@@ -77,7 +77,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 
 | Fase | Qué | Estado |
 |---|---|---|
-| 1 | Base: proyecto, recursos copiados, Johnny andando por el baño | hecha, pendiente de visto bueno |
+| 1 | Base: proyecto, recursos copiados, Johnny andando por el baño | hecha, con visto bueno (19 oct) |
 | 2 | Combate: armas, balas, zombi normal | |
 | 3 | Los 6 zombis y la portera | |
 | 4 | Mapa: planta, apartamentos, puertas, muebles del catálogo, niebla | |
