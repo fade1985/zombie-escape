@@ -11,7 +11,10 @@
 #   libre     apunta con el ratón (y ataca con el clic o J) o con el stick derecho del mando (y ataca mientras
 #             lo empuja). Con una ayuda suave: si apuntas casi encima de un zombi, se tuerce un poco hacia él
 #
-# Tiene vida: los zarpazos se la quitan y, cuando cambia, lo avisa con la señal "vida_cambiada".
+# Tiene vida: los zarpazos se la quitan y, cuando cambia, lo avisa con la señal "vida_cambiada". La vida va
+# en tres tercios: el tercio que pierde ya no se cura, y por cada uno anda un 25 % más lento (como en el JS).
+# Sus atributos (vida máxima, velocidad, daño, ritmo, alcance...) están en "stats" (mejoras.gd): los números
+# de las armas se multiplican por ellos.
 extends CharacterBody2D
 
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
@@ -19,12 +22,10 @@ signal murio
 signal arma_cambiada(texto: String)            # el cartel del arma (y sus balas) de la pantalla escucha esta
 signal modo_cambiado(nombre: String)           # y la ayuda de abajo, el modo de atacar
 
-const VELOCIDAD := 210.0   # unidades por segundo, la misma que en el juego de navegador
 const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igual que en el juego
 const PASO := 140.0        # unidades que avanza en un ciclo de andar, como en el juego
 const RADIO := 18.0        # su círculo de choque (los zombis lo usan para saber si está a tiro)
 
-const VIDA_MAX := 100
 const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (parpadea), como en el juego
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
@@ -40,7 +41,9 @@ const AYUDA_ANGULO := 0.2  # modo libre: radianes (unos 11°) de margen para que
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 
 var direccion := "s"   # hacia dónde mira
-var vida := VIDA_MAX
+var stats := Mejoras.base()   # sus atributos (mejoras.gd)
+var vida := 100
+var tercios := 3          # los tercios de vida que le quedan (el que se pierde ya no se cura)
 var vivo := true
 var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
 var charco_dano := 0.0     # el daño de los charcos que se va sumando hasta llegar a un punto entero
@@ -66,10 +69,11 @@ var con_raton := false     # modo libre: si se está apuntando con el ratón (se
 
 func _ready() -> void:
 	efectos.animation_finished.connect(efectos.hide)
+	vida = stats.vida_max
 	balas = Armas.DATOS[huecos.fuego].cargador
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
-	vida_cambiada.emit.call_deferred(vida, VIDA_MAX)
+	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
 	modo_cambiado.emit.call_deferred(MODOS[modo])
 
 
@@ -88,9 +92,20 @@ func cambiar_modo() -> void:
 	modo_cambiado.emit(MODOS[modo])
 
 
-# El arma que tiene en la mano (sus datos)
+# El arma que tiene en la mano: sus datos, con los atributos de Johnny ya aplicados
 func arma() -> Dictionary:
-	return Armas.DATOS[huecos[mano]]
+	var w: Dictionary = Armas.DATOS[huecos[mano]].duplicate()
+	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
+	w.ritmo = w.ritmo * stats.ritmo
+	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
+	if w.tipo == "fuego":
+		w.velocidad = w.velocidad * stats.velocidad_bala
+	return w
+
+
+# El daño de un golpe o una bala: a veces, crítico (el doble)
+func con_critico(dano: float) -> int:
+	return roundi(dano * (2.0 if randf() < stats.critico else 1.0))
 
 
 func _physics_process(delta: float) -> void:
@@ -124,7 +139,8 @@ func _physics_process(delta: float) -> void:
 	var pedido := Input.get_vector("izquierda", "derecha", "arriba", "abajo")
 	# Acelera suave hacia la velocidad deseada, como en el juego
 	var k := 1.0 - exp(-delta * ARRANQUE)
-	velocity += (pedido * VELOCIDAD - velocity) * k
+	var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios))   # más lento por cada tercio perdido
+	velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()
 	if pedido.length() > 0.1:
@@ -274,7 +290,7 @@ func golpear(angulo: float) -> void:
 		# angle_difference da lo que hay que girar de un ángulo al otro (de -180° a 180°)
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
-			zombi.recibir_golpe(w.dano, hacia.normalized() * EMPUJE * w.empuje)
+			zombi.recibir_golpe(con_critico(w.dano), hacia.normalized() * EMPUJE * w.empuje)
 
 
 # Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo
@@ -294,7 +310,7 @@ func disparar(angulo: float) -> void:
 		var rapidez: float = w.velocidad * (randf_range(0.9, 1.1) if w.temblor > 0.0 else 1.0)
 		var bala := BALA.instantiate()
 		bala.velocidad = Vector2.from_angle(angulo + desvio) * rapidez
-		bala.dano = w.dano
+		bala.dano = con_critico(w.dano)
 		bala.empuje = w.empuje
 		bala.radio = 3.0 if w.perdigones > 1 else 4.0
 		bala.vida = w.alcance / w.velocidad
@@ -414,7 +430,7 @@ func recibir_dano(cantidad: int) -> void:
 	if not vivo or invulnerable > 0.0:
 		return
 	invulnerable = INVULNERABLE
-	quitar_vida(cantidad)
+	quitar_vida(maxi(1, roundi(cantidad * stats.dano_recibido)))
 
 
 # Lo llaman los charcos (moco, lejía) en cada paso mientras los pisa: quita vida poco a poco, sin parpadear
@@ -440,7 +456,10 @@ func empujar(fuerza: Vector2) -> void:
 
 func quitar_vida(cantidad: int) -> void:
 	vida = max(vida - cantidad, 0)
-	vida_cambiada.emit(vida, VIDA_MAX)
+	# Al bajar de un tercio, ese tercio se pierde (vidaTope en el JS)
+	var tercio: float = stats.vida_max / 3.0
+	tercios = mini(tercios, maxi(1, ceili(vida / tercio - 0.000001)))
+	vida_cambiada.emit(vida, stats.vida_max)
 	if vida == 0:
 		vivo = false
 		ataque_t = -1.0

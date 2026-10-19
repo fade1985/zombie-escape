@@ -4,8 +4,13 @@
 #   - Al entrar en un apartamento la puerta se cierra, y no se abre hasta que no queda ni un zombi.
 #   - El apartamento de la jefa está cerrado con llave; la llave está en el suelo de otro apartamento.
 #   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente.
-#   - Después de la 4ª planta, el edificio está limpio y la partida vuelve a empezar.
-# La partida empieza en la sala de mantenimiento de la planta baja. Arriba a la derecha va el minimapa.
+#   - Después de la última planta, el edificio está limpio: cartel de victoria.
+# La partida empieza en la sala de mantenimiento de la planta baja. Arriba a la izquierda va el HUD (hud.gd)
+# y arriba a la derecha, el minimapa. Esc o Start abren la pausa (menus.gd).
+#
+# Dinero y guardado (como game.js y game-combate.js del JS): los zombis sueltan billetes a veces (la portera,
+# varios). Los dólares de la partida solo se guardan si completas el edificio; si caes, se pierden. Al acabar
+# (ganes, caigas o abandones) se guardan los récords y los zombis matados (guardado.gd).
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento.
@@ -28,7 +33,14 @@ const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_P: "portera"}
-const CIERRE := 110.0      # lo que hay que alejarse de la puerta de entrada para que se cierre
+const BILLETE := preload("res://scripts/billete.gd")
+const HUD := preload("res://scripts/ui/hud.gd")
+const MENUS := preload("res://scripts/ui/menus.gd")
+const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
+const NOMBRE_EDIFICIO := "Apartamentos"
+const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
+const BILLETES_JEFA := 3           # los que suelta la portera al caer
+const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
 const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la cara del muro de arriba y su moldura)
 
@@ -42,10 +54,14 @@ var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
 var captura := false
 var tiempo := 0.0
 var luz := Luz.new()       # la penumbra (luz.gd)
+var menus := MENUS.new()   # la pausa y el cartel del final
+var ahorrados := 0         # los dólares guardados de otras partidas
+var dolares := 0           # los recogidos en esta partida
+var muertos := 0           # zombis matados en esta partida
+var duracion := 0.0        # segundos jugados (sin contar la pausa)
+var terminada := false
 
 @onready var johnny := $Johnny
-@onready var barra: ProgressBar = $Pantalla/Vida
-@onready var cartel: Label = $Pantalla/Arma
 @onready var lugar: Label = $Pantalla/Lugar
 @onready var aviso: Label = $Pantalla/Mensaje
 @onready var negro: ColorRect = $Pantalla/Negro
@@ -53,11 +69,7 @@ var luz := Luz.new()       # la penumbra (luz.gd)
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
-	johnny.vida_cambiada.connect(func(vida, maxima):
-		barra.max_value = maxima
-		barra.value = vida)
-	johnny.arma_cambiada.connect(func(texto): cartel.text = texto)
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera · F9 exposición · F10 luz" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · Esc pausa · F2-F7 zombis · P portera · F9 exposición · F10 luz" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.avisar_arma()
 	add_child(luz)
@@ -67,8 +79,28 @@ func _ready() -> void:
 	minimapa.partida = self
 	$Pantalla.add_child(minimapa)
 	$Pantalla.move_child(minimapa, negro.get_index())   # por debajo del fundido a negro
+	var hud := HUD.new()
+	hud.name = "HUD"
+	hud.johnny = johnny
+	hud.partida = self
+	$Pantalla.add_child(hud)
+	$Pantalla.move_child(hud, minimapa.get_index())
+	add_child(menus)
+	menus.continuar.connect(seguir)
+	menus.abandonar.connect(terminar.bind(false, true))
+	menus.reintentar.connect(func():
+		get_tree().paused = false
+		get_tree().reload_current_scene())
+	menus.menu_principal.connect(ir_al_menu)
 
 	captura = "--captura" in OS.get_cmdline_user_args()
+	if captura:
+		Guardado.archivo = "user://guardado-prueba.json"   # la prueba no toca el guardado de verdad
+	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
+	var s := Guardado.cambiar(func(g):
+		g.partidas += 1
+		Guardado.edificio(g, EDIFICIO).partidas += 1)
+	ahorrados = s.dolares
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -191,8 +223,6 @@ func poner_lugar() -> void:
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "":
 		texto += " · " + zona
-	if planta.tiene_llave:
-		texto += "\nLlevas la llave del " + nombre_jefa()
 	lugar.text = texto
 
 
@@ -232,16 +262,16 @@ func cruzar(i: int) -> void:
 func subir() -> void:
 	if planta.num >= Planta.PLANTAS:
 		cambiando = true
-		decir("¡Has limpiado el edificio!", 4.0)
-		await get_tree().create_timer(4.0).timeout
-		get_tree().reload_current_scene()
+		terminar(true)
 		return
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_tipo("llegada"))
 	decir(planta.nombre, 2.5)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if not terminada:
+		duracion += delta
 	if mapa == null or cambiando:
 		return
 	var sitio: Dictionary = planta.sitios[aqui]
@@ -289,15 +319,120 @@ func decir(texto: String, segundos := 2.2) -> void:
 
 func _al_morir_johnny() -> void:
 	$Pantalla/Aviso.show()
-	# A los 2 segundos, vuelta a empezar con un edificio nuevo
-	await get_tree().create_timer(2.0).timeout
-	get_tree().reload_current_scene()
+	# Un momento para verlo caer, y el cartel de derrota
+	await get_tree().create_timer(1.5).timeout
+	terminar(false)
+
+
+# Los dólares que salen en el HUD: los ahorrados más los de esta partida
+func cartera() -> int:
+	return ahorrados + dolares
+
+
+# Suelta billetes donde ha caído un zombi
+func soltar_billetes(cuantos: int, donde: Vector2) -> void:
+	for i in cuantos:
+		var billete := BILLETE.new()
+		billete.johnny = johnny
+		billete.position = donde
+		billete.cogido.connect(func():
+			dolares += 1
+			numero(billete.position, "+$1", Tema.VERDE))
+		mapa.cosas.add_child.call_deferred(billete)
+
+
+# Un texto que sube y se desvanece (al coger un billete)
+func numero(donde: Vector2, texto: String, color: Color) -> void:
+	var etiqueta := Label.new()
+	etiqueta.text = texto
+	etiqueta.theme = Tema.crear()
+	etiqueta.add_theme_color_override("font_color", color)
+	etiqueta.position = donde + Vector2(-14, -50)
+	etiqueta.z_index = 50
+	mapa.cosas.add_child(etiqueta)
+	var tween := etiqueta.create_tween().set_parallel()
+	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 30, 0.7)
+	tween.tween_property(etiqueta, "modulate:a", 0.0, 0.7).set_delay(0.3)
+	tween.chain().tween_callback(etiqueta.queue_free)
+
+
+# Esc o Start: el juego se para y sale el menú de pausa
+func pausar() -> void:
+	if terminada or not johnny.vivo:
+		return
+	get_tree().paused = true
+	menus.pausa(self)
+
+
+func seguir() -> void:
+	menus.cerrar()
+	get_tree().paused = false
+
+
+# Se acabó la partida (endRun en game.js): se guardan los récords y, si ganas, los dólares. Si se abandona
+# desde la pausa, no hay cartel: directo al menú principal
+func terminar(gano: bool, abandona := false) -> void:
+	if terminada:
+		return
+	terminada = true
+	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
+	var s := Guardado.cambiar(func(g):
+		g.mejor_planta = maxi(g.mejor_planta, planta.num)
+		g.muertos += muertos
+		var e := Guardado.edificio(g, EDIFICIO)
+		e.mejor_planta = maxi(e.mejor_planta, planta.num)
+		if gano:
+			g.dolares += dolares
+			g.dolares_total += dolares
+			g.victorias += 1
+			e.victorias += 1
+			e.completado = true
+			if e.mejor_tiempo == 0.0 or duracion < e.mejor_tiempo:
+				e.mejor_tiempo = duracion
+				record[0] = true)
+	if abandona:
+		ir_al_menu()
+		return
+	get_tree().paused = true
+	$Pantalla/Aviso.hide()
+	var apartamentos := 0
+	var visitados := 0
+	for sitio in planta.sitios:
+		if sitio.has("apt"):
+			apartamentos += 1
+			if sitio.get("visitado", false):
+				visitados += 1
+	var tiempo := ""
+	if gano:
+		tiempo = "%d:%02d%s" % [int(duracion) / 60, int(duracion) % 60, " · ¡récord!" if record[0] else ""]
+	menus.fin({
+		"gano": gano,
+		"titulo": "¡Edificio completado!" if gano else "¡Derrota!",
+		"sub": ("Has limpiado los %s de arriba abajo" % NOMBRE_EDIFICIO) if gano
+			else ("Caíste en la %s de los %s" % [planta.nombre.to_lower(), NOMBRE_EDIFICIO]),
+		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
+		"muertos": muertos,
+		"visitados": "%d / %d" % [visitados, apartamentos],
+		"tiempo": tiempo,
+		"dolares": dolares,
+		"cartera": s.dolares,
+	})
+
+
+func ir_al_menu() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://escenas/menu_principal.tscn")
 
 
 # Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
 	zombi.position = donde
+	# Al caer: se cuenta, y a veces suelta un billete (la portera, varios)
+	zombi.murio.connect(func():
+		muertos += 1
+		var cuantos := BILLETES_JEFA if tipo == "portera" else (1 if randf() < BILLETE_ZOMBI else 0)
+		soltar_billetes(cuantos, zombi.position))
 	if tipo == "portera":
 		# Cada planta, un 25 % más dura (como el vecino del juego JS)
 		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1))
@@ -313,6 +448,10 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 
 
 func _unhandled_input(evento: InputEvent) -> void:
+	if evento.is_action_pressed("pausa") and not cambiando:
+		get_viewport().set_input_as_handled()
+		pausar()
+		return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando:
 		return
 	if evento.keycode in TECLAS:
@@ -407,4 +546,21 @@ func _process(delta: float) -> void:
 			jefa.recibir_golpe(99999, Vector2.ZERO)
 	if antes < 9.5 and tiempo >= 9.5:
 		print("Jefa muerta: ", planta.jefa_muerta, " | ", aviso.text)
-		get_tree().quit()
+		probar_menus()
+
+
+# Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)
+func probar_menus() -> void:
+	set_process(false)
+	soltar_billetes(3, johnny.position + Vector2(60, 0))
+	await get_tree().create_timer(1.2).timeout
+	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
+	pausar()
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-pausa.png")
+	seguir()
+	terminar(true)
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-fin.png")
+	print("Guardado de prueba: ", Guardado.cargar())
+	get_tree().quit()
