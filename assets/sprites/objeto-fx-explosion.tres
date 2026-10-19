@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=14 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/objeto-fx-explosion.png" id="hoja"]
+
+[sub_resource type="AtlasTexture" id="t0"]
+atlas = ExtResource("hoja")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t1"]
+atlas = ExtResource("hoja")
+region = Rect2(96, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t2"]
+atlas = ExtResource("hoja")
+region = Rect2(192, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t3"]
+atlas = ExtResource("hoja")
+region = Rect2(288, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t4"]
+atlas = ExtResource("hoja")
+region = Rect2(384, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t5"]
+atlas = ExtResource("hoja")
+region = Rect2(480, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t6"]
+atlas = ExtResource("hoja")
+region = Rect2(576, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t7"]
+atlas = ExtResource("hoja")
+region = Rect2(672, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t8"]
+atlas = ExtResource("hoja")
+region = Rect2(768, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t9"]
+atlas = ExtResource("hoja")
+region = Rect2(864, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t10"]
+atlas = ExtResource("hoja")
+region = Rect2(960, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="t11"]
+atlas = ExtResource("hoja")
+region = Rect2(1056, 0, 96, 96)
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("t0")}, {"duration": 1.0, "texture": SubResource("t1")}, {"duration": 1.0, "texture": SubResource("t2")}, {"duration": 1.0, "texture": SubResource("t3")}, {"duration": 1.0, "texture": SubResource("t4")}, {"duration": 1.0, "texture": SubResource("t5")}, {"duration": 1.0, "texture": SubResource("t6")}, {"duration": 1.0, "texture": SubResource("t7")}, {"duration": 1.0, "texture": SubResource("t8")}, {"duration": 1.0, "texture": SubResource("t9")}, {"duration": 1.0, "texture": SubResource("t10")}, {"duration": 1.0, "texture": SubResource("t11")}], "loop": false, "name": &"reposo_s", "speed": 14.0}]

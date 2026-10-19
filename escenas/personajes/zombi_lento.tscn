@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/zombi.gd" id="script"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento.tres" id="frames"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-rojo.tres" id="ropa1"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-bata.tres" id="ropa2"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-mostaza.tres" id="ropa3"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-negro.tres" id="ropa4"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-militar.tres" id="ropa5"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-turquesa.tres" id="ropa6"]
+
+[sub_resource type="CircleShape2D" id="cuerpo"]
+radius = 17.0
+
+[node name="Zombi" type="CharacterBody2D" groups=["zombis"]]
+collision_layer = 4
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("script")
+vida_max = 30
+velocidad = 45.0
+dano = 10
+radio = 17.0
+empuje = 0.76
+bamboleo = 0.3
+bamboleo_ritmo = 1.5
+a_tirones = true
+altura = 60.0
+ropas = Array[SpriteFrames]([ExtResource("frames"), ExtResource("ropa1"), ExtResource("ropa2"), ExtResource("ropa3"), ExtResource("ropa4"), ExtResource("ropa5"), ExtResource("ropa6")])
+
+[node name="Choque" type="CollisionShape2D" parent="."]
+shape = SubResource("cuerpo")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 27)
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("frames")
+animation = &"reposo_s"
+autoplay = "reposo_s"
+centered = false
+offset = Vector2(-48, -72)
+
+[node name="Agente" type="NavigationAgent2D" parent="."]
+path_desired_distance = 12.0
+target_desired_distance = 12.0
+path_max_distance = 60.0
+avoidance_enabled = true
+radius = 23.0
+neighbor_distance = 120.0
+max_speed = 45.0

@@ -33,6 +33,8 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
   **flechas** o el **stick izquierdo** del mando. **F1** cambia el modo de atacar: *asistido* (apunta y ataca
   solo, como en el JS), *hacia donde mira* (J, clic o botón X) y *libre* (ratón + clic, o stick derecho). **Q** /
   rueda / botón Y cambia entre sus dos armas, **1-6** pone cualquiera (solo para probar) y **R** / RB recarga.
+  Para probar zombis: **F2 a F7** sacan uno de cada tipo (normal, lento, rápido, explosivo, tentáculos y
+  venenoso) y **P**, la portera.
   En el móvil los tres modos irán con controles táctiles (joystick izquierdo, joystick derecho y botón de
   ataque), en la fase 8.
 - **Desde la terminal** (comprobar que arranca y sacar una foto `captura.png` sin jugar; se cierra solo):
@@ -57,10 +59,10 @@ para que el pixel art se vea nítido.
 |---|---|
 | `project.godot` | Ajustes: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque |
 | `escenas/salas/` | Las salas. `bano.tscn` (la de inicio) y `bano_tileset.tres`, las piezas con las que se pinta y cuáles chocan |
-| `escenas/personajes/` | `johnny.tscn`, `zombi_normal.tscn` (y luego los otros zombis, portera…) |
-| `escenas/armas/` | `bala.tscn` (la bala y los perdigones) |
+| `escenas/personajes/` | `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números van en el Inspector) y `portera.tscn` |
+| `escenas/armas/` | `bala.tscn` (la bala y los perdigones), `bala_zombi.tscn` (agua sucia de la portera), `proyectil.tscn` (moco y botella de lejía, en parábola), `charco.tscn` y `explosion.tscn` |
 | `escenas/muebles/` | Un mueble por escena (bañera, váter, lavabo, lavadora), con su choque y su `Sombra` para la fase de luz |
-| `scripts/` | El código: `johnny.gd` (moverse, vida, apuntar y atacar), `armas.gd` (los números de las armas), `bala.gd`, `zombi.gd` (perseguir con navegación, zarpazos), `sala.gd` (hornea la navegación, la pantalla, tandas de zombis y la prueba con `--captura`) |
+| `scripts/` | El código: `johnny.gd` (moverse, vida, apuntar y atacar), `armas.gd` (los números de las armas), `bala.gd`, `zombi.gd` (la base de todos los zombis: perseguir con navegación, zarpazos, golpes; el normal, el lento y el rápido solo cambian números), `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` (heredan de la base y añaden su ataque), `portera.gd` (la jefa, por estados), `sala.gd` (hornea la navegación, la pantalla, tandas mezcladas, teclas de prueba F2-F7 y P, y la prueba con `--captura`) |
 | `assets/sprites/` | Copia de los sprites del juego JS (`.png` + `.json` + `manifest.json`). Los `.tres` de al lado son sus animaciones para Godot |
 | `assets/tiles/` | Texturas preparadas para los TileSets (`py tools/texturas_bano.py`) |
 | `assets/sources/` | Originales (muebles, texturas…). Lleva `.gdignore`: Godot no los importa |
@@ -84,7 +86,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 |---|---|---|
 | 1 | Base: proyecto, recursos copiados, Johnny andando por el baño | hecha, con visto bueno (19 oct) |
 | 2 | Combate: armas, balas, zombi normal, 3 modos de atacar | hecha, con visto bueno (19 oct) |
-| 3 | Los 6 zombis y la portera | |
+| 3 | Los 6 zombis y la portera | hecha, esperando visto bueno (19 oct) |
 | 4 | Mapa: planta, apartamentos, puertas, muebles del catálogo, niebla | |
 | 5 | Luz y penumbra | |
 | 6 | Menús, HUD, guardado, mejoras y talentos | |

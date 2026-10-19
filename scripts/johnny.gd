@@ -43,6 +43,9 @@ var direccion := "s"   # hacia dónde mira
 var vida := VIDA_MAX
 var vivo := true
 var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
+var charco_dano := 0.0     # el daño de los charcos que se va sumando hasta llegar a un punto entero
+var charco_tinte := Color.WHITE
+var charco_tiempo := 0.0   # cuánto le queda teñido del color del charco
 
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
@@ -97,6 +100,10 @@ func _physics_process(delta: float) -> void:
 	sprite.modulate.a = 0.45 if invulnerable > 0.0 and int(invulnerable * 18.0) % 2 == 0 else 1.0
 	if not vivo:
 		return
+	# Pisando un charco se tiñe de su color (verde el moco, azulado la lejía)
+	charco_tiempo -= delta
+	var tinte := charco_tinte if charco_tiempo > 0.0 else Color.WHITE
+	sprite.modulate = Color(tinte, sprite.modulate.a)
 
 	# Teclas de las armas
 	for i in Armas.ORDEN.size():
@@ -155,7 +162,7 @@ func apuntar_y_atacar() -> void:
 		return
 	var hacia: Vector2 = objetivo.global_position - global_position
 	direccion = direccion_de(hacia)   # mira al zombi aunque ande hacia otro lado
-	var a_tiro: bool = w.tipo == "fuego" or hacia.length() - objetivo.RADIO <= w.alcance
+	var a_tiro: bool = w.tipo == "fuego" or hacia.length() - objetivo.radio <= w.alcance
 	if a_tiro:
 		intentar_atacar(hacia.angle())
 
@@ -185,7 +192,7 @@ func ayuda_apunte(angulo: float) -> float:
 	var margen := AYUDA_ANGULO
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
-		if hacia.length() - zombi.RADIO > alcance or not se_ve(zombi):
+		if hacia.length() - zombi.radio > alcance or not se_ve(zombi):
 			continue
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio < margen:
@@ -215,7 +222,7 @@ func buscar_objetivo(w: Dictionary) -> Node2D:
 	var alcance: float = MIRAR_CERCA if w.tipo == "cuerpo" else w.alcance
 	var mejor: Node2D = null
 	for zombi in get_tree().get_nodes_in_group("zombis"):
-		var distancia: float = global_position.distance_to(zombi.global_position) - zombi.RADIO
+		var distancia: float = global_position.distance_to(zombi.global_position) - zombi.radio
 		if distancia >= alcance or not se_ve(zombi):
 			continue
 		mejor = zombi
@@ -258,11 +265,11 @@ func golpear(angulo: float) -> void:
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
-		if distancia - zombi.RADIO > w.alcance:
+		if distancia - zombi.radio > w.alcance:
 			continue
 		# angle_difference da lo que hay que girar de un ángulo al otro (de -180° a 180°)
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
-		if desvio <= mitad + 0.2 or distancia < zombi.RADIO + 12.0:
+		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
 			zombi.recibir_golpe(w.dano, hacia.normalized() * EMPUJE * w.empuje)
 
 
@@ -396,8 +403,33 @@ func animar() -> void:
 func recibir_dano(cantidad: int) -> void:
 	if not vivo or invulnerable > 0.0:
 		return
-	vida = max(vida - cantidad, 0)
 	invulnerable = INVULNERABLE
+	quitar_vida(cantidad)
+
+
+# Lo llaman los charcos (moco, lejía) en cada paso mientras los pisa: quita vida poco a poco, sin parpadear
+# ni dejarle invulnerable, y le tiñe del color del charco. "cantidad" suele ser un trocito (4 por segundo ×
+# lo que dura un paso), así que se va sumando y se quita cuando llega a un punto entero
+func pisar_charco(cantidad: float, color: Color) -> void:
+	if not vivo:
+		return
+	charco_tinte = color
+	charco_tiempo = 0.15
+	charco_dano += cantidad
+	if charco_dano >= 1.0:
+		var entero := int(charco_dano)
+		charco_dano -= entero
+		quitar_vida(entero)
+
+
+# Un empujón (el fregonazo de la portera, su grito): se suma a su velocidad y su frenada lo va parando
+func empujar(fuerza: Vector2) -> void:
+	if vivo:
+		velocity += fuerza
+
+
+func quitar_vida(cantidad: int) -> void:
+	vida = max(vida - cantidad, 0)
 	vida_cambiada.emit(vida, VIDA_MAX)
 	if vida == 0:
 		vivo = false

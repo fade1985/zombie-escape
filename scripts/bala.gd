@@ -44,7 +44,7 @@ func _physics_process(delta: float) -> void:
 
 	# ¿Ha dado a algún zombi?
 	for zombi in get_tree().get_nodes_in_group("zombis"):
-		if global_position.distance_to(zombi.global_position) < zombi.RADIO + radio + 3.0:
+		if global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
 			zombi.recibir_golpe(dano, velocidad.normalized() * EMPUJE * empuje)
 			chocar()
 			return

@@ -8,7 +8,8 @@ import sys
 
 # Nombre de cada estado del juego en español (los que no estén aquí, o no estén en la hoja, no se pasan)
 ESTADOS = {"walk": "andar", "idle": "reposo", "attack": "ataque", "hurt": "golpe", "death": "muerte",
-           "fx": "efectos"}   # "efectos": fogonazo, humo y casquillo del disparo, para pintarlos encima al andar
+           "fx": "efectos",   # "efectos": fogonazo, humo y casquillo del disparo, para pintarlos encima al andar
+           "still": "quieto", "throw": "lanzar", "roar": "grito"}   # estos tres, de la portera
 # Direcciones: sur, sureste, este, noreste, norte, noroeste, oeste, suroeste
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
         "north": "n", "north-west": "no", "west": "o", "south-west": "so"}
@@ -25,6 +26,8 @@ for estado, es in ESTADOS.items():
         continue
     a = meta["anims"][estado]
     for d, dd in DIRS.items():
+        if d not in a["dirs"]:
+            continue   # hay animaciones dibujadas solo en alguna dirección (el grito de la portera, solo al sur)
         info = a["dirs"][d]
         frames = []
         for f in range(info["frames"]):

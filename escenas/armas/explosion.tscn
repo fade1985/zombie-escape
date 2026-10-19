@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/explosion.gd" id="script"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/objeto-fx-explosion.tres" id="fuego"]
+
+[node name="Explosion" type="Node2D"]
+z_index = 5
+script = ExtResource("script")
+
+[node name="Fuego" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -20)
+scale = Vector2(2.5, 2.5)
+sprite_frames = ExtResource("fuego")
+animation = &"reposo_s"

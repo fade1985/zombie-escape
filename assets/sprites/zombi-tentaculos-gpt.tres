@@ -1,0 +1,38 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/zombi-tentaculos-gpt.png" id="hoja"]
+
+[sub_resource type="AtlasTexture" id="t0"]
+atlas = ExtResource("hoja")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t1"]
+atlas = ExtResource("hoja")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t2"]
+atlas = ExtResource("hoja")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t3"]
+atlas = ExtResource("hoja")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t4"]
+atlas = ExtResource("hoja")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t5"]
+atlas = ExtResource("hoja")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t6"]
+atlas = ExtResource("hoja")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="t7"]
+atlas = ExtResource("hoja")
+region = Rect2(896, 0, 128, 128)
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("t0")}], "loop": true, "name": &"reposo_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t1")}], "loop": true, "name": &"reposo_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t2")}], "loop": true, "name": &"reposo_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t3")}], "loop": true, "name": &"reposo_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t4")}], "loop": true, "name": &"reposo_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t5")}], "loop": true, "name": &"reposo_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t6")}], "loop": true, "name": &"reposo_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t7")}], "loop": true, "name": &"reposo_so", "speed": 1.0}]

@@ -30,6 +30,9 @@ border_color = Color(0.11, 0.1, 0.17, 1)
 [sub_resource type="StyleBoxFlat" id="barra_relleno"]
 bg_color = Color(0.85, 0.2, 0.25, 1)
 
+[sub_resource type="StyleBoxFlat" id="barra_jefa"]
+bg_color = Color(0.71, 0.09, 0.62, 1)
+
 [node name="Sala" type="Node2D" unique_id=1294766356]
 script = ExtResource("script")
 
@@ -125,4 +128,28 @@ theme_override_colors/font_outline_color = Color(0.11, 0.1, 0.17, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 28
 text = "Te han pillado"
+horizontal_alignment = 1
+
+[node name="Jefa" type="ProgressBar" parent="Pantalla"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 40.0
+offset_right = 200.0
+offset_bottom = 56.0
+theme_override_styles/background = SubResource("barra_fondo")
+theme_override_styles/fill = SubResource("barra_jefa")
+value = 100.0
+show_percentage = false
+
+[node name="Nombre" type="Label" parent="Pantalla/Jefa"]
+offset_top = -26.0
+offset_right = 400.0
+offset_bottom = -2.0
+theme_override_colors/font_outline_color = Color(0.11, 0.1, 0.17, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 16
+text = "La portera"
 horizontal_alignment = 1
