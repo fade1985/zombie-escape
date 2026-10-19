@@ -54,7 +54,6 @@ func montar(m: Dictionary, surtido: int) -> void:
 	var sprite := Sprite2D.new()
 	sprite.name = "Sprite"
 	sprite.texture = load(queda[0])
-	sprite.light_mask = 2
 	sprite.scale = Vector2(2, 2)   # cada píxel del dibujo, 2 unidades (como los personajes)
 	sprite.centered = false
 	sprite.flip_h = queda[1]

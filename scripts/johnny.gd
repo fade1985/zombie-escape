@@ -300,6 +300,8 @@ func disparar(angulo: float) -> void:
 		bala.vida = w.alcance / w.velocidad
 		get_parent().add_child(bala)
 		bala.global_position = salida
+	# El fogonazo alumbra un instante alrededor (más con la escopeta)
+	Luz.destello(self, salida - Vector2(0, 50), 170.0 if w.perdigones > 1 else 120.0, 0.12 if w.perdigones > 1 else 0.08)
 	# El disparo se oye: despierta a los zombis dormidos que haya cerca
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi.has_method("oir_disparo"):

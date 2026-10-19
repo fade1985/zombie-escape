@@ -21,6 +21,9 @@ func _ready() -> void:
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() <= radio + zombi.radio:
 			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE)
+	# La explosión ilumina toda la zona, y el resplandor del fuego tarda en apagarse
+	Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.4)
+	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)
 	# La bola de fuego de PixelLab, un poco más grande que su dibujo (como en el juego)
 	$Fuego.play("reposo_s")
 

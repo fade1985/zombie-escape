@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/luz/fuego.gd" id="script"]
+[ext_resource type="Texture2D" path="res://escenas/luces/luz_suave.tres" id="luz"]
+
+[node name="Fuego" type="PointLight2D"]
+color = Color(1, 0.47, 0.16, 1)
+range_item_cull_mask = 3
+texture = ExtResource("luz")
+script = ExtResource("script")

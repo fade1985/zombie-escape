@@ -106,6 +106,14 @@ static func generar(num: int) -> Dictionary:
 		"letrero": "Portal" if baja else "Bajada"})
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
 		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con la portera", "letrero": "Escaleras"})
+	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo
+	# (algunos fallan de vez en cuando), como en src/rooms.js
+	pasillo.apliques = []
+	var x := MURO + 130
+	while x < ancho - MURO - 60:
+		if pasillo.salidas.all(func(s): return s.dir != "arriba" or absf(s.en - x) > 90):
+			pasillo.apliques.append({"x": x, "semilla": rng.randf(), "parpadea": rng.randf() < 0.3})
+		x += 230
 	# los muebles del pasillo, sin tapar ninguna puerta y dejando ir de una punta a la otra
 	pasillo.muebles = Muebles.de_sala("pasillo", {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
 		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng)

@@ -41,6 +41,7 @@ var jefa: Node2D = null
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
 var captura := false
 var tiempo := 0.0
+var luz := Luz.new()       # la penumbra (luz.gd)
 
 @onready var johnny := $Johnny
 @onready var barra: ProgressBar = $Pantalla/Vida
@@ -56,9 +57,11 @@ func _ready() -> void:
 		barra.max_value = maxima
 		barra.value = vida)
 	johnny.arma_cambiada.connect(func(texto): cartel.text = texto)
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera · F9 exposición" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera · F9 exposición · F10 luz" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.avisar_arma()
+	add_child(luz)
+	luz.seguir_a(johnny)
 	var minimapa := MINIMAPA.new()
 	minimapa.name = "Minimapa"
 	minimapa.partida = self
@@ -124,6 +127,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	johnny.velocity = Vector2.ZERO
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
+	luz.poner_sitio(sitio.tipo)
 
 	# Los zombis que esperan dentro, dormidos (si el piso aún no se ha limpiado)
 	for z in [] if sitio.limpio else sitio.zombis:
@@ -316,6 +320,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_F9 and planta.expo >= 0 and not cerrada:
 		# a la exposición y de vuelta a la sala de mantenimiento
 		montar(planta.mantenimiento if aqui == planta.expo else planta.expo, 0)
+	elif evento.keycode == KEY_F10:
+		luz.alternar()   # quitar o poner la penumbra, para comparar
 
 
 # ── Solo con --captura ──

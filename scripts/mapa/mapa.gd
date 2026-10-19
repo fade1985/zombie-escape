@@ -19,6 +19,8 @@ const VELO := Color(0.68, 0.68, 0.68)   # la tapa de los muros, oscurecida para 
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
+const LAMPARA := preload("res://escenas/luces/lampara.tscn")
+const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
@@ -79,6 +81,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	var fondo := Node2D.new()
 	fondo.name = "Fondo"
 	fondo.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	fondo.light_mask = Luz.CAPA_SUELO   # el suelo es lo único que recibe sombras (ver luz.gd)
 	fondo.draw.connect(dibujar_fondo.bind(fondo))
 	add_child(fondo)
 	var navegacion := NavigationRegion2D.new()
@@ -93,6 +96,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	poner_caras()
 	poner_puertas()
 	poner_muebles()
+	poner_apliques()
 	if llave != Vector2.INF:
 		poner_llave(llave)
 	if sitio.tipo == "expo":
@@ -207,6 +211,14 @@ func poner_muros() -> void:
 		forma.shape = rect
 		forma.position = Vector2(c0 * CASILLA, caja[1] * CASILLA) + rect.size / 2.0
 		cuerpo.add_child(forma)
+		# y su sombra: la luz de una habitación no pasa a la de al lado a través del tabique
+		var sombra := LightOccluder2D.new()
+		var huella := OccluderPolygon2D.new()
+		var r := Rect2(forma.position - rect.size / 2.0, rect.size)
+		huella.polygon = PackedVector2Array([r.position, Vector2(r.end.x, r.position.y), r.end,
+			Vector2(r.position.x, r.end.y)])
+		sombra.occluder = huella
+		cuerpo.add_child(sombra)
 
 
 # Una cara en cada tramo de muro que tiene suelo justo debajo, con el papel de la habitación de debajo
@@ -263,6 +275,46 @@ func poner_muebles() -> void:
 		mueble.montar(m, sitio.surtido)
 		cosas.add_child(mueble)
 		muebles.append(mueble)
+		if m.tipo == "lamp" or m.tipo == "nightstand":
+			poner_lampara(mueble, m)
+
+
+# Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.
+# Su propia sombra se quita: la luz sale de dentro de su hueco y lo dejaría todo a oscuras.
+func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
+	mueble.get_node("Sombra").free()
+	var luz := LAMPARA.instantiate()
+	luz.semilla = fposmod(sin(m.x * 12.9898 + m.y * 78.233) * 43758.5453, 1.0)
+	luz.parpadea = luz.semilla < 0.2
+	luz.alto = 72.0 if m.tipo == "lamp" else 56.0
+	luz.radio = 210.0 if m.tipo == "lamp" else 150.0
+	luz.mapa = self
+	luz.zona = m.zona
+	mueble.add_child(luz)
+
+
+# Los apliques de la pared de arriba del pasillo (planta.gd): su dibujo y su luz. El nodo va en el pie de la
+# cara del muro, para ordenarse con ella; el charco de luz cae 60 unidades más abajo, en el suelo.
+func poner_apliques() -> void:
+	for a in sitio.get("apliques", []):
+		var luz := LAMPARA.instantiate()
+		luz.position = Vector2(a.x, MURO + 1)
+		luz.semilla = a.semilla
+		luz.parpadea = a.parpadea
+		luz.alto = 38.0
+		luz.suelo = Vector2(0, 60)
+		# si el centro de la luz cae dentro de un mueble, su sombra lo dejaría todo a oscuras: más abajo
+		for m in muebles:
+			var hueco := Rect2(m.datos.x - m.datos.w / 2.0, m.datos.y - m.datos.h / 2.0, m.datos.w, m.datos.h)
+			if hueco.grow(4.0).has_point(luz.position + luz.suelo):
+				luz.suelo.y = hueco.end.y + 8.0 - luz.position.y
+		var dibujo := Sprite2D.new()
+		dibujo.texture = APLIQUE
+		dibujo.scale = Vector2(2, 2)
+		dibujo.position = Vector2(0, -36)
+		luz.add_child(dibujo)
+		luz.move_child(dibujo, 0)
+		cosas.add_child(luz)
 
 
 # ═════════════ Niebla ═════════════
@@ -287,6 +339,7 @@ func preparar_niebla() -> void:
 			c = fin
 	velo = Node2D.new()
 	velo.name = "Niebla"
+	velo.light_mask = 0   # las lámparas no la aclaran
 	velo.draw.connect(func():
 		for sala in niebla:
 			if niebla[sala] > 0.0:
