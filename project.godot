@@ -5,7 +5,7 @@ config_version=5
 [application]
 
 config/name="Zombie Escape"
-run/main_scene="res://escenas/salas/bano.tscn"
+run/main_scene="res://escenas/partida.tscn"
 config/features=PackedStringArray("4.7")
 
 [display]

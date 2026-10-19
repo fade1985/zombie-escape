@@ -11,6 +11,10 @@ extends CharacterBody2D
 signal murio   # avisa cuando se muere (la sala cuenta los muertos para sacar más)
 
 const FRENADA := 900.0     # lo rápido que se para después de que le empujen de un golpe
+const VISTA := 330.0       # dormido, a qué distancia ve a Johnny (si no hay un muro en medio)
+const OIDO := 430.0        # dormido, a qué distancia oye un disparo (aunque haya muros)
+const CORRILLO := 140.0    # al despertar, despierta también a los que tiene a esta distancia
+const ESPABILAR := 0.5     # lo que tarda en echar a andar después de despertar
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 
 @export var vida_max := 30
@@ -34,6 +38,10 @@ var tiempo := 0.0          # para el bamboleo al andar
 var rumbo := Vector2.ZERO  # hacia dónde anda ahora (gira poco a poco hacia donde quiere ir)
 var zarpazo_dado := false  # si ya ha dado el golpe en este zarpazo (solo uno por animación)
 var momento_zarpazo := 0.429   # en qué punto de la animación de ataque llega la mano (lo pone su hoja)
+# Los zombis de los apartamentos esperan dormidos en su habitación ("zona") hasta que notan a Johnny
+var dormido := false
+var zona := -1
+var espabilando := 0.0     # tiempo que le queda quieto después de despertar
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -57,6 +65,16 @@ func _physics_process(delta: float) -> void:
 		return
 	tiempo += delta
 	var johnny := get_tree().get_first_node_in_group("jugador")
+	if dormido or espabilando > 0.0:
+		pedir_velocidad(Vector2.ZERO)
+		poner_animacion("reposo")
+		if dormido:
+			vigilar(johnny)
+		else:
+			espabilando -= delta
+			if johnny:
+				mirar_hacia(johnny.global_position - global_position)
+		return
 
 	match estado:
 		"andar":
@@ -120,6 +138,33 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	poner_animacion("andar")
 
 
+# Dormido: se despierta si Johnny entra en su habitación o le ve cerca sin un muro en medio
+func vigilar(johnny: Node2D) -> void:
+	if johnny == null or not johnny.vivo:
+		return
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	if (mapa and zona >= 0 and mapa.zona_en(johnny.global_position) == zona) 			or (distancia_a(johnny) < VISTA and se_ve(johnny)):
+		despertar()
+
+
+# Suelta un "!" y, al rato, echa a andar. Arrastra a los que tiene al lado.
+func despertar() -> void:
+	if not dormido:
+		return
+	dormido = false
+	espabilando = ESPABILAR
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
+	for otro in get_tree().get_nodes_in_group("zombis"):
+		if otro != self and otro.get("dormido") and distancia_a(otro) < CORRILLO:
+			otro.despertar()
+
+
+# Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar
+func oir_disparo(donde: Vector2) -> void:
+	if dormido and global_position.distance_to(donde) < OIDO:
+		despertar()
+
+
 func distancia_a(nodo: Node2D) -> float:
 	return global_position.distance_to(nodo.global_position)
 
@@ -155,6 +200,9 @@ func empezar_zarpazo(johnny: Node2D) -> void:
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto":
 		return
+	if dormido:
+		despertar()
+		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
 	vida -= cantidad
 	velocity = fuerza * empuje
 	numero_flotante(cantidad)
