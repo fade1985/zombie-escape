@@ -86,7 +86,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 |---|---|---|
 | 1 | Base: proyecto, recursos copiados, Johnny andando por el baño | hecha, con visto bueno (19 oct) |
 | 2 | Combate: armas, balas, zombi normal, 3 modos de atacar | hecha, con visto bueno (19 oct) |
-| 3 | Los 6 zombis y la portera | hecha, esperando visto bueno (19 oct) |
+| 3 | Los 6 zombis y la portera | hecha, con visto bueno (19 oct) |
 | 4 | Mapa: planta, apartamentos, puertas, muebles del catálogo, niebla | |
 | 5 | Luz y penumbra | |
 | 6 | Menús, HUD, guardado, mejoras y talentos | |
