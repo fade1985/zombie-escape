@@ -6,8 +6,8 @@
 Flujo: dejar la imagen (PNG o WEBP con fondo transparente, de Gemini o ChatGPT) en su carpeta de
 assets/sources/salas/<sala>/ → ejecutar el comando → sale en el juego.
 
-Nombres: <mueble>[-<variante>][-lado].png, con el nombre en español del catálogo (src/catalogo.js → MUEBLES,
-campo `archivo`): nevera.png es la de siempre; nevera-b.png, nevera-c.png… otras variantes que el juego elige al
+Nombres: <mueble>[-<variante>][-lado].png, con el nombre en español del catálogo (scripts/mapa/catalogo.gd →
+MUEBLES, campo "archivo"): nevera.png es la de siempre; nevera-b.png, nevera-c.png… otras variantes que el juego elige al
 azar por apartamento; nevera-lado.png / nevera-b-lado.png, el dibujo para las paredes laterales (hecho para la
 izquierda: en la derecha se pone en espejo). La carpeta es solo para ordenar: vale cualquiera menos descartes/.
 
@@ -18,12 +18,13 @@ con "scale": 1 (cada píxel, 2 unidades del juego: la misma densidad que los per
 0,5, con el doble de detalle), y lo apunta en manifest.json.
 
 Para saber qué es nuevo, apunta la huella de cada original en assets/sources/salas/importados.json. Un mueble de
-tipo nuevo (que no está en el catálogo) no se convierte: hay que añadirlo antes a src/catalogo.js.
+tipo nuevo (que no está en el catálogo) no se convierte: hay que añadirlo antes a scripts/mapa/catalogo.gd.
 """
-import hashlib, json, os, subprocess, sys
+import hashlib, json, os, re, sys
 from PIL import Image
 
 SALAS = 'assets/sources/salas'
+CATALOGO = 'scripts/mapa/catalogo.gd'
 OUT = 'assets/sprites'
 REGISTRO = f'{SALAS}/importados.json'
 OUTLINE = (29, 27, 44, 255)
@@ -35,9 +36,17 @@ BLOQUE = {'lamp': (8, 1), 'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7,
 
 
 def catalogo():
-    """{nombre en español: (tipo, len, dep)} sacado de src/catalogo.js, el mismo que usa el juego"""
-    js = "import('./src/catalogo.js').then((m) => console.log(JSON.stringify(m.MUEBLES)))"
-    muebles = json.loads(subprocess.check_output(['node', '--no-warnings', '-e', js]))
+    """{nombre en español: (tipo, len, dep)} sacado de scripts/mapa/catalogo.gd, el mismo que usa el juego.
+    El diccionario MUEBLES de GDScript es casi JSON: se le quitan los comentarios y las comas del final."""
+    texto = open(CATALOGO, encoding='utf-8').read()
+    inicio = texto.index('{', texto.index('const MUEBLES'))
+    fin, nivel = inicio, 0
+    for i in range(inicio, len(texto)):
+        nivel += {'{': 1, '}': -1}.get(texto[i], 0)
+        if nivel == 0: fin = i; break
+    trozo = re.sub(r'#[^\n]*', '', texto[inicio:fin + 1])
+    trozo = re.sub(r',(\s*[}\]])', r'\1', trozo)
+    muebles = json.loads(trozo)
     return {v['archivo'].split('/')[-1]: (k, v['len'], v['dep']) for k, v in muebles.items()}
 
 
@@ -65,7 +74,7 @@ def entiende(nombre, cat):
         if variante == 'a': return f'la primera variante se llama {"-".join(partes)} (sin -a)'
         if not 'b' <= variante <= 'z': return f'la variante tiene que ser una letra de la b a la z'
     base = '-'.join(partes)
-    if base not in cat: return f'"{base}" es un mueble nuevo: hay que añadirlo antes a src/catalogo.js'
+    if base not in cat: return f'"{base}" es un mueble nuevo: hay que añadirlo antes a scripts/mapa/catalogo.gd'
     return *cat[base], variante, lado
 
 

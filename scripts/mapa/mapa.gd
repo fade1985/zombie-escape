@@ -1,8 +1,11 @@
-# Monta un sitio de la planta (el pasillo o un apartamento) a partir de sus datos (planta.gd):
+# Monta un sitio de la planta (el pasillo, un apartamento, la sala de mantenimiento o la exposición) a partir
+# de sus datos (planta.gd):
 #   - el suelo de cada habitación y la tapa de los muros (vistos desde arriba), en un dibujo de fondo
 #   - las caras de los muros (de frente, 3 casillas de alto), ordenadas con los personajes
-#   - los choques de los muros, las puertas, la llave y, en los baños, el váter y el lavabo de la fase 1
+#   - los choques de los muros, las puertas, los muebles (mueble.gd) y la llave
 #   - el mapa de por dónde se puede andar (navegación), para que los zombis rodeen tabiques y muebles
+#   - la niebla: en un apartamento, las habitaciones que aún no se han pisado se ven a oscuras, y lo que hay
+#     dentro ni se ve ni se le puede apuntar (como src/game-mapa.js del juego JS)
 #
 # Las texturas son las mismas del juego JS (assets/sprites/): cada habitación elige su suelo y su pared con
 # una cuenta sobre su posición, así que dos habitaciones iguales de sitio salen iguales.
@@ -15,10 +18,16 @@ const MURO := 64
 const VELO := Color(0.68, 0.68, 0.68)   # la tapa de los muros, oscurecida para que quede por detrás del suelo
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
-const VATER := preload("res://escenas/muebles/vater.tscn")
-const LAVABO := preload("res://escenas/muebles/lavabo.tscn")
+const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
+const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
+const OSCURO := Color(0.07, 0.063, 0.11)   # el color de la niebla
+const ACLARA := 3.5                        # lo rápido que se aclara una habitación al descubrirla (por segundo)
+# los zombis de la exposición, en el orden de las teclas de prueba
+const EXPO_ZOMBIS := ["zombi_normal", "zombi_lento", "zombi_rapido", "zombi_explosivo", "zombi_tentaculos",
+	"zombi_venenoso", "portera"]
+const RUMBOS := ["s", "so", "o", "no", "n", "ne", "e", "se"]
 
 var sitio: Dictionary
 var cols := 0
@@ -29,6 +38,16 @@ var tapa: Texture2D
 var alfombra: Texture2D
 var cosas: Node2D                 # personajes, muebles y caras de muro, ordenados por su "y"
 var puertas: Array = []           # una por salida, en el mismo orden
+var muebles: Array = []
+# La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
+# habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
+var niebla := {}
+var vistas := {}
+var caras := {}                   # habitación -> sus caras de muro (llevan su propia niebla)
+var velo: Node2D                  # donde se pinta la niebla, por encima de todo
+var trozos_niebla := {}           # habitación -> los rectángulos de suelo que tapa la niebla
+var expo_sprites: Array = []      # los zombis de la exposición, que van girando
+var expo_t := 0.0
 
 
 func montar(datos: Dictionary, llave := Vector2.INF) -> void:
@@ -36,16 +55,16 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	add_to_group("mapa")
 	cols = int(sitio.ancho / CASILLA)
 	filas = int(sitio.alto / CASILLA)
-	if sitio.tipo == "pasillo":
+	if sitio.has("dueno"):
 		# un rectángulo con muros de 2 casillas alrededor; todo el suelo es la "habitación" 0
-		dueno.resize(cols * filas)
-		dueno.fill(-1)
-		for f in range(2, filas - 2):
-			for c in range(2, cols - 2):
-				dueno[f * cols + c] = 0
-		estilos[0] = textura("pasillo", "")
-		tapa = load("res://assets/sprites/tapa-pasillo.png")
-		alfombra = load("res://assets/sprites/alfombra-pasillo.png")
+		dueno = sitio.dueno
+		if sitio.tipo == "pasillo":
+			estilos[0] = textura("pasillo", "")
+			tapa = load("res://assets/sprites/tapa-pasillo.png")
+			alfombra = load("res://assets/sprites/alfombra-pasillo.png")
+		else:
+			estilos[0] = textura("mantenimiento", "")
+			tapa = load("res://assets/sprites/tapa-generica.png")
 	else:
 		dueno = sitio.apt.dueno
 		tapa = load("res://assets/sprites/tapa-salon.png")   # la de todo el piso, como en el JS
@@ -73,11 +92,15 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	poner_muros()
 	poner_caras()
 	poner_puertas()
-	if sitio.tipo == "apartamento":
-		amueblar_banos()
+	poner_muebles()
 	if llave != Vector2.INF:
 		poner_llave(llave)
+	if sitio.tipo == "expo":
+		poner_exposicion()
 	hornear(navegacion)
+	if sitio.has("apt"):
+		preparar_niebla()
+	set_process(sitio.has("apt") or sitio.tipo == "expo")
 
 
 func textura(estilo: String, suelo: String, pared := "") -> Dictionary:
@@ -111,7 +134,7 @@ func zona_en(pos: Vector2) -> int:
 
 
 func nombre_zona(zona: int) -> String:
-	if sitio.tipo == "pasillo" or zona < 0:
+	if not sitio.has("apt") or zona < 0:
 		return ""
 	return sitio.apt.salas[zona].nombre
 
@@ -141,6 +164,10 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		var largo := (cols - 4) * 16 - 56
 		var y := filas * 8 - 16
 		lienzo.draw_texture_rect_region(alfombra, Rect2(32 + 28, y, largo, 32), Rect2(0, 0, largo * 2, alfombra.get_height()))
+	# las manchas de sangre de la sala de mantenimiento: cada una gira de 90 en 90 grados y se voltea al azar
+	for m in sitio.get("manchas", []):
+		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
+		lienzo.draw_texture_rect_region(MANCHAS, Rect2(-30, -18, 60, 36), Rect2(m.dibujo * 60, 0, 60, 36))
 
 
 # Los choques de los muros: rectángulos grandes (se juntan las casillas seguidas de cada fila, y las filas
@@ -201,6 +228,9 @@ func poner_caras() -> void:
 			cara.techo = estilos[sala].techo
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			cosas.add_child(cara)
+			if not caras.has(sala):
+				caras[sala] = []
+			caras[sala].append(cara)
 			c = fin
 
 
@@ -226,27 +256,180 @@ func poner_puertas() -> void:
 		puertas.append(puerta)
 
 
-# Los baños llevan el váter y el lavabo de la fase 1 contra la pared de arriba, si en ella no hay puerta
-# (ni en los laterales cerca de esa pared, para no tapar el paso)
-func amueblar_banos() -> void:
+# Los muebles que planta.gd ha decidido para este sitio (muebles.gd), con su variante
+func poner_muebles() -> void:
+	for m in sitio.get("muebles", []):
+		var mueble := MUEBLE.new()
+		mueble.montar(m, sitio.surtido)
+		cosas.add_child(mueble)
+		muebles.append(mueble)
+
+
+# ═════════════ Niebla ═════════════
+
+func preparar_niebla() -> void:
+	vistas = sitio.get_or_add("vistas", {})
 	for s in sitio.apt.salas:
-		if s.uso != "bano":
-			continue
-		var libre := true
-		for c in range(s.c0, s.c0 + s.ancho):
-			if dueno[(s.f0 - 1) * cols + c] == -2:
-				libre = false
-		for f in range(s.f0, s.f0 + 3):
-			if dueno[f * cols + s.c0 - 1] == -2 or dueno[f * cols + s.c0 + s.ancho] == -2:
-				libre = false
-		if not libre:
-			continue
-		var vater := VATER.instantiate()
-		vater.position = Vector2(s.c0 * CASILLA + 44, s.f0 * CASILLA + 26)
-		cosas.add_child(vater)
-		var lavabo := LAVABO.instantiate()
-		lavabo.position = Vector2(s.c0 * CASILLA + 140, s.f0 * CASILLA + 14)
-		cosas.add_child(lavabo)
+		niebla[s.id] = 0.0 if vistas.has(s.id) else 1.0
+		trozos_niebla[s.id] = []
+	# el suelo de cada habitación, por tramos de cada fila. Las casillas que tapa la cara de un muro de más
+	# abajo (las dos últimas filas antes de un tabique) no se oscurecen: ya las tapa esa cara, que lleva la
+	# niebla de su habitación (si no, la cara de una habitación descubierta quedaría a oscuras)
+	for f in filas:
+		var c := 0
+		while c < cols:
+			var sala := -1 if es_muro(c, f) or tapada(c, f) else sala_de(c, f)
+			var fin := c + 1
+			while fin < cols and (-1 if es_muro(fin, f) or tapada(fin, f) else sala_de(fin, f)) == sala:
+				fin += 1
+			if sala >= 0:
+				trozos_niebla[sala].append(Rect2(c * CASILLA, f * CASILLA, (fin - c) * CASILLA, CASILLA))
+			c = fin
+	velo = Node2D.new()
+	velo.name = "Niebla"
+	velo.draw.connect(func():
+		for sala in niebla:
+			if niebla[sala] > 0.0:
+				for r in trozos_niebla[sala]:
+					velo.draw_rect(r, Color(OSCURO, 0.9 * niebla[sala])))
+	add_child(velo)
+	actualizar_niebla(0.0)
+
+
+# ¿Tapa esta casilla de suelo la cara de un muro de debajo?
+func tapada(c: int, f: int) -> bool:
+	for k in [1, 2]:
+		if es_muro(c, f + k) and f + k + 1 < filas and not es_muro(c, f + k + 1):
+			return true
+	return false
+
+
+# Descubre la habitación en la que está Johnny y, si está en una puerta o pegado a ella, las dos que comunica;
+# y va aclarando las descubiertas
+func actualizar_niebla(delta: float) -> void:
+	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
+	if johnny and johnny.get_parent() == cosas:
+		var c := int(johnny.position.x / CASILLA)
+		var f := int(johnny.position.y / CASILLA)
+		var aqui := zona_en(johnny.position)
+		if aqui >= 0:
+			vistas[aqui] = true
+		for d in sitio.apt.puertas:
+			if c >= d.c - 1 and c <= d.c + d.ancho and f >= d.f - 1 and f <= d.f + d.fondo:
+				vistas[d.a] = true
+				vistas[d.b] = true
+	var cambia := delta == 0.0
+	for sala in niebla:
+		if vistas.has(sala) and niebla[sala] > 0.0:
+			niebla[sala] = maxf(0.0, niebla[sala] - delta * ACLARA)
+			cambia = true
+	if not cambia:
+		return
+	velo.queue_redraw()
+	for sala in caras:
+		for cara in caras[sala]:
+			if cara.niebla != niebla.get(sala, 0.0):
+				cara.niebla = niebla.get(sala, 0.0)
+				cara.queue_redraw()
+	for m in muebles:
+		var n: float = niebla.get(m.zona, 0.0)
+		m.modulate = Color(1, 1, 1).lerp(OSCURO, 0.85 * n)
+
+
+# ¿Está esto en una habitación que aún no se ha pisado? (entonces ni se ve ni se le apunta)
+func oculto(pos: Vector2) -> bool:
+	return niebla.get(zona_en(pos), 0.0) > 0.5
+
+
+func _process(delta: float) -> void:
+	if not niebla.is_empty():
+		actualizar_niebla(delta)
+		for z in get_tree().get_nodes_in_group("zombis"):
+			z.visible = not oculto(z.global_position)
+	if not expo_sprites.is_empty():
+		# los zombis de la exposición giran por sus 8 direcciones
+		var antes := int(expo_t / 0.7)
+		expo_t += delta
+		if int(expo_t / 0.7) != antes:
+			for s in expo_sprites:
+				s.play("reposo_" + RUMBOS[int(expo_t / 0.7) % RUMBOS.size()])
+
+
+# ═════════════ Exposición (modo pruebas) ═════════════
+
+# Todos los muebles del catálogo con sus variantes y su dibujo de lado, a su tamaño real y con su nombre debajo
+# (el rectángulo claro es el hueco que ocupa en el suelo); y debajo, los zombis con todas sus ropas, girando.
+# Nada choca: es para mirar.
+func poner_exposicion() -> void:
+	var x := float(MURO + 30)
+	var y := float(MURO + 150)    # el pie de la fila
+	var alto_fila := 0.0
+	for tipo in Catalogo.MUEBLES:
+		var p: Dictionary = Catalogo.MUEBLES[tipo]
+		var ids := ["mueble-" + tipo]
+		for letra in MUEBLE.LETRAS:
+			if not MUEBLE.existe("mueble-%s-%s" % [tipo, letra]):
+				break
+			ids.append("mueble-%s-%s" % [tipo, letra])
+		for id in ids.duplicate():
+			if MUEBLE.existe(id + "-lado"):
+				ids.append(id + "-lado")
+		for id in ids:
+			var lado: bool = id.ends_with("-lado")
+			var tex: Texture2D = load(MUEBLE.ruta(id))
+			var w: float = maxf(tex.get_width() * 2.0, p.dep if lado else p.len)
+			if x + w > sitio.ancho - MURO - 30:
+				x = MURO + 30
+				y += alto_fila + 70
+				alto_fila = 0.0
+			alto_fila = maxf(alto_fila, tex.get_height() * 2.0)
+			var pie := Vector2(x + w / 2.0, y)
+			var hueco := ColorRect.new()
+			hueco.color = Color(1, 1, 1, 0.18)
+			hueco.size = Vector2(p.dep, p.len) if lado else Vector2(p.len, p.dep)
+			hueco.position = pie - Vector2(hueco.size.x / 2.0, hueco.size.y)
+			add_child(hueco)
+			move_child(hueco, 1)
+			var sprite := Sprite2D.new()
+			sprite.texture = tex
+			sprite.scale = Vector2(2, 2)
+			sprite.centered = false
+			sprite.offset = Vector2(-floorf(tex.get_width() / 2.0), -tex.get_height())
+			sprite.position = pie
+			cosas.add_child(sprite)
+			etiqueta(id.trim_prefix("mueble-"), pie + Vector2(0, 6))
+			x += maxf(w + 24, 110.0)
+	# los zombis, en una fila por tipo: el de siempre y sus ropas
+	y += alto_fila + 150
+	for nombre in EXPO_ZOMBIS:
+		var muestra: Node2D = load("res://escenas/personajes/%s.tscn" % nombre).instantiate()
+		var base: AnimatedSprite2D = muestra.get_node("Sprite")
+		var ropas: Array = muestra.get("ropas") if muestra.get("ropas") else [base.sprite_frames]
+		x = MURO + 60
+		for ropa in ropas:
+			var sprite: AnimatedSprite2D = base.duplicate()
+			sprite.sprite_frames = ropa
+			sprite.position += Vector2(x, y)
+			sprite.play("reposo_s")
+			cosas.add_child(sprite)
+			expo_sprites.append(sprite)
+			x += 110
+		etiqueta(nombre.trim_prefix("zombi_"), Vector2(MURO + 60, y + 40))
+		muestra.free()
+		y += 150
+
+
+func etiqueta(texto: String, pos: Vector2) -> void:
+	var nombre := Label.new()
+	nombre.text = texto
+	nombre.add_theme_font_size_override("font_size", 14)
+	nombre.add_theme_color_override("font_outline_color", Color.BLACK)
+	nombre.add_theme_constant_override("outline_size", 4)
+	nombre.size = Vector2(200, 20)
+	nombre.position = pos - Vector2(100, 0)
+	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	nombre.z_index = 5
+	add_child(nombre)
 
 
 # La llave del apartamento de la jefa: brilla un poco y sube y baja hasta que Johnny la pisa

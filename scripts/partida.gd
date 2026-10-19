@@ -5,8 +5,10 @@
 #   - El apartamento de la jefa está cerrado con llave; la llave está en el suelo de otro apartamento.
 #   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente.
 #   - Después de la 4ª planta, el edificio está limpio y la partida vuelve a empezar.
+# La partida empieza en la sala de mantenimiento de la planta baja. Arriba a la derecha va el minimapa.
 #
-# Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny.
+# Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
+# la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento.
 #
 # Con "-- --captura" hace una prueba sola: cuenta en la terminal qué planta ha salido, mete a Johnny en un
 # apartamento, dispara para despertar a los zombis, guarda una foto en captura.png, sube a la planta
@@ -23,6 +25,7 @@ const ZOMBIS := {
 	"portera": preload("res://escenas/personajes/portera.tscn"),
 }
 const MAPA := preload("res://scripts/mapa/mapa.gd")
+const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_P: "portera"}
 const CIERRE := 110.0      # lo que hay que alejarse de la puerta de entrada para que se cierre
@@ -53,14 +56,21 @@ func _ready() -> void:
 		barra.max_value = maxima
 		barra.value = vida)
 	johnny.arma_cambiada.connect(func(texto): cartel.text = texto)
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera · F9 exposición" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.avisar_arma()
+	var minimapa := MINIMAPA.new()
+	minimapa.name = "Minimapa"
+	minimapa.partida = self
+	$Pantalla.add_child(minimapa)
+	$Pantalla.move_child(minimapa, negro.get_index())   # por debajo del fundido a negro
 
 	captura = "--captura" in OS.get_cmdline_user_args()
 	nueva_planta(1)
-	var llegada := puerta_de_tipo("llegada")
-	montar(0, llegada, false)
+	# en la sala de mantenimiento, en medio
+	montar(planta.mantenimiento, 0, false)
+	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
 	if captura:
 		contar_planta()
 	else:
@@ -96,6 +106,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	$Pantalla/Jefa.hide()
 	aqui = idx
 	var sitio: Dictionary = planta.sitios[idx]
+	sitio.visitado = true
 	mapa = MAPA.new()
 	mapa.name = "Mapa"
 	var llave := Vector2.INF
@@ -298,8 +309,13 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 
 
 func _unhandled_input(evento: InputEvent) -> void:
-	if evento is InputEventKey and evento.pressed and not evento.echo and evento.keycode in TECLAS and not cambiando:
+	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando:
+		return
+	if evento.keycode in TECLAS:
 		meter_zombi(TECLAS[evento.keycode], mapa.punto_libre(johnny.position, 300.0))
+	elif evento.keycode == KEY_F9 and planta.expo >= 0 and not cerrada:
+		# a la exposición y de vuelta a la sala de mantenimiento
+		montar(planta.mantenimiento if aqui == planta.expo else planta.expo, 0)
 
 
 # ── Solo con --captura ──
@@ -308,19 +324,31 @@ func contar_planta() -> void:
 	print("Planta: ", planta.nombre)
 	for i in range(1, planta.sitios.size()):
 		var s: Dictionary = planta.sitios[i]
+		if not s.has("apt"):
+			print("  %s [%s]: %d muebles" % [s.nombre, s.tipo, s.muebles.size()])
+			continue
 		var salas := []
 		for sala in s.apt.salas:
 			salas.append("%s(%d)" % [sala.nombre, sala.casillas])
 		var tipos := {}
 		for z in s.zombis:
 			tipos[z.tipo] = tipos.get(z.tipo, 0) + 1
-		print("  %s [%s] %dx%d casillas: %s | zombis: %s" % [s.nombre, s.tipo, s.apt.cols, s.apt.filas, " ".join(salas), tipos])
-	print("  llave en ", planta.sitios[planta.llave.sitio].nombre)
+		print("  %s [%s] %dx%d casillas: %s | %d muebles | zombis: %s" % [s.nombre, s.tipo, s.apt.cols, s.apt.filas,
+			" ".join(salas), s.muebles.size(), tipos])
+	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(), planta.sitios[planta.llave.sitio].nombre])
 
 
 func _process(delta: float) -> void:
 	tiempo += delta
 	var antes := tiempo - delta
+	# primero, fotos de la sala de mantenimiento (donde empieza) y de la exposición
+	if antes < 0.3 and tiempo >= 0.3:
+		get_viewport().get_texture().get_image().save_png("res://captura-mantenimiento.png")
+		montar(planta.expo, 0, false)
+		johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, 420)
+		johnny.get_node("Camara").reset_smoothing()
+	if antes < 0.7 and tiempo >= 0.7:
+		get_viewport().get_texture().get_image().save_png("res://captura-expo.png")
 	# al segundo, a un apartamento normal (el que tiene más zombis)
 	if antes < 1.0 and tiempo >= 1.0:
 		var mejor := 1

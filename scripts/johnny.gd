@@ -221,8 +221,12 @@ func se_ve(zombi: Node2D) -> bool:
 func buscar_objetivo(w: Dictionary) -> Node2D:
 	var alcance: float = MIRAR_CERCA if w.tipo == "cuerpo" else w.alcance
 	var mejor: Node2D = null
+	var mapa := get_tree().get_first_node_in_group("mapa")
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var distancia: float = global_position.distance_to(zombi.global_position) - zombi.radio
+		# a los de una habitación a oscuras no se les apunta
+		if mapa and mapa.oculto(zombi.global_position):
+			continue
 		if distancia >= alcance or not se_ve(zombi):
 			continue
 		mejor = zombi

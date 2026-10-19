@@ -2,7 +2,7 @@
 #
 # Cada planta es un pasillo largo con cuatro puertas, dos a cada lado (A y B arriba, C y D abajo). Detrás de
 # cada una hay un "sitio" aparte: un apartamento o el apartamento de la jefa (cerrado con llave). En la planta
-# baja, la puerta A es la sala de mantenimiento, que de momento está en obras. En el pasillo hay además un
+# baja, la puerta A es la sala de mantenimiento, donde empieza la partida. En el pasillo hay además un
 # ascensor averiado, por la izquierda la puerta por la que se ha llegado y, a la derecha, las escaleras, que
 # no se abren hasta acabar con la jefa.
 #
@@ -15,6 +15,11 @@ const PASILLO_COLS := 56
 const PASILLO_FILAS := 12
 const PUERTA_A := 14 * CASILLA    # a qué distancia de cada punta del pasillo están las puertas
 const PLANTAS := 5                # planta baja y cuatro más (la azotea, con el jefe final, aún no existe)
+const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
+const SALA_FILAS := 20
+const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
+const EXPO_COLS := 46            # la sala de exposición del modo pruebas
+const EXPO_FILAS := 72
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0}
@@ -38,8 +43,10 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # Genera la planta número "num". Devuelve:
 #   num, nombre      número (1 = baja) y nombre de la planta
 #   sitios           [pasillo, lo de detrás de A, B, C y D]. Cada sitio: {tipo ("pasillo", "apartamento",
-#                    "jefe" u "obras"), nombre, ancho, alto, apt (el apartamento, si lo es), salidas, zombis,
-#                    limpio}
+#                    "jefe", "mantenimiento" o "expo"), nombre, ancho, alto, apt (el apartamento, si lo es),
+#                    dueno (el plano de las salas rectangulares), muebles (muebles.gd), surtido (qué variante
+#                    de cada mueble lleva), salidas, zombis, limpio, visitado}
+#   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa
 #   tiene_llave, jefa_muerta
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
@@ -48,11 +55,12 @@ static func nombre_puerta(num: int, letra: String) -> String:
 static func generar(num: int) -> Dictionary:
 	rng.randomize()
 	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
-		"jefa_muerta": false}
+		"jefa_muerta": false, "mantenimiento": -1, "expo": -1}
 	var ancho := PASILLO_COLS * CASILLA
 	var alto := PASILLO_FILAS * CASILLA
 	var pasillo := {"tipo": "pasillo", "nombre": planta.nombre, "ancho": ancho, "alto": alto, "salidas": [],
-		"zombis": [], "limpio": true}
+		"zombis": [], "limpio": true, "visitado": true, "dueno": Muebles.plano_rectangular(PASILLO_COLS, PASILLO_FILAS),
+		"surtido": rng.randi()}
 	planta.sitios.append(pasillo)
 
 	var huecos := [{"letra": "A", "dir": "arriba", "en": PUERTA_A}, {"letra": "B", "dir": "arriba", "en": ancho - PUERTA_A},
@@ -68,15 +76,17 @@ static func generar(num: int) -> Dictionary:
 	for h in huecos:
 		var nombre := nombre_puerta(num, h.letra)
 		if h not in libres:
-			# La sala de mantenimiento (fase 4b): de momento, una puerta que no se abre
-			pasillo.salidas.append({"dir": h.dir, "en": h.en, "tipo": "puerta", "a": -1, "vuelta": -1,
-				"cerrojo": "nunca", "aviso": "Mantenimiento: en obras", "letrero": "Mantenimiento"})
+			planta.mantenimiento = planta.sitios.size()
+			planta.sitios.append(mantenimiento(pasillo.salidas.size()))
+			pasillo.salidas.append({"dir": h.dir, "en": h.en, "tipo": "puerta", "a": planta.mantenimiento, "vuelta": 0,
+				"cerrojo": "", "aviso": "", "letrero": "Mantenimiento"})
 			continue
 		var jefe: bool = h == de_jefa
 		# la puerta del apartamento está en el lado que da al pasillo
 		var apt := Apartamento.generar(rng.randi(), jefe, "abajo" if h.dir == "arriba" else "arriba")
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt,
-			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false}
+			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
+			"visitado": false, "muebles": Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		sitio.salidas.append({"dir": apt.entrada.lado, "en": (apt.entrada.c + 1) * CASILLA, "tipo": "puerta",
@@ -96,6 +106,12 @@ static func generar(num: int) -> Dictionary:
 		"letrero": "Portal" if baja else "Bajada"})
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
 		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con la portera", "letrero": "Escaleras"})
+	# los muebles del pasillo, sin tapar ninguna puerta y dejando ir de una punta a la otra
+	pasillo.muebles = Muebles.de_sala("pasillo", {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
+		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng)
+	if baja:
+		planta.expo = planta.sitios.size()
+		planta.sitios.append(exposicion(planta.mantenimiento))
 
 	# Dificultad: los apartamentos normales, en un orden al azar, llevan cada vez más zombis
 	var normales := []
@@ -111,8 +127,48 @@ static func generar(num: int) -> Dictionary:
 	var donde: int = normales[rng.randi() % normales.size()]
 	var salas: Array = planta.sitios[donde].apt.salas.filter(func(s): return s.uso != "salon" and s.uso != "bano")
 	var sala: Dictionary = salas[rng.randi() % salas.size()]
-	planta.llave = {"sitio": donde, "pos": sala.centro}
+	# en el centro de la habitación o, si ahí hay un mueble, en otro sitio libre de ella
+	var pos: Vector2 = sala.centro
+	if not lejos_de_muebles(planta.sitios[donde], pos, 26.0):
+		pos = sitio_libre(planta.sitios[donde], sala, Vector2.INF, [])
+		if pos == Vector2.INF:
+			pos = sala.centro
+	planta.llave = {"sitio": donde, "pos": pos}
 	return planta
+
+
+# La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo, unos pocos
+# muebles y manchas en el suelo. La mitad izquierda de la pared de arriba queda libre: ahí irán el banco de
+# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340). Los muebles de esta sala
+# solo tienen dibujo de frente, así que van en la otra mitad. "vuelta" es su puerta en el pasillo.
+static func mantenimiento(vuelta: int) -> Dictionary:
+	var ancho := SALA_COLS * CASILLA
+	var alto := SALA_FILAS * CASILLA
+	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "ancho": ancho, "alto": alto,
+		"dueno": Muebles.plano_rectangular(SALA_COLS, SALA_FILAS), "zombis": [], "limpio": true, "visitado": false,
+		"surtido": rng.randi(), "manchas": []}
+	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
+		"aviso": "", "letrero": "Pasillo"}]
+	sitio.muebles = Muebles.de_sala("mantenimiento", {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": sitio.dueno},
+		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0)], rng,
+		[SITIO_TALLER])
+	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), lejos de la pared de arriba
+	for i in rng.randi_range(6, 10):
+		sitio.manchas.append({"pos": Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60),
+			rng.randf_range(MURO + 150, alto - MURO - 50)), "dibujo": rng.randi() % 10, "giro": rng.randi() % 4,
+			"espejo": rng.randf() < 0.5})
+	return sitio
+
+
+# La sala de exposición del modo pruebas (tecla F9): todos los muebles y todos los zombis, para ver cómo
+# quedan. Lo que se expone lo pone mapa.gd. Su puerta lleva a la sala de mantenimiento.
+static func exposicion(mant: int) -> Dictionary:
+	var ancho := EXPO_COLS * CASILLA
+	var alto := EXPO_FILAS * CASILLA
+	return {"tipo": "expo", "nombre": "Exposición", "ancho": ancho, "alto": alto, "muebles": [],
+		"dueno": Muebles.plano_rectangular(EXPO_COLS, EXPO_FILAS), "zombis": [], "limpio": true, "visitado": true,
+		"surtido": 0, "salidas": [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": mant, "vuelta": 0,
+		"cerrojo": "", "aviso": "", "letrero": "Mantenimiento"}]}
 
 
 # Los zombis de un apartamento: ya están dentro, dormidos y repartidos por las habitaciones según su
@@ -150,7 +206,7 @@ static func horda(sitio: Dictionary, orden: int, num: int) -> Array:
 			var caben := tipos.filter(func(t): return COSTE[t] <= queda)
 			if caben.is_empty():
 				break
-			var pos := sitio_libre(apt, s, puerta, zombis)
+			var pos := sitio_libre(sitio, s, puerta, zombis)
 			if pos == Vector2.INF:
 				break
 			var tipo: String = caben[rng.randi() % caben.size()]
@@ -159,22 +215,30 @@ static func horda(sitio: Dictionary, orden: int, num: int) -> Array:
 	return zombis
 
 
-# Un punto de la habitación con sitio alrededor, lejos de la entrada y de los otros zombis
-static func sitio_libre(apt: Dictionary, sala: Dictionary, puerta: Vector2, otros: Array) -> Vector2:
+# Un punto de la habitación con sitio alrededor, lejos de la entrada, de los muebles y de los otros zombis
+static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, otros: Array) -> Vector2:
+	var apt: Dictionary = sitio.apt
 	for i in 200:
 		var pos := Vector2(sala.c0 * CASILLA + rng.randf() * sala.ancho * CASILLA,
 			sala.f0 * CASILLA + rng.randf() * sala.fondo * CASILLA)
 		if not despejado(apt, pos, 26.0, sala.id):
 			continue
-		# en los baños, el váter y el lavabo ocupan la pared de arriba
-		if sala.uso == "bano" and pos.y < sala.f0 * CASILLA + 90:
+		if not lejos_de_muebles(sitio, pos, 30.0):
 			continue
-		if pos.distance_to(puerta) < LEJOS_PUERTA:
+		if puerta != Vector2.INF and pos.distance_to(puerta) < LEJOS_PUERTA:
 			continue
 		if otros.any(func(z): return z.pos.distance_to(pos) < 60.0):
 			continue
 		return pos
 	return Vector2.INF
+
+
+# ¿Queda el punto a más de "radio" de todos los muebles del sitio?
+static func lejos_de_muebles(sitio: Dictionary, pos: Vector2, radio: float) -> bool:
+	for m in sitio.get("muebles", []):
+		if Muebles.hueco(m).grow(radio).has_point(pos):
+			return false
+	return true
 
 
 # ¿Están el punto y lo que tiene alrededor (a "radio") dentro de esa habitación?
