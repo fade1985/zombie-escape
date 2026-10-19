@@ -1,0 +1,2 @@
+# Godot y Python trabajan con saltos de línea de Linux (LF); así git no los cambia
+* text=auto eol=lf

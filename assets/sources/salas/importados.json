@@ -1,0 +1,134 @@
+{
+  "bano/banera-lado.png": {
+    "huella": "c9c541125bebe3e1",
+    "sprite": "mueble-bathtub-lado"
+  },
+  "bano/banera.png": {
+    "huella": "39e271c3464eda5b",
+    "sprite": "mueble-bathtub"
+  },
+  "bano/lavabo.png": {
+    "huella": "56a1dfead52984a2",
+    "sprite": "mueble-sink"
+  },
+  "bano/lavadora.png": {
+    "huella": "60b91907f955b7b5",
+    "sprite": "mueble-washer"
+  },
+  "bano/vater-lado.png": {
+    "huella": "7e2baf3774515fd9",
+    "sprite": "mueble-toilet-lado"
+  },
+  "bano/vater.png": {
+    "huella": "7b7209555c754217",
+    "sprite": "mueble-toilet"
+  },
+  "cocina/encimera.png": {
+    "huella": "5d9751d7bb869abc",
+    "sprite": "mueble-counter"
+  },
+  "cocina/fogon.png": {
+    "huella": "c308523680f5280a",
+    "sprite": "mueble-stove"
+  },
+  "cocina/nevera.png": {
+    "huella": "4fbbc836f523f4e1",
+    "sprite": "mueble-fridge"
+  },
+  "comun/lampara-b.png": {
+    "huella": "6d006070ac0fef0b",
+    "sprite": "mueble-lamp-b"
+  },
+  "comun/lampara.png": {
+    "huella": "600bbdc981c42099",
+    "sprite": "mueble-lamp"
+  },
+  "comun/planta.webp": {
+    "huella": "c57bf3d63b56b949",
+    "sprite": "mueble-plant"
+  },
+  "dormitorio/armario.png": {
+    "huella": "b9de9a8c54f20770",
+    "sprite": "mueble-wardrobe"
+  },
+  "dormitorio/cama.png": {
+    "huella": "a186f369144aa5af",
+    "sprite": "mueble-bed"
+  },
+  "dormitorio/escritorio.png": {
+    "huella": "6570f3a18e7daeae",
+    "sprite": "mueble-desk"
+  },
+  "dormitorio/mesilla.png": {
+    "huella": "31a58da0fa2e0317",
+    "sprite": "mueble-nightstand"
+  },
+  "pasillo/aplique.png": {
+    "huella": "88d5170172b2319e",
+    "sprite": "aplique-pared"
+  },
+  "pasillo/consola.png": {
+    "huella": "01b5e0d324ea5c4a",
+    "sprite": "mueble-console"
+  },
+  "pasillo/perchero.png": {
+    "huella": "0894eb442bc8fa9a",
+    "sprite": "mueble-coatstand"
+  },
+  "pasillo/zapatero.png": {
+    "huella": "32cab786708a36f9",
+    "sprite": "mueble-shoerack"
+  },
+  "salon/estanteria.png": {
+    "huella": "d47adad4c98f2f88",
+    "sprite": "mueble-bookshelf"
+  },
+  "salon/sillon-b.png": {
+    "huella": "202f400ee6535d56",
+    "sprite": "mueble-armchair-b"
+  },
+  "salon/sillon-c-lado.png": {
+    "huella": "cee8cd3c5372f4cb",
+    "sprite": "mueble-armchair-c-lado"
+  },
+  "salon/sillon-c.png": {
+    "huella": "24175239b0428664",
+    "sprite": "mueble-armchair-c"
+  },
+  "salon/sillon-lado.png": {
+    "huella": "c270fd803659faf0",
+    "sprite": "mueble-armchair-lado"
+  },
+  "salon/sillon.png": {
+    "huella": "00a720b09e31232a",
+    "sprite": "mueble-armchair"
+  },
+  "salon/sofa-b.png": {
+    "huella": "1408585f6f615022",
+    "sprite": "mueble-sofa-b"
+  },
+  "salon/sofa-c-lado.png": {
+    "huella": "6b7e833f1e971f28",
+    "sprite": "mueble-sofa-c-lado"
+  },
+  "salon/sofa-c.png": {
+    "huella": "1b08284a70567646",
+    "sprite": "mueble-sofa-c"
+  },
+  "salon/sofa-d.png": {
+    "huella": "8973e340da3eba97",
+    "sprite": "mueble-sofa-d"
+  },
+  "salon/sofa-lado.png": {
+    "huella": "88b3c62ac96c033b",
+    "sprite": "mueble-sofa-lado"
+  },
+  "salon/sofa.png": {
+    "huella": "606ee1ed4b524319",
+    "sprite": "mueble-sofa"
+  },
+  "salon/tele.png": {
+    "huella": "3b3db1bf763bb54f",
+    "sprite": "mueble-tv"
+  }
+}

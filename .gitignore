@@ -1,0 +1,9 @@
+# Lo que Godot vuelve a crear solo (caché de importación)
+.godot/
+# Lo que crea Godot al exportar
+/exportar/
+# Fotos de prueba sacadas con --captura
+captura*.png
+captura*.png.import
+# Python
+__pycache__/

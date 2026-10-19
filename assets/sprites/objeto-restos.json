@@ -1,0 +1,88 @@
+{
+  "cell": [
+    20,
+    20
+  ],
+  "pivot": [
+    10.0,
+    10.0
+  ],
+  "anims": {
+    "calavera-grande": {
+      "fps": 1,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 0,
+          "col": 0,
+          "frames": 3
+        }
+      }
+    },
+    "hueso-grande": {
+      "fps": 1,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 1,
+          "col": 0,
+          "frames": 3
+        }
+      }
+    },
+    "calavera-mediano": {
+      "fps": 1,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 2,
+          "col": 0,
+          "frames": 3
+        }
+      }
+    },
+    "hueso-mediano": {
+      "fps": 1,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 3,
+          "col": 0,
+          "frames": 3
+        }
+      }
+    },
+    "calavera-pequeno": {
+      "fps": 1,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 4,
+          "col": 0,
+          "frames": 3
+        }
+      }
+    },
+    "hueso-pequeno": {
+      "fps": 1,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 5,
+          "col": 0,
+          "frames": 3
+        }
+      }
+    },
+    "idle": {
+      "fps": 1,
+      "dirs": {
+        "south": {
+          "row": 0,
+          "col": 0,
+          "frames": 1
+        }
+      }
+    }
+  }
+}
