@@ -101,7 +101,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 4a | Mapa: planta al azar con pasillo y apartamentos, salas, puertas, zombis dormidos por sala, llave, portera y escaleras (5 plantas) | hecha, con visto bueno (20 oct) |
 | 4b | Catálogo de muebles e `importar.py`, niebla (habitaciones a oscuras), minimapa, sala de mantenimiento y sala de exposición (F9) | hecha, con visto bueno (20 oct) |
 | 5 | Luz y penumbra: oscuridad por sitio, apliques que parpadean, lámparas y mesillas, sombras de muebles y muros, fogonazos y explosiones | hecha, con visto bueno (20 oct) |
-| 6a | Menús (principal, pausa, derrota, victoria) con mando, HUD, guardado, atributos de Johnny y billetes | hecha, pendiente de visto bueno |
+| 6a | Menús (principal, pausa, derrota, victoria) con mando, HUD, guardado, atributos de Johnny y billetes | hecha, con visto bueno (20 oct) |
 | 6b | Ordenador ConserjeOS: compra de puntos, árbol de talentos (Militar y Superviviente) y tienda de armas | |
 | 7 | Molotov, granada, objetos, banco de trabajo, mutaciones y superviviente | |
 | 8 | Música, sonido, exportar a web (Vercel) y retirar la versión JS | |
