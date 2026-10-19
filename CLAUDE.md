@@ -30,7 +30,8 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 
 - **En el editor:** abrir Godot (`C:\Program Files\Godot\Godot_v4.7.2-stable_win64.exe`), en el gestor de
   proyectos **Importar** → `project.godot` de esta carpeta, y **F5** para jugar. Johnny anda con **WASD**, las
-  **flechas** o el **stick izquierdo** del mando.
+  **flechas** o el **stick izquierdo** del mando, y apunta y ataca solo (como en el JS). **Q** / rueda / botón Y
+  cambia entre sus dos armas, **1-6** pone cualquiera (solo para probar) y **R** / botón X recarga.
 - **Desde la terminal** (comprobar que arranca y sacar una foto `captura.png` sin jugar; se cierra solo):
 
   ```
@@ -53,9 +54,10 @@ para que el pixel art se vea nítido.
 |---|---|
 | `project.godot` | Ajustes: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque |
 | `escenas/salas/` | Las salas. `bano.tscn` (la de inicio) y `bano_tileset.tres`, las piezas con las que se pinta y cuáles chocan |
-| `escenas/personajes/` | `johnny.tscn` (y luego zombis, portera…) |
+| `escenas/personajes/` | `johnny.tscn`, `zombi_normal.tscn` (y luego los otros zombis, portera…) |
+| `escenas/armas/` | `bala.tscn` (la bala y los perdigones) |
 | `escenas/muebles/` | Un mueble por escena (bañera, váter, lavabo, lavadora), con su choque y su `Sombra` para la fase de luz |
-| `scripts/` | El código: `johnny.gd` (moverse y animarse), `sala.gd` (la prueba con `--captura`) |
+| `scripts/` | El código: `johnny.gd` (moverse, vida, apuntar y atacar), `armas.gd` (los números de las armas), `bala.gd`, `zombi.gd` (perseguir con navegación, zarpazos), `sala.gd` (hornea la navegación, la pantalla, tandas de zombis y la prueba con `--captura`) |
 | `assets/sprites/` | Copia de los sprites del juego JS (`.png` + `.json` + `manifest.json`). Los `.tres` de al lado son sus animaciones para Godot |
 | `assets/tiles/` | Texturas preparadas para los TileSets (`py tools/texturas_bano.py`) |
 | `assets/sources/` | Originales (muebles, texturas…). Lleva `.gdignore`: Godot no los importa |
@@ -78,7 +80,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | Fase | Qué | Estado |
 |---|---|---|
 | 1 | Base: proyecto, recursos copiados, Johnny andando por el baño | hecha, con visto bueno (19 oct) |
-| 2 | Combate: armas, balas, zombi normal | |
+| 2 | Combate: armas, balas, zombi normal | hecha, esperando visto bueno |
 | 3 | Los 6 zombis y la portera | |
 | 4 | Mapa: planta, apartamentos, puertas, muebles del catálogo, niebla | |
 | 5 | Luz y penumbra | |

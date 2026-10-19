@@ -7,7 +7,8 @@ import json
 import sys
 
 # Nombre de cada estado del juego en español (los que no estén aquí, o no estén en la hoja, no se pasan)
-ESTADOS = {"walk": "andar", "idle": "reposo", "attack": "ataque", "hurt": "golpe", "death": "muerte"}
+ESTADOS = {"walk": "andar", "idle": "reposo", "attack": "ataque", "hurt": "golpe", "death": "muerte",
+           "fx": "efectos"}   # "efectos": fogonazo, humo y casquillo del disparo, para pintarlos encima al andar
 # Direcciones: sur, sureste, este, noreste, norte, noroeste, oeste, suroeste
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
         "north": "n", "north-west": "no", "west": "o", "south-west": "so"}

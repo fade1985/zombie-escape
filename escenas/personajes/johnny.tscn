@@ -23,6 +23,15 @@ autoplay = "reposo_s"
 centered = false
 offset = Vector2(-48, -72)
 
+[node name="Efectos" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 16)
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("frames")
+animation = &"reposo_s"
+centered = false
+offset = Vector2(-48, -72)
+
 [node name="Camara" type="Camera2D" parent="."]
 limit_left = 0
 limit_top = 0
