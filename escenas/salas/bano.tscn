@@ -108,7 +108,7 @@ modulate = Color(1, 1, 1, 0.7)
 theme_override_colors/font_outline_color = Color(0.11, 0.1, 0.17, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 13
-text = "1-6 elegir arma · Q cambiar · R recargar · Johnny apunta y ataca solo"
+text = "Modo: Asistido (F1 cambia) · 1-6 elegir arma · Q cambiar · R recargar"
 
 [node name="Aviso" type="Label" parent="Pantalla"]
 visible = false

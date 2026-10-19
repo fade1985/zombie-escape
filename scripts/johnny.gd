@@ -3,9 +3,13 @@
 #
 # Armas (los números están en armas.gd). Como en el juego de navegador, lleva dos: una de cuerpo a cuerpo y
 # otra de fuego, y se cambia entre ellas con Q, la rueda del ratón o el botón Y del mando. Para probar, las
-# teclas 1 a 6 ponen cualquiera de las seis. R (o el botón X del mando) recarga.
-# Apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si está a tiro,
-# le pega o le dispara. El jugador solo se preocupa de moverse.
+# teclas 1 a 6 ponen cualquiera de las seis. R (o el botón RB del mando) recarga.
+# Tres modos de atacar (F1 cambia de uno a otro):
+#   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
+#             está a tiro, le pega o le dispara. El jugador solo se preocupa de moverse
+#   mira      ataca mientras se pulsa J, el clic izquierdo o el botón X del mando, hacia donde mira Johnny
+#   libre     apunta con el ratón (y ataca con el clic o J) o con el stick derecho del mando (y ataca mientras
+#             lo empuja). Con una ayuda suave: si apuntas casi encima de un zombi, se tuerce un poco hacia él
 #
 # Tiene vida: los zarpazos se la quitan y, cuando cambia, lo avisa con la señal "vida_cambiada".
 extends CharacterBody2D
@@ -13,6 +17,7 @@ extends CharacterBody2D
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
 signal murio
 signal arma_cambiada(texto: String)            # el cartel del arma (y sus balas) de la pantalla escucha esta
+signal modo_cambiado(nombre: String)           # y la ayuda de abajo, el modo de atacar
 
 const VELOCIDAD := 210.0   # unidades por segundo, la misma que en el juego de navegador
 const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igual que en el juego
@@ -26,6 +31,9 @@ const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia em
 const EMPUJE := 170.0      # empuje base de un golpe a un zombi normal (el del arma lo multiplica)
 const CAMBIO := 0.15       # lo que tarda en cambiar de arma antes de poder atacar
 const BALA := preload("res://escenas/armas/bala.tscn")
+
+const MODOS := {"asistido": "Asistido", "mira": "Hacia donde mira", "libre": "Apuntar libre"}
+const AYUDA_ANGULO := 0.2  # modo libre: radianes (unos 11°) de margen para que el apunte se tuerza hacia un zombi
 
 # Nombre corto de cada dirección, empezando por el este y girando hacia abajo (sentido de las agujas
 # del reloj, porque en pantalla la Y crece hacia abajo)
@@ -46,6 +54,9 @@ var ataque_dur := 0.0      # lo que dura ese ataque
 var golpe_pendiente := false   # golpe cuerpo a cuerpo que aún no ha llegado (pega a mitad de animación)
 var golpe_angulo := 0.0        # y hacia dónde va
 
+var modo := "asistido"     # cómo se ataca (ver arriba)
+var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
+
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var efectos: AnimatedSprite2D = $Efectos   # fogonazo, humo y casquillo al disparar andando
 
@@ -56,6 +67,22 @@ func _ready() -> void:
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, VIDA_MAX)
+	modo_cambiado.emit.call_deferred(MODOS[modo])
+
+
+# Si se mueve el ratón, se apunta con él; si se empuja el stick derecho, con el mando
+func _input(evento: InputEvent) -> void:
+	if evento is InputEventMouseMotion:
+		con_raton = true
+	elif evento is InputEventJoypadMotion and absf(evento.axis_value) > 0.4 and evento.axis in [JOY_AXIS_RIGHT_X, JOY_AXIS_RIGHT_Y]:
+		con_raton = false
+
+
+# F1: pasa al siguiente modo de atacar
+func cambiar_modo() -> void:
+	var nombres := MODOS.keys()
+	modo = nombres[(nombres.find(modo) + 1) % nombres.size()]
+	modo_cambiado.emit(MODOS[modo])
 
 
 # El arma que tiene en la mano (sus datos)
@@ -79,6 +106,8 @@ func _physics_process(delta: float) -> void:
 		cambiar_mano()
 	if Input.is_action_just_pressed("recargar"):
 		empezar_recarga()
+	if Input.is_action_just_pressed("cambiar_modo"):
+		cambiar_modo()
 	if recargando > 0.0:
 		recargando -= delta
 		if recargando <= 0.0:
@@ -94,7 +123,14 @@ func _physics_process(delta: float) -> void:
 	if pedido.length() > 0.1:
 		direccion = direccion_de(pedido)
 
-	apuntar_y_atacar()
+	match modo:
+		"asistido":
+			apuntar_y_atacar()
+		"mira":
+			if Input.is_action_pressed("atacar"):
+				intentar_atacar(DIRS.find(direccion) * PI / 4)
+		"libre":
+			apuntar_libre()
 
 	# El golpe cuerpo a cuerpo hace daño cuando el arma llega a su sitio, no al empezar a moverla
 	if ataque_t >= 0.0:
@@ -120,23 +156,67 @@ func apuntar_y_atacar() -> void:
 	var hacia: Vector2 = objetivo.global_position - global_position
 	direccion = direccion_de(hacia)   # mira al zombi aunque ande hacia otro lado
 	var a_tiro: bool = w.tipo == "fuego" or hacia.length() - objetivo.RADIO <= w.alcance
-	if a_tiro and espera <= 0.0 and (w.tipo == "cuerpo" or lista_para_disparar()):
-		espera = 1.0 / w.ritmo
-		atacar(hacia.angle())
+	if a_tiro:
+		intentar_atacar(hacia.angle())
+
+
+# Modo libre: apunta con el stick derecho (y ataca mientras lo empuja) o con el ratón (y ataca con el clic o J)
+func apuntar_libre() -> void:
+	var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
+	var apunte := Vector2.ZERO
+	var ataca := Input.is_action_pressed("atacar")
+	if stick.length() > 0.5:
+		apunte = stick
+		ataca = true
+	elif con_raton:
+		apunte = get_global_mouse_position() - global_position
+	if apunte.length() < 1.0:
+		return
+	direccion = direccion_de(apunte)   # mira hacia donde apunta aunque ande hacia otro lado
+	if ataca:
+		intentar_atacar(ayuda_apunte(apunte.angle()))
+
+
+# La ayuda del modo libre: si hay un zombi a la vista casi en la línea de tiro, apunta justo a él
+func ayuda_apunte(angulo: float) -> float:
+	var w := arma()
+	var alcance: float = w.alcance + 40.0 if w.tipo == "cuerpo" else w.alcance
+	var mejor := angulo
+	var margen := AYUDA_ANGULO
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		var hacia: Vector2 = zombi.global_position - global_position
+		if hacia.length() - zombi.RADIO > alcance or not se_ve(zombi):
+			continue
+		var desvio := absf(angle_difference(angulo, hacia.angle()))
+		if desvio < margen:
+			margen = desvio
+			mejor = hacia.angle()
+	return mejor
+
+
+# Ataca hacia ese ángulo si ya puede (ha pasado el hueco entre ataques y, si es de fuego, tiene bala)
+func intentar_atacar(angulo: float) -> void:
+	var w := arma()
+	if espera > 0.0 or not (w.tipo == "cuerpo" or lista_para_disparar()):
+		return
+	espera = 1.0 / w.ritmo
+	direccion = direccion_de(Vector2.from_angle(angulo))
+	atacar(angulo)
+
+
+# Un "rayo" de Johnny al zombi: si choca con algo de la capa 1 (paredes y muebles), no lo ve
+func se_ve(zombi: Node2D) -> bool:
+	var rayo := PhysicsRayQueryParameters2D.create(global_position, zombi.global_position, 1)
+	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
 
 
 # El zombi más cercano dentro del alcance que no quede detrás de una pared o de un mueble
 func buscar_objetivo(w: Dictionary) -> Node2D:
 	var alcance: float = MIRAR_CERCA if w.tipo == "cuerpo" else w.alcance
 	var mejor: Node2D = null
-	var espacio := get_world_2d().direct_space_state
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var distancia: float = global_position.distance_to(zombi.global_position) - zombi.RADIO
-		if distancia >= alcance:
-			continue
-		# Un "rayo" de Johnny al zombi: si choca con algo de la capa 1 (paredes y muebles), no lo ve
-		var rayo := PhysicsRayQueryParameters2D.create(global_position, zombi.global_position, 1)
-		if espacio.intersect_ray(rayo):
+		if distancia >= alcance or not se_ve(zombi):
 			continue
 		mejor = zombi
 		alcance = distancia

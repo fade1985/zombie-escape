@@ -30,8 +30,11 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 
 - **En el editor:** abrir Godot (`C:\Program Files\Godot\Godot_v4.7.2-stable_win64.exe`), en el gestor de
   proyectos **Importar** → `project.godot` de esta carpeta, y **F5** para jugar. Johnny anda con **WASD**, las
-  **flechas** o el **stick izquierdo** del mando, y apunta y ataca solo (como en el JS). **Q** / rueda / botón Y
-  cambia entre sus dos armas, **1-6** pone cualquiera (solo para probar) y **R** / botón X recarga.
+  **flechas** o el **stick izquierdo** del mando. **F1** cambia el modo de atacar: *asistido* (apunta y ataca
+  solo, como en el JS), *hacia donde mira* (J, clic o botón X) y *libre* (ratón + clic, o stick derecho). **Q** /
+  rueda / botón Y cambia entre sus dos armas, **1-6** pone cualquiera (solo para probar) y **R** / RB recarga.
+  En el móvil los tres modos irán con controles táctiles (joystick izquierdo, joystick derecho y botón de
+  ataque), en la fase 8.
 - **Desde la terminal** (comprobar que arranca y sacar una foto `captura.png` sin jugar; se cierra solo):
 
   ```
