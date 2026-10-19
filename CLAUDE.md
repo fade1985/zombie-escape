@@ -92,7 +92,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 2 | Combate: armas, balas, zombi normal, 3 modos de atacar | hecha, con visto bueno (19 oct) |
 | 3 | Los 6 zombis y la portera | hecha, con visto bueno (19 oct) |
 | 4a | Mapa: planta al azar con pasillo y apartamentos, salas, puertas, zombis dormidos por sala, llave, portera y escaleras (5 plantas) | hecha, con visto bueno (20 oct) |
-| 4b | Catálogo de muebles e `importar.py`, niebla (habitaciones a oscuras), minimapa, sala de mantenimiento y sala de exposición (F9) | hecha, pendiente de visto bueno |
+| 4b | Catálogo de muebles e `importar.py`, niebla (habitaciones a oscuras), minimapa, sala de mantenimiento y sala de exposición (F9) | hecha, con visto bueno (20 oct) |
 | 5 | Luz y penumbra | |
 | 6 | Menús, HUD, guardado, mejoras y talentos | |
 | 7 | Molotov, granada, objetos, banco de trabajo, mutaciones y superviviente | |
