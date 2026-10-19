@@ -30,14 +30,15 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 
 - **En el editor:** abrir Godot (`C:\Program Files\Godot\Godot_v4.7.2-stable_win64.exe`), en el gestor de
   proyectos **Importar** → `project.godot` de esta carpeta, y **F5** para jugar. Johnny anda con **WASD**, las
-  **flechas** o el **stick izquierdo** del mando. **F1** cambia el modo de atacar: *asistido* (apunta y ataca
+  **flechas** o el **stick izquierdo** del mando, y esquiva con **Espacio**, **Mayús** o el botón **A**. **F1** cambia el modo de atacar: *asistido* (apunta y ataca
   solo, como en el JS), *hacia donde mira* (J, clic o botón X) y *libre* (ratón + clic, o stick derecho). **Q** /
   rueda / botón Y cambia entre sus dos armas, **1-6** pone cualquiera (solo para probar) y **R** / RB recarga.
   Para probar zombis: **F2 a F7** sacan uno de cada tipo (normal, lento, rápido, explosivo, tentáculos y
   venenoso) y **P**, la portera. **F9** lleva a la sala de exposición (todos los muebles con sus variantes y
   todos los zombis con sus ropas) y vuelve. **F10** quita y pone la penumbra, para comparar.
   El juego arranca en el menú principal (`escenas/menu_principal.tscn`); JUGAR lleva a la partida
-  (`escenas/partida.tscn`), que empieza en la sala de mantenimiento de la planta baja. **Esc** / Start: pausa.
+  (`escenas/partida.tscn`), que empieza en la sala de mantenimiento de la planta baja. Arrimándose a la mesa del
+  ordenador sale **ConserjeOS** (puntos de talento, árbol de talentos y tienda de armas). **Esc** / Start: pausa.
   Los menús van con ratón, con flechas + Intro o con el mando (cruceta o stick, A pulsar, B volver). El guardado
   está en `%APPDATA%\Godot\app_userdata\Zombie Escape\guardado.json` (borrarlo = empezar de cero); la prueba
   con `--captura` usa `guardado-prueba.json`. El baño de las fases 1-3 sigue
@@ -72,7 +73,7 @@ para que el pixel art se vea nítido.
 | `escenas/armas/` | `bala.tscn` (la bala y los perdigones), `bala_zombi.tscn` (agua sucia de la portera), `proyectil.tscn` (moco y botella de lejía, en parábola), `charco.tscn` y `explosion.tscn` |
 | `escenas/luces/` | `lampara.tscn` (aplique, lámpara o mesilla: luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` (luz de fuego, lista para la fase 7) y `luz_suave.tres` (el degradado de todas) |
 | `escenas/muebles/` | Un mueble por escena (bañera, váter, lavabo, lavadora), con su choque y su `Sombra` para la fase de luz |
-| `scripts/` | El código: `johnny.gd` (moverse, vida, apuntar y atacar), `armas.gd` (los números de las armas), `bala.gd`, `zombi.gd` (la base de todos los zombis: perseguir con navegación, zarpazos, golpes; el normal, el lento y el rápido solo cambian números), `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` (heredan de la base y añaden su ataque), `portera.gd` (la jefa, por estados), `partida.gd` (la planta en juego: cambiar de sitio por las puertas, puerta que se cierra hasta limpiar el piso, llave, portera, escaleras, dinero, pausa, fin de partida, teclas de prueba y `--captura`), `minimapa.gd`, `guardado.gd` (el guardado entre partidas), `mejoras.gd` (los atributos de Johnny: el baseStats del JS), `billete.gd`, `ui/` (`tema.gd` el aspecto de menús y HUD, `hud.gd`, `menus.gd`, `menu_principal.gd`), `mapa/` (`apartamento.gd` genera un apartamento como el `apartment.js` del JS, `planta.gd` la planta, sus zombis, la sala de mantenimiento y la de exposición, `catalogo.gd` los muebles de cada sala, `muebles.gd` dónde va cada uno, `mueble.gd` monta uno, `mapa.gd` monta un sitio: suelos, tapas, caras de pared, choques, muebles, niebla, navegación; `cara_pared.gd` y `puerta.gd`), `luz/` (`luz.gd` la penumbra de cada sitio, la luz de Johnny y los fogonazos; `lampara.gd`, `fuego.gd`), `sala.gd` (la sala de pruebas: hornea la navegación, la pantalla, tandas mezcladas, teclas de prueba F2-F7 y P, y la prueba con `--captura`) |
+| `scripts/` | El código: `johnny.gd` (moverse, vida, apuntar y atacar), `armas.gd` (los números de las armas), `bala.gd`, `zombi.gd` (la base de todos los zombis: perseguir con navegación, zarpazos, golpes; el normal, el lento y el rápido solo cambian números), `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` (heredan de la base y añaden su ataque), `portera.gd` (la jefa, por estados), `partida.gd` (la planta en juego: cambiar de sitio por las puertas, puerta que se cierra hasta limpiar el piso, llave, portera, escaleras, dinero, pausa, fin de partida, teclas de prueba y `--captura`), `talentos.gd` (el árbol de talentos y la compra de puntos), `minimapa.gd`, `guardado.gd` (el guardado entre partidas), `mejoras.gd` (los atributos de Johnny: el baseStats del JS), `billete.gd`, `ui/` (`tema.gd` el aspecto de menús y HUD, `hud.gd`, `menus.gd`, `menu_principal.gd`, `ordenador.gd` la pantalla de ConserjeOS), `mapa/` (`apartamento.gd` genera un apartamento como el `apartment.js` del JS, `planta.gd` la planta, sus zombis, la sala de mantenimiento y la de exposición, `catalogo.gd` los muebles de cada sala, `muebles.gd` dónde va cada uno, `mueble.gd` monta uno, `ordenador.gd` la mesa del ordenador, `mapa.gd` monta un sitio: suelos, tapas, caras de pared, choques, muebles, niebla, navegación; `cara_pared.gd` y `puerta.gd`), `luz/` (`luz.gd` la penumbra de cada sitio, la luz de Johnny y los fogonazos; `lampara.gd`, `fuego.gd`), `sala.gd` (la sala de pruebas: hornea la navegación, la pantalla, tandas mezcladas, teclas de prueba F2-F7 y P, y la prueba con `--captura`) |
 | `assets/sprites/` | Copia de los sprites del juego JS (`.png` + `.json` + `manifest.json`). Los `.tres` de al lado son sus animaciones para Godot |
 | `assets/ui/`, `assets/fuentes/` | HUD y menús, copiados del JS: barra de vida, panel, botón, iconos, la fuente pixel art (nítida a 16 y 32) y el logo |
 | `assets/tiles/` | Texturas preparadas para los TileSets (`py tools/texturas_bano.py`) |
@@ -102,6 +103,6 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 4b | Catálogo de muebles e `importar.py`, niebla (habitaciones a oscuras), minimapa, sala de mantenimiento y sala de exposición (F9) | hecha, con visto bueno (20 oct) |
 | 5 | Luz y penumbra: oscuridad por sitio, apliques que parpadean, lámparas y mesillas, sombras de muebles y muros, fogonazos y explosiones | hecha, con visto bueno (20 oct) |
 | 6a | Menús (principal, pausa, derrota, victoria) con mando, HUD, guardado, atributos de Johnny y billetes | hecha, con visto bueno (20 oct) |
-| 6b | Ordenador ConserjeOS: compra de puntos, árbol de talentos (Militar y Superviviente) y tienda de armas | |
+| 6b | Ordenador ConserjeOS: compra de puntos, árbol de talentos (Militar y Superviviente), tienda de armas y esquiva | hecha, pendiente de visto bueno |
 | 7 | Molotov, granada, objetos, banco de trabajo, mutaciones y superviviente | |
 | 8 | Música, sonido, exportar a web (Vercel) y retirar la versión JS | |

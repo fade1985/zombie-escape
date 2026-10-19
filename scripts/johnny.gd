@@ -15,18 +15,29 @@
 # en tres tercios: el tercio que pierde ya no se cura, y por cada uno anda un 25 % más lento (como en el JS).
 # Sus atributos (vida máxima, velocidad, daño, ritmo, alcance...) están en "stats" (mejoras.gd): los números
 # de las armas se multiplican por ellos.
+#
+# Esquiva (Espacio, Mayús o el botón A del mando): un acelerón corto en el que no le hacen daño, y se recarga
+# en poco menos de un segundo (como el dash del JS). Los talentos (talentos.gd) le dan, además de números:
+# Lobezno (recupera vida poco a poco), Durito (cada golpe quita menos), Reflejos (de vez en cuando esquiva solo
+# un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 4 disparos), Ninja (golpe
+# en área al acabar la esquiva) y Desfibrilador (resucita una vez por partida).
 extends CharacterBody2D
 
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
 signal murio
 signal arma_cambiada(texto: String)            # el cartel del arma (y sus balas) de la pantalla escucha esta
 signal modo_cambiado(nombre: String)           # y la ayuda de abajo, el modo de atacar
+signal resucito                                # Desfibrilador: la partida saca el aviso
 
 const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igual que en el juego
 const PASO := 140.0        # unidades que avanza en un ciclo de andar, como en el juego
 const RADIO := 18.0        # su círculo de choque (los zombis lo usan para saber si está a tiro)
 
 const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (parpadea), como en el juego
+const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
+const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
+const REGENERA_CADA := 3.0 # Lobezno: segundos entre cura y cura
+const AZUL := Color("#9fe8ff")
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
 const EMPUJE := 170.0      # empuje base de un golpe a un zombi normal (el del arma lo multiplica)
@@ -49,6 +60,15 @@ var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
 var charco_dano := 0.0     # el daño de los charcos que se va sumando hasta llegar a un punto entero
 var charco_tinte := Color.WHITE
 var charco_tiempo := 0.0   # cuánto le queda teñido del color del charco
+var escudo := 0.0          # Acero: lo que le queda de escudo en esta planta
+var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
+var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
+var esquiva_dir := Vector2.DOWN
+var estela_t := 0.0        # para soltar las copias transparentes de la estela
+var sola_t := 0.0          # Reflejos: lo que falta para la siguiente esquiva automática
+var regenera_t := 0.0      # Lobezno
+var disparos := 0          # Mirilla: los disparos que lleva
+var resucitado := false    # Desfibrilador: solo una vez por partida
 
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
@@ -85,6 +105,30 @@ func _input(evento: InputEvent) -> void:
 		con_raton = false
 
 
+# Le pone unos atributos nuevos (al empezar la partida con los talentos, o al comprar uno en el ordenador).
+# La vida de más viene llena (sin curar los tercios perdidos) y, si acaba de tener Acero, su escudo
+func poner_stats(nuevos: Dictionary) -> void:
+	var antes: Dictionary = stats
+	stats = nuevos
+	if stats.vida_max > antes.vida_max:
+		vida = mini(vida + stats.vida_max - antes.vida_max, vida_tope())
+	if stats.escudo > 0 and antes.escudo == 0:
+		escudo = stats.escudo
+	vida_cambiada.emit(vida, stats.vida_max)
+
+
+# La vida a la que puede llegar curándose: la de los tercios que le quedan
+func vida_tope() -> int:
+	return roundi(tercios * stats.vida_max / 3.0)
+
+
+func curar(cantidad: int) -> void:
+	if not vivo or vida >= vida_tope():
+		return
+	vida = mini(vida + cantidad, vida_tope())
+	vida_cambiada.emit(vida, stats.vida_max)
+
+
 # F1: pasa al siguiente modo de atacar
 func cambiar_modo() -> void:
 	var nombres := MODOS.keys()
@@ -103,14 +147,16 @@ func arma() -> Dictionary:
 	return w
 
 
-# El daño de un golpe o una bala: a veces, crítico (el doble)
-func con_critico(dano: float) -> int:
-	return roundi(dano * (2.0 if randf() < stats.critico else 1.0))
+# El daño de un golpe o una bala: a veces, crítico (el doble). "seguro": crítico sí o sí (Mirilla)
+func con_critico(dano: float, seguro := false) -> int:
+	return roundi(dano * (2.0 if seguro or randf() < stats.critico else 1.0))
 
 
 func _physics_process(delta: float) -> void:
 	espera -= delta
 	invulnerable -= delta
+	esquiva_espera -= delta
+	sola_t -= delta
 	# Parpadea mientras es invulnerable (medio transparente a ratos)
 	sprite.modulate.a = 0.45 if invulnerable > 0.0 and int(invulnerable * 18.0) % 2 == 0 else 1.0
 	if not vivo:
@@ -135,12 +181,31 @@ func _physics_process(delta: float) -> void:
 		if recargando <= 0.0:
 			terminar_recarga()
 
+	# Lobezno: recupera vida poco a poco
+	if stats.regenera > 0 and vida < vida_tope():
+		regenera_t += delta
+		if regenera_t >= REGENERA_CADA:
+			regenera_t -= REGENERA_CADA
+			curar(stats.regenera)
+
 	# Lo que pide el jugador: un vector de largo 0 a 1 (el stick a medias da menos de 1)
 	var pedido := Input.get_vector("izquierda", "derecha", "arriba", "abajo")
-	# Acelera suave hacia la velocidad deseada, como en el juego
-	var k := 1.0 - exp(-delta * ARRANQUE)
-	var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios))   # más lento por cada tercio perdido
-	velocity += (pedido * rapidez - velocity) * k
+	if Input.is_action_just_pressed("esquivar") and esquiva_espera <= 0.0:
+		esquivar(pedido)
+	if esquiva_t > 0.0:
+		# Durante la esquiva va lanzado, dejando una estela; al acabar frena (y Ninja pega)
+		esquiva_t -= delta
+		estela_t -= delta
+		if estela_t <= 0.0:
+			estela_t = 0.03
+			soltar_estela()
+		if esquiva_t <= 0.0 and stats.ninja:
+			golpe_ninja()
+	else:
+		# Acelera suave hacia la velocidad deseada, como en el juego
+		var k := 1.0 - exp(-delta * ARRANQUE)
+		var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios))   # más lento por cada tercio perdido
+		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()
 	if pedido.length() > 0.1:
@@ -165,6 +230,58 @@ func _physics_process(delta: float) -> void:
 			ataque_t = -1.0
 
 	animar()
+
+
+# La esquiva: sale lanzado hacia donde se mueve (o, quieto, hacia donde mira) y un momento no le hacen daño
+func esquivar(pedido: Vector2) -> void:
+	esquiva_dir = pedido.normalized() if pedido.length() > 0.1 else Vector2.from_angle(DIRS.find(direccion) * PI / 4)
+	velocity = esquiva_dir * stats.velocidad * ESQUIVA_RAPIDEZ
+	esquiva_t = ESQUIVA
+	esquiva_espera = stats.esquiva_espera
+	invulnerable = maxf(invulnerable, 0.3)
+	estela_t = 0.0
+
+
+# Una copia de Johnny, azulada y medio transparente, que se queda atrás y se apaga
+func soltar_estela() -> void:
+	var copia := Sprite2D.new()
+	copia.texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	copia.centered = sprite.centered
+	copia.offset = sprite.offset
+	copia.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	copia.modulate = Color(AZUL, 0.5)
+	get_parent().add_child(copia)
+	copia.global_transform = sprite.global_transform
+	copia.z_index = -1
+	var tween := copia.create_tween()
+	tween.tween_property(copia, "modulate:a", 0.0, 0.2)
+	tween.tween_callback(copia.queue_free)
+
+
+# Ninja: al acabar la esquiva, un barrido en círculo con el arma cuerpo a cuerpo. Los zombis que pilla mueren
+# al momento; a la jefa le quita un 10 % de su vida
+func golpe_ninja() -> void:
+	var w: Dictionary = Armas.DATOS[huecos.cuerpo]
+	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		var hacia: Vector2 = zombi.global_position - global_position
+		if hacia.length() > alcance + zombi.radio:
+			continue
+		var dano: int = zombi.vida + 1 if zombi is Zombi else ceili(zombi.vida_max * 0.1)
+		zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * 1.5)
+	# el barrido se ve aunque no pille a nadie: un aro azul que se abre y se apaga
+	var aro := Line2D.new()
+	aro.width = 3.0
+	aro.default_color = AZUL
+	for i in 33:
+		aro.add_point(Vector2.from_angle(i * TAU / 32) * alcance)
+	get_parent().add_child(aro)
+	aro.global_position = global_position
+	aro.scale = Vector2(0.5, 0.5)
+	var tween := aro.create_tween().set_parallel()
+	tween.tween_property(aro, "scale", Vector2.ONE, 0.25)
+	tween.tween_property(aro, "modulate:a", 0.0, 0.25)
+	tween.chain().tween_callback(aro.queue_free)
 
 
 # Busca el zombi más cercano que vea y, si está a tiro, le ataca (como autoAim en src/aim.js)
@@ -297,6 +414,8 @@ func golpear(angulo: float) -> void:
 func disparar(angulo: float) -> void:
 	var w := arma()
 	balas -= 1
+	disparos += 1
+	var seguro: bool = stats.mirilla and disparos % 4 == 0   # Mirilla: tras 3 disparos, uno crítico seguro
 	# La boca del arma está en píxeles del dibujo desde los pies (x2 para pasar a unidades); los pies van
 	# 16 unidades por debajo del centro de Johnny. La bala de verdad va 50 más abajo, a ras de suelo, y se
 	# dibuja 50 más arriba (ver bala.gd): así sale de la boca y choca con lo que hay a la altura de los pies
@@ -310,7 +429,7 @@ func disparar(angulo: float) -> void:
 		var rapidez: float = w.velocidad * (randf_range(0.9, 1.1) if w.temblor > 0.0 else 1.0)
 		var bala := BALA.instantiate()
 		bala.velocidad = Vector2.from_angle(angulo + desvio) * rapidez
-		bala.dano = con_critico(w.dano)
+		bala.dano = con_critico(w.dano, seguro)
 		bala.empuje = w.empuje
 		bala.radio = 3.0 if w.perdigones > 1 else 4.0
 		bala.vida = w.alcance / w.velocidad
@@ -429,8 +548,20 @@ func animar() -> void:
 func recibir_dano(cantidad: int) -> void:
 	if not vivo or invulnerable > 0.0:
 		return
+	# Reflejos: cada pocos segundos, un golpe se esquiva solo
+	if stats.esquiva_sola > 0 and sola_t <= 0.0:
+		sola_t = stats.esquiva_sola
+		invulnerable = 0.5
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-40, -70), "¡Esquivado!", AZUL, 18)
+		return
 	invulnerable = INVULNERABLE
-	quitar_vida(maxi(1, roundi(cantidad * stats.dano_recibido)))
+	# Durito quita un poco a cada golpe; el escudo de Acero para la mitad de lo que queda mientras dure
+	var dano := maxi(1, roundi(cantidad * stats.dano_recibido) - stats.armadura)
+	if escudo > 0.0:
+		var parado := minf(escudo, dano / 2.0)
+		escudo -= parado
+		dano = maxi(1, roundi(dano - parado))
+	quitar_vida(dano)
 
 
 # Lo llaman los charcos (moco, lejía) en cada paso mientras los pisa: quita vida poco a poco, sin parpadear
@@ -460,6 +591,15 @@ func quitar_vida(cantidad: int) -> void:
 	var tercio: float = stats.vida_max / 3.0
 	tercios = mini(tercios, maxi(1, ceili(vida / tercio - 0.000001)))
 	vida_cambiada.emit(vida, stats.vida_max)
+	if vida == 0 and stats.resucitar and not resucitado:
+		# Desfibrilador: la primera vez que cae, vuelve con toda la vida
+		resucitado = true
+		vida = stats.vida_max
+		tercios = 3
+		invulnerable = 2.0
+		vida_cambiada.emit(vida, stats.vida_max)
+		resucito.emit()
+		return
 	if vida == 0:
 		vivo = false
 		ataque_t = -1.0

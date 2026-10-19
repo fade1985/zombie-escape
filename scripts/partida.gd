@@ -12,6 +12,10 @@
 # varios). Los dólares de la partida solo se guardan si completas el edificio; si caes, se pierden. Al acabar
 # (ganes, caigas o abandones) se guardan los récords y los zombis matados (guardado.gd).
 #
+# El ordenador de la sala de mantenimiento (ui/ordenador.gd): al arrimarse a su mesa, el juego se pausa y sale
+# ConserjeOS, para comprar puntos de talento, subir talentos y comprar armas con los dólares ahorrados. Los
+# talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos.
+#
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento.
 #
@@ -36,6 +40,7 @@ const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "e
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const MENUS := preload("res://scripts/ui/menus.gd")
+const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
 const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
@@ -55,6 +60,7 @@ var captura := false
 var tiempo := 0.0
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
+var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
@@ -69,8 +75,9 @@ var terminada := false
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · Esc pausa · F2-F7 zombis · P portera · F9 exposición · F10 luz" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · Esc pausa · F2-F7 zombis · P portera · F9 exposición · F10 luz" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
+	johnny.resucito.connect(func(): decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
 	johnny.avisar_arma()
 	add_child(luz)
 	luz.seguir_a(johnny)
@@ -92,6 +99,8 @@ func _ready() -> void:
 		get_tree().paused = false
 		get_tree().reload_current_scene())
 	menus.menu_principal.connect(ir_al_menu)
+	add_child(ordenador)
+	ordenador.apagado.connect(func(): get_tree().paused = false)
 
 	captura = "--captura" in OS.get_cmdline_user_args()
 	if captura:
@@ -101,6 +110,10 @@ func _ready() -> void:
 		g.partidas += 1
 		Guardado.edificio(g, EDIFICIO).partidas += 1)
 	ahorrados = s.dolares
+	# los talentos comprados, y empieza con la vida llena y el escudo de Acero
+	aplicar_talentos(s.talentos)
+	johnny.vida = johnny.stats.vida_max
+	johnny.escudo = johnny.stats.escudo
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -115,6 +128,20 @@ func _ready() -> void:
 
 func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num)
+	johnny.escudo = johnny.stats.escudo   # Acero: escudo nuevo en cada planta
+
+
+# Los atributos de Johnny con los talentos comprados (al empezar y al comprar uno en el ordenador)
+func aplicar_talentos(talentos: Dictionary) -> void:
+	johnny.poner_stats(Talentos.aplicar(Mejoras.base(), talentos))
+
+
+# Johnny se ha arrimado a la mesa del ordenador: se pausa el juego y se enciende
+func abrir_ordenador() -> void:
+	if terminada or cambiando or not johnny.vivo:
+		return
+	get_tree().paused = true
+	ordenador.encender(self)
 
 
 func puerta_de_tipo(tipo: String) -> int:
@@ -152,6 +179,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	move_child(mapa, 0)
 	mapa.montar(sitio, llave)
 	mapa.llave_cogida.connect(_al_coger_llave)
+	if mapa.ordenador:
+		mapa.ordenador.usar.connect(abrir_ordenador)
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
 	mapa.cosas.add_child(johnny)
@@ -549,12 +578,42 @@ func _process(delta: float) -> void:
 		probar_menus()
 
 
+# El ordenador: con $60 en el guardado de prueba compra puntos, sube Ataque, compra la escopeta y hace fotos
+func probar_ordenador() -> void:
+	Guardado.cambiar(func(g):
+		g.dolares = 60
+		g.puntos = 0
+		g.talentos = {}
+		g.armas = [])
+	ahorrados = 60
+	aplicar_talentos({})
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("puntos")
+	ordenador.comprar(3)
+	ordenador.subir("ataque")
+	ordenador.subir("punteria")
+	ordenador.subir("tirador")   # bloqueado: no tiene Ataque al máximo
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-ordenador.png")
+	ordenador.abrir("armas")
+	ordenador.comprar_arma("escopeta")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-tienda.png")
+	var g := Guardado.cargar()
+	print("Ordenador: $%d ahorrados, %d puntos, talentos %s, armas %s | daño x%.2f | lleva %s" % [g.dolares, g.puntos,
+		g.talentos, g.armas, johnny.stats.dano, johnny.huecos])
+	ordenador.abrir("")
+	ordenador.apagar()
+
+
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)
 func probar_menus() -> void:
 	set_process(false)
 	soltar_billetes(3, johnny.position + Vector2(60, 0))
 	await get_tree().create_timer(1.2).timeout
 	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
+	await probar_ordenador()
 	pausar()
 	await get_tree().create_timer(0.4).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-pausa.png")

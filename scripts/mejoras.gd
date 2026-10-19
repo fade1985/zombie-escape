@@ -1,6 +1,6 @@
 # Los atributos de Johnny al empezar un edificio (baseStats de src/upgrades.js del JS).
 # Johnny los lleva en "stats" y los lee al moverse, atacar y recibir golpes. Los de ataque multiplican los
-# números del arma que lleve. Los talentos (fase 6b), los objetos y las mutaciones (fase 7) los cambian.
+# números del arma que lleve. Los talentos (talentos.gd), los objetos y las mutaciones (fase 7) los cambian.
 class_name Mejoras
 
 
@@ -16,6 +16,7 @@ static func base() -> Dictionary:
 		"dano_recibido": 1.0,    # x daño que recibes (menos es mejor)
 		"velocidad": 210.0,      # unidades por segundo
 		"iman": 120.0,           # radio en el que los billetes vienen hacia ti
+		"esquiva_espera": 0.9,   # segundos que tarda en recargarse la esquiva
 		# Del árbol de talentos (fase 6b)
 		"dano_cuerpo": 1.0,      # x daño cuerpo a cuerpo (Camorrista)
 		"dano_fuego": 1.0,       # x daño con armas de fuego (Tirador)

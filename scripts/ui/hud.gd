@@ -117,6 +117,8 @@ func pintar_barra() -> void:
 	barra.draw_texture_rect(MARCO, Rect2(0, 0, ANCHO, ALTO), false)
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(vida), roundi(maxima)]
+	if johnny.escudo > 0.0:
+		texto += "  escudo %d" % ceili(johnny.escudo)   # Acero
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
 	var donde := Vector2((ANCHO - ancho) / 2.0, ALTO / 2.0 + 5)
 	barra.draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)

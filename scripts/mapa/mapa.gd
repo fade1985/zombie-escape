@@ -19,6 +19,8 @@ const VELO := Color(0.68, 0.68, 0.68)   # la tapa de los muros, oscurecida para 
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
+const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
+const ORDENADOR_X := 240.0   # dónde va la mesa del ordenador en la sala de mantenimiento (como en el JS)
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
@@ -41,6 +43,7 @@ var alfombra: Texture2D
 var cosas: Node2D                 # personajes, muebles y caras de muro, ordenados por su "y"
 var puertas: Array = []           # una por salida, en el mismo orden
 var muebles: Array = []
+var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de mantenimiento)
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
 # habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
 var niebla := {}
@@ -277,6 +280,10 @@ func poner_muebles() -> void:
 		muebles.append(mueble)
 		if m.tipo == "lamp" or m.tipo == "nightstand":
 			poner_lampara(mueble, m)
+	if sitio.tipo == "mantenimiento":
+		ordenador = ORDENADOR.new()
+		ordenador.montar(ORDENADOR_X, MURO)
+		cosas.add_child(ordenador)
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.
