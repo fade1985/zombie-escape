@@ -28,6 +28,9 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 
 ## Abrir y probar
 
+- **Godot no está en la misma carpeta en todos los equipos** (en el proyecto trabajan dos personas). Las rutas de
+  abajo son las de un equipo; en otro está en `C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe`. Si
+  la ruta no existe, buscar el `Godot_v4.7.2-stable_win64_console.exe` antes de nada.
 - **En el editor:** abrir Godot (`C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe`), en el gestor de
   proyectos **Importar** → `project.godot` de esta carpeta, y **F5** para jugar. Johnny anda con **WASD**, las
   **flechas** o el **stick izquierdo** del mando, y esquiva con **Espacio**, **Mayús** o el botón **A**. **F1** cambia el modo de atacar: *asistido* (apunta y ataca
