@@ -28,7 +28,7 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 
 ## Abrir y probar
 
-- **En el editor:** abrir Godot (`C:\Program Files\Godot\Godot_v4.7.2-stable_win64.exe`), en el gestor de
+- **En el editor:** abrir Godot (`C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe`), en el gestor de
   proyectos **Importar** → `project.godot` de esta carpeta, y **F5** para jugar. Johnny anda con **WASD**, las
   **flechas** o el **stick izquierdo** del mando, y esquiva con **Espacio**, **Mayús** o el botón **A**. **F1** cambia el modo de atacar: *asistido* (apunta y ataca
   solo, como en el JS), *hacia donde mira* (J, clic o botón X) y *libre* (ratón + clic, o stick derecho). **Q** /
@@ -60,7 +60,7 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 - **Desde la terminal** (comprobar que arranca y sacar una foto `captura.png` sin jugar; se cierra solo):
 
   ```
-  "C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe" --path . -- --captura
+  "C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe" --path . -- --captura
   ```
 
   La foto sale al tamaño de la ventana (grande): reducirla antes de mirarla. Si se han añadido sprites nuevos,
@@ -74,7 +74,7 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
   para publicar un cambio: exportar, commit de `web/` y push:
 
   ```
-  "C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe" --headless --path . --export-release "Web" web/index.html
+  "C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe" --headless --path . --export-release "Web" web/index.html
   ```
 
   Para probarla: en Claude, el servidor `web` de `.claude/launch.json` (`py -m http.server 8060 --directory web`) y
