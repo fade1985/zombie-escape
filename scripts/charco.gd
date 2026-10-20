@@ -1,51 +1,205 @@
-# Un charco en el suelo (el moco verde del venenoso o la lejía de la portera): mientras Johnny lo pisa, le va
-# quitando vida poco a poco, y al rato se seca. De momento es la versión sencilla: lo de seguir envenenado
-# al salir y resbalar con la lejía llegará en la fase 7, con el molotov (src/estados.js en el juego).
+# Un charco en el suelo: el moco verde del venenoso, la lejía de la portera, el vómito de Johnny (mutación
+# Gastroenteritis) o el fuego del molotov. Cada uno pone sus estados (estados.gd) a quien lo pisa: el veneno
+# te sigue envenenando al salir, la lejía resbala, el ácido solo daña a los zombis... Al rato se seca.
+# Como HAZARDS en src/game-ataques.js.
+#
+# El fuego (makeFire y burnFire de src/molotov.js) es especial: se dibuja con código, a cuadraditos de pixel
+# art. Se extiende desde el centro, arde con llamas y ascuas, se apaga por trozos al final y deja una mancha
+# de ceniza. Prende a los zombis que lo pisan (siguen ardiendo al salir: zombi.gd) y lleva su luz de fuego.
 extends Node2D
 
-# Cada tipo: su dibujo, su tamaño (radio), cuánto dura, el daño por segundo al pisarlo y de qué color se pone
-# Johnny mientras lo pisa
+const VENENO := preload("res://assets/sprites/objeto-charco-veneno.png")
+const LEJIA := preload("res://assets/sprites/objeto-charco-lejia.png")
+const LUZ_FUEGO := preload("res://escenas/luces/fuego.tscn")
+
+# Cada tipo: su dibujo, su tamaño (radio), cuánto dura y los estados que pone. "solo_zombis": a Johnny no le
+# hace nada. El del molotov tiene sus números en MOLOTOV (lanzables.gd)
 const TIPOS := {
-	"veneno": {"dibujo": preload("res://assets/sprites/objeto-charco-veneno.png"), "radio": 64.0,
-		"vida": 4.0, "dps": 4.0, "color": Color(0.6, 1.0, 0.45)},
-	"lejia": {"dibujo": preload("res://assets/sprites/objeto-charco-lejia.png"), "radio": 54.0,
-		"vida": 5.0, "dps": 3.0, "color": Color(0.7, 0.9, 1.0)},
+	"veneno": {"dibujo": VENENO, "radio": 64.0, "vida": 4.0, "estados": {"veneno": {}}},
+	"lejia": {"dibujo": LEJIA, "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
+	"vomito": {"dibujo": VENENO, "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true,
+		"tinte": Color(1.0, 1.0, 0.45)},
+	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
 }
+# El fuego por fuera: cuánto tarda en extenderse, cuánto antes de acabar empieza a apagarse, lo que brilla en
+# blanco el frente y lo que dura la brasa de un trozo recién apagado
+const EXTIENDE := 0.35
+const APAGA := 1.4
+const FRENTE := 0.07
+const BRASA := 0.3
+const CELDA := 4.0   # 2 píxeles del dibujo
 
 var tipo := "veneno"
+var escala := 1.0          # el Fabricante hace el fuego más grande...
+var duracion := 1.0        # ...y más largo
+var dano_lanzar := 1.0     # Puntería: el fuego quema más a los zombis
 var vida := 0.0
+var vida_max := 0.0
+var t := 0.0
+var tick := 0.0
+var celdas: Array = []     # el fuego: [posición, distancia al centro (0-1), cuándo prende, cuándo se apaga, ruido]
+var llamas: Array = []     # [x, y, ancho, alto, semilla, prende, apaga]
+var ascuas: Array = []
 
 
 func _ready() -> void:
-	vida = TIPOS[tipo].vida
+	vida_max = TIPOS[tipo].vida * duracion
+	vida = vida_max
 	z_index = -1   # en el suelo: por debajo de todos
+	add_to_group("charcos")
+	if tipo == "fuego":
+		hacer_fuego()
+		var luz := LUZ_FUEGO.instantiate()
+		luz.radio = radio() * 3.0
+		luz.vida = vida_max
+		add_child(luz)
 
 
 func radio() -> float:
-	return TIPOS[tipo].radio
+	return TIPOS[tipo].radio * escala
 
 
 func _physics_process(delta: float) -> void:
 	vida -= delta
+	t += delta
 	if vida <= 0.0:
+		if tipo == "fuego":
+			dejar_ceniza()
 		queue_free()
 		return
-	# Al final se va secando (más transparente)
-	modulate.a = clampf(vida / 0.6, 0.0, 1.0)
+	if tipo == "fuego":
+		quemar(delta)
+	else:
+		# Al final se va secando (más transparente)
+		modulate.a = clampf(vida / 0.6, 0.0, 1.0)
+	queue_redraw()
+	var datos: Dictionary = TIPOS[tipo]
 	var johnny := get_tree().get_first_node_in_group("jugador")
-	if johnny and johnny.vivo and dentro(johnny.global_position, johnny.RADIO * 0.3):
-		johnny.pisar_charco(TIPOS[tipo].dps * delta, TIPOS[tipo].color)
+	if not datos.get("solo_zombis", false) and johnny and johnny.vivo and arde_en(johnny.global_position, johnny.RADIO * 0.3):
+		johnny.pisar(datos.estados)
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		if zombi.has_method("pisar") and arde_en(zombi.global_position, zombi.radio * 0.3):
+			zombi.pisar(datos.estados)
 
 
 # El charco es una elipse (más ancha que alta, porque el suelo se ve un poco desde arriba)
 func dentro(punto: Vector2, margen: float) -> bool:
 	var d := punto - global_position
 	var r := radio() + margen
-	return (d.x / r) ** 2 + (d.y / (r * 0.55)) ** 2 <= 1.0
+	return (d.x / r) ** 2 + (d.y / (r * 0.6)) ** 2 <= 1.0
+
+
+# Si ahí se ve el charco: el fuego, solo donde ya ha llegado y aún no se ha apagado
+func arde_en(punto: Vector2, margen: float) -> bool:
+	if not dentro(punto, margen):
+		return false
+	if tipo != "fuego":
+		return true
+	var d := punto - global_position
+	var k := Vector2(d.x, d.y / 0.6).length() / radio()
+	var e := vida_max - vida
+	return e >= k * EXTIENDE and vida > APAGA * k * 0.5
+
+
+# ── El fuego ──
+
+func hacer_fuego() -> void:
+	var r := radio()
+	var ondas := []
+	for k in [3, 5, 7]:
+		ondas.append([k, randf() * TAU, randf_range(0.05, 0.12)])
+	var n := ceili(r / CELDA)
+	for y in range(-n, n + 1):
+		for x in range(-n, n + 1):
+			var p := Vector2(x, y) * CELDA
+			var a := atan2(p.y / 0.6, p.x)
+			var borde := 1.0
+			for o in ondas:
+				borde += sin(a * o[0] + o[1]) * o[2]
+			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
+			var ruido := randf()
+			if d > 1.0 or (d > 0.85 and ruido < 0.4):
+				continue
+			# prende del centro hacia fuera; se apaga a trozos, antes por los bordes
+			var prende := d * EXTIENDE + ruido * 0.05
+			var apaga := vida_max - APAGA * (1.0 - d * 0.6) * (0.5 + ruido * 0.5)
+			celdas.append([p, d, prende, apaga, ruido])
+	# las llamas, en sitios al azar (de atrás adelante, para que las de delante tapen a las de detrás)
+	for i in 14:
+		var c: Array = celdas.pick_random()
+		if c[1] > 0.8:
+			continue
+		var grande: float = 1.0 - c[1]
+		llamas.append([c[0].x + 2.0, c[0].y + 2.0, roundf(4 + grande * 5 + i % 2), roundf(6 + grande * 13 + (i % 3) * 2), randf() * 10.0, c[2], c[3]])
+	llamas.sort_custom(func(a, b): return a[1] < b[1])
+	for i in 24:
+		ascuas.append(celdas.pick_random())
+
+
+# Cada poco, prende a los zombis que estén dentro; y suelta chispas de donde aún arde
+func quemar(delta: float) -> void:
+	tick += delta
+	if tick >= Lanzables.MOLOTOV.tick:
+		tick -= Lanzables.MOLOTOV.tick
+		for zombi in get_tree().get_nodes_in_group("zombis"):
+			if not arde_en(zombi.global_position, zombi.radio * 0.5):
+				continue
+			# el zombi se prende y la quemadura la lleva él: dentro se le renueva sin parar, y al salir sigue
+			# ardiendo unos segundos. La portera no sabe arder: a ella se la quema solo dentro del fuego
+			if zombi.has_method("prender"):
+				zombi.prender(dano_lanzar)
+			else:
+				zombi.herir(Lanzables.MOLOTOV.quema * Lanzables.MOLOTOV.tick * dano_lanzar, Llamas.FUEGO[2])
+	if randf() < 30.0 * delta:
+		var a := randf() * TAU
+		var r := sqrt(randf()) * radio() * 0.85
+		var p := global_position + Vector2(cos(a) * r, sin(a) * r * 0.6)
+		if arde_en(p, 0.0):
+			Particulas.soltar(self, p, Vector2(randf_range(-10, 10), randf_range(-140, -70)), Llamas.FUEGO[randi() % 4], randf_range(1, 3), 0.45)
+
+
+# Al apagarse del todo, la ceniza se queda en el suelo como una mancha más
+func dejar_ceniza() -> void:
+	var m := Mancha.new()
+	m.position = position
+	for c in celdas:
+		m.celdas.append([c[0], Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6)])
+	get_parent().add_child(m)
 
 
 func _draw() -> void:
-	var dibujo: Texture2D = TIPOS[tipo].dibujo
-	# A escala 2, como todo el pixel art (estirarlo a su radio exacto deformaría los píxeles)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
-	draw_texture(dibujo, -Vector2(dibujo.get_size()) / 2.0)
+	if tipo != "fuego":
+		var datos: Dictionary = TIPOS[tipo]
+		var dibujo: Texture2D = datos.dibujo
+		# A escala 2, como todo el pixel art (estirarlo a su radio exacto deformaría los píxeles)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
+		draw_texture(dibujo, -Vector2(dibujo.get_size()) / 2.0, datos.get("tinte", Color.WHITE))
+		return
+	var e := vida_max - vida
+	for c in celdas:
+		if e < c[2]:
+			continue
+		var color: Color
+		if e >= c[3]:
+			# ya apagado: brasa un momento y luego ceniza
+			color = Color("#6e1d12") if e - c[3] < BRASA else (Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6))
+		elif e - c[2] < FRENTE:
+			color = Llamas.FUEGO[0]   # el frente del fuego, recién prendido
+		else:
+			var d: float = c[1] + 0.12 * sin(t * 9.0 + c[4] * 20.0)   # el color tiembla un poco
+			color = Llamas.FUEGO[1] if d < 0.3 else Llamas.FUEGO[2] if d < 0.55 else Llamas.FUEGO[3] if d < 0.8 else Llamas.FUEGO[4]
+			color.a = 0.9
+		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
+	# ascuas: píxeles sueltos que se encienden y se apagan (solo donde arde)
+	for i in ascuas.size():
+		var c: Array = ascuas[i]
+		if e < c[2] or e >= c[3]:
+			continue
+		var brillo := sin(t * (6 + i % 5) + i * 2.3)
+		if brillo > 0.2:
+			draw_rect(Rect2(c[0], Vector2(2, 2)), Llamas.FUEGO[0] if brillo > 0.7 else Llamas.FUEGO[1])
+	# las llamas: cada una crece cuando le llega el fuego y se encoge antes de que se apague su trozo
+	for m in llamas:
+		var k: float = minf(1.0, minf((e - m[5]) / 0.25, (m[6] - e) / 0.5))
+		if k > 0.0:
+			Llamas.llama(self, m[0], m[1], m[2], m[3], t, m[4], k)

@@ -3,6 +3,7 @@
 #     Continuar, Música Sí/No y Abandonar partida. El juego se para mientras está abierta.
 #   - El cartel del final: "¡Edificio completado!" o "¡Derrota!", con lo que has hecho en la partida y los
 #     botones de volver a jugar o ir al menú principal.
+#   - Las mutaciones (showMutacion del JS): tras caer la portera, dos cartas para elegir una (también con 1 y 2).
 # Se manejan con el ratón, con el teclado (flechas e Intro) o con el mando (cruceta o stick, A para pulsar y
 # B para volver): Godot pasa de un botón a otro solo, y aquí se elige cuál empieza marcado.
 extends CanvasLayer
@@ -13,7 +14,9 @@ signal reintentar
 signal menu_principal
 
 var fondo: ColorRect
-var abierto := ""         # "pausa", "fin" o "" (nada)
+var abierto := ""         # "pausa", "fin", "mutacion" o "" (nada)
+var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
+var cartas: Array = []    # las dos mutaciones que se ofrecen
 
 
 func _ready() -> void:
@@ -121,6 +124,17 @@ func pausa(partida: Node) -> void:
 		var a: Dictionary = Armas.DATOS[id]
 		var resumen := "%s · daño %d · %.1f/s" % [a.nombre, a.dano * (a.get("perdigones", 1)), a.ritmo]
 		derecha.add_child(Tema.icono_y_texto({"mp5": "pistola"}.get(id, id), resumen, 20))
+	var lz: Lanzables = partida.lanzables
+	derecha.add_child(Tema.icono_y_texto("molotov", "Molotovs: %d / %d" % [lz.cantidades.molotov, lz.maximo("molotov")], 20))
+	derecha.add_child(Tema.icono_y_texto("granada", "Granadas: %d / %d" % [lz.cantidades.granada, lz.maximo("granada")], 20))
+	if not partida.mutaciones.tengo.is_empty():
+		var muts := Label.new()
+		muts.text = "Mutaciones"
+		muts.theme_type_variation = "Sub"
+		derecha.add_child(muts)
+		for id in partida.mutaciones.tengo:
+			var m := Mutaciones.mutacion(id)
+			derecha.add_child(Tema.icono_y_texto(m.icono, m.nombre, 20))
 	var botones := HBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	botones.add_theme_constant_override("separation", 10)
@@ -165,8 +179,76 @@ func fin(r: Dictionary) -> void:
 	otra.grab_focus.call_deferred()
 
 
-# B del mando o Esc: en la pausa, seguir jugando
+# El recuadro de las mutaciones: dos cartas (icono, nombre y lo que hace). "llevas": las que ya tiene
+func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
+	var columna := abrir("mutacion", 0.8)
+	elegir_mutacion = al_elegir
+	cartas = opciones
+	var virus := Label.new()
+	virus.text = "La exposición prolongada al virus hace que te sientas..."
+	virus.theme_type_variation = "Sub"
+	virus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(virus)
+	var t := Label.new()
+	t.theme_type_variation = "Titulo"
+	t.text = "¡¡¡DIFERENTE!!!"
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.add_theme_color_override("font_color", Color("#e05ce0"))
+	columna.add_child(t)
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 16)
+	columna.add_child(fila)
+	var primera: Button = null
+	for i in opciones.size():
+		var m: Dictionary = opciones[i]
+		var carta := Button.new()
+		carta.custom_minimum_size = Vector2(260, 200)
+		carta.pressed.connect(func(): elegir(m.id))
+		fila.add_child(carta)
+		var dentro := VBoxContainer.new()
+		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
+		dentro.offset_left = 16
+		dentro.offset_right = -16
+		dentro.offset_top = 12
+		dentro.offset_bottom = -12
+		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		carta.add_child(dentro)
+		var cabeza := Tema.icono_y_texto(m.icono, "%d. %s" % [i + 1, m.nombre], 32)
+		cabeza.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dentro.add_child(cabeza)
+		var desc := Label.new()
+		desc.text = m.desc
+		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc.add_theme_font_size_override("font_size", 16)
+		desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		desc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dentro.add_child(desc)
+		if primera == null:
+			primera = carta
+	var pie := Label.new()
+	pie.text = "Mutación %d de %d · dura hasta que acabe la partida" % [llevas + 1, Mutaciones.MAXIMO]
+	pie.theme_type_variation = "Sub"
+	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(pie)
+	primera.grab_focus.call_deferred()
+
+
+func elegir(id: String) -> void:
+	if abierto != "mutacion":
+		return
+	cerrar()
+	elegir_mutacion.call(id)
+
+
+# B del mando o Esc: en la pausa, seguir jugando. En las mutaciones, 1 y 2 eligen carta
 func _unhandled_input(evento: InputEvent) -> void:
+	if abierto == "mutacion" and evento is InputEventKey and evento.pressed and not evento.echo:
+		var n: int = {KEY_1: 0, KEY_KP_1: 0, KEY_2: 1, KEY_KP_2: 1}.get(evento.keycode, -1)
+		if n >= 0 and n < cartas.size():
+			get_viewport().set_input_as_handled()
+			elegir(cartas[n].id)
+		return
 	if abierto == "pausa" and (evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa")):
 		get_viewport().set_input_as_handled()
 		continuar.emit()

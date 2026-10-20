@@ -322,6 +322,12 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 		morir()
 
 
+# Daño sin golpe (el fuego del molotov, mientras está dentro): la portera no sabe arder ni le hacen nada los
+# demás charcos ni las mutaciones
+func herir(cantidad: float, _color := Color.WHITE) -> void:
+	recibir_golpe(maxi(1, roundi(cantidad)), Vector2.ZERO)
+
+
 func morir() -> void:
 	estado = "muerto"
 	remove_from_group("zombis")

@@ -1,4 +1,4 @@
-# Una explosión (la del zombi explosivo; luego también la granada). Al aparecer hace daño a Johnny y a los
+# Una explosión (la del zombi explosivo y la granada). Al aparecer hace daño a Johnny y a los
 # zombis que pillen dentro del círculo (¡reacciones en cadena!), enseña la bola de fuego y se va.
 # Como en el juego (explode en src/game-ataques.js).
 extends Node2D
@@ -7,6 +7,7 @@ const EMPUJE := 170.0 * 2.2   # las explosiones lanzan a los zombis más lejos q
 
 var radio := 90.0
 var dano := 30
+var dano_zombis := -1     # si es distinto (la granada con Puntería les hace más a ellos): -1 = el mismo
 var origen: Node = null       # quien ha reventado (no se hace daño a sí mismo)
 var tiempo := 0.0
 
@@ -20,7 +21,7 @@ func _ready() -> void:
 			continue
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() <= radio + zombi.radio:
-			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE)
+			zombi.recibir_golpe(dano if dano_zombis < 0 else dano_zombis, hacia.normalized() * EMPUJE)
 	# La explosión ilumina toda la zona, y el resplandor del fuego tarda en apagarse
 	Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.4)
 	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)

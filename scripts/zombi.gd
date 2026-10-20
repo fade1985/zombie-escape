@@ -5,6 +5,10 @@
 # velocidad, daño...). El normal, el lento y el rápido solo cambian esos números; los que tienen un ataque
 # especial (explosivo, tentáculos y venenoso) tienen además su script, que "hereda" de este: usa todo lo de
 # aquí y solo cambia lo suyo.
+#
+# Fase 7a: los charcos les ponen estados (estados.gd), el fuego del molotov los prende (siguen ardiendo un
+# rato al salir) y las mutaciones de Johnny los aturden (se quedan quietos) o los desorientan (dan vueltas sin
+# rumbo). Aturdidos o desorientados no hacen daño.
 class_name Zombi
 extends CharacterBody2D
 
@@ -43,6 +47,20 @@ var dormido := false
 var zona := -1
 var espabilando := 0.0     # tiempo que le queda quieto después de despertar
 
+var estados := {}          # lo que le han puesto los charcos (estados.gd)
+var pisando := {}          # los estados de los charcos que pisa en este paso
+var estado_acc := 0.0      # el daño de los estados, que se le da a pellizcos
+var estado_tick := 0.0
+var arder_t := 0.0         # segundos que le quedan ardiendo
+var arder_tick := 0.0
+var arder_acc := 0.0       # la quemadura que lleva sin enseñar
+var arder_texto := 0.0
+var arder_dano := 1.0      # Puntería de quien lo prendió
+var llamas: Llamas
+var aturdido := 0.0        # Tentacular, Flatulento: quieto
+var liado := 0.0           # Locura: da vueltas sin rumbo
+var lio_angulo := 0.0
+
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
 
@@ -64,6 +82,9 @@ func _physics_process(delta: float) -> void:
 	if estado == "muerto":
 		return
 	tiempo += delta
+	sufrir(delta)
+	if estado == "muerto":
+		return
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if dormido or espabilando > 0.0:
 		pedir_velocidad(Vector2.ZERO)
@@ -74,6 +95,10 @@ func _physics_process(delta: float) -> void:
 			espabilando -= delta
 			if johnny:
 				mirar_hacia(johnny.global_position - global_position)
+		return
+	# Aturdido o desorientado: se le corta lo que hacía (salvo la mecha del explosivo, que ya no se apaga)
+	if (aturdido > 0.0 or liado > 0.0) and estado != "mecha":
+		mareo(delta)
 		return
 
 	match estado:
@@ -182,8 +207,12 @@ func pedir_velocidad(v: Vector2) -> void:
 
 
 func _al_calcular_velocidad(segura: Vector2) -> void:
-	if estado == "golpe" or estado == "muerto":
+	if estado == "golpe" or estado == "muerto" or aturdido > 0.0:
 		return
+	# en la lejía resbala: le cuesta cambiar de velocidad
+	var agarre := Estados.agarre(estados)
+	if agarre < 1.0:
+		segura = velocity.lerp(segura, 1.0 - exp(-get_physics_process_delta_time() * 14.0 * maxf(0.08, agarre)))
 	velocity = segura
 	move_and_slide()
 
@@ -221,6 +250,12 @@ func encogerse() -> void:
 
 func morir() -> void:
 	estado = "muerto"
+	if arder_t > 0.0:
+		# murió ardiendo: queda chamuscado y las llamas se apagan poco a poco
+		sprite.self_modulate = Color(0.32, 0.27, 0.27)
+		create_tween().tween_property(llamas, "fuerza", 0.0, 0.6)
+	else:
+		sprite.self_modulate = Color.WHITE
 	if sprite.sprite_frames.has_animation("muerte_" + direccion):
 		poner_animacion("muerte")
 	else:
@@ -235,6 +270,101 @@ func morir() -> void:
 	agente.avoidance_enabled = false
 	z_index = -1
 	murio.emit()
+
+
+# ── Estados, fuego y mareo (fase 7a) ──
+
+# Lo llaman los charcos en cada paso mientras los pisa
+func pisar(estados_charco: Dictionary) -> void:
+	Estados.pisar(pisando, estados_charco, true)
+
+
+# El fuego lo prende (o le renueva la quemadura si ya ardía)
+func prender(dano_lanzar := 1.0) -> void:
+	arder_t = Lanzables.MOLOTOV.sigue
+	arder_dano = dano_lanzar
+	if llamas == null:
+		llamas = Llamas.new()
+		llamas.alto = altura * 0.8
+		llamas.ancho = radio
+		add_child(llamas)
+
+
+# Daño sin golpe (los estados, el fuego): no le empuja ni se encoge; el número sale del color de lo que le daña
+func herir(cantidad: float, color := Color.WHITE) -> void:
+	if estado == "muerto":
+		return
+	if dormido:
+		despertar()
+	var n := maxi(1, roundi(cantidad))
+	vida -= n
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), str(n), color, 16)
+	if vida <= 0:
+		morir()
+
+
+# Cada paso: los estados de los charcos (a pellizcos cada medio segundo), la quemadura y lo que se ve encima
+func sufrir(delta: float) -> void:
+	var dano := Estados.actualizar(estados, pisando, delta)
+	pisando = {}
+	if dano > 0.0:
+		estado_acc += dano
+		estado_tick += delta
+		if estado_tick >= Estados.TICK_ZOMBI:
+			var color := Estados.color(estados)
+			var cuanto := estado_acc
+			estado_acc = 0.0
+			estado_tick = 0.0
+			herir(cuanto, color)
+	else:
+		estado_tick = 0.0
+	if arder_t > 0.0:
+		arder(delta)
+	if llamas:
+		llamas.fuerza = clampf(arder_t / 0.5, 0.0, 1.0)
+	sprite.self_modulate = Estados.tinte(estados, tiempo)
+	if arder_t > 0.0:
+		sprite.self_modulate = Color.WHITE.lerp(Color("#ff7a1c"), 0.35 + 0.2 * sin(tiempo * 6.0))
+	Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
+
+
+# Ardiendo: la quemadura a pellizcos, y el número cada medio segundo (o si ya le mata)
+func arder(delta: float) -> void:
+	var m := Lanzables.MOLOTOV
+	arder_t -= delta
+	arder_tick += delta
+	if arder_tick < m.tick:
+		return
+	arder_tick -= m.tick
+	arder_acc += m.quema * m.tick * arder_dano
+	arder_texto += m.tick
+	if arder_texto >= 0.5 or vida <= arder_acc:
+		var cuanto := arder_acc
+		arder_acc = 0.0
+		arder_texto = 0.0
+		herir(cuanto, Llamas.FUEGO[2])
+
+
+# Aturdido no se mueve (salvo lo que le hayan empujado); desorientado anda despacio hacia un lado y otro.
+# Chispitas sobre la cabeza: amarillas si está aturdido, moradas si está desorientado
+func mareo(delta: float) -> void:
+	if estado != "andar":
+		estado = "andar"   # se le corta el zarpazo o su ataque especial
+	if randf() < 5.0 * delta:
+		Particulas.soltar(self, global_position + Vector2(randf_range(-10, 10), -altura * 0.75), Vector2(randf_range(-15, 15), -35),
+			Color("#ffd23f") if aturdido > 0.0 else Color("#c77dff"), 2, 0.45)
+	if aturdido > 0.0:
+		aturdido -= delta
+		velocity = velocity.move_toward(Vector2.ZERO, FRENADA * delta)
+		move_and_slide()
+		poner_animacion("reposo" if velocity.length() < 20.0 else "golpe")
+		return
+	liado -= delta
+	lio_angulo += delta * 2.5
+	var hacia := Vector2.from_angle(lio_angulo)
+	pedir_velocidad(hacia * velocidad * 0.4)
+	mirar_hacia(hacia)
+	poner_animacion("andar")
 
 
 func numero_flotante(cantidad: int) -> void:

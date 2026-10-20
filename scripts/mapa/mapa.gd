@@ -85,6 +85,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	fondo.name = "Fondo"
 	fondo.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	fondo.light_mask = Luz.CAPA_SUELO   # el suelo es lo único que recibe sombras (ver luz.gd)
+	fondo.z_index = -10   # por debajo de todo: los charcos, las manchas y los cuerpos (z -1 y -2) quedan encima
 	fondo.draw.connect(dibujar_fondo.bind(fondo))
 	add_child(fondo)
 	var navegacion := NavigationRegion2D.new()

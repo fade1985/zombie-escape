@@ -57,9 +57,11 @@ var vida := 100
 var tercios := 3          # los tercios de vida que le quedan (el que se pierde ya no se cura)
 var vivo := true
 var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
-var charco_dano := 0.0     # el daño de los charcos que se va sumando hasta llegar a un punto entero
-var charco_tinte := Color.WHITE
-var charco_tiempo := 0.0   # cuánto le queda teñido del color del charco
+var estados := {}          # lo que le han puesto los charcos (estados.gd): fuego, veneno, lejía...
+var pisando := {}          # los estados de los charcos que pisa en este paso
+var estado_dano := 0.0     # el daño de los estados que se va sumando hasta llegar a un punto entero
+var llamas: Llamas         # las llamas que le salen si arde
+var a_la_vista := 0        # Ansiedad: los zombis despiertos que se ven en pantalla
 var escudo := 0.0          # Acero: lo que le queda de escudo en esta planta
 var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
 var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
@@ -89,6 +91,10 @@ var con_raton := false     # modo libre: si se está apuntando con el ratón (se
 
 func _ready() -> void:
 	efectos.animation_finished.connect(efectos.hide)
+	llamas = Llamas.new()
+	llamas.alto = 70.0
+	llamas.fuerza = 0.0
+	add_child(llamas)
 	vida = stats.vida_max
 	balas = Armas.DATOS[huecos.fuego].cargador
 	sostener(mano)
@@ -144,6 +150,8 @@ func arma() -> Dictionary:
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
 	if w.tipo == "fuego":
 		w.velocidad = w.velocidad * stats.velocidad_bala
+	elif stats.ansiedad:
+		w.ritmo = w.ritmo * (1.0 + minf(0.5, 0.05 * a_la_vista))   # Ansiedad: +5 % por zombi a la vista
 	return w
 
 
@@ -161,10 +169,20 @@ func _physics_process(delta: float) -> void:
 	sprite.modulate.a = 0.45 if invulnerable > 0.0 and int(invulnerable * 18.0) % 2 == 0 else 1.0
 	if not vivo:
 		return
-	# Pisando un charco se tiñe de su color (verde el moco, azulado la lejía)
-	charco_tiempo -= delta
-	var tinte := charco_tinte if charco_tiempo > 0.0 else Color.WHITE
-	sprite.modulate = Color(tinte, sprite.modulate.a)
+	# Los estados de los charcos: el daño poco a poco (sin parpadear), el tinte, las llamas y las gotitas
+	estado_dano += Estados.actualizar(estados, pisando, delta)
+	pisando = {}
+	if estado_dano >= 1.0:
+		var entero := int(estado_dano)
+		estado_dano -= entero
+		quitar_vida(entero)
+		if not vivo:
+			return
+	sprite.modulate = Color(Estados.tinte(estados, Time.get_ticks_msec() / 1000.0), sprite.modulate.a)
+	llamas.fuerza = 1.0 if estados.has("fuego") else 0.0
+	Estados.efectos(self, estados, velocity, delta, 60.0, RADIO)
+	if stats.ansiedad:
+		contar_a_la_vista()
 
 	# Teclas de las armas
 	for i in Armas.ORDEN.size():
@@ -203,7 +221,8 @@ func _physics_process(delta: float) -> void:
 			golpe_ninja()
 	else:
 		# Acelera suave hacia la velocidad deseada, como en el juego
-		var k := 1.0 - exp(-delta * ARRANQUE)
+		# (en la lejía cuesta frenar y girar: menos agarre)
+		var k := 1.0 - exp(-delta * ARRANQUE * maxf(0.08, Estados.agarre(estados)))
 		var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios))   # más lento por cada tercio perdido
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
@@ -564,19 +583,21 @@ func recibir_dano(cantidad: int) -> void:
 	quitar_vida(dano)
 
 
-# Lo llaman los charcos (moco, lejía) en cada paso mientras los pisa: quita vida poco a poco, sin parpadear
-# ni dejarle invulnerable, y le tiñe del color del charco. "cantidad" suele ser un trocito (4 por segundo ×
-# lo que dura un paso), así que se va sumando y se quita cuando llega a un punto entero
-func pisar_charco(cantidad: float, color: Color) -> void:
-	if not vivo:
-		return
-	charco_tinte = color
-	charco_tiempo = 0.15
-	charco_dano += cantidad
-	if charco_dano >= 1.0:
-		var entero := int(charco_dano)
-		charco_dano -= entero
-		quitar_vida(entero)
+# Lo llaman los charcos en cada paso mientras los pisa (charco.gd): apunta sus estados. La esquiva cruza
+# cualquier charco sin que le pase nada
+func pisar(estados_charco: Dictionary) -> void:
+	if vivo and esquiva_t <= 0.0:
+		Estados.pisar(pisando, estados_charco)
+
+
+# Ansiedad: cuántos zombis despiertos hay en la pantalla (sin contar los de habitaciones a oscuras)
+func contar_a_la_vista() -> void:
+	a_la_vista = 0
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		var d: Vector2 = zombi.global_position - global_position
+		if absf(d.x) < 480.0 and absf(d.y) < 320.0 and not zombi.get("dormido") and not (mapa and mapa.oculto(zombi.global_position)):
+			a_la_vista += 1
 
 
 # Un empujón (el fregonazo de la portera, su grito): se suma a su velocidad y su frenada lo va parando

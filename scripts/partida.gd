@@ -17,7 +17,8 @@
 # talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos.
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
-# la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento.
+# la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
+# las mutaciones sin tener que matar a la portera.
 #
 # Con "-- --captura" hace una prueba sola: cuenta en la terminal qué planta ha salido, mete a Johnny en un
 # apartamento, dispara para despertar a los zombis, guarda una foto en captura.png, sube a la planta
@@ -45,6 +46,8 @@ const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
+const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
+	"granada": preload("res://assets/ui/iconos/granada.png")}
 const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
 const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la cara del muro de arriba y su moldura)
@@ -61,6 +64,8 @@ var tiempo := 0.0
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
+var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
+var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
@@ -75,7 +80,7 @@ var terminada := false
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · Esc pausa · F2-F7 zombis · P portera · F9 exposición · F10 luz" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func(): decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
 	johnny.avisar_arma()
@@ -101,6 +106,11 @@ func _ready() -> void:
 	menus.menu_principal.connect(ir_al_menu)
 	add_child(ordenador)
 	ordenador.apagado.connect(func(): get_tree().paused = false)
+	lanzables.johnny = johnny
+	lanzables.partida = self
+	add_child(lanzables)
+	mutaciones.johnny = johnny
+	add_child(mutaciones)
 
 	captura = "--captura" in OS.get_cmdline_user_args()
 	if captura:
@@ -113,7 +123,7 @@ func _ready() -> void:
 	# los talentos comprados, y empieza con la vida llena y el escudo de Acero
 	aplicar_talentos(s.talentos)
 	johnny.vida = johnny.stats.vida_max
-	johnny.escudo = johnny.stats.escudo
+	lanzables.reiniciar(johnny.stats)
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -128,12 +138,43 @@ func _ready() -> void:
 
 func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num)
-	johnny.escudo = johnny.stats.escudo   # Acero: escudo nuevo en cada planta
+	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 
 
-# Los atributos de Johnny con los talentos comprados (al empezar y al comprar uno en el ordenador)
+# Los atributos de Johnny con los talentos comprados y las mutaciones de la partida (al empezar, al comprar
+# un talento en el ordenador y al elegir una mutación)
 func aplicar_talentos(talentos: Dictionary) -> void:
-	johnny.poner_stats(Talentos.aplicar(Mejoras.base(), talentos))
+	johnny.poner_stats(Mutaciones.aplicar(Talentos.aplicar(Mejoras.base(), talentos), mutaciones.tengo))
+
+
+# Tras caer la portera: pausa y dos mutaciones para elegir una (si quedan y no lleva ya 4)
+func abrir_mutacion() -> void:
+	if terminada or not johnny.vivo or mutaciones.tengo.size() >= Mutaciones.MAXIMO:
+		return
+	var opciones := mutaciones.sortear()
+	if opciones.is_empty():
+		return
+	# si en ese momento hay otra pantalla abierta (la pausa), se espera a que se cierre
+	if get_tree().paused:
+		await get_tree().create_timer(0.3, false).timeout
+		abrir_mutacion()
+		return
+	get_tree().paused = true
+	menus.mutacion(opciones, mutaciones.tengo.size(), elegir_mutacion)
+
+
+func elegir_mutacion(id: String) -> void:
+	if id in mutaciones.tengo:
+		return
+	mutaciones.tengo.append(id)
+	var antes: int = johnny.stats.escudo_mut
+	aplicar_talentos(Guardado.cargar().talentos)
+	# Endurecimiento: el escudo ya, sin esperar a la siguiente planta
+	johnny.escudo += johnny.stats.escudo_mut - antes
+	get_tree().paused = false
+	Particulas.anillo(johnny, johnny.global_position, 70.0, Color("#b5179e"), 0.5)
+	var m := Mutaciones.mutacion(id)
+	decir("¡%s!  %s" % [m.nombre, m.desc], 4.0)
 
 
 # Johnny se ha arrimado a la mesa del ordenador: se pausa el juego y se enciende
@@ -370,6 +411,20 @@ func soltar_billetes(cuantos: int, donde: Vector2) -> void:
 		mapa.cosas.add_child.call_deferred(billete)
 
 
+# Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila
+func soltar_lanzable(k: String, donde: Vector2) -> void:
+	var cosa := BILLETE.new()
+	cosa.johnny = johnny
+	cosa.icono = ICONOS_LANZABLES[k]
+	cosa.tamano = 1.0
+	cosa.position = donde
+	cosa.puede = lanzables.cabe.bind(k)
+	cosa.cogido.connect(func():
+		lanzables.sumar(k)
+		numero(cosa.position, "+1 " + k, Lanzables.COLORES[k]))
+	mapa.cosas.add_child.call_deferred(cosa)
+
+
 # Un texto que sube y se desvanece (al coger un billete)
 func numero(donde: Vector2, texto: String, color: Color) -> void:
 	var etiqueta := Label.new()
@@ -387,7 +442,7 @@ func numero(donde: Vector2, texto: String, color: Color) -> void:
 
 # Esc o Start: el juego se para y sale el menú de pausa
 func pausar() -> void:
-	if terminada or not johnny.vivo:
+	if terminada or not johnny.vivo or menus.abierto != "":
 		return
 	get_tree().paused = true
 	menus.pausa(self)
@@ -461,7 +516,18 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	zombi.murio.connect(func():
 		muertos += 1
 		var cuantos := BILLETES_JEFA if tipo == "portera" else (1 if randf() < BILLETE_ZOMBI else 0)
-		soltar_billetes(cuantos, zombi.position))
+		soltar_billetes(cuantos, zombi.position)
+		# a veces, un molotov o una granada
+		for k in ["molotov", "granada"]:
+			if randf() < Lanzables.DATOS[k].suelta:
+				soltar_lanzable(k, zombi.position)
+		# Caníbal: cada zombi que matas te cura
+		if johnny.stats.canibal > 0.0:
+			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
+		# la portera: un poco después de caer su cuerpo, las mutaciones
+		if tipo == "portera":
+			await get_tree().create_timer(2.0, false).timeout
+			abrir_mutacion())
 	if tipo == "portera":
 		# Cada planta, un 25 % más dura (como el vecino del juego JS)
 		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1))
@@ -490,6 +556,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 		montar(planta.mantenimiento if aqui == planta.expo else planta.expo, 0)
 	elif evento.keycode == KEY_F10:
 		luz.alternar()   # quitar o poner la penumbra, para comparar
+	elif evento.keycode == KEY_M:
+		abrir_mutacion()   # para probar las mutaciones sin matar a la portera
 
 
 # ── Solo con --captura ──
@@ -531,6 +599,11 @@ func _process(delta: float) -> void:
 				mejor = i
 		print("Entra en ", planta.sitios[mejor].nombre)
 		montar(mejor, 0, false)
+	# una granada a un lado (explota antes de la foto)
+	if antes < 2.0 and tiempo >= 2.0:
+		lanzables.cambiar()
+		lanzables.lanzar(johnny.global_position + Vector2(-180, 90))
+		lanzables.cambiar()
 	# un tiro de pistola para despertar a los de cerca
 	if antes < 2.5 and tiempo >= 2.5:
 		Input.action_press("arma_4")
@@ -539,6 +612,18 @@ func _process(delta: float) -> void:
 		Input.action_press("atacar")
 	if antes < 3.2 and tiempo >= 3.2:
 		Input.action_release("atacar")
+		# un molotov al zombi más cercano (o por delante)
+		var prueba := meter_zombi("lento", mapa.punto_libre(johnny.position, 120.0))
+		var donde: Vector2 = prueba.global_position
+		lanzables.lanzar(donde)
+		print("Molotov hacia ", donde, " | quedan ", lanzables.cantidades)
+	if antes < 4.2 and tiempo >= 4.2:
+		var ardiendo := 0
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z.get("arder_t") != null and z.arder_t > 0.0:
+				ardiendo += 1
+		print("Charcos: %d | zombis ardiendo: %d | manchas: %d" % [get_tree().get_nodes_in_group("charcos").size(), ardiendo,
+			get_tree().get_nodes_in_group("manchas").size()])
 	if int(tiempo * 2.0) != int(antes * 2.0) and tiempo > 1.2:
 		var dormidos := 0
 		var despiertos := 0
@@ -607,6 +692,17 @@ func probar_ordenador() -> void:
 	ordenador.apagar()
 
 
+# El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
+func probar_mutaciones() -> void:
+	abrir_mutacion()
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-mutacion.png")
+	var primera: String = menus.cartas[0].id
+	menus.elegir(primera)
+	elegir_mutacion("insensible")
+	print("Mutaciones: %s | daño recibido x%.2f | pausa %s" % [mutaciones.tengo, johnny.stats.dano_recibido, get_tree().paused])
+
+
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)
 func probar_menus() -> void:
 	set_process(false)
@@ -614,6 +710,7 @@ func probar_menus() -> void:
 	await get_tree().create_timer(1.2).timeout
 	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
 	await probar_ordenador()
+	await probar_mutaciones()
 	pausar()
 	await get_tree().create_timer(0.4).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-pausa.png")

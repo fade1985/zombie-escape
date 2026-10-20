@@ -3,8 +3,8 @@
 #     con rayas oscuras, porque ya no se curan. Encima, la vida en números.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
 #     reserva. Al recargar, las gastadas parpadean. Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
-#   - Al lado, las dos armas (la que está en la mano, con el borde amarillo), los dólares y la llave de la
-#     portera, si la lleva.
+#   - Al lado, las dos armas (la que está en la mano, con el borde amarillo), los molotovs y las granadas que
+#     le quedan (el que se lanza ahora, con el borde amarillo), los dólares y la llave de la portera, si la lleva.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
 
@@ -24,6 +24,8 @@ var barra := Control.new()
 var cuerpo: PanelContainer
 var fuego: PanelContainer
 var dinero: PanelContainer
+var molotov: PanelContainer
+var granada: PanelContainer
 var llave: PanelContainer
 var antes := {}           # lo que se pintó la última vez (para no rehacer las pastillas en cada fotograma)
 
@@ -41,6 +43,8 @@ func _ready() -> void:
 	fila.add_child(barra)
 	cuerpo = pastilla(fila)
 	fuego = pastilla(fila)
+	molotov = pastilla(fila)
+	granada = pastilla(fila)
 	dinero = pastilla(fila)
 	llave = pastilla(fila)
 
@@ -73,6 +77,9 @@ func _process(_delta: float) -> void:
 	var f: Dictionary = Armas.DATOS[h.fuego]
 	poner(cuerpo, ICONOS.get(h.cuerpo, h.cuerpo), c.nombre, johnny.mano == "cuerpo")
 	poner(fuego, ICONOS.get(h.fuego, h.fuego), f.nombre, johnny.mano == "fuego")
+	var lz: Lanzables = partida.lanzables
+	poner(molotov, "molotov", str(lz.cantidades.molotov), lz.tipo == "molotov")
+	poner(granada, "granada", str(lz.cantidades.granada), lz.tipo == "granada")
 	poner(dinero, "billete", "$%d" % partida.cartera())
 	llave.visible = partida.planta.tiene_llave
 	if llave.visible:

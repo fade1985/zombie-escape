@@ -31,4 +31,8 @@ static func base() -> Dictionary:
 		"escudo": 0,             # escudo al empezar cada planta (Acero)
 		"ninja": false,          # golpe en área al acabar la esquiva (Ninja)
 		"resucitar": false,      # resucitar una vez por edificio (Desfibrilador)
+		# De las mutaciones (fase 7a): solo duran la partida
+		"canibal": 0.0,          # parte de la vida que cura cada zombi que matas (Caníbal)
+		"ansiedad": false,       # golpes más rápidos cuantos más zombis a la vista (Ansiedad)
+		"escudo_mut": 0,         # escudo de más en cada planta (Endurecimiento)
 	}
