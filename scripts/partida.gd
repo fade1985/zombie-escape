@@ -42,6 +42,7 @@ const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
+const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
@@ -66,6 +67,9 @@ var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
 var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
 var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
+var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
+var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
+var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
@@ -80,7 +84,7 @@ var terminada := false
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func(): decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
 	johnny.avisar_arma()
@@ -106,6 +110,8 @@ func _ready() -> void:
 	menus.menu_principal.connect(ir_al_menu)
 	add_child(ordenador)
 	ordenador.apagado.connect(func(): get_tree().paused = false)
+	add_child(inventario)
+	inventario.cerrado.connect(func(): get_tree().paused = false)
 	lanzables.johnny = johnny
 	lanzables.partida = self
 	add_child(lanzables)
@@ -222,6 +228,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	mapa.llave_cogida.connect(_al_coger_llave)
 	if mapa.ordenador:
 		mapa.ordenador.usar.connect(abrir_ordenador)
+		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
+		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
 	mapa.cosas.add_child(johnny)
@@ -425,6 +433,44 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
+# Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila. "tirado":
+# lo ha tirado Johnny desde el inventario (no vuelve a la mochila hasta que se aparte)
+func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
+	var cosa := BILLETE.new()
+	cosa.johnny = johnny
+	cosa.icono = load("res://assets/ui/iconos/obj-%s.png" % id)
+	cosa.tamano = 2.4
+	cosa.tirado = tirado
+	cosa.position = donde
+	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
+	cosa.cogido.connect(func():
+		mochila.append(id)
+		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
+	mapa.cosas.add_child.call_deferred(cosa)
+
+
+# Un arma tirada desde el inventario: al volver a cogerla, otra vez a las guardadas
+func soltar_arma(id: String, donde: Vector2) -> void:
+	var cosa := BILLETE.new()
+	cosa.johnny = johnny
+	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
+	cosa.tamano = 1.4
+	cosa.tirado = true
+	cosa.position = donde
+	cosa.cogido.connect(func():
+		armas_guardadas.append(id)
+		numero(cosa.position, Objetos.nombre(id), Tema.TINTA))
+	mapa.cosas.add_child.call_deferred(cosa)
+
+
+# El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
+func abrir_cosas(que: String) -> void:
+	if terminada or cambiando or not johnny.vivo or get_tree().paused:
+		return
+	get_tree().paused = true
+	inventario.abrir(que, self)
+
+
 # Un texto que sube y se desvanece (al coger un billete)
 func numero(donde: Vector2, texto: String, color: Color) -> void:
 	var etiqueta := Label.new()
@@ -466,6 +512,9 @@ func terminar(gano: bool, abandona := false) -> void:
 		var e := Guardado.edificio(g, EDIFICIO)
 		e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
+			# los objetos de la mochila pasan al baúl (si caes, se pierden)
+			for id in mochila:
+				g.baul[id] = g.baul.get(id, 0) + 1
 			g.dolares += dolares
 			g.dolares_total += dolares
 			g.victorias += 1
@@ -521,6 +570,14 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		for k in ["molotov", "granada"]:
 			if randf() < Lanzables.DATOS[k].suelta:
 				soltar_lanzable(k, zombi.position)
+		# y a veces un objeto para el banco de trabajo (la portera, dos seguros)
+		if tipo == "portera":
+			for i in 2:
+				soltar_objeto(Objetos.al_azar(), zombi.position)
+		else:
+			var obj := Objetos.que_suelta(tipo)
+			if obj != "":
+				soltar_objeto(obj, zombi.position)
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
@@ -547,6 +604,10 @@ func _unhandled_input(evento: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		pausar()
 		return
+	if evento.is_action_pressed("inventario") and not cambiando:
+		get_viewport().set_input_as_handled()
+		abrir_cosas("inventario")
+		return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando:
 		return
 	if evento.keycode in TECLAS:
@@ -558,6 +619,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 		luz.alternar()   # quitar o poner la penumbra, para comparar
 	elif evento.keycode == KEY_M:
 		abrir_mutacion()   # para probar las mutaciones sin matar a la portera
+	elif evento.keycode == KEY_O:
+		soltar_objeto(Objetos.al_azar(), johnny.position + Vector2(0, 50))   # un objeto, para probar
 
 
 # ── Solo con --captura ──
@@ -692,6 +755,48 @@ func probar_ordenador() -> void:
 	ordenador.apagar()
 
 
+# La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al
+# inventario), crea un arma y hace fotos
+func probar_cosas() -> void:
+	Guardado.cambiar(func(g):
+		g.dolares = 20
+		g.baul = {"clavos": 1, "lejia": 2}
+		g.baul_armas = [])
+	ahorrados = 20
+	mochila = ["gasolina", "gasolina", "cuchillas", "taser", "cuerda"]
+	soltar_objeto("mechero", johnny.position + Vector2(30, 0))
+	await get_tree().create_timer(0.6).timeout
+	abrir_ordenador()
+	ordenador.abrir("armas")
+	ordenador.comprar_arma("bate")
+	ordenador.abrir("")
+	ordenador.apagar()
+	abrir_cosas("inventario")
+	inventario.tocar("m0")
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-inventario.png")
+	inventario.cerrar()
+	abrir_cosas("banco")
+	inventario.tocar("mano")
+	inventario.tocar("o_clavos")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-banco.png")
+	inventario.crear_arma()
+	inventario.tocar("o_gasolina")
+	inventario.tocar("o_cuchillas")
+	inventario.crear_arma()   # no combinan: no hace nada
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-banco2.png")
+	inventario.cerrar()
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-baul.png")
+	inventario.cerrar()
+	var g := Guardado.cargar()
+	print("Cosas: mochila %s | guardadas %s | mano %s | baúl %s | armas del baúl %s" % [mochila, armas_guardadas,
+		johnny.huecos.cuerpo, g.baul, g.baul_armas.map(func(a): return "%s %s %d" % [a.nombre, a.rareza, a.dano])])
+
+
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
 func probar_mutaciones() -> void:
 	abrir_mutacion()
@@ -710,6 +815,7 @@ func probar_menus() -> void:
 	await get_tree().create_timer(1.2).timeout
 	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
 	await probar_ordenador()
+	await probar_cosas()
 	await probar_mutaciones()
 	pausar()
 	await get_tree().create_timer(0.4).timeout

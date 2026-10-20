@@ -2,7 +2,8 @@
 # frena, y cuando Johnny pasa cerca (su "iman") vuela hacia él y se lo queda. Los dólares de la partida no se
 # guardan hasta completar el edificio: si te matan, se pierden.
 # También sirve para los molotovs y granadas que sueltan los zombis (fase 7a): otro "icono" y "puede", que
-# dice si cabe en la mochila (si no cabe, se queda en el suelo).
+# dice si cabe en la mochila (si no cabe, se queda en el suelo). Y para los objetos y las armas de la fase 7b:
+# lo que Johnny tira desde el inventario ("tirado") no sale despedido ni vuelve solo hasta que él se aparta.
 extends Node2D
 
 signal cogido
@@ -13,6 +14,7 @@ var johnny: Node2D
 var icono: Texture2D = ICONO
 var tamano := 0.75
 var puede := func() -> bool: return true
+var tirado := false
 var velocidad := Vector2.ZERO
 var t := 0.0
 
@@ -24,7 +26,8 @@ func _ready() -> void:
 	dibujo.offset = Vector2(0, -10)
 	add_child(dibujo)
 	# Sale despedido hacia un lado al azar
-	velocidad = Vector2.from_angle(randf() * TAU) * randf_range(80.0, 200.0)
+	if not tirado:
+		velocidad = Vector2.from_angle(randf() * TAU) * randf_range(80.0, 200.0)
 
 
 func _physics_process(delta: float) -> void:
@@ -35,6 +38,10 @@ func _physics_process(delta: float) -> void:
 	if johnny and johnny.vivo and puede.call():
 		var hacia: Vector2 = johnny.global_position - global_position
 		var d := hacia.length()
+		if tirado:
+			tirado = d < johnny.stats.iman + 30.0   # hasta que se aparte
+			position += velocidad * delta
+			return
 		if t > 0.4 and d < johnny.stats.iman:
 			velocidad += hacia / maxf(d, 1.0) * 2200.0 * delta
 			velocidad = velocidad.limit_length(650.0)

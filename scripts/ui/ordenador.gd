@@ -4,7 +4,8 @@
 #   - "Compra de puntos e intercambio": cambia los dólares ahorrados por puntos de talento (talentos.gd) y los
 #     gasta en el árbol de talentos. Lo comprado se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS) para esta partida, y queda
-#     desbloqueada en el guardado. La que llevaras en ese hueco se pierde (aún no hay armas por el suelo).
+#     desbloqueada en el guardado. La que llevaras en ese hueco: si es cuerpo a cuerpo, va al inventario (para
+#     el banco de trabajo); si es de fuego, se pierde.
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
@@ -378,7 +379,7 @@ func programa_armas(c: VBoxContainer) -> void:
 	var nota := Label.new()
 	nota.theme_type_variation = "Sub"
 	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	nota.text = "Lo que compres es para esta partida y queda desbloqueado. La que llevaras en ese hueco se pierde."
+	nota.text = "Lo que compres es para esta partida y queda desbloqueado. La de cuerpo a cuerpo que llevaras va al inventario; la de fuego, se pierde."
 	c.add_child(nota)
 	nota_partida(c)
 	var ids := Armas.PRECIOS.keys()
@@ -433,9 +434,12 @@ func comprar_arma(id: String) -> void:
 	Guardado.escribir(s)
 	partida.ahorrados = s.dolares
 	var vieja: String = Armas.DATOS[johnny.huecos[w.tipo]].nombre
+	if w.tipo == "cuerpo":
+		partida.armas_guardadas.append(johnny.huecos.cuerpo)   # al inventario
+		partida.armas_guardadas.erase(id)   # si la compras teniéndola guardada, no se queda repetida
 	johnny.coger(id)
 	abrir("armas", "b_" + id)
-	info.set_deferred("text", "¡%s comprada! Dejas %s." % [w.nombre, vieja.to_lower()])   # después de marcar el botón (que pone su explicación)
+	info.set_deferred("text", ("¡%s comprada! %s va al inventario." if w.tipo == "cuerpo" else "¡%s comprada! Dejas %s.") % [w.nombre, vieja if w.tipo == "cuerpo" else vieja.to_lower()])   # después de marcar el botón (que pone su explicación)
 
 
 # ── Piezas ──

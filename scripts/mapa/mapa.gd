@@ -21,6 +21,9 @@ const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
 const ORDENADOR_X := 240.0   # dónde va la mesa del ordenador en la sala de mantenimiento (como en el JS)
+const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
+const BANCO_X := 135.0       # el banco de trabajo, a su izquierda, y el baúl, a su derecha (fase 7b)
+const BAUL_X := 340.0
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
@@ -44,6 +47,8 @@ var cosas: Node2D                 # personajes, muebles y caras de muro, ordenad
 var puertas: Array = []           # una por salida, en el mismo orden
 var muebles: Array = []
 var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de mantenimiento)
+var baul: Node2D = null          # y el baúl y el banco de trabajo
+var banco: Node2D = null
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
 # habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
 var niebla := {}
@@ -285,6 +290,12 @@ func poner_muebles() -> void:
 		ordenador = ORDENADOR.new()
 		ordenador.montar(ORDENADOR_X, MURO)
 		cosas.add_child(ordenador)
+		baul = ARRIMABLE.new()
+		baul.montar("Baul", "res://assets/sprites/baul.png", "Baúl", Color("#ffd98a"), BAUL_X, MURO, 60.0, 36.0)
+		cosas.add_child(baul)
+		banco = ARRIMABLE.new()
+		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", "Banco", Color("#ffb36b"), BANCO_X, MURO, 76.0, 36.0)
+		cosas.add_child(banco)
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.
