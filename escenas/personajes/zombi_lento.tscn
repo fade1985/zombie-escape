@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/zombi.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento.tres" id="frames"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-rojo.tres" id="ropa1"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-lento-bata.tres" id="ropa2"]
@@ -27,6 +28,12 @@ bamboleo_ritmo = 1.5
 a_tirones = true
 altura = 60.0
 ropas = Array[SpriteFrames]([ExtResource("frames"), ExtResource("ropa1"), ExtResource("ropa2"), ExtResource("ropa3"), ExtResource("ropa4"), ExtResource("ropa5"), ExtResource("ropa6")])
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, 27)
+script = ExtResource("sombra")
+ancho = 62.0
+alto = 18.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")

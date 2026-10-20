@@ -332,6 +332,7 @@ func morir() -> void:
 	estado = "muerto"
 	Sonido.tocar("chof")
 	Sonido.tocar("muerte")
+	$Sombra.apagar()
 	var cae: bool = sprite.sprite_frames.has_animation("muerte_" + direccion)
 	if arder_t > 0.0 and not cae:
 		# murió ardiendo (sin animación de caer): queda chamuscado y las llamas se apagan poco a poco

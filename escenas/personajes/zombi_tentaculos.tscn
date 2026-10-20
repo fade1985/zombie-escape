@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/zombi_tentaculos.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-tentaculos-gpt.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
@@ -17,6 +18,12 @@ dano = 0
 radio = 18.0
 empuje = 0.47
 altura = 96.0
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, 28)
+script = ExtResource("sombra")
+ancho = 60.0
+alto = 18.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")

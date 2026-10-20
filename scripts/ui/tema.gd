@@ -54,13 +54,8 @@ static func crear() -> Theme:
 	t.set_stylebox("hover", "Button", _chapa(Color(1.3, 1.25, 1.1)))
 	t.set_stylebox("pressed", "Button", _chapa(Color(0.75, 0.75, 0.75)))
 	t.set_stylebox("disabled", "Button", _chapa(Color(0.5, 0.5, 0.5, 0.75)))
-	# El botón elegido (con el mando o el teclado): un marco amarillo por dentro de la chapa
-	var foco := StyleBoxFlat.new()
-	foco.draw_center = false
-	foco.set_border_width_all(2)
-	foco.border_color = AMARILLO
-	foco.set_expand_margin_all(-6)
-	t.set_stylebox("focus", "Button", foco)
+	# El botón elegido (con el mando o el teclado): la chapa iluminada, igual que con el ratón encima
+	t.set_stylebox("focus", "Button", _chapa(Color(1.3, 1.25, 1.1)))
 	for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
 		t.set_color(c, "Button", Color("#e6dec8"))
 	t.set_color("font_disabled_color", "Button", GRIS)

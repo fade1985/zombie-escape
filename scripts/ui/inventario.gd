@@ -454,7 +454,7 @@ func casilla(padre: Container, clave: String, icono: String, nombre: String, sub
 		b.add_theme_stylebox_override("normal", estilo(borde, elegida, false))
 		b.add_theme_stylebox_override("hover", estilo(borde, elegida, true))
 		b.add_theme_stylebox_override("pressed", estilo(borde, true, true))
-		b.add_theme_stylebox_override("focus", estilo(Tema.AMARILLO, false, false, true))
+		b.add_theme_stylebox_override("focus", estilo(borde, elegida, true))   # elegida con el mando: iluminada
 		c = b
 	else:
 		c = Panel.new()
@@ -498,18 +498,12 @@ func casilla(padre: Container, clave: String, icono: String, nombre: String, sub
 	return c
 
 
-func estilo(borde: Color, elegida: bool, encima: bool, solo_borde := false) -> StyleBoxFlat:
+func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
 	var e := StyleBoxFlat.new()
-	e.bg_color = Color(0, 0, 0, 0) if solo_borde else (Color("#3a3226") if elegida else (Color("#26222e") if encima else FONDO_CASILLA))
+	e.bg_color = Color("#3a3226") if elegida else (Color("#26222e") if encima else FONDO_CASILLA)
 	e.border_color = Tema.AMARILLO if elegida else borde
-	e.set_border_width_all(3 if (elegida or solo_borde) else 2)
+	e.set_border_width_all(3 if elegida else 2)
 	e.set_corner_radius_all(3)
-	if solo_borde:
-		e.draw_center = false
-		e.expand_margin_left = 2
-		e.expand_margin_right = 2
-		e.expand_margin_top = 2
-		e.expand_margin_bottom = 2
 	return e
 
 

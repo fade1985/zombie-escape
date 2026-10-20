@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/zombi_explosivo.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-explosivo.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
@@ -17,6 +18,12 @@ dano = 0
 radio = 19.0
 empuje = 0.82
 altura = 100.0
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, 27)
+script = ExtResource("sombra")
+ancho = 84.0
+alto = 22.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")

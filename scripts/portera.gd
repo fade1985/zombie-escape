@@ -445,6 +445,7 @@ func herir(cantidad: float, _color := Color.WHITE) -> void:
 func morir() -> void:
 	estado = "muerto"
 	Sonido.tocar("explosion")
+	$Sombra.apagar(1.0)
 	remove_from_group("zombis")
 	$Choque.set_deferred("disabled", true)
 	z_index = -1

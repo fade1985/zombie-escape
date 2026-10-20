@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/zombi_venenoso.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-venenoso.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
@@ -17,6 +18,12 @@ dano = 0
 radio = 30.0
 empuje = 0.94
 altura = 128.0
+
+[node name="Sombra" type="Node2D" parent="."]
+position = Vector2(0, 34)
+script = ExtResource("sombra")
+ancho = 58.0
+alto = 18.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")
