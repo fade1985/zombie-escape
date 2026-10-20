@@ -459,9 +459,11 @@ func numero_flotante(cantidad: int) -> void:
 static func texto_flotante(sala: Node, donde: Vector2, texto: String, color := Color.WHITE, tamano := 18) -> void:
 	var etiqueta := Label.new()
 	etiqueta.text = texto
-	etiqueta.add_theme_font_size_override("font_size", tamano)
+	etiqueta.theme = Tema.crear()
+	# la fuente pixel art solo se ve nítida a 16 o a 32 (un píxel suyo = 1 o 2 unidades)
+	etiqueta.add_theme_font_size_override("font_size", 16 if tamano < 24 else 32)
 	etiqueta.add_theme_color_override("font_color", color)
-	etiqueta.add_theme_constant_override("outline_size", 6)
+	etiqueta.add_theme_constant_override("outline_size", 4 if tamano < 24 else 8)
 	etiqueta.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))
 	etiqueta.z_index = 10
 	sala.add_child(etiqueta)

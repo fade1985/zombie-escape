@@ -97,6 +97,9 @@ var terminada := false
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
+	# los textos de la pantalla, con la fuente pixel art de los menús
+	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
+		etiqueta.theme = Tema.crear()
 	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
@@ -108,6 +111,7 @@ func _ready() -> void:
 	var minimapa := MINIMAPA.new()
 	minimapa.name = "Minimapa"
 	minimapa.partida = self
+	minimapa.theme = Tema.crear()
 	$Pantalla.add_child(minimapa)
 	$Pantalla.move_child(minimapa, negro.get_index())   # por debajo del fundido a negro
 	var hud := HUD.new()

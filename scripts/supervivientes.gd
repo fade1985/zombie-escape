@@ -257,9 +257,9 @@ func texto_flotante(donde: Vector2, texto: String, color: Color, tamano := 18, v
 	var etiqueta := Label.new()
 	etiqueta.text = texto
 	etiqueta.theme = Tema.crear()
-	etiqueta.add_theme_font_size_override("font_size", tamano)
+	etiqueta.add_theme_font_size_override("font_size", 16 if tamano < 24 else 32)   # nítida solo a 16 o 32
 	etiqueta.add_theme_color_override("font_color", color)
-	etiqueta.add_theme_constant_override("outline_size", 6)
+	etiqueta.add_theme_constant_override("outline_size", 4 if tamano < 24 else 8)
 	etiqueta.add_theme_color_override("font_outline_color", Tema.LINEA)
 	etiqueta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	etiqueta.size = Vector2(400, 30)

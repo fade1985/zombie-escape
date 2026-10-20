@@ -1,10 +1,9 @@
-# El minimapa (como drawMinimap de src/render.js del juego JS): un plano de la planta arriba a la derecha.
-# El pasillo en medio, una casilla por cada puerta (arriba y abajo), la llegada a la izquierda y las escaleras
-# a la derecha. Gris = sin visitar, rojo = con zombis dentro, claro = limpio, amarillo = donde estás (con un
+# El minimapa: un plano de la planta arriba a la derecha, como el de una mazmorra. El pasillo en medio y, unida
+# a él por un trocito de pasillo, una sala por cada puerta (arriba y abajo), la llegada a la izquierda y las
+# escaleras a la derecha. Gris = sin visitar, rojo = con zombis dentro, claro = limpio, amarillo = donde estás (con un
 # marco que parpadea). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
 # (supervivientes.gd).
-# Es provisional: el minimapa bonito llegará con el arte de los escenarios.
 extends Control
 
 const ANCHO := 170.0
@@ -18,6 +17,12 @@ const ROJO := Color("#b34030")
 const VERDE := Color("#6f9a58")
 const AMARILLO := Color("#e0b030")
 const BORDE := Color("#1d1b2c")
+const FONDO := Color("#141219")
+const CUADRICULA := Color("#24212c")
+const SOMBRA := Color(0, 0, 0, 0.45)
+const SUELO := Color("#8f8775")     # los trocitos de pasillo que unen las salas
+const PASILLO_Y := 58.0     # dónde empieza (por arriba) el pasillo
+const CASILLA := 32.0
 const ICONOS := {
 	"puerta": preload("res://assets/ui/iconos/puerta.png"),
 	"herramientas": preload("res://assets/ui/iconos/herramientas.png"),
@@ -50,25 +55,30 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-# Las casillas: [rectángulo, color, ¿estás aquí?, icono, ¿está ahí el superviviente?]
+# Las salas: cada una un diccionario con su rectángulo, su color, si estás ahí, su icono, si está ahí el
+# superviviente y el trocito de pasillo ("puerta") que la une al pasillo, como en el plano de una mazmorra.
+# Los apartamentos más grandes salen más anchos. Todo cae en números pares: 2 unidades = un píxel del dibujo.
 func casillas() -> Array:
 	var planta: Dictionary = partida.planta
 	var pasillo: Dictionary = planta.sitios[0]
 	var aqui: int = partida.aqui
 	var lista := []
-	var arriba := CABEZA + MARGEN
 	var x0 := MARGEN + PUNTA + 4
-	var largo := ANCHO - (MARGEN + PUNTA + 4) * 2
-	lista.append([Rect2(x0, arriba + 22, largo, 12), CLARO, aqui == 0, "", false])
+	var largo := ANCHO - x0 * 2
+	var medio := PASILLO_Y + 5.0
+	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": false,
+		"puerta": Rect2()})
 	var sos: int = planta.superviviente.sitio if partida.supervivientes.encerrado() else -1
 	for s in pasillo.salidas:
 		match s.tipo:
 			"llegada":
-				lista.append([Rect2(x0 - PUNTA - 4, arriba + 19, PUNTA, 18), GRIS, false, "puerta", false])
+				lista.append({"r": Rect2(MARGEN, medio - 8, PUNTA, 16), "color": GRIS, "aqui": false, "icono": "puerta",
+					"sos": false, "puerta": Rect2(MARGEN + PUNTA - 2, medio - 3, 8, 6)})
 			"escaleras":
 				var abiertas: bool = planta.jefa_muerta
-				lista.append([Rect2(x0 + largo + 4, arriba + 19, PUNTA, 18), VERDE if abiertas else GRIS, false,
-					"escalera" if abiertas else "candado", false])
+				lista.append({"r": Rect2(x0 + largo + 4, medio - 8, PUNTA, 16), "color": VERDE if abiertas else GRIS,
+					"aqui": false, "icono": "escalera" if abiertas else "candado", "sos": false,
+					"puerta": Rect2(x0 + largo - 2, medio - 3, 8, 6)})
 			"puerta":
 				if s.a < 0:
 					continue
@@ -83,10 +93,21 @@ func casillas() -> Array:
 					icono = "herramientas"
 				elif sitio.tipo == "jefe":
 					icono = "jefe"
-				var y := arriba if s.dir == "arriba" else arriba + 38
-				lista.append([Rect2(x0 + float(s.en) / pasillo.ancho * largo - 15, y, 30, 18), color,
-					aqui == s.a or (planta.sitios[aqui].tipo == "expo" and sitio.tipo == "mantenimiento"), icono, s.a == sos])
+				# de 28 a 46 de ancho según lo grande que sea el apartamento
+				var ancho := par(clampf(10.0 + sitio.ancho / CASILLA * 0.8, 28.0, 46.0))
+				var alto := 18.0 if sitio.tipo == "jefe" else 16.0
+				var x := par(x0 + float(s.en) / pasillo.ancho * largo)
+				var arriba: bool = s.dir == "arriba"
+				var y := PASILLO_Y - 6 - alto if arriba else PASILLO_Y + 16
+				var puerta := Rect2(x - 3, PASILLO_Y - 8 if arriba else PASILLO_Y + 8, 6, 8)
+				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
+					"aqui": aqui == s.a or (planta.sitios[aqui].tipo == "expo" and sitio.tipo == "mantenimiento"),
+					"icono": icono, "sos": s.a == sos, "puerta": puerta})
 	return lista
+
+
+static func par(v: float) -> float:
+	return roundf(v / 2.0) * 2.0
 
 
 func _draw() -> void:
@@ -95,23 +116,45 @@ func _draw() -> void:
 	draw_style_box(marco, Rect2(Vector2.ZERO, size))
 	var letra := get_theme_default_font()
 	var titulo: String = partida.planta.nombre
-	draw_string_outline(letra, Vector2(0, 19), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 12, 4, BORDE)
-	draw_string(letra, Vector2(0, 19), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 12, Color("#e6c34a"))
+	draw_string_outline(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, 4, BORDE)
+	draw_string(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, Color("#e6c34a"))
+	# el fondo: papel oscuro cuadriculado, como el plano de una mazmorra
+	var fondo := Rect2(8, 30, ANCHO - 16, ALTO - 38)
+	draw_rect(fondo, FONDO)
+	for gx in range(int(fondo.position.x) + 4, int(fondo.end.x), 8):
+		for gy in range(int(fondo.position.y) + 4, int(fondo.end.y), 8):
+			draw_rect(Rect2(gx, gy, 2, 2), CUADRICULA)
 	var lista := casillas()
+	# primero las sombras, luego los trocitos de pasillo que unen cada sala y, encima, las salas
 	for c in lista:
-		var r: Rect2 = c[0]
-		draw_rect(r, AMARILLO if c[2] else c[1])
-		draw_rect(r, Color("#f2e6c0") if c[2] else BORDE, false, 2.0)
-		if c[3] != "":
-			draw_texture_rect(ICONOS[c[3]], Rect2(r.get_center() - Vector2(8, 8), Vector2(16, 16)), false)
-	# el "!" del superviviente, en una esquina de su casilla
+		draw_rect(Rect2(c.r.position + Vector2(2, 2), c.r.size).grow(2), SOMBRA)
 	for c in lista:
-		if c[4]:
-			var centro: Vector2 = c[0].position + Vector2(c[0].size.x - 2, 2)
-			draw_circle(centro, 7.0, BORDE)
-			draw_circle(centro, 5.5, Color("#ff5d73"))
-			draw_string(letra, centro + Vector2(-10, 4), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 12, Color.WHITE)
+		if c.puerta.has_area():
+			draw_rect(c.puerta.grow(2), BORDE)
+			draw_rect(c.puerta, SUELO)
+	for c in lista:
+		var r: Rect2 = c.r
+		var color: Color = AMARILLO if c.aqui else c.color
+		draw_rect(r.grow(2), BORDE)
+		draw_rect(r, color)
+		# un poco de relieve: luz arriba, sombra abajo
+		draw_rect(Rect2(r.position, Vector2(r.size.x, 2)), color.lightened(0.25))
+		draw_rect(Rect2(r.position + Vector2(0, r.size.y - 2), Vector2(r.size.x, 2)), color.darkened(0.3))
+	# los trozos de pasillo se pintan otra vez por dentro, para que la sala y el pasillo queden abiertos
+	for c in lista:
+		if c.puerta.has_area():
+			draw_rect(c.puerta, AMARILLO.darkened(0.15) if c.aqui else SUELO)
+	for c in lista:
+		if c.icono != "":
+			draw_texture_rect(ICONOS[c.icono], Rect2(c.r.get_center() - Vector2(8, 8), Vector2(16, 16)), false)
+	# el "!" del superviviente, en una esquina de su sala
+	for c in lista:
+		if c.sos:
+			var esquina: Vector2 = c.r.position + Vector2(c.r.size.x - 6, -4)
+			draw_rect(Rect2(esquina, Vector2(10, 12)).grow(2), BORDE)
+			draw_rect(Rect2(esquina, Vector2(10, 12)), Color("#ff5d73"))
+			draw_string(letra, esquina + Vector2(-5, 12), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 16, Color.WHITE)
 	# el marco que parpadea alrededor de donde estás
 	for c in lista:
-		if c[2]:
-			draw_rect(c[0].grow(3), Color(AMARILLO, 0.5 + sin(tiempo * 6.0) * 0.3), false, 2.0)
+		if c.aqui:
+			draw_rect(c.r.grow(4), Color(AMARILLO, 0.5 + sin(tiempo * 6.0) * 0.3), false, 2.0)
