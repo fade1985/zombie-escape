@@ -1,13 +1,17 @@
 # El HUD de Johnny, en la franja de abajo de la pantalla (la del muro de abajo, 64 de alto), como el del JS
-# (src/ui.js, updateHud; #hud en style.css). Así la barra de la portera y la de la horda, arriba, no se tapan:
+# (src/ui.js, updateHud; #hud en style.css). Así la barra de la portera y la de la horda, arriba, no se tapan.
+# Va ordenado por importancia: lo que se usa al pelear, grande; lo que solo informa, pequeño y sin marco.
 #   - La barra de vida en su marco (barra-vida.png), partida en tres tercios. Los tercios perdidos se tapan
 #     con rayas oscuras, porque ya no se curan. Encima, la vida en números. Al recibir un golpe, la barra
 #     tiembla y lo perdido se queda en claro un momento antes de bajar; con poca vida, la sangre late.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
 #     reserva. Al recargar, las gastadas parpadean. Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
-#   - Al lado, las dos armas (la que está en la mano, con el borde amarillo), los molotovs y las granadas que
-#     le quedan (el que se lanza ahora, con el borde amarillo), la mochila (casillas llenas), los dólares y la
-#     llave de la portera, si la lleva.
+#   - Al lado, las armas: la de la mano en una casilla grande con el borde amarillo y la otra, pequeña y
+#     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
+#   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás
+#     en pequeño al lado (en gris si no queda ninguno).
+#   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo), la mochila (una
+#     cajita por casilla, las llenas encendidas) y los dólares, que suben contando con un "+5" que flota.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
 
@@ -19,22 +23,33 @@ const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
 const FRANJA := 64.0      # el alto de la franja de abajo (el grosor del muro de abajo)
-const ICONOS := {"mp5": "pistola"}   # las armas sin icono propio usan el de otra
+const GRANDE := 42.0      # la casilla del arma en la mano
+const PEQUENA := 28.0     # la de la otra arma
+const MEDIANA := 36.0     # la del lanzable de ahora
+const NOMBRE := 1.6       # lo que se ve el nombre del arma al cambiar (segundos)
 
 var johnny: Node2D
 var partida: Node
 
 var fila := HBoxContainer.new()
 var barra := Control.new()
-var cuerpo: PanelContainer
-var fuego: PanelContainer
-var dinero: PanelContainer
-var mochila: PanelContainer
-var molotov: PanelContainer
-var granada: PanelContainer
-var creada: PanelContainer   # la arrojadiza creada elegida (o la primera que quede), si tiene alguna
-var llave: PanelContainer
-var antes := {}           # lo que se pintó la última vez (para no rehacer las pastillas en cada fotograma)
+var armas := Control.new()      # las dos casillas de las armas
+var lanzar := Control.new()     # el lanzable de ahora y los demás
+var recursos := Control.new()   # la llave, la mochila y el dinero, pegados a la derecha
+var texturas := {}              # los iconos ya cargados
+
+# Las armas: cuál estaba en la mano, el saltito al cambiar y el rato que le queda al nombre
+var en_mano := ""
+var salto_arma := 0.0
+var nombre_arma := 0.0
+# Los lanzables: el de antes y cuántos había (para el saltito)
+var lanzable := ""
+var salto_lanzar := 0.0
+# El dinero que se ve (sube contando hasta el de verdad) y los "+5" que flotan: [cantidad, tiempo]
+var dinero_visto := -1.0
+var dinero_real := -1
+var ganado: Array = []
+var llave_t := -1.0             # desde cuándo lleva la llave (para el brillo al cogerla)
 
 # La barra que se mueve: al perder vida, el trozo perdido se queda un momento en claro y luego baja
 # poco a poco (como en los juegos de lucha); al curarse, sube poco a poco
@@ -57,80 +72,219 @@ var nuevas := {}          # número de bala → tiempo desde que entró
 func _ready() -> void:
 	theme = Tema.crear()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	fila.add_theme_constant_override("separation", 8)
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	fila.add_theme_constant_override("separation", 14)
 	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(fila)
 	barra.custom_minimum_size = Vector2(ANCHO, ALTO)
+	barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	barra.draw.connect(pintar_barra)
 	fila.add_child(barra)
-	cuerpo = pastilla(fila)
-	fuego = pastilla(fila)
-	molotov = pastilla(fila)
-	granada = pastilla(fila)
-	creada = pastilla(fila)
-	mochila = pastilla(fila)
-	dinero = pastilla(fila)
-	llave = pastilla(fila)
-
-
-func pastilla(fila: HBoxContainer) -> PanelContainer:
-	var p := PanelContainer.new()
-	p.theme_type_variation = "Pastilla"
-	p.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	fila.add_child(p)
-	return p
-
-
-# Cambia lo que hay dentro de una pastilla (solo si ha cambiado)
-func poner(p: PanelContainer, icono: String, texto: String, on := false) -> void:
-	var clave := "%s|%s|%s" % [icono, texto, on]
-	if antes.get(p) == clave:
-		return
-	var habia := antes.has(p)
-	antes[p] = clave
-	for hijo in p.get_children():
-		hijo.queue_free()
-	p.add_child(Tema.icono_y_texto(icono, texto, 22))
-	p.theme_type_variation = "PastillaOn" if on else "Pastilla"
-	if habia:
-		saltito(p)
-
-
-# Una pastilla que cambia (otra arma en la mano, un dólar más, un molotov menos) da un saltito para que se note
-func saltito(p: Control) -> void:
-	p.pivot_offset = p.size / 2.0
-	var t := p.create_tween()
-	t.tween_property(p, "scale", Vector2(1.18, 1.18), 0.06)
-	t.tween_property(p, "scale", Vector2.ONE, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	armas.custom_minimum_size = Vector2(GRANDE + PEQUENA + 8, GRANDE + 4)
+	armas.draw.connect(pintar_armas)
+	fila.add_child(armas)
+	lanzar.custom_minimum_size = Vector2(MEDIANA, GRANDE + 4)
+	lanzar.draw.connect(pintar_lanzar)
+	fila.add_child(lanzar)
+	recursos.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	recursos.draw.connect(pintar_recursos)
+	add_child(recursos)
 
 
 func _process(delta: float) -> void:
 	tiempo += delta
 	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
 	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 5.0)
+	recursos.position = fila.position
 	if johnny == null:
 		return
-	var h: Dictionary = johnny.huecos
-	var c: Dictionary = Armas.datos(h.cuerpo)
-	var f: Dictionary = Armas.datos(h.fuego)
-	poner(cuerpo, Objetos.icono(h.cuerpo), c.nombre, johnny.mano == "cuerpo")
-	poner(fuego, Objetos.icono(h.fuego), f.nombre, johnny.mano == "fuego")
-	var lz: Lanzables = partida.lanzables
-	poner(molotov, "molotov", str(lz.cantidades.molotov), lz.tipo == "molotov")
-	poner(granada, "granada", str(lz.cantidades.granada), lz.tipo == "granada")
-	var otras: Array = lz.tipos().slice(2)
-	creada.visible = not otras.is_empty()
-	if creada.visible:
-		var k: String = lz.tipo if lz.tipo in otras else otras[0]
-		poner(creada, Objetos.icono(Recetas.LISTA[k].icono), str(lz.cuantas(k)), lz.tipo == k)
-	poner(mochila, "mochila", "%d/%d" % [Objetos.casillas(partida.mochila).size(), Objetos.MOCHILA])
-	poner(dinero, "billete", "$%d" % partida.cartera())
-	llave.visible = partida.planta.tiene_llave
-	if llave.visible:
-		poner(llave, "llave", partida.nombre_jefa())
+	mirar_armas(delta)
+	mirar_lanzar(delta)
+	mirar_recursos(delta)
 	mover_barra(delta)
 	mirar_balas(delta)
 	barra.queue_redraw()
+	armas.queue_redraw()
+	lanzar.queue_redraw()
+	recursos.queue_redraw()
+
+
+func icono(nombre: String) -> Texture2D:
+	if not texturas.has(nombre):
+		texturas[nombre] = load("res://assets/ui/iconos/%s.png" % nombre)
+	return texturas[nombre]
+
+
+func icono_lanzable(k: String) -> String:
+	return k if k in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[k].icono)
+
+
+# Una casilla: sombra, fondo de metal, borde y el icono dentro (apagado si no está en uso)
+func casilla(c: Control, r: Rect2, borde: Color, nombre: String, luz := 1.0) -> void:
+	c.draw_rect(r.grow(2), Tema.LINEA)
+	c.draw_rect(r, Tema.METAL.lerp(Color("#6a6278"), 0.5 * luz))   # más clara la que está en uso, para que el icono se vea
+	c.draw_rect(r.grow(-1), borde, false, 2.0)
+	if nombre == "":
+		return   # casilla vacía
+	var lado := roundf(r.size.x * 0.76)
+	var dentro := Rect2(r.get_center() - Vector2(lado, lado) / 2.0, Vector2(lado, lado))
+	c.draw_texture_rect(icono(nombre), dentro, false, Color(luz, luz, luz, 0.4 + 0.6 * luz))
+
+
+# Un texto con su contorno; "x" es el centro si "centrado"
+func texto(c: Control, donde: Vector2, s: String, tamano: int, color: Color, centrado := false) -> void:
+	if centrado:
+		donde.x -= roundf(Tema.FUENTE.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano).x / 2.0)
+	c.draw_string_outline(Tema.FUENTE, donde, s, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano, 4, Color(Tema.LINEA, color.a))
+	c.draw_string(Tema.FUENTE, donde, s, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano, color)
+
+
+func ancho_texto(s: String, tamano: int) -> float:
+	return Tema.FUENTE.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano).x
+
+
+# Una tecla pequeña pegada a una casilla (Q para cambiar de arma, F para cambiar de lanzable)
+func tecla(c: Control, donde: Vector2, letra: String) -> void:
+	var r := Rect2(donde, Vector2(12, 12))
+	c.draw_rect(r.grow(1), Tema.LINEA)
+	c.draw_rect(r, Tema.GRIS)
+	c.draw_string(Tema.FUENTE, donde + Vector2(3, 10), letra, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Tema.LINEA)
+
+
+# Dibuja con un saltito: más grande al empezar ("k" de 1 a 0), alrededor del centro de "r"
+func con_salto(c: Control, r: Rect2, k: float) -> void:
+	var s := 1.0 + 0.22 * sin(k * PI) * k
+	c.draw_set_transform(r.get_center() * (1.0 - s), 0.0, Vector2(s, s))
+
+
+# ── Las armas ──
+
+func mirar_armas(delta: float) -> void:
+	var ahora: String = johnny.huecos[johnny.mano]
+	if ahora != en_mano:
+		if en_mano != "":
+			salto_arma = 1.0
+			nombre_arma = NOMBRE
+		en_mano = ahora
+	salto_arma = move_toward(salto_arma, 0.0, delta * 5.0)
+	nombre_arma = maxf(nombre_arma - delta, 0.0)
+
+
+func pintar_armas() -> void:
+	var h: Dictionary = johnny.huecos
+	var otra: String = h.fuego if johnny.mano == "cuerpo" else h.cuerpo
+	var grande := Rect2(2, 2, GRANDE, GRANDE)
+	var pequena := Rect2(GRANDE + 8, 2 + GRANDE - PEQUENA, PEQUENA, PEQUENA)
+	casilla(armas, pequena, Tema.OXIDO, Objetos.icono(otra), 0.45)
+	tecla(armas, pequena.position + Vector2(PEQUENA - 8, -8), "Q")
+	con_salto(armas, grande, salto_arma)
+	casilla(armas, grande, Tema.AMARILLO, Objetos.icono(en_mano))
+	armas.draw_set_transform(Vector2.ZERO)
+	# el nombre, encima un momento al cambiar (y se apaga al final)
+	if nombre_arma > 0.0:
+		var a := clampf(nombre_arma / 0.4, 0.0, 1.0)
+		texto(armas, Vector2(2, -30), Armas.datos(en_mano).nombre, 16, Color(Tema.AMARILLO, a))
+
+
+# ── Los lanzables ──
+
+func mirar_lanzar(delta: float) -> void:
+	var lz: Lanzables = partida.lanzables
+	var clave := "%s|%d" % [lz.tipo, lz.cuantas(lz.tipo)]
+	if clave != lanzable:
+		if lanzable != "":
+			salto_lanzar = 1.0
+		lanzable = clave
+	salto_lanzar = move_toward(salto_lanzar, 0.0, delta * 5.0)
+	# el ancho depende de cuántos otros haya al lado
+	lanzar.custom_minimum_size.x = MEDIANA + 8 + 26 * (lz.tipos().size() - 1)
+
+
+func pintar_lanzar() -> void:
+	var lz: Lanzables = partida.lanzables
+	var n := lz.cuantas(lz.tipo)
+	var r := Rect2(2, 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
+	con_salto(lanzar, r, salto_lanzar)
+	casilla(lanzar, r, Tema.AMARILLO if n > 0 else Tema.OXIDO, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35)
+	# cuántos quedan, en la esquina de abajo a la derecha (en rojo si ninguno)
+	var s := "x%d" % n
+	texto(lanzar, Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1), s, 16, Tema.TINTA if n > 0 else Tema.ROJO)
+	lanzar.draw_set_transform(Vector2.ZERO)
+	var otros: Array = lz.tipos().filter(func(k): return k != lz.tipo)
+	if otros.is_empty():
+		return
+	tecla(lanzar, r.position + Vector2(MEDIANA - 8, -8), "F")
+	# los demás, en pequeño y apagados, con su número debajo
+	var x := r.end.x + 10
+	for k in otros:
+		var m := lz.cuantas(k)
+		var luz := 0.85 if m > 0 else 0.3
+		lanzar.draw_texture_rect(icono(icono_lanzable(k)), Rect2(x, r.position.y, 20, 20), false, Color(luz, luz, luz, 0.5 + 0.5 * luz))
+		texto(lanzar, Vector2(x + 10, r.end.y), str(m), 12, Color(Tema.GRIS, 0.5 + 0.5 * luz), true)
+		x += 26
+
+
+# ── La llave, la mochila y el dinero ──
+
+func mirar_recursos(delta: float) -> void:
+	var dinero: int = partida.cartera()
+	if dinero_real < 0 or dinero < dinero_real:
+		dinero_visto = dinero   # al empezar, o si gasta: de golpe
+	elif dinero > dinero_real:
+		# lo que acaba de coger, en un "+N" (si coge varios seguidos, se suman en el mismo)
+		if ganado.is_empty() or ganado[-1][1] > 0.3:
+			ganado.append([0, 0.0])
+		ganado[-1][0] += dinero - dinero_real
+	dinero_real = dinero
+	# el contador sube contando (más deprisa cuanto más falta)
+	dinero_visto = move_toward(dinero_visto, dinero, delta * maxf(12.0, (dinero - dinero_visto) * 4.0))
+	for g in ganado:
+		g[1] += delta
+	ganado = ganado.filter(func(g): return g[1] < 1.1)
+	if partida.planta.tiene_llave:
+		llave_t = 0.0 if llave_t < 0.0 else llave_t + delta
+	else:
+		llave_t = -1.0
+
+
+# De derecha a izquierda: el dinero pegado al borde, la mochila y la llave
+func pintar_recursos() -> void:
+	var y := roundf(fila.size.y / 2.0)
+	var x := get_viewport_rect().size.x - 28.0
+	# el dinero (en amarillo mientras sube) y los "+N" que suben y se apagan
+	var contando: bool = roundi(dinero_visto) < dinero_real
+	var s := "$%d" % roundi(dinero_visto)
+	x -= ancho_texto(s, 16)
+	texto(recursos, Vector2(x, y + 6), s, 16, Tema.AMARILLO if contando else Tema.TINTA)
+	for g in ganado:
+		var t: float = g[1]
+		texto(recursos, Vector2(x + 4, y - 14 - t * 18.0), "+%d" % g[0], 14, Color(Tema.VERDE, clampf((1.1 - t) / 0.4, 0.0, 1.0)))
+	x -= 28
+	recursos.draw_texture_rect(icono("billete"), Rect2(x, y - 12, 24, 24), false)
+	# la mochila: una cajita por casilla, en dos filas; las llenas encendidas (si está llena, parpadea)
+	var llenas := Objetos.casillas(partida.mochila).size()
+	var columnas := ceili(Objetos.MOCHILA / 2.0)
+	var llena := llenas >= Objetos.MOCHILA and int(tiempo * 3.0) % 2 == 0
+	x -= 18 + columnas * 7
+	for i in Objetos.MOCHILA:
+		var r := Rect2(x + (i % columnas) * 7, y - 7 + (i / columnas) * 7, 5, 5)
+		recursos.draw_rect(r.grow(1), Tema.LINEA)
+		recursos.draw_rect(r, (Tema.AMARILLO if llena else Tema.TINTA) if i < llenas else Tema.METAL)
+	x -= 28
+	recursos.draw_texture_rect(icono("mochila"), Rect2(x, y - 12, 24, 24), false)
+	# la llave: al cogerla, entra grande con un brillo amarillo que se apaga
+	if llave_t < 0.0:
+		return
+	var nombre: String = partida.nombre_jefa()
+	x -= 40 + ancho_texto(nombre, 14)
+	texto(recursos, Vector2(x + 28, y + 5), nombre, 14, Tema.AMARILLO)
+	var r := Rect2(x, y - 12, 24, 24)
+	var k := clampf(1.0 - llave_t / 1.2, 0.0, 1.0)
+	if k > 0.0:
+		recursos.draw_circle(r.get_center(), 14.0 + 10.0 * k, Color(Tema.AMARILLO, 0.45 * k))
+	con_salto(recursos, r, k)
+	recursos.draw_texture_rect(icono("llave"), r, false)
+	recursos.draw_set_transform(Vector2.ZERO)
 
 
 func mover_barra(delta: float) -> void:
