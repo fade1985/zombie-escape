@@ -166,6 +166,8 @@ func _ready() -> void:
 	else:
 		set_process(false)
 		decir("%s: limpia los apartamentos y busca la llave de la portera" % planta.nombre, 4.0)
+		if not Historia.noticias_nuevas(s).is_empty():
+			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 
 
 func nueva_planta(num: int) -> void:
@@ -459,7 +461,16 @@ func _al_coger_pagina(p: Dictionary) -> void:
 	Sonido.tocar("compra")
 	var paginas: Array = Historia.dosier(EDIFICIO).paginas
 	get_tree().paused = true
-	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func(): get_tree().paused = false)
+	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func():
+		get_tree().paused = false
+		if Historia.NOTICIAS.any(func(n): return n.pagina == p.id):
+			avisar_noticias())
+
+
+# Hay alguna emisión de Canal 8 sin ver en el programa Noticias del ordenador (historia.gd)
+func avisar_noticias() -> void:
+	if not terminada:
+		decir("Hay noticias nuevas en el ordenador", 3.5)
 
 
 func _al_coger_llave() -> void:
@@ -1012,6 +1023,29 @@ func probar_historia() -> void:
 	ordenador.abrir("")
 	ordenador.apagar()
 	await montar(planta.mantenimiento, 0, false)
+	await probar_noticias()
+
+
+# Las noticias: con la página del correo encontrada salen tres emisiones (dos sin ver). Abre el programa, deja
+# hablar a la reportera un poco y hace la foto
+func probar_noticias() -> void:
+	Guardado.cambiar(func(g):
+		g.paginas = ["vd7_protocolo", "vd7_correo"]
+		g.noticias_vistas = ["n_cierre"])
+	print("Noticias emitidas: %s | nuevas: %s" % [Historia.noticias_emitidas(Guardado.cargar()).map(func(n): return n.id),
+		Historia.noticias_nuevas(Guardado.cargar()).map(func(n): return n.id)])
+	avisar_noticias()
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-aviso-noticias.png")
+	abrir_ordenador()
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-escritorio.png")
+	ordenador.abrir("noticias")
+	await get_tree().create_timer(3.0).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-noticias.png")
+	print("Noticias vistas tras abrir: ", Guardado.cargar().noticias_vistas)
+	ordenador.abrir("")
+	ordenador.apagar()
 
 
 # La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al

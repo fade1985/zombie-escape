@@ -62,6 +62,7 @@ const EFECTOS := {
 	"disparo_zombi": {"hueco": 80, "notas": [[330, 0.08, "seno", 0.025, -150]]},       # enemyShot
 	# armas de fuego: sin balas, sacar el cargador, meterlo, meter un cartucho y cambiar de arma
 	"click": {"hueco": 200, "notas": [[1600, 0.03, "cuadrada", 0.025]]},
+	"voz": {"hueco": 70, "notas": [[480, 0.035, "triangulo", 0.012, -60]]},              # la reportera de las noticias
 	"recargar": {"notas": [[520, 0.05, "cuadrada", 0.025, -200], [260, 0.06, "triangulo", 0.04, -80, 0.06]]},
 	"recargado": {"notas": [[300, 0.05, "cuadrada", 0.035, 200], [1400, 0.04, "cuadrada", 0.025, 0, 0.07]]},
 	"cartucho": {"notas": [[700, 0.04, "cuadrada", 0.025, -300], [1200, 0.03, "cuadrada", 0.02, 0, 0.05]]},

@@ -10,6 +10,8 @@
 #     cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), para
 #     releerlas. Las que faltan salen como páginas arrancadas.
+#   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
+#     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
@@ -24,10 +26,11 @@ const ICONOS := [   # [programa, icono, nombre]
 	["armas", "pistola", "Tienda\nde armas"],
 	["logros", "trofeo", "Logros"],
 	["dosier", "dosier", "Dosier\nVD-7"],
+	["noticias", "noticias", "Noticias"],
 	["apagar", "puerta", "Apagar"],
 ]
-const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT"}
-const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7"}
+const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV"}
+const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7", "noticias": "Noticias de Canal 8"}
 const ICONO_ARMA := {"mp5": "pistola"}
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -114,7 +117,7 @@ func montar_monitor() -> void:
 
 	iconos = VBoxContainer.new()
 	iconos.position = Vector2(10, 12)
-	iconos.add_theme_constant_override("separation", 8)
+	iconos.add_theme_constant_override("separation", 4)
 	pantalla.add_child(iconos)
 	for i in ICONOS:
 		var b := Button.new()
@@ -125,9 +128,13 @@ func montar_monitor() -> void:
 		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		b.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 		b.custom_minimum_size = Vector2(132, 80)
-		b.add_theme_stylebox_override("hover", caja(Color(1, 1, 1, 0.12), Color(0, 0, 0, 0), 0, 4, 4))
-		b.add_theme_stylebox_override("pressed", caja(Color(1, 1, 1, 0.2), Color(0, 0, 0, 0), 0, 4, 4))
+		b.add_theme_stylebox_override("normal", caja(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 4, 2))   # sin el margen grande del tema: caben los 6
+		b.add_theme_stylebox_override("hover", caja(Color(1, 1, 1, 0.12), Color(0, 0, 0, 0), 0, 4, 2))
+		b.add_theme_stylebox_override("pressed", caja(Color(1, 1, 1, 0.2), Color(0, 0, 0, 0), 0, 4, 2))
 		var programa: String = i[0]
+		if programa == "noticias" and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
+			b.text = "Noticias\n¡NUEVAS!"
+			b.add_theme_color_override("font_color", Tema.AMARILLO)
 		b.pressed.connect(func():
 			if programa == "apagar":
 				apagar()
@@ -214,6 +221,8 @@ func abrir(programa: String, foco := "") -> void:
 		programa_logros(contenido)
 	elif programa == "dosier":
 		programa_dosier(contenido)
+	elif programa == "noticias":
+		foco = programa_noticias(contenido, foco)
 	else:
 		programa_armas(contenido)
 	var marcado: Control = contenido.find_child(foco, true, false) if foco != "" else null
@@ -649,6 +658,51 @@ func programa_dosier(c: VBoxContainer) -> void:
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
 	info.text = "Pasa por las páginas para leerlas."
+
+
+# ── Noticias ──
+
+# A la izquierda, las emisiones (las que aún no han salido, con candado); a la derecha, la tele. Devuelve la que
+# hay que dejar marcada: la primera sin ver o, si no, la última emitida
+func programa_noticias(c: VBoxContainer, foco: String) -> String:
+	var s := Guardado.cargar()
+	var partes := HBoxContainer.new()
+	partes.add_theme_constant_override("separation", 10)
+	c.add_child(partes)
+	var lista := VBoxContainer.new()
+	lista.custom_minimum_size.x = 220
+	lista.add_theme_constant_override("separation", 6)
+	partes.add_child(lista)
+	var tele := Tele.new()
+	tele.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	partes.add_child(tele)
+	var nuevas := Historia.noticias_nuevas(s)
+	var primera_nueva := ""
+	var ultima := ""
+	for i in Historia.NOTICIAS.size():
+		var n: Dictionary = Historia.NOTICIAS[i]
+		var sale := Historia.emitida(s, n)
+		var nueva := n in nuevas
+		var b := tarjeta(lista, "b_" + n.id, "noticias" if sale else "candado", "Emisión %d" % (i + 1),
+			n.titular if sale else "Sin emitir", "¡NUEVA!" if nueva else "", "" if sale else "bloqueada")
+		if not sale:
+			var pista := "Completa el edificio." if n.victoria != "" else "Sigue buscando páginas del dosier VD-7."
+			enlazar(b, "Emisión %d: aún no ha salido. %s" % [i + 1, pista], Sonido.tocar.bind("no"))
+			continue
+		ultima = "b_" + n.id
+		if nueva and primera_nueva == "":
+			primera_nueva = ultima
+		var ver := func():
+			if tele.noticia != n:
+				tele.poner(n)
+				Historia.ver_noticia(n.id)
+		enlazar(b, "Emisión %d: «%s». Pulsa para saltar o repetir." % [i + 1, n.titular], tele.saltar)
+		b.focus_entered.connect(ver)
+		b.mouse_entered.connect(ver)
+	info.text = "%s, con %s. Pasa por las emisiones para verlas." % [Historia.CANAL, Historia.REPORTERA]
+	if foco != "":
+		return foco
+	return primera_nueva if primera_nueva != "" else ultima
 
 
 # ── Piezas ──

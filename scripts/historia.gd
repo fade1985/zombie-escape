@@ -6,6 +6,10 @@
 # PARA CAMBIAR LA HISTORIA: todo el texto está aquí. Se puede reescribir cualquier página, cambiar nombres o
 # añadir edificios nuevos (una entrada más en DOSIERES). Lo único que no hay que tocar es el "id" de una página
 # ya publicada: el guardado de los jugadores apunta las encontradas por su id.
+#
+# Las NOTICIAS (fase B): emisiones de Canal 8 que se ven en el programa "Noticias" del ordenador. Van saliendo
+# según se avanza (al empezar, al encontrar ciertas páginas, al completar el edificio) y en cada una Velaria
+# cambia un poco su versión para tapar el experimento. Las vistas quedan en el guardado ("noticias_vistas").
 class_name Historia
 extends RefCounted
 
@@ -50,6 +54,61 @@ const DOSIERES := {
 		],
 	},
 }
+
+
+# ── Las noticias ──
+const CANAL := "Canal 8"
+const REPORTERA := "Marta Ruiz"
+
+# Cada emisión:
+#   id        no cambiar una vez publicada (el guardado apunta las vistas por su id)
+#   pagina    sale al encontrar esa página del dosier ("" = no depende de ninguna)
+#   victoria  sale al completar ese edificio ("" = no depende)
+#   (si no depende de nada, sale desde la primera partida)
+#   titular   el rótulo de abajo de la pantalla (corto: unas 30 letras)
+#   texto     lo que cuenta la reportera
+const NOTICIAS := [
+	{"id": "n_cierre", "pagina": "", "victoria": "",
+		"titular": "Cierran un edificio por un virus",
+		"texto": "Buenas noches. Les hablo desde la puerta del número 14, donde la empresa Velaria Bienestar ha cerrado el edificio esta mañana. Según Velaria, varios vecinos tienen un virus muy contagioso. «La situación está controlada», nos dicen. Piden a todo el mundo que no se acerque."},
+	{"id": "n_estudio", "pagina": "vd7_protocolo", "victoria": "",
+		"titular": "¿Un estudio con los vecinos?",
+		"texto": "Algunos familiares aseguran que a los vecinos del 14 se les pagaba por «probar algo para dormir». Velaria lo niega: «Fue una campaña de salud. Repartimos folletos y vitaminas, nada más». El edificio sigue cerrado y no se deja pasar a la prensa."},
+	{"id": "n_correo", "pagina": "vd7_correo", "victoria": "",
+		"titular": "Un correo dice: no hay virus",
+		"texto": "Canal 8 ha recibido un correo interno de Velaria. En él se lee: «No hay ningún virus, lo sabemos». La empresa dice que el correo es falso. Y añade que, si algún vecino está enfermo, será por «un somnífero en mal estado, de otra marca». Aún no se sabe qué marca."},
+	{"id": "n_portera", "pagina": "vd7_anexo", "victoria": "",
+		"titular": "¿Dónde está la portera?",
+		"texto": "Nadie ha visto a la portera del 14 desde el cierre. Los vecinos de la calle dicen que trabajaba para Velaria. La empresa responde que era «una vecina con problemas que nunca trabajó para nosotros». Por la noche, desde fuera, se oyen golpes en las plantas de arriba."},
+	{"id": "n_buscado", "pagina": "", "victoria": "apartamentos",
+		"titular": "Velaria busca a un conserje",
+		"texto": "Última hora: el edificio está en silencio. Velaria dice que el «virus» ya está vencido y que todo era un malentendido. Pero hoy busca a un empleado de mantenimiento desaparecido. Si lo ven, no se acerquen y llamen al teléfono de Velaria. Dicen que es muy importante para ellos. ¿Por qué?"},
+]
+
+
+# Las noticias ya emitidas (las que se pueden ver en el ordenador), en su orden
+static func noticias_emitidas(s: Dictionary) -> Array:
+	return NOTICIAS.filter(func(n): return emitida(s, n))
+
+
+static func emitida(s: Dictionary, n: Dictionary) -> bool:
+	if n.pagina != "" and not encontrada(s, n.pagina):
+		return false
+	if n.victoria != "" and not s.edificios.get(n.victoria, {}).get("completado", false):
+		return false
+	return true
+
+
+# Las emitidas que aún no se han visto
+static func noticias_nuevas(s: Dictionary) -> Array:
+	return noticias_emitidas(s).filter(func(n): return not n.id in s.noticias_vistas)
+
+
+# Apunta una noticia como vista
+static func ver_noticia(id: String) -> void:
+	Guardado.cambiar(func(g):
+		if not id in g.noticias_vistas:
+			g.noticias_vistas.append(id))
 
 
 static func dosier(edificio: String) -> Dictionary:

@@ -28,6 +28,7 @@ const NUEVO := {
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
+	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"ajustes": {"musica": true},
 }
