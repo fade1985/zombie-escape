@@ -130,6 +130,7 @@ static func generar(num: int) -> Dictionary:
 	for orden in normales.size():
 		var sitio: Dictionary = planta.sitios[normales[orden]]
 		sitio.zombis = horda(sitio, orden + 1, num)
+		sitio.armaritos = armaritos(sitio)
 
 	# La llave de la jefa, en una habitación (que no sea el salón ni un baño) de un apartamento normal
 	var donde: int = normales[rng.randi() % normales.size()]
@@ -221,6 +222,36 @@ static func horda(sitio: Dictionary, orden: int, num: int) -> Array:
 			zombis.append({"tipo": tipo, "pos": pos})
 			queda -= COSTE[tipo]
 	return zombis
+
+
+# Un armarito con un botiquín colgado en la pared de arriba de cada baño (Armarito en src/props.js del JS): es
+# lo único que cura. Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
+# lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido}
+static func armaritos(sitio: Dictionary) -> Array:
+	var apt: Dictionary = sitio.apt
+	var lista := []
+	for s in apt.salas.filter(func(s): return s.uso == "bano"):
+		var mejor := {}
+		for c in range(s.c0 + 1, s.c0 + s.ancho - 1):
+			# la pared de encima (y sus vecinas) tiene que ser muro, no puerta ni suelo
+			var muro := true
+			for dc in [-1, 0, 1]:
+				if apt.dueno[(s.f0 - 1) * apt.cols + c + dc] >= 0 or apt.dueno[(s.f0 - 1) * apt.cols + c + dc] == -2:
+					muro = false
+			if not muro:
+				continue
+			var x := (c + 0.5) * CASILLA
+			var alcance := 70.0
+			for m in sitio.muebles:
+				var h := Muebles.hueco(m)
+				if m.zona == s.id and h.position.y < s.f0 * CASILLA + 8 and absf(m.x - x) < h.size.x / 2.0 + 14.0:
+					alcance = maxf(alcance, h.end.y - s.f0 * CASILLA + 60.0)
+			var nota := absf(x - (s.c0 + s.ancho / 2.0) * CASILLA) + (200.0 if alcance > 70.0 else 0.0)
+			if mejor.is_empty() or nota < mejor.nota:
+				mejor = {"x": x, "y": float(s.f0 * CASILLA), "alcance": alcance, "cogido": false, "nota": nota}
+		if not mejor.is_empty():
+			lista.append(mejor)
+	return lista
 
 
 # Un punto de la habitación con sitio alrededor, lejos de la entrada, de los muebles y de los otros zombis

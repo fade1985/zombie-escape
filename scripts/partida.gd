@@ -47,6 +47,7 @@ const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
+const BOTIQUIN := 50               # lo que cura el botiquín de los baños (BOTIQUIN_CURA en el JS)
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
 const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
@@ -230,6 +231,9 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		mapa.ordenador.usar.connect(abrir_ordenador)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
+	for armarito in mapa.armaritos:
+		armarito.johnny = johnny
+		armarito.usar.connect(coger_botiquin.bind(armarito))
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
 	mapa.cosas.add_child(johnny)
@@ -463,6 +467,21 @@ func soltar_arma(id: String, donde: Vector2) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
+# Delante del armarito de un baño: el botiquín cura (más con Sanitario); con la vida llena se deja para luego
+func coger_botiquin(armarito: Node2D) -> void:
+	var sitio_aviso: Vector2 = armarito.position + Vector2(0, -40)
+	if johnny.vida >= johnny.vida_tope():
+		numero(sitio_aviso, "Tienes la vida al máximo", Tema.TINTA)
+		return
+	var cura: int = BOTIQUIN + johnny.stats.botiquin_extra
+	johnny.curar(cura)
+	armarito.vaciar()
+	numero(sitio_aviso, "+%d" % cura, Tema.VERDE)
+	for i in 12:
+		Particulas.soltar(armarito, armarito.global_position + Vector2(0, -50),
+			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
+
+
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
 func abrir_cosas(que: String) -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused:
@@ -662,6 +681,19 @@ func _process(delta: float) -> void:
 				mejor = i
 		print("Entra en ", planta.sitios[mejor].nombre)
 		montar(mejor, 0, false)
+	# el botiquín del baño: herido, delante del armarito
+	if antes < 1.1 and tiempo >= 1.1 and not mapa.armaritos.is_empty():
+		var a: Node2D = mapa.armaritos[0]
+		johnny.vida = 40
+		johnny.position = a.position + Vector2(0, 40)
+		johnny.get_node("Camara").reset_smoothing()
+		$Pantalla/HUD.hide()   # para que se vea la pared de arriba en la foto
+	if antes < 1.4 and tiempo >= 1.4:
+		var a: Node2D = mapa.armaritos[0] if not mapa.armaritos.is_empty() else null
+		print("Armaritos en el piso: %d | vida tras el botiquín: %d | cogido: %s" % [mapa.armaritos.size(), johnny.vida,
+			a.datos.cogido if a else "-"])
+		get_viewport().get_texture().get_image().save_png("res://captura-botiquin.png")
+		$Pantalla/HUD.show()
 	# una granada a un lado (explota antes de la foto)
 	if antes < 2.0 and tiempo >= 2.0:
 		lanzables.cambiar()

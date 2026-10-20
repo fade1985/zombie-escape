@@ -56,8 +56,8 @@ const LISTA := [
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 ]
 
-# Los que aún no hacen nada (los botiquines llegan en la fase 7b)
-const MAS_ADELANTE := ["sanitario"]
+# Los que aún no hacen nada
+const MAS_ADELANTE := []
 
 
 static func talento(id: String) -> Dictionary:

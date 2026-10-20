@@ -21,6 +21,7 @@ const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
 const ORDENADOR_X := 240.0   # dónde va la mesa del ordenador en la sala de mantenimiento (como en el JS)
+const ARMARITO := preload("res://scripts/mapa/armarito.gd")
 const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
 const BANCO_X := 135.0       # el banco de trabajo, a su izquierda, y el baúl, a su derecha (fase 7b)
 const BAUL_X := 340.0
@@ -49,6 +50,7 @@ var muebles: Array = []
 var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de mantenimiento)
 var baul: Node2D = null          # y el baúl y el banco de trabajo
 var banco: Node2D = null
+var armaritos: Array = []        # los armaritos con botiquín de los baños (armarito.gd)
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
 # habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
 var niebla := {}
@@ -106,6 +108,11 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	poner_puertas()
 	poner_muebles()
 	poner_apliques()
+	for a in sitio.get("armaritos", []):
+		var armarito := ARMARITO.new()
+		armarito.montar(a)
+		cosas.add_child(armarito)
+		armaritos.append(armarito)
 	if llave != Vector2.INF:
 		poner_llave(llave)
 	if sitio.tipo == "expo":
