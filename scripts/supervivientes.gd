@@ -387,6 +387,7 @@ func acabar_horda() -> void:
 	var a: Aliado = rescate.amigo
 	horda = {}
 	rescate.horda_hecha = true
+	partida.logros.cumplir("buen_vecino")
 	a.forzando = false
 	a.levantar = 0.0
 	a.remove_from_group("presa")

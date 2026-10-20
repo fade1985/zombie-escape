@@ -6,6 +6,8 @@
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS) para esta partida, y queda
 #     desbloqueada en el guardado. La que llevaras en ese hueco: si es cuerpo a cuerpo, va al inventario (para
 #     el banco de trabajo); si es de fuego, se pierde.
+#   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
+#     cobran aquí (su premio va a los dólares ahorrados).
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
@@ -18,10 +20,11 @@ const CARCASA := Color("#a49a83")      # el plástico del monitor, amarillento d
 const ICONOS := [   # [programa, icono, nombre]
 	["puntos", "billete", "Puntos e\nintercambio"],
 	["armas", "pistola", "Tienda\nde armas"],
+	["logros", "trofeo", "Logros"],
 	["apagar", "puerta", "Apagar"],
 ]
-const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE"}
-const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas"}
+const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE"}
+const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros"}
 const ICONO_ARMA := {"mp5": "pistola"}
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -204,6 +207,8 @@ func abrir(programa: String, foco := "") -> void:
 	var contenido := montar_ventana(programa)
 	if programa == "puntos":
 		programa_puntos(contenido)
+	elif programa == "logros":
+		programa_logros(contenido)
 	else:
 		programa_armas(contenido)
 	var marcado: Control = contenido.find_child(foco, true, false) if foco != "" else null
@@ -552,6 +557,55 @@ func comprar_arma(id: String) -> void:
 	info.set_deferred("text", ("¡%s comprada! %s va al inventario." if w.tipo == "cuerpo" else "¡%s comprada! Dejas %s.") % [w.nombre, vieja if w.tipo == "cuerpo" else vieja.to_lower()])   # después de marcar el botón (que pone su explicación)
 
 
+# ── Logros ──
+
+func programa_logros(c: VBoxContainer) -> void:
+	var s := Guardado.cargar()
+	var hechos := 0
+	var por_cobrar := 0
+	for l in Logros.LISTA:
+		var e := Logros.estado(s, l.id)
+		if e != "pendiente":
+			hechos += 1
+		if e == "conseguido":
+			por_cobrar += l.premio
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 8)
+	c.add_child(fila)
+	cajita(fila, "Logros conseguidos", "trofeo", "%d / %d" % [hechos, Logros.LISTA.size()])
+	cajita(fila, "Premios por cobrar", "billete", "$%d" % por_cobrar)
+	cajita(fila, "Dólares ahorrados", "billete", "$%d" % s.dolares)
+	nota(c, "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio.")
+	var lista := rejilla(grupo(c, "Retos"))
+	for l in Logros.LISTA:
+		var e := Logros.estado(s, l.id)
+		var etiqueta: String = {"pendiente": "$%d" % l.premio, "conseguido": "COBRAR $%d" % l.premio, "cobrado": "HECHO"}[e]
+		var hecho: int = l.meta if e != "pendiente" else mini(partida.logros.progreso(l.id), l.meta)
+		var barra: Array = [hecho, l.meta] if l.meta > 1 else []
+		var b := tarjeta(lista, "b_" + l.id, l.icono, l.nombre, l.desc, etiqueta,
+			{"pendiente": "apagada", "conseguido": "", "cobrado": "lleno"}[e], [], barra)
+		var cuenta: String = {"partida": " (en una partida)", "total": " (sumando partidas)"}.get(l.cuenta, "")
+		var explica: String = {
+			"pendiente": ("Premio: $%d. Llevas %d de %d%s." % [l.premio, hecho, l.meta, cuenta]) if l.meta > 1
+				else "Premio: $%d. Aún no lo has conseguido." % l.premio,
+			"conseguido": "¡Conseguido! Pulsa para cobrar $%d." % l.premio,
+			"cobrado": "Conseguido y cobrado.",
+		}[e]
+		enlazar(b, "%s: %s %s" % [l.nombre, l.desc, explica], cobrar_logro.bind(l.id))
+	info.text = "Pasa por encima de un logro para ver cómo vas."
+
+
+func cobrar_logro(id: String) -> void:
+	var dinero := Logros.cobrar(id)
+	if dinero == 0:
+		Sonido.tocar("no")
+		return
+	Sonido.tocar("compra")
+	partida.ahorrados = Guardado.cargar().dolares
+	abrir("logros", "b_" + id)
+	info.set_deferred("text", "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas." % dinero)
+
+
 # ── Piezas ──
 
 # Una tarjeta (.pc-arma del JS): con relieve, su icono grande, el nombre (y, en los talentos, sus cuadraditos de
@@ -560,7 +614,7 @@ func comprar_arma(id: String) -> void:
 # "lleno" (en verde). Por encima lleva un botón transparente del mismo tamaño, que es el que se marca y se pulsa
 # (con el ratón, el teclado o el mando) y el que se devuelve
 func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, debajo: String, etiqueta: String,
-		estado := "", pips := []) -> Button:
+		estado := "", pips := [], barra := []) -> Button:
 	var marco := PanelContainer.new()
 	marco.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	marco.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
@@ -610,6 +664,16 @@ func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, de
 	linea.custom_minimum_size.x = 60   # que parta las líneas en vez de ensanchar la tarjeta
 	linea.add_theme_font_size_override("font_size", 16)
 	textos.add_child(linea)
+	if not barra.is_empty():
+		# la barra de progreso (los logros): hundida, rellena de amarillo hasta donde va
+		var progreso := Control.new()
+		progreso.custom_minimum_size = Vector2(0, 10)
+		progreso.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		progreso.draw.connect(func():
+			progreso.draw_rect(Rect2(Vector2.ZERO, progreso.size), PIP)
+			progreso.draw_rect(Rect2(Vector2(2, 2), Vector2((progreso.size.x - 4) * barra[0] / float(barra[1]), progreso.size.y - 4)), PIP_LLENO)
+			relieve(progreso, true, 2.0))
+		textos.add_child(progreso)
 	if etiqueta != "":
 		var marca := Label.new()
 		marca.text = etiqueta

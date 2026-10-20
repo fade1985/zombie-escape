@@ -13,6 +13,7 @@ class_name Zombi
 extends CharacterBody2D
 
 signal murio   # avisa cuando se muere (la sala cuenta los muertos para sacar más)
+signal prendido   # avisa cuando empieza a arder (para el logro "Pirómano")
 
 const FRENADA := 900.0     # lo rápido que se para después de que le empujen de un golpe
 const VISTA := 330.0       # dormido, a qué distancia ve a Johnny (si no hay un muro en medio)
@@ -315,6 +316,8 @@ func pisar(estados_charco: Dictionary) -> void:
 
 # El fuego lo prende (o le renueva la quemadura si ya ardía)
 func prender(dano_lanzar := 1.0) -> void:
+	if arder_t <= 0.0 and estado != "muerto":
+		prendido.emit()
 	arder_t = Lanzables.MOLOTOV.sigue
 	arder_dano = dano_lanzar
 	if llamas == null:

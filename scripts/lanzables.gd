@@ -205,6 +205,7 @@ func lanzar(donde: Vector2) -> void:
 		return
 	cantidades[tipo] -= 1
 	if tipo == "molotov":
+		partida.logros.molotov_lanzado()
 		var p := PROYECTIL.instantiate()
 		p.tipo = "molotov"
 		p.desde = johnny.global_position

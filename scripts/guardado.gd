@@ -26,6 +26,7 @@ const NUEVO := {
 	"baul_armas": [],     # armas creadas en el banco de trabajo, esperando en el baúl (recetas.gd)
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en la sala de mantenimiento
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
+	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"ajustes": {"musica": true},
 }

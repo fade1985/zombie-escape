@@ -358,6 +358,7 @@ func crear_arma() -> void:
 		partida.armas_guardadas.erase(otra)
 		johnny.coger(otra)
 	hecha = Recetas.crear(receta)
+	partida.logros.cumplir("manitas")
 	Sonido.tocar("compra" if hecha.rareza == "verde" else "limpio")   # las raras y épicas suenan a premio
 	Guardado.cambiar(func(s): s.baul_armas.append(hecha))
 	puestos = []

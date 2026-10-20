@@ -77,6 +77,7 @@ var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
 var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
 var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
 var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
+var logros := Logros.new()         # los retos del ordenador (logros.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
 var ahorrados := 0         # los dólares guardados de otras partidas
@@ -130,6 +131,8 @@ func _ready() -> void:
 	add_child(mutaciones)
 	add_child(supervivientes)
 	supervivientes.preparar(self)
+	add_child(logros)
+	logros.preparar(self)
 	# Los controles del móvil (solo salen en pantallas táctiles)
 	var tactil := Tactil.new()
 	tactil.partida = self
@@ -167,6 +170,7 @@ func _ready() -> void:
 func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num)
 	supervivientes.nueva_planta()
+	logros.planta_nueva()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 
 
@@ -375,6 +379,7 @@ func cruzar(i: int) -> void:
 
 # Por las escaleras, a la planta siguiente (o, después de la última, se acabó)
 func subir() -> void:
+	logros.planta_pasada()
 	if planta.num >= Planta.PLANTAS:
 		cambiando = true
 		terminar(true)
@@ -382,6 +387,8 @@ func subir() -> void:
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_tipo("llegada"))
 	decir(planta.nombre, 2.5)
+	if planta.num >= 3:
+		logros.cumplir("sube_conserje")
 
 
 func _physics_process(delta: float) -> void:
@@ -412,8 +419,10 @@ func _physics_process(delta: float) -> void:
 			planta.jefa_muerta = true
 			Sonido.musica("explorar")
 			decir("¡La portera ha caído! Las escaleras ya están abiertas", 4.0)
+			logros.cumplir("desahucio")
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
+			logros.cumplir("primer_turno")
 		actualizar_puertas()
 		Sonido.tocar("limpio")
 		get_tree().create_timer(0.25).timeout.connect(Sonido.tocar.bind("puerta"))
@@ -588,6 +597,8 @@ func terminar(gano: bool, abandona := false) -> void:
 	if terminada:
 		return
 	terminada = true
+	if gano:
+		logros.cumplir("fin_jornada")
 	if abandona:
 		Sonido.musica("")
 	else:
@@ -666,8 +677,12 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	if "talla_restos" in zombi:
 		zombi.talla_restos = {"rapido": "pequeno", "venenoso": "grande"}.get(tipo, "mediano")   # el rápido es un niño
 	# Al caer: se cuenta, y a veces suelta un billete (la portera, varios)
+	if zombi.has_signal("prendido"):   # la portera no arde
+		zombi.prendido.connect(logros.zombi_prendido)
 	zombi.murio.connect(func():
 		muertos += 1
+		var ardia: bool = zombi.get("arder_t") != null and zombi.arder_t > 0.0
+		logros.zombi_muerto(johnny.huecos[johnny.mano] == "fregona" and not ardia)
 		sangre(tipo, zombi)
 		var cuantos := BILLETES_JEFA if tipo == "portera" else (1 if randf() < BILLETE_ZOMBI else 0)
 		soltar_billetes(cuantos, zombi.position)
@@ -922,6 +937,14 @@ func probar_ordenador() -> void:
 	ordenador.comprar_arma("escopeta")
 	await get_tree().create_timer(0.3).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-tienda.png")
+	# los logros: uno cobrado, uno por cobrar y algo de progreso en los demás
+	Guardado.cambiar(func(g): g.logros = {"primer_turno": "cobrado", "desahucio": "conseguido"})
+	logros.fregonazos = 4
+	ordenador.abrir("logros", "b_desahucio")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-logros.png")
+	ordenador.cobrar_logro("desahucio")
+	print("Logros: %s | $%d ahorrados tras cobrar" % [Guardado.cargar().logros, Guardado.cargar().dolares])
 	var g := Guardado.cargar()
 	print("Ordenador: $%d ahorrados, %d puntos, talentos %s, armas %s | daño x%.2f | lleva %s" % [g.dolares, g.puntos,
 		g.talentos, g.armas, johnny.stats.dano, johnny.huecos])
