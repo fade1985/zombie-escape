@@ -109,7 +109,7 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 6a | Menús (principal, pausa, derrota, victoria) con mando, HUD, guardado, atributos de Johnny y billetes | hecha, con visto bueno (20 oct) |
 | 6b | Ordenador ConserjeOS: compra de puntos, árbol de talentos (Militar y Superviviente), tienda de armas y esquiva | hecha, con visto bueno (20 oct) |
 | 7a | Molotov y granada (apuntar y lanzar), fuego y zombis ardiendo, charcos con estados, mutaciones | hecha, con visto bueno (20 oct) |
-| 7b1 | Objetos que sueltan los zombis, mochila e inventario, baúl, banco de trabajo con recetas y rarezas, botiquines y Sanitario | hecha, pendiente de visto bueno |
+| 7b1 | Objetos que sueltan los zombis, mochila e inventario, baúl, banco de trabajo con recetas y rarezas, botiquines y Sanitario | hecha, con visto bueno (20 oct) |
 | 7b2 | Armas creadas: sacarlas del baúl y usarlas (cuerpo a cuerpo, a distancia y arrojadizas en `Lanzables.tipos()`) | |
 | 7c | Superviviente | |
 | 8 | Música, sonido, exportar a web (Vercel) y retirar la versión JS | |
