@@ -18,6 +18,7 @@ config/features=PackedStringArray("4.7")
 
 Sonido="*res://scripts/sonido.gd"
 Botones="*res://scripts/ui/botones.gd"
+Temblor="*res://scripts/temblor.gd"
 
 [display]
 

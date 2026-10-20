@@ -69,6 +69,7 @@ var a_golpes := false      # si el último daño fue un golpe o una bala (no fue
 var rastro := 0.0          # lo que ha avanzado desde la última marca del rastro
 # El destello blanco al recibir un golpe: un shader que mezcla el dibujo con blanco
 const DESTELLO := preload("res://escenas/personajes/destello.gdshader")
+const BARRA := preload("res://scripts/barra_zombi.gd")
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -87,6 +88,11 @@ func _ready() -> void:
 	sprite.animation_finished.connect(_al_acabar_animacion)
 	sprite.material = ShaderMaterial.new()
 	sprite.material.shader = DESTELLO
+	# la barrita de vida encima de la cabeza (sale al herirle)
+	var barra := BARRA.new()
+	barra.zombi = self
+	barra.alto = altura - 8.0
+	add_child(barra)
 
 
 # Se pone blanco de golpe y vuelve a su color enseguida

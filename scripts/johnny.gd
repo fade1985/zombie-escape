@@ -466,6 +466,9 @@ func golpear(angulo: float) -> void:
 				ArmasCreadas.efecto_golpe(zombi, w, dano)   # las armas creadas: aturdir, prender, sangrar...
 	if tocados > 0:
 		Sonido.tocar("porrazo")
+		# el parón y el temblor del golpe (como en el JS): más fuerte cuantos más pilla
+		Temblor.parar(0.05)
+		Temblor.temblar(3.0 + tocados)
 
 
 # Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo
@@ -505,6 +508,8 @@ func disparar(angulo: float) -> void:
 		bala.global_position = salida
 	Sonido.tocar("escopeta" if w.perdigones > 1 else "pistola")
 	soltar_casquillo(angulo, w.perdigones > 1)
+	if w.perdigones > 1:
+		Temblor.temblar(4.0)   # la escopeta da un buen golpe
 	# El fogonazo alumbra un instante alrededor (más con la escopeta)
 	Luz.destello(self, salida - Vector2(0, 50), 170.0 if w.perdigones > 1 else 120.0, 0.12 if w.perdigones > 1 else 0.08)
 	oir_disparo()
@@ -699,6 +704,7 @@ func recibir_dano(cantidad: int) -> void:
 		escudo -= parado
 		dano = maxi(1, roundi(dano - parado))
 	Sonido.tocar("dano")
+	Temblor.temblar(9.0)
 	quitar_vida(dano)
 
 

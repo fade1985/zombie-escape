@@ -726,6 +726,12 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 	var color: Color = MANCHAS.get(tipo, SANGRE)
 	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo", color, zombi.get_parent())
 	var jefa := tipo == "portera"
+	# el temblor al matar (y, a la portera, el golpe final: tiembla mucho y el juego se para un instante)
+	if jefa:
+		Temblor.temblar(20.0)
+		Temblor.parar(0.35)
+	else:
+		Temblor.temblar(3.0)
 	var donde := zombi.position + Vector2(0, 10)
 	if tipo != "explosivo" and (jefa or zombi.get("a_golpes")):
 		Mancha.charco(zombi.get_parent(), donde, randf_range(48.0, 58.0) * (1.5 if jefa else 1.0), color)

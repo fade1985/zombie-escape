@@ -14,6 +14,7 @@ var tiempo := 0.0
 
 func _ready() -> void:
 	Sonido.tocar("explosion")
+	Temblor.temblar(14.0)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO:
 		johnny.recibir_dano(dano)
