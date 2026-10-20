@@ -356,6 +356,7 @@ func actualizar_horda(delta: float) -> void:
 
 # La puerta de entrada se cierra en la cara: empieza la horda
 func empezar_horda() -> void:
+	Sonido.musica("jefe")   # la música más tensa
 	var a: Aliado = rescate.amigo
 	var p: Node2D = partida.mapa.puertas[0]
 	# donde se pone a trabajar: delante de la puerta, por dentro, mirándola
@@ -375,6 +376,7 @@ func empezar_horda() -> void:
 
 # Tres minutos después: la puerta se abre. Los zombis que queden siguen ahí, pero ya se puede salir
 func acabar_horda() -> void:
+	Sonido.musica("explorar")
 	var a: Aliado = rescate.amigo
 	horda = {}
 	rescate.horda_hecha = true

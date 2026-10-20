@@ -8,6 +8,7 @@ const LOGO := preload("res://assets/ui/logo.png")
 
 func _ready() -> void:
 	theme = Tema.crear()
+	Sonido.musica("menu")
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
 	var fondo := ColorRect.new()
 	fondo.color = Color(0.05, 0.04, 0.06)

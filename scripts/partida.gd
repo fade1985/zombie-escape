@@ -266,6 +266,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if fundir:
 		await create_tween().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
+	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "explorar")
 	# En el apartamento de la jefa, aparece ella (si aún no ha caído)
 	if sitio.tipo == "jefe" and not sitio.limpio:
 		await get_tree().create_timer(0.6).timeout
@@ -396,6 +397,7 @@ func _physics_process(delta: float) -> void:
 		cerrada = false
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
+			Sonido.musica("explorar")
 			decir("¡La portera ha caído! Las escaleras ya están abiertas", 4.0)
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
@@ -558,6 +560,10 @@ func terminar(gano: bool, abandona := false) -> void:
 	if terminada:
 		return
 	terminada = true
+	if abandona:
+		Sonido.musica("")
+	else:
+		Sonido.jingle(gano)
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var s := Guardado.cambiar(func(g):

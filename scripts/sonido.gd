@@ -6,8 +6,13 @@
 #     Sonido.tocar("compra")
 #
 # Los buses de audio están en default_bus_layout.tres: Master (con un compresor para que muchos efectos a
-# la vez no saturen), Efectos y Musica (más baja, al 55 % como en el JS).
+# la vez no saturen), Efectos y Musica.
 # Con --captura (la prueba sin jugar) arranca sin sonido, como el modo ?pruebas del JS.
+#
+# La música de fondo: en el JS (src/musica.js) se inventaba sobre la marcha. Aquí son tramos grabados de
+# ella (tools/grabar_musica.mjs → assets/musica/, ya con su volumen) que se encadenan al azar con fundidos:
+#     Sonido.musica("explorar")   # "menu", "explorar", "jefe" o "" (se apaga despacio)
+#     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 extends Node
 
 const MEZCLA := 22050        # muestras por segundo: de sobra para estos pitidos y gasta la mitad
@@ -68,6 +73,14 @@ var ultimo := {}         # nombre → cuándo sonó (ms), para el "hueco"
 var voces: Array[AudioStreamPlayer] = []
 var siguiente := 0
 
+const TRAMOS := {"menu": 2, "explorar": 5, "jefe": 3}   # cuántos tramos hay grabados de cada momento
+const FUNDIDO := 3.0     # segundos que tarda en pasar de un tramo a otro
+var momento := ""        # lo que suena ahora
+var sonando: AudioStreamPlayer = null   # de los dos reproductores de música, el que está sonando
+var otro: AudioStreamPlayer = null
+var ultimo_tramo := ""   # para no repetir el mismo tramo dos veces seguidas
+var queda := 0.0         # segundos que le quedan al tramo que suena
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS    # los clics de los menús suenan también en pausa
@@ -76,6 +89,8 @@ func _ready() -> void:
 		v.bus = &"Efectos"
 		add_child(v)
 		voces.append(v)
+	sonando = reproductor_musica()
+	otro = reproductor_musica()
 	if "--captura" in OS.get_cmdline_user_args():
 		silenciar(true)
 	musica_si(Guardado.cargar().ajustes.musica)
@@ -97,6 +112,83 @@ func tocar(nombre: String) -> void:
 	siguiente = (siguiente + 1) % VOCES
 	v.stream = grabados[nombre]
 	v.play()
+
+
+# ── Música ──
+
+func reproductor_musica() -> AudioStreamPlayer:
+	var r := AudioStreamPlayer.new()
+	r.bus = &"Musica"
+	add_child(r)
+	return r
+
+
+# Cambia de momento: el tramo nuevo entra mientras el viejo se apaga
+func musica(nuevo: String) -> void:
+	if nuevo == momento:
+		return
+	momento = nuevo
+	if nuevo == "":
+		fundir(sonando, 0.0, 1.5)
+		return
+	otro_tramo()
+
+
+func _process(delta: float) -> void:
+	if momento == "":
+		return
+	queda -= delta
+	if queda <= FUNDIDO:
+		otro_tramo()   # se acaba: el siguiente, al azar
+
+
+# Elige un tramo del momento (no el mismo que acaba de sonar), empezando por cualquier sitio de su primera
+# mitad para que tampoco empiece siempre igual, y lo funde con el que sonaba
+func otro_tramo() -> void:
+	var nombre := ultimo_tramo
+	while nombre == ultimo_tramo:
+		nombre = "%s-%d" % [momento, randi_range(1, TRAMOS[momento])]
+		if TRAMOS[momento] == 1:
+			break
+	ultimo_tramo = nombre
+	var tramo: AudioStream = load("res://assets/musica/%s.ogg" % nombre)
+	var desde := randf_range(0.0, tramo.get_length() * 0.5)
+	queda = tramo.get_length() - desde
+	fundir(sonando, 0.0, FUNDIDO)
+	var r := otro
+	otro = sonando
+	sonando = r
+	r.stream = tramo
+	r.volume_db = -60.0
+	r.play(desde)
+	fundir(r, 1.0, FUNDIDO)
+
+
+# Sube o baja el volumen de un reproductor poco a poco (a 0: además se para)
+func fundir(r: AudioStreamPlayer, hasta: float, segundos: float) -> void:
+	if not r.playing:
+		return
+	var t := r.create_tween()
+	t.tween_method(func(v: float): r.volume_db = linear_to_db(v), db_to_linear(r.volume_db), hasta, segundos)
+	if hasta == 0.0:
+		t.tween_callback(r.stop)
+
+
+# La melodía corta del final (como music.jingle del JS): sube si se gana, baja si se pierde. La música se apaga
+func jingle(gana: bool) -> void:
+	musica("")
+	var notas := [0, 4, 7, 12, 7, 12, 16] if gana else [7, 6, 5, 4, 3, 2, 0]
+	var raiz := 392.0 if gana else 196.0
+	var dur := 0.12 if gana else 0.2
+	var lista := []
+	for i in notas.size():
+		var largo := dur * (4.0 if i == notas.size() - 1 else 1.4)
+		# el volumen del JS (0,05) por el de su música (0,55): los tramos grabados ya lo llevan dentro
+		lista.append([raiz * pow(2.0, notas[i] / 12.0), largo, "cuadrada", 0.05 * 0.55, 0, 0.05 + i * dur])
+	var r := otro if not otro.playing else reproductor_musica()
+	r.stream = sintetizar(lista)
+	r.volume_db = 0.0
+	r.play()
 
 
 # Quita o pone todo el sonido (efectos y música)
