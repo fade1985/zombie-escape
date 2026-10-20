@@ -96,7 +96,7 @@ func _ready() -> void:
 	llamas.fuerza = 0.0
 	add_child(llamas)
 	vida = stats.vida_max
-	balas = Armas.DATOS[huecos.fuego].cargador
+	balas = Armas.datos(huecos.fuego).cargador
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
@@ -144,7 +144,7 @@ func cambiar_modo() -> void:
 
 # El arma que tiene en la mano: sus datos, con los atributos de Johnny ya aplicados
 func arma() -> Dictionary:
-	var w: Dictionary = Armas.DATOS[huecos[mano]].duplicate()
+	var w: Dictionary = Armas.datos(huecos[mano]).duplicate()
 	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
@@ -249,6 +249,8 @@ func _physics_process(delta: float) -> void:
 			ataque_t = -1.0
 
 	animar()
+	if Armas.es_creada(huecos[mano]):
+		ArmasCreadas.detalle(self, Armas.datos(huecos[mano]), delta)   # chispitas de color en la punta
 
 
 # La esquiva: sale lanzado hacia donde se mueve (o, quieto, hacia donde mira) y un momento no le hacen daño
@@ -280,7 +282,7 @@ func soltar_estela() -> void:
 # Ninja: al acabar la esquiva, un barrido en círculo con el arma cuerpo a cuerpo. Los zombis que pilla mueren
 # al momento; a la jefa le quita un 10 % de su vida
 func golpe_ninja() -> void:
-	var w: Dictionary = Armas.DATOS[huecos.cuerpo]
+	var w: Dictionary = Armas.datos(huecos.cuerpo)
 	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
@@ -426,13 +428,17 @@ func golpear(angulo: float) -> void:
 		# angle_difference da lo que hay que girar de un ángulo al otro (de -180° a 180°)
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
-			zombi.recibir_golpe(con_critico(w.dano), hacia.normalized() * EMPUJE * w.empuje)
+			var dano := con_critico(w.dano)
+			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * w.empuje)
+			if w.has("efecto"):
+				ArmasCreadas.efecto_golpe(zombi, w, dano)   # las armas creadas: aturdir, prender, sangrar...
 
 
 # Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo
 func disparar(angulo: float) -> void:
 	var w := arma()
-	balas -= 1
+	if not w.get("sin_municion", false):
+		balas -= 1
 	disparos += 1
 	var seguro: bool = stats.mirilla and disparos % 4 == 0   # Mirilla: tras 3 disparos, uno crítico seguro
 	# La boca del arma está en píxeles del dibujo desde los pies (x2 para pasar a unidades); los pies van
@@ -440,6 +446,14 @@ func disparar(angulo: float) -> void:
 	# dibuja 50 más arriba (ver bala.gd): así sale de la boca y choca con lo que hay a la altura de los pies
 	var boca: Vector2 = w.boca[direccion] * 2.0
 	var salida := global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
+	if w.has("efecto"):
+		# las armas creadas a distancia: gotas de fuego o ácido, o el bumerán (armas_creadas.gd)
+		ArmasCreadas.disparar(self, angulo, w, salida)
+		oir_disparo()
+		if balas <= 0:
+			empezar_recarga()
+		avisar_arma()
+		return
 	for i in w.perdigones:
 		var desvio := 0.0
 		if w.perdigones > 1:
@@ -456,13 +470,17 @@ func disparar(angulo: float) -> void:
 		bala.global_position = salida
 	# El fogonazo alumbra un instante alrededor (más con la escopeta)
 	Luz.destello(self, salida - Vector2(0, 50), 170.0 if w.perdigones > 1 else 120.0, 0.12 if w.perdigones > 1 else 0.08)
-	# El disparo se oye: despierta a los zombis dormidos que haya cerca
-	for zombi in get_tree().get_nodes_in_group("zombis"):
-		if zombi.has_method("oir_disparo"):
-			zombi.oir_disparo(global_position)
+	oir_disparo()
 	if balas <= 0:
 		empezar_recarga()
 	avisar_arma()
+
+
+# El disparo se oye: despierta a los zombis dormidos que haya cerca
+func oir_disparo() -> void:
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		if zombi.has_method("oir_disparo"):
+			zombi.oir_disparo(global_position)
 
 
 # Antes de disparar: ¿hay bala en el cargador? Si no, recarga. La escopeta puede disparar a mitad de recarga
@@ -500,12 +518,18 @@ func terminar_recarga() -> void:
 	avisar_arma()
 
 
-# Coge un arma (teclas 1 a 6): va a su hueco y se la pone en la mano. Si es de fuego, con el cargador lleno
+# Coge un arma (teclas 1 a 6, la tienda, el inventario o el baúl): va a su hueco y se la pone en la mano. Si es
+# de fuego, con el cargador lleno; las creadas de fuego, con lo que les quedaba en el depósito al guardarlas
 func coger(id: String) -> void:
-	var w: Dictionary = Armas.DATOS[id]
-	huecos[w.tipo] = id
+	var w: Dictionary = Armas.datos(id)
 	if w.tipo == "fuego":
+		var vieja: String = huecos.fuego
+		if Armas.es_creada(vieja):
+			Armas.sacadas[vieja].balas = balas
 		balas = w.cargador
+		if Armas.es_creada(id):
+			balas = Armas.sacadas[id].get("balas", w.cargador)
+	huecos[w.tipo] = id
 	sostener(w.tipo)
 
 
@@ -542,7 +566,7 @@ func avisar_arma() -> void:
 		if recargando > 0.0:
 			texto += "   recargando…"
 	var otra: String = huecos["fuego" if mano == "cuerpo" else "cuerpo"]
-	texto += "\n[Q] " + Armas.DATOS[otra].nombre
+	texto += "\n[Q] " + Armas.datos(otra).nombre
 	arma_cambiada.emit(texto)
 
 

@@ -1,6 +1,11 @@
 # La granada de Johnny (src/granada.js). Vuela en parábola, bota una vez, rueda un poco frenando, rebota en
 # las paredes y los muebles, parpadea en rojo (cada vez más deprisa) y a los 2 s explota: la explosión de
 # siempre (explosion.gd), que también hace daño a Johnny, y una mancha chamuscada en el suelo.
+# Las arrojadizas creadas (fase 7b2) son esta misma granada con otro "tipo" (Lanzables.ARROJADIZAS): su mecha,
+# su color (el dibujo de la granada, teñido) y lo suyo al explotar. A Johnny le hacen como mucho 25:
+#   atraedora    mientras suena, los zombis cercanos van hacia ella (grupo "cebos", zombi.gd)
+#   congeladora  los zombis que pilla se quedan quietos y azules 3 s (la portera, no)
+#   lluvia_acida deja un charco de ácido grande que solo daña a los zombis
 extends Node2D
 
 const EXPLOSION := preload("res://escenas/armas/explosion.tscn")
@@ -11,6 +16,8 @@ var desde := Vector2.ZERO
 var hasta := Vector2.ZERO
 var radio := 110.0
 var dano_zombis := 80
+var tipo := "granada"
+var fabricante := false
 var z := 20.0          # altura sobre el suelo
 var v := Vector2.ZERO  # velocidad en el suelo
 var vz := 0.0          # velocidad hacia arriba
@@ -26,6 +33,10 @@ func _ready() -> void:
 	v = (hasta - desde) / vuelo
 	vz = (G.gravedad * vuelo * vuelo / 2.0 - z) / vuelo
 	mecha = G.mecha
+	if tipo != "granada":
+		mecha = Lanzables.ARROJADIZAS[tipo].mecha
+		if tipo == "atraedora":
+			add_to_group("cebos")
 
 
 func _physics_process(delta: float) -> void:
@@ -55,7 +66,11 @@ func _physics_process(delta: float) -> void:
 			paso = Vector2.ZERO
 	global_position += paso
 	# parpadeo rojo: de uno cada 0,4 s a casi continuo al final
-	var k := clampf(1.0 - mecha / G.mecha, 0.0, 1.0)
+	var k := clampf(1.0 - mecha / (G.mecha if tipo == "granada" else Lanzables.ARROJADIZAS[tipo].mecha), 0.0, 1.0)
+	if tipo == "atraedora" and randf() < 8.0 * delta:
+		# suena: notas que salen hacia arriba
+		Particulas.soltar(self, global_position + Vector2(randf_range(-8, 8), -z - 20), Vector2(randf_range(-30, 30), -70),
+			Lanzables.ARROJADIZAS.atraedora.color, 3, 0.5)
 	parpadeo += delta / (0.4 - 0.33 * k * k)
 	queue_redraw()
 	if mecha <= 0.0:
@@ -69,9 +84,34 @@ func explotar() -> void:
 	boom.dano = G.dano
 	boom.dano_zombis = dano_zombis
 	boom.position = position
+	if tipo != "granada":
+		boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)   # a Johnny, como mucho 25
+		efecto_creada(Lanzables.ARROJADIZAS[tipo])
 	get_parent().add_child(boom)
 	Mancha.quemado(get_parent(), position, radio * 0.5)
 	queue_free()
+
+
+# Lo suyo de cada arrojadiza creada al explotar, y dos anillos de su color para que se note cuál ha sido
+func efecto_creada(c: Dictionary) -> void:
+	if c.has("congela"):
+		for zombi in get_tree().get_nodes_in_group("zombis"):
+			if zombi is Zombi and zombi.global_position.distance_to(global_position) <= radio + zombi.radio:
+				zombi.aturdido = maxf(zombi.aturdido, c.congela)
+				zombi.modulate = Color(0.55, 0.8, 1.0)
+				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(c.congela - 0.4)
+	if c.has("charco"):
+		var charco := preload("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = "lluvia"
+		charco.escala = Lanzables.FABRICANTE.radio if fabricante else 1.0
+		charco.position = (position / 2.0).round() * 2.0
+		get_parent().add_child(charco)
+		for i in 12:
+			var a := randf() * TAU
+			Particulas.soltar(self, global_position + Vector2(0, -10), Vector2(cos(a), sin(a) * 0.6) * randf_range(60, 200) - Vector2(0, 50),
+				c.color, 3, 0.45)
+	for i in 2:
+		Particulas.anillo(self, global_position, radio * (0.6 + i * 0.4), c.color, 0.4 + i * 0.15)
 
 
 func _draw() -> void:
@@ -82,4 +122,5 @@ func _draw() -> void:
 	# el dibujo del dueño (19×27) a 0,8: unas 15×22 unidades. En el aire gira; en el suelo, derecha
 	var rojo := int(parpadeo) % 2 == 1
 	draw_set_transform(Vector2(0, -z - 8.0), giro if z > 0.0 else 0.0, Vector2(0.8, 0.8))
-	draw_texture(DIBUJO, -Vector2(9.5, 16.0), Color(1.0, 0.35, 0.3) if rojo else Color.WHITE)
+	var tinte: Color = Color.WHITE if tipo == "granada" else Lanzables.ARROJADIZAS[tipo].color
+	draw_texture(DIBUJO, -Vector2(9.5, 16.0), Color(1.0, 0.35, 0.3) if rojo else tinte)

@@ -1,7 +1,7 @@
 # Las recetas del banco de trabajo (src/recetas.js del JS). Cada receta junta dos ingredientes: objetos
 # (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). El arma que sale lleva una rareza al azar que
-# multiplica su daño, y va al baúl (guardado: "baul_armas"). Que las armas creadas peguen es la fase 7b2:
-# de momento se crean, se guardan y se ven.
+# multiplica su daño, y va al baúl (guardado: "baul_armas"). Desde el baúl se sacan para una partida; lo que
+# hacen está en Armas.CREADAS y armas_creadas.gd (fase 7b2).
 #
 # Campos de cada receta:
 #   nombre     lo que sale

@@ -1,10 +1,11 @@
 # Las pantallas de las cosas de Johnny (fase 7b; en el JS, showInventario y showBaul de src/ui.js y el banco
 # de src/banco.js). El juego se para mientras están abiertas:
 #   - Inventario (Tab, I o Select): las dos armas que lleva, las que guarda (la que deja al comprar otra
-#     cuerpo a cuerpo) y la mochila. Al tocar una casilla se elige y salen sus botones: "Ponérmela" (las
-#     armas guardadas) y "Tirar al suelo" (los objetos, de uno en uno, y las armas guardadas).
+#     cuerpo a cuerpo, o al sacar una creada del baúl) y la mochila. Al tocar una casilla se elige y salen sus
+#     botones: "Ponérmela" (las armas guardadas) y "Tirar al suelo" (los objetos, de uno en uno, y las armas).
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): los objetos guardados de otras partidas y las armas
-#     creadas en el banco. Sacarlas y usarlas es la fase 7b2.
+#     creadas en el banco. Un arma creada se puede sacar para esta partida (fase 7b2): la de cuerpo a cuerpo o
+#     de fuego va a la mano (y la que llevaba, al inventario); las arrojadizas, al botón de lanzar.
 #   - Banco de trabajo (al arrimarse a él): arriba, todo lo que se puede combinar (las armas de la receta que
 #     lleva y los objetos de la mochila y del baúl). Se tocan dos cosas, suben a la mesa y, si hacen una receta
 #     (recetas.gd), se puede crear el arma: sale con una rareza al azar, los ingredientes se gastan (los objetos,
@@ -96,10 +97,10 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	var armas := fila(columna)
 	for hueco in ["cuerpo", "fuego"]:
 		var id: String = johnny.huecos[hueco]
-		casilla(armas, "", Objetos.icono(id), Armas.DATOS[id].nombre, "En la mano" if hueco == "cuerpo" else "De fuego",
-			Recetas.GRIS)
+		casilla(armas, "", Objetos.icono(id), Armas.datos(id).nombre, "En la mano" if hueco == "cuerpo" else "De fuego",
+			borde(id))
 	for i in guardadas.size():
-		casilla(armas, "g%d" % i, Objetos.icono(guardadas[i]), Objetos.nombre(guardadas[i]), "Guardada", Recetas.GRIS)
+		casilla(armas, "g%d" % i, Objetos.icono(guardadas[i]), Objetos.nombre(guardadas[i]), "Guardada", borde(guardadas[i]))
 	var llenas := Objetos.casillas(mochila)
 	subtitulo(columna, "Mochila · %d / %d" % [llenas.size(), Objetos.MOCHILA], "mochila")
 	var rejilla := GridContainer.new()
@@ -127,7 +128,12 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	return fondo.find_child("m0", true, false) if not llenas.is_empty() else fondo.find_child("cerrar", true, false)
 
 
-# Se pone en la mano el arma guardada elegida; la que llevaba pasa a las guardadas
+# El borde de la casilla de un arma: el color de su rareza si es creada; si no, gris
+func borde(id: String) -> Color:
+	return Recetas.RAREZAS[Armas.sacadas[id].rareza].color if Armas.es_creada(id) else Recetas.GRIS
+
+
+# Se pone en la mano el arma guardada elegida; la que llevaba (de su mismo tipo) pasa a las guardadas
 func poner_guardada() -> void:
 	var i := sel.substr(1).to_int()
 	var guardadas: Array = partida.armas_guardadas
@@ -135,7 +141,7 @@ func poner_guardada() -> void:
 		return
 	var johnny: Node2D = partida.johnny
 	var id: String = guardadas[i]
-	guardadas[i] = johnny.huecos[Armas.DATOS[id].tipo]
+	guardadas[i] = johnny.huecos[Armas.datos(id).tipo]
 	johnny.coger(id)
 	sel = ""
 	foco = "cerrar"
@@ -188,14 +194,46 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	var texto := "Está vacío. Lo que lleves en la mochila se guarda aquí al completar un edificio, y aquí van las armas que crees en el banco de trabajo."
 	if sel.begins_with("a"):
 		var a: Dictionary = s.baul_armas[sel.substr(1).to_int()]
-		texto = "%s (%s, %s): %s. Sacarla y usarla llega en la próxima fase." % [a.nombre,
-			Recetas.RAREZAS[a.rareza].nombre.to_lower(), Recetas.HUECOS[a.hueco].to_lower(), a.desc]
+		texto = "%s (%s, %s): %s. %s" % [a.nombre, Recetas.RAREZAS[a.rareza].nombre.to_lower(),
+			Recetas.HUECOS[a.hueco].to_lower(), a.desc, AL_SACAR[a.hueco] if a.receta != "molotov" else
+			"Al sacarla, sus botellas se suman a tus molotovs."]
 	elif n > 0:
 		texto = "Aquí se guarda lo que traes en la mochila al completar un edificio, y las armas que creas en el banco de trabajo."
 	nota(columna, texto, 640)
 	var botones := fila(columna, true)
+	if sel.begins_with("a"):
+		boton(botones, "sacar", "Sacar", sacar, "BotonGrande")
 	boton(botones, "cerrar", "Cerrar", cerrar)
 	return fondo.find_child("a0", true, false) if not s.baul_armas.is_empty() else fondo.find_child("cerrar", true, false)
+
+
+const AL_SACAR := {
+	"cuerpo": "Al sacarla, es tuya para esta partida: te la pones y la que llevas pasa al inventario.",
+	"fuego": "Al sacarla, es tuya para esta partida: va a la mano de fuego y la que llevas pasa al inventario.",
+	"arrojadiza": "Al sacarla, es tuya para esta partida: se lanza como la granada (F para elegirla).",
+}
+
+
+# Saca del baúl el arma elegida para esta partida (sacarDelBaul en src/banco.js): la de cuerpo a cuerpo y la de
+# fuego, a la mano (lo que llevara pasa al inventario); el cóctel molotov suma sus botellas a los molotovs; las
+# demás arrojadizas, al botón de lanzar (lanzables.gd)
+func sacar() -> void:
+	var i := sel.substr(1).to_int()
+	var lista: Array = Guardado.cargar().baul_armas
+	if not sel.begins_with("a") or i >= lista.size():
+		return
+	var a: Dictionary = lista[i]
+	Guardado.cambiar(func(s): s.baul_armas.remove_at(i))
+	var johnny: Node2D = partida.johnny
+	var lz: Lanzables = partida.lanzables
+	if a.hueco == "arrojadiza":
+		lz.sacar(a)
+	else:
+		partida.armas_guardadas.append(johnny.huecos[a.hueco])
+		johnny.coger(Armas.apuntar(a))
+	sel = ""
+	foco = "cerrar"
+	pintar()
 
 
 # ── Banco de trabajo ──
@@ -311,7 +349,7 @@ func crear_arma() -> void:
 	if sin_mano:
 		var otra := "fregona"
 		for id in partida.armas_guardadas:
-			if Armas.DATOS[id].tipo == "cuerpo":
+			if Armas.datos(id).tipo == "cuerpo":
 				otra = id
 				break
 		partida.armas_guardadas.erase(otra)

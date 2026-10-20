@@ -28,6 +28,7 @@ var dinero: PanelContainer
 var mochila: PanelContainer
 var molotov: PanelContainer
 var granada: PanelContainer
+var creada: PanelContainer   # la arrojadiza creada elegida (o la primera que quede), si tiene alguna
 var llave: PanelContainer
 var antes := {}           # lo que se pintó la última vez (para no rehacer las pastillas en cada fotograma)
 
@@ -47,6 +48,7 @@ func _ready() -> void:
 	fuego = pastilla(fila)
 	molotov = pastilla(fila)
 	granada = pastilla(fila)
+	creada = pastilla(fila)
 	mochila = pastilla(fila)
 	dinero = pastilla(fila)
 	llave = pastilla(fila)
@@ -76,13 +78,18 @@ func _process(_delta: float) -> void:
 	if johnny == null:
 		return
 	var h: Dictionary = johnny.huecos
-	var c: Dictionary = Armas.DATOS[h.cuerpo]
-	var f: Dictionary = Armas.DATOS[h.fuego]
-	poner(cuerpo, ICONOS.get(h.cuerpo, h.cuerpo), c.nombre, johnny.mano == "cuerpo")
-	poner(fuego, ICONOS.get(h.fuego, h.fuego), f.nombre, johnny.mano == "fuego")
+	var c: Dictionary = Armas.datos(h.cuerpo)
+	var f: Dictionary = Armas.datos(h.fuego)
+	poner(cuerpo, Objetos.icono(h.cuerpo), c.nombre, johnny.mano == "cuerpo")
+	poner(fuego, Objetos.icono(h.fuego), f.nombre, johnny.mano == "fuego")
 	var lz: Lanzables = partida.lanzables
 	poner(molotov, "molotov", str(lz.cantidades.molotov), lz.tipo == "molotov")
 	poner(granada, "granada", str(lz.cantidades.granada), lz.tipo == "granada")
+	var otras: Array = lz.tipos().slice(2)
+	creada.visible = not otras.is_empty()
+	if creada.visible:
+		var k: String = lz.tipo if lz.tipo in otras else otras[0]
+		poner(creada, Objetos.icono(Recetas.LISTA[k].icono), str(lz.cuantas(k)), lz.tipo == k)
 	poner(mochila, "mochila", "%d/%d" % [Objetos.casillas(partida.mochila).size(), Objetos.MOCHILA])
 	poner(dinero, "billete", "$%d" % partida.cartera())
 	llave.visible = partida.planta.tiene_llave
@@ -139,7 +146,7 @@ func pintar_barra() -> void:
 
 # Las balas del cargador, en fila encima de la barra
 func pintar_balas() -> void:
-	var w: Dictionary = Armas.DATOS[johnny.huecos.fuego]
+	var w: Dictionary = Armas.datos(johnny.huecos.fuego)
 	var lejos: bool = johnny.mano != "fuego"
 	var parpadeo: bool = johnny.recargando > 0.0 and int(Time.get_ticks_msec() / 200) % 2 == 0
 	var tam := Vector2(5, 10) if w.cargador > 16 else Vector2(10, 20)   # las del MP5, más pequeñas para que quepan

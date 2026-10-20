@@ -433,9 +433,9 @@ func comprar_arma(id: String) -> void:
 		s.armas.append(id)
 	Guardado.escribir(s)
 	partida.ahorrados = s.dolares
-	var vieja: String = Armas.DATOS[johnny.huecos[w.tipo]].nombre
-	if w.tipo == "cuerpo":
-		partida.armas_guardadas.append(johnny.huecos.cuerpo)   # al inventario
+	var vieja: String = Armas.datos(johnny.huecos[w.tipo]).nombre
+	if w.tipo == "cuerpo" or Armas.es_creada(johnny.huecos[w.tipo]):
+		partida.armas_guardadas.append(johnny.huecos[w.tipo])   # al inventario (las creadas de fuego, también)
 		partida.armas_guardadas.erase(id)   # si la compras teniéndola guardada, no se queda repetida
 	johnny.coger(id)
 	abrir("armas", "b_" + id)

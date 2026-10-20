@@ -4,7 +4,9 @@
 #     Johnny), la zona que arderá o explotará y la trayectoria. Al SOLTAR, lo lanza.
 #   - Con ratón apunta al puntero; con mando, hacia donde se empuja el stick derecho (tan lejos como se
 #     empuje). Si no se apunta a nada, al zombi más cercano a tiro (o, si no hay, un poco por delante).
-#   - F o LB cambian lo que se lanza: molotov → granada → (en la fase 7b, las arrojadizas creadas) → molotov.
+#   - F o LB cambian lo que se lanza: molotov → granada → las arrojadizas creadas que queden → molotov.
+#   - Las arrojadizas creadas (fase 7b2, sacadas del baúl): se lanzan como la granada con su propio efecto
+#     (ARROJADIZAS). El cóctel molotov no está aquí: sus botellas se suman a los molotovs.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
 # explota a los 2 s (granada.gd).
 class_name Lanzables
@@ -41,6 +43,16 @@ const GRANADA := {
 	"roce": 7.0,       # lo que frena al rodar
 }
 const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y explosiones más grandes y largos
+# Las arrojadizas creadas (ARROJADIZAS de src/armas-creadas.js). El daño lo trae cada una (receta + rareza)
+#   mecha    segundos hasta que revienta · radio  de la explosión · color  del dibujo, el aviso y los anillos
+#   atrae    la atraedora suena y los zombis (a menos de esa distancia) van hacia ella en vez de hacia Johnny
+#   congela  segundos que quedan quietos los que pilla · charco  deja la lluvia ácida (charco.gd, solo zombis)
+const ARROJADIZAS := {
+	"atraedora": {"mecha": 3.0, "radio": 110.0, "color": Color("#ffd23f"), "atrae": 520.0},
+	"congeladora": {"mecha": 2.0, "radio": 120.0, "color": Color("#9fe8ff"), "congela": 3.0},
+	"lluvia_acida": {"mecha": 2.0, "radio": 90.0, "color": Color("#c7e04a"), "charco": true},
+}
+const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de una arrojadiza creada
 const DATOS := {"molotov": MOLOTOV, "granada": GRANADA}
 const NOMBRES := {"molotov": "molotovs", "granada": "granadas"}
 const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a")}
@@ -50,6 +62,7 @@ const BOMBA := preload("res://scripts/granada.gd")
 var johnny: Node2D
 var partida: Node
 var cantidades := {"molotov": 0, "granada": 0}
+var creadas: Array = []        # las arrojadizas creadas sacadas del baúl, cada una con sus "unidades"
 var tipo := "molotov"          # lo que se lanza ahora
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
 var t := 0.0
@@ -64,6 +77,35 @@ func _ready() -> void:
 func reiniciar(stats: Dictionary) -> void:
 	for k in cantidades:
 		cantidades[k] = DATOS[k].inicio + stats.lanzar_extra
+	creadas.clear()
+	tipo = "molotov"
+
+
+# Una arrojadiza creada sacada del baúl: el cóctel suma sus botellas a los molotovs (aunque pase del máximo)
+func sacar(a: Dictionary) -> void:
+	if a.receta == "molotov":
+		cantidades.molotov += a.unidades
+	else:
+		creadas.append(a.duplicate())
+
+
+# Las que le quedan de ese tipo (de siempre o creada, sumando todas las que haya sacado)
+func cuantas(k: String) -> int:
+	if cantidades.has(k):
+		return cantidades[k]
+	var n := 0
+	for a in creadas:
+		if a.receta == k:
+			n += a.unidades
+	return n
+
+
+func nombre(k: String) -> String:
+	return NOMBRES[k] if NOMBRES.has(k) else Recetas.LISTA[k].nombre.to_lower()
+
+
+func color(k: String) -> Color:
+	return COLORES[k] if COLORES.has(k) else ARROJADIZAS[k].color
 
 
 func maximo(k: String) -> int:
@@ -79,10 +121,9 @@ func sumar(k: String) -> void:
 	cantidades[k] = mini(cantidades[k] + 1, maximo(k))
 
 
-# Lo que se puede lanzar, en el orden del botón de cambiar. En la 7b se añadirán aquí las arrojadizas creadas
-# que queden (tossKinds en src/armas-creadas.js)
+# Lo que se puede lanzar, en el orden del botón de cambiar: molotov, granada y las creadas que queden
 func tipos() -> Array:
-	return ["molotov", "granada"]
+	return ["molotov", "granada"] + ARROJADIZAS.keys().filter(func(k): return cuantas(k) > 0)
 
 
 func cambiar() -> void:
@@ -92,6 +133,8 @@ func cambiar() -> void:
 
 func radio_zona() -> float:
 	var fab: float = FABRICANTE.radio if johnny.stats.fabricante else 1.0
+	if ARROJADIZAS.has(tipo):
+		return ARROJADIZAS[tipo].radio * fab
 	return (MOLOTOV.radio if tipo == "molotov" else GRANADA.radio) * fab
 
 
@@ -146,11 +189,14 @@ func mas_cercano() -> Node2D:
 
 
 func lanzar(donde: Vector2) -> void:
-	if cantidades[tipo] <= 0:
-		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), "¡Sin %s!" % NOMBRES[tipo], COLORES[tipo], 18)
+	if cuantas(tipo) <= 0:
+		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), "¡Sin %s!" % nombre(tipo), color(tipo), 18)
+		return
+	var sala: Node = johnny.get_parent()
+	if ARROJADIZAS.has(tipo):
+		lanzar_creada(donde, sala)
 		return
 	cantidades[tipo] -= 1
-	var sala: Node = johnny.get_parent()
 	if tipo == "molotov":
 		var p := PROYECTIL.instantiate()
 		p.tipo = "molotov"
@@ -169,27 +215,45 @@ func lanzar(donde: Vector2) -> void:
 		sala.add_child(g)
 
 
+# Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto)
+func lanzar_creada(donde: Vector2, sala: Node) -> void:
+	var a: Dictionary = creadas.filter(func(o): return o.receta == tipo)[0]
+	a.unidades -= 1
+	if a.unidades <= 0:
+		creadas.erase(a)
+	var g := BOMBA.new()
+	g.tipo = tipo
+	g.desde = johnny.global_position
+	g.hasta = donde
+	g.radio = radio_zona()
+	g.dano_zombis = roundi(a.dano * johnny.stats.dano_lanzar)
+	g.fabricante = johnny.stats.fabricante
+	sala.add_child(g)
+	if cuantas(tipo) <= 0:
+		tipo = "molotov"   # era la última: vuelve al molotov
+
+
 # ── Dibujo del apunte ──
 
 func _draw() -> void:
 	if apunte == Vector2.INF:
 		return
-	var hay: bool = cantidades[tipo] > 0
-	var color: Color = COLORES[tipo] if hay else Color(0.67, 0.67, 0.67)
+	var hay: bool = cuantas(tipo) > 0
+	var tono: Color = color(tipo) if hay else Color(0.67, 0.67, 0.67)
 	var desde: Vector2 = johnny.global_position
 	# el alcance máximo, a puntos (con un borde oscuro debajo, para que se vea en suelos claros y oscuros)
 	elipse_a_trozos(desde, MOLOTOV.alcance, Color(0.11, 0.1, 0.17, 0.45), 4.0, 0.0)
 	# la zona que arderá o explotará, latiendo, con su borde a trozos que gira
 	var r := radio_zona()
 	draw_set_transform(apunte, 0.0, Vector2(1.0, 0.6))
-	draw_circle(Vector2.ZERO, r, Color(color, (0.35 if tipo == "molotov" else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
+	draw_circle(Vector2.ZERO, r, Color(tono, (0.35 if tipo == "molotov" else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
 	draw_arc(Vector2.ZERO, r, 0.0, TAU, 64, Color(0.11, 0.1, 0.17, 0.6), 6.0)
 	draw_set_transform(Vector2.ZERO)
-	elipse_a_trozos(apunte, r, color, 2.0, t * 0.6)
+	elipse_a_trozos(apunte, r, tono, 2.0, t * 0.6)
 	if tipo == "molotov":
 		# la cruz del centro: donde se rompe la botella
-		draw_rect(Rect2(apunte + Vector2(-6, -1), Vector2(12, 2)), color)
-		draw_rect(Rect2(apunte + Vector2(-1, -6), Vector2(2, 12)), color)
+		draw_rect(Rect2(apunte + Vector2(-6, -1), Vector2(12, 2)), tono)
+		draw_rect(Rect2(apunte + Vector2(-1, -6), Vector2(2, 12)), tono)
 	# la trayectoria: puntitos en parábola desde la mano de Johnny
 	var salida := desde - Vector2(0, 20)
 	for i in range(1, 12):
@@ -197,15 +261,15 @@ func _draw() -> void:
 		var p := salida.lerp(apunte, k) - Vector2(0, sin(k * PI) * MOLOTOV.altura)
 		p = (p / 2.0).round() * 2.0
 		draw_rect(Rect2(p - Vector2(3, 3), Vector2(6, 6)), Color(0.11, 0.1, 0.17, 0.7))
-		draw_rect(Rect2(p - Vector2(2, 2), Vector2(4, 4)), color)
+		draw_rect(Rect2(p - Vector2(2, 2), Vector2(4, 4)), tono)
 
 
 # Una elipse de suelo (de alto, el 60 %) hecha de trocitos, como una línea de puntos
-func elipse_a_trozos(centro: Vector2, r: float, color: Color, grueso: float, giro: float) -> void:
+func elipse_a_trozos(centro: Vector2, r: float, tono: Color, grueso: float, giro: float) -> void:
 	var trozos := maxi(12, int(r / 6.0))
 	for i in trozos:
 		var a := giro + TAU * i / trozos
 		var b := a + TAU / trozos * 0.45
 		var pa := centro + Vector2(cos(a) * r, sin(a) * r * 0.6)
 		var pb := centro + Vector2(cos(b) * r, sin(b) * r * 0.6)
-		draw_line(pa, pb, color, grueso)
+		draw_line(pa, pb, tono, grueso)

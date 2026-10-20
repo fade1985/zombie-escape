@@ -62,3 +62,64 @@ const DATOS := {
 			"n": Vector2(7, -61), "no": Vector2(-26, -40), "o": Vector2(-32, -30), "so": Vector2(-29, -21)},
 	},
 }
+
+
+# ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
+# Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd). Hasta que tengan
+# dibujo propio, Johnny usa la hoja del arma base y le salen unas chispitas del color "detalle" en la punta
+# ("sube": hacia arriba, como fuego; si no, caen como gotas). Las de fuego usan el cargador como depósito.
+# El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
+const CREADAS := {
+	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "detalle": Color("#dfe4ef")},   # estocada que atraviesa
+	"aplastacabezas": {"base": "bate", "empuje": 3.0, "efecto": "aturde", "detalle": Color("#9a9aa8")},
+	"bate_fuego": {"base": "bate", "efecto": "fuego", "detalle": Color("#ff9f1c"), "sube": true},
+	"partecuerpos": {"base": "bate", "arco": 170.0, "efecto": "sangra", "detalle": Color("#c0392b")},
+	"inmovilizadora": {"base": "bate", "efecto": "descarga", "detalle": Color("#9fe8ff"), "sube": true},
+	"latigo": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "veneno", "detalle": Color("#9be564")},
+	"supermaza": {"base": "fregona", "ritmo": 0.8, "arco": 360.0, "empuje": 2.5, "efecto": "circulo", "detalle": Color("#8a8a9a")},
+	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
+	"lanzallamas": {"base": "pistola", "ritmo": 10.0, "alcance": 170.0, "velocidad": 320.0, "cargador": 40, "recarga": 2.0,
+		"empuje": 0.3, "efecto": "llama", "detalle": Color("#ff9f1c"), "sube": true},
+	"supersoplete": {"base": "escopeta", "perdigones": 1, "ritmo": 2.0, "alcance": 100.0, "velocidad": 300.0, "cargador": 12,
+		"recarga": 2.2, "cartucho": false, "empuje": 1.0, "efecto": "cono", "detalle": Color("#ffd23f"), "sube": true},
+	"desintegrador": {"base": "pistola", "ritmo": 12.0, "alcance": 220.0, "velocidad": 400.0, "cargador": 50, "recarga": 2.0,
+		"empuje": 0.2, "efecto": "acido", "detalle": Color("#c7e04a")},
+	"bumeran": {"base": "pistola", "ritmo": 1.0, "alcance": 300.0, "velocidad": 460.0, "cargador": 1, "recarga": 0.0,
+		"empuje": 1.5, "efecto": "bumeran", "detalle": Color("#c0c4d0"), "sin_municion": true},
+}
+
+# Las armas creadas sacadas del baúl en esta partida. Johnny y el inventario las nombran con un id como
+# "creada_3" (así van en los mismos sitios que las de siempre): aquí está a qué arma creada corresponde cada uno.
+# Lo que le quedaba en el depósito al guardarla se apunta en "balas"
+static var sacadas := {}
+static var contador := 0
+
+
+# Al empezar una partida: las del baúl que se sacaron en la anterior ya se gastaron
+static func olvidar_sacadas() -> void:
+	sacadas.clear()
+
+
+# Apunta un arma creada sacada del baúl y devuelve su id
+static func apuntar(a: Dictionary) -> String:
+	contador += 1
+	var id := "creada_%d" % contador
+	sacadas[id] = a.duplicate()
+	return id
+
+
+static func es_creada(id: String) -> bool:
+	return sacadas.has(id)
+
+
+# Los datos de un arma por su id: las de siempre, de DATOS; las creadas, los de su base con lo suyo encima
+static func datos(id: String) -> Dictionary:
+	if DATOS.has(id):
+		return DATOS[id]
+	var a: Dictionary = sacadas[id]
+	var c: Dictionary = CREADAS[a.receta]
+	var w: Dictionary = DATOS[c.base].merged(c, true)
+	w.nombre = a.nombre
+	w.dano = a.dano
+	w.creada = a
+	return w

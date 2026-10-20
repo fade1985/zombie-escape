@@ -121,9 +121,9 @@ func pausa(partida: Node) -> void:
 	derecha.add_child(armas)
 	for hueco in ["cuerpo", "fuego"]:
 		var id: String = johnny.huecos[hueco]
-		var a: Dictionary = Armas.DATOS[id]
+		var a: Dictionary = Armas.datos(id)
 		var resumen := "%s · daño %d · %.1f/s" % [a.nombre, a.dano * (a.get("perdigones", 1)), a.ritmo]
-		derecha.add_child(Tema.icono_y_texto({"mp5": "pistola"}.get(id, id), resumen, 20))
+		derecha.add_child(Tema.icono_y_texto(Objetos.icono(id), resumen, 20))
 	var lz: Lanzables = partida.lanzables
 	derecha.add_child(Tema.icono_y_texto("molotov", "Molotovs: %d / %d" % [lz.cantidades.molotov, lz.maximo("molotov")], 20))
 	derecha.add_child(Tema.icono_y_texto("granada", "Granadas: %d / %d" % [lz.cantidades.granada, lz.maximo("granada")], 20))

@@ -131,6 +131,7 @@ func _ready() -> void:
 	aplicar_talentos(s.talentos)
 	johnny.vida = johnny.stats.vida_max
 	lanzables.reiniciar(johnny.stats)
+	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -829,6 +830,56 @@ func probar_cosas() -> void:
 		johnny.huecos.cuerpo, g.baul, g.baul_armas.map(func(a): return "%s %s %d" % [a.nombre, a.rareza, a.dano])])
 
 
+# Las armas creadas (fase 7b2): saca cinco del baúl, golpea con la inmovilizadora, lanza el bumerán, se pone
+# el desintegrador desde el inventario y dispara, y lanza la congeladora. Cuenta lo que pasa y hace una foto
+func probar_creadas() -> void:
+	Guardado.cambiar(func(g): g.baul_armas = [Recetas.crear("inmovilizadora", "morada"), Recetas.crear("desintegrador"),
+		Recetas.crear("bumeran"), Recetas.crear("congeladora"), Recetas.crear("molotov")])
+	var molotovs: int = lanzables.cantidades.molotov
+	abrir_cosas("baul")
+	for i in 5:
+		inventario.tocar("a0")
+		inventario.sacar()
+	inventario.cerrar()
+	print("Creadas sacadas: mano %s | guardadas %s | molotovs %d -> %d | lanzables %s | baúl %d" % [
+		[Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego)], armas_guardadas.map(Objetos.nombre),
+		molotovs, lanzables.cantidades.molotov, lanzables.tipos(), Guardado.cargar().baul_armas.size()])
+	johnny.direccion = "e"
+	johnny.sostener("cuerpo")
+	var z1 := meter_zombi("lento", johnny.position + Vector2(40, 0))
+	var z2 := meter_zombi("lento", johnny.position + Vector2(100, 10))
+	z1.vida = 500   # que no muera ninguno (saldría el recuadro de las mutaciones y pararía el juego)
+	z2.vida = 500
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	print("Inmovilizadora: zombi 1 aturdido %.1f vida %d | zombi 2 aturdido %.1f vida %d" % [z1.aturdido, z1.vida, z2.aturdido, z2.vida])
+	johnny.sostener("fuego")
+	johnny.disparar(0.0)
+	await get_tree().create_timer(0.3).timeout
+	print("Bumerán: balas %d (no gasta) | zombi 1 vida %d | zombi 2 vida %d" % [johnny.balas, z1.vida, z2.vida])
+	abrir_cosas("inventario")
+	inventario.tocar("g%d" % armas_guardadas.find(armas_guardadas.filter(func(id): return Objetos.nombre(id) == "Desintegrador")[0]))
+	inventario.poner_guardada()
+	inventario.cerrar()
+	for i in 6:
+		johnny.disparar(0.0)
+		await get_tree().create_timer(0.08).timeout
+	await get_tree().create_timer(0.2).timeout
+	menus.visible = false   # por si ha salido el recuadro de una mutación
+	await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://captura-creadas.png")
+	menus.visible = true
+	print("Desintegrador: mano %s balas %d | zombi 2 vida %d heridas %s | charcos %d" % [Objetos.nombre(johnny.huecos.fuego),
+		johnny.balas, z2.vida, z2.get_children().filter(func(n): return n.name.begins_with("herida")).map(func(n): return n.name),
+		get_tree().get_nodes_in_group("charcos").size()])
+	var z3 := meter_zombi("lento", johnny.position + Vector2(-120, 30))
+	z3.vida = 500
+	lanzables.tipo = "congeladora"
+	lanzables.lanzar(z3.global_position)
+	await get_tree().create_timer(2.3).timeout
+	print("Congeladora: zombi 3 aturdido %.1f vida %d | vida de Johnny %d | quedan %s" % [z3.aturdido, z3.vida, johnny.vida, lanzables.tipos()])
+
+
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
 func probar_mutaciones() -> void:
 	abrir_mutacion()
@@ -848,6 +899,7 @@ func probar_menus() -> void:
 	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
 	await probar_ordenador()
 	await probar_cosas()
+	await probar_creadas()
 	await probar_mutaciones()
 	pausar()
 	await get_tree().create_timer(0.4).timeout

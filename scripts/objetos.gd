@@ -23,6 +23,8 @@ const NOMBRES := {
 static func nombre(id: String) -> String:
 	if id in NOMBRES:
 		return NOMBRES[id]
+	if Armas.es_creada(id):
+		return Armas.sacadas[id].nombre
 	return Armas.DATOS[id].nombre if id in Armas.DATOS else id
 
 
@@ -30,6 +32,8 @@ static func nombre(id: String) -> String:
 static func icono(id: String) -> String:
 	if id in NOMBRES:
 		return "obj-" + id
+	if Armas.es_creada(id):
+		return icono(Armas.sacadas[id].icono)   # hasta que tengan el suyo, el de un ingrediente
 	return {"mp5": "pistola"}.get(id, id)
 
 

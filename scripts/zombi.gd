@@ -107,6 +107,11 @@ func _physics_process(delta: float) -> void:
 				pedir_velocidad(Vector2.ZERO)
 				poner_animacion("reposo")
 				return
+			# la atraedora (arrojadiza creada) suena: va hacia ella en vez de hacia Johnny
+			var cebo := cebo_cerca()
+			if cebo:
+				ir_hacia(delta, camino_hacia(cebo.global_position), velocidad)
+				return
 			andar(delta, johnny)
 
 		"zarpazo":
@@ -128,6 +133,18 @@ func _physics_process(delta: float) -> void:
 		_:
 			# Los estados propios de cada tipo (la mecha del explosivo, el latigazo...)
 			estado_propio(delta, johnny)
+
+
+# La atraedora que le está llamando (la más cercana a menos de su distancia), o null
+func cebo_cerca() -> Node2D:
+	var mejor: Node2D = null
+	var cerca: float = Lanzables.ARROJADIZAS.atraedora.atrae
+	for cebo in get_tree().get_nodes_in_group("cebos"):
+		var d := global_position.distance_to(cebo.global_position)
+		if d < cerca:
+			cerca = d
+			mejor = cebo
+	return mejor
 
 
 # Andar normal: va a por Johnny y, al llegar, le da un zarpazo. Los tipos especiales lo cambian
