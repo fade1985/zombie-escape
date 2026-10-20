@@ -70,7 +70,8 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
   guarda en `tools/efectos/*.wav` (no se suben a git).
 - **En el navegador (web):** las plantillas de exportación de web están en
   `%APPDATA%\Godot\export_templates\4.7.2.stable` (solo las de web). Exportar (sale en `web/`, que lleva un `.gdignore`
-  para que el editor no importe lo exportado). **`web/` sí va en git: Vercel publica lo que haya en ella**, así que
+  para que el editor no importe lo exportado). **`web/` sí va en git: Vercel publica lo que haya en ella** (en https://zombie-escape-two.vercel.app; la
+  cuenta de Vercel no es la del dueño: la lleva otra persona), así que
   para publicar un cambio: exportar, commit de `web/` y push:
 
   ```
@@ -114,8 +115,8 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 
 ## Referencias
 
-- **Juego JS viejo:** `D:\Personal\Proyectos\game` (su `CLAUDE.md` explica el código). Sigue publicado en Vercel
-  sin tocar hasta que esta versión lo alcance. Se mira para copiar números y comportamientos, no se cambia.
+- **Juego JS viejo:** `C:\Users\angel\Projects\game` (su `CLAUDE.md` explica el código). Retirado de Vercel en la
+  fase 8d; el código sigue en GitHub (`fade1985/game`). Se mira para copiar números y comportamientos, no se cambia.
 - **Prueba en Godot:** `D:\Personal\Proyectos\zombie-godot-poc` (su `README.md`). Ya resuelto allí: zombi que
   persigue con NavigationAgent2D y fregonazos (fase 3), lámparas, penumbra y sombras (fase 4). Copiar de ahí
   al llegar a esas fases.
@@ -140,4 +141,4 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 8b | Música: tramos grabados de la del JS (`tools/grabar_musica.mjs`) que se encadenan al azar con fundidos; jingles de ganar y perder | hecha, con visto bueno (20 oct) |
 | 8c | Exportar a web (sin hilos: vale en Vercel sin cabeceras especiales), probada en el navegador; `vercel.json` preparado | hecha, con visto bueno (20 oct) |
 | 8e | Controles táctiles para el móvil (los tres modos, lanzar arrastrando, pantalla completa en la pausa), probados en el navegador con tamaño de móvil | hecha, con visto bueno (20 oct) |
-| 8d | Publicar y retirar la versión JS (cada paso, con el sí del dueño) | |
+| 8d | Publicar y retirar la versión JS: se juega en https://zombie-escape-two.vercel.app | hecha, comprobada en el navegador (20 oct) |
