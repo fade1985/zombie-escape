@@ -9,3 +9,5 @@ captura*.png.import
 __pycache__/
 # Los efectos de sonido grabados para escucharlos (tools/probar_sonido.gd)
 tools/efectos/
+# La exportación a web (se vuelve a crear con --export-release; ver CLAUDE.md)
+/web/

@@ -62,6 +62,17 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
 - **Sonido:** con `--captura` arranca sin sonido (como el `?pruebas` del JS); en la pausa se quita y se pone. Para
   escuchar los efectos sin jugar: `... _console.exe --headless --path . --script tools/probar_sonido.gd` los
   guarda en `tools/efectos/*.wav` (no se suben a git).
+- **En el navegador (web):** las plantillas de exportación de web están en
+  `%APPDATA%\Godot\export_templates.7.2.stable` (solo las de web). Exportar (sale en `web/`, que no se sube a git; si no
+  existe, crearla con un `.gdignore` dentro para que el editor no importe lo exportado):
+
+  ```
+  "C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe" --headless --path . --export-release "Web" web/index.html
+  ```
+
+  Para probarla: en Claude, el servidor `web` de `.claude/launch.json` (`py -m http.server 8060 --directory web`) y
+  abrir `http://localhost:8060`. Ajustes en `export_presets.cfg` (sin hilos) y, para Vercel, `vercel.json` (sirve `web/`).
+  En la web el guardado va en el navegador (IndexedDB), no en `%APPDATA%`.
 - Los errores de Godot salen en la terminal con `ERROR` o `SCRIPT ERROR`: filtrar por ahí.
 - Python se llama con `py` (tiene Pillow); poner `PYTHONIOENCODING=utf-8` delante si escribe tildes.
 
@@ -119,6 +130,6 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 7b2 | Armas creadas: sacarlas del baúl y usarlas (cuerpo a cuerpo, a distancia y arrojadizas en `Lanzables.tipos()`) | hecha, con visto bueno (20 oct) |
 | 7c | Superviviente: encerrado en un baño, la horda mientras fuerza la cerradura, rescatados y acompañante | hecha, con visto bueno (20 oct) |
 | 8a | Sonido: los efectos del JS sintetizados (`sonido.gd`, sin archivos), buses de audio, quitar sonido en la pausa | hecha, con visto bueno (20 oct) |
-| 8b | Música: tramos grabados de la del JS (`tools/grabar_musica.mjs`) que se encadenan al azar con fundidos; jingles de ganar y perder | hecha, falta visto bueno |
-| 8c | Exportar a web y dejar preparado Vercel | |
+| 8b | Música: tramos grabados de la del JS (`tools/grabar_musica.mjs`) que se encadenan al azar con fundidos; jingles de ganar y perder | hecha, con visto bueno (20 oct) |
+| 8c | Exportar a web (sin hilos: vale en Vercel sin cabeceras especiales), probada en el navegador; `vercel.json` preparado | hecha, falta visto bueno |
 | 8d | Publicar y retirar la versión JS (cada paso, con el sí del dueño) | |
