@@ -13,9 +13,14 @@
 class_name Luz
 extends CanvasModulate
 
-const OSCURIDAD_SALA := {"pasillo": 0.62, "apartamento": 0.55, "jefe": 0.36}
-const PASILLO := 0.62                      # la oscuridad de referencia: a esta, las luces lucen a tope
-const SOMBRA := Color(0.06, 0.05, 0.16)    # a qué color tiende lo oscuro (azul noche)
+const OSCURIDAD_SALA := {"pasillo": 0.8, "apartamento": 0.84, "jefe": 0.5}
+const PASILLO := 0.8                       # la oscuridad de referencia: a esta, las luces lucen a tope
+const SOMBRA := Color(0.03, 0.03, 0.1)     # a qué color tiende lo oscuro (azul noche, casi negro)
+# La linterna de Johnny: un cono que sale de sus pies hacia donde mira y hace sombras con los muebles
+const LINTERNA_ALCANCE := 330.0            # hasta dónde llega, en unidades
+const LINTERNA_ANCHO := 0.62               # medio ángulo del cono, en radianes (unos 35°)
+const LINTERNA_GIRO := 10.0                # lo rápido que se vuelve hacia donde mira
+const LINTERNA_COLOR := Color(1.0, 0.95, 0.82)
 const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const CAPA_SUELO := 2
@@ -29,6 +34,11 @@ static var destellos := 0
 
 var objetivo := 0.0
 var luz_johnny: PointLight2D
+var johnny: Node2D
+var linterna: Node2D        # gira con Johnny; dentro, el cono del suelo (con sombras) y el de lo demás
+var linterna_suelo: PointLight2D
+var linterna_cosas: PointLight2D
+static var textura_cono: ImageTexture
 
 
 # Cuánto lucen las luces: a tope con la oscuridad del pasillo y, sin oscuridad, solo un toque cálido
@@ -53,14 +63,64 @@ func alternar() -> void:
 	apagada = not apagada
 
 
-# Johnny siempre se distingue un poco, aunque esté lejos de las luces
-func seguir_a(johnny: Node2D) -> void:
+# Johnny siempre se distingue un poco, aunque esté lejos de las luces (un brillito a su alrededor), y lleva
+# la linterna. Como las lámparas, son dos conos iguales: el del suelo hace sombras y el de lo demás no
+func seguir_a(quien: Node2D) -> void:
+	johnny = quien
 	luz_johnny = PointLight2D.new()
 	luz_johnny.name = "Luz"
 	luz_johnny.texture = TEXTURA
-	luz_johnny.texture_scale = 110.0 / 128.0
+	luz_johnny.texture_scale = 80.0 / 128.0
 	luz_johnny.range_item_cull_mask = CAPA_SUELO | CAPA_COSAS
 	johnny.add_child(luz_johnny)
+	linterna = Node2D.new()
+	linterna.name = "Linterna"
+	linterna.rotation = angulo_de(johnny.direccion)
+	johnny.add_child(linterna)
+	linterna_suelo = cono(CAPA_SUELO)
+	linterna_suelo.shadow_enabled = true
+	linterna_suelo.shadow_color = Color.BLACK
+	linterna_suelo.shadow_filter = Light2D.SHADOW_FILTER_PCF5
+	linterna_suelo.shadow_filter_smooth = 3.0
+	linterna_suelo.shadow_item_cull_mask = 1
+	linterna_cosas = cono(CAPA_COSAS)
+	pintar()
+
+
+func cono(capa: int) -> PointLight2D:
+	var luz := PointLight2D.new()
+	luz.texture = hacer_cono()
+	luz.texture_scale = LINTERNA_ALCANCE / 128.0
+	luz.color = LINTERNA_COLOR
+	luz.range_item_cull_mask = capa
+	linterna.add_child(luz)
+	return luz
+
+
+# El dibujo del cono (se hace una vez): mirando hacia la derecha desde el centro, se apaga hacia la punta y
+# hacia los lados. Pegado a los pies es redondo, para que no se vea dónde empieza
+static func hacer_cono() -> ImageTexture:
+	if textura_cono:
+		return textura_cono
+	var lado := 256
+	var img := Image.create(lado, lado, false, Image.FORMAT_RGBA8)
+	var centro := Vector2(lado, lado) / 2.0
+	for y in lado:
+		for x in lado:
+			var v := Vector2(x + 0.5, y + 0.5) - centro
+			var d := v.length() / (lado / 2.0)
+			var hacia_punta := pow(clampf(1.0 - d, 0.0, 1.0), 0.8)
+			var hacia_lado := 1.0 - smoothstep(LINTERNA_ANCHO * 0.55, LINTERNA_ANCHO, absf(v.angle()))
+			hacia_lado = lerpf(1.0, hacia_lado, smoothstep(0.03, 0.15, d))
+			var k := hacia_punta * hacia_lado
+			img.set_pixel(x, y, Color(k, k, k, 1.0))
+	textura_cono = ImageTexture.create_from_image(img)
+	return textura_cono
+
+
+# El ángulo de cada una de las 8 direcciones de Johnny ("e" es 0 y van girando de 45 en 45)
+func angulo_de(dir: String) -> float:
+	return maxi(["e", "se", "s", "so", "o", "no", "n", "ne"].find(dir), 0) * PI / 4.0
 
 
 func _process(delta: float) -> void:
@@ -68,13 +128,20 @@ func _process(delta: float) -> void:
 	if nivel != quiero:
 		nivel = move_toward(nivel, quiero, delta * CAMBIO)
 		pintar()
+	if linterna and is_instance_valid(johnny):
+		var hacia := angulo_de(johnny.direccion)
+		linterna.rotation = lerp_angle(linterna.rotation, hacia, minf(delta * LINTERNA_GIRO, 1.0))
 
 
 func pintar() -> void:
 	color = Color.WHITE.lerp(SOMBRA, nivel)
 	if luz_johnny:
-		luz_johnny.energy = 0.4 * nivel
+		luz_johnny.energy = 0.45 * nivel
 		luz_johnny.enabled = nivel > 0.01
+	if linterna:
+		linterna_suelo.energy = 1.1 * nivel
+		linterna_cosas.energy = 0.9 * nivel
+		linterna.visible = nivel > 0.01
 
 
 # Un destello corto (fogonazo de un disparo, explosión): sale de golpe y se apaga deprisa. Sin sombras, que
