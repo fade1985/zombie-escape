@@ -9,3 +9,6 @@ captura*.png.import
 __pycache__/
 # Los efectos de sonido grabados para escucharlos (tools/probar_sonido.gd)
 tools/efectos/
+# La foto de tools/ver_dibujos.tscn
+tools/dibujos.png
+tools/dibujos.png.import

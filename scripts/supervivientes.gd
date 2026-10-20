@@ -19,15 +19,22 @@ extends Node
 
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 
-# Los tres que se pueden rescatar (SURVIVORS de src/config.js). "hoja": el dibujo provisional de Johnny que lleva
+# Los tres que se pueden rescatar (SURVIVORS de src/config.js). "look": los colores de su dibujo (persona.gd) y
+# "arma": la que lleva en la mano
 const DATOS := {
-	"policia": {"id": "policia", "nombre": "Policía", "color": Color("#6fa8ff"), "hoja": "pistola",
+	"policia": {"id": "policia", "nombre": "Policía", "color": Color("#6fa8ff"), "arma": "pistola",
+		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
+			"shoes": Color("#1d1b2c"), "hat": {"kind": "cap", "color": Color("#22336b")}},
 		"desc": "Dispara con su pistola cada 1,2 s",
 		"habilidad": {"tipo": "disparar", "cada": 1.2, "dano": 5, "rafaga": 1}},
-	"medico": {"id": "medico", "nombre": "Médica", "color": Color("#80ed99"), "hoja": "guardia",
+	"medico": {"id": "medico", "nombre": "Médica", "color": Color("#80ed99"), "arma": "",
+		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
+			"shoes": Color("#3b3550"), "cross": true},
 		"desc": "Te cura 3 cada 8 s y 10 al limpiar cada piso",
 		"habilidad": {"tipo": "curar", "cada": 8.0, "cura": 3, "al_limpiar": 10}},
-	"militar": {"id": "militar", "nombre": "Militar", "color": Color("#c9e265"), "hoja": "mp5",
+	"militar": {"id": "militar", "nombre": "Militar", "color": Color("#c9e265"), "arma": "rifle",
+		"look": {"skin": Color("#c68642"), "hair": Color("#3b2a1a"), "shirt": Color("#6b8e23"), "pants": Color("#4b5320"),
+			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
 		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
 }

@@ -1,8 +1,9 @@
 # El zombi de tentáculos: muy lento, pero ataca desde lejos. Cuando ve a Johnny a tiro, pinta una franja de
 # aviso en el suelo hacia donde está AHORA y, al rato, lanza un latigazo por ella: si Johnny se ha movido,
 # falla. Números de src/zombies.js (TENTACLE).
-# Aún no tiene pixel art de verdad: usa una prueba quieta (zombi-tentaculos-gpt) y el latigazo se pinta con
-# código, como en el juego.
+# Su dibujo (zombi-tentaculos-gpt) es una imagen quieta por dirección: para que no se vea rígido, se le mueve
+# con código (se bambolea al andar, respira) y le salen por la espalda tentáculos que se menean sin parar,
+# como los de drawBackTentacles en el JS. El latigazo también se pinta con código, como en el juego.
 extends Zombi
 
 const LARGO := 220.0        # hasta dónde llega el latigazo
@@ -15,10 +16,14 @@ const PARARSE := 140.0      # a esta distancia ya no se acerca más: ataca desde
 
 const MORADO := Color("#a06cc0")
 const CONTORNO := Color("#1d1b2c")
+const CARNE := Color("#7a2f3f")      # el granate de los tentáculos de su dibujo
+const CARNE_LUZ := Color("#a4495a")
+const PIES := 28.0                   # dónde van los pies en la escena (el dibujo gira y bota desde ahí)
 
 var espera := 0.0
 var angulo := 0.0           # hacia dónde va el latigazo (se fija al empezar el aviso)
 var t_ataque := 0.0
+var andar_t := 0.0          # la fase del bamboleo al andar
 
 
 func _ready() -> void:
@@ -29,7 +34,20 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	espera -= delta
 	super(delta)
+	if estado != "muerto":
+		mover_dibujo(delta)
 	queue_redraw()
+
+
+# Que no parezca de cartón: se balancea de un pie a otro y bota al andar, y respira (se estira y encoge un
+# poco). Todo gira desde los pies
+func mover_dibujo(delta: float) -> void:
+	var rapidez := minf(1.0, velocity.length() / 25.0)
+	andar_t += delta * (1.5 + 3.0 * rapidez)
+	var respira := sin(tiempo * 2.2)
+	sprite.rotation = sin(andar_t) * 0.07 * rapidez + sin(tiempo * 1.3) * 0.015
+	sprite.position.y = PIES - absf(sin(andar_t)) * 3.0 * rapidez
+	sprite.scale = Vector2(1.0 + respira * 0.012, 1.0 - respira * 0.02)
 
 
 func andar(delta: float, johnny: Node2D) -> void:
@@ -85,6 +103,8 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 
 
 func _draw() -> void:
+	if estado != "muerto":
+		tentaculos_espalda()
 	if estado == "aviso":
 		# La franja de aviso, cada vez más roja
 		var k := t_ataque / AVISO
@@ -103,3 +123,24 @@ func _draw() -> void:
 		draw_polyline(puntos, MORADO, 12.0)
 		for i in range(2, 10, 2):
 			draw_circle(puntos[i], 2.5, Color("#f2b5d4"))
+
+
+# Tentáculos que le salen de los hombros por detrás (se pintan antes que su dibujo, así quedan detrás) y se
+# menean cada uno a su ritmo. Mientras avisa del latigazo se encrespan
+func tentaculos_espalda() -> void:
+	var tenso := 1.8 if estado == "aviso" else 1.0
+	var hombros := Vector2(sprite.position.x, sprite.position.y - 72.0)
+	for i in 4:
+		var lado := -1.0 if i % 2 == 0 else 1.0
+		var abre := 0.25 + 0.35 * float(i / 2)
+		var base := -PI / 2.0 + lado * abre + sin(tiempo * 1.7 + i) * 0.15
+		var desde := hombros + Vector2(lado * (6.0 + 4.0 * float(i / 2)), 6.0)
+		var largo := (36.0 - 6.0 * float(i / 2)) * (1.0 + 0.12 * sin(tiempo * 2.0 + i * 1.3))
+		var puntos := PackedVector2Array()
+		for j in 7:
+			var t := j / 6.0
+			var meneo := (sin(tiempo * 5.0 * tenso + j + i * 2.0) * 5.0 + lado * 4.0) * t * tenso   # y se curvan hacia fuera
+			puntos.append(desde + Vector2.from_angle(base) * largo * t + Vector2.from_angle(base + PI / 2.0) * meneo)
+		draw_polyline(puntos, CONTORNO, 7.0, true)
+		draw_polyline(puntos, CARNE, 4.0, true)
+		draw_polyline(puntos.slice(0, 4), CARNE_LUZ, 2.0, true)

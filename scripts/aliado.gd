@@ -5,7 +5,7 @@
 #     En la horda (supervivientes.gd) se queda delante de la puerta forzando la cerradura ("forzando"): tiene
 #     vida, los zombis van a por él y, si cae, se queda tumbado hasta que Johnny lo levanta.
 #   - "vecino": rescatado en otra partida, espera en la sala de mantenimiento a que Johnny se le arrime.
-# El dibujo es provisional: el de Johnny teñido de su color (el JS los pinta con formas, sin hoja de PixelLab).
+# Se dibuja con formas, como en el JS (persona.gd): sin hoja de PixelLab.
 class_name Aliado
 extends CharacterBody2D
 
@@ -47,7 +47,8 @@ var dicho_t := 99.0
 var vivo: bool:
 	get: return not caido
 
-var sprite: AnimatedSprite2D
+var cuerpo: Persona       # su dibujo
+var mirada := Vector2.DOWN # hacia dónde mira (y apunta)
 var agente: NavigationAgent2D   # le busca el camino rodeando paredes y muebles (como a los zombis)
 var encima: Node2D         # la vida, el bocadillo y su nombre, por encima de todo
 
@@ -68,15 +69,11 @@ func preparar(datos: Dictionary, en_modo: String) -> void:
 	agente.target_desired_distance = 12.0
 	agente.path_max_distance = 60.0
 	add_child(agente)
-	sprite = AnimatedSprite2D.new()
-	sprite.sprite_frames = load("res://assets/sprites/conserje-48-%s.tres" % def.hoja)
-	sprite.position = Vector2(0, 16)
-	sprite.scale = Vector2(2, 2)
-	sprite.centered = false
-	sprite.offset = Vector2(-48, -72)
-	sprite.modulate = Color.WHITE.lerp(def.color, 0.55)
-	add_child(sprite)
-	sprite.play("reposo_s")
+	cuerpo = Persona.new()
+	cuerpo.look = def.look
+	cuerpo.arma = def.get("arma", "")
+	cuerpo.paso = randf() * 6.0
+	add_child(cuerpo)
 	encima = Node2D.new()
 	encima.z_index = 40
 	encima.draw.connect(dibujar_encima)
@@ -90,13 +87,15 @@ func _physics_process(delta: float) -> void:
 	golpe_t = maxf(0.0, golpe_t - delta)
 	cura_t = maxf(0.0, cura_t - delta)
 	dicho_t += delta
-	sprite.rotation = 0.0
-	sprite.position = Vector2(0, 16)
+	cuerpo.rotation = 0.0
+	cuerpo.position = Vector2.ZERO
+	cuerpo.retroceso = maxf(0.0, cuerpo.retroceso - delta * 10.0)
+	cuerpo.fogonazo = cuerpo.retroceso > 0.6
 	match modo:
 		"encerrado":
 			# tiembla de miedo mientras quedan zombis; luego mira a Johnny
 			if asustado:
-				sprite.position.x = sin(tiempo * 40.0) * 1.2
+				cuerpo.position.x = sin(tiempo * 40.0) * 1.2
 				animar("reposo", Vector2.DOWN)
 			else:
 				animar("reposo", johnny.global_position - global_position)
@@ -109,7 +108,12 @@ func _physics_process(delta: float) -> void:
 				seguir()
 				if johnny.vivo:
 					habilidad(delta)
-	sprite.modulate = Color.WHITE if golpe_t > 0.0 else Color.WHITE.lerp(def.color, 0.55)
+	cuerpo.blanco = golpe_t > 0.0
+	# andar: el paso avanza con lo rápido que va
+	var rapidez := velocity.length() if modo == "equipo" and not caido else 0.0
+	cuerpo.paso += delta * (4.0 + rapidez / 22.0 if rapidez > 20.0 else 0.0)
+	cuerpo.andando = minf(1.0, rapidez / 150.0)
+	cuerpo.mueve = velocity.normalized() if rapidez > 1.0 else Vector2.ZERO
 	encima.queue_redraw()
 
 
@@ -122,7 +126,7 @@ func seguir() -> void:
 	if velocity.length() > 20.0:
 		animar("andar", velocity)
 	else:
-		animar("reposo", Vector2.from_angle(TAU / 8.0 * RUMBOS.find(direccion)))
+		animar("reposo", mirada)
 
 
 # Va hacia "meta" por el camino (rodeando paredes y muebles), frenando al llegar
@@ -148,9 +152,9 @@ func en_su_sitio() -> bool:
 func forzar() -> void:
 	if caido:
 		velocity = Vector2.ZERO
-		sprite.rotation = -PI / 2.0
-		sprite.position = Vector2(-20, 6)
-		sprite.play("reposo_s")
+		cuerpo.rotation = -PI / 2.0   # tumbado
+		cuerpo.position = Vector2(0, 6)
+		cuerpo.mira = Vector2.DOWN
 		return
 	ir_a(sitio_forzar, 220.0)
 	animar("andar" if velocity.length() > 20.0 else "reposo", mira_forzar)
@@ -167,8 +171,7 @@ func habilidad(delta: float) -> void:
 	var blanco := zombi_cercano()
 	if blanco:
 		var hacia := blanco.global_position - global_position
-		direccion = rumbo(hacia)
-		sprite.play("reposo_" + direccion)
+		animar("reposo", hacia)
 		if hab_t <= 0.0 and rafaga == 0:
 			rafaga = h.rafaga
 			rafaga_t = 0.0
@@ -208,9 +211,13 @@ func disparar(blanco: Node2D) -> void:
 	bala.vida = 520.0 / 620.0
 	get_parent().add_child(bala)
 	Sonido.tocar("disparo_aliado")
-	var salida := global_position + Vector2(0, 16) + hacia * 18.0
-	bala.global_position = salida
-	Luz.destello(self, salida - Vector2(0, 50), 100.0, 0.07)
+	animar("reposo", hacia)
+	cuerpo.retroceso = 1.0
+	# sale de la boca del arma (en su mano); la bala de verdad va a ras de suelo y se dibuja a esa altura
+	var boca: Vector2 = global_position + Vector2(cos(hacia.angle()) * 13, 3 + sin(hacia.angle()) * 9) 		+ hacia * (34.0 if def.get("arma", "") == "rifle" else 24.0) * cuerpo.s
+	bala.altura = 13.0
+	bala.global_position = boca + Vector2(0, 13)
+	Luz.destello(self, boca, 100.0, 0.07)
 
 
 # La médica: cura a Johnny (si le hace falta) con un anillo verde
@@ -274,10 +281,13 @@ func rumbo(v: Vector2) -> String:
 	return RUMBOS[wrapi(roundi(v.angle() / (TAU / 8.0)), 0, 8)]
 
 
-func animar(que: String, hacia: Vector2) -> void:
+# Hacia dónde mira (y apunta el arma). "que" ("andar" o "reposo") ya lo saca el dibujo de lo rápido que va
+func animar(_que: String, hacia: Vector2) -> void:
 	if hacia.length() > 0.1:
+		mirada = hacia.normalized()
 		direccion = rumbo(hacia)
-	sprite.play(que + "_" + direccion)
+	cuerpo.mira = mirada
+	cuerpo.apunte = mirada.angle()
 
 
 # Por encima de todo: el rayo de la curación, su vida en la horda, el círculo para levantarlo, el bocadillo y
@@ -289,7 +299,7 @@ func dibujar_encima() -> void:
 		encima.draw_line(Vector2(0, -10), johnny.global_position - global_position + Vector2(0, -10),
 			Color(Tema.VERDE, 0.5 * a), 8.0)
 	if forzando:
-		var barra := Rect2(-22, -104, 44, 5)
+		var barra := Rect2(-22, -50, 44, 5)
 		encima.draw_rect(barra.grow(2), LINEA)
 		encima.draw_rect(barra, Color("#3a1d24"))
 		var color := Color.WHITE if golpe_t > 0.0 else Tema.VERDE if vida > VIDA * 0.35 else Tema.ROJO
@@ -313,7 +323,7 @@ func dibujar_encima() -> void:
 		frase = "¿Te acompaño?"
 		color_frase = Color("#2f9e44")
 	if frase != "":
-		var y := -132.0 - absf(sin(tiempo * 3.0)) * 4.0 * float(modo != "equipo")
+		var y := -64.0 - absf(sin(tiempo * 3.0)) * 4.0 * float(modo != "equipo")
 		var ancho := letra.get_string_size(frase, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 22.0
 		var caja := Rect2(-ancho / 2.0, y - 14, ancho, 28)
 		encima.draw_rect(caja.grow(3), Color(LINEA, alfa))
@@ -323,7 +333,7 @@ func dibujar_encima() -> void:
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))
 	if modo != "equipo":
-		texto(letra, def.nombre, Vector2(0, 50), 16, Color.WHITE)
+		texto(letra, def.nombre, Vector2(0, 42), 16, Color.WHITE)
 
 
 func texto(letra: Font, cual: String, donde: Vector2, tamano: int, color: Color) -> void:
