@@ -16,6 +16,10 @@ signal llave_cogida
 const CASILLA := 32
 const MURO := 64
 const VELO := Color(0.68, 0.68, 0.68)   # la tapa de los muros, oscurecida para que quede por detrás del suelo
+const CONTORNO := Color("#1d1b2c")      # la raya oscura "de dibujo animado" donde el suelo toca un muro (como en el JS)
+const FILO := Color(1, 1, 1, 0.14)      # el filo de luz de la tapa de los muros, junto al contorno
+# la pletina de latón gastado del paso entre dos habitaciones, en rayas de 1 píxel: sombra, brillo, latón y sombra
+const PLETINA := [Color("#2a221c"), Color("#b8a37a"), Color("#8a7552"), Color("#4a3c2c")]
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
@@ -198,6 +202,34 @@ func dibujar_tapas(lienzo: Node2D) -> void:
 			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
 			lienzo.draw_texture_rect_region(tapa, trozo, trozo, VELO)
 			c = fin
+	# el filo de luz por fuera del mapa, arriba y a la izquierda (como en el JS)
+	lienzo.draw_rect(Rect2(2, 2, cols * 16 - 4, 2), FILO)
+	lienzo.draw_rect(Rect2(2, 2, 2, filas * 16 - 4), FILO)
+	# y donde el muro toca el suelo: el filo de luz en la tapa y el contorno oscuro justo en la raya (mitad en el
+	# muro, mitad en el suelo), así cada muro se ve como un bloque con borde y no se funde con el suelo
+	for f in filas:
+		for c in cols:
+			if not es_muro(c, f):
+				continue
+			var x := c * 16
+			var y := f * 16
+			if not es_muro(c, f - 1):   # suelo arriba
+				lienzo.draw_rect(Rect2(x, y + 1, 16, 1), FILO)
+				lienzo.draw_rect(Rect2(x, y - 1, 16, 2), CONTORNO)
+			if not es_muro(c, f + 1):   # suelo abajo
+				lienzo.draw_rect(Rect2(x, y + 14, 16, 1), FILO)
+				lienzo.draw_rect(Rect2(x, y + 15, 16, 2), CONTORNO)
+			if not es_muro(c - 1, f):   # suelo a la izquierda
+				lienzo.draw_rect(Rect2(x + 1, y, 1, 16), FILO)
+				lienzo.draw_rect(Rect2(x - 1, y, 2, 16), CONTORNO)
+			if not es_muro(c + 1, f):   # suelo a la derecha
+				lienzo.draw_rect(Rect2(x + 14, y, 1, 16), FILO)
+				lienzo.draw_rect(Rect2(x + 15, y, 2, 16), CONTORNO)
+
+
+# La habitación de una casilla (-1 si es muro o está fuera del mapa, -2 si es un hueco de puerta)
+func dueno_en(c: int, f: int) -> int:
+	return -1 if c < 0 or f < 0 or c >= cols or f >= filas else dueno[f * cols + c]
 
 
 # Los suelos, en píxeles del dibujo (por eso el transform x2). La textura se repite contando desde la
@@ -216,6 +248,24 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 			if not muro:
 				lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, trozo)
 			c = fin
+	# Los huecos de puerta entre dos habitaciones: cada suelo llega hasta la mitad del paso (arriba se ha
+	# pintado entero con el de una de ellas) y, donde se juntan, la pletina de latón
+	for f in filas:
+		for c in cols:
+			if dueno_en(c, f) != -2:
+				continue
+			var abajo := dueno_en(c, f + 1)
+			var derecha := dueno_en(c + 1, f)
+			if dueno_en(c, f - 1) >= 0 and abajo >= 0:   # habitaciones arriba y abajo: pletina tumbada
+				var mitad := Rect2(c * 16, f * 16 + 8, 16, 8)
+				lienzo.draw_texture_rect_region(estilos[abajo].suelo, mitad, mitad)
+				for i in PLETINA.size():
+					lienzo.draw_rect(Rect2(c * 16, f * 16 + 6 + i, 16, 1), PLETINA[i])
+			elif dueno_en(c - 1, f) >= 0 and derecha >= 0:   # a izquierda y derecha: pletina de pie
+				var mitad := Rect2(c * 16 + 8, f * 16, 8, 16)
+				lienzo.draw_texture_rect_region(estilos[derecha].suelo, mitad, mitad)
+				for i in PLETINA.size():
+					lienzo.draw_rect(Rect2(c * 16 + 6 + i, f * 16, 1, 16), PLETINA[i])
 	if alfombra:
 		# la alfombra larga del pasillo, por el centro y de punta a punta (a media escala)
 		var largo := (cols - 4) * 16 - 56
