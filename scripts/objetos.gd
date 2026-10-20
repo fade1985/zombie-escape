@@ -2,7 +2,7 @@
 # los lleva en la mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al
 # baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. En el banco de trabajo se
 # juntan de dos en dos para crear armas (recetas.gd). Todos son de rareza gris (común).
-# Su dibujo es assets/ui/iconos/obj-<id>.png (lo saca tools/dibujos_7b.py).
+# Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py).
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila

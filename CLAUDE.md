@@ -108,7 +108,7 @@ para que el pixel art se vea nítido.
 | `assets/sources/` | Originales (muebles, texturas…). Lleva `.gdignore`: Godot no los importa |
 | `assets/pixellab.json` | Todo lo generado en PixelLab |
 | `docs/` | Pixel art, PixelLab, zombis, fondos y mapa. **Hablan del juego JS** (`src/…`): valen para las ideas y los números |
-| `tools/` | `hacer_frames.py` (hoja → animaciones de Godot), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee `scripts/mapa/catalogo.gd`) y `despixelar.py` (de PixelLab y Gemini) y `dibujos_7b.py` (objetos, baúl, banco y armarito, dibujados a mano en el JS) |
+| `tools/` | `hacer_frames.py` (hoja → animaciones de Godot), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee `scripts/mapa/catalogo.gd`) y `despixelar.py` (de PixelLab y Gemini) y `dibujos_7b.py` (baúl, banco y armarito, dibujados a mano en el JS), `objetos16.py` (los 17 objetos a 16×16) y `ver_dibujos.tscn` (foto de los dibujos hechos con código) |
 
 Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zombi-normal` (saca el `.tres` al lado).
 

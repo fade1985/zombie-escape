@@ -1,5 +1,5 @@
 # Saca los dibujos de la fase 7b (copiados de los dibujos a mano del juego JS):
-#   - los 17 objetos de src/objetos.js (10×10 píxeles) → assets/ui/iconos/obj-<id>.png
+#   - los 17 objetos de src/objetos.js (10×10 píxeles): ya no se usan, los saca a 16×16 tools/objetos16.py
 #   - el baúl y el banco de trabajo de src/props.js → assets/sprites/baul.png y banco-trabajo.png
 #   - el armarito del baño con su botiquín (cerrado y abierto) → assets/sprites/armarito.png (2 fotogramas)
 # Se lanza con:  py tools/dibujos_7b.py   (y luego importar en Godot)
@@ -149,8 +149,7 @@ def armarito():
 
 
 if __name__ == "__main__":
-    objetos()
     baul()
     banco()
     armarito()
-    print("Hecho: 17 objetos, baúl, banco y armarito")
+    print("Hecho: baúl, banco y armarito")
