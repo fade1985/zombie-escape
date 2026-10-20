@@ -23,6 +23,21 @@ const ICONOS := [   # [programa, icono, nombre]
 const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE"}
 const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas"}
 const ICONO_ARMA := {"mp5": "pistola"}
+# Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
+const BEIS := Color("#c3bba5")         # el fondo de la ventana
+const TARJETA := Color("#d8d1bb")
+const TARJETA_LUZ := Color("#ebe4cd")  # la marcada
+const LUZ := Color("#f4efe0")          # el relieve: borde con luz...
+const SOMBRA := Color("#3a352b")       # ...y con sombra
+const TINTA := Color("#1b1712")
+const TINTA_SUAVE := Color("#4a4336")
+const GRIS := Color("#8e8570")
+const AZUL := Color("#1d2a6b")
+const AZUL_CLARO := Color("#5a6ea8")
+const VERDE := Color("#a9c79a")        # la que llevas o el talento lleno
+const VERDE_OSCURO := Color("#2f6b2a")
+const PIP := Color("#d8d0b8")          # los cuadraditos de nivel de los talentos
+const PIP_LLENO := Color("#e8b923")
 
 var partida: Node
 var fondo: ColorRect
@@ -208,10 +223,13 @@ func primer_boton(nodo: Node) -> Button:
 	return null
 
 
-# La ventana: barra de título con su X, el contenido (con barra de desplazamiento si no cabe) y la línea de info
+# La ventana, como las de Windows 95 del JS (.pc-win en style.css): marco beis con relieve, barra de título azul
+# con degradado y su X, el contenido (con barra de desplazamiento si no cabe) y, abajo, una barra de estado que
+# explica lo que está marcado
 func montar_ventana(programa: String) -> VBoxContainer:
 	ventana = PanelContainer.new()
-	ventana.add_theme_stylebox_override("panel", caja(Tema.METAL, Tema.LINEA, 2, 0, 0))
+	ventana.add_theme_stylebox_override("panel", caja(BEIS, BEIS, 0, 0, 3))
+	ventana.draw.connect(func(): relieve(ventana, false, 3.0))
 	ventana.position = Vector2(152, 10)
 	ventana.size = Vector2(718, 508)
 	pantalla.add_child(ventana)
@@ -221,7 +239,18 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	ventana.add_child(columna)
 
 	var barra := PanelContainer.new()
-	barra.add_theme_stylebox_override("panel", caja(TITULO, TITULO, 0, 0, 4))
+	var degradado := Gradient.new()
+	degradado.set_color(0, AZUL)
+	degradado.set_color(1, AZUL_CLARO)
+	var textura := GradientTexture2D.new()
+	textura.gradient = degradado
+	textura.width = 64
+	textura.height = 1
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = textura
+	estilo.set_content_margin_all(3)
+	estilo.content_margin_left = 8
+	barra.add_theme_stylebox_override("panel", estilo)
 	columna.add_child(barra)
 	var fila := HBoxContainer.new()
 	barra.add_child(fila)
@@ -231,17 +260,20 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	fila.add_child(titulo)
 	var x := Button.new()
 	x.text = "X"
-	x.custom_minimum_size = Vector2(28, 24)
+	x.custom_minimum_size = Vector2(28, 22)
 	for estado in ["normal", "hover", "pressed"]:
-		var c := Color("#b8454f") if estado != "hover" else Color("#e0606a")
-		x.add_theme_stylebox_override(estado, caja(c, Tema.LINEA, 2, 2, 0))
+		x.add_theme_stylebox_override(estado, caja(TARJETA_LUZ if estado == "hover" else BEIS, BEIS, 0, 0, 0))
+	for c in ["font_color", "font_hover_color", "font_pressed_color"]:
+		x.add_theme_color_override(c, TINTA)
+	x.add_theme_constant_override("outline_size", 0)
+	x.draw.connect(func(): relieve(x, x.button_pressed, 2.0))
 	x.focus_mode = Control.FOCUS_NONE   # con el mando se cierra con B
 	x.pressed.connect(abrir.bind(""))
 	fila.add_child(x)
 
 	var margen := MarginContainer.new()
 	for lado in ["left", "right", "top", "bottom"]:
-		margen.add_theme_constant_override("margin_" + lado, 10)
+		margen.add_theme_constant_override("margin_" + lado, 8)
 	margen.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	columna.add_child(margen)
 	var desliza := ScrollContainer.new()
@@ -250,18 +282,25 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	margen.add_child(desliza)
 	var contenido := VBoxContainer.new()
 	contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	contenido.add_theme_constant_override("separation", 6)
+	contenido.add_theme_constant_override("separation", 8)
 	desliza.add_child(contenido)
 
-	var abajo := PanelContainer.new()
-	abajo.add_theme_stylebox_override("panel", caja(Color("#1c1a24"), Tema.LINEA, 0, 0, 5))
-	columna.add_child(abajo)
+	# la barra de estado, hundida
+	var hueco := MarginContainer.new()
+	for lado in ["left", "right", "top", "bottom"]:
+		hueco.add_theme_constant_override("margin_" + lado, 3)
+	columna.add_child(hueco)
+	var estado_barra := PanelContainer.new()
+	estado_barra.add_theme_stylebox_override("panel", caja(BEIS, BEIS, 0, 0, 5))
+	estado_barra.draw.connect(func(): relieve(estado_barra, true, 2.0))
+	hueco.add_child(estado_barra)
 	info = Label.new()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.custom_minimum_size = Vector2(0, 34)
 	info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	info.add_theme_color_override("font_color", Color("#9fe8ff"))
-	abajo.add_child(info)
+	info.add_theme_color_override("font_color", TINTA)
+	info.add_theme_constant_override("outline_size", 0)
+	estado_barra.add_child(info)
 	return contenido
 
 
@@ -270,75 +309,142 @@ func montar_ventana(programa: String) -> VBoxContainer:
 func programa_puntos(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
 	var alcanzables: int = s.dolares / Talentos.PRECIO_PUNTO
-	var arriba := HBoxContainer.new()
-	arriba.add_theme_constant_override("separation", 14)
-	c.add_child(arriba)
-	saldo(arriba, s)
-	var hueco := Control.new()
-	hueco.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	arriba.add_child(hueco)
-	var uno := boton(arriba, "b_comprar_1", "billete", "Comprar 1 punto", alcanzables >= 1)
+	saldo(c, s)
+	nota_partida(c)
+	var cambio := grupo(c, "Intercambio · $%d = 1 punto" % Talentos.PRECIO_PUNTO)
+	var botones := rejilla(cambio)
+	var uno := tarjeta(botones, "b_comprar_1", "billete", "Comprar 1 punto", "Cuesta $%d" % Talentos.PRECIO_PUNTO,
+		"Cambiar", "" if alcanzables >= 1 else "bloqueada")
 	enlazar(uno, "Cambia $%d por 1 punto de talento" % Talentos.PRECIO_PUNTO, comprar.bind(1))
-	var todo := boton(arriba, "b_comprar_todo", "billete", "Comprar %d" % alcanzables if alcanzables > 1 else "Comprar todo",
-		alcanzables >= 1)
+	var todo := tarjeta(botones, "b_comprar_todo", "billete",
+		"Comprar %d puntos (todo)" % alcanzables if alcanzables > 1 else "Comprar todo lo posible",
+		"Cuesta $%d" % (alcanzables * Talentos.PRECIO_PUNTO) if alcanzables >= 1 else "Necesitas $%d" % Talentos.PRECIO_PUNTO,
+		"Cambiar", "" if alcanzables >= 1 else "bloqueada")
 	enlazar(todo, "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)" % Talentos.PRECIO_PUNTO,
 		func(): comprar(maxi(1, Guardado.cargar().dolares / Talentos.PRECIO_PUNTO)))
-	nota_partida(c)
+	var arbol_grupo := grupo(c, "Árbol de talentos · cada punto sube un nivel")
+	var arbol := HBoxContainer.new()
+	arbol.add_theme_constant_override("separation", 10)
+	arbol_grupo.add_child(arbol)
 	for rama in Talentos.RAMAS:
-		c.add_child(montar_rama(s, rama))
-	info.text = "Cada punto sube un nivel. Para pasar a la columna siguiente, llena antes el talento que pide."
+		arbol.add_child(montar_rama(s, rama))
+	info.text = "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
 
 
-func saldo(fila: HBoxContainer, s: Dictionary) -> void:
-	var dinero := Tema.icono_y_texto("billete", "$%d ahorrados" % s.dolares, 24)
-	dinero.get_child(1).add_theme_color_override("font_color", Tema.VERDE)
-	fila.add_child(dinero)
+# Lo ahorrado (y, en la de puntos, los puntos): cajas azules hundidas, como .pc-saldo del JS
+func saldo(c: VBoxContainer, s: Dictionary) -> void:
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 8)
+	c.add_child(fila)
+	cajita(fila, "Dólares ahorrados", "billete", "$%d" % s.dolares)
 	if abierta == "puntos":
-		var puntos := Tema.icono_y_texto("trofeo", "%d puntos" % s.puntos, 24)
-		puntos.get_child(1).add_theme_color_override("font_color", Tema.AMARILLO)
-		fila.add_child(puntos)
+		cajita(fila, "Puntos de talento", "trofeo", "%d" % s.puntos)
+
+
+func cajita(fila: HBoxContainer, rotulo: String, icono: String, valor: String) -> void:
+	var marco := PanelContainer.new()
+	marco.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	marco.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 6))
+	marco.draw.connect(func(): relieve(marco, true, 2.0))
+	fila.add_child(marco)
+	var columna := VBoxContainer.new()
+	columna.add_theme_constant_override("separation", 0)
+	marco.add_child(columna)
+	var arriba := Label.new()
+	arriba.text = rotulo
+	arriba.add_theme_color_override("font_color", Color(1, 1, 1, 0.8))
+	columna.add_child(arriba)
+	var abajo := Tema.icono_y_texto(icono, valor, 24)
+	abajo.get_child(1).add_theme_color_override("font_color", Color.WHITE)
+	columna.add_child(abajo)
 
 
 func nota_partida(c: VBoxContainer) -> void:
 	if partida.dolares > 0:
-		var nota := Label.new()
-		nota.theme_type_variation = "Sub"
-		nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		nota.text = "Los $%d de esta partida no se pueden gastar hasta que completes el edificio." % partida.dolares
-		c.add_child(nota)
+		nota(c, "Los $%d de esta partida no se pueden gastar hasta que completes el edificio." % partida.dolares)
 
 
-# Una rama del árbol: sus talentos en tres columnas (nivel 1, 2 y 3), de izquierda a derecha
-func montar_rama(s: Dictionary, rama: Dictionary) -> PanelContainer:
-	var marco := PanelContainer.new()
-	marco.add_theme_stylebox_override("panel", caja(Color("#221f29"), Tema.OXIDO, 2, 4, 6))
+func nota(c: VBoxContainer, texto: String) -> void:
+	var l := Label.new()
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.text = texto
+	l.add_theme_color_override("font_color", TINTA_SUAVE)
+	l.add_theme_constant_override("outline_size", 0)
+	c.add_child(l)
+
+
+# Un grupo con su título subrayado (.pc-grupo): devuelve dónde van sus cosas
+func grupo(c: VBoxContainer, titulo: String) -> VBoxContainer:
+	var caja_grupo := VBoxContainer.new()
+	caja_grupo.add_theme_constant_override("separation", 4)
+	c.add_child(caja_grupo)
+	var l := Label.new()
+	l.text = titulo
+	l.add_theme_color_override("font_color", TINTA)
+	l.add_theme_constant_override("outline_size", 0)
+	caja_grupo.add_child(l)
+	var raya := ColorRect.new()
+	raya.color = GRIS
+	raya.custom_minimum_size = Vector2(0, 2)
+	caja_grupo.add_child(raya)
+	return caja_grupo
+
+
+# Las tarjetas en dos columnas
+func rejilla(c: Container) -> GridContainer:
+	var g := GridContainer.new()
+	g.columns = 2
+	g.add_theme_constant_override("h_separation", 6)
+	g.add_theme_constant_override("v_separation", 6)
+	c.add_child(g)
+	return g
+
+
+# Una rama del árbol (.pc-rama): su título en azul y, debajo, sus niveles (1 arriba, 3 abajo), cada uno con su
+# número a la izquierda y sus talentos uno debajo de otro
+func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 	var columna := VBoxContainer.new()
-	marco.add_child(columna)
-	var titulo := Tema.icono_y_texto(rama.icono, rama.nombre, 24)
-	titulo.get_child(1).add_theme_color_override("font_color", Tema.AMARILLO)
+	columna.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columna.add_theme_constant_override("separation", 5)
+	var titulo := PanelContainer.new()
+	titulo.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 4))
 	columna.add_child(titulo)
-	var niveles := HBoxContainer.new()
-	niveles.add_theme_constant_override("separation", 10)
-	columna.add_child(niveles)
+	titulo.add_child(Tema.icono_y_texto(rama.icono, rama.nombre, 24))
 	for nivel in [1, 2, 3]:
+		var fila := HBoxContainer.new()
+		fila.add_theme_constant_override("separation", 6)
+		columna.add_child(fila)
+		var numero := Label.new()
+		numero.text = str(nivel)
+		numero.custom_minimum_size = Vector2(20, 22)
+		numero.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		numero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		numero.add_theme_color_override("font_color", TARJETA_LUZ)
+		numero.add_theme_constant_override("outline_size", 0)
+		numero.add_theme_stylebox_override("normal", caja(TINTA_SUAVE, TINTA_SUAVE, 0, 0, 0))
+		fila.add_child(numero)
 		var lista := VBoxContainer.new()
 		lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		niveles.add_child(lista)
+		lista.add_theme_constant_override("separation", 4)
+		fila.add_child(lista)
 		for t in Talentos.LISTA:
 			if t.rama == rama.id and t.nivel == nivel:
-				lista.add_child(nodo_talento(s, t))
-	return marco
+				nodo_talento(lista, s, t)
+	return columna
 
 
-func nodo_talento(s: Dictionary, t: Dictionary) -> Button:
+func nodo_talento(lista: VBoxContainer, s: Dictionary, t: Dictionary) -> void:
 	var n := Talentos.nivel_de(s, t.id)
 	var motivo := Talentos.motivo(s, t.id)
-	var b := boton(null, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, "%s  %d/%d" % [t.nombre, n, t.max],
-		motivo == "")
-	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	if motivo == "max":
-		for c in ["font_color", "font_hover_color", "font_focus_color"]:
-			b.add_theme_color_override(c, Tema.AMARILLO)
+	var estado: String = {"max": "lleno", "bloqueado": "bloqueada", "sin_puntos": "apagada"}.get(motivo, "")
+	var debajo: String = t.desc
+	if motivo == "bloqueado":
+		debajo = "Necesitas %s al máximo" % Talentos.talento(t.pide).nombre
+	elif motivo == "max":
+		debajo = "¡Al máximo!"
+	var etiqueta := "MÁX" if motivo == "max" else ("" if motivo == "bloqueado" else "+1")
+	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, t.nombre, debajo, etiqueta,
+		estado, [n, t.max])
 	var texto: String = t.desc
 	if t.id in Talentos.MAS_ADELANTE:
 		texto += " (llega con los objetos, en la fase 7)"
@@ -348,7 +454,6 @@ func nodo_talento(s: Dictionary, t: Dictionary) -> Button:
 		"sin_puntos": texto += ". Te hace falta 1 punto."
 		"": texto += ". Pulsa para subirlo (1 punto)."
 	enlazar(b, texto, subir.bind(t.id))
-	return b
 
 
 func comprar(n: int) -> void:
@@ -379,25 +484,13 @@ func subir(id: String) -> void:
 
 func programa_armas(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
-	var arriba := HBoxContainer.new()
-	c.add_child(arriba)
-	saldo(arriba, s)
-	var nota := Label.new()
-	nota.theme_type_variation = "Sub"
-	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	nota.text = "Lo que compres es para esta partida y queda desbloqueado. La de cuerpo a cuerpo que llevaras va al inventario; la de fuego, se pierde."
-	c.add_child(nota)
+	saldo(c, s)
+	nota(c, "Lo que compres es para esta partida y queda desbloqueado. La de cuerpo a cuerpo que llevaras va al inventario; la de fuego, se pierde.")
 	nota_partida(c)
 	var ids := Armas.PRECIOS.keys()
 	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
 	for tipo in ["cuerpo", "fuego"]:
-		var titulo := Label.new()
-		titulo.text = "Cuerpo a cuerpo" if tipo == "cuerpo" else "De fuego (con el cargador lleno)"
-		titulo.add_theme_color_override("font_color", Tema.AMARILLO)
-		c.add_child(titulo)
-		var fila := HBoxContainer.new()
-		fila.add_theme_constant_override("separation", 10)
-		c.add_child(fila)
+		var lista := rejilla(grupo(c, "Cuerpo a cuerpo" if tipo == "cuerpo" else "De fuego · con el cargador lleno y munición de reserva"))
 		for id in ids:
 			var w: Dictionary = Armas.DATOS[id]
 			if w.tipo != tipo:
@@ -405,12 +498,20 @@ func programa_armas(c: VBoxContainer) -> void:
 			var precio: int = Armas.PRECIOS[id]
 			var lleva: bool = partida.johnny.huecos[tipo] == id
 			var etiqueta := "LA LLEVAS" if lleva else ("GRATIS" if precio == 0 else "$%d" % precio)
-			var b := boton(fila, "b_" + id, ICONO_ARMA.get(id, id), "%s  %s" % [w.nombre, etiqueta], not lleva and s.dolares >= precio)
-			if lleva:
-				for col in ["font_color", "font_hover_color", "font_focus_color"]:
-					b.add_theme_color_override(col, Tema.AMARILLO)
+			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
+			var b := tarjeta(lista, "b_" + id, ICONO_ARMA.get(id, id), w.nombre, resumen_corto(w), etiqueta, estado)
 			enlazar(b, resumen(w), comprar_arma.bind(id))
 	info.text = "Elige un arma: se paga con los dólares ahorrados."
+
+
+# Debajo del nombre, como weaponSummary del JS: "Cuerpo a cuerpo · Daño 9 · 4 ataques/s"
+func resumen_corto(w: Dictionary) -> String:
+	var dano := "%d × %d" % [w.dano, w.perdigones] if w.get("perdigones", 1) > 1 else str(w.dano)
+	var texto := "%s · Daño %s · %s ataques/s" % ["Cuerpo a cuerpo" if w.tipo == "cuerpo" else "De fuego", dano,
+		str(w.ritmo).trim_suffix(".0")]
+	if w.tipo == "fuego":
+		texto += " · Cargador %d" % w.cargador
+	return texto
 
 
 func resumen(w: Dictionary) -> String:
@@ -453,27 +554,114 @@ func comprar_arma(id: String) -> void:
 
 # ── Piezas ──
 
-# Un botón de chapa con icono. "vivo": si se puede usar ahora (si no, se ve apagado, pero se puede marcar
-# para leer en la línea de info por qué no)
-func boton(caja_padre: Container, nombre: String, icono: String, texto: String, vivo := true) -> Button:
+# Una tarjeta (.pc-arma del JS): con relieve, su icono grande, el nombre (y, en los talentos, sus cuadraditos de
+# nivel), una línea de explicación debajo y la etiqueta azul de la derecha ("$15", "+1 punto", "MÁX"...).
+# "estado": "" (se puede usar), "bloqueada" (apagada), "apagada" (sin puntos: la etiqueta en gris), "puesta" o
+# "lleno" (en verde). Por encima lleva un botón transparente del mismo tamaño, que es el que se marca y se pulsa
+# (con el ratón, el teclado o el mando) y el que se devuelve
+func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, debajo: String, etiqueta: String,
+		estado := "", pips := []) -> Button:
+	var marco := PanelContainer.new()
+	marco.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	marco.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	padre.add_child(marco)
+	var dentro := MarginContainer.new()
+	dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for lado in ["left", "right"]:
+		dentro.add_theme_constant_override("margin_" + lado, 6)
+	for lado in ["top", "bottom"]:
+		dentro.add_theme_constant_override("margin_" + lado, 5)
+	marco.add_child(dentro)
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 6)
+	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dentro.add_child(fila)
+	var imagen := TextureRect.new()
+	imagen.texture = load("res://assets/ui/iconos/%s.png" % icono)
+	imagen.custom_minimum_size = Vector2(32, 32)
+	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	imagen.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if estado == "bloqueada":
+		imagen.self_modulate = Color(0.55, 0.55, 0.55)
+	fila.add_child(imagen)
+	var textos := VBoxContainer.new()
+	textos.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	textos.alignment = BoxContainer.ALIGNMENT_CENTER
+	textos.add_theme_constant_override("separation", 0)
+	fila.add_child(textos)
+	var arriba := HBoxContainer.new()
+	arriba.add_theme_constant_override("separation", 6)
+	textos.add_child(arriba)
+	arriba.add_child(texto_tarjeta(titulo, TINTA))
+	if not pips.is_empty():
+		var cuadros := HBoxContainer.new()
+		cuadros.add_theme_constant_override("separation", 2)
+		cuadros.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		for i in pips[1]:
+			var cuadro := Panel.new()
+			cuadro.custom_minimum_size = Vector2(9, 9)
+			cuadro.add_theme_stylebox_override("panel", caja(PIP_LLENO if i < pips[0] else PIP, TINTA, 2, 0, 0))
+			cuadros.add_child(cuadro)
+		arriba.add_child(cuadros)
+	var linea := texto_tarjeta(debajo, TINTA_SUAVE)
+	linea.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	linea.custom_minimum_size.x = 60   # que parta las líneas en vez de ensanchar la tarjeta
+	linea.add_theme_font_size_override("font_size", 16)
+	textos.add_child(linea)
+	if etiqueta != "":
+		var marca := Label.new()
+		marca.text = etiqueta
+		marca.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		marca.add_theme_color_override("font_color", Color.WHITE)
+		marca.add_theme_constant_override("outline_size", 0)
+		var fondo_marca := VERDE_OSCURO if estado in ["puesta", "lleno"] else (GRIS if estado == "apagada" else AZUL)
+		marca.add_theme_stylebox_override("normal", caja(fondo_marca, fondo_marca, 0, 0, 4))
+		fila.add_child(marca)
+	if estado == "bloqueada":
+		dentro.modulate = Color(1, 1, 1, 0.55)
+
 	var b := Button.new()
 	b.name = nombre
-	b.text = texto
-	b.icon = load("res://assets/ui/iconos/%s.png" % icono)
-	b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	b.add_theme_constant_override("icon_max_width", 24)
-	for estado in ["normal", "hover", "pressed"]:
-		var chapa: StyleBoxTexture = Tema.crear().get_stylebox(estado, "Button").duplicate()
-		chapa.content_margin_left = 10
-		chapa.content_margin_right = 12
-		chapa.content_margin_top = 4
-		chapa.content_margin_bottom = 6
-		b.add_theme_stylebox_override(estado, chapa)
-	if not vivo:
-		b.modulate = Color(0.62, 0.6, 0.62)
-	if caja_padre:
-		caja_padre.add_child(b)
+	b.flat = true
+	b.focus_mode = Control.FOCUS_ALL
+	for e in ["normal", "hover", "pressed", "focus", "disabled", "hover_pressed"]:
+		b.add_theme_stylebox_override(e, StyleBoxEmpty.new())
+	marco.add_child(b)
+	var fondo_tarjeta := VERDE if estado in ["puesta", "lleno"] else TARJETA
+	marco.draw.connect(func():
+		var encima := b.has_focus() or b.is_hovered()
+		marco.draw_rect(Rect2(Vector2.ZERO, marco.size), TARJETA_LUZ if encima and estado != "bloqueada" else fondo_tarjeta)
+		relieve(marco, estado == "puesta", 2.0)
+		if encima:
+			# el punteado de "marcado" de Windows, por dentro
+			var r := Rect2(Vector2(5, 5), marco.size - Vector2(10, 10))
+			for lado in [[r.position, Vector2(r.end.x, r.position.y)], [Vector2(r.end.x, r.position.y), r.end],
+					[r.end, Vector2(r.position.x, r.end.y)], [Vector2(r.position.x, r.end.y), r.position]]:
+				marco.draw_dashed_line(lado[0], lado[1], TINTA, 1.0, 2.0))
+	for senal in [b.focus_entered, b.focus_exited, b.mouse_entered, b.mouse_exited]:
+		senal.connect(marco.queue_redraw)
 	return b
+
+
+func texto_tarjeta(texto: String, color: Color) -> Label:
+	var l := Label.new()
+	l.text = texto
+	l.add_theme_color_override("font_color", color)
+	l.add_theme_constant_override("outline_size", 0)
+	return l
+
+
+# El relieve de Windows 95: luz arriba y a la izquierda, sombra abajo y a la derecha ("hundido": al revés)
+func relieve(c: Control, hundido: bool, grosor: float) -> void:
+	var luz := SOMBRA if hundido else LUZ
+	var sombra := LUZ if hundido else SOMBRA
+	var t := c.size
+	c.draw_rect(Rect2(0, 0, t.x, grosor), luz)
+	c.draw_rect(Rect2(0, 0, grosor, t.y), luz)
+	c.draw_rect(Rect2(0, t.y - grosor, t.x, grosor), sombra)
+	c.draw_rect(Rect2(t.x - grosor, 0, grosor, t.y), sombra)
 
 
 # Al marcarlo (con el ratón encima, el teclado o el mando) explica lo que hace en la línea de info
