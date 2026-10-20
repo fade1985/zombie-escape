@@ -124,6 +124,13 @@ func _ready() -> void:
 	add_child(mutaciones)
 	add_child(supervivientes)
 	supervivientes.preparar(self)
+	# Los controles del móvil (solo salen en pantallas táctiles)
+	var tactil := Tactil.new()
+	tactil.partida = self
+	tactil.johnny = johnny
+	add_child(tactil)
+	if Tactil.activo:
+		$Pantalla/Ayuda.hide()   # las teclas no pintan nada en el móvil
 
 	captura = "--captura" in OS.get_cmdline_user_args()
 	if captura:

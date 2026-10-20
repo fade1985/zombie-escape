@@ -7,6 +7,7 @@ const LOGO := preload("res://assets/ui/logo.png")
 
 
 func _ready() -> void:
+	Tactil.preparar(get_tree())   # en el móvil, la pantalla sin redondear
 	theme = Tema.crear()
 	Sonido.musica("menu")
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
@@ -36,7 +37,8 @@ func _ready() -> void:
 	columna.add_child(lema)
 
 	var jugar := boton(columna, "JUGAR", jugar_partida, "BotonGrande")
-	boton(columna, "Pantalla completa", pantalla_completa)
+	if Tactil.puede_pantalla_completa():   # en iPhone no hay
+		boton(columna, "Pantalla completa", Tactil.pantalla_completa)
 	if not OS.has_feature("web"):
 		boton(columna, "Salir", get_tree().quit)
 
@@ -78,7 +80,3 @@ func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "")
 func jugar_partida() -> void:
 	get_tree().change_scene_to_file("res://escenas/partida.tscn")
 
-
-func pantalla_completa() -> void:
-	var completa := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED if completa else DisplayServer.WINDOW_MODE_FULLSCREEN)

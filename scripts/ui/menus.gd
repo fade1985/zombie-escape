@@ -150,6 +150,9 @@ func pausa(partida: Node) -> void:
 	sonido.pressed.connect(func():
 		Sonido.silenciar(not Sonido.silenciado())
 		sonido.text = texto_sonido())
+	# En el móvil, también aquí la pantalla completa (si el navegador la deja)
+	if Tactil.activo and Tactil.puede_pantalla_completa():
+		boton(botones, "Pantalla completa", Tactil.pantalla_completa)
 	boton(botones, "Abandonar partida", func(): abandonar.emit(), "BotonRojo")
 	seguir.grab_focus.call_deferred()
 

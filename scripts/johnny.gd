@@ -328,7 +328,9 @@ func apuntar_libre() -> void:
 	var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
 	var apunte := Vector2.ZERO
 	var ataca := Input.is_action_pressed("atacar")
-	if stick.length() > 0.5:
+	# mientras se apunta un lanzable (con el gatillo o desde el botón del móvil), el stick es para él
+	var lanzando := Input.is_action_pressed("lanzar") or Input.is_action_just_released("lanzar")
+	if stick.length() > 0.5 and not lanzando:
 		apunte = stick
 		ataca = true
 	elif con_raton:
