@@ -429,6 +429,8 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	marcha += fuerza.normalized() * 8.0
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-20, 0), -ARRIBA), str(cantidad))
 	Sonido.tocar("golpe")
+	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre
+		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), ARRIBA * 0.5, fuerza, Color("#7a1f1a"), 5)
 	vida_cambiada.emit(vida, vida_max)
 	if vida <= 0:
 		morir()

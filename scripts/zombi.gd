@@ -63,6 +63,13 @@ var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
 var lio_angulo := 0.0
 
+# La sangre: salta al pegarle, deja charco si muere a golpes o a tiros y, el lento, va dejando su rastro
+var color_sangre := Color("#7a1f1a")   # la pone la partida según el tipo (partida.gd, MANCHAS y SANGRE)
+var a_golpes := false      # si el último daño fue un golpe o una bala (no fuego ni charcos)
+var rastro := 0.0          # lo que ha avanzado desde la última marca del rastro
+# El destello blanco al recibir un golpe: un shader que mezcla el dibujo con blanco
+const DESTELLO := preload("res://escenas/personajes/destello.gdshader")
+
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
 
@@ -78,6 +85,36 @@ func _ready() -> void:
 	# El agente nos devuelve aquí la velocidad ya corregida para no chocar con otros zombis
 	agente.velocity_computed.connect(_al_calcular_velocidad)
 	sprite.animation_finished.connect(_al_acabar_animacion)
+	sprite.material = ShaderMaterial.new()
+	sprite.material.shader = DESTELLO
+
+
+# Se pone blanco de golpe y vuelve a su color enseguida
+func destellar() -> void:
+	sprite.material.set_shader_parameter("destello", 0.9)
+	var t := create_tween()
+	t.tween_interval(0.05)
+	t.tween_property(sprite.material, "shader_parameter/destello", 0.0, 0.1)
+
+
+# Dónde dejar las manchas: en el mismo sitio que el zombi (se borran al salir de la sala)
+func suelo() -> Node:
+	return get_parent()
+
+
+# El lento, mientras se arrastra, deja una estela de sangre detrás: dos marquitas, una a cada lado
+func dejar_rastro(delta: float) -> void:
+	if not a_tirones or velocity.length() < 5.0:
+		return
+	rastro += velocity.length() * delta
+	if rastro < 4.0:
+		return
+	rastro = 0.0
+	var lado := velocity.normalized().orthogonal() * 5.0
+	for s in [-1.0, 0.0, 1.0]:
+		if randf() < 0.85:
+			Mancha.gota(suelo(), global_position + Vector2(0, 4) + lado * s + Vector2(randf_range(-2, 2), randf_range(-2, 2)),
+				Color(color_sangre, randf_range(0.3, 0.5)), Vector2(4, 4), "Rastro", 1400)
 
 
 func _physics_process(delta: float) -> void:
@@ -113,8 +150,10 @@ func _physics_process(delta: float) -> void:
 			var cebo := cebo_cerca()
 			if cebo:
 				ir_hacia(delta, camino_hacia(cebo.global_position), velocidad)
+				dejar_rastro(delta)
 				return
 			andar(delta, johnny)
+			dejar_rastro(delta)
 
 		"zarpazo":
 			pedir_velocidad(Vector2.ZERO)
@@ -265,6 +304,11 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	velocity = fuerza * empuje
 	numero_flotante(cantidad)
 	Sonido.tocar("golpe")
+	a_golpes = true
+	destellar()
+	# la sangre salta hacia donde va el golpe (más si es el último)
+	Particulas.salpicar(self, suelo(), global_position + Vector2(0, 6), altura * 0.5, fuerza, color_sangre,
+		10 if vida <= 0 else 5)
 	# Se gira hacia quien le ha pegado (al revés del empuje)
 	mirar_hacia(-fuerza)
 	if vida <= 0:
@@ -335,6 +379,7 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 		despertar()
 	var n := maxi(1, roundi(cantidad))
 	vida -= n
+	a_golpes = false
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), str(n), color, 16)
 	if vida <= 0:
 		morir()

@@ -52,6 +52,7 @@ const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un bill
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
+const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MUNICION := preload("res://assets/ui/iconos/municion.png")
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
@@ -715,18 +716,25 @@ func ir_al_menu() -> void:
 
 # Al caer un zombi: revienta en trozos de su color y deja su mancha en el suelo (killEnemy y addDecal del JS).
 # El explosivo ya tiene su explosión: sus trozos salen color fuego y sin anillo
+# Si muere a golpes o a tiros (no quemado ni por los charcos), deja además un charco que se va extendiendo
 func sangre(tipo: String, zombi: Node2D) -> void:
 	var trozos: Color = Color("#ff9f1c") if tipo == "explosivo" else PIELES.get(tipo, PIELES.normal)
-	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo")
+	var color: Color = MANCHAS.get(tipo, SANGRE)
+	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo", color, zombi.get_parent())
 	var jefa := tipo == "portera"
-	Mancha.sangre(zombi.get_parent(), zombi.position + Vector2(0, 10), randf_range(14.0, 20.0) * (1.8 if jefa else 1.0),
-		MANCHAS.get(tipo, Color("#5b7d3a")))
+	var donde := zombi.position + Vector2(0, 10)
+	if tipo != "explosivo" and (jefa or zombi.get("a_golpes")):
+		Mancha.charco(zombi.get_parent(), donde, randf_range(48.0, 58.0) * (1.5 if jefa else 1.0), color)
+	else:
+		Mancha.sangre(zombi.get_parent(), donde, randf_range(14.0, 20.0) * (1.8 if jefa else 1.0), color)
 
 
 # Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
 	zombi.position = donde
+	if "color_sangre" in zombi:
+		zombi.color_sangre = MANCHAS.get(tipo, SANGRE)
 	if "talla_restos" in zombi:
 		zombi.talla_restos = {"rapido": "pequeno", "venenoso": "grande"}.get(tipo, "mediano")   # el rápido es un niño
 	# Al caer: se cuenta, y a veces suelta un billete (la portera, varios)
@@ -1014,6 +1022,53 @@ func probar_ordenador() -> void:
 
 # La historia: el científico muerto de la planta (con su página sin encontrar), la página al cogerla y el Dosier
 # del ordenador con dos páginas
+# La sangre, en la sala de mantenimiento (con luz, para que se vea): el destello de un golpe, un zombi muerto a
+# golpes que deja su charco, el lento arrastrándose con su rastro y los casquillos de unos disparos
+func probar_sangre() -> void:
+	# si sigue abierta la mutación de la portera, se elige una que no deja charcos (para que no salgan en la foto)
+	if menus.abierto == "mutacion":
+		menus.elegir("insensible")
+	await montar(planta.mantenimiento, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var centro := Vector2(planta.sitios[aqui].ancho / 2.0, 330)
+	johnny.position = centro
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.invulnerable = 99.0
+	johnny.coger("pistola")   # con la pistola (si lleva el desintegrador, el ácido tapa la sangre)
+	# los acompañantes, quietos (si no, matan al lento antes de que se arrastre)
+	for a in get_tree().get_nodes_in_group("presa"):
+		if a != johnny:
+			a.process_mode = Node.PROCESS_MODE_DISABLED
+	var golpeado := meter_zombi("normal", centro + Vector2(110, -10))
+	var lento := meter_zombi("lento", centro + Vector2(-300, 60))
+	lento.despertar()
+	var muerto := meter_zombi("normal", centro + Vector2(-60, 150))
+	await get_tree().create_timer(0.3).timeout
+	muerto.recibir_golpe(999, Vector2(-120, 60))
+	golpeado.recibir_golpe(1, Vector2(150, 0))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://captura-destello.png")
+	await get_tree().create_timer(0.3).timeout
+	golpeado.recibir_golpe(999, Vector2(170, 0))
+	johnny.coger("pistola")
+	johnny.balas = 8
+	for i in 5:
+		johnny.disparar(-0.3 + i * 0.15)
+		await get_tree().create_timer(0.12).timeout
+	await get_tree().create_timer(2.5).timeout
+	var rastro: Node = lento.get_parent().get_node_or_null("Rastro")
+	print("Sangre: rastro %d | gotas %d | casquillos %d | charco %s" % [rastro.celdas.size() if rastro else 0,
+		lento.get_parent().get_node("Gotas").celdas.size() if lento.get_parent().has_node("Gotas") else 0,
+		lento.get_parent().get_node("Casquillos").celdas.size() if lento.get_parent().has_node("Casquillos") else 0,
+		golpeado.a_golpes])
+	get_viewport().get_texture().get_image().save_png("res://captura-sangre2.png")
+	johnny.invulnerable = 0.0
+	for a in get_tree().get_nodes_in_group("presa"):
+		a.process_mode = Node.PROCESS_MODE_INHERIT
+
+
 func probar_historia() -> void:
 	Guardado.cambiar(func(g): g.paginas = [])
 	var c: Dictionary = planta.cientifico
@@ -1177,6 +1232,7 @@ func probar_menus() -> void:
 	await probar_cosas()
 	await probar_creadas()
 	await supervivientes.probar()
+	await probar_sangre()
 	await probar_mutaciones()
 	await probar_historia()
 	pausar()

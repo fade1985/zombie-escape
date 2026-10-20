@@ -504,12 +504,26 @@ func disparar(angulo: float) -> void:
 		get_parent().add_child(bala)
 		bala.global_position = salida
 	Sonido.tocar("escopeta" if w.perdigones > 1 else "pistola")
+	soltar_casquillo(angulo, w.perdigones > 1)
 	# El fogonazo alumbra un instante alrededor (más con la escopeta)
 	Luz.destello(self, salida - Vector2(0, 50), 170.0 if w.perdigones > 1 else 120.0, 0.12 if w.perdigones > 1 else 0.08)
 	oir_disparo()
 	if balas <= 0:
 		empezar_recarga()
 	avisar_arma()
+
+
+# El casquillo sale despedido por la derecha del arma, salta, rebota y se queda en el suelo un buen rato
+# (los de la escopeta, rojos y más gordos)
+func soltar_casquillo(angulo: float, cartucho: bool) -> void:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	var suelo: Node = mapa.cosas if mapa and "cosas" in mapa else get_parent()
+	var lado := Vector2.from_angle(angulo + PI / 2.0 + randf_range(-0.4, 0.4))
+	var v := lado * randf_range(70.0, 120.0) - Vector2.from_angle(angulo) * randf_range(10.0, 40.0)
+	var color := Color("#c0392b") if cartucho else Color("#e8b84a")
+	var marca := Color("#8e2a20") if cartucho else Color("#b8892e")
+	Particulas.volar(self, global_position + Vector2(0, 14), 40.0, Vector2(v.x, v.y * 0.6), randf_range(110.0, 160.0),
+		color, 4.0, suelo, marca, Vector2(6, 4) if cartucho else Vector2(4, 2), false, false, 2, "Casquillos")
 
 
 # El disparo se oye: despierta a los zombis dormidos que haya cerca
