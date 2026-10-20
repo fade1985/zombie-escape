@@ -148,5 +148,5 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | Qué | Estado |
 |---|---|
 | Logros: programa LOGROS.EXE en ConserjeOS, 10 retos con premio en dólares (`scripts/logros.gd`; añadir más = una línea en `LISTA`) | hecho, con visto bueno y publicado (20 oct) |
-| Historia A: el "Proyecto VD-7" (`historia.gd`). Un científico de Velaria muerto por planta con una página del dosier (solo si falta por encontrar), la página al cogerla y el programa Dosier en ConserjeOS | hecho, falta visto bueno |
+| Historia A: el "Proyecto VD-7" (`historia.gd`). Un científico de Velaria muerto por planta con una página del dosier (solo si falta por encontrar), la página al cogerla y el programa Dosier en ConserjeOS | hecho, con visto bueno y publicado (20 oct) |
 | Historia B: el programa Noticias (tele dibujada con código, la reportera de Canal 8 contando la versión de Velaria) | por hacer |
