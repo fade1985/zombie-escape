@@ -4,7 +4,9 @@
 # zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js).
 extends Node2D
 
-const CHARCO := preload("res://escenas/armas/charco.tscn")
+# El charco se carga al caer, no al principio: charco.gd usa Lanzables, y Lanzables carga este proyectil; si
+# cada uno cargase al otro al empezar, según qué se cargue antes uno se queda a medias (pasaba en bano.tscn)
+const CHARCO := "res://escenas/armas/charco.tscn"
 const MOCO := preload("res://assets/sprites/objeto-moco.png")
 
 # Cada tipo: cuánto tarda en caer, lo alto que sube, el daño al caer y el charco que deja
@@ -40,7 +42,7 @@ func _physics_process(delta: float) -> void:
 
 
 func caer(datos: Dictionary) -> void:
-	var charco := CHARCO.instantiate()
+	var charco: Node2D = load(CHARCO).instantiate()
 	charco.tipo = datos.charco
 	# el centro, en píxel entero del dibujo, para que cuadre con el resto del suelo
 	charco.position = (hasta / 2.0).round() * 2.0
