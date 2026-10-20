@@ -23,9 +23,14 @@ const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
 const FRANJA := 64.0      # el alto de la franja de abajo (el grosor del muro de abajo)
-const GRANDE := 42.0      # la casilla del arma en la mano
+const GRANDE := 44.0      # la casilla del arma en la mano (casilla-grande.png, de 22 píxeles)
 const PEQUENA := 28.0     # la de la otra arma
 const MEDIANA := 36.0     # la del lanzable de ahora
+const MARCOS := {
+	"grande": preload("res://assets/ui/casilla-grande.png"),
+	"mediana": preload("res://assets/ui/casilla-mediana.png"),
+	"pequena": preload("res://assets/ui/casilla-pequena.png"),
+}
 const NOMBRE := 1.6       # lo que se ve el nombre del arma al cambiar (segundos)
 
 var johnny: Node2D
@@ -38,13 +43,20 @@ var lanzar := Control.new()     # el lanzable de ahora y los demás
 var recursos := Control.new()   # la llave, la mochila y el dinero, pegados a la derecha
 var texturas := {}              # los iconos ya cargados
 
-# Las armas: cuál estaba en la mano, el saltito al cambiar y el rato que le queda al nombre
+# Las armas: cuál estaba en la mano y las animaciones al cambiar (de 0 a 1 el intercambio; las demás, de 1 a 0)
 var en_mano := ""
+var mano_antes := ""
+var cambio := 1.0
 var salto_arma := 0.0
-var nombre_arma := 0.0
-# Los lanzables: el de antes y cuántos había (para el saltito)
-var lanzable := ""
-var salto_lanzar := 0.0
+var destello_arma := 0.0
+var nombre_arma := 0.0            # el rato que le queda al nombre
+# Los lanzables: el que se ve, el de antes (sale del tambor) y cuántos había
+var tipo_visto := ""
+var tipo_antes := ""
+var cuenta_antes := -1
+var giro := 1.0
+var salto_cuenta := 0.0
+var destello_lanzar := 0.0
 # El dinero que se ve (sube contando hasta el de verdad) y los "+5" que flotan: [cantidad, tiempo]
 var dinero_visto := -1.0
 var dinero_real := -1
@@ -94,7 +106,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	tiempo += delta
 	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
-	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 5.0)
+	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 7.0)
 	recursos.position = fila.position
 	if johnny == null:
 		return
@@ -119,16 +131,54 @@ func icono_lanzable(k: String) -> String:
 	return k if k in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[k].icono)
 
 
-# Una casilla: sombra, fondo de metal, borde y el icono dentro (apagado si no está en uso)
-func casilla(c: Control, r: Rect2, borde: Color, nombre: String, luz := 1.0) -> void:
-	c.draw_rect(r.grow(2), Tema.LINEA)
-	c.draw_rect(r, Tema.METAL.lerp(Color("#6a6278"), 0.5 * luz))   # más clara la que está en uso, para que el icono se vea
-	c.draw_rect(r.grow(-1), borde, false, 2.0)
-	if nombre == "":
-		return   # casilla vacía
-	var lado := roundf(r.size.x * 0.76)
-	var dentro := Rect2(r.get_center() - Vector2(lado, lado) / 2.0, Vector2(lado, lado))
-	c.draw_texture_rect(icono(nombre), dentro, false, Color(luz, luz, luz, 0.4 + 0.6 * luz))
+# Una casilla: el marco de metal (casilla-*.png) y el icono dentro. "luz" apaga la que no está en uso. El icono
+# puede ir corrido ("corrido", para la animación del tambor) y se recorta al hueco de dentro.
+func casilla(c: Control, r: Rect2, nombre: String, luz := 1.0, corrido := Vector2.ZERO) -> void:
+	var marco: Texture2D = MARCOS.grande if r.size.x > 38 else (MARCOS.mediana if r.size.x > 31 else MARCOS.pequena)
+	var m := 0.55 + 0.45 * luz
+	c.draw_texture_rect(marco, r, false, Color(m, m, m))
+	c.draw_rect(hueco_de(r), Color("#5a4e63", 0.55 * luz))   # el hueco, algo encendido si está en uso
+	if nombre != "":
+		icono_dentro(c, nombre, r, corrido, Color(luz, luz, luz, 0.4 + 0.6 * luz))
+
+
+# El hueco de dentro de una casilla (el marco tiene 4 píxeles del dibujo de grueso contando el filo, de 22)
+func hueco_de(r: Rect2) -> Rect2:
+	return r.grow(-roundf(r.size.x * 4.0 / 22.0))
+
+
+# El icono, centrado en el hueco (corrido si hace falta) y recortado a él para que no se salga
+func icono_dentro(c: Control, nombre: String, r: Rect2, corrido: Vector2, color: Color) -> void:
+	var tex := icono(nombre)
+	var lado := roundf(r.size.x * 32.0 / 44.0)
+	var donde := Rect2(r.get_center() - Vector2(lado, lado) / 2.0 + corrido, Vector2(lado, lado))
+	var visto := donde.intersection(hueco_de(r))
+	if visto.size.x <= 0.0 or visto.size.y <= 0.0:
+		return
+	var escala := tex.get_size() / donde.size
+	c.draw_texture_rect_region(tex, visto, Rect2((visto.position - donde.position) * escala, visto.size * escala), color)
+
+
+# Las cuatro esquinas amarillas de la casilla en uso, como un punto de mira. "abre" las separa (al llegar,
+# vienen de lejos y se cierran) y respiran un poco
+func esquinas(c: Control, r: Rect2, abre := 0.0) -> void:
+	var f := r.grow(3.0 + roundf(abre + sin(tiempo * 5.0) * 0.5 + 0.5))
+	var largo := 8.0
+	for i in 2:   # primero el contorno oscuro (más gordo) y encima el amarillo
+		var g := 1.0 if i == 0 else 0.0
+		var color := Tema.LINEA if i == 0 else Tema.AMARILLO
+		for derecha in [false, true]:
+			for abajo in [false, true]:
+				var x: float = f.end.x - 2 if derecha else f.position.x
+				var y: float = f.end.y - 2 if abajo else f.position.y
+				c.draw_rect(Rect2(f.end.x - largo if derecha else f.position.x, y, largo, 2).grow(g), color)
+				c.draw_rect(Rect2(x, f.end.y - largo if abajo else f.position.y, 2, largo).grow(g), color)
+
+
+# Un destello blanco en el hueco que se apaga (al cambiar algo)
+func destello(c: Control, r: Rect2, k: float) -> void:
+	if k > 0.0:
+		c.draw_rect(hueco_de(r), Color(1, 1, 0.9, 0.55 * k))
 
 
 # Un texto con su contorno; "x" es el centro si "centrado"
@@ -157,28 +207,57 @@ func con_salto(c: Control, r: Rect2, k: float) -> void:
 	c.draw_set_transform(r.get_center() * (1.0 - s), 0.0, Vector2(s, s))
 
 
+# De 0 a 1 pasándose un poco al final y volviendo (como un muelle)
+func muelle(x: float) -> float:
+	var c1 := 1.70158
+	return 1.0 + (c1 + 1.0) * pow(x - 1.0, 3.0) + c1 * pow(x - 1.0, 2.0)
+
+
+func mezclar(a: Rect2, b: Rect2, k: float) -> Rect2:
+	return Rect2(a.position.lerp(b.position, k), a.size.lerp(b.size, k))
+
+
 # ── Las armas ──
 
 func mirar_armas(delta: float) -> void:
 	var ahora: String = johnny.huecos[johnny.mano]
 	if ahora != en_mano:
 		if en_mano != "":
-			salto_arma = 1.0
+			if johnny.mano != mano_antes:
+				cambio = 0.0       # ha cambiado de mano: las casillas se intercambian
+			else:
+				salto_arma = 1.0   # ha cogido otra arma en la misma mano: saltito
+			destello_arma = 1.0
 			nombre_arma = NOMBRE
 		en_mano = ahora
+		mano_antes = johnny.mano
+	cambio = move_toward(cambio, 1.0, delta / 0.24)
 	salto_arma = move_toward(salto_arma, 0.0, delta * 5.0)
+	destello_arma = move_toward(destello_arma, 0.0, delta * 4.0)
 	nombre_arma = maxf(nombre_arma - delta, 0.0)
 
 
+# Al cambiar de arma, la nueva salta de la casilla pequeña a la grande (haciendo un arco por arriba) y la
+# vieja baja a la pequeña; luego las esquinas amarillas se cierran sobre la nueva
 func pintar_armas() -> void:
 	var h: Dictionary = johnny.huecos
 	var otra: String = h.fuego if johnny.mano == "cuerpo" else h.cuerpo
 	var grande := Rect2(2, 2, GRANDE, GRANDE)
 	var pequena := Rect2(GRANDE + 8, 2 + GRANDE - PEQUENA, PEQUENA, PEQUENA)
-	casilla(armas, pequena, Tema.OXIDO, Objetos.icono(otra), 0.45)
-	tecla(armas, pequena.position + Vector2(PEQUENA - 8, -8), "Q")
-	con_salto(armas, grande, salto_arma)
-	casilla(armas, grande, Tema.AMARILLO, Objetos.icono(en_mano))
+	var k := muelle(cambio)
+	var arco := Vector2(0, -sin(cambio * PI) * 12.0)
+	var vieja := mezclar(grande, pequena, k)
+	vieja.position -= arco * 0.4
+	casilla(armas, vieja, Objetos.icono(otra), lerpf(1.0, 0.6, cambio))
+	if cambio >= 1.0:
+		tecla(armas, pequena.position + Vector2(PEQUENA - 8, -8), "Q")
+	var nueva := mezclar(pequena, grande, k)
+	nueva.position += arco
+	con_salto(armas, nueva, salto_arma)
+	casilla(armas, nueva, Objetos.icono(en_mano), lerpf(0.6, 1.0, cambio))
+	destello(armas, nueva, destello_arma)
+	if cambio > 0.6:
+		esquinas(armas, nueva, (1.0 - cambio) * 25.0)
 	armas.draw_set_transform(Vector2.ZERO)
 	# el nombre, encima un momento al cambiar (y se apaga al final)
 	if nombre_arma > 0.0:
@@ -190,37 +269,54 @@ func pintar_armas() -> void:
 
 func mirar_lanzar(delta: float) -> void:
 	var lz: Lanzables = partida.lanzables
-	var clave := "%s|%d" % [lz.tipo, lz.cuantas(lz.tipo)]
-	if clave != lanzable:
-		if lanzable != "":
-			salto_lanzar = 1.0
-		lanzable = clave
-	salto_lanzar = move_toward(salto_lanzar, 0.0, delta * 5.0)
+	var n := lz.cuantas(lz.tipo)
+	if lz.tipo != tipo_visto:
+		if tipo_visto != "":
+			giro = 0.0             # otro lanzable: gira el tambor
+			tipo_antes = tipo_visto
+			destello_lanzar = 1.0
+		tipo_visto = lz.tipo
+	elif n != cuenta_antes and cuenta_antes >= 0:
+		salto_cuenta = 1.0         # uno más o uno menos: el número da un saltito
+	cuenta_antes = n
+	giro = move_toward(giro, 1.0, delta / 0.22)
+	salto_cuenta = move_toward(salto_cuenta, 0.0, delta * 5.0)
+	destello_lanzar = move_toward(destello_lanzar, 0.0, delta * 4.0)
 	# el ancho depende de cuántos otros haya al lado
 	lanzar.custom_minimum_size.x = MEDIANA + 8 + 26 * (lz.tipos().size() - 1)
 
 
+# Al cambiar de lanzable, como el tambor de un revólver: el viejo sale por la izquierda y el nuevo entra por
+# la derecha, dentro del hueco
 func pintar_lanzar() -> void:
 	var lz: Lanzables = partida.lanzables
 	var n := lz.cuantas(lz.tipo)
 	var r := Rect2(2, 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
-	con_salto(lanzar, r, salto_lanzar)
-	casilla(lanzar, r, Tema.AMARILLO if n > 0 else Tema.OXIDO, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35)
-	# cuántos quedan, en la esquina de abajo a la derecha (en rojo si ninguno)
+	var k := muelle(giro)
+	casilla(lanzar, r, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35, Vector2((1.0 - k) * MEDIANA, 0))
+	if giro < 1.0:
+		var m := 1.0 if lz.cuantas(tipo_antes) > 0 else 0.35
+		icono_dentro(lanzar, icono_lanzable(tipo_antes), r, Vector2(-k * MEDIANA, 0), Color(m, m, m, 1.0 - giro))
+	destello(lanzar, r, destello_lanzar)
+	if n > 0:
+		esquinas(lanzar, r, (1.0 - k) * 10.0)
+	# cuántos quedan, en la esquina de abajo a la derecha (en rojo si ninguno), con saltito si cambia
 	var s := "x%d" % n
-	texto(lanzar, Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1), s, 16, Tema.TINTA if n > 0 else Tema.ROJO)
+	var donde := Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1)
+	con_salto(lanzar, Rect2(donde - Vector2(0, 12), Vector2(ancho_texto(s, 16), 12)), salto_cuenta)
+	texto(lanzar, donde, s, 16, Tema.TINTA if n > 0 else Tema.ROJO)
 	lanzar.draw_set_transform(Vector2.ZERO)
-	var otros: Array = lz.tipos().filter(func(k): return k != lz.tipo)
+	var otros: Array = lz.tipos().filter(func(t): return t != lz.tipo)
 	if otros.is_empty():
 		return
-	tecla(lanzar, r.position + Vector2(MEDIANA - 8, -8), "F")
+	tecla(lanzar, r.position + Vector2(MEDIANA - 6, -10), "F")
 	# los demás, en pequeño y apagados, con su número debajo
-	var x := r.end.x + 10
-	for k in otros:
-		var m := lz.cuantas(k)
-		var luz := 0.85 if m > 0 else 0.3
-		lanzar.draw_texture_rect(icono(icono_lanzable(k)), Rect2(x, r.position.y, 20, 20), false, Color(luz, luz, luz, 0.5 + 0.5 * luz))
-		texto(lanzar, Vector2(x + 10, r.end.y), str(m), 12, Color(Tema.GRIS, 0.5 + 0.5 * luz), true)
+	var x := r.end.x + 12
+	for t in otros:
+		var m := lz.cuantas(t)
+		var l := 0.85 if m > 0 else 0.3
+		lanzar.draw_texture_rect(icono(icono_lanzable(t)), Rect2(x, r.position.y, 20, 20), false, Color(l, l, l, 0.5 + 0.5 * l))
+		texto(lanzar, Vector2(x + 10, r.end.y), str(m), 12, Color(Tema.GRIS, 0.5 + 0.5 * l), true)
 		x += 26
 
 

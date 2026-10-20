@@ -80,7 +80,7 @@
 
 `hacer_frames.py` (hoja → animaciones), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
-(objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `ver_dibujos.tscn` (foto de los dibujos hechos con
+(objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 
 ## docs/ (del juego JS)
