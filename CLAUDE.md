@@ -141,4 +141,4 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 8b | Música: tramos grabados de la del JS (`tools/grabar_musica.mjs`) que se encadenan al azar con fundidos; jingles de ganar y perder | hecha, con visto bueno (20 oct) |
 | 8c | Exportar a web (sin hilos: vale en Vercel sin cabeceras especiales), probada en el navegador; `vercel.json` preparado | hecha, con visto bueno (20 oct) |
 | 8e | Controles táctiles para el móvil (los tres modos, lanzar arrastrando, pantalla completa en la pausa), probados en el navegador con tamaño de móvil | hecha, con visto bueno (20 oct) |
-| 8d | Publicar y retirar la versión JS: se juega en https://zombie-escape-two.vercel.app | hecha, comprobada en el navegador (20 oct) |
+| 8d | Publicar y retirar la versión JS: se juega en https://zombie-escape-two.vercel.app | hecha, con visto bueno (20 oct) |
