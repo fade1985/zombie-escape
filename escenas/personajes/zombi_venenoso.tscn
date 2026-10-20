@@ -20,10 +20,10 @@ empuje = 0.94
 altura = 128.0
 
 [node name="Sombra" type="Node2D" parent="."]
-position = Vector2(0, 34)
+position = Vector2(0, 26)
 script = ExtResource("sombra")
-ancho = 58.0
-alto = 18.0
+ancho = 78.0
+alto = 22.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")

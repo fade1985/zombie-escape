@@ -21,9 +21,9 @@ giro = 2.2
 bamboleo = 0.0
 
 [node name="Sombra" type="Node2D" parent="."]
-position = Vector2(0, 25)
+position = Vector2(0, 23)
 script = ExtResource("sombra")
-ancho = 44.0
+ancho = 42.0
 alto = 14.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
