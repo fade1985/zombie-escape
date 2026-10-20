@@ -50,6 +50,7 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa
 #   tiene_llave, jefa_muerta
+#   cientifico       {sitio, pos, cogida} dónde está el científico muerto con la página del dosier (historia.gd)
 #   superviviente    {sitio, sala, puerta, pos} el baño (y su puerta, de apt.puertas) donde se esconde el
 #                    superviviente si en esta partida le toca esta planta (lo decide supervivientes.gd). Ese baño
 #                    no lleva zombis: si no, nadie podría limpiar el piso
@@ -156,6 +157,15 @@ static func generar(num: int) -> Dictionary:
 		if pos == Vector2.INF:
 			pos = sala.centro
 	planta.llave = {"sitio": donde, "pos": pos}
+	# El científico muerto de Velaria (historia.gd), en una habitación de otro apartamento normal si se puede (que
+	# no sea el baño del superviviente). Si sale o no, lo decide la partida: solo si su página falta por encontrar
+	var otros: Array = normales.filter(func(i): return i != donde)
+	var de_cientifico: int = otros[rng.randi() % otros.size()] if not otros.is_empty() else donde
+	var cuartos: Array = planta.sitios[de_cientifico].apt.salas.filter(func(s):
+		return planta.superviviente.is_empty() or de_cientifico != planta.superviviente.sitio or s.id != planta.superviviente.sala)
+	var cuarto: Dictionary = cuartos[rng.randi() % cuartos.size()]
+	var en := sitio_libre(planta.sitios[de_cientifico], cuarto, Vector2.INF, [], 40.0)
+	planta.cientifico = {"sitio": de_cientifico, "pos": cuarto.centro if en == Vector2.INF else en, "cogida": false}
 	return planta
 
 

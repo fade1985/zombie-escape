@@ -8,6 +8,8 @@
 #     el banco de trabajo); si es de fuego, se pierde.
 #   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
 #     cobran aquí (su premio va a los dólares ahorrados).
+#   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), para
+#     releerlas. Las que faltan salen como páginas arrancadas.
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
@@ -21,10 +23,11 @@ const ICONOS := [   # [programa, icono, nombre]
 	["puntos", "billete", "Puntos e\nintercambio"],
 	["armas", "pistola", "Tienda\nde armas"],
 	["logros", "trofeo", "Logros"],
+	["dosier", "dosier", "Dosier\nVD-7"],
 	["apagar", "puerta", "Apagar"],
 ]
-const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE"}
-const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros"}
+const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT"}
+const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7"}
 const ICONO_ARMA := {"mp5": "pistola"}
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -209,6 +212,8 @@ func abrir(programa: String, foco := "") -> void:
 		programa_puntos(contenido)
 	elif programa == "logros":
 		programa_logros(contenido)
+	elif programa == "dosier":
+		programa_dosier(contenido)
 	else:
 		programa_armas(contenido)
 	var marcado: Control = contenido.find_child(foco, true, false) if foco != "" else null
@@ -604,6 +609,46 @@ func cobrar_logro(id: String) -> void:
 	partida.ahorrados = Guardado.cargar().dolares
 	abrir("logros", "b_" + id)
 	info.set_deferred("text", "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas." % dinero)
+
+
+# ── Dosier ──
+
+func programa_dosier(c: VBoxContainer) -> void:
+	var s := Guardado.cargar()
+	var d := Historia.dosier(partida.EDIFICIO)
+	var halladas: int = d.paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 8)
+	c.add_child(fila)
+	cajita(fila, d.titulo, "dosier", "%d / %d páginas" % [halladas, d.paginas.size()])
+	nota(c, "Cada científico de %s muerto en el edificio lleva una página. Lo que encuentres queda aquí para siempre." % Historia.EMPRESA)
+	var partes := HBoxContainer.new()
+	partes.add_theme_constant_override("separation", 10)
+	c.add_child(partes)
+	var lista := VBoxContainer.new()
+	lista.custom_minimum_size.x = 230
+	lista.add_theme_constant_override("separation", 6)
+	partes.add_child(lista)
+	var lado := CenterContainer.new()
+	lado.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lado.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	partes.add_child(lado)
+	for i in d.paginas.size():
+		var p: Dictionary = d.paginas[i]
+		var tiene := Historia.encontrada(s, p.id)
+		var b := tarjeta(lista, "b_" + p.id, "dosier" if tiene else "candado", "Página %d" % (i + 1),
+			p.titulo if tiene else "Arrancada", "", "" if tiene else "bloqueada")
+		var hoja := p if tiene else {"tipo": "???", "titulo": "Página arrancada", "nota": "",
+			"texto": "Esta página falta. La lleva un científico de %s caído en la %s.\n\nBúscalo en una partida." % [Historia.EMPRESA, Planta.nombre_planta(p.planta).to_lower()]}
+		var ver := func():
+			for h in lado.get_children():
+				h.queue_free()
+			lado.add_child(Historia.hoja(hoja, 410.0))
+		enlazar(b, ("Página %d: %s. La llevaba %s." % [i + 1, p.titulo, p.cuerpo]) if tiene
+			else "Página %d: aún no la has encontrado (%s)." % [i + 1, Planta.nombre_planta(p.planta).to_lower()], ver)
+		b.focus_entered.connect(ver)
+		b.mouse_entered.connect(ver)
+	info.text = "Pasa por las páginas para leerlas."
 
 
 # ── Piezas ──

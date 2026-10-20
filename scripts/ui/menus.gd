@@ -4,6 +4,7 @@
 #   - El cartel del final: "¡Edificio completado!" o "¡Derrota!", con lo que has hecho en la partida y los
 #     botones de volver a jugar o ir al menú principal.
 #   - Las mutaciones (showMutacion del JS): tras caer la portera, dos cartas para elegir una (también con 1 y 2).
+#   - La página del dosier recién encontrada junto a un científico muerto (historia.gd).
 # Se manejan con el ratón, con el teclado (flechas e Intro) o con el mando (cruceta o stick, A para pulsar y
 # B para volver): Godot pasa de un botón a otro solo, y aquí se elige cuál empieza marcado.
 extends CanvasLayer
@@ -17,6 +18,7 @@ var fondo: ColorRect
 var abierto := ""         # "pausa", "fin", "mutacion" o "" (nada)
 var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
 var cartas: Array = []    # las dos mutaciones que se ofrecen
+var al_leer := Callable()  # a quién avisar al cerrar la página del dosier
 
 
 func _ready() -> void:
@@ -246,6 +248,32 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 	primera.grab_focus.call_deferred()
 
 
+# La página del dosier que lleva el científico: quién era, la hoja y el botón de seguir
+func pagina(p: Dictionary, n: int, total: int, al_cerrar: Callable) -> void:
+	var columna := abrir("pagina", 0.85)
+	al_leer = al_cerrar
+	titulo(columna, "Página %d de %d" % [n, total], "Junto al cuerpo de %s" % p.cuerpo)
+	var centro := CenterContainer.new()
+	columna.add_child(centro)
+	centro.add_child(Historia.hoja(p, 600.0))
+	var pie := Label.new()
+	pie.text = "Se guarda en el Dosier del ordenador de mantenimiento"
+	pie.theme_type_variation = "Sub"
+	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(pie)
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	columna.add_child(fila)
+	boton(fila, "Seguir", leida).grab_focus.call_deferred()
+
+
+func leida() -> void:
+	if abierto != "pagina":
+		return
+	cerrar()
+	al_leer.call()
+
+
 func elegir(id: String) -> void:
 	if abierto != "mutacion":
 		return
@@ -260,6 +288,10 @@ func _unhandled_input(evento: InputEvent) -> void:
 		if n >= 0 and n < cartas.size():
 			get_viewport().set_input_as_handled()
 			elegir(cartas[n].id)
+		return
+	if abierto == "pagina" and evento.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		leida()
 		return
 	if abierto == "pausa" and (evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa")):
 		get_viewport().set_input_as_handled()

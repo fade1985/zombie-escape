@@ -42,6 +42,7 @@ const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
+const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
@@ -262,6 +263,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(coger_botiquin.bind(armarito))
+	poner_cientifico(idx)
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
 	mapa.cosas.add_child(johnny)
@@ -427,6 +429,37 @@ func _physics_process(delta: float) -> void:
 		Sonido.tocar("limpio")
 		get_tree().create_timer(0.25).timeout.connect(Sonido.tocar.bind("puerta"))
 		supervivientes.piso_limpio(aqui)
+
+
+# El científico muerto de esta planta, si está en este sitio y su página falta por encontrar (historia.gd). Si
+# ya se encontró en otra partida, no sale: la historia no se repite
+func poner_cientifico(idx: int) -> void:
+	var c: Dictionary = planta.get("cientifico", {})
+	if c.is_empty() or c.sitio != idx:
+		return
+	var pagina := Historia.pendiente(Guardado.cargar(), EDIFICIO, planta.num)
+	if pagina.is_empty() and not c.cogida:
+		return
+	var cuerpo := CIENTIFICO.new()
+	cuerpo.montar(pagina if not pagina.is_empty() else c.pagina, c.pos)
+	cuerpo.johnny = johnny
+	cuerpo.mapa = mapa
+	cuerpo.zona = mapa.zona_en(c.pos)
+	mapa.cosas.add_child(cuerpo)
+	if c.cogida:
+		cuerpo.vaciar()
+	else:
+		cuerpo.cogida.connect(_al_coger_pagina.bind(pagina))
+
+
+func _al_coger_pagina(p: Dictionary) -> void:
+	planta.cientifico.cogida = true
+	planta.cientifico.pagina = p
+	Historia.apuntar(p.id)
+	Sonido.tocar("compra")
+	var paginas: Array = Historia.dosier(EDIFICIO).paginas
+	get_tree().paused = true
+	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func(): get_tree().paused = false)
 
 
 func _al_coger_llave() -> void:
@@ -952,6 +985,35 @@ func probar_ordenador() -> void:
 	ordenador.apagar()
 
 
+# La historia: el científico muerto de la planta (con su página sin encontrar), la página al cogerla y el Dosier
+# del ordenador con dos páginas
+func probar_historia() -> void:
+	Guardado.cambiar(func(g): g.paginas = [])
+	var c: Dictionary = planta.cientifico
+	await montar(c.sitio, 0, false)
+	johnny.position = c.pos + Vector2(-70, 0)
+	johnny.get_node("Camara").reset_smoothing()
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await get_tree().create_timer(1.2).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-cientifico.png")
+	print("Científico en pantalla: ", get_viewport().get_canvas_transform() * c.pos)
+	johnny.position = c.pos + Vector2(28, 30)
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-pagina.png")
+	print("Página cogida: %s | en el guardado: %s" % [c.get("pagina", {}).get("id", "-"), Guardado.cargar().paginas])
+	menus.leida()
+	Guardado.cambiar(func(g): g.paginas = ["vd7_protocolo", "vd7_correo"])
+	abrir_ordenador()
+	await get_tree().create_timer(0.3).timeout
+	ordenador.abrir("dosier", "b_vd7_correo")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-dosier.png")
+	ordenador.abrir("")
+	ordenador.apagar()
+	await montar(planta.mantenimiento, 0, false)
+
+
 # La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al
 # inventario), crea un arma y hace fotos
 func probar_cosas() -> void:
@@ -1066,6 +1128,7 @@ func probar_menus() -> void:
 	await probar_creadas()
 	await supervivientes.probar()
 	await probar_mutaciones()
+	await probar_historia()
 	pausar()
 	await get_tree().create_timer(0.4).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-pausa.png")

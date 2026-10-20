@@ -27,6 +27,7 @@ const NUEVO := {
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en la sala de mantenimiento
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
+	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"ajustes": {"musica": true},
 }
