@@ -63,6 +63,7 @@ var sala_casilla := PackedInt32Array()   # la habitación de cada casilla (-1 mu
 var con_niebla := PackedByteArray()      # 1 en las casillas a las que se les pinta niebla encima
 var mascara: Image                # la textura de la niebla, una casilla por píxel (ver pintar_mascara)
 var textura_niebla: ImageTexture
+var sala_johnny := -2             # la habitación en la que está Johnny (ver separar_salas)
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
 
@@ -456,6 +457,7 @@ func _process(delta: float) -> void:
 		actualizar_niebla(delta)
 		for z in get_tree().get_nodes_in_group("zombis"):
 			z.visible = not oculto(z.global_position)
+		separar_salas()
 	if not expo_sprites.is_empty():
 		# los zombis de la exposición giran por sus 8 direcciones
 		var antes := int(expo_t / 0.7)
@@ -463,6 +465,40 @@ func _process(delta: float) -> void:
 		if int(expo_t / 0.7) != antes:
 			for s in expo_sprites:
 				s.play("reposo_" + RUMBOS[int(expo_t / 0.7) % RUMBOS.size()])
+
+
+# Lo que está en otra habitación que la de Johnny pasa a la capa de "lejos" (Luz.CAPA_LEJOS), que la
+# linterna no alumbra: así no atraviesa las paredes. Las sombras no bastan: con la vista desde arriba, la
+# cara de un muro se dibuja encima del suelo de la habitación de detrás, y esa luz sí le llegaría
+func separar_salas() -> void:
+	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
+	if not johnny:
+		return
+	var aqui := zona_en(johnny.global_position)
+	if aqui >= 0 and aqui != sala_johnny:
+		sala_johnny = aqui
+		for sala in caras:
+			for cara in caras[sala]:
+				alejar(cara, sala != aqui)
+		for m in muebles:
+			alejar(m, m.zona != aqui)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		var lejos := zona_en(z.global_position) != sala_johnny
+		if z.get_meta("lejos", false) != lejos:
+			z.set_meta("lejos", lejos)
+			alejar(z, lejos)
+
+
+# Pasa algo (y todo lo que lleva dentro) de la capa de las cosas a la de lejos, o al revés
+func alejar(n: Node, lejos: bool) -> void:
+	if n is CanvasItem:
+		var m: int = n.light_mask
+		if lejos and m & Luz.CAPA_COSAS:
+			n.light_mask = (m & ~Luz.CAPA_COSAS) | Luz.CAPA_LEJOS
+		elif not lejos and m & Luz.CAPA_LEJOS:
+			n.light_mask = (m & ~Luz.CAPA_LEJOS) | Luz.CAPA_COSAS
+	for hijo in n.get_children():
+		alejar(hijo, lejos)
 
 
 # ═════════════ Exposición (modo pruebas) ═════════════

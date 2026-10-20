@@ -25,6 +25,9 @@ const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const CAPA_SUELO := 2
 const CAPA_COSAS := 1
+# Lo que está en otra habitación de un apartamento (muros, muebles, zombis) pasa de la capa 1 a esta (mapa.gd):
+# las lámparas y el fuego la alumbran, pero la linterna de Johnny no, para que no atraviese las paredes
+const CAPA_LEJOS := 4
 const MAX_DESTELLOS := 12                  # fogonazos a la vez, como mucho (la escopeta saca muchos)
 const CAMBIO := 1.5                        # lo rápido que entra o se va la oscuridad (por segundo)
 
@@ -71,7 +74,7 @@ func seguir_a(quien: Node2D) -> void:
 	luz_johnny.name = "Luz"
 	luz_johnny.texture = TEXTURA
 	luz_johnny.texture_scale = 80.0 / 128.0
-	luz_johnny.range_item_cull_mask = CAPA_SUELO | CAPA_COSAS
+	luz_johnny.range_item_cull_mask = CAPA_COSAS   # sin el suelo: sin sombras, se colaría por las paredes
 	johnny.add_child(luz_johnny)
 	linterna = Node2D.new()
 	linterna.name = "Linterna"
@@ -98,7 +101,9 @@ func cono(capa: int) -> PointLight2D:
 
 
 # El dibujo del cono (se hace una vez): mirando hacia la derecha desde el centro, se apaga hacia la punta y
-# hacia los lados. Pegado a los pies es redondo, para que no se vea dónde empieza
+# hacia los lados. Sale de los pies (lo que hay debajo de la mano, en el suelo: si saliera de más arriba,
+# pegado a un muro quedaría dentro de él y se romperían las sombras), pero ahí apenas alumbra: el haz se
+# ve empezar un poco por delante de Johnny, no en sus pies
 static func hacer_cono() -> ImageTexture:
 	if textura_cono:
 		return textura_cono
@@ -111,8 +116,7 @@ static func hacer_cono() -> ImageTexture:
 			var d := v.length() / (lado / 2.0)
 			var hacia_punta := pow(clampf(1.0 - d, 0.0, 1.0), 0.8)
 			var hacia_lado := 1.0 - smoothstep(LINTERNA_ANCHO * 0.55, LINTERNA_ANCHO, absf(v.angle()))
-			hacia_lado = lerpf(1.0, hacia_lado, smoothstep(0.03, 0.15, d))
-			var k := hacia_punta * hacia_lado
+			var k := hacia_punta * hacia_lado * smoothstep(0.02, 0.22, d)
 			img.set_pixel(x, y, Color(k, k, k, 1.0))
 	textura_cono = ImageTexture.create_from_image(img)
 	return textura_cono
@@ -153,7 +157,7 @@ static func destello(desde: Node, pos: Vector2, radio: float, vida: float, fuerz
 	luz.texture = TEXTURA
 	luz.texture_scale = radio / 128.0
 	luz.color = FOGONAZO
-	luz.range_item_cull_mask = CAPA_SUELO | CAPA_COSAS
+	luz.range_item_cull_mask = CAPA_SUELO | CAPA_COSAS | CAPA_LEJOS
 	var e := 1.1 * fuerza_destello * fuerza()
 	luz.energy = e
 	destellos += 1
