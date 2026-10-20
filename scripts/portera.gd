@@ -6,9 +6,11 @@
 #   - abanico: levanta la fregona (aviso: líneas en el suelo) y lanza agua sucia en abanico, 2 tandas
 #   - fregonazo: si Johnny está cerca, marca un trozo de suelo en rojo y da un golpe que quita 20 y empuja
 #   - lejía: tira botellas alrededor de Johnny (la primera, justo donde va a estar) que dejan charco
-# A mitad de vida grita, se pone roja, echa vapor y se vuelve más rápida, y además:
+#   - ácido (20 oct): levanta la fregona y salpica charcos de ácido (el primero, justo donde va a estar Johnny)
+#   - embestida (20 oct): marca una franja roja, corre en línea recta y remata con un fregonazo en círculo
+#   - llamar: grita "¡VECINOS!" y aparecen vecinos (normales y rápidos): 2, o 4 enfadada
+# A mitad de vida grita, se pone roja, echa vapor y se vuelve más rápida, y además (todo el doble):
 #   - giro: da vueltas con la fregona persiguiendo a Johnny y escupe polvo en espiral
-#   - llamar: grita y aparecen dos vecinos (un zombi normal y uno rápido)
 #
 # Johnny y las balas le pegan igual que a un zombi (está en el grupo "zombis" y tiene radio y recibir_golpe).
 extends CharacterBody2D
@@ -32,6 +34,18 @@ const MEDIO_FREGONAZO := 1.05    # medio ángulo del trozo que barre
 const DANO_FREGONAZO := 20
 const DISTANCIA_FREGONAZO := 150.0   # si Johnny está más cerca que esto, prefiere el fregonazo
 const BOTELLAS := 3
+# Charcos de ácido (números provisionales, los de PORTERA en el juego; el charco, en charco.gd)
+const AVISO_ACIDO := 0.5
+const ACIDOS := [3, 6]           # cuántos en cada fase
+# Embestida: aviso, velocidad y tiempo máximo corriendo; luego el fregonazo en círculo
+const AVISO_EMBESTIDA := 0.55
+const VELOCIDAD_EMBESTIDA := 470.0
+const TIEMPO_EMBESTIDA := 0.9
+const AVISO_CIRCULO := 0.35
+const RADIO_CIRCULO := 125.0
+const DANO_CIRCULO := 20
+const EMBESTIDAS := [1, 2]       # cuántas seguidas en cada fase
+const VECINOS := [2, 4]          # cuántos vecinos llama al gritar en cada fase
 const TIEMPO_GIRO := 2.6
 const DANO_CONTACTO := 10        # si Johnny se le pega, también hace daño
 const ARRIBA := 190.0            # a qué altura tiene la cabeza (para los textos y el vapor)
@@ -139,13 +153,48 @@ func _physics_process(delta: float) -> void:
 				cambiar("giro", {"siguiente": 0.0})
 		"giro":
 			girar(delta, johnny)
+		"aviso_acido":
+			# levanta la fregona chorreando ácido
+			frenar(delta)
+			mirar(delta, hacia)
+			if randf() < delta * 12.0:
+				Particulas.soltar(self, global_position + Vector2(randf_range(-30, 30), -randf_range(60, 140)),
+					Vector2(0, 60), Color("#9be33b"), 3, 0.5)
+			if t >= AVISO_ACIDO:
+				cambiar("acido", {"lanzadas": 0})
+		"acido":
+			acido(delta, johnny, hacia, apunta)
+		"aviso_embestida":
+			# se agacha mirando a Johnny (la franja roja marca por dónde va a venir)
+			frenar(delta)
+			mirar(delta, hacia)
+			datos.angulo = apunta
+			if t >= datos.aviso:
+				cambiar("embestida", {"angulo": apunta, "quedan": datos.quedan - 1})
+				Sonido.tocar("rugido")
+		"embestida":
+			embestir(delta, d)
+		"aviso_circulo":
+			frenar(delta, 6.0)
+			if t >= AVISO_CIRCULO:
+				cambiar("circulo", {"quedan": datos.quedan})
+				fregonazo_circulo(johnny)
+		"circulo":
+			frenar(delta)
+			if t >= 0.4:
+				if datos.quedan > 0:
+					cambiar("aviso_embestida", {"quedan": datos.quedan, "aviso": AVISO_EMBESTIDA * 0.6, "angulo": apunta})
+				else:
+					andar(0.5 if enfadada() else 0.9)
 		"llamar":
 			frenar(delta)
 			if t >= 0.8 and not datos.get("hecho", false):
 				datos.hecho = true
-				var a0 := randf() * TAU
-				pide_zombi.emit("normal", global_position + Vector2(cos(a0) * 120.0, sin(a0) * 90.0))
-				pide_zombi.emit("rapido", global_position + Vector2(cos(a0 + PI) * 120.0, sin(a0 + PI) * 90.0))
+				# repartidos a su alrededor, uno normal y otro rápido
+				var n: int = VECINOS[fase - 1]
+				for i in n:
+					var a := float(i) / n * TAU + randf_range(-0.5, 0.5)
+					pide_zombi.emit("rapido" if i % 2 else "normal", global_position + Vector2(cos(a) * 120.0, sin(a) * 90.0))
 			if t >= 1.1:
 				andar(0.6)
 		"grito":
@@ -180,12 +229,14 @@ func elegir(d: float) -> void:
 		var johnny := get_tree().get_first_node_in_group("jugador")
 		cambiar("aviso_fregonazo", {"angulo": (johnny.global_position - global_position).angle()})
 		return
-	if enfadada() and espera_llamar <= 0.0 and secuaces() < 3:
+	# grita y llama a los vecinos (si no quedan ya muchos zombis por ahí)
+	if espera_llamar <= 0.0 and secuaces() <= VECINOS[fase - 1]:
 		espera_llamar = 12.0
 		cambiar("llamar")
-		gritar("¡LOS DEL 3º!", Color("#ffd23f"))
+		gritar("¡VECINOS!", Color("#ffd23f"), 26)
+		Sonido.tocar("rugido")
 		return
-	var opciones := ["abanico", "lejia", "giro"] if enfadada() else ["abanico", "lejia"]
+	var opciones := ["abanico", "lejia", "giro", "acido", "embestida"] if enfadada() else ["abanico", "lejia", "acido", "embestida"]
 	opciones.erase(ultimo)
 	ultimo = opciones.pick_random()
 	match ultimo:
@@ -194,6 +245,13 @@ func elegir(d: float) -> void:
 		"lejia":
 			cambiar("lejia", {"lanzadas": 0})
 			gritar("¡LEJÍA!", Color("#bfe9ff"))
+		"acido":
+			cambiar("aviso_acido")
+			gritar("¡ÁCIDO!", Color("#9be33b"))
+		"embestida":
+			var johnny := get_tree().get_first_node_in_group("jugador")
+			cambiar("aviso_embestida", {"quedan": EMBESTIDAS[fase - 1], "aviso": AVISO_EMBESTIDA,
+				"angulo": (johnny.global_position - global_position).angle()})
 		"giro":
 			cambiar("aviso_giro")
 			gritar("¡A BARRER!", Color("#ffd23f"))
@@ -246,6 +304,53 @@ func lejia(delta: float, johnny: Node2D, hacia: Vector2) -> void:
 		Sonido.tocar("escupitajo")
 	if t >= 0.3 + n * 0.18 + 0.4:
 		andar(0.5 if enfadada() else 1.0)
+
+
+# Charcos de ácido: sacude la fregona y los salpica en parábola (el primero, justo donde va a estar Johnny)
+func acido(delta: float, johnny: Node2D, hacia: Vector2, apunta: float) -> void:
+	frenar(delta)
+	mirar(delta, hacia)
+	var n: int = ACIDOS[fase - 1]
+	var hueco := 0.1 if enfadada() else 0.16
+	while datos.lanzadas < n and t >= datos.lanzadas * hueco:
+		var lejos := 0.0 if datos.lanzadas == 0 else randf_range(70.0, 190.0 if enfadada() else 140.0)
+		var gota := PROYECTIL.instantiate()
+		gota.tipo = "acido"
+		gota.desde = global_position + Vector2.from_angle(apunta) * 40.0   # sale de la punta de la fregona
+		gota.alto_salida = 40.0
+		gota.hasta = johnny.global_position + johnny.velocity * 0.3 + Vector2.from_angle(randf() * TAU) * lejos
+		get_parent().add_child(gota)
+		if datos.lanzadas % 2 == 0:
+			Sonido.tocar("escobazo")
+		datos.lanzadas += 1
+	if t >= n * hueco + 0.45:
+		andar(0.5 if enfadada() else 0.9)
+
+
+# Embestida: corre en línea recta muy deprisa; al llegar a Johnny (o al cansarse) frena y prepara el fregonazo
+func embestir(delta: float, d: float) -> void:
+	marcha = Vector2.from_angle(datos.angulo) * VELOCIDAD_EMBESTIDA
+	mirada = Vector2.from_angle(datos.angulo)
+	if randf() < delta * 25.0:
+		Particulas.soltar(self, global_position + Vector2(randf_range(-20, 20), PIE), Vector2(randf_range(-30, 30), -20),
+			Color("#8a7a66"), 3, 0.4)
+	if d < 75.0 or t >= TIEMPO_EMBESTIDA:
+		marcha *= 0.3
+		cambiar("aviso_circulo", {"quedan": datos.quedan})
+
+
+# Fregonazo en círculo: golpea todo lo que tiene alrededor y lo echa hacia atrás
+func fregonazo_circulo(johnny: Node2D) -> void:
+	Sonido.tocar("escobazo")
+	for i in 14:
+		var a := i / 14.0 * TAU
+		var r := randf_range(50.0, RADIO_CIRCULO)
+		Particulas.soltar(self, global_position + Vector2(cos(a) * r, sin(a) * r * 0.8), Vector2(cos(a), sin(a)) * 60.0,
+			Color("#cbb994"), 4, 0.5)
+	var hacia: Vector2 = johnny.global_position - global_position
+	if hacia.length() - johnny.RADIO <= RADIO_CIRCULO:
+		johnny.recibir_dano(DANO_CIRCULO)
+		johnny.empujar(hacia.normalized() * 700.0)
 
 
 # Torbellino (solo enfadada): da vueltas con la fregona, persigue a Johnny y escupe polvo en espiral
@@ -368,6 +473,16 @@ func animar() -> void:
 			fijar("ataque", dir, alzar(t / AVISO_FREGONAZO))
 		"fregonazo":
 			fijar("ataque", dir, bajar(t / 0.35))
+		"aviso_acido":
+			fijar("ataque", dir, alzar(t / AVISO_ACIDO))
+		"acido":
+			fijar("ataque", dir, bajar(t / (ACIDOS[fase - 1] * (0.1 if enfadada() else 0.16) + 0.45)))
+		"aviso_embestida":
+			fijar("ataque", dir, alzar(t / datos.aviso))
+		"aviso_circulo":
+			fijar("ataque", dir, alzar(t / AVISO_CIRCULO))
+		"circulo":
+			fijar("ataque", dir, bajar(t / 0.4))
 		"lejia":
 			var n := BOTELLAS + 2 if enfadada() else BOTELLAS
 			fijar("lanzar", dir, avance("lanzar_" + dir, t / (0.3 + n * 0.18 + 0.4)))
@@ -448,6 +563,24 @@ func _draw() -> void:
 			for i in n:
 				var a: float = apunta - abierto / 2.0 + float(i) / (n - 1) * abierto
 				draw_dashed_line(Vector2.from_angle(a) * 40.0, Vector2.from_angle(a) * 170.0, color, 2.5, 8.0)
+		"aviso_embestida":
+			# franja roja por donde va a embestir
+			var k := minf(1.0, t / datos.aviso)
+			var largo := VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA
+			draw_set_transform(Vector2(0, 6), datos.angulo)
+			draw_rect(Rect2(0, -radio, largo, radio * 2.0), Color(rojo, 0.08 + k * 0.2))
+			draw_rect(Rect2(0, -radio, largo * k, radio * 2.0), Color(rojo, 0.9), false, 3.0)
+		"aviso_circulo":
+			var k := minf(1.0, t / AVISO_CIRCULO)
+			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.8))
+			draw_circle(Vector2.ZERO, RADIO_CIRCULO, Color(rojo, 0.08 + k * 0.22))
+			draw_arc(Vector2.ZERO, RADIO_CIRCULO, 0, TAU, 48, Color(rojo, 0.9), 3.0)
+			draw_circle(Vector2.ZERO, RADIO_CIRCULO * k, Color(rojo, 0.25))
+		"circulo":
+			# el anillo de polvo del golpe, que se abre y se desvanece
+			var k := minf(1.0, t / 0.35)
+			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.8))
+			draw_arc(Vector2.ZERO, RADIO_CIRCULO * (0.6 + k * 0.4), 0, TAU, 48, Color("#cbb994", 1.0 - k), 6.0)
 		"aviso_giro":
 			var k := minf(1.0, t / 0.6)
 			draw_set_transform(Vector2(0, 10), 0.0, Vector2(1, 0.75))

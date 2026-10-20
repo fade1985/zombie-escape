@@ -17,6 +17,9 @@ const LUZ_FUEGO := preload("res://escenas/luces/fuego.tscn")
 const TIPOS := {
 	"veneno": {"dibujo": VENENO, "radio": 64.0, "vida": 4.0, "estados": {"veneno": {}}},
 	"lejia": {"dibujo": LEJIA, "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
+	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
+	"acido": {"dibujo": VENENO, "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}},
+		"tinte": Color(1.0, 1.0, 0.55)},
 	"vomito": {"dibujo": VENENO, "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true,
 		"tinte": Color(1.0, 1.0, 0.45)},
 	"lluvia": {"dibujo": VENENO, "radio": 150.0, "vida": 7.0, "estados": {"acido": {"dps": 10.0}}, "solo_zombis": true,

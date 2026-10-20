@@ -1,5 +1,5 @@
 # Algo que se lanza en parábola: el moco del venenoso, la botella de lejía de la portera, el cóctel molotov de
-# Johnny o su vómito (mutación Gastroenteritis). Vuela por encima de todo y, al caer, deja un charco. Los de
+# Johnny, su vómito (mutación Gastroenteritis) o el ácido que salpica la portera. Vuela por encima de todo y, al caer, deja un charco. Los de
 # los zombis, si Johnny está justo donde caen, le hacen daño; el molotov suelta una llamarada que prende a los
 # zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js).
 extends Node2D
@@ -11,6 +11,7 @@ const MOCO := preload("res://assets/sprites/objeto-moco.png")
 const TIPOS := {
 	"veneno": {"vuelo": 0.8, "altura": 90.0, "golpe": 8, "charco": "veneno"},
 	"lejia": {"vuelo": 0.9, "altura": 130.0, "golpe": 10, "charco": "lejia"},
+	"acido": {"vuelo": 0.75, "altura": 110.0, "golpe": 8, "charco": "acido"},   # lo que salpica la portera con la fregona
 	"molotov": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "fuego"},
 	"vomito": {"vuelo": 0.45, "altura": 70.0, "golpe": 0, "charco": "vomito"},
 }
@@ -56,7 +57,7 @@ func caer(datos: Dictionary) -> void:
 		_: Sonido.tocar("chof")
 	if tipo == "molotov":
 		llamarada(charco.radio())
-	elif tipo == "vomito":
+	elif tipo == "vomito" or tipo == "acido":
 		for i in 8:
 			var a := randf() * TAU
 			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), Color("#c7e04a"), randf_range(3, 5), 0.4)
@@ -93,9 +94,9 @@ func _draw() -> void:
 	var alto: float = alto_salida * (1.0 - k) + sin(k * PI) * datos.altura
 	var donde := Vector2(0, -alto)
 	match tipo:
-		"veneno", "vomito":
+		"veneno", "vomito", "acido":
 			draw_set_transform(donde, 0.0, Vector2(2, 2))
-			draw_texture(MOCO, -Vector2(MOCO.get_size()) / 2.0, Color(1, 1, 0.45) if tipo == "vomito" else Color.WHITE)
+			draw_texture(MOCO, -Vector2(MOCO.get_size()) / 2.0, Color.WHITE if tipo == "veneno" else Color(1, 1, 0.45))
 		"molotov":
 			botella(donde, t * 12.0)
 		_:
