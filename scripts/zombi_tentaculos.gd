@@ -60,6 +60,7 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 			estado = "latigazo"
 			t_ataque = 0.0
 			sprite.position.x = 0.0
+			Sonido.tocar("latigazo")
 			golpear(johnny)
 	elif estado == "latigazo" and t_ataque >= LATIGAZO:
 		estado = "andar"

@@ -8,6 +8,10 @@ config/name="Zombie Escape"
 run/main_scene="res://escenas/menu_principal.tscn"
 config/features=PackedStringArray("4.7")
 
+[autoload]
+
+Sonido="*res://scripts/sonido.gd"
+
 [display]
 
 window/size/viewport_width=960

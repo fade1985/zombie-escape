@@ -82,6 +82,7 @@ static func herir(zombi: Node2D, tipo: String, dano: float) -> void:
 
 # El rayo de la descarga: una línea en zigzag de puntitos azules y blancos
 static func rayo(desde: Node, a: Vector2, b: Vector2) -> void:
+	Sonido.tocar("click")
 	var n := maxi(4, roundi(a.distance_to(b) / 8.0))
 	for i in n + 1:
 		var lado := 1.0 if i % 2 else -1.0
@@ -115,7 +116,9 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		b.velocidad = w.velocidad
 		sala.add_child(b)
 		b.global_position = salida
+		Sonido.tocar("latigazo")
 		return
+	Sonido.tocar("escupitajo" if w.efecto == "acido" else "fuego")
 	var cono: bool = w.efecto == "cono"
 	var n := 9 if cono else 1
 	var abertura := 0.9 if cono else 0.14
@@ -143,6 +146,8 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 	zombi.recibir_golpe(d, hacia.normalized() * EMPUJE * empuje)
 	if not zombi.is_in_group("zombis"):
 		return
+	if tipo == "bumeran":
+		Sonido.tocar("porrazo")
 	if tipo == "llama" or tipo == "cono":
 		prender(zombi)
 	elif tipo == "acido":

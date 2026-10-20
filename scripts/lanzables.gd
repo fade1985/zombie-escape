@@ -129,6 +129,7 @@ func tipos() -> Array:
 func cambiar() -> void:
 	var ks := tipos()
 	tipo = ks[(ks.find(tipo) + 1) % ks.size()]
+	Sonido.tocar("pitido")
 
 
 func radio_zona() -> float:
@@ -191,7 +192,9 @@ func mas_cercano() -> Node2D:
 func lanzar(donde: Vector2) -> void:
 	if cuantas(tipo) <= 0:
 		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), "¡Sin %s!" % nombre(tipo), color(tipo), 18)
+		Sonido.tocar("no")
 		return
+	Sonido.tocar("lanzar")
 	var sala: Node = johnny.get_parent()
 	if ARROJADIZAS.has(tipo):
 		lanzar_creada(donde, sala)

@@ -176,6 +176,8 @@ func _process(_delta: float) -> void:
 func abrir(programa: String, foco := "") -> void:
 	var antes := abierta
 	abierta = programa
+	if programa != antes:
+		Sonido.tocar("click")
 	if ventana:
 		ventana.queue_free()
 		ventana = null
@@ -353,7 +355,9 @@ func comprar(n: int) -> void:
 	var s := Talentos.comprar_puntos(n)
 	if s.is_empty():
 		info.text = "No te llega: cada punto cuesta $%d de lo ahorrado." % Talentos.PRECIO_PUNTO
+		Sonido.tocar("no")
 		return
+	Sonido.tocar("compra")
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	abrir("puntos", "b_comprar_1" if s.dolares >= Talentos.PRECIO_PUNTO else "")
 	info.set_deferred("text", "¡Hecho! Ahora tienes %d puntos para gastar." % s.puntos)   # después de marcar el botón (que pone su explicación)
@@ -362,7 +366,9 @@ func comprar(n: int) -> void:
 func subir(id: String) -> void:
 	var motivo := Talentos.motivo(Guardado.cargar(), id)
 	if motivo != "":
+		Sonido.tocar("no")
 		return   # la línea de info ya dice por qué no se puede
+	Sonido.tocar("compra")
 	var s := Talentos.subir(id)
 	partida.aplicar_talentos(s.talentos)
 	abrir("puntos", "b_" + id)
@@ -422,12 +428,15 @@ func comprar_arma(id: String) -> void:
 	var johnny: Node = partida.johnny
 	if johnny.huecos[w.tipo] == id:
 		info.text = "Ya llevas %s." % w.nombre.to_lower()
+		Sonido.tocar("no")
 		return
 	var s := Guardado.cargar()
 	var precio: int = Armas.PRECIOS[id]
 	if s.dolares < precio:
 		info.text = "No te llega: te faltan $%d." % (precio - s.dolares)
+		Sonido.tocar("no")
 		return
+	Sonido.tocar("compra")
 	s.dolares -= precio
 	if not id in s.armas:
 		s.armas.append(id)

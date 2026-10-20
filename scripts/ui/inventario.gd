@@ -143,6 +143,7 @@ func poner_guardada() -> void:
 	var id: String = guardadas[i]
 	guardadas[i] = johnny.huecos[Armas.datos(id).tipo]
 	johnny.coger(id)
+	Sonido.tocar("cambiar")
 	sel = ""
 	foco = "cerrar"
 	pintar()
@@ -224,6 +225,7 @@ func sacar() -> void:
 		return
 	var a: Dictionary = lista[i]
 	Guardado.cambiar(func(s): s.baul_armas.remove_at(i))
+	Sonido.tocar("compra")
 	var johnny: Node2D = partida.johnny
 	var lz: Lanzables = partida.lanzables
 	if a.hueco == "arrojadiza":
@@ -331,6 +333,7 @@ func crear_arma() -> void:
 		return
 	var receta := Recetas.buscar(mesa[0].id, mesa[1].id)
 	if receta == "" or not cabe_en_baul(mesa):
+		Sonido.tocar("no")
 		return
 	var johnny: Node2D = partida.johnny
 	# se gastan los ingredientes (las armas guardadas, de la última a la primera para no liar los números)
@@ -355,6 +358,7 @@ func crear_arma() -> void:
 		partida.armas_guardadas.erase(otra)
 		johnny.coger(otra)
 	hecha = Recetas.crear(receta)
+	Sonido.tocar("compra" if hecha.rareza == "verde" else "limpio")   # las raras y épicas suenan a premio
 	Guardado.cambiar(func(s): s.baul_armas.append(hecha))
 	puestos = []
 	foco = "cerrar"
@@ -510,6 +514,7 @@ func estilo(borde: Color, elegida: bool, encima: bool, solo_borde := false) -> S
 
 # Al tocar una casilla: en el banco sube a la mesa; en los demás, se elige (o se deja de elegir)
 func tocar(clave: String) -> void:
+	Sonido.tocar("click")
 	if abierto == "banco":
 		poner_en_mesa(clave)
 		return

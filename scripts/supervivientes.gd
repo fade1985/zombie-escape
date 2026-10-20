@@ -224,11 +224,13 @@ func actualizar_socorro(delta: float) -> void:
 	if partida.aqui == sup.sitio and puerta:
 		donde = puerta.position + Vector2(0, -110)
 		puerta.golpes = 0.45
+		Sonido.tocar("socorro")
 	elif partida.aqui == 0:
 		var p := puerta_del_pasillo()
 		if p:
 			donde = p.position + Vector2(0, 50 if p.salida.dir == "arriba" else -90)
 			tamano = 15
+			Sonido.tocar("socorro_lejos")
 	if donde == Vector2.INF:
 		return
 	grito_t = tiempo
@@ -276,6 +278,7 @@ func piso_limpio(idx: int) -> void:
 		npc.asustado = false
 	if puerta:
 		puerta.abrir()
+		get_tree().create_timer(0.5, false).timeout.connect(Sonido.tocar.bind("puerta"))
 		await get_tree().create_timer(0.1, false).timeout
 		if partida.mapa and partida.aqui == idx:
 			partida.mapa.rehornear()
@@ -296,6 +299,7 @@ func unir(a: Aliado) -> void:
 	rescate.sitio = partida.aqui
 	npc = null
 	partida.decir("¡%s se une al equipo! %s" % [a.def.nombre, a.def.desc], 3.5)
+	Sonido.tocar("limpio")
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
 
 
@@ -336,6 +340,10 @@ func actualizar_horda(delta: float) -> void:
 		a.decir(frase[1])
 		if frase[0] == 0.5:
 			soltar_provisiones(a)
+	# los últimos 10 segundos: aviso
+	if not a.caido and HORDA.dura - h.hecho <= 10.0 and not h.get("cuenta", false):
+		h.cuenta = true
+		Sonido.tocar("jefe")
 
 	# los grupos de zombis
 	h.grupo_t -= delta
@@ -377,6 +385,8 @@ func acabar_horda() -> void:
 	partida.actualizar_puertas()
 	a.decir("¡YA ESTÁ! ¡CORRE!")
 	partida.decir("¡Puerta abierta! Salid de aquí", 3.0)
+	Sonido.tocar("limpio")
+	get_tree().create_timer(0.25, false).timeout.connect(Sonido.tocar.bind("puerta"))
 
 
 # Le han dado: si se ha caído, lo dice; si Johnny anda lejos, se queja (como mucho cada 6 s)
@@ -475,6 +485,7 @@ func llevar_vecino(v: Aliado) -> void:
 		equipo[i].idx = i
 	Guardado.cambiar(func(g): g.acompanante = v.def.id)
 	partida.decir("%s te acompaña · %s" % [v.def.nombre, v.def.desc], 3.0)
+	Sonido.tocar("limpio")
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
 

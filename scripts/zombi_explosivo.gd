@@ -28,6 +28,9 @@ func estado_propio(delta: float, _johnny: Node2D) -> void:
 	if estado != "mecha":
 		return
 	pedir_velocidad(Vector2.ZERO)
+	# Un pitido cada octavo de segundo, como el JS
+	if floorf(mecha * 8.0) != floorf((mecha - delta) * 8.0):
+		Sonido.tocar("pitido")
 	mecha -= delta
 	# Parpadea en rojo cada vez más deprisa (en blanco taparía la dinamita) y tiembla
 	var k := 1.0 - mecha / MECHA

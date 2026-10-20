@@ -175,6 +175,7 @@ func _physics_process(delta: float) -> void:
 	if estado_dano >= 1.0:
 		var entero := int(estado_dano)
 		estado_dano -= entero
+		Sonido.tocar("chisporroteo")
 		quitar_vida(entero)
 		if not vivo:
 			return
@@ -261,6 +262,7 @@ func esquivar(pedido: Vector2) -> void:
 	esquiva_espera = stats.esquiva_espera
 	invulnerable = maxf(invulnerable, 0.3)
 	estela_t = 0.0
+	Sonido.tocar("esquiva")
 
 
 # Una copia de Johnny, azulada y medio transparente, que se queda atrás y se apaga
@@ -396,6 +398,7 @@ func atacar(angulo: float) -> void:
 	if w.tipo == "cuerpo":
 		# La animación del golpe dura medio segundo como mucho, y nunca más que el hueco entre golpes
 		ataque_dur = minf(0.5, 0.95 / w.ritmo)
+		Sonido.tocar("barrido")
 		golpe_pendiente = true
 		golpe_angulo = angulo
 	else:
@@ -420,6 +423,7 @@ func atacar(angulo: float) -> void:
 func golpear(angulo: float) -> void:
 	var w := arma()
 	var mitad := deg_to_rad(w.arco) / 2.0
+	var tocados := 0
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
@@ -430,8 +434,11 @@ func golpear(angulo: float) -> void:
 		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
 			var dano := con_critico(w.dano)
 			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * w.empuje)
+			tocados += 1
 			if w.has("efecto"):
 				ArmasCreadas.efecto_golpe(zombi, w, dano)   # las armas creadas: aturdir, prender, sangrar...
+	if tocados > 0:
+		Sonido.tocar("porrazo")
 
 
 # Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo
@@ -468,6 +475,7 @@ func disparar(angulo: float) -> void:
 		bala.vida = w.alcance / w.velocidad
 		get_parent().add_child(bala)
 		bala.global_position = salida
+	Sonido.tocar("escopeta" if w.perdigones > 1 else "pistola")
 	# El fogonazo alumbra un instante alrededor (más con la escopeta)
 	Luz.destello(self, salida - Vector2(0, 50), 170.0 if w.perdigones > 1 else 120.0, 0.12 if w.perdigones > 1 else 0.08)
 	oir_disparo()
@@ -502,6 +510,7 @@ func empezar_recarga() -> void:
 	if w.tipo != "fuego" or recargando > 0.0 or balas >= w.cargador:
 		return
 	recargando = w.recarga
+	Sonido.tocar("recargar")
 	avisar_arma()
 
 
@@ -509,6 +518,7 @@ func empezar_recarga() -> void:
 func terminar_recarga() -> void:
 	var w := arma()
 	recargando = 0.0
+	Sonido.tocar("cartucho" if w.cartucho else "recargado")
 	if w.cartucho:
 		balas += 1
 		if balas < w.cargador:
@@ -536,6 +546,7 @@ func coger(id: String) -> void:
 # Cambia a la otra arma (Q, rueda del ratón o botón Y)
 func cambiar_mano() -> void:
 	sostener("fuego" if mano == "cuerpo" else "cuerpo")
+	Sonido.tocar("cambiar")
 	espera = maxf(espera, CAMBIO)   # un instante para cambiar de arma
 
 
@@ -596,6 +607,7 @@ func recibir_dano(cantidad: int) -> void:
 		sola_t = stats.esquiva_sola
 		invulnerable = 0.5
 		Zombi.texto_flotante(get_parent(), global_position + Vector2(-40, -70), "¡Esquivado!", AZUL, 18)
+		Sonido.tocar("esquiva")
 		return
 	invulnerable = INVULNERABLE
 	# Durito quita un poco a cada golpe; el escudo de Acero para la mitad de lo que queda mientras dure
@@ -604,6 +616,7 @@ func recibir_dano(cantidad: int) -> void:
 		var parado := minf(escudo, dano / 2.0)
 		escudo -= parado
 		dano = maxi(1, roundi(dano - parado))
+	Sonido.tocar("dano")
 	quitar_vida(dano)
 
 

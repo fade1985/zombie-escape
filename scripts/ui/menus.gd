@@ -140,13 +140,22 @@ func pausa(partida: Node) -> void:
 	botones.add_theme_constant_override("separation", 10)
 	columna.add_child(botones)
 	var seguir := boton(botones, "Continuar", func(): continuar.emit())
-	# La música llega en la fase 8: de momento solo se guarda lo que se elige
 	var musica := boton(botones, texto_musica(), func(): pass)
 	musica.pressed.connect(func():
 		Guardado.cambiar(func(g): g.ajustes.musica = not g.ajustes.musica)
+		Sonido.musica_si(Guardado.cargar().ajustes.musica)
 		musica.text = texto_musica())
+	# Quitar todo el sonido (como el botón del altavoz del JS): no se guarda
+	var sonido := boton(botones, texto_sonido(), func(): pass)
+	sonido.pressed.connect(func():
+		Sonido.silenciar(not Sonido.silenciado())
+		sonido.text = texto_sonido())
 	boton(botones, "Abandonar partida", func(): abandonar.emit(), "BotonRojo")
 	seguir.grab_focus.call_deferred()
+
+
+func texto_sonido() -> String:
+	return "Sonido: %s" % ("No" if Sonido.silenciado() else "Sí")
 
 
 func texto_musica() -> String:

@@ -187,6 +187,7 @@ func disparar(blanco: Node2D) -> void:
 	bala.radio = 4.0
 	bala.vida = 520.0 / 620.0
 	get_parent().add_child(bala)
+	Sonido.tocar("disparo_aliado")
 	var salida := global_position + Vector2(0, 16) + hacia * 18.0
 	bala.global_position = salida
 	Luz.destello(self, salida - Vector2(0, 50), 100.0, 0.07)
@@ -197,6 +198,7 @@ func curar(cuanto: int) -> void:
 	if not johnny.vivo or johnny.vida >= johnny.vida_tope():
 		return
 	johnny.curar(cuanto)
+	Sonido.tocar("curar")
 	cura_t = 0.45
 	partida.numero(johnny.position, "+%d" % cuanto, Tema.VERDE)
 	Particulas.anillo(johnny, johnny.global_position, 40.0, Tema.VERDE, 0.4)
@@ -213,6 +215,7 @@ func recibir_dano(cantidad: int) -> void:
 	if inv_t > 0.0 or caido:
 		return
 	vida -= cantidad
+	Sonido.tocar("dano")
 	inv_t = 0.5
 	golpe_t = 0.15
 	partida.numero(position, "-%d" % cantidad, Tema.ROJO)
@@ -225,6 +228,7 @@ func recibir_dano(cantidad: int) -> void:
 
 func levantarse() -> void:
 	caido = false
+	Sonido.tocar("curar")
 	vida = VIDA / 2
 	inv_t = 1.5
 	levantar = 0.0

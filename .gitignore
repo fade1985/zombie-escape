@@ -7,3 +7,5 @@ captura*.png
 captura*.png.import
 # Python
 __pycache__/
+# Los efectos de sonido grabados para escucharlos (tools/probar_sonido.gd)
+tools/efectos/

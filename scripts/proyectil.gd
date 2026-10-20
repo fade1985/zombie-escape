@@ -48,6 +48,12 @@ func caer(datos: Dictionary) -> void:
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
 		charco.dano_lanzar = dano_lanzar
 	get_parent().add_child(charco)
+	match tipo:
+		"molotov":
+			Sonido.tocar("cristal")
+			Sonido.tocar("fuego")
+		"lejia": Sonido.tocar("cristal")
+		_: Sonido.tocar("chof")
 	if tipo == "molotov":
 		llamarada(charco.radio())
 	elif tipo == "vomito":

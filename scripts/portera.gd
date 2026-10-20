@@ -213,12 +213,15 @@ func abanico(delta: float, hacia: Vector2, apunta: float) -> void:
 			disparar(global_position + Vector2.from_angle(apunta) * 30.0, a, VELOCIDAD_GOTA, DANO_GOTA, 9.0)
 		datos.i += 1
 		datos.siguiente = 0.4
+		Sonido.tocar("escobazo")
+		Sonido.tocar("disparo_zombi")
 	if datos.i >= datos.tandas and datos.siguiente <= 0.0:
 		andar(0.5 if enfadada() else 0.9)
 
 
 # El golpe de fregona: daña y empuja a Johnny si está dentro del trozo marcado
 func fregonazo(johnny: Node2D) -> void:
+	Sonido.tocar("escobazo")
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
 	if hacia.length() - johnny.RADIO <= ALCANCE_FREGONAZO and desvio <= MEDIO_FREGONAZO + 0.15:
@@ -240,6 +243,7 @@ func lejia(delta: float, johnny: Node2D, hacia: Vector2) -> void:
 		botella.hasta = johnny.global_position + johnny.velocity * 0.3 + Vector2.from_angle(randf() * TAU) * lejos
 		get_parent().add_child(botella)
 		datos.lanzadas += 1
+		Sonido.tocar("escupitajo")
 	if t >= 0.3 + n * 0.18 + 0.4:
 		andar(0.5 if enfadada() else 1.0)
 
@@ -253,6 +257,7 @@ func girar(delta: float, johnny: Node2D) -> void:
 		datos.siguiente = 0.11
 		for k in [0.0, PI]:
 			disparar(global_position, giro * 0.45 + k, 170.0, 10, 8.0)
+		Sonido.tocar("escobazo")
 	if t >= TIEMPO_GIRO:
 		cambiar("recuperar", {"dur": 0.9})
 
@@ -262,6 +267,7 @@ func enfadarse(johnny: Node2D) -> void:
 	for bala in get_tree().get_nodes_in_group("balas_zombi"):
 		bala.queue_free()
 	gritar("¡QUE ACABO DE FREGAR!", Color("#ffd23f"), 26)
+	Sonido.tocar("rugido")
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < 260.0:
 		johnny.empujar(hacia.normalized() * 900.0)
@@ -317,6 +323,7 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	# Los jefes apenas se mueven con los golpes
 	marcha += fuerza.normalized() * 8.0
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-20, 0), -ARRIBA), str(cantidad))
+	Sonido.tocar("golpe")
 	vida_cambiada.emit(vida, vida_max)
 	if vida <= 0:
 		morir()
@@ -330,6 +337,7 @@ func herir(cantidad: float, _color := Color.WHITE) -> void:
 
 func morir() -> void:
 	estado = "muerto"
+	Sonido.tocar("explosion")
 	remove_from_group("zombis")
 	$Choque.set_deferred("disabled", true)
 	z_index = -1

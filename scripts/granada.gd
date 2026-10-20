@@ -71,7 +71,10 @@ func _physics_process(delta: float) -> void:
 		# suena: notas que salen hacia arriba
 		Particulas.soltar(self, global_position + Vector2(randf_range(-8, 8), -z - 20), Vector2(randf_range(-30, 30), -70),
 			Lanzables.ARROJADIZAS.atraedora.color, 3, 0.5)
+	var antes := floori(parpadeo)
 	parpadeo += delta / (0.4 - 0.33 * k * k)
+	if floori(parpadeo) != antes and floori(parpadeo) % 2 == 1:
+		Sonido.tocar("pitido")   # pita cada vez que se enciende en rojo
 	queue_redraw()
 	if mecha <= 0.0:
 		explotar()

@@ -103,6 +103,7 @@ func actuar(id: String) -> bool:
 				z.velocity = p.direction_to(z.global_position) * m.empuje * z.empuje
 				z.aturdido = maxf(z.aturdido, m.aturde)
 			Particulas.anillo(johnny, p, m.radio, Color("#b5179e"))
+			Sonido.tocar("latigazo")
 		"gastro":
 			# al zombi (o la portera) más cercano que no esté a oscuras
 			var objetivo: Node2D = null
@@ -121,6 +122,7 @@ func actuar(id: String) -> bool:
 			vomito.alto_salida = 30.0
 			vomito.hasta = objetivo.global_position + Vector2(0, objetivo.radio * 0.5)
 			johnny.get_parent().add_child(vomito)
+			Sonido.tocar("chof")
 		"locura":
 			var zs := cerca(m.radio)
 			if zs.is_empty():
@@ -130,6 +132,7 @@ func actuar(id: String) -> bool:
 				z.lio_angulo = randf() * TAU
 			Particulas.anillo(johnny, p, m.radio, Color("#ffd23f"))
 			Zombi.texto_flotante(johnny.get_parent(), p + Vector2(-50, -100), "¡AAAAAH!", Color("#ffd23f"), 22)
+			Sonido.tocar("rugido")
 		"flatulento":
 			var zs := cerca(m.radio)
 			if zs.is_empty():
@@ -137,6 +140,7 @@ func actuar(id: String) -> bool:
 			for z in zs:
 				z.aturdido = maxf(z.aturdido, m.paraliza)
 				Estados.poner(z.estados, "gases", m.paraliza, m.dps)   # el daño va como un estado, poco a poco
+			Sonido.tocar("rugido")
 			# la nube de gases
 			for i in 14:
 				var a := randf() * TAU

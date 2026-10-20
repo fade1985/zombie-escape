@@ -70,6 +70,7 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 			moco.alto_salida = BOCA
 			moco.hasta = johnny.global_position
 			get_parent().add_child(moco)
+			Sonido.tocar("escupitajo")
 	# Se queda plantado hasta acabar la animación (si se moviera sin mover las piernas, parecería que flota)
 	if escupido and not sprite.is_playing():
 		estado = "andar"

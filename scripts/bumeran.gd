@@ -39,6 +39,7 @@ func _physics_process(delta: float) -> void:
 		angulo = falta.angle()
 		global_position += falta.normalized() * minf(velocidad * 1.2 * delta, falta.length())
 		if falta.length() < 22.0 or t > 4.0:
+			Sonido.tocar("cambiar")   # vuelve a la mano
 			queue_free()
 			return
 	for zombi in get_tree().get_nodes_in_group("zombis"):

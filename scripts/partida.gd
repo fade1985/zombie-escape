@@ -58,6 +58,7 @@ var planta: Dictionary
 var aqui := 0              # el sitio de la planta en el que está Johnny
 var mapa: Node2D
 var cambiando := false     # durante el fundido no se puede cruzar otra puerta
+var latido := 0.0         # cuenta atrás hasta el siguiente latido (con poca vida)
 var cerrada := false       # si la puerta del apartamento en el que está se ha cerrado
 var jefa: Node2D = null
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
@@ -88,7 +89,9 @@ func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
 	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
-	johnny.resucito.connect(func(): decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
+	johnny.resucito.connect(func():
+		Sonido.tocar("limpio")
+		decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
 	johnny.avisar_arma()
 	add_child(luz)
 	luz.seguir_a(johnny)
@@ -180,6 +183,7 @@ func elegir_mutacion(id: String) -> void:
 	if id in mutaciones.tengo:
 		return
 	mutaciones.tengo.append(id)
+	Sonido.tocar("compra")
 	var antes: int = johnny.stats.escudo_mut
 	aplicar_talentos(Guardado.cargar().talentos)
 	# Endurecimiento: el escudo ya, sin esperar a la siguiente planta
@@ -267,6 +271,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		await get_tree().create_timer(0.6).timeout
 		if aqui == idx and not jefa_salio:
 			jefa_salio = true
+			Sonido.tocar("jefe")
 			jefa = meter_zombi("portera", mapa.punto_libre(johnny.position, 380.0))
 
 
@@ -324,24 +329,30 @@ func cruzar(i: int) -> void:
 	var salida: Dictionary = sitio.salidas[i]
 	if sitio.tipo != "pasillo" and cerrada:
 		decir("Aguanta: aún está forzando la cerradura" if supervivientes.en_horda() else "La puerta no se abre mientras quede algún zombi")
+		Sonido.tocar("no")
 		return
 	match salida.cerrojo:
 		"nunca":
 			decir(salida.aviso)
+			Sonido.tocar("no")
 			return
 		"llave":
 			if not planta.tiene_llave:
 				decir(salida.aviso)
+				Sonido.tocar("no")
 				return
 			# La llave se gasta al abrir: la puerta queda abierta para siempre
 			planta.tiene_llave = false
 			planta.llave_usada = true
 			salida.cerrojo = ""
 			decir("Abres con la llave")
+			Sonido.tocar("compra")
 		"jefa":
 			if not planta.jefa_muerta:
 				decir(salida.aviso)
+				Sonido.tocar("no")
 				return
+	Sonido.tocar("puerta")
 	if salida.tipo == "escaleras":
 		subir()
 		return
@@ -364,6 +375,11 @@ func _physics_process(delta: float) -> void:
 		duracion += delta
 	if mapa == null or cambiando:
 		return
+	# Con poca vida (menos del 30 %) se oye el corazón
+	latido -= delta
+	if johnny.vivo and johnny.vida < johnny.stats.vida_max * 0.3 and latido <= 0.0:
+		latido = 0.9
+		Sonido.tocar("latido")
 	var sitio: Dictionary = planta.sitios[aqui]
 	poner_lugar()
 	if sitio.tipo == "pasillo" or sitio.limpio:
@@ -374,6 +390,7 @@ func _physics_process(delta: float) -> void:
 		cerrada = true
 		actualizar_puertas()
 		decir("¡La puerta se ha cerrado detrás de ti!")
+		Sonido.tocar("portazo")
 	elif not quedan:
 		sitio.limpio = true
 		cerrada = false
@@ -383,11 +400,14 @@ func _physics_process(delta: float) -> void:
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
 		actualizar_puertas()
+		Sonido.tocar("limpio")
+		get_tree().create_timer(0.25).timeout.connect(Sonido.tocar.bind("puerta"))
 		supervivientes.piso_limpio(aqui)
 
 
 func _al_coger_llave() -> void:
 	planta.tiene_llave = true
+	Sonido.tocar("compra")
 	decir("Has cogido la llave del " + nombre_jefa(), 3.0)
 
 
@@ -428,6 +448,7 @@ func soltar_billetes(cuantos: int, donde: Vector2) -> void:
 		billete.position = donde
 		billete.cogido.connect(func():
 			dolares += 1
+			Sonido.tocar("moneda")
 			numero(billete.position, "+$1", Tema.VERDE))
 		mapa.cosas.add_child.call_deferred(billete)
 
@@ -442,6 +463,7 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	cosa.puede = lanzables.cabe.bind(k)
 	cosa.cogido.connect(func():
 		lanzables.sumar(k)
+		Sonido.tocar("compra")
 		numero(cosa.position, "+1 " + k, Lanzables.COLORES[k]))
 	mapa.cosas.add_child.call_deferred(cosa)
 
@@ -458,6 +480,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
 	cosa.cogido.connect(func():
 		mochila.append(id)
+		Sonido.tocar("compra")
 		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
 
@@ -472,6 +495,7 @@ func soltar_arma(id: String, donde: Vector2) -> void:
 	cosa.position = donde
 	cosa.cogido.connect(func():
 		armas_guardadas.append(id)
+		Sonido.tocar("compra")
 		numero(cosa.position, Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
 
@@ -485,6 +509,7 @@ func coger_botiquin(armarito: Node2D) -> void:
 	var cura: int = BOTIQUIN + johnny.stats.botiquin_extra
 	johnny.curar(cura)
 	armarito.vaciar()
+	Sonido.tocar("gema")
 	numero(sitio_aviso, "+%d" % cura, Tema.VERDE)
 	for i in 12:
 		Particulas.soltar(armarito, armarito.global_position + Vector2(0, -50),

@@ -262,6 +262,7 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	vida -= cantidad
 	velocity = fuerza * empuje
 	numero_flotante(cantidad)
+	Sonido.tocar("golpe")
 	# Se gira hacia quien le ha pegado (al revés del empuje)
 	mirar_hacia(-fuerza)
 	if vida <= 0:
@@ -277,6 +278,8 @@ func encogerse() -> void:
 
 func morir() -> void:
 	estado = "muerto"
+	Sonido.tocar("chof")
+	Sonido.tocar("muerte")
 	if arder_t > 0.0:
 		# murió ardiendo: queda chamuscado y las llamas se apagan poco a poco
 		sprite.self_modulate = Color(0.32, 0.27, 0.27)
