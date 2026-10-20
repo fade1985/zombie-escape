@@ -25,9 +25,28 @@ const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const CAPA_SUELO := 2
 const CAPA_COSAS := 1
-# Lo que está en otra habitación de un apartamento (muros, muebles, zombis) pasa de la capa 1 a esta (mapa.gd):
-# las lámparas y el fuego la alumbran, pero la linterna de Johnny no, para que no atraviese las paredes
-const CAPA_LEJOS := 4
+# En un apartamento, cada habitación tiene su propia capa (de la 3 a la 20): mapa.gd pasa todo lo que hay en
+# ella (muros, muebles, zombis, Johnny...) de la capa 1 a la suya, y cada lámpara y la linterna solo alumbran la
+# de su habitación. Como esa luz no hace sombras, si no se colaría por las paredes a la habitación de al lado
+const SALAS := 18
+const TODAS := (1 << 20) - 1               # todas las capas (los fogonazos y el fuego: duran poco)
+static var capa_johnny := CAPA_COSAS       # la capa de la habitación de Johnny (la pone mapa.gd)
+
+
+# La capa de una habitación
+static func capa_sala(sala: int) -> int:
+	return 1 << (2 + posmod(sala, SALAS))
+
+
+# Pasa algo (y todo lo que lleva dentro) de su capa de cosas (la 1 o la de una habitación) a otra
+static func poner_capa(n: Node, capa: int) -> void:
+	if n is CanvasItem:
+		var m: int = n.light_mask
+		var cosas := TODAS & ~CAPA_SUELO
+		if m & cosas:
+			n.light_mask = (m & ~cosas) | capa
+	for hijo in n.get_children():
+		poner_capa(hijo, capa)
 const MAX_DESTELLOS := 12                  # fogonazos a la vez, como mucho (la escopeta saca muchos)
 const CAMBIO := 1.5                        # lo rápido que entra o se va la oscuridad (por segundo)
 
@@ -135,6 +154,8 @@ func _process(delta: float) -> void:
 	if linterna and is_instance_valid(johnny):
 		var hacia := angulo_de(johnny.direccion)
 		linterna.rotation = lerp_angle(linterna.rotation, hacia, minf(delta * LINTERNA_GIRO, 1.0))
+		linterna_cosas.range_item_cull_mask = capa_johnny
+		luz_johnny.range_item_cull_mask = capa_johnny
 
 
 func pintar() -> void:
@@ -157,7 +178,7 @@ static func destello(desde: Node, pos: Vector2, radio: float, vida: float, fuerz
 	luz.texture = TEXTURA
 	luz.texture_scale = radio / 128.0
 	luz.color = FOGONAZO
-	luz.range_item_cull_mask = CAPA_SUELO | CAPA_COSAS | CAPA_LEJOS
+	luz.range_item_cull_mask = TODAS
 	var e := 1.1 * fuerza_destello * fuerza()
 	luz.energy = e
 	destellos += 1

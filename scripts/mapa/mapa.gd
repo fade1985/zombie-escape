@@ -63,7 +63,6 @@ var sala_casilla := PackedInt32Array()   # la habitación de cada casilla (-1 mu
 var con_niebla := PackedByteArray()      # 1 en las casillas a las que se les pinta niebla encima
 var mascara: Image                # la textura de la niebla, una casilla por píxel (ver pintar_mascara)
 var textura_niebla: ImageTexture
-var sala_johnny := -2             # la habitación en la que está Johnny (ver separar_salas)
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
 
@@ -104,7 +103,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	var tapas := Node2D.new()
 	tapas.name = "Tapas"
 	tapas.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-	tapas.light_mask = Luz.CAPA_LEJOS
+	tapas.light_mask = Luz.CAPA_COSAS
 	tapas.z_index = -10
 	tapas.draw.connect(dibujar_tapas.bind(tapas))
 	add_child(tapas)
@@ -135,6 +134,12 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	hornear(navegacion)
 	if sitio.has("apt"):
 		preparar_niebla()
+	# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
+	# la de su habitación)
+	Luz.capa_johnny = Luz.CAPA_COSAS
+	for quien in get_tree().get_nodes_in_group("jugador") + get_tree().get_nodes_in_group("presa"):
+		quien.remove_meta("sala")
+		Luz.poner_capa(quien, Luz.CAPA_COSAS)
 	set_process(sitio.has("apt") or sitio.tipo == "expo")
 
 
@@ -174,8 +179,9 @@ func nombre_zona(zona: int) -> String:
 	return sitio.apt.salas[zona].nombre
 
 
-# Las tapas de los muros, aparte del suelo: van en la capa de "lejos" (Luz.CAPA_LEJOS), que la linterna de
-# Johnny no alumbra. Si no, el haz se subiría encima de los muros y parecería que los atraviesa
+# Las tapas de los muros, aparte del suelo: se quedan en la capa 1, que en un apartamento alumbran las lámparas
+# pero no la linterna de Johnny (ver separar_salas). Si no, el haz se subiría encima de los muros y parecería
+# que los atraviesa
 func dibujar_tapas(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
 	# la franja de tapa de encima del mapa (la cámara deja ver un poco más arriba, por la cara del muro de arriba)
@@ -347,6 +353,8 @@ func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
 	luz.radio = 210.0 if m.tipo == "lamp" else 150.0
 	luz.mapa = self
 	luz.zona = m.zona
+	if sitio.has("apt"):   # en un apartamento, solo alumbra su habitación (y las tapas de los muros)
+		luz.get_node("LuzCosas").range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(m.zona)
 	mueble.add_child(luz)
 
 
@@ -490,38 +498,21 @@ func _process(delta: float) -> void:
 				s.play("reposo_" + RUMBOS[int(expo_t / 0.7) % RUMBOS.size()])
 
 
-# Lo que está en otra habitación que la de Johnny pasa a la capa de "lejos" (Luz.CAPA_LEJOS), que la
-# linterna no alumbra: así no atraviesa las paredes. Las sombras no bastan: con la vista desde arriba, la
-# cara de un muro se dibuja encima del suelo de la habitación de detrás, y esa luz sí le llegaría
+# Cada cosa del mapa (muros, muebles, puertas, zombis, cuerpos, objetos, aliados, Johnny...) va en la capa de
+# luz de la habitación en la que tiene los pies (Luz.capa_sala), y las lámparas y la linterna solo alumbran la
+# suya: así su luz (la que no hace sombras) no se cuela por las paredes. Las sombras no bastarían: con la vista
+# desde arriba, la cara de un muro se dibuja encima del suelo de la habitación de detrás. Solo se cambia lo
+# que ha cambiado de habitación (lo nuevo empieza en la capa 1); lo que está en un muro se queda en la 1
 func separar_salas() -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador") as Node2D
-	if not johnny:
-		return
-	var aqui := zona_en(johnny.global_position)
-	if aqui >= 0:
-		sala_johnny = aqui
-	# todo lo que hay en el mapa (muros, muebles, puertas, zombis, cuerpos, objetos, aliados...), según la
-	# habitación en la que tiene los pies. Solo se cambia lo que ha cambiado (lo nuevo empieza en la capa 1)
+	if johnny and zona_en(johnny.global_position) >= 0:
+		Luz.capa_johnny = Luz.capa_sala(zona_en(johnny.global_position))
 	for cosa in cosas.get_children():
-		if cosa == johnny:
+		var sala := zona_en(cosa.global_position)
+		if sala < 0 or cosa.get_meta("sala", -1) == sala:
 			continue
-		var lejos := zona_en(cosa.global_position) != sala_johnny
-		if cosa.has_meta("lejos") and cosa.get_meta("lejos") == lejos:
-			continue
-		cosa.set_meta("lejos", lejos)
-		alejar(cosa, lejos)
-
-
-# Pasa algo (y todo lo que lleva dentro) de la capa de las cosas a la de lejos, o al revés
-func alejar(n: Node, lejos: bool) -> void:
-	if n is CanvasItem:
-		var m: int = n.light_mask
-		if lejos and m & Luz.CAPA_COSAS:
-			n.light_mask = (m & ~Luz.CAPA_COSAS) | Luz.CAPA_LEJOS
-		elif not lejos and m & Luz.CAPA_LEJOS:
-			n.light_mask = (m & ~Luz.CAPA_LEJOS) | Luz.CAPA_COSAS
-	for hijo in n.get_children():
-		alejar(hijo, lejos)
+		cosa.set_meta("sala", sala)
+		Luz.poner_capa(cosa, Luz.capa_sala(sala))
 
 
 # ═════════════ Exposición (modo pruebas) ═════════════

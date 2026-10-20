@@ -23,7 +23,7 @@ texture_scale = 1.6
 
 [node name="LuzCosas" type="PointLight2D" parent="."]
 color = Color(1, 0.8, 0.55, 1)
-range_item_cull_mask = 5
+range_item_cull_mask = 1
 texture = ExtResource("luz")
 texture_scale = 1.6
 
