@@ -69,6 +69,7 @@ var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
 var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
 var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
 var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
+var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
 var ahorrados := 0         # los dólares guardados de otras partidas
@@ -85,7 +86,7 @@ var terminada := false
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func(): decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
 	johnny.avisar_arma()
@@ -118,6 +119,8 @@ func _ready() -> void:
 	add_child(lanzables)
 	mutaciones.johnny = johnny
 	add_child(mutaciones)
+	add_child(supervivientes)
+	supervivientes.preparar(self)
 
 	captura = "--captura" in OS.get_cmdline_user_args()
 	if captura:
@@ -132,6 +135,7 @@ func _ready() -> void:
 	johnny.vida = johnny.stats.vida_max
 	lanzables.reiniciar(johnny.stats)
 	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
+	supervivientes.elegir()
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -146,6 +150,7 @@ func _ready() -> void:
 
 func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num)
+	supervivientes.nueva_planta()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 
 
@@ -207,7 +212,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if fundir:
 		await create_tween().tween_property(negro, "modulate:a", 1.0, FUNDIDO).finished
 	# Johnny pasa de un mapa a otro; el viejo se quita del todo antes de montar el nuevo (si no, su
-	# navegación y sus muros se mezclarían con los del nuevo)
+	# navegación y sus muros se mezclarían con los del nuevo). Y con él, los de su equipo
+	supervivientes.recoger()
 	johnny.get_parent().remove_child(johnny)
 	if mapa:
 		remove_child(mapa)
@@ -240,6 +246,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	mapa.cosas.add_child(johnny)
 	johnny.position = mapa.puertas[por].llegada()
 	johnny.velocity = Vector2.ZERO
+	supervivientes.al_montar(idx, sitio)
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
 	luz.poner_sitio(sitio.tipo)
@@ -316,7 +323,7 @@ func cruzar(i: int) -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
 	if sitio.tipo != "pasillo" and cerrada:
-		decir("La puerta no se abre mientras quede algún zombi")
+		decir("Aguanta: aún está forzando la cerradura" if supervivientes.en_horda() else "La puerta no se abre mientras quede algún zombi")
 		return
 	match salida.cerrojo:
 		"nunca":
@@ -376,6 +383,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
 		actualizar_puertas()
+		supervivientes.piso_limpio(aqui)
 
 
 func _al_coger_llave() -> void:
@@ -526,7 +534,11 @@ func terminar(gano: bool, abandona := false) -> void:
 		return
 	terminada = true
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
+	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var s := Guardado.cambiar(func(g):
+		# el superviviente rescatado en esta partida se viene a vivir a la sala de mantenimiento
+		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
+			g.rescatados.append(nuevo.id)
 		g.mejor_planta = maxi(g.mejor_planta, planta.num)
 		g.muertos += muertos
 		var e := Guardado.edificio(g, EDIFICIO)
@@ -561,7 +573,8 @@ func terminar(gano: bool, abandona := false) -> void:
 	menus.fin({
 		"gano": gano,
 		"titulo": "¡Edificio completado!" if gano else "¡Derrota!",
-		"sub": ("Has limpiado los %s de arriba abajo" % NOMBRE_EDIFICIO) if gano
+		"sub": ("Has limpiado los %s de arriba abajo%s" % [NOMBRE_EDIFICIO, "" if nuevo.is_empty()
+			else ". %s se viene a vivir a la sala de mantenimiento" % nuevo.nombre]) if gano
 			else ("Caíste en la %s de los %s" % [planta.nombre.to_lower(), NOMBRE_EDIFICIO]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,
@@ -639,6 +652,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 		luz.alternar()   # quitar o poner la penumbra, para comparar
 	elif evento.keycode == KEY_M:
 		abrir_mutacion()   # para probar las mutaciones sin matar a la portera
+	elif evento.keycode == KEY_H:
+		supervivientes.probar_aqui()   # al apartamento del superviviente, ya limpio (para probar la horda)
 	elif evento.keycode == KEY_O:
 		soltar_objeto(Objetos.al_azar(), johnny.position + Vector2(0, 50))   # un objeto, para probar
 
@@ -900,6 +915,7 @@ func probar_menus() -> void:
 	await probar_ordenador()
 	await probar_cosas()
 	await probar_creadas()
+	await supervivientes.probar()
 	await probar_mutaciones()
 	pausar()
 	await get_tree().create_timer(0.4).timeout

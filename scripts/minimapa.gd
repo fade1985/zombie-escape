@@ -2,7 +2,8 @@
 # El pasillo en medio, una casilla por cada puerta (arriba y abajo), la llegada a la izquierda y las escaleras
 # a la derecha. Gris = sin visitar, rojo = con zombis dentro, claro = limpio, amarillo = donde estás (con un
 # marco que parpadea). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
-# está su llave y aún no la has cogido, ese lleva la llave.
+# está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
+# (supervivientes.gd).
 # Es provisional: el minimapa bonito llegará con el arte de los escenarios.
 extends Control
 
@@ -49,7 +50,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-# Las casillas: [rectángulo, color, ¿estás aquí?, icono]
+# Las casillas: [rectángulo, color, ¿estás aquí?, icono, ¿está ahí el superviviente?]
 func casillas() -> Array:
 	var planta: Dictionary = partida.planta
 	var pasillo: Dictionary = planta.sitios[0]
@@ -58,15 +59,16 @@ func casillas() -> Array:
 	var arriba := CABEZA + MARGEN
 	var x0 := MARGEN + PUNTA + 4
 	var largo := ANCHO - (MARGEN + PUNTA + 4) * 2
-	lista.append([Rect2(x0, arriba + 22, largo, 12), CLARO, aqui == 0, ""])
+	lista.append([Rect2(x0, arriba + 22, largo, 12), CLARO, aqui == 0, "", false])
+	var sos: int = planta.superviviente.sitio if partida.supervivientes.encerrado() else -1
 	for s in pasillo.salidas:
 		match s.tipo:
 			"llegada":
-				lista.append([Rect2(x0 - PUNTA - 4, arriba + 19, PUNTA, 18), GRIS, false, "puerta"])
+				lista.append([Rect2(x0 - PUNTA - 4, arriba + 19, PUNTA, 18), GRIS, false, "puerta", false])
 			"escaleras":
 				var abiertas: bool = planta.jefa_muerta
 				lista.append([Rect2(x0 + largo + 4, arriba + 19, PUNTA, 18), VERDE if abiertas else GRIS, false,
-					"escalera" if abiertas else "candado"])
+					"escalera" if abiertas else "candado", false])
 			"puerta":
 				if s.a < 0:
 					continue
@@ -83,7 +85,7 @@ func casillas() -> Array:
 					icono = "jefe"
 				var y := arriba if s.dir == "arriba" else arriba + 38
 				lista.append([Rect2(x0 + float(s.en) / pasillo.ancho * largo - 15, y, 30, 18), color,
-					aqui == s.a or (planta.sitios[aqui].tipo == "expo" and sitio.tipo == "mantenimiento"), icono])
+					aqui == s.a or (planta.sitios[aqui].tipo == "expo" and sitio.tipo == "mantenimiento"), icono, s.a == sos])
 	return lista
 
 
@@ -102,6 +104,13 @@ func _draw() -> void:
 		draw_rect(r, Color("#f2e6c0") if c[2] else BORDE, false, 2.0)
 		if c[3] != "":
 			draw_texture_rect(ICONOS[c[3]], Rect2(r.get_center() - Vector2(8, 8), Vector2(16, 16)), false)
+	# el "!" del superviviente, en una esquina de su casilla
+	for c in lista:
+		if c[4]:
+			var centro: Vector2 = c[0].position + Vector2(c[0].size.x - 2, 2)
+			draw_circle(centro, 7.0, BORDE)
+			draw_circle(centro, 5.5, Color("#ff5d73"))
+			draw_string(letra, centro + Vector2(-10, 4), "!", HORIZONTAL_ALIGNMENT_CENTER, 20, 12, Color.WHITE)
 	# el marco que parpadea alrededor de donde estás
 	for c in lista:
 		if c[2]:

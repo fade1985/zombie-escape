@@ -18,6 +18,7 @@ const PLANTAS := 5                # planta baja y cuatro más (la azotea, con el
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
 const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
+const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 72
 
@@ -49,6 +50,9 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa
 #   tiene_llave, jefa_muerta
+#   superviviente    {sitio, sala, puerta, pos} el baño (y su puerta, de apt.puertas) donde se esconde el
+#                    superviviente si en esta partida le toca esta planta (lo decide supervivientes.gd). Ese baño
+#                    no lleva zombis: si no, nadie podría limpiar el piso
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
 # aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}
@@ -127,9 +131,18 @@ static func generar(num: int) -> Dictionary:
 		if planta.sitios[i].tipo == "apartamento":
 			normales.append(i)
 	normales.shuffle()
+	# El baño del superviviente, en un apartamento normal al azar (como floor.survivor de src/building.js)
+	var de_superv: int = normales[rng.randi() % normales.size()]
+	var banos: Array = planta.sitios[de_superv].apt.salas.filter(func(s): return s.uso == "bano" and s.puertas.size() == 1)
+	planta.superviviente = {}
+	if not banos.is_empty():
+		var bano: Dictionary = banos[rng.randi() % banos.size()]
+		var en := sitio_libre(planta.sitios[de_superv], bano, Vector2.INF, [], 18.0)
+		planta.superviviente = {"sitio": de_superv, "sala": bano.id, "puerta": bano.puertas[0],
+			"pos": bano.centro if en == Vector2.INF else en}
 	for orden in normales.size():
 		var sitio: Dictionary = planta.sitios[normales[orden]]
-		sitio.zombis = horda(sitio, orden + 1, num)
+		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
 		sitio.armaritos = armaritos(sitio)
 
 	# La llave de la jefa, en una habitación (que no sea el salón ni un baño) de un apartamento normal
@@ -160,7 +173,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		"aviso": "", "letrero": "Pasillo"}]
 	sitio.muebles = Muebles.de_sala("mantenimiento", {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": sitio.dueno},
 		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0)], rng,
-		[SITIO_TALLER])
+		[SITIO_TALLER, SITIO_VECINOS])
 	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), lejos de la pared de arriba
 	for i in rng.randi_range(6, 10):
 		sitio.manchas.append({"pos": Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60),
@@ -182,7 +195,8 @@ static func exposicion(mant: int) -> Dictionary:
 
 # Los zombis de un apartamento: ya están dentro, dormidos y repartidos por las habitaciones según su
 # tamaño. Devuelve [{tipo, pos}]. "orden" es el puesto del apartamento dentro de la planta (1, 2, 3).
-static func horda(sitio: Dictionary, orden: int, num: int) -> Array:
+# "sin" es la habitación que se queda sin zombis (el baño del superviviente), o -1
+static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	var apt: Dictionary = sitio.apt
 	var nivel := orden + (num - 1)
 	# Los tipos más peligrosos van apareciendo según se avanza
@@ -201,13 +215,14 @@ static func horda(sitio: Dictionary, orden: int, num: int) -> Array:
 	var peso := func(s: Dictionary) -> float:
 		return s.casillas * (0.5 if s.uso == "bano" else 1.0)   # en los baños, pocos
 	var total := 0.0
-	for s in apt.salas:
+	var salas: Array = apt.salas.filter(func(s): return s.id != sin)
+	for s in salas:
 		total += peso.call(s)
 	var salida: Dictionary = sitio.salidas[0]
 	var puerta := Vector2(salida.en, MURO + 52 if salida.dir == "arriba" else sitio.alto - MURO - 52)
 
 	var zombis := []
-	for s in apt.salas:
+	for s in salas:
 		# lo que le toca a esta habitación; el pico que sobra se echa a suertes
 		var parte: float = presupuesto * peso.call(s) / total
 		var queda := floorf(parte * 2.0) / 2.0 + (0.5 if rng.randf() < fmod(parte * 2.0, 1.0) else 0.0)
@@ -255,14 +270,14 @@ static func armaritos(sitio: Dictionary) -> Array:
 
 
 # Un punto de la habitación con sitio alrededor, lejos de la entrada, de los muebles y de los otros zombis
-static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, otros: Array) -> Vector2:
+static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, otros: Array, hueco := 26.0) -> Vector2:
 	var apt: Dictionary = sitio.apt
 	for i in 200:
 		var pos := Vector2(sala.c0 * CASILLA + rng.randf() * sala.ancho * CASILLA,
 			sala.f0 * CASILLA + rng.randf() * sala.fondo * CASILLA)
-		if not despejado(apt, pos, 26.0, sala.id):
+		if not despejado(apt, pos, hueco, sala.id):
 			continue
-		if not lejos_de_muebles(sitio, pos, 30.0):
+		if not lejos_de_muebles(sitio, pos, hueco + 4.0):
 			continue
 		if puerta != Vector2.INF and pos.distance_to(puerta) < LEJOS_PUERTA:
 			continue

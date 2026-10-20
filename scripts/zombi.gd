@@ -85,7 +85,7 @@ func _physics_process(delta: float) -> void:
 	sufrir(delta)
 	if estado == "muerto":
 		return
-	var johnny := get_tree().get_first_node_in_group("jugador")
+	var johnny := objetivo()
 	if dormido or espabilando > 0.0:
 		pedir_velocidad(Vector2.ZERO)
 		poner_animacion("reposo")
@@ -133,6 +133,16 @@ func _physics_process(delta: float) -> void:
 		_:
 			# Los estados propios de cada tipo (la mecha del explosivo, el latigazo...)
 			estado_propio(delta, johnny)
+
+
+# A por quién va: Johnny o, en la horda del superviviente, el que fuerza la cerradura si le pilla más cerca o
+# Johnny se ha alejado de él (presaDe del JS; ver supervivientes.gd y aliado.gd)
+func objetivo() -> Node2D:
+	var johnny := get_tree().get_first_node_in_group("jugador")
+	var presa := get_tree().get_first_node_in_group("presa")
+	if presa and johnny and not dormido and presa.presa_de(self, johnny, Supervivientes.HORDA.lejos):
+		return presa
+	return johnny
 
 
 # La atraedora que le está llamando (la más cercana a menos de su distancia), o null

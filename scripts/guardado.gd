@@ -1,7 +1,8 @@
 # El guardado entre partidas (como src/save.js del JS): un archivo de texto en user://guardado.json.
 # En Windows, user:// es %APPDATA%\Godot\app_userdata\Zombie Escape.
 #
-# Se guarda: dólares, puntos y talentos, armas encontradas, el baúl, récords y el progreso de cada edificio.
+# Se guarda: dólares, puntos y talentos, armas encontradas, el baúl, los supervivientes rescatados, récords y el
+# progreso de cada edificio.
 # Las partidas a medias NO se guardan: si cierras, empiezas el edificio de nuevo.
 #
 # Se usa así:  var s := Guardado.cargar()  ·  s.dolares += 5  ·  Guardado.escribir(s)
@@ -23,6 +24,8 @@ const NUEVO := {
 	"muertos": 0,         # zombis matados en total
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"clavos": 2, ...} (fase 7b)
 	"baul_armas": [],     # armas creadas en el banco de trabajo, esperando en el baúl (recetas.gd)
+	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en la sala de mantenimiento
+	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"ajustes": {"musica": true},
 }

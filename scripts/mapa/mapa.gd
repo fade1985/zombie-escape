@@ -394,6 +394,8 @@ func actualizar_niebla(delta: float) -> void:
 		if aqui >= 0:
 			vistas[aqui] = true
 		for d in sitio.apt.puertas:
+			if d.get("cerrada", false):
+				continue   # la puerta del baño del superviviente: no deja ver lo de dentro (supervivientes.gd)
 			if c >= d.c - 1 and c <= d.c + d.ancho and f >= d.f - 1 and f <= d.f + d.fondo:
 				vistas[d.a] = true
 				vistas[d.b] = true
@@ -550,6 +552,11 @@ func hornear(navegacion: NavigationRegion2D) -> void:
 	poligono.agent_radius = 18.0
 	navegacion.navigation_polygon = poligono
 	navegacion.bake_navigation_polygon(false)
+
+
+# Otra vez, cuando algo deja de chocar (la puerta del baño del superviviente, al abrirse)
+func rehornear() -> void:
+	hornear(get_node("Navegacion"))
 
 
 # Un punto de suelo con sitio alrededor y a más de "distancia" de "lejos_de" (para las teclas de prueba)
