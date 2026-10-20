@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7")
 [autoload]
 
 Sonido="*res://scripts/sonido.gd"
+Botones="*res://scripts/ui/botones.gd"
 
 [display]
 

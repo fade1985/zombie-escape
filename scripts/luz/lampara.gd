@@ -2,7 +2,7 @@
 # prueba de concepto). Lleva dos luces iguales (ver luz.gd):
 #   - LuzSuelo: alumbra el suelo y hace SOMBRAS
 #   - LuzCosas: alumbra personajes, muebles y caras de muro, SIN sombras
-# Y una Bombilla: un brillo pequeño que se ve aunque esté todo oscuro.
+# Y una Bombilla: un brillo pequeño que se ve aunque esté todo oscuro, y motas de polvo flotando en la luz.
 #
 # El nodo va en el pie del mueble (o del muro, en los apliques); `suelo` es dónde está el centro del charco de
 # luz y `alto`, a qué altura está la bombilla. Si "parpadea", tiembla y de vez en cuando falla (dos o tres guiños
@@ -20,6 +20,7 @@ extends Node2D
 var mapa: Node = null              # para mirar la niebla de su habitación
 var zona := -1
 var tiempo := 0.0
+var polvo: CPUParticles2D
 
 @onready var luz_suelo: PointLight2D = $LuzSuelo
 @onready var luz_cosas: PointLight2D = $LuzCosas
@@ -33,6 +34,38 @@ func _ready() -> void:
 	luz_suelo.texture_scale = radio / 128.0
 	luz_cosas.texture_scale = radio / 128.0
 	bombilla.position = Vector2(0, -alto)
+	poner_polvo()
+
+
+# Motas de polvo que flotan despacio en la luz. Solo se ven donde alumbra la lámpara (la penumbra se come las
+# demás) y brillan un poco, sumando su luz a lo de detrás
+func poner_polvo() -> void:
+	polvo = CPUParticles2D.new()
+	polvo.name = "Polvo"
+	polvo.amount = 10
+	polvo.lifetime = 5.0
+	polvo.preprocess = 5.0   # que al entrar ya esté flotando, no saliendo de golpe
+	polvo.position = luz_cosas.position
+	polvo.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	polvo.emission_rect_extents = Vector2(radio * 0.35, maxf(alto * 0.5, 24.0))
+	polvo.direction = Vector2(0, -1)
+	polvo.spread = 180.0
+	polvo.gravity = Vector2(0, 1.5)
+	polvo.initial_velocity_min = 2.0
+	polvo.initial_velocity_max = 7.0
+	polvo.scale_amount_min = 2.0   # un píxel del dibujo (2 unidades)...
+	polvo.scale_amount_max = 2.0
+	var aparecer := Gradient.new()   # ...que aparece, se queda y se apaga
+	aparecer.set_color(0, Color(1, 0.9, 0.7, 0.0))
+	aparecer.set_color(1, Color(1, 0.9, 0.7, 0.0))
+	aparecer.add_point(0.3, Color(1, 0.9, 0.7, 0.55))
+	aparecer.add_point(0.7, Color(1, 0.9, 0.7, 0.55))
+	polvo.color_ramp = aparecer
+	var brillo_suma := CanvasItemMaterial.new()
+	brillo_suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	polvo.material = brillo_suma
+	polvo.z_index = 5
+	add_child(polvo)
 
 
 func _process(delta: float) -> void:
@@ -46,6 +79,8 @@ func _process(delta: float) -> void:
 	luz_suelo.enabled = e > 0.02
 	luz_cosas.enabled = e > 0.02
 	bombilla.modulate.a = b
+	polvo.modulate.a = b
+	polvo.emitting = e > 0.02
 
 
 # Un número "al azar" fijo para cada (a, b): siempre sale el mismo, así el parpadeo no depende de la suerte

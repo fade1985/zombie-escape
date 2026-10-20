@@ -40,6 +40,7 @@ const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "e
 	KEY_F7: "venenoso", KEY_P: "portera"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
+const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
 const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
@@ -114,6 +115,11 @@ func _ready() -> void:
 	hud.partida = self
 	$Pantalla.add_child(hud)
 	$Pantalla.move_child(hud, minimapa.get_index())
+	# El viñeteado y la pantalla roja, por debajo de todo lo demás de la pantalla
+	var ambiente := AMBIENTE.new()
+	ambiente.johnny = johnny
+	$Pantalla.add_child(ambiente)
+	$Pantalla.move_child(ambiente, 0)
 	add_child(menus)
 	menus.continuar.connect(seguir)
 	menus.abandonar.connect(terminar.bind(false, true))
@@ -852,6 +858,13 @@ func _process(delta: float) -> void:
 			a.datos.cogido if a else "-"])
 		get_viewport().get_texture().get_image().save_png("res://captura-botiquin.png")
 		$Pantalla/HUD.show()
+	# poca vida: la pantalla roja y la barra con lo perdido en claro (luego se le devuelve la vida)
+	if antes < 1.45 and tiempo >= 1.45:
+		johnny.quitar_vida(johnny.vida - 18)
+	if antes < 1.6 and tiempo >= 1.6:
+		get_viewport().get_texture().get_image().save_png("res://captura-poca-vida.png")
+		johnny.vida = johnny.stats.vida_max
+		johnny.tercios = 3
 	# una granada a un lado (explota antes de la foto)
 	if antes < 2.0 and tiempo >= 2.0:
 		lanzables.cambiar()

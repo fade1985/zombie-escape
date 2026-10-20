@@ -1,7 +1,8 @@
 # El HUD de Johnny, en la franja de abajo de la pantalla (la del muro de abajo, 64 de alto), como el del JS
 # (src/ui.js, updateHud; #hud en style.css). Así la barra de la portera y la de la horda, arriba, no se tapan:
 #   - La barra de vida en su marco (barra-vida.png), partida en tres tercios. Los tercios perdidos se tapan
-#     con rayas oscuras, porque ya no se curan. Encima, la vida en números.
+#     con rayas oscuras, porque ya no se curan. Encima, la vida en números. Al recibir un golpe, la barra
+#     tiembla y lo perdido se queda en claro un momento antes de bajar; con poca vida, la sangre late.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
 #     reserva. Al recargar, las gastadas parpadean. Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
 #   - Al lado, las dos armas (la que está en la mano, con el borde amarillo), los molotovs y las granadas que
@@ -34,6 +35,23 @@ var granada: PanelContainer
 var creada: PanelContainer   # la arrojadiza creada elegida (o la primera que quede), si tiene alguna
 var llave: PanelContainer
 var antes := {}           # lo que se pintó la última vez (para no rehacer las pastillas en cada fotograma)
+
+# La barra que se mueve: al perder vida, el trozo perdido se queda un momento en claro y luego baja
+# poco a poco (como en los juegos de lucha); al curarse, sube poco a poco
+const ESPERA := 0.45      # lo que tarda en empezar a bajar el trozo perdido
+const BAJADA := 0.9       # cuánta barra baja por segundo (en partes de la barra)
+var vista := -1.0         # la parte de la barra que se ve llena ahora (0 a 1)
+var perdida := -1.0       # hasta dónde llega el trozo claro de lo perdido
+var espera := 0.0
+var temblor := 0.0        # el temblor de la barra al recibir un golpe (se apaga solo)
+var tiempo := 0.0
+
+# Las balas que salen volando del cargador al disparar (se pintan cayendo y apagándose) y las que entran al
+# recargar (aparecen con un saltito)
+var balas_antes := -1
+var arma_antes := ""
+var gastadas: Array = []  # [número de bala, tiempo desde que salió]
+var nuevas := {}          # número de bala → tiempo desde que entró
 
 
 func _ready() -> void:
@@ -68,14 +86,26 @@ func poner(p: PanelContainer, icono: String, texto: String, on := false) -> void
 	var clave := "%s|%s|%s" % [icono, texto, on]
 	if antes.get(p) == clave:
 		return
+	var habia := antes.has(p)
 	antes[p] = clave
 	for hijo in p.get_children():
 		hijo.queue_free()
 	p.add_child(Tema.icono_y_texto(icono, texto, 22))
 	p.theme_type_variation = "PastillaOn" if on else "Pastilla"
+	if habia:
+		saltito(p)
 
 
-func _process(_delta: float) -> void:
+# Una pastilla que cambia (otra arma en la mano, un dólar más, un molotov menos) da un saltito para que se note
+func saltito(p: Control) -> void:
+	p.pivot_offset = p.size / 2.0
+	var t := p.create_tween()
+	t.tween_property(p, "scale", Vector2(1.18, 1.18), 0.06)
+	t.tween_property(p, "scale", Vector2.ONE, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+func _process(delta: float) -> void:
+	tiempo += delta
 	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
 	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 5.0)
 	if johnny == null:
@@ -98,7 +128,55 @@ func _process(_delta: float) -> void:
 	llave.visible = partida.planta.tiene_llave
 	if llave.visible:
 		poner(llave, "llave", partida.nombre_jefa())
+	mover_barra(delta)
+	mirar_balas(delta)
 	barra.queue_redraw()
+
+
+func mover_barra(delta: float) -> void:
+	var parte := clampf(float(johnny.vida) / johnny.stats.vida_max, 0.0, 1.0)
+	if vista < 0.0:
+		vista = parte
+		perdida = parte
+	if parte < vista:
+		# le acaban de pegar: la barra baja de golpe, lo perdido se queda en claro y la barra tiembla
+		perdida = maxf(perdida, vista)
+		vista = parte
+		espera = ESPERA
+		temblor = 1.0
+	elif parte > vista:
+		vista = move_toward(vista, parte, delta * BAJADA * 0.6)   # curarse: sube poco a poco
+	espera -= delta
+	if espera <= 0.0:
+		perdida = move_toward(perdida, vista, delta * BAJADA * 0.5)
+	perdida = maxf(perdida, vista)
+	temblor = move_toward(temblor, 0.0, delta * 3.0)
+	barra.position.x = roundf(sin(tiempo * 70.0) * 3.0 * temblor)
+	barra.position.y = roundf(cos(tiempo * 55.0) * 2.0 * temblor)
+
+
+# Compara las balas con las del fotograma anterior: las que faltan salen volando, las que sobran entran
+func mirar_balas(delta: float) -> void:
+	for g in gastadas:
+		g[1] += delta
+	gastadas = gastadas.filter(func(g): return g[1] < 0.35)
+	for i in nuevas.keys():
+		nuevas[i] += delta
+		if nuevas[i] > 0.2:
+			nuevas.erase(i)
+	var b: int = johnny.balas
+	if johnny.huecos.fuego != arma_antes:
+		arma_antes = johnny.huecos.fuego   # otra arma: no es que se hayan gastado
+		balas_antes = b
+		return
+	if b < balas_antes:
+		for i in range(b, balas_antes):
+			gastadas.append([i, 0.0])
+	elif b > balas_antes and balas_antes >= 0:
+		for i in range(balas_antes, b):
+			# entran una detrás de otra, como si las metiera a mano
+			nuevas[i] = -0.03 * (i - balas_antes)
+	balas_antes = b
 
 
 func pintar_barra() -> void:
@@ -106,10 +184,18 @@ func pintar_barra() -> void:
 	var maxima: float = johnny.stats.vida_max
 	# El fondo del hueco y la sangre
 	barra.draw_rect(HUECO, Color("#1a1620"))
+	# lo que acaba de perder, en claro, que se va bajando detrás de la sangre
+	var claro := HUECO
+	claro.size.x *= perdida
+	barra.draw_rect(claro, Color("#f0d8b0") if espera > ESPERA - 0.08 else Color("#d98a5a"))
 	var lleno := HUECO
-	lleno.size.x *= clampf(vida / maxima, 0.0, 1.0)
-	barra.draw_rect(lleno, Color("#8a1f1a"))
-	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), Color("#c24a38"))
+	lleno.size.x *= vista
+	# con poca vida, la sangre late (más clara en cada latido)
+	var luz := 0.0
+	if vida / maxima < 0.34 and johnny.vivo:
+		luz = 0.35 * pow(absf(sin(tiempo * PI * 1.6)), 4.0)
+	barra.draw_rect(lleno, Color("#8a1f1a").lerp(Color("#e0503a"), luz))
+	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), Color("#c24a38").lerp(Color("#ff8a6a"), luz))
 	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y * 0.8), Vector2(lleno.size.x, lleno.size.y * 0.2)), Color("#6a1512"))
 	# Las dos rayas que separan los tercios
 	for i in [1, 2]:
@@ -156,14 +242,36 @@ func pintar_balas() -> void:
 	var hueco := 2.0
 	var x := HUECO.position.x
 	var abajo := -4.0
+	var dibujo: Texture2D = CARTUCHO if w.cartucho else BALA
+	var sitios := []   # dónde va cada bala, para las que salen volando
 	for i in w.cargador:
+		sitios.append(x)
 		var color := Color.WHITE
 		if i >= johnny.balas:
 			color = Color(0.5, 0.5, 0.5, 0.6 if parpadeo else 0.22)   # gastada
 		if lejos:
 			color.a *= 0.5
-		barra.draw_texture_rect(CARTUCHO if w.cartucho else BALA, Rect2(x, abajo - tam.y, tam.x, tam.y), false, color)
+		var r := Rect2(x, abajo - tam.y, tam.x, tam.y)
+		if nuevas.has(i):
+			# recién metida: aparece desde arriba y más grande, y se asienta
+			var k := clampf(nuevas[i] / 0.2, 0.0, 1.0)
+			if k <= 0.0:
+				color.a = 0.22
+			r = r.grow(roundf((1.0 - k) * 2.0))
+			r.position.y -= roundf((1.0 - k) * 6.0)
+		barra.draw_texture_rect(dibujo, r, false, color)
 		x += tam.x + hueco
+	# las que se acaban de disparar: saltan hacia arriba, caen girando un poco y se apagan
+	for g in gastadas:
+		var i: int = g[0]
+		if i >= sitios.size():
+			continue
+		var t: float = g[1]
+		var salto := Vector2(t * 40.0, -60.0 * t + 260.0 * t * t)
+		var c := Color(1, 0.9, 0.6, 1.0 - t / 0.35)
+		barra.draw_set_transform(Vector2(sitios[i], abajo - tam.y) + tam / 2.0 + salto, t * 9.0)
+		barra.draw_texture_rect(dibujo, Rect2(-tam / 2.0, tam), false, c)
+		barra.draw_set_transform(Vector2.ZERO)
 	# La reserva: las balas de repuesto que lleva (en naranja si ya no le queda ninguna)
 	var donde := Vector2(x + 4, abajo - 2)
 	var texto := "+∞" if w.get("sin_municion", false) else "+%d" % johnny.reserva
