@@ -111,6 +111,8 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	for a in sitio.get("armaritos", []):
 		var armarito := ARMARITO.new()
 		armarito.montar(a)
+		armarito.mapa = self
+		armarito.zona = zona_en(Vector2(a.x, a.y + 24.0))   # la habitación que tiene delante
 		cosas.add_child(armarito)
 		armaritos.append(armarito)
 	if llave != Vector2.INF:

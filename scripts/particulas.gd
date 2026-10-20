@@ -23,6 +23,20 @@ static func soltar(desde: Node, donde: Vector2, velocidad: Vector2, color: Color
 	capa(desde).lista.append({"p": donde, "v": velocidad, "c": color, "s": tamano, "t": vida, "max": vida, "r": 0.0})
 
 
+# El reventón de un zombi al morir (burst en src/game-efectos.js): "n" trozos de su color, con su borde
+# oscuro, que salen disparados en todas direcciones; y, si "con_anillo", un anillo blanco que se abre
+static func reventon(desde: Node, donde: Vector2, color: Color, n: int, radio: float, con_anillo := true) -> void:
+	var c := capa(desde)
+	for i in n:
+		var a := randf() * TAU
+		var v := Vector2.from_angle(a)
+		var vida := randf_range(0.35, 0.7)
+		c.lista.append({"p": donde + v * radio * 0.5, "v": v * randf_range(80.0, 260.0), "c": color,
+			"s": randf_range(8.0, 16.0), "t": vida, "max": 0.7, "r": 0.0, "borde": true})
+	if con_anillo:
+		anillo(desde, donde, radio, Color.WHITE)
+
+
 # Un anillo que se abre desde "donde" hasta "radio" (en el suelo: aplastado como las elipses)
 static func anillo(desde: Node, donde: Vector2, radio: float, color: Color, vida := 0.3) -> void:
 	capa(desde).lista.append({"p": donde, "v": Vector2.ZERO, "c": color, "s": 0.0, "t": vida, "max": vida, "r": radio})
@@ -49,4 +63,7 @@ func _draw() -> void:
 			continue
 		var s: float = maxf(2.0, round(q.s / 2.0) * 2.0)
 		var p: Vector2 = (q.p / 2.0).round() * 2.0   # en píxeles enteros del dibujo
-		draw_rect(Rect2(p - Vector2(s, s) / 2.0, Vector2(s, s)), Color(c, minf(1.0, k * 2.0)))
+		var alfa := minf(1.0, k * 2.0)
+		if q.get("borde", false):
+			draw_rect(Rect2(p - Vector2(s, s) / 2.0 - Vector2(2, 2), Vector2(s + 4, s + 4)), Color(0.11, 0.1, 0.17, alfa))
+		draw_rect(Rect2(p - Vector2(s, s) / 2.0, Vector2(s, s)), Color(c, alfa))

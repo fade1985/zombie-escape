@@ -499,6 +499,7 @@ func disparar(angulo: float) -> void:
 		bala.dano = con_critico(w.dano, seguro)
 		bala.empuje = w.empuje
 		bala.radio = 3.0 if w.perdigones > 1 else 4.0
+		bala.critico = bala.dano > roundi(w.dano)
 		bala.vida = w.alcance / w.velocidad
 		get_parent().add_child(bala)
 		bala.global_position = salida

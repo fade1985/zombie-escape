@@ -46,6 +46,10 @@ const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
+# La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
+const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
+	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994")}
+const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MUNICION := preload("res://assets/ui/iconos/municion.png")
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
@@ -645,13 +649,26 @@ func ir_al_menu() -> void:
 	get_tree().change_scene_to_file("res://escenas/menu_principal.tscn")
 
 
+# Al caer un zombi: revienta en trozos de su color y deja su mancha en el suelo (killEnemy y addDecal del JS).
+# El explosivo ya tiene su explosión: sus trozos salen color fuego y sin anillo
+func sangre(tipo: String, zombi: Node2D) -> void:
+	var trozos: Color = Color("#ff9f1c") if tipo == "explosivo" else PIELES.get(tipo, PIELES.normal)
+	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo")
+	var jefa := tipo == "portera"
+	Mancha.sangre(zombi.get_parent(), zombi.position + Vector2(0, 10), randf_range(14.0, 20.0) * (1.8 if jefa else 1.0),
+		MANCHAS.get(tipo, Color("#5b7d3a")))
+
+
 # Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
 	zombi.position = donde
+	if "talla_restos" in zombi:
+		zombi.talla_restos = {"rapido": "pequeno", "venenoso": "grande"}.get(tipo, "mediano")   # el rápido es un niño
 	# Al caer: se cuenta, y a veces suelta un billete (la portera, varios)
 	zombi.murio.connect(func():
 		muertos += 1
+		sangre(tipo, zombi)
 		var cuantos := BILLETES_JEFA if tipo == "portera" else (1 if randf() < BILLETE_ZOMBI else 0)
 		soltar_billetes(cuantos, zombi.position)
 		# a veces, un molotov o una granada
@@ -784,6 +801,23 @@ func _process(delta: float) -> void:
 	if antes < 2.6 and tiempo >= 2.6:
 		Input.action_release("arma_4")
 		Input.action_press("atacar")
+	# las trazadoras (normal, perdigón y crítica), quietas al lado de Johnny para la foto
+	if antes < 2.65 and tiempo >= 2.65:
+		for i in 3:
+			var bala := preload("res://escenas/armas/bala.tscn").instantiate()
+			bala.velocidad = Vector2.from_angle(-0.4 + i * 0.4) * 600.0
+			bala.radio = 3.0 if i == 1 else 4.0
+			bala.critico = i == 2
+			bala.altura = 22.0
+			bala.set_physics_process(false)
+			bala.name = "BalaFoto%d" % i
+			johnny.get_parent().add_child(bala)
+			bala.global_position = johnny.global_position + Vector2(-70 + i * 50, 30)
+	if antes < 2.7 and tiempo >= 2.7:
+		get_viewport().get_texture().get_image().save_png("res://captura-balas.png")
+		for n in johnny.get_parent().get_children():
+			if n.name.begins_with("BalaFoto"):
+				n.queue_free()
 	if antes < 3.2 and tiempo >= 3.2:
 		Input.action_release("atacar")
 		# un molotov al zombi más cercano (o por delante)
@@ -791,6 +825,25 @@ func _process(delta: float) -> void:
 		var donde: Vector2 = prueba.global_position
 		lanzables.lanzar(donde)
 		print("Molotov hacia ", donde, " | quedan ", lanzables.cantidades)
+		# un zombi que cae al lado de Johnny: revienta y deja su mancha
+		var muerto := meter_zombi("normal", johnny.position + Vector2(-60, 40))
+		muerto.recibir_golpe(999, Vector2.ZERO)
+		# y dos que mueren ardiendo: uno se queda en brasas y al otro se le adelanta el reloj hasta los huesos
+		for i in 2:
+			var quemado := meter_zombi("normal", johnny.position + Vector2(-90 + i * 130, 10))
+			quemado.name = "QuemadoFoto%d" % i
+			quemado.prender()
+			quemado.recibir_golpe(999, Vector2.ZERO)
+	if antes < 4.3 and tiempo >= 4.3:
+		for i in 2:
+			var cuerpo: Node = mapa.cosas.get_node_or_null("QuemadoFoto%d" % i)
+			if cuerpo:
+				var q: Quemado = cuerpo.get_children().filter(func(n): return n is Quemado)[0]
+				q.t = q.caida + 3.0 if i == 0 else 99.0   # uno en brasas y humo; el otro, ya en huesos
+	if antes < 4.4 and tiempo >= 4.4:
+		get_viewport().get_texture().get_image().save_png("res://captura-quemado.png")
+	if antes < 3.35 and tiempo >= 3.35:
+		get_viewport().get_texture().get_image().save_png("res://captura-sangre.png")
 		# las balas: sin ninguna, a la de cuerpo a cuerpo; una caja de munición devuelve la de fuego y recarga
 		var antes_balas := "%s %d +%d" % [johnny.huecos.fuego, johnny.balas, johnny.reserva]
 		johnny.balas = 0

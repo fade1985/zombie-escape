@@ -57,6 +57,7 @@ var arder_acc := 0.0       # la quemadura que lleva sin enseñar
 var arder_texto := 0.0
 var arder_dano := 1.0      # Puntería de quien lo prendió
 var llamas: Llamas
+var talla_restos := "mediano"   # si muere quemado, la talla de su calavera y sus huesos (quemado.gd)
 var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
 var lio_angulo := 0.0
@@ -280,14 +281,17 @@ func morir() -> void:
 	estado = "muerto"
 	Sonido.tocar("chof")
 	Sonido.tocar("muerte")
-	if arder_t > 0.0:
-		# murió ardiendo: queda chamuscado y las llamas se apagan poco a poco
+	var cae: bool = sprite.sprite_frames.has_animation("muerte_" + direccion)
+	if arder_t > 0.0 and not cae:
+		# murió ardiendo (sin animación de caer): queda chamuscado y las llamas se apagan poco a poco
 		sprite.self_modulate = Color(0.32, 0.27, 0.27)
 		create_tween().tween_property(llamas, "fuerza", 0.0, 0.6)
 	else:
 		sprite.self_modulate = Color.WHITE
-	if sprite.sprite_frames.has_animation("muerte_" + direccion):
+	if cae:
 		poner_animacion("muerte")
+		if arder_t > 0.0:
+			Quemado.empezar(self, sprite, talla_restos)   # cae en llamas, se vuelve carbón y se deshace en ceniza
 	else:
 		# Sin animación de morir (el de tentáculos): se queda quieto, cae de lado y se oscurece
 		sprite.pause()

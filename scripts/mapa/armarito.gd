@@ -8,6 +8,8 @@ signal usar
 
 var datos: Dictionary      # {x, y, alcance, cogido} (planta.gd): se queda en la planta al salir del piso
 var johnny: Node2D
+var mapa: Node = null      # para mirar la niebla de su habitación (en una sin descubrir, queda a oscuras)
+var zona := -1
 var listo := true          # hay que apartarse antes de volver a intentarlo
 var dibujo: Sprite2D
 var brillo: PointLight2D
@@ -42,7 +44,11 @@ func vaciar(si := true) -> void:
 
 func _physics_process(delta: float) -> void:
 	t += delta
-	brillo.energy = 0.5 + sin(t * 3.0) * 0.15
+	# como las caras de muro: en una habitación aún sin descubrir se oscurece, y su brillo se apaga
+	var oscuro: float = mapa.niebla.get(zona, 0.0) if mapa and zona >= 0 else 0.0
+	dibujo.modulate = Color.WHITE.lerp(Color(0.07, 0.063, 0.11), 0.9 * oscuro)
+	brillo.energy = (0.5 + sin(t * 3.0) * 0.15) * (1.0 - oscuro)
+	brillo.enabled = oscuro < 0.98
 	if datos.cogido or johnny == null or not johnny.vivo:
 		return
 	var p := johnny.global_position

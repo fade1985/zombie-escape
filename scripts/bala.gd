@@ -6,25 +6,21 @@ extends Node2D
 const ALTURA_CUERPO := 22.0   # a qué altura sobre los pies se dibuja la bala cuando ya va lanzada
 const BAJADA := 14.0          # lo rápido que baja el dibujo desde el cañón
 const EMPUJE := 170.0         # empuje base de un zombi normal (el del arma lo multiplica)
+# Los colores de la trazadora (TRACER del JS), de la punta a la cola; las críticas, más rojizas
+const TRAZA := [Color("#fffbe0"), Color("#ffe066"), Color("#ffb020"), Color("#f0701a"), Color("#b8400e")]
+const TRAZA_CRITICA := [Color("#ffffff"), Color("#ffe9a8"), Color("#ff9a3c"), Color("#ff4d2e"), Color("#b3122a")]
+const LINEA := Color("#1d1b2c")
 
 var velocidad := Vector2.ZERO
 var dano := 0
 var empuje := 1.0
 var radio := 4.0
+var critico := false        # las críticas se ven más rojizas (y saltan más chispas)
 var vida := 1.0             # segundos que le quedan (alcance ÷ velocidad)
 var altura := 50.0          # a qué altura sobre la bala de verdad se dibuja
-var choque := -1.0          # al chocar, el tiempo que queda de la nubecilla (antes de chocar, -1)
 
 
 func _physics_process(delta: float) -> void:
-	if choque >= 0.0:
-		# Ya ha chocado: solo queda la nubecilla, que se apaga y se va
-		choque -= delta
-		queue_redraw()
-		if choque < 0.0:
-			queue_free()
-		return
-
 	vida -= delta
 	if vida <= 0.0:
 		queue_free()
@@ -38,7 +34,7 @@ func _physics_process(delta: float) -> void:
 	var pared := get_world_2d().direct_space_state.intersect_ray(rayo)
 	if pared:
 		global_position = pared.position
-		chocar()
+		chocar(true)
 		return
 	global_position = despues
 
@@ -51,19 +47,43 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 
-func chocar() -> void:
-	choque = 0.12
-	queue_redraw()
+# Al chocar (bulletImpact del JS): un destello cuadrado y unas chispas del color de la bala que rebotan hacia
+# atrás; contra un muro salta además algo de polvo. Salen a la altura a la que se ve la bala
+func chocar(pared := false) -> void:
+	var donde := global_position + Vector2(0, -altura)
+	var atras := (-velocidad).angle()
+	var colores: Array = TRAZA_CRITICA if critico else TRAZA
+	Particulas.soltar(self, donde, Vector2.ZERO, colores[0], 10.0 if critico else 8.0, 0.07)
+	var n := (7 if critico else 5) - (2 if radio < 4.0 else 0)   # los perdigones sueltan menos chispas
+	for i in n:
+		var v := Vector2.from_angle(atras + randf_range(-1.1, 1.1)) * randf_range(110.0, 300.0)
+		Particulas.soltar(self, donde, v, colores[1 + i % 3], 4.0 if i < 2 else 2.0, randf_range(0.14, 0.28))
+	if pared:
+		for i in 3:
+			var v := Vector2.from_angle(atras + randf_range(-0.8, 0.8)) * randf_range(30.0, 90.0) + Vector2(0, -20)
+			Particulas.soltar(self, donde, v, Color("#b9bec9") if i else Color("#e3e6ec"), 4.0, randf_range(0.25, 0.4))
+	queue_free()
 
 
+# La trazadora (drawTracer del JS): cuadraditos de pixel art en fila hacia atrás, encajados en la cuadrícula
+# del dibujo: la punta casi blanca y una estela corta que pasa de amarillo a naranja, con borde oscuro en la
+# parte gorda. Así vale para cualquier ángulo sin verse borrosa. Los perdigones, más finos
 func _draw() -> void:
-	var donde := Vector2(0, -altura)
-	if choque >= 0.0:
-		# Nubecilla blanca que crece y se desvanece
-		var k := 1.0 - choque / 0.12
-		draw_circle(donde, radio + 6.0 * k, Color(1, 1, 1, 0.8 * (1.0 - k)))
-		return
-	# Una estela corta hacia atrás y la bala encima, con su borde oscuro (como todo el pixel art del juego)
-	draw_line(donde, donde - velocidad.normalized() * 14.0, Color(1, 0.96, 0.84, 0.45), radio)
-	draw_circle(donde, radio + 1.5, Color(0.11, 0.1, 0.17))
-	draw_circle(donde, radio, Color(1, 0.96, 0.84))
+	var u := velocidad.normalized()
+	var gordo := 2 if radio >= 4.0 else 1          # lado de la punta, en píxeles del dibujo
+	var colores: Array = TRAZA_CRITICA if critico else TRAZA
+	var paso := gordo * 2.0                         # los trozos van pegados uno detrás de otro
+	var punta := Vector2(0, -altura)
+	for k in range(2, -1, -1):
+		cuadradito(punta - u * k * paso, gordo + 2, LINEA)
+	for k in range(colores.size() - 1, -1, -1):
+		var c: Color = colores[k]
+		c.a = 0.5 if k == 4 else (0.8 if k == 3 else 1.0)
+		cuadradito(punta - u * k * paso, gordo if k < 3 else maxi(1, gordo - 1), c)
+
+
+# Un cuadradito de "lado" píxeles del dibujo, con el centro en "centro", encajado en la cuadrícula del mundo
+func cuadradito(centro: Vector2, lado: int, color: Color) -> void:
+	var s := lado * 2.0
+	var esquina := ((global_position + centro - Vector2(s, s) / 2.0) / 2.0).round() * 2.0 - global_position
+	draw_rect(Rect2(esquina, Vector2(s, s)), color)
