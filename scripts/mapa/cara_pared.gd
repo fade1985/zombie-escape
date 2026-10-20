@@ -30,7 +30,7 @@ func _draw() -> void:
 	draw_texture_rect_region(pared, Rect2(0, -ALTO / 2.0, w, ALTO / 2.0), Rect2(x0, 0, w, pared.get_height()))
 	draw_texture_rect_region(techo, Rect2(0, -(ALTO + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
 	if niebla > 0.0:
-		draw_rect(Rect2(0, -(ALTO + TECHO) / 2.0, w, (ALTO + TECHO) / 2.0), Color(0.07, 0.063, 0.11, 0.9 * niebla))
+		draw_rect(Rect2(0, -(ALTO + TECHO) / 2.0, w, (ALTO + TECHO) / 2.0), Color(0.07, 0.063, 0.11, 0.8 * niebla))
 
 
 func _process(delta: float) -> void:

@@ -31,7 +31,9 @@ const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
 const OSCURO := Color(0.07, 0.063, 0.11)   # el color de la niebla
-const ACLARA := 3.5                        # lo rápido que se aclara una habitación al descubrirla (por segundo)
+const NIEBLA := preload("res://escenas/luces/niebla.gdshader")
+const NIEBLA_FONDO := 0.74                 # lo que tapa la niebla a tope (1 = no se ve nada debajo)
+const ACLARA := 3.5                       # lo rápido que se aclara una habitación al descubrirla (por segundo)
 # los zombis de la exposición, en el orden de las teclas de prueba
 const EXPO_ZOMBIS := ["zombi_normal", "zombi_lento", "zombi_rapido", "zombi_explosivo", "zombi_tentaculos",
 	"zombi_venenoso", "portera"]
@@ -57,7 +59,10 @@ var niebla := {}
 var vistas := {}
 var caras := {}                   # habitación -> sus caras de muro (llevan su propia niebla)
 var velo: Node2D                  # donde se pinta la niebla, por encima de todo
-var trozos_niebla := {}           # habitación -> los rectángulos de suelo que tapa la niebla
+var sala_casilla := PackedInt32Array()   # la habitación de cada casilla (-1 muro), para la niebla
+var con_niebla := PackedByteArray()      # 1 en las casillas a las que se les pinta niebla encima
+var mascara: Image                # la textura de la niebla, una casilla por píxel (ver pintar_mascara)
+var textura_niebla: ImageTexture
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
 
@@ -351,30 +356,51 @@ func preparar_niebla() -> void:
 	vistas = sitio.get_or_add("vistas", {})
 	for s in sitio.apt.salas:
 		niebla[s.id] = 0.0 if vistas.has(s.id) else 1.0
-		trozos_niebla[s.id] = []
-	# el suelo de cada habitación, por tramos de cada fila. Las casillas que tapa la cara de un muro de más
-	# abajo (las dos últimas filas antes de un tabique) no se oscurecen: ya las tapa esa cara, que lleva la
-	# niebla de su habitación (si no, la cara de una habitación descubierta quedaría a oscuras)
+	# De qué habitación es cada casilla (-1 los muros) y si se le pinta niebla encima. Las casillas que tapa la
+	# cara de un muro de más abajo (las dos últimas filas antes de un tabique) no: ya las tapa esa cara, que
+	# lleva la niebla de su habitación (si no, la cara de una habitación descubierta quedaría a oscuras)
+	sala_casilla.resize(cols * filas)
+	con_niebla.resize(cols * filas)
 	for f in filas:
-		var c := 0
-		while c < cols:
-			var sala := -1 if es_muro(c, f) or tapada(c, f) else sala_de(c, f)
-			var fin := c + 1
-			while fin < cols and (-1 if es_muro(fin, f) or tapada(fin, f) else sala_de(fin, f)) == sala:
-				fin += 1
-			if sala >= 0:
-				trozos_niebla[sala].append(Rect2(c * CASILLA, f * CASILLA, (fin - c) * CASILLA, CASILLA))
-			c = fin
+		for c in cols:
+			sala_casilla[f * cols + c] = -1 if es_muro(c, f) else sala_de(c, f)
+			con_niebla[f * cols + c] = 0 if es_muro(c, f) or tapada(c, f) else 1
+	# Se pinta de una vez, con el shader de la niebla y una textura de una casilla por píxel (ver el shader)
+	mascara = Image.create(cols, filas, false, Image.FORMAT_RGBA8)
+	pintar_mascara()
+	textura_niebla = ImageTexture.create_from_image(mascara)
 	velo = Node2D.new()
 	velo.name = "Niebla"
 	velo.light_mask = 0   # las lámparas no la aclaran
+	velo.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR   # para difuminar entre casillas
+	var sombra := ShaderMaterial.new()
+	sombra.shader = NIEBLA
+	sombra.set_shader_parameter("oscuro", OSCURO)
+	sombra.set_shader_parameter("fondo", NIEBLA_FONDO)
+	velo.material = sombra
 	velo.draw.connect(func():
-		for sala in niebla:
-			if niebla[sala] > 0.0:
-				for r in trozos_niebla[sala]:
-					velo.draw_rect(r, Color(OSCURO, 0.9 * niebla[sala])))
+		velo.draw_texture_rect(textura_niebla, Rect2(0, 0, cols * CASILLA, filas * CASILLA), false))
 	add_child(velo)
 	actualizar_niebla(0.0)
+
+
+# La textura de la niebla: en rojo, lo oscura que está cada casilla (los muros toman la más oscura de al lado,
+# para que la niebla no se aclare al llegar a una pared, solo al llegar a una puerta); en verde, si se pinta
+func pintar_mascara() -> void:
+	for f in filas:
+		for c in cols:
+			var n := 0.0
+			var sala := sala_casilla[f * cols + c]
+			if sala >= 0:
+				n = niebla.get(sala, 0.0)
+			else:
+				for df in [-1, 0, 1]:
+					for dc in [-1, 0, 1]:
+						var c2: int = c + dc
+						var f2: int = f + df
+						if c2 >= 0 and f2 >= 0 and c2 < cols and f2 < filas and sala_casilla[f2 * cols + c2] >= 0:
+							n = maxf(n, niebla.get(sala_casilla[f2 * cols + c2], 0.0))
+			mascara.set_pixel(c, f, Color(n, con_niebla[f * cols + c], 0.0, 1.0))
 
 
 # ¿Tapa esta casilla de suelo la cara de un muro de debajo?
@@ -408,7 +434,8 @@ func actualizar_niebla(delta: float) -> void:
 			cambia = true
 	if not cambia:
 		return
-	velo.queue_redraw()
+	pintar_mascara()
+	textura_niebla.update(mascara)
 	for sala in caras:
 		for cara in caras[sala]:
 			if cara.niebla != niebla.get(sala, 0.0):
@@ -416,7 +443,7 @@ func actualizar_niebla(delta: float) -> void:
 				cara.queue_redraw()
 	for m in muebles:
 		var n: float = niebla.get(m.zona, 0.0)
-		m.modulate = Color(1, 1, 1).lerp(OSCURO, 0.85 * n)
+		m.modulate = Color(1, 1, 1).lerp(OSCURO, 0.4 * n)   # poco: encima ya va la niebla, y se intuye la silueta
 
 
 # ¿Está esto en una habitación que aún no se ha pisado? (entonces ni se ve ni se le apunta)
