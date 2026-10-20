@@ -262,6 +262,9 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		mapa.ordenador.usar.connect(abrir_ordenador)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
+		# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
+		if fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
+			avisar_noticias()
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(coger_botiquin.bind(armarito))
