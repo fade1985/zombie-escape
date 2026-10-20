@@ -532,7 +532,7 @@ func poner_exposicion() -> void:
 func etiqueta(texto: String, pos: Vector2) -> void:
 	var nombre := Label.new()
 	nombre.text = texto
-	nombre.add_theme_font_size_override("font_size", 14)
+	nombre.theme = Tema.crear()   # la fuente pixel art, a 16 para que se vea nítida
 	nombre.add_theme_color_override("font_outline_color", Color.BLACK)
 	nombre.add_theme_constant_override("outline_size", 4)
 	nombre.size = Vector2(200, 20)

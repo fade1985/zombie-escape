@@ -48,7 +48,7 @@ func _ready() -> void:
 	# El letrero
 	var cartel := Label.new()
 	cartel.text = salida.letrero
-	cartel.add_theme_font_size_override("font_size", 12)
+	cartel.theme = Tema.crear()   # la fuente pixel art, a 16 para que se vea nítida
 	cartel.add_theme_constant_override("outline_size", 4)
 	cartel.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))
 	cartel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
