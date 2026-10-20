@@ -32,6 +32,13 @@ func montar(datos: Dictionary) -> void:
 	forma.shape = rect
 	forma.position = caja.get_center() - position
 	add_child(forma)
+	# y su sombra: cerrada, la luz tampoco pasa (la de las lámparas ni la linterna de Johnny)
+	var sombra := LightOccluder2D.new()
+	var huella := OccluderPolygon2D.new()
+	var r := Rect2(caja.position - position, caja.size)
+	huella.polygon = PackedVector2Array([r.position, Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)])
+	sombra.occluder = huella
+	add_child(sombra)
 
 
 # Se abre: deja de chocar y, poco a poco, gira
@@ -41,6 +48,8 @@ func abrir() -> void:
 	for hijo in get_children():
 		if hijo is CollisionShape2D:
 			hijo.set_deferred("disabled", true)
+		elif hijo is LightOccluder2D:
+			hijo.queue_free()
 
 
 func _process(delta: float) -> void:

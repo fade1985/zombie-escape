@@ -101,6 +101,13 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 	fondo.z_index = -10   # por debajo de todo: los charcos, las manchas y los cuerpos (z -1 y -2) quedan encima
 	fondo.draw.connect(dibujar_fondo.bind(fondo))
 	add_child(fondo)
+	var tapas := Node2D.new()
+	tapas.name = "Tapas"
+	tapas.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	tapas.light_mask = Luz.CAPA_LEJOS
+	tapas.z_index = -10
+	tapas.draw.connect(dibujar_tapas.bind(tapas))
+	add_child(tapas)
 	var navegacion := NavigationRegion2D.new()
 	navegacion.name = "Navegacion"
 	add_child(navegacion)
@@ -167,12 +174,30 @@ func nombre_zona(zona: int) -> String:
 	return sitio.apt.salas[zona].nombre
 
 
-# Suelos y tapas, en píxeles del dibujo (por eso el transform x2). La textura se repite contando desde la
-# esquina del mapa, así que las baldosas casan aunque una habitación tenga forma de L.
-func dibujar_fondo(lienzo: Node2D) -> void:
+# Las tapas de los muros, aparte del suelo: van en la capa de "lejos" (Luz.CAPA_LEJOS), que la linterna de
+# Johnny no alumbra. Si no, el haz se subiría encima de los muros y parecería que los atraviesa
+func dibujar_tapas(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
 	# la franja de tapa de encima del mapa (la cámara deja ver un poco más arriba, por la cara del muro de arriba)
 	lienzo.draw_texture_rect_region(tapa, Rect2(-16, -48, cols * 16 + 32, 48), Rect2(-16, -48, cols * 16 + 32, 48), VELO)
+	for f in filas:
+		var c := 0
+		while c < cols:
+			if not es_muro(c, f):
+				c += 1
+				continue
+			var fin := c + 1
+			while fin < cols and es_muro(fin, f):
+				fin += 1
+			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
+			lienzo.draw_texture_rect_region(tapa, trozo, trozo, VELO)
+			c = fin
+
+
+# Los suelos, en píxeles del dibujo (por eso el transform x2). La textura se repite contando desde la
+# esquina del mapa, así que las baldosas casan aunque una habitación tenga forma de L.
+func dibujar_fondo(lienzo: Node2D) -> void:
+	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
 	for f in filas:
 		var c := 0
 		while c < cols:
@@ -182,9 +207,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 			while fin < cols and es_muro(fin, f) == muro and (muro or sala_de(fin, f) == sala):
 				fin += 1
 			var trozo := Rect2(c * 16, f * 16, (fin - c) * 16, 16)
-			if muro:
-				lienzo.draw_texture_rect_region(tapa, trozo, trozo, VELO)
-			else:
+			if not muro:
 				lienzo.draw_texture_rect_region(estilos[sala].suelo, trozo, trozo)
 			c = fin
 	if alfombra:
@@ -475,18 +498,18 @@ func separar_salas() -> void:
 	if not johnny:
 		return
 	var aqui := zona_en(johnny.global_position)
-	if aqui >= 0 and aqui != sala_johnny:
+	if aqui >= 0:
 		sala_johnny = aqui
-		for sala in caras:
-			for cara in caras[sala]:
-				alejar(cara, sala != aqui)
-		for m in muebles:
-			alejar(m, m.zona != aqui)
-	for z in get_tree().get_nodes_in_group("zombis"):
-		var lejos := zona_en(z.global_position) != sala_johnny
-		if z.get_meta("lejos", false) != lejos:
-			z.set_meta("lejos", lejos)
-			alejar(z, lejos)
+	# todo lo que hay en el mapa (muros, muebles, puertas, zombis, cuerpos, objetos, aliados...), según la
+	# habitación en la que tiene los pies. Solo se cambia lo que ha cambiado (lo nuevo empieza en la capa 1)
+	for cosa in cosas.get_children():
+		if cosa == johnny:
+			continue
+		var lejos := zona_en(cosa.global_position) != sala_johnny
+		if cosa.has_meta("lejos") and cosa.get_meta("lejos") == lejos:
+			continue
+		cosa.set_meta("lejos", lejos)
+		alejar(cosa, lejos)
 
 
 # Pasa algo (y todo lo que lleva dentro) de la capa de las cosas a la de lejos, o al revés
