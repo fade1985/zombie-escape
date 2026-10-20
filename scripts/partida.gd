@@ -46,6 +46,8 @@ const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
 const NOMBRE_EDIFICIO := "Apartamentos"
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
+const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
+const ICONO_MUNICION := preload("res://assets/ui/iconos/municion.png")
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
 const BOTIQUIN := 50               # lo que cura el botiquín de los baños (BOTIQUIN_CURA en el JS)
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
@@ -477,6 +479,21 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
+# Una caja de munición: un cargador más para el arma de fuego. Va hacia Johnny solo si le cabe
+func soltar_municion(donde: Vector2) -> void:
+	var cosa := BILLETE.new()
+	cosa.johnny = johnny
+	cosa.icono = ICONO_MUNICION
+	cosa.tamano = 2.0
+	cosa.position = donde
+	cosa.puede = johnny.quiere_municion
+	cosa.cogido.connect(func():
+		johnny.sumar_municion()
+		Sonido.tocar("recargado")
+		numero(cosa.position, "+munición", Color("#ffd23f")))
+	mapa.cosas.add_child.call_deferred(cosa)
+
+
 # Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila. "tirado":
 # lo ha tirado Johnny desde el inventario (no vuelve a la mochila hasta que se aparte)
 func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
@@ -638,9 +655,17 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var cuantos := BILLETES_JEFA if tipo == "portera" else (1 if randf() < BILLETE_ZOMBI else 0)
 		soltar_billetes(cuantos, zombi.position)
 		# a veces, un molotov o una granada
+		var soltado := cuantos > 0
 		for k in ["molotov", "granada"]:
 			if randf() < Lanzables.DATOS[k].suelta:
 				soltar_lanzable(k, zombi.position)
+				soltado = true
+		# o una caja de munición (la portera, dos seguras)
+		if tipo == "portera":
+			for i in 2:
+				soltar_municion(zombi.position)
+		elif not soltado and randf() < MUNICION_ZOMBI:
+			soltar_municion(zombi.position)
 		# y a veces un objeto para el banco de trabajo (la portera, dos seguros)
 		if tipo == "portera":
 			for i in 2:
@@ -766,6 +791,16 @@ func _process(delta: float) -> void:
 		var donde: Vector2 = prueba.global_position
 		lanzables.lanzar(donde)
 		print("Molotov hacia ", donde, " | quedan ", lanzables.cantidades)
+		# las balas: sin ninguna, a la de cuerpo a cuerpo; una caja de munición devuelve la de fuego y recarga
+		var antes_balas := "%s %d +%d" % [johnny.huecos.fuego, johnny.balas, johnny.reserva]
+		johnny.balas = 0
+		johnny.reserva = 0
+		johnny.sostener("fuego")
+		johnny.lista_para_disparar()
+		var sin: String = johnny.mano
+		johnny.sumar_municion()
+		print("Balas: %s | sin balas pasa a %s | con una caja: %s %d +%d recargando %s" % [antes_balas, sin,
+			johnny.mano, johnny.balas, johnny.reserva, johnny.recargando > 0.0])
 	if antes < 4.2 and tiempo >= 4.2:
 		var ardiendo := 0
 		for z in get_tree().get_nodes_in_group("zombis"):

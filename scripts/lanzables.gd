@@ -65,6 +65,7 @@ var cantidades := {"molotov": 0, "granada": 0}
 var creadas: Array = []        # las arrojadizas creadas sacadas del baúl, cada una con sus "unidades"
 var tipo := "molotov"          # lo que se lanza ahora
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
+var apuntando := false         # se ha visto el botón apretado: al soltarlo, se lanza (y solo entonces)
 var t := 0.0
 
 
@@ -144,12 +145,15 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 	apunte = Vector2.INF
 	if johnny == null or not johnny.vivo:
+		apuntando = false
 		return
 	if Input.is_action_just_pressed("cambiar_lanzable"):
 		cambiar()
 	if Input.is_action_pressed("lanzar"):
 		apunte = objetivo()
-	elif Input.is_action_just_released("lanzar"):
+		apuntando = true
+	elif apuntando:
+		apuntando = false
 		lanzar(objetivo())
 
 

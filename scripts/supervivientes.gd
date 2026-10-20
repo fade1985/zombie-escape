@@ -330,8 +330,8 @@ func actualizar_horda(delta: float) -> void:
 			a.levantarse()
 			a.decir("¡Gracias! Sigo con la cerradura")
 			Particulas.anillo(a, a.global_position, 50.0, Tema.VERDE, 0.4)
-	else:
-		# la cerradura avanza mientras él esté de pie
+	elif a.en_su_sitio():
+		# la cerradura avanza mientras él esté de pie delante de la puerta
 		h.hecho = minf(HORDA.dura, h.hecho + delta)
 	var k: float = h.hecho / HORDA.dura
 	while h.frase_i < FRASES.size() and k >= FRASES[h.frase_i][0]:
@@ -403,10 +403,12 @@ func al_herir(cae: bool, a: Aliado) -> void:
 		a.decir(["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"][randi() % 3])
 
 
-# A mitad: tira un molotov y una granada a sus pies (en Godot la munición aún no se acaba: no hacen falta cajas)
+# A mitad: tira un molotov, una granada y dos cajas de munición a sus pies
 func soltar_provisiones(a: Aliado) -> void:
 	partida.soltar_lanzable("molotov", a.position + Vector2(-30, 30))
 	partida.soltar_lanzable("granada", a.position + Vector2(30, 30))
+	partida.soltar_municion(a.position + Vector2(-10, 40))
+	partida.soltar_municion(a.position + Vector2(10, 40))
 
 
 # Un grupo de zombis entra por una habitación (casi siempre una donde no está Johnny) y él avisa de por dónde
@@ -584,6 +586,7 @@ func probar() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-superviviente.png")
 	johnny.position = partida.mapa.puertas[0].llegada()
 	johnny.get_node("Camara").reset_smoothing()
+	rescate.amigo.position = johnny.position + Vector2(40, 0)   # le ha seguido hasta la puerta
 	await get_tree().create_timer(0.3, false).timeout
 	print("Horda: %s | puerta %s" % [en_horda(), "cerrada" if partida.cerrada else "abierta"])
 	if not en_horda():
@@ -598,6 +601,7 @@ func probar() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-horda.png")
 	a.inv_t = 0.0
 	a.recibir_dano(500)
+	print("A %.0f de su sitio en la puerta" % a.global_position.distance_to(a.sitio_forzar))
 	print("Caído: %s | cerradura parada en %.1f" % [a.caido, horda.hecho])
 	johnny.position = a.position + Vector2(30, 0)
 	await get_tree().create_timer(2.3, false).timeout

@@ -161,8 +161,10 @@ func pintar_balas() -> void:
 			color.a *= 0.5
 		barra.draw_texture_rect(CARTUCHO if w.cartucho else BALA, Rect2(x, abajo - tam.y, tam.x, tam.y), false, color)
 		x += tam.x + hueco
-	# La reserva: de momento no se acaba (las cajas de munición llegan con los objetos, en la fase 7)
+	# La reserva: las balas de repuesto que lleva (en naranja si ya no le queda ninguna)
 	var donde := Vector2(x + 4, abajo - 2)
-	var color_texto := Color("#f0e8d4", 0.5 if lejos else 1.0)
-	barra.draw_string_outline(Tema.FUENTE, donde, "+∞", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, color_texto.a))
-	barra.draw_string(Tema.FUENTE, donde, "+∞", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color_texto)
+	var texto := "+∞" if w.get("sin_municion", false) else "+%d" % johnny.reserva
+	var color_texto := Color("#f0e8d4") if johnny.reserva > 0 or texto == "+∞" else Color("#ff9f1c")
+	color_texto.a = 0.5 if lejos else 1.0
+	barra.draw_string_outline(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, color_texto.a))
+	barra.draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color_texto)

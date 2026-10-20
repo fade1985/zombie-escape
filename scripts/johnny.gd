@@ -41,8 +41,15 @@ const AZUL := Color("#9fe8ff")
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
 const EMPUJE := 170.0      # empuje base de un golpe a un zombi normal (el del arma lo multiplica)
+const PATADA := 6.0        # disparando andando: lo que el disparo empuja a Johnny hacia atrás (KICK del JS)...
+const PATADA_T := 0.12     # ...y lo que tarda en volver (la escopeta empuja 1,6 veces más)
 const CAMBIO := 0.15       # lo que tarda en cambiar de arma antes de poder atacar
 const BALA := preload("res://escenas/armas/bala.tscn")
+# Balas de reserva (AMMO en src/weapons.js), contadas en cargadores del arma: con cuántos empieza, cuántos caben
+# y cuántos da una caja de munición
+const RESERVA_INICIO := 2
+const RESERVA_MAX := 4
+const RESERVA_CAJA := 1
 
 const MODOS := {"asistido": "Asistido", "mira": "Hacia donde mira", "libre": "Apuntar libre"}
 const AYUDA_ANGULO := 0.2  # modo libre: radianes (unos 11°) de margen para que el apunte se tuerza hacia un zombi
@@ -75,12 +82,17 @@ var resucitado := false    # Desfibrilador: solo una vez por partida
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
 var balas := 0             # balas que quedan en el cargador del arma de fuego
+var reserva := 0           # balas de repuesto en la mochila, para recargar
+var sin_balas_sola := false   # se ha pasado sola a la de cuerpo a cuerpo al quedarse sin balas
+var municion_guardada := {}   # las balas de las armas de fuego que ha guardado: {id: [cargador, reserva]}
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var espera := 0.0          # tiempo que falta para poder atacar otra vez
 var ataque_t := -1.0       # tiempo desde que empezó el ataque en curso (-1 = no está atacando)
 var ataque_dur := 0.0      # lo que dura ese ataque
 var golpe_pendiente := false   # golpe cuerpo a cuerpo que aún no ha llegado (pega a mitad de animación)
 var golpe_angulo := 0.0        # y hacia dónde va
+var patada_t := -1.0           # tiempo desde el último disparo andando (-1 = nada): el retroceso de todo el cuerpo
+var patada := Vector2.ZERO     # hacia dónde y cuánto empuja ese disparo
 
 var modo := "asistido"     # cómo se ataca (ver arriba)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
@@ -97,6 +109,7 @@ func _ready() -> void:
 	add_child(llamas)
 	vida = stats.vida_max
 	balas = Armas.datos(huecos.fuego).cargador
+	reserva = balas * RESERVA_INICIO
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
@@ -167,6 +180,15 @@ func _physics_process(delta: float) -> void:
 	sola_t -= delta
 	# Parpadea mientras es invulnerable (medio transparente a ratos)
 	sprite.modulate.a = 0.45 if invulnerable > 0.0 and int(invulnerable * 18.0) % 2 == 0 else 1.0
+	# El retroceso de disparar andando: el dibujo entero va un poquito hacia atrás y vuelve enseguida
+	var atras := Vector2.ZERO
+	if patada_t >= 0.0:
+		patada_t += delta
+		atras = patada * maxf(0.0, 1.0 - patada_t / PATADA_T)
+		if patada_t >= PATADA_T:
+			patada_t = -1.0
+	sprite.position = Vector2(0, 16) + atras
+	efectos.position = sprite.position
 	if not vivo:
 		return
 	# Los estados de los charcos: el daño poco a poco (sin parpadear), el tinte, las llamas y las gotitas
@@ -415,6 +437,9 @@ func atacar(angulo: float) -> void:
 		efectos.set_frame_and_progress(0, 0.0)
 		efectos.show()
 		ataque_t = -1.0   # las piernas siguen con la animación de andar
+		# como andando no se ve el retroceso de los brazos, el disparo empuja a Johnny entero hacia atrás
+		patada = -Vector2.from_angle(angulo) * PATADA * (1.6 if w.get("perdigones", 1) > 1 else 1.0)
+		patada_t = 0.0
 	else:
 		sprite.speed_scale = ritmo_anim
 		sprite.play(nombre)
@@ -502,14 +527,21 @@ func lista_para_disparar() -> bool:
 		recargando = 0.0   # dispara y deja de meter cartuchos
 	if balas > 0:
 		return true
-	empezar_recarga()
+	if reserva > 0:
+		empezar_recarga()
+		return false
+	# sin balas: a la fregona (o la que lleve)
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), "¡Sin balas!", Color("#ff9f1c"), 18)
+	Sonido.tocar("click")
+	sostener("cuerpo")
+	sin_balas_sola = true
 	return false
 
 
-# De momento las balas de reserva no se acaban (las cajas de munición y la tienda vendrán más adelante)
+# Empieza a recargar, si hace falta y le quedan balas de reserva
 func empezar_recarga() -> void:
 	var w := arma()
-	if w.tipo != "fuego" or recargando > 0.0 or balas >= w.cargador:
+	if w.tipo != "fuego" or recargando > 0.0 or balas >= w.cargador or reserva <= 0:
 		return
 	recargando = w.recarga
 	Sonido.tocar("recargar")
@@ -521,32 +553,64 @@ func terminar_recarga() -> void:
 	var w := arma()
 	recargando = 0.0
 	Sonido.tocar("cartucho" if w.cartucho else "recargado")
-	if w.cartucho:
-		balas += 1
-		if balas < w.cargador:
-			recargando = w.recarga
-	else:
-		balas = w.cargador
+	var mete: int = mini(1 if w.cartucho else w.cargador - balas, reserva)
+	balas += mete
+	reserva -= mete
+	if w.cartucho and balas < w.cargador and reserva > 0:
+		recargando = w.recarga
+	avisar_arma()
+
+
+# ¿Le cabe más munición? (para que la caja de munición vaya hacia él)
+func quiere_municion() -> bool:
+	var w: Dictionary = Armas.datos(huecos.fuego)
+	return not w.get("sin_municion", false) and reserva < w.cargador * RESERVA_MAX
+
+
+# Recoge una caja de munición: un cargador más para el arma de fuego que lleve. Si se había pasado sola a la
+# de cuerpo a cuerpo por quedarse sin balas, vuelve a sacar la de fuego
+func sumar_municion() -> void:
+	var w: Dictionary = Armas.datos(huecos.fuego)
+	reserva = mini(w.cargador * RESERVA_MAX, reserva + w.cargador * RESERVA_CAJA)
+	if sin_balas_sola:
+		sostener("fuego")
+	if mano == "fuego" and balas <= 0:
+		empezar_recarga()
 	avisar_arma()
 
 
 # Coge un arma (teclas 1 a 6, la tienda, el inventario o el baúl): va a su hueco y se la pone en la mano. Si es
-# de fuego, con el cargador lleno; las creadas de fuego, con lo que les quedaba en el depósito al guardarlas
+# de fuego, con las balas que le quedaban al guardarla o, si es nueva, con el cargador lleno y la reserva de
+# partida (las creadas guardan las suyas en Armas.sacadas)
 func coger(id: String) -> void:
 	var w: Dictionary = Armas.datos(id)
 	if w.tipo == "fuego":
 		var vieja: String = huecos.fuego
 		if Armas.es_creada(vieja):
 			Armas.sacadas[vieja].balas = balas
+			Armas.sacadas[vieja].reserva = reserva
+		else:
+			municion_guardada[vieja] = [balas, reserva]
 		balas = w.cargador
+		reserva = w.cargador * RESERVA_INICIO
 		if Armas.es_creada(id):
-			balas = Armas.sacadas[id].get("balas", w.cargador)
+			balas = Armas.sacadas[id].get("balas", balas)
+			reserva = Armas.sacadas[id].get("reserva", reserva)
+		elif municion_guardada.has(id):
+			balas = municion_guardada[id][0]
+			reserva = municion_guardada[id][1]
+			municion_guardada.erase(id)
 	huecos[w.tipo] = id
 	sostener(w.tipo)
 
 
 # Cambia a la otra arma (Q, rueda del ratón o botón Y)
 func cambiar_mano() -> void:
+	# a la de fuego sin balas no se cambia
+	if mano == "cuerpo" and balas <= 0 and reserva <= 0:
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), "¡Sin balas!", Color("#ff9f1c"), 18)
+		Sonido.tocar("click")
+		return
 	sostener("fuego" if mano == "cuerpo" else "cuerpo")
 	Sonido.tocar("cambiar")
 	espera = maxf(espera, CAMBIO)   # un instante para cambiar de arma
@@ -555,6 +619,7 @@ func cambiar_mano() -> void:
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta
 func sostener(hueco: String) -> void:
 	mano = hueco
+	sin_balas_sola = false
 	recargando = 0.0
 	ataque_t = -1.0
 	golpe_pendiente = false

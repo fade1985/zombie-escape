@@ -255,8 +255,10 @@ func soltar_todo() -> void:
 	ejes("", joy)
 	ejes("apuntar", apunte)
 	soltar_apunte = 0
+	# solo las que estén apretadas: soltar una que no lo está cuenta igual como "soltada" (y lanzaba un molotov)
 	for nombre in ["esquivar", "atacar", "lanzar", "cambiar_lanzable", "recargar", "cambiar_arma", "cambiar_modo"]:
-		Input.action_release(nombre)
+		if Input.is_action_pressed(nombre):
+			Input.action_release(nombre)
 
 
 # ── El dibujo ──

@@ -48,6 +48,7 @@ var vivo: bool:
 	get: return not caido
 
 var sprite: AnimatedSprite2D
+var agente: NavigationAgent2D   # le busca el camino rodeando paredes y muebles (como a los zombis)
 var encima: Node2D         # la vida, el bocadillo y su nombre, por encima de todo
 
 
@@ -62,6 +63,11 @@ func preparar(datos: Dictionary, en_modo: String) -> void:
 	circulo.radius = RADIO
 	forma.shape = circulo
 	add_child(forma)
+	agente = NavigationAgent2D.new()
+	agente.path_desired_distance = 12.0
+	agente.target_desired_distance = 12.0
+	agente.path_max_distance = 60.0
+	add_child(agente)
 	sprite = AnimatedSprite2D.new()
 	sprite.sprite_frames = load("res://assets/sprites/conserje-48-%s.tres" % def.hoja)
 	sprite.position = Vector2(0, 16)
@@ -112,14 +118,30 @@ func seguir() -> void:
 	var n: int = maxi(1, partida.supervivientes.equipo.size())
 	var angulo: float = float(idx) / n * TAU + partida.duracion * 0.6
 	var meta: Vector2 = johnny.global_position + Vector2(cos(angulo) * 55.0, sin(angulo) * 42.0)
-	if global_position.distance_to(johnny.global_position) > 500.0:
-		global_position = meta   # se ha quedado atascado detrás de algo: aparece a su lado
-	velocity = ((meta - global_position) * 6.0).limit_length(420.0)
-	move_and_slide()
+	ir_a(meta, 420.0)
 	if velocity.length() > 20.0:
 		animar("andar", velocity)
 	else:
 		animar("reposo", Vector2.from_angle(TAU / 8.0 * RUMBOS.find(direccion)))
+
+
+# Va hacia "meta" por el camino (rodeando paredes y muebles), frenando al llegar
+func ir_a(meta: Vector2, rapidez: float) -> void:
+	var falta := global_position.distance_to(meta)
+	if falta <= 2.0:
+		velocity = Vector2.ZERO
+		return
+	agente.target_position = meta
+	var siguiente := agente.get_next_path_position()
+	if agente.is_navigation_finished() or siguiente.distance_to(global_position) < 1.0:
+		siguiente = meta   # ya está en el último tramo (o el camino aún no está listo): derecho
+	velocity = global_position.direction_to(siguiente) * minf(rapidez, falta * 6.0)
+	move_and_slide()
+
+
+# En la horda: ¿está ya en su sitio delante de la puerta? (la cerradura no avanza mientras va de camino)
+func en_su_sitio() -> bool:
+	return global_position.distance_to(sitio_forzar) < 16.0
 
 
 # En la horda: a su sitio delante de la puerta, y ahí trastea de espaldas (o tumbado, si ha caído)
@@ -130,9 +152,7 @@ func forzar() -> void:
 		sprite.position = Vector2(-20, 6)
 		sprite.play("reposo_s")
 		return
-	var falta := sitio_forzar - global_position
-	velocity = falta.normalized() * minf(220.0, falta.length() * 6.0) if falta.length() > 2.0 else Vector2.ZERO
-	move_and_slide()
+	ir_a(sitio_forzar, 220.0)
 	animar("andar" if velocity.length() > 20.0 else "reposo", mira_forzar)
 
 
