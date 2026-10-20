@@ -63,8 +63,9 @@ infestado, apartamento a apartamento. Solo pixel art. Se está **pasando a Godot
   escuchar los efectos sin jugar: `... _console.exe --headless --path . --script tools/probar_sonido.gd` los
   guarda en `tools/efectos/*.wav` (no se suben a git).
 - **En el navegador (web):** las plantillas de exportación de web están en
-  `%APPDATA%\Godot\export_templates\4.7.2.stable` (solo las de web). Exportar (sale en `web/`, que no se sube a git; si no
-  existe, crearla con un `.gdignore` dentro para que el editor no importe lo exportado):
+  `%APPDATA%\Godot\export_templates\4.7.2.stable` (solo las de web). Exportar (sale en `web/`, que lleva un `.gdignore`
+  para que el editor no importe lo exportado). **`web/` sí va en git: Vercel publica lo que haya en ella**, así que
+  para publicar un cambio: exportar, commit de `web/` y push:
 
   ```
   "C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe" --headless --path . --export-release "Web" web/index.html
