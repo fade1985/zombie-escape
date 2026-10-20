@@ -1,4 +1,5 @@
-# El HUD de arriba a la izquierda, como el del JS (src/ui.js, updateHud):
+# El HUD de Johnny, en la franja de abajo de la pantalla (la del muro de abajo, 64 de alto), como el del JS
+# (src/ui.js, updateHud; #hud en style.css). Así la barra de la portera y la de la horda, arriba, no se tapan:
 #   - La barra de vida en su marco (barra-vida.png), partida en tres tercios. Los tercios perdidos se tapan
 #     con rayas oscuras, porque ya no se curan. Encima, la vida en números.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
@@ -16,11 +17,13 @@ const ANCHO := 236.0      # la barra a tamaño 1 (el dibujo mide 236×26)
 const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
+const FRANJA := 64.0      # el alto de la franja de abajo (el grosor del muro de abajo)
 const ICONOS := {"mp5": "pistola"}   # las armas sin icono propio usan el de otra
 
 var johnny: Node2D
 var partida: Node
 
+var fila := HBoxContainer.new()
 var barra := Control.new()
 var cuerpo: PanelContainer
 var fuego: PanelContainer
@@ -36,8 +39,6 @@ var antes := {}           # lo que se pintó la última vez (para no rehacer las
 func _ready() -> void:
 	theme = Tema.crear()
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var fila := HBoxContainer.new()
-	fila.position = Vector2(14, 30)   # deja sitio arriba para las balas
 	fila.add_theme_constant_override("separation", 8)
 	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(fila)
@@ -75,6 +76,8 @@ func poner(p: PanelContainer, icono: String, texto: String, on := false) -> void
 
 
 func _process(_delta: float) -> void:
+	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
+	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 5.0)
 	if johnny == null:
 		return
 	var h: Dictionary = johnny.huecos

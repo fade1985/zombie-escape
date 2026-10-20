@@ -5,7 +5,7 @@
 #   - El apartamento de la jefa está cerrado con llave; la llave está en el suelo de otro apartamento.
 #   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente.
 #   - Después de la última planta, el edificio está limpio: cartel de victoria.
-# La partida empieza en la sala de mantenimiento de la planta baja. Arriba a la izquierda va el HUD (hud.gd)
+# La partida empieza en la sala de mantenimiento de la planta baja. Abajo, en la franja del muro, va el HUD (hud.gd)
 # y arriba a la derecha, el minimapa. Esc o Start abren la pausa (menus.gd).
 #
 # Dinero y guardado (como game.js y game-combate.js del JS): los zombis sueltan billetes a veces (la portera,

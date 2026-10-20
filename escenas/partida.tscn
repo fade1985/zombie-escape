@@ -25,17 +25,19 @@ script = ExtResource("script")
 [node name="Pantalla" type="CanvasLayer" parent="."]
 
 [node name="Ayuda" type="Label" parent="Pantalla"]
-anchors_preset = 2
+anchors_preset = 12
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 16.0
-offset_top = -30.0
-offset_right = 616.0
-offset_bottom = -10.0
+offset_top = -17.0
+offset_right = -16.0
+offset_bottom = -1.0
+clip_text = true
 modulate = Color(1, 1, 1, 0.7)
 theme_override_colors/font_outline_color = Color(0.11, 0.1, 0.17, 1)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 text = "Modo: Asistido (F1 cambia) · 1-6 elegir arma · Q cambiar · R recargar"
 
 [node name="Aviso" type="Label" parent="Pantalla"]

@@ -1,6 +1,6 @@
 # Una salida de un mapa: las puertas de los apartamentos, el ascensor averiado, las escaleras y por donde se
 # ha llegado. Se dibuja a mano, con rectángulos de colores (en múltiplos de 2 unidades, como un píxel del
-# dibujo). Lleva una lucecita encima: verde si se puede pasar y roja si no.
+# dibujo).
 #
 # Delante tiene una zona invisible: cuando Johnny la pisa, avisa con "empujada" y la partida decide si se
 # pasa al otro lado o se le dice por qué no se abre.
@@ -13,14 +13,15 @@ const HOJA := Color("6b4329")
 const PANEL := Color("573420")
 const POMO := Color("d8b04a")
 const HUECO := Color("1a1410")
-const METAL := Color("8d949e")
-const METAL_OSCURO := Color("4a4f57")
-const VERDE := Color("6ee36e")
-const ROJO := Color("e5484d")
+# El ascensor (elevatorFront de src/render.js): acero, su marco y la cinta de peligro amarilla y negra
+const ACERO := {"luz": Color("76807c"), "medio": Color("566060"), "sombra": Color("3d4545"), "filo": Color("1e2324")}
+const OSCURO := Color("0c0a0e")
+const CINTA := Color("c9a227")
+const CINTA_RAYA := Color("1a1712")
 
 var salida: Dictionary   # la de planta.gd: dir, tipo, letrero...
 var indice := 0          # su número en la lista de salidas del sitio
-var abierta := true:     # si se puede pasar (enciende la luz verde o la roja)
+var abierta := true:     # si se puede pasar
 	set(valor):
 		abierta = valor
 		queue_redraw()
@@ -64,16 +65,11 @@ func llegada() -> Vector2:
 
 
 func _draw() -> void:
-	var luz := VERDE if abierta else ROJO
 	match salida.dir:
 		"arriba":
 			# De frente, sobre la cara del muro (que sube 96 desde aquí)
 			if salida.tipo == "ascensor":
-				draw_rect(Rect2(-36, -86, 72, 86), METAL_OSCURO)
-				draw_rect(Rect2(-32, -80, 64, 80), METAL)
-				draw_rect(Rect2(-2, -80, 4, 80), METAL_OSCURO)
-				draw_rect(Rect2(-14, -94, 28, 8), Color("201010"))
-				draw_rect(Rect2(-10, -92, 20, 4), ROJO.darkened(0.3))
+				ascensor()
 				return
 			draw_rect(Rect2(-36, -86, 72, 86), MARCO)
 			draw_rect(Rect2(-32, -80, 64, 80), HOJA)
@@ -83,13 +79,11 @@ func _draw() -> void:
 			draw_rect(Rect2(-2, -80, 4, 80), MARCO)
 			draw_rect(Rect2(-8, -44, 4, 4), POMO)
 			draw_rect(Rect2(4, -44, 4, 4), POMO)
-			draw_rect(Rect2(-4, -94, 8, 6), luz)
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			draw_rect(Rect2(-36, 0, 72, 64), MARCO)
 			draw_rect(Rect2(-32, 0, 64, 64), HUECO)
 			draw_rect(Rect2(-32, 0, 64, 8), HOJA)
-			draw_rect(Rect2(-4, 14, 8, 6), luz)
 		_:
 			# En los laterales del pasillo: las escaleras (peldaños) o la puerta por donde se ha llegado
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
@@ -101,4 +95,38 @@ func _draw() -> void:
 				draw_rect(Rect2(x0, -32, 64, 64), HUECO)
 			var borde := -8.0 if salida.dir == "izquierda" else 0.0   # la hoja, en el borde de dentro
 			draw_rect(Rect2(borde, -32, 8, 64), HOJA)
-			draw_rect(Rect2(borde + 2, -4, 4, 8), luz)
+
+
+# El ascensor averiado, de frente: más ancho que una puerta, con su marco, dos hojas de acero cerradas, la
+# lucecita de encima apagada en rojo y una cinta de peligro cruzada que lo bloquea
+func ascensor() -> void:
+	var w := 80.0
+	var alto := 80.0
+	var x0 := -w / 2.0
+	var arriba := -alto
+	# el marco
+	draw_rect(Rect2(x0 - 8, arriba - 8, w + 16, alto + 8), ACERO.filo)
+	draw_rect(Rect2(x0 - 6, arriba - 6, w + 12, alto + 6), ACERO.medio)
+	draw_rect(Rect2(x0 - 6, arriba - 6, w + 12, 2), ACERO.luz)
+	draw_rect(Rect2(x0 - 6, arriba - 4, 2, alto + 4), ACERO.luz)
+	draw_rect(Rect2(x0 + w + 4, arriba - 4, 2, alto + 4), ACERO.sombra)
+	draw_rect(Rect2(x0, arriba, w, alto), OSCURO)
+	# las dos hojas cerradas
+	draw_rect(Rect2(x0, arriba, w, alto), ACERO.medio)
+	draw_rect(Rect2(x0, arriba, w, 2), ACERO.luz)
+	draw_rect(Rect2(-1, arriba, 2, alto), ACERO.filo)
+	draw_rect(Rect2(x0, -4, w, 4), ACERO.sombra)
+	# la lucecita de encima, apagada en rojo
+	draw_rect(Rect2(-6, arriba - 6, 12, 4), ACERO.filo)
+	draw_rect(Rect2(-4, arriba - 6, 8, 2), Color("6a1c1c"))
+	cinta(x0 - 4, arriba + alto / 2.0 - 6, w + 8)
+
+
+# Cinta de peligro: franja amarilla con rayas negras en diagonal, hecha a escalones de píxel
+func cinta(x: float, y: float, largo: float) -> void:
+	draw_rect(Rect2(x, y, largo, 10), CINTA)
+	for sx in range(0, int(largo), 12):
+		for j in 5:
+			var px := sx + j * 2
+			if px + 4 <= largo:
+				draw_rect(Rect2(x + px, y + 8 - j * 2, 4, 2), CINTA_RAYA)
