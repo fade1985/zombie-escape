@@ -113,5 +113,5 @@ Para pasar una hoja nueva a Godot: `py tools/hacer_frames.py assets/sprites/zomb
 | 7a | Molotov y granada (apuntar y lanzar), fuego y zombis ardiendo, charcos con estados, mutaciones | hecha, con visto bueno (20 oct) |
 | 7b1 | Objetos que sueltan los zombis, mochila e inventario, baúl, banco de trabajo con recetas y rarezas, botiquines y Sanitario | hecha, con visto bueno (20 oct) |
 | 7b2 | Armas creadas: sacarlas del baúl y usarlas (cuerpo a cuerpo, a distancia y arrojadizas en `Lanzables.tipos()`) | hecha, con visto bueno (20 oct) |
-| 7c | Superviviente: encerrado en un baño, la horda mientras fuerza la cerradura, rescatados y acompañante | hecha, pendiente de visto bueno |
+| 7c | Superviviente: encerrado en un baño, la horda mientras fuerza la cerradura, rescatados y acompañante | hecha, con visto bueno (20 oct) |
 | 8 | Música, sonido, exportar a web (Vercel) y retirar la versión JS | |
