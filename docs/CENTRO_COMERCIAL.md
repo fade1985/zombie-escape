@@ -529,7 +529,7 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        con letras; el porrazo cae en un fotograma algo distinto según la dirección.
      - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
-   - ✅ **Trozo 3: el cocinero** (21 oct), con sus animaciones. Lo que ha quedado:
+   - ✅ **Trozo 3: el cocinero** (21 oct), con sus animaciones y con el visto bueno del dueño (probado en el móvil, tal cual: el molotov sí le quema y el cinto del delantal queda oscuro). Lo que ha quedado:
      - **Ya sale en el sorteo** como el antidisturbios (su tienda, la Cocina central): `scripts/cocinero.gd` y
        `escenas/personajes/cocinero.tscn`, con los números del plan: vida 450 (+25 % por planta), velocidad 60.
      - **A media distancia:** si Johnny se acerca a menos de 200, se aparta (sin dejar de mirarle: anda hacia atrás);
