@@ -1,5 +1,6 @@
 # Monta la hoja de un minijefe del centro comercial (lienzo de 72, como el zombi venenoso) y su SpriteFrames.
 # Uso (desde la raíz del proyecto):  py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios
+#                                    py tools/jefe_hoja.py cocinero-72 jefe-cocinero
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -23,16 +24,29 @@ DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
         "north": "n", "north-west": "no", "west": "o", "south-west": "so"}
 # nombre en el juego: (carpeta de PixelLab, fotogramas por segundo, en bucle, quitar el último fotograma)
 # (el andar de PixelLab termina en la misma postura con la que empieza: sin quitarlo, ese paso se vería dos veces)
-ANIMS = {
+# Cada minijefe tiene las suyas; las comunes van primero.
+COMUNES = {
     "quieto": ("rotations", 1, True, False),
     "reposo": ("rotations", 1, True, False),
     "andar": ("walk", 9, True, True),
-    "porrazo": ("porrazo", 12, False, False),
-    "carga": ("carga", 12, False, False),
-    "golpe": ("golpe", 16, False, False),
-    "muerte": ("muerte", 10, False, False),
-    "silbato": ("silbato", 9, False, False),
 }
+PROPIAS = {
+    "antidisturbios-72": {
+        "porrazo": ("porrazo", 12, False, False),
+        "carga": ("carga", 12, False, False),
+        "golpe": ("golpe", 16, False, False),
+        "muerte": ("muerte", 10, False, False),
+        "silbato": ("silbato", 9, False, False),
+    },
+    "cocinero-72": {
+        "lanzar": ("lanzar", 12, False, False),
+        "cuchillazo": ("cuchillazo", 12, False, False),
+        "golpe": ("golpe", 16, False, False),
+        "muerte": ("muerte", 10, False, False),
+    },
+}
+ANIMS = {**COMUNES, **PROPIAS[fuente]}
+SOLO_DE_FRENTE = {"silbato"}   # dibujadas solo mirando al sur
 
 
 def limpiar(im: Image.Image) -> Image.Image:
@@ -91,7 +105,7 @@ for nombre, (carpeta, fps, bucle, quitar) in ANIMS.items():
     for d, dd in DIRS.items():
         imgs = fotogramas(carpeta, d, quitar)
         if not imgs:
-            if nombre == "silbato" and d != "south":
+            if nombre in SOLO_DE_FRENTE and d != "south":
                 continue   # el silbato solo está dibujado de frente
             imgs = fotogramas("rotations", d, False)
         filas.append((f"{nombre}_{dd}", fps if len(imgs) > 1 else 1, bucle, imgs))
