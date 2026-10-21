@@ -233,7 +233,14 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
        Johnny tiene que girarse. La carga avisa 0,8 s (la segunda seguida, 0,5) y corre como mucho 1,3 s; esquivando
        se la pasa de largo; si te pilla te quedas 0,7 s sin poder moverte ("tirado"). Atontado, estrellitas.
        Silbato cada 13 s si quedan pocos zombis: llegan vigilantes (los del trozo 1).
-     - Tecla de prueba **K**; también en la exposición (F9). `--captura --edificio centro` lo saca en la 1ª planta,
+     - **Su dibujo**, animado con PixelLab sobre su modelo de 72: andar, porrazo, carga (se agacha tras el escudo),
+       golpe (también cuando está atontado) y muerte en las 8 direcciones, y el silbato de frente. **42 generaciones**
+       (detalle y textos en `assets/pixellab.json` → `centro-comercial-parte4` → `antidisturbios-72` → `animaciones`).
+       Se monta con `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, que alinea por los pies los
+       lienzos de PixelLab (cada animación viene de un tamaño) y borra las motas sueltas. Pegas conocidas: andando de
+       frente y de espaldas casi no mueve las piernas; en la carga hacia la derecha el escudo lleva una franja negra
+       con letras; el porrazo cae en un fotograma algo distinto según la dirección.
+     - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones

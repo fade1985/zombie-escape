@@ -1102,7 +1102,7 @@ func _process(delta: float) -> void:
 		johnny.get_node("Camara").reset_smoothing()
 	if antes < 0.7 and tiempo >= 0.7:
 		get_viewport().get_texture().get_image().save_png("res://captura-expo.png")
-		# y las últimas filas de zombis (los del centro comercial y la portera): captura-expo-zombis.png
+		# y las últimas filas de zombis (los del centro comercial, la portera y los minijefes): captura-expo-zombis.png
 		var filas := []
 		for s in mapa.expo_sprites:
 			if s.position.y not in filas:

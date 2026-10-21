@@ -23,7 +23,7 @@ const SALA_FILAS := 20
 const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 86            # (alargada para los zombis del centro comercial)
+const EXPO_FILAS := 97            # (alargada para los zombis y los minijefes del centro comercial)
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,

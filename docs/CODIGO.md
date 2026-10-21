@@ -108,7 +108,8 @@
 (la piel a verde; admite otro tono de origen), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
-`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
+`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`; alinea por los pies los lienzos de PixelLab, borra
+las motas sueltas y dice el `offset` del Sprite; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
