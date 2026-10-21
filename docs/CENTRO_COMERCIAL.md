@@ -108,9 +108,48 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 ## Supervivientes
 
-Supervivientes nuevos, uno por planta, con su evento de rescate como los de ahora; al rescatarlos van a la sala de
-mantenimiento. Cada uno debería **hacer crecer la sala** (uno arregla la cafetera y cura al empezar, otro abre
-una tienda...).
+### Decidido con el dueño (21 oct, para la parte 5)
+
+- **Tres supervivientes nuevos, solo del centro comercial** (eran cuatro; el dueño quitó a la camarera el 21 oct:
+  **tres por edificio**), cada uno en un tipo de tienda con trastienda. **Uno por
+  partida, como ahora**: sale uno de los que aún no tienes, en una planta al azar (nunca la azotea); en los
+  Apartamentos siguen saliendo el policía, la médica y el militar. Al rescatarlo se queda a vivir en la sala de
+  mantenimiento para siempre y **la hace crecer** con algo suyo; como ahora, puede acompañarte (uno a la vez).
+- **Cada uno con su propio rescate** (no la horda de siempre para todos), y **dibujados con código** (`persona.gd`),
+  como los tres de ahora: gratis y con el mismo aspecto.
+- Números provisionales (los puso Claude; se ajustan al probar):
+
+| Quién | Dónde y cómo se le rescata | En la sala | Si te acompaña |
+|---|---|---|---|
+| **Ferretero** | Atrincherado en el almacén de la ferretería: la horda de siempre mientras quita la barricada (más corta, unos 2 min) | Monta su puesto: vende munición, molotovs y granadas por dólares | Martillazos de cerca (8) |
+| **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
+| **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
+
+- **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
+  ahí le metían el VD-7. Decidido en la parte 7: al arreglarla encuentra un doble fondo con cápsulas de VD-7 y te lo
+  dice; desde entonces el café es solo café. **Ojo:** la arreglaba la camarera, que ya no está; falta decidir quién
+  (o cómo) se descubre ahora.
+- Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
+  sala) y luego un superviviente por trozo.
+- ✅ **Lo común** (21 oct):
+  - Los tres, en `supervivientes.gd` (`DATOS`), dibujados con código (`persona.gd`): el ferretero con chaleco naranja
+    de raya brillante, gorra y bigote, y su martillo; la farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
+    aparato con lucecita en el cinturón.
+  - En el centro comercial sale uno de los tres que aún no tengas (en los Apartamentos, los tres de siempre, sin
+    cambios). Su tienda sale siempre en su planta (`Planta.tienda_fija`) y se esconde en su trastienda, cerrada y sin
+    zombis: el ferretero en el almacén de la ferretería, la
+    farmacéutica en la rebotica (sin zombis tampoco en el aseo que tiene dentro) y el técnico en el almacén de la
+    tienda de electrónica. Cada uno grita lo suyo («¡No toquéis el agua!»).
+  - De momento se rescatan como los de siempre (encerrados, gritando y con la horda forzando la cerradura); cada trozo
+    siguiente cambia solo su rescate y hace su mejora de la sala.
+  - Lo suyo al acompañarte, ya hecho (lo pidió el dueño): martillazos a los que se le acercan (8, cada 0,9 s), charcos de veneno y ácido a la mitad, y una descarga cada 4 s que deja quieto 1 s
+    al zombi más cercano (hasta 260 de distancia).
+  - En la sala de mantenimiento, los tres de siempre donde estaban y los tres nuevos en una fila debajo, cada uno
+    con un hueco libre detrás para su mejora (`Planta.SITIO_CENTRO`; el texto de cada mejora, en `DATOS`, "mejora").
+    Lo que no decía el plan: con seis en la sala, solo dice «¿Te acompaño?» el que tienes más cerca (si no, se
+    pisaban los bocadillos).
+  - Tecla **H** en el centro: cada vez, el siguiente de los tres (rehace la planta con su tienda).
+    `--captura` saca además `captura-sala-seis.png` (los seis en la sala).
 
 ## Objetos
 
@@ -119,9 +158,78 @@ una tienda...).
 - **Recetas del banco de trabajo que piden objetos de los dos edificios** ("me falta X de los apartamentos para
   fabricar Y"). Quien juegue solo uno no se queda bloqueado.
 
+### Decidido con el dueño (21 oct, para la parte 6)
+
+- **Apartamentos:** siguen saliendo los 17 objetos de siempre, como ahora (las 15 recetas de ahora se pueden hacer
+  jugando solo ahí).
+- **Centro comercial: cada tienda, lo suyo.** El zombi que cae suelta (con la misma probabilidad de ahora) un objeto
+  de la lista de la tienda donde está; si te falta algo, sabes a qué tienda ir. Las listas mezclan objetos de
+  siempre que pegan con la tienda (en la ferretería clavos, hacha, llave inglesa y cuchillas; en el restaurante
+  alcohol y gasolina; en la electrónica el táser...) y los nuevos. Los zombis del pasillo, de cualquier lista.
+- **Solo en los Apartamentos** (cosas de casa): despertador, mancuernas, pistola de agua, trapo y cuerda.
+- **Ocho objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`):
+
+| Tienda | Objetos nuevos |
+|---|---|
+| Ferretería | Cinta americana, Cadena |
+| Electrónica | Batería, Cable |
+| Restaurante | Aceite, Bombona de gas |
+| Supermercado | Hielo seco |
+| Farmacia | Jeringuilla |
+| Tienda de ropa | Perchas |
+
+- **Seis recetas nuevas que mezclan los dos edificios** (un objeto de casa y otro del centro; los números, al
+  hacerlas, parecidos a los de las recetas de ahora):
+
+| Arma | Ingredientes | Qué hace |
+|---|---|---|
+| Pistola eléctrica | Pistola de agua + Batería | Chorro que electrocuta y salta a los zombis de al lado |
+| Bomba de aceite | Trapo + Aceite | Charco que resbala y luego arde |
+| Mangual | Mancuernas + Cadena | Golpe girando que empuja a todos alrededor |
+| Mina despertador | Despertador + Bombona de gas | Se queda en el suelo y explota cuando pasa un zombi |
+| Nube somnífera | Spray + Jeringuilla | Gas que duerme a los zombis unos segundos (guiño al VD-7, que es un somnífero) |
+| Garfio | Cuerda + Perchas | Engancha a un zombi y lo arrastra hacia ti |
+
+- Para que se usen todos los nuevos, alguna receta más **solo del centro** si hace falta (cinta americana, cable e
+  hielo seco no entran en las seis): por ejemplo, un **bate helado** (bate + hielo seco) que congela.
+- **Más adelante, como parte aparte** (lo decidió el dueño): los objetos de curar de la farmacia y el súper
+  (vendas, comida que cura desde la mochila) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
+  taquillas. Necesitan cosas que aún no existen (objetos que se usan, trajes).
+
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
+
+### Decidido con el dueño (21 oct, para la parte 7): «Turno infinito»
+
+- **La idea** (le encantó al dueño): tras el edificio, Velaria vende el VD-7 rebajado y sin receta («Velaria Noche»).
+  El gerente del centro firma con Velaria un programa secreto, **«Turno infinito»**: VD-7 en el café de la sala de
+  descanso de los empleados para que trabajen sin parar (turnos de 20 horas), sin que ellos lo sepan. Por eso los
+  zombis del centro **siguen haciendo su trabajo**: la dependienta grita ofertas, el vigilante hace la ronda, el
+  cocinero cocina...
+- **Es una trampa:** Johnny va buscando respuestas, y el gerente sabe que viene. Quiere retenerlo para entregárselo
+  a Velaria a cambio de «la dosis buena». A media vida se inyecta VD-7 para no parar nunca, y por eso muta.
+- **El final, con gancho:** al caer el gerente llega un helicóptero de Velaria a por el Sujeto 0; Johnny escapa por la
+  escalera de incendios. La última página nombra **la sede de Velaria**: el siguiente edificio (nombre por decidir).
+- **Dosier del centro comercial** (5 páginas, una por planta; como en los Apartamentos, cada una en un muerto):
+
+| Planta | Quién la lleva | Qué es | Lo que cuenta |
+|---|---|---|---|
+| Baja | Farmacéutico de Velaria | Albarán de la farmacia | 10.000 cajas de «Velaria Noche» sin receta. Nota: «¿Sin receta? ¿En serio?» |
+| 1ª | Técnica de Velaria | Contrato «Turno infinito» | VD-7 en el café de los empleados para turnos de 20 horas; ellos no lo saben |
+| 2ª | Jefe de seguridad del centro | Parte de incidencias | De noche siguen trabajando con los ojos cerrados. «Rinden más que nunca» |
+| 3ª | Secretaria del gerente | Correo del gerente a Velaria | «El conserje del 14 está en el centro. Lo retengo hasta que llegue vuestro equipo. A cambio, quiero la dosis buena» |
+| Azotea | El gerente, al caer | Orden de recogida | Un helicóptero de Velaria viene a por el Sujeto 0 al helipuerto; da el nombre de la sede |
+
+- **Noticias nuevas de Canal 8** (unas 5, con la misma reportera): el centro cierra de noche «por reformas» (sale al
+  completar los Apartamentos, que es cuando se abre el centro), Velaria saca su somnífero a la venta, trabajadores
+  que no vuelven a casa, un audio del gerente, y al completar el centro: «un helicóptero de Velaria aterriza en la
+  azotea... vacío». Como en las de ahora, Velaria va cambiando su versión para taparlo.
+- **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
+  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café. **Ojo:** la camarera ya no está (tres
+  supervivientes por edificio); falta decidir quién descubre el doble fondo.
+- Los textos los escribe Claude y el dueño los lee antes de darlos por buenos (se pueden reescribir: todo está en
+  `historia.gd`; lo único que no se toca es el `id` de una página ya publicada).
 
 ## Para que enganche (ideas aprobadas)
 
@@ -136,6 +244,33 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
 5. **Salas opcionales con riesgo** (ver Las tiendas).
 6. **La sala de mantenimiento crece** con cada superviviente (ver Supervivientes).
 7. **Partidas cortas**, de 15-20 minutos (sobre todo por el móvil).
+
+### Decidido con el dueño (21 oct, para la parte 8)
+
+Entran las cuatro: niveles de alerta, eventos sorpresa, reto del día y colecciones con bestiario. **Las salas
+opcionales con riesgo (la joyería), más adelante**: piden un tipo de tienda nuevo y objetos «muy buenos» que aún no
+existen. Números provisionales (los puso Claude; se ajustan al probar):
+
+- **Niveles de alerta, una regla fija por nivel** (como las ascensiones de *Isaac*), por edificio. Al completar un
+  edificio se desbloquea su Alerta 1; al completarlo con Alerta 1, la 2, y así hasta la 5. Se elige en «Elige
+  edificio». Las reglas se suman:
+  - A1: +25 % de zombis.
+  - A2: zombis un 10 % más rápidos.
+  - A3: los jefes, con +25 % de vida y se enfadan antes.
+  - A4: los botiquines curan la mitad.
+  - A5: el guardia de la tarjeta (o la llave) aguanta el doble y los zombis te oyen más lejos.
+  - Recompensa: +20 % de dólares por nivel y mejores rarezas en las armas que se crean en el banco.
+- **Eventos sorpresa, a veces: 1 de cada 4 plantas**, nunca en la del jefe. En los dos edificios:
+  - Apagón: solo se ve con la linterna.
+  - Alarma de incendios: los aspersores mojan el suelo (resbala) y, donde hay cables, calambrazos.
+  - Horda por las escaleras: las mecánicas en el centro, las de incendios en los Apartamentos.
+  - Vendedor ambulante: un superviviente en el pasillo que vende cosas por dólares.
+- **Reto del día:** cada día, el mismo edificio generado igual para todo el mundo (la semilla sale de la fecha) y una
+  regla rara de una lista (solo cuerpo a cuerpo, todo a oscuras, sin botiquines, zombis rápidos...). Se guarda la
+  mejor marca de cada uno (hasta qué planta llega y en cuánto tiempo). Sin servidor: solo compites contigo.
+- **Colecciones:** un programa nuevo en ConserjeOS con, por cada edificio, los objetos encontrados (p. ej. 23/40),
+  las páginas del dosier y las armas creadas, en porcentaje; y un **bestiario** con cada zombi que has visto, con su
+  dibujo y una frase.
 
 ## Por partes
 
@@ -245,7 +380,8 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
-5. **Supervivientes nuevos** con sus eventos.
-6. **Reparto de objetos** y recetas que mezclan edificios.
-7. **La historia:** dosier y noticias.
-8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones.
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
+   y la mejora de la sala de cada uno (un trozo para cada uno).
+6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
+7. **La historia:** dosier y noticias (decidido: ver «Historia»).
+8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
