@@ -44,6 +44,9 @@ const ESTILO_TIENDA := {
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra
 const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")
+# Los peligros de las tiendas del centro comercial (peligros.gd): cada uno con su nodo
+const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": preload("res://scripts/peligros/fuego.gd"),
+	"agua": preload("res://scripts/peligros/agua.gd")}
 # Los restos sueltos del centro comercial (sprites resto-<nombre>, tools/centro_sprites.py): el juego los reparte al
 # azar por el suelo y las paredes de cada tienda y de la galería, para que haya sangre y destrozo por todas partes
 # sin que se note que la textura se repite. Los repetidos en la lista salen más a menudo.
@@ -90,6 +93,7 @@ var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda o la galería): lleva restos sueltos
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
+var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
 
 
 func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
@@ -162,6 +166,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_muebles()
 	poner_apliques()
 	poner_escaparates()
+	poner_peligros()
 	for a in sitio.get("armaritos", []):
 		var armarito := ARMARITO.new()
 		armarito.montar(a)
@@ -484,6 +489,16 @@ func poner_apliques() -> void:
 		luz.add_child(dibujo)
 		luz.move_child(dibujo, 0)
 		cosas.add_child(luz)
+
+
+# Los peligros de una tienda (peligros.gd): el frío de la cámara, el fuego de la cocina y el agua con corriente.
+# Van en el suelo, por debajo de los personajes (lo que va en la pared, el cuadro y el cable, lo ponen ellos en cosas)
+func poner_peligros() -> void:
+	for d in sitio.get("peligros", []):
+		var nodo: Node2D = PELIGROS[d.tipo].new()
+		nodo.montar(d, self)
+		add_child(nodo)
+		peligros.append(nodo)
 
 
 # Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del

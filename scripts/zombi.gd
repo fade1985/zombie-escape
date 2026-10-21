@@ -61,6 +61,8 @@ var llamas: Llamas
 var talla_restos := "mediano"   # si muere quemado, la talla de su calavera y sus huesos (quemado.gd)
 var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
+var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (peligros.gd): a los 4, se congela
+var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var lio_angulo := 0.0
 
 # La sangre: salta al pegarle, deja charco si muere a golpes o a tiros y, el lento, va dejando su rastro
@@ -232,6 +234,7 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	var paso := rumbo + rumbo.orthogonal() * sin(tiempo * bamboleo_ritmo) * bamboleo
 	if a_tirones:
 		rapidez *= 0.55 + 0.45 * absf(sin(tiempo * 2.0))
+	rapidez *= Estados.frenado(estados)   # el frío de la cámara
 	pedir_velocidad(paso.normalized() * rapidez)
 	mirar_hacia(paso)
 	poner_animacion("andar")
@@ -394,6 +397,13 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 
 # Cada paso: los estados de los charcos (a pellizcos cada medio segundo), la quemadura y lo que se ve encima
 func sufrir(delta: float) -> void:
+	# el frío de la cámara: tras unos segundos seguidos dentro, se congela (y al deshelarse vuelve a contar)
+	if not pisando.has("frio"):
+		frio_t = 0.0
+	elif congelado <= 0.0:
+		frio_t += delta
+		if frio_t >= Peligros.FRIO.congela:
+			congelar(Peligros.FRIO.congelado)
 	var dano := Estados.actualizar(estados, pisando, delta)
 	pisando = {}
 	if dano > 0.0:
@@ -414,7 +424,24 @@ func sufrir(delta: float) -> void:
 	sprite.self_modulate = Estados.tinte(estados, tiempo)
 	if arder_t > 0.0:
 		sprite.self_modulate = Color.WHITE.lerp(Color("#ff7a1c"), 0.35 + 0.2 * sin(tiempo * 6.0))
+	if congelado > 0.0:
+		congelado -= delta
+		if congelado <= 0.0:
+			sprite.material.set_shader_parameter("hielo", 0.0)
+			sprite.play()   # se deshiela: vuelve a moverse su dibujo
 	Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
+
+
+# Se queda helado: quieto, azul y con el dibujo parado, soltando escarcha
+func congelar(segundos: float) -> void:
+	frio_t = 0.0
+	congelado = segundos
+	aturdido = maxf(aturdido, segundos)
+	sprite.material.set_shader_parameter("hielo", 0.6)   # azul hielo (el mismo shader del destello)
+	Sonido.tocar("cristal")
+	for i in 10:
+		Particulas.soltar(self, global_position + Vector2(randf_range(-radio, radio), -randf_range(0, altura * 0.8)),
+			Vector2(randf_range(-50, 50), randf_range(-60, 10)), Color.WHITE if i % 2 else Color("#9fd8ff"), randf_range(2, 4), 0.4)
 
 
 # Ardiendo: la quemadura a pellizcos, y el número cada medio segundo (o si ya le mata)
@@ -435,18 +462,20 @@ func arder(delta: float) -> void:
 
 
 # Aturdido no se mueve (salvo lo que le hayan empujado); desorientado anda despacio hacia un lado y otro.
-# Chispitas sobre la cabeza: amarillas si está aturdido, moradas si está desorientado
+# Chispitas sobre la cabeza: amarillas si está aturdido, moradas si está desorientado, copos si está congelado
 func mareo(delta: float) -> void:
 	if estado != "andar":
 		estado = "andar"   # se le corta el zarpazo o su ataque especial
 	if randf() < 5.0 * delta:
 		Particulas.soltar(self, global_position + Vector2(randf_range(-10, 10), -altura * 0.75), Vector2(randf_range(-15, 15), -35),
-			Color("#ffd23f") if aturdido > 0.0 else Color("#c77dff"), 2, 0.45)
+			Color("#e8f6ff") if congelado > 0.0 else Color("#ffd23f") if aturdido > 0.0 else Color("#c77dff"), 2, 0.45)
 	if aturdido > 0.0:
 		aturdido -= delta
 		velocity = velocity.move_toward(Vector2.ZERO, FRENADA * delta)
 		move_and_slide()
 		poner_animacion("reposo" if velocity.length() < 20.0 else "golpe")
+		if congelado > 0.0:
+			sprite.pause()
 		return
 	liado -= delta
 	lio_angulo += delta * 2.5

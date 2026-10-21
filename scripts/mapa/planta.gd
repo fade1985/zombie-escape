@@ -117,6 +117,8 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
 			"visitado": false, "muebles": Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
+		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
+		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		sitio.salidas.append({"dir": apt.entrada.lado, "en": (apt.entrada.c + 1) * CASILLA, "tipo": "puerta",
@@ -334,6 +336,10 @@ static func sitio_libre(sitio: Dictionary, sala: Dictionary, puerta: Vector2, ot
 		if puerta != Vector2.INF and pos.distance_to(puerta) < LEJOS_PUERTA:
 			continue
 		if otros.any(func(z): return z.pos.distance_to(pos) < 60.0):
+			continue
+		# ni encima del fuego ni del agua con corriente de una tienda (peligros.gd)
+		if [Vector2.ZERO, Vector2(-hueco, 0), Vector2(hueco, 0), Vector2(0, -hueco), Vector2(0, hueco)].any(
+				func(d): return Peligros.encima(sitio, pos + d)):
 			continue
 		return pos
 	return Vector2.INF

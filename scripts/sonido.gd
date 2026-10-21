@@ -71,6 +71,13 @@ const EFECTOS := {
 	"recargado": {"notas": [[300, 0.05, "cuadrada", 0.035, 200], [1400, 0.04, "cuadrada", 0.025, 0, 0.07]]},
 	"cartucho": {"notas": [[700, 0.04, "cuadrada", 0.025, -300], [1200, 0.03, "cuadrada", 0.02, 0, 0.05]]},
 	"cambiar": {"notas": [[420, 0.07, "triangulo", 0.035, 260]]},                      # swap
+	# los peligros del centro comercial: el calambrazo del agua, la chispa del cable pelado y el cuadro eléctrico
+	"calambre": {"hueco": 300, "notas": [[95, 0.2, "cuadrada", 0.045, 25], [1500, 0.12, "sierra", 0.018, -1000, 0.01],
+		[2600, 0.06, "cuadrada", 0.01, -1800, 0.08]]},
+	"chispa": {"hueco": 150, "notas": [[2800, 0.03, "cuadrada", 0.007, -2000]]},
+	"palanca": {"notas": [[220, 0.04, "cuadrada", 0.06, -120], [95, 0.1, "triangulo", 0.07, -30, 0.04]]},
+	"apagon": {"notas": [[180, 0.7, "sierra", 0.03, -150, 0.05]]},                      # se va la corriente
+	"encendido": {"notas": [[60, 0.45, "sierra", 0.03, 180, 0.05], [1400, 0.05, "cuadrada", 0.012, 0, 0.4]]},
 }
 
 var grabados := {}       # nombre → AudioStreamWAV ya sintetizado

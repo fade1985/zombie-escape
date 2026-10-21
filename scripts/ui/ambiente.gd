@@ -2,6 +2,7 @@
 #   - Viñeteado: los bordes un poco más oscuros, para que la vista se vaya al centro (donde está Johnny)
 #   - Pantalla roja: un rojo en los bordes que late como un corazón cuando a Johnny le queda poca vida (menos
 #     de un tercio), y un fogonazo rojo corto cada vez que le pegan
+#   - Escarcha: con el frío de la cámara frigorífica (peligros.gd), los bordes se hielan a cuadraditos
 # Es un rectángulo del tamaño de la pantalla con un shader (un programita que pinta cada píxel).
 extends ColorRect
 
@@ -13,6 +14,7 @@ shader_type canvas_item;
 uniform float vineta = 0.38;
 uniform float rojo = 0.0;      // el latido de poca vida (0 a 1)
 uniform float golpe = 0.0;     // el fogonazo al recibir un golpe (0 a 1)
+uniform float frio = 0.0;      // la escarcha del frío (0 a 1)
 uniform vec2 tam = vec2(960.0, 640.0);
 
 void fragment() {
@@ -24,7 +26,20 @@ void fragment() {
 	float r = clamp(rojo * smoothstep(0.35, 1.0, d) + golpe * (0.35 + 0.65 * borde), 0.0, 1.0);
 	// por dentro, transparente; por fuera, negro, y encima el rojo
 	vec3 color = mix(vec3(0.0), vec3(0.55, 0.02, 0.04), r / max(r + oscuro, 0.001));
-	COLOR = vec4(color, clamp(oscuro + r * 0.6, 0.0, 0.85));
+	float alfa = clamp(oscuro + r * 0.6, 0.0, 0.85);
+	// la escarcha: a cuadraditos de 4 píxeles, entra desde los bordes (más por las esquinas) con el borde
+	// mellado (un ruido grueso y otro fino), y por dentro brilla a trozos
+	vec2 px = UV * tam;
+	float fino = fract(sin(dot(floor(px / 4.0), vec2(12.9898, 78.233))) * 43758.5453);
+	float grueso = fract(sin(dot(floor(px / 20.0), vec2(39.3468, 11.135))) * 43758.5453);
+	float ex = min(px.x, tam.x - px.x);
+	float ey = min(px.y, tam.y - px.y);
+	float esquina = 1.0 - smoothstep(0.0, 240.0, max(ex, ey));
+	float hondo = (14.0 + 22.0 * grueso + 8.0 * fino + 80.0 * esquina) * frio;
+	float hielo = step(min(ex, ey), hondo) * (0.5 + 0.25 * fino);
+	vec3 escarcha = mix(vec3(0.66, 0.84, 0.97), vec3(0.95, 0.99, 1.0), step(0.7, fino));
+	color = mix(color, escarcha, hielo / max(hielo + alfa, 0.001));
+	COLOR = vec4(color, clamp(alfa + hielo, 0.0, 0.85));
 }
 """
 
@@ -68,4 +83,9 @@ func _process(delta: float) -> void:
 			var pulso := pow(absf(sin(latido * PI)), 6.0)   # un golpe seco por latido
 			rojo = (0.3 + 0.35 * apuro) * (0.55 + 0.45 * pulso)
 	material.set_shader_parameter("rojo", rojo)
+	var frio := 0.0
+	if johnny and johnny.vivo and johnny.estados.has("frio"):
+		var e: Dictionary = johnny.estados.frio
+		frio = e.t / e.max if e.max > 0.0 else 1.0
+	material.set_shader_parameter("frio", frio)
 	material.set_shader_parameter("golpe", golpe * 0.55)

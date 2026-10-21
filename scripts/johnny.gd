@@ -258,6 +258,7 @@ func _physics_process(delta: float) -> void:
 		# (en la lejía cuesta frenar y girar: menos agarre)
 		var k := 1.0 - exp(-delta * ARRANQUE * maxf(0.08, Estados.agarre(estados)))
 		var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios))   # más lento por cada tercio perdido
+		rapidez *= Estados.frenado(estados)   # el frío de la cámara, el calambrazo del agua
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()

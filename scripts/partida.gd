@@ -891,7 +891,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 # ── Solo con --captura ──
 
 # Con "-- --captura --edificio centro --fotos-tiendas": sin penumbra y con todo descubierto, una foto de la sala de
-# venta de cada tienda de las dos primeras plantas (captura-tienda-<tipo>.png) y otra de la galería, y se cierra
+# venta de cada tienda de las dos primeras plantas (captura-tienda-<tipo>.png) y otra de la galería, y se cierra.
+# Además, la primera vez que sale cada peligro, sus fotos (fotos_peligros)
 func fotos_tiendas() -> void:
 	set_process(false)
 	luz.alternar()
@@ -914,12 +915,105 @@ func fotos_tiendas() -> void:
 			var nombre: String = "jefe" if s.tipo == "jefe" else s.tienda
 			get_viewport().get_texture().get_image().save_png("res://captura-tienda-%s.png" % nombre)
 			print("Foto: ", s.nombre, " (", nombre, ")")
+			await fotos_peligros(s)
 		montar(0, 0, false)
 		johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().create_timer(0.8).timeout
 		get_viewport().get_texture().get_image().save_png("res://captura-galeria-%d.png" % num)
+	# los peligros que no hayan salido en esas dos plantas (las tiendas cambian en cada partida), en las siguientes
+	for num in range(3, 9):
+		if peligros_vistos.size() >= 3:
+			break
+		nueva_planta(num)
+		for i in range(1, planta.sitios.size()):
+			var s: Dictionary = planta.sitios[i]
+			if not s.get("peligros", []).any(func(d): return not peligros_vistos.has(d.tipo)):
+				continue
+			montar(i, 0, false)
+			for sala in s.apt.salas:
+				mapa.vistas[sala.id] = true
+			for z in get_tree().get_nodes_in_group("zombis"):
+				z.queue_free()
+			await fotos_peligros(s)
 	get_tree().quit()
+
+
+# Las fotos de los peligros (peligros.gd), con la penumbra puesta y unos zombis despiertos dentro:
+#   captura-peligro-frio.png     Johnny dentro de la cámara (escarcha en la pantalla) y los zombis, congelándose
+#   captura-peligro-fuego.png    desde la puerta de la cocina, con zombis ardiendo
+#   captura-peligro-agua.png     en pleno calambrazo, con zombis en el agua
+#   captura-peligro-sin-luz.png  después de bajar la palanca (la tienda a oscuras)
+#   captura-peligro-cuadro.png   delante del cuadro eléctrico (que la vuelve a subir)
+var peligros_vistos := {}
+
+func fotos_peligros(s: Dictionary) -> void:
+	for nodo in mapa.peligros:
+		var d: Dictionary = nodo.datos
+		if peligros_vistos.has(d.tipo):
+			continue
+		peligros_vistos[d.tipo] = true
+		luz.alternar()
+		luz.poner_sitio(s.tipo)
+		var sala: Dictionary = s.apt.salas[d.sala]
+		var donde: Vector2 = sala.centro
+		var zombis := []
+		match d.tipo:
+			"frio":
+				var dentro := Rect2(sala.c0 * 32.0, sala.f0 * 32.0, sala.ancho * 32.0, sala.fondo * 32.0).grow(-24.0)
+				for k in [Vector2(-70, -30), Vector2(70, -20), Vector2(0, 50)]:
+					zombis.append((sala.centro + k).clamp(dentro.position, dentro.end))
+			"fuego":
+				var puerta: Dictionary = s.apt.puertas.filter(func(p): return (p.a == d.sala or p.b == d.sala) and (p.a == 0 or p.b == 0))[0]
+				donde = Peligros.centro(Peligros.al_lado_de(s.apt, puerta, d.sala)) + Vector2(16, 0)
+				for c in d.arde.keys().filter(func(c): return not c in d.focos).slice(0, 3):
+					zombis.append(Peligros.centro(c))
+			"agua":
+				for c in d.casillas:
+					for v in Peligros.LADOS:
+						if not c + v in d.casillas and Peligros.dueno(s.apt, c.x + v.x, c.y + v.y) == 0 and not Peligros.bajo_mueble(s, c + v):
+							donde = Peligros.centro(c + v)
+				var lista: Array = d.casillas.duplicate()
+				lista.shuffle()
+				for c in lista.slice(0, 3):
+					zombis.append(Peligros.centro(c))
+		johnny.position = donde
+		johnny.get_node("Camara").reset_smoothing()
+		for p in zombis:
+			var zombi := meter_zombi("normal", p)
+			zombi.vida = 300   # para que aguanten hasta la foto
+		await get_tree().create_timer(4.6 if d.tipo == "frio" else 1.5).timeout
+		if d.tipo == "agua":
+			# la foto, en pleno calambrazo
+			for i in 60:
+				if nodo.destello > 0.12:
+					break
+				await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+		get_viewport().get_texture().get_image().save_png("res://captura-peligro-%s.png" % d.tipo)
+		var vivos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z.estado != "muerto")
+		print("Peligro %s en %s: Johnny %d de vida | zombis vivos %d (vida %s) | congelados %d | ardiendo %d" % [d.tipo, s.nombre,
+			johnny.vida, vivos.size(), vivos.map(func(z): return z.vida), vivos.filter(func(z): return z.congelado > 0.0).size(),
+			vivos.filter(func(z): return z.arder_t > 0.0).size()])
+		if d.tipo == "fuego":
+			print("  arden %d casillas de %d (tope %d), quemadas %d" % [d.arde.size(), d.casillas.size(), d.tope, d.quemadas.size()])
+		if d.tipo == "agua":
+			nodo.cambiar_corriente()
+			await get_tree().create_timer(1.2).timeout
+			get_viewport().get_texture().get_image().save_png("res://captura-peligro-sin-luz.png")
+			print("  sin corriente: oscuridad %.2f | corriente %s" % [Luz.nivel, d.corriente])
+			johnny.position = Vector2(d.cuadro.x, d.cuadro.y + 40.0)
+			johnny.get_node("Camara").reset_smoothing()
+			await get_tree().create_timer(1.2).timeout
+			get_viewport().get_texture().get_image().save_png("res://captura-peligro-cuadro.png")
+			print("  delante del cuadro: corriente %s | oscuridad %.2f" % [d.corriente, Luz.nivel])
+		for z in get_tree().get_nodes_in_group("zombis"):
+			z.queue_free()
+		johnny.vida = johnny.stats.vida_max
+		johnny.tercios = 3
+		johnny.estados.clear()
+		luz.alternar()
+		luz.poner_sitio(s.tipo)
 
 
 func contar_planta() -> void:

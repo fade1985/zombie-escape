@@ -51,6 +51,7 @@ const MAX_DESTELLOS := 12                  # fogonazos a la vez, como mucho (la 
 const CAMBIO := 1.5                        # lo rápido que entra o se va la oscuridad (por segundo)
 
 static var nivel := 0.0     # lo oscuro que está ahora (0 nada, 1 negro)
+static var extra := 0.0     # oscuridad de más (o de menos) del sitio: la tienda de electrónica, con y sin corriente (agua.gd)
 static var apagada := false # F10: sin penumbra, para comparar
 static var destellos := 0
 
@@ -77,8 +78,13 @@ func _ready() -> void:
 func poner_sitio(tipo: String, de_golpe := true) -> void:
 	objetivo = OSCURIDAD_SALA.get(tipo, 0.0)
 	if de_golpe:
-		nivel = 0.0 if apagada else objetivo
+		nivel = 0.0 if apagada else oscuridad()
 		pintar()
+
+
+# Lo oscuro que tiene que estar este sitio
+func oscuridad() -> float:
+	return clampf(objetivo + extra, 0.0, 0.97)
 
 
 func alternar() -> void:
@@ -147,7 +153,7 @@ func angulo_de(dir: String) -> float:
 
 
 func _process(delta: float) -> void:
-	var quiero := 0.0 if apagada else objetivo
+	var quiero := 0.0 if apagada else oscuridad()
 	if nivel != quiero:
 		nivel = move_toward(nivel, quiero, delta * CAMBIO)
 		pintar()
@@ -170,14 +176,15 @@ func pintar() -> void:
 
 
 # Un destello corto (fogonazo de un disparo, explosión): sale de golpe y se apaga deprisa. Sin sombras, que
-# dura un instante y las sombras son lo que más cuesta. `radio` en unidades, `vida` en segundos.
-static func destello(desde: Node, pos: Vector2, radio: float, vida: float, fuerza_destello := 1.0) -> void:
+# dura un instante y las sombras son lo que más cuesta. `radio` en unidades, `vida` en segundos (el calambrazo
+# del agua lo da azul: `color`).
+static func destello(desde: Node, pos: Vector2, radio: float, vida: float, fuerza_destello := 1.0, color := FOGONAZO) -> void:
 	if destellos >= MAX_DESTELLOS or not desde.is_inside_tree():
 		return
 	var luz := PointLight2D.new()
 	luz.texture = TEXTURA
 	luz.texture_scale = radio / 128.0
-	luz.color = FOGONAZO
+	luz.color = color
 	luz.range_item_cull_mask = TODAS
 	var e := 1.1 * fuerza_destello * fuerza()
 	luz.energy = e
