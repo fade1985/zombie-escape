@@ -630,7 +630,7 @@ func programa_dosier(c: VBoxContainer) -> void:
 	fila.add_theme_constant_override("separation", 8)
 	c.add_child(fila)
 	cajita(fila, d.titulo, "dosier", "%d / %d páginas" % [halladas, d.paginas.size()])
-	nota(c, "Cada científico de %s muerto en el edificio lleva una página. Lo que encuentres queda aquí para siempre." % Historia.EMPRESA)
+	nota(c, d.nota)
 	var partes := HBoxContainer.new()
 	partes.add_theme_constant_override("separation", 10)
 	c.add_child(partes)
@@ -648,13 +648,13 @@ func programa_dosier(c: VBoxContainer) -> void:
 		var b := tarjeta(lista, "b_" + p.id, "dosier" if tiene else "candado", "Página %d" % (i + 1),
 			p.titulo if tiene else "Arrancada", "", "" if tiene else "bloqueada")
 		var hoja := p if tiene else {"tipo": "???", "titulo": "Página arrancada", "nota": "",
-			"texto": "Esta página falta. La lleva un científico de %s caído en la %s.\n\nBúscalo en una partida." % [Historia.EMPRESA, Planta.nombre_planta(p.planta).to_lower()]}
+			"texto": Historia.falta(partida.edificio, p)}
 		var ver := func():
 			for h in lado.get_children():
 				h.queue_free()
 			lado.add_child(Historia.hoja(hoja, 410.0))
 		enlazar(b, ("Página %d: %s. La llevaba %s." % [i + 1, p.titulo, p.cuerpo]) if tiene
-			else "Página %d: aún no la has encontrado (%s)." % [i + 1, Planta.nombre_planta(p.planta).to_lower()], ver)
+			else "Página %d: aún no la has encontrado (%s)." % [i + 1, Historia.donde(p)], ver)
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
 	info.text = "Pasa por las páginas para leerlas."
@@ -669,10 +669,16 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 	var partes := HBoxContainer.new()
 	partes.add_theme_constant_override("separation", 10)
 	c.add_child(partes)
+	# las emisiones, con su propio desplazamiento (ya no caben todas): así la tele no se mueve al bajar por ellas
+	var desliza := ScrollContainer.new()
+	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	desliza.follow_focus = true
+	desliza.custom_minimum_size.y = Tele.CAJA_TEXTO.end.y
+	partes.add_child(desliza)
 	var lista := VBoxContainer.new()
 	lista.custom_minimum_size.x = 220
 	lista.add_theme_constant_override("separation", 6)
-	partes.add_child(lista)
+	desliza.add_child(lista)
 	var tele := Tele.new()
 	tele.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	partes.add_child(tele)
@@ -686,7 +692,7 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 		var b := tarjeta(lista, "b_" + n.id, "noticias" if sale else "candado", "Emisión %d" % (i + 1),
 			n.titular if sale else "Sin emitir", "¡NUEVA!" if nueva else "", "" if sale else "bloqueada")
 		if not sale:
-			var pista := "Completa el edificio." if n.victoria != "" else "Sigue buscando páginas del dosier VD-7."
+			var pista := ("Completa %s." % Edificios.datos(n.victoria).el_nombre) if n.victoria != "" else "Sigue buscando páginas del dosier VD-7."
 			enlazar(b, "Emisión %d: aún no ha salido. %s" % [i + 1, pista], Sonido.tocar.bind("no"))
 			continue
 		ultima = "b_" + n.id

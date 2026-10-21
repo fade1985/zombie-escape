@@ -183,7 +183,7 @@ func lluvia(johnny: Node2D) -> void:
 # El aceite hirviendo: la sartén cae donde va a estar Johnny
 func sarten(johnny: Node2D) -> void:
 	var p := PROYECTIL.instantiate()
-	p.tipo = "aceite"
+	p.tipo = "sarten"
 	p.desde = global_position
 	p.alto_salida = arriba * 0.8
 	p.hasta = johnny.global_position + johnny.velocity * 0.4

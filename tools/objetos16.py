@@ -1,5 +1,6 @@
-# Dibuja los 17 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
-# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha.
+# Dibuja los 26 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
+# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 17 de siempre
+# y, al final, los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md).
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
@@ -282,6 +283,79 @@ DIBUJOS = {
         "................",
         "................",
     ],
+    # ── Los del centro comercial (los demás, con código: ver más abajo) ──
+    "bateria": [
+        "................",
+        "...ooo....ooo...",
+        "...oPo....oGo...",
+        "...oro....odo...",
+        ".oooooooooooooo.",
+        ".oGGGGGGGGGGGdo.",
+        ".oddddddddddddo.",
+        ".oKKKKKKKKKKKko.",
+        ".oKKrKKKKKKKKko.",
+        ".oKrrrKKKKwwwko.",
+        ".oKKrKKKKKKKKko.",
+        ".oKKKKKKKKKKKko.",
+        ".oKKKKKKKKKKKko.",
+        ".okkkkkkkkkkkko.",
+        ".oooooooooooooo.",
+        "................",
+    ],
+    "aceite": [
+        "................",
+        "......oooo......",
+        "......ovlo......",
+        "......oVVo......",
+        ".....oooooo.....",
+        "....oLyyyyYo....",
+        "...oLyyyyyyYo...",
+        "..oLyyyyyyyyYo..",
+        "..oLywwwwwwyYo..",
+        "..oLywwlvwwyYo..",
+        "..oLywvVwwwyYo..",
+        "..oLywwwwwwyYo..",
+        "..oLyyyyyyyyYo..",
+        "..oyyyyyyyyYYo..",
+        "..oYYYYYYYYYYo..",
+        "..oooooooooooo..",
+    ],
+    "bombona": [
+        "................",
+        "....oooooooo....",
+        "....oGo..odo....",
+        "....oGoKKodo....",
+        "...oooooooooo...",
+        "..onLLnnnnnnNo..",
+        ".onLnnnnnnnnnNo.",
+        ".onLnnnnnnnnnNo.",
+        ".onnnnnnnnnnnNo.",
+        ".oNNNNNNNNNNNNo.",
+        ".onnnnnnnnnnnNo.",
+        ".onnnnnnnnnnNNo.",
+        ".onnnnnnnnnnNNo.",
+        "..oNnnnnnnnnNo..",
+        "..oKKKKKKKKKKo..",
+        "..oooooooooooo..",
+    ],
+    "hielo_seco": [
+        "......c....W....",
+        ".....W....W.c...",
+        "....W.c....W....",
+        ".....W....c.....",
+        ".....ooooooooo..",
+        "....oWWWWWWWco..",
+        "...oWWWWWWWcco..",
+        "..ooooooooocco..",
+        "..owwwwwwwecco..",
+        "..owwwewwwecco..",
+        "..owwwwwwwecBo..",
+        "..owewwwwwecBo..",
+        "..owwwwwwwecBo..",
+        "..oeeeeeeeeBo...",
+        "..ooooooooooo...",
+        "................",
+    ],
 }
 
 
@@ -351,9 +425,112 @@ def cuerda(x, y):
     return "L" if dx + dy < -4 else "y"
 
 
+def cinta_americana(x, y):
+    # un rollo de cinta gris visto un poco desde arriba: la cara de arriba con el cartón marrón y el agujero, el
+    # canto por delante y la tira que cuelga por la derecha
+    dx = x - 7.5
+    arriba = (dx / 7.2) ** 2 + ((y - 5.0) / 4.4) ** 2 <= 1.0
+    abajo = (dx / 7.2) ** 2 + ((y - 8.5) / 4.4) ** 2 <= 1.0
+    if arriba:
+        hueco = (dx / 2.4) ** 2 + ((y - 5.0) / 1.5) ** 2
+        if hueco <= 1.0:
+            return "K"
+        if hueco <= 2.6:
+            return "h"
+        return "G" if dx < 2 and y < 5 else "g"
+    if 10 <= x <= 12 and 9 <= y <= 15:
+        if y == 15 and x == 11:
+            return "."   # el borde roto
+        return "g" if x < 12 else "d"
+    if abajo or (abs(dx) <= 7.2 and 5.0 <= y <= 8.5):
+        return "d" if y > 9 or dx > 4 else "g"
+    return "."
+
+
+def cadena(x, y):
+    # tres eslabones un poco en diagonal: el primero y el último de cara (con su agujero) y el del medio de canto
+    ax, ay = 0.866, -0.5
+    for i in (1, 0, 2):
+        cx, cy = 7.5 + (i - 1) * 5.0 * ax, 7.5 + (i - 1) * 5.0 * ay
+        dx, dy = x - cx, y - cy
+        u = dx * ax + dy * ay      # a lo largo de la cadena
+        v = -dx * ay + dy * ax     # de lado (positivo, hacia abajo)
+        if i == 1:
+            if abs(v) <= 1.3 and abs(u) <= 4.0:
+                return "G" if v < 0.3 else "g"
+            continue
+        if (u / 4.0) ** 2 + (v / 3.3) ** 2 <= 1.0 and (u / 2.0) ** 2 + (v / 1.2) ** 2 > 1.0:
+            return "G" if v < -0.6 else "d" if v > 1.8 else "g"
+    return "."
+
+
+def cable(x, y):
+    # un alargador naranja que baja del enchufe blanco, da la vuelta y acaba en los hilos de cobre
+    if y <= 1 and x in (11, 13):
+        return "G"
+    if 10 <= x <= 14 and 2 <= y <= 6:
+        return "w" if x < 14 and y < 6 else "e"
+    p = [(12.0, 7.0), (13.0, 16.0), (0.0, 15.0), (2.5, 4.5)]   # una curva de Bézier
+    mejor, cual = 9.0, 0.0
+    for i in range(121):
+        t = i / 120
+        a = [(1 - t) ** 3, 3 * t * (1 - t) ** 2, 3 * t * t * (1 - t), t ** 3]
+        px = sum(a[k] * p[k][0] for k in range(4))
+        py = sum(a[k] * p[k][1] for k in range(4))
+        d = math.hypot(x - px, y - py)
+        if d < mejor:
+            mejor, cual = d, t
+    if mejor > 1.45:
+        return "."
+    if cual > 0.93:
+        return "L" if mejor < 0.7 else "y"
+    return "n" if mejor < 0.8 else "N"
+
+
+def jeringuilla(x, y):
+    # en diagonal: el émbolo abajo a la izquierda, el cuerpo con el líquido azul y la aguja arriba a la derecha
+    dx, dy = x - 7.5, y - 7.5
+    u = (dx - dy) / math.sqrt(2)   # hacia arriba a la derecha
+    v = (dx + dy) / math.sqrt(2)
+    if 3.2 < u <= 8.2 and abs(v) <= 0.4:
+        return "G"   # la aguja
+    if 2.4 < u <= 3.2 and abs(v) <= 1.0:
+        return "g"
+    if -3.6 <= u <= 2.4 and abs(v) <= 2.0:
+        if u > -1.2 and abs(v) <= 1.1:
+            return "c"   # el líquido
+        return "w" if v < 0.8 else "e"
+    if -4.4 <= u < -3.6 and abs(v) <= 3.2:
+        return "e"   # las aletas
+    if -7.6 <= u < -4.4 and abs(v) <= 0.9:
+        return "g"   # el émbolo
+    if -8.4 <= u < -7.6 and abs(v) <= 2.4:
+        return "G"
+    return "."
+
+
+def percha(x, y):
+    # una percha de madera con su gancho de alambre
+    gancho = {(8, 0), (9, 0), (7, 1), (10, 1), (10, 2), (9, 3), (8, 4), (8, 5)}
+    if (x, y) in gancho:
+        return "G" if y <= 1 or x == 10 else "g"
+    if y == 13 and 1 <= x <= 14:
+        return "G" if x < 8 else "g"   # la barra de abajo
+    alto = 5.0 + abs(x - 7.5) * 0.8
+    if alto - 0.6 <= y <= alto + 1.4:
+        return "h"
+    if alto + 1.4 < y <= alto + 2.5 or (y == 12 and x in (0, 1, 14, 15)):
+        return "m"
+    return "."
+
 DIBUJOS["cuchillas"] = disco(sierra)
 DIBUJOS["despertador"] = disco(despertador)
 DIBUJOS["cuerda"] = disco(cuerda)
+DIBUJOS["cinta_americana"] = disco(cinta_americana)
+DIBUJOS["cadena"] = disco(cadena)
+DIBUJOS["cable"] = disco(cable)
+DIBUJOS["jeringuilla"] = disco(jeringuilla)
+DIBUJOS["perchas"] = disco(percha)
 
 
 def hexa(c):
