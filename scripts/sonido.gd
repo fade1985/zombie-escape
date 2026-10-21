@@ -60,6 +60,8 @@ const EFECTOS := {
 	"clonc": {"hueco": 70, "notas": [[1500, 0.04, "cuadrada", 0.04, -400], [620, 0.16, "triangulo", 0.05, -120, 0.02]]},   # el escudo del antidisturbios
 	"boing": {"hueco": 120, "notas": [[150, 0.22, "triangulo", 0.08, 330], [300, 0.12, "seno", 0.03, 200, 0.06]]},   # la mascota salta o rebota
 	"pisoton": {"notas": [[75, 0.3, "triangulo", 0.12, -40], [150, 0.14, "cuadrada", 0.05, -90]]},   # la mascota cae del salto
+	"cuchillos": {"hueco": 80, "notas": [[1300, 0.1, "sierra", 0.016, -800], [900, 0.08, "sierra", 0.012, -500, 0.05]]},   # el cocinero los lanza
+	"clavado": {"hueco": 60, "notas": [[1100, 0.03, "cuadrada", 0.02, -600], [200, 0.08, "triangulo", 0.05, -70, 0.01]]},    # y se clavan
 	"silbato": {"notas": [[2700, 0.1, "seno", 0.045, 150], [2900, 0.4, "seno", 0.05, -200, 0.13]]},   # el guardia
 	"chillido": {"notas": [[1150, 0.3, "sierra", 0.035, -450], [980, 0.45, "cuadrada", 0.022, -380, 0.1]]},   # ¡OFERTAS!
 	"jefe": {"notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},
@@ -82,6 +84,9 @@ const EFECTOS := {
 	"palanca": {"notas": [[220, 0.04, "cuadrada", 0.06, -120], [95, 0.1, "triangulo", 0.07, -30, 0.04]]},
 	"apagon": {"notas": [[180, 0.7, "sierra", 0.03, -150, 0.05]]},                      # se va la corriente
 	"encendido": {"notas": [[60, 0.45, "sierra", 0.03, 180, 0.05], [1400, 0.05, "cuadrada", 0.012, 0, 0.4]]},
+	# los eventos sorpresa (eventos.gd): la sirena de la alarma de incendios
+	"alarma": {"hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],
+		[720, 0.4, "triangulo", 0.03, 380, 0.8], [1100, 0.4, "triangulo", 0.03, -380, 1.2]]},
 }
 
 var grabados := {}       # nombre → AudioStreamWAV ya sintetizado

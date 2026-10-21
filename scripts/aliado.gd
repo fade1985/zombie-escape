@@ -7,6 +7,8 @@
 #     hacen a Johnny la mitad (eso lo mira johnny.gd: charcos_a_medias).
 #     En la horda (supervivientes.gd) se queda delante de la puerta forzando la cerradura ("forzando"): tiene
 #     vida, los zombis van a por él y, si cae, se queda tumbado hasta que Johnny lo levanta.
+#     La farmacéutica, en su rescate (escolta.gd), va herida ("herida"): cojea detrás de Johnny, despacio, con su
+#     vida encima; los zombis van a por ella como en la horda y, si cae, igual.
 #   - "vecino": rescatado en otra partida, espera en la sala de mantenimiento a que Johnny se le arrime.
 # Se dibuja con formas, como en el JS (persona.gd): sin hoja de PixelLab.
 class_name Aliado
@@ -30,7 +32,7 @@ var partida: Node
 var idx := 0               # su puesto en el equipo (para repartirse alrededor de Johnny)
 var es_vecino := false     # viene de la sala de mantenimiento (y "casa" es su sitio allí)
 var casa := Vector2.ZERO
-var armado := true         # vecino: hay que apartarse un poco antes de que vuelva a contar el arrimarse
+var armado := true       # vecino: hay que apartarse un poco antes de que vuelva a contar el arrimarse
 var asustado := true       # encerrado: mientras quedan zombis en el piso
 var tiempo := 0.0
 var direccion := "s"
@@ -43,6 +45,7 @@ var rayo_a := Vector2.ZERO
 var forzando := false
 var sitio_forzar := Vector2.ZERO
 var mira_forzar := Vector2.UP
+var herida := false        # la farmacéutica, mientras Johnny la lleva a las escaleras (escolta.gd)
 var vida := VIDA
 var caido := false
 var inv_t := 0.0
@@ -112,6 +115,8 @@ func _physics_process(delta: float) -> void:
 		"equipo":
 			if forzando:
 				forzar()
+			elif herida:
+				cojear()
 			else:
 				seguir()
 				if johnny.vivo:
@@ -166,6 +171,26 @@ func forzar() -> void:
 		return
 	ir_a(sitio_forzar, 220.0)
 	animar("andar" if velocity.length() > 20.0 else "reposo", mira_forzar)
+
+
+# Herida (escolta.gd): va detrás de Johnny, despacio y cojeando (o tumbada, si ha caído)
+func cojear() -> void:
+	if caido:
+		velocity = Vector2.ZERO
+		cuerpo.rotation = -PI / 2.0
+		cuerpo.position = Vector2(0, 6)
+		cuerpo.mira = Vector2.DOWN
+		return
+	var hacia := global_position.direction_to(johnny.global_position)
+	ir_a(johnny.global_position - hacia * 60.0, Escolta.VELOCIDAD)
+	if velocity.length() > 20.0:
+		# la cojera: a cada paso se hunde un poco y se ladea
+		var paso := sin(tiempo * 7.0)
+		cuerpo.position.y = absf(paso) * 2.5
+		cuerpo.rotation = paso * 0.08
+		animar("andar", velocity)
+	else:
+		animar("reposo", johnny.global_position - global_position)
 
 
 func habilidad(delta: float) -> void:
@@ -285,7 +310,7 @@ func al_limpiar() -> void:
 		curar(def.habilidad.al_limpiar)
 
 
-# Le alcanza un zarpazo (solo pasa en la horda: es cuando los zombis van a por él)
+# Le alcanza un zarpazo (solo pasa en la horda y en la escolta: es cuando los zombis van a por él)
 func recibir_dano(cantidad: int) -> void:
 	if inv_t > 0.0 or caido:
 		return
@@ -313,7 +338,7 @@ func levantarse() -> void:
 # ¿Va este zombi a por él en vez de a por Johnny? (presaDe del JS: si le pilla más cerca, o si Johnny se ha
 # alejado demasiado de él)
 func presa_de(z: Node2D, jugador: Node2D, lejos: float) -> bool:
-	if not forzando or caido:
+	if not (forzando or herida) or caido:
 		return false
 	var dp := z.global_position.distance_to(jugador.global_position)
 	var da := z.global_position.distance_to(global_position)
@@ -357,7 +382,7 @@ func dibujar_encima() -> void:
 		pts.append(hasta)
 		encima.draw_polyline(pts, LINEA, 6.0)
 		encima.draw_polyline(pts, Color("#bff4ff"), 3.0)
-	if forzando:
+	if forzando or herida:
 		var barra := Rect2(-22, -50, 44, 5)
 		encima.draw_rect(barra.grow(2), LINEA)
 		encima.draw_rect(barra, Color("#3a1d24"))
@@ -392,7 +417,8 @@ func dibujar_encima() -> void:
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))
 	if modo != "equipo":
-		texto(letra, def.nombre, Vector2(0, 42), 16, Color.WHITE)
+		# (en la sala, el ferretero lo lleva más abajo: está detrás de su mostrador)
+		texto(letra, def.nombre, Vector2(0, def.get("nombre_vecino", 42.0) if modo == "vecino" else 42.0), 16, Color.WHITE)
 
 
 func texto(letra: Font, cual: String, donde: Vector2, tamano: int, color: Color) -> void:

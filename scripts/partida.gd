@@ -38,15 +38,16 @@ const ZOMBIS := {
 	"dependienta": preload("res://escenas/personajes/zombi_dependienta.tscn"),
 	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefes del centro comercial
 	"mascota": preload("res://escenas/personajes/mascota.tscn"),
+	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
 }
 # Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
 # objetos y la mutación
-const JEFES := ["portera", "antidisturbios", "mascota"]
+const JEFES := ["portera", "antidisturbios", "cocinero", "mascota"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
-	KEY_U: "mascota"}
+	KEY_G: "cocinero", KEY_J: "mascota"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -61,7 +62,7 @@ const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un bill
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
-	"antidisturbios": Color("#3b4252"), "mascota": Color("#c9a13b")}
+	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "mascota": Color("#c9a13b")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -97,6 +98,7 @@ var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.
 var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
 var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
+var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
 var ahorrados := 0         # los dólares guardados de otras partidas
@@ -117,7 +119,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · U mascota · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · J mascota · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -162,6 +164,8 @@ func _ready() -> void:
 	supervivientes.preparar(self)
 	add_child(logros)
 	logros.preparar(self)
+	add_child(eventos)
+	eventos.preparar(self)
 	# Los controles del móvil (solo salen en pantallas táctiles)
 	var tactil := Tactil.new()
 	tactil.partida = self
@@ -173,6 +177,11 @@ func _ready() -> void:
 	captura = "--captura" in OS.get_cmdline_user_args()
 	if captura:
 		Guardado.archivo = "user://guardado-prueba.json"   # la prueba no toca el guardado de verdad
+		# con "--alerta 5", la prueba se juega con esa alerta (alerta.gd); sin él, sin alerta
+		var args := OS.get_cmdline_user_args()
+		Alerta.nivel = int(args[args.find("--alerta") + 1]) if args.find("--alerta") >= 0 and args.find("--alerta") + 1 < args.size() else 0
+		# con "--evento apagon" (incendio, horda, vendedor), la prueba de ese evento sorpresa (eventos.gd)
+		eventos.forzado = args[args.find("--evento") + 1] if args.find("--evento") >= 0 and args.find("--evento") + 1 < args.size() else ""
 	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
 	var s := Guardado.cambiar(func(g):
 		g.partidas += 1
@@ -187,7 +196,8 @@ func _ready() -> void:
 	# los minijefes del centro comercial, uno por planta en orden al azar (sin repetir)
 	orden_jefes = ed.get("minijefes", []).duplicate()
 	orden_jefes.shuffle()
-	# en la prueba, el jefe que se ve es el de la 1ª planta (la segunda): el antidisturbios u otro con "--jefe <nombre>"
+	# en la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios, u otro
+	# con "--jefe cocinero" o "--jefe mascota"
 	var args := OS.get_cmdline_user_args()
 	var cual := args.find("--jefe")
 	var probar: String = args[cual + 1] if cual >= 0 and cual + 1 < args.size() else "antidisturbios"
@@ -201,11 +211,19 @@ func _ready() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	if captura and "--fotos-tiendas" in OS.get_cmdline_user_args():
 		fotos_tiendas()
+	elif captura and eventos.forzado != "":
+		set_process(false)   # sin la prueba larga
+		eventos.probar(eventos.forzado)
+	elif captura and Alerta.nivel > 0:
+		set_process(false)   # sin la prueba larga
+		probar_alerta()
 	elif captura:
 		contar_planta()
 	else:
 		set_process(false)
-		decir("%s: %s" % [planta.nombre, ed.objetivo], 4.0)
+		decir("%s: %s%s" % [planta.nombre, ed.objetivo, "
+%s: %s" % [Alerta.nombre(), Alerta.REGLAS[Alerta.nivel]]
+			if Alerta.nivel > 0 else ""], 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 
@@ -214,6 +232,7 @@ func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num, edificio, jefe_de(num))
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
+	eventos.nueva_planta()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 
 
@@ -286,6 +305,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	# Johnny pasa de un mapa a otro; el viejo se quita del todo antes de montar el nuevo (si no, su
 	# navegación y sus muros se mezclarían con los del nuevo). Y con él, los de su equipo
 	supervivientes.recoger()
+	eventos.recoger()
 	johnny.get_parent().remove_child(johnny)
 	if mapa:
 		remove_child(mapa)
@@ -326,6 +346,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	supervivientes.al_montar(idx, sitio)
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
+	eventos.al_montar(idx, sitio)   # (antes de la luz: el apagón la cambia)
 	luz.poner_sitio(sitio.tipo)
 
 	# Los zombis que esperan dentro, dormidos (si el piso aún no se ha limpiado)
@@ -333,6 +354,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		var zombi := meter_zombi(z.tipo, z.pos)
 		zombi.dormido = true
 		zombi.zona = mapa.zona_en(z.pos)
+		if z.get("llave", false):
+			vecino_de_la_llave(zombi)
 	if sitio.tipo == "pasillo" and planta.get("guardia", {}).get("vivo", false):
 		poner_guardia()
 	cerrada = false
@@ -394,7 +417,7 @@ func poner_lugar() -> void:
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
-	lugar.text = texto
+	lugar.text = texto + eventos.etiqueta()
 
 
 # Johnny ha empujado la salida "i" del sitio en el que está
@@ -403,8 +426,18 @@ func cruzar(i: int) -> void:
 		return
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
+	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable
+	if arreglo != "":
+		decir(arreglo)
+		Sonido.tocar("no")
+		return
 	if sitio.tipo != "pasillo" and cerrada:
 		decir("Aguanta: aún está forzando la cerradura" if supervivientes.en_horda() else "La puerta no se abre mientras quede algún zombi")
+		Sonido.tocar("no")
+		return
+	var espera := supervivientes.escolta.no_cruzar()   # la farmacéutica herida, lejos o en el suelo
+	if espera != "":
+		decir(espera)
 		Sonido.tocar("no")
 		return
 	match salida.cerrojo:
@@ -558,7 +591,7 @@ func poner_guardia() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var puntas := [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
 	guardia = meter_zombi("guardia", mapa.punto_libre(johnny.position, 500.0))
-	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)))   # cada planta, algo más duro
+	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())   # cada planta, algo más duro
 	guardia.vida = guardia.vida_max if g.vida < 0 else g.vida
 	guardia.puntas = puntas
 	guardia.alerta = g.alerta
@@ -593,6 +626,27 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 	planta.llave = {"sitio": aqui, "pos": zombi.position}
 	mapa.call_deferred("poner_llave", zombi.position, true)
 	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso", 3.0)
+
+
+# Con la Alerta 5, en los Apartamentos: el vecino que lleva la llave (planta.gd) aguanta el doble, como el guardia,
+# y lleva la llave flotando encima. Al caer la suelta donde estaba
+func vecino_de_la_llave(zombi: Node2D) -> void:
+	zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
+	zombi.vida = zombi.vida_max
+	zombi.set_meta("llave", true)
+	var llave := Sprite2D.new()
+	llave.texture = MAPA.LLAVE
+	llave.scale = Vector2(2, 2)
+	llave.position = Vector2(0, -zombi.altura - 10)
+	zombi.add_child(llave)
+	var vaiven := llave.create_tween().set_loops()
+	vaiven.tween_property(llave, "position:y", -zombi.altura - 16, 0.6).set_trans(Tween.TRANS_SINE)
+	vaiven.tween_property(llave, "position:y", -zombi.altura - 10, 0.6).set_trans(Tween.TRANS_SINE)
+	zombi.murio.connect(func():
+		llave.hide()
+		planta.llave = {"sitio": aqui, "pos": zombi.position}
+		mapa.call_deferred("poner_llave", zombi.position)
+		decir("¡El vecino ha caído! Ha soltado la llave del " + nombre_jefa(), 3.0))
 
 
 # El nombre del apartamento de la jefa ("2ºC"...)
@@ -705,7 +759,7 @@ func coger_botiquin(armarito: Node2D) -> void:
 	if johnny.vida >= johnny.vida_tope():
 		numero(sitio_aviso, "Tienes la vida al máximo", Tema.TINTA)
 		return
-	var cura: int = BOTIQUIN + johnny.stats.botiquin_extra
+	var cura := cura_botiquin()
 	johnny.curar(cura)
 	armarito.vaciar()
 	Sonido.tocar("gema")
@@ -713,6 +767,11 @@ func coger_botiquin(armarito: Node2D) -> void:
 	for i in 12:
 		Particulas.soltar(armarito, armarito.global_position + Vector2(0, -50),
 			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
+
+
+# Lo que cura un botiquín (con la Alerta 4, la mitad)
+func cura_botiquin() -> int:
+	return roundi((BOTIQUIN + johnny.stats.botiquin_extra) * Alerta.botiquin())
 
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
@@ -764,6 +823,8 @@ func terminar(gano: bool, abandona := false) -> void:
 	else:
 		Sonido.jingle(gano)
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
+	var abierta := [0]      # la alerta que se abre al ganar (0: ninguna)
+	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var s := Guardado.cambiar(func(g):
 		# el superviviente rescatado en esta partida se viene a vivir a la sala de mantenimiento
@@ -777,11 +838,15 @@ func terminar(gano: bool, abandona := false) -> void:
 			# los objetos de la mochila pasan al baúl (si caes, se pierden)
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
-			g.dolares += dolares
-			g.dolares_total += dolares
+			g.dolares += dolares + extra
+			g.dolares_total += dolares + extra
 			g.victorias += 1
 			e.victorias += 1
 			e.completado = true
+			# completarlo con una alerta abre la siguiente (alerta.gd)
+			if Alerta.nivel >= e.alerta_max and Alerta.nivel < Alerta.MAX:
+				e.alerta_max = Alerta.nivel + 1
+				abierta[0] = e.alerta_max
 			if e.mejor_tiempo == 0.0 or duracion < e.mejor_tiempo:
 				e.mejor_tiempo = duracion
 				record[0] = true)
@@ -812,6 +877,9 @@ func terminar(gano: bool, abandona := false) -> void:
 		"tiempo": tiempo,
 		"dolares": dolares,
 		"cartera": s.dolares,
+		"alerta": Alerta.nivel,
+		"extra": extra,
+		"abierta": abierta[0],
 	})
 
 
@@ -873,12 +941,13 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 				soltar_municion(zombi.position)
 		elif not soltado and randf() < MUNICION_ZOMBI:
 			soltar_municion(zombi.position)
-		# y a veces un objeto para el banco de trabajo (la portera, dos seguros)
+		# y a veces un objeto para el banco de trabajo (los jefes, dos seguros), de los que salen aquí
+		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		if tipo in JEFES:
 			for i in 2:
-				soltar_objeto(Objetos.al_azar(), zombi.position)
+				soltar_objeto(Objetos.al_azar(edificio, tienda), zombi.position)
 		else:
-			var obj := Objetos.que_suelta(tipo)
+			var obj := Objetos.que_suelta(tipo, edificio, tienda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
 		# Caníbal: cada zombi que matas te cura
@@ -889,8 +958,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			await get_tree().create_timer(2.0, false).timeout
 			abrir_mutacion())
 	if tipo in JEFES:
-		# Cada planta, un 25 % más dura (como el vecino del juego JS)
-		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1))
+		# Cada planta, un 25 % más dura (como el vecino del juego JS), y con la Alerta 3, más aún y se enfada antes
+		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1) * Alerta.jefe_vida())
+		zombi.enfado = Alerta.jefe_enfado()
 		# Su barra de vida grande, arriba, y los vecinos que llama
 		var barra_jefa: ProgressBar = $Pantalla/Jefa
 		var el: String = Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera")
@@ -900,6 +970,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			barra_jefa.value = vida
 			barra_jefa.visible = vida > 0)
 		zombi.pide_zombi.connect(meter_zombi)
+	elif "velocidad" in zombi:
+		zombi.velocidad *= Alerta.velocidad()   # con la Alerta 2, todos un poco más rápidos
 	mapa.cosas.add_child(zombi)
 	return zombi
 
@@ -927,7 +999,17 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_H:
 		supervivientes.probar_aqui()   # al apartamento del superviviente, ya limpio (para probar la horda)
 	elif evento.keycode == KEY_O:
-		soltar_objeto(Objetos.al_azar(), johnny.position + Vector2(0, 50))   # un objeto, para probar
+		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
+	elif evento.keycode == KEY_U:
+		dar_objetos()   # uno de cada objeto al baúl, para probar las recetas en el banco de trabajo
+
+
+# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios), para probar todas las recetas
+func dar_objetos() -> void:
+	Guardado.cambiar(func(g):
+		for id in Objetos.NOMBRES:
+			g.baul[id] = g.baul.get(id, 0) + 1)
+	decir("Uno de cada objeto, al baúl")
 
 
 # ── Solo con --captura ──
@@ -1090,6 +1172,97 @@ func fotos_peligros(s: Dictionary) -> void:
 		luz.poner_sitio(s.tipo)
 
 
+# Con "--captura --alerta N" (en vez de la prueba larga): comprueba las reglas de esa alerta (alerta.gd) con sus
+# números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
+# Apartamentos, el vecino que lleva la llave, que solo sale con la Alerta 5; en el centro comercial, el guardia) y
+# captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
+func probar_alerta() -> void:
+	var n := Alerta.nivel
+	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.REGLAS[n]])
+	decir("%s: %s
+%s: %s" % [planta.nombre, ed.objetivo, Alerta.nombre(), Alerta.REGLAS[n]], 4.0)
+	await get_tree().create_timer(0.5, false).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-alerta.png")
+	# A1: los zombis de cinco plantas, sin alerta y con ella (las mismas: con las mismas semillas)
+	var contar := func() -> String:
+		var total := 0
+		var coste := 0.0   # lo que "cuestan" (planta.gd, COSTE): los caros son los duros
+		for i in 5:
+			Planta.semilla = 1000 + i
+			for s in Planta.generar(2, edificio, jefe_de(2)).sitios:
+				for z in s.get("zombis", []).filter(func(z): return not z.get("llave", false)):
+					total += 1
+					coste += Planta.COSTE[z.tipo]
+		Planta.semilla = 0
+		return "%d (coste %.0f)" % [total, coste]
+	Alerta.nivel = 0
+	var sin: String = contar.call()
+	Alerta.nivel = n
+	print("A1 · zombis en cinco plantas: %s sin alerta, %s con ella (x%.2f)" % [sin, contar.call(), Alerta.mas_zombis()])
+	# A2 y A3: un zombi normal y el jefe de la planta, recién sacados
+	var normal := meter_zombi("normal", Vector2(200, 200))
+	var jefe := meter_zombi("portera", Vector2(300, 200))
+	print("A2 · velocidad del zombi normal: %.0f (sin alerta, %.0f)" % [normal.velocidad, ZOMBIS.normal.instantiate().velocidad])
+	print("A3 · vida de la portera en la planta baja: %d · se enfada a %d %% de la vida" % [jefe.vida_max, roundi(jefe.enfado * 100)])
+	normal.queue_free()
+	jefe.queue_free()
+	$Pantalla/Jefa.hide()
+	# A4 y A5
+	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_botiquin(), BOTIQUIN + johnny.stats.botiquin_extra])
+	print("A5 · los disparos se oyen a %.0f (sin alerta, %.0f)" % [Zombi.OIDO * Alerta.oido(), Zombi.OIDO])
+	# las rarezas del banco, en 2000 armas
+	var rarezas := {"verde": 0, "azul": 0, "morada": 0}
+	for i in 2000:
+		rarezas[Recetas.rareza_al_azar()] += 1
+	print("Banco · de 2000 armas: %d verdes, %d azules, %d moradas" % [rarezas.verde, rarezas.azul, rarezas.morada])
+	# el guardia (centro) o el vecino de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
+	if ed.cerrojo == "tarjeta":
+		await montar(0, 0, false)
+		print("A5 · el guardia: vida %d" % guardia.vida_max)
+		johnny.position = guardia.position + Vector2(-160, 40)   # (que no se quede en la puerta, que la cruzaría)
+	else:
+		var vecino := -1
+		for i in planta.sitios.size():
+			if planta.sitios[i].get("zombis", []).any(func(z): return z.get("llave", false)):
+				vecino = i
+		print("A5 · llave en el suelo: %s | vecino de la llave en %s" % [planta.llave.sitio >= 0,
+			planta.sitios[vecino].nombre if vecino >= 0 else "ningún sitio"])
+		if vecino >= 0:
+			await montar(vecino, 0, false)
+			for z in get_tree().get_nodes_in_group("zombis"):
+				if z.has_meta("llave"):
+					print("A5 · el vecino: vida %d" % z.vida_max)
+					johnny.position = z.position + Vector2(0, 90)
+					for k in 16:   # Johnny, cerca de él y en su misma habitación
+						var p: Vector2 = z.position + Vector2.from_angle(k * TAU / 16.0) * 90.0
+						if mapa.zona_en(p) == z.zona:
+							johnny.position = p
+							break
+					luz.alternar()
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.4, false).timeout
+					get_viewport().get_texture().get_image().save_png("res://captura-alerta-llave.png")
+					luz.alternar()
+					z.recibir_golpe(9999, Vector2.ZERO)
+					await get_tree().create_timer(0.5, false).timeout
+					print("A5 · al caer: llave en %s, en el suelo: %s" % [planta.sitios[planta.llave.sitio].nombre
+						if planta.llave.sitio >= 0 else "ningún sitio", mapa.cosas.has_node("Llave")])
+	if ed.cerrojo == "tarjeta":
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.4, false).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-alerta-llave.png")
+	# el final: con 50 dólares recogidos, y la alerta de la partida como la más alta abierta
+	Guardado.cambiar(func(g): Guardado.edificio(g, edificio).alerta_max = n)
+	dolares = 50
+	planta.num = Planta.PLANTAS
+	terminar(true)
+	await get_tree().create_timer(0.5).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-alerta-fin.png")
+	var e: Dictionary = Guardado.cargar().edificios[edificio]
+	print("Final · dólares: 50 + %d · alerta más alta abierta: %d" % [Alerta.dolares_extra(50), e.alerta_max])
+	get_tree().quit()
+
+
 func contar_planta() -> void:
 	print("Planta: ", planta.nombre)
 	for i in range(1, planta.sitios.size()):
@@ -1106,7 +1279,8 @@ func contar_planta() -> void:
 		print("  %s [%s] %dx%d casillas: %s | %d muebles | zombis: %s" % [s.nombre, s.tipo, s.apt.cols, s.apt.filas,
 			" ".join(salas), s.muebles.size(), tipos])
 	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(),
-		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0 else "el guardia del pasillo"])
+		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0
+		else "el guardia del pasillo" if ed.cerrojo == "tarjeta" else "un vecino (Alerta 5)"])
 
 
 func _process(delta: float) -> void:
@@ -1126,7 +1300,7 @@ func _process(delta: float) -> void:
 			if s.position.y not in filas:
 				filas.append(s.position.y)
 		filas.sort()
-		johnny.position = Vector2(560, filas[-2] - 60.0)
+		johnny.position = Vector2(560, filas[-1] - 140.0)
 		johnny.get_node("Camara").reset_smoothing()
 	if antes < 0.9 and tiempo >= 0.9:
 		get_viewport().get_texture().get_image().save_png("res://captura-expo-zombis.png")
@@ -1284,9 +1458,12 @@ func _process(delta: float) -> void:
 				break
 		johnny.get_node("Camara").reset_smoothing()
 		if jefa is Minijefe:
-			# el escudo: un golpe de 10 por delante, de lado, por la espalda y de una explosión (la fuerza va
-			# hacia donde empuja el golpe: el de delante empuja hacia atrás)
 			jefa.mirada = (johnny.position - jefa.position).normalized()
+		if jefa.has_method("lluvia"):
+			probar_cocinero()
+		if planta.jefe == "antidisturbios":
+			# el antidisturbios. El escudo: un golpe de 10 por delante, de lado, por la espalda y de una explosión
+			# (la fuerza va hacia donde empuja el golpe: el de delante empuja hacia atrás)
 			var m: Vector2 = jefa.mirada
 			var quita := []
 			for golpe in [[-m, false], [m.orthogonal(), false], [m, false], [m, true]]:
@@ -1294,8 +1471,8 @@ func _process(delta: float) -> void:
 				jefa.recibir_golpe(10, golpe[0] * 300.0, golpe[1])
 				quita.append(antes_vida - jefa.vida)
 			print("Escudo (golpes de 10): de frente -%d, de lado -%d, por la espalda -%d, explosión -%d" % quita)
-			if jefa.has_method("foto"):   # que salga en la foto haciendo lo suyo (el antidisturbios, preparando la carga)
-				jefa.foto(johnny)
+		if jefa.has_method("foto"):   # que salga en la foto haciendo lo suyo (el antidisturbios, preparando la carga; la mascota, saltando)
+			jefa.foto(johnny)
 	if antes < 8.0 and tiempo >= 8.0 and jefa:
 		get_viewport().get_texture().get_image().save_png("res://captura-jefe.png")
 	if antes < 8.05 and tiempo >= 8.05:
@@ -1307,6 +1484,48 @@ func _process(delta: float) -> void:
 	if antes < 9.5 and tiempo >= 9.5:
 		print("Jefa muerta: ", planta.jefa_muerta, " | ", aviso.text)
 		probar_menus()
+
+
+# El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,
+# unos cuchillos ya clavados, la lluvia marcando el suelo y el abanico recién lanzado
+func probar_cocinero() -> void:
+	var antes_johnny: int = johnny.vida
+	# que nadie le dispare mientras tanto (ni Johnny solo, ni el superviviente que le acompaña): así se ve lo que
+	# le quita su aceite
+	var modo: String = johnny.modo
+	johnny.modo = "mira"
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	for donde in [jefa.position, johnny.position]:
+		var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = "hirviendo"
+		charco.dueno = jefa
+		charco.position = donde
+		mapa.cosas.add_child(charco)
+	for i in 3:
+		var c := Cuchillo.new()
+		c.modo = "cae"
+		c.aviso = 0.05
+		c.position = jefa.position.lerp(johnny.position, 0.5) + Vector2((i - 1) * 50.0, 50.0)
+		mapa.cosas.add_child(c)
+	jefa.lluvia(johnny)
+	jefa.empezar("aviso_abanico", (johnny.position - jefa.position).angle())
+	jefa.t = 0.3   # el aviso ya casi acabado: en la foto acaba de lanzar el abanico
+	await get_tree().create_timer(0.1, false).timeout   # (las balas que ya volaban, que lleguen antes de contar)
+	var antes_jefe: int = jefa.vida
+	await get_tree().create_timer(0.19, false).timeout
+	print("Cocinero: su aceite le quita %d (tiene que ser 0); a Johnny, %d | cuchillos: %d" % [antes_jefe - jefa.vida,
+		antes_johnny - johnny.vida, get_tree().get_nodes_in_group("balas_zombi").size()])
+	# tras la foto, se recoge todo y Johnny vuelve como estaba (si no, las pruebas de después le pillan herido)
+	await get_tree().create_timer(0.1, false).timeout
+	johnny.modo = modo
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_INHERIT
+	for cosa in get_tree().get_nodes_in_group("balas_zombi") + get_tree().get_nodes_in_group("charcos"):
+		cosa.queue_free()
+	johnny.estados.clear()
+	johnny.pisando.clear()
+	johnny.vida = antes_johnny
 
 
 # El ordenador: con $60 en el guardado de prueba compra puntos, sube Ataque, compra la escopeta y hace fotos
@@ -1578,6 +1797,172 @@ func probar_creadas() -> void:
 	print("Congeladora: zombi 3 aturdido %.1f vida %d | vida de Johnny %d | quedan %s" % [z3.aturdido, z3.vida, johnny.vida, lanzables.tipos()])
 
 
+# El reparto de objetos (parte 6 del centro comercial): cuenta qué sale en cada sitio de los dos edificios y
+# comprueba que las cosas de casa no salen en el centro ni las del centro en los Apartamentos. Luego deja en el
+# suelo los nueve nuevos, mete uno de cada objeto en el baúl (lo de la tecla U) y hace fotos del banco y del baúl
+func probar_objetos() -> void:
+	var fallos := []
+	for ed_id in ["apartamentos", "centro"]:
+		for tienda in [""] + (Objetos.TIENDAS.keys() if ed_id == "centro" else []):
+			var salen := {}
+			for i in 2000:
+				var id := Objetos.al_azar(ed_id, tienda)
+				salen[id] = salen.get(id, 0) + 1
+				if id == "explosivos" or (ed_id == "centro" and id in Objetos.SOLO_CASA) \
+						or (ed_id == "apartamentos" and id in Objetos.SOLO_CENTRO):
+					fallos.append("%s %s: %s" % [ed_id, tienda, id])
+			print("Objetos en %s %s: %d distintos %s" % [ed_id, tienda if tienda != "" else "(pasillo)", salen.size(), salen.keys()])
+	print("Reparto de objetos: ", "bien" if fallos.is_empty() else "MAL %s" % str(fallos.slice(0, 5)))
+	for i in Objetos.SOLO_CENTRO.size():
+		soltar_objeto(Objetos.SOLO_CENTRO[i], johnny.position + Vector2(-176 + i * 44, -100), true)
+	await get_tree().create_timer(0.5).timeout
+	menus.visible = false   # por si ha salido el recuadro de una mutación
+	await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://captura-objetos-nuevos.png")
+	menus.visible = true
+	for cosa in mapa.cosas.get_children():
+		if cosa.get_script() == BILLETE:
+			cosa.queue_free()
+	var baul_antes: Dictionary = Guardado.cargar().baul
+	dar_objetos()
+	abrir_cosas("banco")
+	inventario.tocar("o_pistola_agua")
+	inventario.tocar("o_bateria")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-banco-todo.png")
+	inventario.cerrar()
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-baul-todo.png")
+	inventario.cerrar()
+	print("Baúl con uno de cada: %d casillas de %d" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
+	Guardado.cambiar(func(g): g.baul = baul_antes)
+
+
+# Las armas de las recetas nuevas (parte 6 del centro comercial): comprueba que las nueve recetas salen en el banco
+# y prueba cada arma contra zombis lentos de 500 de vida (que no muera ninguno), contando en la terminal lo que pasa
+# y con una foto de cada una: captura-arma-<receta>.png
+func probar_recetas() -> void:
+	var nuevas := ["bate_helado", "mangual", "latigo_electrico", "pistola_electrica", "garfio", "bomba_aceite",
+		"mina_despertador", "nube_somnifera", "bomba_clavos"]
+	print("Recetas nuevas en el banco: ", nuevas.all(func(r): return Recetas.buscar(Recetas.LISTA[r].con[1], Recetas.LISTA[r].con[0]) == r))
+	# en medio del cuarto, mirando a la derecha, y sin atacar por su cuenta (aquí ataca la prueba)
+	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.direccion = "e"
+	johnny.espera = 1000.0
+	# cuerpo a cuerpo: el bate helado congela, el mangual echa a todos lejos y el látigo eléctrico salta a otro
+	var z := zombis_de_prueba([Vector2(40, 0)])
+	johnny.coger(Armas.apuntar(Recetas.crear("bate_helado")))
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	await foto_arma("bate_helado")
+	print("Bate helado: congelado %.1f vida %d" % [z[0].congelado, z[0].vida])
+	z = zombis_de_prueba([Vector2(45, 0), Vector2(-45, 10), Vector2(0, 45)])
+	johnny.coger(Armas.apuntar(Recetas.crear("mangual")))
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	await get_tree().create_timer(0.25).timeout
+	await foto_arma("mangual")
+	print("Mangual: distancias %s | aturdidos %s" % [z.map(func(o): return roundi(o.distancia_a(johnny))), z.map(func(o): return o.aturdido > 0.0)])
+	z = zombis_de_prueba([Vector2(90, 0), Vector2(150, 30)])
+	johnny.coger(Armas.apuntar(Recetas.crear("latigo_electrico")))
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	await foto_arma("latigo_electrico")
+	print("Látigo eléctrico: aturdidos %s | vidas %s" % [z.map(func(o): return snappedf(o.aturdido, 0.1)), z.map(func(o): return o.vida)])
+	# a distancia: las chispas de la pistola eléctrica y el garfio
+	z = zombis_de_prueba([Vector2(160, 0), Vector2(220, 40)])
+	johnny.coger(Armas.apuntar(Recetas.crear("pistola_electrica")))
+	await get_tree().create_timer(0.1).timeout
+	for i in 4:
+		johnny.disparar(0.0)
+		await get_tree().create_timer(0.08).timeout
+	await foto_arma("pistola_electrica")
+	await get_tree().create_timer(0.3).timeout
+	print("Pistola eléctrica: balas %d | aturdidos %s | vidas %s" % [johnny.balas, z.map(func(o): return snappedf(o.aturdido, 0.1)),
+		z.map(func(o): return o.vida)])
+	z = zombis_de_prueba([Vector2(260, 0)])
+	johnny.coger(Armas.apuntar(Recetas.crear("garfio")))
+	await get_tree().create_timer(0.1).timeout
+	var lejos := roundi(z[0].distancia_a(johnny))
+	johnny.disparar(0.0)
+	await get_tree().create_timer(0.4).timeout
+	await foto_arma("garfio")
+	await get_tree().create_timer(0.75).timeout
+	print("Garfio: distancia %d -> %d | balas %d (no gasta) | vida %d" % [lejos, roundi(z[0].distancia_a(johnny)), johnny.balas, z[0].vida])
+	# arrojadizas: el aceite resbala y luego arde, la mina espera a que pase un zombi, la nube duerme y los clavos
+	z = zombis_de_prueba([Vector2(170, 0), Vector2(190, 30)])
+	for r in ["bomba_aceite", "mina_despertador", "nube_somnifera", "bomba_clavos"]:
+		lanzables.sacar(Recetas.crear(r))
+	for o in z:
+		o.aturdido = 4.0   # que se queden en el charco
+	lanzables.tipo = "bomba_aceite"
+	lanzables.lanzar(johnny.global_position + Vector2(180, 10))
+	await get_tree().create_timer(1.0).timeout
+	var aceite := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "aceite").size()
+	await foto_arma("bomba_aceite")
+	await get_tree().create_timer(2.0).timeout
+	print("Bomba de aceite: charcos de aceite %d | luego fuegos %d | zombis ardiendo %s" % [aceite,
+		get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "fuego").size(), z.map(func(o): return o.arder_t > 0.0)])
+	await foto_arma("bomba_aceite_arde")
+	z = zombis_de_prueba([])
+	lanzables.tipo = "mina_despertador"
+	lanzables.lanzar(johnny.global_position + Vector2(-170, 0))
+	await get_tree().create_timer(1.3).timeout
+	await foto_arma("mina_despertador")
+	var mina: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() == Lanzables.BOMBA)[-1]
+	var donde: Vector2 = mina.global_position - johnny.global_position
+	z = zombis_de_prueba([Vector2(-330, 0)])   # viene hacia Johnny y pasa por encima
+	for i in 40:
+		await get_tree().create_timer(0.1).timeout
+		if not is_instance_valid(mina):
+			break
+	await get_tree().create_timer(0.1).timeout
+	print("Mina despertador: en %s | ha explotado %s | el zombi que pasa, vida %d (de 500) | vida de Johnny %d" % [
+		donde.round(), not is_instance_valid(mina), z[0].vida, johnny.vida])
+	z = zombis_de_prueba([Vector2(180, 0), Vector2(200, 40), Vector2(150, -30)])
+	lanzables.tipo = "nube_somnifera"
+	lanzables.lanzar(johnny.global_position + Vector2(180, 10))
+	await get_tree().create_timer(1.9).timeout
+	await foto_arma("nube_somnifera")
+	print("Nube somnífera: dormidos %s" % [z.map(func(o): return snappedf(o.aturdido, 0.1))])
+	z = zombis_de_prueba([Vector2(120, 0), Vector2(200, 50), Vector2(80, -60)])
+	lanzables.tipo = "bomba_clavos"
+	lanzables.lanzar(johnny.global_position + Vector2(150, 0))
+	await get_tree().create_timer(2.15).timeout
+	await foto_arma("bomba_clavos")
+	await get_tree().create_timer(0.35).timeout
+	print("Bomba de clavos: vidas %s | sangran %s | quedan %s" % [z.map(func(o): return o.vida),
+		z.map(func(o): return o.has_node("herida_sangra")), lanzables.tipos()])
+	zombis_de_prueba([])
+	johnny.vida = johnny.stats.vida_max
+	johnny.espera = 0.0
+
+
+# Para probar_recetas: quita los zombis y los charcos que haya, cura a Johnny y saca zombis lentos de 500 de vida
+# en esos sitios (respecto a Johnny)
+func zombis_de_prueba(donde: Array) -> Array:
+	for o in get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("charcos"):
+		o.remove_from_group("zombis")
+		o.queue_free()
+	johnny.vida = johnny.stats.vida_max
+	var lista := []
+	for d in donde:
+		var zombi := meter_zombi("lento", johnny.position + d)
+		zombi.vida = 500
+		lista.append(zombi)
+	return lista
+
+
+# Para probar_recetas: la foto de un arma nueva (sin el recuadro de las mutaciones, si ha salido)
+func foto_arma(nombre: String) -> void:
+	menus.visible = false
+	await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://captura-arma-%s.png" % nombre)
+	menus.visible = true
+
+
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
 func probar_mutaciones() -> void:
 	abrir_mutacion()
@@ -1598,6 +1983,8 @@ func probar_menus() -> void:
 	await probar_ordenador()
 	await probar_cosas()
 	await probar_creadas()
+	await probar_objetos()
+	await probar_recetas()
 	await supervivientes.probar()
 	await probar_sangre()
 	await probar_mutaciones()

@@ -1,4 +1,5 @@
-# Una gota del lanzallamas, del súpersoplete o del desintegrador (los "chorros" de src/armas-creadas.js). Vuela
+# Una gota del lanzallamas, del súpersoplete o del desintegrador (los "chorros" de src/armas-creadas.js), una
+# chispa de la pistola eléctrica o un clavo de la bomba de clavos (los dos del centro comercial). Vuela
 # recta, atraviesa a los zombis (a cada uno le da una vez), se para en las paredes y los muebles y se apaga al
 # llegar a su alcance. Como la bala, la gota "de verdad" va a ras de suelo y se dibuja más arriba.
 # El fuego crece y pasa de amarillo a naranja y rojo; el ácido, de verde claro a verde.
@@ -7,7 +8,7 @@ extends Node2D
 const ALTURA_CUERPO := 22.0
 const BAJADA := 14.0
 
-var tipo := "llama"          # "llama", "cono" (el súpersoplete) o "acido"
+var tipo := "llama"          # "llama", "cono" (el súpersoplete), "acido", "chispa" o "clavo"
 var velocidad := Vector2.ZERO
 var dano := 0.0
 var empuje := 1.0
@@ -41,6 +42,18 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
+	if tipo == "clavo":
+		# un clavo gris que vuela de punta, con su borde oscuro
+		var dir := velocidad.normalized()
+		for capa in [[4.0, Color("#1d1b2c")], [2.0, Color("#d0d4da")]]:
+			draw_line(Vector2(0, -altura) - dir * 6.0, Vector2(0, -altura) + dir * 6.0, capa[1], capa[0])
+		return
+	if tipo == "chispa":
+		# chispas azules y blancas que tiemblan
+		for i in 3:
+			var p := ((Vector2(randf_range(-6, 6), -altura + randf_range(-6, 6))) / 2.0).round() * 2.0
+			draw_rect(Rect2(p - Vector2(2, 2), Vector2(4, 4)), Color.WHITE if i == 0 else Color("#9fe8ff"))
+		return
 	var k := 1.0 - vida / vida_max   # 0 al salir, 1 al apagarse
 	var color: Color
 	var r: float

@@ -12,17 +12,32 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
 - **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
+- **Elige edificio:** debajo de cada tarjeta, **<** y **>** cambian el nivel de alerta (de los abiertos; se
+  recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5.
 
 ## Teclas de prueba
 
 - **1-6**: poner cualquier arma.
 - **F2 a F7**: un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso). **V**: un vigilante y
-  **B**: una dependienta (los del centro comercial). **P**: la portera. **K**: el antidisturbios. **U**: la mascota.
-- **M**: recuadro de mutaciones. **O**: soltar un objeto al azar.
+  **B**: una dependienta (los del centro comercial). **P**: la portera. **K**: el antidisturbios. **G**: el cocinero.
+  **J**: la mascota (de la Juguetería).
+- **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
+  objeto al baúl, para probar todas las recetas en el banco de trabajo.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
   la planta con su tienda y te lleva a ella, ya sin zombis. Con uno ya rescatado en la partida, no hace nada.
+
+**Pruebas sin jugar** (se añaden detrás de `--path . -- --captura`; ver CLAUDE.md):
+- `--edificio centro`: en el centro comercial. `--fotos-tiendas`: una foto de cada tienda y de los peligros.
+- `--alerta N` (1 a 5): en vez de la prueba larga, la de los niveles de alerta: dice en la terminal los números de
+  cada regla (zombis, velocidad, jefe, botiquín, oído, rarezas del banco, guardia o vecino de la llave) y saca
+  `captura-alerta.png` (el aviso del principio), `captura-alerta-llave.png` (el guardia o, en los Apartamentos, el
+  vecino de la llave) y `captura-alerta-fin.png`; la foto de "Elige edificio" sale con las alertas abiertas.
+- `--evento X` (`apagon`, `incendio`, `horda` o `vendedor`): en vez de la prueba larga, la de ese evento sorpresa en
+  la planta baja: dice en la terminal cuántos salen en 2000 partidas sorteadas y lo que pasa (luces apagadas,
+  calambrazos, oleadas y premio, compras con lo que queda de dólares) y saca `captura-evento-<X>.png` (el cartel) y
+  las suyas (`-piso`, `-cable`, `-premio`, `-puesto`, `-comprado`). Sin `--evento`, la prueba va sin eventos.
 
 ## La sala de mantenimiento
 
@@ -30,7 +45,11 @@ La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`esce
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7 y Noticias de Canal 8).
 - A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo** (recetas).
 - Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador (los
-  del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe.
+  del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe. Detrás del técnico,
+  cuando ya vive ahí, las pantallas de las cámaras de seguridad: desde entonces el minimapa enseña los zombis.
+- El **puesto del ferretero** (cuando ya vive ahí): arrimarse a su mostrador por delante para comprar munición
+  ($2), molotovs ($3) y granadas ($4) con los dólares ahorrados. Con el ratón o el dedo; con flechas e Intro o
+  las teclas 1, 2 y 3; con el mando, la cruceta y A. Esc o B cierra. Para que te acompañe, rodear el mostrador.
 - La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 ## Móvil (táctil)
