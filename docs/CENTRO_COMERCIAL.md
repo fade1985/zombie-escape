@@ -176,8 +176,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     vendo la pierna y sigo contigo». Sigue en el equipo como los demás, cuenta para el logro «Buen vecino» y deja
     de haber horda para ella. Para que viva en la sala, como siempre, hay que terminar el edificio con ella.
   - `--captura --edificio centro` prueba la escolta entera (lo escribe en la terminal) y saca `captura-escolta.png`.
-  - ✅ **Su mejora de la sala** (21 oct; lo decidió el dueño): con ella rescatada, **cada partida, en los dos
-    edificios, empiezas con un botiquín en la mochila**, y el cartel del principio lo dice («La Farmacéutica te ha
+  - ✅ **Su mejora de la sala** (21 oct; lo decidió el dueño; con su visto bueno tras probarlo en el móvil): con
+    ella rescatada, **cada partida, en los dos edificios, empiezas con un botiquín en la mochila**, y el cartel del principio lo dice («La Farmacéutica te ha
     preparado un botiquín: está en la mochila»).
     - Ocupa una casilla de la mochila. **Se usa desde el inventario**: lo eliges y pulsas **«Usar»** (con el mando
       o las flechas, la marca salta sola a «Usar»: A dos veces). Se cierra el inventario y cura como el de los
