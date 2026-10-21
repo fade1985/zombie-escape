@@ -26,6 +26,7 @@ const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 
 var vida := 500
 var fase := 1                 # 2 = enfadado
+var enfado := 0.5             # a qué parte de la vida se enfada (con la Alerta 3, antes: alerta.gd)
 var estado := "andar"
 var t := 0.0                  # tiempo que lleva en el estado
 var dur := 1.2                # cuánto anda antes de atacar
@@ -76,7 +77,7 @@ func _physics_process(delta: float) -> void:
 		animar()
 		return
 	# ¡A mitad de vida se enfada de verdad!
-	if fase == 1 and vida <= vida_max * 0.5:
+	if fase == 1 and vida <= vida_max * enfado:
 		fase = 2
 		cambiar("grito")
 		al_enfadarse(johnny)

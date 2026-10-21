@@ -37,7 +37,9 @@ const NUEVO := {
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true},
 }
 
-const EDIFICIO := {"completado": false, "partidas": 0, "victorias": 0, "mejor_planta": 0, "mejor_tiempo": 0.0}
+# alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"
+const EDIFICIO := {"completado": false, "partidas": 0, "victorias": 0, "mejor_planta": 0, "mejor_tiempo": 0.0,
+	"alerta_max": 0, "alerta": 0}
 
 
 static func cargar() -> Dictionary:
@@ -63,7 +65,7 @@ static func cargar() -> Dictionary:
 		a.unidades = int(a.unidades)
 	for id in s.edificios:
 		s.edificios[id] = EDIFICIO.merged(s.edificios[id], true)
-		for clave in ["partidas", "victorias", "mejor_planta"]:
+		for clave in ["partidas", "victorias", "mejor_planta", "alerta_max", "alerta"]:
 			s.edificios[id][clave] = int(s.edificios[id][clave])
 	return s
 

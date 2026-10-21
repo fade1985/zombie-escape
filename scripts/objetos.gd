@@ -3,10 +3,14 @@
 # baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. En el banco de trabajo se
 # juntan de dos en dos para crear armas (recetas.gd). Todos son de rareza gris (común).
 # Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py).
+#
+# Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
+# 17 de siempre; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS), que mezclan
+# algunos de siempre con los nueve nuevos (SOLO_CENTRO). Las cosas de casa (SOLO_CASA) no salen en el centro.
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
-const BAUL := 24             # casillas del baúl: una por cada objeto distinto y una por cada arma creada
+const BAUL := 32             # casillas del baúl: una por cada objeto distinto y una por cada arma creada
 const SUELTA := 0.10         # probabilidad de que un zombi suelte un objeto (provisional, como en el JS)
 const SUELTA_EXPLOSIVOS := 0.25   # los explosivos, solo los zombis explosivos
 
@@ -16,6 +20,22 @@ const NOMBRES := {
 	"trapo": "Trapo", "explosivos": "Explosivos", "despertador": "Despertador", "extintor": "Extintor",
 	"taser": "Táser", "llave_inglesa": "Llave inglesa", "hacha": "Hacha", "cuerda": "Cuerda",
 	"mancuernas": "Mancuernas",
+	# los nueve del centro comercial
+	"cinta_americana": "Cinta americana", "cadena": "Cadena", "bateria": "Batería", "cable": "Cable",
+	"aceite": "Aceite", "bombona": "Bombona de gas", "hielo_seco": "Hielo seco", "jeringuilla": "Jeringuilla",
+	"perchas": "Perchas",
+}
+const SOLO_CASA := ["despertador", "mancuernas", "pistola_agua", "trapo", "cuerda"]   # solo en los Apartamentos
+const SOLO_CENTRO := ["cinta_americana", "cadena", "bateria", "cable", "aceite", "bombona", "hielo_seco",
+	"jeringuilla", "perchas"]   # solo en el centro comercial
+# Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
+const TIENDAS := {
+	"ferreteria": ["clavos", "hacha", "llave_inglesa", "cuchillas", "spray", "cinta_americana", "cadena"],
+	"electronica": ["taser", "extintor", "bateria", "cable"],
+	"restaurante": ["alcohol", "gasolina", "mechero", "extintor", "aceite", "bombona"],
+	"supermercado": ["lejia", "alcohol", "mechero", "hielo_seco"],
+	"farmacia": ["alcohol", "lejia", "jeringuilla"],
+	"ropa": ["cuchillas", "spray", "perchas"],
 }
 
 
@@ -62,13 +82,20 @@ static func casillas_baul(s: Dictionary) -> int:
 	return n + s.baul_armas.size()
 
 
-# Qué objeto suelta un zombi al morir ("" = nada): los explosivos solo los dejan los zombis explosivos
-static func que_suelta(tipo: String) -> String:
+# Qué objeto suelta un zombi al morir ("" = nada): los explosivos solo los dejan los zombis explosivos. "tienda"
+# es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento)
+static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -> String:
 	if tipo == "explosivo":
 		return "explosivos" if randf() < SUELTA_EXPLOSIVOS else ""
-	return al_azar() if randf() < SUELTA else ""
+	return al_azar(edificio, tienda) if randf() < SUELTA else ""
 
 
-# Un objeto cualquiera, menos los explosivos (la portera suelta dos seguros)
-static func al_azar() -> String:
-	return NOMBRES.keys().filter(func(id): return id != "explosivos").pick_random()
+# Un objeto cualquiera de los que salen ahí, menos los explosivos (el jefe suelta dos seguros). En los
+# Apartamentos, uno de los de siempre; en el centro comercial, uno de la lista de su tienda (en el pasillo, de
+# una tienda cualquiera)
+static func al_azar(edificio := "apartamentos", tienda := "") -> String:
+	if edificio == "apartamentos":
+		return NOMBRES.keys().filter(func(id): return id != "explosivos" and id not in SOLO_CENTRO).pick_random()
+	if tienda not in TIENDAS:
+		tienda = TIENDAS.keys().pick_random()
+	return TIENDAS[tienda].pick_random()

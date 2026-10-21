@@ -4,6 +4,9 @@
 # marco que parpadea). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
 # (supervivientes.gd).
+# Con el técnico rescatado (vive en la sala de mantenimiento y ha arreglado las cámaras de seguridad), el plano
+# enseña los zombis: un puntito rojo por cada uno, también en las salas sin visitar. Donde está Johnny, cada
+# puntito va donde está su zombi y se mueve con él; en las demás salas, en filas.
 extends Control
 
 const ANCHO := 170.0
@@ -23,6 +26,8 @@ const SOMBRA := Color(0, 0, 0, 0.45)
 const SUELO := Color("#8f8775")     # los trocitos de pasillo que unen las salas
 const PASILLO_Y := 58.0     # dónde empieza (por arriba) el pasillo
 const CASILLA := 32.0
+const PUNTO := Color("#ff3b3b")     # los zombis, con las cámaras
+const BRILLO := Color("#ffb3a0")
 const ICONOS := {
 	"puerta": preload("res://assets/ui/iconos/puerta.png"),
 	"herramientas": preload("res://assets/ui/iconos/herramientas.png"),
@@ -35,6 +40,7 @@ const ICONOS := {
 var partida: Node           # de donde saca la planta y el sitio en el que está Johnny
 var marco := StyleBoxTexture.new()
 var tiempo := 0.0
+var camaras := false        # el técnico ya vive en la sala: se ven los zombis
 
 
 func _ready() -> void:
@@ -43,6 +49,7 @@ func _ready() -> void:
 	for lado in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
 		marco.set_texture_margin(lado, 14)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	camaras = "tecnico" in Guardado.cargar().rescatados
 	set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	offset_left = -ANCHO - 12
 	offset_right = -12
@@ -67,7 +74,7 @@ func casillas() -> Array:
 	var largo := ANCHO - x0 * 2
 	var medio := PASILLO_Y + 5.0
 	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": false,
-		"puerta": Rect2()})
+		"puerta": Rect2(), "sitio": 0})
 	var sos: int = planta.superviviente.sitio if partida.supervivientes.encerrado() else -1
 	for s in pasillo.salidas:
 		match s.tipo:
@@ -102,7 +109,7 @@ func casillas() -> Array:
 				var puerta := Rect2(x - 3, PASILLO_Y - 8 if arriba else PASILLO_Y + 8, 6, 8)
 				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
 					"aqui": aqui == s.a or (planta.sitios[aqui].tipo == "expo" and sitio.tipo == "mantenimiento"),
-					"icono": icono, "sos": s.a == sos, "puerta": puerta})
+					"icono": icono, "sos": s.a == sos, "puerta": puerta, "sitio": s.a})
 	return lista
 
 
@@ -144,6 +151,8 @@ func _draw() -> void:
 	for c in lista:
 		if c.puerta.has_area():
 			draw_rect(c.puerta, AMARILLO.darkened(0.15) if c.aqui else SUELO)
+	if camaras:
+		dibujar_zombis(lista)
 	for c in lista:
 		if c.icono != "":
 			draw_texture_rect(ICONOS[c.icono], Rect2(c.r.get_center() - Vector2(8, 8), Vector2(16, 16)), false)
@@ -158,3 +167,54 @@ func _draw() -> void:
 	for c in lista:
 		if c.aqui:
 			draw_rect(c.r.grow(4), Color(AMARILLO, 0.5 + sin(tiempo * 6.0) * 0.3), false, 2.0)
+
+
+# ── Las cámaras del técnico ──
+
+# Un puntito por zombi en cada sala. Donde está Johnny, cada uno en su sitio (el sitio entero cabe en su
+# rectángulo); en las demás, en filas, tantos como quepan
+func dibujar_zombis(lista: Array) -> void:
+	for c in lista:
+		var i: int = c.get("sitio", -1)
+		if i < 0:
+			continue
+		var r: Rect2 = c.r.grow(-2)
+		if i == partida.aqui:
+			var sitio: Dictionary = partida.planta.sitios[i]
+			var tam := Vector2(sitio.ancho, sitio.alto)
+			for z in vivos():
+				var p: Vector2 = r.position + z.global_position / tam * r.size - Vector2(2, 2)
+				punto(p.clamp(r.position, r.end - Vector2(4, 4)))
+		else:
+			var por_fila := maxi(1, int(r.size.x / 6.0))
+			var filas := maxi(1, int(r.size.y / 6.0))
+			for k in mini(zombis_en(i), por_fila * filas):
+				punto(r.position + Vector2(k % por_fila, k / por_fila) * 6.0)
+
+
+# Un puntito: rojo, con su sombra y un brillo (que se vea también sobre las salas rojas)
+func punto(p: Vector2) -> void:
+	p = Vector2(par(p.x), par(p.y))
+	draw_rect(Rect2(p + Vector2(2, 2), Vector2(4, 4)), BORDE)
+	draw_rect(Rect2(p, Vector2(4, 4)), PUNTO)
+	draw_rect(Rect2(p, Vector2(2, 2)), BRILLO)
+
+
+# Los zombis que quedan en el sitio "i" (donde no está Johnny: los que esperan dentro, si no está limpio)
+func zombis_en(i: int) -> int:
+	var sitio: Dictionary = partida.planta.sitios[i]
+	return 0 if sitio.get("limpio", false) else sitio.get("zombis", []).size()
+
+
+func vivos() -> Array:
+	return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get("estado") != "muerto")
+
+
+# Para las pruebas: cuántos puntitos lleva cada sala del plano ({sitio: zombis})
+func zombis_por_sala() -> Dictionary:
+	var cuenta := {}
+	for c in casillas():
+		var i: int = c.get("sitio", -1)
+		if i >= 0:
+			cuenta[i] = vivos().size() if i == partida.aqui else zombis_en(i)
+	return cuenta

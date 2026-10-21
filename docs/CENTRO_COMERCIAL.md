@@ -103,7 +103,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   VD-7, el somnífero de Velaria, y **muta (con su propio dibujo)**: más rápido, latigazos de tentáculo (como el zombi
   de tentáculos, más largos) y embestida. Su historia, en la parte 7.
 - **Por trozos**, cada uno con su visto bueno: 1) ✅ vigilante y dependienta; 2) antidisturbios y lo común de los
-  minijefes (y la portera a su nuevo tamaño); 3) cocinero; 4) modista; 5) mascota (rehecha a 72); 6) azotea y gerente.
+  minijefes (y la portera a su nuevo tamaño); 3) ✅ cocinero; 4) modista; 5) mascota (rehecha a 72); 6) azotea y
+  gerente.
   Coste previsto: unas 415 generaciones en total (54 ya gastadas en los 8 modelos).
 
 ## Supervivientes
@@ -158,6 +159,86 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     pisaban los bocadillos).
   - Tecla **H** en el centro: cada vez, el siguiente de los tres (rehace la planta con su tienda).
     `--captura` saca además `captura-sala-seis.png` (los seis en la sala).
+- ✅ **El rescate propio de la farmacéutica** (21 oct; `scripts/escolta.gd`; números provisionales):
+  - Grita desde la rebotica, cerrada, como antes; al limpiar la farmacia se abre y dice «¡Me han mordido la pierna!
+    No puedo correr». Al arrimarte se une y empieza **la escolta** (no hay horda): llevarla hasta la puerta de las
+    escaleras de su planta. Arriba, «Lleva a la Farmacéutica a las escaleras», y una flecha en el borde hacia las
+    escaleras (o hacia la salida, dentro de una tienda). Suena la música tensa.
+  - Va detrás de Johnny cojeando (90 de velocidad; Johnny, 210), con su vida encima, y se queja de vez en cuando.
+    Si Johnny se aleja más de 300, los zombis van a por ella; si cae, quedarse 2 s a su lado para levantarla
+    (vuelve con media vida), como en la horda.
+  - Los zombis: a los 2 s entran 3 por la puerta de la farmacia; en el pasillo salen grupos por las puertas de las
+    tiendas lejos de los dos (de 1 a 3, cada 6 s al principio y cada 3 s al cabo de un minuto; 14 a la vez como
+    mucho; lentos y normales y, más adelante, también rápidos y venenosos).
+  - No se puede cruzar una puerta si está a más de 140 de Johnny («Espera a la Farmacéutica: va herida») o en el
+    suelo.
+  - A menos de 160 de la puerta de las escaleras (aunque sigan cerradas) está a salvo: «Aquí ya estamos a salvo. Me
+    vendo la pierna y sigo contigo». Sigue en el equipo como los demás, cuenta para el logro «Buen vecino» y deja
+    de haber horda para ella. Para que viva en la sala, como siempre, hay que terminar el edificio con ella.
+  - `--captura --edificio centro` prueba la escolta entera (lo escribe en la terminal) y saca `captura-escolta.png`.
+  - Falta su mejora de la sala (empezar con un botiquín en la mochila): no hay botiquín que se lleve en la
+    mochila; va con los objetos de curar de la farmacia (ver «Objetos»).
+- ✅ **El rescate propio del técnico y su mejora** (21 oct; `scripts/averia.gd`; números provisionales):
+  - Grita desde el almacén de la tienda de electrónica, cerrado, como antes; al limpiar la tienda se abre y dice
+    «¡Gracias! Antes de irnos tengo que arreglar ese cable pelado». Al arrimarte se une y pide que bajes la palanca
+    del cuadro eléctrico: arriba, «Baja la palanca del cuadro eléctrico», y una flecha en el borde hacia el cuadro.
+    Mientras no la bajes no se va de la tienda («El Técnico no se va sin arreglar el cable…»). Si ya estaba bajada,
+    empieza directamente.
+  - Al bajarla (la tienda a oscuras, solo la linterna) se va donde el cable sale de la pared y lo arregla de
+    espaldas, con una lucecita de trabajo y chispas; la puerta de la tienda se cierra y van entrando zombis por las
+    habitaciones de la tienda, y él avisa de por dónde. Arriba, la barra «El Técnico arregla el cable · 1:30».
+  - **90 s de trabajo**; grupos cada 6 s al principio y cada 3,5 s al final, de 2 a 5 zombis, 24 a la vez como
+    mucho; el primer minuto lentos, normales y dependientas, y luego también rápidos, vigilantes y algún explosivo.
+    Como en la horda: si Johnny se aleja van a por él, si cae hay que quedarse 2 s a su lado y a mitad suelta un
+    molotov, una granada y munición.
+  - Lo que no decía el plan: **si Johnny vuelve a subir la palanca**, vuelve la luz y el agua da calambres a los
+    zombis que la pisen (sirve de trampa), pero él deja de trabajar («¡Eh, que hay corriente! ¡Baja la palanca!»)
+    y la barra se para. **No se puede salir** de la tienda mientras arregla («Aguanta: el Técnico está arreglando
+    el cable»).
+  - Al acabar: «¡Arreglado! Ya puedes dar la luz». El cable queda empalmado con cinta aislante y **el agua de esa
+    tienda ya no da calambres nunca más** (lo decidió el dueño); la palanca sigue abajo y, si la subes, vuelve la
+    luz. Se abre la puerta, cuenta para «Buen vecino» y él sigue en el equipo como los demás. Si su tienda no
+    tuviera agua con corriente (no debería pasar), sale la horda de siempre.
+  - **Su mejora**: cuando ya vive en la sala, detrás de él hay una mesa con cuatro pantallas de las cámaras de
+    seguridad (`scripts/mapa/camaras.gd`, dibujadas con código) y, **en los dos edificios** (lo decidió el dueño),
+    el minimapa enseña los zombis: un puntito rojo por zombi en cada sala, también en las que no has visitado;
+    donde está Johnny, cada puntito va donde está su zombi y se mueve con él.
+  - `--captura --edificio centro` prueba el rescate entero (lo escribe en la terminal) y saca
+    `captura-tecnico-palanca.png`, `captura-tecnico-horda.png`, `captura-tecnico-fin.png`,
+    `captura-tecnico-minimapa.png` y `captura-tecnico-sala.png`.
+- ✅ **El rescate propio del ferretero y su puesto** (21 oct; `scripts/barricada.gd`, `scripts/mapa/mostrador.gd`
+  y `scripts/ui/puesto.gd`; números provisionales; con el visto bueno del dueño tras probarlo en el móvil):
+  - Grita desde el almacén de la ferretería, como antes, pero su puerta tiene **cuatro tablas clavadas** (la
+    barricada). Al limpiar la tienda no se abre: dice «¡Espera, que quito la barricada!» y, al segundo, **la entrada
+    de la tienda se cierra de golpe** y empieza la horda allí mismo (no hay que ir a la salida).
+  - **2 minutos de trabajo**. Arriba, la barra «Ferretero quita la barricada · 1:45». Grupos cada 6 s al principio
+    y cada 3 s al final, de 2 a 5 zombis, 30 a la vez como mucho; los primeros 50 s lentos y normales, y luego
+    también rápidos y algún explosivo. Entran por el taller u otras habitaciones de la tienda (nunca por su almacén)
+    o por la entrada, y él avisa de por dónde.
+  - Él está dentro (no se le ve y no le pueden tumbar): **lo que se defiende es la puerta**. Los zombis que la
+    pillan más cerca que a Johnny, o todos si Johnny se aleja más de 300, van a aporrearla (tiembla); y **mientras
+    haya un zombi a menos de 70 de la puerta, él no avanza**: la barra se pone roja («¡Están empujando la puerta!
+    Quítaselos») y él se queja («¡Me están empujando la puerta!»).
+  - Las tablas van cayendo según avanza (una cada cuarto, con astillas). Lo que dice sale encima de la puerta,
+    como sus gritos («¡Cuántos clavos le metí!», «Esta tabla no sale…»…). A mitad, **por debajo de la puerta**,
+    un molotov, una granada y dos cajas de munición.
+  - Al acabar: «¡Barricada fuera! La entrada se ha abierto», se abre su puerta («¡Fuera tablas! Gracias, chaval.
+    Vámonos de aquí»), cuenta para «Buen vecino» y se une al arrimarte, como siempre. Al salir con él ya no hay otra
+    horda.
+  - **Su puesto**: cuando ya vive en la sala, atiende **detrás de un mostrador** dibujado con código (la franja
+    naranja de su chaleco, el letrero «Ferretería» y, encima, una caja de munición, un molotov y una granada). Al
+    arrimarte por delante se para el juego y sale la ventanita del puesto, con tres tarjetas: **munición (un
+    cargador) $2, molotov $3 y granada $4**, cada una con lo que llevas. Se paga con los **dólares ahorrados** (como
+    en el ordenador) y lo comprado es para esa partida. Si ya vas lleno («No te cabe…»), si tu arma no usa balas o
+    si no te llega («No te llega: te faltan $2»), lo dice. Con el ratón o el dedo, con flechas e Intro (o 1, 2 y 3)
+    o con el mando (cruceta y A); Esc o B cierra.
+  - Para que te acompañe, hay que **rodear el mostrador** y arrimarse a él. El puesto sigue abierto aunque te
+    acompañe. Lo que no decía el plan: en la sala su nombre va debajo del mostrador (no encima del letrero).
+  - Con el ferretero, en el centro comercial ya ninguno tiene la horda de siempre: la prueba de la horda solo sale
+    en los Apartamentos.
+  - `--captura --edificio centro` prueba la barricada entera y el puesto (lo escribe en la terminal) y saca
+    `captura-ferretero-barricada.png`, `captura-ferretero-empujan.png`, `captura-ferretero-sala.png`,
+    `captura-ferretero-puesto.png` y `captura-ferretero-compra.png`.
 
 ## Objetos
 
@@ -175,7 +256,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   siempre que pegan con la tienda (en la ferretería clavos, hacha, llave inglesa y cuchillas; en el restaurante
   alcohol y gasolina; en la electrónica el táser...) y los nuevos. Los zombis del pasillo, de cualquier lista.
 - **Solo en los Apartamentos** (cosas de casa): despertador, mancuernas, pistola de agua, trapo y cuerda.
-- **Ocho objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`):
+- **Nueve objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`;
+  el plan decía «ocho», pero eran nueve nombres y el dueño se quedó con los nueve):
 
 | Tienda | Objetos nuevos |
 |---|---|
@@ -312,6 +394,68 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 - **Colecciones:** un programa nuevo en ConserjeOS con, por cada edificio, los objetos encontrados (p. ej. 23/40),
   las páginas del dosier y las armas creadas, en porcentaje; y un **bestiario** con cada zombi que has visto, con su
   dibujo y una frase.
+- **El orden** (21 oct, con el dueño): cuatro trozos, cada uno con su visto bueno: 1) niveles de alerta, 2) eventos
+  sorpresa, 3) colecciones (después de juntar la parte 6, que reparte los objetos por edificio) y 4) reto del día
+  (un botón en cada tarjeta de «Elige edificio»; los dólares cuentan como siempre, pero no abre alertas ni cuenta
+  como edificio completado).
+
+### ✅ Hecho (21 oct, parte 8, trozo 1: niveles de alerta)
+
+- Las reglas y sus números, en `scripts/alerta.gd` (como estaban arriba). La partida solo le pregunta: el
+  presupuesto de zombis de cada sitio (A1), la velocidad de los que no son jefes (A2), la vida de los jefes y a qué
+  parte de ella se enfadan: al 70 % en vez de a la mitad (A3, en `portera.gd` y `minijefe.gd`, así que también en
+  los minijefes que vengan), lo que cura el botiquín (A4) y el guardia, y el oído de los zombis: los disparos se oyen
+  a 1,5 veces la distancia (A5).
+- **Lo que cambia respecto al plan: los Apartamentos en la A5** (no tienen guardia). Allí la llave no está en el
+  suelo: la lleva un vecino zombi, con la llave flotando encima, que espera en esa habitación y aguanta el doble
+  (como el guardia: +20 % por planta); al caer la suelta.
+- Recompensas: los dólares de más (+20 % por nivel) se suman al completar el edificio, y el cartel del final lo
+  dice aparte («De ellos, por la Alerta 2»). En el banco, las rarezas pasan de 75/20/5 % (verde/azul/morada) a
+  30/50/20 % con la A5 (cada nivel: −9, +6 y +3 puntos).
+- En «Elige edificio», debajo de cada tarjeta abierta: «< Alerta 2 (de 3) >», con su regla y su recompensa
+  debajo; sin ninguna abierta, «Complétalo para abrir la Alerta 1». Se recuerda la última elegida. Al empezar la
+  partida, el aviso dice la alerta y su regla; al completar el edificio con la más alta abierta, se abre la
+  siguiente y el cartel del final lo celebra.
+- Guardado: `alerta_max` y `alerta` en el progreso de cada edificio. Icono nuevo: `assets/ui/iconos/alerta.png`
+  (`tools/icono_alerta.py`).
+- Prueba: `--captura --alerta N` (con o sin `--edificio centro`): los números de cada regla en la terminal,
+  `captura-alerta.png`, `captura-alerta-llave.png` y `captura-alerta-fin.png`. Para comparar plantas con y sin
+  alerta, `Planta.semilla` hace que salgan iguales (servirá también para el reto del día).
+- Lo que salió al probar: con la A1 el presupuesto sube un 25 %, pero no todo cabe. En los Apartamentos salen un
+  13 % más de zombis y más duros (su «coste» sube un 30 %); en el centro comercial, solo un 8 % más (coste +13 %),
+  porque las tiendas se llenan antes. Si se quiere más, se sube `MAS_ZOMBIS`.
+
+### ✅ Hecho (21 oct, parte 8, trozo 2: eventos sorpresa)
+
+- Todo en `scripts/eventos.gd` (y el vendedor en `scripts/vendedor.gd`), con sus números en constantes. En cada
+  planta menos la última, una de cada cuatro veces (25 %): en 2000 partidas sorteadas sale de media uno por partida
+  (sin ninguno, 31 %; uno, 43 %; dos, 21 %; tres o cuatro, 5 %). En una partida no se repite ninguno. Con
+  `Planta.semilla` (el reto del día) salen los mismos para todos.
+- Empieza la primera vez que Johnny pisa el pasillo de la planta (en la planta baja, al salir de la sala de
+  mantenimiento): un cartel grande arriba en el centro («¡APAGÓN!» y una frase), con su sonido, y mientras dura, el
+  nombre del evento junto al del sitio, arriba a la derecha. Dura toda la planta. En la sala del jefe y en la de
+  mantenimiento no pasa nada.
+- **Apagón:** a oscuras del todo (la oscuridad del sitio +0,4, hasta el tope) y todas las lámparas, apliques y
+  neones apagados: solo se ve con la linterna.
+- **Alarma de incendios:** suena la sirena (al empezar y cada 12 s), llueve de los aspersores y en cada sitio hay de
+  4 a 9 charcos de agua que resbalan como la lejía (sin hacer daño); al volver a un sitio siguen donde estaban. En
+  dos de ellos (en los sitios pequeños, uno) hay un cable pelado que chisporrotea y cada 1,6 s da un calambrazo a
+  todo el charco: a Johnny, 10 de vida y tieso un momento; a los zombis despiertos, 15 y aturdidos (los números del
+  agua de la tienda de electrónica). Avisa la primera vez que te acercas.
+- **Horda por las escaleras:** a los 4 s bajan zombis por la puerta de las escaleras del fondo del pasillo, de uno en
+  uno, en tres oleadas de 4, 6 y 8 (+15 % por planta, y con la Alerta 1, más), cada vez peores (en el centro
+  comercial, también vigilantes). Entre oleada y oleada, 10 s, o enseguida si ya no queda ninguno. Si Johnny se mete
+  en una tienda o un piso, los que quedan le esperan en el pasillo. Premio: 3 billetes (+1 por planta) y una caja
+  de munición.
+- **Vendedor ambulante:** un superviviente con una mochila enorme y una manta en el suelo con lo que vende, contra la
+  pared de arriba del pasillo, a un lado del ascensor. Los zombis no le hacen caso. Al arrimarse, el juego se para y
+  sale su puesto: tres cosas sorteadas, cada una una vez (botiquín $8, caja de munición $3, molotov $5, granada $6,
+  chaleco +30 de escudo hasta la planta siguiente $10, objeto sorpresa para el banco $6). Paga con los dólares de la
+  partida y, si no llegan, con los ahorrados. No deja comprar lo que no sirve (con la vida llena, sin sitio...).
+- **Lo que cambia respecto al plan:** nada de lo decidido; solo los detalles de arriba (el chaleco usa el icono del
+  casco, y la horda baja por la puerta de las escaleras, no por unas escaleras dibujadas).
+- Prueba: `--captura --evento apagon|incendio|horda|vendedor` (con o sin `--edificio centro`). La prueba larga sigue
+  sin eventos.
 
 ## Por partes
 
@@ -418,6 +562,46 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        con letras; el porrazo cae en un fotograma algo distinto según la dirección.
      - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
+   - ✅ **Trozo 3: el cocinero** (21 oct), con sus animaciones y con el visto bueno del dueño (probado en el móvil, tal cual: el molotov sí le quema y el cinto del delantal queda oscuro). Lo que ha quedado:
+     - **Ya sale en el sorteo** como el antidisturbios (su tienda, la Cocina central): `scripts/cocinero.gd` y
+       `escenas/personajes/cocinero.tscn`, con los números del plan: vida 450 (+25 % por planta), velocidad 60.
+     - **A media distancia:** si Johnny se acerca a menos de 200, se aparta (sin dejar de mirarle: anda hacia atrás);
+       si se aleja a más de 360 o no le ve, va a por él; entre medias da pasitos de lado.
+     - **Abanico:** 0,5 s de aviso (rayas rojas en el suelo por donde irán, mientras echa el brazo atrás) y 3
+       cuchillos que giran (12 cada uno, a 340 y separados 0,28 rad). Solo si ve a Johnny; cada 2,4 s como mucho.
+     - **Lluvia:** tira los cuchillos hacia arriba (0,5 s; se les ve subir) y caen 5 alrededor de Johnny (a entre 60
+       y 150 de él), cada uno con su marca roja 0,8 s antes y uno tras otro cada 0,15 s; el primero, donde va a estar
+       si sigue andando. 12 cada uno. Se quedan clavados 4 s (en el suelo; los del abanico, en la pared). Cada 6,5 s.
+     - **Aceite hirviendo:** «¡CALENTITO!», 0,6 s de preparar el brazo y la sartén vuela 0,8 s con una marca roja
+       donde caerá; deja un charco de 6 s (radio 60) que quema como el molotov: a Johnny, el estado fuego (12 por
+       segundo y 2 s más al salir); a los zombis, los prende. Cada 8 s, si Johnny está a entre 120 y 480.
+     - **Cuchillazo:** si Johnny está a menos de 140, 0,5 s de aviso (un trozo rojo, como el porrazo) y 20; le empuja
+       un poco. Cada 1,4 s.
+     - **Enfadado** («¡A LA OLLA!»): 5 cuchillos en el abanico y más rápidos (430), lluvia de 7 con la marca más
+       corta (0,6 s) y todo más seguido (abanico 1,5 s, lluvia 4,5, sartén 6, cuchillazo 1).
+     - **Decidido al hacerlo** (para contárselo al dueño): su propio aceite no le quema (es el cocinero), pero el
+       fuego del molotov sí (si no, el molotov no le haría nada); a los demás zombis su aceite sí les quema. Los
+       números que no daba el plan (distancias, esperas, lo que tardan las marcas, la lluvia de 7 enfadado) son de
+       prueba: se ajustan jugando. En el código, su sartén es el proyectil "sarten" y su charco, "hirviendo" (el
+       "aceite" es el de la bomba de aceite de Johnny, de la parte 6).
+     - Los cuchillos (`cuchillo.gd`), la sartén (`proyectil.gd`) y el charco de aceite (`charco.gd`: una mancha
+       dorada con burbujas que revientan y vapor) se dibujan con código.
+     - **Su dibujo**, animado con PixelLab sobre su modelo de 72: andar, lanzar (brazo atrás y lanzamiento; vale para
+       el abanico, la lluvia y la sartén), cuchillazo (tajo de arriba abajo), golpe (lo hace al enfadarse) y muerte en
+       las 8 direcciones. **42 generaciones** (5 de la prueba de perfil, 35 de la tanda y 2 de repetir el lanzar de
+       espaldas, que se daba la vuelta), más unas 5 de otra sesión que animó a la vez solo de perfil y no se usan
+       (detalle en `assets/pixellab.json` → `centro-comercial-parte4` → `piezas` → `cocinero-72` → `animaciones`).
+       Lo que lanza sale en el fotograma del brazo del todo adelante (4 en e, se, n y no; 5 en s, ne, o y so) y el
+       cuchillazo hace daño en el del tajo (4 en s, se, e y n; 5 en ne, no, o y so). Se monta con
+       `py tools/jefe_hoja.py cocinero-72 jefe-cocinero`, que además oscurece su sangre (PixelLab la pinta roja viva;
+       se baja toda por igual, también el cinto rojo del delantal). Pegas conocidas: andando de frente y de espaldas
+       es más balanceo que paso; al echar el brazo atrás el cuerpo gira algo hacia la cámara; en el lanzar hacia
+       abajo el cuchillo se alarga como una hoja en un fotograma y hacia abajo a la izquierda sale una raya roja; en
+       el tajo, una raya roja pegada al cuchillo; en el golpe se tuerce un poco de lado hacia arriba y hacia la
+       izquierda.
+     - Tecla de prueba **G**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro --jefe
+       cocinero` lo saca en la 1ª planta, comprueba que su aceite no le quema y hace `captura-jefe.png` (con el
+       aceite, cuchillos clavados, la lluvia marcando el suelo y el abanico recién lanzado).
    - ✅ **Trozo 4: la modista** (21 oct). Lo que ha quedado:
      - **Su tienda, el Taller de costura**, llena de maniquíes de cuerpo entero (unos 23) con su mismo vestido: un
        mueble nuevo, `tallmannequin` (PixelLab, 1 generación), en filas por la sala y por las paredes ("jefe-modista"
@@ -448,9 +632,48 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
-5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
-   y la mejora de la sala de cada uno (un trozo para cada uno).
-6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común, ✅ el rescate de la
+   farmacéutica, ✅ el del técnico con su mejora y ✅ el del ferretero con su puesto; falta la mejora de la sala de
+   la farmacéutica (empezar con un botiquín: va con los objetos de curar).
+6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
+   - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
+     edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:
+
+     | Tienda | De siempre | Nuevos |
+     |---|---|---|
+     | Ferretería | clavos, hacha, llave inglesa, cuchillas, spray | cinta americana, cadena |
+     | Electrónica | táser, extintor | batería, cable |
+     | Restaurante | alcohol, gasolina, mechero, extintor | aceite, bombona de gas |
+     | Supermercado | lejía, alcohol, mechero | hielo seco |
+     | Farmacia | alcohol, lejía | jeringuilla |
+     | Tienda de ropa | cuchillas, spray | perchas |
+
+     - Todos los de la lista de una tienda salen igual de a menudo. En el pasillo se elige una tienda al azar y luego
+       uno de su lista. El jefe de la planta suelta sus dos objetos seguros de su tienda (si no tiene, como en el pasillo).
+     - Lo que no decía el plan: **el baúl pasa de 24 a 32 casillas** (8 por fila, para que siga cabiendo en la
+       pantalla), porque con 26 objetos distintos y las armas creadas no cabían; y en el banco de trabajo, si hay más
+       de 24 cosas, las casillas se hacen más pequeñas (10 por fila).
+     - Tecla de prueba **U**: uno de cada objeto al baúl. `--captura` cuenta lo que sale en cada sitio de los dos
+       edificios y saca `captura-objetos-nuevos.png`, `captura-banco-todo.png` y `captura-baul-todo.png`.
+   - ✅ **Trozo B: las recetas** (21 oct). Las seis que mezclan los dos edificios y tres solo del centro, que el dueño
+     aprobó: el banco de trabajo tiene ahora 24 recetas. Cada arma, con sus números en `Recetas.LISTA`, `Armas.CREADAS`
+     y `Lanzables.ARROJADIZAS`, aprovechando lo que ya había:
+
+     | Arma | Ingredientes | Tipo | Qué hace (con rareza verde) |
+     |---|---|---|---|
+     | Pistola eléctrica | pistola de agua + batería | a distancia | chispas (daño 5, 5 por segundo, depósito de 30) que aturden 0,4 s y saltan al zombi de al lado con medio daño, como la inmovilizadora |
+     | Bomba de aceite | trapo + aceite | arrojadiza (3) | se rompe al caer, como el molotov; el charco resbala y a los 2 s arde: un fuego como el del molotov, un 25 % más grande |
+     | Mangual | mancuernas + cadena | cuerpo a cuerpo | golpe en círculo (daño 16) que echa muy lejos a todos los de alrededor y los deja tirados medio segundo |
+     | Mina despertador | despertador + bombona de gas | arrojadiza (2) | se queda en el suelo haciendo tic-tac (se ve el despertador) y, ya quieta, explota (90) cuando un zombi pasa cerca |
+     | Nube somnífera | spray + jeringuilla | arrojadiza (3) | a los 1,2 s suelta una nube morada que dura 3 s: los zombis que pilla se duermen mientras están dentro y 3 s más, con sus «z» |
+     | Garfio | cuerda + perchas | a distancia | sale con la cuerda (alcance 320), engancha al primer zombi (daño 8) y lo trae hasta delante de Johnny, aturdido; sin munición. A los jefes solo les pega |
+     | Bate helado | bate + hielo seco | cuerpo a cuerpo | cada golpe (17) congela 1 s |
+     | Látigo eléctrico | cable + batería | cuerpo a cuerpo | el alcance del látigo escorpión (daño 12) con la descarga de la inmovilizadora |
+     | Bomba de clavos | cinta americana + clavos | arrojadiza (3) | explota (40) y lanza 14 clavos en todas direcciones que atraviesan, pinchan y hacen sangrar |
+
+     - Los jefes no se congelan, ni se duermen, ni se dejan arrastrar, como pasaba ya con aturdir y prender.
+     - `--captura` (en los dos edificios) prueba cada una contra zombis y saca `captura-arma-<receta>.png`.
 7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). Pendiente: la página del gerente
    (trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
+   ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct).

@@ -9,8 +9,9 @@
 # por donde iba, el cuadro eléctrico encendido o apagado). Los monta mapa.gd, cada uno con su nodo:
 #   frio.gd   la cámara entera               {tipo, sala, avisado}
 #   fuego.gd  casillas de la cocina           {tipo, sala, casillas, focos, arde, apagadas, quemadas, tope, nuevo, avisado}
-#   agua.gd   un charco en la sala de venta   {tipo, sala, casillas, cable, cable_desde, cuadro, corriente, avisado}
-#             con cuadro.gd, el cuadro eléctrico que le quita (y le devuelve) la corriente a la tienda
+#   agua.gd   un charco en la sala de venta   {tipo, sala, casillas, cable, cable_desde, cuadro, corriente, arreglado, avisado}
+#             con cuadro.gd, el cuadro eléctrico que le quita (y le devuelve) la corriente a la tienda; "arreglado":
+#             el técnico ha arreglado el cable (su rescate, averia.gd) y el agua ya no da calambres
 class_name Peligros
 
 const CASILLA := 32
@@ -267,7 +268,7 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 			continue
 		return {"tipo": "agua", "sala": 0, "casillas": charco.keys(), "cable": mejor.agua,
 			"cable_desde": Vector2((mejor.pared.x + 0.5) * CASILLA, mejor.pared.y * CASILLA), "cuadro": cuadro,
-			"corriente": true, "avisado": false}
+			"corriente": true, "arreglado": false, "avisado": false}
 	return {}
 
 

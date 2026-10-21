@@ -6,6 +6,8 @@
 # La corriente es la de toda la tienda: con ella, las estanterías de teles dan luz y la tienda está más clara que
 # un piso; en el cuadro eléctrico (cuadro.gd) se baja la palanca y el agua deja de hacer daño, pero la tienda se
 # queda a oscuras (solo se ve con la linterna). Se puede volver a subir: atraes a la horda al agua y das la luz.
+# Si el técnico la arregla (su rescate, averia.gd), el cable queda empalmado con cinta aislante y el agua ya no da
+# calambres nunca más ("arreglado"); la corriente sigue siendo la de la luz de la tienda.
 #
 # Se dibuja todo con código: el charco (de una vez, con su borde irregular), los brillos que se mueven, las
 # chispitas sobre el agua, los rayos de cada calambrazo y el cable, que baja por la pared y llega hasta el agua.
@@ -28,6 +30,7 @@ var mojado := {}             # las casillas del charco
 var charco: Node2D           # el dibujo del agua (se pinta una vez)
 var chispas: Node2D          # lo eléctrico: luce por sí mismo
 var cuadro: Node2D
+var pared: Node2D            # el cable que baja por la pared
 var teles: Array = []        # las luces de las estanterías de teles
 var luz_cable: PointLight2D
 var brillos: Array = []      # [casilla, x, y, semilla]
@@ -62,7 +65,7 @@ func montar(d: Dictionary, m: Node) -> void:
 	for i in maxi(16, d.casillas.size()):
 		brillos.append([d.casillas.pick_random(), randf_range(4, 24), randf_range(4, 28), randf() * TAU])
 	# lo que va en la pared: el cable que baja hasta el suelo, y el cuadro eléctrico
-	var pared := Node2D.new()
+	pared = Node2D.new()
 	pared.name = "CablePared"
 	pared.position = d.cable_desde + Vector2(0, 1)
 	pared.draw.connect(dibujar_cable_pared.bind(pared))
@@ -119,7 +122,7 @@ func encender(si: bool, avisar := true) -> void:
 	datos.corriente = si
 	for luz in teles:
 		luz.fuerza = 0.8 if si else 0.0
-	luz_cable.visible = si
+	luz_cable.visible = si and not datos.get("arreglado", false)
 	Luz.extra = Peligros.AGUA.oscuro_con if si else Peligros.AGUA.oscuro_sin
 	pulso = 0.0
 	if avisar:
@@ -133,6 +136,15 @@ func cambiar_corriente() -> void:
 	encender(not datos.corriente)
 
 
+# El técnico ha arreglado el cable (averia.gd): ya no hay calambres ni chispas, y se ve el empalme
+func arreglar() -> void:
+	datos.arreglado = true
+	luz_cable.visible = false
+	destello = 0.0
+	charco.queue_redraw()
+	pared.queue_redraw()
+
+
 func en_agua(p: Vector2) -> bool:
 	return mojado.has(Peligros.casilla(p))
 
@@ -141,7 +153,7 @@ func _physics_process(delta: float) -> void:
 	t += delta
 	destello = maxf(0.0, destello - delta)
 	var johnny := get_tree().get_first_node_in_group("jugador")
-	if datos.corriente:
+	if datos.corriente and not datos.get("arreglado", false):
 		if johnny and johnny.vivo and cerca(johnny.global_position, 90.0):
 			Peligros.avisar(self, datos, "¡Ojo! El agua tiene corriente")
 		pulso += delta
@@ -251,7 +263,12 @@ func dibujar_charco() -> void:
 		p = (p / 2.0).floor() * 2.0
 		charco.draw_rect(Rect2(p, Vector2(4, 4)), CABLE)
 		charco.draw_rect(Rect2(p, Vector2(2, 2)), Color("#3c3f47"))
-	# la punta: los hilos de cobre abiertos
+	# la punta: los hilos de cobre abiertos o, arreglado, el empalme con cinta aislante
+	if datos.get("arreglado", false):
+		charco.draw_rect(Rect2(punta + Vector2(-8, -4), Vector2(12, 8)), CABLE)
+		charco.draw_rect(Rect2(punta + Vector2(-6, -2), Vector2(8, 4)), Color("#3f4a5c"))
+		charco.draw_rect(Rect2(punta + Vector2(-6, -2), Vector2(8, 2)), Color("#5d6b80"))
+		return
 	for h in [Vector2(-6, -4), Vector2(-7, 2), Vector2(-4, 6)]:
 		charco.draw_line(punta, punta + h, COBRE, 2.0)
 
@@ -268,7 +285,7 @@ func _draw() -> void:
 
 # Lo eléctrico, que luce solo: chispitas sueltas sobre el agua y, en cada calambrazo, los rayos
 func dibujar_chispas() -> void:
-	if not datos.corriente:
+	if not datos.corriente or datos.get("arreglado", false):
 		return
 	for i in 6:
 		var c: Vector2i = datos.casillas[int(fposmod(t * 13.0 + i * 7.3, 1.0) * datos.casillas.size())]
@@ -289,7 +306,11 @@ func dibujar_cable_pared(pared: Node2D) -> void:
 	pared.draw_rect(Rect2(-10, -72, 20, 14), Color("#2b2d33"))
 	pared.draw_rect(Rect2(-8, -70, 16, 10), Color("#6b7078"))
 	pared.draw_rect(Rect2(-8, -70, 16, 2), Color("#9aa1aa"))
-	pared.draw_rect(Rect2(-2, -66, 6, 4), Color("#1a1b1f"))   # la tapa arrancada
+	if datos.get("arreglado", false):
+		pared.draw_rect(Rect2(-6, -68, 12, 6), Color("#3f4a5c"))   # tapada con cinta aislante
+		pared.draw_rect(Rect2(-6, -68, 12, 2), Color("#5d6b80"))
+	else:
+		pared.draw_rect(Rect2(-2, -66, 6, 4), Color("#1a1b1f"))   # la tapa arrancada
 	# una mancha de quemado alrededor
 	for p in [Vector2(-14, -76), Vector2(10, -74), Vector2(-12, -60), Vector2(8, -58)]:
 		pared.draw_rect(Rect2(p, Vector2(4, 4)), Color(0.08, 0.07, 0.07, 0.6))

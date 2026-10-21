@@ -1,8 +1,11 @@
 # El menú principal (showMenu de src/ui.js): el logo, JUGAR, Opciones (opciones.gd), pantalla completa y salir, y el
 # récord. Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings de src/ui.js): una
 # tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida (escenas/partida.tscn).
+# Debajo de cada tarjeta, el nivel de alerta con el que se juega (alerta.gd): se cambia con las flechas, entre los
+# que estén abiertos, y se apunta en el guardado para la próxima vez.
 # Con "-- --captura" saca fotos (captura-menu.png y captura-edificios.png) y pasa sola a la partida, para seguir
-# con su prueba; con "--edificio centro" además, entra en el centro comercial aunque esté cerrado.
+# con su prueba; con "--edificio centro" además, entra en el centro comercial aunque esté cerrado. Con
+# "--alerta 3", la foto de "Elige edificio" sale con todas las alertas abiertas y la 3 elegida (sin guardarlo).
 extends Control
 
 const LOGO := preload("res://assets/ui/logo.png")
@@ -10,6 +13,7 @@ const LOGO := preload("res://assets/ui/logo.png")
 var centro: CenterContainer       # el menú
 var edificios: CenterContainer    # la pantalla "Elige edificio" (se crea al pulsar JUGAR)
 var tarjetas: HBoxContainer
+var alertas := {}                  # la alerta elegida en cada edificio (alerta.gd)
 
 
 func _ready() -> void:
@@ -97,7 +101,7 @@ func elegir_edificio() -> void:
 	centro.hide()
 	if edificios:
 		edificios.show()
-		tarjetas.get_child(0).grab_focus.call_deferred()
+		primera_tarjeta().grab_focus.call_deferred()
 		return
 	edificios = CenterContainer.new()
 	edificios.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -116,11 +120,76 @@ func elegir_edificio() -> void:
 	tarjetas.add_theme_constant_override("separation", 20)
 	columna.add_child(tarjetas)
 	var s := Guardado.cargar()
+	var args := OS.get_cmdline_user_args()
+	if "--captura" in args and args.find("--alerta") >= 0 and args.find("--alerta") + 1 < args.size():
+		for id in Edificios.LISTA:   # para la foto: todas abiertas y la pedida, elegida (no se guarda)
+			Guardado.edificio(s, id).alerta_max = Alerta.MAX
+			s.edificios[id].alerta = int(args[args.find("--alerta") + 1])
 	for id in Edificios.LISTA:
-		tarjetas.add_child(tarjeta(id, s))
+		var caja := VBoxContainer.new()
+		caja.add_theme_constant_override("separation", 6)
+		caja.add_child(tarjeta(id, s))
+		if Edificios.abierto(s, id):
+			selector_alerta(caja, id, s.edificios.get(id, Guardado.EDIFICIO))
+		tarjetas.add_child(caja)
 	var volver := boton(columna, "Volver", volver_al_menu)
 	volver.custom_minimum_size.x = 180
-	tarjetas.get_child(0).grab_focus.call_deferred()
+	primera_tarjeta().grab_focus.call_deferred()
+
+
+func primera_tarjeta() -> Button:
+	return tarjetas.get_child(0).get_child(0)
+
+
+# Debajo de la tarjeta: "< Alerta 2 >" y lo que trae. Sin ninguna abierta, solo cómo se abre la primera
+func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
+	var maximo: int = p.alerta_max
+	alertas[id] = clampi(p.alerta, 0, maximo)
+	var explica := Label.new()
+	explica.theme_type_variation = "Sub"
+	explica.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	explica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	explica.custom_minimum_size = Vector2(300, 0)
+	if maximo == 0:
+		explica.text = "Complétalo para abrir la Alerta 1"
+		explica.modulate = Color(1, 1, 1, 0.6)
+		caja.add_child(explica)
+		return
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 8)
+	caja.add_child(fila)
+	caja.add_child(explica)
+	var menos := Button.new()
+	menos.text = "<"
+	menos.custom_minimum_size = Vector2(44, 0)
+	fila.add_child(menos)
+	var nombre := Tema.icono_y_texto("alerta", "", 24)
+	nombre.custom_minimum_size.x = 170
+	nombre.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_child(nombre)
+	var mas := Button.new()
+	mas.text = ">"
+	mas.custom_minimum_size = Vector2(44, 0)
+	fila.add_child(mas)
+	var texto: Label = nombre.get_child(nombre.get_child_count() - 1)
+	var poner := func():
+		var n: int = alertas[id]
+		texto.text = "%s (de %d)" % [Alerta.nombre(n), maximo]
+		nombre.get_child(0).modulate = Color.WHITE if n > 0 else Color(1, 1, 1, 0.35)
+		explica.text = Alerta.resumen(n)
+		menos.disabled = n <= 0
+		mas.disabled = n >= maximo
+	poner.call()
+	var cambiar := func(paso: int):
+		alertas[id] = clampi(alertas[id] + paso, 0, maximo)
+		poner.call()
+		Sonido.tocar("click")
+		var n: int = alertas[id]
+		if not "--captura" in OS.get_cmdline_user_args():
+			Guardado.cambiar(func(g): Guardado.edificio(g, id).alerta = n)
+	menos.pressed.connect(cambiar.bind(-1))
+	mas.pressed.connect(cambiar.bind(1))
 
 
 func volver_al_menu() -> void:
@@ -193,5 +262,6 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 
 func jugar_partida(id := "apartamentos") -> void:
 	Edificios.elegido = id
+	Alerta.nivel = alertas.get(id, 0)
 	get_tree().change_scene_to_file("res://escenas/partida.tscn")
 

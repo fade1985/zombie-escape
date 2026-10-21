@@ -24,7 +24,7 @@ const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda pa
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 103           # (alargada para los zombis y los minijefes del centro comercial)
+const EXPO_FILAS := 108           # (alargada para los zombis y los minijefes del centro comercial)
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
@@ -40,6 +40,8 @@ const POR_NIVEL := 1.1
 const LEJOS_PUERTA := 340.0       # ningún zombi espera a menos de esto de la puerta de entrada
 
 static var rng := RandomNumberGenerator.new()
+# Si no es 0, las plantas salen siempre iguales: cada una con esta semilla más su número (el reto del día y las pruebas)
+static var semilla := 0
 
 
 static func nombre_planta(num: int) -> String:
@@ -60,7 +62,7 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    los escaparates de las tiendas de arriba ({x, tienda})
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
-#                    el guardia la suelte al caer)
+#                    el guardia la suelte al caer; con la Alerta 5, igual: la lleva un vecino, {"llave": true} en zombis)
 #   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
 #                    pasillo, que lleva la tarjeta (zombi_guardia.gd)
 #   edificio         el id del edificio (edificios.gd)
@@ -75,7 +77,11 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd)
 # "su_jefe": el zombi jefe de esta planta (en el centro comercial, el minijefe que le toca; "" = el del edificio)
 static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dictionary:
-	rng.randomize()
+	if semilla != 0:
+		rng.seed = semilla + num
+		seed(semilla + num)   # también el dado de siempre: lo usan los shuffle() de las plantas y las tiendas
+	else:
+		rng.randomize()
 	var ed: Dictionary = Edificios.datos(edificio)
 	var tiendas: bool = ed.generador == "tienda"
 	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
@@ -225,6 +231,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			pos = sala.centro
 	if ed.cerrojo == "llave":
 		planta.llave = {"sitio": donde, "pos": pos}
+		# con la Alerta 5 (alerta.gd), no está en el suelo: la lleva un vecino que espera allí y la suelta al caer
+		if Alerta.guardia() > 1.0:
+			planta.llave = {"sitio": -1, "pos": Vector2.ZERO}
+			planta.sitios[donde].zombis.append({"tipo": "normal", "pos": pos, "llave": true})
 	# El científico muerto de Velaria (historia.gd), en una habitación de otro apartamento normal si se puede (que
 	# no sea el baño del superviviente). Si sale o no, lo decide la partida: solo si su página falta por encontrar
 	var otros: Array = normales.filter(func(i): return i != donde)
@@ -295,7 +305,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	for s in apt.salas:
 		area += s.casillas
 	# en los pisos grandes hay más, pero no en proporción: si no, los de 3 dormitorios serían eternos
-	var presupuesto := (BASE + nivel * POR_NIVEL) * clampf(area / 700.0, 0.8, 1.4)
+	var presupuesto := (BASE + nivel * POR_NIVEL) * clampf(area / 700.0, 0.8, 1.4) * Alerta.mas_zombis()   # A1: más
 	var peso := func(s: Dictionary) -> float:
 		return s.casillas * (0.5 if s.uso == "bano" else 1.0)   # en los baños, pocos
 	var total := 0.0

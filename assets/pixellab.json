@@ -1464,7 +1464,75 @@
         "size": "72x72",
         "estilo": "south del zombi venenoso 72: 'Match the pixel art style of this zombie: same outline thickness, same pixel size, same level of detail and shading, same rotting skin. Do not copy his body shape, clothes or colors.'",
         "alto_px": 71,
-        "description": "a huge fat zombie chef boss, about 68 pixels tall and 56 pixels wide, very big round belly, sickly grey-green rotting skin, pale dead eyes, open mouth with jagged teeth and blood on his chin, tall white chef's hat crumpled and stained with blood, white double-breasted chef jacket torn and covered in blood and grease stains, dark grey checkered chef trousers, black clogs, a dirty apron stained red tied around his belly, holding a big butcher's meat cleaver in his right hand, kitchen knives tucked in his apron belt, standing wide and hunched, menacing, crisp pixel art, dark outline, detailed shading"
+        "description": "a huge fat zombie chef boss, about 68 pixels tall and 56 pixels wide, very big round belly, sickly grey-green rotting skin, pale dead eyes, open mouth with jagged teeth and blood on his chin, tall white chef's hat crumpled and stained with blood, white double-breasted chef jacket torn and covered in blood and grease stains, dark grey checkered chef trousers, black clogs, a dirty apron stained red tied around his belly, holding a big butcher's meat cleaver in his right hand, kitchen knives tucked in his apron belt, standing wide and hunched, menacing, crisp pixel art, dark outline, detailed shading",
+        "animaciones": {
+          "nota": "2026-10-21. Copiado del antidisturbios: todo con PixMiniMax (animate_character, mode pixminimax) directamente sobre ffe46fdf, 1 generación por dirección (a 72 px, 8 y 12 fotogramas cuestan lo mismo). Cada animación es un grupo: la primera dirección (east, la prueba de perfil) lo crea y las demás se añaden con animation_group_id + el mismo animation_name, de una en una (las que llevan partida no admiten más). Andar: sin fotograma de partida. Lanzar, cuchillazo y golpe: partida y final = dibujo quieto pegado en (28, 44) de un lienzo de 128x128 (assets/sources/cocinero-72/partida/<dirección>.png; los upload:<id> están en partida/subidas.txt y caducan a los 3 días). Muerte: solo partida. Bajado grupo a grupo con las URL que da get_character (no con tools/bajar_zip.py: en el personaje hay grupos de otra sesión con los mismos nombres y se mezclarían) → assets/sources/cocinero-72/{walk,lanzar,cuchillazo,golpe,muerte}/<dirección>-<n>.png. Cada carpeta tiene el fotograma 0 (el de partida) y los generados: 0-8, y 0-12 en la muerte. Montado con py tools/jefe_hoja.py cocinero-72 jefe-cocinero → assets/sprites/jefe-cocinero.png y .tres (56 animaciones, 400 fotogramas, casilla 127x121; offset del Sprite en su escena Vector2(-64, -101)).",
+          "subject_description": "a huge fat zombie chef with a tall white chef's hat, a blood-stained white chef jacket, a red-stained apron over his big round belly, dark checkered trousers, holding a big butcher's meat cleaver in his right hand (de espaldas: '..., seen from behind')",
+          "initial_pose": "Las mismas que el antidisturbios (east 'facing right', north 'seen from behind, his back to the camera'...). El andar, sin initial_pose.",
+          "frase_delante": {
+            "south": "Strict front view the whole time, facing the camera, he never turns to the side.",
+            "south-east": "Strict three-quarter front view the whole time, facing toward the camera and to the right, he never turns to the side.",
+            "south-west": "Strict three-quarter front view the whole time, facing toward the camera and to the left, he never turns to the side.",
+            "north": "Strict back view the whole time, he never turns to face the camera.",
+            "north-east y north-west": "He keeps the same three-quarter back view the whole time and never turns to face the camera.",
+            "east y west": "nada",
+            "cuándo": "En andar, lanzar, cuchillazo y golpe, en todas. En la muerte, solo las de espaldas (north, north-east, north-west)."
+          },
+          "andar": {
+            "group": "dd0e2baf-48ac-4c2d-bb94-eef88943d6f7",
+            "fotogramas": "8 + el de partida (0-8; el 8 vuelve a la postura del 0, ciclo = 0 a 7). Lienzo 104x104.",
+            "action_description": "He lumbers forward in place in a slow, heavy, seamless looping walk cycle: his short legs step alternately with heavy waddling steps, his big round belly bounces and his body sways slightly from side to side, the butcher's cleaver held low in his right hand the whole time and the tall chef's hat staying on his head. He keeps exactly the same view and facing as the first frame the whole time: he never turns. The last frame returns to the starting pose so the cycle loops.",
+            "variantes": "west y south-west en una sola llamada (sin frase delante); las demás de una en una. Todas a la primera.",
+            "pegas": "Ninguna grave: no se gira, no pierde el cuchillo ni el gorro. De frente y de espaldas es más balanceo que paso."
+          },
+          "lanzar": {
+            "group": "e5b16fb2-1e9a-4266-971d-18e177e726a6",
+            "direcciones_usadas": "south, south-east, east, north-east, west, south-west (north y north-west, de lanzar2)",
+            "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Generado a 128x148; guardado más ancho (152-184 x 144-192).",
+            "action_description": "He throws something hard: he swings his right arm far back behind his shoulder, still gripping the butcher's cleaver, and leans his heavy body back, then lunges forward and whips the arm forward hard in the direction he is facing, as if hurling a knife, his big belly and apron swinging with the motion. He never lets go of the cleaver. Then he pulls the arm back and settles cleanly into the starting stance. The tall chef's hat stays on his head. He never turns. No effects, no particles, no motion lines.",
+            "suelta": "Brazo del todo adelante (donde sale el cuchillo o la sartén): fotograma 4 en east, south-east, north y north-west; 5 en south, north-east, west y south-west. Brazo atrás en el 1-3; del 6 al 8 vuelve a la postura.",
+            "repetido": {
+              "group": "ba8fe147-941e-4707-b57b-d2b6cbfdd2a5",
+              "nombre_en_pixellab": "lanzar2",
+              "direcciones": "north y north-west",
+              "motivo": "Con el texto común, en north (fotogramas 1-4) y north-west (4-7) se daba la vuelta y enseñaba la cara y el delantal. Los fotogramas descartados están en assets/sources/cocinero-72/descartes/lanzar/ (siguen en PixelLab en el grupo e5b16fb2).",
+              "action_description_north": "Strict back view the whole time: we only ever see his back and the back of his hat, never his face, his belly or his apron. He throws something hard overhand, away from the camera: he raises his right arm with the cleaver up behind his head, then whips it forward and up, away from the camera, as if hurling a knife far into the distance, his heavy body leaning forward away from the camera. He never lets go of the cleaver. Then he lowers the arm and settles cleanly into the starting stance. The tall chef's hat stays on his head. His feet stay planted and he never turns around. No effects, no particles, no motion lines.",
+              "action_description_north_west": "He keeps the same three-quarter back view the whole time: we only ever see his back and the back of his hat, never his face, his belly or his apron. He throws something hard overhand, away from the camera and to the left: he raises his right arm with the cleaver up behind his head, then whips it forward and up, away from the camera and to the left, as if hurling a knife far into the distance, his heavy body leaning forward in the direction he is facing. He never lets go of the cleaver. Then he lowers the arm and settles cleanly into the starting stance. The tall chef's hat stays on his head. His feet stay planted and he never turns around. No effects, no particles, no motion lines.",
+              "resultado": "north: sale bien, siempre de espaldas, lanza por encima de la cabeza hacia el fondo. north-west: mejor que el primero, pero en el 4-6 se pone de perfil mirando a la izquierda y en el 4-5 el cuchillo parece un cuchillo largo; se dejó así."
+            },
+            "pegas": "Al echar el brazo atrás el cuerpo gira algo hacia la cámara (east 1-3, west 4-7): se deja, es el giro de un lanzamiento. En south el cuchillo se alarga como una hoja en el 5; en south-west sale una raya roja en el 5 y motas rojas en el 1-2 (las motas las borra jefe_hoja, la raya no)."
+          },
+          "cuchillazo": {
+            "group": "dacbedac-b87e-41ab-ac6a-c757462c1946",
+            "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Generado a 128x148 (guardado 128x144-168).",
+            "action_description": "He chops with his butcher's cleaver: he raises the big meat cleaver high above his head with his right arm, then brings it down hard in a heavy vertical chop in front of him, in the direction he is facing, his fat body bending forward with the blow. Then he lifts the cleaver back and settles cleanly into the starting stance. The tall chef's hat stays on his head. He never turns. No effects, no particles, no motion lines.",
+            "impacto": "El cuchillo en alto en el 2-3 (3-4 donde cae en el 5) y el tajo, con el cuerpo doblado, en el fotograma 4 en south, south-east, east y north; 5 en north-east, north-west, west y south-west. Del 6 al 8 vuelve a la postura.",
+            "pegas": "Ninguna dirección se giró ni perdió el cuchillo o el gorro. En el fotograma del tajo PixelLab pinta una raya roja vertical pegada al cuchillo (como una salpicadura); jefe_hoja no la borra porque toca el cuchillo."
+          },
+          "golpe": {
+            "group": "b6a8518f-e6d1-4eda-a7dc-206c5e05ebe6",
+            "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Generado a 128x144/148.",
+            "action_description": "He flinches from a hard blow to his body: his head and shoulders jolt backward, away from where he is facing, his big belly wobbles, and he staggers one short heavy step backward, off balance, still gripping the cleaver in his right hand. He stays on his feet. Then he settles cleanly into the starting stance. Nothing spills: no effects, no particles.",
+            "pegas": "Se encoge y da un paso atrás en las 8 sin caerse. Motas rojas sueltas a un lado (jefe_hoja borra las pequeñas). En north (2-4) y north-east (1-4) se tuerce un poco de lado y en west (3-5) se vuelve algo hacia la cámara; no se repitió."
+          },
+          "muerte": {
+            "group": "bf150646-1b44-4de4-ab89-9d91a239e785",
+            "fotogramas": "12 + el de partida (0-12), solo partida. Generado a 128x144/148; guardado hasta 168x152 al caer.",
+            "action_description": "He dies and collapses, never turning. His knees buckle, he lets go of the butcher's cleaver, and he topples heavily backward, toward <lado>, crashing flat onto the floor on his back, arms flopping out to the sides, his big belly up, his feet toward <lado> and his head toward <lado>, the cleaver lying flat on the floor beside him. Then he lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles.",
+            "lado_por_direccion": "Los mismos textos que el antidisturbios (ver antidisturbios-72 → animaciones → muerte → lado_por_direccion).",
+            "pegas": "Salió bien a la primera en las 8: cae de espaldas hacia el lado pedido, con el cuchillo en el suelo a su lado, y se queda quieto desde el 7-8. Sin charco. En south, los fotogramas 4-6 de la caída se ven algo desde arriba."
+          },
+          "otra_sesion": "A la vez que esta, otra sesión animó el mismo personaje (el dueño la paró). Dejó en PixelLab, solo en east: andar 087f1b62 ('He waddles forward in place...'), lanzar d6ee30e3 ('He throws kitchen knives...', con cuchillos volando y una raya marrón), cuchillazo 6a46dd2c ('He chops with his big meat cleaver...'), golpe 7587a1ef (con una salpicadura roja) y muerte 6bc77eb4 (13 fotogramas). Se compararon con los de aquí y no se usa ninguno: los de aquí salen más limpios y ya tenían su grupo con las otras direcciones.",
+          "sin_usar_en_pixellab": "lanzar e5b16fb2 en north y north-west (sustituidos por lanzar2) y los 5 grupos de la otra sesión. Nada se borró de PixelLab. Borrar solo con confirmación del dueño.",
+          "coste": {
+            "fecha": "2026-10-21",
+            "generaciones": 42,
+            "desglose": "5 de la prueba de perfil (las cinco en east) + 35 de la tanda (7 direcciones de cada una) + 2 de repetir lanzar en north y north-west. Cada trabajo costó 1 (la muerte de 12 fotogramas también).",
+            "saldo_antes": 724.05,
+            "saldo_despues": 631.8,
+            "nota": "El saldo bajó 92,25: 42 son de este trabajo según los recibos de cada llamada; el resto, de otras sesiones que generaban a la vez (la otra del cocinero y las de los personajes 42b5ac10 y 69ab29bc)."
+          }
+        }
       },
       "modista-72": {
         "character_id": "96746c5e-bf41-4e5f-9d04-416616a0c382",
