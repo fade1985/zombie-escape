@@ -13,6 +13,9 @@
 # ella (tools/grabar_musica.mjs → assets/musica/, ya con su volumen) que se encadenan al azar con fundidos:
 #     Sonido.musica("explorar")   # "menu", "explorar", "jefe" o "" (se apaga despacio)
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
+#
+# Cuando el juego no se ve (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana sin foco en el
+# ordenador) se quita todo el sonido, y vuelve al volver: si no, en el móvil la música seguía sonando fuera del juego.
 extends Node
 
 const MEZCLA := 22050        # muestras por segundo: de sobra para estos pitidos y gasta la mitad
@@ -82,6 +85,9 @@ var sonando: AudioStreamPlayer = null   # de los dos reproductores de música, e
 var otro: AudioStreamPlayer = null
 var ultimo_tramo := ""   # para no repetir el mismo tramo dos veces seguidas
 var queda := 0.0         # segundos que le quedan al tramo que suena
+var quieto := false      # sin sonido a propósito (el ajuste de Opciones, o la prueba con --captura)
+var fuera := false       # el juego no se ve: sin sonido hasta que vuelva
+var al_ocultar: JavaScriptObject   # (web) el aviso del navegador cuando la página se oculta o vuelve a verse
 
 
 func _ready() -> void:
@@ -96,6 +102,27 @@ func _ready() -> void:
 	if "--captura" in OS.get_cmdline_user_args():
 		silenciar(true)
 	musica_si(Guardado.cargar().ajustes.musica)
+	if OS.has_feature("web"):
+		# en el navegador, lo fiable es su aviso de "la página se ha ocultado" (cambiar de app, bloquear el móvil...)
+		al_ocultar = JavaScriptBridge.create_callback(_visibilidad)
+		JavaScriptBridge.get_interface("document").addEventListener("visibilitychange", al_ocultar)
+
+
+func _visibilidad(_args: Array) -> void:
+	fuera = bool(JavaScriptBridge.eval("document.hidden", true))
+	aplicar_silencio()
+
+
+# Fuera del navegador: cuando la ventana pierde el foco o la app pasa a segundo plano
+func _notification(que: int) -> void:
+	if OS.has_feature("web"):
+		return
+	if que == NOTIFICATION_APPLICATION_FOCUS_OUT or que == NOTIFICATION_APPLICATION_PAUSED:
+		fuera = true
+		aplicar_silencio()
+	elif que == NOTIFICATION_APPLICATION_FOCUS_IN or que == NOTIFICATION_APPLICATION_RESUMED:
+		fuera = false
+		aplicar_silencio()
 
 
 # Suena un efecto (si no sonó hace nada y lleva "hueco")
@@ -195,11 +222,16 @@ func jingle(gana: bool) -> void:
 
 # Quita o pone todo el sonido (efectos y música)
 func silenciar(si: bool) -> void:
-	AudioServer.set_bus_mute(0, si)
+	quieto = si
+	aplicar_silencio()
 
 
 func silenciado() -> bool:
-	return AudioServer.is_bus_mute(0)
+	return quieto
+
+
+func aplicar_silencio() -> void:
+	AudioServer.set_bus_mute(0, quieto or fuera)
 
 
 # La música encendida o apagada (el ajuste del menú de pausa)
