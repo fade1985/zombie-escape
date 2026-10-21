@@ -418,6 +418,32 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        con letras; el porrazo cae en un fotograma algo distinto según la dirección.
      - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
+   - ✅ **Trozo 5: la mascota** (21 oct). Lo que ha quedado:
+     - **La mascota** (`scripts/mascota.gd`, `escenas/personajes/mascota.tscn`), con los números del plan (vida 420,
+       +25 % por planta; velocidad 140). **Embestida:** se pone mirando a Johnny, rasca el suelo 0,6 s (enfadada,
+       0,4 s) con la franja roja marcando por dónde irá y sale a 520, como mucho 1,1 s; si te pilla, 22 y te tira;
+       esquivando se la pasa de largo; si se estrella contra una pared o un mueble, mareada 1,8 s con estrellitas.
+       **Salto:** se agacha 0,35 s y salta hacia donde estás; en el aire (0,8 s, no se le puede dar) se ve en el
+       suelo su sombra creciendo con un aro rojo donde va a caer; al aterrizar, 18 y empuja a lo que esté en el
+       círculo (radio 90), con temblor y polvo. Grita «¡ABRAZOS GRATIS!» al embestir.
+     - **Lo que cambió respecto al plan:** el mareo no tiene animación propia: usa el golpe, con balanceo y
+       estrellitas hechos con código; enfadada (3 embestidas seguidas) **rebota en las paredes** («¡BOING!») y solo
+       se marea si se estrella en la última; el salto se dibuja en tres tiempos (agacharse, aire y caída) y la
+       altura la pone el código (`ALTURA_SALTO` 150), no el dibujo.
+     - **Lo común pasó a `minijefe.gd`:** la carrera en línea recta (`embestir()`, `pared_chocada()`,
+       `estrellarse()`), la franja roja y el estado "atontado" con estrellitas, que ahora usan la mascota y el
+       antidisturbios (que se comporta igual que antes).
+     - **Su dibujo:** modelo nuevo a 72 copiando el de 128 (6 generaciones) y animaciones de PixelLab sobre él:
+       andar, embestida, salto, golpe y muerte en las 8 direcciones. **47 generaciones en total** (detalle, textos y
+       pegas en `assets/pixellab.json` → `centro-comercial-parte4` → `mascota-72` → `animaciones`). Se monta con
+       `py tools/jefe_hoja.py mascota-72 jefe-mascota` (que ahora lleva las animaciones propias de cada jefe y le
+       quita a la embestida el primer fotograma, que sale de pie). Pegas conocidas: el golpe gira la cara de tres
+       cuartos hacia la cámara en unos 4 de 9 fotogramas (el dueño lo dio por bueno); al aterrizar el salto deja
+       alguna nube de polvo dibujada; andando de frente y de espaldas es sobre todo balanceo, y a mitad del ciclo
+       gira un poco la cabeza.
+     - Tecla de prueba **U**; también en la exposición (F9, con una fila más). `--captura --edificio centro --jefe
+       mascota` hace `captura-jefe.png` con la mascota saltando y su sombra (con `--jefe <nombre>` vale para
+       cualquier jefe).
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.

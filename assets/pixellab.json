@@ -1489,9 +1489,65 @@
         "alto_px": 70,
         "description": "a giant shopping mall mascot costume boss: a huge plush teddy bear costume about 68 pixels tall, standing on two legs, dirty faded mustard-yellow fur, matted and torn, white stuffing coming out of the rips, blood stains, a round belly with a faded round patch, the big cartoon bear head is torn open at the face and through the hole you see the real face of a zombie inside with sickly grey-green rotting skin, pale dead eyes and a bloody mouth, big round bear ears (one of them ripped), huge padded paws with dirty claws poking through the fabric, short thick legs, standing hunched forward and menacing, crisp pixel art, dark outline, detailed shading",
         "nota": "Rehecha a 72 copiando mascota-128 (create_character_pro_flash, view low top-down, plantilla mannequin), como la portera a 72. Vistas en assets/sources/mascota-72/rotations/ (68-70 px de alto). Salió a la primera. La de 128 no se ha borrado.",
+        "animaciones": {
+          "nota": "2026-10-21. Todo con PixMiniMax (animate_character, mode pixminimax) directamente sobre 42b5ac10, una dirección por llamada. 1 generación por trabajo (las de 12 fotogramas también). Cada animación es un grupo: la primera dirección lo crea y las demás se añaden con animation_group_id + el mismo animation_name. Andar y embestida: sin fotograma de partida. Salto y golpe: partida y final = dibujo quieto pegado en (28, 44) de un lienzo de 128x128 (assets/sources/mascota-72/partida/<dirección>.png; los upload:<id> están en partida/subidas.txt y caducan a los 3 días). Muerte: solo partida. De espaldas (north, north-east, north-west) el subject_description lleva ', seen from behind' y el texto empieza con la frase de no girarse; va una dirección por llamada. Bajado con py tools/bajar_zip.py 42b5ac10-26be-45db-b94a-6772483cf4b2 mascota-72 → assets/sources/mascota-72/{walk,embestida,salto,golpe,muerte}/<dirección>-<n>.png (andar va a walk/; el grupo 'golpe2' se pasó a golpe/ y la golpe vieja a descartes/golpe/). Cada carpeta tiene el fotograma 0 (el de partida o la vista quieta, que PixelLab guarda delante) y luego los generados: 9 archivos en las de 8 fotogramas (0-8) y 13 en las de 12 (0-12). Lienzos: andar y embestida 96-100; salto, golpe y muerte 128x136-144 o más. La hoja se monta con py tools/jefe_hoja.py mascota-72 jefe-mascota (andar: ciclo = 0 a 7; embestida: se quita el 0, que sale de pie).",
+          "subject_description": "a giant zombie teddy bear mascot costume with dirty mustard-yellow fur, white stuffing coming out of the rips and a grey-green zombie face inside its torn bear head (de espaldas: '... seen from behind')",
+          "initial_pose": {
+            "south": "facing the camera",
+            "north": "seen from behind, his back to the camera",
+            "east": "facing right",
+            "west": "facing left",
+            "south-east": "in three-quarter front view, facing toward the camera and to the right",
+            "south-west": "in three-quarter front view, facing toward the camera and to the left",
+            "north-east": "in three-quarter back view, facing away from the camera and to the right",
+            "north-west": "in three-quarter back view, facing away from the camera and to the left"
+          },
+          "frases_de_direccion": "Delante del texto, según la dirección: south 'Strict front view the whole time, facing the camera, he never turns to the side.'; south-east / south-west 'Strict three-quarter front view the whole time, facing toward the camera and to the right / left, he never turns to the side.'; north 'Strict back view the whole time, he never turns to face the camera.'; north-east / north-west 'He keeps the same three-quarter back view the whole time and never turns to face the camera.'; east y west nada (salvo el golpe, que lleva 'Strict side view the whole time, facing right / left: he never turns toward the camera and his face stays hidden inside the bear head.').",
+          "andar": {
+            "group": "7aa82590-b270-4c3e-a119-6f98f473a7bc",
+            "fotogramas": "8 + el de la vista quieta (archivos 0-8; el 8 vuelve a la postura del 0, ciclo = 0 a 7). Lienzo 96-100.",
+            "action_description": "He lumbers forward in place in a heavy, clumsy, seamless looping walk cycle: his short thick legs step alternately with big heavy steps, his huge padded paws swing a little at his sides and his big bear head bobs and sways with each step. He keeps exactly the same view and facing as the first frame the whole time: he never turns. The last frame returns to the starting pose so the cycle loops.",
+            "pegas": "Ninguna se giró del todo, pero el oso se balancea mucho: en east los fotogramas 6-8 giran un poco la cabeza hacia la cámara; en south-east se gira algo a mitad del ciclo; en north-east y north-west asoma la cara de lado a media marcha. De frente (south) y de espaldas (north) casi no mueve las piernas, es sobre todo el balanceo del cuerpo y la cabeza."
+          },
+          "embestida": {
+            "group": "9133d6f9-53b3-4ff5-8bc7-eb89174bcbf0",
+            "fotogramas": "8 + el de partida (archivos 0-8). El 0 sale de pie (la vista quieta): al montar se quita, y la carrera va de 1 a 8 en bucle. Lienzo 96-100.",
+            "action_description": "He charges forward in place in a fast, furious, seamless looping run cycle, like a raging bull: he leans far forward with his big bear head lowered, his short thick legs pounding in big quick strides and his huge padded paws stretched out in front of him ready to grab. From the second frame on he is already running at full speed. He keeps exactly the same view and facing as the first frame the whole time: he never turns. No effects, no dust, no motion lines.",
+            "pegas": "La mejor de todas: sale limpia en las 8 direcciones, inclinado hacia delante y con las zarpas por delante, sin giros ni polvo."
+          },
+          "salto": {
+            "group": "b442a549-d65e-4951-a513-37b694443cba",
+            "fotogramas": "12 + el de partida (archivos 0-12), partida y final = dibujo quieto. Lienzo 128x136-144. 0-3 se agacha (en south 0-2), 4-8 en el aire con las zarpas arriba y las piernas recogidas, 9-12 cae y se levanta. En mascota.gd: DESPEGUE = 4, ATERRIZA = 9; la altura del salto la pone el código (ALTURA_SALTO 150) y se dibuja encima la sombra del suelo.",
+            "action_description": "He jumps up high and comes crashing down in the same spot: first he crouches low, bending his short thick legs, then he springs up off the ground with his huge padded paws raised high above his big bear head and his legs tucked under him, hangs in the air for a moment, then drops straight down and lands heavily on both feet with his knees bent, and finally stands back up into the starting stance. He never turns. No effects, no dust, no shadow, no motion lines.",
+            "pegas": "Aunque el texto dice 'no dust', al aterrizar sale una nube de polvo blanca o naranja en south (8-11), south-east, north-east (9-11), north-west y west (9-10); las motas pequeñas se quitan al montar (limpiar() de jefe_hoja.py) pero las nubes grandes se quedan. En east y west, en el aire, el cuerpo se inclina un poco."
+          },
+          "golpe": {
+            "group": "9b36dd59-3438-48ff-b683-25deec153d77",
+            "nombre_en_pixellab": "golpe2",
+            "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Lienzo 128x136-144. Se usa también para el mareo (balanceo y estrellitas con código).",
+            "action_description": "He flinches from a hard blow: his big bear head and shoulders jolt backward away from where he is facing, his arms flail and he staggers one short heavy step backward, off balance and dizzy. He stays on his feet. Then he settles cleanly into the starting stance. Nothing comes off him: no stuffing, no effects, no particles. (south: 'Strict front view the whole time, facing the camera, he never turns to the side.' delante; east y west: 'Strict side view the whole time, facing right / left: he never turns toward the camera and his face stays hidden inside the bear head.')",
+            "pegas": "Se tambalea hacia atrás bien en las 8, pero gira la cara de tres cuartos hacia la cámara en unos 4 de los 9 fotogramas (east 2-5, west 1-6; en north-east y north-west asoma un ojo verde de lado). En north salen chispas naranjas sueltas (son píxeles aislados: se quitan al montar). El dueño lo dio por bueno el 21 oct (a un golpe a los lados un giro así dura unos 0,3 s y a ese tamaño apenas se nota).",
+            "primera_version": {
+              "group": "82ad02a2-2699-402e-935f-eea015a474b3",
+              "nombre_en_pixellab": "golpe",
+              "nota": "Solo east (descartada, fotogramas en assets/sources/mascota-72/descartes/golpe/). Con el texto 'He flinches from a hard blow: his big bear head and shoulders jolt backward, away from where he is facing ...' (sin la frase de lado) se giraba de frente a la cámara en 7 de 9 fotogramas. Se repitió añadiendo 'Strict side view the whole time, facing right: he never turns toward the camera and his face stays hidden inside the bear head.' NO se borró de PixelLab."
+            }
+          },
+          "muerte": {
+            "group": "061150d4-53fe-4628-b5df-abb252d1156b",
+            "fotogramas": "12 + el de partida (0-12), solo partida. Lienzo 128x136-144 (más ancho al caer).",
+            "action_description": "He dies and collapses, never turning. His knees buckle, his big padded paws drop, and he topples heavily backward, toward <lado>, crashing flat onto the floor on his back, his arms and legs flopping out to the sides, his feet toward <lado> and his head toward <lado>. Then he lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles.",
+            "lado_por_direccion": "Como el antidisturbios (antidisturbios-72 → animaciones → muerte → lado_por_direccion): east cae hacia la izquierda ('toward the left ... feet toward the right, head toward the left'); west hacia la derecha; south se aleja de la cámara ('away from the camera, toward the top of the screen ... feet toward the bottom of the screen and head toward the top'); north hacia la cámara (delante 'Strict back view the whole time, he never turns to face the camera.'); south-east 'toward the upper left of the screen ... feet toward the lower right and head toward the upper left'; south-west 'upper right ... feet lower left, head upper right'; north-east 'lower left ... feet upper right, head lower left'; north-west 'lower right ... feet upper left, head lower right' (los dos de espaldas con la frase de 'three-quarter back view').",
+            "pegas": "Salió bien a la primera en las 8: cae de espaldas hacia el lado pedido y queda tendido y quieto desde el fotograma 7-8 (los últimos 4-5 casi iguales), sin charco. De espaldas (north, north-east, north-west) queda boca arriba con la cara verde del zombi dentro de la cabeza a la vista."
+          },
+          "sin_usar_en_pixellab": "Grupo golpe 82ad02a2-2699-402e-935f-eea015a474b3 (solo east, la primera versión, que se giraba de frente). Nada se borró de PixelLab. Borrar solo con confirmación del dueño."
+        },
         "coste": {
-          "generaciones": 6,
-          "saldo_antes": 713.05
+          "fecha": "2026-10-21",
+          "generaciones": 47,
+          "desglose": "6 del modelo + 41 de las animaciones (cada trabajo costó 1): andar 8, embestida 8, salto 8, muerte 8, golpe 8 + 1 de la primera versión del golpe en east que se descartó.",
+          "saldo_antes": 713.05,
+          "nota": "No se anota el saldo de después: otras sesiones generaban a la vez (el cocinero y la modista) y no se puede separar lo gastado."
         }
       },
       "gerente-128": {
