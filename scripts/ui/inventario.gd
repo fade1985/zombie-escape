@@ -7,24 +7,27 @@
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): los objetos guardados de otras partidas y las armas
 #     creadas en el banco. Un arma creada se puede sacar para esta partida (fase 7b2): la de cuerpo a cuerpo o
 #     de fuego va a la mano (y la que llevaba, al inventario); las arrojadizas, al botón de lanzar.
-#   - Banco de trabajo (al arrimarse a él): arriba, todo lo que se puede combinar (las armas de la receta que
-#     lleva y los objetos de la mochila y del baúl). Se tocan dos cosas, suben a la mesa y, si hacen una receta
-#     (recetas.gd), se puede crear el arma: sale con una rareza al azar, los ingredientes se gastan (los objetos,
-#     primero de la mochila) y el arma va al baúl.
+#   - Banco de trabajo (al arrimarse a él): arriba, todas las recetas (recetas.gd). Las aprendidas son hojas de
+#     papel con el dibujo del arma; las que no, un "?" (las sueltan los jefes). Al tocar una hoja se ve lo que
+#     pide y cuántos tienes (en la mano, guardados, en la mochila y en el baúl) y, si está todo, se puede crear el
+#     arma: sale con una rareza al azar, los ingredientes se gastan (los objetos, primero de la mochila) y el arma
+#     va al baúl. Sin la receta no se puede crear.
 # Van con el ratón, con flechas + Intro o con el mando (A elige, B cierra).
 extends CanvasLayer
 
 signal cerrado
 
 const CASILLA := Vector2(108, 100)
-const CASILLA_PEQUENA := Vector2(86, 96)   # en el banco, cuando hay muchas cosas (las de los dos edificios)
+const HOJA := Vector2(92, 88)               # una receta en el banco
+const PAPEL := Color("#e8dcbc")              # las hojas de las recetas
+const TINTA_PAPEL := Color("#3a3226")
 const FONDO_CASILLA := Color("#1b1822")
 
 var partida: Node
 var fondo: ColorRect
 var abierto := ""          # "inventario", "baul", "banco" o "" (nada)
 var sel := ""              # la casilla elegida: "m2" la 3.ª de la mochila, "g0" la 1.ª arma guardada, "a1" la 2.ª arma del baúl
-var puestos: Array = []    # banco: las claves de lo que hay en la mesa (dos como mucho)
+var receta := ""           # banco: la receta elegida (su id de Recetas.LISTA)
 var hecha := {}            # banco: el arma que se acaba de crear (para enseñarla)
 var foco := ""             # el botón que tiene que quedar marcado al volver a pintar
 var aviso := ""            # inventario: lo que se dice abajo una vez (por qué no se puede usar)
@@ -39,7 +42,7 @@ func abrir(que: String, p: Node) -> void:
 	partida = p
 	abierto = que
 	sel = ""
-	puestos = []
+	receta = ""
 	hecha = {}
 	foco = ""
 	aviso = ""
@@ -273,122 +276,165 @@ func sacar() -> void:
 
 # ── Banco de trabajo ──
 
-# Todo lo que se puede poner en el banco. "clave" dice de dónde sale: "mano" el arma cuerpo a cuerpo que lleva,
-# "g1" la 2.ª arma guardada, "o_clavos" ese objeto (sumando los de la mochila y los del baúl)
-func ingredientes() -> Array:
-	var lista := []
-	var mano: String = partida.johnny.huecos.cuerpo
-	if mano in Recetas.ARMAS:
-		lista.append({"clave": "mano", "id": mano, "nota": "En la mano"})
-	var guardadas: Array = partida.armas_guardadas
-	for i in guardadas.size():
-		if guardadas[i] in Recetas.ARMAS:
-			lista.append({"clave": "g%d" % i, "id": guardadas[i], "nota": "Guardada"})
-	var baul: Dictionary = Guardado.cargar().baul
-	for id in Objetos.NOMBRES:
-		var n: int = partida.mochila.count(id) + baul.get(id, 0)
-		if n > 0:
-			lista.append({"clave": "o_" + id, "id": id, "nota": "× %d" % n})
-	return lista
+# Cuántos tiene de un ingrediente: las armas de las recetas (bate, fregona, cuchillo), en la mano o guardadas;
+# los objetos, sumando los de la mochila y los del baúl
+func tiene(id: String, baul: Dictionary) -> int:
+	if id in Recetas.ARMAS:
+		return int(partida.johnny.huecos.cuerpo == id) + partida.armas_guardadas.count(id)
+	return partida.mochila.count(id) + int(baul.get(id, 0))
 
 
 func pintar_banco(columna: VBoxContainer) -> Control:
-	var ings := ingredientes()
-	# si algo de lo puesto ya no está (se gastó), se quita de la mesa
-	puestos = puestos.filter(func(c): return ings.any(func(g): return g.clave == c))
-	var mesa := puestos.map(func(c): return ings.filter(func(g): return g.clave == c)[0])
-	var receta := Recetas.buscar(mesa[0].id, mesa[1].id) if mesa.size() == 2 else ""
-	var lleno := receta != "" and not cabe_en_baul(mesa)
+	var s := Guardado.cargar()
+	var sabidas := Recetas.sabidas(s)
 	titulo(columna, "Banco de trabajo")
-	subtitulo(columna, "Tus cosas", "")
+	subtitulo(columna, "Recetas: %d de %d" % [sabidas.size(), Recetas.LISTA.size()], "")
 	var rejilla := GridContainer.new()
 	rejilla.columns = 8
 	rejilla.add_theme_constant_override("h_separation", 6)
 	rejilla.add_theme_constant_override("v_separation", 6)
 	columna.add_child(rejilla)
-	for g in ings:
-		casilla(rejilla, g.clave, Objetos.icono(g.id), Objetos.nombre(g.id), g.nota, Recetas.GRIS, true, g.clave in puestos)
-	if ings.size() > 24:
-		# si no caben en tres filas, casillas más pequeñas (para que la mesa siga dentro de la pantalla); los nombres
-		# largos se salen un poco del hueco antes que partirse a media palabra
-		rejilla.columns = 10
-		for c in rejilla.get_children():
-			c.custom_minimum_size = CASILLA_PEQUENA
-			for t in c.find_children("*", "Label", true, false):
-				t.autowrap_mode = TextServer.AUTOWRAP_WORD
-	if ings.is_empty():
-		nota(columna, "No tienes nada que combinar. Los objetos los sueltan los zombis.")
-	# la mesa: lo puesto + lo puesto = lo que sale
+	for id in Recetas.LISTA:
+		hoja(rejilla, id, id in sabidas)
+	# la mesa: lo que pide la receta elegida + lo otro = el arma que sale
 	var linea := fila(columna, true)
+	var r: Dictionary = Recetas.LISTA.get(receta, {})
+	var sabe := receta in sabidas
+	var faltan: Array = r.con.filter(func(i): return tiene(i, s.baul) == 0) if sabe else []
+	var lleno: bool = sabe and faltan.is_empty() and not cabe_en_baul(r.con)
 	for i in 2:
-		if i < mesa.size():
-			casilla(linea, "", Objetos.icono(mesa[i].id), Objetos.nombre(mesa[i].id), "", Recetas.GRIS)
+		if sabe:
+			var n := tiene(r.con[i], s.baul)
+			casilla(linea, "", Objetos.icono(r.con[i]), Objetos.nombre(r.con[i]), "Tienes %d" % n if n > 0 else "No tienes",
+				Recetas.GRIS if n > 0 else Color("#c0392b"))
 		else:
-			casilla(linea, "", "", "Elige algo", "", Color(1, 1, 1, 0.15))
+			casilla(linea, "", "", "?", "", Color(1, 1, 1, 0.15))
 		signo(linea, "+" if i == 0 else "=")
-	if not hecha.is_empty() and mesa.is_empty():
-		casilla(linea, "", Objetos.icono(hecha.icono), hecha.nombre, Recetas.detalle(hecha), Recetas.RAREZAS[hecha.rareza].color)
-	elif receta != "":
-		var r: Dictionary = Recetas.LISTA[receta]
-		casilla(linea, "", Objetos.icono(r.icono), r.nombre, Recetas.HUECOS[r.hueco], Recetas.GRIS)
+	if not hecha.is_empty():
+		casilla(linea, "", Recetas.icono_de(hecha.receta), hecha.nombre, Recetas.detalle(hecha), Recetas.RAREZAS[hecha.rareza].color)
+	elif sabe:
+		casilla(linea, "", Recetas.icono_de(receta), r.nombre, Recetas.HUECOS[r.hueco], Recetas.GRIS)
 	else:
-		casilla(linea, "", "", "Esto no combina" if mesa.size() == 2 else "?", "", Color(1, 1, 1, 0.15))
-	var texto := "Toca dos cosas para ponerlas en la mesa. Si hacen receta, puedes crear un arma."
-	if lleno:
-		texto = "El baúl está lleno: haz sitio antes de crear otra arma."
-	elif receta != "":
-		texto = "%s. Al crearla, los dos ingredientes se gastan y el arma va al baúl." % Recetas.LISTA[receta].desc
-	elif not hecha.is_empty() and mesa.is_empty():
+		casilla(linea, "", "", "?", "", Color(1, 1, 1, 0.15))
+	var texto := "Toca una receta para ver lo que pide. Las que no tienes las sueltan los jefes al morir."
+	if not hecha.is_empty():
 		texto = "¡%s %s! %s. Está en el baúl." % [hecha.nombre, Recetas.RAREZAS[hecha.rareza].nombre.to_lower(), hecha.desc]
+	elif receta != "" and not sabe:
+		texto = "Aún no tienes esta receta: la suelta un jefe al morir, en un papel que hay que recoger."
+	elif not faltan.is_empty():
+		texto = "%s. Te falta: %s." % [r.desc, ", ".join(faltan.map(func(i): return Objetos.nombre(i).to_lower()))]
+	elif lleno:
+		texto = "El baúl está lleno: haz sitio antes de crear otra arma."
+	elif sabe:
+		texto = "%s. Al crearla, los dos ingredientes se gastan (primero los de la mochila) y el arma va al baúl." % r.desc
 	nota(columna, texto, 640)
 	var botones := fila(columna, true)
 	var crear := boton(botones, "crear", "Crear", crear_arma, "BotonGrande")
-	crear.disabled = receta == "" or lleno
+	crear.disabled = not sabe or not faltan.is_empty() or lleno or not hecha.is_empty()
 	boton(botones, "cerrar", "Cerrar", cerrar)
-	if receta != "" and not lleno:
+	if not crear.disabled:
 		return crear
-	return fondo.find_child(ings[0].clave, true, false) if not ings.is_empty() else fondo.find_child("cerrar", true, false)
+	return fondo.find_child("r_" + (receta if receta != "" else Recetas.LISTA.keys()[0]), true, false)
 
 
-# Toca una cosa: si ya estaba en la mesa se quita; si no, se pone (la tercera sustituye a la segunda)
-func poner_en_mesa(clave: String) -> void:
+# Una receta en la cuadrícula: si se sabe, una hoja de papel con el dibujo del arma que sale y su nombre; si no,
+# un recuadro oscuro con un "?". Las dos se pueden tocar (la que no se sabe dice de dónde sale)
+func hoja(padre: Container, id: String, sabida: bool) -> void:
+	var elegida := id == receta
+	var b := Button.new()
+	b.name = "r_" + id
+	b.custom_minimum_size = HOJA
+	b.pressed.connect(tocar.bind(b.name))
+	for estado in ["normal", "hover", "pressed", "focus"]:
+		var e := StyleBoxFlat.new()
+		var encima: bool = estado != "normal"
+		if sabida:
+			e.bg_color = PAPEL.lightened(0.08) if encima else PAPEL
+			e.border_color = Tema.AMARILLO if elegida or encima else PAPEL.darkened(0.35)
+		else:
+			e.bg_color = Color("#26222e") if encima else FONDO_CASILLA
+			e.border_color = Tema.AMARILLO if elegida or encima else Color(1, 1, 1, 0.15)
+		e.set_border_width_all(3 if elegida else 2)
+		e.set_corner_radius_all(1)
+		b.add_theme_stylebox_override(estado, e)
+	padre.add_child(b)
+	if not sabida:
+		var interrogacion := Label.new()
+		interrogacion.text = "?"
+		interrogacion.theme_type_variation = "Titulo"
+		interrogacion.add_theme_color_override("font_color", Tema.GRIS)
+		interrogacion.set_anchors_preset(Control.PRESET_FULL_RECT)
+		interrogacion.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		interrogacion.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		interrogacion.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		b.add_child(interrogacion)
+		return
+	# la esquina doblada, arriba a la derecha
+	b.draw.connect(func():
+		var w := b.size.x
+		b.draw_colored_polygon(PackedVector2Array([Vector2(w - 14, 0), Vector2(w, 0), Vector2(w, 14)]), Color("#2a2533"))
+		b.draw_colored_polygon(PackedVector2Array([Vector2(w - 14, 0), Vector2(w, 14), Vector2(w - 14, 14)]), PAPEL.darkened(0.2)))
+	var dentro := VBoxContainer.new()
+	dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dentro.offset_left = 3
+	dentro.offset_right = -3
+	dentro.offset_top = 8
+	dentro.add_theme_constant_override("separation", 0)
+	dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(dentro)
+	var imagen := TextureRect.new()
+	imagen.texture = load("res://assets/ui/iconos/%s.png" % Recetas.icono_de(id))
+	imagen.custom_minimum_size = Vector2(0, 36)
+	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	imagen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dentro.add_child(imagen)
+	var t := Label.new()
+	t.text = Recetas.LISTA[id].nombre
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.autowrap_mode = TextServer.AUTOWRAP_WORD   # los nombres largos, mejor un poco apretados que partidos
+	t.add_theme_font_size_override("font_size", 16 if Recetas.LISTA[id].nombre.length() < 12 else 14)
+	t.add_theme_constant_override("line_spacing", -4)
+	t.add_theme_constant_override("outline_size", 0)
+	t.add_theme_color_override("font_color", TINTA_PAPEL)
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dentro.add_child(t)
+
+
+# Toca una receta: se ve lo que pide (otra vez, la deja de ver). Si se puede crear, la marca salta a «Crear»: con
+# el mando o las flechas, A dos veces y se crea
+func elegir_receta(id: String) -> void:
 	hecha = {}
-	if clave in puestos:
-		puestos.erase(clave)
-	elif puestos.size() < 2:
-		puestos.append(clave)
-	else:
-		puestos[1] = clave
-	foco = clave
+	receta = "" if receta == id else id
+	foco = "r_" + id
 	pintar()
+	var crear: Button = fondo.find_child("crear", true, false)
+	if crear and not crear.disabled:
+		crear.grab_focus.call_deferred()
 
 
 func crear_arma() -> void:
-	var ings := ingredientes()
-	var mesa := []
-	for c in puestos:
-		for g in ings:
-			if g.clave == c:
-				mesa.append(g)
-	if mesa.size() != 2:
+	var s := Guardado.cargar()
+	if not Recetas.sabe(s, receta) or not hecha.is_empty():
+		Sonido.tocar("no")
 		return
-	var receta := Recetas.buscar(mesa[0].id, mesa[1].id)
-	if receta == "" or not cabe_en_baul(mesa):
+	var con: Array = Recetas.LISTA[receta].con
+	if con.any(func(i): return tiene(i, s.baul) == 0) or not cabe_en_baul(con):
 		Sonido.tocar("no")
 		return
 	var johnny: Node2D = partida.johnny
-	# se gastan los ingredientes (las armas guardadas, de la última a la primera para no liar los números)
-	var guardadas := mesa.filter(func(g): return g.clave.begins_with("g")).map(func(g): return g.clave.substr(1).to_int())
-	guardadas.sort()
-	guardadas.reverse()
-	for i in guardadas:
-		partida.armas_guardadas.remove_at(i)
+	# se gastan los ingredientes: las armas, primero las guardadas y si no, la de la mano; los objetos, primero los
+	# de la mochila
 	var sin_mano := false
-	for g in mesa:
-		if g.clave == "mano":
-			sin_mano = true
-		elif g.clave.begins_with("o_"):
-			gastar_objeto(g.id)
+	for id in con:
+		if id in Recetas.ARMAS:
+			if id in partida.armas_guardadas:
+				partida.armas_guardadas.erase(id)
+			else:
+				sin_mano = true
+		else:
+			gastar_objeto(id)
 	# si se ha gastado el arma de la mano, coge otra (la fregona, si no guarda ninguna)
 	if sin_mano:
 		var otra := "fregona"
@@ -401,9 +447,8 @@ func crear_arma() -> void:
 	hecha = Recetas.crear(receta)
 	partida.logros.cumplir("manitas")
 	Sonido.tocar("compra" if hecha.rareza == "verde" else "limpio")   # las raras y épicas suenan a premio
-	Guardado.cambiar(func(s): s.baul_armas.append(hecha))
-	puestos = []
-	foco = "cerrar"
+	Guardado.cambiar(func(g): g.baul_armas.append(hecha))
+	foco = "r_" + receta
 	pintar()
 
 
@@ -420,11 +465,11 @@ func gastar_objeto(id: String) -> void:
 
 
 # ¿Hay sitio en el baúl para el arma? Cuenta que los objetos que se gastan del baúl pueden dejar libre su casilla
-func cabe_en_baul(mesa: Array) -> bool:
+func cabe_en_baul(con: Array) -> bool:
 	var s := Guardado.cargar()
 	var usadas := Objetos.casillas_baul(s)
-	for g in mesa:
-		if g.clave.begins_with("o_") and not g.id in partida.mochila and s.baul.get(g.id, 0) == 1:
+	for id in con:
+		if not id in Recetas.ARMAS and not id in partida.mochila and s.baul.get(id, 0) == 1:
 			usadas -= 1
 	return usadas < Objetos.BAUL
 
@@ -483,7 +528,7 @@ func boton(caja: Container, nombre: String, texto: String, al_pulsar: Callable, 
 
 
 # Una casilla con su dibujo, su nombre y una línea de debajo, con el borde del color de su rareza.
-# Con "clave" se puede tocar (es un botón): en el inventario y el baúl se elige; en el banco, sube a la mesa.
+# Con "clave" se puede tocar (es un botón): en el inventario y el baúl se elige.
 func casilla(padre: Container, clave: String, icono: String, nombre: String, sub: String, borde: Color,
 		tocable := true, puesta := false) -> Control:
 	var c: Control
@@ -548,11 +593,12 @@ func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
 	return e
 
 
-# Al tocar una casilla: en el banco sube a la mesa; en los demás, se elige (o se deja de elegir)
+# Al tocar una casilla: en el banco, una receta ("r_lanza") enseña lo que pide; en los demás, se elige (o se deja
+# de elegir)
 func tocar(clave: String) -> void:
 	Sonido.tocar("click")
 	if abierto == "banco":
-		poner_en_mesa(clave)
+		elegir_receta(clave.trim_prefix("r_"))
 		return
 	sel = "" if sel == clave else clave
 	foco = clave

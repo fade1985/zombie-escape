@@ -1018,7 +1018,7 @@ func probar_botiquin() -> void:
 	johnny.vida = roundi(johnny.vida_tope() * 0.5)
 	partida.abrir_cosas("inventario")
 	print("Botiquín al empezar: sin ella %s | con ella %s | mochila %s | en el banco %s" % [sin_ella, con_ella,
-		partida.mochila, "botiquin" in inv.ingredientes().map(func(x): return x.id)])
+		partida.mochila, Recetas.LISTA.values().any(func(r): return "botiquin" in r.con)])
 	inv.tocar("m0")
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	var marcado := get_viewport().gui_get_focus_owner()

@@ -25,7 +25,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **N** (centro comercial): derecho a la azotea, sin subir planta a planta. En **Elige edificio**, la N abre todos
   los edificios (el centro comercial sin completar los Apartamentos) hasta cerrar el juego; no se guarda.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
-  objeto al baúl, para probar todas las recetas en el banco de trabajo.
+  objeto al baúl y todas las recetas aprendidas, para probar el banco de trabajo. **Y**: soltar a tus pies el
+  papel de una receta que aún no tienes (como al morir un jefe).
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
@@ -56,7 +57,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 
 La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`escenas/menu_principal.tscn`).
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7 y Noticias de Canal 8).
-- A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo** (recetas).
+- A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo**: todas
+  las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
+  mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir
+  (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se pierde nunca.
 - Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador (los
   del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe. Detrás del técnico,
   cuando ya vive ahí, las pantallas de las cámaras de seguridad: desde entonces el minimapa enseña los zombis.

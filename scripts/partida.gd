@@ -70,6 +70,7 @@ const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MUNICION := preload("res://assets/ui/iconos/municion.png")
+const ICONO_RECETA := preload("res://assets/ui/iconos/receta.png")   # la hoja de receta que sueltan los jefes
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
 const BOTIQUIN := 50               # lo que cura el botiquín de los baños (BOTIQUIN_CURA en el JS)
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
@@ -103,6 +104,7 @@ var supervivientes := Supervivientes.new()   # el superviviente de la partida, l
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
 var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
+var recetas_en_suelo: Array = []   # las recetas soltadas por los jefes que aún no se han cogido (no se repiten)
 var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
@@ -113,6 +115,7 @@ var terminada := false
 @onready var johnny := $Johnny
 @onready var lugar: Label = $Pantalla/Lugar
 @onready var aviso: Label = $Pantalla/Mensaje
+var aviso_tween: Tween     # el que va borrando el aviso (decir)
 @onready var negro: ColorRect = $Pantalla/Negro
 
 
@@ -694,7 +697,10 @@ func nombre_jefa() -> String:
 func decir(texto: String, segundos := 2.2) -> void:
 	aviso.text = texto
 	aviso.modulate.a = 1.0
+	if aviso_tween:
+		aviso_tween.kill()   # que el aviso de antes, al irse, no se lleve este
 	var tween := aviso.create_tween()
+	aviso_tween = tween
 	tween.tween_interval(segundos)
 	tween.tween_property(aviso, "modulate:a", 0.0, 0.5)
 
@@ -784,6 +790,31 @@ func soltar_arma(id: String, donde: Vector2) -> void:
 		Sonido.tocar("compra")
 		numero(cosa.position, Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
+
+
+# La hoja de una receta del banco de trabajo (recetas.gd): la sueltan los jefes al morir. Una al azar de las que
+# aún no se saben, sin repetir las que ya están en el suelo sin recoger (recetas_en_suelo). Al cogerla se aprende
+# para siempre. Devuelve cuál ha soltado ("" si ya se saben todas)
+func soltar_receta(donde: Vector2) -> String:
+	var id := Recetas.para_soltar(Guardado.cargar(), recetas_en_suelo)
+	if id == "":
+		return ""
+	recetas_en_suelo.append(id)
+	var cosa := BILLETE.new()
+	cosa.johnny = johnny
+	cosa.icono = ICONO_RECETA
+	cosa.tamano = 2.0
+	cosa.position = donde
+	cosa.cogido.connect(func():
+		recetas_en_suelo.erase(id)
+		Recetas.aprender(id)
+		Sonido.tocar("compra")
+		numero(cosa.position, "Receta: " + Recetas.LISTA[id].nombre, Tema.AMARILLO)
+		decir("¡Receta nueva: %s! Ya puedes crearla en el banco de trabajo" % Recetas.LISTA[id].nombre, 3.5))
+	# si se queda sin coger y Johnny se va de la sala, el papel se pierde: otro jefe la podrá volver a soltar
+	cosa.tree_exited.connect(func(): recetas_en_suelo.erase(id))
+	mapa.cosas.add_child.call_deferred(cosa)
+	return id
 
 
 # Delante del armarito de un baño: el botiquín cura (más con Sanitario); con la vida llena se deja para luego
@@ -1003,6 +1034,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
+		# los jefes, siempre una receta del banco de trabajo que aún no se tenga (si queda alguna)
+		if tipo in JEFES:
+			soltar_receta(zombi.position)
 		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
 		if tipo in JEFES and not final_de(tipo).is_empty():
 			fin_del_edificio()
@@ -1065,7 +1099,11 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_O:
 		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
 	elif evento.keycode == KEY_U:
-		dar_objetos()   # uno de cada objeto al baúl, para probar las recetas en el banco de trabajo
+		dar_objetos()   # uno de cada objeto al baúl y todas las recetas, para probar el banco de trabajo
+	elif evento.keycode == KEY_Y:
+		# una receta a los pies, como la que suelta un jefe al morir
+		if soltar_receta(johnny.position + Vector2(0, 50)) == "":
+			decir("Ya tienes todas las recetas (o están en el suelo)")
 	elif evento.keycode == KEY_N and ed.get("azotea", false) and not cerrada and not planta.get("azotea", false):
 		ir_a_azotea()   # derecho a la azotea del centro comercial, para probar al jefe final
 
@@ -1077,12 +1115,13 @@ func ir_a_azotea() -> void:
 	decir("Azotea · ¡El último combate del edificio!", 2.5)
 
 
-# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios), para probar todas las recetas
+# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios) y enseña todas las recetas, para probarlas
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
 		for id in Objetos.NOMBRES:
-			g.baul[id] = g.baul.get(id, 0) + 1)
-	decir("Uno de cada objeto, al baúl")
+			g.baul[id] = g.baul.get(id, 0) + 1
+		g.recetas = Recetas.LISTA.keys())
+	decir("Uno de cada objeto al baúl, y todas las recetas")
 
 
 # ── Solo con --captura ──
@@ -1892,12 +1931,14 @@ func probar_noticias() -> void:
 
 
 # La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al
-# inventario), crea un arma y hace fotos
+# inventario), crea un arma con una receta sabida, prueba una sin saber, y hace fotos. Luego, las recetas que
+# sueltan los jefes (probar_soltar_recetas)
 func probar_cosas() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 20
 		g.baul = {"clavos": 1, "lejia": 2}
-		g.baul_armas = [])
+		g.baul_armas = []
+		g.recetas = ["molotov", "aplastacabezas", "partecuerpos", "lanza"])
 	ahorrados = 20
 	mochila = ["gasolina", "gasolina", "cuchillas", "taser", "cuerda"]
 	soltar_objeto("mechero", johnny.position + Vector2(30, 0))
@@ -1913,16 +1954,15 @@ func probar_cosas() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-inventario.png")
 	inventario.cerrar()
 	abrir_cosas("banco")
-	inventario.tocar("mano")
-	inventario.tocar("o_clavos")
+	inventario.tocar("r_aplastacabezas")   # el bate de la mano y los clavos del baúl
 	await get_tree().create_timer(0.3).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-banco.png")
 	inventario.crear_arma()
-	inventario.tocar("o_gasolina")
-	inventario.tocar("o_cuchillas")
-	inventario.crear_arma()   # no combinan: no hace nada
+	inventario.tocar("r_bate_fuego")   # tiene la gasolina, pero no la receta (ni ya el bate): no hace nada
+	inventario.crear_arma()
 	await get_tree().create_timer(0.3).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-banco2.png")
+	print("Banco: creadas %s (solo el aplastacabezas)" % Guardado.cargar().baul_armas.map(func(a): return a.receta))
 	inventario.cerrar()
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
@@ -2012,8 +2052,7 @@ func probar_objetos() -> void:
 	var baul_antes: Dictionary = Guardado.cargar().baul
 	dar_objetos()
 	abrir_cosas("banco")
-	inventario.tocar("o_pistola_agua")
-	inventario.tocar("o_bateria")
+	inventario.tocar("r_pistola_electrica")
 	await get_tree().create_timer(0.3).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-banco-todo.png")
 	inventario.cerrar()
@@ -2023,6 +2062,30 @@ func probar_objetos() -> void:
 	inventario.cerrar()
 	print("Baúl con uno de cada: %d casillas de %d" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
 	Guardado.cambiar(func(g): g.baul = baul_antes)
+	await probar_soltar_recetas()
+
+
+# Las recetas que sueltan los jefes: sabiendo todas menos dos, suelta tres (la tercera ya no sale: las dos que
+# quedan están en el suelo), foto del papel en el suelo, lo coge y foto del aviso
+func probar_soltar_recetas() -> void:
+	var faltan := ["garfio", "mangual"]
+	Guardado.cambiar(func(g): g.recetas = Recetas.LISTA.keys().filter(func(r): return not r in faltan))
+	var donde: Vector2 = johnny.position + Vector2(220, 0)
+	var soltadas := [soltar_receta(donde), soltar_receta(donde), soltar_receta(donde)]
+	print("Recetas soltadas: %s (dos distintas de %s y la tercera vacía)" % [soltadas, faltan])
+	menus.visible = false   # por si ha salido el recuadro de una mutación
+	await get_tree().create_timer(0.5).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-receta-suelo.png")
+	for cosa in mapa.cosas.get_children():
+		if cosa.get_script() == BILLETE and cosa.icono == ICONO_RECETA:
+			cosa.cogido.emit()
+			cosa.queue_free()
+	await get_tree().create_timer(0.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-receta-cogida.png")
+	print("Aviso al coger la receta: '%s' (se ve: %s)" % [aviso.text, aviso.modulate.a > 0.5 and aviso.is_visible_in_tree()])
+	menus.visible = true
+	print("Recetas sabidas: %d de %d | en el suelo: %s | otra al morir un jefe: '%s'" % [
+		Recetas.sabidas(Guardado.cargar()).size(), Recetas.LISTA.size(), recetas_en_suelo, soltar_receta(donde)])
 
 
 # Las armas de las recetas nuevas (parte 6 del centro comercial): comprueba que las nueve recetas salen en el banco

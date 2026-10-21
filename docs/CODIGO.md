@@ -113,7 +113,9 @@
   momento el botiquín, que no entra en recetas ni va al baúl; mochila, baúl de 32 casillas, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
   el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (24 recetas y rarezas: 15 de los
-  Apartamentos, 6 que mezclan los dos edificios y 3 solo del centro), `billete.gd`, `minimapa.gd` (con el técnico
+  Apartamentos, 6 que mezclan los dos edificios y 3 solo del centro; solo se crean las aprendidas, `recetas` del
+  guardado: el molotov de serie y las demás, en el papel que suelta cada jefe al morir, `soltar_receta` de
+  `partida.gd`, una al azar sin repetir; la prueba `--captura` las prueba en `probar_soltar_recetas`), `billete.gd`, `minimapa.gd` (con el técnico
   rescatado, `camaras`: un puntito por zombi en cada sala). La prueba
   `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `partida.gd`) y saca `captura-objetos-nuevos.png`,
   `captura-banco-todo.png` y `captura-baul-todo.png`; luego prueba cada arma nueva contra zombis (`probar_recetas`)
@@ -201,7 +203,7 @@ falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos �
 aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
-(los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
+(los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_receta.py` (el papel de las recetas), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 
 ## docs/ (del juego JS)

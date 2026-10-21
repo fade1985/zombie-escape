@@ -113,3 +113,42 @@ static func crear(receta: String, rareza := "") -> Dictionary:
 # La línea de debajo del nombre: su daño (o sus unidades). La rareza ya se ve en el color del borde
 static func detalle(a: Dictionary) -> String:
 	return "%d unidades" % a.unidades if a.unidades > 0 else "daño %d" % a.dano
+
+
+# ── Las recetas aprendidas ──
+# En el banco solo se crea un arma si se sabe su receta. El molotov se sabe de serie; las demás las sueltan los
+# jefes al morir, en un papel que hay que ir a recoger (partida.gd, soltar_receta). Se guardan para siempre
+# (guardado: "recetas"), aunque Johnny muera.
+const DE_SERIE := ["molotov"]
+
+
+# Las que sabe ya (con las de serie, por si el guardado es viejo)
+static func sabidas(s: Dictionary) -> Array:
+	var lista: Array = DE_SERIE.duplicate()
+	for id in s.get("recetas", []):
+		if id in LISTA and not id in lista:
+			lista.append(id)
+	return lista
+
+
+static func sabe(s: Dictionary, id: String) -> bool:
+	return id in sabidas(s)
+
+
+# La apunta como sabida, para siempre
+static func aprender(id: String) -> void:
+	Guardado.cambiar(func(g):
+		if not id in g.recetas:
+			g.recetas.append(id))
+
+
+# La que suelta un jefe: una al azar de las que aún no se saben, sin contar las que ya están en el suelo sin
+# recoger ("en_suelo"). "" si ya no queda ninguna
+static func para_soltar(s: Dictionary, en_suelo: Array) -> String:
+	var quedan := LISTA.keys().filter(func(id): return not sabe(s, id) and not id in en_suelo)
+	return "" if quedan.is_empty() else quedan.pick_random()
+
+
+# El dibujo del arma que sale (el molotov tiene el suyo; las demás, de momento, el de un ingrediente)
+static func icono_de(id: String) -> String:
+	return "molotov" if id == "molotov" else Objetos.icono(LISTA[id].icono)
