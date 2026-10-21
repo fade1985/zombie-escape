@@ -1,10 +1,10 @@
-# Lo que Johnny lanza con el botón de lanzar (clic derecho, E o el gatillo RT): el cóctel molotov y la granada
+# Lo que Johnny lanza con el botón de lanzar (clic derecho, E o el gatillo LT): el cóctel molotov y la granada
 # (src/molotov.js y src/granada.js del JS). Son aparte de sus dos armas y tienen su propia munición.
 #   - Se MANTIENE el botón para apuntar: en el suelo se ven el alcance (la elipse de puntos alrededor de
 #     Johnny), la zona que arderá o explotará y la trayectoria. Al SOLTAR, lo lanza.
 #   - Con ratón apunta al puntero; con mando, hacia donde se empuja el stick derecho (tan lejos como se
 #     empuje). Si no se apunta a nada, al zombi más cercano a tiro (o, si no hay, un poco por delante).
-#   - F o LB cambian lo que se lanza: molotov → granada → las arrojadizas creadas que queden → molotov.
+#   - F o RB cambian lo que se lanza: molotov → granada → las arrojadizas creadas que queden → molotov.
 #   - Las arrojadizas creadas (fase 7b2, sacadas del baúl): se lanzan como la granada con su propio efecto
 #     (ARROJADIZAS). El cóctel molotov no está aquí: sus botellas se suman a los molotovs.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y

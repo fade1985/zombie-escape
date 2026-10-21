@@ -2,11 +2,14 @@
 
 ## Jugar
 
-- **Moverse:** WASD, flechas o stick izquierdo. **Esquivar:** Espacio, Mayús o A.
-- **Opciones** (menú principal y pausa): modo de atacar (se guarda), música, sonido y la lista de controles, que se pueden cambiar (pulsar la casilla y luego la tecla o el botón; si ya la usaba otra acción, se intercambian; "Restablecer controles" vuelve a los de serie). **F1** también cambia el modo de atacar: *asistido* (apunta y ataca solo, como en el JS), *hacia donde mira* (J, clic o
-  X) y *libre* (ratón + clic, o stick derecho).
-- **Q** / rueda / Y: cambiar entre las dos armas. **R** / RB: recargar.
-- **E**, clic derecho o RT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / LB cambia entre ellos.
+Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos para atacar (RT) y lanzar
+(LT), y esquivar también en LB para no soltar el stick derecho al apuntar.
+
+- **Moverse:** WASD, flechas o stick izquierdo. **Esquivar:** Espacio, Mayús, A o LB.
+- **Opciones** (menú principal y pausa): modo de atacar (se guarda), música, sonido y la lista de controles, que se pueden cambiar (pulsar la casilla y luego la tecla o el botón; si ya la usaba otra acción, se intercambian; "Restablecer controles" vuelve a los de serie). **F1**, **C** o la cruceta abajo también cambian el modo de atacar: *asistido* (apunta y ataca solo, como en el JS), *hacia donde mira* (J, clic o
+  RT) y *libre* (ratón + clic, o stick derecho).
+- **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar.
+- **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
 - **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
 
@@ -30,8 +33,8 @@ La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`esce
 ## Móvil (táctil)
 
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (se toca en la mitad izquierda); abajo a la
-derecha, según el modo: nada (asistido), botón de atacar (hacia donde mira) o joystick derecho (libre). En arco:
-esquivar, las dos armas (tocar la otra la saca; tocar la de fuego en la mano recarga) y lanzar (arrastrar y soltar),
+derecha, según el modo: esquivar, más grande (asistido; las armas y lanzar, más cerca a su alrededor), botón de
+atacar (hacia donde mira) o joystick derecho (libre). En arco: esquivar (salvo en asistido), las dos armas (tocar la otra la saca; tocar la de fuego en la mano recarga) y lanzar (arrastrar y soltar),
 con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa. En los menús el dedo hace de
 ratón. En táctil la pantalla se agranda sin redondear (si no, en móviles con muchos píxeles se quedaría en 1×).
 

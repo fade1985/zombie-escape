@@ -45,7 +45,7 @@ const TACTIL := [
 	["Moverse", "Joystick: toca y arrastra en la mitad izquierda"],
 	["Atacar", "Solo en \"hacia donde mira\": el botón grande de abajo a la derecha"],
 	["Apuntar", "Solo en \"apuntar libre\": el joystick de abajo a la derecha"],
-	["Esquivar", "El botón del arco de la derecha"],
+	["Esquivar", "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"],
 	["Armas", "Toca la otra arma para sacarla; toca la de fuego en la mano para recargar"],
 	["Lanzar", "Arrastra desde el botón para apuntar y suelta para tirar"],
 	["Molotov o granada", "El botoncito de al lado de lanzar"],

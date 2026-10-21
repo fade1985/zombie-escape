@@ -1,7 +1,8 @@
 # Los controles táctiles del móvil, como el #touch-ui del JS (src/input.js, index.html):
 #   - Joystick izquierdo: se toca en cualquier sitio de la mitad izquierda y se arrastra (sale donde se toca).
-#   - Abajo a la derecha, según el modo de atacar: nada en el asistido (ataca solo), el botón de atacar en el
-#     de "hacia donde mira" (mientras se mantiene, ataca) y un joystick derecho en el libre (apunta y dispara).
+#   - Abajo a la derecha, según el modo de atacar: esquivar en el asistido (como ataca solo, el botón que más
+#     se usa va donde descansa el pulgar, y lo demás más cerca a su alrededor), el botón de atacar en el de
+#     "hacia donde mira" (mientras se mantiene, ataca) y un joystick derecho en el libre (apunta y dispara).
 #   - Alrededor, en arco: esquivar, las dos armas (tocar la otra la saca; tocar la de fuego que ya está en la
 #     mano, recarga) y lanzar (se arrastra desde él para apuntar y se suelta para tirar), con el ⇄ al lado
 #     para cambiar lo que se lanza.
@@ -153,13 +154,20 @@ func botones() -> Dictionary:
 		"cuerpo": [en_arco.call(218.0, 145.0), 34.0 * k],
 		"fuego": [en_arco.call(252.0, 145.0), 34.0 * k],
 		"lanzar": [en_arco.call(288.0, 145.0), 38.0 * k],
-		"cambiar_lanzable": [en_arco.call(288.0, 145.0) + Vector2(56, -24) * k, 20.0 * k],
 		"modo": [bajo_mapa.call(150.0), 22.0 * k],
 		"inventario": [bajo_mapa.call(97.0), 22.0 * k],
 		"pausa": [bajo_mapa.call(44.0), 22.0 * k],
 	}
-	if johnny.modo == "mira":
+	if johnny.modo == "asistido":
+		# Sin botón grande (ataca solo): esquivar, el que más se usa, va a la esquina, donde descansa el
+		# pulgar, más grande; y las armas y lanzar, en arco a su alrededor y más cerca
+		b.esquivar = [c, 54.0 * k]
+		b.cuerpo = [en_arco.call(190.0, 115.0), 34.0 * k]
+		b.fuego = [en_arco.call(235.0, 115.0), 34.0 * k]
+		b.lanzar = [en_arco.call(280.0, 115.0), 38.0 * k]
+	elif johnny.modo == "mira":
 		b["atacar"] = [c, 62.0 * k]
+	b["cambiar_lanzable"] = [b.lanzar[0] + Vector2(56, -24) * k, 20.0 * k]
 	return b
 
 

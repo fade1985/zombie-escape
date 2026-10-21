@@ -49,7 +49,7 @@ func _ready() -> void:
 	# Señales: Johnny avisa cuando le cambia la vida o el arma, o se muere, y la sala hace lo que toca
 	johnny.vida_cambiada.connect(_al_cambiar_vida)
 	johnny.arma_cambiada.connect(func(texto): cartel.text = texto)
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.avisar_arma()
 	for zombi in get_tree().get_nodes_in_group("zombis"):
