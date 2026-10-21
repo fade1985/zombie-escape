@@ -137,6 +137,44 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 - **Recetas del banco de trabajo que piden objetos de los dos edificios** ("me falta X de los apartamentos para
   fabricar Y"). Quien juegue solo uno no se queda bloqueado.
 
+### Decidido con el dueño (21 oct, para la parte 6)
+
+- **Apartamentos:** siguen saliendo los 17 objetos de siempre, como ahora (las 15 recetas de ahora se pueden hacer
+  jugando solo ahí).
+- **Centro comercial: cada tienda, lo suyo.** El zombi que cae suelta (con la misma probabilidad de ahora) un objeto
+  de la lista de la tienda donde está; si te falta algo, sabes a qué tienda ir. Las listas mezclan objetos de
+  siempre que pegan con la tienda (en la ferretería clavos, hacha, llave inglesa y cuchillas; en el restaurante
+  alcohol y gasolina; en la electrónica el táser...) y los nuevos. Los zombis del pasillo, de cualquier lista.
+- **Solo en los Apartamentos** (cosas de casa): despertador, mancuernas, pistola de agua, trapo y cuerda.
+- **Ocho objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`):
+
+| Tienda | Objetos nuevos |
+|---|---|
+| Ferretería | Cinta americana, Cadena |
+| Electrónica | Batería, Cable |
+| Restaurante | Aceite, Bombona de gas |
+| Supermercado | Hielo seco |
+| Farmacia | Jeringuilla |
+| Tienda de ropa | Perchas |
+
+- **Seis recetas nuevas que mezclan los dos edificios** (un objeto de casa y otro del centro; los números, al
+  hacerlas, parecidos a los de las recetas de ahora):
+
+| Arma | Ingredientes | Qué hace |
+|---|---|---|
+| Pistola eléctrica | Pistola de agua + Batería | Chorro que electrocuta y salta a los zombis de al lado |
+| Bomba de aceite | Trapo + Aceite | Charco que resbala y luego arde |
+| Mangual | Mancuernas + Cadena | Golpe girando que empuja a todos alrededor |
+| Mina despertador | Despertador + Bombona de gas | Se queda en el suelo y explota cuando pasa un zombi |
+| Nube somnífera | Spray + Jeringuilla | Gas que duerme a los zombis unos segundos (guiño al VD-7, que es un somnífero) |
+| Garfio | Cuerda + Perchas | Engancha a un zombi y lo arrastra hacia ti |
+
+- Para que se usen todos los nuevos, alguna receta más **solo del centro** si hace falta (cinta americana, cable e
+  hielo seco no entran en las seis): por ejemplo, un **bate helado** (bate + hielo seco) que congela.
+- **Más adelante, como parte aparte** (lo decidió el dueño): los objetos de curar de la farmacia y el súper
+  (vendas, comida que cura desde la mochila) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
+  taquillas. Necesitan cosas que aún no existen (objetos que se usan, trajes).
+
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
@@ -237,6 +275,6 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
      - Pegas conocidas: el andar del vigilante no cierra del todo el ciclo en algunas direcciones y la dependienta,
        andando hacia arriba a la derecha, se gira un poco de perfil.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
-6. **Reparto de objetos** y recetas que mezclan edificios.
+6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
 7. **La historia:** dosier y noticias.
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones.
