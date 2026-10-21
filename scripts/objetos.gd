@@ -25,6 +25,12 @@ const NOMBRES := {
 	"aceite": "Aceite", "bombona": "Bombona de gas", "hielo_seco": "Hielo seco", "jeringuilla": "Jeringuilla",
 	"perchas": "Perchas",
 }
+# Los que no son chatarra: se usan desde el inventario («Usar») y no entran en las recetas ni pasan al baúl (al
+# acabar la partida, se pierden). De momento, el botiquín de la farmacéutica (supervivientes.gd); su icono,
+# assets/ui/iconos/<icono>.png. Aquí irán los demás de curar (vendas, comida)
+const USABLES := {
+	"botiquin": {"nombre": "Botiquín", "icono": "botiquin"},
+}
 const SOLO_CASA := ["despertador", "mancuernas", "pistola_agua", "trapo", "cuerda"]   # solo en los Apartamentos
 const SOLO_CENTRO := ["cinta_americana", "cadena", "bateria", "cable", "aceite", "bombona", "hielo_seco",
 	"jeringuilla", "perchas"]   # solo en el centro comercial
@@ -43,6 +49,8 @@ const TIENDAS := {
 static func nombre(id: String) -> String:
 	if id in NOMBRES:
 		return NOMBRES[id]
+	if id in USABLES:
+		return USABLES[id].nombre
 	if Armas.es_creada(id):
 		return Armas.sacadas[id].nombre
 	return Armas.DATOS[id].nombre if id in Armas.DATOS else id
@@ -52,6 +60,8 @@ static func nombre(id: String) -> String:
 static func icono(id: String) -> String:
 	if id in NOMBRES:
 		return "obj-" + id
+	if id in USABLES:
+		return USABLES[id].icono
 	if Armas.es_creada(id):
 		return icono(Armas.sacadas[id].icono)   # hasta que tengan el suyo, el de un ingrediente
 	return {"mp5": "pistola"}.get(id, id)

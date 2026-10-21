@@ -10,7 +10,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   RT) y *libre* (ratón + clic, o stick derecho).
 - **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar.
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
-- **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo).
+- **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo). El
+  botiquín de la farmacéutica se usa desde aquí: al elegirlo, la marca salta a **Usar** (con el mando, A dos veces).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
 - **Elige edificio:** debajo de cada tarjeta, **<** y **>** cambian el nivel de alerta (de los abiertos; se
   recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5.

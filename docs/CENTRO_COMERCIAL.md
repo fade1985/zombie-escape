@@ -137,7 +137,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     si Johnny se va antes de acabar, lo cuenta entero la próxima vez.
   - `--captura` saca `captura-cafetera.png` (la primera frase) y comprueba en la terminal que la segunda vez ya no
     dice nada.
-  - El rescate propio de la farmacéutica y su mejora (el botiquín al empezar) siguen pendientes.
+  - El rescate propio de la farmacéutica y su mejora (el botiquín al empezar) ya están hechos (ver abajo).
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
 - ✅ **Lo común** (21 oct):
@@ -176,8 +176,20 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     vendo la pierna y sigo contigo». Sigue en el equipo como los demás, cuenta para el logro «Buen vecino» y deja
     de haber horda para ella. Para que viva en la sala, como siempre, hay que terminar el edificio con ella.
   - `--captura --edificio centro` prueba la escolta entera (lo escribe en la terminal) y saca `captura-escolta.png`.
-  - Falta su mejora de la sala (empezar con un botiquín en la mochila): no hay botiquín que se lleve en la
-    mochila; va con los objetos de curar de la farmacia (ver «Objetos»).
+  - ✅ **Su mejora de la sala** (21 oct; lo decidió el dueño): con ella rescatada, **cada partida, en los dos
+    edificios, empiezas con un botiquín en la mochila**, y el cartel del principio lo dice («La Farmacéutica te ha
+    preparado un botiquín: está en la mochila»).
+    - Ocupa una casilla de la mochila. **Se usa desde el inventario**: lo eliges y pulsas **«Usar»** (con el mando
+      o las flechas, la marca salta sola a «Usar»: A dos veces). Se cierra el inventario y cura como el de los
+      baños (`partida.cura_botiquin()`: más con Sanitario y la mitad con la Alerta 4), con el número verde y las
+      chispas encima de Johnny. **Con la vida llena** no se gasta: «Tienes la vida al máximo: guárdalo para luego».
+    - Se puede **tirar al suelo** como los demás objetos. **No sirve para el banco** ni va al baúl: si no lo usas,
+      se pierde al acabar la partida (en la siguiente te prepara otro).
+    - Es la base para los objetos de curar de más adelante (vendas, comida): `Objetos.USABLES` en
+      `scripts/objetos.gd` y `partida.usar_objeto()`.
+    - `--captura --edificio centro` lo prueba (sin ella no hay botiquín; con ella, «Usar» con la vida llena no lo
+      gasta y con la vida a medias cura y lo gasta; que no sale en el banco y que se tira) y saca
+      `captura-farmaceutica-botiquin.png` (el inventario con el botiquín elegido).
 - ✅ **El rescate propio del técnico y su mejora** (21 oct; `scripts/averia.gd`; números provisionales):
   - Grita desde el almacén de la tienda de electrónica, cerrado, como antes; al limpiar la tienda se abre y dice
     «¡Gracias! Antes de irnos tengo que arreglar ese cable pelado». Al arrimarte se une y pide que bajes la palanca
@@ -283,8 +295,9 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 - Para que se usen todos los nuevos, alguna receta más **solo del centro** si hace falta (cinta americana, cable e
   hielo seco no entran en las seis): por ejemplo, un **bate helado** (bate + hielo seco) que congela.
 - **Más adelante, como parte aparte** (lo decidió el dueño): los objetos de curar de la farmacia y el súper
-  (vendas, comida que cura desde la mochila) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
-  taquillas. Necesitan cosas que aún no existen (objetos que se usan, trajes).
+  (vendas, comida que cura desde la mochila; ya se puede usar algo desde el inventario: el botiquín de la
+  farmacéutica, `Objetos.USABLES`) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
+  taquillas. Les falta lo suyo: cada objeto de curar, y los trajes.
 
 ## Historia
 
@@ -606,8 +619,8 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común, ✅ el rescate de la
-   farmacéutica, ✅ el del técnico con su mejora y ✅ el del ferretero con su puesto; falta la mejora de la sala de
-   la farmacéutica (empezar con un botiquín: va con los objetos de curar).
+   farmacéutica, ✅ el del técnico con su mejora, ✅ el del ferretero con su puesto y ✅ la mejora de la
+   farmacéutica (cada partida, un botiquín en la mochila que se usa desde el inventario).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
    - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
      edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:
