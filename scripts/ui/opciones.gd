@@ -4,7 +4,7 @@
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
 #     En el móvil, qué hace cada botón táctil.
-#   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin). Se guardan y se
+#   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin, lanzar apuntando solo). Se guardan y se
 #     notan al momento, también desde la pausa (johnny.gd y hud.gd las miran con Guardado.ajuste).
 # Se maneja igual que los otros menús: ratón, flechas + Intro o mando (A pulsar, B volver).
 #
@@ -228,6 +228,8 @@ func ayudas() -> void:
 	explicar("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento.")
 	rotar("Pistola sin fin", "pistola_sin_fin", SI_NO)
 	explicar("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre.")
+	rotar("Lanzar apuntando solo", "lanzar_solo", SI_NO)
+	explicar("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre.")
 
 
 func explicar(texto: String) -> void:

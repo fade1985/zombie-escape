@@ -33,10 +33,11 @@ const NUEVO := {
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
-	# vida_entera y pistola_sin_fin: las ayudas de la pestaña Ayudas de Opciones (johnny.gd las mira)
+	# vida_entera, pistola_sin_fin y lanzar_solo: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
+	# lanzables.gd las miran)
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true,
-		"vida_entera": false, "pistola_sin_fin": false},
+		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"
