@@ -51,7 +51,7 @@
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
 
 **ui/**
-- `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd`, `tactil.gd` (controles del móvil).
+- `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd`, `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido y lista de controles), `tactil.gd` (controles del móvil).
 - `ordenador.gd`: la pantalla de ConserjeOS. `inventario.gd`: inventario, baúl y banco.
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado y pantalla roja con poca vida.
 - `botones.gd` (autoload): el saltito de los botones.

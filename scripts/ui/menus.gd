@@ -1,6 +1,6 @@
 # Los menús de dentro de la partida (como showPause y showEnd de src/ui.js):
 #   - Pausa (Esc o Start): el sitio en el que estás, los atributos de Johnny y sus armas, y los botones
-#     Continuar, Música Sí/No y Abandonar partida. El juego se para mientras está abierta.
+#     Continuar, Opciones (opciones.gd) y Abandonar partida. El juego se para mientras está abierta.
 #   - El cartel del final: "¡Edificio completado!" o "¡Derrota!", con lo que has hecho en la partida y los
 #     botones de volver a jugar o ir al menú principal.
 #   - Las mutaciones (showMutacion del JS): tras caer la portera, dos cartas para elegir una (también con 1 y 2).
@@ -142,29 +142,18 @@ func pausa(partida: Node) -> void:
 	botones.add_theme_constant_override("separation", 10)
 	columna.add_child(botones)
 	var seguir := boton(botones, "Continuar", func(): continuar.emit())
-	var musica := boton(botones, texto_musica(), func(): pass)
-	musica.pressed.connect(func():
-		Guardado.cambiar(func(g): g.ajustes.musica = not g.ajustes.musica)
-		Sonido.musica_si(Guardado.cargar().ajustes.musica)
-		musica.text = texto_musica())
-	# Quitar todo el sonido (como el botón del altavoz del JS): no se guarda
-	var sonido := boton(botones, texto_sonido(), func(): pass)
-	sonido.pressed.connect(func():
-		Sonido.silenciar(not Sonido.silenciado())
-		sonido.text = texto_sonido())
+	# Opciones (scripts/ui/opciones.gd): modo de atacar, música, sonido y controles
+	var opciones := boton(botones, "Opciones", func(): pass)
+	opciones.pressed.connect(func():
+		abierto = "opciones"
+		Opciones.abrir(self, fondo, johnny).cerrado.connect(func():
+			abierto = "pausa"
+			opciones.grab_focus()))
 	# En el móvil, también aquí la pantalla completa (si el navegador la deja)
 	if Tactil.activo and Tactil.puede_pantalla_completa():
 		boton(botones, "Pantalla completa", Tactil.pantalla_completa)
 	boton(botones, "Abandonar partida", func(): abandonar.emit(), "BotonRojo")
 	seguir.grab_focus.call_deferred()
-
-
-func texto_sonido() -> String:
-	return "Sonido: %s" % ("No" if Sonido.silenciado() else "Sí")
-
-
-func texto_musica() -> String:
-	return "Música: %s" % ("Sí" if Guardado.cargar().ajustes.musica else "No")
 
 
 # r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, cartera

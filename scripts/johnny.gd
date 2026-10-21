@@ -4,7 +4,7 @@
 # Armas (los números están en armas.gd). Como en el juego de navegador, lleva dos: una de cuerpo a cuerpo y
 # otra de fuego, y se cambia entre ellas con Q, la rueda del ratón o el botón Y del mando. Para probar, las
 # teclas 1 a 6 ponen cualquiera de las seis. R (o el botón RB del mando) recarga.
-# Tres modos de atacar (F1 cambia de uno a otro):
+# Tres modos de atacar (se elige en Opciones, o F1 cambia de uno a otro; se guarda):
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
 #             está a tiro, le pega o le dispara. El jugador solo se preocupa de moverse
 #   mira      ataca mientras se pulsa J, el clic izquierdo o el botón X del mando, hacia donde mira Johnny
@@ -113,6 +113,10 @@ func _ready() -> void:
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
+	# El modo de atacar elegido la última vez (en Opciones o con F1)
+	var guardado: String = Guardado.cargar().ajustes.modo
+	if guardado in MODOS:
+		modo = guardado
 	modo_cambiado.emit.call_deferred(MODOS[modo])
 
 
@@ -148,10 +152,16 @@ func curar(cantidad: int) -> void:
 	vida_cambiada.emit(vida, stats.vida_max)
 
 
-# F1: pasa al siguiente modo de atacar
+# F1: pasa al siguiente modo de atacar (y se guarda para la próxima vez)
 func cambiar_modo() -> void:
 	var nombres := MODOS.keys()
-	modo = nombres[(nombres.find(modo) + 1) % nombres.size()]
+	var nuevo: String = nombres[(nombres.find(modo) + 1) % nombres.size()]
+	poner_modo(nuevo)
+	Guardado.cambiar(func(g): g.ajustes.modo = nuevo)
+
+
+func poner_modo(nuevo: String) -> void:
+	modo = nuevo
 	modo_cambiado.emit(MODOS[modo])
 
 

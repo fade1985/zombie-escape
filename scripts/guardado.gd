@@ -30,7 +30,7 @@ const NUEVO := {
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
-	"ajustes": {"musica": true},
+	"ajustes": {"musica": true, "modo": "asistido"},   # modo: cómo se ataca (johnny.gd, MODOS)
 }
 
 const EDIFICIO := {"completado": false, "partidas": 0, "victorias": 0, "mejor_planta": 0, "mejor_tiempo": 0.0}

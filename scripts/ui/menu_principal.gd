@@ -1,4 +1,4 @@
-# El menú principal (showMenu de src/ui.js): el logo, JUGAR, pantalla completa y salir, los controles y el
+# El menú principal (showMenu de src/ui.js): el logo, JUGAR, Opciones (opciones.gd), pantalla completa y salir, y el
 # récord. Es la escena con la que arranca el juego; JUGAR lleva a la partida (escenas/partida.tscn).
 # Con "-- --captura" saca una foto (captura-menu.png) y pasa sola a la partida, para seguir con su prueba.
 extends Control
@@ -37,6 +37,9 @@ func _ready() -> void:
 	columna.add_child(lema)
 
 	var jugar := boton(columna, "JUGAR", jugar_partida, "BotonGrande")
+	var opciones := boton(columna, "Opciones", func(): pass)
+	opciones.pressed.connect(func():
+		Opciones.abrir(self, centro).cerrado.connect(opciones.grab_focus))
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		boton(columna, "Pantalla completa", Tactil.pantalla_completa)
 	if not OS.has_feature("web"):
@@ -47,9 +50,8 @@ func _ready() -> void:
 	columna.add_child(ayuda)
 	var texto := Label.new()
 	texto.theme_type_variation = "Sub"
-	texto.text = ("Teclado: WASD moverse · Q o rueda cambiar de arma · R recargar · F1 modo de atacar · Esc pausa\n"
-		+ "Mando: stick moverse · Y cambiar de arma · RB recargar · X atacar · Start pausa\n"
-		+ "Limpia cada apartamento para abrir su puerta y busca la llave de la portera")
+	texto.text = ("Limpia cada apartamento para abrir su puerta y busca la llave de la portera\n"
+		+ "Los controles y el modo de atacar están en Opciones")
 	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ayuda.add_child(texto)
 

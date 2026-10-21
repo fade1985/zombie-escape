@@ -3,7 +3,7 @@
 ## Jugar
 
 - **Moverse:** WASD, flechas o stick izquierdo. **Esquivar:** Espacio, Mayús o A.
-- **F1** cambia el modo de atacar: *asistido* (apunta y ataca solo, como en el JS), *hacia donde mira* (J, clic o
+- **Opciones** (menú principal y pausa): modo de atacar (se guarda), música, sonido y la lista de controles. **F1** también cambia el modo de atacar: *asistido* (apunta y ataca solo, como en el JS), *hacia donde mira* (J, clic o
   X) y *libre* (ratón + clic, o stick derecho).
 - **Q** / rueda / Y: cambiar entre las dos armas. **R** / RB: recargar.
 - **E**, clic derecho o RT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / LB cambia entre ellos.
