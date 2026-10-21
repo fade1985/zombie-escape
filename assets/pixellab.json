@@ -1379,7 +1379,85 @@
         "size": "72x72",
         "estilo": "south del zombi venenoso 72: 'Match the pixel art style of this zombie: same outline thickness, same pixel size, same level of detail and shading, same rotting skin. Do not copy his body shape, clothes or colors.'",
         "alto_px": 71,
-        "description": "a huge riot police zombie boss, about 68 pixels tall and broad, black riot helmet with a cracked clear visor pushed up showing a sickly grey-green rotting zombie face with pale dead eyes and a bloody mouth, black padded body armor vest over a dark navy uniform with torn sleeves, black shoulder pads and knee pads, heavy black boots, holding a large tall rectangular clear transparent riot shield with a black rim in front of his body with his left arm (you can see his body through the shield), the shield is cracked and smeared with blood, a black baton in his right hand, standing wide and menacing, crisp pixel art, dark outline, detailed shading"
+        "description": "a huge riot police zombie boss, about 68 pixels tall and broad, black riot helmet with a cracked clear visor pushed up showing a sickly grey-green rotting zombie face with pale dead eyes and a bloody mouth, black padded body armor vest over a dark navy uniform with torn sleeves, black shoulder pads and knee pads, heavy black boots, holding a large tall rectangular clear transparent riot shield with a black rim in front of his body with his left arm (you can see his body through the shield), the shield is cracked and smeared with blood, a black baton in his right hand, standing wide and menacing, crisp pixel art, dark outline, detailed shading",
+        "animaciones": {
+          "nota": "2026-10-21. Todo con PixMiniMax (animate_character, mode pixminimax) directamente sobre 43c798aa, sin pasos intermedios, como el venenoso de 72. 1 generación por dirección (a 72 px, 8 y 12 fotogramas cuestan lo mismo). Cada animación es un grupo: la primera dirección lo crea y las demás se añaden con animation_group_id + el mismo animation_name. Andar: sin fotograma de partida (usa la vista quieta). Porrazo y golpe: partida y final = dibujo quieto pegado en (28, 44) de un lienzo de 128x128 (assets/sources/antidisturbios-72/partida/<dirección>.png; los upload:<id> están en partida/subidas.txt y caducan a los 3 días). Carga, muerte y silbato: solo partida. De espaldas (north, north-east, north-west) el texto empieza con la frase de no girarse y va una dirección por llamada. Bajado con py tools/bajar_zip.py 43c798aa-5e6c-4062-9918-b2943c88545a antidisturbios-72 → assets/sources/antidisturbios-72/{walk,porrazo,carga,golpe,muerte,silbato}/<dirección>-<n>.png (carga/ es la animación 'carga2'; la primera 'carga' está en descartes/carga/). Cada carpeta tiene el fotograma 0 (el dibujo de partida, que PixelLab guarda delante) y luego los generados: 9 archivos en las de 8 fotogramas (0-8) y 13 en la muerte (0-12). Los fotogramas salen en lienzos distintos al de partida (andar 104x104, el resto 128x140/144 o más; el golpe y la muerte ensanchan algo más): hay que recortar/alinear por los pies al montar la hoja.",
+          "subject_description": "a huge riot police zombie in a black riot helmet with the visor pushed up, black body armor over a dark navy uniform, holding a tall clear riot shield on his left arm and a black baton in his right hand (de espaldas: '... seen from behind')",
+          "initial_pose": {
+            "south": "facing the camera",
+            "north": "seen from behind, his back to the camera",
+            "east": "facing right",
+            "west": "facing left",
+            "south-east": "in three-quarter front view, facing toward the camera and to the right",
+            "south-west": "in three-quarter front view, facing toward the camera and to the left",
+            "north-east": "in three-quarter back view, facing away from the camera and to the right",
+            "north-west": "in three-quarter back view, facing away from the camera and to the left"
+          },
+          "andar": {
+            "group": "e49b4468-d2b0-40bd-8557-7a8800673ee0",
+            "fotogramas": "8 + el de partida (archivos 0-8; el 8 vuelve a la postura del 0, ciclo = 0 a 7). Lienzo 104x104.",
+            "action_description": "He marches forward in place in a slow, heavy, seamless looping walk cycle: his legs step alternately with short heavy steps and his body rocks slightly, the tall riot shield held firmly up in front of his body with his left arm the whole time and the baton held low in his right hand. He keeps exactly the same view and facing as the first frame the whole time: he never turns. The last frame returns to the starting pose so the cycle loops.",
+            "variantes": "Sin initial_pose ni fotograma de partida. south: delante 'Strict front view the whole time, facing the camera, he never turns to the side.'; south-east: 'Strict three-quarter front view the whole time, facing toward the camera and to the right, he never turns to the side.'; north: 'Strict back view the whole time, he never turns to face the camera.'; north-east y north-west: 'He keeps the same three-quarter back view the whole time and never turns to face the camera.'; east, west y south-west con el texto común (west y south-west en una sola llamada). Todas a la primera, ninguna se giró.",
+            "pegas": "De frente (south) y de espaldas (north) las piernas se mueven poco, sobre todo es un balanceo del cuerpo. En north-east el escudo queda tapado por el cuerpo en los fotogramas 0, 1 y 8 y asoma entero a la izquierda en el 2-6 (entra y sale de vista dentro del ciclo). En east a mitad del ciclo (5-6) se agacha un poco."
+          },
+          "porrazo": {
+            "group": "3779ad59-dcc3-4ce9-af2d-c1e6166ad239",
+            "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Lienzo 128x144.",
+            "action_description": "He strikes with his baton: he raises the black baton high above his head with his right arm, then swings it down hard in front of him in the direction he is facing, while keeping the riot shield up in front of his body with his left arm. Then he lowers the baton and settles cleanly into the starting stance. No effects, no particles, no motion lines.",
+            "impacto": "La porra está en alto en los fotogramas 2-3 (2-4 en east, west, south-east y north-east) y el golpe cae en: fotograma 3 en south y south-west (ya baja del todo en el 4), fotograma 4 en north y north-west, fotograma 5 en east, west, south-east y north-east. Del 6 al 8 vuelve a la postura. No coincide el fotograma entre direcciones: si el daño se da en un fotograma fijo, el 4-5 es el punto medio.",
+            "pegas": "Aunque el texto dice 'no motion lines', en el fotograma del golpe PixelLab dibuja un arco o raya blanca fina siguiendo la porra (east 5, south-east 5, north-east 5, south 3, south-west 3, y unas rayitas sueltas en north-west 4). Se quita fácil al montar (son píxeles casi blancos sueltos fuera del cuerpo) o se salta ese fotograma. En north la porra queda tapada por el escudo y el cuerpo en el golpe (fotograma 4)."
+          },
+          "carga": {
+            "group": "97d584e2-b33d-49d6-afc5-b7bca1d36980",
+            "nombre_en_pixellab": "carga2",
+            "fotogramas": "8 + el de partida (0-8), solo partida (no es bucle: se agacha y se queda). Lienzo 128x144.",
+            "action_description": "He gets ready to charge: he lowers his head and crouches forward behind his riot shield, pushing the same tall narrow clear transparent riot shield, with its black rim and blood smears, forward in front of him with both arms. The shield keeps exactly the same look the whole time, with no writing, no logo and no symbols on it. His helmet is tucked down behind it, one leg steps forward, his whole weight leans forward in the direction he is facing. He holds that low charging stance for the last frames. He never turns. No effects, no particles.",
+            "agachado_del_todo": "Agachado del todo desde el fotograma 4 en las 8 direcciones (en south, north, west y south-west ya desde el 3). Del 4 al 8 se queda quieto, así que sirve de pose de carga para mantener.",
+            "primera_version": {
+              "group": "f9ee37f8-2710-4907-990c-55fa23586147",
+              "nombre_en_pixellab": "carga",
+              "nota": "Solo se hizo east (descartada, fotogramas en assets/sources/antidisturbios-72/descartes/carga/). Con el texto 'He gets ready to charge: ... pushing the tall shield forward in front of him with both arms ...' el escudo cambió desde el fotograma 2: pasó a ser un cilindro blanco opaco con una franja azul con 'FX' y un símbolo rojo de prohibido. Se repitió añadiendo 'pushing the same tall narrow clear transparent riot shield, with its black rim and blood smears ... The shield keeps exactly the same look the whole time, with no writing, no logo and no symbols on it'. NO se borró de PixelLab (sigue ahí el grupo f9ee37f8)."
+            },
+            "pegas": "El escudo sale con sangre y gris translúcido, como el original, pero en east lleva una franja negra con letras ilegibles y en north-east los fotogramas 5-8 parecen dos escudos juntos (paneles blancos con rojo). No se repitió por eso."
+          },
+          "golpe": {
+            "group": "8084e49c-d393-4364-a763-b91f585bc54b",
+            "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Lienzo 128x144 (east sale a 148x144).",
+            "action_description": "He flinches from a hard blow to his body: his head and shoulders jolt backward, away from where he is facing, the riot shield wobbles on his arm, and he staggers one short heavy step backward, off balance. He stays on his feet. Then he settles cleanly into the starting stance. Nothing spills: no effects, no particles.",
+            "pegas": "Se tambalea hacia atrás bien en las 8 direcciones y no se sale del lienzo, pero en casi todas salen motas sueltas (grises en east, rojas o negras en south, south-east, north, north-west, west, south-west) volando a un lado, y alguna mancha mayor: un trazo rojo en el pecho en south 2 y un punto naranja en south-east 1. En north-east los fotogramas 2-4 dejan ver un panel con cuadritos azules en el escudo. Se limpia al montar quitando los píxeles sueltos fuera del cuerpo (como los destellos en tools/zombi.py). Ningún trabajo falló, no hizo falta el texto neutro."
+          },
+          "muerte": {
+            "group": "f2fe63ab-5246-4ca5-8d89-c54cdfca7b4c",
+            "fotogramas": "12 + el de partida (0-12), solo partida. Lienzo 128x144 en las de pie, más ancho al caer (hasta 160 de ancho).",
+            "action_description": "He dies and collapses, never turning. His knees buckle, he lets go of the baton and the riot shield, and he topples heavily backward, toward <lado>, crashing flat onto the floor on his back, arms flopping out to the sides, his feet toward <lado> and his head toward <lado>, the shield lying flat on the floor beside him. Then he lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles.",
+            "lado_por_direccion": {
+              "east": "cae hacia la izquierda: 'toward the left ... his feet toward the right and his head toward the left'",
+              "west": "cae hacia la derecha: pies a la izquierda, cabeza a la derecha",
+              "south": "cae alejándose de la cámara: 'away from the camera, toward the top of the screen ... feet toward the bottom of the screen and head toward the top'",
+              "north": "cae hacia la cámara: 'toward the camera, toward the bottom of the screen ... feet toward the top and head toward the bottom'; delante 'Strict back view the whole time, he never turns to face the camera.'",
+              "south-east": "'toward the upper left of the screen ... feet toward the lower right and head toward the upper left'",
+              "south-west": "'toward the upper right of the screen ... feet toward the lower left and head toward the upper right'",
+              "north-east": "'toward the lower left of the screen ... feet toward the upper right and head toward the lower left'; delante 'He keeps the same three-quarter back view...'",
+              "north-west": "'toward the lower right of the screen ... feet toward the upper left and head toward the lower right'; delante 'He keeps the same three-quarter back view...'"
+            },
+            "pegas": "Salió bien a la primera en las 8, también south y north cayendo hacia atrás (con la portera de 96 esas dos hubo que repetirlas cayendo de lado). Queda tendido y quieto desde el fotograma 8-9 (los últimos 4 son casi iguales), el escudo al lado y la cabeza hacia el lado pedido; en north se ve la cara hacia arriba con la cabeza abajo. Sin charco. En north-east queda un cuadradito azul en el escudo y en north el escudo tendido se ve apilado a la izquierda; algún píxel suelto rojo en los fotogramas de la caída."
+          },
+          "silbato": {
+            "group": "8c3baba5-1d63-4b57-99c1-7420c7c33522",
+            "fotogramas": "8 + el de partida (0-8), SOLO south, partida y final = dibujo quieto south. Lienzo 128x144.",
+            "action_description": "He blows a whistle: he lifts his right hand, still holding the baton, up to his mouth, a small silver whistle between his lips, puffs out his cheeks and blows hard, leaning back slightly, the riot shield still held up in front of him with his left arm. Then he lowers his hand and settles cleanly into the starting stance. No effects, no particles, no sound lines.",
+            "pegas": "Salió bien: mano a la boca y mejillas hinchadas en los fotogramas 2-5, vuelve a la postura al final. En el 7 queda un destello blanco pequeño cerca de la cara."
+          },
+          "sin_usar_en_pixellab": "Grupo carga f9ee37f8-2710-4907-990c-55fa23586147 (solo east, la primera versión con el escudo cambiado). Nada se borró de PixelLab. Borrar solo con confirmación del dueño.",
+          "coste": {
+            "fecha": "2026-10-21",
+            "generaciones": 42,
+            "desglose": "6 de la prueba de perfil (andar, porrazo, carga, golpe y muerte en east + silbato en south) + 1 de repetir la carga en east + 35 de la tanda (7 direcciones de andar, porrazo, golpe y muerte = 28, y 7 de la carga repetida). Cada trabajo costó 1 (la muerte de 12 fotogramas también).",
+            "saldo_antes": 774.05,
+            "saldo_despues": 730.05,
+            "nota": "El saldo bajó 44: 42 son de este trabajo según los recibos de cada llamada; las otras 2 deben de ser de otra sesión que generaba a la vez."
+          }
+        }
       },
       "cocinero-72": {
         "character_id": "ffe46fdf-d65d-4323-ab41-a0dc2f829706",

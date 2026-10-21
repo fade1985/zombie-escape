@@ -1,7 +1,10 @@
 # Un superviviente (SurvivorNPC y Ally del JS: src/props.js y src/entities.js). Según "modo":
 #   - "encerrado": en el baño de su apartamento, temblando, hasta que Johnny limpia el piso y se le arrima.
 #   - "equipo": sigue a Johnny dando vueltas a su alrededor y usa lo suyo: el policía y el militar disparan al
-#     zombi más cercano; la médica cura a Johnny cada pocos segundos y al limpiar cada piso.
+#     zombi más cercano; la médica cura a Johnny cada pocos segundos y al limpiar cada piso. Los del centro
+#     comercial: el ferretero da martillazos a los que se le acercan, el técnico suelta
+#     una descarga que deja quieto al zombi más cercano y, con la farmacéutica, los charcos de veneno y ácido le
+#     hacen a Johnny la mitad (eso lo mira johnny.gd: charcos_a_medias).
 #     En la horda (supervivientes.gd) se queda delante de la puerta forzando la cerradura ("forzando"): tiene
 #     vida, los zombis van a por él y, si cae, se queda tumbado hasta que Johnny lo levanta.
 #   - "vecino": rescatado en otra partida, espera en la sala de mantenimiento a que Johnny se le arrime.
@@ -13,6 +16,7 @@ signal herido(cae: bool)   # en la horda: le han dado (y si se ha caído)
 
 const RADIO := 14.0        # para los zombis: a qué distancia le alcanzan
 const BALA := preload("res://escenas/armas/bala.tscn")
+const CHARCOS := ["veneno", "acido", "toxico"]   # los que la farmacéutica deja a medias
 const RUMBOS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 const LINEA := Color("#1d1b2c")
 const PAPEL := Color("#fff8ea")
@@ -34,6 +38,8 @@ var hab_t := 0.0           # lo que falta para usar lo suyo
 var rafaga := 0            # balas que quedan de la ráfaga
 var rafaga_t := 0.0
 var cura_t := 0.0          # el destello de la curación
+var rayo_t := 0.0          # la descarga del técnico (lo que le queda por verse) y adónde va
+var rayo_a := Vector2.ZERO
 var forzando := false
 var sitio_forzar := Vector2.ZERO
 var mira_forzar := Vector2.UP
@@ -56,6 +62,7 @@ var encima: Node2D         # la vida, el bocadillo y su nombre, por encima de to
 func preparar(datos: Dictionary, en_modo: String) -> void:
 	def = datos
 	modo = en_modo
+	add_to_group("aliados")
 	collision_layer = 0
 	collision_mask = 1     # solo choca con paredes y muebles
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -86,6 +93,7 @@ func _physics_process(delta: float) -> void:
 	inv_t = maxf(0.0, inv_t - delta)
 	golpe_t = maxf(0.0, golpe_t - delta)
 	cura_t = maxf(0.0, cura_t - delta)
+	rayo_t = maxf(0.0, rayo_t - delta)
 	dicho_t += delta
 	cuerpo.rotation = 0.0
 	cuerpo.position = Vector2.ZERO
@@ -168,7 +176,20 @@ func habilidad(delta: float) -> void:
 			hab_t = h.cada
 			curar(h.cura)
 		return
+	if h.tipo == "charcos":
+		return   # lo suyo no se usa: se nota en los charcos (johnny.gd)
 	var blanco := zombi_cercano()
+	if h.tipo == "golpear" or h.tipo == "aturdir":
+		if blanco:
+			var hacia := blanco.global_position - global_position
+			animar("reposo", hacia)
+			if hab_t <= 0.0 and hacia.length() < h.alcance + blanco.radio:
+				hab_t = h.cada
+				if h.tipo == "golpear":
+					martillazo(blanco, hacia)
+				else:
+					descarga(blanco)
+		return
 	if blanco:
 		var hacia := blanco.global_position - global_position
 		animar("reposo", hacia)
@@ -218,6 +239,33 @@ func disparar(blanco: Node2D) -> void:
 	bala.altura = 13.0
 	bala.global_position = boca + Vector2(0, 13)
 	Luz.destello(self, boca, 100.0, 0.07)
+
+
+# El ferretero: un martillazo al zombi que tiene encima (la mano baja de golpe: persona.gd, con el retroceso)
+func martillazo(z: Node2D, hacia: Vector2) -> void:
+	z.recibir_golpe(def.habilidad.dano, hacia.normalized() * 160.0)
+	cuerpo.retroceso = 1.0
+	Sonido.tocar("barrido")
+	Particulas.anillo(z, z.global_position, 22.0, Color("#ff9a3c"), 0.2)
+
+
+# El técnico: una descarga que deja quieto un momento al zombi (sin hacerle daño); el rayo se dibuja encima
+func descarga(z: Node2D) -> void:
+	if "aturdido" in z:
+		z.aturdido = maxf(z.aturdido, def.habilidad.segundos)
+	rayo_t = 0.25
+	rayo_a = z.global_position + Vector2(0, -24)
+	Sonido.tocar("calambre")
+	for i in 5:
+		Particulas.soltar(z, rayo_a, Vector2.from_angle(randf() * TAU) * randf_range(60.0, 140.0), Color("#bff4ff"), 3.0, 0.25)
+
+
+# ¿Va con Johnny alguien que deja a medias los charcos (la farmacéutica)? Lo pregunta johnny.gd al pisar uno
+static func charcos_a_medias(arbol: SceneTree) -> float:
+	for a in arbol.get_nodes_in_group("aliados"):
+		if a.modo == "equipo" and a.def.habilidad.tipo == "charcos":
+			return a.def.habilidad.parte
+	return 1.0
 
 
 # La médica: cura a Johnny (si le hace falta) con un anillo verde
@@ -298,6 +346,17 @@ func dibujar_encima() -> void:
 		var a := minf(1.0, cura_t / 0.2)
 		encima.draw_line(Vector2(0, -10), johnny.global_position - global_position + Vector2(0, -10),
 			Color(Tema.VERDE, 0.5 * a), 8.0)
+	if rayo_t > 0.0:
+		# la descarga: un zigzag de su aparato al zombi, que cambia cada poco
+		var desde := Vector2(0, -6)
+		var hasta := rayo_a - global_position
+		var pts := PackedVector2Array([desde])
+		var lado := (hasta - desde).orthogonal().normalized()
+		for i in range(1, 6):
+			pts.append(desde.lerp(hasta, i / 6.0) + lado * randf_range(-9.0, 9.0))
+		pts.append(hasta)
+		encima.draw_polyline(pts, LINEA, 6.0)
+		encima.draw_polyline(pts, Color("#bff4ff"), 3.0)
 	if forzando:
 		var barra := Rect2(-22, -50, 44, 5)
 		encima.draw_rect(barra.grow(2), LINEA)
@@ -319,8 +378,8 @@ func dibujar_encima() -> void:
 	elif modo == "encerrado":
 		frase = "¡Socorro!" if asustado else "¡Llévame contigo!"
 		color_frase = Tema.ROJO if asustado else Color("#2f9e44")
-	elif modo == "vecino":
-		frase = "¿Te acompaño?"
+	elif modo == "vecino" and partida.supervivientes.vecino_cerca() == self:
+		frase = "¿Te acompaño?"   # solo el que está más cerca de Johnny (si no, se pisan los bocadillos)
 		color_frase = Color("#2f9e44")
 	if frase != "":
 		var y := -64.0 - absf(sin(tiempo * 3.0)) * 4.0 * float(modo != "equipo")

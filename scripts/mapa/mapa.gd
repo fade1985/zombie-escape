@@ -29,6 +29,8 @@ const ARMARITO := preload("res://scripts/mapa/armarito.gd")
 const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
 const BANCO_X := 135.0       # el banco de trabajo, a su izquierda, y el baúl, a su derecha (fase 7b)
 const BAUL_X := 340.0
+const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
+const CAFETERA_EN := Vector2(765, 392)   # la cafetera, entre la farmacéutica y el técnico (el pie de su mesita)
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
@@ -61,7 +63,7 @@ const NIEBLA_FONDO := 0.74                 # lo que tapa la niebla a tope (1 = n
 const ACLARA := 3.5                       # lo rápido que se aclara una habitación al descubrirla (por segundo)
 # los zombis de la exposición, en el orden de las teclas de prueba
 const EXPO_ZOMBIS := ["zombi_normal", "zombi_lento", "zombi_rapido", "zombi_explosivo", "zombi_tentaculos",
-	"zombi_venenoso", "zombi_vigilante", "zombi_dependienta", "portera"]
+	"zombi_venenoso", "zombi_vigilante", "zombi_dependienta", "portera", "antidisturbios"]
 const RUMBOS := ["s", "so", "o", "no", "n", "ne", "e", "se"]
 
 var sitio: Dictionary
@@ -449,6 +451,9 @@ func poner_muebles() -> void:
 		banco = ARRIMABLE.new()
 		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", "Banco", Color("#ffb36b"), BANCO_X, MURO, 76.0, 36.0)
 		cosas.add_child(banco)
+		var cafetera := CAFETERA.new()   # la de Johnny: la farmacéutica le encuentra el doble fondo (supervivientes.gd)
+		cafetera.position = CAFETERA_EN
+		cosas.add_child(cafetera)
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.

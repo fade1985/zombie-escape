@@ -23,7 +23,11 @@ func _ready() -> void:
 			continue
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() <= radio + zombi.radio:
-			zombi.recibir_golpe(dano if dano_zombis < 0 else dano_zombis, hacia.normalized() * EMPUJE)
+			var cuanto := dano if dano_zombis < 0 else dano_zombis
+			if zombi is Minijefe:   # la explosión les da de lleno (el escudo del antidisturbios no la para)
+				zombi.recibir_golpe(cuanto, hacia.normalized() * EMPUJE, true)
+			else:
+				zombi.recibir_golpe(cuanto, hacia.normalized() * EMPUJE)
 	# La explosión ilumina toda la zona, y el resplandor del fuego tarda en apagarse
 	Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.4)
 	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)

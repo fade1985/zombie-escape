@@ -1,7 +1,8 @@
-# La historia del juego: el "Proyecto VD-7". En cada planta hay un científico de Velaria muerto con una página
-# del dosier de ese edificio; al cogerla se lee y queda guardada para siempre (Guardado: "paginas"). Todo lo
-# encontrado se puede releer en el ordenador de la sala de mantenimiento (programa "Dosier").
-# Un científico solo aparece mientras su página siga sin encontrar: así la historia no se repite.
+# La historia del juego: el "Proyecto VD-7". En cada planta hay un muerto (casi siempre, un científico de Velaria)
+# con una página del dosier de ese edificio; al cogerla se lee y queda guardada para siempre (Guardado: "paginas").
+# Todo lo encontrado se puede releer en el ordenador de la sala de mantenimiento (programa "Dosier").
+# Un muerto solo aparece mientras su página siga sin encontrar: así la historia no se repite. La última página del
+# centro comercial no la lleva un muerto: la suelta el gerente al caer (del_jefe).
 #
 # PARA CAMBIAR LA HISTORIA: todo el texto está aquí. Se puede reescribir cualquier página, cambiar nombres o
 # añadir edificios nuevos (una entrada más en DOSIERES). Lo único que no hay que tocar es el "id" de una página
@@ -15,16 +16,25 @@ extends RefCounted
 
 const EMPRESA := "Velaria Bienestar"
 
-# Un dosier por edificio (la clave es el id del edificio, el EDIFICIO de partida.gd). Cada página:
+# Un dosier por edificio (la clave es el id del edificio, el EDIFICIO de partida.gd). Del dosier:
+#   titulo
+#   nota     lo que explica el ordenador debajo del título
+#   falta    lo que dice el ordenador en el sitio de una página aún sin encontrar (%s = la planta)
+# Cada página:
 #   id       no cambiar una vez publicada
-#   planta   en qué planta está el científico que la lleva
+#   planta   en qué planta está el muerto que la lleva
 #   cuerpo   quién es el muerto (sale al encontrarlo)
-#   look     los colores de su dibujo (persona.gd): todos llevan bata blanca
+#   look     los colores de su dibujo (cientifico.gd): piel y pelo, y bata blanca si no se dice otra cosa
+#            ("ropa": la chaqueta o la blusa, "pantalon", "tarjeta": la tarjeta del pecho)
 #   tipo     qué clase de papel es (sale arriba de la hoja)
 #   titulo, texto, nota (lo escrito a mano al pie, o "")
+# Las páginas con "jefe" no las lleva un muerto de la planta: las suelta el jefe del edificio al caer
+# (del_jefe). Esas dicen además "donde" (el sitio, en vez de la planta) y "falta" (su propio aviso).
 const DOSIERES := {
 	"apartamentos": {
 		"titulo": "Dosier VD-7 · Apartamentos",
+		"nota": "Cada científico de Velaria muerto en el edificio lleva una página. Lo que encuentres queda aquí para siempre.",
+		"falta": "Esta página falta. La lleva un científico de Velaria caído en la %s.\n\nBúscalo en una partida.",
 		"paginas": [
 			{"id": "vd7_protocolo", "planta": 1, "cuerpo": "Dra. Inés Lozano, coordinadora del estudio",
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b")},
@@ -51,6 +61,46 @@ const DOSIERES := {
 				"tipo": "LISTA DE SUJETOS · SOLO DIRECCIÓN", "titulo": "Sujeto 0",
 				"texto": "Vecinos: 38 de 38 con respuesta positiva al VD-7.\n\nSujeto 0: el conserje del edificio. No firmó nada. Ha tomado VD-7 durante 40 días con el café de la sala de mantenimiento (la cafetera se la regalamos nosotros).\n\nRespuesta: NINGUNA. Duerme normal. Sueña normal. Su sangre deshace el VD-7 en menos de una hora.\n\nPrioridad absoluta: llevarlo vivo a la sede. No es un superviviente. Es la cura. O es el arma.",
 				"nota": "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."},
+		],
+	},
+	# «Turno infinito»: el gerente del centro pone VD-7 en el café de sus empleados para que trabajen sin parar, y
+	# quiere entregarle a Johnny a Velaria a cambio de «la dosis buena» (docs/CENTRO_COMERCIAL.md, Historia)
+	"centro": {
+		"titulo": "Dosier VD-7 · Centro comercial",
+		"nota": "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre.",
+		"falta": "Esta página falta. Está junto a un cuerpo, en la %s.\n\nBúscalo en una partida.",
+		"paginas": [
+			{"id": "cc_albaran", "planta": 1, "cuerpo": "Julián Mora, farmacéutico de Velaria",
+				"look": {"skin": Color("#e0ac69"), "hair": Color("#4a3426")},
+				"tipo": "ALBARÁN DE ENTREGA", "titulo": "Pedido para la farmacia",
+				"texto": "Producto: «Velaria Noche», somnífero. 10.000 cajas de 20 cápsulas.\n\nCada cápsula: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n\nColocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n\nSi un cliente pregunta por el edificio del número 14, se le atiende fuera de la tienda.",
+				"nota": "¿Sin receta? ¿En serio? Yo esto no lo vendo."},
+			{"id": "cc_turno", "planta": 2, "cuerpo": "Dra. Elena Ruiz, técnica de Velaria",
+				"look": {"skin": Color("#ffd2a8"), "hair": Color("#b5651d")},
+				"tipo": "CONTRATO · CONFIDENCIAL", "titulo": "Programa «Turno infinito»",
+				"texto": "Entre Velaria Bienestar y la gerencia del centro comercial.\n\nVelaria entrega el VD-7 gratis. El centro lo pone en la cafetera de la sala de descanso de los empleados, a dosis completa. Los empleados no deben saberlo.\n\nObjetivo: turnos de 20 horas, sin cansancio y sin quejas.\n\nEl centro se ahorra las horas extra. Velaria se queda con los datos de 312 empleados.",
+				"nota": "La cajera de la 3 lleva 31 horas de pie. Sonríe. No parpadea."},
+			{"id": "cc_incidencias", "planta": 3, "cuerpo": "Manuel Ortega, jefe de seguridad del centro",
+				"look": {"skin": Color("#c68642"), "hair": Color("#2b2b2b"), "ropa": Color("#2f3b5c"),
+					"pantalon": Color("#23283a"), "tarjeta": Color("#d9b44a")},
+				"tipo": "PARTE DE INCIDENCIAS", "titulo": "Turno de noche",
+				"texto": "02:10. Cerrado al público desde las 22:00. Las cajas siguen abiertas. Los cajeros cobran a nadie.\n\n03:40. La de la tienda de ropa dobla la misma camiseta. Lleva así desde las once.\n\n04:15. Les hablo y no contestan. Tienen los ojos cerrados. Siguen trabajando.\n\n05:00. Llamo al gerente. Dice que no es una incidencia: «Rinden más que nunca».\n\n05:30. Gómez sigue haciendo la ronda. Pasa por mi lado cada diez minutos. No me mira. Pita el silbato a nadie.",
+				"nota": "Esta noche no me tomo el café."},
+			{"id": "cc_correo", "planta": 4, "cuerpo": "Lucía Benet, secretaria del gerente",
+				"look": {"skin": Color("#f1c27d"), "hair": Color("#1d1b2c"), "ropa": Color("#a34a6a"),
+					"pantalon": Color("#3a3a46"), "tarjeta": Color("#e8e8e0")},
+				"tipo": "CORREO IMPRESO · GERENCIA", "titulo": "Asunto: El conserje",
+				"texto": "De: Gerencia del centro comercial\nPara: Velaria Bienestar, Dirección\n\nEl conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n\nNo voy a llamar a la policía. Lo retengo hasta que llegue vuestro equipo. He cerrado las salidas, y mis empleados no se cansan.\n\nA cambio, quiero la dosis buena. La de verdad.",
+				"nota": "Lleva cuatro días sin dormir. Dice que ya no le hace falta."},
+			# La última no la lleva un muerto: la suelta el gerente al caer en la azotea (del_jefe). La azotea y el
+			# gerente llegan en el trozo 6 de la parte 4
+			{"id": "cc_recogida", "planta": 5, "jefe": true, "donde": "azotea",
+				"falta": "Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n\nTendrás que quitársela.",
+				"cuerpo": "Arturo Salcedo, gerente del centro",
+				"look": {"skin": Color("#f1c27d"), "hair": Color("#6e6a64")},
+				"tipo": "ORDEN DE RECOGIDA · URGENTE", "titulo": "Recogida del Sujeto 0",
+				"texto": "Lugar: helipuerto de la azotea del centro comercial. Hora: en cuanto avise el gerente.\n\nCarga: el Sujeto 0, el conserje del 14. Vivo. Atado si hace falta. No gastéis VD-7 con él: no le hace nada.\n\nDestino: Torre Velaria, nuestra sede. Directo al laboratorio de la planta 40.\n\nEl gerente no viaja. Lo que pidió no se le entrega. Mandadle una jeringa para que aguante hasta que lleguemos.",
+				"nota": "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."},
 		],
 	},
 }
@@ -83,6 +133,35 @@ const NOTICIAS := [
 	{"id": "n_buscado", "pagina": "", "victoria": "apartamentos",
 		"titular": "Velaria busca a un conserje",
 		"texto": "Última hora: el edificio está en silencio. Velaria dice que el «virus» ya está vencido y que todo era un malentendido. Pero hoy busca a un empleado de mantenimiento desaparecido. Si lo ven, no se acerquen y llamen al teléfono de Velaria. Dicen que es muy importante para ellos. ¿Por qué?"},
+	# El centro comercial: «Turno infinito»
+	{"id": "n_reformas", "pagina": "", "victoria": "apartamentos",
+		"titular": "El centro cierra «por reformas»",
+		"texto": "Buenas noches. El centro comercial de la avenida cierra por las noches desde hoy, «por reformas». Pero los vecinos ven las luces encendidas hasta el amanecer, y gente moviéndose dentro. Velaria, que tiene allí una farmacia, dice que no sabe nada: «Nosotros solo alquilamos un local»."},
+	{"id": "n_velaria_noche", "pagina": "cc_albaran", "victoria": "",
+		"titular": "Velaria vende su somnífero",
+		"texto": "Ya está a la venta «Velaria Noche», el nuevo somnífero de Velaria. Sin receta y a 3,99 €. Las cajas se agotan en horas. ¿Es lo mismo que se probó en el edificio del 14? Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."},
+	{"id": "n_turnos", "pagina": "cc_turno", "victoria": "",
+		"titular": "Empleados que no vuelven a casa",
+		"texto": "Varias familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa desde hace días. Si llaman a la tienda, alguien coge el teléfono y repite el precio de una oferta. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Velaria no quiere hacer comentarios."},
+	{"id": "n_audio", "pagina": "cc_correo", "victoria": "",
+		"titular": "Se filtra un audio del gerente",
+		"texto": "Canal 8 ha recibido un audio. Se oye al gerente del centro comercial, al teléfono: «Sí, lo tengo aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."},
+	{"id": "n_helicoptero", "pagina": "", "victoria": "centro",
+		"titular": "Un helicóptero en la azotea",
+		"texto": "Última hora: esta madrugada, un helicóptero de Velaria ha aterrizado en la azotea del centro comercial. A los diez minutos ha despegado otra vez... vacío. Velaria dice que era «un vuelo de reparto de medicinas». Y vuelve a buscar a su empleado de mantenimiento. Ahora, con recompensa."},
+]
+
+
+# ── El guiño de la cafetera ──
+# La cafetera de la sala de mantenimiento se la regaló Velaria a Johnny, y con ella le daban el VD-7 (página
+# «Sujeto 0»). La farmacéutica del centro comercial (decidido con el dueño el 21 oct, al quitar a la camarera),
+# la primera vez que está en la sala después de rescatarla, huele el café, encuentra un doble fondo con cápsulas
+# y se lo dice a Johnny, frase a frase; desde entonces el café es solo café. Lo dice supervivientes.gd
+# (guino_cafetera); la cafetera la dibuja mapa/cafetera.gd
+const CAFETERA := [
+	"Johnny, esta cafetera tiene doble fondo.",
+	"Hay cápsulas escondidas. Pone «VD-7».",
+	"Las he tirado todas. Desde hoy, tu café es solo café.",
 ]
 
 
@@ -112,19 +191,40 @@ static func ver_noticia(id: String) -> void:
 
 
 static func dosier(edificio: String) -> Dictionary:
-	return DOSIERES.get(edificio, {"titulo": "", "paginas": []})
+	return DOSIERES.get(edificio, {"titulo": "", "nota": "", "falta": "Esta página falta (%s).", "paginas": []})
 
 
 static func encontrada(s: Dictionary, id: String) -> bool:
 	return id in s.paginas
 
 
-# La página que lleva el científico de esa planta, si aún no se ha encontrado ({} si no hay o ya está)
+# La página que lleva el científico de esa planta, si aún no se ha encontrado ({} si no hay o ya está). Las que
+# suelta el jefe no: esas no las lleva ningún muerto
 static func pendiente(s: Dictionary, edificio: String, planta: int) -> Dictionary:
 	for p in dosier(edificio).paginas:
-		if p.planta == planta and not encontrada(s, p.id):
+		if p.planta == planta and not p.get("jefe", false) and not encontrada(s, p.id):
 			return p
 	return {}
+
+
+# La página que suelta el jefe del edificio al caer, si aún no se ha encontrado ({} si no hay o ya está). En el
+# centro comercial, la orden de recogida del gerente: la pedirá el gerente al morir en la azotea (trozo 6 de la
+# parte 4), con partida.pagina_del_jefe()
+static func del_jefe(s: Dictionary, edificio: String) -> Dictionary:
+	for p in dosier(edificio).paginas:
+		if p.get("jefe", false) and not encontrada(s, p.id):
+			return p
+	return {}
+
+
+# Dónde está una página: su planta o, si la suelta el jefe, su sitio ("azotea")
+static func donde(p: Dictionary) -> String:
+	return p.get("donde", Planta.nombre_planta(p.planta).to_lower())
+
+
+# Lo que dice el ordenador en el sitio de una página aún sin encontrar
+static func falta(edificio: String, p: Dictionary) -> String:
+	return p.get("falta", dosier(edificio).falta % donde(p))
 
 
 # Apunta una página como encontrada

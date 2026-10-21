@@ -17,19 +17,21 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 
 - **1-6**: poner cualquier arma.
 - **F2 a F7**: un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso). **V**: un vigilante y
-  **B**: una dependienta (los del centro comercial). **P**: la portera.
+  **B**: una dependienta (los del centro comercial). **P**: la portera. **K**: el antidisturbios.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
   objeto al baúl, para probar todas las recetas en el banco de trabajo.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
+  En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
+  la planta con su tienda y te lleva a ella, ya sin zombis. Con uno ya rescatado en la partida, no hace nada.
 
 ## La sala de mantenimiento
 
 La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`escenas/menu_principal.tscn`).
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7 y Noticias de Canal 8).
 - A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo** (recetas).
-- Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador:
-  arrimarse a uno para que te acompañe.
+- Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador (los
+  del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe.
 - La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 ## Móvil (táctil)

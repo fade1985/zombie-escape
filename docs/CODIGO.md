@@ -11,7 +11,8 @@
 - `partida.tscn`: Johnny y la pantalla (sitio, avisos, fundido). El mapa lo monta `partida.gd`; el HUD,
   `ui/hud.gd`; el minimapa, `minimapa.gd`; la pausa y el final, `ui/menus.gd`.
 - `salas/`: la sala de pruebas de las fases 1-3 (`bano.tscn` y `bano_tileset.tres`: las piezas y cuáles chocan).
-- `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y `portera.tscn`.
+- `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
+  y los minijefes del centro comercial (`antidisturbios.tscn`).
 - `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera), `proyectil.tscn`
   (moco y botella de lejía, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
@@ -45,12 +46,20 @@
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque.
 - `portera.gd`: la jefa, por estados (charcos de ácido, embestida, grito "¡VECINOS!"; números en sus constantes).
+- `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
+  vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir). Cada uno hereda y pone
+  sus ataques: `antidisturbios.gd` (escudo por delante y doble por la espalda, porrazo, carga que le atonta si se
+  estrella, silbato). Las explosiones les dan "de lleno" (`explosion.gd`); a Johnny la carga le pone el estado
+  "tirado" (`estados.gd`).
 - `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov y bomba de aceite en parábola), `explosion.gd`.
-- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes.
+- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes (con lo de su
+  oficio para los del centro comercial: chaleco, bata, cascos, moño, bigote, martillo).
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
-- `edificios.gd`: la ficha de cada edificio (Apartamentos, Centro comercial) y el elegido en el menú.
+- `edificios.gd`: la ficha de cada edificio (Apartamentos, Centro comercial) y el elegido en el menú; `MINIJEFES`,
+  el nombre de cada minijefe y de su tienda. La partida sortea al empezar qué minijefe va en cada planta
+  (`orden_jefes`, `jefe_de()`; si aún no está hecho, la portera) y `planta.gd` lo apunta en `planta.jefe` y `el_jefe`.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
   centro comercial; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
@@ -64,10 +73,18 @@
   y saca `captura-arma-<receta>.png`.
 - `guardado.gd`: el guardado entre partidas.
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
-- `historia.gd`: el texto del dosier, la hoja de papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale
-  cada una; las vistas en `noticias_vistas` del guardado). Para cambiar la historia se edita aquí, sin tocar los `id`.
+- `historia.gd`: el texto del dosier de cada edificio (`DOSIERES`: Apartamentos y centro comercial), la hoja de
+  papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
+  guardado). La última página del centro no la lleva un muerto: la suelta el gerente al caer (`del_jefe`; la
+  partida la enseña con `pagina_del_jefe()`). También el guiño de la cafetera (`CAFETERA`: lo dice la farmacéutica,
+  `supervivientes.gd`). Para cambiar la historia se edita aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
-  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura).
+  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los seis:
+  los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
+  su tienda en su planta: `Planta.tienda_fija`), sus gritos, su sitio en la sala (`casa`) y su mejora (pendiente).
+  El guiño de la cafetera (`guino_cafetera`: la primera vez que la farmacéutica está en la sala; `cafetera` en el
+  guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
+  medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
@@ -88,7 +105,8 @@
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos.
   `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
-  científico muerto con su página).
+  científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
+  mantenimiento, dibujada con código).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 
@@ -106,7 +124,9 @@
 `hacer_frames.py` (hoja → animaciones); para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
 (la piel a verde; admite otro tono de origen), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
-el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
+el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
+`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`; alinea por los pies los lienzos de PixelLab, borra
+las motas sueltas y dice el `offset` del Sprite; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`

@@ -110,7 +110,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 ### Decidido con el dueño (21 oct, para la parte 5)
 
-- **Cuatro supervivientes nuevos, solo del centro comercial**, uno por cada tipo de tienda con trastienda. **Uno por
+- **Tres supervivientes nuevos, solo del centro comercial** (eran cuatro; el dueño quitó a la camarera el 21 oct:
+  **tres por edificio**), cada uno en un tipo de tienda con trastienda. **Uno por
   partida, como ahora**: sale uno de los que aún no tienes, en una planta al azar (nunca la azotea); en los
   Apartamentos siguen saliendo el policía, la médica y el militar. Al rescatarlo se queda a vivir en la sala de
   mantenimiento para siempre y **la hace crecer** con algo suyo; como ahora, puede acompañarte (uno a la vez).
@@ -120,16 +121,43 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 | Quién | Dónde y cómo se le rescata | En la sala | Si te acompaña |
 |---|---|---|---|
-| **Camarera** | Encerrada en la cámara frigorífica del restaurante, congelándose: una barra de frío de unos 2 min desde que entras en la tienda; si se acaba, se pierde (esa partida) | Arregla la cafetera: cada partida empieza con un café, +25 de vida máxima esa partida | Tira platos: flojo (4) y de lejos, cada 1,5 s |
 | **Ferretero** | Atrincherado en el almacén de la ferretería: la horda de siempre mientras quita la barricada (más corta, unos 2 min) | Monta su puesto: vende munición, molotovs y granadas por dólares | Martillazos de cerca (8) |
 | **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
 | **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
 
-- **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
-  ahí le metían el VD-7. Decidido en la parte 7: al arreglarla encuentra un doble fondo con cápsulas de VD-7 y te lo
-  dice; desde entonces el café es solo café.
+- ✅ **Guiño para la historia (parte 7; hecho el 21 oct):** según el dosier, la cafetera de la sala se la regaló
+  Velaria a Johnny y por ahí le metían el VD-7. La arreglaba la camarera, que ya no está: **lo descubre la
+  farmacéutica** (decidido con el dueño el 21 oct, en la parte 7).
+  - La cafetera, dibujada con código (`scripts/mapa/cafetera.gd`): sobre una mesita, con su jarra, la taza de
+    Johnny y vapor, entre la farmacéutica y el técnico (`Mapa.CAFETERA_EN`). Está siempre en la sala.
+  - La primera vez que la farmacéutica, ya rescatada, está en la sala (en su sitio o acompañándote), al segundo y
+    medio dice las tres frases de `Historia.CAFETERA` en su bocadillo, una detrás de otra
+    (`Supervivientes.guino_cafetera`). Con la última se apunta en el guardado (`cafetera`) y no lo vuelve a decir;
+    si Johnny se va antes de acabar, lo cuenta entero la próxima vez.
+  - `--captura` saca `captura-cafetera.png` (la primera frase) y comprueba en la terminal que la segunda vez ya no
+    dice nada.
+  - El rescate propio de la farmacéutica y su mejora (el botiquín al empezar) siguen pendientes.
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
+- ✅ **Lo común** (21 oct):
+  - Los tres, en `supervivientes.gd` (`DATOS`), dibujados con código (`persona.gd`): el ferretero con chaleco naranja
+    de raya brillante, gorra y bigote, y su martillo; la farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
+    aparato con lucecita en el cinturón.
+  - En el centro comercial sale uno de los tres que aún no tengas (en los Apartamentos, los tres de siempre, sin
+    cambios). Su tienda sale siempre en su planta (`Planta.tienda_fija`) y se esconde en su trastienda, cerrada y sin
+    zombis: el ferretero en el almacén de la ferretería, la
+    farmacéutica en la rebotica (sin zombis tampoco en el aseo que tiene dentro) y el técnico en el almacén de la
+    tienda de electrónica. Cada uno grita lo suyo («¡No toquéis el agua!»).
+  - De momento se rescatan como los de siempre (encerrados, gritando y con la horda forzando la cerradura); cada trozo
+    siguiente cambia solo su rescate y hace su mejora de la sala.
+  - Lo suyo al acompañarte, ya hecho (lo pidió el dueño): martillazos a los que se le acercan (8, cada 0,9 s), charcos de veneno y ácido a la mitad, y una descarga cada 4 s que deja quieto 1 s
+    al zombi más cercano (hasta 260 de distancia).
+  - En la sala de mantenimiento, los tres de siempre donde estaban y los tres nuevos en una fila debajo, cada uno
+    con un hueco libre detrás para su mejora (`Planta.SITIO_CENTRO`; el texto de cada mejora, en `DATOS`, "mejora").
+    Lo que no decía el plan: con seis en la sala, solo dice «¿Te acompaño?» el que tienes más cerca (si no, se
+    pisaban los bocadillos).
+  - Tecla **H** en el centro: cada vez, el siguiente de los tres (rehace la planta con su tienda).
+    `--captura` saca además `captura-sala-seis.png` (los seis en la sala).
 
 ## Objetos
 
@@ -191,7 +219,7 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
 - **Es una trampa:** Johnny va buscando respuestas, y el gerente sabe que viene. Quiere retenerlo para entregárselo
   a Velaria a cambio de «la dosis buena». A media vida se inyecta VD-7 para no parar nunca, y por eso muta.
 - **El final, con gancho:** al caer el gerente llega un helicóptero de Velaria a por el Sujeto 0; Johnny escapa por la
-  escalera de incendios. La última página nombra **la sede de Velaria**: el siguiente edificio (nombre por decidir).
+  escalera de incendios. La última página nombra **la sede de Velaria**: el siguiente edificio (**Torre Velaria**, decidido en la parte 7).
 - **Dosier del centro comercial** (5 páginas, una por planta; como en los Apartamentos, cada una en un muerto):
 
 | Planta | Quién la lleva | Qué es | Lo que cuenta |
@@ -206,10 +234,44 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
   completar los Apartamentos, que es cuando se abre el centro), Velaria saca su somnífero a la venta, trabajadores
   que no vuelven a casa, un audio del gerente, y al completar el centro: «un helicóptero de Velaria aterriza en la
   azotea... vacío». Como en las de ahora, Velaria va cambiando su versión para taparlo.
-- **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
-  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café.
+- ✅ **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
+  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café. La camarera ya no está (tres
+  supervivientes por edificio): **lo descubre la farmacéutica** (decidido el 21 oct, en la parte 7).
 - Los textos los escribe Claude y el dueño los lee antes de darlos por buenos (se pueden reescribir: todo está en
   `historia.gd`; lo único que no se toca es el `id` de una página ya publicada).
+
+### ✅ Hecho (21 oct, parte 7; el dueño leyó los textos y le valen)
+
+- **El dosier del centro comercial** (`historia.gd`, `DOSIERES` → `"centro"`), con las cinco páginas de la tabla:
+  - Ids: `cc_albaran` (baja), `cc_turno` (1ª), `cc_incidencias` (2ª), `cc_correo` (3ª) y `cc_recogida` (azotea).
+    **No se cambian**: el guardado apunta las páginas por su id.
+  - Los cuatro primeros cuerpos salen como los científicos de los Apartamentos (uno por planta, mientras su página
+    falte). Lo nuevo: el jefe de seguridad y la secretaria no llevan bata, sino su ropa (uniforme azul marino con
+    chapa dorada y blusa rosa): `look` admite `ropa`, `pantalon` y `tarjeta` (`cientifico.gd`).
+  - **La sede de Velaria se llama Torre Velaria** (la eligió el dueño entre tres): la orden de recogida lleva al
+    Sujeto 0 «directo al laboratorio de la planta 40». Será el tercer edificio.
+  - El gerente se llama Arturo Salcedo. La nota al pie de su página explica la mutación: «Me prometieron la dosis
+    buena. Me mandaron una jeringa y esta hoja».
+  - En el ordenador, la página del gerente que falta dice «La lleva el gerente del centro, arriba del todo, en la
+    azotea. Tendrás que quitársela». Cada dosier tiene ahora su propia nota y su aviso de página que falta (los de
+    los Apartamentos, igual que antes).
+- **Cinco noticias nuevas de Canal 8** (`NOTICIAS`, emisiones 6 a 10), con las condiciones que ya había (no ha hecho
+  falta ninguna nueva): `n_reformas` (al completar los Apartamentos), `n_velaria_noche` (con la página 1), `n_turnos`
+  (con la 2), `n_audio` (con la 4) y `n_helicoptero` (al completar el centro). La 3ª planta no trae noticia, como el
+  diario de los Apartamentos.
+  - Lo que no decía el plan: con diez emisiones ya no cabían; la lista del programa Noticias tiene ahora su propio
+    desplazamiento y la tele se queda quieta. Y la pista de las que faltan dice qué edificio completar.
+- **Pendiente para el trozo 6 de la parte 4 (azotea y gerente):** al morir el gerente, llamar a
+  `partida.pagina_del_jefe()`: si la orden de recogida falta, la apunta y la enseña con el juego parado (como al
+  coger la de un muerto; `Historia.del_jefe` dice cuál es). Ya está probada en la foto de prueba
+  (`captura-pagina-jefe.png`).
+- ✅ **El guiño de la cafetera** (hecho el 21 oct, aparte del trozo de la farmacéutica): la primera vez que está en
+  la sala después de rescatarla, huele el café y le dice a Johnny las tres frases de `Historia.CAFETERA`; desde
+  entonces el café es solo café. Ver «Supervivientes».
+- Fotos de prueba (`--captura --edificio centro`): `captura-cientifico.png` y `captura-pagina.png` (el farmacéutico
+  de la planta baja), `captura-cuerpos.png` (los dos sin bata), `captura-dosier.png` (página 3),
+  `captura-dosier-falta.png` (la del gerente, sin encontrar), `captura-pagina-jefe.png` y `captura-noticias.png`.
+  Con `--captura` a secas, las de los Apartamentos, como siempre.
 
 ## Para que enganche (ideas aprobadas)
 
@@ -333,7 +395,35 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        despertando a tres vigilantes) y dice qué zombis hay en cada tienda; `--captura`, `captura-expo-zombis.png`.
      - Pegas conocidas: el andar del vigilante no cierra del todo el ciclo en algunas direcciones y la dependienta,
        andando hacia arriba a la derecha, se gira un poco de perfil.
-5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
+   - ✅ **Trozo 2: el antidisturbios y lo común de los minijefes** (21 oct). Lo que ha quedado:
+     - **El sorteo:** al empezar cada partida del centro comercial se sortea el minijefe de cada planta (baja, 1ª, 2ª
+       y 3ª, sin repetir; ficha `minijefes` y `MINIJEFES` en `edificios.gd`). Donde toca uno que aún no está hecho
+       (cocinero, modista, mascota) sale la portera, y también en la 4ª planta (la que será la azotea).
+     - **Su tienda** se llama según quién esté (Oficina de seguridad, Cocina central, Taller de costura, Juguetería):
+       el cartel de la puerta (sin neón), la sala, el aviso de las escaleras, el de la tarjeta, el de "ha caído" y el
+       nombre de la barra. Por dentro, el local destrozado de siempre.
+     - **Lo común** (`scripts/minijefe.gd`): igual que la portera (aparece al entrar, barra grande, +25 % de vida por
+       planta, se enfada a media vida con grito y vapor, al caer billetes, munición, objetos y la mutación).
+     - **El antidisturbios** (`scripts/antidisturbios.gd`), con los números del plan. Detalles decididos al hacerlo:
+       el escudo tapa un tercio de la vuelta por delante (y la espalda es otro tercio); a sus pies se ve un arco
+       azulado por donde tapa; sigue tapando cuando está atontado. Solo anda hacia delante, así que para seguir a
+       Johnny tiene que girarse. La carga avisa 0,8 s (la segunda seguida, 0,5) y corre como mucho 1,3 s; esquivando
+       se la pasa de largo; si te pilla te quedas 0,7 s sin poder moverte ("tirado"). Atontado, estrellitas.
+       Silbato cada 13 s si quedan pocos zombis: llegan vigilantes (los del trozo 1).
+     - **Su dibujo**, animado con PixelLab sobre su modelo de 72: andar, porrazo, carga (se agacha tras el escudo),
+       golpe (también cuando está atontado) y muerte en las 8 direcciones, y el silbato de frente. **42 generaciones**
+       (detalle y textos en `assets/pixellab.json` → `centro-comercial-parte4` → `antidisturbios-72` → `animaciones`).
+       Se monta con `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, que alinea por los pies los
+       lienzos de PixelLab (cada animación viene de un tamaño) y borra las motas sueltas. Pegas conocidas: andando de
+       frente y de espaldas casi no mueve las piernas; en la carga hacia la derecha el escudo lleva una franja negra
+       con letras; el porrazo cae en un fotograma algo distinto según la dirección.
+     - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
+       prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
+   - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
+     grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
+     (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
+   y la mejora de la sala de cada uno (un trozo para cada uno).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
    - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
      edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:
@@ -372,5 +462,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 
      - Los jefes no se congelan, ni se duermen, ni se dejan arrastrar, como pasaba ya con aturdir y prender.
      - `--captura` (en los dos edificios) prueba cada una contra zombis y saca `captura-arma-<receta>.png`.
-7. **La historia:** dosier y noticias (decidido: ver «Historia»).
+7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). Pendiente: la página del gerente
+   (trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
