@@ -214,6 +214,8 @@ func _ready() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	if captura and "--fotos-tiendas" in OS.get_cmdline_user_args():
 		fotos_tiendas()
+	elif captura and "--fotos-luz" in OS.get_cmdline_user_args():
+		fotos_luz()
 	elif captura and eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)
@@ -1048,6 +1050,44 @@ func dar_objetos() -> void:
 
 
 # ── Solo con --captura ──
+
+# Con "--captura --fotos-luz": para ver si la luz se cuela por las paredes. Entra en el apartamento con más
+# habitaciones, todas descubiertas (las lámparas encendidas) y sin zombis, y saca una foto con Johnny en
+# cada habitación, justo debajo de un tabique con otra habitación detrás y mirándolo (captura-luz-<n>.png):
+# la linterna tiene que quedarse en la pared y no alumbrar el suelo de detrás. Luego se cierra
+func fotos_luz() -> void:
+	set_process(false)
+	$Pantalla/HUD.hide()
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	montar(i, 0, false)
+	var s: Dictionary = planta.sitios[i]
+	for sala in s.apt.salas:
+		mapa.vistas[sala.id] = true
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	for sala in s.apt.salas:
+		# justo debajo de un tabique que tenga otra habitación detrás (el del medio, si hay varios)
+		var sitios := []
+		for f in range(3, mapa.filas):
+			for c in mapa.cols:
+				var aqui_d: int = mapa.dueno[f * mapa.cols + c]
+				var detras: int = mapa.dueno[(f - 2) * mapa.cols + c]
+				if aqui_d == sala.id and mapa.dueno[(f - 1) * mapa.cols + c] == -1 and detras >= 0 and detras != sala.id:
+					sitios.append(Vector2(c + 0.5, f + 0.7) * 32.0)
+		if sitios.is_empty():
+			continue
+		johnny.position = sitios[sitios.size() / 2]
+		johnny.direccion = "n"
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-luz-%d.png" % sala.id)
+		print("Foto luz: ", s.nombre, " · ", sala.nombre)
+	get_tree().quit()
+
 
 # Con "-- --captura --edificio centro --fotos-tiendas": sin penumbra y con todo descubierto, una foto de la sala de
 # venta de cada tienda de las dos primeras plantas (captura-tienda-<tipo>.png) y otra de la galería, y se cierra.

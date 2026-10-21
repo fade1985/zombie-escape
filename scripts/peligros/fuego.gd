@@ -68,7 +68,7 @@ func luz_de_fuego(radio: float) -> Node2D:
 			l.shadow_color = Color.BLACK
 			l.shadow_filter = Light2D.SHADOW_FILTER_PCF5
 			l.shadow_filter_smooth = 3.0
-			l.shadow_item_cull_mask = 1
+			l.shadow_item_cull_mask = Luz.SOMBRAS
 		else:
 			l.range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(datos.sala)
 		luz.add_child(l)

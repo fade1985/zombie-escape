@@ -25,6 +25,10 @@ const FOGONAZO := Color(1.0, 0.82, 0.51)
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const CAPA_SUELO := 2
 const CAPA_COSAS := 1
+# La máscara de sombras de las luces del suelo. En Godot sirve para dos cosas a la vez: qué oclusores hacen
+# sombra (los muros y muebles están en la capa 1) y a qué se le pinta la sombra encima (el suelo, en la 2).
+# Con solo la 1, los muros hacían sombra pero el suelo no la recibía, y la luz atravesaba las paredes
+const SOMBRAS := CAPA_COSAS | CAPA_SUELO
 # En un apartamento, cada habitación tiene su propia capa (de la 3 a la 20): mapa.gd pasa todo lo que hay en
 # ella (muros, muebles, zombis, Johnny...) de la capa 1 a la suya, y cada lámpara y la linterna solo alumbran la
 # de su habitación. Como esa luz no hace sombras, si no se colaría por las paredes a la habitación de al lado
@@ -111,7 +115,7 @@ func seguir_a(quien: Node2D) -> void:
 	linterna_suelo.shadow_color = Color.BLACK
 	linterna_suelo.shadow_filter = Light2D.SHADOW_FILTER_PCF5
 	linterna_suelo.shadow_filter_smooth = 3.0
-	linterna_suelo.shadow_item_cull_mask = 1
+	linterna_suelo.shadow_item_cull_mask = SOMBRAS
 	linterna_cosas = cono(CAPA_COSAS)
 	pintar()
 

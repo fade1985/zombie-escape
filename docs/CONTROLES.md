@@ -41,6 +41,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   la planta baja: dice en la terminal cuántos salen en 2000 partidas sorteadas y lo que pasa (luces apagadas,
   calambrazos, oleadas y premio, compras con lo que queda de dólares) y saca `captura-evento-<X>.png` (el cartel) y
   las suyas (`-piso`, `-cable`, `-premio`, `-puesto`, `-comprado`). Sin `--evento`, la prueba va sin eventos.
+- `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
+  con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
+  lámparas no tienen que alumbrar el suelo del otro lado.
 
 ## La sala de mantenimiento
 
