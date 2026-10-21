@@ -1498,7 +1498,7 @@ func probar_objetos() -> void:
 			print("Objetos en %s %s: %d distintos %s" % [ed_id, tienda if tienda != "" else "(pasillo)", salen.size(), salen.keys()])
 	print("Reparto de objetos: ", "bien" if fallos.is_empty() else "MAL %s" % str(fallos.slice(0, 5)))
 	for i in Objetos.SOLO_CENTRO.size():
-		soltar_objeto(Objetos.SOLO_CENTRO[i], johnny.position + Vector2(-176 + i * 44, 110), true)
+		soltar_objeto(Objetos.SOLO_CENTRO[i], johnny.position + Vector2(-176 + i * 44, -100), true)
 	await get_tree().create_timer(0.5).timeout
 	menus.visible = false   # por si ha salido el recuadro de una mutación
 	await get_tree().process_frame
@@ -1523,6 +1523,130 @@ func probar_objetos() -> void:
 	Guardado.cambiar(func(g): g.baul = baul_antes)
 
 
+# Las armas de las recetas nuevas (parte 6 del centro comercial): comprueba que las nueve recetas salen en el banco
+# y prueba cada arma contra zombis lentos de 500 de vida (que no muera ninguno), contando en la terminal lo que pasa
+# y con una foto de cada una: captura-arma-<receta>.png
+func probar_recetas() -> void:
+	var nuevas := ["bate_helado", "mangual", "latigo_electrico", "pistola_electrica", "garfio", "bomba_aceite",
+		"mina_despertador", "nube_somnifera", "bomba_clavos"]
+	print("Recetas nuevas en el banco: ", nuevas.all(func(r): return Recetas.buscar(Recetas.LISTA[r].con[1], Recetas.LISTA[r].con[0]) == r))
+	# en medio del cuarto, mirando a la derecha, y sin atacar por su cuenta (aquí ataca la prueba)
+	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.direccion = "e"
+	johnny.espera = 1000.0
+	# cuerpo a cuerpo: el bate helado congela, el mangual echa a todos lejos y el látigo eléctrico salta a otro
+	var z := zombis_de_prueba([Vector2(40, 0)])
+	johnny.coger(Armas.apuntar(Recetas.crear("bate_helado")))
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	await foto_arma("bate_helado")
+	print("Bate helado: congelado %.1f vida %d" % [z[0].congelado, z[0].vida])
+	z = zombis_de_prueba([Vector2(45, 0), Vector2(-45, 10), Vector2(0, 45)])
+	johnny.coger(Armas.apuntar(Recetas.crear("mangual")))
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	await get_tree().create_timer(0.25).timeout
+	await foto_arma("mangual")
+	print("Mangual: distancias %s | aturdidos %s" % [z.map(func(o): return roundi(o.distancia_a(johnny))), z.map(func(o): return o.aturdido > 0.0)])
+	z = zombis_de_prueba([Vector2(90, 0), Vector2(150, 30)])
+	johnny.coger(Armas.apuntar(Recetas.crear("latigo_electrico")))
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(0.0)
+	await foto_arma("latigo_electrico")
+	print("Látigo eléctrico: aturdidos %s | vidas %s" % [z.map(func(o): return snappedf(o.aturdido, 0.1)), z.map(func(o): return o.vida)])
+	# a distancia: las chispas de la pistola eléctrica y el garfio
+	z = zombis_de_prueba([Vector2(160, 0), Vector2(220, 40)])
+	johnny.coger(Armas.apuntar(Recetas.crear("pistola_electrica")))
+	await get_tree().create_timer(0.1).timeout
+	for i in 4:
+		johnny.disparar(0.0)
+		await get_tree().create_timer(0.08).timeout
+	await foto_arma("pistola_electrica")
+	await get_tree().create_timer(0.3).timeout
+	print("Pistola eléctrica: balas %d | aturdidos %s | vidas %s" % [johnny.balas, z.map(func(o): return snappedf(o.aturdido, 0.1)),
+		z.map(func(o): return o.vida)])
+	z = zombis_de_prueba([Vector2(260, 0)])
+	johnny.coger(Armas.apuntar(Recetas.crear("garfio")))
+	await get_tree().create_timer(0.1).timeout
+	var lejos := roundi(z[0].distancia_a(johnny))
+	johnny.disparar(0.0)
+	await get_tree().create_timer(0.4).timeout
+	await foto_arma("garfio")
+	await get_tree().create_timer(0.75).timeout
+	print("Garfio: distancia %d -> %d | balas %d (no gasta) | vida %d" % [lejos, roundi(z[0].distancia_a(johnny)), johnny.balas, z[0].vida])
+	# arrojadizas: el aceite resbala y luego arde, la mina espera a que pase un zombi, la nube duerme y los clavos
+	z = zombis_de_prueba([Vector2(170, 0), Vector2(190, 30)])
+	for r in ["bomba_aceite", "mina_despertador", "nube_somnifera", "bomba_clavos"]:
+		lanzables.sacar(Recetas.crear(r))
+	for o in z:
+		o.aturdido = 4.0   # que se queden en el charco
+	lanzables.tipo = "bomba_aceite"
+	lanzables.lanzar(johnny.global_position + Vector2(180, 10))
+	await get_tree().create_timer(1.0).timeout
+	var aceite := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "aceite").size()
+	await foto_arma("bomba_aceite")
+	await get_tree().create_timer(2.0).timeout
+	print("Bomba de aceite: charcos de aceite %d | luego fuegos %d | zombis ardiendo %s" % [aceite,
+		get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "fuego").size(), z.map(func(o): return o.arder_t > 0.0)])
+	await foto_arma("bomba_aceite_arde")
+	z = zombis_de_prueba([])
+	lanzables.tipo = "mina_despertador"
+	lanzables.lanzar(johnny.global_position + Vector2(-170, 0))
+	await get_tree().create_timer(1.3).timeout
+	await foto_arma("mina_despertador")
+	var mina: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() == Lanzables.BOMBA)[-1]
+	var donde: Vector2 = mina.global_position - johnny.global_position
+	z = zombis_de_prueba([Vector2(-330, 0)])   # viene hacia Johnny y pasa por encima
+	for i in 40:
+		await get_tree().create_timer(0.1).timeout
+		if not is_instance_valid(mina):
+			break
+	await get_tree().create_timer(0.1).timeout
+	print("Mina despertador: en %s | ha explotado %s | el zombi que pasa, vida %d (de 500) | vida de Johnny %d" % [
+		donde.round(), not is_instance_valid(mina), z[0].vida, johnny.vida])
+	z = zombis_de_prueba([Vector2(180, 0), Vector2(200, 40), Vector2(150, -30)])
+	lanzables.tipo = "nube_somnifera"
+	lanzables.lanzar(johnny.global_position + Vector2(180, 10))
+	await get_tree().create_timer(1.9).timeout
+	await foto_arma("nube_somnifera")
+	print("Nube somnífera: dormidos %s" % [z.map(func(o): return snappedf(o.aturdido, 0.1))])
+	z = zombis_de_prueba([Vector2(120, 0), Vector2(200, 50), Vector2(80, -60)])
+	lanzables.tipo = "bomba_clavos"
+	lanzables.lanzar(johnny.global_position + Vector2(150, 0))
+	await get_tree().create_timer(2.15).timeout
+	await foto_arma("bomba_clavos")
+	await get_tree().create_timer(0.35).timeout
+	print("Bomba de clavos: vidas %s | sangran %s | quedan %s" % [z.map(func(o): return o.vida),
+		z.map(func(o): return o.has_node("herida_sangra")), lanzables.tipos()])
+	zombis_de_prueba([])
+	johnny.vida = johnny.stats.vida_max
+	johnny.espera = 0.0
+
+
+# Para probar_recetas: quita los zombis y los charcos que haya, cura a Johnny y saca zombis lentos de 500 de vida
+# en esos sitios (respecto a Johnny)
+func zombis_de_prueba(donde: Array) -> Array:
+	for o in get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("charcos"):
+		o.remove_from_group("zombis")
+		o.queue_free()
+	johnny.vida = johnny.stats.vida_max
+	var lista := []
+	for d in donde:
+		var zombi := meter_zombi("lento", johnny.position + d)
+		zombi.vida = 500
+		lista.append(zombi)
+	return lista
+
+
+# Para probar_recetas: la foto de un arma nueva (sin el recuadro de las mutaciones, si ha salido)
+func foto_arma(nombre: String) -> void:
+	menus.visible = false
+	await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://captura-arma-%s.png" % nombre)
+	menus.visible = true
+
+
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
 func probar_mutaciones() -> void:
 	abrir_mutacion()
@@ -1544,6 +1668,7 @@ func probar_menus() -> void:
 	await probar_cosas()
 	await probar_creadas()
 	await probar_objetos()
+	await probar_recetas()
 	await supervivientes.probar()
 	await probar_sangre()
 	await probar_mutaciones()

@@ -23,11 +23,13 @@
 **Personajes y combate**
 - `johnny.gd`: moverse, vida, apuntar y atacar. `mejoras.gd`: sus atributos (el baseStats del JS).
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`). `bala.gd`.
-- `armas_creadas.gd`: lo que hacen las armas creadas (aturdir, prender, sangrar, descarga…); `chorro.gd` (gotas de
-  fuego y ácido) y `bumeran.gd`.
+- `armas_creadas.gd`: lo que hacen las armas creadas (aturdir, prender, sangrar, descarga, congelar, dejar tirado…);
+  `chorro.gd` (gotas de fuego y ácido, chispas de la pistola eléctrica y clavos de la bomba de clavos), `bumeran.gd`
+  y `garfio.gd` (engancha a un zombi y lo trae hasta Johnny).
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (munición, apuntar, lanzar; `Lanzables.tipos()`).
-  `granada.gd`: también la atraedora, la congeladora y la lluvia ácida.
-- `charco.gd` (veneno, lejía, vómito, fuego y ácido) y `estados.gd` (lo que hacen los charcos; también el frío y el
+  `granada.gd`: también la atraedora, la congeladora, la lluvia ácida, la mina despertador, la nube somnífera (que
+  suelta `nube.gd`) y la bomba de clavos. La bomba de aceite va como el molotov (`proyectil.gd`).
+- `charco.gd` (veneno, lejía, vómito, fuego, ácido y aceite, que al acabar arde) y `estados.gd` (lo que hacen los charcos; también el frío y el
   calambrazo de los peligros, y `frenado`).
 - `peligros/`: los peligros de las tiendas del centro comercial. `peligros.gd` (sus números y dónde va cada uno, al
   generar la planta), `frio.gd` (la cámara frigorífica; congela a los zombis: `zombi.gd`), `fuego.gd` (la cocina del
@@ -43,7 +45,7 @@
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque.
 - `portera.gd`: la jefa, por estados (charcos de ácido, embestida, grito "¡VECINOS!"; números en sus constantes).
-- `bala_zombi.gd`, `proyectil.gd` (moco, lejía y ácido en parábola), `explosion.gd`.
+- `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov y bomba de aceite en parábola), `explosion.gd`.
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes.
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
@@ -55,9 +57,11 @@
   `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`, y las de los peligros: `captura-peligro-<...>.png`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 26 objetos, mochila, baúl de 32 casillas, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
-  el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (15 recetas y rarezas),
-  `billete.gd`, `minimapa.gd`. La prueba `--captura` cuenta el reparto de cada sitio (`probar_objetos` de
-  `partida.gd`) y saca `captura-objetos-nuevos.png`, `captura-banco-todo.png` y `captura-baul-todo.png`.
+  el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (24 recetas y rarezas: 15 de los
+  Apartamentos, 6 que mezclan los dos edificios y 3 solo del centro), `billete.gd`, `minimapa.gd`. La prueba
+  `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `partida.gd`) y saca `captura-objetos-nuevos.png`,
+  `captura-banco-todo.png` y `captura-baul-todo.png`; luego prueba cada arma nueva contra zombis (`probar_recetas`)
+  y saca `captura-arma-<receta>.png`.
 - `guardado.gd`: el guardado entre partidas.
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
 - `historia.gd`: el texto del dosier, la hoja de papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale

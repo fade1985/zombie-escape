@@ -1,5 +1,6 @@
 # Algo que se lanza en parábola: el moco del venenoso, la botella de lejía de la portera, el cóctel molotov de
-# Johnny, su vómito (mutación Gastroenteritis) o el ácido que salpica la portera. Vuela por encima de todo y, al caer, deja un charco. Los de
+# Johnny, la bomba de aceite (arrojadiza creada del centro comercial), su vómito (mutación Gastroenteritis) o el
+# ácido que salpica la portera. Vuela por encima de todo y, al caer, deja un charco. Los de
 # los zombis, si Johnny está justo donde caen, le hacen daño; el molotov suelta una llamarada que prende a los
 # zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js).
 extends Node2D
@@ -15,6 +16,7 @@ const TIPOS := {
 	"lejia": {"vuelo": 0.9, "altura": 130.0, "golpe": 10, "charco": "lejia"},
 	"acido": {"vuelo": 0.75, "altura": 110.0, "golpe": 8, "charco": "acido"},   # lo que salpica la portera con la fregona
 	"molotov": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "fuego"},
+	"aceite": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "aceite"},
 	"vomito": {"vuelo": 0.45, "altura": 70.0, "golpe": 0, "charco": "vomito"},
 }
 
@@ -46,7 +48,7 @@ func caer(datos: Dictionary) -> void:
 	charco.tipo = datos.charco
 	# el centro, en píxel entero del dibujo, para que cuadre con el resto del suelo
 	charco.position = (hasta / 2.0).round() * 2.0
-	if tipo == "molotov":
+	if tipo == "molotov" or tipo == "aceite":
 		charco.escala = Lanzables.FABRICANTE.radio if fabricante else 1.0
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
 		charco.dano_lanzar = dano_lanzar
@@ -56,13 +58,17 @@ func caer(datos: Dictionary) -> void:
 			Sonido.tocar("cristal")
 			Sonido.tocar("fuego")
 		"lejia": Sonido.tocar("cristal")
+		"aceite":
+			Sonido.tocar("cristal")
+			Sonido.tocar("chof")
 		_: Sonido.tocar("chof")
 	if tipo == "molotov":
 		llamarada(charco.radio())
-	elif tipo == "vomito" or tipo == "acido":
+	elif tipo == "vomito" or tipo == "acido" or tipo == "aceite":
 		for i in 8:
 			var a := randf() * TAU
-			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), Color("#c7e04a"), randf_range(3, 5), 0.4)
+			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160),
+				Color("#e8c547") if tipo == "aceite" else Color("#c7e04a"), randf_range(3, 5), 0.4)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if datos.golpe > 0 and johnny and johnny.vivo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
 		johnny.recibir_dano(datos.golpe)
@@ -101,6 +107,16 @@ func _draw() -> void:
 			draw_texture(MOCO, -Vector2(MOCO.get_size()) / 2.0, Color.WHITE if tipo == "veneno" else Color(1, 1, 0.45))
 		"molotov":
 			botella(donde, t * 12.0)
+		"aceite":
+			# la botella de aceite: amarilla con el tapón verde, dando vueltas
+			draw_set_transform(donde, t * 10.0)
+			var contorno := Color("#1d1b2c")
+			draw_rect(Rect2(-8, -10, 16, 20), contorno)
+			draw_rect(Rect2(-6, -8, 12, 16), Color("#f2c94c"))
+			draw_rect(Rect2(-6, -8, 3, 16), Color("#fff0a0"))
+			draw_rect(Rect2(-4.5, -16, 9, 7), contorno)
+			draw_rect(Rect2(-3, -15, 6, 5), Color("#5aa05a"))
+			draw_rect(Rect2(-4, -2, 8, 4), Color("#f1f1e6"))
 		_:
 			# La botella de lejía, dando vueltas (dibujada con código, como en el juego)
 			draw_set_transform(donde, t * 10.0)
