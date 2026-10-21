@@ -2,7 +2,8 @@
 # de src/banco.js). El juego se para mientras están abiertas:
 #   - Inventario (Tab, I o Select): las dos armas que lleva, las que guarda (la que deja al comprar otra
 #     cuerpo a cuerpo, o al sacar una creada del baúl) y la mochila. Al tocar una casilla se elige y salen sus
-#     botones: "Ponérmela" (las armas guardadas) y "Tirar al suelo" (los objetos, de uno en uno, y las armas).
+#     botones: "Ponérmela" (las armas guardadas), "Usar" (el botiquín de la farmacéutica: Objetos.USABLES) y
+#     "Tirar al suelo" (los objetos, de uno en uno, y las armas).
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): los objetos guardados de otras partidas y las armas
 #     creadas en el banco. Un arma creada se puede sacar para esta partida (fase 7b2): la de cuerpo a cuerpo o
 #     de fuego va a la mano (y la que llevaba, al inventario); las arrojadizas, al botón de lanzar.
@@ -26,6 +27,7 @@ var sel := ""              # la casilla elegida: "m2" la 3.ª de la mochila, "g0
 var puestos: Array = []    # banco: las claves de lo que hay en la mesa (dos como mucho)
 var hecha := {}            # banco: el arma que se acaba de crear (para enseñarla)
 var foco := ""             # el botón que tiene que quedar marcado al volver a pintar
+var aviso := ""            # inventario: lo que se dice abajo una vez (por qué no se puede usar)
 
 
 func _ready() -> void:
@@ -40,6 +42,7 @@ func abrir(que: String, p: Node) -> void:
 	puestos = []
 	hecha = {}
 	foco = ""
+	aviso = ""
 	pintar(true)
 
 
@@ -117,10 +120,18 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		else:
 			casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
 	var texto := "Lo que llevas en la mochila pasa al baúl si completas el edificio. Si caes, se pierde."
-	if sel != "":
+	var usable := elegido() in Objetos.USABLES
+	if usable:   # (de momento solo hay el botiquín)
+		texto = "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_botiquin()
+	elif sel != "":
 		texto = "Si lo tiras, se queda en el suelo: puedes volver a cogerlo." + (" Se tira de uno en uno." if sel[0] == "m" else "")
+	if aviso != "":
+		texto = aviso
+		aviso = ""
 	nota(columna, texto)
 	var botones := fila(columna, true)
+	if usable:
+		boton(botones, "usar", "Usar", usar, "BotonGrande")
 	if sel.begins_with("g"):
 		boton(botones, "poner", "Ponérmela", poner_guardada)
 	if sel != "":
@@ -132,6 +143,27 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 # El borde de la casilla de un arma: el color de su rareza si es creada; si no, gris
 func borde(id: String) -> Color:
 	return Recetas.RAREZAS[Armas.sacadas[id].rareza].color if Armas.es_creada(id) else Recetas.GRIS
+
+
+# El objeto de la casilla de la mochila elegida ("" si no hay ninguna elegida)
+func elegido() -> String:
+	var llenas := Objetos.casillas(partida.mochila)
+	var i := sel.substr(1).to_int()
+	return llenas[i][0] if sel.begins_with("m") and i < llenas.size() else ""
+
+
+# Usa lo elegido de la mochila (el botiquín): se cierra el inventario y Johnny se cura. Si no se puede (con la
+# vida llena), lo dice abajo y no se gasta
+func usar() -> void:
+	var no: String = partida.usar_objeto(elegido())
+	if no != "":
+		Sonido.tocar("no")
+		aviso = no
+		foco = "usar"
+		pintar()
+		return
+	sel = ""
+	cerrar()
 
 
 # Se pone en la mano el arma guardada elegida; la que llevaba (de su mismo tipo) pasa a las guardadas
@@ -524,6 +556,8 @@ func tocar(clave: String) -> void:
 		return
 	sel = "" if sel == clave else clave
 	foco = clave
+	if abierto == "inventario" and elegido() in Objetos.USABLES:
+		foco = "usar"   # con el mando o las flechas, la marca salta a «Usar»: A dos veces y te curas
 	pintar()
 
 

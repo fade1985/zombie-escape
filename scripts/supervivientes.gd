@@ -637,6 +637,17 @@ func abrir_puesto() -> void:
 	puesto.abrir(partida)
 
 
+# ═════════════ El botiquín de la farmacéutica ═════════════
+
+# Al empezar la partida, con la farmacéutica rescatada (en los dos edificios): un botiquín en la mochila. Se usa
+# desde el inventario («Usar», Objetos.USABLES) y no va al baúl. Devuelve si lo ha puesto (para decirlo al empezar)
+func botiquin_al_empezar() -> bool:
+	if "farmaceutica" not in Guardado.cargar().rescatados:
+		return false
+	partida.mochila.append("botiquin")
+	return true
+
+
 # ═════════════ El guiño de la cafetera ═════════════
 
 const CAFE_PAUSA := 1.5   # segundos en la sala antes de que la farmacéutica huela el café
@@ -797,6 +808,7 @@ func probar() -> void:
 	await probar_acompanantes()
 	await probar_cafetera()
 	await probar_puesto()
+	await probar_botiquin()
 	await barricada.probar()
 	await escolta.probar()
 	await averia.probar()
@@ -989,6 +1001,53 @@ func probar_puesto() -> void:
 	for a in equipo:
 		partida.mapa.cosas.add_child(a)
 		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
+
+
+# El botiquín de la farmacéutica: sin ella no hay; con ella, en la mochila. En el inventario, con la vida a medias
+# y el botiquín elegido (captura-farmaceutica-botiquin.png); con la vida llena «Usar» no lo gasta; con la vida a
+# medias cura y lo gasta. Que no sale en el banco y que se puede tirar. Luego se deja todo como estaba
+func probar_botiquin() -> void:
+	var inv = partida.inventario
+	var antes := [Guardado.cargar().rescatados.duplicate(), partida.mochila.duplicate(), johnny.vida]
+	partida.mochila = []
+	Guardado.cambiar(func(x): x.rescatados = ["ferretero"])
+	var sin_ella := botiquin_al_empezar()
+	Guardado.cambiar(func(x): x.rescatados = ["farmaceutica"])
+	var con_ella := botiquin_al_empezar()
+	partida.mochila.append_array(["clavos", "clavos", "lejia"])
+	johnny.vida = roundi(johnny.vida_tope() * 0.5)
+	partida.abrir_cosas("inventario")
+	print("Botiquín al empezar: sin ella %s | con ella %s | mochila %s | en el banco %s" % [sin_ella, con_ella,
+		partida.mochila, "botiquin" in inv.ingredientes().map(func(x): return x.id)])
+	inv.tocar("m0")
+	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
+	var marcado := get_viewport().gui_get_focus_owner()
+	print("Botiquín elegido: marcado '%s' | dice '%s'" % [marcado.name if marcado else "-",
+		inv.fondo.find_children("*", "Label", true, false).filter(func(t): return t.theme_type_variation == "Sub").back().text])
+	get_viewport().get_texture().get_image().save_png("res://captura-farmaceutica-botiquin.png")
+	var vida_media: int = johnny.vida
+	johnny.vida = johnny.vida_tope()
+	inv.usar()
+	print("Botiquín con la vida llena: abierto %s | sigue en la mochila %s" % [inv.abierto != "", "botiquin" in partida.mochila])
+	johnny.vida = vida_media
+	inv.usar()
+	print("Botiquín usado: vida %d -> %d (cura %d) | abierto %s | juego en pausa %s | mochila %s" % [vida_media,
+		johnny.vida, partida.cura_botiquin(), inv.abierto != "", get_tree().paused, partida.mochila])
+	partida.mochila.append("botiquin")
+	partida.abrir_cosas("inventario")
+	inv.tocar("m%d" % (Objetos.casillas(partida.mochila).size() - 1))
+	inv.tirar()
+	inv.cerrar()
+	await get_tree().process_frame
+	var es_botiquin := func(c): return c.get_script() == partida.BILLETE and c.icono.resource_path.ends_with("/botiquin.png")
+	var tirados: Array = partida.mapa.cosas.get_children().filter(es_botiquin)
+	print("Botiquín tirado: en el suelo %d (tamaño %.1f) | mochila %s" % [tirados.size(),
+		tirados[0].tamano if not tirados.is_empty() else 0.0, partida.mochila])
+	for c in tirados:
+		c.queue_free()
+	Guardado.cambiar(func(x): x.rescatados = antes[0])
+	partida.mochila = antes[1]
+	johnny.vida = antes[2]
 
 
 func iconos_lanzables() -> Array:
