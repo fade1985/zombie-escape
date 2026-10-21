@@ -1,9 +1,11 @@
-# La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene dos pestañas:
+# La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene tres pestañas:
 #   - General: el modo de atacar (se guarda), la música, el sonido y la pantalla completa. En el móvil,
 #     además, el tamaño y la transparencia de los botones táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
 #     En el móvil, qué hace cada botón táctil.
+#   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin, lanzar apuntando solo). Se guardan y se
+#     notan al momento, también desde la pausa (johnny.gd y hud.gd las miran con Guardado.ajuste).
 # Se maneja igual que los otros menús: ratón, flechas + Intro o mando (A pulsar, B volver).
 #
 # Se usa así:  Opciones.abrir(self, lo_que_tapa, johnny)  (johnny puede ser null en el menú principal).
@@ -132,7 +134,7 @@ func _ready() -> void:
 	pestanas.alignment = BoxContainer.ALIGNMENT_CENTER
 	pestanas.add_theme_constant_override("separation", 10)
 	columna.add_child(pestanas)
-	for p in [["general", "General"], ["controles", "Controles"]]:
+	for p in [["general", "General"], ["controles", "Controles"], ["ayudas", "Ayudas"]]:
 		var b := Button.new()
 		b.text = p[1]
 		b.name = p[0]
@@ -174,6 +176,8 @@ func ver(cual: String) -> void:
 	esperando = null
 	if cual == "general":
 		general()
+	elif cual == "ayudas":
+		ayudas()
 	else:
 		controles()
 	(pestanas.get_node(cual) as Button).grab_focus.call_deferred()
@@ -216,6 +220,26 @@ func general() -> void:
 		rotar("Tamaño de los botones", "tactil_tamano", TAMANOS)
 		rotar("Transparencia", "tactil_opacidad", OPACIDADES)
 		rotar("Vibración", "vibracion", SI_NO)
+
+
+# Las ayudas: cada una, un botón de Sí/No con lo que hace debajo
+func ayudas() -> void:
+	rotar("Vida entera", "vida_entera", SI_NO)
+	explicar("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento.")
+	rotar("Pistola sin fin", "pistola_sin_fin", SI_NO)
+	explicar("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre.")
+	rotar("Lanzar apuntando solo", "lanzar_solo", SI_NO)
+	explicar("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre.")
+
+
+func explicar(texto: String) -> void:
+	var l := Label.new()
+	l.theme_type_variation = "Sub"
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.custom_minimum_size.x = 560
+	l.text = texto
+	contenido.add_child(l)
 
 
 # Un botón que, a cada pulsación, pasa al siguiente valor de la lista, lo guarda en los ajustes y se lo

@@ -217,6 +217,8 @@ func _ready() -> void:
 		fotos_tiendas()
 	elif captura and "--fotos-luz" in OS.get_cmdline_user_args():
 		fotos_luz()
+	elif captura and "--fotos-ayudas" in OS.get_cmdline_user_args():
+		fotos_ayudas()
 	elif captura and eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)
@@ -1084,6 +1086,58 @@ func dar_objetos() -> void:
 
 
 # ── Solo con --captura ──
+
+# Con "--captura --fotos-ayudas": prueba las ayudas de Opciones. Abre la pestaña Ayudas y las pone en Sí
+# (captura-ayudas-opciones.png); luego le quita casi toda la vida a Johnny, lo cura y dispara la pistola, y
+# cuenta en la terminal la vida, los tercios y las balas, sin ayudas y con ellas (captura-ayudas-hud.png).
+# Para lanzar apuntando solo, con el ratón lejos, mete un zombi y cuenta adónde iría el lanzable: con la
+# ayuda, al zombi (captura-ayudas-lanzar.png, con un molotov en el aire).
+# Al acabar las deja en No y se cierra
+func fotos_ayudas() -> void:
+	set_process(false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var probar := func(nombre: String) -> void:
+		johnny.tercios = 3
+		johnny.vida = johnny.stats.vida_max
+		johnny.quitar_vida(roundi(johnny.stats.vida_max * 0.8))
+		johnny.curar(1000)
+		johnny.coger("pistola")
+		var antes: int = johnny.balas
+		for i in 5:
+			johnny.disparar(0.0)
+		print("Ayudas %s: vida %d/%d tras curar · tercios %d · balas %d -> %d · recargando %s" % [nombre,
+			johnny.vida, johnny.stats.vida_max, johnny.tercios_vivos(), antes, johnny.balas, johnny.recargando > 0.0])
+	var zombi := meter_zombi("normal", johnny.global_position + Vector2(-150, 60))
+	zombi.set_physics_process(false)   # quieto, para la prueba
+	var probar_lanzar := func(nombre: String) -> void:
+		johnny.con_raton = true
+		var donde: Vector2 = lanzables.objetivo()
+		print("Ayudas %s: el lanzable caería a %d del zombi" % [nombre, roundi(donde.distance_to(zombi.global_position))])
+	probar.call("no")
+	probar_lanzar.call("no")
+	var o := Opciones.abrir(self, null, johnny)
+	o.ver("ayudas")
+	await get_tree().process_frame
+	for b in o.contenido.get_children():
+		if b is Button:
+			b.pressed.emit()
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-ayudas-opciones.png")
+	o.cerrar()
+	probar.call("sí")
+	probar_lanzar.call("sí")
+	await get_tree().create_timer(0.5).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-ayudas-hud.png")
+	lanzables.lanzar(lanzables.objetivo())   # un molotov de verdad, en pleno vuelo hacia el zombi
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-ayudas-lanzar.png")
+	Guardado.cambiar(func(g):
+		g.ajustes.vida_entera = false
+		g.ajustes.pistola_sin_fin = false
+		g.ajustes.lanzar_solo = false)
+	get_tree().quit()
+
 
 # Con "--captura --fotos-luz": para ver si la luz se cuela por las paredes. Entra en el apartamento con más
 # habitaciones, todas descubiertas (las lámparas encendidas) y sin zombis, y saca una foto con Johnny en

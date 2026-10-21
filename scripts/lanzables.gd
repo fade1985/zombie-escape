@@ -4,6 +4,8 @@
 #     Johnny), la zona que arderá o explotará y la trayectoria. Al SOLTAR, lo lanza.
 #   - Con ratón apunta al puntero; con mando, hacia donde se empuja el stick derecho (tan lejos como se
 #     empuje). Si no se apunta a nada, al zombi más cercano a tiro (o, si no hay, un poco por delante).
+#   - Con la ayuda "Lanzar apuntando solo" (Opciones > Ayudas), va siempre al zombi más cercano a la vista
+#     (el mismo que buscaría el modo de atacar asistido); si no se ve ninguno, se apunta como siempre.
 #   - F o RB cambian lo que se lanza: molotov → granada → las arrojadizas creadas que queden → molotov.
 #   - Las arrojadizas creadas (fase 7b2, sacadas del baúl): se lanzan como la granada con su propio efecto
 #     (ARROJADIZAS). El cóctel molotov no está aquí: sus botellas se suman a los molotovs.
@@ -174,7 +176,10 @@ func objetivo() -> Vector2:
 	var desde: Vector2 = johnny.global_position
 	var hacia := Vector2.ZERO
 	var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
-	if stick.length() > 0.25:
+	var solo: Node2D = johnny.buscar_objetivo({"tipo": "fuego", "alcance": MOLOTOV.alcance}) 		if Guardado.ajuste("lanzar_solo") else null
+	if solo:
+		hacia = solo.global_position - desde   # ayuda "Lanzar apuntando solo"
+	elif stick.length() > 0.25:
 		hacia = Vector2(stick.x, stick.y * 0.6) * MOLOTOV.alcance
 	elif johnny.con_raton:
 		hacia = get_global_mouse_position() - desde

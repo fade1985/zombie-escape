@@ -447,11 +447,12 @@ func pintar_barra() -> void:
 	barra.draw_rect(lleno, Color("#8a1f1a").lerp(Color("#e0503a"), luz))
 	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, lleno.size.y * 0.45)), Color("#c24a38").lerp(Color("#ff8a6a"), luz))
 	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y * 0.8), Vector2(lleno.size.x, lleno.size.y * 0.2)), Color("#6a1512"))
-	# Las dos rayas que separan los tercios
-	for i in [1, 2]:
+	# Las dos rayas que separan los tercios (con la ayuda "Vida entera" la vida no va en tercios: sin rayas)
+	var en_tercios: bool = not Guardado.ajuste("vida_entera")
+	for i in ([1, 2] if en_tercios else []):
 		barra.draw_rect(Rect2(HUECO.position.x + HUECO.size.x * i / 3.0 - 1, HUECO.position.y, 2, HUECO.size.y), Color("#1a1620"))
 	# Los tercios perdidos, tapados con rayas oscuras en diagonal
-	var perdido: float = HUECO.size.x * (3 - johnny.tercios) / 3.0
+	var perdido: float = HUECO.size.x * (3 - johnny.tercios_vivos()) / 3.0
 	if perdido > 0.0:
 		var x0 := HUECO.end.x - perdido
 		var y0 := HUECO.position.y
@@ -524,7 +525,7 @@ func pintar_balas() -> void:
 		barra.draw_set_transform(Vector2.ZERO)
 	# La reserva: las balas de repuesto que lleva (en naranja si ya no le queda ninguna)
 	var donde := Vector2(x + 4, abajo - 2)
-	var texto := "+∞" if w.get("sin_municion", false) else "+%d" % johnny.reserva
+	var texto := "+∞" if w.get("sin_municion", false) or johnny.pistola_sin_fin() else "+%d" % johnny.reserva
 	var color_texto := Color("#f0e8d4") if johnny.reserva > 0 or texto == "+∞" else Color("#ff9f1c")
 	color_texto.a = 0.5 if lejos else 1.0
 	barra.draw_string_outline(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, color_texto.a))

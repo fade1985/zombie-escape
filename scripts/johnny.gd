@@ -14,6 +14,8 @@
 #
 # Tiene vida: los zarpazos se la quitan y, cuando cambia, lo avisa con la señal "vida_cambiada". La vida va
 # en tres tercios: el tercio que pierde ya no se cura, y por cada uno anda un 25 % más lento (como en el JS).
+# Con la ayuda "Vida entera" (Opciones > Ayudas) no se pierden tercios; con "Pistola sin fin", la pistola no
+# gasta balas.
 # Sus atributos (vida máxima, velocidad, daño, ritmo, alcance...) están en "stats" (mejoras.gd): los números
 # de las armas se multiplican por ellos.
 #
@@ -144,7 +146,17 @@ func poner_stats(nuevos: Dictionary) -> void:
 
 # La vida a la que puede llegar curándose: la de los tercios que le quedan
 func vida_tope() -> int:
-	return roundi(tercios * stats.vida_max / 3.0)
+	return roundi(tercios_vivos() * stats.vida_max / 3.0)
+
+
+# Los tercios que cuentan: con la ayuda "Vida entera", siempre los tres
+func tercios_vivos() -> int:
+	return 3 if Guardado.ajuste("vida_entera") else tercios
+
+
+# Ayuda "Pistola sin fin": la pistola no gasta balas ni se recarga
+func pistola_sin_fin() -> bool:
+	return huecos.fuego == "pistola" and Guardado.ajuste("pistola_sin_fin")
 
 
 func curar(cantidad: int) -> void:
@@ -233,6 +245,11 @@ func _physics_process(delta: float) -> void:
 		empezar_recarga()
 	if Input.is_action_just_pressed("cambiar_modo"):
 		cambiar_modo()
+	# Pistola sin fin: si se pone la ayuda con el cargador a medias, se llena (y deja de recargar)
+	if pistola_sin_fin() and balas < Armas.datos("pistola").cargador:
+		balas = Armas.datos("pistola").cargador
+		recargando = 0.0
+		avisar_arma()
 	if recargando > 0.0:
 		recargando -= delta
 		if recargando <= 0.0:
@@ -262,7 +279,7 @@ func _physics_process(delta: float) -> void:
 		# Acelera suave hacia la velocidad deseada, como en el juego
 		# (en la lejía cuesta frenar y girar: menos agarre)
 		var k := 1.0 - exp(-delta * ARRANQUE * maxf(0.08, Estados.agarre(estados)))
-		var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios))   # más lento por cada tercio perdido
+		var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios_vivos()))   # más lento por cada tercio perdido
 		rapidez *= Estados.frenado(estados)   # el frío de la cámara, el calambrazo del agua
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
@@ -499,7 +516,7 @@ func golpear(angulo: float) -> void:
 # Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo
 func disparar(angulo: float) -> void:
 	var w := arma()
-	if not w.get("sin_municion", false):
+	if not w.get("sin_municion", false) and not pistola_sin_fin():
 		balas -= 1
 	disparos += 1
 	var seguro: bool = stats.mirilla and disparos % 4 == 0   # Mirilla: tras 3 disparos, uno crítico seguro
@@ -586,7 +603,7 @@ func lista_para_disparar() -> bool:
 # Empieza a recargar, si hace falta y le quedan balas de reserva
 func empezar_recarga() -> void:
 	var w := arma()
-	if w.tipo != "fuego" or recargando > 0.0 or balas >= w.cargador or reserva <= 0:
+	if w.tipo != "fuego" or recargando > 0.0 or balas >= w.cargador or reserva <= 0 or pistola_sin_fin():
 		return
 	recargando = w.recarga
 	Sonido.tocar("recargar")
@@ -804,9 +821,10 @@ func empujar(fuerza: Vector2) -> void:
 
 func quitar_vida(cantidad: int) -> void:
 	vida = max(vida - cantidad, 0)
-	# Al bajar de un tercio, ese tercio se pierde (vidaTope en el JS)
-	var tercio: float = stats.vida_max / 3.0
-	tercios = mini(tercios, maxi(1, ceili(vida / tercio - 0.000001)))
+	# Al bajar de un tercio, ese tercio se pierde (vidaTope en el JS); con la ayuda "Vida entera", no
+	if not Guardado.ajuste("vida_entera"):
+		var tercio: float = stats.vida_max / 3.0
+		tercios = mini(tercios, maxi(1, ceili(vida / tercio - 0.000001)))
 	vida_cambiada.emit(vida, stats.vida_max)
 	if vida == 0 and stats.resucitar and not resucitado:
 		# Desfibrilador: la primera vez que cae, vuelve con toda la vida
