@@ -624,7 +624,7 @@ func cobrar_logro(id: String) -> void:
 
 func programa_dosier(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
-	var d := Historia.dosier(partida.EDIFICIO)
+	var d := Historia.dosier(partida.edificio)
 	var halladas: int = d.paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 8)

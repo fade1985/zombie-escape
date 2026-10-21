@@ -28,6 +28,8 @@
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (munición, apuntar, lanzar; `Lanzables.tipos()`).
   `granada.gd`: también la atraedora, la congeladora y la lluvia ácida.
 - `charco.gd` (veneno, lejía, vómito, fuego y ácido) y `estados.gd` (lo que hacen los charcos).
+- `zombi_guardia.gd` (escena `zombi_guardia.tscn`, hereda la del normal): el guardia de seguridad del centro
+  comercial, que lleva la tarjeta (ronda, silbato, huye, se cansa).
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque.
 - `portera.gd`: la jefa, por estados (charcos de ácido, embestida, grito "¡VECINOS!"; números en sus constantes).
@@ -36,8 +38,10 @@
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
-- `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave, portera,
-  escaleras, dinero, pausa, fin), teclas de prueba y `--captura`.
+- `edificios.gd`: la ficha de cada edificio (Apartamentos, Centro comercial) y el elegido en el menú.
+- `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
+  guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
+  centro comercial).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 17 objetos, mochila, baúl, lo que sueltan los
   zombis), `recetas.gd` (15 recetas y rarezas), `billete.gd`, `minimapa.gd`.
 - `guardado.gd`: el guardado entre partidas.
@@ -51,14 +55,15 @@
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
 
 **ui/**
-- `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd`, `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
+- `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio"), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
 - `ordenador.gd`: la pantalla de ConserjeOS. `inventario.gd`: inventario, baúl y banco.
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado y pantalla roja con poca vida.
 - `botones.gd` (autoload): el saltito de los botones.
 
 **mapa/**
-- `apartamento.gd` (genera un apartamento como `apartment.js`), `planta.gd` (la planta, sus zombis, la sala de
-  mantenimiento y la de exposición), `catalogo.gd` (muebles de cada sala), `muebles.gd` (dónde va cada uno),
+- `apartamento.gd` (genera un apartamento como `apartment.js`), `tienda.gd` (genera una tienda del centro
+  comercial, con el mismo tipo de plano), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
+  exposición), `catalogo.gd` (muebles de cada sala), `muebles.gd` (dónde va cada uno),
   `mueble.gd` (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, niebla, navegación);
   `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente).

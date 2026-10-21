@@ -1,7 +1,8 @@
 # Las plantas del edificio (como src/building.js del juego JS; diseño en docs/MAPA.md)
 #
 # Cada planta es un pasillo largo con cuatro puertas, dos a cada lado (A y B arriba, C y D abajo). Detrás de
-# cada una hay un "sitio" aparte: un apartamento o el apartamento de la jefa (cerrado con llave). En la planta
+# cada una hay un "sitio" aparte: un apartamento o el apartamento de la jefa (cerrado con llave); en el centro
+# comercial, una tienda (tienda.gd) o la del jefe, cerrada con la tarjeta que lleva el guardia. En la planta
 # baja, la puerta A es la sala de mantenimiento, donde empieza la partida. En el pasillo hay además un
 # ascensor averiado, por la izquierda la puerta por la que se ha llegado y, a la derecha, las escaleras, que
 # no se abren hasta acabar con la jefa.
@@ -48,7 +49,11 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    dueno (el plano de las salas rectangulares), muebles (muebles.gd), surtido (qué variante
 #                    de cada mueble lleva), salidas, zombis, limpio, visitado}
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
-#   llave            {sitio, pos} dónde está la llave del apartamento de la jefa
+#   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
+#                    el guardia la suelte al caer)
+#   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
+#                    pasillo, que lleva la tarjeta (zombi_guardia.gd)
+#   edificio         el id del edificio (edificios.gd)
 #   tiene_llave, jefa_muerta
 #   cientifico       {sitio, pos, cogida} dónde está el científico muerto con la página del dosier (historia.gd)
 #   superviviente    {sitio, sala, puerta, pos} el baño (y su puerta, de apt.puertas) donde se esconde el
@@ -57,10 +62,12 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
 # aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}
-static func generar(num: int) -> Dictionary:
+static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 	rng.randomize()
+	var ed: Dictionary = Edificios.datos(edificio)
+	var tiendas: bool = ed.generador == "tienda"
 	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
-		"jefa_muerta": false, "mantenimiento": -1, "expo": -1}
+		"jefa_muerta": false, "mantenimiento": -1, "expo": -1, "edificio": edificio}
 	var ancho := PASILLO_COLS * CASILLA
 	var alto := PASILLO_FILAS * CASILLA
 	var pasillo := {"tipo": "pasillo", "nombre": planta.nombre, "ancho": ancho, "alto": alto, "salidas": [],
@@ -75,11 +82,22 @@ static func generar(num: int) -> Dictionary:
 	# la jefa vive en el 4ºB; en las demás plantas, detrás de una puerta al azar
 	var de_jefa: Dictionary = libres[rng.randi() % libres.size()]
 	for h in libres:
-		if nombre_puerta(num, h.letra) == "4ºB":
+		if nombre_puerta(num, h.letra) == "4ºB" and not tiendas:
 			de_jefa = h
+	# en el centro comercial, cada puerta una tienda distinta; la primera tienda normal, de las que tienen aseo
+	# (ahí se esconde el superviviente)
+	var tipos: Array = Tienda.TIPOS.keys()
+	tipos.shuffle()
+	var tipo_de := {}
+	var con_aseo: Array = tipos.filter(func(t): return "bano" in Tienda.TIPOS[t].salas)
+	for h in libres.filter(func(h): return h != de_jefa) + [de_jefa]:
+		tipo_de[h.letra] = con_aseo[0] if tipo_de.is_empty() else tipos.filter(func(t): return t not in tipo_de.values())[0]
 
 	for h in huecos:
 		var nombre := nombre_puerta(num, h.letra)
+		var tipo_tienda: String = tipo_de[h.letra] if tiendas and h in libres else ""
+		if tipo_tienda != "":
+			nombre = Tienda.TIPOS[tipo_tienda].nombre
 		if h not in libres:
 			planta.mantenimiento = planta.sitios.size()
 			planta.sitios.append(mantenimiento(pasillo.salidas.size()))
@@ -88,8 +106,10 @@ static func generar(num: int) -> Dictionary:
 			continue
 		var jefe: bool = h == de_jefa
 		# la puerta del apartamento está en el lado que da al pasillo
-		var apt := Apartamento.generar(rng.randi(), jefe, "abajo" if h.dir == "arriba" else "arriba")
-		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt,
+		var lado := "abajo" if h.dir == "arriba" else "arriba"
+		var apt := Tienda.generar(rng.randi(), tipo_tienda, jefe, lado) if tiendas else Apartamento.generar(rng.randi(), jefe, lado)
+		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
+		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
 			"visitado": false, "muebles": Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
 		var idx: int = planta.sitios.size()
@@ -99,8 +119,8 @@ static func generar(num: int) -> Dictionary:
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
 			"aviso": "", "letrero": nombre}
 		if jefe:
-			puerta.cerrojo = "llave"
-			puerta.aviso = "Cerrada con llave"
+			puerta.cerrojo = "llave"   # la llave o la tarjeta: se abren igual (ver partida.gd)
+			puerta.aviso = "Cerrada: hace falta una tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Cerrada con llave"
 		pasillo.salidas.append(puerta)
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
@@ -110,7 +130,7 @@ static func generar(num: int) -> Dictionary:
 		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido",
 		"letrero": "Portal" if baja else "Bajada"})
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
-		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con la portera", "letrero": "Escaleras"})
+		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + ed.el_jefe, "letrero": "Escaleras"})
 	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo
 	# (algunos fallan de vez en cuando), como en src/rooms.js
 	pasillo.apliques = []
@@ -132,8 +152,10 @@ static func generar(num: int) -> Dictionary:
 		if planta.sitios[i].tipo == "apartamento":
 			normales.append(i)
 	normales.shuffle()
-	# El baño del superviviente, en un apartamento normal al azar (como floor.survivor de src/building.js)
-	var de_superv: int = normales[rng.randi() % normales.size()]
+	# El baño del superviviente, en un apartamento normal al azar (como floor.survivor de src/building.js); en el
+	# centro comercial, en una tienda que tenga aseo (no todas tienen)
+	var con_bano: Array = normales.filter(func(i): return planta.sitios[i].apt.salas.any(func(s): return s.uso == "bano"))
+	var de_superv: int = con_bano[rng.randi() % con_bano.size()] if not con_bano.is_empty() else normales[rng.randi() % normales.size()]
 	var banos: Array = planta.sitios[de_superv].apt.salas.filter(func(s): return s.uso == "bano" and s.puertas.size() == 1)
 	planta.superviviente = {}
 	if not banos.is_empty():
@@ -146,9 +168,13 @@ static func generar(num: int) -> Dictionary:
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
 		sitio.armaritos = armaritos(sitio)
 
+	# Con tarjeta, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
+	if ed.cerrojo == "tarjeta":
+		planta.llave = {"sitio": -1, "pos": Vector2.ZERO}
+		planta.guardia = {"vivo": true, "vida": -1, "alerta": false, "silbidos": 0}
 	# La llave de la jefa, en una habitación (que no sea el salón ni un baño) de un apartamento normal
 	var donde: int = normales[rng.randi() % normales.size()]
-	var salas: Array = planta.sitios[donde].apt.salas.filter(func(s): return s.uso != "salon" and s.uso != "bano")
+	var salas: Array = planta.sitios[donde].apt.salas.filter(func(s): return s.uso != "salon" and s.uso != "tienda" and s.uso != "bano")
 	var sala: Dictionary = salas[rng.randi() % salas.size()]
 	# en el centro de la habitación o, si ahí hay un mueble, en otro sitio libre de ella
 	var pos: Vector2 = sala.centro
@@ -156,7 +182,8 @@ static func generar(num: int) -> Dictionary:
 		pos = sitio_libre(planta.sitios[donde], sala, Vector2.INF, [])
 		if pos == Vector2.INF:
 			pos = sala.centro
-	planta.llave = {"sitio": donde, "pos": pos}
+	if ed.cerrojo == "llave":
+		planta.llave = {"sitio": donde, "pos": pos}
 	# El científico muerto de Velaria (historia.gd), en una habitación de otro apartamento normal si se puede (que
 	# no sea el baño del superviviente). Si sale o no, lo decide la partida: solo si su página falta por encontrar
 	var otros: Array = normales.filter(func(i): return i != donde)

@@ -91,9 +91,20 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
 
 ## Por partes
 
-1. **El esqueleto:** pantalla "Elige edificio" (con el candado), el edificio elegido en la partida, el generador
-   de plantas con tiendas y sus habitaciones (con suelos y muebles de los que ya hay), la tarjeta de acceso y el
-   guardia que la lleva.
+1. ✅ **El esqueleto** (21 oct): pantalla "Elige edificio" (con el candado), el edificio elegido en la partida, el
+   generador de plantas con tiendas y sus habitaciones (con suelos y muebles de los que ya hay), la tarjeta de
+   acceso y el guardia que la lleva. Lo que ha quedado:
+   - Cada edificio es una ficha en `scripts/edificios.gd` (nombre, generador, cerrojo, jefe, avisos...). Las
+     partes siguientes añaden datos ahí.
+   - Las tiendas (`scripts/mapa/tienda.gd`): sala de venta grande delante y las habitaciones de dentro en fila
+     contra la pared del fondo; el aseo, dentro del almacén, la cocina o la rebotica (nunca en la cámara). En
+     cada planta, tiendas de tipos distintos, y siempre una con aseo para el superviviente. La farmacia lleva
+     rebotica y aseo. De momento el jefe de cada planta sigue siendo la portera, en una "tienda destrozada".
+   - **El guardia, hecho evento** (lo pidió el dueño): ronda el pasillo despacio; al verte toca el silbato y
+     llegan refuerzos corriendo por las puntas del pasillo (2, y uno más cada dos plantas); huye a la punta más
+     lejana, se cansa cada 3 s y se para a resoplar ("uf"); acorralado en una punta, pega; a media vida vuelve a
+     silbar. Tiene 90 de vida (+20 % por planta) y si sales del pasillo, al volver sigue igual de herido. Al caer
+     suelta la tarjeta (dibujada con código) y 2 billetes. De momento es el zombi normal con la bata teñida de azul.
 2. **Cómo se ve:** suelos, paredes, escaparates y muebles con PixelLab (lanzarlo todo de golpe).
 3. **Los peligros:** frío, fuego, agua con electricidad.
 4. **Zombis nuevos**, minijefes y jefe final.

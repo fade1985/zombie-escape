@@ -33,7 +33,10 @@ const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
-const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
+const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
+	# las salas de las tiendas, con los suelos de los pisos hasta que tengan los suyos (parte 2 del centro comercial)
+	"tienda": "salon", "almacen": "cocina", "camara": "bano", "taller": "cocina", "taquillas": "dormitorio",
+	"probadores": "dormitorio", "rebotica": "cocina"}
 const OSCURO := Color(0.07, 0.063, 0.11)   # el color de la niebla
 const NIEBLA := preload("res://escenas/luces/niebla.gdshader")
 const NIEBLA_FONDO := 0.74                 # lo que tapa la niebla a tope (1 = no se ve nada debajo)
@@ -71,7 +74,7 @@ var expo_sprites: Array = []      # los zombis de la exposición, que van girand
 var expo_t := 0.0
 
 
-func montar(datos: Dictionary, llave := Vector2.INF) -> void:
+func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	sitio = datos
 	add_to_group("mapa")
 	cols = int(sitio.ancho / CASILLA)
@@ -132,7 +135,7 @@ func montar(datos: Dictionary, llave := Vector2.INF) -> void:
 		cosas.add_child(armarito)
 		armaritos.append(armarito)
 	if llave != Vector2.INF:
-		poner_llave(llave)
+		poner_llave(llave, tarjeta)
 	if sitio.tipo == "expo":
 		poner_exposicion()
 	hornear(navegacion)
@@ -642,8 +645,9 @@ func etiqueta(texto: String, pos: Vector2) -> void:
 	add_child(nombre)
 
 
-# La llave del apartamento de la jefa: brilla un poco y sube y baja hasta que Johnny la pisa
-func poner_llave(pos: Vector2) -> void:
+# La llave del apartamento de la jefa: brilla un poco y sube y baja hasta que Johnny la pisa. En el centro
+# comercial, la tarjeta de acceso (la suelta el guardia al caer)
+func poner_llave(pos: Vector2, tarjeta := false) -> void:
 	var zona := Area2D.new()
 	zona.name = "Llave"
 	zona.position = pos
@@ -655,7 +659,7 @@ func poner_llave(pos: Vector2) -> void:
 	forma.shape = circulo
 	zona.add_child(forma)
 	var dibujo := Sprite2D.new()
-	dibujo.texture = LLAVE
+	dibujo.texture = dibujo_tarjeta() if tarjeta else LLAVE
 	dibujo.scale = Vector2(2, 2)
 	dibujo.offset = Vector2(0, -8)
 	zona.add_child(dibujo)
@@ -667,6 +671,26 @@ func poner_llave(pos: Vector2) -> void:
 		if cuerpo.is_in_group("jugador"):
 			llave_cogida.emit()
 			zona.queue_free())
+
+
+# La tarjeta de acceso, dibujada con código hasta que tenga su sprite (parte 2 del centro comercial): una
+# tarjeta azul de 12 × 8 píxeles con su banda magnética, su chip dorado y el borde oscuro
+static func dibujo_tarjeta() -> Texture2D:
+	var img := Image.create(12, 8, false, Image.FORMAT_RGBA8)
+	img.fill(Color("#3d7be0"))
+	for x in 12:
+		img.set_pixel(x, 0, Color("#1b2f5c"))
+		img.set_pixel(x, 7, Color("#1b2f5c"))
+		img.set_pixel(x, 2, Color("#14161f"))   # la banda
+		img.set_pixel(x, 1, Color("#8fb8ff"))   # el brillo de arriba
+	for y in 8:
+		img.set_pixel(0, y, Color("#1b2f5c"))
+		img.set_pixel(11, y, Color("#1b2f5c"))
+	for p in [Vector2i(2, 4), Vector2i(3, 4), Vector2i(2, 5), Vector2i(3, 5)]:
+		img.set_pixelv(p, Color("#ffd23f"))   # el chip
+	for x in range(6, 10):
+		img.set_pixel(x, 5, Color("#dfe8ff"))   # el nombre
+	return ImageTexture.create_from_image(img)
 
 
 # "Hornear" la navegación: Godot mira los muros y los muebles (grupo "obstaculos") y recorta del suelo todo

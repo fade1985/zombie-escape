@@ -124,6 +124,42 @@ const SALAS := {
 		"cuantos": [5, 8],
 		"fondo_max": 46,   # el pasillo de cada planta es estrecho: solo muebles poco hondos
 	},
+	# Las salas de las tiendas del centro comercial (tienda.gd). De momento con muebles de los pisos; los suyos
+	# (estanterías de tienda, mostradores, cámaras...) llegan en la parte 2 del plan (docs/CENTRO_COMERCIAL.md)
+	"tienda": {
+		"muebles": ["bookshelf", "counter", "bookshelf", "plant", "console", "lamp"],
+		"cuantos": [5, 8],
+		"iguales": {"bookshelf": 4, "counter": 2, "plant": 2},
+	},
+	"almacen": {
+		"muebles": ["bookshelf", "wardrobe", "shoerack", "bookshelf"],
+		"cuantos": [2, 4],
+		"iguales": {"bookshelf": 3},
+	},
+	"camara": {
+		"muebles": ["fridge"],
+		"cuantos": [2, 4],
+		"iguales": {"fridge": 4},
+	},
+	"taller": {
+		"muebles": ["desk", "counter", "bookshelf", "washer"],
+		"cuantos": [2, 4],
+	},
+	"taquillas": {
+		"muebles": ["wardrobe", "shoerack", "coatstand"],
+		"cuantos": [2, 4],
+		"iguales": {"wardrobe": 3},
+	},
+	"probadores": {
+		"muebles": ["coatstand", "wardrobe", "shoerack", "plant"],
+		"cuantos": [2, 4],
+		"iguales": {"coatstand": 2},
+	},
+	"rebotica": {
+		"muebles": ["bookshelf", "desk", "fridge", "bookshelf"],
+		"cuantos": [2, 4],
+		"iguales": {"bookshelf": 2},
+	},
 	# en mantenimiento la pared de arriba queda libre: ahí irán el ordenador, el baúl y el banco de trabajo
 	"mantenimiento": {
 		"muebles": ["washer", "bookshelf", "desk", "wardrobe", "shoerack"],

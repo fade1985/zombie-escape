@@ -33,6 +33,7 @@ const ZOMBIS := {
 	"tentaculos": preload("res://escenas/personajes/zombi_tentaculos.tscn"),
 	"venenoso": preload("res://escenas/personajes/zombi_venenoso.tscn"),
 	"portera": preload("res://escenas/personajes/portera.tscn"),
+	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la tarjeta (centro comercial)
 }
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
@@ -45,8 +46,8 @@ const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
-const EDIFICIO := "apartamentos"   # de momento solo hay un edificio
-const NOMBRE_EDIFICIO := "Apartamentos"
+const REFUERZOS := 2               # los zombis que llegan al silbato del guardia (y uno más cada dos plantas)
+const BILLETES_GUARDIA := 2
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
 # La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
@@ -70,6 +71,10 @@ var cambiando := false     # durante el fundido no se puede cruzar otra puerta
 var latido := 0.0         # cuenta atrás hasta el siguiente latido (con poca vida)
 var cerrada := false       # si la puerta del apartamento en el que está se ha cerrado
 var jefa: Node2D = null
+var guardia: Node2D = null   # el guardia de seguridad, si está en el pasillo en el que está Johnny
+# el edificio que se juega (lo elige el menú; su ficha, en edificios.gd)
+var edificio: String = Edificios.elegido
+var ed: Dictionary = Edificios.datos(edificio)
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
 var captura := false
 var tiempo := 0.0
@@ -160,7 +165,7 @@ func _ready() -> void:
 	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
 	var s := Guardado.cambiar(func(g):
 		g.partidas += 1
-		Guardado.edificio(g, EDIFICIO).partidas += 1)
+		Guardado.edificio(g, edificio).partidas += 1)
 	ahorrados = s.dolares
 	# los talentos comprados, y empieza con la vida llena y el escudo de Acero
 	aplicar_talentos(s.talentos)
@@ -177,13 +182,13 @@ func _ready() -> void:
 		contar_planta()
 	else:
 		set_process(false)
-		decir("%s: limpia los apartamentos y busca la llave de la portera" % planta.nombre, 4.0)
+		decir("%s: %s" % [planta.nombre, ed.objetivo], 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 
 
 func nueva_planta(num: int) -> void:
-	planta = Planta.generar(num)
+	planta = Planta.generar(num, edificio)
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
@@ -254,6 +259,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if mapa:
 		remove_child(mapa)
 		mapa.queue_free()
+	guardar_guardia()
 	jefa = null
 	jefa_salio = false
 	$Pantalla/Jefa.hide()
@@ -268,7 +274,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	# primero en la escena (para hornear su navegación hace falta que esté dentro) y por debajo de la pantalla
 	add_child(mapa)
 	move_child(mapa, 0)
-	mapa.montar(sitio, llave)
+	mapa.montar(sitio, llave, ed.cerrojo == "tarjeta")
 	mapa.llave_cogida.connect(_al_coger_llave)
 	if mapa.ordenador:
 		mapa.ordenador.usar.connect(abrir_ordenador)
@@ -296,6 +302,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		var zombi := meter_zombi(z.tipo, z.pos)
 		zombi.dormido = true
 		zombi.zona = mapa.zona_en(z.pos)
+	if sitio.tipo == "pasillo" and planta.get("guardia", {}).get("vivo", false):
+		poner_guardia()
 	cerrada = false
 	actualizar_puertas()
 	poner_lugar()
@@ -382,7 +390,7 @@ func cruzar(i: int) -> void:
 			planta.tiene_llave = false
 			planta.llave_usada = true
 			salida.cerrojo = ""
-			decir("Abres con la llave")
+			decir("Abres con la tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Abres con la llave")
 			Sonido.tocar("compra")
 		"jefa":
 			if not planta.jefa_muerta:
@@ -437,7 +445,7 @@ func _physics_process(delta: float) -> void:
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
 			Sonido.musica("explorar")
-			decir("¡La portera ha caído! Las escaleras ya están abiertas", 4.0)
+			decir("¡%s ha caído! Las escaleras ya están abiertas" % (ed.el_jefe.left(1).to_upper() + ed.el_jefe.substr(1)), 4.0)
 			logros.cumplir("desahucio")
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
@@ -454,7 +462,7 @@ func poner_cientifico(idx: int) -> void:
 	var c: Dictionary = planta.get("cientifico", {})
 	if c.is_empty() or c.sitio != idx:
 		return
-	var pagina := Historia.pendiente(Guardado.cargar(), EDIFICIO, planta.num)
+	var pagina := Historia.pendiente(Guardado.cargar(), edificio, planta.num)
 	if pagina.is_empty() and not c.cogida:
 		return
 	var cuerpo := CIENTIFICO.new()
@@ -474,7 +482,7 @@ func _al_coger_pagina(p: Dictionary) -> void:
 	planta.cientifico.pagina = p
 	Historia.apuntar(p.id)
 	Sonido.tocar("compra")
-	var paginas: Array = Historia.dosier(EDIFICIO).paginas
+	var paginas: Array = Historia.dosier(edificio).paginas
 	get_tree().paused = true
 	menus.pagina(p, paginas.find(p) + 1, paginas.size(), func():
 		get_tree().paused = false
@@ -491,7 +499,58 @@ func avisar_noticias() -> void:
 func _al_coger_llave() -> void:
 	planta.tiene_llave = true
 	Sonido.tocar("compra")
-	decir("Has cogido la llave del " + nombre_jefa(), 3.0)
+	if ed.cerrojo == "tarjeta":
+		decir("Has cogido la tarjeta de acceso: abre la tienda de " + ed.el_jefe, 3.0)
+	else:
+		decir("Has cogido la llave del " + nombre_jefa(), 3.0)
+
+
+# ── El guardia de seguridad (centro comercial): lleva la tarjeta y ronda el pasillo ──
+
+# Lo saca en el pasillo, lejos de la puerta por la que llega Johnny, con la vida que le quedara
+func poner_guardia() -> void:
+	var g: Dictionary = planta.guardia
+	var sitio: Dictionary = planta.sitios[aqui]
+	var puntas := [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
+	guardia = meter_zombi("guardia", mapa.punto_libre(johnny.position, 500.0))
+	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)))   # cada planta, algo más duro
+	guardia.vida = guardia.vida_max if g.vida < 0 else g.vida
+	guardia.puntas = puntas
+	guardia.alerta = g.alerta
+	guardia.silbidos = g.silbidos
+	guardia.silbato.connect(_al_silbar)
+
+
+# Al salir del pasillo, se apunta cómo estaba (si vuelves, sigue igual de herido y de alerta)
+func guardar_guardia() -> void:
+	if guardia and is_instance_valid(guardia) and guardia.estado != "muerto":
+		planta.guardia.vida = guardia.vida
+		planta.guardia.alerta = guardia.alerta
+		planta.guardia.silbidos = guardia.silbidos
+	guardia = null
+
+
+# El silbato: llegan refuerzos corriendo por las dos puntas del pasillo
+func _al_silbar() -> void:
+	decir("¡El guardia ha tocado el silbato: vienen refuerzos!", 2.5)
+	var sitio: Dictionary = planta.sitios[aqui]
+	var tipos := ["normal", "normal", "rapido"]
+	if planta.num >= 3:
+		tipos.append("venenoso")
+	for i in REFUERZOS + planta.num / 2:
+		var x: float = Planta.MURO + 50 if i % 2 == 0 else sitio.ancho - Planta.MURO - 50
+		var donde := Vector2(x, sitio.alto / 2.0 + randf_range(-60, 60))
+		if donde.distance_to(johnny.position) < 250.0:
+			donde.x = sitio.ancho - donde.x   # no encima de Johnny: por la otra punta
+		meter_zombi(tipos.pick_random(), donde)
+
+
+# Ha caído: suelta la tarjeta donde estaba (se queda en el suelo del pasillo hasta que Johnny la coja)
+func _al_caer_guardia(zombi: Node2D) -> void:
+	planta.guardia.vivo = false
+	planta.llave = {"sitio": aqui, "pos": zombi.position}
+	mapa.call_deferred("poner_llave", zombi.position, true)
+	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso", 3.0)
 
 
 # El nombre del apartamento de la jefa ("2ºC"...)
@@ -670,7 +729,7 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.rescatados.append(nuevo.id)
 		g.mejor_planta = maxi(g.mejor_planta, planta.num)
 		g.muertos += muertos
-		var e := Guardado.edificio(g, EDIFICIO)
+		var e := Guardado.edificio(g, edificio)
 		e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
 			# los objetos de la mochila pasan al baúl (si caes, se pierden)
@@ -702,9 +761,9 @@ func terminar(gano: bool, abandona := false) -> void:
 	menus.fin({
 		"gano": gano,
 		"titulo": "¡Edificio completado!" if gano else "¡Derrota!",
-		"sub": ("Has limpiado los %s de arriba abajo%s" % [NOMBRE_EDIFICIO, "" if nuevo.is_empty()
+		"sub": ("Has limpiado %s de arriba abajo%s" % [ed.el_nombre, "" if nuevo.is_empty()
 			else ". %s se viene a vivir a la sala de mantenimiento" % nuevo.nombre]) if gano
-			else ("Caíste en la %s de los %s" % [planta.nombre.to_lower(), NOMBRE_EDIFICIO]),
+			else ("Caíste en la %s de %s" % [planta.nombre.to_lower(), ed.el_nombre]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],
@@ -756,7 +815,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var ardia: bool = zombi.get("arder_t") != null and zombi.arder_t > 0.0
 		logros.zombi_muerto(johnny.huecos[johnny.mano] == "fregona" and not ardia)
 		sangre(tipo, zombi)
-		var cuantos := BILLETES_JEFA if tipo == "portera" else (1 if randf() < BILLETE_ZOMBI else 0)
+		if tipo == "guardia":
+			_al_caer_guardia(zombi)
+		var cuantos := BILLETES_JEFA if tipo == "portera" else BILLETES_GUARDIA if tipo == "guardia" else (1 if randf() < BILLETE_ZOMBI else 0)
 		soltar_billetes(cuantos, zombi.position)
 		# a veces, un molotov o una granada
 		var soltado := cuantos > 0
@@ -842,7 +903,8 @@ func contar_planta() -> void:
 			tipos[z.tipo] = tipos.get(z.tipo, 0) + 1
 		print("  %s [%s] %dx%d casillas: %s | %d muebles | zombis: %s" % [s.nombre, s.tipo, s.apt.cols, s.apt.filas,
 			" ".join(salas), s.muebles.size(), tipos])
-	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(), planta.sitios[planta.llave.sitio].nombre])
+	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(),
+		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0 else "el guardia del pasillo"])
 
 
 func _process(delta: float) -> void:
@@ -973,7 +1035,23 @@ func _process(delta: float) -> void:
 		montar(0, puerta_de_tipo("escaleras"), false)
 	if antes < 4.7 and tiempo >= 4.7:
 		cruzar(puerta_de_tipo("escaleras"))
+	# en el centro comercial, el guardia: Johnny se le acerca (silbato y refuerzos), foto, y cae con su tarjeta
+	if antes < 5.35 and tiempo >= 5.35 and guardia:
+		johnny.position = mapa.punto_libre(guardia.position, 0.0)
+		for i in 60:
+			var p: Vector2 = guardia.position + Vector2.from_angle(randf() * TAU) * 220.0
+			if mapa.zona_en(p) >= 0:
+				johnny.position = p
+				break
+		johnny.get_node("Camara").reset_smoothing()
+	if antes < 5.5 and tiempo >= 5.5 and guardia:
+		print("Guardia: vida %d/%d | alerta %s | silbidos %d | zombis en el pasillo %d" % [guardia.vida, guardia.vida_max,
+			guardia.alerta, guardia.silbidos, get_tree().get_nodes_in_group("zombis").size()])
+		get_viewport().get_texture().get_image().save_png("res://captura-guardia.png")
+		guardia.recibir_golpe(99999, Vector2.ZERO)
 	if antes < 5.6 and tiempo >= 5.6:
+		if planta.has("guardia"):
+			print("Tarjeta: en el sitio %d, en %s | guardia vivo: %s" % [planta.llave.sitio, planta.llave.pos, planta.guardia.vivo])
 		print("Ahora en: ", planta.nombre, " (", planta.sitios.size() - 1, " puertas)")
 		get_viewport().get_texture().get_image().save_png("res://captura-pasillo.png")
 		# Johnny pisa la puerta A del pasillo, como si fuera andando
