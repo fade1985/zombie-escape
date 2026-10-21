@@ -100,6 +100,7 @@ var con_raton := false     # modo libre: si se está apuntando con el ratón (se
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var efectos: AnimatedSprite2D = $Efectos   # fogonazo, humo y casquillo al disparar andando
+@onready var piernas: AnimatedSprite2D = $Sprite/Piernas   # las piernas andando debajo de un golpe (cintura.gdshader)
 
 
 func _ready() -> void:
@@ -458,6 +459,10 @@ func atacar(angulo: float) -> void:
 		patada = -Vector2.from_angle(angulo) * PATADA * (1.6 if w.get("perdigones", 1) > 1 else 1.0)
 		patada_t = 0.0
 	else:
+		if sprite.animation.begins_with("andar"):
+			# Si golpea andando, las piernas siguen el paso desde donde iba (animar() las enseña)
+			piernas.play(sprite.animation)
+			piernas.set_frame_and_progress(sprite.frame, sprite.frame_progress)
 		sprite.speed_scale = ritmo_anim
 		sprite.play(nombre)
 		sprite.set_frame_and_progress(0, 0.0)
@@ -663,10 +668,13 @@ func sostener(hueco: String) -> void:
 	efectos.hide()
 	var w := arma()
 	# Cada arma tiene su hoja de Johnny; los pies van en el mismo sitio aunque la hoja sea más alta
+	partir_cintura(false)
 	sprite.sprite_frames = w.hoja
 	efectos.sprite_frames = w.hoja
+	piernas.sprite_frames = w.hoja
 	sprite.offset = -w.pies
 	efectos.offset = -w.pies
+	piernas.offset = -w.pies
 	sprite.speed_scale = 1.0
 	sprite.play("reposo_" + direccion)
 	avisar_arma()
@@ -686,20 +694,46 @@ func avisar_arma() -> void:
 
 
 func animar() -> void:
-	# Mientras dura el ataque se deja su animación (se puso al empezarlo)
-	if ataque_t >= 0.0:
-		return
 	var rapidez := velocity.length()
+	# Mientras dura el ataque se deja su animación (se puso al empezarlo). Si es un golpe y va andando, el
+	# cuerpo da el golpe y las piernas siguen andando debajo, para que no parezca que flota
+	if ataque_t >= 0.0:
+		var partir: bool = rapidez > 20.0 and arma().tipo == "cuerpo"
+		partir_cintura(partir)
+		if partir:
+			var andar := "andar_" + direccion
+			if piernas.animation != andar:
+				var fotograma := piernas.frame
+				piernas.play(andar)
+				piernas.set_frame_and_progress(fotograma % piernas.sprite_frames.get_frame_count(andar), 0.0)
+			piernas.speed_scale = ritmo_andar(piernas, rapidez)
+		return
+	if piernas.visible:
+		# Acaba un golpe dado andando: sigue con el paso por donde iban las piernas
+		partir_cintura(false)
+		if rapidez > 20.0:
+			sprite.play("andar_" + direccion)
+			sprite.set_frame_and_progress(piernas.frame, piernas.frame_progress)
 	if rapidez > 20.0:
 		cambiar_animacion("andar_" + direccion)
-		# El paso va según lo que avanza de verdad: más despacio al arrancar y al frenar.
-		# Cada dirección tiene su número de fotogramas; la hoja los pone a su velocidad (12 por segundo)
-		var fotogramas := sprite.sprite_frames.get_frame_count(sprite.animation)
-		var fps := sprite.sprite_frames.get_animation_speed(sprite.animation)
-		sprite.speed_scale = (rapidez / PASO * fotogramas) / fps
+		sprite.speed_scale = ritmo_andar(sprite, rapidez)
 	else:
 		cambiar_animacion("reposo_" + direccion)
 		sprite.speed_scale = 1.0
+
+
+# El paso va según lo que avanza de verdad: más despacio al arrancar y al frenar.
+# Cada dirección tiene su número de fotogramas; la hoja los pone a su velocidad (12 por segundo)
+func ritmo_andar(dibujo: AnimatedSprite2D, rapidez: float) -> float:
+	var fotogramas := dibujo.sprite_frames.get_frame_count(dibujo.animation)
+	var fps := dibujo.sprite_frames.get_animation_speed(dibujo.animation)
+	return (rapidez / PASO * fotogramas) / fps
+
+
+# Parte a Johnny por la cintura (golpe arriba, piernas de andar abajo) o lo deja entero
+func partir_cintura(si: bool) -> void:
+	piernas.visible = si
+	sprite.material.set_shader_parameter("parte", 1 if si else 0)
 
 
 # Lo llaman los zombis al darle un zarpazo
@@ -769,6 +803,7 @@ func quitar_vida(cantidad: int) -> void:
 		ataque_t = -1.0
 		velocity = Vector2.ZERO
 		efectos.hide()
+		partir_cintura(false)
 		# No tiene animación de morirse: se queda quieto y rojo
 		sprite.speed_scale = 1.0
 		cambiar_animacion("reposo_" + direccion)
