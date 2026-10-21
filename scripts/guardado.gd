@@ -33,8 +33,10 @@ const NUEVO := {
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
+	# vida_entera y pistola_sin_fin: las ayudas de la pestaña Ayudas de Opciones (johnny.gd las mira)
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
-		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true},
+		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true,
+		"vida_entera": false, "pistola_sin_fin": false},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"
@@ -74,6 +76,20 @@ static func escribir(s: Dictionary) -> void:
 	var f := FileAccess.open(archivo, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(s, "\t"))
+	ajustes_leidos = s.ajustes.duplicate(true)
+	ajustes_de = archivo
+
+
+# Un ajuste, para mirarlo en cada fotograma (las ayudas): se lee del archivo una vez y se recuerda; al guardar
+# se pone al día solo, así que un cambio en Opciones se nota al momento
+static var ajustes_leidos := {}
+static var ajustes_de := ""   # de qué archivo son (la prueba con --captura usa otro)
+
+static func ajuste(clave: String) -> Variant:
+	if ajustes_de != archivo:
+		ajustes_leidos = cargar().ajustes
+		ajustes_de = archivo
+	return ajustes_leidos.get(clave, NUEVO.ajustes.get(clave))
 
 
 # Carga, cambia y guarda en un paso. Devuelve el guardado ya cambiado
