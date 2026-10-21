@@ -701,22 +701,25 @@ func animar() -> void:
 		var partir: bool = rapidez > 20.0 and arma().tipo == "cuerpo"
 		partir_cintura(partir)
 		if partir:
-			var andar := "andar_" + direccion
+			var p := paso()
+			var andar: String = "andar_" + p[0]
 			if piernas.animation != andar:
 				var fotograma := piernas.frame
 				piernas.play(andar)
 				piernas.set_frame_and_progress(fotograma % piernas.sprite_frames.get_frame_count(andar), 0.0)
-			piernas.speed_scale = ritmo_andar(piernas, rapidez)
+			piernas.speed_scale = ritmo_andar(piernas, rapidez) * p[1]
 		return
 	if piernas.visible:
 		# Acaba un golpe dado andando: sigue con el paso por donde iban las piernas
 		partir_cintura(false)
 		if rapidez > 20.0:
-			sprite.play("andar_" + direccion)
-			sprite.set_frame_and_progress(piernas.frame, piernas.frame_progress)
+			var andar := "andar_" + direccion
+			sprite.play(andar)
+			sprite.set_frame_and_progress(piernas.frame % sprite.sprite_frames.get_frame_count(andar), piernas.frame_progress)
 	if rapidez > 20.0:
 		cambiar_animacion("andar_" + direccion)
-		sprite.speed_scale = ritmo_andar(sprite, rapidez)
+		# Entero no puede girar las piernas: si va de espaldas a donde mira, el paso va marcha atrás
+		sprite.speed_scale = ritmo_andar(sprite, rapidez) * paso()[1]
 	else:
 		cambiar_animacion("reposo_" + direccion)
 		sprite.speed_scale = 1.0
@@ -728,6 +731,19 @@ func ritmo_andar(dibujo: AnimatedSprite2D, rapidez: float) -> float:
 	var fotogramas := dibujo.sprite_frames.get_frame_count(dibujo.animation)
 	var fps := dibujo.sprite_frames.get_animation_speed(dibujo.animation)
 	return (rapidez / PASO * fotogramas) / fps
+
+
+# Hacia dónde dan el paso las piernas y si van hacia delante (1) o marcha atrás (-1). Johnny puede mirar a un
+# zombi y andar hacia otro lado: si anda más o menos hacia donde mira, las piernas van hacia donde anda; si
+# anda de espaldas, son las de mirar al frente pero hacia atrás (como quien recula); de lado, las de mirar al frente
+func paso() -> Array:
+	var mira := Vector2.from_angle(DIRS.find(direccion) * PI / 4)
+	var giro := rad_to_deg(absf(mira.angle_to(velocity)))
+	if giro < 67.5:
+		return [direccion_de(velocity), 1.0]
+	if giro > 112.5:
+		return [direccion_de(-velocity), -1.0]
+	return [direccion, 1.0]
 
 
 # Parte a Johnny por la cintura (golpe arriba, piernas de andar abajo) o lo deja entero
