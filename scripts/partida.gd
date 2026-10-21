@@ -833,12 +833,13 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 				soltar_municion(zombi.position)
 		elif not soltado and randf() < MUNICION_ZOMBI:
 			soltar_municion(zombi.position)
-		# y a veces un objeto para el banco de trabajo (la portera, dos seguros)
+		# y a veces un objeto para el banco de trabajo (la portera, dos seguros), de los que salen aquí
+		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		if tipo == "portera":
 			for i in 2:
-				soltar_objeto(Objetos.al_azar(), zombi.position)
+				soltar_objeto(Objetos.al_azar(edificio, tienda), zombi.position)
 		else:
-			var obj := Objetos.que_suelta(tipo)
+			var obj := Objetos.que_suelta(tipo, edificio, tienda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
 		# Caníbal: cada zombi que matas te cura
@@ -885,7 +886,17 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_H:
 		supervivientes.probar_aqui()   # al apartamento del superviviente, ya limpio (para probar la horda)
 	elif evento.keycode == KEY_O:
-		soltar_objeto(Objetos.al_azar(), johnny.position + Vector2(0, 50))   # un objeto, para probar
+		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
+	elif evento.keycode == KEY_U:
+		dar_objetos()   # uno de cada objeto al baúl, para probar las recetas en el banco de trabajo
+
+
+# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios), para probar todas las recetas
+func dar_objetos() -> void:
+	Guardado.cambiar(func(g):
+		for id in Objetos.NOMBRES:
+			g.baul[id] = g.baul.get(id, 0) + 1)
+	decir("Uno de cada objeto, al baúl")
 
 
 # ── Solo con --captura ──
@@ -1470,6 +1481,48 @@ func probar_creadas() -> void:
 	print("Congeladora: zombi 3 aturdido %.1f vida %d | vida de Johnny %d | quedan %s" % [z3.aturdido, z3.vida, johnny.vida, lanzables.tipos()])
 
 
+# El reparto de objetos (parte 6 del centro comercial): cuenta qué sale en cada sitio de los dos edificios y
+# comprueba que las cosas de casa no salen en el centro ni las del centro en los Apartamentos. Luego deja en el
+# suelo los nueve nuevos, mete uno de cada objeto en el baúl (lo de la tecla U) y hace fotos del banco y del baúl
+func probar_objetos() -> void:
+	var fallos := []
+	for ed_id in ["apartamentos", "centro"]:
+		for tienda in [""] + (Objetos.TIENDAS.keys() if ed_id == "centro" else []):
+			var salen := {}
+			for i in 2000:
+				var id := Objetos.al_azar(ed_id, tienda)
+				salen[id] = salen.get(id, 0) + 1
+				if id == "explosivos" or (ed_id == "centro" and id in Objetos.SOLO_CASA) \
+						or (ed_id == "apartamentos" and id in Objetos.SOLO_CENTRO):
+					fallos.append("%s %s: %s" % [ed_id, tienda, id])
+			print("Objetos en %s %s: %d distintos %s" % [ed_id, tienda if tienda != "" else "(pasillo)", salen.size(), salen.keys()])
+	print("Reparto de objetos: ", "bien" if fallos.is_empty() else "MAL %s" % str(fallos.slice(0, 5)))
+	for i in Objetos.SOLO_CENTRO.size():
+		soltar_objeto(Objetos.SOLO_CENTRO[i], johnny.position + Vector2(-176 + i * 44, 110), true)
+	await get_tree().create_timer(0.5).timeout
+	menus.visible = false   # por si ha salido el recuadro de una mutación
+	await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://captura-objetos-nuevos.png")
+	menus.visible = true
+	for cosa in mapa.cosas.get_children():
+		if cosa.get_script() == BILLETE:
+			cosa.queue_free()
+	var baul_antes: Dictionary = Guardado.cargar().baul
+	dar_objetos()
+	abrir_cosas("banco")
+	inventario.tocar("o_pistola_agua")
+	inventario.tocar("o_bateria")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-banco-todo.png")
+	inventario.cerrar()
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-baul-todo.png")
+	inventario.cerrar()
+	print("Baúl con uno de cada: %d casillas de %d" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
+	Guardado.cambiar(func(g): g.baul = baul_antes)
+
+
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
 func probar_mutaciones() -> void:
 	abrir_mutacion()
@@ -1490,6 +1543,7 @@ func probar_menus() -> void:
 	await probar_ordenador()
 	await probar_cosas()
 	await probar_creadas()
+	await probar_objetos()
 	await supervivientes.probar()
 	await probar_sangre()
 	await probar_mutaciones()

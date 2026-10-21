@@ -53,8 +53,11 @@
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
   centro comercial; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
   `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`, y las de los peligros: `captura-peligro-<...>.png`).
-- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 17 objetos, mochila, baúl, lo que sueltan los
-  zombis), `recetas.gd` (15 recetas y rarezas), `billete.gd`, `minimapa.gd`.
+- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 26 objetos, mochila, baúl de 32 casillas, lo que
+  sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
+  el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (15 recetas y rarezas),
+  `billete.gd`, `minimapa.gd`. La prueba `--captura` cuenta el reparto de cada sitio (`probar_objetos` de
+  `partida.gd`) y saca `captura-objetos-nuevos.png`, `captura-banco-todo.png` y `captura-baul-todo.png`.
 - `guardado.gd`: el guardado entre partidas.
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
 - `historia.gd`: el texto del dosier, la hoja de papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale
@@ -103,7 +106,7 @@ el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `asse
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
-(objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
+(los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 
 ## docs/ (del juego JS)

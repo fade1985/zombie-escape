@@ -147,7 +147,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   siempre que pegan con la tienda (en la ferretería clavos, hacha, llave inglesa y cuchillas; en el restaurante
   alcohol y gasolina; en la electrónica el táser...) y los nuevos. Los zombis del pasillo, de cualquier lista.
 - **Solo en los Apartamentos** (cosas de casa): despertador, mancuernas, pistola de agua, trapo y cuerda.
-- **Ocho objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`):
+- **Nueve objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`;
+  el plan decía «ocho», pero eran nueve nombres y el dueño se quedó con los nueve):
 
 | Tienda | Objetos nuevos |
 |---|---|
@@ -333,6 +334,28 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      - Pegas conocidas: el andar del vigilante no cierra del todo el ciclo en algunas direcciones y la dependienta,
        andando hacia arriba a la derecha, se gira un poco de perfil.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
-6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
+6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
+   - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
+     edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:
+
+     | Tienda | De siempre | Nuevos |
+     |---|---|---|
+     | Ferretería | clavos, hacha, llave inglesa, cuchillas, spray | cinta americana, cadena |
+     | Electrónica | táser, extintor | batería, cable |
+     | Restaurante | alcohol, gasolina, mechero, extintor | aceite, bombona de gas |
+     | Supermercado | lejía, alcohol, mechero | hielo seco |
+     | Farmacia | alcohol, lejía | jeringuilla |
+     | Tienda de ropa | cuchillas, spray | perchas |
+
+     - Todos los de la lista de una tienda salen igual de a menudo. En el pasillo se elige una tienda al azar y luego
+       uno de su lista. El jefe de la planta suelta sus dos objetos seguros de su tienda (si no tiene, como en el pasillo).
+     - Lo que no decía el plan: **el baúl pasa de 24 a 32 casillas** (8 por fila, para que siga cabiendo en la
+       pantalla), porque con 26 objetos distintos y las armas creadas no cabían; y en el banco de trabajo, si hay más
+       de 24 cosas, las casillas se hacen más pequeñas (10 por fila).
+     - Tecla de prueba **U**: uno de cada objeto al baúl. `--captura` cuenta lo que sale en cada sitio de los dos
+       edificios y saca `captura-objetos-nuevos.png`, `captura-banco-todo.png` y `captura-baul-todo.png`.
+   - **Trozo B: las recetas.** Las seis que mezclan edificios y, propuestas (falta que el dueño las confirme), tres
+     solo del centro: bate helado (bate + hielo seco), látigo eléctrico (cable + batería) y bomba de clavos (cinta
+     americana + clavos).
 7. **La historia:** dosier y noticias (decidido: ver «Historia»).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
