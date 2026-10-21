@@ -50,6 +50,7 @@ const MUEBLES := {
 	"drinkfridge":     {"len": 56,  "dep": 48, "paredes": "",      "archivo": "centro/nevera-bebidas"},
 	"clothesrack":     {"len": 88,  "dep": 36, "paredes": "lados", "archivo": "centro/perchero-ropa"},
 	"mannequin":       {"len": 32,  "dep": 28, "paredes": "todas", "archivo": "centro/maniqui"},
+	"tallmannequin":   {"len": 60,  "dep": 28, "paredes": "todas", "archivo": "centro/maniqui-alto"},
 	"tvshelf":         {"len": 116, "dep": 40, "paredes": "",      "archivo": "centro/estanteria-teles"},
 	"pharmacycounter": {"len": 100, "dep": 48, "paredes": "",      "archivo": "centro/mostrador-farmacia"},
 	"metalshelf":      {"len": 80,  "dep": 40, "paredes": "",      "archivo": "centro/estanteria-metal"},
@@ -193,6 +194,13 @@ const SALAS := {
 	"jefe-tienda": {
 		"muebles": ["gondola", "metalshelf", "pallet", "checkout", "mannequin"],
 		"cuantos": [2, 3],
+	},
+	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
+	"jefe-modista": {
+		"muebles": ["tallmannequin", "clothesrack", "tallmannequin", "checkout"],
+		"cuantos": [4, 6],
+		"iguales": {"tallmannequin": 6, "clothesrack": 2},
+		"islas": {"muebles": ["tallmannequin"], "fila": 2, "entre": 80, "cada": 230},
 	},
 	"almacen": {
 		"muebles": ["metalshelf", "metalshelf", "pallet", "pallet", "lockers"],

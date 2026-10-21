@@ -63,7 +63,7 @@ const NIEBLA_FONDO := 0.74                 # lo que tapa la niebla a tope (1 = n
 const ACLARA := 3.5                       # lo rápido que se aclara una habitación al descubrirla (por segundo)
 # los zombis de la exposición, en el orden de las teclas de prueba
 const EXPO_ZOMBIS := ["zombi_normal", "zombi_lento", "zombi_rapido", "zombi_explosivo", "zombi_tentaculos",
-	"zombi_venenoso", "zombi_vigilante", "zombi_dependienta", "portera", "antidisturbios"]
+	"zombi_venenoso", "zombi_vigilante", "zombi_dependienta", "portera", "antidisturbios", "modista"]
 const RUMBOS := ["s", "so", "o", "no", "n", "ne", "e", "se"]
 
 var sitio: Dictionary

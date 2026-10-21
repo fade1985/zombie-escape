@@ -75,6 +75,10 @@
     "huella": "7ef8b250442a0aaa",
     "sprite": "mueble-gondola"
   },
+  "centro/maniqui-alto.png": {
+    "huella": "65d4621ad2631917",
+    "sprite": "mueble-tallmannequin"
+  },
   "centro/maniqui.png": {
     "huella": "4893a0711b688faa",
     "sprite": "mueble-mannequin"

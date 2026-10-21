@@ -3,6 +3,8 @@
 Uso:  py tools/piel.py <sprite>            (por ejemplo: py tools/piel.py zombi-normal-48)
       py tools/piel.py <sprite> 43 68 0.35  (tono de la piel de origen, de 43 a 68 grados, y luz mínima 0,35:
                                             la dependienta salió con una piel más amarilla y apagada)
+      py tools/piel.py modista-72 5 29 0.45 68 0.6   (y además: la fila de los zapatos, 68 en un lienzo de 72,
+                                            y la saturación máxima, 0,6, para no tocar la cinta métrica amarilla)
 
 Lee las vistas tal como salieron de PixelLab en assets/sources/<sprite>/rotations-original/ (la primera vez
 las copia ahí desde rotations/) y deja las corregidas en rotations/. Solo cambia los píxeles de tono carne
@@ -16,13 +18,14 @@ DIRS = 'south south-east east north-east north north-west west south-west'.split
 TONO = (26, 42)      # tonos carne, en grados
 CLARO = 0.55         # por debajo de esta luz es pelo o zapato, no piel
 SUELO = 36           # de esta fila para abajo son los zapatos
+SAT_MAX = 1.0        # más saturado que esto no es piel (la cinta métrica de la modista)
 VERDE = 88           # tono nuevo (verde amarillento)
 SAT = 0.85           # cuánta saturación se conserva (menos = más gris)
 LUZ = 0.93           # un poco más apagado que la piel viva
 
 def es_piel(r, g, b, y):
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-    return TONO[0] <= h * 360 <= TONO[1] and v >= CLARO and y <= SUELO
+    return TONO[0] <= h * 360 <= TONO[1] and v >= CLARO and y <= SUELO and s <= SAT_MAX
 
 def verde(r, g, b):
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
@@ -50,4 +53,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:   # otro tono de piel de origen
         TONO = (float(sys.argv[2]), float(sys.argv[3]))
         CLARO = float(sys.argv[4]) if len(sys.argv) > 4 else CLARO
+        SUELO = int(sys.argv[5]) if len(sys.argv) > 5 else SUELO
+        SAT_MAX = float(sys.argv[6]) if len(sys.argv) > 6 else SAT_MAX
     main(sys.argv[1])
