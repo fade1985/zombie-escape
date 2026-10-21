@@ -7,6 +7,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | `docs/CODIGO.md` | Qué hace cada escena, script, asset y herramienta |
 | `docs/CONTROLES.md` | Teclas, mando, móvil, teclas de prueba (F2-F10, H, M, O…), sala de mantenimiento, guardado |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel |
+| `docs/CENTRO_COMERCIAL.md` | El segundo edificio: plan entero por partes (lo que está hecho, marcado) |
 | `docs/PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md` | Del juego JS: ideas y números |
 
 ## Qué es
