@@ -24,7 +24,7 @@ const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda pa
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 102           # (alargada para los zombis y los minijefes del centro comercial)
+const EXPO_FILAS := 108           # (alargada para los zombis y los minijefes del centro comercial)
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
@@ -134,6 +134,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
 			nombre = mini.tienda
 			apt.salas[0].nombre = mini.tienda
+			if Catalogo.SALAS.has("jefe-" + su_jefe):
+				apt.tipo = su_jefe   # sus muebles, los suyos (el Taller de costura, lleno de maniquíes)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,

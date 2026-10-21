@@ -1,4 +1,4 @@
-# Una bala de los malos (de momento, el agua sucia que lanza la portera con la fregona): vuela en línea recta,
+# Una bala de los malos (el agua sucia que lanza la portera con la fregona o los alfileres de la modista): vuela en línea recta,
 # se acaba al chocar con una pared o un mueble y le hace daño a Johnny si le da. Como enemyShoot en el juego
 # (src/game-combate.js).
 extends Node2D
@@ -8,6 +8,7 @@ var dano := 10
 var radio := 9.0
 var color := Color("#cbb994")
 var vida := 6.0
+var forma := "gota"   # "alfiler": una aguja fina con la cabeza roja (la modista)
 
 
 func _ready() -> void:
@@ -34,5 +35,12 @@ func _physics_process(delta: float) -> void:
 
 # Una gota redonda con su borde oscuro, a la altura del cuerpo
 func _draw() -> void:
+	if forma == "alfiler":
+		var d := velocidad.normalized()
+		var a := Vector2(0, -22)
+		draw_line(a - d * 9.0, a + d * 8.0, Color("#1d1b2c"), 4.0)
+		draw_line(a - d * 8.0, a + d * 7.0, Color("#d8dde6"), 2.0)
+		draw_circle(a - d * 8.0, 3.0, Color("#e0303a"))
+		return
 	draw_circle(Vector2(0, -22), radio + 2.0, Color("#1d1b2c"))
 	draw_circle(Vector2(0, -22), radio, color)

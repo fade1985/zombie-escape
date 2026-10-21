@@ -39,15 +39,16 @@ const ZOMBIS := {
 	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefes del centro comercial
 	"mascota": preload("res://escenas/personajes/mascota.tscn"),
 	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
+	"modista": preload("res://escenas/personajes/modista.tscn"),
 }
 # Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
 # objetos y la mutación
-const JEFES := ["portera", "antidisturbios", "cocinero", "mascota"]
+const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
-	KEY_G: "cocinero", KEY_J: "mascota"}
+	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -62,7 +63,8 @@ const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un bill
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
-	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "mascota": Color("#c9a13b")}
+	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
+	"mascota": Color("#c9a13b")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -119,7 +121,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · J mascota · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -198,7 +200,7 @@ func _ready() -> void:
 	orden_jefes = ed.get("minijefes", []).duplicate()
 	orden_jefes.shuffle()
 	# en la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios, u otro
-	# con "--jefe cocinero" o "--jefe mascota"
+	# con "--jefe cocinero", "--jefe modista" o "--jefe mascota"
 	var args := OS.get_cmdline_user_args()
 	var cual := args.find("--jefe")
 	var probar: String = args[cual + 1] if cual >= 0 and cual + 1 < args.size() else "antidisturbios"
@@ -1469,6 +1471,8 @@ func _process(delta: float) -> void:
 			if planta.sitios[i].tipo == "jefe":
 				montar(i, 0, false)
 	if antes < 7.7 and tiempo >= 7.7 and jefa:
+		if jefa.has_method("cambiarse"):
+			probar_modista(jefa)   # antes de poner a Johnny delante: se cambia de sitio
 		# Johnny, delante del jefe (para que salga en la foto)
 		for i in 60:
 			var p: Vector2 = jefa.position + Vector2.from_angle(jefa.mirada.angle() + randf_range(-0.7, 0.7)) * 230.0
@@ -1492,6 +1496,9 @@ func _process(delta: float) -> void:
 			print("Escudo (golpes de 10): de frente -%d, de lado -%d, por la espalda -%d, explosión -%d" % quita)
 		if jefa.has_method("foto"):   # que salga en la foto haciendo lo suyo (el antidisturbios, preparando la carga; la mascota, saltando)
 			jefa.foto(johnny)
+		if jefa.has_method("cambiarse"):   # la modista: que salga en la foto tirando alfileres
+			jefa.apuntar_alfileres(johnny.position - jefa.position)
+			jefa.datos.aviso = 0.15
 	if antes < 8.0 and tiempo >= 8.0 and jefa:
 		get_viewport().get_texture().get_image().save_png("res://captura-jefe.png")
 	if antes < 8.05 and tiempo >= 8.05:
@@ -1503,6 +1510,21 @@ func _process(delta: float) -> void:
 	if antes < 9.5 and tiempo >= 9.5:
 		print("Jefa muerta: ", planta.jefa_muerta, " | ", aviso.text)
 		probar_menus()
+
+
+# La modista, en la prueba: cuántos maniquíes hay en su tienda, que se cambie de sitio con uno y que cobren vida
+# tres (al caer ella, se caen)
+func probar_modista(jefa: Node2D) -> void:
+	var antes: Vector2 = jefa.position
+	print("Modista: %d maniquíes en %s | al entrar, escondida: %s" % [jefa.maniquies().size(), planta.sitios[aqui].nombre,
+		jefa.estado == "escondida"])
+	jefa.cambiarse(johnny)
+	print("Modista: se cambia de sitio con un maniquí (a %d unidades) | ahora: %s" % [antes.distance_to(jefa.position), jefa.estado])
+	jefa.despertar_maniquies(johnny)
+	print("Modista: cobran vida %d maniquíes | quedan %d de mueble" % [jefa.vivos.size(), jefa.maniquies().size()])
+	jefa.murio.connect(func(): (func():
+		print("Modista: al caer ella, maniquíes vivos: %d" % jefa.vivos.filter(func(v): return v.estado != "muerto").size())
+		).call_deferred())
 
 
 # El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,

@@ -424,6 +424,9 @@ func buscar_objetivo(w: Dictionary) -> Node2D:
 		# a los de una habitación a oscuras no se les apunta
 		if mapa and mapa.oculto(zombi.global_position):
 			continue
+		# ni a la modista quieta entre los maniquíes: hay que encontrarla (o pegarle a mano)
+		if zombi.has_method("escondida") and zombi.escondida():
+			continue
 		if distancia >= alcance or not se_ve(zombi):
 			continue
 		mejor = zombi

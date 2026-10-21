@@ -615,6 +615,33 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      - Tecla de prueba **G**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro --jefe
        cocinero` lo saca en la 1ª planta, comprueba que su aceite no le quema y hace `captura-jefe.png` (con el
        aceite, cuchillos clavados, la lluvia marcando el suelo y el abanico recién lanzado).
+   - ✅ **Trozo 4: la modista** (21 oct). Lo que ha quedado:
+     - **Su tienda, el Taller de costura**, llena de maniquíes de cuerpo entero (unos 23) con su mismo vestido: un
+       mueble nuevo, `tallmannequin` (PixelLab, 1 generación), en filas por la sala y por las paredes ("jefe-modista"
+       en `catalogo.gd`). Decidido con el dueño: mejor que el busto de la tienda de ropa, que es más bajo que ella.
+     - **Ella** (`scripts/modista.gd`), con los números del plan. Detalles decididos al hacerlo: al entrar ya está
+       escondida en el sitio de un maniquí. Escondida se queda de frente y quieta, sin hacer daño al tocarla; si
+       Johnny se acerca a menos de 130 o le pega, da un respingo («¡SSSS!») y salta con el tijeretazo o los
+       alfileres. Se cambia de sitio cada 7 s (enfadada, 4,5) con un maniquí lejos de Johnny: le brillan los ojos
+       0,6 s (si le pegas entonces, no se va) y otra vez un momento al llegar. La ráfaga son 5 alfileres (7
+       enfadada) con una raya en el suelo que sigue a Johnny hasta 0,2 s antes de tirar. Los alfileres y el brillo
+       de los ojos, dibujados con código (el brillo se ve también a oscuras).
+     - **Los maniquíes que cobran vida** (`scripts/maniqui_vivo.gd`): al enfadarse, 3 de los de la tienda (si no
+       hay, aparecen a su alrededor). Tiemblan al despertar; solo se mueven (a 165, bamboleándose) cuando no están
+       delante de Johnny o hay algo en medio; si te tocan moviéndose, 10. Vida 45; al caer la modista se caen todos.
+     - Tecla de prueba **T**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro --jefe
+       modista` la saca en la 1ª planta, cuenta los maniquíes, la cambia de sitio, despierta a tres y hace
+       `captura-jefe.png` con ella tirando alfileres.
+     - **Escondida, el apuntado automático no la busca** (`johnny.gd`): en el modo asistido Johnny se giraba solo
+       hacia ella y la descubría. Hay que encontrarla o pegarle a mano.
+     - **Su dibujo:** el modelo, delgado, se quedó así (lo decidió el dueño). Piel corregida con `piel.py` (ahora
+       admite la fila de los zapatos y la saturación máxima, para no tocar la cinta métrica) y subida como personaje
+       nuevo (0,25). Animada con PixMiniMax sobre ese modelo, con la receta del antidisturbios: andar, alfileres,
+       tijeretazo, golpe (el respingo al pillarla) y muerte, en las 8 direcciones. **41,25 generaciones** en total
+       (con el maniquí; detalle y textos en `assets/pixellab.json` → `centro-comercial-parte4` → `trozo4`). Se monta
+       con `py tools/jefe_hoja.py modista-72 jefe-modista`. Pegas conocidas: andando hacia arriba a la derecha se
+       pone algo de perfil a mitad del paso; el tijeretazo lleva un tajo blanco grande (se ha dejado: se lee como el
+       corte); en el golpe, el primer fotograma lleva una raya blanca en varias direcciones (el juego se lo salta).
    - ✅ **Trozo 5: la mascota** (21 oct). Lo que ha quedado:
      - **La mascota** (`scripts/mascota.gd`, `escenas/personajes/mascota.tscn`), con los números del plan (vida 420,
        +25 % por planta; velocidad 140). **Embestida:** se pone mirando a Johnny, rasca el suelo 0,6 s (enfadada,

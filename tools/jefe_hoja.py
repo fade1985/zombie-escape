@@ -1,6 +1,7 @@
 # Monta la hoja de un minijefe del centro comercial (lienzo de 72, como el zombi venenoso) y su SpriteFrames.
 # Uso (desde la raíz del proyecto):  py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios
 #                                    py tools/jefe_hoja.py cocinero-72 jefe-cocinero
+#                                    py tools/jefe_hoja.py modista-72 jefe-modista
 #                                    py tools/jefe_hoja.py mascota-72 jefe-mascota
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
@@ -54,6 +55,18 @@ JEFES = {
             "muerte": ("muerte", 10, False, False),
         },
         "sangre": True,
+    },
+    # la modista: los alfileres y el brillo de los ojos, con código
+    "modista-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "alfileres": ("alfileres", 12, False, False),
+            "tijeretazo": ("tijeretazo", 12, False, False),
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
     },
     # la mascota: la embestida es una carrera en bucle y el salto va por fotogramas (agacharse, aire, caer)
     "mascota-72": {

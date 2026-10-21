@@ -63,6 +63,8 @@ const EFECTOS := {
 	"cuchillos": {"hueco": 80, "notas": [[1300, 0.1, "sierra", 0.016, -800], [900, 0.08, "sierra", 0.012, -500, 0.05]]},   # el cocinero los lanza
 	"clavado": {"hueco": 60, "notas": [[1100, 0.03, "cuadrada", 0.02, -600], [200, 0.08, "triangulo", 0.05, -70, 0.01]]},    # y se clavan
 	"silbato": {"notas": [[2700, 0.1, "seno", 0.045, 150], [2900, 0.4, "seno", 0.05, -200, 0.13]]},   # el guardia
+	"tijeras": {"hueco": 60, "notas": [[2400, 0.03, "cuadrada", 0.03, -800], [1900, 0.05, "cuadrada", 0.03, -600, 0.07]]},   # la modista
+	"alfiler": {"hueco": 40, "notas": [[2600, 0.03, "triangulo", 0.012, 900]]},
 	"chillido": {"notas": [[1150, 0.3, "sierra", 0.035, -450], [980, 0.45, "cuadrada", 0.022, -380, 0.1]]},   # ¡OFERTAS!
 	"jefe": {"notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},
 	"rugido": {"notas": [[160, 0.5, "sierra", 0.07, -90], [120, 0.6, "cuadrada", 0.04, -60, 0.05]]},
