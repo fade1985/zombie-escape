@@ -125,11 +125,18 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 | **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
 | **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
 
-- **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
-  ahí le metían el VD-7. Decidido en la parte 7: al arreglarla encuentra un doble fondo con cápsulas de VD-7 y te lo
-  dice; desde entonces el café es solo café. La arreglaba la camarera, que ya no está: **lo descubre la
-  farmacéutica** (decidido con el dueño el 21 oct, en la parte 7). La primera vez que está en la sala después de
-  rescatarla, huele el café y te lo dice; el texto ya está escrito (`Historia.CAFETERA`) y se mete en su trozo.
+- ✅ **Guiño para la historia (parte 7; hecho el 21 oct):** según el dosier, la cafetera de la sala se la regaló
+  Velaria a Johnny y por ahí le metían el VD-7. La arreglaba la camarera, que ya no está: **lo descubre la
+  farmacéutica** (decidido con el dueño el 21 oct, en la parte 7).
+  - La cafetera, dibujada con código (`scripts/mapa/cafetera.gd`): sobre una mesita, con su jarra, la taza de
+    Johnny y vapor, entre la farmacéutica y el técnico (`Mapa.CAFETERA_EN`). Está siempre en la sala.
+  - La primera vez que la farmacéutica, ya rescatada, está en la sala (en su sitio o acompañándote), al segundo y
+    medio dice las tres frases de `Historia.CAFETERA` en su bocadillo, una detrás de otra
+    (`Supervivientes.guino_cafetera`). Con la última se apunta en el guardado (`cafetera`) y no lo vuelve a decir;
+    si Johnny se va antes de acabar, lo cuenta entero la próxima vez.
+  - `--captura` saca `captura-cafetera.png` (la primera frase) y comprueba en la terminal que la segunda vez ya no
+    dice nada.
+  - El rescate propio de la farmacéutica y su mejora (el botiquín al empezar) siguen pendientes.
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
 - ✅ **Lo común** (21 oct):
@@ -226,7 +233,7 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
   completar los Apartamentos, que es cuando se abre el centro), Velaria saca su somnífero a la venta, trabajadores
   que no vuelven a casa, un audio del gerente, y al completar el centro: «un helicóptero de Velaria aterriza en la
   azotea... vacío». Como en las de ahora, Velaria va cambiando su versión para taparlo.
-- **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
+- ✅ **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
   fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café. La camarera ya no está (tres
   supervivientes por edificio): **lo descubre la farmacéutica** (decidido el 21 oct, en la parte 7).
 - Los textos los escribe Claude y el dueño los lee antes de darlos por buenos (se pueden reescribir: todo está en
@@ -257,9 +264,9 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
   `partida.pagina_del_jefe()`: si la orden de recogida falta, la apunta y la enseña con el juego parado (como al
   coger la de un muerto; `Historia.del_jefe` dice cuál es). Ya está probada en la foto de prueba
   (`captura-pagina-jefe.png`).
-- **Pendiente para el trozo de la farmacéutica (parte 5):** el guiño de la cafetera. El texto ya está escrito
-  (`Historia.CAFETERA`, tres frases): la primera vez que está en la sala después de rescatarla, huele el café y se
-  lo dice a Johnny; desde entonces el café es solo café.
+- ✅ **El guiño de la cafetera** (hecho el 21 oct, aparte del trozo de la farmacéutica): la primera vez que está en
+  la sala después de rescatarla, huele el café y le dice a Johnny las tres frases de `Historia.CAFETERA`; desde
+  entonces el café es solo café. Ver «Supervivientes».
 - Fotos de prueba (`--captura --edificio centro`): `captura-cientifico.png` y `captura-pagina.png` (el farmacéutico
   de la planta baja), `captura-cuerpos.png` (los dos sin bata), `captura-dosier.png` (página 3),
   `captura-dosier-falta.png` (la del gerente, sin encontrar), `captura-pagina-jefe.png` y `captura-noticias.png`.
@@ -417,6 +424,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
    y la mejora de la sala de cada uno (un trozo para cada uno).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
-7. ✅ **La historia:** dosier y noticias (ver «Historia»). Pendiente: la página del gerente (trozo 6 de la parte 4) y
-   el guiño de la cafetera (trozo de la farmacéutica).
+7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). Pendiente: la página del gerente
+   (trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).

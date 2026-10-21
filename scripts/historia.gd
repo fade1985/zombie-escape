@@ -156,8 +156,8 @@ const NOTICIAS := [
 # La cafetera de la sala de mantenimiento se la regaló Velaria a Johnny, y con ella le daban el VD-7 (página
 # «Sujeto 0»). La farmacéutica del centro comercial (decidido con el dueño el 21 oct, al quitar a la camarera),
 # la primera vez que está en la sala después de rescatarla, huele el café, encuentra un doble fondo con cápsulas
-# y se lo dice a Johnny, frase a frase; desde entonces el café es solo café. Aún no sale en el juego: va en el
-# trozo de la farmacéutica (docs/CENTRO_COMERCIAL.md, Historia)
+# y se lo dice a Johnny, frase a frase; desde entonces el café es solo café. Lo dice supervivientes.gd
+# (guino_cafetera); la cafetera la dibuja mapa/cafetera.gd
 const CAFETERA := [
 	"Johnny, esta cafetera tiene doble fondo.",
 	"Hay cápsulas escondidas. Pone «VD-7».",

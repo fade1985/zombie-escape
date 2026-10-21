@@ -13,9 +13,12 @@
 #
 # Al ganar con él en el equipo se viene a vivir a la sala de mantenimiento (Guardado: rescatados) y ya no vuelve a
 # salir. Los rescatados esperan cada uno en su sitio ("casa"): los tres de siempre a la derecha del ordenador y los
-# del centro comercial en otra fila, debajo, cada uno delante del hueco de lo suyo (la cafetera, el puesto del
-# ferretero...: "mejora", que llega con el rescate propio de cada uno). Al arrimarse a uno, te acompaña (Guardado:
-# acompanante) y empieza las partidas siguientes en el equipo. Solo uno a la vez.
+# del centro comercial en otra fila, debajo, cada uno delante del hueco de lo suyo (el puesto del ferretero, las
+# cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno). Al arrimarse a uno, te acompaña
+# (Guardado: acompanante) y empieza las partidas siguientes en el equipo. Solo uno a la vez.
+#
+# El guiño de la cafetera: la primera vez que la farmacéutica está en la sala, huele el café de la cafetera de
+# Johnny (mapa/cafetera.gd), le encuentra el doble fondo con cápsulas de VD-7 y se lo dice (Historia.CAFETERA).
 #
 # Los del centro comercial, de momento, se rescatan como los de siempre (encerrados, gritando y con la horda):
 # su rescate propio llega en un trozo para cada uno (docs/CENTRO_COMERCIAL.md, «Supervivientes»).
@@ -242,6 +245,7 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		sala_socorro = -1
 	if sitio.tipo == "mantenimiento":
 		colocar_vecinos()
+		guino_cafetera()
 
 
 func _process(delta: float) -> void:
@@ -561,6 +565,34 @@ func llevar_vecino(v: Aliado) -> void:
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
 
+# ═════════════ El guiño de la cafetera ═════════════
+
+const CAFE_PAUSA := 1.5   # segundos en la sala antes de que la farmacéutica huela el café
+const CAFE_CADA := 3.6    # y entre frase y frase (el bocadillo dura 3,2)
+
+# La primera vez que la farmacéutica (ya rescatada) está en la sala de mantenimiento, en su sitio o acompañándote,
+# huele el café, encuentra el doble fondo con las cápsulas de VD-7 y se lo dice a Johnny, frase a frase
+# (Historia.CAFETERA). Se apunta en el guardado con la última frase: si Johnny se va antes, lo vuelve a contar la
+# próxima vez. Desde entonces el café es solo café, y no lo repite nunca más
+func guino_cafetera() -> void:
+	var g := Guardado.cargar()
+	if g.cafetera or "farmaceutica" not in g.rescatados:
+		return
+	var ella: Aliado = null
+	for a in vecinos + equipo:
+		if a.def.id == "farmaceutica":
+			ella = a
+	if ella == null:
+		return
+	var mapa: Node2D = partida.mapa
+	for i in Historia.CAFETERA.size():
+		await get_tree().create_timer(CAFE_PAUSA if i == 0 else CAFE_CADA, false).timeout
+		if partida.mapa != mapa or not is_instance_valid(ella) or not ella.is_inside_tree():
+			return   # Johnny ha salido de la sala
+		ella.decir(Historia.CAFETERA[i])
+	Guardado.cambiar(func(x): x.cafetera = true)
+
+
 # ═════════════ En la pantalla ═════════════
 
 # La flecha en el borde hacia donde está encerrado y, en la horda, la barra de la cerradura y la cuenta atrás
@@ -706,6 +738,7 @@ func probar() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-vecinos.png")
 	await probar_los_seis()
 	await probar_acompanantes()
+	await probar_cafetera()
 	partida.menus.visible = true
 
 
@@ -760,6 +793,45 @@ func probar_acompanantes() -> void:
 	for a in equipo:
 		a.queue_free()
 	equipo = antes
+
+
+# El guiño de la cafetera: solo la farmacéutica en la sala, con la cafetera sin descubrir. La foto con su primera
+# frase (captura-cafetera.png); luego, lo que dice y si queda apuntado, y que la segunda vez ya no dice nada. Se
+# deja el guardado y el equipo como estaban
+func probar_cafetera() -> void:
+	var g := Guardado.cargar()
+	var antes := [g.rescatados.duplicate(), g.acompanante, g.cafetera]
+	var equipo_antes := equipo
+	for a in equipo:
+		if a.get_parent():
+			a.get_parent().remove_child(a)
+	equipo = []
+	Guardado.cambiar(func(x):
+		x.rescatados = ["farmaceutica"]
+		x.acompanante = ""
+		x.cafetera = false)
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	var ella: Aliado = vecinos[0]
+	johnny.position = ella.position + Vector2(-30, 120)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-cafetera.png")
+	var dichas := [ella.dicho]
+	for i in Historia.CAFETERA.size() - 1:
+		await get_tree().create_timer(CAFE_CADA, false).timeout
+		dichas.append(ella.dicho)
+	print("Cafetera: %s dice %s | apuntada %s" % [ella.def.nombre, dichas, Guardado.cargar().cafetera])
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	await get_tree().create_timer(CAFE_PAUSA + CAFE_CADA * 2.0 + 0.5, false).timeout
+	print("Cafetera, la segunda vez: dice '%s'" % vecinos[0].dicho)
+	Guardado.cambiar(func(x):
+		x.rescatados = antes[0]
+		x.acompanante = antes[1]
+		x.cafetera = antes[2])
+	equipo = equipo_antes
+	for a in equipo:
+		partida.mapa.cosas.add_child(a)
+		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
 
 
 func iconos_lanzables() -> Array:

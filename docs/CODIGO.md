@@ -69,13 +69,14 @@
 - `historia.gd`: el texto del dosier de cada edificio (`DOSIERES`: Apartamentos y centro comercial), la hoja de
   papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
   guardado). La última página del centro no la lleva un muerto: la suelta el gerente al caer (`del_jefe`; la
-  partida la enseña con `pagina_del_jefe()`). También el guiño de la cafetera (`CAFETERA`, aún sin usar). Para
-  cambiar la historia se edita aquí, sin tocar los `id`.
+  partida la enseña con `pagina_del_jefe()`). También el guiño de la cafetera (`CAFETERA`: lo dice la farmacéutica,
+  `supervivientes.gd`). Para cambiar la historia se edita aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
   `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
   su tienda en su planta: `Planta.tienda_fija`), sus gritos, su sitio en la sala (`casa`) y su mejora (pendiente).
-  Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
+  El guiño de la cafetera (`guino_cafetera`: la primera vez que la farmacéutica está en la sala; `cafetera` en el
+  guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
   medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
@@ -97,7 +98,8 @@
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos.
   `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
-  científico muerto con su página; con bata o, si no es científico, con su ropa).
+  científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
+  mantenimiento, dibujada con código).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 
