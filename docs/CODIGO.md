@@ -188,10 +188,11 @@
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, `cocinero-72 jefe-cocinero`, `modista-72 jefe-modista` o
-`mascota-72 jefe-mascota`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
+`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
 ficha `JEFES` (con la lista, los fotogramas por
 segundo y, si el lienzo no es de 72, el punto de los pies; la embestida de la mascota y la del gerente mutado llevan
-un 5.º dato: quitar el primer fotograma); alinea por los pies los lienzos
+un 5.º dato: quitar el primer fotograma; y opciones: `"sangre"`, `"motas"` por animación y `"sin"` para quitar fotogramas
+sueltos); alinea por los pies los lienzos
 de PixelLab, borra las motas sueltas, oscurece la sangre si la ficha lo pide y dice el `offset` del Sprite; lo que
 falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),

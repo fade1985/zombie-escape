@@ -4,6 +4,7 @@
 #                                    py tools/jefe_hoja.py modista-72 jefe-modista
 #                                    py tools/jefe_hoja.py mascota-72 jefe-mascota
 #                                    py tools/jefe_hoja.py gerente-128 jefe-gerente   (el jefe final, lienzo de 128)
+#                                    py tools/jefe_hoja.py portera-72 jefe-portera    (la jefa de los Apartamentos)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -29,8 +30,10 @@ DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
 # último fotograma[, quitar el primero]) (el andar de PixelLab termina en la misma postura con la que empieza: sin
 # quitarlo, ese paso se vería dos veces; y la embestida de la mascota empieza de pie: en la carrera sobra).
 # "de_frente": las que solo se dibujan mirando hacia abajo. "sangre": oscurecer la sangre roja viva de PixelLab
-# (como en tools/zombi.py, decidido por el dueño: que no desentone). "pies": el punto de los pies si el lienzo no
-# es de 72
+# (como en tools/zombi.py, decidido por el dueño: que no desentone; con un número, solo los rojos a partir de ese,
+# para no tocar la sangre oscura que ya trae el dibujo). "pies": el punto de los pies si el lienzo no es de 72.
+# "motas": en esas animaciones se borran también los trozos sueltos más grandes (lo que lanza y sale volando, que ya
+# lo dibuja el juego). "sin": fotogramas que se quitan de una animación en una dirección (el número del archivo)
 JEFES = {
     "antidisturbios-72": {
         "anims": {
@@ -111,24 +114,41 @@ JEFES = {
         },
         "pies": (64, 127),
     },
+    # la portera (la jefa de los Apartamentos), rehecha a 72 como los minijefes: "ataque" es el fregonazo
+    # (levanta la fregona y la baja) y "lanzar", la lejía; el abanico, el ácido y el giro usan esas mismas
+    "portera-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "ataque": ("fregonazo", 10, False, False),
+            "lanzar": ("lanzar", 10, False, False),
+            "grito": ("grito", 8, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["grito"],
+        "sangre": 160,                 # solo los salpicones rojo vivo del fregonazo
+        "motas": {"lanzar": 300},      # la botella que sale volando
+        "sin": {"lanzar_s": [6, 7]},   # de frente, la botella se ve enorme al venir hacia la cámara
+    },
 }
 JEFE = JEFES[fuente]
 PIES = JEFE.get("pies", PIES)
 ANIMS = JEFE["anims"]
 
 
-def oscurecer(im: Image.Image) -> Image.Image:
+def oscurecer(im: Image.Image, desde: int = 110) -> Image.Image:
     """La sangre roja viva, a un rojo apagado: baja cada rojo por igual, para que no pierda sus sombras."""
     px = im.load()
     for y in range(im.height):
         for x in range(im.width):
             r, g, b, a = px[x, y]
-            if a and r >= 110 and r > 1.8 * g and r > 1.8 * b:
+            if a and r >= desde and r > 1.8 * g and r > 1.8 * b:
                 px[x, y] = (int(r * 0.65), int(g * 0.3), int(b * 0.27), a)
     return im
 
 
-def limpiar(im: Image.Image) -> Image.Image:
+def limpiar(im: Image.Image, mota: int = MOTA) -> Image.Image:
     """Borra los trozos sueltos pequeños (contando juntos los píxeles que se tocan, también en diagonal)."""
     w, h = im.size
     px = im.load()
@@ -148,7 +168,7 @@ def limpiar(im: Image.Image) -> Image.Image:
                         if 0 <= nx < w and 0 <= ny < h and not visto[ny][nx] and px[nx, ny][3] > 0:
                             visto[ny][nx] = True
                             pila.append((nx, ny))
-            if len(trozo) < MOTA:
+            if len(trozo) < mota:
                 for x, y in trozo:
                     px[x, y] = (0, 0, 0, 0)
     return im
@@ -159,7 +179,8 @@ def quieta(d: str) -> Image.Image:
 
 
 # Los fotogramas de una animación y dónde va su esquina respecto al lienzo de 72
-def fotogramas(carpeta: str, d: str, quitar_ultimo: bool, quitar_primero: bool = False) -> list:
+def fotogramas(carpeta: str, d: str, quitar_ultimo: bool, quitar_primero: bool = False, mota: int = MOTA,
+               sin: tuple = ()) -> list:
     if carpeta == "rotations":
         return [(quieta(d), (0, 0))]
     ruta = f"{src}/{carpeta}"
@@ -169,7 +190,7 @@ def fotogramas(carpeta: str, d: str, quitar_ultimo: bool, quitar_primero: bool =
                      key=lambda f: int(f[len(d) + 1:-4]))
     if not nombres:
         return []
-    lista = [Image.open(f"{ruta}/{f}").convert("RGBA") for f in nombres]
+    lista = [Image.open(f"{ruta}/{f}").convert("RGBA") for f in nombres if int(f[len(d) + 1:-4]) not in sin]
     if quitar_ultimo and len(lista) > 2:
         lista = lista[:-1]
     a, b = quieta(d).getbbox(), lista[0].getbbox()
@@ -178,13 +199,14 @@ def fotogramas(carpeta: str, d: str, quitar_ultimo: bool, quitar_primero: bool =
     sitio = (a[0] - b[0], a[3] - b[3])
     if quitar_primero:   # (después de alinear, que se hace con el primero)
         lista = lista[1:]
-    return [(limpiar(im), sitio) for im in lista]
+    return [(limpiar(im, mota), sitio) for im in lista]
 
 
 filas = []   # (nombre, fps, bucle, [(imagen, sitio)])
 for nombre, (carpeta, fps, bucle, *quitar) in ANIMS.items():
     for d, dd in DIRS.items():
-        imgs = fotogramas(carpeta, d, *quitar)
+        imgs = fotogramas(carpeta, d, *quitar, mota=JEFE.get("motas", {}).get(nombre, MOTA),
+                          sin=JEFE.get("sin", {}).get(f"{nombre}_{dd}", ()))
         if not imgs:
             if nombre in JEFE.get("de_frente", []) and d != "south":
                 continue   # solo está dibujada de frente
@@ -211,7 +233,7 @@ for _, _, _, imgs in filas:
         n += 1
     regiones.append(casillas)
 if JEFE.get("sangre"):
-    hoja = oscurecer(hoja)
+    hoja = oscurecer(hoja, 110 if JEFE["sangre"] is True else JEFE["sangre"])
 hoja.save(f"assets/sprites/{salida}.png")
 
 subs, anims = [], []

@@ -1,0 +1,9 @@
+south upload:76f44a78-9e63-40f6-bc49-3500b621e94f
+south-east upload:11c79114-413d-4e4c-a2a1-195631eee023
+east upload:3660064c-ff50-49b2-9b6a-fb673165e5fa
+north-east upload:1f56ee62-4bfb-4252-9749-ad6663777be0
+north upload:9ee8ba19-fabd-4f06-81cc-72c602bfcc8b
+north-west upload:63cde07a-861d-49e5-8e45-0af01cc2d59f
+west upload:ca30cfad-cba5-4d75-8c35-84f2d7a73198
+south-west upload:4bfb213a-9792-48b9-a9b2-4e2abbda2040
+(subidas el 2026-10-21, caducan a los 3 días)

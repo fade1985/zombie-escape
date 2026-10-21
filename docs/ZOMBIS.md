@@ -159,7 +159,19 @@ final, también la de la azotea (con el doble de vida). El vecino del 4ºB, que 
 - **Andar (16 oct, con visto bueno):** parecía que levitaba. Su paso va atado a la distancia andada (`STRIDE`)
   y, como en el dibujo lo que toca el suelo es la fregona, se baja de 3 a 9 píxeles según la dirección para que
   las zapatillas pisen la sombra (`FEET_DY` en `src/jefe-portera.js`). Si se rehace la hoja, volver a medirlo.
-- **Números provisionales** (los puso Claude): 600 de vida en la planta baja (+25 % por planta), radio 38.
+- **Rehecha a 72 (22 oct, lo pidió el dueño para que todos los jefes tengan el tamaño de un zombi grande):** lo de
+  arriba es la portera de 96, que ya no se usa. La nueva (`assets/sources/portera-72/`, entrada `portera-72` de
+  `assets/pixellab.json`; 40 generaciones) mide unos 70 px, como el antidisturbios y el venenoso. Modelo con
+  `create_character_pro_flash` a 72 con la vista de frente de la de 96 reducida a 72 como imagen de estilo
+  (`estilo.png`), sin retoque (ya sale con su piel gris verdosa y la sangre). Animaciones con PixMiniMax, una
+  dirección por llamada: andar, fregonazo, lanzar (la lejía), grito (solo de frente) y muerte (cae de espaldas).
+  Hoja con `py tools/jefe_hoja.py portera-72 jefe-portera` (su ficha en `JEFES`: oscurece solo la sangre rojo vivo de
+  los salpicones, borra la botella que sale volando —la dibuja el juego— y quita dos fotogramas de la lejía de frente,
+  donde la botella se ve enorme). En `portera.gd`: `GOLPE_FREGONA` va por dirección (4, o 5 hacia la izquierda y
+  arriba a la izquierda), `BAJAR` de 0 a 3 píxeles, `PASO` 60, `ARRIBA` 118, `PIE` 30; en su escena, radio 32 y
+  sombra de 92×24. En la sala de exposición ya no necesita hueco de más.
+- **Números provisionales** (los puso Claude): 600 de vida en la planta baja (+25 % por planta), radio 32 (38
+  cuando era grande).
 - **Pendiente:** que el dueño la pruebe; la botella de lejía y el agua sucia siguen dibujadas con código.
 
 ## Centro comercial (Godot, 21 de octubre de 2026)

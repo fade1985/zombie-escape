@@ -1222,7 +1222,69 @@
       "grito": "grupo a947a243, solo south.",
       "muerte": "grupo 4f1eb34d, 8 direcciones. south y north se repitieron cayendo de lado ('topples over sideways... lying flat on her side'): cayendo hacia la cámara o de espaldas no llegaba a caerse (las malas en descartes/muerte/)."
     },
-    "sin_usar_en_pixellab": "Personaje 5b930c2c (modelo sin retocar). En 4ce7c0cc: grupos andar (6f41b757), andar3 (ddac24e4, skeleton-v3) y fregonazo (19468601); y las direcciones repetidas de andar2 (north, north-west), fregonazo2 (north) y muerte (south, north). Borrar solo con confirmación del dueño."
+    "sin_usar_en_pixellab": "Personaje 5b930c2c (modelo sin retocar). En 4ce7c0cc: grupos andar (6f41b757), andar3 (ddac24e4, skeleton-v3) y fregonazo (19468601); y las direcciones repetidas de andar2 (north, north-west), fregonazo2 (north) y muerte (south, north). Borrar solo con confirmación del dueño.",
+    "sustituida": "2026-10-22: en el juego ya no se usa; la portera es ahora portera-72 (tamaño de zombi grande)."
+  },
+  "portera-72": {
+    "kind": "character",
+    "character_id": "38cf6a70-31fd-4aed-9747-9d18022b70ce",
+    "name": "portera-72",
+    "nota": "La portera rehecha al tamaño de un zombi grande (2026-10-21/22; lo pidió el dueño para que todos los jefes midan como los minijefes del centro comercial). Sustituye a portera-96 en el juego (assets/sprites/jefe-portera). create_character_pro_flash a 72x72 con la vista south de portera-96 (la retocada) reducida a 72 como imagen de estilo (assets/sources/portera-72/estilo.png: recortada, a 70 de alto con LANCZOS y cada color llevado al más cercano de la original; la imagen de estilo tiene que caber en el lienzo). Sale de 68-70 px de alto, con la piel gris verdosa y la sangre de la retocada: no hizo falta retoque. Visto bueno del dueño al modelo y a la prueba de animaciones. Vistas en assets/sources/portera-72/rotations/.",
+    "request": {
+      "description": "the same character as the reference, a zombie old cleaning lady boss redrawn crisp and clean: huge hunched old woman zombie about 68 pixels tall, big hunchback, very broad shoulders and thick arms, long messy white hair tied in a high ponytail with loose strands over her face, pale grey-green wrinkled rotting skin, white blind eyes, open mouth with rotten teeth and blood on her chin, dirty grey t-shirt, long cream apron soaked with dark red blood splatter, baggy dark blue denim trousers, beige crocs clogs stained with blood, bloody clawed hands, holding a wooden mop in her right hand with a big pale mop head soaked in blood resting on the floor, standing wide and menacing, crisp pixel art, dark outline, detailed shading",
+      "width": 72,
+      "height": 72,
+      "view": "low top-down",
+      "style_image": {
+        "url": "assets/sources/portera-72/estilo.png",
+        "usage_description": "This is the exact character to draw, at the right size. It was shrunk from a bigger drawing, so it looks a bit noisy and blurry: redraw her cleanly as crisp pixel art with a dark outline, keeping exactly her design, body shape, pose, hunchback, white ponytail, grey-green skin, grey t-shirt, bloody cream apron, blue jeans, beige crocs and the bloody mop, with the same colors and the same size."
+      },
+      "style_options": {
+        "color_palette": true,
+        "detail": true,
+        "outline": true,
+        "shading": true
+      }
+    },
+    "animaciones": {
+      "nota": "2026-10-21/22. Todo con PixMiniMax (animate_character, mode pixminimax) sobre 38cf6a70, una dirección por llamada, 1 generación cada una (las de 12 fotogramas también). Primero una prueba (east de andar, fregonazo, lanzar y muerte, y el grito south) y, con el visto bueno del dueño, las otras 7 direcciones añadidas a cada grupo con animation_group_id + el mismo animation_name. Andar: sin fotograma de partida. Fregonazo, lanzar y grito: partida y final = dibujo quieto pegado en (28, 44) de un lienzo de 128x128 (assets/sources/portera-72/partida/<dirección>.png; los upload:<id> de partida/subidas.txt caducan a los 3 días). Muerte: solo partida. PixelLab deja 8 trabajos a la vez como mucho, y el zip no se baja mientras haya alguno en marcha. Bajado con py tools/bajar_zip.py 38cf6a70-31fd-4aed-9747-9d18022b70ce portera-72 → assets/sources/portera-72/{walk,fregonazo,lanzar,grito,muerte}/<dirección>-<n>.png. OJO: lanzar/east-* es en realidad el grupo 'lanzar2' (se movió a mano; la primera east está en descartes/lanzar/): si se vuelve a bajar el zip, rehacer ese cambio. Hoja: py tools/jefe_hoja.py portera-72 jefe-portera (casilla 130x124, offset del Sprite (-64, -105)).",
+      "subject_description": "a huge hunched zombie old woman with grey-green skin, long white hair in a ponytail, a grey t-shirt, a bloody cream apron, dark blue jeans and beige crocs, holding a long wooden mop with a bloody white mop head (de espaldas: 'a huge hunched zombie old woman with grey-green skin, a big hunchback, long white hair in a ponytail, a grey t-shirt, dark blue jeans and beige crocs, holding a long wooden mop with a bloody white mop head, seen from behind')",
+      "initial_pose": "En fregonazo, lanzar, grito y muerte: 'standing hunched, facing the camera / facing right / facing left / in three-quarter front view, facing toward the camera and to the right / in three-quarter back view, facing away from the camera and to the left / seen from behind, her back to the camera ..., the mop held low in her hand with the mop head on the floor'. Andar, sin initial_pose.",
+      "frases_de_direccion": "Delante del texto (menos en las pruebas east): south 'Strict front view the whole time, facing the camera, she never turns to the side.'; south-east / south-west 'Strict three-quarter front view the whole time, facing toward the camera and to the right / left, she never turns to the side.'; north 'Strict back view the whole time: we only see her back, her face stays hidden the whole time, she never turns to face the camera.' (en la muerte, 'Strict back view the whole time, she never turns to face the camera.'); north-east / north-west 'Strict three-quarter back view the whole time, facing away from the camera and to the right / left: we only see her back, her face stays hidden the whole time, she never turns to face the camera.'; west 'Strict side view the whole time, facing left: she never turns toward the camera.' (en lanzar, '..., we only see her in profile.').",
+      "andar": {
+        "group": "b7ffe304-7f5f-4159-aea3-b3388e74d871",
+        "fotogramas": "8 + la vista quieta (0-8; el 8 vuelve a la postura del 0, ciclo = 0 a 7). Lienzo 96-104.",
+        "action_description": "She shuffles forward in place in a slow, heavy, hunched, seamless looping walk cycle: her legs step alternately with short heavy steps, her big hunchback rocks slightly with each step and she keeps holding the mop low in her hand, its bloody mop head sliding along the floor. She keeps exactly the same view and facing as the first frame the whole time: she never turns. The last frame returns to the starting pose so the cycle loops.",
+        "pegas": "En east (la prueba, sin frase de dirección) se gira un poco hacia la cámara a mitad del paso. En north-west la fregona queda tapada por el cuerpo casi todo el ciclo."
+      },
+      "fregonazo": {
+        "group": "a453fbff-f044-4d01-aaaf-dbb3506e6958",
+        "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Levanta la fregona con las dos manos (1-3) y la estampa contra el suelo en el 4 (en west y north-west, en el 5: GOLPE_FREGONA en portera.gd); luego la arrastra y vuelve a su postura. Lienzo 128x140-144.",
+        "action_description": "She smashes her mop down like a club: she raises the long wooden mop high above her head with both hands, then brings it down hard in front of her in the direction she is facing, slamming the bloody mop head onto the floor. Then she lifts it and settles cleanly into the starting stance. Her feet stay in place. No effects, no particles, no splashes, no motion lines. (De frente: '... in front of her, toward the camera, ...'; de espaldas: '... in front of her, away from the camera, ...')",
+        "pegas": "Aunque dice 'no splashes', al golpear salpica sangre (charco y gotas): las gotas sueltas las quita jefe_hoja.py y el rojo vivo de west y south-west se oscurece (\"sangre\": 160). En north la fregona queda tapada por el cuerpo al golpear."
+      },
+      "lanzar": {
+        "group": "2be2c152-90a8-481a-9468-639dad7a4a00 (east: e9dd9dc9-390e-4db0-9db5-a1ff6bfe84fe, 'lanzar2')",
+        "fotogramas": "8 + el de partida (0-8), partida y final = dibujo quieto. Saca una botella de lejía azul y blanca del delantal (1-3) y la lanza por encima del hombro (4-5).",
+        "action_description": "She throws a bottle: with her free hand she pulls a small white bleach bottle out of her apron pocket and hurls it overhand, over her shoulder, forward in the direction she is facing, while she keeps holding the mop low in her other hand. Then she settles cleanly into the starting stance. Her feet stay in place. No effects, no particles, no motion lines. (De frente: '... forward toward the camera ...'; de espaldas: '... forward, away from the camera ...'; east y west: '... forward to the right / left in the direction she is facing ...')",
+        "pegas": "La primera east (sin frase de dirección) se ponía de cara a la cámara al lanzar: se repitió como 'lanzar2' con 'Strict side view the whole time, facing right: she never turns toward the camera, we only see her in profile.' (se gira menos). La botella sale volando y se queda en el aire hasta el último fotograma (north): jefe_hoja.py la borra (\"motas\": {\"lanzar\": 300}) porque el juego dibuja la suya. De frente, la botella viene hacia la cámara y en los fotogramas 6-7 se ve enorme: se quitan (\"sin\": {\"lanzar_s\": [6, 7]}). En south-east, en el 6, una raya blanca de movimiento pegada a la mano."
+      },
+      "grito": {
+        "group": "ab653487-5c6f-44c1-a5d0-8f27c81a8e74",
+        "fotogramas": "8 + el de partida (0-8), SOLO south, partida y final = dibujo quieto. Ruge, levanta la fregona (2-4) y da un golpe en el suelo (5) que salpica sangre.",
+        "action_description": "Strict front view the whole time, facing the camera, she never turns to the side. She roars in fury: she throws her head back and screams with her mouth wide open, raises the mop high in the air with one hand, then slams the mop handle down hard on the floor. Then she settles cleanly into the starting stance. Her feet stay in place. No effects, no particles, no sound lines."
+      },
+      "muerte": {
+        "group": "d168bcd0-dfae-4ab4-a171-84ea95600990",
+        "fotogramas": "12 + el de partida (0-12), solo partida. Suelta la fregona, cae de espaldas hacia el lado pedido y queda tendida y quieta desde el 8, con la fregona al lado.",
+        "action_description": "She dies and collapses, never turning. Her knees buckle, she lets go of the mop, and she topples heavily backward, <lado>, crashing flat onto the floor on her back, arms flopping out to the sides, <pies y cabeza>, the mop lying flat on the floor beside her. Then she lies completely still for the last frames. She never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles.",
+        "lado_por_direccion": "Como el antidisturbios: east 'toward the left ... her feet toward the right and her head toward the left'; west al revés; south 'away from the camera, toward the top of the screen ... her feet toward the bottom of the screen and her head toward the top'; north 'toward the camera, toward the bottom of the screen ...' (con 'Strict back view the whole time, she never turns to face the camera.' delante); south-east 'toward the upper left of the screen ...'; south-west 'toward the upper right ...'; north-east 'toward the lower left ...'; north-west 'toward the lower right ...' (las dos de espaldas con la frase de tres cuartos de espaldas).",
+        "pegas": "Todas a la primera. De frente, al empezar a caer (4-6) se ve un momento desde arriba, encogida."
+      }
+    },
+    "sin_usar_en_pixellab": "La primera lanzar east (en el grupo 2be2c152) no se usa: la de east es la del grupo lanzar2. Nada se borró. Borrar solo con confirmación del dueño.",
+    "cost": "40 generaciones: 6 del modelo (730,05 → 724,05), 5 de la prueba (520,80 → 515,80; entre medias gastaron otras sesiones) y 29 de la tanda (7 direcciones de andar, fregonazo, lanzar y muerte = 28, y la lanzar east repetida; 515,80 → 486,80). Ninguna más repetida.",
+    "updated": "2026-10-22"
   },
   "zombi-explosivo-56": {
     "kind": "character",

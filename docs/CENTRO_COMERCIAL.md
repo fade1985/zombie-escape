@@ -98,7 +98,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   Un espacio grande y abierto (como en el juego JS), con suelo de hormigón, murete alrededor, aparatos de aire
   acondicionado, chimeneas y un helipuerto pintado. Se llega por las escaleras y no se vuelve; al caer el gerente se
   abre la escalera de incendios y por ahí se acaba el edificio.
-- **El gerente** (jefe final, grande como la portera ahora: unos 117 px; vida 1400): contratos que cortan en abanico
+- **El gerente** (jefe final, grande como era la portera: unos 117 px; vida 1400): contratos que cortan en abanico
   (10 cada uno), maletinazo de cerca (20) y «¡A TRABAJAR!» (2 dependientas y 1 vigilante). A media vida se inyecta
   VD-7, el somnífero de Velaria, y **muta (con su propio dibujo)**: más rápido, latigazos de tentáculo (como el zombi
   de tentáculos, más largos) y embestida. Su historia, en la parte 7.
@@ -743,9 +743,10 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        - `--captura --edificio centro` saca además `captura-gerente-jeringa.png`, `captura-gerente-muta.png`,
          `captura-mutado.png` (latigazos), `captura-mutado-embestida.png` y `captura-helicoptero.png`, y comprueba en
          la salida que sale la página y llega el helicóptero (y que no sale la mutación de Johnny).
-   - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
-     grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
-     (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
+   - ✅ **La portera a 72 px** (22 oct; el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
+     grande): modelo nuevo copiando la de antes (visto bueno del dueño) y sus animaciones (andar, fregonazo, lanzar,
+     grito y muerte), 40 generaciones. Ahora mide unos 70 px, como los minijefes; el detalle, en `docs/ZOMBIS.md`
+     («La portera») y en `assets/pixellab.json` → `portera-72`.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común, ✅ el rescate de la
    farmacéutica, ✅ el del técnico con su mejora, ✅ el del ferretero con su puesto y ✅ la mejora de la
    farmacéutica (cada partida, un botiquín en la mochila que se usa desde el inventario).

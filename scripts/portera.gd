@@ -48,17 +48,18 @@ const EMBESTIDAS := [1, 2]       # cuántas seguidas en cada fase
 const VECINOS := [2, 4]          # cuántos vecinos llama al gritar en cada fase
 const TIEMPO_GIRO := 2.6
 const DANO_CONTACTO := 10        # si Johnny se le pega, también hace daño
-const ARRIBA := 190.0            # a qué altura tiene la cabeza (para los textos y el vapor)
-const PASO := 96.0               # lo que avanza en un ciclo de andar (así los pies no patinan)
-const PIE := 34.0                # a qué altura dibuja los pies respecto a su centro
-# En su dibujo lo que toca el suelo es la fregona: las zapatillas quedan algo más arriba según la dirección.
-# Cuántos píxeles se baja en cada una (FEET_DY en el juego)
-const BAJAR := {"s": 5, "se": 9, "e": 3, "ne": 5, "n": 5, "no": 5, "o": 3, "so": 4}
+const ARRIBA := 118.0            # a qué altura tiene la cabeza (para los textos y el vapor)
+const PASO := 60.0               # lo que avanza en un ciclo de andar (así los pies no patinan)
+const PIE := 30.0                # a qué altura dibuja los pies respecto a su centro
+# En algunas vistas lo que toca el suelo es la fregona y las zapatillas quedan algo más arriba: cuántos píxeles del
+# dibujo se baja en cada dirección para que pisen la sombra (medido en las vistas quietas de la portera de 72)
+const BAJAR := {"s": 0, "se": 3, "e": 0, "ne": 1, "n": 1, "no": 0, "o": 0, "so": 0}
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
-const GOLPE_FREGONA := 2         # fotograma del fregonazo en el que la fregona toca el suelo
+# El fotograma del fregonazo en el que la fregona toca el suelo, en cada dirección
+const GOLPE_FREGONA := {"s": 4, "se": 4, "e": 4, "ne": 4, "n": 4, "no": 5, "o": 5, "so": 4}
 
 @export var vida_max := 600
-@export var radio := 38.0
+@export var radio := 32.0
 
 var vida := 600
 var fase := 1                 # 2 = enfadada
@@ -470,23 +471,23 @@ func animar() -> void:
 	var dir := direccion()
 	match estado:
 		"aviso_abanico":
-			fijar("ataque", dir, alzar(t / AVISO_ABANICO))
+			fijar("ataque", dir, alzar(t / AVISO_ABANICO, dir))
 		"abanico":
-			fijar("ataque", dir, GOLPE_FREGONA if datos.i == 0 else bajar(1.0 - maxf(0.0, datos.siguiente) / 0.4))
+			fijar("ataque", dir, GOLPE_FREGONA[dir] if datos.i == 0 else bajar(1.0 - maxf(0.0, datos.siguiente) / 0.4, dir))
 		"aviso_fregonazo":
-			fijar("ataque", dir, alzar(t / AVISO_FREGONAZO))
+			fijar("ataque", dir, alzar(t / AVISO_FREGONAZO, dir))
 		"fregonazo":
-			fijar("ataque", dir, bajar(t / 0.35))
+			fijar("ataque", dir, bajar(t / 0.35, dir))
 		"aviso_acido":
-			fijar("ataque", dir, alzar(t / AVISO_ACIDO))
+			fijar("ataque", dir, alzar(t / AVISO_ACIDO, dir))
 		"acido":
-			fijar("ataque", dir, bajar(t / (ACIDOS[fase - 1] * (0.1 if enfadada() else 0.16) + 0.45)))
+			fijar("ataque", dir, bajar(t / (ACIDOS[fase - 1] * (0.1 if enfadada() else 0.16) + 0.45), dir))
 		"aviso_embestida":
-			fijar("ataque", dir, alzar(t / datos.aviso))
+			fijar("ataque", dir, alzar(t / datos.aviso, dir))
 		"aviso_circulo":
-			fijar("ataque", dir, alzar(t / AVISO_CIRCULO))
+			fijar("ataque", dir, alzar(t / AVISO_CIRCULO, dir))
 		"circulo":
-			fijar("ataque", dir, bajar(t / 0.4))
+			fijar("ataque", dir, bajar(t / 0.4, dir))
 		"lejia":
 			var n := BOTELLAS + 2 if enfadada() else BOTELLAS
 			fijar("lanzar", dir, avance("lanzar_" + dir, t / (0.3 + n * 0.18 + 0.4)))
@@ -533,14 +534,14 @@ func avance(nombre: String, k: float) -> int:
 
 
 # Levantar la fregona: los fotogramas de antes del golpe
-func alzar(k: float) -> int:
-	return mini(GOLPE_FREGONA - 1, int(k * GOLPE_FREGONA))
+func alzar(k: float, dir: String) -> int:
+	return mini(GOLPE_FREGONA[dir] - 1, int(k * GOLPE_FREGONA[dir]))
 
 
 # Bajarla: del golpe hasta el final
-func bajar(k: float) -> int:
-	var resto := sprite.sprite_frames.get_frame_count(sprite.animation) - GOLPE_FREGONA
-	return GOLPE_FREGONA + clampi(int(k * resto), 0, resto - 1)
+func bajar(k: float, dir: String) -> int:
+	var resto: int = sprite.sprite_frames.get_frame_count("ataque_" + dir) - GOLPE_FREGONA[dir]
+	return GOLPE_FREGONA[dir] + clampi(int(k * resto), 0, resto - 1)
 
 
 # Los avisos, en el suelo (por debajo de ella)

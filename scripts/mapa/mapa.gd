@@ -765,8 +765,8 @@ func poner_exposicion() -> void:
 	# los zombis, en una fila por tipo: el de siempre y sus ropas
 	y += alto_fila + 150
 	for nombre in EXPO_ZOMBIS:
-		if nombre in ["portera", "gerente"]:
-			y += 100   # son mucho más altos que los demás: sin esto tapan la fila de encima
+		if nombre == "gerente":
+			y += 100   # es mucho más alto que los demás: sin esto tapa la fila de encima
 		var muestra: Node2D = load("res://escenas/personajes/%s.tscn" % nombre).instantiate()
 		var base: AnimatedSprite2D = muestra.get_node("Sprite")
 		var ropas: Array = muestra.get("ropas") if muestra.get("ropas") else [base.sprite_frames]
