@@ -108,9 +108,27 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 ## Supervivientes
 
-Supervivientes nuevos, uno por planta, con su evento de rescate como los de ahora; al rescatarlos van a la sala de
-mantenimiento. Cada uno debería **hacer crecer la sala** (uno arregla la cafetera y cura al empezar, otro abre
-una tienda...).
+### Decidido con el dueño (21 oct, para la parte 5)
+
+- **Cuatro supervivientes nuevos, solo del centro comercial**, uno por cada tipo de tienda con trastienda. **Uno por
+  partida, como ahora**: sale uno de los que aún no tienes, en una planta al azar (nunca la azotea); en los
+  Apartamentos siguen saliendo el policía, la médica y el militar. Al rescatarlo se queda a vivir en la sala de
+  mantenimiento para siempre y **la hace crecer** con algo suyo; como ahora, puede acompañarte (uno a la vez).
+- **Cada uno con su propio rescate** (no la horda de siempre para todos), y **dibujados con código** (`persona.gd`),
+  como los tres de ahora: gratis y con el mismo aspecto.
+- Números provisionales (los puso Claude; se ajustan al probar):
+
+| Quién | Dónde y cómo se le rescata | En la sala | Si te acompaña |
+|---|---|---|---|
+| **Camarera** | Encerrada en la cámara frigorífica del restaurante, congelándose: una barra de frío de unos 2 min desde que entras en la tienda; si se acaba, se pierde (esa partida) | Arregla la cafetera: cada partida empieza con un café, +25 de vida máxima esa partida | Tira platos: flojo (4) y de lejos, cada 1,5 s |
+| **Ferretero** | Atrincherado en el almacén de la ferretería: la horda de siempre mientras quita la barricada (más corta, unos 2 min) | Monta su puesto: vende munición, molotovs y granadas por dólares | Martillazos de cerca (8) |
+| **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
+| **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
+
+- **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
+  ahí le metían el VD-7. Que la camarera la arregle (y quizá note algo raro en el café) se puede aprovechar.
+- Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
+  sala) y luego un superviviente por trozo.
 
 ## Objetos
 
@@ -218,7 +236,7 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
        despertando a tres vigilantes) y dice qué zombis hay en cada tienda; `--captura`, `captura-expo-zombis.png`.
      - Pegas conocidas: el andar del vigilante no cierra del todo el ciclo en algunas direcciones y la dependienta,
        andando hacia arriba a la derecha, se gira un poco de perfil.
-5. **Supervivientes nuevos** con sus eventos.
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
 6. **Reparto de objetos** y recetas que mezclan edificios.
 7. **La historia:** dosier y noticias.
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones.
