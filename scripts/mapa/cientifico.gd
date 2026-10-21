@@ -1,5 +1,5 @@
-# El científico de Velaria muerto en el suelo (historia.gd): tumbado boca arriba con su bata blanca, un brazo
-# estirado y la cabeza de lado, sobre su charco de sangre (dibujado con formas, como persona.gd) y, a su lado, la página del dosier, que brilla y sube y baja hasta que Johnny se arrima.
+# El científico de Velaria muerto en el suelo (historia.gd): tumbado boca arriba con su bata blanca (o con su ropa,
+# si no es científico: el jefe de seguridad y la secretaria del centro comercial), un brazo estirado y la cabeza de lado, sobre su charco de sangre (dibujado con formas, como persona.gd) y, a su lado, la página del dosier, que brilla y sube y baja hasta que Johnny se arrima.
 # Entonces avisa con "cogida" (la partida la enseña y la guarda). Ya cogida, el cuerpo se queda sin la página.
 extends Node2D
 
@@ -74,20 +74,22 @@ func _draw() -> void:
 		draw_circle(g[0], g[1], Color(SANGRE, 0.85))
 	# piernas y zapatos
 	for y in [-9.0, 2.0]:
-		pieza(Rect2(10, y, 34, 8), PANTALON)
+		pieza(Rect2(10, y, 34, 8), look.get("pantalon", PANTALON))
 		pieza(Rect2(44, y - 1, 7, 10), LINEA)
 	# brazo estirado hacia arriba (manga y mano) y el otro pegado al cuerpo
-	pieza(Rect2(-14, -30, 8, 20), BATA)
+	var ropa: Color = look.get("ropa", BATA)   # los que no son científicos llevan su ropa (historia.gd)
+	pieza(Rect2(-14, -30, 8, 20), ropa)
 	draw_circle(Vector2(-10, -33), 5.0, look.skin)
 	draw_arc(Vector2(-10, -33), 5.0, 0, TAU, 12, LINEA, 2.0)
-	pieza(Rect2(-6, 12, 18, 7), BATA)
+	pieza(Rect2(-6, 12, 18, 7), ropa)
 	draw_circle(Vector2(15, 16), 4.5, look.skin)
 	draw_arc(Vector2(15, 16), 4.5, 0, TAU, 12, LINEA, 2.0)
 	# la bata: el cuerpo, con la solapa, el bolsillo y la tarjeta de Velaria
-	pieza(Rect2(-24, -13, 38, 26), BATA)
-	draw_line(Vector2(-24, 0), Vector2(6, 0), BATA_SOMBRA, 2.0)
-	draw_rect(Rect2(-4, -10, 8, 6), BATA_SOMBRA, false, 1.5)
-	draw_rect(Rect2(-18, 3, 7, 8), Color("#3d63c9"))
+	var sombra: Color = BATA_SOMBRA if not look.has("ropa") else ropa.darkened(0.35)
+	pieza(Rect2(-24, -13, 38, 26), ropa)
+	draw_line(Vector2(-24, 0), Vector2(6, 0), sombra, 2.0)
+	draw_rect(Rect2(-4, -10, 8, 6), sombra, false, 1.5)
+	draw_rect(Rect2(-18, 3, 7, 8), look.get("tarjeta", Color("#3d63c9")))
 	# la cabeza, de lado, con el pelo
 	draw_circle(Vector2(-35, 2), 11.0, look.skin)
 	draw_circle(Vector2(-39, 0), 9.0, look.hair)

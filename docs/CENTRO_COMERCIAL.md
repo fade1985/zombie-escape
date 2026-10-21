@@ -127,8 +127,9 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 - **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
   ahí le metían el VD-7. Decidido en la parte 7: al arreglarla encuentra un doble fondo con cápsulas de VD-7 y te lo
-  dice; desde entonces el café es solo café. **Ojo:** la arreglaba la camarera, que ya no está; falta decidir quién
-  (o cómo) se descubre ahora.
+  dice; desde entonces el café es solo café. La arreglaba la camarera, que ya no está: **lo descubre la
+  farmacéutica** (decidido con el dueño el 21 oct, en la parte 7). La primera vez que está en la sala después de
+  rescatarla, huele el café y te lo dice; el texto ya está escrito (`Historia.CAFETERA`) y se mete en su trozo.
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
 - ✅ **Lo común** (21 oct):
@@ -210,7 +211,7 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
 - **Es una trampa:** Johnny va buscando respuestas, y el gerente sabe que viene. Quiere retenerlo para entregárselo
   a Velaria a cambio de «la dosis buena». A media vida se inyecta VD-7 para no parar nunca, y por eso muta.
 - **El final, con gancho:** al caer el gerente llega un helicóptero de Velaria a por el Sujeto 0; Johnny escapa por la
-  escalera de incendios. La última página nombra **la sede de Velaria**: el siguiente edificio (nombre por decidir).
+  escalera de incendios. La última página nombra **la sede de Velaria**: el siguiente edificio (**Torre Velaria**, decidido en la parte 7).
 - **Dosier del centro comercial** (5 páginas, una por planta; como en los Apartamentos, cada una en un muerto):
 
 | Planta | Quién la lleva | Qué es | Lo que cuenta |
@@ -226,10 +227,43 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
   que no vuelven a casa, un audio del gerente, y al completar el centro: «un helicóptero de Velaria aterriza en la
   azotea... vacío». Como en las de ahora, Velaria va cambiando su versión para taparlo.
 - **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
-  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café. **Ojo:** la camarera ya no está (tres
-  supervivientes por edificio); falta decidir quién descubre el doble fondo.
+  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café. La camarera ya no está (tres
+  supervivientes por edificio): **lo descubre la farmacéutica** (decidido el 21 oct, en la parte 7).
 - Los textos los escribe Claude y el dueño los lee antes de darlos por buenos (se pueden reescribir: todo está en
   `historia.gd`; lo único que no se toca es el `id` de una página ya publicada).
+
+### ✅ Hecho (21 oct, parte 7; el dueño leyó los textos y le valen)
+
+- **El dosier del centro comercial** (`historia.gd`, `DOSIERES` → `"centro"`), con las cinco páginas de la tabla:
+  - Ids: `cc_albaran` (baja), `cc_turno` (1ª), `cc_incidencias` (2ª), `cc_correo` (3ª) y `cc_recogida` (azotea).
+    **No se cambian**: el guardado apunta las páginas por su id.
+  - Los cuatro primeros cuerpos salen como los científicos de los Apartamentos (uno por planta, mientras su página
+    falte). Lo nuevo: el jefe de seguridad y la secretaria no llevan bata, sino su ropa (uniforme azul marino con
+    chapa dorada y blusa rosa): `look` admite `ropa`, `pantalon` y `tarjeta` (`cientifico.gd`).
+  - **La sede de Velaria se llama Torre Velaria** (la eligió el dueño entre tres): la orden de recogida lleva al
+    Sujeto 0 «directo al laboratorio de la planta 40». Será el tercer edificio.
+  - El gerente se llama Arturo Salcedo. La nota al pie de su página explica la mutación: «Me prometieron la dosis
+    buena. Me mandaron una jeringa y esta hoja».
+  - En el ordenador, la página del gerente que falta dice «La lleva el gerente del centro, arriba del todo, en la
+    azotea. Tendrás que quitársela». Cada dosier tiene ahora su propia nota y su aviso de página que falta (los de
+    los Apartamentos, igual que antes).
+- **Cinco noticias nuevas de Canal 8** (`NOTICIAS`, emisiones 6 a 10), con las condiciones que ya había (no ha hecho
+  falta ninguna nueva): `n_reformas` (al completar los Apartamentos), `n_velaria_noche` (con la página 1), `n_turnos`
+  (con la 2), `n_audio` (con la 4) y `n_helicoptero` (al completar el centro). La 3ª planta no trae noticia, como el
+  diario de los Apartamentos.
+  - Lo que no decía el plan: con diez emisiones ya no cabían; la lista del programa Noticias tiene ahora su propio
+    desplazamiento y la tele se queda quieta. Y la pista de las que faltan dice qué edificio completar.
+- **Pendiente para el trozo 6 de la parte 4 (azotea y gerente):** al morir el gerente, llamar a
+  `partida.pagina_del_jefe()`: si la orden de recogida falta, la apunta y la enseña con el juego parado (como al
+  coger la de un muerto; `Historia.del_jefe` dice cuál es). Ya está probada en la foto de prueba
+  (`captura-pagina-jefe.png`).
+- **Pendiente para el trozo de la farmacéutica (parte 5):** el guiño de la cafetera. El texto ya está escrito
+  (`Historia.CAFETERA`, tres frases): la primera vez que está en la sala después de rescatarla, huele el café y se
+  lo dice a Johnny; desde entonces el café es solo café.
+- Fotos de prueba (`--captura --edificio centro`): `captura-cientifico.png` y `captura-pagina.png` (el farmacéutico
+  de la planta baja), `captura-cuerpos.png` (los dos sin bata), `captura-dosier.png` (página 3),
+  `captura-dosier-falta.png` (la del gerente, sin encontrar), `captura-pagina-jefe.png` y `captura-noticias.png`.
+  Con `--captura` a secas, las de los Apartamentos, como siempre.
 
 ## Para que enganche (ideas aprobadas)
 
@@ -383,5 +417,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
    y la mejora de la sala de cada uno (un trozo para cada uno).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
-7. **La historia:** dosier y noticias (decidido: ver «Historia»).
+7. ✅ **La historia:** dosier y noticias (ver «Historia»). Pendiente: la página del gerente (trozo 6 de la parte 4) y
+   el guiño de la cafetera (trozo de la farmacéutica).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).

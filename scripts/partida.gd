@@ -506,6 +506,19 @@ func poner_cientifico(idx: int) -> void:
 func _al_coger_pagina(p: Dictionary) -> void:
 	planta.cientifico.cogida = true
 	planta.cientifico.pagina = p
+	leer_pagina(p)
+
+
+# La página que suelta el jefe del edificio al caer, si aún falta (historia.gd, del_jefe): en el centro comercial,
+# la orden de recogida. La llamará el gerente al morir en la azotea (trozo 6 de la parte 4)
+func pagina_del_jefe() -> void:
+	var p := Historia.del_jefe(Guardado.cargar(), edificio)
+	if not p.is_empty():
+		leer_pagina(p)
+
+
+# Apunta la página para siempre y la enseña con el juego parado; al cerrarla, avisa si trae noticias
+func leer_pagina(p: Dictionary) -> void:
 	Historia.apuntar(p.id)
 	Sonido.tocar("compra")
 	var paginas: Array = Historia.dosier(edificio).paginas
@@ -1392,24 +1405,65 @@ func probar_historia() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-pagina.png")
 	print("Página cogida: %s | en el guardado: %s" % [c.get("pagina", {}).get("id", "-"), Guardado.cargar().paginas])
 	menus.leida()
-	Guardado.cambiar(func(g): g.paginas = ["vd7_protocolo", "vd7_correo"])
+	# los muertos que no llevan bata (en el centro comercial: el jefe de seguridad y la secretaria), en fila sobre
+	# un fondo liso, por encima de todo (sin penumbra ni paredes): captura-cuerpos.png
+	var con_ropa: Array = Historia.dosier(edificio).paginas.filter(func(p): return p.look.has("ropa"))
+	if not con_ropa.is_empty():
+		var capa := CanvasLayer.new()
+		capa.layer = 50
+		add_child(capa)
+		var fondo := ColorRect.new()
+		fondo.color = Color("#5a5d66")
+		fondo.position = Vector2(240, 230)
+		fondo.size = Vector2(480, 180)
+		capa.add_child(fondo)
+		for i in con_ropa.size():
+			var cuerpo := CIENTIFICO.new()
+			cuerpo.montar(con_ropa[i], Vector2(370 + i * 220, 320))
+			cuerpo.z_index = 0
+			capa.add_child(cuerpo)
+		await get_tree().create_timer(0.3).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-cuerpos.png")
+		capa.queue_free()
+	# en el ordenador, la primera y la tercera página del dosier de este edificio (en los Apartamentos, el correo)
+	var ids: Array = Historia.dosier(edificio).paginas.map(func(p): return p.id)
+	Guardado.cambiar(func(g): g.paginas = [ids[0], ids[2]])
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
-	ordenador.abrir("dosier", "b_vd7_correo")
+	ordenador.abrir("dosier", "b_" + ids[2])
 	await get_tree().create_timer(0.3).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-dosier.png")
+	# la del jefe, si este edificio la tiene (el centro comercial): sin encontrar en el ordenador y luego soltada
+	var del_jefe := Historia.del_jefe(Guardado.cargar(), edificio)
+	if not del_jefe.is_empty():
+		ordenador.abrir("dosier", "b_" + del_jefe.id)
+		await get_tree().create_timer(0.3).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-dosier-falta.png")
 	ordenador.abrir("")
 	ordenador.apagar()
+	if not del_jefe.is_empty():
+		pagina_del_jefe()
+		await get_tree().create_timer(0.4).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-pagina-jefe.png")
+		print("Página del jefe: %s | en el guardado: %s" % [del_jefe.id, Guardado.cargar().paginas])
+		menus.leida()
 	await montar(planta.mantenimiento, 0, false)
 	await probar_noticias()
 
 
-# Las noticias: con la página del correo encontrada salen tres emisiones (dos sin ver). Abre el programa, deja
-# hablar a la reportera un poco y hace la foto
+# Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
+# centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
+# programa, deja hablar a la reportera un poco y hace la foto
 func probar_noticias() -> void:
+	var ids: Array = Historia.dosier(edificio).paginas.map(func(p): return p.id)
+	var centro := edificio == "centro"
 	Guardado.cambiar(func(g):
-		g.paginas = ["vd7_protocolo", "vd7_correo"]
-		g.noticias_vistas = ["n_cierre"])
+		g.paginas = [ids[0], ids[1]] if centro else ["vd7_protocolo", "vd7_correo"]
+		g.noticias_vistas = ["n_cierre", "n_buscado", "n_reformas"] if centro else ["n_cierre"]
+		# los edificios completados, siempre igual (el final de la prueba vuelve a completar el de la partida): en el
+		# centro, los Apartamentos sí y el centro no (la del helicóptero, aún sin emitir)
+		Guardado.edificio(g, "apartamentos").completado = centro
+		Guardado.edificio(g, "centro").completado = false)
 	print("Noticias emitidas: %s | nuevas: %s" % [Historia.noticias_emitidas(Guardado.cargar()).map(func(n): return n.id),
 		Historia.noticias_nuevas(Guardado.cargar()).map(func(n): return n.id)])
 	avisar_noticias()
