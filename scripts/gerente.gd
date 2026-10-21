@@ -8,11 +8,19 @@
 #   - Maletinazo: si Johnny se le acerca, marca un trozo de suelo (medio segundo) y le da con el maletín: 20 y le
 #     aparta de un empujón.
 #   - «¡A TRABAJAR!»: si quedan pocos zombis, grita y llegan dos dependientas y un vigilante.
-# Enfadado (a media vida): más contratos y más rápidos, y todo más seguido. En la parte 3 del trozo 6
-# (docs/CENTRO_COMERCIAL.md), a media vida se inyectará VD-7 y pasará a su forma mutada: ver al_enfadarse().
-# Sus animaciones (PixelLab): andar, contratos, maletinazo, a_trabajar (solo de frente) y jeringa (solo de frente,
-# para la parte 3). Los papeles salen justo en el fotograma en el que el brazo llega adelante (SUELTA) y el
-# maletín hace daño en el del golpe (GOLPE).
+# A media vida no se enfada como los minijefes: se pincha VD-7 en el cuello para no parar nunca (la jeringa, sin
+# que se le pueda hacer daño) y, con un fogonazo, se convierte en el MUTADO: más grande y más rápido, con cuatro
+# tentáculos en la espalda. La barra sigue con la vida que tenía. El mutado ya no lanza contratos ni llama a
+# nadie (ya no piensa: solo ataca) y hace dos cosas, también con aviso:
+#   - Latigazos: tres franjas rojas en abanico hacia Johnny y, al rato, tres tentáculos por ellas (como el zombi
+#     de tentáculos, pero más largos).
+#   - Embestida: si Johnny está lejos, una franja roja y sale corriendo en línea recta. Si atropella a Johnny le
+#     tira; si se estrella contra un aparato o el murete, se queda atontado un rato (el momento de pegarle).
+# Antes de mutar no puede caer (aunque le den mucho de golpe, se queda con 1): la mutación siempre llega. Al caer
+# el mutado, la partida enseña la página del dosier y trae el helicóptero de Velaria (partida.gd).
+# Sus animaciones (PixelLab): andar, contratos, maletinazo, a_trabajar (solo de frente) y jeringa (solo de frente).
+# Los papeles salen justo en el fotograma en el que el brazo llega adelante (SUELTA) y el maletín hace daño en el
+# del golpe (GOLPE). Las del mutado, en otra hoja (jefe-gerente-mutado): andar, latigazo, embestida y muerte.
 extends Minijefe
 
 const VELOCIDAD := 70.0
@@ -40,10 +48,44 @@ const SUELTA := {"s": 5, "se": 5, "e": 5, "ne": 5, "n": 5, "no": 5, "o": 6, "so"
 const GOLPE := {"s": 4, "se": 4, "e": 5, "ne": 4, "n": 5, "no": 5, "o": 5, "so": 4}
 const DESPUES := 0.45                    # lo que tarda en acabar la animación después de soltar (y en volver a andar)
 
+# La jeringa y el mutado
+const MUTADO := preload("res://assets/sprites/jefe-gerente-mutado.tres")
+const JERINGA := 2.6                     # lo que tarda en pincharse (los 13 fotogramas de jeringa_s)
+const MUTAR := 1.3                       # el cambio: fogonazo, temblor y un rugido, también sin que le hagan daño
+const VERDE := Color("#b6ff6a")          # el VD-7 (el líquido de la jeringa)
+const RADIO_MUTADO := 46.0
+const ARRIBA_MUTADO := 230.0
+const OFFSET_MUTADO := Vector2(-80, -157)
+const PIE_MUTADO := 34.0
+const VELOCIDAD_MUTADO := 110.0
+const LATIGAZOS := 3                     # tentáculos a la vez, en abanico
+const ABRE_LATIGAZO := 0.42
+const LARGO_LATIGAZO := 340.0
+const ANCHO_LATIGAZO := 18.0             # medio ancho de cada franja
+const AVISO_LATIGAZO := 0.75
+const DANO_LATIGAZO := 18
+const AVISO_EMBESTIDA := 0.8
+const VELOCIDAD_EMBESTIDA := 560.0
+const TIEMPO_EMBESTIDA := 1.0
+const DANO_EMBESTIDA := 24
+const LEJOS_EMBESTIDA := 240.0           # si Johnny está más lejos que esto, prefiere embestir
+const ATONTADO := 2.2
+const ESPERAS_MUTADO := {"latigazo": 1.5, "embestida": 3.4}
+# El fotograma del latigazo en el que los tentáculos llegan abajo (cuando salen los de código)
+const LATIGAZO := {"s": 3, "se": 3, "e": 3, "ne": 5, "n": 4, "no": 5, "o": 4, "so": 4}
+const MORADO := Color("#8d4f9e")         # los tentáculos (como los de su dibujo)
+const MORADO_LUZ := Color("#c98ad6")
+const CONTORNO := Color("#1d1b2c")
+
 var espera := {"contratos": 1.2, "maletinazo": 0.8, "a_trabajar": 6.0}
+var mutado := false
+var espera_mutado := {"latigazo": 0.6, "embestida": 1.8}
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
+	if mutado:
+		pensar_mutado(delta, johnny)
+		return
 	for k in espera:
 		espera[k] -= delta
 	var hacia: Vector2 = johnny.global_position - global_position
@@ -80,6 +122,21 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				llamar_empleados()
 			if t >= GRITO_A_TRABAJAR:
 				andar(0.4)
+		"jeringa":
+			sin_tocar(delta)
+			mirada = Vector2.DOWN   # (la jeringa solo está dibujada de frente)
+			if t >= JERINGA * 0.3 and not datos.get("pinchado", false):
+				datos.pinchado = true
+				Sonido.tocar("jeringa")
+			if t >= JERINGA:
+				mutar()
+
+
+# Quieto y sin que le hagan daño (pinchándose y mutando)
+func sin_tocar(delta: float) -> void:
+	invulnerable = true
+	contacto = 0
+	frenar(delta)
 
 
 func elegir(johnny: Node2D, d: float) -> void:
@@ -154,14 +211,150 @@ func libre(p: Vector2) -> bool:
 	return NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), p).distance_to(p) < 12.0
 
 
-# A media vida. De momento se enfada como los minijefes; en la parte 3, aquí se pinchará la jeringa de VD-7
-# (estado "jeringa", con su animación) y pasará a su forma mutada (gerente-mutado-128)
+# A media vida: en vez de enfadarse como los minijefes, se pincha VD-7. Borra los contratos que vuelan y aparta a
+# Johnny (para que vea la jeringa), y luego muta (mutar())
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡ESTÁS DESPEDIDO!")
+	for bala in get_tree().get_nodes_in_group("balas_zombi"):
+		bala.queue_free()
+	gritar("¡AQUÍ NO PARA NADIE!", Color("#ffd23f"), 24)
+	var hacia: Vector2 = johnny.global_position - global_position
+	if hacia.length() < 240.0:
+		johnny.empujar(hacia.normalized() * 800.0)
+	cambiar("jeringa")
+
+
+# Antes de pincharse no puede caer: como mucho se queda con 1 (y a media vida se pincha seguro)
+func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
+	return cantidad if mutado else mini(cantidad, vida - 1)
+
+
+# El cambio: otro dibujo (más grande), un fogonazo verde, temblor y un rugido. Crece de golpe desde un poco más
+# pequeño, como si se hinchara
+func mutar() -> void:
+	mutado = true
+	vapor = false   # (el vapor de enfadado es de los minijefes)
+	cambiar("mutar")
+	sprite.sprite_frames = MUTADO
+	sprite.offset = OFFSET_MUTADO
+	sprite.play("reposo_s")
+	radio = RADIO_MUTADO
+	arriba = ARRIBA_MUTADO
+	dano_contacto = 14
+	$Choque.shape = $Choque.shape.duplicate()
+	$Choque.shape.radius = radio
+	$Sombra.ancho = 124.0
+	$Sombra.alto = 34.0
+	$Sombra.queue_redraw()
+	sprite.scale = Vector2(1.5, 1.5)
+	sprite.modulate = Color(2.2, 2.6, 1.8)
+	var tw := create_tween().set_parallel()
+	tw.tween_property(sprite, "scale", Vector2(2, 2), 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(sprite, "modulate", Color.WHITE, 0.6)
+	Luz.destello(self, global_position + Vector2(0, -100), 420.0, 0.7, 1.8, VERDE)
+	Temblor.temblar(14.0)
+	Sonido.tocar("rugido")
+	Sonido.tocar("explosion")
+	gritar("¡GRAAAAH!", VERDE, 30)
+	for i in 24:
+		Particulas.soltar(self, global_position + Vector2(randf_range(-40, 40), randf_range(-150, 0)),
+			Vector2.from_angle(randf() * TAU) * randf_range(60, 160), [VERDE, MORADO, Color("#7a1f1a")].pick_random(), 4, 0.8)
+
+
+# ── El mutado ──
+
+func pensar_mutado(delta: float, johnny: Node2D) -> void:
+	for k in espera_mutado:
+		espera_mutado[k] -= delta
+	var hacia: Vector2 = johnny.global_position - global_position
+	var d := hacia.length()
+	match estado:
+		"mutar":
+			sin_tocar(delta)
+			mirada = Vector2.DOWN
+			if t >= MUTAR:
+				andar(0.3)
+		"andar":
+			if d > 110.0:
+				perseguir(delta, johnny, VELOCIDAD_MUTADO)
+			else:
+				frenar(delta)
+			mirada = marcha.normalized() if marcha.length() > 10.0 else hacia.normalized()
+			if t >= dur:
+				elegir_mutado(johnny, d)
+		"aviso_latigazo":
+			frenar(delta)
+			if t >= AVISO_LATIGAZO:
+				cambiar("latigazo", {"angulo": datos.angulo})
+				Sonido.tocar("latigazo")
+				latigazos(johnny)
+		"latigazo":
+			frenar(delta)
+			if t >= DESPUES:
+				andar(0.4)
+		"aviso_embestida":
+			# encorvado y temblando; la franja roja marca por dónde irá (ya no cambia de idea)
+			frenar(delta, 12.0)
+			if t >= AVISO_EMBESTIDA:
+				cambiar("embestida")
+				Sonido.tocar("rugido")
+		"embestida":
+			match embestir(delta, johnny, VELOCIDAD_EMBESTIDA, DANO_EMBESTIDA, TIEMPO_EMBESTIDA, PIE_MUTADO):
+				"pillado":
+					cambiar("recuperar", {"dur": 0.6})
+				"pared":
+					estrellarse()
+				"fin":
+					marcha *= 0.3
+					cambiar("recuperar", {"dur": 0.5})
+		"recuperar":
+			frenar(delta, 5.0)
+			if t >= datos.dur:
+				andar(0.5)
+		"atontado":
+			frenar(delta, 4.0)
+			if t >= ATONTADO:
+				andar(0.4)
+
+
+func elegir_mutado(johnny: Node2D, d: float) -> void:
+	var angulo := (johnny.global_position - global_position).angle()
+	if d > LEJOS_EMBESTIDA and espera_mutado.embestida <= 0.0 and a_la_vista(johnny):
+		espera_mutado.embestida = ESPERAS_MUTADO.embestida
+		empezar("aviso_embestida", angulo)
+		return
+	if d < LARGO_LATIGAZO + 20.0 and espera_mutado.latigazo <= 0.0:
+		espera_mutado.latigazo = ESPERAS_MUTADO.latigazo
+		empezar("aviso_latigazo", angulo)
+		return
+	andar(0.3)
+
+
+# Los ángulos de los tres latigazos, alrededor de donde apuntó
+func angulos_latigazo() -> Array:
+	var lista := []
+	for i in LATIGAZOS:
+		lista.append(datos.angulo + (i - (LATIGAZOS - 1) / 2.0) * ABRE_LATIGAZO)
+	return lista
+
+
+# ¿Está Johnny dentro de alguna franja? (como golpear() del zombi de tentáculos)
+func latigazos(johnny: Node2D) -> void:
+	Temblor.temblar(5.0)
+	for a in angulos_latigazo():
+		var linea := Vector2.from_angle(a)
+		var hacia: Vector2 = johnny.global_position - global_position
+		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LATIGAZO)
+		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LATIGAZO + johnny.RADIO:
+			johnny.recibir_dano(DANO_LATIGAZO)
+			return
 
 
 # En la foto de la prueba (--captura): lanzando los contratos hacia Johnny
 func foto(johnny: Node2D) -> void:
+	if mutado:
+		empezar("aviso_latigazo", (johnny.global_position - global_position).angle())
+		t = AVISO_LATIGAZO - 0.05
+		return
 	empezar("aviso_contratos", (johnny.global_position - global_position).angle())
 	t = AVISO_CONTRATOS[0] - 0.02
 
@@ -171,6 +364,9 @@ func foto(johnny: Node2D) -> void:
 func animar() -> void:
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
+	if mutado:
+		animar_mutado(dir)
+		return
 	match estado:
 		"aviso_contratos":
 			preparar("contratos", dir, SUELTA[dir], AVISO_CONTRATOS[fase - 1])
@@ -186,9 +382,40 @@ func animar() -> void:
 			# al enfadarse: el mismo grito, temblando de rabia
 			fijar("a_trabajar", "s", avance("a_trabajar_s", minf(t / 0.9, 0.55)))
 			sprite.position.x = sin(tiempo * 50.0) * 2.0
+		"jeringa":
+			# los 13 fotogramas en lo que dura; del 10 en adelante (tira la jeringa y se encorva), temblando
+			var f := avance("jeringa_s", t / JERINGA)
+			fijar("jeringa", "s", f)
+			if f >= 10:
+				sprite.position.x = sin(tiempo * 60.0) * 2.0
 		_:
 			if marcha.length() > 8.0:
 				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD, 0.4, 1.5))
+			else:
+				poner("reposo_" + dir)
+
+
+func animar_mutado(dir: String) -> void:
+	sprite.position = Vector2(0, PIE_MUTADO)
+	match estado:
+		"mutar":
+			poner("reposo_s")
+			sprite.position.x = sin(tiempo * 70.0) * 3.0 * (1.0 - t / MUTAR)
+		"aviso_latigazo":
+			preparar("latigazo", dir, LATIGAZO[dir], AVISO_LATIGAZO)
+		"latigazo":
+			soltar("latigazo", dir, LATIGAZO[dir])
+		"aviso_embestida":
+			# el primer paso de la carrera, quieto y temblando de rabia
+			fijar("embestida", dir, 0)
+			sprite.position.x = sin(tiempo * 55.0) * 2.0
+		"embestida":
+			poner("embestida_" + dir, 1.2)
+		"recuperar", "atontado":
+			poner("reposo_" + dir)
+		_:
+			if marcha.length() > 8.0:
+				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD_MUTADO, 0.5, 1.5))
 			else:
 				poner("reposo_" + dir)
 
@@ -206,7 +433,7 @@ func soltar(anim: String, dir: String, golpe: int) -> void:
 
 func morir() -> void:
 	super()
-	# no tiene animación de muerte (en la parte 3 el que cae es el mutado): cae de lado
+	# (el gerente sin mutar no tiene animación de muerte: si cayera así, de lado; el mutado cae con la suya)
 	if sprite.sprite_frames.get_frame_count(sprite.animation) == 1:
 		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
 
@@ -235,3 +462,27 @@ func _draw() -> void:
 			draw_colored_polygon(puntos, Color(rojo, 0.1 + k * 0.25))
 			puntos.append(Vector2.ZERO)
 			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
+		"aviso_latigazo":
+			# las tres franjas de los latigazos, cada vez más rojas
+			var k := minf(1.0, t / AVISO_LATIGAZO)
+			for a in angulos_latigazo():
+				draw_set_transform(Vector2(0, 6), a)
+				draw_rect(Rect2(radio * 0.5, -ANCHO_LATIGAZO, LARGO_LATIGAZO - radio * 0.5, ANCHO_LATIGAZO * 2.0), Color(rojo, 0.1 + k * 0.3))
+				draw_rect(Rect2(radio * 0.5, -ANCHO_LATIGAZO, LARGO_LATIGAZO - radio * 0.5, ANCHO_LATIGAZO * 2.0), Color(rojo, 0.9), false, 3.0)
+		"latigazo":
+			# los tentáculos salen disparados por las franjas, culebrean y se recogen
+			var largo := LARGO_LATIGAZO * minf(1.0, t / 0.08) * clampf((DESPUES - t) / 0.2, 0.0, 1.0)
+			for a in angulos_latigazo():
+				draw_set_transform(Vector2(0, -6), a)
+				var puntos := PackedVector2Array()
+				for i in 15:
+					var f := i / 14.0
+					puntos.append(Vector2(largo * f, sin(f * 10.0 + t * 30.0 + a * 5.0) * 7.0 * (1.0 - f)))
+				draw_polyline(puntos, CONTORNO, 22.0)
+				draw_polyline(puntos, MORADO, 15.0)
+				draw_polyline(puntos.slice(0, 10), MORADO_LUZ, 4.0)
+				for i in range(2, 13, 3):
+					draw_circle(puntos[i], 3.0, Color("#f2b5d4"))
+		"aviso_embestida":
+			franja(VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA, minf(1.0, t / AVISO_EMBESTIDA))
+	draw_set_transform(Vector2.ZERO)

@@ -560,11 +560,30 @@ func _al_coger_pagina(p: Dictionary) -> void:
 
 
 # La página que suelta el jefe del edificio al caer, si aún falta (historia.gd, del_jefe): en el centro comercial,
-# la orden de recogida. La llamará el gerente al morir en la azotea (trozo 6 de la parte 4)
+# la orden de recogida. La pide el gerente al caer en la azotea (fin_del_edificio())
 func pagina_del_jefe() -> void:
 	var p := Historia.del_jefe(Guardado.cargar(), edificio)
 	if not p.is_empty():
 		leer_pagina(p)
+
+
+# Ha caído el jefe final (el gerente mutado, en la azotea): cuando se ha visto caer, su página del dosier (si aún
+# falta; con el juego parado) y, al cerrarla, llega el helicóptero de Velaria a por Johnny (helicoptero.gd). La
+# escalera de incendios ya se abre sola al quedar la azotea limpia: por ahí se va
+func fin_del_edificio() -> void:
+	var donde := aqui
+	await get_tree().create_timer(1.6, false).timeout
+	if donde != aqui:
+		return
+	pagina_del_jefe()
+	await get_tree().create_timer(0.8, false).timeout   # (mientras la página está abierta, no corre)
+	if donde != aqui:
+		return
+	var heli := Helicoptero.new()
+	heli.destino = planta.sitios[aqui].get("helipuerto", johnny.position)
+	heli.johnny = johnny
+	mapa.cosas.add_child(heli)
+	decir("¡Un helicóptero de Velaria viene a por ti! Vete por la escalera de incendios", 4.5)
 
 
 # Apunta la página para siempre y la enseña con el juego parado; al cerrarla, avisa si trae noticias
@@ -982,6 +1001,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
+		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
+		if tipo in JEFES and not final_de(tipo).is_empty():
+			fin_del_edificio()
 		# la portera: un poco después de caer su cuerpo, las mutaciones (el jefe final, no: se acaba el edificio)
 		if tipo in JEFES and final_de(tipo).is_empty():
 			await get_tree().create_timer(2.0, false).timeout
@@ -2133,6 +2155,7 @@ func probar_azotea() -> void:
 		await get_tree().create_timer(0.9).timeout
 		get_viewport().get_texture().get_image().save_png("res://captura-gerente-trabajar.png")
 		print("  ¡A TRABAJAR!: han llegado %d" % (jefa.secuaces() - antes_zombis))
+		await probar_mutado(camara)
 	luz.alternar()
 	johnny.position = Vector2(s.ancho / 2.0, s.alto / 2.0)
 	camara.zoom = Vector2(0.66, 0.66)
@@ -2144,6 +2167,9 @@ func probar_azotea() -> void:
 	# sin el jefe se abre la escalera de incendios. El gerente cae de verdad (el jefe final no saca mutaciones); la
 	# portera (si aún no estuviera el gerente), quitada sin que caiga: así no salen las mutaciones
 	var es_final := jefa != null and not final_de(planta.jefe).is_empty()
+	if es_final:
+		# que su página del dosier salga al caer (probar_historia ya la ha apuntado)
+		Guardado.cambiar(func(g): g.paginas.erase("cc_recogida"))
 	if jefa:
 		for z in get_tree().get_nodes_in_group("zombis"):
 			if z != jefa:
@@ -2161,8 +2187,76 @@ func probar_azotea() -> void:
 	print("  sin el jefe: jefe muerto %s | incendios %s | aviso: '%s'" % [planta.jefa_muerta,
 		"abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
 	if es_final:
-		await get_tree().create_timer(1.8).timeout
-		print("  al caer el gerente, mutación: %s" % ("sí (¡no debería!)" if get_tree().paused else "no"))
+		# al rato, su página del dosier (con el juego parado); al cerrarla, el helicóptero (captura-helicoptero.png)
+		await get_tree().create_timer(1.3).timeout
+		print("  al caer el gerente: página del dosier abierta %s | juego parado %s" % [menus.abierto == "pagina",
+			get_tree().paused])
+		menus.leida()
+		var helipuerto: Vector2 = s.get("helipuerto", johnny.position)
+		johnny.position = helipuerto + Vector2(-170, 150)
+		camara.zoom = Vector2(0.8, 0.8)
+		camara.reset_smoothing()
+		await get_tree().create_timer(0.8 + Helicoptero.LLEGADA + 0.5).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-helicoptero.png")
+		var helis: Array = mapa.cosas.get_children().filter(func(n): return n is Helicoptero)
+		print("  helicóptero de Velaria: %d | sobre el helipuerto %s | aviso: '%s'" % [helis.size(),
+			not helis.is_empty() and helis[0].llegado and helis[0].position.distance_to(helipuerto) < 1.0, aviso.text])
+		camara.zoom = Vector2.ONE
+		print("  al caer el gerente, mutación: %s" % ("sí (¡no debería!)" if menus.abierto == "mutacion" else "no"))
+
+
+# El gerente, a media vida, se pincha VD-7 (captura-gerente-jeringa.png) y muta con un fogonazo
+# (captura-gerente-muta.png); el mutado, con los latigazos (captura-mutado.png) y avisando la embestida
+# (captura-mutado-embestida.png)
+func probar_mutado(camara: Camera2D) -> void:
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != jefa:
+			z.queue_free()   # (los empleados del gerente)
+	for papel in get_tree().get_nodes_in_group("balas_zombi"):
+		papel.queue_free()
+	var cerca := func(lejos: float, hacia := PI / 2.0) -> void:   # Johnny cerca de él, donde se pueda estar y a la vista
+		for i in 60:
+			johnny.position = jefa.position + Vector2.from_angle(hacia + randf_range(-0.6, 0.6)) * lejos
+			if mapa.zona_en(johnny.position) >= 0 and jefa.a_la_vista(johnny):
+				break
+		camara.reset_smoothing()
+	cerca.call(170.0, PI)   # (a un lado: así se le ve entero, con la jeringa)
+	jefa.andar(5.0)
+	jefa.recibir_golpe(int(jefa.vida - jefa.vida_max * 0.5), Vector2.ZERO)
+	await get_tree().create_timer(1.5).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-gerente-jeringa.png")
+	print("  a media vida: %s (fotograma %d) | vida %d/%d | invulnerable %s" % [jefa.estado, jefa.sprite.frame,
+		jefa.vida, jefa.vida_max, jefa.invulnerable])
+	for i in 300:
+		if jefa.mutado:
+			break
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.12).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-gerente-muta.png")
+	while jefa.estado == "mutar":
+		await get_tree().physics_frame
+	print("  mutado: %s | dibujo %s | radio %d | vida %d/%d | barra: '%s'" % [jefa.estado,
+		jefa.sprite.sprite_frames.resource_path.get_file(), jefa.radio, jefa.vida, jefa.vida_max, $Pantalla/Jefa/Nombre.text])
+	# los latigazos, recién soltados
+	cerca.call(200.0, 0.0)
+	johnny.invulnerable = 0.0
+	var vida_johnny: int = johnny.vida
+	jefa.foto(johnny)
+	await get_tree().create_timer(0.14).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-mutado.png")
+	print("  latigazos: %s | a Johnny le han quitado %d" % [jefa.estado, vida_johnny - johnny.vida])
+	# y la embestida: la franja roja, y luego sale corriendo
+	await get_tree().create_timer(0.5).timeout
+	cerca.call(400.0, 0.0)
+	jefa.empezar("aviso_embestida", (johnny.position - jefa.position).angle())
+	await get_tree().create_timer(0.55).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-mutado-embestida.png")
+	var estados := []
+	for i in 30:
+		await get_tree().create_timer(0.05).timeout
+		if estados.is_empty() or estados[-1] != jefa.estado:
+			estados.append(jefa.estado)
+	print("  embestida: %s" % " → ".join(estados))
 
 
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)

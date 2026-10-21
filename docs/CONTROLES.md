@@ -32,7 +32,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 
 **Pruebas sin jugar** (se añaden detrás de `--path . -- --captura`; ver CLAUDE.md):
 - `--edificio centro`: en el centro comercial (al final, la azotea: `captura-azotea.png`, `captura-gerente.png`
-  —el gerente lanzando contratos—, `captura-azotea-entera.png` y `captura-azotea-incendios.png`). `--fotos-tiendas`: una foto de cada tienda y de los peligros.
+  —el gerente lanzando contratos—, `-maletinazo` y `-trabajar`, `captura-gerente-jeringa.png` y
+  `captura-gerente-muta.png` —se pincha y muta—, `captura-mutado.png` —los latigazos— y
+  `captura-mutado-embestida.png`, `captura-azotea-entera.png`, `captura-azotea-incendios.png` y
+  `captura-helicoptero.png` —al caer, el helicóptero de Velaria—). `--fotos-tiendas`: una foto de cada tienda y de los peligros.
 - `--alerta N` (1 a 5): en vez de la prueba larga, la de los niveles de alerta: dice en la terminal los números de
   cada regla (zombis, velocidad, jefe, botiquín, oído, rarezas del banco, guardia o vecino de la llave) y saca
   `captura-alerta.png` (el aviso del principio), `captura-alerta-llave.png` (el guardia o, en los Apartamentos, el

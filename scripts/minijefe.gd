@@ -36,6 +36,7 @@ var mirada := Vector2.DOWN    # hacia dónde mira
 var invulnerable := false
 var contacto := 0
 var tiempo := 0.0
+var vapor := true              # el vapor de la cabeza al enfadarse (el gerente mutado no echa)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -289,7 +290,7 @@ func poner(nombre: String, velocidad := 1.0) -> void:
 func _pintar_encima() -> void:
 	if estado == "muerto":
 		return
-	if enfadado():
+	if enfadado() and vapor:
 		for i in 3:
 			var k := fmod(tiempo * 1.2 + i / 3.0, 1.0)
 			$Vapor.draw_circle(Vector2((i - 1) * 18.0, -arriba + 6.0 - k * 36.0), 3.0 + k * 7.0, Color(1, 1, 1, 0.75 * (1.0 - k)))

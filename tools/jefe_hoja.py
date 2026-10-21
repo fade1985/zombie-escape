@@ -98,6 +98,19 @@ JEFES = {
         "de_frente": ["a_trabajar", "jeringa"],
         "pies": (64, 124),
     },
+    # el gerente mutado (parte 3 del trozo 6): los latigazos largos salen con código (gerente.gd); la embestida,
+    # carrera en bucle como la de la mascota (sin el primer fotograma, que es de pie)
+    "gerente-mutado-128": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "latigazo": ("latigazo", 12, False, False),
+            "embestida": ("embestida", 14, True, False, True),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "pies": (64, 127),
+    },
 }
 JEFE = JEFES[fuente]
 PIES = JEFE.get("pies", PIES)

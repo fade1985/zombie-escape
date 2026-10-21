@@ -355,10 +355,9 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
   diario de los Apartamentos.
   - Lo que no decía el plan: con diez emisiones ya no cabían; la lista del programa Noticias tiene ahora su propio
     desplazamiento y la tele se queda quieta. Y la pista de las que faltan dice qué edificio completar.
-- **Pendiente para el trozo 6 de la parte 4 (azotea y gerente):** al morir el gerente, llamar a
-  `partida.pagina_del_jefe()`: si la orden de recogida falta, la apunta y la enseña con el juego parado (como al
-  coger la de un muerto; `Historia.del_jefe` dice cuál es). Ya está probada en la foto de prueba
-  (`captura-pagina-jefe.png`).
+- ✅ **La página del gerente** (trozo 6 de la parte 4, parte 3): al caer el gerente mutado, la partida llama a
+  `pagina_del_jefe()`: si la orden de recogida falta, la apunta y la enseña con el juego parado (como al coger la de
+  un muerto). Al cerrarla llega el helicóptero de Velaria.
 - ✅ **El guiño de la cafetera** (hecho el 21 oct, aparte del trozo de la farmacéutica): la primera vez que está en
   la sala después de rescatarla, huele el café y le dice a Johnny las tres frases de `Historia.CAFETERA`; desde
   entonces el café es solo café. Ver «Supervivientes».
@@ -720,6 +719,30 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        - Tecla de prueba **L** (también en la exposición, F9). `--captura --edificio centro` saca además
          `captura-gerente.png` (lanzando contratos), `captura-gerente-maletinazo.png` y `captura-gerente-trabajar.png`,
          y le hace caer para comprobar que no sale la mutación.
+     - ✅ **Parte 3: la mutación, la página del dosier y el helicóptero de Velaria** (21 oct). Lo que ha quedado:
+       - **El dibujo del mutado**, animado con PixelLab sobre el modelo aprobado (`gerente-mutado-128`, 127 px): andar,
+         latigazo de tentáculos, embestida (carrera en bucle) y muerte (cae de espaldas), en las 8 direcciones. Hoja
+         `jefe-gerente-mutado` (`py tools/jefe_hoja.py gerente-mutado-128 jefe-gerente-mutado`). Costó
+         **32 generaciones**, sin repeticiones: con la frase fuerte de espaldas desde el principio, ninguna se giró.
+       - **La jeringa:** a media vida, en vez de enfadarse, grita «¡AQUÍ NO PARA NADIE!», aparta a Johnny y se pincha
+         (2,6 s con la animación de la jeringa, sin que se le pueda dar); al final, encorvado y temblando. Luego
+         **muta**: fogonazo verde, temblor, rugido y trocitos, y crece de golpe al dibujo del mutado (1,3 s también
+         sin que se le pueda dar). La barra sigue con la vida que tenía. Antes de pincharse **no puede caer**: aunque le
+         den mucho de golpe, se queda con 1, así que la mutación llega siempre.
+       - **El mutado** es más rápido (110 en vez de 70), pega más si Johnny se le pega (14) y ya no lanza contratos ni
+         grita «¡A TRABAJAR!» (decidido aquí: ya no piensa, solo ataca, y así el final es un duelo). Con aviso hace:
+         **latigazos**, tres franjas rojas en abanico (0,75 s) y tres tentáculos de 340 de largo por ellas (18 de daño;
+         el zombi de tentáculos llega a 220), y la **embestida** si Johnny está lejos: franja roja (0,8 s) y sale
+         corriendo (24 de daño y le tira); si se estrella contra un aparato o el murete se queda **atontado** 2,2 s.
+       - **Al caer el mutado** (con su animación): «¡El gerente ha caído!», se abre la escalera de incendios, y al rato
+         sale la **página del dosier** (la orden de recogida, si falta) y, al cerrarla, llega el **helicóptero de
+         Velaria** (`helicoptero.gd`, dibujado con código): viene volando de fuera, se queda sobre el helipuerto con el
+         rotor girando, la luz roja que parpadea y un foco que busca a Johnny por el suelo, con el aviso «¡Un
+         helicóptero de Velaria viene a por ti! Vete por la escalera de incendios». No ataca: Johnny se va por la
+         escalera. Suena el rotor (efecto nuevo, `rotor`) y al pincharse, `jeringa`.
+       - `--captura --edificio centro` saca además `captura-gerente-jeringa.png`, `captura-gerente-muta.png`,
+         `captura-mutado.png` (latigazos), `captura-mutado-embestida.png` y `captura-helicoptero.png`, y comprueba en
+         la salida que sale la página y llega el helicóptero (y que no sale la mutación de Johnny).
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
@@ -764,7 +787,7 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 
      - Los jefes no se congelan, ni se duermen, ni se dejan arrastrar, como pasaba ya con aturdir y prender.
      - `--captura` (en los dos edificios) prueba cada una contra zombis y saca `captura-arma-<receta>.png`.
-7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). Pendiente: la página del gerente
-   (trozo 6 de la parte 4).
+7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). La página del gerente, también
+   (sale al caer él, en la parte 3 del trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
    ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct).
