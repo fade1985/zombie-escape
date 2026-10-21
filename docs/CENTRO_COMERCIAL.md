@@ -201,7 +201,7 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
      chispazo 1 de cada 3 veces; se cambió.)
    - Para probarlo: `--captura --edificio centro --fotos-tiendas` saca también `captura-peligro-frio/fuego/agua/sin-luz/cuadro.png`.
 4. **Zombis nuevos**, minijefes y jefe final, por trozos (ver «Decidido con el dueño»):
-   - ✅ **Trozo 1: vigilante y dependienta** (21 oct). Animados con PixelLab (andar, ataque, golpe y muerte en las 8
+   - ✅ **Trozo 1: vigilante y dependienta** (21 oct; con el visto bueno del dueño, probado en el móvil). Animados con PixelLab (andar, ataque, golpe y muerte en las 8
      direcciones; 73 generaciones, detalle en `assets/pixellab.json` → `centro-comercial-parte4` → `trozo1`) y
      metidos en el juego con los números del plan:
      - **Vigilante** (`zombi_vigilante.tscn`): vida 45, velocidad 85, porrazo de 12 con más alcance. Sale en las
