@@ -111,13 +111,18 @@
 - `averia.gd`: el rescate propio del técnico (bajar la palanca del cuadro y aguantar a oscuras, con zombis entrando
   por las habitaciones de la tienda, mientras arregla el cable del agua); igual que la escolta. Su prueba también
   prueba su mejora (el minimapa con los zombis y las pantallas de la sala).
+- `barricada.gd`: el rescate propio del ferretero (la puerta de su almacén con tablas; al limpiar la tienda se
+  cierra la entrada y hay que defender la puerta mientras las quita, con zombis entrando por las habitaciones o la
+  entrada). Lo que aporrean los zombis es un punto invisible delante de la puerta (`Diana`, en el grupo "presa").
+  La cuelga `supervivientes.gd`, que también pone su puesto en la sala (`poner_puesto`).
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
 
 **ui/**
 - `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio"), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
-- `ordenador.gd`: la pantalla de ConserjeOS. `inventario.gd`: inventario, baúl y banco.
+- `ordenador.gd`: la pantalla de ConserjeOS. `inventario.gd`: inventario, baúl y banco. `puesto.gd`: la ventanita
+  del puesto del ferretero (munición, molotovs y granadas por dólares ahorrados).
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado, pantalla roja con poca vida y escarcha con frío.
 - `botones.gd` (autoload): el saltito de los botones.
 
@@ -133,7 +138,8 @@
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
   mantenimiento, dibujada con código), `camaras.gd` (las pantallas de las cámaras de seguridad, detrás del técnico,
-  cuando ya vive en la sala).
+  cuando ya vive en la sala), `mostrador.gd` (el del puesto del ferretero, dibujado con código; al arrimarse por
+  delante abre `ui/puesto.gd`).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, con lo de más de la tienda de electrónica y del apagón; luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 

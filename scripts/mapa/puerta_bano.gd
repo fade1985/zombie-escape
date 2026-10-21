@@ -2,6 +2,8 @@
 # tabique y no deja pasar hasta que se limpia el piso. Mientras está cerrada, tiembla cuando él da golpes desde
 # dentro ("golpes", lo pone supervivientes.gd al gritar). "hueco" es la puerta de apt.puertas, en casillas.
 # Al abrirse se encoge hacia un lado (gira sobre las bisagras) y deja de chocar.
+# La del almacén del ferretero lleva además tablas clavadas por encima ("tablas", las que quedan): las va
+# quitando él desde dentro (barricada.gd).
 extends StaticBody2D
 
 const CASILLA := 32
@@ -14,6 +16,7 @@ var caja := Rect2()         # el hueco, en unidades del mundo
 var abierta := 0.0          # 0 cerrada, 1 abierta del todo
 var abriendo := false
 var golpes := 0.0           # segundos que le quedan temblando
+var tablas := 0             # las tablas que le quedan clavadas (la barricada del ferretero)
 var tiempo := 0.0
 
 
@@ -85,6 +88,11 @@ func _draw() -> void:
 			var pomo := Rect2(x0 + ancho - 11, arriba + (abajo - arriba) / 2.0, 5, 5)
 			draw_rect(pomo, Color("#c9a227"))
 			draw_rect(pomo, LINEA, false, 1.0)
+		# la barricada: tablas torcidas de lado a lado, más anchas que la puerta, con un clavo en cada punta
+		for i in tablas:
+			var y: float = arriba + (abajo - arriba) * [0.18, 0.4, 0.62, 0.84][i]
+			tabla(Vector2(r.position.x - 6 + temblor, y - [5, -6, 4, -5][i] / 2.0),
+				Vector2(r.end.x + 6 + temblor, y + [5, -6, 4, -5][i] / 2.0))
 	else:
 		# en un tabique de lado: una hoja de madera vista desde arriba
 		var alto := (r.size.y - 4) * k
@@ -93,3 +101,19 @@ func _draw() -> void:
 		draw_rect(hoja, LINEA, false, 2.0)
 		if alto > 20:
 			draw_rect(Rect2(hoja.position.x + 4, hoja.position.y + alto - 14, 5, 5), Color("#c9a227"))
+		for i in tablas:
+			var y: float = r.position.y + r.size.y * (i + 1) / (tablas + 1.0)
+			tabla(Vector2(hoja.position.x - 10, y - 3), Vector2(hoja.end.x + 10, y + 3))
+
+
+# Una tabla de la barricada, de "desde" a "hasta" (los centros de sus dos puntas)
+func tabla(desde: Vector2, hasta: Vector2) -> void:
+	var grueso := Vector2(0, 5)
+	var forma := PackedVector2Array([desde - grueso, hasta - grueso, hasta + grueso, desde + grueso])
+	draw_colored_polygon(forma, Color("#a0703f"))
+	draw_line(desde - grueso + Vector2(0, 2), hasta - grueso + Vector2(0, 2), Color("#c4945c"), 2.0)   # el canto con luz
+	forma.append(forma[0])
+	draw_polyline(forma, LINEA, 2.0)
+	for punta in [desde.lerp(hasta, 0.08), desde.lerp(hasta, 0.92)]:
+		draw_rect(Rect2(punta - Vector2(2, 2), Vector2(4, 4)), Color("#c0c4d0"))
+		draw_rect(Rect2(punta - Vector2(2, 2), Vector2(4, 4)), LINEA, false, 1.0)

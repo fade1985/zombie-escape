@@ -206,6 +206,39 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   - `--captura --edificio centro` prueba el rescate entero (lo escribe en la terminal) y saca
     `captura-tecnico-palanca.png`, `captura-tecnico-horda.png`, `captura-tecnico-fin.png`,
     `captura-tecnico-minimapa.png` y `captura-tecnico-sala.png`.
+- ✅ **El rescate propio del ferretero y su puesto** (21 oct; `scripts/barricada.gd`, `scripts/mapa/mostrador.gd`
+  y `scripts/ui/puesto.gd`; números provisionales):
+  - Grita desde el almacén de la ferretería, como antes, pero su puerta tiene **cuatro tablas clavadas** (la
+    barricada). Al limpiar la tienda no se abre: dice «¡Espera, que quito la barricada!» y, al segundo, **la entrada
+    de la tienda se cierra de golpe** y empieza la horda allí mismo (no hay que ir a la salida).
+  - **2 minutos de trabajo**. Arriba, la barra «Ferretero quita la barricada · 1:45». Grupos cada 6 s al principio
+    y cada 3 s al final, de 2 a 5 zombis, 30 a la vez como mucho; los primeros 50 s lentos y normales, y luego
+    también rápidos y algún explosivo. Entran por el taller u otras habitaciones de la tienda (nunca por su almacén)
+    o por la entrada, y él avisa de por dónde.
+  - Él está dentro (no se le ve y no le pueden tumbar): **lo que se defiende es la puerta**. Los zombis que la
+    pillan más cerca que a Johnny, o todos si Johnny se aleja más de 300, van a aporrearla (tiembla); y **mientras
+    haya un zombi a menos de 70 de la puerta, él no avanza**: la barra se pone roja («¡Están empujando la puerta!
+    Quítaselos») y él se queja («¡Me están empujando la puerta!»).
+  - Las tablas van cayendo según avanza (una cada cuarto, con astillas). Lo que dice sale encima de la puerta,
+    como sus gritos («¡Cuántos clavos le metí!», «Esta tabla no sale…»…). A mitad, **por debajo de la puerta**,
+    un molotov, una granada y dos cajas de munición.
+  - Al acabar: «¡Barricada fuera! La entrada se ha abierto», se abre su puerta («¡Fuera tablas! Gracias, chaval.
+    Vámonos de aquí»), cuenta para «Buen vecino» y se une al arrimarte, como siempre. Al salir con él ya no hay otra
+    horda.
+  - **Su puesto**: cuando ya vive en la sala, atiende **detrás de un mostrador** dibujado con código (la franja
+    naranja de su chaleco, el letrero «Ferretería» y, encima, una caja de munición, un molotov y una granada). Al
+    arrimarte por delante se para el juego y sale la ventanita del puesto, con tres tarjetas: **munición (un
+    cargador) $2, molotov $3 y granada $4**, cada una con lo que llevas. Se paga con los **dólares ahorrados** (como
+    en el ordenador) y lo comprado es para esa partida. Si ya vas lleno («No te cabe…»), si tu arma no usa balas o
+    si no te llega («No te llega: te faltan $2»), lo dice. Con el ratón o el dedo, con flechas e Intro (o 1, 2 y 3)
+    o con el mando (cruceta y A); Esc o B cierra.
+  - Para que te acompañe, hay que **rodear el mostrador** y arrimarse a él. El puesto sigue abierto aunque te
+    acompañe. Lo que no decía el plan: en la sala su nombre va debajo del mostrador (no encima del letrero).
+  - Con el ferretero, en el centro comercial ya ninguno tiene la horda de siempre: la prueba de la horda solo sale
+    en los Apartamentos.
+  - `--captura --edificio centro` prueba la barricada entera y el puesto (lo escribe en la terminal) y saca
+    `captura-ferretero-barricada.png`, `captura-ferretero-empujan.png`, `captura-ferretero-sala.png`,
+    `captura-ferretero-puesto.png` y `captura-ferretero-compra.png`.
 
 ## Objetos
 
@@ -573,8 +606,8 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común, ✅ el rescate de la
-   farmacéutica y ✅ el del técnico con su mejora; falta el rescate propio del ferretero y la mejora de la sala del
-   ferretero y de la farmacéutica (un trozo para cada uno).
+   farmacéutica, ✅ el del técnico con su mejora y ✅ el del ferretero con su puesto; falta la mejora de la sala de
+   la farmacéutica (empezar con un botiquín: va con los objetos de curar).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
    - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
      edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:

@@ -16,26 +16,33 @@
 # del centro comercial en otra fila, debajo, cada uno delante del hueco de lo suyo (el puesto del ferretero, las
 # cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno). Al arrimarse a uno, te acompaña
 # (Guardado: acompanante) y empieza las partidas siguientes en el equipo. Solo uno a la vez.
+# El ferretero, ya rescatado, atiende detrás de su mostrador (mapa/mostrador.gd): al arrimarse a él se compran
+# munición, molotovs y granadas con los dólares ahorrados (ui/puesto.gd). Sigue abierto aunque te acompañe.
 #
 # El guiño de la cafetera: la primera vez que la farmacéutica está en la sala, huele el café de la cafetera de
 # Johnny (mapa/cafetera.gd), le encuentra el doble fondo con cápsulas de VD-7 y se lo dice (Historia.CAFETERA).
 #
-# Los del centro comercial, de momento, se rescatan como los de siempre (encerrados, gritando y con la horda):
-# su rescate propio llega en un trozo para cada uno (docs/CENTRO_COMERCIAL.md, «Supervivientes»). Ya está el de
-# la farmacéutica ("rescate": "escolta"): sin horda, hay que llevarla herida hasta las escaleras (escolta.gd). Y el
-# del técnico ("rescate": "averia"): bajar la palanca del cuadro y aguantar a oscuras mientras arregla el cable (averia.gd).
+# Los del centro comercial se esconden igual, pero cada uno tiene su propio rescate en vez de la horda de siempre
+# (docs/CENTRO_COMERCIAL.md, «Supervivientes»): la farmacéutica ("rescate": "escolta"), sin horda, hay que llevarla
+# herida hasta las escaleras (escolta.gd); el técnico ("rescate": "averia"), bajar la palanca del cuadro y aguantar
+# a oscuras mientras arregla el cable (averia.gd); y el ferretero ("rescate": "barricada"), defender la puerta de
+# su almacén mientras quita las tablas (barricada.gd).
 #
 # Lo monta partida.gd: recoger() antes de cambiar de sitio y al_montar() después.
 class_name Supervivientes
 extends Node
 
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
+const MOSTRADOR := preload("res://scripts/mapa/mostrador.gd")
+const MOSTRADOR_EN := Vector2(600, 380)   # el pie del mostrador del ferretero (él, detrás: su "casa")
+const PUESTO := preload("res://scripts/ui/puesto.gd")
 
 # Los que se pueden rescatar (SURVIVORS de src/config.js y los tres del centro comercial). "edificio": dónde sale;
 # "look": los colores de su dibujo (persona.gd); "arma": la que lleva en la mano; "casa": su sitio en la sala de
 # mantenimiento. Los del centro comercial llevan además "tienda" y "sala" (dónde se esconde), "gritos" (los suyos)
 # y "mejora" (lo que hará en la sala de mantenimiento cuando llegue su trozo). "rescate": si no es la horda de
-# siempre, cuál ("escolta": escolta.gd; "averia": averia.gd); "al_abrir": lo que dice al abrirse su puerta
+# siempre, cuál ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo que
+# dice al abrirse su puerta
 const DATOS := {
 	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"casa": Vector2(600, 174),
@@ -57,11 +64,13 @@ const DATOS := {
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
 	# los del centro comercial (parte 5 del plan; tres por edificio: el dueño quitó a la camarera)
 	"ferretero": {"id": "ferretero", "nombre": "Ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
-		"casa": Vector2(600, 380), "tienda": "ferreteria", "sala": "almacen",
+		"casa": Vector2(600, 338), "tienda": "ferreteria", "sala": "almacen",   # (detrás de su mostrador: MOSTRADOR_EN)
+		"nombre_vecino": 58.0,   # en la sala, su nombre va debajo del mostrador (no encima del letrero)
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],
+		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",
 		"desc": "Da martillazos (8 de daño) a los zombis que se le acercan",
 		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 46.0},
 		"mejora": "Monta su puesto: vende munición, molotovs y granadas por dólares"},
@@ -129,6 +138,8 @@ var equipo: Array = []     # los Aliado que siguen a Johnny
 var npc: Aliado = null     # el superviviente en su baño (mientras se está en su apartamento)
 var puerta: Node2D = null  # y la puerta del baño
 var vecinos: Array = []    # los rescatados de otras partidas, en la sala de mantenimiento
+var barricada := Barricada.new()   # el rescate del ferretero
+var puesto := PUESTO.new()         # y la ventanita de su puesto en la sala de mantenimiento
 var socorro_t := 1.0
 var sala_socorro := -1
 var grito_t := -9.0
@@ -142,6 +153,9 @@ var averia := Averia.new()     # el del técnico
 func preparar(p: Node) -> void:
 	partida = p
 	johnny = p.johnny
+	barricada.sup = self
+	add_child(barricada)
+	add_child(puesto)
 	capa = Control.new()
 	capa.name = "Superviviente"
 	capa.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -247,6 +261,8 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		if sup.puerta.cerrada:
 			puerta = PUERTA_BANO.new()
 			puerta.montar(sup.puerta)
+			if rescate.def.get("rescate", "") == "barricada":
+				puerta.tablas = Barricada.TABLAS   # el ferretero se ha atrincherado (barricada.gd)
 			mapa.cosas.add_child(puerta)
 			mapa.rehornear()   # que los zombis no cuenten con pasar por ahí
 		npc = crear(rescate.def, "encerrado")
@@ -256,6 +272,7 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		sala_socorro = -1
 	if sitio.tipo == "mantenimiento":
 		colocar_vecinos()
+		poner_puesto()
 		guino_cafetera()
 
 
@@ -283,8 +300,8 @@ func _physics_process(delta: float) -> void:
 # Mientras la puerta sigue cerrada, grita y da golpes. Se le oye desde su apartamento (sale de la puerta del baño)
 # y desde el pasillo (sale de la puerta del piso)
 func actualizar_socorro(delta: float) -> void:
-	if not encerrado():
-		return
+	if not encerrado() or barricada.activa():
+		return   # (el ferretero, quitando la barricada, dice otras cosas: barricada.gd)
 	var sup: Dictionary = partida.planta.superviviente
 	# al entrar en un sitio desde donde se le oye, el primer grito llega enseguida
 	if partida.aqui != sala_socorro:
@@ -341,12 +358,19 @@ func texto_flotante(donde: Vector2, texto: String, color: Color, tamano := 18, v
 	tween.chain().tween_callback(etiqueta.queue_free)
 
 
-# Se ha limpiado el piso "idx": si es el suyo, se abre la puerta del baño; y la médica cura un poco
+# Se ha limpiado el piso "idx": si es el suyo, se abre la puerta del baño; y la médica cura un poco. La del
+# ferretero no: se queda cerrada hasta que quita la barricada (empieza sola: barricada.gd)
 func piso_limpio(idx: int) -> void:
 	for a in equipo:
 		a.al_limpiar()
 	if not encerrado() or idx != partida.planta.superviviente.sitio:
 		return
+	if rescate.def.get("rescate", "") != "barricada":
+		abrir_escondite(idx)
+
+
+# Se abre la puerta de su escondite y, al poco, dice lo suyo
+func abrir_escondite(idx: int) -> void:
 	var sup: Dictionary = partida.planta.superviviente
 	sup.puerta.cerrada = false
 	partida.mapa.vistas[sup.sala] = true
@@ -588,6 +612,31 @@ func llevar_vecino(v: Aliado) -> void:
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
 
+# ═════════════ El puesto del ferretero ═════════════
+
+# Con el ferretero rescatado, su mostrador en la sala de mantenimiento, delante de su sitio (él atiende detrás).
+# Al arrimarse por delante se abre el puesto; para que te acompañe, hay que rodearlo y arrimarse a él
+func poner_puesto() -> void:
+	if "ferretero" not in Guardado.cargar().rescatados:
+		return
+	var mostrador := MOSTRADOR.new()
+	mostrador.position = MOSTRADOR_EN
+	partida.mapa.cosas.add_child(mostrador)
+	partida.mapa.rehornear()   # que los del equipo lo rodeen
+	mostrador.usar.connect(abrir_puesto)
+
+
+# Se para el juego y sale la ventanita del puesto (ui/puesto.gd); el ferretero, si está en su sitio, te atiende
+func abrir_puesto() -> void:
+	if partida.terminada or partida.cambiando or not johnny.vivo or get_tree().paused:
+		return
+	for v in vecinos:
+		if v.def.id == "ferretero":
+			v.decir("¿Qué te pongo, chaval?")
+	get_tree().paused = true
+	puesto.abrir(partida)
+
+
 # ═════════════ El guiño de la cafetera ═════════════
 
 const CAFE_PAUSA := 1.5   # segundos en la sala antes de que la farmacéutica huela el café
@@ -619,12 +668,13 @@ func guino_cafetera() -> void:
 # ═════════════ En la pantalla ═════════════
 
 # La flecha en el borde hacia donde está encerrado; en la horda, la barra de la cerradura y la cuenta atrás; y en
-# la escolta de la farmacéutica, lo suyo (escolta.gd)
+# la escolta de la farmacéutica, lo suyo (escolta.gd); y en la barricada del ferretero, su barra (barricada.gd)
 func dibujar_capa() -> void:
 	if partida == null or partida.mapa == null or partida.terminada:
 		return
 	var letra := Tema.FUENTE
 	var tam := capa.size
+	barricada.dibujar(capa)
 	if encerrado():
 		var hacia := Vector2.INF
 		if partida.aqui == partida.planta.superviviente.sitio and puerta:
@@ -722,8 +772,39 @@ func probar() -> void:
 	partida.menus.visible = false   # por si ha salido el recuadro de una mutación (tapa las fotos)
 	await probar_aqui(false)
 	for i in 2:
-		if rescate.def.get("rescate", "") in ["escolta", "averia"]:
+		if rescate.def.get("rescate", "") in ["escolta", "averia", "barricada"]:
 			await probar_aqui(false)   # la horda, con otro (la escolta y la avería se prueban en escolta.gd y averia.gd)
+	# la horda de siempre (en el centro comercial ya no la tiene ninguno: cada uno tiene su rescate)
+	if rescate.def.get("rescate", "") == "":
+		await probar_horda()
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()   # que no estorben al resto de la prueba
+	# un vecino rescatado en otra partida: en mantenimiento, arrimarse a él
+	var otro: String = DATOS.keys().filter(func(id): return id != rescate.def.id)[0]
+	Guardado.cambiar(func(g): g.rescatados = [otro])
+	partida.nueva_planta(1)   # la sala de mantenimiento está en la planta baja
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	await get_tree().create_timer(0.2, false).timeout
+	print("Vecinos en mantenimiento: %d" % vecinos.size())
+	if not vecinos.is_empty():
+		johnny.position = vecinos[0].position + Vector2(0, 120)
+		await get_tree().create_timer(0.2, false).timeout
+		johnny.position = vecinos[0].position + Vector2(0, 20)
+		await get_tree().create_timer(0.3, false).timeout
+	print("Acompañante: '%s' | equipo %s" % [Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre)])
+	get_viewport().get_texture().get_image().save_png("res://captura-vecinos.png")
+	await probar_los_seis()
+	await probar_acompanantes()
+	await probar_cafetera()
+	await probar_puesto()
+	await barricada.probar()
+	await escolta.probar()
+	await averia.probar()
+	partida.menus.visible = true
+
+
+# La horda de siempre (con --captura): el rescate, la horda con la cerradura adelantada y levantarlo
+func probar_horda() -> void:
 	await get_tree().create_timer(0.3, false).timeout
 	var sup: Dictionary = partida.planta.superviviente
 	print("Superviviente: %s en %s · %s | baño cerrado %s | puerta %s" % [rescate.def.nombre, partida.planta.nombre,
@@ -758,28 +839,6 @@ func probar() -> void:
 	horda.hecho = HORDA.dura - 0.3
 	await get_tree().create_timer(0.6, false).timeout
 	print("Fin de la horda: %s | puerta %s" % [not en_horda(), "cerrada" if partida.cerrada else "abierta"])
-	for z in get_tree().get_nodes_in_group("zombis"):
-		z.queue_free()   # que no estorben al resto de la prueba
-	# un vecino rescatado en otra partida: en mantenimiento, arrimarse a él
-	var otro: String = DATOS.keys().filter(func(id): return id != rescate.def.id)[0]
-	Guardado.cambiar(func(g): g.rescatados = [otro])
-	partida.nueva_planta(1)   # la sala de mantenimiento está en la planta baja
-	await partida.montar(partida.planta.mantenimiento, 0, false)
-	await get_tree().create_timer(0.2, false).timeout
-	print("Vecinos en mantenimiento: %d" % vecinos.size())
-	if not vecinos.is_empty():
-		johnny.position = vecinos[0].position + Vector2(0, 120)
-		await get_tree().create_timer(0.2, false).timeout
-		johnny.position = vecinos[0].position + Vector2(0, 20)
-		await get_tree().create_timer(0.3, false).timeout
-	print("Acompañante: '%s' | equipo %s" % [Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre)])
-	get_viewport().get_texture().get_image().save_png("res://captura-vecinos.png")
-	await probar_los_seis()
-	await probar_acompanantes()
-	await probar_cafetera()
-	await escolta.probar()
-	await averia.probar()
-	partida.menus.visible = true
 
 
 # Los seis rescatados a la vez en la sala de mantenimiento, cada uno en su sitio (sin acompañante, para que se
@@ -868,6 +927,64 @@ func probar_cafetera() -> void:
 		x.rescatados = antes[0]
 		x.acompanante = antes[1]
 		x.cafetera = antes[2])
+	equipo = equipo_antes
+	for a in equipo:
+		partida.mapa.cosas.add_child(a)
+		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
+
+
+# El puesto del ferretero: con él rescatado (y $9 ahorrados), su mostrador en la sala con él detrás
+# (captura-ferretero-sala.png); arrimarse por delante abre el puesto (captura-ferretero-puesto.png); se compra una
+# cosa de cada y una más que ya no llega; y, rodeando el mostrador, se viene contigo. Luego se deja el guardado y
+# el equipo como estaban
+func probar_puesto() -> void:
+	var g := Guardado.cargar()
+	var antes := [g.rescatados.duplicate(), g.acompanante, g.dolares]
+	var equipo_antes := equipo
+	for a in equipo:
+		if a.get_parent():
+			a.get_parent().remove_child(a)
+	equipo = []
+	Guardado.cambiar(func(x):
+		x.rescatados = ["ferretero"]
+		x.acompanante = ""
+		x.dolares = 9)
+	partida.ahorrados = 9
+	partida.lanzables.cantidades.molotov = 0
+	partida.lanzables.cantidades.granada = 0
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	johnny.position = MOSTRADOR_EN + Vector2(-40, 120)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4, false).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-ferretero-sala.png")
+	johnny.position = MOSTRADOR_EN + Vector2(0, 34)   # delante del mostrador
+	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
+	print("Puesto: abierto %s | juego en pausa %s" % [puesto.abierta(), get_tree().paused])
+	if puesto.abierta():
+		get_viewport().get_texture().get_image().save_png("res://captura-ferretero-puesto.png")
+		var compras := []
+		johnny.coger("pistola")
+		johnny.reserva = 0   # con la pistola y sin cargadores de reserva, para que quepa la munición
+		for id in ["municion", "molotov", "granada", "granada"]:
+			compras.append("%s %s" % [id, puesto.comprar(id)])
+		print("Puesto: %s | quedan $%d | dice '%s' | molotovs %d, granadas %d" % [compras, Guardado.cargar().dolares,
+			puesto.info.text, partida.lanzables.cantidades.molotov, partida.lanzables.cantidades.granada])
+		await get_tree().create_timer(0.2).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-ferretero-compra.png")
+		puesto.cerrar()
+	# por detrás del mostrador: se viene contigo
+	johnny.position = MOSTRADOR_EN + Vector2(0, 150)
+	await get_tree().create_timer(0.3, false).timeout
+	johnny.position = DATOS.ferretero.casa + Vector2(-34, -6)
+	await get_tree().create_timer(0.3, false).timeout
+	print("Puesto: cerrado %s | acompañante '%s'" % [not puesto.abierta(), Guardado.cargar().acompanante])
+	for a in equipo:
+		a.queue_free()
+	Guardado.cambiar(func(x):
+		x.rescatados = antes[0]
+		x.acompanante = antes[1]
+		x.dolares = antes[2])
+	partida.ahorrados = antes[2]
 	equipo = equipo_antes
 	for a in equipo:
 		partida.mapa.cosas.add_child(a)

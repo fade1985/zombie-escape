@@ -46,6 +46,9 @@ La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`esce
 - Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador (los
   del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe. Detrás del técnico,
   cuando ya vive ahí, las pantallas de las cámaras de seguridad: desde entonces el minimapa enseña los zombis.
+- El **puesto del ferretero** (cuando ya vive ahí): arrimarse a su mostrador por delante para comprar munición
+  ($2), molotovs ($3) y granadas ($4) con los dólares ahorrados. Con el ratón o el dedo; con flechas e Intro o
+  las teclas 1, 2 y 3; con el mando, la cruceta y A. Esc o B cierra. Para que te acompañe, rodear el mostrador.
 - La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 ## Móvil (táctil)

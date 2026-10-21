@@ -32,7 +32,7 @@ var partida: Node
 var idx := 0               # su puesto en el equipo (para repartirse alrededor de Johnny)
 var es_vecino := false     # viene de la sala de mantenimiento (y "casa" es su sitio allí)
 var casa := Vector2.ZERO
-var armado := true         # vecino: hay que apartarse un poco antes de que vuelva a contar el arrimarse
+var armado := true       # vecino: hay que apartarse un poco antes de que vuelva a contar el arrimarse
 var asustado := true       # encerrado: mientras quedan zombis en el piso
 var tiempo := 0.0
 var direccion := "s"
@@ -417,7 +417,8 @@ func dibujar_encima() -> void:
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))
 	if modo != "equipo":
-		texto(letra, def.nombre, Vector2(0, 42), 16, Color.WHITE)
+		# (en la sala, el ferretero lo lleva más abajo: está detrás de su mostrador)
+		texto(letra, def.nombre, Vector2(0, def.get("nombre_vecino", 42.0) if modo == "vecino" else 42.0), 16, Color.WHITE)
 
 
 func texto(letra: Font, cual: String, donde: Vector2, tamano: int, color: Color) -> void:
