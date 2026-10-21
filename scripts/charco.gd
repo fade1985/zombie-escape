@@ -1,5 +1,6 @@
 # Un charco en el suelo: el moco verde del venenoso, la lejía de la portera, el vómito de Johnny (mutación
-# Gastroenteritis) o el fuego del molotov. Cada uno pone sus estados (estados.gd) a quien lo pisa: el veneno
+# Gastroenteritis), el fuego del molotov o el aceite de la bomba de aceite (centro comercial), que resbala y al
+# secarse arde: se convierte en un fuego como el del molotov, un poco más grande. Cada uno pone sus estados (estados.gd) a quien lo pisa: el veneno
 # te sigue envenenando al salir, la lejía resbala, el ácido solo daña a los zombis... Al rato se seca.
 # Como HAZARDS en src/game-ataques.js.
 #
@@ -25,7 +26,9 @@ const TIPOS := {
 	"lluvia": {"dibujo": VENENO, "radio": 150.0, "vida": 7.0, "estados": {"acido": {"dps": 10.0}}, "solo_zombis": true,
 		"tinte": Color(1.0, 1.0, 0.45)},   # la lluvia ácida (arrojadiza creada)
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
+	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
 }
+const ACEITE_ARDE := 1.25   # el fuego del aceite, así de grande respecto al del molotov
 # El fuego por fuera: cuánto tarda en extenderse, cuánto antes de acabar empieza a apagarse, lo que brilla en
 # blanco el frente y lo que dura la brasa de un trozo recién apagado
 const EXTIENDE := 0.35
@@ -70,10 +73,14 @@ func _physics_process(delta: float) -> void:
 	if vida <= 0.0:
 		if tipo == "fuego":
 			dejar_ceniza()
+		elif tipo == "aceite":
+			arder()
 		queue_free()
 		return
 	if tipo == "fuego":
 		quemar(delta)
+	elif tipo == "aceite":
+		modulate.a = 1.0   # el aceite no se seca: arde
 	else:
 		# Al final se va secando (más transparente)
 		modulate.a = clampf(vida / 0.6, 0.0, 1.0)
@@ -161,6 +168,23 @@ func quemar(delta: float) -> void:
 		var p := global_position + Vector2(cos(a) * r, sin(a) * r * 0.6)
 		if arde_en(p, 0.0):
 			Particulas.soltar(self, p, Vector2(randf_range(-10, 10), randf_range(-140, -70)), Llamas.FUEGO[randi() % 4], randf_range(1, 3), 0.45)
+
+
+# El aceite, al acabar, arde: en su sitio, un fuego como el del molotov (con su llamarada)
+func arder() -> void:
+	var fuego: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+	fuego.tipo = "fuego"
+	fuego.escala = escala * ACEITE_ARDE
+	fuego.duracion = duracion
+	fuego.dano_lanzar = dano_lanzar
+	fuego.position = position
+	get_parent().add_child(fuego)
+	Sonido.tocar("fuego")
+	Luz.destello(get_parent(), global_position, radio() * 3.0, 0.3, 0.8)
+	for i in 16:
+		var a := randf() * TAU
+		Particulas.soltar(self, global_position + Vector2(0, -6), Vector2(cos(a) * 160.0, sin(a) * 90.0 - 40.0), Llamas.FUEGO[i % 4],
+			randf_range(2, 4), 0.5)
 
 
 # Al apagarse del todo, la ceniza se queda en el suelo como una mancha más

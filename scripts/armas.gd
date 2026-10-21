@@ -77,6 +77,11 @@ const CREADAS := {
 	"inmovilizadora": {"base": "bate", "efecto": "descarga", "detalle": Color("#9fe8ff"), "sube": true},
 	"latigo": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "veneno", "detalle": Color("#9be564")},
 	"supermaza": {"base": "fregona", "ritmo": 0.8, "arco": 360.0, "empuje": 2.5, "efecto": "circulo", "detalle": Color("#8a8a9a")},
+	# las del centro comercial (parte 6): el mangual echa muy lejos a todos los de alrededor y los deja un momento
+	# tirados; el bate helado congela; el látigo eléctrico es el látigo con la descarga de la inmovilizadora
+	"mangual": {"base": "fregona", "ritmo": 1.2, "alcance": 90.0, "arco": 360.0, "empuje": 4.5, "efecto": "tira", "detalle": Color("#c0c4d0")},
+	"bate_helado": {"base": "bate", "efecto": "congela", "detalle": Color("#e8f6ff")},
+	"latigo_electrico": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "descarga", "detalle": Color("#9fe8ff"), "sube": true},
 	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
 	"lanzallamas": {"base": "pistola", "ritmo": 10.0, "alcance": 170.0, "velocidad": 320.0, "cargador": 40, "recarga": 2.0,
 		"empuje": 0.3, "efecto": "llama", "detalle": Color("#ff9f1c"), "sube": true},
@@ -86,6 +91,11 @@ const CREADAS := {
 		"empuje": 0.2, "efecto": "acido", "detalle": Color("#c7e04a")},
 	"bumeran": {"base": "pistola", "ritmo": 1.0, "alcance": 300.0, "velocidad": 460.0, "cargador": 1, "recarga": 0.0,
 		"empuje": 1.5, "efecto": "bumeran", "detalle": Color("#c0c4d0"), "sin_municion": true},
+	# las del centro comercial: chispas que aturden y saltan, y el garfio, que sale y vuelve como el bumerán
+	"pistola_electrica": {"base": "pistola", "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0, "cargador": 30, "recarga": 2.0,
+		"empuje": 0.2, "efecto": "chispa", "detalle": Color("#9fe8ff"), "sube": true},
+	"garfio": {"base": "pistola", "ritmo": 0.9, "alcance": 320.0, "velocidad": 620.0, "cargador": 1, "recarga": 0.0,
+		"empuje": 0.0, "efecto": "garfio", "detalle": Color("#c0c4d0"), "sin_municion": true},
 }
 
 # Las armas creadas sacadas del baúl en esta partida. Johnny y el inventario las nombran con un id como

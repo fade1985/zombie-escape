@@ -1,5 +1,7 @@
 # Las recetas del banco de trabajo (src/recetas.js del JS). Cada receta junta dos ingredientes: objetos
-# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). El arma que sale lleva una rareza al azar que
+# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 15 primeras se hacen con lo de los
+# Apartamentos; las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
+# tres últimas, solo cosas del centro (parte 6 de docs/CENTRO_COMERCIAL.md). El arma que sale lleva una rareza al azar que
 # multiplica su daño, y va al baúl (guardado: "baul_armas"). Desde el baúl se sacan para una partida; lo que
 # hacen está en Armas.CREADAS y armas_creadas.gd (fase 7b2).
 #
@@ -46,6 +48,26 @@ const LISTA := {
 		"desc": "Alcance largo y envenena"},
 	"supermaza": {"nombre": "Súper maza", "con": ["fregona", "mancuernas"], "hueco": "cuerpo", "icono": "mancuernas", "dano": 24,
 		"desc": "Lenta: golpe en círculo con temblor"},
+	# mezclan los dos edificios: una cosa de casa y otra del centro comercial
+	"pistola_electrica": {"nombre": "Pistola eléctrica", "con": ["pistola_agua", "bateria"], "hueco": "fuego", "icono": "bateria", "dano": 5,
+		"desc": "Chorro eléctrico: aturde y salta al zombi de al lado"},
+	"bomba_aceite": {"nombre": "Bomba de aceite", "con": ["trapo", "aceite"], "hueco": "arrojadiza", "icono": "aceite", "dano": 22, "unidades": 3,
+		"desc": "Deja un charco que resbala y a los 2 s arde"},
+	"mangual": {"nombre": "Mangual", "con": ["mancuernas", "cadena"], "hueco": "cuerpo", "icono": "cadena", "dano": 16,
+		"desc": "Golpe girando que echa lejos a todos los de alrededor"},
+	"mina_despertador": {"nombre": "Mina despertador", "con": ["despertador", "bombona"], "hueco": "arrojadiza", "icono": "bombona", "dano": 90, "unidades": 2,
+		"desc": "Se queda en el suelo y explota cuando pasa un zombi"},
+	"nube_somnifera": {"nombre": "Nube somnífera", "con": ["spray", "jeringuilla"], "hueco": "arrojadiza", "icono": "jeringuilla", "dano": 0, "unidades": 3,
+		"desc": "Una nube de gas que duerme a los zombis unos segundos"},
+	"garfio": {"nombre": "Garfio", "con": ["cuerda", "perchas"], "hueco": "fuego", "icono": "perchas", "dano": 8,
+		"desc": "Engancha a un zombi y lo arrastra hasta ti; sin munición"},
+	# solo del centro comercial
+	"bate_helado": {"nombre": "Bate helado", "con": ["bate", "hielo_seco"], "hueco": "cuerpo", "icono": "hielo_seco", "dano": 17,
+		"desc": "Cada golpe congela un momento"},
+	"latigo_electrico": {"nombre": "Látigo eléctrico", "con": ["cable", "bateria"], "hueco": "cuerpo", "icono": "cable", "dano": 12,
+		"desc": "Alcance largo: la descarga aturde y salta a otro zombi"},
+	"bomba_clavos": {"nombre": "Bomba de clavos", "con": ["cinta_americana", "clavos"], "hueco": "arrojadiza", "icono": "cinta_americana", "dano": 40, "unidades": 3,
+		"desc": "Explota y lanza clavos en todas direcciones que hacen sangrar"},
 }
 
 # Las rarezas: probabilidad, cuánto multiplica el daño, unidades de más en las arrojadizas y el color del borde

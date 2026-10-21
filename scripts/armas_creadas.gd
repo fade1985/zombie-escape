@@ -1,13 +1,16 @@
 # Lo que hacen las armas creadas (fase 7b2; src/armas-creadas.js del JS). Sus números están en Armas.CREADAS;
 # aquí, sus efectos:
-#   - Cuerpo a cuerpo, al golpear: aturdir, prender, hacer sangrar, envenenar o la descarga que salta a otro
-#     zombi. Los jefes (la portera) no se aturden ni arden; sangrar y el veneno sí les hacen daño.
-#   - A distancia: las gotas de fuego o ácido (chorro.gd) y el bumerán (bumeran.gd).
+#   - Cuerpo a cuerpo, al golpear: aturdir, prender, hacer sangrar, envenenar, la descarga que salta a otro
+#     zombi, congelar (el bate helado) o dejarlo tirado (el mangual). Los jefes (la portera) no se aturden, ni
+#     arden, ni se congelan; sangrar y el veneno sí les hacen daño.
+#   - A distancia: las gotas de fuego, ácido o chispas (chorro.gd), el bumerán (bumeran.gd) y el garfio
+#     (garfio.gd), que trae al zombi hasta Johnny.
 #   - Las chispitas de color en la punta del arma que lleva Johnny.
 class_name ArmasCreadas
 
 const CHORRO := preload("res://scripts/chorro.gd")
 const BUMERAN := preload("res://scripts/bumeran.gd")
+const GARFIO := preload("res://scripts/garfio.gd")
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 const EMPUJE := 170.0   # empuje base, como el de las balas
 
@@ -18,6 +21,9 @@ const EFECTOS := {
 	"veneno": {"t": 4.0, "total": 1.0, "color": Color("#9be564")},   # dura 4 s y quita en total otro golpe entero
 	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a")},    # el ácido sigue royendo: el triple de una gota
 	"descarga": {"aturde": 1.0, "salto": 130.0, "dano": 0.5},        # aturde 1 s y salta al más cercano con medio daño
+	"chispa": 0.4,                                                   # la pistola eléctrica: cada chispa aturde 0,4 s (y salta)
+	"congela": 1.0,                                                  # segundos congelado con cada golpe del bate helado
+	"tira": 0.5,                                                     # segundos que deja tirado el mangual
 	"tick": 0.5,                                                     # cada cuánto se quitan los pellizcos
 }
 const ACIDO_CHARCO := 0.6   # cada cuánto puede dejar el desintegrador un charco de ácido
@@ -37,20 +43,30 @@ static func efecto_golpe(zombi: Node2D, w: Dictionary, dano: float) -> void:
 		"sangra", "veneno":
 			herir(zombi, w.efecto, dano)
 		"descarga":
-			aturdir(zombi, EFECTOS.descarga.aturde)
-			# salta al zombi más cercano
-			var otro: Node2D = null
-			var mejor: float = EFECTOS.descarga.salto
-			for o in zombi.get_tree().get_nodes_in_group("zombis"):
-				var d: float = o.global_position.distance_to(zombi.global_position)
-				if o != zombi and d < mejor:
-					mejor = d
-					otro = o
-			if otro:
-				rayo(zombi, zombi.global_position + Vector2(0, -40), otro.global_position + Vector2(0, -40))
-				var hacia := (otro.global_position - zombi.global_position).normalized()
-				otro.recibir_golpe(roundi(dano * EFECTOS.descarga.dano), hacia * EMPUJE * 0.5)
-				aturdir(otro, EFECTOS.descarga.aturde)
+			descarga(zombi, dano, EFECTOS.descarga.aturde)
+		"congela":
+			if zombi is Zombi:
+				zombi.congelar(EFECTOS.congela)
+		"tira":
+			aturdir(zombi, EFECTOS.tira)
+
+
+# La descarga: aturde al zombi y salta al más cercano (a menos de "salto"), que se lleva medio daño y también
+# se queda aturdido. La usan la inmovilizadora, el látigo eléctrico y las chispas de la pistola eléctrica
+static func descarga(zombi: Node2D, dano: float, aturde: float) -> void:
+	aturdir(zombi, aturde)
+	var otro: Node2D = null
+	var mejor: float = EFECTOS.descarga.salto
+	for o in zombi.get_tree().get_nodes_in_group("zombis"):
+		var d: float = o.global_position.distance_to(zombi.global_position)
+		if o != zombi and d < mejor:
+			mejor = d
+			otro = o
+	if otro:
+		rayo(zombi, zombi.global_position + Vector2(0, -40), otro.global_position + Vector2(0, -40))
+		var hacia := (otro.global_position - zombi.global_position).normalized()
+		otro.recibir_golpe(roundi(dano * EFECTOS.descarga.dano), hacia * EMPUJE * 0.5)
+		aturdir(otro, aturde)
 
 
 # Se queda quieto echando chispitas amarillas (como con la mutación Tentacular). Los jefes, no
@@ -102,10 +118,22 @@ static func detalle(johnny: Node2D, w: Dictionary, delta: float) -> void:
 
 # ── A distancia ──
 
-# Disparo de un arma creada a distancia desde la boca del arma. Las tres de chorro sueltan gotas de fuego o
-# ácido que atraviesan a los zombis; el bumerán sale una vez y vuelve a la mano
+# Disparo de un arma creada a distancia desde la boca del arma. Las de chorro sueltan gotas de fuego, ácido o
+# chispas que atraviesan a los zombis; el bumerán sale una vez y vuelve a la mano, y el garfio, igual, pero
+# trayéndose al zombi que pille
 static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vector2) -> void:
 	var sala: Node = johnny.get_parent()
+	if w.efecto == "garfio":
+		var g := GARFIO.new()
+		g.johnny = johnny
+		g.angulo = angulo
+		g.dano = w.dano
+		g.alcance = w.alcance
+		g.velocidad = w.velocidad
+		sala.add_child(g)
+		g.global_position = salida
+		Sonido.tocar("latigazo")
+		return
 	if w.efecto == "bumeran":
 		var b := BUMERAN.new()
 		b.johnny = johnny
@@ -118,7 +146,7 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		b.global_position = salida
 		Sonido.tocar("latigazo")
 		return
-	Sonido.tocar("escupitajo" if w.efecto == "acido" else "fuego")
+	Sonido.tocar({"acido": "escupitajo", "chispa": "chispa"}.get(w.efecto, "fuego"))
 	var cono: bool = w.efecto == "cono"
 	var n := 9 if cono else 1
 	var abertura := 0.9 if cono else 0.14
@@ -135,21 +163,27 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		g.vida_max = w.alcance / w.velocidad
 		sala.add_child(g)
 		g.global_position = salida
-	if w.efecto != "acido":
+	if w.efecto == "chispa":
+		Luz.destello(johnny, salida - Vector2(0, 50), 110.0, 0.06, 1.0, Color("#9fe8ff"))
+	elif w.efecto != "acido":
 		Luz.destello(johnny, salida - Vector2(0, 50), 170.0 if cono else 120.0, 0.08)
 
 
-# Lo que pasa cuando una gota o el bumerán toca a un zombi
+# Lo que pasa cuando una gota, el bumerán, el garfio o un clavo de la bomba de clavos tocan a un zombi
 static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String) -> void:
 	var johnny := zombi.get_tree().get_first_node_in_group("jugador")
 	var d: int = johnny.con_critico(dano) if johnny else roundi(dano)
 	zombi.recibir_golpe(d, hacia.normalized() * EMPUJE * empuje)
 	if not zombi.is_in_group("zombis"):
 		return
-	if tipo == "bumeran":
+	if tipo == "bumeran" or tipo == "garfio":
 		Sonido.tocar("porrazo")
 	if tipo == "llama" or tipo == "cono":
 		prender(zombi)
+	elif tipo == "chispa":
+		descarga(zombi, d, EFECTOS.chispa)
+	elif tipo == "clavo":
+		herir(zombi, "sangra", d)
 	elif tipo == "acido":
 		herir(zombi, "acido", d)
 		# de vez en cuando, un charco de ácido a sus pies (el de Gastroenteritis: solo daña a los zombis)
