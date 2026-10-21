@@ -22,7 +22,9 @@
 ## scripts/
 
 **Personajes y combate**
-- `johnny.gd`: moverse, vida, apuntar y atacar. `mejoras.gd`: sus atributos (el baseStats del JS).
+- `johnny.gd`: moverse, vida, apuntar y atacar. Al golpear andando, `escenas/personajes/cintura.gdshader` lo parte
+  por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. `mejoras.gd`: sus atributos
+  (el baseStats del JS).
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`). `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas creadas (aturdir, prender, sangrar, descarga, congelar, dejar tirado…);
   `chorro.gd` (gotas de fuego y ácido, chispas de la pistola eléctrica y clavos de la bomba de clavos), `bumeran.gd`

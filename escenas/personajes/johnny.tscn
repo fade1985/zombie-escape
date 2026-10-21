@@ -4,8 +4,19 @@
 [ext_resource type="Script" path="res://scripts/sombra.gd" id="sombra"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/conserje-48-guardia.tres" id="frames"]
 
+[ext_resource type="Shader" path="res://escenas/personajes/cintura.gdshader" id="cintura"]
+
 [sub_resource type="CircleShape2D" id="cuerpo"]
 radius = 18.0
+
+[sub_resource type="ShaderMaterial" id="cuerpo_entero"]
+resource_local_to_scene = true
+shader = ExtResource("cintura")
+shader_parameter/parte = 0
+
+[sub_resource type="ShaderMaterial" id="solo_piernas"]
+shader = ExtResource("cintura")
+shader_parameter/parte = 2
 
 [node name="Johnny" type="CharacterBody2D" groups=["jugador"]]
 collision_layer = 2
@@ -22,11 +33,21 @@ alto = 16.0
 shape = SubResource("cuerpo")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("cuerpo_entero")
 position = Vector2(0, 16)
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("frames")
 animation = &"reposo_s"
 autoplay = "reposo_s"
+centered = false
+offset = Vector2(-48, -72)
+
+[node name="Piernas" type="AnimatedSprite2D" parent="Sprite"]
+visible = false
+show_behind_parent = true
+material = SubResource("solo_piernas")
+sprite_frames = ExtResource("frames")
+animation = &"andar_s"
 centered = false
 offset = Vector2(-48, -72)
 
