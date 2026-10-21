@@ -418,6 +418,32 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        con letras; el porrazo cae en un fotograma algo distinto según la dirección.
      - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
+   - **Trozo 4: la modista** (21 oct, en marcha: el juego hecho y probado; faltan casi todas sus animaciones, ver
+     «Pendiente»). Lo que ha quedado:
+     - **Su tienda, el Taller de costura**, llena de maniquíes de cuerpo entero (unos 23) con su mismo vestido: un
+       mueble nuevo, `tallmannequin` (PixelLab, 1 generación), en filas por la sala y por las paredes ("jefe-modista"
+       en `catalogo.gd`). Decidido con el dueño: mejor que el busto de la tienda de ropa, que es más bajo que ella.
+     - **Ella** (`scripts/modista.gd`), con los números del plan. Detalles decididos al hacerlo: al entrar ya está
+       escondida en el sitio de un maniquí. Escondida se queda de frente y quieta, sin hacer daño al tocarla; si
+       Johnny se acerca a menos de 130 o le pega, da un respingo («¡SSSS!») y salta con el tijeretazo o los
+       alfileres. Se cambia de sitio cada 7 s (enfadada, 4,5) con un maniquí lejos de Johnny: le brillan los ojos
+       0,6 s (si le pegas entonces, no se va) y otra vez un momento al llegar. La ráfaga son 5 alfileres (7
+       enfadada) con una raya en el suelo que sigue a Johnny hasta 0,2 s antes de tirar. Los alfileres y el brillo
+       de los ojos, dibujados con código (el brillo se ve también a oscuras).
+     - **Los maniquíes que cobran vida** (`scripts/maniqui_vivo.gd`): al enfadarse, 3 de los de la tienda (si no
+       hay, aparecen a su alrededor). Tiemblan al despertar; solo se mueven (a 165, bamboleándose) cuando no están
+       delante de Johnny o hay algo en medio; si te tocan moviéndose, 10. Vida 45; al caer la modista se caen todos.
+     - Tecla de prueba **T**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro --jefe
+       modista` la saca en la 1ª planta, cuenta los maniquíes, la cambia de sitio, despierta a tres y hace
+       `captura-jefe.png` con ella tirando alfileres.
+     - **Su dibujo:** el modelo, delgado, se quedó así (lo decidió el dueño). Piel corregida con `piel.py` (ahora
+       admite la fila de los zapatos y la saturación máxima, para no tocar la cinta métrica) y subida como personaje
+       nuevo (0,25). Animaciones con la receta del antidisturbios: andar, alfileres, tijeretazo, golpe (el respingo
+       al pillarla) y muerte; la prueba hacia la derecha salió bien (el tijeretazo lleva un tajo blanco que se ha
+       dejado: se lee como el corte). Detalle en `assets/pixellab.json` → `centro-comercial-parte4` → `trozo4`.
+     - **Pendiente:** las demás direcciones de cada animación (33 generaciones; el tijeretazo hacia abajo y abajo a
+       la derecha ya están lanzados; PixelLab estaba casi siempre lleno con las otras sesiones), montar la hoja (`py tools/jefe_hoja.py modista-72 jefe-modista`, poner el `offset` que
+       diga en `modista.tscn`) y ajustar `CORTA` y `LANZA` en `modista.gd` si el golpe cae en otro fotograma.
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.

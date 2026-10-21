@@ -12,8 +12,8 @@
   `ui/hud.gd`; el minimapa, `minimapa.gd`; la pausa y el final, `ui/menus.gd`.
 - `salas/`: la sala de pruebas de las fases 1-3 (`bano.tscn` y `bano_tileset.tres`: las piezas y cuáles chocan).
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
-  y los minijefes del centro comercial (`antidisturbios.tscn`).
-- `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera), `proyectil.tscn`
+  y los minijefes del centro comercial (`antidisturbios.tscn`, `modista.tscn`).
+- `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera y alfileres de la modista), `proyectil.tscn`
   (moco y botella de lejía, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
   `luz_suave.tres` (el degradado de todas).
@@ -47,7 +47,9 @@
 - `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
   vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir). Cada uno hereda y pone
   sus ataques: `antidisturbios.gd` (escudo por delante y doble por la espalda, porrazo, carga que le atonta si se
-  estrella, silbato). Las explosiones les dan "de lleno" (`explosion.gd`); a Johnny la carga le pone el estado
+  estrella, silbato) y `modista.gd` (se esconde entre los maniquíes de su tienda y se cambia de sitio con uno,
+  alfileres, tijeretazo; enfadada, despierta 3 maniquíes: `maniqui_vivo.gd`, que solo se mueven si Johnny no los
+  mira). Las explosiones les dan "de lleno" (`explosion.gd`); a Johnny la carga le pone el estado
   "tirado" (`estados.gd`).
 - `bala_zombi.gd`, `proyectil.gd` (moco, lejía y ácido en parábola), `explosion.gd`.
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes (con lo de su
@@ -60,7 +62,7 @@
   (`orden_jefes`, `jefe_de()`; si aún no está hecho, la portera) y `planta.gd` lo apunta en `planta.jefe` y `el_jefe`.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
-  centro comercial; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
+  centro comercial, y con `--jefe <nombre>`, el minijefe de la 1ª planta, por defecto el antidisturbios; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
   `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`, y las de los peligros: `captura-peligro-<...>.png`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 17 objetos, mochila, baúl, lo que sueltan los
   zombis), `recetas.gd` (15 recetas y rarezas), `billete.gd`, `minimapa.gd`.
@@ -91,7 +93,8 @@
 **mapa/**
 - `apartamento.gd` (genera un apartamento como `apartment.js`), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
-  exposición), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"), `muebles.gd`
+  exposición), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
+  tiene la suya: "jefe-modista"), `muebles.gd`
   (dónde va cada uno; en las salas de venta, también filas en medio: `islas`), `mueble.gd` (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, peligros, niebla, navegación). Los suelos y
   paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas) y `PASILLOS` (el pasillo de cada
@@ -115,10 +118,11 @@
 ## tools/
 
 `hacer_frames.py` (hoja → animaciones); para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
-(la piel a verde; admite otro tono de origen), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
+(la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
-`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`; alinea por los pies los lienzos de PixelLab, borra
+`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, o `modista-72 jefe-modista`; las animaciones de
+cada uno, en `ANIMS_DE`; alinea por los pies los lienzos de PixelLab, borra
 las motas sueltas y dice el `offset` del Sprite; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
