@@ -1353,5 +1353,70 @@
       "resto-agujero": "d2183864"
     },
     "descartados": "la primera tanda de muebles (limpios, y la mitad girados en diagonal), el carrito de la compra (tres intentos, siempre en diagonal: no está en el juego), los muebles altos de lado (góndola y taquillas: vistos desde arriba son una barra que no se entiende; van solo en la pared del fondo) y los escaparates de la primera tanda (con puerta y acera, sin romper)"
+  },
+  "centro-comercial-parte4": {
+    "kind": "characters",
+    "fecha": "2026-10-21",
+    "nota": "Parte 4 del centro comercial (docs/CENTRO_COMERCIAL.md, 'Decidido con el dueño'). Solo los modelos de prueba (8 vistas, create_character_pro_flash, view low top-down, style_options sin color_palette salvo el mutado); con el visto bueno del dueño y de un amigo suyo. Vistas en assets/sources/<nombre>/rotations/. Pegas: la dependienta y la modista salieron con la piel beige (corregir con piel.py antes de animar); la sangre del vigilante, roja viva (oscurecer al montar). El dueño pidió la mascota al tamaño de los otros minijefes (rehacerla en lienzo de 72 a partir de esta) y también la portera. Aún sin animaciones.",
+    "coste": "54 generaciones (6 cada uno de 48 y 72; 8 cada uno de 128)",
+    "piezas": {
+      "vigilante-48": {
+        "character_id": "4aaccb8b-61c8-4f56-a560-aa9a3c00ba67",
+        "size": "48x48",
+        "estilo": "south del zombi normal (assets/sources/zombi-normal-48 del juego JS): 'Match the pixel art style of this zombie: same outline thickness, same level of detail and shading, same body size and proportions, same rotting skin. Do not copy his clothes, hair or colors.'",
+        "alto_px": 46,
+        "description": "adult male zombie security guard of a shopping mall, realistic adult body proportions, tall and broad-shouldered, small head, sickly grey-green rotting skin, sunken dark eye sockets with pale dead eyes, open mouth with dark blood around the jaw, black peaked security guard cap with a small silver badge, dark navy blue short-sleeved uniform shirt with a silver badge on the chest and a black radio clipped to the shoulder, shirt torn and stained with dried blood, black trousers, black belt with a black baton hanging at his hip, black boots, slightly hunched posture with the head tilted, arms hanging limp at his sides, empty hands, detailed shading"
+      },
+      "dependienta-48": {
+        "character_id": "baa9688f-1d49-4a16-b106-a8d3fd648505",
+        "size": "48x48",
+        "estilo": "south del zombi normal (assets/sources/zombi-normal-48 del juego JS): 'Match the pixel art style of this zombie: same outline thickness, same level of detail and shading, same body size and proportions, same rotting skin. Do not copy his clothes, hair or colors.'",
+        "alto_px": 46,
+        "description": "adult female zombie shop assistant from a shopping mall, realistic adult body proportions, slim, small head, sickly grey-green rotting skin, sunken dark eye sockets with pale dead eyes, wide open screaming mouth with dark blood around the jaw, dark brown hair tied in a messy ponytail, bright red short-sleeved uniform polo shirt with a small white name tag on the chest, a dark blue lanyard with a white ID card around her neck, polo torn and stained with dried blood, black trousers, black flat shoes, slightly hunched posture with the head tilted, arms hanging limp at her sides, empty hands, detailed shading"
+      },
+      "antidisturbios-72": {
+        "character_id": "43c798aa-5e6c-4062-9918-b2943c88545a",
+        "size": "72x72",
+        "estilo": "south del zombi venenoso 72: 'Match the pixel art style of this zombie: same outline thickness, same pixel size, same level of detail and shading, same rotting skin. Do not copy his body shape, clothes or colors.'",
+        "alto_px": 71,
+        "description": "a huge riot police zombie boss, about 68 pixels tall and broad, black riot helmet with a cracked clear visor pushed up showing a sickly grey-green rotting zombie face with pale dead eyes and a bloody mouth, black padded body armor vest over a dark navy uniform with torn sleeves, black shoulder pads and knee pads, heavy black boots, holding a large tall rectangular clear transparent riot shield with a black rim in front of his body with his left arm (you can see his body through the shield), the shield is cracked and smeared with blood, a black baton in his right hand, standing wide and menacing, crisp pixel art, dark outline, detailed shading"
+      },
+      "cocinero-72": {
+        "character_id": "ffe46fdf-d65d-4323-ab41-a0dc2f829706",
+        "size": "72x72",
+        "estilo": "south del zombi venenoso 72: 'Match the pixel art style of this zombie: same outline thickness, same pixel size, same level of detail and shading, same rotting skin. Do not copy his body shape, clothes or colors.'",
+        "alto_px": 71,
+        "description": "a huge fat zombie chef boss, about 68 pixels tall and 56 pixels wide, very big round belly, sickly grey-green rotting skin, pale dead eyes, open mouth with jagged teeth and blood on his chin, tall white chef's hat crumpled and stained with blood, white double-breasted chef jacket torn and covered in blood and grease stains, dark grey checkered chef trousers, black clogs, a dirty apron stained red tied around his belly, holding a big butcher's meat cleaver in his right hand, kitchen knives tucked in his apron belt, standing wide and hunched, menacing, crisp pixel art, dark outline, detailed shading"
+      },
+      "modista-72": {
+        "character_id": "96746c5e-bf41-4e5f-9d04-416616a0c382",
+        "size": "72x72",
+        "estilo": "south del zombi venenoso 72: 'Match the pixel art style of this zombie: same outline thickness, same pixel size, same level of detail and shading, same rotting skin. Do not copy his body shape, clothes or colors.'",
+        "alto_px": 71,
+        "description": "a tall thin zombie woman boss, the manager of a fashion boutique, about 68 pixels tall, very slim and elongated, sickly grey-green rotting skin, pale glowing dead eyes, black hair pulled into a tight bun with loose strands over her face, a long elegant deep burgundy red evening dress torn at the hem and stained with blood, a yellow tailor's measuring tape hanging around her neck, a red pincushion on her left wrist, long thin bloody fingers, holding a big pair of silver tailor's scissors in her right hand, black high heels, standing very upright and stiff like a shop mannequin, eerie and menacing, crisp pixel art, dark outline, detailed shading"
+      },
+      "mascota-128": {
+        "character_id": "15041131-8e73-4f2a-aab2-a8541fa5b714",
+        "size": "128x128",
+        "estilo": "south de la portera (128): 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading. Do not copy her body, clothes, mop or colors.'",
+        "alto_px": 127,
+        "nota": "Demasiado grande (más que la portera): rehacerla en 72 usando esta como referencia.",
+        "description": "a giant shopping mall mascot costume boss: a huge plush teddy bear costume about 100 pixels tall, dirty faded mustard-yellow fur, matted and torn, white stuffing coming out of the rips, blood stains, a round belly with a faded round patch, the big cartoon bear head is torn open at the neck and tilted back, and through the hole you see the real face of a zombie inside with sickly grey-green rotting skin, pale dead eyes and a bloody mouth, big round bear ears (one of them ripped), huge padded paws with dirty claws poking through the fabric, short thick legs, standing hunched forward and menacing, crisp pixel art, dark outline, detailed shading"
+      },
+      "gerente-128": {
+        "character_id": "9cf9e727-09b7-46a3-a7d1-3363792ab173",
+        "size": "128x128",
+        "estilo": "south de la portera (128): 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading. Do not copy her body, clothes, mop or colors.'",
+        "alto_px": 117,
+        "description": "a tall zombie shopping mall general manager boss, about 96 pixels tall, broad shoulders, sickly grey-green rotting skin, slicked-back grey hair now messy, pale dead eyes, a cruel bloody grin, an expensive dark charcoal grey business suit torn and stained with blood, white shirt with a loosened red tie, a lanyard with a corporate ID badge with a green leaf logo around his neck, holding a black leather briefcase in his right hand, polished black shoes, standing upright, arrogant and menacing, crisp pixel art, dark outline, detailed shading"
+      },
+      "gerente-mutado-128": {
+        "character_id": "2ae497f1-67b6-43d5-a69c-e65ec2cc9476",
+        "size": "128x128",
+        "alto_px": 127,
+        "estilo": "south del gerente-128 (color_palette true): 'This is the same man before mutating. Keep his face, grey hair, suit and tie colors, ID badge, pixel size, outline and shading style. Make him bigger, mutated and monstrous as described.'",
+        "description": "the same zombie mall manager as the reference, after injecting himself with an experimental drug and mutating into a monster: much bigger and bulkier, about 116 pixels tall filling the canvas, swollen muscles that have ripped his charcoal grey suit jacket apart at the shoulders and back, shreds of the jacket and his torn bloody white shirt hanging, his red tie still around his neck, the same messy grey hair and the same corporate ID badge with a green leaf logo, sickly grey-green skin covered in bulging purple veins, four long thick purple tentacles bursting out of his back and curling around him, his right arm enlarged into a huge clawed hand, glowing pale yellow eyes, a huge mouth with jagged teeth dripping blood, torn charcoal trousers, bare clawed feet, hunched forward and enraged, crisp pixel art, dark outline, detailed shading"
+      }
+    }
   }
 }
