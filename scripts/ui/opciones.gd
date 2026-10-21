@@ -1,5 +1,6 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene dos pestañas:
-#   - General: el modo de atacar (se guarda), la música, el sonido y la pantalla completa.
+#   - General: el modo de atacar (se guarda), la música, el sonido y la pantalla completa. En el móvil,
+#     además, el tamaño y la transparencia de los botones táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
 #     En el móvil, qué hace cada botón táctil.
@@ -50,6 +51,12 @@ const TACTIL := [
 	["Molotov o granada", "El botoncito de al lado de lanzar"],
 	["Modo, inventario y pausa", "Los botones de debajo del minimapa"],
 ]
+
+# Los ajustes del móvil (tactil.gd): los valores por los que va pasando cada botón, con su nombre.
+# Más de 1,4 no cabe: los botones del arco chocarían con los de debajo del minimapa
+const TAMANOS := [[0.8, "Pequeño"], [1.0, "Normal"], [1.2, "Grande"], [1.4, "Muy grande"]]
+const OPACIDADES := [[1.0, "100 %"], [0.75, "75 %"], [0.5, "50 %"], [0.3, "30 %"]]
+const SI_NO := [[true, "Sí"], [false, "No"]]
 
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -200,6 +207,32 @@ func general() -> void:
 		sonido.text = texto_sonido())
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		opcion("Pantalla completa").pressed.connect(Tactil.pantalla_completa)
+	if Tactil.activo:
+		var titulo := Label.new()
+		titulo.theme_type_variation = "Sub"
+		titulo.text = "Móvil"
+		titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		contenido.add_child(titulo)
+		rotar("Tamaño de los botones", "tactil_tamano", TAMANOS)
+		rotar("Transparencia", "tactil_opacidad", OPACIDADES)
+		rotar("Vibración", "vibracion", SI_NO)
+
+
+# Un botón que, a cada pulsación, pasa al siguiente valor de la lista, lo guarda en los ajustes y se lo
+# dice a los botones táctiles (se nota al momento, también al volver de la pausa)
+func rotar(nombre: String, clave: String, valores: Array) -> void:
+	var cual := func() -> int:
+		var actual = Guardado.cargar().ajustes[clave]
+		for i in valores.size():
+			if str(valores[i][0]) == str(actual):   # con str: el guardado trae los números con decimales
+				return i
+		return 0
+	var b := opcion("%s: %s" % [nombre, valores[cual.call()][1]])
+	b.pressed.connect(func():
+		var nuevo: Array = valores[(cual.call() + 1) % valores.size()]
+		Guardado.cambiar(func(g): g.ajustes[clave] = nuevo[0])
+		Tactil.ajustar()
+		b.text = "%s: %s" % [nombre, nuevo[1]])
 
 
 # Los nombres de los modos están en johnny.gd (MODOS)

@@ -295,6 +295,7 @@ func esquivar(pedido: Vector2) -> void:
 	invulnerable = maxf(invulnerable, 0.3)
 	estela_t = 0.0
 	Sonido.tocar("esquiva")
+	Tactil.vibracion()
 
 
 # Una copia de Johnny, azulada y medio transparente, que se queda atrás y se apaga
@@ -715,6 +716,7 @@ func recibir_dano(cantidad: int) -> void:
 		dano = maxi(1, roundi(dano - parado))
 	Sonido.tocar("dano")
 	Temblor.temblar(9.0)
+	Tactil.vibracion()
 	quitar_vida(dano)
 
 

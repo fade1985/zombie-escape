@@ -31,7 +31,9 @@ const NUEVO := {
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
-	"ajustes": {"musica": true, "modo": "asistido", "teclas": {}},
+	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
+	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
+		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true},
 }
 
 const EDIFICIO := {"completado": false, "partidas": 0, "victorias": 0, "mejor_planta": 0, "mejor_tiempo": 0.0}

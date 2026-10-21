@@ -8,6 +8,8 @@
 #   - Bajo el minimapa: cambiar el modo de atacar, el inventario y la pausa.
 # Los botones "pulsan" las mismas acciones que el teclado y el mando (eventos de acción), así que Johnny y
 # los lanzables no saben si es un dedo o una tecla.
+# En Opciones se cambian el tamaño de los botones (también lo que ocupa cada uno al tocarlo), lo
+# transparentes que son y si el móvil vibra al recibir un golpe y al esquivar (ajustes del guardado).
 # Solo sale en pantallas táctiles y solo mientras se juega: en la pausa y en las pantallas (inventario, baúl,
 # ordenador...) se esconde, y allí el dedo hace de ratón. Mientras se juega, el toque NO hace de ratón (si
 # no, cada toque del joystick sería un clic de atacar).
@@ -20,10 +22,15 @@ const OSCURO := Color(0.06, 0.05, 0.09, 0.55)
 const BORDE := Color(0.85, 0.82, 0.74, 0.5)
 
 static var activo := false     # si la pantalla es táctil (se decide una vez y vale para todas las escenas)
+# Los ajustes de Opciones (se leen del guardado con ajustar(), al arrancar y cada vez que se cambian)
+static var escala := 1.0       # tamaño de los botones: 1 = normal
+static var opacidad := 1.0     # 1 = como siempre, 0,3 = casi transparentes
+static var vibrar := true      # si vibra al recibir un golpe y al esquivar
 
 var partida: Node
 var johnny: Node2D
-var lienzo := Control.new()    # donde se dibuja todo
+var lienzo := Control.new()    # donde se dibujan los botones (con su transparencia)
+var aviso := Control.new()     # el "gira el móvil", que no se vuelve transparente
 var dedos := {}                # cada dedo en la pantalla (su índice) → qué está haciendo: "joy", "apunte", o un botón
 var joy_origen := Vector2.ZERO # dónde se tocó para el joystick izquierdo
 var joy := Vector2.ZERO        # cómo de empujado está (de -1 a 1)
@@ -50,6 +57,21 @@ static func puede_pantalla_completa() -> bool:
 	return true
 
 
+# Lee los ajustes del móvil del guardado (lo llama Opciones al cambiarlos: se notan al momento)
+static func ajustar() -> void:
+	var a: Dictionary = Guardado.cargar().ajustes
+	escala = float(a.tactil_tamano)
+	opacidad = float(a.tactil_opacidad)
+	vibrar = bool(a.vibracion)
+
+
+# Una vibración cortita (al recibir un golpe y al esquivar), solo en el móvil y si está puesta. En la web
+# usa la del navegador (en iPhone no hay, y no pasa nada)
+static func vibracion() -> void:
+	if activo and vibrar:
+		Input.vibrate_handheld(35)
+
+
 static func pantalla_completa() -> void:
 	var completa := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED if completa else DisplayServer.WINDOW_MODE_FULLSCREEN)
@@ -59,10 +81,13 @@ func _ready() -> void:
 	layer = 5   # por encima del HUD, por debajo de los menús
 	process_mode = Node.PROCESS_MODE_ALWAYS   # también en la pausa, para esconderse
 	preparar(get_tree())
-	lienzo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	lienzo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ajustar()
+	for c in [lienzo, aviso]:
+		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		c.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(c)
 	lienzo.draw.connect(dibujar)
-	add_child(lienzo)
+	aviso.draw.connect(dibujar_aviso)
 
 
 func _exit_tree() -> void:
@@ -85,7 +110,9 @@ func _process(_delta: float) -> void:
 	Input.emulate_mouse_from_touch = not ver
 	if ver:
 		johnny.con_raton = false   # que no apunte al último sitio tocado en un menú
+	lienzo.modulate.a = opacidad   # la transparencia: a todo lo del lienzo (fondos, bordes, iconos)
 	lienzo.queue_redraw()
+	aviso.queue_redraw()
 
 
 func _physics_process(_delta: float) -> void:
@@ -102,29 +129,37 @@ func tamano() -> Vector2:
 	return lienzo.get_viewport_rect().size
 
 
+# Todas las medidas de los botones van por "escala" (el tamaño elegido en Opciones): el dibujo y lo que
+# ocupa cada uno al tocarlo. Más grandes, también se separan más y se apartan más del borde
+func radio_joy() -> float:
+	return RADIO_JOY * escala
+
+
 # El centro del botón grande de abajo a la derecha (atacar o joystick derecho)
 func centro() -> Vector2:
-	var s := tamano()
-	return Vector2(s.x - 140, s.y - 140)
+	return tamano() - Vector2(140, 140) * escala
 
 
 # Los botones: nombre → [centro, radio]. Las armas, esquivar y lanzar, en arco alrededor del grande
 func botones() -> Dictionary:
 	var c := centro()
 	var s := tamano()
-	var en_arco := func(grados: float, r: float) -> Vector2: return c + Vector2.from_angle(deg_to_rad(grados)) * r
+	var k := escala
+	var en_arco := func(grados: float, r: float) -> Vector2: return c + Vector2.from_angle(deg_to_rad(grados)) * r * k
+	# los de debajo del minimapa: pegados a la derecha y con el borde de arriba siempre a la misma altura
+	var bajo_mapa := func(desde_derecha: float) -> Vector2: return Vector2(s.x - desde_derecha * k, 128.0 + 22.0 * k)
 	var b := {
-		"esquivar": [en_arco.call(180.0, 140.0), 44.0],
-		"cuerpo": [en_arco.call(218.0, 145.0), 34.0],
-		"fuego": [en_arco.call(252.0, 145.0), 34.0],
-		"lanzar": [en_arco.call(288.0, 145.0), 38.0],
-		"cambiar_lanzable": [en_arco.call(288.0, 145.0) + Vector2(56, -24), 20.0],
-		"modo": [Vector2(s.x - 150, 150), 22.0],
-		"inventario": [Vector2(s.x - 97, 150), 22.0],
-		"pausa": [Vector2(s.x - 44, 150), 22.0],
+		"esquivar": [en_arco.call(180.0, 140.0), 44.0 * k],
+		"cuerpo": [en_arco.call(218.0, 145.0), 34.0 * k],
+		"fuego": [en_arco.call(252.0, 145.0), 34.0 * k],
+		"lanzar": [en_arco.call(288.0, 145.0), 38.0 * k],
+		"cambiar_lanzable": [en_arco.call(288.0, 145.0) + Vector2(56, -24) * k, 20.0 * k],
+		"modo": [bajo_mapa.call(150.0), 22.0 * k],
+		"inventario": [bajo_mapa.call(97.0), 22.0 * k],
+		"pausa": [bajo_mapa.call(44.0), 22.0 * k],
 	}
 	if johnny.modo == "mira":
-		b["atacar"] = [c, 62.0]
+		b["atacar"] = [c, 62.0 * k]
 	return b
 
 
@@ -151,12 +186,12 @@ func tocar(dedo: int, donde: Vector2) -> void:
 	# ¿Un botón? (con un poco de margen, que el dedo es gordo)
 	var b := botones()
 	for nombre in b:
-		if donde.distance_to(b[nombre][0]) <= b[nombre][1] + 10.0:
+		if donde.distance_to(b[nombre][0]) <= b[nombre][1] + 10.0 * escala:
 			dedos[dedo] = nombre
 			pulsar(nombre, true)
 			return
 	# El joystick derecho del modo libre: alrededor del botón grande
-	if johnny.modo == "libre" and donde.distance_to(centro()) <= RADIO_JOY * 1.5 and not "apunte" in dedos.values():
+	if johnny.modo == "libre" and donde.distance_to(centro()) <= radio_joy() * 1.5 and not "apunte" in dedos.values():
 		dedos[dedo] = "apunte"
 		arrastrar(dedo, donde)
 		return
@@ -170,10 +205,10 @@ func tocar(dedo: int, donde: Vector2) -> void:
 func arrastrar(dedo: int, donde: Vector2) -> void:
 	match dedos[dedo]:
 		"joy":
-			joy = ((donde - joy_origen) / RADIO_JOY).limit_length(1.0)
+			joy = ((donde - joy_origen) / radio_joy()).limit_length(1.0)
 			ejes("", joy)
 		"apunte":
-			apunte = ((donde - centro()) / RADIO_JOY).limit_length(1.0)
+			apunte = ((donde - centro()) / radio_joy()).limit_length(1.0)
 			ejes("apuntar", apunte)
 		"lanzar":
 			apunte = ((donde - botones().lanzar[0]) / ARRASTRE_LANZAR).limit_length(1.0)
@@ -263,30 +298,35 @@ func soltar_todo() -> void:
 
 # ── El dibujo ──
 
-func dibujar() -> void:
+func dibujar_aviso() -> void:
 	var s := tamano()
 	if s.y > s.x:
-		texto(Vector2(s.x / 2, s.y / 2), "Gira el móvil para jugar mejor", 24, Tema.TINTA)
+		texto(aviso, Vector2(s.x / 2, s.y / 2), "Gira el móvil para jugar mejor", 24, Tema.TINTA)
+
+
+func dibujar() -> void:
+	var esc := escala
+	var rj := radio_joy()
 	# El joystick izquierdo, donde se tocó
 	if "joy" in dedos.values():
-		lienzo.draw_circle(joy_origen, RADIO_JOY, OSCURO)
-		lienzo.draw_arc(joy_origen, RADIO_JOY, 0, TAU, 48, BORDE, 2.0)
-		lienzo.draw_circle(joy_origen + joy * RADIO_JOY, 28.0, Color(0.85, 0.82, 0.74, 0.6))
+		lienzo.draw_circle(joy_origen, rj, OSCURO)
+		lienzo.draw_arc(joy_origen, rj, 0, TAU, 48, BORDE, 2.0)
+		lienzo.draw_circle(joy_origen + joy * rj, 28.0 * esc, Color(0.85, 0.82, 0.74, 0.6))
 	# El joystick derecho (modo libre), siempre a la vista
 	if johnny.modo == "libre":
 		var c := centro()
-		lienzo.draw_circle(c, RADIO_JOY, OSCURO)
-		lienzo.draw_arc(c, RADIO_JOY, 0, TAU, 48, Color(Tema.ROJO, 0.6), 2.0)
+		lienzo.draw_circle(c, rj, OSCURO)
+		lienzo.draw_arc(c, rj, 0, TAU, 48, Color(Tema.ROJO, 0.6), 2.0)
 		var mover := apunte if "apunte" in dedos.values() else Vector2.ZERO
-		lienzo.draw_circle(c + mover * RADIO_JOY, 28.0, Color(Tema.ROJO, 0.55))
-		icono(c + mover * RADIO_JOY, "diana", 32)
+		lienzo.draw_circle(c + mover * rj, 28.0 * esc, Color(Tema.ROJO, 0.55))
+		icono(c + mover * rj, "diana", 32 * esc)
 	var b := botones()
 	var lz: Lanzables = partida.lanzables
 	for nombre in b:
 		var donde: Vector2 = b[nombre][0]
 		var r: float = b[nombre][1]
 		if pulsados.has(nombre):
-			donde += Vector2(0, 3)   # hundido
+			donde += Vector2(0, 3) * esc   # hundido
 		var borde := BORDE
 		if nombre == johnny.mano:
 			borde = Color(Tema.AMARILLO, 0.9)
@@ -296,34 +336,34 @@ func dibujar() -> void:
 		lienzo.draw_arc(donde, r, 0, TAU, 40, borde, 2.5 if nombre == johnny.mano else 2.0)
 		match nombre:
 			"esquivar":
-				icono(donde, "dash", 52)
+				icono(donde, "dash", 52 * esc)
 				if johnny.esquiva_espera > 0.0:
 					lienzo.draw_circle(donde, r, Color(0, 0, 0, 0.45))
 			"cuerpo", "fuego":
-				icono(donde, Objetos.icono(johnny.huecos[nombre]), 40)
+				icono(donde, Objetos.icono(johnny.huecos[nombre]), 40 * esc)
 				# recargando: un aro blanco que se va llenando (como en el JS)
 				if nombre == "fuego" and johnny.recargando > 0.0:
 					var w: Dictionary = Armas.datos(johnny.huecos.fuego)
 					var hecho: float = 1.0 - johnny.recargando / maxf(0.01, w.get("recarga", 1.0))
-					lienzo.draw_arc(donde, r + 4, -PI / 2, -PI / 2 + TAU * clampf(hecho, 0, 1), 32, Color.WHITE, 3.0)
+					lienzo.draw_arc(donde, r + 4 * esc, -PI / 2, -PI / 2 + TAU * clampf(hecho, 0, 1), 32, Color.WHITE, 3.0)
 			"lanzar":
 				var k: String = lz.tipo
 				var ico: String = k if k in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[k].icono)
-				icono(donde, ico, 40)
-				texto(donde + Vector2(r * 0.6, r * 0.75), str(lz.cuantas(k)), 16, Tema.TINTA)
+				icono(donde, ico, 40 * esc)
+				texto(lienzo, donde + Vector2(r * 0.6, r * 0.75), str(lz.cuantas(k)), roundi(16 * esc), Tema.TINTA)
 			"cambiar_lanzable":
 				# el que vendría después (el ⇄ del JS: la fuente pixel art no tiene flechas)
 				var ks := lz.tipos()
 				var otro: String = ks[(ks.find(lz.tipo) + 1) % ks.size()]
-				icono(donde, otro if otro in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[otro].icono), 22)
+				icono(donde, otro if otro in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[otro].icono), 22 * esc)
 			"atacar":
-				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56)
+				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56 * esc)
 			"modo":
-				icono(donde, "diana", 26)
+				icono(donde, "diana", 26 * esc)
 			"inventario":
-				icono(donde, "mochila", 26)
+				icono(donde, "mochila", 26 * esc)
 			"pausa":
-				icono(donde, "pausa", 26)
+				icono(donde, "pausa", 26 * esc)
 	# Mientras se apunta desde lanzar, hasta dónde se ha arrastrado
 	if "lanzar" in dedos.values():
 		var desde: Vector2 = b.lanzar[0]
@@ -344,8 +384,8 @@ func icono(donde: Vector2, nombre: String, lado: float) -> void:
 	lienzo.draw_texture_rect(t, Rect2(donde - tam / 2, tam), false)
 
 
-func texto(donde: Vector2, que: String, tam: int, color: Color) -> void:
+func texto(en: Control, donde: Vector2, que: String, tam: int, color: Color) -> void:
 	var ancho := Tema.FUENTE.get_string_size(que, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x
 	var pos := donde + Vector2(-ancho / 2, tam * 0.35)
-	lienzo.draw_string_outline(Tema.FUENTE, pos, que, HORIZONTAL_ALIGNMENT_LEFT, -1, tam, 4, Tema.LINEA)
-	lienzo.draw_string(Tema.FUENTE, pos, que, HORIZONTAL_ALIGNMENT_LEFT, -1, tam, color)
+	en.draw_string_outline(Tema.FUENTE, pos, que, HORIZONTAL_ALIGNMENT_LEFT, -1, tam, 4, Tema.LINEA)
+	en.draw_string(Tema.FUENTE, pos, que, HORIZONTAL_ALIGNMENT_LEFT, -1, tam, color)

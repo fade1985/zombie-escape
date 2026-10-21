@@ -35,6 +35,14 @@ esquivar, las dos armas (tocar la otra la saca; tocar la de fuego en la mano rec
 con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa. En los menús el dedo hace de
 ratón. En táctil la pantalla se agranda sin redondear (si no, en móviles con muchos píxeles se quedaría en 1×).
 
+En Opciones → General, solo en táctil, apartado **Móvil** (se guarda en `ajustes` y se nota al momento, también
+al volver de la pausa):
+- **Tamaño de los botones:** Pequeño 0,8 · Normal 1 · Grande 1,2 · Muy grande 1,4. Cambia el dibujo y la zona de
+  toque de los joysticks, el arco y los botones de bajo el minimapa (más de 1,4 choca con el minimapa).
+- **Transparencia:** 100 %, 75 %, 50 % o 30 % (fondos, bordes e iconos; el "gira el móvil" no).
+- **Vibración:** Sí/No. Una vibración de 35 ms al recibir un golpe y al esquivar (`Input.vibrate_handheld`; en la
+  web usa la del navegador, que en iPhone no hay).
+
 Probarlo en el navegador integrado: menos de 768 de ancho (p. ej. 740×360) y toques con `TouchEvent` desde
 JavaScript (los clics llegan como ratón).
 
