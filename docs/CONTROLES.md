@@ -12,6 +12,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
 - **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
+- **Elige edificio:** debajo de cada tarjeta, **<** y **>** cambian el nivel de alerta (de los abiertos; se
+  recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5.
 
 ## Teclas de prueba
 
@@ -23,6 +25,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
   la planta con su tienda y te lleva a ella, ya sin zombis. Con uno ya rescatado en la partida, no hace nada.
+
+**Pruebas sin jugar** (se añaden detrás de `--path . -- --captura`; ver CLAUDE.md):
+- `--edificio centro`: en el centro comercial. `--fotos-tiendas`: una foto de cada tienda y de los peligros.
+- `--alerta N` (1 a 5): en vez de la prueba larga, la de los niveles de alerta: dice en la terminal los números de
+  cada regla (zombis, velocidad, jefe, botiquín, oído, rarezas del banco, guardia o vecino de la llave) y saca
+  `captura-alerta.png` (el aviso del principio), `captura-alerta-llave.png` (el guardia o, en los Apartamentos, el
+  vecino de la llave) y `captura-alerta-fin.png`; la foto de "Elige edificio" sale con las alertas abiertas.
 
 ## La sala de mantenimiento
 

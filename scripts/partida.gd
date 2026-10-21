@@ -171,6 +171,9 @@ func _ready() -> void:
 	captura = "--captura" in OS.get_cmdline_user_args()
 	if captura:
 		Guardado.archivo = "user://guardado-prueba.json"   # la prueba no toca el guardado de verdad
+		# con "--alerta 5", la prueba se juega con esa alerta (alerta.gd); sin él, sin alerta
+		var args := OS.get_cmdline_user_args()
+		Alerta.nivel = int(args[args.find("--alerta") + 1]) if args.find("--alerta") >= 0 and args.find("--alerta") + 1 < args.size() else 0
 	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
 	var s := Guardado.cambiar(func(g):
 		g.partidas += 1
@@ -196,11 +199,16 @@ func _ready() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	if captura and "--fotos-tiendas" in OS.get_cmdline_user_args():
 		fotos_tiendas()
+	elif captura and Alerta.nivel > 0:
+		set_process(false)   # sin la prueba larga
+		probar_alerta()
 	elif captura:
 		contar_planta()
 	else:
 		set_process(false)
-		decir("%s: %s" % [planta.nombre, ed.objetivo], 4.0)
+		decir("%s: %s%s" % [planta.nombre, ed.objetivo, "
+%s: %s" % [Alerta.nombre(), Alerta.REGLAS[Alerta.nivel]]
+			if Alerta.nivel > 0 else ""], 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 
@@ -328,6 +336,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		var zombi := meter_zombi(z.tipo, z.pos)
 		zombi.dormido = true
 		zombi.zona = mapa.zona_en(z.pos)
+		if z.get("llave", false):
+			vecino_de_la_llave(zombi)
 	if sitio.tipo == "pasillo" and planta.get("guardia", {}).get("vivo", false):
 		poner_guardia()
 	cerrada = false
@@ -553,7 +563,7 @@ func poner_guardia() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var puntas := [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
 	guardia = meter_zombi("guardia", mapa.punto_libre(johnny.position, 500.0))
-	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)))   # cada planta, algo más duro
+	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())   # cada planta, algo más duro
 	guardia.vida = guardia.vida_max if g.vida < 0 else g.vida
 	guardia.puntas = puntas
 	guardia.alerta = g.alerta
@@ -588,6 +598,27 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 	planta.llave = {"sitio": aqui, "pos": zombi.position}
 	mapa.call_deferred("poner_llave", zombi.position, true)
 	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso", 3.0)
+
+
+# Con la Alerta 5, en los Apartamentos: el vecino que lleva la llave (planta.gd) aguanta el doble, como el guardia,
+# y lleva la llave flotando encima. Al caer la suelta donde estaba
+func vecino_de_la_llave(zombi: Node2D) -> void:
+	zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
+	zombi.vida = zombi.vida_max
+	zombi.set_meta("llave", true)
+	var llave := Sprite2D.new()
+	llave.texture = MAPA.LLAVE
+	llave.scale = Vector2(2, 2)
+	llave.position = Vector2(0, -zombi.altura - 10)
+	zombi.add_child(llave)
+	var vaiven := llave.create_tween().set_loops()
+	vaiven.tween_property(llave, "position:y", -zombi.altura - 16, 0.6).set_trans(Tween.TRANS_SINE)
+	vaiven.tween_property(llave, "position:y", -zombi.altura - 10, 0.6).set_trans(Tween.TRANS_SINE)
+	zombi.murio.connect(func():
+		llave.hide()
+		planta.llave = {"sitio": aqui, "pos": zombi.position}
+		mapa.call_deferred("poner_llave", zombi.position)
+		decir("¡El vecino ha caído! Ha soltado la llave del " + nombre_jefa(), 3.0))
 
 
 # El nombre del apartamento de la jefa ("2ºC"...)
@@ -700,7 +731,7 @@ func coger_botiquin(armarito: Node2D) -> void:
 	if johnny.vida >= johnny.vida_tope():
 		numero(sitio_aviso, "Tienes la vida al máximo", Tema.TINTA)
 		return
-	var cura: int = BOTIQUIN + johnny.stats.botiquin_extra
+	var cura := cura_botiquin()
 	johnny.curar(cura)
 	armarito.vaciar()
 	Sonido.tocar("gema")
@@ -708,6 +739,11 @@ func coger_botiquin(armarito: Node2D) -> void:
 	for i in 12:
 		Particulas.soltar(armarito, armarito.global_position + Vector2(0, -50),
 			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
+
+
+# Lo que cura un botiquín (con la Alerta 4, la mitad)
+func cura_botiquin() -> int:
+	return roundi((BOTIQUIN + johnny.stats.botiquin_extra) * Alerta.botiquin())
 
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
@@ -759,6 +795,8 @@ func terminar(gano: bool, abandona := false) -> void:
 	else:
 		Sonido.jingle(gano)
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
+	var abierta := [0]      # la alerta que se abre al ganar (0: ninguna)
+	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var s := Guardado.cambiar(func(g):
 		# el superviviente rescatado en esta partida se viene a vivir a la sala de mantenimiento
@@ -772,11 +810,15 @@ func terminar(gano: bool, abandona := false) -> void:
 			# los objetos de la mochila pasan al baúl (si caes, se pierden)
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
-			g.dolares += dolares
-			g.dolares_total += dolares
+			g.dolares += dolares + extra
+			g.dolares_total += dolares + extra
 			g.victorias += 1
 			e.victorias += 1
 			e.completado = true
+			# completarlo con una alerta abre la siguiente (alerta.gd)
+			if Alerta.nivel >= e.alerta_max and Alerta.nivel < Alerta.MAX:
+				e.alerta_max = Alerta.nivel + 1
+				abierta[0] = e.alerta_max
 			if e.mejor_tiempo == 0.0 or duracion < e.mejor_tiempo:
 				e.mejor_tiempo = duracion
 				record[0] = true)
@@ -807,6 +849,9 @@ func terminar(gano: bool, abandona := false) -> void:
 		"tiempo": tiempo,
 		"dolares": dolares,
 		"cartera": s.dolares,
+		"alerta": Alerta.nivel,
+		"extra": extra,
+		"abierta": abierta[0],
 	})
 
 
@@ -884,8 +929,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			await get_tree().create_timer(2.0, false).timeout
 			abrir_mutacion())
 	if tipo in JEFES:
-		# Cada planta, un 25 % más dura (como el vecino del juego JS)
-		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1))
+		# Cada planta, un 25 % más dura (como el vecino del juego JS), y con la Alerta 3, más aún y se enfada antes
+		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1) * Alerta.jefe_vida())
+		zombi.enfado = Alerta.jefe_enfado()
 		# Su barra de vida grande, arriba, y los vecinos que llama
 		var barra_jefa: ProgressBar = $Pantalla/Jefa
 		var el: String = Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera")
@@ -895,6 +941,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			barra_jefa.value = vida
 			barra_jefa.visible = vida > 0)
 		zombi.pide_zombi.connect(meter_zombi)
+	elif "velocidad" in zombi:
+		zombi.velocidad *= Alerta.velocidad()   # con la Alerta 2, todos un poco más rápidos
 	mapa.cosas.add_child(zombi)
 	return zombi
 
@@ -1085,6 +1133,97 @@ func fotos_peligros(s: Dictionary) -> void:
 		luz.poner_sitio(s.tipo)
 
 
+# Con "--captura --alerta N" (en vez de la prueba larga): comprueba las reglas de esa alerta (alerta.gd) con sus
+# números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
+# Apartamentos, el vecino que lleva la llave, que solo sale con la Alerta 5; en el centro comercial, el guardia) y
+# captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
+func probar_alerta() -> void:
+	var n := Alerta.nivel
+	print("Prueba de la %s en %s: %s" % [Alerta.nombre(), ed.el_nombre, Alerta.REGLAS[n]])
+	decir("%s: %s
+%s: %s" % [planta.nombre, ed.objetivo, Alerta.nombre(), Alerta.REGLAS[n]], 4.0)
+	await get_tree().create_timer(0.5, false).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-alerta.png")
+	# A1: los zombis de cinco plantas, sin alerta y con ella (las mismas: con las mismas semillas)
+	var contar := func() -> String:
+		var total := 0
+		var coste := 0.0   # lo que "cuestan" (planta.gd, COSTE): los caros son los duros
+		for i in 5:
+			Planta.semilla = 1000 + i
+			for s in Planta.generar(2, edificio, jefe_de(2)).sitios:
+				for z in s.get("zombis", []).filter(func(z): return not z.get("llave", false)):
+					total += 1
+					coste += Planta.COSTE[z.tipo]
+		Planta.semilla = 0
+		return "%d (coste %.0f)" % [total, coste]
+	Alerta.nivel = 0
+	var sin: String = contar.call()
+	Alerta.nivel = n
+	print("A1 · zombis en cinco plantas: %s sin alerta, %s con ella (x%.2f)" % [sin, contar.call(), Alerta.mas_zombis()])
+	# A2 y A3: un zombi normal y el jefe de la planta, recién sacados
+	var normal := meter_zombi("normal", Vector2(200, 200))
+	var jefe := meter_zombi("portera", Vector2(300, 200))
+	print("A2 · velocidad del zombi normal: %.0f (sin alerta, %.0f)" % [normal.velocidad, ZOMBIS.normal.instantiate().velocidad])
+	print("A3 · vida de la portera en la planta baja: %d · se enfada a %d %% de la vida" % [jefe.vida_max, roundi(jefe.enfado * 100)])
+	normal.queue_free()
+	jefe.queue_free()
+	$Pantalla/Jefa.hide()
+	# A4 y A5
+	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_botiquin(), BOTIQUIN + johnny.stats.botiquin_extra])
+	print("A5 · los disparos se oyen a %.0f (sin alerta, %.0f)" % [Zombi.OIDO * Alerta.oido(), Zombi.OIDO])
+	# las rarezas del banco, en 2000 armas
+	var rarezas := {"verde": 0, "azul": 0, "morada": 0}
+	for i in 2000:
+		rarezas[Recetas.rareza_al_azar()] += 1
+	print("Banco · de 2000 armas: %d verdes, %d azules, %d moradas" % [rarezas.verde, rarezas.azul, rarezas.morada])
+	# el guardia (centro) o el vecino de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
+	if ed.cerrojo == "tarjeta":
+		await montar(0, 0, false)
+		print("A5 · el guardia: vida %d" % guardia.vida_max)
+		johnny.position = guardia.position + Vector2(-160, 40)   # (que no se quede en la puerta, que la cruzaría)
+	else:
+		var vecino := -1
+		for i in planta.sitios.size():
+			if planta.sitios[i].get("zombis", []).any(func(z): return z.get("llave", false)):
+				vecino = i
+		print("A5 · llave en el suelo: %s | vecino de la llave en %s" % [planta.llave.sitio >= 0,
+			planta.sitios[vecino].nombre if vecino >= 0 else "ningún sitio"])
+		if vecino >= 0:
+			await montar(vecino, 0, false)
+			for z in get_tree().get_nodes_in_group("zombis"):
+				if z.has_meta("llave"):
+					print("A5 · el vecino: vida %d" % z.vida_max)
+					johnny.position = z.position + Vector2(0, 90)
+					for k in 16:   # Johnny, cerca de él y en su misma habitación
+						var p: Vector2 = z.position + Vector2.from_angle(k * TAU / 16.0) * 90.0
+						if mapa.zona_en(p) == z.zona:
+							johnny.position = p
+							break
+					luz.alternar()
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.4, false).timeout
+					get_viewport().get_texture().get_image().save_png("res://captura-alerta-llave.png")
+					luz.alternar()
+					z.recibir_golpe(9999, Vector2.ZERO)
+					await get_tree().create_timer(0.5, false).timeout
+					print("A5 · al caer: llave en %s, en el suelo: %s" % [planta.sitios[planta.llave.sitio].nombre
+						if planta.llave.sitio >= 0 else "ningún sitio", mapa.cosas.has_node("Llave")])
+	if ed.cerrojo == "tarjeta":
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.4, false).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-alerta-llave.png")
+	# el final: con 50 dólares recogidos, y la alerta de la partida como la más alta abierta
+	Guardado.cambiar(func(g): Guardado.edificio(g, edificio).alerta_max = n)
+	dolares = 50
+	planta.num = Planta.PLANTAS
+	terminar(true)
+	await get_tree().create_timer(0.5).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-alerta-fin.png")
+	var e: Dictionary = Guardado.cargar().edificios[edificio]
+	print("Final · dólares: 50 + %d · alerta más alta abierta: %d" % [Alerta.dolares_extra(50), e.alerta_max])
+	get_tree().quit()
+
+
 func contar_planta() -> void:
 	print("Planta: ", planta.nombre)
 	for i in range(1, planta.sitios.size()):
@@ -1101,7 +1240,8 @@ func contar_planta() -> void:
 		print("  %s [%s] %dx%d casillas: %s | %d muebles | zombis: %s" % [s.nombre, s.tipo, s.apt.cols, s.apt.filas,
 			" ".join(salas), s.muebles.size(), tipos])
 	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(),
-		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0 else "el guardia del pasillo"])
+		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0
+		else "el guardia del pasillo" if ed.cerrojo == "tarjeta" else "un vecino (Alerta 5)"])
 
 
 func _process(delta: float) -> void:

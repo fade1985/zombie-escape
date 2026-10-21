@@ -62,6 +62,12 @@
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
   centro comercial; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
   `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`, y las de los peligros: `captura-peligro-<...>.png`).
+- `alerta.gd`: los niveles de alerta (parte 8): la regla de cada nivel, los números (constantes) y lo que la partida
+  le pregunta (`mas_zombis()`, `velocidad()`, `jefe_vida()`, `jefe_enfado()`, `botiquin()`, `guardia()`, `oido()`,
+  `dolares_extra()`, `prob_rareza()`). El nivel de la partida, en `Alerta.nivel` (lo pone "Elige edificio"); la más
+  alta abierta y la elegida de cada edificio, en el guardado (`alerta_max`, `alerta`). Con la Alerta 5 en los
+  Apartamentos la llave la lleva un vecino (`planta.gd` lo apunta con `"llave": true` en sus zombis;
+  `partida.gd`, `vecino_de_la_llave()`). La prueba: `--captura --alerta N` (`probar_alerta()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 17 objetos, mochila, baúl, lo que sueltan los
   zombis), `recetas.gd` (15 recetas y rarezas), `billete.gd`, `minimapa.gd`.
 - `guardado.gd`: el guardado entre partidas.
@@ -121,7 +127,7 @@ el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `asse
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`; alinea por los pies los lienzos de PixelLab, borra
 las motas sueltas y dice el `offset` del Sprite; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
-`guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
+`icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
 (objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).

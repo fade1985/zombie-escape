@@ -312,6 +312,36 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 - **Colecciones:** un programa nuevo en ConserjeOS con, por cada edificio, los objetos encontrados (p. ej. 23/40),
   las páginas del dosier y las armas creadas, en porcentaje; y un **bestiario** con cada zombi que has visto, con su
   dibujo y una frase.
+- **El orden** (21 oct, con el dueño): cuatro trozos, cada uno con su visto bueno: 1) niveles de alerta, 2) eventos
+  sorpresa, 3) colecciones (después de juntar la parte 6, que reparte los objetos por edificio) y 4) reto del día
+  (un botón en cada tarjeta de «Elige edificio»; los dólares cuentan como siempre, pero no abre alertas ni cuenta
+  como edificio completado).
+
+### ✅ Hecho (21 oct, parte 8, trozo 1: niveles de alerta)
+
+- Las reglas y sus números, en `scripts/alerta.gd` (como estaban arriba). La partida solo le pregunta: el
+  presupuesto de zombis de cada sitio (A1), la velocidad de los que no son jefes (A2), la vida de los jefes y a qué
+  parte de ella se enfadan: al 70 % en vez de a la mitad (A3, en `portera.gd` y `minijefe.gd`, así que también en
+  los minijefes que vengan), lo que cura el botiquín (A4) y el guardia, y el oído de los zombis: los disparos se oyen
+  a 1,5 veces la distancia (A5).
+- **Lo que cambia respecto al plan: los Apartamentos en la A5** (no tienen guardia). Allí la llave no está en el
+  suelo: la lleva un vecino zombi, con la llave flotando encima, que espera en esa habitación y aguanta el doble
+  (como el guardia: +20 % por planta); al caer la suelta.
+- Recompensas: los dólares de más (+20 % por nivel) se suman al completar el edificio, y el cartel del final lo
+  dice aparte («De ellos, por la Alerta 2»). En el banco, las rarezas pasan de 75/20/5 % (verde/azul/morada) a
+  30/50/20 % con la A5 (cada nivel: −9, +6 y +3 puntos).
+- En «Elige edificio», debajo de cada tarjeta abierta: «< Alerta 2 (de 3) >», con su regla y su recompensa
+  debajo; sin ninguna abierta, «Complétalo para abrir la Alerta 1». Se recuerda la última elegida. Al empezar la
+  partida, el aviso dice la alerta y su regla; al completar el edificio con la más alta abierta, se abre la
+  siguiente y el cartel del final lo celebra.
+- Guardado: `alerta_max` y `alerta` en el progreso de cada edificio. Icono nuevo: `assets/ui/iconos/alerta.png`
+  (`tools/icono_alerta.py`).
+- Prueba: `--captura --alerta N` (con o sin `--edificio centro`): los números de cada regla en la terminal,
+  `captura-alerta.png`, `captura-alerta-llave.png` y `captura-alerta-fin.png`. Para comparar plantas con y sin
+  alerta, `Planta.semilla` hace que salgan iguales (servirá también para el reto del día).
+- Lo que salió al probar: con la A1 el presupuesto sube un 25 %, pero no todo cabe. En los Apartamentos salen un
+  13 % más de zombis y más duros (su «coste» sube un 30 %); en el centro comercial, solo un 8 % más (coste +13 %),
+  porque las tiendas se llenan antes. Si se quiere más, se sube `MAS_ZOMBIS`.
 
 ## Por partes
 
@@ -427,3 +457,4 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). Pendiente: la página del gerente
    (trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
+   ✅ Trozo 1, niveles de alerta (21 oct).

@@ -156,7 +156,8 @@ func pausa(partida: Node) -> void:
 	seguir.grab_focus.call_deferred()
 
 
-# r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, cartera
+# r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, cartera y, con los niveles de alerta
+# (alerta.gd), alerta (la de la partida), extra (los dólares de más por ella) y abierta (la que se abre, o 0)
 func fin(r: Dictionary) -> void:
 	var columna := abrir("fin")
 	titulo(columna, r.titulo, r.sub)
@@ -169,7 +170,11 @@ func fin(r: Dictionary) -> void:
 	if r.tiempo != "":
 		dato(lista, "trofeo", "Tiempo", r.tiempo)
 	if r.gano:
-		dato(lista, "billete", "Dólares conseguidos", "+$%d  (tienes $%d)" % [r.dolares, r.cartera], Tema.VERDE)
+		dato(lista, "billete", "Dólares conseguidos", "+$%d  (tienes $%d)" % [r.dolares + r.extra, r.cartera], Tema.VERDE)
+		if r.get("alerta", 0) > 0:
+			dato(lista, "alerta", "De ellos, por la %s" % Alerta.nombre(r.alerta), "+$%d" % r.extra, Tema.VERDE)
+		if r.get("abierta", 0) > 0:
+			dato(lista, "alerta", "¡Nivel nuevo!", Alerta.nombre(r.abierta) + " abierta", Color("#f7c440"))
 	else:
 		dato(lista, "billete", "Dólares perdidos", "$%d  (tienes $%d)" % [r.dolares, r.cartera], Tema.ROJO)
 	var botones := VBoxContainer.new()
