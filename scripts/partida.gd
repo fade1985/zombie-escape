@@ -402,6 +402,11 @@ func cruzar(i: int) -> void:
 		decir("Aguanta: aún está forzando la cerradura" if supervivientes.en_horda() else "La puerta no se abre mientras quede algún zombi")
 		Sonido.tocar("no")
 		return
+	var espera := supervivientes.escolta.no_cruzar()   # la farmacéutica herida, lejos o en el suelo
+	if espera != "":
+		decir(espera)
+		Sonido.tocar("no")
+		return
 	match salida.cerrojo:
 		"nunca":
 			decir(salida.aviso)

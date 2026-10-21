@@ -158,6 +158,25 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     pisaban los bocadillos).
   - Tecla **H** en el centro: cada vez, el siguiente de los tres (rehace la planta con su tienda).
     `--captura` saca además `captura-sala-seis.png` (los seis en la sala).
+- ✅ **El rescate propio de la farmacéutica** (21 oct; `scripts/escolta.gd`; números provisionales):
+  - Grita desde la rebotica, cerrada, como antes; al limpiar la farmacia se abre y dice «¡Me han mordido la pierna!
+    No puedo correr». Al arrimarte se une y empieza **la escolta** (no hay horda): llevarla hasta la puerta de las
+    escaleras de su planta. Arriba, «Lleva a la Farmacéutica a las escaleras», y una flecha en el borde hacia las
+    escaleras (o hacia la salida, dentro de una tienda). Suena la música tensa.
+  - Va detrás de Johnny cojeando (90 de velocidad; Johnny, 210), con su vida encima, y se queja de vez en cuando.
+    Si Johnny se aleja más de 300, los zombis van a por ella; si cae, quedarse 2 s a su lado para levantarla
+    (vuelve con media vida), como en la horda.
+  - Los zombis: a los 2 s entran 3 por la puerta de la farmacia; en el pasillo salen grupos por las puertas de las
+    tiendas lejos de los dos (de 1 a 3, cada 6 s al principio y cada 3 s al cabo de un minuto; 14 a la vez como
+    mucho; lentos y normales y, más adelante, también rápidos y venenosos).
+  - No se puede cruzar una puerta si está a más de 140 de Johnny («Espera a la Farmacéutica: va herida») o en el
+    suelo.
+  - A menos de 160 de la puerta de las escaleras (aunque sigan cerradas) está a salvo: «Aquí ya estamos a salvo. Me
+    vendo la pierna y sigo contigo». Sigue en el equipo como los demás, cuenta para el logro «Buen vecino» y deja
+    de haber horda para ella. Para que viva en la sala, como siempre, hay que terminar el edificio con ella.
+  - `--captura --edificio centro` prueba la escolta entera (lo escribe en la terminal) y saca `captura-escolta.png`.
+  - Falta su mejora de la sala (empezar con un botiquín en la mochila): no hay botiquín que se lleve en la
+    mochila; va con los objetos de curar de la farmacia (ver «Objetos»).
 
 ## Objetos
 
@@ -422,8 +441,9 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
-5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
-   y la mejora de la sala de cada uno (un trozo para cada uno).
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común y ✅ el rescate de la
+   farmacéutica; falta el rescate propio del ferretero y del técnico, y la mejora de la sala de cada uno (un trozo
+   para cada uno).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
    - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
      edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:

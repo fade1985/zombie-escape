@@ -85,6 +85,8 @@
   El guiño de la cafetera (`guino_cafetera`: la primera vez que la farmacéutica está en la sala; `cafetera` en el
   guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
   medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
+- `escolta.gd`: el rescate propio de la farmacéutica (llevarla herida hasta las escaleras, con zombis saliendo por
+  las puertas del pasillo); la cuelga `supervivientes.gd` y `partida.gd` le pregunta antes de cruzar una puerta.
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
