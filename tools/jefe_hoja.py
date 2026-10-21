@@ -3,6 +3,7 @@
 #                                    py tools/jefe_hoja.py cocinero-72 jefe-cocinero
 #                                    py tools/jefe_hoja.py modista-72 jefe-modista
 #                                    py tools/jefe_hoja.py mascota-72 jefe-mascota
+#                                    py tools/jefe_hoja.py gerente-128 jefe-gerente   (el jefe final, lienzo de 128)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -21,14 +22,15 @@ fuente, salida = sys.argv[1], sys.argv[2]
 src = f"assets/sources/{fuente}"
 ANCHO_HOJA = 4000
 MOTA = 30          # los trozos sueltos de menos píxeles que esto se borran
-PIES = (36, 70)    # el punto de los pies en el lienzo de 72 (el centro del Sprite va ahí)
+PIES = (36, 70)    # el punto de los pies en el lienzo de 72 (el centro del Sprite va ahí; el gerente pone el suyo)
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
         "north": "n", "north-west": "no", "west": "o", "south-west": "so"}
 # Lo de cada jefe. "anims": nombre en el juego: (carpeta de PixelLab, fotogramas por segundo, en bucle, quitar el
 # último fotograma[, quitar el primero]) (el andar de PixelLab termina en la misma postura con la que empieza: sin
 # quitarlo, ese paso se vería dos veces; y la embestida de la mascota empieza de pie: en la carrera sobra).
 # "de_frente": las que solo se dibujan mirando hacia abajo. "sangre": oscurecer la sangre roja viva de PixelLab
-# (como en tools/zombi.py, decidido por el dueño: que no desentone)
+# (como en tools/zombi.py, decidido por el dueño: que no desentone). "pies": el punto de los pies si el lienzo no
+# es de 72
 JEFES = {
     "antidisturbios-72": {
         "anims": {
@@ -80,8 +82,25 @@ JEFES = {
             "muerte": ("muerte", 10, False, False),
         },
     },
+    # el gerente (jefe final, lienzo de 128 como la portera): los contratos salen con código (contrato.gd). Sin
+    # golpe ni muerte (cae de lado; en la parte 3 el que muere es el mutado); la jeringa es para la parte 3
+    "gerente-128": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "contratos": ("contratos", 12, False, False),
+            "maletinazo": ("maletinazo", 12, False, False),
+            "a_trabajar": ("a-trabajar", 9, False, False),
+            "jeringa": ("jeringa", 10, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["a_trabajar", "jeringa"],
+        "pies": (64, 124),
+    },
 }
 JEFE = JEFES[fuente]
+PIES = JEFE.get("pies", PIES)
 ANIMS = JEFE["anims"]
 
 

@@ -40,15 +40,16 @@ const ZOMBIS := {
 	"mascota": preload("res://escenas/personajes/mascota.tscn"),
 	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
 	"modista": preload("res://escenas/personajes/modista.tscn"),
+	"gerente": preload("res://escenas/personajes/gerente.tscn"),   # el jefe final del centro comercial (la azotea)
 }
 # Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
-# objetos y la mutación
-const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota"]
+# objetos y la mutación (el jefe final de un edificio, el gerente, sin lo del 25 % ni la mutación: final_de())
+const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
-	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota"}
+	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -64,7 +65,7 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
 	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
-	"mascota": Color("#c9a13b")}
+	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -121,7 +122,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -981,17 +982,20 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
-		# la portera: un poco después de caer su cuerpo, las mutaciones
-		if tipo in JEFES:
+		# la portera: un poco después de caer su cuerpo, las mutaciones (el jefe final, no: se acaba el edificio)
+		if tipo in JEFES and final_de(tipo).is_empty():
 			await get_tree().create_timer(2.0, false).timeout
 			abrir_mutacion())
 	if tipo in JEFES:
-		# Cada planta, un 25 % más dura (como el vecino del juego JS), y con la Alerta 3, más aún y se enfada antes
-		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1) * Alerta.jefe_vida())
+		# Cada planta, un 25 % más dura (como el vecino del juego JS), y con la Alerta 3, más aún y se enfada antes.
+		# El jefe final (el gerente), con su vida justa: ya está en la última planta
+		var de_final := final_de(tipo)
+		var por_planta := pow(1.25, planta.num - 1) if de_final.is_empty() else 1.0
+		zombi.vida_max = int(zombi.vida_max * por_planta * Alerta.jefe_vida())
 		zombi.enfado = Alerta.jefe_enfado()
 		# Su barra de vida grande, arriba, y los vecinos que llama
 		var barra_jefa: ProgressBar = $Pantalla/Jefa
-		var el: String = Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera")
+		var el: String = de_final.get("el_final", Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera"))
 		$Pantalla/Jefa/Nombre.text = el.left(1).to_upper() + el.substr(1)
 		zombi.vida_cambiada.connect(func(vida, maxima):
 			barra_jefa.max_value = maxima
@@ -1002,6 +1006,14 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		zombi.velocidad *= Alerta.velocidad()   # con la Alerta 2, todos un poco más rápidos
 	mapa.cosas.add_child(zombi)
 	return zombi
+
+
+# El edificio del que "tipo" es el jefe final (el gerente, del centro comercial; edificios.gd, "final"), o {}
+func final_de(tipo: String) -> Dictionary:
+	for e in Edificios.LISTA.values():
+		if e.get("final", "") == tipo:
+			return e
+	return {}
 
 
 func _unhandled_input(evento: InputEvent) -> void:
@@ -2087,6 +2099,40 @@ func probar_azotea() -> void:
 	print("  ha salido el jefe: %s | escalera de llegada %s | incendios %s | aviso: '%s'" % [jefa != null,
 		"cerrada" if cerrada else "abierta", "abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
 	var camara: Camera2D = johnny.get_node("Camara")
+	# el gerente, con Johnny delante, lanzándole los contratos (captura-gerente.png)
+	if jefa and jefa.has_method("lanzar_contratos"):
+		for i in 60:
+			johnny.position = jefa.position + Vector2.from_angle(PI + randf_range(-0.8, 0.8)) * 300.0
+			if mapa.zona_en(johnny.position) >= 0 and jefa.a_la_vista(johnny):   # sin aparatos en medio
+				break
+		camara.reset_smoothing()
+		jefa.foto(johnny)
+		await get_tree().create_timer(0.45).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-gerente.png")
+		print("  el gerente: vida %d/%d | barra: '%s' | contratos volando: %d" % [jefa.vida, jefa.vida_max,
+			$Pantalla/Jefa/Nombre.text, get_tree().get_nodes_in_group("balas_zombi").size()])
+		# el maletinazo, con Johnny pegado (captura-gerente-maletinazo.png)
+		for i in 60:
+			johnny.position = jefa.position + Vector2.from_angle(PI + randf_range(-0.5, 0.5)) * 115.0
+			if mapa.zona_en(johnny.position) >= 0:
+				break
+		camara.reset_smoothing()
+		for papel in get_tree().get_nodes_in_group("balas_zombi"):
+			papel.queue_free()   # (que no le dé antes un contrato: luego Johnny es invulnerable un momento)
+		johnny.invulnerable = 0.0
+		var vida_johnny: int = johnny.vida
+		jefa.empezar("aviso_maletinazo", (johnny.position - jefa.position).angle())
+		await get_tree().create_timer(0.3).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-gerente-maletinazo.png")
+		await get_tree().create_timer(0.4).timeout
+		# y «¡A TRABAJAR!»: llegan dos dependientas y un vigilante (captura-gerente-trabajar.png)
+		print("  maletinazo: a Johnny le ha quitado %d (con su escudo y sus mutaciones de la prueba)" % (vida_johnny - johnny.vida))
+		var antes_zombis: int = jefa.secuaces()
+		jefa.cambiar("a_trabajar")
+		jefa.gritar("¡A TRABAJAR!", Color("#ffd23f"), 26)
+		await get_tree().create_timer(0.9).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-gerente-trabajar.png")
+		print("  ¡A TRABAJAR!: han llegado %d" % (jefa.secuaces() - antes_zombis))
 	luz.alternar()
 	johnny.position = Vector2(s.ancho / 2.0, s.alto / 2.0)
 	camara.zoom = Vector2(0.66, 0.66)
@@ -2095,16 +2141,28 @@ func probar_azotea() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-azotea-entera.png")
 	camara.zoom = Vector2.ONE
 	luz.alternar()
-	# sin el jefe (quitado, sin que caiga: así no salen las mutaciones), se abre la escalera de incendios
+	# sin el jefe se abre la escalera de incendios. El gerente cae de verdad (el jefe final no saca mutaciones); la
+	# portera (si aún no estuviera el gerente), quitada sin que caiga: así no salen las mutaciones
+	var es_final := jefa != null and not final_de(planta.jefe).is_empty()
 	if jefa:
-		jefa.queue_free()
-		$Pantalla/Jefa.hide()
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z != jefa:
+				z.queue_free()   # (los empleados del gerente)
+		if es_final:
+			jefa.invulnerable = false
+			jefa.recibir_golpe(99999, Vector2.ZERO)
+		else:
+			jefa.queue_free()
+			$Pantalla/Jefa.hide()
 	johnny.position = mapa.puertas[1].llegada() + Vector2(-90, 0)
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.6).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-azotea-incendios.png")
 	print("  sin el jefe: jefe muerto %s | incendios %s | aviso: '%s'" % [planta.jefa_muerta,
 		"abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
+	if es_final:
+		await get_tree().create_timer(1.8).timeout
+		print("  al caer el gerente, mutación: %s" % ("sí (¡no debería!)" if get_tree().paused else "no"))
 
 
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)

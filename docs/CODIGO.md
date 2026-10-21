@@ -12,7 +12,8 @@
   `ui/hud.gd`; el minimapa, `minimapa.gd`; la pausa y el final, `ui/menus.gd`.
 - `salas/`: la sala de pruebas de las fases 1-3 (`bano.tscn` y `bano_tileset.tres`: las piezas y cuáles chocan).
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
-  y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`, `modista.tscn`, `mascota.tscn`).
+  y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`, `modista.tscn`, `mascota.tscn`) y
+  su jefe final, en la azotea (`gerente.tscn`).
 - `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera y alfileres de la modista), `proyectil.tscn`
   (moco, botella de lejía y sartén del cocinero, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
@@ -62,10 +63,15 @@
   sin poder dársele, con su sombra creciendo en el suelo, y cae quitando 18 en un círculo; el dibujo del salto va por
   fotogramas —`DESPEGUE`, `ATERRIZA`— y la altura la pone el código, `ALTURA_SALTO`; mareada usa el golpe, con
   balanceo). Las explosiones les dan "de lleno" (`explosion.gd`); a Johnny la carga le pone el estado "tirado"
-  (`estados.gd`).
+  (`estados.gd`). El jefe final del centro comercial, `gerente.gd`, también hereda de `minijefe.gd`: anda hacia
+  Johnny y lanza contratos en abanico (con rayas rojas de aviso), da un maletinazo de cerca (trozo de suelo rojo) y,
+  si quedan pocos zombis, grita «¡A TRABAJAR!» y llegan dos dependientas y un vigilante; los fotogramas en los que
+  sueltan los papeles y cae el maletín, en `SUELTA` y `GOLPE`. A media vida, de momento, se enfada como los
+  minijefes (la jeringa de VD-7 y la mutación serán la parte 3 del trozo 6: ver `al_enfadarse()`).
 - `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov, bomba de aceite y la sartén del cocinero en
   parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
-  su marca; se quedan clavados un rato), `explosion.gd`.
+  su marca; se quedan clavados un rato), `contrato.gd` (los contratos del gerente, dibujados con código: vuelan
+  girando, cortan 10 y al toparse con algo caen al suelo), `explosion.gd`.
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes (con lo de su
   oficio para los del centro comercial: chaleco, bata, cascos, moño, bigote, martillo).
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
@@ -74,6 +80,8 @@
 - `edificios.gd`: la ficha de cada edificio (Apartamentos, Centro comercial) y el elegido en el menú; `MINIJEFES`,
   el nombre de cada minijefe y de su tienda. La partida sortea al empezar qué minijefe va en cada planta
   (`orden_jefes`, `jefe_de()`; si aún no está hecho, la portera) y `planta.gd` lo apunta en `planta.jefe` y `el_jefe`.
+  El jefe final de la azotea va en `final` y `el_final` (el gerente); `partida.final_de()` lo reconoce: su barra dice
+  su nombre y no lleva el 25 % más por planta ni la mutación al caer.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
   centro comercial, con el antidisturbios en la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o
@@ -173,8 +181,10 @@
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, `cocinero-72 jefe-cocinero`, `modista-72 jefe-modista` o
-`mascota-72 jefe-mascota`; las animaciones de cada uno, en su ficha `JEFES` (con la lista y los fotogramas por
-segundo; la embestida de la mascota lleva un 5.º dato: quitar el primer fotograma); alinea por los pies los lienzos
+`mascota-72 jefe-mascota`, y el gerente, de 128: `gerente-128 jefe-gerente`; las animaciones de cada uno, en su
+ficha `JEFES` (con la lista, los fotogramas por
+segundo y, si el lienzo no es de 72, el punto de los pies; la embestida de la mascota lleva un 5.º dato: quitar el
+primer fotograma); alinea por los pies los lienzos
 de PixelLab, borra las motas sueltas, oscurece la sangre si la ficha lo pide y dice el `offset` del Sprite; lo que
 falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
