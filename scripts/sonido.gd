@@ -58,6 +58,8 @@ const EFECTOS := {
 		[150, 0.06, "cuadrada", 0.02, -50, 0.3], [700, 0.35, "seno", 0.01, -240, 0.45]]},
 	"portazo": {"notas": [[110, 0.16, "cuadrada", 0.07, -50], [70, 0.22, "triangulo", 0.08, -20, 0.03]]},
 	"clonc": {"hueco": 70, "notas": [[1500, 0.04, "cuadrada", 0.04, -400], [620, 0.16, "triangulo", 0.05, -120, 0.02]]},   # el escudo del antidisturbios
+	"boing": {"hueco": 120, "notas": [[150, 0.22, "triangulo", 0.08, 330], [300, 0.12, "seno", 0.03, 200, 0.06]]},   # la mascota salta o rebota
+	"pisoton": {"notas": [[75, 0.3, "triangulo", 0.12, -40], [150, 0.14, "cuadrada", 0.05, -90]]},   # la mascota cae del salto
 	"silbato": {"notas": [[2700, 0.1, "seno", 0.045, 150], [2900, 0.4, "seno", 0.05, -200, 0.13]]},   # el guardia
 	"chillido": {"notas": [[1150, 0.3, "sierra", 0.035, -450], [980, 0.45, "cuadrada", 0.022, -380, 0.1]]},   # ¡OFERTAS!
 	"jefe": {"notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},

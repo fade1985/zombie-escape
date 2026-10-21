@@ -156,6 +156,59 @@ func mover() -> void:
 	move_and_slide()
 
 
+# ── Embestir (la carga del antidisturbios y la embestida de la mascota) ──
+
+# Corre en línea recta hacia donde mira, a "rapidez". Si atropella a Johnny le quita "dano", le empuja y le tira
+# al suelo (esquivando, le pasa de largo). Dice cómo va: "pillado" (ha atropellado a Johnny), "pared" (se ha
+# comido una pared o un mueble), "fin" (ha corrido "cuanto" segundos sin chocar) o "" (sigue corriendo)
+func embestir(delta: float, johnny: Node2D, rapidez: float, dano: int, cuanto: float, pie: float) -> String:
+	marcha = mirada * rapidez
+	contacto = 0   # el golpe ya lo da la embestida
+	if randf() < delta * 25.0:
+		Particulas.soltar(self, global_position + Vector2(randf_range(-20, 20), pie), Vector2(randf_range(-30, 30), -20),
+			Color("#8a7a66"), 3, 0.4)
+	var d := global_position.distance_to(johnny.global_position)
+	if d < radio + johnny.RADIO + 10.0 and johnny.esquiva_t <= 0.0:
+		johnny.recibir_dano(dano)
+		johnny.empujar(mirada * 900.0)
+		johnny.pisar({"tirado": {}})
+		Temblor.temblar(10.0)
+		marcha *= 0.2
+		return "pillado"
+	if t > 0.12 and get_real_velocity().length() < rapidez * 0.4:
+		return "pared"
+	if t >= cuanto:
+		return "fin"
+	return ""
+
+
+# Hacia dónde mira la pared con la que acaba de chocar (para rebotar); si no lo sabe, hacia atrás
+func pared_chocada() -> Vector2:
+	var choque := get_last_slide_collision()
+	return choque.get_normal() if choque else -mirada
+
+
+# Se ha estrellado: se queda atontado (con estrellitas) "atontado_t" segundos
+func estrellarse() -> void:
+	marcha = Vector2.ZERO
+	cambiar("atontado")
+	Sonido.tocar("portazo")
+	Temblor.temblar(9.0)
+	gritar("¡PUMBA!", Color("#ffd23f"))
+	for i in 10:
+		Particulas.soltar(self, global_position + mirada * radio + Vector2(randf_range(-20, 20), randf_range(-60, 10)),
+			Vector2.from_angle(randf() * TAU) * 70.0, Color("#b9b2a6"), 4, 0.6)
+
+
+# El aviso de la embestida, en el suelo: una franja roja de "largo" por donde va a pasar, que se llena en "k" (0 a 1)
+func franja(largo: float, k: float) -> void:
+	var rojo := Color(1, 0.24, 0.35)
+	draw_set_transform(Vector2(0, 6), mirada.angle())
+	draw_rect(Rect2(0, -radio, largo, radio * 2.0), Color(rojo, 0.08 + k * 0.2))
+	draw_rect(Rect2(0, -radio, largo * k, radio * 2.0), Color(rojo, 0.9), false, 3.0)
+	draw_set_transform(Vector2.ZERO)
+
+
 # ── Recibir golpes y morir ──
 
 # Cuánto le quita de verdad un golpe de "cantidad" que viene empujando hacia "fuerza". "de_lleno": las
@@ -230,8 +283,8 @@ func poner(nombre: String, velocidad := 1.0) -> void:
 	sprite.speed_scale = velocidad
 
 
-# Lo que va por encima de él (en el nodo "Vapor"): enfadado, el vapor de la cabeza. Cada jefe puede añadir
-# más (las estrellitas del antidisturbios atontado) en pintar_encima()
+# Lo que va por encima de él (en el nodo "Vapor"): enfadado, el vapor de la cabeza, y atontado, estrellitas
+# dando vueltas. Cada jefe puede añadir más en pintar_encima()
 func _pintar_encima() -> void:
 	if estado == "muerto":
 		return
@@ -239,6 +292,14 @@ func _pintar_encima() -> void:
 		for i in 3:
 			var k := fmod(tiempo * 1.2 + i / 3.0, 1.0)
 			$Vapor.draw_circle(Vector2((i - 1) * 18.0, -arriba + 6.0 - k * 36.0), 3.0 + k * 7.0, Color(1, 1, 1, 0.75 * (1.0 - k)))
+	if estado == "atontado":
+		for i in 3:
+			var b := tiempo * 5.0 + i * TAU / 3.0
+			var p := Vector2(cos(b) * 26.0, -arriba - 8.0 + sin(b) * 8.0)
+			var estrella := PackedVector2Array()
+			for j in 10:
+				estrella.append(p + Vector2.from_angle(j * TAU / 10.0 - PI / 2.0) * (6.0 if j % 2 == 0 else 2.5))
+			$Vapor.draw_colored_polygon(estrella, Color("#ffd23f"))
 	pintar_encima($Vapor)
 
 

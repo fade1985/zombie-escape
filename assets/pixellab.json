@@ -1478,8 +1478,21 @@
         "size": "128x128",
         "estilo": "south de la portera (128): 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading. Do not copy her body, clothes, mop or colors.'",
         "alto_px": 127,
-        "nota": "Demasiado grande (más que la portera): rehacerla en 72 usando esta como referencia.",
+        "nota": "Demasiado grande (más que la portera): rehacerla en 72 usando esta como referencia. Hecho: mascota-72.",
         "description": "a giant shopping mall mascot costume boss: a huge plush teddy bear costume about 100 pixels tall, dirty faded mustard-yellow fur, matted and torn, white stuffing coming out of the rips, blood stains, a round belly with a faded round patch, the big cartoon bear head is torn open at the neck and tilted back, and through the hole you see the real face of a zombie inside with sickly grey-green rotting skin, pale dead eyes and a bloody mouth, big round bear ears (one of them ripped), huge padded paws with dirty claws poking through the fabric, short thick legs, standing hunched forward and menacing, crisp pixel art, dark outline, detailed shading"
+      },
+      "mascota-72": {
+        "character_id": "42b5ac10-26be-45db-b94a-6772483cf4b2",
+        "size": "72x72",
+        "fecha": "2026-10-21",
+        "estilo": "la vista south de mascota-128 reducida a 72 (70 px de alto; assets/sources/mascota-72/estilo.png), con style_options todo a true (también los colores) y usage_description: 'This is exactly the character to draw, already at the right size: copy it faithfully, the same dirty mustard-yellow teddy bear mascot costume, the same torn head with the grey-green zombie face inside, the same rips with white stuffing, blood stains, belly patch, ears, paws and legs, the same colors, outline thickness, pixel size and shading. Keep it the same size and proportions as this image.'",
+        "alto_px": 70,
+        "description": "a giant shopping mall mascot costume boss: a huge plush teddy bear costume about 68 pixels tall, standing on two legs, dirty faded mustard-yellow fur, matted and torn, white stuffing coming out of the rips, blood stains, a round belly with a faded round patch, the big cartoon bear head is torn open at the face and through the hole you see the real face of a zombie inside with sickly grey-green rotting skin, pale dead eyes and a bloody mouth, big round bear ears (one of them ripped), huge padded paws with dirty claws poking through the fabric, short thick legs, standing hunched forward and menacing, crisp pixel art, dark outline, detailed shading",
+        "nota": "Rehecha a 72 copiando mascota-128 (create_character_pro_flash, view low top-down, plantilla mannequin), como la portera a 72. Vistas en assets/sources/mascota-72/rotations/ (68-70 px de alto). Salió a la primera. La de 128 no se ha borrado.",
+        "coste": {
+          "generaciones": 6,
+          "saldo_antes": 713.05
+        }
       },
       "gerente-128": {
         "character_id": "9cf9e727-09b7-46a3-a7d1-3363792ab173",

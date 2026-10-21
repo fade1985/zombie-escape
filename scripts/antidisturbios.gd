@@ -71,7 +71,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				cambiar("carga", {"quedan": datos.quedan - 1})
 				Sonido.tocar("rugido")
 		"carga":
-			cargar(delta, johnny, d)
+			cargar(delta, johnny)
 		"atontado":
 			frenar(delta, 4.0)
 			if t >= ATONTADO:
@@ -130,41 +130,26 @@ func porrazo(johnny: Node2D) -> void:
 		johnny.empujar(hacia.normalized() * 650.0)
 
 
-# La carga: corre en línea recta con el escudo por delante. Si pilla a Johnny, le tira; si se estrella, se atonta
-func cargar(delta: float, johnny: Node2D, d: float) -> void:
-	marcha = mirada * VELOCIDAD_CARGA
-	contacto = 0   # el golpe de la carga ya lo da él
-	if randf() < delta * 25.0:
-		Particulas.soltar(self, global_position + Vector2(randf_range(-20, 20), PIE), Vector2(randf_range(-30, 30), -20),
-			Color("#8a7a66"), 3, 0.4)
-	if d < radio + johnny.RADIO + 10.0 and johnny.esquiva_t <= 0.0:   # esquivando, la carga le pasa de largo
-		johnny.recibir_dano(DANO_CARGA)
-		johnny.empujar(mirada * 900.0)
-		johnny.pisar({"tirado": {}})
-		Temblor.temblar(10.0)
-		marcha *= 0.2
-		cambiar("recuperar", {"dur": 0.6, "quedan": datos.quedan})
-	elif t > 0.12 and get_real_velocity().length() < VELOCIDAD_CARGA * 0.4:
-		# se ha comido una pared o un mueble
-		estrellarse()
-	elif t >= TIEMPO_CARGA:
-		marcha *= 0.3
-		cambiar("recuperar", {"dur": 0.5, "quedan": datos.quedan})
-
-
-func estrellarse() -> void:
-	marcha = Vector2.ZERO
-	cambiar("atontado")
-	Sonido.tocar("portazo")
-	Temblor.temblar(9.0)
-	gritar("¡PUMBA!", Color("#ffd23f"))
-	for i in 10:
-		Particulas.soltar(self, global_position + mirada * radio + Vector2(randf_range(-20, 20), randf_range(-60, 10)),
-			Vector2.from_angle(randf() * TAU) * 70.0, Color("#b9b2a6"), 4, 0.6)
+# La carga: corre en línea recta con el escudo por delante (lo común, en minijefe.gd). Si pilla a Johnny, le
+# tira; si se estrella, se atonta
+func cargar(delta: float, johnny: Node2D) -> void:
+	match embestir(delta, johnny, VELOCIDAD_CARGA, DANO_CARGA, TIEMPO_CARGA, PIE):
+		"pillado":
+			cambiar("recuperar", {"dur": 0.6, "quedan": datos.quedan})
+		"pared":
+			estrellarse()
+		"fin":
+			marcha *= 0.3
+			cambiar("recuperar", {"dur": 0.5, "quedan": datos.quedan})
 
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 	super(johnny, "¡QUEDAS DETENIDO!")
+
+
+# En la foto de la prueba (--captura): preparando la carga
+func foto(_johnny: Node2D) -> void:
+	cambiar("aviso_carga", {"quedan": 1, "aviso": 0.8})
 
 
 # ── El escudo ──
@@ -254,21 +239,5 @@ func _draw() -> void:
 			puntos.append(Vector2.ZERO)
 			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
 		"aviso_carga":
-			var k := minf(1.0, t / datos.aviso)
-			var largo := VELOCIDAD_CARGA * TIEMPO_CARGA
-			draw_set_transform(Vector2(0, 6), a)
-			draw_rect(Rect2(0, -radio, largo, radio * 2.0), Color(rojo, 0.08 + k * 0.2))
-			draw_rect(Rect2(0, -radio, largo * k, radio * 2.0), Color(rojo, 0.9), false, 3.0)
+			franja(VELOCIDAD_CARGA * TIEMPO_CARGA, minf(1.0, t / datos.aviso))
 
-
-# Atontado: estrellitas dando vueltas sobre el casco
-func pintar_encima(lienzo: Node2D) -> void:
-	if estado != "atontado":
-		return
-	for i in 3:
-		var b := tiempo * 5.0 + i * TAU / 3.0
-		var p := Vector2(cos(b) * 26.0, -arriba - 8.0 + sin(b) * 8.0)
-		var estrella := PackedVector2Array()
-		for j in 10:
-			estrella.append(p + Vector2.from_angle(j * TAU / 10.0 - PI / 2.0) * (6.0 if j % 2 == 0 else 2.5))
-		lienzo.draw_colored_polygon(estrella, Color("#ffd23f"))

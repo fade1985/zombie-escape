@@ -36,15 +36,17 @@ const ZOMBIS := {
 	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la tarjeta (centro comercial)
 	"vigilante": preload("res://escenas/personajes/zombi_vigilante.tscn"),       # los del centro comercial
 	"dependienta": preload("res://escenas/personajes/zombi_dependienta.tscn"),
-	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefe del centro comercial
+	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefes del centro comercial
+	"mascota": preload("res://escenas/personajes/mascota.tscn"),
 }
 # Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
 # objetos y la mutación
-const JEFES := ["portera", "antidisturbios"]
+const JEFES := ["portera", "antidisturbios", "mascota"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
-	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios"}
+	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
+	KEY_U: "mascota"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -59,7 +61,7 @@ const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un bill
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
-	"antidisturbios": Color("#3b4252")}
+	"antidisturbios": Color("#3b4252"), "mascota": Color("#c9a13b")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -115,7 +117,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · U mascota · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -185,10 +187,13 @@ func _ready() -> void:
 	# los minijefes del centro comercial, uno por planta en orden al azar (sin repetir)
 	orden_jefes = ed.get("minijefes", []).duplicate()
 	orden_jefes.shuffle()
-	if captura and "antidisturbios" in orden_jefes:
-		# en la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios
-		orden_jefes.erase("antidisturbios")
-		orden_jefes.insert(1, "antidisturbios")
+	# en la prueba, el jefe que se ve es el de la 1ª planta (la segunda): el antidisturbios u otro con "--jefe <nombre>"
+	var args := OS.get_cmdline_user_args()
+	var cual := args.find("--jefe")
+	var probar: String = args[cual + 1] if cual >= 0 and cual + 1 < args.size() else "antidisturbios"
+	if captura and probar in orden_jefes:
+		orden_jefes.erase(probar)
+		orden_jefes.insert(1, probar)
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -1289,14 +1294,15 @@ func _process(delta: float) -> void:
 				jefa.recibir_golpe(10, golpe[0] * 300.0, golpe[1])
 				quita.append(antes_vida - jefa.vida)
 			print("Escudo (golpes de 10): de frente -%d, de lado -%d, por la espalda -%d, explosión -%d" % quita)
-			if jefa.has_method("estrellarse"):   # el antidisturbios: que salga en la foto preparando la carga
-				jefa.cambiar("aviso_carga", {"quedan": 1, "aviso": 0.8})
+			if jefa.has_method("foto"):   # que salga en la foto haciendo lo suyo (el antidisturbios, preparando la carga)
+				jefa.foto(johnny)
 	if antes < 8.0 and tiempo >= 8.0 and jefa:
 		get_viewport().get_texture().get_image().save_png("res://captura-jefe.png")
 	if antes < 8.05 and tiempo >= 8.05:
 		print("El jefe (%s) ha salido en '%s': %s | vida %d | puerta %s" % [planta.jefe, planta.sitios[aqui].nombre,
 			jefa != null, jefa.vida_max if jefa else 0, "cerrada" if cerrada else "abierta"])
 		if jefa:
+			jefa.invulnerable = false   # (la mascota de la foto está en el aire, donde no se le puede dar)
 			jefa.recibir_golpe(99999, Vector2.ZERO)
 	if antes < 9.5 and tiempo >= 9.5:
 		print("Jefa muerta: ", planta.jefa_muerta, " | ", aviso.text)

@@ -1,5 +1,6 @@
 # Monta la hoja de un minijefe del centro comercial (lienzo de 72, como el zombi venenoso) y su SpriteFrames.
 # Uso (desde la raíz del proyecto):  py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios
+#                                     py tools/jefe_hoja.py mascota-72 jefe-mascota
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -21,18 +22,29 @@ MOTA = 30          # los trozos sueltos de menos píxeles que esto se borran
 PIES = (36, 70)    # el punto de los pies en el lienzo de 72 (el centro del Sprite va ahí)
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
         "north": "n", "north-west": "no", "west": "o", "south-west": "so"}
-# nombre en el juego: (carpeta de PixelLab, fotogramas por segundo, en bucle, quitar el último fotograma)
-# (el andar de PixelLab termina en la misma postura con la que empieza: sin quitarlo, ese paso se vería dos veces)
+# nombre en el juego: (carpeta de PixelLab, fotogramas por segundo, en bucle, quitar el último fotograma[, quitar
+# el primero]) (el andar de PixelLab termina en la misma postura con la que empieza: sin quitarlo, ese paso se vería
+# dos veces; y la embestida de la mascota empieza de pie: en la carrera sobra)
+# Las que tienen todos los jefes y, en PROPIAS, las de cada uno (según la carpeta de sus dibujos)
 ANIMS = {
     "quieto": ("rotations", 1, True, False),
     "reposo": ("rotations", 1, True, False),
     "andar": ("walk", 9, True, True),
-    "porrazo": ("porrazo", 12, False, False),
-    "carga": ("carga", 12, False, False),
     "golpe": ("golpe", 16, False, False),
     "muerte": ("muerte", 10, False, False),
-    "silbato": ("silbato", 9, False, False),
 }
+PROPIAS = {
+    "antidisturbios-72": {
+        "porrazo": ("porrazo", 12, False, False),
+        "carga": ("carga", 12, False, False),
+        "silbato": ("silbato", 9, False, False),
+    },
+    "mascota-72": {
+        "embestida": ("embestida", 14, True, False, True),
+        "salto": ("salto", 12, False, False),
+    },
+}
+ANIMS.update(PROPIAS.get(fuente, {}))
 
 
 def limpiar(im: Image.Image) -> Image.Image:
@@ -66,7 +78,7 @@ def quieta(d: str) -> Image.Image:
 
 
 # Los fotogramas de una animación y dónde va su esquina respecto al lienzo de 72
-def fotogramas(carpeta: str, d: str, quitar_ultimo: bool) -> list:
+def fotogramas(carpeta: str, d: str, quitar_ultimo: bool, quitar_primero: bool = False) -> list:
     if carpeta == "rotations":
         return [(quieta(d), (0, 0))]
     ruta = f"{src}/{carpeta}"
@@ -83,13 +95,15 @@ def fotogramas(carpeta: str, d: str, quitar_ultimo: bool) -> list:
     if abs((a[2] - a[0]) - (b[2] - b[0])) > 3:
         print(f"  ojo: {carpeta}/{d}: su primer fotograma no se parece a la vista quieta")
     sitio = (a[0] - b[0], a[3] - b[3])
+    if quitar_primero:   # (después de alinear, que se hace con el primero)
+        lista = lista[1:]
     return [(limpiar(im), sitio) for im in lista]
 
 
 filas = []   # (nombre, fps, bucle, [(imagen, sitio)])
-for nombre, (carpeta, fps, bucle, quitar) in ANIMS.items():
+for nombre, (carpeta, fps, bucle, *quitar) in ANIMS.items():
     for d, dd in DIRS.items():
-        imgs = fotogramas(carpeta, d, quitar)
+        imgs = fotogramas(carpeta, d, *quitar)
         if not imgs:
             if nombre == "silbato" and d != "south":
                 continue   # el silbato solo está dibujado de frente
