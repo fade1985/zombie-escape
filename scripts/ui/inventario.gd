@@ -16,6 +16,7 @@ extends CanvasLayer
 signal cerrado
 
 const CASILLA := Vector2(108, 100)
+const CASILLA_PEQUENA := Vector2(86, 96)   # en el banco, cuando hay muchas cosas (las de los dos edificios)
 const FONDO_CASILLA := Color("#1b1822")
 
 var partida: Node
@@ -177,7 +178,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	var s := Guardado.cargar()
 	titulo(columna, "Baúl · %d / %d" % [Objetos.casillas_baul(s), Objetos.BAUL])
 	var rejilla := GridContainer.new()
-	rejilla.columns = 6
+	rejilla.columns = 8
 	rejilla.add_theme_constant_override("h_separation", 6)
 	rejilla.add_theme_constant_override("v_separation", 6)
 	columna.add_child(rejilla)
@@ -190,7 +191,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 		if s.baul.get(id, 0) > 0:
 			casilla(rejilla, "o_" + id, Objetos.icono(id), Objetos.nombre(id), "× %d" % s.baul[id], Recetas.GRIS, false)
 			n += 1
-	for i in range(n, maxi(Objetos.BAUL, ceili(n / 6.0) * 6)):
+	for i in range(n, maxi(Objetos.BAUL, ceili(n / 8.0) * 8)):
 		casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
 	var texto := "Está vacío. Lo que lleves en la mochila se guarda aquí al completar un edificio, y aquí van las armas que crees en el banco de trabajo."
 	if sel.begins_with("a"):
@@ -275,6 +276,14 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 	columna.add_child(rejilla)
 	for g in ings:
 		casilla(rejilla, g.clave, Objetos.icono(g.id), Objetos.nombre(g.id), g.nota, Recetas.GRIS, true, g.clave in puestos)
+	if ings.size() > 24:
+		# si no caben en tres filas, casillas más pequeñas (para que la mesa siga dentro de la pantalla); los nombres
+		# largos se salen un poco del hueco antes que partirse a media palabra
+		rejilla.columns = 10
+		for c in rejilla.get_children():
+			c.custom_minimum_size = CASILLA_PEQUENA
+			for t in c.find_children("*", "Label", true, false):
+				t.autowrap_mode = TextServer.AUTOWRAP_WORD
 	if ings.is_empty():
 		nota(columna, "No tienes nada que combinar. Los objetos los sueltan los zombis.")
 	# la mesa: lo puesto + lo puesto = lo que sale

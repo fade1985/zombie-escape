@@ -13,12 +13,17 @@
 #
 # Al ganar con él en el equipo se viene a vivir a la sala de mantenimiento (Guardado: rescatados) y ya no vuelve a
 # salir. Los rescatados esperan cada uno en su sitio ("casa"): los tres de siempre a la derecha del ordenador y los
-# del centro comercial en otra fila, debajo, cada uno delante del hueco de lo suyo (la cafetera, el puesto del
-# ferretero...: "mejora", que llega con el rescate propio de cada uno). Al arrimarse a uno, te acompaña (Guardado:
-# acompanante) y empieza las partidas siguientes en el equipo. Solo uno a la vez.
+# del centro comercial en otra fila, debajo, cada uno delante del hueco de lo suyo (el puesto del ferretero, las
+# cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno). Al arrimarse a uno, te acompaña
+# (Guardado: acompanante) y empieza las partidas siguientes en el equipo. Solo uno a la vez.
+#
+# El guiño de la cafetera: la primera vez que la farmacéutica está en la sala, huele el café de la cafetera de
+# Johnny (mapa/cafetera.gd), le encuentra el doble fondo con cápsulas de VD-7 y se lo dice (Historia.CAFETERA).
 #
 # Los del centro comercial, de momento, se rescatan como los de siempre (encerrados, gritando y con la horda):
-# su rescate propio llega en un trozo para cada uno (docs/CENTRO_COMERCIAL.md, «Supervivientes»).
+# su rescate propio llega en un trozo para cada uno (docs/CENTRO_COMERCIAL.md, «Supervivientes»). Ya está el de
+# la farmacéutica ("rescate": "escolta"): sin horda, hay que llevarla herida hasta las escaleras (escolta.gd). Y el
+# del técnico ("rescate": "averia"): bajar la palanca del cuadro y aguantar a oscuras mientras arregla el cable (averia.gd).
 #
 # Lo monta partida.gd: recoger() antes de cambiar de sitio y al_montar() después.
 class_name Supervivientes
@@ -29,7 +34,8 @@ const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 # Los que se pueden rescatar (SURVIVORS de src/config.js y los tres del centro comercial). "edificio": dónde sale;
 # "look": los colores de su dibujo (persona.gd); "arma": la que lleva en la mano; "casa": su sitio en la sala de
 # mantenimiento. Los del centro comercial llevan además "tienda" y "sala" (dónde se esconde), "gritos" (los suyos)
-# y "mejora" (lo que hará en la sala de mantenimiento cuando llegue su trozo)
+# y "mejora" (lo que hará en la sala de mantenimiento cuando llegue su trozo). "rescate": si no es la horda de
+# siempre, cuál ("escolta": escolta.gd; "averia": averia.gd); "al_abrir": lo que dice al abrirse su puerta
 const DATOS := {
 	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"casa": Vector2(600, 174),
@@ -65,6 +71,7 @@ const DATOS := {
 			"shoes": Color("#3b3550"), "bata": Color("#8fd3e8"), "cross": true, "cross_color": Color("#2fbf5b"),
 			"peinado": "moño"},
 		"gritos": ["¡Socorro!", "¡Estoy en la rebotica!", "¡Estoy herida!", "¡Ayuda, por favor!", "¡Aquí detrás!"],
+		"rescate": "escolta", "al_abrir": "¡Me han mordido la pierna! No puedo correr",
 		"desc": "Los charcos de veneno y ácido te hacen la mitad",
 		"habilidad": {"tipo": "charcos", "cada": 1.0, "parte": 0.5},
 		"mejora": "Cada partida empiezas con un botiquín en la mochila"},
@@ -73,6 +80,7 @@ const DATOS := {
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],
+		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",
 		"desc": "Cada 4 s, una descarga deja quieto 1 s al zombi más cercano",
 		"habilidad": {"tipo": "aturdir", "cada": 4.0, "segundos": 1.0, "alcance": 260.0},
 		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},
@@ -127,6 +135,8 @@ var grito_t := -9.0
 var horda := {}
 var tiempo := 0.0
 var capa: Control          # la flecha del borde y la barra de la horda (en la pantalla)
+var escolta := Escolta.new()   # el rescate de la farmacéutica
+var averia := Averia.new()     # el del técnico
 
 
 func preparar(p: Node) -> void:
@@ -140,6 +150,10 @@ func preparar(p: Node) -> void:
 	var pantalla: Node = p.get_node("Pantalla")
 	pantalla.add_child(capa)
 	pantalla.move_child(capa, p.negro.get_index())   # por debajo del fundido a negro
+	escolta.sup = self
+	add_child(escolta)
+	averia.sup = self
+	add_child(averia)
 
 
 # Al empezar la partida: quién sale y en qué planta (elegirSuperviviente), de los de este edificio. Los que ya
@@ -242,6 +256,7 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		sala_socorro = -1
 	if sitio.tipo == "mantenimiento":
 		colocar_vecinos()
+		guino_cafetera()
 
 
 func _process(delta: float) -> void:
@@ -345,7 +360,7 @@ func piso_limpio(idx: int) -> void:
 			partida.mapa.rehornear()
 	await get_tree().create_timer(0.4, false).timeout
 	if npc and partida.aqui == idx:
-		npc.decir("¡Gracias! ¡Sácame de aquí!")
+		npc.decir(rescate.def.get("al_abrir", "¡Gracias! ¡Sácame de aquí!"))
 
 
 # Johnny se le arrima con la puerta abierta: se une al equipo
@@ -362,6 +377,10 @@ func unir(a: Aliado) -> void:
 	partida.decir("¡%s se une al equipo! %s" % [a.def.nombre, a.def.desc], 3.5)
 	Sonido.tocar("limpio")
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
+	if a.def.get("rescate", "") == "escolta":
+		escolta.empezar(a)
+	elif a.def.get("rescate", "") == "averia":
+		averia.empezar(a)   # si su tienda no tuviera el agua con corriente, la horda de siempre
 
 
 # ═════════════ La horda ═════════════
@@ -370,6 +389,8 @@ func actualizar_horda(delta: float) -> void:
 	var r := rescate
 	if r.is_empty() or not r.rescatado or not r.amigo in equipo or partida.aqui != r.sitio:
 		return
+	if r.def.get("rescate", "") == "escolta" or averia.activa():
+		return   # la farmacéutica no tiene horda (su escolta va en escolta.gd), ni el técnico (averia.gd)
 	var a: Aliado = r.amigo
 	if horda.is_empty():
 		if r.horda_hecha or not johnny.vivo:
@@ -455,6 +476,12 @@ func acabar_horda() -> void:
 
 # Le han dado: si se ha caído, lo dice; si Johnny anda lejos, se queja (como mucho cada 6 s)
 func al_herir(cae: bool, a: Aliado) -> void:
+	if escolta.ella == a:
+		escolta.al_herir(cae)
+		return
+	if averia.el == a:
+		averia.al_herir(cae)
+		return
 	if horda.is_empty():
 		return
 	if cae:
@@ -561,9 +588,38 @@ func llevar_vecino(v: Aliado) -> void:
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
 
+# ═════════════ El guiño de la cafetera ═════════════
+
+const CAFE_PAUSA := 1.5   # segundos en la sala antes de que la farmacéutica huela el café
+const CAFE_CADA := 3.6    # y entre frase y frase (el bocadillo dura 3,2)
+
+# La primera vez que la farmacéutica (ya rescatada) está en la sala de mantenimiento, en su sitio o acompañándote,
+# huele el café, encuentra el doble fondo con las cápsulas de VD-7 y se lo dice a Johnny, frase a frase
+# (Historia.CAFETERA). Se apunta en el guardado con la última frase: si Johnny se va antes, lo vuelve a contar la
+# próxima vez. Desde entonces el café es solo café, y no lo repite nunca más
+func guino_cafetera() -> void:
+	var g := Guardado.cargar()
+	if g.cafetera or "farmaceutica" not in g.rescatados:
+		return
+	var ella: Aliado = null
+	for a in vecinos + equipo:
+		if a.def.id == "farmaceutica":
+			ella = a
+	if ella == null:
+		return
+	var mapa: Node2D = partida.mapa
+	for i in Historia.CAFETERA.size():
+		await get_tree().create_timer(CAFE_PAUSA if i == 0 else CAFE_CADA, false).timeout
+		if partida.mapa != mapa or not is_instance_valid(ella) or not ella.is_inside_tree():
+			return   # Johnny ha salido de la sala
+		ella.decir(Historia.CAFETERA[i])
+	Guardado.cambiar(func(x): x.cafetera = true)
+
+
 # ═════════════ En la pantalla ═════════════
 
-# La flecha en el borde hacia donde está encerrado y, en la horda, la barra de la cerradura y la cuenta atrás
+# La flecha en el borde hacia donde está encerrado; en la horda, la barra de la cerradura y la cuenta atrás; y en
+# la escolta de la farmacéutica, lo suyo (escolta.gd)
 func dibujar_capa() -> void:
 	if partida == null or partida.mapa == null or partida.terminada:
 		return
@@ -578,18 +634,9 @@ func dibujar_capa() -> void:
 			if p:
 				hacia = p.position
 		if hacia != Vector2.INF:
-			var en := partida.get_viewport().get_canvas_transform() * hacia
-			var borde := Rect2(Vector2.ZERO, tam).grow(-34)
-			if not borde.has_point(en):
-				var punto := en.clamp(borde.position, borde.end)
-				var color: Color = rescate.def.color
-				var radio := 16.0 if tiempo - grito_t < 0.7 else 13.0
-				var dir := (en - punto).normalized()
-				capa.draw_colored_polygon(PackedVector2Array([punto + dir * (radio + 10), punto + dir.orthogonal() * 8 + dir * radio * 0.6,
-					punto - dir.orthogonal() * 8 + dir * radio * 0.6]), color)
-				capa.draw_circle(punto, radio + 2, Tema.LINEA)
-				capa.draw_circle(punto, radio, color)
-				capa.draw_string(letra, punto + Vector2(-20, 6), "!", HORIZONTAL_ALIGNMENT_CENTER, 40, 16, Tema.LINEA)
+			flecha(hacia, rescate.def.color, tiempo - grito_t < 0.7)
+	escolta.dibujar(capa)
+	averia.dibujar(capa)
 	if horda.is_empty():
 		return
 	var a: Aliado = rescate.amigo
@@ -615,12 +662,30 @@ func dibujar_capa() -> void:
 		capa.draw_string(letra, Vector2(0, 150), str(falta), HORIZONTAL_ALIGNMENT_CENTER, tam.x, grande, Tema.AMARILLO)
 
 
+# La flecha en el borde de la pantalla hacia "hacia" (si no se ve), con un "!" (más grande si "grande")
+func flecha(hacia: Vector2, color: Color, grande: bool) -> void:
+	var tam := capa.size
+	var en := partida.get_viewport().get_canvas_transform() * hacia
+	var borde := Rect2(Vector2.ZERO, tam).grow(-34)
+	if borde.has_point(en):
+		return
+	var punto := en.clamp(borde.position, borde.end)
+	var radio := 16.0 if grande else 13.0
+	var dir := (en - punto).normalized()
+	capa.draw_colored_polygon(PackedVector2Array([punto + dir * (radio + 10), punto + dir.orthogonal() * 8 + dir * radio * 0.6,
+		punto - dir.orthogonal() * 8 + dir * radio * 0.6]), color)
+	capa.draw_circle(punto, radio + 2, Tema.LINEA)
+	capa.draw_circle(punto, radio, color)
+	capa.draw_string(Tema.FUENTE, punto + Vector2(-20, 6), "!", HORIZONTAL_ALIGNMENT_CENTER, 40, 16, Tema.LINEA)
+
+
 # ═════════════ Para probar ═════════════
 
 # Tecla H: el superviviente pasa a esta planta y Johnny va a su apartamento, ya sin zombis (se abre el baño al
 # entrar). Sirve para probar el rescate y la horda sin jugar hasta su planta. En el centro comercial, cada vez
-# trae al siguiente de los tres (ferretero, farmacéutica, técnico) y rehace la planta con su tienda
-func probar_aqui(fundir := true) -> void:
+# trae al siguiente de los tres (ferretero, farmacéutica, técnico) y rehace la planta con su tienda. Con "quien"
+# (para las pruebas), ese
+func probar_aqui(fundir := true, quien := "") -> void:
 	var sup: Dictionary = partida.planta.get("superviviente", {})
 	if partida.cerrada or sup.is_empty():
 		partida.decir("Ahora no se puede")
@@ -632,6 +697,8 @@ func probar_aqui(fundir := true) -> void:
 	var num: int = partida.planta.num
 	if DATOS[propios[0]].has("tienda"):
 		var i: int = (propios.find(rescate.def.id) + 1) % propios.size() if not rescate.is_empty() else 0
+		if quien != "":
+			i = propios.find(quien)
 		poner_rescate(DATOS[propios[i]], num)
 		partida.nueva_planta(num)   # la misma planta otra vez, ya con su tienda
 		sup = partida.planta.superviviente
@@ -654,6 +721,9 @@ func probar_aqui(fundir := true) -> void:
 func probar() -> void:
 	partida.menus.visible = false   # por si ha salido el recuadro de una mutación (tapa las fotos)
 	await probar_aqui(false)
+	for i in 2:
+		if rescate.def.get("rescate", "") in ["escolta", "averia"]:
+			await probar_aqui(false)   # la horda, con otro (la escolta y la avería se prueban en escolta.gd y averia.gd)
 	await get_tree().create_timer(0.3, false).timeout
 	var sup: Dictionary = partida.planta.superviviente
 	print("Superviviente: %s en %s · %s | baño cerrado %s | puerta %s" % [rescate.def.nombre, partida.planta.nombre,
@@ -706,6 +776,9 @@ func probar() -> void:
 	get_viewport().get_texture().get_image().save_png("res://captura-vecinos.png")
 	await probar_los_seis()
 	await probar_acompanantes()
+	await probar_cafetera()
+	await escolta.probar()
+	await averia.probar()
 	partida.menus.visible = true
 
 
@@ -760,6 +833,45 @@ func probar_acompanantes() -> void:
 	for a in equipo:
 		a.queue_free()
 	equipo = antes
+
+
+# El guiño de la cafetera: solo la farmacéutica en la sala, con la cafetera sin descubrir. La foto con su primera
+# frase (captura-cafetera.png); luego, lo que dice y si queda apuntado, y que la segunda vez ya no dice nada. Se
+# deja el guardado y el equipo como estaban
+func probar_cafetera() -> void:
+	var g := Guardado.cargar()
+	var antes := [g.rescatados.duplicate(), g.acompanante, g.cafetera]
+	var equipo_antes := equipo
+	for a in equipo:
+		if a.get_parent():
+			a.get_parent().remove_child(a)
+	equipo = []
+	Guardado.cambiar(func(x):
+		x.rescatados = ["farmaceutica"]
+		x.acompanante = ""
+		x.cafetera = false)
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	var ella: Aliado = vecinos[0]
+	johnny.position = ella.position + Vector2(-30, 120)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-cafetera.png")
+	var dichas := [ella.dicho]
+	for i in Historia.CAFETERA.size() - 1:
+		await get_tree().create_timer(CAFE_CADA, false).timeout
+		dichas.append(ella.dicho)
+	print("Cafetera: %s dice %s | apuntada %s" % [ella.def.nombre, dichas, Guardado.cargar().cafetera])
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	await get_tree().create_timer(CAFE_PAUSA + CAFE_CADA * 2.0 + 0.5, false).timeout
+	print("Cafetera, la segunda vez: dice '%s'" % vecinos[0].dicho)
+	Guardado.cambiar(func(x):
+		x.rescatados = antes[0]
+		x.acompanante = antes[1]
+		x.cafetera = antes[2])
+	equipo = equipo_antes
+	for a in equipo:
+		partida.mapa.cosas.add_child(a)
+		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
 
 
 func iconos_lanzables() -> Array:

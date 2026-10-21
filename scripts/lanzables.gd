@@ -47,10 +47,22 @@ const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y expl
 #   mecha    segundos hasta que revienta · radio  de la explosión · color  del dibujo, el aviso y los anillos
 #   atrae    la atraedora suena y los zombis (a menos de esa distancia) van hacia ella en vez de hacia Johnny
 #   congela  segundos que quedan quietos los que pilla · charco  deja la lluvia ácida (charco.gd, solo zombis)
+# Las del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md):
+#   rompe    la bomba de aceite no bota: se rompe al caer, como el molotov (proyectil.gd), y deja el charco de
+#            aceite, que resbala y a los 2 s arde (charco.gd). Su daño es el del fuego (22 = como el molotov)
+#   mina     no tiene mecha: se queda en el suelo y, ya quieta, explota cuando un zombi pasa a menos de "pisa".
+#            "dibujo": se ve el icono de ese objeto en vez de la granada
+#   nube     no explota: suelta la nube somnífera (nube.gd), que dura esos segundos y duerme "duerme" s más
+#   clavos   cuántos salen disparados al explotar (chorro.gd), cada uno con "pincha" del daño, y hacen sangrar
 const ARROJADIZAS := {
 	"atraedora": {"mecha": 3.0, "radio": 110.0, "color": Color("#ffd23f"), "atrae": 520.0},
 	"congeladora": {"mecha": 2.0, "radio": 120.0, "color": Color("#9fe8ff"), "congela": 3.0},
 	"lluvia_acida": {"mecha": 2.0, "radio": 90.0, "color": Color("#c7e04a"), "charco": true},
+	"bomba_aceite": {"mecha": 0.0, "radio": 54.0, "color": Color("#e8c547"), "rompe": true},
+	"mina_despertador": {"mecha": 0.0, "radio": 110.0, "color": Color("#ff9f1c"), "mina": true, "pisa": 50.0,
+		"dibujo": "despertador"},
+	"nube_somnifera": {"mecha": 1.2, "radio": 120.0, "color": Color("#c9a0ff"), "nube": 3.0, "duerme": 3.0},
+	"bomba_clavos": {"mecha": 2.0, "radio": 90.0, "color": Color("#c0c4d0"), "clavos": 14, "pincha": 0.35},
 }
 const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de una arrojadiza creada
 const DATOS := {"molotov": MOLOTOV, "granada": GRANADA}
@@ -223,12 +235,25 @@ func lanzar(donde: Vector2) -> void:
 		sala.add_child(g)
 
 
-# Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto)
+# Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto; la
+# bomba de aceite, como el molotov)
 func lanzar_creada(donde: Vector2, sala: Node) -> void:
 	var a: Dictionary = creadas.filter(func(o): return o.receta == tipo)[0]
 	a.unidades -= 1
 	if a.unidades <= 0:
 		creadas.erase(a)
+	if ARROJADIZAS[tipo].has("rompe"):
+		var p := PROYECTIL.instantiate()
+		p.tipo = "aceite"
+		p.desde = johnny.global_position
+		p.alto_salida = 20.0
+		p.hasta = donde
+		p.dano_lanzar = a.dano / float(Recetas.LISTA[tipo].dano) * johnny.stats.dano_lanzar   # la rareza quema más
+		p.fabricante = johnny.stats.fabricante
+		sala.add_child(p)
+		if cuantas(tipo) <= 0:
+			tipo = "molotov"
+		return
 	var g := BOMBA.new()
 	g.tipo = tipo
 	g.desde = johnny.global_position
