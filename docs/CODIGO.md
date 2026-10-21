@@ -45,8 +45,7 @@
 - `portera.gd`: la jefa, por estados (charcos de ácido, embestida, grito "¡VECINOS!"; números en sus constantes).
 - `bala_zombi.gd`, `proyectil.gd` (moco, lejía y ácido en parábola), `explosion.gd`.
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes (con lo de su
-  oficio para los del centro comercial: delantal, chaleco, bata, cascos, coleta, moño, bigote, martillo).
-- `plato.gd`: el plato que tira la camarera (una bala de `bala.gd` con otro dibujo, que se rompe al chocar).
+  oficio para los del centro comercial: chaleco, bata, cascos, moño, bigote, martillo).
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
@@ -62,10 +61,10 @@
 - `historia.gd`: el texto del dosier, la hoja de papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale
   cada una; las vistas en `noticias_vistas` del guardado). Para cambiar la historia se edita aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
-  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los siete:
-  los tres de los Apartamentos y los cuatro del centro comercial, con su tienda y su habitación (`planta.gd` pone
+  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los seis:
+  los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
   su tienda en su planta: `Planta.tienda_fija`), sus gritos, su sitio en la sala (`casa`) y su mejora (pendiente).
-  Lo suyo al acompañarte: disparar, curar, platos (`plato.gd`), martillazos, descarga que aturde y charcos a
+  Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
   medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).

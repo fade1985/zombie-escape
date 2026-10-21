@@ -21,7 +21,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
-  En el centro comercial, cada H trae al siguiente de sus cuatro (camarera, ferretero, farmacéutica, técnico): rehace
+  En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
   la planta con su tienda y te lleva a ella, ya sin zombis. Con uno ya rescatado en la partida, no hace nada.
 
 ## La sala de mantenimiento

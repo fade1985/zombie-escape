@@ -1,7 +1,7 @@
 # El superviviente de la partida (src/superviviente.js del JS). En cada partida sale uno de los de su edificio que
 # aún no viven en la sala de mantenimiento, en una planta al azar (nunca la última): en los Apartamentos, uno de
-# los tres de siempre, escondido en el baño de un apartamento; en el centro comercial, uno de sus cuatro, en la
-# trastienda de su tienda (la camarera en la cámara frigorífica del restaurante...). Siempre con la puerta
+# los tres de siempre, escondido en el baño de un apartamento; en el centro comercial, uno de sus tres, en la
+# trastienda de su tienda (el ferretero en el almacén de la ferretería...). Siempre con la puerta
 # cerrada y sin zombis dentro (lo guarda planta.gd, que pone su tienda en su planta: Planta.tienda_fija). Grita "¡Socorro!" y da golpes de
 # vez en cuando para que se sepa dónde está (más flojo desde el pasillo); hay una flecha en el borde de la
 # pantalla y un "!" en el minimapa. Al limpiar el piso se abre la puerta del baño y, al arrimarse, se une al equipo.
@@ -26,7 +26,7 @@ extends Node
 
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 
-# Los que se pueden rescatar (SURVIVORS de src/config.js y los cuatro del centro comercial). "edificio": dónde sale;
+# Los que se pueden rescatar (SURVIVORS de src/config.js y los tres del centro comercial). "edificio": dónde sale;
 # "look": los colores de su dibujo (persona.gd); "arma": la que lleva en la mano; "casa": su sitio en la sala de
 # mantenimiento. Los del centro comercial llevan además "tienda" y "sala" (dónde se esconde), "gritos" (los suyos)
 # y "mejora" (lo que hará en la sala de mantenimiento cuando llegue su trozo)
@@ -49,17 +49,9 @@ const DATOS := {
 			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
 		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
-	# los del centro comercial (parte 5 del plan)
-	"camarera": {"id": "camarera", "nombre": "Camarera", "edificio": "centro", "color": Color("#ff8fa3"), "arma": "",
-		"casa": Vector2(549, 380), "tienda": "restaurante", "sala": "camara",
-		"look": {"skin": Color("#e8b48a"), "hair": Color("#7b3f1e"), "shirt": Color("#e8394f"), "pants": Color("#2b2b35"),
-			"shoes": Color("#1d1b2c"), "delantal": Color("#fbf7ee"), "peinado": "coleta"},
-		"gritos": ["¡Socorro!", "¡Estoy en la cámara!", "¡Me estoy congelando!", "¡Sacadme de la nevera!", "¡Aquí dentro!"],
-		"desc": "Tira platos (4 de daño) cada 1,5 s",
-		"habilidad": {"tipo": "disparar", "cada": 1.5, "dano": 4, "rafaga": 1, "plato": true},
-		"mejora": "Arregla la cafetera: cada partida empieza con un café (+25 de vida máxima)"},
+	# los del centro comercial (parte 5 del plan; tres por edificio: el dueño quitó a la camarera)
 	"ferretero": {"id": "ferretero", "nombre": "Ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
-		"casa": Vector2(647, 380), "tienda": "ferreteria", "sala": "almacen",
+		"casa": Vector2(600, 380), "tienda": "ferreteria", "sala": "almacen",
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
@@ -68,7 +60,7 @@ const DATOS := {
 		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 46.0},
 		"mejora": "Monta su puesto: vende munición, molotovs y granadas por dólares"},
 	"farmaceutica": {"id": "farmaceutica", "nombre": "Farmacéutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
-		"casa": Vector2(745, 380), "tienda": "farmacia", "sala": "rebotica",
+		"casa": Vector2(710, 380), "tienda": "farmacia", "sala": "rebotica",
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#2b1d14"), "shirt": Color("#f4f6f8"), "pants": Color("#55606e"),
 			"shoes": Color("#3b3550"), "bata": Color("#8fd3e8"), "cross": true, "cross_color": Color("#2fbf5b"),
 			"peinado": "moño"},
@@ -77,7 +69,7 @@ const DATOS := {
 		"habilidad": {"tipo": "charcos", "cada": 1.0, "parte": 0.5},
 		"mejora": "Cada partida empiezas con un botiquín en la mochila"},
 	"tecnico": {"id": "tecnico", "nombre": "Técnico", "edificio": "centro", "color": Color("#4fe3ff"), "arma": "",
-		"casa": Vector2(843, 380), "tienda": "electronica", "sala": "almacen",
+		"casa": Vector2(820, 380), "tienda": "electronica", "sala": "almacen",
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],
@@ -627,7 +619,7 @@ func dibujar_capa() -> void:
 
 # Tecla H: el superviviente pasa a esta planta y Johnny va a su apartamento, ya sin zombis (se abre el baño al
 # entrar). Sirve para probar el rescate y la horda sin jugar hasta su planta. En el centro comercial, cada vez
-# trae al siguiente de los cuatro (camarera, ferretero, farmacéutica, técnico) y rehace la planta con su tienda
+# trae al siguiente de los tres (ferretero, farmacéutica, técnico) y rehace la planta con su tienda
 func probar_aqui(fundir := true) -> void:
 	var sup: Dictionary = partida.planta.get("superviviente", {})
 	if partida.cerrada or sup.is_empty():
@@ -712,14 +704,14 @@ func probar() -> void:
 		await get_tree().create_timer(0.3, false).timeout
 	print("Acompañante: '%s' | equipo %s" % [Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre)])
 	get_viewport().get_texture().get_image().save_png("res://captura-vecinos.png")
-	await probar_los_siete()
+	await probar_los_seis()
 	await probar_acompanantes()
 	partida.menus.visible = true
 
 
-# Los siete rescatados a la vez en la sala de mantenimiento, cada uno en su sitio (sin acompañante, para que se
+# Los seis rescatados a la vez en la sala de mantenimiento, cada uno en su sitio (sin acompañante, para que se
 # vean todos). Luego se deja el guardado y el equipo como estaban
-func probar_los_siete() -> void:
+func probar_los_seis() -> void:
 	var g := Guardado.cargar()
 	var antes := [g.rescatados.duplicate(), g.acompanante]
 	var equipo_antes := equipo
@@ -733,8 +725,8 @@ func probar_los_siete() -> void:
 	johnny.position = Vector2(300, 470)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
-	print("Los siete en mantenimiento: %s" % [vecinos.map(func(v): return "%s %s" % [v.def.nombre, v.position])])
-	get_viewport().get_texture().get_image().save_png("res://captura-sala-siete.png")
+	print("Los seis en mantenimiento: %s" % [vecinos.map(func(v): return "%s %s" % [v.def.nombre, v.position])])
+	get_viewport().get_texture().get_image().save_png("res://captura-sala-seis.png")
 	Guardado.cambiar(func(x):
 		x.rescatados = antes[0]
 		x.acompanante = antes[1])
@@ -744,7 +736,7 @@ func probar_los_siete() -> void:
 		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
 
 
-# Lo suyo al acompañarte, de los cuatro del centro comercial a la vez: tres zombis lentos cerca de Johnny
+# Lo suyo al acompañarte, de los tres del centro comercial a la vez: tres zombis lentos cerca de Johnny
 func probar_acompanantes() -> void:
 	var antes := equipo
 	equipo = de_edificio("centro").map(func(id): return crear(DATOS[id], "equipo"))

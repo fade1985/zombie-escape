@@ -110,7 +110,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 ### Decidido con el dueño (21 oct, para la parte 5)
 
-- **Cuatro supervivientes nuevos, solo del centro comercial**, uno por cada tipo de tienda con trastienda. **Uno por
+- **Tres supervivientes nuevos, solo del centro comercial** (eran cuatro; el dueño quitó a la camarera el 21 oct:
+  **tres por edificio**), cada uno en un tipo de tienda con trastienda. **Uno por
   partida, como ahora**: sale uno de los que aún no tienes, en una planta al azar (nunca la azotea); en los
   Apartamentos siguen saliendo el policía, la médica y el militar. Al rescatarlo se queda a vivir en la sala de
   mantenimiento para siempre y **la hace crecer** con algo suyo; como ahora, puede acompañarte (uno a la vez).
@@ -120,37 +121,35 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 | Quién | Dónde y cómo se le rescata | En la sala | Si te acompaña |
 |---|---|---|---|
-| **Camarera** | Encerrada en la cámara frigorífica del restaurante, congelándose: una barra de frío de unos 2 min desde que entras en la tienda; si se acaba, se pierde (esa partida) | Arregla la cafetera: cada partida empieza con un café, +25 de vida máxima esa partida | Tira platos: flojo (4) y de lejos, cada 1,5 s |
 | **Ferretero** | Atrincherado en el almacén de la ferretería: la horda de siempre mientras quita la barricada (más corta, unos 2 min) | Monta su puesto: vende munición, molotovs y granadas por dólares | Martillazos de cerca (8) |
 | **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
 | **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
 
 - **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
   ahí le metían el VD-7. Decidido en la parte 7: al arreglarla encuentra un doble fondo con cápsulas de VD-7 y te lo
-  dice; desde entonces el café es solo café.
+  dice; desde entonces el café es solo café. **Ojo:** la arreglaba la camarera, que ya no está; falta decidir quién
+  (o cómo) se descubre ahora.
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
 - ✅ **Lo común** (21 oct):
-  - Los cuatro, en `supervivientes.gd` (`DATOS`), dibujados con código (`persona.gd`): la camarera con uniforme rojo,
-    delantal de cintura y coleta; el ferretero con chaleco naranja de raya brillante, gorra y bigote, y su martillo; la
-    farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
+  - Los tres, en `supervivientes.gd` (`DATOS`), dibujados con código (`persona.gd`): el ferretero con chaleco naranja
+    de raya brillante, gorra y bigote, y su martillo; la farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
     aparato con lucecita en el cinturón.
-  - En el centro comercial sale uno de los cuatro que aún no tengas (en los Apartamentos, los tres de siempre, sin
+  - En el centro comercial sale uno de los tres que aún no tengas (en los Apartamentos, los tres de siempre, sin
     cambios). Su tienda sale siempre en su planta (`Planta.tienda_fija`) y se esconde en su trastienda, cerrada y sin
-    zombis: la camarera en la cámara frigorífica del restaurante, el ferretero en el almacén de la ferretería, la
+    zombis: el ferretero en el almacén de la ferretería, la
     farmacéutica en la rebotica (sin zombis tampoco en el aseo que tiene dentro) y el técnico en el almacén de la
-    tienda de electrónica. Cada uno grita lo suyo («¡Me estoy congelando!»).
+    tienda de electrónica. Cada uno grita lo suyo («¡No toquéis el agua!»).
   - De momento se rescatan como los de siempre (encerrados, gritando y con la horda forzando la cerradura); cada trozo
     siguiente cambia solo su rescate y hace su mejora de la sala.
-  - Lo suyo al acompañarte, ya hecho (lo pidió el dueño): platos que se rompen (4, cada 1,5 s), martillazos a los que
-    se le acercan (8, cada 0,9 s), charcos de veneno y ácido a la mitad, y una descarga cada 4 s que deja quieto 1 s
+  - Lo suyo al acompañarte, ya hecho (lo pidió el dueño): martillazos a los que se le acercan (8, cada 0,9 s), charcos de veneno y ácido a la mitad, y una descarga cada 4 s que deja quieto 1 s
     al zombi más cercano (hasta 260 de distancia).
-  - En la sala de mantenimiento, los tres de siempre donde estaban y los cuatro nuevos en una fila debajo, cada uno
+  - En la sala de mantenimiento, los tres de siempre donde estaban y los tres nuevos en una fila debajo, cada uno
     con un hueco libre detrás para su mejora (`Planta.SITIO_CENTRO`; el texto de cada mejora, en `DATOS`, "mejora").
-    Lo que no decía el plan: con siete en la sala, solo dice «¿Te acompaño?» el que tienes más cerca (si no, se
+    Lo que no decía el plan: con seis en la sala, solo dice «¿Te acompaño?» el que tienes más cerca (si no, se
     pisaban los bocadillos).
-  - Tecla **H** en el centro: cada vez, el siguiente de los cuatro (rehace la planta con su tienda).
-    `--captura` saca además `captura-sala-siete.png` (los siete en la sala).
+  - Tecla **H** en el centro: cada vez, el siguiente de los tres (rehace la planta con su tienda).
+    `--captura` saca además `captura-sala-seis.png` (los seis en la sala).
 
 ## Objetos
 
@@ -227,7 +226,8 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
   que no vuelven a casa, un audio del gerente, y al completar el centro: «un helicóptero de Velaria aterriza en la
   azotea... vacío». Como en las de ahora, Velaria va cambiando su versión para taparlo.
 - **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
-  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café.
+  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café. **Ojo:** la camarera ya no está (tres
+  supervivientes por edificio); falta decidir quién descubre el doble fondo.
 - Los textos los escribe Claude y el dueño los lee antes de darlos por buenos (se pueden reescribir: todo está en
   `historia.gd`; lo único que no se toca es el `id` de una página ya publicada).
 

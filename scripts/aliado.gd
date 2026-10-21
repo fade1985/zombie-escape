@@ -2,7 +2,7 @@
 #   - "encerrado": en el baño de su apartamento, temblando, hasta que Johnny limpia el piso y se le arrima.
 #   - "equipo": sigue a Johnny dando vueltas a su alrededor y usa lo suyo: el policía y el militar disparan al
 #     zombi más cercano; la médica cura a Johnny cada pocos segundos y al limpiar cada piso. Los del centro
-#     comercial: la camarera tira platos, el ferretero da martillazos a los que se le acercan, el técnico suelta
+#     comercial: el ferretero da martillazos a los que se le acercan, el técnico suelta
 #     una descarga que deja quieto al zombi más cercano y, con la farmacéutica, los charcos de veneno y ácido le
 #     hacen a Johnny la mitad (eso lo mira johnny.gd: charcos_a_medias).
 #     En la horda (supervivientes.gd) se queda delante de la puerta forzando la cerradura ("forzando"): tiene
@@ -16,7 +16,6 @@ signal herido(cae: bool)   # en la horda: le han dado (y si se ha caído)
 
 const RADIO := 14.0        # para los zombis: a qué distancia le alcanzan
 const BALA := preload("res://escenas/armas/bala.tscn")
-const PLATO := preload("res://scripts/plato.gd")
 const CHARCOS := ["veneno", "acido", "toxico"]   # los que la farmacéutica deja a medias
 const RUMBOS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 const LINEA := Color("#1d1b2c")
@@ -226,9 +225,6 @@ func zombi_cercano() -> Node2D:
 
 func disparar(blanco: Node2D) -> void:
 	var hacia := global_position.direction_to(blanco.global_position).rotated(randf_range(-0.04, 0.04))
-	if def.habilidad.get("plato", false):
-		tirar_plato(hacia)
-		return
 	var bala := BALA.instantiate()
 	bala.velocidad = hacia * 620.0
 	bala.dano = def.habilidad.dano
@@ -243,21 +239,6 @@ func disparar(blanco: Node2D) -> void:
 	bala.altura = 13.0
 	bala.global_position = boca + Vector2(0, 13)
 	Luz.destello(self, boca, 100.0, 0.07)
-
-
-# La camarera: un plato, más lento que una bala y con poco empuje, que sale de su mano
-func tirar_plato(hacia: Vector2) -> void:
-	var plato := PLATO.new()
-	plato.velocidad = hacia * 420.0
-	plato.dano = def.habilidad.dano
-	plato.empuje = 0.5
-	plato.radio = 6.0
-	plato.vida = 520.0 / 420.0
-	plato.altura = 22.0
-	get_parent().add_child(plato)
-	plato.global_position = global_position + hacia * 16.0 + Vector2(0, 6)
-	Sonido.tocar("barrido")
-	animar("reposo", hacia)
 
 
 # El ferretero: un martillazo al zombi que tiene encima (la mano baja de golpe: persona.gd, con el retroceso)

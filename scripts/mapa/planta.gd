@@ -22,7 +22,7 @@ const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la
 const SALA_FILAS := 20
 const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
-const SITIO_CENTRO := Rect2(500, 250, 892 - 500, 170)      # y los del centro comercial, con el hueco de lo suyo
+const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 86            # (alargada para los zombis del centro comercial)
 

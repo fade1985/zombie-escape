@@ -2,7 +2,7 @@
 # camisa y pantalón, manos, cabeza con pelo, ojos que miran hacia donde va, y gorra o casco. La usan los
 # supervivientes (aliado.gd), que en el JS no tenían pixel art. Si lleva arma, se dibuja en su mano
 # (drawHeld de src/weapons.js), apuntando hacia "apunte". Los del centro comercial llevan además lo de su oficio
-# (el delantal de la camarera, el chaleco del ferretero, la bata de la farmacéutica, los cascos del técnico...).
+# (el chaleco del ferretero, la bata de la farmacéutica, los cascos del técnico...).
 # Las medidas son las del JS (unidades del mundo) y se multiplican por "s" (su escala). El origen es su
 # centro en el suelo (su círculo de choque); los pies quedan un poco más abajo.
 class_name Persona
@@ -12,8 +12,8 @@ const LINEA := Color("#1d1b2c")   # el contorno "de dibujo animado"
 const SOMBRA := Color(0.024, 0.016, 0.055)
 
 var look := {}             # colores: skin, hair, shirt, pants, shoes; hat {kind, color, chapa}; cross (y cross_color);
-                           # y los del centro comercial: delantal, chaleco, bata (el cuello de la camisa), cascos
-                           # (colores); peinado ("coleta" o "moño"); bigote, tarjeta y aparato (sí o no)
+                           # y los del centro comercial: chaleco, bata (el cuello de la camisa), cascos (colores);
+                           # peinado ("moño"); bigote, tarjeta y aparato (sí o no)
 var s := 0.82              # su escala (la de los compañeros en el JS)
 var mira := Vector2.DOWN   # hacia dónde mira
 var mueve := Vector2.ZERO  # hacia dónde anda
@@ -85,7 +85,7 @@ func dibujar_persona() -> void:
 	if not de_espaldas:
 		manos(by, fx, fy, lw)
 
-	# cabeza (la coleta o el moño, detrás; de espaldas, encima)
+	# cabeza (el moño, detrás; de espaldas, encima)
 	var r := 15.0 * s
 	var cabeza_c := Vector2(0, by - 15 * s)
 	if not de_espaldas:
@@ -153,14 +153,6 @@ func ropa(cuerpo: PackedVector2Array, by: float, de_espaldas: bool, lw: float) -
 			for x0: float in [-12.0 * s, 3.5 * s]:
 				recortado(cuerpo, rect(Rect2(x0, by - 10 * s, 8.5 * s, 15 * s)), look.chaleco)
 				recortado(cuerpo, rect(Rect2(x0, by - 1 * s, 8.5 * s, 2.5 * s)), raya)
-	if look.has("delantal"):
-		if de_espaldas:
-			for lado: int in [-1, 1]:   # el lazo, en la espalda
-				forma(elipse(Vector2(lado * 3.5 * s, by + 3 * s), 3.5 * s, 2.2 * s), look.delantal, lw * 0.5)
-		else:
-			# de cintura, con su cinta (la cabeza tapa lo de arriba: así se ve el uniforme)
-			recortado(cuerpo, rect(Rect2(-12 * s, by + 3 * s, 24 * s, 1.6 * s)), look.delantal)
-			forma(caja_redonda(Rect2(-6 * s, by + 3.5 * s, 12 * s, 8.5 * s), 2 * s), look.delantal, lw * 0.6)
 	if look.get("tarjeta", false) and not de_espaldas:
 		# el cordón rojo con la tarjeta de la tienda
 		draw_polyline(PackedVector2Array([Vector2(-4.5 * s, by - 9 * s), Vector2(0, by), Vector2(4.5 * s, by - 9 * s)]),
@@ -174,18 +166,12 @@ func ropa(cuerpo: PackedVector2Array, by: float, de_espaldas: bool, lw: float) -
 		draw_rect(Rect2(x + 1.5 * s, by + 4.5 * s, 2 * s, 2 * s), luz)
 
 
-# La coleta (cuelga detrás, hacia el lado contrario de la mirada) o el moño (encima, detrás). "encima": de espaldas
+# El moño (encima de la cabeza, detrás). "encima": de espaldas, se dibuja por encima de la cabeza
 func peinado(cabeza_c: Vector2, lx: float, encima: bool, lw: float) -> void:
-	var cual: String = look.get("peinado", "")
-	if cual == "" or blanco:
+	if look.get("peinado", "") != "moño" or blanco:
 		return
-	var pelo: Color = look.get("hair", Color("#6b3e26"))
-	if cual == "coleta":
-		var c := cabeza_c + (Vector2(0, 5 * s) if encima else Vector2(-lx * 14 * s, 4 * s))
-		forma(elipse(c, 4.5 * s, 8.5 * s, -lx * 0.4 if not encima else 0.0), pelo, lw * 0.7)
-	else:
-		var c := cabeza_c + (Vector2(0, -11 * s) if encima else Vector2(-lx * 5 * s, -14 * s))
-		forma(elipse(c, 6 * s, 5.5 * s), pelo, lw * 0.7)
+	var c := cabeza_c + (Vector2(0, -11 * s) if encima else Vector2(-lx * 5 * s, -14 * s))
+	forma(elipse(c, 6 * s, 5.5 * s), look.get("hair", Color("#6b3e26")), lw * 0.7)
 
 
 # Las manos, con balanceo opuesto a los pies. La del arma la dibuja el arma
