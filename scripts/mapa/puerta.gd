@@ -45,7 +45,9 @@ func _ready() -> void:
 		if cuerpo.is_in_group("jugador"):
 			empujada.emit(indice))
 
-	# El letrero
+	# El letrero (las tiendas de la pared de arriba llevan el suyo de neón, que pone mapa.gd)
+	if salida.has("neon"):
+		return
 	var cartel := Label.new()
 	cartel.text = salida.letrero
 	cartel.theme = Tema.crear()   # la fuente pixel art, a 16 para que se vea nítida

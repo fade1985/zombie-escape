@@ -33,10 +33,25 @@ const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
-const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
-	# las salas de las tiendas, con los suelos de los pisos hasta que tengan los suyos (parte 2 del centro comercial)
-	"tienda": "salon", "almacen": "cocina", "camara": "bano", "taller": "cocina", "taquillas": "dormitorio",
-	"probadores": "dormitorio", "rebotica": "cocina"}
+const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
+# Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
+# techo-<x>. El aseo de las tiendas usa los del baño de los pisos (ESTILO_DE).
+const ESTILO_TIENDA := {
+	"tienda": [["venta-a", "venta-b"], "venta"], "jefe": [["venta-a", "venta-b"], "venta"],
+	"almacen": [["almacen"], "almacen"], "camara": [["camara"], "camara"], "cocina": [["cocinaind"], "cocinaind"],
+	"taller": [["linoleo"], "almacen"], "taquillas": [["linoleo"], "almacen"], "rebotica": [["linoleo"], "venta"],
+	"probadores": [["moqueta"], "venta"]}
+# El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra
+const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false}}
+const NEON := preload("res://scripts/mapa/neon.gd")
+# Los restos sueltos del centro comercial (sprites resto-<nombre>, tools/centro_sprites.py): el juego los reparte al
+# azar por el suelo y las paredes de cada tienda y de la galería, para que haya sangre y destrozo por todas partes
+# sin que se note que la textura se repite. Los repetidos en la lista salen más a menudo.
+const RESTOS_SUELO := ["sangre", "sangre", "cristales", "cristales", "latas", "ropa", "cascotes", "papeles", "papeles"]
+const RESTOS_PARED := ["salpicon", "salpicon", "huellas", "pintada", "agujero"]
+const RESTOS_POR_CASILLA := 1.0 / 30.0    # en el suelo, uno de cada tantas casillas libres (entre 4 y 24)
+const RESTOS_PARED_CADA := 192.0          # en las paredes, como mucho uno por cada tramo de este largo...
+const RESTOS_PARED_SUERTE := 0.45         # ...y no siempre
 const OSCURO := Color(0.07, 0.063, 0.11)   # el color de la niebla
 const NIEBLA := preload("res://escenas/luces/niebla.gdshader")
 const NIEBLA_FONDO := 0.74                 # lo que tapa la niebla a tope (1 = no se ve nada debajo)
@@ -72,6 +87,9 @@ var mascara: Image                # la textura de la niebla, una casilla por pí
 var textura_niebla: ImageTexture
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
+var centro := false               # si es del centro comercial (una tienda o la galería): lleva restos sueltos
+var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
+var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 
 
 func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
@@ -83,22 +101,38 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		# un rectángulo con muros de 2 casillas alrededor; todo el suelo es la "habitación" 0
 		dueno = sitio.dueno
 		if sitio.tipo == "pasillo":
-			estilos[0] = textura("pasillo", "")
-			tapa = load("res://assets/sprites/tapa-pasillo.png")
-			alfombra = load("res://assets/sprites/alfombra-pasillo.png")
+			var estilo: String = sitio.get("estilo", "pasillo")
+			estilos[0] = textura(estilo, "")
+			tapa = load("res://assets/sprites/tapa-%s.png" % PASILLOS[estilo].tapa)
+			if PASILLOS[estilo].alfombra:
+				alfombra = load("res://assets/sprites/alfombra-pasillo.png")
 		else:
 			estilos[0] = textura("mantenimiento", "")
 			tapa = load("res://assets/sprites/tapa-generica.png")
 	else:
 		dueno = sitio.apt.dueno
-		tapa = load("res://assets/sprites/tapa-salon.png")   # la de todo el piso, como en el JS
+		var tienda: bool = sitio.get("tienda", "") != ""
+		# la de todo el piso, como en el JS; en el centro comercial, la suya
+		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-salon.png")
 		for s in sitio.apt.salas:
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
+			if tienda and ESTILO_TIENDA.has(s.uso):
+				var suelos: Array = ESTILO_TIENDA[s.uso][0]
+				var pared: String = ESTILO_TIENDA[s.uso][1]
+				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-%s.png" % suelos[h % suelos.size()]),
+					"pared": load("res://assets/sprites/pared-%s.png" % pared),
+					"techo": load("res://assets/sprites/techo-%s.png" % pared)}
+				continue
 			var estilo: String = ESTILO_DE[s.uso]
 			if estilo == "bano":
 				estilos[s.id] = textura("bano", "-a" if h % 2 else "-b", "-a" if (h >> 1) % 2 else "-b")
 			else:
 				estilos[s.id] = textura(estilo, ["-a", "-b", "-c"][h % 3], ["-a", "-b", "-c"][(h / 3) % 3])
+
+	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") == "galeria"
+	if centro:
+		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
+		preparar_restos()
 
 	var fondo := Node2D.new()
 	fondo.name = "Fondo"
@@ -127,6 +161,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_puertas()
 	poner_muebles()
 	poner_apliques()
+	poner_escaparates()
 	for a in sitio.get("armaritos", []):
 		var armarito := ARMARITO.new()
 		armarito.montar(a)
@@ -278,6 +313,11 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 	for m in sitio.get("manchas", []):
 		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
 		lienzo.draw_texture_rect_region(MANCHAS, Rect2(-30, -18, 60, 36), Rect2(m.dibujo * 60, 0, 60, 36))
+	# y los restos sueltos del centro comercial, igual (de 90 en 90 grados y volteados)
+	for r in restos:
+		var t: Texture2D = r.dibujo
+		lienzo.draw_set_transform(r.pos, r.giro * PI / 2.0, Vector2(-2 if r.espejo else 2, 2))
+		lienzo.draw_texture(t, -(t.get_size() / 2.0).floor())
 
 
 # Los choques de los muros: rectángulos grandes (se juntan las casillas seguidas de cada fila, y las filas
@@ -345,6 +385,8 @@ func poner_caras() -> void:
 			cara.pared = estilos[sala].pared
 			cara.techo = estilos[sala].techo
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
+			if centro:
+				cara.adornos = restos_de_pared(cara.ancho)
 			cosas.add_child(cara)
 			if not caras.has(sala):
 				caras[sala] = []
@@ -368,6 +410,15 @@ func poner_puertas() -> void:
 			# delante de la cara del muro (que tiene su pie en la misma "y")
 			puerta.position.y += 1
 			cosas.add_child(puerta)
+			if salida.has("neon"):
+				# la fachada de una tienda del centro comercial: su letrero de neón encima de la puerta
+				var neon := NEON.new()
+				var tipo: Dictionary = Tienda.TIPOS[salida.neon]
+				neon.texto = tipo.neon
+				neon.color = tipo.color
+				neon.semilla = fposmod(sin(salida.en * 12.9898) * 43758.5453, 1.0)
+				neon.position = puerta.position
+				cosas.add_child(neon)
 		else:
 			add_child(puerta)
 			move_child(puerta, 1)   # justo encima del suelo, por debajo de los personajes
@@ -433,6 +484,65 @@ func poner_apliques() -> void:
 		luz.add_child(dibujo)
 		luz.move_child(dibujo, 0)
 		cosas.add_child(luz)
+
+
+# Los escaparates de las tiendas, en la pared de arriba de la galería (planta.gd): el dibujo apoyado encima del
+# rodapié y, a veces, un salpicón o unas huellas de sangre en el cristal. Van en el pie de la cara del muro, como
+# los apliques, para ordenarse con ella.
+func poner_escaparates() -> void:
+	for e in sitio.get("escaparates", []):
+		var nodo := Node2D.new()
+		nodo.position = Vector2(e.x, MURO + 1)
+		var dibujo := Sprite2D.new()
+		dibujo.texture = load("res://assets/sprites/escaparate-%s.png" % e.tienda)
+		dibujo.centered = false
+		dibujo.scale = Vector2(2, 2)
+		var t := dibujo.texture.get_size()
+		dibujo.position = Vector2(-t.x, -9 - t.y * 2)   # el pie, 4 píxeles por encima del suelo (el rodapié)
+		nodo.add_child(dibujo)
+		if dado_restos.randf() < 0.6:
+			var mancha := Sprite2D.new()
+			mancha.texture = load("res://assets/sprites/resto-%s.png" % ["salpicon", "huellas"][dado_restos.randi() % 2])
+			mancha.scale = Vector2(2, 2)
+			mancha.flip_h = dado_restos.randf() < 0.5
+			mancha.position = dibujo.position + Vector2(dado_restos.randf_range(0.25, 0.75) * t.x * 2, t.y * 0.8)
+			nodo.add_child(mancha)
+		cosas.add_child(nodo)
+
+
+# Los restos sueltos del suelo de una tienda o de la galería: en casillas de suelo rodeadas de suelo (para que no
+# se monten en un muro), con giro y volteo al azar
+func preparar_restos() -> void:
+	var libres := []
+	for f in range(1, filas - 1):
+		for c in range(1, cols - 1):
+			if dueno[f * cols + c] >= 0 and not (es_muro(c - 1, f) or es_muro(c + 1, f) or es_muro(c, f - 1) or es_muro(c, f + 1)):
+				libres.append(Vector2(c, f))
+	if libres.is_empty():
+		return
+	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, 24)
+	for i in cuantos:
+		var casilla: Vector2 = libres[dado_restos.randi() % libres.size()]
+		var nombre: String = RESTOS_SUELO[dado_restos.randi() % RESTOS_SUELO.size()]
+		restos.append({"dibujo": load("res://assets/sprites/resto-%s.png" % nombre),
+			"pos": (casilla + Vector2(0.5, 0.5)) * CASILLA + Vector2(dado_restos.randi_range(-4, 4), dado_restos.randi_range(-4, 4)) * 2.0,
+			"giro": dado_restos.randi() % 4, "espejo": dado_restos.randf() < 0.5})
+
+
+# Los restos de una cara de muro de "ancho" unidades: [{dibujo, x, y}] en píxeles del dibujo, contando desde la
+# esquina de abajo a la izquierda de la cara (cara_pared.gd los pinta encima del papel)
+func restos_de_pared(ancho: float) -> Array:
+	var lista := []
+	var tramos := floori(ancho / RESTOS_PARED_CADA)
+	for i in tramos:
+		if dado_restos.randf() > RESTOS_PARED_SUERTE:
+			continue
+		var t: Texture2D = load("res://assets/sprites/resto-%s.png" % RESTOS_PARED[dado_restos.randi() % RESTOS_PARED.size()])
+		var tramo := RESTOS_PARED_CADA / 2.0   # en píxeles del dibujo
+		var x := i * tramo + dado_restos.randf_range(0.0, maxf(0.0, tramo - t.get_width()))
+		var y := -dado_restos.randf_range(t.get_height() + 6.0, 44.0)   # sin pisar el rodapié ni la moldura
+		lista.append({"dibujo": t, "x": floorf(x), "y": floorf(y)})
+	return lista
 
 
 # ═════════════ Niebla ═════════════

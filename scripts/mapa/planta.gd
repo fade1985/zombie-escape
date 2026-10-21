@@ -15,6 +15,8 @@ const MURO := 64                  # grosor de los muros de fuera
 const PASILLO_COLS := 56
 const PASILLO_FILAS := 12
 const PUERTA_A := 14 * CASILLA    # a qué distancia de cada punta del pasillo están las puertas
+const ESCAPARATE_A := 100         # en el centro comercial, a qué distancia de su puerta va cada escaparate
+const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho (escaparate-electronica, 57 píxeles)
 const PLANTAS := 5                # planta baja y cuatro más (la azotea, con el jefe final, aún no existe)
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
@@ -47,7 +49,9 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #   sitios           [pasillo, lo de detrás de A, B, C y D]. Cada sitio: {tipo ("pasillo", "apartamento",
 #                    "jefe", "mantenimiento" o "expo"), nombre, ancho, alto, apt (el apartamento, si lo es),
 #                    dueno (el plano de las salas rectangulares), muebles (muebles.gd), surtido (qué variante
-#                    de cada mueble lleva), salidas, zombis, limpio, visitado}
+#                    de cada mueble lleva), salidas, zombis, limpio, visitado}. El pasillo lleva además su estilo
+#                    (el del edificio: "pasillo" o "galeria", ver mapa.gd), sus apliques y, en el centro comercial,
+#                    los escaparates de las tiendas de arriba ({x, tienda})
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
 #                    el guardia la suelte al caer)
@@ -61,7 +65,8 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    no lleva zombis: si no, nadie podría limpiar el piso
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
-# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}
+# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}; las puertas de tienda de la pared de arriba
+# llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd)
 static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 	rng.randomize()
 	var ed: Dictionary = Edificios.datos(edificio)
@@ -72,7 +77,7 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 	var alto := PASILLO_FILAS * CASILLA
 	var pasillo := {"tipo": "pasillo", "nombre": planta.nombre, "ancho": ancho, "alto": alto, "salidas": [],
 		"zombis": [], "limpio": true, "visitado": true, "dueno": Muebles.plano_rectangular(PASILLO_COLS, PASILLO_FILAS),
-		"surtido": rng.randi()}
+		"surtido": rng.randi(), "estilo": ed.pasillo, "escaparates": []}
 	planta.sitios.append(pasillo)
 
 	var huecos := [{"letra": "A", "dir": "arriba", "en": PUERTA_A}, {"letra": "B", "dir": "arriba", "en": ancho - PUERTA_A},
@@ -118,6 +123,12 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": "", "letrero": planta.nombre})
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
 			"aviso": "", "letrero": nombre}
+		if tipo_tienda != "" and h.dir == "arriba":
+			# en la pared de arriba se ve la fachada de la tienda: su letrero de neón (en vez del cartel) y un
+			# escaparate a cada lado de la puerta (mapa.gd)
+			puerta.neon = tipo_tienda
+			for lado_x in [-1, 1]:
+				pasillo.escaparates.append({"x": h.en + lado_x * ESCAPARATE_A, "tienda": tipo_tienda})
 		if jefe:
 			puerta.cerrojo = "llave"   # la llave o la tarjeta: se abren igual (ver partida.gd)
 			puerta.aviso = "Cerrada: hace falta una tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Cerrada con llave"
@@ -136,12 +147,16 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 	pasillo.apliques = []
 	var x := MURO + 130
 	while x < ancho - MURO - 60:
-		if pasillo.salidas.all(func(s): return s.dir != "arriba" or absf(s.en - x) > 90):
+		if pasillo.salidas.all(func(s): return s.dir != "arriba" or absf(s.en - x) > 90) \
+				and pasillo.escaparates.all(func(e): return absf(e.x - x) > ESCAPARATE_MEDIO + 20):
 			pasillo.apliques.append({"x": x, "semilla": rng.randf(), "parpadea": rng.randf() < 0.3})
 		x += 230
-	# los muebles del pasillo, sin tapar ninguna puerta y dejando ir de una punta a la otra
-	pasillo.muebles = Muebles.de_sala("pasillo", {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
-		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng)
+	# los muebles del pasillo, sin tapar ninguna puerta ni escaparate y dejando ir de una punta a la otra
+	var delante_escaparates: Array = pasillo.escaparates.map(func(e): return Rect2(e.x - ESCAPARATE_MEDIO, MURO,
+		ESCAPARATE_MEDIO * 2, 60))
+	pasillo.muebles = Muebles.de_sala(ed.pasillo, {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
+		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng,
+		delante_escaparates)
 	if baja:
 		planta.expo = planta.sitios.size()
 		planta.sitios.append(exposicion(planta.mantenimiento))

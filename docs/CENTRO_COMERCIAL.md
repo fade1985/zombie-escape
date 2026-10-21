@@ -105,7 +105,28 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
      lejana, se cansa cada 3 s y se para a resoplar ("uf"); acorralado en una punta, pega; a media vida vuelve a
      silbar. Tiene 90 de vida (+20 % por planta) y si sales del pasillo, al volver sigue igual de herido. Al caer
      suelta la tarjeta (dibujada con código) y 2 billetes. De momento es el zombi normal con la bata teñida de azul.
-2. **Cómo se ve:** suelos, paredes, escaparates y muebles con PixelLab (lanzarlo todo de golpe).
+2. ✅ **Cómo se ve** (21 oct): suelos, paredes, escaparates y muebles con PixelLab. Unas 120 generaciones (detalle y
+   recetas en `assets/pixellab.json` → `centro-comercial`). Lo que ha quedado:
+   - **Suelos, paredes y tapa** (`docs/FONDOS.md`): la galería (el pasillo: baldosa clara, paneles crema y su tapa gris
+     clara, sin alfombra), la sala de venta (terrazo o vinilo, pared verde grisácea), almacén (hormigón con raya
+     amarilla y bloques de hormigón), cámara (chapa con escarcha y paneles helados), cocina (baldosa roja y azulejo
+     blanco), linóleo gris (taller, taquillas y rebotica) y moqueta (probadores). El aseo sigue con los del baño.
+   - **El dueño pidió (tras la primera hoja) que nada pareciera limpio y que ningún mueble saliera girado.** Así que:
+     - **Muebles rectos y destrozados**, pedidos con un boceto de su forma en la perspectiva del juego
+       (`tools/guias_centro.py`): 17 de frente y 5 de lado (caja, perchero, banco de trabajo, fogón y banco de la
+       galería, vistos desde arriba y pegados a la pared). **Los altos (estanterías, taquillas, neveras) solo van en
+       la pared del fondo**: de lado, desde arriba, son una barra que no se entiende. **El carrito no está**: siempre
+       salía en diagonal. Cada tipo de tienda tiene sus muebles (`Catalogo.SALAS`, "tienda-<tipo>").
+     - **Restos sueltos** que el juego reparte al azar (siempre igual en cada sitio): charcos de sangre, cristales,
+       latas, ropa, cascotes y papeles por el suelo; salpicones, huellas, pintadas y agujeros en las paredes. En las
+       tiendas y la galería; los apartamentos no cambian.
+     - **Escaparates rotos** (cristal reventado, pintadas, sangre) a los dos lados de las puertas de tienda de la pared
+       de arriba del pasillo, y encima de la puerta un **letrero de neón** con su nombre (SUPER, FERRETERIA, ELECTRO,
+       BURGER, MODA, FARMACIA) que dibuja el juego (`scripts/mapa/neon.gd`): una o dos letras fundidas, parpadeos y
+       apagones, y una luz de su color en el suelo. Las puertas de abajo siguen con su cartel (de esa pared solo se ve
+       la tapa).
+   - **Pendiente de ver con el dueño:** las salas de venta son grandes y los muebles solo van pegados a las paredes, así
+     que el centro queda despejado (se podrían poner filas de góndolas o mesas en medio).
 3. **Los peligros:** frío, fuego, agua con electricidad.
 4. **Zombis nuevos**, minijefes y jefe final.
 5. **Supervivientes nuevos** con sus eventos.

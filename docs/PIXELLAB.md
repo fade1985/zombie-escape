@@ -30,6 +30,13 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
     `py tools/muebles3c.py monta`. El largo de cada mueble en `MUEBLES` (`src/catalogo.js`) es el ancho de su dibujo × 2.
   - Pendiente: dibujos de lado de cama, estantería, armario, encimera, nevera y demás (los tres primeros se
     pidieron y salieron mal), para que las paredes laterales no se queden tan vacías.
+  - **Receta que funciona (centro comercial, 21 oct): siempre con guía.** `py tools/guias_centro.py` pinta un boceto
+    de cada mueble ya en la perspectiva del juego (tapa vista desde arriba con lo que tiene encima dibujado, y el
+    frente debajo; de lado, la tapa tumbada a lo largo de la pared y el costado corto abajo) sobre azul. Se pasa
+    como `init_image` con fuerza 45 y `no_background` false, y luego `guias_centro.py quita` le quita el fondo.
+    Con fondo transparente PixelLab se come la tapa; con la tapa lisa en la guía, la deja lisa; los muebles altos
+    de lado no salen bien (se dejan para la pared del fondo). Para que algo salga destrozado, decirlo en el texto
+    ("wrecked, dented, blood splatter, zombie apocalypse").
   - PixelLab solo deja 8 generaciones a la vez. **La clave `PIXELLAB_API_KEY` de este ordenador es de otra
     cuenta, sin saldo**: todo se pide por MCP.
 - **Animaciones muy sutiles (reposo): mejor hacerlas a mano que pedirlas.** Las de PixelLab redibujan el

@@ -178,7 +178,9 @@ func _ready() -> void:
 	montar(planta.mantenimiento, 0, false)
 	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
 	johnny.get_node("Camara").reset_smoothing()
-	if captura:
+	if captura and "--fotos-tiendas" in OS.get_cmdline_user_args():
+		fotos_tiendas()
+	elif captura:
 		contar_planta()
 	else:
 		set_process(false)
@@ -887,6 +889,38 @@ func _unhandled_input(evento: InputEvent) -> void:
 
 
 # ── Solo con --captura ──
+
+# Con "-- --captura --edificio centro --fotos-tiendas": sin penumbra y con todo descubierto, una foto de la sala de
+# venta de cada tienda de las dos primeras plantas (captura-tienda-<tipo>.png) y otra de la galería, y se cierra
+func fotos_tiendas() -> void:
+	set_process(false)
+	luz.alternar()
+	for num in [1, 2]:
+		if num > 1:
+			nueva_planta(num)
+		for i in range(1, planta.sitios.size()):
+			var s: Dictionary = planta.sitios[i]
+			if s.get("tienda", "") == "":
+				continue
+			montar(i, 0, false)
+			for sala in s.apt.salas:
+				mapa.vistas[sala.id] = true
+			for z in get_tree().get_nodes_in_group("zombis"):
+				z.queue_free()
+			var venta: Dictionary = s.apt.salas[0]
+			johnny.position = Vector2(venta.c0 + venta.ancho / 2.0, venta.f0 + venta.fondo / 2.0) * 32.0
+			johnny.get_node("Camara").reset_smoothing()
+			await get_tree().create_timer(0.8).timeout
+			var nombre: String = "jefe" if s.tipo == "jefe" else s.tienda
+			get_viewport().get_texture().get_image().save_png("res://captura-tienda-%s.png" % nombre)
+			print("Foto: ", s.nombre, " (", nombre, ")")
+		montar(0, 0, false)
+		johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		get_viewport().get_texture().get_image().save_png("res://captura-galeria-%d.png" % num)
+	get_tree().quit()
+
 
 func contar_planta() -> void:
 	print("Planta: ", planta.nombre)

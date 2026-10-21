@@ -33,6 +33,11 @@ IMAGENES = ('.png', '.webp', '.jpg', '.jpeg')
 # N veces (no al ancho del catálogo) y salen con la escala indicada ("scale": 1 = el mismo tamaño de píxel que Johnny).
 # Para añadir otro mueble así: su tipo (el del catálogo), el N y la escala.
 BLOQUE = {'lamp': (8, 1), 'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7, 1), 'bookshelf': (12.7, 1)}  # tipo: (N, scale del .json: 1 = 2 unidades por píxel, 0.5 = 1)
+# Muebles de PixelLab (los del centro comercial): salen con el fondo transparente de verdad, sin halo blanco, así que
+# no se les quita lo blanco (si no, se agujerearían la escarcha, los cristales o el maniquí)
+SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 'tvshelf', 'pharmacycounter',
+            'metalshelf', 'pallet', 'lockers', 'workbench', 'freezershelf', 'industrialstove', 'steeltable', 'fryer',
+            'diningtable', 'bench'}
 
 
 def catalogo():
@@ -78,8 +83,9 @@ def entiende(nombre, cat):
     return *cat[base], variante, lado
 
 
-def convierte(src, w, bloque=None):
-    """La receta de siempre: sin fondo, recortado, a `w` píxeles de ancho (contorno incluido) y con contorno"""
+def convierte(src, w, bloque=None, halo=True):
+    """La receta de siempre: sin fondo, recortado, a `w` píxeles de ancho (contorno incluido) y con contorno.
+    Con halo=False no se quita lo blanco (solo el fondo transparente)"""
     im = Image.open(src).convert('RGBA')
     if im.getchannel('A').getextrema()[0] >= 128:
         return None  # sin nada transparente: el fondo es de verdad (o un damero pintado)
@@ -88,7 +94,7 @@ def convierte(src, w, bloque=None):
         for x in range(im.size[0]):
             r, g, b, a = px[x, y]
             # fondo transparente y el halo blanco que deja la IA alrededor
-            if a < 128 or (min(r, g, b) > 200 and max(r, g, b) - min(r, g, b) < 30): px[x, y] = (0, 0, 0, 0)
+            if a < 128 or (halo and min(r, g, b) > 200 and max(r, g, b) - min(r, g, b) < 30): px[x, y] = (0, 0, 0, 0)
             else: px[x, y] = (r, g, b, 255)
     im = im.crop(im.getbbox())
     if bloque:
@@ -128,7 +134,7 @@ def main(forzar):
         sid = f'mueble-{tipo}' + (f'-{variante}' if variante else '') + ('-lado' if lado else '')
         bloque, escala = BLOQUE.get(tipo, (None, 1))
         # a la densidad de los personajes: cada píxel, 2 unidades del juego (el ancho del catálogo va en unidades)
-        im = convierte(ruta, round((fondo if lado else largo) / 2), bloque)
+        im = convierte(ruta, round((fondo if lado else largo) / 2), bloque, tipo not in SIN_HALO)
         if im is None: avisos.append(f'{rel}: no tiene fondo transparente (¿un damero pintado?); no se convierte'); continue
         im.save(f'{OUT}/{sid}.png')
         meta = {'cell': [im.width, im.height], 'pivot': [im.width // 2, im.height], 'scale': escala,

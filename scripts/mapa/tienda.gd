@@ -26,13 +26,21 @@ const DELANTE := 10        # fondo mínimo de sala de venta delante de las habit
 # Cada tipo de tienda: su nombre (el del letrero y el de la sala de venta), sus habitaciones de dentro en el
 # orden en que se dan ("bano" es el aseo: va dentro de otra, la primera de ASEO_EN que tenga) y cuántas casillas de ancho mide
 # (la profundidad sale de sus habitaciones). El peligro y los objetos de cada una llegan en las partes 3 y 6.
+# "neon" es lo que pone el letrero de neón de encima de su puerta (neon.gd), con su color; su escaparate, el sprite
+# escaparate-<tipo>.
 const TIPOS := {
-	"supermercado": {"nombre": "Supermercado", "salas": ["almacen", "camara", "bano"], "cols": [40, 46]},
-	"ferreteria": {"nombre": "Ferretería", "salas": ["almacen", "taller"], "cols": [34, 40]},
-	"electronica": {"nombre": "Electrónica", "salas": ["almacen", "taquillas"], "cols": [34, 40]},
-	"restaurante": {"nombre": "Restaurante", "salas": ["cocina", "camara", "bano"], "cols": [40, 46]},
-	"ropa": {"nombre": "Tienda de ropa", "salas": ["probadores", "almacen"], "cols": [34, 40]},
-	"farmacia": {"nombre": "Farmacia", "salas": ["rebotica", "bano"], "cols": [30, 34]},
+	"supermercado": {"nombre": "Supermercado", "salas": ["almacen", "camara", "bano"], "cols": [40, 46],
+		"neon": "SUPER", "color": Color("#5dff8a")},
+	"ferreteria": {"nombre": "Ferretería", "salas": ["almacen", "taller"], "cols": [34, 40],
+		"neon": "FERRETERIA", "color": Color("#ff9a3c")},
+	"electronica": {"nombre": "Electrónica", "salas": ["almacen", "taquillas"], "cols": [34, 40],
+		"neon": "ELECTRO", "color": Color("#4fe3ff")},
+	"restaurante": {"nombre": "Restaurante", "salas": ["cocina", "camara", "bano"], "cols": [40, 46],
+		"neon": "BURGER", "color": Color("#ff4f5e")},
+	"ropa": {"nombre": "Tienda de ropa", "salas": ["probadores", "almacen"], "cols": [34, 40],
+		"neon": "MODA", "color": Color("#ff5fd0")},
+	"farmacia": {"nombre": "Farmacia", "salas": ["rebotica", "bano"], "cols": [30, 34],
+		"neon": "FARMACIA", "color": Color("#3dff6e")},
 }
 const ASEO_EN := ["almacen", "cocina", "rebotica", "taller", "taquillas", "probadores"]   # nunca en la cámara
 const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "taller": "Taller", "taquillas": "Taquillas",
@@ -47,6 +55,7 @@ static func generar(semilla: int, tipo: String, jefe := false, lado := "abajo") 
 	if jefe:
 		var local := Apartamento.generar(semilla, true, lado)
 		local.salas[0].nombre = "Tienda destrozada"
+		local.tipo = "tienda"   # sus muebles, los de "jefe-tienda" del catálogo (no los del salón de un piso)
 		return local
 	for intento in 500:
 		rng.seed = semilla + intento * 7919

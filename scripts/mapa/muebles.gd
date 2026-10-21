@@ -43,6 +43,10 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 	var lista := []
 	for s in apt.salas:
 		var uso: String = s.uso
+		# en una tienda, primero los de su tipo (la sala de venta del supermercado, la cocina del restaurante...)
+		var propio := "%s-%s" % [uso, apt.get("tipo", "")]
+		if Catalogo.SALAS.has(propio):
+			uso = propio
 		var datos: Dictionary = Catalogo.SALAS[uso]
 		var cuantos: Array = datos.cuantos
 		# en las habitaciones grandes cabe algún mueble más

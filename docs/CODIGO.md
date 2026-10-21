@@ -41,7 +41,8 @@
 - `edificios.gd`: la ficha de cada edificio (Apartamentos, Centro comercial) y el elegido en el menú.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
-  centro comercial).
+  centro comercial; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
+  `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 17 objetos, mochila, baúl, lo que sueltan los
   zombis), `recetas.gd` (15 recetas y rarezas), `billete.gd`, `minimapa.gd`.
 - `guardado.gd`: el guardado entre partidas.
@@ -63,10 +64,12 @@
 **mapa/**
 - `apartamento.gd` (genera un apartamento como `apartment.js`), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
-  exposición), `catalogo.gd` (muebles de cada sala), `muebles.gd` (dónde va cada uno),
-  `mueble.gd` (monta uno).
-- `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, niebla, navegación);
-  `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente).
+  exposición), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"), `muebles.gd`
+  (dónde va cada uno), `mueble.gd` (monta uno).
+- `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, niebla, navegación). Los suelos y
+  paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas) y `PASILLOS` (el pasillo de cada
+  edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos.
+  `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página).
 
@@ -84,7 +87,9 @@
 ## tools/
 
 `hacer_frames.py` (hoja → animaciones), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
-`catalogo.gd`), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
+`catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
+`guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
+(escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
 (objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 

@@ -23,6 +23,94 @@
     "huella": "7b7209555c754217",
     "sprite": "mueble-toilet"
   },
+  "centro/banco-galeria-lado.png": {
+    "huella": "4c8c2915a6efccf3",
+    "sprite": "mueble-bench-lado"
+  },
+  "centro/banco-galeria.png": {
+    "huella": "41182d98b622ed97",
+    "sprite": "mueble-bench"
+  },
+  "centro/banco-trabajo-lado.png": {
+    "huella": "a741c3d9feeb9b4c",
+    "sprite": "mueble-workbench-lado"
+  },
+  "centro/banco-trabajo.png": {
+    "huella": "3b44bde2a714bac6",
+    "sprite": "mueble-workbench"
+  },
+  "centro/caja-lado.png": {
+    "huella": "b53e54677c321f73",
+    "sprite": "mueble-checkout-lado"
+  },
+  "centro/caja.png": {
+    "huella": "0eb77cee8737f3c8",
+    "sprite": "mueble-checkout"
+  },
+  "centro/estanteria-camara.png": {
+    "huella": "4d33e73e362778fd",
+    "sprite": "mueble-freezershelf"
+  },
+  "centro/estanteria-metal.png": {
+    "huella": "39d253410951c6d7",
+    "sprite": "mueble-metalshelf"
+  },
+  "centro/estanteria-teles.png": {
+    "huella": "a3bf8c69737908de",
+    "sprite": "mueble-tvshelf"
+  },
+  "centro/fogon-industrial-lado.png": {
+    "huella": "a6467fca96c49b1f",
+    "sprite": "mueble-industrialstove-lado"
+  },
+  "centro/fogon-industrial.png": {
+    "huella": "25833f5ed59495c4",
+    "sprite": "mueble-industrialstove"
+  },
+  "centro/freidora.png": {
+    "huella": "540ac39e610aaf25",
+    "sprite": "mueble-fryer"
+  },
+  "centro/gondola.png": {
+    "huella": "7ef8b250442a0aaa",
+    "sprite": "mueble-gondola"
+  },
+  "centro/maniqui.png": {
+    "huella": "4893a0711b688faa",
+    "sprite": "mueble-mannequin"
+  },
+  "centro/mesa-acero.png": {
+    "huella": "6f8780a80a075a9b",
+    "sprite": "mueble-steeltable"
+  },
+  "centro/mesa-restaurante.png": {
+    "huella": "0ca5116c38cdb538",
+    "sprite": "mueble-diningtable"
+  },
+  "centro/mostrador-farmacia.png": {
+    "huella": "320a3dc6cc2cacaa",
+    "sprite": "mueble-pharmacycounter"
+  },
+  "centro/nevera-bebidas.png": {
+    "huella": "81156ec94af52298",
+    "sprite": "mueble-drinkfridge"
+  },
+  "centro/pale.png": {
+    "huella": "6caca18f4f1bddc1",
+    "sprite": "mueble-pallet"
+  },
+  "centro/perchero-ropa-lado.png": {
+    "huella": "a19a7827c71ce82c",
+    "sprite": "mueble-clothesrack-lado"
+  },
+  "centro/perchero-ropa.png": {
+    "huella": "15eeb9056c142612",
+    "sprite": "mueble-clothesrack"
+  },
+  "centro/taquillas.png": {
+    "huella": "6f2b053967ce8cc0",
+    "sprite": "mueble-lockers"
+  },
   "cocina/encimera.png": {
     "huella": "5d9751d7bb869abc",
     "sprite": "mueble-counter"

@@ -13,6 +13,7 @@ var pared: Texture2D
 var techo: Texture2D
 var puede_tapar := false   # solo los tabiques de dentro tienen a alguien detrás
 var niebla := 0.0          # la oscuridad de su habitación, si aún no se ha pisado (la pone mapa.gd)
+var adornos := []          # restos pintados encima del papel (salpicones, huellas...; mapa.gd): {dibujo, x, y}
 
 
 func _ready() -> void:
@@ -29,6 +30,8 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
 	draw_texture_rect_region(pared, Rect2(0, -ALTO / 2.0, w, ALTO / 2.0), Rect2(x0, 0, w, pared.get_height()))
 	draw_texture_rect_region(techo, Rect2(0, -(ALTO + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
+	for a in adornos:
+		draw_texture(a.dibujo, Vector2(a.x, a.y))
 	if niebla > 0.0:
 		draw_rect(Rect2(0, -(ALTO + TECHO) / 2.0, w, (ALTO + TECHO) / 2.0), Color(0.07, 0.063, 0.11, 0.8 * niebla))
 

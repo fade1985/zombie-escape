@@ -131,6 +131,30 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
 El método anterior (fondos enteros dibujados con ChatGPT/Gemini, abandonado) está en
 [`archivo/FONDOS-CHATGPT.md`](archivo/FONDOS-CHATGPT.md), con sus textos en `archivo/PROMPTS_*.md`.
 
+## El centro comercial (21 oct, parte 2 de `CENTRO_COMERCIAL.md`)
+
+Todo de PixelLab (recetas e ids en `assets/pixellab.json` → `centro-comercial`); originales en `assets/sources/centro/`.
+Las herramientas del JS se copiaron a `tools/` (`textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, sin cambios).
+
+- **Suelos** (256 × 256, a 8 baldosas → 128 × 128): `py tools/textura_suelo.py assets/sources/centro/suelo-<x>.png <x> 8`
+  para galeria, venta-a, venta-b, almacen, camara, cocinaind, linoleo y moqueta. PixelLab ya los da sin costura.
+- **Paredes** (256 × 128, de frente): `py tools/textura_pared.py assets/sources/centro/pared-<x>.png <x> x0 x1 y0 y1 t0 t1`
+  con galeria 5 249 17 119 1 17 · venta 79 219 19 108 9 19 · almacen 29 211 23 112 16 23 · camara 75 247 21 116 2 21 ·
+  cocinaind 35 206 23 119 12 23. Las juntas (x0, x1) se buscaron comparando columnas para que la tira empalme.
+- **Tapa:** `py tools/textura_tapa.py assets/sources/centro/tapa-centro.png centro` (la galería y todas las tiendas).
+- **Qué va en cada sala:** `ESTILO_TIENDA` de `scripts/mapa/mapa.gd` (venta: terrazo o vinilo al azar y pared verde;
+  almacén, cámara y cocina, los suyos; taller y taquillas, linóleo con la pared del almacén; rebotica, linóleo con la
+  de la tienda; probadores, moqueta con la de la tienda; el aseo, los del baño). El pasillo, por la ficha del edificio
+  (`Edificios.LISTA` → "pasillo": "galeria") y `PASILLOS` de `mapa.gd` (su tapa, y sin la alfombra de los pisos).
+- **Sangre y destrozo:** las texturas llevan poca sangre (si no, se nota que se repiten); el juego reparte encima
+  **restos sueltos** (`py tools/centro_sprites.py` → `resto-<nombre>`, a la mitad de como salen de PixelLab): por el
+  suelo (`RESTOS_SUELO` de `mapa.gd`, uno de cada 30 casillas, entre 4 y 24) y por las caras de los muros
+  (`RESTOS_PARED`), con el dado del sitio, así que al volver todo sigue igual. Solo en el centro comercial.
+- **Escaparates** (`escaparate-<tipo>`, a 38 píxeles de alto con el mismo script) a 100 unidades de cada puerta de tienda
+  de la pared de arriba del pasillo (`ESCAPARATE_A` de `planta.gd`), y el **neón** encima de la puerta (`neon.gd`).
+- **Muebles:** guía con `py tools/guias_centro.py` → PixelLab → `py tools/guias_centro.py quita <png>` (quita el fondo,
+  el color de los bordes) → `assets/sources/salas/centro/` → `py tools/importar.py`. De lado solo los bajos.
+
 ## Pendiente de decidir: lootear y destruir (hablado el 13 de octubre de 2026)
 
 El dueño quiere escenarios con cosas que se puedan registrar y romper. Como cada mueble está en un bloque

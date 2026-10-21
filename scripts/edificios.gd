@@ -10,6 +10,8 @@
 #   jefe, el_jefe     el zombi jefe de cada planta (una escena de partida.gd, ZOMBIS) y cómo se le nombra
 #   objetivo          el aviso al empezar cada planta
 #   abre              el edificio que hay que completar antes para poder jugarlo ("" si está abierto desde el principio)
+#   pasillo           el aspecto del pasillo de cada planta: su suelo, pared y tapa (mapa.gd, PASILLOS) y sus muebles
+#                     (catalogo.gd, SALAS)
 #   El dosier de cada edificio va por su id en historia.gd (DOSIERES) y el progreso, en el guardado (Guardado.edificio).
 class_name Edificios
 
@@ -25,6 +27,7 @@ const LISTA := {
 		"el_jefe": "la portera",
 		"objetivo": "limpia los apartamentos y busca la llave de la portera",
 		"abre": "",
+		"pasillo": "pasillo",
 	},
 	"centro": {
 		"nombre": "Centro comercial",
@@ -37,6 +40,7 @@ const LISTA := {
 		"el_jefe": "la portera",
 		"objetivo": "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso",
 		"abre": "apartamentos",
+		"pasillo": "galeria",
 	},
 }
 
