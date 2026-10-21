@@ -82,6 +82,9 @@ const EFECTOS := {
 	"palanca": {"notas": [[220, 0.04, "cuadrada", 0.06, -120], [95, 0.1, "triangulo", 0.07, -30, 0.04]]},
 	"apagon": {"notas": [[180, 0.7, "sierra", 0.03, -150, 0.05]]},                      # se va la corriente
 	"encendido": {"notas": [[60, 0.45, "sierra", 0.03, 180, 0.05], [1400, 0.05, "cuadrada", 0.012, 0, 0.4]]},
+	# los eventos sorpresa (eventos.gd): la sirena de la alarma de incendios
+	"alarma": {"hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],
+		[720, 0.4, "triangulo", 0.03, 380, 0.8], [1100, 0.4, "triangulo", 0.03, -380, 1.2]]},
 }
 
 var grabados := {}       # nombre → AudioStreamWAV ya sintetizado

@@ -94,7 +94,7 @@ static func rareza_al_azar() -> String:
 	var azar := randf()
 	var acum := 0.0
 	for r in RAREZAS:
-		acum += RAREZAS[r].prob
+		acum += Alerta.prob_rareza(r, RAREZAS[r].prob)   # con alerta, salen mejores (alerta.gd)
 		if azar < acum:
 			return r
 	return "verde"

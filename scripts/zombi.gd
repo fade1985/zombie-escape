@@ -277,7 +277,7 @@ func meter_prisa(segundos: float) -> void:
 
 # Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar
 func oir_disparo(donde: Vector2) -> void:
-	if dormido and global_position.distance_to(donde) < OIDO:
+	if dormido and global_position.distance_to(donde) < OIDO * Alerta.oido():   # con la Alerta 5, más lejos
 		despertar()
 
 
