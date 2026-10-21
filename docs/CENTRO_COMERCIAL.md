@@ -126,7 +126,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 | **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
 
 - **Guiño para la historia (parte 7):** según el dosier, la cafetera de la sala se la regaló Velaria a Johnny y por
-  ahí le metían el VD-7. Que la camarera la arregle (y quizá note algo raro en el café) se puede aprovechar.
+  ahí le metían el VD-7. Decidido en la parte 7: al arreglarla encuentra un doble fondo con cápsulas de VD-7 y te lo
+  dice; desde entonces el café es solo café.
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
 
@@ -178,6 +179,36 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
+
+### Decidido con el dueño (21 oct, para la parte 7): «Turno infinito»
+
+- **La idea** (le encantó al dueño): tras el edificio, Velaria vende el VD-7 rebajado y sin receta («Velaria Noche»).
+  El gerente del centro firma con Velaria un programa secreto, **«Turno infinito»**: VD-7 en el café de la sala de
+  descanso de los empleados para que trabajen sin parar (turnos de 20 horas), sin que ellos lo sepan. Por eso los
+  zombis del centro **siguen haciendo su trabajo**: la dependienta grita ofertas, el vigilante hace la ronda, el
+  cocinero cocina...
+- **Es una trampa:** Johnny va buscando respuestas, y el gerente sabe que viene. Quiere retenerlo para entregárselo
+  a Velaria a cambio de «la dosis buena». A media vida se inyecta VD-7 para no parar nunca, y por eso muta.
+- **El final, con gancho:** al caer el gerente llega un helicóptero de Velaria a por el Sujeto 0; Johnny escapa por la
+  escalera de incendios. La última página nombra **la sede de Velaria**: el siguiente edificio (nombre por decidir).
+- **Dosier del centro comercial** (5 páginas, una por planta; como en los Apartamentos, cada una en un muerto):
+
+| Planta | Quién la lleva | Qué es | Lo que cuenta |
+|---|---|---|---|
+| Baja | Farmacéutico de Velaria | Albarán de la farmacia | 10.000 cajas de «Velaria Noche» sin receta. Nota: «¿Sin receta? ¿En serio?» |
+| 1ª | Técnica de Velaria | Contrato «Turno infinito» | VD-7 en el café de los empleados para turnos de 20 horas; ellos no lo saben |
+| 2ª | Jefe de seguridad del centro | Parte de incidencias | De noche siguen trabajando con los ojos cerrados. «Rinden más que nunca» |
+| 3ª | Secretaria del gerente | Correo del gerente a Velaria | «El conserje del 14 está en el centro. Lo retengo hasta que llegue vuestro equipo. A cambio, quiero la dosis buena» |
+| Azotea | El gerente, al caer | Orden de recogida | Un helicóptero de Velaria viene a por el Sujeto 0 al helipuerto; da el nombre de la sede |
+
+- **Noticias nuevas de Canal 8** (unas 5, con la misma reportera): el centro cierra de noche «por reformas» (sale al
+  completar los Apartamentos, que es cuando se abre el centro), Velaria saca su somnífero a la venta, trabajadores
+  que no vuelven a casa, un audio del gerente, y al completar el centro: «un helicóptero de Velaria aterriza en la
+  azotea... vacío». Como en las de ahora, Velaria va cambiando su versión para taparlo.
+- **El guiño de la cafetera** (con la camarera de la parte 5): al arreglar la cafetera de la sala encuentra un doble
+  fondo con cápsulas de VD-7 y te lo dice; desde entonces el café es solo café.
+- Los textos los escribe Claude y el dueño los lee antes de darlos por buenos (se pueden reescribir: todo está en
+  `historia.gd`; lo único que no se toca es el `id` de una página ya publicada).
 
 ## Para que enganche (ideas aprobadas)
 
@@ -276,5 +307,5 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
        andando hacia arriba a la derecha, se gira un poco de perfil.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
-7. **La historia:** dosier y noticias.
+7. **La historia:** dosier y noticias (decidido: ver «Historia»).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones.
