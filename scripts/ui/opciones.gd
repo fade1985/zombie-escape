@@ -1,7 +1,8 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene dos pestañas:
 #   - General: el modo de atacar (se guarda), la música, el sonido y la pantalla completa.
-#   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot, así que si
-#     cambian las teclas, la lista cambia sola). En el móvil, qué hace cada botón táctil.
+#   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
+#     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
+#     En el móvil, qué hace cada botón táctil.
 # Se maneja igual que los otros menús: ratón, flechas + Intro o mando (A pulsar, B volver).
 #
 # Se usa así:  Opciones.abrir(self, lo_que_tapa, johnny)  (johnny puede ser null en el menú principal).
@@ -20,9 +21,13 @@ const MODOS_AYUDA := {
 }
 
 # Las filas de la pestaña Controles: el nombre y las acciones del mapa de controles (project.godot) que juntan
+# (apuntar no se cambia aquí: es el ratón o el stick derecho)
 const FILAS := [
-	["Moverse", ["arriba", "izquierda", "abajo", "derecha"]],
-	["Apuntar (modo libre)", ["apuntar_arriba", "apuntar_izquierda", "apuntar_abajo", "apuntar_derecha"]],
+	["Moverse: arriba", ["arriba"]],
+	["Moverse: izquierda", ["izquierda"]],
+	["Moverse: abajo", ["abajo"]],
+	["Moverse: derecha", ["derecha"]],
+	["Apuntar (modo libre)", []],
 	["Atacar", ["atacar"]],
 	["Esquivar", ["esquivar"]],
 	["Cambiar de arma", ["cambiar_arma"]],
@@ -59,12 +64,16 @@ const EJES_MANDO := {
 	JOY_AXIS_RIGHT_X: "Stick dcho.", JOY_AXIS_RIGHT_Y: "Stick dcho.",
 	JOY_AXIS_TRIGGER_LEFT: "LT", JOY_AXIS_TRIGGER_RIGHT: "RT",
 }
+# Hacia dónde se empuja el stick: [hacia el negativo, hacia el positivo]
+const SENTIDOS := {
+	JOY_AXIS_LEFT_X: [" izq.", " dcha."], JOY_AXIS_LEFT_Y: [" arriba", " abajo"],
+	JOY_AXIS_RIGHT_X: [" izq.", " dcha."], JOY_AXIS_RIGHT_Y: [" arriba", " abajo"],
+}
 const TECLAS := {
 	KEY_SPACE: "Espacio", KEY_SHIFT: "Mayús", KEY_ESCAPE: "Esc", KEY_TAB: "Tab", KEY_ENTER: "Intro",
 	KEY_CTRL: "Ctrl", KEY_ALT: "Alt", KEY_BACKSPACE: "Borrar",
 	KEY_LEFT: "Flecha izq.", KEY_RIGHT: "Flecha dcha.", KEY_UP: "Flecha arriba", KEY_DOWN: "Flecha abajo",
 }
-const FLECHAS := [KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT]
 
 var tapado: CanvasItem     # el menú de detrás, escondido mientras esto está abierto
 var johnny: Node2D         # para cambiarle el modo de atacar en plena partida (null en el menú principal)
@@ -72,6 +81,12 @@ var fondo: ColorRect
 var pestanas: HBoxContainer
 var contenido: VBoxContainer
 var pestana := "general"
+var casillas := []         # pestaña Controles: [botón, acción, si es del mando] de cada casilla que se cambia
+var aviso: Label           # debajo de la tabla: qué hacer o qué ha pasado
+var esperando: Button = null   # la casilla que espera una tecla nueva (o null)
+var esperando_accion := ""
+var esperando_mando := false
+var esperando_desde := 0   # cuándo empezó a esperar (ms): lo que llegue justo después es el mismo pulsar
 
 
 static func abrir(dueno: Node, tapar: CanvasItem, jugador: Node2D = null) -> Opciones:
@@ -148,6 +163,8 @@ func ver(cual: String) -> void:
 				b.remove_theme_color_override(c)
 	for hijo in contenido.get_children():
 		hijo.queue_free()
+	casillas.clear()
+	esperando = null
 	if cual == "general":
 		general()
 	else:
@@ -208,27 +225,43 @@ func opcion(texto: String) -> Button:
 func controles() -> void:
 	var tabla := GridContainer.new()
 	tabla.add_theme_constant_override("h_separation", 24)
-	tabla.add_theme_constant_override("v_separation", 4)
-	contenido.add_child(tabla)
+	tabla.add_theme_constant_override("v_separation", 2)
 	if Tactil.activo:
+		contenido.add_child(tabla)
 		tabla.columns = 2
 		for f in TACTIL:
 			celda(tabla, f[0])
 			celda(tabla, f[1], "Sub")
 		return
+	# La tabla va en una caja con barra, por si no cabe (con el mando, la barra sigue a la casilla elegida)
+	var caja := ScrollContainer.new()
+	caja.custom_minimum_size = Vector2(620, 330)
+	caja.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	caja.follow_focus = true
+	contenido.add_child(caja)
 	tabla.columns = 3
+	tabla.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	caja.add_child(tabla)
 	celda(tabla, "", "Sub")
 	celda(tabla, "Teclado y ratón", "Sub")
 	celda(tabla, "Mando", "Sub")
 	for f in FILAS:
 		celda(tabla, f[0])
-		if f[0].begins_with("Apuntar"):
+		if f[1].is_empty():   # apuntar
 			celda(tabla, "Ratón", "Sub")
-		elif f[1].size() == 4:
-			celda(tabla, teclas_direcciones(f[1]), "Sub")
-		else:
-			celda(tabla, nombres(f[1], false), "Sub")
-		celda(tabla, nombres(f[1], true), "Sub")
+			celda(tabla, "Stick dcho.", "Sub")
+			continue
+		casilla(tabla, f[1][0], false)
+		casilla(tabla, f[1][0], true)
+	aviso = Label.new()
+	aviso.theme_type_variation = "Sub"
+	aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aviso.text = "Pulsa una casilla para cambiar esa tecla o ese botón"
+	contenido.add_child(aviso)
+	opcion("Restablecer controles").pressed.connect(func():
+		Controles.restablecer()
+		refrescar()
+		aviso.text = "Vuelven a estar los controles de serie")
 
 
 func celda(tabla: GridContainer, texto: String, variacion := "") -> void:
@@ -238,44 +271,46 @@ func celda(tabla: GridContainer, texto: String, variacion := "") -> void:
 	tabla.add_child(l)
 
 
+# Una casilla de la tabla que se puede pulsar para cambiar la tecla (o el botón del mando) de una acción
+func casilla(tabla: GridContainer, accion: String, mando: bool) -> void:
+	var b := Button.new()
+	b.theme_type_variation = "Celda"
+	b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	b.text = nombres([accion], mando)
+	b.pressed.connect(func(): esperar(b, accion, mando))
+	tabla.add_child(b)
+	casillas.append([b, accion, mando])
+
+
+func esperar(b: Button, accion: String, mando: bool) -> void:
+	if esperando:
+		refrescar()
+	esperando = b
+	esperando_accion = accion
+	esperando_mando = mando
+	esperando_desde = Time.get_ticks_msec()
+	b.text = "Pulsa un botón del mando..." if mando else "Pulsa una tecla o un clic..."
+	aviso.text = "Esc para dejarlo como estaba"
+
+
+# Vuelve a escribir lo que pone cada casilla (tras cambiar una, que puede haber cambiado otra al intercambiarse)
+func refrescar() -> void:
+	esperando = null
+	for c in casillas:
+		c[0].text = nombres([c[1]], c[2])
+
+
 # Los nombres de las teclas (mando = false) o de los botones del mando (mando = true) de unas acciones,
 # sin repetir, separados por " / "
 func nombres(acciones: Array, mando: bool) -> String:
 	var lista: Array[String] = []
 	for a in acciones:
-		for ev in InputMap.action_get_events(a):
+		for ev in Controles.eventos(a, mando):
 			var n := nombre_evento(ev)
-			var es_mando := ev is InputEventJoypadButton or ev is InputEventJoypadMotion
-			if n != "" and es_mando == mando and not n in lista:
+			if n != "" and not n in lista:
 				lista.append(n)
 	return " / ".join(lista) if not lista.is_empty() else "-"
-
-
-# Moverse con el teclado: las cuatro direcciones juntas, como "WASD / Flechas"
-func teclas_direcciones(acciones: Array) -> String:
-	var grupos: Array[String] = []
-	var i := 0
-	while true:
-		var codigos := []
-		for a in acciones:
-			var teclas := InputMap.action_get_events(a).filter(func(e): return e is InputEventKey)
-			if i < teclas.size():
-				codigos.append(codigo(teclas[i]))
-		if codigos.is_empty():
-			break
-		if codigos == FLECHAS:
-			grupos.append("Flechas")
-		else:
-			var letras := ""
-			for c in codigos:
-				letras += nombre_tecla(c)
-			grupos.append(letras)
-		i += 1
-	return " / ".join(grupos) if not grupos.is_empty() else "-"
-
-
-static func codigo(ev: InputEventKey) -> Key:
-	return ev.physical_keycode if ev.physical_keycode != KEY_NONE else ev.keycode
 
 
 static func nombre_tecla(c: Key) -> String:
@@ -288,14 +323,15 @@ static func nombre_tecla(c: Key) -> String:
 # El nombre de una tecla, botón del ratón o del mando, para enseñarlo
 static func nombre_evento(ev: InputEvent) -> String:
 	if ev is InputEventKey:
-		return nombre_tecla(codigo(ev))
+		return nombre_tecla(Controles.codigo(ev))
 	if ev is InputEventMouseButton:
 		return {MOUSE_BUTTON_LEFT: "Clic izq.", MOUSE_BUTTON_RIGHT: "Clic dcho.", MOUSE_BUTTON_MIDDLE: "Clic rueda",
 			MOUSE_BUTTON_WHEEL_UP: "Rueda", MOUSE_BUTTON_WHEEL_DOWN: "Rueda"}.get(ev.button_index, "Ratón")
 	if ev is InputEventJoypadButton:
 		return BOTONES_MANDO.get(ev.button_index, "Botón %d" % ev.button_index)
 	if ev is InputEventJoypadMotion:
-		return EJES_MANDO.get(ev.axis, "Eje %d" % ev.axis)
+		var sentido: String = SENTIDOS[ev.axis][1 if ev.axis_value > 0 else 0] if ev.axis in SENTIDOS else ""
+		return EJES_MANDO.get(ev.axis, "Eje %d" % ev.axis) + sentido
 	return ""
 
 
@@ -307,8 +343,36 @@ func texto_musica() -> String:
 	return "Música: %s" % ("Sí" if Guardado.cargar().ajustes.musica else "No")
 
 
-# B del mando o Esc: volver
+# B del mando o Esc: volver. Si una casilla espera tecla, lo que se pulse es para ella (Esc la deja como estaba)
 func _input(evento: InputEvent) -> void:
+	if esperando:
+		esperar_tecla(evento)
+		return
 	if evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa"):
 		get_viewport().set_input_as_handled()
 		cerrar()
+
+
+func esperar_tecla(evento: InputEvent) -> void:
+	if evento is InputEventMouseMotion:
+		return
+	get_viewport().set_input_as_handled()   # que no lo use nadie más (ni para moverse por el menú)
+	if Time.get_ticks_msec() - esperando_desde < 200:
+		return   # aún es el pulsar con el que se eligió la casilla
+	var cancelar: bool = evento is InputEventKey and evento.pressed and Controles.codigo(evento) == KEY_ESCAPE
+	# Esperando un botón del mando, un clic también lo deja como estaba (por si no hay mando)
+	if esperando_mando and evento is InputEventMouseButton and evento.pressed:
+		cancelar = true
+	var casilla_elegida := esperando
+	if cancelar:
+		refrescar()
+		aviso.text = "Sin cambios"
+		casilla_elegida.grab_focus()
+		return
+	var nuevo := Controles.capturar(evento, esperando_mando)
+	if nuevo == null:
+		return
+	Controles.cambiar(esperando_accion, nuevo)
+	refrescar()
+	aviso.text = "Cambiado a %s" % nombre_evento(nuevo)
+	casilla_elegida.grab_focus()

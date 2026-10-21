@@ -30,7 +30,8 @@ const NUEVO := {
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
-	"ajustes": {"musica": true, "modo": "asistido"},   # modo: cómo se ataca (johnny.gd, MODOS)
+	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
+	"ajustes": {"musica": true, "modo": "asistido", "teclas": {}},
 }
 
 const EDIFICIO := {"completado": false, "partidas": 0, "victorias": 0, "mejor_planta": 0, "mejor_tiempo": 0.0}
@@ -46,7 +47,7 @@ static func cargar() -> Dictionary:
 	for clave in leido:
 		if clave in s:
 			s[clave] = leido[clave]
-	s.ajustes = NUEVO.ajustes.merged(s.ajustes, true)
+	s.ajustes = NUEVO.ajustes.duplicate(true).merged(s.ajustes, true)   # copia: las constantes no se pueden cambiar
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
 	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos"]:
 		s[clave] = int(s[clave])

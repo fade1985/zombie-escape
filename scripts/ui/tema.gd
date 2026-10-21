@@ -4,6 +4,7 @@
 # Variantes (se ponen con theme_type_variation):
 #   "BotonGrande"  el botón principal (JUGAR, Continuar...)
 #   "BotonRojo"    la misma chapa, rojiza (Abandonar partida)
+#   "Celda"        las casillas de la tabla de controles (Opciones)
 #   "Pastilla"     las cajitas del HUD (arma, dinero, llave); "PastillaOn", la que está en la mano
 #   "Titulo"       el título grande de un panel · "Sub" el texto gris de debajo
 class_name Tema
@@ -63,6 +64,16 @@ static func crear() -> Theme:
 	t.set_constant("outline_size", "Button", 4)
 	t.set_font_size("font_size", "Button", 16)
 	t.set_constant("h_separation", "Button", 8)
+
+	# Las casillas de la tabla de controles (Opciones): solo el texto; al pasar por encima o elegirlas,
+	# una cajita de metal con el borde amarillo
+	t.set_type_variation("Celda", "Button")
+	var celda := _pastilla(AMARILLO)
+	t.set_stylebox("normal", "Celda", StyleBoxEmpty.new())
+	t.set_stylebox("hover", "Celda", celda)
+	t.set_stylebox("focus", "Celda", celda)
+	t.set_stylebox("pressed", "Celda", celda)
+	t.set_color("font_color", "Celda", GRIS)
 
 	t.set_type_variation("BotonGrande", "Button")
 	t.set_font_size("font_size", "BotonGrande", 32)
