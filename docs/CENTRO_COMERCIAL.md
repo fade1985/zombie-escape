@@ -102,7 +102,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   (10 cada uno), maletinazo de cerca (20) y «¡A TRABAJAR!» (2 dependientas y 1 vigilante). A media vida se inyecta
   VD-7, el somnífero de Velaria, y **muta (con su propio dibujo)**: más rápido, latigazos de tentáculo (como el zombi
   de tentáculos, más largos) y embestida. Su historia, en la parte 7.
-- **Por trozos**, cada uno con su visto bueno: 1) vigilante y dependienta; 2) antidisturbios y lo común de los
+- **Por trozos**, cada uno con su visto bueno: 1) ✅ vigilante y dependienta; 2) antidisturbios y lo común de los
   minijefes (y la portera a su nuevo tamaño); 3) cocinero; 4) modista; 5) mascota (rehecha a 72); 6) azotea y gerente.
   Coste previsto: unas 415 generaciones en total (54 ya gastadas en los 8 modelos).
 
@@ -152,7 +152,7 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
      llegan refuerzos corriendo por las puntas del pasillo (2, y uno más cada dos plantas); huye a la punta más
      lejana, se cansa cada 3 s y se para a resoplar ("uf"); acorralado en una punta, pega; a media vida vuelve a
      silbar. Tiene 90 de vida (+20 % por planta) y si sales del pasillo, al volver sigue igual de herido. Al caer
-     suelta la tarjeta (dibujada con código) y 2 billetes. De momento es el zombi normal con la bata teñida de azul.
+     suelta la tarjeta (dibujada con código) y 2 billetes. Desde la parte 4 lleva el dibujo del vigilante.
 2. ✅ **Cómo se ve** (21 oct): suelos, paredes, escaparates y muebles con PixelLab. Unas 120 generaciones (detalle y
    recetas en `assets/pixellab.json` → `centro-comercial`). Lo que ha quedado:
    - **Suelos, paredes y tapa** (`docs/FONDOS.md`): la galería (el pasillo: baldosa clara, paneles crema y su tapa gris
@@ -200,7 +200,24 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
      agua no hace nada pero la tienda se queda muy oscura (0,94) y solo se ve con la linterna. (En el plan era un
      chispazo 1 de cada 3 veces; se cambió.)
    - Para probarlo: `--captura --edificio centro --fotos-tiendas` saca también `captura-peligro-frio/fuego/agua/sin-luz/cuadro.png`.
-4. **Zombis nuevos**, minijefes y jefe final.
+4. **Zombis nuevos**, minijefes y jefe final, por trozos (ver «Decidido con el dueño»):
+   - ✅ **Trozo 1: vigilante y dependienta** (21 oct). Animados con PixelLab (andar, ataque, golpe y muerte en las 8
+     direcciones; 73 generaciones, detalle en `assets/pixellab.json` → `centro-comercial-parte4` → `trozo1`) y
+     metidos en el juego con los números del plan:
+     - **Vigilante** (`zombi_vigilante.tscn`): vida 45, velocidad 85, porrazo de 12 con más alcance. Sale en las
+       tiendas desde la 1ª planta y son los refuerzos del silbato (antes, normales, rápidos y venenosos). El guardia
+       de la tarjeta lleva su dibujo (sin el tinte azul) y hace lo mismo que antes.
+     - **Dependienta** (`zombi_dependienta.gd`): vida 20, velocidad 95. Al despertar grita «¡OFERTAS!» (con su
+       sonido): despierta a toda la tienda y todos, ella también, van un 30 % más rápidos durante 5 s. Luego guarda
+       las distancias (se aparta si te acercas a menos de 200 y se acerca si te alejas a más de 300) y vuelve a gritar
+       cada 8 s. Lo que no decía el plan: si la acorralas, te chilla en la cara y quita 6 (su «ataque» es el grito, sin
+       zarpazo). En las tiendas desde la planta baja, una por tienda como mucho.
+     - Cuestan 1,5 cada uno en el reparto de zombis de las tiendas; los Apartamentos no cambian.
+     - Teclas de prueba **V** (vigilante) y **B** (dependienta); salen en la sala de exposición (F9), que se ha
+       alargado para que quepan. `--captura --edificio centro --fotos-tiendas` saca `captura-grito.png` (el grito
+       despertando a tres vigilantes) y dice qué zombis hay en cada tienda; `--captura`, `captura-expo-zombis.png`.
+     - Pegas conocidas: el andar del vigilante no cierra del todo el ciclo en algunas direcciones y la dependienta,
+       andando hacia arriba a la derecha, se gira un poco de perfil.
 5. **Supervivientes nuevos** con sus eventos.
 6. **Reparto de objetos** y recetas que mezclan edificios.
 7. **La historia:** dosier y noticias.

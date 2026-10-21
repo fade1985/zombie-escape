@@ -34,11 +34,13 @@ const ZOMBIS := {
 	"venenoso": preload("res://escenas/personajes/zombi_venenoso.tscn"),
 	"portera": preload("res://escenas/personajes/portera.tscn"),
 	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la tarjeta (centro comercial)
+	"vigilante": preload("res://escenas/personajes/zombi_vigilante.tscn"),       # los del centro comercial
+	"dependienta": preload("res://escenas/personajes/zombi_dependienta.tscn"),
 }
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
-	KEY_F7: "venenoso", KEY_P: "portera"}
+	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -46,12 +48,13 @@ const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
-const REFUERZOS := 2               # los zombis que llegan al silbato del guardia (y uno más cada dos plantas)
+const REFUERZOS := 2               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas)
 const BILLETES_GUARDIA := 2
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
 # La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
-	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994")}
+	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
+	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -536,15 +539,12 @@ func guardar_guardia() -> void:
 func _al_silbar() -> void:
 	decir("¡El guardia ha tocado el silbato: vienen refuerzos!", 2.5)
 	var sitio: Dictionary = planta.sitios[aqui]
-	var tipos := ["normal", "normal", "rapido"]
-	if planta.num >= 3:
-		tipos.append("venenoso")
 	for i in REFUERZOS + planta.num / 2:
 		var x: float = Planta.MURO + 50 if i % 2 == 0 else sitio.ancho - Planta.MURO - 50
 		var donde := Vector2(x, sitio.alto / 2.0 + randf_range(-60, 60))
 		if donde.distance_to(johnny.position) < 250.0:
 			donde.x = sitio.ancho - donde.x   # no encima de Johnny: por la otra punta
-		meter_zombi(tipos.pick_random(), donde)
+		meter_zombi("vigilante", donde)
 
 
 # Ha caído: suelta la tarjeta donde estaba (se queda en el suelo del pasillo hasta que Johnny la coja)
@@ -914,7 +914,13 @@ func fotos_tiendas() -> void:
 			await get_tree().create_timer(0.8).timeout
 			var nombre: String = "jefe" if s.tipo == "jefe" else s.tienda
 			get_viewport().get_texture().get_image().save_png("res://captura-tienda-%s.png" % nombre)
-			print("Foto: ", s.nombre, " (", nombre, ")")
+			var cuenta := {}
+			for z in s.zombis:
+				cuenta[z.tipo] = cuenta.get(z.tipo, 0) + 1
+			print("Foto: ", s.nombre, " (", nombre, ") | zombis: ", cuenta)
+			if not grito_visto and s.tipo != "jefe":
+				grito_visto = true
+				await foto_grito()
 			await fotos_peligros(s)
 		montar(0, 0, false)
 		johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
@@ -937,6 +943,32 @@ func fotos_tiendas() -> void:
 				z.queue_free()
 			await fotos_peligros(s)
 	get_tree().quit()
+
+
+# La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡OFERTAS!», despierta a los
+# vigilantes dormidos de al lado y les mete prisa (captura-grito.png); luego, los nuevos de cerca (captura-nuevos.png)
+var grito_visto := false
+
+func foto_grito() -> void:
+	var dep := meter_zombi("dependienta", johnny.position + Vector2(120, 0))
+	dep.dormido = true
+	var otros := []
+	for i in 3:
+		var v := meter_zombi("vigilante", johnny.position + Vector2(-140 + i * 90, 110))
+		v.dormido = true
+		otros.append(v)
+	# se despierta sola al ver a Johnny (en la misma sala) y grita enseguida
+	await get_tree().create_timer(0.25).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-grito.png")
+	print("Grito: estado %s | despiertos %d/3 | prisa %s | velocidad máxima %s" % [dep.estado,
+		otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return snappedf(o.prisa, 0.1)),
+		otros.map(func(o): return o.agente.max_speed)])
+	await get_tree().create_timer(2.0).timeout
+	print("Dependienta a %d de Johnny (se aparta) | estado %s" % [dep.global_position.distance_to(johnny.global_position), dep.estado])
+	get_viewport().get_texture().get_image().save_png("res://captura-nuevos.png")
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await get_tree().process_frame
 
 
 # Las fotos de los peligros (peligros.gd), con la penumbra puesta y unos zombis despiertos dentro:
@@ -1046,6 +1078,16 @@ func _process(delta: float) -> void:
 		johnny.get_node("Camara").reset_smoothing()
 	if antes < 0.7 and tiempo >= 0.7:
 		get_viewport().get_texture().get_image().save_png("res://captura-expo.png")
+		# y las últimas filas de zombis (los del centro comercial y la portera): captura-expo-zombis.png
+		var filas := []
+		for s in mapa.expo_sprites:
+			if s.position.y not in filas:
+				filas.append(s.position.y)
+		filas.sort()
+		johnny.position = Vector2(560, filas[-2] - 60.0)
+		johnny.get_node("Camara").reset_smoothing()
+	if antes < 0.9 and tiempo >= 0.9:
+		get_viewport().get_texture().get_image().save_png("res://captura-expo-zombis.png")
 	# al segundo, a un apartamento normal (el que tiene más zombis)
 	if antes < 1.0 and tiempo >= 1.0:
 		var mejor := 1

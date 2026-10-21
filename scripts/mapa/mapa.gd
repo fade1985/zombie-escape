@@ -61,7 +61,7 @@ const NIEBLA_FONDO := 0.74                 # lo que tapa la niebla a tope (1 = n
 const ACLARA := 3.5                       # lo rápido que se aclara una habitación al descubrirla (por segundo)
 # los zombis de la exposición, en el orden de las teclas de prueba
 const EXPO_ZOMBIS := ["zombi_normal", "zombi_lento", "zombi_rapido", "zombi_explosivo", "zombi_tentaculos",
-	"zombi_venenoso", "portera"]
+	"zombi_venenoso", "zombi_vigilante", "zombi_dependienta", "portera"]
 const RUMBOS := ["s", "so", "o", "no", "n", "ne", "e", "se"]
 
 var sitio: Dictionary
@@ -740,6 +740,8 @@ func poner_exposicion() -> void:
 	# los zombis, en una fila por tipo: el de siempre y sus ropas
 	y += alto_fila + 150
 	for nombre in EXPO_ZOMBIS:
+		if nombre == "portera":
+			y += 100   # es mucho más alta que los demás: sin esto tapa la fila de encima
 		var muestra: Node2D = load("res://escenas/personajes/%s.tscn" % nombre).instantiate()
 		var base: AnimatedSprite2D = muestra.get_node("Sprite")
 		var ropas: Array = muestra.get("ropas") if muestra.get("ropas") else [base.sprite_frames]

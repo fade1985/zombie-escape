@@ -161,3 +161,23 @@ final, también la de la azotea (con el doble de vida). El vecino del 4ºB, que 
   las zapatillas pisen la sombra (`FEET_DY` en `src/jefe-portera.js`). Si se rehace la hoja, volver a medirlo.
 - **Números provisionales** (los puso Claude): 600 de vida en la planta baja (+25 % por planta), radio 38.
 - **Pendiente:** que el dueño la pruebe; la botella de lejía y el agua sucia siguen dibujadas con código.
+
+## Centro comercial (Godot, 21 de octubre de 2026)
+
+Hechos ya en Godot con la receta del JS (herramientas copiadas en `tools/`: `piel.py`, `bajar_zip.py`, `hoja.py`,
+`zombi.py`). Modelos con `create_character_pro_flash` (estilo: el sur del zombi normal) y animaciones con PixMiniMax:
+andar de 12 fotogramas, ataque y golpe de 8 (partida y final iguales), muerte de 12. Todo en `assets/pixellab.json`
+→ `centro-comercial-parte4` (ids, grupos, textos y coste).
+
+- **Vigilante** (`zombi-vigilante`, fuente `vigilante-48`): gorra, uniforme azul marino, porra y radio. El ataque es
+  un porrazo: saca la porra de la cintura, la levanta y la baja de golpe. Su dibujo quieto ya traía sangre roja viva:
+  se oscurece en toda la hoja (`"sangre_en_todo": true` en su `zombi.json`). También es el dibujo del guardia de la
+  tarjeta.
+- **Dependienta** (`zombi-dependienta`, fuente `dependienta-48`): polo rojo, coleta y acreditación. La piel salió
+  beige más amarilla que la de siempre: `py tools/piel.py dependienta-48 43 68 0.35` (tono de origen 43-68 y luz
+  mínima 0,35) y se subió como personaje nuevo (`cb6062dd`, 0,25). El ataque es el grito «¡OFERTAS!» con las manos
+  en la boca. Como el polo es rojo, la sangre no se puede buscar por el color: `"sangre": "quitar"` y `"sueltos":
+  true` (se quitan los chorros que salen volando; lo pegado al cuerpo se confunde con el polo).
+- **Coste:** 73 generaciones los dos (cada dirección, 1; dos andares de la dependienta, 2). Se repitieron dos muertes
+  del vigilante (de espaldas y hacia la izquierda) porque PixelLab pintó un charco grande alrededor: el texto «He
+  dies quietly... The floor around him stays completely clean» lo quitó a la primera.

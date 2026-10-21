@@ -23,10 +23,11 @@ const SALA_FILAS := 20
 const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 72
+const EXPO_FILAS := 86            # (alargada para los zombis del centro comercial)
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
-const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0}
+const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,
+	"vigilante": 1.5, "dependienta": 1.5}
 # Presupuesto de un apartamento: "base" más "por_nivel" por cada nivel (el nivel sube con la planta y con el
 # orden del apartamento dentro de ella). Son los números del juego JS, equilibrados con partidas simuladas.
 const BASE := 5.0
@@ -261,6 +262,12 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 		tipos.append("explosivo")
 	if nivel >= 4:
 		tipos.append("tentaculos")
+	# en las tiendas del centro comercial, además, los suyos: la dependienta desde la planta baja (una por tienda
+	# como mucho) y el vigilante desde la 1ª planta
+	if sitio.get("tienda", "") != "":
+		tipos.append("dependienta")
+		if num >= 2:
+			tipos.append("vigilante")
 	var area := 0
 	for s in apt.salas:
 		area += s.casillas
@@ -290,6 +297,8 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			var tipo: String = caben[rng.randi() % caben.size()]
 			zombis.append({"tipo": tipo, "pos": pos})
 			queda -= COSTE[tipo]
+			if tipo == "dependienta":
+				tipos.erase("dependienta")
 	return zombis
 
 
