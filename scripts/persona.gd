@@ -1,7 +1,8 @@
 # Una persona dibujada con formas, como drawHuman de src/draw.js en el juego JS: pies que andan, cuerpo con
 # camisa y pantalón, manos, cabeza con pelo, ojos que miran hacia donde va, y gorra o casco. La usan los
 # supervivientes (aliado.gd), que en el JS no tenían pixel art. Si lleva arma, se dibuja en su mano
-# (drawHeld de src/weapons.js), apuntando hacia "apunte".
+# (drawHeld de src/weapons.js), apuntando hacia "apunte". Los del centro comercial llevan además lo de su oficio
+# (el delantal de la camarera, el chaleco del ferretero, la bata de la farmacéutica, los cascos del técnico...).
 # Las medidas son las del JS (unidades del mundo) y se multiplican por "s" (su escala). El origen es su
 # centro en el suelo (su círculo de choque); los pies quedan un poco más abajo.
 class_name Persona
@@ -10,14 +11,16 @@ extends Node2D
 const LINEA := Color("#1d1b2c")   # el contorno "de dibujo animado"
 const SOMBRA := Color(0.024, 0.016, 0.055)
 
-var look := {}             # colores: skin, hair, shirt, pants, shoes; hat {kind, color}; cross
+var look := {}             # colores: skin, hair, shirt, pants, shoes; hat {kind, color, chapa}; cross (y cross_color);
+                           # y los del centro comercial: delantal, chaleco, bata (el cuello de la camisa), cascos
+                           # (colores); peinado ("coleta" o "moño"); bigote, tarjeta y aparato (sí o no)
 var s := 0.82              # su escala (la de los compañeros en el JS)
 var mira := Vector2.DOWN   # hacia dónde mira
 var mueve := Vector2.ZERO  # hacia dónde anda
 var andando := 0.0         # de 0 (quieto) a 1 (andando a buen paso)
 var paso := 0.0            # la fase de la animación de andar
 var blanco := false        # todo blanco (le acaban de dar)
-var arma := ""             # "pistola", "rifle" o nada
+var arma := ""             # "pistola", "rifle", "martillo" o nada
 var apunte := PI / 2.0     # hacia dónde lleva el arma
 var retroceso := 0.0       # de 1 (acaba de disparar) a 0
 var fogonazo := false
@@ -70,17 +73,23 @@ func dibujar_persona() -> void:
 	rellenar(cuerpo, col(look.shirt))
 	if not blanco:
 		recortado(cuerpo, rect(Rect2(-12 * s, by + 4 * s, 24 * s, 10 * s)), look.get("pants", Color("#3d4a7a")))
+		ropa(cuerpo, by, de_espaldas, lw)
 	borde(cuerpo, lw)
-	# cruz roja en el pecho (la médica)
+	# cruz en el pecho: roja en medio (la médica) o verde y a un lado de la bata (la farmacéutica)
 	if look.get("cross", false) and not blanco and not de_espaldas:
-		draw_rect(Rect2(-1.6 * s, by + 1 * s, 3.2 * s, 8 * s), Color("#ff5d73"))
-		draw_rect(Rect2(-4 * s, by + 3.4 * s, 8 * s, 3.2 * s), Color("#ff5d73"))
+		var cruz: Color = look.get("cross_color", Color("#ff5d73"))
+		var cx := -5.0 * s if look.has("bata") else 0.0
+		var k := 0.7 if look.has("bata") else 1.0
+		draw_rect(Rect2(cx - 1.6 * s * k, by + (5 - 4 * k) * s, 3.2 * s * k, 8 * s * k), cruz)
+		draw_rect(Rect2(cx - 4 * s * k, by + (5 - 1.6 * k) * s, 8 * s * k, 3.2 * s * k), cruz)
 	if not de_espaldas:
 		manos(by, fx, fy, lw)
 
-	# cabeza
+	# cabeza (la coleta o el moño, detrás; de espaldas, encima)
 	var r := 15.0 * s
 	var cabeza_c := Vector2(0, by - 15 * s)
+	if not de_espaldas:
+		peinado(cabeza_c, lx, false, lw)
 	var cabeza := elipse(cabeza_c, r, r)
 	rellenar(cabeza, col(look.skin))
 	if not blanco:
@@ -91,6 +100,8 @@ func dibujar_persona() -> void:
 		recortado(cabeza, elipse(cabeza_c + Vector2(2 * s, 12 * s), r, r), Color(0, 0, 0, 0.1))   # sombreado
 		rellenar(elipse(cabeza_c + Vector2(-6 * s, -8 * s), 4 * s, 2.4 * s, -0.7), Color(1, 1, 1, 0.4))   # brillo
 	borde(cabeza, lw)
+	if de_espaldas:
+		peinado(cabeza_c, lx, true, lw)
 
 	# gorra de policía o casco militar
 	var gorro: Dictionary = look.get("hat", {})
@@ -104,7 +115,15 @@ func dibujar_persona() -> void:
 			if not de_espaldas:
 				# la visera, hacia donde mira
 				rellenar(elipse(cabeza_c + Vector2(lx * 8 * s, -5 * s), 11 * s, 4 * s, lx * 0.3, 0.0, PI, true), LINEA)
-			rellenar(elipse(cabeza_c + Vector2(0, -12 * s), 2.6 * s, 2.6 * s), Color("#ffd23f"))
+			if gorro.get("chapa", true):
+				rellenar(elipse(cabeza_c + Vector2(0, -12 * s), 2.6 * s, 2.6 * s), Color("#ffd23f"))
+
+	# los cascos del técnico: la diadema por encima y un auricular a cada lado
+	if look.has("cascos") and not blanco:
+		draw_arc(cabeza_c, r + 1.5 * s, PI * 1.08, PI * 1.92, 14, LINEA, 4.5 * s)
+		draw_arc(cabeza_c, r + 1.5 * s, PI * 1.08, PI * 1.92, 14, Color("#3a3d47"), 2.2 * s)
+		for lado: int in [-1, 1]:
+			forma(elipse(cabeza_c + Vector2(lado * (r - 1.5 * s) - lx * 2 * s, 2 * s), 4 * s, 5.5 * s), look.cascos, lw * 0.7)
 
 	# la cara (de espaldas no se ve)
 	if not de_espaldas:
@@ -112,6 +131,61 @@ func dibujar_persona() -> void:
 		if ly > -0.1 and not blanco:
 			for k: int in [-1, 1]:
 				rellenar(elipse(cabeza_c + Vector2(lx * 4 * s + k * 9.5 * s, 11.5 * s), 2.8 * s, 1.8 * s), Color(1, 0.47, 0.55, 0.45))
+			if look.get("bigote", false):
+				rellenar(elipse(cabeza_c + Vector2(lx * 5 * s, 11 * s), 4.5 * s, 1.6 * s), look.get("hair", LINEA).darkened(0.35))
+
+
+# Lo que llevan encima de la camisa los del centro comercial
+func ropa(cuerpo: PackedVector2Array, by: float, de_espaldas: bool, lw: float) -> void:
+	if look.has("bata"):
+		# la bata (la camisa es la bata) baja tapando el pantalón; por delante va abierta y se ve el cuello de la camisa
+		recortado(cuerpo, rect(Rect2(-12 * s, by + 4 * s, 24 * s, 5 * s)), look.shirt)
+		if not de_espaldas:
+			rellenar(PackedVector2Array([Vector2(-3.5 * s, by - 9.5 * s), Vector2(3.5 * s, by - 9.5 * s), Vector2(0, by - 3 * s)]), look.bata)
+			draw_line(Vector2(0, by - 3 * s), Vector2(0, by + 10.5 * s), Color(LINEA, 0.45), 1.5 * s)
+	if look.has("chaleco"):
+		# el chaleco naranja con su raya que brilla; por delante, abierto
+		var raya := Color("#f4f1a0")
+		if de_espaldas:
+			recortado(cuerpo, rect(Rect2(-12 * s, by - 10 * s, 24 * s, 15 * s)), look.chaleco)
+			recortado(cuerpo, rect(Rect2(-12 * s, by - 1 * s, 24 * s, 2.5 * s)), raya)
+		else:
+			for x0: float in [-12.0 * s, 3.5 * s]:
+				recortado(cuerpo, rect(Rect2(x0, by - 10 * s, 8.5 * s, 15 * s)), look.chaleco)
+				recortado(cuerpo, rect(Rect2(x0, by - 1 * s, 8.5 * s, 2.5 * s)), raya)
+	if look.has("delantal"):
+		if de_espaldas:
+			for lado: int in [-1, 1]:   # el lazo, en la espalda
+				forma(elipse(Vector2(lado * 3.5 * s, by + 3 * s), 3.5 * s, 2.2 * s), look.delantal, lw * 0.5)
+		else:
+			# de cintura, con su cinta (la cabeza tapa lo de arriba: así se ve el uniforme)
+			recortado(cuerpo, rect(Rect2(-12 * s, by + 3 * s, 24 * s, 1.6 * s)), look.delantal)
+			forma(caja_redonda(Rect2(-6 * s, by + 3.5 * s, 12 * s, 8.5 * s), 2 * s), look.delantal, lw * 0.6)
+	if look.get("tarjeta", false) and not de_espaldas:
+		# el cordón rojo con la tarjeta de la tienda
+		draw_polyline(PackedVector2Array([Vector2(-4.5 * s, by - 9 * s), Vector2(0, by), Vector2(4.5 * s, by - 9 * s)]),
+			Color("#e04848"), 1.5 * s)
+		forma(rect(Rect2(-2.5 * s, by, 5 * s, 6 * s)), Color("#f4f6f8"), lw * 0.5)
+	if look.get("aparato", false):
+		# el aparato del cinturón, con su lucecita verde que parpadea
+		var x := -11.0 * s if de_espaldas else 6.0 * s
+		forma(rect(Rect2(x, by + 3 * s, 5 * s, 5 * s)), Color("#2f3240"), lw * 0.5)
+		var luz := Color("#5dff8a") if Time.get_ticks_msec() / 400 % 2 else Color("#1f5a2e")
+		draw_rect(Rect2(x + 1.5 * s, by + 4.5 * s, 2 * s, 2 * s), luz)
+
+
+# La coleta (cuelga detrás, hacia el lado contrario de la mirada) o el moño (encima, detrás). "encima": de espaldas
+func peinado(cabeza_c: Vector2, lx: float, encima: bool, lw: float) -> void:
+	var cual: String = look.get("peinado", "")
+	if cual == "" or blanco:
+		return
+	var pelo: Color = look.get("hair", Color("#6b3e26"))
+	if cual == "coleta":
+		var c := cabeza_c + (Vector2(0, 5 * s) if encima else Vector2(-lx * 14 * s, 4 * s))
+		forma(elipse(c, 4.5 * s, 8.5 * s, -lx * 0.4 if not encima else 0.0), pelo, lw * 0.7)
+	else:
+		var c := cabeza_c + (Vector2(0, -11 * s) if encima else Vector2(-lx * 5 * s, -14 * s))
+		forma(elipse(c, 6 * s, 5.5 * s), pelo, lw * 0.7)
 
 
 # Las manos, con balanceo opuesto a los pies. La del arma la dibuja el arma
@@ -143,14 +217,19 @@ func dibujar_arma() -> void:
 	var mano := Vector2(cos(apunte) * 13, 3 + sin(apunte) * 9) - Vector2.from_angle(apunte) * retroceso * 6
 	var voltea := -1.0 if cos(apunte) < 0 else 1.0
 	draw_set_transform(mano, apunte, Vector2(s, s * voltea))
-	if arma == "rifle":
+	if arma == "martillo":
+		# el martillo del ferretero: en alto y, al dar el golpe (el retroceso), baja de golpe hacia delante
+		draw_set_transform(mano, apunte + voltea * lerpf(-1.0, 0.5, retroceso), Vector2(s, s * voltea))
+		forma(caja_redonda(Rect2(-3, -2.5, 22, 5), 2), Color("#8a5a2b"), 3)
+		forma(caja_redonda(Rect2(17, -7, 8, 14), 2), Color("#9aa0ad"), 3)
+	elif arma == "rifle":
 		forma(caja_redonda(Rect2(-8, -4, 16, 8), 3), Color("#4b5320"), 3)
 		forma(caja_redonda(Rect2(6, -3, 28, 6), 2), Color("#3a3d47"), 3)
 		forma(caja_redonda(Rect2(10, 2, 5, 9), 2), Color("#2f3240"), 3)
 	else:
 		forma(caja_redonda(Rect2(-4, -4, 26, 8), 2), Color("#4a4e5c"), 3)
 		forma(caja_redonda(Rect2(-2, 2, 7, 9), 2), Color("#2f3240"), 3)
-	if fogonazo:
+	if fogonazo and arma != "martillo":
 		var boca := (34.0 if arma == "rifle" else 24.0) + 6.0
 		var estrella := PackedVector2Array()
 		for i in 10:

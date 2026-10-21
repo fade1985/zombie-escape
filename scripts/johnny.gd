@@ -202,7 +202,11 @@ func _physics_process(delta: float) -> void:
 	efectos.position = sprite.position
 	if not vivo:
 		return
-	# Los estados de los charcos: el daño poco a poco (sin parpadear), el tinte, las llamas y las gotitas
+	# Los estados de los charcos: el daño poco a poco (sin parpadear), el tinte, las llamas y las gotitas. Si te
+	# acompaña la farmacéutica, el veneno y el ácido hacen la mitad (aliado.gd)
+	for nombre in Aliado.CHARCOS:
+		if pisando.has(nombre):
+			pisando[nombre] = pisando[nombre].merged({"dps": pisando[nombre].get("dps", 0.0) * Aliado.charcos_a_medias(get_tree())}, true)
 	estado_dano += Estados.actualizar(estados, pisando, delta)
 	pisando = {}
 	if estado_dano >= 1.0:

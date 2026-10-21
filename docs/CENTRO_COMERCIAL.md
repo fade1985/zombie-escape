@@ -130,6 +130,27 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   dice; desde entonces el café es solo café.
 - Se hace por trozos, cada uno con su visto bueno: lo común (que salgan los nuevos en el centro y su sitio en la
   sala) y luego un superviviente por trozo.
+- ✅ **Lo común** (21 oct):
+  - Los cuatro, en `supervivientes.gd` (`DATOS`), dibujados con código (`persona.gd`): la camarera con uniforme rojo,
+    delantal de cintura y coleta; el ferretero con chaleco naranja de raya brillante, gorra y bigote, y su martillo; la
+    farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
+    aparato con lucecita en el cinturón.
+  - En el centro comercial sale uno de los cuatro que aún no tengas (en los Apartamentos, los tres de siempre, sin
+    cambios). Su tienda sale siempre en su planta (`Planta.tienda_fija`) y se esconde en su trastienda, cerrada y sin
+    zombis: la camarera en la cámara frigorífica del restaurante, el ferretero en el almacén de la ferretería, la
+    farmacéutica en la rebotica (sin zombis tampoco en el aseo que tiene dentro) y el técnico en el almacén de la
+    tienda de electrónica. Cada uno grita lo suyo («¡Me estoy congelando!»).
+  - De momento se rescatan como los de siempre (encerrados, gritando y con la horda forzando la cerradura); cada trozo
+    siguiente cambia solo su rescate y hace su mejora de la sala.
+  - Lo suyo al acompañarte, ya hecho (lo pidió el dueño): platos que se rompen (4, cada 1,5 s), martillazos a los que
+    se le acercan (8, cada 0,9 s), charcos de veneno y ácido a la mitad, y una descarga cada 4 s que deja quieto 1 s
+    al zombi más cercano (hasta 260 de distancia).
+  - En la sala de mantenimiento, los tres de siempre donde estaban y los cuatro nuevos en una fila debajo, cada uno
+    con un hueco libre detrás para su mejora (`Planta.SITIO_CENTRO`; el texto de cada mejora, en `DATOS`, "mejora").
+    Lo que no decía el plan: con siete en la sala, solo dice «¿Te acompaño?» el que tienes más cerca (si no, se
+    pisaban los bocadillos).
+  - Tecla **H** en el centro: cada vez, el siguiente de los cuatro (rehace la planta con su tienda).
+    `--captura` saca además `captura-sala-siete.png` (los siete en la sala).
 
 ## Objetos
 
@@ -332,7 +353,8 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        despertando a tres vigilantes) y dice qué zombis hay en cada tienda; `--captura`, `captura-expo-zombis.png`.
      - Pegas conocidas: el andar del vigilante no cierra del todo el ciclo en algunas direcciones y la dependienta,
        andando hacia arriba a la derecha, se gira un poco de perfil.
-5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común; falta el rescate propio
+   y la mejora de la sala de cada uno (un trozo para cada uno).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
 7. **La historia:** dosier y noticias (decidido: ver «Historia»).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).

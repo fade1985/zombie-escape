@@ -22,8 +22,13 @@ const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la
 const SALA_FILAS := 20
 const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
+const SITIO_CENTRO := Rect2(500, 250, 892 - 500, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 86            # (alargada para los zombis del centro comercial)
+
+# El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
+# empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
+static var tienda_fija := {}
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,
@@ -90,14 +95,16 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 	for h in libres:
 		if nombre_puerta(num, h.letra) == "4ºB" and not tiendas:
 			de_jefa = h
-	# en el centro comercial, cada puerta una tienda distinta; la primera tienda normal, de las que tienen aseo
-	# (ahí se esconde el superviviente)
+	# en el centro comercial, cada puerta una tienda distinta; la primera tienda normal, la del superviviente si le
+	# toca esta planta (tienda_fija) o, si no, una de las que tienen aseo
 	var tipos: Array = Tienda.TIPOS.keys()
 	tipos.shuffle()
 	var tipo_de := {}
 	var con_aseo: Array = tipos.filter(func(t): return "bano" in Tienda.TIPOS[t].salas)
+	var fija: Dictionary = tienda_fija if tiendas and tienda_fija.get("planta", -1) == num else {}
+	var primera: String = fija.tienda if not fija.is_empty() else con_aseo[0]
 	for h in libres.filter(func(h): return h != de_jefa) + [de_jefa]:
-		tipo_de[h.letra] = con_aseo[0] if tipo_de.is_empty() else tipos.filter(func(t): return t not in tipo_de.values())[0]
+		tipo_de[h.letra] = primera if tipo_de.is_empty() else tipos.filter(func(t): return t not in tipo_de.values())[0]
 
 	for h in huecos:
 		var nombre := nombre_puerta(num, h.letra)
@@ -171,15 +178,22 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 			normales.append(i)
 	normales.shuffle()
 	# El baño del superviviente, en un apartamento normal al azar (como floor.survivor de src/building.js); en el
-	# centro comercial, en una tienda que tenga aseo (no todas tienen)
+	# centro comercial, en una tienda que tenga aseo (no todas tienen) o, si le toca esta planta a uno de los suyos,
+	# en la habitación de su tienda (la cámara del restaurante...), cerrada por la puerta que da a la sala de venta
 	var con_bano: Array = normales.filter(func(i): return planta.sitios[i].apt.salas.any(func(s): return s.uso == "bano"))
 	var de_superv: int = con_bano[rng.randi() % con_bano.size()] if not con_bano.is_empty() else normales[rng.randi() % normales.size()]
-	var banos: Array = planta.sitios[de_superv].apt.salas.filter(func(s): return s.uso == "bano" and s.puertas.size() == 1)
+	var de_su_tienda: Array = normales.filter(func(i): return planta.sitios[i].tienda == fija.tienda) if not fija.is_empty() else []
+	if not de_su_tienda.is_empty():
+		de_superv = de_su_tienda[0]
+	var escondite: String = fija.sala if not de_su_tienda.is_empty() else "bano"
+	var banos: Array = planta.sitios[de_superv].apt.salas.filter(func(s):
+		return s.uso == escondite and (s.puertas.size() == 1 or escondite != "bano"))
 	planta.superviviente = {}
 	if not banos.is_empty():
 		var bano: Dictionary = banos[rng.randi() % banos.size()]
 		var en := sitio_libre(planta.sitios[de_superv], bano, Vector2.INF, [], 18.0)
-		planta.superviviente = {"sitio": de_superv, "sala": bano.id, "puerta": bano.puertas[0],
+		var puertas: Array = bano.puertas.filter(func(p): return p.a == 0 or p.b == 0) if not de_su_tienda.is_empty() else bano.puertas
+		planta.superviviente = {"sitio": de_superv, "sala": bano.id, "puerta": puertas[0],
 			"pos": bano.centro if en == Vector2.INF else en}
 	for orden in normales.size():
 		var sitio: Dictionary = planta.sitios[normales[orden]]
@@ -228,7 +242,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		"aviso": "", "letrero": "Pasillo"}]
 	sitio.muebles = Muebles.de_sala("mantenimiento", {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": sitio.dueno},
 		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0)], rng,
-		[SITIO_TALLER, SITIO_VECINOS])
+		[SITIO_TALLER, SITIO_VECINOS, SITIO_CENTRO])
 	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), lejos de la pared de arriba
 	for i in rng.randi_range(6, 10):
 		sitio.manchas.append({"pos": Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60),
@@ -276,7 +290,7 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	var peso := func(s: Dictionary) -> float:
 		return s.casillas * (0.5 if s.uso == "bano" else 1.0)   # en los baños, pocos
 	var total := 0.0
-	var salas: Array = apt.salas.filter(func(s): return s.id != sin)
+	var salas: Array = apt.salas.filter(func(s): return s.id != sin and s.get("dueno_bano", -1) != sin)   # ni su aseo
 	for s in salas:
 		total += peso.call(s)
 	var salida: Dictionary = sitio.salidas[0]
