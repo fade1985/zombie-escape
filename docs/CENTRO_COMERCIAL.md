@@ -224,6 +224,33 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
 6. **La sala de mantenimiento crece** con cada superviviente (ver Supervivientes).
 7. **Partidas cortas**, de 15-20 minutos (sobre todo por el móvil).
 
+### Decidido con el dueño (21 oct, para la parte 8)
+
+Entran las cuatro: niveles de alerta, eventos sorpresa, reto del día y colecciones con bestiario. **Las salas
+opcionales con riesgo (la joyería), más adelante**: piden un tipo de tienda nuevo y objetos «muy buenos» que aún no
+existen. Números provisionales (los puso Claude; se ajustan al probar):
+
+- **Niveles de alerta, una regla fija por nivel** (como las ascensiones de *Isaac*), por edificio. Al completar un
+  edificio se desbloquea su Alerta 1; al completarlo con Alerta 1, la 2, y así hasta la 5. Se elige en «Elige
+  edificio». Las reglas se suman:
+  - A1: +25 % de zombis.
+  - A2: zombis un 10 % más rápidos.
+  - A3: los jefes, con +25 % de vida y se enfadan antes.
+  - A4: los botiquines curan la mitad.
+  - A5: el guardia de la tarjeta (o la llave) aguanta el doble y los zombis te oyen más lejos.
+  - Recompensa: +20 % de dólares por nivel y mejores rarezas en las armas que se crean en el banco.
+- **Eventos sorpresa, a veces: 1 de cada 4 plantas**, nunca en la del jefe. En los dos edificios:
+  - Apagón: solo se ve con la linterna.
+  - Alarma de incendios: los aspersores mojan el suelo (resbala) y, donde hay cables, calambrazos.
+  - Horda por las escaleras: las mecánicas en el centro, las de incendios en los Apartamentos.
+  - Vendedor ambulante: un superviviente en el pasillo que vende cosas por dólares.
+- **Reto del día:** cada día, el mismo edificio generado igual para todo el mundo (la semilla sale de la fecha) y una
+  regla rara de una lista (solo cuerpo a cuerpo, todo a oscuras, sin botiquines, zombis rápidos...). Se guarda la
+  mejor marca de cada uno (hasta qué planta llega y en cuánto tiempo). Sin servidor: solo compites contigo.
+- **Colecciones:** un programa nuevo en ConserjeOS con, por cada edificio, los objetos encontrados (p. ej. 23/40),
+  las páginas del dosier y las armas creadas, en porcentaje; y un **bestiario** con cada zombi que has visto, con su
+  dibujo y una frase.
+
 ## Por partes
 
 1. ✅ **El esqueleto** (21 oct): pantalla "Elige edificio" (con el candado), el edificio elegido en la partida, el
@@ -308,4 +335,4 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»).
 7. **La historia:** dosier y noticias (decidido: ver «Historia»).
-8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones.
+8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
