@@ -207,7 +207,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     `captura-tecnico-palanca.png`, `captura-tecnico-horda.png`, `captura-tecnico-fin.png`,
     `captura-tecnico-minimapa.png` y `captura-tecnico-sala.png`.
 - ✅ **El rescate propio del ferretero y su puesto** (21 oct; `scripts/barricada.gd`, `scripts/mapa/mostrador.gd`
-  y `scripts/ui/puesto.gd`; números provisionales):
+  y `scripts/ui/puesto.gd`; números provisionales; con el visto bueno del dueño tras probarlo en el móvil):
   - Grita desde el almacén de la ferretería, como antes, pero su puerta tiene **cuatro tablas clavadas** (la
     barricada). Al limpiar la tienda no se abre: dice «¡Espera, que quito la barricada!» y, al segundo, **la entrada
     de la tienda se cierra de golpe** y empieza la horda allí mismo (no hay que ir a la salida).
