@@ -57,7 +57,81 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 		else:
 			lista += sueltos(uso, rng, geo, cuantos[0] + extra, cuantos[1] + extra,
 				{"zona": s.id, "despejar": despejar, "paso": paso})
+		if datos.has("islas"):
+			lista += islas(datos.islas, rng, geo, s.id, despejar, paso, lista)
 	return lista
+
+
+# ═════════════ Filas en medio de la sala ═════════════
+
+# Las salas de venta de las tiendas son grandes: además de los muebles de las paredes, filas de muebles en medio
+# (góndolas, estanterías, mesas...) con pasillos entre ellas. "isla" (de Catalogo.SALAS): muebles (de qué tipos,
+# al azar), fila (cuántos seguidos como mucho), entre (el hueco entre dos de la misma fila) y cada (cada cuánto va
+# una fila, de pie a pie; lo bastante para que el dibujo de una no tape la de detrás y quede pasillo). Todo lejos
+# de las paredes (MARGEN_ISLA), sin tapar puertas ni cortar el paso.
+const MARGEN_ISLA := 104.0
+const PASILLO_ISLA := 96.0   # el pasillo entre dos tramos de la misma fila
+
+static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary, zona: int, despejar: Array,
+		paso: Paso, puestos: Array) -> Array:
+	# las casillas de la sala: su rectángulo
+	var c0: int = geo.cols
+	var c1 := -1
+	var f0: int = geo.filas
+	var f1 := -1
+	for f in geo.filas:
+		for c in geo.cols:
+			if geo.dueno[f * geo.cols + c] == zona:
+				c0 = mini(c0, c)
+				c1 = maxi(c1, c)
+				f0 = mini(f0, f)
+				f1 = maxi(f1, f)
+	if c1 < 0:
+		return []
+	var x0 := c0 * CASILLA + MARGEN_ISLA
+	var x1 := (c1 + 1) * CASILLA - MARGEN_ISLA
+	var y0 := f0 * CASILLA + MARGEN_ISLA + 40.0   # arriba, más: los muebles de la pared de arriba son altos
+	var y1 := (f1 + 1) * CASILLA - MARGEN_ISLA
+	var puestas := []
+	var y := y0 + rng.randf() * 32.0
+	while true:
+		# los tipos de cada fila, al azar, y cuánto mide
+		var tipos := []
+		for i in isla.fila:
+			tipos.append(isla.muebles[rng.randi() % isla.muebles.size()])
+		var fondo := 0.0
+		for t in tipos:
+			fondo = maxf(fondo, Catalogo.MUEBLES[t].dep)
+		if y + fondo > y1:
+			break
+		var largo: float = -float(isla.entre)
+		for t in tipos:
+			largo += Catalogo.MUEBLES[t].len + isla.entre
+		# cuántos tramos caben a lo ancho (con su pasillo entre uno y otro), centrados
+		var tramos := floori((x1 - x0 + PASILLO_ISLA) / (largo + PASILLO_ISLA))
+		var x := (x0 + x1) / 2.0 - (tramos * largo + (tramos - 1) * PASILLO_ISLA) / 2.0
+		for k in tramos:
+			for t in tipos:
+				var l: float = Catalogo.MUEBLES[t].len
+				var en := roundf((x + l / 2.0) / 2.0) * 2.0
+				var m := nuevo(t, {"lado": "arriba", "base": y + fondo - Catalogo.MUEBLES[t].dep}, en, zona)
+				var r := hueco(m)
+				if en_sala(geo, r.grow(24.0), zona) and not despejar.any(func(d): return d.intersects(r)) \
+						and not (puestos + puestas).any(func(p): return hueco(p).grow(10).intersects(r)) and paso.cabe(r):
+					puestas.append(m)
+				x += l + isla.entre
+			x += PASILLO_ISLA - isla.entre
+		y += isla.cada
+	return puestas
+
+
+# ¿Cae el rectángulo entero en suelo de esa habitación?
+static func en_sala(geo: Dictionary, r: Rect2, zona: int) -> bool:
+	for f in range(floori(r.position.y / CASILLA), floori((r.end.y - 1) / CASILLA) + 1):
+		for c in range(floori(r.position.x / CASILLA), floori((r.end.x - 1) / CASILLA) + 1):
+			if c < 0 or f < 0 or c >= geo.cols or f >= geo.filas or geo.dueno[f * geo.cols + c] != zona:
+				return false
+	return true
 
 
 # Los muebles de un sitio rectangular (el pasillo o la sala de mantenimiento). "salidas" son sus puertas (como

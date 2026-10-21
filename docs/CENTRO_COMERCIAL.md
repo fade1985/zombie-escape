@@ -125,8 +125,10 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
        BURGER, MODA, FARMACIA) que dibuja el juego (`scripts/mapa/neon.gd`): una o dos letras fundidas, parpadeos y
        apagones, y una luz de su color en el suelo. Las puertas de abajo siguen con su cartel (de esa pared solo se ve
        la tapa).
-   - **Pendiente de ver con el dueño:** las salas de venta son grandes y los muebles solo van pegados a las paredes, así
-     que el centro queda despejado (se podrían poner filas de góndolas o mesas en medio).
+   - **Filas en medio de las salas de venta** (lo pidió el dueño al verlo dentro): además de los muebles de las paredes,
+     filas con pasillos (góndolas en el supermercado, mesas en el restaurante, perchas y maniquíes en la de ropa,
+     estanterías en la ferretería y la farmacia, estanterías de teles en electrónica): "islas" de cada "tienda-<tipo>"
+     en `Catalogo.SALAS` y `Muebles.islas`.
 3. **Los peligros:** frío, fuego, agua con electricidad.
 4. **Zombis nuevos**, minijefes y jefe final.
 5. **Supervivientes nuevos** con sus eventos.

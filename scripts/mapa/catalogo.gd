@@ -146,41 +146,48 @@ const SALAS := {
 	# Las salas de las tiendas del centro comercial (tienda.gd). La sala de venta va por tipo de tienda
 	# ("tienda-<tipo>", y "tienda" si un tipo no tiene la suya); la cocina del restaurante es "cocina-restaurante"
 	# (Muebles.de_apartamento busca primero "<uso>-<tipo de tienda>"). Sin plantillas: son salas grandes y se
-	# amueblan todas sus paredes
+	# amueblan todas sus paredes, y además "islas": filas de muebles en medio, con pasillos (Muebles.islas)
 	"tienda": {
 		"muebles": ["gondola", "metalshelf", "checkout", "pallet"],
-		"cuantos": [9, 13],
+		"cuantos": [8, 11],
 		"iguales": {"gondola": 3, "metalshelf": 2},
+		"islas": {"muebles": ["gondola"], "fila": 3, "entre": 0, "cada": 176},
 	},
 	"tienda-supermercado": {
 		"muebles": ["gondola", "gondola", "drinkfridge", "checkout", "pallet"],
-		"cuantos": [9, 13],
+		"cuantos": [8, 11],
 		"iguales": {"gondola": 4, "drinkfridge": 2, "checkout": 2, "pallet": 2},
+		"islas": {"muebles": ["gondola"], "fila": 3, "entre": 0, "cada": 176},
 	},
 	"tienda-ferreteria": {
 		"muebles": ["metalshelf", "metalshelf", "workbench", "checkout", "pallet"],
-		"cuantos": [9, 13],
+		"cuantos": [8, 11],
 		"iguales": {"metalshelf": 4, "pallet": 2},
+		"islas": {"muebles": ["metalshelf"], "fila": 4, "entre": 0, "cada": 176},
 	},
 	"tienda-electronica": {
 		"muebles": ["tvshelf", "tvshelf", "metalshelf", "checkout", "pallet"],
-		"cuantos": [9, 13],
+		"cuantos": [8, 11],
 		"iguales": {"tvshelf": 3, "metalshelf": 2},
+		"islas": {"muebles": ["tvshelf"], "fila": 2, "entre": 0, "cada": 176},
 	},
 	"tienda-restaurante": {
 		"muebles": ["diningtable", "diningtable", "checkout", "drinkfridge", "bench"],
-		"cuantos": [9, 13],
+		"cuantos": [8, 11],
 		"iguales": {"diningtable": 4, "bench": 2},
+		"islas": {"muebles": ["diningtable"], "fila": 4, "entre": 40, "cada": 150},
 	},
 	"tienda-ropa": {
 		"muebles": ["clothesrack", "clothesrack", "mannequin", "mannequin", "checkout", "bench"],
-		"cuantos": [9, 13],
+		"cuantos": [8, 11],
 		"iguales": {"clothesrack": 4, "mannequin": 3},
+		"islas": {"muebles": ["clothesrack", "clothesrack", "mannequin"], "fila": 3, "entre": 36, "cada": 150},
 	},
 	"tienda-farmacia": {
 		"muebles": ["pharmacycounter", "metalshelf", "metalshelf", "drinkfridge", "bench"],
 		"cuantos": [8, 11],
 		"iguales": {"metalshelf": 3},
+		"islas": {"muebles": ["metalshelf"], "fila": 2, "entre": 0, "cada": 176},
 	},
 	# la tienda destrozada del jefe de la planta
 	"jefe-tienda": {
