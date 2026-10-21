@@ -6,7 +6,7 @@
 #   - Correr le cansa: cada poco se para a recuperar el aliento. Ese es el momento de pillarle.
 #   - Si le acorralas (o le alcanzas mientras descansa), se defiende a zarpazos.
 #   - A media vida, vuelve a tocar el silbato.
-# De momento es el zombi normal teñido de azul; su dibujo propio llega con los zombis nuevos (parte 4 del plan).
+# Lleva el dibujo del vigilante (zombi_vigilante.tscn), el mismo que los refuerzos que llegan al silbato.
 extends Zombi
 
 signal silbato   # ha tocado el silbato: la partida trae refuerzos
@@ -16,7 +16,6 @@ const HUIDA := 165.0         # y huyendo (Johnny anda a 210: se le alcanza, pero
 const ALIENTO := 3.2         # segundos que aguanta corriendo...
 const RESPIRO := 1.8         # ...y lo que tarda en recuperarse
 const DEFENDERSE := 70.0     # más cerca que esto (además de los radios), se gira y pega
-const TINTE := Color(0.42, 0.58, 1.0)   # la bata blanca, teñida: el uniforme azul
 
 var alerta := false          # si ya ha visto a Johnny (entonces ya no hace la ronda)
 var silbidos := 0            # cuántas veces ha tocado el silbato (dos como mucho: al verte y a media vida)
@@ -24,11 +23,6 @@ var aliento := ALIENTO
 var cansado := 0.0           # tiempo que le queda parado recuperándose
 var meta := Vector2.INF      # adónde va (en la ronda, una punta; huyendo, la punta lejos de Johnny)
 var puntas: Array = []       # los dos extremos del pasillo, los pone la partida
-
-
-func _ready() -> void:
-	super()
-	sprite.modulate = TINTE
 
 
 func andar(delta: float, johnny: Node2D) -> void:

@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://escenas/personajes/zombi_normal.tscn" id="base"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/zombi-vigilante.tres" id="ropa"]
+
+[node name="Zombi" instance=ExtResource("base")]
+vida_max = 45
+velocidad = 85.0
+dano = 12
+alcance = 26.0
+ropas = Array[SpriteFrames]([ExtResource("ropa")])
+
+[node name="Sprite" parent="." index="2"]
+sprite_frames = ExtResource("ropa")

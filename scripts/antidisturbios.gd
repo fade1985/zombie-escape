@@ -11,8 +11,7 @@
 # Enfadado (a media vida): gira más deprisa, carga dos veces seguidas y llama a 3.
 extends Minijefe
 
-# PENDIENTE: los refuerzos tienen que ser "vigilante" (el zombi nuevo del trozo 1); hasta juntarlo, el normal
-const REFUERZO := "normal"
+const REFUERZO := "vigilante"
 const REFUERZOS := [2, 3]          # cuántos llegan al silbato (normal y enfadado)
 const VELOCIDAD := 70.0
 const GIRO := [1.4, 2.4]           # lo deprisa que se gira, en radianes por segundo (normal y enfadado)

@@ -1417,6 +1417,43 @@
         "estilo": "south del gerente-128 (color_palette true): 'This is the same man before mutating. Keep his face, grey hair, suit and tie colors, ID badge, pixel size, outline and shading style. Make him bigger, mutated and monstrous as described.'",
         "description": "the same zombie mall manager as the reference, after injecting himself with an experimental drug and mutating into a monster: much bigger and bulkier, about 116 pixels tall filling the canvas, swollen muscles that have ripped his charcoal grey suit jacket apart at the shoulders and back, shreds of the jacket and his torn bloody white shirt hanging, his red tie still around his neck, the same messy grey hair and the same corporate ID badge with a green leaf logo, sickly grey-green skin covered in bulging purple veins, four long thick purple tentacles bursting out of his back and curling around him, his right arm enlarged into a huge clawed hand, glowing pale yellow eyes, a huge mouth with jagged teeth dripping blood, torn charcoal trousers, bare clawed feet, hunched forward and enraged, crisp pixel art, dark outline, detailed shading"
       }
+    },
+    "trozo1": {
+      "fecha": "2026-10-21",
+      "nota": "Trozo 1 de la parte 4: vigilante y dependienta animados (receta zombi-nuevo del JS; herramientas copiadas en tools/). PixMiniMax: andar 12 fotogramas sin final; ataque y golpe 8 con partida y final iguales (el dibujo quieto en (24, 32) de un lienzo de 96); muerte 12 sin final. A 48 px cada dirección costó 1 (salvo dos andares de la dependienta con lienzo de 64, que costaron 2). Los textos de andar, golpe y muerte son los de zombi-normal-48 cambiando el sujeto; en las vistas de espaldas, con 'He keeps the same three-quarter back view...' o 'Strict back view...' delante; en las muertes de espaldas, la cabeza queda hacia la cámara.",
+      "coste": "73,25 generaciones según el saldo (840,30 → 767,05): unas 34 del vigilante, unas 34 de la dependienta (0,25 de importar las vistas corregidas) y el resto, pequeños cobros sueltos",
+      "vigilante-48": {
+        "character_id": "4aaccb8b-61c8-4f56-a560-aa9a3c00ba67",
+        "sprite": "assets/sprites/zombi-vigilante (tools/zombi.py con zombi.json: sangre_en_todo, porque el dibujo quieto ya traía sangre roja viva)",
+        "subject_description": "a male zombie security guard with grey-green skin, a black peaked cap, a dark navy blue uniform shirt, black trousers and boots, a black baton at his hip",
+        "grupos": {
+          "andar": "74572b5f-40e3-4202-9df1-20b3bb900ab6",
+          "ataque": "bb9ef05c-22fa-4584-9bf3-da71fcb58dd7",
+          "golpe": "ecc6a091-2750-46ac-9f20-8fad046517b9",
+          "muerte": "e79f7952-efab-440c-ab40-d0429fd94082 (north y west, descartadas: charco grande alrededor; en assets/sources/vigilante-48/descartes/muerte/)",
+          "muerte2": "89e7f982-c9d4-4953-b71d-9975f3bfad7b (north) y 08cc8a43-d741-4a00-9521-4b262c4e164c (west): repetidas sin charco"
+        },
+        "ataque": "He attacks with a heavy baton blow. He grabs the black baton from his hip with his front hand, swings it up high over his shoulder, then lunges forward with one heavy step and smashes it down hard in front of him at chest height, his jaw snapping open as his head thrusts forward. His body leans far into the lunge and his cap stays on. He keeps facing exactly the same direction the whole time. Then he pulls back, the baton drops back to his hip, his arms hang limp again and he settles cleanly into the starting hunched stance. (+ cola de siempre)",
+        "andar": "Brazos estirados (texto común) en east, west, south-west y north-west; brazos bajos ('Strict front view...' / de espaldas) en south, south-east, north-east y north.",
+        "muerte_sin_charco": "He dies quietly: his knees buckle and his whole body goes limp... The floor around him stays completely clean and empty: nothing spills, nothing spreads, no puddle, no liquid, no effects.",
+        "pegas": "El andar no cierra perfecto en casi ninguna dirección (zombi.py elige el mejor tramo); la porra sale grande en el ataque."
+      },
+      "dependienta-48": {
+        "character_id": "cb6062dd-00cf-4018-be43-4bc0e065935d",
+        "de": "baa9688f-1d49-4a16-b106-a8d3fd648505 (el modelo, con la piel beige) → py tools/piel.py dependienta-48 43 68 0.35 → create_character v3 con las 8 vistas (0,25)",
+        "sprite": "assets/sprites/zombi-dependienta (zombi.json: sangre quitar y sueltos, porque el polo es rojo)",
+        "subject_description": "a female zombie shop assistant with grey-green skin, a dark brown ponytail, a bright red polo shirt, a blue lanyard with a white ID card and black trousers",
+        "grupos": {
+          "andar": "d6b4d192-150d-4916-a379-2b248fe450ec",
+          "ataque": "c1391a8e-a967-41ec-838e-802e9b9b1f58",
+          "golpe": "d1d7b427-34d5-48f4-8be8-0e8076702ebd",
+          "muerte": "1c387481-2e8b-4829-b939-f572a830f77e"
+        },
+        "andar": "She hurries forward in place in a quick, jerky, seamless looping zombie walk cycle: her legs stride alternately with short hurried steps... (brazos estirados en east, west, south-west, north-west; bajos en las otras cuatro)",
+        "ataque": "She lets out a loud shrill scream. She straightens up, throws her head back, then thrusts her head forward with her mouth stretched wide open, both hands raised and cupped around her mouth like a megaphone, her shoulders shaking and her ponytail whipping with the force of the shriek. She does not strike or claw. She keeps facing exactly the same direction the whole time. Then she lowers her hands, her arms drop limp again and she settles cleanly into the starting hunched stance. No effects, no text. (+ cola de siempre)",
+        "pegas": "Andando hacia arriba a la derecha (north-east) se gira un poco de perfil en 3 fotogramas."
+      },
+      "sin_usar_en_pixellab": "Las muertes north y west del grupo e79f7952 del vigilante (con charco). Borrar solo con confirmación del dueño."
     }
   }
 }

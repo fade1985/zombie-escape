@@ -21,6 +21,7 @@ const OIDO := 430.0        # dormido, a qué distancia oye un disparo (aunque ha
 const CORRILLO := 140.0    # al despertar, despierta también a los que tiene a esta distancia
 const ESPABILAR := 0.5     # lo que tarda en echar a andar después de despertar
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
+const PRISA := 1.3         # con el grito de la dependienta, todos van un 30 % más rápido
 
 @export var vida_max := 30
 @export var velocidad := 80.0    # unidades por segundo
@@ -64,6 +65,7 @@ var liado := 0.0           # Locura: da vueltas sin rumbo
 var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (peligros.gd): a los 4, se congela
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var lio_angulo := 0.0
+var prisa := 0.0           # segundos que le quedan con prisa (el grito de la dependienta, zombi_dependienta.gd)
 
 # La sangre: salta al pegarle, deja charco si muere a golpes o a tiros y, el lento, va dejando su rastro
 var color_sangre := Color("#7a1f1a")   # la pone la partida según el tipo (partida.gd, MANCHAS y SANGRE)
@@ -129,6 +131,10 @@ func _physics_process(delta: float) -> void:
 	if estado == "muerto":
 		return
 	tiempo += delta
+	if prisa > 0.0:
+		prisa -= delta
+		if prisa <= 0.0:
+			agente.max_speed = velocidad
 	sufrir(delta)
 	if estado == "muerto":
 		return
@@ -235,6 +241,8 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	if a_tirones:
 		rapidez *= 0.55 + 0.45 * absf(sin(tiempo * 2.0))
 	rapidez *= Estados.frenado(estados)   # el frío de la cámara
+	if prisa > 0.0:
+		rapidez *= PRISA
 	pedir_velocidad(paso.normalized() * rapidez)
 	mirar_hacia(paso)
 	poner_animacion("andar")
@@ -259,6 +267,12 @@ func despertar() -> void:
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro != self and otro.get("dormido") and distancia_a(otro) < CORRILLO:
 			otro.despertar()
+
+
+# El grito de la dependienta: unos segundos con prisa (el agente también tiene que dejarle ir más rápido)
+func meter_prisa(segundos: float) -> void:
+	prisa = maxf(prisa, segundos)
+	agente.max_speed = velocidad * PRISA
 
 
 # Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar

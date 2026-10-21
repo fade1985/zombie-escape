@@ -16,7 +16,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 ## Teclas de prueba
 
 - **1-6**: poner cualquier arma.
-- **F2 a F7**: un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso). **P**: la portera. **K**: el antidisturbios.
+- **F2 a F7**: un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso). **V**: un vigilante y
+  **B**: una dependienta (los del centro comercial). **P**: la portera. **K**: el antidisturbios.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
