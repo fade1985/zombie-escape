@@ -193,6 +193,7 @@ func _ready() -> void:
 	lanzables.reiniciar(johnny.stats)
 	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	supervivientes.elegir()
+	var botiquin := supervivientes.botiquin_al_empezar()   # la mejora de la farmacéutica
 	# los minijefes del centro comercial, uno por planta en orden al azar (sin repetir)
 	orden_jefes = ed.get("minijefes", []).duplicate()
 	orden_jefes.shuffle()
@@ -223,7 +224,8 @@ func _ready() -> void:
 		set_process(false)
 		decir("%s: %s%s" % [planta.nombre, ed.objetivo, "
 %s: %s" % [Alerta.nombre(), Alerta.REGLAS[Alerta.nivel]]
-			if Alerta.nivel > 0 else ""], 4.0)
+			if Alerta.nivel > 0 else ""] + ("
+La Farmacéutica te ha preparado un botiquín: está en la mochila" if botiquin else ""), 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 
@@ -726,8 +728,8 @@ func soltar_municion(donde: Vector2) -> void:
 func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
-	cosa.icono = load("res://assets/ui/iconos/obj-%s.png" % id)
-	cosa.tamano = 2.0   # 16×16: cada píxel del dibujo, 2 unidades (como todo el pixel art)
+	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
+	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
 	cosa.tirado = tirado
 	cosa.position = donde
 	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
@@ -755,18 +757,34 @@ func soltar_arma(id: String, donde: Vector2) -> void:
 
 # Delante del armarito de un baño: el botiquín cura (más con Sanitario); con la vida llena se deja para luego
 func coger_botiquin(armarito: Node2D) -> void:
-	var sitio_aviso: Vector2 = armarito.position + Vector2(0, -40)
 	if johnny.vida >= johnny.vida_tope():
-		numero(sitio_aviso, "Tienes la vida al máximo", Tema.TINTA)
+		numero(armarito.position + Vector2(0, -40), "Tienes la vida al máximo", Tema.TINTA)
 		return
+	armarito.vaciar()
+	curar_botiquin(armarito)
+
+
+# Cura lo de un botiquín, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
+func curar_botiquin(sobre: Node2D) -> void:
 	var cura := cura_botiquin()
 	johnny.curar(cura)
-	armarito.vaciar()
 	Sonido.tocar("gema")
-	numero(sitio_aviso, "+%d" % cura, Tema.VERDE)
+	numero(sobre.position + Vector2(0, -40), "+%d" % cura, Tema.VERDE)
 	for i in 12:
-		Particulas.soltar(armarito, armarito.global_position + Vector2(0, -50),
+		Particulas.soltar(sobre, sobre.global_position + Vector2(0, -50),
 			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
+
+
+# Usar desde el inventario un objeto de la mochila (Objetos.USABLES; de momento, el botiquín de la farmacéutica):
+# se gasta y cura. Si no se puede (con la vida llena), no se gasta y devuelve por qué
+func usar_objeto(id: String) -> String:
+	if not id in mochila or not id in Objetos.USABLES:
+		return "No se puede usar"
+	if johnny.vida >= johnny.vida_tope():
+		return "Tienes la vida al máximo: guárdalo para luego"
+	mochila.remove_at(mochila.rfind(id))
+	curar_botiquin(johnny)
+	return ""
 
 
 # Lo que cura un botiquín (con la Alerta 4, la mitad)
@@ -835,9 +853,10 @@ func terminar(gano: bool, abandona := false) -> void:
 		var e := Guardado.edificio(g, edificio)
 		e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
-			# los objetos de la mochila pasan al baúl (si caes, se pierden)
+			# los objetos de la mochila pasan al baúl (si caes, se pierden); el botiquín, no (se pierde)
 			for id in mochila:
-				g.baul[id] = g.baul.get(id, 0) + 1
+				if not id in Objetos.USABLES:
+					g.baul[id] = g.baul.get(id, 0) + 1
 			g.dolares += dolares + extra
 			g.dolares_total += dolares + extra
 			g.victorias += 1
