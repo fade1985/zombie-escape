@@ -1,5 +1,6 @@
 # Algo que se lanza en parábola: el moco del venenoso, la botella de lejía de la portera, el cóctel molotov de
-# Johnny, su vómito (mutación Gastroenteritis) o el ácido que salpica la portera. Vuela por encima de todo y, al caer, deja un charco. Los de
+# Johnny, su vómito (mutación Gastroenteritis), el ácido que salpica la portera o la sartén de aceite hirviendo del
+# cocinero (con su marca roja en el suelo, donde caerá). Vuela por encima de todo y, al caer, deja un charco. Los de
 # los zombis, si Johnny está justo donde caen, le hacen daño; el molotov suelta una llamarada que prende a los
 # zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js).
 extends Node2D
@@ -16,6 +17,8 @@ const TIPOS := {
 	"acido": {"vuelo": 0.75, "altura": 110.0, "golpe": 8, "charco": "acido"},   # lo que salpica la portera con la fregona
 	"molotov": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "fuego"},
 	"vomito": {"vuelo": 0.45, "altura": 70.0, "golpe": 0, "charco": "vomito"},
+	# la sartén del cocinero ("marca": el radio de la marca en el suelo, el del charco de aceite en charco.gd)
+	"aceite": {"vuelo": 0.8, "altura": 130.0, "golpe": 0, "charco": "aceite", "marca": 60.0},
 }
 
 var tipo := "veneno"
@@ -24,11 +27,18 @@ var alto_salida := 0.0       # a qué altura sobre el suelo sale
 var hasta := Vector2.ZERO    # dónde caerá
 var dano_lanzar := 1.0       # molotov: Puntería
 var fabricante := false      # molotov: fuego más grande y más largo
+var dueno: Node2D = null     # quien lo lanza (al cocinero no le quema su aceite)
 var t := 0.0
+var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de todos
 
 
 func _ready() -> void:
 	global_position = desde
+	if tipo == "aceite":
+		marca = Node2D.new()
+		marca.z_index = -6   # este nodo va a 5: la marca, a -1, como los charcos
+		marca.draw.connect(pintar_marca)
+		add_child(marca)
 
 
 func _physics_process(delta: float) -> void:
@@ -37,6 +47,8 @@ func _physics_process(delta: float) -> void:
 	var k: float = minf(t / datos.vuelo, 1.0)
 	global_position = desde.lerp(hasta, k)
 	queue_redraw()
+	if marca:
+		marca.queue_redraw()
 	if k >= 1.0:
 		caer(datos)
 
@@ -46,6 +58,7 @@ func caer(datos: Dictionary) -> void:
 	charco.tipo = datos.charco
 	# el centro, en píxel entero del dibujo, para que cuadre con el resto del suelo
 	charco.position = (hasta / 2.0).round() * 2.0
+	charco.dueno = dueno
 	if tipo == "molotov":
 		charco.escala = Lanzables.FABRICANTE.radio if fabricante else 1.0
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
@@ -56,13 +69,17 @@ func caer(datos: Dictionary) -> void:
 			Sonido.tocar("cristal")
 			Sonido.tocar("fuego")
 		"lejia": Sonido.tocar("cristal")
+		"aceite":
+			Sonido.tocar("chof")
+			Sonido.tocar("chisporroteo")
 		_: Sonido.tocar("chof")
 	if tipo == "molotov":
 		llamarada(charco.radio())
-	elif tipo == "vomito" or tipo == "acido":
+	elif tipo == "vomito" or tipo == "acido" or tipo == "aceite":
+		var color := Color("#e0a43a") if tipo == "aceite" else Color("#c7e04a")
 		for i in 8:
 			var a := randf() * TAU
-			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), Color("#c7e04a"), randf_range(3, 5), 0.4)
+			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), color, randf_range(3, 5), 0.4)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if datos.golpe > 0 and johnny and johnny.vivo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
 		johnny.recibir_dano(datos.golpe)
@@ -101,6 +118,8 @@ func _draw() -> void:
 			draw_texture(MOCO, -Vector2(MOCO.get_size()) / 2.0, Color.WHITE if tipo == "veneno" else Color(1, 1, 0.45))
 		"molotov":
 			botella(donde, t * 12.0)
+		"aceite":
+			sarten(self, donde, t * 9.0)
 		_:
 			# La botella de lejía, dando vueltas (dibujada con código, como en el juego)
 			draw_set_transform(donde, t * 10.0)
@@ -110,6 +129,27 @@ func _draw() -> void:
 			draw_rect(Rect2(-4.5, -16, 9, 7), contorno)
 			draw_rect(Rect2(-3, -15, 6, 5), Color("#4c9fd6"))
 			draw_rect(Rect2(-6, -2, 12, 4), Color("#4c9fd6"))
+
+
+# La sartén del cocinero, con su aceite dentro (también la dibuja él en la mano, antes de lanzarla)
+static func sarten(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
+	lienzo.draw_set_transform(donde, giro)
+	lienzo.draw_rect(Rect2(10, -4, 20, 8), Color("#1d1b2c"))   # el mango
+	lienzo.draw_rect(Rect2(12, -2, 16, 4), Color("#5a3a22"))
+	lienzo.draw_circle(Vector2.ZERO, 15.0, Color("#1d1b2c"))
+	lienzo.draw_circle(Vector2.ZERO, 12.0, Color("#3a3a46"))   # el hierro
+	lienzo.draw_circle(Vector2.ZERO, 9.0, Color("#c98a2a"))    # el aceite
+	lienzo.draw_circle(Vector2(-3, -3), 3.0, Color("#f0c060"))
+
+
+# Dónde caerá la sartén: un anillo rojo que se va llenando
+func pintar_marca() -> void:
+	var k: float = minf(t / TIPOS[tipo].vuelo, 1.0)
+	var r: float = TIPOS[tipo].marca
+	var rojo := Color(1, 0.24, 0.35)
+	marca.draw_set_transform(hasta - global_position, 0.0, Vector2(1, 0.6))
+	marca.draw_circle(Vector2.ZERO, r * k, Color(rojo, 0.12 + 0.15 * k))
+	marca.draw_arc(Vector2.ZERO, r, 0.0, TAU, 32, Color(rojo, 0.5 + 0.4 * k), 3.0)
 
 
 # La botella del molotov (drawMolotov del JS): cristal verde, trapo y la llama del trapo, que baila

@@ -1,0 +1,266 @@
+[gd_resource type="SpriteFrames" load_steps=67 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/jefe-cocinero.png" id="hoja"]
+
+[sub_resource type="AtlasTexture" id="t0"]
+atlas = ExtResource("hoja")
+region = Rect2(0, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t1"]
+atlas = ExtResource("hoja")
+region = Rect2(72, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t2"]
+atlas = ExtResource("hoja")
+region = Rect2(144, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t3"]
+atlas = ExtResource("hoja")
+region = Rect2(216, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t4"]
+atlas = ExtResource("hoja")
+region = Rect2(288, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t5"]
+atlas = ExtResource("hoja")
+region = Rect2(360, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t6"]
+atlas = ExtResource("hoja")
+region = Rect2(432, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t7"]
+atlas = ExtResource("hoja")
+region = Rect2(504, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t8"]
+atlas = ExtResource("hoja")
+region = Rect2(576, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t9"]
+atlas = ExtResource("hoja")
+region = Rect2(648, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t10"]
+atlas = ExtResource("hoja")
+region = Rect2(720, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t11"]
+atlas = ExtResource("hoja")
+region = Rect2(792, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t12"]
+atlas = ExtResource("hoja")
+region = Rect2(864, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t13"]
+atlas = ExtResource("hoja")
+region = Rect2(936, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t14"]
+atlas = ExtResource("hoja")
+region = Rect2(1008, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t15"]
+atlas = ExtResource("hoja")
+region = Rect2(1080, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t16"]
+atlas = ExtResource("hoja")
+region = Rect2(1152, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t17"]
+atlas = ExtResource("hoja")
+region = Rect2(1224, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t18"]
+atlas = ExtResource("hoja")
+region = Rect2(1296, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t19"]
+atlas = ExtResource("hoja")
+region = Rect2(1368, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t20"]
+atlas = ExtResource("hoja")
+region = Rect2(1440, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t21"]
+atlas = ExtResource("hoja")
+region = Rect2(1512, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t22"]
+atlas = ExtResource("hoja")
+region = Rect2(1584, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t23"]
+atlas = ExtResource("hoja")
+region = Rect2(1656, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t24"]
+atlas = ExtResource("hoja")
+region = Rect2(1728, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t25"]
+atlas = ExtResource("hoja")
+region = Rect2(1800, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t26"]
+atlas = ExtResource("hoja")
+region = Rect2(1872, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t27"]
+atlas = ExtResource("hoja")
+region = Rect2(1944, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t28"]
+atlas = ExtResource("hoja")
+region = Rect2(2016, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t29"]
+atlas = ExtResource("hoja")
+region = Rect2(2088, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t30"]
+atlas = ExtResource("hoja")
+region = Rect2(2160, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t31"]
+atlas = ExtResource("hoja")
+region = Rect2(2232, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t32"]
+atlas = ExtResource("hoja")
+region = Rect2(2304, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t33"]
+atlas = ExtResource("hoja")
+region = Rect2(2376, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t34"]
+atlas = ExtResource("hoja")
+region = Rect2(2448, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t35"]
+atlas = ExtResource("hoja")
+region = Rect2(2520, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t36"]
+atlas = ExtResource("hoja")
+region = Rect2(2592, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t37"]
+atlas = ExtResource("hoja")
+region = Rect2(2664, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t38"]
+atlas = ExtResource("hoja")
+region = Rect2(2736, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t39"]
+atlas = ExtResource("hoja")
+region = Rect2(2808, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t40"]
+atlas = ExtResource("hoja")
+region = Rect2(2880, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t41"]
+atlas = ExtResource("hoja")
+region = Rect2(2952, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t42"]
+atlas = ExtResource("hoja")
+region = Rect2(3024, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t43"]
+atlas = ExtResource("hoja")
+region = Rect2(3096, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t44"]
+atlas = ExtResource("hoja")
+region = Rect2(3168, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t45"]
+atlas = ExtResource("hoja")
+region = Rect2(3240, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t46"]
+atlas = ExtResource("hoja")
+region = Rect2(3312, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t47"]
+atlas = ExtResource("hoja")
+region = Rect2(3384, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t48"]
+atlas = ExtResource("hoja")
+region = Rect2(3456, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t49"]
+atlas = ExtResource("hoja")
+region = Rect2(3528, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t50"]
+atlas = ExtResource("hoja")
+region = Rect2(3600, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t51"]
+atlas = ExtResource("hoja")
+region = Rect2(3672, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t52"]
+atlas = ExtResource("hoja")
+region = Rect2(3744, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t53"]
+atlas = ExtResource("hoja")
+region = Rect2(3816, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t54"]
+atlas = ExtResource("hoja")
+region = Rect2(3888, 0, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t55"]
+atlas = ExtResource("hoja")
+region = Rect2(0, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t56"]
+atlas = ExtResource("hoja")
+region = Rect2(72, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t57"]
+atlas = ExtResource("hoja")
+region = Rect2(144, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t58"]
+atlas = ExtResource("hoja")
+region = Rect2(216, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t59"]
+atlas = ExtResource("hoja")
+region = Rect2(288, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t60"]
+atlas = ExtResource("hoja")
+region = Rect2(360, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t61"]
+atlas = ExtResource("hoja")
+region = Rect2(432, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t62"]
+atlas = ExtResource("hoja")
+region = Rect2(504, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t63"]
+atlas = ExtResource("hoja")
+region = Rect2(576, 76, 72, 76)
+
+[sub_resource type="AtlasTexture" id="t64"]
+atlas = ExtResource("hoja")
+region = Rect2(648, 76, 72, 76)
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("t0")}], "loop": true, "name": &"quieto_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t1")}], "loop": true, "name": &"quieto_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t2")}], "loop": true, "name": &"quieto_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t3")}], "loop": true, "name": &"quieto_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t4")}], "loop": true, "name": &"quieto_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t5")}], "loop": true, "name": &"quieto_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t6")}], "loop": true, "name": &"quieto_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t7")}], "loop": true, "name": &"quieto_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t8")}], "loop": true, "name": &"reposo_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t9")}], "loop": true, "name": &"reposo_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t10")}], "loop": true, "name": &"reposo_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t11")}], "loop": true, "name": &"reposo_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t12")}], "loop": true, "name": &"reposo_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t13")}], "loop": true, "name": &"reposo_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t14")}], "loop": true, "name": &"reposo_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t15")}], "loop": true, "name": &"reposo_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t16")}], "loop": true, "name": &"andar_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t17")}], "loop": true, "name": &"andar_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t18")}], "loop": true, "name": &"andar_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t19")}], "loop": true, "name": &"andar_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t20")}], "loop": true, "name": &"andar_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t21")}], "loop": true, "name": &"andar_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t22")}], "loop": true, "name": &"andar_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t23")}], "loop": true, "name": &"andar_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t24")}], "loop": false, "name": &"lanzar_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t25")}], "loop": false, "name": &"lanzar_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t26")}], "loop": false, "name": &"lanzar_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t27")}], "loop": false, "name": &"lanzar_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t28")}], "loop": false, "name": &"lanzar_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t29")}], "loop": false, "name": &"lanzar_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t30")}], "loop": false, "name": &"lanzar_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t31")}], "loop": false, "name": &"lanzar_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t32")}], "loop": false, "name": &"cuchillazo_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t33")}], "loop": false, "name": &"cuchillazo_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t34")}], "loop": false, "name": &"cuchillazo_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t35")}], "loop": false, "name": &"cuchillazo_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t36")}], "loop": false, "name": &"cuchillazo_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t37")}], "loop": false, "name": &"cuchillazo_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t38")}], "loop": false, "name": &"cuchillazo_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t39")}], "loop": false, "name": &"cuchillazo_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t40")}], "loop": false, "name": &"sarten_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t41")}], "loop": false, "name": &"sarten_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t42")}], "loop": false, "name": &"sarten_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t43")}], "loop": false, "name": &"sarten_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t44")}], "loop": false, "name": &"sarten_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t45")}], "loop": false, "name": &"sarten_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t46")}], "loop": false, "name": &"sarten_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t47")}], "loop": false, "name": &"sarten_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t48")}], "loop": false, "name": &"lluvia_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t49")}], "loop": false, "name": &"golpe_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t50")}], "loop": false, "name": &"golpe_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t51")}], "loop": false, "name": &"golpe_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t52")}], "loop": false, "name": &"golpe_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t53")}], "loop": false, "name": &"golpe_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t54")}], "loop": false, "name": &"golpe_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t55")}], "loop": false, "name": &"golpe_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t56")}], "loop": false, "name": &"golpe_so", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t57")}], "loop": false, "name": &"muerte_s", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t58")}], "loop": false, "name": &"muerte_se", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t59")}], "loop": false, "name": &"muerte_e", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t60")}], "loop": false, "name": &"muerte_ne", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t61")}], "loop": false, "name": &"muerte_n", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t62")}], "loop": false, "name": &"muerte_no", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t63")}], "loop": false, "name": &"muerte_o", "speed": 1.0}, {"frames": [{"duration": 1.0, "texture": SubResource("t64")}], "loop": false, "name": &"muerte_so", "speed": 1.0}]

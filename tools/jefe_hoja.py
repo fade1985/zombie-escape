@@ -1,5 +1,6 @@
 # Monta la hoja de un minijefe del centro comercial (lienzo de 72, como el zombi venenoso) y su SpriteFrames.
 # Uso (desde la raíz del proyecto):  py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios
+#                                    py tools/jefe_hoja.py cocinero-72 jefe-cocinero
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -21,18 +22,54 @@ MOTA = 30          # los trozos sueltos de menos píxeles que esto se borran
 PIES = (36, 70)    # el punto de los pies en el lienzo de 72 (el centro del Sprite va ahí)
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
         "north": "n", "north-west": "no", "west": "o", "south-west": "so"}
-# nombre en el juego: (carpeta de PixelLab, fotogramas por segundo, en bucle, quitar el último fotograma)
-# (el andar de PixelLab termina en la misma postura con la que empieza: sin quitarlo, ese paso se vería dos veces)
-ANIMS = {
-    "quieto": ("rotations", 1, True, False),
-    "reposo": ("rotations", 1, True, False),
-    "andar": ("walk", 9, True, True),
-    "porrazo": ("porrazo", 12, False, False),
-    "carga": ("carga", 12, False, False),
-    "golpe": ("golpe", 16, False, False),
-    "muerte": ("muerte", 10, False, False),
-    "silbato": ("silbato", 9, False, False),
+# Lo de cada jefe. "anims": nombre en el juego: (carpeta de PixelLab, fotogramas por segundo, en bucle, quitar el
+# último fotograma) (el andar de PixelLab termina en la misma postura con la que empieza: sin quitarlo, ese paso se
+# vería dos veces). "de_frente": las que solo se dibujan mirando hacia abajo. "sangre": oscurecer la sangre roja
+# viva de PixelLab (como en tools/zombi.py, decidido por el dueño: que no desentone)
+JEFES = {
+    "antidisturbios-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "porrazo": ("porrazo", 12, False, False),
+            "carga": ("carga", 12, False, False),
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+            "silbato": ("silbato", 9, False, False),
+        },
+        "de_frente": ["silbato"],
+    },
+    # el cocinero: de momento solo sus 8 vistas quietas (las animaciones, cuando el dueño apruebe el coste)
+    "cocinero-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "lanzar": ("lanzar", 12, False, False),          # el abanico de cuchillos
+            "cuchillazo": ("cuchillazo", 12, False, False),
+            "sarten": ("sarten", 12, False, False),          # el aceite hirviendo
+            "lluvia": ("lluvia", 10, False, False),          # tira los cuchillos hacia arriba (solo de frente)
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["lluvia"],
+        "sangre": True,
+    },
 }
+JEFE = JEFES[fuente]
+ANIMS = JEFE["anims"]
+
+
+def oscurecer(im: Image.Image) -> Image.Image:
+    """La sangre roja viva, a un rojo apagado: baja cada rojo por igual, para que no pierda sus sombras."""
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            if a and r >= 110 and r > 1.8 * g and r > 1.8 * b:
+                px[x, y] = (int(r * 0.65), int(g * 0.3), int(b * 0.27), a)
+    return im
 
 
 def limpiar(im: Image.Image) -> Image.Image:
@@ -91,8 +128,8 @@ for nombre, (carpeta, fps, bucle, quitar) in ANIMS.items():
     for d, dd in DIRS.items():
         imgs = fotogramas(carpeta, d, quitar)
         if not imgs:
-            if nombre == "silbato" and d != "south":
-                continue   # el silbato solo está dibujado de frente
+            if nombre in JEFE.get("de_frente", []) and d != "south":
+                continue   # solo está dibujada de frente
             imgs = fotogramas("rotations", d, False)
         filas.append((f"{nombre}_{dd}", fps if len(imgs) > 1 else 1, bucle, imgs))
 
@@ -115,6 +152,8 @@ for _, _, _, imgs in filas:
         casillas.append((cx, cy))
         n += 1
     regiones.append(casillas)
+if JEFE.get("sangre"):
+    hoja = oscurecer(hoja)
 hoja.save(f"assets/sprites/{salida}.png")
 
 subs, anims = [], []

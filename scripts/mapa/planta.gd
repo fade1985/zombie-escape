@@ -24,7 +24,7 @@ const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda pa
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 97            # (alargada para los zombis y los minijefes del centro comercial)
+const EXPO_FILAS := 102           # (alargada para los zombis y los minijefes del centro comercial)
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre

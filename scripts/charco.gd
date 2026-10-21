@@ -1,11 +1,15 @@
 # Un charco en el suelo: el moco verde del venenoso, la lejía de la portera, el vómito de Johnny (mutación
-# Gastroenteritis) o el fuego del molotov. Cada uno pone sus estados (estados.gd) a quien lo pisa: el veneno
-# te sigue envenenando al salir, la lejía resbala, el ácido solo daña a los zombis... Al rato se seca.
+# Gastroenteritis), el fuego del molotov o el aceite hirviendo del cocinero. Cada uno pone sus estados (estados.gd)
+# a quien lo pisa: el veneno te sigue envenenando al salir, la lejía resbala, el ácido solo daña a los zombis... Al
+# rato se seca.
 # Como HAZARDS en src/game-ataques.js.
 #
 # El fuego (makeFire y burnFire de src/molotov.js) es especial: se dibuja con código, a cuadraditos de pixel
 # art. Se extiende desde el centro, arde con llamas y ascuas, se apaga por trozos al final y deja una mancha
 # de ceniza. Prende a los zombis que lo pisan (siguen ardiendo al salir: zombi.gd) y lleva su luz de fuego.
+#
+# El aceite hirviendo del cocinero quema como el fuego (a Johnny y a los zombis, pero no a él: es su "dueno"); se
+# dibuja también con código, una mancha dorada con burbujas que revientan y algo de vapor.
 extends Node2D
 
 const VENENO := preload("res://assets/sprites/objeto-charco-veneno.png")
@@ -25,6 +29,7 @@ const TIPOS := {
 	"lluvia": {"dibujo": VENENO, "radio": 150.0, "vida": 7.0, "estados": {"acido": {"dps": 10.0}}, "solo_zombis": true,
 		"tinte": Color(1.0, 1.0, 0.45)},   # la lluvia ácida (arrojadiza creada)
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
+	"aceite": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},
 }
 # El fuego por fuera: cuánto tarda en extenderse, cuánto antes de acabar empieza a apagarse, lo que brilla en
 # blanco el frente y lo que dura la brasa de un trozo recién apagado
@@ -35,6 +40,7 @@ const BRASA := 0.3
 const CELDA := 4.0   # 2 píxeles del dibujo
 
 var tipo := "veneno"
+var dueno: Node2D = null   # quien lo ha tirado: a él no le hace nada (el cocinero y su aceite)
 var escala := 1.0          # el Fabricante hace el fuego más grande...
 var duracion := 1.0        # ...y más largo
 var dano_lanzar := 1.0     # Puntería: el fuego quema más a los zombis
@@ -45,6 +51,7 @@ var tick := 0.0
 var celdas: Array = []     # el fuego: [posición, distancia al centro (0-1), cuándo prende, cuándo se apaga, ruido]
 var llamas: Array = []     # [x, y, ancho, alto, semilla, prende, apaga]
 var ascuas: Array = []
+var burbujas: Array = []   # el aceite: [sitio, cuándo empieza, cada cuánto revienta]
 
 
 func _ready() -> void:
@@ -52,6 +59,8 @@ func _ready() -> void:
 	vida = vida_max
 	z_index = -1   # en el suelo: por debajo de todos
 	add_to_group("charcos")
+	if tipo == "aceite":
+		hacer_aceite()
 	if tipo == "fuego":
 		hacer_fuego()
 		var luz := LUZ_FUEGO.instantiate()
@@ -75,6 +84,10 @@ func _physics_process(delta: float) -> void:
 	if tipo == "fuego":
 		quemar(delta)
 	else:
+		if TIPOS[tipo].get("prende", false):
+			prender_zombis(delta)
+		if tipo == "aceite":
+			hervir(delta)
 		# Al final se va secando (más transparente)
 		modulate.a = clampf(vida / 0.6, 0.0, 1.0)
 	queue_redraw()
@@ -83,7 +96,7 @@ func _physics_process(delta: float) -> void:
 	if not datos.get("solo_zombis", false) and johnny and johnny.vivo and arde_en(johnny.global_position, johnny.RADIO * 0.3):
 		johnny.pisar(datos.estados)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
-		if zombi.has_method("pisar") and arde_en(zombi.global_position, zombi.radio * 0.3):
+		if zombi != dueno and zombi.has_method("pisar") and arde_en(zombi.global_position, zombi.radio * 0.3):
 			zombi.pisar(datos.estados)
 
 
@@ -143,11 +156,21 @@ func hacer_fuego() -> void:
 
 # Cada poco, prende a los zombis que estén dentro; y suelta chispas de donde aún arde
 func quemar(delta: float) -> void:
+	prender_zombis(delta)
+	if randf() < 30.0 * delta:
+		var a := randf() * TAU
+		var r := sqrt(randf()) * radio() * 0.85
+		var p := global_position + Vector2(cos(a) * r, sin(a) * r * 0.6)
+		if arde_en(p, 0.0):
+			Particulas.soltar(self, p, Vector2(randf_range(-10, 10), randf_range(-140, -70)), Llamas.FUEGO[randi() % 4], randf_range(1, 3), 0.45)
+
+
+func prender_zombis(delta: float) -> void:
 	tick += delta
 	if tick >= Lanzables.MOLOTOV.tick:
 		tick -= Lanzables.MOLOTOV.tick
 		for zombi in get_tree().get_nodes_in_group("zombis"):
-			if not arde_en(zombi.global_position, zombi.radio * 0.5):
+			if zombi == dueno or not arde_en(zombi.global_position, zombi.radio * 0.5):
 				continue
 			# el zombi se prende y la quemadura la lleva él: dentro se le renueva sin parar, y al salir sigue
 			# ardiendo unos segundos. La portera no sabe arder: a ella se la quema solo dentro del fuego
@@ -155,12 +178,6 @@ func quemar(delta: float) -> void:
 				zombi.prender(dano_lanzar)
 			else:
 				zombi.herir(Lanzables.MOLOTOV.quema * Lanzables.MOLOTOV.tick * dano_lanzar, Llamas.FUEGO[2])
-	if randf() < 30.0 * delta:
-		var a := randf() * TAU
-		var r := sqrt(randf()) * radio() * 0.85
-		var p := global_position + Vector2(cos(a) * r, sin(a) * r * 0.6)
-		if arde_en(p, 0.0):
-			Particulas.soltar(self, p, Vector2(randf_range(-10, 10), randf_range(-140, -70)), Llamas.FUEGO[randi() % 4], randf_range(1, 3), 0.45)
 
 
 # Al apagarse del todo, la ceniza se queda en el suelo como una mancha más
@@ -172,7 +189,64 @@ func dejar_ceniza() -> void:
 	get_parent().add_child(m)
 
 
+# ── El aceite hirviendo ──
+
+# Su forma, en cuadraditos como el fuego (con el borde ondulado), y dónde salen las burbujas
+func hacer_aceite() -> void:
+	var r := radio()
+	var ondas := []
+	for k in [3, 5]:
+		ondas.append([k, randf() * TAU, randf_range(0.06, 0.12)])
+	var n := ceili(r / CELDA)
+	for y in range(-n, n + 1):
+		for x in range(-n, n + 1):
+			var p := Vector2(x, y) * CELDA
+			var a := atan2(p.y / 0.6, p.x)
+			var borde := 1.0
+			for o in ondas:
+				borde += sin(a * o[0] + o[1]) * o[2]
+			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
+			if d <= 1.0:
+				celdas.append([p, d, 0.0, 0.0, randf()])
+	for i in 9:
+		var c: Array = celdas.pick_random()
+		if c[1] < 0.8:
+			burbujas.append([c[0], randf() * 2.0, randf_range(0.7, 1.4)])
+
+
+# Hierve: algo de vapor que sube
+func hervir(delta: float) -> void:
+	if randf() < 5.0 * delta:
+		var a := randf() * TAU
+		var r := sqrt(randf()) * radio() * 0.7
+		Particulas.soltar(self, global_position + Vector2(cos(a) * r, sin(a) * r * 0.6), Vector2(randf_range(-8, 8), randf_range(-50, -30)),
+			Color(1, 0.95, 0.85, 0.4), randf_range(3, 5), 0.7)
+
+
+func pintar_aceite() -> void:
+	var crece := minf(1.0, t / 0.25)   # al caer, se extiende en un momento
+	for c in celdas:
+		if c[1] > crece:
+			continue
+		var color := Color("#5e3510") if c[1] > 0.88 else Color("#9a5a16") if c[1] > 0.6 or c[4] < 0.25 else Color("#c07a22")
+		if c[4] > 0.93:
+			color = Color("#e8b04a")   # brillos
+		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
+	# las burbujas: crecen y revientan (un anillo claro), cada una a su ritmo
+	for b in burbujas:
+		var k: float = fmod(t + b[1], b[2]) / b[2]
+		var p: Vector2 = b[0] + Vector2(2, 2)
+		if k < 0.8:
+			draw_circle(p, 1.0 + k * 4.0, Color("#f0c060"))
+			draw_circle(p + Vector2(-1, -1), 1.0, Color("#fff1c4"))
+		else:
+			draw_arc(p, 6.0, 0.0, TAU, 10, Color("#fff1c4", 0.8), 1.5)
+
+
 func _draw() -> void:
+	if tipo == "aceite":
+		pintar_aceite()
+		return
 	if tipo != "fuego":
 		var datos: Dictionary = TIPOS[tipo]
 		var dibujo: Texture2D = datos.dibujo

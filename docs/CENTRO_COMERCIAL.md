@@ -103,7 +103,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   VD-7, el somnífero de Velaria, y **muta (con su propio dibujo)**: más rápido, latigazos de tentáculo (como el zombi
   de tentáculos, más largos) y embestida. Su historia, en la parte 7.
 - **Por trozos**, cada uno con su visto bueno: 1) ✅ vigilante y dependienta; 2) antidisturbios y lo común de los
-  minijefes (y la portera a su nuevo tamaño); 3) cocinero; 4) modista; 5) mascota (rehecha a 72); 6) azotea y gerente.
+  minijefes (y la portera a su nuevo tamaño); 3) cocinero (hecho el juego, faltan las animaciones); 4) modista; 5) mascota (rehecha a 72); 6) azotea y gerente.
   Coste previsto: unas 415 generaciones en total (54 ya gastadas en los 8 modelos).
 
 ## Supervivientes
@@ -377,6 +377,40 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        con letras; el porrazo cae en un fotograma algo distinto según la dirección.
      - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
+   - **Trozo 3: el cocinero** (21 oct): **hecho el juego, faltan las animaciones**. De momento lleva sus 8 vistas
+     quietas; las animaciones de PixelLab, cuando el dueño apruebe el coste. Lo que ha quedado:
+     - **Ya sale en el sorteo** como el antidisturbios (su tienda, la Cocina central): `scripts/cocinero.gd` y
+       `escenas/personajes/cocinero.tscn`, con los números del plan: vida 450 (+25 % por planta), velocidad 60.
+     - **A media distancia:** si Johnny se acerca a menos de 200, se aparta (sin dejar de mirarle); si se aleja a más
+       de 360 o no le ve, va a por él; entre medias da pasitos de lado.
+     - **Abanico:** 0,5 s de aviso (rayas rojas en el suelo por donde irán y los cuchillos en alto) y 3 cuchillos que
+       giran (12 cada uno, a 340 y separados 0,28 rad). Solo si ve a Johnny; cada 2,4 s como mucho.
+     - **Lluvia:** tira los cuchillos hacia arriba (0,5 s) y caen 5 alrededor de Johnny (a entre 60 y 150 de él),
+       cada uno con su marca roja 0,8 s antes y uno tras otro cada 0,15 s; el primero, donde va a estar si sigue
+       andando. 12 cada uno. Se quedan clavados 4 s (en el suelo; los del abanico, en la pared). Cada 6,5 s.
+     - **Aceite hirviendo:** la sartén en alto 0,6 s («¡CALENTITO!»), vuela 0,8 s con una marca roja donde caerá y
+       deja un charco de 6 s (radio 60) que quema como el molotov: a Johnny, el estado fuego (12 por segundo y 2 s
+       más al salir); a los zombis, los prende. Cada 8 s, si Johnny está a entre 120 y 480.
+     - **Cuchillazo:** si Johnny está a menos de 140, 0,5 s de aviso (un trozo rojo, como el porrazo) y 20; le empuja
+       un poco. Cada 1,4 s.
+     - **Enfadado** («¡A LA OLLA!»): 5 cuchillos en el abanico y más rápidos (430), lluvia de 7 con la marca más
+       corta (0,6 s) y todo más seguido (abanico 1,5 s, lluvia 4,5, sartén 6, cuchillazo 1).
+     - **Decidido al hacerlo** (para contárselo al dueño): su propio aceite no le quema (es el cocinero), pero el
+       fuego del molotov sí (si no, el molotov no le haría nada); a los demás zombis su aceite sí les quema. Los
+       números que no daba el plan (distancias, esperas, lo que tardan las marcas, la lluvia de 7 enfadado) son de
+       prueba: se ajustan jugando.
+     - Los cuchillos (`cuchillo.gd`), la sartén (`proyectil.gd`) y el charco de aceite (`charco.gd`: una mancha
+       dorada con burbujas que revientan y vapor) se dibujan con código. Mientras no tenga animaciones, lo que lleva
+       en la mano antes de lanzarlo se dibuja encima de su cabeza y, al avisar, tiembla un poco.
+     - **Su dibujo:** las 8 vistas de `assets/sources/cocinero-72/rotations/` con la sangre oscurecida (PixelLab la
+       pinta roja viva; se baja toda por igual, también el cinto rojo del delantal), montadas con
+       `py tools/jefe_hoja.py cocinero-72 jefe-cocinero`. Animaciones previstas: andar, lanzar (el abanico),
+       cuchillazo, sartén, golpe y muerte en las 8 direcciones y la lluvia de frente: unas 49 generaciones. Cuando
+       lleguen, basta con volver a correr el script, ajustar `SUELTA` (el fotograma en el que suelta lo que lanza) y
+       quitar los cuchillos y la sartén dibujados encima de su cabeza.
+     - Tecla de prueba **G**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro --jefe
+       cocinero` lo saca en la 1ª planta, comprueba que su aceite no le quema y hace `captura-jefe.png` (con el
+       aceite, cuchillos clavados, la lluvia marcando el suelo y el abanico a punto de salir).
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.

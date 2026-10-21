@@ -12,9 +12,9 @@
   `ui/hud.gd`; el minimapa, `minimapa.gd`; la pausa y el final, `ui/menus.gd`.
 - `salas/`: la sala de pruebas de las fases 1-3 (`bano.tscn` y `bano_tileset.tres`: las piezas y cuáles chocan).
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
-  y los minijefes del centro comercial (`antidisturbios.tscn`).
+  y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`).
 - `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera), `proyectil.tscn`
-  (moco y botella de lejía, en parábola), `charco.tscn` y `explosion.tscn`.
+  (moco, botella de lejía y sartén del cocinero, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
   `luz_suave.tres` (el degradado de todas).
 - `muebles/`: un mueble por escena, con su choque y su `Sombra`.
@@ -28,7 +28,7 @@
   fuego y ácido) y `bumeran.gd`.
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (munición, apuntar, lanzar; `Lanzables.tipos()`).
   `granada.gd`: también la atraedora, la congeladora y la lluvia ácida.
-- `charco.gd` (veneno, lejía, vómito, fuego y ácido) y `estados.gd` (lo que hacen los charcos; también el frío y el
+- `charco.gd` (veneno, lejía, vómito, fuego, ácido y el aceite hirviendo del cocinero, que no quema a quien lo tira) y `estados.gd` (lo que hacen los charcos; también el frío y el
   calambrazo de los peligros, y `frenado`).
 - `peligros/`: los peligros de las tiendas del centro comercial. `peligros.gd` (sus números y dónde va cada uno, al
   generar la planta), `frio.gd` (la cámara frigorífica; congela a los zombis: `zombi.gd`), `fuego.gd` (la cocina del
@@ -47,9 +47,12 @@
 - `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
   vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir). Cada uno hereda y pone
   sus ataques: `antidisturbios.gd` (escudo por delante y doble por la espalda, porrazo, carga que le atonta si se
-  estrella, silbato). Las explosiones les dan "de lleno" (`explosion.gd`); a Johnny la carga le pone el estado
-  "tirado" (`estados.gd`).
-- `bala_zombi.gd`, `proyectil.gd` (moco, lejía y ácido en parábola), `explosion.gd`.
+  estrella, silbato) y `cocinero.gd` (a media distancia: abanico de cuchillos, lluvia de cuchillos con su marca en
+  el suelo, sartén de aceite hirviendo y cuchillazo). Las explosiones les dan "de lleno" (`explosion.gd`); a
+  Johnny la carga le pone el estado "tirado" (`estados.gd`).
+- `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido y la sartén en parábola), `cuchillo.gd` (los cuchillos del
+  cocinero, dibujados con código: lanzados en línea recta o cayendo sobre su marca; se quedan clavados un rato),
+  `explosion.gd`.
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes (con lo de su
   oficio para los del centro comercial: chaleco, bata, cascos, moño, bigote, martillo).
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
@@ -60,7 +63,7 @@
   (`orden_jefes`, `jefe_de()`; si aún no está hecho, la portera) y `planta.gd` lo apunta en `planta.jefe` y `el_jefe`.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
   guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
-  centro comercial; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
+  centro comercial, con el antidisturbios en la 1ª planta, u otro minijefe con `--jefe cocinero`; con `--edificio centro --fotos-tiendas`, sin penumbra, una foto de cada tienda y de la galería:
   `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`, y las de los peligros: `captura-peligro-<...>.png`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 17 objetos, mochila, baúl, lo que sueltan los
   zombis), `recetas.gd` (15 recetas y rarezas), `billete.gd`, `minimapa.gd`.
@@ -113,8 +116,9 @@
 (la piel a verde; admite otro tono de origen), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
-`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`; alinea por los pies los lienzos de PixelLab, borra
-las motas sueltas y dice el `offset` del Sprite; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
+`py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios` o `cocinero-72 jefe-cocinero`; las animaciones de
+cada uno, en su ficha `JEFES`; alinea por los pies los lienzos de PixelLab, borra las motas sueltas, oscurece la
+sangre si la ficha lo pide y dice el `offset` del Sprite; lo que falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
