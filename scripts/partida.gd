@@ -1834,8 +1834,11 @@ func probar_historia() -> void:
 		get_viewport().get_texture().get_image().save_png("res://captura-cuerpos.png")
 		capa.queue_free()
 	# en el ordenador, la primera y la tercera página del dosier de este edificio (en los Apartamentos, el correo)
+	# y la primera de cada uno de los otros edificios: el Dosier las enseña todas, sea cual sea el edificio
 	var ids: Array = Historia.dosier(edificio).paginas.map(func(p): return p.id)
-	Guardado.cambiar(func(g): g.paginas = [ids[0], ids[2]])
+	var de_otros: Array = Historia.DOSIERES.keys().filter(func(e): return e != edificio).map(
+		func(e): return Historia.DOSIERES[e].paginas[0].id)
+	Guardado.cambiar(func(g): g.paginas = [ids[0], ids[2]] + de_otros)
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
 	ordenador.abrir("dosier", "b_" + ids[2])

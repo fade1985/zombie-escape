@@ -124,7 +124,8 @@
   papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
   guardado). La última página del centro no la lleva un muerto: la suelta el gerente al caer (`del_jefe`; la
   partida la enseña con `pagina_del_jefe()`). También el guiño de la cafetera (`CAFETERA`: lo dice la farmacéutica,
-  `supervivientes.gd`). Para cambiar la historia se edita aquí, sin tocar los `id`.
+  `supervivientes.gd`). Para cambiar la historia se edita aquí, sin tocar los `id`. Las páginas encontradas se
+  guardan para siempre (`paginas` del guardado) y el programa Dosier del ordenador enseña las de todos los edificios.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
   `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone

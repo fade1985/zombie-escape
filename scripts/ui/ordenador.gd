@@ -8,8 +8,8 @@
 #     el banco de trabajo); si es de fuego, se pierde.
 #   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
 #     cobran aquí (su premio va a los dólares ahorrados).
-#   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), para
-#     releerlas. Las que faltan salen como páginas arrancadas.
+#   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
+#     los edificios, para releerlas. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
 #     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
@@ -622,41 +622,58 @@ func cobrar_logro(id: String) -> void:
 
 # ── Dosier ──
 
+# Las páginas de todos los edificios (no solo del que se juega): se guardan para siempre (Guardado: "paginas"),
+# las encuentres donde las encuentres. A la izquierda, las páginas por edificio (con su propio desplazamiento);
+# a la derecha, la hoja que se esté mirando. Las que faltan salen como páginas arrancadas
 func programa_dosier(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
-	var d := Historia.dosier(partida.edificio)
-	var halladas: int = d.paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
+	var halladas := 0
+	var total := 0
+	for id in Historia.DOSIERES:
+		var paginas: Array = Historia.DOSIERES[id].paginas
+		total += paginas.size()
+		halladas += paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 8)
 	c.add_child(fila)
-	cajita(fila, d.titulo, "dosier", "%d / %d páginas" % [halladas, d.paginas.size()])
-	nota(c, d.nota)
+	cajita(fila, "Dosier VD-7", "dosier", "%d / %d páginas" % [halladas, total])
+	nota(c, "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre.")
 	var partes := HBoxContainer.new()
 	partes.add_theme_constant_override("separation", 10)
 	c.add_child(partes)
+	var desliza := ScrollContainer.new()
+	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	desliza.follow_focus = true
+	desliza.custom_minimum_size = Vector2(240, Tele.CAJA_TEXTO.end.y - 40)
+	partes.add_child(desliza)
 	var lista := VBoxContainer.new()
-	lista.custom_minimum_size.x = 230
+	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lista.add_theme_constant_override("separation", 6)
-	partes.add_child(lista)
+	desliza.add_child(lista)
 	var lado := CenterContainer.new()
 	lado.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lado.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	partes.add_child(lado)
-	for i in d.paginas.size():
-		var p: Dictionary = d.paginas[i]
-		var tiene := Historia.encontrada(s, p.id)
-		var b := tarjeta(lista, "b_" + p.id, "dosier" if tiene else "candado", "Página %d" % (i + 1),
-			p.titulo if tiene else "Arrancada", "", "" if tiene else "bloqueada")
-		var hoja := p if tiene else {"tipo": "???", "titulo": "Página arrancada", "nota": "",
-			"texto": Historia.falta(partida.edificio, p)}
-		var ver := func():
-			for h in lado.get_children():
-				h.queue_free()
-			lado.add_child(Historia.hoja(hoja, 410.0))
-		enlazar(b, ("Página %d: %s. La llevaba %s." % [i + 1, p.titulo, p.cuerpo]) if tiene
-			else "Página %d: aún no la has encontrado (%s)." % [i + 1, Historia.donde(p)], ver)
-		b.focus_entered.connect(ver)
-		b.mouse_entered.connect(ver)
+	for edificio in Historia.DOSIERES:
+		var d: Dictionary = Historia.DOSIERES[edificio]
+		var suyas: int = d.paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
+		var nombre: String = Edificios.datos(edificio).nombre if edificio in Edificios.LISTA else edificio
+		var del_edificio := grupo(lista, "%s · %d / %d" % [nombre, suyas, d.paginas.size()])
+		for i in d.paginas.size():
+			var p: Dictionary = d.paginas[i]
+			var tiene := Historia.encontrada(s, p.id)
+			var b := tarjeta(del_edificio, "b_" + p.id, "dosier" if tiene else "candado", "Página %d" % (i + 1),
+				p.titulo if tiene else "Arrancada", "", "" if tiene else "bloqueada")
+			var hoja := p if tiene else {"tipo": "???", "titulo": "Página arrancada", "nota": "",
+				"texto": Historia.falta(edificio, p)}
+			var ver := func():
+				for h in lado.get_children():
+					h.queue_free()
+				lado.add_child(Historia.hoja(hoja, 410.0))
+			enlazar(b, ("%s, página %d: %s. La llevaba %s." % [nombre, i + 1, p.titulo, p.cuerpo]) if tiene
+				else "%s, página %d: aún no la has encontrado (%s)." % [nombre, i + 1, Historia.donde(p)], ver)
+			b.focus_entered.connect(ver)
+			b.mouse_entered.connect(ver)
 	info.text = "Pasa por las páginas para leerlas."
 
 
