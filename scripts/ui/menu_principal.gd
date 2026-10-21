@@ -119,6 +119,16 @@ func elegir_edificio() -> void:
 	tarjetas.alignment = BoxContainer.ALIGNMENT_CENTER
 	tarjetas.add_theme_constant_override("separation", 20)
 	columna.add_child(tarjetas)
+	poner_tarjetas()
+	var volver := boton(columna, "Volver", volver_al_menu)
+	volver.custom_minimum_size.x = 180
+	primera_tarjeta().grab_focus.call_deferred()
+
+
+# Las tarjetas, con lo que dice el guardado (se rehacen al pulsar N, la tecla de prueba que lo abre todo)
+func poner_tarjetas() -> void:
+	for caja in tarjetas.get_children():
+		caja.free()
 	var s := Guardado.cargar()
 	var args := OS.get_cmdline_user_args()
 	if "--captura" in args and args.find("--alerta") >= 0 and args.find("--alerta") + 1 < args.size():
@@ -132,9 +142,6 @@ func elegir_edificio() -> void:
 		if Edificios.abierto(s, id):
 			selector_alerta(caja, id, s.edificios.get(id, Guardado.EDIFICIO))
 		tarjetas.add_child(caja)
-	var volver := boton(columna, "Volver", volver_al_menu)
-	volver.custom_minimum_size.x = 180
-	primera_tarjeta().grab_focus.call_deferred()
 
 
 func primera_tarjeta() -> Button:
@@ -198,10 +205,19 @@ func volver_al_menu() -> void:
 	centro.find_children("*", "Button", true, false)[0].grab_focus()
 
 
-# Esc (o B en el mando) en "Elige edificio": vuelve al menú
+# Esc (o B en el mando) en "Elige edificio": vuelve al menú. N (tecla de prueba): abre todos los edificios
+# hasta cerrar el juego, sin completar los anteriores (no se guarda nada)
 func _unhandled_input(evento: InputEvent) -> void:
-	if edificios and edificios.visible and evento.is_action_pressed("ui_cancel"):
+	if not (edificios and edificios.visible):
+		return
+	if evento.is_action_pressed("ui_cancel"):
 		volver_al_menu()
+		get_viewport().set_input_as_handled()
+	elif evento is InputEventKey and evento.pressed and not evento.echo and evento.keycode == KEY_N and not Edificios.abrir_todo:
+		Edificios.abrir_todo = true
+		poner_tarjetas()
+		Sonido.tocar("click")
+		primera_tarjeta().grab_focus()
 		get_viewport().set_input_as_handled()
 
 

@@ -66,6 +66,8 @@ const MINIJEFES := {
 
 # El edificio elegido en el menú: la partida lo lee al empezar
 static var elegido := "apartamentos"
+# Tecla de prueba N en "Elige edificio": todos abiertos, sin haber completado los de antes (no se guarda)
+static var abrir_todo := false
 
 
 static func datos(id := "") -> Dictionary:
@@ -75,4 +77,4 @@ static func datos(id := "") -> Dictionary:
 # ¿Se puede jugar ya? (el centro comercial, solo después de completar los Apartamentos)
 static func abierto(s: Dictionary, id: String) -> bool:
 	var antes: String = LISTA[id].abre
-	return antes == "" or (s.edificios.has(antes) and s.edificios[antes].completado)
+	return abrir_todo or antes == "" or (s.edificios.has(antes) and s.edificios[antes].completado)
