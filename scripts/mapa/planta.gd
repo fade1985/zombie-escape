@@ -67,12 +67,15 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
 # aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}; las puertas de tienda de la pared de arriba
 # llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd)
-static func generar(num: int, edificio := "apartamentos") -> Dictionary:
+# "su_jefe": el zombi jefe de esta planta (en el centro comercial, el minijefe que le toca; "" = el del edificio)
+static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dictionary:
 	rng.randomize()
 	var ed: Dictionary = Edificios.datos(edificio)
 	var tiendas: bool = ed.generador == "tienda"
+	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
 	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
-		"jefa_muerta": false, "mantenimiento": -1, "expo": -1, "edificio": edificio}
+		"jefa_muerta": false, "mantenimiento": -1, "expo": -1, "edificio": edificio,
+		"jefe": su_jefe if su_jefe != "" else ed.jefe, "el_jefe": mini.get("el", ed.el_jefe)}
 	var ancho := PASILLO_COLS * CASILLA
 	var alto := PASILLO_FILAS * CASILLA
 	var pasillo := {"tipo": "pasillo", "nombre": planta.nombre, "ancho": ancho, "alto": alto, "salidas": [],
@@ -113,6 +116,10 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 		# la puerta del apartamento está en el lado que da al pasillo
 		var lado := "abajo" if h.dir == "arriba" else "arriba"
 		var apt := Tienda.generar(rng.randi(), tipo_tienda, jefe, lado) if tiendas else Apartamento.generar(rng.randi(), jefe, lado)
+		if jefe and not mini.is_empty():
+			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
+			nombre = mini.tienda
+			apt.salas[0].nombre = mini.tienda
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
@@ -125,7 +132,7 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": "", "letrero": planta.nombre})
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
 			"aviso": "", "letrero": nombre}
-		if tipo_tienda != "" and h.dir == "arriba":
+		if tipo_tienda != "" and h.dir == "arriba" and not (jefe and not mini.is_empty()):
 			# en la pared de arriba se ve la fachada de la tienda: su letrero de neón (en vez del cartel) y un
 			# escaparate a cada lado de la puerta (mapa.gd)
 			puerta.neon = tipo_tienda
@@ -143,7 +150,7 @@ static func generar(num: int, edificio := "apartamentos") -> Dictionary:
 		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido",
 		"letrero": "Portal" if baja else "Bajada"})
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
-		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + ed.el_jefe, "letrero": "Escaleras"})
+		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + planta.el_jefe, "letrero": "Escaleras"})
 	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo
 	# (algunos fallan de vez en cuando), como en src/rooms.js
 	pasillo.apliques = []

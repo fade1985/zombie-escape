@@ -27,6 +27,8 @@ const LISTA := {
 	# calambrazo del agua con corriente (a los zombis, el agua los aturde: agua.gd)
 	"frio": {"dps": 3.0, "despues": 1.5, "frena": 0.4, "zombis": true, "color": Color("#9fd8ff")},
 	"calambre": {"despues": 0.4, "frena": 1.0, "zombis": false, "color": Color("#bff4ff")},
+	# la carga del antidisturbios: te tira y tardas un momento en levantarte
+	"tirado": {"despues": 0.7, "frena": 1.0, "zombis": false, "color": Color("#ffd23f")},
 }
 
 const TICK_ZOMBI := 0.5   # a los zombis el daño de los estados se les da a pellizcos, cada medio segundo

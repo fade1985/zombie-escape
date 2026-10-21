@@ -34,11 +34,15 @@ const ZOMBIS := {
 	"venenoso": preload("res://escenas/personajes/zombi_venenoso.tscn"),
 	"portera": preload("res://escenas/personajes/portera.tscn"),
 	"guardia": preload("res://escenas/personajes/zombi_guardia.tscn"),   # el de la tarjeta (centro comercial)
+	"antidisturbios": preload("res://escenas/personajes/antidisturbios.tscn"),   # minijefe del centro comercial
 }
+# Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
+# objetos y la mutación
+const JEFES := ["portera", "antidisturbios"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
-	KEY_F7: "venenoso", KEY_P: "portera"}
+	KEY_F7: "venenoso", KEY_P: "portera", KEY_K: "antidisturbios"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -51,7 +55,8 @@ const BILLETES_GUARDIA := 2
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
 # La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
-	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994")}
+	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
+	"antidisturbios": Color("#3b4252")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -76,6 +81,7 @@ var guardia: Node2D = null   # el guardia de seguridad, si está en el pasillo e
 var edificio: String = Edificios.elegido
 var ed: Dictionary = Edificios.datos(edificio)
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
+var orden_jefes: Array = []   # el centro comercial: el minijefe de cada planta, sorteado al empezar (edificios.gd)
 var captura := false
 var tiempo := 0.0
 var luz := Luz.new()       # la penumbra (luz.gd)
@@ -106,7 +112,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -173,6 +179,13 @@ func _ready() -> void:
 	lanzables.reiniciar(johnny.stats)
 	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	supervivientes.elegir()
+	# los minijefes del centro comercial, uno por planta en orden al azar (sin repetir)
+	orden_jefes = ed.get("minijefes", []).duplicate()
+	orden_jefes.shuffle()
+	if captura and "antidisturbios" in orden_jefes:
+		# en la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios
+		orden_jefes.erase("antidisturbios")
+		orden_jefes.insert(1, "antidisturbios")
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio
 	montar(planta.mantenimiento, 0, false)
@@ -190,10 +203,18 @@ func _ready() -> void:
 
 
 func nueva_planta(num: int) -> void:
-	planta = Planta.generar(num, edificio)
+	planta = Planta.generar(num, edificio, jefe_de(num))
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
+
+
+# El minijefe de la planta "num" (centro comercial): el que le tocó en el sorteo, si ya está hecho (tiene su
+# escena en ZOMBIS); si no, "" (el jefe del edificio: la portera)
+func jefe_de(num: int) -> String:
+	if num > orden_jefes.size() or not ZOMBIS.has(orden_jefes[num - 1]):
+		return ""
+	return orden_jefes[num - 1]
 
 
 # Los atributos de Johnny con los talentos comprados y las mutaciones de la partida (al empezar, al comprar
@@ -319,7 +340,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		if aqui == idx and not jefa_salio:
 			jefa_salio = true
 			Sonido.tocar("jefe")
-			jefa = meter_zombi("portera", mapa.punto_libre(johnny.position, 380.0))
+			jefa = meter_zombi(planta.jefe, mapa.punto_libre(johnny.position, 380.0))
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
@@ -363,7 +384,7 @@ func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var texto: String = planta.nombre if sitio.tipo == "pasillo" else "%s · %s" % [planta.nombre, sitio.nombre]
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
-	if zona != "":
+	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
 	lugar.text = texto
 
@@ -447,7 +468,7 @@ func _physics_process(delta: float) -> void:
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
 			Sonido.musica("explorar")
-			decir("¡%s ha caído! Las escaleras ya están abiertas" % (ed.el_jefe.left(1).to_upper() + ed.el_jefe.substr(1)), 4.0)
+			decir("¡%s ha caído! Las escaleras ya están abiertas" % (planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1)), 4.0)
 			logros.cumplir("desahucio")
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
@@ -502,7 +523,8 @@ func _al_coger_llave() -> void:
 	planta.tiene_llave = true
 	Sonido.tocar("compra")
 	if ed.cerrojo == "tarjeta":
-		decir("Has cogido la tarjeta de acceso: abre la tienda de " + ed.el_jefe, 3.0)
+		var tienda: String = Edificios.MINIJEFES.get(planta.jefe, {}).get("la_tienda", "la tienda de " + planta.el_jefe)
+		decir("Has cogido la tarjeta de acceso: abre " + tienda, 3.0)
 	else:
 		decir("Has cogido la llave del " + nombre_jefa(), 3.0)
 
@@ -787,7 +809,7 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 	var trozos: Color = Color("#ff9f1c") if tipo == "explosivo" else PIELES.get(tipo, PIELES.normal)
 	var color: Color = MANCHAS.get(tipo, SANGRE)
 	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo", color, zombi.get_parent())
-	var jefa := tipo == "portera"
+	var jefa := tipo in JEFES
 	# el temblor al matar (y, a la portera, el golpe final: tiembla mucho y el juego se para un instante)
 	if jefa:
 		Temblor.temblar(20.0)
@@ -819,7 +841,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		sangre(tipo, zombi)
 		if tipo == "guardia":
 			_al_caer_guardia(zombi)
-		var cuantos := BILLETES_JEFA if tipo == "portera" else BILLETES_GUARDIA if tipo == "guardia" else (1 if randf() < BILLETE_ZOMBI else 0)
+		var cuantos := BILLETES_JEFA if tipo in JEFES else BILLETES_GUARDIA if tipo == "guardia" else (1 if randf() < BILLETE_ZOMBI else 0)
 		soltar_billetes(cuantos, zombi.position)
 		# a veces, un molotov o una granada
 		var soltado := cuantos > 0
@@ -828,13 +850,13 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 				soltar_lanzable(k, zombi.position)
 				soltado = true
 		# o una caja de munición (la portera, dos seguras)
-		if tipo == "portera":
+		if tipo in JEFES:
 			for i in 2:
 				soltar_municion(zombi.position)
 		elif not soltado and randf() < MUNICION_ZOMBI:
 			soltar_municion(zombi.position)
 		# y a veces un objeto para el banco de trabajo (la portera, dos seguros)
-		if tipo == "portera":
+		if tipo in JEFES:
 			for i in 2:
 				soltar_objeto(Objetos.al_azar(), zombi.position)
 		else:
@@ -845,14 +867,16 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
 		# la portera: un poco después de caer su cuerpo, las mutaciones
-		if tipo == "portera":
+		if tipo in JEFES:
 			await get_tree().create_timer(2.0, false).timeout
 			abrir_mutacion())
-	if tipo == "portera":
+	if tipo in JEFES:
 		# Cada planta, un 25 % más dura (como el vecino del juego JS)
 		zombi.vida_max = int(zombi.vida_max * pow(1.25, planta.num - 1))
 		# Su barra de vida grande, arriba, y los vecinos que llama
 		var barra_jefa: ProgressBar = $Pantalla/Jefa
+		var el: String = Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera")
+		$Pantalla/Jefa/Nombre.text = el.left(1).to_upper() + el.substr(1)
 		zombi.vida_cambiada.connect(func(vida, maxima):
 			barra_jefa.max_value = maxima
 			barra_jefa.value = vida
@@ -1191,8 +1215,32 @@ func _process(delta: float) -> void:
 		for i in planta.sitios.size():
 			if planta.sitios[i].tipo == "jefe":
 				montar(i, 0, false)
-	if antes < 8.0 and tiempo >= 8.0:
-		print("La portera ha salido: ", jefa != null, " | puerta ", "cerrada" if cerrada else "abierta")
+	if antes < 7.7 and tiempo >= 7.7 and jefa:
+		# Johnny, delante del jefe (para que salga en la foto)
+		for i in 60:
+			var p: Vector2 = jefa.position + Vector2.from_angle(jefa.mirada.angle() + randf_range(-0.7, 0.7)) * 230.0
+			if mapa.zona_en(p) >= 0:
+				johnny.position = p
+				break
+		johnny.get_node("Camara").reset_smoothing()
+		if jefa is Minijefe:
+			# el escudo: un golpe de 10 por delante, de lado, por la espalda y de una explosión (la fuerza va
+			# hacia donde empuja el golpe: el de delante empuja hacia atrás)
+			jefa.mirada = (johnny.position - jefa.position).normalized()
+			var m: Vector2 = jefa.mirada
+			var quita := []
+			for golpe in [[-m, false], [m.orthogonal(), false], [m, false], [m, true]]:
+				var antes_vida: int = jefa.vida
+				jefa.recibir_golpe(10, golpe[0] * 300.0, golpe[1])
+				quita.append(antes_vida - jefa.vida)
+			print("Escudo (golpes de 10): de frente -%d, de lado -%d, por la espalda -%d, explosión -%d" % quita)
+			if jefa.has_method("estrellarse"):   # el antidisturbios: que salga en la foto preparando la carga
+				jefa.cambiar("aviso_carga", {"quedan": 1, "aviso": 0.8})
+	if antes < 8.0 and tiempo >= 8.0 and jefa:
+		get_viewport().get_texture().get_image().save_png("res://captura-jefe.png")
+	if antes < 8.05 and tiempo >= 8.05:
+		print("El jefe (%s) ha salido en '%s': %s | vida %d | puerta %s" % [planta.jefe, planta.sitios[aqui].nombre,
+			jefa != null, jefa.vida_max if jefa else 0, "cerrada" if cerrada else "abierta"])
 		if jefa:
 			jefa.recibir_golpe(99999, Vector2.ZERO)
 	if antes < 9.5 and tiempo >= 9.5:

@@ -200,7 +200,28 @@ Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSI
      agua no hace nada pero la tienda se queda muy oscura (0,94) y solo se ve con la linterna. (En el plan era un
      chispazo 1 de cada 3 veces; se cambió.)
    - Para probarlo: `--captura --edificio centro --fotos-tiendas` saca también `captura-peligro-frio/fuego/agua/sin-luz/cuadro.png`.
-4. **Zombis nuevos**, minijefes y jefe final.
+4. **Zombis nuevos**, minijefes y jefe final (por trozos; el plan, en "Decidido con el dueño (21 oct, para la parte 4)").
+   - ✅ **Trozo 2: el antidisturbios y lo común de los minijefes** (21 oct). Lo que ha quedado:
+     - **El sorteo:** al empezar cada partida del centro comercial se sortea el minijefe de cada planta (baja, 1ª, 2ª
+       y 3ª, sin repetir; ficha `minijefes` y `MINIJEFES` en `edificios.gd`). Donde toca uno que aún no está hecho
+       (cocinero, modista, mascota) sale la portera, y también en la 4ª planta (la que será la azotea).
+     - **Su tienda** se llama según quién esté (Oficina de seguridad, Cocina central, Taller de costura, Juguetería):
+       el cartel de la puerta (sin neón), la sala, el aviso de las escaleras, el de la tarjeta, el de "ha caído" y el
+       nombre de la barra. Por dentro, el local destrozado de siempre.
+     - **Lo común** (`scripts/minijefe.gd`): igual que la portera (aparece al entrar, barra grande, +25 % de vida por
+       planta, se enfada a media vida con grito y vapor, al caer billetes, munición, objetos y la mutación).
+     - **El antidisturbios** (`scripts/antidisturbios.gd`), con los números del plan. Detalles decididos al hacerlo:
+       el escudo tapa un tercio de la vuelta por delante (y la espalda es otro tercio); a sus pies se ve un arco
+       azulado por donde tapa; sigue tapando cuando está atontado. Solo anda hacia delante, así que para seguir a
+       Johnny tiene que girarse. La carga avisa 0,8 s (la segunda seguida, 0,5) y corre como mucho 1,3 s; esquivando
+       se la pasa de largo; si te pilla te quedas 0,7 s sin poder moverte ("tirado"). Atontado, estrellitas.
+       Silbato cada 13 s si quedan pocos zombis; **los refuerzos son zombis normales hasta juntarlo con el trozo 1**
+       (entonces, vigilantes: `REFUERZO` en `antidisturbios.gd`).
+     - Tecla de prueba **K**; también en la exposición (F9). `--captura --edificio centro` lo saca en la 1ª planta,
+       prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
+   - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
+     grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
+     (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
 5. **Supervivientes nuevos** con sus eventos.
 6. **Reparto de objetos** y recetas que mezclan edificios.
 7. **La historia:** dosier y noticias.
