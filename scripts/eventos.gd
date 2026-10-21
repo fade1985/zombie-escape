@@ -442,16 +442,20 @@ func probar_incendio(foto: Callable, esperar: Callable) -> void:
 	print("Incendio · charcos en el pasillo: %d, con cable: %d" % [lista.size(), lista.filter(func(c): return c.cable).size()])
 	# Johnny, dentro de un charco con cable, con un zombi al lado (también dentro)
 	var con: Dictionary = lista.filter(func(c): return c.cable)[0]
-	johnny.position = con.pos + Vector2(-20, 0)
+	johnny.position = con.pos
+	johnny.set_physics_process(false)   # quieto en el charco (que no le saque un empujón de un mueble)
 	johnny.get_node("Camara").reset_smoothing()
 	var zombi: Node2D = partida.meter_zombi("lento", con.pos + Vector2(24, 4))
 	zombi.set_physics_process(false)
 	var antes: int = johnny.vida
 	var antes_z: int = zombi.vida
 	await esperar.call(INCENDIO.pulso + 0.3)
-	print("Incendio · tras un calambrazo: Johnny %d -> %d · zombi %d -> %d · resbala: %s" % [antes, johnny.vida,
-		antes_z, zombi.vida if is_instance_valid(zombi) else 0, johnny.estados.has("resbaladizo")])
+	print("Incendio · tras un calambrazo: Johnny %d -> %d · zombi %d -> %d" % [antes, johnny.vida,
+		antes_z, zombi.vida if is_instance_valid(zombi) else 0])
 	foto.call("incendio-cable")
+	johnny.set_physics_process(true)
+	await esperar.call(0.2)
+	print("Incendio · en el charco resbala: %s" % johnny.estados.has("resbaladizo"))
 	johnny.vida = johnny.stats.vida_max
 	await partida.montar(piso(false), 0, false)
 	await esperar.call(1.0)
