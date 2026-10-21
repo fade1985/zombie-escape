@@ -668,6 +668,33 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      - Tecla de prueba **J** (la **U** es de los objetos); también en la exposición (F9, con una fila más). `--captura --edificio centro --jefe
        mascota` hace `captura-jefe.png` con la mascota saltando y su sombra (con `--jefe <nombre>` vale para
        cualquier jefe).
+   - **Trozo 6: la azotea y el gerente**, en tres partes con el visto bueno del dueño en cada una (decidido el 21 oct:
+     1) la azotea; 2) el gerente con su dibujo y sus ataques; 3) la mutación y el final, con el helicóptero de Velaria
+     al caer el gerente; los aparatos de la azotea, con PixelLab).
+     - ✅ **Parte 1: la azotea** (21 oct). Lo que ha quedado:
+       - El centro comercial tiene ahora la planta baja y tres plantas con tiendas (cada una con su minijefe) y,
+         encima, **la azotea** (la 5ª: `Planta.azotea`, ficha `azotea`, `final` y `el_final` en `edificios.gd`). Los
+         Apartamentos no cambian. Es un sitio "jefe" sin pasillo: el jefe aparece al llegar, en medio del helipuerto,
+         y al caer se abre la salida.
+       - Un espacio abierto de 44 × 30 casillas (como en el juego JS), más grande que la pantalla. **Suelo de
+         hormigón** con sus losas, juntas, grava y grietas; **el murete**: arriba se le ve de frente, bajito, con la
+         ciudad de noche detrás (edificios con ventanas encendidas y estrellas), y en los lados y abajo, su remate
+         visto desde arriba; **el helipuerto pintado** (el círculo amarillo y la H, gastados). Todo esto, dibujado con
+         código (`tools/azotea.py`). Restos sueltos por el suelo (sangre, latas, cascotes y papeles, sin ropa y menos
+         que en las tiendas) y manchas de sangre.
+       - **Los aparatos**, con PixelLab (4 generaciones, con las guías de `tools/guias_azotea.py`): aire acondicionado
+         (con dos ventiladores), climatizadora (una caja larga con su conducto), chimenea de ladrillo y extractor de
+         turbina. Van sueltos (2-3, 1-2, 2-3 y 3-4), lejos unos de otros, del helipuerto y de las puertas, para que
+         sirvan de cobertura y se pueda pasar entre ellos.
+       - **Se llega por la izquierda**, por la escalera, que se cierra detrás («¡La puerta se ha cerrado detrás de
+         ti!»; luego, «Ya no hay vuelta atrás»). Al llegar: «Azotea · ¡El último combate del edificio!». **A la
+         derecha, la escalera de incendios** (peldaños de rejilla y barandilla roja, dibujados con código en
+         `puerta.gd`), con una cinta de peligro mientras siga cerrada. Al caer el jefe: «¡… ha caído! La escalera de
+         incendios ya está abierta», y por ahí se acaba el edificio.
+       - Mientras no esté el gerente (parte 2), en la azotea sale la portera.
+       - Tecla de prueba **N**: derecho a la azotea. `--captura --edificio centro` acaba en la azotea y saca
+         `captura-azotea.png` (al llegar, con el jefe), `captura-azotea-entera.png` (entera, sin penumbra) y
+         `captura-azotea-incendios.png` (quitado el jefe, con la escalera abierta).
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.

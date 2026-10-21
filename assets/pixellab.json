@@ -1706,6 +1706,17 @@
         "saldo_despues": 588.8,
         "nota": "El saldo bajó más (124) porque otras sesiones generaban a la vez (la mascota y otras); lo de este trozo, según los recibos de cada llamada, son 41,25."
       }
+    },
+    "azotea": {
+      "fecha": "2026-10-21",
+      "nota": "Trozo 6, parte 1 (la azotea). Los cuatro aparatos sueltos de la azotea con create_image_pixflux (1 generación cada uno), con la receta de los muebles del centro comercial (assets/pixellab.json → centro-comercial): la guía de py tools/guias_azotea.py como init_image (fuerza 45), no_background false, single color black outline, high top-down, y el texto '<aparato> seen in 3/4 top-down view, <la tapa> seen from above, <el frente> facing the viewer, weathered, rust streaks, dents, dirt, a few blood splatters, zombie apocalypse, not rotated, not isometric, game prop sprite on a plain blue background, horror game, muted colors'. Todos a la primera. Fondo quitado con py tools/guias_centro.py quita; originales en assets/sources/salas/centro/ y sprites con py tools/importar.py. El suelo, el murete, su tapa y el helipuerto, con código (py tools/azotea.py).",
+      "coste": "4 generaciones",
+      "piezas": {
+        "aire-acondicionado (acunit)": "bac72586-2618-468b-a27a-83dac90fdac6",
+        "climatizadora (airhandler)": "0c1a3da7-84b6-44f1-8d46-7cb42a7070a8",
+        "chimenea (chimney)": "5e299542-07aa-4766-974a-42437311fec1 (la guía tenía el hollín medio transparente y PixelLab lo pasó a blanco: queda un remate claro)",
+        "extractor (vent)": "a0d9477f-76cb-47ae-bc21-ae7534a06b12"
+      }
     }
   }
 }

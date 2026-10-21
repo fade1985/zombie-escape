@@ -37,6 +37,7 @@ const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
+const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
 # techo-<x>. El aseo de las tiendas usa los del baño de los pisos (ESTILO_DE).
@@ -55,6 +56,8 @@ const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": p
 # azar por el suelo y las paredes de cada tienda y de la galería, para que haya sangre y destrozo por todas partes
 # sin que se note que la textura se repite. Los repetidos en la lista salen más a menudo.
 const RESTOS_SUELO := ["sangre", "sangre", "cristales", "cristales", "latas", "ropa", "cascotes", "papeles", "papeles"]
+const RESTOS_AZOTEA := ["sangre", "latas", "cascotes", "cascotes", "papeles"]   # en la azotea, menos y sin ropa
+const RESTOS_AZOTEA_MAX := 12
 const RESTOS_PARED := ["salpicon", "salpicon", "huellas", "pintada", "agujero"]
 const RESTOS_POR_CASILLA := 1.0 / 30.0    # en el suelo, uno de cada tantas casillas libres (entre 4 y 24)
 const RESTOS_PARED_CADA := 192.0          # en las paredes, como mucho uno por cada tramo de este largo...
@@ -95,7 +98,7 @@ var mascara: Image                # la textura de la niebla, una casilla por pí
 var textura_niebla: ImageTexture
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
-var centro := false               # si es del centro comercial (una tienda o la galería): lleva restos sueltos
+var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
@@ -115,6 +118,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			tapa = load("res://assets/sprites/tapa-%s.png" % PASILLOS[estilo].tapa)
 			if PASILLOS[estilo].alfombra:
 				alfombra = load("res://assets/sprites/alfombra-pasillo.png")
+		elif sitio.get("estilo", "") == "azotea":
+			# la azotea del centro comercial (tools/azotea.py): hormigón, y el murete con la ciudad de noche detrás
+			estilos[0] = {"suelo": load("res://assets/sprites/suelo-hormigon.png"),
+				"pared": load("res://assets/sprites/pared-azotea.png"), "techo": load("res://assets/sprites/techo-azotea.png")}
+			tapa = load("res://assets/sprites/tapa-azotea.png")
 		else:
 			estilos[0] = textura("mantenimiento", "")
 			tapa = load("res://assets/sprites/tapa-generica.png")
@@ -138,7 +146,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			else:
 				estilos[s.id] = textura(estilo, ["-a", "-b", "-c"][h % 3], ["-a", "-b", "-c"][(h / 3) % 3])
 
-	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") == "galeria"
+	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea"]
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
 		preparar_restos()
@@ -319,7 +327,10 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		var largo := (cols - 4) * 16 - 56
 		var y := filas * 8 - 16
 		lienzo.draw_texture_rect_region(alfombra, Rect2(32 + 28, y, largo, 32), Rect2(0, 0, largo * 2, alfombra.get_height()))
-	# las manchas de sangre de la sala de mantenimiento: cada una gira de 90 en 90 grados y se voltea al azar
+	# el helipuerto pintado de la azotea
+	if sitio.has("helipuerto"):
+		lienzo.draw_texture(HELIPUERTO, (sitio.helipuerto / 2.0 - HELIPUERTO.get_size() / 2.0).floor())
+	# las manchas de sangre de la sala de mantenimiento (y la azotea): cada una gira de 90 en 90 grados y se voltea al azar
 	for m in sitio.get("manchas", []):
 		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
 		lienzo.draw_texture_rect_region(MANCHAS, Rect2(-30, -18, 60, 36), Rect2(m.dibujo * 60, 0, 60, 36))
@@ -395,7 +406,7 @@ func poner_caras() -> void:
 			cara.pared = estilos[sala].pared
 			cara.techo = estilos[sala].techo
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
-			if centro:
+			if centro and sitio.get("estilo", "") != "azotea":   # (el murete es bajo: lo de encima es el cielo)
 				cara.adornos = restos_de_pared(cara.ancho)
 			cosas.add_child(cara)
 			if not caras.has(sala):
@@ -547,10 +558,12 @@ func preparar_restos() -> void:
 				libres.append(Vector2(c, f))
 	if libres.is_empty():
 		return
-	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, 24)
+	var azotea: bool = sitio.get("estilo", "") == "azotea"
+	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, RESTOS_AZOTEA_MAX if azotea else 24)
+	var lista: Array = RESTOS_AZOTEA if azotea else RESTOS_SUELO
 	for i in cuantos:
 		var casilla: Vector2 = libres[dado_restos.randi() % libres.size()]
-		var nombre: String = RESTOS_SUELO[dado_restos.randi() % RESTOS_SUELO.size()]
+		var nombre: String = lista[dado_restos.randi() % lista.size()]
 		restos.append({"dibujo": load("res://assets/sprites/resto-%s.png" % nombre),
 			"pos": (casilla + Vector2(0.5, 0.5)) * CASILLA + Vector2(dado_restos.randi_range(-4, 4), dado_restos.randi_range(-4, 4)) * 2.0,
 			"giro": dado_restos.randi() % 4, "espejo": dado_restos.randf() < 0.5})

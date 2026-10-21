@@ -23,6 +23,10 @@
     "huella": "7b7209555c754217",
     "sprite": "mueble-toilet"
   },
+  "centro/aire-acondicionado.png": {
+    "huella": "7e353b97b0077a87",
+    "sprite": "mueble-acunit"
+  },
   "centro/banco-galeria-lado.png": {
     "huella": "4c8c2915a6efccf3",
     "sprite": "mueble-bench-lado"
@@ -47,6 +51,14 @@
     "huella": "0eb77cee8737f3c8",
     "sprite": "mueble-checkout"
   },
+  "centro/chimenea.png": {
+    "huella": "4e2555e35e9e59f8",
+    "sprite": "mueble-chimney"
+  },
+  "centro/climatizadora.png": {
+    "huella": "ce412d037dd1645f",
+    "sprite": "mueble-airhandler"
+  },
   "centro/estanteria-camara.png": {
     "huella": "4d33e73e362778fd",
     "sprite": "mueble-freezershelf"
@@ -58,6 +70,10 @@
   "centro/estanteria-teles.png": {
     "huella": "a3bf8c69737908de",
     "sprite": "mueble-tvshelf"
+  },
+  "centro/extractor.png": {
+    "huella": "696bef57a48a6f3a",
+    "sprite": "mueble-vent"
   },
   "centro/fogon-industrial-lado.png": {
     "huella": "a6467fca96c49b1f",

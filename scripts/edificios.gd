@@ -11,6 +11,9 @@
 #   minijefes         (el centro comercial) los minijefes de las plantas con tiendas, uno por planta desde la baja:
 #                     la partida los sortea (sin repetir) y en las plantas de más, o si aún no existe el que toca,
 #                     sale "jefe". Sus datos, en MINIJEFES
+#   azotea            (el centro comercial) la última planta no tiene tiendas: es la azotea (planta.gd, azotea), con
+#                     el jefe final "final" ("el_final", cómo se le nombra). Mientras no tenga su escena en partida.gd
+#                     (ZOMBIS), sale "jefe"
 #   objetivo          el aviso al empezar cada planta
 #   abre              el edificio que hay que completar antes para poder jugarlo ("" si está abierto desde el principio)
 #   pasillo           el aspecto del pasillo de cada planta: su suelo, pared y tapa (mapa.gd, PASILLOS) y sus muebles
@@ -39,9 +42,12 @@ const LISTA := {
 		"generador": "tienda",
 		"sitios": "tiendas",
 		"cerrojo": "tarjeta",
-		"jefe": "portera",          # en la 4ª planta (la azotea, aún sin hacer) y donde le toque a un minijefe sin hacer
+		"jefe": "portera",          # donde le toque a un minijefe sin hacer (y en la azotea, mientras no esté el gerente)
 		"el_jefe": "la portera",
 		"minijefes": ["antidisturbios", "cocinero", "modista", "mascota"],
+		"azotea": true,
+		"final": "gerente",
+		"el_final": "el gerente",
 		"objetivo": "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso",
 		"abre": "apartamentos",
 		"pasillo": "galeria",

@@ -17,7 +17,7 @@ const PASILLO_FILAS := 12
 const PUERTA_A := 14 * CASILLA    # a qué distancia de cada punta del pasillo están las puertas
 const ESCAPARATE_A := 100         # en el centro comercial, a qué distancia de su puerta va cada escaparate
 const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho (escaparate-electronica, 57 píxeles)
-const PLANTAS := 5                # planta baja y cuatro más (la azotea, con el jefe final, aún no existe)
+const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
 const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
@@ -25,6 +25,11 @@ const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los superviv
 const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 108           # (alargada para los zombis y los minijefes del centro comercial)
+const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
+const AZOTEA_FILAS := 30
+const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
+# Los aparatos de la azotea (catalogo.gd): cuántos de cada uno [mínimo, máximo]
+const APARATOS := {"acunit": [2, 3], "airhandler": [1, 2], "chimney": [2, 3], "vent": [3, 4]}
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
@@ -83,6 +88,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	else:
 		rng.randomize()
 	var ed: Dictionary = Edificios.datos(edificio)
+	if ed.get("azotea", false) and num == PLANTAS:
+		return azotea(num, edificio, su_jefe)
 	var tiendas: bool = ed.generador == "tienda"
 	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
 	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
@@ -245,6 +252,64 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var en := sitio_libre(planta.sitios[de_cientifico], cuarto, Vector2.INF, [], 40.0)
 	planta.cientifico = {"sitio": de_cientifico, "pos": cuarto.centro if en == Vector2.INF else en, "cogida": false}
 	return planta
+
+
+# La azotea del centro comercial (la última planta, como en el juego JS): un solo sitio grande y abierto, sin pasillo
+# ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el helipuerto pintado y
+# los aparatos sueltos (aire acondicionado, climatizadoras, chimeneas y extractores), que sirven para cubrirse. Se
+# llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la derecha, la escalera de
+# incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe": el jefe aparece al
+# llegar y, al caer, se abren las escaleras (partida.gd), como en el piso de la portera.
+static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
+	var ed: Dictionary = Edificios.datos(edificio)
+	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
+	var planta := {"num": num, "nombre": "Azotea", "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},
+		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "expo": -1, "edificio": edificio, "jefe": jefe,
+		"el_jefe": ed.el_final if jefe == ed.get("final", "") else ed.el_jefe, "superviviente": {}, "cientifico": {}}
+	var ancho := AZOTEA_COLS * CASILLA
+	var alto := AZOTEA_FILAS * CASILLA
+	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",
+		"dueno": Muebles.plano_rectangular(AZOTEA_COLS, AZOTEA_FILAS), "zombis": [], "limpio": false, "visitado": true,
+		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(roundf(ancho * 0.6 / 2.0) * 2.0, roundf(alto * 0.54 / 2.0) * 2.0)}
+	sitio.salidas = [
+		{"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
+			"aviso": "Ya no hay vuelta atrás", "letrero": "Escalera"},
+		{"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "incendios": true, "a": -1, "vuelta": -1, "cerrojo": "jefa",
+			"aviso": "Bloqueada: acaba antes con " + planta.el_jefe, "letrero": "Incendios"},
+	]
+	sitio.muebles = aparatos(sitio)
+	# manchas de sangre sueltas (las de manchas-suelo.png), fuera del helipuerto
+	for i in rng.randi_range(5, 8):
+		var pos := Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60), rng.randf_range(MURO + 60, alto - MURO - 60))
+		if pos.distance_to(sitio.helipuerto) > HELIPUERTO_RADIO and lejos_de_muebles(sitio, pos, 20.0):
+			sitio.manchas.append({"pos": pos, "dibujo": rng.randi() % 10, "giro": rng.randi() % 4, "espejo": rng.randf() < 0.5})
+	planta.sitios.append(sitio)
+	return planta
+
+
+# Los aparatos sueltos por la azotea, cada uno lejos de los demás (para que se pueda pasar entre ellos, también el
+# jefe), del helipuerto, de las dos puertas y del murete
+static func aparatos(sitio: Dictionary) -> Array:
+	var puestos := []
+	var puertas := [Vector2(MURO, sitio.alto / 2.0), Vector2(sitio.ancho - MURO, sitio.alto / 2.0)]
+	for tipo in APARATOS:
+		for i in rng.randi_range(APARATOS[tipo][0], APARATOS[tipo][1]):
+			var p: Dictionary = Catalogo.MUEBLES[tipo]
+			for intento in 60:
+				var x := roundf(rng.randf_range(MURO + 50 + p.len / 2.0, sitio.ancho - MURO - 50 - p.len / 2.0) / 2.0) * 2.0
+				var y := roundf(rng.randf_range(MURO + 40, sitio.alto - MURO - 60 - p.dep) / 2.0) * 2.0
+				var m := Muebles.nuevo(tipo, {"lado": "arriba", "base": y}, x, 0)
+				var r := Muebles.hueco(m)
+				var cerca := Vector2(clampf(sitio.helipuerto.x, r.position.x, r.end.x), clampf(sitio.helipuerto.y, r.position.y, r.end.y))
+				if cerca.distance_to(sitio.helipuerto) < HELIPUERTO_RADIO + 30.0:
+					continue
+				if puertas.any(func(d): return d.distance_to(r.get_center()) < 220.0):
+					continue
+				if puestos.any(func(o): return Muebles.hueco(o).grow(90.0).intersects(r)):
+					continue
+				puestos.append(m)
+				break
+	return puestos
 
 
 # La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo, unos pocos

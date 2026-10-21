@@ -22,6 +22,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **F2 a F7**: un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso). **V**: un vigilante y
   **B**: una dependienta (los del centro comercial). **P**: la portera. **K**: el antidisturbios. **G**: el cocinero.
   **T**: la modista. **J**: la mascota (de la Juguetería).
+- **N** (centro comercial): derecho a la azotea, sin subir planta a planta.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
   objeto al baúl, para probar todas las recetas en el banco de trabajo.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
@@ -30,7 +31,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   la planta con su tienda y te lleva a ella, ya sin zombis. Con uno ya rescatado en la partida, no hace nada.
 
 **Pruebas sin jugar** (se añaden detrás de `--path . -- --captura`; ver CLAUDE.md):
-- `--edificio centro`: en el centro comercial. `--fotos-tiendas`: una foto de cada tienda y de los peligros.
+- `--edificio centro`: en el centro comercial (al final, la azotea: `captura-azotea.png`, `captura-azotea-entera.png`
+  y `captura-azotea-incendios.png`). `--fotos-tiendas`: una foto de cada tienda y de los peligros.
 - `--alerta N` (1 a 5): en vez de la prueba larga, la de los niveles de alerta: dice en la terminal los números de
   cada regla (zombis, velocidad, jefe, botiquín, oído, rarezas del banco, guardia o vecino de la llave) y saca
   `captura-alerta.png` (el aviso del principio), `captura-alerta-llave.png` (el guardia o, en los Apartamentos, el

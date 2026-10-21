@@ -63,6 +63,12 @@ const MUEBLES := {
 	"fryer":           {"len": 48,  "dep": 48, "paredes": "",      "archivo": "centro/freidora"},
 	"diningtable":     {"len": 96,  "dep": 64, "paredes": "",      "archivo": "centro/mesa-restaurante"},
 	"bench":           {"len": 92,  "dep": 36, "paredes": "lados", "archivo": "centro/banco-galeria"},
+	# Los aparatos de la azotea del centro comercial (PixelLab, con las guías de tools/guias_azotea.py): van sueltos
+	# por la azotea, no contra una pared (los coloca planta.gd)
+	"acunit":          {"len": 128, "dep": 72, "paredes": "todas", "archivo": "centro/aire-acondicionado"},
+	"airhandler":      {"len": 184, "dep": 60, "paredes": "todas", "archivo": "centro/climatizadora"},
+	"chimney":         {"len": 48,  "dep": 48, "paredes": "todas", "archivo": "centro/chimenea"},
+	"vent":            {"len": 44,  "dep": 44, "paredes": "todas", "archivo": "centro/extractor"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo y la sala de mantenimiento):

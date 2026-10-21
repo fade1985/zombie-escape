@@ -139,13 +139,14 @@
 **mapa/**
 - `apartamento.gd` (genera un apartamento como `apartment.js`), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
-  exposición), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
+  exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
   tiene la suya: "jefe-modista"), `muebles.gd`
   (dónde va cada uno; en las salas de venta, también filas en medio: `islas`), `mueble.gd` (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, peligros, niebla, navegación). Los suelos y
   paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas) y `PASILLOS` (el pasillo de cada
-  edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos.
-  `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
+  edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
+  su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
+  `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
   mantenimiento, dibujada con código), `camaras.gd` (las pantallas de las cámaras de seguridad, detrás del técnico,
@@ -175,7 +176,9 @@ segundo; la embestida de la mascota lleva un 5.º dato: quitar el primer fotogra
 de PixelLab, borra las motas sueltas, oscurece la sangre si la ficha lo pide y dice el `offset` del Sprite; lo que
 falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
-`icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo), `centro_sprites.py`
+`icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo; `guias_azotea.py`, los de los
+aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
+helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
 (los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).

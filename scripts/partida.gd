@@ -243,6 +243,9 @@ func nueva_planta(num: int) -> void:
 # El minijefe de la planta "num" (centro comercial): el que le tocó en el sorteo, si ya está hecho (tiene su
 # escena en ZOMBIS); si no, "" (el jefe del edificio: la portera)
 func jefe_de(num: int) -> String:
+	# en la azotea, el jefe final del edificio (el gerente), si ya está hecho
+	if ed.get("azotea", false) and num == Planta.PLANTAS:
+		return ed.final if ZOMBIS.has(ed.final) else ""
 	if num > orden_jefes.size() or not ZOMBIS.has(orden_jefes[num - 1]):
 		return ""
 	return orden_jefes[num - 1]
@@ -375,7 +378,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		if aqui == idx and not jefa_salio:
 			jefa_salio = true
 			Sonido.tocar("jefe")
-			jefa = meter_zombi(planta.jefe, mapa.punto_libre(johnny.position, 380.0))
+			# en la azotea, esperando en medio del helipuerto
+			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.punto_libre(johnny.position, 380.0))
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
@@ -417,7 +421,7 @@ func actualizar_puertas() -> void:
 
 func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
-	var texto: String = planta.nombre if sitio.tipo == "pasillo" else "%s · %s" % [planta.nombre, sitio.nombre]
+	var texto: String = planta.nombre if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [planta.nombre, sitio.nombre]
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
@@ -481,7 +485,7 @@ func subir() -> void:
 		return
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_tipo("llegada"))
-	decir(planta.nombre, 2.5)
+	decir("Azotea · ¡El último combate del edificio!" if planta.get("azotea", false) else planta.nombre, 2.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
 
@@ -513,7 +517,8 @@ func _physics_process(delta: float) -> void:
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
 			Sonido.musica("explorar")
-			decir("¡%s ha caído! Las escaleras ya están abiertas" % (planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1)), 4.0)
+			decir("¡%s ha caído! %s" % [planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1),
+				"La escalera de incendios ya está abierta" if sitio.get("azotea", false) else "Las escaleras ya están abiertas"], 4.0)
 			logros.cumplir("desahucio")
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
@@ -1023,6 +1028,15 @@ func _unhandled_input(evento: InputEvent) -> void:
 		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
 	elif evento.keycode == KEY_U:
 		dar_objetos()   # uno de cada objeto al baúl, para probar las recetas en el banco de trabajo
+	elif evento.keycode == KEY_N and ed.get("azotea", false) and not cerrada and not planta.get("azotea", false):
+		ir_a_azotea()   # derecho a la azotea del centro comercial, para probar al jefe final
+
+
+# Tecla N (centro comercial): derecho a la azotea, sin subir planta a planta
+func ir_a_azotea() -> void:
+	nueva_planta(Planta.PLANTAS)
+	await montar(0, puerta_de_tipo("llegada"))
+	decir("Azotea · ¡El último combate del edificio!", 2.5)
 
 
 # Tecla U: mete en el baúl uno de cada objeto (de los dos edificios), para probar todas las recetas
@@ -2015,6 +2029,44 @@ func probar_mutaciones() -> void:
 	print("Mutaciones: %s | daño recibido x%.2f | pausa %s" % [mutaciones.tengo, johnny.stats.dano_recibido, get_tree().paused])
 
 
+# La azotea del centro comercial: Johnny llega por la escalera y sale el jefe (captura-azotea.png); la azotea entera,
+# sin penumbra y desde lejos (captura-azotea-entera.png); y, quitado el jefe, la escalera de incendios abierta
+# (captura-azotea-incendios.png)
+func probar_azotea() -> void:
+	nueva_planta(Planta.PLANTAS)
+	await montar(0, puerta_de_tipo("llegada"), false)
+	var s: Dictionary = planta.sitios[0]
+	var tipos := {}
+	for m in s.muebles:
+		tipos[m.tipo] = tipos.get(m.tipo, 0) + 1
+	print("Azotea: %d x %d | aparatos %s | manchas %d | restos %d | jefe: %s (%s)" % [s.ancho, s.alto, tipos,
+		s.manchas.size(), mapa.restos.size(), planta.jefe, planta.el_jefe])
+	johnny.position = mapa.puertas[0].llegada() + Vector2(200, 0)   # se aleja de la escalera: se cierra detrás
+	await get_tree().create_timer(1.4).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-azotea.png")
+	print("  ha salido el jefe: %s | escalera de llegada %s | incendios %s | aviso: '%s'" % [jefa != null,
+		"cerrada" if cerrada else "abierta", "abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
+	var camara: Camera2D = johnny.get_node("Camara")
+	luz.alternar()
+	johnny.position = Vector2(s.ancho / 2.0, s.alto / 2.0)
+	camara.zoom = Vector2(0.66, 0.66)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-azotea-entera.png")
+	camara.zoom = Vector2.ONE
+	luz.alternar()
+	# sin el jefe (quitado, sin que caiga: así no salen las mutaciones), se abre la escalera de incendios
+	if jefa:
+		jefa.queue_free()
+		$Pantalla/Jefa.hide()
+	johnny.position = mapa.puertas[1].llegada() + Vector2(-90, 0)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.6).timeout
+	get_viewport().get_texture().get_image().save_png("res://captura-azotea-incendios.png")
+	print("  sin el jefe: jefe muerto %s | incendios %s | aviso: '%s'" % [planta.jefa_muerta,
+		"abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
+
+
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)
 func probar_menus() -> void:
 	set_process(false)
@@ -2030,6 +2082,8 @@ func probar_menus() -> void:
 	await probar_sangre()
 	await probar_mutaciones()
 	await probar_historia()
+	if ed.get("azotea", false):
+		await probar_azotea()
 	pausar()
 	await get_tree().create_timer(0.4).timeout
 	get_viewport().get_texture().get_image().save_png("res://captura-pausa.png")
