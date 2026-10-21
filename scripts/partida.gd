@@ -1333,7 +1333,7 @@ func _process(delta: float) -> void:
 
 
 # El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,
-# unos cuchillos ya clavados, la lluvia marcando el suelo y el abanico a punto de salir
+# unos cuchillos ya clavados, la lluvia marcando el suelo y el abanico recién lanzado
 func probar_cocinero() -> void:
 	var antes_johnny: int = johnny.vida
 	# que nadie le dispare mientras tanto (ni Johnny solo, ni el superviviente que le acompaña): así se ve lo que
@@ -1356,6 +1356,7 @@ func probar_cocinero() -> void:
 		mapa.cosas.add_child(c)
 	jefa.lluvia(johnny)
 	jefa.empezar("aviso_abanico", (johnny.position - jefa.position).angle())
+	jefa.t = 0.3   # el aviso ya casi acabado: en la foto acaba de lanzar el abanico
 	await get_tree().create_timer(0.1, false).timeout   # (las balas que ya volaban, que lleguen antes de contar)
 	var antes_jefe: int = jefa.vida
 	await get_tree().create_timer(0.19, false).timeout

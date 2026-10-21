@@ -40,20 +40,17 @@ JEFES = {
         },
         "de_frente": ["silbato"],
     },
-    # el cocinero: de momento solo sus 8 vistas quietas (las animaciones, cuando el dueño apruebe el coste)
+    # el cocinero: "lanzar" vale para el abanico, la lluvia y la sartén
     "cocinero-72": {
         "anims": {
             "quieto": ("rotations", 1, True, False),
             "reposo": ("rotations", 1, True, False),
             "andar": ("walk", 9, True, True),
-            "lanzar": ("lanzar", 12, False, False),          # el abanico de cuchillos
+            "lanzar": ("lanzar", 12, False, False),
             "cuchillazo": ("cuchillazo", 12, False, False),
-            "sarten": ("sarten", 12, False, False),          # el aceite hirviendo
-            "lluvia": ("lluvia", 10, False, False),          # tira los cuchillos hacia arriba (solo de frente)
             "golpe": ("golpe", 16, False, False),
             "muerte": ("muerte", 10, False, False),
         },
-        "de_frente": ["lluvia"],
         "sangre": True,
     },
 }

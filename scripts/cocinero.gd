@@ -10,12 +10,12 @@
 #     molotov durante 6 s (charco.gd). A él su aceite no le quema: es el cocinero.
 #   - Cuchillazo: si Johnny se le pega, marca un trozo de suelo (medio segundo) y le da: 20.
 # Enfadado (a media vida): 5 cuchillos en el abanico y más rápidos, 7 en la lluvia y todo más seguido.
-# Mientras solo tenga sus 8 vistas quietas, lo que lleva en la mano antes de lanzarlo (los cuchillos, la sartén) se
-# dibuja con código encima de él.
+# Sus animaciones (PixelLab): andar, lanzar (vale para el abanico, la lluvia y la sartén), cuchillazo, golpe (al
+# enfadarse) y muerte. Lo que lanza sale justo en el fotograma en el que el brazo llega adelante (SUELTA) y el
+# cuchillazo hace daño en el del tajo (TAJO).
 extends Minijefe
 
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
-const LANZAR := preload("res://scripts/proyectil.gd")   # para dibujar la sartén en su mano
 const VELOCIDAD := 60.0
 const CERCA := 200.0               # si Johnny está más cerca que esto, se aparta...
 const LEJOS := 360.0               # ...y si está más lejos, va a por él (entre medias, pasitos de lado)
@@ -39,7 +39,12 @@ const DISTANCIA_CUCHILLAZO := 140.0   # si Johnny está más cerca que esto, pre
 # lo que espera a repetir cada ataque (normal y enfadado)
 const ESPERAS := {"abanico": [2.4, 1.5], "lluvia": [6.5, 4.5], "sarten": [8.0, 6.0], "cuchillazo": [1.4, 1.0]}
 const PIE := 30.0                  # a qué altura dibuja los pies respecto a su centro
-const SUELTA := 4                  # fotograma en el que suelta lo que lanza (ajustar con sus animaciones)
+# El fotograma de "lanzar" con el brazo del todo adelante (cuando sale el cuchillo o la sartén) y el del tajo del
+# cuchillazo, según hacia dónde mire
+const SUELTA := {"e": 4, "se": 4, "n": 4, "no": 4, "s": 5, "ne": 5, "o": 5, "so": 5}
+const TAJO := {"s": 4, "se": 4, "e": 4, "n": 4, "ne": 5, "no": 5, "o": 5, "so": 5}
+const DESPUES := 0.4               # lo que tarda en acabar la animación después de soltar (y en volver a andar)
+const SUBEN := 0.4                 # la lluvia: lo que se ven subir los cuchillos al tirarlos
 
 var espera := {"abanico": 1.0, "lluvia": 3.0, "sarten": 4.5, "cuchillazo": 0.8}
 var lado := 1.0                    # hacia qué lado da los pasitos
@@ -75,15 +80,12 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"aviso_sarten":
 			frenar(delta)
 			mirada = hacia.normalized()
-			if randf() < delta * 20.0:   # el aceite de la sartén, que salpica
-				Particulas.soltar(self, global_position + Vector2(randf_range(-14, 14), -arriba - 10.0), Vector2(randf_range(-40, 40), -60),
-					Color("#e0a43a"), 2, 0.3)
 			if t >= AVISO_SARTEN:
 				cambiar("sarten")
 				sarten(johnny)
 		"cuchillazo", "abanico", "lluvia", "sarten":
 			frenar(delta)
-			if t >= 0.4:
+			if t >= DESPUES:
 				andar(0.5 if enfadado() else 0.9)
 
 
@@ -184,8 +186,8 @@ func lluvia(johnny: Node2D) -> void:
 func sarten(johnny: Node2D) -> void:
 	var p := PROYECTIL.instantiate()
 	p.tipo = "sarten"
-	p.desde = global_position
-	p.alto_salida = arriba * 0.8
+	p.desde = global_position + mirada * 30.0   # sale de la mano, con el brazo adelante
+	p.alto_salida = arriba * 0.6
 	p.hasta = johnny.global_position + johnny.velocity * 0.4
 	if not libre(p.hasta):
 		p.hasta = johnny.global_position
@@ -216,50 +218,40 @@ func animar() -> void:
 	sprite.position = Vector2(0, PIE)
 	match estado:
 		"aviso_abanico":
-			preparar("lanzar", dir, AVISO_ABANICO)
-		"abanico":
-			soltar("lanzar", dir)
-		"aviso_cuchillazo":
-			preparar("cuchillazo", dir, AVISO_CUCHILLAZO)
-		"cuchillazo":
-			soltar("cuchillazo", dir)
-		"aviso_sarten":
-			preparar("sarten", dir, AVISO_SARTEN)
-		"sarten":
-			soltar("sarten", dir)
+			preparar("lanzar", dir, SUELTA[dir], AVISO_ABANICO)
 		"aviso_lluvia":
-			fijar("lluvia", "s", avance("lluvia_s", t / (AVISO_LLUVIA + 0.4)))
-		"lluvia":
-			fijar("lluvia", "s", avance("lluvia_s", (AVISO_LLUVIA + t) / (AVISO_LLUVIA + 0.4)))
+			preparar("lanzar", dir, SUELTA[dir], AVISO_LLUVIA)
+		"aviso_sarten":
+			preparar("lanzar", dir, SUELTA[dir], AVISO_SARTEN)
+		"abanico", "lluvia", "sarten":
+			soltar("lanzar", dir, SUELTA[dir])
+		"aviso_cuchillazo":
+			preparar("cuchillazo", dir, TAJO[dir], AVISO_CUCHILLAZO)
+		"cuchillazo":
+			soltar("cuchillazo", dir, TAJO[dir])
 		"grito":
-			fijar("quieto", "s", 0)
-			sprite.position.x = sin(tiempo * 50.0) * 2.0
+			# al enfadarse: se encoge como si le hubieran dado y luego tiembla de rabia
+			fijar("golpe", dir, avance("golpe_" + dir, t / 0.6))
+			if t > 0.6:
+				sprite.position.x = sin(tiempo * 50.0) * 2.0
 		_:
 			if marcha.length() > 8.0:
-				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD, 0.4, 1.5))
+				# si va hacia atrás (apartándose de Johnny sin dejar de mirarle), las piernas también
+				var atras := -1.0 if marcha.dot(mirada) < -0.3 * marcha.length() else 1.0
+				poner("andar_" + dir, clampf(marcha.length() / VELOCIDAD, 0.4, 1.5) * atras)
 			else:
 				poner("reposo_" + dir)
 
 
-# Antes de soltar el golpe: hasta el fotograma SUELTA (sin llegar) en lo que dura el aviso. Mientras solo tenga
-# la vista quieta, tiembla un poco: así se nota que va a hacer algo
-func preparar(anim: String, dir: String, aviso: float) -> void:
-	fijar(anim, dir, mini(SUELTA - 1, int(t / aviso * SUELTA)))
-	if sprite.sprite_frames.get_frame_count(anim + "_" + dir) == 1:
-		sprite.position.x = sin(tiempo * 40.0) * 1.5
+# Antes de soltar: hasta el fotograma "golpe" (sin llegar) en lo que dura el aviso
+func preparar(anim: String, dir: String, golpe: int, aviso: float) -> void:
+	fijar(anim, dir, mini(golpe - 1, int(t / aviso * golpe)))
 
 
-# Y el resto de la animación, en lo que tarda en volver a andar
-func soltar(anim: String, dir: String) -> void:
-	var resto := sprite.sprite_frames.get_frame_count(anim + "_" + dir) - SUELTA
-	fijar(anim, dir, SUELTA + clampi(int(t / 0.4 * resto), 0, maxi(0, resto - 1)))
-
-
-func morir() -> void:
-	super()
-	# mientras no tenga su animación de muerte (solo la vista quieta), cae de lado
-	if sprite.sprite_frames.get_frame_count(sprite.animation) == 1:
-		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
+# Y desde el fotograma "golpe" hasta el final, en lo que tarda en volver a andar
+func soltar(anim: String, dir: String, golpe: int) -> void:
+	var resto := sprite.sprite_frames.get_frame_count(anim + "_" + dir) - golpe
+	fijar(anim, dir, golpe + clampi(int(t / DESPUES * resto), 0, maxi(0, resto - 1)))
 
 
 # Los avisos, en el suelo (por debajo de él): las rayas del abanico y el trozo del cuchillazo
@@ -288,23 +280,12 @@ func _draw() -> void:
 			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
 
 
-# Lo que lleva en la mano antes de lanzarlo, por encima de la cabeza (hasta que tenga sus animaciones): los
-# cuchillos del abanico, la sartén o los cuchillos que tira hacia arriba
+# La lluvia: al soltarlos, los cuchillos suben dando vueltas hasta salir de la pantalla (luego caen sobre sus marcas)
 func pintar_encima(lienzo: Node2D) -> void:
-	var mano := Vector2(0, -arriba + 6.0)
-	match estado:
-		"aviso_abanico":
-			var k := minf(1.0, t / AVISO_ABANICO)
-			var n: int = CUCHILLOS[fase - 1]
-			for i in n:
-				var a := -PI / 2.0 + (i - (n - 1) / 2.0) * 0.35
-				Cuchillo.dibujar(lienzo, mano + Vector2(0, -8.0 * k) + Vector2.from_angle(a) * 10.0, a)
-		"aviso_sarten":
-			var k := minf(1.0, t / AVISO_SARTEN)
-			LANZAR.sarten(lienzo, mano + Vector2(0, -10.0 * k), -PI / 2.0 + sin(tiempo * 10.0) * 0.15)
-		"aviso_lluvia":
-			var k := t / AVISO_LLUVIA
-			var n: int = LLUVIA[fase - 1]
-			for i in n:
-				var x := (i - (n - 1) / 2.0) * 12.0
-				Cuchillo.dibujar(lienzo, mano + Vector2(x * (1.0 + k), -k * k * 260.0 - i * 6.0), -PI / 2.0 + tiempo * 14.0 + i)
+	if estado != "lluvia" or t > SUBEN:
+		return
+	var k := t / SUBEN
+	var n: int = LLUVIA[fase - 1]
+	for i in n:
+		var x := (i - (n - 1) / 2.0) * 12.0 * (1.0 + k)
+		Cuchillo.dibujar(lienzo, Vector2(x, -arriba * 0.7 - k * k * 420.0 - i * 6.0), -PI / 2.0 + tiempo * 14.0 + i)
