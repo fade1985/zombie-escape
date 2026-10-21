@@ -27,6 +27,8 @@ const TIPOS := {
 		"tinte": Color(1.0, 1.0, 0.45)},   # la lluvia ácida (arrojadiza creada)
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
 	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
+	# el agua de los aspersores (la alarma de incendios, eventos.gd): solo resbala, y no se seca mientras dure
+	"agua": {"dibujo": LEJIA, "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
 }
 const ACEITE_ARDE := 1.25   # el fuego del aceite, así de grande respecto al del molotov
 # El fuego por fuera: cuánto tarda en extenderse, cuánto antes de acabar empieza a apagarse, lo que brilla en

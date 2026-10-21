@@ -33,6 +33,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   cada regla (zombis, velocidad, jefe, botiquín, oído, rarezas del banco, guardia o vecino de la llave) y saca
   `captura-alerta.png` (el aviso del principio), `captura-alerta-llave.png` (el guardia o, en los Apartamentos, el
   vecino de la llave) y `captura-alerta-fin.png`; la foto de "Elige edificio" sale con las alertas abiertas.
+- `--evento X` (`apagon`, `incendio`, `horda` o `vendedor`): en vez de la prueba larga, la de ese evento sorpresa en
+  la planta baja: dice en la terminal cuántos salen en 2000 partidas sorteadas y lo que pasa (luces apagadas,
+  calambrazos, oleadas y premio, compras con lo que queda de dólares) y saca `captura-evento-<X>.png` (el cartel) y
+  las suyas (`-piso`, `-cable`, `-premio`, `-puesto`, `-comprado`). Sin `--evento`, la prueba va sin eventos.
 
 ## La sala de mantenimiento
 

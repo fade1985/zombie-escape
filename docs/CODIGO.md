@@ -30,7 +30,7 @@
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (munición, apuntar, lanzar; `Lanzables.tipos()`).
   `granada.gd`: también la atraedora, la congeladora, la lluvia ácida, la mina despertador, la nube somnífera (que
   suelta `nube.gd`) y la bomba de clavos. La bomba de aceite va como el molotov (`proyectil.gd`).
-- `charco.gd` (veneno, lejía, vómito, fuego, ácido y aceite, que al acabar arde) y `estados.gd` (lo que hacen los charcos; también el frío y el
+- `charco.gd` (veneno, lejía, vómito, fuego, ácido, aceite, que al acabar arde, y el agua de los aspersores) y `estados.gd` (lo que hacen los charcos; también el frío y el
   calambrazo de los peligros, y `frenado`).
 - `peligros/`: los peligros de las tiendas del centro comercial. `peligros.gd` (sus números y dónde va cada uno, al
   generar la planta), `frio.gd` (la cámara frigorífica; congela a los zombis: `zombi.gd`), `fuego.gd` (la cocina del
@@ -70,6 +70,14 @@
   alta abierta y la elegida de cada edificio, en el guardado (`alerta_max`, `alerta`). Con la Alerta 5 en los
   Apartamentos la llave la lleva un vecino (`planta.gd` lo apunta con `"llave": true` en sus zombis;
   `partida.gd`, `vecino_de_la_llave()`). La prueba: `--captura --alerta N` (`probar_alerta()`).
+- `eventos.gd`: los eventos sorpresa (parte 8): una de cada cuatro plantas (nunca la última ni, dentro, la sala del
+  jefe o la de mantenimiento), al pisar su pasillo, con un cartel grande: apagón (`Luz.evento` y las lámparas a
+  `fuerza` 0), alarma de incendios (charcos `"agua"` de `charco.gd`, la lluvia y los cables con calambrazos: clases
+  `Lluvia` y `Cable` de dentro), horda por las escaleras (tres oleadas por la puerta de las escaleras; los que
+  quedan esperan en el pasillo; premio al final) y el vendedor ambulante (`vendedor.gd`: el dibujo con `Persona`,
+  la mochila y la manta, y su puesto con el panel de `menus.gd`; paga con los dólares de la partida y luego con los
+  ahorrados). Los números, en sus constantes. Lo engancha `partida.gd` en `nueva_planta()`, `montar()` (`recoger()`
+  y `al_montar()`) y `poner_lugar()` (`etiqueta()`). La prueba: `--captura --evento X` (`probar()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 26 objetos, mochila, baúl de 32 casillas, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
   el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (24 recetas y rarezas: 15 de los
@@ -114,7 +122,7 @@
   científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
   mantenimiento, dibujada con código).
 
-**luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
+**luz/**: `luz.gd` (penumbra de cada sitio, con lo de más de la tienda de electrónica y del apagón; luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 
 ## assets/
 

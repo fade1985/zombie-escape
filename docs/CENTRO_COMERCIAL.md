@@ -344,6 +344,38 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   13 % más de zombis y más duros (su «coste» sube un 30 %); en el centro comercial, solo un 8 % más (coste +13 %),
   porque las tiendas se llenan antes. Si se quiere más, se sube `MAS_ZOMBIS`.
 
+### ✅ Hecho (21 oct, parte 8, trozo 2: eventos sorpresa)
+
+- Todo en `scripts/eventos.gd` (y el vendedor en `scripts/vendedor.gd`), con sus números en constantes. En cada
+  planta menos la última, una de cada cuatro veces (25 %): en 2000 partidas sorteadas sale de media uno por partida
+  (sin ninguno, 31 %; uno, 43 %; dos, 21 %; tres o cuatro, 5 %). En una partida no se repite ninguno. Con
+  `Planta.semilla` (el reto del día) salen los mismos para todos.
+- Empieza la primera vez que Johnny pisa el pasillo de la planta (en la planta baja, al salir de la sala de
+  mantenimiento): un cartel grande arriba en el centro («¡APAGÓN!» y una frase), con su sonido, y mientras dura, el
+  nombre del evento junto al del sitio, arriba a la derecha. Dura toda la planta. En la sala del jefe y en la de
+  mantenimiento no pasa nada.
+- **Apagón:** a oscuras del todo (la oscuridad del sitio +0,4, hasta el tope) y todas las lámparas, apliques y
+  neones apagados: solo se ve con la linterna.
+- **Alarma de incendios:** suena la sirena (al empezar y cada 12 s), llueve de los aspersores y en cada sitio hay de
+  4 a 9 charcos de agua que resbalan como la lejía (sin hacer daño); al volver a un sitio siguen donde estaban. En
+  dos de ellos (en los sitios pequeños, uno) hay un cable pelado que chisporrotea y cada 1,6 s da un calambrazo a
+  todo el charco: a Johnny, 10 de vida y tieso un momento; a los zombis despiertos, 15 y aturdidos (los números del
+  agua de la tienda de electrónica). Avisa la primera vez que te acercas.
+- **Horda por las escaleras:** a los 4 s bajan zombis por la puerta de las escaleras del fondo del pasillo, de uno en
+  uno, en tres oleadas de 4, 6 y 8 (+15 % por planta, y con la Alerta 1, más), cada vez peores (en el centro
+  comercial, también vigilantes). Entre oleada y oleada, 10 s, o enseguida si ya no queda ninguno. Si Johnny se mete
+  en una tienda o un piso, los que quedan le esperan en el pasillo. Premio: 3 billetes (+1 por planta) y una caja
+  de munición.
+- **Vendedor ambulante:** un superviviente con una mochila enorme y una manta en el suelo con lo que vende, contra la
+  pared de arriba del pasillo, a un lado del ascensor. Los zombis no le hacen caso. Al arrimarse, el juego se para y
+  sale su puesto: tres cosas sorteadas, cada una una vez (botiquín $8, caja de munición $3, molotov $5, granada $6,
+  chaleco +30 de escudo hasta la planta siguiente $10, objeto sorpresa para el banco $6). Paga con los dólares de la
+  partida y, si no llegan, con los ahorrados. No deja comprar lo que no sirve (con la vida llena, sin sitio...).
+- **Lo que cambia respecto al plan:** nada de lo decidido; solo los detalles de arriba (el chaleco usa el icono del
+  casco, y la horda baja por la puerta de las escaleras, no por unas escaleras dibujadas).
+- Prueba: `--captura --evento apagon|incendio|horda|vendedor` (con o sin `--edificio centro`). La prueba larga sigue
+  sin eventos.
+
 ## Por partes
 
 1. ✅ **El esqueleto** (21 oct): pantalla "Elige edificio" (con el candado), el edificio elegido en la partida, el
@@ -495,4 +527,4 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). Pendiente: la página del gerente
    (trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
-   ✅ Trozo 1, niveles de alerta (21 oct).
+   ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct).

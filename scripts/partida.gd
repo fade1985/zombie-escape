@@ -95,6 +95,7 @@ var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.
 var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
 var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
+var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
 var ahorrados := 0         # los dólares guardados de otras partidas
@@ -160,6 +161,8 @@ func _ready() -> void:
 	supervivientes.preparar(self)
 	add_child(logros)
 	logros.preparar(self)
+	add_child(eventos)
+	eventos.preparar(self)
 	# Los controles del móvil (solo salen en pantallas táctiles)
 	var tactil := Tactil.new()
 	tactil.partida = self
@@ -174,6 +177,8 @@ func _ready() -> void:
 		# con "--alerta 5", la prueba se juega con esa alerta (alerta.gd); sin él, sin alerta
 		var args := OS.get_cmdline_user_args()
 		Alerta.nivel = int(args[args.find("--alerta") + 1]) if args.find("--alerta") >= 0 and args.find("--alerta") + 1 < args.size() else 0
+		# con "--evento apagon" (incendio, horda, vendedor), la prueba de ese evento sorpresa (eventos.gd)
+		eventos.forzado = args[args.find("--evento") + 1] if args.find("--evento") >= 0 and args.find("--evento") + 1 < args.size() else ""
 	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
 	var s := Guardado.cambiar(func(g):
 		g.partidas += 1
@@ -199,6 +204,9 @@ func _ready() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	if captura and "--fotos-tiendas" in OS.get_cmdline_user_args():
 		fotos_tiendas()
+	elif captura and eventos.forzado != "":
+		set_process(false)   # sin la prueba larga
+		eventos.probar(eventos.forzado)
 	elif captura and Alerta.nivel > 0:
 		set_process(false)   # sin la prueba larga
 		probar_alerta()
@@ -217,6 +225,7 @@ func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num, edificio, jefe_de(num))
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
+	eventos.nueva_planta()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 
 
@@ -289,6 +298,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	# Johnny pasa de un mapa a otro; el viejo se quita del todo antes de montar el nuevo (si no, su
 	# navegación y sus muros se mezclarían con los del nuevo). Y con él, los de su equipo
 	supervivientes.recoger()
+	eventos.recoger()
 	johnny.get_parent().remove_child(johnny)
 	if mapa:
 		remove_child(mapa)
@@ -329,6 +339,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	supervivientes.al_montar(idx, sitio)
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
+	eventos.al_montar(idx, sitio)   # (antes de la luz: el apagón la cambia)
 	luz.poner_sitio(sitio.tipo)
 
 	# Los zombis que esperan dentro, dormidos (si el piso aún no se ha limpiado)
@@ -399,7 +410,7 @@ func poner_lugar() -> void:
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
-	lugar.text = texto
+	lugar.text = texto + eventos.etiqueta()
 
 
 # Johnny ha empujado la salida "i" del sitio en el que está
