@@ -1623,7 +1623,51 @@
         "size": "128x128",
         "estilo": "south de la portera (128): 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading. Do not copy her body, clothes, mop or colors.'",
         "alto_px": 117,
-        "description": "a tall zombie shopping mall general manager boss, about 96 pixels tall, broad shoulders, sickly grey-green rotting skin, slicked-back grey hair now messy, pale dead eyes, a cruel bloody grin, an expensive dark charcoal grey business suit torn and stained with blood, white shirt with a loosened red tie, a lanyard with a corporate ID badge with a green leaf logo around his neck, holding a black leather briefcase in his right hand, polished black shoes, standing upright, arrogant and menacing, crisp pixel art, dark outline, detailed shading"
+        "description": "a tall zombie shopping mall general manager boss, about 96 pixels tall, broad shoulders, sickly grey-green rotting skin, slicked-back grey hair now messy, pale dead eyes, a cruel bloody grin, an expensive dark charcoal grey business suit torn and stained with blood, white shirt with a loosened red tie, a lanyard with a corporate ID badge with a green leaf logo around his neck, holding a black leather briefcase in his right hand, polished black shoes, standing upright, arrogant and menacing, crisp pixel art, dark outline, detailed shading",
+        "animaciones": {
+          "nota": "2026-10-21 (trozo 6, parte 2). Todo con PixMiniMax (animate_character, mode pixminimax) directamente sobre 9cf9e727, una dirección por llamada, 1 generación cada una (también la jeringa, de 12 fotogramas). Cada animación es un grupo: la primera dirección (south) lo crea y las demás se añaden con animation_group_id + el mismo animation_name. Andar: sin fotograma de partida. Contratos, maletinazo y a-trabajar: partida y final = dibujo quieto pegado en (16, 28) de un lienzo de 160x160, como la portera (assets/sources/gerente-128/partida/<dirección>.png; los upload:<id> en partida/subidas.txt caducan a los 3 días). Jeringa: solo partida (acaba encorvado, para que en la parte 3 pase a la forma mutada). a-trabajar y jeringa, solo de frente (south). PixelLab deja 8 trabajos a la vez: se lanzan 8 y el resto según acaban; el zip no se puede bajar (error 423) mientras quede alguno en marcha, pero sí cada fotograma suelto por su dirección de get_character. Bajado con py tools/bajar_zip.py 9cf9e727-09b7-46a3-a7d1-3363792ab173 gerente-128 → assets/sources/gerente-128/{walk,contratos,maletinazo,a-trabajar,jeringa}/<dirección>-<n>.png. Las repeticiones (grupos andar2, contratos2 y maletinazo2) se pasaron a su carpeta y las primeras a descartes/<carpeta>/: al volver a bajar el zip entero hay que repetir ese cambio. Lienzos: andar 168-176; los ataques 160x196-208 o más. La hoja se monta con py tools/jefe_hoja.py gerente-128 jefe-gerente (casilla 164x166, offset (-82, -155)).",
+          "coste": "33 generaciones: 24 de las 8 direcciones de andar, contratos y maletinazo, 2 de a-trabajar y jeringa y 7 repeticiones (andar NE y NO, contratos NE, maletinazo N, NE y NO). Saldo: 584,80 → 552,80 (PixelLab cobró 32)",
+          "subject_description": "a tall zombie shopping mall manager in a torn dark charcoal grey business suit, white shirt and loosened red tie, holding a black leather briefcase in his right hand (de espaldas: '..., seen from behind'; en las repeticiones de espaldas, sin 'white shirt and loosened red tie')",
+          "initial_pose": {
+            "south": "facing the camera",
+            "north": "seen from behind, his back to the camera",
+            "east": "facing right",
+            "west": "facing left",
+            "south-east": "in three-quarter front view, facing toward the camera and to the right",
+            "south-west": "in three-quarter front view, facing toward the camera and to the left",
+            "north-east": "in three-quarter back view, facing away from the camera and to the right",
+            "north-west": "in three-quarter back view, facing away from the camera and to the left"
+          },
+          "frases_de_direccion": "Delante del texto, según la dirección: south 'Strict front view the whole time, facing the camera, he never turns to the side.'; south-east / south-west 'Strict three-quarter front view the whole time, facing toward the camera and to the right / left, he never turns to the side.'; north 'Strict back view the whole time, he never turns to face the camera.'; north-east / north-west 'He keeps the same three-quarter back view the whole time and never turns to face the camera.'; east y west nada. En las repeticiones de espaldas, más fuerte: 'Strict three-quarter back view the whole time, facing away from the camera and to the right / left: we only see his back, his face and his tie stay hidden the whole time, he never turns to face the camera (or to the side).'",
+          "andar": {
+            "group": "777515e5-ab79-492e-a07a-600cb60943be (NE y NO, del grupo andar2: 2157ef7b-73d7-432b-8c6a-ec3553267d03)",
+            "fotogramas": "8 + la vista quieta (0-8; el 8 vuelve a la postura del 0, ciclo = 0 a 7). Lienzo 168-176.",
+            "action_description": "He strides forward in place in a slow, arrogant, seamless looping walk cycle: his legs step alternately with long confident steps, his free left arm swings a little and the black briefcase swings slightly in his right hand. He keeps exactly the same view and facing as the first frame the whole time: he never turns. The last frame returns to the starting pose so the cycle loops.",
+            "pegas": "Las primeras NE y NO (en descartes/walk/) se giraban al final del ciclo (en NE asomaba la corbata roja ondeando): repetidas con la frase fuerte, salen bien. De frente y de espaldas es sobre todo balanceo."
+          },
+          "contratos": {
+            "group": "3d96d36e-fb3a-4d17-be7d-3c561c5fe35e (NE, del grupo contratos2: 47272959-a31a-4aa4-a2ff-d48827599556)",
+            "fotogramas": "8 + el de partida (0-8). Saca el taco (1-3), lo lanza (4-5, con los papeles en el aire o un barrido blanco) y la mano queda vacía y adelante (5-6). En gerente.gd, SUELTA (cuando salen los contratos de código): 5 en todas menos west y south-west, 6.",
+            "action_description": "He throws a fan of papers: with his free left hand he pulls a small stack of white paper contracts out of his suit jacket, raises it up to his shoulder and flings it forward hard with a wide sweeping throw in the direction he is facing, while still holding the black briefcase in his right hand. At the end of the throw his left hand is empty and open. Then he lowers his arm and settles cleanly into the starting stance. No effects, no particles, no motion lines. (contratos2 NE: '... flings it forward hard, away from the camera, with a wide sweeping throw ...')",
+            "pegas": "De frente, los papeles se le enroscan alrededor (4) y caen a sus pies (5-6). En NE se pone de lado a mitad del lanzamiento y se le ve la corbata (2-5) en las dos versiones; la segunda, algo menos (la primera, en descartes/contratos/). Pese al 'no motion lines', dibuja barridos blancos al lanzar."
+          },
+          "maletinazo": {
+            "group": "3022fa90-2d8c-41e0-b9e6-fa3fb3896147 (N, NE y NO, del grupo maletinazo2: 38aa3ed6-230d-4d91-9862-0a127dd86cd1)",
+            "fotogramas": "8 + el de partida (0-8). Levanta el maletín (1-3) y golpea (GOLPE en gerente.gd: 4 en s, se, ne y so; 5 en e, o, n y no), con un arco blanco; del 6 al 8 vuelve.",
+            "action_description": "He strikes with his heavy black leather briefcase: he lifts it high above his shoulder with his right arm, then smashes it down hard in front of him in the direction he is facing with a wide brutal swing. Then he lowers the briefcase and settles cleanly into the starting stance. No effects, no particles, no motion lines. (maletinazo2: '... he raises it up over his right shoulder, then smashes it down hard in front of him, away from the camera, with a brutal overhead swing ...')",
+            "pegas": "Las primeras N, NE y NO (en descartes/maletinazo/) se giraban hacia la cámara al levantar el maletín. Repetidas: N sale perfecta; en NE aún mira a la cámara 2 fotogramas (2-3) y en NO se pone de perfil (3-7), mejor que las primeras."
+          },
+          "a-trabajar": {
+            "group": "0fee7cf9-ac5d-4168-ab48-addafed22da0",
+            "fotogramas": "8 + el de partida (0-8), solo south: señala con el dedo y grita (2-6). Vale también para el enfado.",
+            "action_description": "He yells an order at his workers: he raises his free left arm and points forward with his index finger, leans his head forward with his mouth wide open shouting furiously, and shakes the black briefcase in his right hand. Then he lowers his arm and settles cleanly into the starting stance. No effects, no particles, no motion lines."
+          },
+          "jeringa": {
+            "group": "4c6cfb35-6544-4f3e-a4dd-0f386fcb6d39",
+            "fotogramas": "12 + el de partida (0-12), solo south, solo partida: saca la jeringa verde (1-2), se la clava en el cuello (3-9), la tira (10-11, se ve volar) y acaba encorvado (12). Para la parte 3.",
+            "action_description": "He injects himself with a drug: with his free left hand he pulls a large syringe full of glowing green liquid out of his suit jacket, stabs it into the side of his neck and pushes the plunger, then lets the syringe fall and doubles over convulsing in pain, his body shaking and his shoulders hunched, still holding the black briefcase in his right hand. No effects, no particles, no motion lines."
+          }
+        }
       },
       "gerente-mutado-128": {
         "character_id": "2ae497f1-67b6-43d5-a69c-e65ec2cc9476",

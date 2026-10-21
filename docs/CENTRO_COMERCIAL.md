@@ -695,6 +695,31 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        - Tecla de prueba **N**: derecho a la azotea. `--captura --edificio centro` acaba en la azotea y saca
          `captura-azotea.png` (al llegar, con el jefe), `captura-azotea-entera.png` (entera, sin penumbra) y
          `captura-azotea-incendios.png` (quitado el jefe, con la escalera abierta).
+     - ✅ **Parte 2: el gerente, con su dibujo y sus ataques** (21 oct). Lo que ha quedado:
+       - **Su dibujo**, animado con PixelLab sobre el modelo aprobado (`gerente-128`, 117 px, como la portera): andar,
+         lanzar contratos y maletinazo en las 8 direcciones, y «¡A TRABAJAR!» y pincharse la jeringa, solo de frente
+         (la jeringa es para la parte 3). Hoja `jefe-gerente` (`py tools/jefe_hoja.py gerente-128 jefe-gerente`).
+         Costó **33 generaciones** (lo previsto eran ~30): 26 y 7 repeticiones de las que se giraban de espaldas
+         (andar arriba a los lados, contratos arriba-derecha y maletinazo arriba y arriba a los lados).
+       - **Pegas que quedan:** el maletinazo arriba-derecha mira a la cámara 2 fotogramas al levantar el maletín y
+         arriba-izquierda se pone de perfil; los contratos arriba-derecha, de lado a mitad del lanzamiento (se le ve
+         la corbata); al lanzar dibuja un barrido blanco (aunque se le pidió que no) y de frente los papeles le caen a
+         los pies. Cada ataque dura menos de un segundo.
+       - **`gerente.gd`** (hereda de `minijefe.gd`): **1400 de vida justa** (sin el 25 % más por planta de los otros
+         jefes) y la barra dice «El gerente». Anda despacio hacia Johnny rodeando los aparatos y, con aviso, hace tres
+         cosas: **contratos** (rayas rojas en el suelo 0,6 s y 5 hojas de papel en abanico que cortan 10 cada una; los
+         paran los aparatos y las paredes: `contrato.gd`, dibujado con código), **maletinazo** si Johnny se acerca
+         (trozo de suelo rojo 0,5 s; 20 y le aparta de un empujón) y **«¡A TRABAJAR!»** si quedan pocos zombis (como
+         mucho 1): grita y llegan dos dependientas y un vigilante (cada 15 s como mucho).
+       - **A media vida**, de momento, se enfada como los minijefes («¡ESTÁS DESPEDIDO!», vapor y rojo): 7 contratos
+         más rápidos y todo más seguido. La jeringa de VD-7 y la mutación van en la parte 3, en `al_enfadarse()`.
+       - **Al caer** (de lado: no tiene animación de muerte, porque en la parte 3 el que muere es el mutado) suelta lo
+         de los jefes, **no saca mutación** (se acaba el edificio) y se abre la escalera de incendios. La página del
+         dosier al morir (`pagina_del_jefe()`) queda para la parte 3. Si se sube a la azotea en la Alerta 3, la vida y
+         el enfado cambian como con los demás jefes.
+       - Tecla de prueba **L** (también en la exposición, F9). `--captura --edificio centro` saca además
+         `captura-gerente.png` (lanzando contratos), `captura-gerente-maletinazo.png` y `captura-gerente-trabajar.png`,
+         y le hace caer para comprobar que no sale la mutación.
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
