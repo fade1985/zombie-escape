@@ -44,7 +44,8 @@ La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`esce
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7 y Noticias de Canal 8).
 - A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo** (recetas).
 - Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador (los
-  del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe.
+  del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe. Detrás del técnico,
+  cuando ya vive ahí, las pantallas de las cámaras de seguridad: desde entonces el minimapa enseña los zombis.
 - La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 ## Móvil (táctil)
