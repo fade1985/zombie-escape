@@ -398,6 +398,11 @@ func cruzar(i: int) -> void:
 		return
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
+	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable
+	if arreglo != "":
+		decir(arreglo)
+		Sonido.tocar("no")
+		return
 	if sitio.tipo != "pasillo" and cerrada:
 		decir("Aguanta: aún está forzando la cerradura" if supervivientes.en_horda() else "La puerta no se abre mientras quede algún zombi")
 		Sonido.tocar("no")

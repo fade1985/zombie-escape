@@ -35,7 +35,8 @@
 - `peligros/`: los peligros de las tiendas del centro comercial. `peligros.gd` (sus números y dónde va cada uno, al
   generar la planta), `frio.gd` (la cámara frigorífica; congela a los zombis: `zombi.gd`), `fuego.gd` (la cocina del
   restaurante, que se extiende por casillas), `agua.gd` (el charco con corriente de la electrónica, su cable, las luces
-  de las teles y lo oscura que se queda la tienda: `Luz.extra`) y `cuadro.gd` (el cuadro eléctrico).
+  de las teles y lo oscura que se queda la tienda: `Luz.extra`; `arreglar()`, cuando el técnico arregla el cable y
+  el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico).
 - `zombi_guardia.gd` (escena `zombi_guardia.tscn`, hereda la del normal): el guardia de seguridad del centro
   comercial, que lleva la tarjeta (ronda, silbato, huye, se cansa). Lleva el dibujo del vigilante.
 - Los zombis del centro comercial (parte 4): `zombi_vigilante.tscn` (hereda la del normal; solo cambian números y
@@ -67,7 +68,8 @@
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 26 objetos, mochila, baúl de 32 casillas, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
   el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (24 recetas y rarezas: 15 de los
-  Apartamentos, 6 que mezclan los dos edificios y 3 solo del centro), `billete.gd`, `minimapa.gd`. La prueba
+  Apartamentos, 6 que mezclan los dos edificios y 3 solo del centro), `billete.gd`, `minimapa.gd` (con el técnico
+  rescatado, `camaras`: un puntito por zombi en cada sala). La prueba
   `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `partida.gd`) y saca `captura-objetos-nuevos.png`,
   `captura-banco-todo.png` y `captura-baul-todo.png`; luego prueba cada arma nueva contra zombis (`probar_recetas`)
   y saca `captura-arma-<receta>.png`.
@@ -87,6 +89,9 @@
   medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
 - `escolta.gd`: el rescate propio de la farmacéutica (llevarla herida hasta las escaleras, con zombis saliendo por
   las puertas del pasillo); la cuelga `supervivientes.gd` y `partida.gd` le pregunta antes de cruzar una puerta.
+- `averia.gd`: el rescate propio del técnico (bajar la palanca del cuadro y aguantar a oscuras, con zombis entrando
+  por las habitaciones de la tienda, mientras arregla el cable del agua); igual que la escolta. Su prueba también
+  prueba su mejora (el minimapa con los zombis y las pantallas de la sala).
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
@@ -108,7 +113,8 @@
   `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
-  mantenimiento, dibujada con código).
+  mantenimiento, dibujada con código), `camaras.gd` (las pantallas de las cámaras de seguridad, detrás del técnico,
+  cuando ya vive en la sala).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 

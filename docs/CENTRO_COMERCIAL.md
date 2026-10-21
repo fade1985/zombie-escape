@@ -177,6 +177,34 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   - `--captura --edificio centro` prueba la escolta entera (lo escribe en la terminal) y saca `captura-escolta.png`.
   - Falta su mejora de la sala (empezar con un botiquín en la mochila): no hay botiquín que se lleve en la
     mochila; va con los objetos de curar de la farmacia (ver «Objetos»).
+- ✅ **El rescate propio del técnico y su mejora** (21 oct; `scripts/averia.gd`; números provisionales):
+  - Grita desde el almacén de la tienda de electrónica, cerrado, como antes; al limpiar la tienda se abre y dice
+    «¡Gracias! Antes de irnos tengo que arreglar ese cable pelado». Al arrimarte se une y pide que bajes la palanca
+    del cuadro eléctrico: arriba, «Baja la palanca del cuadro eléctrico», y una flecha en el borde hacia el cuadro.
+    Mientras no la bajes no se va de la tienda («El Técnico no se va sin arreglar el cable…»). Si ya estaba bajada,
+    empieza directamente.
+  - Al bajarla (la tienda a oscuras, solo la linterna) se va donde el cable sale de la pared y lo arregla de
+    espaldas, con una lucecita de trabajo y chispas; la puerta de la tienda se cierra y van entrando zombis por las
+    habitaciones de la tienda, y él avisa de por dónde. Arriba, la barra «El Técnico arregla el cable · 1:30».
+  - **90 s de trabajo**; grupos cada 6 s al principio y cada 3,5 s al final, de 2 a 5 zombis, 24 a la vez como
+    mucho; el primer minuto lentos, normales y dependientas, y luego también rápidos, vigilantes y algún explosivo.
+    Como en la horda: si Johnny se aleja van a por él, si cae hay que quedarse 2 s a su lado y a mitad suelta un
+    molotov, una granada y munición.
+  - Lo que no decía el plan: **si Johnny vuelve a subir la palanca**, vuelve la luz y el agua da calambres a los
+    zombis que la pisen (sirve de trampa), pero él deja de trabajar («¡Eh, que hay corriente! ¡Baja la palanca!»)
+    y la barra se para. **No se puede salir** de la tienda mientras arregla («Aguanta: el Técnico está arreglando
+    el cable»).
+  - Al acabar: «¡Arreglado! Ya puedes dar la luz». El cable queda empalmado con cinta aislante y **el agua de esa
+    tienda ya no da calambres nunca más** (lo decidió el dueño); la palanca sigue abajo y, si la subes, vuelve la
+    luz. Se abre la puerta, cuenta para «Buen vecino» y él sigue en el equipo como los demás. Si su tienda no
+    tuviera agua con corriente (no debería pasar), sale la horda de siempre.
+  - **Su mejora**: cuando ya vive en la sala, detrás de él hay una mesa con cuatro pantallas de las cámaras de
+    seguridad (`scripts/mapa/camaras.gd`, dibujadas con código) y, **en los dos edificios** (lo decidió el dueño),
+    el minimapa enseña los zombis: un puntito rojo por zombi en cada sala, también en las que no has visitado;
+    donde está Johnny, cada puntito va donde está su zombi y se mueve con él.
+  - `--captura --edificio centro` prueba el rescate entero (lo escribe en la terminal) y saca
+    `captura-tecnico-palanca.png`, `captura-tecnico-horda.png`, `captura-tecnico-fin.png`,
+    `captura-tecnico-minimapa.png` y `captura-tecnico-sala.png`.
 
 ## Objetos
 
@@ -441,9 +469,9 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.
-5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común y ✅ el rescate de la
-   farmacéutica; falta el rescate propio del ferretero y del técnico, y la mejora de la sala de cada uno (un trozo
-   para cada uno).
+5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común, ✅ el rescate de la
+   farmacéutica y ✅ el del técnico con su mejora; falta el rescate propio del ferretero y la mejora de la sala del
+   ferretero y de la farmacéutica (un trozo para cada uno).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
    - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por
      edificio y por tienda (`Objetos.TIENDAS`, en `scripts/objetos.gd`). Las listas que aprobó el dueño:

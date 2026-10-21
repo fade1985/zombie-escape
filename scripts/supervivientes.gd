@@ -22,7 +22,8 @@
 #
 # Los del centro comercial, de momento, se rescatan como los de siempre (encerrados, gritando y con la horda):
 # su rescate propio llega en un trozo para cada uno (docs/CENTRO_COMERCIAL.md, «Supervivientes»). Ya está el de
-# la farmacéutica ("rescate": "escolta"): sin horda, hay que llevarla herida hasta las escaleras (escolta.gd).
+# la farmacéutica ("rescate": "escolta"): sin horda, hay que llevarla herida hasta las escaleras (escolta.gd). Y el
+# del técnico ("rescate": "averia"): bajar la palanca del cuadro y aguantar a oscuras mientras arregla el cable (averia.gd).
 #
 # Lo monta partida.gd: recoger() antes de cambiar de sitio y al_montar() después.
 class_name Supervivientes
@@ -34,7 +35,7 @@ const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 # "look": los colores de su dibujo (persona.gd); "arma": la que lleva en la mano; "casa": su sitio en la sala de
 # mantenimiento. Los del centro comercial llevan además "tienda" y "sala" (dónde se esconde), "gritos" (los suyos)
 # y "mejora" (lo que hará en la sala de mantenimiento cuando llegue su trozo). "rescate": si no es la horda de
-# siempre, cuál ("escolta": escolta.gd); "al_abrir": lo que dice al abrirse su puerta
+# siempre, cuál ("escolta": escolta.gd; "averia": averia.gd); "al_abrir": lo que dice al abrirse su puerta
 const DATOS := {
 	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"casa": Vector2(600, 174),
@@ -79,6 +80,7 @@ const DATOS := {
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],
+		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",
 		"desc": "Cada 4 s, una descarga deja quieto 1 s al zombi más cercano",
 		"habilidad": {"tipo": "aturdir", "cada": 4.0, "segundos": 1.0, "alcance": 260.0},
 		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},
@@ -134,6 +136,7 @@ var horda := {}
 var tiempo := 0.0
 var capa: Control          # la flecha del borde y la barra de la horda (en la pantalla)
 var escolta := Escolta.new()   # el rescate de la farmacéutica
+var averia := Averia.new()     # el del técnico
 
 
 func preparar(p: Node) -> void:
@@ -149,6 +152,8 @@ func preparar(p: Node) -> void:
 	pantalla.move_child(capa, p.negro.get_index())   # por debajo del fundido a negro
 	escolta.sup = self
 	add_child(escolta)
+	averia.sup = self
+	add_child(averia)
 
 
 # Al empezar la partida: quién sale y en qué planta (elegirSuperviviente), de los de este edificio. Los que ya
@@ -374,6 +379,8 @@ func unir(a: Aliado) -> void:
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
 	if a.def.get("rescate", "") == "escolta":
 		escolta.empezar(a)
+	elif a.def.get("rescate", "") == "averia":
+		averia.empezar(a)   # si su tienda no tuviera el agua con corriente, la horda de siempre
 
 
 # ═════════════ La horda ═════════════
@@ -382,8 +389,8 @@ func actualizar_horda(delta: float) -> void:
 	var r := rescate
 	if r.is_empty() or not r.rescatado or not r.amigo in equipo or partida.aqui != r.sitio:
 		return
-	if r.def.get("rescate", "") == "escolta":
-		return   # la farmacéutica no tiene horda: su escolta va en escolta.gd
+	if r.def.get("rescate", "") == "escolta" or averia.activa():
+		return   # la farmacéutica no tiene horda (su escolta va en escolta.gd), ni el técnico (averia.gd)
 	var a: Aliado = r.amigo
 	if horda.is_empty():
 		if r.horda_hecha or not johnny.vivo:
@@ -471,6 +478,9 @@ func acabar_horda() -> void:
 func al_herir(cae: bool, a: Aliado) -> void:
 	if escolta.ella == a:
 		escolta.al_herir(cae)
+		return
+	if averia.el == a:
+		averia.al_herir(cae)
 		return
 	if horda.is_empty():
 		return
@@ -626,6 +636,7 @@ func dibujar_capa() -> void:
 		if hacia != Vector2.INF:
 			flecha(hacia, rescate.def.color, tiempo - grito_t < 0.7)
 	escolta.dibujar(capa)
+	averia.dibujar(capa)
 	if horda.is_empty():
 		return
 	var a: Aliado = rescate.amigo
@@ -710,8 +721,9 @@ func probar_aqui(fundir := true, quien := "") -> void:
 func probar() -> void:
 	partida.menus.visible = false   # por si ha salido el recuadro de una mutación (tapa las fotos)
 	await probar_aqui(false)
-	if rescate.def.get("rescate", "") == "escolta":
-		await probar_aqui(false)   # la horda, con otro (la escolta de la farmacéutica se prueba en escolta.gd)
+	for i in 2:
+		if rescate.def.get("rescate", "") in ["escolta", "averia"]:
+			await probar_aqui(false)   # la horda, con otro (la escolta y la avería se prueban en escolta.gd y averia.gd)
 	await get_tree().create_timer(0.3, false).timeout
 	var sup: Dictionary = partida.planta.superviviente
 	print("Superviviente: %s en %s · %s | baño cerrado %s | puerta %s" % [rescate.def.nombre, partida.planta.nombre,
@@ -766,6 +778,7 @@ func probar() -> void:
 	await probar_acompanantes()
 	await probar_cafetera()
 	await escolta.probar()
+	await averia.probar()
 	partida.menus.visible = true
 
 
