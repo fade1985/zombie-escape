@@ -418,8 +418,7 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
        con letras; el porrazo cae en un fotograma algo distinto según la dirección.
      - Tecla de prueba **K**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro` lo saca en la 1ª planta,
        prueba el escudo (lo escribe en la terminal) y hace `captura-jefe.png`.
-   - **Trozo 4: la modista** (21 oct, en marcha: el juego hecho y probado; faltan casi todas sus animaciones, ver
-     «Pendiente»). Lo que ha quedado:
+   - ✅ **Trozo 4: la modista** (21 oct). Lo que ha quedado:
      - **Su tienda, el Taller de costura**, llena de maniquíes de cuerpo entero (unos 23) con su mismo vestido: un
        mueble nuevo, `tallmannequin` (PixelLab, 1 generación), en filas por la sala y por las paredes ("jefe-modista"
        en `catalogo.gd`). Decidido con el dueño: mejor que el busto de la tienda de ropa, que es más bajo que ella.
@@ -436,14 +435,16 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      - Tecla de prueba **T**; también en la exposición (F9, alargada otra vez). `--captura --edificio centro --jefe
        modista` la saca en la 1ª planta, cuenta los maniquíes, la cambia de sitio, despierta a tres y hace
        `captura-jefe.png` con ella tirando alfileres.
+     - **Escondida, el apuntado automático no la busca** (`johnny.gd`): en el modo asistido Johnny se giraba solo
+       hacia ella y la descubría. Hay que encontrarla o pegarle a mano.
      - **Su dibujo:** el modelo, delgado, se quedó así (lo decidió el dueño). Piel corregida con `piel.py` (ahora
        admite la fila de los zapatos y la saturación máxima, para no tocar la cinta métrica) y subida como personaje
-       nuevo (0,25). Animaciones con la receta del antidisturbios: andar, alfileres, tijeretazo, golpe (el respingo
-       al pillarla) y muerte; la prueba hacia la derecha salió bien (el tijeretazo lleva un tajo blanco que se ha
-       dejado: se lee como el corte). Detalle en `assets/pixellab.json` → `centro-comercial-parte4` → `trozo4`.
-     - **Pendiente:** las demás direcciones de cada animación (33 generaciones; el tijeretazo hacia abajo y abajo a
-       la derecha ya están lanzados; PixelLab estaba casi siempre lleno con las otras sesiones), montar la hoja (`py tools/jefe_hoja.py modista-72 jefe-modista`, poner el `offset` que
-       diga en `modista.tscn`) y ajustar `CORTA` y `LANZA` en `modista.gd` si el golpe cae en otro fotograma.
+       nuevo (0,25). Animada con PixMiniMax sobre ese modelo, con la receta del antidisturbios: andar, alfileres,
+       tijeretazo, golpe (el respingo al pillarla) y muerte, en las 8 direcciones. **41,25 generaciones** en total
+       (con el maniquí; detalle y textos en `assets/pixellab.json` → `centro-comercial-parte4` → `trozo4`). Se monta
+       con `py tools/jefe_hoja.py modista-72 jefe-modista`. Pegas conocidas: andando hacia arriba a la derecha se
+       pone algo de perfil a mitad del paso; el tijeretazo lleva un tajo blanco grande (se ha dejado: se lee como el
+       corte); en el golpe, el primer fotograma lleva una raya blanca en varias direcciones (el juego se lo salta).
    - **Siguiente paso: la portera a 72 px** (el dueño lo pidió para que todos los jefes tengan el tamaño de un zombi
      grande): modelo nuevo copiando la de ahora (~6 generaciones, enseñárselo antes de seguir) y sus animaciones
      (andar, fregonazo, lanzar, grito y muerte; ~40). Unas 46-50 en total. Aprobado dejarlo para otra sesión.

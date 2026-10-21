@@ -44,7 +44,8 @@ const OTRA_VEZ := [0.25, 0.5]      # al dejar de esconderse, lo probable que vue
 const VIVOS := 3                   # los maniquíes que cobran vida al enfadarse
 const PIE := 30.0                  # a qué altura dibuja los pies respecto a su centro
 const PIE_MANIQUI := Vector2(0, 26)   # su centro, respecto a los pies de un maniquí (para ponerse en su sitio)
-# Los fotogramas de sus animaciones en los que corta las tijeras y lanza los alfileres (ajustar con su dibujo)
+# Los fotogramas de sus animaciones en los que corta las tijeras (el tajo blanco; hacia la izquierda, en el 5) y
+# lanza los alfileres (el brazo ya estirado)
 const CORTA := 4
 const LANZA := 4
 # Dónde tiene los ojos en cada dirección (respecto a su centro), para el brillo; de espaldas, solo el resplandor
@@ -256,6 +257,11 @@ func salir(johnny: Node2D, hacia: Vector2, d: float) -> void:
 		andar(0.4)
 
 
+# ¿Está quieta entre los maniquíes? (el apuntado automático de Johnny no la busca: johnny.gd)
+func escondida() -> bool:
+	return estado == "escondida"
+
+
 # Si le pegan escondida (o con los ojos brillando), la han pillado: el golpe le hace el daño de siempre
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	if estado == "escondida" or estado == "ojos":
@@ -341,7 +347,9 @@ func animar() -> void:
 			var k: float = t / (ALFILERES[fase - 1] * CADA_ALFILER + 0.25)
 			fijar("alfileres", dir, LANZA + clampi(int(k * (total - LANZA)), 0, maxi(0, total - LANZA - 1)))
 		"pillada":
-			fijar("golpe", dir, avance("golpe_" + dir, t / 0.35))
+			# el respingo, desde el fotograma 2 (en el 1 PixelLab pintó una raya blanca en varias direcciones)
+			var total := sprite.sprite_frames.get_frame_count("golpe_" + dir)
+			fijar("golpe", dir, mini(total - 1, 2 + int(t / 0.35 * (total - 2))))
 		"ojos", "escondida":
 			fijar("quieto", dir, 0)
 		"grito":
