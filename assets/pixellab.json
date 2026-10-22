@@ -2272,6 +2272,6 @@
       "aliado.gd": "HOJAS: 'fogonazo' 0,2 s en los dos (el martillazo y la descarga llegan ahí); el rayo de la descarga sale de la altura del aparato",
       "retoque": "accion/north-west-3.png del técnico: PixelLab lo tiñó de celeste (cabeza, brazos y camisa) en el fotograma del chispazo; se tapó con los colores del fotograma 4, que tiene la misma postura (el aparato sigue brillando). El original, en intentos/accion-north-west-3-tenido.png"
     },
-    "descartados": "22 oct, con el visto bueno del dueño: ferretero B (e5f071af-2f2d-4e43-ac65-a197586aaab7) BORRADO de PixelLab. Farmacéutica A (2a8e6503-a12a-4c97-922d-d9c47999fe54) y técnico B (0a342c53-7dda-4f7f-b21d-29ceb0bea068) siguen allí: el sistema de permisos paró su borrado; sus vistas, en assets/sources/superviviente-<id>-48/intentos/."
+    "descartados": "22 oct, con el visto bueno del dueño: los tres BORRADOS de PixelLab (ferretero B e5f071af-2f2d-4e43-ac65-a197586aaab7, farmacéutica A 2a8e6503-a12a-4c97-922d-d9c47999fe54 y técnico B 0a342c53-7dda-4f7f-b21d-29ceb0bea068); sus vistas siguen en assets/sources/superviviente-<id>-48/intentos/."
   }
 }
