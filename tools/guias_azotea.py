@@ -5,6 +5,7 @@ quita el fondo después), pero con los aparatos del tejado: el aire acondicionad
 el extractor. Se ven todos de frente (están sueltos por la azotea, no contra una pared).
 
   py tools/guias_azotea.py                 → assets/sources/centro/guias/<archivo>.png
+  py tools/guias_azotea.py apartamentos    los de la azotea de los Apartamentos (depósito, antenas y tendedero)
   py tools/guias_centro.py quita <png>…    quita el fondo azul de lo que devuelve PixelLab
 """
 import os, random, sys
@@ -19,7 +20,12 @@ T = {
     'climatizadora':      (184, 60, 30, (140, 150, 156)),
     'chimenea':           (48,  48, 56, (140, 72, 56)),
     'extractor':          (44,  44, 38, (165, 170, 175)),
+    # los de la azotea de los Apartamentos (py tools/guias_azotea.py apartamentos)
+    'deposito-agua':      (96,  64, 58, (150, 158, 160)),
+    'antenas':            (64,  40, 60, (150, 150, 155)),
+    'tendedero':          (160, 24, 46, (225, 222, 210)),
 }
+APARTAMENTOS = ('deposito-agua', 'antenas', 'tendedero')
 
 
 def ventilador(dr, cx, cy, r, color):
@@ -110,6 +116,48 @@ def guia(nombre, largo, fondo, alto, color):
         for xx in range(x + 5 * S, x + w - 5 * S, 3 * S):
             dr.line((xx, top + S, xx, top + h * 3 // 5 - 2), fill=tono(color, 0.6))
         dr.rectangle((x, top + h * 3 // 5, x + w - 1, y + d + h - 1), fill=tono(color, 0.7), outline=RAYA)
+    elif nombre == 'deposito-agua':
+        # un depósito de agua tumbado (un cilindro de chapa) sobre cuatro patas de hierro, con su tapa redonda
+        dr.rectangle((x + 3 * S, y + d // 2 + h - 10 * S, x + w - 4 * S, y + d + h - 1), fill=(0, 0, 0, 0))
+        for px in (x + 6 * S, x + w - 9 * S):   # las patas
+            dr.rectangle((px, y + d + h - 14 * S, px + 3 * S, y + d + h - 1), fill=(60, 52, 48, 255), outline=RAYA)
+        dr.rounded_rectangle((x, y + 2 * S, x + w - 1, y + d + h - 12 * S), radius=d // 2, fill=tono(color, 0.85), outline=RAYA)
+        dr.rounded_rectangle((x + 2 * S, y + 4 * S, x + w - 3 * S, y + d // 2 + 4 * S), radius=d // 3, fill=tono(color, 1.08))
+        for k in range(1, 5):   # los aros de la chapa
+            xx = x + w * k // 5
+            dr.line((xx, y + 3 * S, xx, y + d + h - 13 * S), fill=tono(color, 0.65))
+        cx = x + w // 2
+        dr.ellipse((cx - 8 * S, y + 6 * S, cx + 8 * S, y + 16 * S), fill=tono(color, 0.7), outline=RAYA)   # la tapa
+        dr.rectangle((x + w - 6 * S, y + d // 2 + 6 * S, x + w - 1, y + d // 2 + 10 * S), fill=(70, 70, 75, 255), outline=RAYA)  # el tubo
+    elif nombre == 'antenas':
+        # una base de hormigón con dos antenas de tele (un palo con varillas) y una parabólica blanca
+        base = y + d + h - 10 * S   # la base, bajita: lo demás es aire
+        dr.rectangle((x, base - d // 2, x + w - 1, base), fill=(150, 150, 145, 255), outline=RAYA)
+        dr.rectangle((x, base, x + w - 1, y + d + h - 1), fill=(120, 120, 115, 255), outline=RAYA)
+        for px, alto in ((x + w // 4, h + d - 4 * S), (x + w * 3 // 5, h + d - 18 * S)):
+            top = y + d + h - alto
+            dr.line((px, top, px, base - 4 * S), fill=(70, 70, 75, 255), width=S * 2)
+            for k in range(4):   # las varillas
+                yy = top + 3 * S + k * 4 * S
+                ancho = 10 * S - k * 2 * S
+                dr.line((px - ancho, yy, px + ancho, yy), fill=(90, 90, 95, 255), width=S)
+        cx, cy = x + w - 11 * S, base - 16 * S   # la parabólica, de cara, en su palo
+        dr.line((cx, cy, cx, base - 4 * S), fill=(70, 70, 75, 255), width=S * 2)
+        dr.ellipse((cx - 9 * S, cy - 9 * S, cx + 9 * S, cy + 9 * S), fill=(215, 215, 210, 255), outline=RAYA)
+        dr.ellipse((cx - 2 * S, cy - 2 * S, cx + 2 * S, cy + 2 * S), fill=(80, 80, 85, 255), outline=RAYA)
+    elif nombre == 'tendedero':
+        # dos postes en T con tres cuerdas y la ropa colgada: sábanas, una camiseta y unos pantalones
+        for px in (x + 2 * S, x + w - 5 * S):
+            dr.rectangle((px, y + 2 * S, px + 3 * S, y + d + h - 1), fill=(90, 92, 96, 255), outline=RAYA)
+        dr.rectangle((x, y, x + w - 1, y + 3 * S), fill=(90, 92, 96, 255), outline=RAYA)
+        for k in range(3):
+            yy = y + S + k * (d // 3)
+            dr.line((x + 3 * S, yy, x + w - 4 * S, yy), fill=(40, 40, 44, 255))
+        prendas = [(0.06, 0.34, (225, 222, 210)), (0.38, 0.55, (110, 140, 175)), (0.58, 0.88, (210, 190, 180)), (0.9, 0.95, (80, 90, 70))]
+        for u0, u1, c in prendas:
+            dr.rectangle((x + int(u0 * w), y + 2 * S, x + int(u1 * w), y + d + h - 10 * S), fill=c + (255,), outline=RAYA)
+            for xx in range(x + int(u0 * w) + 4 * S, x + int(u1 * w), 6 * S):   # las arrugas
+                dr.line((xx, y + 4 * S, xx, y + d + h - 12 * S), fill=tono(c, 0.82))
     os.makedirs(OUT, exist_ok=True)
     ruta = f'{OUT}/{nombre}.png'
     im.save(ruta)
@@ -117,5 +165,6 @@ def guia(nombre, largo, fondo, alto, color):
 
 
 if __name__ == '__main__':
-    for nombre, (largo, fondo, alto, color) in T.items():
-        guia(nombre, largo, fondo, alto, color)
+    solo = APARTAMENTOS if sys.argv[1:] == ['apartamentos'] else [n for n in T if n not in APARTAMENTOS]
+    for nombre in solo:
+        guia(nombre, *T[nombre])

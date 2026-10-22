@@ -1,4 +1,16 @@
 {
+  "azotea/antenas.png": {
+    "huella": "e5a872a0f7817e49",
+    "sprite": "mueble-antennas"
+  },
+  "azotea/deposito-agua.png": {
+    "huella": "790710574077301b",
+    "sprite": "mueble-watertank"
+  },
+  "azotea/tendedero.png": {
+    "huella": "01ff8cb8697f09d0",
+    "sprite": "mueble-clothesline"
+  },
   "bano/banera-lado.png": {
     "huella": "c9c541125bebe3e1",
     "sprite": "mueble-bathtub-lado"

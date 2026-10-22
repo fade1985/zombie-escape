@@ -33,7 +33,7 @@ const EMPRESA := "Velaria Bienestar"
 const DOSIERES := {
 	"apartamentos": {
 		"titulo": "Dosier VD-7 · Apartamentos",
-		"nota": "Cada científico de Velaria muerto en el edificio lleva una página. Lo que encuentres queda aquí para siempre.",
+		"nota": "Cada científico de Velaria muerto en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre.",
 		"falta": "Esta página falta. La lleva un científico de Velaria caído en la %s.\n\nBúscalo en una partida.",
 		"paginas": [
 			{"id": "vd7_protocolo", "planta": 1, "cuerpo": "Dra. Inés Lozano, coordinadora del estudio",
@@ -56,7 +56,13 @@ const DOSIERES := {
 				"tipo": "ANEXO 4 · CONFIDENCIAL", "titulo": "La colaboradora del edificio",
 				"texto": "Funciones: repartir los sobres, apuntar quién entra y quién sale, avisar si algún vecino habla con la prensa. Pago: 1.500 € al mes y un año de alquiler gratis.\n\nDía 15: la colaboradora pide «algo para aguantar despierta». Se le da VD-7 sin decírselo, a dosis doble, para ver cómo reacciona un sujeto activo.\n\nDía 17: la colaboradora no duerme. No para. Ha cerrado el edificio por dentro: tiene todas las llaves.",
 				"nota": "Retirad al personal de las plantas de arriba. YA."},
-			{"id": "vd7_sujeto_cero", "planta": 5, "cuerpo": "Dr. Héctor Salas, director del estudio",
+			# La última no la lleva un muerto: la suelta el científico jefe (el director del estudio) al caer en la
+			# azotea (del_jefe)
+			{"id": "vd7_sujeto_cero", "planta": 5, "jefe": true, "donde": "azotea",
+				"falta": "Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.
+
+Tendrás que quitársela.",
+				"cuerpo": "Dr. Héctor Salas, director del estudio",
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#d9d1bd")},
 				"tipo": "LISTA DE SUJETOS · SOLO DIRECCIÓN", "titulo": "Sujeto 0",
 				"texto": "Vecinos: 38 de 38 con respuesta positiva al VD-7.\n\nSujeto 0: el conserje del edificio. No firmó nada. Ha tomado VD-7 durante 40 días con el café de la sala de mantenimiento (la cafetera se la regalamos nosotros).\n\nRespuesta: NINGUNA. Duerme normal. Sueña normal. Su sangre deshace el VD-7 en menos de una hora.\n\nPrioridad absoluta: llevarlo vivo a la sede. No es un superviviente. Es la cura. O es el arma.",
@@ -207,9 +213,9 @@ static func pendiente(s: Dictionary, edificio: String, planta: int) -> Dictionar
 	return {}
 
 
-# La página que suelta el jefe del edificio al caer, si aún no se ha encontrado ({} si no hay o ya está). En el
-# centro comercial, la orden de recogida del gerente: la pedirá el gerente al morir en la azotea (trozo 6 de la
-# parte 4), con partida.pagina_del_jefe()
+# La página que suelta el jefe del edificio al caer, si aún no se ha encontrado ({} si no hay o ya está): en el
+# centro comercial, la orden de recogida del gerente; en los Apartamentos, la lista de sujetos del científico jefe.
+# La pide partida.pagina_del_jefe() al caer él en la azotea
 static func del_jefe(s: Dictionary, edificio: String) -> Dictionary:
 	for p in dosier(edificio).paginas:
 		if p.get("jefe", false) and not encontrada(s, p.id):

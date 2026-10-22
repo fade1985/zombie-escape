@@ -28,8 +28,11 @@ const EXPO_FILAS := 131           # (alargada para los zombis, los minijefes y e
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
-# Los aparatos de la azotea (catalogo.gd): cuántos de cada uno [mínimo, máximo]
-const APARATOS := {"acunit": [2, 3], "airhandler": [1, 2], "chimney": [2, 3], "vent": [3, 4]}
+# Los aparatos de la azotea de cada edificio (catalogo.gd): cuántos de cada uno [mínimo, máximo]
+const APARATOS := {
+	"centro": {"acunit": [2, 3], "airhandler": [1, 2], "chimney": [2, 3], "vent": [3, 4]},
+	"apartamentos": {"watertank": [1, 2], "antennas": [2, 3], "clothesline": [2, 3], "chimney": [2, 3], "vent": [1, 2]},
+}
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
@@ -270,10 +273,11 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	return planta
 
 
-# La azotea del centro comercial (la última planta, como en el juego JS): un solo sitio grande y abierto, sin pasillo
-# ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el helipuerto pintado y
-# los aparatos sueltos (aire acondicionado, climatizadoras, chimeneas y extractores), que sirven para cubrirse. Se
-# llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la derecha, la escalera de
+# La azotea (la última planta del centro comercial y de los Apartamentos, como en el juego JS): un solo sitio grande
+# y abierto, sin pasillo ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el
+# helipuerto pintado y los aparatos sueltos (en el centro, aire acondicionado, climatizadoras, chimeneas y
+# extractores; en los Apartamentos, depósitos de agua, antenas, tendederos, chimeneas y extractores), que sirven para
+# cubrirse. Se llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la derecha, la escalera de
 # incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe": el jefe aparece al
 # llegar y, al caer, se abren las escaleras (partida.gd), como en el piso de la portera.
 static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
@@ -293,7 +297,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 		{"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "incendios": true, "a": -1, "vuelta": -1, "cerrojo": "jefa",
 			"aviso": "Bloqueada: acaba antes con " + planta.el_jefe, "letrero": "Incendios"},
 	]
-	sitio.muebles = aparatos(sitio)
+	sitio.muebles = aparatos(sitio, edificio)
 	# manchas de sangre sueltas (las de manchas-suelo.png), fuera del helipuerto
 	for i in rng.randi_range(5, 8):
 		var pos := Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60), rng.randf_range(MURO + 60, alto - MURO - 60))
@@ -305,11 +309,12 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 
 # Los aparatos sueltos por la azotea, cada uno lejos de los demás (para que se pueda pasar entre ellos, también el
 # jefe), del helipuerto, de las dos puertas y del murete
-static func aparatos(sitio: Dictionary) -> Array:
+static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 	var puestos := []
 	var puertas := [Vector2(MURO, sitio.alto / 2.0), Vector2(sitio.ancho - MURO, sitio.alto / 2.0)]
-	for tipo in APARATOS:
-		for i in rng.randi_range(APARATOS[tipo][0], APARATOS[tipo][1]):
+	var cuantos: Dictionary = APARATOS.get(edificio, APARATOS.centro)
+	for tipo in cuantos:
+		for i in rng.randi_range(cuantos[tipo][0], cuantos[tipo][1]):
 			var p: Dictionary = Catalogo.MUEBLES[tipo]
 			for intento in 60:
 				var x := roundf(rng.randf_range(MURO + 50 + p.len / 2.0, sitio.ancho - MURO - 50 - p.len / 2.0) / 2.0) * 2.0
