@@ -109,3 +109,47 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 	if tienda not in TIENDAS:
 		tienda = TIENDAS.keys().pick_random()
 	return TIENDAS[tienda].pick_random()
+
+
+# ── Colecciones (el programa del ordenador) ──
+# Lo encontrado alguna vez se apunta en el guardado ("encontrados"), y el ordenador lo cuenta por edificio.
+
+# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 17 de siempre (con los
+# explosivos); en el centro comercial, todos menos las cosas de casa. Otro valor: todos
+static func de_edificio(edificio: String) -> Array:
+	match edificio:
+		"apartamentos":
+			return NOMBRES.keys().filter(func(id): return not id in SOLO_CENTRO)
+		"centro":
+			return NOMBRES.keys().filter(func(id): return not id in SOLO_CASA)
+	return NOMBRES.keys()
+
+
+# Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier zombi (los
+# explosivos, solo el explosivo); en el centro comercial, las tiendas que lo sueltan ("Ferretería y tienda de ropa")
+static func donde(id: String, edificio: String) -> String:
+	if id == "explosivos":
+		return "lo suelta el zombi explosivo"
+	if edificio != "centro":
+		return "lo suelta cualquier zombi"
+	var tiendas := []
+	for tipo in TIENDAS:
+		if id in TIENDAS[tipo]:
+			var n: String = Tienda.TIPOS[tipo].nombre
+			tiendas.append(n if tiendas.is_empty() else n.to_lower())   # solo la primera con mayúscula
+	if tiendas.is_empty():
+		return ""
+	if tiendas.size() == 1:
+		return tiendas[0]
+	return ", ".join(tiendas.slice(0, -1)) + " y " + tiendas[-1]
+
+
+# Apunta un objeto como encontrado alguna vez (al cogerlo del suelo o comprárselo al vendedor). Los que no son
+# chatarra (el botiquín) no cuentan
+static func apuntar_encontrado(id: String) -> void:
+	if not id in NOMBRES:
+		return
+	Guardado.cambiar(func(g):
+		if not id in g.encontrados:
+			g.encontrados.append(id)
+			g.colecciones_nuevo = true)

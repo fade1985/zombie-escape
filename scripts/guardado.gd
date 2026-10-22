@@ -2,7 +2,7 @@
 # En Windows, user:// es %APPDATA%\Godot\app_userdata\Zombie Escape.
 #
 # Se guarda: dólares, puntos y talentos, armas encontradas, el baúl, las recetas aprendidas, los supervivientes
-# rescatados, récords y el progreso de cada edificio.
+# rescatados, récords, el progreso de cada edificio y las colecciones (lo encontrado, creado y visto alguna vez).
 # Las partidas a medias NO se guardan: si cierras, empiezas el edificio de nuevo.
 #
 # Se usa así:  var s := Guardado.cargar()  ·  s.dolares += 5  ·  Guardado.escribir(s)
@@ -30,6 +30,10 @@ const NUEVO := {
 	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
+	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
+	"creadas": [],        # armas creadas alguna vez en el banco de trabajo (ids de Recetas.LISTA): Colecciones
+	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
+	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
 	"cafetera": false,    # la farmacéutica ya ha encontrado el VD-7 en la cafetera (Historia.CAFETERA): no lo repite
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
@@ -71,8 +75,19 @@ static func cargar() -> Dictionary:
 		s.edificios[id] = EDIFICIO.merged(s.edificios[id], true)
 		for clave in ["partidas", "victorias", "mejor_planta", "alerta_max", "alerta"]:
 			s.edificios[id][clave] = int(s.edificios[id][clave])
+	# Un guardado de antes de las Colecciones (sin "encontrados"): lo encontrado y lo creado se saca del baúl, una
+	# sola vez (en cuanto se escriba, el archivo ya lleva las claves)
+	if not leido.has("encontrados"):
+		for id in s.baul:
+			if s.baul[id] > 0:
+				s.encontrados.append(id)
+		for a in s.baul_armas:
+			if not a.receta in s.creadas:
+				s.creadas.append(a.receta)
 	return s
 
+
+static var escrituras := 0   # cuántas veces se ha escrito: Bestiario mira si el archivo cambió desde que lo leyó
 
 static func escribir(s: Dictionary) -> void:
 	var f := FileAccess.open(archivo, FileAccess.WRITE)
@@ -80,6 +95,7 @@ static func escribir(s: Dictionary) -> void:
 		f.store_string(JSON.stringify(s, "\t"))
 	ajustes_leidos = s.ajustes.duplicate(true)
 	ajustes_de = archivo
+	escrituras += 1
 
 
 # Un ajuste, para mirarlo en cada fotograma (las ayudas): se lee del archivo una vez y se recuerda; al guardar

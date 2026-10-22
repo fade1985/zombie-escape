@@ -233,6 +233,7 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 func mutar() -> void:
 	mutado = true
 	vapor = false   # (el vapor de enfadado es de los minijefes)
+	Bestiario.apuntar("gerente_mutado")   # visto: al bestiario de las Colecciones del ordenador
 	cambiar("mutar")
 	sprite.sprite_frames = MUTADO
 	sprite.offset = OFFSET_MUTADO

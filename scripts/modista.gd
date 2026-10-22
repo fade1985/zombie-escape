@@ -309,6 +309,7 @@ func despertar_maniquies(johnny: Node2D) -> void:
 	while donde.size() < VIVOS:
 		var a := donde.size() * TAU / VIVOS + randf() * 0.5
 		donde.append(global_position + PIE_MANIQUI + Vector2(cos(a), sin(a) * 0.8) * 130.0)
+	Bestiario.apuntar("maniqui")   # visto: al bestiario de las Colecciones del ordenador
 	for p in donde:
 		var vivo := VIVO.new()
 		get_parent().add_child(vivo)

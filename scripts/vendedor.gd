@@ -220,6 +220,7 @@ func dar(id: String) -> String:
 			return "+%d de escudo" % ESCUDO
 		"objeto":
 			partida.mochila.append(datos.objeto)
+			Objetos.apuntar_encontrado(datos.objeto)   # para las Colecciones del ordenador
 			return "Te llevas: " + Objetos.nombre(datos.objeto)
 	return ""
 

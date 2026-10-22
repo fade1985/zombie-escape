@@ -448,6 +448,7 @@ func crear_arma() -> void:
 	partida.logros.cumplir("manitas")
 	Sonido.tocar("compra" if hecha.rareza == "verde" else "limpio")   # las raras y épicas suenan a premio
 	Guardado.cambiar(func(g): g.baul_armas.append(hecha))
+	Recetas.apuntar_creada(receta)   # para las Colecciones del ordenador
 	foco = "r_" + receta
 	pintar()
 

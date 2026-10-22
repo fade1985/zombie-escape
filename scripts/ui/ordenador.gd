@@ -12,6 +12,8 @@
 #     los edificios, para releerlas. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
 #     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
+#   - "Colecciones": lo encontrado, creado y visto alguna vez, por edificio y en porcentaje, y el bestiario
+#     (bestiario.gd) con cada enemigo, su dibujo y una frase. Queda entre partidas; el icono avisa si hay algo nuevo.
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
@@ -27,10 +29,13 @@ const ICONOS := [   # [programa, icono, nombre]
 	["logros", "trofeo", "Logros"],
 	["dosier", "dosier", "Dosier\nVD-7"],
 	["noticias", "noticias", "Noticias"],
+	["colecciones", "colecciones", "Colecciones"],
 	["apagar", "puerta", "Apagar"],
 ]
-const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV"}
-const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7", "noticias": "Noticias de Canal 8"}
+const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGROS.EXE", "dosier": "DOSIER.TXT", "noticias": "CANAL8.TV",
+	"colecciones": "COLECCION.EXE"}
+const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
+	"noticias": "Noticias de Canal 8", "colecciones": "Colecciones y bestiario"}
 const ICONO_ARMA := {"mp5": "pistola"}
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
@@ -115,22 +120,46 @@ func montar_monitor() -> void:
 	iconos.position = Vector2(10, 12)
 	iconos.add_theme_constant_override("separation", 4)
 	pantalla.add_child(iconos)
+	var s := Guardado.cargar()   # una sola vez, para los avisos de los iconos
 	for i in ICONOS:
 		var b := Button.new()
 		b.name = "icono_" + i[0]
-		b.text = i[2]
-		b.icon = load("res://assets/ui/iconos/%s.png" % i[1])
 		b.flat = true
-		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		b.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-		b.custom_minimum_size = Vector2(132, 80)
-		b.add_theme_stylebox_override("normal", caja(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 4, 2))   # sin el margen grande del tema: caben los 6
+		b.custom_minimum_size = Vector2(132, 68)
+		b.add_theme_stylebox_override("normal", caja(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 4, 2))   # sin el margen grande del tema: caben los 7
 		b.add_theme_stylebox_override("hover", caja(Color(1, 1, 1, 0.12), Color(0, 0, 0, 0), 0, 4, 2))
 		b.add_theme_stylebox_override("pressed", caja(Color(1, 1, 1, 0.2), Color(0, 0, 0, 0), 0, 4, 2))
+		# El dibujo y el rótulo van dentro, no como icono y texto del botón: con el dibujo arriba, Button cuenta
+		# una línea de más y los rótulos de dos líneas pedirían 84 de alto (y los 7 ya no cabrían)
+		var dentro := VBoxContainer.new()
+		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
+		dentro.offset_top = 2
+		dentro.offset_bottom = -2
+		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dentro.add_theme_constant_override("separation", 0)
+		b.add_child(dentro)
+		var dibujo := TextureRect.new()
+		dibujo.texture = load("res://assets/ui/iconos/%s.png" % i[1])
+		dibujo.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+		dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		dibujo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dentro.add_child(dibujo)
+		var rotulo := Label.new()
+		rotulo.name = "rotulo_" + i[0]
+		rotulo.text = i[2]
+		rotulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		rotulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		rotulo.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		rotulo.add_theme_constant_override("line_spacing", 0)
+		rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dentro.add_child(rotulo)
 		var programa: String = i[0]
-		if programa == "noticias" and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
-			b.text = "Noticias\n¡NUEVAS!"
-			b.add_theme_color_override("font_color", Tema.AMARILLO)
+		if programa == "noticias" and not Historia.noticias_nuevas(s).is_empty():
+			rotulo.text = "Noticias\n¡NUEVAS!"
+			rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
+		elif programa == "colecciones" and s.colecciones_nuevo:
+			rotulo.text = "Colecciones\n¡NUEVO!"
+			rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
 		b.pressed.connect(func():
 			if programa == "apagar":
 				apagar()
@@ -219,6 +248,8 @@ func abrir(programa: String, foco := "") -> void:
 		programa_dosier(contenido)
 	elif programa == "noticias":
 		foco = programa_noticias(contenido, foco)
+	elif programa == "colecciones":
+		programa_colecciones(contenido)
 	else:
 		programa_armas(contenido)
 	var marcado: Control = contenido.find_child(foco, true, false) if foco != "" else null
@@ -297,6 +328,7 @@ func montar_ventana(programa: String) -> VBoxContainer:
 	margen.add_child(desliza)
 	var contenido := VBoxContainer.new()
 	contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	contenido.size_flags_vertical = Control.SIZE_EXPAND_FILL   # llena la ventana: un programa puede repartirse el hueco
 	contenido.add_theme_constant_override("separation", 8)
 	desliza.add_child(contenido)
 
@@ -722,6 +754,245 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 	if foco != "":
 		return foco
 	return primera_nueva if primera_nueva != "" else ultima
+
+
+# ── Colecciones ──
+
+# Lo que se ha encontrado, creado y visto alguna vez, de todos los edificios (Guardado: "encontrados", "creadas",
+# "bestiario"). Arriba, las cuentas totales; a la izquierda, por edificio, tres fichas (objetos, armas creadas y
+# páginas del dosier) con su barra, y el bestiario con una ficha por enemigo; a la derecha, lo que se esté
+# mirando: la rejilla de objetos o de armas, las páginas, o el dibujo del enemigo (en silueta si no se ha visto)
+func programa_colecciones(c: VBoxContainer) -> void:
+	var s := Guardado.cargar()
+	if s.colecciones_nuevo:
+		# ya está visto: el aviso del icono se quita hasta que haya algo nuevo
+		s = Guardado.cambiar(func(g): g.colecciones_nuevo = false)
+		var rotulo: Label = iconos.find_child("rotulo_colecciones", true, false)
+		if rotulo:
+			rotulo.text = "Colecciones"
+			rotulo.remove_theme_color_override("font_color")
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 8)
+	c.add_child(fila)
+	cajita(fila, "Objetos", "mochila", "%d / %d" % [cuantos(Objetos.NOMBRES.keys(), s.encontrados), Objetos.NOMBRES.size()])
+	cajita(fila, "Armas creadas", "herramientas", "%d / %d" % [cuantos(Recetas.LISTA.keys(), s.creadas), Recetas.LISTA.size()])
+	var vistos := cuantos(Bestiario.LISTA.keys(), s.bestiario)
+	cajita(fila, "Bestiario", "zombi", "%d / %d" % [vistos, Bestiario.LISTA.size()])
+	# la lista y el visor se quedan con el hueco que dejan las cajas (con un alto fijo, el contenido se pasaba unos
+	# píxeles y la ventana se desplazaba al marcar una ficha, tapando las cajas)
+	var partes := HBoxContainer.new()
+	partes.add_theme_constant_override("separation", 10)
+	partes.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	c.add_child(partes)
+	var desliza := ScrollContainer.new()
+	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	desliza.follow_focus = true
+	desliza.custom_minimum_size = Vector2(240, 200)
+	desliza.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	partes.add_child(desliza)
+	var lista := VBoxContainer.new()
+	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lista.add_theme_constant_override("separation", 6)
+	desliza.add_child(lista)
+	var lado := CenterContainer.new()
+	lado.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lado.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	partes.add_child(lado)
+
+	for ed in Edificios.LISTA:
+		var nombre: String = Edificios.datos(ed).nombre
+		var paginas: Array = Historia.dosier(ed).paginas
+		# [ficha, icono, título, cuántos, de cuántos, cómo se llaman en la línea de abajo]
+		var fichas := [
+			["objetos", "mochila", "Objetos", cuantos(Objetos.de_edificio(ed), s.encontrados), Objetos.de_edificio(ed).size(),
+				"objetos encontrados"],
+			["armas", "herramientas", "Armas creadas", cuantos(Recetas.de_edificio(ed), s.creadas), Recetas.de_edificio(ed).size(),
+				"armas creadas"],
+			["dosier", "dosier", "Dosier", paginas.filter(func(p): return Historia.encontrada(s, p.id)).size(), paginas.size(),
+				"páginas del dosier"],
+		]
+		var hecho := 0
+		var meta := 0
+		for f in fichas:
+			hecho += f[3]
+			meta += f[4]
+		var del_edificio := grupo(lista, "%s · %d %%" % [nombre, roundi(100.0 * hecho / maxi(meta, 1))])
+		for f in fichas:
+			var cual: String = f[0]
+			var clave := "c_%s_%s" % [ed, cual]
+			var b := tarjeta(del_edificio, clave, f[1], f[2], "%d / %d" % [f[3], f[4]], "",
+				"lleno" if f[4] > 0 and f[3] >= f[4] else "", [], [f[3], f[4]] if f[4] > 0 else [])
+			var hacer := ficha_edificio.bind(s, ed, cual)
+			var ver := func(): mostrar(lado, clave, hacer)
+			enlazar(b, "%s: %d de %d %s." % [nombre, f[3], f[4], f[5]], ver)
+			b.focus_entered.connect(ver)
+			b.mouse_entered.connect(ver)
+
+	var del_bestiario := grupo(lista, "Bestiario · %d / %d" % [vistos, Bestiario.LISTA.size()])
+	for id: String in Bestiario.LISTA:
+		var d: Dictionary = Bestiario.LISTA[id]
+		var visto := Bestiario.visto(s, id)
+		var clave := "z_" + id
+		var b := tarjeta(del_bestiario, clave, "jefe" if d.get("jefe", false) else "zombi", d.nombre if visto else "???",
+			sale_en(d) if visto else "Sin ver", "", "" if visto else "bloqueada")
+		var hacer := ficha_bestiario.bind(id, visto)
+		var ver := func(): mostrar(lado, clave, hacer)
+		enlazar(b, ("%s: sale en %s." % [d.nombre, sale_en(d, true)]) if visto
+			else "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí.", ver)
+		b.focus_entered.connect(ver)
+		b.mouse_entered.connect(ver)
+	info.text = "Lo que encuentras, creas o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+
+
+# Cuántos de estos ids están ya en una lista del guardado
+func cuantos(ids: Array, tenidos: Array) -> int:
+	return ids.filter(func(id): return id in tenidos).size()
+
+
+# Dónde sale un enemigo: corto para las fichas ("Apartamentos y centro") o con artículo para las frases
+func sale_en(d: Dictionary, con_articulo := false) -> String:
+	var eds: Array = d.edificios
+	if con_articulo:
+		return " y ".join(PackedStringArray(eds.map(func(e): return Edificios.datos(e).el_nombre)))
+	return "Apartamentos y centro" if eds.size() > 1 else Edificios.datos(eds[0]).nombre
+
+
+# Pone una ficha en el visor de la derecha. Si ya es la que está, nada (el foco y el ratón la piden a la vez).
+# "hacer" la construye, solo entonces: las rejillas de iconos no se montan hasta que se miran
+func mostrar(lado: CenterContainer, clave: String, hacer: Callable) -> void:
+	if lado.get_meta("ficha", "") == clave:
+		return
+	lado.set_meta("ficha", clave)
+	# si el foco (el mando) estaba dentro del visor y el ratón pide otra ficha, que no se pierda: pasa a la ficha
+	# nueva o, si esa no tiene botones, a su tarjeta de la lista
+	var foco := get_viewport().gui_get_focus_owner()
+	var dentro := foco != null and lado.is_ancestor_of(foco)
+	for h in lado.get_children():
+		lado.remove_child(h)
+		h.queue_free()
+	var ficha: Control = hacer.call()
+	lado.add_child(ficha)
+	if dentro:
+		var b: Control = primer_boton(ficha)
+		if b == null:
+			b = ventana.find_child(clave, true, false)
+		if b:
+			b.grab_focus()
+
+
+# La ficha de un edificio en el visor: sus objetos o sus armas creadas (una rejilla de casillas, apagadas las que
+# faltan) o sus páginas del dosier (solo los títulos: se leen en DOSIER.TXT)
+func ficha_edificio(s: Dictionary, ed: String, cual: String) -> Control:
+	var nombre: String = Edificios.datos(ed).nombre
+	var columna := VBoxContainer.new()
+	columna.add_theme_constant_override("separation", 6)
+	if cual == "dosier":
+		var paginas: Array = Historia.dosier(ed).paginas
+		var halladas := paginas.filter(func(p): return Historia.encontrada(s, p.id)).size()
+		var l := texto_tarjeta("%d de %d páginas de %s. Léelas en DOSIER.TXT." % [halladas, paginas.size(), nombre], TINTA)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size.x = 400
+		columna.add_child(l)
+		for i in paginas.size():
+			if Historia.encontrada(s, paginas[i].id):
+				columna.add_child(texto_tarjeta("Página %d · %s" % [i + 1, paginas[i].titulo], TINTA_SUAVE))
+		return columna
+	columna.add_child(texto_tarjeta("%s · %s" % ["Objetos" if cual == "objetos" else "Armas creadas", nombre], TINTA))
+	var casillas := GridContainer.new()
+	casillas.columns = 6
+	casillas.add_theme_constant_override("h_separation", 4)
+	casillas.add_theme_constant_override("v_separation", 4)
+	columna.add_child(casillas)
+	if cual == "objetos":
+		for id in Objetos.de_edificio(ed):
+			var tiene: bool = id in s.encontrados
+			var b := casilla(casillas, "o_" + id, "obj-" + id, tiene, false)
+			enlazar(b, "%s%s · %s" % [Objetos.NOMBRES[id], "" if tiene else " (sin encontrar)", Objetos.donde(id, ed)], func(): pass)
+		return columna
+	for id in Recetas.de_edificio(ed):
+		var r: Dictionary = Recetas.LISTA[id]
+		var creada: bool = id in s.creadas
+		var sabe := Recetas.sabe(s, id)
+		var b := casilla(casillas, "a_" + id, Recetas.icono_de(id), creada, not sabe)
+		var texto: String = r.desc if creada else ("receta aprendida: créala en el banco de trabajo" if sabe
+			else "sin receta: la suelta un jefe al caer")
+		enlazar(b, "%s · %s" % [r.nombre, texto], func(): pass)
+	return columna
+
+
+# Una casilla de la rejilla de objetos o armas: un botón de 52 × 52 con el icono a 32 × 32; apagado si aún no se
+# tiene y, si además falta la receta, con un candado en la esquina. Se marca (el mando entra en la rejilla) pero
+# no hace nada al pulsarlo: solo explica en la línea de abajo
+func casilla(padre: Container, nombre: String, icono: String, tiene: bool, candado: bool) -> Button:
+	var b := Button.new()
+	b.name = nombre
+	b.focus_mode = Control.FOCUS_ALL
+	b.custom_minimum_size = Vector2(52, 52)
+	b.add_theme_stylebox_override("normal", caja(TARJETA, TARJETA, 0, 0, 0))
+	for e in ["hover", "focus", "pressed", "hover_pressed"]:
+		b.add_theme_stylebox_override(e, caja(TARJETA_LUZ, TINTA, 2, 0, 0))
+	padre.add_child(b)
+	var centro := CenterContainer.new()
+	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(centro)
+	var imagen := TextureRect.new()
+	imagen.texture = load("res://assets/ui/iconos/%s.png" % icono)
+	imagen.custom_minimum_size = Vector2(32, 32)
+	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	imagen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if not tiene:
+		imagen.modulate = Color(1, 1, 1, 0.35)   # apagado, como las tarjetas "bloqueada"
+	centro.add_child(imagen)
+	if candado:
+		var cerrojo := TextureRect.new()
+		cerrojo.texture = load("res://assets/ui/iconos/candado.png")
+		cerrojo.position = Vector2(34, 2)
+		cerrojo.size = Vector2(16, 16)
+		cerrojo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		cerrojo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		cerrojo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		cerrojo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		b.add_child(cerrojo)
+	return b
+
+
+# La ficha de un enemigo en el visor: su dibujo de frente al tamaño del juego (en silueta si no se ha visto), su
+# nombre, dónde sale y su frase
+func ficha_bestiario(id: String, visto: bool) -> Control:
+	var d: Dictionary = Bestiario.LISTA[id]
+	var columna := VBoxContainer.new()
+	columna.add_theme_constant_override("separation", 4)
+	var retrato := TextureRect.new()
+	retrato.texture = Bestiario.retrato(id)
+	# cada píxel del dibujo, "escala" en pantalla (como en el juego); los más altos (el gerente y su mutación), a 1,
+	# para que quepan con el nombre y la frase
+	var escala: int = d.escala
+	if retrato.texture.get_size().y * escala > 220:
+		escala = 1
+	retrato.custom_minimum_size = retrato.texture.get_size() * escala
+	retrato.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	retrato.stretch_mode = TextureRect.STRETCH_SCALE
+	retrato.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	retrato.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	if not visto:
+		retrato.modulate = Color(0, 0, 0, 0.85)   # la silueta
+	columna.add_child(retrato)
+	var nombre := texto_tarjeta(d.nombre if visto else "???", TINTA)
+	nombre.add_theme_font_size_override("font_size", 32)
+	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(nombre)
+	var donde := texto_tarjeta("Sale en: " + (sale_en(d) if visto else "???"), TINTA_SUAVE)
+	donde.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(donde)
+	var frase := texto_tarjeta(d.frase if visto else "Aún no te lo has cruzado.", TINTA)
+	frase.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	frase.custom_minimum_size.x = 420
+	frase.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(frase)
+	return columna
 
 
 # ── Piezas ──

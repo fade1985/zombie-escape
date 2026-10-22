@@ -827,6 +827,63 @@ func probar_historia() -> void:
 	await probar_noticias()
 
 
+# Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (8 objetos y los
+# explosivos, tres o cuatro armas, cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
+# (captura-escritorio-nuevo.png), los objetos de este edificio (captura-colecciones.png), la ficha del vecino
+# (captura-bestiario.png) y la del gerente, sin ver (captura-bestiario-falta.png). Luego cuenta en la terminal lo
+# encontrado, creado y visto de cada edificio, y comprueba los totales
+func probar_colecciones() -> void:
+	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
+	print("Bestiario apuntado por la prueba hasta aquí: %s" % [Guardado.cargar().get("bestiario", [])])
+	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 8)
+	if not "explosivos" in encontrados:
+		encontrados.append("explosivos")
+	var creadas: Array = ["molotov", "lanza", "supermaza"]
+	var vistos: Array = ["normal", "lento", "rapido", "portera"]
+	if edificio == "centro":
+		creadas.append("bate_helado")
+		vistos += ["dependienta", "guardia", "antidisturbios"]
+	Guardado.cambiar(func(g):
+		g.encontrados = encontrados
+		g.creadas = creadas
+		g.bestiario = vistos
+		g.colecciones_nuevo = true)
+	abrir_ordenador()
+	await get_tree().create_timer(0.5).timeout   # el encendido del monitor dura 0,35 s
+	Captura.foto("captura-escritorio-nuevo.png")   # el icono avisa de que hay algo nuevo
+	ordenador.abrir("colecciones", "c_%s_objetos" % edificio)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-colecciones.png")
+	ordenador.abrir("colecciones", "z_normal")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-bestiario.png")
+	ordenador.abrir("colecciones", "z_gerente")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-bestiario-falta.png")
+	# los recuentos que enseña el programa, edificio por edificio
+	var g := Guardado.cargar()
+	for e in Edificios.LISTA:
+		var objetos: Array = Objetos.de_edificio(e)
+		var armas: Array = Recetas.de_edificio(e)
+		var bichos: Array = Bestiario.de_edificio(e)
+		print("Colecciones de %s: objetos %d/%d | armas %d/%d | bestiario %d/%d" % [e,
+			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
+			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
+			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
+	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 21:
+		push_error("Colecciones: los objetos por edificio no son 17 y 21")
+	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
+		push_error("Colecciones: las recetas por edificio no son 15 y 9")
+	if Bestiario.LISTA.size() != 17:
+		push_error("Colecciones: el bestiario no tiene 17 fichas")
+	if Bestiario.retrato("gerente_mutado") == null:
+		push_error("Colecciones: el retrato del gerente mutado es null")
+	if g.colecciones_nuevo:
+		push_error("Colecciones: el aviso de nuevo sigue puesto después de abrir el programa")
+	ordenador.abrir("")
+	ordenador.apagar()
+
+
 # Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
 # centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
 # programa, deja hablar a la reportera un poco y hace la foto
@@ -1320,6 +1377,7 @@ func probar_menus() -> void:
 	await probar_sangre()
 	await probar_mutaciones()
 	await probar_historia()
+	await probar_colecciones()
 	if ed.get("azotea", false):
 		await probar_azotea()
 	pausar()

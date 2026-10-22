@@ -469,6 +469,35 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 - Prueba: `--captura --evento apagon|incendio|horda|vendedor` (con o sin `--edificio centro`). La prueba larga sigue
   sin eventos.
 
+### ✅ Hecho (22 oct 2026, parte 8, trozo 3: colecciones y bestiario)
+
+- Un programa nuevo en ConserjeOS, **Colecciones** (`COLECCION.EXE`, en `scripts/ui/ordenador.gd`), con una ficha por
+  edificio: objetos encontrados, armas creadas y páginas del dosier, cada una con su cuenta y su porcentaje; y el
+  **bestiario**: una ficha por enemigo y, en las de los vistos, su dibujo de frente, su nombre y una frase. Icono
+  nuevo: `assets/ui/iconos/colecciones.png` (`tools/icono_colecciones.py`), un álbum de pegatinas. Mientras haya algo
+  nuevo desde la última vez, el icono dice «¡NUEVO!»; al abrir el programa se apaga.
+- Guardado (para siempre, entre partidas): `encontrados`, `creadas`, `bestiario` y `colecciones_nuevo`. Un guardado de
+  antes se rellena una vez con lo que haya en el baúl (objetos con más de 0 y las recetas de `baul_armas`).
+- Dónde se apunta: un objeto, al cogerlo del suelo (`soltar_objeto` de `partida.gd`) o al comprárselo al vendedor
+  ambulante (`vendedor.gd`); un arma, al crearla en el banco (`inventario.gd`), y cuenta como creada alguna vez,
+  aunque luego se pierda; un enemigo, cuando aparece en la sala donde estás (`meter_zombi` de `partida.gd`, por donde
+  pasan todos), más el gerente al mutar (`gerente.gd`) y el maniquí vivo de la modista (`modista.gd`). El bestiario
+  apunta en memoria y solo escribe el guardado la primera vez que ve a cada uno.
+- Las cuentas: los objetos, por edificio, 17 en los Apartamentos y 21 en el centro comercial (los explosivos cuentan
+  en los dos: los suelta el zombi explosivo); debajo de cada objeto, dónde sale (en el centro, sus tiendas). Las
+  recetas, 15 de los Apartamentos y 9 del centro (las 6 que mezclan los dos edificios y las 3 solo del centro). El
+  bestiario, 17 fichas (`scripts/bestiario.gd`): los seis zombis de siempre, la portera, la dependienta, el vigilante,
+  el guardia de la tarjeta, los cuatro minijefes, el maniquí, el gerente y el gerente mutado. Los textos del bestiario
+  están en `scripts/bestiario.gd`; el dueño los retocará al verlos en el juego. El dibujo de cada ficha es el fotograma
+  de frente de su hoja, recortado a lo dibujado (el recorte lo calcula `py tools/recortes_bestiario.py` y queda escrito
+  en `bestiario.gd`, para no leer imágenes en el juego); a tamaño del juego, salvo el gerente y su mutación, a la mitad
+  para que quepan con la frase.
+- Tecla de prueba **F8**: todo encontrado, creado y visto (y el aviso de nuevo puesto).
+- Prueba: la larga (`--captura`, con o sin `--edificio centro`), en `probar_colecciones`, deja en el guardado parte
+  de lo que hay y saca `captura-escritorio-nuevo.png` (el icono con el aviso), `captura-colecciones.png` (los objetos
+  del edificio), `captura-bestiario.png` (la ficha del vecino) y `captura-bestiario-falta.png` (la del gerente, sin
+  ver); en la terminal, lo encontrado, creado y visto de cada edificio, y avisa si los totales no cuadran.
+
 ## Por partes
 
 1. ✅ **El esqueleto** (21 oct): pantalla "Elige edificio" (con el candado), el edificio elegido en la partida, el
@@ -791,4 +820,5 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). La página del gerente, también
    (sale al caer él, en la parte 3 del trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
-   ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct).
+   ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct). ✅ Trozo 3, colecciones y
+   bestiario (22 oct).

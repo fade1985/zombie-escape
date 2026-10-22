@@ -25,7 +25,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **N** (centro comercial): derecho a la azotea, sin subir planta a planta. En **Elige edificio**, la N abre todos
   los edificios (el centro comercial sin completar los Apartamentos) hasta cerrar el juego; no se guarda.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
-  objeto al baúl y todas las recetas aprendidas, para probar el banco de trabajo. **Y**: soltar a tus pies el
+  objeto al baúl y todas las recetas aprendidas, para probar el banco de trabajo. **F8**: Colecciones al completo
+  (todo encontrado, creado y visto), para probar el programa del ordenador. **Y**: soltar a tus pies el
   papel de una receta que aún no tienes (como al morir un jefe).
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
@@ -52,11 +53,15 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--fotos-ayudas`: pone en Sí las ayudas de Opciones (`captura-ayudas-opciones.png`), prueba la vida y la pistola
   y adónde caería un lanzable, sin ayudas y con ellas (lo cuenta en la terminal), y saca el HUD (`captura-ayudas-hud.png`)
   y un molotov volando al zombi (`captura-ayudas-lanzar.png`). Las deja en No.
+- La prueba larga saca también las de Colecciones: `captura-escritorio-nuevo.png` (el icono con el aviso de
+  «¡NUEVO!»), `captura-colecciones.png` (los objetos del edificio), `captura-bestiario.png` (la ficha del vecino) y
+  `captura-bestiario-falta.png` (la del gerente, sin ver), y cuenta en la terminal lo encontrado, creado y visto.
 
 ## La sala de mantenimiento
 
 La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`escenas/menu_principal.tscn`).
-- Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7 y Noticias de Canal 8).
+- Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7,
+  Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el bestiario).
 - A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo**: todas
   las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
   mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir

@@ -758,6 +758,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
 	cosa.cogido.connect(func():
 		mochila.append(id)
+		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
 		Sonido.tocar("compra")
 		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
@@ -979,6 +980,7 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 # Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
+	Bestiario.apuntar(tipo)   # visto: al bestiario de las Colecciones del ordenador
 	zombi.position = donde
 	if "color_sangre" in zombi:
 		zombi.color_sangre = MANCHAS.get(tipo, SANGRE)
@@ -1086,6 +1088,10 @@ func _unhandled_input(evento: InputEvent) -> void:
 		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
 	elif evento.keycode == KEY_U:
 		dar_objetos()   # uno de cada objeto al baúl y todas las recetas, para probar el banco de trabajo
+	elif evento.keycode == KEY_F8:
+		# todo encontrado, creado y visto, para probar el programa Colecciones del ordenador (bestiario.gd)
+		Bestiario.todo_visto()
+		decir("Colecciones: todo encontrado, creado y visto")
 	elif evento.keycode == KEY_Y:
 		# una receta a los pies, como la que suelta un jefe al morir
 		if soltar_receta(johnny.position + Vector2(0, 50)) == "":

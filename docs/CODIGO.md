@@ -120,7 +120,9 @@
   `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `pruebas/partida_prueba.gd`) y saca `captura-objetos-nuevos.png`,
   `captura-banco-todo.png` y `captura-baul-todo.png`; luego prueba cada arma nueva contra zombis (`probar_recetas`)
   y saca `captura-arma-<receta>.png`.
-- `guardado.gd`: el guardado entre partidas.
+- `guardado.gd`: el guardado entre partidas. Para Colecciones: `encontrados` (objetos cogidos alguna vez), `creadas`
+  (armas creadas alguna vez en el banco), `bestiario` (enemigos vistos) y `colecciones_nuevo` (hay algo nuevo desde
+  la última vez que se abrió el programa; el icono avisa). Un guardado de antes los rellena una vez con lo del baúl.
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
 - `historia.gd`: el texto del dosier de cada edificio (`DOSIERES`: Apartamentos y centro comercial), la hoja de
   papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
@@ -128,6 +130,12 @@
   partida la enseña con `pagina_del_jefe()`). También el guiño de la cafetera (`CAFETERA`: lo dice la farmacéutica,
   `supervivientes.gd`). Para cambiar la historia se edita aquí, sin tocar los `id`. Las páginas encontradas se
   guardan para siempre (`paginas` del guardado) y el programa Dosier del ordenador enseña las de todos los edificios.
+- `bestiario.gd`: las 17 fichas del bestiario de Colecciones (`LISTA`: cada enemigo con su nombre, su frase, en qué
+  edificios sale, su hoja de sprites y la animación de frente). `apuntar(id)` lo llama `meter_zombi` de `partida.gd`
+  con cada enemigo que nace (y el gerente al mutar, y la modista con el maniquí vivo): visto = ha aparecido en la
+  sala donde estás; apunta en memoria y solo escribe el guardado la primera vez. `retrato(id)` da el dibujo de
+  frente recortado a lo dibujado (el `recorte` de cada ficha lo calcula `py tools/recortes_bestiario.py`; repetirlo si
+  cambia una hoja). `todo_visto()` es la tecla F8. Los textos se retocan aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
   `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
@@ -156,8 +164,12 @@
   `averia.gd`, `escolta.gd` y `barricada.gd`.
 - `partida_prueba.gd`: la partida de prueba. Es `partida.gd` (la hereda: tiene todo lo suyo) más las fotos y lo
   que cuenta en la terminal. Sin nada más, la prueba larga (`_process`: un apartamento, el jefe, menús, ordenador,
-  inventario, recetas, supervivientes...; con `--edificio centro`, en el centro comercial, con el antidisturbios en
-  la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o `--jefe mascota`, y al final la azotea).
+  inventario, recetas, supervivientes, historia, colecciones...; con `--edificio centro`, en el centro comercial, con
+  el antidisturbios en la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o `--jefe mascota`, y al
+  final la azotea). `probar_colecciones` deja en el guardado parte de lo que hay, saca el escritorio con el aviso
+  (`captura-escritorio-nuevo.png`), los objetos del edificio (`captura-colecciones.png`), la ficha del vecino
+  (`captura-bestiario.png`) y la del gerente sin ver (`captura-bestiario-falta.png`), y cuenta en la terminal lo
+  encontrado, creado y visto de cada edificio.
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
   `--alerta N` o `--evento X`, solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
@@ -165,7 +177,10 @@
 
 **ui/**
 - `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio"), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil, ayudas y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
-- `ordenador.gd`: la pantalla de ConserjeOS. `inventario.gd`: inventario (ponerse, usar y tirar), baúl y banco. `puesto.gd`: la ventanita
+- `ordenador.gd`: la pantalla de ConserjeOS (puntos, talentos, tienda de armas, logros, Dosier, Noticias y
+  Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
+  y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras
+  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl y banco. `puesto.gd`: la ventanita
   del puesto del ferretero (munición, molotovs y granadas por dólares ahorrados).
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado, pantalla roja con poca vida y escarcha con frío.
 - `botones.gd` (autoload): el saltito de los botones.
@@ -217,7 +232,8 @@ falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos �
 aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
-(los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_receta.py` (el papel de las recetas), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
+(los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
+Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 
 ## docs/ (del juego JS)
