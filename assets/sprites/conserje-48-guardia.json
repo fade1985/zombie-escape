@@ -98,7 +98,7 @@
       "dirs": {
         "south": {
           "row": 9,
-          "frames": 6
+          "frames": 11
         },
         "south-east": {
           "row": 10,
@@ -106,27 +106,47 @@
         },
         "east": {
           "row": 11,
-          "frames": 10
+          "frames": 8
         },
         "north-east": {
           "row": 12,
-          "frames": 10
+          "frames": 7
         },
         "north": {
           "row": 13,
-          "frames": 8
+          "frames": 8,
+          "durations": [
+            1.1,
+            0.7,
+            0.97,
+            1.15,
+            0.71,
+            0.81,
+            1.24,
+            1.32
+          ]
         },
         "north-west": {
           "row": 14,
-          "frames": 8
+          "frames": 8,
+          "durations": [
+            0.88,
+            1.25,
+            1.13,
+            1.17,
+            1.12,
+            0.77,
+            0.75,
+            0.93
+          ]
         },
         "west": {
           "row": 15,
-          "frames": 10
+          "frames": 8
         },
         "south-west": {
           "row": 16,
-          "frames": 9
+          "frames": 7
         }
       }
     },
