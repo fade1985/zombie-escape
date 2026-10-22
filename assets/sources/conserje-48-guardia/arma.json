@@ -18,9 +18,9 @@
       "west":       [1, 10],
       "south-west": [1, 9]
     },
-    "nota_fotogramas": "Lo que manda desde el 22 oct (tools/andar_arma.py): qué dibujos de PixelLab forman el paso en cada dirección, en orden. Se quitaron los que repiten casi la misma postura y en el sur se cogió el otro paso, que no la repite. 'ciclo' queda como estaba porque es lo que lee tools/arma.py (que no está en git).",
+    "nota_fotogramas": "Lo que manda desde el 22 oct (tools/andar_arma.py): qué dibujos de PixelLab forman el paso en cada dirección, en orden. Se quitaron los que repiten casi la misma postura. En el sur van del 1 al 11, la vuelta entera con las dos piernas: el 0 es la postura de arranque de PixelLab y hacía saltar el pie derecho (23 oct). 'ciclo' queda como estaba porque es lo que lee tools/arma.py (que no está en git).",
     "fotogramas": {
-      "south":      [0, 1, 2, 3, 4, 5],
+      "south":      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       "south-east": [4, 5, 6, 7, 8, 9, 10, 11],
       "north-east": [0, 1, 4, 5, 6, 7, 9],
       "north":      [1, 2, 3, 4, 5, 6, 7, 8],
