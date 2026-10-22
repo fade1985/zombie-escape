@@ -11,7 +11,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-(nada todavía)
+- **F1.** En la sala de mantenimiento aparece siempre un mueble al lado de la taquilla que no debería
+  existir: quitarlo.
 
 ## Mejoras
 
