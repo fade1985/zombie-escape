@@ -12,6 +12,9 @@
 #   agua.gd   un charco en la sala de venta   {tipo, sala, casillas, cable, cable_desde, cuadro, corriente, arreglado, avisado}
 #             con cuadro.gd, el cuadro eléctrico que le quita (y le devuelve) la corriente a la tienda; "arreglado":
 #             el técnico ha arreglado el cable (su rescate, averia.gd) y el agua ya no da calambres
+# Y el de un minijefe de los Apartamentos (planta.gd llama a del_gloton):
+#   porqueria.gd  la habitación del Glotón   {tipo, sala, casillas (casilla -> 1 charco, 2 con montón),
+#                                             paredes (casilla de muro -> forma del pegote), avisado}
 class_name Peligros
 
 const CASILLA := 32
@@ -49,6 +52,16 @@ const AGUA := {
 	"oscuro_sin": 0.1,   # ...y sin ella, más oscura (solo se ve con la linterna)
 	"teles": 4,          # cuántas estanterías de teles dan luz, como mucho
 }
+# La porquería del Glotón (su habitación, sin muebles): montones de mierda y charcos de diarrea con ácido por el
+# suelo (y salpicada por la pared), que queman a Johnny al pisarla; a los zombis no, que es suya
+const PORQUERIA := {
+	"dps": 7.0,          # vida por segundo pisándola...
+	"despues": 1.0,      # ...y lo que sigue escociendo al salir
+	"parte": 0.45,       # qué parte del suelo cubre, más o menos
+	"charcos": [1.6, 3.6],  # el radio de cada charco, en casillas (de ancho; de alto, tres cuartos)
+	"montones": 0.22,    # parte de las casillas sucias que llevan un montón encima
+	"paredes": 0.4,      # parte de las casillas de muro pegadas al suelo (lados y abajo) con un pegote encima
+}
 
 
 # Los peligros de una tienda (el sitio, ya con sus muebles). Vacío si su tipo no tiene. Con su propio dado (de la
@@ -69,6 +82,50 @@ static func de_tienda(sitio: Dictionary) -> Array:
 		if not a.is_empty():
 			lista.append(a)
 	return lista
+
+
+# La porquería del Glotón: por toda su habitación (la única sala del piso del jefe), a charcos redondos que se
+# solapan hasta cubrir su parte del suelo, menos lo de delante de la puerta de entrada (ahí aparece Johnny). Con su
+# propio dado, como de_tienda. Cada casilla sucia: 1, charco; 2, charco con un montón encima
+static func del_gloton(sitio: Dictionary) -> Array:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(sitio.surtido) + 7331
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var p: Dictionary = PORQUERIA
+	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * CASILLA)
+	var casillas := {}
+	var total: int = sala.ancho * sala.fondo
+	var intentos := 0
+	while casillas.size() < total * p.parte and intentos < 400:
+		intentos += 1
+		var cx := rng.randf_range(sala.c0, sala.c0 + sala.ancho)
+		var cy := rng.randf_range(sala.f0, sala.f0 + sala.fondo)
+		var r: float = rng.randf_range(p.charcos[0], p.charcos[1])
+		for f in range(floori(cy - r), ceili(cy + r) + 1):
+			for c in range(floori(cx - r), ceili(cx + r) + 1):
+				if dueno(apt, c, f) != sala.id:
+					continue
+				if Vector2(c + 0.5 - cx, (f + 0.5 - cy) / 0.75).length() > r:
+					continue
+				if entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
+					continue
+				casillas[Vector2i(c, f)] = 1
+	for k in casillas:
+		if rng.randf() < p.montones:
+			casillas[k] = 2
+	# y los lomos de los muros de los lados y de abajo, salpicados (el de arriba lleva lo suyo en su cara): de las
+	# casillas de muro pegadas al suelo, una parte, cada una con una forma (0 a 2)
+	var paredes := {}
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			if dueno(apt, c, f) != sala.id:
+				continue
+			for d in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]:
+				var k: Vector2i = Vector2i(c, f) + d
+				if dueno(apt, k.x, k.y) == -1 and not paredes.has(k) and rng.randf() < p.paredes:
+					paredes[k] = rng.randi_range(0, 2)
+	return [{"tipo": "porqueria", "sala": sala.id, "casillas": casillas, "paredes": paredes, "avisado": false}]
 
 
 # ¿Hay ahí fuego o agua? (para no poner a los zombis dormidos encima: planta.gd)

@@ -82,6 +82,11 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   ferretero con Johnny quieto; con un zombi en otra habitación (pared en medio) se queda en la fila; con otro a unos 250
   a la vista, deja la fila y va a por él (`captura-caza-va.png`), lo mata a martillazos y vuelve a su puesto
   (`captura-caza-vuelve.png`). Cada línea de la terminal dice lo esperado.
+- `--porqueria` (con `--jefe gloton`): en vez de la prueba larga, la de la habitación del Glotón (`peligros/porqueria.gd`):
+  la monta sin él y cuenta en la terminal los muebles (0), la parte del suelo sucia, que donde aparece Johnny está
+  limpio, lo que pierde sobre la porquería en 1 s y que en una casilla limpia no pierde nada, las salpicaduras de la
+  pared y las luces del resplandor (`captura-porqueria.png`, Johnny encima; `captura-porqueria-pared.png`, la pared
+  de arriba). Cada línea dice lo esperado.
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

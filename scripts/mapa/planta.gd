@@ -160,6 +160,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			"visitado": false, "muebles": Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
 		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
+		if jefe and su_jefe == "gloton":
+			# la habitación del Glotón no tiene muebles: en su lugar, el suelo (y la pared) llenos de su porquería, que quema
+			sitio.muebles = []
+			sitio.peligros = Peligros.del_gloton(sitio)
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		if tipo_tienda == "joyeria":

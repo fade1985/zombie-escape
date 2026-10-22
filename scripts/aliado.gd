@@ -33,7 +33,7 @@ const SIN_RASTRO := 45.0   # sin rastro aún para su puesto, espera a esta dista
 # no repiten) y se borra al montar otra sala (supervivientes.al_montar)
 static var huellas := PackedVector2Array()
 const BALA := preload("res://escenas/armas/bala.tscn")
-const CHARCOS := ["veneno", "acido", "toxico"]   # los que la farmacéutica deja a medias
+const CHARCOS := ["veneno", "acido", "toxico", "porqueria"]   # los que la farmacéutica deja a medias (la porquería del Glotón lleva ácido)
 const RUMBOS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 const LINEA := Color("#1d1b2c")
 const PAPEL := Color("#fff8ea")

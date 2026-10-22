@@ -27,6 +27,9 @@ const LISTA := {
 	# calambrazo del agua con corriente (a los zombis, el agua los aturde: agua.gd)
 	"frio": {"dps": 3.0, "despues": 1.5, "frena": 0.4, "zombis": true, "color": Color("#9fd8ff")},
 	"calambre": {"despues": 0.4, "frena": 1.0, "zombis": false, "color": Color("#bff4ff")},
+	# la porquería del Glotón: mierda con ácido, solo a Johnny. Sus números (dps y despues) los manda siempre
+	# peligros/porqueria.gd desde Peligros.PORQUERIA: aquí no se repiten, para que no se desparejen
+	"porqueria": {"zombis": false, "color": Color("#c9a227")},
 	# la carga del antidisturbios: te tira y tardas un momento en levantarte
 	"tirado": {"despues": 0.7, "frena": 1.0, "zombis": false, "color": Color("#ffd23f")},
 }
@@ -116,6 +119,8 @@ static func tinte(est: Dictionary, t: float) -> Color:
 		c = Color("#ff7a1c")
 	elif est.has("veneno") or est.has("acido") or est.has("gases") or est.has("toxico"):
 		c = Color("#7ddc3a")
+	elif est.has("porqueria"):
+		c = Color("#9a8a2a")   # verde sucio
 	elif est.has("resbaladizo") or est.has("frio"):
 		c = Color("#9fd8ff")
 	else:
@@ -130,6 +135,10 @@ static func efectos(nodo: Node2D, est: Dictionary, velocidad: Vector2, delta: fl
 	if est.has("veneno") and randf() < 6.0 * delta:
 		Particulas.soltar(nodo, p + Vector2(randf_range(-radio, radio) * 0.7, -randf_range(0, alto)), Vector2(randf_range(-8, 8), randf_range(30, 60)),
 			LISTA.veneno.color if randf() < 0.5 else Color("#4f772d"), randf_range(2, 3), 0.5)
+	if est.has("porqueria") and randf() < 6.0 * delta:
+		# gotas marrones que caen de los pies y alguna chispita de ácido
+		Particulas.soltar(nodo, p + Vector2(randf_range(-radio, radio) * 0.7, randf_range(-6, 4)), Vector2(randf_range(-10, 10), randf_range(20, 50)),
+			Color("#6b4a1f") if randf() < 0.65 else Color("#b5d634"), randf_range(2, 3), 0.45)
 	if est.has("fuego") and randf() < 30.0 * delta:
 		Particulas.soltar(nodo, p + Vector2(randf_range(-radio, radio) * 0.6, 10.0 - randf_range(0, alto)), Vector2(randf_range(-18, 18), randf_range(-130, -60)),
 			Llamas.FUEGO[randi() % 4], randf_range(2, 4), 0.4)

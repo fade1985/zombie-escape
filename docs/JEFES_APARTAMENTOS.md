@@ -62,6 +62,23 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
 - Pegas conocidas: el andar a gatas es sutil (más balanceo que paso); de espaldas, el latigazo enseña una lengua por
   encima de la cabeza.
 
+### ✅ Hecho (22 oct 2026, M2 de `PENDIENTES.md`): su habitación
+
+- **Sin muebles** (`planta.gd`: el piso del jefe, cuando es el Glotón). En su lugar, **su porquería**: un peligro como
+  los de las tiendas (`scripts/peligros/porqueria.gd`; los números en `Peligros.PORQUERIA`), decidido al generar la
+  planta (`Peligros.del_gloton`) y que sigue igual al volver.
+  - **El suelo:** charcos de diarrea redondos que se solapan hasta cubrir cerca de un 45 % de la habitación, con un
+    montón de mierda encima en un 22 % de las casillas sucias; delante de la puerta de entrada, limpio (ahí aparece
+    Johnny). Dibujado a cuadraditos como el fuego de la cocina, con burbujas de ácido que revientan y moscas sobre los
+    montones. **Las paredes:** la de arriba con salpicaduras que gotean (texturas hechas con código, como adornos de
+    las caras de muro) y los lomos de las otras tres, que se ven desde arriba, con pegotes en un 40 % de sus casillas.
+    Como sin muebles no hay lámparas, el ácido **reluce** con 8 luces verdosas suaves que laten (si no, la habitación
+    quedaría a oscuras y no se vería dónde pisar).
+  - **Quema:** estado `porqueria` (`estados.gd`), **7 de vida por segundo** pisándola y 1 s de escozor al salir, con
+    gotas marrones; la esquiva la cruza sin daño, como los charcos. A los zombis (y a él) no les hace nada. Al entrar,
+    el aviso «¡Qué peste! El suelo está lleno de mierda con ácido: no la pises».
+  - Prueba: `--captura --jefe gloton --porqueria` (`captura-porqueria.png` y `captura-porqueria-pared.png`).
+
 ## 2. El Gymbro (minijefe; diseño del dueño)
 
 **Aspecto:** muy musculoso, con **cuádriceps y manos gigantes** comparados con el resto del cuerpo; **arrastra las

@@ -15,9 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M2.** La habitación del Glotón nunca tiene muebles: en su lugar está toda llena de caca, heces y diarrea,
-  también las paredes. Esa porquería es una mezcla de mierda y ácido: quita vida al pisarla, así que en la
-  pelea no se puede uno acercar a él sin más.
 - **M3.** Mini presentación de cada jefe: al empezar la pelea, un pequeño zoom que lo enfoca solo a él
   mientras suelta un grito, y sale su nombre en pantalla.
 - **M4.** Meter objetos en el baúl a mano: además de que los del inventario pasen solos al baúl al acabar la
