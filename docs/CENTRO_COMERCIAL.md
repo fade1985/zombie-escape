@@ -357,8 +357,35 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   con el vigilante dos veces más en la lista.
 - Prueba: `--captura --edificio centro --fotos-tiendas` pone la joyería en la 1.ª planta y saca
   `captura-tienda-joyeria.png` como las demás.
-- Lo que falta (trozos 2 y 3): la puerta de la cámara aún se abre como cualquier otra, y dentro solo hay cajas
-  fuertes de adorno.
+- Lo que faltaba al acabar el trozo 1: la puerta de la cámara (trozo 2) y lo que hay dentro (trozo 3).
+
+### ✅ Hecho (22 oct 2026, parte 10, trozo 2: la cámara acorazada)
+
+- Todo en `scripts/joyeria.gd` (lo engancha `partida.gd` como los eventos: `preparar`, `al_montar`, `recoger`,
+  `soltar_dorada` y `coger_dorada`). El estado va en `planta.joyeria` (lo crea `planta.gd` al poner la joyería):
+  la sala de la cámara, su puerta, si está abierta, dónde anda la tarjeta dorada y los segundos de alarma que
+  quedan. La cámara nunca lleva zombis dormidos dentro (no podrían salir) ni al científico muerto.
+- **La puerta blindada:** la de `mapa/puerta_bano.gd` con `acero`: una plancha gris con remaches, la rueda de la
+  combinación y el tirador (de lado, una hoja gruesa). Cerrada, choca y tapa la luz, y los zombis no cuentan con
+  pasar por ahí; al abrirse se encoge como la de madera.
+- **El lector:** arrimarse a la puerta por el lado de la tienda (a menos de 64). Con la **tarjeta dorada**, abre sin
+  ruido. Sin ella, la primera vez avisa («vuelve a arrimarte para disparar la alarma») y, tras apartarse, la segunda
+  dispara la **apertura de emergencia**: música de jefe, el cartel «¡ALARMA!» (el de los eventos), la sirena cada 6 s
+  y una cuenta atrás de **40 s** con su barra arriba (como la de la barricada del ferretero; los últimos 10 s, el
+  número en grande). Mientras dura entran zombis por la entrada de la tienda o por una habitación donde no esté
+  Johnny (nunca la cámara): grupos de 2 a 4 (uno más por cada dos plantas), cada 5 s al principio y cada 3 al final,
+  con 24 a la vez como mucho; primero normales, lentos, rápidos y dependientas, luego rápidos, vigilantes y
+  explosivos. Si Johnny sale de la joyería, la cuenta se para hasta que vuelve. Al acabar: «¡Clac!», la puerta se
+  abre y la música vuelve a la de explorar.
+- **La tarjeta dorada:** el guardia de la planta de la joyería la lleva junto a la suya y, al caer, suelta las dos
+  (la dorada, de oro con el chip azul: `Mapa.dibujo_tarjeta(true)`; `poner_llave(..., dorada)` avisa con
+  `dorada_cogida`). Si se queda en el suelo, al volver al pasillo sigue ahí.
+- Prueba: `--captura --edificio centro --joyeria` (`probar_joyeria`, con la joyería en la planta baja): la puerta
+  cerrada (`captura-joyeria-camara.png`), el aviso y la alarma con los primeros zombis (`captura-joyeria-alarma.png`),
+  la cuenta adelantada y la puerta abierta (`captura-joyeria-abierta.png`), el guardia que suelta las dos tarjetas
+  (`captura-joyeria-dorada.png`) y, con la cámara otra vez cerrada, la apertura con la tarjeta sin alarma; todo
+  contado en la terminal.
+- Lo que falta (trozo 3): dentro solo hay cajas fuertes de adorno; el premio y el logro «Caja fuerte».
 
 ## Historia
 
@@ -926,5 +953,5 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
    el inventario (ver «Objetos»). Quedan, de lo apartado: la joyería (sala opcional con riesgo) y los trajes de
    Johnny de la tienda de ropa.
 10. **La joyería**, la sala opcional con riesgo (decidido: ver «Decidido con el dueño (22 oct 2026, para la parte
-    10)», en «Objetos»), en tres trozos: ✅ Trozo 1, la tienda (22 oct). Trozo 2, la cámara acorazada (la tarjeta
-    dorada y la apertura de emergencia con la alarma). Trozo 3, el premio, el logro «Caja fuerte» y la prueba.
+    10)», en «Objetos»), en tres trozos: ✅ Trozo 1, la tienda (22 oct). ✅ Trozo 2, la cámara acorazada (22 oct: la
+    tarjeta dorada y la apertura de emergencia con la alarma). Trozo 3, el premio, el logro «Caja fuerte» y la prueba.

@@ -101,6 +101,7 @@ var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el
 var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
 var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
+var joyeria := Joyeria.new()       # la cámara acorazada de la joyería del centro comercial (joyeria.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var recetas_en_suelo: Array = []   # las recetas soltadas por los jefes que aún no se han cogido (no se repiten)
 var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
@@ -171,6 +172,8 @@ func _ready() -> void:
 	logros.preparar(self)
 	add_child(eventos)
 	eventos.preparar(self)
+	add_child(joyeria)
+	joyeria.preparar(self)
 	# Los controles del móvil (solo salen en pantallas táctiles)
 	var tactil := Tactil.new()
 	tactil.partida = self
@@ -324,6 +327,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	# navegación y sus muros se mezclarían con los del nuevo). Y con él, los de su equipo
 	supervivientes.recoger()
 	eventos.recoger()
+	joyeria.recoger()
 	johnny.get_parent().remove_child(johnny)
 	if mapa:
 		remove_child(mapa)
@@ -345,6 +349,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	move_child(mapa, 0)
 	mapa.montar(sitio, llave, ed.cerrojo == "tarjeta")
 	mapa.llave_cogida.connect(_al_coger_llave)
+	mapa.dorada_cogida.connect(joyeria.coger_dorada)
 	if mapa.ordenador:
 		mapa.ordenador.usar.connect(abrir_ordenador)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
@@ -364,6 +369,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	johnny.position = mapa.puertas[por].llegada()
 	johnny.velocity = Vector2.ZERO
 	supervivientes.al_montar(idx, sitio)
+	joyeria.al_montar(idx, sitio)   # la puerta blindada de la cámara acorazada, y la tarjeta dorada si está en el suelo
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
 	eventos.al_montar(idx, sitio)   # (antes de la luz: el apagón la cambia)
@@ -666,7 +672,9 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 	planta.guardia.vivo = false
 	planta.llave = {"sitio": aqui, "pos": zombi.position}
 	mapa.call_deferred("poner_llave", zombi.position, true)
-	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso", 3.0)
+	# en la planta de la joyería lleva también la tarjeta dorada de su cámara acorazada (joyeria.gd)
+	var dorada := joyeria.soltar_dorada(zombi.position + Vector2(44, 0))
+	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso" + (" y la tarjeta dorada de la Joyería" if dorada else ""), 3.0)
 
 
 # Con la Alerta 5, en los Apartamentos: el vecino que lleva la llave (planta.gd) aguanta el doble, como el guardia,

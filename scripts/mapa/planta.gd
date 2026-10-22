@@ -159,6 +159,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
+		if tipo_tienda == "joyeria":
+			# la cámara acorazada (joyeria.gd): su sala, la puerta que la separa de la sala de venta (cerrada hasta
+			# que se abra con la tarjeta dorada o con la alarma) y dónde anda la tarjeta dorada (la lleva el guardia)
+			var acorazada: Dictionary = apt.salas.filter(func(s): return s.uso == "acorazada")[0]
+			planta.joyeria = {"sitio": idx, "sala": acorazada.id, "abierta": false, "dorada": "guardia", "suelo": {},
+				"alarma": -1.0, "puerta": apt.puertas.filter(func(p): return p.a == acorazada.id or p.b == acorazada.id)[0]}
 		sitio.salidas.append({"dir": apt.entrada.lado, "en": (apt.entrada.c + 1) * CASILLA, "tipo": "puerta",
 			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": "", "letrero": planta.nombre})
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
@@ -255,7 +261,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var otros: Array = normales.filter(func(i): return i != donde)
 	var de_cientifico: int = otros[rng.randi() % otros.size()] if not otros.is_empty() else donde
 	var cuartos: Array = planta.sitios[de_cientifico].apt.salas.filter(func(s):
-		return planta.superviviente.is_empty() or de_cientifico != planta.superviviente.sitio or s.id != planta.superviviente.sala)
+		# (ni en la cámara acorazada de la joyería, que está cerrada)
+		return ((planta.superviviente.is_empty() or de_cientifico != planta.superviviente.sitio
+			or s.id != planta.superviviente.sala) and s.uso != "acorazada"))
 	var cuarto: Dictionary = cuartos[rng.randi() % cuartos.size()]
 	var en := sitio_libre(planta.sitios[de_cientifico], cuarto, Vector2.INF, [], 40.0)
 	planta.cientifico = {"sitio": de_cientifico, "pos": cuarto.centro if en == Vector2.INF else en, "cogida": false}
@@ -385,7 +393,8 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	var peso := func(s: Dictionary) -> float:
 		return s.casillas * (0.5 if s.uso == "bano" else 1.0)   # en los baños, pocos
 	var total := 0.0
-	var salas: Array = apt.salas.filter(func(s): return s.id != sin and s.get("dueno_bano", -1) != sin)   # ni su aseo
+	# (ni su aseo; ni la cámara acorazada de la joyería: con la puerta blindada cerrada no podrían salir)
+	var salas: Array = apt.salas.filter(func(s): return s.id != sin and s.get("dueno_bano", -1) != sin and s.uso != "acorazada")
 	for s in salas:
 		total += peso.call(s)
 	var salida: Dictionary = sitio.salidas[0]

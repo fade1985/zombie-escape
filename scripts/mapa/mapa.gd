@@ -12,6 +12,7 @@
 extends Node2D
 
 signal llave_cogida
+signal dorada_cogida   # la tarjeta dorada de la cámara acorazada de la joyería (joyeria.gd)
 
 const CASILLA := 32
 const MURO := 64
@@ -803,10 +804,11 @@ func etiqueta(texto: String, pos: Vector2) -> void:
 
 
 # La llave del apartamento de la jefa: brilla un poco y sube y baja hasta que Johnny la pisa. En el centro
-# comercial, la tarjeta de acceso (la suelta el guardia al caer)
-func poner_llave(pos: Vector2, tarjeta := false) -> void:
+# comercial, la tarjeta de acceso (la suelta el guardia al caer) y, con "dorada", la tarjeta dorada de la cámara
+# acorazada de la joyería (joyeria.gd; al cogerla avisa con dorada_cogida)
+func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
 	var zona := Area2D.new()
-	zona.name = "Llave"
+	zona.name = "Dorada" if dorada else "Llave"
 	zona.position = pos
 	zona.collision_layer = 0
 	zona.collision_mask = 2
@@ -816,7 +818,7 @@ func poner_llave(pos: Vector2, tarjeta := false) -> void:
 	forma.shape = circulo
 	zona.add_child(forma)
 	var dibujo := Sprite2D.new()
-	dibujo.texture = dibujo_tarjeta() if tarjeta else LLAVE
+	dibujo.texture = dibujo_tarjeta(dorada) if tarjeta else LLAVE
 	dibujo.scale = Vector2(2, 2)
 	dibujo.offset = Vector2(0, -8)
 	zona.add_child(dibujo)
@@ -826,27 +828,35 @@ func poner_llave(pos: Vector2, tarjeta := false) -> void:
 	vaiven.tween_property(dibujo, "position:y", 0.0, 0.6).set_trans(Tween.TRANS_SINE)
 	zona.body_entered.connect(func(cuerpo):
 		if cuerpo.is_in_group("jugador"):
-			llave_cogida.emit()
+			if dorada:
+				dorada_cogida.emit()
+			else:
+				llave_cogida.emit()
 			zona.queue_free())
 
 
 # La tarjeta de acceso, dibujada con código hasta que tenga su sprite (parte 2 del centro comercial): una
-# tarjeta azul de 12 × 8 píxeles con su banda magnética, su chip dorado y el borde oscuro
-static func dibujo_tarjeta() -> Texture2D:
+# tarjeta azul de 12 × 8 píxeles con su banda magnética, su chip dorado y el borde oscuro. La dorada (la de la
+# cámara acorazada de la joyería), igual pero de oro, con el chip azul
+static func dibujo_tarjeta(dorada := false) -> Texture2D:
+	var fondo := Color("#e0b030") if dorada else Color("#3d7be0")
+	var borde := Color("#6e4e10") if dorada else Color("#1b2f5c")
+	var brillo := Color("#fff0a0") if dorada else Color("#8fb8ff")
+	var chip := Color("#3d7be0") if dorada else Color("#ffd23f")
 	var img := Image.create(12, 8, false, Image.FORMAT_RGBA8)
-	img.fill(Color("#3d7be0"))
+	img.fill(fondo)
 	for x in 12:
-		img.set_pixel(x, 0, Color("#1b2f5c"))
-		img.set_pixel(x, 7, Color("#1b2f5c"))
+		img.set_pixel(x, 0, borde)
+		img.set_pixel(x, 7, borde)
 		img.set_pixel(x, 2, Color("#14161f"))   # la banda
-		img.set_pixel(x, 1, Color("#8fb8ff"))   # el brillo de arriba
+		img.set_pixel(x, 1, brillo)             # el brillo de arriba
 	for y in 8:
-		img.set_pixel(0, y, Color("#1b2f5c"))
-		img.set_pixel(11, y, Color("#1b2f5c"))
+		img.set_pixel(0, y, borde)
+		img.set_pixel(11, y, borde)
 	for p in [Vector2i(2, 4), Vector2i(3, 4), Vector2i(2, 5), Vector2i(3, 5)]:
-		img.set_pixelv(p, Color("#ffd23f"))   # el chip
+		img.set_pixelv(p, chip)   # el chip
 	for x in range(6, 10):
-		img.set_pixel(x, 5, Color("#dfe8ff"))   # el nombre
+		img.set_pixel(x, 5, Color("#fff8e0") if dorada else Color("#dfe8ff"))   # el nombre
 	return ImageTexture.create_from_image(img)
 
 

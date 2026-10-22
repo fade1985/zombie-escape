@@ -120,6 +120,13 @@
   `ficha()` (de otro día, se empieza de cero), `apuntar()` (al acabar, en `terminar()` de `partida.gd`, que no toca el
   progreso del edificio) y `marca()` y `texto_tarjeta()` para los textos. La prueba: `--captura --reto si` (o
   `--reto <regla>`; `probar_reto()` en `pruebas/partida_prueba.gd`).
+- `joyeria.gd`: la cámara acorazada de la joyería (parte 10): la puerta blindada (`mapa/puerta_bano.gd` con `acero`),
+  el lector (arrimarse a la puerta: con la tarjeta dorada abre; sin ella, la segunda vez dispara la apertura de
+  emergencia), la alarma (cuenta atrás de 40 s con su barra en pantalla, sirena y grupos de zombis por la entrada o
+  por una habitación: `grupo()`) y la tarjeta dorada, que suelta el guardia de esa planta (`soltar_dorada`, desde
+  `_al_caer_guardia` de `partida.gd`; `Mapa.poner_llave(..., dorada)` y su señal `dorada_cogida`). El estado, en
+  `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
+  `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, lo que
@@ -186,7 +193,8 @@
   encontrado, creado y visto de cada edificio.
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
-  `--alerta N`, `--evento X` o `--reto si` (`probar_reto`: el reto del día), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día) o `--joyeria` (`probar_joyeria`: la cámara
+  acorazada), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**

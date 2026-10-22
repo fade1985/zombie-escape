@@ -35,6 +35,8 @@ func ordenar_jefes_prueba() -> void:
 	if probar in orden_jefes:
 		orden_jefes.erase(probar)
 		orden_jefes.insert(1, probar)
+	if "--joyeria" in OS.get_cmdline_user_args():
+		Planta.joyeria_planta = 1   # la joyería en la planta baja, para ir derecho a su cámara acorazada
 
 
 # Ya en la sala de mantenimiento: la prueba que se haya pedido (si no, la larga, que sigue en _process)
@@ -46,6 +48,11 @@ func empezar_prueba() -> void:
 		fotos_luz()
 	elif "--fotos-ayudas" in args:
 		fotos_ayudas()
+	elif "--fotos-supervivientes" in args:
+		fotos_supervivientes()
+	elif "--joyeria" in args:
+		set_process(false)   # sin la prueba larga
+		probar_joyeria()
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)
@@ -108,6 +115,70 @@ func fotos_ayudas() -> void:
 		g.ajustes.vida_entera = false
 		g.ajustes.pistola_sin_fin = false
 		g.ajustes.lanzar_solo = false)
+	get_tree().quit()
+
+
+# Con "--captura --fotos-supervivientes": los tres supervivientes de los Apartamentos con su hoja de PixelLab
+# (aliado.gd, HOJAS). En la sala de mantenimiento, de vecinos junto a Johnny (captura-supervivientes-sala.png); luego
+# se unen al equipo y, en un apartamento sin zombis, andan tras él (captura-supervivientes-andar.png), hacen lo suyo
+# (captura-supervivientes-accion.png: el fogonazo de la pistola y del fusil, y la jeringa) y el policía cae, con su
+# vida encima como en la horda (captura-supervivientes-caido.png). Luego se cierra
+func fotos_supervivientes() -> void:
+	set_process(false)
+	for id in ["policia", "medico", "militar"]:
+		var v := supervivientes.crear(Supervivientes.DATOS[id], "vecino")
+		v.es_vecino = true
+		v.casa = Supervivientes.DATOS[id].casa
+		v.position = v.casa
+		mapa.cosas.add_child(v)
+		supervivientes.vecinos.append(v)
+	johnny.position = Vector2(710, 262)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-supervivientes-sala.png")
+	print("Foto supervivientes: en la sala, de vecinos")
+	for v in supervivientes.vecinos.duplicate():
+		supervivientes.unir(v)
+	# a un apartamento (el de más habitaciones) sin zombis y con todo descubierto, como en fotos_luz
+	var i := 1
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	montar(i, 0, false)
+	for sala in planta.sitios[i].apt.salas:
+		mapa.vistas[sala.id] = true
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await get_tree().create_timer(0.5).timeout
+	# andando tras Johnny: él se aparta y ellos van a su alrededor
+	johnny.position += Vector2(150, 0)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-supervivientes-andar.png")
+	print("Foto supervivientes: andando")
+	await get_tree().create_timer(1.2).timeout
+	# lo suyo: el policía y el militar sacan el arma y la médica la jeringa (la foto, en el fotograma del fogonazo)
+	var hacia := {"policia": Vector2.RIGHT, "medico": Vector2.DOWN, "militar": Vector2.LEFT}
+	for a in supervivientes.equipo:
+		a.velocity = Vector2.ZERO
+		a.animar("reposo", hacia[a.def.id])
+		a.empezar_accion()
+	await get_tree().create_timer(0.22).timeout
+	Captura.foto("captura-supervivientes-accion.png")
+	print("Foto supervivientes: disparo, ráfaga y jeringa")
+	await get_tree().create_timer(0.8).timeout
+	# el policía cae (como en la horda: forzando la cerradura, con su vida encima)
+	var p: Aliado = supervivientes.equipo[0]
+	p.forzando = true
+	p.sitio_forzar = p.position
+	p.vida = 0
+	p.caido = true
+	await get_tree().create_timer(0.9).timeout
+	Captura.foto("captura-supervivientes-caido.png")
+	print("Foto supervivientes: el policía caído")
 	get_tree().quit()
 
 
@@ -468,6 +539,81 @@ func probar_reto() -> void:
 		e.completado, e.victorias, e.alerta_max, e.mejor_planta, e.mejor_tiempo,
 		e.completado == antes.completado and e.victorias == antes.victorias and e.alerta_max == antes.alerta_max
 		and e.mejor_planta == antes.mejor_planta and e.mejor_tiempo == antes.mejor_tiempo])
+	get_tree().quit()
+
+
+# Con "--captura --edificio centro --joyeria": la prueba de la cámara acorazada (joyeria.gd), con la joyería en la
+# planta baja. Johnny delante de la puerta blindada cerrada (captura-joyeria-camara.png); arrimarse al lector sin
+# tarjeta: el aviso y, a la segunda, la alarma con el cartel y los primeros zombis (captura-joyeria-alarma.png); la
+# cuenta adelantada hasta el final: la puerta se abre (captura-joyeria-abierta.png). Luego la otra manera: en el
+# pasillo cae el guardia y suelta las dos tarjetas (captura-joyeria-dorada.png), Johnny coge la dorada y, con la
+# cámara otra vez cerrada, el lector la abre sin alarma. Lo cuenta todo en la terminal
+func probar_joyeria() -> void:
+	var d: Dictionary = planta.get("joyeria", {})
+	print("Joyería en la planta baja: %s · cámara: sala %d, puerta en (%d, %d) · dorada: %s" % [not d.is_empty(),
+		d.get("sala", -1), d.get("puerta", {}).get("c", -1), d.get("puerta", {}).get("f", -1), d.get("dorada", "-")])
+	if d.is_empty():
+		get_tree().quit()
+		return
+	luz.alternar()
+	await montar(d.sitio, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var sitio: Dictionary = planta.sitios[d.sitio]
+	for sala in sitio.apt.salas:
+		mapa.vistas[sala.id] = true
+	# Johnny delante de la puerta blindada, por el lado de la sala de venta
+	var centro: Vector2 = joyeria.puerta.caja.get_center()
+	var dentro: Vector2 = sitio.apt.salas[d.sala].centro
+	var fuera := Vector2(0, signf(centro.y - dentro.y)) if joyeria.puerta.de_frente else Vector2(signf(centro.x - dentro.x), 0)
+	johnny.position = centro + fuera * 52.0
+	johnny.get_node("Camara").reset_smoothing()
+	print("Puerta blindada: montada %s · choca %s · abierta %s · zombis dentro de la cámara: %d" % [joyeria.puerta != null,
+		joyeria.puerta.is_in_group("obstaculos"), d.abierta, sitio.zombis.filter(func(z): return mapa.zona_en(z.pos) == d.sala).size()])
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-joyeria-camara.png")
+	# el lector sin tarjeta: la primera vez avisa, la segunda dispara la alarma
+	joyeria.listo = true
+	joyeria.mirar_lector()
+	print("Lector, 1ª vez: alarma %s · dice «%s»" % [joyeria.alarma(), aviso.text])
+	joyeria.listo = true
+	joyeria.mirar_lector()
+	print("Lector, 2ª vez: alarma %s (quedan %.0f s)" % [joyeria.alarma(), d.alarma])
+	joyeria.grupo_t = 0.5
+	await get_tree().create_timer(1.6, false).timeout
+	print("Alarma: zombis en la tienda %d · quedan %.0f s" % [get_tree().get_nodes_in_group("zombis").size(), d.alarma])
+	Captura.foto("captura-joyeria-alarma.png")
+	# la cuenta, adelantada hasta el final: se abre
+	d.alarma = 1.0
+	await get_tree().create_timer(1.6, false).timeout
+	print("Al acabar la cuenta: abierta %s · la puerta choca %s · dice «%s»" % [d.abierta,
+		joyeria.puerta.is_in_group("obstaculos") if is_instance_valid(joyeria.puerta) else false, aviso.text])
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await get_tree().create_timer(0.8, false).timeout
+	Captura.foto("captura-joyeria-abierta.png")
+	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya
+	await montar(0, 0, false)
+	print("Guardia en el pasillo: %s · dorada: %s" % [guardia != null, d.dorada])
+	johnny.position = guardia.position + Vector2(-120, 30)
+	guardia.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.6, false).timeout
+	johnny.get_node("Camara").reset_smoothing()
+	print("Al caer: dorada %s en %s · en el suelo: tarjeta %s, dorada %s" % [d.dorada, d.suelo, mapa.cosas.has_node("Llave"), mapa.cosas.has_node("Dorada")])
+	Captura.foto("captura-joyeria-dorada.png")
+	johnny.position = d.suelo.pos
+	await get_tree().create_timer(0.4, false).timeout
+	print("Cogida: dorada %s · dice «%s»" % [d.dorada, aviso.text])
+	# con la cámara otra vez cerrada, el lector la abre con la tarjeta y sin alarma
+	d.abierta = false
+	d.alarma = -1.0
+	await montar(d.sitio, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	johnny.position = centro + fuera * 52.0
+	joyeria.listo = true
+	joyeria.mirar_lector()
+	print("Con la tarjeta dorada: abierta %s · alarma %s · dorada %s · dice «%s»" % [d.abierta, joyeria.alarma(), d.dorada, aviso.text])
 	get_tree().quit()
 
 

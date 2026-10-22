@@ -17,6 +17,7 @@ var abierta := 0.0          # 0 cerrada, 1 abierta del todo
 var abriendo := false
 var golpes := 0.0           # segundos que le quedan temblando
 var tablas := 0             # las tablas que le quedan clavadas (la barricada del ferretero)
+var acero := false          # la puerta blindada de la cámara acorazada de la joyería (joyeria.gd): de acero, sin madera
 var tiempo := 0.0
 
 
@@ -70,6 +71,9 @@ func _draw() -> void:
 	var temblor := sin(tiempo * 70.0) * 2.0 * minf(1.0, golpes / 0.15) if golpes > 0.0 else 0.0
 	var r := caja
 	r.position -= position
+	if acero:
+		dibujar_acero(r, k, temblor)
+		return
 	if de_frente:
 		# de frente: del pie del hueco hasta casi lo alto del muro, con dos cuarterones y el pomo
 		var abajo := r.end.y
@@ -104,6 +108,40 @@ func _draw() -> void:
 		for i in tablas:
 			var y: float = r.position.y + r.size.y * (i + 1) / (tablas + 1.0)
 			tabla(Vector2(hoja.position.x - 10, y - 3), Vector2(hoja.end.x + 10, y + 3))
+
+
+# La puerta blindada de la cámara acorazada de la joyería: de frente, una plancha de acero con sus remaches, la
+# rueda de la combinación y el tirador; de lado, una hoja gruesa de acero. Se abre como la de madera (se encoge)
+func dibujar_acero(r: Rect2, k: float, temblor: float) -> void:
+	if de_frente:
+		var abajo := r.end.y
+		var arriba := abajo - ALTO
+		var x0 := r.position.x + 2 + temblor
+		var ancho := (r.size.x - 4) * k
+		var hoja := Rect2(x0, arriba, ancho, abajo - arriba)
+		draw_rect(hoja, Color("#3b4046"))
+		draw_rect(hoja.grow(-3), Color("#5c646c"))
+		draw_rect(Rect2(hoja.position + Vector2(3, 3), Vector2(maxf(0.0, hoja.size.x - 6), 4)), Color("#7a848c"))   # el brillo de arriba
+		draw_rect(hoja, LINEA, false, 2.0)
+		if ancho > 24:
+			for px in [x0 + 6, x0 + ancho - 10]:
+				for py in [arriba + 8, abajo - 12]:
+					draw_rect(Rect2(px, py, 4, 4), Color("#23272b"))   # los remaches
+			var cy := arriba + (abajo - arriba) * 0.5
+			var cx := x0 + ancho * 0.4
+			draw_circle(Vector2(cx, cy), 10.0, Color("#23272b"))   # la rueda de la combinación
+			draw_circle(Vector2(cx, cy), 6.0, Color("#8a949c"))
+			draw_rect(Rect2(cx - 1, cy - 6, 2, 6), Color("#23272b"))
+			draw_rect(Rect2(x0 + ancho * 0.68, cy - 12, 5, 24), Color("#9aa3aa"))   # el tirador
+			draw_rect(Rect2(x0 + ancho * 0.68, cy - 12, 5, 24), LINEA, false, 1.0)
+	else:
+		var alto := (r.size.y - 4) * k
+		var hoja := Rect2(r.get_center().x - 9 + temblor, r.position.y + 2, 18, alto)
+		draw_rect(hoja, Color("#5c646c"))
+		draw_rect(Rect2(hoja.position.x + 3, hoja.position.y, 4, alto), Color("#7a848c"))
+		draw_rect(hoja, LINEA, false, 2.0)
+		if alto > 20:
+			draw_rect(Rect2(hoja.position.x + 6, hoja.position.y + alto - 16, 6, 6), Color("#23272b"))
 
 
 # Una tabla de la barricada, de "desde" a "hasta" (los centros de sus dos puntas)
