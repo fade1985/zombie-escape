@@ -1,0 +1,7 @@
+[gd_scene format=4]
+
+[ext_resource type="PackedScene" path="res://escenas/partida.tscn" id="partida"]
+[ext_resource type="Script" path="res://scripts/pruebas/partida_prueba.gd" id="script"]
+
+[node name="Partida" instance=ExtResource("partida")]
+script = ExtResource("script")

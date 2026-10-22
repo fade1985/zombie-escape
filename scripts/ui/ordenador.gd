@@ -64,10 +64,6 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS   # funciona con el juego en pausa
 
 
-func esta_encendido() -> bool:
-	return fondo != null
-
-
 # Enciende el ordenador (el juego ya está en pausa)
 func encender(p: Node) -> void:
 	partida = p

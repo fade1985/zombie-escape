@@ -225,7 +225,7 @@ func probar() -> void:
 	await get_tree().create_timer(1.4, false).timeout
 	print("Escolta: zombis en el pasillo %d | van a por ella %d" % [get_tree().get_nodes_in_group("zombis").size(),
 		get_tree().get_nodes_in_group("zombis").filter(func(z): return z.objetivo() == a).size()])
-	get_viewport().get_texture().get_image().save_png("res://captura-escolta.png")
+	Captura.foto("captura-escolta.png")
 	# tumbada: no deja cruzar, y Johnny la levanta
 	matar_zombis()
 	a.inv_t = 0.0

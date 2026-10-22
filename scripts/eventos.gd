@@ -363,7 +363,7 @@ func sitio_vendedor(sitio: Dictionary) -> Vector2:
 # Fuerza el evento en la planta baja, sale al pasillo (empieza) y saca sus fotos
 func probar(que: String) -> void:
 	var foto := func(nombre: String) -> void:
-		get_viewport().get_texture().get_image().save_png("res://captura-evento-%s.png" % nombre)
+		Captura.foto("captura-evento-%s.png" % nombre)
 	var esperar := func(s: float) -> void:
 		await get_tree().create_timer(s, false).timeout
 	print("Prueba del evento '%s' en %s" % [que, partida.ed.el_nombre])

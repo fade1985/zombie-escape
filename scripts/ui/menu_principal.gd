@@ -73,15 +73,13 @@ func _ready() -> void:
 		columna.add_child(record)
 
 	jugar.grab_focus.call_deferred()
-	if "--captura" in OS.get_cmdline_user_args():
+	if Captura.activa():
 		await get_tree().create_timer(0.4).timeout
-		get_viewport().get_texture().get_image().save_png("res://captura-menu.png")
+		Captura.foto("captura-menu.png")
 		elegir_edificio()
 		await get_tree().create_timer(0.3).timeout
-		get_viewport().get_texture().get_image().save_png("res://captura-edificios.png")
-		var args := OS.get_cmdline_user_args()
-		var i := args.find("--edificio")
-		jugar_partida(args[i + 1] if i >= 0 and i + 1 < args.size() else "apartamentos")
+		Captura.foto("captura-edificios.png")
+		jugar_partida(Captura.dato("--edificio", "apartamentos"))
 
 
 func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "") -> Button:
@@ -130,11 +128,10 @@ func poner_tarjetas() -> void:
 	for caja in tarjetas.get_children():
 		caja.free()
 	var s := Guardado.cargar()
-	var args := OS.get_cmdline_user_args()
-	if "--captura" in args and args.find("--alerta") >= 0 and args.find("--alerta") + 1 < args.size():
+	if Captura.activa() and Captura.dato("--alerta") != "":
 		for id in Edificios.LISTA:   # para la foto: todas abiertas y la pedida, elegida (no se guarda)
 			Guardado.edificio(s, id).alerta_max = Alerta.MAX
-			s.edificios[id].alerta = int(args[args.find("--alerta") + 1])
+			s.edificios[id].alerta = int(Captura.dato("--alerta"))
 	for id in Edificios.LISTA:
 		var caja := VBoxContainer.new()
 		caja.add_theme_constant_override("separation", 6)
@@ -193,7 +190,7 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 		poner.call()
 		Sonido.tocar("click")
 		var n: int = alertas[id]
-		if not "--captura" in OS.get_cmdline_user_args():
+		if not Captura.activa():
 			Guardado.cambiar(func(g): Guardado.edificio(g, id).alerta = n)
 	menos.pressed.connect(cambiar.bind(-1))
 	mas.pressed.connect(cambiar.bind(1))
@@ -279,5 +276,6 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 func jugar_partida(id := "apartamentos") -> void:
 	Edificios.elegido = id
 	Alerta.nivel = alertas.get(id, 0)
-	get_tree().change_scene_to_file("res://escenas/partida.tscn")
+	# con --captura, la partida de prueba: la misma, con las fotos (pruebas/partida_prueba.gd)
+	get_tree().change_scene_to_file("res://escenas/partida_prueba.tscn" if Captura.activa() else "res://escenas/partida.tscn")
 

@@ -55,7 +55,7 @@ func _ready() -> void:
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		zombi.murio.connect(_al_morir_zombi)
 
-	captura = "--captura" in OS.get_cmdline_user_args()
+	captura = Captura.activa()
 	if captura:
 		print("Navegación: ", $Navegacion.navigation_polygon.get_polygon_count(), " trozos de suelo andable")
 		# Uno de cada tipo, cada uno en una salida, y la portera arriba en el centro
@@ -140,6 +140,5 @@ func _process(delta: float) -> void:
 				linea += "%s(%d,%d %s %d) " % [tipo, z.position.x, z.position.y, z.estado, z.vida]
 		print(linea)
 	if tiempo > 6.0:
-		var foto := get_viewport().get_texture().get_image()
-		foto.save_png("res://captura.png")
+		Captura.foto("captura.png")
 		get_tree().quit()

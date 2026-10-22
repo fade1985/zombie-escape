@@ -338,7 +338,7 @@ func probar() -> void:
 	print("Barricada a %d s: tablas %d | zombis %d | provisiones en el suelo %d" % [int(hecho), sup.puerta.tablas,
 		get_tree().get_nodes_in_group("zombis").size(), partida.mapa.cosas.get_children().filter(
 		func(n): return n.get("icono") in sup.iconos_lanzables() or n.get("icono") == partida.ICONO_MUNICION).size()])
-	get_viewport().get_texture().get_image().save_png("res://captura-ferretero-barricada.png")
+	Captura.foto("captura-ferretero-barricada.png")
 	# un zombi pegado a la puerta: no avanza
 	for z in get_tree().get_nodes_in_group("zombis"):
 		z.queue_free()
@@ -350,7 +350,7 @@ func probar() -> void:
 	await get_tree().create_timer(0.8, false).timeout
 	print("Barricada: con zombis en la puerta, empujan %s | avanza %.1f s | van a por la puerta %d" % [empujan,
 		hecho - parado, pegados.filter(func(z): return is_instance_valid(z) and z.objetivo() == diana).size()])
-	get_viewport().get_texture().get_image().save_png("res://captura-ferretero-empujan.png")
+	Captura.foto("captura-ferretero-empujan.png")
 	for z in pegados:
 		if is_instance_valid(z):
 			z.queue_free()

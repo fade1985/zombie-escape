@@ -310,7 +310,7 @@ func probar() -> void:
 	johnny.position = datos.cable_desde + Vector2(0, 90)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.6, false).timeout
-	get_viewport().get_texture().get_image().save_png("res://captura-tecnico-palanca.png")
+	Captura.foto("captura-tecnico-palanca.png")
 	# sin bajar la palanca, la puerta no deja salir
 	partida.cruzar(0)
 	print("Técnico: salir sin bajar la palanca: '%s'" % partida.aviso.text)
@@ -330,7 +330,7 @@ func probar() -> void:
 	await get_tree().create_timer(2.0, false).timeout
 	print("Técnico: arreglando %.1f s | en su sitio %s | zombis %d | dice '%s'" % [hecho, a.en_su_sitio(),
 		get_tree().get_nodes_in_group("zombis").size(), a.dicho])
-	get_viewport().get_texture().get_image().save_png("res://captura-tecnico-horda.png")
+	Captura.foto("captura-tecnico-horda.png")
 	# subir la palanca: vuelve la luz y se para
 	johnny.position = Vector2(c.datos.x, c.datos.y + 200)
 	await get_tree().create_timer(0.1, false).timeout
@@ -370,7 +370,7 @@ func probar() -> void:
 	await get_tree().create_timer(2.6, false).timeout
 	print("Técnico: con luz otra vez %s | calambrazos del agua: %s" % [datos.corriente,
 		"no" if c.agua.pulso == 0.0 else "sí"])
-	get_viewport().get_texture().get_image().save_png("res://captura-tecnico-fin.png")
+	Captura.foto("captura-tecnico-fin.png")
 	sup.escolta.matar_zombis()
 	sup.equipo.erase(a)
 	a.queue_free()
@@ -396,7 +396,7 @@ func probar_mejora() -> void:
 		partida.meter_zombi("lento", johnny.position + Vector2(160 + i * 90, 70 * (i % 2)))
 	await get_tree().create_timer(0.4, false).timeout
 	print("Cámaras: zombis en el minimapa %s" % [minimapa.zombis_por_sala()])
-	get_viewport().get_texture().get_image().save_png("res://captura-tecnico-minimapa.png")
+	Captura.foto("captura-tecnico-minimapa.png")
 	sup.escolta.matar_zombis()
 	partida.nueva_planta(1)   # la sala de mantenimiento está en la planta baja
 	await partida.montar(partida.planta.mantenimiento, 0, false)
@@ -404,7 +404,7 @@ func probar_mejora() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4, false).timeout
 	print("Cámaras: pantallas en la sala %s" % [partida.mapa.cosas.has_node("Camaras")])
-	get_viewport().get_texture().get_image().save_png("res://captura-tecnico-sala.png")
+	Captura.foto("captura-tecnico-sala.png")
 	minimapa.camaras = "tecnico" in antes[0]
 	Guardado.cambiar(func(x):
 		x.rescatados = antes[0]

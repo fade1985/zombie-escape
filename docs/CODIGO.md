@@ -10,6 +10,8 @@
 - `menu_principal.tscn`: la escena de inicio (`scripts/ui/menu_principal.gd`).
 - `partida.tscn`: Johnny y la pantalla (sitio, avisos, fundido). El mapa lo monta `partida.gd`; el HUD,
   `ui/hud.gd`; el minimapa, `minimapa.gd`; la pausa y el final, `ui/menus.gd`.
+- `partida_prueba.tscn`: la misma escena con el script de la partida de prueba (`pruebas/partida_prueba.gd`); el
+  menú la abre en vez de `partida.tscn` cuando se arranca con `--captura`.
 - `salas/`: la sala de pruebas de las fases 1-3 (`bano.tscn` y `bano_tileset.tres`: las piezas y cuáles chocan).
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
   y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`, `modista.tscn`, `mascota.tscn`) y
@@ -90,17 +92,15 @@
   El jefe final de la azotea va en `final` y `el_final` (el gerente); `partida.final_de()` lo reconoce: su barra dice
   su nombre y no lleva el 25 % más por planta ni la mutación al caer.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
-  guardia, portera, escaleras, dinero, pausa, fin), teclas de prueba y `--captura` (con `--edificio centro`, en el
-  centro comercial, con el antidisturbios en la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o
-  `--jefe mascota` (`captura-jefe.png`: la mascota, saltando con su sombra); con `--edificio centro --fotos-tiendas`,
-  sin penumbra, una foto de cada tienda y de la galería: `captura-tienda-<tipo>.png`, `captura-galeria-<n>.png`, y
-  las de los peligros: `captura-peligro-<...>.png`).
+  guardia, portera, escaleras, dinero, pausa, fin) y las teclas de prueba. Lo de `--captura` está aparte, en
+  `pruebas/partida_prueba.gd`.
 - `alerta.gd`: los niveles de alerta (parte 8): la regla de cada nivel, los números (constantes) y lo que la partida
   le pregunta (`mas_zombis()`, `velocidad()`, `jefe_vida()`, `jefe_enfado()`, `botiquin()`, `guardia()`, `oido()`,
   `dolares_extra()`, `prob_rareza()`). El nivel de la partida, en `Alerta.nivel` (lo pone "Elige edificio"); la más
   alta abierta y la elegida de cada edificio, en el guardado (`alerta_max`, `alerta`). Con la Alerta 5 en los
   Apartamentos la llave la lleva un vecino (`planta.gd` lo apunta con `"llave": true` en sus zombis;
-  `partida.gd`, `vecino_de_la_llave()`). La prueba: `--captura --alerta N` (`probar_alerta()`).
+  `partida.gd`, `vecino_de_la_llave()`). La prueba: `--captura --alerta N` (`probar_alerta()`, en
+  `pruebas/partida_prueba.gd`).
 - `eventos.gd`: los eventos sorpresa (parte 8): una de cada cuatro plantas (nunca la última ni, dentro, la sala del
   jefe o la de mantenimiento), al pisar su pasillo, con un cartel grande: apagón (`Luz.evento` y las lámparas a
   `fuerza` 0), alarma de incendios (charcos `"agua"` de `charco.gd`, la lluvia y los cables con calambrazos: clases
@@ -117,7 +117,7 @@
   guardado: el molotov de serie y las demás, en el papel que suelta cada jefe al morir, `soltar_receta` de
   `partida.gd`, una al azar sin repetir; la prueba `--captura` las prueba en `probar_soltar_recetas`), `billete.gd`, `minimapa.gd` (con el técnico
   rescatado, `camaras`: un puntito por zombi en cada sala). La prueba
-  `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `partida.gd`) y saca `captura-objetos-nuevos.png`,
+  `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `pruebas/partida_prueba.gd`) y saca `captura-objetos-nuevos.png`,
   `captura-banco-todo.png` y `captura-baul-todo.png`; luego prueba cada arma nueva contra zombis (`probar_recetas`)
   y saca `captura-arma-<receta>.png`.
 - `guardado.gd`: el guardado entre partidas.
@@ -148,6 +148,20 @@
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
+
+**pruebas/**: lo que solo se usa en las pruebas sin jugar (`--captura`).
+- `captura.gd` (clase `Captura`): `Captura.activa()` (si se ha arrancado con `--captura`), `Captura.dato("--jefe",
+  "antidisturbios")` (lo que va detrás de esa palabra en la línea de órdenes) y `Captura.foto("captura-x.png")`
+  (guarda lo que se ve en la pantalla). Lo usan todas las pruebas, también las de `supervivientes.gd`, `eventos.gd`,
+  `averia.gd`, `escolta.gd` y `barricada.gd`.
+- `partida_prueba.gd`: la partida de prueba. Es `partida.gd` (la hereda: tiene todo lo suyo) más las fotos y lo
+  que cuenta en la terminal. Sin nada más, la prueba larga (`_process`: un apartamento, el jefe, menús, ordenador,
+  inventario, recetas, supervivientes...; con `--edificio centro`, en el centro comercial, con el antidisturbios en
+  la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o `--jefe mascota`, y al final la azotea).
+  Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
+  `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
+  `--alerta N` o `--evento X`, solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**
 - `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio"), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil, ayudas y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).

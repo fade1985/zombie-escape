@@ -803,7 +803,7 @@ func probar() -> void:
 		johnny.position = vecinos[0].position + Vector2(0, 20)
 		await get_tree().create_timer(0.3, false).timeout
 	print("Acompañante: '%s' | equipo %s" % [Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre)])
-	get_viewport().get_texture().get_image().save_png("res://captura-vecinos.png")
+	Captura.foto("captura-vecinos.png")
 	await probar_los_seis()
 	await probar_acompanantes()
 	await probar_cafetera()
@@ -825,7 +825,7 @@ func probar_horda() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
 	print("Rescatado: %s | equipo %d" % [rescate.rescatado, equipo.size()])
-	get_viewport().get_texture().get_image().save_png("res://captura-superviviente.png")
+	Captura.foto("captura-superviviente.png")
 	johnny.position = partida.mapa.puertas[0].llegada()
 	johnny.get_node("Camara").reset_smoothing()
 	rescate.amigo.position = johnny.position + Vector2(40, 0)   # le ha seguido hasta la puerta
@@ -840,7 +840,7 @@ func probar_horda() -> void:
 	print("Horda a %d s: zombis %d | dice '%s' | molotovs/granadas en el suelo %d" % [int(horda.hecho),
 		get_tree().get_nodes_in_group("zombis").size(), a.dicho, partida.mapa.cosas.get_children().filter(
 		func(n): return n.get("icono") in iconos_lanzables()).size()])
-	get_viewport().get_texture().get_image().save_png("res://captura-horda.png")
+	Captura.foto("captura-horda.png")
 	a.inv_t = 0.0
 	a.recibir_dano(500)
 	print("A %.0f de su sitio en la puerta" % a.global_position.distance_to(a.sitio_forzar))
@@ -870,7 +870,7 @@ func probar_los_seis() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
 	print("Los seis en mantenimiento: %s" % [vecinos.map(func(v): return "%s %s" % [v.def.nombre, v.position])])
-	get_viewport().get_texture().get_image().save_png("res://captura-sala-seis.png")
+	Captura.foto("captura-sala-seis.png")
 	Guardado.cambiar(func(x):
 		x.rescatados = antes[0]
 		x.acompanante = antes[1])
@@ -892,7 +892,7 @@ func probar_acompanantes() -> void:
 	for k in 3:
 		zombis.append(partida.meter_zombi("lento", johnny.position + Vector2(-110 + k * 110, -110)))
 	await get_tree().create_timer(1.8, false).timeout
-	get_viewport().get_texture().get_image().save_png("res://captura-acompanantes.png")
+	Captura.foto("captura-acompanantes.png")
 	await get_tree().create_timer(1.6, false).timeout
 	var como := []
 	for z in zombis:
@@ -926,7 +926,7 @@ func probar_cafetera() -> void:
 	johnny.position = ella.position + Vector2(-30, 120)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
-	get_viewport().get_texture().get_image().save_png("res://captura-cafetera.png")
+	Captura.foto("captura-cafetera.png")
 	var dichas := [ella.dicho]
 	for i in Historia.CAFETERA.size() - 1:
 		await get_tree().create_timer(CAFE_CADA, false).timeout
@@ -968,12 +968,12 @@ func probar_puesto() -> void:
 	johnny.position = MOSTRADOR_EN + Vector2(-40, 120)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4, false).timeout
-	get_viewport().get_texture().get_image().save_png("res://captura-ferretero-sala.png")
+	Captura.foto("captura-ferretero-sala.png")
 	johnny.position = MOSTRADOR_EN + Vector2(0, 34)   # delante del mostrador
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	print("Puesto: abierto %s | juego en pausa %s" % [puesto.abierta(), get_tree().paused])
 	if puesto.abierta():
-		get_viewport().get_texture().get_image().save_png("res://captura-ferretero-puesto.png")
+		Captura.foto("captura-ferretero-puesto.png")
 		var compras := []
 		johnny.coger("pistola")
 		johnny.reserva = 0   # con la pistola y sin cargadores de reserva, para que quepa la munición
@@ -982,7 +982,7 @@ func probar_puesto() -> void:
 		print("Puesto: %s | quedan $%d | dice '%s' | molotovs %d, granadas %d" % [compras, Guardado.cargar().dolares,
 			puesto.info.text, partida.lanzables.cantidades.molotov, partida.lanzables.cantidades.granada])
 		await get_tree().create_timer(0.2).timeout
-		get_viewport().get_texture().get_image().save_png("res://captura-ferretero-compra.png")
+		Captura.foto("captura-ferretero-compra.png")
 		puesto.cerrar()
 	# por detrás del mostrador: se viene contigo
 	johnny.position = MOSTRADOR_EN + Vector2(0, 150)
@@ -1024,7 +1024,7 @@ func probar_botiquin() -> void:
 	var marcado := get_viewport().gui_get_focus_owner()
 	print("Botiquín elegido: marcado '%s' | dice '%s'" % [marcado.name if marcado else "-",
 		inv.fondo.find_children("*", "Label", true, false).filter(func(t): return t.theme_type_variation == "Sub").back().text])
-	get_viewport().get_texture().get_image().save_png("res://captura-farmaceutica-botiquin.png")
+	Captura.foto("captura-farmaceutica-botiquin.png")
 	var vida_media: int = johnny.vida
 	johnny.vida = johnny.vida_tope()
 	inv.usar()
