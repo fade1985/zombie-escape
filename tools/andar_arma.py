@@ -12,6 +12,9 @@ lo que quita los pocos colores sueltos que mete PixelLab. Luego se sube o se baj
 (el pie que pisa) quede a la altura de los pies de Johnny quieto en esa dirección (la fila "still" de la hoja): así
 no se hunde en el suelo ni flota al andar (paso 2, 23 oct).
 
+Antes de eso se limpian los pies (paso 3): se quitan los píxeles gris mopa que quedan sueltos debajo de un zapato, y en
+los dibujos de "zapatos_negros" ({"north": [1, 4, 5]}) el zapato relleno del color del borde se pinta de marrón.
+
 Toca solo las filas de andar de assets/sprites/<arma>.png y sus números en <arma>.json, y vuelve a sacar el .tres
 con tools/hacer_frames.py.
 """
@@ -49,6 +52,29 @@ def colocar(dibujo, colores):
     return casilla
 
 
+BORDE, ZAPATO, GRIS = (5, 2, 2), (49, 17, 8), (143, 140, 137)   # colores de la paleta de Johnny con fregona
+ZONA_PIES = 8   # filas desde abajo en las que se buscan zapatos y grises
+
+
+def limpiar_pies(casilla, zapato_negro):
+    """Quita los grises sueltos bajo los zapatos y, si zapato_negro, pinta de marrón el zapato relleno de borde."""
+    c = casilla.copy()
+    visible = c[..., 3] > 0
+    arriba = suelo(c) - ZONA_PIES + 1
+    def de_color(color):
+        sitio = (c[..., :3] == color).all(-1) & visible
+        sitio[:arriba] = False
+        return sitio
+    nada_debajo = np.ones_like(visible)
+    nada_debajo[:-1] = ~visible[1:]
+    c[de_color(GRIS) & nada_debajo] = 0
+    if zapato_negro:
+        rodeado = np.zeros_like(visible)   # con dibujo arriba, abajo y a los lados: no es borde
+        rodeado[1:-1, 1:-1] = visible[:-2, 1:-1] & visible[2:, 1:-1] & visible[1:-1, :-2] & visible[1:-1, 2:]
+        c[de_color(BORDE) & rodeado, :3] = ZAPATO
+    return c
+
+
 def suelo(casilla):
     """La fila del píxel visible más bajo de una casilla: donde pisa."""
     return int(np.nonzero(casilla[..., 3].any(1))[0].max())
@@ -60,6 +86,7 @@ def a_ras(casilla, fila_pies):
 
 
 espejo = datos.get("espejo", {})   # {"east": "west"}: el este es el oeste dado la vuelta
+zapatos_negros = datos.get("zapatos_negros", {})
 for direccion, info in filas.items():
     origen = espejo.get(direccion, direccion)
     lista = datos["fotogramas"][origen]
@@ -70,7 +97,8 @@ for direccion, info in filas.items():
     hoja[fila * ch:(fila + 1) * ch, :] = 0   # la fila entera en blanco: puede tener menos dibujos que antes
     for i, n in enumerate(lista):
         dibujo = np.array(Image.open(f"{FUENTE}/walk/{origen}-{n}.png").convert("RGBA"))
-        casilla = a_ras(colocar(dibujo, colores), pies)
+        casilla = limpiar_pies(colocar(dibujo, colores), n in zapatos_negros.get(origen, []))
+        casilla = a_ras(casilla, pies)
         if origen != direccion:
             casilla = casilla[:, ::-1]
         hoja[fila * ch:(fila + 1) * ch, i * cw:(i + 1) * cw] = casilla
