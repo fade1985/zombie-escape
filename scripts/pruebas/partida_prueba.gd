@@ -12,6 +12,7 @@
 #   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
+#   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
 extends "res://scripts/partida.gd"
 
 var tiempo := 0.0            # los segundos que lleva la prueba larga (_process)
@@ -64,6 +65,9 @@ func empezar_prueba() -> void:
 	elif "--caza" in args:
 		set_process(false)   # sin la prueba larga
 		probar_caza()
+	elif "--porqueria" in args:
+		set_process(false)   # sin la prueba larga
+		probar_porqueria()
 	elif "--trajes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_trajes()
@@ -257,6 +261,95 @@ func fotos_luz() -> void:
 		await get_tree().create_timer(0.8).timeout
 		Captura.foto("captura-luz-%d.png" % sala.id)
 		print("Foto luz: ", s.nombre, " · ", sala.nombre)
+	get_tree().quit()
+
+
+# Con "--captura --jefe gloton --porqueria": la habitación del Glotón (peligros/porqueria.gd): solo con lámparas y
+# con la franja de porquería pegada a las paredes, que quema. Monta su piso (la 1ª planta) con todo descubierto y sin
+# que salga él, y cuenta en la terminal: los muebles (3 o 4 lámparas), cuántas casillas están sucias (parte del suelo), que donde
+# aparece Johnny está limpio, que el centro está limpio y lo pegado a las paredes sucio (y cuánto mide la franja), lo
+# que pierde Johnny en 1 s sobre una casilla sucia (unos 7) y que en una limpia, pasado el escozor, no pierde nada;
+# las salpicaduras de la pared de arriba, los pegotes de los lomos de las otras y las luces del resplandor. Saca
+# captura-porqueria.png (Johnny sobre la porquería) y captura-porqueria-medio.png (desde el medio: el óvalo limpio y
+# la franja alrededor) y se cierra
+func probar_porqueria() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe gloton, la suya
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca el Glotón: aquí se prueba la habitación
+	await montar(idx, 0, false)
+	for sala in sitio.apt.salas:
+		mapa.vistas[sala.id] = true   # todo descubierto
+		mapa.niebla[sala.id] = 0.0
+	var lista: Array = sitio.get("peligros", []).filter(func(q): return q.tipo == "porqueria")
+	if lista.is_empty():
+		print("Porquería: el piso del jefe (%s) no tiene porquería (¡mal!)" % planta.jefe)
+		get_tree().quit()
+		return
+	var p: Dictionary = lista[0]
+	var sala: Dictionary = sitio.apt.salas[0]
+	var total: int = sala.ancho * sala.fondo
+	var montones: int = p.casillas.values().count(2)
+	print("Porquería (jefe %s): muebles %d, todos lámparas %s (esperado: de 3 a 4, true) · casillas sucias %d de %d (%d %%, esperado: entre 35 y 55) · montones %d · donde aparece Johnny, limpio %s (esperado: true)" % [
+		planta.jefe, sitio.muebles.size(), sitio.muebles.all(func(m): return m.tipo == "lamp"), p.casillas.size(), total,
+		roundi(100.0 * p.casillas.size() / total), montones, not p.casillas.has(Peligros.casilla(johnny.position))])
+	# la franja junto a las paredes y el óvalo limpio: el centro limpio, y las casillas pegadas a cada pared sucias (en la
+	# de la puerta, a un lado de ella), con la franja de al menos 2 casillas de grosor en sus puntos medios
+	var medio := Vector2i(sala.c0 + sala.ancho / 2, sala.f0 + sala.fondo / 2)
+	var lado_puerta: int = sala.f0 if sitio.apt.entrada.lado == "arriba" else sala.f0 + sala.fondo - 1
+	var puntos := [Vector2i(sala.c0, medio.y), Vector2i(sala.c0 + sala.ancho - 1, medio.y),
+		Vector2i(medio.x, sala.f0), Vector2i(medio.x, sala.f0 + sala.fondo - 1)]
+	for i in puntos.size():
+		if puntos[i].y == lado_puerta:
+			puntos[i].x += 7   # a un lado del pasillo limpio de la puerta
+	var sucios := puntos.filter(func(q): return p.casillas.has(q)).size()
+	var grosor := 99
+	for q in puntos:
+		var hacia: Vector2i = (medio - q).sign()
+		var n := 0
+		var k: Vector2i = q
+		while p.casillas.has(k):
+			n += 1
+			k += hacia
+		grosor = mini(grosor, n)
+	print("Porquería: el centro limpio %s (esperado: true) · pegado a las paredes, sucio en %d de 4 puntos (esperado: 4) · la franja mide al menos %d casillas de grosor (esperado: 2 o más)" % [
+		not p.casillas.has(medio), sucios, grosor])
+	# 1 s sobre una casilla sucia rodeada de sucias (que el borde no engañe)
+	var sucia := Vector2i(-1, -1)
+	for c in p.casillas:
+		if sucia == Vector2i(-1, -1) and Peligros.LADOS.all(func(d): return p.casillas.has(c + d)):
+			sucia = c
+	johnny.vida = johnny.stats.vida_max
+	johnny.position = Peligros.centro(sucia)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(1.0).timeout
+	print("Porquería: 1 s sobre una casilla sucia, Johnny pierde %d (esperado: entre 5 y 9) · estado «porqueria» %s (esperado: true)" % [
+		johnny.stats.vida_max - johnny.vida, johnny.estados.has("porqueria")])
+	Captura.foto("captura-porqueria.png")
+	# en una limpia (sin sucias alrededor), pasado el escozor de 1 s, ya no pierde nada
+	var limpia := Vector2i(-1, -1)
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var k := Vector2i(c, f)
+			if limpia == Vector2i(-1, -1) and not p.casillas.has(k) and Peligros.LADOS.all(func(d): return not p.casillas.has(k + d)):
+				limpia = k
+	johnny.position = Peligros.centro(limpia)
+	await get_tree().create_timer(1.3).timeout
+	var antes: int = johnny.vida
+	await get_tree().create_timer(1.0).timeout
+	var salpicaduras: int = mapa.caras.get(sala.id, []).reduce(func(acc, cara): return acc + cara.adornos.size(), 0)
+	print("Porquería: en una casilla limpia, pasado el escozor, pierde %d en 1 s (esperado: 0) · estado «porqueria» %s (esperado: false) · salpicaduras en la pared de arriba %d y pegotes en los lomos de las otras %d (esperado: más de 0 las dos) · luces del resplandor %d (esperado: entre 4 y 8)" % [
+		antes - johnny.vida, johnny.estados.has("porqueria"), salpicaduras, p.get("paredes", {}).size(), mapa.get_node("Porqueria").luces.size()])
+	# y desde el medio de la zona de pelea: el óvalo limpio y la franja sucia alrededor, con la pared de arriba
+	johnny.position = Peligros.centro(medio)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-porqueria-medio.png")
 	get_tree().quit()
 
 

@@ -110,6 +110,13 @@ const SALAS := {
 		"muebles": ["sofa", "tv", "armchair", "bookshelf", "lamp", "plant"],
 		"cuantos": [2, 3],
 	},
+	# la habitación del Glotón (planta.gd pone apt.tipo = "gloton"): sin más muebles que unas lámparas de pie, para que
+	# haya luz además de la linterna; el suelo lo llena su porquería (peligros/porqueria.gd)
+	"jefe-gloton": {
+		"muebles": ["lamp"],
+		"cuantos": [3, 4],
+		"iguales": {"lamp": 4},
+	},
 	"cocina": {
 		"muebles": ["counter", "fridge", "stove", "counter", "plant"],
 		"cuantos": [2, 4],

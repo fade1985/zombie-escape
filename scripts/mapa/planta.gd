@@ -152,8 +152,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
 			nombre = mini.tienda
 			apt.salas[0].nombre = mini.tienda
-			if Catalogo.SALAS.has("jefe-" + su_jefe):
-				apt.tipo = su_jefe   # sus muebles, los suyos (el Taller de costura, lleno de maniquíes)
+		if jefe and Catalogo.SALAS.has("jefe-" + su_jefe):
+			apt.tipo = su_jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón, solo lámparas)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
@@ -161,8 +161,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		if jefe and su_jefe == "gloton":
-			# la habitación del Glotón no tiene muebles: en su lugar, el suelo (y la pared) llenos de su porquería, que quema
-			sitio.muebles = []
+			# la habitación del Glotón (solo con lámparas, ver arriba): el suelo y las paredes llenos de su porquería, que quema
 			sitio.peligros = Peligros.del_gloton(sitio)
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)

@@ -14,7 +14,7 @@
 #             el técnico ha arreglado el cable (su rescate, averia.gd) y el agua ya no da calambres
 # Y el de un minijefe de los Apartamentos (planta.gd llama a del_gloton):
 #   porqueria.gd  la habitación del Glotón   {tipo, sala, casillas (casilla -> 1 charco, 2 con montón),
-#                                             paredes (casilla de muro -> forma del pegote), avisado}
+#                                             paredes (casilla de muro -> forma del pegote), ovalo, avisado}
 class_name Peligros
 
 const CASILLA := 32
@@ -52,13 +52,15 @@ const AGUA := {
 	"oscuro_sin": 0.1,   # ...y sin ella, más oscura (solo se ve con la linterna)
 	"teles": 4,          # cuántas estanterías de teles dan luz, como mucho
 }
-# La porquería del Glotón (su habitación, sin muebles): montones de mierda y charcos de diarrea con ácido por el
-# suelo (y salpicada por la pared), que queman a Johnny al pisarla; a los zombis no, que es suya
+# La porquería del Glotón (su habitación, sin más muebles que lámparas): montones de mierda y charcos de diarrea con
+# ácido por el suelo (y salpicada por las paredes), que queman a Johnny al pisarla; a los zombis no, que es suya
 const PORQUERIA := {
 	"dps": 7.0,          # vida por segundo pisándola...
 	"despues": 1.0,      # ...y lo que sigue escociendo al salir
-	"parte": 0.45,       # qué parte del suelo cubre, más o menos
-	"charcos": [1.6, 3.6],  # el radio de cada charco, en casillas (de ancho; de alto, tres cuartos)
+	"parte": 0.45,       # qué parte del suelo cubre: una franja pegada a las paredes (en medio, un óvalo limpio para pelear)
+	"ondas": 0.09,       # lo que ondula el borde del óvalo (parte de su radio), para que no parezca hecho con compás
+	"salientes": 3,      # charcos sueltos que desde la franja se meten un poco en el óvalo...
+	"saliente_radio": [1.0, 1.8],   # ...y su radio, en casillas
 	"montones": 0.22,    # parte de las casillas sucias que llevan un montón encima
 	"paredes": 0.4,      # parte de las casillas de muro pegadas al suelo (lados y abajo) con un pegote encima
 }
@@ -84,9 +86,11 @@ static func de_tienda(sitio: Dictionary) -> Array:
 	return lista
 
 
-# La porquería del Glotón: por toda su habitación (la única sala del piso del jefe), a charcos redondos que se
-# solapan hasta cubrir su parte del suelo, menos lo de delante de la puerta de entrada (ahí aparece Johnny). Con su
-# propio dado, como de_tienda. Cada casilla sucia: 1, charco; 2, charco con un montón encima
+# La porquería del Glotón: una franja pegada a las paredes de su habitación (la única sala del piso del jefe), y en
+# medio un óvalo limpio, la zona de pelea: así no se puede rodear al Glotón bordeando la habitación y hay que luchar
+# cerca de él. El óvalo tiene el tamaño justo para que la franja cubra su parte del suelo, con el borde ondulado y
+# algún charco suelto que se mete en él; lo de delante de la puerta de entrada queda limpio (ahí aparece Johnny).
+# Con su propio dado, como de_tienda. Cada casilla sucia: 1, charco; 2, charco con un montón encima
 static func del_gloton(sitio: Dictionary) -> Array:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(sitio.surtido) + 7331
@@ -94,26 +98,37 @@ static func del_gloton(sitio: Dictionary) -> Array:
 	var sala: Dictionary = apt.salas[0]
 	var p: Dictionary = PORQUERIA
 	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * CASILLA)
+	# el óvalo: con la forma de la habitación y el área que deja limpia la franja (1 - parte)
+	var centro := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0)
+	var escala := sqrt((1.0 - p.parte) * 4.0 / PI)
+	var rx: float = sala.ancho / 2.0 * escala
+	var ry: float = sala.fondo / 2.0 * escala
+	var fase := rng.randf() * TAU
+	var fase2 := rng.randf() * TAU
 	var casillas := {}
-	var total: int = sala.ancho * sala.fondo
-	var intentos := 0
-	while casillas.size() < total * p.parte and intentos < 400:
-		intentos += 1
-		var cx := rng.randf_range(sala.c0, sala.c0 + sala.ancho)
-		var cy := rng.randf_range(sala.f0, sala.f0 + sala.fondo)
-		var r: float = rng.randf_range(p.charcos[0], p.charcos[1])
+	var sucia := func(c: int, f: int) -> void:
+		if dueno(apt, c, f) == sala.id and not entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
+			casillas[Vector2i(c, f)] = 1
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var d := Vector2((c + 0.5 - centro.x) / rx, (f + 0.5 - centro.y) / ry)
+			var a := atan2(d.y, d.x)
+			var borde: float = 1.0 + p.ondas * sin(a * 3.0 + fase) + p.ondas * 0.55 * sin(a * 7.0 + fase2)
+			if d.length() > borde:
+				sucia.call(c, f)
+	# los charcos sueltos, con el centro en el borde del óvalo
+	for i in p.salientes:
+		var a := rng.randf() * TAU
+		var cx: float = centro.x + cos(a) * rx
+		var cy: float = centro.y + sin(a) * ry
+		var r: float = rng.randf_range(p.saliente_radio[0], p.saliente_radio[1])
 		for f in range(floori(cy - r), ceili(cy + r) + 1):
 			for c in range(floori(cx - r), ceili(cx + r) + 1):
-				if dueno(apt, c, f) != sala.id:
-					continue
-				if Vector2(c + 0.5 - cx, (f + 0.5 - cy) / 0.75).length() > r:
-					continue
-				if entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
-					continue
-				casillas[Vector2i(c, f)] = 1
-	for k in casillas:
+				if Vector2(c + 0.5 - cx, (f + 0.5 - cy) / 0.75).length() <= r:
+					sucia.call(c, f)
+	for key in casillas:
 		if rng.randf() < p.montones:
-			casillas[k] = 2
+			casillas[key] = 2
 	# y los lomos de los muros de los lados y de abajo, salpicados (el de arriba lleva lo suyo en su cara): de las
 	# casillas de muro pegadas al suelo, una parte, cada una con una forma (0 a 2)
 	var paredes := {}
@@ -125,7 +140,8 @@ static func del_gloton(sitio: Dictionary) -> Array:
 				var k: Vector2i = Vector2i(c, f) + d
 				if dueno(apt, k.x, k.y) == -1 and not paredes.has(k) and rng.randf() < p.paredes:
 					paredes[k] = rng.randi_range(0, 2)
-	return [{"tipo": "porqueria", "sala": sala.id, "casillas": casillas, "paredes": paredes, "avisado": false}]
+	return [{"tipo": "porqueria", "sala": sala.id, "casillas": casillas, "paredes": paredes, "avisado": false,
+		"ovalo": {"centro": centro, "rx": rx, "ry": ry}}]   # (el óvalo, para repartir las luces del resplandor)
 
 
 # ¿Hay ahí fuego o agua? (para no poner a los zombis dormidos encima: planta.gd)

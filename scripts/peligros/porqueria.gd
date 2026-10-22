@@ -1,13 +1,14 @@
-# La porquería del Glotón (peligros.gd, PORQUERIA): su habitación no tiene muebles y el suelo está lleno de charcos
-# de diarrea y montones de mierda con ácido, salpicada también por la pared. Se decide al generar la planta
-# (Peligros.del_gloton: qué casillas están sucias y cuáles llevan montón) y aquí se dibuja y quema: a Johnny le pone
+# La porquería del Glotón (peligros.gd, PORQUERIA): su habitación no tiene más muebles que unas lámparas y, pegada a
+# las paredes, una franja de charcos de diarrea y montones de mierda con ácido (en medio, un óvalo limpio donde se pelea), salpicada
+# también por las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
+# llevan montón) y aquí se dibuja y quema: a Johnny le pone
 # el estado "porqueria" (estados.gd) mientras la pisa (la esquiva la cruza sin daño, como los charcos); a los zombis
 # no les hace nada (es del Glotón). Se dibuja a cuadraditos de pixel art como el fuego de la cocina (fuego.gd): cada
 # casilla sucia entera, con el borde deshilachado donde se acaba, y encima los montones; eso se pinta una vez
 # (el nodo "Suelo") y aparte, repintándose, las burbujas de ácido que revientan y las moscas sobre los montones.
 # Las salpicaduras de la pared de arriba son texturas hechas aquí mismo (salpicon), puestas como adornos de las caras
 # de muro (cara_pared.gd), como los restos del centro comercial; en los lomos de los otros tres muros, que se ven
-# desde arriba, van pegotes a celdas (pegote). Y como sin muebles no hay lámparas, el ácido reluce (luz_de_acido).
+# desde arriba, van pegotes a celdas (pegote). Y el ácido reluce (luz_de_acido): con las lámparas, luz de sobra.
 extends Node2D
 
 const CASILLA := 32
@@ -21,13 +22,13 @@ const MONTON := [Color("#2e1d0c"), Color("#4a2f12"), Color("#6b4a1f"), Color("#8
 const ACIDO := Color("#b5d634")
 const ACIDO_OSCURO := Color("#7e9a1c")
 const MOSCA := Color("#15100c")
-# El resplandor del ácido: sin muebles no hay lámparas, y a oscuras no se vería dónde pisar. Unas luces verdosas
-# suaves repartidas por los charcos (como las del fuego de la cocina, sin sombras), que laten despacio
+# El resplandor del ácido: unas luces verdosas suaves repartidas por la franja (como las del fuego de la cocina, sin
+# sombras), que laten despacio; con ellas y las lámparas de pie se ve bien dónde pisar
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
-const LUCES := Vector2i(4, 2)       # cuántas, a lo ancho y a lo alto de la habitación
-const LUZ_RADIO := 300.0
+const LUCES := 8                    # cuántas, repartidas por el borde del óvalo limpio
+const LUZ_RADIO := 380.0            # (llegan hasta el medio de la zona de pelea)
 const LUZ_COLOR := Color(0.62, 0.86, 0.38)
-const LUZ_FUERZA := 0.7
+const LUZ_FUERZA := 0.5
 
 var datos: Dictionary
 var mapa: Node
@@ -64,23 +65,23 @@ func montar(d: Dictionary, m: Node) -> void:
 		luz_de_acido(Peligros.centro(c))
 
 
-# Dónde va cada luz del resplandor: la habitación se reparte en una cuadrícula (LUCES) y en cada trozo, la casilla
-# sucia más cercana a su centro (si en ese trozo no hay ninguna, sin luz)
+# Dónde va cada luz del resplandor: LUCES puntos repartidos por el borde del óvalo limpio (la franja sucia empieza
+# ahí), cada uno en la casilla sucia más cercana; así alumbran la franja y, hacia dentro, la zona de pelea
 func focos_de_luz() -> Array:
-	var sala: Dictionary = mapa.sitio.apt.salas[datos.sala]
+	var ov: Dictionary = datos.ovalo
 	var focos := []
-	for gy in LUCES.y:
-		for gx in LUCES.x:
-			var meta := Vector2(sala.c0 + (gx + 0.5) * sala.ancho / LUCES.x, sala.f0 + (gy + 0.5) * sala.fondo / LUCES.y)
-			var mejor := Vector2i(-1, -1)
-			var cerca := 4.0   # como mucho a 4 casillas del centro del trozo
-			for c in datos.casillas:
-				var d: float = (Vector2(c) + Vector2(0.5, 0.5)).distance_to(meta)
-				if d < cerca:
-					cerca = d
-					mejor = c
-			if mejor != Vector2i(-1, -1) and not mejor in focos:
-				focos.append(mejor)
+	for i in LUCES:
+		var a := i * TAU / LUCES
+		var meta: Vector2 = ov.centro + Vector2(cos(a) * ov.rx, sin(a) * ov.ry)
+		var mejor := Vector2i(-1, -1)
+		var cerca := 4.0   # como mucho a 4 casillas del punto
+		for c in datos.casillas:
+			var d: float = (Vector2(c) + Vector2(0.5, 0.5)).distance_to(meta)
+			if d < cerca:
+				cerca = d
+				mejor = c
+		if mejor != Vector2i(-1, -1) and not mejor in focos:
+			focos.append(mejor)
 	return focos
 
 

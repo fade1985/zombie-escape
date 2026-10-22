@@ -45,7 +45,8 @@
   restaurante, que se extiende por casillas), `agua.gd` (el charco con corriente de la electrónica, su cable, las luces
   de las teles y lo oscura que se queda la tienda: `Luz.extra`; `arreglar()`, cuando el técnico arregla el cable y
   el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y uno de los Apartamentos: `porqueria.gd`, la
-  habitación del Glotón (sin muebles; charcos y montones de mierda con ácido por casillas, `Peligros.del_gloton`,
+  habitación del Glotón (solo lámparas, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
+  ácido pegada a las paredes, con un óvalo limpio en medio para pelear, `Peligros.del_gloton`,
   salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
   `porqueria`, que quema a Johnny al pisarla).
 - `zombi_guardia.gd` (escena `zombi_guardia.tscn`, hereda la del normal): el guardia de seguridad del centro
