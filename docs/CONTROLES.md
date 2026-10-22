@@ -62,7 +62,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--joyeria` (con `--edificio centro`): en vez de la prueba larga, la de la cámara acorazada de la joyería, que sale
   en la planta baja: la puerta blindada cerrada (`captura-joyeria-camara.png`), el lector sin tarjeta y la alarma con
   sus zombis (`captura-joyeria-alarma.png`), la cuenta adelantada y la puerta abierta (`captura-joyeria-abierta.png`),
-  el guardia que suelta la tarjeta dorada junto a la suya (`captura-joyeria-dorada.png`) y la apertura con ella.
+  la vitrina del premio dentro (`captura-joyeria-premio.png`) y lo que pasa al pisarla, el guardia que suelta la
+  tarjeta dorada junto a la suya (`captura-joyeria-dorada.png`) y la apertura con ella.
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

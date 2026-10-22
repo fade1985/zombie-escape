@@ -124,7 +124,9 @@
   el lector (arrimarse a la puerta: con la tarjeta dorada abre; sin ella, la segunda vez dispara la apertura de
   emergencia), la alarma (cuenta atrás de 40 s con su barra en pantalla, sirena y grupos de zombis por la entrada o
   por una habitación: `grupo()`) y la tarjeta dorada, que suelta el guardia de esa planta (`soltar_dorada`, desde
-  `_al_caer_guardia` de `partida.gd`; `Mapa.poner_llave(..., dorada)` y su señal `dorada_cogida`). El estado, en
+  `_al_caer_guardia` de `partida.gd`; `Mapa.poner_llave(..., dorada)` y su señal `dorada_cogida`). Al abrirse, el
+  premio dentro (`preparar_premio`, `poner_premio`, `coger_premio`: un arma creada morada de una receta sabida, que
+  va a la mano como al sacarla del baúl, y el fajo de billetes) y el logro «Caja fuerte». El estado, en
   `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:

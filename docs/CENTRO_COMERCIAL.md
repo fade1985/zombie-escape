@@ -385,7 +385,25 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   la cuenta adelantada y la puerta abierta (`captura-joyeria-abierta.png`), el guardia que suelta las dos tarjetas
   (`captura-joyeria-dorada.png`) y, con la cámara otra vez cerrada, la apertura con la tarjeta sin alarma; todo
   contado en la terminal.
-- Lo que falta (trozo 3): dentro solo hay cajas fuertes de adorno; el premio y el logro «Caja fuerte».
+- Lo que faltaba al acabar el trozo 2: el premio y el logro (trozo 3).
+
+### ✅ Hecho (22 oct 2026, parte 10, trozo 3: el premio y el logro «Caja fuerte»)
+
+- Al abrirse la cámara (con la tarjeta o al acabar la cuenta), `joyeria.gd` decide el premio y lo pone dentro
+  (`planta.joyeria.premio`: arma, fajo, sitio y si se ha cogido; si Johnny sale y vuelve, sigue ahí):
+  - **La vitrina:** un arma creada de rareza **morada** (la «épica» del banco: ×1,45 de daño, +2 unidades) de una
+    receta que ya se sepa, al azar sin contar el molotov; si solo se sabe el molotov, un cóctel molotov morado (5
+    botellas). Se ve como el icono del arma en grande con un brillo morado, en un sitio libre de la cámara, y se
+    coge pisándola, como lo del suelo: la de cuerpo a cuerpo o de fuego va a la mano (la que llevaba, al
+    inventario), el cóctel suma sus botellas a los molotovs y las demás arrojadizas van al botón de lanzar, igual
+    que al sacarla del baúl. Cuenta en Colecciones como arma creada alguna vez.
+  - **El fajo:** 15 $ más 5 por planta, directos a los dólares de la partida al coger la vitrina (con su «+$N»).
+- **El logro «Caja fuerte»** (`logros.gd`, 20 $): abrir la cámara acorazada por primera vez, de cualquiera de las
+  dos maneras.
+- Prueba: la de `--joyeria` sigue con el premio: dice qué arma ha tocado y el logro, saca la vitrina dentro de la
+  cámara (`captura-joyeria-premio.png`), la pisa y cuenta las manos, las guardadas, los dólares y los molotovs antes
+  y después; y en la segunda apertura (la de la tarjeta), sabiendo solo el molotov, enseña el cóctel morado.
+- **Parte 10 terminada.** Números provisionales: la cuenta de 40 s, los grupos de la alarma y el fajo.
 
 ## Historia
 
@@ -954,4 +972,5 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
    Johnny de la tienda de ropa.
 10. **La joyería**, la sala opcional con riesgo (decidido: ver «Decidido con el dueño (22 oct 2026, para la parte
     10)», en «Objetos»), en tres trozos: ✅ Trozo 1, la tienda (22 oct). ✅ Trozo 2, la cámara acorazada (22 oct: la
-    tarjeta dorada y la apertura de emergencia con la alarma). Trozo 3, el premio, el logro «Caja fuerte» y la prueba.
+    tarjeta dorada y la apertura de emergencia con la alarma). ✅ Trozo 3, el premio (el arma morada y el fajo) y el
+    logro «Caja fuerte» (22 oct). **Parte 10 terminada.** De lo apartado solo quedan los trajes de Johnny.

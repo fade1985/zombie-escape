@@ -31,6 +31,8 @@ const LISTA := [
 		"desc": "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."},
 	{"id": "fin_jornada", "nombre": "Fin de la jornada", "icono": "trofeo", "premio": 50, "meta": 1, "cuenta": "",
 		"desc": "Gana una partida: limpia el edificio de arriba abajo."},
+	{"id": "caja_fuerte", "nombre": "Caja fuerte", "icono": "llave", "premio": 20, "meta": 1, "cuenta": "",
+		"desc": "Abre la cámara acorazada de la Joyería del centro comercial."},
 ]
 
 const AL_PRENDER := 5.0   # segundos tras lanzar un molotov en los que sus llamas cuentan para "Pirómano"

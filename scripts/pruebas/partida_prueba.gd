@@ -126,6 +126,8 @@ func fotos_ayudas() -> void:
 func fotos_supervivientes() -> void:
 	set_process(false)
 	for id in ["policia", "medico", "militar"]:
+		if supervivientes.equipo.any(func(a): return a.def.id == id):
+			continue   # ya acompaña a Johnny (el guardado de la prueba trae al policía de acompañante)
 		var v := supervivientes.crear(Supervivientes.DATOS[id], "vecino")
 		v.es_vecino = true
 		v.casa = Supervivientes.DATOS[id].casa
@@ -592,6 +594,25 @@ func probar_joyeria() -> void:
 		z.queue_free()
 	await get_tree().create_timer(0.8, false).timeout
 	Captura.foto("captura-joyeria-abierta.png")
+	# el premio: la vitrina dentro de la cámara y el logro; al pisarla, el arma a la mano y el fajo
+	var a: Dictionary = d.premio.arma
+	print("Premio: %s (%s, %s) · fajo $%d · vitrina en %s · logro Caja fuerte: %s" % [a.nombre, a.rareza, Recetas.detalle(a),
+		d.premio.fajo, d.premio.pos, Logros.estado(Guardado.cargar(), "caja_fuerte")])
+	var manos_antes: Dictionary = johnny.huecos.duplicate()
+	var dolares_antes := dolares
+	var molotovs_antes: int = lanzables.cantidades.molotov
+	johnny.position = d.premio.pos + Vector2(0, 170)   # (más lejos que el imán de las cosas del suelo: que no vuele aún)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.6, false).timeout
+	Captura.foto("captura-joyeria-premio.png")
+	johnny.position = d.premio.pos
+	await get_tree().create_timer(0.6, false).timeout
+	print("Cogido: %s · manos %s → %s · guardadas %s · dólares %d → %d · molotovs %d → %d · dice «%s»" % [d.premio.cogido,
+		manos_antes, johnny.huecos, armas_guardadas, dolares_antes, dolares, molotovs_antes, lanzables.cantidades.molotov, aviso.text])
+	# si solo se sabe el molotov, el premio es un cóctel morado (la segunda apertura, más abajo, lo enseña)
+	var recetas_antes: Array = Guardado.cargar().recetas.duplicate()
+	Guardado.cambiar(func(g): g.recetas = ["molotov"])
+	d.erase("premio")
 	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya
 	await montar(0, 0, false)
 	print("Guardia en el pasillo: %s · dorada: %s" % [guardia != null, d.dorada])
@@ -614,6 +635,9 @@ func probar_joyeria() -> void:
 	joyeria.listo = true
 	joyeria.mirar_lector()
 	print("Con la tarjeta dorada: abierta %s · alarma %s · dorada %s · dice «%s»" % [d.abierta, joyeria.alarma(), d.dorada, aviso.text])
+	a = d.premio.arma
+	print("Premio sabiendo solo el molotov: %s (%s, %s) · fajo $%d" % [a.nombre, a.rareza, Recetas.detalle(a), d.premio.fajo])
+	Guardado.cambiar(func(g): g.recetas = recetas_antes)
 	get_tree().quit()
 
 
