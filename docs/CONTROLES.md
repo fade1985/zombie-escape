@@ -27,7 +27,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
   objeto al baúl y todas las recetas aprendidas, para probar el banco de trabajo. **F8**: Colecciones al completo
   (todo encontrado, creado y visto), para probar el programa del ordenador. **Y**: soltar a tus pies el
-  papel de una receta que aún no tienes (como al morir un jefe).
+  papel de una receta que aún no tienes (como al morir un jefe). **X**: un científico muerto a tus pies (cada X, el de la
+  página siguiente, con su piel y su pelo); su página se coge pero no se guarda.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace

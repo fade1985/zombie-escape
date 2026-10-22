@@ -114,6 +114,7 @@ var terminada := false
 @onready var lugar: Label = $Pantalla/Lugar
 @onready var aviso: Label = $Pantalla/Mensaje
 var aviso_tween: Tween     # el que va borrando el aviso (decir)
+var de_prueba := 0         # tecla X: la página del siguiente científico de prueba (probar_cientifico)
 @onready var negro: ColorRect = $Pantalla/Negro
 
 
@@ -1096,8 +1097,25 @@ func _unhandled_input(evento: InputEvent) -> void:
 		# una receta a los pies, como la que suelta un jefe al morir
 		if soltar_receta(johnny.position + Vector2(0, 50)) == "":
 			decir("Ya tienes todas las recetas (o están en el suelo)")
+	elif evento.keycode == KEY_X:
+		probar_cientifico()   # un científico muerto a los pies, para ver su dibujo
 	elif evento.keycode == KEY_N and ed.get("azotea", false) and not cerrada and not planta.get("azotea", false):
 		ir_a_azotea()   # derecho a la azotea del centro comercial, para probar al jefe final
+
+
+# Tecla X: un científico muerto a los pies de Johnny, cada vez con la siguiente página de todos los edificios (su
+# piel y su pelo, o su ropa). Solo para verlo: su página se coge, pero no se lee ni se guarda
+func probar_cientifico() -> void:
+	var paginas := []
+	for d in Historia.DOSIERES.values():
+		paginas.append_array(d.paginas)
+	var p: Dictionary = paginas[de_prueba % paginas.size()]
+	de_prueba += 1
+	var cuerpo := CIENTIFICO.new()
+	cuerpo.montar(p, johnny.position + Vector2(0, 70))
+	cuerpo.johnny = johnny
+	mapa.cosas.add_child(cuerpo)
+	decir("Científico de prueba: " + p.cuerpo)
 
 
 # Tecla N (centro comercial): derecho a la azotea, sin subir planta a planta
