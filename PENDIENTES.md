@@ -30,6 +30,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   emergencia, sale un mensaje de Johnny diciendo que ha podido arreglar el ascensor para bajar a la planta
   baja, donde está la sala de mantenimiento. El ascensor solo sirve para bajar a la planta baja y volver a la
   planta de la que venimos; nunca para ir entre plantas.
+- **M6.** La habitación del Gymbro es un gimnasio: máquinas pegadas a las paredes que reducen el espacio
+  libre, y mancuernas por el suelo que, al pisarlas, nos hacen caer y tardamos 2 segundos en levantarnos.
 
 ## Por limar
 
