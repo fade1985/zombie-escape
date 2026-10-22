@@ -1670,6 +1670,16 @@
       "lado_por_direccion": "Como el antidisturbios (antidisturbios-72 → animaciones → muerte → lado_por_direccion): east cae hacia la izquierda ('toward the left ... feet toward the right, head toward the left'); west hacia la derecha; south se aleja de la cámara ('away from the camera, toward the top of the screen ... feet toward the bottom of the screen and head toward the top'); north hacia la cámara (delante 'Strict back view the whole time, he never turns to face the camera.'); south-east 'toward the upper left of the screen ... feet toward the lower right and head toward the upper left'; south-west 'upper right ... feet lower left, head upper right'; north-east 'lower left ... feet upper right, head lower left'; north-west 'lower right ... feet upper left, head lower right' (los dos de espaldas con la frase de 'three-quarter back view').",
       "pegas": "Salió bien a la primera en las 8: cae de espaldas hacia el lado pedido y queda tendido y quieto desde el fotograma 7-8 (los últimos 4-5 casi iguales), sin charco. De espaldas (north, north-east, north-west) queda boca arriba con la cara verde del zombi dentro de la cabeza a la vista."
      },
+     "andar_cerrado": {
+      "fecha": "2026-10-22",
+      "group": "5118d5be-8677-484e-8286-1f63cd9a222a",
+      "nombre_en_pixellab": "andar-cerrado",
+      "por_que": "El andar south-east de 'andar' daba un saltito al repetirse: en 6-7 el oso se gira hacia la cámara, abre los brazos y baja 3 px, y vuelve de golpe al 0. Se repite solo south-east con partida y final = dibujo quieto (partida/south-east.png, upload 009a853a-..., aún válido el 22 oct).",
+      "fotogramas": "8 + el de partida (archivos 0-8); el 8 es casi igual que el 0 (74 px distintos), así que el ciclo es 0 a 7. Lienzo 128x152. Con visto bueno del dueño (22 oct) sustituye al south-east de walk/ (assets/sources/mascota-72/walk/south-east-0..8; el viejo pasó a descartes/walk/) y está en la hoja jefe-mascota. En pruebas/andar-cerrado/ quedan comparacion.gif (viejo y nuevo), tira.png y en-el-juego.gif (sacado de la hoja).",
+      "action_description": "La del andar con la frase de south-east delante (Strict three-quarter front view the whole time, facing toward the camera and to the right, he never turns to the side. He lumbers forward ...).",
+      "pegas": "Sigue girándose algo hacia la cámara y abriendo los brazos en 5-7 (baja 2 px en vez de 3). El salto de 7 a 0 queda como un paso normal (1221 px distintos, como 0→1: 1233) frente al viejo (1307, con pasos de ~980). El dueño lo dio por bueno así.",
+      "coste": "1 generación (saldo 133,80 antes)."
+     },
      "sin_usar_en_pixellab": "Grupo golpe 82ad02a2-2699-402e-935f-eea015a474b3 (solo east, la primera versión, que se giraba de frente). Nada se borró de PixelLab. Borrar solo con confirmación del dueño."
     },
     "coste": {
