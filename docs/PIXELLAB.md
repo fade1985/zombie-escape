@@ -66,7 +66,8 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
   con su aparato; la farmacéutica no tiene acción. En la hoja (`tools/superviviente.py`) no hay fogonazo amarillo ni
   boca del arma: el momento de lo suyo se busca por el chispazo, salvo en el ferretero, que se dice a mano
   (`superviviente.json`, `golpe`: el detector se quedaba con el fotograma de más chispas, que va después del golpe).
-  Pega conocida: al noroeste, en el fotograma del chispazo, PixelLab tiñó de celeste la cabeza y el brazo del técnico.
+  Al noroeste, en el fotograma antes del chispazo, PixelLab tiñó de celeste la cabeza, los brazos y la camisa del
+  técnico: se tapó con los colores del fotograma siguiente, que tiene la misma postura (el original, en `intentos/`).
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el
