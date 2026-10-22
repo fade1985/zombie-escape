@@ -51,7 +51,7 @@ const DOSIERES := {
 				"tipo": "CORREO INTERNO IMPRESO", "titulo": "Asunto: RE: ¿virus?",
 				"texto": "De: Dirección de Comunicación\nPara: Equipo de campo\n\nNo hay ningún virus, lo sabemos. Pero «virus» lo entiende todo el mundo, asusta lo justo y nadie pregunta por las cápsulas. Desde hoy el edificio está en cuarentena sanitaria.\n\nLo que pase dentro es la fase de campo: no intervengáis. Necesitamos 30 días de observación sin tratamiento.\n\nEl contagio por mordisco no estaba previsto. Ahora forma parte del estudio.\n\nBorrad este correo.",
 				"nota": "No pienso borrarlo. Que lo lea alguien."},
-			{"id": "vd7_anexo", "planta": 4, "cuerpo": "Ramón Gil, vigilante de Velaria",
+			{"id": "vd7_anexo", "planta": 4, "cuerpo": "Dr. Ramón Gil, investigador de Velaria",
 				"look": {"skin": Color("#e0ac69"), "hair": Color("#9b93a0")},
 				"tipo": "ANEXO 4 · CONFIDENCIAL", "titulo": "La colaboradora del edificio",
 				"texto": "Funciones: repartir los sobres, apuntar quién entra y quién sale, avisar si algún vecino habla con la prensa. Pago: 1.500 € al mes y un año de alquiler gratis.\n\nDía 15: la colaboradora pide «algo para aguantar despierta». Se le da VD-7 sin decírselo, a dosis doble, para ver cómo reacciona un sujeto activo.\n\nDía 17: la colaboradora no duerme. No para. Ha cerrado el edificio por dentro: tiene todas las llaves.",
