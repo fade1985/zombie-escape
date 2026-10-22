@@ -146,6 +146,11 @@ func comprar(id: String) -> bool:
 	var johnny: Node2D = partida.johnny
 	var cabe: bool = johnny.quiere_municion() if id == "municion" else partida.lanzables.cabe(id)
 	var s := Guardado.cargar()
+	if not Reto.se_vende(id):   # el reto del día "Solo cuerpo a cuerpo"
+		info.text = "Hoy el reto va solo a cuerpo a cuerpo: nada de esto."
+		info.add_theme_color_override("font_color", Tema.ROJO)
+		Sonido.tocar("no")
+		return false
 	if not cabe:
 		if id != "municion":
 			info.text = "No te cabe: ya llevas las %d %ss." % [partida.lanzables.maximo(id), cosa.nombre.to_lower()]

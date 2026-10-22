@@ -498,6 +498,45 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   del edificio), `captura-bestiario.png` (la ficha del vecino) y `captura-bestiario-falta.png` (la del gerente, sin
   ver); en la terminal, lo encontrado, creado y visto de cada edificio, y avisa si los totales no cuadran.
 
+### ✅ Hecho (22 oct 2026, parte 8, trozo 4: reto del día)
+
+- Todo en `scripts/reto.gd`: cada día, el edificio sale igual para todo el mundo y con una regla rara, **la misma
+  para los dos edificios ese día**. La semilla de las plantas (`Planta.semilla`, la del trozo 1) sale de la fecha y
+  del edificio, y la partida pone también el dado de siempre con ella al empezar, así que el orden de los minijefes,
+  la planta del superviviente y los eventos sorpresa salen iguales para todos; lo que pasa dentro ya depende de cada
+  jugador. La regla sale de la fecha. Sin servidor: solo compites contigo.
+- **Las siete reglas** (números en constantes de `reto.gd`; cada una se mira en una línea del sitio donde se aplica):
+  - *Solo cuerpo a cuerpo*: la pistola empieza vacía, no caen cajas de munición ni molotovs ni granadas, el vendedor
+    ambulante y el puesto del ferretero no los venden, y la ayuda «Pistola sin fin» no vale.
+  - *Todo a oscuras*: todos los sitios menos la sala de mantenimiento como en el apagón (la misma oscuridad de más y
+    las lámparas apagadas: `eventos.gd`, `al_montar`); ese día el apagón no se sortea.
+  - *Sin botiquines*: los armaritos de los baños salen vacíos, la farmacéutica no te prepara el suyo y el vendedor no
+    lo vende.
+  - *Zombis rápidos*: todos un 35 % más rápidos (los jefes, no).
+  - *De cristal*: Johnny con la mitad de vida.
+  - *Casa llena*: el doble de presupuesto de zombis en cada sitio (y en las oleadas de la horda).
+  - *Oído fino*: los zombis dormidos oyen los disparos desde el triple de lejos.
+- **Qué cuenta y qué no:** como siempre, los dólares (solo si lo completas), los zombis matados, las partidas, los
+  supervivientes rescatados, las colecciones, los logros y los objetos al baúl. No cuenta como edificio completado:
+  no toca «Completado», las victorias, la mejor planta ni el mejor tiempo del edificio, y va sin alerta y no abre
+  ninguna.
+- **Guardado:** `retos`, una ficha por edificio (`Guardado.RETO`): la fecha, la regla, los intentos, la planta más
+  alta de hoy y, si se ha completado, el mejor tiempo. Si la ficha es de otro día, se empieza de cero: el reto es
+  nuevo. Mejor marca = llegar más lejos; con el edificio completado, hacerlo en menos tiempo.
+- **Cómo se ve:** en «Elige edificio», debajo del selector de alerta de cada tarjeta abierta, el botón «Reto del
+  día» (con el trofeo) y, debajo, «Hoy: Casa llena» y tu marca («Aún no lo has intentado», «Has llegado a la
+  planta 3 (2 intentos)» o «Completado en 12:34 (3 intentos)»). En la partida, el aviso del principio dice la regla
+  y, arriba a la derecha, junto al nombre del sitio, «· Reto: Casa llena». Al acabar, el cartel dice «¡Reto
+  completado!» (o «¡Derrota!») con una línea «Reto del día · Casa llena» y la marca: en amarillo, «¡mejor marca de
+  hoy!» si la has mejorado. «Jugar otra vez» repite el mismo reto.
+- **Lo que cambia respecto al plan:** nada; la regla es la misma para los dos edificios (más fácil de contar).
+- Prueba: `--captura --reto si` (o `--reto oscuras`, `--reto cuerpo`... para forzar una regla; con o sin
+  `--edificio centro`): comprueba que la 1ª planta sale igual dos veces con la semilla de hoy y distinta con la de
+  otro día, dice en la terminal lo que cambia cada regla y cómo queda el primer piso con la que se juega, y saca
+  `captura-reto-tarjeta.png` (la tarjeta con el botón y una marca inventada), `captura-reto.png` (el aviso),
+  `captura-reto-piso.png`, `captura-reto-derrota.png` (caída en la 2ª planta) y `captura-reto-fin.png` (completado,
+  con la marca mejorada); al final mira el guardado: la marca de hoy, y que el edificio sigue igual.
+
 ## Por partes
 
 1. ✅ **El esqueleto** (21 oct): pantalla "Elige edificio" (con el candado), el edificio elegido en la partida, el
@@ -821,4 +860,4 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
    (sale al caer él, en la parte 3 del trozo 6 de la parte 4).
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
    ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct). ✅ Trozo 3, colecciones y
-   bestiario (22 oct).
+   bestiario (22 oct). ✅ Trozo 4, reto del día (22 oct). **Parte 8 terminada.**

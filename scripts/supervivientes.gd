@@ -642,7 +642,7 @@ func abrir_puesto() -> void:
 # Al empezar la partida, con la farmacéutica rescatada (en los dos edificios): un botiquín en la mochila. Se usa
 # desde el inventario («Usar», Objetos.USABLES) y no va al baúl. Devuelve si lo ha puesto (para decirlo al empezar)
 func botiquin_al_empezar() -> bool:
-	if "farmaceutica" not in Guardado.cargar().rescatados:
+	if "farmaceutica" not in Guardado.cargar().rescatados or Reto.sin_botiquines():   # (en ese reto, nadie te lo prepara)
 		return false
 	partida.mochila.append("botiquin")
 	return true

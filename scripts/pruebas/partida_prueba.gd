@@ -49,6 +49,9 @@ func empezar_prueba() -> void:
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)
+	elif Reto.activo:
+		set_process(false)   # sin la prueba larga
+		probar_reto()
 	elif Alerta.nivel > 0:
 		set_process(false)   # sin la prueba larga
 		probar_alerta()
@@ -388,6 +391,82 @@ func probar_alerta() -> void:
 	Captura.foto("captura-alerta-fin.png")
 	var e: Dictionary = Guardado.cargar().edificios[edificio]
 	print("Final · dólares: 50 + %d · alerta más alta abierta: %d" % [Alerta.dolares_extra(50), e.alerta_max])
+	get_tree().quit()
+
+
+# Con "--captura --reto" (y "--reto oscuras", "--reto cuerpo"..., con esa regla en vez de la de hoy): la prueba
+# del reto del día (reto.gd). Saca el aviso del principio (captura-reto.png); comprueba que la 1ª planta sale
+# igual dos veces con la semilla de hoy y distinta con la de otro día; dice en la terminal lo que cambia cada
+# regla y, con la que se juega, cómo queda el primer piso (armaritos, balas, lanzables, lo oscuro que está:
+# captura-reto-piso.png); y acaba dos veces, cayendo en la 3ª planta (captura-reto-derrota.png) y completando
+# el edificio (captura-reto-fin.png, con la marca mejorada). Al final mira el guardado: la marca de hoy, y que
+# el edificio sigue sin contar como completado y sin abrir alertas
+func probar_reto() -> void:
+	print("Reto del día (%s) en %s: %s · %s · semilla %d" % [Reto.fecha, ed.el_nombre, Reto.nombre(), Reto.desc(), Planta.semilla])
+	decir("%s: %s
+%s" % [planta.nombre, ed.objetivo, Reto.aviso()], 4.0)
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-reto.png")
+	# la 1ª planta, dos veces con la semilla de hoy y una con la de otro día
+	var una := var_to_str(Planta.generar(2, edificio, jefe_de(2)).sitios)
+	var otra := var_to_str(Planta.generar(2, edificio, jefe_de(2)).sitios)
+	var semilla := Planta.semilla
+	Planta.semilla = Reto.semilla_de("2000-01-01", edificio)
+	var de_otro_dia := var_to_str(Planta.generar(2, edificio, jefe_de(2)).sitios)
+	Planta.semilla = semilla
+	print("Semilla · la 1ª planta sale igual dos veces: %s · con la de otro día, distinta: %s" % [una == otra, una != de_otro_dia])
+	# lo que cambia cada regla (la vida de Johnny y la velocidad de un zombi normal, recién puestos)
+	var regla := Reto.regla
+	var talentos: Dictionary = Guardado.cargar().talentos
+	for r in Reto.REGLAS:
+		Reto.regla = r
+		aplicar_talentos(talentos)
+		var z := meter_zombi("normal", Vector2(200, 200))
+		print("%s · munición: %s · oscuras: %s · botiquines: %s · vende botiquín/munición: %s/%s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
+			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_botiquines(), Reto.se_vende("botiquin"),
+			Reto.se_vende("municion"), z.velocidad, johnny.stats.vida_max, Reto.mas_zombis(), Zombi.OIDO * Reto.oido()])
+		z.queue_free()
+	Reto.regla = regla
+	aplicar_talentos(talentos)
+	# con la regla que se juega, el primer piso: los armaritos, las balas y los lanzables, y lo oscuro que está
+	var piso := 1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento":
+			piso = i
+			break
+	await montar(piso, 0, false)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4, false).timeout
+	var lamparas := mapa.find_children("*", "", true, false).filter(func(n): return n.scene_file_path == Eventos.LAMPARA)
+	print("Con «%s», en %s · armaritos vacíos: %d de %d · balas %d (+%d) · molotovs %d, granadas %d · oscuridad %.2f (Luz.evento %.2f) · lámparas apagadas: %d de %d · arriba: «%s»" % [
+		Reto.nombre(), planta.sitios[piso].nombre, mapa.armaritos.filter(func(a): return a.datos.cogido).size(), mapa.armaritos.size(),
+		johnny.balas, johnny.reserva, lanzables.cantidades.molotov, lanzables.cantidades.granada, Luz.nivel, Luz.evento,
+		lamparas.filter(func(n): return n.fuerza == 0.0).size(), lamparas.size(), lugar.text])
+	Captura.foto("captura-reto-piso.png")
+	# el final, dos veces: cayendo en la 3ª planta y luego completando el edificio (las dos mejoran la marca de hoy)
+	var antes: Dictionary = Guardado.cargar().edificios[edificio].duplicate()
+	planta.num = 3
+	planta.nombre = Planta.nombre_planta(3)
+	terminar(false)
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-reto-derrota.png")
+	var f: Dictionary = Guardado.cargar().retos[edificio]
+	print("Caída en la %s · marca de hoy: %s · intentos: %d" % [planta.nombre.to_lower(), Reto.marca(f), f.intentos])
+	terminada = false
+	planta.num = Planta.PLANTAS
+	planta.nombre = Planta.nombre_planta(Planta.PLANTAS)
+	dolares = 50
+	terminar(true)
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-reto-fin.png")
+	var s := Guardado.cargar()
+	f = s.retos[edificio]
+	var e: Dictionary = s.edificios[edificio]
+	print("Completado · marca de hoy: %s (regla %s, intentos %d) · dólares ahorrados: %d" % [Reto.marca(f), f.regla, f.intentos, s.dolares])
+	print("El edificio sigue igual (completado %s, victorias %d, alerta más alta %d, mejor planta %d, mejor tiempo %.0f): %s" % [
+		e.completado, e.victorias, e.alerta_max, e.mejor_planta, e.mejor_tiempo,
+		e.completado == antes.completado and e.victorias == antes.victorias and e.alerta_max == antes.alerta_max
+		and e.mejor_planta == antes.mejor_planta and e.mejor_tiempo == antes.mejor_tiempo])
 	get_tree().quit()
 
 

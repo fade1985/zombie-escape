@@ -14,7 +14,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   botiquín de la farmacéutica se usa desde aquí: al elegirlo, la marca salta a **Usar** (con el mando, A dos veces).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
 - **Elige edificio:** debajo de cada tarjeta, **<** y **>** cambian el nivel de alerta (de los abiertos; se
-  recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5.
+  recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5. Debajo, el botón
+  **Reto del día**: ese edificio generado igual para todo el mundo ese día y con la regla rara de hoy (la misma en
+  los dos edificios; sale debajo del botón con tu mejor marca de hoy). Va sin alerta, no abre ninguna y no cuenta
+  como edificio completado; los dólares, como siempre.
 
 ## Teclas de prueba
 
@@ -48,6 +51,12 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   la planta baja: dice en la terminal cuántos salen en 2000 partidas sorteadas y lo que pasa (luces apagadas,
   calambrazos, oleadas y premio, compras con lo que queda de dólares) y saca `captura-evento-<X>.png` (el cartel) y
   las suyas (`-piso`, `-cable`, `-premio`, `-puesto`, `-comprado`). Sin `--evento`, la prueba va sin eventos.
+- `--reto si` (o `--reto oscuras`, `--reto cuerpo`, `--reto botiquines`, `--reto rapidos`, `--reto cristal`,
+  `--reto llena` o `--reto oido`, para forzar esa regla en vez de la de hoy): en vez de la prueba larga, la del reto
+  del día: comprueba que la 1ª planta sale igual dos veces con la semilla de hoy, dice en la terminal lo que cambia
+  cada regla y cómo queda el primer piso con la que se juega, y saca `captura-reto-tarjeta.png` (la tarjeta con el
+  botón y una marca inventada), `captura-reto.png` (el aviso), `captura-reto-piso.png`, `captura-reto-derrota.png`
+  y `captura-reto-fin.png` (los carteles del final, con la marca); al final mira el guardado.
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

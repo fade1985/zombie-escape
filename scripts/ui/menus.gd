@@ -157,7 +157,8 @@ func pausa(partida: Node) -> void:
 
 
 # r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, cartera y, con los niveles de alerta
-# (alerta.gd), alerta (la de la partida), extra (los dólares de más por ella) y abierta (la que se abre, o 0)
+# (alerta.gd), alerta (la de la partida), extra (los dólares de más por ella) y abierta (la que se abre, o 0);
+# con el reto del día (reto.gd), reto (el nombre de su regla), marca (la mejor de hoy) y mejor (si se acaba de mejorar)
 func fin(r: Dictionary) -> void:
 	var columna := abrir("fin")
 	titulo(columna, r.titulo, r.sub)
@@ -169,6 +170,9 @@ func fin(r: Dictionary) -> void:
 	dato(lista, "puerta", "Apartamentos visitados (última planta)", r.visitados)
 	if r.tiempo != "":
 		dato(lista, "trofeo", "Tiempo", r.tiempo)
+	if r.get("reto", "") != "":
+		dato(lista, "trofeo", "Reto del día · " + r.reto, "%s · ¡mejor marca de hoy!" % r.marca if r.mejor
+			else "Tu mejor marca de hoy: " + r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
 	if r.gano:
 		dato(lista, "billete", "Dólares conseguidos", "+$%d  (tienes $%d)" % [r.dolares + r.extra, r.cartera], Tema.VERDE)
 		if r.get("alerta", 0) > 0:

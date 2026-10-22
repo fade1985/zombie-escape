@@ -154,9 +154,9 @@ func tercios_vivos() -> int:
 	return 3 if Guardado.ajuste("vida_entera") else tercios
 
 
-# Ayuda "Pistola sin fin": la pistola no gasta balas ni se recarga
+# Ayuda "Pistola sin fin": la pistola no gasta balas ni se recarga (en el reto "Solo cuerpo a cuerpo", no vale)
 func pistola_sin_fin() -> bool:
-	return huecos.fuego == "pistola" and Guardado.ajuste("pistola_sin_fin")
+	return huecos.fuego == "pistola" and Guardado.ajuste("pistola_sin_fin") and not Reto.sin_municion()
 
 
 func curar(cantidad: int) -> void:

@@ -181,15 +181,26 @@ func _ready() -> void:
 
 	if captura:
 		preparar_prueba()   # el guardado de prueba, la alerta y el evento que se piden
+	if Reto.activo:
+		# el reto del día (reto.gd): también el dado de siempre con la semilla de hoy, para que el orden de los
+		# minijefes, la planta del superviviente y los eventos sorpresa salgan iguales para todo el mundo
+		seed(Planta.semilla)
 	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
 	var s := Guardado.cambiar(func(g):
 		g.partidas += 1
-		Guardado.edificio(g, edificio).partidas += 1)
+		Guardado.edificio(g, edificio).partidas += 1
+		if Reto.activo:
+			Reto.ficha(g, edificio).intentos += 1)
 	ahorrados = s.dolares
 	# los talentos comprados, y empieza con la vida llena y el escudo de Acero
 	aplicar_talentos(s.talentos)
 	johnny.vida = johnny.stats.vida_max
 	lanzables.reiniciar(johnny.stats)
+	if Reto.sin_municion():   # el reto "Solo cuerpo a cuerpo": la pistola vacía y sin lanzables
+		johnny.balas = 0
+		johnny.reserva = 0
+		for k in lanzables.cantidades:
+			lanzables.cantidades[k] = 0
 	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	supervivientes.elegir()
 	var botiquin := supervivientes.botiquin_al_empezar()   # la mejora de la farmacéutica
@@ -209,6 +220,7 @@ func _ready() -> void:
 		decir("%s: %s%s" % [planta.nombre, ed.objetivo, "
 %s: %s" % [Alerta.nombre(), Alerta.REGLAS[Alerta.nivel]]
 			if Alerta.nivel > 0 else ""] + ("
+" + Reto.aviso() if Reto.activo else "") + ("
 La Farmacéutica te ha preparado un botiquín: está en la mochila" if botiquin else ""), 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
@@ -249,7 +261,9 @@ func jefe_de(num: int) -> String:
 # Los atributos de Johnny con los talentos comprados y las mutaciones de la partida (al empezar, al comprar
 # un talento en el ordenador y al elegir una mutación)
 func aplicar_talentos(talentos: Dictionary) -> void:
-	johnny.poner_stats(Mutaciones.aplicar(Talentos.aplicar(Mejoras.base(), talentos), mutaciones.tengo))
+	var st := Mutaciones.aplicar(Talentos.aplicar(Mejoras.base(), talentos), mutaciones.tengo)
+	st.vida_max = maxi(3, roundi(st.vida_max * Reto.vida()))   # el reto del día "De cristal": la mitad
+	johnny.poner_stats(st)
 
 
 # Tras caer la portera: pausa y dos mutaciones para elegir una (si quedan y no lleva ya 4)
@@ -339,6 +353,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(coger_botiquin.bind(armarito))
+		if Reto.sin_botiquines():   # el reto del día "Sin botiquines": todos vacíos
+			armarito.vaciar()
 	poner_cientifico(idx)
 	for puerta in mapa.puertas:
 		puerta.empujada.connect(cruzar)
@@ -420,7 +436,7 @@ func poner_lugar() -> void:
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
-	lugar.text = texto + eventos.etiqueta()
+	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta()
 
 
 # Johnny ha empujado la salida "i" del sitio en el que está
@@ -717,8 +733,11 @@ func soltar_billetes(cuantos: int, donde: Vector2) -> void:
 		mapa.cosas.add_child.call_deferred(billete)
 
 
-# Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila
+# Un molotov o una granada en el suelo: se coge pasando por encima, si cabe en la mochila (en el reto "Solo
+# cuerpo a cuerpo", no caen)
 func soltar_lanzable(k: String, donde: Vector2) -> void:
+	if Reto.sin_municion():
+		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.icono = ICONOS_LANZABLES[k]
@@ -732,8 +751,11 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Una caja de munición: un cargador más para el arma de fuego. Va hacia Johnny solo si le cabe
+# Una caja de munición: un cargador más para el arma de fuego. Va hacia Johnny solo si le cabe (en el reto
+# "Solo cuerpo a cuerpo", no caen)
 func soltar_municion(donde: Vector2) -> void:
+	if Reto.sin_municion():
+		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.icono = ICONO_MUNICION
@@ -892,16 +914,21 @@ func terminar(gano: bool, abandona := false) -> void:
 		Sonido.jingle(gano)
 	var record := [false]   # en una lista, para que la función de dentro pueda cambiarlo
 	var abierta := [0]      # la alerta que se abre al ganar (0: ninguna)
+	var mejor := [false]    # el reto del día: se ha mejorado la marca de hoy
 	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var s := Guardado.cambiar(func(g):
 		# el superviviente rescatado en esta partida se viene a vivir a la sala de mantenimiento
 		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
 			g.rescatados.append(nuevo.id)
-		g.mejor_planta = maxi(g.mejor_planta, planta.num)
 		g.muertos += muertos
 		var e := Guardado.edificio(g, edificio)
-		e.mejor_planta = maxi(e.mejor_planta, planta.num)
+		# el reto del día (reto.gd) lleva su marca aparte: no toca las plantas ni los tiempos del edificio
+		if Reto.activo:
+			mejor[0] = Reto.apuntar(g, edificio, planta.num, gano, duracion)
+		else:
+			g.mejor_planta = maxi(g.mejor_planta, planta.num)
+			e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
 			# los objetos de la mochila pasan al baúl (si caes, se pierden); el botiquín, no (se pierde)
 			for id in mochila:
@@ -910,6 +937,7 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.dolares += dolares + extra
 			g.dolares_total += dolares + extra
 			g.victorias += 1
+		if gano and not Reto.activo:   # (el reto no cuenta como edificio completado ni abre alertas)
 			e.victorias += 1
 			e.completado = true
 			# completarlo con una alerta abre la siguiente (alerta.gd)
@@ -936,7 +964,10 @@ func terminar(gano: bool, abandona := false) -> void:
 		tiempo = "%d:%02d%s" % [int(duracion) / 60, int(duracion) % 60, " · ¡récord!" if record[0] else ""]
 	menus.fin({
 		"gano": gano,
-		"titulo": "¡Edificio completado!" if gano else "¡Derrota!",
+		"titulo": ("¡Reto completado!" if Reto.activo else "¡Edificio completado!") if gano else "¡Derrota!",
+		"reto": Reto.nombre() if Reto.activo else "",
+		"mejor": mejor[0],
+		"marca": Reto.marca(Reto.ficha(s, edificio), true) if Reto.activo else "",
 		"sub": ("Has limpiado %s de arriba abajo%s" % [ed.el_nombre, "" if nuevo.is_empty()
 			else ". %s se viene a vivir a la sala de mantenimiento" % nuevo.nombre]) if gano
 			else ("Caíste en la %s de %s" % [planta.nombre.to_lower(), ed.el_nombre]),
@@ -1050,7 +1081,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			barra_jefa.visible = vida > 0)
 		zombi.pide_zombi.connect(meter_zombi)
 	elif "velocidad" in zombi:
-		zombi.velocidad *= Alerta.velocidad()   # con la Alerta 2, todos un poco más rápidos
+		# con la Alerta 2, todos un poco más rápidos; con el reto del día "Zombis rápidos", bastante más
+		zombi.velocidad *= Alerta.velocidad() * Reto.velocidad()
 	mapa.cosas.add_child(zombi)
 	return zombi
 

@@ -109,6 +109,17 @@
   la mochila y la manta, y su puesto con el panel de `menus.gd`; paga con los dólares de la partida y luego con los
   ahorrados). Los números, en sus constantes. Lo engancha `partida.gd` en `nueva_planta()`, `montar()` (`recoger()`
   y `al_montar()`) y `poner_lugar()` (`etiqueta()`). La prueba: `--captura --evento X` (`probar()`).
+- `reto.gd`: el reto del día (parte 8): cada día el edificio sale igual para todo el mundo (la semilla de las
+  plantas, `Planta.semilla`, sale de la fecha y del edificio: `semilla_de()`; la partida pone también el dado de
+  siempre con ella al empezar) y con una regla rara de `REGLAS`, la misma para los dos edificios (`regla_de()`).
+  «Elige edificio» lo pone con `empezar()` (y `quitar()` para una partida normal). La partida pregunta a sus
+  funciones donde se aplica cada regla: `sin_municion()` (`partida.gd`, `johnny.gd`, `puesto.gd`), `oscuras()`
+  (`eventos.gd`, `al_montar`, con lo del apagón), `sin_botiquines()` (`partida.gd`, `supervivientes.gd`),
+  `se_vende()` (el vendedor y el puesto), `velocidad()`, `vida()` (`aplicar_talentos`), `mas_zombis()` (`planta.gd` y
+  la horda) y `oido()` (`zombi.gd`). La marca de hoy de cada edificio, en el guardado (`retos`, `Guardado.RETO`):
+  `ficha()` (de otro día, se empieza de cero), `apuntar()` (al acabar, en `terminar()` de `partida.gd`, que no toca el
+  progreso del edificio) y `marca()` y `texto_tarjeta()` para los textos. La prueba: `--captura --reto si` (o
+  `--reto <regla>`; `probar_reto()` en `pruebas/partida_prueba.gd`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 26 objetos, los que se usan desde el inventario, `USABLES`: de
   momento el botiquín, que no entra en recetas ni va al baúl; mochila, baúl de 32 casillas, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
@@ -123,6 +134,8 @@
 - `guardado.gd`: el guardado entre partidas. Para Colecciones: `encontrados` (objetos cogidos alguna vez), `creadas`
   (armas creadas alguna vez en el banco), `bestiario` (enemigos vistos) y `colecciones_nuevo` (hay algo nuevo desde
   la última vez que se abrió el programa; el icono avisa). Un guardado de antes los rellena una vez con lo del baúl.
+  Para el reto del día: `retos` (la ficha de hoy de cada edificio, `RETO`: fecha, regla, intentos, planta, completado
+  y tiempo).
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
 - `historia.gd`: el texto del dosier de cada edificio (`DOSIERES`: Apartamentos y centro comercial), la hoja de
   papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
@@ -172,11 +185,11 @@
   encontrado, creado y visto de cada edificio.
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
-  `--alerta N` o `--evento X`, solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  `--alerta N`, `--evento X` o `--reto si` (`probar_reto`: el reto del día), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**
-- `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio"), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil, ayudas y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
+- `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio": la tarjeta de cada edificio, el selector de alerta y el botón del reto del día con tu marca de hoy), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil, ayudas y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
 - `ordenador.gd`: la pantalla de ConserjeOS (puntos, talentos, tienda de armas, logros, Dosier, Noticias y
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
   y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras

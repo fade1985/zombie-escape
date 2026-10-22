@@ -121,7 +121,8 @@ func nueva_planta() -> void:
 	if Planta.semilla != 0:
 		rng.seed = Planta.semilla * 13 + num
 	if rng.randf() < PROBABILIDAD:
-		var quedan: Array = LISTA.filter(func(e): return e not in usados)
+		# (con el reto "Todo a oscuras" ya está todo apagado: el apagón no se sortea)
+		var quedan: Array = LISTA.filter(func(e): return e not in usados and not (e == "apagon" and Reto.oscuras()))
 		if not quedan.is_empty():
 			evento = quedan[rng.randi() % quedan.size()]
 			usados.append(evento)
@@ -144,12 +145,15 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 	if evento != "" and not empezado and sitio.tipo == "pasillo":
 		empezar()
 	activo = empezado and sitio.tipo in ["pasillo", "apartamento"]   # (las tiendas también son "apartamento")
-	Luz.evento = APAGON if activo and evento == "apagon" else 0.0
+	# A oscuras y con las luces apagadas: con el apagón o, con el reto del día "Todo a oscuras" (reto.gd), en
+	# todos los sitios menos la sala de mantenimiento
+	var oscuras: bool = (activo and evento == "apagon") or (Reto.oscuras() and sitio.tipo != "mantenimiento")
+	Luz.evento = APAGON if oscuras else 0.0
+	if oscuras:
+		apagar_luces()
 	if not activo:
 		return
 	match evento:
-		"apagon":
-			apagar_luces()
 		"incendio":
 			mojar(idx, sitio)
 		"horda":
@@ -278,7 +282,7 @@ func avanzar_horda(delta: float) -> void:
 		h.t = minf(h.t, 2.0)   # si ya no queda ninguno, la siguiente oleada no se hace esperar
 	if h.t <= 0.0 and h.oleada < HORDA.oleadas.size():
 		var num: int = partida.planta.num
-		var n := roundi(HORDA.oleadas[h.oleada] * (1.0 + HORDA.por_planta * (num - 1)) * Alerta.mas_zombis())
+		var n := roundi(HORDA.oleadas[h.oleada] * (1.0 + HORDA.por_planta * (num - 1)) * Alerta.mas_zombis() * Reto.mas_zombis())
 		var tipos := tipos_horda(h.oleada, num)
 		for i in n:
 			h.cola.append(tipos.pick_random())
@@ -338,7 +342,8 @@ func premio() -> void:
 
 func poner_vendedor(sitio: Dictionary) -> void:
 	if venta.is_empty():
-		var ofertas: Array = VENDEDOR.VENTA.keys()
+		# (con el reto del día, sin lo que su regla quita: el botiquín, o la munición y los lanzables)
+		var ofertas: Array = VENDEDOR.VENTA.keys().filter(Reto.se_vende)
 		ofertas.shuffle()
 		venta = {"pos": sitio_vendedor(sitio), "ofertas": ofertas.slice(0, VENDEDOR.OFERTAS), "vendidas": [],
 			"objeto": Objetos.al_azar(partida.edificio, "")}

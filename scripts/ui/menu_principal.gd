@@ -78,8 +78,13 @@ func _ready() -> void:
 		Captura.foto("captura-menu.png")
 		elegir_edificio()
 		await get_tree().create_timer(0.3).timeout
-		Captura.foto("captura-edificios.png")
-		jugar_partida(Captura.dato("--edificio", "apartamentos"))
+		var edificio := Captura.dato("--edificio", "apartamentos")
+		if "--reto" in OS.get_cmdline_user_args():   # la prueba del reto del día: la tarjeta con su botón y su marca
+			Captura.foto("captura-reto-tarjeta.png")
+			jugar_reto(edificio)
+		else:
+			Captura.foto("captura-edificios.png")
+			jugar_partida(edificio)
 
 
 func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "") -> Button:
@@ -132,12 +137,18 @@ func poner_tarjetas() -> void:
 		for id in Edificios.LISTA:   # para la foto: todas abiertas y la pedida, elegida (no se guarda)
 			Guardado.edificio(s, id).alerta_max = Alerta.MAX
 			s.edificios[id].alerta = int(Captura.dato("--alerta"))
+	if Captura.activa() and "--reto" in OS.get_cmdline_user_args():
+		for id in Edificios.LISTA:   # para la foto: una marca de hoy inventada (no se guarda)
+			var f := Reto.ficha(s, id, Reto.hoy())
+			f.intentos = 2
+			f.planta = 3
 	for id in Edificios.LISTA:
 		var caja := VBoxContainer.new()
 		caja.add_theme_constant_override("separation", 6)
 		caja.add_child(tarjeta(id, s))
 		if Edificios.abierto(s, id):
 			selector_alerta(caja, id, s.edificios.get(id, Guardado.EDIFICIO))
+			boton_reto(caja, id, s)
 		tarjetas.add_child(caja)
 
 
@@ -194,6 +205,37 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 			Guardado.cambiar(func(g): Guardado.edificio(g, id).alerta = n)
 	menos.pressed.connect(cambiar.bind(-1))
 	mas.pressed.connect(cambiar.bind(1))
+
+
+# Debajo del selector de alerta: el botón del reto del día (reto.gd) y, debajo, la regla de hoy y tu marca
+func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
+	var b := Button.new()
+	b.text = "Reto del día"
+	b.icon = load("res://assets/ui/iconos/trofeo.png")
+	b.expand_icon = true
+	b.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	b.add_theme_constant_override("icon_max_width", 24)
+	b.custom_minimum_size.x = 220
+	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	b.pressed.connect(jugar_reto.bind(id))
+	caja.add_child(b)
+	var explica := Label.new()
+	explica.theme_type_variation = "Sub"
+	explica.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	explica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	explica.custom_minimum_size = Vector2(300, 0)
+	explica.text = Reto.texto_tarjeta(Reto.ficha(s, id, Reto.hoy()))
+	caja.add_child(explica)
+
+
+# El reto del día de un edificio (reto.gd): el de hoy, sin alerta. En la prueba, "--reto <regla>" fuerza esa regla
+func jugar_reto(id: String) -> void:
+	Edificios.elegido = id
+	Alerta.nivel = 0
+	Reto.empezar(id)
+	if Captura.activa() and Captura.dato("--reto") in Reto.REGLAS:
+		Reto.regla = Captura.dato("--reto")
+	get_tree().change_scene_to_file("res://escenas/partida_prueba.tscn" if Captura.activa() else "res://escenas/partida.tscn")
 
 
 func volver_al_menu() -> void:
@@ -276,6 +318,7 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 func jugar_partida(id := "apartamentos") -> void:
 	Edificios.elegido = id
 	Alerta.nivel = alertas.get(id, 0)
+	Reto.quitar()   # (por si la partida anterior fue el reto del día)
 	# con --captura, la partida de prueba: la misma, con las fotos (pruebas/partida_prueba.gd)
 	get_tree().change_scene_to_file("res://escenas/partida_prueba.tscn" if Captura.activa() else "res://escenas/partida.tscn")
 
