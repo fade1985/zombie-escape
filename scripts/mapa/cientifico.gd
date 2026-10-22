@@ -1,5 +1,7 @@
-# El científico de Velaria muerto en el suelo (historia.gd): tumbado boca arriba con su bata blanca (o con su ropa,
-# si no es científico: el jefe de seguridad y la secretaria del centro comercial), un brazo estirado y la cabeza de lado, sobre su charco de sangre (dibujado con formas, como persona.gd) y, a su lado, la página del dosier, que brilla y sube y baja hasta que Johnny se arrima.
+# El científico de Velaria muerto en el suelo (historia.gd): tumbado con su bata blanca manchada de sangre seca
+# (sprite de PixelLab con la piel y el pelo de su página; el jefe de seguridad y la secretaria del centro comercial,
+# que llevan su ropa, todavía dibujados con formas, como persona.gd) y, a su lado, la página del dosier, que brilla
+# y sube y baja hasta que Johnny se arrima.
 # Entonces avisa con "cogida" (la partida la enseña y la guarda). Ya cogida, el cuerpo se queda sin la página.
 extends Node2D
 
@@ -23,7 +25,14 @@ func montar(p: Dictionary, pos: Vector2) -> void:
 	position = pos
 	look = p.look
 	z_index = -1   # en el suelo: los que pasen por encima se ven delante
-	queue_redraw()
+	if look.has("ropa"):
+		queue_redraw()   # los que no son científicos, todavía dibujados con formas (_draw)
+	else:
+		# el dibujo de PixelLab, en tres capas: el cuerpo, y la piel y el pelo en grises que se pintan con los
+		# colores de su página (tools/cientifico_muerto.py). La piel, apagada y grisácea: lleva tiempo muerto
+		capa(CUERPO, Color.WHITE)
+		capa(PIEL, Color(look.skin).lerp(Color("#969696"), 0.35))
+		capa(PELO, look.hair)
 	# la página: un papel con renglones
 	papel = Node2D.new()
 	papel.position = Vector2(28, 30)
@@ -57,6 +66,22 @@ func _physics_process(delta: float) -> void:
 		cogida.emit()
 
 
+const CUERPO := preload("res://assets/sprites/cientifico-muerto.png")
+const PIEL := preload("res://assets/sprites/cientifico-muerto-piel.png")
+const PELO := preload("res://assets/sprites/cientifico-muerto-pelo.png")
+
+
+# Una capa del dibujo, a escala 2 como los demás sprites, más o menos donde estaba el cuerpo dibujado a mano
+func capa(textura: Texture2D, color: Color) -> void:
+	var s := Sprite2D.new()
+	s.texture = textura
+	s.scale = Vector2(2, 2)
+	s.position = Vector2(4, 4)
+	s.modulate = color
+	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	add_child(s)   # antes que la página: queda debajo
+
+
 const LINEA := Color("#1d1b2c")
 const BATA := Color("#eeeee6")
 const BATA_SOMBRA := Color("#b9bcc6")
@@ -66,6 +91,8 @@ const SANGRE := Color("#5e1212")
 
 # Tumbado a lo largo (la cabeza a la izquierda). Las medidas son unidades del mundo (2 por píxel)
 func _draw() -> void:
+	if not look.has("ropa"):
+		return   # los científicos ya son un sprite (montar)
 	# el charco de sangre, con unas salpicaduras
 	draw_set_transform(Vector2(-12, 6), 0.0, Vector2(1.0, 0.42))
 	draw_circle(Vector2.ZERO, 50.0, Color(SANGRE, 0.85))

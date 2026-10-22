@@ -197,7 +197,8 @@
   su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
   `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
-  científico muerto con su página; con bata o, si no es científico, con su ropa), `cafetera.gd` (la de la sala de
+  científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
+  no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de la sala de
   mantenimiento, dibujada con código), `camaras.gd` (las pantallas de las cámaras de seguridad, detrás del técnico,
   cuando ya vive en la sala), `mostrador.gd` (el del puesto del ferretero, dibujado con código; al arrimarse por
   delante abre `ui/puesto.gd`).
@@ -233,7 +234,7 @@ aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, muret
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
 (los 26 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
-Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
+Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 
 ## docs/ (del juego JS)

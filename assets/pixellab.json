@@ -1860,7 +1860,7 @@
   "cientifico-muerto": {
     "kind": "image",
     "herramienta": "create_image_pixflux (MCP)",
-    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/; falta que el dueño elija.",
+    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/; elegido el 3 (22 oct), partido en capas con tools/cientifico_muerto.py.",
     "request": {
       "width": 64,
       "height": 64,
