@@ -13,6 +13,7 @@
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
+#   --presentacion (con --jefe X, si se quiere) la presentación del jefe al aparecer (ui/presentacion.gd)
 extends "res://scripts/partida.gd"
 
 var tiempo := 0.0            # los segundos que lleva la prueba larga (_process)
@@ -68,6 +69,9 @@ func empezar_prueba() -> void:
 	elif "--porqueria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_porqueria()
+	elif "--presentacion" in args:
+		set_process(false)   # sin la prueba larga
+		probar_presentacion()
 	elif "--trajes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_trajes()
@@ -261,6 +265,39 @@ func fotos_luz() -> void:
 		await get_tree().create_timer(0.8).timeout
 		Captura.foto("captura-luz-%d.png" % sala.id)
 		print("Foto luz: ", s.nombre, " · ", sala.nombre)
+	get_tree().quit()
+
+
+# Con "--captura --presentacion" (y --jefe gloton, u otro): la presentación del jefe (ui/presentacion.gd). Entra en el
+# piso del jefe de la 1ª planta y, cuando él aparece, mira a mitad de la presentación (captura-presentacion.png) que
+# la cámara está acercada y sobre el jefe, Johnny quieto y sin poder recibir daño, el jefe gritando, el nombre en
+# pantalla y la barra de vida aún oculta; y al acabar, que la cámara ha vuelto, Johnny se mueve, el jefe anda y la
+# barra ha salido. Con la Modista (--edificio centro --jefe modista), que entra escondida, ni zoom ni grito: solo
+# franjas, nombre y rugido, y sigue escondida al acabar. Cuenta todo en la terminal, con lo esperado, y se cierra
+func probar_presentacion() -> void:
+	set_process(false)
+	presentar_en_prueba = true
+	nueva_planta(2)   # la 1ª planta: con --jefe X, el suyo
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	montar(idx, 0, false)   # (sin await: la presentación va dentro, y hay que mirarla a medias)
+	await get_tree().create_timer(JEFE_TARDA + 1.1).timeout   # a 1,1 s de empezar la presentación
+	var camara: Camera2D = johnny.get_node("Camara")
+	print("Presentación (jefe %s), a mitad: zoom %.2f (esperado: %.1f; 1 si entra escondido, como la Modista) · cámara desplazada %d hacia el jefe (esperado: más de 0; 0 si escondido) · a %d del jefe (esperado: menos de 60, que enfoca algo por encima; da igual si escondido) · Johnny quieto %s y sin daño %s (esperado: true, true) · el jefe gritando %s (esperado: true; false si escondido) · nombre «%s» a la vista %s (esperado: true) · barra oculta %s (esperado: true)" % [
+		planta.jefe, camara.zoom.x, presentacion.ZOOM, roundi(camara.offset.length()),
+		roundi(camara.get_screen_center_position().distance_to(jefa.global_position)), not johnny.is_physics_processing(),
+		johnny.invulnerable > 0.0, jefa.estado == "grito", presentacion.nombre.text,
+		presentacion.visible and presentacion.nombre.modulate.a > 0.9, not $Pantalla/Jefa.visible])
+	print("  (jefe en %s, a %d del medio de la sala (esperado: menos de 60) · centro de la cámara %s · offset %s · límites %d-%d x %d-%d · zoom %s)" % [jefa.global_position.round(),
+		roundi(jefa.global_position.distance_to(Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0))),
+		camara.get_screen_center_position().round(), camara.offset, camara.limit_left, camara.limit_right, camara.limit_top, camara.limit_bottom, camara.zoom])
+	Captura.foto("captura-presentacion.png")
+	await get_tree().create_timer(presentacion.DURA - 1.1 + 0.5).timeout
+	print("Presentación, al acabar: zoom %.2f (esperado: 1) · cámara desplazada %d (esperado: 0) · Johnny se mueve %s (esperado: true) · el jefe en «%s» (esperado: no «grito») · barra a la vista %s (esperado: true) · franjas y nombre ocultos %s (esperado: true)" % [
+		camara.zoom.x, roundi(camara.offset.length()), johnny.is_physics_processing(), jefa.estado, $Pantalla/Jefa.visible,
+		not presentacion.visible])
 	get_tree().quit()
 
 

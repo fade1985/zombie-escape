@@ -8,7 +8,8 @@ Hoy en los Apartamentos la portera es la jefa de todas las plantas. Pasan a tene
 - **Minijefes:** portera, Glotón, Gymbro y jefe de bomberos. **Uno por planta, en orden al azar en cada partida y
   sin repetir** (como `minijefes` del centro en `edificios.gd`). Tamaño de zombi grande (lienzo de 72), como los del
   centro. Lo común ya está en `scripts/minijefe.gd` (aparece al entrar, barra grande, +25 % de vida por planta, se
-  enfada a media vida, botín y mutación al caer).
+  enfada a media vida, botín y mutación al caer). Desde el M3 (23 oct 2026), todos salen en medio de su sala y con
+  su presentación: zoom de la cámara, grito y nombre en pantalla (`scripts/ui/presentacion.gd`).
 - **Jefe final, siempre en la azotea:** el científico jefe. **Más grande de lo normal, como el gerente** (lienzo de 128,
   unos 117 px) y con **dos fases: en la segunda se transforma** (como el gerente con la jeringa).
 - Mientras un jefe no esté hecho, en su sitio sale la portera (como en el centro).

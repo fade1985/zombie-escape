@@ -88,6 +88,11 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   1 s y que en una casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor
   (`captura-porqueria.png`, Johnny encima; `captura-porqueria-medio.png`, el óvalo limpio desde el medio). Cada línea
   dice lo esperado.
+- `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
+  (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
+  cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la
+  barra oculta (`captura-presentacion.png`); al acabar, que todo ha vuelto. Cada línea dice lo esperado. (En el
+  juego, mientras dura la presentación no responden la pausa, el inventario ni las teclas de prueba.)
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

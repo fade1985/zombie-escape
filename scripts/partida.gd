@@ -63,6 +63,7 @@ const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
 const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
 const TAQUILLA := preload("res://scripts/ui/taquilla.gd")
+const PRESENTACION := preload("res://scripts/ui/presentacion.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const REFUERZOS := 2               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas)
@@ -106,6 +107,9 @@ var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
 var taquilla := TAQUILLA.new()     # la ventanita de la taquilla de los trajes de Johnny (parte 11)
+var presentacion := PRESENTACION.new()   # la presentación de cada jefe al aparecer (ui/presentacion.gd)
+var presentar_en_prueba := false   # en la partida de prueba la presentación se salta, salvo en la suya (--presentacion)
+const JEFE_TARDA := 0.6            # lo que tarda el jefe en salir al entrar en su sala
 var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
 var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
 var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
@@ -173,6 +177,7 @@ func _ready() -> void:
 	add_child(inventario)
 	inventario.cerrado.connect(func(): get_tree().paused = false)
 	add_child(taquilla)
+	presentacion.preparar(self)
 	lanzables.johnny = johnny
 	lanzables.partida = self
 	add_child(lanzables)
@@ -406,12 +411,15 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "explorar")
 	# En el apartamento de la jefa, aparece ella (si aún no ha caído)
 	if sitio.tipo == "jefe" and not sitio.limpio:
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(JEFE_TARDA).timeout
 		if aqui == idx and not jefa_salio:
 			jefa_salio = true
 			Sonido.tocar("jefe")
-			# en la azotea, esperando en medio del helipuerto
-			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.punto_libre(johnny.position, 380.0))
+			# en medio de la sala (la pelea empieza en el centro, nunca junto a una pared); en la azotea, en el helipuerto
+			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.centro_libre())
+			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
+			if not captura or presentar_en_prueba:
+				await presentacion.presentar(self, jefa, planta.jefe, $Pantalla/Jefa/Nombre.text)
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
@@ -906,7 +914,7 @@ func cura_de(id: String) -> int:
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
 func abrir_cosas(que: String) -> void:
-	if terminada or cambiando or not johnny.vivo or get_tree().paused:
+	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return
 	get_tree().paused = true
 	inventario.abrir(que, self)
@@ -914,7 +922,7 @@ func abrir_cosas(que: String) -> void:
 
 # La taquilla de los trajes de Johnny (ui/taquilla.gd): se para el juego y sale su ventanita
 func abrir_taquilla() -> void:
-	if terminada or cambiando or not johnny.vivo or get_tree().paused:
+	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return
 	get_tree().paused = true
 	taquilla.abrir(self)
@@ -937,7 +945,7 @@ func numero(donde: Vector2, texto: String, color: Color) -> void:
 
 # Esc o Start: el juego se para y sale el menú de pausa
 func pausar() -> void:
-	if terminada or not johnny.vivo or menus.abierto != "":
+	if terminada or not johnny.vivo or menus.abierto != "" or presentacion.activa:
 		return
 	get_tree().paused = true
 	menus.pausa(self)
@@ -1131,7 +1139,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		zombi.vida_cambiada.connect(func(vida, maxima):
 			barra_jefa.max_value = maxima
 			barra_jefa.value = vida
-			barra_jefa.visible = vida > 0)
+			barra_jefa.visible = vida > 0 and not presentacion.activa)   # (durante la presentación, oculta)
 		# la armadura (los suplementos del Gymbro enfadado), en una barra fina encima de la de vida
 		var barra_armadura := armadura_jefe()
 		barra_armadura.hide()
@@ -1187,7 +1195,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		abrir_cosas("inventario")
 		return
-	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando:
+	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando or presentacion.activa:
 		return
 	if evento.keycode in TECLAS:
 		meter_zombi(TECLAS[evento.keycode], mapa.punto_libre(johnny.position, 300.0))

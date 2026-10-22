@@ -776,6 +776,18 @@ func paso() -> Array:
 
 
 # Parte a Johnny por la cintura (golpe arriba, piernas de andar abajo) o lo deja entero
+# Se queda quieto del todo (la presentación del jefe, ui/presentacion.gd): corta el golpe o el disparo que llevara a
+# medias y deja el dibujo en reposo, para que no siga moviendo las piernas mientras está parado
+func quedarse_quieto() -> void:
+	velocity = Vector2.ZERO
+	ataque_t = -1.0
+	golpe_pendiente = false
+	patada_t = -1.0
+	partir_cintura(false)
+	sprite.speed_scale = 1.0
+	cambiar_animacion("reposo_" + direccion)
+
+
 func partir_cintura(si: bool) -> void:
 	piernas.visible = si
 	sprite.material.set_shader_parameter("parte", 1 if si else 0)

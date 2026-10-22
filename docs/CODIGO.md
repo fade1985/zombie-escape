@@ -233,6 +233,14 @@
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**
+
+- `presentacion.gd`: la presentación de cada jefe al aparecer: todo se queda quieto, la cámara hace zoom sobre él
+  entre dos franjas negras mientras grita (su estado «grito», un foco y su frase, `GRITOS`) y sale su nombre en grande;
+  a los 2,2 s vuelve la cámara y empieza la pelea. Los que entran a su manera (la Modista, escondida) solo reciben
+  franjas, nombre y rugido. La monta `partida.gd` al sacar al jefe (en la prueba se salta, salvo con `--presentacion`);
+  mientras dura no se puede pausar ni abrir el inventario. El jefe sale siempre en medio de su sala
+  (`mapa.centro_libre`; en la azotea, en el helipuerto). El desplazamiento de la cámara va por `Temblor.desplazamiento`
+  (`temblor.gd`), que se suma a la sacudida; `johnny.quedarse_quieto()` lo deja parado del todo.
 - `tema.gd` (aspecto de menús y HUD), `hud.gd`, `menus.gd`, `menu_principal.gd` (menú y "Elige edificio": la tarjeta de cada edificio, el selector de alerta y el botón del reto del día con tu marca de hoy), `opciones.gd` (pantalla de Opciones: modo de atacar, música, sonido, ajustes del móvil, ayudas y tabla de controles para cambiarlos; los cambios los pone y guarda `scripts/controles.gd`), `tactil.gd` (controles del móvil; su tamaño, transparencia y vibración se leen de `ajustes` con `Tactil.ajustar()`).
 - `ordenador.gd`: la pantalla de ConserjeOS (puntos, talentos, tienda de armas, logros, Dosier, Noticias y
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,

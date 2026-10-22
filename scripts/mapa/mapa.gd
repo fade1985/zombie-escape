@@ -912,3 +912,13 @@ func punto_libre(lejos_de: Vector2, distancia: float) -> Vector2:
 		if bien:
 			return pos
 	return Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+
+
+# El medio del sitio donde se puede estar: en un apartamento o una tienda, el centro de su sala principal (la del
+# jefe, la de venta) y, si cae en un mueble o fuera del suelo, el punto andable más cercano. Ahí sale el jefe
+func centro_libre() -> Vector2:
+	var p := Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+	if sitio.has("apt") and not sitio.apt.salas.is_empty() and sitio.apt.salas[0].has("c0"):
+		var s: Dictionary = sitio.apt.salas[0]
+		p = Vector2(s.c0 + s.ancho / 2.0, s.f0 + s.fondo / 2.0) * CASILLA
+	return NavigationServer2D.map_get_closest_point(get_world_2d().navigation_map, p)
