@@ -133,9 +133,12 @@
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
 - `trajes.gd`: los trajes de Johnny (parte 11): `LISTA` (nombre, frase y los colores de cada zona: el tono nuevo y
   por cuánto se multiplican la saturación y la luz del peto, la camisa y el pañuelo), `puesto()` y `poner()` (el
-  guardado, `traje`), `vestir(material, id)` (se lo dice al shader de la cintura) y `siguiente()` (la tecla Z). Los
-  encontrados, en `trajes` del guardado (trozo 2). La prueba: `--captura --trajes` (`probar_trajes()`).
-- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
+  guardado, `traje`), `vestir(material, id)` (se lo dice al shader de la cintura) y `siguiente()` (la tecla Z). Como
+  objetos de la tienda de ropa (`objetos.gd`, `traje_<id>`): `objeto()`, `es_objeto()`, `de_objeto()`, `tenidos()`
+  (los encontrados, `trajes` del guardado), `que_falta()` (el que suelta la modista al caer, desde `partida.gd`) y
+  `encontrar()` (al cogerlo, en `soltar_objeto` de `partida.gd`: se apunta para siempre y Johnny se lo pone). La
+  prueba: `--captura --trajes` (`probar_trajes()`).
+- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 32 objetos, con los cuatro trajes de Johnny, `traje_<id>`, que salen en la tienda de ropa solo mientras falten y al cogerlos se los pone, `trajes.gd`; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
@@ -269,7 +272,7 @@ falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos �
 aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
-(los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
+(los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 

@@ -1,6 +1,8 @@
-# Dibuja los 28 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
+# Dibuja los 32 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
 # les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 17 de siempre,
-# los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md) y, al final, los 2 de curar (parte 9).
+# los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md), los 2 de curar (parte 9) y, al final, los 4
+# trajes de Johnny (parte 11: la misma plantilla, un peto con su camisa colgado de una percha, con los colores de cada
+# uno, TRAJES).
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
@@ -570,32 +572,68 @@ DIBUJOS["jeringuilla"] = disco(jeringuilla)
 DIBUJOS["perchas"] = disco(percha)
 
 
+# Los trajes de Johnny (scripts/trajes.gd): la misma plantilla para los cuatro, un peto con su camisa colgado de
+# una percha, y los colores de cada uno: P el peto, p su luz y Q su sombra; C la camisa y c su luz (parecidos a
+# los que saca el shader del juego)
+PLANTILLA_TRAJE = [
+    "................",
+    ".......oo.......",
+    "......o..o......",
+    ".......oo.......",
+    "....okkkkkkko...",
+    "..ooCCCPPCCCoo..",
+    ".oCcCCCPPCCCCCo.",
+    ".oCCCCCPPCCCCCo.",
+    ".ooCCCPPPPCCCoo.",
+    "...oPpPPPPPPo...",
+    "...oPpPPPPPPo...",
+    "...oPPPPPPPPo...",
+    "...oPPPPPPQQo...",
+    "...oPPPPPPQQo...",
+    "...oooooooooo...",
+    "................",
+]
+TRAJES = {
+    "vigilante": {"P": "#1e2a4a", "p": "#2f3f66", "Q": "#121a30", "C": "#7fb4e8", "c": "#a8d0f5"},
+    "farmacia": {"P": "#e8ece8", "p": "#ffffff", "Q": "#b8c0bc", "C": "#7fd8a8", "c": "#a8ecc8"},
+    "cocinero": {"P": "#9a2a2a", "p": "#c04040", "Q": "#5e1818", "C": "#f4f4ec", "c": "#ffffff"},
+    "chandal": {"P": "#8a3ab0", "p": "#b060d8", "Q": "#5a2078", "C": "#f2d44c", "c": "#fff0a0"},
+}
+
+
 def hexa(c):
     c = c.lstrip("#")
     return tuple(int(c[i:i + 2], 16) for i in (0, 2, 4)) + (255,)
 
 
-def imagen(filas):
+def imagen(filas, paleta=PALETA):
     assert len(filas) == 16 and all(len(f) == 16 for f in filas), filas
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     for j, fila in enumerate(filas):
         for i, letra in enumerate(fila):
-            if letra in PALETA:
-                img.putpixel((i, j), hexa(PALETA[letra]))
+            if letra in paleta:
+                img.putpixel((i, j), hexa(paleta[letra]))
     return img
 
 
+def trajes():
+    """Los iconos de los trajes: {nombre: (filas, paleta)}, con la plantilla y los colores de cada uno."""
+    return {f"traje_{id}": (PLANTILLA_TRAJE, {**PALETA, **colores}) for id, colores in TRAJES.items()}
+
+
 def main():
-    for nombre, filas in DIBUJOS.items():
-        imagen(filas).save(ICONOS / f"obj-{nombre}.png")
+    todos = {nombre: (filas, PALETA) for nombre, filas in DIBUJOS.items()}
+    todos.update(trajes())
+    for nombre, (filas, paleta) in todos.items():
+        imagen(filas, paleta).save(ICONOS / f"obj-{nombre}.png")
     if "muestra" in sys.argv:
-        ids = sorted(DIBUJOS)
+        ids = sorted(todos)
         hoja = Image.new("RGBA", (len(ids) * 72, 72), (60, 56, 70, 255))
         for i, nombre in enumerate(ids):
-            hoja.paste(imagen(DIBUJOS[nombre]).resize((64, 64), Image.NEAREST), (i * 72 + 4, 4),
-                       imagen(DIBUJOS[nombre]).resize((64, 64), Image.NEAREST))
+            grande = imagen(*todos[nombre]).resize((64, 64), Image.NEAREST)
+            hoja.paste(grande, (i * 72 + 4, 4), grande)
         hoja.save(RAIZ / "tools" / "objetos16.png")
-    print(len(DIBUJOS), "objetos")
+    print(len(todos), "objetos")
 
 
 if __name__ == "__main__":

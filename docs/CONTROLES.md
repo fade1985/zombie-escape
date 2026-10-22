@@ -68,7 +68,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--trajes`: en vez de la prueba larga, la de los trajes de Johnny (`trajes.gd`): en la sala de mantenimiento,
   Johnny de conserje y una copia con cada traje, cada una con una hoja distinta (`captura-trajes.png`), y el chándal
   con el bate dando un golpe andando (`captura-trajes-golpe.png`); en la terminal, lo que se guarda y la vuelta de
-  la tecla Z.
+  la tecla Z. Luego cómo se consiguen: lo que sortea la tienda de ropa (en la terminal), el delantal en el suelo
+  (`captura-trajes-suelo.png`), Johnny lo pisa y se lo pone (`captura-trajes-cogido.png`) y la modista cae y suelta
+  uno que falta (`captura-trajes-modista.png`).
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

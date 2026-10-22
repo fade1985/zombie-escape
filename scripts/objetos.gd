@@ -7,6 +7,8 @@
 # Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
 # 17 de siempre; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS), que mezclan
 # algunos de siempre con los nueve nuevos (SOLO_CENTRO). Las cosas de casa (SOLO_CASA) no salen en el centro.
+# Los trajes de Johnny (parte 11, trajes.gd) también son objetos ("traje_<id>", de la tienda de ropa): no son
+# chatarra, al cogerlos se los pone y se quedan para siempre; solo salen mientras falten.
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
@@ -26,6 +28,10 @@ const NOMBRES := {
 	"perchas": "Perchas",
 	# los dos de curar del centro comercial (parte 9): no son chatarra, se usan desde el inventario (USABLES)
 	"vendas": "Vendas", "bocadillo": "Bocadillo",
+	# los cuatro trajes de Johnny (parte 11, trajes.gd; los nombres, los mismos de Trajes.LISTA): no son chatarra,
+	# al cogerlos Johnny se los pone y se quedan para siempre
+	"traje_vigilante": "Uniforme de vigilante", "traje_farmacia": "Bata de farmacéutico",
+	"traje_cocinero": "Delantal de cocinero", "traje_chandal": "Chándal",
 }
 # Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no entran en las recetas ni
 # pasan al baúl (al acabar la partida, se pierden). El botiquín de la farmacéutica (supervivientes.gd; cura lo de
@@ -39,7 +45,8 @@ const USABLES := {
 }
 const SOLO_CASA := ["despertador", "mancuernas", "pistola_agua", "trapo", "cuerda"]   # solo en los Apartamentos
 const SOLO_CENTRO := ["cinta_americana", "cadena", "bateria", "cable", "aceite", "bombona", "hielo_seco",
-	"jeringuilla", "perchas", "vendas", "bocadillo"]   # solo en el centro comercial
+	"jeringuilla", "perchas", "vendas", "bocadillo",
+	"traje_vigilante", "traje_farmacia", "traje_cocinero", "traje_chandal"]   # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
 const TIENDAS := {
 	"ferreteria": ["clavos", "hacha", "llave_inglesa", "cuchillas", "spray", "cinta_americana", "cadena"],
@@ -47,7 +54,7 @@ const TIENDAS := {
 	"restaurante": ["alcohol", "gasolina", "mechero", "extintor", "aceite", "bombona"],
 	"supermercado": ["lejia", "alcohol", "mechero", "hielo_seco", "bocadillo"],
 	"farmacia": ["alcohol", "lejia", "jeringuilla", "vendas"],
-	"ropa": ["cuchillas", "spray", "perchas"],
+	"ropa": ["cuchillas", "spray", "perchas", "traje_vigilante", "traje_farmacia", "traje_cocinero", "traje_chandal"],
 	"joyeria": ["cadena", "cuchillas", "bateria", "spray"],
 }
 
@@ -109,8 +116,8 @@ static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -
 
 # Un objeto cualquiera de los que salen ahí, menos los explosivos (el jefe suelta dos seguros). En los
 # Apartamentos, uno de los de siempre; en el centro comercial, uno de la lista de su tienda (en el pasillo, de
-# una tienda cualquiera). Con "chatarra", sin los de curar (el objeto sorpresa del vendedor es para el banco); con
-# el reto del día "Sin curas" (reto.gd), tampoco
+# una tienda cualquiera). Con "chatarra", sin los de curar ni los trajes (el objeto sorpresa del vendedor es para el
+# banco); con el reto del día "Sin curas" (reto.gd), tampoco los de curar. Los trajes, solo los que aún no se tienen
 static func al_azar(edificio := "apartamentos", tienda := "", chatarra := false) -> String:
 	var lista: Array
 	if edificio == "apartamentos":
@@ -121,6 +128,10 @@ static func al_azar(edificio := "apartamentos", tienda := "", chatarra := false)
 		lista = TIENDAS[tienda]
 	if chatarra or Reto.sin_curas():
 		lista = lista.filter(func(id): return not id in USABLES)
+	# los trajes (trajes.gd): solo los que aún no se tienen, y nunca como chatarra (no van al banco)
+	if lista.any(func(id): return Trajes.es_objeto(id)):
+		var tenidos := Trajes.tenidos()
+		lista = lista.filter(func(id): return not Trajes.es_objeto(id) or (not chatarra and not Trajes.de_objeto(id) in tenidos))
 	return lista.pick_random()
 
 
@@ -145,6 +156,8 @@ static func donde(id: String, edificio: String) -> String:
 		return "lo suelta el zombi explosivo"
 	if edificio != "centro":
 		return "lo suelta cualquier zombi"
+	if Trajes.es_objeto(id):
+		return "Tienda de ropa, y la modista si te falta"
 	var tiendas := []
 	for tipo in TIENDAS:
 		if id in TIENDAS[tipo]:

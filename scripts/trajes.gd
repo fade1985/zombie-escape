@@ -6,8 +6,11 @@
 # entrada más en LISTA (y retocar los números mirando la foto de --captura --trajes).
 #
 # El puesto va en el guardado ("traje"; "" = el conserje de siempre) y se lo pone johnny.gd al empezar (vestir).
-# Los encontrados, en "trajes" (trozo 2: los sueltan los zombis de la tienda de ropa; trozo 3: se eligen en la
-# taquilla de la sala de mantenimiento). Tecla de prueba Z: el siguiente traje, sin guardarlo.
+# Cómo se consiguen (trozo 2): cada traje es un objeto de la tienda de ropa (objetos.gd: "traje_<id>", en
+# Objetos.TIENDAS["ropa"] y en NOMBRES, así cuenta en Colecciones) que sus zombis sueltan como los demás, pero solo
+# mientras no se tenga; y la modista al caer suelta siempre uno que falte (partida.gd). Al cogerlo Johnny se lo
+# pone en el acto y se queda para siempre ("trajes" del guardado; no va a la mochila ni se pierde al caer).
+# Trozo 3: se eligen en la taquilla de la sala de mantenimiento. Tecla de prueba Z: el siguiente, sin guardarlo.
 class_name Trajes
 
 const LISTA := {
@@ -54,3 +57,38 @@ static func vestir(material: ShaderMaterial, id: String) -> void:
 static func siguiente(id: String) -> String:
 	var todos: Array = [""] + LISTA.keys()
 	return todos[(todos.find(id) + 1) % todos.size()]
+
+
+# ── Como objetos (objetos.gd) ──
+
+# El id del objeto de un traje ("traje_vigilante"), y vuelta
+static func objeto(id: String) -> String:
+	return "traje_" + id
+
+
+static func es_objeto(obj: String) -> bool:
+	return obj.begins_with("traje_") and obj.trim_prefix("traje_") in LISTA
+
+
+static func de_objeto(obj: String) -> String:
+	return obj.trim_prefix("traje_") if es_objeto(obj) else ""
+
+
+# Los que ya se tienen (ids), según el guardado
+static func tenidos() -> Array:
+	return Guardado.cargar().trajes
+
+
+# Uno al azar de los que faltan ("" si ya están todos): el que suelta la modista al caer
+static func que_falta() -> String:
+	var tiene := tenidos()
+	var faltan: Array = LISTA.keys().filter(func(id): return not id in tiene)
+	return faltan.pick_random() if not faltan.is_empty() else ""
+
+
+# Al coger uno del suelo: se apunta para siempre y se queda puesto
+static func encontrar(id: String) -> void:
+	Guardado.cambiar(func(g):
+		if not id in g.trajes:
+			g.trajes.append(id)
+		g.traje = id)

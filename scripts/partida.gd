@@ -788,12 +788,23 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
 	cosa.tirado = tirado
 	cosa.position = donde
-	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
-	cosa.cogido.connect(func():
-		mochila.append(id)
-		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
-		Sonido.tocar("compra")
-		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
+	if Trajes.es_objeto(id):
+		# un traje (trajes.gd): no va a la mochila; al cogerlo Johnny se lo pone y se queda para siempre
+		var t := Trajes.de_objeto(id)
+		cosa.cogido.connect(func():
+			Trajes.encontrar(t)
+			johnny.vestir(t)
+			Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
+			Sonido.tocar("compra")
+			numero(cosa.position, "¡Traje nuevo!", Tema.TINTA)
+			decir("Te pones el traje: %s. Se queda para siempre" % Trajes.nombre(t), 3.0))
+	else:
+		cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
+		cosa.cogido.connect(func():
+			mochila.append(id)
+			Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
+			Sonido.tocar("compra")
+			numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
@@ -1067,6 +1078,11 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			var obj := Objetos.que_suelta(tipo, edificio, tienda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
+		# la modista (la de la tienda de ropa): siempre un traje de Johnny que aún no se tenga (trajes.gd)
+		if tipo == "modista":
+			var falta := Trajes.que_falta()
+			if falta != "":
+				soltar_objeto(Trajes.objeto(falta), zombi.position)
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
@@ -1181,7 +1197,7 @@ func ir_a_azotea() -> void:
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
 		for id in Objetos.NOMBRES:
-			if not id in Objetos.USABLES:   # (los de curar no van al baúl)
+			if not id in Objetos.USABLES and not Trajes.es_objeto(id):   # (los de curar y los trajes no van al baúl)
 				g.baul[id] = g.baul.get(id, 0) + 1
 		g.recetas = Recetas.LISTA.keys())
 	decir("Uno de cada objeto al baúl, y todas las recetas")

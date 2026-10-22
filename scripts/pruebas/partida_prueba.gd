@@ -554,7 +554,10 @@ func probar_reto() -> void:
 # (captura-trajes.png). Luego Johnny con el chándal y el bate dando un golpe andando, parado a mitad del barrido:
 # el cuerpo con el golpe y las piernas de andar debajo, las dos con los colores del traje
 # (captura-trajes-golpe.png). Cuenta en la terminal los trajes, lo que se guarda y la vuelta de la tecla Z.
-# Luego se cierra
+# Luego, cómo se consiguen (trozo 2): cuenta lo que sortea la tienda de ropa sin ningún traje, como chatarra del
+# vendedor y con los cuatro, y mira Colecciones; suelta el delantal en el suelo (captura-trajes-suelo.png), Johnny lo
+# pisa, se lo pone y se guarda (captura-trajes-cogido.png); y la modista cae y suelta uno que falte
+# (captura-trajes-modista.png). Luego se cierra
 func probar_trajes() -> void:
 	set_process(false)
 	johnny.position = Vector2(200, 400)
@@ -617,6 +620,61 @@ func probar_trajes() -> void:
 	Trajes.poner("")
 	print("Trajes: %d (%s) · zonas: %s · PixelLab: 0 generaciones" % [Trajes.LISTA.size(), ", ".join(Trajes.LISTA.keys()),
 		", ".join(Trajes.ZONAS)])
+
+	# ── Cómo se consiguen (trozo 2) ──
+	# la tienda de ropa sortea los que faltan (nunca como chatarra del vendedor); con los cuatro, solo lo de siempre
+	Guardado.cambiar(func(g): g.trajes = []; g.traje = "")
+	var cuenta := {}
+	var chatarra := 0
+	for i in 2000:
+		var id := Objetos.al_azar("centro", "ropa")
+		cuenta[id] = cuenta.get(id, 0) + 1
+		if Trajes.es_objeto(Objetos.al_azar("centro", "ropa", true)):
+			chatarra += 1
+	Guardado.cambiar(func(g): g.trajes = Trajes.LISTA.keys())
+	var con_todos := 0
+	for i in 2000:
+		if Trajes.es_objeto(Objetos.al_azar("centro", "ropa")):
+			con_todos += 1
+	print("Tienda de ropa, 2000 sorteos sin ningún traje: %s · como chatarra del vendedor: %d trajes · con los cuatro: %d trajes" % [
+		cuenta, chatarra, con_todos])
+	var nombres_bien: bool = Trajes.LISTA.keys().all(func(id): return Objetos.NOMBRES[Trajes.objeto(id)] == Trajes.LISTA[id].nombre)
+	print("Colecciones del centro: %d objetos · dónde sale el delantal: «%s» · los nombres de objetos.gd y trajes.gd coinciden: %s · algún traje en los Apartamentos: %s" % [
+		Objetos.de_edificio("centro").size(), Objetos.donde(Trajes.objeto("cocinero"), "centro"), nombres_bien,
+		Objetos.de_edificio("apartamentos").any(func(id): return Trajes.es_objeto(id))])
+	# uno en el suelo, con su icono; Johnny lo pisa, se lo pone y se queda para siempre
+	Guardado.cambiar(func(g): g.trajes = []; g.traje = "")
+	johnny.vestir("")
+	johnny.coger("fregona")
+	johnny.direccion = "e"
+	soltar_objeto(Trajes.objeto("cocinero"), johnny.position + Vector2(230, 0))
+	await get_tree().create_timer(0.7).timeout
+	Captura.foto("captura-trajes-suelo.png")
+	var en_suelo := func() -> Array:
+		return mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D and "obj-traje_" in c.icono.resource_path)
+	var suelto: Array = en_suelo.call()
+	print("Un traje en el suelo: %d (%s)" % [suelto.size(), suelto[0].icono.resource_path.get_file() if not suelto.is_empty() else "-"])
+	if not suelto.is_empty():
+		johnny.position = suelto[0].position
+	await get_tree().create_timer(0.5).timeout
+	var g := Guardado.cargar()
+	print("Cogido: Johnny lleva «%s» · guardado: traje «%s», trajes %s · en encontrados: %s · en la mochila: %s" % [
+		johnny.traje, g.traje, g.trajes, Trajes.objeto("cocinero") in g.encontrados, Trajes.objeto("cocinero") in mochila])
+	Captura.foto("captura-trajes-cogido.png")
+	# la modista: al caer suelta siempre uno que falte (si en ese momento no se le puede dar, se insiste)
+	var modista: Node2D = meter_zombi("modista", johnny.position + Vector2(-240, 0))
+	await get_tree().create_timer(0.2).timeout
+	for i in 20:
+		if modista.estado == "muerto":
+			break
+		modista.recibir_golpe(99999, Vector2.ZERO)
+		await get_tree().process_frame
+	await get_tree().create_timer(0.6).timeout
+	var de_modista: Array = en_suelo.call()
+	print("La modista al caer (muerta: %s): %d traje(s) en el suelo: %s" % [modista.estado == "muerto", de_modista.size(),
+		de_modista.map(func(c): return c.icono.resource_path.get_file())])
+	Captura.foto("captura-trajes-modista.png")
+	Guardado.cambiar(func(g2): g2.trajes = []; g2.traje = "")
 	get_tree().quit()
 
 
@@ -1196,8 +1254,8 @@ func probar_colecciones() -> void:
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 23:
-		push_error("Colecciones: los objetos por edificio no son 17 y 23")
+	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 27:
+		push_error("Colecciones: los objetos por edificio no son 17 y 27 (con los cuatro trajes)")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
 	if Bestiario.LISTA.size() != 17:

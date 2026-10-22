@@ -452,6 +452,31 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   la vuelta de la Z. PixelLab: 0 generaciones.
 - Lo que faltaba al acabar el trozo 1: conseguirlos (trozo 2) y la taquilla (trozo 3). Hasta entonces, con la Z.
 
+### ✅ Hecho (22 oct 2026, parte 11, trozo 2: cómo se consiguen)
+
+- **Cada traje es un objeto** (`Objetos.NOMBRES`, `traje_<id>`: «Uniforme de vigilante», «Bata de farmacéutico»,
+  «Delantal de cocinero» y «Chándal») de la lista de la **tienda de ropa** (`Objetos.TIENDAS["ropa"]`, junto a las
+  cuchillas, el spray y las perchas): sus zombis los sueltan con la probabilidad de siempre, pero **solo los que
+  aún no se tienen** (`al_azar` mira `trajes` del guardado); con los cuatro, la tienda vuelve a soltar solo lo de
+  siempre. Como el pasillo sortea una tienda cualquiera, alguna vez sale allí. Nunca como chatarra del vendedor ni
+  con la tecla U (no van al baúl ni entran en recetas).
+- **La modista** al caer suelta siempre uno que falte (`Trajes.que_falta()`, desde `partida.gd` al caer un
+  zombi), además de sus dos objetos de la tienda donde esté.
+- **Al cogerlo** (`soltar_objeto` de `partida.gd`): no va a la mochila; Johnny **se lo pone en el acto** y se
+  apunta para siempre (`Trajes.encontrar`: `trajes` y `traje` del guardado), con el aviso «Te pones el traje: …
+  Se queda para siempre». Si Johnny cae después, no se pierde. Lo de ponérselo en el acto no estaba en el plan:
+  así se ve el traje nada más cogerlo, antes de que exista la taquilla; en ella se podrá volver al que sea.
+- **Colecciones:** cuentan como objetos del centro comercial (de 23 a 27), con «Tienda de ropa, y la modista si te
+  falta» en su línea (`Objetos.donde`). En los Apartamentos no salen (`SOLO_CENTRO`).
+- **Iconos** de 16×16 con código (`tools/objetos16.py`, `TRAJES` y `PLANTILLA_TRAJE`: un peto con su camisa colgado
+  de una percha, con los colores de cada traje): `obj-traje_<id>.png`.
+- **Prueba:** `--captura --trajes` sigue con esto: sortea 2000 veces lo que suelta la tienda de ropa sin ningún
+  traje (los cuatro salen como el resto), como chatarra del vendedor (ninguno) y con los cuatro (ninguno); mira
+  Colecciones (27) y los nombres; suelta el delantal en el suelo (`captura-trajes-suelo.png`), Johnny lo pisa, se
+  lo pone y se guarda (`captura-trajes-cogido.png`); y la modista cae y suelta uno que falta
+  (`captura-trajes-modista.png`). La prueba larga comprueba ahora 27 objetos del centro (antes 23).
+- Lo que faltaba al acabar el trozo 2: la taquilla (trozo 3), para cambiarse entre los que se tienen.
+
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
@@ -1023,5 +1048,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
     logro «Caja fuerte» (22 oct). **Parte 10 terminada.** De lo apartado solo quedan los trajes de Johnny.
 11. **Los trajes de Johnny** (decidido: ver «Decidido con el dueño (22 oct 2026, para la parte 11)», en «Objetos»),
     en tres trozos: ✅ Trozo 1, el shader y los cuatro trajes (22 oct: el cambio de colores del peto, la camisa y
-    el pañuelo, el guardado, la tecla Z y la prueba `--trajes`). Trozo 2, cómo se consiguen (la tienda de ropa, la
-    modista, los iconos y Colecciones). Trozo 3, la taquilla de la sala de mantenimiento y su ventanita.
+    el pañuelo, el guardado, la tecla Z y la prueba `--trajes`). ✅ Trozo 2, cómo se consiguen (22 oct: objetos de
+    la tienda de ropa solo mientras falten, la modista suelta uno que falte, al cogerlo se lo pone y se guarda,
+    iconos y Colecciones de 23 a 27). Trozo 3, la taquilla de la sala de mantenimiento y su ventanita.
