@@ -41,8 +41,10 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L3.** El ascensor averiado: quitar el letrero "averiado" de encima y poner en su lugar más cintas
   amarillas con franjas negras cruzándolo. Que quede más realista.
 - **L4.** En los pasillos, sin muebles: solo plantas con maceta y las lámparas que ya hay. Más realista.
-  Ideas propuestas por Claude, pendientes de que el dueño elija: ficus o palmera de interior en maceta grande,
-  sansevieria (lengua de suegra), helecho colgante o en pedestal, cactus en maceta pequeña; felpudo delante de
-  cada puerta, extintor en la pared, buzones junto al ascensor, cuadro de luces o contadores, cartel de salida
-  de emergencia con luz verde, paragüero, bicicleta apoyada en la pared, carrito de la compra, cubo y fregona
-  del conserje, radiador bajo una ventana al patio.
+  Lo elegido por el dueño:
+  - Plantas (tres tipos): ficus o palmera de interior en maceta grande, sansevieria (lengua de suegra) y la
+    planta que ya tenemos.
+  - Cosas de portal: felpudo delante de cada puerta; extintor en la pared; buzones solo en la planta baja,
+    cerca del portal; cartel de salida de emergencia que se enciende cuando ya se puede subir a la siguiente
+    planta.
+  - Arquitectura: solo el radiador, nada de ventanas.
