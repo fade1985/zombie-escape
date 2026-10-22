@@ -11,7 +11,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-- **F3.** El vómito de la mutación Gastroenteritis atraviesa paredes: no debe hacerlo.
+_(ninguno por ahora)_
 
 ## Mejoras
 

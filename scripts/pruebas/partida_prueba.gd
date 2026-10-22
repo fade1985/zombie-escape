@@ -10,6 +10,7 @@
 #   --jefe X       el minijefe de la 1ª planta (centro comercial: si no, el antidisturbios; Apartamentos: si no, la
 #                  portera en la baja)
 #   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
+#   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 extends "res://scripts/partida.gd"
 
 var tiempo := 0.0            # los segundos que lleva la prueba larga (_process)
@@ -56,6 +57,9 @@ func empezar_prueba() -> void:
 		fotos_ayudas()
 	elif "--fotos-supervivientes" in args:
 		fotos_supervivientes()
+	elif "--gastro" in args:
+		set_process(false)   # sin la prueba larga
+		probar_gastro()
 	elif "--trajes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_trajes()
@@ -249,6 +253,97 @@ func fotos_luz() -> void:
 		await get_tree().create_timer(0.8).timeout
 		Captura.foto("captura-luz-%d.png" % sala.id)
 		print("Foto luz: ", s.nombre, " · ", sala.nombre)
+	get_tree().quit()
+
+
+# Con "--captura --gastro": el vómito de Gastroenteritis (mutaciones.gd) no cruza las paredes. En un apartamento,
+# Johnny pegado a un tabique con un zombi justo detrás: el vómito no sale (no lo ve). El charco del vómito junto al
+# tabique no quema a ese zombi, pero sí a otro de este lado. Y con otro zombi más lejos pero a la vista, el vómito
+# sale a ese (captura-gastro-vuelo.png, captura-gastro-charco.png). Cuenta todo en la terminal y se cierra
+func probar_gastro() -> void:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	var sitio: Dictionary = planta.sitios[i]
+	for sala in sitio.apt.salas:
+		mapa.vistas[sala.id] = true   # todo descubierto: nada a oscuras
+		mapa.niebla[sala.id] = 0.0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	await get_tree().process_frame
+	# un tabique de una casilla con una habitación a cada lado, a la altura de una fila (Johnny a un lado, el zombi al otro)
+	var johnny_en := Vector2.INF
+	var tras_en := Vector2.INF
+	var dc := 1
+	for f in range(3, mapa.filas - 3):
+		for c in range(3, mapa.cols - 3):
+			for d in [1, -1]:
+				var a: int = mapa.dueno[f * mapa.cols + c]
+				var b: int = mapa.dueno[f * mapa.cols + c + 2 * d]
+				if a >= 0 and b >= 0 and a != b and mapa.dueno[f * mapa.cols + c + d] == -1 and johnny_en == Vector2.INF \
+						and mapa.dueno[f * mapa.cols + c - d] == a and mapa.dueno[f * mapa.cols + c + 3 * d] == b:
+					dc = d
+					johnny_en = Vector2(c + 0.5, f + 0.5) * 32.0
+					tras_en = johnny_en + Vector2(52.0 * d, 0)   # 4 de la pared hacia dentro: dentro del charco
+	if johnny_en == Vector2.INF:
+		print("Gastro: no he encontrado ningún tabique (¡mal!)")
+		get_tree().quit()
+		return
+	johnny.position = johnny_en
+	johnny.get_node("Camara").reset_smoothing()
+	var tras := meter_zombi("normal", tras_en)
+	tras.set_physics_process(false)   # quietos, para la prueba
+	var vomitos := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n.get("tipo") == "vomito" and not n.is_in_group("charcos"))
+	# 1) solo hay un zombi, y está tras la pared (a unos 52 de Johnny, muy a tiro): no debe lanzar
+	var lanzo: bool = mutaciones.actuar("gastro")
+	print("Gastro, un zombi tras la pared (a %d): ¿lanza? %s (esperado: false) · vómitos en el aire %d (esperado: 0)" % [
+		roundi(johnny.position.distance_to(tras.position)), lanzo, vomitos.call().size()])
+	# 2) un charco de vómito en los pies de Johnny, pegado al tabique: no quema al de detrás pero sí a uno de este lado
+	var cerca := meter_zombi("normal", johnny_en - Vector2(28.0 * dc, 0))
+	cerca.set_physics_process(false)
+	var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+	charco.tipo = "vomito"
+	charco.position = johnny_en
+	johnny.get_parent().add_child(charco)
+	await get_tree().create_timer(0.4).timeout
+	print("Gastro, charco pegado al tabique: el de este lado lo pisa %s (esperado: true) · el de detrás lo pisa %s (esperado: false)" % [
+		cerca.pisando.has("acido"), tras.pisando.has("acido")])
+	Captura.foto("captura-gastro-charco.png")
+	charco.queue_free()
+	# 3) otro zombi, más lejos que el de detrás pero a la vista: el vómito sale a ese y cae en él, no en la pared
+	var lejos_en := Vector2.INF
+	for f in range(2, mapa.filas - 2):
+		for c in range(2, mapa.cols - 2):
+			var pos := Vector2(c + 0.5, f + 0.5) * 32.0
+			var dist := pos.distance_to(johnny_en)
+			if dist > 110.0 and dist < 260.0 and mapa.dueno[f * mapa.cols + c] == mapa.dueno[int(johnny_en.y / 32.0) * mapa.cols + int(johnny_en.x / 32.0)] \
+					and mapa.muro_entre(johnny_en, pos).is_empty() and Planta.lejos_de_muebles(sitio, pos, 34.0) and lejos_en == Vector2.INF:
+				lejos_en = pos
+	if lejos_en == Vector2.INF:
+		print("Gastro: no he encontrado sitio para el zombi lejano (¡mal!)")
+		get_tree().quit()
+		return
+	var lejos := meter_zombi("normal", lejos_en)
+	lejos.set_physics_process(false)
+	cerca.queue_free()
+	await get_tree().process_frame   # que ya no esté en el grupo: si no, el vómito iría a él (el más cercano)
+	lanzo = mutaciones.actuar("gastro")
+	var aire: Array = vomitos.call()
+	var cae := Vector2.INF
+	if not aire.is_empty():
+		cae = aire[0].hasta
+	print("Gastro, con otro zombi a %d a la vista: ¿lanza? %s (esperado: true) · cae a %d de ese zombi y a %d del de detrás de la pared" % [
+		roundi(johnny.position.distance_to(lejos.position)), lanzo, roundi(cae.distance_to(lejos.position)), roundi(cae.distance_to(tras.position))])
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-gastro-vuelo.png")
+	await get_tree().create_timer(0.6).timeout
+	print("Gastro: el charco cae sobre el zombi a la vista, que lo pisa %s (esperado: true) · el de detrás de la pared %s (esperado: false)" % [
+		lejos.pisando.has("acido"), tras.pisando.has("acido")])
 	get_tree().quit()
 
 

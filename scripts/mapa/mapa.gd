@@ -697,6 +697,19 @@ func oculto(pos: Vector2) -> bool:
 	return niebla.get(zona_en(pos), 0.0) > 0.5
 
 
+# La primera pared (o puerta cerrada, o barricada) que corta la línea de "a" a "b", como la que devuelve intersect_ray
+# ("position", "normal"...), o {} si el camino está libre. Los muebles no cuentan: lo que se lanza vuela por encima
+func muro_entre(a: Vector2, b: Vector2) -> Dictionary:
+	var excluir: Array[RID] = []
+	for i in 16:
+		var rayo := PhysicsRayQueryParameters2D.create(a, b, 1, excluir)
+		var choque := get_world_2d().direct_space_state.intersect_ray(rayo)
+		if choque.is_empty() or not choque.collider.is_in_group("muebles"):
+			return choque
+		excluir.append(choque.rid)
+	return {}
+
+
 func _process(delta: float) -> void:
 	if not niebla.is_empty():
 		actualizar_niebla(delta)

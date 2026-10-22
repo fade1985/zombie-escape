@@ -74,6 +74,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   (`captura-trajes-suelo.png`), Johnny lo pisa y se lo pone (`captura-trajes-cogido.png`), se arrima a la taquilla
   y elige en su ventanita (`captura-taquilla.png`), y la modista cae y suelta uno que falta
   (`captura-trajes-modista.png`).
+- `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
+  apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
+  que su charco pegado al tabique no lo quema (pero sí a uno de este lado) y que, con otro zombi más lejos pero a la
+  vista, sale a ese (`captura-gastro-vuelo.png`, `captura-gastro-charco.png`). Cada línea dice lo esperado.
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

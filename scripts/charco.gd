@@ -104,8 +104,12 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if not datos.get("solo_zombis", false) and johnny and johnny.vivo and arde_en(johnny.global_position, johnny.RADIO * 0.3):
 		johnny.pisar(datos.estados)
+	# el vómito de Gastroenteritis no cruza las paredes: un zombi al otro lado de un tabique no lo pisa
+	var mapa := get_tree().get_first_node_in_group("mapa") if tipo == "vomito" else null
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi != dueno and zombi.has_method("pisar") and arde_en(zombi.global_position, zombi.radio * 0.3):
+			if mapa and not mapa.muro_entre(global_position, zombi.global_position).is_empty():
+				continue
 			zombi.pisar(datos.estados)
 
 

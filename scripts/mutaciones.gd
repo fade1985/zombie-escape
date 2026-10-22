@@ -105,13 +105,13 @@ func actuar(id: String) -> bool:
 			Particulas.anillo(johnny, p, m.radio, Color("#b5179e"))
 			Sonido.tocar("latigazo")
 		"gastro":
-			# al zombi (o la portera) más cercano que no esté a oscuras
+			# al zombi (o la portera) más cercano que no esté a oscuras ni tras una pared (por encima de los muebles sí)
 			var objetivo: Node2D = null
 			var mejor: float = m.alcance
 			var mapa := get_tree().get_first_node_in_group("mapa")
 			for z in get_tree().get_nodes_in_group("zombis"):
 				var d := p.distance_to(z.global_position)
-				if d < mejor and not (mapa and mapa.oculto(z.global_position)):
+				if d < mejor and not (mapa and (mapa.oculto(z.global_position) or not mapa.muro_entre(p, z.global_position).is_empty())):
 					mejor = d
 					objetivo = z
 			if objetivo == null:
@@ -121,6 +121,10 @@ func actuar(id: String) -> bool:
 			vomito.desde = p
 			vomito.alto_salida = 30.0
 			vomito.hasta = objetivo.global_position + Vector2(0, objetivo.radio * 0.5)
+			# si ese punto (un poco por delante del zombi) cae al otro lado de una pared, cae justo antes de ella
+			var muro: Dictionary = mapa.muro_entre(p, vomito.hasta) if mapa else {}
+			if not muro.is_empty():
+				vomito.hasta = muro.position + muro.normal * 4.0
 			johnny.get_parent().add_child(vomito)
 			Sonido.tocar("chof")
 		"locura":
