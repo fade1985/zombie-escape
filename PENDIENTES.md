@@ -21,6 +21,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M2.** La habitación del Glotón nunca tiene muebles: en su lugar está toda llena de caca, heces y diarrea,
   también las paredes. Esa porquería es una mezcla de mierda y ácido: quita vida al pisarla, así que en la
   pelea no se puede uno acercar a él sin más.
+- **M3.** Mini presentación de cada jefe: al empezar la pelea, un pequeño zoom que lo enfoca solo a él
+  mientras suelta un grito, y sale su nombre en pantalla.
 
 ## Por limar
 
