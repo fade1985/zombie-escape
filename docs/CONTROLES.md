@@ -32,7 +32,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   objeto al baúl y todas las recetas aprendidas, para probar el banco de trabajo. **F8**: Colecciones al completo
   (todo encontrado, creado y visto), para probar el programa del ordenador. **Y**: soltar a tus pies el
   papel de una receta que aún no tienes (como al morir un jefe). **X**: un científico muerto a tus pies (cada X, el de la
-  página siguiente, con su piel y su pelo); su página se coge pero no se guarda.
+  página siguiente, con su piel y su pelo); su página se coge pero no se guarda. **Z**: el siguiente traje de
+  Johnny (`trajes.gd`; al final vuelve al conserje), sin guardarlo.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
@@ -64,6 +65,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   sus zombis (`captura-joyeria-alarma.png`), la cuenta adelantada y la puerta abierta (`captura-joyeria-abierta.png`),
   la vitrina del premio dentro (`captura-joyeria-premio.png`) y lo que pasa al pisarla, el guardia que suelta la
   tarjeta dorada junto a la suya (`captura-joyeria-dorada.png`) y la apertura con ella.
+- `--trajes`: en vez de la prueba larga, la de los trajes de Johnny (`trajes.gd`): en la sala de mantenimiento,
+  Johnny de conserje y una copia con cada traje, cada una con una hoja distinta (`captura-trajes.png`), y el chándal
+  con el bate dando un golpe andando (`captura-trajes-golpe.png`); en la terminal, lo que se guarda y la vuelta de
+  la tecla Z.
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

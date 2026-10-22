@@ -26,8 +26,9 @@
 
 **Personajes y combate**
 - `johnny.gd`: moverse, vida, apuntar y atacar. Al golpear andando, `escenas/personajes/cintura.gdshader` lo parte
-  por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. `mejoras.gd`: sus atributos
-  (el baseStats del JS).
+  por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Los trajes (`trajes.gd`):
+  `vestir(id)` le pasa a ese mismo shader los colores del peto, la camisa y el pañuelo (los reconoce por su color en
+  las siete hojas); al empezar se pone el del guardado. `mejoras.gd`: sus atributos (el baseStats del JS).
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`). `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas creadas (aturdir, prender, sangrar, descarga, congelar, dejar tirado…);
   `chorro.gd` (gotas de fuego y ácido, chispas de la pistola eléctrica y clavos de la bomba de clavos), `bumeran.gd`
@@ -130,6 +131,10 @@
   va a la mano como al sacarla del baúl, y el fajo de billetes) y el logro «Caja fuerte». El estado, en
   `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
+- `trajes.gd`: los trajes de Johnny (parte 11): `LISTA` (nombre, frase y los colores de cada zona: el tono nuevo y
+  por cuánto se multiplican la saturación y la luz del peto, la camisa y el pañuelo), `puesto()` y `poner()` (el
+  guardado, `traje`), `vestir(material, id)` (se lo dice al shader de la cintura) y `siguiente()` (la tecla Z). Los
+  encontrados, en `trajes` del guardado (trozo 2). La prueba: `--captura --trajes` (`probar_trajes()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, lo que
@@ -146,7 +151,7 @@
   (armas creadas alguna vez en el banco), `bestiario` (enemigos vistos) y `colecciones_nuevo` (hay algo nuevo desde
   la última vez que se abrió el programa; el icono avisa). Un guardado de antes los rellena una vez con lo del baúl.
   Para el reto del día: `retos` (la ficha de hoy de cada edificio, `RETO`: fecha, regla, intentos, planta, completado
-  y tiempo).
+  y tiempo). Los trajes de Johnny (`trajes.gd`): `traje` (el puesto) y `trajes` (los encontrados).
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
 - `historia.gd`: el texto del dosier de cada edificio (`DOSIERES`: Apartamentos y centro comercial), la hoja de
   papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
@@ -198,8 +203,8 @@
   encontrado, creado y visto de cada edificio.
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
-  `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día) o `--joyeria` (`probar_joyeria`: la cámara
-  acorazada), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día), `--joyeria` (`probar_joyeria`: la cámara
+  acorazada) o `--trajes` (`probar_trajes`: los trajes de Johnny), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**

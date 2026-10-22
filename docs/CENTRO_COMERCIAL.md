@@ -405,6 +405,53 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   y después; y en la segunda apertura (la de la tarjeta), sabiendo solo el molotov, enseña el cóctel morado.
 - **Parte 10 terminada.** Números provisionales: la cuenta de 40 s, los grupos de la alarma y el fajo.
 
+### Decidido con el dueño (22 oct 2026, para la parte 11: los trajes de Johnny)
+
+- **Cuatro trajes, uno por tienda, por cambio de colores** (sin PixelLab): el **uniforme de vigilante** (peto azul
+  marino casi negro, camisa celeste, pañuelo negro), la **bata del farmacéutico** (peto blanco, camisa verde menta,
+  pañuelo verde), el **delantal del cocinero** (peto granate, camisa y pañuelo blancos) y el **chándal** de la tienda
+  de ropa (peto morado, camisa amarilla, pañuelo verde fosforito). Añadir uno más son tres líneas de números (el
+  esmoquin de la joyería, en negro, blanco y dorado, queda como extra por si lo quiere).
+- **Por qué no dibujados de verdad:** Johnny tiene siete hojas (una por arma) con reposo, andar y ataque en 8
+  direcciones; un traje dibujado en PixelLab son unas 175 generaciones como mínimo (estado, andar y ataque por
+  cada hoja) y 200-250 con repeticiones, y quedaban 378 hasta el 12 de noviembre. El cambio de colores lo hace el
+  shader que ya partía a Johnny por la cintura: reconoce por su color el peto (los vaqueros azules), la camisa
+  (crema) y el pañuelo (rojo), les cambia el tono y respeta el sombreado; vale para las siete hojas y todas las
+  animaciones. Una gorra dibujada con código se descartó (la cabeza se mueve distinto en cada fotograma y
+  flotaría); el pañuelo de otro color ya hace de accesorio.
+- **Cómo se consiguen:** como las vendas en la farmacia: cada traje es un objeto de la lista de la **tienda de
+  ropa** (solo los que aún no se tienen) y la **modista** al caer suelta siempre uno que falte. Al cogerlo se
+  guarda para siempre (como las recetas): no va a la mochila ni se pierde si Johnny cae. Icono de 16×16 con código.
+- **Dónde se cambian:** en una **taquilla** nueva de la sala de mantenimiento (dibujada con código como el baúl, en
+  la pared de arriba a la derecha del baúl, donde hay hueco antes de los vecinos), con una ventanita como la del
+  puesto del ferretero: el conserje de siempre y los cuatro, los que faltan con «?» y «lo sueltan en la tienda de
+  ropa». Al elegir uno, Johnny cambia en el acto y se queda así para las siguientes partidas.
+- **Guardado:** el traje puesto (`traje`) y los encontrados (`trajes`). Cuentan en Colecciones como objetos del
+  centro comercial (de 23 a 27), con «Tienda de ropa» debajo.
+- **Por trozos**, cada uno con su visto bueno: 1) el shader, los cuatro trajes, el guardado, Johnny vestido, la
+  tecla Z y la prueba; 2) cómo se consiguen (objetos, modista, iconos, Colecciones); 3) la taquilla y su ventanita.
+
+### ✅ Hecho (22 oct 2026, parte 11, trozo 1: los trajes y el shader)
+
+- **`scripts/trajes.gd`** (`Trajes.LISTA`): los cuatro trajes con su nombre, una frase para la taquilla y sus
+  colores: para cada zona (peto, camisa, pañuelo), el tono nuevo en grados y por cuánto se multiplican la
+  saturación y la luz. `nombre()`, `puesto()` (el del guardado), `poner()` (lo guarda), `vestir(material, id)` (le
+  pasa los colores al shader) y `siguiente()` (la tecla Z).
+- **El shader de la cintura** (`escenas/personajes/cintura.gdshader`) lleva ahora tres zonas más (`peto`,
+  `camisa`, `panuelo`): reconoce cada una por su color en el dibujo original (el peto, los azules no muy claros,
+  para no coger el arco cian de la fregona; la camisa, los cremas poco saturados, que el pelo y el bate son más
+  naranjas y saturados; el pañuelo, los rojos muy saturados) y pinta ya con los colores del traje. Las pruebas de
+  pierna del golpe andando siguen mirando los colores de siempre, así que el cuerpo y las piernas de debajo van
+  los dos vestidos. La estela de la esquiva lleva también el material (antes salía sin él).
+- **Johnny** (`johnny.gd`): `vestir(id)` y `traje`; al empezar se pone el del guardado. En el guardado, `traje`
+  (el puesto; «» = el conserje de siempre) y `trajes` (los encontrados, para el trozo 2).
+- **Tecla de prueba Z:** el siguiente traje (y vuelta al conserje), sin guardarlo.
+- **Prueba:** `--captura --trajes` (`probar_trajes`): en la sala, Johnny de conserje y una copia con cada traje,
+  cada una con una hoja distinta (fregona, bate, pistola, escopeta): `captura-trajes.png`; el chándal con el bate
+  dando un golpe andando, parado a mitad del barrido: `captura-trajes-golpe.png`; y en la terminal el guardado y
+  la vuelta de la Z. PixelLab: 0 generaciones.
+- Lo que faltaba al acabar el trozo 1: conseguirlos (trozo 2) y la taquilla (trozo 3). Hasta entonces, con la Z.
+
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
@@ -974,3 +1021,7 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
     10)», en «Objetos»), en tres trozos: ✅ Trozo 1, la tienda (22 oct). ✅ Trozo 2, la cámara acorazada (22 oct: la
     tarjeta dorada y la apertura de emergencia con la alarma). ✅ Trozo 3, el premio (el arma morada y el fajo) y el
     logro «Caja fuerte» (22 oct). **Parte 10 terminada.** De lo apartado solo quedan los trajes de Johnny.
+11. **Los trajes de Johnny** (decidido: ver «Decidido con el dueño (22 oct 2026, para la parte 11)», en «Objetos»),
+    en tres trozos: ✅ Trozo 1, el shader y los cuatro trajes (22 oct: el cambio de colores del peto, la camisa y
+    el pañuelo, el guardado, la tecla Z y la prueba `--trajes`). Trozo 2, cómo se consiguen (la tienda de ropa, la
+    modista, los iconos y Colecciones). Trozo 3, la taquilla de la sala de mantenimiento y su ventanita.

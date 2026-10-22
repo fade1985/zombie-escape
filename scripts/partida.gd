@@ -18,7 +18,7 @@
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
-# las mutaciones sin tener que matar a la portera.
+# las mutaciones sin tener que matar a la portera. Z le pone a Johnny el siguiente traje (trajes.gd).
 #
 # Con "-- --captura" no se juega esta, sino la partida de prueba (escenas/partida_prueba.tscn): la misma partida
 # más las fotos y las comprobaciones, que están en scripts/pruebas/partida_prueba.gd.
@@ -1147,6 +1147,10 @@ func _unhandled_input(evento: InputEvent) -> void:
 			decir("Ya tienes todas las recetas (o están en el suelo)")
 	elif evento.keycode == KEY_X:
 		probar_cientifico()   # un científico muerto a los pies, para ver su dibujo
+	elif evento.keycode == KEY_Z:
+		# el siguiente traje de Johnny (trajes.gd), para verlos sin tener que encontrarlos (no se guarda)
+		johnny.vestir(Trajes.siguiente(johnny.traje))
+		decir("Traje: " + Trajes.nombre(johnny.traje))
 	elif evento.keycode == KEY_N and ed.get("azotea", false) and not cerrada and not planta.get("azotea", false):
 		ir_a_azotea()   # derecho a la azotea del centro comercial, para probar al jefe final
 

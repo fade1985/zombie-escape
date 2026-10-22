@@ -8,6 +8,7 @@
 #   --evento X     la prueba de ese evento sorpresa (eventos.gd)
 #   --alerta N     las reglas de esa alerta (alerta.gd)
 #   --jefe X       el minijefe de la 1ª planta del centro comercial (si no, el antidisturbios)
+#   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
 extends "res://scripts/partida.gd"
 
 var tiempo := 0.0            # los segundos que lleva la prueba larga (_process)
@@ -50,6 +51,9 @@ func empezar_prueba() -> void:
 		fotos_ayudas()
 	elif "--fotos-supervivientes" in args:
 		fotos_supervivientes()
+	elif "--trajes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_trajes()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -541,6 +545,78 @@ func probar_reto() -> void:
 		e.completado, e.victorias, e.alerta_max, e.mejor_planta, e.mejor_tiempo,
 		e.completado == antes.completado and e.victorias == antes.victorias and e.alerta_max == antes.alerta_max
 		and e.mejor_planta == antes.mejor_planta and e.mejor_tiempo == antes.mejor_tiempo])
+	get_tree().quit()
+
+
+# Con "--captura --trajes": los trajes de Johnny (trajes.gd y cintura.gdshader). En la sala de mantenimiento,
+# Johnny con la ropa de siempre y, a su lado, una copia de su dibujo con cada traje, cada una con una hoja
+# distinta (fregona, bate, pistola y escopeta), para ver que el cambio de colores vale en todas
+# (captura-trajes.png). Luego Johnny con el chándal y el bate dando un golpe andando, parado a mitad del barrido:
+# el cuerpo con el golpe y las piernas de andar debajo, las dos con los colores del traje
+# (captura-trajes-golpe.png). Cuenta en la terminal los trajes, lo que se guarda y la vuelta de la tecla Z.
+# Luego se cierra
+func probar_trajes() -> void:
+	set_process(false)
+	johnny.position = Vector2(200, 400)
+	johnny.direccion = "s"
+	johnny.get_node("Camara").reset_smoothing()
+	var ids: Array = Trajes.LISTA.keys()
+	var hojas := ["fregona", "bate", "pistola", "escopeta"]
+	var copias := []
+	for i in ids.size():
+		var w: Dictionary = Armas.datos(hojas[i % hojas.size()])
+		var copia := Node2D.new()   # los pies, como el dibujo de Johnny (sprite.position)
+		copia.position = johnny.position + Vector2(130 * (i + 1), 16)
+		var sombra := Sombra.new()
+		sombra.ancho = 50.0
+		sombra.alto = 16.0
+		copia.add_child(sombra)
+		var dibujo := AnimatedSprite2D.new()
+		dibujo.sprite_frames = w.hoja
+		dibujo.centered = false
+		dibujo.offset = -w.pies
+		dibujo.scale = Vector2(2, 2)
+		dibujo.material = johnny.sprite.material.duplicate()
+		Trajes.vestir(dibujo.material, ids[i])
+		copia.add_child(dibujo)
+		dibujo.play("reposo_s")
+		mapa.cosas.add_child(copia)
+		copias.append(copia)
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-trajes.png")
+	print("Foto trajes: Johnny de conserje y, a su lado, %s" % ", ".join(ids.map(
+		func(id): return "%s (%s)" % [Trajes.nombre(id), hojas[ids.find(id) % hojas.size()]])))
+	for c in copias:
+		c.queue_free()
+	# el chándal y el bate: un golpe andando hacia la derecha, parado a mitad del barrido (con el juego en pausa)
+	johnny.vestir("chandal")
+	johnny.coger("bate")
+	johnny.direccion = "e"
+	johnny.velocity = Vector2(140, 0)
+	johnny.atacar(0.0)
+	johnny.animar()
+	johnny.sprite.frame = 4
+	johnny.piernas.frame = 3
+	get_tree().paused = true
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-trajes-golpe.png")
+	get_tree().paused = false
+	print("Foto trajes: el chándal con el bate, golpe andando · partido por la cintura %s · piernas a la vista %s" % [
+		johnny.sprite.material.get_shader_parameter("parte") == 1, johnny.piernas.visible])
+	# lo que se guarda: el puesto se queda de una partida a otra; la tecla Z va dando la vuelta sin guardar
+	Trajes.poner("vigilante")
+	johnny.vestir(Trajes.puesto())
+	print("Guardado: traje «%s» · puesto() «%s» (%s) · Johnny lleva «%s»" % [Guardado.cargar().traje, Trajes.puesto(),
+		Trajes.nombre(Trajes.puesto()), johnny.traje])
+	var vuelta := []
+	var t := ""
+	for i in Trajes.LISTA.size() + 1:
+		t = Trajes.siguiente(t)
+		vuelta.append(Trajes.nombre(t))
+	print("Tecla Z: %s" % " > ".join(vuelta))
+	Trajes.poner("")
+	print("Trajes: %d (%s) · zonas: %s · PixelLab: 0 generaciones" % [Trajes.LISTA.size(), ", ".join(Trajes.LISTA.keys()),
+		", ".join(Trajes.ZONAS)])
 	get_tree().quit()
 
 

@@ -15,6 +15,7 @@ shader = ExtResource("cintura")
 shader_parameter/parte = 0
 
 [sub_resource type="ShaderMaterial" id="solo_piernas"]
+resource_local_to_scene = true
 shader = ExtResource("cintura")
 shader_parameter/parte = 2
 

@@ -24,6 +24,9 @@
 # Lobezno (recupera vida poco a poco), Durito (cada golpe quita menos), Reflejos (de vez en cuando esquiva solo
 # un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 4 disparos), Ninja (golpe
 # en área al acabar la esquiva) y Desfibrilador (resucita una vez por partida).
+#
+# Los trajes de la tienda de ropa (trajes.gd): vestir() le cambia los colores de la ropa con el shader de la
+# cintura (cintura.gdshader); al empezar se pone el que dice el guardado.
 extends CharacterBody2D
 
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
@@ -97,6 +100,7 @@ var golpe_angulo := 0.0        # y hacia dónde va
 var patada_t := -1.0           # tiempo desde el último disparo andando (-1 = nada): el retroceso de todo el cuerpo
 var patada := Vector2.ZERO     # hacia dónde y cuánto empuja ese disparo
 
+var traje := ""            # el traje puesto (trajes.gd; "" = el conserje de siempre): los colores de la ropa
 var modo := "asistido"     # cómo se ataca (ver arriba)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
 
@@ -117,10 +121,11 @@ func _ready() -> void:
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
-	# El modo de atacar elegido la última vez (en Opciones o con F1)
-	var guardado: String = Guardado.cargar().ajustes.modo
-	if guardado in MODOS:
-		modo = guardado
+	# El modo de atacar elegido la última vez (en Opciones o con F1), y el traje que lleva puesto (trajes.gd)
+	var guardado := Guardado.cargar()
+	if guardado.ajustes.modo in MODOS:
+		modo = guardado.ajustes.modo
+	vestir(guardado.traje if guardado.traje in Trajes.LISTA else "")
 	modo_cambiado.emit.call_deferred(MODOS[modo])
 
 
@@ -329,6 +334,10 @@ func soltar_estela() -> void:
 	copia.centered = sprite.centered
 	copia.offset = sprite.offset
 	copia.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# con los colores del traje (el shader de la cintura), y entera
+	var material: ShaderMaterial = sprite.material.duplicate()
+	material.set_shader_parameter("parte", 0)
+	copia.material = material
 	copia.modulate = Color(AZUL, 0.5)
 	get_parent().add_child(copia)
 	copia.global_transform = sprite.global_transform
@@ -770,6 +779,14 @@ func paso() -> Array:
 func partir_cintura(si: bool) -> void:
 	piernas.visible = si
 	sprite.material.set_shader_parameter("parte", 1 if si else 0)
+
+
+# Le pone un traje (trajes.gd; "" = el conserje de siempre): el shader de la cintura le cambia los colores del
+# peto, la camisa y el pañuelo, también en las piernas de andar que van debajo de un golpe
+func vestir(id: String) -> void:
+	traje = id
+	Trajes.vestir(sprite.material, id)
+	Trajes.vestir(piernas.material, id)
 
 
 # Lo llaman los zombis al darle un zarpazo
