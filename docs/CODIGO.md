@@ -278,7 +278,7 @@
 `hacer_frames.py` (hoja → animaciones); `superviviente.py` (monta la hoja de un superviviente con lo de PixelLab: reposo a
 mano, andar alineado, acción con el fogonazo limpio, si la tiene, y caído; `py tools/superviviente.py policia`);
 para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
-(la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py`, `bajar.py` y `bajar_fotogramas.py` (bajar de PixelLab; el último, una animación fotograma a fotograma con las URL de `get_character`, cuando el zip aún no deja, y monta una tira para mirarla), `espejo_oeste.py` (la animación hacia el oeste con la del este en espejo), `hoja.py` (hoja de
+(la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py`, `bajar.py` y `bajar_fotogramas.py` (bajar de PixelLab; el último, una animación fotograma a fotograma con las URL de `get_character`, cuando el zip aún no deja, y monta una tira para mirarla), `espejo_oeste.py` (la animación hacia el oeste con la del este en espejo), `andar_arma.py` (rehace las filas de andar de la hoja de Johnny con un arma con los dibujos de PixelLab que se elijan en `arma.json` → `andar` → `fotogramas`, saltando los que repiten postura; hoy, la fregona), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, `cocinero-72 jefe-cocinero`, `modista-72 jefe-modista` o

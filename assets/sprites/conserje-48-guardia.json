@@ -106,11 +106,11 @@
         },
         "east": {
           "row": 11,
-          "frames": 10
+          "frames": 8
         },
         "north-east": {
           "row": 12,
-          "frames": 10
+          "frames": 7
         },
         "north": {
           "row": 13,
@@ -122,11 +122,11 @@
         },
         "west": {
           "row": 15,
-          "frames": 10
+          "frames": 8
         },
         "south-west": {
           "row": 16,
-          "frames": 9
+          "frames": 7
         }
       }
     },

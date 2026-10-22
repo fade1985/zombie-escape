@@ -18,6 +18,16 @@
       "west":       [1, 10],
       "south-west": [1, 9]
     },
+    "nota_fotogramas": "Lo que manda desde el 22 oct (tools/andar_arma.py): qué dibujos de PixelLab forman el paso en cada dirección, en orden. Se quitaron los que repiten casi la misma postura y en el sur se cogió el otro paso, que no la repite. 'ciclo' queda como estaba porque es lo que lee tools/arma.py (que no está en git).",
+    "fotogramas": {
+      "south":      [0, 1, 2, 3, 4, 5],
+      "south-east": [4, 5, 6, 7, 8, 9, 10, 11],
+      "north-east": [0, 1, 4, 5, 6, 7, 9],
+      "north":      [1, 2, 3, 4, 5, 6, 7, 8],
+      "north-west": [4, 5, 6, 7, 8, 9, 10, 11],
+      "west":       [1, 3, 4, 5, 6, 8, 9, 10],
+      "south-west": [1, 2, 3, 4, 5, 6, 9]
+    },
     "espejo": { "east": "west" },
     "nota_espejo": "El andar hacia el este que dio PixelLab va a trompicones (solo 4 posturas): se usa el del oeste dado la vuelta (2026-10-16)."
   },
