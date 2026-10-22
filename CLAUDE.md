@@ -6,7 +6,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 |---|---|
 | `docs/CODIGO.md` | Qué hace cada escena, script, asset y herramienta |
 | `docs/CONTROLES.md` | Teclas, mando, móvil, teclas de prueba (F2-F10, H, M, O…), sala de mantenimiento, guardado |
-| `docs/WEB.md` | Exportar a web y publicar en Vercel |
+| `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica solo con cada push a main) |
 | `docs/CENTRO_COMERCIAL.md` | El segundo edificio: plan entero por partes (lo que está hecho, marcado) |
 | `docs/PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md` | Del juego JS: ideas y números |
 
@@ -51,4 +51,5 @@ de 48 px. Pantalla base **960×640**, agrandada por **números enteros** con fil
 - **Juego JS viejo:** `C:\Users\angel\Projects\game` (GitHub `fade1985/game`; su `CLAUDE.md` explica el código).
   Se mira para copiar números y comportamientos, no se cambia.
 - **Prueba en Godot:** `D:\Personal\Proyectos\zombie-godot-poc` (navegación, lámparas, penumbra y sombras).
-- **Web publicada:** https://zombie-escape-two.vercel.app (ver `docs/WEB.md`).
+- **Web publicada:** https://zombie-escape-two.vercel.app, se publica sola con cada push a `main`; `web/` no va
+  en git (ver `docs/WEB.md`).

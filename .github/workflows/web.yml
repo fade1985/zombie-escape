@@ -1,0 +1,62 @@
+# Publicar la web: cada push a main, GitHub exporta el juego con Godot y lo sube a Vercel
+# (https://zombie-escape-two.vercel.app). Así la carpeta web/ no va en git y el repositorio no crece 20 MB cada vez.
+# Necesita tres secretos del repositorio (Settings → Secrets and variables → Actions):
+# VERCEL_TOKEN, VERCEL_ORG_ID y VERCEL_PROJECT_ID. Explicado en docs/WEB.md
+name: Publicar la web
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["docs/**", "**.md"]   # si solo cambian las notas, no hace falta publicar
+  workflow_dispatch:   # el botón "Run workflow" de la pestaña Actions, para publicar a mano
+
+# Si llegan dos push seguidos, se publica solo el último
+concurrency:
+  group: web
+  cancel-in-progress: true
+
+env:
+  GODOT: "4.7.2"
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Godot y sus plantillas de web se guardan entre una vez y otra (las plantillas vienen en un archivo de 1,2 GB)
+      - name: Godot guardado de otras veces
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT }}-web
+
+      - name: Descargar Godot y las plantillas de web
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          url=https://github.com/godotengine/godot-builds/releases/download/$GODOT-stable
+          mkdir -p ~/godot/plantillas
+          curl -sSL -o godot.zip $url/Godot_v$GODOT-stable_linux.x86_64.zip
+          unzip -q godot.zip -d ~/godot
+          mv ~/godot/Godot_v$GODOT-stable_linux.x86_64 ~/godot/godot
+          curl -sSL -o plantillas.tpz $url/Godot_v$GODOT-stable_export_templates.tpz
+          unzip -q -j plantillas.tpz "templates/web*" "templates/version.txt" -d ~/godot/plantillas
+          rm godot.zip plantillas.tpz
+
+      - name: Exportar el juego
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates
+          ln -s ~/godot/plantillas ~/.local/share/godot/export_templates/$GODOT.stable
+          ~/godot/godot --headless --path . --import
+          ~/godot/godot --headless --path . --export-release "Web" web/index.html
+          test -f web/index.pck   # si la exportación falla, no se publica nada
+          ls -la web
+
+      - name: Subir a Vercel
+        run: |
+          npx --yes vercel@62.5.0 pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          npx --yes vercel@62.5.0 build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          npx --yes vercel@62.5.0 deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

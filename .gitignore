@@ -14,3 +14,9 @@ tools/dibujos.png
 tools/dibujos.png.import
 tools/objetos16.png
 tools/objetos16.png.import
+# La web exportada: la exporta y publica GitHub en cada push (.github/workflows/web.yml). Solo va en git el
+# .gdignore, para que el editor no importe lo que se exporte aquí para probar
+web/*
+!web/.gdignore
+# Lo que crea la herramienta de Vercel
+.vercel/
