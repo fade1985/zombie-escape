@@ -15,7 +15,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-(nada todavía)
+- **M1.** El superviviente que acompaña a Johnny ataca a los zombis que ve: si los ve pero no los tiene a
+  rango, se acerca y los ataca aunque rompa la formación. Cuando mata a todos los que ve (uno o varios),
+  vuelve a la formación como siempre.
 
 ## Por limar
 
