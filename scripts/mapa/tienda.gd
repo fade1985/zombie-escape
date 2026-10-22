@@ -41,10 +41,15 @@ const TIPOS := {
 		"neon": "MODA", "color": Color("#ff5fd0")},
 	"farmacia": {"nombre": "Farmacia", "salas": ["rebotica", "bano"], "cols": [30, 34],
 		"neon": "FARMACIA", "color": Color("#3dff6e")},
+	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
+	# Al fondo, la cámara acorazada: la sala opcional con riesgo (su puerta y su premio, en los trozos 2 y 3)
+	"joyeria": {"nombre": "Joyería", "salas": ["trastienda", "acorazada"], "cols": [30, 34],
+		"neon": "JOYAS", "color": Color("#ffd23f")},
 }
 const ASEO_EN := ["almacen", "cocina", "rebotica", "taller", "taquillas", "probadores"]   # nunca en la cámara
 const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "taller": "Taller", "taquillas": "Taquillas",
-	"cocina": "Cocina", "probadores": "Probadores", "rebotica": "Rebotica", "bano": "Aseo"}
+	"cocina": "Cocina", "probadores": "Probadores", "rebotica": "Rebotica", "bano": "Aseo",
+	"trastienda": "Trastienda", "acorazada": "Cámara acorazada"}
 
 static var rng := RandomNumberGenerator.new()
 

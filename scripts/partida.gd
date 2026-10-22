@@ -203,6 +203,8 @@ func _ready() -> void:
 			lanzables.cantidades[k] = 0
 	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	supervivientes.elegir()
+	# la joyería del centro comercial (parte 9): una por partida, en una planta al azar de la 1ª a la 3ª
+	Planta.joyeria_planta = randi_range(2, Planta.PLANTAS - 1) if ed.generador == "tienda" else 0
 	var botiquin := supervivientes.botiquin_al_empezar()   # la mejora de la farmacéutica
 	# los minijefes del centro comercial, uno por planta en orden al azar (sin repetir)
 	orden_jefes = ed.get("minijefes", []).duplicate()

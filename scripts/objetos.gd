@@ -48,6 +48,7 @@ const TIENDAS := {
 	"supermercado": ["lejia", "alcohol", "mechero", "hielo_seco", "bocadillo"],
 	"farmacia": ["alcohol", "lejia", "jeringuilla", "vendas"],
 	"ropa": ["cuchillas", "spray", "perchas"],
+	"joyeria": ["cadena", "cuchillas", "bateria", "spray"],
 }
 
 

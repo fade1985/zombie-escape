@@ -53,6 +53,10 @@ T = {
     'carrito':            (52,  40, 24, 0,  (130, 135, 140), 'carrito',  False),
     'mesa-restaurante':   (96,  64, 18, 0,  (190, 160, 110), 'mesa',     False),
     'banco-galeria':      (92,  36, 12, 14, (120, 85, 55),   'banco',    True),
+    # la joyería (parte 9): la vitrina baja (mostrador de cristal con joyas), la vitrina alta y la caja fuerte
+    'vitrina-joyeria':    (96,  44, 26, 0,  (120, 100, 80),  'vitrina',  True),
+    'vitrina-alta':       (64,  36, 46, 0,  (80, 65, 55),    'cristal',  False),
+    'caja-fuerte':        (56,  48, 46, 0,  (75, 80, 90),    'cajafuerte', False),
 }
 
 
@@ -153,6 +157,17 @@ def encima(t, nombre, color, rnd):
     elif nombre in ('taquillas', 'nevera-bebidas'):
         for k in range(1, 4):
             t.caja(0.1, k * 0.22, 0.9, k * 0.22 + 0.06, tono(color, 0.8), False)   # rejillas
+    elif nombre == 'vitrina-joyeria':
+        t.caja(0.03, 0.08, 0.97, 0.9, (130, 165, 170))      # el cristal de la tapa
+        u = 0.07
+        while u < 0.86:
+            t.caja(u, 0.18, u + 0.12, 0.78, (60, 30, 70))   # bandejas de terciopelo...
+            t.caja(u + 0.03, 0.3, u + 0.06, 0.42, (240, 220, 120), False)   # ...con joyas doradas y brillantes
+            t.caja(u + 0.06, 0.55, u + 0.09, 0.67, (225, 235, 245), False)
+            u += 0.16
+    elif nombre == 'vitrina-alta':
+        t.caja(0, 0, 1, 0.12, tono(color, 0.6))              # el panel del fondo
+        t.caja(0.08, 0.2, 0.92, 0.85, tono(color, 0.95))     # la tapa de madera oscura
 
 
 def frente(dr, x, y, w, h, color, estilo, rnd):
@@ -248,6 +263,14 @@ def frente(dr, x, y, w, h, color, estilo, rnd):
     elif estilo == 'horno':
         dr.rectangle((x + 2 * S, y + 4 * S, x + w // 2 - 2 * S, y + h - 3 * S), fill=tono(color, 0.5), outline=RAYA)
         dr.rectangle((x + w // 2 + S, y + 4 * S, x + w - 3 * S, y + h - 3 * S), fill=tono(color, 0.5), outline=RAYA)
+    elif estilo == 'cajafuerte':
+        # la puerta de acero con la rueda de la combinación en medio y el tirador a la derecha
+        dr.rectangle((x + 2 * S, y + 2 * S, x + w - 3 * S, y + h - 3 * S), fill=tono(color, 0.85), outline=RAYA)
+        cx, cy = x + w // 2 - 2 * S, y + h // 2
+        r = 5 * S
+        dr.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(40, 40, 45, 255), outline=RAYA)
+        dr.ellipse((cx - r // 2, cy - r // 2, cx + r // 2, cy + r // 2), outline=(160, 160, 170, 255))
+        dr.rectangle((x + w - 9 * S, cy - S, x + w - 5 * S, cy + S), fill=(170, 170, 180, 255), outline=RAYA)
 
 
 def costado(dr, x, y, w, h, color, estilo):

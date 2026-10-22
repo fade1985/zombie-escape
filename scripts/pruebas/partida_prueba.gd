@@ -155,6 +155,7 @@ func fotos_luz() -> void:
 func fotos_tiendas() -> void:
 	set_process(false)
 	luz.alternar()
+	Planta.joyeria_planta = 2   # la joyería, en la 1ª planta: así sale en las fotos
 	for num in [1, 2]:
 		if num > 1:
 			nueva_planta(num)

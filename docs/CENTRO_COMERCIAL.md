@@ -319,6 +319,47 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   mochila, saca el inventario con las vendas elegidas (`captura-vendas.png`), usa cada uno y cuenta la vida antes y
   después; dice dónde salen, que no entran en recetas, que el vendedor los vende y los 23 objetos de Colecciones.
 
+### Decidido con el dueño (22 oct 2026, para la parte 10: la joyería, la sala opcional con riesgo)
+
+- **Una tienda nueva, la Joyería** (el séptimo tipo): sala de venta con vitrinas, trastienda y, al fondo, la **cámara
+  acorazada**. **Una por partida**, en una planta al azar de la 1.ª a la 3.ª (como la tienda del superviviente), para
+  que se sienta como la sala del tesoro de *Isaac*. Sus zombis, los de siempre con más vigilantes; suelta cadenas,
+  cuchillas, baterías y spray; sin peligro propio: el riesgo es la cámara.
+- **La cámara acorazada** tiene la puerta cerrada y un lector de tarjetas. Se abre de dos maneras: con la **tarjeta
+  dorada**, que lleva el guardia de la planta junto a la suya (al caer suelta las dos), o con la **apertura de
+  emergencia**: un botón junto a la puerta que hace saltar la sirena, una cuenta atrás de 40 s y zombis entrando por
+  la puerta de la tienda y por la trastienda, en oleadas que crecen con la planta (lo del rescate del ferretero, al
+  revés: aquí se aguanta). Si sales de la tienda, la cuenta se para.
+- **El premio:** una vitrina con **un arma creada de rareza morada** de una receta que ya sepas (si solo sabes el
+  molotov, un cóctel morado con todas sus botellas), que se coge y va a la mano, y **un fajo de billetes** (15 $ más 5
+  por planta). Y un logro nuevo, «Caja fuerte», por abrirla la primera vez.
+- **Por trozos**, cada uno con su visto bueno: 1) la tienda (tipo, muebles de PixelLab y cómo se ve); 2) la cámara
+  (la tarjeta dorada y la apertura de emergencia con la alarma); 3) el premio, el logro, la prueba y las docs.
+
+### ✅ Hecho (22 oct 2026, parte 10, trozo 1: la joyería, la tienda)
+
+- El tipo `joyeria` en `Tienda.TIPOS` (`scripts/mapa/tienda.gd`): sala de venta de 30-34 casillas, con la
+  **trastienda** y la **cámara acorazada** detrás; neón «JOYAS» dorado. No entra en el sorteo de tiendas de cada
+  planta: la partida elige al empezar su planta (`Planta.joyeria_planta`, de la 1.ª a la 3.ª; con el reto del día,
+  la misma para todos) y `planta.gd` la pone en la segunda puerta normal de esa planta (nunca en la del jefe ni en la
+  del superviviente). En los Apartamentos, ninguna.
+- **Cómo se ve:** 7 generaciones de PixelLab, todas a la primera (`assets/pixellab.json` → `centro-comercial-joyeria`,
+  con la receta de la parte 2: guías de `tools/guias_centro.py`, que ya dibuja los tres muebles nuevos): la **vitrina
+  baja** (mostrador de cristal con relojes y joyas; de frente y de lado), la **vitrina alta** y la **caja fuerte**
+  (`jewelcase`, `jewelcabinet` y `safe` en `catalogo.gd`); el **escaparate** con collares en bustos y el cristal roto;
+  y dos suelos: **mármol** para la sala de venta (`suelo-marmol`, la primera tienda con suelo propio: `ESTILO_TIENDA`
+  de `mapa.gd` mira ahora `"<uso>-<tipo de tienda>"` antes que `"<uso>"`) y **chapa de acero** para la cámara
+  acorazada (`suelo-acorazada`). La trastienda va como un almacén pequeño; las paredes, las de la tienda y las del
+  almacén.
+- Muebles por sala (`catalogo.gd`): la sala de venta con vitrinas bajas en filas y vitrinas altas, caja y banco; la
+  trastienda con estanterías, banco de trabajo, taquillas y palés; la cámara acorazada con cajas fuertes y una
+  estantería. Objetos: `Objetos.TIENDAS["joyeria"]` (cadena, cuchillas, batería, spray). Zombis: los de las tiendas,
+  con el vigilante dos veces más en la lista.
+- Prueba: `--captura --edificio centro --fotos-tiendas` pone la joyería en la 1.ª planta y saca
+  `captura-tienda-joyeria.png` como las demás.
+- Lo que falta (trozos 2 y 3): la puerta de la cámara aún se abre como cualquier otra, y dentro solo hay cajas
+  fuertes de adorno.
+
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
@@ -884,3 +925,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 9. ✅ **Los objetos de curar** (22 oct): las vendas de la farmacia y el bocadillo del supermercado, que se usan desde
    el inventario (ver «Objetos»). Quedan, de lo apartado: la joyería (sala opcional con riesgo) y los trajes de
    Johnny de la tienda de ropa.
+10. **La joyería**, la sala opcional con riesgo (decidido: ver «Decidido con el dueño (22 oct 2026, para la parte
+    10)», en «Objetos»), en tres trozos: ✅ Trozo 1, la tienda (22 oct). Trozo 2, la cámara acorazada (la tarjeta
+    dorada y la apertura de emergencia con la alarma). Trozo 3, el premio, el logro «Caja fuerte» y la prueba.

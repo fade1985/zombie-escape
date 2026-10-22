@@ -183,5 +183,10 @@
   "mueble-acunit",
   "mueble-chimney",
   "mueble-airhandler",
-  "mueble-vent"
+  "mueble-vent",
+  "mueble-safe",
+  "mueble-jewelcabinet",
+  "mueble-jewelcase-lado",
+  "mueble-jewelcase",
+  "escaparate-joyeria"
 ]

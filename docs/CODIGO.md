@@ -201,12 +201,14 @@
 
 **mapa/**
 - `apartamento.gd` (genera un apartamento como `apartment.js`), `tienda.gd` (genera una tienda del centro
-  comercial, con el mismo tipo de plano), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
+  comercial, con el mismo tipo de plano; sus tipos, en `TIPOS`: la joyería, parte 10, no se sortea, sale una por
+  partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
   exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
   tiene la suya: "jefe-modista"), `muebles.gd`
   (dónde va cada uno; en las salas de venta, también filas en medio: `islas`), `mueble.gd` (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, peligros, niebla, navegación). Los suelos y
-  paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas) y `PASILLOS` (el pasillo de cada
+  paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas: por uso, o por `"<uso>-<tipo>"` si ese
+  tipo tiene el suyo, como el mármol de la joyería) y `PASILLOS` (el pasillo de cada
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
   su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
   `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).

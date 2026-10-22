@@ -63,6 +63,10 @@ const MUEBLES := {
 	"fryer":           {"len": 48,  "dep": 48, "paredes": "",      "archivo": "centro/freidora"},
 	"diningtable":     {"len": 96,  "dep": 64, "paredes": "",      "archivo": "centro/mesa-restaurante"},
 	"bench":           {"len": 92,  "dep": 36, "paredes": "lados", "archivo": "centro/banco-galeria"},
+	# los de la joyería (parte 9): la vitrina baja (mostrador de cristal con joyas), la vitrina alta y la caja fuerte
+	"jewelcase":       {"len": 96,  "dep": 44, "paredes": "lados", "archivo": "centro/vitrina-joyeria"},
+	"jewelcabinet":    {"len": 64,  "dep": 36, "paredes": "",      "archivo": "centro/vitrina-alta"},
+	"safe":            {"len": 56,  "dep": 48, "paredes": "",      "archivo": "centro/caja-fuerte"},
 	# Los aparatos de la azotea del centro comercial (PixelLab, con las guías de tools/guias_azotea.py): van sueltos
 	# por la azotea, no contra una pared (los coloca planta.gd)
 	"acunit":          {"len": 128, "dep": 72, "paredes": "todas", "archivo": "centro/aire-acondicionado"},
@@ -195,6 +199,24 @@ const SALAS := {
 		"cuantos": [8, 11],
 		"iguales": {"metalshelf": 3},
 		"islas": {"muebles": ["metalshelf"], "fila": 2, "entre": 0, "cada": 176},
+	},
+	# la joyería (parte 9): vitrinas bajas en filas, vitrinas altas contra la pared; detrás, la trastienda (como un
+	# almacén pequeño) y la cámara acorazada con sus cajas fuertes
+	"tienda-joyeria": {
+		"muebles": ["jewelcase", "jewelcase", "jewelcabinet", "checkout", "bench"],
+		"cuantos": [7, 10],
+		"iguales": {"jewelcase": 4, "jewelcabinet": 3},
+		"islas": {"muebles": ["jewelcase"], "fila": 2, "entre": 40, "cada": 150},
+	},
+	"trastienda": {
+		"muebles": ["metalshelf", "workbench", "lockers", "pallet"],
+		"cuantos": [2, 4],
+		"iguales": {"metalshelf": 2},
+	},
+	"acorazada": {
+		"muebles": ["safe", "safe", "metalshelf"],
+		"cuantos": [2, 4],
+		"iguales": {"safe": 3, "metalshelf": 1},
 	},
 	# la tienda destrozada del jefe de la planta
 	"jefe-tienda": {

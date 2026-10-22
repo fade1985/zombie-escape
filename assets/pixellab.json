@@ -2106,5 +2106,21 @@
       "action_description": "He collapses to the floor, exhausted and wounded. His knees buckle, he sways and slumps down, falling onto his side on the floor with his legs drawn up a little and one arm stretched out along the ground, his head resting on the floor and his cap still on. Then he lies completely still and motionless on the floor for the last frames, unconscious but alive, eyes closed. He never gets up. No blood, no effects. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
       "nota": "A la médica se le cambia 'his cap still on' por 'her ponytail spread on the ground' y al militar por 'his helmet still on and the rifle still slung on his back'. Los tres se desploman en 3-4 fotogramas y quedan quietos del 5 al 8: el último fotograma es la postura de caído del juego (la médica salió en lienzo de 96x100). Sin sangre, como se pidió."
     }
+  },
+  "centro-comercial-joyeria": {
+    "kind": "images",
+    "fecha": "2026-10-22",
+    "nota": "La joyería (parte 9 de docs/CENTRO_COMERCIAL.md, trozo 1). Todo con create_image_pixflux, 1 generación cada una, con la misma receta de 'centro-comercial': los muebles con su guía de tools/guias_centro.py (subida con get_upload_url) como init_image a fuerza 45, no_background false, outline negro, view high top-down; el escaparate, img2img sobre assets/sources/centro/escaparate-ropa.png (fuerza 70, text_guidance_scale 12); los suelos, 256x256 'edge to edge seamless tileable texture ... flat top-down texture'. Originales en assets/sources/salas/centro/ (muebles, ya sin fondo con 'guias_centro.py quita') y assets/sources/centro/ (escaparate y suelos). Sprites: py tools/importar.py, py tools/centro_sprites.py, py tools/textura_suelo.py (marmol a 4 baldosas, acorazada a 8).",
+    "coste": "7 generaciones, todas a la primera",
+    "piezas": {
+      "vitrina-joyeria": "0f0a1969",
+      "vitrina-joyeria-lado": "4a8b2b5f",
+      "vitrina-alta": "981d6526",
+      "caja-fuerte": "ecfe59f7",
+      "escaparate-joyeria": "0b407c9c",
+      "suelo-marmol": "9293b030",
+      "suelo-acorazada": "843745fb"
+    },
+    "descartados": ""
   }
 }

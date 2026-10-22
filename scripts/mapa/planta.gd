@@ -34,6 +34,9 @@ const APARATOS := {"acunit": [2, 3], "airhandler": [1, 2], "chimney": [2, 3], "v
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
 # empezar). En esa planta sale su tienda y se esconde en esa habitación de ella. Vacío: como siempre
 static var tienda_fija := {}
+# La joyería del centro comercial (parte 9): una por partida, en esta planta (la pone partida.gd al empezar; 0 =
+# ninguna). Va en la segunda puerta normal de su planta, nunca en la del jefe ni en la del superviviente
+static var joyeria_planta := 0
 
 # Coste de cada zombi para "comprar" los de un apartamento con un presupuesto. Los lentos son baratos: van en grupo.
 const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "explosivo": 2.0, "tentaculos": 3.0,
@@ -113,14 +116,19 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			de_jefa = h
 	# en el centro comercial, cada puerta una tienda distinta; la primera tienda normal, la del superviviente si le
 	# toca esta planta (tienda_fija) o, si no, una de las que tienen aseo
-	var tipos: Array = Tienda.TIPOS.keys()
+	var tipos: Array = Tienda.TIPOS.keys().filter(func(t): return t != "joyeria")   # (la joyería no se sortea)
 	tipos.shuffle()
 	var tipo_de := {}
 	var con_aseo: Array = tipos.filter(func(t): return "bano" in Tienda.TIPOS[t].salas)
 	var fija: Dictionary = tienda_fija if tiendas and tienda_fija.get("planta", -1) == num else {}
 	var primera: String = fija.tienda if not fija.is_empty() else con_aseo[0]
 	for h in libres.filter(func(h): return h != de_jefa) + [de_jefa]:
-		tipo_de[h.letra] = primera if tipo_de.is_empty() else tipos.filter(func(t): return t not in tipo_de.values())[0]
+		if tipo_de.is_empty():
+			tipo_de[h.letra] = primera
+		elif tiendas and joyeria_planta == num and h != de_jefa and not "joyeria" in tipo_de.values():
+			tipo_de[h.letra] = "joyeria"   # la joyería de la partida: la segunda puerta normal de su planta
+		else:
+			tipo_de[h.letra] = tipos.filter(func(t): return t not in tipo_de.values())[0]
 
 	for h in huecos:
 		var nombre := nombre_puerta(num, h.letra)
@@ -366,6 +374,8 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 		tipos.append("dependienta")
 		if num >= 2:
 			tipos.append("vigilante")
+		if sitio.tienda == "joyeria":   # la joyería tiene más seguridad: más vigilantes
+			tipos += ["vigilante", "vigilante"]
 	var area := 0
 	for s in apt.salas:
 		area += s.casillas

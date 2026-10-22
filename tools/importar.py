@@ -37,7 +37,8 @@ BLOQUE = {'lamp': (8, 1), 'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7,
 # no se les quita lo blanco (si no, se agujerearían la escarcha, los cristales o el maniquí)
 SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 'tvshelf', 'pharmacycounter',
             'metalshelf', 'pallet', 'lockers', 'workbench', 'freezershelf', 'industrialstove', 'steeltable', 'fryer',
-            'diningtable', 'bench', 'tallmannequin', 'acunit', 'airhandler', 'chimney', 'vent'}
+            'diningtable', 'bench', 'tallmannequin', 'acunit', 'airhandler', 'chimney', 'vent',
+            'jewelcase', 'jewelcabinet', 'safe'}
 
 
 def catalogo():

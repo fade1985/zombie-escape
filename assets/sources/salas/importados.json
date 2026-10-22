@@ -43,6 +43,10 @@
     "huella": "3b44bde2a714bac6",
     "sprite": "mueble-workbench"
   },
+  "centro/caja-fuerte.png": {
+    "huella": "0d5042f6e471d650",
+    "sprite": "mueble-safe"
+  },
   "centro/caja-lado.png": {
     "huella": "b53e54677c321f73",
     "sprite": "mueble-checkout-lado"
@@ -130,6 +134,18 @@
   "centro/taquillas.png": {
     "huella": "6f2b053967ce8cc0",
     "sprite": "mueble-lockers"
+  },
+  "centro/vitrina-alta.png": {
+    "huella": "17c964f7482ac62e",
+    "sprite": "mueble-jewelcabinet"
+  },
+  "centro/vitrina-joyeria-lado.png": {
+    "huella": "2f29063bd9e86151",
+    "sprite": "mueble-jewelcase-lado"
+  },
+  "centro/vitrina-joyeria.png": {
+    "huella": "d6299f1e19011d62",
+    "sprite": "mueble-jewelcase"
   },
   "cocina/encimera.png": {
     "huella": "5d9751d7bb869abc",

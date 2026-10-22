@@ -45,7 +45,10 @@ const ESTILO_TIENDA := {
 	"tienda": [["venta-a", "venta-b"], "venta"], "jefe": [["venta-a", "venta-b"], "venta"],
 	"almacen": [["almacen"], "almacen"], "camara": [["camara"], "camara"], "cocina": [["cocinaind"], "cocinaind"],
 	"taller": [["linoleo"], "almacen"], "taquillas": [["linoleo"], "almacen"], "rebotica": [["linoleo"], "venta"],
-	"probadores": [["moqueta"], "venta"]}
+	"probadores": [["moqueta"], "venta"],
+	# la joyería (parte 9): su sala de venta con mármol ("<uso>-<tipo de tienda>" manda sobre "<uso>"), la trastienda
+	# como un almacén y la cámara acorazada con suelo de chapa de acero
+	"tienda-joyeria": [["marmol"], "venta"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"]}
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra
 const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")
@@ -133,9 +136,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-salon.png")
 		for s in sitio.apt.salas:
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
-			if tienda and ESTILO_TIENDA.has(s.uso):
-				var suelos: Array = ESTILO_TIENDA[s.uso][0]
-				var pared: String = ESTILO_TIENDA[s.uso][1]
+			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
+			if tienda and (ESTILO_TIENDA.has(propio) or ESTILO_TIENDA.has(s.uso)):
+				var clave: String = propio if ESTILO_TIENDA.has(propio) else s.uso
+				var suelos: Array = ESTILO_TIENDA[clave][0]
+				var pared: String = ESTILO_TIENDA[clave][1]
 				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-%s.png" % suelos[h % suelos.size()]),
 					"pared": load("res://assets/sprites/pared-%s.png" % pared),
 					"techo": load("res://assets/sprites/techo-%s.png" % pared)}
