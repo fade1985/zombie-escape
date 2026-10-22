@@ -46,7 +46,7 @@ T = {
     'pale':               (68,  56, 28, 0,  (160, 120, 80),  'pale',     False),
     'taquillas':          (100, 40, 46, 0,  (95, 105, 100),  'puertas-4', False),
     'banco-trabajo':      (100, 48, 22, 20, (140, 100, 60),  'mesa',     True),
-    'estanteria-camara':  (84,  44, 46, 0,  (150, 170, 185), 'cajas',    False),
+    'estanteria-camara':  (84,  44, 46, 0,  (150, 170, 185), 'camara',   False),
     'fogon-industrial':   (84,  54, 22, 0,  (140, 145, 150), 'horno',    True),
     'mesa-acero':         (88,  48, 22, 0,  (150, 155, 160), 'mesa',     False),
     'freidora':           (48,  48, 22, 0,  (140, 145, 150), 'liso',     False),
@@ -94,11 +94,18 @@ def encima(t, nombre, color, rnd):
             c = (40, 45, 50) if nombre == 'estanteria-teles' else rnd.choice(PRODUCTOS)
             t.caja(u, 0.18, min(u + a, 0.97), rnd.uniform(0.5, 0.85), c)
             u += a + rnd.uniform(0.0, 0.05)
-    elif nombre in ('estanteria-metal', 'estanteria-camara', 'pale'):
+    elif nombre == 'estanteria-camara':
+        # la tapa, cubierta de escarcha: manchas blancas sobre el metal, y un par de cajas encima
+        for _ in range(14):
+            u, v = rnd.uniform(0, 0.9), rnd.uniform(0, 0.85)
+            t.caja(u, v, u + rnd.uniform(0.06, 0.16), v + rnd.uniform(0.1, 0.2), (225, 238, 245), False)
+        t.caja(0.12, 0.2, 0.38, 0.75, (175, 195, 210))
+        t.caja(0.6, 0.3, 0.82, 0.8, (175, 195, 210))
+    elif nombre in ('estanteria-metal', 'pale'):
         u = 0.05
         while u < 0.85:
             a = rnd.uniform(0.2, 0.4)
-            c = (175, 195, 210) if nombre == 'estanteria-camara' else (150, 115, 75)
+            c = (150, 115, 75)
             t.caja(u, rnd.uniform(0.05, 0.2), min(u + a, 0.95), rnd.uniform(0.75, 0.95), c)
             u += a + rnd.uniform(0.03, 0.08)
     elif nombre == 'caja':
@@ -186,6 +193,28 @@ def frente(dr, x, y, w, h, color, estilo, rnd):
             dr.line((px, y, px, y + h - 1), fill=RAYA, width=S)
         return
     dr.rectangle((x, y, x + w - 1, y + h - 1), fill=tono(color, 0.72), outline=RAYA)
+    if estilo == 'camara':
+        # estantes metálicos con carne congelada (rojo con escarcha) y cajas blanquecinas; carámbanos bajo las baldas
+        dr.rectangle((x + 2 * S, y + S, x + w - 3 * S, y + h - 2 * S), fill=tono(color, 0.4), outline=RAYA)
+        n = 3
+        paso = (h - 3 * S) / n
+        for i in range(n):
+            y1 = int(y + S + (i + 1) * paso)
+            dr.rectangle((x + 2 * S, y1 - 2 * S, x + w - 3 * S, y1 - S), fill=tono(color, 1.0), outline=RAYA)   # la balda
+            for k in range(x + 4 * S, x + w - 4 * S, 5 * S):   # carámbanos
+                dr.rectangle((k, y1 - S, k + S - 1, y1 - S + rnd.randint(1, 2) * S), fill=(225, 238, 245, 255))
+            bx = x + 3 * S
+            while bx < x + w - 6 * S:
+                bw = rnd.randint(5, 8) * S
+                bh = rnd.randint(int(paso * 0.45), int(paso * 0.7))
+                fin = min(bx + bw - 1, x + w - 4 * S)
+                if rnd.random() < 0.6:   # carne congelada
+                    dr.rectangle((bx, y1 - 2 * S - bh, fin, y1 - 2 * S - 1), fill=(150, 50, 55, 255), outline=RAYA)
+                    dr.rectangle((bx + S, y1 - 2 * S - bh + S, fin - S, y1 - 2 * S - bh + 2 * S - 1), fill=(225, 238, 245, 255))
+                else:                    # caja
+                    dr.rectangle((bx, y1 - 2 * S - bh, fin, y1 - 2 * S - 1), fill=(185, 200, 210, 255), outline=RAYA)
+                bx += bw + rnd.randint(0, 2) * S
+        return
     if estilo in ('estantes', 'cajas', 'teles'):
         n = max(2, h // (11 * S))
         paso = h / n
