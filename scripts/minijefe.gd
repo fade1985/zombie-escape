@@ -129,7 +129,11 @@ func gritar(texto: String, color: Color, tamano := 24) -> void:
 func llamar(tipo: String, cuantos: int, lejos := 110.0) -> void:
 	for i in cuantos:
 		var a := float(i) / cuantos * TAU + randf_range(-0.4, 0.4)
-		pide_zombi.emit(tipo, global_position + Vector2(cos(a) * lejos, sin(a) * lejos * 0.8))
+		var donde := global_position + Vector2(cos(a) * lejos, sin(a) * lejos * 0.8)
+		# donde se pueda estar: si cae dentro de una pared, un mueble o fuera de la sala, al sitio libre más cercano
+		# (si no, se queda encerrado sin poder matarlo y la puerta no se abre nunca)
+		donde = NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), donde)
+		pide_zombi.emit(tipo, donde)
 
 
 # Cuántos zombis quedan (sin contarle a él)
