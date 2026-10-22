@@ -11,8 +11,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-- **F1.** En la sala de mantenimiento aparece siempre un mueble al lado de la taquilla que no debería
-  existir: quitarlo.
 - **F2.** Los zombis de un piso se concentran en el baño: tienen que estar repartidos por todas las
   habitaciones del piso.
 - **F3.** El vómito de la mutación Gastroenteritis atraviesa paredes: no debe hacerlo.

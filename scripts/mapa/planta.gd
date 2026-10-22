@@ -20,7 +20,7 @@ const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
-const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda para el ordenador, el baúl y el banco
+const SITIO_TALLER := Rect2(MURO, MURO, 540 - MURO, 150)   # lo que se guarda para el banco, el ordenador, el baúl y la taquilla
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
@@ -335,8 +335,9 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 
 # La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo, unos pocos
 # muebles y manchas en el suelo. La mitad izquierda de la pared de arriba queda libre: ahí irán el banco de
-# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340). Los muebles de esta sala
-# solo tienen dibujo de frente, así que van en la otra mitad. "vuelta" es su puerta en el pasillo.
+# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340) y la taquilla (parte 11), y
+# hasta los vecinos no se deja nada suelto: junto a la taquilla no sale ningún mueble de sobra. "vuelta" es su
+# puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA
 	var alto := SALA_FILAS * CASILLA
