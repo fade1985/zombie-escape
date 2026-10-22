@@ -2133,5 +2133,89 @@
       "suelo-acorazada": "843745fb"
     },
     "descartados": ""
+  },
+  "supervivientes-centro-48": {
+    "kind": "characters",
+    "fecha": "2026-10-22",
+    "nota": "Los tres supervivientes del centro comercial (ferretero, farmacéutica y técnico de scripts/supervivientes.gd) en pixel art, con la misma receta que supervivientes-48, para sustituir el dibujo con formas de persona.gd. Diseños sacados de su aspecto en el juego (DATOS, look): el ferretero con chaleco naranja de raya brillante, camisa azul, gorra verde, bigote canoso y el martillo colgado del cinturón; la farmacéutica con bata blanca, cruz verde, moño y una venda en la pierna (la mordieron); el técnico con polo azul marino, cascos rojos al cuello, tarjeta colgada y el aparato con lucecita en el cinturón. Todos algo sucios y cansados, sin heridas de zombi, manos vacías. FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Hoja de comparación: assets/pruebas/supervivientes-centro-48-modelos.png. A la espera de que el dueño elija uno de cada.",
+    "coste": "36 generaciones de los modelos (6 cada uno; saldo 377,80 → 341,80)",
+    "request": {
+      "herramienta": "create_character_pro_flash",
+      "width": 48,
+      "height": 48,
+      "view": "low top-down",
+      "style_image": {
+        "url": "rotations/south.png de conserje-48 (4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c), por su URL de PixelLab",
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors."
+      },
+      "style_options": {
+        "color_palette": false,
+        "detail": true,
+        "outline": true,
+        "shading": true
+      }
+    },
+    "piezas": {
+      "ferretero-A": {
+        "character_id": "7832191d-f10d-4635-ba5b-57a996c738f9",
+        "job_id": "602ff0f5-d9da-4893-a309-b20753e7cbc0",
+        "seed": 4811,
+        "name": "Superviviente ferretero A",
+        "carpeta": "assets/sources/superviviente-ferretero-48/intentos/A/",
+        "alto_px": 46,
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors.",
+        "description": "middle-aged male hardware store clerk, a tired survivor of a zombie outbreak, realistic adult body proportions, sturdy build, small head, tanned light skin, short grey hair under a dark green baseball cap, thick grey moustache, blue work shirt with rolled-up sleeves, bright orange high-visibility work vest with reflective silver stripes over the shirt, brown tool belt with a claw hammer hanging at his right hip, dark grey-blue work trousers, brown work boots, clothes dusty and smudged with sawdust and dirt, a white bandage on one hand, tired face, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      },
+      "ferretero-B": {
+        "character_id": "e5f071af-2f2d-4e43-ac65-a197586aaab7",
+        "job_id": "e662db6e-90c4-4dd7-a370-2fc87202aa90",
+        "seed": 4812,
+        "name": "Superviviente ferretero B",
+        "carpeta": "assets/sources/superviviente-ferretero-48/intentos/B/",
+        "alto_px": 46,
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors.",
+        "description": "middle-aged male hardware store worker, a weary survivor of a zombie outbreak, realistic adult body proportions, stocky build, small head, light tanned skin, short salt-and-pepper grey hair under a dark green cap, bushy grey moustache, denim blue work shirt, orange safety vest with two shiny reflective stripes, leather tool belt with a hammer tucked in a loop at his hip, grey-blue cargo work trousers, brown boots, clothes crumpled and dusty with dirt stains, a strip of white bandage around one wrist, tired expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      },
+      "farmaceutica-A": {
+        "character_id": "2a8e6503-a12a-4c97-922d-d9c47999fe54",
+        "job_id": "36caf5e5-f8e3-4349-aa72-767effeff899",
+        "seed": 4813,
+        "name": "Superviviente farmacéutica A",
+        "carpeta": "assets/sources/superviviente-farmaceutica-48/intentos/A/",
+        "alto_px": 46,
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy her clothes, face or colors.",
+        "description": "adult female pharmacist, a tired survivor of a zombie outbreak, realistic adult body proportions, slim, small head, fair skin, dark brown hair tied up in a neat bun, white pharmacist coat buttoned up with a small green cross on the chest, light grey blouse collar, grey trousers, dark purple flat shoes, a white bandage wrapped around her left lower leg over the trousers, coat wrinkled and dirty with grey smudges, exhausted face, no zombie wounds, no blood, empty hands, arms relaxed at her sides, detailed shading"
+      },
+      "farmaceutica-B": {
+        "character_id": "51f37508-7dad-4bad-8018-2e7d60d48060",
+        "job_id": "6ac3eb9b-c370-473c-a5ad-121800e4e0cb",
+        "seed": 4814,
+        "name": "Superviviente farmacéutica B",
+        "carpeta": "assets/sources/superviviente-farmaceutica-48/intentos/B/",
+        "alto_px": 46,
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy her clothes, face or colors.",
+        "description": "adult female pharmacist, a weary survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, fair skin, dark hair pulled back into a round bun, long white lab coat with a bright green pharmacy cross badge on the chest pocket, pale blue shirt underneath, slate grey trousers, dark flat shoes, a white bandage around one leg below the knee, a name tag clipped to the coat, coat crumpled and stained with dirt, tired expression, no zombie wounds, no blood, empty hands, arms relaxed at her sides, detailed shading"
+      },
+      "tecnico-A": {
+        "character_id": "79ec1c1b-640d-4fe9-8397-133f547a68ea",
+        "job_id": "53d5a437-58bc-46d2-831d-c48057734052",
+        "seed": 4815,
+        "name": "Superviviente técnico A",
+        "carpeta": "assets/sources/superviviente-tecnico-48/intentos/A/",
+        "alto_px": 46,
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors.",
+        "description": "young adult male electronics store technician, a tired survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, dark brown skin, short black hair, red over-ear headphones resting around his neck, navy blue polo shirt, a white staff ID card hanging on a lanyard on his chest, black belt with a small grey electronic gadget with a glowing cyan light clipped at his hip, dark grey trousers, black sneakers, clothes wrinkled and dusty with a dirt smudge, a white bandage on one forearm, tired face, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      },
+      "tecnico-B": {
+        "character_id": "0a342c53-7dda-4f7f-b21d-29ceb0bea068",
+        "job_id": "9d487277-28c5-4e6a-b9c5-6df8854883e8",
+        "seed": 4816,
+        "name": "Superviviente técnico B",
+        "carpeta": "assets/sources/superviviente-tecnico-48/intentos/B/",
+        "alto_px": 46,
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors.",
+        "description": "young adult male tech repair worker, a weary survivor of a zombie outbreak, realistic adult body proportions, slim, small head, dark brown skin, short black curly hair, bright red headphones hanging around his neck, dark navy blue polo shirt with a small store logo, white ID badge on a lanyard, a compact grey handheld gadget with a small blinking blue light hooked on his belt, charcoal grey trousers, dark sneakers, clothes crumpled and dirty, a white bandage around one wrist, exhausted expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      }
+    }
   }
 }
