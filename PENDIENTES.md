@@ -18,6 +18,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M1.** El superviviente que acompaña a Johnny ataca a los zombis que ve: si los ve pero no los tiene a
   rango, se acerca y los ataca aunque rompa la formación. Cuando mata a todos los que ve (uno o varios),
   vuelve a la formación como siempre.
+- **M2.** La habitación del Glotón nunca tiene muebles: en su lugar está toda llena de caca, heces y diarrea,
+  también las paredes. Esa porquería es una mezcla de mierda y ácido: quita vida al pisarla, así que en la
+  pelea no se puede uno acercar a él sin más.
 
 ## Por limar
 
