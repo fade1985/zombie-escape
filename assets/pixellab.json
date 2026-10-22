@@ -1860,7 +1860,7 @@
   "cientifico-muerto": {
     "kind": "image",
     "herramienta": "create_image_pixflux (MCP)",
-    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/; elegido el 3 (22 oct), partido en capas con tools/cientifico_muerto.py.",
+    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/. 1ª tanda: elegido el 3 (22 oct), partido en capas con tools/cientifico_muerto.py. 2ª tanda (4-11, con los bocetos de guia_cientifico.py, a escala de Johnny, bata larga y charco): a = boca abajo, b = boca arriba; falta elegir.",
     "request": {
       "width": 64,
       "height": 64,
@@ -1894,6 +1894,78 @@
         "init_image": "último fotograma de muerte (east) de zombi-lento-bata, centrado en 64x64",
         "init_image_strength": 90,
         "description": "dead human scientist lying on the floor, long dead corpse, pale grayish skin, short dark hair, white lab coat stained with dried dark blood, small id badge, dark trousers, limp arm stretched out, not a zombie"
+      },
+      {
+        "hoja": "intento-4",
+        "seed": 4201,
+        "job_id": "4310dd76-4899-4a37-a4a1-9e7ec096e718",
+        "view": "low top-down",
+        "init_image": "guia-a.png (tools/guia_cientifico.py)",
+        "init_image_strength": 60,
+        "description": "dead human scientist lying face down on the floor, long dead corpse, back of the head with dark hair, big head chibi proportions, long white lab coat reaching the knees soaked with dried dark red blood stains, one arm stretched out, pale grayish hand, dark trousers, shoes, large pool of dark dried blood under the body, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-5",
+        "seed": 4202,
+        "job_id": "59ec6a2c-4bce-4f51-8b43-72b3f57079a1",
+        "view": "low top-down",
+        "init_image": "guia-a.png (tools/guia_cientifico.py)",
+        "init_image_strength": 110,
+        "description": "dead human scientist lying face down on the floor, long dead corpse, back of the head with dark hair, big head chibi proportions, long white lab coat reaching the knees soaked with dried dark red blood stains, one arm stretched out, pale grayish hand, dark trousers, shoes, large pool of dark dried blood under the body, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-6",
+        "seed": 4203,
+        "job_id": "68a47907-37e4-4b51-8a1d-74496d39f80f",
+        "view": "high top-down",
+        "init_image": "guia-b.png (tools/guia_cientifico.py)",
+        "init_image_strength": 60,
+        "description": "dead human scientist lying on his back on the floor seen from above, long dead corpse, big head chibi proportions, pale grayish face with closed eyes and open mouth, dark hair, long white lab coat reaching the knees soaked with dried dark red blood stains, blue id badge, one arm spread out, dark trousers, shoes, large pool of dark dried blood around the head and body, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-7",
+        "seed": 4204,
+        "job_id": "05184cb5-010c-4484-b7f7-a46b4783853c",
+        "view": "high top-down",
+        "init_image": "guia-b.png (tools/guia_cientifico.py)",
+        "init_image_strength": 110,
+        "description": "dead human scientist lying on his back on the floor seen from above, long dead corpse, big head chibi proportions, pale grayish face with closed eyes and open mouth, dark hair, long white lab coat reaching the knees soaked with dried dark red blood stains, blue id badge, one arm spread out, dark trousers, shoes, large pool of dark dried blood around the head and body, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-8",
+        "seed": 4205,
+        "job_id": "8ceb2c2a-4688-44a6-81aa-a190e58d991e",
+        "view": "high top-down",
+        "init_image": "guia-a.png (tools/guia_cientifico.py)",
+        "init_image_strength": 80,
+        "description": "corpse of a scientist lying flat face down on the floor, seen from above, dead for a long time, big head with dark messy hair seen from behind, long white lab coat down to the knees covered in dried dark red blood, one arm stretched forward on the floor, pale gray hand, dark trousers and shoes, big pool of dark dried blood spreading under the head and chest, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-9",
+        "seed": 4206,
+        "job_id": "826341da-3ef9-42ac-88a6-7f6587aaf8ff",
+        "view": "low top-down",
+        "init_image": "guia-a.png (tools/guia_cientifico.py)",
+        "init_image_strength": 90,
+        "description": "corpse of a scientist lying flat face down on the floor, seen from above, dead for a long time, big head with dark messy hair seen from behind, long white lab coat down to the knees covered in dried dark red blood, one arm stretched forward on the floor, pale gray hand, dark trousers and shoes, big pool of dark dried blood spreading under the head and chest, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-10",
+        "seed": 4207,
+        "job_id": "88ce99e5-ad33-4e41-95d5-ce3f78d12f38",
+        "view": "high top-down",
+        "init_image": "guia-b.png (tools/guia_cientifico.py)",
+        "init_image_strength": 80,
+        "description": "corpse of a scientist lying flat on his back on the floor, viewed from directly above, NOT standing, dead for a long time, big head, pale gray face with closed eyes and open mouth, dark hair, long white lab coat down to the knees covered in dried dark red blood, blue id badge, one arm spread out on the floor, dark trousers and shoes, big pool of dark dried blood under the head and body, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-11",
+        "seed": 4208,
+        "job_id": "b3c20134-a39c-48d9-b090-1bda8d376028",
+        "view": "high top-down",
+        "init_image": "guia-b.png (tools/guia_cientifico.py)",
+        "init_image_strength": 95,
+        "description": "corpse of a scientist lying flat on his back on the floor, viewed from directly above, NOT standing, dead for a long time, big head, pale gray face with closed eyes and open mouth, dark hair, long white lab coat down to the knees covered in dried dark red blood, blue id badge, one arm spread out on the floor, dark trousers and shoes, big pool of dark dried blood under the head and body, top-down RPG game sprite"
       }
     ]
   }
