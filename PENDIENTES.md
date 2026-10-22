@@ -23,6 +23,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   pelea no se puede uno acercar a él sin más.
 - **M3.** Mini presentación de cada jefe: al empezar la pelea, un pequeño zoom que lo enfoca solo a él
   mientras suelta un grito, y sale su nombre en pantalla.
+- **M4.** Meter objetos en el baúl a mano: además de que los del inventario pasen solos al baúl al acabar la
+  partida, al arrimarse al baúl se pueda elegir desde el inventario qué objetos guardar en él.
 
 ## Por limar
 
