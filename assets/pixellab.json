@@ -1972,8 +1972,8 @@
   "supervivientes-48": {
     "kind": "characters",
     "fecha": "2026-10-22",
-    "nota": "Los tres supervivientes de los Apartamentos (policía, médica y militar de scripts/supervivientes.gd) en pixel art, al tamaño y estilo de Johnny, para sustituir el dibujo con formas de persona.gd (los del centro comercial siguen con persona.gd). FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Diseños aprobados por el dueño: policía con uniforme azul, gorra, chaleco y la pistola en la funda; médica con el pelo rojo recogido, bata blanca sobre pijama verde agua y fonendo; militar con casco y uniforme verde oliva, chaleco táctico, botas y el fusil a la espalda. Todos algo sucios y cansados (ropa arrugada, alguna venda), sin heridas de zombi, manos vacías (la plantilla de andar quita lo que lleven en la mano). Hoja de comparación: assets/pruebas/supervivientes-48-modelos.png. PENDIENTE: la elección y el visto bueno del dueño; luego andar (walking-8-frames, 8 direcciones), acción y caído (pixminimax) y meterlos en Godot (aliado.gd).",
-    "coste": "36 generaciones (6 por modelo; saldo 471,80 → 435,80)",
+    "nota": "Los tres supervivientes de los Apartamentos (policía, médica y militar de scripts/supervivientes.gd) en pixel art, al tamaño y estilo de Johnny, para sustituir el dibujo con formas de persona.gd (los del centro comercial siguen con persona.gd). FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Diseños aprobados por el dueño: policía con uniforme azul, gorra, chaleco y la pistola en la funda; médica con el pelo rojo recogido, bata blanca sobre pijama verde agua y fonendo; militar con casco y uniforme verde oliva, chaleco táctico, botas y el fusil a la espalda. Todos algo sucios y cansados (ropa arrugada, alguna venda), sin heridas de zombi, manos vacías (la plantilla de andar quita lo que lleven en la mano). Hoja de comparación: assets/pruebas/supervivientes-48-modelos.png. ELEGIDOS por el dueño (22 oct): policía B, médica B y militar A; sus 8 vistas están copiadas en assets/sources/superviviente-<id>-48/rotations/. FASE 2 (andar): plantilla walking-8-frames en las 8 direcciones de los tres (probado primero east y luego el resto en el mismo grupo), fotogramas tal cual en assets/sources/superviviente-<id>-48/walk/<dirección>-<n>.png; hoja assets/pruebas/supervivientes-48-andar.png y GIF .gif. El reposo no se pide a PixelLab: se hará a mano al montar la hoja (respiración de 1 píxel, como Johnny y los zombis). PENDIENTE: acción y caído (pixminimax) y meterlos en Godot (aliado.gd).",
+    "coste": "60 generaciones: 36 de los modelos (6 cada uno; saldo 471,80 → 435,80) y 24 del andar (1 por dirección; 435,80 → 411,80)",
     "request": {
       "herramienta": "create_character_pro_flash",
       "width": 48,
@@ -2045,6 +2045,22 @@
         "alto_px": 46,
         "description": "adult male soldier, a weary survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, tan skin with dark stubble, olive green combat helmet, olive drab military fatigues, a dark olive green tactical vest with ammo pouches, a black assault rifle hanging on his back by a strap, dark green combat trousers, black lace-up combat boots, fatigues crumpled and smeared with dust and dirt, a bandage wrapped around one hand, exhausted expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
       }
+    },
+    "elegidos": {
+      "policia": "policia-B",
+      "medica": "medica-B",
+      "militar": "militar-A"
+    },
+    "andar": {
+      "fecha": "2026-10-22",
+      "template": "walking-8-frames",
+      "frames": 8,
+      "grupos": {
+        "policia": "e5fae7a9-7e11-4aa2-ad92-d2b9d102d4a6",
+        "medica": "0c63aca5-4308-4c89-9619-6c621e46f38a",
+        "militar": "a353a2bf-b1d2-4ba2-9d4a-cabb6d5c09bb"
+      },
+      "resultado": "Los tres conservan gorra, chaleco y funda; pelo, bata y fonendo; casco, chaleco y fusil a la espalda. Los fotogramas salen 1-2 píxeles más bajos que el dibujo quieto (44-46) y con los tonos algo cambiados: al montar la hoja se alinean los pies y se igualan los colores a los del dibujo quieto, como hace tools/walk.py del juego JS con Johnny. En el militar, el fusil de espaldas (north) casi solo se ve por la correa."
     }
   }
 }
