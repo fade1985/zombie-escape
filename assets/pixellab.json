@@ -2137,8 +2137,8 @@
   "supervivientes-centro-48": {
     "kind": "characters",
     "fecha": "2026-10-22",
-    "nota": "Los tres supervivientes del centro comercial (ferretero, farmacéutica y técnico de scripts/supervivientes.gd) en pixel art, con la misma receta que supervivientes-48, para sustituir el dibujo con formas de persona.gd. Diseños sacados de su aspecto en el juego (DATOS, look): el ferretero con chaleco naranja de raya brillante, camisa azul, gorra verde, bigote canoso y el martillo colgado del cinturón; la farmacéutica con bata blanca, cruz verde, moño y una venda en la pierna (la mordieron); el técnico con polo azul marino, cascos rojos al cuello, tarjeta colgada y el aparato con lucecita en el cinturón. Todos algo sucios y cansados, sin heridas de zombi, manos vacías. FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Hoja de comparación: assets/pruebas/supervivientes-centro-48-modelos.png. ELEGIDOS por el dueño (22 oct): ferretero A, farmacéutica B y técnico A; sus 8 vistas están copiadas en assets/sources/superviviente-<id>-48/rotations/. FASE 2 (andar): plantilla walking-8-frames en las 8 direcciones de los tres (probado primero east y luego el resto en el mismo grupo; todas bien a la primera), fotogramas en assets/sources/superviviente-<id>-48/walk/<dirección>-<n>.png (bajados con tools/bajar_zip.py); hoja assets/pruebas/supervivientes-centro-48-andar.png y GIF .gif. Retoque a mano: en north-1 y north-3 de la farmacéutica PixelLab le pintó la cruz verde en la espalda; se tapó con el blanco de la bata (recuadro x 23-29, y 16-22).",
-    "coste": "60 generaciones: 36 de los modelos (6 cada uno; saldo 377,80 → 341,80) y 24 del andar (1 por dirección; 341,80 → 317,80)",
+    "nota": "Los tres supervivientes del centro comercial (ferretero, farmacéutica y técnico de scripts/supervivientes.gd) en pixel art, con la misma receta que supervivientes-48, para sustituir el dibujo con formas de persona.gd. Diseños sacados de su aspecto en el juego (DATOS, look): el ferretero con chaleco naranja de raya brillante, camisa azul, gorra verde, bigote canoso y el martillo colgado del cinturón; la farmacéutica con bata blanca, cruz verde, moño y una venda en la pierna (la mordieron); el técnico con polo azul marino, cascos rojos al cuello, tarjeta colgada y el aparato con lucecita en el cinturón. Todos algo sucios y cansados, sin heridas de zombi, manos vacías. FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Hoja de comparación: assets/pruebas/supervivientes-centro-48-modelos.png. ELEGIDOS por el dueño (22 oct): ferretero A, farmacéutica B y técnico A; sus 8 vistas están copiadas en assets/sources/superviviente-<id>-48/rotations/. FASE 2 (andar): plantilla walking-8-frames en las 8 direcciones de los tres (probado primero east y luego el resto en el mismo grupo; todas bien a la primera), fotogramas en assets/sources/superviviente-<id>-48/walk/<dirección>-<n>.png (bajados con tools/bajar_zip.py); hoja assets/pruebas/supervivientes-centro-48-andar.png y GIF .gif. Retoque a mano: en north-1 y north-3 de la farmacéutica PixelLab le pintó la cruz verde en la espalda; se tapó con el blanco de la bata (recuadro x 23-29, y 16-22). FASE 3 (acción y caído, PixMiniMax, misma receta que supervivientes-48): el ferretero saca el martillo del cinturón, da un martillazo con un chispazo de líneas blancas y lo guarda; el técnico saca el aparato del cinturón, lo apunta y suelta un chispazo celeste en la punta (sin rayo largo: el rayo hasta el zombi ya lo dibuja aliado.gd) y lo guarda; las 8 direcciones de cada uno con el dibujo quieto como fotograma de partida y de llegada (accion/); la farmacéutica sin acción (lo suyo, los charcos a la mitad, no tiene gesto); y los tres se desploman y quedan tumbados mirando al sur (caido/, solo south). Todo bien a la primera; en el ferretero los dos primeros fotogramas giran un poco el cuerpo al sacar el martillo. Hoja de comprobación: assets/pruebas/supervivientes-centro-48-accion.png.",
+    "coste": "79 generaciones: 36 de los modelos (6 cada uno; saldo 377,80 → 341,80), 24 del andar (1 por dirección; 341,80 → 317,80) y 19 de acción y caído (1 por dirección y 1 por caído; 317,80 → 298,80)",
     "request": {
       "herramienta": "create_character_pro_flash",
       "width": 48,
@@ -2231,6 +2231,39 @@
         "farmaceutica": "8d6f3038-4e2b-4094-afa9-42cd7b5fcc6b",
         "tecnico": "2c496a39-e324-489c-8181-be574524ca8e"
       }
+    },
+    "accion": {
+      "fecha": "2026-10-22",
+      "modo": "pixminimax, 8 fotogramas más el de partida (9 guardados), una dirección por llamada",
+      "partida_y_llegada": "el dibujo quieto de esa dirección pegado en (24, 32) de un lienzo de 96x96, subido con get_upload_url y pasado como custom_start_frame_url y end_frame_url (upload:<id>)",
+      "lienzos": "El técnico sale 96x96 en las 8. El ferretero, más ancho por el martillo: south 100x100, south-east 104x104, east 124x96, north-east y north-west 108x96, west 100x96, south-west 108x124, north 96x96. Al montar, alinear cada tira por su fotograma 0.",
+      "golpe": "El chispazo (martillazo o descarga) sale en el fotograma 3 o 4 según la dirección (en el técnico hacia el sur, en el 2-3).",
+      "direcciones": "Los textos de cada dirección como en supervivientes-48 → accion → direcciones.",
+      "ferretero": {
+        "grupo": "47ba1baa-cb8d-4143-9b1c-8e60d65705dd",
+        "animation_name": "martillazo",
+        "subject_description": "a tired middle-aged hardware store clerk with a dark green cap, a grey moustache, a blue work shirt, a bright orange high-visibility vest with reflective stripes, dark grey-blue trousers and brown boots, a claw hammer hanging from his tool belt at his right hip",
+        "initial_pose_east": "standing upright facing right, empty hands, arms relaxed at his sides, the claw hammer hanging from his tool belt at his hip",
+        "action_description_east": "He pulls his claw hammer from his tool belt and strikes one hard blow. His right hand grabs the hammer from the loop at his hip and raises it high above his shoulder, then he swings it down hard and forward to the right in one fast overhead arc, hitting at chest height in front of him, his torso leaning into the blow while his feet stay planted and he keeps facing exactly the same direction. At the end of the swing a small burst of short white impact lines flashes in front of the hammer head for an instant. The impact lines fade quickly, he pulls the hammer back, slides it back into the loop of his tool belt at his hip, his arms relax and he settles cleanly back into the starting standing pose with empty hands. Only one blow. He never turns. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+      },
+      "tecnico": {
+        "grupo": "20474f07-d794-4cae-98ee-f0bd90836431",
+        "animation_name": "descarga",
+        "subject_description": "a tired young male electronics technician with short black hair, red headphones around his neck, a navy blue polo shirt with an ID card on a lanyard, dark grey trousers and black sneakers, a small grey electronic gadget with a cyan light clipped to his belt",
+        "initial_pose_east": "standing upright facing right, empty hands, arms relaxed at his sides, the small grey gadget clipped to his belt at his hip",
+        "action_description_east": "He zaps with his gadget. His right hand unclips the small grey gadget from his belt and holds it out straight in front of him to the right at chest height, arm fully extended, while his feet stay planted and he keeps facing exactly the same direction. The light on the gadget glows bright cyan and the tip of the gadget crackles with a small burst of bright cyan and white electric sparks for an instant, his arm jolting slightly. The sparks fade quickly, he lowers the gadget, clips it back onto his belt at his hip, his arms relax and he settles cleanly back into the starting standing pose with empty hands. Only one zap, no long lightning bolt. He never turns. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+      }
+    },
+    "caido": {
+      "fecha": "2026-10-22",
+      "modo": "pixminimax, 8 fotogramas más el de partida, solo south, sin fotograma de llegada; partida: el quieto en (24, 32) de 96x96",
+      "grupos": {
+        "ferretero": "62d313fe-332a-48a2-b719-4df76dc83c7a",
+        "farmaceutica": "5b8fb0ed-73c6-415e-ab81-920b574e9451",
+        "tecnico": "2bbf670f-5a78-48ea-b0e5-a1279fd11c8d"
+      },
+      "action_description": "El de supervivientes-48 → caido, con «his cap still on» (ferretero), «her hair bun still tied» (farmacéutica) o «his red headphones still around his neck» (técnico).",
+      "resultado": "Los tres se desploman en 3-4 fotogramas y quedan quietos tumbados del 5 al 8, en lienzo de 96x96. Sin sangre."
     }
   }
 }
