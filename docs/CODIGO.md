@@ -81,8 +81,9 @@
   parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
   su marca; se quedan clavados un rato), `contrato.gd` (los contratos del gerente, dibujados con código: vuelan
   girando, cortan 10 y al toparse con algo caen al suelo), `explosion.gd`.
-- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes (con lo de su
-  oficio para los del centro comercial: chaleco, bata, cascos, moño, bigote, martillo).
+- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes del centro comercial
+  (con lo de su oficio: chaleco, bata, cascos, moño, bigote, martillo) y el vendedor. Los tres de los Apartamentos
+  (policía, médica y militar) ya no la usan: van con su hoja de PixelLab (`aliado.gd`, `HOJAS`).
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
@@ -160,7 +161,9 @@
   frente recortado a lo dibujado (el `recorte` de cada ficha lo calcula `py tools/recortes_bestiario.py`; repetirlo si
   cambia una hoja). `todo_visto()` es la tecla F8. Los textos se retocan aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
-  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura). En `DATOS`, los seis:
+  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los tres de los Apartamentos
+  se dibujan con su hoja de PixelLab, `HOJAS` → `assets/sprites/superviviente-<id>`, al tamaño de Johnny: reposo,
+  andar, lo suyo en las 8 direcciones y caído; los del centro, con `persona.gd`). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
   su tienda en su planta: `Planta.tienda_fija`), sus gritos, su sitio en la sala (`casa`) y su mejora. La de la
   farmacéutica: `botiquin_al_empezar()` (lo llama `partida.gd` al empezar) mete un botiquín en la mochila, que se
@@ -242,7 +245,9 @@
 
 ## tools/
 
-`hacer_frames.py` (hoja → animaciones); para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
+`hacer_frames.py` (hoja → animaciones); `superviviente.py` (monta la hoja de un superviviente de los Apartamentos con lo
+de PixelLab: reposo a mano, andar alineado, acción con el fogonazo limpio y caído; `py tools/superviviente.py policia`);
+para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
 (la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:

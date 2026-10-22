@@ -70,6 +70,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--fotos-ayudas`: pone en Sí las ayudas de Opciones (`captura-ayudas-opciones.png`), prueba la vida y la pistola
   y adónde caería un lanzable, sin ayudas y con ellas (lo cuenta en la terminal), y saca el HUD (`captura-ayudas-hud.png`)
   y un molotov volando al zombi (`captura-ayudas-lanzar.png`). Las deja en No.
+- `--fotos-supervivientes`: los tres supervivientes de los Apartamentos con su hoja de PixelLab: de vecinos en la sala
+  (`captura-supervivientes-sala.png`) y, en un apartamento, andando tras Johnny (`-andar`), disparando y pinchando
+  (`-accion`) y el policía caído (`-caido`).
 - La prueba larga saca también las de Colecciones: `captura-escritorio-nuevo.png` (el icono con el aviso de
   «¡NUEVO!»), `captura-colecciones.png` (los objetos del edificio), `captura-bestiario.png` (la ficha del vecino) y
   `captura-bestiario-falta.png` (la del gerente, sin ver), y cuenta en la terminal lo encontrado, creado y visto.

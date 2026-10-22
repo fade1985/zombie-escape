@@ -51,6 +51,16 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
   `walking-8-frames` sobre el estado "Fregona en guardia": en 7 de las 8 direcciones Johnny pierde la fregona y
   sale más grande. Para esos estados, todo con PixMiniMax (el andar también: 1 generación por dirección, las 8
   en una sola llamada, y luego se recorta el tramo que hace ciclo).
+- **Los supervivientes (22 oct, `pixellab.json` → `supervivientes-48`):** personaje con las manos vacías y el arma
+  guardada (funda o fusil a la espalda), hecho con `create_character_pro_flash` a 48 y el sur de Johnny como estilo
+  (6 generaciones; dos intentos y elige el dueño). Con las manos vacías la plantilla `walking-8-frames` va bien a la
+  primera en las 8 direcciones. La acción (sacar el arma, disparar y guardarla; la jeringa) con PixMiniMax, 8
+  fotogramas y el quieto como partida y llegada, 1 por dirección. Lo aprendido: PixelLab vuelve a medir el lienzo
+  alrededor del movimiento (de 96 pasa a 104, 120 o 128 de ancho), así que la hoja se monta alineando cada tira por su
+  fotograma 0; el detector automático del tinte amarillo del fogonazo (`tools/superviviente.py`, receta de `arma.py`
+  del JS) se confunde si el personaje dobla las rodillas al apuntar (el militar): mejor decirle a mano los fotogramas
+  (`superviviente.json`, `sin_tinte`); y estos personajes no tienen blanco en los ojos, así que el parpadeo a mano de
+  Johnny no se les puede hacer (solo respiran).
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

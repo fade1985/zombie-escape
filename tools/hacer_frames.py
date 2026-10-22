@@ -9,6 +9,7 @@ import sys
 # Nombre de cada estado del juego en español (los que no estén aquí, o no estén en la hoja, no se pasan)
 ESTADOS = {"walk": "andar", "idle": "reposo", "attack": "ataque", "hurt": "golpe", "death": "muerte",
            "fx": "efectos",   # "efectos": fogonazo, humo y casquillo del disparo, para pintarlos encima al andar
+           "fall": "caer",   # "caer": el superviviente se desploma y se queda tumbado (tools/superviviente.py)
            "still": "quieto", "throw": "lanzar", "roar": "grito"}   # estos tres, de la portera
 # Direcciones: sur, sureste, este, noreste, norte, noroeste, oeste, suroeste
 DIRS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne",
