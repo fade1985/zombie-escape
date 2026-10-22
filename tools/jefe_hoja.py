@@ -182,6 +182,39 @@ JEFES = {
         "de_frente": ["giro"],
         "motas": {"lanzar": 120, "hachazo": 150},   # las rayas del brazo al lanzar y el polvo del hachazo
     },
+    # el científico jefe (el jefe final de los Apartamentos, lienzo de 128 como el gerente): las probetas que
+    # lanza, el chorro de suero y la cúpula salen con código (cientifico_jefe.gd). Sin muerte (el que muere es la
+    # criatura, en otra hoja); "suero" y "jeringa", solo de frente. Hacia el oeste, el este dado la vuelta
+    "cientifico-jefe-128": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "probetas": ("probetas", 12, False, False),
+            "suero": ("suero", 10, False, False),
+            "jeringa": ("jeringa", 10, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["suero", "jeringa"],
+        "motas": {"probetas": 1500},   # la probeta que sale volando y el barrido verde (la probeta la dibuja el juego)
+        "sin": {"probetas_s": [6, 7]},  # de frente, la probeta se ve enorme al venir hacia la cámara (pegada a él)
+        "pies": (64, 123),
+    },
+    # la criatura (el científico jefe mutado, otra hoja): las lenguas largas, la onda del puñetazo y las bolas de
+    # fuego salen con código (cientifico_jefe.gd). Hacia el oeste, el este dado la vuelta (tools/espejo_oeste.py --lado)
+    "criatura-128": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "lenguas": ("lenguas", 12, False, False),
+            "punetazo": ("punetazo", 12, False, False),
+            "escupir": ("escupir", 12, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "motas": {"escupir": 150},   # el fuego que sale volando (lo dibuja el juego)
+        "pies": (64, 121),
+    },
 }
 JEFE = JEFES[fuente]
 PIES = JEFE.get("pies", PIES)

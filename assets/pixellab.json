@@ -1865,6 +1865,16 @@
     "chimenea (chimney)": "5e299542-07aa-4766-974a-42437311fec1 (la guía tenía el hollín medio transparente y PixelLab lo pasó a blanco: queda un remate claro)",
     "extractor (vent)": "a0d9477f-76cb-47ae-bc21-ae7534a06b12"
    }
+  },
+  "azotea-apartamentos": {
+   "fecha": "2026-10-22",
+   "nota": "La azotea de los Apartamentos (docs/JEFES_APARTAMENTOS.md, apartado 4). Tres aparatos nuevos de vecinos con create_image_pixflux (1 generación cada uno), con la misma receta que los de arriba: la guía de py tools/guias_azotea.py apartamentos como init_image (fuerza 45), no_background false, single color black outline, high top-down y el mismo texto ('<aparato> seen in 3/4 top-down view ... weathered, rust streaks, dents, dirt, a few blood splatters, zombie apocalypse, not rotated, not isometric, game prop sprite on a plain blue background, horror game, muted colors'). Todos a la primera. Fondo quitado con py tools/guias_centro.py quita; originales en assets/sources/salas/azotea/ y sprites con py tools/importar.py (catalogo.gd: watertank, antennas, clothesline). Con la chimenea y el extractor de arriba (planta.gd, APARATOS).",
+   "coste": "3 generaciones",
+   "piezas": {
+    "depósito de agua (watertank)": "15bf98e8-b28b-43e6-97f9-0052ab2f37db",
+    "antenas (antennas)": "d00fe078-4937-4f09-abaf-39cff19bc87e",
+    "tendedero (clothesline)": "bbfaaf94-c4cf-4570-8008-537175224adf"
+   }
   }
  },
  "cientifico-muerto": {
@@ -2288,7 +2298,7 @@
   "kind": "characters",
   "fecha": "2026-10-22",
   "nota": "Los minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md): uno por sesión. Mismo camino que los del centro comercial (centro-comercial-parte4): modelo con create_character_pro_flash a 72x72 (view low top-down, estilo del zombi venenoso de 72 sin su paleta) y animaciones con PixMiniMax (animate_character, mode pixminimax, 1 generación por dirección, cada animación un grupo: la primera dirección lo crea y las demás se añaden con animation_group_id + el mismo animation_name; de espaldas, el texto empieza con la frase de no girarse). PixelLab solo deja 8 trabajos a la vez: se lanzan por tandas. Mientras queda un trabajo en marcha, el zip del personaje da HTTP 423: se bajan los fotogramas uno a uno con las URL que da get_character (animations/<id>/<dirección>/<n>.png) o se espera y se usa py tools/bajar_zip.py <character_id> <fuente>.",
-  "coste": "46 generaciones el Glotón (6 el modelo, 40 las animaciones); 46 el Gymbro (6 el modelo, 40 las animaciones, una de ellas descartada); 42 el jefe de bomberos (6 el modelo, 36 las animaciones, ninguna descartada)",
+  "coste": "46 generaciones el Glotón (6 el modelo, 40 las animaciones); 46 el Gymbro (6 el modelo, 40 las animaciones, una de ellas descartada); 42 el jefe de bomberos (6 el modelo, 36 las animaciones, ninguna descartada); 21 el científico jefe (8 el modelo, 13 las animaciones) y 33 la criatura (8 el modelo, 25 las animaciones), ninguna descartada (saldo 161,80 → 107,80)",
   "piezas": {
    "gloton-72": {
     "character_id": "100feaee-97d4-48e5-9401-c977c03ff898",
@@ -2444,6 +2454,103 @@
       "fotogramas": "12 + partida (0-12), solo partida. 7 direcciones (west = east en espejo). Se tambalea, se agarra el pecho, cae de rodillas y de bruces hacia donde mira; tendido desde el 7-8, con el depósito rojo encima.",
       "action_description": "He dies: he drops the hose nozzle, staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera, toward the bottom of the screen, his feet toward the top of the screen and his helmet toward the bottom / toward the right, his feet toward the left and his helmet toward the right / away from the camera, toward the top of the screen...), and lies still, flat on the floor, in the last frames. The red tank stays on his back. No effects, no blood, no fire.",
       "pegas": "Ninguna."
+     }
+    }
+   },
+   "cientifico-jefe-128": {
+    "character_id": "199bae7e-8aca-4c7c-a34c-6660e602b573",
+    "size": "128x128",
+    "fecha": "2026-10-22",
+    "estilo": "south del gerente-128 (assets/sources/gerente-128/rotations/south.png, subido con get_upload_url): 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading, same size on the canvas. Do not copy his body, clothes, briefcase or colors.' (style_options sin color_palette)",
+    "alto_px": 119,
+    "description": "a tall sinister mad scientist boss, the director of a secret drug experiment, about 96 pixels tall, a thin gaunt older man with pale skin, wild messy white-grey hair, big round laboratory safety goggles over his eyes reflecting green light, a cruel thin smile, a long white lab coat that reaches his knees, dirty and stained with dried blood and glowing green chemical splashes, a corporate ID badge with a green leaf logo clipped to the coat, a belt of small glass test tubes filled with green, purple and yellow liquids across his chest, black rubber gloves, dark grey trousers and black shoes, holding an enormous syringe as long as his arm in his right hand like a spear, full of glowing green liquid with a long needle, standing upright, arrogant and menacing, crisp pixel art, dark outline, detailed shading",
+    "resultado": "A la primera y con el visto bueno del dueño (el doctor Héctor Salas de historia.gd): más alto que el gerente, bata manchada, gafas verdes, probetas cruzadas en el pecho y la jeringa enorme. Vistas en assets/sources/cientifico-jefe-128/rotations/ (west, south-west y north-west son el espejo; las de PixelLab, en rotations-pixellab/). En el juego: escenas/personajes/cientifico_jefe.tscn y scripts/cientifico_jefe.gd; hoja con py tools/jefe_hoja.py cientifico-jefe-128 jefe-cientifico (casilla 124x163, offset del Sprite (-62, -152)).",
+    "animaciones": {
+     "nota": "2026-10-22. PixMiniMax (animate_character, mode pixminimax) sobre 199bae7e, una dirección por llamada, 1 generación cada una. Cada animación es un grupo: la primera dirección (south) lo crea y las demás se añaden con animation_group_id + el mismo animation_name. Andar: sin fotograma de partida. Probetas, suero y jeringa: partida (y final, menos la jeringa) = dibujo quieto pegado en (16, 28) de un lienzo de 160x160 (assets/sources/cientifico-jefe-128/partida/<dirección>.png; los upload:<id> de partida/subidas.txt caducan a los 3 días). Suero y jeringa, solo de frente. Bajado fotograma a fotograma con py tools/bajar_fotogramas.py (el zip da 423 mientras quede un trabajo en marcha) → assets/sources/cientifico-jefe-128/{walk,probetas,suero,jeringa}/<dirección>-<n>.png.",
+     "coste": "13 generaciones (5 andar, 5 probetas, 1 suero, 1 jeringa... y ninguna repetida)",
+     "subject_description": "a tall thin mad scientist in a long white blood-stained lab coat and green lab goggles, holding an enormous syringe full of green liquid in his right hand (de espaldas: 'a tall thin mad scientist in a long white lab coat with wild white hair, holding an enormous syringe, seen from behind')",
+     "initial_pose": {
+      "south": "facing the camera",
+      "north": "seen from behind, his back to the camera",
+      "east": "facing right",
+      "south-east": "in three-quarter front view, facing toward the camera and to the right",
+      "north-east": "in three-quarter back view, facing away from the camera and to the right"
+     },
+     "frases_de_direccion": "Delante del texto, según la dirección: south 'Strict front view the whole time, facing the camera, he never turns to the side.'; south-east 'Strict three-quarter front view the whole time, facing toward the camera and to the right, he never turns to the side.'; north 'Strict back view the whole time: we only see his back, his face stays hidden the whole time, he never turns to face the camera.'; north-east 'Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see his back, his face stays hidden the whole time, he never turns to face the camera.'; east nada. Solo se generan south, south-east, east, north-east y north: west, south-west y north-west (y sus vistas quietas) son el espejo (py tools/espejo_oeste.py --lado <fuente> rotations <carpetas>).",
+     "andar": {
+      "group": "a5b382b4-034f-4bd6-8ae2-7c3ad6a4f9a3",
+      "fotogramas": "8 + la vista quieta (0-8; el 8 vuelve a la postura del 0, ciclo = 0 a 7). Lienzo 168-172.",
+      "action_description": "He strides forward in place in a slow, confident, seamless looping walk cycle: his legs step alternately, his long white lab coat sways, his free left arm swings a little and he holds the enormous syringe upright in his right hand. He keeps exactly the same view and facing as the first frame the whole time: he never turns. The last frame returns to the starting pose so the cycle loops.",
+      "pegas": "De frente es sobre todo balanceo; las demás andan bien."
+     },
+     "probetas": {
+      "group": "2398c9e9-210e-46e8-8cfa-ca7d68e9a1dd",
+      "fotogramas": "8 + el de partida (0-8). Saca la probeta del pecho (1-3) y la lanza (4-5); SUELTA en cientifico_jefe.gd: 4 (south-east y south-west, 5). De frente, en los fotogramas 6 y 7 la probeta se ve enorme al venir hacia la cámara, pegada a él: quitados ('sin' en jefe_hoja.py). La probeta que vuela y el barrido verde se borran como motas (1500) y los dibuja el juego.",
+      "action_description": "He throws a glass test tube: with his free left hand he pulls a small glass test tube full of glowing liquid from the belt across his chest, raises it up to his shoulder and flings it forward in a high arc in the direction he is facing, while still holding the enormous syringe in his right hand. At the end of the throw his left hand is empty and open. Then he lowers his arm and settles cleanly into the starting stance. No effects, no particles, no motion lines. (De espaldas: '... flings it forward in a high arc, away from the camera ...')"
+     },
+     "suero": {
+      "group": "1a93aa4d-a3fc-4180-ac8c-5980166ad0fb",
+      "fotogramas": "8 + el de partida (0-8), solo south: levanta la jeringa con las dos manos y ríe (2-6). Vale también para llamar sujetos.",
+      "action_description": "He raises the enormous syringe high above his head with both hands, pointing the needle up at the sky, and squeezes the plunger while laughing madly with his head thrown back and his mouth wide open. Then he lowers the syringe back to his right side and settles cleanly into the starting stance. No effects, no particles, no motion lines."
+     },
+     "jeringa": {
+      "group": "dd8bc711-3027-4b05-9044-efe64d32bb10",
+      "fotogramas": "12 + el de partida (0-12), solo south, solo partida: levanta la jeringa (1-3), se la clava en el pecho (4-8), la suelta (9-10, se queda en el suelo) y acaba encorvado (11-12). Para la transformación.",
+      "action_description": "He injects himself: he grabs the enormous syringe with both hands, turns the needle toward himself and stabs it into his own chest, pushing the plunger until the glowing green liquid is gone, then lets the empty syringe fall to the floor and doubles over convulsing in pain, his body shaking, hunched forward, his lab coat starting to tear at the shoulders. No effects, no particles, no motion lines."
+     }
+    }
+   },
+   "criatura-128": {
+    "character_id": "78ecd15b-869a-485a-97c3-4d5109cf4cf5",
+    "size": "128x128",
+    "fecha": "2026-10-22",
+    "estilo": "south del cientifico-jefe-128 (la URL de backblaze que da get_character, directamente) con color_palette true: 'This is the same man before mutating. Keep his white hair, green goggles, lab coat colors, ID badge, pixel size, outline and shading style. Make him much bigger, mutated and monstrous as described.'",
+    "alto_px": 115,
+    "description": "the same mad scientist as the reference after injecting himself with his own experimental drug and mutating into a monster: a massive hulking bloated creature about 120 pixels tall filling the canvas, hunched forward and enraged. Its head is one enormous gaping mouth with several rows of jagged yellowish teeth and three long thin dark red whip-like tongues hanging out, with his cracked green lab goggles still perched on top and tufts of wild white hair. Two gigantic swollen muscular arms with bulging veins and huge fists, far too big for its body, knuckles dragging near the floor. Shreds of his torn white blood-stained lab coat hanging from its shoulders and waist, a corporate ID badge with a green leaf logo still clipped to a shred. Sickly grey-green skin with bulging purple veins and glowing green cracks. Orange flames burning on its back and shoulders and fire glowing deep inside its mouth. Short thick legs with bare clawed feet. Crisp pixel art, dark outline, detailed shading",
+    "resultado": "A la primera y con el visto bueno del dueño: la boca del Glotón (con las tres lenguas), los brazos del Gymbro y el fuego del bombero, con las gafas, el pelo blanco, jirones de la bata y la tarjeta. Vistas en assets/sources/criatura-128/rotations/ (el lado oeste, en espejo). Hoja con py tools/jefe_hoja.py criatura-128 jefe-criatura; el offset del Sprite lo pone cientifico_jefe.gd (OFFSET_CRIATURA) al mutar.",
+    "animaciones": {
+     "nota": "2026-10-22. La misma receta que el cientifico-jefe-128: PixMiniMax, una dirección por llamada, 1 generación cada una, 5 direcciones y el lado oeste en espejo. Lenguas, punetazo y escupir: partida y final = dibujo quieto en (16, 28) de 160x160 (assets/sources/criatura-128/partida/); muerte, solo partida; andar, sin partida. Ojo: las 5 direcciones de andar se lanzaron a la vez sin animation_group_id y cada una quedó en su propio grupo (todos llamados 'andar'): da igual para bajarlas.",
+     "coste": "25 generaciones (5 por animación), ninguna repetida",
+     "subject_description": "a huge hulking mutated monster whose head is one enormous gaping mouth full of jagged teeth with three long red tongues, with gigantic muscular arms, shreds of a white lab coat and flames burning on its back (de espaldas: 'a huge hulking mutated monster with gigantic muscular arms, shreds of a white lab coat and flames burning on its back, seen from behind')",
+     "initial_pose": {
+      "south": "facing the camera",
+      "north": "seen from behind, its back to the camera",
+      "east": "facing right",
+      "south-east": "in three-quarter front view, facing toward the camera and to the right",
+      "north-east": "in three-quarter back view, facing away from the camera and to the right"
+     },
+     "frases_de_direccion": "Delante del texto, según la dirección: south 'Strict front view the whole time, facing the camera, it never turns to the side.'; south-east 'Strict three-quarter front view the whole time, facing toward the camera and to the right, it never turns to the side.'; north 'Strict back view the whole time: we only see its back, its mouth stays hidden the whole time, it never turns to face the camera.'; north-east 'Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see its back, its mouth stays hidden the whole time, it never turns to face the camera.'; east nada. Solo se generan south, south-east, east, north-east y north: west, south-west y north-west (y sus vistas quietas) son el espejo (py tools/espejo_oeste.py --lado <fuente> rotations <carpetas>).",
+     "andar": {
+      "groups": {
+       "south": "efd6a03a-c343-42ff-a859-5f10739721f4",
+       "south-east": "f887ab08-78f2-4eed-b046-cef26ddca222",
+       "east": "13051d23-5173-40fa-8cb9-f99456c2dc98",
+       "north-east": "5a974493-aebf-4fce-b846-6b0c0af2d13c",
+       "north": "4c9be92a-c9f1-44fc-89b7-d092130672ef"
+      },
+      "fotogramas": "8 + la vista quieta (0-8; ciclo = 0 a 7). Lienzo 160-176.",
+      "action_description": "It stomps forward in place in a heavy, hunched, menacing, seamless looping walk cycle: its short legs step alternately with heavy stomping steps, its gigantic arms swing low with the knuckles near the floor, the flames on its back flicker and the tongues sway. It keeps exactly the same view and facing as the first frame the whole time: it never turns. The last frame returns to the starting pose so the cycle loops.",
+      "pegas": "De frente es sobre todo balanceo."
+     },
+     "lenguas": {
+      "group": "3b14bf3a-f74f-43a7-95e9-1c5d5900f682",
+      "fotogramas": "8 + el de partida (0-8). Echa la cabeza atrás (1-2) y las lenguas salen (3-6; GOLPE.lenguas en cientifico_jefe.gd: 3). Las lenguas largas de verdad las pinta el código.",
+      "action_description": "It lashes out with its tongues: it rears its head back, then the three long red tongues shoot out of its gaping mouth toward the camera, stretching far, while it leans forward roaring with its huge arms spread wide. Then the tongues snap back into the mouth and it settles cleanly into the starting stance. Its feet stay in place. No effects, no particles, no motion lines. (Cada dirección, con 'forward and to the right', 'to the right', 'away from the camera and to the right' o 'away from the camera, upward in the picture'.)"
+     },
+     "punetazo": {
+      "group": "f52cc475-ffc5-4c84-a620-e1ede8e92f79",
+      "fotogramas": "8 + el de partida (0-8). Levanta los puños (1-3) y los estampa (4; GOLPE.punetazo: 4); del 5 al 8 vuelve, con grietas en el suelo.",
+      "action_description": "It smashes the ground: it raises both gigantic fists high above its head, then slams them down hard into the ground in front of it with a brutal overhead blow, crouching forward. Then it lifts the fists and settles cleanly into the starting stance. Its feet stay in place. No effects, no particles, no motion lines, no cracks, no dust."
+     },
+     "escupir": {
+      "group": "95286ca9-2e2f-4617-945d-8fbaebe88969",
+      "fotogramas": "8 + el de partida (0-8). Hincha el pecho (1-3) y escupe (4-6, con una bola de fuego pegada a la boca que hace de fogonazo; GOLPE.escupir: 4). Las bolas de verdad las pinta el juego.",
+      "action_description": "It spits fire: it rears its head back and inflates its chest, then lunges its head forward and a short burst of orange fire bursts out of its gaping mouth toward the camera, with the flames on its back flaring up. Then it closes its mouth and settles cleanly into the starting stance. Its feet stay in place. No motion lines."
+     },
+     "muerte": {
+      "group": "2d96c833-5515-4239-a9b1-3caf786aea8e",
+      "fotogramas": "8 + el de partida (0-8), solo partida: se tambalea, ruge y cae de bruces; el 8, muerta en el suelo.",
+      "action_description": "It dies: it staggers, clutches its chest with both gigantic hands, throws its head back roaring, then collapses forward onto the ground and lies dead face down, motionless, with the flames on its back going out. The last frame is lying dead on the floor. No effects, no particles, no motion lines."
      }
     }
    }

@@ -175,13 +175,65 @@ gerente: fogonazo, temblor y rugido).
 Gymbro y el fuego del bombero**), como si fuera él quien los hubiera creado. Ataques que los recuerdan:
 lenguas-látigo, puñetazos al suelo con onda expansiva y escupitajos de fuego.
 
+### ✅ Hecho (22 oct 2026): la azotea y el científico jefe, con el visto bueno del dueño
+
+- **La azotea de los Apartamentos** (commit `76f6bfad`): la 5ª planta ya es la azotea, como en el centro (`azotea`,
+  `final` y `el_final` en su ficha de `edificios.gd`; `planta.gd` pone los aparatos de cada edificio, `APARATOS`):
+  depósitos de agua, antenas y tendederos nuevos (PixelLab, 3 generaciones con las guías de
+  `py tools/guias_azotea.py apartamentos`; en `catalogo.gd`, `watertank`, `antennas` y `clothesline`) más chimeneas y
+  extractores. La última página del dosier («Sujeto 0», `vd7_sujeto_cero` en `historia.gd`) ya no la lleva un
+  muerto: la suelta el doctor Salas al caer, y luego llega el helicóptero de Velaria, como con el gerente.
+- **El doctor Salas** (`scripts/cientifico_jefe.gd`, `escenas/personajes/cientifico_jefe.tscn`; hereda de
+  `minijefe.gd`, con la receta de la jeringa y la mutación del gerente). Vida 1500 justa (sin el 25 % por planta),
+  8 por contacto; la barra dice «El doctor Salas». Los números que han quedado (provisionales, se ajustan jugando):
+  - *A distancia:* velocidad 95; a más de 430 se acerca y a menos de 220 se aleja (por el mapa de navegación: contra
+    el murete, de lado).
+  - *Probetas:* a menos de 540, tres de golpe (ácido, veneno y aceite, que resbala: tipos `probeta_*` de
+    `proyectil.gd`, dibujadas con código) en curva de 0,85 s, con aviso de 0,55 s (anillos rojos de 50 donde caen: a
+    ti, a donde vas y alrededor); 6 al caer (el aceite, 0) y los charcos de siempre (`charco.gd`). Cada 3 s.
+  - *Sujetos:* si queda como mucho 1 zombi, levanta la jeringa («¡MÁS SUJETOS!», 1,2 s) y llegan un vecino, un
+    rápido y un venenoso, repartidos a su alrededor. Cada 14 s.
+  - *Suero:* si hay zombis sin inyectar a menos de 480, levanta la jeringa («¡DOSIS DOBLE!») y lanza un rayo verde a
+    los 3 más cercanos: vida máxima ×1,6 (y se les suma), velocidad ×1,3 (también en su agente de navegación), +6 de
+    daño y se ven verdes. Cada 9 s.
+  - *Cúpula:* cada 14 s, si ya le han hecho daño (vida por debajo del 92 %), sube una cúpula de cristal (0,4 s) y se
+    queda dentro hasta 7 s: los golpes se los lleva la cúpula (140; `danar()` devuelve 0; se ve en la barra azul fina
+    de «armadura» de `partida.gd`), no hace daño por contacto y desde dentro tira 2 probetas cada 1,6 s. Al
+    rompérsela: cristales, «¡MI CÚPULA!» y 0,9 s tambaleándose (ahí se le da bien). Su propio fuego (el aceite al
+    secarse) no le quema: `charco.gd` le pasa el `dueno` al charco de fuego.
+  - *A media vida* («¡AÚN NO HE TERMINADO!»): baja la cúpula si la tiene, te aparta, se pincha (2,6 s, sin que se le
+    pueda dar) y muta (1,3 s): fogonazo verde, temblor, rugido y trozos de la bata. Antes no puede caer (se queda
+    con 1).
+- **La criatura** (otra hoja, `jefe-criatura`; radio 48, 14 por contacto, velocidad 100; se apunta en el bestiario
+  al mutar):
+  - *Lenguas-látigo:* a menos de 350, tres franjas rojas en abanico (±0,4 rad, 330 de largo, 0,65 s) y las lenguas
+    (con código, desde la boca): 18 y empujón. Cada 2,2 s.
+  - *Puñetazo al suelo:* a menos de 240, un círculo rojo de 210 (0,75 s) y la onda, que crece 0,4 s: 24, empujón y
+    te tira al suelo; si estás esquivando cuando te pasa, nada. Cada 3,2 s.
+  - *Escupitajos de fuego:* a más de 230 y a la vista, tres rayas rojas (0,5 s) y tres bolas de fuego en abanico
+    (`bola_fuego.gd`: 12 y ardes 1,5 s). Cada 3,6 s.
+  - Al caer: la página del «Sujeto 0» y el helicóptero (`fin_del_edificio()` de `partida.gd`).
+- **Dibujo:** el científico a 128 (117 px; 8 generaciones el modelo y 13 las animaciones: andar y probetas en 5
+  direcciones, con el oeste en espejo con `py tools/espejo_oeste.py --lado`; suero y jeringa solo de frente) y la
+  criatura a 128 (8 el modelo y 25 las animaciones: andar, lenguas, puñetazo, escupir y muerte en 5 direcciones, el
+  oeste en espejo). Con la azotea, 57 generaciones. Hojas con `py tools/jefe_hoja.py cientifico-jefe-128 jefe-cientifico`
+  y `criatura-128 jefe-criatura`; detalle y textos en `assets/pixellab.json` → `apartamentos-jefes`. Las probetas, el
+  rayo del suero, la cúpula, las lenguas, la onda y las bolas salen con código.
+- Tecla de prueba **0** (la N también lleva derecho a la azotea); sale en la exposición (F9, alargada otras 8
+  casillas) y en el bestiario («El doctor Salas» y «La criatura», 22 fichas). `--captura` (Apartamentos) acaba en la
+  azotea y comprueba probetas, cúpula, suero, jeringa, mutación, lenguas, puñetazo, fuego, la página y el
+  helicóptero (`captura-cientifico*.png` y `captura-criatura*.png`).
+- Pegas conocidas: el andar de frente (del científico y de la criatura) es sobre todo balanceo; de frente, a las
+  probetas se les quitaron dos fotogramas en los que la probeta se veía enorme al venir hacia la cámara.
+
 ## Orden de trabajo (una sesión cada uno)
 
 1. ✅ **Glotón**, y de paso el sorteo de minijefes en los Apartamentos (`minijefes` en su ficha de `edificios.gd`;
    donde toque uno sin hacer, la portera). Hecho el 22 oct.
 2. ✅ **Gymbro.** Hecho el 22 oct.
 3. ✅ **Jefe de bomberos.** Hecho el 22 oct.
-4. **Científico jefe**, y de paso la azotea en los Apartamentos (`azotea` y `final` en su ficha, como el centro).
+4. ✅ **Científico jefe**, y de paso la azotea en los Apartamentos (`azotea` y `final` en su ficha, como el centro).
+   Hecho el 22 oct.
 
 Cada uno: modelo en PixelLab (coste antes) → visto bueno del aspecto → animaciones → su script (hereda de
 `minijefe.gd`) → ficha del bestiario → prueba → visto bueno del dueño → commit y push solo de sus archivos.

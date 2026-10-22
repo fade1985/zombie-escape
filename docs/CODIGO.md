@@ -16,9 +16,9 @@
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
   y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`, `modista.tscn`, `mascota.tscn`) y
   su jefe final, en la azotea (`gerente.tscn`); los minijefes de los Apartamentos (`docs/JEFES_APARTAMENTOS.md`):
-  `gloton.tscn`, `gymbro.tscn` y `bombero.tscn`.
+  `gloton.tscn`, `gymbro.tscn` y `bombero.tscn`, y su jefe final, en la azotea (`cientifico_jefe.tscn`).
 - `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera y alfileres de la modista), `proyectil.tscn`
-  (moco, botella de lejía, sartén del cocinero y molotov del jefe de bomberos, en parábola), `charco.tscn` y `explosion.tscn`.
+  (moco, botella de lejía, sartén del cocinero, molotov del jefe de bomberos y probetas del científico jefe, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
   `luz_suave.tres` (el degradado de todas).
 - `muebles/`: un mueble por escena, con su choque y su `Sombra`.
@@ -83,11 +83,18 @@
   es más rápido y hace latigazos de tentáculo (tres franjas en abanico; los tentáculos largos, con código) y la
   embestida de `minijefe.gd` (si se estrella, atontado). Antes de mutar no puede caer (`danar()` le deja con 1).
   Al caer el mutado, la partida llama a `fin_del_edificio()`: su página del dosier y el helicóptero.
+  El jefe final de los Apartamentos, `cientifico_jefe.gd` (el doctor Salas, `docs/JEFES_APARTAMENTOS.md`, apartado 4),
+  sigue la misma receta: se mantiene a distancia (`huir()` por el mapa de navegación), tira probetas (tipos
+  `probeta_*` de `proyectil.gd`, con anillos rojos donde caen), llama sujetos, les inyecta suero (más vida, más
+  rápidos, pegan más; `inyectar()`) y se mete en una cúpula de cristal (`cupula`: los golpes se los lleva ella, con la
+  barra azul de "armadura"; `danar()`). A media vida se pincha y `mutar()` le cambia por la criatura
+  (`jefe-criatura`): lenguas-látigo (franjas y lenguas con código), puñetazo al suelo con onda expansiva (`onda()`) y
+  escupitajos de fuego (`bola_fuego.gd`). Al caer, también `fin_del_edificio()`.
 - `helicoptero.gd`: el helicóptero de Velaria que llega a la azotea cuando cae el gerente (dibujado con código, a
   cuadraditos): viene volando, se queda encima del helipuerto con el rotor girando y un foco (una luz de verdad) que
   busca a Johnny por el suelo. No ataca.
-- `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov, bomba de aceite y la sartén del cocinero en
-  parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
+- `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov, bomba de aceite, la sartén del cocinero y las
+  probetas del científico jefe en parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
   su marca; se quedan clavados un rato), `contrato.gd` (los contratos del gerente, dibujados con código: vuelan
   girando, cortan 10 y al toparse con algo caen al suelo), `explosion.gd`.
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS), para el vendedor (sabe también lo de cada
@@ -273,13 +280,14 @@ para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, `cocinero-72 jefe-cocinero`, `modista-72 jefe-modista` o
-`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, el Glotón: `gloton-72 jefe-gloton`, el Gymbro: `gymbro-72 jefe-gymbro`, el jefe de bomberos: `bombero-72 jefe-bombero`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
+`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, el Glotón: `gloton-72 jefe-gloton`, el Gymbro: `gymbro-72 jefe-gymbro`, el jefe de bomberos: `bombero-72 jefe-bombero`, y los jefes finales, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`, `cientifico-jefe-128 jefe-cientifico` y `criatura-128 jefe-criatura`; las animaciones de cada uno, en su
 ficha `JEFES` (con la lista, los fotogramas por
 segundo y, si el lienzo no es de 72, el punto de los pies; la embestida de la mascota y la del gerente mutado llevan
 un 5.º dato: quitar el primer fotograma; y opciones: `"sangre"`, `"motas"` por animación y `"sin"` para quitar fotogramas
 sueltos); alinea por los pies los lienzos
 de PixelLab, borra las motas sueltas, oscurece la sangre si la ficha lo pide y dice el `offset` del Sprite; lo que
-falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
+falte, con la vista quieta), `espejo_oeste.py` (las animaciones hacia el oeste, dando la vuelta a las del este;
+con `--lado`, también suroeste y noroeste y las vistas quietas, para ahorrar generaciones), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo; `guias_azotea.py`, los de los
 aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el

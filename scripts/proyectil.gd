@@ -23,6 +23,11 @@ const TIPOS := {
 	"sarten": {"vuelo": 0.8, "altura": 130.0, "golpe": 0, "charco": "hirviendo", "marca": 60.0},
 	# el molotov del jefe de bomberos (bombero.gd): como el de Johnny pero con marca y un fuego algo más pequeño
 	"molotov_jefe": {"vuelo": 0.9, "altura": 140.0, "golpe": 6, "charco": "fuego", "marca": 54.0, "escala": 0.85},
+	# las probetas del científico jefe (cientifico_jefe.gd): una de ácido, una de veneno y una de aceite (resbala),
+	# en curva alta y con su marca en el suelo. Se dibujan con código (probeta()), con el color de su líquido
+	"probeta_acido": {"vuelo": 0.85, "altura": 170.0, "golpe": 6, "charco": "acido", "marca": 50.0, "liquido": Color("#d8ff4a")},
+	"probeta_veneno": {"vuelo": 0.85, "altura": 170.0, "golpe": 6, "charco": "veneno", "marca": 50.0, "liquido": Color("#b05ad8")},
+	"probeta_aceite": {"vuelo": 0.85, "altura": 170.0, "golpe": 0, "charco": "aceite", "marca": 50.0, "liquido": Color("#4fc3ff")},
 }
 
 var tipo := "veneno"
@@ -78,17 +83,21 @@ func caer(datos: Dictionary) -> void:
 		"sarten":
 			Sonido.tocar("chof")
 			Sonido.tocar("chisporroteo")
-		"aceite":
+		"aceite", "probeta_acido", "probeta_veneno", "probeta_aceite":
 			Sonido.tocar("cristal")
 			Sonido.tocar("chof")
 		_: Sonido.tocar("chof")
 	if tipo == "molotov" or tipo == "molotov_jefe":
 		llamarada(charco.radio())
-	elif tipo == "vomito" or tipo == "acido" or tipo == "aceite" or tipo == "sarten":
+	elif tipo == "vomito" or tipo == "acido" or tipo == "aceite" or tipo == "sarten" or datos.has("liquido"):
 		for i in 8:
 			var a := randf() * TAU
-			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160),
-				Color("#e8c547") if tipo == "aceite" or tipo == "sarten" else Color("#c7e04a"), randf_range(3, 5), 0.4)
+			var color: Color = datos.get("liquido", Color("#e8c547") if tipo == "aceite" or tipo == "sarten" else Color("#c7e04a"))
+			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), color, randf_range(3, 5), 0.4)
+		if datos.has("liquido"):   # la probeta: también sus cristales
+			for i in 4:
+				var a := randf() * TAU
+				Particulas.soltar(self, hasta, Vector2(cos(a) * 110.0, sin(a) * 65.0), Color("#d8f0ff"), 2, 0.3)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if datos.golpe > 0 and johnny and johnny.vivo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
 		johnny.recibir_dano(datos.golpe)
@@ -131,6 +140,8 @@ func _draw() -> void:
 			botella(donde, t * 12.0)
 		"sarten":
 			sarten(self, donde, t * 9.0)
+		"probeta_acido", "probeta_veneno", "probeta_aceite":
+			probeta(self, donde, t * 11.0, datos.liquido)
 		"aceite":
 			# la botella de aceite: amarilla con el tapón verde, dando vueltas
 			draw_set_transform(donde, t * 10.0)
@@ -161,6 +172,19 @@ static func sarten(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
 	lienzo.draw_circle(Vector2.ZERO, 12.0, Color("#3a3a46"))   # el hierro
 	lienzo.draw_circle(Vector2.ZERO, 9.0, Color("#c98a2a"))    # el aceite
 	lienzo.draw_circle(Vector2(-3, -3), 3.0, Color("#f0c060"))
+
+
+# Una probeta de cristal con su tapón de corcho y el líquido dentro, dando vueltas (las del científico jefe)
+static func probeta(lienzo: CanvasItem, donde: Vector2, giro: float, liquido: Color) -> void:
+	lienzo.draw_set_transform(donde, giro)
+	var contorno := Color("#1d1b2c")
+	lienzo.draw_rect(Rect2(-6, -14, 12, 28), contorno)             # el tubo
+	lienzo.draw_rect(Rect2(-4, -12, 8, 24), Color("#d8f0ff", 0.85))
+	lienzo.draw_rect(Rect2(-4, 0, 8, 12), liquido)                  # el líquido, en la mitad de abajo
+	lienzo.draw_rect(Rect2(-4, 0, 8, 2), liquido.lightened(0.5))
+	lienzo.draw_rect(Rect2(-3, -10, 2, 8), Color(1, 1, 1, 0.6))     # el brillo del cristal
+	lienzo.draw_rect(Rect2(-5, -18, 10, 5), contorno)              # el tapón
+	lienzo.draw_rect(Rect2(-4, -17, 8, 3), Color("#b58a5a"))
 
 
 # Dónde caerá la sartén: un anillo rojo que se va llenando

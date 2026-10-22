@@ -196,6 +196,7 @@ func arder() -> void:
 	fuego.escala = escala * ACEITE_ARDE
 	fuego.duracion = duracion
 	fuego.dano_lanzar = dano_lanzar
+	fuego.dueno = dueno   # (a quien tiró el aceite, el científico jefe, tampoco le quema su fuego)
 	fuego.position = position
 	get_parent().add_child(fuego)
 	Sonido.tocar("fuego")

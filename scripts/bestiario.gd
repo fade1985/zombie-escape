@@ -104,6 +104,15 @@ const LISTA := {
 		"frase": "El fuego no le hace nada: cambia de arma. Sal de la lengua de fuego cuando gire y no pises sus charcos; de cerca, cuidado con el hacha.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-bombero.tres",
 		"recorte": Rect2i(27, 36, 68, 70), "retrato": "quieto_s", "escala": 2, "jefe": true},
+	# el jefe final de los Apartamentos (la azotea) y en lo que se convierte (lo apunta cientifico_jefe.gd al mutar)
+	"cientifico_jefe": {"nombre": "El doctor Salas",
+		"frase": "Héctor Salas, director del estudio del VD-7. Tira probetas, mejora a sus sujetos y se esconde en una cúpula de cristal: rómpela.",
+		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-cientifico.tres",
+		"recorte": Rect2i(28, 33, 61, 119), "retrato": "quieto_s", "escala": 2, "jefe": true},
+	"criatura": {"nombre": "La criatura",
+		"frase": "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda.",
+		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-criatura.tres",
+		"recorte": Rect2i(22, 47, 116, 115), "retrato": "quieto_s", "escala": 2, "jefe": true},
 }
 
 

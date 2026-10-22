@@ -1387,8 +1387,8 @@ func probar_colecciones() -> void:
 		push_error("Colecciones: los objetos por edificio no son 17 y 27 (con los cuatro trajes)")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
-	if Bestiario.LISTA.size() != 20:
-		push_error("Colecciones: el bestiario no tiene 20 fichas")
+	if Bestiario.LISTA.size() != 22:
+		push_error("Colecciones: el bestiario no tiene 22 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
 		push_error("Colecciones: el retrato del gerente mutado es null")
 	if g.colecciones_nuevo:
@@ -1800,6 +1800,8 @@ func probar_azotea() -> void:
 		Captura.foto("captura-gerente-trabajar.png")
 		print("  ¡A TRABAJAR!: han llegado %d" % (jefa.secuaces() - antes_zombis))
 		await probar_mutado(camara)
+	elif jefa and jefa.has_method("lanzar_probetas"):
+		await probar_cientifico_jefe(camara)
 	luz.alternar()
 	johnny.position = Vector2(s.ancho / 2.0, s.alto / 2.0)
 	camara.zoom = Vector2(0.66, 0.66)
@@ -1813,7 +1815,9 @@ func probar_azotea() -> void:
 	var es_final := jefa != null and not final_de(planta.jefe).is_empty()
 	if es_final:
 		# que su página del dosier salga al caer (probar_historia ya la ha apuntado)
-		Guardado.cambiar(func(g): g.paginas.erase("cc_recogida"))
+		Guardado.cambiar(func(g):
+			g.paginas.erase("cc_recogida")
+			g.paginas.erase("vd7_sujeto_cero"))
 	if jefa:
 		for z in get_tree().get_nodes_in_group("zombis"):
 			if z != jefa:
@@ -1847,6 +1851,105 @@ func probar_azotea() -> void:
 			not helis.is_empty() and helis[0].llegado and helis[0].position.distance_to(helipuerto) < 1.0, aviso.text])
 		camara.zoom = Vector2.ONE
 		print("  al caer el gerente, mutación: %s" % ("sí (¡no debería!)" if menus.abierto == "mutacion" else "no"))
+
+
+# El científico jefe (el jefe final de los Apartamentos): las probetas (captura-cientifico.png), la cúpula a
+# golpes hasta rompérsela (captura-cientifico-cupula.png), el suero a dos vecinos (captura-cientifico-suero.png), la
+# jeringa a media vida (captura-cientifico-jeringa.png) y el cambio (captura-cientifico-muta.png); la criatura con
+# las lenguas (captura-criatura.png), el puñetazo (captura-criatura-punetazo.png) y escupiendo fuego
+# (captura-criatura-fuego.png). Lo que comprueba lo escribe en la terminal
+func probar_cientifico_jefe(camara: Camera2D) -> void:
+	var cerca := func(lejos: float, hacia := PI / 2.0) -> void:   # Johnny cerca de él, donde se pueda estar y a la vista
+		for i in 60:
+			johnny.position = jefa.position + Vector2.from_angle(hacia + randf_range(-0.6, 0.6)) * lejos
+			if mapa.zona_en(johnny.position) >= 0 and jefa.a_la_vista(johnny):
+				break
+		camara.reset_smoothing()
+	# las probetas, recién tiradas
+	cerca.call(300.0, PI)
+	jefa.foto(johnny)
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-cientifico.png")
+	var en_el_aire := jefa.get_parent().get_children().filter(func(n): return str(n.get("tipo")).begins_with("probeta")).size()
+	print("  el científico: vida %d/%d | barra: '%s' | probetas en el aire: %d | estado %s" % [jefa.vida, jefa.vida_max,
+		$Pantalla/Jefa/Nombre.text, en_el_aire, jefa.estado])
+	await get_tree().create_timer(1.3).timeout
+	var charcos: Array = jefa.get_parent().get_children().filter(func(n): return n.get("tipo") in ["acido", "veneno", "aceite"])
+	print("  al caer: charcos %s" % [charcos.map(func(c): return c.tipo)])
+	# la cúpula: se mete y Johnny le da hasta rompérsela (los golpes se los lleva ella, con su barra azul)
+	jefa.subir_cupula()
+	await get_tree().create_timer(0.6).timeout
+	var vida_antes: int = jefa.vida
+	jefa.recibir_golpe(60, Vector2.RIGHT * 300.0)
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-cientifico-cupula.png")
+	print("  cúpula: %d/%d tras un golpe de 60 | a él le ha quitado %d | barra azul visible %s" % [jefa.cupula,
+		jefa.CUPULA_VIDA, vida_antes - jefa.vida, armadura_jefe().visible])
+	jefa.recibir_golpe(200, Vector2.RIGHT * 300.0)
+	print("  otro de 200: cúpula %d | estado %s | vida %d" % [jefa.cupula, jefa.estado, jefa.vida])
+	# el suero: dos vecinos al lado, inyectados
+	var vecinos := []
+	for i in 2:
+		vecinos.append(meter_zombi("normal", jefa.position + Vector2(130.0 * (i * 2 - 1), 70.0)))
+	await get_tree().physics_frame
+	# (inyecta a los tres más cercanos: puede que a alguno de los sujetos que ya ha llamado él, en vez de a estos)
+	var antes := vecinos.map(func(z): return [z.vida_max, int(z.velocidad), z.dano])
+	jefa.cambiar("suero", {"hecho": true})
+	jefa.inyectar()
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-cientifico-suero.png")
+	var con_suero: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z.has_meta("suero"))
+	print("  suero: un vecino normal (vida máx, velocidad, daño) %s | inyectados %d: %s" % [antes[0], con_suero.size(),
+		con_suero.map(func(z): return [z.vida_max, int(z.velocidad), z.dano])])
+	await get_tree().create_timer(1.1).timeout
+	# a media vida: la jeringa y el cambio
+	jefa.andar(5.0)
+	cerca.call(190.0, PI)
+	jefa.recibir_golpe(int(jefa.vida - jefa.vida_max * 0.5), Vector2.ZERO)
+	await get_tree().create_timer(1.6).timeout
+	Captura.foto("captura-cientifico-jeringa.png")
+	print("  a media vida: %s (fotograma %d) | vida %d/%d | invulnerable %s" % [jefa.estado, jefa.sprite.frame,
+		jefa.vida, jefa.vida_max, jefa.invulnerable])
+	for i in 300:
+		if jefa.mutado:
+			break
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-cientifico-muta.png")
+	while jefa.estado == "mutar":
+		await get_tree().physics_frame
+	print("  la criatura: %s | dibujo %s | radio %d | vida %d/%d | barra: '%s'" % [jefa.estado,
+		jefa.sprite.sprite_frames.resource_path.get_file(), jefa.radio, jefa.vida, jefa.vida_max, $Pantalla/Jefa/Nombre.text])
+	# las lenguas, recién soltadas
+	cerca.call(200.0, 0.0)
+	johnny.invulnerable = 0.0
+	var vida_johnny: int = johnny.vida
+	jefa.foto(johnny)
+	await get_tree().create_timer(0.14).timeout
+	Captura.foto("captura-criatura.png")
+	print("  lenguas: %s | a Johnny le han quitado %d" % [jefa.estado, vida_johnny - johnny.vida])
+	# el puñetazo: el círculo rojo y la onda
+	await get_tree().create_timer(0.5).timeout
+	cerca.call(150.0, 0.0)
+	johnny.invulnerable = 0.0
+	vida_johnny = johnny.vida
+	jefa.empezar("aviso_punetazo", (johnny.position - jefa.position).angle())
+	jefa.t = jefa.AVISO_PUNETAZO - 0.3
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-criatura-punetazo.png")
+	await get_tree().create_timer(0.5).timeout
+	print("  puñetazo: %s | a Johnny le ha quitado %d" % [jefa.estado, vida_johnny - johnny.vida])
+	# y escupe fuego
+	await get_tree().create_timer(0.5).timeout
+	cerca.call(380.0, 0.0)
+	jefa.empezar("aviso_fuego", (johnny.position - jefa.position).angle())
+	jefa.t = jefa.AVISO_FUEGO - 0.05
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-criatura-fuego.png")
+	print("  fuego: %s | bolas en el aire %d" % [jefa.estado, get_tree().get_nodes_in_group("balas_zombi").size()])
+	for z in vecinos:
+		if is_instance_valid(z):
+			z.queue_free()
 
 
 # El gerente, a media vida, se pincha VD-7 (captura-gerente-jeringa.png) y muta con un fogonazo
