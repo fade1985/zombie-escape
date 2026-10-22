@@ -1856,5 +1856,45 @@
         "extractor (vent)": "a0d9477f-76cb-47ae-bc21-ae7534a06b12"
       }
     }
+  },
+  "cientifico-muerto": {
+    "kind": "image",
+    "herramienta": "create_image_pixflux (MCP)",
+    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/; falta que el dueño elija.",
+    "request": {
+      "width": 64,
+      "height": 64,
+      "no_background": true,
+      "outline": "single color black outline"
+    },
+    "piezas": [
+      {
+        "hoja": "intento-1",
+        "seed": 4101,
+        "job_id": "4c606ead-5a40-4189-b1a1-d091ef7978d9",
+        "view": "low top-down",
+        "detail": "medium detail",
+        "shading": "basic shading",
+        "description": "dead human scientist lying face down on the floor, long dead corpse, pale grayish skin, short dark hair, dirty white lab coat stained with dried dark brown blood, small id badge on the coat, one arm stretched out, limp body, small dried blood pool, chibi proportions with a big head, game sprite"
+      },
+      {
+        "hoja": "intento-2",
+        "seed": 4102,
+        "job_id": "1693e97c-e827-4f55-a674-2d11307ae03f",
+        "view": "high top-down",
+        "detail": "medium detail",
+        "shading": "basic shading",
+        "description": "corpse of a human scientist lying on his back on the floor, arms spread out, head turned to the side, pale gray skin, short dark hair, white lab coat with dried dark blood stains and a small id card clipped on, dark trousers, shoes, long dead, chibi proportions with a big head, top-down RPG game sprite"
+      },
+      {
+        "hoja": "intento-3",
+        "seed": 4103,
+        "job_id": "40adce68-a948-4d3b-8ac4-c372d5111b3e",
+        "view": "low top-down",
+        "init_image": "último fotograma de muerte (east) de zombi-lento-bata, centrado en 64x64",
+        "init_image_strength": 90,
+        "description": "dead human scientist lying on the floor, long dead corpse, pale grayish skin, short dark hair, white lab coat stained with dried dark blood, small id badge, dark trousers, limp arm stretched out, not a zombie"
+      }
+    ]
   }
 }
