@@ -123,6 +123,41 @@ la lumbre.
 - El doble de bolas de fuego, de lenguas de fuego en el giro y de charcos.
 - **Se le rompe el traje y entra en llamas:** deja un rastro de fuego al andar.
 
+### ✅ Hecho (22 oct 2026): el jefe de bomberos, con el visto bueno del dueño
+
+- **El jefe de bomberos** (`scripts/bombero.gd`, `escenas/personajes/bombero.tscn`; las bolas de fuego,
+  `scripts/bola_fuego.gd`). Ya sale en el sorteo (no la portera en su lugar). Los números que han quedado
+  (provisionales, se ajustan jugando): vida 560 (+25 % por planta), velocidad 70, 10 por contacto.
+  - *Inmune al fuego:* el molotov (ni el fogonazo ni el charco), el lanzallamas y el súpersoplete, el fuego del bate
+    de fuego y el aceite ardiendo no le quitan nada; grita «¡INMUNE!». Los golpes, las balas y las explosiones, sí.
+    Por dentro: `inmune_fuego` en el jefe, que miran `proyectil.gd` y `armas_creadas.gd`; los charcos de fuego le
+    llaman a `prender()`, que aquí no hace nada.
+  - *Bolas de fuego:* si estás a más de 100, una bola recta a 340 (dibujada con código, con su luz y chispas): 14 de
+    daño y te deja ardiendo 1,5 s (8 por segundo). Se para en paredes y muebles. Cada 2,8 s.
+  - *Giro con el lanzallamas:* si estás a menos de 440, grita «¡A ARDER!», se va al centro de la sala en la que está
+    (hasta 5 s), avisa 0,8 s (el anillo rojo hasta donde llega y el cono por donde empieza, apuntándote) y da vueltas
+    4,2 s (1,5 rad/s) con una lengua de fuego de 210 (±0,3 rad) que se para en la primera pared o mueble: 10 de daño y
+    ardes 1,5 s (10 por segundo); a los demás zombis los prende. Cada 9,5 s. Una explosión (granada) se lo corta
+    (0,7 s tambaleándose).
+  - *Molotovs:* a entre 140 y 520, uno en curva (0,9 s) a donde estás, con su marca roja en el suelo
+    (`proyectil.gd`, tipo `molotov_jefe`): 6 si te pilla al caer y un charco de fuego algo más pequeño que el de
+    Johnny (`charco.gd`, 4 s): 12 por segundo dentro y 2 s más al salir. Cada 4,6 s.
+  - *Hachazo:* si te le pegas (a menos de 64 + tu radio), levanta el hacha 0,4 s (arco rojo en el suelo) y la baja:
+    22 de daño y empujón (esquivando, nada; si falla, clava el hacha en el suelo). Cada 1,6 s.
+  - *Enfadado* («¡TODO ARDE!»): se le rompe el traje y arde él mismo (llamas encima, `llamas.gd`): deja un rastro de
+    fuego al andar (un charco pequeño, del 35 %, de 2 s, cada 44 unidades). Además: 2 bolas (la segunda a donde vas
+    a estar), 2 lenguas de fuego opuestas en el giro, 2 molotovs (el segundo a donde vas a estar), todo más seguido
+    (bolas 1,9 s, giro 7 s, molotovs 3,2 s) y el primer giro enfadado a los 2 s como mucho.
+- **Dibujo:** modelo a 72 y 6 animaciones en PixelLab (42 generaciones; detalle y textos en `assets/pixellab.json` →
+  `apartamentos-jefes` → `bombero-72`). El giro solo de frente (es una vuelta entera: el juego elige el fotograma
+  según hacia dónde apunta la lengua); hacia el oeste, todo es el este en espejo (`tools/espejo_oeste.py`). Hoja con
+  `py tools/jefe_hoja.py bombero-72 jefe-bombero`. Las lenguas, las bolas, los molotovs y los avisos salen con código.
+- Tecla de prueba **9**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El jefe de bomberos»,
+  20 fichas). `--captura --jefe bombero` comprueba la inmunidad (lanzallamas, molotov y charco), un golpe normal, las
+  bolas y los molotovs (lo escribe en la terminal) y saca `captura-jefe.png` con el giro.
+- Pegas conocidas: el andar y el golpe (tambaleo) son sutiles; al lanzar de frente PixelLab pintó una bola de fuego
+  pegada al cuerpo (queda como el fogonazo del lanzamiento).
+
 ## 4. El científico jefe (jefe final de la azotea; de Claude, con visto bueno)
 
 Grande como el gerente (lienzo de 128). Encaja con la historia de Velaria (`docs/CENTRO_COMERCIAL.md`): es quien
@@ -145,7 +180,7 @@ lenguas-látigo, puñetazos al suelo con onda expansiva y escupitajos de fuego.
 1. ✅ **Glotón**, y de paso el sorteo de minijefes en los Apartamentos (`minijefes` en su ficha de `edificios.gd`;
    donde toque uno sin hacer, la portera). Hecho el 22 oct.
 2. ✅ **Gymbro.** Hecho el 22 oct.
-3. **Jefe de bomberos.**
+3. ✅ **Jefe de bomberos.** Hecho el 22 oct.
 4. **Científico jefe**, y de paso la azotea en los Apartamentos (`azotea` y `final` en su ficha, como el centro).
 
 Cada uno: modelo en PixelLab (coste antes) → visto bueno del aspecto → animaciones → su script (hereda de

@@ -1018,6 +1018,8 @@ func _process(delta: float) -> void:
 		probar_gloton()   # la sangre ácida y el aspirado (lo escribe en la terminal)
 	if antes < 7.3 and tiempo >= 7.3 and jefa and planta.jefe == "gymbro":
 		probar_gymbro()   # los suplementos (la armadura) y las pesas (lo escribe en la terminal)
+	if antes < 7.3 and tiempo >= 7.3 and jefa and planta.jefe == "bombero":
+		probar_bombero()   # inmune al fuego, las bolas y los molotovs (lo escribe en la terminal)
 	if antes < 7.7 and tiempo >= 7.7 and jefa:
 		if jefa.has_method("cambiarse"):
 			probar_modista(jefa)   # antes de poner a Johnny delante: se cambia de sitio
@@ -1107,6 +1109,42 @@ func probar_gymbro() -> void:
 		vida_antes - jefa.vida, armadura_antes - jefa.armadura, jefa.armadura_max, barra != null and barra.visible])
 	jefa.lanzar_pesas(johnny)
 	print("Gymbro: pesas en el aire: %d" % get_tree().get_nodes_in_group("balas_zombi").size())
+
+
+# El jefe de bomberos: el fuego no le hace nada (una gota del lanzallamas, el fogonazo de un molotov y un charco
+# de fuego debajo de él no le quitan vida, y grita «¡INMUNE!»), pero un golpe sí; y lanza sus bolas de fuego y un
+# molotov (para que salgan en la foto de los 8,0, con el giro)
+func probar_bombero() -> void:
+	var vida_antes: int = jefa.vida
+	ArmasCreadas.golpe(jefa, Vector2.RIGHT, 20.0, 1.0, "llama")
+	var sin_lanzallamas: int = vida_antes - jefa.vida
+	var molotov: Node2D = load("res://escenas/armas/proyectil.tscn").instantiate()
+	molotov.tipo = "molotov"
+	molotov.desde = jefa.position
+	molotov.hasta = jefa.position
+	add_child(molotov)
+	molotov.llamarada(60.0)
+	molotov.queue_free()
+	var sin_molotov: int = vida_antes - jefa.vida
+	var fuego: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+	fuego.tipo = "fuego"
+	fuego.position = jefa.position
+	add_child(fuego)
+	# (0,6 s: el charco prende a los zombis cada medio segundo; y hay que acabar antes de la foto de los 8,0 y de
+	# que la prueba mate al jefe a los 8,05)
+	await get_tree().create_timer(0.6, false).timeout
+	var sin_fuego: int = vida_antes - jefa.vida
+	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	print("Bombero inmune al fuego: lanzallamas -%d, molotov -%d, charco de fuego (0,6 s) -%d | un golpe de 10: -%d" % [
+		sin_lanzallamas, sin_molotov, sin_fuego, vida_antes - sin_fuego - jefa.vida])
+	jefa.mirada = (johnny.position - jefa.position).normalized()
+	jefa.lanzar_bolas(johnny)
+	jefa.lanzar_molotovs(johnny)
+	var molotovs := 0
+	for n in jefa.get_parent().get_children():
+		if n.get("tipo") == "molotov_jefe":
+			molotovs += 1
+	print("Bombero: bolas de fuego en el aire: %d | molotovs: %d" % [get_tree().get_nodes_in_group("balas_zombi").size(), molotovs])
 
 
 # El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,
@@ -1349,8 +1387,8 @@ func probar_colecciones() -> void:
 		push_error("Colecciones: los objetos por edificio no son 17 y 27 (con los cuatro trajes)")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
-	if Bestiario.LISTA.size() != 19:
-		push_error("Colecciones: el bestiario no tiene 19 fichas")
+	if Bestiario.LISTA.size() != 20:
+		push_error("Colecciones: el bestiario no tiene 20 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
 		push_error("Colecciones: el retrato del gerente mutado es null")
 	if g.colecciones_nuevo:

@@ -2278,7 +2278,7 @@
   "kind": "characters",
   "fecha": "2026-10-22",
   "nota": "Los minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md): uno por sesión. Mismo camino que los del centro comercial (centro-comercial-parte4): modelo con create_character_pro_flash a 72x72 (view low top-down, estilo del zombi venenoso de 72 sin su paleta) y animaciones con PixMiniMax (animate_character, mode pixminimax, 1 generación por dirección, cada animación un grupo: la primera dirección lo crea y las demás se añaden con animation_group_id + el mismo animation_name; de espaldas, el texto empieza con la frase de no girarse). PixelLab solo deja 8 trabajos a la vez: se lanzan por tandas. Mientras queda un trabajo en marcha, el zip del personaje da HTTP 423: se bajan los fotogramas uno a uno con las URL que da get_character (animations/<id>/<dirección>/<n>.png) o se espera y se usa py tools/bajar_zip.py <character_id> <fuente>.",
-  "coste": "46 generaciones el Glotón (6 el modelo, 40 las animaciones); 46 el Gymbro (6 el modelo, 40 las animaciones, una de ellas descartada)",
+  "coste": "46 generaciones el Glotón (6 el modelo, 40 las animaciones); 46 el Gymbro (6 el modelo, 40 las animaciones, una de ellas descartada); 42 el jefe de bomberos (6 el modelo, 36 las animaciones, ninguna descartada)",
   "piezas": {
    "gloton-72": {
     "character_id": "100feaee-97d4-48e5-9401-c977c03ff898",
@@ -2383,6 +2383,57 @@
       "fotogramas": "12 + partida (0-12), solo partida. 7 direcciones (west = east en espejo). Cae de rodillas y luego de bruces hacia donde mira; tendido desde el 6-8.",
       "action_description": "He dies: his huge legs buckle and he drops heavily to his knees, sways, then topples forward face down onto the floor (toward the camera / to the right / in the direction he is facing / away from the camera), his gigantic arms sprawled out, and lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles, no dust.",
       "pegas": "En north-east salen unas motitas blancas al caer (se limpian solas)."
+     }
+    }
+   },
+   "bombero-72": {
+    "character_id": "8ebf784f-0dfc-404e-a324-b55e200059a6",
+    "size": "72x72",
+    "fecha": "2026-10-22",
+    "estilo": "como el Glotón y el Gymbro: south del zombi venenoso 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette",
+    "alto_px": 66,
+    "description": "a huge, broad zombie fire chief boss, standing hunched forward, about 66 pixels tall. Big and wide: a thick heavy body with broad shoulders. He wears a scorched, charred firefighter turnout suit, dark grey with soot-blackened burn marks and dull yellow reflective stripes, torn wide open across the chest so that glowing orange embers show inside his ribcage, as if he burns from within. A firefighter helmet with a cracked, broken visor, with dark smoke leaking out from under the brim. On his back, a battered oxygen tank repainted as a rusty red gasoline tank, with a hose running from it to a brass flamethrower nozzle he holds in both hands, spitting a small flame. Grey-green rotting zombie skin with glowing orange-red cracks like lava on his face and hands, dead white eyes. Heavy black fireman boots. No logos, no letters, no badges, no brand marks. Crisp pixel art, dark outline, detailed shading",
+    "resultado": "El primer intento (personaje 5c2eeb7e) falló por carga del servidor después de dibujar la vista de frente (imagen f96d5a80 de la galería): se rehízo con create_character_pro_flash y source_image_id = esa imagen (solo cobra las 7 vistas que faltaban; 6 generaciones en total). Con el visto bueno del dueño a la primera: ancho y gordo, casco con visera, pecho abierto con brasas (de frente), depósito rojo a la espalda, manguera con una llamita en la boquilla y rayas amarillas. Sin marcas. Vistas en assets/sources/bombero-72/rotations/. En el juego: escenas/personajes/bombero.tscn y scripts/bombero.gd; hoja con py tools/jefe_hoja.py bombero-72 jefe-bombero (casilla 121x128; offset del Sprite (-61, -106)).",
+    "animaciones": {
+     "nota": "2026-10-22, 36 generaciones con PixMiniMax (1 por trabajo, también las de 12 fotogramas). Andar: sin fotograma de partida, lienzo 100-104. Giro, lanzar, hachazo, golpe y muerte: partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/bombero-72/partida/<dirección>.png; los upload:<id> en partida/subidas.txt caducan a los 3 días); lanzar, hachazo y golpe también con final = partida. Bajados fotograma a fotograma con py tools/bajar_fotogramas.py (las URL de get_character) a assets/sources/bombero-72/{walk,giro,lanzar,hachazo,golpe,muerte}/<dirección>-<n>.png (0 = partida); las dos últimas muertes, con el zip (tools/bajar_zip.py). Hacia el oeste no se generó nada: todo menos el giro es el este en espejo (py tools/espejo_oeste.py bombero-72 walk lanzar hachazo golpe muerte). Ninguna se giró ni hubo que repetir.",
+     "subject_description": "a huge broad zombie fire chief in a scorched dark firefighter suit with yellow reflective stripes, a firefighter helmet with a cracked visor, a red gasoline tank on his back and a hose with a brass nozzle held in both hands (de lado: ', seen from the side'; de espaldas: ', seen from behind')",
+     "initial_pose": "standing hunched forward + la vista (facing the camera / facing right / in three-quarter front view, facing toward the camera and to the right / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the left...) + ', holding the hose nozzle in both hands in front of him'",
+     "frases_de_direccion": "las del Gymbro: south 'Strict front view the whole time, facing the camera, he never turns to the side.'; south-east/south-west 'Strict three-quarter front view the whole time, facing toward the camera and to the right/left, he never turns to the side.'; east 'Strict side view the whole time, facing right: he never turns toward the camera.'; north 'Strict back view the whole time, he never turns to face the camera.'; north-east/north-west 'He keeps the same three-quarter back view the whole time, facing away from the camera and to the right/left, and never turns to face the camera.'",
+     "andar": {
+      "group": "6f078231-7787-4d37-bef7-46dcb71c8747",
+      "fotogramas": "8 + la vista quieta (0-8; el 8 vuelve al 0, ciclo = 0 a 7). 7 direcciones (west = east en espejo).",
+      "action_description": "He lumbers forward in place in a heavy, slow, seamless looping walk cycle: his thick legs step alternately with heavy steps and his broad body rocks slightly from side to side, while he keeps holding the hose nozzle in both hands in front of him in the same place the whole time, the hose and the red tank on his back only swaying very slightly with each step. His arms do not swing. The last frame returns to the starting pose so the cycle loops. The small flame at the nozzle stays as it is. No other fire, no effects, no smoke, no dust.",
+      "pegas": "Paso corto y sutil (como el del Gymbro), ninguna se giró."
+     },
+     "giro": {
+      "group": "5f15f454-7186-4cec-aa9c-4c265709550e",
+      "fotogramas": "12 + partida (0-12), solo south (una vuelta entera se ve igual desde cualquier lado). 0 = quieto; 1-12 la vuelta: sur → este → norte → oeste → sur (SENTIDO = -1 en bombero.gd, que pone el fotograma según el ángulo de la lengua). Lienzo 164x156.",
+      "action_description": "He spins around on the spot with the flamethrower: he raises the hose nozzle to chest height, holding it straight out in front of him with both arms, and turns his whole body around in one full, steady turn on the spot, showing his side, his back with the red tank, his other side and his front again, the nozzle always pointing straight out ahead of him. His feet stay on the same spot. The last frame shows him facing the camera again, the same as the first frame. No fire stream, no flames, no effects, no motion lines, no dust.",
+      "pegas": "Ninguna: la llamita de la boquilla va girando con él; la lengua de fuego grande la dibuja el juego."
+     },
+     "lanzar": {
+      "group": "b0dab7c7-cb0c-4fcd-a5c8-52b0ac6728c3",
+      "fotogramas": "8 + partida (0-8), partida y final = dibujo quieto. 1-3 echa el brazo atrás y arriba, 4 lo suelta (SUELTA = 4: ahí salen la bola de fuego o el molotov, que dibuja el juego), 5-8 vuelve. Lienzos 128-164 x 140-196. 7 direcciones (west = east en espejo).",
+      "action_description": "He hurls something with one hand: he lets go of the hose nozzle with his right hand, keeping the nozzle in his left hand, swings his right arm back and up over his shoulder with the hand clenched, then whips that arm forward hard in a big overhand throw (toward the camera / to the right / toward the lower right of the image / away from the camera...), his body leaning forward with the effort, and then settles cleanly back into the starting stance holding the nozzle with both hands. His throwing hand is empty: no object, no fireball, no bottle, no effects, no motion lines, no dust.",
+      "pegas": "Aunque dice 'no fireball', de frente pinta una bola de fuego grande pegada al cuerpo en los fotogramas 5-6 (se queda: parece el fogonazo del lanzamiento) y en varias direcciones rayas de movimiento y chispas sueltas (se quitan al montar: motas 120)."
+     },
+     "hachazo": {
+      "group": "f611743e-5311-4fb4-8d15-d0b2bcff947c",
+      "fotogramas": "8 + partida (0-8), partida y final = dibujo quieto. 1-3 saca el hacha y la levanta, 4 la baja (HACHA_PEGA = 4), 5-7 clavada en el suelo con el estelazo rojo y 8 la guarda. Lienzos 132-180 x 144-204. 7 direcciones (west = east en espejo).",
+      "action_description": "He swings a big fire axe: he lets go of the hose nozzle, grabs a heavy fire axe with a red head and a wooden handle in both hands, raises it high above his helmet, and chops it straight down hard in front of him (toward the camera / to the right / away from the camera...), in one fast vertical arc, his body bending forward into the blow, then lifts it and settles cleanly back into the starting stance holding the nozzle with both hands, the axe gone. No effects, no motion lines, no dust, no cracks, no blood.",
+      "pegas": "Pinta un estelazo rojo del hacha (pegado a ella, se queda) y nubes de polvo sueltas al clavarla (se quitan al montar: motas 150; el trozo suelto más grande era de 138 píxeles)."
+     },
+     "golpe": {
+      "group": "afecc3b8-9438-45eb-bf3a-764336e000dd",
+      "fotogramas": "8 + partida (0-8), partida y final = dibujo quieto. 7 direcciones (west = east en espejo). Se usa para el tambaleo cuando una explosión le corta lo que hace.",
+      "action_description": "He flinches from a hard blow: his helmet and broad shoulders jolt backward (away from the camera / to the left / toward the camera...), and he staggers one short heavy step backward, off balance, still holding the hose nozzle with both hands. He stays on his feet. Then he settles cleanly into the starting stance. Nothing comes off: no effects, no particles, no blood.",
+      "pegas": "Sutil (poco más que un respingo), pero vale."
+     },
+     "muerte": {
+      "group": "68734bec-280f-4a0a-8373-3300af98bbbd",
+      "fotogramas": "12 + partida (0-12), solo partida. 7 direcciones (west = east en espejo). Se tambalea, se agarra el pecho, cae de rodillas y de bruces hacia donde mira; tendido desde el 7-8, con el depósito rojo encima.",
+      "action_description": "He dies: he drops the hose nozzle, staggers, clutches his chest, falls to his knees and then collapses forward, face down on the floor (toward the camera, toward the bottom of the screen, his feet toward the top of the screen and his helmet toward the bottom / toward the right, his feet toward the left and his helmet toward the right / away from the camera, toward the top of the screen...), and lies still, flat on the floor, in the last frames. The red tank stays on his back. No effects, no blood, no fire.",
+      "pegas": "Ninguna."
      }
     }
    }

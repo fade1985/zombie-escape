@@ -100,6 +100,10 @@ const LISTA := {
 		"frase": "Gira con los brazos abiertos, salta encima de ti y te tira pesas. Con sus suplementos, la armadura se come la mitad del daño.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-gymbro.tres",
 		"recorte": Rect2i(31, 34, 70, 66), "retrato": "quieto_s", "escala": 2, "jefe": true},
+	"bombero": {"nombre": "El jefe de bomberos",
+		"frase": "El fuego no le hace nada: cambia de arma. Sal de la lengua de fuego cuando gire y no pises sus charcos; de cerca, cuidado con el hacha.",
+		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-bombero.tres",
+		"recorte": Rect2i(27, 36, 68, 70), "retrato": "quieto_s", "escala": 2, "jefe": true},
 }
 
 

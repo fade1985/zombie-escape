@@ -16,9 +16,9 @@
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
   y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`, `modista.tscn`, `mascota.tscn`) y
   su jefe final, en la azotea (`gerente.tscn`); los minijefes de los Apartamentos (`docs/JEFES_APARTAMENTOS.md`):
-  `gloton.tscn` y `gymbro.tscn`.
+  `gloton.tscn`, `gymbro.tscn` y `bombero.tscn`.
 - `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera y alfileres de la modista), `proyectil.tscn`
-  (moco, botella de lejía y sartén del cocinero, en parábola), `charco.tscn` y `explosion.tscn`.
+  (moco, botella de lejía, sartén del cocinero y molotov del jefe de bomberos, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
   `luz_suave.tres` (el degradado de todas).
 - `muebles/`: un mueble por escena, con su choque y su `Sombra`.
@@ -58,7 +58,10 @@
 - `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
   vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir; y la carrera en línea
   recta, `embestir()` con `pared_chocada()` y `estrellarse()`, con su `franja()` roja de aviso y el estado "atontado"
-  con estrellitas). Cada uno hereda y pone sus ataques: `gymbro.gd` (minijefe de los Apartamentos: torbellino con
+  con estrellitas). Cada uno hereda y pone sus ataques: `bombero.gd` (minijefe de los Apartamentos: el fuego no le
+  hace nada, `inmune_fuego`; bolas de fuego `bola_fuego.gd`, giro con el lanzallamas en el centro de la sala con la
+  lengua de fuego dibujada con código, molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
+  Johnny se le pega; enfadado arde él mismo y deja un rastro de fuego al andar), `gymbro.gd` (minijefe de los Apartamentos: torbellino con
   los brazos abiertos, salto encima de Johnny y pesas en curva, `pesa.gd`; enfadado, armadura de suplementos con su
   barra encima de la de vida, que se come la mitad del daño), `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo
   de lenguas en abanico, aspira 5 s tirando de Johnny hacia la boca y se lo come si llega, sangre ácida al pegarle; una
@@ -207,7 +210,7 @@
   que cuenta en la terminal. Sin nada más, la prueba larga (`_process`: un apartamento, el jefe, menús, ordenador,
   inventario, recetas, supervivientes, historia, colecciones...; con `--edificio centro`, en el centro comercial, con
   el antidisturbios en la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o `--jefe mascota`, y al
-  final la azotea; en los Apartamentos, la portera en la planta baja o el minijefe de `--jefe gloton` / `--jefe gymbro` en la 1ª). `probar_colecciones` deja en el guardado parte de lo que hay, saca el escritorio con el aviso
+  final la azotea; en los Apartamentos, la portera en la planta baja o el minijefe de `--jefe gloton` / `--jefe gymbro` / `--jefe bombero` en la 1ª). `probar_colecciones` deja en el guardado parte de lo que hay, saca el escritorio con el aviso
   (`captura-escritorio-nuevo.png`), los objetos del edificio (`captura-colecciones.png`), la ficha del vecino
   (`captura-bestiario.png`) y la del gerente sin ver (`captura-bestiario-falta.png`), y cuenta en la terminal lo
   encontrado, creado y visto de cada edificio.
@@ -266,11 +269,11 @@
 `hacer_frames.py` (hoja → animaciones); `superviviente.py` (monta la hoja de un superviviente con lo de PixelLab: reposo a
 mano, andar alineado, acción con el fogonazo limpio, si la tiene, y caído; `py tools/superviviente.py policia`);
 para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
-(la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
+(la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py`, `bajar.py` y `bajar_fotogramas.py` (bajar de PixelLab; el último, una animación fotograma a fotograma con las URL de `get_character`, cuando el zip aún no deja, y monta una tira para mirarla), `espejo_oeste.py` (la animación hacia el oeste con la del este en espejo), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, `cocinero-72 jefe-cocinero`, `modista-72 jefe-modista` o
-`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, el Glotón: `gloton-72 jefe-gloton`, el Gymbro: `gymbro-72 jefe-gymbro`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
+`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, el Glotón: `gloton-72 jefe-gloton`, el Gymbro: `gymbro-72 jefe-gymbro`, el jefe de bomberos: `bombero-72 jefe-bombero`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
 ficha `JEFES` (con la lista, los fotogramas por
 segundo y, si el lienzo no es de 72, el punto de los pies; la embestida de la mascota y la del gerente mutado llevan
 un 5.º dato: quitar el primer fotograma; y opciones: `"sangre"`, `"motas"` por animación y `"sin"` para quitar fotogramas

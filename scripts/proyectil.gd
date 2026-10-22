@@ -21,6 +21,8 @@ const TIPOS := {
 	"vomito": {"vuelo": 0.45, "altura": 70.0, "golpe": 0, "charco": "vomito"},
 	# la sartén del cocinero ("marca": el radio de la marca en el suelo, el del charco "hirviendo" en charco.gd)
 	"sarten": {"vuelo": 0.8, "altura": 130.0, "golpe": 0, "charco": "hirviendo", "marca": 60.0},
+	# el molotov del jefe de bomberos (bombero.gd): como el de Johnny pero con marca y un fuego algo más pequeño
+	"molotov_jefe": {"vuelo": 0.9, "altura": 140.0, "golpe": 6, "charco": "fuego", "marca": 54.0, "escala": 0.85},
 }
 
 var tipo := "veneno"
@@ -36,7 +38,7 @@ var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de t
 
 func _ready() -> void:
 	global_position = desde
-	if tipo == "sarten":
+	if TIPOS[tipo].has("marca"):
 		marca = Node2D.new()
 		marca.z_index = -6   # este nodo va a 5: la marca, a -1, como los charcos
 		marca.draw.connect(pintar_marca)
@@ -65,9 +67,11 @@ func caer(datos: Dictionary) -> void:
 		charco.escala = Lanzables.FABRICANTE.radio if fabricante else 1.0
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
 		charco.dano_lanzar = dano_lanzar
+	elif tipo == "molotov_jefe":
+		charco.escala = datos.escala
 	get_parent().add_child(charco)
 	match tipo:
-		"molotov":
+		"molotov", "molotov_jefe":
 			Sonido.tocar("cristal")
 			Sonido.tocar("fuego")
 		"lejia": Sonido.tocar("cristal")
@@ -78,7 +82,7 @@ func caer(datos: Dictionary) -> void:
 			Sonido.tocar("cristal")
 			Sonido.tocar("chof")
 		_: Sonido.tocar("chof")
-	if tipo == "molotov":
+	if tipo == "molotov" or tipo == "molotov_jefe":
 		llamarada(charco.radio())
 	elif tipo == "vomito" or tipo == "acido" or tipo == "aceite" or tipo == "sarten":
 		for i in 8:
@@ -103,10 +107,12 @@ func llamarada(r: float) -> void:
 		Particulas.soltar(self, hasta, Vector2(cos(a) * 120.0, sin(a) * 70.0), Color("#b9e3d0"), 2, 0.3)   # cristales
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var d: Vector2 = zombi.global_position - hasta
-		if Vector2(d.x, d.y / 0.6).length() > r * 0.8 + zombi.radio:
-			continue
+		if Vector2(d.x, d.y / 0.6).length() > r * 0.8 + zombi.radio or zombi == dueno:
+			continue   # (al que lo tira, el jefe de bomberos, su propio molotov no le hace nada)
 		if zombi.has_method("prender"):
 			zombi.prender(dano_lanzar)
+		if zombi.get("inmune_fuego"):
+			continue   # al que el fuego no le hace nada (el jefe de bomberos), el golpe tampoco
 		zombi.recibir_golpe(roundi(Lanzables.MOLOTOV.golpe * dano_lanzar), Vector2.ZERO)
 
 
@@ -121,7 +127,7 @@ func _draw() -> void:
 		"veneno", "vomito", "acido":
 			draw_set_transform(donde, 0.0, Vector2(2, 2))
 			draw_texture(MOCO, -Vector2(MOCO.get_size()) / 2.0, Color.WHITE if tipo == "veneno" else Color(1, 1, 0.45))
-		"molotov":
+		"molotov", "molotov_jefe":
 			botella(donde, t * 12.0)
 		"sarten":
 			sarten(self, donde, t * 9.0)

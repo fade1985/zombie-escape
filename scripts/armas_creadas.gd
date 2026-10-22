@@ -171,6 +171,10 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 
 # Lo que pasa cuando una gota, el bumerán, el garfio o un clavo de la bomba de clavos tocan a un zombi
 static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String) -> void:
+	# al jefe de bomberos (bombero.gd) el fuego no le hace nada: ni el daño ni prenderle
+	if (tipo == "llama" or tipo == "cono") and zombi.get("inmune_fuego"):
+		zombi.prender()
+		return
 	var johnny := zombi.get_tree().get_first_node_in_group("jugador")
 	var d: int = johnny.con_critico(dano) if johnny else roundi(dano)
 	zombi.recibir_golpe(d, hacia.normalized() * EMPUJE * empuje)

@@ -7,6 +7,7 @@
 #                                    py tools/jefe_hoja.py portera-72 jefe-portera    (la jefa de los Apartamentos)
 #                                    py tools/jefe_hoja.py gloton-72 jefe-gloton      (minijefe de los Apartamentos)
 #                                    py tools/jefe_hoja.py gymbro-72 jefe-gymbro      (minijefe de los Apartamentos)
+#                                    py tools/jefe_hoja.py bombero-72 jefe-bombero    (minijefe de los Apartamentos)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -163,6 +164,23 @@ JEFES = {
         },
         "de_frente": ["torbellino"],
         "motas": {"salto": 120, "lanzar": 120},   # las grietas al caer y las rayas del brazo al lanzar
+    },
+    # el jefe de bomberos (minijefe de los Apartamentos): el giro con el lanzallamas es una vuelta entera, solo de
+    # frente; las lenguas de fuego, las bolas y los molotovs salen con código (bombero.gd, bola_fuego.gd). Hacia el
+    # oeste, todo menos el giro es el este dado la vuelta (tools/espejo_oeste.py)
+    "bombero-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 8, True, True),
+            "giro": ("giro", 16, True, False),
+            "lanzar": ("lanzar", 12, False, False),
+            "hachazo": ("hachazo", 12, False, False),
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["giro"],
+        "motas": {"lanzar": 120, "hachazo": 150},   # las rayas del brazo al lanzar y el polvo del hachazo
     },
 }
 JEFE = JEFES[fuente]
