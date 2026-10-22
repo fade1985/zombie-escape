@@ -38,3 +38,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L2.** El nombre de cada puerta de piso se ve poco estético. Ponerlo como en un edificio real: la letra
   del piso al lado de la puerta y, junto al ascensor, en grande, la planta en la que estás. Que quede más
   realista.
+- **L3.** El ascensor averiado: quitar el letrero "averiado" de encima y poner en su lugar más cintas
+  amarillas con franjas negras cruzándolo. Que quede más realista.
