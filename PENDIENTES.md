@@ -15,6 +15,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   existir: quitarlo.
 - **F2.** Los zombis de un piso se concentran en el baño: tienen que estar repartidos por todas las
   habitaciones del piso.
+- **F3.** El vómito de la mutación Gastroenteritis atraviesa paredes: no debe hacerlo.
 
 ## Mejoras
 
