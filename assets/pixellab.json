@@ -1968,5 +1968,83 @@
         "description": "corpse of a scientist lying flat on his back on the floor, viewed from directly above, NOT standing, dead for a long time, big head, pale gray face with closed eyes and open mouth, dark hair, long white lab coat down to the knees covered in dried dark red blood, blue id badge, one arm spread out on the floor, dark trousers and shoes, big pool of dark dried blood under the head and body, top-down RPG game sprite"
       }
     ]
+  },
+  "supervivientes-48": {
+    "kind": "characters",
+    "fecha": "2026-10-22",
+    "nota": "Los tres supervivientes de los Apartamentos (policía, médica y militar de scripts/supervivientes.gd) en pixel art, al tamaño y estilo de Johnny, para sustituir el dibujo con formas de persona.gd (los del centro comercial siguen con persona.gd). FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Diseños aprobados por el dueño: policía con uniforme azul, gorra, chaleco y la pistola en la funda; médica con el pelo rojo recogido, bata blanca sobre pijama verde agua y fonendo; militar con casco y uniforme verde oliva, chaleco táctico, botas y el fusil a la espalda. Todos algo sucios y cansados (ropa arrugada, alguna venda), sin heridas de zombi, manos vacías (la plantilla de andar quita lo que lleven en la mano). Hoja de comparación: assets/pruebas/supervivientes-48-modelos.png. PENDIENTE: la elección y el visto bueno del dueño; luego andar (walking-8-frames, 8 direcciones), acción y caído (pixminimax) y meterlos en Godot (aliado.gd).",
+    "coste": "36 generaciones (6 por modelo; saldo 471,80 → 435,80)",
+    "request": {
+      "herramienta": "create_character_pro_flash",
+      "width": 48,
+      "height": 48,
+      "view": "low top-down",
+      "style_image": {
+        "url": "rotations/south.png de conserje-48 (4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c), por su URL de PixelLab",
+        "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors."
+      },
+      "style_options": {
+        "color_palette": false,
+        "detail": true,
+        "outline": true,
+        "shading": true
+      }
+    },
+    "piezas": {
+      "policia-A": {
+        "character_id": "caa7f0fa-7419-48ee-860f-658407fdc7a5",
+        "job_id": "c8d725dd-df07-4ea4-b5e3-525620e6437e",
+        "seed": 4801,
+        "name": "Superviviente policía A",
+        "carpeta": "assets/sources/superviviente-policia-48/intentos/A/",
+        "alto_px": 46,
+        "description": "adult male police officer, a tired survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, light skin with dark stubble, short dark hair under a dark navy blue police cap with a small silver badge, royal blue short-sleeved police uniform shirt, dark navy blue bulletproof vest over the shirt, black duty belt with a black pistol in a holster at his right hip, dark navy blue trousers, black boots, uniform wrinkled and smudged with dirt, a small white bandage on one forearm, tired face, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      },
+      "policia-B": {
+        "character_id": "b7d21ddf-245a-41dd-b2ea-de130f5c015f",
+        "job_id": "4b1d1eab-1a39-4f9b-8aaf-64e01d500be9",
+        "seed": 4802,
+        "name": "Superviviente policía B",
+        "carpeta": "assets/sources/superviviente-policia-48/intentos/B/",
+        "alto_px": 46,
+        "description": "adult male police officer, a weary survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, light skin, short dark hair under a dark navy blue peaked police cap, bright blue short-sleeved police uniform shirt with a small silver badge on the chest, black tactical vest with pouches over the shirt, black belt with a holstered black pistol at his right hip, dark navy blue trousers, black boots, clothes crumpled and dusty with a dirt stain on the trousers, a white bandage wrapped around one hand, tired expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      },
+      "medica-A": {
+        "character_id": "58b4e7d5-028d-4ad9-a3e3-4b0279b31a25",
+        "job_id": "f7d1ee02-fcc0-410e-9979-fd47f9d703c1",
+        "seed": 4803,
+        "name": "Superviviente médica A",
+        "carpeta": "assets/sources/superviviente-medica-48/intentos/A/",
+        "alto_px": 46,
+        "description": "adult female doctor, a tired survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, fair skin, red hair tied up in a bun, long white doctor's coat worn open over light teal medical scrubs, a black stethoscope hanging around her neck, dark shoes, coat wrinkled with a few dirt smudges and a small white bandage on one wrist, tired face with dark circles under the eyes, no zombie wounds, no blood, empty hands, arms relaxed at her sides, detailed shading"
+      },
+      "medica-B": {
+        "character_id": "a41d8e0a-efba-41e1-aea9-ead327fe2a31",
+        "job_id": "ac54990a-17f5-4c1b-bf0e-66017f57f023",
+        "seed": 4804,
+        "name": "Superviviente médica B",
+        "carpeta": "assets/sources/superviviente-medica-48/intentos/B/",
+        "alto_px": 46,
+        "description": "adult female doctor, a weary survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, fair skin, dark red hair pulled back in a short ponytail, white lab coat worn open over pale aqua green scrubs, a stethoscope draped around her neck, dark flat shoes, the coat crumpled and dirty with a few grey smudges, a small bandage on one forearm, exhausted expression, no zombie wounds, no blood, empty hands, arms relaxed at her sides, detailed shading"
+      },
+      "militar-A": {
+        "character_id": "065cdc0c-9fe7-45ce-b122-7ef77cd0c76a",
+        "job_id": "8cc894ef-7e7d-4db2-b85a-e4653b8393be",
+        "seed": 4805,
+        "name": "Superviviente militar A",
+        "carpeta": "assets/sources/superviviente-militar-48/intentos/A/",
+        "alto_px": 46,
+        "description": "adult male soldier, a tired survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, tan skin, olive drab military helmet with a chin strap, olive green military uniform shirt with rolled-up sleeves, dark green tactical vest with pouches over the shirt, an assault rifle slung across his back with the strap over his shoulder, dark army green trousers tucked into black combat boots, uniform dusty and wrinkled with a dirt stain, a white bandage on one upper arm, tired face, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      },
+      "militar-B": {
+        "character_id": "c41ea0ae-ad10-402b-b717-81b7c8fcf8b0",
+        "job_id": "232e99c9-4742-4852-9c47-347996692672",
+        "seed": 4806,
+        "name": "Superviviente militar B",
+        "carpeta": "assets/sources/superviviente-militar-48/intentos/B/",
+        "alto_px": 46,
+        "description": "adult male soldier, a weary survivor of a zombie outbreak, realistic adult body proportions, tall and slim, small head, tan skin with dark stubble, olive green combat helmet, olive drab military fatigues, a dark olive green tactical vest with ammo pouches, a black assault rifle hanging on his back by a strap, dark green combat trousers, black lace-up combat boots, fatigues crumpled and smeared with dust and dirt, a bandage wrapped around one hand, exhausted expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      }
+    }
   }
 }
