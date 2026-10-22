@@ -2278,7 +2278,7 @@
   "kind": "characters",
   "fecha": "2026-10-22",
   "nota": "Los minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md): uno por sesión. Mismo camino que los del centro comercial (centro-comercial-parte4): modelo con create_character_pro_flash a 72x72 (view low top-down, estilo del zombi venenoso de 72 sin su paleta) y animaciones con PixMiniMax (animate_character, mode pixminimax, 1 generación por dirección, cada animación un grupo: la primera dirección lo crea y las demás se añaden con animation_group_id + el mismo animation_name; de espaldas, el texto empieza con la frase de no girarse). PixelLab solo deja 8 trabajos a la vez: se lanzan por tandas. Mientras queda un trabajo en marcha, el zip del personaje da HTTP 423: se bajan los fotogramas uno a uno con las URL que da get_character (animations/<id>/<dirección>/<n>.png) o se espera y se usa py tools/bajar_zip.py <character_id> <fuente>.",
-  "coste": "46 generaciones el Glotón (6 el modelo, 40 las animaciones)",
+  "coste": "46 generaciones el Glotón (6 el modelo, 40 las animaciones); 46 el Gymbro (6 el modelo, 40 las animaciones, una de ellas descartada)",
   "piezas": {
    "gloton-72": {
     "character_id": "100feaee-97d4-48e5-9401-c977c03ff898",
@@ -2331,6 +2331,58 @@
       "action_description": "He dies: his arms give out and he collapses flat onto the floor on his belly, his enormous head dropping down and tilting to one side with the mouth hanging open, the red tongues flopping out limp on the floor, his legs sprawling out. Then he lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles.",
       "espaldas": "north, north-east y north-west: '... his enormous blistered head dropping down to the floor, his legs sprawling out ...' sin lenguas.",
       "pegas": "Como va a gatas no hay que decirle hacia dónde cae: se desploma en el sitio en las 8 (tendido desde el fotograma 5-7). Salió a la primera."
+     }
+    }
+   },
+   "gymbro-72": {
+    "character_id": "f00fc408-f107-4d14-8fc3-5ec22751d768",
+    "size": "72x72",
+    "fecha": "2026-10-22",
+    "estilo": "como el Glotón: south del zombi venenoso 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette",
+    "alto_px": 66,
+    "description": "a huge hulking gym bodybuilder zombie boss, standing hunched forward, about 66 pixels tall. Absurdly muscular: an enormous bulging chest, shoulders and arms, and gigantic oversized hands, each hand as big as his head, hanging so low that the knuckles drag on the floor. Huge bulging thigh muscles (quadriceps) much too big for the rest of his body. Bald head with a thick dark beard, angry dead white eyes. Bare chest, no shirt: sickly grey-green rotting skin peeling off in patches, with raw red flesh showing where chunks of skin have fallen off. He wears dark grey sweatpants and plain white classic sneakers, no logos, no stripes, no brand marks. Crisp pixel art, dark outline, detailed shading",
+    "resultado": "A la primera y con el visto bueno del dueño: calvo, barba, brazos y manos enormes casi en el suelo, piel a cachos con la carne roja, chándal gris y zapatillas blancas lisas. La piel salió más beis que verde y los cuádriceps grandes pero no exagerados. Vistas en assets/sources/gymbro-72/rotations/. En el juego: escenas/personajes/gymbro.tscn y scripts/gymbro.gd; hoja con py tools/jefe_hoja.py gymbro-72 jefe-gymbro (casilla 131x123; offset del Sprite (-66, -101)).",
+    "animaciones": {
+     "nota": "2026-10-22, 40 generaciones con PixMiniMax (1 por trabajo, también las de 12 fotogramas). Andar: sin fotograma de partida, lienzo 96-100. Torbellino, salto, lanzar y golpe: partida y final = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/gymbro-72/partida/<dirección>.png; los upload:<id> en partida/subidas.txt caducan a los 3 días); el torbellino solo con partida. Muerte: solo partida. Bajados fotograma a fotograma con las URL de get_character a assets/sources/gymbro-72/{walk,torbellino,salto,lanzar,golpe,muerte}/<dirección>-<n>.png (0 = partida). Hacia el oeste, el andar, el golpe y la muerte son los del este en espejo (el andar hacia el oeste se giraba hacia la cámara dos veces: los dos intentos, en descartes/walk-oeste-1 y -2; el golpe y la muerte ya no se pidieron al oeste).",
+     "subject_description": "a huge hulking bald bearded zombie bodybuilder with gigantic arms and hands (that hang down to the floor), peeling rotting skin, bare chest, dark grey sweatpants and white sneakers (de espaldas: 'bald zombie ... bare back ..., seen from behind'; de lado: ', seen from the side')",
+     "initial_pose": "standing hunched forward + la vista (facing the camera / facing right / in three-quarter front view, facing toward the camera and to the right / seen from behind, his back to the camera / in three-quarter back view, facing away from the camera and to the left...) + ', his enormous hands hanging down to the floor'",
+     "frases_de_direccion": "las del antidisturbios y la mascota (Strict front view..., Strict three-quarter front view..., Strict back view..., He keeps the same three-quarter back view...); de lado, 'Strict side view the whole time, facing left/right: he never turns toward the camera.'",
+     "andar": {
+      "group": "1337452a-aeda-4e69-a26c-8b7395772c78",
+      "repeticion_oeste": "82e68d15-5f83-404f-9795-45bbf53dcf5a (andar-oeste, descartada)",
+      "fotogramas": "8 + la vista quieta (0-8; el 8 vuelve al 0, ciclo = 0 a 7).",
+      "action_description": "He lumbers forward in place in a heavy, slow, seamless looping walk cycle: his huge thick legs step alternately with heavy steps, his gigantic arms hang down and his enormous hands drag along the floor, knuckles scraping the ground, his massive shoulders rolling (from side to side) with each step. ... The last frame returns to the starting pose so the cycle loops. No effects, no dust.",
+      "pegas": "West se giraba de cara a la cámara (dos veces): se usa east en espejo. En south-east se gira un poco hacia delante al final del ciclo."
+     },
+     "torbellino": {
+      "group": "892fd00a-5be2-4ebf-a57f-8332c9a54743",
+      "fotogramas": "8 + partida (0-8), solo south (una vuelta entera se ve igual desde cualquier lado). 0 = quieto; 1-8 con los brazos abiertos dando la vuelta (GIRO_DESDE = 1 en gymbro.gd). Lienzo 180x144.",
+      "action_description": "He spins around like a whirlwind: he lifts his gigantic arms straight out to his sides, wide open like helicopter blades, and spins his whole body around on the spot in one full fast turn, showing his side, his back, his other side and his front again, his arms always stretched wide open. His feet stay on the same spot. The last frame shows him facing the camera again with his arms still wide open, so the spin loops. No effects, no wind, no motion lines, no dust.",
+      "pegas": "Ninguna: salió a la primera."
+     },
+     "salto": {
+      "group": "a9a157c5-c8d2-4824-b7ac-8fcffbf4d729",
+      "fotogramas": "12 + partida (0-12), partida y final = dibujo quieto. 1-3 se agacha, 4-7 en el aire con los puños juntos arriba, 8-11 cae y se levanta (DESPEGUE = 4, ATERRIZA = 8). Lienzos 128-168 x 168-196.",
+      "action_description": "He jumps up high and comes crashing down in the same spot: first he crouches low, bending his huge thick legs, then he springs up off the ground with his gigantic arms raised high above his bald head and his huge fists clenched together, hangs in the air for a moment, then drops straight down and lands heavily on both feet with his knees bent, smashing both huge fists into the floor, and finally stands back up into the starting stance. No effects, no dust, no shadow, no cracks, no motion lines.",
+      "pegas": "Aunque dice 'no cracks', al caer pinta grietas y piedrecitas en el suelo (south-east, north, south-west); las sueltas se quitan al montar (motas 120 en jefe_hoja.py). En west salta un poco antes de agacharse."
+     },
+     "lanzar": {
+      "group": "edf6f9a4-f74e-411c-91ca-51e33e3c1321",
+      "fotogramas": "8 + partida (0-8), partida y final = dibujo quieto. 1-3 echa el brazo atrás, 4 lo suelta (SUELTA = 4: ahí sale la pesa, que dibuja pesa.gd), 5-8 vuelve. Lienzos 128-180 x 136-188.",
+      "action_description": "He hurls a heavy weight: he swings one gigantic arm back and up over his shoulder, his hand clenched into a huge fist, then whips that arm forward hard in a big overhand throw (toward the camera / to the right / in the direction he is facing / away from the camera), his body leaning forward with the effort, and then settles cleanly back into the starting stance with his hands hanging down. His hands are empty. No effects, no objects, no motion lines, no dust.",
+      "pegas": "Rayas de movimiento y polvillo en el fotograma 4-6 de varias direcciones (se quitan las sueltas: motas 120)."
+     },
+     "golpe": {
+      "group": "c0ab808e-530a-4920-a8e3-cd5383f7229c",
+      "fotogramas": "8 + partida (0-8), partida y final = dibujo quieto. 7 direcciones (west = east en espejo). Se usa para el mareo al estrellarse contra una pared.",
+      "action_description": "He flinches from a hard blow: his bald head and huge shoulders jolt backward (away from where he is facing), his gigantic arms flail and he staggers one short heavy step backward, off balance and dizzy. He stays on his feet. Then he settles cleanly into the starting stance. Nothing comes off: no effects, no particles, no blood.",
+      "pegas": "Ninguna."
+     },
+     "muerte": {
+      "group": "3cce13cf-a974-4866-9e98-b182687cd959",
+      "fotogramas": "12 + partida (0-12), solo partida. 7 direcciones (west = east en espejo). Cae de rodillas y luego de bruces hacia donde mira; tendido desde el 6-8.",
+      "action_description": "He dies: his huge legs buckle and he drops heavily to his knees, sways, then topples forward face down onto the floor (toward the camera / to the right / in the direction he is facing / away from the camera), his gigantic arms sprawled out, and lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles, no dust.",
+      "pegas": "En north-east salen unas motitas blancas al caer (se limpian solas)."
      }
     }
    }

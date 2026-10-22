@@ -6,6 +6,7 @@
 #                                    py tools/jefe_hoja.py gerente-128 jefe-gerente   (el jefe final, lienzo de 128)
 #                                    py tools/jefe_hoja.py portera-72 jefe-portera    (la jefa de los Apartamentos)
 #                                    py tools/jefe_hoja.py gloton-72 jefe-gloton      (minijefe de los Apartamentos)
+#                                    py tools/jefe_hoja.py gymbro-72 jefe-gymbro      (minijefe de los Apartamentos)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -145,6 +146,23 @@ JEFES = {
             "muerte": ("muerte", 10, False, False),
         },
         "motas": {"golpe": 200},       # la lengua que sale volando en el golpe hacia la izquierda
+    },
+    # el Gymbro (minijefe de los Apartamentos): el torbellino es una vuelta entera sobre sí mismo, así que solo
+    # está de frente; las pesas que lanza, el remolino y el polvo del salto salen con código (gymbro.gd, pesa.gd).
+    # Hacia el oeste, el andar, el golpe y la muerte son los del este dados la vuelta (PixelLab se giraba)
+    "gymbro-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 8, True, True),
+            "torbellino": ("torbellino", 16, True, False),
+            "salto": ("salto", 12, False, False),
+            "lanzar": ("lanzar", 12, False, False),
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["torbellino"],
+        "motas": {"salto": 120, "lanzar": 120},   # las grietas al caer y las rayas del brazo al lanzar
     },
 }
 JEFE = JEFES[fuente]

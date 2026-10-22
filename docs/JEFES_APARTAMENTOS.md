@@ -80,6 +80,30 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
 - El salto dura la mitad.
 - El doble de pesas.
 
+### ✅ Hecho (22 oct 2026): el Gymbro, con el visto bueno del dueño
+
+- **El Gymbro** (`scripts/gymbro.gd`, `escenas/personajes/gymbro.tscn`; las pesas, `scripts/pesa.gd`). Ya sale en el
+  sorteo (no la portera en su lugar). Los números que han quedado (provisionales, se ajustan jugando): vida 540 (+25 %
+  por planta), velocidad 75, 10 por contacto.
+  - *Torbellino:* si está a entre 90 y 460, franja roja tan ancha como sus brazos (0,7 s) y sale girando en línea
+    recta a 400 durante 1,1 s: 20 de daño, manotazo hacia un lado y te tira (esquivando, pasa de largo). Si se come
+    una pared, mareado 1,6 s con estrellitas. Cada 3,6 s.
+  - *Salto:* a entre 120 y 450, se agacha 0,45 s y está 1,1 s en el aire (no se le puede dar) con la sombra donde va
+    a caer: 24 de daño en un círculo de 100 y te tira. Cada 5 s.
+  - *Pesas:* a más de 160, 2 mancuernas en curva (0,9 s), una a donde estás y otra a donde vas a estar, cada una con
+    su círculo rojo: 18 de daño y empujón. Se quedan 3 s tiradas. Cada 4,2 s.
+  - *Enfadado* («¡HORA DE LOS SUPLEMENTOS!»): armadura del 30 % de su vida máxima, con su barra azul acero encima de
+    la de vida (`armadura_jefe()` en `partida.gd`) y un brillo azul alrededor; cada golpe va mitad a la vida y mitad
+    a la armadura hasta que se acaba («¡SIN SUPLEMENTOS!»). Además: 2 torbellinos seguidos (el segundo con menos
+    aviso), salto de 0,55 s, 4 pesas (las otras dos, alrededor de Johnny) y todo más seguido (torbellino 2,8 s,
+    salto 3,5 s, pesas 3 s).
+- **Dibujo:** modelo a 72 y 6 animaciones en PixelLab (46 generaciones; detalle y textos en `assets/pixellab.json` →
+  `apartamentos-jefes` → `gymbro-72`). El torbellino solo de frente (es una vuelta entera); hacia el oeste, andar,
+  golpe y muerte son los del este en espejo. Hoja con `py tools/jefe_hoja.py gymbro-72 jefe-gymbro`.
+- Tecla de prueba **8**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El Gymbro», 19
+  fichas). `--captura --jefe gymbro` comprueba la armadura y las pesas (lo escribe en la terminal) y saca
+  `captura-jefe.png` con el torbellino.
+
 ## 3. El jefe de bomberos (minijefe; aspecto de Claude, con visto bueno)
 
 **Aspecto:** grande y ancho, con el **traje ignífugo chamuscado y abierto por el pecho**, que deja ver brasas por
@@ -120,7 +144,7 @@ lenguas-látigo, puñetazos al suelo con onda expansiva y escupitajos de fuego.
 
 1. ✅ **Glotón**, y de paso el sorteo de minijefes en los Apartamentos (`minijefes` en su ficha de `edificios.gd`;
    donde toque uno sin hacer, la portera). Hecho el 22 oct.
-2. **Gymbro.**
+2. ✅ **Gymbro.** Hecho el 22 oct.
 3. **Jefe de bomberos.**
 4. **Científico jefe**, y de paso la azotea en los Apartamentos (`azotea` y `final` en su ficha, como el centro).
 

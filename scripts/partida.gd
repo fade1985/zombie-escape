@@ -18,7 +18,7 @@
 # igual: al arrimarse sale la ventanita para elegir el traje de Johnny (trajes.gd).
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny (los minijefes de
-# los Apartamentos, con los números: 7, el Glotón). F9 lleva a
+# los Apartamentos, con los números: 7, el Glotón; 8, el Gymbro). F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
 # las mutaciones sin tener que matar a la portera. Z le pone a Johnny el siguiente traje (trajes.gd).
 #
@@ -43,15 +43,16 @@ const ZOMBIS := {
 	"modista": preload("res://escenas/personajes/modista.tscn"),
 	"gerente": preload("res://escenas/personajes/gerente.tscn"),   # el jefe final del centro comercial (la azotea)
 	"gloton": preload("res://escenas/personajes/gloton.tscn"),     # minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md)
+	"gymbro": preload("res://escenas/personajes/gymbro.tscn"),
 }
 # Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
 # objetos y la mutación (el jefe final de un edificio, el gerente, sin lo del 25 % ni la mutación: final_de())
-const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente", "gloton"]
+const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente", "gloton", "gymbro"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
-	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente", KEY_7: "gloton"}
+	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente", KEY_7: "gloton", KEY_8: "gymbro"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -68,7 +69,7 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
 	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
-	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80"), "gloton": Color("#b9a06e")}
+	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80"), "gloton": Color("#b9a06e"), "gymbro": Color("#c2b48a")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -130,7 +131,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · 7 Glotón · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · 7 Glotón · 8 Gymbro · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -1126,12 +1127,42 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			barra_jefa.max_value = maxima
 			barra_jefa.value = vida
 			barra_jefa.visible = vida > 0)
+		# la armadura (los suplementos del Gymbro enfadado), en una barra fina encima de la de vida
+		var barra_armadura := armadura_jefe()
+		barra_armadura.hide()
+		if zombi.has_signal("armadura_cambiada"):
+			zombi.armadura_cambiada.connect(func(armadura, maxima):
+				barra_armadura.max_value = maxima
+				barra_armadura.value = armadura
+				barra_armadura.visible = armadura > 0)
 		zombi.pide_zombi.connect(meter_zombi)
 	elif "velocidad" in zombi:
 		# con la Alerta 2, todos un poco más rápidos; con el reto del día "Zombis rápidos", bastante más
 		zombi.velocidad *= Alerta.velocidad() * Reto.velocidad()
 	mapa.cosas.add_child(zombi)
 	return zombi
+
+
+# La barra de armadura de los jefes (la del Gymbro): se hace la primera vez que hace falta, pegada encima de la
+# barra de vida grande, del mismo ancho y más fina, de color acero
+func armadura_jefe() -> ProgressBar:
+	var barra: ProgressBar = $Pantalla/Jefa.get_node_or_null("Armadura")
+	if barra:
+		return barra
+	barra = ProgressBar.new()
+	barra.name = "Armadura"
+	barra.show_percentage = false
+	barra.position = Vector2(0, -8)
+	barra.size = Vector2($Pantalla/Jefa.size.x, 6)
+	var fondo := StyleBoxFlat.new()
+	fondo.bg_color = Color("#1c1a2b")
+	var lleno := StyleBoxFlat.new()
+	lleno.bg_color = Color("#9fc3e8")
+	barra.add_theme_stylebox_override("background", fondo)
+	barra.add_theme_stylebox_override("fill", lleno)
+	barra.visible = false
+	$Pantalla/Jefa.add_child(barra)
+	return barra
 
 
 # El edificio del que "tipo" es el jefe final (el gerente, del centro comercial; edificios.gd, "final"), o {}

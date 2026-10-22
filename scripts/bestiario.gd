@@ -96,6 +96,10 @@ const LISTA := {
 		"frase": "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe te salpica.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-gloton.tres",
 		"recorte": Rect2i(33, 26, 66, 66), "retrato": "quieto_s", "escala": 2, "jefe": true},
+	"gymbro": {"nombre": "El Gymbro",
+		"frase": "Gira con los brazos abiertos, salta encima de ti y te tira pesas. Con sus suplementos, la armadura se come la mitad del daño.",
+		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-gymbro.tres",
+		"recorte": Rect2i(31, 34, 70, 66), "retrato": "quieto_s", "escala": 2, "jefe": true},
 }
 
 

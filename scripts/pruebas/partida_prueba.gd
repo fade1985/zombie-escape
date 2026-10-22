@@ -1016,6 +1016,8 @@ func _process(delta: float) -> void:
 				montar(i, 0, false)
 	if antes < 7.3 and tiempo >= 7.3 and jefa and planta.jefe == "gloton":   # (aparece a los 7,2)
 		probar_gloton()   # la sangre ácida y el aspirado (lo escribe en la terminal)
+	if antes < 7.3 and tiempo >= 7.3 and jefa and planta.jefe == "gymbro":
+		probar_gymbro()   # los suplementos (la armadura) y las pesas (lo escribe en la terminal)
 	if antes < 7.7 and tiempo >= 7.7 and jefa:
 		if jefa.has_method("cambiarse"):
 			probar_modista(jefa)   # antes de poner a Johnny delante: se cambia de sitio
@@ -1090,6 +1092,21 @@ func probar_gloton() -> void:
 	var d0: float = johnny.position.distance_to(jefa.position)
 	await get_tree().create_timer(0.3, false).timeout
 	print("Aspirar (0,3 s): Johnny de %d a %d de distancia (le ve: %s)" % [d0, johnny.position.distance_to(jefa.position), jefa.se_ve(johnny)])
+
+
+# El Gymbro: se enfada ya (los suplementos): un golpe de 20 le quita 10 de vida y 10 de armadura, y sale la barra
+# de armadura; y lanza sus pesas (enfadado, 4) para que salgan en la foto de los 7,7
+func probar_gymbro() -> void:
+	jefa.fase = 2
+	jefa.al_enfadarse(johnny)
+	var vida_antes: int = jefa.vida
+	var armadura_antes: int = jefa.armadura
+	jefa.recibir_golpe(20, Vector2.RIGHT * 300.0)
+	var barra: Node = $Pantalla/Jefa.get_node_or_null("Armadura")
+	print("Gymbro con suplementos (golpe de 20): vida -%d, armadura -%d de %d | barra de armadura: %s" % [
+		vida_antes - jefa.vida, armadura_antes - jefa.armadura, jefa.armadura_max, barra != null and barra.visible])
+	jefa.lanzar_pesas(johnny)
+	print("Gymbro: pesas en el aire: %d" % get_tree().get_nodes_in_group("balas_zombi").size())
 
 
 # El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,
@@ -1332,8 +1349,8 @@ func probar_colecciones() -> void:
 		push_error("Colecciones: los objetos por edificio no son 17 y 27 (con los cuatro trajes)")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
-	if Bestiario.LISTA.size() != 18:
-		push_error("Colecciones: el bestiario no tiene 18 fichas")
+	if Bestiario.LISTA.size() != 19:
+		push_error("Colecciones: el bestiario no tiene 19 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
 		push_error("Colecciones: el retrato del gerente mutado es null")
 	if g.colecciones_nuevo:
