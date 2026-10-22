@@ -24,7 +24,7 @@ const SITIO_TALLER := Rect2(MURO, MURO, 480 - MURO, 150)   # lo que se guarda pa
 const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
 const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 116           # (alargada para los zombis, los minijefes y el gerente del centro comercial)
+const EXPO_FILAS := 121           # (alargada para los zombis, los minijefes y el gerente del centro comercial, y el Glotón)
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
@@ -83,7 +83,7 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
 # aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}; las puertas de tienda de la pared de arriba
 # llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd)
-# "su_jefe": el zombi jefe de esta planta (en el centro comercial, el minijefe que le toca; "" = el del edificio)
+# "su_jefe": el zombi jefe de esta planta (el minijefe que le toca; "" = el del edificio)
 static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dictionary:
 	if semilla != 0:
 		rng.seed = semilla + num
@@ -145,7 +145,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# la puerta del apartamento está en el lado que da al pasillo
 		var lado := "abajo" if h.dir == "arriba" else "arriba"
 		var apt := Tienda.generar(rng.randi(), tipo_tienda, jefe, lado) if tiendas else Apartamento.generar(rng.randi(), jefe, lado)
-		if jefe and not mini.is_empty():
+		if jefe and mini.has("tienda"):
 			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
 			nombre = mini.tienda
 			apt.salas[0].nombre = mini.tienda

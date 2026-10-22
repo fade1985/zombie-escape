@@ -1,0 +1,8 @@
+south {"ref":"upload:654ed7b8-8ec6-414e-93a4-2f77c2ac79af","upload_id":"654ed7b8-8ec6-414e-93a4-2f77c2ac79af","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+south-east {"ref":"upload:bac68854-7e6b-4979-a207-2127b979c3e0","upload_id":"bac68854-7e6b-4979-a207-2127b979c3e0","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+east {"ref":"upload:094965c1-a66e-42ef-b2f5-2df760b5502c","upload_id":"094965c1-a66e-42ef-b2f5-2df760b5502c","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+north-east {"ref":"upload:005c5bea-0543-48d9-bfd3-03442b19836c","upload_id":"005c5bea-0543-48d9-bfd3-03442b19836c","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+north {"ref":"upload:b09d5cd6-28e8-4efe-b41c-f6316cf9d65a","upload_id":"b09d5cd6-28e8-4efe-b41c-f6316cf9d65a","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+north-west {"ref":"upload:dbf6123e-91d0-41fa-a1d6-77627197e6b9","upload_id":"dbf6123e-91d0-41fa-a1d6-77627197e6b9","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+west {"ref":"upload:7159f308-9ab7-46e5-9389-8019e4d9938f","upload_id":"7159f308-9ab7-46e5-9389-8019e4d9938f","width":128,"height":128,"n_frames":1,"expires_in_days":3}
+south-west {"ref":"upload:0c9b8d1d-b347-446e-a083-0b236d0a22d2","upload_id":"0c9b8d1d-b347-446e-a083-0b236d0a22d2","width":128,"height":128,"n_frames":1,"expires_in_days":3}

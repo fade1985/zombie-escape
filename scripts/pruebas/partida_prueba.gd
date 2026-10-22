@@ -7,7 +7,8 @@
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas   las fotos de las tiendas, de la luz o de las ayudas
 #   --evento X     la prueba de ese evento sorpresa (eventos.gd)
 #   --alerta N     las reglas de esa alerta (alerta.gd)
-#   --jefe X       el minijefe de la 1ª planta del centro comercial (si no, el antidisturbios)
+#   --jefe X       el minijefe de la 1ª planta (centro comercial: si no, el antidisturbios; Apartamentos: si no, la
+#                  portera en la baja)
 #   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
 extends "res://scripts/partida.gd"
 
@@ -33,6 +34,10 @@ func preparar_prueba() -> void:
 # "--jefe cocinero", "--jefe modista" o "--jefe mascota"
 func ordenar_jefes_prueba() -> void:
 	var probar := Captura.dato("--jefe", "antidisturbios")
+	if probar not in orden_jefes and "portera" in orden_jefes:
+		# los Apartamentos sin --jefe: la portera en la planta baja, como siempre
+		orden_jefes.erase("portera")
+		orden_jefes.insert(0, "portera")
 	if probar in orden_jefes:
 		orden_jefes.erase(probar)
 		orden_jefes.insert(1, probar)
@@ -1009,6 +1014,8 @@ func _process(delta: float) -> void:
 		for i in planta.sitios.size():
 			if planta.sitios[i].tipo == "jefe":
 				montar(i, 0, false)
+	if antes < 7.3 and tiempo >= 7.3 and jefa and planta.jefe == "gloton":   # (aparece a los 7,2)
+		probar_gloton()   # la sangre ácida y el aspirado (lo escribe en la terminal)
 	if antes < 7.7 and tiempo >= 7.7 and jefa:
 		if jefa.has_method("cambiarse"):
 			probar_modista(jefa)   # antes de poner a Johnny delante: se cambia de sitio
@@ -1064,6 +1071,25 @@ func probar_modista(jefa: Node2D) -> void:
 	jefa.murio.connect(func(): (func():
 		print("Modista: al caer ella, maniquíes vivos: %d" % jefa.vivos.filter(func(v): return v.estado != "muerto").size())
 		).call_deferred())
+
+
+# El Glotón: la sangre ácida (dos golpes seguidos: solo el primero salpica, un 1 % de la vida de Johnny) y el
+# aspirado (0,3 s tirando de Johnny, puesto a 220 de él; antes de la foto de los 7,7)
+func probar_gloton() -> void:
+	var antes_vida: int = johnny.vida
+	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	print("Sangre ácida (dos golpes seguidos de 10): Johnny -%d" % (antes_vida - johnny.vida))
+	for i in 60:
+		var p: Vector2 = jefa.position + Vector2.from_angle(randf() * TAU) * 220.0
+		if mapa.zona_en(p) >= 0:
+			johnny.position = p
+			break
+	jefa.mirada = (johnny.position - jefa.position).normalized()
+	jefa.cambiar("aspirar")
+	var d0: float = johnny.position.distance_to(jefa.position)
+	await get_tree().create_timer(0.3, false).timeout
+	print("Aspirar (0,3 s): Johnny de %d a %d de distancia (le ve: %s)" % [d0, johnny.position.distance_to(jefa.position), jefa.se_ve(johnny)])
 
 
 # El cocinero, para la foto del jefe: un charco de aceite debajo de él (no le quema) y otro debajo de Johnny,
@@ -1306,8 +1332,8 @@ func probar_colecciones() -> void:
 		push_error("Colecciones: los objetos por edificio no son 17 y 27 (con los cuatro trajes)")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
-	if Bestiario.LISTA.size() != 17:
-		push_error("Colecciones: el bestiario no tiene 17 fichas")
+	if Bestiario.LISTA.size() != 18:
+		push_error("Colecciones: el bestiario no tiene 18 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
 		push_error("Colecciones: el retrato del gerente mutado es null")
 	if g.colecciones_nuevo:

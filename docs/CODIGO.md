@@ -15,7 +15,8 @@
 - `salas/`: la sala de pruebas de las fases 1-3 (`bano.tscn` y `bano_tileset.tres`: las piezas y cuáles chocan).
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector), `portera.tscn`
   y los minijefes del centro comercial (`antidisturbios.tscn`, `cocinero.tscn`, `modista.tscn`, `mascota.tscn`) y
-  su jefe final, en la azotea (`gerente.tscn`).
+  su jefe final, en la azotea (`gerente.tscn`); los minijefes de los Apartamentos (`docs/JEFES_APARTAMENTOS.md`):
+  `gloton.tscn`.
 - `armas/`: `bala.tscn` (bala y perdigones), `bala_zombi.tscn` (agua sucia de la portera y alfileres de la modista), `proyectil.tscn`
   (moco, botella de lejía y sartén del cocinero, en parábola), `charco.tscn` y `explosion.tscn`.
 - `luces/`: `lampara.tscn` (luz de suelo con sombras, luz de lo demás sin sombras y bombilla), `fuego.tscn` y
@@ -57,7 +58,9 @@
 - `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
   vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir; y la carrera en línea
   recta, `embestir()` con `pared_chocada()` y `estrellarse()`, con su `franja()` roja de aviso y el estado "atontado"
-  con estrellitas). Cada uno hereda y pone sus ataques: `antidisturbios.gd` (escudo por delante y doble por la espalda,
+  con estrellitas). Cada uno hereda y pone sus ataques: `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo
+  de lenguas en abanico, aspira 5 s tirando de Johnny hacia la boca y se lo come si llega, sangre ácida al pegarle; una
+  explosión le corta lo que hace), `antidisturbios.gd` (escudo por delante y doble por la espalda,
   porrazo, carga que le atonta si se estrella, silbato), `cocinero.gd` (a media distancia: abanico de cuchillos, lluvia
   de cuchillos con su marca en el suelo, sartén de aceite hirviendo y cuchillazo), `modista.gd` (se esconde entre los
   maniquíes de su tienda y se cambia de sitio con uno, alfileres, tijeretazo; enfadada, despierta 3 maniquíes:
@@ -202,7 +205,7 @@
   que cuenta en la terminal. Sin nada más, la prueba larga (`_process`: un apartamento, el jefe, menús, ordenador,
   inventario, recetas, supervivientes, historia, colecciones...; con `--edificio centro`, en el centro comercial, con
   el antidisturbios en la 1ª planta, u otro minijefe con `--jefe cocinero`, `--jefe modista` o `--jefe mascota`, y al
-  final la azotea). `probar_colecciones` deja en el guardado parte de lo que hay, saca el escritorio con el aviso
+  final la azotea; en los Apartamentos, la portera en la planta baja o el minijefe de `--jefe gloton` en la 1ª). `probar_colecciones` deja en el guardado parte de lo que hay, saca el escritorio con el aviso
   (`captura-escritorio-nuevo.png`), los objetos del edificio (`captura-colecciones.png`), la ficha del vecino
   (`captura-bestiario.png`) y la del gerente sin ver (`captura-bestiario-falta.png`), y cuenta en la terminal lo
   encontrado, creado y visto de cada edificio.
@@ -265,7 +268,7 @@ para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
 el dibujo quieto y con `"sueltos"` quita los chorros que salen volando, en `assets/sources/<zombi>/zombi.json`); `jefe_hoja.py` (las vistas y animaciones de PixelLab de un minijefe de 72 → hoja y `.tres`:
 `py tools/jefe_hoja.py antidisturbios-72 jefe-antidisturbios`, `cocinero-72 jefe-cocinero`, `modista-72 jefe-modista` o
-`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
+`mascota-72 jefe-mascota`, la portera: `portera-72 jefe-portera`, el Glotón: `gloton-72 jefe-gloton`, y el gerente, de 128: `gerente-128 jefe-gerente` y `gerente-mutado-128 jefe-gerente-mutado`; las animaciones de cada uno, en su
 ficha `JEFES` (con la lista, los fotogramas por
 segundo y, si el lienzo no es de 72, el punto de los pies; la embestida de la mascota y la del gerente mutado llevan
 un 5.º dato: quitar el primer fotograma; y opciones: `"sangre"`, `"motas"` por animación y `"sin"` para quitar fotogramas

@@ -26,6 +26,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **F2 a F7**: un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso). **V**: un vigilante y
   **B**: una dependienta (los del centro comercial). **P**: la portera. **K**: el antidisturbios. **G**: el cocinero.
   **T**: la modista. **J**: la mascota (de la Juguetería). **L**: el gerente (el jefe final de la azotea).
+  Los minijefes de los Apartamentos (`docs/JEFES_APARTAMENTOS.md`), con los números: **7**, el Glotón.
 - **N** (centro comercial): derecho a la azotea, sin subir planta a planta. En **Elige edificio**, la N abre todos
   los edificios (el centro comercial sin completar los Apartamentos) hasta cerrar el juego; no se guarda.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada

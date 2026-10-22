@@ -5,6 +5,7 @@
 #                                    py tools/jefe_hoja.py mascota-72 jefe-mascota
 #                                    py tools/jefe_hoja.py gerente-128 jefe-gerente   (el jefe final, lienzo de 128)
 #                                    py tools/jefe_hoja.py portera-72 jefe-portera    (la jefa de los Apartamentos)
+#                                    py tools/jefe_hoja.py gloton-72 jefe-gloton      (minijefe de los Apartamentos)
 # Lee assets/sources/<fuente>/: rotations/<dirección>.png (las 8 vistas quietas) y, si ya están, las animaciones
 # de PixelLab en <carpeta>/<dirección>-<n>.png (las baja tools/bajar_zip.py). Saca assets/sprites/<salida>.png
 # (todas las casillas seguidas, en filas de hasta ~4000 píxeles) y <salida>.tres con "quieto_s", "andar_ne",
@@ -130,6 +131,20 @@ JEFES = {
         "sangre": 160,                 # solo los salpicones rojo vivo del fregonazo
         "motas": {"lanzar": 300},      # la botella que sale volando
         "sin": {"lanzar_s": [6, 7]},   # de frente, la botella se ve enorme al venir hacia la cámara
+    },
+    # el Glotón (minijefe de los Apartamentos, docs/JEFES_APARTAMENTOS.md): las lenguas largas del latigazo y el
+    # cono de aspirar salen con código (gloton.gd); "aspirar" acaba con la boca abierta y el juego la mantiene
+    "gloton-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "latigazo": ("latigazo", 12, False, False),
+            "aspirar": ("aspirar", 12, False, False),
+            "golpe": ("golpe", 16, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "motas": {"golpe": 200},       # la lengua que sale volando en el golpe hacia la izquierda
     },
 }
 JEFE = JEFES[fuente]

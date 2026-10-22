@@ -17,7 +17,8 @@
 # talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos. La taquilla (ui/taquilla.gd),
 # igual: al arrimarse sale la ventanita para elegir el traje de Johnny (trajes.gd).
 #
-# Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
+# Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny (los minijefes de
+# los Apartamentos, con los números: 7, el Glotón). F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
 # las mutaciones sin tener que matar a la portera. Z le pone a Johnny el siguiente traje (trajes.gd).
 #
@@ -41,15 +42,16 @@ const ZOMBIS := {
 	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
 	"modista": preload("res://escenas/personajes/modista.tscn"),
 	"gerente": preload("res://escenas/personajes/gerente.tscn"),   # el jefe final del centro comercial (la azotea)
+	"gloton": preload("res://escenas/personajes/gloton.tscn"),     # minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md)
 }
 # Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
 # objetos y la mutación (el jefe final de un edificio, el gerente, sin lo del 25 % ni la mutación: final_de())
-const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente"]
+const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente", "gloton"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
-	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente"}
+	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente", KEY_7: "gloton"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -66,7 +68,7 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 	"explosivo": Color("#c3d96b"), "tentaculos": Color("#86b8aa"), "venenoso": Color("#b5e655"), "portera": Color("#cbb994"),
 	"vigilante": Color("#a6d655"), "dependienta": Color("#93c46a"), "guardia": Color("#a6d655"),
 	"antidisturbios": Color("#3b4252"), "cocinero": Color("#8a9a6a"), "modista": Color("#93b07a"),
-	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80")}
+	"mascota": Color("#c9a13b"), "gerente": Color("#8f9f80"), "gloton": Color("#b9a06e")}
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
@@ -92,7 +94,7 @@ var guardia: Node2D = null   # el guardia de seguridad, si está en el pasillo e
 var edificio: String = Edificios.elegido
 var ed: Dictionary = Edificios.datos(edificio)
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
-var orden_jefes: Array = []   # el centro comercial: el minijefe de cada planta, sorteado al empezar (edificios.gd)
+var orden_jefes: Array = []   # el minijefe de cada planta, sorteado al empezar (edificios.gd)
 var captura := false       # si es la partida de prueba (la pone pruebas/partida_prueba.gd)
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
@@ -128,7 +130,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · 7 Glotón · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -213,7 +215,7 @@ func _ready() -> void:
 	# la joyería del centro comercial (parte 9): una por partida, en una planta al azar de la 1ª a la 3ª
 	Planta.joyeria_planta = randi_range(2, Planta.PLANTAS - 1) if ed.generador == "tienda" else 0
 	var botiquin := supervivientes.botiquin_al_empezar()   # la mejora de la farmacéutica
-	# los minijefes del centro comercial, uno por planta en orden al azar (sin repetir)
+	# los minijefes, uno por planta en orden al azar (sin repetir)
 	orden_jefes = ed.get("minijefes", []).duplicate()
 	orden_jefes.shuffle()
 	if captura:
@@ -256,7 +258,7 @@ func nueva_planta(num: int) -> void:
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 
 
-# El minijefe de la planta "num" (centro comercial): el que le tocó en el sorteo, si ya está hecho (tiene su
+# El minijefe de la planta "num": el que le tocó en el sorteo, si ya está hecho (tiene su
 # escena en ZOMBIS); si no, "" (el jefe del edificio: la portera)
 func jefe_de(num: int) -> String:
 	# en la azotea, el jefe final del edificio (el gerente), si ya está hecho

@@ -8,7 +8,7 @@
 #   cerrojo           cómo se abre el sitio del jefe: "llave" (en el suelo de otro sitio) o "tarjeta" (la lleva
 #                     el guardia de seguridad, que ronda el pasillo: zombi_guardia.gd)
 #   jefe, el_jefe     el zombi jefe de cada planta (una escena de partida.gd, ZOMBIS) y cómo se le nombra
-#   minijefes         (el centro comercial) los minijefes de las plantas con tiendas, uno por planta desde la baja:
+#   minijefes         los minijefes de las plantas (las de tiendas en el centro comercial), uno por planta desde la baja:
 #                     la partida los sortea (sin repetir) y en las plantas de más, o si aún no existe el que toca,
 #                     sale "jefe". Sus datos, en MINIJEFES
 #   azotea            (el centro comercial) la última planta no tiene tiendas: es la azotea (planta.gd, azotea), con
@@ -29,8 +29,9 @@ const LISTA := {
 		"generador": "apartamento",
 		"sitios": "apartamentos",
 		"cerrojo": "llave",
-		"jefe": "portera",
+		"jefe": "portera",          # donde le toque a un minijefe sin hacer (y en la 4ª planta, mientras no haya azotea)
 		"el_jefe": "la portera",
+		"minijefes": ["portera", "gloton", "gymbro", "bombero"],
 		"objetivo": "limpia los apartamentos y busca la llave de la portera",
 		"abre": "",
 		"pasillo": "pasillo",
@@ -54,10 +55,14 @@ const LISTA := {
 	},
 }
 
-# Los minijefes del centro comercial (parte 4 del plan): cómo se les nombra y cómo se llama su tienda (sola y
-# con su artículo). Mientras
-# no tengan su escena en partida.gd (ZOMBIS), en su planta sale la portera
+# Los minijefes: cómo se les nombra y, en el centro comercial (parte 4 del plan), cómo se llama su tienda (sola y
+# con su artículo). En los Apartamentos (docs/JEFES_APARTAMENTOS.md) viven en un piso más, sin nombre propio.
+# Mientras no tengan su escena en partida.gd (ZOMBIS), en su planta sale la portera
 const MINIJEFES := {
+	"portera": {"el": "la portera"},
+	"gloton": {"el": "el Glotón"},
+	"gymbro": {"el": "el Gymbro"},
+	"bombero": {"el": "el jefe de bomberos"},
 	"antidisturbios": {"el": "el antidisturbios", "tienda": "Oficina de seguridad", "la_tienda": "la Oficina de seguridad"},
 	"cocinero": {"el": "el cocinero", "tienda": "Cocina central", "la_tienda": "la Cocina central"},
 	"modista": {"el": "la modista", "tienda": "Taller de costura", "la_tienda": "el Taller de costura"},

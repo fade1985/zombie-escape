@@ -74,7 +74,7 @@ const ACLARA := 3.5                       # lo rápido que se aclara una habitac
 # los zombis de la exposición, en el orden de las teclas de prueba
 const EXPO_ZOMBIS := ["zombi_normal", "zombi_lento", "zombi_rapido", "zombi_explosivo", "zombi_tentaculos",
 	"zombi_venenoso", "zombi_vigilante", "zombi_dependienta", "portera", "antidisturbios", "cocinero", "modista",
-	"mascota", "gerente"]
+	"mascota", "gerente", "gloton"]
 const RUMBOS := ["s", "so", "o", "no", "n", "ne", "e", "se"]
 
 var sitio: Dictionary

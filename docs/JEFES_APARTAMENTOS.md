@@ -35,6 +35,33 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
 
 *Nota de Claude:* con armas rápidas (MP5) el salpicón suma mucho; quizá uno cada medio segundo como mucho.
 
+### ✅ Hecho (22 oct 2026): el Glotón y el sorteo, con el visto bueno del dueño
+
+- **El sorteo:** `minijefes: ["portera", "gloton", "gymbro", "bombero"]` en la ficha `apartamentos` de `edificios.gd`
+  y sus nombres en `MINIJEFES` (sin tienda: en los Apartamentos el piso del jefe se llama como siempre, «2ºC»).
+  Donde toca uno sin hacer (Gymbro, bombero) sale la portera, y en la 4ª planta también (hasta que haya azotea).
+  En `--captura` sin `--jefe`, la portera va en la planta baja; con `--jefe gloton`, él en la 1ª.
+- **El Glotón** (`scripts/gloton.gd`, `escenas/personajes/gloton.tscn`). Los números que han quedado (provisionales,
+  se ajustan jugando): vida 480 (+25 % por planta), velocidad 55, 8 por contacto.
+  - *Latigazo:* si te ve a menos de 280, aviso de 0,6 s (franjas rojas) y 3 lenguas en abanico (separadas 0,4 rad,
+    250 de largo): 16 de daño y empujón. Cada 2,4 s. Las lenguas largas las dibuja el código por encima de él.
+  - *Aspirar:* si te ve a entre 90 y 420, grita «¡HAMBRE!», 0,8 s de aviso con el cono verde en el suelo (±0,85 rad)
+    y 5 s tirando de ti hacia la boca (te suma 120 de velocidad hacia él; andando hacia atrás se resiste, esquivando
+    no tira y con una pared en medio tampoco), mientras se va girando hacia ti (2 rad/s). Si llegas a su boca te
+    come: 30 de daño, te escupe lejos y te deja tirado. Cada 10 s.
+  - *Sangre ácida:* cada golpe o bala que le das te quita el 1 % de la vida máxima (mínimo 1), uno cada 0,5 s como
+    mucho, con gotas verdes y su chisporroteo.
+  - Una granada (explosión) le corta lo que esté haciendo (0,6 s tambaleándose): así se para el aspirado.
+  - *Enfadado* («¡TENGO HAMBRE!»): 6 lenguas (separadas 0,27 rad), tira el doble (240), ácido al 2 %, latigazo cada
+    1,6 s y aspira cada 7 s.
+- **Dibujo:** modelo a 72 y 5 animaciones en PixelLab (46 generaciones; detalle y textos en `assets/pixellab.json` →
+  `apartamentos-jefes` → `gloton-72`). Hoja con `py tools/jefe_hoja.py gloton-72 jefe-gloton`.
+- Tecla de prueba **7** (los demás minijefes de los Apartamentos irán en 8, 9...); sale en la exposición (F9,
+  alargada 5 casillas) y en el bestiario («El Glotón», 18 fichas). `--captura --jefe gloton` comprueba la sangre
+  ácida y el aspirado (lo escribe en la terminal) y saca `captura-jefe.png` con el latigazo.
+- Pegas conocidas: el andar a gatas es sutil (más balanceo que paso); de espaldas, el latigazo enseña una lengua por
+  encima de la cabeza.
+
 ## 2. El Gymbro (minijefe; diseño del dueño)
 
 **Aspecto:** muy musculoso, con **cuádriceps y manos gigantes** comparados con el resto del cuerpo; **arrastra las
@@ -91,8 +118,8 @@ lenguas-látigo, puñetazos al suelo con onda expansiva y escupitajos de fuego.
 
 ## Orden de trabajo (una sesión cada uno)
 
-1. **Glotón**, y de paso el sorteo de minijefes en los Apartamentos (`minijefes` en su ficha de `edificios.gd`;
-   donde toque uno sin hacer, la portera).
+1. ✅ **Glotón**, y de paso el sorteo de minijefes en los Apartamentos (`minijefes` en su ficha de `edificios.gd`;
+   donde toque uno sin hacer, la portera). Hecho el 22 oct.
 2. **Gymbro.**
 3. **Jefe de bomberos.**
 4. **Científico jefe**, y de paso la azotea en los Apartamentos (`azotea` y `final` en su ficha, como el centro).
