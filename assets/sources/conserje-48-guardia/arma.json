@@ -30,6 +30,8 @@
     },
     "zapatos_negros": { "north": [1, 4, 5] },
     "nota_zapatos_negros": "Dibujos de PixelLab con un zapato relleno del color del borde en vez de marrón: tools/andar_arma.py lo pinta de marrón (paso 3, 23 oct).",
+    "ritmo_parejo": ["north", "north-west"],
+    "nota_ritmo_parejo": "En estas direcciones PixelLab dio dibujos casi repetidos y el paso iba a trompicones: tools/andar_arma.py da menos tiempo a los que casi no cambian y más a los que cambian mucho (23 oct).",
     "espejo": { "east": "west" },
     "nota_espejo": "El andar hacia el este que dio PixelLab va a trompicones (solo 4 posturas): se usa el del oeste dado la vuelta (2026-10-16)."
   },

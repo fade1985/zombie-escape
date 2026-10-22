@@ -15,6 +15,10 @@ no se hunde en el suelo ni flota al andar (paso 2, 23 oct).
 Antes de eso se limpian los pies (paso 3): se quitan los píxeles gris mopa que quedan sueltos debajo de un zapato, y en
 los dibujos de "zapatos_negros" ({"north": [1, 4, 5]}) el zapato relleno del color del borde se pinta de marrón.
 
+En las direcciones de "ritmo_parejo" (["north", "north-west"]) no todos los dibujos duran lo mismo: los que casi no
+cambian hasta el siguiente pasan más rápido, para que el paso no vaya a trompicones (23 oct). Se apunta en <arma>.json
+("durations") y tools/hacer_frames.py lo pasa al .tres.
+
 Toca solo las filas de andar de assets/sprites/<arma>.png y sus números en <arma>.json, y vuelve a sacar el .tres
 con tools/hacer_frames.py.
 """
@@ -85,8 +89,18 @@ def a_ras(casilla, fila_pies):
     return np.roll(casilla, fila_pies - suelo(casilla), axis=0)
 
 
+def ritmo(casillas):
+    """Cuánto dura cada dibujo para que el paso vaya parejo: según cuánto cambian las piernas hasta el siguiente.
+    Entre 0,6 y 1,4 veces lo normal, y entre todos suman lo mismo que antes (la vuelta entera dura igual)."""
+    n = len(casillas)
+    cambio = np.array([(casillas[k][56:] != casillas[(k + 1) % n][56:]).any(-1).sum() for k in range(n)], float)
+    d = np.clip(cambio / cambio.mean(), 0.6, 1.4)
+    return [round(float(x), 2) for x in d * n / d.sum()]
+
+
 espejo = datos.get("espejo", {})   # {"east": "west"}: el este es el oeste dado la vuelta
 zapatos_negros = datos.get("zapatos_negros", {})
+ritmo_parejo = datos.get("ritmo_parejo", [])
 for direccion, info in filas.items():
     origen = espejo.get(direccion, direccion)
     lista = datos["fotogramas"][origen]
@@ -95,6 +109,7 @@ for direccion, info in filas.items():
     quieto = meta["anims"]["still"]["dirs"][direccion]
     pies = suelo(hoja[quieto["row"] * ch:(quieto["row"] + 1) * ch, quieto["col"] * cw:(quieto["col"] + 1) * cw])
     hoja[fila * ch:(fila + 1) * ch, :] = 0   # la fila entera en blanco: puede tener menos dibujos que antes
+    casillas = []
     for i, n in enumerate(lista):
         dibujo = np.array(Image.open(f"{FUENTE}/walk/{origen}-{n}.png").convert("RGBA"))
         casilla = limpiar_pies(colocar(dibujo, colores), n in zapatos_negros.get(origen, []))
@@ -102,7 +117,12 @@ for direccion, info in filas.items():
         if origen != direccion:
             casilla = casilla[:, ::-1]
         hoja[fila * ch:(fila + 1) * ch, i * cw:(i + 1) * cw] = casilla
+        casillas.append(casilla)
     info["frames"] = len(lista)
+    info.pop("durations", None)
+    if direccion in ritmo_parejo:
+        info["durations"] = ritmo(casillas)
+        print(f"  ritmo: {info['durations']}")
     print(f"{direccion}: {len(lista)} dibujos ({', '.join(map(str, lista))}{', en espejo' if origen != direccion else ''})")
 
 Image.fromarray(hoja).save(f"{HOJA}.png", optimize=True)
