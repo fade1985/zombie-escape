@@ -61,6 +61,12 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
   del JS) se confunde si el personaje dobla las rodillas al apuntar (el militar): mejor decirle a mano los fotogramas
   (`superviviente.json`, `sin_tinte`); y estos personajes no tienen blanco en los ojos, así que el parpadeo a mano de
   Johnny no se les puede hacer (solo respiran).
+- **Los supervivientes del centro comercial (22 oct, `pixellab.json` → `supervivientes-centro-48`):** la misma
+  receta (79 generaciones). El ferretero da un martillazo con chispazo blanco y el técnico suelta un chispazo celeste
+  con su aparato; la farmacéutica no tiene acción. En la hoja (`tools/superviviente.py`) no hay fogonazo amarillo ni
+  boca del arma: el momento de lo suyo se busca por el chispazo, salvo en el ferretero, que se dice a mano
+  (`superviviente.json`, `golpe`: el detector se quedaba con el fotograma de más chispas, que va después del golpe).
+  Pega conocida: al noroeste, en el fotograma del chispazo, PixelLab tiñó de celeste la cabeza y el brazo del técnico.
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

@@ -1,0 +1,4 @@
+{
+  "golpe": {"south": 4, "south-east": 3, "east": 3, "north-east": 4, "north": 5, "north-west": 3, "west": 4, "south-west": 4},
+  "nota": "golpe: en qué fotograma de la acción (de 1 a 8) el martillo da en el suelo, mirado a mano (el primero con el chispazo blanco). El detector automático se queda con el de más chispas, que a veces es el siguiente o, al noreste, el martillo alzado al sol"
+}

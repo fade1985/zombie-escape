@@ -1,19 +1,23 @@
-"""Monta la hoja de sprites de un superviviente de los Apartamentos (policía, médica o militar) con lo que da PixelLab.
+"""Monta la hoja de sprites de un superviviente (policía, médica, militar, ferretero, farmacéutica o técnico) con lo que
+da PixelLab.
 
 Lo saca todo de assets/sources/superviviente-<id>-48/:
   rotations/<dirección>.png     las 8 posturas quietas (48×48)
   walk/<dirección>-<n>.png      andar (plantilla walking-8-frames: 8 fotogramas, sin el quieto)
-  accion/<dirección>-<n>.png    lo suyo (disparo, ráfaga o cura): PixMiniMax, el fotograma 0 es el quieto (lienzo de 96 o más)
+  accion/<dirección>-<n>.png    lo suyo (disparo, ráfaga, cura, martillazo o descarga): PixMiniMax, el fotograma 0 es el
+                                quieto (lienzo de 96 o más). Opcional: la farmacéutica no tiene (lo suyo no tiene gesto)
   caido/south-<n>.png           se desploma (solo mirando al sur): el fotograma 0 es el quieto y el último, tumbado
   superviviente.json (opcional) ajustes: "cuello" {dirección: fila desde lo alto de la cabeza}, "ojos" [desde, hasta]
-                                (filas desde lo alto de la cabeza donde buscar los ojos), "sin_tinte" {dirección: [n...]}
+                                (filas desde lo alto de la cabeza donde buscar los ojos), "sin_tinte" {dirección: [n...]},
+                                "golpe" {dirección: n} (a mano, en qué fotograma de la acción, de 1 a 8, llega lo suyo)
 
 Y escribe assets/sprites/superviviente-<id>.png y .json con cinco animaciones (y hacer_frames.py las pasa a .tres):
   still   las 8 posturas quietas
   idle    reposo a mano, como el de Johnny (tools/idle.py del JS): respiración de 1 píxel y un parpadeo,
           20 fotogramas a 5 por segundo. PixelLab redibuja la cara en cada fotograma y a 48 píxeles "baila".
   walk    andar: colores igualados a los del dibujo quieto y pies a su altura (como tools/walk.py del JS)
-  attack  la acción, 8 fotogramas; "hit": en qué punto (de 0 a 1) está el fogonazo (o el pinchazo), y en el JSON
+  attack  la acción, 8 fotogramas; "hit": en qué punto (de 0 a 1) está el fogonazo (el pinchazo, el martillazo o el
+          chispazo de la descarga), y en el JSON
           "muzzle": dónde está la boca del arma en cada dirección (respecto a los pies, en píxeles del dibujo)
   fall    caerse (solo south, que es como el juego los tumba): no se repite, se queda en el último fotograma
 Casilla de 96×96 con los pies en (48, 78): el dibujo quieto va en (24, 32), como los zombis (tools/zombi.py).
@@ -254,9 +258,16 @@ def green(f, d):
             if px[x, y][3] and not body[x, y][3] and px[x, y][1] > 170 and px[x, y][1] - max(px[x, y][0], px[x, y][2]) > 60]
 
 
+def spark(f, d):
+    """El chispazo blanco del martillazo o el celeste del aparato del técnico, fuera de la silueta quieta."""
+    px, body = f.load(), still[d].load()
+    return [(x, y) for y in range(CH) for x in range(CW)
+            if px[x, y][3] and not body[x, y][3] and min(px[x, y][1:3]) > 200 and px[x, y][2] >= px[x, y][0] - 10]
+
+
 TINT = cfg.get('sin_tinte')   # a mano: en qué fotogramas de cada dirección se quita el tinte amarillo
 attack, muzzle, hits = {}, {}, {}
-for d in DIRS:
+for d in (DIRS if os.path.isdir(f'{SRC}/accion') else []):
     fs = load('accion', d)
     assert len(fs) == 9, f'la acción de {d} debería tener 9 fotogramas (el quieto y 8 más)'
     ox, oy = offset(fs, d, 'accion')
@@ -268,8 +279,8 @@ for d in DIRS:
                 fixed.append(n)
     attack[d] = [placed(fs[n], ox, oy, d, n, 'accion') for n in range(1, 9)]
     # en qué fotograma (de los 8 usados) se ve el fogonazo (o las chispas): ahí sale la bala (o cura)
-    marks = [flash(f, d) if TIRADOR else green(f, d) for f in attack[d]]
-    hits[d] = max(range(8), key=lambda i: len(marks[i]))
+    marks = [flash(f, d) if TIRADOR else green(f, d) if ID == 'medica' else spark(f, d) for f in attack[d]]
+    hits[d] = cfg['golpe'][d] - 1 if d in cfg.get('golpe', {}) else max(range(8), key=lambda i: len(marks[i]))
     if TIRADOR:
         pts = marks[hits[d]]
         assert len(pts) >= 6, f'no encuentro el fogonazo de {d}'
@@ -288,7 +299,7 @@ fall = {'south': [placed(fs[n], ox, oy, 'south', n, 'caido') for n in range(1, 9
 print(f'caido  south       lienzo {fs[0].size}, desplazado ({ox}, {oy}), 8 fotogramas; se queda en el último')
 
 # ═════════════ Hoja y JSON ═════════════
-blocks = [('idle', idle), ('walk', walk), ('attack', attack), ('fall', fall)]
+blocks = [(n, b) for n, b in [('idle', idle), ('walk', walk), ('attack', attack), ('fall', fall)] if b]
 cols = max(len(DIRS), *(len(fs) for _, b in blocks for fs in b.values()))
 rows_total = 1 + sum(len(b) for _, b in blocks)
 sheet = Image.new('RGBA', (cols * CW, rows_total * CH), (0, 0, 0, 0))
@@ -306,8 +317,9 @@ for name, b in blocks:
     fps = {'idle': IDLE_FPS, 'walk': WALK_FPS, 'attack': ATK_FPS, 'fall': FALL_FPS}[name]
     anims[name] = {'fps': fps, 'loop': name in ('idle', 'walk'), 'dirs': dirs}
 # en qué punto de la acción (de 0 a 1) llega el fogonazo o el pinchazo (el juego saca la bala o cura ahí)
-anims['attack']['hit'] = round(hits['east'] / 8, 3)
-anims['attack']['hits'] = {d: hits[d] + 1 for d in DIRS}
+if attack:
+    anims['attack']['hit'] = round(hits['east'] / 8, 3)
+    anims['attack']['hits'] = {d: hits[d] + 1 for d in DIRS}
 guardar_png(sheet, f'{OUT}.png')
 meta = {'cell': [CW, CH], 'pivot': [PX, PY], 'anims': anims,
         'source': f'Hecha con tools/superviviente.py a partir de {SRC}/'}

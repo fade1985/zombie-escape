@@ -2264,6 +2264,12 @@
       },
       "action_description": "El de supervivientes-48 → caido, con «his cap still on» (ferretero), «her hair bun still tied» (farmacéutica) o «his red headphones still around his neck» (técnico).",
       "resultado": "Los tres se desploman en 3-4 fotogramas y quedan quietos tumbados del 5 al 8, en lienzo de 96x96. Sin sangre."
+    },
+    "godot": {
+      "fecha": "2026-10-22",
+      "hojas": "assets/sprites/superviviente-<ferretero|farmaceutica|tecnico>.png + .json (tools/superviviente.py) → .tres (tools/hacer_frames.py); misma casilla y animaciones que supervivientes-48 → godot, la farmacéutica sin ataque",
+      "ajustes": "assets/sources/superviviente-ferretero-48/superviviente.json: 'golpe' dice a mano en qué fotograma da el martillo (S 4, SE 3, E 3, NE 4, N 5, NO 3, O 4, SO 4); el técnico, por el chispazo celeste (3 o 4)",
+      "aliado.gd": "HOJAS: 'fogonazo' 0,2 s en los dos (el martillazo y la descarga llegan ahí); el rayo de la descarga sale de la altura del aparato"
     }
   }
 }

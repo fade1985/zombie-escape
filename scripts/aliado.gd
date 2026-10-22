@@ -10,9 +10,9 @@
 #     La farmacéutica, en su rescate (escolta.gd), va herida ("herida"): cojea detrás de Johnny, despacio, con su
 #     vida encima; los zombis van a por ella como en la horda y, si cae, igual.
 #   - "vecino": rescatado en otra partida, espera en la sala de mantenimiento a que Johnny se le arrime.
-# Los tres de los Apartamentos (policía, médica y militar) se dibujan con su hoja de PixelLab (HOJAS: assets/sprites/
-# superviviente-<id>, hechas con tools/superviviente.py al tamaño y estilo de Johnny). Los del centro comercial siguen
-# dibujados con formas, como en el JS (persona.gd).
+# Los seis (policía, médica y militar de los Apartamentos; ferretero, farmacéutica y técnico del centro comercial) se
+# dibujan con su hoja de PixelLab (HOJAS: assets/sprites/superviviente-<id>, hechas con tools/superviviente.py al
+# tamaño y estilo de Johnny). El dibujo con formas del JS (persona.gd) queda para quien no tenga hoja.
 class_name Aliado
 extends CharacterBody2D
 
@@ -29,8 +29,9 @@ const VIDA := 100          # la vida en la horda (HORDA.vida en el JS)
 const DESTELLO := preload("res://escenas/personajes/destello.gdshader")   # el blanco al recibir un golpe (como los zombis)
 # Los que tienen hoja de PixelLab (tools/superviviente.py). "boca": dónde está la boca del arma en cada dirección, en
 # píxeles del dibujo desde los pies (como en armas.gd; lo dice la herramienta al montar la hoja). "fogonazo": a los
-# cuántos segundos de empezar lo suyo sale el fogonazo (ahí sale la bala) o llega el pinchazo de la jeringa (ahí cura):
-# la acción son 8 fotogramas a 15 por segundo y el fogonazo está en el 4º
+# cuántos segundos de empezar lo suyo sale el fogonazo (ahí sale la bala), llega el pinchazo de la jeringa (ahí cura),
+# el martillo da en el suelo (ahí pega) o salta el chispazo del aparato (ahí sale la descarga): la acción son 8
+# fotogramas a 15 por segundo y el fogonazo está en el 4º. La farmacéutica no tiene acción (lo suyo no tiene gesto)
 const HOJAS := {
 	"policia": {"hoja": preload("res://assets/sprites/superviviente-policia.tres"), "fogonazo": 0.2,
 		"boca": {"s": Vector2(-4, -34), "se": Vector2(26, -29), "e": Vector2(23, -37), "ne": Vector2(23, -52),
@@ -39,6 +40,9 @@ const HOJAS := {
 	"militar": {"hoja": preload("res://assets/sprites/superviviente-militar.tres"), "fogonazo": 0.2,
 		"boca": {"s": Vector2(24, -25), "se": Vector2(26, -23), "e": Vector2(32, -36), "ne": Vector2(28, -43),
 			"n": Vector2(-1, -51), "no": Vector2(-24, -48), "o": Vector2(-31, -37), "so": Vector2(-27, -16)}},
+	"ferretero": {"hoja": preload("res://assets/sprites/superviviente-ferretero.tres"), "fogonazo": 0.2},
+	"farmaceutica": {"hoja": preload("res://assets/sprites/superviviente-farmaceutica.tres")},
+	"tecnico": {"hoja": preload("res://assets/sprites/superviviente-tecnico.tres"), "fogonazo": 0.2},
 }
 
 var def: Dictionary
@@ -73,10 +77,11 @@ var vivo: bool:
 	get: return not caido
 
 var cuerpo: Node2D         # su dibujo: la Persona (formas) o, con hoja, el nodo que lleva la sombra y el sprite
-var persona: Persona = null   # el dibujo con formas (los del centro comercial)
-var sprite: AnimatedSprite2D = null   # la hoja de PixelLab (los tres de los Apartamentos: HOJAS)
-var accion_t := -1.0       # con hoja: lo que lleva lo suyo (disparo, ráfaga o cura); -1, nada en marcha
+var persona: Persona = null   # el dibujo con formas (quien no tenga hoja)
+var sprite: AnimatedSprite2D = null   # la hoja de PixelLab (HOJAS)
+var accion_t := -1.0       # con hoja: lo que lleva lo suyo (disparo, ráfaga, cura, martillazo o descarga); -1, nada
 var accion_cura := 0       # con hoja: lo que curará la médica cuando llegue el pinchazo (0: nada pendiente)
+var accion_zombi: Node2D = null   # con hoja: a quién le llegará el martillazo o la descarga (null: a nadie)
 var mirada := Vector2.DOWN # hacia dónde mira (y apunta)
 var agente: NavigationAgent2D   # le busca el camino rodeando paredes y muebles (como a los zombis)
 var encima: Node2D         # la vida, el bocadillo y su nombre, por encima de todo
@@ -254,7 +259,11 @@ func habilidad(delta: float) -> void:
 			animar("reposo", hacia)
 			if hab_t <= 0.0 and hacia.length() < h.alcance + blanco.radio:
 				hab_t = h.cada
-				if h.tipo == "golpear":
+				if sprite:
+					# con hoja: alza el martillo (o saca el aparato), y pega cuando llega el golpe (dibujar_hoja)
+					empezar_accion()
+					accion_zombi = blanco
+				elif h.tipo == "golpear":
 					martillazo(blanco, hacia)
 				else:
 					descarga(blanco)
@@ -323,10 +332,12 @@ func disparar(blanco: Node2D) -> void:
 	Luz.destello(self, boca, 100.0, 0.07)
 
 
-# El ferretero: un martillazo al zombi que tiene encima (la mano baja de golpe: persona.gd, con el retroceso)
+# El ferretero: un martillazo al zombi que tiene encima (con hoja, en el fotograma en que el martillo da abajo; con
+# formas, la mano baja de golpe: persona.gd, con el retroceso)
 func martillazo(z: Node2D, hacia: Vector2) -> void:
 	z.recibir_golpe(def.habilidad.dano, hacia.normalized() * 160.0)
-	persona.retroceso = 1.0   # (el ferretero se dibuja con formas)
+	if persona:
+		persona.retroceso = 1.0
 	Sonido.tocar("barrido")
 	Particulas.anillo(z, z.global_position, 22.0, Color("#ff9a3c"), 0.2)
 
@@ -445,12 +456,21 @@ func dibujar_hoja(delta: float, rapidez: float) -> void:
 	sprite.material.set_shader_parameter("destello", 0.85 if golpe_t > 0.0 else 0.0)
 	if caido:
 		poner_animacion("caer_s")   # se desploma y se queda tumbado (no se repite)
+		accion_zombi = null
 		return
 	if accion_t >= 0.0:
 		accion_t += delta
 		if accion_cura > 0 and accion_t >= HOJAS[def.id].fogonazo:
 			curar(accion_cura)   # el pinchazo de la médica
 			accion_cura = 0
+		if accion_zombi and accion_t >= HOJAS[def.id].fogonazo:
+			# el martillo da abajo o salta el chispazo: si el zombi sigue ahí, le llega
+			if is_instance_valid(accion_zombi) and accion_zombi.get("estado") != "muerto":
+				if def.habilidad.tipo == "golpear":
+					martillazo(accion_zombi, accion_zombi.global_position - global_position)
+				else:
+					descarga(accion_zombi)
+			accion_zombi = null
 		poner_animacion("ataque_" + direccion)
 		if sprite.is_playing():
 			return
@@ -496,8 +516,9 @@ func dibujar_encima() -> void:
 		encima.draw_line(Vector2(0, -10), johnny.global_position - global_position + Vector2(0, -10),
 			Color(Tema.VERDE, 0.5 * a), 8.0)
 	if rayo_t > 0.0:
-		# la descarga: un zigzag de su aparato al zombi, que cambia cada poco
-		var desde := Vector2(0, -6)
+		# la descarga: un zigzag de su aparato al zombi, que cambia cada poco (con hoja, desde la punta del aparato,
+		# que apunta adonde mira a la altura del pecho)
+		var desde := Vector2(0, -6) if persona else Vector2(0, -32) + mirada * 26.0
 		var hasta := rayo_a - global_position
 		var pts := PackedVector2Array([desde])
 		var lado := (hasta - desde).orthogonal().normalized()

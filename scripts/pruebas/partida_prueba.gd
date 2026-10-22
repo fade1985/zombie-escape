@@ -177,19 +177,26 @@ func fotos_supervivientes() -> void:
 		"ferretero": Vector2.RIGHT, "farmaceutica": Vector2.DOWN, "tecnico": Vector2.LEFT}
 	for k in supervivientes.equipo.size():
 		var a: Aliado = supervivientes.equipo[k]
-		a.position = johnny.position + Vector2(-210 + k * 140, 90)   # en fila, que no se tapen
+		# en fila, que no se tapen, y quietos ahí mirando a su lado (como en la horda, delante de la cerradura)
+		a.position = johnny.position + Vector2(-210 + k * 140, 90)
 		a.velocity = Vector2.ZERO
+		a.forzando = true
+		a.sitio_forzar = a.position
+		a.mira_forzar = hacia[a.def.id]
 		a.animar("reposo", hacia[a.def.id])
 		if a.sprite.sprite_frames.has_animation("ataque_s"):
 			a.empezar_accion()
-	await get_tree().create_timer(0.22).timeout
+	await get_tree().create_timer(0.17).timeout
 	for a in supervivientes.equipo:
 		if a.def.id == "tecnico":
-			a.rayo_t = 0.25
+			a.rayo_t = 0.6
 			a.rayo_a = a.global_position + Vector2(-180, -24)
+	await get_tree().create_timer(0.05).timeout   # (que se llegue a dibujar el rayo)
 	Captura.foto("captura-supervivientes-accion.png")
 	print("Foto supervivientes: lo suyo de cada uno")
 	await get_tree().create_timer(0.8).timeout
+	for a in supervivientes.equipo:
+		a.forzando = false
 	# el último del edificio cae (como en la horda: forzando la cerradura, con su vida encima)
 	var p: Aliado = supervivientes.equipo.filter(func(a): return a.def.id in ids).back()
 	p.forzando = true
@@ -198,7 +205,7 @@ func fotos_supervivientes() -> void:
 	p.caido = true
 	await get_tree().create_timer(0.9).timeout
 	Captura.foto("captura-supervivientes-caido.png")
-	print("Foto supervivientes: %s caído" % p.def.nombre)
+	print("Foto supervivientes: cae %s" % p.def.nombre)
 	get_tree().quit()
 
 
