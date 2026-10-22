@@ -76,7 +76,7 @@ func capa(textura: Texture2D, color: Color) -> void:
 	var s := Sprite2D.new()
 	s.texture = textura
 	s.scale = Vector2(2, 2)
-	s.position = Vector2(4, 4)
+	s.position = Vector2(0, -6)
 	s.modulate = color
 	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(s)   # antes que la página: queda debajo

@@ -1860,7 +1860,7 @@
   "cientifico-muerto": {
     "kind": "image",
     "herramienta": "create_image_pixflux (MCP)",
-    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/. 1ª tanda: elegido el 3 (22 oct), partido en capas con tools/cientifico_muerto.py. 2ª tanda (4-11, con los bocetos de guia_cientifico.py, a escala de Johnny, bata larga y charco): a = boca abajo, b = boca arriba; falta elegir.",
+    "nota": "Científico de Velaria muerto (cuerpo en el suelo con la página del dosier). Intentos en assets/sources/cientifico-muerto/. 1ª tanda: elegido el 3 (22 oct), partido en capas con tools/cientifico_muerto.py. 2ª tanda (4-11, con los bocetos de guia_cientifico.py, a escala de Johnny, bata larga y charco): a = boca abajo, b = boca arriba; elegido el 9 (A1, boca abajo, 22 oct), el que usa el juego.",
     "request": {
       "width": 64,
       "height": 64,
