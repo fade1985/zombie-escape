@@ -422,8 +422,8 @@ func probar_reto() -> void:
 		Reto.regla = r
 		aplicar_talentos(talentos)
 		var z := meter_zombi("normal", Vector2(200, 200))
-		print("%s · munición: %s · oscuras: %s · botiquines: %s · vende botiquín/munición: %s/%s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
-			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_botiquines(), Reto.se_vende("botiquin"),
+		print("%s · munición: %s · oscuras: %s · curas: %s · vende botiquín/munición: %s/%s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
+			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_curas(), Reto.se_vende("botiquin"),
 			Reto.se_vende("municion"), z.velocidad, johnny.stats.vida_max, Reto.mas_zombis(), Zombi.OIDO * Reto.oido()])
 		z.queue_free()
 	Reto.regla = regla
@@ -949,8 +949,8 @@ func probar_colecciones() -> void:
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 21:
-		push_error("Colecciones: los objetos por edificio no son 17 y 21")
+	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 23:
+		push_error("Colecciones: los objetos por edificio no son 17 y 23")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
 	if Bestiario.LISTA.size() != 17:
@@ -1129,6 +1129,34 @@ func probar_objetos() -> void:
 
 # Las recetas que sueltan los jefes: sabiendo todas menos dos, suelta tres (la tercera ya no sale: las dos que
 # quedan están en el suelo), foto del papel en el suelo, lo coge y foto del aviso
+# Los objetos de curar de las tiendas (parte 9: las vendas y el bocadillo, Objetos.USABLES): con la vida baja y los
+# dos en la mochila, saca el inventario con las vendas elegidas (captura-vendas.png) y usa cada uno, contando la
+# vida antes y después; luego dice dónde salen, que no entran en recetas y cuántos objetos cuenta Colecciones
+func probar_curas() -> void:
+	var antes := [mochila.duplicate(), johnny.vida]
+	mochila = ["vendas", "bocadillo", "clavos"]
+	johnny.vida = roundi(johnny.vida_tope() * 0.4)
+	abrir_cosas("inventario")
+	inventario.tocar("m0")
+	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
+	Captura.foto("captura-vendas.png")
+	for id in ["vendas", "bocadillo"]:
+		var v: int = johnny.vida
+		if inventario.abierto == "":
+			abrir_cosas("inventario")
+		if inventario.elegido() != id:   # (tocar la casilla ya elegida la deselecciona)
+			inventario.tocar("m0")   # el primero de la mochila: primero las vendas y, gastadas, el bocadillo
+		inventario.usar()
+		print("%s: vida %d -> %d (cura %d) | mochila %s | cerrado %s" % [Objetos.nombre(id), v, johnny.vida, cura_de(id),
+			mochila, inventario.abierto == ""])
+	print("Curas · en alguna receta: %s · dónde salen: vendas en %s, bocadillo en %s · el vendedor las vende: %s · Colecciones del centro: %d objetos" % [
+		Recetas.LISTA.values().any(func(r): return "vendas" in r.con or "bocadillo" in r.con),
+		Objetos.donde("vendas", "centro"), Objetos.donde("bocadillo", "centro"),
+		"vendas" in eventos.VENDEDOR.VENTA and "bocadillo" in eventos.VENDEDOR.VENTA, Objetos.de_edificio("centro").size()])
+	mochila = antes[0]
+	johnny.vida = antes[1]
+
+
 func probar_soltar_recetas() -> void:
 	var faltan := ["garfio", "mangual"]
 	Guardado.cambiar(func(g): g.recetas = Recetas.LISTA.keys().filter(func(r): return not r in faltan))
@@ -1451,6 +1479,7 @@ func probar_menus() -> void:
 	await probar_cosas()
 	await probar_creadas()
 	await probar_objetos()
+	await probar_curas()
 	await probar_recetas()
 	await supervivientes.probar()
 	await probar_sangre()

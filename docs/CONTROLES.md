@@ -10,8 +10,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   RT) y *libre* (ratón + clic, o stick derecho).
 - **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar.
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
-- **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo). El
-  botiquín de la farmacéutica se usa desde aquí: al elegirlo, la marca salta a **Usar** (con el mando, A dos veces).
+- **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo). Los
+  objetos de curar (el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado) se
+  usan desde aquí: al elegir uno, la marca salta a **Usar** (con el mando, A dos veces).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
 - **Elige edificio:** debajo de cada tarjeta, **<** y **>** cambian el nivel de alerta (de los abiertos; se
   recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5. Debajo, el botón
@@ -51,7 +52,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   la planta baja: dice en la terminal cuántos salen en 2000 partidas sorteadas y lo que pasa (luces apagadas,
   calambrazos, oleadas y premio, compras con lo que queda de dólares) y saca `captura-evento-<X>.png` (el cartel) y
   las suyas (`-piso`, `-cable`, `-premio`, `-puesto`, `-comprado`). Sin `--evento`, la prueba va sin eventos.
-- `--reto si` (o `--reto oscuras`, `--reto cuerpo`, `--reto botiquines`, `--reto rapidos`, `--reto cristal`,
+- `--reto si` (o `--reto oscuras`, `--reto cuerpo`, `--reto curas`, `--reto rapidos`, `--reto cristal`,
   `--reto llena` o `--reto oido`, para forzar esa regla en vez de la de hoy): en vez de la prueba larga, la del reto
   del día: comprueba que la 1ª planta sale igual dos veces con la semilla de hoy, dice en la terminal lo que cambia
   cada regla y cómo queda el primer piso con la que se juega, y saca `captura-reto-tarjeta.png` (la tarjeta con el
@@ -66,6 +67,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - La prueba larga saca también las de Colecciones: `captura-escritorio-nuevo.png` (el icono con el aviso de
   «¡NUEVO!»), `captura-colecciones.png` (los objetos del edificio), `captura-bestiario.png` (la ficha del vecino) y
   `captura-bestiario-falta.png` (la del gerente, sin ver), y cuenta en la terminal lo encontrado, creado y visto.
+  También `captura-vendas.png` (el inventario con las vendas elegidas) y, en la terminal, lo que curan las vendas y
+  el bocadillo al usarlos.
 
 ## La sala de mantenimiento
 

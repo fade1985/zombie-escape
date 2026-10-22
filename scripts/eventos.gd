@@ -346,7 +346,7 @@ func poner_vendedor(sitio: Dictionary) -> void:
 		var ofertas: Array = VENDEDOR.VENTA.keys().filter(Reto.se_vende)
 		ofertas.shuffle()
 		venta = {"pos": sitio_vendedor(sitio), "ofertas": ofertas.slice(0, VENDEDOR.OFERTAS), "vendidas": [],
-			"objeto": Objetos.al_azar(partida.edificio, "")}
+			"objeto": Objetos.al_azar(partida.edificio, "", true)}   # (chatarra: los de curar ya los vende aparte)
 	vendedor = VENDEDOR.new()
 	vendedor.montar(partida, venta)
 	partida.mapa.cosas.add_child(vendedor)

@@ -124,8 +124,8 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
 	var texto := "Lo que llevas en la mochila pasa al baúl si completas el edificio. Si caes, se pierde."
 	var usable := elegido() in Objetos.USABLES
-	if usable:   # (de momento solo hay el botiquín)
-		texto = "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_botiquin()
+	if usable:   # el botiquín, las vendas o el bocadillo: cada uno cura lo suyo
+		texto = "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_de(elegido())
 	elif sel != "":
 		texto = "Si lo tiras, se queda en el suelo: puedes volver a cogerlo." + (" Se tira de uno en uno." if sel[0] == "m" else "")
 	if aviso != "":

@@ -353,7 +353,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(coger_botiquin.bind(armarito))
-		if Reto.sin_botiquines():   # el reto del día "Sin botiquines": todos vacíos
+		if Reto.sin_curas():   # el reto del día "Sin curas": todos vacíos
 			armarito.vaciar()
 	poner_cientifico(idx)
 	for puerta in mapa.puertas:
@@ -833,12 +833,11 @@ func coger_botiquin(armarito: Node2D) -> void:
 		numero(armarito.position + Vector2(0, -40), "Tienes la vida al máximo", Tema.TINTA)
 		return
 	armarito.vaciar()
-	curar_botiquin(armarito)
+	curar_con(cura_botiquin(), armarito)
 
 
-# Cura lo de un botiquín, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
-func curar_botiquin(sobre: Node2D) -> void:
-	var cura := cura_botiquin()
+# Cura "cura" de vida, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
+func curar_con(cura: int, sobre: Node2D) -> void:
 	johnny.curar(cura)
 	Sonido.tocar("gema")
 	numero(sobre.position + Vector2(0, -40), "+%d" % cura, Tema.VERDE)
@@ -847,21 +846,28 @@ func curar_botiquin(sobre: Node2D) -> void:
 			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
 
 
-# Usar desde el inventario un objeto de la mochila (Objetos.USABLES; de momento, el botiquín de la farmacéutica):
-# se gasta y cura. Si no se puede (con la vida llena), no se gasta y devuelve por qué
+# Usar desde el inventario un objeto de curar de la mochila (Objetos.USABLES: el botiquín de la farmacéutica, las
+# vendas y el bocadillo): se gasta y cura lo suyo. Si no se puede (con la vida llena), no se gasta y devuelve por qué
 func usar_objeto(id: String) -> String:
 	if not id in mochila or not id in Objetos.USABLES:
 		return "No se puede usar"
 	if johnny.vida >= johnny.vida_tope():
 		return "Tienes la vida al máximo: guárdalo para luego"
 	mochila.remove_at(mochila.rfind(id))
-	curar_botiquin(johnny)
+	curar_con(cura_de(id), johnny)
 	return ""
 
 
-# Lo que cura un botiquín (con la Alerta 4, la mitad)
+# Lo que cura un botiquín (el de los baños o el de la farmacéutica)
 func cura_botiquin() -> int:
-	return roundi((BOTIQUIN + johnny.stats.botiquin_extra) * Alerta.botiquin())
+	return cura_de("botiquin")
+
+
+# Lo que cura un objeto de curar: lo suyo (el botiquín, BOTIQUIN; los demás, su "cura" de Objetos.USABLES), más el
+# talento Sanitario y, con la Alerta 4, la mitad
+func cura_de(id: String) -> int:
+	var base: int = BOTIQUIN if id == "botiquin" else Objetos.USABLES[id].cura
+	return roundi((base + johnny.stats.botiquin_extra) * Alerta.botiquin())
 
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
@@ -1161,6 +1167,7 @@ func ir_a_azotea() -> void:
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
 		for id in Objetos.NOMBRES:
-			g.baul[id] = g.baul.get(id, 0) + 1
+			if not id in Objetos.USABLES:   # (los de curar no van al baúl)
+				g.baul[id] = g.baul.get(id, 0) + 1
 		g.recetas = Recetas.LISTA.keys())
 	decir("Uno de cada objeto al baúl, y todas las recetas")

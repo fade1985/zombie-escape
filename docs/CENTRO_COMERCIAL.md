@@ -299,6 +299,26 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   farmacéutica, `Objetos.USABLES`) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
   taquillas. Les falta lo suyo: cada objeto de curar, y los trajes.
 
+### ✅ Hecho (22 oct 2026, parte 9: los objetos de curar)
+
+- **Dos objetos nuevos, solo del centro comercial**: las **vendas** (las suelta un zombi de la farmacia; curan 25) y
+  el **bocadillo** (del supermercado; cura 15). Salen como los demás objetos (la misma probabilidad), van en la
+  mochila y se usan desde el inventario con «Usar», como el botiquín de la farmacéutica. No van al baúl ni entran en
+  recetas: lo que no uses se pierde al acabar la partida.
+- Están en `Objetos.NOMBRES` y `Objetos.TIENDAS` (así cuentan en Colecciones: el centro pasa de 21 a 23 objetos, con
+  su tienda debajo) y en `Objetos.USABLES`, con lo que curan (`"cura"`). La partida pregunta `cura_de(id)` (en
+  `partida.gd`): lo suyo más el talento Sanitario y, con la Alerta 4, la mitad; los textos del talento y de la
+  alerta lo dicen. Iconos de 16×16 con código, `obj-vendas.png` y `obj-bocadillo.png` (`tools/objetos16.py`, 28 ya).
+- **El vendedor ambulante** también los vende (vendas $4, bocadillo $3): van a la mochila, para cuando hagan falta.
+  Su «objeto sorpresa» sigue siendo chatarra para el banco (`Objetos.al_azar(..., true)`).
+- **El reto del día «Sin botiquines» pasa a llamarse «Sin curas»** (`curas` en `reto.gd`): además de los armaritos
+  vacíos y sin el botiquín de la farmacéutica, los zombis no sueltan vendas ni bocadillos y el vendedor no vende
+  nada que cure.
+- La tecla de prueba U (uno de cada objeto al baúl) no mete los de curar.
+- Prueba: la larga (`--captura`, con o sin `--edificio centro`), en `probar_curas`: con la vida baja y los dos en la
+  mochila, saca el inventario con las vendas elegidas (`captura-vendas.png`), usa cada uno y cuenta la vida antes y
+  después; dice dónde salen, que no entran en recetas, que el vendedor los vende y los 23 objetos de Colecciones.
+
 ## Historia
 
 Dosier y noticias del centro comercial (`historia.gd`: una entrada más en `DOSIERES` y noticias nuevas).
@@ -510,8 +530,8 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
     ambulante y el puesto del ferretero no los venden, y la ayuda «Pistola sin fin» no vale.
   - *Todo a oscuras*: todos los sitios menos la sala de mantenimiento como en el apagón (la misma oscuridad de más y
     las lámparas apagadas: `eventos.gd`, `al_montar`); ese día el apagón no se sortea.
-  - *Sin botiquines*: los armaritos de los baños salen vacíos, la farmacéutica no te prepara el suyo y el vendedor no
-    lo vende.
+  - *Sin curas* (se llamó «Sin botiquines» hasta la parte 9): los armaritos de los baños salen vacíos, la farmacéutica
+    no te prepara el suyo, los zombis no sueltan vendas ni bocadillos y el vendedor no vende nada que cure.
   - *Zombis rápidos*: todos un 35 % más rápidos (los jefes, no).
   - *De cristal*: Johnny con la mitad de vida.
   - *Casa llena*: el doble de presupuesto de zombis en cada sitio (y en las oleadas de la horda).
@@ -861,3 +881,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 8. **Extras:** niveles de alerta, eventos sorpresa, reto del día, colecciones (decidido: ver «Para que enganche»).
    ✅ Trozo 1, niveles de alerta (21 oct). ✅ Trozo 2, eventos sorpresa (21 oct). ✅ Trozo 3, colecciones y
    bestiario (22 oct). ✅ Trozo 4, reto del día (22 oct). **Parte 8 terminada.**
+9. ✅ **Los objetos de curar** (22 oct): las vendas de la farmacia y el bocadillo del supermercado, que se usan desde
+   el inventario (ver «Objetos»). Quedan, de lo apartado: la joyería (sala opcional con riesgo) y los trajes de
+   Johnny de la tienda de ropa.

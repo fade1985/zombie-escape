@@ -16,7 +16,7 @@ const REGLAS := [
 	"+25 % de zombis",
 	"Zombis un 10 % más rápidos",
 	"Jefes con +25 % de vida, y se enfadan antes",
-	"Los botiquines curan la mitad",
+	"Botiquines, vendas y comida curan la mitad",
 	"El guardia (o el vecino de la llave) aguanta el doble y los zombis te oyen más lejos",
 ]
 const MAS_ZOMBIS := 1.25     # A1: el presupuesto de zombis de cada sitio (planta.gd, horda)

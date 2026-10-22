@@ -1,6 +1,6 @@
-# Dibuja los 26 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
-# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 17 de siempre
-# y, al final, los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md).
+# Dibuja los 28 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
+# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 17 de siempre,
+# los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md) y, al final, los 2 de curar (parte 9).
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
@@ -354,6 +354,43 @@ DIBUJOS = {
         "..owwwwwwwecBo..",
         "..oeeeeeeeeBo...",
         "..ooooooooooo...",
+        "................",
+    ],
+    # los dos de curar (parte 9): el rollo de vendas con una tira con su cruz roja, y el bocadillo por el lado
+    "vendas": [
+        "................",
+        "...oooooooo.....",
+        "..oWwwwwwwweo...",
+        ".oWwwwwwwwwweo..",
+        ".owwwwwwwwwweo..",
+        ".owwwwwwwwwweo..",
+        ".oewwwwwwwwweo..",
+        ".oeewwwwwwweeo..",
+        "..oeeeeeeeeeo...",
+        "...oooooooooo...",
+        "......owwwwwwwo.",
+        "......owwrwwwwo.",
+        "......owrrrwwwo.",
+        "......owwrwwwwo.",
+        "......oeeeeeeeo.",
+        "......ooooooooo.",
+    ],
+    "bocadillo": [
+        "................",
+        "................",
+        "....oooooooo....",
+        "..ooLhhhhhhhoo..",
+        ".oLhhhhhhhhhhho.",
+        ".ohhhhhhhhhhhmo.",
+        ".ommmmmmmmmmmmo.",
+        ".ovlvvlvvlvvlvo.",
+        ".oyyyyyyyyyyyyo.",
+        ".oPrrPPrrPPrrPo.",
+        ".ohhhhhhhhhhhmo.",
+        ".ohhhhhhhhhhmmo.",
+        "..oohhhhhhhmoo..",
+        "....oooooooo....",
+        "................",
         "................",
     ],
 }

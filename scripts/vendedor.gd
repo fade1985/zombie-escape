@@ -10,6 +10,8 @@ extends Node2D
 # Números provisionales
 const VENTA := {
 	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "precio": 8, "desc": "Cura como el de los baños"},
+	"vendas": {"nombre": "Vendas", "icono": "obj-vendas", "precio": 4, "desc": "Para curarte cuando quieras, desde la mochila"},
+	"bocadillo": {"nombre": "Bocadillo", "icono": "obj-bocadillo", "precio": 3, "desc": "Cura un poco, cuando quieras, desde la mochila"},
 	"municion": {"nombre": "Caja de munición", "icono": "municion", "precio": 3, "desc": "Un cargador más"},
 	"molotov": {"nombre": "Molotov", "icono": "molotov", "precio": 5, "desc": "Uno más para lanzar"},
 	"granada": {"nombre": "Granada", "icono": "granada", "precio": 6, "desc": "Una más para lanzar"},
@@ -189,6 +191,9 @@ func por_que_no(id: String) -> String:
 		"objeto":
 			if not Objetos.cabe(partida.mochila, datos.objeto):
 				return "No te cabe en la mochila"
+		"vendas", "bocadillo":
+			if not Objetos.cabe(partida.mochila, id):
+				return "No te cabe en la mochila"
 	return ""
 
 
@@ -209,6 +214,10 @@ func dar(id: String) -> String:
 			var cura: int = partida.cura_botiquin()
 			johnny.curar(cura)
 			return "Te curas %d" % cura
+		"vendas", "bocadillo":   # a la mochila, para usarlos desde el inventario cuando hagan falta
+			partida.mochila.append(id)
+			Objetos.apuntar_encontrado(id)
+			return "Te llevas: " + Objetos.nombre(id)
 		"municion":
 			johnny.sumar_municion()
 			return "Un cargador más"

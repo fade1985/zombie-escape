@@ -24,23 +24,29 @@ const NOMBRES := {
 	"cinta_americana": "Cinta americana", "cadena": "Cadena", "bateria": "Batería", "cable": "Cable",
 	"aceite": "Aceite", "bombona": "Bombona de gas", "hielo_seco": "Hielo seco", "jeringuilla": "Jeringuilla",
 	"perchas": "Perchas",
+	# los dos de curar del centro comercial (parte 9): no son chatarra, se usan desde el inventario (USABLES)
+	"vendas": "Vendas", "bocadillo": "Bocadillo",
 }
-# Los que no son chatarra: se usan desde el inventario («Usar») y no entran en las recetas ni pasan al baúl (al
-# acabar la partida, se pierden). De momento, el botiquín de la farmacéutica (supervivientes.gd); su icono,
-# assets/ui/iconos/<icono>.png. Aquí irán los demás de curar (vendas, comida)
+# Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no entran en las recetas ni
+# pasan al baúl (al acabar la partida, se pierden). El botiquín de la farmacéutica (supervivientes.gd; cura lo de
+# partida.BOTIQUIN; su icono, assets/ui/iconos/botiquin.png), y los de curar de las tiendas, con lo que curan
+# ("cura"; más con el talento Sanitario, y con la Alerta 4, la mitad): las vendas de la farmacia y el bocadillo del
+# supermercado. Cuentan en Colecciones como los demás (están en NOMBRES y en TIENDAS)
 const USABLES := {
 	"botiquin": {"nombre": "Botiquín", "icono": "botiquin"},
+	"vendas": {"cura": 25},
+	"bocadillo": {"cura": 15},
 }
 const SOLO_CASA := ["despertador", "mancuernas", "pistola_agua", "trapo", "cuerda"]   # solo en los Apartamentos
 const SOLO_CENTRO := ["cinta_americana", "cadena", "bateria", "cable", "aceite", "bombona", "hielo_seco",
-	"jeringuilla", "perchas"]   # solo en el centro comercial
+	"jeringuilla", "perchas", "vendas", "bocadillo"]   # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
 const TIENDAS := {
 	"ferreteria": ["clavos", "hacha", "llave_inglesa", "cuchillas", "spray", "cinta_americana", "cadena"],
 	"electronica": ["taser", "extintor", "bateria", "cable"],
 	"restaurante": ["alcohol", "gasolina", "mechero", "extintor", "aceite", "bombona"],
-	"supermercado": ["lejia", "alcohol", "mechero", "hielo_seco"],
-	"farmacia": ["alcohol", "lejia", "jeringuilla"],
+	"supermercado": ["lejia", "alcohol", "mechero", "hielo_seco", "bocadillo"],
+	"farmacia": ["alcohol", "lejia", "jeringuilla", "vendas"],
 	"ropa": ["cuchillas", "spray", "perchas"],
 }
 
@@ -102,13 +108,19 @@ static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -
 
 # Un objeto cualquiera de los que salen ahí, menos los explosivos (el jefe suelta dos seguros). En los
 # Apartamentos, uno de los de siempre; en el centro comercial, uno de la lista de su tienda (en el pasillo, de
-# una tienda cualquiera)
-static func al_azar(edificio := "apartamentos", tienda := "") -> String:
+# una tienda cualquiera). Con "chatarra", sin los de curar (el objeto sorpresa del vendedor es para el banco); con
+# el reto del día "Sin curas" (reto.gd), tampoco
+static func al_azar(edificio := "apartamentos", tienda := "", chatarra := false) -> String:
+	var lista: Array
 	if edificio == "apartamentos":
-		return NOMBRES.keys().filter(func(id): return id != "explosivos" and id not in SOLO_CENTRO).pick_random()
-	if tienda not in TIENDAS:
-		tienda = TIENDAS.keys().pick_random()
-	return TIENDAS[tienda].pick_random()
+		lista = NOMBRES.keys().filter(func(id): return id != "explosivos" and id not in SOLO_CENTRO)
+	else:
+		if tienda not in TIENDAS:
+			tienda = TIENDAS.keys().pick_random()
+		lista = TIENDAS[tienda]
+	if chatarra or Reto.sin_curas():
+		lista = lista.filter(func(id): return not id in USABLES)
+	return lista.pick_random()
 
 
 # ── Colecciones (el programa del ordenador) ──
@@ -144,8 +156,8 @@ static func donde(id: String, edificio: String) -> String:
 	return ", ".join(tiendas.slice(0, -1)) + " y " + tiendas[-1]
 
 
-# Apunta un objeto como encontrado alguna vez (al cogerlo del suelo o comprárselo al vendedor). Los que no son
-# chatarra (el botiquín) no cuentan
+# Apunta un objeto como encontrado alguna vez (al cogerlo del suelo o comprárselo al vendedor). El botiquín de la
+# farmacéutica no cuenta (no está en NOMBRES); las vendas y el bocadillo, sí
 static func apuntar_encontrado(id: String) -> void:
 	if not id in NOMBRES:
 		return

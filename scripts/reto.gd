@@ -17,7 +17,7 @@ class_name Reto
 const REGLAS := {
 	"cuerpo": {"nombre": "Solo cuerpo a cuerpo", "desc": "la pistola va vacía y no cae munición, ni molotovs ni granadas"},
 	"oscuras": {"nombre": "Todo a oscuras", "desc": "todas las plantas como en un apagón: solo se ve con la linterna"},
-	"botiquines": {"nombre": "Sin botiquines", "desc": "los armaritos están vacíos y nadie te vende ni te prepara uno"},
+	"curas": {"nombre": "Sin curas", "desc": "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"},
 	"rapidos": {"nombre": "Zombis rápidos", "desc": "todos un 35 % más rápidos (los jefes, no)"},
 	"cristal": {"nombre": "De cristal", "desc": "Johnny con la mitad de vida"},
 	"llena": {"nombre": "Casa llena", "desc": "el doble de zombis en cada sitio"},
@@ -27,7 +27,7 @@ const MAS_RAPIDOS := 1.35   # rapidos: la velocidad de los zombis (no la de los 
 const VIDA := 0.5           # cristal: la vida máxima de Johnny (partida.gd, aplicar_talentos)
 const MAS_ZOMBIS := 2.0     # llena: el presupuesto de zombis de cada sitio (planta.gd, horda) y las oleadas de la horda
 const OIDO := 3.0           # oido: la distancia a la que los zombis dormidos oyen los disparos (zombi.gd)
-# "oscuras" usa lo del apagón (eventos.gd, al_montar) y "cuerpo" y "botiquines" se miran donde se reparte cada cosa
+# "oscuras" usa lo del apagón (eventos.gd, al_montar) y "cuerpo" y "curas" se miran donde se reparte cada cosa
 
 # El reto que se juega: si es el reto, de qué día ("2026-10-22") y con qué regla (una clave de REGLAS)
 static var activo := false
@@ -84,9 +84,10 @@ static func oscuras() -> bool:
 	return es("oscuras")
 
 
-# botiquines: los armaritos vacíos, sin el botiquín de la farmacéutica y el vendedor no lo vende
-static func sin_botiquines() -> bool:
-	return es("botiquines")
+# curas: los armaritos vacíos, sin el botiquín de la farmacéutica, los zombis no sueltan vendas ni bocadillos
+# (objetos.gd, al_azar) y el vendedor no vende nada de eso
+static func sin_curas() -> bool:
+	return es("curas")
 
 
 static func velocidad() -> float:
@@ -107,8 +108,8 @@ static func oido() -> float:
 
 # ¿El vendedor ambulante y el puesto del ferretero pueden vender esto? (vendedor.gd, puesto.gd)
 static func se_vende(id: String) -> bool:
-	if id == "botiquin":
-		return not sin_botiquines()
+	if id in Objetos.USABLES:   # el botiquín, las vendas y el bocadillo
+		return not sin_curas()
 	if id in ["municion", "molotov", "granada"]:
 		return not sin_municion()
 	return true
