@@ -8,7 +8,9 @@ direcciones de "espejo" ({"east": "west"}) se hacen con la otra dada la vuelta.
 
 Cada dibujo se coloca como lo hacía tools/arma.py (que no está en git): centrado en la casilla y 1 píxel más abajo,
 con cada color cambiado por el más parecido del dibujo quieto de esa dirección (rotations/<dirección>.png), que es
-lo que quita los pocos colores sueltos que mete PixelLab. Con las listas antiguas sale la hoja de antes, píxel a píxel.
+lo que quita los pocos colores sueltos que mete PixelLab. Luego se sube o se baja entero para que su píxel más bajo
+(el pie que pisa) quede a la altura de los pies de Johnny quieto en esa dirección (la fila "still" de la hoja): así
+no se hunde en el suelo ni flota al andar (paso 2, 23 oct).
 
 Toca solo las filas de andar de assets/sprites/<arma>.png y sus números en <arma>.json, y vuelve a sacar el .tres
 con tools/hacer_frames.py.
@@ -47,16 +49,28 @@ def colocar(dibujo, colores):
     return casilla
 
 
+def suelo(casilla):
+    """La fila del píxel visible más bajo de una casilla: donde pisa."""
+    return int(np.nonzero(casilla[..., 3].any(1))[0].max())
+
+
+def a_ras(casilla, fila_pies):
+    """La casilla movida arriba o abajo para que pise en fila_pies."""
+    return np.roll(casilla, fila_pies - suelo(casilla), axis=0)
+
+
 espejo = datos.get("espejo", {})   # {"east": "west"}: el este es el oeste dado la vuelta
 for direccion, info in filas.items():
     origen = espejo.get(direccion, direccion)
     lista = datos["fotogramas"][origen]
     colores = paleta(origen)
     fila = info["row"]
+    quieto = meta["anims"]["still"]["dirs"][direccion]
+    pies = suelo(hoja[quieto["row"] * ch:(quieto["row"] + 1) * ch, quieto["col"] * cw:(quieto["col"] + 1) * cw])
     hoja[fila * ch:(fila + 1) * ch, :] = 0   # la fila entera en blanco: puede tener menos dibujos que antes
     for i, n in enumerate(lista):
         dibujo = np.array(Image.open(f"{FUENTE}/walk/{origen}-{n}.png").convert("RGBA"))
-        casilla = colocar(dibujo, colores)
+        casilla = a_ras(colocar(dibujo, colores), pies)
         if origen != direccion:
             casilla = casilla[:, ::-1]
         hoja[fila * ch:(fila + 1) * ch, i * cw:(i + 1) * cw] = casilla
