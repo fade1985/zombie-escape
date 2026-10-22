@@ -2137,8 +2137,8 @@
   "supervivientes-centro-48": {
     "kind": "characters",
     "fecha": "2026-10-22",
-    "nota": "Los tres supervivientes del centro comercial (ferretero, farmacéutica y técnico de scripts/supervivientes.gd) en pixel art, con la misma receta que supervivientes-48, para sustituir el dibujo con formas de persona.gd. Diseños sacados de su aspecto en el juego (DATOS, look): el ferretero con chaleco naranja de raya brillante, camisa azul, gorra verde, bigote canoso y el martillo colgado del cinturón; la farmacéutica con bata blanca, cruz verde, moño y una venda en la pierna (la mordieron); el técnico con polo azul marino, cascos rojos al cuello, tarjeta colgada y el aparato con lucecita en el cinturón. Todos algo sucios y cansados, sin heridas de zombi, manos vacías. FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Hoja de comparación: assets/pruebas/supervivientes-centro-48-modelos.png. A la espera de que el dueño elija uno de cada.",
-    "coste": "36 generaciones de los modelos (6 cada uno; saldo 377,80 → 341,80)",
+    "nota": "Los tres supervivientes del centro comercial (ferretero, farmacéutica y técnico de scripts/supervivientes.gd) en pixel art, con la misma receta que supervivientes-48, para sustituir el dibujo con formas de persona.gd. Diseños sacados de su aspecto en el juego (DATOS, look): el ferretero con chaleco naranja de raya brillante, camisa azul, gorra verde, bigote canoso y el martillo colgado del cinturón; la farmacéutica con bata blanca, cruz verde, moño y una venda en la pierna (la mordieron); el técnico con polo azul marino, cascos rojos al cuello, tarjeta colgada y el aparato con lucecita en el cinturón. Todos algo sucios y cansados, sin heridas de zombi, manos vacías. FASE 1 (modelos): dos intentos por personaje con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo (sin copiar colores). Los seis salieron de 46 píxeles de alto, como Johnny. Hoja de comparación: assets/pruebas/supervivientes-centro-48-modelos.png. ELEGIDOS por el dueño (22 oct): ferretero A, farmacéutica B y técnico A; sus 8 vistas están copiadas en assets/sources/superviviente-<id>-48/rotations/. FASE 2 (andar): plantilla walking-8-frames en las 8 direcciones de los tres (probado primero east y luego el resto en el mismo grupo; todas bien a la primera), fotogramas en assets/sources/superviviente-<id>-48/walk/<dirección>-<n>.png (bajados con tools/bajar_zip.py); hoja assets/pruebas/supervivientes-centro-48-andar.png y GIF .gif. Retoque a mano: en north-1 y north-3 de la farmacéutica PixelLab le pintó la cruz verde en la espalda; se tapó con el blanco de la bata (recuadro x 23-29, y 16-22).",
+    "coste": "60 generaciones: 36 de los modelos (6 cada uno; saldo 377,80 → 341,80) y 24 del andar (1 por dirección; 341,80 → 317,80)",
     "request": {
       "herramienta": "create_character_pro_flash",
       "width": 48,
@@ -2215,6 +2215,21 @@
         "alto_px": 46,
         "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors.",
         "description": "young adult male tech repair worker, a weary survivor of a zombie outbreak, realistic adult body proportions, slim, small head, dark brown skin, short black curly hair, bright red headphones hanging around his neck, dark navy blue polo shirt with a small store logo, white ID badge on a lanyard, a compact grey handheld gadget with a small blinking blue light hooked on his belt, charcoal grey trousers, dark sneakers, clothes crumpled and dirty, a white bandage around one wrist, exhausted expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+      }
+    },
+    "elegidos": {
+      "ferretero": "ferretero-A",
+      "farmaceutica": "farmaceutica-B",
+      "tecnico": "tecnico-A"
+    },
+    "andar": {
+      "fecha": "2026-10-22",
+      "template": "walking-8-frames",
+      "frames": 8,
+      "grupos": {
+        "ferretero": "1e13f708-1908-40ee-ba8e-33b033894ef9",
+        "farmaceutica": "8d6f3038-4e2b-4094-afa9-42cd7b5fcc6b",
+        "tecnico": "2c496a39-e324-489c-8181-be574524ca8e"
       }
     }
   }
