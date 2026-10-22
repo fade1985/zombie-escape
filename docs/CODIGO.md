@@ -185,7 +185,8 @@
   frente recortado a lo dibujado (el `recorte` de cada ficha lo calcula `py tools/recortes_bestiario.py`; repetirlo si
   cambia una hoja). `todo_visto()` es la tecla F8. Los textos se retocan aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
-  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los seis se dibujan con su
+  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los que atacan van a por los
+  zombis que ven aunque rompan la fila, `cazar`, y vuelven a su puesto cuando no queda ninguno a la vista; los seis se dibujan con su
   hoja de PixelLab, `HOJAS` → `assets/sprites/superviviente-<id>`, al tamaño de Johnny: reposo, andar, lo suyo en las
   8 direcciones y caído; la bala, la cura, el martillazo y la descarga llegan en su fotograma, `fogonazo`; la
   farmacéutica no tiene acción). En `DATOS`, los seis:

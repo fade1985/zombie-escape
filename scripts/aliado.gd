@@ -2,6 +2,8 @@
 #   - "encerrado": en el baño de su apartamento, temblando, hasta que Johnny limpia el piso y se le arrima.
 #   - "equipo": sigue a Johnny en fila india por donde él ha pasado (sus huellas: seguir) y usa lo suyo: el policía y
 #     el militar disparan al zombi más cercano; la médica cura a Johnny cada pocos segundos y al limpiar cada piso.
+#     Los que atacan van a por los zombis que ven (cazar): si ven uno y no lo tienen a tiro, dejan la fila y se le
+#     acercan; cuando no queda ninguno a la vista, vuelven a su puesto.
 #     Los del centro comercial: el ferretero da martillazos a los que se le acercan, el técnico suelta
 #     una descarga que deja quieto al zombi más cercano y, con la farmacéutica, los charcos de veneno y ácido le
 #     hacen a Johnny la mitad (eso lo mira johnny.gd: charcos_a_medias).
@@ -35,7 +37,11 @@ const CHARCOS := ["veneno", "acido", "toxico"]   # los que la farmacéutica deja
 const RUMBOS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 const LINEA := Color("#1d1b2c")
 const PAPEL := Color("#fff8ea")
-const ALCANCE := 400.0     # a qué distancia busca zombis para disparar
+const ALCANCE := 400.0     # a qué distancia disparan el policía y el militar (los demás llevan el suyo: "alcance")
+# La caza (cazar): a qué distancia ve a los zombis, a cuánto de Johnny deja de ir a por ellos, y lo rápido que va
+const VISTA := 460.0       # (algo menos de media pantalla)
+const CORREA := 420.0
+const CAZA_RAPIDEZ := 190.0   # un poco menos que Johnny (210): no se le adelanta
 const VIDA := 100          # la vida en la horda (HORDA.vida en el JS)
 const DESTELLO := preload("res://escenas/personajes/destello.gdshader")   # el blanco al recibir un golpe (como los zombis)
 # Los que tienen hoja de PixelLab (tools/superviviente.py). "boca": dónde está la boca del arma en cada dirección, en
@@ -94,6 +100,9 @@ var accion_t := -1.0       # con hoja: lo que lleva lo suyo (disparo, ráfaga, c
 var accion_cura := 0       # con hoja: lo que curará la médica cuando llegue el pinchazo (0: nada pendiente)
 var accion_zombi: Node2D = null   # con hoja: a quién le llegará el martillazo o la descarga (null: a nadie)
 var mirada := Vector2.DOWN # hacia dónde mira (y apunta)
+var presa: Node2D = null   # la caza (cazar): el zombi al que va, si ha dejado la fila por él
+var cazando := false       # ha dejado la fila: sigue con los zombis que vea hasta que no quede ninguno a la vista
+var volviendo := false     # ha dejado la caza por quedarse lejos de Johnny: hasta estar en su puesto, no vuelve a salir
 var agente: NavigationAgent2D   # le busca el camino rodeando paredes y muebles (como a los zombis)
 var encima: Node2D         # la vida, el bocadillo y su nombre, por encima de todo
 
@@ -175,7 +184,8 @@ func _physics_process(delta: float) -> void:
 			elif herida:
 				cojear()
 			else:
-				seguir()
+				if not cazar():
+					seguir()
 				if johnny.vivo:
 					habilidad(delta)
 	# andar: el paso avanza con lo rápido que va
@@ -318,7 +328,7 @@ func habilidad(delta: float) -> void:
 		if blanco:
 			var hacia := blanco.global_position - global_position
 			animar("reposo", hacia)
-			if hab_t <= 0.0 and hacia.length() < h.alcance + blanco.radio:
+			if hab_t <= 0.0 and hacia.length() < rango() + blanco.radio:
 				hab_t = h.cada
 				if sprite:
 					# con hoja: alza el martillo (o saca el aparato), y pega cuando llega el golpe (dibujar_hoja)
@@ -332,7 +342,7 @@ func habilidad(delta: float) -> void:
 	if blanco:
 		var hacia := blanco.global_position - global_position
 		animar("reposo", hacia)
-		if hab_t <= 0.0 and rafaga == 0:
+		if hab_t <= 0.0 and rafaga == 0 and hacia.length() < rango() + blanco.radio:
 			rafaga = h.rafaga
 			rafaga_t = 0.0
 			hab_t = h.cada
@@ -349,10 +359,62 @@ func habilidad(delta: float) -> void:
 			rafaga_t = h.get("hueco", 0.0)
 
 
+# La caza: el acompañante va a por los zombis que ve aunque rompa la fila. Si ve uno (despierto, sin niebla ni muro
+# en medio, a menos de VISTA) y no lo tiene a tiro, deja la fila y se le acerca hasta tenerlo; desde ahí sigue con los
+# que vea (quieto, si ya los tiene a tiro) hasta que no quede ninguno a la vista: entonces vuelve a su puesto. Si
+# Johnny se le aleja más de CORREA, lo deja y vuelve, y no sale otra vez hasta estar en la fila. Los que no atacan (la
+# médica, la farmacéutica) nunca la dejan. Devuelve si está de caza (si no, seguir() lleva el paso)
+func cazar() -> bool:
+	if not johnny.vivo or def.habilidad.tipo not in ["disparar", "golpear", "aturdir"]:
+		presa = null
+		cazando = false
+		return false
+	var lejos_j := global_position.distance_to(johnny.global_position)
+	if volviendo:
+		if lejos_j > SEPARACION * (idx + 1) + CERCA:
+			return false
+		volviendo = false
+	if presa and not is_instance_valid(presa):
+		presa = null   # ha desaparecido del todo (otra sala): a la fila
+		cazando = false
+	elif presa and (presa.get("estado") == "muerto" or not presa.visible or global_position.distance_to(presa.global_position) > VISTA):
+		presa = null   # ha caído (o lo ha perdido de vista): el siguiente que vea
+	if presa == null:
+		var z := zombi_cercano()
+		if z == null:
+			cazando = false
+			return false
+		if not cazando and global_position.distance_to(z.global_position) < rango() + z.radio:
+			return false   # lo tiene a tiro desde la fila: lo ataca desde ahí, como siempre
+		presa = z
+		cazando = true
+	if lejos_j > CORREA:
+		presa = null
+		cazando = false
+		volviendo = true
+		return false
+	pisar_huellas(johnny.global_position)   # el rastro de Johnny sigue apuntándose mientras tanto
+	var hacia := presa.global_position - global_position
+	if hacia.length() > rango() + presa.radio - 10.0:   # (un poco más adentro, para no quedarse en el borde justo)
+		ir_a(presa.global_position, CAZA_RAPIDEZ)
+		if velocity.length() > 20.0:
+			animar("andar", velocity)
+	else:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		animar("reposo", hacia)
+	return true
+
+
+# A qué distancia alcanza lo suyo: el martillo y la descarga llevan el suyo; las balas, ALCANCE
+func rango() -> float:
+	return def.habilidad.get("alcance", ALCANCE)
+
+
 # El zombi despierto más cercano que se ve (sin un muro en medio ni la niebla por encima)
 func zombi_cercano() -> Node2D:
 	var mejor: Node2D = null
-	var cerca := ALCANCE
+	var cerca := VISTA
 	for z in get_tree().get_nodes_in_group("zombis"):
 		if z.get("dormido") or z.get("estado") == "muerto" or not z.visible:
 			continue

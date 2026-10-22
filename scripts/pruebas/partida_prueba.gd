@@ -11,6 +11,7 @@
 #                  portera en la baja)
 #   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
+#   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 extends "res://scripts/partida.gd"
 
 var tiempo := 0.0            # los segundos que lleva la prueba larga (_process)
@@ -60,6 +61,9 @@ func empezar_prueba() -> void:
 	elif "--gastro" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gastro()
+	elif "--caza" in args:
+		set_process(false)   # sin la prueba larga
+		probar_caza()
 	elif "--trajes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_trajes()
@@ -253,6 +257,101 @@ func fotos_luz() -> void:
 		await get_tree().create_timer(0.8).timeout
 		Captura.foto("captura-luz-%d.png" % sala.id)
 		print("Foto luz: ", s.nombre, " · ", sala.nombre)
+	get_tree().quit()
+
+
+# Con "--captura --caza": el acompañante va a por los zombis que ve (aliado.gd, cazar). En un apartamento con todo
+# descubierto, solo el ferretero (martillo, alcance 80) acompaña a Johnny, quieto en lo más despejado de la habitación
+# más grande. Un zombi en otra habitación, con pared en medio: el ferretero se queda en la fila. Otro despierto y
+# quieto a unos 250, a la vista: deja la fila y va a por él (captura-caza-va.png), le da martillazos hasta matarlo y
+# vuelve a su puesto junto a Johnny (captura-caza-vuelve.png). Cuenta en la terminal distancias y vida, con lo esperado
+func probar_caza() -> void:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	var sitio: Dictionary = planta.sitios[i]
+	var apt: Dictionary = sitio.apt
+	for sala in apt.salas:
+		mapa.vistas[sala.id] = true   # todo descubierto: nada a oscuras
+		mapa.niebla[sala.id] = 0.0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	# solo el ferretero en el equipo (el guardado de la prueba trae al policía, que mataría al zombi a tiros desde la fila)
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
+	var datos: Dictionary = Supervivientes.DATOS.ferretero.duplicate()
+	datos.erase("rescate")
+	var ferre: Aliado = supervivientes.crear(datos, "equipo")
+	ferre.idx = 0
+	supervivientes.equipo.append(ferre)
+	mapa.cosas.add_child(ferre)
+	# Johnny, quieto en lo más despejado de la habitación más grande; el ferretero, a su lado
+	var grande: Dictionary = apt.salas[0]
+	for s in apt.salas:
+		if s.casillas > grande.casillas:
+			grande = s
+	johnny.position = grande.centro
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	ferre.position = johnny.position + Vector2(-40, 20)
+	Aliado.borrar_huellas()
+	await get_tree().create_timer(0.8).timeout
+	var d_fila: float = ferre.position.distance_to(johnny.position)
+	# 1) un zombi en otra habitación, con pared en medio: no lo ve, así que se queda en la fila
+	var otra: Dictionary = {}
+	for s in apt.salas:
+		if s.id != grande.id and not mapa.muro_entre(ferre.position, s.centro).is_empty() and otra.is_empty():
+			otra = s
+	if otra.is_empty():
+		print("Caza: ninguna habitación con pared en medio (no se prueba lo de no verlo)")
+	else:
+		var tras := meter_zombi("normal", otra.centro)
+		tras.dormido = false
+		tras.set_physics_process(false)
+		await get_tree().create_timer(1.5).timeout
+		print("Caza, zombi en otra habitación (a %d, con pared): el ferretero sigue en la fila, a %d de Johnny (esperado: menos de 80) · de caza %s (esperado: false)" % [
+			roundi(ferre.position.distance_to(tras.position)), roundi(ferre.position.distance_to(johnny.position)), ferre.cazando])
+		tras.queue_free()
+		await get_tree().process_frame
+	# 2) un zombi despierto y quieto a unos 250, a la vista, en la misma habitación
+	var donde := Vector2.INF
+	for lejos in [250.0, 200.0, 160.0]:
+		for k in 64:
+			var pos: Vector2 = johnny.position + Vector2.from_angle(k * TAU / 64.0) * lejos
+			if donde == Vector2.INF and Planta.despejado(apt, pos, 20.0, grande.id) and Planta.lejos_de_muebles(sitio, pos, 34.0) \
+					and mapa.muro_entre(ferre.position, pos).is_empty():
+				donde = pos
+		if donde != Vector2.INF:
+			break
+	if donde == Vector2.INF:
+		print("Caza: no hay sitio para el zombi a la vista (¡mal!)")
+		get_tree().quit()
+		return
+	var z := meter_zombi("normal", donde)
+	z.dormido = false
+	z.set_physics_process(false)   # quieto: ni anda ni ataca, para medir
+	var d0: float = ferre.position.distance_to(z.position)
+	await get_tree().create_timer(0.7).timeout
+	print("Caza, zombi a la vista a %d de Johnny: el ferretero va a por él, de %d a %d (esperado: baja) · a %d de Johnny (esperado: más de %d) · de caza %s (esperado: true)" % [
+		roundi(johnny.position.distance_to(z.position)), roundi(d0), roundi(ferre.position.distance_to(z.position)),
+		roundi(ferre.position.distance_to(johnny.position)), roundi(d_fila), ferre.cazando])
+	Captura.foto("captura-caza-va.png")
+	var t := 0.0
+	while is_instance_valid(z) and z.estado != "muerto" and t < 8.0:
+		await get_tree().create_timer(0.1).timeout
+		t += 0.1
+	var como: String = "muerto" if not is_instance_valid(z) or z.estado == "muerto" else "vivo con %d" % z.vida
+	print("Caza: a los %.1f s el zombi está %s (esperado: muerto) · el ferretero a %d de donde estaba el zombi (esperado: menos de 100)" % [
+		t, como, roundi(ferre.position.distance_to(donde))])
+	await get_tree().create_timer(2.5).timeout
+	print("Caza: sin zombis a la vista, vuelve a la fila: a %d de Johnny (esperado: menos de 80) · de caza %s (esperado: false)" % [
+		roundi(ferre.position.distance_to(johnny.position)), ferre.cazando])
+	Captura.foto("captura-caza-vuelve.png")
 	get_tree().quit()
 
 

@@ -78,6 +78,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
   que su charco pegado al tabique no lo quema (pero sí a uno de este lado) y que, con otro zombi más lejos pero a la
   vista, sale a ese (`captura-gastro-vuelo.png`, `captura-gastro-charco.png`). Cada línea dice lo esperado.
+- `--caza`: en vez de la prueba larga, la de la caza del acompañante (`aliado.gd`, `cazar`): en un apartamento, solo el
+  ferretero con Johnny quieto; con un zombi en otra habitación (pared en medio) se queda en la fila; con otro a unos 250
+  a la vista, deja la fila y va a por él (`captura-caza-va.png`), lo mata a martillazos y vuelve a su puesto
+  (`captura-caza-vuelve.png`). Cada línea de la terminal dice lo esperado.
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

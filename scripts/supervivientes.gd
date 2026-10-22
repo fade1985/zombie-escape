@@ -71,8 +71,8 @@ const DATOS := {
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],
 		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",
-		"desc": "Da martillazos (8 de daño) a los zombis que se le acercan",
-		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0},   # (alcance: va en la fila, a 52 por detrás de Johnny)
+		"desc": "Va a por los zombis que ve y les da martillazos (8 de daño)",
+		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0},   # (alcance: lo cerca que tiene que estar para pegar)
 		"mejora": "Monta su puesto: vende munición, molotovs y granadas por dólares"},
 	"farmaceutica": {"id": "farmaceutica", "nombre": "Farmacéutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
 		"casa": Vector2(710, 380), "tienda": "farmacia", "sala": "rebotica",
