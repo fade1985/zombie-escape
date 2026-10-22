@@ -8,6 +8,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | `docs/CONTROLES.md` | Teclas, mando, móvil, teclas de prueba (F2-F10, H, M, O…), sala de mantenimiento, guardado |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica solo con cada push a main) |
 | `docs/CENTRO_COMERCIAL.md` | El segundo edificio: plan entero por partes (lo que está hecho, marcado) |
+| `PENDIENTES.md` (raíz) | Lista del dueño de fallos, mejoras y cosas por limar: solo se toca un punto cuando él lo pide |
 | `docs/PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md` | Del juego JS: ideas y números |
 
 ## Qué es
@@ -23,6 +24,9 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
 - Por tareas: al terminar, resumen + captura, commit, push y **esperar su visto bueno**.
 - Antes de cambios grandes, **contar el plan y preguntar**. Si dice "no hagas nada, solo dime", solo se responde.
 - Directamente en `main`, sin pull requests salvo que los pida.
+- **`PENDIENTES.md`** (en la raíz) es la lista del dueño de fallos, mejoras y cosas por limar: él dicta los
+  puntos y Claude solo los apunta. **No se trabaja en ningún punto hasta que él lo pida**; al terminar uno con
+  visto bueno, se borra de la lista en el mismo commit.
 - Si hay varias sesiones a la vez, en el commit solo los archivos propios (nada de `git add -A`).
 - **Borrar en PixelLab no se puede deshacer:** solo con confirmación expresa del dueño.
 - **Ahorrar cuota:** sesiones cortas (si pasa de ~80 pasos, proponer seguir en otra con un resumen); Sonnet para
