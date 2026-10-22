@@ -400,7 +400,8 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 		return s.casillas * (0.5 if s.uso == "bano" else 1.0)   # en los baños, pocos
 	var total := 0.0
 	# (ni su aseo; ni la cámara acorazada de la joyería: con la puerta blindada cerrada no podrían salir)
-	var salas: Array = apt.salas.filter(func(s): return s.id != sin and s.get("dueno_bano", -1) != sin and s.uso != "acorazada")
+	# (sin == -1 es "ninguna": por eso lo que no tiene "dueno_bano" se compara con -2, y no con -1, que lo dejaría fuera)
+	var salas: Array = apt.salas.filter(func(s): return s.id != sin and s.get("dueno_bano", -2) != sin and s.uso != "acorazada")
 	for s in salas:
 		total += peso.call(s)
 	var salida: Dictionary = sitio.salidas[0]
