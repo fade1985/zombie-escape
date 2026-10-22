@@ -60,11 +60,11 @@ const RETO := {"fecha": "", "regla": "", "intentos": 0, "planta": 0, "completado
 
 static func cargar() -> Dictionary:
 	var s: Dictionary = NUEVO.duplicate(true)
-	if not FileAccess.file_exists(archivo):
-		return s
-	var leido = JSON.parse_string(FileAccess.get_file_as_string(archivo))
+	var leido = leer(archivo)
 	if not leido is Dictionary:
-		return s   # guardado roto: se empieza de cero
+		leido = leer(archivo + ".bak")   # roto o sin terminar de escribir: vale la copia de la vez anterior
+	if not leido is Dictionary:
+		return s   # no hay guardado (o están rotos los dos): se empieza de cero
 	for clave in leido:
 		if clave in s:
 			s[clave] = leido[clave]
@@ -99,12 +99,32 @@ static func cargar() -> Dictionary:
 	return s
 
 
+# Lo que hay en un archivo de guardado: un Dictionary, o null si no existe o está roto
+static func leer(ruta: String) -> Variant:
+	if not FileAccess.file_exists(ruta):
+		return null
+	return JSON.parse_string(FileAccess.get_file_as_string(ruta))
+
+
 static var escrituras := 0   # cuántas veces se ha escrito: Bestiario mira si el archivo cambió desde que lo leyó
 
+# Guardado seguro: si el juego se cierra a mitad de escribir, no se pierde nada. Se escribe primero en
+# guardado.json.tmp; solo cuando está entero, el guardado de antes pasa a ser la copia (guardado.json.bak) y el
+# nuevo ocupa su sitio. Pase lo que pase, siempre queda uno entero: el bueno o la copia (cargar mira los dos)
 static func escribir(s: Dictionary) -> void:
-	var f := FileAccess.open(archivo, FileAccess.WRITE)
+	var tmp := archivo + ".tmp"
+	var bak := archivo + ".bak"
+	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(s, "\t"))
+		var bien := f.get_error() == OK
+		f.close()   # cerrar asegura que todo está ya en el disco
+		if bien:
+			if FileAccess.file_exists(archivo):
+				if FileAccess.file_exists(bak):
+					DirAccess.remove_absolute(bak)
+				DirAccess.rename_absolute(archivo, bak)
+			DirAccess.rename_absolute(tmp, archivo)
 	ajustes_leidos = s.ajustes.duplicate(true)
 	ajustes_de = archivo
 	escrituras += 1
