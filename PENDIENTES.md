@@ -33,4 +33,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
-(nada todavía)
+- **L1.** Rehacer con PixelLab el banco de trabajo, el baúl, la taquilla, la ferretería y la cafetera: vistos
+  de frente y un poco desde arriba (tres cuartos), con el mismo arte que llevan los muebles hasta ahora.
