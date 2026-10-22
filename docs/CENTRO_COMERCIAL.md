@@ -116,8 +116,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   partida, como ahora**: sale uno de los que aún no tienes, en una planta al azar (nunca la azotea); en los
   Apartamentos siguen saliendo el policía, la médica y el militar. Al rescatarlo se queda a vivir en la sala de
   mantenimiento para siempre y **la hace crecer** con algo suyo; como ahora, puede acompañarte (uno a la vez).
-- **Cada uno con su propio rescate** (no la horda de siempre para todos), y **dibujados con código** (`persona.gd`),
-  como los tres de ahora: gratis y con el mismo aspecto.
+- **Cada uno con su propio rescate** (no la horda de siempre para todos), y al principio **dibujados con código**
+  (`persona.gd`); desde el 22 oct, con su pixel art de PixelLab, como los de los Apartamentos (ver «Lo común»).
 - Números provisionales (los puso Claude; se ajustan al probar):
 
 | Quién | Dónde y cómo se le rescata | En la sala | Si te acompaña |
@@ -143,7 +143,10 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 - ✅ **Lo común** (21 oct):
   - Los tres, en `supervivientes.gd` (`DATOS`), dibujados con código (`persona.gd`): el ferretero con chaleco naranja
     de raya brillante, gorra y bigote, y su martillo; la farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
-    aparato con lucecita en el cinturón.
+    aparato con lucecita en el cinturón. **Pixel art (22 oct):** ahora los tres van con su hoja de PixelLab al
+    tamaño de Johnny (`assets/pixellab.json` → `supervivientes-centro-48`; `aliado.gd`, `HOJAS`) en todos sus
+    sitios: encerrados, en el equipo, la escolta, la avería, detrás del mostrador y en la sala. El martillazo pega
+    cuando el martillo da abajo y la descarga sale con el chispazo del aparato.
   - En el centro comercial sale uno de los tres que aún no tengas (en los Apartamentos, los tres de siempre, sin
     cambios). Su tienda sale siempre en su planta (`Planta.tienda_fija`) y se esconde en su trastienda, cerrada y sin
     zombis: el ferretero en el almacén de la ferretería, la
@@ -476,6 +479,25 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   lo pone y se guarda (`captura-trajes-cogido.png`); y la modista cae y suelta uno que falta
   (`captura-trajes-modista.png`). La prueba larga comprueba ahora 27 objetos del centro (antes 23).
 - Lo que faltaba al acabar el trozo 2: la taquilla (trozo 3), para cambiarse entre los que se tienen.
+
+### ✅ Hecho (22 oct 2026, parte 11, trozo 3: la taquilla)
+
+- **La taquilla**, en la sala de mantenimiento: dos puertas de chapa con sus rejillas, tiradores y etiquetas,
+  dibujada con código (`tools/taquilla.py` → `assets/sprites/taquilla.png`, 28×40 píxeles), pegada a la pared de
+  arriba a la derecha del baúl (`mapa.gd`, `TAQUILLA_X`), como mueble de arrimarse (`arrimable.gd`) con su letrero
+  azul claro.
+- **La ventanita** (`scripts/ui/taquilla.gd`, hecha como la del puesto del ferretero): al arrimarse se para el juego
+  (`partida.abrir_taquilla`) y sale: a la izquierda Johnny de frente con su fregona, al triple, enseñando el traje
+  por el que se pasa (en silueta y «???» si aún no se tiene); a la derecha la lista, el conserje de siempre y los
+  cuatro trajes, con su icono, su nombre y su frase (los que faltan, apagados y con «Aún no lo tienes: lo sueltan
+  los zombis de la tienda de ropa»), y la marca «Puesto» en el que lleva. Se elige uno y Johnny se lo pone en el
+  acto y se queda puesto (`Trajes.poner`); uno que falta no se puede («y la modista, uno seguro»). Con el ratón o el
+  dedo, con flechas e Intro (o 1 a 5) o con el mando (cruceta y A); Esc o B cierra.
+- **Prueba:** `--captura --trajes` sigue con esto: con dos trajes, Johnny se arrima a la taquilla y la ventanita se
+  abre sola (`captura-taquilla.png`, con el chándal marcado), elige el chándal (se guarda y se lo pone), prueba uno
+  que falta (no se puede) y vuelve al conserje; al cerrar, el juego sigue.
+- **Parte 11 terminada.** Números provisionales: lo que sueltan la tienda de ropa y la modista. Lo que no entró:
+  el esmoquin de la joyería (tres líneas en `trajes.gd` y otra en `objetos.gd`, si se quiere).
 
 ## Historia
 
@@ -1050,4 +1072,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
     en tres trozos: ✅ Trozo 1, el shader y los cuatro trajes (22 oct: el cambio de colores del peto, la camisa y
     el pañuelo, el guardado, la tecla Z y la prueba `--trajes`). ✅ Trozo 2, cómo se consiguen (22 oct: objetos de
     la tienda de ropa solo mientras falten, la modista suelta uno que falte, al cogerlo se lo pone y se guarda,
-    iconos y Colecciones de 23 a 27). Trozo 3, la taquilla de la sala de mantenimiento y su ventanita.
+    iconos y Colecciones de 23 a 27). ✅ Trozo 3, la taquilla de la sala de mantenimiento y su ventanita (22 oct:
+    a la derecha del baúl, con Johnny de muestra y la lista de trajes). **Parte 11 terminada.** Ya no queda nada de
+    lo apartado del plan.

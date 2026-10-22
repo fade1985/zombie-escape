@@ -122,17 +122,22 @@ func fotos_ayudas() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --fotos-supervivientes": los tres supervivientes de los Apartamentos con su hoja de PixelLab
-# (aliado.gd, HOJAS). En la sala de mantenimiento, de vecinos junto a Johnny (captura-supervivientes-sala.png); luego
-# se unen al equipo y, en un apartamento sin zombis, andan tras él (captura-supervivientes-andar.png), hacen lo suyo
-# (captura-supervivientes-accion.png: el fogonazo de la pistola y del fusil, y la jeringa) y el policía cae, con su
-# vida encima como en la horda (captura-supervivientes-caido.png). Luego se cierra
+# Con "--captura --fotos-supervivientes": los tres supervivientes del edificio con su hoja de PixelLab (aliado.gd,
+# HOJAS; con "--edificio centro", los del centro comercial). En la sala de mantenimiento, de vecinos junto a Johnny
+# (captura-supervivientes-sala.png); luego se unen al equipo y, en un piso sin zombis, andan tras él
+# (captura-supervivientes-andar.png), hacen lo suyo (captura-supervivientes-accion.png: el fogonazo de la pistola y
+# del fusil y la jeringa, o el martillazo y la descarga; la farmacéutica no tiene gesto) y el último cae, con su vida
+# encima como en la horda (captura-supervivientes-caido.png). Luego se cierra
 func fotos_supervivientes() -> void:
 	set_process(false)
-	for id in ["policia", "medico", "militar"]:
+	var ids := ["ferretero", "farmaceutica", "tecnico"] if edificio == "centro" else ["policia", "medico", "militar"]
+	for id in ids:
 		if supervivientes.equipo.any(func(a): return a.def.id == id):
 			continue   # ya acompaña a Johnny (el guardado de la prueba trae al policía de acompañante)
-		var v := supervivientes.crear(Supervivientes.DATOS[id], "vecino")
+		# (sin su rescate: al unirse, la farmacéutica y el técnico no empiezan la escolta ni la avería)
+		var datos: Dictionary = Supervivientes.DATOS[id].duplicate()
+		datos.erase("rescate")
+		var v := supervivientes.crear(datos, "vecino")
 		v.es_vecino = true
 		v.casa = Supervivientes.DATOS[id].casa
 		v.position = v.casa
@@ -166,25 +171,34 @@ func fotos_supervivientes() -> void:
 	Captura.foto("captura-supervivientes-andar.png")
 	print("Foto supervivientes: andando")
 	await get_tree().create_timer(1.2).timeout
-	# lo suyo: el policía y el militar sacan el arma y la médica la jeringa (la foto, en el fotograma del fogonazo)
-	var hacia := {"policia": Vector2.RIGHT, "medico": Vector2.DOWN, "militar": Vector2.LEFT}
-	for a in supervivientes.equipo:
+	# lo suyo: el policía y el militar sacan el arma, la médica la jeringa, el ferretero alza el martillo y el técnico
+	# saca el aparato (la foto, en el fotograma del fogonazo; el rayo de la descarga, a mano, que no hay zombis)
+	var hacia := {"policia": Vector2.RIGHT, "medico": Vector2.DOWN, "militar": Vector2.LEFT,
+		"ferretero": Vector2.RIGHT, "farmaceutica": Vector2.DOWN, "tecnico": Vector2.LEFT}
+	for k in supervivientes.equipo.size():
+		var a: Aliado = supervivientes.equipo[k]
+		a.position = johnny.position + Vector2(-210 + k * 140, 90)   # en fila, que no se tapen
 		a.velocity = Vector2.ZERO
 		a.animar("reposo", hacia[a.def.id])
-		a.empezar_accion()
+		if a.sprite.sprite_frames.has_animation("ataque_s"):
+			a.empezar_accion()
 	await get_tree().create_timer(0.22).timeout
+	for a in supervivientes.equipo:
+		if a.def.id == "tecnico":
+			a.rayo_t = 0.25
+			a.rayo_a = a.global_position + Vector2(-180, -24)
 	Captura.foto("captura-supervivientes-accion.png")
-	print("Foto supervivientes: disparo, ráfaga y jeringa")
+	print("Foto supervivientes: lo suyo de cada uno")
 	await get_tree().create_timer(0.8).timeout
-	# el policía cae (como en la horda: forzando la cerradura, con su vida encima)
-	var p: Aliado = supervivientes.equipo[0]
+	# el último del edificio cae (como en la horda: forzando la cerradura, con su vida encima)
+	var p: Aliado = supervivientes.equipo.filter(func(a): return a.def.id in ids).back()
 	p.forzando = true
 	p.sitio_forzar = p.position
 	p.vida = 0
 	p.caido = true
 	await get_tree().create_timer(0.9).timeout
 	Captura.foto("captura-supervivientes-caido.png")
-	print("Foto supervivientes: el policía caído")
+	print("Foto supervivientes: %s caído" % p.def.nombre)
 	get_tree().quit()
 
 
@@ -556,8 +570,9 @@ func probar_reto() -> void:
 # (captura-trajes-golpe.png). Cuenta en la terminal los trajes, lo que se guarda y la vuelta de la tecla Z.
 # Luego, cómo se consiguen (trozo 2): cuenta lo que sortea la tienda de ropa sin ningún traje, como chatarra del
 # vendedor y con los cuatro, y mira Colecciones; suelta el delantal en el suelo (captura-trajes-suelo.png), Johnny lo
-# pisa, se lo pone y se guarda (captura-trajes-cogido.png); y la modista cae y suelta uno que falte
-# (captura-trajes-modista.png). Luego se cierra
+# pisa, se lo pone y se guarda (captura-trajes-cogido.png); con dos trajes, se arrima a la taquilla y sale su
+# ventanita (captura-taquilla.png), elige uno, prueba uno que falta y vuelve al conserje; y la modista cae y suelta
+# uno que falte (captura-trajes-modista.png). Luego se cierra
 func probar_trajes() -> void:
 	set_process(false)
 	johnny.position = Vector2(200, 400)
@@ -661,6 +676,32 @@ func probar_trajes() -> void:
 	print("Cogido: Johnny lleva «%s» · guardado: traje «%s», trajes %s · en encontrados: %s · en la mochila: %s" % [
 		johnny.traje, g.traje, g.trajes, Trajes.objeto("cocinero") in g.encontrados, Trajes.objeto("cocinero") in mochila])
 	Captura.foto("captura-trajes-cogido.png")
+	# la taquilla (ui/taquilla.gd): con dos trajes, arrimarse a ella abre la ventanita; se elige uno (se guarda y
+	# Johnny se lo pone), uno que falta no se puede, y vuelta al conserje
+	Guardado.cambiar(func(g2): g2.trajes = ["cocinero", "chandal"]; g2.traje = "cocinero")
+	johnny.position = Vector2(mapa.TAQUILLA_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Taquilla: abierta al arrimarse %s · juego en pausa %s" % [taquilla.abierta(), get_tree().paused])
+	if taquilla.abierta():
+		taquilla.marcar("chandal")
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-taquilla.png")
+		taquilla.elegir("chandal")
+		print("Elegido el chándal: Johnny lleva «%s» · guardado «%s» · dice «%s»" % [johnny.traje, Guardado.cargar().traje,
+			taquilla.info.text])
+		taquilla.elegir("vigilante")
+		print("Elegido uno que falta: Johnny lleva «%s» · dice «%s»" % [johnny.traje, taquilla.info.text])
+		taquilla.elegir("")
+		print("Elegido el conserje: Johnny lleva «%s» · guardado «%s» · dice «%s»" % [johnny.traje, Guardado.cargar().traje,
+			taquilla.info.text])
+		taquilla.cerrar()
+	print("Taquilla cerrada: juego en pausa %s" % get_tree().paused)
+	johnny.position = Vector2(560, 400)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
 	# la modista: al caer suelta siempre uno que falte (si en ese momento no se le puede dar, se insiste)
 	var modista: Node2D = meter_zombi("modista", johnny.position + Vector2(-240, 0))
 	await get_tree().create_timer(0.2).timeout

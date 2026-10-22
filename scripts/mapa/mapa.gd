@@ -30,6 +30,7 @@ const ARMARITO := preload("res://scripts/mapa/armarito.gd")
 const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
 const BANCO_X := 135.0       # el banco de trabajo, a su izquierda, y el baúl, a su derecha (fase 7b)
 const BAUL_X := 340.0
+const TAQUILLA_X := 460.0    # la taquilla de los trajes de Johnny (trajes.gd), a la derecha del baúl (parte 11)
 const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
 const CAFETERA_EN := Vector2(765, 392)   # la cafetera, entre la farmacéutica y el técnico (el pie de su mesita)
 const CAMARAS := preload("res://scripts/mapa/camaras.gd")
@@ -89,6 +90,7 @@ var muebles: Array = []
 var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de mantenimiento)
 var baul: Node2D = null          # y el baúl y el banco de trabajo
 var banco: Node2D = null
+var taquilla: Node2D = null      # y la taquilla de los trajes de Johnny (parte 11)
 var armaritos: Array = []        # los armaritos con botiquín de los baños (armarito.gd)
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
 # habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
@@ -471,6 +473,9 @@ func poner_muebles() -> void:
 		banco = ARRIMABLE.new()
 		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", "Banco", Color("#ffb36b"), BANCO_X, MURO, 76.0, 36.0)
 		cosas.add_child(banco)
+		taquilla = ARRIMABLE.new()   # la de los trajes de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
+		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", "Taquilla", Color("#9fd3ff"), TAQUILLA_X, MURO, 56.0, 36.0)
+		cosas.add_child(taquilla)
 		var cafetera := CAFETERA.new()   # la de Johnny: la farmacéutica le encuentra el doble fondo (supervivientes.gd)
 		cafetera.position = CAFETERA_EN
 		cosas.add_child(cafetera)

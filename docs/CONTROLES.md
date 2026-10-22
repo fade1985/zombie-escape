@@ -69,17 +69,19 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   Johnny de conserje y una copia con cada traje, cada una con una hoja distinta (`captura-trajes.png`), y el chándal
   con el bate dando un golpe andando (`captura-trajes-golpe.png`); en la terminal, lo que se guarda y la vuelta de
   la tecla Z. Luego cómo se consiguen: lo que sortea la tienda de ropa (en la terminal), el delantal en el suelo
-  (`captura-trajes-suelo.png`), Johnny lo pisa y se lo pone (`captura-trajes-cogido.png`) y la modista cae y suelta
-  uno que falta (`captura-trajes-modista.png`).
+  (`captura-trajes-suelo.png`), Johnny lo pisa y se lo pone (`captura-trajes-cogido.png`), se arrima a la taquilla
+  y elige en su ventanita (`captura-taquilla.png`), y la modista cae y suelta uno que falta
+  (`captura-trajes-modista.png`).
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.
 - `--fotos-ayudas`: pone en Sí las ayudas de Opciones (`captura-ayudas-opciones.png`), prueba la vida y la pistola
   y adónde caería un lanzable, sin ayudas y con ellas (lo cuenta en la terminal), y saca el HUD (`captura-ayudas-hud.png`)
   y un molotov volando al zombi (`captura-ayudas-lanzar.png`). Las deja en No.
-- `--fotos-supervivientes`: los tres supervivientes de los Apartamentos con su hoja de PixelLab: de vecinos en la sala
-  (`captura-supervivientes-sala.png`) y, en un apartamento, andando tras Johnny (`-andar`), disparando y pinchando
-  (`-accion`) y el policía caído (`-caido`).
+- `--fotos-supervivientes`: los tres supervivientes del edificio con su hoja de PixelLab (con `--edificio centro`, el
+  ferretero, la farmacéutica y el técnico): de vecinos en la sala (`captura-supervivientes-sala.png`) y, en un piso,
+  andando tras Johnny (`-andar`), haciendo lo suyo (`-accion`: disparo, jeringa, martillazo, descarga) y el último
+  caído (`-caido`).
 - La prueba larga saca también las de Colecciones: `captura-escritorio-nuevo.png` (el icono con el aviso de
   «¡NUEVO!»), `captura-colecciones.png` (los objetos del edificio), `captura-bestiario.png` (la ficha del vecino) y
   `captura-bestiario-falta.png` (la del gerente, sin ver), y cuenta en la terminal lo encontrado, creado y visto.
@@ -91,6 +93,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`escenas/menu_principal.tscn`).
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7,
   Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el bestiario).
+- A la derecha del baúl, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa del
+  centro comercial que ya tengas; se queda puesto). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
+  (cruceta y A); Esc o B cierra.
 - A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo**: todas
   las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
   mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir

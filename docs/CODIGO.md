@@ -82,9 +82,9 @@
   parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
   su marca; se quedan clavados un rato), `contrato.gd` (los contratos del gerente, dibujados con código: vuelan
   girando, cortan 10 y al toparse con algo caen al suelo), `explosion.gd`.
-- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para los supervivientes del centro comercial
-  (con lo de su oficio: chaleco, bata, cascos, moño, bigote, martillo) y el vendedor. Los tres de los Apartamentos
-  (policía, médica y militar) ya no la usan: van con su hoja de PixelLab (`aliado.gd`, `HOJAS`).
+- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para el vendedor (sabe también lo de cada
+  oficio: chaleco, bata, cascos, moño, bigote, martillo). Los seis supervivientes ya no la usan: van con
+  su hoja de PixelLab (`aliado.gd`, `HOJAS`); `aliado.gd` la sigue sabiendo usar para quien no tenga hoja.
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
@@ -136,8 +136,9 @@
   guardado, `traje`), `vestir(material, id)` (se lo dice al shader de la cintura) y `siguiente()` (la tecla Z). Como
   objetos de la tienda de ropa (`objetos.gd`, `traje_<id>`): `objeto()`, `es_objeto()`, `de_objeto()`, `tenidos()`
   (los encontrados, `trajes` del guardado), `que_falta()` (el que suelta la modista al caer, desde `partida.gd`) y
-  `encontrar()` (al cogerlo, en `soltar_objeto` de `partida.gd`: se apunta para siempre y Johnny se lo pone). La
-  prueba: `--captura --trajes` (`probar_trajes()`).
+  `encontrar()` (al cogerlo, en `soltar_objeto` de `partida.gd`: se apunta para siempre y Johnny se lo pone). Se
+  eligen en la taquilla de la sala de mantenimiento (`ui/taquilla.gd`). La prueba: `--captura --trajes`
+  (`probar_trajes()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 32 objetos, con los cuatro trajes de Johnny, `traje_<id>`, que salen en la tienda de ropa solo mientras falten y al cogerlos se los pone, `trajes.gd`; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, lo que
@@ -169,9 +170,10 @@
   frente recortado a lo dibujado (el `recorte` de cada ficha lo calcula `py tools/recortes_bestiario.py`; repetirlo si
   cambia una hoja). `todo_visto()` es la tecla F8. Los textos se retocan aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
-  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los tres de los Apartamentos
-  se dibujan con su hoja de PixelLab, `HOJAS` → `assets/sprites/superviviente-<id>`, al tamaño de Johnny: reposo,
-  andar, lo suyo en las 8 direcciones y caído; los del centro, con `persona.gd`). En `DATOS`, los seis:
+  `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los seis se dibujan con su
+  hoja de PixelLab, `HOJAS` → `assets/sprites/superviviente-<id>`, al tamaño de Johnny: reposo, andar, lo suyo en las
+  8 direcciones y caído; la bala, la cura, el martillazo y la descarga llegan en su fotograma, `fogonazo`; la
+  farmacéutica no tiene acción). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
   su tienda en su planta: `Planta.tienda_fija`), sus gritos, su sitio en la sala (`casa`) y su mejora. La de la
   farmacéutica: `botiquin_al_empezar()` (lo llama `partida.gd` al empezar) mete un botiquín en la mochila, que se
@@ -216,7 +218,9 @@
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
   y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras
   `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl y banco. `puesto.gd`: la ventanita
-  del puesto del ferretero (munición, molotovs y granadas por dólares ahorrados).
+  del puesto del ferretero (munición, molotovs y granadas por dólares ahorrados). `taquilla.gd`: la ventanita de la
+  taquilla de Johnny (parte 11; la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con el traje
+  marcado (`marcar`) y la lista para ponerse uno (`elegir`: `Trajes.poner` y `johnny.vestir`).
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado, pantalla roja con poca vida y escarcha con frío.
 - `botones.gd` (autoload): el saltito de los botones.
 
@@ -233,7 +237,8 @@
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
   su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
   `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
-- `ordenador.gd` (la mesa), `arrimable.gd` (baúl y banco), `armarito.gd` (botiquín), `cientifico.gd` (el
+- `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de los trajes: `TAQUILLA_X` en `mapa.gd`),
+  `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
   no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de la sala de
   mantenimiento, dibujada con código), `camaras.gd` (las pantallas de las cámaras de seguridad, detrás del técnico,
@@ -253,8 +258,8 @@
 
 ## tools/
 
-`hacer_frames.py` (hoja → animaciones); `superviviente.py` (monta la hoja de un superviviente de los Apartamentos con lo
-de PixelLab: reposo a mano, andar alineado, acción con el fogonazo limpio y caído; `py tools/superviviente.py policia`);
+`hacer_frames.py` (hoja → animaciones); `superviviente.py` (monta la hoja de un superviviente con lo de PixelLab: reposo a
+mano, andar alineado, acción con el fogonazo limpio, si la tiene, y caído; `py tools/superviviente.py policia`);
 para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
 (la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py` y `bajar.py` (bajar de PixelLab), `hoja.py` (hoja de
 revisión) y `zombi.py` (+ `png.py`: monta la hoja del zombi; con `"sangre_en_todo"` oscurece la sangre también en
@@ -271,7 +276,7 @@ falte, con la vista quieta), `texturas_bano.py`, `importar.py` (muebles nuevos �
 `icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo; `guias_azotea.py`, los de los
 aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
-(escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `objetos16.py`
+(escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `taquilla.py` (la taquilla de los trajes), `objetos16.py`
 (los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).

@@ -14,7 +14,8 @@
 #
 # El ordenador de la sala de mantenimiento (ui/ordenador.gd): al arrimarse a su mesa, el juego se pausa y sale
 # ConserjeOS, para comprar puntos de talento, subir talentos y comprar armas con los dólares ahorrados. Los
-# talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos.
+# talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos. La taquilla (ui/taquilla.gd),
+# igual: al arrimarse sale la ventanita para elegir el traje de Johnny (trajes.gd).
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny. F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
@@ -54,6 +55,7 @@ const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
 const MENUS := preload("res://scripts/ui/menus.gd")
 const ORDENADOR := preload("res://scripts/ui/ordenador.gd")
+const TAQUILLA := preload("res://scripts/ui/taquilla.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const REFUERZOS := 2               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas)
@@ -95,6 +97,7 @@ var captura := false       # si es la partida de prueba (la pone pruebas/partida
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
+var taquilla := TAQUILLA.new()     # la ventanita de la taquilla de los trajes de Johnny (parte 11)
 var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
 var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
 var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
@@ -161,6 +164,7 @@ func _ready() -> void:
 	ordenador.apagado.connect(func(): get_tree().paused = false)
 	add_child(inventario)
 	inventario.cerrado.connect(func(): get_tree().paused = false)
+	add_child(taquilla)
 	lanzables.johnny = johnny
 	lanzables.partida = self
 	add_child(lanzables)
@@ -354,6 +358,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		mapa.ordenador.usar.connect(abrir_ordenador)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
+		mapa.taquilla.usar.connect(abrir_taquilla)
 		# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
 		if fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
 			avisar_noticias()
@@ -897,6 +902,14 @@ func abrir_cosas(que: String) -> void:
 		return
 	get_tree().paused = true
 	inventario.abrir(que, self)
+
+
+# La taquilla de los trajes de Johnny (ui/taquilla.gd): se para el juego y sale su ventanita
+func abrir_taquilla() -> void:
+	if terminada or cambiando or not johnny.vivo or get_tree().paused:
+		return
+	get_tree().paused = true
+	taquilla.abrir(self)
 
 
 # Un texto que sube y se desvanece (al coger un billete)
