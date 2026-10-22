@@ -72,7 +72,7 @@ const DATOS := {
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],
 		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",
 		"desc": "Da martillazos (8 de daño) a los zombis que se le acercan",
-		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 46.0},
+		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0},   # (alcance: va en la fila, a 52 por detrás de Johnny)
 		"mejora": "Monta su puesto: vende munición, molotovs y granadas por dólares"},
 	"farmaceutica": {"id": "farmaceutica", "nombre": "Farmacéutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
 		"casa": Vector2(710, 380), "tienda": "farmacia", "sala": "rebotica",
@@ -251,6 +251,7 @@ func recoger() -> void:
 # Recién montado el sitio "idx": el equipo, al lado de Johnny; el superviviente en su baño; los vecinos
 func al_montar(idx: int, sitio: Dictionary) -> void:
 	var mapa: Node2D = partida.mapa
+	Aliado.borrar_huellas()   # el rastro de Johnny era del mapa viejo: la fila se forma de nuevo desde la puerta
 	for i in equipo.size():
 		var a: Aliado = equipo[i]
 		a.idx = i

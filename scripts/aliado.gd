@@ -1,8 +1,8 @@
 # Un superviviente (SurvivorNPC y Ally del JS: src/props.js y src/entities.js). Según "modo":
 #   - "encerrado": en el baño de su apartamento, temblando, hasta que Johnny limpia el piso y se le arrima.
-#   - "equipo": sigue a Johnny dando vueltas a su alrededor y usa lo suyo: el policía y el militar disparan al
-#     zombi más cercano; la médica cura a Johnny cada pocos segundos y al limpiar cada piso. Los del centro
-#     comercial: el ferretero da martillazos a los que se le acercan, el técnico suelta
+#   - "equipo": sigue a Johnny en fila india por donde él ha pasado (sus huellas: seguir) y usa lo suyo: el policía y
+#     el militar disparan al zombi más cercano; la médica cura a Johnny cada pocos segundos y al limpiar cada piso.
+#     Los del centro comercial: el ferretero da martillazos a los que se le acercan, el técnico suelta
 #     una descarga que deja quieto al zombi más cercano y, con la farmacéutica, los charcos de veneno y ácido le
 #     hacen a Johnny la mitad (eso lo mira johnny.gd: charcos_a_medias).
 #     En la horda (supervivientes.gd) se queda delante de la puerta forzando la cerradura ("forzando"): tiene
@@ -19,6 +19,17 @@ extends CharacterBody2D
 signal herido(cae: bool)   # en la horda: le han dado (y si se ha caído)
 
 const RADIO := 14.0        # para los zombis: a qué distancia le alcanzan
+# La fila india (seguir): cada uno va SEPARACION unidades por detrás del anterior, siguiendo las huellas de Johnny
+const SEPARACION := 52.0   # Johnny → primero, primero → segundo... (radios: Johnny 18 + aliado 14, y un poco de aire)
+const HUELLA_CADA := 12.0  # Johnny deja una huella cada tantas unidades que anda
+const HUELLAS_TOPE := 40   # huellas que se guardan: 40 × 12 = 480 unidades, de sobra para 4 aliados (el último a 208)
+const CERCA := 36.0        # si su huella cae a menos de esto de Johnny (ha vuelto sobre sus pasos), espera
+const SALTO := 60.0        # Johnny más lejos de esto de su última huella (nadie seguía, o un teletransporte): rastro nuevo
+const SIN_RASTRO := 45.0   # sin rastro aún para su puesto, espera a esta distancia de Johnny, cada uno en su ángulo
+# Las huellas de Johnny, de la más vieja a la más nueva. Es una sola lista para todos los aliados (static): la apunta el
+# primero que pasa por seguir() en cada fotograma (los demás ven que Johnny no ha andado HUELLA_CADA desde la última y
+# no repiten) y se borra al montar otra sala (supervivientes.al_montar)
+static var huellas := PackedVector2Array()
 const BALA := preload("res://escenas/armas/bala.tscn")
 const CHARCOS := ["veneno", "acido", "toxico"]   # los que la farmacéutica deja a medias
 const RUMBOS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
@@ -49,7 +60,7 @@ var def: Dictionary
 var modo := "equipo"
 var johnny: Node2D
 var partida: Node
-var idx := 0               # su puesto en el equipo (para repartirse alrededor de Johnny)
+var idx := 0               # su puesto en la fila (0, el que va justo detrás de Johnny)
 var es_vecino := false     # viene de la sala de mantenimiento (y "casa" es su sitio allí)
 var casa := Vector2.ZERO
 var armado := true       # vecino: hay que apartarse un poco antes de que vuelva a contar el arrimarse
@@ -179,16 +190,63 @@ func _physics_process(delta: float) -> void:
 	encima.queue_redraw()
 
 
-# Se reparten alrededor de Johnny, dando vueltas despacio, y le siguen
+# En fila india por donde ha pasado Johnny: el primero (idx 0) va a la huella que queda SEPARACION unidades por
+# detrás de él siguiendo su camino, el segundo al doble, y así. Las huellas solo cambian cuando Johnny anda: si él se
+# para, cada uno llega a su sitio y se queda quieto. Se queda donde está (sin moverse):
+#   - si su huella ha quedado pegada a Johnny (ha vuelto sobre sus pasos: él pasa a través, que no chocan);
+#   - si Johnny anda y su huella está más lejos de él que el propio aliado (acaba de dar media vuelta, o va y viene
+#     en una pelea): espera a que el rastro le llegue, en vez de correr hacia atrás o bailotear.
+# Si el rastro aún no llega hasta su puesto (recién montada la sala, recién unido), espera junto a Johnny en un sitio
+# fijo por puesto (SIN_RASTRO), para no quedarse amontonado encima de él
 func seguir() -> void:
-	var n: int = maxi(1, partida.supervivientes.equipo.size())
-	var angulo: float = float(idx) / n * TAU + partida.duracion * 0.6
-	var meta: Vector2 = johnny.global_position + Vector2(cos(angulo) * 55.0, sin(angulo) * 42.0)
-	ir_a(meta, 420.0)
+	var j: Vector2 = johnny.global_position
+	pisar_huellas(j)
+	var meta := huella_a(j, SEPARACION * (idx + 1))
+	if not meta.is_finite():
+		meta = j + Vector2.from_angle(PI * 0.75 + idx * TAU / Supervivientes.MAX_EQUIPO) * SIN_RASTRO
+	var anda: bool = johnny.velocity.length() > 20.0
+	if meta.distance_to(j) < CERCA or (anda and meta.distance_to(j) > global_position.distance_to(j) + 4.0):
+		velocity = Vector2.ZERO
+		move_and_slide()   # quieto (y si al montar la sala ha caído medio dentro de una pared, esto lo saca)
+	else:
+		ir_a(meta, 420.0)
 	if velocity.length() > 20.0:
 		animar("andar", velocity)
 	else:
 		animar("reposo", mirada)
+
+
+# Apunta una huella de Johnny si ha andado HUELLA_CADA desde la última (y tira la más vieja si hay de más). Si ha
+# aparecido de golpe lejos de la última (SALTO: nadie le seguía mientras tanto, o un teletransporte de las pruebas),
+# el rastro empieza de nuevo: el tramo recto hasta aquí cruzaría paredes
+static func pisar_huellas(donde: Vector2) -> void:
+	if not huellas.is_empty():
+		var d := huellas[huellas.size() - 1].distance_to(donde)
+		if d < HUELLA_CADA:
+			return
+		if d > SALTO:
+			huellas.clear()
+	huellas.append(donde)
+	if huellas.size() > HUELLAS_TOPE:
+		huellas.remove_at(0)
+
+
+# El punto que queda a "atras" unidades por detrás de Johnny siguiendo sus huellas: se parte de donde está él y se va
+# hacia la más vieja, tramo a tramo, hasta gastar esa distancia. Si el rastro no llega tan lejos, Vector2.INF
+static func huella_a(desde: Vector2, atras: float) -> Vector2:
+	var p := desde
+	for i in range(huellas.size() - 1, -1, -1):
+		var d := p.distance_to(huellas[i])
+		if d >= atras:
+			return p.lerp(huellas[i], atras / d)   # cae en este tramo
+		atras -= d
+		p = huellas[i]
+	return Vector2.INF
+
+
+# Al montar otra sala (supervivientes.al_montar): el rastro era del mapa viejo y el equipo aparece junto a Johnny
+static func borrar_huellas() -> void:
+	huellas.clear()
 
 
 # Va hacia "meta" por el camino (rodeando paredes y muebles), frenando al llegar
@@ -203,6 +261,9 @@ func ir_a(meta: Vector2, rapidez: float) -> void:
 		siguiente = meta   # ya está en el último tramo (o el camino aún no está listo): derecho
 	velocity = global_position.direction_to(siguiente) * minf(rapidez, falta * 6.0)
 	move_and_slide()
+	# lo que se ha movido de verdad: si la meta cae dentro de una pared o un mueble, se queda pegado a él en reposo en vez
+	# de "andar" sin avanzar
+	velocity = get_real_velocity()
 
 
 # En la horda: ¿está ya en su sitio delante de la puerta? (la cerradura no avanza mientras va de camino)
