@@ -364,9 +364,9 @@ func probar_presentacion() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --jefe gloton --porqueria": la habitación del Glotón (peligros/porqueria.gd): solo con lámparas y
-# con la franja de porquería pegada a las paredes, que quema. Monta su piso (la 1ª planta) con todo descubierto y sin
-# que salga él, y cuenta en la terminal: los muebles (3 o 4 lámparas), cuántas casillas están sucias (parte del suelo), que donde
+# Con "--captura --jefe gloton --porqueria": la habitación del Glotón (peligros/porqueria.gd): sin muebles y con la
+# franja de porquería pegada a las paredes, que quema. Monta su piso (la 1ª planta) con todo descubierto y sin
+# que salga él, y cuenta en la terminal: los muebles (ninguno, ni lámparas), cuántas casillas están sucias (parte del suelo), que donde
 # aparece Johnny está limpio, que el centro está limpio y lo pegado a las paredes sucio (y cuánto mide la franja), que
 # en medio queda una elipse limpia perfecta, como un ring, que sale igual con otra semilla, que la puerta está en el
 # centro de la pared y de ella se llega al centro por un paso limpio, recto y holgado, lo que pierde Johnny en 1 s sobre una casilla sucia (unos 7) y que en una limpia,
@@ -396,8 +396,8 @@ func probar_porqueria() -> void:
 	var sala: Dictionary = sitio.apt.salas[0]
 	var total: int = sala.ancho * sala.fondo
 	var montones: int = p.casillas.values().count(2)
-	print("Porquería (jefe %s): muebles %d, todos lámparas %s (esperado: de 3 a 4, true) · casillas sucias %d de %d (%d %%, esperado: entre 35 y 55) · montones %d · donde aparece Johnny, limpio %s (esperado: true)" % [
-		planta.jefe, sitio.muebles.size(), sitio.muebles.all(func(m): return m.tipo == "lamp"), p.casillas.size(), total,
+	print("Porquería (jefe %s): muebles %d (esperado: 0, ni lámparas) · casillas sucias %d de %d (%d %%, esperado: entre 35 y 55) · montones %d · donde aparece Johnny, limpio %s (esperado: true)" % [
+		planta.jefe, sitio.muebles.size(), p.casillas.size(), total,
 		roundi(100.0 * p.casillas.size() / total), montones, not p.casillas.has(Peligros.casilla(johnny.position))])
 	# la franja junto a las paredes y la elipse limpia: el centro limpio, y las casillas pegadas a cada pared sucias (en la
 	# de la puerta, a un lado de ella), con la franja de al menos 2 casillas de grosor en sus puntos medios

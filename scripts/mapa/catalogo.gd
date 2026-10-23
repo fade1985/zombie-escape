@@ -127,12 +127,11 @@ const SALAS := {
 		"muebles": ["sofa", "tv", "armchair", "bookshelf", "lamp", "plant"],
 		"cuantos": [2, 3],
 	},
-	# la habitación del Glotón (planta.gd pone apt.tipo = "gloton"): sin más muebles que unas lámparas de pie, para que
-	# haya luz además de la linterna; el suelo lo llena su porquería (peligros/porqueria.gd)
+	# la habitación del Glotón (planta.gd pone apt.tipo = "gloton"): sin muebles (el dueño, 23 oct: tampoco lámparas);
+	# el suelo lo llena su porquería (peligros/porqueria.gd) y la luz la da el resplandor del ácido
 	"jefe-gloton": {
-		"muebles": ["lamp"],
-		"cuantos": [3, 4],
-		"iguales": {"lamp": 4},
+		"muebles": [],
+		"cuantos": [0, 0],
 	},
 	# el gimnasio del Gymbro (planta.gd pone apt.tipo = "gymbro"): las paredes llenas de máquinas, una detrás de otra
 	# (muebles.gd, llenar), que le quitan sitio a la pelea, y tres lámparas de pie (primero, para que siempre haya luz);

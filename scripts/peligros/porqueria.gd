@@ -1,4 +1,4 @@
-# La porquería del Glotón (peligros.gd, PORQUERIA): su habitación no tiene más muebles que unas lámparas y, pegada a
+# La porquería del Glotón (peligros.gd, PORQUERIA): su habitación no tiene muebles y, pegada a
 # las paredes, una franja de charcos de diarrea y montones de mierda con ácido (en medio, una elipse limpia perfecta,
 # siempre igual, donde se pelea, como un ring, y un pasillo limpio de la puerta hasta ella), salpicada también por
 # las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
@@ -24,7 +24,7 @@ const ACIDO := Color("#b5d634")
 const ACIDO_OSCURO := Color("#7e9a1c")
 const MOSCA := Color("#15100c")
 # El resplandor del ácido: unas luces verdosas suaves repartidas por la franja (como las del fuego de la cocina, sin
-# sombras), que laten despacio; con ellas y las lámparas de pie se ve bien dónde pisar
+# sombras), que laten despacio; son la luz de la habitación (no hay lámparas) y con ellas se ve bien dónde pisar
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
 const LUCES := 8                    # cuántas, repartidas por el borde del óvalo limpio
 const LUZ_RADIO := 380.0            # (llegan hasta el medio de la zona de pelea)

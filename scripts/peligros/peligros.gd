@@ -58,7 +58,7 @@ const AGUA := {
 	"oscuro_sin": 0.1,   # ...y sin ella, más oscura (solo se ve con la linterna)
 	"teles": 4,          # cuántas estanterías de teles dan luz, como mucho
 }
-# La porquería del Glotón (su habitación, sin más muebles que lámparas): montones de mierda y charcos de diarrea con
+# La porquería del Glotón (su habitación, sin muebles): montones de mierda y charcos de diarrea con
 # ácido por el suelo (y salpicada por las paredes), que queman a Johnny al pisarla; a los zombis no, que es suya
 const PORQUERIA := {
 	"dps": 7.0,          # vida por segundo pisándola...

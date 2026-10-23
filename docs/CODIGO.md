@@ -47,7 +47,7 @@
   restaurante, que se extiende por casillas), `agua.gd` (el charco con corriente de la electrónica, su cable, las luces
   de las teles y lo oscura que se queda la tienda: `Luz.extra`; `arreglar()`, cuando el técnico arregla el cable y
   el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y tres de los Apartamentos: `porqueria.gd`, la
-  habitación del Glotón (solo lámparas, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
+  habitación del Glotón (sin muebles, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
   ácido pegada a las paredes, con una elipse limpia perfecta en medio para pelear, siempre igual, como un ring, y un
   pasillo limpio de la puerta a ella: `Peligros.del_gloton`, `Peligros.franja_y_ovalo` y `Peligros.acceso`, el hueco
   de delante de la puerta y un pasillo de su ancho, recto hacia el centro de la sala (la puerta está en el centro de

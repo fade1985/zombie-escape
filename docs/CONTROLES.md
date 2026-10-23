@@ -95,7 +95,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   a la vista, deja la fila y va a por él (`captura-caza-va.png`), lo mata a martillazos y vuelve a su puesto
   (`captura-caza-vuelve.png`). Cada línea de la terminal dice lo esperado.
 - `--porqueria` (con `--jefe gloton`): en vez de la prueba larga, la de la habitación del Glotón (`peligros/porqueria.gd`):
-  la monta sin él y cuenta en la terminal los muebles (solo lámparas), la parte del suelo sucia, que donde aparece Johnny y el
+  la monta sin él y cuenta en la terminal los muebles (ninguno, ni lámparas), la parte del suelo sucia, que donde aparece Johnny y el
   centro están limpios y lo pegado a las paredes sucio (y el grosor de la franja), que en medio queda una elipse limpia
   perfecta, como un ring, que sale igual con otra semilla, que la puerta está en el centro de la pared y de ella se
   llega al centro sin pisar nada por un paso recto de 3 casillas de ancho como poco, lo que pierde sobre la porquería en 1 s y que en una

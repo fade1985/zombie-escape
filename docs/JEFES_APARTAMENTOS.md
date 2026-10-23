@@ -65,8 +65,8 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
 
 ### ✅ Hecho (22 oct 2026, M2 de `PENDIENTES.md`): su habitación
 
-- **Sin más muebles que 3 o 4 lámparas de pie** (`catalogo.gd`, `jefe-gloton`; `planta.gd` pone `apt.tipo`): el dueño
-  las quiso dejar para que haya luz además de la linterna. En su lugar, **su porquería**: un peligro como los de las
+- **Sin muebles** (`catalogo.gd`, `jefe-gloton`; `planta.gd` pone `apt.tipo`): al principio tenía 3 o 4 lámparas de
+  pie, pero el dueño las quitó (23 oct); la luz la da el resplandor del ácido. En su lugar, **su porquería**: un peligro como los de las
   tiendas (`scripts/peligros/porqueria.gd`; los números en `Peligros.PORQUERIA`), decidido al generar la planta
   (`Peligros.del_gloton`) y que sigue igual al volver.
   - **El suelo:** una **franja pegada a las paredes** que cubre cerca de un 45 % de la habitación, y en medio una
