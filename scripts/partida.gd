@@ -184,6 +184,7 @@ func _ready() -> void:
 	lanzables.partida = self
 	add_child(lanzables)
 	mutaciones.johnny = johnny
+	mutaciones.presentacion = presentacion
 	add_child(mutaciones)
 	add_child(supervivientes)
 	supervivientes.preparar(self)

@@ -295,7 +295,9 @@ func fotos_luz() -> void:
 # la cámara está acercada y sobre el jefe, Johnny quieto y sin poder recibir daño, el jefe gritando, el nombre en
 # pantalla y la barra de vida aún oculta; y al acabar, que la cámara ha vuelto, Johnny se mueve, el jefe anda y la
 # barra ha salido. Con la Modista (--edificio centro --jefe modista), que entra escondida, ni zoom ni grito: solo
-# franjas, nombre y rugido, y sigue escondida al acabar. Cuenta todo en la terminal, con lo esperado, y se cierra
+# franjas, nombre y rugido, y sigue escondida al acabar. Johnny lleva la Gastroenteritis (mutaciones.gd) lista para
+# tirar: ningún vómito mientras dura, y el primero 1 s después de acabar (captura-presentacion-vomito.png).
+# Cuenta todo en la terminal, con lo esperado, y se cierra
 func probar_presentacion() -> void:
 	set_process(false)
 	presentar_en_prueba = true
@@ -304,7 +306,17 @@ func probar_presentacion() -> void:
 	for i in planta.sitios.size():
 		if planta.sitios[i].tipo == "jefe":
 			idx = i
+	# con la Gastroenteritis lista para tirar (como en la partida, esperando a quién): se apunta cuándo sale cada vómito
+	mutaciones.tengo.append("gastro")
+	mutaciones.espera["gastro"] = 0.0
+	var vomitos: Array = []   # [cuándo (ms), si la presentación seguía]
+	get_tree().node_added.connect(func(n: Node) -> void:
+		if n.get("tipo") == "vomito" and n.scene_file_path == Mutaciones.PROYECTIL.resource_path:
+			vomitos.append([Time.get_ticks_msec(), presentacion.activa]))
 	montar(idx, 0, false)   # (sin await: la presentación va dentro, y hay que mirarla a medias)
+	# Johnny, a 200 de donde saldrá el jefe (en medio de la sala): desde la puerta, el vómito (420) no le llegaría
+	johnny.position = Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0 + 200.0)
+	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(JEFE_TARDA + 1.1).timeout   # a 1,1 s de empezar la presentación
 	var camara: Camera2D = johnny.get_node("Camara")
 	print("Presentación (jefe %s), a mitad: zoom %.2f (esperado: %.1f; 1 si entra escondido, como la Modista) · cámara desplazada %d hacia el jefe (esperado: más de 0; 0 si escondido) · a %d del jefe (esperado: menos de 60, que enfoca algo por encima; da igual si escondido) · Johnny quieto %s y sin daño %s (esperado: true, true) · el jefe gritando %s (esperado: true; false si escondido) · nombre «%s» a la vista %s (esperado: true) · barra oculta %s (esperado: true)" % [
@@ -316,10 +328,22 @@ func probar_presentacion() -> void:
 		roundi(jefa.global_position.distance_to(Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0))),
 		camara.get_screen_center_position().round(), camara.offset, camara.limit_left, camara.limit_right, camara.limit_top, camara.limit_bottom, camara.zoom])
 	Captura.foto("captura-presentacion.png")
-	await get_tree().create_timer(presentacion.DURA - 1.1 + 0.5).timeout
+	while presentacion.activa:
+		await get_tree().physics_frame
+	var acabo := Time.get_ticks_msec()
+	await get_tree().create_timer(0.5).timeout
 	print("Presentación, al acabar: zoom %.2f (esperado: 1) · cámara desplazada %d (esperado: 0) · Johnny se mueve %s (esperado: true) · el jefe en «%s» (esperado: no «grito») · barra a la vista %s (esperado: true) · franjas y nombre ocultos %s (esperado: true)" % [
 		camara.zoom.x, roundi(camara.offset.length()), johnny.is_physics_processing(), jefa.estado, $Pantalla/Jefa.visible,
 		not presentacion.visible])
+	# el primer vómito de después (se espera hasta 2,5 s) y su foto, ya en el aire
+	var despues: Array = []
+	while despues.is_empty() and Time.get_ticks_msec() - acabo < 2500:
+		await get_tree().physics_frame
+		despues = vomitos.filter(func(v): return not v[1])
+	print("Gastroenteritis: vómitos durante la presentación %d (esperado: 0) · el primero, %s s después de acabar (esperado: 1, con un fotograma de margen: entre 0,95 y 1,1)" % [
+		vomitos.size() - despues.size(), "%.2f" % ((despues[0][0] - acabo) / 1000.0) if not despues.is_empty() else "ninguno"])
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-presentacion-vomito.png")
 	get_tree().quit()
 
 

@@ -5,7 +5,8 @@
 # se juntan 4 por partida y nunca se repite una que ya tengas. Se pierden al acabar la partida: no se guardan.
 #
 # Cada una: o cambia los atributos de Johnny (aplicar), o hace algo ella sola cada pocos segundos ("cada").
-# Si no hay a quién hacérselo, no gasta la vez: lo intenta en el siguiente paso.
+# Si no hay a quién hacérselo, no gasta la vez: lo intenta en el siguiente paso. Las que llevan "tras_presentacion"
+# no actúan mientras se presenta un jefe (ui/presentacion.gd): su vez llega esos segundos después de que acabe.
 # Caníbal se cura en partida.gd (al morir un zombi), Ansiedad está en johnny.gd (arma) y el escudo de
 # Endurecimiento se pone en cada planta (partida.gd). A la portera no le afectan.
 class_name Mutaciones
@@ -14,7 +15,7 @@ extends Node
 # Los números de cada una (provisionales, los del JS). Tentacular: el empujón los manda a unos 150 de distancia
 const MUT := {
 	"tentacular": {"cada": 4.0, "radio": 90.0, "empuje": 520.0, "aturde": 1.0},
-	"gastro": {"cada": 3.0, "alcance": 420.0},
+	"gastro": {"cada": 3.0, "alcance": 420.0, "tras_presentacion": 1.0},
 	"insensible": {"dano": 0.5},
 	"canibal": {"cura": 0.05},
 	"endurecimiento": {"escudo": 80},
@@ -43,6 +44,7 @@ const LISTA := [
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 
 var johnny: Node2D
+var presentacion: Presentacion   # la presentación de los jefes (ui/presentacion.gd): mientras dura, algunas esperan
 var tengo: Array = []      # las de esta partida
 var espera := {}           # lo que le falta a cada una para actuar otra vez
 
@@ -75,8 +77,13 @@ static func aplicar(st: Dictionary, ids: Array) -> Dictionary:
 func _physics_process(delta: float) -> void:
 	if johnny == null or not johnny.vivo:
 		return
+	var presentando: bool = presentacion != null and presentacion.activa
 	for id in tengo:
 		if not MUT.has(id) or not MUT[id].has("cada"):
+			continue
+		# mientras el jefe se presenta, la cuenta se queda parada en lo que tardará cuando acabe
+		if presentando and MUT[id].has("tras_presentacion"):
+			espera[id] = MUT[id].tras_presentacion
 			continue
 		espera[id] = espera.get(id, MUT[id].cada) - delta
 		if espera[id] > 0.0:
