@@ -156,7 +156,7 @@ func latigazos(johnny: Node2D) -> void:
 		var linea := Vector2.from_angle(a)
 		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LENGUA)
 		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LENGUA + johnny.RADIO:
-			johnny.recibir_dano(DANO_LATIGAZO)
+			johnny.recibir_dano(DANO_LATIGAZO, self)
 			johnny.empujar(linea * 500.0)
 			return
 
@@ -233,7 +233,7 @@ func la_elipse() -> Dictionary:
 
 
 func comer(johnny: Node2D, hacia: Vector2) -> void:
-	johnny.recibir_dano(DANO_COMER)
+	johnny.recibir_dano(DANO_COMER, self)
 	johnny.empujar(hacia.normalized() * 1100.0)   # y lo escupe
 	johnny.pisar({"tirado": {}})
 	Sonido.tocar("chof")

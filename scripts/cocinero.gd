@@ -141,7 +141,7 @@ func cuchillazo(johnny: Node2D) -> void:
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
 	if hacia.length() - johnny.RADIO <= ALCANCE_CUCHILLAZO and desvio <= MEDIO_CUCHILLAZO + 0.15:
-		johnny.recibir_dano(DANO_CUCHILLAZO)
+		johnny.recibir_dano(DANO_CUCHILLAZO, self)
 		johnny.empujar(hacia.normalized() * 500.0)
 
 
@@ -151,6 +151,7 @@ func abanico() -> void:
 	for i in n:
 		var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
 		var c := Cuchillo.new()
+		c.dueno = self
 		c.position = global_position + Vector2.from_angle(a) * (radio + 6.0)
 		c.velocidad = Vector2.from_angle(a) * VELOCIDAD_CUCHILLO[fase - 1]
 		c.dano = DANO_CUCHILLO
@@ -174,6 +175,7 @@ func lluvia(johnny: Node2D) -> void:
 				continue
 			donde = johnny.global_position
 		var c := Cuchillo.new()
+		c.dueno = self
 		c.modo = "cae"
 		c.position = donde
 		c.aviso = marca

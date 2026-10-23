@@ -94,7 +94,7 @@ func _physics_process(delta: float) -> void:
 	mover()
 	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso)
 	if contacto > 0 and global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
-		johnny.recibir_dano(contacto)
+		johnny.recibir_dano(contacto, self)
 	animar()
 	queue_redraw()
 	$Vapor.queue_redraw()
@@ -175,7 +175,7 @@ func embestir(delta: float, johnny: Node2D, rapidez: float, dano: int, cuanto: f
 			Color("#8a7a66"), 3, 0.4)
 	var d := global_position.distance_to(johnny.global_position)
 	if d < radio + johnny.RADIO + 10.0 and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, self)
 		johnny.empujar(mirada * 900.0)
 		johnny.pisar({"tirado": {}})
 		Temblor.temblar(10.0)
@@ -228,7 +228,19 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, _de_aliado := false) -> void:
 	if estado == "muerto" or invulnerable:
 		return
-	cantidad = danar(cantidad, fuerza, de_lleno)
+	quitar_vida(danar(cantidad, fuerza, de_lleno), fuerza)
+
+
+# El mordisco de la skin del glotón (johnny.gd, devolver()): le ha hecho daño a Johnny y pierde esa vida, directa (ni
+# la armadura, ni el escudo, ni la cúpula, ni la burbuja de fuego lo paran), sin salpicar ácido ni sangre. El científico
+# jefe y el gerente lo cambian: antes de pincharse no pueden caer
+func morder(cantidad: int) -> void:
+	if estado != "muerto":
+		quitar_vida(cantidad, Vector2.ZERO)
+
+
+# Le quita esa vida (lo que ya no han parado sus defensas): el número, el sonido, su sangre y, si llega a 0, cae
+func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	if cantidad <= 0:
 		return
 	vida = max(vida - cantidad, 0)

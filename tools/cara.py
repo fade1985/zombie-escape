@@ -12,16 +12,19 @@
 #      siempre (en las animaciones la cabeza sube, baja y se inclina un poco).
 #   4. Se pega la nueva encima. Lo que no es de Johnny (la fregona, el bate, el agua...) se respeta: la cabeza
 #      queda detrás. Donde la nueva no tiene nada, se borra solo lo que era de la cabeza de siempre.
-#   5. El pelo castaño que quede cerca (cada arma tiene su cabeza un poco distinta), del color del pelo nuevo.
+#   5. Lo que quede cerca del pelo castaño de siempre (cada arma tiene su cabeza un poco distinta), según la skin
+#      (SOBRA): del color del pelo nuevo (el portero) o quitado, también lo que quede del pañuelo (el glotón, calvo).
 # Los efectos (fila "fx": fogonazo, humo) no tienen a Johnny: se copian tal cual.
 #
 # Saca assets/sprites/conserje-48-<arma>-<id>.png y su .tres (el mismo con la otra imagen), y los iconos de la
 # taquilla: assets/ui/iconos/skin-<id>.png y skin-conserje.png (la cara de frente, 16×16).
 #   py tools/cara.py portero            → las hojas y los iconos (y luego importar en Godot)
 #   py tools/cara.py portero muestra    → además, captura-cara-<arma>.png con antes y después, para revisarlos
+#   py tools/cara.py gloton muestra     → lo mismo, con el glotón
 import colorsys
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 from PIL import Image
@@ -33,6 +36,9 @@ DIRECCIONES = ["south", "south-east", "east", "north-east", "north", "north-west
 BARBILLA = 12     # hasta esta fila (del dibujo de 48) llega la cabeza de siempre
 PARECIDO = 60     # dos colores se parecen si la suma de sus diferencias es menor que esto
 DE_JOHNNY = 34    # un color es "de Johnny" si se parece así a alguno de sus colores (si no, es el arma u otra cosa)
+# Qué se hace con lo que sobre del pelo de siempre alrededor de la cabeza nueva: "tenir", del color del pelo nuevo
+# (el portero); "quitar", para una cabeza calva y sin pañuelo (el glotón: también lo que sobre del pañuelo)
+SOBRA = {"portero": "tenir", "gloton": "quitar"}
 
 
 def dist(a, b):
@@ -232,7 +238,106 @@ def tenir(c, claros):
     return claros[i] + (c[3],)
 
 
-def pegar(px, x0, y0, cw, ch, t, cabeza, quieto_o, johnny, claros):
+def piel_nueva(cabeza):
+    """El color de piel que más sale en la cabeza nueva: para tapar lo que sobre por dentro en una calva."""
+    pieles = Counter(c for c in cabeza.values() if c[3] > 0 and tsv(c)[0] < 30 and tsv(c)[1] >= 0.3 and tsv(c)[2] >= 0.7)
+    return pieles.most_common(1)[0][0] if pieles else (251, 179, 134, 255)
+
+
+def quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel):
+    """Calvo (el glotón): lo que sobre del pelo y del pañuelo de siempre alrededor de la cabeza nueva.
+    - Los trozos de pelo o de pañuelo (cada uno por su lado) que no salen de alrededor de la cabeza: si siguen, son
+      otra cosa (el palo de un arma tiene los mismos castaños). Las puntas del pañuelo vuelan más lejos: para el rojo,
+      "alrededor" es un poco más grande. Si tocan el aire, ellos o su contorno negro, se borran con su contorno; si
+      quedan metidos entre otras cosas, del color de la piel.
+    - Al final, las motas negras sueltas que no rodean nada (el contorno de las puntas del pelo y del pañuelo)."""
+    dentro = set(zona)
+    xs, ys = [p[0] for p in zona], [p[1] for p in zona]
+    lejos = {(x, y) for y in range(min(ys) - 3, max(ys) + 4) for x in range(min(xs) - 6, max(xs) + 7)
+             if 0 <= x < cw and 0 <= y < ch and (x, y) not in hechos}
+
+    def color(p):
+        return px[x0 + p[0], y0 + p[1]]
+
+    def clase(p):
+        if p in hechos:
+            return None
+        f = color(p)
+        return "pelo" if johnny.es_pelo(f) else "rojo" if panuelo(f) else None
+
+    def oscuro(p):
+        f = color(p)
+        return p not in hechos and f[3] > 0 and tsv(f)[2] < 0.22
+
+    def vecinos(p, cruz=False):
+        x, y = p
+        lista = ((1, 0), (-1, 0), (0, 1), (0, -1)) if cruz else \
+            [(vx, vy) for vx in (-1, 0, 1) for vy in (-1, 0, 1) if vx or vy]
+        return [(x + vx, y + vy) for vx, vy in lista]
+
+    def en_celda(p):
+        return 0 <= p[0] < cw and 0 <= p[1] < ch
+
+    def aire(p):
+        return not en_celda(p) or color(p)[3] == 0
+
+    def mancha(p, igual, caja):
+        """Los que se tocan con p y cumplen igual(); y si alguno se sale de la caja (alrededor de la cabeza)."""
+        grupo, pila, sale = {p}, [p], False
+        while pila:
+            for v in vecinos(pila.pop()):
+                if v not in grupo and en_celda(v) and igual(v):
+                    grupo.add(v)
+                    pila.append(v)
+                    sale = sale or v not in caja
+        return grupo, sale
+
+    def rodea_algo(p):
+        """Si p hace de contorno de algo que se queda (lo que no es de la cabeza nueva ni oscuro)."""
+        return any(en_celda(v) and v not in hechos and color(v)[3] > 0 and tsv(color(v))[2] >= 0.22
+                   for v in vecinos(p))
+
+    vistos = set()
+    for p in sorted(lejos):
+        k = clase(p)
+        caja = lejos if k == "rojo" else dentro
+        if k is None or p in vistos or p not in caja:
+            continue
+        trozo, sale = mancha(p, lambda v: clase(v) == k, caja)
+        vistos |= trozo
+        if sale:
+            continue
+        contorno = {v for q in trozo for v in vecinos(q) if v in caja and oscuro(v)}
+        if any(aire(v) for q in trozo | contorno for v in vecinos(q, True)):
+            for q in trozo:
+                px[x0 + q[0], y0 + q[1]] = (0, 0, 0, 0)
+            for q in sorted(contorno):
+                if not rodea_algo(q):
+                    px[x0 + q[0], y0 + q[1]] = (0, 0, 0, 0)
+        else:
+            for q in trozo:
+                px[x0 + q[0], y0 + q[1]] = piel
+    # las motas negras sueltas
+    for p in sorted(lejos):
+        if p in vistos or not oscuro(p):
+            continue
+        mota, sale = mancha(p, oscuro, lejos)
+        vistos |= mota
+        if not sale and not any(rodea_algo(q) for q in mota):
+            for q in mota:
+                px[x0 + q[0], y0 + q[1]] = (0, 0, 0, 0)
+    # y las islas pequeñas que quedan sueltas, casi todo contorno (lo que queda de una punta con algo de su color)
+    for p in sorted(lejos):
+        if p in vistos or color(p)[3] == 0:
+            continue
+        isla, sale = mancha(p, lambda v: color(v)[3] > 0, lejos)
+        vistos |= isla
+        if not sale and len(isla) < 10 and not isla & hechos and 2 * sum(oscuro(q) for q in isla) >= len(isla):
+            for q in isla:
+                px[x0 + q[0], y0 + q[1]] = (0, 0, 0, 0)
+
+
+def pegar(px, x0, y0, cw, ch, t, cabeza, quieto_o, johnny, claros, sobra, piel):
     po = quieto_o.load()
     hechos = set()
     for (x, y), n in cabeza.items():
@@ -246,16 +351,20 @@ def pegar(px, x0, y0, cw, ch, t, cabeza, quieto_o, johnny, claros):
             if y <= BARBILLA and po[x, y][3] > 0 and de_cabeza(f):
                 px[x0 + X, y0 + Y] = (0, 0, 0, 0)
             continue
-        if f[3] == 0 or johnny.es_suyo(f):
+        # (sin pañuelo, también los rojos que no son de su paleta: en algunos golpes PixelLab lo pintó más vivo)
+        if f[3] == 0 or johnny.es_suyo(f) or (sobra == "quitar" and panuelo(f)):
             px[x0 + X, y0 + Y] = n
-    # el pelo castaño que sobre alrededor (la cabeza de cada arma es un poco distinta)
+    # lo que sobre alrededor del pelo de siempre (la cabeza de cada arma es un poco distinta)
     xs = [x for x, _ in cabeza]
-    for Y in range(t[1], t[1] + BARBILLA + 3):
-        for X in range(t[0] + min(xs) - 3, t[0] + max(xs) + 4):
-            if 0 <= X < cw and 0 <= Y < ch and (X, Y) not in hechos:
-                f = px[x0 + X, y0 + Y]
-                if johnny.es_pelo(f):
-                    px[x0 + X, y0 + Y] = tenir(f, claros)
+    zona = [(X, Y) for Y in range(t[1], t[1] + BARBILLA + 3) for X in range(t[0] + min(xs) - 3, t[0] + max(xs) + 4)
+            if 0 <= X < cw and 0 <= Y < ch and (X, Y) not in hechos]
+    if sobra == "quitar":
+        quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel)
+        return
+    for X, Y in zona:
+        f = px[x0 + X, y0 + Y]
+        if johnny.es_pelo(f):
+            px[x0 + X, y0 + Y] = tenir(f, claros)
 
 
 def fotogramas(datos):
@@ -284,6 +393,8 @@ def main():
         print(f"{direc}: PixelLab lo movió {movido}; se pegan {len(cabezas[direc])} píxeles")
     johnny = Paleta(quietos)
     claros = {d: pelo_nuevo(cabezas[d]) for d in cabezas}
+    pieles = {d: piel_nueva(cabezas[d]) for d in cabezas}
+    sobra = SOBRA.get(skin, "tenir")
 
     for arma in [a for a in ARMAS if a in sys.argv] or ARMAS:
         nombre = f"conserje-48-{arma}"
@@ -306,7 +417,7 @@ def main():
             t, parecido = buscar(px, x0, y0, cw, ch, *plantillas[direc], cerca[direc])
             if parecido < 0.35:
                 dudosos.append(f"{anim} {direc} {col} ({parecido:.2f})")
-            pegar(px, x0, y0, cw, ch, t, cabezas[direc], quietos[direc], johnny, claros[direc])
+            pegar(px, x0, y0, cw, ch, t, cabezas[direc], quietos[direc], johnny, claros[direc], sobra, pieles[direc])
             hechos.append((anim, direc, fila, col, t))
         hoja.save(SPRITES / f"{nombre}-{skin}.png", optimize=True)
         tres = (SPRITES / f"{nombre}.tres").read_text(encoding="utf-8")

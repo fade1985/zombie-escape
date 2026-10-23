@@ -16,6 +16,7 @@ const ALTURA := 22.0      # a qué altura del suelo vuela (la del cuerpo, como l
 var modo := "vuela"
 var velocidad := Vector2.ZERO   # "vuela"
 var dano := 12
+var dueno: Node2D = null        # quien lo lanza, el cocinero (para la skin del glotón: johnny.gd, devolver())
 var aviso := 0.8                # "cae": lo que dura la marca antes de caer
 var espera := 0.0               # "cae": lo que tarda en salir la marca (para que no caigan todos a la vez)
 var t := 0.0
@@ -66,7 +67,7 @@ func volar(delta: float) -> void:
 	global_position = despues
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) < johnny.RADIO + 10.0:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, dueno)
 		queue_free()
 
 
@@ -83,7 +84,7 @@ func caer() -> void:
 	alto = 12.0
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and dentro(johnny.global_position, johnny.RADIO * 0.6):
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, dueno)
 	for i in 5:
 		Particulas.soltar(self, global_position, Vector2(randf_range(-70, 70), randf_range(-60, -20)), Color("#8a7a66"), 3, 0.35)
 	clavar()

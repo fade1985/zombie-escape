@@ -43,7 +43,8 @@ class Diana extends Node2D:
 	var vivo := true
 	var barricada: Barricada
 
-	func recibir_dano(_cantidad: int) -> void:
+	# ("_quien", el zombi que pega: solo lo mira Johnny, para la skin del glotón)
+	func recibir_dano(_cantidad: int, _quien = null) -> void:
 		barricada.golpe()
 
 	# ¿Va este zombi a por la puerta en vez de a por Johnny? Si la pilla más cerca, o si Johnny se ha alejado

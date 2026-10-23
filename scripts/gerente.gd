@@ -172,6 +172,7 @@ func lanzar_contratos() -> void:
 	for i in n:
 		var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
 		var c := Contrato.new()
+		c.dueno = self
 		c.position = global_position + Vector2.from_angle(a) * (radio + 6.0)
 		c.velocidad = Vector2.from_angle(a) * VELOCIDAD_CONTRATO[fase - 1] * randf_range(0.95, 1.05)
 		c.dano = DANO_CONTRATO
@@ -185,7 +186,7 @@ func maletinazo(johnny: Node2D) -> void:
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
 	if hacia.length() - johnny.RADIO <= ALCANCE_MALETINAZO and desvio <= MEDIO_MALETINAZO + 0.15:
-		johnny.recibir_dano(DANO_MALETINAZO)
+		johnny.recibir_dano(DANO_MALETINAZO, self)
 		johnny.empujar(hacia.normalized() * EMPUJE_MALETINAZO)
 		Temblor.temblar(6.0)
 
@@ -226,6 +227,11 @@ func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 # Antes de pincharse no puede caer: como mucho se queda con 1 (y a media vida se pincha seguro)
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	return cantidad if mutado else mini(cantidad, vida - 1)
+
+
+# Con el mordisco del glotón, igual
+func morder(cantidad: int) -> void:
+	super(cantidad if mutado else mini(cantidad, vida - 1))
 
 
 # El cambio: otro dibujo (más grande), un fogonazo verde, temblor y un rugido. Crece de golpe desde un poco más
@@ -346,7 +352,7 @@ func latigazos(johnny: Node2D) -> void:
 		var hacia: Vector2 = johnny.global_position - global_position
 		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LATIGAZO)
 		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LATIGAZO + johnny.RADIO:
-			johnny.recibir_dano(DANO_LATIGAZO)
+			johnny.recibir_dano(DANO_LATIGAZO, self)
 			return
 
 

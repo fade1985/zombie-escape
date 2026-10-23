@@ -77,6 +77,15 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
   armas tiene los mismos colores que el pelo, así que donde el palo pasa justo por delante de la cara, la cabeza nueva
   lo tapa un poco; y los cartuchos rojos de la escopeta despistan al buscar el pañuelo (se prueban todas las manchas
   rojas cercanas y gana la que mejor encaja). Para una skin que cambie el cuerpo, no solo la cabeza, esto no basta.
+  - **La segunda, el glotón (24 oct, `skin-gloton`)**, igual: una petición, 10 generaciones, a la primera (esa vez
+    PixelLab tardó unos 15 minutos). El texto pide quitar el pelo y el pañuelo, la cara hecha una boca enorme con
+    colmillos, encías rojas y la garganta oscura, y dos ojillos encima; de lado, la boca de perfil, y de espaldas, la
+    calva. Lo aprendido al pegarla: con una cabeza calva lo que sobra del pelo y del pañuelo de siempre alrededor no
+    se tiñe, se quita (`SOBRA` en `cara.py`): los trozos que tocan el aire se borran con su contorno y los metidos
+    entre otras cosas se pintan de piel; las puntas del pañuelo vuelan lejos en los golpes (para el rojo se mira más
+    lejos de la cabeza) y en algunos golpes PixelLab pintó el pañuelo de un rojo más vivo que el de la paleta de
+    Johnny; y quedan motas negras sueltas del contorno de las puntas del pelo, que también se quitan. En un par de
+    dibujos del golpe con el bate Johnny se gira y se le pone la cabeza de espaldas: le pasa igual al portero.
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

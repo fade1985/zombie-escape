@@ -188,7 +188,7 @@ func tijeretazo(johnny: Node2D) -> void:
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
 	if hacia.length() - johnny.RADIO <= ALCANCE_TIJERETAZO and desvio <= MEDIO_TIJERETAZO + 0.15:
-		johnny.recibir_dano(DANO_TIJERETAZO)
+		johnny.recibir_dano(DANO_TIJERETAZO, self)
 		johnny.empujar(hacia.normalized() * 650.0)
 
 
@@ -196,6 +196,7 @@ func tijeretazo(johnny: Node2D) -> void:
 func lanzar_alfiler(angulo: float) -> void:
 	var dir := Vector2.from_angle(angulo)
 	var bala := BALA.instantiate()
+	bala.dueno = self
 	bala.position = position + dir * (radio + 6.0)
 	bala.velocidad = dir * VELOCIDAD_ALFILER
 	bala.dano = DANO_ALFILER

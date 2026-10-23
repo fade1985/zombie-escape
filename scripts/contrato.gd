@@ -13,6 +13,7 @@ const CAIDA := 0.35       # lo que tarda en caer al suelo
 
 var velocidad := Vector2.ZERO
 var dano := 10
+var dueno: Node2D = null  # quien lo lanza, el gerente (para la skin del glotón: johnny.gd, devolver())
 var t := 0.0
 var caido := -1.0         # el tiempo que lleva parado (-1 = aún vuela)
 var giro := 0.0           # hacia dónde apunta la hoja
@@ -51,7 +52,7 @@ func _physics_process(delta: float) -> void:
 	global_position = despues
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) < johnny.RADIO + 10.0:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, dueno)
 		# un corte: unos trocitos de papel saltan
 		for i in 4:
 			Particulas.soltar(self, global_position + Vector2(0, -ALTURA), Vector2.from_angle(randf() * TAU) * 80.0,

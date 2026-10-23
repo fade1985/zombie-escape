@@ -358,6 +358,11 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	return cantidad if mutado else mini(cantidad, vida - 1)
 
 
+# El mordisco del glotón pasa la cúpula, pero antes de pincharse tampoco le hace caer
+func morder(cantidad: int) -> void:
+	super(cantidad if mutado else mini(cantidad, vida - 1))
+
+
 # Si Johnny está a la vista (sin paredes ni aparatos en medio)
 func a_la_vista(johnny: Node2D) -> bool:
 	var rayo := PhysicsRayQueryParameters2D.create(global_position, johnny.global_position, 1)
@@ -506,7 +511,7 @@ func lenguas(johnny: Node2D) -> void:
 		var hacia: Vector2 = johnny.global_position - global_position
 		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LENGUA)
 		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LENGUA + johnny.RADIO:
-			johnny.recibir_dano(DANO_LENGUA)
+			johnny.recibir_dano(DANO_LENGUA, self)
 			johnny.empujar(linea * 500.0)
 			return
 
@@ -531,7 +536,7 @@ func onda(johnny: Node2D) -> void:
 	if Vector2(hacia.x, hacia.y / 0.7).length() <= r + johnny.RADIO:
 		datos.hecho = true
 		if johnny.esquiva_t <= 0.0:
-			johnny.recibir_dano(DANO_PUNETAZO)
+			johnny.recibir_dano(DANO_PUNETAZO, self)
 			johnny.empujar(hacia.normalized() * 700.0)
 			johnny.pisar({"tirado": {}})
 
@@ -543,6 +548,7 @@ func escupir() -> void:
 	for i in BOLAS:
 		var a: float = datos.angulo + (i - (BOLAS - 1) / 2.0) * ABRE_BOLAS
 		var bola := BolaFuego.new()
+		bola.dueno = self
 		bola.desde = boca
 		bola.velocidad = Vector2.from_angle(a) * VELOCIDAD_BOLA
 		bola.dano = DANO_BOLA

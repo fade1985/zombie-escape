@@ -156,7 +156,7 @@ func girar(delta: float, johnny: Node2D) -> String:
 			Color("#8a7a66"), 3, 0.4)
 	var d := global_position.distance_to(johnny.global_position)
 	if d < BRAZOS + johnny.RADIO and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(DANO_TORBELLINO)
+		johnny.recibir_dano(DANO_TORBELLINO, self)
 		# le lanza hacia un lado, como un manotazo
 		var lado: Vector2 = mirada.orthogonal() * signf(mirada.orthogonal().dot(johnny.global_position - global_position) + 0.01)
 		johnny.empujar((mirada + lado).normalized() * 900.0)
@@ -202,7 +202,7 @@ func aterrizar(johnny: Node2D) -> void:
 	Particulas.anillo(self, global_position + Vector2(0, PIE - 6), RADIO_SALTO, Color("#b3a58c"), 0.35)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if en_la_zona(johnny.global_position + Vector2(0, 16), johnny.RADIO * 0.6) and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(DANO_SALTO)
+		johnny.recibir_dano(DANO_SALTO, self)
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 700.0)
 		johnny.pisar({"tirado": {}})
 
@@ -228,6 +228,7 @@ func lanzar_pesas(johnny: Node2D) -> void:
 		donde.append(johnny.global_position + Vector2.from_angle(randf() * TAU) * randf_range(70.0, 120.0))
 	for i in donde.size():
 		var pesa := Pesa.new()
+		pesa.dueno = self
 		pesa.desde = mano
 		# donde se pueda estar (no dentro de una pared o un mueble)
 		pesa.hasta = NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), donde[i])

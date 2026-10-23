@@ -1157,11 +1157,13 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# los jefes, siempre una receta del banco de trabajo que aún no se tenga (si queda alguna)
 		if tipo in JEFES:
 			soltar_receta(zombi.position)
-		# la portera, la primera vez: la skin del portero (skins.gd), para siempre (se pone en la taquilla)
-		if tipo == "portera" and Skins.desbloquear("portero"):
+		# algunos jefes, la primera vez, sueltan una skin (skins.gd: la portera, el portero; el Glotón, el glotón), para
+		# siempre (se pone en la taquilla)
+		var skin := Skins.de_jefe(tipo)
+		if skin != "" and Skins.desbloquear(skin):
 			Sonido.tocar("compra")
 			numero(zombi.position + Vector2(0, -40), "¡Skin nueva!", Tema.TINTA)
-			decir("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento" % Skins.nombre("portero"), 4.0)
+			decir("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento" % Skins.nombre(skin), 4.0)
 		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
 		if tipo in JEFES and not final_de(tipo).is_empty():
 			fin_del_edificio()

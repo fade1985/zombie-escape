@@ -126,7 +126,7 @@ func porrazo(johnny: Node2D) -> void:
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
 	if hacia.length() - johnny.RADIO <= ALCANCE_PORRAZO and desvio <= MEDIO_PORRAZO + 0.15:
-		johnny.recibir_dano(DANO_PORRAZO)
+		johnny.recibir_dano(DANO_PORRAZO, self)
 		johnny.empujar(hacia.normalized() * 650.0)
 
 

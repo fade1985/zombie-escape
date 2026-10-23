@@ -36,7 +36,7 @@ var alto_salida := 0.0       # a qué altura sobre el suelo sale
 var hasta := Vector2.ZERO    # dónde caerá
 var dano_lanzar := 1.0       # molotov: Puntería
 var fabricante := false      # molotov: fuego más grande y más largo
-var dueno: Node2D = null     # quien lo lanza (al cocinero no le quema su aceite)
+var dueno: Node2D = null     # quien lo lanza (al cocinero no le quema su aceite; y la skin del glotón le muerde)
 var t := 0.0
 var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de todos
 
@@ -100,7 +100,7 @@ func caer(datos: Dictionary) -> void:
 				Particulas.soltar(self, hasta, Vector2(cos(a) * 110.0, sin(a) * 65.0), Color("#d8f0ff"), 2, 0.3)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if datos.golpe > 0 and johnny and johnny.vivo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
-		johnny.recibir_dano(datos.golpe)
+		johnny.recibir_dano(datos.golpe, dueno)
 	queue_free()
 
 

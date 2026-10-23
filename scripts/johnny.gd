@@ -26,7 +26,8 @@
 # en área al acabar la esquiva) y Desfibrilador (resucita una vez por partida).
 #
 # Las skins (skins.gd): vestir() le cambia las hojas por las de esa skin (las de siempre con otra cabeza); al
-# empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 300 % más (arma()).
+# empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 300 % más (arma()), y con el
+# glotón quien le hace daño lo paga (devolver()).
 extends CharacterBody2D
 
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
@@ -49,6 +50,7 @@ const REGENERA_CADA := 3.0 # Lobezno: segundos entre cura y cura
 const CAIDA := 0.22        # tropezón (caer): lo que tarda en llegar al suelo y en levantarse
 const LEVANTADO := 0.6     # recién levantado, este rato sin volver a tropezar
 const AZUL := Color("#9fe8ff")
+const MORDISCO := Color("#ff5d5d")   # el «¡ÑAM!» del glotón sobre el que le ha hecho daño
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
 const EMPUJE := 170.0      # empuje base de un golpe a un zombi normal (el del arma lo multiplica)
@@ -899,8 +901,10 @@ func vestir(id: String) -> void:
 		dibujo.set_frame_and_progress(fotograma, avance)
 
 
-# Lo llaman los zombis al darle un zarpazo
-func recibir_dano(cantidad: int) -> void:
+# Lo llaman los zombis al darle un zarpazo. "quien": el que se lo hace (el zombi o el jefe; en lo que se lanza, el que
+# lo lanzó), para el glotón (devolver()); nada si no es de nadie (charcos, agua con corriente, explosiones). Sin tipo:
+# lo que se lanza puede llegar cuando su dueño ya no está
+func recibir_dano(cantidad: int, quien = null) -> void:
 	if not vivo or invulnerable > 0.0:
 		return
 	# Reflejos: cada pocos segundos, un golpe se esquiva solo
@@ -921,6 +925,22 @@ func recibir_dano(cantidad: int) -> void:
 	Temblor.temblar(9.0)
 	Tactil.vibracion()
 	quitar_vida(dano)
+	devolver(quien)
+
+
+# El glotón (skins.gd): el que le ha hecho daño lo paga. Un zombi normal (o un maniquí de la modista) muere al momento;
+# un jefe pierde una parte de su vida máxima, directa a la vida (morder(): ni su armadura ni su escudo la paran)
+func devolver(quien) -> void:
+	var parte := Skins.mordisco(skin)
+	if parte <= 0.0 or not is_instance_valid(quien) or quien.get("estado") == "muerto":
+		return
+	if quien.has_method("morder"):
+		quien.morder(ceili(quien.vida_max * parte))
+	else:
+		var dano: int = quien.vida + 1
+		quien.recibir_golpe(dano, (quien.global_position - global_position).normalized() * EMPUJE)
+	Zombi.texto_flotante(get_parent(), quien.global_position + Vector2(-30, -60), "¡ÑAM!", MORDISCO, 18)
+	Sonido.tocar("mordisco")
 
 
 # Lo llaman los charcos en cada paso mientras los pisa (charco.gd): apunta sus estados. La esquiva cruza

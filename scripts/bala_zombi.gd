@@ -9,6 +9,7 @@ var radio := 9.0
 var color := Color("#cbb994")
 var vida := 6.0
 var forma := "gota"   # "alfiler": una aguja fina con la cabeza roja (la modista)
+var dueno: Node2D = null   # quien la lanza (para la skin del glotón: johnny.gd, devolver())
 
 
 func _ready() -> void:
@@ -29,7 +30,7 @@ func _physics_process(delta: float) -> void:
 	global_position = despues
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) < johnny.RADIO + radio:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, dueno)
 		queue_free()
 
 

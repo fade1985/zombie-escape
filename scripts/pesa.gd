@@ -14,6 +14,7 @@ var desde := Vector2.ZERO   # de dónde sale (su mano)
 var hasta := Vector2.ZERO   # dónde cae (el centro de la marca)
 var vuelo := 0.9            # lo que tarda en caer
 var dano := 18
+var dueno: Node2D = null    # quien la lanza, el Gymbro (para la skin del glotón: johnny.gd, devolver())
 var t := 0.0
 var tirada := -1.0          # lo que le queda en el suelo (-1 = aún vuela)
 var alto := 0.0             # a qué altura del suelo va
@@ -55,7 +56,7 @@ func caer() -> void:
 		Particulas.soltar(self, global_position, Vector2(randf_range(-90, 90), randf_range(-70, -20)), Color("#8a7a66"), 3, 0.4)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and dentro(johnny.global_position, johnny.RADIO * 0.6) and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, dueno)
 		var hacia: Vector2 = johnny.global_position - global_position
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 500.0)
 

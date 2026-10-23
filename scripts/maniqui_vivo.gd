@@ -69,7 +69,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	sprite.rotation = sin(t * 16.0) * 0.12
 	if global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
-		johnny.recibir_dano(DANO)
+		johnny.recibir_dano(DANO, self)
 
 
 # ¿Lo está mirando Johnny? (lo tiene por delante, no muy lejos y sin nada en medio)

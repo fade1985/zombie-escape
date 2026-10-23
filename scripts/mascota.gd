@@ -155,7 +155,7 @@ func aterrizar(johnny: Node2D) -> void:
 			Vector2(cos(a) * 160.0, sin(a) * 70.0), Color("#8a7a66"), 4, 0.5)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < RADIO_SALTO + johnny.RADIO and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(DANO_SALTO)
+		johnny.recibir_dano(DANO_SALTO, self)
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 600.0)
 
 

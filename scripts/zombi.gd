@@ -175,7 +175,7 @@ func _physics_process(delta: float) -> void:
 			if not zarpazo_dado and avance_animacion() >= momento_zarpazo:
 				zarpazo_dado = true
 				if johnny and global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + alcance + 10.0:
-					johnny.recibir_dano(dano)
+					johnny.recibir_dano(dano, self)
 
 		"golpe":
 			# Sale despedido hacia atrás y va frenando; aquí no se usa el agente, se mueve él solo

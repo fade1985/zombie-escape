@@ -94,7 +94,7 @@ func golpear(johnny: Node2D) -> void:
 	var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO)
 	var separado := hacia.distance_to(linea * a_lo_largo)
 	if separado <= ANCHO + johnny.RADIO:
-		johnny.recibir_dano(DANO_LATIGAZO)
+		johnny.recibir_dano(DANO_LATIGAZO, self)
 
 
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:

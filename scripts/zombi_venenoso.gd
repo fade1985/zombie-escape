@@ -64,6 +64,7 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 		espera = ESPERA
 		if johnny:
 			var moco := PROYECTIL.instantiate()
+			moco.dueno = self
 			moco.tipo = "veneno"
 			var delante := Vector2.from_angle(DIRS.find(direccion) * PI / 4) * 26.0
 			moco.desde = global_position + delante

@@ -11,11 +11,17 @@
 # La primera, el portero (la portera la suelta al caer por primera vez, partida.gd): un viejo de pelo largo blanco
 # con coleta y barba blanca, con el pañuelo rojo de siempre. Con ella puesta, la fregona hace un 300 % más de daño
 # (× 4, "fregona"; solo la fregona de siempre, no las armas creadas a partir de ella).
+#
+# La segunda, el glotón (la suelta el Glotón al caer por primera vez, partida.gd): calvo y con la cara convertida en
+# una boca enorme llena de dientes, como la del Glotón. Con ella puesta, quien le hace daño lo paga (johnny.gd,
+# devolver()): un zombi normal muere al momento y un jefe pierde un 10 % de su vida máxima ("mordisco").
 class_name Skins
 
 const LISTA := {
 	"portero": {"nombre": "El portero", "desc": "Pelo largo blanco, coleta y barba. La fregona hace un 300 % más de daño.",
-		"como": "Mata a la portera por primera vez.", "fregona": 4.0},
+		"como": "Mata a la portera por primera vez.", "jefe": "portera", "fregona": 4.0},
+	"gloton": {"nombre": "El glotón", "desc": "Calvo y todo boca. Quien te hace daño lo paga: un zombi muere y un jefe pierde un 10 % de vida.",
+		"como": "Mata al Glotón por primera vez.", "jefe": "gloton", "mordisco": 0.1},
 }
 
 
@@ -38,6 +44,14 @@ static func poner(id: String) -> void:
 # Las que ya se tienen (ids), según el guardado
 static func tenidas() -> Array:
 	return Guardado.cargar().skins
+
+
+# La skin que suelta ese jefe la primera vez que cae (partida.gd; "" = ninguna)
+static func de_jefe(tipo: String) -> String:
+	for id in LISTA:
+		if LISTA[id].get("jefe", "") == tipo:
+			return id
+	return ""
 
 
 # La apunta para siempre (no se la pone: eso, en la taquilla). Devuelve si es nueva
@@ -65,3 +79,8 @@ static func hoja(de_siempre: SpriteFrames, id: String) -> SpriteFrames:
 # Por cuánto se multiplica el daño de la fregona con esa skin
 static func fregona(id: String) -> float:
 	return LISTA[id].get("fregona", 1.0) if id in LISTA else 1.0
+
+
+# Qué parte de su vida máxima pierde un jefe que le hace daño con esa skin (0 = nada: el poder del glotón no está)
+static func mordisco(id: String) -> float:
+	return LISTA[id].get("mordisco", 0.0) if id in LISTA else 0.0

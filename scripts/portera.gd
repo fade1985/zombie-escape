@@ -214,7 +214,7 @@ func _physics_process(delta: float) -> void:
 	mover()
 	# Si Johnny se le pega, le hace daño (Johnny luego es invulnerable un rato: no le quita en cada paso)
 	if contacto > 0 and d < radio + johnny.RADIO + 4.0:
-		johnny.recibir_dano(contacto)
+		johnny.recibir_dano(contacto, self)
 	animar()
 
 
@@ -285,7 +285,7 @@ func fregonazo(johnny: Node2D) -> void:
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
 	if hacia.length() - johnny.RADIO <= ALCANCE_FREGONAZO and desvio <= MEDIO_FREGONAZO + 0.15:
-		johnny.recibir_dano(DANO_FREGONAZO)
+		johnny.recibir_dano(DANO_FREGONAZO, self)
 		johnny.empujar(hacia.normalized() * 650.0)
 
 
@@ -297,6 +297,7 @@ func lejia(delta: float, johnny: Node2D, hacia: Vector2) -> void:
 	while datos.lanzadas < n and t >= 0.3 + datos.lanzadas * 0.18:
 		var lejos := 0.0 if datos.lanzadas == 0 else randf_range(60.0, 130.0)
 		var botella := PROYECTIL.instantiate()
+		botella.dueno = self
 		botella.tipo = "lejia"
 		botella.desde = global_position
 		botella.alto_salida = ARRIBA * 0.6
@@ -317,6 +318,7 @@ func acido(delta: float, johnny: Node2D, hacia: Vector2, apunta: float) -> void:
 	while datos.lanzadas < n and t >= datos.lanzadas * hueco:
 		var lejos := 0.0 if datos.lanzadas == 0 else randf_range(70.0, 190.0 if enfadada() else 140.0)
 		var gota := PROYECTIL.instantiate()
+		gota.dueno = self
 		gota.tipo = "acido"
 		gota.desde = global_position + Vector2.from_angle(apunta) * 40.0   # sale de la punta de la fregona
 		gota.alto_salida = 40.0
@@ -351,7 +353,7 @@ func fregonazo_circulo(johnny: Node2D) -> void:
 			Color("#cbb994"), 4, 0.5)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() - johnny.RADIO <= RADIO_CIRCULO:
-		johnny.recibir_dano(DANO_CIRCULO)
+		johnny.recibir_dano(DANO_CIRCULO, self)
 		johnny.empujar(hacia.normalized() * 700.0)
 
 
@@ -387,6 +389,7 @@ func gritar(texto: String, color: Color, tamano := 24) -> void:
 
 func disparar(desde: Vector2, angulo: float, rapidez: float, dano: int, tamano: float) -> void:
 	var bala := BALA.instantiate()
+	bala.dueno = self
 	bala.position = desde
 	bala.velocidad = Vector2.from_angle(angulo) * rapidez
 	bala.dano = dano
@@ -426,6 +429,18 @@ func mover() -> void:
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto" or invulnerable:
 		return
+	quitar_vida(cantidad, fuerza)
+
+
+# El mordisco de la skin del glotón (johnny.gd, devolver()): le ha hecho daño a Johnny y pierde esa vida, aunque esté
+# gritando
+func morder(cantidad: int) -> void:
+	if estado != "muerto":
+		quitar_vida(cantidad, Vector2.ZERO)
+
+
+# Le quita esa vida: el número, el sonido, su sangre y, si llega a 0, cae
+func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	vida = max(vida - cantidad, 0)
 	# Los jefes apenas se mueven con los golpes
 	marcha += fuerza.normalized() * 8.0

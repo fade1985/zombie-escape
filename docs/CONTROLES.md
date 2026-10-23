@@ -73,11 +73,14 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   tarjeta dorada junto a la suya (`captura-joyeria-dorada.png`) y la apertura con ella.
 - `--skins`: en vez de la prueba larga, la de las skins de Johnny (`skins.gd`), en la sala de mantenimiento y sin
   ninguna: la taquilla no deja ponerse el portero sin tenerlo; la portera cae y lo desbloquea, con su aviso
-  (`captura-skins-desbloqueo.png`), y una segunda vez ya no es nuevo; en la taquilla se elige (`captura-skins-taquilla.png`),
-  Johnny cambia de hoja y se guarda; la vuelta de la tecla Z; la cara en las 8 direcciones y con las seis armas, al
-  lado del conserje de siempre (`captura-skins-caras.png`); ponérsela andando no le corta el paso; y el daño de la
-  fregona, × 4 con el portero (y el del bate, igual), contado y con un golpe de verdad. Cada línea de la terminal
-  dice lo esperado.
+  (`captura-skins-desbloqueo.png`), y una segunda vez ya no es nuevo; el Glotón cae y desbloquea el glotón
+  (`captura-skins-desbloqueo-gloton.png`); en la taquilla se eligen (`captura-skins-taquilla.png` y
+  `captura-skins-taquilla-gloton.png`), Johnny cambia de hoja y se guarda; la vuelta de la tecla Z; la cara en las 8
+  direcciones y con las seis armas, al lado del conserje de siempre (`captura-skins-caras.png`, el portero, y
+  `captura-skins-caras-gloton.png`); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero
+  (y el del bate, igual), contado y con un golpe de verdad; y el poder del glotón: el zombi que le da un zarpazo muere,
+  el Gymbro pierde un 10 % con un golpe suyo y con una pesa suya aunque tenga la armadura, y sin la skin, siendo
+  invulnerable o con un daño que no es de nadie, nada. Cada línea de la terminal dice lo esperado.
 - `--baul`: en vez de la prueba larga, la de guardar a mano en el baúl lo de la mochila (`ui/inventario.gd`): con
   gasolina, clavos, vendas, cuchillas y táser en la mochila, Johnny se arrima al baúl y comprueba en la terminal que
   se abre, que «Guardar de la mochila» enseña la mochila (`captura-baul-mochila.png`, con la gasolina elegida), que
@@ -228,9 +231,12 @@ En el suelo, manchas de sangre.
   armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
   bestiario).
 - En el vestuario, la **taquilla** de Johnny: arrimarse para elegir la skin (las que ya hayas desbloqueado; las
-  demás salen con «???» y cómo se consiguen; la que te pongas se queda puesta). Por ahora, **el portero**: se
-  desbloquea la primera vez que matas a la portera; pelo largo blanco con coleta y barba, y la fregona hace un 300 %
-  más de daño. Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
+  demás salen con «???» y cómo se consiguen; la que te pongas se queda puesta). **El portero**: se desbloquea la
+  primera vez que matas a la portera; pelo largo blanco con coleta y barba, y la fregona hace un 300 % más de daño.
+  **El glotón**: se desbloquea la primera vez que matas al Glotón; calvo y con la cara hecha una boca llena de
+  dientes, y quien te hace daño lo paga («¡ÑAM!»): un zombi muere al momento y un jefe pierde un 10 % de su vida
+  máxima (también si te da con algo que lanza; la armadura y los escudos no lo paran). No cuenta si eres invulnerable
+  o lo esquivas, ni lo que no es de nadie (charcos, fuego del suelo, agua con corriente, explosiones). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
   (cruceta y A); Esc o B cierra.
 - Los baños tienen un armarito con botiquín.
 - Por la **puerta de la derecha** del taller, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un

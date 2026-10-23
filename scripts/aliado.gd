@@ -520,8 +520,9 @@ func al_limpiar() -> void:
 		curar(def.habilidad.al_limpiar)
 
 
-# Le alcanza un zarpazo (solo pasa en la horda y en la escolta: es cuando los zombis van a por él)
-func recibir_dano(cantidad: int) -> void:
+# Le alcanza un zarpazo (solo pasa en la horda y en la escolta: es cuando los zombis van a por él). "_quien", el zombi
+# que pega: solo lo mira Johnny (la skin del glotón)
+func recibir_dano(cantidad: int, _quien = null) -> void:
 	if inv_t > 0.0 or caido:
 		return
 	vida -= cantidad

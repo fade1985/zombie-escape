@@ -2763,5 +2763,19 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-10-24"
+ },
+ "skin-gloton": {
+  "kind": "edit_image",
+  "job_id": "758cdf7c-33e5-4543-89a7-9fe239cc072b",
+  "asset_id": "4be50caa-5889-542e-9826-327b1df54d88",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin del glotón (scripts/skins.gd), hecha el 2026-10-24 con la misma receta que skin-portero: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera y el dueño le dio el visto bueno (esa vez PixelLab tardó unos 15 minutos). Los 8 dibujos, tal cual, en assets/sources/skin-gloton/quietos/<dirección>.png. PixelLab movió el cuerpo de lado de 0 a 7 píxeles, como con el portero. tools/cara.py gloton pega la cabeza en las seis hojas de armas; como es calva, lo que sobra del pelo y del pañuelo de siempre se quita (SOBRA = \"quitar\") en vez de teñirse.",
+  "request": {
+   "description": "Turn his head into a monster glutton head: remove all his brown hair and remove the red bandana completely, he is totally bald with a smooth bald scalp in his skin color. His whole face becomes one huge gaping monster mouth that fills the face from just below the eyes down to the chin: a big open mouth ringed with giant long sharp pointed fangs, cream-white teeth, red gums and lips, and a dark red-black throat inside. Only two tiny beady white eyes remain just above the mouth. Keep exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the bald head and the giant toothy mouth consistent in every view; from the side the open mouth with its fangs is seen in profile at the front of the face; from behind only the smooth bald back of the head is seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24"
  }
 }

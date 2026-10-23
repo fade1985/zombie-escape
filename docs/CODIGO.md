@@ -30,7 +30,10 @@
   por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Las skins (`skins.gd`):
   `vestir(id)` le cambia las hojas por las de esa skin sin cortarle la animación (`sostener` también coge la hoja de
   la skin al cambiar de arma); al empezar se pone la del guardado. Con el portero, `arma()` multiplica por 4 el daño de
-  la fregona. `caer(segundos)`: un tropezón (las mancuernas del gimnasio
+  la fregona. `recibir_dano(cantidad, quien)`: "quien" es el que le pega (el zombi o el jefe; en lo que se lanza,
+  balas, pesas, cuchillos, contratos, bolas de fuego y lo de `proyectil.gd`, su `dueno`), o nada si no es de nadie
+  (charcos, agua con corriente, explosiones); con el glotón, `devolver(quien)` se lo cobra: el zombi muere y el jefe
+  pierde un 10 % de su vida máxima (`morder()`). `caer(segundos)`: un tropezón (las mancuernas del gimnasio
   del Gymbro, los cubos de la portera): se queda tirado sin andar, atacar ni rodar, con el dibujo tumbado y estrellitas en la cabeza, y luego
   se levanta; rodando no se tropieza. `mejoras.gd`: sus atributos (el baseStats del JS).
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`). `bala.gd`.
@@ -80,7 +83,8 @@
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque.
 - `portera.gd`: la jefa, por estados (charcos de ácido, embestida, grito "¡VECINOS!"; números en sus constantes).
 - `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
-  vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir; y la carrera en línea
+  vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, `quitar_vida()`, `morder()` (el
+  10 % de la skin del glotón, sin pasar por `danar()`), morir; y la carrera en línea
   recta, `embestir()` con `pared_chocada()` y `estrellarse()`, con su `franja()` roja de aviso y el estado "atontado"
   con estrellitas). Cada uno hereda y pone sus ataques: `bombero.gd` (minijefe de los Apartamentos: el fuego no le
   hace nada, `inmune_fuego`; bolas de fuego `bola_fuego.gd` en abanico de 15 grados (`BOLAS`: 3, enfadado 5, cada
@@ -178,12 +182,17 @@
   `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
 - `skins.gd`: las skins de Johnny, que se desbloquean haciendo algo y se quedan para siempre: `LISTA` (nombre, frase,
-  cómo se consigue y su ventaja: `fregona`, por cuánto se multiplica su daño), `puesta()` y `poner()` (el guardado,
-  `skin`), `tenidas()` y `desbloquear()` (`skins`), `siguiente()` (la tecla Z), `hoja(de_siempre, id)` (la hoja de esa
-  skin para un arma: `conserje-48-<arma>-<id>.tres`) y `fregona(id)`. La primera, **el portero**: la suelta la portera
-  al caer por primera vez (`partida.gd`, con su aviso); viejo de pelo largo blanco, coleta y barba, con el pañuelo de
-  siempre, y la fregona × 4. Sus hojas son las de siempre con la cabeza cambiada (`tools/cara.py`). Se eligen en la
-  taquilla del vestuario (`ui/taquilla.gd`). La prueba: `--captura --skins` (`probar_skins()`).
+  cómo se consigue, `jefe`, el que la suelta, y su ventaja: `fregona`, por cuánto se multiplica su daño; `mordisco`,
+  lo que pierde el jefe que te hace daño), `puesta()` y `poner()` (el guardado, `skin`), `tenidas()` y `desbloquear()`
+  (`skins`), `de_jefe(tipo)` (la que suelta ese jefe al caer por primera vez: `partida.gd`, con su aviso),
+  `siguiente()` (la tecla Z), `hoja(de_siempre, id)` (la hoja de esa skin para un arma: `conserje-48-<arma>-<id>.tres`),
+  `fregona(id)` y `mordisco(id)`. **El portero** (la suelta la portera): viejo de pelo largo blanco, coleta y barba, con
+  el pañuelo de siempre, y la fregona × 4. **El glotón** (la suelta el Glotón): calvo y con la cara convertida en una
+  boca llena de dientes; quien le hace daño lo paga (`johnny.devolver()`): un zombi normal (o un maniquí) muere al
+  momento y un jefe pierde un 10 % de su vida máxima, directo a la vida (`morder()` en `minijefe.gd` y `portera.gd`: ni
+  la armadura del Gymbro, ni el escudo del antidisturbios, ni la cúpula del científico lo paran; el científico y el
+  gerente, antes de pincharse, no caen). Sus hojas son las de siempre con la cabeza cambiada (`tools/cara.py`). Se
+  eligen en la taquilla del vestuario (`ui/taquilla.gd`). La prueba: `--captura --skins` (`probar_skins()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, con
@@ -380,8 +389,9 @@ el corcho del despacho, que también pasa a sprite, y les quita lo azulado que P
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de las skins), `cara.py` (las skins de Johnny: pega
 la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos de las seis hojas de armas, buscándola por
-el pañuelo rojo; saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos de la taquilla; con `muestra`, el antes y el
-después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
+el pañuelo rojo; lo que sobra del pelo de siempre alrededor, según la skin (`SOBRA`): teñido del pelo nuevo (el portero)
+o quitado, con lo que sobre del pañuelo (el glotón, calvo); saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
+de la taquilla; con `muestra`, el antes y el después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
 (los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).

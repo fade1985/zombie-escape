@@ -15,6 +15,7 @@ var desde := Vector2.ZERO
 var velocidad := Vector2.ZERO
 var dano := 14
 var quema := {"fuego": {}}   # lo que arde Johnny al darle
+var dueno: Node2D = null     # quien la lanza (para la skin del glotón: johnny.gd, devolver())
 var vida := VIDA
 var t := 0.0
 
@@ -51,7 +52,7 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) < johnny.RADIO + RADIO \
 			and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, dueno)
 		johnny.pisar(quema)
 		apagarse()
 

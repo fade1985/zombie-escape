@@ -227,7 +227,7 @@ func dar_hachazo(johnny: Node2D) -> void:
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < ALCANCE_HACHA + johnny.RADIO + 8.0 and absf(angle_difference(mirada.angle(), hacia.angle())) < 1.1 \
 			and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(DANO_HACHA)
+		johnny.recibir_dano(DANO_HACHA, self)
 		johnny.empujar(mirada * 650.0)
 		Sonido.tocar("porrazo")
 	else:
@@ -247,6 +247,7 @@ func lanzar_bolas(johnny: Node2D) -> void:
 	var n: int = BOLAS[fase - 1]
 	for i in n:
 		var bola := BolaFuego.new()
+		bola.dueno = self
 		bola.desde = mano
 		bola.velocidad = hacia.rotated((i - (n - 1) / 2.0) * ABANICO_BOLAS) * VELOCIDAD_BOLA
 		bola.dano = DANO_BOLA
@@ -369,7 +370,7 @@ func quemar_cono(a: float, johnny: Node2D, puntas: Array) -> float:
 			johnny.invulnerable = 0.0
 		if johnny.invulnerable <= 0.0:
 			quema_t = johnny.INVULNERABLE
-		johnny.recibir_dano(DANO_CONO)
+		johnny.recibir_dano(DANO_CONO, self)
 		Estados.pisar(johnny.pisando, QUEMA_CONO)   # (johnny.pisar() no apunta nada mientras rueda)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == self or not zombi.has_method("prender"):
