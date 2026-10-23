@@ -28,6 +28,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   **T**: la modista. **J**: la mascota (de la Juguetería). **L**: el gerente (el jefe final de la azotea).
   Los minijefes de los Apartamentos (`docs/JEFES_APARTAMENTOS.md`), con los números: **7**, el Glotón; **8**, el Gymbro; **9**, el jefe de bomberos;
   y **0**, el científico jefe (el doctor Salas, el jefe final de su azotea).
+- **Mayús + 7, 8, 9 o P** (en los Apartamentos): derecho a la habitación de ese minijefe (el Glotón, el Gymbro, el jefe
+  de bomberos o la portera) para pelear con él sin jugar hasta él: rehace la planta que le tocó en el sorteo de la
+  partida y Johnny entra por la puerta; el jefe sale como siempre, con su presentación. Funciona en cualquier momento
+  (`ir_al_jefe` en `partida.gd`). Al pulsar Mayús, Johnny rueda (es la tecla de esquivar): no pasa nada.
 - **N** (los dos edificios tienen azotea): derecho a la azotea, sin subir planta a planta. En **Elige edificio**, la N abre todos
   los edificios (el centro comercial sin completar los Apartamentos) hasta cerrar el juego; no se guarda.
 - **M**: recuadro de mutaciones. **O**: soltar un objeto al azar (de los que salen donde estás). **U**: uno de cada
@@ -131,6 +135,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   entre los dos conos a su paso, no (`captura-llamas.png`, la sala entera; `captura-llamas-aviso.png`, el cono rojo y
   las flechas del aviso; `captura-llamas-giro.png`, Johnny corriendo delante del cono; `captura-llamas-burbuja.png`, la
   burbuja de cerca; `captura-llamas-enfadado.png`, los dos conos). Cada línea dice lo esperado.
+- `--ir-jefe`: en vez de la prueba larga, la de Mayús + 7, 8, P y 9 (`probar_ir_jefe`): desde la sala de
+  mantenimiento pulsa cada una y cuenta en la terminal que Johnny está en la habitación de ese jefe, junto a la puerta,
+  en la planta que le tocó en el sorteo, y que el jefe que sale es ese (`captura-ir-jefe.png`, el jefe de bomberos en su
+  habitación). Cada línea dice lo esperado.
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
   (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
   cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la

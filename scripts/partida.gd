@@ -19,7 +19,8 @@
 # igual: al arrimarse sale la ventanita para elegir el traje de Johnny (trajes.gd).
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny (los minijefes de
-# los Apartamentos, con los números: 7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; 0, el científico jefe). F9 lleva a
+# los Apartamentos, con los números: 7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; 0, el científico jefe; con
+# Mayús, 7, 8, 9 y P llevan derecho a la habitación de ese minijefe). F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
 # las mutaciones sin tener que matar a la portera. Z le pone a Johnny el siguiente traje (trajes.gd).
 #
@@ -58,6 +59,8 @@ const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "e
 	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
 	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente", KEY_7: "gloton", KEY_8: "gymbro",
 	KEY_9: "bombero", KEY_0: "cientifico_jefe"}
+# Mayús + la tecla de un minijefe de los Apartamentos: derecho a su habitación (ir_al_jefe)
+const SALAS_JEFE := {KEY_7: "gloton", KEY_8: "gymbro", KEY_9: "bombero", KEY_P: "portera"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -1231,7 +1234,9 @@ func _unhandled_input(evento: InputEvent) -> void:
 		return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando or presentacion.activa:
 		return
-	if evento.keycode in TECLAS:
+	if evento.shift_pressed and evento.keycode in SALAS_JEFE:
+		ir_al_jefe(SALAS_JEFE[evento.keycode])   # derecho a la habitación de ese minijefe, para pelear con él
+	elif evento.keycode in TECLAS:
 		meter_zombi(TECLAS[evento.keycode], mapa.punto_libre(johnny.position, 300.0))
 	elif evento.keycode == KEY_F9 and planta.expo >= 0 and not cerrada:
 		# a la exposición y de vuelta a la sala de mantenimiento
@@ -1284,6 +1289,21 @@ func ir_a_azotea() -> void:
 	nueva_planta(Planta.PLANTAS)
 	await montar(0, puerta_de_tipo("llegada"))
 	decir("Azotea · ¡El último combate del edificio!", 2.5)
+
+
+# Mayús + la tecla de un minijefe (7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; P, la portera): derecho a su
+# habitación, sin jugar hasta ella. Rehace la planta que le tocó en el sorteo de esta partida (como recién llegado) y
+# Johnny entra por la puerta: el jefe sale como siempre, con su presentación (acaba cuando ya ha salido)
+func ir_al_jefe(tipo: String) -> void:
+	var num := orden_jefes.find(tipo) + 1
+	if num <= 0 or jefe_de(num) != tipo:
+		decir("Ese jefe no está en este edificio")
+		return
+	nueva_planta(num)
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			await montar(i, 0)
+			return
 
 
 # Tecla U: mete en el baúl uno de cada objeto (de los dos edificios) y enseña todas las recetas, para probarlas

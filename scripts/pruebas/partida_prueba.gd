@@ -20,6 +20,7 @@
 #                  colgados y cubos por el suelo que te tiran
 #   --llamas       (con --jefe bombero) la habitación del jefe de bomberos, en llamas por el borde, y su giro con el
 #                  lanzallamas: el cono llega a la pared y solo se esquiva corriendo en su sentido
+#   --ir-jefe      Mayús + 7, 8, 9 y P: derecho a la habitación de cada minijefe de los Apartamentos
 #   --presentacion (con --jefe X, si se quiere) la presentación del jefe al aparecer (ui/presentacion.gd)
 extends "res://scripts/partida.gd"
 
@@ -85,6 +86,9 @@ func empezar_prueba() -> void:
 	elif "--llamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamas()
+	elif "--ir-jefe" in args:
+		set_process(false)   # sin la prueba larga
+		probar_ir_jefe()
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
@@ -860,6 +864,43 @@ func probar_llamas() -> void:
 	var entre := await vuelta_de_giro(jefe, centro, "entre", -1.0, PI / 2.0, 210.0, "", "captura-llamas-enfadado.png")
 	print("Llamas: enfadado, corriendo por el hueco entre los dos conos, a su paso (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false) · conos %d (esperado: 2)" % [
 		roundi(entre.radio[0]), roundi(entre.radio[1]), entre.vida, entre.arde, entre.conos])
+	get_tree().quit()
+
+
+# Con "--captura --ir-jefe": desde la sala de mantenimiento, pulsa Mayús + la tecla de cada minijefe de los
+# Apartamentos (SALAS_JEFE e ir_al_jefe, partida.gd; la última, el jefe de bomberos) y cuenta en la terminal, de cada
+# uno: que está en la planta que le tocó en el sorteo, que Johnny está en la habitación del jefe, junto a la puerta, y
+# que el jefe que ha salido es ese. Saca captura-ir-jefe.png (el jefe de bomberos en su habitación en llamas) y se
+# cierra
+func probar_ir_jefe() -> void:
+	var teclas: Array = SALAS_JEFE.keys()
+	teclas.erase(KEY_9)
+	teclas.append(KEY_9)   # (el jefe de bomberos, el último: el de la foto)
+	for tecla in teclas:
+		var tipo: String = SALAS_JEFE[tecla]
+		johnny.vida = johnny.stats.vida_max
+		for pulsada in [true, false]:
+			var evento := InputEventKey.new()
+			evento.keycode = tecla
+			evento.shift_pressed = true
+			evento.pressed = pulsada
+			Input.parse_input_event(evento)
+		# hasta que empieza a cambiar de sitio (mientras se funde a negro, "jefa" aún es el de antes) y luego, hasta que
+		# sale el jefe (en la prueba, sin presentación)
+		var espera := 0.0
+		while not cambiando and espera < 1.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		while (cambiando or not is_instance_valid(jefa)) and espera < 6.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		var sitio: Dictionary = planta.sitios[aqui]
+		print("Ir al jefe (Mayús + %s): a la %s, la suya del sorteo %s (esperado: true) · en la habitación del jefe %s (esperado: true) · Johnny, a %d de la puerta (esperado: menos de 100) · ha salido %s (esperado: %s)" % [
+			OS.get_keycode_string(tecla), planta.nombre, planta.num == orden_jefes.find(tipo) + 1, sitio.tipo == "jefe",
+			roundi(johnny.position.distance_to(mapa.puertas[0].llegada())),
+			jefa.scene_file_path.get_file().get_basename() if is_instance_valid(jefa) else "nadie", ZOMBIS[tipo].resource_path.get_file().get_basename()])
+	await get_tree().create_timer(1.0).timeout
+	Captura.foto("captura-ir-jefe.png")
 	get_tree().quit()
 
 
