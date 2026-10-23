@@ -760,11 +760,12 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 # sentido sale a cada lado; el cono se abre 40 grados; llega hasta la pared en todo su ancho; corriendo delante de él,
 # en su sentido, Johnny no se quema; en contra, sí; rodando a través de él, también; su burbuja de fuego
 # (burbuja_de_fuego): girando, nada le quita vida, y en el aviso y acabado el giro, sí; y enfadado, corriendo por el
-# hueco entre los dos conos a su paso, no.
+# hueco entre los dos conos a su paso, no. Al final, sus bolas de fuego y sus molotovs, enfadado (bolas_y_molotovs).
 # Cada línea dice lo esperado. Saca captura-llamas.png (la sala entera ardiendo, con la cámara alejada),
 # captura-llamas-aviso.png (el cono rojo y las flechas del aviso), captura-llamas-giro.png (Johnny corriendo delante
 # del cono), captura-llamas-burbuja.png (la burbuja de cerca, brillando donde le da una bala) y
-# captura-llamas-enfadado.png (los dos conos) y se cierra
+# captura-llamas-enfadado.png (los dos conos) y captura-llamas-bolas.png (el abanico de bolas y los molotovs) y se
+# cierra
 func probar_llamas() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe bombero, la suya
@@ -890,7 +891,41 @@ func probar_llamas() -> void:
 	var entre := await vuelta_de_giro(jefe, centro, "entre", -1.0, PI / 2.0, 210.0, "", "captura-llamas-enfadado.png")
 	print("Llamas: enfadado, corriendo por el hueco entre los dos conos, a su paso (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false) · conos %d (esperado: 2)" % [
 		roundi(entre.radio[0]), roundi(entre.radio[1]), entre.vida, entre.arde, entre.conos])
+	await bolas_y_molotovs(jefe, centro)
 	get_tree().quit()
+
+
+# Las bolas de fuego y los molotovs del bombero ("jefe", ya enfadado, puesto en "centro"; bombero.gd), con Johnny
+# quieto a un lado: 5 bolas en abanico (de 15 grados en 15) y 3 molotovs en fila, separados para no caer unos encima de
+# otros. Saca captura-llamas-bolas.png (el abanico de bolas volando y los molotovs con sus marcas rojas)
+func bolas_y_molotovs(jefe: Node2D, centro: Vector2) -> void:
+	jefe.andar(5.0)
+	jefe.position = centro
+	jefe.marcha = Vector2.ZERO
+	johnny.position = centro + Vector2(300, 0)
+	johnny.velocity = Vector2.ZERO
+	johnny.vida = johnny.stats.vida_max
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.8, 0.8)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	jefe.mirada = (johnny.position - jefe.position).normalized()
+	jefe.lanzar_bolas(johnny)
+	jefe.lanzar_molotovs(johnny)
+	var bolas: Array = get_tree().get_nodes_in_group("balas_zombi").filter(func(n): return n is BolaFuego)
+	var abanico := 0.0
+	for b in bolas:
+		abanico = maxf(abanico, absf(angle_difference(jefe.mirada.angle(), b.velocidad.angle())))
+	var caen: Array = jefe.get_parent().get_children().filter(func(n): return n.get("tipo") == "molotov_jefe").map(
+		func(n): return n.hasta)
+	var separados := INF
+	for i in caen.size():
+		for j in range(i + 1, caen.size()):
+			separados = minf(separados, caen[i].distance_to(caen[j]))
+	print("Llamas: enfadado, bolas de fuego %d (esperado: 5) en abanico de %d grados de punta a punta (esperado: 60) · molotovs %d (esperado: 3), separados %d como poco (esperado: 100 o más)" % [
+		bolas.size(), roundi(rad_to_deg(abanico * 2.0)), caen.size(), roundi(separados)])
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-llamas-bolas.png")
 
 
 # Con "--captura --ir-jefe": desde la sala de mantenimiento, pulsa Mayús + la tecla de cada minijefe de los

@@ -7,7 +7,8 @@
 #     fuego —el porrazo del bate sí le entra—...): hay que cambiar de arma. Lo dice con un «¡INMUNE!»
 #     ("inmune_fuego", que miran proyectil.gd y armas_creadas.gd; los charcos de fuego le llaman a prender(), que
 #     aquí no hace nada).
-#   - Bolas de fuego (bola_fuego.gd): van rectas a Johnny; al dar, daño y le dejan ardiendo un momento.
+#   - Bolas de fuego (bola_fuego.gd): tres de una vez, en abanico hacia Johnny (de cerca no se cabe entre dos: hay
+#     que rodar o apartarse bastante); al dar, daño y le dejan ardiendo un momento.
 #   - El giro con el lanzallamas: se va al centro de la sala, avisa (el cono rojo por donde empieza, apuntando a
 #     Johnny, y unas flechas en el suelo que dicen hacia qué lado va a girar: cada vez, uno al azar) y da algo más
 #     de una vuelta entera echando un cono de fuego (40 grados: estrecho al salir de la manguera y cada vez más ancho)
@@ -18,12 +19,14 @@
 #     sin vida propia: no se rompe) y NADA LE QUITA VIDA: ni balas, ni golpes, ni explosiones (y la explosión tampoco
 #     le corta el giro); donde le dan, la burbuja brilla. En el aviso todavía no la tiene: ahí sí se le puede pegar, y
 #     una explosión (granada) se lo corta (se tambalea).
-#   - Molotovs (proyectil.gd, "molotov_jefe"): en curva, con su marca roja donde caen; al caer dejan un charco de
-#     fuego (charco.gd): daño al entrar y un rato después de salir.
+#   - Molotovs (proyectil.gd, "molotov_jefe"): dos de una vez, uno donde está Johnny y otro donde va a estar; en
+#     curva, con su marca roja donde caen; al caer dejan un charco de fuego (charco.gd): daño al entrar y un rato
+#     después de salir.
 #   - Hachazo de bombero: si Johnny se le pega, levanta el hacha (aviso) y le da: daño y empujón.
 # Enfadado (a media vida, «¡TODO ARDE!»): se le rompe el traje y arde él mismo (llamas.gd encima): deja un rastro
-# de fuego al andar; el doble de bolas, dos conos de fuego opuestos en el giro (hay que correr por el hueco entre los
-# dos, a su paso: ni más deprisa ni más despacio) y el doble de molotovs.
+# de fuego al andar; cinco bolas en abanico, dos conos de fuego opuestos en el giro (hay que correr por el hueco entre
+# los dos, a su paso: ni más deprisa ni más despacio) y tres molotovs en fila (detrás de Johnny, donde está y delante:
+# hay que salir de lado); bolas y molotovs, más seguidos.
 extends Minijefe
 
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
@@ -33,11 +36,16 @@ const VELOCIDAD := 70.0
 const DANO_HACHA := 22
 const ALCANCE_HACHA := 64.0            # hasta dónde llega el hacha (desde su centro)
 const AVISO_HACHA := 0.4
-const BOLAS := [1, 2]                  # cuántas bolas de fuego de una vez (normal y enfadado)
+const BOLAS := [3, 5]                  # cuántas bolas de fuego de una vez (normal y enfadado), en abanico...
+const ABANICO_BOLAS := 0.26            # ...con 15 grados (en radianes) de una a otra
+const ESPERA_BOLAS := [2.2, 1.6]       # cada cuánto las tira (normal y enfadado)
 const VELOCIDAD_BOLA := 340.0
 const DANO_BOLA := 14
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}     # lo que arde Johnny al darle una bola
-const MOLOTOVS := [1, 2]
+const MOLOTOVS := [2, 3]
+const ESPERA_MOLOTOV := [4.0, 2.8]
+const SEPARA_MOLOTOV := 110.0          # lo menos que se separan los molotovs de una vez (lo que mide su fuego, de borde
+                                       # a borde): así no caen unos encima de otros
 const CONOS := [1, 2]                  # conos de fuego en el giro
 const LARGO_MAX := 1600.0              # el cono llega hasta la pared (esto, por si no la encuentra)
 const ABERTURA := 0.35                 # medio cono, en radianes: 20 grados a cada lado del medio (40 en total)
@@ -184,12 +192,12 @@ func elegir(johnny: Node2D) -> void:
 			cambiar("ir_centro", {"centro": centro})
 		return
 	if molotov and (not bolas or randf() < 0.45):
-		espera_molotov = 3.2 if enfadado() else 4.6
+		espera_molotov = ESPERA_MOLOTOV[fase - 1]
 		mirada = global_position.direction_to(johnny.global_position)
 		cambiar("molotov", {"lanzado": false})
 		return
 	if bolas:
-		espera_bolas = 1.9 if enfadado() else 2.8
+		espera_bolas = ESPERA_BOLAS[fase - 1]
 		mirada = global_position.direction_to(johnny.global_position)
 		cambiar("bolas", {"lanzado": false})
 		return
@@ -231,17 +239,16 @@ func dar_hachazo(johnny: Node2D) -> void:
 
 # ── Las bolas de fuego ──
 
-# La primera, a donde está Johnny; enfadado, otra a donde va a estar si sigue andando igual
+# En abanico: la del medio, a donde está Johnny; las demás, de ABANICO_BOLAS en ABANICO_BOLAS a cada lado
 func lanzar_bolas(johnny: Node2D) -> void:
 	Sonido.tocar("fuego")
 	var mano := global_position + Vector2(mirada.x * 24.0, 0)
-	var donde: Array = [johnny.global_position]
-	if BOLAS[fase - 1] > 1:
-		donde.append(johnny.global_position + johnny.velocity * 0.5)
-	for p in donde:
+	var hacia := mano.direction_to(johnny.global_position)
+	var n: int = BOLAS[fase - 1]
+	for i in n:
 		var bola := BolaFuego.new()
 		bola.desde = mano
-		bola.velocidad = mano.direction_to(p) * VELOCIDAD_BOLA
+		bola.velocidad = hacia.rotated((i - (n - 1) / 2.0) * ABANICO_BOLAS) * VELOCIDAD_BOLA
 		bola.dano = DANO_BOLA
 		bola.quema = QUEMA_BOLA
 		get_parent().add_child(bola)
@@ -250,12 +257,18 @@ func lanzar_bolas(johnny: Node2D) -> void:
 
 # ── Los molotovs ──
 
-# Uno a donde está Johnny; enfadado, otro a donde va a estar. Caen donde se pueda estar (no dentro de una pared)
+# Uno a donde está Johnny y otro a donde va a estar (si va despacio, un poco más allá; si está quieto, a un lado);
+# enfadado, un tercero al otro lado: una fila de fuego de la que hay que salir de lado. Se separan por lo menos
+# SEPARA_MOLOTOV, para que no caigan unos encima de otros. Caen donde se pueda estar (no dentro de una pared)
 func lanzar_molotovs(johnny: Node2D) -> void:
 	Sonido.tocar("lanzar")
-	var donde: Array = [johnny.global_position]
-	if MOLOTOVS[fase - 1] > 1:
-		donde.append(johnny.global_position + johnny.velocity * 0.9)
+	var aqui: Vector2 = johnny.global_position
+	var va: Vector2 = johnny.velocity * 0.9   # (lo que tarda el molotov en caer)
+	if va.length() < 20.0:
+		va = global_position.direction_to(aqui).orthogonal() * (1.0 if randf() < 0.5 else -1.0)
+	if va.length() < SEPARA_MOLOTOV:
+		va = va.normalized() * SEPARA_MOLOTOV
+	var donde: Array = [aqui, aqui + va, aqui - va].slice(0, MOLOTOVS[fase - 1])
 	for i in donde.size():
 		var p: Node2D = PROYECTIL.instantiate()
 		p.tipo = "molotov_jefe"
