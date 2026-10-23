@@ -8,12 +8,13 @@
 #     ("inmune_fuego", que miran proyectil.gd y armas_creadas.gd; los charcos de fuego le llaman a prender(), que
 #     aquí no hace nada).
 #   - Bolas de fuego (bola_fuego.gd): van rectas a Johnny; al dar, daño y le dejan ardiendo un momento.
-#   - El giro con el lanzallamas: se va al centro de la sala, avisa (la franja roja por donde empieza, apuntando a
+#   - El giro con el lanzallamas: se va al centro de la sala, avisa (el cono rojo por donde empieza, apuntando a
 #     Johnny, y unas flechas en el suelo que dicen hacia qué lado va a girar: cada vez, uno al azar) y da algo más
-#     de una vuelta entera echando una lengua de fuego que llega hasta la pared (atraviesa los muebles): al que pilla
-#     le quema y le deja ardiendo. Como su habitación arde por el borde (peligros/cerco.gd), no hay donde quedarse
-#     fuera: solo se libra quien corre delante de la lengua, en su mismo sentido y a su paso (rodando no se cruza:
-#     quema igual). Mientras sale la lengua le rodea una burbuja de fuego (como la cúpula del científico jefe, pero
+#     de una vuelta entera echando un cono de fuego (40 grados: estrecho al salir de la manguera y cada vez más ancho)
+#     que llega hasta la pared (atraviesa los muebles): al que pilla le quema y le deja ardiendo. Como su habitación
+#     arde por el borde (peligros/cerco.gd), no hay donde quedarse fuera: solo se libra quien corre delante del cono,
+#     en su mismo sentido y a su paso (rodando no se cruza: es más ancho que la voltereta y quema igual). Mientras
+#     sale el fuego le rodea una burbuja de fuego (como la cúpula del científico jefe, pero
 #     sin vida propia: no se rompe) y NADA LE QUITA VIDA: ni balas, ni golpes, ni explosiones (y la explosión tampoco
 #     le corta el giro); donde le dan, la burbuja brilla. En el aviso todavía no la tiene: ahí sí se le puede pegar, y
 #     una explosión (granada) se lo corta (se tambalea).
@@ -21,8 +22,8 @@
 #     fuego (charco.gd): daño al entrar y un rato después de salir.
 #   - Hachazo de bombero: si Johnny se le pega, levanta el hacha (aviso) y le da: daño y empujón.
 # Enfadado (a media vida, «¡TODO ARDE!»): se le rompe el traje y arde él mismo (llamas.gd encima): deja un rastro
-# de fuego al andar; el doble de bolas, dos lenguas de fuego opuestas en el giro (hay que correr entre las dos, a su
-# paso: ni más deprisa ni más despacio) y el doble de molotovs.
+# de fuego al andar; el doble de bolas, dos conos de fuego opuestos en el giro (hay que correr por el hueco entre los
+# dos, a su paso: ni más deprisa ni más despacio) y el doble de molotovs.
 extends Minijefe
 
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
@@ -37,15 +38,17 @@ const VELOCIDAD_BOLA := 340.0
 const DANO_BOLA := 14
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}     # lo que arde Johnny al darle una bola
 const MOLOTOVS := [1, 2]
-const LENGUAS := [1, 2]                # lenguas de fuego en el giro
-const LARGO_MAX := 1600.0              # la lengua llega hasta la pared (esto, por si no la encuentra)
-const ANCHO_LENGUA := 30.0             # medio ancho de la lengua (al salir de la manguera, menos: ancho_lengua)
-const GIRO := 1.0                      # lo deprisa que da la vuelta (radianes por segundo): una vuelta en 6,3 s. Johnny
+const CONOS := [1, 2]                  # conos de fuego en el giro
+const LARGO_MAX := 1600.0              # el cono llega hasta la pared (esto, por si no la encuentra)
+const ABERTURA := 0.35                 # medio cono, en radianes: 20 grados a cada lado del medio (40 en total)
+const RAYOS := 10                      # en cuántos trozos se parte el cono de borde a borde para medir hasta dónde
+                                       # llega cada uno y dibujarlo (de 4 grados cada uno)
+const GIRO := 1.0                     # lo deprisa que da la vuelta (radianes por segundo): una vuelta en 6,3 s. Johnny
                                        # le sigue el paso corriendo a unas 6 casillas de él (con poca vida, más cerca)
 const TIEMPO_GIRO := 6.6               # algo más de una vuelta: pasa por toda la sala
 const AVISO_GIRO := 1.0                # (le da tiempo a mirar las flechas y echar a correr)
-const DANO_LENGUA := 10
-const QUEMA_LENGUA := {"fuego": {"dps": 10.0, "despues": 1.5}}
+const DANO_CONO := 10
+const QUEMA_CONO := {"fuego": {"dps": 10.0, "despues": 1.5}}
 const BURBUJA_RADIO := 84.0            # la burbuja de fuego del giro (la cúpula del científico, 78: él es más ancho)
 const BURBUJA_ALTO := 0.42             # a qué altura tiene el centro (de "arriba")
 const BURBUJA_SUBE := 0.4              # lo que tarda en subir (y en bajar)
@@ -69,10 +72,10 @@ var espera_giro := 4.5
 var espera_molotov := 3.0
 var espera_hacha := 0.0
 var aviso_inmune := 0.0      # para no gritar «¡INMUNE!» sin parar
-var quema_t := 0.0           # lo que falta para que la lengua pueda volver a quemar a Johnny aunque esté rodando
+var quema_t := 0.0           # lo que falta para que el cono pueda volver a quemar a Johnny aunque esté rodando
 var rastro := Vector2.ZERO   # dónde dejó el último fuego del rastro
 var llamas: Llamas = null    # enfadado: arde él mismo
-var luz_giro: PointLight2D   # la luz de la lengua de fuego
+var luz_giro: PointLight2D   # la luz del cono de fuego
 var burbuja := 0.0           # lo subida que está la burbuja de fuego del giro (0 = no hay, 1 = entera)
 var destello := 0.0          # lo que brilla la burbuja porque le acaban de dar (de 1 a 0)
 var destello_por := Vector2.ZERO   # hacia dónde le han dado (desde él); Vector2.ZERO, por todos lados (una explosión)
@@ -81,8 +84,8 @@ var destello_por := Vector2.ZERO   # hacia dónde le han dado (desde él); Vecto
 func _ready() -> void:
 	super()
 	luz_giro = LUZ.instantiate()
-	luz_giro.radio = 220.0
-	luz_giro.fuerza = 0.8
+	luz_giro.radio = 300.0   # (el cono, ancho: alumbra más que una lengua)
+	luz_giro.fuerza = 0.85
 	luz_giro.visible = false
 	add_child(luz_giro)
 
@@ -138,21 +141,21 @@ func pensar(delta: float, johnny: Node2D) -> void:
 				avisar_giro(johnny)
 		"aviso_giro":
 			frenar(delta, 12.0)
+			datos.puntas = medir_conos()   # (el aviso dibuja el cono entero, hasta la pared)
 			if t >= AVISO_GIRO:
-				cambiar("giro", {"angulo": datos.angulo, "sentido": datos.sentido, "largos": [], "puntas": []})
+				cambiar("giro", {"angulo": datos.angulo, "sentido": datos.sentido, "largos": [], "puntas": datos.puntas})
 				Sonido.tocar("fuego")
 				Sonido.tocar("rugido")
 		"giro":
 			frenar(delta, 12.0)
 			datos.angulo += GIRO * datos.sentido * delta
-			# lo largas que son (desde él, para quemar) y hasta dónde se dibujan (desde sus pies, en el suelo)
+			# hasta dónde llega cada cono (desde sus pies, en el suelo, rayo a rayo: para dibujarlo) y lo que quema; y
+			# lo largo que es por el medio (desde él)
+			datos.puntas = medir_conos()
 			datos.largos = []
-			datos.puntas = []
-			var n: int = LENGUAS[fase - 1]
-			for i in n:
-				var a: float = datos.angulo + i * TAU / n
-				datos.largos.append(quemar_lengua(a, johnny))
-				datos.puntas.append(hasta_la_pared(global_position + Vector2(0, PIE - 6), Vector2.from_angle(a)))
+			var n: int = CONOS[fase - 1]
+			for i in mini(n, datos.puntas.size()):
+				datos.largos.append(quemar_cono(datos.angulo + i * TAU / n, johnny, datos.puntas[i]))
 			if randf() < delta * 2.0:
 				Sonido.tocar("fuego")
 			if t >= TIEMPO_GIRO:
@@ -161,7 +164,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta, 5.0)
 			if t >= TAMBALEO:
 				andar(0.4)
-	# mientras sale la lengua, la burbuja de fuego le protege: nada le quita vida (recibir_golpe)
+	# mientras sale el fuego, la burbuja de fuego le protege: nada le quita vida (recibir_golpe)
 	if estado == "giro":
 		invulnerable = true
 
@@ -278,7 +281,7 @@ func centro_sala() -> Vector2:
 	return NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), centro)
 
 
-# Se para y avisa: la lengua empezará apuntando a Johnny y girará hacia "sentido" (1, como las agujas del reloj; -1, al
+# Se para y avisa: el cono empezará apuntando a Johnny y girará hacia "sentido" (1, como las agujas del reloj; -1, al
 # revés; 0, uno al azar)
 func avisar_giro(johnny: Node2D, sentido := 0.0) -> void:
 	marcha = Vector2.ZERO
@@ -287,22 +290,40 @@ func avisar_giro(johnny: Node2D, sentido := 0.0) -> void:
 	mirada = Vector2.DOWN
 	if sentido == 0.0:
 		sentido = 1.0 if randf() < 0.5 else -1.0
-	cambiar("aviso_giro", {"angulo": angulo, "sentido": sentido})
+	cambiar("aviso_giro", {"angulo": angulo, "sentido": sentido, "puntas": []})
 
 
-# Lo ancha que es la lengua (la mitad) a "s" de él: estrecha al salir de la manguera y enseguida, ANCHO_LENGUA
-func ancho_lengua(s: float) -> float:
-	return minf(ANCHO_LENGUA, 8.0 + s * 0.3)
+# El ángulo del rayo "j" (de 0 a RAYOS, de un borde al otro) de un cono que apunta hacia "a"
+func angulo_rayo(a: float, j: int) -> float:
+	return a + ABERTURA * (2.0 * j / RAYOS - 1.0)
 
 
-# ¿Está "p" dentro de la lengua que va hacia "dir" y mide "largo"? (con "margen" de más a los lados y en la punta)
-func en_lengua(p: Vector2, dir: Vector2, largo: float, margen: float) -> bool:
+# Hasta dónde llega cada cono, desde sus pies (en el suelo): por cada uno, lo largo de sus RAYOS + 1 rayos, de un
+# borde al otro (cada uno, hasta la pared)
+func medir_conos() -> Array:
+	var conos := []
+	var pies := global_position + Vector2(0, PIE - 6)
+	var n: int = CONOS[fase - 1]
+	for i in n:
+		var rayos := []
+		for j in RAYOS + 1:
+			rayos.append(hasta_la_pared(pies, Vector2.from_angle(angulo_rayo(datos.angulo + i * TAU / n, j))))
+		conos.append(rayos)
+	return conos
+
+
+# ¿Está "p" dentro del cono que apunta hacia "a"? (con "margen" de más a los lados y en la punta). Se abre ABERTURA a
+# cada lado y llega hasta la pared
+func en_cono(p: Vector2, a: float, margen: float) -> bool:
 	var d := p - global_position
+	var dir := Vector2.from_angle(a)
 	var a_lo_largo := d.dot(dir)
-	return a_lo_largo > 0.0 and a_lo_largo < largo + margen and absf(d.cross(dir)) < ancho_lengua(a_lo_largo) + margen
+	if a_lo_largo <= 0.0 or absf(d.cross(dir)) >= a_lo_largo * tan(ABERTURA) + margen:
+		return false
+	return d.length() < hasta_la_pared(global_position, d.normalized()) + margen
 
 
-# Hasta dónde llega una lengua que sale de "desde" hacia "dir": hasta la pared de la sala, atravesando los muebles
+# Hasta dónde llega un rayo del cono que sale de "desde" hacia "dir": hasta la pared de la sala, atravesando los muebles
 # (se mira en el plano del piso, casilla a casilla: a saltos y, al dar con la pared, afinando). Fuera de un piso
 # (la exposición), hasta la primera pared o mueble
 func hasta_la_pared(desde: Vector2, dir: Vector2) -> float:
@@ -325,30 +346,33 @@ func hasta_la_pared(desde: Vector2, dir: Vector2) -> float:
 	return s
 
 
-# Una lengua de fuego hacia "a": llega hasta la pared, quema a Johnny si está dentro (también rodando: la voltereta no
-# la cruza, solo se libra quien corre delante de ella) y prende a los zombis que pilla. Devuelve lo larga que es
-func quemar_lengua(a: float, johnny: Node2D) -> float:
-	var dir := Vector2.from_angle(a)
-	var largo := hasta_la_pared(global_position, dir)
-	if johnny.vivo and en_lengua(johnny.global_position, dir, largo, johnny.RADIO * 0.5):
-		# rodando, la voltereta le haría invulnerable: la lengua se lo salta (una vez por cada rato sin poder darle)
+# Un cono de fuego hacia "a" ("puntas", lo largo de cada rayo desde sus pies: medir_conos): llega hasta la pared,
+# quema a Johnny si está dentro (también rodando: la voltereta no lo cruza, solo se libra quien corre delante de él) y
+# prende a los zombis que pilla. Devuelve lo largo que es por el medio (desde él)
+func quemar_cono(a: float, johnny: Node2D, puntas: Array) -> float:
+	if johnny.vivo and en_cono(johnny.global_position, a, johnny.RADIO * 0.5):
+		# rodando, la voltereta le haría invulnerable: el cono se lo salta (una vez por cada rato sin poder darle)
 		if johnny.esquiva_t > 0.0 and quema_t <= 0.0:
 			johnny.invulnerable = 0.0
 		if johnny.invulnerable <= 0.0:
 			quema_t = johnny.INVULNERABLE
-		johnny.recibir_dano(DANO_LENGUA)
-		Estados.pisar(johnny.pisando, QUEMA_LENGUA)   # (johnny.pisar() no apunta nada mientras rueda)
+		johnny.recibir_dano(DANO_CONO)
+		Estados.pisar(johnny.pisando, QUEMA_CONO)   # (johnny.pisar() no apunta nada mientras rueda)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == self or not zombi.has_method("prender"):
 			continue
-		if en_lengua(zombi.global_position, dir, largo, zombi.radio):
+		if en_cono(zombi.global_position, a, zombi.radio):
 			zombi.prender()
-	# chispas que saltan de la lengua
-	if randf() < 0.5:
-		var s := randf_range(0.2, 1.0) * largo
-		Particulas.soltar(self, global_position + dir * s + Vector2(0, -arriba * 0.4 + randf_range(-6, 6)),
-			dir * 60.0 + Vector2(randf_range(-20, 20), randf_range(-60, -20)), Llamas.FUEGO[randi() % 4], randf_range(1, 3), 0.4)
-	return largo
+	# chispas que saltan del cono, por todo él (a la altura del fuego, que baja de la manguera al suelo de la pared)
+	for k in 2:
+		if randf() < 0.5:
+			var j := randi() % (RAYOS + 1)
+			var dir := Vector2.from_angle(angulo_rayo(a, j))
+			var f := randf_range(0.2, 1.0)
+			var donde := Vector2(0, -arriba * 0.4).lerp(Vector2(0, PIE - 6), f) + dir * float(puntas[j]) * f
+			Particulas.soltar(self, global_position + donde + Vector2(0, randf_range(-6, 6)),
+				dir * 60.0 + Vector2(randf_range(-20, 20), randf_range(-60, -20)), Llamas.FUEGO[randi() % 4], randf_range(1, 3), 0.4)
+	return hasta_la_pared(global_position, Vector2.from_angle(a))
 
 
 # ── Inmune al fuego ──
@@ -436,7 +460,7 @@ func rastro_de_fuego() -> void:
 	get_parent().add_child(fuego)
 
 
-# En la foto de la prueba (--captura): dando vueltas con el lanzallamas, la lengua hacia Johnny (con la burbuja ya
+# En la foto de la prueba (--captura): dando vueltas con el lanzallamas, el cono hacia Johnny (con la burbuja ya
 # subida)
 func foto(johnny: Node2D) -> void:
 	avisar_giro(johnny)
@@ -493,12 +517,13 @@ func animar() -> void:
 			else:
 				poner("reposo_" + dir)
 	if estado == "giro" and not datos.largos.is_empty():
-		luz_giro.position = Vector2.from_angle(datos.angulo) * minf(datos.largos[0] * 0.5, 240.0) + Vector2(0, -arriba * 0.3)
+		# (el cono es más ancho lejos de él: la luz, algo más allá de la mitad)
+		luz_giro.position = Vector2.from_angle(datos.angulo) * minf(datos.largos[0] * 0.6, 300.0) + Vector2(0, -arriba * 0.3)
 
 
-# Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, la franja por donde va cada lengua,
-# desde sus pies hasta la pared (en el aviso, roja y creciendo, con la raya por donde empieza y las flechas del lado
-# al que va a girar; girando, naranja). Y el borde de la burbuja de fuego
+# Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, el cono por donde va cada fuego,
+# desde sus pies hasta la pared (en el aviso, rojo y creciendo, con su borde, la raya del medio por donde empieza y las
+# flechas del lado al que va a girar; girando, naranja). Y el borde de la burbuja de fuego
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -517,40 +542,37 @@ func _draw() -> void:
 		"aviso_giro", "giro":
 			var k := minf(1.0, t / AVISO_GIRO) if estado == "aviso_giro" else 1.0
 			var pies := Vector2(0, PIE - 6)
-			var n: int = LENGUAS[fase - 1]
-			for i in n:
-				var dir := Vector2.from_angle(datos.angulo + i * TAU / n)
+			var n: int = CONOS[fase - 1]
+			for i in mini(n, datos.puntas.size()):
+				var a: float = datos.angulo + i * TAU / n
 				if estado == "aviso_giro":
-					var largo := hasta_la_pared(global_position + pies, dir) * k
-					if largo > 4.0:
-						draw_colored_polygon(franja_lengua(pies, dir, largo), Color(ROJO, 0.2 + 0.35 * k))
-						draw_line(pies, pies + dir * largo, Color(ROJO, 0.9), 4.0)
-				elif i < datos.puntas.size() and datos.puntas[i] > 4.0:
-					draw_colored_polygon(franja_lengua(pies, dir, datos.puntas[i]), Color(Llamas.FUEGO[2], 0.3))
+					var punta := abanico(pies, a, datos.puntas[i], k, Color(ROJO, 0.2 + 0.35 * k))
+					# el borde del cono y la raya del medio, por donde empieza
+					draw_polyline(punta, Color(ROJO, 0.9), 3.0)
+					draw_polyline(PackedVector2Array([punta[0], pies, punta[RAYOS]]), Color(ROJO, 0.9), 3.0)
+					draw_line(pies, punta[RAYOS / 2], Color(ROJO, 0.9), 4.0)
+				else:
+					abanico(pies, a, datos.puntas[i], 1.0, Color(Llamas.FUEGO[2], 0.3))
 			if estado == "aviso_giro":
 				flechas(pies, datos.sentido, minf(1.0, k * 3.0))
 	draw_set_transform(Vector2.ZERO)
 
 
-# Los puntos de la franja de una lengua en el suelo: de "desde" hacia "dir", "largo" de larga y con su ancho
-# (ancho_lengua: más estrecha al salir)
-func franja_lengua(desde: Vector2, dir: Vector2, largo: float) -> PackedVector2Array:
-	var lado := dir.orthogonal()
-	var izq := PackedVector2Array()
-	var der := PackedVector2Array()
-	var s := 0.0
-	while true:
-		izq.append(desde + dir * s + lado * ancho_lengua(s))
-		der.append(desde + dir * s - lado * ancho_lengua(s))
-		if s >= largo:
-			break
-		s = minf(s + 24.0, largo)
-	der.reverse()
-	return izq + der
+# Un cono en el suelo, de "desde" hacia "a" hasta lo que llega cada rayo ("puntas", por "k": en el aviso va creciendo),
+# relleno de "color", trozo a trozo (así se corta bien en la pared, aunque la pille de lado). Devuelve sus puntas, de
+# un borde al otro
+func abanico(desde: Vector2, a: float, puntas: Array, k: float, color: Color) -> PackedVector2Array:
+	var punta := PackedVector2Array()
+	for j in RAYOS + 1:
+		punta.append(desde + Vector2.from_angle(angulo_rayo(a, j)) * float(puntas[j]) * k)
+	var colores := PackedColorArray([color, color, color])
+	for j in RAYOS:
+		draw_primitive(PackedVector2Array([desde, punta[j], punta[j + 1]]), colores, PackedVector2Array())
+	return punta
 
 
 # Las flechas del aviso del giro: dos anillos de puntas de flecha en el suelo, alrededor de "centro", que corren hacia
-# el lado al que va a girar la lengua ("sentido": 1, como las agujas del reloj; -1, al revés). Rojas y con el borde
+# el lado al que va a girar el cono ("sentido": 1, como las agujas del reloj; -1, al revés). Rojas y con el borde
 # oscuro, para que se vean en cualquier suelo. "k", lo que se ven (0 a 1)
 func flechas(centro: Vector2, sentido: float, k: float) -> void:
 	for anillo in [[110.0, 6], [200.0, 10]]:
@@ -576,16 +598,15 @@ func sector(a: float, ancho: float, r: float) -> PackedVector2Array:
 	return puntos
 
 
-# Por encima de él: la burbuja de fuego y las lenguas de fuego del giro (por encima de la burbuja: salen de dentro)
+# Por encima de él: la burbuja de fuego y los conos de fuego del giro (por encima de la burbuja: salen de dentro)
 func pintar_encima(lienzo: Node2D) -> void:
 	if burbuja > 0.0:
 		pintar_burbuja(lienzo)
 	if estado != "giro":
 		return
-	var n: int = LENGUAS[fase - 1]
-	for i in n:
-		if i < datos.puntas.size():
-			lengua(lienzo, datos.angulo + i * TAU / n, datos.puntas[i])
+	var n: int = CONOS[fase - 1]
+	for i in mini(n, datos.puntas.size()):
+		cono(lienzo, datos.angulo + i * TAU / n, datos.puntas[i])
 
 
 # La burbuja de fuego del giro, como la cúpula de cristal del científico jefe pero en colores de fuego: naranja por
@@ -621,29 +642,56 @@ func pintar_burbuja(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO)
 
 
-# Una lengua de fuego a cuadraditos hacia "a", "largo" de larga (en el suelo, desde sus pies hasta la pared): sale en
-# alto de la boca de la manguera y va bajando hasta tocar el suelo en la pared. Amarilla al salir y roja en la punta,
-# más ancha al alejarse, que se mece y se deshilacha al final. Cada trozo, de 6 unidades, girado hacia "a"
-func lengua(lienzo: Node2D, a: float, largo: float) -> void:
-	var dir := Vector2.from_angle(a)
+# Un cono de fuego a cuadraditos hacia "a" (en el suelo, desde sus pies hasta la pared; "puntas", lo largo de cada
+# rayo): sale en alto de la boca de la manguera, estrecho, y se abre y va bajando hasta tocar el suelo en la pared.
+# Cada trozo de ancho (entre dos rayos) se corta a lo largo en trozos de unas 10 unidades, cada uno de su color
+# (llama): los seguidos del mismo color, de una vez
+func cono(lienzo: Node2D, a: float, puntas: Array) -> void:
+	var largo: float = puntas.max()
+	if largo < 20.0:
+		return
 	var boca := Vector2(0, -arriba * 0.4)
 	var pies := Vector2(0, PIE - 6)
-	var s := 10.0
-	while s < largo:
-		var f := s / largo   # 0 al salir, 1 en la punta
-		var hw := roundf((ancho_lengua(s) * 0.75 + sin(tiempo * 19.0 + s * 0.09) * 2.0) / 2.0) * 2.0
-		var vaiven := roundf(sin(tiempo * 9.0 - s * 0.05) * minf(1.0, s / 150.0) * 8.0 / 2.0) * 2.0
-		if f > 0.85 and fmod(s * 7.3 + tiempo * 30.0, 10.0) < 3.0:
-			s += 6.0
-			continue   # la punta, deshilachada
-		# (cada trozo, algo más largo que el paso: al ir bajando, si no, quedarían rendijas entre uno y otro)
-		lienzo.draw_set_transform(boca.lerp(pies, f) + dir * s, a)
-		var borde: Color = Llamas.FUEGO[4] if f > 0.45 else Llamas.FUEGO[3]
-		var dentro: Color = Llamas.FUEGO[3] if f > 0.7 else Llamas.FUEGO[2] if f > 0.4 else Llamas.FUEGO[1]
-		lienzo.draw_rect(Rect2(0.0, vaiven - hw, 8.0, hw * 2.0), borde)
-		if hw > 4.0:
-			lienzo.draw_rect(Rect2(0.0, vaiven - hw + 2.0, 8.0, hw * 2.0 - 4.0), dentro)
-		if hw > 8.0 and f < 0.5:
-			lienzo.draw_rect(Rect2(0.0, vaiven - hw + 6.0, 8.0, hw * 2.0 - 12.0), Llamas.FUEGO[0] if f < 0.2 else Llamas.FUEGO[1])
-		s += 6.0
-	lienzo.draw_set_transform(Vector2.ZERO)
+	var paso := 10.0 / largo
+	var desde := 10.0 / largo   # (empieza un poco por delante de la boca)
+	for j in RAYOS:
+		var lado := absf(2.0 * (j + 0.5) / RAYOS - 1.0)   # 0 en el medio, casi 1 en los bordes
+		var rayos := [Vector2.from_angle(angulo_rayo(a, j)) * float(puntas[j]),
+			Vector2.from_angle(angulo_rayo(a, j + 1)) * float(puntas[j + 1])]
+		var ini := desde
+		var color := llama(desde, lado, j)
+		var f := desde
+		while f < 1.0:
+			var g := minf(1.0, f + paso)
+			var siguiente := llama(g, lado, j) if g < 1.0 else Color.TRANSPARENT
+			if siguiente != color:
+				if color.a > 0.0:
+					# un trozo del cono: de "ini" a "g" de lo largo, entre los dos rayos (en píxeles del dibujo)
+					var puntos := PackedVector2Array()
+					for p in [[0, ini], [0, g], [1, g], [1, ini]]:
+						puntos.append(((boca.lerp(pies, p[1]) + rayos[p[0]] * p[1]) / 2.0).round() * 2.0)
+					lienzo.draw_primitive(puntos, PackedColorArray([color, color, color, color]), PackedVector2Array())
+				ini = g
+				color = siguiente
+			f = g
+
+
+# El color del fuego del cono a "f" de lo largo (0 en la boca, 1 en la pared) y "lado" de lo ancho (0 en el medio, 1
+# en el borde): amarillo claro en el medio junto a la manguera, luego naranja, y rojo en los bordes y en la punta, con
+# olas que corren hacia fuera. Los bordes y la punta, deshilachados: a ratos, nada (Color.TRANSPARENT). "j", el trozo
+# de ancho (para que no vayan todos a una)
+func llama(f: float, lado: float, j: int) -> Color:
+	if f > 0.86 and fmod(j * 7.3 + f * 61.0 + tiempo * 30.0, 10.0) < 3.0:
+		return Color.TRANSPARENT
+	if lado > 0.85 and f > 0.2 and fmod(j * 3.1 + f * 37.0 + tiempo * 23.0, 6.0) < 1.5:
+		return Color.TRANSPARENT
+	var calor := 1.0 - maxf(f * 0.9, lado) - f * lado * 0.3 + sin(tiempo * 17.0 - f * 24.0 + j * 1.9) * 0.1
+	if calor > 0.7:
+		return Llamas.FUEGO[0]
+	if calor > 0.5:
+		return Llamas.FUEGO[1]
+	if calor > 0.32:
+		return Llamas.FUEGO[2]
+	if calor > 0.15:
+		return Llamas.FUEGO[3]
+	return Llamas.FUEGO[4]

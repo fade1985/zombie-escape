@@ -19,7 +19,7 @@
 #   --cubos        (con --jefe portera) el cuarto de la limpieza de la portera: cubos de basura, fregonas y cubos
 #                  colgados y cubos por el suelo que te tiran
 #   --llamas       (con --jefe bombero) la habitación del jefe de bomberos, en llamas por el borde, y su giro con el
-#                  lanzallamas: la lengua llega a la pared y solo se esquiva corriendo en su sentido
+#                  lanzallamas: el cono llega a la pared y solo se esquiva corriendo en su sentido
 #   --presentacion (con --jefe X, si se quiere) la presentación del jefe al aparecer (ui/presentacion.gd)
 extends "res://scripts/partida.gd"
 
@@ -727,13 +727,14 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 # paso sin fuego, recto y holgado, y sitio de sobra para el giro en el medio), el aviso de
 # Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el fuego.
 # Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
-# sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
-# quema; en contra, sí; rodando a través de ella, también; su burbuja de fuego (burbuja_de_fuego): girando, nada le
-# quita vida, y en el aviso y acabado el giro, sí; y enfadado, corriendo entre las dos lenguas a su paso, no.
+# sentido sale a cada lado; el cono se abre 40 grados; llega hasta la pared en todo su ancho; corriendo delante de él,
+# en su sentido, Johnny no se quema; en contra, sí; rodando a través de él, también; su burbuja de fuego
+# (burbuja_de_fuego): girando, nada le quita vida, y en el aviso y acabado el giro, sí; y enfadado, corriendo por el
+# hueco entre los dos conos a su paso, no.
 # Cada línea dice lo esperado. Saca captura-llamas.png (la sala entera ardiendo, con la cámara alejada),
-# captura-llamas-aviso.png (las flechas del aviso), captura-llamas-giro.png (Johnny corriendo delante de la lengua),
-# captura-llamas-burbuja.png (la burbuja de cerca, brillando donde le da una bala) y captura-llamas-enfadado.png (las
-# dos lenguas) y se cierra
+# captura-llamas-aviso.png (el cono rojo y las flechas del aviso), captura-llamas-giro.png (Johnny corriendo delante
+# del cono), captura-llamas-burbuja.png (la burbuja de cerca, brillando donde le da una bala) y
+# captura-llamas-enfadado.png (los dos conos) y se cierra
 func probar_llamas() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe bombero, la suya
@@ -833,27 +834,32 @@ func probar_llamas() -> void:
 		lados[jefe.datos.sentido] += 1
 	print("Llamas: el sentido del giro, en 40 avisos: %d como las agujas del reloj y %d al revés (esperado: más de 5 los dos)" % [
 		lados[1.0], lados[-1.0]])
+	# lo abierto que es el cono: 40 grados (20 a cada lado del medio), a 200 del jefe (la lengua de antes, solo unos 8)
+	var cerca := func(grados: float) -> bool:
+		return jefe.en_cono(jefe.global_position + Vector2.from_angle(deg_to_rad(grados)) * 200.0, 0.0, 0.0)
+	print("Llamas: el cono se abre %d grados (esperado: 40): a 200 del jefe, pilla lo que está a 17 grados del medio %s (esperado: true) y no lo que está a 23 %s (esperado: true)" % [
+		roundi(rad_to_deg(jefe.ABERTURA * 2.0)), cerca.call(17.0), not cerca.call(23.0)])
 	jefe.andar(5.0)
 	var con := await vuelta_de_giro(jefe, centro, "con", 1.0, PI / 2.0, 190.0, "captura-llamas-aviso.png", "captura-llamas-giro.png")
-	print("Llamas: la lengua llega a la pared: entre %d y %d de larga, y lo más que se queda de la pared, %d (esperado: 2 o menos)" % [
+	print("Llamas: el cono llega a la pared en todo su ancho: por el medio, entre %d y %d de largo, y lo más que se queda un rayo de la pared, de borde a borde, %d (esperado: 2 o menos)" % [
 		roundi(con.largo[0]), roundi(con.largo[1]), roundi(con.pared)])
-	print("Llamas: corriendo delante de la lengua, en su sentido (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false)" % [
+	print("Llamas: corriendo delante del cono, en su sentido (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false)" % [
 		roundi(con.radio[0]), roundi(con.radio[1]), con.vida, con.arde])
 	var contra := await vuelta_de_giro(jefe, centro, "contra", -1.0, PI / 2.0, 190.0)
 	print("Llamas: corriendo en contra (a %d-%d del jefe), Johnny pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
 		roundi(contra.radio[0]), roundi(contra.radio[1]), contra.vida, contra.arde])
 	var rodar := await vuelta_de_giro(jefe, centro, "rodar", 1.0, 0.0, 190.0)
-	print("Llamas: rodando a través de la lengua, Johnny rueda %s (esperado: true) · pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
+	print("Llamas: rodando a través del cono, Johnny rueda %s (esperado: true) · pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
 		rodar.rodado, rodar.vida, rodar.arde])
 	await burbuja_de_fuego(jefe, centro)
-	# enfadado: dos lenguas opuestas (Johnny, lejos del empujón del grito y a un lado, donde la elipse limpia es más ancha)
+	# enfadado: dos conos opuestos (Johnny, lejos del empujón del grito y a un lado, donde la elipse limpia es más ancha)
 	johnny.position = centro + Vector2(300, 0)
 	jefe.fase = 2
 	jefe.al_enfadarse(johnny)
 	await get_tree().create_timer(0.5).timeout
 	var entre := await vuelta_de_giro(jefe, centro, "entre", -1.0, PI / 2.0, 210.0, "", "captura-llamas-enfadado.png")
-	print("Llamas: enfadado, corriendo entre las dos lenguas, a su paso (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false) · lenguas %d (esperado: 2)" % [
-		roundi(entre.radio[0]), roundi(entre.radio[1]), entre.vida, entre.arde, entre.lenguas])
+	print("Llamas: enfadado, corriendo por el hueco entre los dos conos, a su paso (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false) · conos %d (esperado: 2)" % [
+		roundi(entre.radio[0]), roundi(entre.radio[1]), entre.vida, entre.arde, entre.conos])
 	get_tree().quit()
 
 
@@ -920,13 +926,14 @@ func paso_holgado(sala: Dictionary, casillas: Dictionary, desde: Vector2i) -> bo
 
 # Una vuelta del giro del bombero ("jefe", puesto en "centro"), con Johnny a "radio" de él, hacia "desde" (ángulo), y
 # girando hacia "sentido" (1, como las agujas del reloj). "como" dice qué hace Johnny, moviéndose como con el mando:
-# "con" (corre delante de la lengua, en su sentido), "contra" (corre en contra), "rodar" (quieto, con la lengua
-# empezando 1,2 rad por detrás de él, y cuando le va a llegar rueda a través de ella) o "entre" (enfadado: en el aviso
-# corre en el sentido del giro y luego va entre las dos lenguas, a su paso: si se le acerca la de detrás, se arrima
-# al jefe, que así da la vuelta antes; si se le acerca la de delante, se aleja). Saca "foto_aviso" en el aviso y
-# "foto_giro" a los 2,5 s de girar. Devuelve {vida (la que pierde), arde (si ha llegado a arder), radio ([mín, máx] de
-# lo lejos que ha ido del jefe), largo ([mín, máx] de la primera lengua), pared (lo más que se ha quedado una lengua de
-# la pared), lenguas, rodado}. Si le quema, acaba un poco después
+# "con" (corre delante del cono, en su sentido), "contra" (corre en contra), "rodar" (quieto, con el medio del cono
+# empezando 1,2 rad por detrás de él, y cuando le va a llegar el borde rueda a través de él) o "entre" (enfadado: en el
+# aviso corre en el sentido del giro y luego va por el hueco entre los dos conos, a su paso: si se le acerca el de
+# detrás, se arrima al jefe, que así da la vuelta antes; si se le acerca el de delante, se aleja). Saca "foto_aviso" en
+# el aviso y "foto_giro" a los 2,5 s de girar. Devuelve {vida (la que pierde), arde (si ha llegado a arder), radio
+# ([mín, máx] de lo lejos que ha ido del jefe), largo ([mín, máx] del primer cono, por el medio), pared (lo más que se
+# ha quedado de la pared un cono, por el medio o cualquiera de sus rayos), conos, rodado}. Si le quema, acaba un poco
+# después
 func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float, desde: float, radio: float,
 		foto_aviso := "", foto_giro := "") -> Dictionary:
 	var sala: Dictionary = mapa.sitio.apt.salas[0]
@@ -952,7 +959,7 @@ func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float,
 	jefe.avisar_giro(johnny, sentido)
 	if como == "rodar":
 		jefe.datos.angulo = desde - sentido * 1.2
-	var r := {"vida": 0, "arde": false, "radio": [INF, 0.0], "largo": [INF, 0.0], "pared": 0.0, "lenguas": 0, "rodado": false}
+	var r := {"vida": 0, "arde": false, "radio": [INF, 0.0], "largo": [INF, 0.0], "pared": 0.0, "conos": 0, "rodado": false}
 	var vida0: int = johnny.vida
 	var fotos := {"aviso": foto_aviso == "", "giro": foto_giro == ""}   # (las que ya están o no hacen falta)
 	var quemado := -1.0
@@ -961,7 +968,7 @@ func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float,
 		var d: Vector2 = johnny.global_position - jefe.global_position
 		var lejos := d.length()
 		var fuera := d / lejos
-		var hacia := Vector2.from_angle(d.angle() + PI / 2.0 * sentido)   # por donde va la lengua
+		var hacia := Vector2.from_angle(d.angle() + PI / 2.0 * sentido)   # por donde va el cono
 		var pedido := Vector2.ZERO
 		match como:
 			"con":
@@ -971,26 +978,31 @@ func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float,
 			"entre":
 				var meta := radio
 				if jefe.estado == "giro":
-					# lo que le lleva a la lengua de detrás (de 0 a PI): lo mejor, PI / 2, en medio de las dos
+					# lo que le lleva al medio del cono de detrás (de 0 a PI): lo mejor, PI / 2, en medio de los dos
 					var va := fposmod((d.angle() - jefe.datos.angulo) * sentido, PI)
 					meta = clampf(radio + (va - PI / 2.0) * 120.0, 110.0, 300.0)
 				pedido = hacia + fuera * clampf((meta - lejos) / 40.0, -1.0, 1.0)
 			"rodar":
-				var falta := fposmod((d.angle() - jefe.datos.angulo) * sentido, TAU)   # lo que le falta a la lengua para llegarle
-				if jefe.estado == "giro" and not r.rodado and falta < 0.45:
+				var falta := fposmod((d.angle() - jefe.datos.angulo) * sentido, TAU)   # lo que le falta al medio del cono para llegarle
+				if jefe.estado == "giro" and not r.rodado and falta < jefe.ABERTURA + 0.12:   # (ya le llega el borde)
 					r.rodado = true
 					johnny.esquiva_espera = 0.0
 					johnny.esquivar(-hacia)
 		pedir_andar(pedido.normalized() if pedido != Vector2.ZERO else Vector2.ZERO)
 		if jefe.estado == "giro":
 			r.radio = [minf(r.radio[0], lejos), maxf(r.radio[1], lejos)]
-			r.lenguas = jefe.datos.largos.size()
+			r.conos = jefe.datos.largos.size()
+			var pies: Vector2 = jefe.global_position + Vector2(0, jefe.PIE - 6)
 			for i in jefe.datos.largos.size():
 				var a: float = jefe.datos.angulo + i * TAU / jefe.datos.largos.size()
 				var largo: float = jefe.datos.largos[i]
 				r.pared = maxf(r.pared, absf(largo - hasta_caja.call(jefe.global_position, Vector2.from_angle(a))))
 				if i == 0:
 					r.largo = [minf(r.largo[0], largo), maxf(r.largo[1], largo)]
+				# y cada rayo del cono, de borde a borde (desde sus pies, hasta donde se dibuja)
+				for j in jefe.RAYOS + 1:
+					var dir := Vector2.from_angle(jefe.angulo_rayo(a, j))
+					r.pared = maxf(r.pared, absf(float(jefe.datos.puntas[i][j]) - hasta_caja.call(pies, dir)))
 		r.arde = r.arde or johnny.estados.has("fuego")
 		if quemado < 0.0 and johnny.vida < vida0:
 			quemado = espera
@@ -1010,7 +1022,7 @@ func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float,
 	return r
 
 
-# La burbuja de fuego del bombero ("jefe", puesto en "centro"; bombero.gd), con Johnny cerca y la lengua empezando
+# La burbuja de fuego del bombero ("jefe", puesto en "centro"; bombero.gd), con Johnny cerca y el cono empezando
 # lejos de él. En el aviso del giro aún no la tiene: un golpe de 10 le quita 10. Girando, la tiene: ni un golpe de 10,
 # ni una explosión de 40 (que tampoco le corta el giro), ni una bala de 10 le quitan vida, y la burbuja brilla donde
 # le da la bala (captura-llamas-burbuja.png, de cerca). Acabado el giro, un golpe de 10 vuelve a quitarle 10 y la
@@ -1027,7 +1039,7 @@ func burbuja_de_fuego(jefe: Node2D, centro: Vector2) -> void:
 	camara.reset_smoothing()
 	await get_tree().physics_frame
 	jefe.avisar_giro(johnny, 1.0)
-	jefe.datos.angulo += PI   # (la lengua, al otro lado: tarda 3 s en llegarle a Johnny)
+	jefe.datos.angulo += PI   # (el cono, al otro lado: tarda unos 2,7 s en llegarle a Johnny)
 	await get_tree().create_timer(0.3).timeout
 	var antes: int = jefe.vida
 	jefe.recibir_golpe(10, Vector2.RIGHT * 300.0)

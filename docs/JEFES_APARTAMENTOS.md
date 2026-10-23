@@ -152,7 +152,7 @@ la lumbre.
 - **Hachazo de bombero** si Johnny se le pega (para que pegarle de cerca no salga gratis).
 
 **Fase 2**
-- El doble de bolas de fuego, de lenguas de fuego en el giro y de charcos.
+- El doble de bolas de fuego, de conos de fuego en el giro y de charcos.
 - **Se le rompe el traje y entra en llamas:** deja un rastro de fuego al andar.
 
 ### ✅ Hecho (22 oct 2026): el jefe de bomberos, con el visto bueno del dueño
@@ -168,16 +168,19 @@ la lumbre.
   - *Bolas de fuego:* si estás a más de 100, una bola recta a 340 (dibujada con código, con su luz y chispas): 14 de
     daño y te deja ardiendo 1,5 s (8 por segundo). Se para en paredes y muebles. Cada 2,8 s.
   - *Giro con el lanzallamas* (rehecho el 23 oct, M8 de `PENDIENTES.md`): si estás a menos de 440, grita «¡A ARDER!»,
-    se va al centro de la sala en la que está (hasta 5 s) y avisa 1 s: la franja roja por donde empieza, apuntándote,
+    se va al centro de la sala en la que está (hasta 5 s) y avisa 1 s: el cono rojo por donde empieza, apuntándote,
     y dos anillos de flechas rojas en el suelo que dicen hacia qué lado va a girar (cada giro, uno al azar). Luego da
-    algo más de una vuelta entera, 6,6 s a 1 rad/s (una vuelta en 6,3 s), con una lengua de fuego que **llega siempre
-    hasta la pared** (atraviesa los muebles) y mide 60 de ancho (más estrecha al salir de la manguera): 10 de daño y
-    ardes 1,5 s (10 por segundo), **también rodando** (la voltereta no la cruza); a los demás zombis los prende. Como
-    la sala arde por el borde, **solo se libra quien corre delante de la lengua, en su mismo sentido**: a tope de vida,
-    a unas 6 casillas del jefe se le sigue el paso (con poca vida, Johnny anda más lento y tiene que arrimarse más);
-    corriendo en contra o quieto, te alcanza. Cada 15 s. Una explosión (granada) en el aviso se lo corta (0,7 s
-    tambaleándose).
-  - *La burbuja de fuego del giro* (el dueño, 23 oct): mientras sale la lengua le rodea una burbuja como la cúpula del
+    algo más de una vuelta entera, 6,6 s a 1 rad/s (una vuelta en 6,3 s), echando un **cono de fuego** (el dueño, 23
+    oct; antes era una lengua de 60 de ancho) **de 40 grados** (20 a cada lado del medio): estrecho al salir de la
+    manguera y cada vez más ancho, a 6 casillas de él mide unas 4 de ancho y contra la pared, de 9 a 17 (según lo
+    lejos que quede la pared: de 415 a 760 desde el centro de su sala). **Llega siempre
+    hasta la pared** en todo su ancho (atraviesa los muebles): 10 de daño y ardes 1,5 s (10 por segundo), **también
+    rodando** (la voltereta no lo cruza: es más ancho); a los demás zombis los prende. Como la sala arde por el borde,
+    **solo se libra quien corre delante del cono, en su mismo sentido** (su borde de delante gira a la misma
+    velocidad que la lengua de antes): a tope de vida, a unas 6 casillas del jefe se le sigue el paso (con poca vida,
+    Johnny anda más lento y tiene que arrimarse más); corriendo en contra o quieto, te alcanza. Cada 15 s. Una
+    explosión (granada) en el aviso se lo corta (0,7 s tambaleándose).
+  - *La burbuja de fuego del giro* (el dueño, 23 oct): mientras sale el fuego le rodea una burbuja como la cúpula del
     científico jefe, pero en colores de fuego (naranja por dentro, el borde rojo con llamitas que se mecen y un brillo
     amarillo); sube en 0,4 s al empezar el giro y baja en 0,4 s al acabar. **Mientras gira, nada le quita vida**: ni
     balas, ni golpes, ni explosiones (y la explosión tampoco le corta el giro). No tiene vida propia ni barra: no se
@@ -198,20 +201,23 @@ la lumbre.
     22 de daño y empujón (esquivando, nada; si falla, clava el hacha en el suelo). Cada 1,6 s.
   - *Enfadado* («¡TODO ARDE!»): se le rompe el traje y arde él mismo (llamas encima, `llamas.gd`): deja un rastro de
     fuego al andar (un charco pequeño, del 35 %, de 2 s, cada 44 unidades). Además: 2 bolas (la segunda a donde vas
-    a estar), 2 lenguas de fuego opuestas en el giro (hay que correr entre las dos, a su paso: si vas más deprisa te
-    comes la de delante y si vas más despacio te alcanza la de detrás), 2 molotovs (el segundo a donde vas a estar),
+    a estar), 2 conos de fuego opuestos en el giro (hay que correr por uno de los dos huecos que quedan entre ellos,
+    de 140 grados, a su paso: si vas más deprisa te comes el de delante y si vas más despacio te alcanza el de
+    detrás), 2 molotovs (el segundo a donde vas a estar),
     todo más seguido (bolas 1,9 s, giro 12 s, molotovs 3,2 s) y el primer giro enfadado a los 2 s como mucho.
 - **Dibujo:** modelo a 72 y 6 animaciones en PixelLab (42 generaciones; detalle y textos en `assets/pixellab.json` →
   `apartamentos-jefes` → `bombero-72`). El giro solo de frente (es una vuelta entera: el juego elige el fotograma
-  según hacia dónde apunta la lengua); hacia el oeste, todo es el este en espejo (`tools/espejo_oeste.py`). Hoja con
-  `py tools/jefe_hoja.py bombero-72 jefe-bombero`. Las lenguas, las bolas, los molotovs y los avisos salen con código.
+  según hacia dónde apunta el cono); hacia el oeste, todo es el este en espejo (`tools/espejo_oeste.py`). Hoja con
+  `py tools/jefe_hoja.py bombero-72 jefe-bombero`. Los conos (a cuadraditos, amarillo en el medio junto a la manguera
+  y rojo en los bordes y la punta), las bolas, los molotovs y los avisos salen con código.
 - Tecla de prueba **9**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El jefe de bomberos»,
   20 fichas). `--captura --jefe bombero` comprueba la inmunidad (lanzallamas, molotov y charco), un golpe normal, las
   bolas y los molotovs (lo escribe en la terminal) y saca `captura-jefe.png` con el giro y su burbuja. `--captura --jefe bombero
   --llamas` prueba su habitación en llamas y el giro: que arde todo el borde menos el pasillo de la puerta, que en medio
   queda la elipse limpia perfecta (igual con otra semilla), que la puerta está en el centro de la pared y de ella se
-  llega al centro sin pisar el fuego, por un pasillo recto, que la lengua llega a la pared y que corriendo en su
-  sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco entre las dos lenguas, sí, y que con la
+  llega al centro sin pisar el fuego, por un pasillo recto, que el cono se abre 40 grados y llega a la pared en todo
+  su ancho y que corriendo en su sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco entre los
+  dos conos, sí, y que con la
   burbuja nada le quita vida, pero en el aviso y acabado el giro sí (ver `docs/CONTROLES.md`).
 - Pegas conocidas: el andar y el golpe (tambaleo) son sutiles; al lanzar de frente PixelLab pintó una bola de fuego
   pegada al cuerpo (queda como el fogonazo del lanzamiento).

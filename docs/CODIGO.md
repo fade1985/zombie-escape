@@ -78,9 +78,11 @@
   vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, morir; y la carrera en línea
   recta, `embestir()` con `pared_chocada()` y `estrellarse()`, con su `franja()` roja de aviso y el estado "atontado"
   con estrellitas). Cada uno hereda y pone sus ataques: `bombero.gd` (minijefe de los Apartamentos: el fuego no le
-  hace nada, `inmune_fuego`; bolas de fuego `bola_fuego.gd`, giro con el lanzallamas en el centro de la sala con la
-  lengua de fuego dibujada con código, que llega hasta la pared (`hasta_la_pared`, por el plano del piso: atraviesa
-  los muebles), gira hacia un lado al azar (las flechas del aviso) y no se cruza rodando; mientras gira, una burbuja de
+  hace nada, `inmune_fuego`; bolas de fuego `bola_fuego.gd`, giro con el lanzallamas en el centro de la sala con un
+  cono de fuego de 40 grados (`ABERTURA`, `en_cono`) dibujado con código a cuadraditos (`cono` y `llama`; en el suelo,
+  `abanico`), que llega hasta la pared en todo su ancho (`medir_conos`: `RAYOS` rayos de borde a borde, cada uno con
+  `hasta_la_pared`, por el plano del piso: atraviesa los muebles), gira hacia un lado al azar (las flechas del aviso) y
+  no se cruza rodando; mientras gira, una burbuja de
   fuego (`pintar_burbuja`, como la cúpula del científico jefe pero sin vida propia) le hace `invulnerable` y brilla
   donde le dan (`rebote`), molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
   Johnny se le pega; enfadado arde él mismo y deja un rastro de fuego al andar), `gymbro.gd` (minijefe de los Apartamentos: torbellino con
