@@ -364,7 +364,7 @@ func probar_presentacion() -> void:
 		presentacion.visible and presentacion.nombre.modulate.a > 0.9, not $Pantalla/Jefa.visible])
 	# el foco que alumbra al jefe mientras grita (presentacion.gd): ninguno al Gymbro (se ve con la luz de su gimnasio)
 	var focos: int = jefa.get_children().filter(func(n): return n is PointLight2D and n.texture_scale == Presentacion.LUZ_RADIO / 128.0).size()
-	print("  (focos sobre el jefe %d (esperado: %s))" % [focos, "0, el Gymbro no lleva" if planta.jefe in Presentacion.SIN_FOCO else "1; 0 si entra escondido, como la Modista"])
+	print("  (focos sobre el jefe %d (esperado: %s))" % [focos, "0, no lleva (SIN_FOCO)" if planta.jefe in Presentacion.SIN_FOCO else "1; 0 si entra escondido, como la Modista"])
 	print("  (jefe en %s, a %d del medio de la sala (esperado: menos de 60) · centro de la cámara %s · offset %s · límites %d-%d x %d-%d · zoom %s)" % [jefa.global_position.round(),
 		roundi(jefa.global_position.distance_to(Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0))),
 		camara.get_screen_center_position().round(), camara.offset, camara.limit_left, camara.limit_right, camara.limit_top, camara.limit_bottom, camara.zoom])
@@ -488,6 +488,7 @@ func probar_porqueria() -> void:
 	var salpicaduras: int = mapa.caras.get(sala.id, []).reduce(func(acc, cara): return acc + cara.adornos.size(), 0)
 	print("Porquería: en una casilla limpia, pasado el escozor, pierde %d en 1 s (esperado: 0) · estado «porqueria» %s (esperado: false) · salpicaduras en la pared de arriba %d y pegotes en los lomos de las otras %d (esperado: más de 0 las dos) · luces del resplandor %d (esperado: entre 4 y 8)" % [
 		antes - johnny.vida, johnny.estados.has("porqueria"), salpicaduras, p.get("paredes", {}).size(), mapa.get_node("Porqueria").luces.size()])
+	print("Porquería: %s (se suma al resplandor)" % await luz_fija_de_jefe())
 	# y desde el medio de la zona de pelea, con la cámara alejada: la elipse limpia y la franja sucia alrededor
 	johnny.position = Peligros.centro(medio)
 	johnny.direccion = "n"
@@ -499,7 +500,7 @@ func probar_porqueria() -> void:
 
 
 # Con "--captura --jefe gymbro --gimnasio": el gimnasio del Gymbro (catalogo.gd, "jefe-gymbro", muebles.gd, fijos,
-# peligros/luz_gimnasio.gd y peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga
+# peligros/luz_jefe.gd y peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga
 # él, y cuenta en la terminal: las máquinas (29) y cuántas de cada tipo hay en cada pared (la derecha, 8 cintas; la
 # izquierda, 6 bancos de press y 2 pilas de discos; el fondo, 2 taquillas, 4 pilas de discos, 3 poleas y 4 estantes,
 # nada en la de abajo), que ninguna se pisa ni toca un muro, que el fondo es simétrico con una polea justo enfrente de
@@ -604,9 +605,7 @@ func probar_gimnasio() -> void:
 	Captura.foto("captura-gimnasio.png")
 	luz.alternar()
 	await get_tree().create_timer(0.6).timeout
-	var luces: Array = mapa.peligros.filter(func(p): return p.datos.tipo == "luz_gimnasio")
-	var encendidas: int = luces[0].luces.filter(func(l): return l.energy > 0.0).size() if not luces.is_empty() else 0
-	print("Gimnasio: luces fijas %d (esperado: 5), encendidas %d (esperado: 5)" % [luces[0].luces.size() if not luces.is_empty() else 0, encendidas])
+	print("Gimnasio: %s" % await luz_fija_de_jefe())
 	Captura.foto("captura-gimnasio-luz.png")   # con la penumbra de siempre: lo que alumbran las luces
 	camara.zoom = Vector2.ONE
 	await probar_tropezar("Gimnasio", "una mancuerna", "mancuernas", sitio, datos, "captura-gimnasio-caido.png")
@@ -692,6 +691,7 @@ func probar_cubos() -> void:
 	camara.reset_smoothing()
 	luz.alternar()   # sin penumbra, para que se vea todo
 	await get_tree().create_timer(0.6).timeout
+	print("Cubos: %s (se suma a las lámparas)" % await luz_fija_de_jefe())
 	Captura.foto("captura-cubos.png")
 	# y la pared de arriba de cerca, con lo colgado (desde un sitio sin cubos cerca: si no, se caería ya aquí)
 	camara.zoom = Vector2.ONE
@@ -878,6 +878,7 @@ func probar_llamas() -> void:
 	var nodo: Node = mapa.get_node("Cerco")
 	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
 		cerco.avisado, nodo.luces.size()])
+	print("Llamas: %s (se suma al fuego)" % await luz_fija_de_jefe())
 	# lo más cerca que llega el fuego del medio de la sala (donde gira el bombero): Johnny corre a unas 6 casillas de él
 	var centro: Vector2 = mapa.centro_libre()   # (ya con el mapa de navegación listo)
 	var hueco_giro := INF
@@ -1034,6 +1035,18 @@ func descuadradas(sitio: Dictionary, datos: Dictionary) -> int:
 			if datos.casillas.has(k) != (fuera and not limpio.has(k) and Peligros.dueno(apt, c, f) == sala.id):
 				n += 1
 	return n
+
+
+# La luz fija de la habitación del jefe de los Apartamentos (peligros/luz_jefe.gd): cuántas luces tiene y cuántas están
+# encendidas, con lo esperado (espera un momento a que se enciendan)
+func luz_fija_de_jefe() -> String:
+	await get_tree().create_timer(0.1).timeout
+	var nodos: Array = mapa.peligros.filter(func(p): return p.datos.tipo == "luz_jefe")
+	if nodos.is_empty():
+		return "luz fija: ninguna (esperado: %d luces blancas, ¡mal!)" % Peligros.LUZ_JEFE.luces.size()
+	var luces: Array = nodos[0].luces
+	return "luz fija: %d luces (esperado: %d), encendidas %d (esperado: todas)" % [luces.size(), Peligros.LUZ_JEFE.luces.size(),
+		luces.filter(func(l): return l.energy > 0.0).size()]
 
 
 # La puerta de entrada de la habitación del jefe, en el centro de su pared (Apartamento.probar). Devuelve el trozo de

@@ -182,6 +182,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# la habitación del jefe de bomberos (sin muebles, ver arriba): en llamas por todo el borde menos la puerta
 			apt.salas[0].nombre = "Apartamento en llamas"
 			sitio.peligros = Peligros.del_bombero(sitio)
+		if jefe and planta.jefe in Peligros.LUZ_JEFE.jefes:
+			# y a las cuatro habitaciones de los jefes de los Apartamentos, la misma luz blanca fija (la del gimnasio)
+			sitio.peligros.append(Peligros.luz_de_jefe(sitio))
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		if tipo_tienda == "joyeria":

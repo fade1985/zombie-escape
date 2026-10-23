@@ -104,7 +104,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   perfecta, como un ring, que sale igual con otra semilla, que la puerta está en el centro de la pared y de ella se
   llega al centro sin pisar nada por un paso recto de 3 casillas de ancho como poco, lo que pierde sobre la porquería en 1 s y que en una
   casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor (`captura-porqueria.png`,
-  Johnny encima; `captura-porqueria-medio.png`, la elipse limpia desde el medio). Cada línea dice lo esperado.
+  Johnny encima; `captura-porqueria-medio.png`, la elipse limpia desde el medio) y la luz fija blanca de la sala
+  (`peligros/luz_jefe.gd`, que se suma al resplandor). Cada línea dice lo esperado.
 - `--gimnasio` (con `--jefe gymbro`): en vez de la prueba larga, la del gimnasio del Gymbro (`peligros/tropiezos.gd`):
   lo monta sin él y cuenta en la terminal las máquinas (29) y cuántas de cada tipo hay en cada pared, que no se
   pisan ni tocan un muro, que el fondo es simétrico con una polea justo enfrente de la puerta, que no hay lámparas,
@@ -123,7 +124,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   de arriba (fregonas y cubos, nada delante de la puerta), los cubos del suelo (10, de pie, separados, lejos de la
   puerta y de los muebles) y el aviso de Johnny al entrar; luego, lo mismo que el gimnasio con un cubo (que además
   vuelca al tropezar) (`captura-cubos.png`, la sala entera; `captura-cubos-pared.png`, la pared de arriba de cerca;
-  `captura-cubos-caido.png`, Johnny en el suelo y el cubo volcado). Cada línea dice lo esperado.
+  `captura-cubos-caido.png`, Johnny en el suelo y el cubo volcado) y la luz fija blanca de la sala
+  (`peligros/luz_jefe.gd`, que se suma a las lámparas). Cada línea dice lo esperado.
 - `--llamas` (con `--jefe bombero`): en vez de la prueba larga, la de la habitación del jefe de bomberos
   (`peligros/cerco.gd`) y su giro con el lanzallamas (`bombero.gd`): la monta sin él y cuenta en la terminal cómo se
   llama la sala, que no tiene muebles, cómo arde (entre un 35 y un 55 % del suelo, el centro no, todo lo pegado a la
@@ -138,7 +140,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   y brilla donde le dan, y acabado el giro baja y los golpes vuelven a quitarle; y, enfadado, corriendo por el hueco
   entre los dos conos a su paso, no (`captura-llamas.png`, la sala entera; `captura-llamas-aviso.png`, el cono rojo y
   las flechas del aviso; `captura-llamas-giro.png`, Johnny corriendo delante del cono; `captura-llamas-burbuja.png`, la
-  burbuja de cerca; `captura-llamas-enfadado.png`, los dos conos). Cada línea dice lo esperado.
+  burbuja de cerca; `captura-llamas-enfadado.png`, los dos conos) y la luz fija blanca de la sala
+  (`peligros/luz_jefe.gd`, que se suma al fuego). Cada línea dice lo esperado.
 - `--ir-jefe`: en vez de la prueba larga, la de Mayús + 7, 8, P y 9 (`probar_ir_jefe`): desde la sala de
   mantenimiento pulsa cada una y cuenta en la terminal que Johnny está en la habitación de ese jefe, junto a la puerta,
   en la planta que le tocó en el sorteo, y que el jefe que sale es ese (`captura-ir-jefe.png`, el jefe de bomberos en su

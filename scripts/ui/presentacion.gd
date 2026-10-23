@@ -6,7 +6,8 @@
 # HUD, el minimapa y la barra del jefe se esconden; Johnny se calla (lo que estuviera diciendo, como el aviso de la
 # habitación al entrar, y lo que fuera a decir: partida.decir lo deja en "pendiente") y lo dice al acabar; el jefe se
 # pone en su pose de gritar (su estado "grito", el mismo de cuando se enfada, que también lo deja sin recibir daño) y
-# un foco lo alumbra (menos al Gymbro: SIN_FOCO, se ve con la luz de su gimnasio); al acabar echa a andar como siempre.
+# un foco lo alumbra (menos a los jefes de los Apartamentos: SIN_FOCO, se ven con la luz fija de su sala); al acabar echa
+# a andar como siempre.
 # Los jefes que entran a su manera (la Modista, escondida
 # entre los maniquíes: no empiezan en "andar") se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y
 # el rugido. partida.gd no deja pausar ni abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan
@@ -25,7 +26,7 @@ const CUERPO := 24.0         # la cámara enfoca un poco por encima del pie del 
 const NOMBRE_ENTRA := 0.25   # lo que tarda el nombre en aparecer
 const LUZ_RADIO := 240.0     # el foco que alumbra al jefe mientras tanto (en la penumbra o a oscuras no se le vería)
 const LUZ_TEXTURA := preload("res://escenas/luces/luz_suave.tres")
-const SIN_FOCO := ["gymbro"]   # los jefes a los que no se les pone el foco: se ven con la luz de su sala (el gimnasio tiene luces propias)
+const SIN_FOCO := ["gloton", "gymbro", "portera", "bombero"]   # los jefes a los que no se les pone el foco: se ven con la luz de su sala (los de los Apartamentos tienen la luz fija, peligros/luz_jefe.gd)
 
 var arriba: ColorRect        # las franjas negras
 var abajo: ColorRect

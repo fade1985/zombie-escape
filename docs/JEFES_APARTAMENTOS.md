@@ -161,11 +161,16 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
   el piso del Gymbro detrás de una puerta de las de arriba del pasillo, A o B: las poleas y las taquillas solo se ven
   de frente, así que van en la pared de arriba, y la puerta tiene que quedar enfrente de ellas). Las
   paredes laterales empiezan justo por debajo de la fila del fondo (si no, se pisarían en las esquinas). Sin
-  lámparas ni bancos de la galería: la luz es fija (`peligros/luz_gimnasio.gd`, 5 luces blancas sin latido ni sombras,
-  como el resplandor del Glotón y el fuego del bombero; números en `Peligros.GIMNASIO`). Las máquinas cuentan como
+  lámparas ni bancos de la galería: la luz es fija (`peligros/luz_jefe.gd`, 5 luces blancas sin latido ni sombras,
+  como el resplandor del Glotón y el fuego del bombero; números en `Peligros.LUZ_JEFE`). Las máquinas cuentan como
   pared para el torbellino. Por el suelo, 12 mancuernas (`peligros/tropiezos.gd`): al pisarlas, Johnny se cae 2 s sin
   poder moverse, atacar ni rodar (no quita vida) y la mancuerna sale rodando; rodando se pasan sin caer. Al Gymbro y a
   los zombis no les hacen nada. Prueba: `--captura --jefe gymbro --gimnasio`.
+- **La misma luz en las habitaciones de los jefes de los Apartamentos** (el dueño, 23 oct): la de la portera, el
+  Glotón y el jefe de bomberos llevan también esas 5 luces blancas (`Peligros.luz_de_jefe`, que `planta.gd` añade al
+  final de sus peligros), sumadas a lo suyo (las lámparas de la portera, el resplandor del ácido del Glotón y el fuego
+  del bombero). Y en la presentación (el zoom), ninguno de los cuatro lleva el foco sobre él: se ve con la luz de su
+  sala (`SIN_FOCO` en `ui/presentacion.gd`).
 
 ## 3. El jefe de bomberos (minijefe; aspecto de Claude, con visto bueno)
 

@@ -137,7 +137,7 @@ const SALAS := {
 	# sitio (muebles.gd, fijos), que le quitan sitio a la pelea: las 8 cintas de correr a la derecha; a la izquierda, los
 	# 6 bancos de press y 2 pilas de discos; y en el fondo, simétrico (las poleas, la del medio justo enfrente de la
 	# puerta), con las pilas de discos en las esquinas y las taquillas a continuación. La pared de abajo, vacía (ahí está
-	# la puerta). Sin lámparas: la luz es fija (peligros/luz_gimnasio.gd). Por el suelo, mancuernas con las que Johnny
+	# la puerta). Sin lámparas: la luz es fija (peligros/luz_jefe.gd). Por el suelo, mancuernas con las que Johnny
 	# tropieza (peligros/tropiezos.gd)
 	"jefe-gymbro": {
 		"muebles": [],

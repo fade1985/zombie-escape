@@ -57,8 +57,10 @@
   limpieza de la portera (`Peligros.de_la_portera`, 10, de tres colores, dibujados a cuadraditos en `tropiezos.gd`),
   repartidos por el suelo libre (`Peligros.tirar_cosas`); al pisarlos, `johnny.caer` 2 s y la cosa sale rodando (el
   cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso. Con las
-  mancuernas va `luz_gimnasio.gd` (no es un peligro: la luz fija del gimnasio, 5 luces blancas sin latido ni sombras,
-  porque su sala no tiene lámparas: `Peligros.GIMNASIO`). Y
+  mancuernas va `luz_jefe.gd` (no es un peligro: la luz fija de las habitaciones de los jefes de los Apartamentos,
+  la portera, el Glotón, el Gymbro y el bombero: 5 luces blancas sin latido ni sombras, siempre la última de sus
+  peligros: `Peligros.LUZ_JEFE`, `Peligros.luz_de_jefe`, `planta.gd`; en el gimnasio, que no tiene lámparas, es la
+  única, y en las otras tres se suma a lo suyo). Y
   `cerco.gd`, la habitación del jefe de bomberos («Apartamento en llamas», sin muebles: `jefe-bombero` del catálogo),
   que arde por el borde (`Peligros.del_bombero`: con la misma `Peligros.franja_y_ovalo` que la porquería del Glotón:
   en medio una elipse limpia perfecta, siempre igual, como un ring, y todo lo de fuera ardiendo hasta la pared, menos

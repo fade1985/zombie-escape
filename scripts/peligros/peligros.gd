@@ -19,7 +19,8 @@
 #   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
 #                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado, color}])
 #                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
-#   luz_gimnasio.gd  la luz fija del gimnasio del Gymbro (no es un peligro: su sala no tiene lámparas)   {tipo, sala, luces ([Vector2])}
+#   luz_jefe.gd   la luz fija de las habitaciones de los jefes de los Apartamentos (no es un peligro: la última de
+#                 sus entradas; el gimnasio del Gymbro no tiene otra)   {tipo, sala, luces ([Vector2])}
 #   cerco.gd      la habitación del jefe de bomberos, en llamas por el borde   {tipo, sala, casillas (casilla -> 1),
 #                                                                               ovalo, avisado}
 class_name Peligros
@@ -82,9 +83,11 @@ const TROPIEZOS := {
 	"caido": 2.0,        # segundos que tarda en levantarse
 	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
 }
-# La luz del gimnasio del Gymbro (luz_gimnasio.gd): como no tiene lámparas, unas luces fijas (sin latido, sin sombras)
-# repartidas por la sala, como el resplandor del Glotón o el fuego del bombero
-const GIMNASIO := {
+# La luz fija de las habitaciones de los jefes de los Apartamentos (luz_jefe.gd): unas luces blancas (sin latido, sin
+# sombras) repartidas por la sala; la del gimnasio del Gymbro (que no tiene lámparas) es la única que tiene, y en las
+# de la portera, el Glotón y el jefe de bomberos se suman a lo suyo. Todas son de la misma medida (44 × 30 casillas)
+const LUZ_JEFE := {
+	"jefes": ["gloton", "gymbro", "portera", "bombero"],   # a quiénes se les pone
 	"luces": [Vector2(-344, -220), Vector2(344, -220), Vector2(-344, 160), Vector2(344, 160), Vector2(0, -20)],   # desde el centro de la sala
 	"radio": 440.0,      # hasta dónde llega cada una
 	"fuerza": 0.95,      # lo fuerte que luce
@@ -216,13 +219,19 @@ static func luces_del_ovalo(datos: Dictionary, cuantas: int) -> Array:
 	return focos
 
 
-# Las mancuernas del gimnasio del Gymbro: unas tumbadas a lo ancho y otras a lo largo (tirar_cosas); y sus luces fijas
+# Las mancuernas del gimnasio del Gymbro: unas tumbadas a lo ancho y otras a lo largo (tirar_cosas)
 static func del_gymbro(sitio: Dictionary) -> Array:
+	return tirar_cosas(sitio, "mancuerna", TROPIEZOS.mancuernas, 5113)
+
+
+# La luz fija de la habitación de un jefe de los Apartamentos (luz_jefe.gd): LUZ_JEFE.luces, desde el centro de la sala.
+# planta.gd la añade al final de sus peligros (los de cada jefe, siempre los primeros)
+static func luz_de_jefe(sitio: Dictionary) -> Dictionary:
 	var sala: Dictionary = sitio.apt.salas[0]
 	var luces := []
-	for o in GIMNASIO.luces:
+	for o in LUZ_JEFE.luces:
 		luces.append(sala.centro + o)
-	return tirar_cosas(sitio, "mancuerna", TROPIEZOS.mancuernas, 5113) + [{"tipo": "luz_gimnasio", "sala": sala.id, "luces": luces}]
+	return {"tipo": "luz_jefe", "sala": sala.id, "luces": luces}
 
 
 # Los cubos del cuarto de la limpieza de la portera: de pie, con agua sucia, de tres colores (tirar_cosas)
