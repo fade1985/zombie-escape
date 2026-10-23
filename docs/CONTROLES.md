@@ -100,6 +100,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   1 s y que en una casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor
   (`captura-porqueria.png`, Johnny encima; `captura-porqueria-medio.png`, el óvalo limpio desde el medio). Cada línea
   dice lo esperado.
+- `--gimnasio` (con `--jefe gymbro`): en vez de la prueba larga, la del gimnasio del Gymbro (`peligros/tropiezos.gd`):
+  lo monta sin él y cuenta en la terminal las máquinas y en qué paredes están, las lámparas, la parte del suelo que
+  queda libre y las mancuernas (cuántas, lo separadas que están, lejos de la puerta y de los muebles); que andando
+  por encima de una Johnny se cae, se queda tumbado sin moverse ni atacar aunque se le pida, no pierde vida, se
+  levanta a los 2 s y la mancuerna sale rodando; y que rodando se pasa por encima de otra sin caer
+  (`captura-gimnasio.png`, la sala entera con la cámara alejada y sin penumbra; `captura-gimnasio-caido.png`, Johnny
+  en el suelo con las estrellitas). Cada línea dice lo esperado.
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
   (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
   cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la

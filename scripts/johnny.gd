@@ -43,6 +43,8 @@ const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
 const REGENERA_CADA := 3.0 # Lobezno: segundos entre cura y cura
+const CAIDA := 0.22        # tropezón (caer): lo que tarda en llegar al suelo y en levantarse
+const LEVANTADO := 0.6     # recién levantado, este rato sin volver a tropezar
 const AZUL := Color("#9fe8ff")
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
@@ -84,6 +86,12 @@ var sola_t := 0.0          # Reflejos: lo que falta para la siguiente esquiva au
 var regenera_t := 0.0      # Lobezno
 var disparos := 0          # Mirilla: los disparos que lleva
 var resucitado := false    # Desfibrilador: solo una vez por partida
+var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
+var caido_max := 0.0       # lo que dura ese tropezón
+var caido_lado := 1.0      # hacia dónde ha caído: 1, con la cabeza a la derecha; -1, a la izquierda
+var levantado_t := 0.0     # lo que le queda sin poder volver a tropezar
+var sombra_ancho := 0.0    # lo ancha que es su sombra de pie (tumbado, se alarga)
+var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuando está en el suelo
 
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
@@ -115,6 +123,11 @@ func _ready() -> void:
 	llamas.alto = 70.0
 	llamas.fuerza = 0.0
 	add_child(llamas)
+	estrellas = Node2D.new()
+	estrellas.name = "Estrellas"
+	estrellas.draw.connect(pintar_estrellas)
+	add_child(estrellas)
+	sombra_ancho = $Sombra.ancho
 	vida = stats.vida_max
 	balas = Armas.datos(huecos.fuego).cargador
 	reserva = balas * RESERVA_INICIO
@@ -207,6 +220,7 @@ func _physics_process(delta: float) -> void:
 	invulnerable -= delta
 	esquiva_espera -= delta
 	sola_t -= delta
+	levantado_t -= delta
 	# Parpadea mientras es invulnerable (medio transparente a ratos)
 	sprite.modulate.a = 0.45 if invulnerable > 0.0 and int(invulnerable * 18.0) % 2 == 0 else 1.0
 	# El retroceso de disparar andando: el dibujo entero va un poquito hacia atrás y vuelve enseguida
@@ -239,6 +253,10 @@ func _physics_process(delta: float) -> void:
 	Estados.efectos(self, estados, velocity, delta, 60.0, RADIO)
 	if stats.ansiedad:
 		contar_a_la_vista()
+	# Tirado en el suelo por un tropezón: ni anda, ni ataca, ni rueda hasta que se levanta
+	if caido_t > 0.0:
+		seguir_caido(delta)
+		return
 
 	# Teclas de las armas
 	for i in Armas.ORDEN.size():
@@ -775,6 +793,70 @@ func paso() -> Array:
 	return [direccion, 1.0]
 
 
+# Tropieza y se cae (las mancuernas del gimnasio del Gymbro: peligros/tropiezos.gd): se queda tirado "segundos",
+# sin andar, atacar ni rodar, y luego se levanta. No quita vida (lo malo es lo que pase mientras). Rodando no se
+# tropieza, ni recién levantado. Devuelve si se ha caído
+func caer(segundos: float) -> bool:
+	if not vivo or esquiva_t > 0.0 or caido_t > 0.0 or levantado_t > 0.0:
+		return false
+	# cae hacia donde iba (si iba de arriba abajo, hacia donde mira)
+	var hacia := velocity.x if absf(velocity.x) > 20.0 else Vector2.from_angle(DIRS.find(direccion) * PI / 4).x
+	caido_lado = -1.0 if hacia < -0.01 else 1.0
+	var iba := velocity
+	quedarse_quieto()
+	velocity = iba * 0.6   # resbala un poco al caer
+	efectos.hide()
+	cambiar_animacion("reposo_s")   # boca arriba: tumbado, se le ve la cara
+	caido_t = segundos
+	caido_max = segundos
+	Sonido.tocar("golpe")
+	Temblor.temblar(6.0)
+	Tactil.vibracion()
+	return true
+
+
+# En el suelo: cae de lado (el dibujo se tumba), le dan vueltas unas estrellitas y, al acabar, se levanta
+func seguir_caido(delta: float) -> void:
+	caido_t -= delta
+	velocity *= exp(-delta * 7.0)
+	move_and_slide()
+	tumbar(clampf(minf(caido_max - caido_t, caido_t) / CAIDA, 0.0, 1.0))
+	estrellas.queue_redraw()
+	if caido_t <= 0.0:
+		caido_t = 0.0
+		levantado_t = LEVANTADO
+		tumbar(0.0)
+		estrellas.queue_redraw()
+
+
+# Cuánto está tumbado (0, de pie; 1, en el suelo). El dibujo gira por la mitad del cuerpo, no por los pies, y baja
+# hasta el suelo; la sombra se alarga
+func tumbar(k: float) -> void:
+	var giro := caido_lado * PI / 2.0 * k
+	sprite.rotation = giro
+	var medio := Vector2(0, lerpf(-28.0, 4.0, k))      # dónde queda la mitad del cuerpo
+	sprite.position = medio - Vector2(0, -44).rotated(giro)   # (la mitad del cuerpo, 44 unidades por encima de los pies)
+	$Sombra.ancho = lerpf(sombra_ancho, sombra_ancho * 1.9, k)
+	$Sombra.queue_redraw()
+
+
+# Tres estrellitas que dan vueltas sobre la cabeza mientras está en el suelo: cruces de 5 píxeles del dibujo (de 2
+# unidades), amarillas o blancas, con su borde oscuro
+func pintar_estrellas() -> void:
+	if caido_t <= 0.0 or caido_max - caido_t < CAIDA:
+		return
+	var cabeza := Vector2(caido_lado * 40.0, -22.0)
+	var t := Time.get_ticks_msec() / 1000.0
+	for i in 3:
+		var a := t * 5.0 + i * TAU / 3.0
+		var p := ((cabeza + Vector2(cos(a) * 22.0, sin(a) * 8.0)) / 2.0).round() * 2.0
+		var color := Color("#ffd23f") if i != 1 else Color.WHITE
+		for capa in [[Color("#1d1b2c"), 2.0], [color, 0.0]]:
+			var b: float = capa[1]
+			estrellas.draw_rect(Rect2(p + Vector2(-5 - b, -1 - b), Vector2(10 + b * 2, 2 + b * 2)), capa[0])
+			estrellas.draw_rect(Rect2(p + Vector2(-1 - b, -5 - b), Vector2(2 + b * 2, 10 + b * 2)), capa[0])
+
+
 # Parte a Johnny por la cintura (golpe arriba, piernas de andar abajo) o lo deja entero
 # Se queda quieto del todo (la presentación del jefe, ui/presentacion.gd): corta el golpe o el disparo que llevara a
 # medias y deja el dibujo en reposo, para que no siga moviendo las piernas mientras está parado
@@ -868,6 +950,8 @@ func quitar_vida(cantidad: int) -> void:
 		vivo = false
 		ataque_t = -1.0
 		velocity = Vector2.ZERO
+		caido_t = 0.0   # (si estaba tirado por un tropezón, se queda en el suelo, pero sin estrellitas)
+		estrellas.queue_redraw()
 		efectos.hide()
 		partir_cintura(false)
 		# No tiene animación de morirse: se queda quieto y rojo

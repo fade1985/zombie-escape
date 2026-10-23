@@ -29,7 +29,9 @@
 - `johnny.gd`: moverse, vida, apuntar y atacar. Al golpear andando, `escenas/personajes/cintura.gdshader` lo parte
   por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Los trajes (`trajes.gd`):
   `vestir(id)` le pasa a ese mismo shader los colores del peto, la camisa y el pañuelo (los reconoce por su color en
-  las siete hojas); al empezar se pone el del guardado. `mejoras.gd`: sus atributos (el baseStats del JS).
+  las siete hojas); al empezar se pone el del guardado. `caer(segundos)`: un tropezón (las mancuernas del gimnasio
+  del Gymbro): se queda tirado sin andar, atacar ni rodar, con el dibujo tumbado y estrellitas en la cabeza, y luego
+  se levanta; rodando no se tropieza. `mejoras.gd`: sus atributos (el baseStats del JS).
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`). `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas creadas (aturdir, prender, sangrar, descarga, congelar, dejar tirado…);
   `chorro.gd` (gotas de fuego y ácido, chispas de la pistola eléctrica y clavos de la bomba de clavos), `bumeran.gd`
@@ -44,11 +46,14 @@
   generar la planta), `frio.gd` (la cámara frigorífica; congela a los zombis: `zombi.gd`), `fuego.gd` (la cocina del
   restaurante, que se extiende por casillas), `agua.gd` (el charco con corriente de la electrónica, su cable, las luces
   de las teles y lo oscura que se queda la tienda: `Luz.extra`; `arreglar()`, cuando el técnico arregla el cable y
-  el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y uno de los Apartamentos: `porqueria.gd`, la
+  el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y dos de los Apartamentos: `porqueria.gd`, la
   habitación del Glotón (solo lámparas, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
   ácido pegada a las paredes, con un óvalo limpio en medio para pelear, `Peligros.del_gloton`,
   salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
-  `porqueria`, que quema a Johnny al pisarla).
+  `porqueria`, que quema a Johnny al pisarla), y `tropiezos.gd`, las cosas tiradas por el suelo con las que se
+  tropieza: las mancuernas del gimnasio del Gymbro (`Peligros.del_gymbro`, 12 repartidas por el suelo libre; al
+  pisarlas, `johnny.caer` 2 s y la mancuerna sale rodando). Hecho para valer también con otras cosas (los cubos de la
+  portera): cada una lleva su forma.
 - `zombi_guardia.gd` (escena `zombi_guardia.tscn`, hereda la del normal): el guardia de seguridad del centro
   comercial, que lleva la tarjeta (ronda, silbato, huye, se cansa). Lleva el dibujo del vigilante.
 - Los zombis del centro comercial (parte 4): `zombi_vigilante.tscn` (hereda la del normal; solo cambian números y
@@ -260,8 +265,9 @@
   comercial, con el mismo tipo de plano; sus tipos, en `TIPOS`: la joyería, parte 10, no se sortea, sale una por
   partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
   exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
-  tiene la suya: "jefe-modista"), `muebles.gd`
-  (dónde va cada uno; en las salas de venta, también filas en medio: `islas`), `mueble.gd` (monta uno).
+  tiene la suya: "jefe-modista"; la habitación de un minijefe de los Apartamentos: "jefe-gloton", "jefe-gymbro"),
+  `muebles.gd` (dónde va cada uno; en las salas de venta, también filas en medio: `islas`; en el gimnasio, las paredes
+  llenas, una máquina detrás de otra: `llenar`), `mueble.gd` (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, peligros, niebla, navegación; y
   `muro_entre(a, b)`, la primera pared que corta una línea sin contar los muebles: la usa el vómito de Gastroenteritis). Los suelos y
   paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas: por uso, o por `"<uso>-<tipo>"` si ese
@@ -307,7 +313,7 @@ falte, con la vista quieta), `espejo_oeste.py` (las animaciones hacia el oeste, 
 con `--lado`, también suroeste y noroeste y las vistas quietas, para ahorrar generaciones), `texturas_bano.py`, `importar.py` (muebles nuevos → sprites; lee
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo; `guias_azotea.py`, los de los
-aparatos de la azotea), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
+aparatos de la azotea; `guias_gimnasio.py`, las máquinas del gimnasio del Gymbro), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `taquilla.py` (la taquilla de los trajes), `objetos16.py`
 (los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de

@@ -12,9 +12,11 @@
 #   agua.gd   un charco en la sala de venta   {tipo, sala, casillas, cable, cable_desde, cuadro, corriente, arreglado, avisado}
 #             con cuadro.gd, el cuadro eléctrico que le quita (y le devuelve) la corriente a la tienda; "arreglado":
 #             el técnico ha arreglado el cable (su rescate, averia.gd) y el agua ya no da calambres
-# Y el de un minijefe de los Apartamentos (planta.gd llama a del_gloton):
+# Y los de los minijefes de los Apartamentos (planta.gd llama a del_gloton y a del_gymbro):
 #   porqueria.gd  la habitación del Glotón   {tipo, sala, casillas (casilla -> 1 charco, 2 con montón),
 #                                             paredes (casilla de muro -> forma del pegote), ovalo, avisado}
+#   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
+#                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
 class_name Peligros
 
 const CASILLA := 32
@@ -63,6 +65,18 @@ const PORQUERIA := {
 	"saliente_radio": [1.0, 1.8],   # ...y su radio, en casillas
 	"montones": 0.22,    # parte de las casillas sucias que llevan un montón encima
 	"paredes": 0.4,      # parte de las casillas de muro pegadas al suelo (lados y abajo) con un pegote encima
+}
+# Las cosas tiradas por el suelo con las que se tropieza (las mancuernas del gimnasio del Gymbro): al pisar una,
+# Johnny se cae y tarda en levantarse (sin daño; rodando se pasa por encima sin caer). A los zombis y al jefe no
+# les pasa nada. La cosa sale rodando un poco, para que al levantarse no se vuelva a caer con la misma
+const TROPIEZOS := {
+	"mancuernas": 12,    # cuántas en el gimnasio
+	"separadas": 110.0,  # como poco, a esta distancia unas de otras
+	"lejos_muebles": 26.0,   # ni pegadas a una máquina o a la pared (que se vean y se pueda pasar al lado)
+	"lejos_entrada": 90.0,   # ni junto a la puerta (ahí aparece Johnny)
+	"pie": 8.0,          # lo cerca que tienen que pasar los pies de Johnny para tropezar
+	"caido": 2.0,        # segundos que tarda en levantarse
+	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
 }
 
 
@@ -142,6 +156,44 @@ static func del_gloton(sitio: Dictionary) -> Array:
 					paredes[k] = rng.randi_range(0, 2)
 	return [{"tipo": "porqueria", "sala": sala.id, "casillas": casillas, "paredes": paredes, "avisado": false,
 		"ovalo": {"centro": centro, "rx": rx, "ry": ry}}]   # (el óvalo, para repartir las luces del resplandor)
+
+
+# Las mancuernas del gimnasio del Gymbro: repartidas al azar por el suelo libre de su habitación (la única sala del
+# piso del jefe), separadas unas de otras, sin pegarse a las máquinas ni a las paredes y lejos de la puerta de
+# entrada. Unas tumbadas a lo ancho y otras a lo largo. Con su propio dado, como de_tienda
+static func del_gymbro(sitio: Dictionary) -> Array:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(sitio.surtido) + 5113
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var t: Dictionary = TROPIEZOS
+	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado,
+		(apt.entrada.c + 1) * CASILLA).grow(t.lejos_entrada)
+	var cosas := []
+	for intento in 600:
+		if cosas.size() >= t.mancuernas:
+			break
+		var p := Vector2(rng.randf_range(sala.c0, sala.c0 + sala.ancho), rng.randf_range(sala.f0, sala.f0 + sala.fondo)) * CASILLA
+		p = (p / 2.0).round() * 2.0   # en píxeles enteros del dibujo
+		if not libre_para_cosas(sitio, sala.id, p, t.lejos_muebles) or entrada.has_point(p):
+			continue
+		if cosas.any(func(k): return k.pos.distance_to(p) < t.separadas):
+			continue
+		cosas.append({"pos": p, "forma": "mancuerna", "giro": 0.0 if rng.randf() < 0.5 else PI / 2.0})
+	return [{"tipo": "tropiezos", "sala": sala.id, "cosas": cosas, "avisado": false}]
+
+
+# ¿Puede estar ahí una cosa tirada? En el suelo de la sala, a "margen" de las paredes y de los muebles (por arriba
+# de los muebles, más: su dibujo sube y la taparía)
+static func libre_para_cosas(sitio: Dictionary, sala: int, p: Vector2, margen: float) -> bool:
+	for d in [Vector2(-margen, -margen), Vector2(margen, -margen), Vector2(-margen, margen), Vector2(margen, margen)]:
+		var c := casilla(p + d)
+		if dueno(sitio.apt, c.x, c.y) != sala:
+			return false
+	for m in sitio.muebles:
+		if Muebles.hueco(m).grow_individual(margen, margen + 50.0, margen, margen).has_point(p):
+			return false
+	return true
 
 
 # ¿Hay ahí fuego o agua? (para no poner a los zombis dormidos encima: planta.gd)

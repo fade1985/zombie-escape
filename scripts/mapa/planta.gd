@@ -153,7 +153,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			nombre = mini.tienda
 			apt.salas[0].nombre = mini.tienda
 		if jefe and Catalogo.SALAS.has("jefe-" + su_jefe):
-			apt.tipo = su_jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón, solo lámparas)
+			apt.tipo = su_jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón, solo lámparas;
+			# el Gymbro, sus máquinas de gimnasio)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
@@ -163,6 +164,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if jefe and su_jefe == "gloton":
 			# la habitación del Glotón (solo con lámparas, ver arriba): el suelo y las paredes llenos de su porquería, que quema
 			sitio.peligros = Peligros.del_gloton(sitio)
+		if jefe and su_jefe == "gymbro":
+			# el gimnasio del Gymbro (lleno de máquinas, ver arriba): mancuernas por el suelo, que hacen caer a Johnny
+			apt.salas[0].nombre = "Gimnasio"
+			sitio.peligros = Peligros.del_gymbro(sitio)
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		if tipo_tienda == "joyeria":

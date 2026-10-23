@@ -57,7 +57,8 @@ const NEON := preload("res://scripts/mapa/neon.gd")
 # Los peligros de las tiendas del centro comercial, y la porquería del Glotón (peligros.gd): cada uno con su nodo
 const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": preload("res://scripts/peligros/fuego.gd"),
 	"agua": preload("res://scripts/peligros/agua.gd"),
-	"porqueria": preload("res://scripts/peligros/porqueria.gd")}   # (y la de la habitación del Glotón, en los Apartamentos)
+	"porqueria": preload("res://scripts/peligros/porqueria.gd"),   # (y la de la habitación del Glotón, en los Apartamentos)
+	"tropiezos": preload("res://scripts/peligros/tropiezos.gd")}   # (y las mancuernas del gimnasio del Gymbro)
 # Los restos sueltos del centro comercial (sprites resto-<nombre>, tools/centro_sprites.py): el juego los reparte al
 # azar por el suelo y las paredes de cada tienda y de la galería, para que haya sangre y destrozo por todas partes
 # sin que se note que la textura se repite. Los repetidos en la lista salen más a menudo.
@@ -527,7 +528,7 @@ func poner_apliques() -> void:
 
 
 # Los peligros de una tienda (peligros.gd): el frío de la cámara, el fuego de la cocina y el agua con corriente; y
-# la porquería de la habitación del Glotón.
+# la porquería de la habitación del Glotón y las mancuernas del gimnasio del Gymbro.
 # Van en el suelo, por debajo de los personajes (lo que va en la pared, el cuadro y el cable, lo ponen ellos en cosas)
 func poner_peligros() -> void:
 	for d in sitio.get("peligros", []):

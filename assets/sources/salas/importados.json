@@ -199,6 +199,38 @@
     "huella": "31a58da0fa2e0317",
     "sprite": "mueble-nightstand"
   },
+  "gimnasio/banco-press-lado.png": {
+    "huella": "fad769a1375d9f43",
+    "sprite": "mueble-benchpress-lado"
+  },
+  "gimnasio/banco-press.png": {
+    "huella": "7f99ddd8118e32ef",
+    "sprite": "mueble-benchpress"
+  },
+  "gimnasio/cinta-correr-lado.png": {
+    "huella": "fdd1098394dc754a",
+    "sprite": "mueble-treadmill-lado"
+  },
+  "gimnasio/cinta-correr.png": {
+    "huella": "8633ad7b76b1bd69",
+    "sprite": "mueble-treadmill"
+  },
+  "gimnasio/discos.png": {
+    "huella": "ab950467f34de20e",
+    "sprite": "mueble-weightplates"
+  },
+  "gimnasio/estante-mancuernas-lado.png": {
+    "huella": "f85ddb035798631a",
+    "sprite": "mueble-dumbbellrack-lado"
+  },
+  "gimnasio/estante-mancuernas.png": {
+    "huella": "664a7ab4b91d4ece",
+    "sprite": "mueble-dumbbellrack"
+  },
+  "gimnasio/maquina-poleas.png": {
+    "huella": "d179ab9c4a311987",
+    "sprite": "mueble-cablemachine"
+  },
   "pasillo/aplique.png": {
     "huella": "88d5170172b2319e",
     "sprite": "aplique-pared"

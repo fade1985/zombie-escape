@@ -2555,5 +2555,26 @@
     }
    }
   }
+ },
+ "gimnasio-gymbro": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "El gimnasio del Gymbro (M6 de PENDIENTES.md; docs/JEFES_APARTAMENTOS.md, apartado 2). Cinco máquinas con create_image_pixflux (1 generación cada una), con la receta de los muebles del centro comercial: la guía de py tools/guias_gimnasio.py como init_image (fuerza 45), no_background false, single color black outline, high top-down y el texto '<máquina> seen in 3/4 top-down view, <lo de encima> seen from above, <el frente> facing the viewer, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors'. Las cinco de frente salieron a la primera. De lado, con 'lying along the left wall' las tres salieron mal (pintaba la pared o la máquina torcida); se repitieron con fuerza 130 y 'seen from above in 3/4 top-down view, turned sideways: ...' (salen casi como la guía): valieron la cinta y el estante; del banco se quedó el primero, quitándole a mano la franja de pared. Fondo quitado con py tools/guias_centro.py quita y, después, el azul encerrado dentro de los marcos (lo que tiene mucho más azul que verde y rojo); descartes en assets/sources/salas/descartes/. Originales en assets/sources/salas/gimnasio/ y sprites con py tools/importar.py (catalogo.gd: treadmill, benchpress, cablemachine, dumbbellrack, weightplates).",
+  "coste": "11 generaciones (8 + 3 repetidas de lado)",
+  "piezas": {
+   "cinta de correr (treadmill)": "3972201f-05fd-45cc-8520-f84a99395f29",
+   "cinta de correr, de lado": "ccb1eeae-090a-4779-a773-769e55123229",
+   "banco de press (benchpress)": "a08629d6-67d0-4a1b-bdd9-d42b2d9033f7",
+   "banco de press, de lado": "c62fecc5-fd15-48d0-8022-c7a5fa6c5c20",
+   "máquina de poleas (cablemachine)": "b96a187f-d5bf-4020-9502-d2a7853cf407",
+   "estante de mancuernas (dumbbellrack)": "588140d1-5515-46cb-bc71-4c503cf9b019",
+   "estante de mancuernas, de lado": "ab9b42b7-cfc4-4085-aa45-0dfa9a142d01",
+   "pila de discos (weightplates)": "8e35a500-a9ae-41a4-9f68-e394c7e19898",
+   "descartadas": [
+    "9b097fad-9cae-47b1-8d00-07761ed54a90",
+    "b890ac0b-f833-44cd-8354-89e53478a124",
+    "e455a11f-cfc4-4769-8c3b-374bc7b6bf9e"
+   ]
+  }
  }
 }

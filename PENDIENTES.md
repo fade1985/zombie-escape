@@ -15,8 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M6.** La habitación del Gymbro es un gimnasio: máquinas pegadas a las paredes que reducen el espacio
-  libre, y mancuernas por el suelo que, al pisarlas, nos hacen caer y tardamos 2 segundos en levantarnos.
 - **M7.** La habitación de la portera: cubos y fregonas colgando de las paredes, cubos de basura, y cubos
   por el suelo que, al pisarlos, nos hacen caer y tardamos 2 segundos en levantarnos.
 - **M8.** La habitación del jefe de bomberos está en llamas por todo el borde, rodeando la habitación entera

@@ -123,6 +123,12 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
 - Tecla de prueba **8**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El Gymbro», 19
   fichas). `--captura --jefe gymbro` comprueba la armadura y las pesas (lo escribe en la terminal) y saca
   `captura-jefe.png` con el torbellino.
+- **Su habitación, un gimnasio** (23 oct, M6 de `PENDIENTES.md`): las paredes llenas de máquinas, una detrás de otra
+  (`jefe-gymbro` en `catalogo.gd`, `llenar` en `muebles.gd`): cinta de correr, banco de press, máquina de poleas,
+  estante de mancuernas, pila de discos, taquillas y bancos, y 3 lámparas de pie. Las máquinas cuentan como pared
+  para el torbellino. Por el suelo, 12 mancuernas (`peligros/tropiezos.gd`): al pisarlas, Johnny se cae 2 s sin poder
+  moverse, atacar ni rodar (no quita vida) y la mancuerna sale rodando; rodando se pasan sin caer. Al Gymbro y a los
+  zombis no les hacen nada. Prueba: `--captura --jefe gymbro --gimnasio`.
 
 ## 3. El jefe de bomberos (minijefe; aspecto de Claude, con visto bueno)
 

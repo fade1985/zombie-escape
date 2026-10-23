@@ -77,6 +77,14 @@ const MUEBLES := {
 	"watertank":       {"len": 96,  "dep": 64, "paredes": "todas", "archivo": "azotea/deposito-agua"},
 	"antennas":        {"len": 64,  "dep": 40, "paredes": "todas", "archivo": "azotea/antenas"},
 	"clothesline":     {"len": 160, "dep": 24, "paredes": "todas", "archivo": "azotea/tendedero"},
+	# las máquinas del gimnasio del Gymbro (su habitación; PixelLab, con las guías de tools/guias_gimnasio.py): la
+	# cinta de correr y el banco de press salen de la pared hacia la habitación; la máquina de poleas, alta, solo en
+	# la del fondo; la pila de discos se ve igual desde cualquier lado
+	"treadmill":       {"len": 56,  "dep": 100, "paredes": "lados", "archivo": "gimnasio/cinta-correr"},
+	"benchpress":      {"len": 104, "dep": 72, "paredes": "lados", "archivo": "gimnasio/banco-press"},
+	"cablemachine":    {"len": 100, "dep": 52, "paredes": "",      "archivo": "gimnasio/maquina-poleas"},
+	"dumbbellrack":    {"len": 112, "dep": 40, "paredes": "lados", "archivo": "gimnasio/estante-mancuernas"},
+	"weightplates":    {"len": 44,  "dep": 44, "paredes": "todas", "archivo": "gimnasio/discos"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo y la sala de mantenimiento):
@@ -90,6 +98,9 @@ const MUEBLES := {
 #               baño). Con plantillas, solo se amuebla la pared del fondo; si en ella no cabe nada (una puerta
 #               en medio), muebles sueltos en las demás paredes, como en las otras salas.
 #   fondo_max   el fondo máximo de sus muebles (para sitios estrechos)
+#   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas del gimnasio)
+#   llenar      las paredes llenas, un mueble detrás de otro, con este hueco entre ellos ([mínimo, máximo]), en vez
+#               de unos cuantos sueltos (el gimnasio)
 const SALAS := {
 	"salon": {
 		"muebles": ["sofa", "tv", "armchair", "bookshelf", "lamp", "plant"],
@@ -116,6 +127,17 @@ const SALAS := {
 		"muebles": ["lamp"],
 		"cuantos": [3, 4],
 		"iguales": {"lamp": 4},
+	},
+	# el gimnasio del Gymbro (planta.gd pone apt.tipo = "gymbro"): las paredes llenas de máquinas, una detrás de otra
+	# (muebles.gd, llenar), que le quitan sitio a la pelea, y tres lámparas de pie (primero, para que siempre haya luz);
+	# por el suelo, mancuernas con las que Johnny tropieza (peligros/tropiezos.gd)
+	"jefe-gymbro": {
+		"primero": ["lamp", "lamp", "lamp"],
+		"muebles": ["treadmill", "treadmill", "benchpress", "benchpress", "cablemachine", "dumbbellrack", "weightplates",
+			"lockers", "bench"],
+		"llenar": [6, 28],
+		"iguales": {"lamp": 3, "treadmill": 8, "benchpress": 6, "cablemachine": 3, "dumbbellrack": 4, "weightplates": 6,
+			"lockers": 2, "bench": 3},
 	},
 	"cocina": {
 		"muebles": ["counter", "fridge", "stove", "counter", "plant"],

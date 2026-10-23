@@ -15,6 +15,7 @@
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
+#   --gimnasio     (con --jefe gymbro) el gimnasio del Gymbro: máquinas en las paredes y mancuernas que te tiran
 #   --presentacion (con --jefe X, si se quiere) la presentación del jefe al aparecer (ui/presentacion.gd)
 extends "res://scripts/partida.gd"
 
@@ -71,6 +72,9 @@ func empezar_prueba() -> void:
 	elif "--porqueria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_porqueria()
+	elif "--gimnasio" in args:
+		set_process(false)   # sin la prueba larga
+		probar_gimnasio()
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
@@ -395,6 +399,144 @@ func probar_porqueria() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
 	Captura.foto("captura-porqueria-medio.png")
+	get_tree().quit()
+
+
+# Con "--captura --jefe gymbro --gimnasio": el gimnasio del Gymbro (catalogo.gd, "jefe-gymbro", y
+# peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga él, y cuenta en la
+# terminal: las máquinas y en qué paredes están, las lámparas (3), qué parte del suelo queda libre, las mancuernas
+# (12, separadas, lejos de la puerta y de los muebles); que al pasar andando por encima de una Johnny se cae, no se
+# mueve ni ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la mancuerna sale rodando; y que rodando
+# (la esquiva) se pasa por encima sin caer. Cada línea dice lo esperado. Saca captura-gimnasio.png (la sala entera,
+# con la cámara alejada) y captura-gimnasio-caido.png (Johnny en el suelo con las estrellitas) y se cierra
+func probar_gimnasio() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe gymbro, la suya
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca el Gymbro: aquí se prueba la habitación
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true   # todo descubierto
+		mapa.niebla[s.id] = 0.0
+	var lista: Array = sitio.get("peligros", []).filter(func(q): return q.tipo == "tropiezos")
+	if lista.is_empty():
+		print("Gimnasio: el piso del jefe (%s) no tiene mancuernas (¡mal!)" % planta.jefe)
+		get_tree().quit()
+		return
+	var datos: Dictionary = lista[0]
+	var sala: Dictionary = sitio.apt.salas[0]
+	var maquinas := ["treadmill", "benchpress", "cablemachine", "dumbbellrack", "weightplates", "lockers", "bench"]
+	var de_gimnasio: Array = sitio.muebles.filter(func(m): return m.tipo in maquinas)
+	var lamparas: int = sitio.muebles.filter(func(m): return m.tipo == "lamp").size()
+	var paredes := {}
+	var ocupado := 0.0
+	for m in sitio.muebles:
+		paredes[m.lado] = paredes.get(m.lado, 0) + 1
+		ocupado += m.w * m.h
+	var suelo: float = sala.ancho * sala.fondo * Peligros.CASILLA * Peligros.CASILLA
+	print("Gimnasio (jefe %s): muebles %d, de gimnasio %d (esperado: 12 o más) · lámparas %d (esperado: 3) · otros %d (esperado: 0) · por pared %s (esperado: en las 4) · suelo libre %d %% (esperado: menos de 92)" % [
+		planta.jefe, sitio.muebles.size(), de_gimnasio.size(), lamparas, sitio.muebles.size() - de_gimnasio.size() - lamparas,
+		paredes, roundi(100.0 * (1.0 - ocupado / suelo))])
+	var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
+		(sitio.apt.entrada.c + 1) * Peligros.CASILLA)
+	var cerca := 9999.0
+	for a in datos.cosas:
+		for b in datos.cosas:
+			if a != b:
+				cerca = minf(cerca, a.pos.distance_to(b.pos))
+	print("Gimnasio: mancuernas %d (esperado: 12) · la más cercana a otra, a %d (esperado: 110 o más) · alguna junto a la puerta %s (esperado: false) · alguna junto a un mueble %s (esperado: false) · donde aparece Johnny, sin mancuerna %s (esperado: true)" % [
+		datos.cosas.size(), roundi(cerca), datos.cosas.any(func(k): return entrada.grow(60.0).has_point(k.pos)),
+		datos.cosas.any(func(k): return sitio.muebles.any(func(m): return Muebles.hueco(m).grow(20.0).has_point(k.pos))),
+		datos.cosas.all(func(k): return k.pos.distance_to(johnny.position) > 60.0)])
+	# la sala entera, desde el medio y con la cámara alejada
+	var camara: Camera2D = johnny.get_node("Camara")
+	johnny.position = sala.centro
+	johnny.direccion = "s"
+	camara.zoom = Vector2(0.66, 0.66)
+	camara.reset_smoothing()
+	luz.alternar()   # sin penumbra, para que se vea todo
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-gimnasio.png")
+	luz.alternar()
+	camara.zoom = Vector2.ONE
+	# una mancuerna con sitio libre a los dos lados para pasar por encima (sin muebles ni otras mancuernas)
+	var tropiezos: Node = mapa.get_node("Tropiezos")
+	var hueco_para := func(k: Dictionary, dir: Vector2) -> bool:
+		for paso in range(-100, 181, 8):
+			var p: Vector2 = k.pos + dir * paso
+			if absi(paso) > 30 and not Peligros.libre_para_cosas(sitio, sala.id, p, 22.0):
+				return false
+			for otra in datos.cosas:
+				if otra != k and otra.pos.distance_to(p) < 40.0:
+					return false
+		return true
+	var buscar := func(menos: Dictionary) -> Array:
+		for k in datos.cosas:
+			if k == menos:
+				continue
+			for dir in [Vector2.RIGHT, Vector2.LEFT, Vector2.DOWN, Vector2.UP]:
+				if hueco_para.call(k, dir):
+					return [k, dir]
+		return []
+	var accion := {Vector2.RIGHT: "derecha", Vector2.LEFT: "izquierda", Vector2.DOWN: "abajo", Vector2.UP: "arriba"}
+	var elegida: Array = buscar.call({})
+	if elegida.is_empty():
+		print("Gimnasio: ninguna mancuerna con sitio para pasar por encima (¡mal!)")
+		get_tree().quit()
+		return
+	var cosa: Dictionary = elegida[0]
+	var dir: Vector2 = elegida[1]
+	var antes: Vector2 = cosa.pos
+	# andando hacia ella: se cae
+	johnny.vida = johnny.stats.vida_max
+	johnny.velocity = Vector2.ZERO
+	johnny.position = cosa.pos - dir * 90.0 - Vector2(0, tropiezos.PIES)
+	camara.reset_smoothing()
+	Input.action_press(accion[dir])
+	var espera := 0.0
+	while johnny.caido_t <= 0.0 and espera < 2.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	var t0 := Time.get_ticks_msec()
+	print("Gimnasio: andando hacia una mancuerna, se cae %s (esperado: true)" % (johnny.caido_t > 0.0))
+	await get_tree().create_timer(0.4).timeout
+	var tumbado := absf(rad_to_deg(johnny.sprite.rotation))
+	var quieto: Vector2 = johnny.position
+	Input.action_press("atacar")
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-gimnasio-caido.png")
+	await get_tree().create_timer(0.6).timeout
+	print("Gimnasio: en el suelo, tumbado %d° (esperado: 90) · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · la mancuerna ha rodado %d (esperado: entre 30 y 120)" % [
+		roundi(tumbado), roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0, roundi(cosa.pos.distance_to(antes))])
+	Input.action_release("atacar")
+	while johnny.caido_t > 0.0 and Time.get_ticks_msec() - t0 < 4000:
+		await get_tree().physics_frame
+	var dura := (Time.get_ticks_msec() - t0) / 1000.0
+	var de_pie: Vector2 = johnny.position
+	await get_tree().create_timer(0.4).timeout
+	Input.action_release(accion[dir])
+	print("Gimnasio: se levanta a los %.2f s (esperado: 2,0) · derecho %s (esperado: true) · luego anda %d en 0,4 s (esperado: más de 30) · vida perdida %d (esperado: 0)" % [
+		dura, is_zero_approx(johnny.sprite.rotation), roundi(johnny.position.distance_to(de_pie)), johnny.stats.vida_max - johnny.vida])
+	# rodando por encima de otra: no se cae
+	await get_tree().create_timer(0.8).timeout
+	var otra: Array = buscar.call(cosa)
+	if otra.is_empty():
+		print("Gimnasio: ninguna otra mancuerna con sitio para rodar por encima (¡mal!)")
+		get_tree().quit()
+		return
+	johnny.velocity = Vector2.ZERO
+	johnny.position = otra[0].pos - otra[1] * 60.0 - Vector2(0, tropiezos.PIES)
+	await get_tree().physics_frame
+	johnny.esquivar(otra[1])
+	await get_tree().create_timer(0.6).timeout
+	var pasada: float = (johnny.position + Vector2(0, tropiezos.PIES) - otra[0].pos).dot(otra[1])
+	print("Gimnasio: rodando por encima de otra, se cae %s (esperado: false) · la ha pasado %s (esperado: true)" % [
+		johnny.caido_t > 0.0, pasada > 20.0])
 	get_tree().quit()
 
 

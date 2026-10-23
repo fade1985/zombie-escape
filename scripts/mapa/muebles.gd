@@ -48,12 +48,17 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 		if Catalogo.SALAS.has(propio):
 			uso = propio
 		var datos: Dictionary = Catalogo.SALAS[uso]
-		var cuantos: Array = datos.cuantos
+		var cuantos: Array = datos.get("cuantos", [0, 0])
 		# en las habitaciones grandes cabe algún mueble más
 		var extra := mini(2, floori(s.casillas / 220.0))
 		var fondo: Array = pared_fondo(uso, rng, geo, s.id, despejar, paso) if datos.has("plantillas") else []
 		if not fondo.is_empty():
 			lista += fondo
+		elif datos.has("llenar"):
+			# las paredes llenas, un mueble detrás de otro (el gimnasio); antes, sueltos, los de "primero" (las lámparas)
+			var primeros: Array = sueltos(uso, rng, geo, datos.primero.size(), datos.primero.size(),
+				{"zona": s.id, "despejar": despejar, "paso": paso}) if datos.has("primero") else []
+			lista += primeros + llenar(uso, rng, geo, s.id, despejar, paso, primeros)
 		else:
 			lista += sueltos(uso, rng, geo, cuantos[0] + extra, cuantos[1] + extra,
 				{"zona": s.id, "despejar": despejar, "paso": paso})
@@ -123,6 +128,39 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 			x += PASILLO_ISLA - isla.entre
 		y += isla.cada
 	return puestas
+
+
+# ═════════════ Paredes llenas ═════════════
+
+# Las paredes de una sala llenas de muebles, uno detrás de otro (el gimnasio del Gymbro: máquinas por todas partes,
+# que le quitan sitio a la pelea). Recorre cada tramo de pared de punta a punta poniendo muebles al azar de los que
+# valen para esa pared (sin pasarse de los "iguales"), con un hueco entre uno y otro ("llenar": [mínimo, máximo]);
+# donde no cabe ninguno (delante de la puerta, o cortaría el paso), prueba un poco más allá. "puestos": los que ya
+# hay (no se pisan)
+static func llenar(uso: String, rng: RandomNumberGenerator, geo: Dictionary, zona: int, despejar: Array, paso: Paso,
+		puestos: Array) -> Array:
+	var datos: Dictionary = Catalogo.SALAS[uso]
+	var iguales: Dictionary = datos.get("iguales", {})
+	var nuevos := []
+	for tramo in tramos(geo, zona):
+		var en: float = tramo.a + rng.randf() * 24.0
+		while true:
+			var valen: Array = datos.muebles.filter(func(t): return va_en(t, tramo.lado) \
+				and Catalogo.MUEBLES[t].len <= tramo.b - en \
+				and (puestos + nuevos).filter(func(p): return p.tipo == t).size() < iguales.get(t, 1))
+			if valen.is_empty():
+				break
+			var tipo: String = valen[rng.randi() % valen.size()]
+			var largo: float = Catalogo.MUEBLES[tipo].len
+			var m := nuevo(tipo, tramo, roundf((en + largo / 2.0) / 2.0) * 2.0, zona)
+			var r := hueco(m)
+			if en_suelo(geo, r) and not despejar.any(func(k): return k.intersects(r)) \
+					and not (puestos + nuevos).any(func(p): return hueco(p).grow(6).intersects(r)) and paso.cabe(r):
+				nuevos.append(m)
+				en += largo + rng.randf_range(datos.llenar[0], datos.llenar[1])
+			else:
+				en += 16.0
+	return nuevos
 
 
 # ¿Cae el rectángulo entero en suelo de esa habitación?
@@ -258,6 +296,7 @@ static func sueltos(uso: String, rng: RandomNumberGenerator, geo: Dictionary, mi
 	var despejar: Array = op.get("despejar", [])
 	var paso: Paso = op.get("paso")
 	var surtido: Array = datos.muebles.filter(func(t): return Catalogo.MUEBLES[t].dep <= op.get("fondo_max", 9999))
+	var primero: Array = datos.get("primero", []).duplicate()   # los que van antes que los demás (las lámparas del gimnasio)
 	var quiere := minimo + rng.randi() % (maximo - minimo + 1)
 	var todos := tramos(geo, zona)
 	var de_arriba := todos.filter(func(t): return t.lado == "arriba")
@@ -268,7 +307,9 @@ static func sueltos(uso: String, rng: RandomNumberGenerator, geo: Dictionary, mi
 		# primero la pared (mejor las de arriba, donde cabe cualquier mueble) y luego un mueble que valga para ella
 		var de: Array = de_arriba if not de_arriba.is_empty() and rng.randf() < 0.55 else todos
 		var tramo: Dictionary = de[rng.randi() % de.size()]
-		var valen := surtido.filter(func(t): return va_en(t, tramo.lado) \
+		# (si a los de "primero" no se les encuentra sitio en la mitad de los intentos, se dejan)
+		var toca: bool = not primero.is_empty() and intento <= 120
+		var valen := ([primero[0]] if toca else surtido).filter(func(t): return va_en(t, tramo.lado) \
 			and Catalogo.MUEBLES[t].len <= tramo.b - tramo.a \
 			and puestos.filter(func(p): return p.tipo == t).size() < iguales.get(t, 1))
 		if valen.is_empty():
@@ -289,6 +330,8 @@ static func sueltos(uso: String, rng: RandomNumberGenerator, geo: Dictionary, mi
 		if paso and not paso.cabe(r):
 			continue
 		puestos.append(m)
+		if toca:
+			primero.pop_front()
 	return puestos
 
 
