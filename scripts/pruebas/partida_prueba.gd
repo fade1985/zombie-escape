@@ -2409,8 +2409,9 @@ func probar_modista(jefa: Node2D) -> void:
 
 
 # El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y a Johnny no le salpica; luego
-# dos golpes de Johnny seguidos: solo el primero salpica, un 1 % de su vida) y el aspirado (Johnny puesto a 220 de él:
-# 0,15 s al abrir la boca y otros 0,15 s con toda su fuerza; antes de la foto de los 7,7)
+# dos golpes de Johnny seguidos: solo el primero salpica, un 1 % de su vida) y el aspirado (hasta dónde llega: al
+# borde de la elipse limpia de su habitación, mire a donde mire; y Johnny puesto a 220 de él: 0,15 s al abrir la boca
+# y otros 0,15 s con toda su fuerza; antes de la foto de los 7,7)
 func probar_gloton() -> void:
 	# la bala de verdad, encima de él, con un paso suyo hecho a mano (para que no tarde nada)
 	var antes_vida: int = johnny.vida
@@ -2434,23 +2435,40 @@ func probar_gloton() -> void:
 		if mapa.zona_en(p) >= 0:
 			johnny.position = p
 			break
+	# hasta dónde llega: a la derecha, abajo, a la izquierda y arriba, y que las puntas caen en el borde de la elipse
+	var ov: Dictionary = jefa.la_elipse()
+	if ov.is_empty():
+		print("Aspirar: no encuentra la elipse limpia de su habitación (¡mal!)")
+	else:
+		var largos := PackedStringArray()
+		var en_borde := true
+		for a in [0.0, PI / 2.0, PI, -PI / 2.0]:
+			var largo: float = jefa.largo_aspirado(a, jefa.global_position)
+			largos.append("%.1f" % (largo / 32.0))
+			var punta: Vector2 = jefa.global_position + Vector2.from_angle(a) * largo
+			en_borde = en_borde and absf(((punta - ov.centro) / Vector2(ov.rx, ov.ry)).length() - 1.0) < 0.001
+		print("Aspirar: llega al borde de la elipse (de %.1f × %.1f casillas) mire a donde mire: a la derecha, abajo, a la izquierda y arriba %s casillas · las puntas, en el borde %s (esperado: true)" % [
+			ov.rx * 2.0 / 32.0, ov.ry * 2.0 / 32.0, " / ".join(largos), en_borde])
 	jefa.mirada = (johnny.position - jefa.position).normalized()
 	jefa.cambiar("aspirar")
-	# va de menos a más: lo que tira a 3, 5 y 8 casillas al abrir la boca, y lo que acerca a Johnny (quieto) en
-	# 0,15 s; luego lo mismo ya con toda su fuerza (Johnny anda a 210: de cerca le arrastra, de lejos no)
+	# va de menos a más: lo que tira a 3, 5, 8 y 12 casillas al abrir la boca, y lo que acerca a Johnny (quieto) en
+	# 0,15 s; luego lo mismo ya con toda su fuerza (Johnny anda a 210: de cerca le arrastra, de lejos no, pero le frena)
 	var sitio: Vector2 = johnny.position
-	var flojo := [3, 5, 8].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
+	var flojo := [3, 5, 8, 12].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
 	var d0: float = johnny.position.distance_to(jefa.position)
 	await get_tree().create_timer(0.15, false).timeout
 	var d1: float = johnny.position.distance_to(jefa.position)
 	johnny.position = sitio
 	johnny.velocity = Vector2.ZERO
 	jefa.t = jefa.CRECE_ASPIRAR
-	var fuerte := [3, 5, 8].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
+	var fuerte := [3, 5, 8, 12].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
 	await get_tree().create_timer(0.15, false).timeout
 	print("Aspirar (0,15 s, Johnny quieto): al empezar de %d a %d; con toda su fuerza de %d a %d (le ve: %s)" % [
 		d0, d1, d0, johnny.position.distance_to(jefa.position), jefa.se_ve(johnny)])
-	print("Aspirar, tirón a 3/5/8 casillas (Johnny anda a 210): al empezar %s; con toda su fuerza %s" % [flojo, fuerte])
+	print("Aspirar, tirón a 3/5/8/12 casillas (Johnny anda a 210): al empezar %s; con toda su fuerza %s (esperado: [327, 211, 84, 70])" % [flojo, fuerte])
+	# y la foto del cono, aspirando con toda su fuerza: hasta el borde de la elipse
+	print("Aspirar: foto en captura-gloton-aspira.png (aspirando: %s)" % (jefa.estado == "aspirar"))
+	Captura.foto("captura-gloton-aspira.png")
 
 
 # El Gymbro: se enfada ya (los suplementos): un golpe de 20 le quita 10 de vida y 10 de armadura, y sale la barra

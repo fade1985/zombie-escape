@@ -91,7 +91,7 @@
   Johnny se le pega; enfadado arde él mismo y deja un rastro de fuego al andar), `gymbro.gd` (minijefe de los Apartamentos: torbellino con
   los brazos abiertos, salto encima de Johnny y pesas en curva, `pesa.gd`; enfadado, armadura de suplementos con su
   barra debajo de la de vida, que se come la mitad del daño), `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo
-  de lenguas en abanico, aspira 5 s tirando de Johnny hacia la boca, cada vez más fuerte y mucho más de cerca, y se lo come si llega, sangre ácida al pegarle; una
+  de lenguas en abanico, aspira 5 s tirando de Johnny hacia la boca, hasta el borde de la elipse limpia de su habitación, cada vez más fuerte y mucho más de cerca, y se lo come si llega, sangre ácida al pegarle; una
   explosión le corta lo que hace), `antidisturbios.gd` (escudo por delante y doble por la espalda,
   porrazo, carga que le atonta si se estrella, silbato), `cocinero.gd` (a media distancia: abanico de cuchillos, lluvia
   de cuchillos con su marca en el suelo, sartén de aceite hirviendo y cuchillazo), `modista.gd` (se esconde entre los
