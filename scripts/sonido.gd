@@ -9,8 +9,9 @@
 # la vez no saturen), Efectos y Musica.
 # Con --captura (la prueba sin jugar) arranca sin sonido, como el modo ?pruebas del JS.
 #
-# La música de fondo: en el JS (src/musica.js) se inventaba sobre la marcha. Aquí son tramos grabados de
-# ella (tools/grabar_musica.mjs → assets/musica/, ya con su volumen) que se encadenan al azar con fundidos:
+# La música de fondo: una canción de 8 bits para cada momento, hecha aquí (cada una tiene su partitura en
+# tools/<canción>.mjs, que saca assets/musica/<canción>.ogg ya con su volumen). Suena en bucle sin cortes (el
+# final empalma con el principio) y, al cambiar de momento, la nueva entra mientras la vieja se apaga:
 #     Sonido.musica("explorar")   # "menu", "explorar", "jefe" o "" (se apaga despacio)
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 #
@@ -98,16 +99,17 @@ var ultimo := {}         # nombre → cuándo sonó (ms), para el "hueco"
 var voces: Array[AudioStreamPlayer] = []
 var siguiente := 0
 
-# Cuántos tramos hay grabados de cada momento. Los últimos no vienen del JS: son canciones de 8 bits hechas
-# aquí: menu-3 es «El último inquilino» (tools/el-ultimo-inquilino.mjs), explorar-6 es «Puerta a puerta»
-# (tools/puerta-a-puerta.mjs) y jefe-4 es «Turno de noche» (tools/turno-de-noche.mjs)
-const TRAMOS := {"menu": 3, "explorar": 6, "jefe": 4}
-const FUNDIDO := 3.0     # segundos que tarda en pasar de un tramo a otro
+# La canción de cada momento (assets/musica/<nombre>.ogg) y cuántos compases tiene (los de su partitura), para
+# que empiece siempre al principio de uno
+const CANCIONES := {
+	"menu": {"nombre": "el-ultimo-inquilino", "compases": 32},   # «El último inquilino»
+	"explorar": {"nombre": "puerta-a-puerta", "compases": 40},    # «Puerta a puerta»
+	"jefe": {"nombre": "turno-de-noche", "compases": 52},         # «Turno de noche»: jefes, hordas y rescates
+}
+const FUNDIDO := 3.0     # segundos que tarda en pasar de una canción a otra
 var momento := ""        # lo que suena ahora
 var sonando: AudioStreamPlayer = null   # de los dos reproductores de música, el que está sonando
 var otro: AudioStreamPlayer = null
-var ultimo_tramo := ""   # para no repetir el mismo tramo dos veces seguidas
-var queda := 0.0         # segundos que le quedan al tramo que suena
 var quieto := false      # sin sonido a propósito (el ajuste de Opciones, o la prueba con --captura)
 var fuera := false       # el juego no se ve: sin sonido hasta que vuelva
 var al_ocultar: JavaScriptObject   # (web) el aviso del navegador cuando la página se oculta o vuelve a verse
@@ -175,7 +177,7 @@ func reproductor_musica() -> AudioStreamPlayer:
 	return r
 
 
-# Cambia de momento: el tramo nuevo entra mientras el viejo se apaga
+# Cambia de momento: la canción nueva entra mientras la vieja se apaga
 func musica(nuevo: String) -> void:
 	if nuevo == momento:
 		return
@@ -183,44 +185,36 @@ func musica(nuevo: String) -> void:
 	if nuevo == "":
 		fundir(sonando, 0.0, 1.5)
 		return
-	otro_tramo()
+	poner_cancion()
 
 
-func _process(delta: float) -> void:
-	if momento == "":
-		return
-	queda -= delta
-	if queda <= FUNDIDO:
-		otro_tramo()   # se acaba: el siguiente, al azar
-
-
-# Elige un tramo del momento (no el mismo que acaba de sonar), empezando por cualquier sitio de su primera
-# mitad para que tampoco empiece siempre igual, y lo funde con el que sonaba
-func otro_tramo() -> void:
-	var nombre := ultimo_tramo
-	while nombre == ultimo_tramo:
-		nombre = "%s-%d" % [momento, randi_range(1, TRAMOS[momento])]
-		if TRAMOS[momento] == 1:
-			break
-	ultimo_tramo = nombre
-	var tramo: AudioStream = load("res://assets/musica/%s.ogg" % nombre)
-	var desde := randf_range(0.0, tramo.get_length() * 0.5)
-	queda = tramo.get_length() - desde
+# Pone la canción del momento en bucle, empezando al principio de un compás al azar para que no suene siempre
+# igual, y la funde con la que sonaba
+func poner_cancion() -> void:
+	var c: Dictionary = CANCIONES[momento]
+	var cancion: AudioStreamOggVorbis = load("res://assets/musica/%s.ogg" % c.nombre)
+	cancion.loop = true   # el final empalma con el principio
+	var compases: int = c.compases
+	var desde := randi_range(0, compases - 1) * cancion.get_length() / compases
 	fundir(sonando, 0.0, FUNDIDO)
 	var r := otro
 	otro = sonando
 	sonando = r
-	r.stream = tramo
+	r.stream = cancion
 	r.volume_db = -60.0
 	r.play(desde)
 	fundir(r, 1.0, FUNDIDO)
 
 
-# Sube o baja el volumen de un reproductor poco a poco (a 0: además se para)
+# Sube o baja el volumen de un reproductor poco a poco (a 0: además se para). Si aún iba por la mitad de otro
+# fundido, ese se corta: si no, al cambiar dos veces de momento muy seguido, el viejo pararía la canción nueva
 func fundir(r: AudioStreamPlayer, hasta: float, segundos: float) -> void:
 	if not r.playing:
 		return
+	if r.has_meta("fundido"):
+		(r.get_meta("fundido") as Tween).kill()
 	var t := r.create_tween()
+	r.set_meta("fundido", t)
 	t.tween_method(func(v: float): r.volume_db = linear_to_db(v), db_to_linear(r.volume_db), hasta, segundos)
 	if hasta == 0.0:
 		t.tween_callback(r.stop)
@@ -235,7 +229,7 @@ func jingle(gana: bool) -> void:
 	var lista := []
 	for i in notas.size():
 		var largo := dur * (4.0 if i == notas.size() - 1 else 1.4)
-		# el volumen del JS (0,05) por el de su música (0,55): los tramos grabados ya lo llevan dentro
+		# el volumen del JS (0,05) por el de su música (0,55): las canciones ya están a ese nivel
 		lista.append([raiz * pow(2.0, notas[i] / 12.0), largo, "cuadrada", 0.05 * 0.55, 0, 0.05 + i * dur])
 	var r := otro if not otro.playing else reproductor_musica()
 	r.stream = sintetizar(lista)

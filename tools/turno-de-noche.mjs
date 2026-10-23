@@ -3,9 +3,9 @@
 //  (no es arreglo de nada). Johnny limpiando el edificio de madrugada: un arpegio que no para,
 //  un bajo que empuja y una melodía en modo frigio (el fa natural sobre mi le da el aire de miedo).
 //
-//  En el juego es el cuarto tramo de la música de peleas (assets/musica/jefe-4.ogg, ver scripts/sonido.gd).
+//  En el juego es la música de las peleas (assets/musica/turno-de-noche.ogg, ver scripts/sonido.gd).
 //
-//  node tools/turno-de-noche.mjs   → tools/efectos/turno-de-noche.wav y assets/musica/jefe-4.ogg (necesita ffmpeg)
+//  node tools/turno-de-noche.mjs   → tools/efectos/turno-de-noche.wav y assets/musica/turno-de-noche.ogg (necesita ffmpeg)
 //  Sale en bucle perfecto. El sonido lo hace tools/motor-8bit.mjs; aquí solo van los instrumentos
 //  y la PARTITURA (más abajo): para cambiar la canción, tocar eso.
 // ─────────────────────────────────────────────
@@ -15,8 +15,8 @@ import { crearMotor, pasarAOgg, sube, pulso, ruido, paso, SR } from './motor-8bi
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SALIDA = path.join(ROOT, 'tools', 'efectos', 'turno-de-noche.wav');
-const OGG = path.join(ROOT, 'assets', 'musica', 'jefe-4.ogg');
-const VOLUMEN = -9.3;   // decibelios: así queda a -25 LUFS, como jefe-1, jefe-2 y jefe-3
+const OGG = path.join(ROOT, 'assets', 'musica', 'turno-de-noche.ogg');
+const VOLUMEN = -9.3;   // decibelios: así queda a -25 LUFS, como la música de peleas que se grabó del juego JS
 
 // ── Instrumentos ────────────────────────────────
 const INS = {

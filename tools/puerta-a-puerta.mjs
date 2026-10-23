@@ -7,9 +7,9 @@
 //  acorde (do, si, si bemol, la) mientras el bajo se queda quieto en do. En medio hay un sótano:
 //  sin batería, con goteras, una puerta que cruje y algo que gruñe lejos.
 //
-//  En el juego es el sexto tramo de la música de explorar (assets/musica/explorar-6.ogg, ver scripts/sonido.gd).
+//  En el juego es la música de explorar (assets/musica/puerta-a-puerta.ogg, ver scripts/sonido.gd).
 //
-//  node tools/puerta-a-puerta.mjs   → tools/efectos/puerta-a-puerta.wav y assets/musica/explorar-6.ogg (necesita ffmpeg)
+//  node tools/puerta-a-puerta.mjs   → tools/efectos/puerta-a-puerta.wav y assets/musica/puerta-a-puerta.ogg (necesita ffmpeg)
 //  Sale en bucle perfecto. El sonido lo hace tools/motor-8bit.mjs; aquí solo van los instrumentos
 //  y la PARTITURA (más abajo): para cambiar la canción, tocar eso.
 // ─────────────────────────────────────────────
@@ -19,8 +19,8 @@ import { crearMotor, pasarAOgg, sube, pulso, triangulo, ruido, paso, SR } from '
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SALIDA = path.join(ROOT, 'tools', 'efectos', 'puerta-a-puerta.wav');
-const OGG = path.join(ROOT, 'assets', 'musica', 'explorar-6.ogg');
-const VOLUMEN = -11.6;   // decibelios: así queda a -28,1 LUFS, la media de explorar-1 a explorar-5
+const OGG = path.join(ROOT, 'assets', 'musica', 'puerta-a-puerta.ogg');
+const VOLUMEN = -11.6;   // decibelios: así queda a -28,1 LUFS, la media de la música de explorar que se grabó del juego JS
 
 // ── Instrumentos ────────────────────────────────
 const INS = {

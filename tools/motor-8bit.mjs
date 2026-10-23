@@ -302,8 +302,9 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
 }
 
 // Pasa el .wav a .ogg para el juego, como el resto de assets/musica/ (32 000 muestras por segundo, la misma
-// calidad que tools/grabar_musica.mjs). «decibelios» lo baja hasta el volumen de los otros tramos (los de
-// «jefe» están a -25 LUFS; se mide con `ffmpeg -i x.ogg -af ebur128 -f null -`). Necesita ffmpeg.
+// calidad que la música que se grababa del juego JS). «decibelios» lo baja hasta su volumen en el juego (el menú
+// está a -29,7 LUFS, explorar a -28,1 y las peleas a -25; se mide con `ffmpeg -i x.ogg -af ebur128 -f null -`).
+// Necesita ffmpeg.
 export function pasarAOgg(wav, ogg, decibelios) {
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-af', `volume=${decibelios}dB`,
     '-ar', '32000', '-c:a', 'libvorbis', '-q:a', '1', ogg]);

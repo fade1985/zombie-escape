@@ -8,9 +8,9 @@
 //  que se repite en escalón: sobre re menor, sobre sol menor y sobre si bemol. Antes de volver,
 //  siempre pasa por mi bemol mayor, el acorde «raro» que da el escalofrío.
 //
-//  En el juego es el tercer tramo de la música del menú (assets/musica/menu-3.ogg, ver scripts/sonido.gd).
+//  En el juego es la música del menú (assets/musica/el-ultimo-inquilino.ogg, ver scripts/sonido.gd).
 //
-//  node tools/el-ultimo-inquilino.mjs   → tools/efectos/el-ultimo-inquilino.wav y assets/musica/menu-3.ogg (necesita ffmpeg)
+//  node tools/el-ultimo-inquilino.mjs   → tools/efectos/el-ultimo-inquilino.wav y assets/musica/el-ultimo-inquilino.ogg (necesita ffmpeg)
 //  Sale en bucle perfecto. El sonido lo hace tools/motor-8bit.mjs; aquí solo van los instrumentos
 //  y la PARTITURA (más abajo): para cambiar la canción, tocar eso.
 // ─────────────────────────────────────────────
@@ -20,8 +20,8 @@ import { crearMotor, pasarAOgg, sube, pulso, ruido, paso, SR } from './motor-8bi
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SALIDA = path.join(ROOT, 'tools', 'efectos', 'el-ultimo-inquilino.wav');
-const OGG = path.join(ROOT, 'assets', 'musica', 'menu-3.ogg');
-const VOLUMEN = -13.9;   // decibelios: así queda a -29,7 LUFS, entre menu-1 (-30,4) y menu-2 (-28,9)
+const OGG = path.join(ROOT, 'assets', 'musica', 'el-ultimo-inquilino.ogg');
+const VOLUMEN = -13.9;   // decibelios: así queda a -29,7 LUFS, como la música del menú que se grabó del juego JS
 
 // ── Instrumentos ────────────────────────────────
 const INS = {

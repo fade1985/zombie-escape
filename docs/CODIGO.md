@@ -345,9 +345,9 @@
 
 - `sprites/`: copia de los sprites del JS (`.png` + `.json` + `manifest.json`); los `.tres` de al lado son sus
   animaciones. Hoja nueva → `py tools/hacer_frames.py assets/sprites/zombi-normal`.
-- `musica/`: tramos (`menu-*`, `explorar-*`, `jefe-*`.ogg). Casi todos están grabados del JS con
-  `node tools/grabar_musica.mjs` (necesita el JS y ffmpeg); `menu-3`, `explorar-6` y `jefe-4` son canciones de
-  8 bits hechas aquí (ver `tools/`). Si se añaden más, cambiar `TRAMOS` en `sonido.gd`.
+- `musica/`: las tres canciones de 8 bits hechas aquí, una por momento (ver `tools/`): `el-ultimo-inquilino.ogg`
+  (menú), `puerta-a-puerta.ogg` (explorar) y `turno-de-noche.ogg` (peleas). Suenan en bucle; la de cada momento se
+  elige en `CANCIONES` de `sonido.gd` (con sus compases, para que entre siempre al principio de uno).
 - `ui/`, `fuentes/`: HUD y menús del JS (la fuente es nítida a 16 y 32). En `fuentes/` también, la letra de los
   nombres de los jefes: `jersey-25.ttf` (Jersey 25, de Google Fonts; nítida a 25 y 50), con su licencia OFL
   `jersey-25-OFL.txt`, que tiene que ir siempre con ella. `tiles/`: texturas para los TileSets.
@@ -383,9 +383,9 @@ helipuerto, dibujadas con código), `centro_sprites.py`
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 Música de 8 bits: `motor-8bit.mjs` (ondas de consola, percusión, eco y el .wav en bucle) y las canciones hechas con
-él, cada una con su partitura: `el-ultimo-inquilino.mjs` (menú, `menu-3`), `puerta-a-puerta.mjs` (explorar,
-`explorar-6`), `turno-de-noche.mjs` (peleas, `jefe-4`) y `villancico-8bit.mjs` (prueba, no está en el juego).
-`node tools/<canción>.mjs` saca el .wav en `tools/efectos/` y el .ogg ya a su volumen; con `--veces 4`, además,
+él, cada una con su partitura: `el-ultimo-inquilino.mjs` (menú), `puerta-a-puerta.mjs` (explorar),
+`turno-de-noche.mjs` (peleas) y `villancico-8bit.mjs` (prueba, no está en el juego).
+`node tools/<canción>.mjs` saca el .wav en `tools/efectos/` y `assets/musica/<canción>.ogg` ya a su volumen; con `--veces 4`, además,
 el .wav repetido para oír si cansa en bucle.
 
 ## docs/ (del juego JS)
