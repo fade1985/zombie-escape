@@ -84,10 +84,10 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    no lleva zombis: si no, nadie podría limpiar el piso
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
-# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}; las puertas de tienda de la pared de arriba
-# llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd). Las puertas de los pisos
-# llevan "placa" (su letra, o "llave" la de la sala de mantenimiento): en vez del cartel, una placa junto a la
-# puerta; y el ascensor, "planta" (0 = la baja): el número grande que se ve a su lado (puerta.gd)
+# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso}; las puertas de tienda de la pared de arriba
+# llevan "neon" (el tipo de tienda): su letrero de neón encima (neon.gd). Las puertas de los pisos llevan "placa" (su
+# letra, o "llave" la de la sala de mantenimiento): una placa junto a la puerta; y el ascensor, "planta" (0 = la
+# baja): el número grande que se ve a su lado (puerta.gd)
 # "su_jefe": el zombi jefe de esta planta (el minijefe que le toca; "" = el del edificio)
 static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dictionary:
 	if semilla != 0:
@@ -144,7 +144,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			planta.mantenimiento = planta.sitios.size()
 			planta.sitios.append(mantenimiento(pasillo.salidas.size()))
 			pasillo.salidas.append({"dir": h.dir, "en": h.en, "tipo": "puerta", "a": planta.mantenimiento, "vuelta": 0,
-				"cerrojo": "", "aviso": "", "letrero": "Mantenimiento", "placa": "llave"})
+				"cerrojo": "", "aviso": "", "placa": "llave"})
 			continue
 		var jefe: bool = h == de_jefa
 		# la puerta del apartamento está en el lado que da al pasillo
@@ -189,14 +189,14 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			planta.joyeria = {"sitio": idx, "sala": acorazada.id, "abierta": false, "dorada": "guardia", "suelo": {},
 				"alarma": -1.0, "puerta": apt.puertas.filter(func(p): return p.a == acorazada.id or p.b == acorazada.id)[0]}
 		sitio.salidas.append({"dir": apt.entrada.lado, "en": (apt.entrada.c + 1) * CASILLA, "tipo": "puerta",
-			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": "", "letrero": planta.nombre})
+			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": ""})
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
-			"aviso": "", "letrero": nombre}
+			"aviso": ""}
 		if tipo_tienda == "":
 			puerta.placa = h.letra   # los pisos, como en un edificio de verdad: su letra en una placa junto a la puerta
 		if tipo_tienda != "" and h.dir == "arriba" and not (jefe and not mini.is_empty()):
-			# en la pared de arriba se ve la fachada de la tienda: su letrero de neón (en vez del cartel) y un
-			# escaparate a cada lado de la puerta (mapa.gd)
+			# en la pared de arriba se ve la fachada de la tienda: su letrero de neón y un escaparate a cada lado de la
+			# puerta (mapa.gd)
 			puerta.neon = tipo_tienda
 			for lado_x in [-1, 1]:
 				pasillo.escaparates.append({"x": h.en + lado_x * ESCAPARATE_A, "tienda": tipo_tienda})
@@ -206,13 +206,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		pasillo.salidas.append(puerta)
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
-		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "letrero": "", "planta": num - 1})   # sin letrero: lo dicen sus cintas
+		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": num - 1})
 	# por donde se ha llegado (en la planta baja, el portal del edificio) y por donde se sigue subiendo
 	pasillo.salidas.append({"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
-		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido",
-		"letrero": "Portal" if baja else "Bajada"})
+		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido"})
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
-		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + planta.el_jefe, "letrero": "Escaleras"})
+		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + planta.el_jefe})
 	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo
 	# (algunos fallan de vez en cuando), como en src/rooms.js
 	pasillo.apliques = []
@@ -316,9 +315,9 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(roundf(ancho * 0.6 / 2.0) * 2.0, roundf(alto * 0.54 / 2.0) * 2.0)}
 	sitio.salidas = [
 		{"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
-			"aviso": "Ya no hay vuelta atrás", "letrero": "Escalera"},
+			"aviso": "Ya no hay vuelta atrás"},
 		{"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "incendios": true, "a": -1, "vuelta": -1, "cerrojo": "jefa",
-			"aviso": "Bloqueada: acaba antes con " + planta.el_jefe, "letrero": "Incendios"},
+			"aviso": "Bloqueada: acaba antes con " + planta.el_jefe},
 	]
 	sitio.muebles = aparatos(sitio, edificio)
 	# manchas de sangre sueltas (las de manchas-suelo.png), fuera del helipuerto
@@ -368,7 +367,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		"dueno": Muebles.plano_rectangular(SALA_COLS, SALA_FILAS), "zombis": [], "limpio": true, "visitado": false,
 		"surtido": rng.randi(), "manchas": []}
 	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
-		"aviso": "", "letrero": "Pasillo"}]
+		"aviso": ""}]
 	sitio.muebles = Muebles.de_sala("mantenimiento", {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": sitio.dueno},
 		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0)], rng,
 		[SITIO_TALLER, SITIO_VECINOS, SITIO_CENTRO])
@@ -388,7 +387,7 @@ static func exposicion(mant: int) -> Dictionary:
 	return {"tipo": "expo", "nombre": "Exposición", "ancho": ancho, "alto": alto, "muebles": [],
 		"dueno": Muebles.plano_rectangular(EXPO_COLS, EXPO_FILAS), "zombis": [], "limpio": true, "visitado": true,
 		"surtido": 0, "salidas": [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": mant, "vuelta": 0,
-		"cerrojo": "", "aviso": "", "letrero": "Mantenimiento"}]}
+		"cerrojo": "", "aviso": ""}]}
 
 
 # Los zombis de un apartamento: ya están dentro, dormidos y repartidos por las habitaciones según su

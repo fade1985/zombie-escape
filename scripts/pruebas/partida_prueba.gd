@@ -1944,8 +1944,8 @@ func probar_ascensor() -> void:
 	print("Cae el jefe: escaleras abiertas %s · el ascensor «%s» lleva al sitio %d, «%s» (esperado: true, «», %d, mantenimiento)" % [
 		planta.jefa_muerta, salida.cerrojo, salida.a, planta.sitios[salida.a].tipo, planta.sitios.size() - 1])
 	await cruzar(0)
-	print("Al salir al pasillo: Johnny dice «%s» (esperado: que ha arreglado el ascensor) · ascensor abierto %s, letrero «%s» (esperado: true, Mantenimiento)" % [
-		aviso.text, mapa.puertas[asc].abierta, salida.letrero])
+	print("Al salir al pasillo: Johnny dice «%s» (esperado: que ha arreglado el ascensor) · ascensor abierto %s (esperado: true)" % [
+		aviso.text, mapa.puertas[asc].abierta])
 	johnny.position = mapa.puertas[asc].llegada() + Vector2(0, 40)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()

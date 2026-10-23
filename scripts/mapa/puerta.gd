@@ -52,7 +52,7 @@ const LETRITAS := {
 	"T": ["XXX", ".X.", ".X.", ".X.", ".X."],
 }
 
-var salida: Dictionary   # la de planta.gd: dir, tipo, letrero...
+var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var abierta := true:     # si se puede pasar
 	set(valor):
@@ -77,21 +77,8 @@ func _ready() -> void:
 	zona.body_entered.connect(func(cuerpo):
 		if cuerpo.is_in_group("jugador"):
 			empujada.emit(indice))
-
-	# El letrero (las tiendas de la pared de arriba llevan el suyo de neón, que pone mapa.gd, y los pisos, su placa;
-	# el ascensor averiado no lleva: ya lo dicen sus cintas)
-	if salida.has("neon") or salida.has("placa") or salida.letrero == "":
-		return
-	var cartel := Label.new()
-	cartel.text = salida.letrero
-	cartel.theme = Tema.crear()   # la fuente pixel art, a 16 para que se vea nítida
-	cartel.add_theme_constant_override("outline_size", 4)
-	cartel.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))
-	cartel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	cartel.size = Vector2(120, 16)
-	cartel.position = {"arriba": Vector2(-60, -102), "abajo": Vector2(-60, -24), "izquierda": Vector2(-20, -56),
-		"derecha": Vector2(-100, -56)}[salida.dir]
-	add_child(cartel)
+	# (sin nada escrito encima: adónde lleva lo dicen el mapa de la esquina, las placas de los pisos, el cartel de la
+	# planta junto al ascensor y los letreros de neón de las tiendas)
 
 
 # Dónde aparece Johnny al llegar por esta puerta (un poco hacia dentro)

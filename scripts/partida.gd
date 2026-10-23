@@ -546,9 +546,9 @@ func arreglar_ascensor() -> void:
 	# la sala, con su puerta cambiada: lleva al ascensor de esta planta (lo demás, lo de siempre)
 	var sala: Dictionary = sala_mantenimiento.duplicate()
 	sala.salidas = [sala.salidas[0].duplicate()]
-	sala.salidas[0].merge({"tipo": "ascensor", "vuelta": i, "letrero": "Ascensor"}, true)
+	sala.salidas[0].merge({"tipo": "ascensor", "vuelta": i}, true)
 	planta.sitios.append(sala)
-	ascensor.merge({"a": planta.mantenimiento, "vuelta": 0, "cerrojo": "", "aviso": "", "letrero": "Mantenimiento"}, true)
+	ascensor.merge({"a": planta.mantenimiento, "vuelta": 0, "cerrojo": "", "aviso": ""}, true)
 	planta.ascensor_nuevo = true   # (el aviso de Johnny, al salir al pasillo: ver cruzar)
 
 
