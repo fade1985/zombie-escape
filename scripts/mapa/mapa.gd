@@ -25,12 +25,23 @@ const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
-const ORDENADOR_X := 480.0   # dónde va la mesa del ordenador en la sala de mantenimiento: en el centro de la pared de arriba
+# Lo que se usa de la sala de mantenimiento, en la pared de arriba de sus estancias (planta.gd; lo demás son muebles
+# del catálogo): la mesa del ordenador, en medio de la del despacho, con el corcho colgado a su izquierda; el banco de
+# trabajo (fase 7b) y el baúl, en el taller, a la derecha de la estantería; y la taquilla de los trajes de Johnny
+# (trajes.gd, parte 11), en el vestuario, en medio de lo que deja libre el plato de ducha
+const ORDENADOR_X := 576.0
+const CORCHO_X := 480.0
+const CORCHO := preload("res://assets/sprites/corcho.png")   # (tools/guias_mantenimiento.py)
 const ARMARITO := preload("res://scripts/mapa/armarito.gd")
 const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
-const BANCO_X := 135.0       # el banco de trabajo, en la esquina de la izquierda (fase 7b), y el baúl, a su derecha
-const BAUL_X := 240.0
-const TAQUILLA_X := 835.0    # la taquilla de los trajes de Johnny (trajes.gd), en la esquina de la derecha: tan lejos del muro como el banco (parte 11)
+const BANCO_X := 918.0
+const BAUL_X := 1010.0
+const TAQUILLA_X := 260.0
+# Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, con los de siempre (cemento y la pared
+# blanca y verde); el vestuario, de azulejo, como los baños de los pisos; y el despacho, con tarima y la pared beis con
+# friso de madera de los salones. [suelo, pared]: sprites suelo-<x>, pared-<x> y techo-<x>
+const ESTILO_MANTENIMIENTO := {"taller": ["mantenimiento", "mantenimiento"], "vestuario": ["bano-b", "bano-b"],
+	"despacho": ["salon-a", "salon-c"]}
 const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
 const CAFETERA_JUNTO := Vector2(64, -8)   # la cafetera de Johnny, en la habitación de la farmacéutica (viviendas.gd): a su derecha, por debajo de su bocadillo (el pie de su mesita)
 const CAMARAS := preload("res://scripts/mapa/camaras.gd")
@@ -141,16 +152,23 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			estilos[0] = {"suelo": load("res://assets/sprites/suelo-hormigon.png"),
 				"pared": load("res://assets/sprites/pared-azotea.png"), "techo": load("res://assets/sprites/techo-azotea.png")}
 			tapa = load("res://assets/sprites/tapa-azotea.png")
-		else:
+		else:   # la exposición del modo pruebas: como el taller de la sala de mantenimiento
 			estilos[0] = textura("mantenimiento", "")
 			tapa = load("res://assets/sprites/tapa-generica.png")
 	else:
 		dueno = sitio.apt.dueno
 		var tienda: bool = sitio.get("tienda", "") != ""
-		# la de todo el piso, como en el JS; en el centro comercial, la suya; en las viviendas, la del pasillo
+		# la de todo el piso, como en el JS; en el centro comercial, la suya; en las viviendas, la del pasillo; en la
+		# sala de mantenimiento, la de siempre
 		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-pasillo.png"
-			if sitio.tipo == "viviendas" else "res://assets/sprites/tapa-salon.png")
+			if sitio.tipo == "viviendas" else "res://assets/sprites/tapa-generica.png" if sitio.tipo == "mantenimiento"
+			else "res://assets/sprites/tapa-salon.png")
 		for s in sitio.apt.salas:
+			if sitio.tipo == "mantenimiento":
+				var de: Array = ESTILO_MANTENIMIENTO[s.uso]
+				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-%s.png" % de[0]),
+					"pared": load("res://assets/sprites/pared-%s.png" % de[1]), "techo": load("res://assets/sprites/techo-%s.png" % de[1])}
+				continue
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
 			if s.uso == "pasillo":   # el pasillo de las viviendas: como el de los pisos
 				estilos[s.id] = textura("pasillo", "")
@@ -495,6 +513,18 @@ func poner_muebles() -> void:
 		taquilla = ARRIMABLE.new()   # la de los trajes de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
 		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", "Taquilla", Color("#9fd3ff"), TAQUILLA_X, MURO, 56.0, 36.0)
 		cosas.add_child(taquilla)
+		# el corcho del despacho, colgado en la cara del muro de arriba (en su pie, como los escaparates de la galería,
+		# para ordenarse con ella), con su borde de abajo a media pared
+		var corcho := Node2D.new()
+		corcho.name = "Corcho"
+		corcho.position = Vector2(CORCHO_X, MURO + 1)
+		var dibujo := Sprite2D.new()
+		dibujo.texture = CORCHO
+		dibujo.centered = false
+		dibujo.scale = Vector2(2, 2)
+		dibujo.position = Vector2(-CORCHO.get_width(), -28 - CORCHO.get_height() * 2)
+		corcho.add_child(dibujo)
+		cosas.add_child(corcho)
 	if sitio.tipo == "viviendas":
 		poner_viviendas()
 
@@ -833,6 +863,7 @@ func poner_exposicion() -> void:
 		for id in ids.duplicate():
 			if MUEBLE.existe(id + "-lado"):
 				ids.append(id + "-lado")
+		ids = ids.filter(func(id): return MUEBLE.existe(id))   # (el váter y el lavabo del vestuario solo son de lado)
 		for id in ids:
 			var lado: bool = id.ends_with("-lado")
 			var tex: Texture2D = load(MUEBLE.ruta(id))

@@ -1,4 +1,4 @@
-# La taquilla de Johnny, en la sala de mantenimiento (parte 11, trozo 3; mapa.gd la pone en la esquina):
+# La taquilla de Johnny, en el vestuario de la sala de mantenimiento (parte 11, trozo 3; la pone mapa.gd):
 # al arrimarse (mapa/arrimable.gd → partida.abrir_taquilla) el juego se para y sale esta ventanita para elegir
 # el traje (trajes.gd): a la izquierda, Johnny de frente con el traje marcado (en silueta si aún no se tiene), y
 # a la derecha la lista: el conserje de siempre y los cuatro trajes, los que faltan con «???». Se elige uno y

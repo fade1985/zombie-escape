@@ -2664,5 +2664,90 @@
     "intento 4, semilla 404": "316d8653-9c48-4236-824a-9f865d00fe56"
    }
   }
+ },
+ "sala-mantenimiento-estancias": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "Los muebles nuevos de las tres estancias de la sala de mantenimiento (planta.gd: el vestuario, el despacho y el taller), con create_image_pixflux y la receta del banco, el baúl y la mesa del ordenador: la guía de py tools/guias_mantenimiento.py como init_image, no_background false y single color black outline, 4 semillas cada uno (101, 202, 303 y 404). De frente, high top-down y fuerza 45; el váter y el lavabo de lado (van en la pared de la izquierda del vestuario), fuerza 75 y \"turned sideways against the left wall\", como el carro de la portera; el corcho, que cuelga de la pared, view side y fuerza 60. Las elegidas, por Claude (el dueño puede cambiarlas: las cuatro de cada uno, con fondo, en assets/sources/mantenimiento/intentos/): la ducha 4 (la 2 traía la pared pintada detrás, más oscura), el banco 3, el váter 4 (la 1 con la cisterna gris de piedra), el lavabo 1 (en la 2 y la 4 el espejo sale torcido), la estantería 2 (la 3 con cubos y sangre en el suelo, fuera del mueble), la papelera 1 (la 3 y la 4, cubos negros con tapa) y el corcho 4 (el plano del edificio, de los que más se entiende). PixelLab pintó la pared detrás de la ducha y una sombra azulada debajo del banco y de la papelera, que quita() no se lleva: se quitan con py tools/guias_mantenimiento.py limpia. Fondo quitado con py tools/guias_centro.py quita; los muebles, al juego con py tools/importar.py (originales en assets/sources/salas/vestuario/, mantenimiento/ y despacho/) y el corcho con py tools/guias_mantenimiento.py corcho (original en assets/sources/mantenimiento/corcho.png). El carrito del conserje es el de la portera (janitorcart), de lado; la silla del ordenador se pidió quitar antes de hacerla.",
+  "coste": "28 generaciones (quedan 4960 de 5000 hasta el 23 nov)",
+  "piezas": {
+   "plato-ducha": {
+    "texto": "white shower tray in a dirty locker room seen in 3/4 top-down view, a chrome shower pipe with a shower head and a tap on the wall behind it, a chrome curtain rail with a mouldy teal plastic shower curtain pulled to the left side, the tray seen from above with a drain, its front edge facing the viewer, dirty, cracked, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 45,
+    "vista": "high top-down",
+    "descartadas": {
+     "intento 1, semilla 101": "2dd89b79-7bbf-47f4-bba4-158f067df987",
+     "intento 2, semilla 202": "f014b0fd-302b-4c8f-87b6-af6b35ab2188",
+     "intento 3, semilla 303": "c8eb8b8b-d49a-4368-8936-93fa424572f2"
+    },
+    "mueble-showertray (intento 4, semilla 404)": "a3c2ffe8-3f4c-4160-936e-ce7adaf42d72"
+   },
+   "banco-vestuario": {
+    "texto": "long wooden locker room bench without backrest seen in 3/4 top-down view, its seat of three wooden slats seen from above, iron legs with a crossbar and a pair of old worn boots under it facing the viewer, worn, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 45,
+    "vista": "high top-down",
+    "descartadas": {
+     "intento 1, semilla 101": "99b288e1-ffc5-4dee-a2dd-06348db79ce0",
+     "intento 2, semilla 202": "bde2c0e7-5c0a-4ad8-a14d-fa26b8362363",
+     "intento 4, semilla 404": "d5329e5f-4b35-449e-a4f8-0012d088bc48"
+    },
+    "mueble-lockerbench (intento 3, semilla 303)": "11d0c6a2-c76f-4105-bedc-73500fda380a"
+   },
+   "vater-vestuario-lado": {
+    "texto": "white porcelain toilet turned sideways against the left wall, seen in 3/4 top-down view, the cistern against the wall on the left with its lid and flush button seen from above, the bowl and the seat seen from above pointing to the right, its side and pedestal facing the viewer, dirty, stained, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 75,
+    "vista": "high top-down",
+    "descartadas": {
+     "intento 1, semilla 101": "cc60471a-b7a9-4a12-99ed-63c28fa48b5c",
+     "intento 2, semilla 202": "3dfef4c3-f685-461f-87ae-a2aecc4b6c7c",
+     "intento 3, semilla 303": "0ae09406-5efd-4b6d-9290-53a5152cca72"
+    },
+    "mueble-stafftoilet-lado (intento 4, semilla 404)": "e500152a-f387-447c-88dc-fe16452d566a"
+   },
+   "lavabo-espejo-lado": {
+    "texto": "white porcelain pedestal washbasin turned sideways against the left wall, seen in 3/4 top-down view, a narrow mirror with a wooden frame on the wall above it seen edge-on, the basin seen from above with a chrome tap next to the wall, the pedestal facing the viewer, dirty, cracked, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 75,
+    "vista": "high top-down",
+    "descartadas": {
+     "intento 2, semilla 202": "31e6ad3b-3d45-41a3-afd0-bcd7140b1dec",
+     "intento 3, semilla 303": "a2966587-8fa6-4e41-870f-71539fc51d7a",
+     "intento 4, semilla 404": "ad8a8611-77ae-4ed2-802e-4c576219fec1"
+    },
+    "mueble-staffsink-lado (intento 1, semilla 101)": "85698512-a8a2-4840-9dee-858d1034e06b"
+   },
+   "estanteria-botes": {
+    "texto": "grey metal storage shelf seen in 3/4 top-down view, a few paint cans on its top seen from above, three shelves full of paint cans, spray cans, glass jars and plastic jugs facing the viewer, two big white paint buckets on the bottom, worn, dented, rusty, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 45,
+    "vista": "high top-down",
+    "descartadas": {
+     "intento 1, semilla 101": "2118d1b4-0471-4877-bb20-6ddac774ef85",
+     "intento 3, semilla 303": "c01dca70-e7f4-4aa9-bf4e-388b55dc1ffe",
+     "intento 4, semilla 404": "9c3b1edc-4b26-4c26-85a8-2c26adf085a0"
+    },
+    "mueble-canshelf (intento 2, semilla 202)": "e9480a14-6b64-48d1-95a2-cfe68d6f1b65"
+   },
+   "papelera": {
+    "texto": "small dark grey metal mesh office wastebasket seen in 3/4 top-down view, its open top seen from above full of crumpled white paper, its mesh side facing the viewer, dented, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 45,
+    "vista": "high top-down",
+    "descartadas": {
+     "intento 2, semilla 202": "5b0e5afc-7d18-42b4-8633-e70de6210346",
+     "intento 3, semilla 303": "eccc6732-36d9-4c2c-a3ce-85bf770e86a7",
+     "intento 4, semilla 404": "9de92447-5d2e-40d8-9e5e-6dcad4a89509"
+    },
+    "mueble-wastebasket (intento 1, semilla 101)": "d53a9b35-d9ae-47c5-84a4-f7af5bdae486"
+   },
+   "corcho": {
+    "texto": "cork notice board with a wooden frame hanging on a wall, seen from the front, flat, a blue blueprint of an apartment building with five floors pinned in the middle, papers, a yellow sticky note and a photo pinned around with red pins, a small blood stain, game sprite on a plain blue background, horror game, muted colors",
+    "fuerza": 60,
+    "vista": "side",
+    "descartadas": {
+     "intento 1, semilla 101": "f9393d11-40e8-4430-9346-3dd7da8677cb",
+     "intento 2, semilla 202": "83a79855-94e9-4db1-a4d8-a3db735541e4",
+     "intento 3, semilla 303": "58d21dbf-067a-4850-8682-da208af36201"
+    },
+    "corcho (intento 4, semilla 404)": "015e41df-54ce-4394-ba11-6e413631750e"
+   }
+  }
  }
 }

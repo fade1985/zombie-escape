@@ -40,7 +40,8 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'diningtable', 'bench', 'tallmannequin', 'acunit', 'airhandler', 'chimney', 'vent',
             'jewelcase', 'jewelcabinet', 'safe',
             'treadmill', 'benchpress', 'cablemachine', 'dumbbellrack', 'weightplates',   # (las máquinas del gimnasio del Gymbro)
-            'wheeliebin', 'trashcan', 'janitorcart'}   # (y lo del cuarto de la limpieza de la portera)
+            'wheeliebin', 'trashcan', 'janitorcart',   # (y lo del cuarto de la limpieza de la portera)
+            'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket'}   # (y los de la sala de mantenimiento)
 
 
 def catalogo():

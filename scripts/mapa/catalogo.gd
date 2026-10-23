@@ -91,6 +91,16 @@ const MUEBLES := {
 	"wheeliebin":      {"len": 56,  "dep": 48, "paredes": "todas", "archivo": "limpieza/contenedor"},
 	"trashcan":        {"len": 36,  "dep": 36, "paredes": "todas", "archivo": "limpieza/cubo-basura"},
 	"janitorcart":     {"len": 84,  "dep": 44, "paredes": "lados", "archivo": "limpieza/carro-limpieza"},
+	# los de la sala de mantenimiento (sus tres estancias, planta.gd; PixelLab, con las guías de
+	# tools/guias_mantenimiento.py), que no salen en los pisos: en el vestuario, el plato de ducha, el banco largo sin
+	# respaldo (suelto, se ve igual desde cualquier lado), el váter y el lavabo con su espejo (estos dos, solo de lado: no
+	# tienen dibujo de frente); en el taller, la estantería metálica con botes; y en el despacho, la papelera
+	"showertray":      {"len": 72,  "dep": 64, "paredes": "",      "archivo": "vestuario/plato-ducha"},
+	"lockerbench":     {"len": 128, "dep": 28, "paredes": "todas", "archivo": "vestuario/banco-vestuario"},
+	"stafftoilet":     {"len": 40,  "dep": 52, "paredes": "lados", "archivo": "vestuario/vater-vestuario"},
+	"staffsink":       {"len": 52,  "dep": 40, "paredes": "lados", "archivo": "vestuario/lavabo-espejo"},
+	"canshelf":        {"len": 80,  "dep": 36, "paredes": "",      "archivo": "mantenimiento/estanteria-botes"},
+	"wastebasket":     {"len": 24,  "dep": 22, "paredes": "todas", "archivo": "despacho/papelera"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo; la sala de mantenimiento no tiene muebles sueltos):

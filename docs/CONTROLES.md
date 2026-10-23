@@ -104,6 +104,12 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   cafetera en la habitación de la farmacéutica y no en la sala; desde el pasillo no dice nada, al entrar sí, si sales a
   medias lo vuelve a contar entero y la segunda vez ya no: `captura-cafetera.png`) y las cámaras del técnico
   (`captura-tecnico-*.png`). Cada línea dice lo esperado. Deja el guardado como estaba.
+- `--sala`: en vez de la prueba larga, la de la sala de mantenimiento (`planta.gd`, sus tres estancias): cuenta en la
+  terminal las estancias, sus puertas y en cuál ha quedado cada mueble, si desde el despacho se llega a la puerta del
+  pasillo, a la de las viviendas y delante del ordenador, el banco, el baúl y la taquilla, y qué pone arriba en cada
+  estancia. Fotos: la sala entera (`captura-sala.png`) y cada estancia de cerca, con Johnny dentro
+  (`captura-sala-vestuario.png`, `captura-sala-despacho.png` y `captura-sala-taller.png`). Luego cruza la puerta de
+  las viviendas, vuelve (al taller) y sale al pasillo. Cada línea dice lo esperado.
 - `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
   que su charco pegado al tabique no lo quema (pero sí a uno de este lado) y que, con otro zombi más lejos pero a la
@@ -195,9 +201,20 @@ Se puede volver a mitad de partida: al caer el jefe de una planta (de la 1ª en 
 **ascensor** del pasillo (luz verde, sin las cintas, y lo dice al salir al pasillo). Solo baja a esta sala y, por su
 puerta, vuelve a la planta de la que venías, delante del ascensor; nunca lleva a otra planta. La planta queda como
 la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azotea no tiene.
-En la sala no hay más muebles que los cuatro de la pared de arriba (de izquierda a derecha: el banco de trabajo, el
-baúl, la mesa del ordenador y la taquilla); en el suelo, solo manchas.
-- En la esquina de la izquierda, el **banco de trabajo**: todas las recetas en hojas de papel (las que aún no tienes,
+La sala tiene tres estancias de 10 × 10 casillas, una al lado de otra (algo más ancha que la pantalla: la cámara se
+mueve un poco al andar). Arriba sale en cuál estás («Planta baja · Mantenimiento · Taller»). Del despacho salen dos
+puertas sin hoja, como las de dentro de los pisos: a la izquierda al vestuario y a la derecha al taller.
+- **Despacho** (en medio, con tarima y la pared beis con friso de madera): por su puerta de abajo se sale al pasillo y
+  aquí empieza la partida. En medio de la pared de arriba, la mesa del ordenador; a su izquierda, un corcho con el
+  plano del edificio y papeles clavados, y a su derecha, una papelera.
+- **Vestuario** (a la izquierda, de azulejo): el plato de ducha en la esquina de arriba, la taquilla en medio de lo que
+  queda de esa pared, el lavabo con su espejo y el váter de lado en la pared de la izquierda y el banco largo para
+  ponerse los zapatos, abajo. La ducha, el váter y el lavabo son de adorno.
+- **Taller** (a la derecha, con el cemento y la pared de siempre): en la pared de arriba, una estantería metálica con
+  botes, el banco de trabajo y el baúl; en la de la derecha, la puerta de las viviendas y, debajo, el carrito del
+  conserje.
+En el suelo, manchas de sangre.
+- En el taller, el **banco de trabajo**: todas las recetas en hojas de papel (las que aún no tienes,
   con un «?»). Se toca una y, si tienes lo que pide (en la mochila, el baúl o la mano), se crea el arma. El molotov
   viene aprendido; las demás las suelta cada jefe al morir (los de planta y el de la azotea), en un papel que hay que
   recoger. Lo aprendido no se pierde nunca.
@@ -207,14 +224,14 @@ baúl, la mesa del ordenador y la taquilla); en el suelo, solo manchas.
   el edificio). Lo de curar no se guarda, y con el baúl lleno (32 casillas) solo caben más de lo que ya tiene. Con
   el ratón o el dedo, flechas e Intro o el mando (A elige, y la marca salta a «Guardar»: A dos veces); Esc o B
   cierra.
-- En el centro de la pared, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
+- En el despacho, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
   armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
   bestiario).
-- En la esquina de la derecha, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa
+- En el vestuario, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa
   del centro comercial que ya tengas; se queda puesto). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
   (cruceta y A); Esc o B cierra.
 - Los baños tienen un armarito con botiquín.
-- Por la **puerta de la derecha**, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un
+- Por la **puerta de la derecha** del taller, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un
   pasillo largo con seis habitaciones, una para cada uno, con su placa junto a la puerta. Arriba, las de los
   Apartamentos (policía, médica, militar); abajo, las del centro comercial (ferretero, farmacéutica, técnico). Las de
   quien aún no has rescatado están cerradas y a oscuras; las de los rescatados, abiertas y con él dentro: arrimarse a

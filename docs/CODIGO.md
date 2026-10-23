@@ -299,9 +299,12 @@
 - `apartamento.gd` (genera un apartamento como `apartment.js`; la habitación de un jefe, de los Apartamentos y del
   centro comercial, con la puerta de entrada siempre en el centro de la pared), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano; sus tipos, en `TIPOS`: la joyería, parte 10, no se sortea, sale una por
-  partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento, con su
-  puerta abajo y otra a la derecha, la de las viviendas, y sin muebles sueltos: el ordenador, el banco, el baúl y la
-  taquilla los pone `mapa.gd`; y la de
+  partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento —tres
+  estancias de 10 × 10 una al lado de otra, el vestuario, el despacho y el taller (`SALA_ESTANCIAS`), hecha como un
+  apartamento: su `apt`, con todas las estancias ya vistas, sin niebla; la puerta del pasillo, abajo en el despacho, y
+  la de las viviendas, a la derecha del taller; sus muebles de adorno, del catálogo, los pone ella, y el ordenador, el
+  banco, el baúl, la taquilla y el corcho, `mapa.gd` (`ORDENADOR_X`, `BANCO_X`...), con el suelo y la pared de cada
+  estancia en `ESTILO_MANTENIMIENTO`—; y la de
   exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `viviendas.gd` (las
   viviendas de los supervivientes rescatados, detrás de la puerta de la derecha de la sala de mantenimiento: un pasillo
   largo con seis habitaciones, tres arriba para los de los Apartamentos y tres abajo para los del centro comercial,
@@ -370,7 +373,9 @@ aparatos de la azotea; `guias_gimnasio.py`, las máquinas del gimnasio del Gymbr
 limpieza de la portera y lo que cuelga de su pared, que también pasa a sprite; `guias_puertas.py`, las puertas vistas de
 frente, que también pasa a sprites `puerta-<piso|tienda|servicio|bano>`; `banco_mantenimiento.py`, `baul_mantenimiento.py` y
 `ordenador_mantenimiento.py`, el banco de trabajo, el baúl y la mesa del ordenador de la sala de mantenimiento, que también
-pasan a sprite; el de la mesa, además, le quita la sombra azulada que PixelLab pinta debajo), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
+pasan a sprite; el de la mesa, además, le quita la sombra azulada que PixelLab pinta debajo; `guias_mantenimiento.py`, los
+muebles nuevos de sus estancias —plato de ducha, banco largo, váter y lavabo de lado, estantería con botes, papelera— y
+el corcho del despacho, que también pasa a sprite, y les quita lo azulado que PixelLab pinta alrededor), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de los trajes), `objetos16.py`
 (los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de

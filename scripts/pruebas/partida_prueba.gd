@@ -13,6 +13,7 @@
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
 #   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
+#   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
@@ -105,6 +106,9 @@ func empezar_prueba() -> void:
 	elif "--viviendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_viviendas()
+	elif "--sala" in args:
+		set_process(false)   # sin la prueba larga
+		probar_sala()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -1803,6 +1807,69 @@ func probar_reto() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --sala": la sala de mantenimiento y sus tres estancias (planta.gd). Cuenta en la terminal las
+# estancias, sus puertas y en cuál ha quedado cada mueble, y si desde donde se empieza se llega a todo (por donde andan
+# los zombis): a la puerta del pasillo, a la de las viviendas y delante de cada mueble que se usa. Fotos: la sala entera
+# (captura-sala.png) y, recortada de la pantalla, cada estancia con Johnny dentro y lo que pone arriba
+# (captura-sala-vestuario.png, captura-sala-despacho.png y captura-sala-taller.png). Luego cruza la puerta de las
+# viviendas, vuelve y sale al pasillo, y cuenta adónde ha llegado cada vez. Luego se cierra
+func probar_sala() -> void:
+	var sitio: Dictionary = planta.sitios[aqui]
+	var apt: Dictionary = sitio.apt
+	print("Sala: %d × %d casillas (%d × %d) · estancias: %s · puertas de dentro: %s" % [apt.cols, apt.filas, sitio.ancho,
+		sitio.alto, ", ".join(apt.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo])),
+		", ".join(apt.puertas.map(func(d): return "%s-%s" % [apt.salas[d.a].nombre, apt.salas[d.b].nombre]))])
+	# los que se usan: [nodo, cómo se dice "delante de él"]
+	var usables := {"Ordenador": [mapa.ordenador, "del ordenador"], "Banco": [mapa.banco, "del banco"],
+		"Baúl": [mapa.baul, "del baúl"], "Taquilla": [mapa.taquilla, "de la taquilla"]}
+	var donde := []
+	for n in usables:
+		donde.append("%s en %s" % [n, mapa.nombre_zona(mapa.zona_en(usables[n][0].position - Vector2(0, 4)))])
+	for m in mapa.muebles:
+		donde.append("%s en %s" % [m.datos.tipo, mapa.nombre_zona(m.zona)])
+	var corcho: Node2D = mapa.cosas.get_node_or_null("Corcho")
+	donde.append("corcho en %s" % (mapa.nombre_zona(mapa.zona_en(corcho.position)) if corcho else "ningún sitio"))
+	print("Muebles: " + " · ".join(donde))
+	await get_tree().create_timer(0.2).timeout
+	var red: RID = mapa.get_node("Navegacion").get_navigation_map()
+	var inicio: Vector2 = johnny.position
+	var metas := {"la puerta del pasillo": mapa.puertas[0].llegada(), "la de las viviendas": mapa.puertas[1].llegada()}
+	for n in usables:
+		metas["delante " + usables[n][1]] = usables[n][0].position + Vector2(0, 22)
+	var llega := []
+	for n in metas:
+		var camino := NavigationServer2D.map_get_path(red, inicio, metas[n], true)
+		llega.append("%s %s" % [n, not camino.is_empty() and camino[-1].distance_to(metas[n]) < 24.0])
+	print("Desde %s (en el %s) se llega a: %s" % [inicio, mapa.nombre_zona(mapa.zona_en(inicio)).to_lower(), " · ".join(llega)])
+	johnny.direccion = "s"
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-sala.png")
+	# cada estancia, de cerca: Johnny en medio y, de la pantalla, el trozo de la estancia con sus paredes (sin lo de
+	# encima de la pantalla: el minimapa y el letrero tapan la esquina del taller)
+	$Pantalla.hide()
+	for s in apt.salas:
+		johnny.position = s.centro + Vector2(0, 40)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.3).timeout
+		print("En el %s, arriba pone «%s»" % [s.nombre.to_lower(), lugar.text])
+		var pantalla := get_viewport().get_texture().get_image()
+		var escala := Vector2(pantalla.get_size()) / get_viewport().get_visible_rect().size
+		var a := get_viewport().get_canvas_transform() * Vector2((s.c0 - 1) * Planta.CASILLA, -48.0) * escala
+		var b := get_viewport().get_canvas_transform() * Vector2((s.c0 + s.ancho + 1) * Planta.CASILLA, sitio.alto) * escala
+		var trozo := Rect2i(Vector2i(a), Vector2i(b - a)).intersection(Rect2i(Vector2i.ZERO, pantalla.get_size()))
+		pantalla.get_region(trozo).save_png("res://captura-sala-%s.png" % s.uso)
+	$Pantalla.show()
+	# las dos puertas de fuera: a las viviendas (y vuelta, por la misma) y al pasillo
+	await cruzar(1)
+	print("Por la puerta de la derecha: en «%s» (esperado: viviendas)" % planta.sitios[aqui].tipo)
+	await cruzar(0)
+	print("De vuelta: en «%s», en el %s (esperado: mantenimiento, taller)" % [planta.sitios[aqui].tipo,
+		mapa.nombre_zona(mapa.zona_en(johnny.position)).to_lower()])
+	await cruzar(0)
+	print("Por la puerta de abajo: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
+	get_tree().quit()
+
+
 # Con "--captura --trajes": los trajes de Johnny (trajes.gd y cintura.gdshader). En la sala de mantenimiento,
 # Johnny con la ropa de siempre y, a su lado, una copia de su dibujo con cada traje, cada una con una hoja
 # distinta (fregona, bate, pistola y escopeta), para ver que el cambio de colores vale en todas
@@ -1816,7 +1883,7 @@ func probar_reto() -> void:
 # uno que falte (captura-trajes-modista.png). Luego se cierra
 func probar_trajes() -> void:
 	set_process(false)
-	johnny.position = Vector2(200, 400)
+	johnny.position = Vector2(300, 240)   # (en la fila de las puertas de dentro: las copias quedan entre los tabiques)
 	johnny.direccion = "s"
 	johnny.get_node("Camara").reset_smoothing()
 	var ids: Array = Trajes.LISTA.keys()
@@ -1935,7 +2002,7 @@ func probar_trajes() -> void:
 			taquilla.info.text])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s" % get_tree().paused)
-	johnny.position = Vector2(560, 400)
+	johnny.position = Vector2(690, 300)   # (en el despacho: la modista, a su izquierda, también)
 	johnny.direccion = "e"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3).timeout

@@ -240,7 +240,7 @@ func _ready() -> void:
 	if captura:
 		ordenar_jefes_prueba()   # el jefe que se quiere ver, en la 1ª planta
 	nueva_planta(1)
-	# en la sala de mantenimiento, en medio
+	# en la sala de mantenimiento, en medio (en medio del despacho)
 	montar(planta.mantenimiento, 0, false)
 	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
 	johnny.get_node("Camara").reset_smoothing()
@@ -1066,7 +1066,7 @@ func terminar(gano: bool, abandona := false) -> void:
 	var apartamentos := 0
 	var visitados := 0
 	for sitio in planta.sitios:
-		if sitio.has("apt") and sitio.tipo != "viviendas":
+		if sitio.has("apt") and sitio.tipo not in ["viviendas", "mantenimiento"]:
 			apartamentos += 1
 			if sitio.get("visitado", false):
 				visitados += 1

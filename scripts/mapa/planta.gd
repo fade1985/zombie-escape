@@ -19,10 +19,19 @@ const PUERTA_A := 14 * CASILLA    # a qué distancia de cada punta del pasillo e
 const ESCAPARATE_A := 100         # en el centro comercial, a qué distancia de su puerta va cada escaparate
 const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho (escaparate-electronica, 57 píxeles)
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
-const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
-const SALA_FILAS := 20
+# La sala de mantenimiento: tres estancias de 10 × 10 casillas, una al lado de otra (el vestuario, el despacho y el
+# taller), con un tabique de una casilla entre ellas y el muro de fuera alrededor (1152 × 448, algo más ancha que la
+# pantalla: la cámara se mueve un poco al andar)
+const SALA_ESTANCIA := 10
+const SALA_COLS := 2 + SALA_ESTANCIA * 3 + 2 + 2
+const SALA_FILAS := 2 + SALA_ESTANCIA + 2
+const SALA_PUERTA := 6            # la fila de arriba de las dos puertas de dentro (a media altura, como la de las viviendas)
+# Cada estancia, de izquierda a derecha: su uso (el estilo de su suelo y su pared, en mapa.gd) y su nombre. La del
+# medio va primero (la habitación 0): ahí está la entrada y ahí empieza la partida
+const SALA_ESTANCIAS := [{"uso": "vestuario", "nombre": "Vestuario"}, {"uso": "despacho", "nombre": "Despacho"},
+	{"uso": "taller", "nombre": "Taller"}]
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
-const EXPO_FILAS := 139           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe)
+const EXPO_FILAS := 153           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe, y para los muebles de la sala de mantenimiento)
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
@@ -365,24 +374,77 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 	return puestos
 
 
-# La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo y manchas en el
-# suelo, sin muebles sueltos. En la pared de arriba, de izquierda a derecha, van el banco de trabajo, el baúl, el
-# ordenador en el centro (fases 6 y 7) y la taquilla en la esquina de la derecha (parte 11; los pone mapa.gd). En la
-# pared de la derecha, la puerta de las viviendas de los supervivientes rescatados (viviendas.gd; adónde lleva lo
-# pone generar). "vuelta" es su puerta en el pasillo.
+# La sala de mantenimiento, donde empieza la partida: tres estancias una al lado de otra (SALA_ESTANCIAS), hecha como
+# un apartamento ("apt": su plano por casillas, sus habitaciones y sus puertas, como las viviendas), así cada estancia
+# lleva su suelo y su pared (mapa.gd) y arriba sale en cuál se está. Ninguna tiene niebla: ya están todas vistas.
+#   - el vestuario, a la izquierda: el plato de ducha en la esquina, la taquilla de los trajes en medio de lo que queda
+#     de la pared de arriba (parte 11; la pone mapa.gd), el lavabo con su espejo y el váter de lado en la pared de la
+#     izquierda y el banco largo suelto, abajo a la derecha, sin tapar la puerta
+#   - el despacho, en medio: la puerta del pasillo abajo y la mesa del ordenador en medio de la pared de arriba (fases 6
+#     y 7), con el corcho colgado a su izquierda (mapa.gd) y la papelera a su derecha
+#   - el taller, a la derecha: la estantería con botes, el banco de trabajo y el baúl (fase 7b; los dos, mapa.gd) en la
+#     pared de arriba, el carrito del conserje en la de la derecha y, en esa misma pared, la puerta de las viviendas de
+#     los supervivientes rescatados (viviendas.gd; adónde lleva lo pone generar)
+# Entre estancia y estancia, una puerta sin hoja, como las de dentro de los pisos. Y manchas de sangre por el suelo.
+# "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA
 	var alto := SALA_FILAS * CASILLA
-	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "ancho": ancho, "alto": alto,
-		"dueno": Muebles.plano_rectangular(SALA_COLS, SALA_FILAS), "zombis": [], "limpio": true, "visitado": false,
-		"surtido": rng.randi(), "muebles": [], "manchas": []}
+	var dueno := PackedInt32Array()
+	dueno.resize(SALA_COLS * SALA_FILAS)
+	dueno.fill(-1)
+	var salas := []
+	var puertas := []
+	for k in SALA_ESTANCIAS.size():
+		var e: Dictionary = SALA_ESTANCIAS[k]
+		var sala := {"id": [1, 0, 2][k], "uso": e.uso, "nombre": e.nombre, "c0": 2 + k * (SALA_ESTANCIA + 1), "f0": 2,
+			"ancho": SALA_ESTANCIA, "fondo": SALA_ESTANCIA, "puertas": [], "casillas": SALA_ESTANCIA * SALA_ESTANCIA}
+		sala.centro = Vector2(sala.c0 + SALA_ESTANCIA / 2.0, sala.f0 + SALA_ESTANCIA / 2.0) * CASILLA
+		for f in range(sala.f0, sala.f0 + SALA_ESTANCIA):
+			for c in range(sala.c0, sala.c0 + SALA_ESTANCIA):
+				dueno[f * SALA_COLS + c] = sala.id
+		salas.append(sala)
+	salas.sort_custom(func(a, b): return a.id < b.id)
+	# las dos puertas de dentro, en los tabiques del despacho: al vestuario y al taller
+	for otra in [1, 2]:
+		var c: int = salas[0].c0 - 1 if otra == 1 else salas[0].c0 + SALA_ESTANCIA
+		var p := {"a": otra, "b": 0, "c": c, "f": SALA_PUERTA, "ancho": 1, "fondo": 2}
+		for f in [SALA_PUERTA, SALA_PUERTA + 1]:
+			dueno[f * SALA_COLS + c] = -2
+		puertas.append(p)
+		salas[0].puertas.append(p)
+		salas[otra].puertas.append(p)
+	var apt := {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": dueno, "salas": salas, "puertas": puertas, "jefe": false,
+		"tipo": "mantenimiento"}
+	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "apt": apt, "ancho": ancho, "alto": alto,
+		"zombis": [], "limpio": true, "visitado": false, "surtido": rng.randi(), "manchas": [],
+		"vistas": {0: true, 1: true, 2: true}}
 	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
 		"aviso": ""}, {"dir": "derecha", "en": alto / 2, "tipo": "puerta", "a": -1, "vuelta": 0, "cerrojo": "", "aviso": ""}]
-	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), lejos de la pared de arriba
-	for i in rng.randi_range(6, 10):
-		sitio.manchas.append({"pos": Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60),
-			rng.randf_range(MURO + 150, alto - MURO - 50)), "dibujo": rng.randi() % 10, "giro": rng.randi() % 4,
-			"espejo": rng.randf() < 0.5})
+	# Los muebles (los que se usan, el banco, el baúl, el ordenador y la taquilla, los pone mapa.gd)
+	var arriba := {"lado": "arriba", "base": MURO}
+	var izquierda := {"lado": "izquierda", "base": MURO}
+	sitio.muebles = [
+		Muebles.nuevo("showertray", arriba, MURO + Catalogo.MUEBLES.showertray.len / 2.0, 1),
+		Muebles.nuevo("staffsink", izquierda, 240, 1),   # (el espejo sube mucho: más arriba se montaría en la ducha)
+		Muebles.nuevo("stafftoilet", izquierda, 332, 1),
+		Muebles.nuevo("lockerbench", {"lado": "arriba", "base": 302}, 270, 1),
+		Muebles.nuevo("wastebasket", arriba, 650, 0),
+		Muebles.nuevo("canshelf", arriba, 820, 2),
+		Muebles.nuevo("janitorcart", {"lado": "derecha", "base": ancho - MURO}, 330, 2),
+	]
+	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), por el suelo de las tres estancias, lejos de la pared
+	# de arriba y de los muebles (con su propio dado: así no cambian los pisos que salen detrás)
+	var dado := RandomNumberGenerator.new()
+	dado.seed = sitio.surtido
+	for i in dado.randi_range(6, 9):
+		for intento in 30:
+			var pos := Vector2(dado.randf_range(MURO + 40, ancho - MURO - 40), dado.randf_range(MURO + 110, alto - MURO - 40))
+			var aqui := dueno[int(pos.y / CASILLA) * SALA_COLS + int(pos.x / CASILLA)]
+			if aqui < 0 or not despejado(apt, pos, 24.0, aqui) or not lejos_de_muebles(sitio, pos, 30.0):
+				continue
+			sitio.manchas.append({"pos": pos, "dibujo": dado.randi() % 10, "giro": dado.randi() % 4, "espejo": dado.randf() < 0.5})
+			break
 	return sitio
 
 

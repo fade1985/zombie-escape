@@ -183,6 +183,10 @@
     "huella": "c57bf3d63b56b949",
     "sprite": "mueble-plant"
   },
+  "despacho/papelera.png": {
+    "huella": "4ca0efd7594aa282",
+    "sprite": "mueble-wastebasket"
+  },
   "dormitorio/armario.png": {
     "huella": "b9de9a8c54f20770",
     "sprite": "mueble-wardrobe"
@@ -246,6 +250,10 @@
   "limpieza/cubo-basura.png": {
     "huella": "97b3d2b6ebcc8e7a",
     "sprite": "mueble-trashcan"
+  },
+  "mantenimiento/estanteria-botes.png": {
+    "huella": "e1ae8b020516c9cf",
+    "sprite": "mueble-canshelf"
   },
   "pasillo/aplique.png": {
     "huella": "88d5170172b2319e",
@@ -314,5 +322,21 @@
   "salon/tele.png": {
     "huella": "3b3db1bf763bb54f",
     "sprite": "mueble-tv"
+  },
+  "vestuario/banco-vestuario.png": {
+    "huella": "d48a8dde87bafebc",
+    "sprite": "mueble-lockerbench"
+  },
+  "vestuario/lavabo-espejo-lado.png": {
+    "huella": "63be3f61f7495582",
+    "sprite": "mueble-staffsink-lado"
+  },
+  "vestuario/plato-ducha.png": {
+    "huella": "6a8e8dc772d24298",
+    "sprite": "mueble-showertray"
+  },
+  "vestuario/vater-vestuario-lado.png": {
+    "huella": "6c3969fda369d75f",
+    "sprite": "mueble-stafftoilet-lado"
   }
 }

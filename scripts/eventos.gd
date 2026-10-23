@@ -385,7 +385,7 @@ func piso(jefe: bool) -> int:
 	var mejor := -1
 	for i in range(1, partida.planta.sitios.size()):
 		var s: Dictionary = partida.planta.sitios[i]
-		if (s.tipo == "jefe") != jefe or not s.has("apt") or s.tipo == "viviendas":
+		if (s.tipo == "jefe") != jefe or not s.has("apt") or s.tipo in ["viviendas", "mantenimiento"]:
 			continue
 		if mejor < 0 or s.zombis.size() > partida.planta.sitios[mejor].zombis.size():
 			mejor = i
