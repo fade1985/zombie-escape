@@ -6,13 +6,15 @@
 #   - Latigazo: marca en rojo por dónde irán las lenguas (0,6 s) y las dispara en abanico: 16 de daño y un
 #     empujón si te alcanza una.
 #   - Aspirar: abre la boca (0,8 s de aviso, con el cono marcado en el suelo) y durante 5 s tira de Johnny hacia
-#     ella si está en el cono y le ve. Se resiste andando hacia atrás y esquivando (esquivando no tira), o
-#     poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
+#     ella si está en el cono y le ve. Va de menos a más: empieza flojo y a los 3,5 s tira con toda su fuerza; y
+#     cuanto más cerca, mucho más fuerte. Al máximo, a menos de 5 casillas arrastra a Johnny aunque ande hacia
+#     atrás; más lejos, andando hacia atrás le gana. También se libra esquivando (esquivando no tira), saliendo del
+#     cono o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
 #   - Sangre ácida: cada golpe o disparo que le das salpica ácido y Johnny pierde un 1 % de su vida (uno cada
 #     0,5 s como mucho, para que las armas rápidas no sumen demasiado).
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
-# Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza y el ácido quita
-# un 2 %.
+# Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza (al máximo arrastra
+# desde 7 casillas) y el ácido quita un 2 %.
 extends Minijefe
 
 const VELOCIDAD := 55.0
@@ -27,7 +29,11 @@ const DANO_LATIGAZO := 16
 const GOLPE_LATIGAZO := 5              # fotograma del latigazo en el que las lenguas salen disparadas (en su animación de PixelLab)
 const AVISO_ASPIRAR := 0.8
 const DURA_ASPIRAR := 5.0
-const TIRON := [120.0, 240.0]          # a cuánto tira de Johnny (unidades por segundo que le suma hacia la boca)
+const CRECE_ASPIRAR := 3.5             # lo que tarda en tirar con toda su fuerza (empieza al 20 %)
+# A cuánto tira de Johnny con toda su fuerza y pegado a la boca (unidades por segundo que le suma hacia ella; normal
+# y enfadado). Se apaga deprisa con la distancia (tiron_aspirado()): Johnny anda a 210, así que al máximo le arrastra a
+# menos de unas 5 casillas (7 enfadado) y más lejos le gana andando hacia atrás
+const TIRON := [550.0, 1100.0]
 const ALCANCE_ASPIRAR := 420.0
 const MEDIO_ASPIRAR := 0.85            # medio ángulo del cono por donde aspira
 const DANO_COMER := 30
@@ -44,6 +50,7 @@ const CONTORNO := Color("#2a1416")
 var espera_latigazo := 1.5
 var espera_aspirar := 6.0
 var acido_t := 0.0                     # para no salpicar ácido con cada perdigón
+var aire := 0.0                        # por dónde van los arcos del aspirado (corren más cuanto más fuerte aspira)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -150,21 +157,36 @@ func latigazos(johnny: Node2D) -> void:
 
 # Tira de Johnny hacia la boca mientras esté en el cono, le vea y no esté esquivando. Si llega, se lo come
 func aspirar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
-	# el aire que entra: motas que vuelan hacia la boca
-	if randf() < delta * 40.0:
+	var fuerza := fuerza_aspirado()
+	aire += delta * (0.4 + 1.6 * fuerza)
+	# el aire que entra: motas que vuelan hacia la boca (más, más deprisa y más blancas cuanto más fuerte aspira)
+	if randf() < delta * 60.0 * fuerza:
 		var a := mirada.angle() + randf_range(-MEDIO_ASPIRAR, MEDIO_ASPIRAR)
 		var desde := global_position + Vector2.from_angle(a) * randf_range(100.0, ALCANCE_ASPIRAR)
 		var boca := global_position + Vector2(0, -arriba * BOCA)
-		Particulas.soltar(self, desde, (boca - desde).normalized() * 380.0, Color(1, 1, 1, 0.45), 2, 0.4)
+		Particulas.soltar(self, desde, (boca - desde).normalized() * (200.0 + 350.0 * fuerza),
+			Color(1, 1, 1, 0.25 + 0.35 * fuerza), 2, 0.4)
 	if d > ALCANCE_ASPIRAR or absf(angle_difference(mirada.angle(), hacia.angle())) > MEDIO_ASPIRAR:
 		return
 	if not se_ve(johnny) or johnny.esquiva_t > 0.0:
 		return
-	# más fuerte cuanto más cerca (sumado a la velocidad de Johnny, que su frenada va parando)
-	var tiron: float = TIRON[fase - 1] * (0.7 + 0.3 * (1.0 - d / ALCANCE_ASPIRAR))
-	johnny.empujar(-hacia.normalized() * tiron * delta * johnny.ARRANQUE)
+	# se suma a la velocidad de Johnny, que su frenada va parando: este empujón es justo el que, con esa frenada,
+	# le deja el tirón sumado (anda a 210 hacia atrás y se queda en 210 - tirón)
+	johnny.empujar(-hacia.normalized() * tiron_aspirado(d) * (exp(delta * johnny.ARRANQUE) - 1.0))
 	if d < radio + johnny.RADIO + 6.0:
 		comer(johnny, hacia)
+
+
+# Lo fuerte que aspira: del 20 % al abrir la boca al 100 % a los CRECE_ASPIRAR s, y así hasta que la cierra
+func fuerza_aspirado() -> float:
+	return lerpf(0.2, 1.0, minf(1.0, t / CRECE_ASPIRAR))
+
+
+# A cuánto tira de Johnny a esa distancia: cada vez más fuerte, y mucho más cuanto más cerca (va con el cuadrado de
+# lo cerca que está: a media distancia, la cuarta parte que pegado a la boca)
+func tiron_aspirado(d: float) -> float:
+	var cerca := maxf(0.0, 1.0 - d / ALCANCE_ASPIRAR)
+	return TIRON[fase - 1] * fuerza_aspirado() * cerca * cerca
 
 
 func comer(johnny: Node2D, hacia: Vector2) -> void:
@@ -237,9 +259,9 @@ func animar() -> void:
 		"aviso_aspirar":
 			fijar("aspirar", dir, avance("aspirar_" + dir, t / AVISO_ASPIRAR))
 		"aspirar":
-			# con la boca abierta del todo, temblando del esfuerzo
+			# con la boca abierta del todo, temblando del esfuerzo (más cuanto más fuerte aspira)
 			fijar("aspirar", dir, sprite.sprite_frames.get_frame_count("aspirar_" + dir) - 1)
-			sprite.position.x = sin(tiempo * 40.0) * 1.5
+			sprite.position.x = sin(tiempo * 40.0) * 3.0 * fuerza_aspirado()
 		"tambaleo":
 			fijar("golpe", dir, avance("golpe_" + dir, t / TAMBALEO))
 		"grito":
@@ -274,21 +296,23 @@ func _draw() -> void:
 				draw_rect(franja, Color(rojo, 0.1 + k * 0.3))
 				draw_rect(franja, Color(rojo, 0.9), false, 3.0)
 		"aviso_aspirar", "aspirar":
-			# el cono por donde aspira; aspirando, arcos que se le meten en la boca
+			# el cono por donde aspira; aspirando, arcos que se le meten en la boca. Cuanto más fuerte aspira, más
+			# verde el cono y más deprisa, más vivos y más gruesos los arcos
 			var k := minf(1.0, t / AVISO_ASPIRAR) if estado == "aviso_aspirar" else 1.0
+			var fuerza := fuerza_aspirado() if estado == "aspirar" else 0.0
 			var puntos := PackedVector2Array([Vector2.ZERO])
 			for i in 21:
 				var b: float = mirada.angle() - MEDIO_ASPIRAR + i / 20.0 * MEDIO_ASPIRAR * 2.0
 				puntos.append(Vector2.from_angle(b) * ALCANCE_ASPIRAR)
 			draw_set_transform(Vector2(0, 6))
-			draw_colored_polygon(puntos, Color(VERDE, 0.06 + k * 0.12))
+			draw_colored_polygon(puntos, Color(VERDE, 0.06 + k * 0.12 + fuerza * 0.12))
 			puntos.append(Vector2.ZERO)
 			draw_polyline(puntos, Color(VERDE, 0.4 + k * 0.5), 3.0)
 			if estado == "aspirar":
 				for i in 3:
-					var f := 1.0 - fmod(tiempo * 0.9 + i / 3.0, 1.0)
+					var f := 1.0 - fmod(aire + i / 3.0, 1.0)
 					draw_arc(Vector2.ZERO, ALCANCE_ASPIRAR * f, mirada.angle() - MEDIO_ASPIRAR, mirada.angle() + MEDIO_ASPIRAR,
-						24, Color(VERDE, 0.6 * f), 3.0)
+						24, Color(VERDE, (0.3 + 0.5 * fuerza) * f), 2.0 + 2.0 * fuerza)
 	draw_set_transform(Vector2.ZERO)
 
 

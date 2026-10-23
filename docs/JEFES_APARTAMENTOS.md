@@ -47,14 +47,20 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
   - *Latigazo:* si te ve a menos de 330, aviso de 0,6 s (franjas rojas) y 3 lenguas en abanico (separadas 0,4 rad,
     300 de largo; hasta el 23 oct, 250): 16 de daño y empujón. Cada 2,4 s. Las lenguas largas las dibuja el código por encima de él.
   - *Aspirar:* si te ve a entre 90 y 420, grita «¡HAMBRE!», 0,8 s de aviso con el cono verde en el suelo (±0,85 rad)
-    y 5 s tirando de ti hacia la boca (te suma 120 de velocidad hacia él; andando hacia atrás se resiste, esquivando
-    no tira y con una pared en medio tampoco), mientras se va girando hacia ti (2 rad/s). Si llegas a su boca te
-    come: 30 de daño, te escupe lejos y te deja tirado. Cada 10 s.
+    y 5 s tirando de ti hacia la boca (esquivando no tira y con una pared en medio tampoco), mientras se va girando
+    hacia ti (2 rad/s). Si llegas a su boca te come: 30 de daño, te escupe lejos y te deja tirado. Cada 10 s.
+    Desde el 23 oct va **de menos a más** (antes tiraba casi igual todo el rato y desde cualquier distancia, 120 de
+    velocidad, y andando hacia atrás siempre le ganabas): empieza al 20 % y llega a toda su fuerza a los 3,5 s
+    (`CRECE_ASPIRAR`); y tira mucho más de cerca, con el cuadrado de lo cerca que estás (`TIRON` 550 pegado a la
+    boca × (1 − distancia / 420)²). Como Johnny anda a 210, al máximo **a menos de 5 casillas te arrastra aunque
+    andes hacia atrás, y más lejos le ganas andando**: 3 casillas, 327; 5, 210; 7, 120; 10, 31. Quieto, de lejos
+    también te acaba tragando: hay que moverse. Con menos vida Johnny anda más lento y la zona crece (6-7 casillas).
+    Se ve que coge fuerza: más motas de aire y más rápidas, arcos del cono más deprisa y más vivos, y tiembla más.
   - *Sangre ácida:* cada golpe o bala que le das te quita el 1 % de la vida máxima (mínimo 1), uno cada 0,5 s como
     mucho, con gotas verdes y su chisporroteo.
   - Una granada (explosión) le corta lo que esté haciendo (0,6 s tambaleándose): así se para el aspirado.
-  - *Enfadado* («¡TENGO HAMBRE!»): 6 lenguas (separadas 0,27 rad), tira el doble (240), ácido al 2 %, latigazo cada
-    1,6 s y aspira cada 7 s.
+  - *Enfadado* («¡TENGO HAMBRE!»): 6 lenguas (separadas 0,27 rad), tira el doble (1100: al máximo arrastra desde 7
+    casillas), ácido al 2 %, latigazo cada 1,6 s y aspira cada 7 s.
 - **Dibujo:** modelo a 72 y 5 animaciones en PixelLab (46 generaciones; detalle y textos en `assets/pixellab.json` →
   `apartamentos-jefes` → `gloton-72`). Hoja con `py tools/jefe_hoja.py gloton-72 jefe-gloton`.
 - Tecla de prueba **7** (los demás minijefes de los Apartamentos irán en 8, 9...); sale en la exposición (F9,

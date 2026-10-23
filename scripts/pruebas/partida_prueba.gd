@@ -2409,7 +2409,8 @@ func probar_modista(jefa: Node2D) -> void:
 
 
 # El Glotón: la sangre ácida (dos golpes seguidos: solo el primero salpica, un 1 % de la vida de Johnny) y el
-# aspirado (0,3 s tirando de Johnny, puesto a 220 de él; antes de la foto de los 7,7)
+# aspirado (Johnny puesto a 220 de él: 0,15 s al abrir la boca y otros 0,15 s con toda su fuerza; antes de la foto
+# de los 7,7)
 func probar_gloton() -> void:
 	var antes_vida: int = johnny.vida
 	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
@@ -2422,9 +2423,21 @@ func probar_gloton() -> void:
 			break
 	jefa.mirada = (johnny.position - jefa.position).normalized()
 	jefa.cambiar("aspirar")
+	# va de menos a más: lo que tira a 3, 5 y 8 casillas al abrir la boca, y lo que acerca a Johnny (quieto) en
+	# 0,15 s; luego lo mismo ya con toda su fuerza (Johnny anda a 210: de cerca le arrastra, de lejos no)
+	var sitio: Vector2 = johnny.position
+	var flojo := [3, 5, 8].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
 	var d0: float = johnny.position.distance_to(jefa.position)
-	await get_tree().create_timer(0.3, false).timeout
-	print("Aspirar (0,3 s): Johnny de %d a %d de distancia (le ve: %s)" % [d0, johnny.position.distance_to(jefa.position), jefa.se_ve(johnny)])
+	await get_tree().create_timer(0.15, false).timeout
+	var d1: float = johnny.position.distance_to(jefa.position)
+	johnny.position = sitio
+	johnny.velocity = Vector2.ZERO
+	jefa.t = jefa.CRECE_ASPIRAR
+	var fuerte := [3, 5, 8].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
+	await get_tree().create_timer(0.15, false).timeout
+	print("Aspirar (0,15 s, Johnny quieto): al empezar de %d a %d; con toda su fuerza de %d a %d (le ve: %s)" % [
+		d0, d1, d0, johnny.position.distance_to(jefa.position), jefa.se_ve(johnny)])
+	print("Aspirar, tirón a 3/5/8 casillas (Johnny anda a 210): al empezar %s; con toda su fuerza %s" % [flojo, fuerte])
 
 
 # El Gymbro: se enfada ya (los suplementos): un golpe de 20 le quita 10 de vida y 10 de armadura, y sale la barra
