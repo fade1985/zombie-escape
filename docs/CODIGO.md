@@ -160,7 +160,8 @@
   (`probar_trajes()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 32 objetos, con los cuatro trajes de Johnny, `traje_<id>`, que salen en la tienda de ropa solo mientras falten y al cogerlos se los pone, `trajes.gd`; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
-  entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, lo que
+  entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, con
+  `al_baul()` y `cabe_baul()` para guardar en él, lo que
   sueltan los zombis: en los Apartamentos, los 17 de siempre; en el centro comercial, la lista de la tienda donde cae
   el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera), `recetas.gd` (24 recetas y rarezas: 15 de los
   Apartamentos, 6 que mezclan los dos edificios y 3 solo del centro; solo se crean las aprendidas, `recetas` del
@@ -229,7 +230,8 @@
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
   `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día), `--joyeria` (`probar_joyeria`: la cámara
-  acorazada) o `--trajes` (`probar_trajes`: los trajes de Johnny), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  acorazada), `--trajes` (`probar_trajes`: los trajes de Johnny) o `--baul` (`probar_baul`: guardar en el baúl lo
+  de la mochila), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**
@@ -245,7 +247,7 @@
 - `ordenador.gd`: la pantalla de ConserjeOS (puntos, talentos, tienda de armas, logros, Dosier, Noticias y
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
   y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras
-  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl y banco. `puesto.gd`: la ventanita
+  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `puesto.gd`: la ventanita
   del puesto del ferretero (munición, molotovs y granadas por dólares ahorrados). `taquilla.gd`: la ventanita de la
   taquilla de Johnny (parte 11; la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con el traje
   marcado (`marcar`) y la lista para ponerse uno (`elegir`: `Trajes.poner` y `johnny.vestir`).

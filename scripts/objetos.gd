@@ -1,6 +1,7 @@
 # Los objetos para crear armas (src/objetos.js del JS). Son chatarra: los sueltan los zombis al morir y Johnny
 # los lleva en la mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al
-# baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. En el banco de trabajo se
+# baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se
+# pueden guardar a mano (ui/inventario.gd, «Guardar de la mochila»). En el banco de trabajo se
 # juntan de dos en dos para crear armas (recetas.gd). Todos son de rareza gris (común).
 # Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py).
 #
@@ -104,6 +105,16 @@ static func casillas_baul(s: Dictionary) -> int:
 		if s.baul[id] > 0:
 			n += 1
 	return n + s.baul_armas.size()
+
+
+# ¿Va al baúl? Todo menos lo de curar (USABLES), que se pierde al acabar la partida
+static func al_baul(id: String) -> bool:
+	return not id in USABLES
+
+
+# ¿Cabe en el baúl? Si ya tiene alguno va a su casilla; si no, hace falta una libre
+static func cabe_baul(s: Dictionary, id: String) -> bool:
+	return s.baul.get(id, 0) > 0 or casillas_baul(s) < BAUL
 
 
 # Qué objeto suelta un zombi al morir ("" = nada): los explosivos solo los dejan los zombis explosivos. "tienda"

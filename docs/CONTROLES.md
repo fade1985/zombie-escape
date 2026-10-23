@@ -74,6 +74,12 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   (`captura-trajes-suelo.png`), Johnny lo pisa y se lo pone (`captura-trajes-cogido.png`), se arrima a la taquilla
   y elige en su ventanita (`captura-taquilla.png`), y la modista cae y suelta uno que falta
   (`captura-trajes-modista.png`).
+- `--baul`: en vez de la prueba larga, la de guardar a mano en el baúl lo de la mochila (`ui/inventario.gd`): con
+  gasolina, clavos, vendas, cuchillas y táser en la mochila, Johnny se arrima al baúl y comprueba en la terminal que
+  se abre, que «Guardar de la mochila» enseña la mochila (`captura-baul-mochila.png`, con la gasolina elegida), que
+  «Guardar» mete toda la casilla en el baúl, que las vendas no se guardan, que con el baúl lleno solo caben más de lo
+  que ya tiene, y que «Guardar todo» mete lo demás (`captura-baul-guardado.png`, el baúl al volver). Cada línea
+  dice lo esperado. Deja el baúl del guardado de prueba como estaba.
 - `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
   que su charco pegado al tabique no lo quema (pero sí a uno de este lado) y que, con otro zombi más lejos pero a la
@@ -117,7 +123,12 @@ La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`esce
 - A la derecha del baúl, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa del
   centro comercial que ya tengas; se queda puesto). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
   (cruceta y A); Esc o B cierra.
-- A su derecha, el **baúl** (las armas creadas para la partida); a su izquierda, el **banco de trabajo**: todas
+- A su derecha, el **baúl**: las armas creadas (se sacan para la partida) y los objetos guardados. Con
+  «Guardar de la mochila» se ve la mochila: se toca una casilla y «Guardar» mete en el baúl todos los de esa
+  casilla, o «Guardar todo»; así ya no se pierden si Johnny cae (lo que quede en la mochila pasa solo al completar
+  el edificio). Lo de curar no se guarda, y con el baúl lleno (32 casillas) solo caben más de lo que ya tiene. Con
+  el ratón o el dedo, flechas e Intro o el mando (A elige, y la marca salta a «Guardar»: A dos veces); Esc o B
+  cierra. A su izquierda, el **banco de trabajo**: todas
   las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
   mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir
   (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se pierde nunca.

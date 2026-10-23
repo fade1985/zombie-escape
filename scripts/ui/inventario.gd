@@ -7,6 +7,9 @@
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): los objetos guardados de otras partidas y las armas
 #     creadas en el banco. Un arma creada se puede sacar para esta partida (fase 7b2): la de cuerpo a cuerpo o
 #     de fuego va a la mano (y la que llevaba, al inventario); las arrojadizas, al botón de lanzar.
+#     Con «Guardar de la mochila» se ve la mochila: se toca una casilla y «Guardar» mete en el baúl todos los de
+#     esa casilla (o «Guardar todo»), y ya no se pierden si Johnny cae. Lo de curar no se guarda (Objetos.al_baul) y,
+#     con el baúl lleno, solo caben más de lo que ya tiene. Los objetos no se sacan del baúl: el banco los usa ahí.
 #   - Banco de trabajo (al arrimarse a él): arriba, todas las recetas (recetas.gd). Las aprendidas son hojas de
 #     papel con el dibujo del arma; las que no, un "?" (las sueltan los jefes). Al tocar una hoja se ve lo que
 #     pide y cuántos tienes (en la mano, guardados, en la mochila y en el baúl) y, si está todo, se puede crear el
@@ -30,7 +33,8 @@ var sel := ""              # la casilla elegida: "m2" la 3.ª de la mochila, "g0
 var receta := ""           # banco: la receta elegida (su id de Recetas.LISTA)
 var hecha := {}            # banco: el arma que se acaba de crear (para enseñarla)
 var foco := ""             # el botón que tiene que quedar marcado al volver a pintar
-var aviso := ""            # inventario: lo que se dice abajo una vez (por qué no se puede usar)
+var aviso := ""            # inventario y baúl: lo que se dice abajo una vez (por qué no se puede usar o no cabe)
+var guardando := false     # baúl: en vez del baúl, la mochila, para elegir lo que se guarda en él
 
 
 func _ready() -> void:
@@ -46,6 +50,7 @@ func abrir(que: String, p: Node) -> void:
 	hecha = {}
 	foco = ""
 	aviso = ""
+	guardando = false
 	pintar(true)
 
 
@@ -83,11 +88,11 @@ func pintar(entrar := false) -> void:
 	var primero: Control
 	match abierto:
 		"inventario": primero = pintar_inventario(columna)
-		"baul": primero = pintar_baul(columna)
+		"baul": primero = pintar_guardar(columna) if guardando else pintar_baul(columna)
 		"banco": primero = pintar_banco(columna)
-	# se queda marcado el mismo botón que antes (o el primero)
+	# se queda marcado el mismo botón que antes (o el primero, si ya no está o se ha apagado)
 	var marcado: Control = fondo.find_child(foco, true, false) if foco != "" else null
-	if marcado == null or not marcado.focus_mode == Control.FOCUS_ALL:
+	if marcado == null or not marcado.focus_mode == Control.FOCUS_ALL or (marcado is BaseButton and marcado.disabled):
 		marcado = primero
 	if marcado:
 		marcado.grab_focus.call_deferred()
@@ -122,7 +127,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			casilla(rejilla, "m%d" % i, Objetos.icono(id), Objetos.nombre(id), "× %d" % n if n > 1 else "", Recetas.GRIS)
 		else:
 			casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
-	var texto := "Lo que llevas en la mochila pasa al baúl si completas el edificio. Si caes, se pierde."
+	var texto := "Lo que llevas en la mochila pasa al baúl si completas el edificio (o si lo guardas tú en él). Si caes, se pierde."
 	var usable := elegido() in Objetos.USABLES
 	if usable:   # el botiquín, las vendas o el bocadillo: cada uno cura lo suyo
 		texto = "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_de(elegido())
@@ -228,20 +233,26 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 			n += 1
 	for i in range(n, maxi(Objetos.BAUL, ceili(n / 8.0) * 8)):
 		casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
-	var texto := "Está vacío. Lo que lleves en la mochila se guarda aquí al completar un edificio, y aquí van las armas que crees en el banco de trabajo."
+	var texto := "Está vacío. Aquí van las armas que crees en el banco de trabajo y lo que traigas en la mochila: lo guardas tú o, si completas el edificio, pasa solo."
 	if sel.begins_with("a"):
 		var a: Dictionary = s.baul_armas[sel.substr(1).to_int()]
 		texto = "%s (%s, %s): %s. %s" % [a.nombre, Recetas.RAREZAS[a.rareza].nombre.to_lower(),
 			Recetas.HUECOS[a.hueco].to_lower(), a.desc, AL_SACAR[a.hueco] if a.receta != "molotov" else
 			"Al sacarla, sus botellas se suman a tus molotovs."]
+	elif not guardables().is_empty():
+		texto = "Lo que llevas en la mochila se pierde si caes: con «Guardar de la mochila» lo metes aquí y queda a salvo."
 	elif n > 0:
-		texto = "Aquí se guarda lo que traes en la mochila al completar un edificio, y las armas que creas en el banco de trabajo."
+		texto = "Aquí se guarda lo que traes en la mochila (lo guardas tú o pasa solo al completar un edificio), y las armas que creas en el banco de trabajo."
 	nota(columna, texto, 640)
 	var botones := fila(columna, true)
 	if sel.begins_with("a"):
 		boton(botones, "sacar", "Sacar", sacar, "BotonGrande")
+	var mochila := boton(botones, "ver_mochila", "Guardar de la mochila", ver_mochila.bind(true))
+	mochila.disabled = guardables().is_empty()
 	boton(botones, "cerrar", "Cerrar", cerrar)
-	return fondo.find_child("a0", true, false) if not s.baul_armas.is_empty() else fondo.find_child("cerrar", true, false)
+	if not s.baul_armas.is_empty():
+		return fondo.find_child("a0", true, false)
+	return fondo.find_child("cerrar" if mochila.disabled else "ver_mochila", true, false)
 
 
 const AL_SACAR := {
@@ -272,6 +283,111 @@ func sacar() -> void:
 	sel = ""
 	foco = "cerrar"
 	pintar()
+
+
+# ── Baúl: guardar lo de la mochila ──
+
+# La mochila dentro de la ventana del baúl, en una fila de 8 (como el baúl, para que no cambie de ancho). El título
+# sigue contando las casillas del baúl, para ver cuánto sitio queda
+func pintar_guardar(columna: VBoxContainer) -> Control:
+	var s := Guardado.cargar()
+	var llenas := Objetos.casillas(partida.mochila)
+	titulo(columna, "Baúl · %d / %d" % [Objetos.casillas_baul(s), Objetos.BAUL])
+	subtitulo(columna, "Mochila · %d / %d" % [llenas.size(), Objetos.MOCHILA], "mochila")
+	var rejilla := GridContainer.new()
+	rejilla.columns = 8
+	rejilla.add_theme_constant_override("h_separation", 6)
+	rejilla.add_theme_constant_override("v_separation", 6)
+	columna.add_child(rejilla)
+	for i in Objetos.MOCHILA:
+		if i < llenas.size():
+			var id: String = llenas[i][0]
+			var n: int = llenas[i][1]
+			var sub := ("× %d" % n if n > 1 else "") if Objetos.al_baul(id) else "No va al baúl"
+			casilla(rejilla, "m%d" % i, Objetos.icono(id), Objetos.nombre(id), sub, Recetas.GRIS)
+		else:
+			casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
+	var id := elegido()
+	var cabe := id != "" and Objetos.al_baul(id) and Objetos.cabe_baul(s, id)
+	var texto := "Toca lo que quieras guardar. En el baúl queda a salvo aunque caigas, y el banco de trabajo lo usa igual."
+	if llenas.is_empty():
+		texto = "La mochila está vacía."
+	elif id != "" and not Objetos.al_baul(id):
+		texto = "Lo de curar (%s) no va al baúl: úsalo en la partida, porque al acabarla se pierde." % Objetos.nombre(id).to_lower()
+	elif id != "" and not cabe:
+		texto = "El baúl está lleno: solo caben más de lo que ya tiene. Haz sitio sacando armas o creando alguna en el banco de trabajo."
+	elif id != "":
+		texto = "«Guardar» mete en el baúl todo lo de esta casilla (%s × %d) y ya no se pierde aunque caigas." % [
+			Objetos.nombre(id), partida.mochila.count(id)]
+	if aviso != "":
+		texto = aviso
+		aviso = ""
+	nota(columna, texto, 640)
+	var botones := fila(columna, true)
+	if id != "" and Objetos.al_baul(id):
+		var uno := boton(botones, "guardar", "Guardar", guardar, "BotonGrande")
+		uno.disabled = not cabe
+	var todo := boton(botones, "guardar_todo", "Guardar todo", guardar_todo)
+	todo.disabled = guardables().is_empty()
+	boton(botones, "ver_baul", "Ver el baúl", ver_mochila.bind(false))
+	boton(botones, "cerrar", "Cerrar", cerrar)
+	return fondo.find_child("m0", true, false) if not llenas.is_empty() else fondo.find_child("ver_baul", true, false)
+
+
+# Pasa de ver el baúl a ver la mochila (para guardar) o al revés
+func ver_mochila(si: bool) -> void:
+	Sonido.tocar("click")
+	guardando = si
+	sel = ""
+	foco = "" if si else "ver_mochila"
+	pintar()
+
+
+# Los objetos distintos de la mochila que pueden ir al baúl (todos menos los de curar)
+func guardables() -> Array:
+	return Objetos.casillas(partida.mochila).map(func(c): return c[0]).filter(func(id): return Objetos.al_baul(id))
+
+
+# Guarda en el baúl la casilla elegida de la mochila (todos los de esa casilla). La marca se queda en el mismo
+# sitio, que ahora es la casilla siguiente: con el mando o las flechas, A dos veces y se guarda otra
+func guardar() -> void:
+	if not meter_en_baul(elegido()):
+		Sonido.tocar("no")
+		return
+	Sonido.tocar("cambiar")
+	foco = sel
+	sel = ""
+	pintar()
+
+
+# Guarda en el baúl todo lo de la mochila que se pueda; lo que no cabe (con el baúl lleno) se queda, y se dice
+func guardar_todo() -> void:
+	var guardados := 0
+	var no_caben := []
+	for id in guardables():
+		if meter_en_baul(id):
+			guardados += 1
+		else:
+			no_caben.append(Objetos.nombre(id).to_lower())
+	Sonido.tocar("cambiar" if guardados > 0 else "no")
+	if not no_caben.is_empty():
+		aviso = "El baúl está lleno: en la mochila se quedan %s." % (", ".join(no_caben.slice(0, -1)) + " y " +
+			no_caben[-1] if no_caben.size() > 1 else no_caben[0])
+	sel = ""
+	foco = "ver_baul"
+	pintar()
+
+
+# Mete en el baúl todos los de la mochila de ese objeto, si puede ir (no es de curar) y cabe. Dice si lo ha hecho
+func meter_en_baul(id: String) -> bool:
+	if id == "" or not Objetos.al_baul(id) or not Objetos.cabe_baul(Guardado.cargar(), id):
+		return false
+	var mochila: Array = partida.mochila
+	var n := mochila.count(id)
+	while id in mochila:
+		mochila.erase(id)
+	Guardado.cambiar(func(s): s.baul[id] = s.baul.get(id, 0) + n)
+	return true
 
 
 # ── Banco de trabajo ──
@@ -493,6 +609,7 @@ func subtitulo(columna: VBoxContainer, texto: String, icono: String) -> void:
 
 func nota(columna: VBoxContainer, texto: String, ancho := 0) -> void:
 	var t := Label.new()
+	t.name = "nota"   # (una por pantalla; la prueba --baul la lee)
 	t.theme_type_variation = "Sub"
 	t.text = texto
 	t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -605,6 +722,8 @@ func tocar(clave: String) -> void:
 	foco = clave
 	if abierto == "inventario" and elegido() in Objetos.USABLES:
 		foco = "usar"   # con el mando o las flechas, la marca salta a «Usar»: A dos veces y te curas
+	elif guardando and Objetos.al_baul(elegido()) and Objetos.cabe_baul(Guardado.cargar(), elegido()):
+		foco = "guardar"   # y en el baúl, a «Guardar»: A dos veces y se guarda
 	pintar()
 
 

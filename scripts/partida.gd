@@ -988,7 +988,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		if gano:
 			# los objetos de la mochila pasan al baúl (si caes, se pierden); el botiquín, no (se pierde)
 			for id in mochila:
-				if not id in Objetos.USABLES:
+				if Objetos.al_baul(id):
 					g.baul[id] = g.baul.get(id, 0) + 1
 			g.dolares += dolares + extra
 			g.dolares_total += dolares + extra

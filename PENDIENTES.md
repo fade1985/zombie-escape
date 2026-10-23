@@ -15,8 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M4.** Meter objetos en el baúl a mano: además de que los del inventario pasen solos al baúl al acabar la
-  partida, al arrimarse al baúl se pueda elegir desde el inventario qué objetos guardar en él.
 - **M5.** Ascensor a la sala de mantenimiento: al completar una planta, además de abrirse las escaleras de
   emergencia, sale un mensaje de Johnny diciendo que ha podido arreglar el ascensor para bajar a la planta
   baja, donde está la sala de mantenimiento. El ascensor solo sirve para bajar a la planta baja y volver a la
