@@ -85,7 +85,9 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
 # aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso, letrero}; las puertas de tienda de la pared de arriba
-# llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd)
+# llevan "neon" (el tipo de tienda): en vez del cartel, su letrero de neón (neon.gd). Las puertas de los pisos
+# llevan "placa" (su letra, o "llave" la de la sala de mantenimiento): en vez del cartel, una placa junto a la
+# puerta; y el ascensor, "planta" (0 = la baja): el número grande que se ve a su lado (puerta.gd)
 # "su_jefe": el zombi jefe de esta planta (el minijefe que le toca; "" = el del edificio)
 static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dictionary:
 	if semilla != 0:
@@ -142,7 +144,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			planta.mantenimiento = planta.sitios.size()
 			planta.sitios.append(mantenimiento(pasillo.salidas.size()))
 			pasillo.salidas.append({"dir": h.dir, "en": h.en, "tipo": "puerta", "a": planta.mantenimiento, "vuelta": 0,
-				"cerrojo": "", "aviso": "", "letrero": "Mantenimiento"})
+				"cerrojo": "", "aviso": "", "letrero": "Mantenimiento", "placa": "llave"})
 			continue
 		var jefe: bool = h == de_jefa
 		# la puerta del apartamento está en el lado que da al pasillo
@@ -190,6 +192,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": "", "letrero": planta.nombre})
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
 			"aviso": "", "letrero": nombre}
+		if tipo_tienda == "":
+			puerta.placa = h.letra   # los pisos, como en un edificio de verdad: su letra en una placa junto a la puerta
 		if tipo_tienda != "" and h.dir == "arriba" and not (jefe and not mini.is_empty()):
 			# en la pared de arriba se ve la fachada de la tienda: su letrero de neón (en vez del cartel) y un
 			# escaparate a cada lado de la puerta (mapa.gd)
@@ -202,7 +206,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		pasillo.salidas.append(puerta)
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
-		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "letrero": "Averiado"})
+		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "letrero": "Averiado", "planta": num - 1})
 	# por donde se ha llegado (en la planta baja, el portal del edificio) y por donde se sigue subiendo
 	pasillo.salidas.append({"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido",
@@ -221,6 +225,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	# los muebles del pasillo, sin tapar ninguna puerta ni escaparate y dejando ir de una punta a la otra
 	var delante_escaparates: Array = pasillo.escaparates.map(func(e): return Rect2(e.x - ESCAPARATE_MEDIO, MURO,
 		ESCAPARATE_MEDIO * 2, 60))
+	delante_escaparates.append(Rect2(ancho / 2.0 - 130, MURO, 130, 130))   # (y el cartel de la planta, a la izquierda del ascensor)
 	pasillo.muebles = Muebles.de_sala(ed.pasillo, {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
 		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng,
 		delante_escaparates)

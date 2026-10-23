@@ -21,9 +21,6 @@ _(ninguna por ahora)_
 
 - **L1.** Rehacer con PixelLab el banco de trabajo, el baúl, la taquilla, la ferretería y la cafetera: vistos
   de frente y un poco desde arriba (tres cuartos), con el mismo arte que llevan los muebles hasta ahora.
-- **L2.** El nombre de cada puerta de piso se ve poco estético. Ponerlo como en un edificio real: la letra
-  del piso al lado de la puerta y, junto al ascensor, en grande, la planta en la que estás. Que quede más
-  realista.
 - **L3.** El ascensor averiado: quitar el letrero "averiado" de encima y poner en su lugar más cintas
   amarillas con franjas negras cruzándolo. Que quede más realista.
 - **L4.** En los pasillos, sin muebles: solo plantas con maceta y las lámparas que ya hay. Más realista.

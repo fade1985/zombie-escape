@@ -1649,10 +1649,16 @@ func probar_baul() -> void:
 # sala y el jefe no llega a salir), y al salir al pasillo Johnny dice que lo ha arreglado. Con cosas en la mochila,
 # baja en él a la sala de mantenimiento, las guarda en el baúl y vuelve a la 1ª planta, delante del ascensor. En la
 # 2ª planta vuelve a estar averiado, y en la azotea no hay. Cada línea de la terminal dice lo esperado. Saca
-# captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
+# captura-placas.png (antes de nada, el pasillo de la planta baja con las placas de las puertas y el cartel de la
+# planta junto al ascensor), captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
 # sala, ya abajo) y captura-ascensor-baul.png (lo de la mochila, ya en el baúl). Deja el baúl como estaba y se cierra
 func probar_ascensor() -> void:
 	var antes := Guardado.cargar()
+	# en el pasillo de la planta baja, delante de la sala de mantenimiento (la puerta A): su placa, con la llave
+	# inglesa, y junto al ascensor el cartel de la planta, con el 0 (captura-placas.png)
+	await montar(0, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-placas.png")
 	var sala_de_siempre: int = planta.mantenimiento
 	arreglar_ascensor()
 	var asc := puerta_de_tipo("ascensor")

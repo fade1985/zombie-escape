@@ -282,7 +282,7 @@
   tipo tiene el suyo, como el mármol de la joyería) y `PASILLOS` (el pasillo de cada
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
   su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
-  `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
+  `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de los trajes: `TAQUILLA_X` en `mapa.gd`),
   `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que

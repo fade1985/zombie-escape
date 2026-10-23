@@ -18,6 +18,38 @@ const ACERO := {"luz": Color("76807c"), "medio": Color("566060"), "sombra": Colo
 const OSCURO := Color("0c0a0e")
 const CINTA := Color("c9a227")
 const CINTA_RAYA := Color("1a1712")
+# Las placas del pasillo, como en un edificio de verdad: la letra de cada piso junto a su puerta (de latón; la de la
+# sala de mantenimiento, de acero y con una llave inglesa) y, a la izquierda del ascensor, el número grande de la planta
+const LATON := {"luz": Color("e8c868"), "medio": Color("b8923a"), "sombra": Color("7a5a20"), "filo": Color("2e2010"),
+	"letra": Color("2b1d10")}
+const CHAPA := {"luz": Color("aab2ae"), "medio": Color("86908c"), "sombra": Color("565f5d"), "filo": Color("1e2324"),
+	"letra": Color("15191a")}
+# Las letras, dibujadas a mano: 5 × 7 píxeles ("X" = píxel)
+const LETRAS := {
+	"A": [".XXX.", "X...X", "X...X", "XXXXX", "X...X", "X...X", "X...X"],
+	"B": ["XXXX.", "X...X", "X...X", "XXXX.", "X...X", "X...X", "XXXX."],
+	"C": [".XXX.", "X...X", "X....", "X....", "X....", "X...X", ".XXX."],
+	"D": ["XXXX.", "X...X", "X...X", "X...X", "X...X", "X...X", "XXXX."],
+	"0": [".XXX.", "X...X", "X..XX", "X.X.X", "XX..X", "X...X", ".XXX."],
+	"1": ["..X..", ".XX..", "..X..", "..X..", "..X..", "..X..", ".XXX."],
+	"2": [".XXX.", "X...X", "....X", "...X.", "..X..", ".X...", "XXXXX"],
+	"3": ["XXXXX", "...X.", "..X..", "...X.", "....X", "X...X", ".XXX."],
+	"4": ["...X.", "..XX.", ".X.X.", "X..X.", "XXXXX", "...X.", "...X."],
+	"5": ["XXXXX", "X....", "XXXX.", "....X", "....X", "X...X", ".XXX."],
+	"6": ["..XX.", ".X...", "X....", "XXXX.", "X...X", "X...X", ".XXX."],
+	"7": ["XXXXX", "....X", "...X.", "..X..", ".X...", ".X...", ".X..."],
+	"8": [".XXX.", "X...X", "X...X", ".XXX.", "X...X", "X...X", ".XXX."],
+	"9": [".XXX.", "X...X", "X...X", ".XXXX", "....X", "...X.", ".XX.."],
+	"llave": ["....X.X", "....XXX", "...XXX.", "..XX...", ".XX....", "XX.....", "X......"],   # la llave inglesa (7 × 7)
+}
+# y las de "PLANTA", más pequeñas: 3 × 5
+const LETRITAS := {
+	"P": ["XXX", "X.X", "XXX", "X..", "X.."],
+	"L": ["X..", "X..", "X..", "X..", "XXX"],
+	"A": ["XXX", "X.X", "XXX", "X.X", "X.X"],
+	"N": ["X.X", "XXX", "XXX", "XXX", "X.X"],
+	"T": ["XXX", ".X.", ".X.", ".X.", ".X."],
+}
 
 var salida: Dictionary   # la de planta.gd: dir, tipo, letrero...
 var indice := 0          # su número en la lista de salidas del sitio
@@ -45,8 +77,8 @@ func _ready() -> void:
 		if cuerpo.is_in_group("jugador"):
 			empujada.emit(indice))
 
-	# El letrero (las tiendas de la pared de arriba llevan el suyo de neón, que pone mapa.gd)
-	if salida.has("neon"):
+	# El letrero (las tiendas de la pared de arriba llevan el suyo de neón, que pone mapa.gd, y los pisos, su placa)
+	if salida.has("neon") or salida.has("placa"):
 		return
 	var cartel := Label.new()
 	cartel.text = salida.letrero
@@ -81,11 +113,15 @@ func _draw() -> void:
 			draw_rect(Rect2(-2, -80, 4, 80), MARCO)
 			draw_rect(Rect2(-8, -44, 4, 4), POMO)
 			draw_rect(Rect2(4, -44, 4, 4), POMO)
+			if salida.has("placa"):
+				placa_de_piso(Vector2(42, -78))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			draw_rect(Rect2(-36, 0, 72, 64), MARCO)
 			draw_rect(Rect2(-32, 0, 64, 64), HUECO)
 			draw_rect(Rect2(-32, 0, 64, 8), HOJA)
+			if salida.has("placa"):
+				placa_de_piso(Vector2(42, 6))   # encima del muro, a la derecha del hueco
 		_:
 			# En los laterales del pasillo: las escaleras (peldaños) o la puerta por donde se ha llegado
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
@@ -146,6 +182,47 @@ func ascensor() -> void:
 	draw_rect(Rect2(-4, arriba - 6, 8, 2), Color("5fd35a") if abierta else Color("6a1c1c"))
 	if not abierta:
 		cinta(x0 - 4, arriba + alto / 2.0 - 6, w + 8)
+	if salida.has("planta"):
+		cartel_planta(Vector2(x0 - 76, -84))
+
+
+# La placa de un piso, con su esquina de arriba a la izquierda en "donde": la letra en una placa de latón (22 × 26)
+# o, la de la sala de mantenimiento, una llave inglesa en una de acero (un poco más ancha)
+func placa_de_piso(donde: Vector2) -> void:
+	var metal: Dictionary = CHAPA if salida.placa == "llave" else LATON
+	var filas: Array = LETRAS[salida.placa]
+	placa(Rect2(donde, Vector2(filas[0].length() * 2 + 12, filas.size() * 2 + 12)), metal)
+	letra(filas, donde + Vector2(6, 6), 2, metal.letra)
+
+
+# El cartel de la planta, junto al ascensor: una placa de acero (58 × 58) con "PLANTA" en pequeño y debajo el número
+# en grande (la planta baja, el 0, como en los botones de los ascensores)
+func cartel_planta(donde: Vector2) -> void:
+	placa(Rect2(donde, Vector2(58, 58)), CHAPA)
+	var x := donde.x + 6
+	for c in "PLANTA":
+		letra(LETRITAS[c], Vector2(x, donde.y + 8), 2, CHAPA.letra)
+		x += 8
+	letra(LETRAS[str(salida.planta)], donde + Vector2(19, 24), 4, CHAPA.letra)
+
+
+# Una placa: el borde oscuro y el metal, con su brillo arriba y a la izquierda y su sombra abajo y a la derecha
+func placa(r: Rect2, metal: Dictionary) -> void:
+	draw_rect(r, metal.filo)
+	var dentro := r.grow(-2)
+	draw_rect(dentro, metal.medio)
+	draw_rect(Rect2(dentro.position, Vector2(dentro.size.x, 2)), metal.luz)
+	draw_rect(Rect2(dentro.position, Vector2(2, dentro.size.y)), metal.luz)
+	draw_rect(Rect2(dentro.position.x, dentro.end.y - 2, dentro.size.x, 2), metal.sombra)
+	draw_rect(Rect2(dentro.end.x - 2, dentro.position.y + 2, 2, dentro.size.y - 2), metal.sombra)
+
+
+# Una letra de LETRAS o de LETRITAS, con su esquina de arriba a la izquierda en "donde"; "px", lo que mide cada píxel
+func letra(filas: Array, donde: Vector2, px: float, color: Color) -> void:
+	for f in filas.size():
+		for c in filas[f].length():
+			if filas[f][c] == "X":
+				draw_rect(Rect2(donde + Vector2(c, f) * px, Vector2(px, px)), color)
 
 
 # Cinta de peligro: franja amarilla con rayas negras en diagonal, hecha a escalones de píxel
