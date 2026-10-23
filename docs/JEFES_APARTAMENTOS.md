@@ -44,8 +44,8 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
   En `--captura` sin `--jefe`, la portera va en la planta baja; con `--jefe gloton`, él en la 1ª.
 - **El Glotón** (`scripts/gloton.gd`, `escenas/personajes/gloton.tscn`). Los números que han quedado (provisionales,
   se ajustan jugando): vida 480 (+25 % por planta), velocidad 55, 8 por contacto.
-  - *Latigazo:* si te ve a menos de 280, aviso de 0,6 s (franjas rojas) y 3 lenguas en abanico (separadas 0,4 rad,
-    250 de largo): 16 de daño y empujón. Cada 2,4 s. Las lenguas largas las dibuja el código por encima de él.
+  - *Latigazo:* si te ve a menos de 330, aviso de 0,6 s (franjas rojas) y 3 lenguas en abanico (separadas 0,4 rad,
+    300 de largo; hasta el 23 oct, 250): 16 de daño y empujón. Cada 2,4 s. Las lenguas largas las dibuja el código por encima de él.
   - *Aspirar:* si te ve a entre 90 y 420, grita «¡HAMBRE!», 0,8 s de aviso con el cono verde en el suelo (±0,85 rad)
     y 5 s tirando de ti hacia la boca (te suma 120 de velocidad hacia él; andando hacia atrás se resiste, esquivando
     no tira y con una pared en medio tampoco), mientras se va girando hacia ti (2 rad/s). Si llegas a su boca te
