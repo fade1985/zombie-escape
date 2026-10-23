@@ -48,17 +48,17 @@
   de las teles y lo oscura que se queda la tienda: `Luz.extra`; `arreglar()`, cuando el técnico arregla el cable y
   el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y tres de los Apartamentos: `porqueria.gd`, la
   habitación del Glotón (solo lámparas, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
-  ácido pegada a las paredes, con un óvalo limpio en medio para pelear, `Peligros.del_gloton`,
-  salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
+  ácido pegada a las paredes, con una elipse limpia perfecta en medio para pelear, siempre igual, como un ring:
+  `Peligros.del_gloton` y `Peligros.franja_y_ovalo`; salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
   `porqueria`, que quema a Johnny al pisarla), y `tropiezos.gd`, las cosas tiradas por el suelo con las que se
   tropieza: las mancuernas del gimnasio del Gymbro (`Peligros.del_gymbro`, 12) y los cubos de fregar del cuarto de la
   limpieza de la portera (`Peligros.de_la_portera`, 10, de tres colores, dibujados a cuadraditos en `tropiezos.gd`),
   repartidos por el suelo libre (`Peligros.tirar_cosas`); al pisarlos, `johnny.caer` 2 s y la cosa sale rodando (el
   cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso. Y
   `cerco.gd`, la habitación del jefe de bomberos («Apartamento en llamas», sin muebles: `jefe-bombero` del catálogo),
-  que arde por el borde (`Peligros.del_bombero`: con la misma `Peligros.franja_y_ovalo` que la porquería del Glotón,
-  pero con los números de `CERCO`, sin ondas ni llamas sueltas: en medio una elipse limpia perfecta, siempre igual,
-  como un ring, y todo lo de fuera ardiendo hasta la pared, menos delante de la puerta de entrada): quema como el
+  que arde por el borde (`Peligros.del_bombero`: con la misma `Peligros.franja_y_ovalo` que la porquería del Glotón:
+  en medio una elipse limpia perfecta, siempre igual, como un ring, y todo lo de fuera ardiendo hasta la pared, menos
+  delante de la puerta de entrada): quema como el
   fuego de la cocina, prende a los zombis (al bombero no) y la alumbra con sus luces (por el borde de la elipse, como
   las del ácido: `Peligros.luces_del_ovalo`); lo fijo se pinta una vez y las llamas, solo lo que
   se ve en pantalla.

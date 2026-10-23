@@ -1,6 +1,6 @@
 # La porquería del Glotón (peligros.gd, PORQUERIA): su habitación no tiene más muebles que unas lámparas y, pegada a
-# las paredes, una franja de charcos de diarrea y montones de mierda con ácido (en medio, un óvalo limpio donde se pelea), salpicada
-# también por las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
+# las paredes, una franja de charcos de diarrea y montones de mierda con ácido (en medio, una elipse limpia perfecta,
+# siempre igual, donde se pelea, como un ring), salpicada también por las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
 # llevan montón) y aquí se dibuja y quema: a Johnny le pone
 # el estado "porqueria" (estados.gd) mientras la pisa (la esquiva la cruza sin daño, como los charcos); a los zombis
 # no les hace nada (es del Glotón). Se dibuja a cuadraditos de pixel art como el fuego de la cocina (fuego.gd): cada
@@ -61,7 +61,7 @@ func montar(d: Dictionary, m: Node) -> void:
 	for cara in mapa.caras.get(datos.sala, []):
 		cara.adornos += salpicones(cara.ancho, rng)
 		cara.queue_redraw()
-	# el resplandor: LUCES luces repartidas por el borde del óvalo limpio (Peligros.luces_del_ovalo)
+	# el resplandor: LUCES luces repartidas por el borde de la elipse limpia (Peligros.luces_del_ovalo)
 	for c in Peligros.luces_del_ovalo(datos, LUCES):
 		luz_de_acido(Peligros.centro(c))
 

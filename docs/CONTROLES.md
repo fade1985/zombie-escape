@@ -96,10 +96,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   (`captura-caza-vuelve.png`). Cada línea de la terminal dice lo esperado.
 - `--porqueria` (con `--jefe gloton`): en vez de la prueba larga, la de la habitación del Glotón (`peligros/porqueria.gd`):
   la monta sin él y cuenta en la terminal los muebles (solo lámparas), la parte del suelo sucia, que donde aparece Johnny y el
-  centro están limpios y lo pegado a las paredes sucio (y el grosor de la franja), lo que pierde sobre la porquería en
-  1 s y que en una casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor
-  (`captura-porqueria.png`, Johnny encima; `captura-porqueria-medio.png`, el óvalo limpio desde el medio). Cada línea
-  dice lo esperado.
+  centro están limpios y lo pegado a las paredes sucio (y el grosor de la franja), que en medio queda una elipse limpia
+  perfecta, como un ring, que sale igual con otra semilla, lo que pierde sobre la porquería en 1 s y que en una
+  casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor (`captura-porqueria.png`,
+  Johnny encima; `captura-porqueria-medio.png`, la elipse limpia desde el medio). Cada línea dice lo esperado.
 - `--gimnasio` (con `--jefe gymbro`): en vez de la prueba larga, la del gimnasio del Gymbro (`peligros/tropiezos.gd`):
   lo monta sin él y cuenta en la terminal las máquinas y en qué paredes están, las lámparas, la parte del suelo que
   queda libre y las mancuernas (cuántas, lo separadas que están, lejos de la puerta y de los muebles); que andando

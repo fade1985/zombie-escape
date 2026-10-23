@@ -69,14 +69,15 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
   las quiso dejar para que haya luz además de la linterna. En su lugar, **su porquería**: un peligro como los de las
   tiendas (`scripts/peligros/porqueria.gd`; los números en `Peligros.PORQUERIA`), decidido al generar la planta
   (`Peligros.del_gloton`) y que sigue igual al volver.
-  - **El suelo:** una **franja pegada a las paredes** que cubre cerca de un 45 % de la habitación, y en medio un
-    **óvalo limpio, la zona de pelea** (el dueño, 23 oct: que no se pueda rodear al Glotón bordeando la habitación y
-    haya que luchar cerca de él); el borde del óvalo ondula y algún charco suelto se mete en él. Un montón de mierda
-    en un 22 % de las casillas sucias; delante de la puerta de entrada, limpio (ahí aparece Johnny). Dibujado a
-    cuadraditos como el fuego de la cocina, con burbujas de ácido que revientan y moscas sobre los montones.
+  - **El suelo:** una **franja pegada a las paredes** que cubre cerca de un 45 % de la habitación, y en medio una
+    **elipse limpia, la zona de pelea** (el dueño, 23 oct: que no se pueda rodear al Glotón bordeando la habitación y
+    haya que luchar cerca de él); la elipse es perfecta y siempre igual, como un ring (el dueño, 23 oct: sin nada al
+    azar, como el fuego del bombero; lo que cambia de una partida a otra es dónde caen los montones). Un montón de
+    mierda en un 22 % de las casillas sucias; delante de la puerta de entrada, limpio (ahí aparece Johnny). Dibujado
+    a cuadraditos como el fuego de la cocina, con burbujas de ácido que revientan y moscas sobre los montones.
     **Las paredes:** la de arriba con salpicaduras que gotean (texturas hechas con código, como adornos de
     las caras de muro) y los lomos de las otras tres, que se ven desde arriba, con pegotes en un 40 % de sus casillas.
-    Y el ácido **reluce** con 8 luces verdosas suaves que laten, repartidas por el borde del óvalo.
+    Y el ácido **reluce** con 8 luces verdosas suaves que laten, repartidas por el borde de la elipse.
   - **Quema:** estado `porqueria` (`estados.gd`), **7 de vida por segundo** pisándola y 1 s de escozor al salir, con
     gotas marrones; la esquiva la cruza sin daño, como los charcos. A los zombis (y a él) no les hace nada. Al entrar,
     el aviso «¡Qué peste! El suelo está lleno de mierda con ácido: no la pises».
@@ -172,8 +173,8 @@ la lumbre.
   - *Su habitación, en llamas* (M8): «Apartamento en llamas», sin muebles (`jefe-bombero` del catálogo) y con todo el
     borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`), **una elipse fija, como un ring** (el dueño, 23
     oct): en medio, una elipse limpia perfecta donde se pelea, siempre igual (sin nada al azar), y todo lo de fuera
-    ardiendo hasta la pared, cerca de un 45 % de la habitación (se reparte con lo mismo que la porquería del Glotón,
-    pero sin ondas ni llamas sueltas); delante de la puerta de entrada no arde. No se apaga: quema como el fuego de
+    ardiendo hasta la pared, cerca de un 45 % de la habitación (se reparte igual que la porquería del Glotón);
+    delante de la puerta de entrada no arde. No se apaga: quema como el fuego de
     la cocina (12 por segundo y 2 s más al salir; rodando se cruza, como los charcos) y prende a los zombis; al
     bombero no le hace nada. Da la luz de la sala (10 luces de fuego repartidas por el borde de la elipse).
   - *Molotovs:* a entre 140 y 520, uno en curva (0,9 s) a donde estás, con su marca roja en el suelo

@@ -367,11 +367,12 @@ func probar_presentacion() -> void:
 # Con "--captura --jefe gloton --porqueria": la habitación del Glotón (peligros/porqueria.gd): solo con lámparas y
 # con la franja de porquería pegada a las paredes, que quema. Monta su piso (la 1ª planta) con todo descubierto y sin
 # que salga él, y cuenta en la terminal: los muebles (3 o 4 lámparas), cuántas casillas están sucias (parte del suelo), que donde
-# aparece Johnny está limpio, que el centro está limpio y lo pegado a las paredes sucio (y cuánto mide la franja), lo
-# que pierde Johnny en 1 s sobre una casilla sucia (unos 7) y que en una limpia, pasado el escozor, no pierde nada;
-# las salpicaduras de la pared de arriba, los pegotes de los lomos de las otras y las luces del resplandor. Saca
-# captura-porqueria.png (Johnny sobre la porquería) y captura-porqueria-medio.png (desde el medio: el óvalo limpio y
-# la franja alrededor) y se cierra
+# aparece Johnny está limpio, que el centro está limpio y lo pegado a las paredes sucio (y cuánto mide la franja), que
+# en medio queda una elipse limpia perfecta, como un ring, que sale igual con otra semilla, lo que pierde Johnny en
+# 1 s sobre una casilla sucia (unos 7) y que en una limpia, pasado el escozor, no pierde nada; las salpicaduras de la
+# pared de arriba, los pegotes de los lomos de las otras y las luces del resplandor. Saca captura-porqueria.png
+# (Johnny sobre la porquería) y captura-porqueria-medio.png (desde el medio: la elipse limpia y la franja alrededor)
+# y se cierra
 func probar_porqueria() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe gloton, la suya
@@ -385,6 +386,7 @@ func probar_porqueria() -> void:
 	for sala in sitio.apt.salas:
 		mapa.vistas[sala.id] = true   # todo descubierto
 		mapa.niebla[sala.id] = 0.0
+	mapa.actualizar_niebla(0.0)   # (y la niebla, repintada ya: si no, la foto sale tapada)
 	var lista: Array = sitio.get("peligros", []).filter(func(q): return q.tipo == "porqueria")
 	if lista.is_empty():
 		print("Porquería: el piso del jefe (%s) no tiene porquería (¡mal!)" % planta.jefe)
@@ -397,7 +399,7 @@ func probar_porqueria() -> void:
 	print("Porquería (jefe %s): muebles %d, todos lámparas %s (esperado: de 3 a 4, true) · casillas sucias %d de %d (%d %%, esperado: entre 35 y 55) · montones %d · donde aparece Johnny, limpio %s (esperado: true)" % [
 		planta.jefe, sitio.muebles.size(), sitio.muebles.all(func(m): return m.tipo == "lamp"), p.casillas.size(), total,
 		roundi(100.0 * p.casillas.size() / total), montones, not p.casillas.has(Peligros.casilla(johnny.position))])
-	# la franja junto a las paredes y el óvalo limpio: el centro limpio, y las casillas pegadas a cada pared sucias (en la
+	# la franja junto a las paredes y la elipse limpia: el centro limpio, y las casillas pegadas a cada pared sucias (en la
 	# de la puerta, a un lado de ella), con la franja de al menos 2 casillas de grosor en sus puntos medios
 	var medio := Vector2i(sala.c0 + sala.ancho / 2, sala.f0 + sala.fondo / 2)
 	var lado_puerta: int = sala.f0 if sitio.apt.entrada.lado == "arriba" else sala.f0 + sala.fondo - 1
@@ -418,6 +420,11 @@ func probar_porqueria() -> void:
 		grosor = mini(grosor, n)
 	print("Porquería: el centro limpio %s (esperado: true) · pegado a las paredes, sucio en %d de 4 puntos (esperado: 4) · la franja mide al menos %d casillas de grosor (esperado: 2 o más)" % [
 		not p.casillas.has(medio), sucios, grosor])
+	# siempre igual: con otra semilla, las mismas casillas sucias (los montones sí cambian)
+	var otro: Dictionary = sitio.duplicate()
+	otro.surtido = int(sitio.surtido) + 1
+	print("Porquería: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
+		p.ovalo.rx * 2.0, p.ovalo.ry * 2.0, descuadradas(sitio, p), Peligros.del_gloton(otro)[0].casillas.keys() == p.casillas.keys()])
 	# 1 s sobre una casilla sucia rodeada de sucias (que el borde no engañe)
 	var sucia := Vector2i(-1, -1)
 	for c in p.casillas:
@@ -444,9 +451,10 @@ func probar_porqueria() -> void:
 	var salpicaduras: int = mapa.caras.get(sala.id, []).reduce(func(acc, cara): return acc + cara.adornos.size(), 0)
 	print("Porquería: en una casilla limpia, pasado el escozor, pierde %d en 1 s (esperado: 0) · estado «porqueria» %s (esperado: false) · salpicaduras en la pared de arriba %d y pegotes en los lomos de las otras %d (esperado: más de 0 las dos) · luces del resplandor %d (esperado: entre 4 y 8)" % [
 		antes - johnny.vida, johnny.estados.has("porqueria"), salpicaduras, p.get("paredes", {}).size(), mapa.get_node("Porqueria").luces.size()])
-	# y desde el medio de la zona de pelea: el óvalo limpio y la franja sucia alrededor, con la pared de arriba
+	# y desde el medio de la zona de pelea, con la cámara alejada: la elipse limpia y la franja sucia alrededor
 	johnny.position = Peligros.centro(medio)
 	johnny.direccion = "n"
+	johnny.get_node("Camara").zoom = Vector2(0.66, 0.66)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
 	Captura.foto("captura-porqueria-medio.png")
@@ -740,24 +748,18 @@ func probar_llamas() -> void:
 	var sala: Dictionary = apt.salas[0]
 	var total: int = sala.ancho * sala.fondo
 	# la parte del suelo que arde, el centro sin fuego y, contadas aquí por su cuenta, las casillas pegadas a la pared
-	# (menos el hueco limpio de delante de la puerta, el de Peligros.franja_y_ovalo), las de delante de la puerta (las
-	# de sus 2 casillas y una más a cada lado, en las 2 filas de esa pared) y las que no cuadran con la elipse perfecta
-	# (fuera de ella arde todo, menos el hueco de la puerta, y dentro nada: sin ondas ni llamas sueltas)
+	# (menos el hueco limpio de delante de la puerta, el de Peligros.franja_y_ovalo) y las de delante de la puerta (las
+	# de sus 2 casillas y una más a cada lado, en las 2 filas de esa pared)
 	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * Peligros.CASILLA)
 	var en: float = (apt.entrada.c + 1) * Peligros.CASILLA
-	var ov: Dictionary = cerco.ovalo
 	var pegadas := 0
 	var pegadas_arden := 0
 	var puerta := 0
 	var puerta_arde := 0
-	var descuadradas := 0
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
 			var k := Vector2i(c, f)
-			var fuera: bool = Vector2((c + 0.5 - ov.centro.x) / ov.rx, (f + 0.5 - ov.centro.y) / ov.ry).length() > 1.0
 			var en_hueco := hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA))
-			if cerco.casillas.has(k) != (fuera and not en_hueco):
-				descuadradas += 1
 			var lejos: int = mini(mini(c - sala.c0, sala.c0 + sala.ancho - 1 - c), mini(f - sala.f0, sala.f0 + sala.fondo - 1 - f))
 			var pared_puerta: int = sala.f0 + sala.fondo - 1 - f if apt.entrada.lado == "abajo" else f - sala.f0
 			if pared_puerta < 2 and absf((c + 0.5) * Peligros.CASILLA - en) < 64.0:
@@ -774,7 +776,7 @@ func probar_llamas() -> void:
 	var otro: Dictionary = sitio.duplicate()
 	otro.surtido = int(sitio.surtido) + 1
 	print("Llamas: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
-		ov.rx * 2.0, ov.ry * 2.0, descuadradas, Peligros.del_bombero(otro)[0].casillas == cerco.casillas])
+		cerco.ovalo.rx * 2.0, cerco.ovalo.ry * 2.0, descuadradas(sitio, cerco), Peligros.del_bombero(otro)[0].casillas == cerco.casillas])
 	await get_tree().create_timer(0.3).timeout
 	var nodo: Node = mapa.get_node("Cerco")
 	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
@@ -830,7 +832,7 @@ func probar_llamas() -> void:
 	var rodar := await vuelta_de_giro(jefe, centro, "rodar", 1.0, 0.0, 190.0)
 	print("Llamas: rodando a través de la lengua, Johnny rueda %s (esperado: true) · pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
 		rodar.rodado, rodar.vida, rodar.arde])
-	# enfadado: dos lenguas opuestas (Johnny, lejos del empujón del grito y a un lado, donde el óvalo limpio es más ancho)
+	# enfadado: dos lenguas opuestas (Johnny, lejos del empujón del grito y a un lado, donde la elipse limpia es más ancha)
 	johnny.position = centro + Vector2(300, 0)
 	jefe.fase = 2
 	jefe.al_enfadarse(johnny)
@@ -839,6 +841,25 @@ func probar_llamas() -> void:
 	print("Llamas: enfadado, corriendo entre las dos lenguas, a su paso (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false) · lenguas %d (esperado: 2)" % [
 		roundi(entre.radio[0]), roundi(entre.radio[1]), entre.vida, entre.arde, entre.lenguas])
 	get_tree().quit()
+
+
+# Las casillas de la habitación del jefe que no cuadran con una elipse perfecta, la de "datos.ovalo" (la porquería del
+# Glotón y el cerco de fuego del bombero, de Peligros.franja_y_ovalo): fuera de ella tiene que estar todo cubierto,
+# menos el hueco de delante de la puerta, y dentro, nada (sin ondas ni manchas sueltas)
+func descuadradas(sitio: Dictionary, datos: Dictionary) -> int:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * Peligros.CASILLA)
+	var ov: Dictionary = datos.ovalo
+	var n := 0
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var k := Vector2i(c, f)
+			var fuera: bool = Vector2((c + 0.5 - ov.centro.x) / ov.rx, (f + 0.5 - ov.centro.y) / ov.ry).length() > 1.0
+			var en_hueco := hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA))
+			if datos.casillas.has(k) != (fuera and not en_hueco and Peligros.dueno(apt, c, f) == sala.id):
+				n += 1
+	return n
 
 
 # Una vuelta del giro del bombero ("jefe", puesto en "centro"), con Johnny a "radio" de él, hacia "desde" (ángulo), y

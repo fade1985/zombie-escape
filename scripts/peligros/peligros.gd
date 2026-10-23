@@ -63,10 +63,7 @@ const AGUA := {
 const PORQUERIA := {
 	"dps": 7.0,          # vida por segundo pisándola...
 	"despues": 1.0,      # ...y lo que sigue escociendo al salir
-	"parte": 0.45,       # qué parte del suelo cubre: una franja pegada a las paredes (en medio, un óvalo limpio para pelear)
-	"ondas": 0.09,       # lo que ondula el borde del óvalo (parte de su radio), para que no parezca hecho con compás
-	"salientes": 3,      # charcos sueltos que desde la franja se meten un poco en el óvalo...
-	"saliente_radio": [1.0, 1.8],   # ...y su radio, en casillas
+	"parte": 0.45,       # qué parte del suelo cubre: todo lo de fuera de una elipse limpia en medio, para pelear
 	"montones": 0.22,    # parte de las casillas sucias que llevan un montón encima
 	"paredes": 0.4,      # parte de las casillas de muro pegadas al suelo (lados y abajo) con un pegote encima
 }
@@ -85,13 +82,11 @@ const TROPIEZOS := {
 	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
 }
 # El cerco de fuego de la habitación del jefe de bomberos: arde siempre (no se apaga) todo lo pegado a las paredes,
-# para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas. Se reparte como la porquería del
-# Glotón (franja_y_ovalo), pero sin nada al azar: en medio, una elipse limpia perfecta, siempre igual, como un ring
+# para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas. Se reparte igual que la porquería del
+# Glotón (franja_y_ovalo): en medio, una elipse limpia perfecta, siempre igual, como un ring
 const CERCO := {
 	"dps": 12.0,         # a Johnny, como el fuego de la cocina (y sigue ardiendo 2 s al salir); a los zombis los prende
 	"parte": 0.45,       # qué parte del suelo arde: todo lo de fuera de la elipse, hasta la pared (como la porquería)
-	"ondas": 0.0,        # el borde de la elipse, liso...
-	"salientes": 0,      # ...y sin llamas sueltas que se metan en ella
 	"luces": 10,         # luces de fuego repartidas por el borde de la elipse (no hay más luz en la habitación)
 }
 
@@ -116,15 +111,16 @@ static func de_tienda(sitio: Dictionary) -> Array:
 	return lista
 
 
-# La porquería del Glotón: la franja pegada a las paredes de su habitación con el óvalo limpio en medio (franja_y_ovalo).
-# Con su propio dado, como de_tienda. Cada casilla sucia: 1, charco; 2, charco con un montón encima
+# La porquería del Glotón: todo lo pegado a las paredes de su habitación, con la elipse limpia en medio (franja_y_ovalo:
+# siempre igual). Con su propio dado, como de_tienda, solo para lo de encima: qué casillas sucias llevan un montón (1,
+# charco; 2, charco con un montón encima) y los pegotes de las paredes
 static func del_gloton(sitio: Dictionary) -> Array:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(sitio.surtido) + 7331
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
 	var p: Dictionary = PORQUERIA
-	var reparto := franja_y_ovalo(sitio, rng, p)
+	var reparto := franja_y_ovalo(sitio, p.parte)
 	var casillas: Dictionary = reparto.casillas
 	for key in casillas:
 		if rng.randf() < p.montones:
@@ -141,52 +137,35 @@ static func del_gloton(sitio: Dictionary) -> Array:
 				if dueno(apt, k.x, k.y) == -1 and not paredes.has(k) and rng.randf() < p.paredes:
 					paredes[k] = rng.randi_range(0, 2)
 	return [{"tipo": "porqueria", "sala": sala.id, "casillas": casillas, "paredes": paredes, "avisado": false,
-		"ovalo": reparto.ovalo}]   # (el óvalo, para repartir las luces del resplandor)
+		"ovalo": reparto.ovalo}]   # (la elipse, para repartir las luces del resplandor)
 
 
-# El reparto de la porquería del Glotón (y del cerco de fuego del jefe de bomberos, que va igual pero sin ondas ni
-# charcos sueltos: CERCO): una franja pegada a las paredes de la habitación del jefe (la única sala de su piso), y en
-# medio un óvalo limpio, la zona de pelea: así no se le puede rodear bordeando la habitación y hay que luchar cerca
-# de él. El óvalo tiene el tamaño justo para que la franja cubra su parte del suelo ("parte"), con el borde ondulado
-# ("ondas") y algún charco suelto ("salientes") que se mete en él; lo de delante de la puerta de entrada queda limpio
-# (ahí aparece Johnny). Devuelve {casillas (casilla -> 1), ovalo {centro, rx, ry} (en casillas)}
-static func franja_y_ovalo(sitio: Dictionary, rng: RandomNumberGenerator, p: Dictionary) -> Dictionary:
+# El reparto de la porquería del Glotón y del cerco de fuego del jefe de bomberos: todo lo pegado a las paredes de la
+# habitación del jefe (la única sala de su piso) cubierto, y en medio una elipse limpia perfecta, siempre igual (no
+# hay nada al azar), la zona de pelea, como un ring: así no se le puede rodear bordeando la habitación y hay que
+# luchar cerca de él. La elipse tiene la forma de la habitación y el tamaño justo para que lo de fuera cubra "parte"
+# del suelo; lo de delante de la puerta de entrada queda limpio (ahí aparece Johnny). Devuelve {casillas (casilla ->
+# 1), ovalo {centro, rx, ry} (la elipse, en casillas)}
+static func franja_y_ovalo(sitio: Dictionary, parte: float) -> Dictionary:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
 	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * CASILLA)
-	# el óvalo: con la forma de la habitación y el área que deja limpia la franja (1 - parte)
+	# la elipse: con la forma de la habitación y el área que deja limpia (1 - parte)
 	var centro := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0)
-	var escala := sqrt((1.0 - p.parte) * 4.0 / PI)
+	var escala := sqrt((1.0 - parte) * 4.0 / PI)
 	var rx: float = sala.ancho / 2.0 * escala
 	var ry: float = sala.fondo / 2.0 * escala
-	var fase := rng.randf() * TAU
-	var fase2 := rng.randf() * TAU
 	var casillas := {}
-	var marcar := func(c: int, f: int) -> void:
-		if dueno(apt, c, f) == sala.id and not entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
-			casillas[Vector2i(c, f)] = 1
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
-			var d := Vector2((c + 0.5 - centro.x) / rx, (f + 0.5 - centro.y) / ry)
-			var a := atan2(d.y, d.x)
-			var borde: float = 1.0 + p.ondas * sin(a * 3.0 + fase) + p.ondas * 0.55 * sin(a * 7.0 + fase2)
-			if d.length() > borde:
-				marcar.call(c, f)
-	# los charcos sueltos, con el centro en el borde del óvalo
-	for i in p.salientes:
-		var a := rng.randf() * TAU
-		var cx: float = centro.x + cos(a) * rx
-		var cy: float = centro.y + sin(a) * ry
-		var r: float = rng.randf_range(p.saliente_radio[0], p.saliente_radio[1])
-		for f in range(floori(cy - r), ceili(cy + r) + 1):
-			for c in range(floori(cx - r), ceili(cx + r) + 1):
-				if Vector2(c + 0.5 - cx, (f + 0.5 - cy) / 0.75).length() <= r:
-					marcar.call(c, f)
+			var fuera := Vector2((c + 0.5 - centro.x) / rx, (f + 0.5 - centro.y) / ry).length() > 1.0
+			if fuera and dueno(apt, c, f) == sala.id and not entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
+				casillas[Vector2i(c, f)] = 1
 	return {"casillas": casillas, "ovalo": {"centro": centro, "rx": rx, "ry": ry}}
 
 
-# Dónde van las luces de una franja con su óvalo (las del resplandor de la porquería y las del cerco de fuego):
-# "cuantas" puntos repartidos por el borde del óvalo limpio (la franja empieza ahí), cada uno en la casilla de la
+# Dónde van las luces de una franja con su elipse (las del resplandor de la porquería y las del cerco de fuego):
+# "cuantas" puntos repartidos por el borde de la elipse limpia (la franja empieza ahí), cada uno en la casilla de la
 # franja más cercana (como mucho a 4 casillas del punto); así alumbran la franja y, hacia dentro, la zona de pelea
 static func luces_del_ovalo(datos: Dictionary, cuantas: int) -> Array:
 	var ov: Dictionary = datos.ovalo
@@ -248,12 +227,12 @@ static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla:
 
 
 # El cerco de fuego del jefe de bomberos: su habitación (la única sala de su piso, sin muebles) arde por el borde,
-# repartido como la porquería del Glotón (franja_y_ovalo) pero con los números de CERCO, sin ondas ni llamas sueltas:
-# en medio, una elipse limpia perfecta, donde se pelea, como un ring, y todo lo de fuera ardiendo hasta la pared;
-# delante de la puerta de entrada no arde (por ahí se entra y ahí aparece Johnny). Sale siempre igual (el dado no
-# decide nada). Cada casilla que arde, en "casillas" (casilla -> 1), y la elipse ("ovalo"), para repartir las luces
+# repartido igual que la porquería del Glotón (franja_y_ovalo): en medio, una elipse limpia perfecta, siempre igual,
+# donde se pelea, como un ring, y todo lo de fuera ardiendo hasta la pared; delante de la puerta de entrada no arde
+# (por ahí se entra y ahí aparece Johnny). Cada casilla que arde, en "casillas" (casilla -> 1), y la elipse
+# ("ovalo"), para repartir las luces
 static func del_bombero(sitio: Dictionary) -> Array:
-	var reparto := franja_y_ovalo(sitio, RandomNumberGenerator.new(), CERCO)
+	var reparto := franja_y_ovalo(sitio, CERCO.parte)
 	return [{"tipo": "cerco", "sala": sitio.apt.salas[0].id, "casillas": reparto.casillas, "ovalo": reparto.ovalo,
 		"avisado": false}]
 
