@@ -295,9 +295,9 @@ func fotos_luz() -> void:
 # la cámara está acercada y sobre el jefe, Johnny quieto y sin poder recibir daño, el jefe gritando, el nombre en
 # pantalla y la barra de vida aún oculta; y al acabar, que la cámara ha vuelto, Johnny se mueve, el jefe anda y la
 # barra ha salido. Con la Modista (--edificio centro --jefe modista), que entra escondida, ni zoom ni grito: solo
-# franjas, nombre y rugido, y sigue escondida al acabar. Johnny lleva la Gastroenteritis (mutaciones.gd) lista para
-# tirar: ningún vómito mientras dura, y el primero 1 s después de acabar (captura-presentacion-vomito.png).
-# Cuenta todo en la terminal, con lo esperado, y se cierra
+# franjas, nombre y rugido, y sigue escondida al acabar. Johnny lleva las mutaciones que actúan solas (mutaciones.gd),
+# listas y con un zombi quieto al lado: ninguna actúa mientras dura, y cada una 1 s después de acabar
+# (captura-presentacion-vomito.png, con el vómito en el aire). Cuenta todo en la terminal, con lo esperado, y se cierra
 func probar_presentacion() -> void:
 	set_process(false)
 	presentar_en_prueba = true
@@ -306,18 +306,33 @@ func probar_presentacion() -> void:
 	for i in planta.sitios.size():
 		if planta.sitios[i].tipo == "jefe":
 			idx = i
-	# con la Gastroenteritis lista para tirar (como en la partida, esperando a quién): se apunta cuándo sale cada vómito
-	mutaciones.tengo.append("gastro")
-	mutaciones.espera["gastro"] = 0.0
-	var vomitos: Array = []   # [cuándo (ms), si la presentación seguía]
-	get_tree().node_added.connect(func(n: Node) -> void:
-		if n.get("tipo") == "vomito" and n.scene_file_path == Mutaciones.PROYECTIL.resource_path:
-			vomitos.append([Time.get_ticks_msec(), presentacion.activa]))
+	# con las mutaciones que actúan solas, listas (como en la partida, esperando a quién): se apunta cuándo actúa cada
+	# una (al actuar, su cuenta vuelve a "cada": se ve en el fotograma siguiente) y si la presentación seguía
+	var ids := ["gastro", "tentacular", "locura", "flatulento"]
+	for id in ids:
+		mutaciones.tengo.append(id)
+		mutaciones.espera[id] = 0.0
+	# el reloj del juego (el de las mutaciones: en los parones de los golpes, Temblor.parar, casi no avanza)
+	var reloj := get_tree().create_timer(1000.0)
+	var ahora := func() -> float: return 1000.0 - reloj.time_left
+	var actua: Array = []   # [mutación, cuándo (s del juego), si la presentación seguía]
+	get_tree().physics_frame.connect(func() -> void:
+		for id in ids:
+			if mutaciones.espera[id] == Mutaciones.MUT[id].cada:
+				actua.append([id, ahora.call(), presentacion.activa]))
 	montar(idx, 0, false)   # (sin await: la presentación va dentro, y hay que mirarla a medias)
 	# Johnny, a 200 de donde saldrá el jefe (en medio de la sala): desde la puerta, el vómito (420) no le llegaría
 	johnny.position = Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0 + 200.0)
 	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(JEFE_TARDA + 1.1).timeout   # a 1,1 s de empezar la presentación
+	# y, nada más empezar la presentación (hasta ahí, sin nadie a quien hacérselo, esperan listas), un zombi quieto a su
+	# lado, para que Tentacular, Locura y Flatulento tengan a quién (el vómito también va a él; con mucha vida, que no
+	# lo maten)
+	while not presentacion.activa:
+		await get_tree().physics_frame
+	var vecino := meter_zombi("normal", johnny.position + Vector2(40, 0))
+	vecino.set_physics_process(false)
+	vecino.vida = 100000
+	await get_tree().create_timer(1.1).timeout   # a 1,1 s de empezar la presentación
 	var camara: Camera2D = johnny.get_node("Camara")
 	print("Presentación (jefe %s), a mitad: zoom %.2f (esperado: %.1f; 1 si entra escondido, como la Modista) · cámara desplazada %d hacia el jefe (esperado: más de 0; 0 si escondido) · a %d del jefe (esperado: menos de 60, que enfoca algo por encima; da igual si escondido) · Johnny quieto %s y sin daño %s (esperado: true, true) · el jefe gritando %s (esperado: true; false si escondido) · nombre «%s» a la vista %s (esperado: true) · barra oculta %s (esperado: true)" % [
 		planta.jefe, camara.zoom.x, presentacion.ZOOM, roundi(camara.offset.length()),
@@ -330,18 +345,20 @@ func probar_presentacion() -> void:
 	Captura.foto("captura-presentacion.png")
 	while presentacion.activa:
 		await get_tree().physics_frame
-	var acabo := Time.get_ticks_msec()
+	var acabo: float = ahora.call()
 	await get_tree().create_timer(0.5).timeout
 	print("Presentación, al acabar: zoom %.2f (esperado: 1) · cámara desplazada %d (esperado: 0) · Johnny se mueve %s (esperado: true) · el jefe en «%s» (esperado: no «grito») · barra a la vista %s (esperado: true) · franjas y nombre ocultos %s (esperado: true)" % [
 		camara.zoom.x, roundi(camara.offset.length()), johnny.is_physics_processing(), jefa.estado, $Pantalla/Jefa.visible,
 		not presentacion.visible])
-	# el primer vómito de después (se espera hasta 2,5 s) y su foto, ya en el aire
-	var despues: Array = []
-	while despues.is_empty() and Time.get_ticks_msec() - acabo < 2500:
+	# la primera vez de cada una después (se espera hasta 2,5 s del juego) y la foto, con el vómito ya en el aire
+	var primera := {}
+	while primera.size() < ids.size() and ahora.call() - acabo < 2.5:
 		await get_tree().physics_frame
-		despues = vomitos.filter(func(v): return not v[1])
-	print("Gastroenteritis: vómitos durante la presentación %d (esperado: 0) · el primero, %s s después de acabar (esperado: 1, con un fotograma de margen: entre 0,95 y 1,1)" % [
-		vomitos.size() - despues.size(), "%.2f" % ((despues[0][0] - acabo) / 1000.0) if not despues.is_empty() else "ninguno"])
+		for a in actua:
+			if a[1] >= acabo and not primera.has(a[0]):   # (las de antes de salir el jefe no cuentan)
+				primera[a[0]] = "%.2f" % (a[1] - acabo)
+	print("Mutaciones: veces que actúan durante la presentación %d (esperado: 0) · la primera de cada una, en s después de acabar: %s (esperado: las 4, a 1, con un fotograma de margen: entre 0,95 y 1,1)" % [
+		actua.filter(func(a): return a[2]).size(), primera])
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-presentacion-vomito.png")
 	get_tree().quit()

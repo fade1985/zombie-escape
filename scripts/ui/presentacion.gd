@@ -7,7 +7,7 @@
 # mismo de cuando se enfada, que también lo deja sin recibir daño) y un foco lo alumbra; al acabar echa a andar
 # como siempre. Los jefes que entran a su manera (la Modista, escondida entre los maniquíes: no empiezan en "andar")
 # se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y el rugido. partida.gd no deja pausar ni
-# abrir el inventario mientras tanto ("activa"), ni la Gastroenteritis tira (mutaciones.gd). El desplazamiento de la
+# abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan (mutaciones.gd). El desplazamiento de la
 # cámara va por Temblor.desplazamiento (si se tocara el offset de la cámara, el temblor lo borraría).
 class_name Presentacion
 extends Control
