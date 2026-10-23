@@ -58,8 +58,9 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       cosas que llamen la atención (jefes, armas creadas, hordas), Discord pequeño para los probadores.
 - [ ] **Lo legal y de cobrar.** Cuenta de Steamworks; darse de alta como autónomo o empresa para poder facturar;
       formulario fiscal de Valve (W-8BEN); el IVA lo gestiona Valve. Revisar licencias de todo lo que no es
-      nuestro: términos comerciales de PixelLab, fuentes, sonidos y su origen. Clasificación por edades gratis
-      desde Steam (cuestionario IARC). Créditos en el menú.
+      nuestro: términos comerciales de PixelLab, fuentes, sonidos y su origen (la letra de los jefes, Jersey 25,
+      es OFL: se puede vender, pero su licencia `assets/fuentes/jersey-25-OFL.txt` va con el juego y sale en los
+      créditos). Clasificación por edades gratis desde Steam (cuestionario IARC). Créditos en el menú.
 - [ ] **Precio y salida.** Con dos edificios, un Early Access honesto es defendible; si se sale completo, mejor
       con tres. Descuento de salida del 10–20 %.
 

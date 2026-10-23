@@ -2,20 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/partida.gd" id="script"]
 [ext_resource type="PackedScene" path="res://escenas/personajes/johnny.tscn" id="johnny"]
-
-[sub_resource type="StyleBoxFlat" id="barra_fondo"]
-bg_color = Color(0.1, 0.08, 0.1, 0.85)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.11, 0.1, 0.17, 1)
+[ext_resource type="Script" path="res://scripts/ui/barra_jefe.gd" id="barra_jefe"]
 
 [sub_resource type="StyleBoxFlat" id="barra_relleno"]
 bg_color = Color(0.85, 0.2, 0.25, 1)
-
-[sub_resource type="StyleBoxFlat" id="barra_jefa"]
-bg_color = Color(0.71, 0.09, 0.62, 1)
 
 [node name="Partida" type="Node2D"]
 script = ExtResource("script")
@@ -57,29 +47,27 @@ theme_override_font_sizes/font_size = 28
 text = "Te han pillado"
 horizontal_alignment = 1
 
-[node name="Jefa" type="ProgressBar" parent="Pantalla"]
+[node name="Jefa" type="Control" parent="Pantalla"]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
-offset_top = 40.0
+offset_top = 44.0
 offset_right = 200.0
-offset_bottom = 56.0
-theme_override_styles/background = SubResource("barra_fondo")
-theme_override_styles/fill = SubResource("barra_jefa")
-value = 100.0
-show_percentage = false
+offset_bottom = 70.0
+mouse_filter = 2
+script = ExtResource("barra_jefe")
 
 [node name="Nombre" type="Label" parent="Pantalla/Jefa"]
-offset_top = -26.0
+offset_top = -32.0
 offset_right = 400.0
 offset_bottom = -2.0
-theme_override_colors/font_outline_color = Color(0.11, 0.1, 0.17, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 16
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 25
 text = "La portera"
 horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="Lugar" type="Label" parent="Pantalla"]
 anchors_preset = 1

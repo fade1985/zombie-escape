@@ -45,7 +45,8 @@ func preparar(partida: Node) -> void:
 	abajo = franja()
 	nombre = Label.new()
 	nombre.theme_type_variation = "Titulo"
-	nombre.add_theme_font_size_override("font_size", 48)
+	nombre.add_theme_font_override("font", Tema.FUENTE_JEFE)   # la letra de los jefes, como en su barra (al doble)
+	nombre.add_theme_font_size_override("font_size", 50)
 	nombre.add_theme_color_override("font_color", Tema.AMARILLO)
 	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	nombre.mouse_filter = Control.MOUSE_FILTER_IGNORE

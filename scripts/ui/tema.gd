@@ -19,6 +19,9 @@ const VERDE := Color("#80ed99")
 const ROJO := Color("#ff5d73")
 
 const FUENTE := preload("res://assets/fuentes/zombie-scape-ui.ttf")
+# La letra de los nombres de los jefes (su barra de vida y su presentación): Jersey 25, de Google Fonts, con licencia
+# OFL (jersey-25-OFL.txt, que va con ella). Es pixel art a 25 (un píxel de su dibujo, uno de pantalla) y a 50
+const FUENTE_JEFE := preload("res://assets/fuentes/jersey-25.ttf")
 const BOTON := preload("res://assets/ui/boton-oscuro.png")
 const PANEL := preload("res://assets/ui/panel-oscuro.png")
 
@@ -29,11 +32,13 @@ static func crear() -> Theme:
 	if _tema:
 		return _tema
 	var t := Theme.new()
-	# La fuente es pixel art (un píxel = 1/16 de su tamaño): sin suavizado y a 16 o 32, para que se vea nítida
+	# La fuente es pixel art (un píxel = 1/16 de su tamaño): sin suavizado y a 16 o 32, para que se vea nítida (la de
+	# los jefes, igual: sin suavizado)
 	var fuente: FontFile = FUENTE
-	fuente.antialiasing = TextServer.FONT_ANTIALIASING_NONE
-	fuente.hinting = TextServer.HINTING_NONE
-	fuente.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+	for f: FontFile in [FUENTE, FUENTE_JEFE]:
+		f.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+		f.hinting = TextServer.HINTING_NONE
+		f.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
 	t.default_font = fuente
 	t.default_font_size = 16
 

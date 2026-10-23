@@ -1169,15 +1169,16 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var por_planta := pow(1.25, planta.num - 1) if de_final.is_empty() else 1.0
 		zombi.vida_max = int(zombi.vida_max * por_planta * Alerta.jefe_vida())
 		zombi.enfado = Alerta.jefe_enfado()
-		# Su barra de vida grande, arriba, y los vecinos que llama
-		var barra_jefa: ProgressBar = $Pantalla/Jefa
+		# Su barra de vida grande, arriba (ui/barra_jefe.gd), y los vecinos que llama
+		var barra_jefa: BarraJefe = $Pantalla/Jefa
 		var el: String = de_final.get("el_final", Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera"))
 		$Pantalla/Jefa/Nombre.text = el.left(1).to_upper() + el.substr(1)
+		barra_jefa.jefe = zombi
 		zombi.vida_cambiada.connect(func(vida, maxima):
 			barra_jefa.max_value = maxima
 			barra_jefa.value = vida
 			barra_jefa.visible = vida > 0 and not presentacion.activa)   # (durante la presentación, oculta)
-		# la armadura (los suplementos del Gymbro enfadado), en una barra fina encima de la de vida
+		# la armadura (los suplementos del Gymbro enfadado), en una barra fina debajo de la de vida
 		var barra_armadura := armadura_jefe()
 		barra_armadura.hide()
 		if zombi.has_signal("armadura_cambiada"):
@@ -1193,8 +1194,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	return zombi
 
 
-# La barra de armadura de los jefes (la del Gymbro): se hace la primera vez que hace falta, pegada encima de la
-# barra de vida grande, del mismo ancho y más fina, de color acero
+# La barra de armadura de los jefes (la del Gymbro): se hace la primera vez que hace falta, pegada debajo de la
+# barra de vida grande, del ancho de su hueco y más fina, de color acero (la pinta la barra del jefe, con el mismo
+# estilo: ui/barra_jefe.gd, pintar_armadura)
 func armadura_jefe() -> ProgressBar:
 	var barra: ProgressBar = $Pantalla/Jefa.get_node_or_null("Armadura")
 	if barra:
@@ -1202,14 +1204,12 @@ func armadura_jefe() -> ProgressBar:
 	barra = ProgressBar.new()
 	barra.name = "Armadura"
 	barra.show_percentage = false
-	barra.position = Vector2(0, -8)
-	barra.size = Vector2($Pantalla/Jefa.size.x, 6)
-	var fondo := StyleBoxFlat.new()
-	fondo.bg_color = Color("#1c1a2b")
-	var lleno := StyleBoxFlat.new()
-	lleno.bg_color = Color("#9fc3e8")
-	barra.add_theme_stylebox_override("background", fondo)
-	barra.add_theme_stylebox_override("fill", lleno)
+	barra.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	barra.position = Vector2(BarraJefe.HUECO.position.x - 2, BarraJefe.ALTO)
+	barra.size = Vector2(BarraJefe.HUECO.size.x + 4, 8)
+	barra.add_theme_stylebox_override("background", StyleBoxEmpty.new())
+	barra.add_theme_stylebox_override("fill", StyleBoxEmpty.new())
+	barra.draw.connect(Callable($Pantalla/Jefa, "pintar_armadura").bind(barra))
 	barra.visible = false
 	$Pantalla/Jefa.add_child(barra)
 	return barra

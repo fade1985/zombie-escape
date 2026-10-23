@@ -87,7 +87,7 @@
   donde le dan (`rebote`), molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
   Johnny se le pega; enfadado arde él mismo y deja un rastro de fuego al andar), `gymbro.gd` (minijefe de los Apartamentos: torbellino con
   los brazos abiertos, salto encima de Johnny y pesas en curva, `pesa.gd`; enfadado, armadura de suplementos con su
-  barra encima de la de vida, que se come la mitad del daño), `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo
+  barra debajo de la de vida, que se come la mitad del daño), `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo
   de lenguas en abanico, aspira 5 s tirando de Johnny hacia la boca y se lo come si llega, sangre ácida al pegarle; una
   explosión le corta lo que hace), `antidisturbios.gd` (escudo por delante y doble por la espalda,
   porrazo, carga que le atonta si se estrella, silbato), `cocinero.gd` (a media distancia: abanico de cuchillos, lluvia
@@ -257,8 +257,16 @@
 
 **ui/**
 
+- `barra_jefe.gd` (`BarraJefe`): la barra de vida de todos los jefes, arriba en el centro (el nodo `Pantalla/Jefa` de
+  `partida.tscn`), con el mismo estilo que la de Johnny en `hud.gd`: el marco oxidado `barra-vida.png` alargado a 400
+  repitiendo su trozo de en medio (las puntas con remaches no se estiran), la sangre roja con su brillo, lo perdido en
+  claro antes de bajar, el temblor al recibir un golpe y la vida en números. Con el jefe enfadado (`fase` 2) la sangre
+  da un fogonazo, se vuelve rojo fuego y late. Encima, su nombre (`Nombre`) con la letra de los jefes, Jersey 25
+  (`Tema.FUENTE_JEFE`, a 25); debajo, la barra fina de armadura (`Armadura`, del Gymbro y la cúpula del científico:
+  la hace `partida.armadura_jefe()` y la pinta `pintar_armadura`). `partida.gd` le pone `jefe`, `max_value` y `value`.
 - `presentacion.gd`: la presentación de cada jefe al aparecer: todo se queda quieto, la cámara hace zoom sobre él
-  entre dos franjas negras mientras grita (su estado «grito», un foco y su frase, `GRITOS`) y sale su nombre en grande;
+  entre dos franjas negras mientras grita (su estado «grito», un foco y su frase, `GRITOS`) y sale su nombre en grande
+  (con la letra de los jefes, a 50);
   a los 2,2 s vuelve la cámara y empieza la pelea. Los que entran a su manera (la Modista, escondida) solo reciben
   franjas, nombre y rugido. La monta `partida.gd` al sacar al jefe (en la prueba se salta, salvo con `--presentacion`);
   mientras dura no se puede pausar ni abrir el inventario. El jefe sale siempre en medio de su sala
@@ -309,7 +317,9 @@
   animaciones. Hoja nueva → `py tools/hacer_frames.py assets/sprites/zombi-normal`.
 - `musica/`: tramos (`menu-*`, `explorar-*`, `jefe-*`.ogg) grabados del JS con `node tools/grabar_musica.mjs`
   (necesita el JS y ffmpeg). Si se graban más, cambiar `TRAMOS` en `sonido.gd`.
-- `ui/`, `fuentes/`: HUD y menús del JS (la fuente es nítida a 16 y 32). `tiles/`: texturas para los TileSets.
+- `ui/`, `fuentes/`: HUD y menús del JS (la fuente es nítida a 16 y 32). En `fuentes/` también, la letra de los
+  nombres de los jefes: `jersey-25.ttf` (Jersey 25, de Google Fonts; nítida a 25 y 50), con su licencia OFL
+  `jersey-25-OFL.txt`, que tiene que ir siempre con ella. `tiles/`: texturas para los TileSets.
 - `sources/`: originales (lleva `.gdignore`). `pixellab.json`: todo lo generado en PixelLab.
 
 ## tools/
