@@ -501,7 +501,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 - **La taquilla**, en la sala de mantenimiento: dos puertas de chapa con sus rejillas, tiradores y etiquetas,
   dibujada con código (`tools/taquilla.py` → `assets/sprites/taquilla.png`, 28×40 píxeles), pegada a la pared de
-  arriba a la derecha del baúl (`mapa.gd`, `TAQUILLA_X`), como mueble de arrimarse (`arrimable.gd`) con su letrero
+  arriba, en la esquina de la derecha (`mapa.gd`, `TAQUILLA_X`), como mueble de arrimarse (`arrimable.gd`) con su letrero
   azul claro.
 - **La ventanita** (`scripts/ui/taquilla.gd`, hecha como la del puesto del ferretero): al arrimarse se para el juego
   (`partida.abrir_taquilla`) y sale: a la izquierda Johnny de frente con su fregona, al triple, enseñando el traje

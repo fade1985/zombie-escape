@@ -366,8 +366,8 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 
 
 # La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo y manchas en el
-# suelo, sin muebles sueltos. En la mitad izquierda de la pared de arriba van el banco de trabajo, el ordenador y
-# el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340) y la taquilla (parte 11; los pone mapa.gd). En la
+# suelo, sin muebles sueltos. En la pared de arriba, de izquierda a derecha, van el banco de trabajo, el baúl, el
+# ordenador en el centro (fases 6 y 7) y la taquilla en la esquina de la derecha (parte 11; los pone mapa.gd). En la
 # pared de la derecha, la puerta de las viviendas de los supervivientes rescatados (viviendas.gd; adónde lleva lo
 # pone generar). "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:

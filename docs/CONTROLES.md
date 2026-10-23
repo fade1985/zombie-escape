@@ -195,22 +195,24 @@ Se puede volver a mitad de partida: al caer el jefe de una planta (de la 1ª en 
 **ascensor** del pasillo (luz verde, sin las cintas, y lo dice al salir al pasillo). Solo baja a esta sala y, por su
 puerta, vuelve a la planta de la que venías, delante del ascensor; nunca lleva a otra planta. La planta queda como
 la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azotea no tiene.
-En la sala no hay más muebles que los cuatro de la pared de arriba (de izquierda a derecha: el banco de trabajo, la
-mesa del ordenador, el baúl y la taquilla); en el suelo, solo manchas.
-- Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7,
-  Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el bestiario).
-- A la derecha del baúl, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa del
-  centro comercial que ya tengas; se queda puesto). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
-  (cruceta y A); Esc o B cierra.
+En la sala no hay más muebles que los cuatro de la pared de arriba (de izquierda a derecha: el banco de trabajo, el
+baúl, la mesa del ordenador y la taquilla); en el suelo, solo manchas.
+- En la esquina de la izquierda, el **banco de trabajo**: todas las recetas en hojas de papel (las que aún no tienes,
+  con un «?»). Se toca una y, si tienes lo que pide (en la mochila, el baúl o la mano), se crea el arma. El molotov
+  viene aprendido; las demás las suelta cada jefe al morir (los de planta y el de la azotea), en un papel que hay que
+  recoger. Lo aprendido no se pierde nunca.
 - A su derecha, el **baúl**: las armas creadas (se sacan para la partida) y los objetos guardados. Con
   «Guardar de la mochila» se ve la mochila: se toca una casilla y «Guardar» mete en el baúl todos los de esa
   casilla, o «Guardar todo»; así ya no se pierden si Johnny cae (lo que quede en la mochila pasa solo al completar
   el edificio). Lo de curar no se guarda, y con el baúl lleno (32 casillas) solo caben más de lo que ya tiene. Con
   el ratón o el dedo, flechas e Intro o el mando (A elige, y la marca salta a «Guardar»: A dos veces); Esc o B
-  cierra. A su izquierda, el **banco de trabajo**: todas
-  las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
-  mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir
-  (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se pierde nunca.
+  cierra.
+- En el centro de la pared, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
+  armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
+  bestiario).
+- En la esquina de la derecha, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa
+  del centro comercial que ya tengas; se queda puesto). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
+  (cruceta y A); Esc o B cierra.
 - Los baños tienen un armarito con botiquín.
 - Por la **puerta de la derecha**, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un
   pasillo largo con seis habitaciones, una para cada uno, con su placa junto a la puerta. Arriba, las de los

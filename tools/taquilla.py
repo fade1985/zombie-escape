@@ -1,7 +1,7 @@
 # La taquilla de Johnny, la de la sala de mantenimiento donde se elige el traje (parte 11 de
 # docs/CENTRO_COMERCIAL.md): dos puertas de chapa con sus rejillas, tiradores y etiquetas, dibujada con rectángulos
 # de píxeles como el baúl y el banco de tools/dibujos_7b.py. Sale en assets/sprites/taquilla.png (28×40 píxeles;
-# en el juego va al doble, pegada a la pared de arriba a la derecha del baúl: mapa.gd, TAQUILLA_X).
+# en el juego va al doble, pegada a la pared de arriba, en la esquina de la derecha: mapa.gd, TAQUILLA_X).
 #   py tools/taquilla.py   (y luego importar en Godot)
 from pathlib import Path
 

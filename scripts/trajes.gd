@@ -10,8 +10,8 @@
 # Objetos.TIENDAS["ropa"] y en NOMBRES, así cuenta en Colecciones) que sus zombis sueltan como los demás, pero solo
 # mientras no se tenga; y la modista al caer suelta siempre uno que falte (partida.gd). Al cogerlo Johnny se lo
 # pone en el acto y se queda para siempre ("trajes" del guardado; no va a la mochila ni se pierde al caer).
-# Se eligen en la taquilla de la sala de mantenimiento (ui/taquilla.gd; mapa.gd la pone a la derecha del baúl).
-# Tecla de prueba Z: el siguiente, sin guardarlo.
+# Se eligen en la taquilla de la sala de mantenimiento (ui/taquilla.gd; mapa.gd la pone en la esquina de la derecha
+# de la pared de arriba). Tecla de prueba Z: el siguiente, sin guardarlo.
 class_name Trajes
 
 const LISTA := {
