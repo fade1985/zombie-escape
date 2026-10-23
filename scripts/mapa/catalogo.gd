@@ -136,14 +136,15 @@ const SALAS := {
 	# el gimnasio del Gymbro (planta.gd pone apt.tipo = "gymbro"): tres paredes llenas de máquinas, siempre en el mismo
 	# sitio (muebles.gd, fijos), que le quitan sitio a la pelea: las 8 cintas de correr a la derecha; a la izquierda, los
 	# 6 bancos de press y 2 pilas de discos; y en el fondo, simétrico (las poleas, la del medio justo enfrente de la
-	# puerta), las taquillas en las esquinas. La pared de abajo, vacía (ahí está la puerta). Sin lámparas: la luz es
-	# fija (peligros/luz_gimnasio.gd). Por el suelo, mancuernas con las que Johnny tropieza (peligros/tropiezos.gd)
+	# puerta), con las pilas de discos en las esquinas y las taquillas a continuación. La pared de abajo, vacía (ahí está
+	# la puerta). Sin lámparas: la luz es fija (peligros/luz_gimnasio.gd). Por el suelo, mancuernas con las que Johnny
+	# tropieza (peligros/tropiezos.gd)
 	"jefe-gymbro": {
 		"muebles": [],
 		"cuantos": [0, 0],
 		"fijos": {
-			"arriba": ["lockers", "weightplates", "weightplates", "cablemachine", "dumbbellrack", "dumbbellrack",
-				"cablemachine", "dumbbellrack", "dumbbellrack", "cablemachine", "weightplates", "weightplates", "lockers"],
+			"arriba": ["weightplates", "weightplates", "lockers", "cablemachine", "dumbbellrack", "dumbbellrack",
+				"cablemachine", "dumbbellrack", "dumbbellrack", "cablemachine", "lockers", "weightplates", "weightplates"],
 			"izquierda": ["benchpress", "benchpress", "benchpress", "benchpress", "benchpress", "benchpress",
 				"weightplates", "weightplates"],
 			"derecha": ["treadmill", "treadmill", "treadmill", "treadmill", "treadmill", "treadmill", "treadmill",

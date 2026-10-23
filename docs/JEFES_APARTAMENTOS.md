@@ -154,8 +154,9 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
   `captura-gymbro-salto.png` con él en el aire y la zona en el suelo y `captura-jefe.png` con el torbellino.
 - **Su habitación, un gimnasio** (23 oct, M6 de `PENDIENTES.md`): tres paredes llenas de máquinas, **siempre en el
   mismo sitio** (`jefe-gymbro` en `catalogo.gd`, `fijos` en `muebles.gd`; el dueño lo pidió así): a la derecha, las
-  8 cintas de correr; a la izquierda, los 6 bancos de press y 2 pilas de discos; y en el fondo, simétrico, 2
-  taquillas en las esquinas, 4 pilas de discos, 3 máquinas de poleas (la del medio, justo enfrente de la puerta) y 4
+  8 cintas de correr; a la izquierda, los 6 bancos de press y 2 pilas de discos; y en el fondo, simétrico, 2 pilas de
+  discos juntas en cada esquina (las 4) y a continuación una taquilla a cada lado (el dueño, 23 oct: los discos en las
+  esquinas), 3 máquinas de poleas (la del medio, justo enfrente de la puerta) y 4
   estantes de mancuernas. La pared de abajo, vacía: ahí está la puerta (en la pared de abajo siempre: `planta.gd` pone
   el piso del Gymbro detrás de una puerta de las de arriba del pasillo, A o B: las poleas y las taquillas solo se ven
   de frente, así que van en la pared de arriba, y la puerta tiene que quedar enfrente de ellas). Las
