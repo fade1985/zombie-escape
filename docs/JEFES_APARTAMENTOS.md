@@ -160,7 +160,8 @@ la lumbre.
   `scripts/bola_fuego.gd`). Ya sale en el sorteo (no la portera en su lugar). Los números que han quedado
   (provisionales, se ajustan jugando): vida 560 (+25 % por planta), velocidad 70, 10 por contacto.
   - *Inmune al fuego:* el molotov (ni el fogonazo ni el charco), el lanzallamas y el súpersoplete, el fuego del bate
-    de fuego y el aceite ardiendo no le quitan nada; grita «¡INMUNE!». Los golpes, las balas y las explosiones, sí.
+    de fuego y el aceite ardiendo no le quitan nada; grita «¡INMUNE!». Los golpes, las balas y las explosiones, sí
+    (menos mientras gira: la burbuja de fuego).
     Por dentro: `inmune_fuego` en el jefe, que miran `proyectil.gd` y `armas_creadas.gd`; los charcos de fuego le
     llaman a `prender()`, que aquí no hace nada.
   - *Bolas de fuego:* si estás a más de 100, una bola recta a 340 (dibujada con código, con su luz y chispas): 14 de
@@ -173,7 +174,14 @@ la lumbre.
     ardes 1,5 s (10 por segundo), **también rodando** (la voltereta no la cruza); a los demás zombis los prende. Como
     la sala arde por el borde, **solo se libra quien corre delante de la lengua, en su mismo sentido**: a tope de vida,
     a unas 6 casillas del jefe se le sigue el paso (con poca vida, Johnny anda más lento y tiene que arrimarse más);
-    corriendo en contra o quieto, te alcanza. Cada 15 s. Una explosión (granada) se lo corta (0,7 s tambaleándose).
+    corriendo en contra o quieto, te alcanza. Cada 15 s. Una explosión (granada) en el aviso se lo corta (0,7 s
+    tambaleándose).
+  - *La burbuja de fuego del giro* (el dueño, 23 oct): mientras sale la lengua le rodea una burbuja como la cúpula del
+    científico jefe, pero en colores de fuego (naranja por dentro, el borde rojo con llamitas que se mecen y un brillo
+    amarillo); sube en 0,4 s al empezar el giro y baja en 0,4 s al acabar. **Mientras gira, nada le quita vida**: ni
+    balas, ni golpes, ni explosiones (y la explosión tampoco le corta el giro). No tiene vida propia ni barra: no se
+    rompe. Donde le dan, brilla en blanco y saltan chispas (una explosión, la burbuja entera), y de vez en cuando grita
+    «¡INMUNE!». En el aviso (las flechas) todavía no la tiene: ahí sí se le puede pegar.
   - *Su habitación, en llamas* (M8): «Apartamento en llamas», sin muebles (`jefe-bombero` del catálogo) y con todo el
     borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`), **una elipse fija, como un ring** (el dueño, 23
     oct): en medio, una elipse limpia perfecta donde se pelea, siempre igual (sin nada al azar), y todo lo de fuera
@@ -198,12 +206,12 @@ la lumbre.
   `py tools/jefe_hoja.py bombero-72 jefe-bombero`. Las lenguas, las bolas, los molotovs y los avisos salen con código.
 - Tecla de prueba **9**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El jefe de bomberos»,
   20 fichas). `--captura --jefe bombero` comprueba la inmunidad (lanzallamas, molotov y charco), un golpe normal, las
-  bolas y los molotovs (lo escribe en la terminal) y saca `captura-jefe.png` con el giro. `--captura --jefe bombero
+  bolas y los molotovs (lo escribe en la terminal) y saca `captura-jefe.png` con el giro y su burbuja. `--captura --jefe bombero
   --llamas` prueba su habitación en llamas y el giro: que arde todo el borde menos el pasillo de la puerta, que en medio
   queda la elipse limpia perfecta (igual con otra semilla), que de la puerta se llega al centro sin pisar el fuego,
   esté donde esté la puerta, que la lengua llega a la pared y que corriendo en su
-  sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco entre las dos lenguas, sí (ver
-  `docs/CONTROLES.md`).
+  sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco entre las dos lenguas, sí, y que con la
+  burbuja nada le quita vida, pero en el aviso y acabado el giro sí (ver `docs/CONTROLES.md`).
 - Pegas conocidas: el andar y el golpe (tambaleo) son sutiles; al lanzar de frente PixelLab pintó una bola de fuego
   pegada al cuerpo (queda como el fogonazo del lanzamiento).
 

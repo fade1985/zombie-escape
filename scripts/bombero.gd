@@ -13,7 +13,10 @@
 #     de una vuelta entera echando una lengua de fuego que llega hasta la pared (atraviesa los muebles): al que pilla
 #     le quema y le deja ardiendo. Como su habitación arde por el borde (peligros/cerco.gd), no hay donde quedarse
 #     fuera: solo se libra quien corre delante de la lengua, en su mismo sentido y a su paso (rodando no se cruza:
-#     quema igual). Una explosión (granada) se lo corta (se tambalea).
+#     quema igual). Mientras sale la lengua le rodea una burbuja de fuego (como la cúpula del científico jefe, pero
+#     sin vida propia: no se rompe) y NADA LE QUITA VIDA: ni balas, ni golpes, ni explosiones (y la explosión tampoco
+#     le corta el giro); donde le dan, la burbuja brilla. En el aviso todavía no la tiene: ahí sí se le puede pegar, y
+#     una explosión (granada) se lo corta (se tambalea).
 #   - Molotovs (proyectil.gd, "molotov_jefe"): en curva, con su marca roja donde caen; al caer dejan un charco de
 #     fuego (charco.gd): daño al entrar y un rato después de salir.
 #   - Hachazo de bombero: si Johnny se le pega, levanta el hacha (aviso) y le da: daño y empujón.
@@ -43,6 +46,9 @@ const TIEMPO_GIRO := 6.6               # algo más de una vuelta: pasa por toda 
 const AVISO_GIRO := 1.0                # (le da tiempo a mirar las flechas y echar a correr)
 const DANO_LENGUA := 10
 const QUEMA_LENGUA := {"fuego": {"dps": 10.0, "despues": 1.5}}
+const BURBUJA_RADIO := 84.0            # la burbuja de fuego del giro (la cúpula del científico, 78: él es más ancho)
+const BURBUJA_ALTO := 0.42             # a qué altura tiene el centro (de "arriba")
+const BURBUJA_SUBE := 0.4              # lo que tarda en subir (y en bajar)
 const TAMBALEO := 0.7
 const RASTRO_CADA := 44.0              # enfadado: cada cuántas unidades andadas deja fuego
 const RASTRO_ESCALA := 0.35            # el fuego del rastro, respecto al del molotov...
@@ -67,6 +73,9 @@ var quema_t := 0.0           # lo que falta para que la lengua pueda volver a qu
 var rastro := Vector2.ZERO   # dónde dejó el último fuego del rastro
 var llamas: Llamas = null    # enfadado: arde él mismo
 var luz_giro: PointLight2D   # la luz de la lengua de fuego
+var burbuja := 0.0           # lo subida que está la burbuja de fuego del giro (0 = no hay, 1 = entera)
+var destello := 0.0          # lo que brilla la burbuja porque le acaban de dar (de 1 a 0)
+var destello_por := Vector2.ZERO   # hacia dónde le han dado (desde él); Vector2.ZERO, por todos lados (una explosión)
 
 
 func _ready() -> void:
@@ -152,6 +161,9 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			frenar(delta, 5.0)
 			if t >= TAMBALEO:
 				andar(0.4)
+	# mientras sale la lengua, la burbuja de fuego le protege: nada le quita vida (recibir_golpe)
+	if estado == "giro":
+		invulnerable = true
 
 
 func elegir(johnny: Node2D) -> void:
@@ -341,8 +353,13 @@ func quemar_lengua(a: float, johnny: Node2D) -> float:
 
 # ── Inmune al fuego ──
 
-# Los charcos de fuego y el molotov le llaman a prender(): a él no le pasa nada (lo dice, de vez en cuando)
+# Los charcos de fuego y el molotov le llaman a prender(): a él no le pasa nada
 func prender(_dano_lanzar := 1.0) -> void:
+	decir_inmune()
+
+
+# Lo dice de vez en cuando, no a cada golpe: «¡INMUNE!»
+func decir_inmune() -> void:
 	if aviso_inmune <= 0.0 and estado != "muerto":
 		aviso_inmune = 1.5
 		gritar("¡INMUNE!", Llamas.FUEGO[1], 18)
@@ -353,8 +370,12 @@ func herir(_cantidad: float, _color := Color.WHITE) -> void:
 	prender()
 
 
-# Una explosión le corta el giro (y lo demás que esté haciendo): se tambalea
+# Una explosión le corta lo que esté haciendo (también el aviso del giro): se tambalea. Girando, no: la burbuja de
+# fuego se lo lleva todo (golpes, balas y explosiones), sin quitarle vida ni pararle, y brilla donde le dan
 func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false) -> void:
+	if invulnerable and estado == "giro":
+		rebote(fuerza, de_lleno)
+		return
 	var antes := vida
 	super(cantidad, fuerza, de_lleno)
 	if estado == "muerto" or vida == antes:
@@ -362,6 +383,26 @@ func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false) -> void:
 	if de_lleno and estado != "grito" and estado != "tambaleo":
 		cambiar("tambaleo")
 		marcha = Vector2.ZERO
+
+
+# Le han dado con la burbuja puesta: brilla por donde viene el golpe (una explosión, entera), saltan chispas de fuego
+# y, de vez en cuando, grita «¡INMUNE!». "fuerza" va hacia donde empuja el golpe
+func rebote(fuerza: Vector2, de_lleno: bool) -> void:
+	destello = 1.0
+	destello_por = Vector2.ZERO if de_lleno else -fuerza.normalized()
+	var centro := global_position + Vector2(0, -arriba * BURBUJA_ALTO)
+	for i in 6:
+		var a := randf() * TAU if destello_por == Vector2.ZERO else angulo_burbuja(destello_por) + randf_range(-0.4, 0.4)
+		var donde := centro + Vector2(cos(a), sin(a) * 1.25) * BURBUJA_RADIO
+		Particulas.soltar(self, donde, Vector2(cos(a), sin(a)) * randf_range(60.0, 150.0) + Vector2(0, -40),
+			Llamas.FUEGO[i % 4], 3, 0.3)
+	Sonido.tocar("chispa")
+	decir_inmune()
+
+
+# El ángulo del círculo de la burbuja (que se dibuja estirada hacia arriba, x 1,25) que cae hacia "dir"
+func angulo_burbuja(dir: Vector2) -> float:
+	return Vector2(dir.x, dir.y / 1.25).angle()
 
 
 # ── Enfadado: todo arde ──
@@ -395,11 +436,13 @@ func rastro_de_fuego() -> void:
 	get_parent().add_child(fuego)
 
 
-# En la foto de la prueba (--captura): dando vueltas con el lanzallamas, la lengua hacia Johnny
+# En la foto de la prueba (--captura): dando vueltas con el lanzallamas, la lengua hacia Johnny (con la burbuja ya
+# subida)
 func foto(johnny: Node2D) -> void:
 	avisar_giro(johnny)
 	cambiar("giro", {"angulo": datos.angulo, "sentido": datos.sentido, "largos": [], "puntas": []})
 	t = 0.3
+	burbuja = 1.0
 
 
 func morir() -> void:
@@ -416,6 +459,10 @@ func animar() -> void:
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
 	luz_giro.visible = estado == "giro"   # (aquí y no en pensar(): animar() se llama siempre, también en el grito)
+	# la burbuja de fuego sube al empezar el giro y baja al acabar; el destello de un golpe se apaga enseguida
+	var paso := get_physics_process_delta_time()
+	burbuja = clampf(burbuja + paso / BURBUJA_SUBE * (1.0 if estado == "giro" else -1.0), 0.0, 1.0)
+	destello = maxf(0.0, destello - paso * 4.0)
 	match estado:
 		"aviso_hacha":
 			# levanta el hacha, a punto de bajarla
@@ -451,10 +498,15 @@ func animar() -> void:
 
 # Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, la franja por donde va cada lengua,
 # desde sus pies hasta la pared (en el aviso, roja y creciendo, con la raya por donde empieza y las flechas del lado
-# al que va a girar; girando, naranja)
+# al que va a girar; girando, naranja). Y el borde de la burbuja de fuego
 func _draw() -> void:
 	if estado == "muerto":
 		return
+	if burbuja > 0.0:
+		draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.55))
+		draw_circle(Vector2.ZERO, BURBUJA_RADIO * burbuja, Color(Llamas.FUEGO[2], 0.14))
+		draw_arc(Vector2.ZERO, BURBUJA_RADIO * burbuja, 0.0, TAU, 40, Color(Llamas.FUEGO[3], 0.7), 3.0)
+		draw_set_transform(Vector2.ZERO)
 	match estado:
 		"aviso_hacha":
 			var k := minf(1.0, t / AVISO_HACHA)
@@ -524,14 +576,49 @@ func sector(a: float, ancho: float, r: float) -> PackedVector2Array:
 	return puntos
 
 
-# Por encima de él: las lenguas de fuego del giro
+# Por encima de él: la burbuja de fuego y las lenguas de fuego del giro (por encima de la burbuja: salen de dentro)
 func pintar_encima(lienzo: Node2D) -> void:
+	if burbuja > 0.0:
+		pintar_burbuja(lienzo)
 	if estado != "giro":
 		return
 	var n: int = LENGUAS[fase - 1]
 	for i in n:
 		if i < datos.puntas.size():
 			lengua(lienzo, datos.angulo + i * TAU / n, datos.puntas[i])
+
+
+# La burbuja de fuego del giro, como la cúpula de cristal del científico jefe pero en colores de fuego: naranja por
+# dentro y más clara en el medio, el borde rojo con llamitas que se mecen hacia fuera, y su brillo amarillo. Crece
+# desde dentro de él (burbuja, de 0 a 1) y, donde le acaban de dar, brilla en blanco (destello; una explosión, entera)
+func pintar_burbuja(lienzo: Node2D) -> void:
+	var r := BURBUJA_RADIO
+	lienzo.draw_set_transform(Vector2(0, -arriba * BURBUJA_ALTO), 0.0, Vector2(1, 1.25) * burbuja)
+	lienzo.draw_circle(Vector2.ZERO, r, Color(Llamas.FUEGO[2], 0.28))
+	lienzo.draw_circle(Vector2.ZERO, r * 0.65, Color(Llamas.FUEGO[1], 0.14))
+	# las llamitas del borde: rojas, con el centro amarillo, cada una de un largo que va cambiando
+	for i in 20:
+		var a := i * TAU / 20.0 + tiempo * 0.5
+		var dir := Vector2.from_angle(a)
+		var lado := dir.orthogonal()
+		var base := dir * (r - 3.0)
+		var largo := 8.0 + (0.5 + 0.5 * sin(tiempo * 11.0 + i * 2.3)) * 12.0
+		lienzo.draw_colored_polygon(PackedVector2Array([base + lado * 7.0, dir * (r + largo), base - lado * 7.0]),
+			Color(Llamas.FUEGO[3], 0.9))
+		lienzo.draw_colored_polygon(PackedVector2Array([base + lado * 3.0, dir * (r + largo * 0.55), base - lado * 3.0]),
+			Color(Llamas.FUEGO[1], 0.9))
+	lienzo.draw_arc(Vector2.ZERO, r, 0.0, TAU, 48, Color(Llamas.FUEGO[3], 1.0), 4.0)
+	lienzo.draw_arc(Vector2.ZERO, r - 5.0, 0.0, TAU, 48, Color(Llamas.FUEGO[1], 0.65), 3.0)
+	lienzo.draw_arc(Vector2(-14, -14), r * 0.68, PI * 1.05, PI * 1.55, 16, Color(Llamas.FUEGO[0], 0.75), 4.0)   # el brillo
+	if destello > 0.0:
+		if destello_por == Vector2.ZERO:
+			lienzo.draw_circle(Vector2.ZERO, r, Color(Llamas.FUEGO[0], 0.3 * destello))
+			lienzo.draw_arc(Vector2.ZERO, r, 0.0, TAU, 48, Color(1, 1, 1, 0.9 * destello), 6.0)
+		else:
+			var a := angulo_burbuja(destello_por)
+			lienzo.draw_arc(Vector2.ZERO, r, a - 0.55, a + 0.55, 12, Color(Llamas.FUEGO[0], 0.8 * destello), 10.0)
+			lienzo.draw_arc(Vector2.ZERO, r, a - 0.35, a + 0.35, 8, Color(1, 1, 1, destello), 5.0)
+	lienzo.draw_set_transform(Vector2.ZERO)
 
 
 # Una lengua de fuego a cuadraditos hacia "a", "largo" de larga (en el suelo, desde sus pies hasta la pared): sale en

@@ -727,10 +727,12 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 # Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el fuego.
 # Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
 # sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
-# quema; en contra, sí; rodando a través de ella, también; y enfadado, corriendo entre las dos lenguas a su paso, no.
+# quema; en contra, sí; rodando a través de ella, también; su burbuja de fuego (burbuja_de_fuego): girando, nada le
+# quita vida, y en el aviso y acabado el giro, sí; y enfadado, corriendo entre las dos lenguas a su paso, no.
 # Cada línea dice lo esperado. Saca captura-llamas.png (la sala entera ardiendo, con la cámara alejada),
-# captura-llamas-aviso.png (las flechas del aviso), captura-llamas-giro.png (Johnny corriendo delante de la lengua) y
-# captura-llamas-enfadado.png (las dos lenguas) y se cierra
+# captura-llamas-aviso.png (las flechas del aviso), captura-llamas-giro.png (Johnny corriendo delante de la lengua),
+# captura-llamas-burbuja.png (la burbuja de cerca, brillando donde le da una bala) y captura-llamas-enfadado.png (las
+# dos lenguas) y se cierra
 func probar_llamas() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe bombero, la suya
@@ -843,6 +845,7 @@ func probar_llamas() -> void:
 	var rodar := await vuelta_de_giro(jefe, centro, "rodar", 1.0, 0.0, 190.0)
 	print("Llamas: rodando a través de la lengua, Johnny rueda %s (esperado: true) · pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
 		rodar.rodado, rodar.vida, rodar.arde])
+	await burbuja_de_fuego(jefe, centro)
 	# enfadado: dos lenguas opuestas (Johnny, lejos del empujón del grito y a un lado, donde la elipse limpia es más ancha)
 	johnny.position = centro + Vector2(300, 0)
 	jefe.fase = 2
@@ -1003,6 +1006,75 @@ func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float,
 	r.vida = vida0 - johnny.vida
 	jefe.andar(5.0)   # que pare de girar (y no ataque hasta la siguiente)
 	return r
+
+
+# La burbuja de fuego del bombero ("jefe", puesto en "centro"; bombero.gd), con Johnny cerca y la lengua empezando
+# lejos de él. En el aviso del giro aún no la tiene: un golpe de 10 le quita 10. Girando, la tiene: ni un golpe de 10,
+# ni una explosión de 40 (que tampoco le corta el giro), ni una bala de 10 le quitan vida, y la burbuja brilla donde
+# le da la bala (captura-llamas-burbuja.png, de cerca). Acabado el giro, un golpe de 10 vuelve a quitarle 10 y la
+# burbuja baja
+func burbuja_de_fuego(jefe: Node2D, centro: Vector2) -> void:
+	await get_tree().create_timer(0.5).timeout   # (que acabe de bajar la burbuja de la vuelta de antes)
+	jefe.position = centro
+	jefe.marcha = Vector2.ZERO
+	johnny.position = centro + Vector2(-130, 70)
+	johnny.velocity = Vector2.ZERO
+	johnny.vida = johnny.stats.vida_max
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(1.25, 1.25)
+	camara.reset_smoothing()
+	await get_tree().physics_frame
+	jefe.avisar_giro(johnny, 1.0)
+	jefe.datos.angulo += PI   # (la lengua, al otro lado: tarda 3 s en llegarle a Johnny)
+	await get_tree().create_timer(0.3).timeout
+	var antes: int = jefe.vida
+	jefe.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	var aviso := [jefe.burbuja == 0.0, antes - jefe.vida]
+	var espera := 0.0
+	while jefe.estado == "aviso_giro" and espera < 3.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	await get_tree().create_timer(0.5).timeout   # (ya subida)
+	var girando: bool = jefe.estado == "giro"
+	var subida: bool = jefe.burbuja >= 1.0
+	antes = jefe.vida
+	jefe.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	var explosion: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+	explosion.dano = 40
+	explosion.position = jefe.position + Vector2(50, 0)
+	jefe.get_parent().add_child(explosion)
+	await get_tree().create_timer(0.2).timeout
+	var sigue: bool = jefe.estado == "giro"
+	espera = 0.0
+	while is_instance_valid(explosion) and espera < 1.5:   # (que no tape la burbuja en la foto)
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	Temblor.desplazamiento = jefe.position + Vector2(0, -50) - johnny.position   # la foto, con el jefe en medio
+	var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
+	bala.velocidad = johnny.position.direction_to(jefe.position) * 900.0
+	bala.dano = 10
+	bala.vida = 1.0
+	jefe.get_parent().add_child(bala)
+	bala.global_position = johnny.position
+	espera = 0.0
+	while is_instance_valid(bala) and espera < 1.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	var brilla: bool = jefe.destello > 0.0
+	await get_tree().process_frame
+	await get_tree().process_frame
+	Captura.foto("captura-llamas-burbuja.png")
+	Temblor.desplazamiento = Vector2.ZERO
+	var girando_quita: int = antes - jefe.vida
+	jefe.andar(5.0)   # se acaba el giro
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	antes = jefe.vida
+	jefe.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	var fuera_quita: int = antes - jefe.vida
+	await get_tree().create_timer(0.5).timeout
+	print("Llamas: la burbuja de fuego, en el aviso aún no está %s (esperado: true) y un golpe de 10 le quita %d (esperado: 10) · girando está %s (esperado: true) y un golpe de 10, una explosión de 40 y una bala de 10 le quitan %d (esperado: 0) · la explosión no le corta el giro %s (esperado: true) · brilla donde le da la bala %s (esperado: true) · acabado el giro, un golpe de 10 le quita %d (esperado: 10) y la burbuja baja %s (esperado: true)" % [
+		aviso[0], aviso[1], girando and subida, girando_quita, sigue, brilla, fuera_quita, jefe.burbuja == 0.0])
 
 
 # Pide andar hacia "dir" como con el stick del mando (cada tecla con su fuerza); Vector2.ZERO, nada
@@ -2255,8 +2327,9 @@ func probar_gymbro() -> void:
 
 
 # El jefe de bomberos: el fuego no le hace nada (una gota del lanzallamas, el fogonazo de un molotov y un charco
-# de fuego debajo de él no le quitan vida, y grita «¡INMUNE!»), pero un golpe sí; y lanza sus bolas de fuego y un
-# molotov (para que salgan en la foto de los 8,0, con el giro)
+# de fuego debajo de él no le quitan vida, y grita «¡INMUNE!»), pero un golpe sí (antes de que se ponga a girar para
+# la foto: girando, su burbuja de fuego no deja); y lanza sus bolas de fuego y un molotov (para que salgan en la foto
+# de los 8,0, con el giro)
 func probar_bombero() -> void:
 	var vida_antes: int = jefa.vida
 	ArmasCreadas.golpe(jefa, Vector2.RIGHT, 20.0, 1.0, "llama")
@@ -2269,6 +2342,11 @@ func probar_bombero() -> void:
 	molotov.llamarada(60.0)
 	molotov.queue_free()
 	var sin_molotov: int = vida_antes - jefa.vida
+	# el golpe, ya (a los 7,7 se pone a girar para la foto, y girando la burbuja no deja que nada le quite vida)
+	var antes_golpe: int = jefa.vida
+	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
+	var golpe: int = antes_golpe - jefa.vida
+	vida_antes = jefa.vida
 	var fuego: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
 	fuego.tipo = "fuego"
 	fuego.position = jefa.position
@@ -2277,9 +2355,8 @@ func probar_bombero() -> void:
 	# que la prueba mate al jefe a los 8,05)
 	await get_tree().create_timer(0.6, false).timeout
 	var sin_fuego: int = vida_antes - jefa.vida
-	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
 	print("Bombero inmune al fuego: lanzallamas -%d, molotov -%d, charco de fuego (0,6 s) -%d | un golpe de 10: -%d" % [
-		sin_lanzallamas, sin_molotov, sin_fuego, vida_antes - sin_fuego - jefa.vida])
+		sin_lanzallamas, sin_molotov, sin_fuego, golpe])
 	jefa.mirada = (johnny.position - jefa.position).normalized()
 	jefa.lanzar_bolas(johnny)
 	jefa.lanzar_molotovs(johnny)

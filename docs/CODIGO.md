@@ -80,7 +80,9 @@
   con estrellitas). Cada uno hereda y pone sus ataques: `bombero.gd` (minijefe de los Apartamentos: el fuego no le
   hace nada, `inmune_fuego`; bolas de fuego `bola_fuego.gd`, giro con el lanzallamas en el centro de la sala con la
   lengua de fuego dibujada con código, que llega hasta la pared (`hasta_la_pared`, por el plano del piso: atraviesa
-  los muebles), gira hacia un lado al azar (las flechas del aviso) y no se cruza rodando, molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
+  los muebles), gira hacia un lado al azar (las flechas del aviso) y no se cruza rodando; mientras gira, una burbuja de
+  fuego (`pintar_burbuja`, como la cúpula del científico jefe pero sin vida propia) le hace `invulnerable` y brilla
+  donde le dan (`rebote`), molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
   Johnny se le pega; enfadado arde él mismo y deja un rastro de fuego al andar), `gymbro.gd` (minijefe de los Apartamentos: torbellino con
   los brazos abiertos, salto encima de Johnny y pesas en curva, `pesa.gd`; enfadado, armadura de suplementos con su
   barra encima de la de vida, que se come la mitad del daño), `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo

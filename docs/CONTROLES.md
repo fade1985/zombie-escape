@@ -124,9 +124,12 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   en el medio queda sitio para el giro), el aviso de Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el borde. Luego
   mete al bombero en el medio y le hace girar con Johnny moviéndose como con el mando (`vuelta_de_giro`): el sentido
   sale a los dos lados, la lengua llega hasta la pared, corriendo delante de ella en su sentido Johnny no se quema, en
-  contra sí, rodando a través de ella también y, enfadado, corriendo entre las dos lenguas a su paso, no
-  (`captura-llamas.png`, la sala entera; `captura-llamas-aviso.png`, las flechas del aviso; `captura-llamas-giro.png`,
-  Johnny corriendo delante de la lengua; `captura-llamas-enfadado.png`, las dos lenguas). Cada línea dice lo esperado.
+  contra sí, rodando a través de ella también; su burbuja de fuego (`burbuja_de_fuego`): en el aviso aún no está y un
+  golpe le quita vida, girando ni un golpe, ni una explosión (que tampoco le corta el giro) ni una bala le quitan nada
+  y brilla donde le dan, y acabado el giro baja y los golpes vuelven a quitarle; y, enfadado, corriendo entre las dos
+  lenguas a su paso, no (`captura-llamas.png`, la sala entera; `captura-llamas-aviso.png`, las flechas del aviso;
+  `captura-llamas-giro.png`, Johnny corriendo delante de la lengua; `captura-llamas-burbuja.png`, la burbuja de cerca;
+  `captura-llamas-enfadado.png`, las dos lenguas). Cada línea dice lo esperado.
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
   (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
   cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la
