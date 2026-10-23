@@ -54,11 +54,8 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 		var fondo: Array = pared_fondo(uso, rng, geo, s.id, despejar, paso) if datos.has("plantillas") else []
 		if not fondo.is_empty():
 			lista += fondo
-		elif datos.has("llenar"):
-			# las paredes llenas, un mueble detrás de otro (el gimnasio); antes, sueltos, los de "primero" (las lámparas)
-			var primeros: Array = sueltos(uso, rng, geo, datos.primero.size(), datos.primero.size(),
-				{"zona": s.id, "despejar": despejar, "paso": paso}) if datos.has("primero") else []
-			lista += primeros + llenar(uso, rng, geo, s.id, despejar, paso, primeros)
+		elif datos.has("fijos"):
+			lista += fijos(uso, geo, s.id)   # cada pared con sus muebles puestos a mano (el gimnasio)
 		else:
 			lista += sueltos(uso, rng, geo, cuantos[0] + extra, cuantos[1] + extra,
 				{"zona": s.id, "despejar": despejar, "paso": paso})
@@ -130,37 +127,59 @@ static func islas(isla: Dictionary, rng: RandomNumberGenerator, geo: Dictionary,
 	return puestas
 
 
-# ═════════════ Paredes llenas ═════════════
+# ═════════════ Paredes con sus muebles fijos ═════════════
 
-# Las paredes de una sala llenas de muebles, uno detrás de otro (el gimnasio del Gymbro: máquinas por todas partes,
-# que le quitan sitio a la pelea). Recorre cada tramo de pared de punta a punta poniendo muebles al azar de los que
-# valen para esa pared (sin pasarse de los "iguales"), con un hueco entre uno y otro ("llenar": [mínimo, máximo]);
-# donde no cabe ninguno (delante de la puerta, o cortaría el paso), prueba un poco más allá. "puestos": los que ya
-# hay (no se pisan)
-static func llenar(uso: String, rng: RandomNumberGenerator, geo: Dictionary, zona: int, despejar: Array, paso: Paso,
-		puestos: Array) -> Array:
+# Lo que separa, como poco, dos muebles de una pared de muebles fijos (si no caben con ese hueco, se avisa)
+const HUECO_FIJOS := 6.0
+# Lo que se separa el principio de una pared lateral de lo que sobresale de la fila de arriba en esa esquina
+const MARGEN_FIJOS := 8.0
+
+# Las paredes de una sala con sus muebles puestos a mano, siempre iguales (el gimnasio del Gymbro: máquinas por tres
+# paredes, que le quitan sitio a la pelea). "fijos" (de Catalogo.SALAS) dice, pared por pared (arriba, izquierda,
+# derecha, abajo), qué muebles van y en qué orden (de izquierda a derecha, o de arriba abajo). En cada pared se
+# reparten parejos, con el mismo hueco entre todos y el primero y el último pegados a los extremos del tramo. La
+# pared de arriba se pone primero y las laterales empiezan justo por debajo de lo que sobresale de ella en la
+# esquina (si no, se pisarían). Nada se aparta de las puertas ni se comprueba el paso: lo que se pide es lo que sale
+static func fijos(uso: String, geo: Dictionary, zona: int) -> Array:
 	var datos: Dictionary = Catalogo.SALAS[uso]
-	var iguales: Dictionary = datos.get("iguales", {})
-	var nuevos := []
-	for tramo in tramos(geo, zona):
-		var en: float = tramo.a + rng.randf() * 24.0
-		while true:
-			var valen: Array = datos.muebles.filter(func(t): return va_en(t, tramo.lado) \
-				and Catalogo.MUEBLES[t].len <= tramo.b - en \
-				and (puestos + nuevos).filter(func(p): return p.tipo == t).size() < iguales.get(t, 1))
-			if valen.is_empty():
-				break
-			var tipo: String = valen[rng.randi() % valen.size()]
+	var todos := tramos(geo, zona)
+	var puestos := []
+	for lado in ["arriba", "izquierda", "derecha", "abajo"]:
+		var tipos: Array = datos.fijos.get(lado, [])
+		if tipos.is_empty():
+			continue
+		# el tramo más largo de esa pared (en una sala sin tabiques, el único)
+		var tramo := {}
+		for t in todos:
+			if t.lado == lado and (tramo.is_empty() or t.b - t.a > tramo.b - tramo.a):
+				tramo = t
+		if tramo.is_empty():
+			push_error("Muebles.fijos: la sala %d de «%s» no tiene pared «%s»" % [zona, uso, lado])
+			continue
+		var a: float = tramo.a
+		var suma := 0.0
+		var fondo := 0.0
+		for tipo in tipos:
+			if not va_en(tipo, lado):
+				push_error("Muebles.fijos: «%s» no va en la pared «%s»" % [tipo, lado])
+			suma += Catalogo.MUEBLES[tipo].len
+			fondo = maxf(fondo, Catalogo.MUEBLES[tipo].dep)
+		if lado == "izquierda" or lado == "derecha":
+			# la franja de la sala que ocupa esta pared; lo que sobresale de la fila de arriba dentro de ella
+			var x0: float = tramo.base if lado == "izquierda" else tramo.base - fondo
+			for p in puestos:
+				var r := hueco(p)
+				if p.lado == "arriba" and r.position.x < x0 + fondo and r.end.x > x0:
+					a = maxf(a, r.end.y + MARGEN_FIJOS)
+		var entre: float = (tramo.b - a - suma) / maxf(tipos.size() - 1, 1)
+		if tipos.size() > 1 and entre < HUECO_FIJOS:
+			push_warning("Muebles.fijos: en la pared «%s» de «%s» los muebles no caben (hueco %.1f)" % [lado, uso, entre])
+		var en: float = a if tipos.size() > 1 else (a + tramo.b - suma) / 2.0
+		for tipo in tipos:
 			var largo: float = Catalogo.MUEBLES[tipo].len
-			var m := nuevo(tipo, tramo, roundf((en + largo / 2.0) / 2.0) * 2.0, zona)
-			var r := hueco(m)
-			if en_suelo(geo, r) and not despejar.any(func(k): return k.intersects(r)) \
-					and not (puestos + nuevos).any(func(p): return hueco(p).grow(6).intersects(r)) and paso.cabe(r):
-				nuevos.append(m)
-				en += largo + rng.randf_range(datos.llenar[0], datos.llenar[1])
-			else:
-				en += 16.0
-	return nuevos
+			puestos.append(nuevo(tipo, tramo, roundf((en + largo / 2.0) / 2.0) * 2.0, zona))
+			en += largo + entre
+	return puestos
 
 
 # ¿Cae el rectángulo entero en suelo de esa habitación?
@@ -296,7 +315,7 @@ static func sueltos(uso: String, rng: RandomNumberGenerator, geo: Dictionary, mi
 	var despejar: Array = op.get("despejar", [])
 	var paso: Paso = op.get("paso")
 	var surtido: Array = datos.muebles.filter(func(t): return Catalogo.MUEBLES[t].dep <= op.get("fondo_max", 9999))
-	var primero: Array = datos.get("primero", []).duplicate()   # los que van antes que los demás (las lámparas del gimnasio)
+	var primero: Array = datos.get("primero", []).duplicate()   # los que van antes que los demás (las lámparas de la portera)
 	var quiere := minimo + rng.randi() % (maximo - minimo + 1)
 	var todos := tramos(geo, zona)
 	var de_arriba := todos.filter(func(t): return t.lado == "arriba")

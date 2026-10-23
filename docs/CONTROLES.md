@@ -106,11 +106,15 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor (`captura-porqueria.png`,
   Johnny encima; `captura-porqueria-medio.png`, la elipse limpia desde el medio). Cada línea dice lo esperado.
 - `--gimnasio` (con `--jefe gymbro`): en vez de la prueba larga, la del gimnasio del Gymbro (`peligros/tropiezos.gd`):
-  lo monta sin él y cuenta en la terminal las máquinas y en qué paredes están, las lámparas, la parte del suelo que
-  queda libre, que la puerta está en el centro de la pared y las mancuernas (cuántas, lo separadas que están, lejos de la puerta y de los muebles); que andando
+  lo monta sin él y cuenta en la terminal las máquinas (29) y cuántas de cada tipo hay en cada pared, que no se
+  pisan ni tocan un muro, que el fondo es simétrico con una polea justo enfrente de la puerta, que no hay lámparas,
+  la parte del suelo que queda libre, que la puerta está abajo, en el centro de la pared y sin nada delante (y lo mismo
+  en 40 plantas más, con el piso del jefe en otra puerta), las 5 luces fijas encendidas y las mancuernas (cuántas, lo
+  separadas que están, lejos de la puerta y de los muebles); que andando
   por encima de una Johnny se cae, se queda tumbado sin moverse ni atacar aunque se le pida, no pierde vida, se
   levanta a los 2 s y la mancuerna sale rodando; y que rodando se pasa por encima de otra sin caer
-  (`captura-gimnasio.png`, la sala entera con la cámara alejada y sin penumbra; `captura-gimnasio-caido.png`, Johnny
+  (`captura-gimnasio.png`, la sala entera con la cámara alejada y sin penumbra; `captura-gimnasio-luz.png`, igual pero
+  con la penumbra de siempre, para ver lo que alumbran las luces; `captura-gimnasio-caido.png`, Johnny
   en el suelo con las estrellitas). Cada línea dice lo esperado.
 - `--cubos` (con `--jefe portera`): en vez de la prueba larga, la del cuarto de la limpieza de la portera
   (`peligros/tropiezos.gd`): lo monta sin ella y cuenta en la terminal cómo se llama la sala, los muebles

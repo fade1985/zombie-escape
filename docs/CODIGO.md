@@ -56,7 +56,9 @@
   tropieza: las mancuernas del gimnasio del Gymbro (`Peligros.del_gymbro`, 12) y los cubos de fregar del cuarto de la
   limpieza de la portera (`Peligros.de_la_portera`, 10, de tres colores, dibujados a cuadraditos en `tropiezos.gd`),
   repartidos por el suelo libre (`Peligros.tirar_cosas`); al pisarlos, `johnny.caer` 2 s y la cosa sale rodando (el
-  cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso. Y
+  cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso. Con las
+  mancuernas va `luz_gimnasio.gd` (no es un peligro: la luz fija del gimnasio, 5 luces blancas sin latido ni sombras,
+  porque su sala no tiene lámparas: `Peligros.GIMNASIO`). Y
   `cerco.gd`, la habitación del jefe de bomberos («Apartamento en llamas», sin muebles: `jefe-bombero` del catálogo),
   que arde por el borde (`Peligros.del_bombero`: con la misma `Peligros.franja_y_ovalo` que la porquería del Glotón:
   en medio una elipse limpia perfecta, siempre igual, como un ring, y todo lo de fuera ardiendo hasta la pared, menos
@@ -299,8 +301,9 @@
   exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
   tiene la suya: "jefe-modista"; la habitación de un minijefe de los Apartamentos: "jefe-gloton", "jefe-gymbro", "jefe-portera";
   `planta.gd` la elige por el jefe de la planta, también cuando la portera sale por defecto),
-  `muebles.gd` (dónde va cada uno; en las salas de venta, también filas en medio: `islas`; en el gimnasio, las paredes
-  llenas, una máquina detrás de otra: `llenar`), `mueble.gd` (monta uno).
+  `muebles.gd` (dónde va cada uno; en las salas de venta, también filas en medio: `islas`; en el gimnasio, tres
+  paredes con las máquinas siempre en el mismo orden y repartidas parejas de punta a punta: `fijos`), `mueble.gd`
+  (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, peligros, niebla, navegación; y
   `muro_entre(a, b)`, la primera pared que corta una línea sin contar los muebles: la usa el vómito de Gastroenteritis;
   en el cuarto de la limpieza de la portera, `colgados`: fregonas y cubos colgados en la pared de arriba). Los suelos y

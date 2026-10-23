@@ -114,8 +114,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		{"letra": "C", "dir": "abajo", "en": PUERTA_A}, {"letra": "D", "dir": "abajo", "en": ancho - PUERTA_A}]
 	var baja := num == 1
 	var libres := huecos.filter(func(h): return not (baja and h.letra == "A"))
-	# la jefa vive en el 4ºB; en las demás plantas, detrás de una puerta al azar
-	var de_jefa: Dictionary = libres[rng.randi() % libres.size()]
+	# la jefa vive en el 4ºB; en las demás plantas, detrás de una puerta al azar (la del Gymbro, de las de arriba, A o B:
+	# su gimnasio tiene la puerta abajo y todas sus máquinas en las otras tres paredes, muebles.gd, fijos)
+	var posibles: Array = libres.filter(func(h): return h.dir == "arriba") if planta.jefe == "gymbro" else libres
+	var de_jefa: Dictionary = posibles[rng.randi() % posibles.size()]
 	for h in libres:
 		if nombre_puerta(num, h.letra) == "4ºB" and not tiendas:
 			de_jefa = h

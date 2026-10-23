@@ -19,6 +19,7 @@
 #   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
 #                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado, color}])
 #                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
+#   luz_gimnasio.gd  la luz fija del gimnasio del Gymbro (no es un peligro: su sala no tiene lámparas)   {tipo, sala, luces ([Vector2])}
 #   cerco.gd      la habitación del jefe de bomberos, en llamas por el borde   {tipo, sala, casillas (casilla -> 1),
 #                                                                               ovalo, avisado}
 class_name Peligros
@@ -80,6 +81,14 @@ const TROPIEZOS := {
 	"pie": 8.0,          # lo cerca que tienen que pasar los pies de Johnny para tropezar
 	"caido": 2.0,        # segundos que tarda en levantarse
 	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
+}
+# La luz del gimnasio del Gymbro (luz_gimnasio.gd): como no tiene lámparas, unas luces fijas (sin latido, sin sombras)
+# repartidas por la sala, como el resplandor del Glotón o el fuego del bombero
+const GIMNASIO := {
+	"luces": [Vector2(-344, -220), Vector2(344, -220), Vector2(-344, 160), Vector2(344, 160), Vector2(0, -20)],   # desde el centro de la sala
+	"radio": 440.0,      # hasta dónde llega cada una
+	"fuerza": 0.95,      # lo fuerte que luce
+	"color": Color(1.0, 0.93, 0.8),   # blanca, un poco cálida
 }
 # El cerco de fuego de la habitación del jefe de bomberos: arde siempre (no se apaga) todo lo pegado a las paredes,
 # para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas. Se reparte igual que la porquería del
@@ -207,9 +216,13 @@ static func luces_del_ovalo(datos: Dictionary, cuantas: int) -> Array:
 	return focos
 
 
-# Las mancuernas del gimnasio del Gymbro: unas tumbadas a lo ancho y otras a lo largo (tirar_cosas)
+# Las mancuernas del gimnasio del Gymbro: unas tumbadas a lo ancho y otras a lo largo (tirar_cosas); y sus luces fijas
 static func del_gymbro(sitio: Dictionary) -> Array:
-	return tirar_cosas(sitio, "mancuerna", TROPIEZOS.mancuernas, 5113)
+	var sala: Dictionary = sitio.apt.salas[0]
+	var luces := []
+	for o in GIMNASIO.luces:
+		luces.append(sala.centro + o)
+	return tirar_cosas(sitio, "mancuerna", TROPIEZOS.mancuernas, 5113) + [{"tipo": "luz_gimnasio", "sala": sala.id, "luces": luces}]
 
 
 # Los cubos del cuarto de la limpieza de la portera: de pie, con agua sucia, de tres colores (tirar_cosas)

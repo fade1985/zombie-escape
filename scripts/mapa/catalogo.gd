@@ -104,9 +104,9 @@ const MUEBLES := {
 #               baño). Con plantillas, solo se amuebla la pared del fondo; si en ella no cabe nada (una puerta
 #               en medio), muebles sueltos en las demás paredes, como en las otras salas.
 #   fondo_max   el fondo máximo de sus muebles (para sitios estrechos)
-#   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas del gimnasio)
-#   llenar      las paredes llenas, un mueble detrás de otro, con este hueco entre ellos ([mínimo, máximo]), en vez
-#               de unos cuantos sueltos (el gimnasio)
+#   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas de la portera)
+#   fijos       en vez de unos cuantos sueltos, cada pared con sus muebles en un orden fijo (siempre igual), de punta
+#               a punta: {pared: [tipos de izquierda a derecha o de arriba abajo]} (el gimnasio)
 const SALAS := {
 	"salon": {
 		"muebles": ["sofa", "tv", "armchair", "bookshelf", "lamp", "plant"],
@@ -133,16 +133,22 @@ const SALAS := {
 		"muebles": [],
 		"cuantos": [0, 0],
 	},
-	# el gimnasio del Gymbro (planta.gd pone apt.tipo = "gymbro"): las paredes llenas de máquinas, una detrás de otra
-	# (muebles.gd, llenar), que le quitan sitio a la pelea, y tres lámparas de pie (primero, para que siempre haya luz);
-	# por el suelo, mancuernas con las que Johnny tropieza (peligros/tropiezos.gd)
+	# el gimnasio del Gymbro (planta.gd pone apt.tipo = "gymbro"): tres paredes llenas de máquinas, siempre en el mismo
+	# sitio (muebles.gd, fijos), que le quitan sitio a la pelea: las 8 cintas de correr a la derecha; a la izquierda, los
+	# 6 bancos de press y 2 pilas de discos; y en el fondo, simétrico (las poleas, la del medio justo enfrente de la
+	# puerta), las taquillas en las esquinas. La pared de abajo, vacía (ahí está la puerta). Sin lámparas: la luz es
+	# fija (peligros/luz_gimnasio.gd). Por el suelo, mancuernas con las que Johnny tropieza (peligros/tropiezos.gd)
 	"jefe-gymbro": {
-		"primero": ["lamp", "lamp", "lamp"],
-		"muebles": ["treadmill", "treadmill", "benchpress", "benchpress", "cablemachine", "dumbbellrack", "weightplates",
-			"lockers", "bench"],
-		"llenar": [6, 28],
-		"iguales": {"lamp": 3, "treadmill": 8, "benchpress": 6, "cablemachine": 3, "dumbbellrack": 4, "weightplates": 6,
-			"lockers": 2, "bench": 3},
+		"muebles": [],
+		"cuantos": [0, 0],
+		"fijos": {
+			"arriba": ["lockers", "weightplates", "weightplates", "cablemachine", "dumbbellrack", "dumbbellrack",
+				"cablemachine", "dumbbellrack", "dumbbellrack", "cablemachine", "weightplates", "weightplates", "lockers"],
+			"izquierda": ["benchpress", "benchpress", "benchpress", "benchpress", "benchpress", "benchpress",
+				"weightplates", "weightplates"],
+			"derecha": ["treadmill", "treadmill", "treadmill", "treadmill", "treadmill", "treadmill", "treadmill",
+				"treadmill"],
+		},
 	},
 	# el cuarto de la limpieza de la portera (planta.gd pone apt.tipo = "portera"): contenedores y cubos de basura y el
 	# carro de limpieza contra las paredes, sueltos (con hueco para esquivar su embestida); antes que nada (primero),

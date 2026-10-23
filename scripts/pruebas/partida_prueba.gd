@@ -495,13 +495,18 @@ func probar_porqueria() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --jefe gymbro --gimnasio": el gimnasio del Gymbro (catalogo.gd, "jefe-gymbro", y
-# peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga él, y cuenta en la
-# terminal: las máquinas y en qué paredes están, las lámparas (3), qué parte del suelo queda libre, la puerta en el
-# centro de la pared, las mancuernas (12, separadas, lejos de la puerta y de los muebles); que al pasar andando por encima de una Johnny se cae, no se
-# mueve ni ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la mancuerna sale rodando; y que rodando
-# (la esquiva) se pasa por encima sin caer. Cada línea dice lo esperado. Saca captura-gimnasio.png (la sala entera,
-# con la cámara alejada) y captura-gimnasio-caido.png (Johnny en el suelo con las estrellitas) y se cierra
+# Con "--captura --jefe gymbro --gimnasio": el gimnasio del Gymbro (catalogo.gd, "jefe-gymbro", muebles.gd, fijos,
+# peligros/luz_gimnasio.gd y peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga
+# él, y cuenta en la terminal: las máquinas (29) y cuántas de cada tipo hay en cada pared (la derecha, 8 cintas; la
+# izquierda, 6 bancos de press y 2 pilas de discos; el fondo, 2 taquillas, 4 pilas de discos, 3 poleas y 4 estantes,
+# nada en la de abajo), que ninguna se pisa ni toca un muro, que el fondo es simétrico con una polea justo enfrente de
+# la puerta, ninguna lámpara, las luces fijas (5) encendidas, qué parte del suelo queda libre, la puerta en el centro
+# de la pared, las mancuernas (12, separadas, lejos de la puerta y de los muebles); que al pasar andando por encima de
+# una Johnny se cae, no se mueve ni ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la mancuerna sale
+# rodando; y que rodando (la esquiva) se pasa por encima sin caer. Cada línea dice lo esperado. Saca
+# captura-gimnasio.png (la sala entera, con la cámara alejada y sin penumbra), captura-gimnasio-luz.png (lo mismo, con
+# la penumbra de siempre: lo que alumbran las luces) y captura-gimnasio-caido.png (Johnny en el suelo con las
+# estrellitas) y se cierra
 func probar_gimnasio() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe gymbro, la suya
@@ -522,21 +527,60 @@ func probar_gimnasio() -> void:
 		return
 	var datos: Dictionary = lista[0]
 	var sala: Dictionary = sitio.apt.salas[0]
-	var maquinas := ["treadmill", "benchpress", "cablemachine", "dumbbellrack", "weightplates", "lockers", "bench"]
+	var maquinas := ["treadmill", "benchpress", "cablemachine", "dumbbellrack", "weightplates", "lockers"]
 	var de_gimnasio: Array = sitio.muebles.filter(func(m): return m.tipo in maquinas)
 	var lamparas: int = sitio.muebles.filter(func(m): return m.tipo == "lamp").size()
-	var paredes := {}
+	var paredes := {}   # pared -> {tipo -> cuántos}
 	var ocupado := 0.0
 	for m in sitio.muebles:
-		paredes[m.lado] = paredes.get(m.lado, 0) + 1
+		paredes[m.lado] = paredes.get(m.lado, {})
+		paredes[m.lado][m.tipo] = paredes[m.lado].get(m.tipo, 0) + 1
 		ocupado += m.w * m.h
+	var esperadas := {"derecha": {"treadmill": 8}, "izquierda": {"benchpress": 6, "weightplates": 2},
+		"arriba": {"lockers": 2, "weightplates": 4, "cablemachine": 3, "dumbbellrack": 4}}
 	var suelo: float = sala.ancho * sala.fondo * Peligros.CASILLA * Peligros.CASILLA
-	print("Gimnasio (jefe %s): muebles %d, de gimnasio %d (esperado: 12 o más) · lámparas %d (esperado: 3) · otros %d (esperado: 0) · por pared %s (esperado: en las 4) · suelo libre %d %% (esperado: menos de 92)" % [
-		planta.jefe, sitio.muebles.size(), de_gimnasio.size(), lamparas, sitio.muebles.size() - de_gimnasio.size() - lamparas,
-		paredes, roundi(100.0 * (1.0 - ocupado / suelo))])
+	print("Gimnasio (jefe %s): muebles %d (esperado: 29), de gimnasio %d (esperado: 29) · lámparas %d (esperado: 0) · por pared %s (esperado: %s) · suelo libre %d %% (esperado: menos de 92)" % [
+		planta.jefe, sitio.muebles.size(), de_gimnasio.size(), lamparas, paredes, "igual" if paredes == esperadas else "OTRO: %s" % esperadas,
+		roundi(100.0 * (1.0 - ocupado / suelo))])
+	# ni se pisan ni tocan un muro, el fondo es simétrico (y la polea del medio, justo enfrente de la puerta)
+	var geo := {"cols": sitio.apt.cols, "filas": sitio.apt.filas, "dueno": sitio.apt.dueno}
+	var pisados := 0
+	for i in sitio.muebles.size():
+		for j in range(i + 1, sitio.muebles.size()):
+			if Muebles.hueco(sitio.muebles[i]).intersects(Muebles.hueco(sitio.muebles[j])):
+				pisados += 1
+	var en_muro: int = sitio.muebles.filter(func(m): return not Muebles.en_suelo(geo, Muebles.hueco(m))).size()
+	var fondo: Array = sitio.muebles.filter(func(m): return m.lado == "arriba")
+	fondo.sort_custom(func(a, b): return a.x < b.x)
+	var medio: float = (sitio.apt.entrada.c + 1) * Peligros.CASILLA
+	var simetrico := not fondo.is_empty()
+	for i in fondo.size():
+		var otro: Dictionary = fondo[fondo.size() - 1 - i]
+		simetrico = simetrico and fondo[i].tipo == otro.tipo and absf((fondo[i].x - medio) + (otro.x - medio)) <= 2.0
+	print("Gimnasio: muebles que se pisan %d (esperado: 0) · metidos en un muro %d (esperado: 0) · el fondo, simétrico %s (esperado: true) · el del medio %s, en x = %d (esperado: cablemachine, en x = %d)" % [
+		pisados, en_muro, simetrico, fondo[fondo.size() / 2].tipo if not fondo.is_empty() else "-",
+		roundi(fondo[fondo.size() / 2].x) if not fondo.is_empty() else 0, roundi(medio)])
 	print("Gimnasio: %s" % puerta_en_medio(sitio))
 	var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
 		(sitio.apt.entrada.c + 1) * Peligros.CASILLA)
+	print("Gimnasio: la puerta, en la pared de %s (esperado: abajo) · muebles delante de la puerta %d (esperado: 0)" % [
+		sitio.apt.entrada.lado, sitio.muebles.filter(func(m): return Muebles.hueco(m).intersects(entrada)).size()])
+	# y en 40 plantas más, cada una con el piso del jefe detrás de una puerta (y una semilla) distinta: siempre abajo
+	# y sin muebles delante
+	var malos := 0
+	var viejo := Planta.semilla
+	for k in 40:
+		Planta.semilla = 3000 + k
+		var otra: Dictionary = Planta.generar(1 + k % 4, "apartamentos", "gymbro")
+		for s in otra.sitios:
+			if s.tipo != "jefe":
+				continue
+			var delante: Rect2 = Muebles.delante_de({"cols": s.apt.cols, "filas": s.apt.filas}, s.apt.entrada.lado,
+				(s.apt.entrada.c + 1) * Peligros.CASILLA)
+			if s.apt.entrada.lado != "abajo" or s.muebles.size() != 29 or s.muebles.any(func(m): return Muebles.hueco(m).intersects(delante)):
+				malos += 1
+	Planta.semilla = viejo
+	print("Gimnasio: en 40 plantas más, con el piso del jefe en otra puerta, con la puerta en otro sitio o con muebles delante: %d (esperado: 0)" % malos)
 	var cerca := 9999.0
 	for a in datos.cosas:
 		for b in datos.cosas:
@@ -556,6 +600,11 @@ func probar_gimnasio() -> void:
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-gimnasio.png")
 	luz.alternar()
+	await get_tree().create_timer(0.6).timeout
+	var luces: Array = mapa.peligros.filter(func(p): return p.datos.tipo == "luz_gimnasio")
+	var encendidas: int = luces[0].luces.filter(func(l): return l.energy > 0.0).size() if not luces.is_empty() else 0
+	print("Gimnasio: luces fijas %d (esperado: 5), encendidas %d (esperado: 5)" % [luces[0].luces.size() if not luces.is_empty() else 0, encendidas])
+	Captura.foto("captura-gimnasio-luz.png")   # con la penumbra de siempre: lo que alumbran las luces
 	camara.zoom = Vector2.ONE
 	await probar_tropezar("Gimnasio", "una mancuerna", "mancuernas", sitio, datos, "captura-gimnasio-caido.png")
 	get_tree().quit()

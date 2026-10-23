@@ -59,7 +59,8 @@ const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": p
 	"agua": preload("res://scripts/peligros/agua.gd"),
 	"porqueria": preload("res://scripts/peligros/porqueria.gd"),   # (y la de la habitación del Glotón, en los Apartamentos)
 	"tropiezos": preload("res://scripts/peligros/tropiezos.gd"),   # (las mancuernas del gimnasio y los cubos de la portera)
-	"cerco": preload("res://scripts/peligros/cerco.gd")}   # (el borde en llamas de la habitación del jefe de bomberos)
+	"cerco": preload("res://scripts/peligros/cerco.gd"),   # (el borde en llamas de la habitación del jefe de bomberos)
+	"luz_gimnasio": preload("res://scripts/peligros/luz_gimnasio.gd")}   # (no es un peligro: la luz fija del gimnasio del Gymbro)
 # Lo que cuelga de la pared de arriba del cuarto de la limpieza de la portera (tools/guias_limpieza.py): fregonas
 # (las que más) y cubos, uno detrás de otro con este hueco entre ellos (en píxeles del dibujo, [mínimo, máximo])
 const COLGADOS := [preload("res://assets/sprites/colgado-fregona.png"), preload("res://assets/sprites/colgado-fregona.png"),

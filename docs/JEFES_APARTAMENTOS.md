@@ -152,12 +152,19 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
   fichas). `--captura --jefe gymbro` comprueba la armadura, la zona del salto (justo dentro y justo fuera del borde,
   y uno de verdad con Johnny justo fuera, que no le da) y las pesas (lo escribe en la terminal), y saca
   `captura-gymbro-salto.png` con él en el aire y la zona en el suelo y `captura-jefe.png` con el torbellino.
-- **Su habitación, un gimnasio** (23 oct, M6 de `PENDIENTES.md`): las paredes llenas de máquinas, una detrás de otra
-  (`jefe-gymbro` en `catalogo.gd`, `llenar` en `muebles.gd`): cinta de correr, banco de press, máquina de poleas,
-  estante de mancuernas, pila de discos, taquillas y bancos, y 3 lámparas de pie. Las máquinas cuentan como pared
-  para el torbellino. Por el suelo, 12 mancuernas (`peligros/tropiezos.gd`): al pisarlas, Johnny se cae 2 s sin poder
-  moverse, atacar ni rodar (no quita vida) y la mancuerna sale rodando; rodando se pasan sin caer. Al Gymbro y a los
-  zombis no les hacen nada. Prueba: `--captura --jefe gymbro --gimnasio`.
+- **Su habitación, un gimnasio** (23 oct, M6 de `PENDIENTES.md`): tres paredes llenas de máquinas, **siempre en el
+  mismo sitio** (`jefe-gymbro` en `catalogo.gd`, `fijos` en `muebles.gd`; el dueño lo pidió así): a la derecha, las
+  8 cintas de correr; a la izquierda, los 6 bancos de press y 2 pilas de discos; y en el fondo, simétrico, 2
+  taquillas en las esquinas, 4 pilas de discos, 3 máquinas de poleas (la del medio, justo enfrente de la puerta) y 4
+  estantes de mancuernas. La pared de abajo, vacía: ahí está la puerta (en la pared de abajo siempre: `planta.gd` pone
+  el piso del Gymbro detrás de una puerta de las de arriba del pasillo, A o B: las poleas y las taquillas solo se ven
+  de frente, así que van en la pared de arriba, y la puerta tiene que quedar enfrente de ellas). Las
+  paredes laterales empiezan justo por debajo de la fila del fondo (si no, se pisarían en las esquinas). Sin
+  lámparas ni bancos de la galería: la luz es fija (`peligros/luz_gimnasio.gd`, 5 luces blancas sin latido ni sombras,
+  como el resplandor del Glotón y el fuego del bombero; números en `Peligros.GIMNASIO`). Las máquinas cuentan como
+  pared para el torbellino. Por el suelo, 12 mancuernas (`peligros/tropiezos.gd`): al pisarlas, Johnny se cae 2 s sin
+  poder moverse, atacar ni rodar (no quita vida) y la mancuerna sale rodando; rodando se pasan sin caer. Al Gymbro y a
+  los zombis no les hacen nada. Prueba: `--captura --jefe gymbro --gimnasio`.
 
 ## 3. El jefe de bomberos (minijefe; aspecto de Claude, con visto bueno)
 
