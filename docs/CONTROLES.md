@@ -195,6 +195,8 @@ Se puede volver a mitad de partida: al caer el jefe de una planta (de la 1ª en 
 **ascensor** del pasillo (luz verde, sin las cintas, y lo dice al salir al pasillo). Solo baja a esta sala y, por su
 puerta, vuelve a la planta de la que venías, delante del ascensor; nunca lleva a otra planta. La planta queda como
 la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azotea no tiene.
+En la sala no hay más muebles que los cuatro de la pared de arriba (de izquierda a derecha: el banco de trabajo, la
+mesa del ordenador, el baúl y la taquilla); en el suelo, solo manchas.
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7,
   Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el bestiario).
 - A la derecha del baúl, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa del

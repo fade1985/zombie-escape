@@ -173,7 +173,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   (para ver lo que falta por salvar); las de los rescatados, abiertas, con él dentro y lo suyo (el mostrador del
   ferretero, las pantallas del técnico y la cafetera de Johnny junto a la farmacéutica). Arrimarse a uno sigue
   haciendo que te acompañe. La sala de mantenimiento se queda con el ordenador, el banco, el baúl y la taquilla (los
-  huecos de los vecinos, `SITIO_VECINOS` y `SITIO_CENTRO`, ya no se guardan). Las habitaciones, **de momento
+  huecos de los vecinos, `SITIO_VECINOS` y `SITIO_CENTRO`, ya no se guardan), y sin más muebles: los sueltos que salían
+  al azar ya no salen (lo pidió el dueño). Las habitaciones, **de momento
   vacías**: se decoran en otra tarea (sus muebles, en `catalogo.gd`: «habitacion-<id>» y «pasillo-viviendas»; que no
   pisen el mostrador, las pantallas ni la cafetera). El guiño de la cafetera salta la primera vez que Johnny entra en
   la habitación de la farmacéutica (ver «Guiño para la historia»). Prueba: `--captura --viviendas` (fotos

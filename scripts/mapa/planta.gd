@@ -21,7 +21,6 @@ const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
-const SITIO_TALLER := Rect2(MURO, MURO, 540 - MURO, 150)   # lo que se guarda para el banco, el ordenador, el baúl y la taquilla
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 139           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe)
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
@@ -366,22 +365,19 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 	return puestos
 
 
-# La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo, unos pocos
-# muebles y manchas en el suelo. La mitad izquierda de la pared de arriba queda libre: ahí van el banco de
-# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340) y la taquilla (parte 11; los
-# pone mapa.gd). En la pared de la derecha, la puerta de las viviendas de los supervivientes rescatados
-# (viviendas.gd; adónde lleva lo pone generar). "vuelta" es su puerta en el pasillo.
+# La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo y manchas en el
+# suelo, sin muebles sueltos. En la mitad izquierda de la pared de arriba van el banco de trabajo, el ordenador y
+# el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340) y la taquilla (parte 11; los pone mapa.gd). En la
+# pared de la derecha, la puerta de las viviendas de los supervivientes rescatados (viviendas.gd; adónde lleva lo
+# pone generar). "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA
 	var alto := SALA_FILAS * CASILLA
 	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "ancho": ancho, "alto": alto,
 		"dueno": Muebles.plano_rectangular(SALA_COLS, SALA_FILAS), "zombis": [], "limpio": true, "visitado": false,
-		"surtido": rng.randi(), "manchas": []}
+		"surtido": rng.randi(), "muebles": [], "manchas": []}
 	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
 		"aviso": ""}, {"dir": "derecha", "en": alto / 2, "tipo": "puerta", "a": -1, "vuelta": 0, "cerrojo": "", "aviso": ""}]
-	sitio.muebles = Muebles.de_sala("mantenimiento", {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": sitio.dueno},
-		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0),
-		Vector2(ancho - MURO - 40, alto / 2.0)], rng, [SITIO_TALLER])
 	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), lejos de la pared de arriba
 	for i in rng.randi_range(6, 10):
 		sitio.manchas.append({"pos": Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60),

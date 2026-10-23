@@ -304,7 +304,8 @@
   centro comercial, con la puerta de entrada siempre en el centro de la pared), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano; sus tipos, en `TIPOS`: la joyería, parte 10, no se sortea, sale una por
   partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento, con su
-  puerta abajo y otra a la derecha, la de las viviendas, y la de
+  puerta abajo y otra a la derecha, la de las viviendas, y sin muebles sueltos: el ordenador, el banco, el baúl y la
+  taquilla los pone `mapa.gd`; y la de
   exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `viviendas.gd` (las
   viviendas de los supervivientes rescatados, detrás de la puerta de la derecha de la sala de mantenimiento: un pasillo
   largo con seis habitaciones, tres arriba para los de los Apartamentos y tres abajo para los del centro comercial,

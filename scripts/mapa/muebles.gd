@@ -194,7 +194,7 @@ static func en_sala(geo: Dictionary, r: Rect2, zona: int) -> bool:
 	return true
 
 
-# Los muebles de un sitio rectangular (el pasillo o la sala de mantenimiento). "salidas" son sus puertas (como
+# Los muebles de un sitio rectangular (el pasillo). "salidas" son sus puertas (como
 # en planta.gd): delante de ellas no se pone nada. "puntos" son los sitios entre los que se tiene que poder andar.
 # "reservado": más rectángulos que dejar libres.
 static func de_sala(uso: String, geo: Dictionary, salidas: Array, puntos: Array, rng: RandomNumberGenerator,

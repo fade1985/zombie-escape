@@ -93,7 +93,7 @@ const MUEBLES := {
 	"janitorcart":     {"len": 84,  "dep": 44, "paredes": "lados", "archivo": "limpieza/carro-limpieza"},
 }
 
-# Cada sala, por su uso (el de apartamento.gd, más el pasillo y la sala de mantenimiento):
+# Cada sala, por su uso (el de apartamento.gd, más el pasillo; la sala de mantenimiento no tiene muebles sueltos):
 #   muebles     los que puede tener (uno repetido en la lista sale más a menudo)
 #   cuantos     [mínimo, máximo] de muebles sueltos (en las habitaciones grandes, alguno más)
 #   iguales     cuántos de un mismo mueble caben (los que no salen aquí, uno)
@@ -331,11 +331,6 @@ const SALAS := {
 		"cuantos": [5, 8],
 		"iguales": {"bench": 3, "plant": 2},
 		"fondo_max": 46,   # estrecho, como el de los pisos
-	},
-	# en mantenimiento la pared de arriba queda libre: ahí irán el ordenador, el baúl y el banco de trabajo
-	"mantenimiento": {
-		"muebles": ["washer", "bookshelf", "desk", "wardrobe", "shoerack"],
-		"cuantos": [2, 3],
 	},
 	# Las viviendas de los supervivientes rescatados (viviendas.gd): el pasillo y la habitación de cada uno
 	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). De momento, vacías: se decoran en otra tarea
