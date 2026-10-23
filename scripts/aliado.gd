@@ -625,7 +625,8 @@ func dibujar_hoja(delta: float, rapidez: float) -> void:
 		sprite.speed_scale = 1.0
 
 
-# El paso va según lo que avanza de verdad, como Johnny (johnny.gd, PASO): más despacio al arrancar y al frenar
+# El paso va según lo que avanza de verdad, como Johnny (johnny.gd, PASO, pero con un solo número para todas
+# las direcciones): más despacio al arrancar y al frenar
 func ritmo_andar(rapidez: float) -> float:
 	var fotogramas := sprite.sprite_frames.get_frame_count(sprite.animation)
 	var fps := sprite.sprite_frames.get_animation_speed(sprite.animation)

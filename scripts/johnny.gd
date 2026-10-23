@@ -36,7 +36,10 @@ signal modo_cambiado(nombre: String)           # y la ayuda de abajo, el modo de
 signal resucito                                # Desfibrilador: la partida saca el aviso
 
 const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igual que en el juego
-const PASO := 140.0        # unidades que avanza en un ciclo de andar, como en el juego
+# Unidades que avanza en un ciclo de andar (dos pasos), según hacia dónde da el paso. Medido en el dibujo: de lado
+# el pie apoyado se va hacia atrás más que de frente o de espaldas. Con 140 (lo del juego viejo) los pies patinaban
+# y parecía que flotaba; pegados del todo serían 62 y 52, pero las piernas irían a toda prisa: esto es el término medio
+const PASO := {"e": 96.0, "o": 96.0, "se": 84.0, "so": 84.0, "ne": 84.0, "no": 84.0, "s": 84.0, "n": 84.0}
 const RADIO := 18.0        # su círculo de choque (los zombis lo usan para saber si está a tiro)
 
 const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (parpadea), como en el juego
@@ -777,7 +780,8 @@ func animar() -> void:
 func ritmo_andar(dibujo: AnimatedSprite2D, rapidez: float) -> float:
 	var fotogramas := dibujo.sprite_frames.get_frame_count(dibujo.animation)
 	var fps := dibujo.sprite_frames.get_animation_speed(dibujo.animation)
-	return (rapidez / PASO * fotogramas) / fps
+	var hacia := String(dibujo.animation).trim_prefix("andar_")
+	return (rapidez / PASO.get(hacia, 84.0) * fotogramas) / fps
 
 
 # Hacia dónde dan el paso las piernas y si van hacia delante (1) o marcha atrás (-1). Johnny puede mirar a un
