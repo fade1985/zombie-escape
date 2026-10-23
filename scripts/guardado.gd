@@ -27,8 +27,8 @@ const NUEVO := {
 	"recetas": ["molotov"], # recetas del banco de trabajo aprendidas (las sueltan los jefes): no se pierden nunca
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
-	"traje": "",          # el traje que lleva Johnny (trajes.gd; "" = el conserje de siempre)
-	"trajes": [],         # los trajes encontrados (ids de Trajes.LISTA): se quedan para siempre
+	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)
+	"skins": [],          # las skins desbloqueadas (ids de Skins.LISTA): se quedan para siempre
 	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite

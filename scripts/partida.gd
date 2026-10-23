@@ -17,13 +17,13 @@
 # El ordenador de la sala de mantenimiento (ui/ordenador.gd): al arrimarse a su mesa, el juego se pausa y sale
 # ConserjeOS, para comprar puntos de talento, subir talentos y comprar armas con los dólares ahorrados. Los
 # talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos. La taquilla (ui/taquilla.gd),
-# igual: al arrimarse sale la ventanita para elegir el traje de Johnny (trajes.gd).
+# igual: al arrimarse sale la ventanita para elegir la skin de Johnny (skins.gd).
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny (los minijefes de
 # los Apartamentos, con los números: 7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; 0, el científico jefe; con
 # Mayús, 7, 8, 9 y P llevan derecho a la habitación de ese minijefe). F9 lleva a
 # la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
-# las mutaciones sin tener que matar a la portera. Z le pone a Johnny el siguiente traje (trajes.gd).
+# las mutaciones sin tener que matar a la portera. Z le pone a Johnny la siguiente skin (skins.gd), sin guardarla.
 #
 # Con "-- --captura" no se juega esta, sino la partida de prueba (escenas/partida_prueba.tscn): la misma partida
 # más las fotos y las comprobaciones, que están en scripts/pruebas/partida_prueba.gd.
@@ -113,7 +113,7 @@ var captura := false       # si es la partida de prueba (la pone pruebas/partida
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
-var taquilla := TAQUILLA.new()     # la ventanita de la taquilla de los trajes de Johnny (parte 11)
+var taquilla := TAQUILLA.new()     # la ventanita de la taquilla de las skins de Johnny (skins.gd)
 var presentacion := PRESENTACION.new()   # la presentación de cada jefe al aparecer (ui/presentacion.gd)
 var presentar_en_prueba := false   # en la partida de prueba la presentación se salta, salvo en la suya (--presentacion)
 const JEFE_TARDA := 0.6            # lo que tarda el jefe en salir al entrar en su sala
@@ -864,23 +864,12 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
 	cosa.tirado = tirado
 	cosa.position = donde
-	if Trajes.es_objeto(id):
-		# un traje (trajes.gd): no va a la mochila; al cogerlo Johnny se lo pone y se queda para siempre
-		var t := Trajes.de_objeto(id)
-		cosa.cogido.connect(func():
-			Trajes.encontrar(t)
-			johnny.vestir(t)
-			Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
-			Sonido.tocar("compra")
-			numero(cosa.position, "¡Traje nuevo!", Tema.TINTA)
-			decir("Te pones el traje: %s. Se queda para siempre" % Trajes.nombre(t), 3.0))
-	else:
-		cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
-		cosa.cogido.connect(func():
-			mochila.append(id)
-			Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
-			Sonido.tocar("compra")
-			numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
+	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
+	cosa.cogido.connect(func():
+		mochila.append(id)
+		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
+		Sonido.tocar("compra")
+		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
@@ -975,7 +964,7 @@ func abrir_cosas(que: String) -> void:
 	inventario.abrir(que, self)
 
 
-# La taquilla de los trajes de Johnny (ui/taquilla.gd): se para el juego y sale su ventanita
+# La taquilla de las skins de Johnny (ui/taquilla.gd): se para el juego y sale su ventanita
 func abrir_taquilla() -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return
@@ -1162,17 +1151,17 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			var obj := Objetos.que_suelta(tipo, edificio, tienda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
-		# la modista (la de la tienda de ropa): siempre un traje de Johnny que aún no se tenga (trajes.gd)
-		if tipo == "modista":
-			var falta := Trajes.que_falta()
-			if falta != "":
-				soltar_objeto(Trajes.objeto(falta), zombi.position)
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
 		# los jefes, siempre una receta del banco de trabajo que aún no se tenga (si queda alguna)
 		if tipo in JEFES:
 			soltar_receta(zombi.position)
+		# la portera, la primera vez: la skin del portero (skins.gd), para siempre (se pone en la taquilla)
+		if tipo == "portera" and Skins.desbloquear("portero"):
+			Sonido.tocar("compra")
+			numero(zombi.position + Vector2(0, -40), "¡Skin nueva!", Tema.TINTA)
+			decir("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento" % Skins.nombre("portero"), 4.0)
 		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
 		if tipo in JEFES and not final_de(tipo).is_empty():
 			fin_del_edificio()
@@ -1280,9 +1269,9 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_X:
 		probar_cientifico()   # un científico muerto a los pies, para ver su dibujo
 	elif evento.keycode == KEY_Z:
-		# el siguiente traje de Johnny (trajes.gd), para verlos sin tener que encontrarlos (no se guarda)
-		johnny.vestir(Trajes.siguiente(johnny.traje))
-		decir("Traje: " + Trajes.nombre(johnny.traje))
+		# la siguiente skin de Johnny (skins.gd), para verlas sin tener que conseguirlas (no se guarda)
+		johnny.vestir(Skins.siguiente(johnny.skin))
+		decir("Skin: " + Skins.nombre(johnny.skin))
 	elif evento.keycode == KEY_N and ed.get("azotea", false) and not cerrada and not planta.get("azotea", false):
 		ir_a_azotea()   # derecho a la azotea (los dos edificios la tienen), para probar al jefe final
 
@@ -1328,7 +1317,7 @@ func ir_al_jefe(tipo: String) -> void:
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
 		for id in Objetos.NOMBRES:
-			if not id in Objetos.USABLES and not Trajes.es_objeto(id):   # (los de curar y los trajes no van al baúl)
+			if not id in Objetos.USABLES:   # (los de curar no van al baúl)
 				g.baul[id] = g.baul.get(id, 0) + 1
 		g.recetas = Recetas.LISTA.keys())
 	decir("Uno de cada objeto al baúl, y todas las recetas")

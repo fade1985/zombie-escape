@@ -2749,5 +2749,19 @@
     "corcho (intento 4, semilla 404)": "015e41df-54ce-4394-ba11-6e413631750e"
    }
   }
+ },
+ "skin-portero": {
+  "kind": "edit_image",
+  "job_id": "46753c61-7b06-47f9-a914-b336101968f0",
+  "asset_id": "57fc24f0-752f-5d90-87ea-b109b866d7ff",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin del portero (scripts/skins.gd), hecha el 2026-10-24: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera y el dueño le dio el visto bueno. Los 8 dibujos, tal cual, en assets/sources/skin-portero/quietos/<dirección>.png. PixelLab movió el cuerpo de lado en algunas direcciones (0 a 7 píxeles): tools/cara.py lo alinea, saca la cabeza nueva (lo que cambia unido a la cabeza, y la cabeza de siempre hasta la barbilla) y la pega en todos los dibujos de las seis hojas de armas (~1.700), buscándola por el pañuelo rojo. Así no hizo falta rehacer ninguna animación: rehacer las hojas en PixelLab habrían sido miles de generaciones.",
+  "request": {
+   "description": "Turn him into an old man in his seventies: long white hair flowing down to his shoulders and tied back into a ponytail behind his head, a full white beard covering his chin and jaw, white eyebrows, a wrinkled older face. Keep the red bandana tied on his head exactly as it is. Keep exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the hair, ponytail and beard consistent in every view; from behind, the ponytail hangs down the back of his head.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24"
  }
 }

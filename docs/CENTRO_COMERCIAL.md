@@ -415,6 +415,11 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   y después; y en la segunda apertura (la de la tarjeta), sabiendo solo el molotov, enseña el cóctel morado.
 - **Parte 10 terminada.** Números provisionales: la cuenta de 40 s, los grupos de la alarma y el fajo.
 
+> **Retirados el 24 oct 2026** (lo pidió el dueño): los cuatro trajes ya no están en el juego (ni `trajes.gd`, ni los
+> objetos `traje_<id>` de la tienda de ropa, ni el de la modista, ni los colores del shader de la cintura). En su
+> lugar, las **skins desbloqueables** de Johnny (`scripts/skins.gd`, ver `docs/CODIGO.md`), que se eligen en la misma
+> taquilla. Lo de abajo se queda como historia.
+
 ### Decidido con el dueño (22 oct 2026, para la parte 11: los trajes de Johnny)
 
 - **Cuatro trajes, uno por tienda, por cambio de colores** (sin PixelLab): el **uniforme de vigilante** (peto azul

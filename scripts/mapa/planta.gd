@@ -377,7 +377,7 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 # La sala de mantenimiento, donde empieza la partida: tres estancias una al lado de otra (SALA_ESTANCIAS), hecha como
 # un apartamento ("apt": su plano por casillas, sus habitaciones y sus puertas, como las viviendas), así cada estancia
 # lleva su suelo y su pared (mapa.gd) y arriba sale en cuál se está. Ninguna tiene niebla: ya están todas vistas.
-#   - el vestuario, a la izquierda: el plato de ducha en la esquina, la taquilla de los trajes en medio de lo que queda
+#   - el vestuario, a la izquierda: el plato de ducha en la esquina, la taquilla de las skins en medio de lo que queda
 #     de la pared de arriba (parte 11; la pone mapa.gd), el lavabo con su espejo y el váter de lado en la pared de la
 #     izquierda y el banco largo suelto, abajo a la derecha, sin tapar la puerta
 #   - el despacho, en medio: la puerta del pasillo abajo y la mesa del ordenador en medio de la pared de arriba (fases 6

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvsts17s8b4nc"
-path="res://.godot/imported/obj-traje_farmacia.png-98f638dff997630131bbd32f710bac7d.ctex"
+uid="uid://cn28r7knjrqit"
+path="res://.godot/imported/conserje-48-bate-portero.png-790ff145dbd1a5cfeba7274e0f91beab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-traje_farmacia.png"
-dest_files=["res://.godot/imported/obj-traje_farmacia.png-98f638dff997630131bbd32f710bac7d.ctex"]
+source_file="res://assets/sprites/conserje-48-bate-portero.png"
+dest_files=["res://.godot/imported/conserje-48-bate-portero.png-790ff145dbd1a5cfeba7274e0f91beab.ctex"]
 
 [params]
 

@@ -9,7 +9,7 @@
 #   --alerta N     las reglas de esa alerta (alerta.gd)
 #   --jefe X       el minijefe de la 1ª planta (centro comercial: si no, el antidisturbios; Apartamentos: si no, la
 #                  portera en la baja)
-#   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
+#   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y el daño de la fregona
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
 #   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
@@ -94,9 +94,9 @@ func empezar_prueba() -> void:
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
-	elif "--trajes" in args:
+	elif "--skins" in args:
 		set_process(false)   # sin la prueba larga
-		probar_trajes()
+		probar_skins()
 	elif "--baul" in args:
 		set_process(false)   # sin la prueba larga
 		probar_baul()
@@ -1870,156 +1870,157 @@ func probar_sala() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --trajes": los trajes de Johnny (trajes.gd y cintura.gdshader). En la sala de mantenimiento,
-# Johnny con la ropa de siempre y, a su lado, una copia de su dibujo con cada traje, cada una con una hoja
-# distinta (fregona, bate, pistola y escopeta), para ver que el cambio de colores vale en todas
-# (captura-trajes.png). Luego Johnny con el chándal y el bate dando un golpe andando, parado a mitad del barrido:
-# el cuerpo con el golpe y las piernas de andar debajo, las dos con los colores del traje
-# (captura-trajes-golpe.png). Cuenta en la terminal los trajes, lo que se guarda y la vuelta de la tecla Z.
-# Luego, cómo se consiguen (trozo 2): cuenta lo que sortea la tienda de ropa sin ningún traje y con los cuatro, y
-# mira Colecciones; suelta el delantal en el suelo (captura-trajes-suelo.png), Johnny lo
-# pisa, se lo pone y se guarda (captura-trajes-cogido.png); con dos trajes, se arrima a la taquilla y sale su
-# ventanita (captura-taquilla.png), elige uno, prueba uno que falta y vuelve al conserje; y la modista cae y suelta
-# uno que falte (captura-trajes-modista.png). Luego se cierra
-func probar_trajes() -> void:
+# Con "--captura --skins": las skins de Johnny (skins.gd). En la sala de mantenimiento, sin ninguna skin:
+#   - sin desbloquear, la taquilla no deja ponérsela (y dice cómo se consigue)
+#   - la portera cae y desbloquea el portero (se guarda; no se pone sola), con su aviso (captura-skins-desbloqueo.png);
+#     una segunda vez ya no es nueva
+#   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
+#     hoja en el acto y se guarda; uno que no existe no se puede; la tecla Z da la vuelta sin guardar
+#   - la cara en las 8 direcciones (con la fregona) y con las otras cinco armas, mirando al sur, al lado del
+#     conserje de siempre (captura-skins-caras.png); y Johnny andando con la skin, que sigue con su paso
+#   - el daño de la fregona: × 4 con el portero (con el bate, igual), contado y con un golpe de verdad
+# Cada línea dice lo esperado. Deja el guardado de la prueba sin skins y se cierra
+func probar_skins() -> void:
 	set_process(false)
-	johnny.position = Vector2(300, 240)   # (en la fila de las puertas de dentro: las copias quedan entre los tabiques)
-	johnny.direccion = "s"
-	johnny.get_node("Camara").reset_smoothing()
-	var ids: Array = Trajes.LISTA.keys()
-	var hojas := ["fregona", "bate", "pistola", "escopeta"]
-	var copias := []
-	for i in ids.size():
-		var w: Dictionary = Armas.datos(hojas[i % hojas.size()])
-		var copia := Node2D.new()   # los pies, como el dibujo de Johnny (sprite.position)
-		copia.position = johnny.position + Vector2(130 * (i + 1), 16)
-		var sombra := Sombra.new()
-		sombra.ancho = 50.0
-		sombra.alto = 16.0
-		copia.add_child(sombra)
-		var dibujo := AnimatedSprite2D.new()
-		dibujo.sprite_frames = w.hoja
-		dibujo.centered = false
-		dibujo.offset = -w.pies
-		dibujo.scale = Vector2(2, 2)
-		dibujo.material = johnny.sprite.material.duplicate()
-		Trajes.vestir(dibujo.material, ids[i])
-		copia.add_child(dibujo)
-		dibujo.play("reposo_s")
-		mapa.cosas.add_child(copia)
-		copias.append(copia)
-	await get_tree().create_timer(0.8).timeout
-	Captura.foto("captura-trajes.png")
-	print("Foto trajes: Johnny de conserje y, a su lado, %s" % ", ".join(ids.map(
-		func(id): return "%s (%s)" % [Trajes.nombre(id), hojas[ids.find(id) % hojas.size()]])))
-	for c in copias:
-		c.queue_free()
-	# el chándal y el bate: un golpe andando hacia la derecha, parado a mitad del barrido (con el juego en pausa)
-	johnny.vestir("chandal")
-	johnny.coger("bate")
-	johnny.direccion = "e"
-	johnny.velocity = Vector2(140, 0)
-	johnny.atacar(0.0)
-	johnny.animar()
-	johnny.sprite.frame = 4
-	johnny.piernas.frame = 3
-	get_tree().paused = true
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-trajes-golpe.png")
-	get_tree().paused = false
-	print("Foto trajes: el chándal con el bate, golpe andando · partido por la cintura %s · piernas a la vista %s" % [
-		johnny.sprite.material.get_shader_parameter("parte") == 1, johnny.piernas.visible])
-	# lo que se guarda: el puesto se queda de una partida a otra; la tecla Z va dando la vuelta sin guardar
-	Trajes.poner("vigilante")
-	johnny.vestir(Trajes.puesto())
-	print("Guardado: traje «%s» · puesto() «%s» (%s) · Johnny lleva «%s»" % [Guardado.cargar().traje, Trajes.puesto(),
-		Trajes.nombre(Trajes.puesto()), johnny.traje])
-	var vuelta := []
-	var t := ""
-	for i in Trajes.LISTA.size() + 1:
-		t = Trajes.siguiente(t)
-		vuelta.append(Trajes.nombre(t))
-	print("Tecla Z: %s" % " > ".join(vuelta))
-	Trajes.poner("")
-	print("Trajes: %d (%s) · zonas: %s · PixelLab: 0 generaciones" % [Trajes.LISTA.size(), ", ".join(Trajes.LISTA.keys()),
-		", ".join(Trajes.ZONAS)])
-
-	# ── Cómo se consiguen (trozo 2) ──
-	# la tienda de ropa sortea los que faltan; con los cuatro, solo lo de siempre
-	Guardado.cambiar(func(g): g.trajes = []; g.traje = "")
-	var cuenta := {}
-	for i in 2000:
-		var id := Objetos.al_azar("centro", "ropa")
-		cuenta[id] = cuenta.get(id, 0) + 1
-	Guardado.cambiar(func(g): g.trajes = Trajes.LISTA.keys())
-	var con_todos := 0
-	for i in 2000:
-		if Trajes.es_objeto(Objetos.al_azar("centro", "ropa")):
-			con_todos += 1
-	print("Tienda de ropa, 2000 sorteos sin ningún traje: %s · con los cuatro: %d trajes" % [cuenta, con_todos])
-	var nombres_bien: bool = Trajes.LISTA.keys().all(func(id): return Objetos.NOMBRES[Trajes.objeto(id)] == Trajes.LISTA[id].nombre)
-	print("Colecciones del centro: %d objetos · dónde sale el delantal: «%s» · los nombres de objetos.gd y trajes.gd coinciden: %s · algún traje en los Apartamentos: %s" % [
-		Objetos.de_edificio("centro").size(), Objetos.donde(Trajes.objeto("cocinero"), "centro"), nombres_bien,
-		Objetos.de_edificio("apartamentos").any(func(id): return Trajes.es_objeto(id))])
-	# uno en el suelo, con su icono; Johnny lo pisa, se lo pone y se queda para siempre
-	Guardado.cambiar(func(g): g.trajes = []; g.traje = "")
+	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
 	johnny.vestir("")
 	johnny.coger("fregona")
-	johnny.direccion = "e"
-	soltar_objeto(Trajes.objeto("cocinero"), johnny.position + Vector2(230, 0))
-	await get_tree().create_timer(0.7).timeout
-	Captura.foto("captura-trajes-suelo.png")
-	var en_suelo := func() -> Array:
-		return mapa.cosas.get_children().filter(func(c): return c.get("icono") is Texture2D and "obj-traje_" in c.icono.resource_path)
-	var suelto: Array = en_suelo.call()
-	print("Un traje en el suelo: %d (%s)" % [suelto.size(), suelto[0].icono.resource_path.get_file() if not suelto.is_empty() else "-"])
-	if not suelto.is_empty():
-		johnny.position = suelto[0].position
-	await get_tree().create_timer(0.5).timeout
-	var g := Guardado.cargar()
-	print("Cogido: Johnny lleva «%s» · guardado: traje «%s», trajes %s · en encontrados: %s · en la mochila: %s" % [
-		johnny.traje, g.traje, g.trajes, Trajes.objeto("cocinero") in g.encontrados, Trajes.objeto("cocinero") in mochila])
-	Captura.foto("captura-trajes-cogido.png")
-	# la taquilla (ui/taquilla.gd): con dos trajes, arrimarse a ella abre la ventanita; se elige uno (se guarda y
-	# Johnny se lo pone), uno que falta no se puede, y vuelta al conserje
-	Guardado.cambiar(func(g2): g2.trajes = ["cocinero", "chandal"]; g2.traje = "cocinero")
+	print("Al empezar: skins %s · puesta «%s» · Johnny lleva «%s» (esperado: [], «», «»)" % [Skins.tenidas(),
+		Skins.puesta(), johnny.skin])
+	# sin desbloquear: la taquilla no deja
 	johnny.position = Vector2(mapa.TAQUILLA_X, mapa.MURO + 36.0 + 22.0)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
-	print("Taquilla: abierta al arrimarse %s · juego en pausa %s" % [taquilla.abierta(), get_tree().paused])
 	if taquilla.abierta():
-		taquilla.marcar("chandal")
-		await get_tree().create_timer(0.4).timeout
-		Captura.foto("captura-taquilla.png")
-		taquilla.elegir("chandal")
-		print("Elegido el chándal: Johnny lleva «%s» · guardado «%s» · dice «%s»" % [johnny.traje, Guardado.cargar().traje,
-			taquilla.info.text])
-		taquilla.elegir("vigilante")
-		print("Elegido uno que falta: Johnny lleva «%s» · dice «%s»" % [johnny.traje, taquilla.info.text])
-		taquilla.elegir("")
-		print("Elegido el conserje: Johnny lleva «%s» · guardado «%s» · dice «%s»" % [johnny.traje, Guardado.cargar().traje,
-			taquilla.info.text])
+		print("Sin desbloquear: ¿puesto? %s (esperado: false) · Johnny lleva «%s» · dice «%s»" % [
+			taquilla.elegir("portero"), johnny.skin, taquilla.info.text])
 		taquilla.cerrar()
-	print("Taquilla cerrada: juego en pausa %s" % get_tree().paused)
-	johnny.position = Vector2(690, 300)   # (en el despacho: la modista, a su izquierda, también)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
 	johnny.direccion = "e"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	# la modista: al caer suelta siempre uno que falte (si en ese momento no se le puede dar, se insiste)
-	var modista: Node2D = meter_zombi("modista", johnny.position + Vector2(-240, 0))
+
+	# ── El desbloqueo: cae la portera ──
+	var portera: Node2D = meter_zombi("portera", johnny.position + Vector2(220, 0))
 	await get_tree().create_timer(0.2).timeout
 	for i in 20:
-		if modista.estado == "muerto":
+		if portera.estado == "muerto":
 			break
-		modista.recibir_golpe(99999, Vector2.ZERO)
+		portera.recibir_golpe(99999, Vector2.ZERO)
 		await get_tree().process_frame
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-skins-desbloqueo.png")
+	print("Cae la portera (muerta: %s): skins %s · puesta «%s» (esperado: [\"portero\"], «»: no se pone sola)" % [
+		portera.estado == "muerto", Skins.tenidas(), Skins.puesta()])
+	print("Otra vez: ¿nueva? %s (esperado: false) · skins %s" % [Skins.desbloquear("portero"), Skins.tenidas()])
+	# las mutaciones que salen al caer la portera: se elige una y sigue
+	await get_tree().create_timer(2.0).timeout
+	if menus.abierto == "mutacion":
+		menus.elegir("insensible")
+	get_tree().paused = false
+	$Pantalla/Jefa.hide()
+
+	# ── La taquilla ──
+	johnny.position = Vector2(mapa.TAQUILLA_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Taquilla: abierta al arrimarse %s · juego en pausa %s (esperado: true, true)" % [taquilla.abierta(), get_tree().paused])
+	if taquilla.abierta():
+		taquilla.marcar("portero")
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-skins-taquilla.png")
+		taquilla.elegir("portero")
+		print("Elegido el portero: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
+			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
+		print("Uno que no existe: ¿puesto? %s (esperado: false) · Johnny sigue con «%s»" % [taquilla.elegir("astronauta"),
+			johnny.skin])
+		taquilla.cerrar()
+	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
+	var vuelta := []
+	var s := ""
+	for i in Skins.LISTA.size() + 1:
+		s = Skins.siguiente(s)
+		vuelta.append(Skins.nombre(s))
+	print("Tecla Z: %s (esperado: El portero > Conserje)" % " > ".join(vuelta))
+
+	# ── La cara: las 8 direcciones con la fregona, y las otras armas mirando al sur ──
+	johnny.position = Vector2(690, 330)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.hide()
+	var copias := []
+	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
+	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
+	var hojas_bien := 0
+	for i in dirs.size() + armas.size() + 1:
+		var arma: String = "fregona" if i < dirs.size() else ("fregona" if i == dirs.size() else armas[i - dirs.size() - 1])
+		var w: Dictionary = Armas.datos(arma)
+		var copia := Node2D.new()   # los pies, como el dibujo de Johnny (sprite.position)
+		if i < dirs.size():
+			copia.position = johnny.position + Vector2(-350 + 100 * i, -40)
+		else:
+			copia.position = johnny.position + Vector2(-350 + 100 * (i - dirs.size()), 110)
+		var dibujo := AnimatedSprite2D.new()
+		# el último de la segunda fila, el conserje de siempre, para comparar
+		dibujo.sprite_frames = Skins.hoja(w.hoja, "" if i == dirs.size() else "portero")
+		if dibujo.sprite_frames.resource_path.ends_with("-portero.tres"):
+			hojas_bien += 1
+		dibujo.centered = false
+		dibujo.offset = -w.pies
+		dibujo.scale = Vector2(2, 2)
+		dibujo.material = johnny.sprite.material.duplicate()
+		copia.add_child(dibujo)
+		dibujo.play("reposo_" + (dirs[i] if i < dirs.size() else "s"))
+		mapa.cosas.add_child(copia)
+		copias.append(copia)
 	await get_tree().create_timer(0.6).timeout
-	var de_modista: Array = en_suelo.call()
-	print("La modista al caer (muerta: %s): %d traje(s) en el suelo: %s" % [modista.estado == "muerto", de_modista.size(),
-		de_modista.map(func(c): return c.icono.resource_path.get_file())])
-	Captura.foto("captura-trajes-modista.png")
-	Guardado.cambiar(func(g2): g2.trajes = []; g2.traje = "")
+	Captura.foto("captura-skins-caras.png")
+	print("Foto caras: arriba el portero en %s; abajo el conserje y el portero con %s · hojas del portero %d de %d (esperado: 14 de 14)" % [
+		", ".join(dirs), ", ".join(armas), hojas_bien, dirs.size() + armas.size()])
+	for c in copias:
+		c.queue_free()
+	johnny.show()
+	# andando: ponerse la skin no le corta el paso (sigue con la misma animación, en el mismo dibujo)
+	johnny.vestir("")
+	johnny.sprite.play("andar_e")
+	johnny.sprite.set_frame_and_progress(3, 0.5)
+	johnny.vestir("portero")
+	print("Andando: después de ponérsela «%s», dibujo %d, en marcha %s (esperado: andar_e, 3, true) · hoja %s" % [
+		johnny.sprite.animation, johnny.sprite.frame, johnny.sprite.is_playing(),
+		johnny.sprite.sprite_frames.resource_path.get_file()])
+
+	# ── El daño de la fregona ──
+	johnny.coger("fregona")
+	johnny.vestir("")
+	var de_siempre: float = johnny.arma().dano
+	johnny.vestir("portero")
+	var con_portero: float = johnny.arma().dano
+	johnny.coger("bate")
+	var bate_portero: float = johnny.arma().dano
+	johnny.vestir("")
+	var bate_siempre: float = johnny.arma().dano
+	print("Daño de la fregona: conserje %.1f · portero %.1f (× %.1f; esperado: × 4) · bate: conserje %.1f, portero %.1f (esperado: igual)" % [
+		de_siempre, con_portero, con_portero / de_siempre, bate_siempre, bate_portero])
+	# un golpe de verdad, sin críticos, a un zombi delante
+	johnny.coger("fregona")
+	var critico: float = johnny.stats.critico
+	johnny.stats.critico = 0.0
+	var quitado := {}
+	for skin in ["", "portero"]:
+		johnny.vestir(skin)
+		var zombi: Node2D = meter_zombi("normal", johnny.position + Vector2(40, 0))
+		zombi.vida = 500
+		await get_tree().process_frame
+		var vida_antes: float = zombi.vida
+		johnny.golpear(0.0)
+		quitado[skin] = vida_antes - zombi.vida
+		zombi.queue_free()
+		await get_tree().process_frame
+	johnny.stats.critico = critico
+	print("Un golpe de fregona a un zombi: conserje le quita %d · portero %d (esperado: el cuádruple)" % [
+		quitado[""], quitado["portero"]])
+	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
 	get_tree().quit()
 
 
@@ -2083,7 +2084,7 @@ func probar_baul() -> void:
 	# el baúl lleno: los objetos que faltan (menos las cuchillas y el táser) y 8 armas, 32 casillas
 	Guardado.cambiar(func(g2):
 		for id in Objetos.NOMBRES:
-			if Objetos.al_baul(id) and not Trajes.es_objeto(id) and not id in ["cuchillas", "taser"] and not id in g2.baul:
+			if Objetos.al_baul(id) and not id in ["cuchillas", "taser"] and not id in g2.baul:
 				g2.baul[id] = 1
 		for i in 8:
 			g2.baul_armas.append(Recetas.crear("molotov")))
@@ -2947,8 +2948,8 @@ func probar_colecciones() -> void:
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 27:
-		push_error("Colecciones: los objetos por edificio no son 17 y 27 (con los cuatro trajes)")
+	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 23:
+		push_error("Colecciones: los objetos por edificio no son 17 y 23")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
 	if Bestiario.LISTA.size() != 22:

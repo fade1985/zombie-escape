@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://05nq4jy5gyui"
-path="res://.godot/imported/obj-traje_vigilante.png-9ef5ec69aeb7677e44d9de898842039f.ctex"
+uid="uid://b34g3ff0183bf"
+path="res://.godot/imported/conserje-48-escopeta-portero.png-13080dcb92bf3eb367bf8465474cf5cc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-traje_vigilante.png"
-dest_files=["res://.godot/imported/obj-traje_vigilante.png-9ef5ec69aeb7677e44d9de898842039f.ctex"]
+source_file="res://assets/sprites/conserje-48-escopeta-portero.png"
+dest_files=["res://.godot/imported/conserje-48-escopeta-portero.png-13080dcb92bf3eb367bf8465474cf5cc.ctex"]
 
 [params]
 

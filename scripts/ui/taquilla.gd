@@ -1,9 +1,9 @@
-# La taquilla de Johnny, en el vestuario de la sala de mantenimiento (parte 11, trozo 3; la pone mapa.gd):
-# al arrimarse (mapa/arrimable.gd → partida.abrir_taquilla) el juego se para y sale esta ventanita para elegir
-# el traje (trajes.gd): a la izquierda, Johnny de frente con el traje marcado (en silueta si aún no se tiene), y
-# a la derecha la lista: el conserje de siempre y los cuatro trajes, los que faltan con «???». Se elige uno y
-# Johnny se lo pone en el acto, y se queda puesto (Trajes.poner). Va con el ratón o el dedo, con flechas e Intro
-# (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
+# La taquilla de Johnny, en el vestuario de la sala de mantenimiento (la pone mapa.gd): al arrimarse
+# (mapa/arrimable.gd → partida.abrir_taquilla) el juego se para y sale esta ventanita para elegir la skin
+# (skins.gd): a la izquierda, Johnny de frente con la skin marcada (en silueta si aún no se tiene), y a la derecha
+# la lista: el conserje de siempre y las skins, con su cara de icono; las que faltan, con «???» y cómo se
+# consiguen. Se elige una y Johnny se la pone en el acto, y se queda puesta (Skins.poner). Va con el ratón o el
+# dedo, con flechas e Intro (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
 extends CanvasLayer
 
 const COLOR := Color("#9fd3ff")   # el color de la taquilla (su letrero en la sala, y el título)
@@ -11,12 +11,13 @@ const COLOR := Color("#9fd3ff")   # el color de la taquilla (su letrero en la sa
 var partida: Node
 var fondo: ColorRect
 var info: Label
-var vista: AnimatedSprite2D      # Johnny de frente, con el traje marcado
+var vista: AnimatedSprite2D      # Johnny de frente, con la skin marcada
 var nombre_vista: Label
 var cartas := {}                 # id → su botón ("" = el conserje de siempre)
 var puestos := {}                # id → la etiqueta «Puesto» de su carta
-var tenidos: Array = []          # los trajes que se tienen (al abrir)
-var marcado := ""                # el traje que enseña la vista
+var hoja: SpriteFrames           # la hoja de la fregona de siempre (la vista enseña la de cada skin)
+var tenidos: Array = []          # las skins que se tienen (al abrir)
+var marcado := ""                # la skin que enseña la vista
 
 
 func _ready() -> void:
@@ -28,20 +29,20 @@ func abierta() -> bool:
 	return fondo != null
 
 
-# Los ids en el orden de la lista: el conserje de siempre y luego los trajes
+# Los ids en el orden de la lista: el conserje de siempre y luego las skins
 func ids() -> Array:
-	return [""] + Trajes.LISTA.keys()
+	return [""] + Skins.LISTA.keys()
 
 
 func tiene(id: String) -> bool:
 	return id == "" or id in tenidos
 
 
-# El fondo oscuro y, encima, el panel: la vista de Johnny a la izquierda y la lista de trajes a la derecha
+# El fondo oscuro y, encima, el panel: la vista de Johnny a la izquierda y la lista de skins a la derecha
 func abrir(p: Node) -> void:
 	partida = p
 	quitar()
-	tenidos = Trajes.tenidos()
+	tenidos = Skins.tenidas()
 	fondo = ColorRect.new()
 	fondo.color = Color(0.04, 0.03, 0.06, 0.72)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -64,14 +65,14 @@ func abrir(p: Node) -> void:
 	columna.add_child(titulo)
 	var sub := Label.new()
 	sub.theme_type_variation = "Sub"
-	sub.text = "«La ropa de la tienda de ropa. Lo que te pongas se queda puesto»"
+	sub.text = "«Las skins que has desbloqueado. La que te pongas se queda puesta»"
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(sub)
 
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 18)
 	columna.add_child(fila)
-	# la vista: Johnny de frente, al triple, con su hoja de la fregona y el shader de la cintura (los colores)
+	# la vista: Johnny de frente, al triple, con la hoja de la fregona de la skin marcada (marcar)
 	var lado := VBoxContainer.new()
 	lado.add_theme_constant_override("separation", 4)
 	fila.add_child(lado)
@@ -79,8 +80,9 @@ func abrir(p: Node) -> void:
 	hueco.custom_minimum_size = Vector2(160, 176)
 	lado.add_child(hueco)
 	var w: Dictionary = Armas.datos("fregona")
+	hoja = w.hoja
 	vista = AnimatedSprite2D.new()
-	vista.sprite_frames = w.hoja
+	vista.sprite_frames = hoja
 	vista.centered = false
 	vista.offset = -w.pies
 	vista.scale = Vector2(3, 3)
@@ -95,7 +97,7 @@ func abrir(p: Node) -> void:
 	nombre_vista.add_theme_color_override("font_color", COLOR)
 	lado.add_child(nombre_vista)
 
-	# la lista: una carta por traje, con su icono, su nombre y su frase
+	# la lista: una carta por skin, con su cara de icono (tools/cara.py), su nombre y su frase
 	var lista := VBoxContainer.new()
 	lista.add_theme_constant_override("separation", 6)
 	fila.add_child(lista)
@@ -119,7 +121,7 @@ func abrir(p: Node) -> void:
 		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		carta.add_child(dentro)
 		var imagen := TextureRect.new()
-		imagen.texture = load("res://assets/ui/iconos/%s.png" % ("fregona" if id == "" else "obj-" + Trajes.objeto(id)))
+		imagen.texture = load("res://assets/ui/iconos/skin-%s.png" % ("conserje" if id == "" else id))
 		imagen.custom_minimum_size = Vector2(32, 32)
 		imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -135,14 +137,14 @@ func abrir(p: Node) -> void:
 		textos.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_child(textos)
-		etiqueta(textos, "%d. %s" % [i + 1, Trajes.nombre(id) if tiene(id) else "???"], 22)
+		etiqueta(textos, "%d. %s" % [i + 1, Skins.nombre(id) if tiene(id) else "???"], 22)
 		var frase: String
 		if not tiene(id):
-			frase = "Aún no lo tienes: lo sueltan los zombis de la tienda de ropa."
+			frase = "Aún no la tienes: " + Skins.LISTA[id].como.to_lower()
 		elif id == "":
-			frase = "La ropa de siempre: peto vaquero, camisa crema y pañuelo rojo."
+			frase = "El de siempre: peto vaquero, camisa crema y pañuelo rojo."
 		else:
-			frase = Trajes.LISTA[id].desc
+			frase = Skins.LISTA[id].desc
 		var desc := etiqueta(textos, frase, 15)
 		desc.theme_type_variation = "Sub"
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -162,7 +164,7 @@ func abrir(p: Node) -> void:
 	cerrar_b.pressed.connect(cerrar)
 	pie.add_child(cerrar_b)
 	refrescar()
-	var puesto := Trajes.puesto()
+	var puesto := Skins.puesta()
 	marcar(puesto)
 	(cartas[puesto] as Button).grab_focus.call_deferred()
 	# entra con un pequeño salto, como los menús
@@ -181,40 +183,41 @@ func etiqueta(padre: Container, texto: String, tamano: int) -> Label:
 	return e
 
 
-# La marca «Puesto» en la carta del traje que lleva
+# La marca «Puesta» en la carta de la skin que lleva
 func refrescar() -> void:
-	var puesto := Trajes.puesto()
+	var puesto := Skins.puesta()
 	for id in puestos:
-		puestos[id].text = "Puesto" if id == puesto else ""
+		puestos[id].text = "Puesta" if id == puesto else ""
 
 
-# La vista enseña ese traje (al pasar por su carta): si aún no se tiene, en silueta y «???»
+# La vista enseña esa skin (al pasar por su carta): si aún no se tiene, en silueta y «???»
 func marcar(id: String) -> void:
 	if fondo == null:
 		return
 	marcado = id
-	Trajes.vestir(vista.material, id)
+	vista.sprite_frames = Skins.hoja(hoja, id)
+	vista.play("reposo_s")
 	vista.modulate = Color.WHITE if tiene(id) else Color(0.05, 0.04, 0.08, 0.9)
-	nombre_vista.text = Trajes.nombre(id) if tiene(id) else "???"
+	nombre_vista.text = Skins.nombre(id) if tiene(id) else "???"
 
 
-# Ponerse ese traje (si se tiene): se guarda y Johnny cambia en el acto. Devuelve si se lo ha puesto
+# Ponerse esa skin (si se tiene): se guarda y Johnny cambia en el acto. Devuelve si se la ha puesto
 func elegir(id: String) -> bool:
-	if fondo == null:
+	if fondo == null or not id in ids():
 		return false
 	if not tiene(id):
-		info.text = "Aún no lo tienes: lo sueltan los zombis de la tienda de ropa (y la modista, uno seguro)."
+		info.text = "Aún no la tienes. " + Skins.LISTA[id].como
 		info.add_theme_color_override("font_color", Tema.ROJO)
 		Sonido.tocar("no")
 		return false
-	if id == Trajes.puesto():
-		info.text = "Ya lo llevas puesto."
+	if id == Skins.puesta():
+		info.text = "Ya la llevas puesta."
 		info.add_theme_color_override("font_color", Tema.TINTA)
 		return false
-	Trajes.poner(id)
+	Skins.poner(id)
 	partida.johnny.vestir(id)
 	Sonido.tocar("cambiar")
-	info.text = "Vuelves a tu ropa de siempre." if id == "" else "Te pones: %s. Se queda puesto." % Trajes.nombre(id)
+	info.text = "Vuelves a ser el conserje de siempre." if id == "" else "Te pones: %s. Se queda puesta." % Skins.nombre(id)
 	info.add_theme_color_override("font_color", Tema.VERDE)
 	refrescar()
 	marcar(id)

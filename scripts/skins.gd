@@ -1,0 +1,67 @@
+# Las skins de Johnny: otra cara y una ventaja. Se desbloquean haciendo algo en el juego y se quedan para siempre
+# ("skins" del guardado); la puesta va en "skin" ("" = el conserje de siempre) y se elige en la taquilla del
+# vestuario de la sala de mantenimiento (ui/taquilla.gd; mapa.gd la pone). Tecla de prueba Z: la siguiente, sin
+# guardarla.
+#
+# Cada skin tiene sus propias hojas de Johnny, una por arma: las de siempre con la cabeza cambiada. La cabeza nueva
+# se pidió a PixelLab una sola vez, en las 8 direcciones de Johnny quieto (assets/pixellab.json → "skin-portero"),
+# y tools/cara.py la pega en todos los dibujos de cada hoja (conserje-48-guardia.png → conserje-48-guardia-portero.png,
+# con su .json y su .tres). hoja() da la de la skin, si la tiene.
+#
+# La primera, el portero (la portera la suelta al caer por primera vez, partida.gd): un viejo de pelo largo blanco
+# con coleta y barba blanca, con el pañuelo rojo de siempre. Con ella puesta, la fregona hace un 300 % más de daño
+# (× 4, "fregona"; solo la fregona de siempre, no las armas creadas a partir de ella).
+class_name Skins
+
+const LISTA := {
+	"portero": {"nombre": "El portero", "desc": "Pelo largo blanco, coleta y barba. La fregona hace un 300 % más de daño.",
+		"como": "Mata a la portera por primera vez.", "fregona": 4.0},
+}
+
+
+# El nombre de una skin ("" = el conserje de siempre)
+static func nombre(id: String) -> String:
+	return LISTA[id].nombre if id in LISTA else "Conserje"
+
+
+# La que lleva puesta, según el guardado (si no es ninguna conocida o no la tiene, la de siempre)
+static func puesta() -> String:
+	var g := Guardado.cargar()
+	return g.skin if g.skin in LISTA and g.skin in g.skins else ""
+
+
+# Se queda con esa skin para siempre (hasta que elija otra)
+static func poner(id: String) -> void:
+	Guardado.cambiar(func(g): g.skin = id if id in LISTA else "")
+
+
+# Las que ya se tienen (ids), según el guardado
+static func tenidas() -> Array:
+	return Guardado.cargar().skins
+
+
+# La apunta para siempre (no se la pone: eso, en la taquilla). Devuelve si es nueva
+static func desbloquear(id: String) -> bool:
+	if not id in LISTA or id in tenidas():
+		return false
+	Guardado.cambiar(func(g): g.skins.append(id))
+	return true
+
+
+# La que va después de esa (tecla Z): la de siempre, las de la lista en orden y vuelta a empezar
+static func siguiente(id: String) -> String:
+	var todas: Array = [""] + LISTA.keys()
+	return todas[(todas.find(id) + 1) % todas.size()]
+
+
+# La hoja de Johnny de esa skin para un arma (la de siempre si la skin no tiene: "" o una sin hacer)
+static func hoja(de_siempre: SpriteFrames, id: String) -> SpriteFrames:
+	if not id in LISTA:
+		return de_siempre
+	var ruta := de_siempre.resource_path.trim_suffix(".tres") + "-" + id + ".tres"
+	return load(ruta) if ResourceLoader.exists(ruta) else de_siempre
+
+
+# Por cuánto se multiplica el daño de la fregona con esa skin
+static func fregona(id: String) -> float:
+	return LISTA[id].get("fregona", 1.0) if id in LISTA else 1.0

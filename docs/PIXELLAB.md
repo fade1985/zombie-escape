@@ -68,6 +68,15 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
   (`superviviente.json`, `golpe`: el detector se quedaba con el fotograma de más chispas, que va después del golpe).
   Al noroeste, en el fotograma antes del chispazo, PixelLab tiñó de celeste la cabeza, los brazos y la camisa del
   técnico: se tapó con los colores del fotograma siguiente, que tiene la misma postura (el original, en `intentos/`).
+- **Las skins de Johnny (24 oct, `pixellab.json` → `skin-portero`): otra cara sin rehacer ninguna animación.**
+  Una sola petición de `edit_image` (modo texto, 10 generaciones) con las 8 rotaciones de Johnny quieto: «conviértelo
+  en...», manteniendo ropa, postura y tamaño. Los 8 dibujos van a `assets/sources/skin-<id>/quietos/` y
+  `py tools/cara.py <id>` pega la cabeza nueva en los ~1.700 dibujos de las seis hojas de armas (busca la cabeza por el
+  pañuelo rojo; con `muestra`, el antes y el después en `captura-cara-<arma>.png`). Lo aprendido: PixelLab movió el
+  cuerpo de lado hasta 7 píxeles en algunas direcciones (la herramienta lo alinea mirando el cuerpo); la madera de las
+  armas tiene los mismos colores que el pelo, así que donde el palo pasa justo por delante de la cara, la cabeza nueva
+  lo tapa un poco; y los cartuchos rojos de la escopeta despistan al buscar el pañuelo (se prueban todas las manchas
+  rojas cercanas y gana la que mejor encaja). Para una skin que cambie el cuerpo, no solo la cabeza, esto no basta.
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

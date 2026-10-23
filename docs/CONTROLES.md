@@ -38,8 +38,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   objeto al baúl y todas las recetas aprendidas, para probar el banco de trabajo. **F8**: Colecciones al completo
   (todo encontrado, creado y visto), para probar el programa del ordenador. **Y**: soltar a tus pies el
   papel de una receta que aún no tienes (como al morir un jefe). **X**: un científico muerto a tus pies (cada X, el de la
-  página siguiente, con su piel y su pelo); su página se coge pero no se guarda. **Z**: el siguiente traje de
-  Johnny (`trajes.gd`; al final vuelve al conserje), sin guardarlo.
+  página siguiente, con su piel y su pelo); su página se coge pero no se guarda. **Z**: la siguiente skin de
+  Johnny (`skins.gd`; al final vuelve al conserje), sin guardarla.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
@@ -71,13 +71,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   sus zombis (`captura-joyeria-alarma.png`), la cuenta adelantada y la puerta abierta (`captura-joyeria-abierta.png`),
   la vitrina del premio dentro (`captura-joyeria-premio.png`) y lo que pasa al pisarla, el guardia que suelta la
   tarjeta dorada junto a la suya (`captura-joyeria-dorada.png`) y la apertura con ella.
-- `--trajes`: en vez de la prueba larga, la de los trajes de Johnny (`trajes.gd`): en la sala de mantenimiento,
-  Johnny de conserje y una copia con cada traje, cada una con una hoja distinta (`captura-trajes.png`), y el chándal
-  con el bate dando un golpe andando (`captura-trajes-golpe.png`); en la terminal, lo que se guarda y la vuelta de
-  la tecla Z. Luego cómo se consiguen: lo que sortea la tienda de ropa (en la terminal), el delantal en el suelo
-  (`captura-trajes-suelo.png`), Johnny lo pisa y se lo pone (`captura-trajes-cogido.png`), se arrima a la taquilla
-  y elige en su ventanita (`captura-taquilla.png`), y la modista cae y suelta uno que falta
-  (`captura-trajes-modista.png`).
+- `--skins`: en vez de la prueba larga, la de las skins de Johnny (`skins.gd`), en la sala de mantenimiento y sin
+  ninguna: la taquilla no deja ponerse el portero sin tenerlo; la portera cae y lo desbloquea, con su aviso
+  (`captura-skins-desbloqueo.png`), y una segunda vez ya no es nuevo; en la taquilla se elige (`captura-skins-taquilla.png`),
+  Johnny cambia de hoja y se guarda; la vuelta de la tecla Z; la cara en las 8 direcciones y con las seis armas, al
+  lado del conserje de siempre (`captura-skins-caras.png`); ponérsela andando no le corta el paso; y el daño de la
+  fregona, × 4 con el portero (y el del bate, igual), contado y con un golpe de verdad. Cada línea de la terminal
+  dice lo esperado.
 - `--baul`: en vez de la prueba larga, la de guardar a mano en el baúl lo de la mochila (`ui/inventario.gd`): con
   gasolina, clavos, vendas, cuchillas y táser en la mochila, Johnny se arrima al baúl y comprueba en la terminal que
   se abre, que «Guardar de la mochila» enseña la mochila (`captura-baul-mochila.png`, con la gasolina elegida), que
@@ -227,8 +227,10 @@ En el suelo, manchas de sangre.
 - En el despacho, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
   armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
   bestiario).
-- En el vestuario, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa
-  del centro comercial que ya tengas; se queda puesto). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
+- En el vestuario, la **taquilla** de Johnny: arrimarse para elegir la skin (las que ya hayas desbloqueado; las
+  demás salen con «???» y cómo se consiguen; la que te pongas se queda puesta). Por ahora, **el portero**: se
+  desbloquea la primera vez que matas a la portera; pelo largo blanco con coleta y barba, y la fregona hace un 300 %
+  más de daño. Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
   (cruceta y A); Esc o B cierra.
 - Los baños tienen un armarito con botiquín.
 - Por la **puerta de la derecha** del taller, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un

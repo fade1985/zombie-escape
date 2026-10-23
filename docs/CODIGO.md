@@ -27,9 +27,10 @@
 
 **Personajes y combate**
 - `johnny.gd`: moverse, vida, apuntar y atacar. Al golpear andando, `escenas/personajes/cintura.gdshader` lo parte
-  por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Los trajes (`trajes.gd`):
-  `vestir(id)` le pasa a ese mismo shader los colores del peto, la camisa y el pañuelo (los reconoce por su color en
-  las siete hojas); al empezar se pone el del guardado. `caer(segundos)`: un tropezón (las mancuernas del gimnasio
+  por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Las skins (`skins.gd`):
+  `vestir(id)` le cambia las hojas por las de esa skin sin cortarle la animación (`sostener` también coge la hoja de
+  la skin al cambiar de arma); al empezar se pone la del guardado. Con el portero, `arma()` multiplica por 4 el daño de
+  la fregona. `caer(segundos)`: un tropezón (las mancuernas del gimnasio
   del Gymbro, los cubos de la portera): se queda tirado sin andar, atacar ni rodar, con el dibujo tumbado y estrellitas en la cabeza, y luego
   se levanta; rodando no se tropieza. `mejoras.gd`: sus atributos (el baseStats del JS).
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`). `bala.gd`.
@@ -176,15 +177,14 @@
   va a la mano como al sacarla del baúl, y el fajo de billetes) y el logro «Caja fuerte». El estado, en
   `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
-- `trajes.gd`: los trajes de Johnny (parte 11): `LISTA` (nombre, frase y los colores de cada zona: el tono nuevo y
-  por cuánto se multiplican la saturación y la luz del peto, la camisa y el pañuelo), `puesto()` y `poner()` (el
-  guardado, `traje`), `vestir(material, id)` (se lo dice al shader de la cintura) y `siguiente()` (la tecla Z). Como
-  objetos de la tienda de ropa (`objetos.gd`, `traje_<id>`): `objeto()`, `es_objeto()`, `de_objeto()`, `tenidos()`
-  (los encontrados, `trajes` del guardado), `que_falta()` (el que suelta la modista al caer, desde `partida.gd`) y
-  `encontrar()` (al cogerlo, en `soltar_objeto` de `partida.gd`: se apunta para siempre y Johnny se lo pone). Se
-  eligen en la taquilla de la sala de mantenimiento (`ui/taquilla.gd`). La prueba: `--captura --trajes`
-  (`probar_trajes()`).
-- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 32 objetos, con los cuatro trajes de Johnny, `traje_<id>`, que salen en la tienda de ropa solo mientras falten y al cogerlos se los pone, `trajes.gd`; los que se usan desde el inventario, `USABLES`:
+- `skins.gd`: las skins de Johnny, que se desbloquean haciendo algo y se quedan para siempre: `LISTA` (nombre, frase,
+  cómo se consigue y su ventaja: `fregona`, por cuánto se multiplica su daño), `puesta()` y `poner()` (el guardado,
+  `skin`), `tenidas()` y `desbloquear()` (`skins`), `siguiente()` (la tecla Z), `hoja(de_siempre, id)` (la hoja de esa
+  skin para un arma: `conserje-48-<arma>-<id>.tres`) y `fregona(id)`. La primera, **el portero**: la suelta la portera
+  al caer por primera vez (`partida.gd`, con su aviso); viejo de pelo largo blanco, coleta y barba, con el pañuelo de
+  siempre, y la fregona × 4. Sus hojas son las de siempre con la cabeza cambiada (`tools/cara.py`). Se eligen en la
+  taquilla del vestuario (`ui/taquilla.gd`). La prueba: `--captura --skins` (`probar_skins()`).
+- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, con
   `al_baul()` y `cabe_baul()` para guardar en él, lo que
@@ -201,7 +201,7 @@
   (armas creadas alguna vez en el banco), `bestiario` (enemigos vistos) y `colecciones_nuevo` (hay algo nuevo desde
   la última vez que se abrió el programa; el icono avisa). Un guardado de antes los rellena una vez con lo del baúl.
   Para el reto del día: `retos` (la ficha de hoy de cada edificio, `RETO`: fecha, regla, intentos, planta, completado
-  y tiempo). Los trajes de Johnny (`trajes.gd`): `traje` (el puesto) y `trajes` (los encontrados).
+  y tiempo). Las skins de Johnny (`skins.gd`): `skin` (la puesta) y `skins` (las desbloqueadas).
 - `logros.gd`: la lista de logros (añadir uno = una línea en `LISTA`) y sus avisos.
 - `historia.gd`: el texto del dosier de cada edificio (`DOSIERES`: Apartamentos y centro comercial), la hoja de
   papel y las noticias de Canal 8 (`NOTICIAS`, con cuándo sale cada una; las vistas en `noticias_vistas` del
@@ -259,7 +259,7 @@
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
   `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día), `--joyeria` (`probar_joyeria`: la cámara
-  acorazada), `--trajes` (`probar_trajes`: los trajes de Johnny), `--baul` (`probar_baul`: guardar en el baúl lo
+  acorazada), `--skins` (`probar_skins`: las skins de Johnny), `--baul` (`probar_baul`: guardar en el baúl lo
   de la mochila) o `--ascensor` (`probar_ascensor`: bajar en el ascensor a la sala y volver), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
@@ -290,8 +290,9 @@
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
   y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras
   `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `taquilla.gd`: la ventanita de la
-  taquilla de Johnny (parte 11; la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con el traje
-  marcado (`marcar`) y la lista para ponerse uno (`elegir`: `Trajes.poner` y `johnny.vestir`).
+  taquilla de Johnny (la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con la skin marcada
+  (`marcar`: su hoja de la fregona; en silueta si aún no se tiene) y la lista para ponerse una (`elegir`:
+  `Skins.poner` y `johnny.vestir`), con la cara de cada una de icono (`assets/ui/iconos/skin-<id>.png`).
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado, pantalla roja con poca vida y escarcha con frío.
 - `botones.gd` (autoload): el saltito de los botones.
 
@@ -329,7 +330,7 @@
   `cara_pared.gd`, `puerta.gd` (las de la pared de arriba, dibujos de PixelLab: `puerta-piso` en los Apartamentos,
   `puerta-tienda` de cristal en el centro comercial y `puerta-servicio` de acero en la sala de mantenimiento de los dos;
   las de los otros muros, el ascensor y las escaleras, con código; también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente, y la de las habitaciones cerradas de las viviendas; de frente, el dibujo `puerta-bano`), `placa.gd` (la placa de latón con el nombre de cada habitación de las viviendas), `neon.gd` (el letrero de neón de una tienda).
-- `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de los trajes: `TAQUILLA_X` en `mapa.gd`),
+- `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de las skins: `TAQUILLA_X` en `mapa.gd`),
   `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
   no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de Johnny, en la
@@ -377,8 +378,11 @@ pasan a sprite; el de la mesa, además, le quita la sombra azulada que PixelLab 
 muebles nuevos de sus estancias —plato de ducha, banco largo, váter y lavabo de lado, estantería con botes, papelera— y
 el corcho del despacho, que también pasa a sprite, y les quita lo azulado que PixelLab pinta alrededor), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
-(escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de los trajes), `objetos16.py`
-(los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
+(escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de las skins), `cara.py` (las skins de Johnny: pega
+la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos de las seis hojas de armas, buscándola por
+el pañuelo rojo; saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos de la taquilla; con `muestra`, el antes y el
+después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
+(los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 Música de 8 bits: `motor-8bit.mjs` (ondas de consola, percusión, eco y el .wav en bucle) y las canciones hechas con

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8f0sae2vylsa"
-path="res://.godot/imported/obj-traje_cocinero.png-23ae27badd75beee74f9fb3889a7f805.ctex"
+uid="uid://cid5htllnwlei"
+path="res://.godot/imported/conserje-48-guardia-portero.png-fe6471e89f0618c1ce2e7b24df351a49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-traje_cocinero.png"
-dest_files=["res://.godot/imported/obj-traje_cocinero.png-23ae27badd75beee74f9fb3889a7f805.ctex"]
+source_file="res://assets/sprites/conserje-48-guardia-portero.png"
+dest_files=["res://.godot/imported/conserje-48-guardia-portero.png-fe6471e89f0618c1ce2e7b24df351a49.ctex"]
 
 [params]
 

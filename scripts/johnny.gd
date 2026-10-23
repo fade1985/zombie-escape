@@ -25,8 +25,8 @@
 # un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 4 disparos), Ninja (golpe
 # en área al acabar la esquiva) y Desfibrilador (resucita una vez por partida).
 #
-# Los trajes de la tienda de ropa (trajes.gd): vestir() le cambia los colores de la ropa con el shader de la
-# cintura (cintura.gdshader); al empezar se pone el que dice el guardado.
+# Las skins (skins.gd): vestir() le cambia las hojas por las de esa skin (las de siempre con otra cabeza); al
+# empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 300 % más (arma()).
 extends CharacterBody2D
 
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
@@ -111,7 +111,7 @@ var golpe_angulo := 0.0        # y hacia dónde va
 var patada_t := -1.0           # tiempo desde el último disparo andando (-1 = nada): el retroceso de todo el cuerpo
 var patada := Vector2.ZERO     # hacia dónde y cuánto empuja ese disparo
 
-var traje := ""            # el traje puesto (trajes.gd; "" = el conserje de siempre): los colores de la ropa
+var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siempre): sus hojas y su ventaja
 var modo := "asistido"     # cómo se ataca (ver arriba)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
 
@@ -134,14 +134,14 @@ func _ready() -> void:
 	vida = stats.vida_max
 	balas = Armas.datos(huecos.fuego).cargador
 	reserva = balas * RESERVA_INICIO
+	skin = Skins.puesta()   # la skin que lleva puesta (antes de coger el arma: cada skin tiene sus hojas)
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
 	vida_cambiada.emit.call_deferred(vida, stats.vida_max)
-	# El modo de atacar elegido la última vez (en Opciones o con F1), y el traje que lleva puesto (trajes.gd)
+	# El modo de atacar elegido la última vez (en Opciones o con F1)
 	var guardado := Guardado.cargar()
 	if guardado.ajustes.modo in MODOS:
 		modo = guardado.ajustes.modo
-	vestir(guardado.traje if guardado.traje in Trajes.LISTA else "")
 	modo_cambiado.emit.call_deferred(MODOS[modo])
 
 
@@ -204,6 +204,8 @@ func poner_modo(nuevo: String) -> void:
 func arma() -> Dictionary:
 	var w: Dictionary = Armas.datos(huecos[mano]).duplicate()
 	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
+	if huecos[mano] == "fregona":
+		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
 	if w.tipo == "fuego":
@@ -355,7 +357,7 @@ func soltar_estela() -> void:
 	copia.centered = sprite.centered
 	copia.offset = sprite.offset
 	copia.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	# con los colores del traje (el shader de la cintura), y entera
+	# entera (sin partir por la cintura)
 	var material: ShaderMaterial = sprite.material.duplicate()
 	material.set_shader_parameter("parte", 0)
 	copia.material = material
@@ -717,11 +719,12 @@ func sostener(hueco: String) -> void:
 	golpe_pendiente = false
 	efectos.hide()
 	var w := arma()
-	# Cada arma tiene su hoja de Johnny; los pies van en el mismo sitio aunque la hoja sea más alta
+	# Cada arma tiene su hoja de Johnny (y cada skin la suya); los pies van en el mismo sitio aunque sea más alta
 	partir_cintura(false)
-	sprite.sprite_frames = w.hoja
-	efectos.sprite_frames = w.hoja
-	piernas.sprite_frames = w.hoja
+	var hoja := Skins.hoja(w.hoja, skin)
+	sprite.sprite_frames = hoja
+	efectos.sprite_frames = hoja
+	piernas.sprite_frames = hoja
 	sprite.offset = -w.pies
 	efectos.offset = -w.pies
 	piernas.offset = -w.pies
@@ -879,12 +882,21 @@ func partir_cintura(si: bool) -> void:
 	sprite.material.set_shader_parameter("parte", 1 if si else 0)
 
 
-# Le pone un traje (trajes.gd; "" = el conserje de siempre): el shader de la cintura le cambia los colores del
-# peto, la camisa y el pañuelo, también en las piernas de andar que van debajo de un golpe
+# Le pone una skin (skins.gd; "" = el conserje de siempre): las hojas de esa skin para el arma que lleva, sin
+# cortar lo que estaba haciendo (sigue con la misma animación, en el mismo punto)
 func vestir(id: String) -> void:
-	traje = id
-	Trajes.vestir(sprite.material, id)
-	Trajes.vestir(piernas.material, id)
+	skin = id
+	var hoja := Skins.hoja(arma().hoja, skin)
+	for dibujo: AnimatedSprite2D in [sprite, efectos, piernas]:
+		var animacion := dibujo.animation
+		var fotograma := dibujo.frame
+		var avance := dibujo.frame_progress
+		var andando := dibujo.is_playing()
+		dibujo.sprite_frames = hoja
+		dibujo.animation = animacion
+		if andando:
+			dibujo.play(animacion)
+		dibujo.set_frame_and_progress(fotograma, avance)
 
 
 # Lo llaman los zombis al darle un zarpazo

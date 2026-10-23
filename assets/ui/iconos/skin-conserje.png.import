@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bm0rdikqimj0g"
-path="res://.godot/imported/obj-traje_chandal.png-a9946824e6c0c6f8f1be855a01c97e3a.ctex"
+uid="uid://dr0526x55tuj"
+path="res://.godot/imported/skin-conserje.png-2a39cfad7369dd0d0ee56ddec251c30f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-traje_chandal.png"
-dest_files=["res://.godot/imported/obj-traje_chandal.png-a9946824e6c0c6f8f1be855a01c97e3a.ctex"]
+source_file="res://assets/ui/iconos/skin-conserje.png"
+dest_files=["res://.godot/imported/skin-conserje.png-2a39cfad7369dd0d0ee56ddec251c30f.ctex"]
 
 [params]
 

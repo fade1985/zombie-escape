@@ -27,8 +27,8 @@ const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
 # Lo que se usa de la sala de mantenimiento, en la pared de arriba de sus estancias (planta.gd; lo demás son muebles
 # del catálogo): la mesa del ordenador, en medio de la del despacho, con el corcho colgado a su izquierda; el banco de
-# trabajo (fase 7b) y el baúl, en el taller, a la derecha de la estantería; y la taquilla de los trajes de Johnny
-# (trajes.gd, parte 11), en el vestuario, en medio de lo que deja libre el plato de ducha
+# trabajo (fase 7b) y el baúl, en el taller, a la derecha de la estantería; y la taquilla de las skins de Johnny
+# (skins.gd), en el vestuario, en medio de lo que deja libre el plato de ducha
 const ORDENADOR_X := 576.0
 const CORCHO_X := 480.0
 const CORCHO := preload("res://assets/sprites/corcho.png")   # (tools/guias_mantenimiento.py)
@@ -113,7 +113,7 @@ var muebles: Array = []
 var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de mantenimiento)
 var baul: Node2D = null          # y el baúl y el banco de trabajo
 var banco: Node2D = null
-var taquilla: Node2D = null      # y la taquilla de los trajes de Johnny (parte 11)
+var taquilla: Node2D = null      # y la taquilla de las skins de Johnny (skins.gd)
 var armaritos: Array = []        # los armaritos con botiquín de los baños (armarito.gd)
 # La niebla (solo en los apartamentos): por habitación, cuánta oscuridad le queda (1 negro, 0 nada). Las
 # habitaciones ya descubiertas se apuntan en el sitio ("vistas"), así siguen claras al volver.
@@ -510,7 +510,7 @@ func poner_muebles() -> void:
 		banco = ARRIMABLE.new()
 		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", "Banco", Color("#ffb36b"), BANCO_X, MURO, 76.0, 36.0)
 		cosas.add_child(banco)
-		taquilla = ARRIMABLE.new()   # la de los trajes de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
+		taquilla = ARRIMABLE.new()   # la de las skins de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
 		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", "Taquilla", Color("#9fd3ff"), TAQUILLA_X, MURO, 56.0, 36.0)
 		cosas.add_child(taquilla)
 		# el corcho del despacho, colgado en la cara del muro de arriba (en su pie, como los escaparates de la galería,
