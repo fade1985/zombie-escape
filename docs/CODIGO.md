@@ -374,8 +374,9 @@ con `--lado`, también suroeste y noroeste y las vistas quietas, para ahorrar ge
 `icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo; `guias_azotea.py`, los de los
 aparatos de la azotea; `guias_gimnasio.py`, las máquinas del gimnasio del Gymbro; `guias_limpieza.py`, los muebles del cuarto de la
 limpieza de la portera y lo que cuelga de su pared, que también pasa a sprite; `guias_puertas.py`, las puertas vistas de
-frente, que también pasa a sprites `puerta-<piso|tienda|servicio|bano>`; `banco_mantenimiento.py` y `baul_mantenimiento.py`, el banco de trabajo
-y el baúl de la sala de mantenimiento, que también pasan a sprite), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
+frente, que también pasa a sprites `puerta-<piso|tienda|servicio|bano>`; `banco_mantenimiento.py`, `baul_mantenimiento.py` y
+`ordenador_mantenimiento.py`, el banco de trabajo, el baúl y la mesa del ordenador de la sala de mantenimiento, que también
+pasan a sprite; el de la mesa, además, le quita la sombra azulada que PixelLab pinta debajo), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de los trajes), `objetos16.py`
 (los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de

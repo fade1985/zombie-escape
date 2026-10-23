@@ -1,7 +1,8 @@
 # La mesa del ordenador de la sala de mantenimiento (Ordenador en src/props.js del JS): pegada a la pared de
 # arriba, con el monitor que brilla un poco para que se vea que se puede usar. Delante tiene una zona
 # invisible: cuando Johnny se arrima, avisa con "usar" y la partida enciende la pantalla de ConserjeOS
-# (ui/ordenador.gd). Al cerrarla hay que apartarse un poco antes de que se vuelva a abrir.
+# (ui/ordenador.gd). Al cerrarla hay que apartarse un poco antes de que se vuelva a abrir. El dibujo sale de
+# PixelLab, al estilo de los muebles, como el banco y el baúl (tools/ordenador_mantenimiento.py).
 extends StaticBody2D
 
 signal usar
@@ -34,12 +35,12 @@ func montar(x: float, arriba: float) -> void:
 	forma.position = Vector2(0, -HONDO / 2.0)
 	add_child(forma)
 
-	# el resplandor azulado del monitor
+	# el resplandor azulado del monitor, sobre la pantalla
 	brillo = PointLight2D.new()
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")
 	brillo.texture_scale = 0.35
 	brillo.color = Color("#78dcff")
-	brillo.position = Vector2(-2, -70)
+	brillo.position = Vector2(-2, -76)
 	add_child(brillo)
 
 	var letrero := Label.new()

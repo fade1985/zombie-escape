@@ -2649,5 +2649,20 @@
     "intento 4, semilla 404": "246c010c-4241-4fd8-9710-3c4c0dbc351b"
    }
   }
+ },
+ "mesa-ordenador-mantenimiento": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "La mesa del ordenador de la sala de mantenimiento (ordenador.gd, donde Johnny abre ConserjeOS), que era el dibujo que dio el dueño en el juego JS (19 oct), pasado a píxeles tal cual: se rehízo para que todos los muebles de la sala estén hechos con la misma herramienta. Con create_image_pixflux y la misma receta que el banco y el baúl: la guía de py tools/ordenador_mantenimiento.py guia (48 píxeles del juego de ancho; de arriba abajo, el monitor beis de los 90 con la pantalla encendida encima de la caja con la disquetera, la tapa vista desde arriba con el teclado, el ratón en su alfombrilla, una taza, papeles y sangre, y el frente con el faldón, la pata de la izquierda, la cajonera de tres cajones y el panel del fondo) como init_image con fuerza 45, no_background false, single color black outline y high top-down, 4 semillas. Las cuatro salieron de frente y con la pantalla azul; la 1 con un monitor sin caja (tipo Macintosh), una maceta y un charco de sangre, la 3 con la madera rosada y la 4 con la tapa más clara y un cacharro gris detrás. La 1, la 2 y la 3 traían una sombra azulada pintada debajo de la mesa (y la 2 también a su izquierda), más oscura que el fondo, que quita() no se lleva: se les quitó con py tools/ordenador_mantenimiento.py sombra. El dueño eligió la 2, la recomendada (la más parecida a su dibujo). Fondo quitado con py tools/guias_centro.py quita, luego la sombra, y sprite de 48×49 con py tools/ordenador_mantenimiento.py; el brillo del monitor (ordenador.gd) pasó de (-2, -70) a (-2, -76), sobre la pantalla nueva. Originales en assets/sources/mantenimiento/ (intentos/, con fondo).",
+  "texto": "wooden computer desk with an old beige 90s computer monitor with a glowing blue screen, seen in 3/4 top-down view, a keyboard, a mouse, a coffee mug and papers on its top seen from above, a drawer unit facing the viewer, worn, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+  "coste": "4 generaciones (quedan 4988 de 5000 hasta el 23 nov)",
+  "piezas": {
+   "mesa-ordenador (intento 2, semilla 202)": "df50344e-8838-47fb-891c-34f1e055aaf7",
+   "descartadas": {
+    "intento 1, semilla 101": "16260ab2-2071-4e9c-b977-8e78511dde44",
+    "intento 3, semilla 303": "37661b7e-9669-4cdf-a8ce-672fa640d3a3",
+    "intento 4, semilla 404": "316d8653-9c48-4236-824a-9f865d00fe56"
+   }
+  }
  }
 }
