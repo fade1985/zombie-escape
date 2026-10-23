@@ -61,28 +61,9 @@ func montar(d: Dictionary, m: Node) -> void:
 	for cara in mapa.caras.get(datos.sala, []):
 		cara.adornos += salpicones(cara.ancho, rng)
 		cara.queue_redraw()
-	for c in focos_de_luz():
+	# el resplandor: LUCES luces repartidas por el borde del óvalo limpio (Peligros.luces_del_ovalo)
+	for c in Peligros.luces_del_ovalo(datos, LUCES):
 		luz_de_acido(Peligros.centro(c))
-
-
-# Dónde va cada luz del resplandor: LUCES puntos repartidos por el borde del óvalo limpio (la franja sucia empieza
-# ahí), cada uno en la casilla sucia más cercana; así alumbran la franja y, hacia dentro, la zona de pelea
-func focos_de_luz() -> Array:
-	var ov: Dictionary = datos.ovalo
-	var focos := []
-	for i in LUCES:
-		var a := i * TAU / LUCES
-		var meta: Vector2 = ov.centro + Vector2(cos(a) * ov.rx, sin(a) * ov.ry)
-		var mejor := Vector2i(-1, -1)
-		var cerca := 4.0   # como mucho a 4 casillas del punto
-		for c in datos.casillas:
-			var d: float = (Vector2(c) + Vector2(0.5, 0.5)).distance_to(meta)
-			if d < cerca:
-				cerca = d
-				mejor = c
-		if mejor != Vector2i(-1, -1) and not mejor in focos:
-			focos.append(mejor)
-	return focos
 
 
 # Una luz del resplandor: suave, verdosa y sin sombras (la habitación es una sola: no hay a quién colarse), que

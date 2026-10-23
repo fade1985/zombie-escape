@@ -706,8 +706,10 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 
 # Con "--captura --jefe bombero --llamas": la habitación del jefe de bomberos (catalogo.gd, "jefe-bombero";
 # peligros/cerco.gd) y su giro con el lanzallamas (bombero.gd). Monta su piso (la 1ª planta) con todo descubierto y sin
-# que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, que arde todo el borde menos
-# delante de la puerta (y más adentro, nada), el aviso de Johnny al entrar y lo que quema quedarse 1 s en el fuego.
+# que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, que el fuego se reparte como la
+# porquería del Glotón (la parte del suelo que arde, el centro sin fuego, todo lo pegado a la pared ardiendo menos
+# delante de la puerta y sitio de sobra para el giro en el medio), el aviso de Johnny al entrar, las luces del fuego y
+# lo que quema quedarse 1 s en el fuego.
 # Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
 # sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
 # quema; en contra, sí; rodando a través de ella, también; y enfadado, corriendo entre las dos lenguas a su paso, no.
@@ -736,38 +738,45 @@ func probar_llamas() -> void:
 	var cerco: Dictionary = lista[0]
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
-	# el borde, contado aquí por su cuenta: las casillas a menos de 2 de una pared; las de delante de la puerta (las
-	# de sus 2 casillas y una más a cada lado, en la franja de esa pared), aparte
-	var g: int = Peligros.CERCO.grosor
+	var total: int = sala.ancho * sala.fondo
+	# repartido como la porquería del Glotón (probar_porqueria): la parte del suelo que arde, el centro sin fuego y,
+	# contadas aquí por su cuenta, las casillas pegadas a la pared (menos el hueco limpio de delante de la puerta, el
+	# de Peligros.franja_y_ovalo) y las de delante de la puerta (las de sus 2 casillas y una más a cada lado, en las 2
+	# filas de esa pared)
+	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * Peligros.CASILLA)
 	var en: float = (apt.entrada.c + 1) * Peligros.CASILLA
-	var borde := 0
-	var arden := 0
+	var pegadas := 0
+	var pegadas_arden := 0
 	var puerta := 0
 	var puerta_arde := 0
-	var dentro_arde := 0
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
 			var k := Vector2i(c, f)
 			var lejos: int = mini(mini(c - sala.c0, sala.c0 + sala.ancho - 1 - c), mini(f - sala.f0, sala.f0 + sala.fondo - 1 - f))
 			var pared_puerta: int = sala.f0 + sala.fondo - 1 - f if apt.entrada.lado == "abajo" else f - sala.f0
-			if lejos >= g:
-				dentro_arde += 1 if cerco.casillas.has(k) else 0
-			elif pared_puerta < g and absf((c + 0.5) * Peligros.CASILLA - en) < 64.0:
+			if pared_puerta < 2 and absf((c + 0.5) * Peligros.CASILLA - en) < 64.0:
 				puerta += 1
 				puerta_arde += 1 if cerco.casillas.has(k) else 0
-			else:
-				borde += 1
-				arden += 1 if cerco.casillas.has(k) else 0
-	print("Llamas (jefe %s): la sala se llama «%s» (esperado: Apartamento en llamas) · muebles %d (esperado: 0) · el borde (a menos de %d casillas de la pared) arde en %d de %d casillas (esperado: todas) · delante de la puerta arden %d de %d (esperado: 0 de 8) · más adentro arden %d (esperado: 0) · donde aparece Johnny, sin fuego %s (esperado: true)" % [
-		planta.jefe, sala.nombre, sitio.muebles.size(), g, arden, borde, puerta_arde, puerta, dentro_arde,
-		not cerco.casillas.has(Peligros.casilla(johnny.position))])
+			if lejos == 0 and not hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA)):
+				pegadas += 1
+				pegadas_arden += 1 if cerco.casillas.has(k) else 0
+	var medio := Vector2i(sala.c0 + sala.ancho / 2, sala.f0 + sala.fondo / 2)
+	print("Llamas (jefe %s): la sala se llama «%s» (esperado: Apartamento en llamas) · muebles %d (esperado: 0) · arden %d de %d casillas (%d %%, esperado: entre 35 y 55, como la porquería) · el centro sin fuego %s (esperado: true) · pegadas a la pared arden %d de %d (esperado: todas) · delante de la puerta arden %d de %d (esperado: 0 de 8) · donde aparece Johnny, sin fuego %s (esperado: true)" % [
+		planta.jefe, sala.nombre, sitio.muebles.size(), cerco.casillas.size(), total, roundi(100.0 * cerco.casillas.size() / total),
+		not cerco.casillas.has(medio), pegadas_arden, pegadas, puerta_arde, puerta, not cerco.casillas.has(Peligros.casilla(johnny.position))])
 	await get_tree().create_timer(0.3).timeout
 	var nodo: Node = mapa.get_node("Cerco")
 	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
 		cerco.avisado, nodo.luces.size()])
+	# lo más cerca que llega el fuego del medio de la sala (donde gira el bombero): Johnny corre a unas 6 casillas de él
+	var centro: Vector2 = mapa.centro_libre()   # (ya con el mapa de navegación listo)
+	var hueco_giro := INF
+	for k in cerco.casillas:
+		var caja := Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA)
+		hueco_giro = minf(hueco_giro, centro.distance_to(centro.clamp(caja.position, caja.end)))
+	print("Llamas: el fuego, a %d del medio de la sala como poco (esperado: más de 250, que deja sitio para correr el giro a 190-210)" % roundi(hueco_giro))
 	# la sala entera, desde el medio y con la cámara alejada (con su luz de verdad: solo la del fuego)
 	var camara: Camera2D = johnny.get_node("Camara")
-	var centro: Vector2 = mapa.centro_libre()
 	johnny.position = centro + Vector2(0, 120)
 	johnny.direccion = "n"
 	camara.zoom = Vector2(0.66, 0.66)
@@ -810,8 +819,8 @@ func probar_llamas() -> void:
 	var rodar := await vuelta_de_giro(jefe, centro, "rodar", 1.0, 0.0, 190.0)
 	print("Llamas: rodando a través de la lengua, Johnny rueda %s (esperado: true) · pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
 		rodar.rodado, rodar.vida, rodar.arde])
-	# enfadado: dos lenguas opuestas
-	johnny.position = centro + Vector2(0, 300)
+	# enfadado: dos lenguas opuestas (Johnny, lejos del empujón del grito y a un lado, donde el óvalo limpio es más ancho)
+	johnny.position = centro + Vector2(300, 0)
 	jefe.fase = 2
 	jefe.al_enfadarse(johnny)
 	await get_tree().create_timer(0.5).timeout

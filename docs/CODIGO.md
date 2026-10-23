@@ -56,9 +56,11 @@
   repartidos por el suelo libre (`Peligros.tirar_cosas`); al pisarlos, `johnny.caer` 2 s y la cosa sale rodando (el
   cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso. Y
   `cerco.gd`, la habitación del jefe de bomberos («Apartamento en llamas», sin muebles: `jefe-bombero` del catálogo),
-  que arde por todo el borde (`Peligros.del_bombero`: una franja de 2 casillas pegada a las paredes, menos delante de
-  la puerta de entrada): quema como el fuego de la cocina, prende a los zombis (al bombero no) y la alumbra con sus
-  luces; lo fijo se pinta una vez y las llamas, solo lo que se ve en pantalla.
+  que arde por el borde (`Peligros.del_bombero`: repartido igual que la porquería del Glotón, con la misma
+  `Peligros.franja_y_ovalo`: la franja pegada a las paredes y el óvalo limpio en medio, menos delante de la puerta de
+  entrada): quema como el fuego de la cocina, prende a los zombis (al bombero no) y la alumbra con sus luces (por el
+  borde del óvalo, como las del ácido: `Peligros.luces_del_ovalo`); lo fijo se pinta una vez y las llamas, solo lo que
+  se ve en pantalla.
 - `zombi_guardia.gd` (escena `zombi_guardia.tscn`, hereda la del normal): el guardia de seguridad del centro
   comercial, que lleva la tarjeta (ronda, silbato, huye, se cansa). Lleva el dibujo del vigilante.
 - Los zombis del centro comercial (parte 4): `zombi_vigilante.tscn` (hereda la del normal; solo cambian números y

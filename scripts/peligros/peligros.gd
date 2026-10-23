@@ -19,7 +19,8 @@
 #   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
 #                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado, color}])
 #                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
-#   cerco.gd      la habitación del jefe de bomberos, en llamas por todo el borde   {tipo, sala, casillas, avisado}
+#   cerco.gd      la habitación del jefe de bomberos, en llamas por el borde   {tipo, sala, casillas (casilla -> 1),
+#                                                                               ovalo, avisado}
 class_name Peligros
 
 const CASILLA := 32
@@ -84,12 +85,11 @@ const TROPIEZOS := {
 	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
 }
 # El cerco de fuego de la habitación del jefe de bomberos: una franja que arde siempre (no se apaga) pegada a las
-# paredes, para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas
+# paredes, para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas. Se reparte igual que la
+# porquería del Glotón (con los números de PORQUERIA: parte, ondas, salientes y saliente_radio)
 const CERCO := {
-	"grosor": 2,         # casillas de ancho de la franja
-	"puerta": 1,         # delante de la puerta de entrada no arde: la puerta y esta casillas más a cada lado
 	"dps": 12.0,         # a Johnny, como el fuego de la cocina (y sigue ardiendo 2 s al salir); a los zombis los prende
-	"luces": 10,         # luces de fuego repartidas por la franja (no hay más luz en la habitación)
+	"luces": 10,         # luces de fuego repartidas por el borde del óvalo limpio (no hay más luz en la habitación)
 }
 
 
@@ -113,10 +113,7 @@ static func de_tienda(sitio: Dictionary) -> Array:
 	return lista
 
 
-# La porquería del Glotón: una franja pegada a las paredes de su habitación (la única sala del piso del jefe), y en
-# medio un óvalo limpio, la zona de pelea: así no se puede rodear al Glotón bordeando la habitación y hay que luchar
-# cerca de él. El óvalo tiene el tamaño justo para que la franja cubra su parte del suelo, con el borde ondulado y
-# algún charco suelto que se mete en él; lo de delante de la puerta de entrada queda limpio (ahí aparece Johnny).
+# La porquería del Glotón: la franja pegada a las paredes de su habitación con el óvalo limpio en medio (franja_y_ovalo).
 # Con su propio dado, como de_tienda. Cada casilla sucia: 1, charco; 2, charco con un montón encima
 static func del_gloton(sitio: Dictionary) -> Array:
 	var rng := RandomNumberGenerator.new()
@@ -124,35 +121,8 @@ static func del_gloton(sitio: Dictionary) -> Array:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
 	var p: Dictionary = PORQUERIA
-	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * CASILLA)
-	# el óvalo: con la forma de la habitación y el área que deja limpia la franja (1 - parte)
-	var centro := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0)
-	var escala := sqrt((1.0 - p.parte) * 4.0 / PI)
-	var rx: float = sala.ancho / 2.0 * escala
-	var ry: float = sala.fondo / 2.0 * escala
-	var fase := rng.randf() * TAU
-	var fase2 := rng.randf() * TAU
-	var casillas := {}
-	var sucia := func(c: int, f: int) -> void:
-		if dueno(apt, c, f) == sala.id and not entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
-			casillas[Vector2i(c, f)] = 1
-	for f in range(sala.f0, sala.f0 + sala.fondo):
-		for c in range(sala.c0, sala.c0 + sala.ancho):
-			var d := Vector2((c + 0.5 - centro.x) / rx, (f + 0.5 - centro.y) / ry)
-			var a := atan2(d.y, d.x)
-			var borde: float = 1.0 + p.ondas * sin(a * 3.0 + fase) + p.ondas * 0.55 * sin(a * 7.0 + fase2)
-			if d.length() > borde:
-				sucia.call(c, f)
-	# los charcos sueltos, con el centro en el borde del óvalo
-	for i in p.salientes:
-		var a := rng.randf() * TAU
-		var cx: float = centro.x + cos(a) * rx
-		var cy: float = centro.y + sin(a) * ry
-		var r: float = rng.randf_range(p.saliente_radio[0], p.saliente_radio[1])
-		for f in range(floori(cy - r), ceili(cy + r) + 1):
-			for c in range(floori(cx - r), ceili(cx + r) + 1):
-				if Vector2(c + 0.5 - cx, (f + 0.5 - cy) / 0.75).length() <= r:
-					sucia.call(c, f)
+	var reparto := franja_y_ovalo(sitio, rng, p)
+	var casillas: Dictionary = reparto.casillas
 	for key in casillas:
 		if rng.randf() < p.montones:
 			casillas[key] = 2
@@ -168,7 +138,69 @@ static func del_gloton(sitio: Dictionary) -> Array:
 				if dueno(apt, k.x, k.y) == -1 and not paredes.has(k) and rng.randf() < p.paredes:
 					paredes[k] = rng.randi_range(0, 2)
 	return [{"tipo": "porqueria", "sala": sala.id, "casillas": casillas, "paredes": paredes, "avisado": false,
-		"ovalo": {"centro": centro, "rx": rx, "ry": ry}}]   # (el óvalo, para repartir las luces del resplandor)
+		"ovalo": reparto.ovalo}]   # (el óvalo, para repartir las luces del resplandor)
+
+
+# El reparto de la porquería del Glotón (y del cerco de fuego del jefe de bomberos, que va igual): una franja pegada a
+# las paredes de la habitación del jefe (la única sala de su piso), y en medio un óvalo limpio, la zona de pelea: así
+# no se le puede rodear bordeando la habitación y hay que luchar cerca de él. El óvalo tiene el tamaño justo para que
+# la franja cubra su parte del suelo ("parte"), con el borde ondulado ("ondas") y algún charco suelto ("salientes")
+# que se mete en él; lo de delante de la puerta de entrada queda limpio (ahí aparece Johnny). Devuelve {casillas
+# (casilla -> 1), ovalo {centro, rx, ry} (en casillas)}
+static func franja_y_ovalo(sitio: Dictionary, rng: RandomNumberGenerator, p: Dictionary) -> Dictionary:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * CASILLA)
+	# el óvalo: con la forma de la habitación y el área que deja limpia la franja (1 - parte)
+	var centro := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0)
+	var escala := sqrt((1.0 - p.parte) * 4.0 / PI)
+	var rx: float = sala.ancho / 2.0 * escala
+	var ry: float = sala.fondo / 2.0 * escala
+	var fase := rng.randf() * TAU
+	var fase2 := rng.randf() * TAU
+	var casillas := {}
+	var marcar := func(c: int, f: int) -> void:
+		if dueno(apt, c, f) == sala.id and not entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
+			casillas[Vector2i(c, f)] = 1
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var d := Vector2((c + 0.5 - centro.x) / rx, (f + 0.5 - centro.y) / ry)
+			var a := atan2(d.y, d.x)
+			var borde: float = 1.0 + p.ondas * sin(a * 3.0 + fase) + p.ondas * 0.55 * sin(a * 7.0 + fase2)
+			if d.length() > borde:
+				marcar.call(c, f)
+	# los charcos sueltos, con el centro en el borde del óvalo
+	for i in p.salientes:
+		var a := rng.randf() * TAU
+		var cx: float = centro.x + cos(a) * rx
+		var cy: float = centro.y + sin(a) * ry
+		var r: float = rng.randf_range(p.saliente_radio[0], p.saliente_radio[1])
+		for f in range(floori(cy - r), ceili(cy + r) + 1):
+			for c in range(floori(cx - r), ceili(cx + r) + 1):
+				if Vector2(c + 0.5 - cx, (f + 0.5 - cy) / 0.75).length() <= r:
+					marcar.call(c, f)
+	return {"casillas": casillas, "ovalo": {"centro": centro, "rx": rx, "ry": ry}}
+
+
+# Dónde van las luces de una franja con su óvalo (las del resplandor de la porquería y las del cerco de fuego):
+# "cuantas" puntos repartidos por el borde del óvalo limpio (la franja empieza ahí), cada uno en la casilla de la
+# franja más cercana (como mucho a 4 casillas del punto); así alumbran la franja y, hacia dentro, la zona de pelea
+static func luces_del_ovalo(datos: Dictionary, cuantas: int) -> Array:
+	var ov: Dictionary = datos.ovalo
+	var focos := []
+	for i in cuantas:
+		var a := i * TAU / cuantas
+		var meta: Vector2 = ov.centro + Vector2(cos(a) * ov.rx, sin(a) * ov.ry)
+		var mejor := Vector2i(-1, -1)
+		var cerca := 4.0
+		for c in datos.casillas:
+			var d: float = (Vector2(c) + Vector2(0.5, 0.5)).distance_to(meta)
+			if d < cerca:
+				cerca = d
+				mejor = c
+		if mejor != Vector2i(-1, -1) and not mejor in focos:
+			focos.append(mejor)
+	return focos
 
 
 # Las mancuernas del gimnasio del Gymbro: unas tumbadas a lo ancho y otras a lo largo (tirar_cosas)
@@ -212,32 +244,17 @@ static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla:
 	return [{"tipo": "tropiezos", "sala": sala.id, "cosas": cosas, "avisado": false}]
 
 
-# El cerco de fuego del jefe de bomberos: su habitación (la única sala de su piso, sin muebles) arde por todo el borde,
-# en una franja de CERCO.grosor casillas pegada a las cuatro paredes, menos delante de la puerta de entrada (por ahí
-# se entra y ahí aparece Johnny). Cada casilla que arde, en "casillas" (casilla -> true)
+# El cerco de fuego del jefe de bomberos: su habitación (la única sala de su piso, sin muebles) arde por el borde,
+# repartido igual que la porquería del Glotón (franja_y_ovalo, con sus mismos números): la franja pegada a las paredes
+# y el óvalo limpio en medio, donde se pelea; delante de la puerta de entrada no arde (por ahí se entra y ahí aparece
+# Johnny). Con su propio dado, como de_tienda. Cada casilla que arde, en "casillas" (casilla -> 1), y el óvalo, para
+# repartir las luces del fuego
 static func del_bombero(sitio: Dictionary) -> Array:
-	var apt: Dictionary = sitio.apt
-	var sala: Dictionary = apt.salas[0]
-	var g: int = CERCO.grosor
-	var e: Dictionary = apt.entrada
-	var casillas := {}
-	for f in range(sala.f0, sala.f0 + sala.fondo):
-		for c in range(sala.c0, sala.c0 + sala.ancho):
-			if dueno(apt, c, f) != sala.id:
-				continue
-			# delante de la puerta (en las filas de la franja de esa pared), libre
-			var lado_puerta: bool = f >= sala.f0 + sala.fondo - g if e.lado == "abajo" else f < sala.f0 + g
-			if lado_puerta and c >= e.c - CERCO.puerta and c <= e.c + 1 + CERCO.puerta:
-				continue
-			# a menos de "g" casillas de una pared, por cualquiera de los cuatro lados
-			var junto := false
-			for d in LADOS:
-				for k in range(1, g + 1):
-					if dueno(apt, c + d.x * k, f + d.y * k) != sala.id:
-						junto = true
-			if junto:
-				casillas[Vector2i(c, f)] = true
-	return [{"tipo": "cerco", "sala": sala.id, "casillas": casillas, "avisado": false}]
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(sitio.surtido) + 8443
+	var reparto := franja_y_ovalo(sitio, rng, PORQUERIA)
+	return [{"tipo": "cerco", "sala": sitio.apt.salas[0].id, "casillas": reparto.casillas, "ovalo": reparto.ovalo,
+		"avisado": false}]
 
 
 # ¿Puede estar ahí una cosa tirada? En el suelo de la sala, a "margen" de las paredes y de los muebles (por arriba

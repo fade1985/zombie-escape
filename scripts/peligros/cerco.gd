@@ -1,7 +1,8 @@
 # El cerco de fuego de la habitación del jefe de bomberos (peligros.gd, CERCO): una franja que arde siempre, pegada a
-# las cuatro paredes, menos delante de la puerta de entrada. Se decide al generar la planta (Peligros.del_bombero:
-# qué casillas arden) y aquí se dibuja y quema. Así no se puede huir del giro con el lanzallamas (bombero.gd)
-# arrimándose a la pared: la lengua llega hasta ella y el borde está ardiendo.
+# las paredes y repartida como la porquería del Glotón (en medio, un óvalo limpio donde se pelea), menos delante de
+# la puerta de entrada. Se decide al generar la planta (Peligros.del_bombero: qué casillas arden) y aquí se dibuja y
+# quema. Así no se puede huir del giro con el lanzallamas (bombero.gd) arrimándose a la pared: la lengua llega hasta
+# ella y el borde está ardiendo.
 #
 # Quema como el fuego de la cocina (fuego.gd): a Johnny le pone el estado "fuego" (sigue ardiendo un poco al salir;
 # la esquiva lo cruza sin daño, como los charcos) y a los zombis despiertos los prende (al bombero no le hace nada y
@@ -9,7 +10,7 @@
 # pero la franja es mucho más grande, así que, como la porquería del Glotón (porqueria.gd), lo que no cambia se pinta
 # una vez (el nodo "Suelo") y aparte, repintándose y solo lo que se ve en pantalla, las celdas que tiemblan y las
 # llamas. Contra la pared no se deshilacha (el fuego llega hasta ella); hacia dentro de la sala, sí. Y alumbra:
-# unas luces de fuego repartidas por la franja, sin sombras (la habitación es una sola), que tiemblan.
+# unas luces de fuego repartidas por el borde del óvalo, sin sombras (la habitación es una sola), que tiemblan.
 extends Node2D
 
 const CASILLA := 32
@@ -53,30 +54,9 @@ func montar(d: Dictionary, m: Node) -> void:
 	suelo.show_behind_parent = true   # lo fijo debajo; lo que tiembla y las llamas (el _draw de este nodo), encima
 	suelo.draw.connect(pintar_suelo)
 	add_child(suelo)
-	for c in focos_de_luz():
+	# las luces: CERCO.luces repartidas por el borde del óvalo limpio, como las de la porquería (Peligros.luces_del_ovalo)
+	for c in Peligros.luces_del_ovalo(datos, Peligros.CERCO.luces):
 		luz_de_fuego(Peligros.centro(c))
-
-
-# Dónde va cada luz: CERCO.luces puntos repartidos alrededor del medio de la sala, cada uno en la casilla que arde más
-# cerca de él (así quedan por toda la franja, también en las esquinas)
-func focos_de_luz() -> Array:
-	var sala: Dictionary = mapa.sitio.apt.salas[datos.sala]
-	var medio := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0)
-	var focos := []
-	var n: int = Peligros.CERCO.luces
-	for i in n:
-		var a := i * TAU / n
-		var meta := medio + Vector2(cos(a) * sala.ancho, sin(a) * sala.fondo) * 0.5
-		var mejor := Vector2i(-1, -1)
-		var cerca := INF
-		for c in datos.casillas:
-			var d: float = (Vector2(c) + Vector2(0.5, 0.5)).distance_to(meta)
-			if d < cerca:
-				cerca = d
-				mejor = c
-		if mejor != Vector2i(-1, -1) and not mejor in focos:
-			focos.append(mejor)
-	return focos
 
 
 # Una luz de fuego, naranja, sin sombras (como las del resplandor de la porquería): alumbra el suelo y lo que hay en

@@ -170,10 +170,12 @@ la lumbre.
     a unas 6 casillas del jefe se le sigue el paso (con poca vida, Johnny anda más lento y tiene que arrimarse más);
     corriendo en contra o quieto, te alcanza. Cada 15 s. Una explosión (granada) se lo corta (0,7 s tambaleándose).
   - *Su habitación, en llamas* (M8): «Apartamento en llamas», sin muebles (`jefe-bombero` del catálogo) y con todo el
-    borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`): una franja de 2 casillas pegada a las cuatro paredes,
-    menos delante de la puerta de entrada (la puerta y una casilla a cada lado). No se apaga: quema como el fuego de
-    la cocina (12 por segundo y 2 s más al salir; rodando se cruza, como los charcos) y prende a los zombis; al
-    bombero no le hace nada. Da la luz de la sala (10 luces de fuego repartidas por la franja).
+    borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`), **repartido igual que la porquería del Glotón**
+    (el dueño, 23 oct): una franja pegada a las paredes que cubre cerca de un 45 % de la habitación y en medio un
+    óvalo limpio donde se pelea, con el borde ondulado y alguna llama suelta que se mete en él; delante de la puerta
+    de entrada no arde. No se apaga: quema como el fuego de la cocina (12 por segundo y 2 s más al salir; rodando se
+    cruza, como los charcos) y prende a los zombis; al bombero no le hace nada. Da la luz de la sala (10 luces de
+    fuego repartidas por el borde del óvalo).
   - *Molotovs:* a entre 140 y 520, uno en curva (0,9 s) a donde estás, con su marca roja en el suelo
     (`proyectil.gd`, tipo `molotov_jefe`): 6 si te pilla al caer y un charco de fuego algo más pequeño que el de
     Johnny (`charco.gd`, 4 s): 12 por segundo dentro y 2 s más al salir. Cada 4,6 s.
