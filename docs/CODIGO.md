@@ -265,8 +265,10 @@
   (`Tema.FUENTE_JEFE`, a 25); debajo, la barra fina de armadura (`Armadura`, del Gymbro y la cúpula del científico:
   la hace `partida.armadura_jefe()` y la pinta `pintar_armadura`). `partida.gd` le pone `jefe`, `max_value` y `value`.
 - `presentacion.gd`: la presentación de cada jefe al aparecer: todo se queda quieto, la cámara hace zoom sobre él
-  entre dos franjas negras mientras grita (su estado «grito», un foco y su frase, `GRITOS`) y sale su nombre en grande
-  (con la letra de los jefes, a 50);
+  entre dos franjas negras mientras grita (su estado «grito», un foco y el rugido; sin frase escrita, que con el zoom
+  no se leía) y sale su nombre en grande (con la letra de los jefes, a 50); Johnny se calla mientras tanto (lo que
+  estuviera diciendo, como el aviso de la habitación, y lo que fuera a decir: `partida.decir` lo guarda en
+  `pendiente`) y lo dice al acabar;
   a los 2,2 s vuelve la cámara y empieza la pelea. Los que entran a su manera (la Modista, escondida) solo reciben
   franjas, nombre y rugido. La monta `partida.gd` al sacar al jefe (en la prueba se salta, salvo con `--presentacion`);
   mientras dura no se puede pausar ni abrir el inventario. El jefe sale siempre en medio de su sala

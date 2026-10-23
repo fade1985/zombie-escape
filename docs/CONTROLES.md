@@ -140,9 +140,11 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   en la planta que le tocó en el sorteo, y que el jefe que sale es ese (`captura-ir-jefe.png`, el jefe de bomberos en su
   habitación). Cada línea dice lo esperado.
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
-  (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
-  cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la
-  barra oculta (`captura-presentacion.png`); al acabar, que todo ha vuelto. Johnny lleva la Gastroenteritis,
+  (`ui/presentacion.gd`): entra en su piso y, al gritar el jefe, comprueba que no sale ninguna frase escrita y que
+  Johnny está callado (`captura-presentacion-grito.png`); a mitad de la presentación, el zoom de la cámara sobre él,
+  que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la barra oculta
+  (`captura-presentacion.png`); al acabar, que todo ha vuelto y Johnny dice lo que se había callado (lo de la
+  habitación). Johnny lleva la Gastroenteritis,
   Tentacular, Locura y Flatulento, con un zombi quieto al lado: ninguna actúa mientras dura y cada una lo hace 1 s
   después de acabar (`captura-presentacion-vomito.png`). Cada línea dice lo esperado. (En el juego, mientras dura la
   presentación no responden la pausa, el inventario ni las teclas de prueba, y las mutaciones no actúan.)

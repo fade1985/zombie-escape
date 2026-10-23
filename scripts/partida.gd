@@ -427,7 +427,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.centro_libre())
 			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
 			if not captura or presentar_en_prueba:
-				await presentacion.presentar(self, jefa, planta.jefe, $Pantalla/Jefa/Nombre.text)
+				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
@@ -764,8 +764,12 @@ func nombre_jefa() -> String:
 	return ""
 
 
-# Un aviso en el centro de la pantalla que se va solo
+# Un aviso en el centro de la pantalla que se va solo. Durante la presentación de un jefe no sale: se guarda (el
+# último) y sale al acabar (ui/presentacion.gd)
 func decir(texto: String, segundos := 2.2) -> void:
+	if presentacion.activa:
+		presentacion.pendiente = [texto, segundos]
+		return
 	aviso.text = texto
 	aviso.modulate.a = 1.0
 	if aviso_tween:

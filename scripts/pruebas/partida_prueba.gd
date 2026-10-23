@@ -295,13 +295,15 @@ func fotos_luz() -> void:
 
 
 # Con "--captura --presentacion" (y --jefe gloton, u otro): la presentación del jefe (ui/presentacion.gd). Entra en el
-# piso del jefe de la 1ª planta y, cuando él aparece, mira a mitad de la presentación (captura-presentacion.png) que
-# la cámara está acercada y sobre el jefe, Johnny quieto y sin poder recibir daño, el jefe gritando, el nombre en
-# pantalla y la barra de vida aún oculta; y al acabar, que la cámara ha vuelto, Johnny se mueve, el jefe anda y la
-# barra ha salido. Con la Modista (--edificio centro --jefe modista), que entra escondida, ni zoom ni grito: solo
-# franjas, nombre y rugido, y sigue escondida al acabar. Johnny lleva las mutaciones que actúan solas (mutaciones.gd),
-# listas y con un zombi quieto al lado: ninguna actúa mientras dura, y cada una 1 s después de acabar
-# (captura-presentacion-vomito.png, con el vómito en el aire). Cuenta todo en la terminal, con lo esperado, y se cierra
+# piso del jefe de la 1ª planta y, cuando él aparece, mira al gritar (captura-presentacion-grito.png) que no sale
+# ninguna frase escrita y que Johnny está callado; a mitad de la presentación (captura-presentacion.png), que la
+# cámara está acercada y sobre el jefe, Johnny quieto y sin poder recibir daño, el jefe gritando, el nombre en
+# pantalla y la barra de vida aún oculta; y al acabar, que la cámara ha vuelto, Johnny se mueve (y dice lo que se ha
+# callado), el jefe anda y la barra ha salido. Con la Modista (--edificio centro --jefe modista), que entra
+# escondida, ni zoom ni grito: solo franjas, nombre y rugido, y sigue escondida al acabar. Johnny lleva las mutaciones
+# que actúan solas (mutaciones.gd), listas y con un zombi quieto al lado: ninguna actúa mientras dura, y cada una 1 s
+# después de acabar (captura-presentacion-vomito.png, con el vómito en el aire). Cuenta todo en la terminal, con lo
+# esperado, y se cierra
 func probar_presentacion() -> void:
 	set_process(false)
 	presentar_en_prueba = true
@@ -336,7 +338,14 @@ func probar_presentacion() -> void:
 	var vecino := meter_zombi("normal", johnny.position + Vector2(40, 0))
 	vecino.set_physics_process(false)
 	vecino.vida = 100000
-	await get_tree().create_timer(1.1).timeout   # a 1,1 s de empezar la presentación
+	# a 0,6 s, recién soltado el grito: ningún texto flotando en la sala (el jefe no dice ninguna frase escrita) y
+	# Johnny callado (lo de la habitación lo dice al acabar)
+	await get_tree().create_timer(0.6).timeout
+	var flotando: Array = jefa.get_parent().get_children().filter(func(n): return n is Label).map(func(n): return n.text)
+	print("Presentación, al gritar: textos flotando en la sala %d %s (esperado: 0: el grito es la pose y el rugido, sin frase escrita) · Johnny dice algo %s (esperado: false: se calla hasta el final)" % [
+		flotando.size(), flotando, aviso.modulate.a > 0.0 and aviso.text != ""])
+	Captura.foto("captura-presentacion-grito.png")
+	await get_tree().create_timer(0.5).timeout   # a 1,1 s de empezar la presentación
 	var camara: Camera2D = johnny.get_node("Camara")
 	print("Presentación (jefe %s), a mitad: zoom %.2f (esperado: %.1f; 1 si entra escondido, como la Modista) · cámara desplazada %d hacia el jefe (esperado: más de 0; 0 si escondido) · a %d del jefe (esperado: menos de 60, que enfoca algo por encima; da igual si escondido) · Johnny quieto %s y sin daño %s (esperado: true, true) · el jefe gritando %s (esperado: true; false si escondido) · nombre «%s» a la vista %s (esperado: true) · barra oculta %s (esperado: true)" % [
 		planta.jefe, camara.zoom.x, presentacion.ZOOM, roundi(camara.offset.length()),
@@ -351,9 +360,9 @@ func probar_presentacion() -> void:
 		await get_tree().physics_frame
 	var acabo: float = ahora.call()
 	await get_tree().create_timer(0.5).timeout
-	print("Presentación, al acabar: zoom %.2f (esperado: 1) · cámara desplazada %d (esperado: 0) · Johnny se mueve %s (esperado: true) · el jefe en «%s» (esperado: no «grito») · barra a la vista %s (esperado: true) · franjas y nombre ocultos %s (esperado: true)" % [
+	print("Presentación, al acabar: zoom %.2f (esperado: 1) · cámara desplazada %d (esperado: 0) · Johnny se mueve %s (esperado: true) · el jefe en «%s» (esperado: no «grito») · barra a la vista %s (esperado: true) · franjas y nombre ocultos %s (esperado: true) · Johnny dice «%s» (esperado: lo de la habitación, si tiene peligro: en la del bombero, «¡La habitación está en llamas!…»; si no, nada)" % [
 		camara.zoom.x, roundi(camara.offset.length()), johnny.is_physics_processing(), jefa.estado, $Pantalla/Jefa.visible,
-		not presentacion.visible])
+		not presentacion.visible, aviso.text if aviso.modulate.a > 0.0 else ""])
 	# la primera vez de cada una después (se espera hasta 2,5 s del juego) y la foto, con el vómito ya en el aire
 	var primera := {}
 	while primera.size() < ids.size() and ahora.call() - acabo < 2.5:

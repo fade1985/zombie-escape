@@ -1,14 +1,16 @@
 # La presentación de un jefe: al aparecer, la pelea se para un momento, la cámara hace un zoom que lo enfoca solo a
-# él mientras suelta su grito, entran dos franjas negras de cine y sale su nombre en grande; luego la cámara vuelve
-# y empieza la pelea. La monta partida.gd al sacar al jefe (presentar); en la partida de prueba se salta, salvo en su
-# prueba (--captura --presentacion).
+# él mientras suelta su grito (la pose y el rugido, sin ninguna frase escrita: con el zoom no se leería), entran dos
+# franjas negras de cine y sale su nombre en grande; luego la cámara vuelve y empieza la pelea. La monta partida.gd
+# al sacar al jefe (presentar); en la partida de prueba se salta, salvo en su prueba (--captura --presentacion).
 # Mientras dura: Johnny, los acompañantes y los demás zombis se quedan quietos (y Johnny no puede recibir daño); el
-# HUD, el minimapa y la barra del jefe se esconden; el jefe se pone en su pose de gritar (su estado "grito", el
-# mismo de cuando se enfada, que también lo deja sin recibir daño) y un foco lo alumbra; al acabar echa a andar
-# como siempre. Los jefes que entran a su manera (la Modista, escondida entre los maniquíes: no empiezan en "andar")
-# se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y el rugido. partida.gd no deja pausar ni
-# abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan (mutaciones.gd). El desplazamiento de la
-# cámara va por Temblor.desplazamiento (si se tocara el offset de la cámara, el temblor lo borraría).
+# HUD, el minimapa y la barra del jefe se esconden; Johnny se calla (lo que estuviera diciendo, como el aviso de la
+# habitación al entrar, y lo que fuera a decir: partida.decir lo deja en "pendiente") y lo dice al acabar; el jefe se
+# pone en su pose de gritar (su estado "grito", el mismo de cuando se enfada, que también lo deja sin recibir daño) y
+# un foco lo alumbra; al acabar echa a andar como siempre. Los jefes que entran a su manera (la Modista, escondida
+# entre los maniquíes: no empiezan en "andar") se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y
+# el rugido. partida.gd no deja pausar ni abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan
+# (mutaciones.gd). El desplazamiento de la cámara va por Temblor.desplazamiento (si se tocara el offset de la cámara,
+# el temblor lo borraría).
 class_name Presentacion
 extends Control
 
@@ -22,18 +24,12 @@ const CUERPO := 24.0         # la cámara enfoca un poco por encima del pie del 
 const NOMBRE_ENTRA := 0.25   # lo que tarda el nombre en aparecer
 const LUZ_RADIO := 240.0     # el foco que alumbra al jefe mientras tanto (en la penumbra o a oscuras no se le vería)
 const LUZ_TEXTURA := preload("res://escenas/luces/luz_suave.tres")
-# El grito de cada jefe al presentarse: frases propias de la presentación, ninguna es el aviso de un ataque ni el
-# grito de enfadarse (si no está, "¡GRRRAAAH!"). La Modista no grita: entra escondida
-const GRITOS := {
-	"portera": "¡FUERA DE MI EDIFICIO!", "gloton": "¡CARNE FRESCA!", "gymbro": "¡PURO MÚSCULO!", "bombero": "¡VAIS A ARDER!",
-	"cientifico_jefe": "¡POR LA CIENCIA!", "gerente": "¡ESTÁS DESPEDIDO!", "antidisturbios": "¡ALTO, POLICÍA!",
-	"cocinero": "¡PLATO DEL DÍA!", "modista": "¡SSSS!", "mascota": "¡JUGUEMOS!",
-}
 
 var arriba: ColorRect        # las franjas negras
 var abajo: ColorRect
 var nombre: Label            # el nombre del jefe, en grande
 var activa := false          # mientras dura
+var pendiente: Array = []    # lo que Johnny se calla mientras tanto ([texto] o [texto, segundos]): lo dice al acabar
 
 
 func preparar(partida: Node) -> void:
@@ -72,9 +68,9 @@ func franja() -> ColorRect:
 	return f
 
 
-# La presentación entera: se llama al sacar al jefe y se espera a que acabe (await). "tipo" es su tipo de zombi
-# (el grito) y "texto_nombre", lo que pone en su barra de vida
-func presentar(partida: Node, jefa: Node2D, tipo: String, texto_nombre: String) -> void:
+# La presentación entera: se llama al sacar al jefe y se espera a que acabe (await). "texto_nombre" es lo que pone en
+# su barra de vida
+func presentar(partida: Node, jefa: Node2D, texto_nombre: String) -> void:
 	if activa or not is_instance_valid(jefa) or not partida.johnny.vivo or partida.terminada:
 		return
 	activa = true
@@ -97,12 +93,20 @@ func presentar(partida: Node, jefa: Node2D, tipo: String, texto_nombre: String) 
 	# la barra de vida se enseña), y así se sabe dónde está y cómo entra
 	await get_tree().process_frame
 	if not is_instance_valid(jefa) or jefa.get("estado") == "muerto" or not johnny.vivo or partida.terminada:
-		soltar(quietos, johnny, inv_antes)
+		soltar(partida, quietos, johnny, inv_antes)
 		return
 	barra.hide()
 	for h in hud:
 		if h:
 			h.hide()
+	# lo que esté diciendo Johnny (lo de la habitación, nada más entrar: «¡La habitación está en llamas!…») se calla y
+	# lo dice al acabar
+	var aviso: Label = partida.aviso
+	if aviso.modulate.a > 0.0 and aviso.text != "":
+		pendiente = [aviso.text]
+		if partida.aviso_tween:
+			partida.aviso_tween.kill()
+		aviso.modulate.a = 0.0
 	# los que empiezan andando se ponen a gritar desde ya (sin recibir daño ni hacerlo) y se les enfoca; los que entran
 	# a su manera (la Modista, escondida), ni se tocan ni se enfocan
 	var normal: bool = jefa.get("estado") == "andar"
@@ -143,11 +147,10 @@ func presentar(partida: Node, jefa: Node2D, tipo: String, texto_nombre: String) 
 	ida.tween_property(arriba, "position:y", 0.0, ACERCAR)
 	ida.tween_property(abajo, "position:y", pantalla.y - FRANJA, ACERCAR)
 	await get_tree().create_timer(GRITO, false).timeout
-	# el grito: su frase y el rugido (y el grito le dura desde aquí 1,4 s más, hasta casi el final); y el nombre
+	# el grito: el rugido, sin frase escrita (la pose ya la tiene, y le dura desde aquí 1,4 s más, hasta casi el
+	# final); y el nombre
 	if normal and is_instance_valid(jefa):
 		jefa.set("t", 0.0)
-		if jefa.has_method("gritar"):
-			jefa.gritar(GRITOS.get(tipo, "¡GRRRAAAH!"), Tema.AMARILLO, 26)
 	Sonido.tocar("rugido")
 	create_tween().tween_property(nombre, "modulate:a", 1.0, NOMBRE_ENTRA)
 	await get_tree().create_timer(QUIETO - GRITO, false).timeout
@@ -168,16 +171,20 @@ func presentar(partida: Node, jefa: Node2D, tipo: String, texto_nombre: String) 
 	for h in hud:
 		if h:
 			h.show()
-	soltar(quietos, johnny, inv_antes)
+	soltar(partida, quietos, johnny, inv_antes)
 	if is_instance_valid(jefa) and jefa.get("estado") != "muerto":
 		barra.show()
 
 
-# Se acaba: todos vuelven a moverse y Johnny recupera su cuenta de invulnerabilidad (al menos un respiro)
-func soltar(quietos: Array, johnny: Node2D, inv_antes: float) -> void:
+# Se acaba: todos vuelven a moverse, Johnny recupera su cuenta de invulnerabilidad (al menos un respiro) y dice lo que
+# se ha callado
+func soltar(partida: Node, quietos: Array, johnny: Node2D, inv_antes: float) -> void:
 	for n in quietos:
 		if is_instance_valid(n):
 			n.set_physics_process(true)
 	if is_instance_valid(johnny):
 		johnny.invulnerable = maxf(inv_antes, 0.3)
 	activa = false
+	if not pendiente.is_empty() and is_instance_valid(johnny) and johnny.vivo and not partida.terminada:
+		partida.callv("decir", pendiente)   # (con sus segundos, si los dijo)
+	pendiente = []
