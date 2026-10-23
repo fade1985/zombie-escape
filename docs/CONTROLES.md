@@ -146,8 +146,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
   (`ui/presentacion.gd`): entra en su piso y, al gritar el jefe, comprueba que no sale ninguna frase escrita y que
   Johnny está callado (`captura-presentacion-grito.png`); a mitad de la presentación, el zoom de la cámara sobre él,
-  que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la barra oculta
-  (`captura-presentacion.png`); al acabar, que todo ha vuelto y Johnny dice lo que se había callado (lo de la
+  que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la barra oculta, y
+  el foco que lo alumbra (uno, menos al Gymbro, que no lleva ninguno) (`captura-presentacion.png`); al acabar, que todo ha vuelto y Johnny dice lo que se había callado (lo de la
   habitación). Johnny lleva la Gastroenteritis,
   Tentacular, Locura y Flatulento, con un zombi quieto al lado: ninguna actúa mientras dura y cada una lo hace 1 s
   después de acabar (`captura-presentacion-vomito.png`); el acompañante que ataca (el policía), con su arma lista,

@@ -6,7 +6,8 @@
 # HUD, el minimapa y la barra del jefe se esconden; Johnny se calla (lo que estuviera diciendo, como el aviso de la
 # habitación al entrar, y lo que fuera a decir: partida.decir lo deja en "pendiente") y lo dice al acabar; el jefe se
 # pone en su pose de gritar (su estado "grito", el mismo de cuando se enfada, que también lo deja sin recibir daño) y
-# un foco lo alumbra; al acabar echa a andar como siempre. Los jefes que entran a su manera (la Modista, escondida
+# un foco lo alumbra (menos al Gymbro: SIN_FOCO, se ve con la luz de su gimnasio); al acabar echa a andar como siempre.
+# Los jefes que entran a su manera (la Modista, escondida
 # entre los maniquíes: no empiezan en "andar") se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y
 # el rugido. partida.gd no deja pausar ni abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan
 # (mutaciones.gd); al acabar, ellas y los acompañantes (aliado.gd: calma) tardan 1 s más en atacar. El desplazamiento
@@ -24,6 +25,7 @@ const CUERPO := 24.0         # la cámara enfoca un poco por encima del pie del 
 const NOMBRE_ENTRA := 0.25   # lo que tarda el nombre en aparecer
 const LUZ_RADIO := 240.0     # el foco que alumbra al jefe mientras tanto (en la penumbra o a oscuras no se le vería)
 const LUZ_TEXTURA := preload("res://escenas/luces/luz_suave.tres")
+const SIN_FOCO := ["gymbro"]   # los jefes a los que no se les pone el foco: se ven con la luz de su sala (el gimnasio tiene luces propias)
 
 var arriba: ColorRect        # las franjas negras
 var abajo: ColorRect
@@ -114,14 +116,15 @@ func presentar(partida: Node, jefa: Node2D, texto_nombre: String) -> void:
 	if normal:
 		if jefa.has_method("cambiar"):
 			jefa.cambiar("grito")
-		foco = PointLight2D.new()
-		foco.texture = LUZ_TEXTURA
-		foco.texture_scale = LUZ_RADIO / 128.0
-		foco.color = Color(1.0, 0.95, 0.85)
-		foco.energy = 0.9
-		foco.range_item_cull_mask = Luz.TODAS
-		foco.position = Vector2(0, -40)
-		jefa.add_child(foco)
+		if not partida.planta.jefe in SIN_FOCO:
+			foco = PointLight2D.new()
+			foco.texture = LUZ_TEXTURA
+			foco.texture_scale = LUZ_RADIO / 128.0
+			foco.color = Color(1.0, 0.95, 0.85)
+			foco.energy = 0.9
+			foco.range_item_cull_mask = Luz.TODAS
+			foco.position = Vector2(0, -40)
+			jefa.add_child(foco)
 	# las franjas y el nombre, al tamaño de la pantalla de verdad (la ventana puede ser más ancha que la base)
 	var pantalla := get_viewport_rect().size
 	arriba.size = Vector2(pantalla.x, FRANJA)

@@ -362,6 +362,9 @@ func probar_presentacion() -> void:
 		roundi(camara.get_screen_center_position().distance_to(jefa.global_position)), not johnny.is_physics_processing(),
 		johnny.invulnerable > 0.0, jefa.estado == "grito", presentacion.nombre.text,
 		presentacion.visible and presentacion.nombre.modulate.a > 0.9, not $Pantalla/Jefa.visible])
+	# el foco que alumbra al jefe mientras grita (presentacion.gd): ninguno al Gymbro (se ve con la luz de su gimnasio)
+	var focos: int = jefa.get_children().filter(func(n): return n is PointLight2D and n.texture_scale == Presentacion.LUZ_RADIO / 128.0).size()
+	print("  (focos sobre el jefe %d (esperado: %s))" % [focos, "0, el Gymbro no lleva" if planta.jefe in Presentacion.SIN_FOCO else "1; 0 si entra escondido, como la Modista"])
 	print("  (jefe en %s, a %d del medio de la sala (esperado: menos de 60) · centro de la cámara %s · offset %s · límites %d-%d x %d-%d · zoom %s)" % [jefa.global_position.round(),
 		roundi(jefa.global_position.distance_to(Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0))),
 		camara.get_screen_center_position().round(), camara.offset, camara.limit_left, camara.limit_right, camara.limit_top, camara.limit_bottom, camara.zoom])
