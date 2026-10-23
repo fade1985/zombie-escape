@@ -20,9 +20,9 @@
 # El ferretero, ya rescatado, atiende detrás de su mostrador (mapa/mostrador.gd): al arrimarse a él se compran
 # munición, molotovs y granadas con los dólares ahorrados (ui/puesto.gd). Sigue abierto aunque te acompañe.
 #
-# El guiño de la cafetera: la primera vez que la farmacéutica está en la sala de mantenimiento (ahora que vive en su
-# habitación, al venir contigo), huele el café de la cafetera de Johnny (mapa/cafetera.gd), le encuentra el doble
-# fondo con cápsulas de VD-7 y se lo dice (Historia.CAFETERA).
+# El guiño de la cafetera: la cafetera de Johnny (mapa/cafetera.gd) está en la habitación de la farmacéutica. La
+# primera vez que Johnny entra allí con ella rescatada, ella le ha encontrado el doble fondo con cápsulas de VD-7 y
+# se lo dice (Historia.CAFETERA).
 #
 # Los del centro comercial se esconden igual, pero cada uno tiene su propio rescate en vez de la horda de siempre
 # (docs/CENTRO_COMERCIAL.md, «Supervivientes»): la farmacéutica ("rescate": "escolta"), sin horda, hay que llevarla
@@ -147,6 +147,8 @@ var tiempo := 0.0
 var capa: Control          # la flecha del borde y la barra de la horda (en la pantalla)
 var escolta := Escolta.new()   # el rescate de la farmacéutica
 var averia := Averia.new()     # el del técnico
+var sala_cafe := -1            # en las viviendas, la habitación de la farmacéutica si aún falta el guiño de la cafetera
+var contando_cafe := false     # ella lo está contando
 
 
 func preparar(p: Node) -> void:
@@ -245,10 +247,11 @@ func recoger() -> void:
 	npc = null
 	puerta = null
 	vecinos = []
+	sala_cafe = -1
 
 
-# Recién montado el sitio "idx": el equipo, al lado de Johnny; el superviviente en su baño; en las viviendas, los
-# vecinos y el puesto del ferretero; y en la sala de mantenimiento, el guiño de la cafetera
+# Recién montado el sitio "idx": el equipo, al lado de Johnny; el superviviente en su baño; y en las viviendas, los
+# vecinos, el puesto del ferretero y, si falta, el guiño de la cafetera
 func al_montar(idx: int, sitio: Dictionary) -> void:
 	var mapa: Node2D = partida.mapa
 	Aliado.borrar_huellas()   # el rastro de Johnny era del mapa viejo: la fila se forma de nuevo desde la puerta
@@ -274,8 +277,7 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 	if sitio.tipo == "viviendas":
 		colocar_vecinos()
 		poner_puesto()
-	if sitio.tipo == "mantenimiento":
-		guino_cafetera()
+		sala_cafe = sala_cafetera(sitio)
 
 
 func _process(delta: float) -> void:
@@ -294,6 +296,8 @@ func _physics_process(delta: float) -> void:
 			unir(npc)
 	for v in vecinos:
 		hablar_vecino(v)
+	if sala_cafe >= 0 and not contando_cafe and partida.mapa.zona_en(johnny.position) == sala_cafe:
+		guino_cafetera()   # Johnny acaba de entrar en la habitación de la farmacéutica
 	actualizar_horda(delta)
 
 
@@ -657,31 +661,46 @@ func botiquin_al_empezar() -> bool:
 
 # ═════════════ El guiño de la cafetera ═════════════
 
-const CAFE_PAUSA := 1.5   # segundos en la sala antes de que la farmacéutica huela el café
+const CAFE_PAUSA := 1.5   # segundos en su habitación antes de que la farmacéutica empiece a contarlo
 const CAFE_CADA := 3.6    # y entre frase y frase (el bocadillo dura 3,2)
 
-# La primera vez que la farmacéutica (ya rescatada) está en la sala de mantenimiento (vive en su habitación de las
-# viviendas: cuando te acompaña), huele el café, encuentra el doble fondo con las cápsulas de VD-7 y se lo dice a
-# Johnny, frase a frase
-# (Historia.CAFETERA). Se apunta en el guardado con la última frase: si Johnny se va antes, lo vuelve a contar la
-# próxima vez. Desde entonces el café es solo café, y no lo repite nunca más
-func guino_cafetera() -> void:
+# En las viviendas, la habitación de la farmacéutica (su número de sala) si ya está rescatada y aún no ha contado lo
+# de la cafetera; si no, -1
+func sala_cafetera(sitio: Dictionary) -> int:
 	var g := Guardado.cargar()
 	if g.cafetera or "farmaceutica" not in g.rescatados:
-		return
+		return -1
+	for s in sitio.apt.salas:
+		if s.get("vecino", "") == "farmaceutica":
+			return s.id
+	return -1
+
+
+# La primera vez que Johnny entra en la habitación de la farmacéutica (ya rescatada), donde está la cafetera de
+# Johnny, ella le cuenta que le ha encontrado el doble fondo con las cápsulas de VD-7, frase a frase
+# (Historia.CAFETERA): esté en su habitación o te acompañe. Se apunta en el guardado con la última frase: si Johnny
+# sale de la habitación antes, lo vuelve a contar entero la próxima vez que entre. Desde entonces el café es solo
+# café, y no lo repite nunca más
+func guino_cafetera() -> void:
 	var ella: Aliado = null
 	for a in vecinos + equipo:
 		if a.def.id == "farmaceutica":
 			ella = a
 	if ella == null:
 		return
+	contando_cafe = true
 	var mapa: Node2D = partida.mapa
+	var sala := sala_cafe
 	for i in Historia.CAFETERA.size():
 		await get_tree().create_timer(CAFE_PAUSA if i == 0 else CAFE_CADA, false).timeout
-		if partida.mapa != mapa or not is_instance_valid(ella) or not ella.is_inside_tree():
-			return   # Johnny ha salido de la sala
+		if partida.mapa != mapa or not is_instance_valid(ella) or not ella.is_inside_tree() \
+				or mapa.zona_en(johnny.position) != sala:
+			contando_cafe = false
+			return   # Johnny ha salido de su habitación
 		ella.decir(Historia.CAFETERA[i])
 	Guardado.cambiar(func(x): x.cafetera = true)
+	sala_cafe = -1
+	contando_cafe = false
 
 
 # ═════════════ En la pantalla ═════════════
@@ -1043,9 +1062,11 @@ func probar_acompanantes() -> void:
 	equipo = antes
 
 
-# El guiño de la cafetera: solo la farmacéutica rescatada, con la cafetera sin descubrir. En su habitación no dice
-# nada; al bajar contigo a la sala (te acompaña), sí. La foto con su primera frase (captura-cafetera.png); luego, lo
-# que dice y si queda apuntado, y que la segunda vez ya no dice nada. Se deja el guardado y el equipo como estaban
+# El guiño de la cafetera: solo la farmacéutica rescatada, con la cafetera sin descubrir. La cafetera, en su
+# habitación de las viviendas y no en la sala. Con Johnny en el pasillo, delante de su puerta, no dice nada; al
+# entrar él, empieza; si sale antes de acabar, lo deja sin apuntar; y al volver a entrar lo cuenta entero: la foto
+# con su primera frase (captura-cafetera.png), lo que dice y si queda apuntado. La segunda vez (tras pasar por la
+# sala) ya no dice nada. Se deja el guardado y el equipo como estaban
 func probar_cafetera() -> void:
 	var g := Guardado.cargar()
 	var antes := [g.rescatados.duplicate(), g.acompanante, g.cafetera]
@@ -1060,13 +1081,26 @@ func probar_cafetera() -> void:
 		x.cafetera = false)
 	await partida.montar(partida.planta.viviendas, 0, false)
 	var ella: Aliado = vecinos[0]
-	await arrimarse(ella)   # se viene contigo
-	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
-	print("Cafetera, en su habitación: dice '%s' | te acompaña %s (esperado: '', true)" % [ella.dicho, ella in equipo])
-	await partida.montar(partida.planta.mantenimiento, 1, false)   # por la puerta de la derecha, con ella
-	johnny.position = partida.mapa.CAFETERA_EN + Vector2(40, 110)
+	var mapa: Node2D = partida.mapa
+	var cafetera: Node2D = mapa.cosas.get_node_or_null("Cafetera")
+	print("Cafetera: en «%s» (esperado: Farmacéutica)" % (mapa.nombre_zona(mapa.zona_en(cafetera.position)) if cafetera else "ninguna parte"))
+	# en el pasillo, delante de su puerta, y dentro, a su izquierda (no tan cerca como para que se venga contigo, y
+	# que no lo tape su bocadillo)
+	var fuera := Vector2(ella.casa.x, (Viviendas.ABAJO_F - 3.5) * Planta.CASILLA)
+	var dentro := ella.casa + Vector2(-80, -48)
+	johnny.position = fuera
 	johnny.get_node("Camara").reset_smoothing()
-	ella.position = johnny.position + Vector2(-50, 10)
+	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
+	print("Cafetera, Johnny en «%s»: dice '%s' (esperado: Viviendas, '')" % [mapa.nombre_zona(mapa.zona_en(johnny.position)), ella.dicho])
+	johnny.position = dentro
+	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
+	var primera := ella.dicho
+	ella.dicho = ""
+	johnny.position = fuera   # sale antes de acabar
+	await get_tree().create_timer(CAFE_CADA + 0.5, false).timeout
+	print("Cafetera, sale a medias: dijo '%s' y luego '%s' | apuntada %s (esperado: la 1ª frase, '', false)" % [
+		primera, ella.dicho, Guardado.cargar().cafetera])
+	johnny.position = dentro   # vuelve a entrar
 	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
 	Captura.foto("captura-cafetera.png")
 	var dichas := [ella.dicho]
@@ -1074,8 +1108,12 @@ func probar_cafetera() -> void:
 		await get_tree().create_timer(CAFE_CADA, false).timeout
 		dichas.append(ella.dicho)
 	print("Cafetera: %s dice %s | apuntada %s" % [ella.def.nombre, dichas, Guardado.cargar().cafetera])
-	ella.dicho = ""
-	await partida.montar(partida.planta.mantenimiento, 0, false)
+	await partida.montar(partida.planta.mantenimiento, 1, false)   # por la puerta de la derecha, a la sala
+	print("Cafetera: en la sala hay una %s (esperado: false)" % (partida.mapa.cosas.get_node_or_null("Cafetera") != null))
+	await partida.montar(partida.planta.viviendas, 0, false)
+	ella = vecinos[0]
+	johnny.position = dentro
+	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(CAFE_PAUSA + CAFE_CADA * 2.0 + 0.5, false).timeout
 	print("Cafetera, la segunda vez: dice '%s'" % ella.dicho)
 	Guardado.cambiar(func(x):

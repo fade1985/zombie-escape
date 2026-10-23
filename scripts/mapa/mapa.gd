@@ -32,7 +32,7 @@ const BANCO_X := 135.0       # el banco de trabajo, a su izquierda, y el baúl, 
 const BAUL_X := 340.0
 const TAQUILLA_X := 460.0    # la taquilla de los trajes de Johnny (trajes.gd), a la derecha del baúl (parte 11)
 const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
-const CAFETERA_EN := Vector2(522, 92)    # la cafetera, a la derecha de la taquilla, contra la pared (el pie de su mesita)
+const CAFETERA_JUNTO := Vector2(64, -8)   # la cafetera de Johnny, en la habitación de la farmacéutica (viviendas.gd): a su derecha, por debajo de su bocadillo (el pie de su mesita)
 const CAMARAS := preload("res://scripts/mapa/camaras.gd")
 const CAMARAS_DETRAS := Vector2(0, -68)  # las pantallas de las cámaras, detrás del técnico, en su habitación (viviendas.gd)
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # (la de las habitaciones cerradas de las viviendas)
@@ -495,17 +495,16 @@ func poner_muebles() -> void:
 		taquilla = ARRIMABLE.new()   # la de los trajes de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
 		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", "Taquilla", Color("#9fd3ff"), TAQUILLA_X, MURO, 56.0, 36.0)
 		cosas.add_child(taquilla)
-		var cafetera := CAFETERA.new()   # la de Johnny: la farmacéutica le encuentra el doble fondo (supervivientes.gd)
-		cafetera.position = CAFETERA_EN
-		cosas.add_child(cafetera)
 	if sitio.tipo == "viviendas":
 		poner_viviendas()
 
 
 # Las viviendas de los supervivientes (viviendas.gd): junto a cada puerta, la placa con su nombre. Las de quien aún no
 # está rescatado, cerradas (con su hoja, que no deja pasar ni ver lo de dentro: la niebla sigue); las de los rescatados,
-# abiertas y ya descubiertas. Y con el técnico rescatado, sus pantallas de las cámaras detrás de él (su mejora: el
-# minimapa enseña los zombis, minimapa.gd). Se mira el guardado cada vez que se monta
+# abiertas y ya descubiertas. Con el técnico rescatado, sus pantallas de las cámaras detrás de él (su mejora: el
+# minimapa enseña los zombis, minimapa.gd); y con la farmacéutica, la cafetera de Johnny junto a ella (la primera vez
+# que Johnny entra en su habitación, le encuentra el doble fondo: supervivientes.gd). Se mira el guardado cada vez
+# que se monta
 func poner_viviendas() -> void:
 	var rescatados: Array = Guardado.cargar().rescatados
 	var descubiertas: Dictionary = sitio.get_or_add("vistas", {})
@@ -528,6 +527,10 @@ func poner_viviendas() -> void:
 		var camaras := CAMARAS.new()
 		camaras.position = Viviendas.casa("tecnico") + CAMARAS_DETRAS
 		cosas.add_child(camaras)
+	if "farmaceutica" in rescatados:
+		var cafetera := CAFETERA.new()
+		cafetera.position = Viviendas.casa("farmaceutica") + CAFETERA_JUNTO
+		cosas.add_child(cafetera)
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.

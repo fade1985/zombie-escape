@@ -99,8 +99,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   una puerta cerrada no se pasa y hacia una abierta sí (`captura-viviendas-habitacion.png`); que al arrimarse al
   policía te acompaña y al militar también (y el policía vuelve a la suya); que por la puerta de la izquierda se
   vuelve a la sala, junto a su puerta de la derecha, con el militar; y que en la 1ª planta, con el ascensor
-  arreglado, también se llega. Luego los seis a la vez (`captura-viviendas-seis.png`), el guiño de la cafetera
-  (`captura-cafetera.png`), el puesto del ferretero (`captura-ferretero-*.png`) y las cámaras del técnico
+  arreglado, también se llega. Luego los seis a la vez (`captura-viviendas-seis.png`), el guiño de la cafetera (la
+  cafetera en la habitación de la farmacéutica y no en la sala; desde el pasillo no dice nada, al entrar sí, si sales a
+  medias lo vuelve a contar entero y la segunda vez ya no: `captura-cafetera.png`), el puesto del ferretero
+  (`captura-ferretero-*.png`) y las cámaras del técnico
   (`captura-tecnico-*.png`). Cada línea dice lo esperado. Deja el guardado como estaba.
 - `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
@@ -207,16 +209,15 @@ la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azo
   las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
   mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir
   (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se pierde nunca.
-- A la derecha de la taquilla, la **cafetera** de Johnny: la primera vez que la farmacéutica entra en la sala (cuando
-  te acompaña), le encuentra el doble fondo.
 - Los baños tienen un armarito con botiquín.
 - Por la **puerta de la derecha**, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un
   pasillo largo con seis habitaciones, una para cada uno, con su placa junto a la puerta. Arriba, las de los
   Apartamentos (policía, médica, militar); abajo, las del centro comercial (ferretero, farmacéutica, técnico). Las de
   quien aún no has rescatado están cerradas y a oscuras; las de los rescatados, abiertas y con él dentro: arrimarse a
   uno para que te acompañe (solo uno a la vez; el que te acompañaba vuelve a la suya). Detrás del técnico, las
-  pantallas de las cámaras de seguridad: desde que está rescatado el minimapa enseña los zombis. Las habitaciones,
-  de momento, sin muebles. Se llega también desde el ascensor (la sala tiene la misma puerta).
+  pantallas de las cámaras de seguridad: desde que está rescatado el minimapa enseña los zombis. Junto a la
+  farmacéutica, la **cafetera** de Johnny: la primera vez que entras en su habitación (con ella rescatada), te
+  cuenta que le ha encontrado el doble fondo. Las habitaciones, de momento, sin más muebles. Se llega también desde el ascensor (la sala tiene la misma puerta).
 - El **puesto del ferretero**, en su habitación: arrimarse a su mostrador por delante para comprar munición
   ($2), molotovs ($3) y granadas ($4) con los dólares ahorrados. Con el ratón o el dedo; con flechas e Intro o
   las teclas 1, 2 y 3; con el mando, la cruceta y A. Esc o B cierra. Para que te acompañe, rodear el mostrador.

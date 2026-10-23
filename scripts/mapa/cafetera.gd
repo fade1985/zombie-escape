@@ -1,6 +1,7 @@
-# La cafetera de la sala de mantenimiento, sobre una mesita, a la derecha de la taquilla: la de Johnny. Según el
-# dosier de los Apartamentos (página «Sujeto 0»), se la regaló Velaria y con ella le daban el VD-7. La primera vez
-# que la farmacéutica está en la sala (cuando te acompaña), le encuentra el doble fondo (supervivientes.gd: guino_cafetera).
+# La cafetera de Johnny, sobre una mesita. Según el dosier de los Apartamentos (página «Sujeto 0»), se la regaló
+# Velaria y con ella le daban el VD-7. Está en la habitación de la farmacéutica de las viviendas, junto a ella (la
+# pone mapa.gd: poner_viviendas, cuando ya está rescatada); la primera vez que Johnny entra allí, ella le encuentra
+# el doble fondo (supervivientes.gd: guino_cafetera).
 # Dibujada con código, en píxeles de 2 unidades como los sprites: la mesita, la cafetera con su jarra, una taza y
 # el vapor que sube. El origen es el pie de la mesita (para ordenarse con los personajes).
 extends StaticBody2D

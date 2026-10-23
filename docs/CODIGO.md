@@ -229,10 +229,10 @@
   (`mapa/viviendas.gd`): al montarlas, `colocar_vecinos()` pone a cada uno en su habitación (`Viviendas.casa(id)`) y
   `poner_puesto()` el mostrador del ferretero delante de él (`mostrador_en()`). La de la
   farmacéutica: `botiquin_al_empezar()` (lo llama `partida.gd` al empezar) mete un botiquín en la mochila, que se
-  usa desde el inventario (`partida.usar_objeto`). El guiño de la cafetera (`guino_cafetera`: la primera vez que la
-  farmacéutica está en la sala de mantenimiento, o sea, cuando te acompaña; `cafetera` en el
-  guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
-  medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
+  usa desde el inventario (`partida.usar_objeto`). El guiño de la cafetera (`guino_cafetera`: la primera vez que
+  Johnny entra en la habitación de la farmacéutica con ella rescatada, en su sitio o acompañándole; lo vigila
+  `sala_cafe`, y `cafetera` en el guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que
+  aturde y charcos a medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
 - `escolta.gd`: el rescate propio de la farmacéutica (llevarla herida hasta las escaleras, con zombis saliendo por
   las puertas del pasillo); la cuelga `supervivientes.gd` y `partida.gd` le pregunta antes de cruzar una puerta.
 - `averia.gd`: el rescate propio del técnico (bajar la palanca del cuadro y aguantar a oscuras, con zombis entrando
@@ -324,15 +324,16 @@
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
   su hormigón, el murete con la ciudad detrás y el helipuerto pintado. En las viviendas (`poner_viviendas`), con el
   guardado de ese momento: la placa de cada puerta (`placa.gd`), las de los que faltan por rescatar cerradas con una
-  hoja (`puerta_bano.gd`) y sin descubrir, las de los rescatados abiertas y ya descubiertas, y las cámaras del técnico.
+  hoja (`puerta_bano.gd`) y sin descubrir, las de los rescatados abiertas y ya descubiertas, las cámaras del técnico
+  y la cafetera de Johnny junto a la farmacéutica.
   `cara_pared.gd`, `puerta.gd` (las de la pared de arriba, dibujos de PixelLab: `puerta-piso` en los Apartamentos,
   `puerta-tienda` de cristal en el centro comercial y `puerta-servicio` de acero en la sala de mantenimiento de los dos;
   las de los otros muros, el ascensor y las escaleras, con código; también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente, y la de las habitaciones cerradas de las viviendas; de frente, el dibujo `puerta-bano`), `placa.gd` (la placa de latón con el nombre de cada habitación de las viviendas), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de los trajes: `TAQUILLA_X` en `mapa.gd`),
   `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
-  no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de la sala de
-  mantenimiento, a la derecha de la taquilla, dibujada con código), `camaras.gd` (las pantallas de las cámaras de
+  no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de Johnny, en la
+  habitación de la farmacéutica de las viviendas, a su derecha: `CAFETERA_JUNTO` en `mapa.gd`; dibujada con código), `camaras.gd` (las pantallas de las cámaras de
   seguridad, detrás del técnico, en su habitación de las viviendas), `mostrador.gd` (el del puesto del ferretero, en su
   habitación, dibujado con código; al arrimarse por
   delante abre `ui/puesto.gd`).

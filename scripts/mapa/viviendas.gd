@@ -4,7 +4,8 @@
 # comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio y, junto a ella, una
 # placa con su nombre (placa.gd). Las de quien aún no está rescatado (Guardado.rescatados) están cerradas y a oscuras,
 # para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos)
-# y lo suyo: el mostrador del ferretero y las pantallas de las cámaras del técnico.
+# y lo suyo: el mostrador del ferretero, las pantallas de las cámaras del técnico y, junto a la farmacéutica, la
+# cafetera de Johnny.
 #
 # Es un sitio de la planta baja como los demás (planta.gd), hecho como un apartamento ("apt": su plano por casillas,
 # sus habitaciones y sus puertas), así cada habitación lleva su niebla y no se ve por dentro hasta que se abre. Es

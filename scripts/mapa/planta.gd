@@ -21,7 +21,7 @@ const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
-const SITIO_TALLER := Rect2(MURO, MURO, 560 - MURO, 150)   # lo que se guarda para el banco, el ordenador, el baúl, la taquilla y la cafetera
+const SITIO_TALLER := Rect2(MURO, MURO, 540 - MURO, 150)   # lo que se guarda para el banco, el ordenador, el baúl y la taquilla
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 139           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe)
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
@@ -368,8 +368,8 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 
 # La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo, unos pocos
 # muebles y manchas en el suelo. La mitad izquierda de la pared de arriba queda libre: ahí van el banco de
-# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340), la taquilla (parte 11) y la
-# cafetera (mapa.gd). En la pared de la derecha, la puerta de las viviendas de los supervivientes rescatados
+# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340) y la taquilla (parte 11; los
+# pone mapa.gd). En la pared de la derecha, la puerta de las viviendas de los supervivientes rescatados
 # (viviendas.gd; adónde lleva lo pone generar). "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA

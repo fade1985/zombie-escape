@@ -159,11 +159,11 @@ const NOTICIAS := [
 
 
 # ── El guiño de la cafetera ──
-# La cafetera de la sala de mantenimiento se la regaló Velaria a Johnny, y con ella le daban el VD-7 (página
-# «Sujeto 0»). La farmacéutica del centro comercial (decidido con el dueño el 21 oct, al quitar a la camarera),
-# la primera vez que está en la sala después de rescatarla, huele el café, encuentra un doble fondo con cápsulas
-# y se lo dice a Johnny, frase a frase; desde entonces el café es solo café. Lo dice supervivientes.gd
-# (guino_cafetera); la cafetera la dibuja mapa/cafetera.gd
+# La cafetera de Johnny se la regaló Velaria, y con ella le daban el VD-7 (página «Sujeto 0»). Ahora está en la
+# habitación de la farmacéutica del centro comercial, en las viviendas (decidido con el dueño el 21 oct, al quitar
+# a la camarera; en su habitación desde el 23 oct): la primera vez que Johnny entra allí después de rescatarla,
+# ella le ha encontrado un doble fondo con cápsulas y se lo dice, frase a frase; desde entonces el café es solo
+# café. Lo dice supervivientes.gd (guino_cafetera); la cafetera la dibuja mapa/cafetera.gd
 const CAFETERA := [
 	"Johnny, esta cafetera tiene doble fondo.",
 	"Hay cápsulas escondidas. Pone «VD-7».",
