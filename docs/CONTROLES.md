@@ -97,7 +97,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--porqueria` (con `--jefe gloton`): en vez de la prueba larga, la de la habitación del Glotón (`peligros/porqueria.gd`):
   la monta sin él y cuenta en la terminal los muebles (solo lámparas), la parte del suelo sucia, que donde aparece Johnny y el
   centro están limpios y lo pegado a las paredes sucio (y el grosor de la franja), que en medio queda una elipse limpia
-  perfecta, como un ring, que sale igual con otra semilla, lo que pierde sobre la porquería en 1 s y que en una
+  perfecta, como un ring, que sale igual con otra semilla, que de la puerta se llega al centro sin pisar nada por un
+  paso de 3 casillas de ancho como poco (con la puerta donde está y en cada uno de los 70 sitios en que cabe en la
+  pared, arriba y abajo, pegada a las esquinas también), lo que pierde sobre la porquería en 1 s y que en una
   casilla limpia no pierde nada, las salpicaduras de las paredes y las luces del resplandor (`captura-porqueria.png`,
   Johnny encima; `captura-porqueria-medio.png`, la elipse limpia desde el medio). Cada línea dice lo esperado.
 - `--gimnasio` (con `--jefe gymbro`): en vez de la prueba larga, la del gimnasio del Gymbro (`peligros/tropiezos.gd`):
@@ -117,8 +119,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--llamas` (con `--jefe bombero`): en vez de la prueba larga, la de la habitación del jefe de bomberos
   (`peligros/cerco.gd`) y su giro con el lanzallamas (`bombero.gd`): la monta sin él y cuenta en la terminal cómo se
   llama la sala, que no tiene muebles, cómo arde (entre un 35 y un 55 % del suelo, el centro no, todo lo pegado a la
-  pared sí menos delante de la puerta, en medio una elipse limpia perfecta, como un ring, que sale igual con otra
-  semilla, y en el medio queda sitio para el giro), el aviso de Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el borde. Luego
+  pared sí menos el pasillo de la puerta, en medio una elipse limpia perfecta, como un ring, que sale igual con otra
+  semilla, que de la puerta se llega al centro sin pisar el fuego por un paso holgado, esté donde esté la puerta, y
+  en el medio queda sitio para el giro), el aviso de Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el borde. Luego
   mete al bombero en el medio y le hace girar con Johnny moviéndose como con el mando (`vuelta_de_giro`): el sentido
   sale a los dos lados, la lengua llega hasta la pared, corriendo delante de ella en su sentido Johnny no se quema, en
   contra sí, rodando a través de ella también y, enfadado, corriendo entre las dos lenguas a su paso, no

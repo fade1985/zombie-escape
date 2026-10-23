@@ -368,9 +368,10 @@ func probar_presentacion() -> void:
 # con la franja de porquería pegada a las paredes, que quema. Monta su piso (la 1ª planta) con todo descubierto y sin
 # que salga él, y cuenta en la terminal: los muebles (3 o 4 lámparas), cuántas casillas están sucias (parte del suelo), que donde
 # aparece Johnny está limpio, que el centro está limpio y lo pegado a las paredes sucio (y cuánto mide la franja), que
-# en medio queda una elipse limpia perfecta, como un ring, que sale igual con otra semilla, lo que pierde Johnny en
-# 1 s sobre una casilla sucia (unos 7) y que en una limpia, pasado el escozor, no pierde nada; las salpicaduras de la
-# pared de arriba, los pegotes de los lomos de las otras y las luces del resplandor. Saca captura-porqueria.png
+# en medio queda una elipse limpia perfecta, como un ring, que sale igual con otra semilla, que de la puerta se llega
+# al centro por un paso limpio y holgado (también con la puerta en cualquier otro sitio de la pared, pegada a las
+# esquinas incluso: accesos), lo que pierde Johnny en 1 s sobre una casilla sucia (unos 7) y que en una limpia,
+# pasado el escozor, no pierde nada; las salpicaduras de la pared de arriba, los pegotes de los lomos de las otras y las luces del resplandor. Saca captura-porqueria.png
 # (Johnny sobre la porquería) y captura-porqueria-medio.png (desde el medio: la elipse limpia y la franja alrededor)
 # y se cierra
 func probar_porqueria() -> void:
@@ -407,7 +408,8 @@ func probar_porqueria() -> void:
 		Vector2i(medio.x, sala.f0), Vector2i(medio.x, sala.f0 + sala.fondo - 1)]
 	for i in puntos.size():
 		if puntos[i].y == lado_puerta:
-			puntos[i].x += 7   # a un lado del pasillo limpio de la puerta
+			# a un lado del acceso limpio de la puerta: al otro lado del centro (el pasillo va de la puerta hacia él)
+			puntos[i].x += -7 if sitio.apt.entrada.c + 1 > medio.x else 7
 	var sucios := puntos.filter(func(q): return p.casillas.has(q)).size()
 	var grosor := 99
 	for q in puntos:
@@ -425,6 +427,10 @@ func probar_porqueria() -> void:
 	otro.surtido = int(sitio.surtido) + 1
 	print("Porquería: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
 		p.ovalo.rx * 2.0, p.ovalo.ry * 2.0, descuadradas(sitio, p), Peligros.del_gloton(otro)[0].casillas.keys() == p.casillas.keys()])
+	# el acceso: de la puerta al centro sin pisar nada, con la puerta donde está y en cualquier otro sitio de la pared
+	var paso := accesos(sitio, p.casillas, Peligros.casilla(johnny.position), Peligros.PORQUERIA.parte)
+	print("Porquería: de donde aparece Johnny al centro, sin pisar nada y holgado (3 casillas de ancho como poco) %s (esperado: true) · con la puerta en cada uno de los %d sitios de la pared (arriba y abajo, pegada a las esquinas también), sin ese paso %d (esperado: 0)" % [
+		paso[0], paso[1], paso[2]])
 	# 1 s sobre una casilla sucia rodeada de sucias (que el borde no engañe)
 	var sucia := Vector2i(-1, -1)
 	for c in p.casillas:
@@ -715,8 +721,9 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 # Con "--captura --jefe bombero --llamas": la habitación del jefe de bomberos (catalogo.gd, "jefe-bombero";
 # peligros/cerco.gd) y su giro con el lanzallamas (bombero.gd). Monta su piso (la 1ª planta) con todo descubierto y sin
 # que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, cómo arde (la parte del suelo,
-# el centro sin fuego, todo lo pegado a la pared ardiendo menos delante de la puerta, en medio una elipse limpia
-# perfecta, como un ring, que sale igual con otra semilla, y sitio de sobra para el giro en el medio), el aviso de
+# el centro sin fuego, todo lo pegado a la pared ardiendo menos el acceso de la puerta, en medio una elipse limpia
+# perfecta, como un ring, que sale igual con otra semilla, de la puerta al centro un paso sin fuego y holgado, con la
+# puerta donde está y en cualquier otro sitio de la pared (accesos), y sitio de sobra para el giro en el medio), el aviso de
 # Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el fuego.
 # Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
 # sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
@@ -748,9 +755,9 @@ func probar_llamas() -> void:
 	var sala: Dictionary = apt.salas[0]
 	var total: int = sala.ancho * sala.fondo
 	# la parte del suelo que arde, el centro sin fuego y, contadas aquí por su cuenta, las casillas pegadas a la pared
-	# (menos el hueco limpio de delante de la puerta, el de Peligros.franja_y_ovalo) y las de delante de la puerta (las
-	# de sus 2 casillas y una más a cada lado, en las 2 filas de esa pared)
-	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * Peligros.CASILLA)
+	# (menos el acceso limpio de la puerta, el de Peligros.franja_y_ovalo) y las de delante de la puerta (las de sus 2
+	# casillas y una más a cada lado, en las 2 filas de esa pared)
+	var limpio := Peligros.acceso(apt)
 	var en: float = (apt.entrada.c + 1) * Peligros.CASILLA
 	var pegadas := 0
 	var pegadas_arden := 0
@@ -759,7 +766,7 @@ func probar_llamas() -> void:
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
 			var k := Vector2i(c, f)
-			var en_hueco := hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA))
+			var en_hueco := limpio.has(k)
 			var lejos: int = mini(mini(c - sala.c0, sala.c0 + sala.ancho - 1 - c), mini(f - sala.f0, sala.f0 + sala.fondo - 1 - f))
 			var pared_puerta: int = sala.f0 + sala.fondo - 1 - f if apt.entrada.lado == "abajo" else f - sala.f0
 			if pared_puerta < 2 and absf((c + 0.5) * Peligros.CASILLA - en) < 64.0:
@@ -777,6 +784,10 @@ func probar_llamas() -> void:
 	otro.surtido = int(sitio.surtido) + 1
 	print("Llamas: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
 		cerco.ovalo.rx * 2.0, cerco.ovalo.ry * 2.0, descuadradas(sitio, cerco), Peligros.del_bombero(otro)[0].casillas == cerco.casillas])
+	# el acceso: de la puerta al centro sin pisar el fuego, con la puerta donde está y en cualquier otro sitio de la pared
+	var paso := accesos(sitio, cerco.casillas, Peligros.casilla(johnny.position), Peligros.CERCO.parte)
+	print("Llamas: de donde aparece Johnny al centro, sin pisar el fuego y holgado (3 casillas de ancho como poco) %s (esperado: true) · con la puerta en cada uno de los %d sitios de la pared (arriba y abajo, pegada a las esquinas también), sin ese paso %d (esperado: 0)" % [
+		paso[0], paso[1], paso[2]])
 	await get_tree().create_timer(0.3).timeout
 	var nodo: Node = mapa.get_node("Cerco")
 	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
@@ -845,21 +856,61 @@ func probar_llamas() -> void:
 
 # Las casillas de la habitación del jefe que no cuadran con una elipse perfecta, la de "datos.ovalo" (la porquería del
 # Glotón y el cerco de fuego del bombero, de Peligros.franja_y_ovalo): fuera de ella tiene que estar todo cubierto,
-# menos el hueco de delante de la puerta, y dentro, nada (sin ondas ni manchas sueltas)
+# menos el acceso limpio de la puerta (Peligros.acceso: el hueco de delante y el pasillo hacia el centro), y dentro,
+# nada (sin ondas ni manchas sueltas)
 func descuadradas(sitio: Dictionary, datos: Dictionary) -> int:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
-	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * Peligros.CASILLA)
+	var limpio := Peligros.acceso(apt)
 	var ov: Dictionary = datos.ovalo
 	var n := 0
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
 			var k := Vector2i(c, f)
 			var fuera: bool = Vector2((c + 0.5 - ov.centro.x) / ov.rx, (f + 0.5 - ov.centro.y) / ov.ry).length() > 1.0
-			var en_hueco := hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA))
-			if datos.casillas.has(k) != (fuera and not en_hueco and Peligros.dueno(apt, c, f) == sala.id):
+			if datos.casillas.has(k) != (fuera and not limpio.has(k) and Peligros.dueno(apt, c, f) == sala.id):
 				n += 1
 	return n
+
+
+# El acceso de la habitación del jefe (Peligros.acceso, el de la porquería del Glotón y el del cerco de fuego del
+# bombero): ¿se va holgado de la puerta al centro de la sala sin pisar nada? Con la puerta donde está, desde donde
+# aparece Johnny ("desde"); y luego con la puerta en cada sitio de la pared en que cabe (arriba y abajo, pegada a las
+# esquinas también), desde la casilla de dentro de ella, repartiendo otra vez como franja_y_ovalo con "parte" (la
+# habitación es un rectángulo: con la puerta arriba o abajo, la misma). Devuelve [holgado ahora, sitios probados,
+# sitios sin paso holgado]
+func accesos(sitio: Dictionary, casillas: Dictionary, desde: Vector2i, parte: float) -> Array:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var probados := 0
+	var malos := 0
+	for lado in ["arriba", "abajo"]:
+		for c in range(sala.c0 + 2, sala.c0 + sala.ancho - 3):   # (con dos casillas de pared a cada lado, como en Apartamento)
+			var otro: Dictionary = apt.duplicate()
+			otro.entrada = {"c": c, "lado": lado}
+			var reparto := Peligros.franja_y_ovalo({"apt": otro}, parte)
+			probados += 1
+			if not paso_holgado(sala, reparto.casillas, Vector2i(c, sala.f0 if lado == "arriba" else sala.f0 + sala.fondo - 1)):
+				malos += 1
+	return [paso_holgado(sala, casillas, desde), probados, malos]
+
+
+# ¿Se va de "desde" al centro de la habitación del jefe ("sala") sin pisar "casillas", y holgado? Por casillas de la
+# sala con las 8 de alrededor también limpias (los muros no cuentan): un paso de 3 casillas de ancho como poco, no un
+# hueco por el que apenas se cuela
+func paso_holgado(sala: Dictionary, casillas: Dictionary, desde: Vector2i) -> bool:
+	var pasa := {}
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var k := Vector2i(c, f)
+			var libre := true
+			for df in range(-1, 2):
+				for dc in range(-1, 2):
+					if casillas.has(k + Vector2i(dc, df)):
+						libre = false
+			if libre:
+				pasa[k] = true
+	return not Peligros.camino(pasa, desde, Vector2i(sala.c0 + sala.ancho / 2, sala.f0 + sala.fondo / 2)).is_empty()
 
 
 # Una vuelta del giro del bombero ("jefe", puesto en "centro"), con Johnny a "radio" de él, hacia "desde" (ángulo), y

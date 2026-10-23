@@ -1,6 +1,6 @@
 # El cerco de fuego de la habitación del jefe de bomberos (peligros.gd, CERCO): arde siempre todo lo pegado a las
-# paredes, y en medio queda una elipse limpia perfecta, siempre igual, donde se pelea, como un ring; delante de la
-# puerta de entrada no arde. Se decide al generar la planta (Peligros.del_bombero: qué casillas arden) y aquí se
+# paredes, y en medio queda una elipse limpia perfecta, siempre igual, donde se pelea, como un ring; el pasillo de la
+# puerta de entrada a la elipse no arde. Se decide al generar la planta (Peligros.del_bombero: qué casillas arden) y aquí se
 # dibuja y quema. Así no se puede huir del giro con el lanzallamas (bombero.gd) arrimándose a la pared: la lengua llega hasta
 # ella y el borde está ardiendo.
 #

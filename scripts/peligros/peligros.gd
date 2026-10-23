@@ -144,12 +144,12 @@ static func del_gloton(sitio: Dictionary) -> Array:
 # habitación del jefe (la única sala de su piso) cubierto, y en medio una elipse limpia perfecta, siempre igual (no
 # hay nada al azar), la zona de pelea, como un ring: así no se le puede rodear bordeando la habitación y hay que
 # luchar cerca de él. La elipse tiene la forma de la habitación y el tamaño justo para que lo de fuera cubra "parte"
-# del suelo; lo de delante de la puerta de entrada queda limpio (ahí aparece Johnny). Devuelve {casillas (casilla ->
-# 1), ovalo {centro, rx, ry} (la elipse, en casillas)}
+# del suelo; el acceso, de la puerta de entrada a la elipse, queda limpio (ahí aparece Johnny). Devuelve {casillas
+# (casilla -> 1), ovalo {centro, rx, ry} (la elipse, en casillas)}
 static func franja_y_ovalo(sitio: Dictionary, parte: float) -> Dictionary:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
-	var entrada: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * CASILLA)
+	var limpio := acceso(apt)
 	# la elipse: con la forma de la habitación y el área que deja limpia (1 - parte)
 	var centro := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0)
 	var escala := sqrt((1.0 - parte) * 4.0 / PI)
@@ -159,9 +159,32 @@ static func franja_y_ovalo(sitio: Dictionary, parte: float) -> Dictionary:
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
 			var fuera := Vector2((c + 0.5 - centro.x) / rx, (f + 0.5 - centro.y) / ry).length() > 1.0
-			if fuera and dueno(apt, c, f) == sala.id and not entrada.intersects(Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)):
+			if fuera and dueno(apt, c, f) == sala.id and not limpio.has(Vector2i(c, f)):
 				casillas[Vector2i(c, f)] = 1
 	return {"casillas": casillas, "ovalo": {"centro": centro, "rx": rx, "ry": ry}}
+
+
+# El acceso limpio de la habitación del jefe, de la puerta de entrada (arriba o abajo) a la elipse de franja_y_ovalo:
+# el hueco de delante de la puerta (Muebles.delante_de; ahí aparece Johnny) y un pasillo de su mismo ancho, unas 5
+# casillas, de la puerta hacia el centro de la sala. Con la puerta en medio de la pared, el pasillo cae dentro del
+# hueco; cerca de una esquina, donde la franja es más gruesa y el hueco solo no llega a la elipse, sale en diagonal.
+# Devuelve sus casillas (casilla -> true)
+static func acceso(apt: Dictionary) -> Dictionary:
+	var sala: Dictionary = apt.salas[0]
+	var en: float = (apt.entrada.c + 1) * CASILLA
+	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, en)
+	# el pasillo: las casillas que pisan la raya de la puerta al centro de la sala, ensanchada como el hueco
+	var puerta := Vector2(en, (sala.f0 if apt.entrada.lado == "arriba" else sala.f0 + sala.fondo) * CASILLA)
+	var medio := Vector2(sala.c0 + sala.ancho / 2.0, sala.f0 + sala.fondo / 2.0) * CASILLA
+	var lejos := hueco.size.x / 2.0 + CASILLA / 2.0
+	var casillas := {}
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var caja := Rect2(c * CASILLA, f * CASILLA, CASILLA, CASILLA)
+			var p := caja.get_center()
+			if hueco.intersects(caja) or p.distance_to(Geometry2D.get_closest_point_to_segment(p, puerta, medio)) < lejos:
+				casillas[Vector2i(c, f)] = true
+	return casillas
 
 
 # Dónde van las luces de una franja con su elipse (las del resplandor de la porquería y las del cerco de fuego):
@@ -228,8 +251,8 @@ static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla:
 
 # El cerco de fuego del jefe de bomberos: su habitación (la única sala de su piso, sin muebles) arde por el borde,
 # repartido igual que la porquería del Glotón (franja_y_ovalo): en medio, una elipse limpia perfecta, siempre igual,
-# donde se pelea, como un ring, y todo lo de fuera ardiendo hasta la pared; delante de la puerta de entrada no arde
-# (por ahí se entra y ahí aparece Johnny). Cada casilla que arde, en "casillas" (casilla -> 1), y la elipse
+# donde se pelea, como un ring, y todo lo de fuera ardiendo hasta la pared; el acceso, de la puerta de entrada a la
+# elipse, no arde (acceso: por ahí se entra y ahí aparece Johnny). Cada casilla que arde, en "casillas" (casilla -> 1), y la elipse
 # ("ovalo"), para repartir las luces
 static func del_bombero(sitio: Dictionary) -> Array:
 	var reparto := franja_y_ovalo(sitio, CERCO.parte)

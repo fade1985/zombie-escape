@@ -1,6 +1,7 @@
 # La porquería del Glotón (peligros.gd, PORQUERIA): su habitación no tiene más muebles que unas lámparas y, pegada a
 # las paredes, una franja de charcos de diarrea y montones de mierda con ácido (en medio, una elipse limpia perfecta,
-# siempre igual, donde se pelea, como un ring), salpicada también por las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
+# siempre igual, donde se pelea, como un ring, y un pasillo limpio de la puerta hasta ella), salpicada también por
+# las paredes. Se decide al generar la planta (Peligros.del_gloton: qué casillas están sucias y cuáles
 # llevan montón) y aquí se dibuja y quema: a Johnny le pone
 # el estado "porqueria" (estados.gd) mientras la pisa (la esquiva la cruza sin daño, como los charcos); a los zombis
 # no les hace nada (es del Glotón). Se dibuja a cuadraditos de pixel art como el fuego de la cocina (fuego.gd): cada
