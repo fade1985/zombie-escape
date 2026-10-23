@@ -1,6 +1,7 @@
 # Una salida de un mapa: las puertas de los apartamentos, el ascensor averiado, las escaleras y por donde se
-# ha llegado. Se dibuja a mano, con rectángulos de colores (en múltiplos de 2 unidades, como un píxel del
-# dibujo).
+# ha llegado. Las puertas vistas de frente (en la pared de arriba) son dibujos de PixelLab (tools/guias_puertas.py):
+# la de madera de los pisos, la de cristal de las tiendas y la de acero de la sala de mantenimiento. Lo demás se
+# dibuja a mano, con rectángulos de colores (en múltiplos de 2 unidades, como un píxel del dibujo).
 #
 # Delante tiene una zona invisible: cuando Johnny la pisa, avisa con "empujada" y la partida decide si se
 # pasa al otro lado o se le dice por qué no se abre.
@@ -8,10 +9,12 @@ extends Node2D
 
 signal empujada(indice: int)
 
+# Las puertas de frente: 36 × 43 píxeles, o sea 72 × 86 unidades
+const DIBUJO := {"piso": preload("res://assets/sprites/puerta-piso.png"),
+	"tienda": preload("res://assets/sprites/puerta-tienda.png"),
+	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
 const MARCO := Color("2b1d16")
 const HOJA := Color("6b4329")
-const PANEL := Color("573420")
-const POMO := Color("d8b04a")
 const HUECO := Color("1a1410")
 # El ascensor (elevatorFront de src/render.js): acero, su marco y la cinta de peligro amarilla y negra
 const ACERO := {"luz": Color("76807c"), "medio": Color("566060"), "sombra": Color("3d4545"), "filo": Color("1e2324")}
@@ -54,6 +57,7 @@ const LETRITAS := {
 
 var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
+var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
 var abierta := true:     # si se puede pasar
 	set(valor):
 		abierta = valor
@@ -94,14 +98,10 @@ func _draw() -> void:
 			if salida.tipo == "ascensor":
 				ascensor()
 				return
-			draw_rect(Rect2(-36, -86, 72, 86), MARCO)
-			draw_rect(Rect2(-32, -80, 64, 80), HOJA)
-			for x in [-28, 4]:
-				draw_rect(Rect2(x, -74, 24, 30), PANEL)
-				draw_rect(Rect2(x, -38, 24, 32), PANEL)
-			draw_rect(Rect2(-2, -80, 4, 80), MARCO)
-			draw_rect(Rect2(-8, -44, 4, 4), POMO)
-			draw_rect(Rect2(4, -44, 4, 4), POMO)
+			# la de la sala de mantenimiento (la de la placa con la llave inglesa), de acero en los dos edificios; las
+			# demás, la del edificio
+			var dibujo: String = "servicio" if salida.get("placa", "") == "llave" else ("tienda" if centro else "piso")
+			draw_texture_rect(DIBUJO[dibujo], Rect2(-36, -86, 72, 86), false)
 			if salida.has("placa"):
 				placa_de_piso(Vector2(42, -78))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":

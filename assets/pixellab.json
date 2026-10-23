@@ -2593,5 +2593,31 @@
     "5a799129-f41e-4f3f-9458-1b0b4cfa6b8f"
    ]
   }
+ },
+ "puertas": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "Las puertas vistas de frente (puerta.gd y puerta_bano.gd), que eran rectángulos de colores. Con create_image_pixflux y la receta de lo colgado de la portera: la guía de py tools/guias_puertas.py (la puerta de antes, al doble y con 4 píxeles de azul alrededor; subida con get_upload_url) como init_image, view side, no_background false, single color black outline, medium shading, medium detail, text_guidance_scale 10, cuatro intentos de cada una (dos a fuerza 50 y dos a 80; las dos fuerzas salieron bien). Textos: piso, 'closed wooden apartment front door, seen straight from the front, flat orthographic elevation, wooden door frame moulding around it, raised wooden panels, brass doorknob, small peephole, scratched and dented, a few blood smears, zombie apocalypse, horror game, muted colors, game sprite on a plain blue background' (con la guía de una hoja; la de dos hojas, 'with double doors' y 'dark wood door frame'); tienda, 'closed shopping mall store entrance, double glass doors with brushed aluminium frame, ..., dark empty shop behind the glass, long vertical metal pull handles, cracked glass with spiderweb cracks, dirty, blood smears, ...'; servicio, 'closed grey steel service double door of a maintenance room, ..., small wired glass windows, horizontal panic push bar, ventilation louvers at the bottom, scuffed paint, rust stains, dents, ...'; baño, 'closed interior wooden bathroom door, single door without frame, ..., two recessed panels, round brass doorknob, scratched, a bloody handprint, ...'. PixelLab a veces pinta suelo debajo (las de cristal) o pared alrededor, y a veces se acerca demasiado (piso-sencilla-2, bano-4). Elegidas por el dueño: piso-sencilla-1, tienda-3, servicio-2 y bano-3, en assets/sources/puertas/ (sin fondo con guias_centro.py quita, menos la de la tienda, que se deja con su suelo como zócalo); las demás, en descartes/. Sprites: py tools/guias_puertas.py sprites (recorte, a la mitad y contorno).",
+  "coste": "16 generaciones (saldo 31,8 → 15,8)",
+  "piezas": {
+   "puerta-piso (piso-sencilla-1, fuerza 50, semilla 103)": "4353cab2-32db-4a30-8985-a8b5a7fe662c",
+   "puerta-tienda (tienda-3, fuerza 80, semilla 107)": "f111bb1d-eb3c-4c1a-a805-147ca028e6d2",
+   "puerta-servicio (servicio-2, fuerza 50, semilla 110)": "8dc10abc-d427-42de-bc66-12acbfa84ad9",
+   "puerta-bano (bano-3, fuerza 80, semilla 115)": "1f285ba5-3434-4fa0-8c5f-edbf3bbe393d",
+   "descartadas": [
+    "4e0d7171-31e5-4172-af15-15077ca17fd8",
+    "b9ae385c-c368-48d3-bfbc-2885fcf75cc8",
+    "2771d627-8a42-48e0-bfde-83c8bd2cfa8b",
+    "d705431d-dd77-4486-9fd1-30d7d1e5f5de",
+    "9bd533f4-118c-4495-b8b7-8915dcd7aaa0",
+    "e0cbca88-1ca9-45db-b0b2-98441ed3ff45",
+    "c62314c8-5070-43fd-aa49-4070a57a2965",
+    "22e42640-07dc-4f50-9741-068d609c9b84",
+    "2335c682-9ba8-4579-a183-b6c9d7e1dbe4",
+    "af6f1d34-e958-404b-8007-b4c78df140bc",
+    "04160762-ec8b-463d-8976-aef01775ebae",
+    "9e920dd1-926c-4c04-b8af-e0c55ef1b2da"
+   ]
+  }
  }
 }

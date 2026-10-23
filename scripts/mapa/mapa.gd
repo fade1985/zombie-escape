@@ -439,6 +439,7 @@ func poner_puertas() -> void:
 		var puerta := PUERTA.new()
 		puerta.salida = salida
 		puerta.indice = i
+		puerta.centro = centro
 		puerta.name = "Puerta%d" % i
 		match salida.dir:
 			"arriba": puerta.position = Vector2(salida.en, MURO)

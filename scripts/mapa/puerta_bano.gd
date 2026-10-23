@@ -1,7 +1,8 @@
 # La puerta del baño donde se esconde el superviviente (PuertaBano en src/props.js del JS): tapa el hueco del
 # tabique y no deja pasar hasta que se limpia el piso. Mientras está cerrada, tiembla cuando él da golpes desde
 # dentro ("golpes", lo pone supervivientes.gd al gritar). "hueco" es la puerta de apt.puertas, en casillas.
-# Al abrirse se encoge hacia un lado (gira sobre las bisagras) y deja de chocar.
+# Al abrirse se encoge hacia un lado (gira sobre las bisagras) y deja de chocar. De frente es un dibujo de PixelLab
+# (puerta-bano); de lado, una hoja de madera dibujada a mano.
 # La del almacén del ferretero lleva además tablas clavadas por encima ("tablas", las que quedan): las va
 # quitando él desde dentro (barricada.gd).
 extends StaticBody2D
@@ -9,6 +10,7 @@ extends StaticBody2D
 const CASILLA := 32
 const ALTO := 86.0          # lo alto de la hoja vista de frente (casi lo alto de la cara del muro)
 const LINEA := Color("#1d1b2c")
+const DIBUJO := preload("res://assets/sprites/puerta-bano.png")   # la hoja de frente: 28 × 43 píxeles (56 × 86 unidades)
 
 var hueco: Dictionary
 var de_frente := false      # hueco en un tabique horizontal: la hoja se ve de frente, como los muros
@@ -75,23 +77,13 @@ func _draw() -> void:
 		dibujar_acero(r, k, temblor)
 		return
 	if de_frente:
-		# de frente: del pie del hueco hasta casi lo alto del muro, con dos cuarterones y el pomo
+		# de frente: del pie del hueco hasta casi lo alto del muro, el dibujo de PixelLab (tools/guias_puertas.py), que
+		# al abrirse se estrecha
 		var abajo := r.end.y
 		var arriba := abajo - ALTO
 		var x0 := r.position.x + 4 + temblor
 		var ancho := (r.size.x - 8) * k
-		var hoja := Rect2(x0, arriba, ancho, abajo - arriba)
-		draw_rect(hoja, Color("#4a3123"))
-		draw_rect(hoja.grow(-3), Color("#6e4b35"))
-		draw_rect(hoja, LINEA, false, 2.0)
-		if ancho > 20:
-			var pw := ancho - 16
-			var ph := (abajo - arriba - 26) / 2.0
-			draw_rect(Rect2(x0 + 8, arriba + 8, pw, ph), Color("#5a3d2b"))
-			draw_rect(Rect2(x0 + 8, arriba + 18 + ph, pw, ph), Color("#5a3d2b"))
-			var pomo := Rect2(x0 + ancho - 11, arriba + (abajo - arriba) / 2.0, 5, 5)
-			draw_rect(pomo, Color("#c9a227"))
-			draw_rect(pomo, LINEA, false, 1.0)
+		draw_texture_rect(DIBUJO, Rect2(x0, arriba, ancho, ALTO), false)
 		# la barricada: tablas torcidas de lado a lado, más anchas que la puerta, con un clavo en cada punta
 		for i in tablas:
 			var y: float = arriba + (abajo - arriba) * [0.18, 0.4, 0.62, 0.84][i]

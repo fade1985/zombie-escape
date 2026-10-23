@@ -308,7 +308,9 @@
   tipo tiene el suyo, como el mármol de la joyería) y `PASILLOS` (el pasillo de cada
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
   su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
-  `cara_pared.gd`, `puerta.gd` (también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente), `neon.gd` (el letrero de neón de una tienda).
+  `cara_pared.gd`, `puerta.gd` (las de la pared de arriba, dibujos de PixelLab: `puerta-piso` en los Apartamentos,
+  `puerta-tienda` de cristal en el centro comercial y `puerta-servicio` de acero en la sala de mantenimiento de los dos;
+  las de los otros muros, el ascensor y las escaleras, con código; también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente; de frente, el dibujo `puerta-bano`), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de los trajes: `TAQUILLA_X` en `mapa.gd`),
   `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
@@ -350,7 +352,8 @@ con `--lado`, también suroeste y noroeste y las vistas quietas, para ahorrar ge
 `catalogo.gd`), `textura_suelo.py`, `textura_pared.py` y `textura_tapa.py` (suelos, paredes y tapas: ver `FONDOS.md`),
 `icono_alerta.py` (el triángulo de los niveles de alerta), `guias_centro.py` (bocetos para pedir a PixelLab muebles rectos, y quitarles el fondo; `guias_azotea.py`, los de los
 aparatos de la azotea; `guias_gimnasio.py`, las máquinas del gimnasio del Gymbro; `guias_limpieza.py`, los muebles del cuarto de la
-limpieza de la portera y lo que cuelga de su pared, que también pasa a sprite), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
+limpieza de la portera y lo que cuelga de su pared, que también pasa a sprite; `guias_puertas.py`, las puertas vistas de
+frente, que también pasa a sprites `puerta-<piso|tienda|servicio|bano>`), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (baúl, banco y armarito), `taquilla.py` (la taquilla de los trajes), `objetos16.py`
 (los 32 objetos a 16×16; los cuatro trajes, con una plantilla y los colores de cada uno), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
