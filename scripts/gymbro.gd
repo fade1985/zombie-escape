@@ -5,8 +5,9 @@
 #   - Torbellino: marca en rojo por dónde irá (lo ancho de sus brazos) y sale girando con los brazos abiertos en
 #     línea recta. Si pilla a Johnny le quita 20 y le tira (esquivando, le pasa de largo). Si se come una pared,
 #     se queda mareado (¡a por él!).
-#   - Salto: se agacha y salta hacia Johnny. Mientras está en el aire (1,1 s) se ve en el suelo la sombra de
-#     donde va a caer; al caer, quita 24 a lo que esté en ese círculo y le tira. En el aire no se le puede dar.
+#   - Salto: se agacha y salta hacia Johnny. Mientras está en el aire (1,1 s) se ve en el suelo la zona donde va a
+#     caer (una sombra con el borde rojo, de 400 de ancho); al caer, si Johnny está dentro, le quita 24 y le tira.
+#     En el aire no se le puede dar.
 #   - Pesas: lanza mancuernas en curva (pesa.gd) a donde está Johnny y a donde va a estar, cada una con su marca
 #     roja en el suelo.
 # Enfadado (a media vida, «¡HORA DE LOS SUPLEMENTOS!»): se toma sus suplementos y le sale una barra de armadura
@@ -27,7 +28,7 @@ const MAREADO := 1.6
 const AGACHARSE := 0.45
 const VUELO := [1.1, 0.55]              # lo que está en el aire (enfadado, la mitad)
 const ALTURA_SALTO := 170.0
-const RADIO_SALTO := 100.0
+const RADIO_SALTO := 200.0              # la zona donde cae: de lado a lado, el doble (de arriba abajo, el 60 %)
 const DANO_SALTO := 24
 const PESAS := [2, 4]                   # cuántas lanza de una vez
 const VUELO_PESA := 0.9
@@ -193,15 +194,26 @@ func aterrizar(johnny: Node2D) -> void:
 	cambiar("aterrizar")
 	Sonido.tocar("pisoton")
 	Temblor.temblar(14.0)
+	# el polvo sale hacia los lados y la onda se abre hasta el borde de la zona
 	for i in 16:
 		var a := i * TAU / 16.0
 		Particulas.soltar(self, global_position + Vector2(cos(a) * 34.0, PIE + sin(a) * 16.0),
-			Vector2(cos(a) * 180.0, sin(a) * 80.0), Color("#8a7a66"), 4, 0.5)
+			Vector2(cos(a), sin(a) * 0.6) * RADIO_SALTO * 2.0, Color("#8a7a66"), 4, 0.5)
+	Particulas.anillo(self, global_position + Vector2(0, PIE - 6), RADIO_SALTO, Color("#b3a58c"), 0.35)
 	var hacia: Vector2 = johnny.global_position - global_position
-	if hacia.length() < RADIO_SALTO + johnny.RADIO and johnny.esquiva_t <= 0.0:
+	if en_la_zona(johnny.global_position + Vector2(0, 16), johnny.RADIO * 0.6) and johnny.esquiva_t <= 0.0:
 		johnny.recibir_dano(DANO_SALTO)
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 700.0)
 		johnny.pisar({"tirado": {}})
+
+
+# La zona del salto es la que se ve en el suelo, a sus pies donde cae: una elipse (el suelo se ve un poco desde
+# arriba, como la marca de las pesas). Le da a Johnny si tiene los pies (su sombra) dentro, con "margen" de más
+# por lo que ocupa él
+func en_la_zona(pies: Vector2, margen: float) -> bool:
+	var d := pies - (global_position + Vector2(0, PIE - 6))
+	var r := RADIO_SALTO + margen
+	return (d.x / r) ** 2 + (d.y / (r * 0.6)) ** 2 <= 1.0
 
 
 # ── Las pesas ──
@@ -305,7 +317,8 @@ func animar() -> void:
 
 
 # Los avisos, en el suelo (por debajo de él): la franja del torbellino (tan ancha como sus brazos), el círculo
-# que barre girando y la sombra de donde va a caer del salto
+# que barre girando y la zona del salto (la sombra de donde va a caer, que se agranda, y su borde rojo: lo que
+# golpea, en_la_zona())
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -327,7 +340,7 @@ func _draw() -> void:
 			var k := minf(1.0, t / datos.vuelo)
 			draw_set_transform(datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, Vector2(1, 0.6))
 			draw_circle(Vector2.ZERO, RADIO_SALTO * (0.35 + 0.65 * k), Color(0, 0, 0, 0.2 + 0.3 * k))
-			draw_arc(Vector2.ZERO, RADIO_SALTO, 0.0, TAU, 40, Color(rojo, 0.4 + 0.5 * k), 3.0)
+			draw_arc(Vector2.ZERO, RADIO_SALTO, 0.0, TAU, 64, Color(rojo, 0.4 + 0.5 * k), 3.0)
 	draw_set_transform(Vector2.ZERO)
 
 

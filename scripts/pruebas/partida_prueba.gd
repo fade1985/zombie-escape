@@ -2472,7 +2472,9 @@ func probar_gloton() -> void:
 
 
 # El Gymbro: se enfada ya (los suplementos): un golpe de 20 le quita 10 de vida y 10 de armadura, y sale la barra
-# de armadura; y lanza sus pesas (enfadado, 4) para que salgan en la foto de los 7,7
+# de armadura. El salto: qué cae dentro de la zona (a un lado y arriba, justo dentro y justo fuera del borde) y uno de
+# verdad, en el sitio, con Johnny de pie justo fuera del borde: la foto con él en el aire y, al caer, no le da (0,35 s;
+# antes de la foto de los 7,7). Y lanza sus pesas (enfadado, 4) para que salgan en la foto de los 8,0
 func probar_gymbro() -> void:
 	jefa.fase = 2
 	jefa.al_enfadarse(johnny)
@@ -2482,6 +2484,31 @@ func probar_gymbro() -> void:
 	var barra: Node = $Pantalla/Jefa.get_node_or_null("Armadura")
 	print("Gymbro con suplementos (golpe de 20): vida -%d, armadura -%d de %d | barra de armadura: %s" % [
 		vida_antes - jefa.vida, armadura_antes - jefa.armadura, jefa.armadura_max, barra != null and barra.visible])
+	# la zona del salto, en el suelo a sus pies (con el margen de Johnny, como al caer)
+	var r: float = jefa.RADIO_SALTO
+	var suelo: Vector2 = jefa.global_position + Vector2(0, jefa.PIE - 6)
+	var margen: float = johnny.RADIO * 0.6
+	var dentro := [Vector2(r - 10.0, 0), Vector2(r + 30.0, 0), Vector2(0, -(r * 0.6 - 10.0)), Vector2(0, -(r * 0.6 + 30.0))].map(
+		func(d): return jefa.en_la_zona(suelo + d, margen))
+	print("Gymbro, zona del salto (%d de ancho y %d de alto): a un lado, justo dentro %s y justo fuera %s; arriba, justo dentro %s y justo fuera %s (esperado: true, false, true, false)" % [
+		r * 2.0, r * 1.2, dentro[0], dentro[1], dentro[2], dentro[3]])
+	for lado in [1.0, -1.0]:
+		var p: Vector2 = jefa.position + Vector2(0, jefa.PIE - 6) + Vector2(lado * (r + 30.0), -16.0)
+		if mapa.zona_en(p) >= 0:
+			johnny.position = p
+			break
+	johnny.get_node("Camara").reset_smoothing()
+	jefa.mirada = (johnny.position - jefa.position).normalized()
+	jefa.cambiar("salto", {"desde": jefa.global_position, "hasta": jefa.global_position, "vuelo": jefa.VUELO[0]})
+	jefa.t = jefa.VUELO[0] * 0.75
+	var antes_johnny: int = johnny.vida
+	await get_tree().create_timer(0.1, false).timeout
+	print("Gymbro: foto del salto en captura-gymbro-salto.png (en el aire: %s; Johnny, a %d del centro de la zona)" % [
+		jefa.estado == "salto", (johnny.global_position + Vector2(0, 16) - suelo).length()])
+	Captura.foto("captura-gymbro-salto.png")
+	await get_tree().create_timer(0.25, false).timeout
+	print("Gymbro: cae del salto (%s) con Johnny justo fuera del borde: Johnny -%d (esperado: 0)" % [
+		jefa.estado == "aterrizar", antes_johnny - johnny.vida])
 	jefa.lanzar_pesas(johnny)
 	print("Gymbro: pesas en el aire: %d" % get_tree().get_nodes_in_group("balas_zombi").size())
 

@@ -134,7 +134,10 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
     recta a 400 durante 1,1 s: 20 de daño, manotazo hacia un lado y te tira (esquivando, pasa de largo). Si se come
     una pared, mareado 1,6 s con estrellitas. Cada 3,6 s.
   - *Salto:* a entre 120 y 450, se agacha 0,45 s y está 1,1 s en el aire (no se le puede dar) con la sombra donde va
-    a caer: 24 de daño en un círculo de 100 y te tira. Cada 5 s.
+    a caer, que se agranda hasta su borde rojo: 24 de daño si Johnny tiene los pies dentro, y te tira. La zona mide
+    200 de radio (23 oct, el doble: antes 100), es decir 400 de ancho (12,5 casillas) y 240 de alto, porque es una
+    elipse como el resto de marcas del suelo (`en_la_zona()`: golpea justo lo que se ve). Al caer, el polvo y una
+    onda se abren hasta el borde. Cada 5 s.
   - *Pesas:* a más de 160, 2 mancuernas en curva (0,9 s), una a donde estás y otra a donde vas a estar, cada una con
     su círculo rojo: 18 de daño y empujón. Se quedan 3 s tiradas. Cada 4,2 s.
   - *Enfadado* («¡HORA DE LOS SUPLEMENTOS!»): armadura del 30 % de su vida máxima, con su barra azul acero encima de
@@ -146,8 +149,9 @@ pantalón de chándal y zapatillas deportivas de estilo clásico, **sin marca ni
   `apartamentos-jefes` → `gymbro-72`). El torbellino solo de frente (es una vuelta entera); hacia el oeste, andar,
   golpe y muerte son los del este en espejo. Hoja con `py tools/jefe_hoja.py gymbro-72 jefe-gymbro`.
 - Tecla de prueba **8**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El Gymbro», 19
-  fichas). `--captura --jefe gymbro` comprueba la armadura y las pesas (lo escribe en la terminal) y saca
-  `captura-jefe.png` con el torbellino.
+  fichas). `--captura --jefe gymbro` comprueba la armadura, la zona del salto (justo dentro y justo fuera del borde,
+  y uno de verdad con Johnny justo fuera, que no le da) y las pesas (lo escribe en la terminal), y saca
+  `captura-gymbro-salto.png` con él en el aire y la zona en el suelo y `captura-jefe.png` con el torbellino.
 - **Su habitación, un gimnasio** (23 oct, M6 de `PENDIENTES.md`): las paredes llenas de máquinas, una detrás de otra
   (`jefe-gymbro` en `catalogo.gd`, `llenar` en `muebles.gd`): cinta de correr, banco de press, máquina de poleas,
   estante de mancuernas, pila de discos, taquillas y bancos, y 3 lámparas de pie. Las máquinas cuentan como pared
