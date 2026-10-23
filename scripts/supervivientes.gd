@@ -13,12 +13,10 @@
 #
 # Al ganar con él en el equipo se viene a vivir a las viviendas (Guardado: rescatados) y ya no vuelve a salir. Las
 # viviendas (mapa/viviendas.gd) son un pasillo detrás de la puerta de la derecha de la sala de mantenimiento, con una
-# habitación para cada uno: los rescatados esperan cada uno en la suya ("casa", Viviendas.casa), con lo suyo (el
-# puesto del ferretero, las cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno), y las de
-# los que faltan siguen cerradas. Al arrimarse a uno, te acompaña (Guardado: acompanante) y empieza las partidas
-# siguientes en el equipo. Solo uno a la vez.
-# El ferretero, ya rescatado, atiende detrás de su mostrador (mapa/mostrador.gd): al arrimarse a él se compran
-# munición, molotovs y granadas con los dólares ahorrados (ui/puesto.gd). Sigue abierto aunque te acompañe.
+# habitación para cada uno: los rescatados esperan cada uno en la suya ("casa", Viviendas.casa), con lo suyo (las
+# cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno), y las de los que faltan siguen
+# cerradas. Al arrimarse a uno, te acompaña (Guardado: acompanante) y empieza las partidas siguientes en el equipo.
+# Solo uno a la vez.
 #
 # El guiño de la cafetera: la cafetera de Johnny (mapa/cafetera.gd) está en la habitación de la farmacéutica. La
 # primera vez que Johnny entra allí con ella rescatada, ella le ha encontrado el doble fondo con cápsulas de VD-7 y
@@ -35,16 +33,13 @@ class_name Supervivientes
 extends Node
 
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
-const MOSTRADOR := preload("res://scripts/mapa/mostrador.gd")
-const MOSTRADOR_DELANTE := Vector2(0, 42)   # el pie del mostrador del ferretero, delante de él (de su "casa")
-const PUESTO := preload("res://scripts/ui/puesto.gd")
 
 # Los que se pueden rescatar (SURVIVORS de src/config.js y los tres del centro comercial). "edificio": dónde sale (y
 # en qué fila de las viviendas vive: los de los Apartamentos arriba, los del centro comercial abajo); "look": los
 # colores de su dibujo (persona.gd); "arma": la que lleva en la mano. Los del centro comercial llevan además "tienda"
-# y "sala" (dónde se esconde), "gritos" (los suyos) y "mejora" (lo que hace ya rescatado). "rescate": si no es la
-# horda de siempre, cuál ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo
-# que dice al abrirse su puerta
+# y "sala" (dónde se esconde), "gritos" (los suyos) y "mejora" (lo que hace ya rescatado; el ferretero no tiene: el
+# dueño quitó su puesto, porque todo sale ya de los zombis). "rescate": si no es la horda de siempre, cuál
+# ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo que dice al abrirse su puerta
 const DATOS := {
 	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
@@ -63,16 +58,14 @@ const DATOS := {
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
 	# los del centro comercial (parte 5 del plan; tres por edificio: el dueño quitó a la camarera)
 	"ferretero": {"id": "ferretero", "nombre": "Ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
-		"tienda": "ferreteria", "sala": "almacen",   # (en su habitación, detrás de su mostrador: mostrador_en)
-		"nombre_vecino": 58.0,   # en su habitación, su nombre va debajo del mostrador (no encima del letrero)
+		"tienda": "ferreteria", "sala": "almacen",
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],
 		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",
 		"desc": "Va a por los zombis que ve y les da martillazos (8 de daño)",
-		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0},   # (alcance: lo cerca que tiene que estar para pegar)
-		"mejora": "Monta su puesto: vende munición, molotovs y granadas por dólares"},
+		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0}},   # (alcance: lo cerca que tiene que estar para pegar)
 	"farmaceutica": {"id": "farmaceutica", "nombre": "Farmacéutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
 		"tienda": "farmacia", "sala": "rebotica",
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#2b1d14"), "shirt": Color("#f4f6f8"), "pants": Color("#55606e"),
@@ -138,7 +131,6 @@ var npc: Aliado = null     # el superviviente en su baño (mientras se está en 
 var puerta: Node2D = null  # y la puerta del baño
 var vecinos: Array = []    # los rescatados de otras partidas, cada uno en su habitación de las viviendas
 var barricada := Barricada.new()   # el rescate del ferretero
-var puesto := PUESTO.new()         # y la ventanita de su puesto en su habitación
 var socorro_t := 1.0
 var sala_socorro := -1
 var grito_t := -9.0
@@ -156,7 +148,6 @@ func preparar(p: Node) -> void:
 	johnny = p.johnny
 	barricada.sup = self
 	add_child(barricada)
-	add_child(puesto)
 	capa = Control.new()
 	capa.name = "Superviviente"
 	capa.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -251,7 +242,7 @@ func recoger() -> void:
 
 
 # Recién montado el sitio "idx": el equipo, al lado de Johnny; el superviviente en su baño; y en las viviendas, los
-# vecinos, el puesto del ferretero y, si falta, el guiño de la cafetera
+# vecinos y, si falta, el guiño de la cafetera
 func al_montar(idx: int, sitio: Dictionary) -> void:
 	var mapa: Node2D = partida.mapa
 	Aliado.borrar_huellas()   # el rastro de Johnny era del mapa viejo: la fila se forma de nuevo desde la puerta
@@ -276,7 +267,6 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		sala_socorro = -1
 	if sitio.tipo == "viviendas":
 		colocar_vecinos()
-		poner_puesto()
 		sala_cafe = sala_cafetera(sitio)
 
 
@@ -618,36 +608,6 @@ func llevar_vecino(v: Aliado) -> void:
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
 
-# ═════════════ El puesto del ferretero ═════════════
-
-# Con el ferretero rescatado, su mostrador en su habitación de las viviendas, delante de él (él atiende detrás).
-# Al arrimarse por delante se abre el puesto; para que te acompañe, hay que rodearlo y arrimarse a él
-func poner_puesto() -> void:
-	if "ferretero" not in Guardado.cargar().rescatados:
-		return
-	var mostrador := MOSTRADOR.new()
-	mostrador.position = mostrador_en()
-	partida.mapa.cosas.add_child(mostrador)
-	partida.mapa.rehornear()   # que los del equipo lo rodeen
-	mostrador.usar.connect(abrir_puesto)
-
-
-# Dónde va el pie del mostrador: delante del ferretero, en su habitación
-static func mostrador_en() -> Vector2:
-	return Viviendas.casa("ferretero") + MOSTRADOR_DELANTE
-
-
-# Se para el juego y sale la ventanita del puesto (ui/puesto.gd); el ferretero, si está en su sitio, te atiende
-func abrir_puesto() -> void:
-	if partida.terminada or partida.cambiando or not johnny.vivo or get_tree().paused:
-		return
-	for v in vecinos:
-		if v.def.id == "ferretero":
-			v.decir("¿Qué te pongo, chaval?")
-	get_tree().paused = true
-	puesto.abrir(partida)
-
-
 # ═════════════ El botiquín de la farmacéutica ═════════════
 
 # Al empezar la partida, con la farmacéutica rescatada (en los dos edificios): un botiquín en la mochila. Se usa
@@ -832,7 +792,6 @@ func probar() -> void:
 	await probar_los_seis()
 	await probar_acompanantes()
 	await probar_cafetera()
-	await probar_puesto()
 	await probar_botiquin()
 	await barricada.probar()
 	await escolta.probar()
@@ -881,9 +840,10 @@ func probar_horda() -> void:
 # Las viviendas (mapa/viviendas.gd), con cuatro rescatados (el policía, el militar, el ferretero y el técnico) y sin
 # acompañante. En la sala de mantenimiento ya no espera nadie y hay una puerta a la derecha (captura-viviendas-puerta.png);
 # por ella, al pasillo de las viviendas: seis puertas con su placa, cerradas las de la médica y la farmacéutica (que
-# no dejan pasar, y sus habitaciones siguen a oscuras) y abiertas las demás, cada uno en la suya, el mostrador del
-# ferretero y las cámaras del técnico. Fotos del pasillo (captura-viviendas.png, la mitad de la izquierda, y
-# captura-viviendas-derecha.png) y de una habitación por dentro (captura-viviendas-habitacion.png). Luego, arrimarse
+# no dejan pasar, y sus habitaciones siguen a oscuras) y abiertas las demás, cada uno en la suya (el ferretero, en
+# medio de la suya: captura-viviendas-ferretero.png) y las cámaras del técnico. Fotos del pasillo (captura-viviendas.png,
+# la mitad de la izquierda, y captura-viviendas-derecha.png) y de una habitación por dentro
+# (captura-viviendas-habitacion.png). Luego, arrimarse
 # al policía (te acompaña), al militar (el policía vuelve a la suya) y volver a la sala con él por la puerta de la
 # izquierda. Y en la 1ª planta, con el ascensor arreglado, también se llega desde la sala. Se deja el guardado y el
 # equipo como estaban
@@ -927,10 +887,18 @@ func probar_viviendas() -> void:
 	print("Viviendas: a oscuras %s (esperado: [Médica, Farmacéutica])" % [oscuras])
 	print("Viviendas: vecinos %s (esperado: cada uno en la suya)" % [vecinos.map(func(v):
 		return "%s en «%s»" % [v.def.nombre, mapa.nombre_zona(mapa.zona_en(v.position))])])
+	print("Viviendas: cuánto se aparta cada uno del medio de su habitación %s (esperado: 0 todos menos el técnico, -96)" % [
+		vecinos.map(func(v):
+			var r := Viviendas.habitacion(v.def.id)
+			return "%s %d" % [v.def.nombre, roundi(v.position.x - (r.position.x + r.size.x / 2.0) * Planta.CASILLA)])])
 	var camaras: Node2D = mapa.cosas.get_node_or_null("Camaras")
-	print("Viviendas: mostrador %s en «%s» · cámaras %s en «%s» (esperado: true, Ferretero, true, Técnico)" % [
-		mapa.cosas.has_node("Mostrador"), mapa.nombre_zona(mapa.zona_en(mostrador_en())), camaras != null,
+	print("Viviendas: cámaras %s en «%s» (esperado: true, Técnico)" % [camaras != null,
 		mapa.nombre_zona(mapa.zona_en(camaras.position)) if camaras else "-"])
+	# la habitación del ferretero, con él en medio
+	johnny.position = Viviendas.casa("ferretero") + Vector2(-70, 50)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-viviendas-ferretero.png")
 	# las fotos del pasillo: la mitad de la izquierda y la de la derecha
 	johnny.position = Vector2(Viviendas.casa("policia").x + 120, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
 	johnny.get_node("Camara").reset_smoothing()
@@ -1122,65 +1090,6 @@ func probar_cafetera() -> void:
 		x.cafetera = antes[2])
 	for a in equipo:
 		a.queue_free()
-	equipo = equipo_antes
-	for a in equipo:
-		partida.mapa.cosas.add_child(a)
-		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
-
-
-# El puesto del ferretero: con él rescatado (y $9 ahorrados), su mostrador en su habitación con él detrás
-# (captura-ferretero-sala.png); arrimarse por delante abre el puesto (captura-ferretero-puesto.png); se compra una
-# cosa de cada y una más que ya no llega; y, rodeando el mostrador, se viene contigo. Luego se deja el guardado y
-# el equipo como estaban
-func probar_puesto() -> void:
-	var g := Guardado.cargar()
-	var antes := [g.rescatados.duplicate(), g.acompanante, g.dolares]
-	var equipo_antes := equipo
-	for a in equipo:
-		if a.get_parent():
-			a.get_parent().remove_child(a)
-	equipo = []
-	Guardado.cambiar(func(x):
-		x.rescatados = ["ferretero"]
-		x.acompanante = ""
-		x.dolares = 9)
-	partida.ahorrados = 9
-	partida.lanzables.cantidades.molotov = 0
-	partida.lanzables.cantidades.granada = 0
-	await partida.montar(partida.planta.viviendas, 0, false)
-	johnny.position = mostrador_en() + Vector2(-60, 70)
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.4, false).timeout
-	print("Puesto: el mostrador, en «%s» (esperado: Ferretero)" % partida.mapa.nombre_zona(partida.mapa.zona_en(mostrador_en())))
-	Captura.foto("captura-ferretero-sala.png")
-	johnny.position = mostrador_en() + Vector2(0, 34)   # delante del mostrador
-	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
-	print("Puesto: abierto %s | juego en pausa %s" % [puesto.abierta(), get_tree().paused])
-	if puesto.abierta():
-		Captura.foto("captura-ferretero-puesto.png")
-		var compras := []
-		johnny.coger("pistola")
-		johnny.reserva = 0   # con la pistola y sin cargadores de reserva, para que quepa la munición
-		for id in ["municion", "molotov", "granada", "granada"]:
-			compras.append("%s %s" % [id, puesto.comprar(id)])
-		print("Puesto: %s | quedan $%d | dice '%s' | molotovs %d, granadas %d" % [compras, Guardado.cargar().dolares,
-			puesto.info.text, partida.lanzables.cantidades.molotov, partida.lanzables.cantidades.granada])
-		await get_tree().create_timer(0.2).timeout
-		Captura.foto("captura-ferretero-compra.png")
-		puesto.cerrar()
-	# por detrás del mostrador: se viene contigo
-	johnny.position = mostrador_en() + Vector2(-140, 40)
-	await get_tree().create_timer(0.3, false).timeout
-	johnny.position = Viviendas.casa("ferretero") + Vector2(-34, -6)
-	await get_tree().create_timer(0.3, false).timeout
-	print("Puesto: cerrado %s | acompañante '%s'" % [not puesto.abierta(), Guardado.cargar().acompanante])
-	for a in equipo:
-		a.queue_free()
-	Guardado.cambiar(func(x):
-		x.rescatados = antes[0]
-		x.acompanante = antes[1]
-		x.dolares = antes[2])
-	partida.ahorrados = antes[2]
 	equipo = equipo_antes
 	for a in equipo:
 		partida.mapa.cosas.add_child(a)

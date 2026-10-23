@@ -106,13 +106,6 @@ static func oido() -> float:
 	return OIDO if es("oido") else 1.0
 
 
-# ¿El puesto del ferretero puede vender esto? (puesto.gd)
-static func se_vende(id: String) -> bool:
-	if id in ["municion", "molotov", "granada"]:
-		return not sin_municion()
-	return true
-
-
 # ── Los textos ──
 
 static func nombre(r := regla) -> String:

@@ -176,14 +176,13 @@ func fotos_ayudas() -> void:
 # Con "--captura --viviendas": las viviendas de los supervivientes rescatados (mapa/viviendas.gd), detrás de la puerta
 # de la derecha de la sala de mantenimiento. Entrar, las puertas cerradas y abiertas, cada uno en su habitación,
 # acompañar y volver, y desde la 1ª planta por el ascensor (supervivientes.gd: probar_viviendas); luego los seis a la
-# vez, el guiño de la cafetera, el puesto del ferretero y las cámaras del técnico. Cada línea de la terminal dice lo
-# esperado. Deja el guardado como estaba y se cierra
+# vez, el guiño de la cafetera y las cámaras del técnico. Cada línea de la terminal dice lo esperado. Deja el guardado
+# como estaba y se cierra
 func probar_viviendas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await supervivientes.probar_viviendas()
 	await supervivientes.probar_los_seis()
 	await supervivientes.probar_cafetera()
-	await supervivientes.probar_puesto()
 	await supervivientes.averia.probar_mejora()
 	get_tree().quit()
 
@@ -1756,9 +1755,9 @@ func probar_reto() -> void:
 		Reto.regla = r
 		aplicar_talentos(talentos)
 		var z := meter_zombi("normal", Vector2(200, 200))
-		print("%s · munición: %s · oscuras: %s · curas: %s · el ferretero vende munición: %s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
+		print("%s · munición: %s · oscuras: %s · curas: %s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
 			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_curas(),
-			Reto.se_vende("municion"), z.velocidad, johnny.stats.vida_max, Reto.mas_zombis(), Zombi.OIDO * Reto.oido()])
+			z.velocidad, johnny.stats.vida_max, Reto.mas_zombis(), Zombi.OIDO * Reto.oido()])
 		z.queue_free()
 	Reto.regla = regla
 	aplicar_talentos(talentos)

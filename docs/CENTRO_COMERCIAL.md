@@ -123,7 +123,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 | Quién | Dónde y cómo se le rescata | En la sala | Si te acompaña |
 |---|---|---|---|
-| **Ferretero** | Atrincherado en el almacén de la ferretería: la horda de siempre mientras quita la barricada (más corta, unos 2 min) | Monta su puesto: vende munición, molotovs y granadas por dólares | Martillazos de cerca (8) |
+| **Ferretero** | Atrincherado en el almacén de la ferretería: la horda de siempre mientras quita la barricada (más corta, unos 2 min) | Nada (tenía un puesto que vendía munición, molotovs y granadas; el dueño lo quitó el 23 oct: todo sale ya de los zombis) | Martillazos de cerca (8) |
 | **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
 | **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
 
@@ -148,7 +148,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     de raya brillante, gorra y bigote, y su martillo; la farmacéutica con bata blanca, cruz verde y moño; el técnico con polo azul, cascos rojos, tarjeta colgada y un
     aparato con lucecita en el cinturón. **Pixel art (22 oct):** ahora los tres van con su hoja de PixelLab al
     tamaño de Johnny (`assets/pixellab.json` → `supervivientes-centro-48`; `aliado.gd`, `HOJAS`) en todos sus
-    sitios: encerrados, en el equipo, la escolta, la avería, detrás del mostrador y en la sala. El martillazo pega
+    sitios: encerrados, en el equipo, la escolta, la avería y en la sala. El martillazo pega
     cuando el martillo da abajo y la descarga sale con el chispazo del aparato.
   - En el centro comercial sale uno de los tres que aún no tengas (en los Apartamentos, los tres de siempre, sin
     cambios). Su tienda sale siempre en su planta (`Planta.tienda_fija`) y se esconde en su trastienda, cerrada y sin
@@ -170,13 +170,13 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   (`scripts/mapa/viviendas.gd`): arriba las de los Apartamentos (policía, médica, militar) y abajo las del centro
   comercial (ferretero, farmacéutica, técnico), cada una con su puerta en medio y una placa de latón con su nombre
   (`scripts/mapa/placa.gd`). **Siempre las seis puertas**: las de quien aún no has rescatado, cerradas y a oscuras
-  (para ver lo que falta por salvar); las de los rescatados, abiertas, con él dentro y lo suyo (el mostrador del
-  ferretero, las pantallas del técnico y la cafetera de Johnny junto a la farmacéutica). Arrimarse a uno sigue
+  (para ver lo que falta por salvar); las de los rescatados, abiertas, con él dentro, en medio, y lo suyo (las
+  pantallas del técnico, que espera a un lado, y la cafetera de Johnny junto a la farmacéutica). Arrimarse a uno sigue
   haciendo que te acompañe. La sala de mantenimiento se queda con el ordenador, el banco, el baúl y la taquilla (los
   huecos de los vecinos, `SITIO_VECINOS` y `SITIO_CENTRO`, ya no se guardan), y sin más muebles: los sueltos que salían
   al azar ya no salen (lo pidió el dueño). Las habitaciones, **de momento
   vacías**: se decoran en otra tarea (sus muebles, en `catalogo.gd`: «habitacion-<id>» y «pasillo-viviendas»; que no
-  pisen el mostrador, las pantallas ni la cafetera). El guiño de la cafetera salta la primera vez que Johnny entra en
+  pisen las pantallas ni la cafetera). El guiño de la cafetera salta la primera vez que Johnny entra en
   la habitación de la farmacéutica (ver «Guiño para la historia»). Prueba: `--captura --viviendas` (fotos
   `captura-viviendas*.png`; la de los seis ahora es `captura-viviendas-seis.png`).
 - ✅ **El rescate propio de la farmacéutica** (21 oct; `scripts/escolta.gd`; números provisionales):
@@ -238,8 +238,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   - `--captura --edificio centro` prueba el rescate entero (lo escribe en la terminal) y saca
     `captura-tecnico-palanca.png`, `captura-tecnico-horda.png`, `captura-tecnico-fin.png`,
     `captura-tecnico-minimapa.png` y `captura-tecnico-sala.png`.
-- ✅ **El rescate propio del ferretero y su puesto** (21 oct; `scripts/barricada.gd`, `scripts/mapa/mostrador.gd`
-  y `scripts/ui/puesto.gd`; números provisionales; con el visto bueno del dueño tras probarlo en el móvil):
+- ✅ **El rescate propio del ferretero** (21 oct; `scripts/barricada.gd`; números provisionales; con el visto bueno
+  del dueño tras probarlo en el móvil):
   - Grita desde el almacén de la ferretería, como antes, pero su puerta tiene **cuatro tablas clavadas** (la
     barricada). Al limpiar la tienda no se abre: dice «¡Espera, que quito la barricada!» y, al segundo, **la entrada
     de la tienda se cierra de golpe** y empieza la horda allí mismo (no hay que ir a la salida).
@@ -257,20 +257,13 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   - Al acabar: «¡Barricada fuera! La entrada se ha abierto», se abre su puerta («¡Fuera tablas! Gracias, chaval.
     Vámonos de aquí»), cuenta para «Buen vecino» y se une al arrimarte, como siempre. Al salir con él ya no hay otra
     horda.
-  - **Su puesto**: cuando ya vive en la sala (desde el 23 oct, en su habitación), atiende **detrás de un mostrador** dibujado con código (la franja
-    naranja de su chaleco, el letrero «Ferretería» y, encima, una caja de munición, un molotov y una granada). Al
-    arrimarte por delante se para el juego y sale la ventanita del puesto, con tres tarjetas: **munición (un
-    cargador) $2, molotov $3 y granada $4**, cada una con lo que llevas. Se paga con los **dólares ahorrados** (como
-    en el ordenador) y lo comprado es para esa partida. Si ya vas lleno («No te cabe…»), si tu arma no usa balas o
-    si no te llega («No te llega: te faltan $2»), lo dice. Con el ratón o el dedo, con flechas e Intro (o 1, 2 y 3)
-    o con el mando (cruceta y A); Esc o B cierra.
-  - Para que te acompañe, hay que **rodear el mostrador** y arrimarse a él. El puesto sigue abierto aunque te
-    acompañe. Lo que no decía el plan: en la sala su nombre va debajo del mostrador (no encima del letrero).
+  - **Su puesto**, ya quitado: hasta el 23 oct atendía en su habitación detrás de un mostrador y vendía munición,
+    molotovs y granadas por dólares ahorrados. El dueño lo quitó porque todo sale ya de los zombis; desde entonces
+    espera en medio de su habitación, como los demás.
   - Con el ferretero, en el centro comercial ya ninguno tiene la horda de siempre: la prueba de la horda solo sale
     en los Apartamentos.
-  - `--captura --edificio centro` prueba la barricada entera y el puesto (lo escribe en la terminal) y saca
-    `captura-ferretero-barricada.png`, `captura-ferretero-empujan.png`, `captura-ferretero-sala.png`,
-    `captura-ferretero-puesto.png` y `captura-ferretero-compra.png`.
+  - `--captura --edificio centro` prueba la barricada entera (lo escribe en la terminal) y saca
+    `captura-ferretero-barricada.png` y `captura-ferretero-empujan.png`.
 
 ## Objetos
 
@@ -440,9 +433,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   ropa** (solo los que aún no se tienen) y la **modista** al caer suelta siempre uno que falte. Al cogerlo se
   guarda para siempre (como las recetas): no va a la mochila ni se pierde si Johnny cae. Icono de 16×16 con código.
 - **Dónde se cambian:** en una **taquilla** nueva de la sala de mantenimiento (dibujada con código como el baúl, en
-  la pared de arriba a la derecha del baúl, donde hay hueco antes de los vecinos), con una ventanita como la del
-  puesto del ferretero: el conserje de siempre y los cuatro, los que faltan con «?» y «lo sueltan en la tienda de
-  ropa». Al elegir uno, Johnny cambia en el acto y se queda así para las siguientes partidas.
+  la pared de arriba a la derecha del baúl, donde hay hueco antes de los vecinos), con una ventanita: el conserje de
+  siempre y los cuatro, los que faltan con «?» y «lo sueltan en la tienda de ropa». Al elegir uno, Johnny cambia en el acto y se queda así para las siguientes partidas.
 - **Guardado:** el traje puesto (`traje`) y los encontrados (`trajes`). Cuentan en Colecciones como objetos del
   centro comercial (de 23 a 27), con «Tienda de ropa» debajo.
 - **Por trozos**, cada uno con su visto bueno: 1) el shader, los cuatro trajes, el guardado, Johnny vestido, la
@@ -500,7 +492,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   dibujada con código (`tools/taquilla.py` → `assets/sprites/taquilla.png`, 28×40 píxeles), pegada a la pared de
   arriba, en la esquina de la derecha (`mapa.gd`, `TAQUILLA_X`), como mueble de arrimarse (`arrimable.gd`) con su letrero
   azul claro.
-- **La ventanita** (`scripts/ui/taquilla.gd`, hecha como la del puesto del ferretero): al arrimarse se para el juego
+- **La ventanita** (`scripts/ui/taquilla.gd`): al arrimarse se para el juego
   (`partida.abrir_taquilla`) y sale: a la izquierda Johnny de frente con su fregona, al triple, enseñando el traje
   por el que se pasa (en silueta y «???» si aún no se tiene); a la derecha la lista, el conserje de siempre y los
   cuatro trajes, con su icono, su nombre y su frase (los que faltan, apagados y con «Aún no lo tienes: lo sueltan
@@ -717,8 +709,8 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   la planta del superviviente y los eventos sorpresa salen iguales para todos; lo que pasa dentro ya depende de cada
   jugador. La regla sale de la fecha. Sin servidor: solo compites contigo.
 - **Las siete reglas** (números en constantes de `reto.gd`; cada una se mira en una línea del sitio donde se aplica):
-  - *Solo cuerpo a cuerpo*: la pistola empieza vacía, no caen cajas de munición ni molotovs ni granadas, el puesto
-    del ferretero no los vende y la ayuda «Pistola sin fin» no vale.
+  - *Solo cuerpo a cuerpo*: la pistola empieza vacía, no caen cajas de munición ni molotovs ni granadas y la
+    ayuda «Pistola sin fin» no vale.
   - *Todo a oscuras*: todos los sitios menos la sala de mantenimiento como en el apagón (la misma oscuridad de más y
     las lámparas apagadas: `eventos.gd`, `al_montar`); ese día el apagón no se sortea.
   - *Sin curas* (se llamó «Sin botiquines» hasta la parte 9): los armaritos de los baños salen vacíos, la farmacéutica
@@ -1027,7 +1019,7 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      grito y muerte), 40 generaciones. Ahora mide unos 70 px, como los minijefes; el detalle, en `docs/ZOMBIS.md`
      («La portera») y en `assets/pixellab.json` → `portera-72`.
 5. **Supervivientes nuevos** con sus eventos (decidido: ver «Supervivientes»). ✅ Lo común, ✅ el rescate de la
-   farmacéutica, ✅ el del técnico con su mejora, ✅ el del ferretero con su puesto y ✅ la mejora de la
+   farmacéutica, ✅ el del técnico con su mejora, ✅ el del ferretero (su puesto, quitado el 23 oct) y ✅ la mejora de la
    farmacéutica (cada partida, un botiquín en la mochila que se usa desde el inventario).
 6. **Reparto de objetos** y recetas que mezclan edificios (decidido: ver «Objetos»), en dos trozos:
    - ✅ **Trozo A: los objetos** (21 oct). Los nueve nuevos con sus iconos dibujados con código y el reparto por

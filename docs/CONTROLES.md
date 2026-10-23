@@ -94,15 +94,15 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   policía, el militar, el ferretero y el técnico rescatados, comprueba en la terminal que en la sala de
   mantenimiento no espera nadie y hay una puerta a la derecha (`captura-viviendas-puerta.png`); que por ella se llega
   al pasillo de las viviendas («Planta baja · Viviendas»), con seis placas, cerradas (y a oscuras) las puertas de la
-  médica y la farmacéutica y abiertas las demás, cada uno en su habitación, el mostrador en la del ferretero y las
-  cámaras en la del técnico (`captura-viviendas.png` y `captura-viviendas-derecha.png`, el pasillo); que andando hacia
+  médica y la farmacéutica y abiertas las demás, cada uno en su habitación (en medio, menos el técnico:
+  `captura-viviendas-ferretero.png`) y las cámaras en la del técnico (`captura-viviendas.png` y
+  `captura-viviendas-derecha.png`, el pasillo); que andando hacia
   una puerta cerrada no se pasa y hacia una abierta sí (`captura-viviendas-habitacion.png`); que al arrimarse al
   policía te acompaña y al militar también (y el policía vuelve a la suya); que por la puerta de la izquierda se
   vuelve a la sala, junto a su puerta de la derecha, con el militar; y que en la 1ª planta, con el ascensor
   arreglado, también se llega. Luego los seis a la vez (`captura-viviendas-seis.png`), el guiño de la cafetera (la
   cafetera en la habitación de la farmacéutica y no en la sala; desde el pasillo no dice nada, al entrar sí, si sales a
-  medias lo vuelve a contar entero y la segunda vez ya no: `captura-cafetera.png`), el puesto del ferretero
-  (`captura-ferretero-*.png`) y las cámaras del técnico
+  medias lo vuelve a contar entero y la segunda vez ya no: `captura-cafetera.png`) y las cámaras del técnico
   (`captura-tecnico-*.png`). Cada línea dice lo esperado. Deja el guardado como estaba.
 - `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
@@ -222,9 +222,6 @@ baúl, la mesa del ordenador y la taquilla); en el suelo, solo manchas.
   pantallas de las cámaras de seguridad: desde que está rescatado el minimapa enseña los zombis. Junto a la
   farmacéutica, la **cafetera** de Johnny: la primera vez que entras en su habitación (con ella rescatada), te
   cuenta que le ha encontrado el doble fondo. Las habitaciones, de momento, sin más muebles. Se llega también desde el ascensor (la sala tiene la misma puerta).
-- El **puesto del ferretero**, en su habitación: arrimarse a su mostrador por delante para comprar munición
-  ($2), molotovs ($3) y granadas ($4) con los dólares ahorrados. Con el ratón o el dedo; con flechas e Intro o
-  las teclas 1, 2 y 3; con el mando, la cruceta y A. Esc o B cierra. Para que te acompañe, rodear el mostrador.
 - La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 ## Móvil (táctil)

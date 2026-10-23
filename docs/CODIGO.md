@@ -161,10 +161,9 @@
   plantas, `Planta.semilla`, sale de la fecha y del edificio: `semilla_de()`; la partida pone también el dado de
   siempre con ella al empezar) y con una regla rara de `REGLAS`, la misma para los dos edificios (`regla_de()`).
   «Elige edificio» lo pone con `empezar()` (y `quitar()` para una partida normal). La partida pregunta a sus
-  funciones donde se aplica cada regla: `sin_municion()` (`partida.gd`, `johnny.gd`, `puesto.gd`), `oscuras()`
+  funciones donde se aplica cada regla: `sin_municion()` (`partida.gd` y `johnny.gd`), `oscuras()`
   (`eventos.gd`, `al_montar`, con lo del apagón), `sin_curas()` (`partida.gd`, `supervivientes.gd` y `objetos.gd`),
-  `se_vende()` (el puesto del ferretero), `velocidad()`, `vida()` (`aplicar_talentos`), `mas_zombis()` (`planta.gd` y
-  la horda) y `oido()` (`zombi.gd`). La marca de hoy de cada edificio, en el guardado (`retos`, `Guardado.RETO`):
+  `velocidad()`, `vida()` (`aplicar_talentos`), `mas_zombis()` (`planta.gd` y la horda) y `oido()` (`zombi.gd`). La marca de hoy de cada edificio, en el guardado (`retos`, `Guardado.RETO`):
   `ficha()` (de otro día, se empieza de cero), `apuntar()` (al acabar, en `terminar()` de `partida.gd`, que no toca el
   progreso del edificio) y `marca()` y `texto_tarjeta()` para los textos. La prueba: `--captura --reto si` (o
   `--reto <regla>`; `probar_reto()` en `pruebas/partida_prueba.gd`).
@@ -224,10 +223,9 @@
   8 direcciones y caído; la bala, la cura, el martillazo y la descarga llegan en su fotograma, `fogonazo`; la
   farmacéutica no tiene acción). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
-  su tienda en su planta: `Planta.tienda_fija`), sus gritos y su mejora. Ya rescatados viven en las viviendas
-  (`mapa/viviendas.gd`): al montarlas, `colocar_vecinos()` pone a cada uno en su habitación (`Viviendas.casa(id)`) y
-  `poner_puesto()` el mostrador del ferretero delante de él (`mostrador_en()`). La de la
-  farmacéutica: `botiquin_al_empezar()` (lo llama `partida.gd` al empezar) mete un botiquín en la mochila, que se
+  su tienda en su planta: `Planta.tienda_fija`), sus gritos y su mejora (el ferretero no tiene). Ya rescatados viven
+  en las viviendas (`mapa/viviendas.gd`): al montarlas, `colocar_vecinos()` pone a cada uno en su habitación
+  (`Viviendas.casa(id)`: en medio, menos el técnico, `Viviendas.SITIO`). La mejora de la farmacéutica: `botiquin_al_empezar()` (lo llama `partida.gd` al empezar) mete un botiquín en la mochila, que se
   usa desde el inventario (`partida.usar_objeto`). El guiño de la cafetera (`guino_cafetera`: la primera vez que
   Johnny entra en la habitación de la farmacéutica con ella rescatada, en su sitio o acompañándole; lo vigila
   `sala_cafe`, y `cafetera` en el guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que
@@ -240,7 +238,7 @@
 - `barricada.gd`: el rescate propio del ferretero (la puerta de su almacén con tablas; al limpiar la tienda se
   cierra la entrada y hay que defender la puerta mientras las quita, con zombis entrando por las habitaciones o la
   entrada). Lo que aporrean los zombis es un punto invisible delante de la puerta (`Diana`, en el grupo "presa").
-  La cuelga `supervivientes.gd`, que también pone su puesto en su habitación de las viviendas (`poner_puesto`).
+  La cuelga `supervivientes.gd`.
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
@@ -291,8 +289,7 @@
 - `ordenador.gd`: la pantalla de ConserjeOS (puntos, talentos, tienda de armas, logros, Dosier, Noticias y
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
   y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras
-  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `puesto.gd`: la ventanita
-  del puesto del ferretero (munición, molotovs y granadas por dólares ahorrados). `taquilla.gd`: la ventanita de la
+  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `taquilla.gd`: la ventanita de la
   taquilla de Johnny (parte 11; la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con el traje
   marcado (`marcar`) y la lista para ponerse uno (`elegir`: `Trajes.poner` y `johnny.vestir`).
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado, pantalla roja con poca vida y escarcha con frío.
@@ -334,9 +331,7 @@
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
   no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de Johnny, en la
   habitación de la farmacéutica de las viviendas, a su derecha: `CAFETERA_JUNTO` en `mapa.gd`; dibujada con código), `camaras.gd` (las pantallas de las cámaras de
-  seguridad, detrás del técnico, en su habitación de las viviendas), `mostrador.gd` (el del puesto del ferretero, en su
-  habitación, dibujado con código; al arrimarse por
-  delante abre `ui/puesto.gd`).
+  seguridad, detrás del técnico, en su habitación de las viviendas).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, con lo de más de la tienda de electrónica y del apagón; luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 

@@ -3,8 +3,7 @@
 # el traje (trajes.gd): a la izquierda, Johnny de frente con el traje marcado (en silueta si aún no se tiene), y
 # a la derecha la lista: el conserje de siempre y los cuatro trajes, los que faltan con «???». Se elige uno y
 # Johnny se lo pone en el acto, y se queda puesto (Trajes.poner). Va con el ratón o el dedo, con flechas e Intro
-# (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra. Hecha como la ventanita del puesto del ferretero
-# (puesto.gd)
+# (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
 extends CanvasLayer
 
 const COLOR := Color("#9fd3ff")   # el color de la taquilla (su letrero en la sala, y el título)
