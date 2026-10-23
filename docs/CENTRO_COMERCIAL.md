@@ -116,6 +116,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   partida, como ahora**: sale uno de los que aún no tienes, en una planta al azar (nunca la azotea); en los
   Apartamentos siguen saliendo el policía, la médica y el militar. Al rescatarlo se queda a vivir en la sala de
   mantenimiento para siempre y **la hace crecer** con algo suyo; como ahora, puede acompañarte (uno a la vez).
+  (Desde el 23 oct viven en **las viviendas**, detrás de la puerta de la derecha de la sala: ver abajo.)
 - **Cada uno con su propio rescate** (no la horda de siempre para todos), y al principio **dibujados con código**
   (`persona.gd`); desde el 22 oct, con su pixel art de PixelLab, como los de los Apartamentos (ver «Lo común»).
 - Números provisionales (los puso Claude; se ajustan al probar):
@@ -130,8 +131,9 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   Velaria a Johnny y por ahí le metían el VD-7. La arreglaba la camarera, que ya no está: **lo descubre la
   farmacéutica** (decidido con el dueño el 21 oct, en la parte 7).
   - La cafetera, dibujada con código (`scripts/mapa/cafetera.gd`): sobre una mesita, con su jarra, la taza de
-    Johnny y vapor, entre la farmacéutica y el técnico (`Mapa.CAFETERA_EN`). Está siempre en la sala.
-  - La primera vez que la farmacéutica, ya rescatada, está en la sala (en su sitio o acompañándote), al segundo y
+    Johnny y vapor; desde el 23 oct, a la derecha de la taquilla (`Mapa.CAFETERA_EN`). Está siempre en la sala.
+  - La primera vez que la farmacéutica, ya rescatada, está en la sala (desde el 23 oct vive en su habitación de las
+    viviendas: cuando te acompaña), al segundo y
     medio dice las tres frases de `Historia.CAFETERA` en su bocadillo, una detrás de otra
     (`Supervivientes.guino_cafetera`). Con la última se apunta en el guardado (`cafetera`) y no lo vuelve a decir;
     si Johnny se va antes de acabar, lo cuenta entero la próxima vez.
@@ -162,6 +164,18 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     pisaban los bocadillos).
   - Tecla **H** en el centro: cada vez, el siguiente de los tres (rehace la planta con su tienda).
     `--captura` saca además `captura-sala-seis.png` (los seis en la sala).
+- ✅ **Las viviendas** (23 oct; lo pidió el dueño): los seis salen de la sala de mantenimiento y cada uno vive en su
+  habitación. En la pared de la derecha de la sala hay una puerta nueva a un **pasillo largo con seis habitaciones**
+  (`scripts/mapa/viviendas.gd`): arriba las de los Apartamentos (policía, médica, militar) y abajo las del centro
+  comercial (ferretero, farmacéutica, técnico), cada una con su puerta en medio y una placa de latón con su nombre
+  (`scripts/mapa/placa.gd`). **Siempre las seis puertas**: las de quien aún no has rescatado, cerradas y a oscuras
+  (para ver lo que falta por salvar); las de los rescatados, abiertas, con él dentro y lo suyo (el mostrador del
+  ferretero y las pantallas del técnico). Arrimarse a uno sigue haciendo que te acompañe. La sala de mantenimiento se
+  queda con el ordenador, el banco, el baúl, la taquilla y la cafetera (los huecos de los vecinos, `SITIO_VECINOS` y
+  `SITIO_CENTRO`, ya no se guardan). Las habitaciones, **de momento vacías**: se decoran en otra tarea (sus muebles,
+  en `catalogo.gd`: «habitacion-<id>» y «pasillo-viviendas»). Lo que cambia sin que lo pidiera nadie: el guiño de la
+  cafetera, como la farmacéutica ya no vive en la sala, salta cuando entra en ella contigo (te acompaña). Prueba:
+  `--captura --viviendas` (fotos `captura-viviendas*.png`; la de los seis ahora es `captura-viviendas-seis.png`).
 - ✅ **El rescate propio de la farmacéutica** (21 oct; `scripts/escolta.gd`; números provisionales):
   - Grita desde la rebotica, cerrada, como antes; al limpiar la farmacia se abre y dice «¡Me han mordido la pierna!
     No puedo correr». Al arrimarte se une y empieza **la escolta** (no hay horda): llevarla hasta la puerta de las
@@ -214,7 +228,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
     tienda ya no da calambres nunca más** (lo decidió el dueño); la palanca sigue abajo y, si la subes, vuelve la
     luz. Se abre la puerta, cuenta para «Buen vecino» y él sigue en el equipo como los demás. Si su tienda no
     tuviera agua con corriente (no debería pasar), sale la horda de siempre.
-  - **Su mejora**: cuando ya vive en la sala, detrás de él hay una mesa con cuatro pantallas de las cámaras de
+  - **Su mejora**: cuando ya vive en la sala (desde el 23 oct, en su habitación), detrás de él hay una mesa con cuatro pantallas de las cámaras de
     seguridad (`scripts/mapa/camaras.gd`, dibujadas con código) y, **en los dos edificios** (lo decidió el dueño),
     el minimapa enseña los zombis: un puntito rojo por zombi en cada sala, también en las que no has visitado;
     donde está Johnny, cada puntito va donde está su zombi y se mueve con él.
@@ -240,7 +254,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   - Al acabar: «¡Barricada fuera! La entrada se ha abierto», se abre su puerta («¡Fuera tablas! Gracias, chaval.
     Vámonos de aquí»), cuenta para «Buen vecino» y se une al arrimarte, como siempre. Al salir con él ya no hay otra
     horda.
-  - **Su puesto**: cuando ya vive en la sala, atiende **detrás de un mostrador** dibujado con código (la franja
+  - **Su puesto**: cuando ya vive en la sala (desde el 23 oct, en su habitación), atiende **detrás de un mostrador** dibujado con código (la franja
     naranja de su chaleco, el letrero «Ferretería» y, encima, una caja de munición, un molotov y una granada). Al
     arrimarte por delante se para el juego y sale la ventanita del puesto, con tres tarjetas: **munición (un
     cargador) $2, molotov $3 y granada $4**, cada una con lo que llevas. Se paga con los **dólares ahorrados** (como

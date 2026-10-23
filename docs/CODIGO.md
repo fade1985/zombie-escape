@@ -217,7 +217,7 @@
   sala donde estás; apunta en memoria y solo escribe el guardado la primera vez. `retrato(id)` da el dibujo de
   frente recortado a lo dibujado (el `recorte` de cada ficha lo calcula `py tools/recortes_bestiario.py`; repetirlo si
   cambia una hoja). `todo_visto()` es la tecla F8. Los textos se retocan aquí, sin tocar los `id`.
-- `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
+- `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos en sus viviendas) y
   `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los que atacan van a por los
   zombis que ven aunque rompan la fila, `cazar`, y vuelven a su puesto cuando no queda ninguno a la vista; al acabar
   la presentación de un jefe esperan 1 s sin cazar ni atacar, `calma`; los seis se dibujan con su
@@ -225,20 +225,23 @@
   8 direcciones y caído; la bala, la cura, el martillazo y la descarga llegan en su fotograma, `fogonazo`; la
   farmacéutica no tiene acción). En `DATOS`, los seis:
   los tres de los Apartamentos y los tres del centro comercial, con su tienda y su habitación (`planta.gd` pone
-  su tienda en su planta: `Planta.tienda_fija`), sus gritos, su sitio en la sala (`casa`) y su mejora. La de la
+  su tienda en su planta: `Planta.tienda_fija`), sus gritos y su mejora. Ya rescatados viven en las viviendas
+  (`mapa/viviendas.gd`): al montarlas, `colocar_vecinos()` pone a cada uno en su habitación (`Viviendas.casa(id)`) y
+  `poner_puesto()` el mostrador del ferretero delante de él (`mostrador_en()`). La de la
   farmacéutica: `botiquin_al_empezar()` (lo llama `partida.gd` al empezar) mete un botiquín en la mochila, que se
-  usa desde el inventario (`partida.usar_objeto`). El guiño de la cafetera (`guino_cafetera`: la primera vez que la farmacéutica está en la sala; `cafetera` en el
+  usa desde el inventario (`partida.usar_objeto`). El guiño de la cafetera (`guino_cafetera`: la primera vez que la
+  farmacéutica está en la sala de mantenimiento, o sea, cuando te acompaña; `cafetera` en el
   guardado). Lo suyo al acompañarte: disparar, curar, martillazos, descarga que aturde y charcos a
   medias (`johnny.gd` pregunta a `Aliado.charcos_a_medias`).
 - `escolta.gd`: el rescate propio de la farmacéutica (llevarla herida hasta las escaleras, con zombis saliendo por
   las puertas del pasillo); la cuelga `supervivientes.gd` y `partida.gd` le pregunta antes de cruzar una puerta.
 - `averia.gd`: el rescate propio del técnico (bajar la palanca del cuadro y aguantar a oscuras, con zombis entrando
   por las habitaciones de la tienda, mientras arregla el cable del agua); igual que la escolta. Su prueba también
-  prueba su mejora (el minimapa con los zombis y las pantallas de la sala).
+  prueba su mejora (el minimapa con los zombis y las pantallas de su habitación).
 - `barricada.gd`: el rescate propio del ferretero (la puerta de su almacén con tablas; al limpiar la tienda se
   cierra la entrada y hay que defender la puerta mientras las quita, con zombis entrando por las habitaciones o la
   entrada). Lo que aporrean los zombis es un punto invisible delante de la puerta (`Diana`, en el grupo "presa").
-  La cuelga `supervivientes.gd`, que también pone su puesto en la sala (`poner_puesto`).
+  La cuelga `supervivientes.gd`, que también pone su puesto en su habitación de las viviendas (`poner_puesto`).
 - `sonido.gd` (autoload): efectos sintetizados como en `src/sfx.js` y la música (`Sonido.tocar("compra")`,
   `Sonido.musica("jefe")`).
 - `sala.gd`: la sala de pruebas (hornea la navegación, tandas mezcladas, F2-F7 y P, su `--captura`).
@@ -300,10 +303,16 @@
 - `apartamento.gd` (genera un apartamento como `apartment.js`; la habitación de un jefe, de los Apartamentos y del
   centro comercial, con la puerta de entrada siempre en el centro de la pared), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano; sus tipos, en `TIPOS`: la joyería, parte 10, no se sortea, sale una por
-  partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
-  exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
+  partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento, con su
+  puerta abajo y otra a la derecha, la de las viviendas, y la de
+  exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `viviendas.gd` (las
+  viviendas de los supervivientes rescatados, detrás de la puerta de la derecha de la sala de mantenimiento: un pasillo
+  largo con seis habitaciones, tres arriba para los de los Apartamentos y tres abajo para los del centro comercial,
+  hecho como un apartamento —su `apt`, con niebla por habitación—; siempre igual: `habitacion(id)` y `casa(id)` dicen
+  dónde está cada una y dónde espera cada uno; qué puertas se abren lo decide `mapa.gd` al montarlo), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
   tiene la suya: "jefe-modista"; la habitación de un minijefe de los Apartamentos: "jefe-gloton", "jefe-gymbro", "jefe-portera";
-  `planta.gd` la elige por el jefe de la planta, también cuando la portera sale por defecto),
+  `planta.gd` la elige por el jefe de la planta, también cuando la portera sale por defecto; las viviendas: "pasillo-viviendas" y
+  "habitacion-<id>", de momento vacías: cada sala con "tipo" busca "<uso>-<tipo>" en `Muebles.de_apartamento`),
   `muebles.gd` (dónde va cada uno; en las salas de venta, también filas en medio: `islas`; en el gimnasio, tres
   paredes con las máquinas siempre en el mismo orden y repartidas parejas de punta a punta: `fijos`), `mueble.gd`
   (monta uno).
@@ -313,16 +322,19 @@
   paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas: por uso, o por `"<uso>-<tipo>"` si ese
   tipo tiene el suyo, como el mármol de la joyería) y `PASILLOS` (el pasillo de cada
   edificio); en el centro comercial pone además los escaparates, los neones y los restos sueltos, y en la azotea
-  su hormigón, el murete con la ciudad detrás y el helipuerto pintado.
+  su hormigón, el murete con la ciudad detrás y el helipuerto pintado. En las viviendas (`poner_viviendas`), con el
+  guardado de ese momento: la placa de cada puerta (`placa.gd`), las de los que faltan por rescatar cerradas con una
+  hoja (`puerta_bano.gd`) y sin descubrir, las de los rescatados abiertas y ya descubiertas, y las cámaras del técnico.
   `cara_pared.gd`, `puerta.gd` (las de la pared de arriba, dibujos de PixelLab: `puerta-piso` en los Apartamentos,
   `puerta-tienda` de cristal en el centro comercial y `puerta-servicio` de acero en la sala de mantenimiento de los dos;
-  las de los otros muros, el ascensor y las escaleras, con código; también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente; de frente, el dibujo `puerta-bano`), `neon.gd` (el letrero de neón de una tienda).
+  las de los otros muros, el ascensor y las escaleras, con código; también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente, y la de las habitaciones cerradas de las viviendas; de frente, el dibujo `puerta-bano`), `placa.gd` (la placa de latón con el nombre de cada habitación de las viviendas), `neon.gd` (el letrero de neón de una tienda).
 - `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de los trajes: `TAQUILLA_X` en `mapa.gd`),
   `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
   no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de la sala de
-  mantenimiento, dibujada con código), `camaras.gd` (las pantallas de las cámaras de seguridad, detrás del técnico,
-  cuando ya vive en la sala), `mostrador.gd` (el del puesto del ferretero, dibujado con código; al arrimarse por
+  mantenimiento, a la derecha de la taquilla, dibujada con código), `camaras.gd` (las pantallas de las cámaras de
+  seguridad, detrás del técnico, en su habitación de las viviendas), `mostrador.gd` (el del puesto del ferretero, en su
+  habitación, dibujado con código; al arrimarse por
   delante abre `ui/puesto.gd`).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, con lo de más de la tienda de electrónica y del apagón; luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.

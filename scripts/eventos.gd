@@ -146,8 +146,8 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		empezar()
 	activo = empezado and sitio.tipo in ["pasillo", "apartamento"]   # (las tiendas también son "apartamento")
 	# A oscuras y con las luces apagadas: con el apagón o, con el reto del día "Todo a oscuras" (reto.gd), en
-	# todos los sitios menos la sala de mantenimiento
-	var oscuras: bool = (activo and evento == "apagon") or (Reto.oscuras() and sitio.tipo != "mantenimiento")
+	# todos los sitios menos la sala de mantenimiento y las viviendas de los rescatados
+	var oscuras: bool = (activo and evento == "apagon") or (Reto.oscuras() and sitio.tipo not in ["mantenimiento", "viviendas"])
 	Luz.evento = APAGON if oscuras else 0.0
 	if oscuras:
 		apagar_luces()
@@ -419,7 +419,7 @@ func piso(jefe: bool) -> int:
 	var mejor := -1
 	for i in range(1, partida.planta.sitios.size()):
 		var s: Dictionary = partida.planta.sitios[i]
-		if (s.tipo == "jefe") != jefe or not s.has("apt"):
+		if (s.tipo == "jefe") != jefe or not s.has("apt") or s.tipo == "viviendas":
 			continue
 		if mejor < 0 or s.zombis.size() > partida.planta.sitios[mejor].zombis.size():
 			mejor = i

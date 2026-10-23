@@ -3,7 +3,8 @@
 # Cada planta es un pasillo largo con cuatro puertas, dos a cada lado (A y B arriba, C y D abajo). Detrás de
 # cada una hay un "sitio" aparte: un apartamento o el apartamento de la jefa (cerrado con llave); en el centro
 # comercial, una tienda (tienda.gd) o la del jefe, cerrada con la tarjeta que lleva el guardia. En la planta
-# baja, la puerta A es la sala de mantenimiento, donde empieza la partida. En el pasillo hay además un
+# baja, la puerta A es la sala de mantenimiento, donde empieza la partida, y por la puerta de su derecha se va a
+# las viviendas de los supervivientes rescatados (viviendas.gd). En el pasillo hay además un
 # ascensor averiado, por la izquierda la puerta por la que se ha llegado y, a la derecha, las escaleras, que
 # no se abren hasta acabar con la jefa.
 #
@@ -20,9 +21,7 @@ const ESCAPARATE_MEDIO := 58      # la mitad del ancho del escaparate más ancho
 const PLANTAS := 5                # planta baja y cuatro más (en el centro comercial, la última es la azotea)
 const SALA_COLS := 30             # la sala de mantenimiento: lo que se ve en la pantalla base (960 × 640)
 const SALA_FILAS := 20
-const SITIO_TALLER := Rect2(MURO, MURO, 540 - MURO, 150)   # lo que se guarda para el banco, el ordenador, el baúl y la taquilla
-const SITIO_VECINOS := Rect2(540, MURO, 892 - 540, 170)    # y para los supervivientes rescatados (supervivientes.gd)
-const SITIO_CENTRO := Rect2(540, 250, 892 - 540, 170)      # y los del centro comercial, con el hueco de lo suyo
+const SITIO_TALLER := Rect2(MURO, MURO, 560 - MURO, 150)   # lo que se guarda para el banco, el ordenador, el baúl, la taquilla y la cafetera
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 139           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe)
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
@@ -66,12 +65,13 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # Genera la planta número "num". Devuelve:
 #   num, nombre      número (1 = baja) y nombre de la planta
 #   sitios           [pasillo, lo de detrás de A, B, C y D]. Cada sitio: {tipo ("pasillo", "apartamento",
-#                    "jefe", "mantenimiento" o "expo"), nombre, ancho, alto, apt (el apartamento, si lo es),
+#                    "jefe", "mantenimiento", "viviendas" o "expo"), nombre, ancho, alto, apt (el apartamento, si lo es),
 #                    dueno (el plano de las salas rectangulares), muebles (muebles.gd), surtido (qué variante
 #                    de cada mueble lleva), salidas, zombis, limpio, visitado}. El pasillo lleva además su estilo
 #                    (el del edificio: "pasillo" o "galeria", ver mapa.gd), sus apliques y, en el centro comercial,
 #                    los escaparates de las tiendas de arriba ({x, tienda})
-#   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay) y expo, el de la exposición
+#   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay), viviendas, el de las viviendas de los
+#                    rescatados (viviendas.gd), y expo, el de la exposición
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
 #                    el guardia la suelte al caer; con la Alerta 5, igual: la lleva un vecino, {"llave": true} en zombis)
 #   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
@@ -101,7 +101,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var tiendas: bool = ed.generador == "tienda"
 	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
 	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
-		"jefa_muerta": false, "mantenimiento": -1, "expo": -1, "edificio": edificio,
+		"jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "edificio": edificio,
 		"jefe": su_jefe if su_jefe != "" else ed.jefe, "el_jefe": mini.get("el", ed.el_jefe)}
 	var ancho := PASILLO_COLS * CASILLA
 	var alto := PASILLO_FILAS * CASILLA
@@ -297,6 +297,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var cuarto: Dictionary = cuartos[rng.randi() % cuartos.size()]
 	var en := sitio_libre(planta.sitios[de_cientifico], cuarto, Vector2.INF, [], 40.0)
 	planta.cientifico = {"sitio": de_cientifico, "pos": cuarto.centro if en == Vector2.INF else en, "cogida": false}
+	# Las viviendas de los rescatados, detrás de la puerta de la derecha de la sala de mantenimiento (la segunda de sus
+	# salidas)
+	if baja:
+		planta.viviendas = planta.sitios.size()
+		planta.sitios.append(Viviendas.generar(rng.randi(), planta.mantenimiento, 1))
+		planta.sitios[planta.mantenimiento].salidas[1].a = planta.viviendas
 	return planta
 
 
@@ -311,7 +317,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
 	var planta := {"num": num, "nombre": "Azotea", "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},
-		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "expo": -1, "edificio": edificio, "jefe": jefe,
+		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "edificio": edificio, "jefe": jefe,
 		"el_jefe": ed.el_final if jefe == ed.get("final", "") else ed.el_jefe, "superviviente": {}, "cientifico": {}}
 	var ancho := AZOTEA_COLS * CASILLA
 	var alto := AZOTEA_FILAS * CASILLA
@@ -361,10 +367,10 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 
 
 # La sala de mantenimiento, donde empieza la partida: una sala sencilla con su puerta abajo, unos pocos
-# muebles y manchas en el suelo. La mitad izquierda de la pared de arriba queda libre: ahí irán el banco de
-# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340) y la taquilla (parte 11), y
-# hasta los vecinos no se deja nada suelto: junto a la taquilla no sale ningún mueble de sobra. "vuelta" es su
-# puerta en el pasillo.
+# muebles y manchas en el suelo. La mitad izquierda de la pared de arriba queda libre: ahí van el banco de
+# trabajo, el ordenador y el baúl (fases 6 y 7; en el juego JS, en x = 135, 240 y 340), la taquilla (parte 11) y la
+# cafetera (mapa.gd). En la pared de la derecha, la puerta de las viviendas de los supervivientes rescatados
+# (viviendas.gd; adónde lleva lo pone generar). "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA
 	var alto := SALA_FILAS * CASILLA
@@ -372,10 +378,10 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		"dueno": Muebles.plano_rectangular(SALA_COLS, SALA_FILAS), "zombis": [], "limpio": true, "visitado": false,
 		"surtido": rng.randi(), "manchas": []}
 	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
-		"aviso": ""}]
+		"aviso": ""}, {"dir": "derecha", "en": alto / 2, "tipo": "puerta", "a": -1, "vuelta": 0, "cerrojo": "", "aviso": ""}]
 	sitio.muebles = Muebles.de_sala("mantenimiento", {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": sitio.dueno},
-		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0)], rng,
-		[SITIO_TALLER, SITIO_VECINOS, SITIO_CENTRO])
+		sitio.salidas, [Vector2(ancho / 2.0, alto - MURO - 40), Vector2(ancho / 2.0, alto / 2.0),
+		Vector2(ancho - MURO - 40, alto / 2.0)], rng, [SITIO_TALLER])
 	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), lejos de la pared de arriba
 	for i in rng.randi_range(6, 10):
 		sitio.manchas.append({"pos": Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60),

@@ -1,4 +1,4 @@
-# El mostrador del puesto del ferretero, en la sala de mantenimiento: su mejora, cuando ya está rescatado
+# El mostrador del puesto del ferretero, en su habitación de las viviendas: su mejora, cuando ya está rescatado
 # (supervivientes.gd: poner_puesto). Él atiende detrás. Dibujado con código, en píxeles de 2 unidades como los
 # sprites: un mostrador de tablas con la franja naranja de su chaleco y el letrero, y encima lo que vende (una caja
 # de munición, un molotov y una granada). Delante tiene una zona invisible: cuando Johnny se arrima, avisa con

@@ -337,4 +337,14 @@ const SALAS := {
 		"muebles": ["washer", "bookshelf", "desk", "wardrobe", "shoerack"],
 		"cuantos": [2, 3],
 	},
+	# Las viviendas de los supervivientes rescatados (viviendas.gd): el pasillo y la habitación de cada uno
+	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). De momento, vacías: se decoran en otra tarea
+	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-policia": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-medico": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-militar": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0]},
 }

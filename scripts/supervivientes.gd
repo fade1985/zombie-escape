@@ -1,5 +1,5 @@
 # El superviviente de la partida (src/superviviente.js del JS). En cada partida sale uno de los de su edificio que
-# aún no viven en la sala de mantenimiento, en una planta al azar (nunca la última): en los Apartamentos, uno de
+# aún no viven en las viviendas, en una planta al azar (nunca la última): en los Apartamentos, uno de
 # los tres de siempre, escondido en el baño de un apartamento; en el centro comercial, uno de sus tres, en la
 # trastienda de su tienda (el ferretero en el almacén de la ferretería...). Siempre con la puerta
 # cerrada y sin zombis dentro (lo guarda planta.gd, que pone su tienda en su planta: Planta.tienda_fija). Grita "¡Socorro!" y da golpes de
@@ -11,16 +11,18 @@
 # se aleja de él, van a por él; si lo tumban, la cerradura no avanza hasta que Johnny lo levanta (quedarse a su
 # lado). Va diciendo cómo lo lleva y, a mitad, suelta un molotov y una granada. Arriba, la barra y la cuenta atrás.
 #
-# Al ganar con él en el equipo se viene a vivir a la sala de mantenimiento (Guardado: rescatados) y ya no vuelve a
-# salir. Los rescatados esperan cada uno en su sitio ("casa"): los tres de siempre a la derecha del ordenador y los
-# del centro comercial en otra fila, debajo, cada uno delante del hueco de lo suyo (el puesto del ferretero, las
-# cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno). Al arrimarse a uno, te acompaña
-# (Guardado: acompanante) y empieza las partidas siguientes en el equipo. Solo uno a la vez.
+# Al ganar con él en el equipo se viene a vivir a las viviendas (Guardado: rescatados) y ya no vuelve a salir. Las
+# viviendas (mapa/viviendas.gd) son un pasillo detrás de la puerta de la derecha de la sala de mantenimiento, con una
+# habitación para cada uno: los rescatados esperan cada uno en la suya ("casa", Viviendas.casa), con lo suyo (el
+# puesto del ferretero, las cámaras del técnico...: "mejora", que llega con el rescate propio de cada uno), y las de
+# los que faltan siguen cerradas. Al arrimarse a uno, te acompaña (Guardado: acompanante) y empieza las partidas
+# siguientes en el equipo. Solo uno a la vez.
 # El ferretero, ya rescatado, atiende detrás de su mostrador (mapa/mostrador.gd): al arrimarse a él se compran
 # munición, molotovs y granadas con los dólares ahorrados (ui/puesto.gd). Sigue abierto aunque te acompañe.
 #
-# El guiño de la cafetera: la primera vez que la farmacéutica está en la sala, huele el café de la cafetera de
-# Johnny (mapa/cafetera.gd), le encuentra el doble fondo con cápsulas de VD-7 y se lo dice (Historia.CAFETERA).
+# El guiño de la cafetera: la primera vez que la farmacéutica está en la sala de mantenimiento (ahora que vive en su
+# habitación, al venir contigo), huele el café de la cafetera de Johnny (mapa/cafetera.gd), le encuentra el doble
+# fondo con cápsulas de VD-7 y se lo dice (Historia.CAFETERA).
 #
 # Los del centro comercial se esconden igual, pero cada uno tiene su propio rescate en vez de la horda de siempre
 # (docs/CENTRO_COMERCIAL.md, «Supervivientes»): la farmacéutica ("rescate": "escolta"), sin horda, hay que llevarla
@@ -34,38 +36,35 @@ extends Node
 
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 const MOSTRADOR := preload("res://scripts/mapa/mostrador.gd")
-const MOSTRADOR_EN := Vector2(600, 380)   # el pie del mostrador del ferretero (él, detrás: su "casa")
+const MOSTRADOR_DELANTE := Vector2(0, 42)   # el pie del mostrador del ferretero, delante de él (de su "casa")
 const PUESTO := preload("res://scripts/ui/puesto.gd")
 
-# Los que se pueden rescatar (SURVIVORS de src/config.js y los tres del centro comercial). "edificio": dónde sale;
-# "look": los colores de su dibujo (persona.gd); "arma": la que lleva en la mano; "casa": su sitio en la sala de
-# mantenimiento. Los del centro comercial llevan además "tienda" y "sala" (dónde se esconde), "gritos" (los suyos)
-# y "mejora" (lo que hará en la sala de mantenimiento cuando llegue su trozo). "rescate": si no es la horda de
-# siempre, cuál ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo que
-# dice al abrirse su puerta
+# Los que se pueden rescatar (SURVIVORS de src/config.js y los tres del centro comercial). "edificio": dónde sale (y
+# en qué fila de las viviendas vive: los de los Apartamentos arriba, los del centro comercial abajo); "look": los
+# colores de su dibujo (persona.gd); "arma": la que lleva en la mano. Los del centro comercial llevan además "tienda"
+# y "sala" (dónde se esconde), "gritos" (los suyos) y "mejora" (lo que hace ya rescatado). "rescate": si no es la
+# horda de siempre, cuál ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo
+# que dice al abrirse su puerta
 const DATOS := {
 	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
-		"casa": Vector2(600, 174),
 		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
 			"shoes": Color("#1d1b2c"), "hat": {"kind": "cap", "color": Color("#22336b")}},
 		"desc": "Dispara con su pistola cada 1,2 s",
 		"habilidad": {"tipo": "disparar", "cada": 1.2, "dano": 5, "rafaga": 1}},
 	"medico": {"id": "medico", "nombre": "Médica", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
-		"casa": Vector2(710, 174),
 		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
 			"shoes": Color("#3b3550"), "cross": true},
 		"desc": "Te cura 3 cada 8 s y 10 al limpiar cada piso",
 		"habilidad": {"tipo": "curar", "cada": 8.0, "cura": 3, "al_limpiar": 10}},
 	"militar": {"id": "militar", "nombre": "Militar", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
-		"casa": Vector2(820, 174),
 		"look": {"skin": Color("#c68642"), "hair": Color("#3b2a1a"), "shirt": Color("#6b8e23"), "pants": Color("#4b5320"),
 			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
 		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
 	# los del centro comercial (parte 5 del plan; tres por edificio: el dueño quitó a la camarera)
 	"ferretero": {"id": "ferretero", "nombre": "Ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
-		"casa": Vector2(600, 338), "tienda": "ferreteria", "sala": "almacen",   # (detrás de su mostrador: MOSTRADOR_EN)
-		"nombre_vecino": 58.0,   # en la sala, su nombre va debajo del mostrador (no encima del letrero)
+		"tienda": "ferreteria", "sala": "almacen",   # (en su habitación, detrás de su mostrador: mostrador_en)
+		"nombre_vecino": 58.0,   # en su habitación, su nombre va debajo del mostrador (no encima del letrero)
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
@@ -75,7 +74,7 @@ const DATOS := {
 		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0},   # (alcance: lo cerca que tiene que estar para pegar)
 		"mejora": "Monta su puesto: vende munición, molotovs y granadas por dólares"},
 	"farmaceutica": {"id": "farmaceutica", "nombre": "Farmacéutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
-		"casa": Vector2(710, 380), "tienda": "farmacia", "sala": "rebotica",
+		"tienda": "farmacia", "sala": "rebotica",
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#2b1d14"), "shirt": Color("#f4f6f8"), "pants": Color("#55606e"),
 			"shoes": Color("#3b3550"), "bata": Color("#8fd3e8"), "cross": true, "cross_color": Color("#2fbf5b"),
 			"peinado": "moño"},
@@ -85,7 +84,7 @@ const DATOS := {
 		"habilidad": {"tipo": "charcos", "cada": 1.0, "parte": 0.5},
 		"mejora": "Cada partida empiezas con un botiquín en la mochila"},
 	"tecnico": {"id": "tecnico", "nombre": "Técnico", "edificio": "centro", "color": Color("#4fe3ff"), "arma": "",
-		"casa": Vector2(820, 380), "tienda": "electronica", "sala": "almacen",
+		"tienda": "electronica", "sala": "almacen",
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],
@@ -137,9 +136,9 @@ var rescate := {}          # {def, planta, rescatado, amigo, sitio, horda_hecha}
 var equipo: Array = []     # los Aliado que siguen a Johnny
 var npc: Aliado = null     # el superviviente en su baño (mientras se está en su apartamento)
 var puerta: Node2D = null  # y la puerta del baño
-var vecinos: Array = []    # los rescatados de otras partidas, en la sala de mantenimiento
+var vecinos: Array = []    # los rescatados de otras partidas, cada uno en su habitación de las viviendas
 var barricada := Barricada.new()   # el rescate del ferretero
-var puesto := PUESTO.new()         # y la ventanita de su puesto en la sala de mantenimiento
+var puesto := PUESTO.new()         # y la ventanita de su puesto en su habitación
 var socorro_t := 1.0
 var sala_socorro := -1
 var grito_t := -9.0
@@ -171,7 +170,7 @@ func preparar(p: Node) -> void:
 
 
 # Al empezar la partida: quién sale y en qué planta (elegirSuperviviente), de los de este edificio. Los que ya
-# viven en la sala de mantenimiento no vuelven a salir; con todos rescatados no hay a quién salvar. Si es uno del
+# viven en las viviendas no vuelven a salir; con todos rescatados no hay a quién salvar. Si es uno del
 # centro comercial, su tienda tiene que salir en su planta (Planta.tienda_fija). Y el acompañante elegido
 # empieza ya en el equipo
 func elegir() -> void:
@@ -183,7 +182,7 @@ func elegir() -> void:
 	if s.acompanante in s.rescatados and DATOS.has(s.acompanante):
 		var a := crear(DATOS[s.acompanante], "equipo")
 		a.es_vecino = true
-		a.casa = DATOS[s.acompanante].casa
+		a.casa = Viviendas.casa(s.acompanante)
 		equipo.append(a)
 
 
@@ -223,7 +222,7 @@ func en_horda() -> bool:
 	return not horda.is_empty()
 
 
-# El superviviente rescatado en esta partida, si sigue en el equipo (al ganar, se viene a vivir a mantenimiento)
+# El superviviente rescatado en esta partida, si sigue en el equipo (al ganar, se viene a vivir a las viviendas)
 func rescatado_nuevo() -> Dictionary:
 	var a = rescate.get("amigo")
 	return a.def if a != null and a in equipo else {}
@@ -248,7 +247,8 @@ func recoger() -> void:
 	vecinos = []
 
 
-# Recién montado el sitio "idx": el equipo, al lado de Johnny; el superviviente en su baño; los vecinos
+# Recién montado el sitio "idx": el equipo, al lado de Johnny; el superviviente en su baño; en las viviendas, los
+# vecinos y el puesto del ferretero; y en la sala de mantenimiento, el guiño de la cafetera
 func al_montar(idx: int, sitio: Dictionary) -> void:
 	var mapa: Node2D = partida.mapa
 	Aliado.borrar_huellas()   # el rastro de Johnny era del mapa viejo: la fila se forma de nuevo desde la puerta
@@ -271,9 +271,10 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		npc.position = sup.pos
 		mapa.cosas.add_child(npc)
 		sala_socorro = -1
-	if sitio.tipo == "mantenimiento":
+	if sitio.tipo == "viviendas":
 		colocar_vecinos()
 		poner_puesto()
+	if sitio.tipo == "mantenimiento":
 		guino_cafetera()
 
 
@@ -551,10 +552,10 @@ func grupo(n: int, tipos: Array) -> void:
 		a.decir("¡Vienen por %s!" % POR[sala.uso])
 
 
-# ═════════════ Los vecinos de la sala de mantenimiento ═════════════
+# ═════════════ Los vecinos, en las viviendas ═════════════
 
-# Los rescatados en otras partidas esperan en la sala de mantenimiento. El que te acompaña ya va en el equipo
-# (su sitio se queda vacío)
+# Los rescatados en otras partidas esperan cada uno en su habitación de las viviendas (mapa/viviendas.gd; su puerta
+# ya la ha abierto mapa.gd). El que te acompaña ya va en el equipo (su habitación se queda vacía)
 func colocar_vecinos() -> void:
 	var s := Guardado.cargar()
 	for id: String in s.rescatados:
@@ -562,7 +563,7 @@ func colocar_vecinos() -> void:
 			continue
 		var v := crear(DATOS[id], "vecino")
 		v.es_vecino = true
-		v.casa = DATOS[id].casa
+		v.casa = Viviendas.casa(id)
 		v.position = v.casa
 		v.armado = true
 		partida.mapa.cosas.add_child(v)
@@ -581,7 +582,7 @@ func vecino_cerca() -> Aliado:
 	return mejor
 
 
-# Arrimarse a un vecino: se viene contigo (y el que te acompañaba vuelve a su sitio). Como el ordenador, hay que
+# Arrimarse a un vecino: se viene contigo (y el que te acompañaba vuelve a su habitación). Como el ordenador, hay que
 # apartarse un poco antes de que vuelva a contar
 func hablar_vecino(v: Aliado) -> void:
 	if v.modo != "vecino":
@@ -615,16 +616,21 @@ func llevar_vecino(v: Aliado) -> void:
 
 # ═════════════ El puesto del ferretero ═════════════
 
-# Con el ferretero rescatado, su mostrador en la sala de mantenimiento, delante de su sitio (él atiende detrás).
+# Con el ferretero rescatado, su mostrador en su habitación de las viviendas, delante de él (él atiende detrás).
 # Al arrimarse por delante se abre el puesto; para que te acompañe, hay que rodearlo y arrimarse a él
 func poner_puesto() -> void:
 	if "ferretero" not in Guardado.cargar().rescatados:
 		return
 	var mostrador := MOSTRADOR.new()
-	mostrador.position = MOSTRADOR_EN
+	mostrador.position = mostrador_en()
 	partida.mapa.cosas.add_child(mostrador)
 	partida.mapa.rehornear()   # que los del equipo lo rodeen
 	mostrador.usar.connect(abrir_puesto)
+
+
+# Dónde va el pie del mostrador: delante del ferretero, en su habitación
+static func mostrador_en() -> Vector2:
+	return Viviendas.casa("ferretero") + MOSTRADOR_DELANTE
 
 
 # Se para el juego y sale la ventanita del puesto (ui/puesto.gd); el ferretero, si está en su sitio, te atiende
@@ -654,8 +660,9 @@ func botiquin_al_empezar() -> bool:
 const CAFE_PAUSA := 1.5   # segundos en la sala antes de que la farmacéutica huela el café
 const CAFE_CADA := 3.6    # y entre frase y frase (el bocadillo dura 3,2)
 
-# La primera vez que la farmacéutica (ya rescatada) está en la sala de mantenimiento, en su sitio o acompañándote,
-# huele el café, encuentra el doble fondo con las cápsulas de VD-7 y se lo dice a Johnny, frase a frase
+# La primera vez que la farmacéutica (ya rescatada) está en la sala de mantenimiento (vive en su habitación de las
+# viviendas: cuando te acompaña), huele el café, encuentra el doble fondo con las cápsulas de VD-7 y se lo dice a
+# Johnny, frase a frase
 # (Historia.CAFETERA). Se apunta en el guardado con la última frase: si Johnny se va antes, lo vuelve a contar la
 # próxima vez. Desde entonces el café es solo café, y no lo repite nunca más
 func guino_cafetera() -> void:
@@ -779,7 +786,7 @@ func probar_aqui(fundir := true, quien := "") -> void:
 	await partida.montar(sup.sitio, 0, fundir)
 
 
-# Con --captura: el rescate, la horda (con la cerradura adelantada), levantarlo, y un vecino en mantenimiento
+# Con --captura: el rescate, la horda (con la cerradura adelantada), levantarlo, y un vecino en su habitación
 func probar() -> void:
 	partida.menus.visible = false   # por si ha salido el recuadro de una mutación (tapa las fotos)
 	await probar_aqui(false)
@@ -791,20 +798,18 @@ func probar() -> void:
 		await probar_horda()
 	for z in get_tree().get_nodes_in_group("zombis"):
 		z.queue_free()   # que no estorben al resto de la prueba
-	# un vecino rescatado en otra partida: en mantenimiento, arrimarse a él
+	# un vecino rescatado en otra partida: en su habitación de las viviendas, arrimarse a él
 	var otro: String = DATOS.keys().filter(func(id): return id != rescate.def.id)[0]
 	Guardado.cambiar(func(g): g.rescatados = [otro])
-	partida.nueva_planta(1)   # la sala de mantenimiento está en la planta baja
-	await partida.montar(partida.planta.mantenimiento, 0, false)
+	partida.nueva_planta(1)   # las viviendas están en la planta baja
+	await partida.montar(partida.planta.viviendas, 0, false)
 	await get_tree().create_timer(0.2, false).timeout
-	print("Vecinos en mantenimiento: %d" % vecinos.size())
+	print("Vecinos en las viviendas: %d" % vecinos.size())
 	if not vecinos.is_empty():
-		johnny.position = vecinos[0].position + Vector2(0, 120)
-		await get_tree().create_timer(0.2, false).timeout
-		johnny.position = vecinos[0].position + Vector2(0, 20)
-		await get_tree().create_timer(0.3, false).timeout
+		await arrimarse(vecinos[0])
 	print("Acompañante: '%s' | equipo %s" % [Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre)])
 	Captura.foto("captura-vecinos.png")
+	await probar_viviendas()
 	await probar_los_seis()
 	await probar_acompanantes()
 	await probar_cafetera()
@@ -854,8 +859,137 @@ func probar_horda() -> void:
 	print("Fin de la horda: %s | puerta %s" % [not en_horda(), "cerrada" if partida.cerrada else "abierta"])
 
 
-# Los seis rescatados a la vez en la sala de mantenimiento, cada uno en su sitio (sin acompañante, para que se
-# vean todos). Luego se deja el guardado y el equipo como estaban
+# Las viviendas (mapa/viviendas.gd), con cuatro rescatados (el policía, el militar, el ferretero y el técnico) y sin
+# acompañante. En la sala de mantenimiento ya no espera nadie y hay una puerta a la derecha (captura-viviendas-puerta.png);
+# por ella, al pasillo de las viviendas: seis puertas con su placa, cerradas las de la médica y la farmacéutica (que
+# no dejan pasar, y sus habitaciones siguen a oscuras) y abiertas las demás, cada uno en la suya, el mostrador del
+# ferretero y las cámaras del técnico. Fotos del pasillo (captura-viviendas.png, la mitad de la izquierda, y
+# captura-viviendas-derecha.png) y de una habitación por dentro (captura-viviendas-habitacion.png). Luego, arrimarse
+# al policía (te acompaña), al militar (el policía vuelve a la suya) y volver a la sala con él por la puerta de la
+# izquierda. Y en la 1ª planta, con el ascensor arreglado, también se llega desde la sala. Se deja el guardado y el
+# equipo como estaban
+func probar_viviendas() -> void:
+	var g := Guardado.cargar()
+	var antes := [g.rescatados.duplicate(), g.acompanante]
+	var equipo_antes := equipo
+	for a in equipo:
+		if a.get_parent():
+			a.get_parent().remove_child(a)
+	equipo = []
+	Guardado.cambiar(func(x):
+		x.rescatados = ["policia", "militar", "ferretero", "tecnico"]
+		x.acompanante = "")
+	partida.nueva_planta(1)
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	var sala: Dictionary = partida.planta.sitios[partida.aqui]
+	print("Mantenimiento: salidas %s · vecinos en la sala %d (esperado: [abajo, derecha], 0)" % [
+		sala.salidas.map(func(s): return s.dir), vecinos.size()])
+	johnny.position = partida.mapa.puertas[1].llegada() + Vector2(-60, 40)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-viviendas-puerta.png")
+	# se empuja la puerta de la derecha (como al andar hacia ella)
+	johnny.position = partida.mapa.puertas[1].position + Vector2(-16, 0)
+	await get_tree().create_timer(1.0, false).timeout   # (el fundido a negro, de ida y de vuelta)
+	var mapa: Node2D = partida.mapa
+	var casas: Dictionary = partida.planta.sitios[partida.aqui]
+	print("Por la puerta de la derecha: en «%s» · arriba pone «%s» · Johnny a %d de la puerta (esperado: viviendas, Planta baja · Viviendas, 0)" % [
+		casas.tipo, partida.lugar.text, roundi(johnny.position.distance_to(mapa.puertas[0].llegada()))])
+	var cerradas := []
+	var abiertas := []
+	for d in casas.apt.puertas:
+		(cerradas if d.cerrada else abiertas).append(DATOS[d.vecino].nombre)
+	var hojas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == PUERTA_BANO)
+	var placas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == mapa.PLACA)
+	print("Viviendas: placas %d · cerradas %s con su hoja %d · abiertas %s (esperado: 6, [Médica, Farmacéutica], 2, los otros cuatro)" % [
+		placas.size(), cerradas, hojas.size(), abiertas])
+	var oscuras: Array = casas.apt.salas.filter(func(s): return mapa.oculto(s.centro)).map(func(s): return s.nombre)
+	print("Viviendas: a oscuras %s (esperado: [Médica, Farmacéutica])" % [oscuras])
+	print("Viviendas: vecinos %s (esperado: cada uno en la suya)" % [vecinos.map(func(v):
+		return "%s en «%s»" % [v.def.nombre, mapa.nombre_zona(mapa.zona_en(v.position))])])
+	var camaras: Node2D = mapa.cosas.get_node_or_null("Camaras")
+	print("Viviendas: mostrador %s en «%s» · cámaras %s en «%s» (esperado: true, Ferretero, true, Técnico)" % [
+		mapa.cosas.has_node("Mostrador"), mapa.nombre_zona(mapa.zona_en(mostrador_en())), camaras != null,
+		mapa.nombre_zona(mapa.zona_en(camaras.position)) if camaras else "-"])
+	# las fotos del pasillo: la mitad de la izquierda y la de la derecha
+	johnny.position = Vector2(Viviendas.casa("policia").x + 120, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-viviendas.png")
+	johnny.position = Vector2(Viviendas.casa("militar").x - 120, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-viviendas-derecha.png")
+	# una puerta cerrada no deja pasar: Johnny anda hacia la de la médica un segundo y se queda en el pasillo
+	var de_ella: Dictionary = casas.apt.puertas.filter(func(d): return d.vecino == "medico")[0]
+	johnny.position = Vector2((de_ella.c + 1) * Planta.CASILLA, (Viviendas.PASILLO_F + 1) * Planta.CASILLA)
+	Input.action_press("arriba")
+	await get_tree().create_timer(1.0, false).timeout
+	Input.action_release("arriba")
+	print("Hacia la puerta cerrada de la médica: Johnny en «%s» (esperado: Viviendas)" % mapa.nombre_zona(mapa.zona_en(johnny.position)))
+	# y una abierta sí: hacia la del militar, hasta dentro
+	var del_militar: Dictionary = casas.apt.puertas.filter(func(d): return d.vecino == "militar")[0]
+	johnny.position = Vector2((del_militar.c + 1) * Planta.CASILLA, (Viviendas.PASILLO_F + 1) * Planta.CASILLA)
+	Input.action_press("arriba")
+	await get_tree().create_timer(0.6, false).timeout
+	Input.action_release("arriba")
+	print("Hacia la puerta abierta del militar: Johnny en «%s» (esperado: Militar)" % mapa.nombre_zona(mapa.zona_en(johnny.position)))
+	Captura.foto("captura-viviendas-habitacion.png")
+	# acompañar: el policía; luego el militar (el policía vuelve a su habitación)
+	var policia: Aliado = vecinos.filter(func(v): return v.def.id == "policia")[0]
+	await arrimarse(policia)
+	print("Acompaña: '%s' | equipo %s (esperado: policia, [Policía])" % [Guardado.cargar().acompanante,
+		equipo.map(func(x): return x.def.nombre)])
+	var militar: Aliado = vecinos.filter(func(v): return v.def.id == "militar")[0]
+	await arrimarse(militar)
+	print("Acompaña: '%s' | equipo %s | el policía, de vuelta en «%s» (esperado: militar, [Militar], Policía)" % [
+		Guardado.cargar().acompanante, equipo.map(func(x): return x.def.nombre),
+		mapa.nombre_zona(mapa.zona_en(policia.position))])
+	# de vuelta a la sala por la puerta de la izquierda, con el militar
+	johnny.position = mapa.puertas[0].position + Vector2(16, 0)
+	await get_tree().create_timer(1.0, false).timeout
+	print("De vuelta: en «%s», junto a la puerta de la derecha (a %d) · equipo %s · vecinos en la sala %d (esperado: mantenimiento, 0, [Militar], 0)" % [
+		partida.planta.sitios[partida.aqui].tipo, roundi(johnny.position.distance_to(partida.mapa.puertas[1].llegada())),
+		equipo.map(func(x): return x.def.nombre), vecinos.size()])
+	# en la 1ª planta, con el ascensor arreglado: la sala que se añade lleva también a las viviendas, y de vuelta
+	partida.nueva_planta(2)
+	partida.arreglar_ascensor()
+	var abajo: Dictionary = partida.planta.sitios[partida.planta.mantenimiento]
+	var suyas: Dictionary = partida.planta.sitios[partida.planta.viviendas]
+	print("1ª planta, ascensor arreglado: la sala lleva a %d, las viviendas %d vuelven a %d (esperado: %d, %d)" % [
+		abajo.salidas[1].a, partida.planta.viviendas, suyas.salidas[0].a, partida.planta.viviendas, partida.planta.mantenimiento])
+	await partida.montar(partida.planta.viviendas, 0, false)
+	var minimapa: Node = partida.get_node("Pantalla/Minimapa")
+	print("1ª planta, en las viviendas: arriba pone «%s» · el minimapa, abajo %s (esperado: Planta baja · Viviendas, true)" % [
+		partida.lugar.text, minimapa.abajo()])
+	for a in equipo:
+		a.queue_free()
+	equipo = []
+	Guardado.cambiar(func(x):
+		x.rescatados = antes[0]
+		x.acompanante = antes[1])
+	partida.nueva_planta(1)
+	await partida.montar(partida.planta.mantenimiento, 0, false)
+	equipo = equipo_antes
+	for a in equipo:
+		partida.mapa.cosas.add_child(a)
+		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
+
+
+# Johnny se arrima a un vecino desde el lado del pasillo (como al entrar por su puerta): primero se queda cerca y
+# luego llega hasta él
+func arrimarse(v: Aliado) -> void:
+	var hacia := Vector2(0, 1 if v.position.y < Viviendas.PASILLO_F * Planta.CASILLA else -1)
+	johnny.position = v.position + hacia * 120.0
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.2, false).timeout
+	johnny.position = v.position + hacia * 20.0
+	await get_tree().create_timer(0.3, false).timeout
+
+
+# Los seis rescatados a la vez en las viviendas, cada uno en su habitación (sin acompañante, para que se vean
+# todos): la foto, desde el medio del pasillo. Luego se deja el guardado y el equipo como estaban
 func probar_los_seis() -> void:
 	var g := Guardado.cargar()
 	var antes := [g.rescatados.duplicate(), g.acompanante]
@@ -866,12 +1000,14 @@ func probar_los_seis() -> void:
 	Guardado.cambiar(func(x):
 		x.rescatados = DATOS.keys()
 		x.acompanante = "")
-	await partida.montar(partida.planta.mantenimiento, 0, false)
-	johnny.position = Vector2(300, 470)
+	await partida.montar(partida.planta.viviendas, 0, false)
+	johnny.position = Vector2(Viviendas.COLS * Planta.CASILLA / 2.0, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
-	print("Los seis en mantenimiento: %s" % [vecinos.map(func(v): return "%s %s" % [v.def.nombre, v.position])])
-	Captura.foto("captura-sala-seis.png")
+	print("Los seis en las viviendas: %s | puertas cerradas %d (esperado: 0)" % [vecinos.map(func(v): return "%s en «%s»" % [
+		v.def.nombre, partida.mapa.nombre_zona(partida.mapa.zona_en(v.position))]),
+		partida.mapa.sitio.apt.puertas.filter(func(d): return d.cerrada).size()])
+	Captura.foto("captura-viviendas-seis.png")
 	Guardado.cambiar(func(x):
 		x.rescatados = antes[0]
 		x.acompanante = antes[1])
@@ -907,9 +1043,9 @@ func probar_acompanantes() -> void:
 	equipo = antes
 
 
-# El guiño de la cafetera: solo la farmacéutica en la sala, con la cafetera sin descubrir. La foto con su primera
-# frase (captura-cafetera.png); luego, lo que dice y si queda apuntado, y que la segunda vez ya no dice nada. Se
-# deja el guardado y el equipo como estaban
+# El guiño de la cafetera: solo la farmacéutica rescatada, con la cafetera sin descubrir. En su habitación no dice
+# nada; al bajar contigo a la sala (te acompaña), sí. La foto con su primera frase (captura-cafetera.png); luego, lo
+# que dice y si queda apuntado, y que la segunda vez ya no dice nada. Se deja el guardado y el equipo como estaban
 func probar_cafetera() -> void:
 	var g := Guardado.cargar()
 	var antes := [g.rescatados.duplicate(), g.acompanante, g.cafetera]
@@ -922,10 +1058,15 @@ func probar_cafetera() -> void:
 		x.rescatados = ["farmaceutica"]
 		x.acompanante = ""
 		x.cafetera = false)
-	await partida.montar(partida.planta.mantenimiento, 0, false)
+	await partida.montar(partida.planta.viviendas, 0, false)
 	var ella: Aliado = vecinos[0]
-	johnny.position = ella.position + Vector2(-30, 120)
+	await arrimarse(ella)   # se viene contigo
+	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
+	print("Cafetera, en su habitación: dice '%s' | te acompaña %s (esperado: '', true)" % [ella.dicho, ella in equipo])
+	await partida.montar(partida.planta.mantenimiento, 1, false)   # por la puerta de la derecha, con ella
+	johnny.position = partida.mapa.CAFETERA_EN + Vector2(40, 110)
 	johnny.get_node("Camara").reset_smoothing()
+	ella.position = johnny.position + Vector2(-50, 10)
 	await get_tree().create_timer(CAFE_PAUSA + 0.5, false).timeout
 	Captura.foto("captura-cafetera.png")
 	var dichas := [ella.dicho]
@@ -933,20 +1074,23 @@ func probar_cafetera() -> void:
 		await get_tree().create_timer(CAFE_CADA, false).timeout
 		dichas.append(ella.dicho)
 	print("Cafetera: %s dice %s | apuntada %s" % [ella.def.nombre, dichas, Guardado.cargar().cafetera])
+	ella.dicho = ""
 	await partida.montar(partida.planta.mantenimiento, 0, false)
 	await get_tree().create_timer(CAFE_PAUSA + CAFE_CADA * 2.0 + 0.5, false).timeout
-	print("Cafetera, la segunda vez: dice '%s'" % vecinos[0].dicho)
+	print("Cafetera, la segunda vez: dice '%s'" % ella.dicho)
 	Guardado.cambiar(func(x):
 		x.rescatados = antes[0]
 		x.acompanante = antes[1]
 		x.cafetera = antes[2])
+	for a in equipo:
+		a.queue_free()
 	equipo = equipo_antes
 	for a in equipo:
 		partida.mapa.cosas.add_child(a)
 		a.position = johnny.position + Vector2(randf_range(-20, 20), randf_range(-20, 20))
 
 
-# El puesto del ferretero: con él rescatado (y $9 ahorrados), su mostrador en la sala con él detrás
+# El puesto del ferretero: con él rescatado (y $9 ahorrados), su mostrador en su habitación con él detrás
 # (captura-ferretero-sala.png); arrimarse por delante abre el puesto (captura-ferretero-puesto.png); se compra una
 # cosa de cada y una más que ya no llega; y, rodeando el mostrador, se viene contigo. Luego se deja el guardado y
 # el equipo como estaban
@@ -965,12 +1109,13 @@ func probar_puesto() -> void:
 	partida.ahorrados = 9
 	partida.lanzables.cantidades.molotov = 0
 	partida.lanzables.cantidades.granada = 0
-	await partida.montar(partida.planta.mantenimiento, 0, false)
-	johnny.position = MOSTRADOR_EN + Vector2(-40, 120)
+	await partida.montar(partida.planta.viviendas, 0, false)
+	johnny.position = mostrador_en() + Vector2(-60, 70)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4, false).timeout
+	print("Puesto: el mostrador, en «%s» (esperado: Ferretero)" % partida.mapa.nombre_zona(partida.mapa.zona_en(mostrador_en())))
 	Captura.foto("captura-ferretero-sala.png")
-	johnny.position = MOSTRADOR_EN + Vector2(0, 34)   # delante del mostrador
+	johnny.position = mostrador_en() + Vector2(0, 34)   # delante del mostrador
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	print("Puesto: abierto %s | juego en pausa %s" % [puesto.abierta(), get_tree().paused])
 	if puesto.abierta():
@@ -986,9 +1131,9 @@ func probar_puesto() -> void:
 		Captura.foto("captura-ferretero-compra.png")
 		puesto.cerrar()
 	# por detrás del mostrador: se viene contigo
-	johnny.position = MOSTRADOR_EN + Vector2(0, 150)
+	johnny.position = mostrador_en() + Vector2(-140, 40)
 	await get_tree().create_timer(0.3, false).timeout
-	johnny.position = DATOS.ferretero.casa + Vector2(-34, -6)
+	johnny.position = Viviendas.casa("ferretero") + Vector2(-34, -6)
 	await get_tree().create_timer(0.3, false).timeout
 	print("Puesto: cerrado %s | acompañante '%s'" % [not puesto.abierta(), Guardado.cargar().acompanante])
 	for a in equipo:

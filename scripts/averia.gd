@@ -280,7 +280,7 @@ func dibujar(capa: Control) -> void:
 # la palanca (captura-tecnico-palanca.png) y que no deja salir; bajar la palanca y la horda a oscuras
 # (captura-tecnico-horda.png); subirla (se para); tumbarlo y levantarlo; acabar, y que el agua ya no da calambres
 # (captura-tecnico-fin.png). Luego su mejora: el minimapa con los zombis (captura-tecnico-minimapa.png) y las
-# pantallas en la sala de mantenimiento (captura-tecnico-sala.png). Se deja el equipo y el guardado como estaban
+# pantallas en su habitación de las viviendas (captura-tecnico-sala.png). Se deja el equipo y el guardado como estaban
 func probar() -> void:
 	var partida: Node = sup.partida
 	if partida.edificio != "centro":
@@ -379,7 +379,7 @@ func probar() -> void:
 
 
 # Su mejora: con el técnico rescatado, el minimapa enseña los zombis (en el pasillo, unos cuantos de prueba, y en
-# las tiendas sin visitar) y en la sala de mantenimiento están sus pantallas. Se deja el guardado como estaba
+# las tiendas sin visitar) y en su habitación de las viviendas están sus pantallas. Se deja el guardado como estaba
 func probar_mejora() -> void:
 	var partida: Node = sup.partida
 	var johnny: Node2D = sup.johnny
@@ -398,12 +398,15 @@ func probar_mejora() -> void:
 	print("Cámaras: zombis en el minimapa %s" % [minimapa.zombis_por_sala()])
 	Captura.foto("captura-tecnico-minimapa.png")
 	sup.escolta.matar_zombis()
-	partida.nueva_planta(1)   # la sala de mantenimiento está en la planta baja
-	await partida.montar(partida.planta.mantenimiento, 0, false)
-	johnny.position = Vector2(420, 470)   # lejos del técnico, que no diga «¿Te acompaño?» encima de las pantallas
+	partida.nueva_planta(1)   # las viviendas están en la planta baja
+	await partida.montar(partida.planta.viviendas, 0, false)
+	# en el pasillo, lejos del técnico, que no diga «¿Te acompaño?» encima de las pantallas
+	johnny.position = Vector2(Viviendas.casa("tecnico").x, (Viviendas.PASILLO_F + 2) * Planta.CASILLA)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4, false).timeout
-	print("Cámaras: pantallas en la sala %s" % [partida.mapa.cosas.has_node("Camaras")])
+	var camaras: Node2D = partida.mapa.cosas.get_node_or_null("Camaras")
+	print("Cámaras: pantallas en su habitación %s, en «%s» (esperado: true, Técnico)" % [camaras != null,
+		partida.mapa.nombre_zona(partida.mapa.zona_en(camaras.position)) if camaras else "-"])
 	Captura.foto("captura-tecnico-sala.png")
 	minimapa.camaras = "tecnico" in antes[0]
 	Guardado.cambiar(func(x):

@@ -1,5 +1,5 @@
-# Las pantallas de las cámaras de seguridad, en la sala de mantenimiento, detrás del técnico: su mejora. Sale cuando
-# ya vive en la sala (lo rescataste en el centro comercial) y, desde entonces, el minimapa enseña los zombis
+# Las pantallas de las cámaras de seguridad, en la habitación del técnico de las viviendas (viviendas.gd), detrás de
+# él: su mejora. Sale cuando ya está rescatado (en el centro comercial) y, desde entonces, el minimapa enseña los zombis
 # (minimapa.gd). Dibujadas con código, en píxeles de 2 unidades como los sprites: una mesa metálica con cuatro
 # monitores viejos, cada uno con la imagen verdosa de una cámara (rayas, figuras que pasan y algún chispazo de
 # nieve) y, en el primero, el piloto rojo de grabar. El origen es el pie de la mesa (para ordenarse con los

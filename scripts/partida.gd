@@ -6,7 +6,8 @@
 #   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente y Johnny arregla
 #     el ascensor, que solo baja a la sala de mantenimiento y vuelve a esa planta (arreglar_ascensor).
 #   - Después de la última planta, el edificio está limpio: cartel de victoria.
-# La partida empieza en la sala de mantenimiento de la planta baja. Abajo, en la franja del muro, va el HUD (hud.gd)
+# La partida empieza en la sala de mantenimiento de la planta baja (por su puerta de la derecha se va a las viviendas
+# de los supervivientes rescatados, mapa/viviendas.gd). Abajo, en la franja del muro, va el HUD (hud.gd)
 # y arriba a la derecha, el minimapa. Esc o Start abren la pausa (menus.gd).
 #
 # Dinero y guardado (como game.js y game-combate.js del JS): los zombis sueltan billetes a veces (la portera,
@@ -107,6 +108,7 @@ var ed: Dictionary = Edificios.datos(edificio)
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
 var orden_jefes: Array = []   # el minijefe de cada planta, sorteado al empezar (edificios.gd)
 var sala_mantenimiento := {}  # la sala de mantenimiento de la planta baja, para bajar a ella en el ascensor
+var sala_viviendas := {}      # y las viviendas de los rescatados, detrás de su puerta de la derecha (viviendas.gd)
 var captura := false       # si es la partida de prueba (la pone pruebas/partida_prueba.gd)
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
@@ -271,6 +273,8 @@ func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num, edificio, jefe_de(num))
 	if planta.mantenimiento >= 0:
 		sala_mantenimiento = planta.sitios[planta.mantenimiento]
+	if planta.viviendas >= 0:
+		sala_viviendas = planta.sitios[planta.viviendas]
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
 	eventos.nueva_planta()
@@ -469,8 +473,8 @@ func actualizar_puertas() -> void:
 
 func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
-	# (la sala de mantenimiento siempre está en la planta baja, aunque se haya bajado en el ascensor)
-	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo == "mantenimiento" else planta.nombre
+	# (la sala de mantenimiento y las viviendas siempre están en la planta baja, aunque se haya bajado en el ascensor)
+	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else planta.nombre
 	var texto: String = de_planta if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [de_planta, sitio.nombre]
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
@@ -535,8 +539,9 @@ func cruzar(i: int) -> void:
 
 
 # El ascensor (M5): al caer el jefe de la planta, Johnny lo arregla. Solo baja a la sala de mantenimiento de la
-# planta baja (la misma del principio, que se añade a esta planta como un sitio más) y vuelve aquí, nunca a otra
-# planta. En la planta baja no hace falta (la sala está ahí mismo) y la azotea no tiene
+# planta baja (la misma del principio, que se añade a esta planta como un sitio más, y con ella las viviendas de su
+# puerta de la derecha) y vuelve aquí, nunca a otra planta. En la planta baja no hace falta (la sala está ahí mismo)
+# y la azotea no tiene
 func arreglar_ascensor() -> void:
 	var i := puerta_de_tipo("ascensor")
 	var ascensor: Dictionary = planta.sitios[0].salidas[i]
@@ -545,9 +550,18 @@ func arreglar_ascensor() -> void:
 	planta.mantenimiento = planta.sitios.size()
 	# la sala, con su puerta cambiada: lleva al ascensor de esta planta (lo demás, lo de siempre)
 	var sala: Dictionary = sala_mantenimiento.duplicate()
-	sala.salidas = [sala.salidas[0].duplicate()]
+	sala.salidas = sala.salidas.map(func(s): return s.duplicate())
 	sala.salidas[0].merge({"tipo": "ascensor", "vuelta": i}, true)
 	planta.sitios.append(sala)
+	# y las viviendas, con su puerta a esta sala
+	if sala_viviendas.is_empty():
+		return
+	planta.viviendas = planta.sitios.size()
+	var casas: Dictionary = sala_viviendas.duplicate()
+	casas.salidas = [casas.salidas[0].duplicate()]
+	casas.salidas[0].a = planta.mantenimiento
+	planta.sitios.append(casas)
+	sala.salidas[1].a = planta.viviendas
 	ascensor.merge({"a": planta.mantenimiento, "vuelta": 0, "cerrojo": "", "aviso": ""}, true)
 	planta.ascensor_nuevo = true   # (el aviso de Johnny, al salir al pasillo: ver cruzar)
 
@@ -1015,7 +1029,7 @@ func terminar(gano: bool, abandona := false) -> void:
 	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var s := Guardado.cambiar(func(g):
-		# el superviviente rescatado en esta partida se viene a vivir a la sala de mantenimiento
+		# el superviviente rescatado en esta partida se viene a vivir a las viviendas (su puerta ya estará abierta)
 		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
 			g.rescatados.append(nuevo.id)
 		g.muertos += muertos
@@ -1052,7 +1066,7 @@ func terminar(gano: bool, abandona := false) -> void:
 	var apartamentos := 0
 	var visitados := 0
 	for sitio in planta.sitios:
-		if sitio.has("apt"):
+		if sitio.has("apt") and sitio.tipo != "viviendas":
 			apartamentos += 1
 			if sitio.get("visitado", false):
 				visitados += 1
@@ -1066,7 +1080,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"mejor": mejor[0],
 		"marca": Reto.marca(Reto.ficha(s, edificio), true) if Reto.activo else "",
 		"sub": ("Has limpiado %s de arriba abajo%s" % [ed.el_nombre, "" if nuevo.is_empty()
-			else ". %s se viene a vivir a la sala de mantenimiento" % nuevo.nombre]) if gano
+			else ". %s se viene a vivir a su habitación, junto a la sala de mantenimiento" % nuevo.nombre]) if gano
 			else ("Caíste en la %s de %s" % [planta.nombre.to_lower(), ed.el_nombre]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,

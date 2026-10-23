@@ -25,7 +25,7 @@ const NUEVO := {
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"clavos": 2, ...} (fase 7b)
 	"baul_armas": [],     # armas creadas en el banco de trabajo, esperando en el baúl (recetas.gd)
 	"recetas": ["molotov"], # recetas del banco de trabajo aprendidas (las sueltan los jefes): no se pierden nunca
-	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en la sala de mantenimiento
+	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"traje": "",          # el traje que lleva Johnny (trajes.gd; "" = el conserje de siempre)
 	"trajes": [],         # los trajes encontrados (ids de Trajes.LISTA): se quedan para siempre

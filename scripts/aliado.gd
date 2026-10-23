@@ -11,7 +11,7 @@
 #     vida, los zombis van a por él y, si cae, se queda tumbado hasta que Johnny lo levanta.
 #     La farmacéutica, en su rescate (escolta.gd), va herida ("herida"): cojea detrás de Johnny, despacio, con su
 #     vida encima; los zombis van a por ella como en la horda y, si cae, igual.
-#   - "vecino": rescatado en otra partida, espera en la sala de mantenimiento a que Johnny se le arrime.
+#   - "vecino": rescatado en otra partida, espera en su habitación de las viviendas a que Johnny se le arrime.
 # Los seis (policía, médica y militar de los Apartamentos; ferretero, farmacéutica y técnico del centro comercial) se
 # dibujan con su hoja de PixelLab (HOJAS: assets/sprites/superviviente-<id>, hechas con tools/superviviente.py al
 # tamaño y estilo de Johnny). El dibujo con formas del JS (persona.gd) queda para quien no tenga hoja.
@@ -67,7 +67,7 @@ var modo := "equipo"
 var johnny: Node2D
 var partida: Node
 var idx := 0               # su puesto en la fila (0, el que va justo detrás de Johnny)
-var es_vecino := false     # viene de la sala de mantenimiento (y "casa" es su sitio allí)
+var es_vecino := false     # viene de las viviendas (y "casa" es su sitio en su habitación: Viviendas.casa)
 var casa := Vector2.ZERO
 var armado := true       # vecino: hay que apartarse un poco antes de que vuelva a contar el arrimarse
 var asustado := true       # encerrado: mientras quedan zombis en el piso
@@ -707,7 +707,7 @@ func dibujar_encima() -> void:
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))
 	if modo != "equipo":
-		# (en la sala, el ferretero lo lleva más abajo: está detrás de su mostrador)
+		# (en su habitación, el ferretero lo lleva más abajo: está detrás de su mostrador)
 		texto(letra, def.nombre, Vector2(0, def.get("nombre_vecino", 42.0) if modo == "vecino" else 42.0), 16, Color.WHITE)
 
 

@@ -1,11 +1,11 @@
-# Monta un sitio de la planta (el pasillo, un apartamento, la sala de mantenimiento o la exposición) a partir
-# de sus datos (planta.gd):
+# Monta un sitio de la planta (el pasillo, un apartamento, la sala de mantenimiento, las viviendas de los
+# rescatados o la exposición) a partir de sus datos (planta.gd):
 #   - el suelo de cada habitación y la tapa de los muros (vistos desde arriba), en un dibujo de fondo
 #   - las caras de los muros (de frente, 3 casillas de alto), ordenadas con los personajes
 #   - los choques de los muros, las puertas, los muebles (mueble.gd) y la llave
 #   - el mapa de por dónde se puede andar (navegación), para que los zombis rodeen tabiques y muebles
 #   - la niebla: en un apartamento, las habitaciones que aún no se han pisado se ven a oscuras, y lo que hay
-#     dentro ni se ve ni se le puede apuntar (como src/game-mapa.js del juego JS)
+#     dentro ni se ve ni se le puede apuntar (como src/game-mapa.js del juego JS); en las viviendas, las cerradas
 #
 # Las texturas son las mismas del juego JS (assets/sprites/): cada habitación elige su suelo y su pared con
 # una cuenta sobre su posición, así que dos habitaciones iguales de sitio salen iguales.
@@ -32,15 +32,18 @@ const BANCO_X := 135.0       # el banco de trabajo, a su izquierda, y el baúl, 
 const BAUL_X := 340.0
 const TAQUILLA_X := 460.0    # la taquilla de los trajes de Johnny (trajes.gd), a la derecha del baúl (parte 11)
 const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
-const CAFETERA_EN := Vector2(765, 392)   # la cafetera, entre la farmacéutica y el técnico (el pie de su mesita)
+const CAFETERA_EN := Vector2(522, 92)    # la cafetera, a la derecha de la taquilla, contra la pared (el pie de su mesita)
 const CAMARAS := preload("res://scripts/mapa/camaras.gd")
-const CAMARAS_EN := Vector2(820, 312)    # las pantallas de las cámaras, detrás del técnico (en su hueco)
+const CAMARAS_DETRAS := Vector2(0, -68)  # las pantallas de las cámaras, detrás del técnico, en su habitación (viviendas.gd)
+const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # (la de las habitaciones cerradas de las viviendas)
+const PLACA := preload("res://scripts/mapa/placa.gd")
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
-const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
+const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
+	"habitacion": "dormitorio"}   # (las habitaciones de las viviendas, viviendas.gd; su pasillo, el de los pisos)
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
 # techo-<x>. El aseo de las tiendas usa los del baño de los pisos (ESTILO_DE).
 const ESTILO_TIENDA := {
@@ -144,10 +147,14 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	else:
 		dueno = sitio.apt.dueno
 		var tienda: bool = sitio.get("tienda", "") != ""
-		# la de todo el piso, como en el JS; en el centro comercial, la suya
-		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-salon.png")
+		# la de todo el piso, como en el JS; en el centro comercial, la suya; en las viviendas, la del pasillo
+		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-pasillo.png"
+			if sitio.tipo == "viviendas" else "res://assets/sprites/tapa-salon.png")
 		for s in sitio.apt.salas:
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
+			if s.uso == "pasillo":   # el pasillo de las viviendas: como el de los pisos
+				estilos[s.id] = textura("pasillo", "")
+				continue
 			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
 			if tienda and (ESTILO_TIENDA.has(propio) or ESTILO_TIENDA.has(s.uso)):
 				var clave: String = propio if ESTILO_TIENDA.has(propio) else s.uso
@@ -491,10 +498,36 @@ func poner_muebles() -> void:
 		var cafetera := CAFETERA.new()   # la de Johnny: la farmacéutica le encuentra el doble fondo (supervivientes.gd)
 		cafetera.position = CAFETERA_EN
 		cosas.add_child(cafetera)
-		if "tecnico" in Guardado.cargar().rescatados:   # su mejora: el minimapa enseña los zombis (minimapa.gd)
-			var camaras := CAMARAS.new()
-			camaras.position = CAMARAS_EN
-			cosas.add_child(camaras)
+	if sitio.tipo == "viviendas":
+		poner_viviendas()
+
+
+# Las viviendas de los supervivientes (viviendas.gd): junto a cada puerta, la placa con su nombre. Las de quien aún no
+# está rescatado, cerradas (con su hoja, que no deja pasar ni ver lo de dentro: la niebla sigue); las de los rescatados,
+# abiertas y ya descubiertas. Y con el técnico rescatado, sus pantallas de las cámaras detrás de él (su mejora: el
+# minimapa enseña los zombis, minimapa.gd). Se mira el guardado cada vez que se monta
+func poner_viviendas() -> void:
+	var rescatados: Array = Guardado.cargar().rescatados
+	var descubiertas: Dictionary = sitio.get_or_add("vistas", {})
+	descubiertas[0] = true   # el pasillo
+	for d in sitio.apt.puertas:
+		var placa := PLACA.new()
+		placa.texto = Supervivientes.DATOS[d.vecino].nombre
+		placa.color = Supervivientes.DATOS[d.vecino].color
+		placa.position = Vector2((d.c + d.ancho / 2.0) * CASILLA, (d.f + 1) * CASILLA + 1)
+		cosas.add_child(placa)
+		d.cerrada = d.vecino not in rescatados
+		if d.cerrada:
+			var hoja := PUERTA_BANO.new()
+			hoja.montar(d)
+			cosas.add_child(hoja)
+			descubiertas.erase(d.a)
+		else:
+			descubiertas[d.a] = true
+	if "tecnico" in rescatados:
+		var camaras := CAMARAS.new()
+		camaras.position = Viviendas.casa("tecnico") + CAMARAS_DETRAS
+		cosas.add_child(camaras)
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.

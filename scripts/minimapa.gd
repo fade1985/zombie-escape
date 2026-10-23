@@ -4,7 +4,7 @@
 # marco que parpadea). El piso de la portera lleva un candado y, cuando ya has entrado en el apartamento donde
 # está su llave y aún no la has cogido, ese lleva la llave. Donde está encerrado el superviviente, un "!" rojo
 # (supervivientes.gd).
-# Con el técnico rescatado (vive en la sala de mantenimiento y ha arreglado las cámaras de seguridad), el plano
+# Con el técnico rescatado (vive en su habitación de las viviendas y ha arreglado las cámaras de seguridad), el plano
 # enseña los zombis: un puntito rojo por cada uno, también en las salas sin visitar. Donde está Johnny, cada
 # puntito va donde está su zombi y se mueve con él; en las demás salas, en filas.
 extends Control
@@ -40,7 +40,7 @@ const ICONOS := {
 var partida: Node           # de donde saca la planta y el sitio en el que está Johnny
 var marco := StyleBoxTexture.new()
 var tiempo := 0.0
-var camaras := false        # el técnico ya vive en la sala: se ven los zombis
+var camaras := false        # el técnico ya está rescatado: se ven los zombis
 
 
 func _ready() -> void:
@@ -114,14 +114,15 @@ func casillas() -> Array:
 				var y := PASILLO_Y - 6 - alto if arriba else PASILLO_Y + 16
 				var puerta := Rect2(x - 3, PASILLO_Y - 8 if arriba else PASILLO_Y + 8, 6, 8)
 				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
-					"aqui": aqui == s.a or (planta.sitios[aqui].tipo == "expo" and sitio.tipo == "mantenimiento"),
+					# (desde la exposición y las viviendas, que no salen en el plano, se marca la sala de mantenimiento)
+					"aqui": aqui == s.a or (planta.sitios[aqui].tipo in ["expo", "viviendas"] and sitio.tipo == "mantenimiento"),
 					"icono": icono, "sos": s.a == sos, "puerta": puerta, "sitio": s.a})
 	return lista
 
 
-# Si Johnny ha bajado en el ascensor a la sala de mantenimiento (está en la planta baja, no en la suya)
+# Si Johnny ha bajado en el ascensor a la sala de mantenimiento o a las viviendas (está en la planta baja, no en la suya)
 func abajo() -> bool:
-	return partida.planta.num > 1 and partida.planta.sitios[partida.aqui].tipo == "mantenimiento"
+	return partida.planta.num > 1 and partida.planta.sitios[partida.aqui].tipo in ["mantenimiento", "viviendas"]
 
 
 static func par(v: float) -> float:

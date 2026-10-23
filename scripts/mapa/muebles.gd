@@ -29,6 +29,8 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 	var en: float = (apt.entrada.c + 1) * CASILLA
 	var despejar := [delante_de(geo, apt.entrada.lado, en)]
 	var puntos := [Vector2(en, (fila + 0.5) * CASILLA)]
+	if apt.entrada.lado == "izquierda":   # (las viviendas, viviendas.gd: se entra por la izquierda y "c" cuenta filas)
+		puntos = [Vector2(MURO + 16.0, en)]
 	for d in apt.puertas:
 		var x: float = (d.c + d.ancho / 2.0) * CASILLA
 		var y: float = (d.f + d.fondo / 2.0) * CASILLA
@@ -43,8 +45,9 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 	var lista := []
 	for s in apt.salas:
 		var uso: String = s.uso
-		# en una tienda, primero los de su tipo (la sala de venta del supermercado, la cocina del restaurante...)
-		var propio := "%s-%s" % [uso, apt.get("tipo", "")]
+		# en una tienda, primero los de su tipo (la sala de venta del supermercado, la cocina del restaurante...); en las
+		# viviendas, cada habitación lleva el suyo (la de cada superviviente)
+		var propio := "%s-%s" % [uso, s.get("tipo", apt.get("tipo", ""))]
 		if Catalogo.SALAS.has(propio):
 			uso = propio
 		var datos: Dictionary = Catalogo.SALAS[uso]

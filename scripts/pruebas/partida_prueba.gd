@@ -12,6 +12,7 @@
 #   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
 #   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
+#   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
@@ -101,6 +102,9 @@ func empezar_prueba() -> void:
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
+	elif "--viviendas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_viviendas()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -169,8 +173,23 @@ func fotos_ayudas() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --viviendas": las viviendas de los supervivientes rescatados (mapa/viviendas.gd), detrás de la puerta
+# de la derecha de la sala de mantenimiento. Entrar, las puertas cerradas y abiertas, cada uno en su habitación,
+# acompañar y volver, y desde la 1ª planta por el ascensor (supervivientes.gd: probar_viviendas); luego los seis a la
+# vez, el guiño de la cafetera, el puesto del ferretero y las cámaras del técnico. Cada línea de la terminal dice lo
+# esperado. Deja el guardado como estaba y se cierra
+func probar_viviendas() -> void:
+	await get_tree().create_timer(0.3).timeout
+	await supervivientes.probar_viviendas()
+	await supervivientes.probar_los_seis()
+	await supervivientes.probar_cafetera()
+	await supervivientes.probar_puesto()
+	await supervivientes.averia.probar_mejora()
+	get_tree().quit()
+
+
 # Con "--captura --fotos-supervivientes": los tres supervivientes del edificio con su hoja de PixelLab (aliado.gd,
-# HOJAS; con "--edificio centro", los del centro comercial). En la sala de mantenimiento, de vecinos junto a Johnny
+# HOJAS; con "--edificio centro", los del centro comercial). En las viviendas, de vecinos, cada uno en su habitación
 # (captura-supervivientes-sala.png); luego se unen al equipo y, en un piso sin zombis, andan tras él
 # (captura-supervivientes-andar.png), hacen lo suyo (captura-supervivientes-accion.png: el fogonazo de la pistola y
 # del fusil y la jeringa, o el martillazo y la descarga; la farmacéutica no tiene gesto) y el último cae, con su vida
@@ -178,6 +197,14 @@ func fotos_ayudas() -> void:
 func fotos_supervivientes() -> void:
 	set_process(false)
 	var ids := ["ferretero", "farmaceutica", "tecnico"] if edificio == "centro" else ["policia", "medico", "militar"]
+	# en las viviendas, con sus puertas abiertas (sin los vecinos de siempre: se ponen los de la prueba)
+	var rescatados_antes: Array = Guardado.cargar().rescatados.duplicate()
+	Guardado.cambiar(func(g): g.rescatados = ids)
+	await montar(planta.viviendas, 0, false)
+	Guardado.cambiar(func(g): g.rescatados = rescatados_antes)
+	for v in supervivientes.vecinos:
+		v.queue_free()
+	supervivientes.vecinos = []
 	for id in ids:
 		if supervivientes.equipo.any(func(a): return a.def.id == id):
 			continue   # ya acompaña a Johnny (el guardado de la prueba trae al policía de acompañante)
@@ -186,12 +213,14 @@ func fotos_supervivientes() -> void:
 		datos.erase("rescate")
 		var v := supervivientes.crear(datos, "vecino")
 		v.es_vecino = true
-		v.casa = Supervivientes.DATOS[id].casa
+		v.casa = Viviendas.casa(id)
 		v.position = v.casa
 		mapa.cosas.add_child(v)
 		supervivientes.vecinos.append(v)
-	johnny.position = Vector2(710, 262)
-	johnny.direccion = "n"
+	# en el pasillo, delante de la habitación del medio de su fila
+	var medio := Viviendas.casa(ids[1])
+	johnny.position = Vector2(medio.x, (Viviendas.PASILLO_F + (1 if medio.y < Viviendas.PASILLO_F * 32 else 4)) * 32)
+	johnny.direccion = "n" if medio.y < Viviendas.PASILLO_F * 32 else "s"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.8).timeout
 	Captura.foto("captura-supervivientes-sala.png")
@@ -201,7 +230,7 @@ func fotos_supervivientes() -> void:
 	# a un apartamento (el de más habitaciones) sin zombis y con todo descubierto, como en fotos_luz
 	var i := 1
 	for j in range(1, planta.sitios.size()):
-		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
 				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
 			i = j
 	montar(i, 0, false)
@@ -265,7 +294,7 @@ func fotos_luz() -> void:
 	$Pantalla/HUD.hide()
 	var i := 1   # el apartamento con más habitaciones
 	for j in range(1, planta.sitios.size()):
-		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
 				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
 			i = j
 	montar(i, 0, false)
@@ -1276,7 +1305,7 @@ func probar_caza() -> void:
 	set_process(false)
 	var i := 1   # el apartamento con más habitaciones
 	for j in range(1, planta.sitios.size()):
-		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
 				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
 			i = j
 	await montar(i, 0, false)
@@ -1370,7 +1399,7 @@ func probar_gastro() -> void:
 	set_process(false)
 	var i := 1   # el apartamento con más habitaciones
 	for j in range(1, planta.sitios.size()):
-		if planta.sitios[j].has("apt") and (not planta.sitios[i].has("apt")
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
 				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
 			i = j
 	await montar(i, 0, false)
@@ -2067,8 +2096,9 @@ func probar_ascensor() -> void:
 	jefa_salio = true
 	await get_tree().create_timer(0.3).timeout
 	var salida: Dictionary = planta.sitios[0].salidas[asc]
+	# (la sala es el penúltimo sitio: detrás van sus viviendas)
 	print("Cae el jefe: escaleras abiertas %s · el ascensor «%s» lleva al sitio %d, «%s» (esperado: true, «», %d, mantenimiento)" % [
-		planta.jefa_muerta, salida.cerrojo, salida.a, planta.sitios[salida.a].tipo, planta.sitios.size() - 1])
+		planta.jefa_muerta, salida.cerrojo, salida.a, planta.sitios[salida.a].tipo, planta.sitios.size() - 2])
 	await cruzar(0)
 	print("Al salir al pasillo: Johnny dice «%s» (esperado: que ha arreglado el ascensor) · ascensor abierto %s (esperado: true)" % [
 		aviso.text, mapa.puertas[asc].abierta])

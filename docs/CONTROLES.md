@@ -90,6 +90,18 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   mantenimiento (`captura-ascensor-sala.png`), que ahí se guarda en el baúl lo de la mochila
   (`captura-ascensor-baul.png`), que la puerta de la sala devuelve a la 1ª planta delante del ascensor, que en la
   2ª planta vuelve a estar averiado y que la azotea no tiene. Cada línea dice lo esperado. Deja el baúl como estaba.
+- `--viviendas`: en vez de la prueba larga, la de las viviendas de los rescatados (`mapa/viviendas.gd`): con el
+  policía, el militar, el ferretero y el técnico rescatados, comprueba en la terminal que en la sala de
+  mantenimiento no espera nadie y hay una puerta a la derecha (`captura-viviendas-puerta.png`); que por ella se llega
+  al pasillo de las viviendas («Planta baja · Viviendas»), con seis placas, cerradas (y a oscuras) las puertas de la
+  médica y la farmacéutica y abiertas las demás, cada uno en su habitación, el mostrador en la del ferretero y las
+  cámaras en la del técnico (`captura-viviendas.png` y `captura-viviendas-derecha.png`, el pasillo); que andando hacia
+  una puerta cerrada no se pasa y hacia una abierta sí (`captura-viviendas-habitacion.png`); que al arrimarse al
+  policía te acompaña y al militar también (y el policía vuelve a la suya); que por la puerta de la izquierda se
+  vuelve a la sala, junto a su puerta de la derecha, con el militar; y que en la 1ª planta, con el ascensor
+  arreglado, también se llega. Luego los seis a la vez (`captura-viviendas-seis.png`), el guiño de la cafetera
+  (`captura-cafetera.png`), el puesto del ferretero (`captura-ferretero-*.png`) y las cámaras del técnico
+  (`captura-tecnico-*.png`). Cada línea dice lo esperado. Deja el guardado como estaba.
 - `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
   que su charco pegado al tabique no lo quema (pero sí a uno de este lado) y que, con otro zombi más lejos pero a la
@@ -164,7 +176,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   y adónde caería un lanzable, sin ayudas y con ellas (lo cuenta en la terminal), y saca el HUD (`captura-ayudas-hud.png`)
   y un molotov volando al zombi (`captura-ayudas-lanzar.png`). Las deja en No.
 - `--fotos-supervivientes`: los tres supervivientes del edificio con su hoja de PixelLab (con `--edificio centro`, el
-  ferretero, la farmacéutica y el técnico): de vecinos en la sala (`captura-supervivientes-sala.png`) y, en un piso,
+  ferretero, la farmacéutica y el técnico): de vecinos, cada uno en su habitación de las viviendas
+  (`captura-supervivientes-sala.png`) y, en un piso,
   andando tras Johnny (`-andar`), haciendo lo suyo (`-accion`: disparo, jeringa, martillazo, descarga) y el último
   caído (`-caido`).
 - La prueba larga saca también las de Colecciones: `captura-escritorio-nuevo.png` (el icono con el aviso de
@@ -194,10 +207,17 @@ la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azo
   las recetas en hojas de papel (las que aún no tienes, con un «?»). Se toca una y, si tienes lo que pide (en la
   mochila, el baúl o la mano), se crea el arma. El molotov viene aprendido; las demás las suelta cada jefe al morir
   (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se pierde nunca.
-- Los baños tienen un armarito con botiquín. Los supervivientes rescatados esperan a la derecha del ordenador (los
-  del centro comercial, en una segunda fila, debajo): arrimarse a uno para que te acompañe. Detrás del técnico,
-  cuando ya vive ahí, las pantallas de las cámaras de seguridad: desde entonces el minimapa enseña los zombis.
-- El **puesto del ferretero** (cuando ya vive ahí): arrimarse a su mostrador por delante para comprar munición
+- A la derecha de la taquilla, la **cafetera** de Johnny: la primera vez que la farmacéutica entra en la sala (cuando
+  te acompaña), le encuentra el doble fondo.
+- Los baños tienen un armarito con botiquín.
+- Por la **puerta de la derecha**, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un
+  pasillo largo con seis habitaciones, una para cada uno, con su placa junto a la puerta. Arriba, las de los
+  Apartamentos (policía, médica, militar); abajo, las del centro comercial (ferretero, farmacéutica, técnico). Las de
+  quien aún no has rescatado están cerradas y a oscuras; las de los rescatados, abiertas y con él dentro: arrimarse a
+  uno para que te acompañe (solo uno a la vez; el que te acompañaba vuelve a la suya). Detrás del técnico, las
+  pantallas de las cámaras de seguridad: desde que está rescatado el minimapa enseña los zombis. Las habitaciones,
+  de momento, sin muebles. Se llega también desde el ascensor (la sala tiene la misma puerta).
+- El **puesto del ferretero**, en su habitación: arrimarse a su mostrador por delante para comprar munición
   ($2), molotovs ($3) y granadas ($4) con los dólares ahorrados. Con el ratón o el dedo; con flechas e Intro o
   las teclas 1, 2 y 3; con el mando, la cruceta y A. Esc o B cierra. Para que te acompañe, rodear el mostrador.
 - La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.

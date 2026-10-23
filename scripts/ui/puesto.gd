@@ -1,4 +1,4 @@
-# La ventanita del puesto del ferretero, en la sala de mantenimiento (supervivientes.gd: abrir_puesto). Al
+# La ventanita del puesto del ferretero, en su habitación de las viviendas (supervivientes.gd: abrir_puesto). Al
 # arrimarse por delante a su mostrador (mapa/mostrador.gd) el juego se para y sale: munición, molotovs y granadas,
 # cada uno con su precio y lo que llevas. Se paga con los dólares ahorrados (como en el ordenador: los de la
 # partida en curso no cuentan hasta completar el edificio) y lo comprado es para esta partida. Si no te llega o ya
