@@ -116,9 +116,9 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   `captura-cubos-caido.png`, Johnny en el suelo y el cubo volcado). Cada línea dice lo esperado.
 - `--llamas` (con `--jefe bombero`): en vez de la prueba larga, la de la habitación del jefe de bomberos
   (`peligros/cerco.gd`) y su giro con el lanzallamas (`bombero.gd`): la monta sin él y cuenta en la terminal cómo se
-  llama la sala, que no tiene muebles, que el fuego se reparte como la porquería del Glotón (arde entre un 35 y un
-  55 % del suelo, el centro no, todo lo pegado a la pared sí menos delante de la puerta, y en el medio queda sitio
-  para el giro), el aviso de Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el borde. Luego
+  llama la sala, que no tiene muebles, cómo arde (entre un 35 y un 55 % del suelo, el centro no, todo lo pegado a la
+  pared sí menos delante de la puerta, en medio una elipse limpia perfecta, como un ring, que sale igual con otra
+  semilla, y en el medio queda sitio para el giro), el aviso de Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el borde. Luego
   mete al bombero en el medio y le hace girar con Johnny moviéndose como con el mando (`vuelta_de_giro`): el sentido
   sale a los dos lados, la lengua llega hasta la pared, corriendo delante de ella en su sentido Johnny no se quema, en
   contra sí, rodando a través de ella también y, enfadado, corriendo entre las dos lenguas a su paso, no

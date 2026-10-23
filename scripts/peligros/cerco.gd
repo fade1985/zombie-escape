@@ -1,7 +1,7 @@
-# El cerco de fuego de la habitación del jefe de bomberos (peligros.gd, CERCO): una franja que arde siempre, pegada a
-# las paredes y repartida como la porquería del Glotón (en medio, un óvalo limpio donde se pelea), menos delante de
-# la puerta de entrada. Se decide al generar la planta (Peligros.del_bombero: qué casillas arden) y aquí se dibuja y
-# quema. Así no se puede huir del giro con el lanzallamas (bombero.gd) arrimándose a la pared: la lengua llega hasta
+# El cerco de fuego de la habitación del jefe de bomberos (peligros.gd, CERCO): arde siempre todo lo pegado a las
+# paredes, y en medio queda una elipse limpia perfecta, siempre igual, donde se pelea, como un ring; delante de la
+# puerta de entrada no arde. Se decide al generar la planta (Peligros.del_bombero: qué casillas arden) y aquí se
+# dibuja y quema. Así no se puede huir del giro con el lanzallamas (bombero.gd) arrimándose a la pared: la lengua llega hasta
 # ella y el borde está ardiendo.
 #
 # Quema como el fuego de la cocina (fuego.gd): a Johnny le pone el estado "fuego" (sigue ardiendo un poco al salir;
@@ -10,7 +10,7 @@
 # pero la franja es mucho más grande, así que, como la porquería del Glotón (porqueria.gd), lo que no cambia se pinta
 # una vez (el nodo "Suelo") y aparte, repintándose y solo lo que se ve en pantalla, las celdas que tiemblan y las
 # llamas. Contra la pared no se deshilacha (el fuego llega hasta ella); hacia dentro de la sala, sí. Y alumbra:
-# unas luces de fuego repartidas por el borde del óvalo, sin sombras (la habitación es una sola), que tiemblan.
+# unas luces de fuego repartidas por el borde de la elipse, sin sombras (la habitación es una sola), que tiemblan.
 extends Node2D
 
 const CASILLA := 32
@@ -54,7 +54,7 @@ func montar(d: Dictionary, m: Node) -> void:
 	suelo.show_behind_parent = true   # lo fijo debajo; lo que tiembla y las llamas (el _draw de este nodo), encima
 	suelo.draw.connect(pintar_suelo)
 	add_child(suelo)
-	# las luces: CERCO.luces repartidas por el borde del óvalo limpio, como las de la porquería (Peligros.luces_del_ovalo)
+	# las luces: CERCO.luces repartidas por el borde de la elipse limpia, como las de la porquería (Peligros.luces_del_ovalo)
 	for c in Peligros.luces_del_ovalo(datos, Peligros.CERCO.luces):
 		luz_de_fuego(Peligros.centro(c))
 

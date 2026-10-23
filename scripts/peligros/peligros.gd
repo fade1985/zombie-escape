@@ -84,12 +84,15 @@ const TROPIEZOS := {
 	"caido": 2.0,        # segundos que tarda en levantarse
 	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
 }
-# El cerco de fuego de la habitación del jefe de bomberos: una franja que arde siempre (no se apaga) pegada a las
-# paredes, para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas. Se reparte igual que la
-# porquería del Glotón (con los números de PORQUERIA: parte, ondas, salientes y saliente_radio)
+# El cerco de fuego de la habitación del jefe de bomberos: arde siempre (no se apaga) todo lo pegado a las paredes,
+# para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas. Se reparte como la porquería del
+# Glotón (franja_y_ovalo), pero sin nada al azar: en medio, una elipse limpia perfecta, siempre igual, como un ring
 const CERCO := {
 	"dps": 12.0,         # a Johnny, como el fuego de la cocina (y sigue ardiendo 2 s al salir); a los zombis los prende
-	"luces": 10,         # luces de fuego repartidas por el borde del óvalo limpio (no hay más luz en la habitación)
+	"parte": 0.45,       # qué parte del suelo arde: todo lo de fuera de la elipse, hasta la pared (como la porquería)
+	"ondas": 0.0,        # el borde de la elipse, liso...
+	"salientes": 0,      # ...y sin llamas sueltas que se metan en ella
+	"luces": 10,         # luces de fuego repartidas por el borde de la elipse (no hay más luz en la habitación)
 }
 
 
@@ -141,12 +144,12 @@ static func del_gloton(sitio: Dictionary) -> Array:
 		"ovalo": reparto.ovalo}]   # (el óvalo, para repartir las luces del resplandor)
 
 
-# El reparto de la porquería del Glotón (y del cerco de fuego del jefe de bomberos, que va igual): una franja pegada a
-# las paredes de la habitación del jefe (la única sala de su piso), y en medio un óvalo limpio, la zona de pelea: así
-# no se le puede rodear bordeando la habitación y hay que luchar cerca de él. El óvalo tiene el tamaño justo para que
-# la franja cubra su parte del suelo ("parte"), con el borde ondulado ("ondas") y algún charco suelto ("salientes")
-# que se mete en él; lo de delante de la puerta de entrada queda limpio (ahí aparece Johnny). Devuelve {casillas
-# (casilla -> 1), ovalo {centro, rx, ry} (en casillas)}
+# El reparto de la porquería del Glotón (y del cerco de fuego del jefe de bomberos, que va igual pero sin ondas ni
+# charcos sueltos: CERCO): una franja pegada a las paredes de la habitación del jefe (la única sala de su piso), y en
+# medio un óvalo limpio, la zona de pelea: así no se le puede rodear bordeando la habitación y hay que luchar cerca
+# de él. El óvalo tiene el tamaño justo para que la franja cubra su parte del suelo ("parte"), con el borde ondulado
+# ("ondas") y algún charco suelto ("salientes") que se mete en él; lo de delante de la puerta de entrada queda limpio
+# (ahí aparece Johnny). Devuelve {casillas (casilla -> 1), ovalo {centro, rx, ry} (en casillas)}
 static func franja_y_ovalo(sitio: Dictionary, rng: RandomNumberGenerator, p: Dictionary) -> Dictionary:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
@@ -245,14 +248,12 @@ static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla:
 
 
 # El cerco de fuego del jefe de bomberos: su habitación (la única sala de su piso, sin muebles) arde por el borde,
-# repartido igual que la porquería del Glotón (franja_y_ovalo, con sus mismos números): la franja pegada a las paredes
-# y el óvalo limpio en medio, donde se pelea; delante de la puerta de entrada no arde (por ahí se entra y ahí aparece
-# Johnny). Con su propio dado, como de_tienda. Cada casilla que arde, en "casillas" (casilla -> 1), y el óvalo, para
-# repartir las luces del fuego
+# repartido como la porquería del Glotón (franja_y_ovalo) pero con los números de CERCO, sin ondas ni llamas sueltas:
+# en medio, una elipse limpia perfecta, donde se pelea, como un ring, y todo lo de fuera ardiendo hasta la pared;
+# delante de la puerta de entrada no arde (por ahí se entra y ahí aparece Johnny). Sale siempre igual (el dado no
+# decide nada). Cada casilla que arde, en "casillas" (casilla -> 1), y la elipse ("ovalo"), para repartir las luces
 static func del_bombero(sitio: Dictionary) -> Array:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = int(sitio.surtido) + 8443
-	var reparto := franja_y_ovalo(sitio, rng, PORQUERIA)
+	var reparto := franja_y_ovalo(sitio, RandomNumberGenerator.new(), CERCO)
 	return [{"tipo": "cerco", "sala": sitio.apt.salas[0].id, "casillas": reparto.casillas, "ovalo": reparto.ovalo,
 		"avisado": false}]
 

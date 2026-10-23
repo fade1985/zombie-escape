@@ -170,12 +170,12 @@ la lumbre.
     a unas 6 casillas del jefe se le sigue el paso (con poca vida, Johnny anda más lento y tiene que arrimarse más);
     corriendo en contra o quieto, te alcanza. Cada 15 s. Una explosión (granada) se lo corta (0,7 s tambaleándose).
   - *Su habitación, en llamas* (M8): «Apartamento en llamas», sin muebles (`jefe-bombero` del catálogo) y con todo el
-    borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`), **repartido igual que la porquería del Glotón**
-    (el dueño, 23 oct): una franja pegada a las paredes que cubre cerca de un 45 % de la habitación y en medio un
-    óvalo limpio donde se pelea, con el borde ondulado y alguna llama suelta que se mete en él; delante de la puerta
-    de entrada no arde. No se apaga: quema como el fuego de la cocina (12 por segundo y 2 s más al salir; rodando se
-    cruza, como los charcos) y prende a los zombis; al bombero no le hace nada. Da la luz de la sala (10 luces de
-    fuego repartidas por el borde del óvalo).
+    borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`), **una elipse fija, como un ring** (el dueño, 23
+    oct): en medio, una elipse limpia perfecta donde se pelea, siempre igual (sin nada al azar), y todo lo de fuera
+    ardiendo hasta la pared, cerca de un 45 % de la habitación (se reparte con lo mismo que la porquería del Glotón,
+    pero sin ondas ni llamas sueltas); delante de la puerta de entrada no arde. No se apaga: quema como el fuego de
+    la cocina (12 por segundo y 2 s más al salir; rodando se cruza, como los charcos) y prende a los zombis; al
+    bombero no le hace nada. Da la luz de la sala (10 luces de fuego repartidas por el borde de la elipse).
   - *Molotovs:* a entre 140 y 520, uno en curva (0,9 s) a donde estás, con su marca roja en el suelo
     (`proyectil.gd`, tipo `molotov_jefe`): 6 si te pilla al caer y un charco de fuego algo más pequeño que el de
     Johnny (`charco.gd`, 4 s): 12 por segundo dentro y 2 s más al salir. Cada 4,6 s.
@@ -193,9 +193,10 @@ la lumbre.
 - Tecla de prueba **9**; sale en la exposición (F9, alargada otras 5 casillas) y en el bestiario («El jefe de bomberos»,
   20 fichas). `--captura --jefe bombero` comprueba la inmunidad (lanzallamas, molotov y charco), un golpe normal, las
   bolas y los molotovs (lo escribe en la terminal) y saca `captura-jefe.png` con el giro. `--captura --jefe bombero
-  --llamas` prueba su habitación en llamas y el giro: que arde todo el borde menos delante de la puerta, que la lengua
-  llega a la pared y que corriendo en su sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco
-  entre las dos lenguas, sí (ver `docs/CONTROLES.md`).
+  --llamas` prueba su habitación en llamas y el giro: que arde todo el borde menos delante de la puerta, que en medio
+  queda la elipse limpia perfecta (igual con otra semilla), que la lengua llega a la pared y que corriendo en su
+  sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco entre las dos lenguas, sí (ver
+  `docs/CONTROLES.md`).
 - Pegas conocidas: el andar y el golpe (tambaleo) son sutiles; al lanzar de frente PixelLab pintó una bola de fuego
   pegada al cuerpo (queda como el fogonazo del lanzamiento).
 

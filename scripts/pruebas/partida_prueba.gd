@@ -706,10 +706,10 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 
 # Con "--captura --jefe bombero --llamas": la habitación del jefe de bomberos (catalogo.gd, "jefe-bombero";
 # peligros/cerco.gd) y su giro con el lanzallamas (bombero.gd). Monta su piso (la 1ª planta) con todo descubierto y sin
-# que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, que el fuego se reparte como la
-# porquería del Glotón (la parte del suelo que arde, el centro sin fuego, todo lo pegado a la pared ardiendo menos
-# delante de la puerta y sitio de sobra para el giro en el medio), el aviso de Johnny al entrar, las luces del fuego y
-# lo que quema quedarse 1 s en el fuego.
+# que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, cómo arde (la parte del suelo,
+# el centro sin fuego, todo lo pegado a la pared ardiendo menos delante de la puerta, en medio una elipse limpia
+# perfecta, como un ring, que sale igual con otra semilla, y sitio de sobra para el giro en el medio), el aviso de
+# Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el fuego.
 # Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
 # sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
 # quema; en contra, sí; rodando a través de ella, también; y enfadado, corriendo entre las dos lenguas a su paso, no.
@@ -739,31 +739,42 @@ func probar_llamas() -> void:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
 	var total: int = sala.ancho * sala.fondo
-	# repartido como la porquería del Glotón (probar_porqueria): la parte del suelo que arde, el centro sin fuego y,
-	# contadas aquí por su cuenta, las casillas pegadas a la pared (menos el hueco limpio de delante de la puerta, el
-	# de Peligros.franja_y_ovalo) y las de delante de la puerta (las de sus 2 casillas y una más a cada lado, en las 2
-	# filas de esa pared)
+	# la parte del suelo que arde, el centro sin fuego y, contadas aquí por su cuenta, las casillas pegadas a la pared
+	# (menos el hueco limpio de delante de la puerta, el de Peligros.franja_y_ovalo), las de delante de la puerta (las
+	# de sus 2 casillas y una más a cada lado, en las 2 filas de esa pared) y las que no cuadran con la elipse perfecta
+	# (fuera de ella arde todo, menos el hueco de la puerta, y dentro nada: sin ondas ni llamas sueltas)
 	var hueco: Rect2 = Muebles.delante_de({"cols": apt.cols, "filas": apt.filas}, apt.entrada.lado, (apt.entrada.c + 1) * Peligros.CASILLA)
 	var en: float = (apt.entrada.c + 1) * Peligros.CASILLA
+	var ov: Dictionary = cerco.ovalo
 	var pegadas := 0
 	var pegadas_arden := 0
 	var puerta := 0
 	var puerta_arde := 0
+	var descuadradas := 0
 	for f in range(sala.f0, sala.f0 + sala.fondo):
 		for c in range(sala.c0, sala.c0 + sala.ancho):
 			var k := Vector2i(c, f)
+			var fuera: bool = Vector2((c + 0.5 - ov.centro.x) / ov.rx, (f + 0.5 - ov.centro.y) / ov.ry).length() > 1.0
+			var en_hueco := hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA))
+			if cerco.casillas.has(k) != (fuera and not en_hueco):
+				descuadradas += 1
 			var lejos: int = mini(mini(c - sala.c0, sala.c0 + sala.ancho - 1 - c), mini(f - sala.f0, sala.f0 + sala.fondo - 1 - f))
 			var pared_puerta: int = sala.f0 + sala.fondo - 1 - f if apt.entrada.lado == "abajo" else f - sala.f0
 			if pared_puerta < 2 and absf((c + 0.5) * Peligros.CASILLA - en) < 64.0:
 				puerta += 1
 				puerta_arde += 1 if cerco.casillas.has(k) else 0
-			if lejos == 0 and not hueco.intersects(Rect2(Vector2(k) * Peligros.CASILLA, Vector2.ONE * Peligros.CASILLA)):
+			if lejos == 0 and not en_hueco:
 				pegadas += 1
 				pegadas_arden += 1 if cerco.casillas.has(k) else 0
 	var medio := Vector2i(sala.c0 + sala.ancho / 2, sala.f0 + sala.fondo / 2)
 	print("Llamas (jefe %s): la sala se llama «%s» (esperado: Apartamento en llamas) · muebles %d (esperado: 0) · arden %d de %d casillas (%d %%, esperado: entre 35 y 55, como la porquería) · el centro sin fuego %s (esperado: true) · pegadas a la pared arden %d de %d (esperado: todas) · delante de la puerta arden %d de %d (esperado: 0 de 8) · donde aparece Johnny, sin fuego %s (esperado: true)" % [
 		planta.jefe, sala.nombre, sitio.muebles.size(), cerco.casillas.size(), total, roundi(100.0 * cerco.casillas.size() / total),
 		not cerco.casillas.has(medio), pegadas_arden, pegadas, puerta_arde, puerta, not cerco.casillas.has(Peligros.casilla(johnny.position))])
+	# siempre igual: con otra semilla, las mismas casillas
+	var otro: Dictionary = sitio.duplicate()
+	otro.surtido = int(sitio.surtido) + 1
+	print("Llamas: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
+		ov.rx * 2.0, ov.ry * 2.0, descuadradas, Peligros.del_bombero(otro)[0].casillas == cerco.casillas])
 	await get_tree().create_timer(0.3).timeout
 	var nodo: Node = mapa.get_node("Cerco")
 	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
