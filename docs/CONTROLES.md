@@ -146,8 +146,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   (`captura-presentacion.png`); al acabar, que todo ha vuelto y Johnny dice lo que se había callado (lo de la
   habitación). Johnny lleva la Gastroenteritis,
   Tentacular, Locura y Flatulento, con un zombi quieto al lado: ninguna actúa mientras dura y cada una lo hace 1 s
-  después de acabar (`captura-presentacion-vomito.png`). Cada línea dice lo esperado. (En el juego, mientras dura la
-  presentación no responden la pausa, el inventario ni las teclas de prueba, y las mutaciones no actúan.)
+  después de acabar (`captura-presentacion-vomito.png`); el acompañante que ataca (el policía), con su arma lista,
+  tampoco ataca hasta 1 s después. Cada línea dice lo esperado. (En el juego, mientras dura la presentación no
+  responden la pausa, el inventario ni las teclas de prueba, y las mutaciones no actúan; al acabar, ellas y los
+  acompañantes que atacan esperan 1 s.)
 - `--fotos-luz`: en el apartamento con más habitaciones, todo descubierto y sin zombis, una foto por habitación
   con Johnny mirando un tabique que tiene otra habitación detrás (`captura-luz-<n>.png`): la linterna y las
   lámparas no tienen que alumbrar el suelo del otro lado.

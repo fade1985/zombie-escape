@@ -74,6 +74,8 @@ var asustado := true       # encerrado: mientras quedan zombis en el piso
 var tiempo := 0.0
 var direccion := "s"
 var hab_t := 0.0           # lo que falta para usar lo suyo
+var calma := 0.0           # recién acabada la presentación de un jefe, lo que le falta para poder atacar (la pone
+                           # ui/presentacion.gd: Mutaciones.TRAS_PRESENTACION, el mismo respiro que las mutaciones)
 var rafaga := 0            # balas que quedan de la ráfaga
 var rafaga_t := 0.0
 var cura_t := 0.0          # el destello de la curación
@@ -162,6 +164,7 @@ func _physics_process(delta: float) -> void:
 	golpe_t = maxf(0.0, golpe_t - delta)
 	cura_t = maxf(0.0, cura_t - delta)
 	rayo_t = maxf(0.0, rayo_t - delta)
+	calma = maxf(0.0, calma - delta)
 	dicho_t += delta
 	cuerpo.rotation = 0.0
 	cuerpo.position = Vector2.ZERO
@@ -183,6 +186,11 @@ func _physics_process(delta: float) -> void:
 				forzar()
 			elif herida:
 				cojear()
+			elif calma > 0.0 and ataca():
+				# recién presentado el jefe: en la fila, sin ir a por nadie ni atacar (su cuenta sigue corriendo: si la
+				# tiene lista, ataca en cuanto se le acabe la calma)
+				hab_t -= delta
+				seguir()
 			else:
 				if not cazar():
 					seguir()
@@ -359,13 +367,19 @@ func habilidad(delta: float) -> void:
 			rafaga_t = h.get("hueco", 0.0)
 
 
+# Si lo suyo es atacar (el policía y el militar disparan, el ferretero da martillazos, el técnico suelta descargas); la
+# médica y la farmacéutica, no
+func ataca() -> bool:
+	return def.habilidad.tipo in ["disparar", "golpear", "aturdir"]
+
+
 # La caza: el acompañante va a por los zombis que ve aunque rompa la fila. Si ve uno (despierto, sin niebla ni muro
 # en medio, a menos de VISTA) y no lo tiene a tiro, deja la fila y se le acerca hasta tenerlo; desde ahí sigue con los
 # que vea (quieto, si ya los tiene a tiro) hasta que no quede ninguno a la vista: entonces vuelve a su puesto. Si
 # Johnny se le aleja más de CORREA, lo deja y vuelve, y no sale otra vez hasta estar en la fila. Los que no atacan (la
 # médica, la farmacéutica) nunca la dejan. Devuelve si está de caza (si no, seguir() lleva el paso)
 func cazar() -> bool:
-	if not johnny.vivo or def.habilidad.tipo not in ["disparar", "golpear", "aturdir"]:
+	if not johnny.vivo or not ataca():
 		presa = null
 		cazando = false
 		return false

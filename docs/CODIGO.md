@@ -212,7 +212,8 @@
   cambia una hoja). `todo_visto()` es la tecla F8. Los textos se retocan aquí, sin tocar los `id`.
 - `supervivientes.gd` (el superviviente encerrado en su baño, la horda, los vecinos de mantenimiento) y
   `aliado.gd` (cada superviviente: sigue a Johnny, dispara o cura, fuerza la cerradura; los que atacan van a por los
-  zombis que ven aunque rompan la fila, `cazar`, y vuelven a su puesto cuando no queda ninguno a la vista; los seis se dibujan con su
+  zombis que ven aunque rompan la fila, `cazar`, y vuelven a su puesto cuando no queda ninguno a la vista; al acabar
+  la presentación de un jefe esperan 1 s sin cazar ni atacar, `calma`; los seis se dibujan con su
   hoja de PixelLab, `HOJAS` → `assets/sprites/superviviente-<id>`, al tamaño de Johnny: reposo, andar, lo suyo en las
   8 direcciones y caído; la bala, la cura, el martillazo y la descarga llegan en su fotograma, `fogonazo`; la
   farmacéutica no tiene acción). En `DATOS`, los seis:
@@ -269,7 +270,9 @@
   no se leía) y sale su nombre en grande (con la letra de los jefes, a 50); Johnny se calla mientras tanto (lo que
   estuviera diciendo, como el aviso de la habitación, y lo que fuera a decir: `partida.decir` lo guarda en
   `pendiente`) y lo dice al acabar;
-  a los 2,2 s vuelve la cámara y empieza la pelea. Los que entran a su manera (la Modista, escondida) solo reciben
+  a los 2,2 s vuelve la cámara y empieza la pelea; las mutaciones (`Mutaciones.TRAS_PRESENTACION`) y los
+  acompañantes que atacan (`aliado.gd`, `calma`: siguen en la fila sin cazar ni atacar) esperan 1 s más. Los que
+  entran a su manera (la Modista, escondida) solo reciben
   franjas, nombre y rugido. La monta `partida.gd` al sacar al jefe (en la prueba se salta, salvo con `--presentacion`);
   mientras dura no se puede pausar ni abrir el inventario. El jefe sale siempre en medio de su sala
   (`mapa.centro_libre`; en la azotea, en el helipuerto). El desplazamiento de la cámara va por `Temblor.desplazamiento`

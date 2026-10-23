@@ -9,8 +9,8 @@
 # un foco lo alumbra; al acabar echa a andar como siempre. Los jefes que entran a su manera (la Modista, escondida
 # entre los maniquíes: no empiezan en "andar") se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y
 # el rugido. partida.gd no deja pausar ni abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan
-# (mutaciones.gd). El desplazamiento de la cámara va por Temblor.desplazamiento (si se tocara el offset de la cámara,
-# el temblor lo borraría).
+# (mutaciones.gd); al acabar, ellas y los acompañantes (aliado.gd: calma) tardan 1 s más en atacar. El desplazamiento
+# de la cámara va por Temblor.desplazamiento (si se tocara el offset de la cámara, el temblor lo borraría).
 class_name Presentacion
 extends Control
 
@@ -176,12 +176,14 @@ func presentar(partida: Node, jefa: Node2D, texto_nombre: String) -> void:
 		barra.show()
 
 
-# Se acaba: todos vuelven a moverse, Johnny recupera su cuenta de invulnerabilidad (al menos un respiro) y dice lo que
-# se ha callado
+# Se acaba: todos vuelven a moverse (los acompañantes, sin atacar hasta pasado el mismo respiro que las mutaciones),
+# Johnny recupera su cuenta de invulnerabilidad (al menos un respiro) y dice lo que se ha callado
 func soltar(partida: Node, quietos: Array, johnny: Node2D, inv_antes: float) -> void:
 	for n in quietos:
 		if is_instance_valid(n):
 			n.set_physics_process(true)
+			if n is Aliado:
+				n.calma = Mutaciones.TRAS_PRESENTACION
 	if is_instance_valid(johnny):
 		johnny.invulnerable = maxf(inv_antes, 0.3)
 	activa = false

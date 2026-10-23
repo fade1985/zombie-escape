@@ -302,8 +302,9 @@ func fotos_luz() -> void:
 # callado), el jefe anda y la barra ha salido. Con la Modista (--edificio centro --jefe modista), que entra
 # escondida, ni zoom ni grito: solo franjas, nombre y rugido, y sigue escondida al acabar. Johnny lleva las mutaciones
 # que actúan solas (mutaciones.gd), listas y con un zombi quieto al lado: ninguna actúa mientras dura, y cada una 1 s
-# después de acabar (captura-presentacion-vomito.png, con el vómito en el aire). Cuenta todo en la terminal, con lo
-# esperado, y se cierra
+# después de acabar (captura-presentacion-vomito.png, con el vómito en el aire); el acompañante que ataca (el policía
+# del guardado de la prueba), igual: con lo suyo listo, no ataca hasta 1 s después (aliado.gd, calma). Cuenta todo en
+# la terminal, con lo esperado, y se cierra
 func probar_presentacion() -> void:
 	set_process(false)
 	presentar_en_prueba = true
@@ -322,10 +323,15 @@ func probar_presentacion() -> void:
 	var reloj := get_tree().create_timer(1000.0)
 	var ahora := func() -> float: return 1000.0 - reloj.time_left
 	var actua: Array = []   # [mutación, cuándo (s del juego), si la presentación seguía]
+	# y lo mismo con los acompañantes que atacan (al atacar, su cuenta vuelve a "cada", igual que las mutaciones)
+	var ataques: Array = []   # [cuándo (s del juego), si la presentación seguía]
 	get_tree().physics_frame.connect(func() -> void:
 		for id in ids:
 			if mutaciones.espera[id] == Mutaciones.MUT[id].cada:
-				actua.append([id, ahora.call(), presentacion.activa]))
+				actua.append([id, ahora.call(), presentacion.activa])
+		for a in get_tree().get_nodes_in_group("aliados"):
+			if a.modo == "equipo" and a.ataca() and a.hab_t == a.def.habilidad.cada:
+				ataques.append([ahora.call(), presentacion.activa]))
 	montar(idx, 0, false)   # (sin await: la presentación va dentro, y hay que mirarla a medias)
 	# Johnny, a 200 de donde saldrá el jefe (en medio de la sala): desde la puerta, el vómito (420) no le llegaría
 	johnny.position = Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0 + 200.0)
@@ -338,6 +344,10 @@ func probar_presentacion() -> void:
 	var vecino := meter_zombi("normal", johnny.position + Vector2(40, 0))
 	vecino.set_physics_process(false)
 	vecino.vida = 100000
+	# y los acompañantes que atacan, con lo suyo listo (como las mutaciones): atacan en cuanto se les acaba la calma
+	var acompanan: Array = get_tree().get_nodes_in_group("aliados").filter(func(a): return a.modo == "equipo" and a.ataca())
+	for a in acompanan:
+		a.hab_t = 0.0
 	# a 0,6 s, recién soltado el grito: ningún texto flotando en la sala (el jefe no dice ninguna frase escrita) y
 	# Johnny callado (lo de la habitación lo dice al acabar)
 	await get_tree().create_timer(0.6).timeout
@@ -363,15 +373,22 @@ func probar_presentacion() -> void:
 	print("Presentación, al acabar: zoom %.2f (esperado: 1) · cámara desplazada %d (esperado: 0) · Johnny se mueve %s (esperado: true) · el jefe en «%s» (esperado: no «grito») · barra a la vista %s (esperado: true) · franjas y nombre ocultos %s (esperado: true) · Johnny dice «%s» (esperado: lo de la habitación, si tiene peligro: en la del bombero, «¡La habitación está en llamas!…»; si no, nada)" % [
 		camara.zoom.x, roundi(camara.offset.length()), johnny.is_physics_processing(), jefa.estado, $Pantalla/Jefa.visible,
 		not presentacion.visible, aviso.text if aviso.modulate.a > 0.0 else ""])
-	# la primera vez de cada una después (se espera hasta 2,5 s del juego) y la foto, con el vómito ya en el aire
+	# la primera vez de cada una después, y el primer ataque de los acompañantes (se espera hasta 2,5 s del juego); y
+	# la foto, con el vómito ya en el aire
 	var primera := {}
-	while primera.size() < ids.size() and ahora.call() - acabo < 2.5:
+	var primer_ataque := ""
+	while (primera.size() < ids.size() or (not acompanan.is_empty() and primer_ataque == "")) and ahora.call() - acabo < 2.5:
 		await get_tree().physics_frame
 		for a in actua:
 			if a[1] >= acabo and not primera.has(a[0]):   # (las de antes de salir el jefe no cuentan)
 				primera[a[0]] = "%.2f" % (a[1] - acabo)
+		for a in ataques:
+			if a[0] >= acabo and primer_ataque == "":
+				primer_ataque = "%.2f" % (a[0] - acabo)
 	print("Mutaciones: veces que actúan durante la presentación %d (esperado: 0) · la primera de cada una, en s después de acabar: %s (esperado: las 4, a 1, con un fotograma de margen: entre 0,95 y 1,1)" % [
 		actua.filter(func(a): return a[2]).size(), primera])
+	print("Acompañantes que atacan %s: ataques durante la presentación %d (esperado: 0) · el primero, en s después de acabar: %s (esperado: a 1, como las mutaciones: entre 0,95 y 1,1; sin acompañantes, «»)" % [
+		acompanan.map(func(a): return a.def.id), ataques.filter(func(a): return a[1]).size(), primer_ataque])
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-presentacion-vomito.png")
 	get_tree().quit()
