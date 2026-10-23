@@ -2619,5 +2619,20 @@
     "9e920dd1-926c-4c04-b8af-e0c55ef1b2da"
    ]
   }
+ },
+ "banco-mantenimiento": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "El banco de trabajo de la sala de mantenimiento (arrimable.gd, donde Johnny se fabrica las armas), que era un dibujo de rectángulos copiado del juego JS (tools/dibujos_7b.py) y se veía de dibujos animados. Con create_image_pixflux y la receta de los muebles del centro comercial: la guía de py tools/banco_mantenimiento.py guia (40 píxeles del juego de ancho; de arriba abajo, el tablero de las herramientas, la tapa con el tornillo de banco, un martillo, una sierra y clavos, y el frente con dos cajones, las patas y una balda con la caja de herramientas) como init_image con fuerza 45, no_background false, single color black outline y high top-down, 4 semillas. Las cuatro salieron bien; el dueño eligió la 4 (la única sin azul encerrado debajo). Fondo quitado con py tools/guias_centro.py quita y sprite de 40×44 con py tools/banco_mantenimiento.py. Originales en assets/sources/mantenimiento/ (intentos/, con fondo).",
+  "texto": "wooden workbench seen in 3/4 top-down view, a pegboard with hanging tools (hammer, wrench, saw, screwdriver, pliers) on the wall behind it, a bench vise, a hammer, a saw and scattered nails on its top seen from above, two drawers and a bottom shelf with a red toolbox facing the viewer, worn, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+  "coste": "4 generaciones (quedan 4996 de 5000 hasta el 23 nov)",
+  "piezas": {
+   "banco-trabajo (intento 4, semilla 404)": "9eac5ee2-a95b-4ba7-af60-317a6a88dfd1",
+   "descartadas": {
+    "intento 1, semilla 101": "4cdf23af-9acb-4af4-9e71-2669966a724a",
+    "intento 2, semilla 202": "94a23a07-a761-4c66-b0e7-ab42200b517d",
+    "intento 3, semilla 303": "9b5b6fd8-0c79-4429-b213-7573043f9b50"
+   }
+  }
  }
 }

@@ -1,6 +1,7 @@
 # Saca los dibujos de la fase 7b (copiados de los dibujos a mano del juego JS):
 #   - los 17 objetos de src/objetos.js (10×10 píxeles): ya no se usan, los saca a 16×16 tools/objetos16.py
-#   - el baúl y el banco de trabajo de src/props.js → assets/sprites/baul.png y banco-trabajo.png
+#   - el baúl de src/props.js → assets/sprites/baul.png (el banco de trabajo también salía de aquí; desde el 23 oct
+#     es de PixelLab, al estilo de los muebles: tools/banco_mantenimiento.py)
 #   - el armarito del baño con su botiquín (cerrado y abierto) → assets/sprites/armarito.png (2 fotogramas)
 # Se lanza con:  py tools/dibujos_7b.py   (y luego importar en Godot)
 from pathlib import Path
@@ -101,28 +102,6 @@ def baul():
     g.img.save(SPRITES / "baul.png")
 
 
-def banco():
-    g = Lienzo(38, 32)
-    borde, oscura, madera, clara = "#24150d", "#5a3820", "#8a5a32", "#b07a44"
-    hierro, brillo, rojo, corcho, punto = "#5e6670", "#a3acb6", "#b8433a", "#6b5a44", "#4a3d2e"
-    g.px(3, 0, 32, 13, borde); g.px(4, 1, 30, 11, corcho)
-    for i in range(6, 33, 4):
-        for j in range(3, 11, 4):
-            g.px(i, j, 1, 1, punto)
-    g.px(7, 2, 1, 8, borde); g.px(6, 2, 3, 2, hierro); g.px(7, 4, 1, 6, hierro)
-    g.px(7, 7, 1, 3, rojo)
-    g.px(13, 2, 5, 2, hierro); g.px(13, 2, 5, 1, brillo); g.px(15, 4, 1, 7, oscura)
-    g.px(21, 2, 2, 9, hierro); g.px(21, 2, 1, 9, brillo); g.px(20, 2, 4, 2, hierro)
-    g.px(27, 3, 4, 4, rojo); g.px(28, 4, 2, 2, corcho); g.px(28, 7, 2, 4, oscura)
-    g.px(0, 13, 38, 6, borde); g.px(1, 14, 36, 4, madera); g.px(1, 14, 36, 1, clara); g.px(1, 17, 36, 1, oscura)
-    g.px(3, 10, 8, 4, borde); g.px(4, 11, 6, 3, hierro); g.px(4, 11, 6, 1, brillo); g.px(10, 12, 3, 1, hierro)
-    g.px(1, 19, 4, 13, borde); g.px(2, 19, 2, 12, oscura)
-    g.px(33, 19, 4, 13, borde); g.px(34, 19, 2, 12, oscura)
-    g.px(5, 25, 28, 3, borde); g.px(5, 26, 28, 1, madera)
-    g.px(14, 19, 12, 5, borde); g.px(15, 19, 10, 4, madera); g.px(19, 21, 2, 1, hierro)
-    g.img.save(SPRITES / "banco-trabajo.png")
-
-
 # El armarito del baño (Armarito en props.js, que se dibujaba con rectángulos de 36×40): aquí a 2 unidades por
 # píxel, 26×22 con hueco para las puertas abiertas. Fotograma 0 cerrado (con la cruz roja), 1 abierto y vacío
 def armarito():
@@ -150,6 +129,5 @@ def armarito():
 
 if __name__ == "__main__":
     baul()
-    banco()
     armarito()
-    print("Hecho: baúl, banco y armarito")
+    print("Hecho: baúl y armarito")
