@@ -2591,6 +2591,8 @@ func probar_curas() -> void:
 		Recetas.LISTA.values().any(func(r): return "vendas" in r.con or "bocadillo" in r.con),
 		Objetos.donde("vendas", "centro"), Objetos.donde("bocadillo", "centro"),
 		"vendas" in eventos.VENDEDOR.VENTA and "bocadillo" in eventos.VENDEDOR.VENTA, Objetos.de_edificio("centro").size()])
+	if inventario.abierto != "":
+		inventario.cerrar()   # por si alguno no se ha podido usar: que no se quede el juego en pausa
 	mochila = antes[0]
 	johnny.vida = antes[1]
 
@@ -3013,6 +3015,15 @@ func probar_mutado(camara: Camera2D) -> void:
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)
 func probar_menus() -> void:
 	set_process(false)
+	# Johnny, como nuevo y sin charcos alrededor: el bombero deja el suelo ardiendo y le seguía quemando hasta
+	# dejarle en un tercio; con la vida tan baja el bocadillo no se podía usar (se quedaba el inventario abierto y
+	# el juego en pausa, y la prueba no se cerraba nunca) y en la azotea moría
+	for c in get_tree().get_nodes_in_group("charcos"):
+		c.remove_from_group("charcos")
+		c.queue_free()
+	johnny.estados.clear()
+	johnny.tercios = 3
+	johnny.vida = johnny.stats.vida_max
 	soltar_billetes(3, johnny.position + Vector2(60, 0))
 	await get_tree().create_timer(1.2).timeout
 	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
