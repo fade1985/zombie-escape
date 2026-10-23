@@ -152,9 +152,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
 			nombre = mini.tienda
 			apt.salas[0].nombre = mini.tienda
-		if jefe and Catalogo.SALAS.has("jefe-" + su_jefe):
-			apt.tipo = su_jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón, solo lámparas;
-			# el Gymbro, sus máquinas de gimnasio)
+		# (planta.jefe, no su_jefe: cuando la portera sale por defecto, su_jefe llega vacío)
+		if jefe and Catalogo.SALAS.has("jefe-" + planta.jefe):
+			apt.tipo = planta.jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón, solo
+			# lámparas; el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
@@ -168,6 +169,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# el gimnasio del Gymbro (lleno de máquinas, ver arriba): mancuernas por el suelo, que hacen caer a Johnny
 			apt.salas[0].nombre = "Gimnasio"
 			sitio.peligros = Peligros.del_gymbro(sitio)
+		if jefe and planta.jefe == "portera":
+			# el cuarto de la limpieza de la portera (ver arriba): cubos por el suelo, que hacen caer a Johnny
+			apt.salas[0].nombre = "Cuarto de la limpieza"
+			sitio.peligros = Peligros.de_la_portera(sitio)
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		if tipo_tienda == "joyeria":

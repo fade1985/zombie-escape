@@ -85,6 +85,12 @@ const MUEBLES := {
 	"cablemachine":    {"len": 100, "dep": 52, "paredes": "",      "archivo": "gimnasio/maquina-poleas"},
 	"dumbbellrack":    {"len": 112, "dep": 40, "paredes": "lados", "archivo": "gimnasio/estante-mancuernas"},
 	"weightplates":    {"len": 44,  "dep": 44, "paredes": "todas", "archivo": "gimnasio/discos"},
+	# los del cuarto de la limpieza de la portera (su habitación; PixelLab, con las guías de tools/guias_limpieza.py):
+	# el contenedor de basura de la comunidad, el cubo de basura de metal (los dos se ven igual desde cualquier lado) y
+	# el carro de limpieza, con su cubo y su fregona
+	"wheeliebin":      {"len": 56,  "dep": 48, "paredes": "todas", "archivo": "limpieza/contenedor"},
+	"trashcan":        {"len": 36,  "dep": 36, "paredes": "todas", "archivo": "limpieza/cubo-basura"},
+	"janitorcart":     {"len": 84,  "dep": 44, "paredes": "lados", "archivo": "limpieza/carro-limpieza"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo y la sala de mantenimiento):
@@ -138,6 +144,16 @@ const SALAS := {
 		"llenar": [6, 28],
 		"iguales": {"lamp": 3, "treadmill": 8, "benchpress": 6, "cablemachine": 3, "dumbbellrack": 4, "weightplates": 6,
 			"lockers": 2, "bench": 3},
+	},
+	# el cuarto de la limpieza de la portera (planta.gd pone apt.tipo = "portera"): contenedores y cubos de basura y el
+	# carro de limpieza contra las paredes, sueltos (con hueco para esquivar su embestida); antes que nada (primero),
+	# tres lámparas de pie, para que siempre haya luz, y un carro, que siempre esté. En la pared de arriba cuelgan
+	# fregonas y cubos (mapa.gd, colgados) y por el suelo hay cubos con los que Johnny tropieza (peligros/tropiezos.gd)
+	"jefe-portera": {
+		"primero": ["lamp", "lamp", "lamp", "janitorcart"],
+		"muebles": ["wheeliebin", "wheeliebin", "trashcan", "trashcan", "janitorcart"],
+		"cuantos": [10, 12],
+		"iguales": {"lamp": 3, "wheeliebin": 5, "trashcan": 5, "janitorcart": 2},
 	},
 	"cocina": {
 		"muebles": ["counter", "fridge", "stove", "counter", "plant"],

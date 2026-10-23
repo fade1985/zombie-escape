@@ -16,6 +16,8 @@
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
 #   --gimnasio     (con --jefe gymbro) el gimnasio del Gymbro: máquinas en las paredes y mancuernas que te tiran
+#   --cubos        (con --jefe portera) el cuarto de la limpieza de la portera: cubos de basura, fregonas y cubos
+#                  colgados y cubos por el suelo que te tiran
 #   --presentacion (con --jefe X, si se quiere) la presentación del jefe al aparecer (ui/presentacion.gd)
 extends "res://scripts/partida.gd"
 
@@ -75,6 +77,9 @@ func empezar_prueba() -> void:
 	elif "--gimnasio" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gimnasio()
+	elif "--cubos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_cubos()
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
@@ -463,7 +468,114 @@ func probar_gimnasio() -> void:
 	Captura.foto("captura-gimnasio.png")
 	luz.alternar()
 	camara.zoom = Vector2.ONE
-	# una mancuerna con sitio libre a los dos lados para pasar por encima (sin muebles ni otras mancuernas)
+	await probar_tropezar("Gimnasio", "una mancuerna", "mancuernas", sitio, datos, "captura-gimnasio-caido.png")
+	get_tree().quit()
+
+
+# Con "--captura --jefe portera --cubos": el cuarto de la limpieza de la portera (catalogo.gd, "jefe-portera"; mapa.gd,
+# colgados; peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga ella, y cuenta en
+# la terminal: cómo se llama la sala, los muebles (contenedores, cubos de basura y carros de limpieza, y 3 lámparas) y en
+# qué paredes están, lo que cuelga de la pared de arriba (fregonas y cubos, nada delante de la puerta), los cubos del
+# suelo (10, de pie, separados, lejos de la puerta y de los muebles) y el aviso de Johnny al entrar; luego lo mismo que
+# en el gimnasio (probar_tropezar), y que el cubo con el que tropieza vuelca. Saca captura-cubos.png (la sala entera,
+# con la cámara alejada), captura-cubos-pared.png (la pared de arriba de cerca) y captura-cubos-caido.png (Johnny en
+# el suelo junto al cubo volcado) y se cierra
+func probar_cubos() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe portera, la suya
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca la portera: aquí se prueba la habitación
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true   # todo descubierto
+		mapa.niebla[s.id] = 0.0
+	var lista: Array = sitio.get("peligros", []).filter(func(q): return q.tipo == "tropiezos")
+	if lista.is_empty():
+		print("Cubos: el piso del jefe (%s) no tiene cubos por el suelo (¡mal!)" % planta.jefe)
+		get_tree().quit()
+		return
+	var datos: Dictionary = lista[0]
+	var sala: Dictionary = sitio.apt.salas[0]
+	var de_limpieza: Array = sitio.muebles.filter(func(m): return m.tipo in ["wheeliebin", "trashcan", "janitorcart"])
+	var lamparas: int = sitio.muebles.filter(func(m): return m.tipo == "lamp").size()
+	var tipos := {}
+	for m in de_limpieza:
+		tipos[m.tipo] = tipos.get(m.tipo, 0) + 1
+	var paredes := {}
+	for m in sitio.muebles:
+		paredes[m.lado] = paredes.get(m.lado, 0) + 1
+	print("Cubos (jefe %s): la sala se llama «%s» (esperado: Cuarto de la limpieza) · muebles %d, de limpieza %d %s (esperado: de 8 a 11, con 1 o 2 carros, janitorcart) · lámparas %d (esperado: 3) · otros %d (esperado: 0) · por pared %s (esperado: en 3 o 4)" % [
+		planta.jefe, sala.nombre, sitio.muebles.size(), de_limpieza.size(), tipos, lamparas,
+		sitio.muebles.size() - de_limpieza.size() - lamparas, paredes])
+	# lo que cuelga de la pared de arriba (en unidades del mapa, para mirar la puerta)
+	var colgados := []
+	for cara in mapa.caras.get(sala.id, []):
+		for a in cara.adornos:
+			if a.dibujo.resource_path.contains("colgado-"):
+				colgados.append({"x": cara.position.x + a.x * 2.0, "w": a.dibujo.get_width() * 2.0,
+					"fregona": a.dibujo.resource_path.contains("fregona")})
+	var puertas: Array = sitio.salidas.filter(func(s): return s.dir == "arriba").map(func(s): return s.en)
+	var fregonas := colgados.filter(func(k): return k.fregona).size()
+	print("Cubos: colgados en la pared de arriba %d (esperado: 10 o más): fregonas %d y cubos %d (esperado: más de 0 los dos) · alguno delante de la puerta %s (esperado: false; puertas arriba: %d)" % [
+		colgados.size(), fregonas, colgados.size() - fregonas,
+		colgados.any(func(k): return puertas.any(func(en): return k.x < en + 32.0 and k.x + k.w > en - 32.0)), puertas.size()])
+	var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
+		(sitio.apt.entrada.c + 1) * Peligros.CASILLA)
+	var cerca := 9999.0
+	for a in datos.cosas:
+		for b in datos.cosas:
+			if a != b:
+				cerca = minf(cerca, a.pos.distance_to(b.pos))
+	var colores := {}
+	for k in datos.cosas:
+		colores[k.color] = colores.get(k.color, 0) + 1
+	print("Cubos: en el suelo %d (esperado: 10) · todos cubos y de pie %s (esperado: true) · de qué color %s (esperado: de 2 o 3) · el más cercano a otro, a %d (esperado: 110 o más) · alguno junto a la puerta %s (esperado: false) · alguno junto a un mueble %s (esperado: false) · donde aparece Johnny, sin cubo %s (esperado: true)" % [
+		datos.cosas.size(), datos.cosas.all(func(k): return k.forma == "cubo" and k.volcado == 0), colores, roundi(cerca),
+		datos.cosas.any(func(k): return entrada.grow(60.0).has_point(k.pos)),
+		datos.cosas.any(func(k): return sitio.muebles.any(func(m): return Muebles.hueco(m).grow(20.0).has_point(k.pos))),
+		datos.cosas.all(func(k): return k.pos.distance_to(johnny.position) > 60.0)])
+	await get_tree().create_timer(0.3).timeout
+	print("Cubos: al entrar, Johnny avisa %s (esperado: true) · «%s» (esperado: habla de cubos)" % [
+		datos.avisado, mapa.get_node("Tropiezos").aviso])
+	# la sala entera, desde el medio y con la cámara alejada
+	var camara: Camera2D = johnny.get_node("Camara")
+	johnny.position = sala.centro
+	johnny.direccion = "s"
+	camara.zoom = Vector2(0.66, 0.66)
+	camara.reset_smoothing()
+	luz.alternar()   # sin penumbra, para que se vea todo
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-cubos.png")
+	# y la pared de arriba de cerca, con lo colgado (desde un sitio sin cubos cerca: si no, se caería ya aquí)
+	camara.zoom = Vector2.ONE
+	var junto_pared := Vector2(sala.centro.x, (sala.f0 + 4) * Peligros.CASILLA)
+	for paso in range(0, 640, 32):
+		var p := junto_pared + Vector2(paso if paso % 64 == 0 else -paso, 0)
+		if datos.cosas.all(func(k): return k.pos.distance_to(p + Vector2(0, 14)) > 80.0) \
+				and sitio.muebles.all(func(m): return not Muebles.hueco(m).grow(30.0).has_point(p)):
+			junto_pared = p
+			break
+	johnny.position = junto_pared
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-cubos-pared.png")
+	luz.alternar()
+	await probar_tropezar("Cubos", "un cubo", "cubos", sitio, datos, "captura-cubos-caido.png")
+	get_tree().quit()
+
+
+# Lo que se prueba igual en el gimnasio y en el cuarto de la limpieza (probar_gimnasio, probar_cubos), con la cosa del
+# suelo que toque ("uno": "una mancuerna" o "un cubo"; "varios", en plural): que al pasar andando por encima de una Johnny se cae, no se mueve ni
+# ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la cosa sale rodando (el cubo, volcado); y que
+# rodando (la esquiva) se pasa por encima de otra sin caer. Saca la foto "foto" (Johnny en el suelo con las estrellitas)
+func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Dictionary, datos: Dictionary, foto: String) -> void:
+	var sala: Dictionary = sitio.apt.salas[0]
+	var camara: Camera2D = johnny.get_node("Camara")
+	# una cosa con sitio libre a los dos lados para pasar por encima (sin muebles ni otras cosas)
 	var tropiezos: Node = mapa.get_node("Tropiezos")
 	var hueco_para := func(k: Dictionary, dir: Vector2) -> bool:
 		for paso in range(-100, 181, 8):
@@ -474,8 +586,11 @@ func probar_gimnasio() -> void:
 				if otra != k and otra.pos.distance_to(p) < 40.0:
 					return false
 		return true
+	# (las más cerca del medio, primero: que en la foto no quede Johnny pegado al borde)
+	var orden: Array = datos.cosas.duplicate()
+	orden.sort_custom(func(a, b): return a.pos.distance_to(sala.centro) < b.pos.distance_to(sala.centro))
 	var buscar := func(menos: Dictionary) -> Array:
-		for k in datos.cosas:
+		for k in orden:
 			if k == menos:
 				continue
 			for dir in [Vector2.RIGHT, Vector2.LEFT, Vector2.DOWN, Vector2.UP]:
@@ -483,10 +598,12 @@ func probar_gimnasio() -> void:
 					return [k, dir]
 		return []
 	var accion := {Vector2.RIGHT: "derecha", Vector2.LEFT: "izquierda", Vector2.DOWN: "abajo", Vector2.UP: "arriba"}
+	if johnny.caido_t > 0.0:
+		print("%s: Johnny ya estaba en el suelo antes de empezar (¡mal! la prueba no valdría)" % titulo)
+		return
 	var elegida: Array = buscar.call({})
 	if elegida.is_empty():
-		print("Gimnasio: ninguna mancuerna con sitio para pasar por encima (¡mal!)")
-		get_tree().quit()
+		print("%s: no hay %s con sitio para pasar por encima (¡mal!)" % [titulo, varios])
 		return
 	var cosa: Dictionary = elegida[0]
 	var dir: Vector2 = elegida[1]
@@ -502,17 +619,19 @@ func probar_gimnasio() -> void:
 		await get_tree().physics_frame
 		espera += get_physics_process_delta_time()
 	var t0 := Time.get_ticks_msec()
-	print("Gimnasio: andando hacia una mancuerna, se cae %s (esperado: true)" % (johnny.caido_t > 0.0))
+	print("%s: andando hacia %s, se cae %s (esperado: true)" % [titulo, uno, johnny.caido_t > 0.0])
 	await get_tree().create_timer(0.4).timeout
 	var tumbado := absf(rad_to_deg(johnny.sprite.rotation))
 	var quieto: Vector2 = johnny.position
 	Input.action_press("atacar")
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.4).timeout
-	Captura.foto("captura-gimnasio-caido.png")
+	Captura.foto(foto)
 	await get_tree().create_timer(0.6).timeout
-	print("Gimnasio: en el suelo, tumbado %d° (esperado: 90) · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · la mancuerna ha rodado %d (esperado: entre 30 y 120)" % [
-		roundi(tumbado), roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0, roundi(cosa.pos.distance_to(antes))])
+	var volcado := " · volcado %s (esperado: true)" % (cosa.volcado != 0) if cosa.forma == "cubo" else ""
+	print("%s: en el suelo, tumbado %d° (esperado: 90) · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · ha salido rodando %d (esperado: entre 30 y 120)%s" % [
+		titulo, roundi(tumbado), roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0,
+		roundi(cosa.pos.distance_to(antes)), volcado])
 	Input.action_release("atacar")
 	while johnny.caido_t > 0.0 and Time.get_ticks_msec() - t0 < 4000:
 		await get_tree().physics_frame
@@ -520,14 +639,14 @@ func probar_gimnasio() -> void:
 	var de_pie: Vector2 = johnny.position
 	await get_tree().create_timer(0.4).timeout
 	Input.action_release(accion[dir])
-	print("Gimnasio: se levanta a los %.2f s (esperado: 2,0) · derecho %s (esperado: true) · luego anda %d en 0,4 s (esperado: más de 30) · vida perdida %d (esperado: 0)" % [
-		dura, is_zero_approx(johnny.sprite.rotation), roundi(johnny.position.distance_to(de_pie)), johnny.stats.vida_max - johnny.vida])
+	print("%s: se levanta a los %.2f s (esperado: 2,0) · derecho %s (esperado: true) · luego anda %d en 0,4 s (esperado: más de 30) · vida perdida %d (esperado: 0)" % [
+		titulo, dura, is_zero_approx(johnny.sprite.rotation), roundi(johnny.position.distance_to(de_pie)),
+		johnny.stats.vida_max - johnny.vida])
 	# rodando por encima de otra: no se cae
 	await get_tree().create_timer(0.8).timeout
 	var otra: Array = buscar.call(cosa)
 	if otra.is_empty():
-		print("Gimnasio: ninguna otra mancuerna con sitio para rodar por encima (¡mal!)")
-		get_tree().quit()
+		print("%s: no hay más %s con sitio para rodar por encima (¡mal!)" % [titulo, varios])
 		return
 	johnny.velocity = Vector2.ZERO
 	johnny.position = otra[0].pos - otra[1] * 60.0 - Vector2(0, tropiezos.PIES)
@@ -535,9 +654,8 @@ func probar_gimnasio() -> void:
 	johnny.esquivar(otra[1])
 	await get_tree().create_timer(0.6).timeout
 	var pasada: float = (johnny.position + Vector2(0, tropiezos.PIES) - otra[0].pos).dot(otra[1])
-	print("Gimnasio: rodando por encima de otra, se cae %s (esperado: false) · la ha pasado %s (esperado: true)" % [
-		johnny.caido_t > 0.0, pasada > 20.0])
-	get_tree().quit()
+	print("%s: rodando por encima de %s, se cae %s (esperado: false) · ha pasado al otro lado %s (esperado: true)" % [
+		titulo, uno, johnny.caido_t > 0.0, pasada > 20.0])
 
 
 # Con "--captura --caza": el acompañante va a por los zombis que ve (aliado.gd, cazar). En un apartamento con todo

@@ -231,6 +231,22 @@
     "huella": "d179ab9c4a311987",
     "sprite": "mueble-cablemachine"
   },
+  "limpieza/carro-limpieza-lado.png": {
+    "huella": "9f5e88e5b4f024d7",
+    "sprite": "mueble-janitorcart-lado"
+  },
+  "limpieza/carro-limpieza.png": {
+    "huella": "91971d0d1ec4571e",
+    "sprite": "mueble-janitorcart"
+  },
+  "limpieza/contenedor.png": {
+    "huella": "dd7382866e677ee1",
+    "sprite": "mueble-wheeliebin"
+  },
+  "limpieza/cubo-basura.png": {
+    "huella": "97b3d2b6ebcc8e7a",
+    "sprite": "mueble-trashcan"
+  },
   "pasillo/aplique.png": {
     "huella": "88d5170172b2319e",
     "sprite": "aplique-pared"

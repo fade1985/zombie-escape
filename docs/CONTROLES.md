@@ -107,6 +107,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   levanta a los 2 s y la mancuerna sale rodando; y que rodando se pasa por encima de otra sin caer
   (`captura-gimnasio.png`, la sala entera con la cámara alejada y sin penumbra; `captura-gimnasio-caido.png`, Johnny
   en el suelo con las estrellitas). Cada línea dice lo esperado.
+- `--cubos` (con `--jefe portera`): en vez de la prueba larga, la del cuarto de la limpieza de la portera
+  (`peligros/tropiezos.gd`): lo monta sin ella y cuenta en la terminal cómo se llama la sala, los muebles
+  (contenedores, cubos de basura, carros de limpieza y 3 lámparas) y en qué paredes están, lo que cuelga de la pared
+  de arriba (fregonas y cubos, nada delante de la puerta), los cubos del suelo (10, de pie, separados, lejos de la
+  puerta y de los muebles) y el aviso de Johnny al entrar; luego, lo mismo que el gimnasio con un cubo (que además
+  vuelca al tropezar) (`captura-cubos.png`, la sala entera; `captura-cubos-pared.png`, la pared de arriba de cerca;
+  `captura-cubos-caido.png`, Johnny en el suelo y el cubo volcado). Cada línea dice lo esperado.
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
   (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
   cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la

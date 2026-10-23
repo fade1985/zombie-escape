@@ -58,7 +58,12 @@ const NEON := preload("res://scripts/mapa/neon.gd")
 const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": preload("res://scripts/peligros/fuego.gd"),
 	"agua": preload("res://scripts/peligros/agua.gd"),
 	"porqueria": preload("res://scripts/peligros/porqueria.gd"),   # (y la de la habitación del Glotón, en los Apartamentos)
-	"tropiezos": preload("res://scripts/peligros/tropiezos.gd")}   # (y las mancuernas del gimnasio del Gymbro)
+	"tropiezos": preload("res://scripts/peligros/tropiezos.gd")}   # (las mancuernas del gimnasio y los cubos de la portera)
+# Lo que cuelga de la pared de arriba del cuarto de la limpieza de la portera (tools/guias_limpieza.py): fregonas
+# (las que más) y cubos, uno detrás de otro con este hueco entre ellos (en píxeles del dibujo, [mínimo, máximo])
+const COLGADOS := [preload("res://assets/sprites/colgado-fregona.png"), preload("res://assets/sprites/colgado-fregona.png"),
+	preload("res://assets/sprites/colgado-cubo.png")]
+const COLGADOS_HUECO := [6.0, 30.0]
 # Los restos sueltos del centro comercial (sprites resto-<nombre>, tools/centro_sprites.py): el juego los reparte al
 # azar por el suelo y las paredes de cada tienda y de la galería, para que haya sangre y destrozo por todas partes
 # sin que se note que la textura se repite. Los repetidos en la lista salen más a menudo.
@@ -418,6 +423,8 @@ func poner_caras() -> void:
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			if centro and sitio.get("estilo", "") != "azotea":   # (el murete es bajo: lo de encima es el cielo)
 				cara.adornos = restos_de_pared(cara.ancho)
+			if sitio.get("apt", {}).get("tipo", "") == "portera":
+				cara.adornos += colgados(cara)
 			cosas.add_child(cara)
 			if not caras.has(sala):
 				caras[sala] = []
@@ -596,6 +603,28 @@ func restos_de_pared(ancho: float) -> Array:
 		var x := i * tramo + dado_restos.randf_range(0.0, maxf(0.0, tramo - t.get_width()))
 		var y := -dado_restos.randf_range(t.get_height() + 6.0, 44.0)   # sin pisar el rodapié ni la moldura
 		lista.append({"dibujo": t, "x": floorf(x), "y": floorf(y)})
+	return lista
+
+
+# Las fregonas y los cubos colgados de una cara de muro del cuarto de la limpieza de la portera (planta.gd pone
+# apt.tipo = "portera"): uno detrás de otro, con un hueco al azar entre ellos, colgados de lo alto, justo debajo de la
+# moldura, menos delante de la puerta. Con su propio dado (de la semilla del sitio): al volver, siguen igual
+func colgados(cara: Node2D) -> Array:
+	var dado := RandomNumberGenerator.new()
+	dado.seed = int(sitio.get("surtido", 0)) + 29 + int(cara.position.x)
+	var puertas: Array = sitio.salidas.filter(func(s): return s.dir == "arriba").map(func(s): return s.en)
+	var lista := []
+	var x := dado.randf_range(4.0, 16.0)   # en píxeles del dibujo, desde el borde izquierdo de la cara
+	while true:
+		var t: Texture2D = COLGADOS[dado.randi() % COLGADOS.size()]
+		var w := t.get_width()
+		if x + w > cara.ancho / 2.0 - 4.0:
+			break
+		# lo que ocupa, en unidades del mapa (la puerta mide 2 casillas: con un poco de margen a cada lado)
+		var desde: float = cara.position.x + x * 2.0
+		if not puertas.any(func(en): return desde < en + 44.0 and desde + w * 2.0 > en - 44.0):
+			lista.append({"dibujo": t, "x": floorf(x), "y": -46.0 if t == COLGADOS[0] else -44.0})
+		x += w + dado.randf_range(COLGADOS_HUECO[0], COLGADOS_HUECO[1])
 	return lista
 
 

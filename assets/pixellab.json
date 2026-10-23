@@ -2576,5 +2576,22 @@
     "e455a11f-cfc4-4769-8c3b-374bc7b6bf9e"
    ]
   }
+ },
+ "limpieza-portera": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "El cuarto de la limpieza de la portera (M7 de PENDIENTES.md). Con create_image_pixflux y la receta del gimnasio: la guía de py tools/guias_limpieza.py como init_image, no_background false, single color black outline. Muebles (high top-down, fuerza 45, '<mueble> seen in 3/4 top-down view, <lo de encima> seen from above, <el frente> facing the viewer, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors'): el contenedor de basura de la comunidad, el cubo de basura de metal y el carro de limpieza, a la primera. El carro de lado, con fuerza 130 y 'turned sideways', salió casi igual que la guía (descartes/carro-limpieza-lado-1.png); con fuerza 75 y más detalle en el texto, bien. Lo colgado de la pared (view side, fuerza 60, '... seen from the front, flat, game sprite on a plain blue background'): la fregona y el cubo, a la primera, pero PixelLab pinta un trozo de pared detrás: se quita con py tools/guias_limpieza.py pared después de guias_centro.py quita. Originales de los muebles en assets/sources/salas/limpieza/ (sprites con py tools/importar.py: wheeliebin, trashcan, janitorcart); los de lo colgado, en assets/sources/limpieza/ (sprites colgado-fregona y colgado-cubo con py tools/guias_limpieza.py colgados). Los cubos del suelo, con código (tropiezos.gd).",
+  "coste": "7 generaciones (6 + 1 repetida de lado)",
+  "piezas": {
+   "contenedor de basura (wheeliebin)": "e6614d39-0ecd-4626-afbf-08305e25df75",
+   "cubo de basura de metal (trashcan)": "b830dd2a-1cbb-4f7b-b4b5-c364f1eee606",
+   "carro de limpieza (janitorcart)": "4b1e5aeb-10e4-44e8-890e-c6d4be8d2554",
+   "carro de limpieza, de lado": "51523989-10c1-4d47-886e-70df46468960",
+   "fregona colgada": "c73fa1a0-b6f8-4a94-a05d-ccd75b81f000",
+   "cubo colgado": "f69f364d-adee-47a1-8fc3-5e8dcc53ba4e",
+   "descartadas": [
+    "5a799129-f41e-4f3f-9458-1b0b4cfa6b8f"
+   ]
+  }
  }
 }

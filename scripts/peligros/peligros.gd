@@ -12,10 +12,11 @@
 #   agua.gd   un charco en la sala de venta   {tipo, sala, casillas, cable, cable_desde, cuadro, corriente, arreglado, avisado}
 #             con cuadro.gd, el cuadro eléctrico que le quita (y le devuelve) la corriente a la tienda; "arreglado":
 #             el técnico ha arreglado el cable (su rescate, averia.gd) y el agua ya no da calambres
-# Y los de los minijefes de los Apartamentos (planta.gd llama a del_gloton y a del_gymbro):
+# Y los de los minijefes de los Apartamentos (planta.gd llama a del_gloton, a del_gymbro y a de_la_portera):
 #   porqueria.gd  la habitación del Glotón   {tipo, sala, casillas (casilla -> 1 charco, 2 con montón),
 #                                             paredes (casilla de muro -> forma del pegote), ovalo, avisado}
 #   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
+#                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado, color}])
 #                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
 class_name Peligros
 
@@ -66,11 +67,13 @@ const PORQUERIA := {
 	"montones": 0.22,    # parte de las casillas sucias que llevan un montón encima
 	"paredes": 0.4,      # parte de las casillas de muro pegadas al suelo (lados y abajo) con un pegote encima
 }
-# Las cosas tiradas por el suelo con las que se tropieza (las mancuernas del gimnasio del Gymbro): al pisar una,
-# Johnny se cae y tarda en levantarse (sin daño; rodando se pasa por encima sin caer). A los zombis y al jefe no
-# les pasa nada. La cosa sale rodando un poco, para que al levantarse no se vuelva a caer con la misma
+# Las cosas tiradas por el suelo con las que se tropieza (las mancuernas del gimnasio del Gymbro y los cubos del
+# cuarto de la limpieza de la portera): al pisar una, Johnny se cae y tarda en levantarse (sin daño; rodando se pasa
+# por encima sin caer). A los zombis y al jefe no les pasa nada. La cosa sale rodando un poco, para que al
+# levantarse no se vuelva a caer con la misma
 const TROPIEZOS := {
 	"mancuernas": 12,    # cuántas en el gimnasio
+	"cubos": 10,         # cuántos en el cuarto de la limpieza (son más grandes que una mancuerna)
 	"separadas": 110.0,  # como poco, a esta distancia unas de otras
 	"lejos_muebles": 26.0,   # ni pegadas a una máquina o a la pared (que se vean y se pueda pasar al lado)
 	"lejos_entrada": 90.0,   # ni junto a la puerta (ahí aparece Johnny)
@@ -158,12 +161,23 @@ static func del_gloton(sitio: Dictionary) -> Array:
 		"ovalo": {"centro": centro, "rx": rx, "ry": ry}}]   # (el óvalo, para repartir las luces del resplandor)
 
 
-# Las mancuernas del gimnasio del Gymbro: repartidas al azar por el suelo libre de su habitación (la única sala del
-# piso del jefe), separadas unas de otras, sin pegarse a las máquinas ni a las paredes y lejos de la puerta de
-# entrada. Unas tumbadas a lo ancho y otras a lo largo. Con su propio dado, como de_tienda
+# Las mancuernas del gimnasio del Gymbro: unas tumbadas a lo ancho y otras a lo largo (tirar_cosas)
 static func del_gymbro(sitio: Dictionary) -> Array:
+	return tirar_cosas(sitio, "mancuerna", TROPIEZOS.mancuernas, 5113)
+
+
+# Los cubos del cuarto de la limpieza de la portera: de pie, con agua sucia, de tres colores (tirar_cosas)
+static func de_la_portera(sitio: Dictionary) -> Array:
+	return tirar_cosas(sitio, "cubo", TROPIEZOS.cubos, 6217)
+
+
+# Cosas con las que se tropieza ("mancuerna" o "cubo"), repartidas al azar por el suelo libre de la habitación del
+# jefe (la única sala de su piso), separadas unas de otras, sin pegarse a los muebles ni a las paredes y lejos de la
+# puerta de entrada. Con su propio dado, como de_tienda. La mancuerna, tumbada a lo ancho o a lo largo ("giro"); el
+# cubo, de pie ("volcado": 0; al tropezar con él, vuelca: tropiezos.gd) y de uno de tres colores ("color")
+static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla: int) -> Array:
 	var rng := RandomNumberGenerator.new()
-	rng.seed = int(sitio.surtido) + 5113
+	rng.seed = int(sitio.surtido) + semilla
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
 	var t: Dictionary = TROPIEZOS
@@ -171,7 +185,7 @@ static func del_gymbro(sitio: Dictionary) -> Array:
 		(apt.entrada.c + 1) * CASILLA).grow(t.lejos_entrada)
 	var cosas := []
 	for intento in 600:
-		if cosas.size() >= t.mancuernas:
+		if cosas.size() >= cuantas:
 			break
 		var p := Vector2(rng.randf_range(sala.c0, sala.c0 + sala.ancho), rng.randf_range(sala.f0, sala.f0 + sala.fondo)) * CASILLA
 		p = (p / 2.0).round() * 2.0   # en píxeles enteros del dibujo
@@ -179,7 +193,12 @@ static func del_gymbro(sitio: Dictionary) -> Array:
 			continue
 		if cosas.any(func(k): return k.pos.distance_to(p) < t.separadas):
 			continue
-		cosas.append({"pos": p, "forma": "mancuerna", "giro": 0.0 if rng.randf() < 0.5 else PI / 2.0})
+		var cosa := {"pos": p, "forma": forma, "giro": 0.0 if rng.randf() < 0.5 else PI / 2.0}
+		if forma == "cubo":
+			cosa.giro = 0.0
+			cosa.volcado = 0
+			cosa.color = rng.randi() % 3
+		cosas.append(cosa)
 	return [{"tipo": "tropiezos", "sala": sala.id, "cosas": cosas, "avisado": false}]
 
 

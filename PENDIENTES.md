@@ -15,8 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M7.** La habitación de la portera: cubos y fregonas colgando de las paredes, cubos de basura, y cubos
-  por el suelo que, al pisarlos, nos hacen caer y tardamos 2 segundos en levantarnos.
 - **M8.** La habitación del jefe de bomberos está en llamas por todo el borde, rodeando la habitación entera
   menos la puerta de entrada. Su ataque de girar con una lengua de llamas tiene que llegar hasta la pared,
   de forma que solo se pueda esquivar corriendo en el mismo sentido en el que gira.
