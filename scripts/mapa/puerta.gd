@@ -18,6 +18,7 @@ const ACERO := {"luz": Color("76807c"), "medio": Color("566060"), "sombra": Colo
 const OSCURO := Color("0c0a0e")
 const CINTA := Color("c9a227")
 const CINTA_RAYA := Color("1a1712")
+const CINTA_SOMBRA := Color(0, 0, 0, 0.35)   # la sombrita que deja la cinta pegada, un píxel por debajo
 # Las placas del pasillo, como en un edificio de verdad: la letra de cada piso junto a su puerta (de latón; la de la
 # sala de mantenimiento, de acero y con una llave inglesa) y, a la izquierda del ascensor, el número grande de la planta
 const LATON := {"luz": Color("e8c868"), "medio": Color("b8923a"), "sombra": Color("7a5a20"), "filo": Color("2e2010"),
@@ -77,8 +78,9 @@ func _ready() -> void:
 		if cuerpo.is_in_group("jugador"):
 			empujada.emit(indice))
 
-	# El letrero (las tiendas de la pared de arriba llevan el suyo de neón, que pone mapa.gd, y los pisos, su placa)
-	if salida.has("neon") or salida.has("placa"):
+	# El letrero (las tiendas de la pared de arriba llevan el suyo de neón, que pone mapa.gd, y los pisos, su placa;
+	# el ascensor averiado no lleva: ya lo dicen sus cintas)
+	if salida.has("neon") or salida.has("placa") or salida.letrero == "":
 		return
 	var cartel := Label.new()
 	cartel.text = salida.letrero
@@ -158,8 +160,9 @@ func incendios(x0: float) -> void:
 
 
 # El ascensor averiado, de frente: más ancho que una puerta, con su marco, dos hojas de acero cerradas, la
-# lucecita de encima apagada en rojo y una cinta de peligro cruzada que lo bloquea. Ya arreglado (al caer el jefe
-# de la planta, ver arreglar_ascensor en partida.gd), sin la cinta y con la lucecita encendida en verde
+# lucecita de encima apagada en rojo y tres cintas de peligro que lo bloquean: dos en aspa, de esquina a esquina, y
+# una horizontal por encima, algo más baja que el cruce (como pegadas a mano, una tras otra). Ya arreglado (al caer
+# el jefe de la planta, ver arreglar_ascensor en partida.gd), sin las cintas y con la lucecita encendida en verde
 func ascensor() -> void:
 	var w := 80.0
 	var alto := 80.0
@@ -181,7 +184,12 @@ func ascensor() -> void:
 	draw_rect(Rect2(-6, arriba - 6, 12, 4), ACERO.filo)
 	draw_rect(Rect2(-4, arriba - 6, 8, 2), Color("5fd35a") if abierta else Color("6a1c1c"))
 	if not abierta:
-		cinta(x0 - 4, arriba + alto / 2.0 - 6, w + 8)
+		# las puntas, pegadas al marco (la horizontal, sin llegar al cartel de la planta, que acaba 18 a la izquierda
+		# de las hojas)
+		cinta_cruzada(Vector2(x0 - 2, arriba - 6), Vector2(-x0, -4))
+		cinta_cruzada(Vector2(-x0 + 2, arriba - 6), Vector2(x0, -4))
+		draw_rect(Rect2(x0 - 10, -20, w + 20, 2), CINTA_SOMBRA)
+		cinta(x0 - 10, -30, w + 20)
 	if salida.has("planta"):
 		cartel_planta(Vector2(x0 - 76, -84))
 
@@ -233,3 +241,25 @@ func cinta(x: float, y: float, largo: float) -> void:
 			var px := sx + j * 2
 			if px + 4 <= largo:
 				draw_rect(Rect2(x + px, y + 8 - j * 2, 4, 2), CINTA_RAYA)
+
+
+# Cinta de peligro en diagonal, con su línea del medio de "desde" a "hasta" y su sombrita debajo. Se pinta píxel a
+# píxel (de 2 en 2 unidades) para que tenga el mismo tamaño de píxel que todo lo demás: girada con
+# draw_set_transform, como la de incendios, saldría con escalones más finos. Las rayas negras van en horizontal, que
+# en una cinta inclinada quedan en diagonal sobre la franja, como las de cinta()
+func cinta_cruzada(desde: Vector2, hasta: Vector2) -> void:
+	var largo := desde.distance_to(hasta)
+	var dir := (hasta - desde) / largo
+	var normal := Vector2(-dir.y, dir.x)
+	var caja := Rect2(desde, Vector2.ZERO).expand(hasta).grow(8)
+	for sombra in [true, false]:   # primero la sombra, y encima la cinta
+		for x in range(int(caja.position.x), int(caja.end.x), 2):
+			for y in range(int(caja.position.y), int(caja.end.y), 2):
+				if y >= 0:
+					continue   # por debajo del suelo, nada
+				var d := Vector2(x + 1, y + 1 - (2 if sombra else 0)) - desde   # el centro del píxel
+				var a_lo_largo := d.dot(dir)
+				if a_lo_largo < 0 or a_lo_largo > largo or absf(d.dot(normal)) > 5:
+					continue
+				var color := CINTA_SOMBRA if sombra else (CINTA_RAYA if posmod(y, 12) < 4 else CINTA)
+				draw_rect(Rect2(x, y, 2, 2), color)

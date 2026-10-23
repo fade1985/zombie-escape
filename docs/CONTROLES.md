@@ -148,7 +148,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 
 La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`escenas/menu_principal.tscn`).
 Se puede volver a mitad de partida: al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el
-**ascensor** del pasillo (luz verde, sin la cinta, y lo dice al salir al pasillo). Solo baja a esta sala y, por su
+**ascensor** del pasillo (luz verde, sin las cintas, y lo dice al salir al pasillo). Solo baja a esta sala y, por su
 puerta, vuelve a la planta de la que venías, delante del ascensor; nunca lleva a otra planta. La planta queda como
 la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azotea no tiene.
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7,

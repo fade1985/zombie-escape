@@ -206,7 +206,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		pasillo.salidas.append(puerta)
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
-		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "letrero": "Averiado", "planta": num - 1})
+		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "letrero": "", "planta": num - 1})   # sin letrero: lo dicen sus cintas
 	# por donde se ha llegado (en la planta baja, el portal del edificio) y por donde se sigue subiendo
 	pasillo.salidas.append({"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido",
