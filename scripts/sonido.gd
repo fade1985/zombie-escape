@@ -98,9 +98,10 @@ var ultimo := {}         # nombre → cuándo sonó (ms), para el "hueco"
 var voces: Array[AudioStreamPlayer] = []
 var siguiente := 0
 
-# Cuántos tramos hay grabados de cada momento. jefe-4 no viene del JS: es «Turno de noche», una canción
-# de 8 bits hecha con tools/turno-de-noche.mjs
-const TRAMOS := {"menu": 2, "explorar": 5, "jefe": 4}
+# Cuántos tramos hay grabados de cada momento. Los últimos no vienen del JS: son canciones de 8 bits hechas
+# aquí: menu-3 es «El último inquilino» (tools/el-ultimo-inquilino.mjs), explorar-6 es «Puerta a puerta»
+# (tools/puerta-a-puerta.mjs) y jefe-4 es «Turno de noche» (tools/turno-de-noche.mjs)
+const TRAMOS := {"menu": 3, "explorar": 6, "jefe": 4}
 const FUNDIDO := 3.0     # segundos que tarda en pasar de un tramo a otro
 var momento := ""        # lo que suena ahora
 var sonando: AudioStreamPlayer = null   # de los dos reproductores de música, el que está sonando
