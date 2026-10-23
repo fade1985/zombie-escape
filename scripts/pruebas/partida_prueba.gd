@@ -368,9 +368,8 @@ func probar_presentacion() -> void:
 # con la franja de porquería pegada a las paredes, que quema. Monta su piso (la 1ª planta) con todo descubierto y sin
 # que salga él, y cuenta en la terminal: los muebles (3 o 4 lámparas), cuántas casillas están sucias (parte del suelo), que donde
 # aparece Johnny está limpio, que el centro está limpio y lo pegado a las paredes sucio (y cuánto mide la franja), que
-# en medio queda una elipse limpia perfecta, como un ring, que sale igual con otra semilla, que de la puerta se llega
-# al centro por un paso limpio y holgado (también con la puerta en cualquier otro sitio de la pared, pegada a las
-# esquinas incluso: accesos), lo que pierde Johnny en 1 s sobre una casilla sucia (unos 7) y que en una limpia,
+# en medio queda una elipse limpia perfecta, como un ring, que sale igual con otra semilla, que la puerta está en el
+# centro de la pared y de ella se llega al centro por un paso limpio, recto y holgado, lo que pierde Johnny en 1 s sobre una casilla sucia (unos 7) y que en una limpia,
 # pasado el escozor, no pierde nada; las salpicaduras de la pared de arriba, los pegotes de los lomos de las otras y las luces del resplandor. Saca captura-porqueria.png
 # (Johnny sobre la porquería) y captura-porqueria-medio.png (desde el medio: la elipse limpia y la franja alrededor)
 # y se cierra
@@ -427,10 +426,9 @@ func probar_porqueria() -> void:
 	otro.surtido = int(sitio.surtido) + 1
 	print("Porquería: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
 		p.ovalo.rx * 2.0, p.ovalo.ry * 2.0, descuadradas(sitio, p), Peligros.del_gloton(otro)[0].casillas.keys() == p.casillas.keys()])
-	# el acceso: de la puerta al centro sin pisar nada, con la puerta donde está y en cualquier otro sitio de la pared
-	var paso := accesos(sitio, p.casillas, Peligros.casilla(johnny.position), Peligros.PORQUERIA.parte)
-	print("Porquería: de donde aparece Johnny al centro, sin pisar nada y holgado (3 casillas de ancho como poco) %s (esperado: true) · con la puerta en cada uno de los %d sitios de la pared (arriba y abajo, pegada a las esquinas también), sin ese paso %d (esperado: 0)" % [
-		paso[0], paso[1], paso[2]])
+	# el acceso: la puerta en el centro de la pared y de ella al centro de la sala, recto y sin pisar nada
+	print("Porquería: %s · %s · de donde aparece Johnny al centro, sin pisar nada y holgado (3 casillas de ancho como poco) %s (esperado: true)" % [
+		puerta_en_medio(sitio), paso_recto(sitio), paso_holgado(sala, p.casillas, Peligros.casilla(johnny.position))])
 	# 1 s sobre una casilla sucia rodeada de sucias (que el borde no engañe)
 	var sucia := Vector2i(-1, -1)
 	for c in p.casillas:
@@ -469,8 +467,8 @@ func probar_porqueria() -> void:
 
 # Con "--captura --jefe gymbro --gimnasio": el gimnasio del Gymbro (catalogo.gd, "jefe-gymbro", y
 # peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga él, y cuenta en la
-# terminal: las máquinas y en qué paredes están, las lámparas (3), qué parte del suelo queda libre, las mancuernas
-# (12, separadas, lejos de la puerta y de los muebles); que al pasar andando por encima de una Johnny se cae, no se
+# terminal: las máquinas y en qué paredes están, las lámparas (3), qué parte del suelo queda libre, la puerta en el
+# centro de la pared, las mancuernas (12, separadas, lejos de la puerta y de los muebles); que al pasar andando por encima de una Johnny se cae, no se
 # mueve ni ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la mancuerna sale rodando; y que rodando
 # (la esquiva) se pasa por encima sin caer. Cada línea dice lo esperado. Saca captura-gimnasio.png (la sala entera,
 # con la cámara alejada) y captura-gimnasio-caido.png (Johnny en el suelo con las estrellitas) y se cierra
@@ -506,6 +504,7 @@ func probar_gimnasio() -> void:
 	print("Gimnasio (jefe %s): muebles %d, de gimnasio %d (esperado: 12 o más) · lámparas %d (esperado: 3) · otros %d (esperado: 0) · por pared %s (esperado: en las 4) · suelo libre %d %% (esperado: menos de 92)" % [
 		planta.jefe, sitio.muebles.size(), de_gimnasio.size(), lamparas, sitio.muebles.size() - de_gimnasio.size() - lamparas,
 		paredes, roundi(100.0 * (1.0 - ocupado / suelo))])
+	print("Gimnasio: %s" % puerta_en_medio(sitio))
 	var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
 		(sitio.apt.entrada.c + 1) * Peligros.CASILLA)
 	var cerca := 9999.0
@@ -535,7 +534,8 @@ func probar_gimnasio() -> void:
 # Con "--captura --jefe portera --cubos": el cuarto de la limpieza de la portera (catalogo.gd, "jefe-portera"; mapa.gd,
 # colgados; peligros/tropiezos.gd). Monta su piso (la 1ª planta) con todo descubierto y sin que salga ella, y cuenta en
 # la terminal: cómo se llama la sala, los muebles (contenedores, cubos de basura y carros de limpieza, y 3 lámparas) y en
-# qué paredes están, lo que cuelga de la pared de arriba (fregonas y cubos, nada delante de la puerta), los cubos del
+# qué paredes están, la puerta en el centro de la pared, lo que cuelga de la pared de arriba (fregonas y cubos, nada
+# delante de la puerta), los cubos del
 # suelo (10, de pie, separados, lejos de la puerta y de los muebles) y el aviso de Johnny al entrar; luego lo mismo que
 # en el gimnasio (probar_tropezar), y que el cubo con el que tropieza vuelca. Saca captura-cubos.png (la sala entera,
 # con la cámara alejada), captura-cubos-pared.png (la pared de arriba de cerca) y captura-cubos-caido.png (Johnny en
@@ -583,6 +583,7 @@ func probar_cubos() -> void:
 	print("Cubos: colgados en la pared de arriba %d (esperado: 10 o más): fregonas %d y cubos %d (esperado: más de 0 los dos) · alguno delante de la puerta %s (esperado: false; puertas arriba: %d)" % [
 		colgados.size(), fregonas, colgados.size() - fregonas,
 		colgados.any(func(k): return puertas.any(func(en): return k.x < en + 32.0 and k.x + k.w > en - 32.0)), puertas.size()])
+	print("Cubos: %s" % puerta_en_medio(sitio))
 	var entrada: Rect2 = Muebles.delante_de({"cols": sitio.apt.cols, "filas": sitio.apt.filas}, sitio.apt.entrada.lado,
 		(sitio.apt.entrada.c + 1) * Peligros.CASILLA)
 	var cerca := 9999.0
@@ -722,8 +723,8 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 # peligros/cerco.gd) y su giro con el lanzallamas (bombero.gd). Monta su piso (la 1ª planta) con todo descubierto y sin
 # que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, cómo arde (la parte del suelo,
 # el centro sin fuego, todo lo pegado a la pared ardiendo menos el acceso de la puerta, en medio una elipse limpia
-# perfecta, como un ring, que sale igual con otra semilla, de la puerta al centro un paso sin fuego y holgado, con la
-# puerta donde está y en cualquier otro sitio de la pared (accesos), y sitio de sobra para el giro en el medio), el aviso de
+# perfecta, como un ring, que sale igual con otra semilla, la puerta en el centro de la pared y de ella al centro un
+# paso sin fuego, recto y holgado, y sitio de sobra para el giro en el medio), el aviso de
 # Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el fuego.
 # Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
 # sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
@@ -786,10 +787,9 @@ func probar_llamas() -> void:
 	otro.surtido = int(sitio.surtido) + 1
 	print("Llamas: la elipse limpia del medio, de %.1f × %.1f casillas, es perfecta: casillas que no cuadran %d (esperado: 0) · con otra semilla sale igual %s (esperado: true)" % [
 		cerco.ovalo.rx * 2.0, cerco.ovalo.ry * 2.0, descuadradas(sitio, cerco), Peligros.del_bombero(otro)[0].casillas == cerco.casillas])
-	# el acceso: de la puerta al centro sin pisar el fuego, con la puerta donde está y en cualquier otro sitio de la pared
-	var paso := accesos(sitio, cerco.casillas, Peligros.casilla(johnny.position), Peligros.CERCO.parte)
-	print("Llamas: de donde aparece Johnny al centro, sin pisar el fuego y holgado (3 casillas de ancho como poco) %s (esperado: true) · con la puerta en cada uno de los %d sitios de la pared (arriba y abajo, pegada a las esquinas también), sin ese paso %d (esperado: 0)" % [
-		paso[0], paso[1], paso[2]])
+	# el acceso: la puerta en el centro de la pared y de ella al centro de la sala, recto y sin pisar el fuego
+	print("Llamas: %s · %s · de donde aparece Johnny al centro, sin pisar el fuego y holgado (3 casillas de ancho como poco) %s (esperado: true)" % [
+		puerta_en_medio(sitio), paso_recto(sitio), paso_holgado(sala, cerco.casillas, Peligros.casilla(johnny.position))])
 	await get_tree().create_timer(0.3).timeout
 	var nodo: Node = mapa.get_node("Cerco")
 	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
@@ -876,26 +876,28 @@ func descuadradas(sitio: Dictionary, datos: Dictionary) -> int:
 	return n
 
 
-# El acceso de la habitación del jefe (Peligros.acceso, el de la porquería del Glotón y el del cerco de fuego del
-# bombero): ¿se va holgado de la puerta al centro de la sala sin pisar nada? Con la puerta donde está, desde donde
-# aparece Johnny ("desde"); y luego con la puerta en cada sitio de la pared en que cabe (arriba y abajo, pegada a las
-# esquinas también), desde la casilla de dentro de ella, repartiendo otra vez como franja_y_ovalo con "parte" (la
-# habitación es un rectángulo: con la puerta arriba o abajo, la misma). Devuelve [holgado ahora, sitios probados,
-# sitios sin paso holgado]
-func accesos(sitio: Dictionary, casillas: Dictionary, desde: Vector2i, parte: float) -> Array:
+# La puerta de entrada de la habitación del jefe, en el centro de su pared (Apartamento.probar). Devuelve el trozo de
+# línea que lo cuenta, con lo esperado
+func puerta_en_medio(sitio: Dictionary) -> String:
 	var apt: Dictionary = sitio.apt
-	var sala: Dictionary = apt.salas[0]
-	var probados := 0
-	var malos := 0
-	for lado in ["arriba", "abajo"]:
-		for c in range(sala.c0 + 2, sala.c0 + sala.ancho - 3):   # (con dos casillas de pared a cada lado, como en Apartamento)
-			var otro: Dictionary = apt.duplicate()
-			otro.entrada = {"c": c, "lado": lado}
-			var reparto := Peligros.franja_y_ovalo({"apt": otro}, parte)
-			probados += 1
-			if not paso_holgado(sala, reparto.casillas, Vector2i(c, sala.f0 if lado == "arriba" else sala.f0 + sala.fondo - 1)):
-				malos += 1
-	return [paso_holgado(sala, casillas, desde), probados, malos]
+	var en: int = (apt.entrada.c + 1) * Peligros.CASILLA
+	var medio: int = apt.cols * Peligros.CASILLA / 2
+	return "la puerta, en x %d, en el centro de la pared (x %d) %s (esperado: true)" % [en, medio, en == medio]
+
+
+# El acceso limpio de la habitación del jefe (Peligros.acceso, el de la porquería del Glotón y el del cerco de fuego del
+# bombero), recto: de la puerta al centro de la sala por las mismas columnas a un lado y a otro de la puerta (torcido,
+# sobraría por un lado). Devuelve el trozo de línea que lo cuenta, con lo esperado
+func paso_recto(sitio: Dictionary) -> String:
+	var apt: Dictionary = sitio.apt
+	var columnas := {}
+	for k in Peligros.acceso(apt):
+		columnas[k.x] = true
+	var de: int = columnas.keys().min()
+	var a: int = columnas.keys().max()
+	var en: int = (apt.entrada.c + 1) * Peligros.CASILLA
+	return "el paso limpio va recto, de la columna %d a la %d, lo mismo a cada lado de la puerta %s (esperado: true)" % [
+		de, a, (de + a + 1) * Peligros.CASILLA == 2 * en]
 
 
 # ¿Se va de "desde" al centro de la habitación del jefe ("sala") sin pisar "casillas", y holgado? Por casillas de la

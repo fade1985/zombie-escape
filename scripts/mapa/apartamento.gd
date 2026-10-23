@@ -11,7 +11,8 @@
 #   4. Se abre una puerta del salón a la cocina y a cada dormitorio, y otra de cada dormitorio a su baño.
 #      A veces, una más entre dos habitaciones vecinas.
 #
-# El apartamento de la jefa es el mismo rectángulo sin tabiques: lo ha reventado todo.
+# El apartamento de la jefa es el mismo rectángulo sin tabiques: lo ha reventado todo. Su puerta de entrada, siempre en
+# el centro de la pared (la de los pisos, al azar).
 #
 # Se trabaja en casillas de 32 unidades. "dueno" dice de quién es cada casilla: el número de su habitación,
 # -1 si es muro y -2 si es el hueco de una puerta.
@@ -354,8 +355,11 @@ static func probar(dormitorios: int, jefe: bool) -> Dictionary:
 			sitios.append(c)
 	if sitios.is_empty():
 		return {}
+	# en la habitación de un jefe, siempre en el centro de la pared: así el paso limpio de la puerta al medio (el de la
+	# porquería del Glotón y el del fuego del bombero) va recto
+	var entrada: int = (cols - PUERTA) / 2 if jefe else escoger(sitios)
 	var apt := {"cols": cols, "filas": filas, "dueno": dueno, "salas": salas, "puertas": puertas,
-		"entrada": {"c": escoger(sitios), "lado": "abajo"}, "jefe": jefe}
+		"entrada": {"c": entrada, "lado": "abajo"}, "jefe": jefe}
 	describir(apt)
 	return apt
 

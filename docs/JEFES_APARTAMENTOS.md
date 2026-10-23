@@ -74,10 +74,11 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
     haya que luchar cerca de él); la elipse es perfecta y siempre igual, como un ring (el dueño, 23 oct: sin nada al
     azar, como el fuego del bombero; lo que cambia de una partida a otra es dónde caen los montones). Un montón de
     mierda en un 22 % de las casillas sucias. De la puerta de entrada a la elipse, un **pasillo limpio** (ahí
-    aparece Johnny): el hueco de delante de la puerta y, del mismo ancho (unas 5 casillas), un pasillo hacia el centro
-    de la sala; con la puerta en medio de la pared cae dentro del hueco y cerca de una esquina, donde la franja es más
-    gruesa, sale en diagonal (el dueño, 23 oct: con la puerta en una esquina el hueco solo no llegaba a la elipse y
-    había que pisar porquería para entrar; `Peligros.acceso`). Dibujado
+    aparece Johnny): el hueco de delante de la puerta y, del mismo ancho (unas 5 casillas), un pasillo recto hacia el
+    centro de la sala (el dueño, 23 oct: con la puerta en una esquina el hueco solo no llegaba a la elipse y había que
+    pisar porquería para entrar; `Peligros.acceso`). La puerta está siempre en el centro de la pared (el dueño, 23 oct:
+    el camino por un lado no le gustaba; vale para las habitaciones de todos los jefes, también las del centro
+    comercial, `Apartamento.probar`). Dibujado
     a cuadraditos como el fuego de la cocina, con burbujas de ácido que revientan y moscas sobre los montones.
     **Las paredes:** la de arriba con salpicaduras que gotean (texturas hechas con código, como adornos de
     las caras de muro) y los lomos de las otras tres, que se ven desde arriba, con pegotes en un 40 % de sus casillas.
@@ -186,8 +187,8 @@ la lumbre.
     borde ardiendo (`peligros/cerco.gd`, `Peligros.del_bombero`), **una elipse fija, como un ring** (el dueño, 23
     oct): en medio, una elipse limpia perfecta donde se pelea, siempre igual (sin nada al azar), y todo lo de fuera
     ardiendo hasta la pared, cerca de un 45 % de la habitación (se reparte igual que la porquería del Glotón);
-    el pasillo de la puerta de entrada a la elipse no arde (el mismo que el de la porquería del Glotón, hacia el
-    centro de la sala, en diagonal si la puerta cae cerca de una esquina). No se apaga: quema como el fuego de
+    el pasillo de la puerta de entrada a la elipse no arde (el mismo que el de la porquería del Glotón, recto hacia el
+    centro de la sala: la puerta está en el centro de la pared). No se apaga: quema como el fuego de
     la cocina (12 por segundo y 2 s más al salir; rodando se cruza, como los charcos) y prende a los zombis; al
     bombero no le hace nada. Da la luz de la sala (10 luces de fuego repartidas por el borde de la elipse).
   - *Molotovs:* a entre 140 y 520, uno en curva (0,9 s) a donde estás, con su marca roja en el suelo
@@ -208,8 +209,8 @@ la lumbre.
   20 fichas). `--captura --jefe bombero` comprueba la inmunidad (lanzallamas, molotov y charco), un golpe normal, las
   bolas y los molotovs (lo escribe en la terminal) y saca `captura-jefe.png` con el giro y su burbuja. `--captura --jefe bombero
   --llamas` prueba su habitación en llamas y el giro: que arde todo el borde menos el pasillo de la puerta, que en medio
-  queda la elipse limpia perfecta (igual con otra semilla), que de la puerta se llega al centro sin pisar el fuego,
-  esté donde esté la puerta, que la lengua llega a la pared y que corriendo en su
+  queda la elipse limpia perfecta (igual con otra semilla), que la puerta está en el centro de la pared y de ella se
+  llega al centro sin pisar el fuego, por un pasillo recto, que la lengua llega a la pared y que corriendo en su
   sentido no te quema, pero en contra, rodando o (enfadado) fuera del hueco entre las dos lenguas, sí, y que con la
   burbuja nada le quita vida, pero en el aviso y acabado el giro sí (ver `docs/CONTROLES.md`).
 - Pegas conocidas: el andar y el golpe (tambaleo) son sutiles; al lanzar de frente PixelLab pintó una bola de fuego

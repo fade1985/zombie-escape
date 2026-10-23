@@ -50,8 +50,8 @@
   habitación del Glotón (solo lámparas, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
   ácido pegada a las paredes, con una elipse limpia perfecta en medio para pelear, siempre igual, como un ring, y un
   pasillo limpio de la puerta a ella: `Peligros.del_gloton`, `Peligros.franja_y_ovalo` y `Peligros.acceso`, el hueco
-  de delante de la puerta y un pasillo de su ancho hacia el centro de la sala, en diagonal si la puerta cae cerca de
-  una esquina; salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
+  de delante de la puerta y un pasillo de su ancho, recto hacia el centro de la sala (la puerta está en el centro de
+  la pared); salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
   `porqueria`, que quema a Johnny al pisarla), y `tropiezos.gd`, las cosas tiradas por el suelo con las que se
   tropieza: las mancuernas del gimnasio del Gymbro (`Peligros.del_gymbro`, 12) y los cubos de fregar del cuarto de la
   limpieza de la portera (`Peligros.de_la_portera`, 10, de tres colores, dibujados a cuadraditos en `tropiezos.gd`),
@@ -274,7 +274,8 @@
 - `botones.gd` (autoload): el saltito de los botones.
 
 **mapa/**
-- `apartamento.gd` (genera un apartamento como `apartment.js`), `tienda.gd` (genera una tienda del centro
+- `apartamento.gd` (genera un apartamento como `apartment.js`; la habitación de un jefe, de los Apartamentos y del
+  centro comercial, con la puerta de entrada siempre en el centro de la pared), `tienda.gd` (genera una tienda del centro
   comercial, con el mismo tipo de plano; sus tipos, en `TIPOS`: la joyería, parte 10, no se sortea, sale una por
   partida en la planta de `Planta.joyeria_planta`), `planta.gd` (la planta, sus zombis, la sala de mantenimiento y la de
   exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `catalogo.gd` (muebles de cada sala; en las tiendas, por tipo: "tienda-<tipo>"; la tienda de un minijefe, si
