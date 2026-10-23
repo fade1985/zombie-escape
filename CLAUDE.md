@@ -8,6 +8,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | `docs/CONTROLES.md` | Teclas, mando, móvil, teclas de prueba (F2-F10, H, M, O…), sala de mantenimiento, guardado |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica solo con cada push a main) |
 | `docs/CENTRO_COMERCIAL.md` | El segundo edificio: plan entero por partes (lo que está hecho, marcado) |
+| `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
 | `PENDIENTES.md` (raíz) | Lista del dueño de fallos, mejoras y cosas por limar: solo se toca un punto cuando él lo pide |
 | `docs/PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md` | Del juego JS: ideas y números |
 
