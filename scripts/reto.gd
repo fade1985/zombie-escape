@@ -84,8 +84,8 @@ static func oscuras() -> bool:
 	return es("oscuras")
 
 
-# curas: los armaritos vacíos, sin el botiquín de la farmacéutica, los zombis no sueltan vendas ni bocadillos
-# (objetos.gd, al_azar) y el vendedor no vende nada de eso
+# curas: los armaritos vacíos, sin el botiquín de la farmacéutica y los zombis no sueltan vendas ni bocadillos
+# (objetos.gd, al_azar)
 static func sin_curas() -> bool:
 	return es("curas")
 
@@ -106,10 +106,8 @@ static func oido() -> float:
 	return OIDO if es("oido") else 1.0
 
 
-# ¿El vendedor ambulante y el puesto del ferretero pueden vender esto? (vendedor.gd, puesto.gd)
+# ¿El puesto del ferretero puede vender esto? (puesto.gd)
 static func se_vende(id: String) -> bool:
-	if id in Objetos.USABLES:   # el botiquín, las vendas y el bocadillo
-		return not sin_curas()
 	if id in ["municion", "molotov", "granada"]:
 		return not sin_municion()
 	return true

@@ -329,15 +329,12 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   su tienda debajo) y en `Objetos.USABLES`, con lo que curan (`"cura"`). La partida pregunta `cura_de(id)` (en
   `partida.gd`): lo suyo más el talento Sanitario y, con la Alerta 4, la mitad; los textos del talento y de la
   alerta lo dicen. Iconos de 16×16 con código, `obj-vendas.png` y `obj-bocadillo.png` (`tools/objetos16.py`, 28 ya).
-- **El vendedor ambulante** también los vende (vendas $4, bocadillo $3): van a la mochila, para cuando hagan falta.
-  Su «objeto sorpresa» sigue siendo chatarra para el banco (`Objetos.al_azar(..., true)`).
 - **El reto del día «Sin botiquines» pasa a llamarse «Sin curas»** (`curas` en `reto.gd`): además de los armaritos
-  vacíos y sin el botiquín de la farmacéutica, los zombis no sueltan vendas ni bocadillos y el vendedor no vende
-  nada que cure.
+  vacíos y sin el botiquín de la farmacéutica, los zombis no sueltan vendas ni bocadillos.
 - La tecla de prueba U (uno de cada objeto al baúl) no mete los de curar.
 - Prueba: la larga (`--captura`, con o sin `--edificio centro`), en `probar_curas`: con la vida baja y los dos en la
   mochila, saca el inventario con las vendas elegidas (`captura-vendas.png`), usa cada uno y cuenta la vida antes y
-  después; dice dónde salen, que no entran en recetas, que el vendedor los vende y los 23 objetos de Colecciones.
+  después; dice dónde salen, que no entran en recetas y los 23 objetos de Colecciones.
 
 ### Decidido con el dueño (22 oct 2026, para la parte 10: la joyería, la sala opcional con riesgo)
 
@@ -478,8 +475,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   «Delantal de cocinero» y «Chándal») de la lista de la **tienda de ropa** (`Objetos.TIENDAS["ropa"]`, junto a las
   cuchillas, el spray y las perchas): sus zombis los sueltan con la probabilidad de siempre, pero **solo los que
   aún no se tienen** (`al_azar` mira `trajes` del guardado); con los cuatro, la tienda vuelve a soltar solo lo de
-  siempre. Como el pasillo sortea una tienda cualquiera, alguna vez sale allí. Nunca como chatarra del vendedor ni
-  con la tecla U (no van al baúl ni entran en recetas).
+  siempre. Como el pasillo sortea una tienda cualquiera, alguna vez sale allí. Nunca con la tecla U (no van al baúl
+  ni entran en recetas).
 - **La modista** al caer suelta siempre uno que falte (`Trajes.que_falta()`, desde `partida.gd` al caer un
   zombi), además de sus dos objetos de la tienda donde esté.
 - **Al cogerlo** (`soltar_objeto` de `partida.gd`): no va a la mochila; Johnny **se lo pone en el acto** y se
@@ -491,7 +488,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 - **Iconos** de 16×16 con código (`tools/objetos16.py`, `TRAJES` y `PLANTILLA_TRAJE`: un peto con su camisa colgado
   de una percha, con los colores de cada traje): `obj-traje_<id>.png`.
 - **Prueba:** `--captura --trajes` sigue con esto: sortea 2000 veces lo que suelta la tienda de ropa sin ningún
-  traje (los cuatro salen como el resto), como chatarra del vendedor (ninguno) y con los cuatro (ninguno); mira
+  traje (los cuatro salen como el resto) y con los cuatro (ninguno); mira
   Colecciones (27) y los nombres; suelta el delantal en el suelo (`captura-trajes-suelo.png`), Johnny lo pisa, se
   lo pone y se guarda (`captura-trajes-cogido.png`); y la modista cae y suelta uno que falta
   (`captura-trajes-modista.png`). La prueba larga comprueba ahora 27 objetos del centro (antes 23).
@@ -617,7 +614,6 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   - Apagón: solo se ve con la linterna.
   - Alarma de incendios: los aspersores mojan el suelo (resbala) y, donde hay cables, calambrazos.
   - Horda por las escaleras: las mecánicas en el centro, las de incendios en los Apartamentos.
-  - Vendedor ambulante: un superviviente en el pasillo que vende cosas por dólares.
 - **Reto del día:** cada día, el mismo edificio generado igual para todo el mundo (la semilla sale de la fecha) y una
   regla rara de una lista (solo cuerpo a cuerpo, todo a oscuras, sin botiquines, zombis rápidos...). Se guarda la
   mejor marca de cada uno (hasta qué planta llega y en cuánto tiempo). Sin servidor: solo compites contigo.
@@ -657,7 +653,7 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 
 ### ✅ Hecho (21 oct, parte 8, trozo 2: eventos sorpresa)
 
-- Todo en `scripts/eventos.gd` (y el vendedor en `scripts/vendedor.gd`), con sus números en constantes. En cada
+- Todo en `scripts/eventos.gd`, con sus números en constantes. En cada
   planta menos la última, una de cada cuatro veces (25 %): en 2000 partidas sorteadas sale de media uno por partida
   (sin ninguno, 31 %; uno, 43 %; dos, 21 %; tres o cuatro, 5 %). En una partida no se repite ninguno. Con
   `Planta.semilla` (el reto del día) salen los mismos para todos.
@@ -677,15 +673,12 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   comercial, también vigilantes). Entre oleada y oleada, 10 s, o enseguida si ya no queda ninguno. Si Johnny se mete
   en una tienda o un piso, los que quedan le esperan en el pasillo. Premio: 3 billetes (+1 por planta) y una caja
   de munición.
-- **Vendedor ambulante:** un superviviente con una mochila enorme y una manta en el suelo con lo que vende, contra la
-  pared de arriba del pasillo, a un lado del ascensor. Los zombis no le hacen caso. Al arrimarse, el juego se para y
-  sale su puesto: tres cosas sorteadas, cada una una vez (botiquín $8, caja de munición $3, molotov $5, granada $6,
-  chaleco +30 de escudo hasta la planta siguiente $10, objeto sorpresa para el banco $6). Paga con los dólares de la
-  partida y, si no llegan, con los ahorrados. No deja comprar lo que no sirve (con la vida llena, sin sitio...).
-- **Lo que cambia respecto al plan:** nada de lo decidido; solo los detalles de arriba (el chaleco usa el icono del
-  casco, y la horda baja por la puerta de las escaleras, no por unas escaleras dibujadas).
-- Prueba: `--captura --evento apagon|incendio|horda|vendedor` (con o sin `--edificio centro`). La prueba larga sigue
-  sin eventos.
+- **Lo que cambia respecto al plan:** nada de lo decidido; solo los detalles de arriba (la horda baja por la puerta
+  de las escaleras, no por unas escaleras dibujadas).
+- **El 23 oct se quitó el cuarto, el vendedor ambulante:** no pegaba con el juego. La probabilidad sigue en el 25 %,
+  así que cada uno de los tres sale algo más a menudo.
+- Prueba: `--captura --evento apagon|incendio|horda` (con o sin `--edificio centro`). La prueba larga sigue sin
+  eventos.
 
 ### ✅ Hecho (22 oct 2026, parte 8, trozo 3: colecciones y bestiario)
 
@@ -696,11 +689,11 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   nuevo desde la última vez, el icono dice «¡NUEVO!»; al abrir el programa se apaga.
 - Guardado (para siempre, entre partidas): `encontrados`, `creadas`, `bestiario` y `colecciones_nuevo`. Un guardado de
   antes se rellena una vez con lo que haya en el baúl (objetos con más de 0 y las recetas de `baul_armas`).
-- Dónde se apunta: un objeto, al cogerlo del suelo (`soltar_objeto` de `partida.gd`) o al comprárselo al vendedor
-  ambulante (`vendedor.gd`); un arma, al crearla en el banco (`inventario.gd`), y cuenta como creada alguna vez,
-  aunque luego se pierda; un enemigo, cuando aparece en la sala donde estás (`meter_zombi` de `partida.gd`, por donde
-  pasan todos), más el gerente al mutar (`gerente.gd`) y el maniquí vivo de la modista (`modista.gd`). El bestiario
-  apunta en memoria y solo escribe el guardado la primera vez que ve a cada uno.
+- Dónde se apunta: un objeto, al cogerlo del suelo (`soltar_objeto` de `partida.gd`); un arma, al crearla en el
+  banco (`inventario.gd`), y cuenta como creada alguna vez, aunque luego se pierda; un enemigo, cuando aparece en la
+  sala donde estás (`meter_zombi` de `partida.gd`, por donde pasan todos), más el gerente al mutar (`gerente.gd`) y
+  el maniquí vivo de la modista (`modista.gd`). El bestiario apunta en memoria y solo escribe el guardado la primera
+  vez que ve a cada uno.
 - Las cuentas: los objetos, por edificio, 17 en los Apartamentos y 21 en el centro comercial (los explosivos cuentan
   en los dos: los suelta el zombi explosivo); debajo de cada objeto, dónde sale (en el centro, sus tiendas). Las
   recetas, 15 de los Apartamentos y 9 del centro (las 6 que mezclan los dos edificios y las 3 solo del centro). El
@@ -724,12 +717,12 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
   la planta del superviviente y los eventos sorpresa salen iguales para todos; lo que pasa dentro ya depende de cada
   jugador. La regla sale de la fecha. Sin servidor: solo compites contigo.
 - **Las siete reglas** (números en constantes de `reto.gd`; cada una se mira en una línea del sitio donde se aplica):
-  - *Solo cuerpo a cuerpo*: la pistola empieza vacía, no caen cajas de munición ni molotovs ni granadas, el vendedor
-    ambulante y el puesto del ferretero no los venden, y la ayuda «Pistola sin fin» no vale.
+  - *Solo cuerpo a cuerpo*: la pistola empieza vacía, no caen cajas de munición ni molotovs ni granadas, el puesto
+    del ferretero no los vende y la ayuda «Pistola sin fin» no vale.
   - *Todo a oscuras*: todos los sitios menos la sala de mantenimiento como en el apagón (la misma oscuridad de más y
     las lámparas apagadas: `eventos.gd`, `al_montar`); ese día el apagón no se sortea.
   - *Sin curas* (se llamó «Sin botiquines» hasta la parte 9): los armaritos de los baños salen vacíos, la farmacéutica
-    no te prepara el suyo, los zombis no sueltan vendas ni bocadillos y el vendedor no vende nada que cure.
+    no te prepara el suyo y los zombis no sueltan vendas ni bocadillos.
   - *Zombis rápidos*: todos un 35 % más rápidos (los jefes, no).
   - *De cristal*: Johnny con la mitad de vida.
   - *Casa llena*: el doble de presupuesto de zombis en cada sitio (y en las oleadas de la horda).

@@ -128,9 +128,9 @@
   probetas del científico jefe en parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
   su marca; se quedan clavados un rato), `contrato.gd` (los contratos del gerente, dibujados con código: vuelan
   girando, cortan 10 y al toparse con algo caen al suelo), `explosion.gd`.
-- `persona.gd`: una persona dibujada con formas (drawHuman del JS), para el vendedor (sabe también lo de cada
-  oficio: chaleco, bata, cascos, moño, bigote, martillo). Los seis supervivientes ya no la usan: van con
-  su hoja de PixelLab (`aliado.gd`, `HOJAS`); `aliado.gd` la sigue sabiendo usar para quien no tenga hoja.
+- `persona.gd`: una persona dibujada con formas (drawHuman del JS; sabe también lo de cada oficio: chaleco, bata,
+  cascos, moño, bigote, martillo). Los seis supervivientes ya no la usan: van con su hoja de PixelLab (`aliado.gd`,
+  `HOJAS`); `aliado.gd` la sigue sabiendo usar para quien no tenga hoja.
 - `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
@@ -153,18 +153,17 @@
 - `eventos.gd`: los eventos sorpresa (parte 8): una de cada cuatro plantas (nunca la última ni, dentro, la sala del
   jefe o la de mantenimiento), al pisar su pasillo, con un cartel grande: apagón (`Luz.evento` y las lámparas a
   `fuerza` 0), alarma de incendios (charcos `"agua"` de `charco.gd`, la lluvia y los cables con calambrazos: clases
-  `Lluvia` y `Cable` de dentro), horda por las escaleras (tres oleadas por la puerta de las escaleras; los que
-  quedan esperan en el pasillo; premio al final) y el vendedor ambulante (`vendedor.gd`: el dibujo con `Persona`,
-  la mochila y la manta, y su puesto con el panel de `menus.gd`; paga con los dólares de la partida y luego con los
-  ahorrados). Los números, en sus constantes. Lo engancha `partida.gd` en `nueva_planta()`, `montar()` (`recoger()`
-  y `al_montar()`) y `poner_lugar()` (`etiqueta()`). La prueba: `--captura --evento X` (`probar()`).
+  `Lluvia` y `Cable` de dentro) y horda por las escaleras (tres oleadas por la puerta de las escaleras; los que
+  quedan esperan en el pasillo; premio al final). Los números, en sus constantes. Lo engancha `partida.gd` en
+  `nueva_planta()`, `montar()` (`recoger()` y `al_montar()`) y `poner_lugar()` (`etiqueta()`). La prueba:
+  `--captura --evento X` (`probar()`).
 - `reto.gd`: el reto del día (parte 8): cada día el edificio sale igual para todo el mundo (la semilla de las
   plantas, `Planta.semilla`, sale de la fecha y del edificio: `semilla_de()`; la partida pone también el dado de
   siempre con ella al empezar) y con una regla rara de `REGLAS`, la misma para los dos edificios (`regla_de()`).
   «Elige edificio» lo pone con `empezar()` (y `quitar()` para una partida normal). La partida pregunta a sus
   funciones donde se aplica cada regla: `sin_municion()` (`partida.gd`, `johnny.gd`, `puesto.gd`), `oscuras()`
   (`eventos.gd`, `al_montar`, con lo del apagón), `sin_curas()` (`partida.gd`, `supervivientes.gd` y `objetos.gd`),
-  `se_vende()` (el vendedor y el puesto), `velocidad()`, `vida()` (`aplicar_talentos`), `mas_zombis()` (`planta.gd` y
+  `se_vende()` (el puesto del ferretero), `velocidad()`, `vida()` (`aplicar_talentos`), `mas_zombis()` (`planta.gd` y
   la horda) y `oido()` (`zombi.gd`). La marca de hoy de cada edificio, en el guardado (`retos`, `Guardado.RETO`):
   `ficha()` (de otro día, se empieza de cero), `apuntar()` (al acabar, en `terminar()` de `partida.gd`, que no toca el
   progreso del edificio) y `marca()` y `texto_tarjeta()` para los textos. La prueba: `--captura --reto si` (o

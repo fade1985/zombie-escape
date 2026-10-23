@@ -127,9 +127,9 @@ static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -
 
 # Un objeto cualquiera de los que salen ahí, menos los explosivos (el jefe suelta dos seguros). En los
 # Apartamentos, uno de los de siempre; en el centro comercial, uno de la lista de su tienda (en el pasillo, de
-# una tienda cualquiera). Con "chatarra", sin los de curar ni los trajes (el objeto sorpresa del vendedor es para el
-# banco); con el reto del día "Sin curas" (reto.gd), tampoco los de curar. Los trajes, solo los que aún no se tienen
-static func al_azar(edificio := "apartamentos", tienda := "", chatarra := false) -> String:
+# una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar. Los trajes, solo los que aún
+# no se tienen
+static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 	var lista: Array
 	if edificio == "apartamentos":
 		lista = NOMBRES.keys().filter(func(id): return id != "explosivos" and id not in SOLO_CENTRO)
@@ -137,12 +137,12 @@ static func al_azar(edificio := "apartamentos", tienda := "", chatarra := false)
 		if tienda not in TIENDAS:
 			tienda = TIENDAS.keys().pick_random()
 		lista = TIENDAS[tienda]
-	if chatarra or Reto.sin_curas():
+	if Reto.sin_curas():
 		lista = lista.filter(func(id): return not id in USABLES)
-	# los trajes (trajes.gd): solo los que aún no se tienen, y nunca como chatarra (no van al banco)
+	# los trajes (trajes.gd): solo los que aún no se tienen
 	if lista.any(func(id): return Trajes.es_objeto(id)):
 		var tenidos := Trajes.tenidos()
-		lista = lista.filter(func(id): return not Trajes.es_objeto(id) or (not chatarra and not Trajes.de_objeto(id) in tenidos))
+		lista = lista.filter(func(id): return not Trajes.es_objeto(id) or not Trajes.de_objeto(id) in tenidos)
 	return lista.pick_random()
 
 
@@ -181,7 +181,7 @@ static func donde(id: String, edificio: String) -> String:
 	return ", ".join(tiendas.slice(0, -1)) + " y " + tiendas[-1]
 
 
-# Apunta un objeto como encontrado alguna vez (al cogerlo del suelo o comprárselo al vendedor). El botiquín de la
+# Apunta un objeto como encontrado alguna vez (al cogerlo del suelo). El botiquín de la
 # farmacéutica no cuenta (no está en NOMBRES); las vendas y el bocadillo, sí
 static func apuntar_encontrado(id: String) -> void:
 	if not id in NOMBRES:

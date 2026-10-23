@@ -39,7 +39,7 @@ func preparar_prueba() -> void:
 	Guardado.archivo = "user://guardado-prueba.json"   # la prueba no toca el guardado de verdad
 	# con "--alerta 5", la prueba se juega con esa alerta (alerta.gd); sin él, sin alerta
 	Alerta.nivel = int(Captura.dato("--alerta", "0"))
-	# con "--evento apagon" (incendio, horda, vendedor), la prueba de ese evento sorpresa (eventos.gd)
+	# con "--evento apagon" (incendio, horda), la prueba de ese evento sorpresa (eventos.gd)
 	eventos.forzado = Captura.dato("--evento")
 
 
@@ -1756,8 +1756,8 @@ func probar_reto() -> void:
 		Reto.regla = r
 		aplicar_talentos(talentos)
 		var z := meter_zombi("normal", Vector2(200, 200))
-		print("%s · munición: %s · oscuras: %s · curas: %s · vende botiquín/munición: %s/%s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
-			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_curas(), Reto.se_vende("botiquin"),
+		print("%s · munición: %s · oscuras: %s · curas: %s · el ferretero vende munición: %s · velocidad %.0f · vida %d · zombis x%.1f · oído %.0f" % [
+			Reto.nombre(), not Reto.sin_municion(), Reto.oscuras(), not Reto.sin_curas(),
 			Reto.se_vende("municion"), z.velocidad, johnny.stats.vida_max, Reto.mas_zombis(), Zombi.OIDO * Reto.oido()])
 		z.queue_free()
 	Reto.regla = regla
@@ -1810,8 +1810,8 @@ func probar_reto() -> void:
 # (captura-trajes.png). Luego Johnny con el chándal y el bate dando un golpe andando, parado a mitad del barrido:
 # el cuerpo con el golpe y las piernas de andar debajo, las dos con los colores del traje
 # (captura-trajes-golpe.png). Cuenta en la terminal los trajes, lo que se guarda y la vuelta de la tecla Z.
-# Luego, cómo se consiguen (trozo 2): cuenta lo que sortea la tienda de ropa sin ningún traje, como chatarra del
-# vendedor y con los cuatro, y mira Colecciones; suelta el delantal en el suelo (captura-trajes-suelo.png), Johnny lo
+# Luego, cómo se consiguen (trozo 2): cuenta lo que sortea la tienda de ropa sin ningún traje y con los cuatro, y
+# mira Colecciones; suelta el delantal en el suelo (captura-trajes-suelo.png), Johnny lo
 # pisa, se lo pone y se guarda (captura-trajes-cogido.png); con dos trajes, se arrima a la taquilla y sale su
 # ventanita (captura-taquilla.png), elige uno, prueba uno que falta y vuelve al conserje; y la modista cae y suelta
 # uno que falte (captura-trajes-modista.png). Luego se cierra
@@ -1879,22 +1879,18 @@ func probar_trajes() -> void:
 		", ".join(Trajes.ZONAS)])
 
 	# ── Cómo se consiguen (trozo 2) ──
-	# la tienda de ropa sortea los que faltan (nunca como chatarra del vendedor); con los cuatro, solo lo de siempre
+	# la tienda de ropa sortea los que faltan; con los cuatro, solo lo de siempre
 	Guardado.cambiar(func(g): g.trajes = []; g.traje = "")
 	var cuenta := {}
-	var chatarra := 0
 	for i in 2000:
 		var id := Objetos.al_azar("centro", "ropa")
 		cuenta[id] = cuenta.get(id, 0) + 1
-		if Trajes.es_objeto(Objetos.al_azar("centro", "ropa", true)):
-			chatarra += 1
 	Guardado.cambiar(func(g): g.trajes = Trajes.LISTA.keys())
 	var con_todos := 0
 	for i in 2000:
 		if Trajes.es_objeto(Objetos.al_azar("centro", "ropa")):
 			con_todos += 1
-	print("Tienda de ropa, 2000 sorteos sin ningún traje: %s · como chatarra del vendedor: %d trajes · con los cuatro: %d trajes" % [
-		cuenta, chatarra, con_todos])
+	print("Tienda de ropa, 2000 sorteos sin ningún traje: %s · con los cuatro: %d trajes" % [cuenta, con_todos])
 	var nombres_bien: bool = Trajes.LISTA.keys().all(func(id): return Objetos.NOMBRES[Trajes.objeto(id)] == Trajes.LISTA[id].nombre)
 	print("Colecciones del centro: %d objetos · dónde sale el delantal: «%s» · los nombres de objetos.gd y trajes.gd coinciden: %s · algún traje en los Apartamentos: %s" % [
 		Objetos.de_edificio("centro").size(), Objetos.donde(Trajes.objeto("cocinero"), "centro"), nombres_bien,
@@ -3085,10 +3081,9 @@ func probar_curas() -> void:
 		inventario.usar()
 		print("%s: vida %d -> %d (cura %d) | mochila %s | cerrado %s" % [Objetos.nombre(id), v, johnny.vida, cura_de(id),
 			mochila, inventario.abierto == ""])
-	print("Curas · en alguna receta: %s · dónde salen: vendas en %s, bocadillo en %s · el vendedor las vende: %s · Colecciones del centro: %d objetos" % [
+	print("Curas · en alguna receta: %s · dónde salen: vendas en %s, bocadillo en %s · Colecciones del centro: %d objetos" % [
 		Recetas.LISTA.values().any(func(r): return "vendas" in r.con or "bocadillo" in r.con),
-		Objetos.donde("vendas", "centro"), Objetos.donde("bocadillo", "centro"),
-		"vendas" in eventos.VENDEDOR.VENTA and "bocadillo" in eventos.VENDEDOR.VENTA, Objetos.de_edificio("centro").size()])
+		Objetos.donde("vendas", "centro"), Objetos.donde("bocadillo", "centro"), Objetos.de_edificio("centro").size()])
 	if inventario.abierto != "":
 		inventario.cerrar()   # por si alguno no se ha podido usar: que no se quede el juego en pausa
 	mochila = antes[0]

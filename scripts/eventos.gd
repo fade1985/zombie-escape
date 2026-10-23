@@ -7,7 +7,6 @@
 #             "agua") y en algunos cae un cable pelado que da calambrazos a Johnny y a los zombis (Cable, abajo)
 #   horda     bajan zombis por las escaleras del fondo del pasillo, en tres oleadas, cada vez más y peores; si
 #             Johnny se mete en un piso, los que quedan le esperan en el pasillo. Al acabar con todos, un premio
-#   vendedor  un superviviente en el pasillo que vende cosas por dólares (vendedor.gd)
 #
 # Empieza la primera vez que Johnny pisa el pasillo de la planta (en la planta baja, al salir de la sala de
 # mantenimiento), con un cartel grande en la pantalla. Lo que dura, toda la planta.
@@ -17,8 +16,7 @@ class_name Eventos
 extends Node
 
 const PROBABILIDAD := 0.25
-const LISTA := ["apagon", "incendio", "horda", "vendedor"]
-const VENDEDOR := preload("res://scripts/vendedor.gd")
+const LISTA := ["apagon", "incendio", "horda"]
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 const LAMPARA := "res://escenas/luces/lampara.tscn"
 const RAYO := Color("#9fe8ff")
@@ -31,8 +29,6 @@ const DATOS := {
 		"sonido": "alarma", "texto": "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"},
 	"horda": {"nombre": "Horda", "titulo": "¡HORDA POR LAS ESCALERAS!", "color": Color("#ff9f1c"), "sonido": "rugido",
 		"texto": "Algo baja por las escaleras %s... ¡prepárate!"},
-	"vendedor": {"nombre": "Vendedor ambulante", "titulo": "VENDEDOR AMBULANTE", "color": Color("#80ed99"),
-		"sonido": "compra", "texto": "Un superviviente vende cosas en el pasillo: arrímate a él"},
 }
 # Números provisionales
 const APAGON := 0.4          # oscuridad de más (con la del pasillo, casi negro: el tope de luz.gd es 0,97)
@@ -60,8 +56,6 @@ var empezado := false      # si ya ha empezado (Johnny ha pisado el pasillo)
 var activo := false        # si Johnny está en un sitio con el evento (no en la sala del jefe ni en mantenimiento)
 var charcos := {}          # incendio: sitio -> [{pos, cable, avisado}]
 var horda := {}            # {oleada, t, goteo, cola, vivos, quedan, hecha}
-var venta := {}            # el vendedor: {pos, ofertas, vendidas, objeto}
-var vendedor: Node2D = null
 var sirena_t := 0.0
 var cartel: VBoxContainer
 var cartel_titulo: Label
@@ -112,8 +106,7 @@ func nueva_planta() -> void:
 	activo = false
 	charcos = {}
 	horda = {}
-	venta = {}
-	if forzado != "":
+	if forzado in LISTA:   # (si no es ninguno de la lista, probar() lo dice y cierra)
 		evento = forzado
 		return
 	if partida.captura or num >= Planta.PLANTAS:
@@ -130,7 +123,6 @@ func nueva_planta() -> void:
 
 # Antes de cambiar de sitio: los zombis de la horda que siguen en pie se apuntan (esperarán en el pasillo)
 func recoger() -> void:
-	vendedor = null
 	if horda.is_empty():
 		return
 	for z in horda.vivos:
@@ -161,9 +153,6 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 				for tipo in horda.quedan:
 					bajar(tipo, false)
 				horda.quedan = []
-		"vendedor":
-			if idx == 0:
-				poner_vendedor(sitio)
 
 
 func empezar() -> void:
@@ -338,35 +327,14 @@ func premio() -> void:
 	Sonido.tocar("limpio")
 
 
-# ── El vendedor ambulante ──
-
-func poner_vendedor(sitio: Dictionary) -> void:
-	if venta.is_empty():
-		# (con el reto del día, sin lo que su regla quita: el botiquín, o la munición y los lanzables)
-		var ofertas: Array = VENDEDOR.VENTA.keys().filter(Reto.se_vende)
-		ofertas.shuffle()
-		venta = {"pos": sitio_vendedor(sitio), "ofertas": ofertas.slice(0, VENDEDOR.OFERTAS), "vendidas": [],
-			"objeto": Objetos.al_azar(partida.edificio, "", true)}   # (chatarra: los de curar ya los vende aparte)
-	vendedor = VENDEDOR.new()
-	vendedor.montar(partida, venta)
-	partida.mapa.cosas.add_child(vendedor)
-
-
-# Un hueco libre en el medio del pasillo, contra la pared de arriba (a un lado del ascensor)
-func sitio_vendedor(sitio: Dictionary) -> Vector2:
-	var mapa: Node = partida.mapa
-	for k in 20:
-		var x: float = sitio.ancho / 2.0 + (1 if k % 2 == 0 else -1) * (170 + 48 * (k / 2))
-		var p := Vector2(x, Planta.MURO + 70)
-		if Planta.lejos_de_muebles(sitio, p, 46.0) and mapa.zona_en(p) >= 0:
-			return p
-	return mapa.punto_libre(partida.johnny.position, 300.0)
-
-
 # ═════════════ La prueba (--captura --evento X) ═════════════
 
 # Fuerza el evento en la planta baja, sale al pasillo (empieza) y saca sus fotos
 func probar(que: String) -> void:
+	if not que in LISTA:
+		print("No hay ningún evento sorpresa '%s': los que hay son %s" % [que, ", ".join(LISTA)])
+		get_tree().quit()
+		return
 	var foto := func(nombre: String) -> void:
 		Captura.foto("captura-evento-%s.png" % nombre)
 	var esperar := func(s: float) -> void:
@@ -409,8 +377,6 @@ func probar(que: String) -> void:
 			await probar_incendio(foto, esperar)
 		"horda":
 			await probar_horda(foto, esperar)
-		"vendedor":
-			await probar_vendedor(foto, esperar)
 	get_tree().quit()
 
 
@@ -506,35 +472,6 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	print("Horda · vencida: %s · oleadas %d · dólares %d -> %d · aviso '%s' · lugar '%s'" % [horda.hecha, horda.oleada,
 		dolares, partida.dolares, partida.aviso.text, partida.lugar.text])
 	foto.call("horda-premio")
-
-
-func probar_vendedor(foto: Callable, esperar: Callable) -> void:
-	var johnny: Node2D = partida.johnny
-	print("Vendedor · en %s · vende %s (objeto sorpresa: %s)" % [venta.pos, venta.ofertas, venta.objeto])
-	johnny.position = venta.pos + Vector2(-150, 90)
-	johnny.get_node("Camara").reset_smoothing()
-	await esperar.call(0.4)
-	foto.call("vendedor")
-	# con $5 de la partida y $20 ahorrados; herido, para que el botiquín sirva
-	partida.dolares = 5
-	Guardado.cambiar(func(g): g.dolares = 20)
-	partida.ahorrados = 20
-	johnny.vida = 40
-	johnny.position = venta.pos + Vector2(0, 50)   # se arrima: se abre el puesto
-	await get_tree().create_timer(0.5).timeout   # (este reloj sigue con el juego parado)
-	print("Vendedor · puesto abierto: %s · juego parado: %s" % [partida.menus.abierto, get_tree().paused])
-	foto.call("vendedor-puesto")
-	for id in venta.ofertas:
-		vendedor.comprar(id)
-		print("Vendedor · compra '%s': %s · quedan $%d de la partida y $%d ahorrados (guardado: $%d)" % [id,
-			vendedor.info.text, partida.dolares, partida.ahorrados, Guardado.cargar().dolares])
-	vendedor.comprar(venta.ofertas[0])
-	print("Vendedor · otra vez la primera: '%s'" % vendedor.info.text)
-	await get_tree().create_timer(0.2).timeout
-	foto.call("vendedor-comprado")
-	vendedor.cerrar()
-	print("Vendedor · cerrado: juego parado %s · vida %d · escudo %.0f · lanzables %s · mochila %s" % [get_tree().paused,
-		johnny.vida, johnny.escudo, partida.lanzables.cantidades, partida.mochila])
 
 
 # ═════════════ Lo que se dibuja ═════════════
