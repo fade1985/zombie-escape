@@ -11,7 +11,8 @@
 #     atrás; más lejos, andando hacia atrás le gana. También se libra esquivando (esquivando no tira), saliendo del
 #     cono o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
 #   - Sangre ácida: cada golpe o disparo que le das salpica ácido y Johnny pierde un 1 % de su vida (uno cada
-#     0,5 s como mucho, para que las armas rápidas no sumen demasiado).
+#     0,5 s como mucho, para que las armas rápidas no sumen demasiado). Si le pegan los supervivientes que
+#     acompañan a Johnny, le hacen daño igual pero el ácido no le cae a nadie.
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
 # Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza (al máximo arrastra
 # desde 7 casillas) y el ácido quita un 2 %.
@@ -214,15 +215,16 @@ func foto(johnny: Node2D) -> void:
 
 # ── La sangre ácida ──
 
-func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false) -> void:
+func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, de_aliado := false) -> void:
 	var antes := vida
-	super(cantidad, fuerza, de_lleno)
+	super(cantidad, fuerza, de_lleno, de_aliado)
 	if estado == "muerto" or vida == antes:
 		return
 	if de_lleno and estado != "grito":
 		cambiar("tambaleo")   # una explosión le corta lo que esté haciendo
 		marcha = Vector2.ZERO
-	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salpica
+	# un golpe o una bala de Johnny (no el fuego): salpica. Si le pega un superviviente, el ácido no le cae a nadie
+	if fuerza != Vector2.ZERO and not de_aliado:
 		salpicar_acido()
 
 

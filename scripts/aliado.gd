@@ -447,6 +447,7 @@ func disparar(blanco: Node2D) -> void:
 	var bala := BALA.instantiate()
 	bala.velocidad = hacia * 620.0
 	bala.dano = def.habilidad.dano
+	bala.de_aliado = true
 	bala.radio = 4.0
 	bala.vida = 520.0 / 620.0
 	get_parent().add_child(bala)
@@ -470,9 +471,13 @@ func disparar(blanco: Node2D) -> void:
 
 
 # El ferretero: un martillazo al zombi que tiene encima (con hoja, en el fotograma en que el martillo da abajo; con
-# formas, la mano baja de golpe: persona.gd, con el retroceso)
+# formas, la mano baja de golpe: persona.gd, con el retroceso). A un jefe le dice que el golpe es de un superviviente
+# (el Glotón no salpica a Johnny con su ácido)
 func martillazo(z: Node2D, hacia: Vector2) -> void:
-	z.recibir_golpe(def.habilidad.dano, hacia.normalized() * 160.0)
+	if z is Minijefe:
+		z.recibir_golpe(def.habilidad.dano, hacia.normalized() * 160.0, false, true)
+	else:
+		z.recibir_golpe(def.habilidad.dano, hacia.normalized() * 160.0)
 	if persona:
 		persona.retroceso = 1.0
 	Sonido.tocar("barrido")

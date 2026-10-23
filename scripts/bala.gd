@@ -18,6 +18,7 @@ var radio := 4.0
 var critico := false        # las críticas se ven más rojizas (y saltan más chispas)
 var vida := 1.0             # segundos que le quedan (alcance ÷ velocidad)
 var altura := 50.0          # a qué altura sobre la bala de verdad se dibuja
+var de_aliado := false      # la ha disparado un superviviente, no Johnny (se lo dice a los jefes: el Glotón no salpica)
 
 
 func _physics_process(delta: float) -> void:
@@ -41,7 +42,11 @@ func _physics_process(delta: float) -> void:
 	# ¿Ha dado a algún zombi?
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
-			zombi.recibir_golpe(dano, velocidad.normalized() * EMPUJE * empuje)
+			var fuerza := velocidad.normalized() * EMPUJE * empuje
+			if de_aliado and zombi is Minijefe:
+				zombi.recibir_golpe(dano, fuerza, false, true)
+			else:
+				zombi.recibir_golpe(dano, fuerza)
 			chocar()
 			return
 	queue_redraw()

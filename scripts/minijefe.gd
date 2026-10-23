@@ -223,7 +223,9 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	return cantidad
 
 
-func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false) -> void:
+# "de_aliado": el golpe es de un superviviente que acompaña a Johnny (sus balas o el martillazo del ferretero). Aquí no
+# cambia nada: lo mira el Glotón, que entonces no salpica a Johnny con su ácido
+func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, _de_aliado := false) -> void:
 	if estado == "muerto" or invulnerable:
 		return
 	cantidad = danar(cantidad, fuerza, de_lleno)

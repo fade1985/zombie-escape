@@ -57,7 +57,9 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
     también te acaba tragando: hay que moverse. Con menos vida Johnny anda más lento y la zona crece (6-7 casillas).
     Se ve que coge fuerza: más motas de aire y más rápidas, arcos del cono más deprisa y más vivos, y tiembla más.
   - *Sangre ácida:* cada golpe o bala que le das te quita el 1 % de la vida máxima (mínimo 1), uno cada 0,5 s como
-    mucho, con gotas verdes y su chisporroteo.
+    mucho, con gotas verdes y su chisporroteo. Desde el 23 oct, lo que le pegan los supervivientes que te acompañan
+    (balas del policía y del militar, martillazos del ferretero) le hace daño igual, pero el ácido no le cae a nadie:
+    el golpe lleva `de_aliado` (`bala.gd`, `aliado.gd`) y el Glotón solo salpica si es de Johnny.
   - Una granada (explosión) le corta lo que esté haciendo (0,6 s tambaleándose): así se para el aspirado.
   - *Enfadado* («¡TENGO HAMBRE!»): 6 lenguas (separadas 0,27 rad), tira el doble (1100: al máximo arrastra desde 7
     casillas), ácido al 2 %, latigazo cada 1,6 s y aspira cada 7 s.
@@ -65,7 +67,8 @@ gigante con varias filas de dientes** y **lenguas como látigos** que le salen d
   `apartamentos-jefes` → `gloton-72`). Hoja con `py tools/jefe_hoja.py gloton-72 jefe-gloton`.
 - Tecla de prueba **7** (los demás minijefes de los Apartamentos irán en 8, 9...); sale en la exposición (F9,
   alargada 5 casillas) y en el bestiario («El Glotón», 18 fichas). `--captura --jefe gloton` comprueba la sangre
-  ácida y el aspirado (lo escribe en la terminal) y saca `captura-jefe.png` con el latigazo.
+  ácida (también que la bala de un superviviente no salpica a Johnny) y el aspirado (lo escribe en la terminal) y
+  saca `captura-jefe.png` con el latigazo.
 - Pegas conocidas: el andar a gatas es sutil (más balanceo que paso); de espaldas, el latigazo enseña una lengua por
   encima de la cabeza.
 

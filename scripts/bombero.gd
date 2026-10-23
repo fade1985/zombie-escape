@@ -409,12 +409,12 @@ func herir(_cantidad: float, _color := Color.WHITE) -> void:
 
 # Una explosión le corta lo que esté haciendo (también el aviso del giro): se tambalea. Girando, no: la burbuja de
 # fuego se lo lleva todo (golpes, balas y explosiones), sin quitarle vida ni pararle, y brilla donde le dan
-func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false) -> void:
+func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, de_aliado := false) -> void:
 	if invulnerable and estado == "giro":
 		rebote(fuerza, de_lleno)
 		return
 	var antes := vida
-	super(cantidad, fuerza, de_lleno)
+	super(cantidad, fuerza, de_lleno, de_aliado)
 	if estado == "muerto" or vida == antes:
 		return
 	if de_lleno and estado != "grito" and estado != "tambaleo":

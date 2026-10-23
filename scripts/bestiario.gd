@@ -93,7 +93,7 @@ const LISTA := {
 		"recorte": Rect2i(17, 31, 127, 127), "retrato": "quieto_s", "escala": 2, "jefe": true},
 	# los minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md)
 	"gloton": {"nombre": "El Glotón",
-		"frase": "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe te salpica.",
+		"frase": "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe tuyo te salpica.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-gloton.tres",
 		"recorte": Rect2i(33, 26, 66, 66), "retrato": "quieto_s", "escala": 2, "jefe": true},
 	"gymbro": {"nombre": "El Gymbro",

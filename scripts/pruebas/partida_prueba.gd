@@ -2408,11 +2408,24 @@ func probar_modista(jefa: Node2D) -> void:
 		).call_deferred())
 
 
-# El Glotón: la sangre ácida (dos golpes seguidos: solo el primero salpica, un 1 % de la vida de Johnny) y el
-# aspirado (Johnny puesto a 220 de él: 0,15 s al abrir la boca y otros 0,15 s con toda su fuerza; antes de la foto
-# de los 7,7)
+# El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y a Johnny no le salpica; luego
+# dos golpes de Johnny seguidos: solo el primero salpica, un 1 % de su vida) y el aspirado (Johnny puesto a 220 de él:
+# 0,15 s al abrir la boca y otros 0,15 s con toda su fuerza; antes de la foto de los 7,7)
 func probar_gloton() -> void:
+	# la bala de verdad, encima de él, con un paso suyo hecho a mano (para que no tarde nada)
 	var antes_vida: int = johnny.vida
+	var antes_jefe: int = jefa.vida
+	var bala := preload("res://escenas/armas/bala.tscn").instantiate()
+	bala.velocidad = Vector2.RIGHT * 620.0
+	bala.dano = 10
+	bala.de_aliado = true
+	bala.set_physics_process(false)
+	jefa.get_parent().add_child(bala)
+	bala.global_position = jefa.global_position
+	bala._physics_process(1.0 / 60.0)
+	print("Sangre ácida (bala de 10 de un superviviente): Glotón -%d, Johnny -%d (esperado: 10 y 0)" % [
+		antes_jefe - jefa.vida, antes_vida - johnny.vida])
+	antes_vida = johnny.vida
 	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
 	jefa.recibir_golpe(10, Vector2.RIGHT * 300.0)
 	print("Sangre ácida (dos golpes seguidos de 10): Johnny -%d" % (antes_vida - johnny.vida))
