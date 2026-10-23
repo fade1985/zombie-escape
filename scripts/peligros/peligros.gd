@@ -12,12 +12,14 @@
 #   agua.gd   un charco en la sala de venta   {tipo, sala, casillas, cable, cable_desde, cuadro, corriente, arreglado, avisado}
 #             con cuadro.gd, el cuadro eléctrico que le quita (y le devuelve) la corriente a la tienda; "arreglado":
 #             el técnico ha arreglado el cable (su rescate, averia.gd) y el agua ya no da calambres
-# Y los de los minijefes de los Apartamentos (planta.gd llama a del_gloton, a del_gymbro y a de_la_portera):
+# Y los de los minijefes de los Apartamentos (planta.gd llama a del_gloton, a del_gymbro, a de_la_portera y a
+# del_bombero):
 #   porqueria.gd  la habitación del Glotón   {tipo, sala, casillas (casilla -> 1 charco, 2 con montón),
 #                                             paredes (casilla de muro -> forma del pegote), ovalo, avisado}
 #   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
 #                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado, color}])
 #                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
+#   cerco.gd      la habitación del jefe de bomberos, en llamas por todo el borde   {tipo, sala, casillas, avisado}
 class_name Peligros
 
 const CASILLA := 32
@@ -80,6 +82,14 @@ const TROPIEZOS := {
 	"pie": 8.0,          # lo cerca que tienen que pasar los pies de Johnny para tropezar
 	"caido": 2.0,        # segundos que tarda en levantarse
 	"rueda": 120.0,      # lo que sale rodando la cosa al tropezar con ella
+}
+# El cerco de fuego de la habitación del jefe de bomberos: una franja que arde siempre (no se apaga) pegada a las
+# paredes, para que no se pueda huir de su giro con el lanzallamas arrimándose a ellas
+const CERCO := {
+	"grosor": 2,         # casillas de ancho de la franja
+	"puerta": 1,         # delante de la puerta de entrada no arde: la puerta y esta casillas más a cada lado
+	"dps": 12.0,         # a Johnny, como el fuego de la cocina (y sigue ardiendo 2 s al salir); a los zombis los prende
+	"luces": 10,         # luces de fuego repartidas por la franja (no hay más luz en la habitación)
 }
 
 
@@ -202,6 +212,34 @@ static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla:
 	return [{"tipo": "tropiezos", "sala": sala.id, "cosas": cosas, "avisado": false}]
 
 
+# El cerco de fuego del jefe de bomberos: su habitación (la única sala de su piso, sin muebles) arde por todo el borde,
+# en una franja de CERCO.grosor casillas pegada a las cuatro paredes, menos delante de la puerta de entrada (por ahí
+# se entra y ahí aparece Johnny). Cada casilla que arde, en "casillas" (casilla -> true)
+static func del_bombero(sitio: Dictionary) -> Array:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var g: int = CERCO.grosor
+	var e: Dictionary = apt.entrada
+	var casillas := {}
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			if dueno(apt, c, f) != sala.id:
+				continue
+			# delante de la puerta (en las filas de la franja de esa pared), libre
+			var lado_puerta: bool = f >= sala.f0 + sala.fondo - g if e.lado == "abajo" else f < sala.f0 + g
+			if lado_puerta and c >= e.c - CERCO.puerta and c <= e.c + 1 + CERCO.puerta:
+				continue
+			# a menos de "g" casillas de una pared, por cualquiera de los cuatro lados
+			var junto := false
+			for d in LADOS:
+				for k in range(1, g + 1):
+					if dueno(apt, c + d.x * k, f + d.y * k) != sala.id:
+						junto = true
+			if junto:
+				casillas[Vector2i(c, f)] = true
+	return [{"tipo": "cerco", "sala": sala.id, "casillas": casillas, "avisado": false}]
+
+
 # ¿Puede estar ahí una cosa tirada? En el suelo de la sala, a "margen" de las paredes y de los muebles (por arriba
 # de los muebles, más: su dibujo sube y la taparía)
 static func libre_para_cosas(sitio: Dictionary, sala: int, p: Vector2, margen: float) -> bool:
@@ -220,6 +258,8 @@ static func encima(sitio: Dictionary, pos: Vector2) -> bool:
 	var c := casilla(pos)
 	for p in sitio.get("peligros", []):
 		if p.tipo == "fuego" and p.arde.has(c):
+			return true
+		if p.tipo == "cerco" and p.casillas.has(c):
 			return true
 		if p.tipo == "agua" and c in p.casillas:
 			return true

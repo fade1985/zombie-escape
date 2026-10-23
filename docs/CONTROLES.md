@@ -114,6 +114,15 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   puerta y de los muebles) y el aviso de Johnny al entrar; luego, lo mismo que el gimnasio con un cubo (que además
   vuelca al tropezar) (`captura-cubos.png`, la sala entera; `captura-cubos-pared.png`, la pared de arriba de cerca;
   `captura-cubos-caido.png`, Johnny en el suelo y el cubo volcado). Cada línea dice lo esperado.
+- `--llamas` (con `--jefe bombero`): en vez de la prueba larga, la de la habitación del jefe de bomberos
+  (`peligros/cerco.gd`) y su giro con el lanzallamas (`bombero.gd`): la monta sin él y cuenta en la terminal cómo se
+  llama la sala, que no tiene muebles, que arde todo el borde menos delante de la puerta (y más adentro, nada), el
+  aviso de Johnny al entrar, las luces del fuego y lo que quema quedarse 1 s en el borde. Luego mete al bombero en el
+  medio y le hace girar con Johnny moviéndose como con el mando (`vuelta_de_giro`): el sentido sale a los dos lados,
+  la lengua llega hasta la pared, corriendo delante de ella en su sentido Johnny no se quema, en contra sí, rodando a
+  través de ella también y, enfadado, corriendo entre las dos lenguas a su paso, no (`captura-llamas.png`, la sala
+  entera; `captura-llamas-aviso.png`, las flechas del aviso; `captura-llamas-giro.png`, Johnny corriendo delante de la
+  lengua; `captura-llamas-enfadado.png`, las dos lenguas). Cada línea dice lo esperado.
 - `--presentacion` (con `--jefe X`, si se quiere): en vez de la prueba larga, la de la presentación del jefe
   (`ui/presentacion.gd`): entra en su piso y, a mitad de la presentación, comprueba en la terminal el zoom de la
   cámara sobre él, que Johnny está quieto y sin poder recibir daño, que el jefe grita, el nombre en pantalla y la

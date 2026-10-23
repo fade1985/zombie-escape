@@ -58,7 +58,8 @@ const NEON := preload("res://scripts/mapa/neon.gd")
 const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": preload("res://scripts/peligros/fuego.gd"),
 	"agua": preload("res://scripts/peligros/agua.gd"),
 	"porqueria": preload("res://scripts/peligros/porqueria.gd"),   # (y la de la habitación del Glotón, en los Apartamentos)
-	"tropiezos": preload("res://scripts/peligros/tropiezos.gd")}   # (las mancuernas del gimnasio y los cubos de la portera)
+	"tropiezos": preload("res://scripts/peligros/tropiezos.gd"),   # (las mancuernas del gimnasio y los cubos de la portera)
+	"cerco": preload("res://scripts/peligros/cerco.gd")}   # (el borde en llamas de la habitación del jefe de bomberos)
 # Lo que cuelga de la pared de arriba del cuarto de la limpieza de la portera (tools/guias_limpieza.py): fregonas
 # (las que más) y cubos, uno detrás de otro con este hueco entre ellos (en píxeles del dibujo, [mínimo, máximo])
 const COLGADOS := [preload("res://assets/sprites/colgado-fregona.png"), preload("res://assets/sprites/colgado-fregona.png"),
@@ -535,7 +536,8 @@ func poner_apliques() -> void:
 
 
 # Los peligros de una tienda (peligros.gd): el frío de la cámara, el fuego de la cocina y el agua con corriente; y
-# la porquería de la habitación del Glotón y las mancuernas del gimnasio del Gymbro.
+# la porquería de la habitación del Glotón, las mancuernas del gimnasio del Gymbro, los cubos de la portera y el borde
+# en llamas de la habitación del jefe de bomberos.
 # Van en el suelo, por debajo de los personajes (lo que va en la pared, el cuadro y el cable, lo ponen ellos en cosas)
 func poner_peligros() -> void:
 	for d in sitio.get("peligros", []):

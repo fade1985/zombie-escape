@@ -8,14 +8,18 @@
 #     ("inmune_fuego", que miran proyectil.gd y armas_creadas.gd; los charcos de fuego le llaman a prender(), que
 #     aquí no hace nada).
 #   - Bolas de fuego (bola_fuego.gd): van rectas a Johnny; al dar, daño y le dejan ardiendo un momento.
-#   - El giro con el lanzallamas: se va al centro de la sala, avisa (el cono rojo en el suelo) y da vueltas
-#     echando una lengua de fuego larga, que se para en las paredes y los muebles: al que pilla le quema y le
-#     deja ardiendo. Una explosión (granada) se lo corta (se tambalea).
+#   - El giro con el lanzallamas: se va al centro de la sala, avisa (la franja roja por donde empieza, apuntando a
+#     Johnny, y unas flechas en el suelo que dicen hacia qué lado va a girar: cada vez, uno al azar) y da algo más
+#     de una vuelta entera echando una lengua de fuego que llega hasta la pared (atraviesa los muebles): al que pilla
+#     le quema y le deja ardiendo. Como su habitación arde por el borde (peligros/cerco.gd), no hay donde quedarse
+#     fuera: solo se libra quien corre delante de la lengua, en su mismo sentido y a su paso (rodando no se cruza:
+#     quema igual). Una explosión (granada) se lo corta (se tambalea).
 #   - Molotovs (proyectil.gd, "molotov_jefe"): en curva, con su marca roja donde caen; al caer dejan un charco de
 #     fuego (charco.gd): daño al entrar y un rato después de salir.
 #   - Hachazo de bombero: si Johnny se le pega, levanta el hacha (aviso) y le da: daño y empujón.
 # Enfadado (a media vida, «¡TODO ARDE!»): se le rompe el traje y arde él mismo (llamas.gd encima): deja un rastro
-# de fuego al andar; el doble de bolas, dos lenguas de fuego en el giro y el doble de molotovs.
+# de fuego al andar; el doble de bolas, dos lenguas de fuego opuestas en el giro (hay que correr entre las dos, a su
+# paso: ni más deprisa ni más despacio) y el doble de molotovs.
 extends Minijefe
 
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
@@ -31,11 +35,12 @@ const DANO_BOLA := 14
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}     # lo que arde Johnny al darle una bola
 const MOLOTOVS := [1, 2]
 const LENGUAS := [1, 2]                # lenguas de fuego en el giro
-const LARGO_LENGUA := 210.0
-const ANCHO_LENGUA := 0.3              # medio ángulo de la lengua (radianes)
-const GIRO := 1.5                      # lo deprisa que da la vuelta (radianes por segundo)
-const TIEMPO_GIRO := 4.2
-const AVISO_GIRO := 0.8
+const LARGO_MAX := 1600.0              # la lengua llega hasta la pared (esto, por si no la encuentra)
+const ANCHO_LENGUA := 30.0             # medio ancho de la lengua (al salir de la manguera, menos: ancho_lengua)
+const GIRO := 1.0                      # lo deprisa que da la vuelta (radianes por segundo): una vuelta en 6,3 s. Johnny
+                                       # le sigue el paso corriendo a unas 6 casillas de él (con poca vida, más cerca)
+const TIEMPO_GIRO := 6.6               # algo más de una vuelta: pasa por toda la sala
+const AVISO_GIRO := 1.0                # (le da tiempo a mirar las flechas y echar a correr)
 const DANO_LENGUA := 10
 const QUEMA_LENGUA := {"fuego": {"dps": 10.0, "despues": 1.5}}
 const TAMBALEO := 0.7
@@ -58,6 +63,7 @@ var espera_giro := 4.5
 var espera_molotov := 3.0
 var espera_hacha := 0.0
 var aviso_inmune := 0.0      # para no gritar «¡INMUNE!» sin parar
+var quema_t := 0.0           # lo que falta para que la lengua pueda volver a quemar a Johnny aunque esté rodando
 var rastro := Vector2.ZERO   # dónde dejó el último fuego del rastro
 var llamas: Llamas = null    # enfadado: arde él mismo
 var luz_giro: PointLight2D   # la luz de la lengua de fuego
@@ -66,7 +72,7 @@ var luz_giro: PointLight2D   # la luz de la lengua de fuego
 func _ready() -> void:
 	super()
 	luz_giro = LUZ.instantiate()
-	luz_giro.radio = 170.0
+	luz_giro.radio = 220.0
 	luz_giro.fuerza = 0.8
 	luz_giro.visible = false
 	add_child(luz_giro)
@@ -78,6 +84,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 	espera_molotov -= delta
 	espera_hacha -= delta
 	aviso_inmune -= delta
+	quema_t -= delta
 	if enfadado() and estado != "giro":
 		rastro_de_fuego()
 	match estado:
@@ -123,16 +130,20 @@ func pensar(delta: float, johnny: Node2D) -> void:
 		"aviso_giro":
 			frenar(delta, 12.0)
 			if t >= AVISO_GIRO:
-				cambiar("giro", {"angulo": datos.angulo, "largos": []})
+				cambiar("giro", {"angulo": datos.angulo, "sentido": datos.sentido, "largos": [], "puntas": []})
 				Sonido.tocar("fuego")
 				Sonido.tocar("rugido")
 		"giro":
 			frenar(delta, 12.0)
-			datos.angulo += GIRO * delta
+			datos.angulo += GIRO * datos.sentido * delta
+			# lo largas que son (desde él, para quemar) y hasta dónde se dibujan (desde sus pies, en el suelo)
 			datos.largos = []
+			datos.puntas = []
 			var n: int = LENGUAS[fase - 1]
 			for i in n:
-				datos.largos.append(quemar_lengua(datos.angulo + i * TAU / n, johnny))
+				var a: float = datos.angulo + i * TAU / n
+				datos.largos.append(quemar_lengua(a, johnny))
+				datos.puntas.append(hasta_la_pared(global_position + Vector2(0, PIE - 6), Vector2.from_angle(a)))
 			if randf() < delta * 2.0:
 				Sonido.tocar("fuego")
 			if t >= TIEMPO_GIRO:
@@ -149,7 +160,7 @@ func elegir(johnny: Node2D) -> void:
 	var bolas := espera_bolas <= 0.0 and d > 100.0
 	var molotov := espera_molotov <= 0.0 and d > 140.0 and d < 520.0
 	if gira:
-		espera_giro = 7.0 if enfadado() else 9.5
+		espera_giro = 12.0 if enfadado() else 15.0   # (el giro solo ya dura unos 8 s)
 		gritar("¡A ARDER!", Color("#ff9f1c"), 20)
 		var centro := centro_sala()
 		if centro.distance_to(global_position) < 30.0:
@@ -255,34 +266,70 @@ func centro_sala() -> Vector2:
 	return NavigationServer2D.map_get_closest_point(agente.get_navigation_map(), centro)
 
 
-# Se para y avisa: la lengua empezará apuntando a Johnny
-func avisar_giro(johnny: Node2D) -> void:
+# Se para y avisa: la lengua empezará apuntando a Johnny y girará hacia "sentido" (1, como las agujas del reloj; -1, al
+# revés; 0, uno al azar)
+func avisar_giro(johnny: Node2D, sentido := 0.0) -> void:
 	marcha = Vector2.ZERO
 	var hacia: Vector2 = johnny.global_position - global_position
 	var angulo := hacia.angle() if hacia != Vector2.ZERO else PI / 2.0
 	mirada = Vector2.DOWN
-	cambiar("aviso_giro", {"angulo": angulo})
+	if sentido == 0.0:
+		sentido = 1.0 if randf() < 0.5 else -1.0
+	cambiar("aviso_giro", {"angulo": angulo, "sentido": sentido})
 
 
-# Una lengua de fuego hacia "a": hasta donde llega (se para en la primera pared o mueble), quema a Johnny si está
-# dentro del cono (esquivando, no) y prende a los zombis que pilla. Devuelve lo larga que es ahora mismo
+# Lo ancha que es la lengua (la mitad) a "s" de él: estrecha al salir de la manguera y enseguida, ANCHO_LENGUA
+func ancho_lengua(s: float) -> float:
+	return minf(ANCHO_LENGUA, 8.0 + s * 0.3)
+
+
+# ¿Está "p" dentro de la lengua que va hacia "dir" y mide "largo"? (con "margen" de más a los lados y en la punta)
+func en_lengua(p: Vector2, dir: Vector2, largo: float, margen: float) -> bool:
+	var d := p - global_position
+	var a_lo_largo := d.dot(dir)
+	return a_lo_largo > 0.0 and a_lo_largo < largo + margen and absf(d.cross(dir)) < ancho_lengua(a_lo_largo) + margen
+
+
+# Hasta dónde llega una lengua que sale de "desde" hacia "dir": hasta la pared de la sala, atravesando los muebles
+# (se mira en el plano del piso, casilla a casilla: a saltos y, al dar con la pared, afinando). Fuera de un piso
+# (la exposición), hasta la primera pared o mueble
+func hasta_la_pared(desde: Vector2, dir: Vector2) -> float:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	if mapa == null or not mapa.sitio.has("apt"):
+		var rayo := PhysicsRayQueryParameters2D.create(desde, desde + dir * LARGO_MAX, 1)
+		var choque := get_world_2d().direct_space_state.intersect_ray(rayo)
+		return LARGO_MAX if choque.is_empty() else desde.distance_to(choque.position)
+	var apt: Dictionary = mapa.sitio.apt
+	var s := 0.0
+	var paso := 16.0
+	while s < LARGO_MAX:
+		var c := Peligros.casilla(desde + dir * (s + paso))
+		if Peligros.dueno(apt, c.x, c.y) >= 0:
+			s += paso
+		elif paso > 1.0:
+			paso /= 2.0
+		else:
+			break
+	return s
+
+
+# Una lengua de fuego hacia "a": llega hasta la pared, quema a Johnny si está dentro (también rodando: la voltereta no
+# la cruza, solo se libra quien corre delante de ella) y prende a los zombis que pilla. Devuelve lo larga que es
 func quemar_lengua(a: float, johnny: Node2D) -> float:
 	var dir := Vector2.from_angle(a)
-	var largo := LARGO_LENGUA
-	var rayo := PhysicsRayQueryParameters2D.create(global_position, global_position + dir * LARGO_LENGUA, 1)
-	var choque := get_world_2d().direct_space_state.intersect_ray(rayo)
-	if not choque.is_empty():
-		largo = global_position.distance_to(choque.position)
-	var hacia: Vector2 = johnny.global_position - global_position
-	if johnny.vivo and hacia.length() < largo + johnny.RADIO and absf(angle_difference(a, hacia.angle())) < ANCHO_LENGUA + 0.08 \
-			and johnny.esquiva_t <= 0.0:
+	var largo := hasta_la_pared(global_position, dir)
+	if johnny.vivo and en_lengua(johnny.global_position, dir, largo, johnny.RADIO * 0.5):
+		# rodando, la voltereta le haría invulnerable: la lengua se lo salta (una vez por cada rato sin poder darle)
+		if johnny.esquiva_t > 0.0 and quema_t <= 0.0:
+			johnny.invulnerable = 0.0
+		if johnny.invulnerable <= 0.0:
+			quema_t = johnny.INVULNERABLE
 		johnny.recibir_dano(DANO_LENGUA)
-		johnny.pisar(QUEMA_LENGUA)
+		Estados.pisar(johnny.pisando, QUEMA_LENGUA)   # (johnny.pisar() no apunta nada mientras rueda)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == self or not zombi.has_method("prender"):
 			continue
-		var d: Vector2 = zombi.global_position - global_position
-		if d.length() < largo + zombi.radio and absf(angle_difference(a, d.angle())) < ANCHO_LENGUA:
+		if en_lengua(zombi.global_position, dir, largo, zombi.radio):
 			zombi.prender()
 	# chispas que saltan de la lengua
 	if randf() < 0.5:
@@ -351,7 +398,7 @@ func rastro_de_fuego() -> void:
 # En la foto de la prueba (--captura): dando vueltas con el lanzallamas, la lengua hacia Johnny
 func foto(johnny: Node2D) -> void:
 	avisar_giro(johnny)
-	cambiar("giro", {"angulo": datos.angulo, "largos": []})
+	cambiar("giro", {"angulo": datos.angulo, "sentido": datos.sentido, "largos": [], "puntas": []})
 	t = 0.3
 
 
@@ -399,11 +446,12 @@ func animar() -> void:
 			else:
 				poner("reposo_" + dir)
 	if estado == "giro" and not datos.largos.is_empty():
-		luz_giro.position = Vector2.from_angle(datos.angulo) * datos.largos[0] * 0.5 + Vector2(0, -arriba * 0.3)
+		luz_giro.position = Vector2.from_angle(datos.angulo) * minf(datos.largos[0] * 0.5, 240.0) + Vector2(0, -arriba * 0.3)
 
 
-# Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, el anillo hasta donde llega la
-# lengua y el cono por donde va
+# Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, la franja por donde va cada lengua,
+# desde sus pies hasta la pared (en el aviso, roja y creciendo, con la raya por donde empieza y las flechas del lado
+# al que va a girar; girando, naranja)
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -416,17 +464,56 @@ func _draw() -> void:
 			draw_arc(Vector2.ZERO, r, mirada.angle() - 1.1, mirada.angle() + 1.1, 16, Color(ROJO, 0.9), 3.0)
 		"aviso_giro", "giro":
 			var k := minf(1.0, t / AVISO_GIRO) if estado == "aviso_giro" else 1.0
-			draw_set_transform(Vector2(0, PIE - 6), 0.0, Vector2(1, 0.6))
-			draw_arc(Vector2.ZERO, LARGO_LENGUA, 0.0, TAU, 48, Color(ROJO, 0.25 + 0.4 * k), 3.0)
+			var pies := Vector2(0, PIE - 6)
 			var n: int = LENGUAS[fase - 1]
 			for i in n:
-				var a: float = datos.angulo + i * TAU / n
-				var largo: float = datos.largos[i] if estado == "giro" and i < datos.largos.size() else LARGO_LENGUA
-				var color := Color(ROJO, 0.15 + 0.25 * k) if estado == "aviso_giro" else Color(Llamas.FUEGO[2], 0.3)
-				draw_colored_polygon(sector(a, ANCHO_LENGUA, largo), color)
+				var dir := Vector2.from_angle(datos.angulo + i * TAU / n)
 				if estado == "aviso_giro":
-					draw_line(Vector2.ZERO, Vector2.from_angle(a) * LARGO_LENGUA * k, Color(ROJO, 0.9), 3.0)
+					var largo := hasta_la_pared(global_position + pies, dir) * k
+					if largo > 4.0:
+						draw_colored_polygon(franja_lengua(pies, dir, largo), Color(ROJO, 0.2 + 0.35 * k))
+						draw_line(pies, pies + dir * largo, Color(ROJO, 0.9), 4.0)
+				elif i < datos.puntas.size() and datos.puntas[i] > 4.0:
+					draw_colored_polygon(franja_lengua(pies, dir, datos.puntas[i]), Color(Llamas.FUEGO[2], 0.3))
+			if estado == "aviso_giro":
+				flechas(pies, datos.sentido, minf(1.0, k * 3.0))
 	draw_set_transform(Vector2.ZERO)
+
+
+# Los puntos de la franja de una lengua en el suelo: de "desde" hacia "dir", "largo" de larga y con su ancho
+# (ancho_lengua: más estrecha al salir)
+func franja_lengua(desde: Vector2, dir: Vector2, largo: float) -> PackedVector2Array:
+	var lado := dir.orthogonal()
+	var izq := PackedVector2Array()
+	var der := PackedVector2Array()
+	var s := 0.0
+	while true:
+		izq.append(desde + dir * s + lado * ancho_lengua(s))
+		der.append(desde + dir * s - lado * ancho_lengua(s))
+		if s >= largo:
+			break
+		s = minf(s + 24.0, largo)
+	der.reverse()
+	return izq + der
+
+
+# Las flechas del aviso del giro: dos anillos de puntas de flecha en el suelo, alrededor de "centro", que corren hacia
+# el lado al que va a girar la lengua ("sentido": 1, como las agujas del reloj; -1, al revés). Rojas y con el borde
+# oscuro, para que se vean en cualquier suelo. "k", lo que se ven (0 a 1)
+func flechas(centro: Vector2, sentido: float, k: float) -> void:
+	for anillo in [[110.0, 6], [200.0, 10]]:
+		var r: float = anillo[0]
+		var n: int = anillo[1]
+		for j in n:
+			var b := j * TAU / n + tiempo * 1.2 * sentido
+			var fuera := Vector2.from_angle(b)
+			var hacia := Vector2.from_angle(b + PI / 2.0 * sentido)   # por donde va a girar
+			var p := centro + fuera * r
+			var punta := PackedVector2Array([p + hacia * 11.0, p - hacia * 9.0 + fuera * 14.0, p - hacia * 3.0,
+				p - hacia * 9.0 - fuera * 14.0])
+			draw_colored_polygon(punta, Color(ROJO, 0.95 * k))
+			punta.append(punta[0])
+			draw_polyline(punta, Color(0.16, 0.03, 0.05, 0.8 * k), 2.0)
 
 
 # Los puntos de un sector de círculo: del centro, el arco de "a - ancho" a "a + ancho" a "r" de distancia
@@ -443,29 +530,33 @@ func pintar_encima(lienzo: Node2D) -> void:
 		return
 	var n: int = LENGUAS[fase - 1]
 	for i in n:
-		if i < datos.largos.size():
-			lengua(lienzo, datos.angulo + i * TAU / n, datos.largos[i])
+		if i < datos.puntas.size():
+			lengua(lienzo, datos.angulo + i * TAU / n, datos.puntas[i])
 
 
-# Una lengua de fuego a cuadraditos, de la boca de la manguera hacia "a": amarilla al salir y roja en la punta,
-# cada vez más ancha, que se mece y se deshilacha al final. El suelo se ve desde arriba: hacia arriba y abajo se
-# acorta (escala 0,6 en y después de girar)
+# Una lengua de fuego a cuadraditos hacia "a", "largo" de larga (en el suelo, desde sus pies hasta la pared): sale en
+# alto de la boca de la manguera y va bajando hasta tocar el suelo en la pared. Amarilla al salir y roja en la punta,
+# más ancha al alejarse, que se mece y se deshilacha al final. Cada trozo, de 6 unidades, girado hacia "a"
 func lengua(lienzo: Node2D, a: float, largo: float) -> void:
-	lienzo.draw_set_transform_matrix(Transform2D(0.0, Vector2(1, 0.6), 0.0, Vector2(0, -arriba * 0.4)) * Transform2D(a, Vector2.ZERO))
+	var dir := Vector2.from_angle(a)
+	var boca := Vector2(0, -arriba * 0.4)
+	var pies := Vector2(0, PIE - 6)
 	var s := 10.0
 	while s < largo:
-		var f := s / LARGO_LENGUA   # 0 al salir, 1 en la punta
-		var hw := roundf((4.0 + 16.0 * f + sin(tiempo * 19.0 + s * 0.09) * 2.0) / 2.0) * 2.0
-		var vaiven := roundf(sin(tiempo * 9.0 - s * 0.05) * f * 10.0 / 2.0) * 2.0
-		if f > 0.8 and fmod(s * 7.3 + tiempo * 30.0, 10.0) < 3.0:
+		var f := s / largo   # 0 al salir, 1 en la punta
+		var hw := roundf((ancho_lengua(s) * 0.75 + sin(tiempo * 19.0 + s * 0.09) * 2.0) / 2.0) * 2.0
+		var vaiven := roundf(sin(tiempo * 9.0 - s * 0.05) * minf(1.0, s / 150.0) * 8.0 / 2.0) * 2.0
+		if f > 0.85 and fmod(s * 7.3 + tiempo * 30.0, 10.0) < 3.0:
 			s += 6.0
 			continue   # la punta, deshilachada
+		# (cada trozo, algo más largo que el paso: al ir bajando, si no, quedarían rendijas entre uno y otro)
+		lienzo.draw_set_transform(boca.lerp(pies, f) + dir * s, a)
 		var borde: Color = Llamas.FUEGO[4] if f > 0.45 else Llamas.FUEGO[3]
 		var dentro: Color = Llamas.FUEGO[3] if f > 0.7 else Llamas.FUEGO[2] if f > 0.4 else Llamas.FUEGO[1]
-		lienzo.draw_rect(Rect2(s, vaiven - hw, 6.0, hw * 2.0), borde)
+		lienzo.draw_rect(Rect2(0.0, vaiven - hw, 8.0, hw * 2.0), borde)
 		if hw > 4.0:
-			lienzo.draw_rect(Rect2(s, vaiven - hw + 2.0, 6.0, hw * 2.0 - 4.0), dentro)
+			lienzo.draw_rect(Rect2(0.0, vaiven - hw + 2.0, 8.0, hw * 2.0 - 4.0), dentro)
 		if hw > 8.0 and f < 0.5:
-			lienzo.draw_rect(Rect2(s, vaiven - hw + 6.0, 6.0, hw * 2.0 - 12.0), Llamas.FUEGO[0] if f < 0.2 else Llamas.FUEGO[1])
+			lienzo.draw_rect(Rect2(0.0, vaiven - hw + 6.0, 8.0, hw * 2.0 - 12.0), Llamas.FUEGO[0] if f < 0.2 else Llamas.FUEGO[1])
 		s += 6.0
 	lienzo.draw_set_transform(Vector2.ZERO)

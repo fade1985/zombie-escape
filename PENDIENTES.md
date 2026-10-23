@@ -15,9 +15,7 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M8.** La habitación del jefe de bomberos está en llamas por todo el borde, rodeando la habitación entera
-  menos la puerta de entrada. Su ataque de girar con una lengua de llamas tiene que llegar hasta la pared,
-  de forma que solo se pueda esquivar corriendo en el mismo sentido en el que gira.
+_(ninguna por ahora)_
 
 ## Por limar
 

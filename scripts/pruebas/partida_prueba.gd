@@ -18,6 +18,8 @@
 #   --gimnasio     (con --jefe gymbro) el gimnasio del Gymbro: máquinas en las paredes y mancuernas que te tiran
 #   --cubos        (con --jefe portera) el cuarto de la limpieza de la portera: cubos de basura, fregonas y cubos
 #                  colgados y cubos por el suelo que te tiran
+#   --llamas       (con --jefe bombero) la habitación del jefe de bomberos, en llamas por el borde, y su giro con el
+#                  lanzallamas: la lengua llega a la pared y solo se esquiva corriendo en su sentido
 #   --presentacion (con --jefe X, si se quiere) la presentación del jefe al aparecer (ui/presentacion.gd)
 extends "res://scripts/partida.gd"
 
@@ -80,6 +82,9 @@ func empezar_prueba() -> void:
 	elif "--cubos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cubos()
+	elif "--llamas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_llamas()
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
@@ -656,6 +661,224 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 	var pasada: float = (johnny.position + Vector2(0, tropiezos.PIES) - otra[0].pos).dot(otra[1])
 	print("%s: rodando por encima de %s, se cae %s (esperado: false) · ha pasado al otro lado %s (esperado: true)" % [
 		titulo, uno, johnny.caido_t > 0.0, pasada > 20.0])
+
+
+# Con "--captura --jefe bombero --llamas": la habitación del jefe de bomberos (catalogo.gd, "jefe-bombero";
+# peligros/cerco.gd) y su giro con el lanzallamas (bombero.gd). Monta su piso (la 1ª planta) con todo descubierto y sin
+# que salga él, y cuenta en la terminal: cómo se llama la sala, que no tiene muebles, que arde todo el borde menos
+# delante de la puerta (y más adentro, nada), el aviso de Johnny al entrar y lo que quema quedarse 1 s en el fuego.
+# Luego mete al bombero en el medio y le hace girar (vuelta_de_giro), con Johnny moviéndose como con el mando: el
+# sentido sale a cada lado; la lengua llega hasta la pared; corriendo delante de ella, en su sentido, Johnny no se
+# quema; en contra, sí; rodando a través de ella, también; y enfadado, corriendo entre las dos lenguas a su paso, no.
+# Cada línea dice lo esperado. Saca captura-llamas.png (la sala entera ardiendo, con la cámara alejada),
+# captura-llamas-aviso.png (las flechas del aviso), captura-llamas-giro.png (Johnny corriendo delante de la lengua) y
+# captura-llamas-enfadado.png (las dos lenguas) y se cierra
+func probar_llamas() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe bombero, la suya
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca solo: se le mete a mano cuando toca
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true   # todo descubierto
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)   # (y la niebla, repintada ya: si no, la foto sale tapada)
+	var lista: Array = sitio.get("peligros", []).filter(func(q): return q.tipo == "cerco")
+	if lista.is_empty():
+		print("Llamas: el piso del jefe (%s) no tiene el borde en llamas (¡mal!)" % planta.jefe)
+		get_tree().quit()
+		return
+	var cerco: Dictionary = lista[0]
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	# el borde, contado aquí por su cuenta: las casillas a menos de 2 de una pared; las de delante de la puerta (las
+	# de sus 2 casillas y una más a cada lado, en la franja de esa pared), aparte
+	var g: int = Peligros.CERCO.grosor
+	var en: float = (apt.entrada.c + 1) * Peligros.CASILLA
+	var borde := 0
+	var arden := 0
+	var puerta := 0
+	var puerta_arde := 0
+	var dentro_arde := 0
+	for f in range(sala.f0, sala.f0 + sala.fondo):
+		for c in range(sala.c0, sala.c0 + sala.ancho):
+			var k := Vector2i(c, f)
+			var lejos: int = mini(mini(c - sala.c0, sala.c0 + sala.ancho - 1 - c), mini(f - sala.f0, sala.f0 + sala.fondo - 1 - f))
+			var pared_puerta: int = sala.f0 + sala.fondo - 1 - f if apt.entrada.lado == "abajo" else f - sala.f0
+			if lejos >= g:
+				dentro_arde += 1 if cerco.casillas.has(k) else 0
+			elif pared_puerta < g and absf((c + 0.5) * Peligros.CASILLA - en) < 64.0:
+				puerta += 1
+				puerta_arde += 1 if cerco.casillas.has(k) else 0
+			else:
+				borde += 1
+				arden += 1 if cerco.casillas.has(k) else 0
+	print("Llamas (jefe %s): la sala se llama «%s» (esperado: Apartamento en llamas) · muebles %d (esperado: 0) · el borde (a menos de %d casillas de la pared) arde en %d de %d casillas (esperado: todas) · delante de la puerta arden %d de %d (esperado: 0 de 8) · más adentro arden %d (esperado: 0) · donde aparece Johnny, sin fuego %s (esperado: true)" % [
+		planta.jefe, sala.nombre, sitio.muebles.size(), g, arden, borde, puerta_arde, puerta, dentro_arde,
+		not cerco.casillas.has(Peligros.casilla(johnny.position))])
+	await get_tree().create_timer(0.3).timeout
+	var nodo: Node = mapa.get_node("Cerco")
+	print("Llamas: al entrar, Johnny avisa %s (esperado: true) · luces del fuego %d (esperado: entre 8 y 10)" % [
+		cerco.avisado, nodo.luces.size()])
+	# la sala entera, desde el medio y con la cámara alejada (con su luz de verdad: solo la del fuego)
+	var camara: Camera2D = johnny.get_node("Camara")
+	var centro: Vector2 = mapa.centro_libre()
+	johnny.position = centro + Vector2(0, 120)
+	johnny.direccion = "n"
+	camara.zoom = Vector2(0.66, 0.66)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-llamas.png")
+	# 1 s en el fuego, en el medio del borde de la izquierda; y luego en el medio, pasado el ardor, nada
+	johnny.vida = johnny.stats.vida_max
+	johnny.position = Peligros.centro(Vector2i(sala.c0, sala.f0 + sala.fondo / 2))
+	await get_tree().create_timer(1.0).timeout
+	print("Llamas: 1 s en el fuego del borde, Johnny pierde %d (esperado: entre 10 y 14) · ardiendo %s (esperado: true)" % [
+		johnny.stats.vida_max - johnny.vida, johnny.estados.has("fuego")])
+	johnny.position = centro + Vector2(0, 120)
+	await get_tree().create_timer(2.3).timeout
+	var antes: int = johnny.vida
+	await get_tree().create_timer(1.0).timeout
+	print("Llamas: en el medio, pasado el ardor, pierde %d en 1 s (esperado: 0) · ardiendo %s (esperado: false)" % [
+		antes - johnny.vida, johnny.estados.has("fuego")])
+	# el bombero, en el medio; que nadie le dispare (ni Johnny solo, ni los que le acompañan)
+	johnny.modo = "mira"
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var jefe: Node2D = meter_zombi("bombero", centro)
+	await get_tree().create_timer(0.3).timeout
+	var lados := {1.0: 0, -1.0: 0}
+	for i in 40:
+		jefe.avisar_giro(johnny)
+		lados[jefe.datos.sentido] += 1
+	print("Llamas: el sentido del giro, en 40 avisos: %d como las agujas del reloj y %d al revés (esperado: más de 5 los dos)" % [
+		lados[1.0], lados[-1.0]])
+	jefe.andar(5.0)
+	var con := await vuelta_de_giro(jefe, centro, "con", 1.0, PI / 2.0, 190.0, "captura-llamas-aviso.png", "captura-llamas-giro.png")
+	print("Llamas: la lengua llega a la pared: entre %d y %d de larga, y lo más que se queda de la pared, %d (esperado: 2 o menos)" % [
+		roundi(con.largo[0]), roundi(con.largo[1]), roundi(con.pared)])
+	print("Llamas: corriendo delante de la lengua, en su sentido (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false)" % [
+		roundi(con.radio[0]), roundi(con.radio[1]), con.vida, con.arde])
+	var contra := await vuelta_de_giro(jefe, centro, "contra", -1.0, PI / 2.0, 190.0)
+	print("Llamas: corriendo en contra (a %d-%d del jefe), Johnny pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
+		roundi(contra.radio[0]), roundi(contra.radio[1]), contra.vida, contra.arde])
+	var rodar := await vuelta_de_giro(jefe, centro, "rodar", 1.0, 0.0, 190.0)
+	print("Llamas: rodando a través de la lengua, Johnny rueda %s (esperado: true) · pierde %d (esperado: más de 0) · arde %s (esperado: true)" % [
+		rodar.rodado, rodar.vida, rodar.arde])
+	# enfadado: dos lenguas opuestas
+	johnny.position = centro + Vector2(0, 300)
+	jefe.fase = 2
+	jefe.al_enfadarse(johnny)
+	await get_tree().create_timer(0.5).timeout
+	var entre := await vuelta_de_giro(jefe, centro, "entre", -1.0, PI / 2.0, 210.0, "", "captura-llamas-enfadado.png")
+	print("Llamas: enfadado, corriendo entre las dos lenguas, a su paso (a %d-%d del jefe), Johnny pierde %d (esperado: 0) · arde %s (esperado: false) · lenguas %d (esperado: 2)" % [
+		roundi(entre.radio[0]), roundi(entre.radio[1]), entre.vida, entre.arde, entre.lenguas])
+	get_tree().quit()
+
+
+# Una vuelta del giro del bombero ("jefe", puesto en "centro"), con Johnny a "radio" de él, hacia "desde" (ángulo), y
+# girando hacia "sentido" (1, como las agujas del reloj). "como" dice qué hace Johnny, moviéndose como con el mando:
+# "con" (corre delante de la lengua, en su sentido), "contra" (corre en contra), "rodar" (quieto, con la lengua
+# empezando 1,2 rad por detrás de él, y cuando le va a llegar rueda a través de ella) o "entre" (enfadado: en el aviso
+# corre en el sentido del giro y luego va entre las dos lenguas, a su paso: si se le acerca la de detrás, se arrima
+# al jefe, que así da la vuelta antes; si se le acerca la de delante, se aleja). Saca "foto_aviso" en el aviso y
+# "foto_giro" a los 2,5 s de girar. Devuelve {vida (la que pierde), arde (si ha llegado a arder), radio ([mín, máx] de
+# lo lejos que ha ido del jefe), largo ([mín, máx] de la primera lengua), pared (lo más que se ha quedado una lengua de
+# la pared), lenguas, rodado}. Si le quema, acaba un poco después
+func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float, desde: float, radio: float,
+		foto_aviso := "", foto_giro := "") -> Dictionary:
+	var sala: Dictionary = mapa.sitio.apt.salas[0]
+	var cas := float(Peligros.CASILLA)
+	var caja := Rect2(sala.c0 * cas, sala.f0 * cas, sala.ancho * cas, sala.fondo * cas)   # las paredes de la sala
+	var hasta_caja := func(p: Vector2, dir: Vector2) -> float:
+		var tx := INF if absf(dir.x) < 0.0001 else ((caja.end.x if dir.x > 0.0 else caja.position.x) - p.x) / dir.x
+		var ty := INF if absf(dir.y) < 0.0001 else ((caja.end.y if dir.y > 0.0 else caja.position.y) - p.y) / dir.y
+		return minf(tx, ty)
+	jefe.position = centro
+	jefe.marcha = Vector2.ZERO
+	johnny.position = centro + Vector2.from_angle(desde) * radio
+	johnny.velocity = Vector2.ZERO
+	johnny.tercios = 3
+	johnny.vida = johnny.stats.vida_max
+	johnny.estados.clear()
+	johnny.pisando.clear()
+	johnny.invulnerable = 0.0
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.66, 0.66)
+	camara.reset_smoothing()
+	await get_tree().physics_frame
+	jefe.avisar_giro(johnny, sentido)
+	if como == "rodar":
+		jefe.datos.angulo = desde - sentido * 1.2
+	var r := {"vida": 0, "arde": false, "radio": [INF, 0.0], "largo": [INF, 0.0], "pared": 0.0, "lenguas": 0, "rodado": false}
+	var vida0: int = johnny.vida
+	var fotos := {"aviso": foto_aviso == "", "giro": foto_giro == ""}   # (las que ya están o no hacen falta)
+	var quemado := -1.0
+	var espera := 0.0
+	while jefe.estado in ["aviso_giro", "giro"] and espera < 10.0:
+		var d: Vector2 = johnny.global_position - jefe.global_position
+		var lejos := d.length()
+		var fuera := d / lejos
+		var hacia := Vector2.from_angle(d.angle() + PI / 2.0 * sentido)   # por donde va la lengua
+		var pedido := Vector2.ZERO
+		match como:
+			"con":
+				pedido = hacia + fuera * clampf((radio - lejos) / 40.0, -1.0, 1.0)
+			"contra":
+				pedido = -hacia + fuera * clampf((radio - lejos) / 40.0, -1.0, 1.0)
+			"entre":
+				var meta := radio
+				if jefe.estado == "giro":
+					# lo que le lleva a la lengua de detrás (de 0 a PI): lo mejor, PI / 2, en medio de las dos
+					var va := fposmod((d.angle() - jefe.datos.angulo) * sentido, PI)
+					meta = clampf(radio + (va - PI / 2.0) * 120.0, 110.0, 300.0)
+				pedido = hacia + fuera * clampf((meta - lejos) / 40.0, -1.0, 1.0)
+			"rodar":
+				var falta := fposmod((d.angle() - jefe.datos.angulo) * sentido, TAU)   # lo que le falta a la lengua para llegarle
+				if jefe.estado == "giro" and not r.rodado and falta < 0.45:
+					r.rodado = true
+					johnny.esquiva_espera = 0.0
+					johnny.esquivar(-hacia)
+		pedir_andar(pedido.normalized() if pedido != Vector2.ZERO else Vector2.ZERO)
+		if jefe.estado == "giro":
+			r.radio = [minf(r.radio[0], lejos), maxf(r.radio[1], lejos)]
+			r.lenguas = jefe.datos.largos.size()
+			for i in jefe.datos.largos.size():
+				var a: float = jefe.datos.angulo + i * TAU / jefe.datos.largos.size()
+				var largo: float = jefe.datos.largos[i]
+				r.pared = maxf(r.pared, absf(largo - hasta_caja.call(jefe.global_position, Vector2.from_angle(a))))
+				if i == 0:
+					r.largo = [minf(r.largo[0], largo), maxf(r.largo[1], largo)]
+		r.arde = r.arde or johnny.estados.has("fuego")
+		if quemado < 0.0 and johnny.vida < vida0:
+			quemado = espera
+		if not fotos.aviso and jefe.estado == "aviso_giro" and jefe.t >= 0.7:
+			fotos.aviso = true
+			Captura.foto(foto_aviso)
+		if not fotos.giro and jefe.estado == "giro" and jefe.t >= 2.5:
+			fotos.giro = true
+			Captura.foto(foto_giro)
+		if quemado >= 0.0 and espera > quemado + 0.4:
+			break   # ya le ha quemado
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	pedir_andar(Vector2.ZERO)
+	r.vida = vida0 - johnny.vida
+	jefe.andar(5.0)   # que pare de girar (y no ataque hasta la siguiente)
+	return r
+
+
+# Pide andar hacia "dir" como con el stick del mando (cada tecla con su fuerza); Vector2.ZERO, nada
+func pedir_andar(dir: Vector2) -> void:
+	for par in [["derecha", dir.x], ["izquierda", -dir.x], ["abajo", dir.y], ["arriba", -dir.y]]:
+		if par[1] > 0.01:
+			Input.action_press(par[0], par[1])
+		else:
+			Input.action_release(par[0])
 
 
 # Con "--captura --caza": el acompañante va a por los zombis que ve (aliado.gd, cazar). En un apartamento con todo

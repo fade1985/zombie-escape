@@ -155,6 +155,12 @@ const SALAS := {
 		"cuantos": [10, 12],
 		"iguales": {"lamp": 3, "wheeliebin": 5, "trashcan": 5, "janitorcart": 2},
 	},
+	# la habitación del jefe de bomberos (planta.gd pone apt.tipo = "bombero"): sin muebles, que quedarían dentro del
+	# fuego del borde (peligros/cerco.gd); la luz la da el propio fuego. Su lengua de fuego llega así hasta la pared
+	"jefe-bombero": {
+		"muebles": [],
+		"cuantos": [0, 0],
+	},
 	"cocina": {
 		"muebles": ["counter", "fridge", "stove", "counter", "plant"],
 		"cuantos": [2, 4],

@@ -155,7 +155,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# (planta.jefe, no su_jefe: cuando la portera sale por defecto, su_jefe llega vacío)
 		if jefe and Catalogo.SALAS.has("jefe-" + planta.jefe):
 			apt.tipo = planta.jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón, solo
-			# lámparas; el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza)
+			# lámparas; el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza; el jefe
+			# de bomberos, ninguno)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
@@ -173,6 +174,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# el cuarto de la limpieza de la portera (ver arriba): cubos por el suelo, que hacen caer a Johnny
 			apt.salas[0].nombre = "Cuarto de la limpieza"
 			sitio.peligros = Peligros.de_la_portera(sitio)
+		if jefe and planta.jefe == "bombero":
+			# la habitación del jefe de bomberos (sin muebles, ver arriba): en llamas por todo el borde menos la puerta
+			apt.salas[0].nombre = "Apartamento en llamas"
+			sitio.peligros = Peligros.del_bombero(sitio)
 		var idx: int = planta.sitios.size()
 		planta.sitios.append(sitio)
 		if tipo_tienda == "joyeria":

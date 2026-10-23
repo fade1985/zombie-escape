@@ -46,7 +46,7 @@
   generar la planta), `frio.gd` (la cámara frigorífica; congela a los zombis: `zombi.gd`), `fuego.gd` (la cocina del
   restaurante, que se extiende por casillas), `agua.gd` (el charco con corriente de la electrónica, su cable, las luces
   de las teles y lo oscura que se queda la tienda: `Luz.extra`; `arreglar()`, cuando el técnico arregla el cable y
-  el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y dos de los Apartamentos: `porqueria.gd`, la
+  el agua deja de dar calambres) y `cuadro.gd` (el cuadro eléctrico). Y tres de los Apartamentos: `porqueria.gd`, la
   habitación del Glotón (solo lámparas, `jefe-gloton` del catálogo; una franja de charcos y montones de mierda con
   ácido pegada a las paredes, con un óvalo limpio en medio para pelear, `Peligros.del_gloton`,
   salpicaduras en la pared de arriba y pegotes en los lomos de las otras, el resplandor verde del ácido y el estado
@@ -54,7 +54,11 @@
   tropieza: las mancuernas del gimnasio del Gymbro (`Peligros.del_gymbro`, 12) y los cubos de fregar del cuarto de la
   limpieza de la portera (`Peligros.de_la_portera`, 10, de tres colores, dibujados a cuadraditos en `tropiezos.gd`),
   repartidos por el suelo libre (`Peligros.tirar_cosas`); al pisarlos, `johnny.caer` 2 s y la cosa sale rodando (el
-  cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso.
+  cubo, además, vuelca y salpica agua sucia). Cada cosa lleva su forma, con su tamaño, su dibujo y su aviso. Y
+  `cerco.gd`, la habitación del jefe de bomberos («Apartamento en llamas», sin muebles: `jefe-bombero` del catálogo),
+  que arde por todo el borde (`Peligros.del_bombero`: una franja de 2 casillas pegada a las paredes, menos delante de
+  la puerta de entrada): quema como el fuego de la cocina, prende a los zombis (al bombero no) y la alumbra con sus
+  luces; lo fijo se pinta una vez y las llamas, solo lo que se ve en pantalla.
 - `zombi_guardia.gd` (escena `zombi_guardia.tscn`, hereda la del normal): el guardia de seguridad del centro
   comercial, que lleva la tarjeta (ronda, silbato, huye, se cansa). Lleva el dibujo del vigilante.
 - Los zombis del centro comercial (parte 4): `zombi_vigilante.tscn` (hereda la del normal; solo cambian números y
@@ -70,7 +74,8 @@
   recta, `embestir()` con `pared_chocada()` y `estrellarse()`, con su `franja()` roja de aviso y el estado "atontado"
   con estrellitas). Cada uno hereda y pone sus ataques: `bombero.gd` (minijefe de los Apartamentos: el fuego no le
   hace nada, `inmune_fuego`; bolas de fuego `bola_fuego.gd`, giro con el lanzallamas en el centro de la sala con la
-  lengua de fuego dibujada con código, molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
+  lengua de fuego dibujada con código, que llega hasta la pared (`hasta_la_pared`, por el plano del piso: atraviesa
+  los muebles), gira hacia un lado al azar (las flechas del aviso) y no se cruza rodando, molotovs `proyectil.gd` "molotov_jefe" con charcos de fuego y hachazo si
   Johnny se le pega; enfadado arde él mismo y deja un rastro de fuego al andar), `gymbro.gd` (minijefe de los Apartamentos: torbellino con
   los brazos abiertos, salto encima de Johnny y pesas en curva, `pesa.gd`; enfadado, armadura de suplementos con su
   barra encima de la de vida, que se come la mitad del daño), `gloton.gd` (minijefe de los Apartamentos: a gatas, latigazo
