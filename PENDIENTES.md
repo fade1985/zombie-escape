@@ -19,13 +19,4 @@ _(ninguna por ahora)_
 
 ## Por limar
 
-- **L1.** Rehacer con PixelLab el banco de trabajo, el baúl, la taquilla, la ferretería y la cafetera: vistos
-  de frente y un poco desde arriba (tres cuartos), con el mismo arte que llevan los muebles hasta ahora.
-- **L4.** En los pasillos, sin muebles: solo plantas con maceta y las lámparas que ya hay. Más realista.
-  Lo elegido por el dueño:
-  - Plantas (tres tipos): ficus o palmera de interior en maceta grande, sansevieria (lengua de suegra) y la
-    planta que ya tenemos.
-  - Cosas de portal: felpudo delante de cada puerta; extintor en la pared; buzones solo en la planta baja,
-    cerca del portal; cartel de salida de emergencia que se enciende cuando ya se puede subir a la siguiente
-    planta.
-  - Arquitectura: solo el radiador, nada de ventanas.
+_(nada por ahora)_
