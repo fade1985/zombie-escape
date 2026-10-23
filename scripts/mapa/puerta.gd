@@ -122,7 +122,8 @@ func incendios(x0: float) -> void:
 
 
 # El ascensor averiado, de frente: más ancho que una puerta, con su marco, dos hojas de acero cerradas, la
-# lucecita de encima apagada en rojo y una cinta de peligro cruzada que lo bloquea
+# lucecita de encima apagada en rojo y una cinta de peligro cruzada que lo bloquea. Ya arreglado (al caer el jefe
+# de la planta, ver arreglar_ascensor en partida.gd), sin la cinta y con la lucecita encendida en verde
 func ascensor() -> void:
 	var w := 80.0
 	var alto := 80.0
@@ -140,10 +141,11 @@ func ascensor() -> void:
 	draw_rect(Rect2(x0, arriba, w, 2), ACERO.luz)
 	draw_rect(Rect2(-1, arriba, 2, alto), ACERO.filo)
 	draw_rect(Rect2(x0, -4, w, 4), ACERO.sombra)
-	# la lucecita de encima, apagada en rojo
+	# la lucecita de encima: apagada en rojo o, ya arreglado, encendida en verde
 	draw_rect(Rect2(-6, arriba - 6, 12, 4), ACERO.filo)
-	draw_rect(Rect2(-4, arriba - 6, 8, 2), Color("6a1c1c"))
-	cinta(x0 - 4, arriba + alto / 2.0 - 6, w + 8)
+	draw_rect(Rect2(-4, arriba - 6, 8, 2), Color("5fd35a") if abierta else Color("6a1c1c"))
+	if not abierta:
+		cinta(x0 - 4, arriba + alto / 2.0 - 6, w + 8)
 
 
 # Cinta de peligro: franja amarilla con rayas negras en diagonal, hecha a escalones de píxel

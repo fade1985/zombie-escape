@@ -3,7 +3,8 @@
 # del mapa:
 #   - Al entrar en un apartamento la puerta se cierra, y no se abre hasta que no queda ni un zombi.
 #   - El apartamento de la jefa está cerrado con llave; la llave está en el suelo de otro apartamento.
-#   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente.
+#   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente y Johnny arregla
+#     el ascensor, que solo baja a la sala de mantenimiento y vuelve a esa planta (arreglar_ascensor).
 #   - Después de la última planta, el edificio está limpio: cartel de victoria.
 # La partida empieza en la sala de mantenimiento de la planta baja. Abajo, en la franja del muro, va el HUD (hud.gd)
 # y arriba a la derecha, el minimapa. Esc o Start abren la pausa (menus.gd).
@@ -102,6 +103,7 @@ var edificio: String = Edificios.elegido
 var ed: Dictionary = Edificios.datos(edificio)
 var jefa_salio := false    # si ya ha aparecido la portera en este apartamento
 var orden_jefes: Array = []   # el minijefe de cada planta, sorteado al empezar (edificios.gd)
+var sala_mantenimiento := {}  # la sala de mantenimiento de la planta baja, para bajar a ella en el ascensor
 var captura := false       # si es la partida de prueba (la pone pruebas/partida_prueba.gd)
 var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
@@ -263,6 +265,8 @@ func empezar_prueba() -> void:
 
 func nueva_planta(num: int) -> void:
 	planta = Planta.generar(num, edificio, jefe_de(num))
+	if planta.mantenimiento >= 0:
+		sala_mantenimiento = planta.sitios[planta.mantenimiento]
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
 	eventos.nueva_planta()
@@ -461,7 +465,9 @@ func actualizar_puertas() -> void:
 
 func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
-	var texto: String = planta.nombre if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [planta.nombre, sitio.nombre]
+	# (la sala de mantenimiento siempre está en la planta baja, aunque se haya bajado en el ascensor)
+	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo == "mantenimiento" else planta.nombre
+	var texto: String = de_planta if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [de_planta, sitio.nombre]
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
 	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
@@ -513,7 +519,33 @@ func cruzar(i: int) -> void:
 	if salida.tipo == "escaleras":
 		subir()
 		return
-	montar(salida.a, salida.vuelta)
+	await montar(salida.a, salida.vuelta)
+	if planta.sitios[aqui].tipo != "pasillo":
+		return
+	if salida.tipo == "ascensor":
+		decir(planta.nombre, 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
+	elif planta.get("ascensor_nuevo", false):
+		# al salir al pasillo tras acabar con el jefe (con el ascensor ya a la vista), Johnny cuenta que lo ha arreglado
+		planta.erase("ascensor_nuevo")
+		decir("Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»", 5.0)
+
+
+# El ascensor (M5): al caer el jefe de la planta, Johnny lo arregla. Solo baja a la sala de mantenimiento de la
+# planta baja (la misma del principio, que se añade a esta planta como un sitio más) y vuelve aquí, nunca a otra
+# planta. En la planta baja no hace falta (la sala está ahí mismo) y la azotea no tiene
+func arreglar_ascensor() -> void:
+	var i := puerta_de_tipo("ascensor")
+	var ascensor: Dictionary = planta.sitios[0].salidas[i]
+	if planta.num == 1 or ascensor.tipo != "ascensor" or sala_mantenimiento.is_empty():
+		return
+	planta.mantenimiento = planta.sitios.size()
+	# la sala, con su puerta cambiada: lleva al ascensor de esta planta (lo demás, lo de siempre)
+	var sala: Dictionary = sala_mantenimiento.duplicate()
+	sala.salidas = [sala.salidas[0].duplicate()]
+	sala.salidas[0].merge({"tipo": "ascensor", "vuelta": i, "letrero": "Ascensor"}, true)
+	planta.sitios.append(sala)
+	ascensor.merge({"a": planta.mantenimiento, "vuelta": 0, "cerrojo": "", "aviso": "", "letrero": "Mantenimiento"}, true)
+	planta.ascensor_nuevo = true   # (el aviso de Johnny, al salir al pasillo: ver cruzar)
 
 
 # Por las escaleras, a la planta siguiente (o, después de la última, se acabó)
@@ -556,6 +588,7 @@ func _physics_process(delta: float) -> void:
 		cerrada = false
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
+			arreglar_ascensor()
 			Sonido.musica("explorar")
 			decir("¡%s ha caído! %s" % [planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1),
 				"La escalera de incendios ya está abierta" if sitio.get("azotea", false) else "Las escaleras ya están abiertas"], 4.0)

@@ -80,6 +80,12 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   «Guardar» mete toda la casilla en el baúl, que las vendas no se guardan, que con el baúl lleno solo caben más de lo
   que ya tiene, y que «Guardar todo» mete lo demás (`captura-baul-guardado.png`, el baúl al volver). Cada línea
   dice lo esperado. Deja el baúl del guardado de prueba como estaba.
+- `--ascensor`: en vez de la prueba larga, la del ascensor (`partida.gd`, `arreglar_ascensor`): comprueba en la
+  terminal que en la planta baja no se arregla, que en la 1ª planta sigue averiado hasta que cae el jefe, que al
+  salir al pasillo Johnny dice que lo ha arreglado (`captura-ascensor-arreglado.png`), que baja a la sala de
+  mantenimiento (`captura-ascensor-sala.png`), que ahí se guarda en el baúl lo de la mochila
+  (`captura-ascensor-baul.png`), que la puerta de la sala devuelve a la 1ª planta delante del ascensor, que en la
+  2ª planta vuelve a estar averiado y que la azotea no tiene. Cada línea dice lo esperado. Deja el baúl como estaba.
 - `--gastro`: en vez de la prueba larga, la del vómito de la mutación Gastroenteritis (`mutaciones.gd`): en un
   apartamento, junto a un tabique con un zombi justo detrás, comprueba en la terminal que el vómito no sale hacia él,
   que su charco pegado al tabique no lo quema (pero sí a uno de este lado) y que, con otro zombi más lejos pero a la
@@ -118,6 +124,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 ## La sala de mantenimiento
 
 La partida (`escenas/partida.tscn`) empieza ahí, tras el menú principal (`escenas/menu_principal.tscn`).
+Se puede volver a mitad de partida: al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el
+**ascensor** del pasillo (luz verde, sin la cinta, y lo dice al salir al pasillo). Solo baja a esta sala y, por su
+puerta, vuelve a la planta de la que venías, delante del ascensor; nunca lleva a otra planta. La planta queda como
+la dejaste. En la planta baja sigue averiado (la sala está ahí mismo) y la azotea no tiene.
 - Mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de armas, logros, Dosier VD-7,
   Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el bestiario).
 - A la derecha del baúl, la **taquilla** de Johnny: arrimarse para elegir el traje (los de la tienda de ropa del

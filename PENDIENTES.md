@@ -15,10 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M5.** Ascensor a la sala de mantenimiento: al completar una planta, además de abrirse las escaleras de
-  emergencia, sale un mensaje de Johnny diciendo que ha podido arreglar el ascensor para bajar a la planta
-  baja, donde está la sala de mantenimiento. El ascensor solo sirve para bajar a la planta baja y volver a la
-  planta de la que venimos; nunca para ir entre plantas.
 - **M6.** La habitación del Gymbro es un gimnasio: máquinas pegadas a las paredes que reducen el espacio
   libre, y mancuernas por el suelo que, al pisarlas, nos hacen caer y tardamos 2 segundos en levantarnos.
 - **M7.** La habitación de la portera: cubos y fregonas colgando de las paredes, cubos de basura, y cubos

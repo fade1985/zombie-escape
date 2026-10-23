@@ -74,7 +74,13 @@ func casillas() -> Array:
 	var largo := ANCHO - x0 * 2
 	var medio := PASILLO_Y + 5.0
 	lista.append({"r": Rect2(x0, PASILLO_Y, largo, 10), "color": CLARO, "aqui": aqui == 0, "icono": "", "sos": false,
-		"puerta": Rect2(), "sitio": 0})
+		"puerta": Rect2(), "sitio": -1 if abajo() else 0})
+	if abajo():
+		# bajando en el ascensor: el pasillo de la planta baja y, en su puerta A, la sala de mantenimiento
+		var x := par(x0 + float(Planta.PUERTA_A) / pasillo.ancho * largo)
+		lista.append({"r": Rect2(x - 17, PASILLO_Y - 22, 34, 16), "color": CLARO, "aqui": true, "icono": "herramientas",
+			"sos": false, "puerta": Rect2(x - 3, PASILLO_Y - 8, 6, 8)})
+		return lista
 	var sos: int = planta.superviviente.sitio if partida.supervivientes.encerrado() else -1
 	for s in pasillo.salidas:
 		match s.tipo:
@@ -113,6 +119,11 @@ func casillas() -> Array:
 	return lista
 
 
+# Si Johnny ha bajado en el ascensor a la sala de mantenimiento (está en la planta baja, no en la suya)
+func abajo() -> bool:
+	return partida.planta.num > 1 and partida.planta.sitios[partida.aqui].tipo == "mantenimiento"
+
+
 static func par(v: float) -> float:
 	return roundf(v / 2.0) * 2.0
 
@@ -122,7 +133,7 @@ func _draw() -> void:
 		return
 	draw_style_box(marco, Rect2(Vector2.ZERO, size))
 	var letra := get_theme_default_font()
-	var titulo: String = partida.planta.nombre
+	var titulo: String = Planta.nombre_planta(1) if abajo() else partida.planta.nombre
 	draw_string_outline(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, 4, BORDE)
 	draw_string(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, Color("#e6c34a"))
 	# el fondo: papel oscuro cuadriculado, como el plano de una mazmorra

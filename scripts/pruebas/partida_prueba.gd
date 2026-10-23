@@ -11,6 +11,7 @@
 #                  portera en la baja)
 #   --trajes       los trajes de Johnny (trajes.gd): fotos en la sala de mantenimiento
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
+#   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
@@ -79,6 +80,9 @@ func empezar_prueba() -> void:
 	elif "--baul" in args:
 		set_process(false)   # sin la prueba larga
 		probar_baul()
+	elif "--ascensor" in args:
+		set_process(false)   # sin la prueba larga
+		probar_ascensor()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -1151,6 +1155,97 @@ func probar_baul() -> void:
 	inventario.cerrar()
 	await get_tree().process_frame
 	print("Baúl cerrado: juego en pausa %s (esperado: false)" % get_tree().paused)
+	Guardado.cambiar(func(g2):
+		g2.baul = antes.baul
+		g2.baul_armas = antes.baul_armas)
+	get_tree().quit()
+
+
+# Con "--captura --ascensor": el ascensor (partida.gd, arreglar_ascensor). En la planta baja no se arregla (la sala
+# está ahí mismo); en la 1ª planta está averiado hasta que cae el jefe (se hace como si cayera: Johnny entra en su
+# sala y el jefe no llega a salir), y al salir al pasillo Johnny dice que lo ha arreglado. Con cosas en la mochila,
+# baja en él a la sala de mantenimiento, las guarda en el baúl y vuelve a la 1ª planta, delante del ascensor. En la
+# 2ª planta vuelve a estar averiado, y en la azotea no hay. Cada línea de la terminal dice lo esperado. Saca
+# captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
+# sala, ya abajo) y captura-ascensor-baul.png (lo de la mochila, ya en el baúl). Deja el baúl como estaba y se cierra
+func probar_ascensor() -> void:
+	var antes := Guardado.cargar()
+	var sala_de_siempre: int = planta.mantenimiento
+	arreglar_ascensor()
+	var asc := puerta_de_tipo("ascensor")
+	print("Planta baja, como si cayera el jefe: la sala %d (esperado: %d, la de siempre) · el ascensor «%s» (esperado: nunca)" % [
+		planta.mantenimiento, sala_de_siempre, planta.sitios[0].salidas[asc].cerrojo])
+	# a la 1ª planta, al pasillo (por la llegada, como al subir)
+	nueva_planta(2)
+	await montar(0, puerta_de_tipo("llegada"), false)
+	asc = puerta_de_tipo("ascensor")
+	cruzar(asc)
+	await get_tree().process_frame
+	print("1ª planta, antes del jefe: ascensor abierto %s · al empujarlo, sigue en el sitio %d y dice «%s» (esperado: false, 0, El ascensor está averiado)" % [
+		mapa.puertas[asc].abierta, aqui, aviso.text])
+	# en la sala del jefe, como si ya hubiera caído: sin zombis y sin que llegue a salir
+	var del_jefe := -1
+	for k in planta.sitios.size():
+		if planta.sitios[k].tipo == "jefe":
+			del_jefe = k
+	montar(del_jefe, 0, false)
+	jefa_salio = true
+	await get_tree().create_timer(0.3).timeout
+	var salida: Dictionary = planta.sitios[0].salidas[asc]
+	print("Cae el jefe: escaleras abiertas %s · el ascensor «%s» lleva al sitio %d, «%s» (esperado: true, «», %d, mantenimiento)" % [
+		planta.jefa_muerta, salida.cerrojo, salida.a, planta.sitios[salida.a].tipo, planta.sitios.size() - 1])
+	await cruzar(0)
+	print("Al salir al pasillo: Johnny dice «%s» (esperado: que ha arreglado el ascensor) · ascensor abierto %s, letrero «%s» (esperado: true, Mantenimiento)" % [
+		aviso.text, mapa.puertas[asc].abierta, salida.letrero])
+	johnny.position = mapa.puertas[asc].llegada() + Vector2(0, 40)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-ascensor-arreglado.png")
+	# con cosas en la mochila, abajo
+	mochila.clear()
+	mochila.append_array(["gasolina", "gasolina", "clavos"])
+	Guardado.cambiar(func(g2):
+		g2.baul = {}
+		g2.baul_armas = [])
+	await cruzar(asc)
+	var minimapa = $Pantalla/Minimapa
+	print("Abajo: en «%s» (esperado: mantenimiento) · arriba pone «%s» (esperado: Planta baja · Mantenimiento) · el minimapa, «%s» (esperado: Planta baja) · la planta sigue siendo la %d (esperado: 2)" % [
+		planta.sitios[aqui].tipo, lugar.text, Planta.nombre_planta(1) if minimapa.abajo() else planta.nombre, planta.num])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-ascensor-sala.png")
+	# al baúl: se guarda todo lo de la mochila
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	var abierto: bool = inventario.abierto == "baul"
+	if abierto:
+		inventario.ver_mochila(true)
+		await get_tree().process_frame
+		inventario.guardar_todo()
+		await get_tree().process_frame
+		inventario.ver_mochila(false)
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-ascensor-baul.png")
+	var g := Guardado.cargar()
+	print("Baúl: abierto %s · guardado gasolina %d, clavos %d · en la mochila %d (esperado: true, 2, 1, 0)" % [
+		abierto, g.baul.get("gasolina", 0), g.baul.get("clavos", 0), mochila.size()])
+	inventario.cerrar()
+	await get_tree().process_frame
+	# y de vuelta: la puerta de la sala lleva al ascensor de la 1ª planta
+	await cruzar(0)
+	print("De vuelta: planta %d, en el sitio %d, a %d del ascensor · dice «%s» (esperado: 2, 0, 0, 1ª planta)" % [
+		planta.num, aqui, roundi(johnny.position.distance_to(mapa.puertas[asc].llegada())), aviso.text])
+	# en la 2ª planta, averiado otra vez (y la sala de la planta baja, como siempre)
+	await subir()
+	asc = puerta_de_tipo("ascensor")
+	print("2ª planta: el ascensor «%s», abierto %s · la puerta de la sala de siempre, «%s» (esperado: nunca, false, puerta)" % [
+		planta.sitios[0].salidas[asc].cerrojo, mapa.puertas[asc].abierta, sala_mantenimiento.salidas[0].tipo])
+	# en la azotea no hay ascensor: no se arregla nada (ni falla)
+	await ir_a_azotea()
+	arreglar_ascensor()
+	print("Azotea: sala de mantenimiento %d (esperado: -1)" % planta.mantenimiento)
 	Guardado.cambiar(func(g2):
 		g2.baul = antes.baul
 		g2.baul_armas = antes.baul_armas)

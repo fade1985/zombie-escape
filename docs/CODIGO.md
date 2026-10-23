@@ -113,7 +113,8 @@
   El jefe final de la azotea va en `final` y `el_final` (el gerente); `partida.final_de()` lo reconoce: su barra dice
   su nombre y no lleva el 25 % más por planta ni la mutación al caer.
 - `partida.gd`: la planta en juego (cambiar de sitio, puerta cerrada hasta limpiar el piso, llave o tarjeta y su
-  guardia, portera, escaleras, dinero, pausa, fin) y las teclas de prueba. Lo de `--captura` está aparte, en
+  guardia, portera, escaleras, el ascensor arreglado a la sala de mantenimiento —`arreglar_ascensor()`, que añade
+  la sala de la planta baja a la planta en juego—, dinero, pausa, fin) y las teclas de prueba. Lo de `--captura` está aparte, en
   `pruebas/partida_prueba.gd`.
 - `alerta.gd`: los niveles de alerta (parte 8): la regla de cada nivel, los números (constantes) y lo que la partida
   le pregunta (`mas_zombis()`, `velocidad()`, `jefe_vida()`, `jefe_enfado()`, `botiquin()`, `guardia()`, `oido()`,
@@ -230,8 +231,8 @@
   Con `--fotos-tiendas` (una foto de cada tienda y de la galería, `captura-tienda-<tipo>.png` y
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
   `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día), `--joyeria` (`probar_joyeria`: la cámara
-  acorazada), `--trajes` (`probar_trajes`: los trajes de Johnny) o `--baul` (`probar_baul`: guardar en el baúl lo
-  de la mochila), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  acorazada), `--trajes` (`probar_trajes`: los trajes de Johnny), `--baul` (`probar_baul`: guardar en el baúl lo
+  de la mochila) o `--ascensor` (`probar_ascensor`: bajar en el ascensor a la sala y volver), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**
