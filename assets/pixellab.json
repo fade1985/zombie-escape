@@ -2634,5 +2634,20 @@
     "intento 3, semilla 303": "9b5b6fd8-0c79-4429-b213-7573043f9b50"
    }
   }
+ },
+ "baul-mantenimiento": {
+  "kind": "images",
+  "fecha": "2026-10-23",
+  "nota": "El baúl de la sala de mantenimiento (arrimable.gd, donde se guardan las armas creadas y los objetos), que era un dibujo de rectángulos copiado del juego JS (tools/dibujos_7b.py) y desentonaba al lado del banco de trabajo nuevo. Con create_image_pixflux y la misma receta que el banco: la guía de py tools/baul_mantenimiento.py guia (32 píxeles del juego de ancho; de arriba abajo, la tapa vista desde arriba con tres tablones, dos flejes de hierro con remaches, esquinas de hierro y una mancha de sangre, y el frente con el canto de la tapa, los flejes, la cerradura dorada y el zócalo) como init_image con fuerza 45, no_background false, single color black outline y high top-down, 4 semillas. La 2 y la 4 salieron con la tapa abombada y algo giradas (se les ve un lado) y la 3 de frente pero amoratada; el dueño eligió la 1, la recomendada (de frente como el banco, sin azul encerrado). Fondo quitado con py tools/guias_centro.py quita y sprite de 32×29 con py tools/baul_mantenimiento.py. Originales en assets/sources/mantenimiento/ (intentos/, con fondo).",
+  "texto": "wooden chest with iron bands and a golden lock seen in 3/4 top-down view, its flat lid seen from above with two riveted iron bands, iron corners and a blood stain, the front with the iron bands and a golden lock facing the viewer, worn, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+  "coste": "4 generaciones (quedan 4992 de 5000 hasta el 23 nov)",
+  "piezas": {
+   "baul (intento 1, semilla 101)": "c8e13f66-2f90-48c5-9550-36ea6e84222d",
+   "descartadas": {
+    "intento 2, semilla 202": "e2617682-d03d-440e-ad85-5b02343aaebf",
+    "intento 3, semilla 303": "4b07dc4a-2e1e-4e85-9a1c-ef554d17e53a",
+    "intento 4, semilla 404": "246c010c-4241-4fd8-9710-3c4c0dbc351b"
+   }
+  }
  }
 }

@@ -1,7 +1,7 @@
 # Saca los dibujos de la fase 7b (copiados de los dibujos a mano del juego JS):
 #   - los 17 objetos de src/objetos.js (10×10 píxeles): ya no se usan, los saca a 16×16 tools/objetos16.py
-#   - el baúl de src/props.js → assets/sprites/baul.png (el banco de trabajo también salía de aquí; desde el 23 oct
-#     es de PixelLab, al estilo de los muebles: tools/banco_mantenimiento.py)
+#   - el baúl y el banco de trabajo de src/props.js también salían de aquí; desde el 23 oct son de PixelLab, al estilo
+#     de los muebles: tools/baul_mantenimiento.py y tools/banco_mantenimiento.py
 #   - el armarito del baño con su botiquín (cerrado y abierto) → assets/sprites/armarito.png (2 fotogramas)
 # Se lanza con:  py tools/dibujos_7b.py   (y luego importar en Godot)
 from pathlib import Path
@@ -84,24 +84,6 @@ class Lienzo:
                     self.img.putpixel((i, j), c)
 
 
-def baul():
-    g = Lienzo(30, 24)
-    borde, oscura, madera, clara = "#24150d", "#5a3820", "#8a5a32", "#b07a44"
-    hierro, brillo, oro, oro_oscuro = "#5e6670", "#a3acb6", "#e3b341", "#9c7322"
-    g.px(1, 0, 28, 1, borde); g.px(0, 1, 30, 23, borde)
-    g.px(1, 1, 28, 9, madera); g.px(2, 1, 26, 2, clara)
-    g.px(1, 8, 28, 1, oscura); g.px(1, 9, 28, 1, hierro)
-    g.px(1, 10, 28, 1, borde)
-    g.px(1, 11, 28, 12, madera)
-    g.px(1, 15, 28, 1, oscura); g.px(1, 19, 28, 1, oscura)
-    g.px(1, 21, 28, 2, oscura)
-    for bx in (4, 23):
-        g.px(bx, 1, 3, 22, hierro); g.px(bx, 1, 1, 22, brillo)
-    g.px(12, 7, 6, 8, borde); g.px(13, 8, 4, 6, oro); g.px(13, 13, 4, 1, oro_oscuro)
-    g.px(14, 10, 2, 2, borde)
-    g.img.save(SPRITES / "baul.png")
-
-
 # El armarito del baño (Armarito en props.js, que se dibujaba con rectángulos de 36×40): aquí a 2 unidades por
 # píxel, 26×22 con hueco para las puertas abiertas. Fotograma 0 cerrado (con la cruz roja), 1 abierto y vacío
 def armarito():
@@ -128,6 +110,5 @@ def armarito():
 
 
 if __name__ == "__main__":
-    baul()
     armarito()
-    print("Hecho: baúl y armarito")
+    print("Hecho: el armarito")
