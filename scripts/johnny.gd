@@ -208,6 +208,8 @@ func arma() -> Dictionary:
 	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
 	if huecos[mano] == "fregona":
 		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
+	if w.tipo == "cuerpo":
+		w.dano = w.dano * Skins.cuerpo(skin)    # el gymbro: × 3 (todas, también las creadas en el banco)
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
 	if w.tipo == "fuego":

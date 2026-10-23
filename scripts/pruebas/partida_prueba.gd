@@ -9,7 +9,7 @@
 #   --alerta N     las reglas de esa alerta (alerta.gd)
 #   --jefe X       el minijefe de la 1ª planta (centro comercial: si no, el antidisturbios; Apartamentos: si no, la
 #                  portera en la baja)
-#   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y el daño de la fregona
+#   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y lo que hace cada una
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
 #   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
@@ -1873,14 +1873,17 @@ func probar_sala() -> void:
 # Con "--captura --skins": las skins de Johnny (skins.gd). En la sala de mantenimiento, sin ninguna skin:
 #   - sin desbloquear, la taquilla no deja ponérsela (y dice cómo se consigue)
 #   - la portera cae y desbloquea el portero (se guarda; no se pone sola), con su aviso (captura-skins-desbloqueo.png);
-#     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png)
+#     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png), y el Gymbro, el
+#     gymbro (captura-skins-desbloqueo-gymbro.png)
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
-#     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón
-#     (captura-skins-taquilla-gloton.png); la tecla Z da la vuelta sin guardar
+#     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón y el gymbro
+#     (captura-skins-taquilla-gloton.png, captura-skins-taquilla-gymbro.png); la tecla Z da la vuelta sin guardar
 #   - la cara en las 8 direcciones (con la fregona) y con las otras cinco armas, mirando al sur, al lado del
-#     conserje de siempre (captura-skins-caras.png, el portero; captura-skins-caras-gloton.png, el glotón); y Johnny
+#     conserje de siempre (captura-skins-caras.png, el portero; captura-skins-caras-<id>.png, las demás); y Johnny
 #     andando con la skin, que sigue con su paso
 #   - el daño de la fregona: × 4 con el portero (con el bate, igual), contado y con un golpe de verdad
+#   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (también una creada en el banco, la lanza) y las de
+#     fuego, igual; contado y con un golpe de verdad (con el bate y con la lanza)
 #   - el poder del glotón: un zombi normal que le da un zarpazo de verdad muere; el Gymbro (con su armadura) pierde
 #     un 10 % de su vida con un golpe suyo y con una pesa suya, y la armadura no se lo para; sin la skin, nada; y nada
 #     si Johnny es invulnerable o si el daño no es de nadie
@@ -1937,11 +1940,29 @@ func probar_skins() -> void:
 	Captura.foto("captura-skins-desbloqueo-gloton.png")
 	print("Cae el Glotón (muerto: %s): skins %s · puesta «%s» (esperado: [\"portero\", \"gloton\"], «»)" % [
 		gloton.estado == "muerto", Skins.tenidas(), Skins.puesta()])
-	print("Otra vez: ¿nueva? %s (esperado: false) · un jefe sin skin (el Gymbro): «%s» (esperado: «»)" % [
-		Skins.desbloquear("gloton"), Skins.de_jefe("gymbro")])
+	print("Otra vez: ¿nueva? %s (esperado: false) · un jefe sin skin (el bombero): «%s» (esperado: «»)" % [
+		Skins.desbloquear("gloton"), Skins.de_jefe("bombero")])
 	await get_tree().create_timer(2.0).timeout
 	if menus.abierto == "mutacion":
 		menus.elegir("canibal")
+	get_tree().paused = false
+	$Pantalla/Jefa.hide()
+	# y el Gymbro
+	var jefe_gymbro: Node2D = meter_zombi("gymbro", johnny.position + Vector2(220, 0))
+	await get_tree().create_timer(0.2).timeout
+	for i in 60:
+		if jefe_gymbro.estado == "muerto":
+			break
+		jefe_gymbro.recibir_golpe(99999, Vector2.ZERO, false, true)
+		await get_tree().process_frame
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-skins-desbloqueo-gymbro.png")
+	print("Cae el Gymbro (muerto: %s): skins %s · puesta «%s» (esperado: [\"portero\", \"gloton\", \"gymbro\"], «»)" % [
+		jefe_gymbro.estado == "muerto", Skins.tenidas(), Skins.puesta()])
+	print("Otra vez: ¿nueva? %s (esperado: false)" % Skins.desbloquear("gymbro"))
+	await get_tree().create_timer(2.0).timeout
+	if menus.abierto == "mutacion":
+		menus.elegir("insensible")
 	get_tree().paused = false
 	$Pantalla/Jefa.hide()
 
@@ -1966,6 +1987,13 @@ func probar_skins() -> void:
 		taquilla.elegir("gloton")
 		print("Elegido el glotón: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
 			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
+		# (la foto, ya puesta: que su frase quepa también con «Puesta» al lado)
+		taquilla.marcar("gymbro")
+		taquilla.elegir("gymbro")
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-skins-taquilla-gymbro.png")
+		print("Elegido el gymbro: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
+			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
 	var vuelta := []
@@ -1973,7 +2001,7 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Tecla Z: %s (esperado: El portero > El glotón > Conserje)" % " > ".join(vuelta))
+	print("Tecla Z: %s (esperado: El portero > El glotón > El gymbro > Conserje)" % " > ".join(vuelta))
 
 	# ── La cara: las 8 direcciones con la fregona, y las otras armas mirando al sur (una foto por skin) ──
 	johnny.position = Vector2(690, 330)
@@ -1981,7 +2009,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton"]:
+	for skin in ["portero", "gloton", "gymbro"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:
@@ -2051,6 +2079,39 @@ func probar_skins() -> void:
 	johnny.stats.critico = critico
 	print("Un golpe de fregona a un zombi: conserje le quita %d · portero %d (esperado: el cuádruple)" % [
 		quitado[""], quitado["portero"]])
+
+	# ── El daño cuerpo a cuerpo del gymbro: × 3 con todas, también las creadas en el banco; las de fuego, igual ──
+	var lanza := Armas.apuntar(Recetas.crear("lanza", "verde"))
+	var cuentas := []
+	for arma in ["fregona", "bate", "cuchillo", lanza, "pistola", "escopeta", "mp5"]:
+		johnny.coger(arma)
+		johnny.vestir("")
+		var siempre: float = johnny.arma().dano
+		johnny.vestir("gymbro")
+		cuentas.append("%s × %.1f" % [Objetos.nombre(arma), johnny.arma().dano / siempre])
+	print("Daño con el gymbro: %s (esperado: × 3 las cuatro primeras, × 1 las de fuego)" % " · ".join(cuentas))
+	# golpes de verdad, sin críticos, con el bate y con la lanza
+	johnny.stats.critico = 0.0
+	var golpes := []
+	for arma in ["bate", lanza]:
+		johnny.coger(arma)
+		var quita := {}
+		for skin in ["", "gymbro"]:
+			johnny.vestir(skin)
+			var zombi: Node2D = meter_zombi("normal", johnny.position + Vector2(40, 0))
+			zombi.vida = 500
+			await get_tree().process_frame
+			var vida_antes: float = zombi.vida
+			johnny.golpear(0.0)
+			quita[skin] = vida_antes - zombi.vida
+			zombi.queue_free()
+			await get_tree().process_frame
+		golpes.append("%s: conserje %d, gymbro %d" % [Objetos.nombre(arma), quita[""], quita["gymbro"]])
+	johnny.stats.critico = critico
+	print("Un golpe a un zombi: %s (esperado: el triple)" % " · ".join(golpes))
+	johnny.coger("fregona")
+	johnny.coger("pistola")
+	johnny.vestir("")
 
 	# ── El poder del glotón: quien le hace daño lo paga ──
 	var modo: String = johnny.modo

@@ -86,6 +86,15 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
     lejos de la cabeza) y en algunos golpes PixelLab pintó el pañuelo de un rojo más vivo que el de la paleta de
     Johnny; y quedan motas negras sueltas del contorno de las puntas del pelo, que también se quitan. En un par de
     dibujos del golpe con el bate Johnny se gira y se le pone la cabeza de espaldas: le pasa igual al portero.
+  - **La tercera, el gymbro (24 oct, `skin-gymbro`)**, igual: una petición, 10 generaciones, a la primera (unos 6
+    minutos). El texto pide quitar el pelo castaño (calva lisa del color de la piel) y dejar el pañuelo rojo tal cual,
+    con su nudo y sus puntas, y una barba negra tupida con bigote y cejas negras; de lado, la barba de perfil, y de
+    espaldas, la calva con el nudo del pañuelo. Lo aprendido al pegarla: calvo pero con pañuelo pide un tercer modo
+    (`SOBRA` = "calvo"): se quita lo que sobre del pelo como con el glotón, pero el pañuelo, sus puntas al viento y su
+    contorno se respetan (tampoco se borran las islitas sueltas que tengan rojo); y los rojos más vivos que no son de
+    la paleta, dentro de la cabeza, se tapan con la cabeza nueva, como en el glotón. La barba se pega con el trozo de
+    contorno del cuello que la rodea: en algún golpe en que el hombro se mueve, asoma una rayita oscura junto a la barba
+    (al portero le pasa igual). Las hojas del portero y del glotón salen iguales al volver a sacarlas.
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

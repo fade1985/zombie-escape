@@ -1157,8 +1157,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# los jefes, siempre una receta del banco de trabajo que aún no se tenga (si queda alguna)
 		if tipo in JEFES:
 			soltar_receta(zombi.position)
-		# algunos jefes, la primera vez, sueltan una skin (skins.gd: la portera, el portero; el Glotón, el glotón), para
-		# siempre (se pone en la taquilla)
+		# algunos jefes, la primera vez, sueltan una skin (skins.gd: la portera, el portero; el Glotón, el glotón; el
+		# Gymbro, el gymbro), para siempre (se pone en la taquilla)
 		var skin := Skins.de_jefe(tipo)
 		if skin != "" and Skins.desbloquear(skin):
 			Sonido.tocar("compra")

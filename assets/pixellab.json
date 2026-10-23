@@ -2777,5 +2777,19 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-10-24"
+ },
+ "skin-gymbro": {
+  "kind": "edit_image",
+  "job_id": "52377abf-ac0e-4398-b8a0-aa2090b60733",
+  "asset_id": "41b93386-d881-5d43-967b-e40f177fd26b",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin del gymbro (scripts/skins.gd), hecha el 2026-10-24 con la misma receta que skin-portero y skin-gloton: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera y el dueño le dio el visto bueno (PixelLab tardó unos 6 minutos). Los 8 dibujos, tal cual, en assets/sources/skin-gymbro/quietos/<dirección>.png. PixelLab movió el cuerpo de lado de 0 a 7 píxeles y 1 hacia arriba, como en las otras. tools/cara.py gymbro pega la cabeza en las seis hojas de armas; como es calva pero con el pañuelo de siempre, lo que sobra del pelo se quita y el pañuelo y sus puntas se respetan (SOBRA = \"calvo\").",
+  "request": {
+   "description": "Make him bald with a black beard, like a tough gym bro. Remove all his brown hair: the top, sides and back of his head become a smooth bald scalp in his skin color. Keep the red bandana tied around his head exactly as it is: the same place, the same knot and the same two tails at the back. Give him a full thick black beard covering his chin, jaw and cheeks, joined to a black mustache, and thick black eyebrows. Keep the same face, eyes and expression, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the bald head, the red bandana and the black beard consistent in every view; from the side the black beard is seen in profile along the jaw and chin; from behind only the smooth bald back of the head with the red bandana knot and its tails is seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24"
  }
 }

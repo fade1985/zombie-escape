@@ -30,7 +30,7 @@
   por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Las skins (`skins.gd`):
   `vestir(id)` le cambia las hojas por las de esa skin sin cortarle la animación (`sostener` también coge la hoja de
   la skin al cambiar de arma); al empezar se pone la del guardado. Con el portero, `arma()` multiplica por 4 el daño de
-  la fregona. `recibir_dano(cantidad, quien)`: "quien" es el que le pega (el zombi o el jefe; en lo que se lanza,
+  la fregona, y con el gymbro, por 3 el de todas las armas cuerpo a cuerpo (también las creadas en el banco). `recibir_dano(cantidad, quien)`: "quien" es el que le pega (el zombi o el jefe; en lo que se lanza,
   balas, pesas, cuchillos, contratos, bolas de fuego y lo de `proyectil.gd`, su `dueno`), o nada si no es de nadie
   (charcos, agua con corriente, explosiones); con el glotón, `devolver(quien)` se lo cobra: el zombi muere y el jefe
   pierde un 10 % de su vida máxima (`morder()`). `caer(segundos)`: un tropezón (las mancuernas del gimnasio
@@ -182,16 +182,19 @@
   `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
 - `skins.gd`: las skins de Johnny, que se desbloquean haciendo algo y se quedan para siempre: `LISTA` (nombre, frase,
-  cómo se consigue, `jefe`, el que la suelta, y su ventaja: `fregona`, por cuánto se multiplica su daño; `mordisco`,
-  lo que pierde el jefe que te hace daño), `puesta()` y `poner()` (el guardado, `skin`), `tenidas()` y `desbloquear()`
+  cómo se consigue, `jefe`, el que la suelta, y su ventaja: `fregona`, por cuánto se multiplica su daño; `cuerpo`, lo
+  mismo con todas las armas cuerpo a cuerpo; `mordisco`, lo que pierde el jefe que te hace daño), `puesta()` y `poner()` (el guardado, `skin`), `tenidas()` y `desbloquear()`
   (`skins`), `de_jefe(tipo)` (la que suelta ese jefe al caer por primera vez: `partida.gd`, con su aviso),
   `siguiente()` (la tecla Z), `hoja(de_siempre, id)` (la hoja de esa skin para un arma: `conserje-48-<arma>-<id>.tres`),
-  `fregona(id)` y `mordisco(id)`. **El portero** (la suelta la portera): viejo de pelo largo blanco, coleta y barba, con
+  `fregona(id)`, `cuerpo(id)` y `mordisco(id)`. **El portero** (la suelta la portera): viejo de pelo largo blanco, coleta y barba, con
   el pañuelo de siempre, y la fregona × 4. **El glotón** (la suelta el Glotón): calvo y con la cara convertida en una
   boca llena de dientes; quien le hace daño lo paga (`johnny.devolver()`): un zombi normal (o un maniquí) muere al
   momento y un jefe pierde un 10 % de su vida máxima, directo a la vida (`morder()` en `minijefe.gd` y `portera.gd`: ni
   la armadura del Gymbro, ni el escudo del antidisturbios, ni la cúpula del científico lo paran; el científico y el
-  gerente, antes de pincharse, no caen). Sus hojas son las de siempre con la cabeza cambiada (`tools/cara.py`). Se
+  gerente, antes de pincharse, no caen). **El gymbro** (la suelta el Gymbro): calvo, con el pañuelo de siempre y
+  barba negra; las armas cuerpo a cuerpo hacen el triple de daño (todas las que lleve Johnny en la mano, también las
+  creadas en el banco de trabajo; el golpe de Ninja y los martillazos del ferretero, no). Sus hojas son las de siempre
+  con la cabeza cambiada (`tools/cara.py`). Se
   eligen en la taquilla del vestuario (`ui/taquilla.gd`). La prueba: `--captura --skins` (`probar_skins()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
   el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
@@ -389,8 +392,9 @@ el corcho del despacho, que también pasa a sprite, y les quita lo azulado que P
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de las skins), `cara.py` (las skins de Johnny: pega
 la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos de las seis hojas de armas, buscándola por
-el pañuelo rojo; lo que sobra del pelo de siempre alrededor, según la skin (`SOBRA`): teñido del pelo nuevo (el portero)
-o quitado, con lo que sobre del pañuelo (el glotón, calvo); saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
+el pañuelo rojo; lo que sobra del pelo de siempre alrededor, según la skin (`SOBRA`): teñido del pelo nuevo (el portero),
+quitado con lo que sobre del pañuelo (el glotón, calvo y sin pañuelo) o quitado solo el pelo, respetando el pañuelo y sus
+puntas al viento (el gymbro, calvo con pañuelo); saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
 de la taquilla; con `muestra`, el antes y el después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
 (los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con

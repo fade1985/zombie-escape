@@ -13,14 +13,15 @@
 #   4. Se pega la nueva encima. Lo que no es de Johnny (la fregona, el bate, el agua...) se respeta: la cabeza
 #      queda detrás. Donde la nueva no tiene nada, se borra solo lo que era de la cabeza de siempre.
 #   5. Lo que quede cerca del pelo castaño de siempre (cada arma tiene su cabeza un poco distinta), según la skin
-#      (SOBRA): del color del pelo nuevo (el portero) o quitado, también lo que quede del pañuelo (el glotón, calvo).
+#      (SOBRA): del color del pelo nuevo (el portero), quitado y también lo que quede del pañuelo (el glotón, calvo y
+#      sin pañuelo) o quitado solo el pelo, respetando el pañuelo y sus puntas (el gymbro, calvo con pañuelo).
 # Los efectos (fila "fx": fogonazo, humo) no tienen a Johnny: se copian tal cual.
 #
 # Saca assets/sprites/conserje-48-<arma>-<id>.png y su .tres (el mismo con la otra imagen), y los iconos de la
 # taquilla: assets/ui/iconos/skin-<id>.png y skin-conserje.png (la cara de frente, 16×16).
 #   py tools/cara.py portero            → las hojas y los iconos (y luego importar en Godot)
 #   py tools/cara.py portero muestra    → además, captura-cara-<arma>.png con antes y después, para revisarlos
-#   py tools/cara.py gloton muestra     → lo mismo, con el glotón
+#   py tools/cara.py gloton muestra     → lo mismo, con el glotón (y gymbro, con el gymbro)
 import colorsys
 import json
 import sys
@@ -37,8 +38,9 @@ BARBILLA = 12     # hasta esta fila (del dibujo de 48) llega la cabeza de siempr
 PARECIDO = 60     # dos colores se parecen si la suma de sus diferencias es menor que esto
 DE_JOHNNY = 34    # un color es "de Johnny" si se parece así a alguno de sus colores (si no, es el arma u otra cosa)
 # Qué se hace con lo que sobre del pelo de siempre alrededor de la cabeza nueva: "tenir", del color del pelo nuevo
-# (el portero); "quitar", para una cabeza calva y sin pañuelo (el glotón: también lo que sobre del pañuelo)
-SOBRA = {"portero": "tenir", "gloton": "quitar"}
+# (el portero); "quitar", para una cabeza calva y sin pañuelo (el glotón: también lo que sobre del pañuelo); "calvo",
+# para una calva con el pañuelo de siempre (el gymbro: se quita el pelo, y el pañuelo y sus puntas se quedan)
+SOBRA = {"portero": "tenir", "gloton": "quitar", "gymbro": "calvo"}
 
 
 def dist(a, b):
@@ -244,8 +246,9 @@ def piel_nueva(cabeza):
     return pieles.most_common(1)[0][0] if pieles else (251, 179, 134, 255)
 
 
-def quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel):
+def quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel, solo_pelo=False):
     """Calvo (el glotón): lo que sobre del pelo y del pañuelo de siempre alrededor de la cabeza nueva.
+    "solo_pelo" (el gymbro, calvo con pañuelo): solo el pelo; el pañuelo, sus puntas y su contorno se quedan.
     - Los trozos de pelo o de pañuelo (cada uno por su lado) que no salen de alrededor de la cabeza: si siguen, son
       otra cosa (el palo de un arma tiene los mismos castaños). Las puntas del pañuelo vuelan más lejos: para el rojo,
       "alrededor" es un poco más grande. Si tocan el aire, ellos o su contorno negro, se borran con su contorno; si
@@ -263,7 +266,7 @@ def quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel):
         if p in hechos:
             return None
         f = color(p)
-        return "pelo" if johnny.es_pelo(f) else "rojo" if panuelo(f) else None
+        return "pelo" if johnny.es_pelo(f) else "rojo" if panuelo(f) and not solo_pelo else None
 
     def oscuro(p):
         f = color(p)
@@ -332,7 +335,7 @@ def quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel):
             continue
         isla, sale = mancha(p, lambda v: color(v)[3] > 0, lejos)
         vistos |= isla
-        if not sale and len(isla) < 10 and not isla & hechos and 2 * sum(oscuro(q) for q in isla) >= len(isla):
+        if not sale and len(isla) < 10 and not isla & hechos and 2 * sum(oscuro(q) for q in isla) >= len(isla)                 and not (solo_pelo and any(panuelo(color(q)) for q in isla)):
             for q in isla:
                 px[x0 + q[0], y0 + q[1]] = (0, 0, 0, 0)
 
@@ -351,15 +354,15 @@ def pegar(px, x0, y0, cw, ch, t, cabeza, quieto_o, johnny, claros, sobra, piel):
             if y <= BARBILLA and po[x, y][3] > 0 and de_cabeza(f):
                 px[x0 + X, y0 + Y] = (0, 0, 0, 0)
             continue
-        # (sin pañuelo, también los rojos que no son de su paleta: en algunos golpes PixelLab lo pintó más vivo)
-        if f[3] == 0 or johnny.es_suyo(f) or (sobra == "quitar" and panuelo(f)):
+        # (calvo, también los rojos que no son de su paleta: en algunos golpes PixelLab pintó el pañuelo más vivo)
+        if f[3] == 0 or johnny.es_suyo(f) or (sobra in ("quitar", "calvo") and panuelo(f)):
             px[x0 + X, y0 + Y] = n
     # lo que sobre alrededor del pelo de siempre (la cabeza de cada arma es un poco distinta)
     xs = [x for x, _ in cabeza]
     zona = [(X, Y) for Y in range(t[1], t[1] + BARBILLA + 3) for X in range(t[0] + min(xs) - 3, t[0] + max(xs) + 4)
             if 0 <= X < cw and 0 <= Y < ch and (X, Y) not in hechos]
-    if sobra == "quitar":
-        quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel)
+    if sobra in ("quitar", "calvo"):
+        quitar(px, x0, y0, cw, ch, zona, hechos, johnny, piel, sobra == "calvo")
         return
     for X, Y in zona:
         f = px[x0 + X, y0 + Y]

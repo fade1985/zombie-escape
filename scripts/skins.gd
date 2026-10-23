@@ -15,6 +15,11 @@
 # La segunda, el glotón (la suelta el Glotón al caer por primera vez, partida.gd): calvo y con la cara convertida en
 # una boca enorme llena de dientes, como la del Glotón. Con ella puesta, quien le hace daño lo paga (johnny.gd,
 # devolver()): un zombi normal muere al momento y un jefe pierde un 10 % de su vida máxima ("mordisco").
+#
+# La tercera, el gymbro (la suelta el Gymbro al caer por primera vez, partida.gd): calvo, con el pañuelo rojo de
+# siempre y una barba negra. Con ella puesta, las armas cuerpo a cuerpo hacen un 200 % más de daño (× 3, "cuerpo";
+# todas las que lleve Johnny en la mano, también las creadas en el banco de trabajo; el golpe de Ninja y los
+# martillazos del ferretero, no).
 class_name Skins
 
 const LISTA := {
@@ -22,6 +27,8 @@ const LISTA := {
 		"como": "Mata a la portera por primera vez.", "jefe": "portera", "fregona": 4.0},
 	"gloton": {"nombre": "El glotón", "desc": "Calvo y todo boca. Quien te hace daño lo paga: un zombi muere y un jefe pierde un 10 % de vida.",
 		"como": "Mata al Glotón por primera vez.", "jefe": "gloton", "mordisco": 0.1},
+	"gymbro": {"nombre": "El gymbro", "desc": "Calvo y barbudo. Las armas cuerpo a cuerpo hacen un 200 % más de daño.",
+		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 3.0},
 }
 
 
@@ -79,6 +86,11 @@ static func hoja(de_siempre: SpriteFrames, id: String) -> SpriteFrames:
 # Por cuánto se multiplica el daño de la fregona con esa skin
 static func fregona(id: String) -> float:
 	return LISTA[id].get("fregona", 1.0) if id in LISTA else 1.0
+
+
+# Por cuánto se multiplica el daño de todas las armas cuerpo a cuerpo con esa skin
+static func cuerpo(id: String) -> float:
+	return LISTA[id].get("cuerpo", 1.0) if id in LISTA else 1.0
 
 
 # Qué parte de su vida máxima pierde un jefe que le hace daño con esa skin (0 = nada: el poder del glotón no está)
