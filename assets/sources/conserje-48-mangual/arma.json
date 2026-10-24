@@ -1,0 +1,6 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con el mangual (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-mangual). La casilla es más ancha y alta que la de siempre (144x128, con los pies en 72,88, como la del látigo) porque el golpe es un giro entero con la cadena estirada a pulso (el mangual llega más lejos que la súper maza: alcance 90) y una estela circular que rodea a Johnny: con el lienzo de 96x96 se quedaría justa.",
+  "celda": [144, 128],
+  "pivote": [72, 88],
+  "lienzo_ataque": [144, 128, 40, 33]
+}
