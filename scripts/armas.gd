@@ -91,8 +91,10 @@ const DATOS := {
 # garfio.gd), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
+	# la lanza: su casilla es más ancha (128x96, con los pies en 64,72) porque en la estocada Johnny se queda en su sitio
+	# y la lanza avanza (tools/estocada.py)
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
-		"hoja": preload("res://assets/sprites/conserje-48-lanza.tres")},
+		"pies": Vector2(64, 72), "hoja": preload("res://assets/sprites/conserje-48-lanza.tres")},
 	"aplastacabezas": {"base": "bate", "empuje": 3.0, "efecto": "aturde", "momento": 0.222,
 		"hoja": preload("res://assets/sprites/conserje-48-aplastacabezas.tres")},
 	"bate_fuego": {"base": "bate", "efecto": "fuego", "momento": 0.222,

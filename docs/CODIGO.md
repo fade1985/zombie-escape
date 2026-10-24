@@ -337,7 +337,8 @@
   `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día), `--joyeria` (`probar_joyeria`: la cámara
   acorazada), `--skins` (`probar_skins`: las skins de Johnny), `--baul` (`probar_baul`: guardar en el baúl lo
   de la mochila), `--lanza` (`probar_lanza`: la lanza con su dibujo propio, su icono y la estocada en las 8
-  direcciones, `captura-lanza-<dirección>.png`), `--aplastacabezas` (`probar_aplastacabezas`: lo mismo con el aplastacabezas,
+  direcciones, `captura-lanza-<dirección>.png`), `--estocada` (`probar_estocada`: en la sala de pruebas de armas, F11, la
+  estocada de la lanza desde las 8 direcciones, con Johnny quieto en su sitio, `captura-estocada-<dirección>-<1-3>.png`), `--aplastacabezas` (`probar_aplastacabezas`: lo mismo con el aplastacabezas,
   que además aturde y echa atrás, `captura-aplastacabezas-<dirección>.png`), `--bate-fuego` (`probar_bate_fuego`: lo mismo
   con el bate de fuego, que además prende al zombi, y con las cuatro skins, `captura-bate-fuego-<dirección o skin>.png`),
   `--partecuerpos` (`probar_partecuerpos`: lo mismo con el partecuerpos, que además deja sangrando al zombi,
@@ -478,7 +479,8 @@ detrás de los brazos y las manos, `delante()`, y lo que se sale de la cabeza de
 saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
 de la taquilla; con `muestra`, el antes y el después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
 (los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
-Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `icono_lanza.py` (el icono de la lanza, con los colores de los de la fregona y el cuchillo), `icono_aplastacabezas.py`
+Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `icono_lanza.py` (el icono de la lanza, con los colores de los de la fregona y el cuchillo), `estocada.py` (recoloca los dibujos de la estocada de
+la lanza de PixelLab para que Johnny no se eche atrás al clavar: de `ataque-pixellab/` a `ataque/`), `icono_aplastacabezas.py`
 (el icono del bate con clavos que asoman por los lados, con los grises del de los clavos), `icono_bate_fuego.py` (el icono del bate con la punta
 envuelta en trapos chamuscados y una llama encima), `icono_partecuerpos.py` (el icono del bate con cuatro cuchillas anchas clavadas
 de canto, el filo claro hacia fuera, y sangre), `icono_inmovilizadora.py` (el icono del bate con una caja gris de táser

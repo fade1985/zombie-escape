@@ -58,6 +58,8 @@
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
 #   --armas        la sala de pruebas de armas (F11, sala_armas.gd): la diana que no se muere, la pistola desde 72
 #                  ángulos (desde cuáles falla), la munición sin fin, el cambio de arma y la vuelta con las armas de antes
+#   --estocada     en la sala de pruebas de armas (F11), la estocada de la lanza desde las 8 direcciones: Johnny se queda
+#                  en su sitio y la lanza avanza (tools/estocada.py), con tres fotos de cada una
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
@@ -204,6 +206,9 @@ func empezar_prueba() -> void:
 	elif "--armas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_armas()
+	elif "--estocada" in args:
+		set_process(false)   # sin la prueba larga
+		probar_estocada()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -2091,6 +2096,43 @@ func probar_armas() -> void:
 	print("De vuelta con F11: en «%s» (esperado: mantenimiento) · armas %s (esperado: true) · balas %d y %d (esperado: %d y %d)" % [
 		planta.sitios[aqui].tipo, [johnny.huecos, johnny.mano] == [antes[0], antes[1]], johnny.balas, johnny.reserva,
 		antes[2], antes[3]])
+	get_tree().quit()
+
+
+# Con "--captura --estocada": la estocada de la lanza en la sala de pruebas de armas (F11, sala_armas.gd), desde que
+# Johnny se queda en su sitio al clavar y es la lanza la que avanza (24 oct, tools/estocada.py). Coge la lanza de la
+# lista de la sala y, a 80 de la diana, ataca desde las 8 direcciones: cuenta su hoja, que los pies van en el sitio de
+# su casilla ancha y el daño que le hace a la diana desde cada una, con tres fotos de cada dirección (tomando impulso,
+# en el golpe y con la lanza estirada: captura-estocada-<dirección>-<1, 2, 3>.png). Cada línea dice lo esperado
+func probar_estocada() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	sala.indice = sala.lista.find("lanza")
+	sala.cambiar(0)
+	johnny.espera = 1000.0   # que no ataque por su cuenta: aquí ataca la prueba
+	await get_tree().process_frame
+	print("Lanza en la mano: hoja «%s» · pies %s (esperado: conserje-48-lanza o la de la skin puesta, (-64.0, -72.0))" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), johnny.sprite.offset])
+	var danos := []
+	for d in johnny.DIRS:
+		var angulo: float = johnny.DIRS.find(d) * PI / 4
+		johnny.global_position = sala.diana.global_position - Vector2.from_angle(angulo) * 80.0
+		johnny.direccion = d
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.3).timeout
+		var antes: int = sala.total
+		johnny.atacar(angulo)
+		# el golpe llega a los 0,111 s (0,5 × 0,222) y la lanza acaba de estirarse en el fotograma siguiente
+		for foto in [[0.03, 1], [0.1, 2], [0.07, 3]]:
+			await get_tree().create_timer(foto[0]).timeout
+			Captura.foto("captura-estocada-%s-%d.png" % [d, foto[1]])
+		await get_tree().create_timer(0.5).timeout
+		danos.append("%s %d" % [d, sala.total - antes])
+	print("Daño a la diana desde cada dirección: %s (esperado: más de 0 en todas)" % ", ".join(danos))
 	get_tree().quit()
 
 
