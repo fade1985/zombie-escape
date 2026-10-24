@@ -7,9 +7,9 @@
 # Va de hija de Johnny. Johnny la mantiene encendida llamando a mantener() en cada paso en que echa fuego (johnny.gd,
 # echar_fuego); el paso en que no la llama, se apaga sola. Como la bala, la llama "de verdad" va por el suelo (desde
 # debajo de la boca) y se dibuja más arriba: sale a la altura de la boca y va bajando hasta el cuerpo de los zombis.
-# El dibujo lo hace su shader (escenas/armas/llamarada.gdshader): fuego en pixel art, con las bocanadas, los colores y
-# el humo. Aquí, además, las chispas que saltan, la luz que alumbra alrededor mientras sale (más en los sitios oscuros)
-# y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
+# El dibujo lo hace su shader (escenas/armas/llamarada.gdshader): fuego en pixel art, con las bocanadas y los colores
+# (sin humo). Aquí, además, las chispas que saltan, la luz que alumbra alrededor mientras sale (más en los sitios
+# oscuros) y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
 class_name Llamarada
 extends Node2D
 
@@ -182,7 +182,7 @@ func pintar() -> void:
 	queue_redraw()
 
 
-# Un rectángulo que cubre la llama entera (con sitio para que ondule, se abra y eche humo): lo demás lo pinta el shader
+# Un rectángulo que cubre la llama entera (con sitio para que ondule y se abra): lo demás lo pinta el shader
 func _draw() -> void:
 	if not visible:
 		return
@@ -191,5 +191,5 @@ func _draw() -> void:
 	var lado := eje.orthogonal() * 170.0
 	var boca := Vector2(0, -ALTURA)
 	var desde := boca - eje * (ATRAS + 10.0)
-	var hasta := boca + eje * (largo * 1.1 + 40.0)
+	var hasta := boca + eje * (largo * 1.1 + 12.0)
 	draw_colored_polygon(PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)

@@ -5,7 +5,7 @@
 //   - Sale estrecha de la boca y se abre en cono, ondulando como una manguera; dentro, un ruido que corre hacia
 //     fuera hace las bocanadas, y deshilacha los bordes y la punta
 //   - Más caliente en el medio y junto a la boca (blanco y amarillo), naranja en el medio y rojo en los bordes, más
-//     fría cuanto más lejos; al final, humo oscuro
+//     fría cuanto más lejos (sin humo: se quitó porque parecía una nube negra al final)
 //   - Si la corta una pared, en la punta se aplasta y se abre (aunque esté muy cerca); al apagarla, se despega de
 //     la boca ("cola")
 // Los bordes entre un color y otro van en damero (dos colores a cuadros), como se hace a mano en pixel art.
@@ -26,8 +26,6 @@ const vec3 FUEGO1 = vec3(1.0, 0.824, 0.247);   // #ffd23f
 const vec3 FUEGO2 = vec3(1.0, 0.624, 0.11);    // #ff9f1c
 const vec3 FUEGO3 = vec3(0.941, 0.329, 0.118); // #f0541e
 const vec3 FUEGO4 = vec3(0.722, 0.149, 0.11);  // #b8261c
-const vec3 HUMO_OSCURO = vec3(0.16, 0.13, 0.15);
-const vec3 HUMO_CLARO = vec3(0.3, 0.26, 0.28);
 
 varying vec2 mundo;
 
@@ -82,20 +80,9 @@ void fragment() {
 	calor *= smoothstep(cola - 24.0, cola, x);
 	calor *= step(-1.0, x);
 
-	// el humo: al final y un poco más allá de la punta, algo más ancho que el fuego, y sube (se mira un poco más abajo
-	// en el mundo, más cuanto más lejos)
-	vec2 rs = r + vec2(0.0, 6.0 + max(0.0, x - largo * 0.5) * 0.3);
-	float xs = dot(rs, eje);
-	float ys = dot(rs, vec2(-eje.y, eje.x)) - onda;
-	float s = capas(vec2(xs * 0.05 - tiempo * 4.0, ys * 0.08 - tiempo * 1.1));
-	float hacia_final = smoothstep(largo * 0.6, largo * 0.95, xs) * (1.0 - smoothstep(largo, largo + 28.0, xs));
-	float humo = (1.0 - abs(ys) / ((5.0 + xs * 0.21) * 1.2)) * hacia_final + (s - 0.5) * 0.9;
-	humo *= smoothstep(cola - 24.0, cola, x) * step(0.0, x);
-
 	// el damero de los bordes: medio píxel sí y medio no, un poco más o menos caliente
 	float damero = mod(floor(p.x / 2.0) + floor(p.y / 2.0), 2.0) - 0.5;
 	calor += damero * 0.06;
-	humo += damero * 0.05;
 
 	vec4 color = vec4(0.0);
 	if (calor > 0.88) {
@@ -110,10 +97,6 @@ void fragment() {
 		color = vec4(FUEGO3, 1.0);
 	} else if (calor > 0.07) {
 		color = vec4(FUEGO4, 1.0);
-	} else if (humo > 0.45) {
-		color = vec4(HUMO_OSCURO, 0.8);
-	} else if (humo > 0.3) {
-		color = vec4(HUMO_CLARO, 0.5);
 	}
 	COLOR = color;
 }

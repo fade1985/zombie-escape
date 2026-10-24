@@ -100,7 +100,7 @@
   `escenas/armas/llamarada.gdshader`, sobre un rectángulo que la cubre: en cada píxel del dibujo (de 2 unidades,
   alineados con el mundo) calcula lo caliente que está con un ruido que corre hacia fuera y lo pinta a bandas con los
   colores de `Llamas.FUEGO` (blanco y amarillo junto a la boca, naranja en medio, rojo en los bordes), con los bordes en
-  damero y humo oscuro que sube al final; contra una pared se aplasta y se abre. `llamarada.gd` le pasa dónde va, suelta
+  damero y sin humo; contra una pared se aplasta y se abre. `llamarada.gd` le pasa dónde va, suelta
   chispas (`Particulas`), lleva una luz que alumbra alrededor (más en los sitios oscuros) y, al soltar, la llama se
   despega de la boca y se va.
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (munición, apuntar, lanzar; `Lanzables.tipos()`).
