@@ -508,6 +508,22 @@
    "cost": "7 generaciones (3 de posturas, 4 de animaciones)"
   }
  },
+ "conserje-48-lanza": {
+  "kind": "character_state",
+  "character_id": "8333198c-825f-47c6-b9af-365a8654f84e",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Lanza en guardia",
+  "nota": "Estado de Johnny con la lanza (el arma creada: palo de fregona con un cuchillo de cocina atado en la punta), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Salió a la primera: la sujeta con las dos manos en diagonal, con la hoja arriba y hacia delante, en las 8 direcciones. Lienzo de 64x64; con use_color_palette_from_reference conserva unos 41 colores, y mide lo mismo que con el bate y el cuchillo. Las 8 posturas, tal cual, en assets/sources/conserje-48-lanza/rotations/<dirección>.png. Falta: ataque (estocada) y andar.",
+  "request": {
+   "edit_description": "holding a homemade spear like a weapon: a long thin wooden mop handle with no mop head, with a kitchen knife tied to its top end with grey duct tape, the steel blade pointing outward as the spear tip; gripping the shaft with both hands in a ready fighting stance, knees slightly bent; the shaft is held diagonally across his body with the blade end raised up and forward above shoulder height, away from his face, and the bottom end of the shaft pointing down toward the opposite hip; the spear stays held the same way, blade up, in every view: front, side and back; light brown wooden shaft with a dark outline, small light grey steel blade, grey tape wrapped around the joint; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
