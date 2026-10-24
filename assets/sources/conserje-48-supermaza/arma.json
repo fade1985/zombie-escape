@@ -1,6 +1,157 @@
 {
   "nota": "Datos para montar la hoja de sprites de Johnny con la súper maza (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-supermaza). La casilla es más ancha y alta que la de siempre (128x112, con los pies en 64,79) porque el golpe es un giro entero con la maza a pulso y una estela circular que rodea a Johnny: con el lienzo de 96x96 se quedaría justa.",
-  "celda": [128, 112],
-  "pivote": [64, 79],
-  "lienzo_ataque": [128, 112, 32, 24]
+  "celda": [
+    128,
+    112
+  ],
+  "pivote": [
+    64,
+    79
+  ],
+  "lienzo_ataque": [
+    128,
+    112,
+    32,
+    24
+  ],
+  "andar": {
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. Van a mano, calculados mirando cuál se parece más el fotograma a+n al a (diferencia de píxeles entre los dos; el script los elegía solo y fallaba porque la maza, que se mece por encima de la silueta quieta, cuenta como píxeles sueltos). Al cerrar cambian entre 14 y 176 píxeles (la mayoría, menos de 60; el norte, 176). Son 8 fotogramas en el sur y el sureste, 9 en el este y el suroeste, 10 en el noreste, el norte y el noroeste y 12 en el oeste; el fotograma 0 es el dibujo quieto y vale como parte del ciclo en el oeste.",
+    "ciclo": {
+      "south": [
+        4,
+        8
+      ],
+      "south-east": [
+        4,
+        8
+      ],
+      "east": [
+        3,
+        9
+      ],
+      "north-east": [
+        1,
+        10
+      ],
+      "north": [
+        2,
+        10
+      ],
+      "north-west": [
+        1,
+        10
+      ],
+      "west": [
+        0,
+        12
+      ],
+      "south-west": [
+        1,
+        9
+      ]
+    }
+  },
+  "ataque": {
+    "nota": "Qué fotogramas de PixelLab se usan en cada dirección y en qué orden (de 13: el de partida y 12 generados). La súper maza ataca 0,8 veces por segundo y el golpe dura 0,5 s: 10 fotogramas. En todas, el golpe (la primera estela blanca grande del giro, con el anillo de polvo) cae en el cuarto (índice 3; Armas.CREADAS.supermaza → momento 0,3). Se saltan los fotogramas repetidos de la preparación y de la vuelta a la guardia; el último (12) es el de llegada, igual que el quieto.",
+    "duracion": 0.5,
+    "impacto": 3,
+    "fotogramas": {
+      "south": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        12
+      ],
+      "south-east": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "east": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ],
+      "north-east": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        12
+      ],
+      "north": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ],
+      "north-west": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        12
+      ],
+      "west": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ],
+      "south-west": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ]
+    }
+  }
 }
