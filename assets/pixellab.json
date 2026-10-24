@@ -1717,169 +1717,226 @@
  },
  "conserje-48-lanzallamas": {
   "kind": "character_state",
-  "character_id": "74572bbd-8873-463b-b0d7-8693ff99c7b0",
+  "character_id": "85a9a505-cbaa-4803-8ea2-a29452d4487e",
   "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
-  "state_name": "Lanzallamas en guardia",
-  "nota": "Estado de Johnny con el lanzallamas (el arma creada: pistola de agua + gasolina; base la pistola, ritmo 10, alcance 170, chorro de llamas), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un lanzallamas casero: un depósito rojo de gas pequeño bajo un tubo largo de metal gris oscuro con una manguera negra, sujeto con las dos manos apuntando al frente y una llama pequeña naranja y amarilla (el piloto) en la punta del tubo. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 7001) y la B, con colores libres (seed 7002). Elegida por el dueño la A: la cara de Johnny sale limpia (en la B sale con manchas rojas, como salpicaduras) y los colores le pegan; la B sacaba el tubo recto hacia arriba de espaldas, pero con Johnny rígido y sin depósito a la vista. Las 8 posturas de la A, en assets/sources/conserje-48-lanzallamas/rotations/<dirección>.png; las de la B, en descartes/rotations-B/. Lienzo de 64x64 salvo south (64x80) y north (64x78), recortados con los pies en la fila 55 como los demás (ver 'posturas'). Se distingue de la pistola (negra y corta) y del bate de fuego (un bate ardiendo en alto) a la primera: depósito rojo, tubo largo gris y llamita en la punta. EN EL JUEGO (sprite conserje-48-lanzallamas, desde el 2026-10-24, parte 4): reposo, andar y disparo en las 8 direcciones, con sus hojas de cada skin (tools/cara.py) y su icono propio (tools/icono_lanzallamas.py: un depósito rojo de gas con la válvula gris, un tubo largo gris en diagonal con una empuñadura negra, una manguera negra en bucle y una llamita en la punta). Es la primera arma creada a distancia con hoja propia: en Armas.CREADAS.lanzallamas lleva su 'hoja' y su 'boca' (copiada de 'muzzle' en assets/sprites/conserje-48-lanzallamas.json: south (-1, 22), south-east (32, -8), east (34, -26), north-east (32, -46), north (11, -51), north-west (-32, -49), west (-30, -21), south-west (-34, 1)) y ya no lleva 'detalle' ni 'sube'; 'pies' sigue siendo el de la pistola (48, 72) aunque la casilla de la hoja mide 96x104. Las gotas de fuego las pone el juego (chorro.gd, desde la boca) y la hoja solo lleva el retroceso y la llamarada: salen del mismo sitio en las 8 direcciones. Se monta con: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanzallamas (y py tools/hacer_frames.py assets/sprites/conserje-48-lanzallamas); qué fotogramas van (3 por dirección), los ciclos del andar y la casilla, en assets/sources/conserje-48-lanzallamas/arma.json. tools/cara.py avisa de 'cabeza poco clara: 30' (casi todos en north: el tubo asoma junto a la cabeza) pero en las fotos del juego las 4 skins se ven bien. Prueba: -- --captura --lanzallamas.",
+  "state_name": "Lanzallamas con bombonas",
+  "nota": "Johnny con el lanzallamas de la llamarada continua (fase C, 25 oct): dos bombonas grises de combustible atadas a la espalda con correas marrones, una manguera negra hasta el tubo y el tubo sujeto con las dos manos apuntando, con el piloto encendido. Se pidieron dos estados a la vez (20 generaciones), los dos con los colores de Johnny (use_color_palette_from_reference): la A con dos bidones rojos de gasolina y la B con dos bombonas grises. Elegida por el dueño la B. Sus 8 posturas, en assets/sources/conserje-48-lanzallamas/rotations/ (south y north, rehechas: ver 'posturas'); las de la A, en descartes/bidones-A/. Sin animación de disparo: Johnny echa el fuego en la postura quieta y la llama la pinta el juego (llamarada.gd). La boca de armas.gd es la punta del tubo de cada postura quieta, medida en la hoja.",
   "request": {
-   "edit_description": "holding a homemade flamethrower with both hands in a ready shooting stance, knees slightly bent: a small red gas canister attached under a short black hose and a thick dark grey metal nozzle pipe, one hand gripping the handle under the canister and the other hand holding the nozzle pipe, the nozzle pointing straight ahead in the direction he is facing, with a small bright orange and yellow pilot flame burning at the very tip of the nozzle; the flamethrower stays aimed forward in every view: front, side and back; red canister, black hose, dark grey metal nozzle, small flame at its tip; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "edit_description": "holding a flamethrower with both hands in a ready aiming stance, knees slightly bent: two tall grey metal fuel cylinders strapped side by side to his back like a backpack with brown straps over both shoulders, a black rubber hose running from the cylinders around his side to a long dark grey metal nozzle pipe with a black handle, one hand on the handle and the other hand holding the pipe, the nozzle pointing straight ahead in the direction he is facing, with a small bright orange and yellow pilot flame burning at the very tip of the nozzle; the flamethrower stays aimed forward in every view: front, side and back; the two grey cylinders are fully visible on his back from behind and peek out behind his shoulders from the front; grey cylinders, brown straps, black hose, dark grey metal nozzle, small flame at its tip; same face, same hair and red bandana, same clothes, same body size and proportions",
    "override_width": 64,
    "override_height": 64,
    "use_color_palette_from_reference": true,
-   "seed": 7001
+   "seed": 7102
   },
   "cost": "10 generaciones",
-  "updated": "2026-10-24",
-  "alternativa_B": {
-   "character_id": "8a65a4dc-e57f-4dc7-89d4-5b19a7c67500",
-   "state_name": "Lanzallamas en guardia (colores libres)",
+  "alternativa_A": {
+   "character_id": "1b1e6641-473d-4c01-b6d4-b6f99272790f",
+   "state_name": "Lanzallamas con bidones",
+   "request": {
+    "edit_description": "holding a homemade flamethrower with both hands in a ready aiming stance, knees slightly bent: two red metal gasoline jerrycans strapped to his back like a backpack with brown straps over both shoulders, a black rubber hose running from the jerrycans around his side to a long dark grey metal nozzle pipe with a black handle, one hand on the handle and the other hand holding the pipe, the nozzle pointing straight ahead in the direction he is facing, with a small bright orange and yellow pilot flame burning at the very tip of the nozzle; the flamethrower stays aimed forward in every view: front, side and back; the two red jerrycans are fully visible on his back from behind and peek out behind his shoulders from the front; red jerrycans, brown straps, black hose, dark grey metal nozzle, small flame at its tip; same face, same hair and red bandana, same clothes, same body size and proportions",
+    "override_width": 64,
+    "override_height": 64,
+    "use_color_palette_from_reference": true,
+    "seed": 7101
+   },
    "cost": "10 generaciones",
-   "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 7002. Sus 8 posturas, en assets/sources/conserje-48-lanzallamas/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
+   "nota": "Descartada (el dueño eligió la B). Sigue en PixelLab, sin borrar. Sus 8 posturas, en descartes/bidones-A/."
   },
   "posturas": {
-   "nota": "Las posturas quietas de south y north NO son las del estado de PixelLab de la A (allí el tubo cruzaba el cuerpo en diagonal de frente y asomaba en diagonal por el hombro izquierdo de espaldas, como pasó con la escopeta y el MP5, y al disparar la llama habría salido de lado mientras el chorro va recto): se rehicieron el 2026-10-24 con una animación corta de PixMiniMax (8 fotogramas más el de partida, 1 generación cada una, lienzo de partida de 64x64 = la postura vieja) en la que Johnny gira el arma, y se guardó el ÚLTIMO fotograma (el 8) recortado para que los pies queden en la fila 55: south 64x80 (el tubo apunta recto hacia abajo entre las piernas, la llama en la fila 66) y north 64x78 (el tubo recto hacia arriba sobre el hombro derecho, la llama en la fila 2). Las viejas, en descartes/rotations-viejas/. En PixelLab el estado sigue con sus rotaciones originales: las nuevas solo existen en el proyecto. Ojo: arma.py usa 'pies_en_rotacion' [32, 55] y las rotaciones south y north son más altas que 64 (no pasa nada: la casilla es de 96x96).",
+   "nota": "Como con el lanzallamas de antes: en la B el tubo cruzaba el cuerpo en diagonal de frente y asomaba en diagonal por el hombro izquierdo de espaldas. Se rehicieron con una animación corta de PixMiniMax (8 fotogramas más el de partida, 1 generación cada una, sin fotograma de partida subido: usa la rotación) en la que Johnny gira el arma, y se guardó el último fotograma (el 8) recortado con los pies en la fila 55: south 64x66 (el tubo recto hacia abajo entre las piernas) y north 64x64 (el tubo recto hacia arriba junto al hombro derecho). Todos los fotogramas, en assets/sources/conserje-48-lanzallamas/posturas/. En PixelLab el estado sigue con sus rotaciones originales.",
    "south": {
-    "group": "3ec72c5e-07cd-4f16-b943-e3fea0a9c8eb",
-    "animation_name": "postura-lanzallamas-abajo",
-    "upload": "c155d73f-c164-45bf-ab0e-5b74c2e051eb (partida: la postura vieja, caduca el 2026-10-27)",
-    "action_description": "He keeps facing the camera the whole time, his face, chest and both shoulders square to the camera. He quickly lowers the flamethrower to his waist and turns it so the nozzle points straight down the image: he holds it low at hip height in front of his belly with both hands, the black hose and the red gas canister at his side, the long dark grey nozzle pipe perfectly vertical in the image and pointing straight down toward the bottom edge of the image between his legs, with the small orange and yellow pilot flame burning at the bottom end of the nozzle. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+    "group": "61cfd16d-0f9c-4198-a960-3d0678a46f8d",
+    "animation_name": "postura-bombonas-abajo",
+    "action_description": "He keeps facing the camera the whole time, his face, chest and both shoulders square to the camera, the two grey cylinders still strapped to his back. He quickly lowers the flamethrower to his waist and turns it so the nozzle points straight down the image: he holds it low at hip height in front of his belly with both hands, the black hose running from his side to the handle, the long dark grey nozzle pipe perfectly vertical in the image and pointing straight down toward the bottom edge of the image between his legs, with the small orange and yellow pilot flame burning at the bottom end of the nozzle. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
    },
    "north": {
-    "group": "89188a75-6eb2-4073-aafc-3cbeaabc64b0",
-    "animation_name": "postura-lanzallamas-arriba",
-    "upload": "786f432d-7048-4b40-8616-707b423785bc (partida: la postura vieja, caduca el 2026-10-27)",
-    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls, his shoulders square to the camera; he never turns around and his face is never visible. He quickly straightens the flamethrower so it points straight ahead of him, away from the camera, toward the top edge of the image: he holds it in front of him with both hands, hidden behind his torso, and only the long dark grey nozzle pipe sticks straight up above his right shoulder, perfectly vertical in the image, next to his head, with the small orange and yellow pilot flame burning at the top end. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+    "group": "18565cba-ce62-462a-8aeb-47946665d4be",
+    "animation_name": "postura-bombonas-arriba",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana, the two grey cylinders strapped to his back and the back of his overalls, his shoulders square to the camera; he never turns around and his face is never visible. He quickly straightens the flamethrower so it points straight ahead of him, away from the camera, toward the top edge of the image: he holds it in front of him with both hands, hidden behind his torso, and only the long dark grey nozzle pipe sticks straight up above his right shoulder, perfectly vertical in the image, next to his head, with the small orange and yellow pilot flame burning at the top end. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
    },
    "cost": "2 generaciones (1 por dirección)"
   },
-  "cost_total": "38 generaciones: 20 de los dos estados (la B, descartada), 2 de las posturas de south y north, 8 del disparo (2 de prueba y 6) y 8 del andar; todo a la primera, sin repeticiones",
-  "ataque": {
-   "nota": "Disparo: retroceso corto y una llamarada que sale de la boca del tubo (después, unas brasas rojas y vuelve la llamita del piloto), sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo de 96x96 como fotograma de partida y de llegada (arma.py --lienzos: lienzo_ataque por defecto, 96x96 con la postura en 16,20). Fotogramas en assets/sources/conserje-48-lanzallamas/ataque/. Las 8 direcciones salieron a la primera (2026-10-24), ninguna hacia atrás: la llamarada sale por la punta del tubo en todas (east y north de la prueba de la parte 2, las otras 6 en la parte 3; en west y south-west se añadió 'in front of him' y a qué lado de la imagen va, como pedían las notas del látigo eléctrico). PixelLab devuelve lienzos de 96x96 a 136x112 (south, 96x152). Se usan 3 fotogramas por dirección (el disparo dura 0,1 s, ritmo 10): south [2,3,4], south-east [3,4,5], east [3,4,5], north-east [1,2,3], north [3,4,5], north-west [3,4,5], west [3,4,5], south-west [2,3,4] (la llamarada empieza ahí; los siguientes son las brasas). La casilla de la hoja mide 96x104 (pies en 48,72): la llamarada del sur baja 27 píxeles por debajo de los pies. tools/arma.py quitó el tinte amarillo de los 3 fotogramas del oeste (la llama iluminaba a Johnny) y calculó la boca (en píxeles del dibujo desde los pies): south (-1, 22), south-east (32, -8), east (34, -26), north-east (32, -46), north (11, -51), north-west (-32, -49), west (-30, -21), south-west (-34, 1).",
-   "animation_name": "disparo-lanzallamas",
-   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
-   "initial_pose": {
-    "east": "standing in a ready shooting stance facing right, both hands on the flamethrower, the long metal nozzle pointing straight to the right with a small pilot flame at its tip",
-    "west": "standing in a ready shooting stance facing left, both hands on the flamethrower, the long metal nozzle pointing straight to the left with a small pilot flame at its tip",
-    "south": "standing facing the camera in a hip-fire stance, holding the flamethrower low in front of his belly with both hands, the long metal nozzle pointing straight down toward the bottom of the image between his legs with a small pilot flame at its tip",
-    "south-east": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the right, both hands on the flamethrower, the long metal nozzle pointing down and to the right of the image with a small pilot flame at its tip",
-    "south-west": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the left, both hands on the flamethrower, the long metal nozzle pointing down and to the left of the image with a small pilot flame at its tip",
-    "north-east": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the right, the long metal nozzle pointing up and to the right of the image with a small pilot flame at its tip",
-    "north-west": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the left, the long metal nozzle pointing up and to the left of the image with a small pilot flame at its tip",
-    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the long metal nozzle of the flamethrower sticking straight up above his right shoulder with a small pilot flame at its tip"
-   },
-   "action_description": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
-   "east": {
-    "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
-    "animation_id": "fc0f7107-2644-4e22-8492-01f3b3acc52b",
-    "animation_name": "disparo-lanzallamas",
-    "cost": "1 generación"
-   },
-   "north": {
-    "group": "b36f8596-4d25-4553-b5c4-bb31449cc951",
-    "animation_id": "19e490d6-710a-40e8-a67a-b7e3af37c95f",
-    "animation_name": "disparo-lanzallamas-norte",
-    "cost": "1 generación",
-    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
-    "initial_pose": "standing seen from behind, his back to the camera, facing away toward the top of the image, the long metal nozzle of the flamethrower sticking straight up above his right shoulder with a small pilot flame at its tip",
-    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one short burst of flame with the flamethrower away from the camera, toward the top of the image. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle for an instant, straight up above his right shoulder, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
-   },
-   "subidas": {
-    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab; caducan el 2026-10-27",
-    "east": "b68038c5-9f0e-4ff6-a157-a6cef8f2b4ed",
-    "north": "9139843d-099c-4898-88f7-f6dfd523fad7",
-    "south": "2c3de37d-c623-4a9e-bc8c-58c8a94d6e90",
-    "south-east": "74b1c3e5-3c27-4f2f-ba15-dfe3a45f1467",
-    "south-west": "ae285454-7d4c-44a7-a1ee-a4cf39e69e4d",
-    "west": "1d91cfdd-0bee-404f-ba15-d5384888cc4a",
-    "north-east": "5a8f81bf-bcac-4ffb-adc3-75e6746f7054",
-    "north-west": "03d6840a-138c-458b-bd44-c9beaa29c0a1",
-    "south-andar": "566eae47-32e8-4bbe-839b-e7d29ddee753 (la postura nueva de south, 64x80, de partida del andar)",
-    "north-andar": "d1bb9c82-624d-4eea-b00c-1c2ea7e20f3a (la postura nueva de north, 64x78, de partida del andar)"
-   },
-   "cost": "8 generaciones (2 de la prueba y 6 de las otras direcciones), todas a la primera",
-   "textos_por_direccion": {
-    "south": "He keeps facing the camera the whole time and never turns. He fires one short burst of flame with the flamethrower straight down the image. The flamethrower kicks back a little: his hands jerk up slightly and his shoulders rock, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle straight down toward the bottom of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting hip-fire stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
-    "south-east": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle toward the lower right of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
-    "west": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle in front of him, toward the left of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
-    "south-west": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle in front of him, toward the lower left of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
-    "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle toward the upper right of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
-    "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle toward the upper left of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
-   },
-   "south": {
-    "group": "286c7f0f-eefd-4d85-8e34-266e5df9e150",
-    "animation_id": "95760b35-4194-464f-be94-d1f1aab88f2a",
-    "animation_name": "disparo-lanzallamas-sur",
-    "cost": "1 generación"
-   },
-   "south-east": {
-    "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
-    "animation_id": "e15886b2-d56b-441a-9f1b-9cddd175fdd0",
-    "animation_name": "disparo-lanzallamas",
-    "cost": "1 generación"
-   },
-   "west": {
-    "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
-    "animation_id": "7d40da91-7cf8-4fd9-9727-c6898ac2e927",
-    "animation_name": "disparo-lanzallamas",
-    "cost": "1 generación"
-   },
-   "south-west": {
-    "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
-    "animation_id": "988a57bd-b19d-4bc7-9635-45355c44128e",
-    "animation_name": "disparo-lanzallamas",
-    "cost": "1 generación"
-   },
-   "north-east": {
-    "group": "a3a36f51-22e0-4b3a-80f6-6a4a2f2d780e",
-    "animation_id": "320f105a-06f8-40b1-9ac1-6f4722a78def",
-    "animation_name": "disparo-lanzallamas-noreste",
-    "cost": "1 generación"
-   },
-   "north-west": {
-    "group": "d301a118-1947-4592-ad07-de1aa6d96264",
-    "animation_id": "171f39c6-9ac5-4f43-89eb-d8303548932d",
-    "animation_name": "disparo-lanzallamas-noroeste",
-    "cost": "1 generación"
-   }
-  },
   "andar": {
-   "nota": "PixMiniMax, 12 fotogramas más el de partida; las 8 direcciones en cinco llamadas (el texto común para el sureste, el este, el oeste y el suroeste, sin fotograma de partida: usa la rotación de cada dirección; el sur y el norte, con la postura nueva como fotograma de partida; y el noreste y el noroeste con el texto estricto de espaldas). Salieron a la primera las 8: ninguna se giró de perfil ni cambió de ropa, el lanzallamas se ve en todas y no se coló ninguna llamarada (se usó el estilo del andar de la pistola: 'It stays idle', sin nombrar lo que no se quiere ver). Lienzos de 64x88 a 80x80 (norte, 64x104). Fotogramas en assets/sources/conserje-48-lanzallamas/walk/. Los tramos que hacen ciclo, a mano en arma.json: diferencia de píxeles entre el fotograma a y el a+n (de 14 a 56, todos cierran bien). Zapatos negros con borde gris: ninguno (como mucho 7 píxeles sueltos en un fotograma del suroeste).",
-   "animation_name": "andar-lanzallamas",
-   "cost": "8 generaciones",
-   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
-   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower with both hands in the same two-handed stance the whole time, the long nozzle held steady pointing forward in the same place, the red gas canister and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "nota": "PixMiniMax, 12 fotogramas más el de partida; las 8 direcciones en cinco llamadas, como con el lanzallamas de antes (sus textos, en 'antes', 'andar', cambiando el depósito rojo por las dos bombonas grises): el texto común para el sureste, el este, el oeste y el suroeste; el sur y el norte con la postura nueva como fotograma de partida (uploads 8ce4b587 y b2a8d9a8); el noreste y el noroeste con el texto estricto de espaldas. Ninguna se giró ni perdió el arma ni coló llamaradas. Pero el oeste y el noroeste iban a trompicones (las piernas solo cambiaban cada dos y cada tres fotogramas): en la hoja son el este y el noreste en espejo (arma.json, andar.espejo). Fotogramas en assets/sources/conserje-48-lanzallamas/walk/.",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower with both hands in the same two-handed stance the whole time, the long nozzle held steady pointing forward in the same place, the two grey cylinders on his back and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
    "grupos": {
-    "south-east, east, west, south-west": {
-     "group": "7756f0b3-5f4e-4baa-b23e-2de16d71dfe1",
-     "animation_name": "andar-lanzallamas",
-     "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower with both hands in the same two-handed stance the whole time, the long nozzle held steady pointing forward in the same place, the red gas canister and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
-    },
+    "south-east, east, west, south-west": "c54efc1e-bddd-4603-90c7-39fdf23cccfb (andar-bombonas)",
+    "south": "48dd315f-e622-473b-92e5-aea854c9c168 (andar-bombonas-sur)",
+    "north": "e305a9c1-3822-4929-9cbf-0f396ea2c3a3 (andar-bombonas-norte)",
+    "north-east": "a024f39b-fcc7-4660-92b8-b19145041129 (andar-bombonas-noreste)",
+    "north-west": "6834491b-cc32-4175-a9db-b6946c52ab59 (andar-bombonas-noroeste, sin usar)"
+   },
+   "cost": "8 generaciones"
+  },
+  "cost_total": "30 generaciones: 20 de los dos estados (la A, descartada), 2 de las posturas de south y north y 8 del andar; todo a la primera",
+  "updated": "2026-10-25",
+  "antes": {
+   "kind": "character_state",
+   "character_id": "74572bbd-8873-463b-b0d7-8693ff99c7b0",
+   "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+   "state_name": "Lanzallamas en guardia",
+   "nota": "Estado de Johnny con el lanzallamas (el arma creada: pistola de agua + gasolina; base la pistola, ritmo 10, alcance 170, chorro de llamas), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un lanzallamas casero: un depósito rojo de gas pequeño bajo un tubo largo de metal gris oscuro con una manguera negra, sujeto con las dos manos apuntando al frente y una llama pequeña naranja y amarilla (el piloto) en la punta del tubo. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 7001) y la B, con colores libres (seed 7002). Elegida por el dueño la A: la cara de Johnny sale limpia (en la B sale con manchas rojas, como salpicaduras) y los colores le pegan; la B sacaba el tubo recto hacia arriba de espaldas, pero con Johnny rígido y sin depósito a la vista. Las 8 posturas de la A, en assets/sources/conserje-48-lanzallamas/rotations/<dirección>.png; las de la B, en descartes/rotations-B/. Lienzo de 64x64 salvo south (64x80) y north (64x78), recortados con los pies en la fila 55 como los demás (ver 'posturas'). Se distingue de la pistola (negra y corta) y del bate de fuego (un bate ardiendo en alto) a la primera: depósito rojo, tubo largo gris y llamita en la punta. EN EL JUEGO (sprite conserje-48-lanzallamas, desde el 2026-10-24, parte 4): reposo, andar y disparo en las 8 direcciones, con sus hojas de cada skin (tools/cara.py) y su icono propio (tools/icono_lanzallamas.py: un depósito rojo de gas con la válvula gris, un tubo largo gris en diagonal con una empuñadura negra, una manguera negra en bucle y una llamita en la punta). Es la primera arma creada a distancia con hoja propia: en Armas.CREADAS.lanzallamas lleva su 'hoja' y su 'boca' (copiada de 'muzzle' en assets/sprites/conserje-48-lanzallamas.json: south (-1, 22), south-east (32, -8), east (34, -26), north-east (32, -46), north (11, -51), north-west (-32, -49), west (-30, -21), south-west (-34, 1)) y ya no lleva 'detalle' ni 'sube'; 'pies' sigue siendo el de la pistola (48, 72) aunque la casilla de la hoja mide 96x104. Las gotas de fuego las pone el juego (chorro.gd, desde la boca) y la hoja solo lleva el retroceso y la llamarada: salen del mismo sitio en las 8 direcciones. Se monta con: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanzallamas (y py tools/hacer_frames.py assets/sprites/conserje-48-lanzallamas); qué fotogramas van (3 por dirección), los ciclos del andar y la casilla, en assets/sources/conserje-48-lanzallamas/arma.json. tools/cara.py avisa de 'cabeza poco clara: 30' (casi todos en north: el tubo asoma junto a la cabeza) pero en las fotos del juego las 4 skins se ven bien. Prueba: -- --captura --lanzallamas.",
+   "request": {
+    "edit_description": "holding a homemade flamethrower with both hands in a ready shooting stance, knees slightly bent: a small red gas canister attached under a short black hose and a thick dark grey metal nozzle pipe, one hand gripping the handle under the canister and the other hand holding the nozzle pipe, the nozzle pointing straight ahead in the direction he is facing, with a small bright orange and yellow pilot flame burning at the very tip of the nozzle; the flamethrower stays aimed forward in every view: front, side and back; red canister, black hose, dark grey metal nozzle, small flame at its tip; same face, same hair and red bandana, same clothes, same body size and proportions",
+    "override_width": 64,
+    "override_height": 64,
+    "use_color_palette_from_reference": true,
+    "seed": 7001
+   },
+   "cost": "10 generaciones",
+   "updated": "2026-10-24",
+   "alternativa_B": {
+    "character_id": "8a65a4dc-e57f-4dc7-89d4-5b19a7c67500",
+    "state_name": "Lanzallamas en guardia (colores libres)",
+    "cost": "10 generaciones",
+    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 7002. Sus 8 posturas, en assets/sources/conserje-48-lanzallamas/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
+   },
+   "posturas": {
+    "nota": "Las posturas quietas de south y north NO son las del estado de PixelLab de la A (allí el tubo cruzaba el cuerpo en diagonal de frente y asomaba en diagonal por el hombro izquierdo de espaldas, como pasó con la escopeta y el MP5, y al disparar la llama habría salido de lado mientras el chorro va recto): se rehicieron el 2026-10-24 con una animación corta de PixMiniMax (8 fotogramas más el de partida, 1 generación cada una, lienzo de partida de 64x64 = la postura vieja) en la que Johnny gira el arma, y se guardó el ÚLTIMO fotograma (el 8) recortado para que los pies queden en la fila 55: south 64x80 (el tubo apunta recto hacia abajo entre las piernas, la llama en la fila 66) y north 64x78 (el tubo recto hacia arriba sobre el hombro derecho, la llama en la fila 2). Las viejas, en descartes/rotations-viejas/. En PixelLab el estado sigue con sus rotaciones originales: las nuevas solo existen en el proyecto. Ojo: arma.py usa 'pies_en_rotacion' [32, 55] y las rotaciones south y north son más altas que 64 (no pasa nada: la casilla es de 96x96).",
     "south": {
-     "group": "cc53172e-cc37-4ce6-969b-4643b5c76580",
-     "animation_name": "andar-lanzallamas-sur",
-     "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower low in front of his belly with both hands in a hip-fire stance, the long nozzle hanging straight down in front of him, the red gas canister and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
-     "inicio": "postura nueva de south (upload 566eae47-32e8-4bbe-839b-e7d29ddee753)"
+     "group": "3ec72c5e-07cd-4f16-b943-e3fea0a9c8eb",
+     "animation_name": "postura-lanzallamas-abajo",
+     "upload": "c155d73f-c164-45bf-ab0e-5b74c2e051eb (partida: la postura vieja, caduca el 2026-10-27)",
+     "action_description": "He keeps facing the camera the whole time, his face, chest and both shoulders square to the camera. He quickly lowers the flamethrower to his waist and turns it so the nozzle points straight down the image: he holds it low at hip height in front of his belly with both hands, the black hose and the red gas canister at his side, the long dark grey nozzle pipe perfectly vertical in the image and pointing straight down toward the bottom edge of the image between his legs, with the small orange and yellow pilot flame burning at the bottom end of the nozzle. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
     },
     "north": {
-     "group": "f0676849-84d7-4a20-b9a6-c4aff3df760c",
-     "animation_name": "andar-lanzallamas-norte",
+     "group": "89188a75-6eb2-4073-aafc-3cbeaabc64b0",
+     "animation_name": "postura-lanzallamas-arriba",
+     "upload": "786f432d-7048-4b40-8616-707b423785bc (partida: la postura vieja, caduca el 2026-10-27)",
+     "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls, his shoulders square to the camera; he never turns around and his face is never visible. He quickly straightens the flamethrower so it points straight ahead of him, away from the camera, toward the top edge of the image: he holds it in front of him with both hands, hidden behind his torso, and only the long dark grey nozzle pipe sticks straight up above his right shoulder, perfectly vertical in the image, next to his head, with the small orange and yellow pilot flame burning at the top end. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+    },
+    "cost": "2 generaciones (1 por dirección)"
+   },
+   "cost_total": "38 generaciones: 20 de los dos estados (la B, descartada), 2 de las posturas de south y north, 8 del disparo (2 de prueba y 6) y 8 del andar; todo a la primera, sin repeticiones",
+   "ataque": {
+    "nota": "Disparo: retroceso corto y una llamarada que sale de la boca del tubo (después, unas brasas rojas y vuelve la llamita del piloto), sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo de 96x96 como fotograma de partida y de llegada (arma.py --lienzos: lienzo_ataque por defecto, 96x96 con la postura en 16,20). Fotogramas en assets/sources/conserje-48-lanzallamas/ataque/. Las 8 direcciones salieron a la primera (2026-10-24), ninguna hacia atrás: la llamarada sale por la punta del tubo en todas (east y north de la prueba de la parte 2, las otras 6 en la parte 3; en west y south-west se añadió 'in front of him' y a qué lado de la imagen va, como pedían las notas del látigo eléctrico). PixelLab devuelve lienzos de 96x96 a 136x112 (south, 96x152). Se usan 3 fotogramas por dirección (el disparo dura 0,1 s, ritmo 10): south [2,3,4], south-east [3,4,5], east [3,4,5], north-east [1,2,3], north [3,4,5], north-west [3,4,5], west [3,4,5], south-west [2,3,4] (la llamarada empieza ahí; los siguientes son las brasas). La casilla de la hoja mide 96x104 (pies en 48,72): la llamarada del sur baja 27 píxeles por debajo de los pies. tools/arma.py quitó el tinte amarillo de los 3 fotogramas del oeste (la llama iluminaba a Johnny) y calculó la boca (en píxeles del dibujo desde los pies): south (-1, 22), south-east (32, -8), east (34, -26), north-east (32, -46), north (11, -51), north-west (-32, -49), west (-30, -21), south-west (-34, 1).",
+    "animation_name": "disparo-lanzallamas",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+    "initial_pose": {
+     "east": "standing in a ready shooting stance facing right, both hands on the flamethrower, the long metal nozzle pointing straight to the right with a small pilot flame at its tip",
+     "west": "standing in a ready shooting stance facing left, both hands on the flamethrower, the long metal nozzle pointing straight to the left with a small pilot flame at its tip",
+     "south": "standing facing the camera in a hip-fire stance, holding the flamethrower low in front of his belly with both hands, the long metal nozzle pointing straight down toward the bottom of the image between his legs with a small pilot flame at its tip",
+     "south-east": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the right, both hands on the flamethrower, the long metal nozzle pointing down and to the right of the image with a small pilot flame at its tip",
+     "south-west": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the left, both hands on the flamethrower, the long metal nozzle pointing down and to the left of the image with a small pilot flame at its tip",
+     "north-east": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the right, the long metal nozzle pointing up and to the right of the image with a small pilot flame at its tip",
+     "north-west": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the left, the long metal nozzle pointing up and to the left of the image with a small pilot flame at its tip",
+     "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the long metal nozzle of the flamethrower sticking straight up above his right shoulder with a small pilot flame at its tip"
+    },
+    "action_description": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "east": {
+     "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
+     "animation_id": "fc0f7107-2644-4e22-8492-01f3b3acc52b",
+     "animation_name": "disparo-lanzallamas",
+     "cost": "1 generación"
+    },
+    "north": {
+     "group": "b36f8596-4d25-4553-b5c4-bb31449cc951",
+     "animation_id": "19e490d6-710a-40e8-a67a-b7e3af37c95f",
+     "animation_name": "disparo-lanzallamas-norte",
+     "cost": "1 generación",
      "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
-     "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the flamethrower in front of him in the same two-handed stance the whole time, only the long nozzle sticking straight up above his right shoulder, held steady in the same place, with the small pilot flame at its tip burning steadily. The flamethrower is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation.",
-     "inicio": "postura nueva de north (upload d1bb9c82-624d-4eea-b00c-1c2ea7e20f3a)"
+     "initial_pose": "standing seen from behind, his back to the camera, facing away toward the top of the image, the long metal nozzle of the flamethrower sticking straight up above his right shoulder with a small pilot flame at its tip",
+     "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one short burst of flame with the flamethrower away from the camera, toward the top of the image. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle for an instant, straight up above his right shoulder, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+    },
+    "subidas": {
+     "nota": "Lienzos de partida (y de llegada) subidos a PixelLab; caducan el 2026-10-27",
+     "east": "b68038c5-9f0e-4ff6-a157-a6cef8f2b4ed",
+     "north": "9139843d-099c-4898-88f7-f6dfd523fad7",
+     "south": "2c3de37d-c623-4a9e-bc8c-58c8a94d6e90",
+     "south-east": "74b1c3e5-3c27-4f2f-ba15-dfe3a45f1467",
+     "south-west": "ae285454-7d4c-44a7-a1ee-a4cf39e69e4d",
+     "west": "1d91cfdd-0bee-404f-ba15-d5384888cc4a",
+     "north-east": "5a8f81bf-bcac-4ffb-adc3-75e6746f7054",
+     "north-west": "03d6840a-138c-458b-bd44-c9beaa29c0a1",
+     "south-andar": "566eae47-32e8-4bbe-839b-e7d29ddee753 (la postura nueva de south, 64x80, de partida del andar)",
+     "north-andar": "d1bb9c82-624d-4eea-b00c-1c2ea7e20f3a (la postura nueva de north, 64x78, de partida del andar)"
+    },
+    "cost": "8 generaciones (2 de la prueba y 6 de las otras direcciones), todas a la primera",
+    "textos_por_direccion": {
+     "south": "He keeps facing the camera the whole time and never turns. He fires one short burst of flame with the flamethrower straight down the image. The flamethrower kicks back a little: his hands jerk up slightly and his shoulders rock, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle straight down toward the bottom of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting hip-fire stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+     "south-east": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle toward the lower right of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+     "west": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle in front of him, toward the left of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+     "south-west": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle in front of him, toward the lower left of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+     "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle toward the upper right of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+     "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle toward the upper left of the image for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+    },
+    "south": {
+     "group": "286c7f0f-eefd-4d85-8e34-266e5df9e150",
+     "animation_id": "95760b35-4194-464f-be94-d1f1aab88f2a",
+     "animation_name": "disparo-lanzallamas-sur",
+     "cost": "1 generación"
+    },
+    "south-east": {
+     "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
+     "animation_id": "e15886b2-d56b-441a-9f1b-9cddd175fdd0",
+     "animation_name": "disparo-lanzallamas",
+     "cost": "1 generación"
+    },
+    "west": {
+     "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
+     "animation_id": "7d40da91-7cf8-4fd9-9727-c6898ac2e927",
+     "animation_name": "disparo-lanzallamas",
+     "cost": "1 generación"
+    },
+    "south-west": {
+     "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
+     "animation_id": "988a57bd-b19d-4bc7-9635-45355c44128e",
+     "animation_name": "disparo-lanzallamas",
+     "cost": "1 generación"
     },
     "north-east": {
-     "group": "37fcffc6-8646-4ca3-9c82-60741f0ea7cc",
-     "animation_name": "andar-lanzallamas-noreste",
-     "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
-     "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the flamethrower in the same two-handed stance the whole time, the long nozzle pointing up and to the right of the image, held steady in the same place, with the small pilot flame at its tip burning steadily. The flamethrower is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+     "group": "a3a36f51-22e0-4b3a-80f6-6a4a2f2d780e",
+     "animation_id": "320f105a-06f8-40b1-9ac1-6f4722a78def",
+     "animation_name": "disparo-lanzallamas-noreste",
+     "cost": "1 generación"
     },
     "north-west": {
-     "group": "4771f9dd-ec55-4a55-84b4-3192ebc6b188",
-     "animation_name": "andar-lanzallamas-noroeste",
-     "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
-     "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the flamethrower in the same two-handed stance the whole time, the long nozzle pointing up and to the left of the image, held steady in the same place, with the small pilot flame at its tip burning steadily. The flamethrower is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+     "group": "d301a118-1947-4592-ad07-de1aa6d96264",
+     "animation_id": "171f39c6-9ac5-4f43-89eb-d8303548932d",
+     "animation_name": "disparo-lanzallamas-noroeste",
+     "cost": "1 generación"
     }
-   }
+   },
+   "andar": {
+    "nota": "PixMiniMax, 12 fotogramas más el de partida; las 8 direcciones en cinco llamadas (el texto común para el sureste, el este, el oeste y el suroeste, sin fotograma de partida: usa la rotación de cada dirección; el sur y el norte, con la postura nueva como fotograma de partida; y el noreste y el noroeste con el texto estricto de espaldas). Salieron a la primera las 8: ninguna se giró de perfil ni cambió de ropa, el lanzallamas se ve en todas y no se coló ninguna llamarada (se usó el estilo del andar de la pistola: 'It stays idle', sin nombrar lo que no se quiere ver). Lienzos de 64x88 a 80x80 (norte, 64x104). Fotogramas en assets/sources/conserje-48-lanzallamas/walk/. Los tramos que hacen ciclo, a mano en arma.json: diferencia de píxeles entre el fotograma a y el a+n (de 14 a 56, todos cierran bien). Zapatos negros con borde gris: ninguno (como mucho 7 píxeles sueltos en un fotograma del suroeste).",
+    "animation_name": "andar-lanzallamas",
+    "cost": "8 generaciones",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower with both hands in the same two-handed stance the whole time, the long nozzle held steady pointing forward in the same place, the red gas canister and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "grupos": {
+     "south-east, east, west, south-west": {
+      "group": "7756f0b3-5f4e-4baa-b23e-2de16d71dfe1",
+      "animation_name": "andar-lanzallamas",
+      "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower with both hands in the same two-handed stance the whole time, the long nozzle held steady pointing forward in the same place, the red gas canister and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+     },
+     "south": {
+      "group": "cc53172e-cc37-4ce6-969b-4643b5c76580",
+      "animation_name": "andar-lanzallamas-sur",
+      "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the flamethrower low in front of his belly with both hands in a hip-fire stance, the long nozzle hanging straight down in front of him, the red gas canister and the black hose only swaying slightly with each step, and the small pilot flame at the nozzle tip burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+      "inicio": "postura nueva de south (upload 566eae47-32e8-4bbe-839b-e7d29ddee753)"
+     },
+     "north": {
+      "group": "f0676849-84d7-4a20-b9a6-c4aff3df760c",
+      "animation_name": "andar-lanzallamas-norte",
+      "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+      "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the flamethrower in front of him in the same two-handed stance the whole time, only the long nozzle sticking straight up above his right shoulder, held steady in the same place, with the small pilot flame at its tip burning steadily. The flamethrower is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation.",
+      "inicio": "postura nueva de north (upload d1bb9c82-624d-4eea-b00c-1c2ea7e20f3a)"
+     },
+     "north-east": {
+      "group": "37fcffc6-8646-4ca3-9c82-60741f0ea7cc",
+      "animation_name": "andar-lanzallamas-noreste",
+      "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+      "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the flamethrower in the same two-handed stance the whole time, the long nozzle pointing up and to the right of the image, held steady in the same place, with the small pilot flame at its tip burning steadily. The flamethrower is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+     },
+     "north-west": {
+      "group": "4771f9dd-ec55-4a55-84b4-3192ebc6b188",
+      "animation_name": "andar-lanzallamas-noroeste",
+      "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+      "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the flamethrower in the same two-handed stance the whole time, the long nozzle pointing up and to the left of the image, held steady in the same place, with the small pilot flame at its tip burning steadily. The flamethrower is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+     }
+    }
+   },
+   "nota_antes": "El lanzallamas de antes (24 oct): el depósito rojo bajo el tubo, sin nada a la espalda, con su disparo con llamarada dibujada. Sus fuentes, en assets/sources/conserje-48-lanzallamas/descartes/sin-bombonas/."
   }
  },
  "conserje-48-supersoplete": {

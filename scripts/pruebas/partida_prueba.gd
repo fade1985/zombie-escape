@@ -3534,7 +3534,7 @@ func probar_lanzallamas() -> void:
 	var w := Armas.datos(id)
 	johnny.modo = "mira"   # que no eche fuego por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
-	print("Lanzallamas en la mano: hoja «%s» · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: conserje-48-lanzallamas.tres, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (27, -23), false, lanzallamas, false)" % [
+	print("Lanzallamas en la mano: hoja «%s» · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: conserje-48-lanzallamas.tres, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (28, -22), false, lanzallamas, false)" % [
 		johnny.sprite.sprite_frames.resource_path.get_file(), w.alcance, w.alcance / Planta.CASILLA, w.deposito,
 		johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.quiere_municion()])
 

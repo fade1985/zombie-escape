@@ -80,7 +80,8 @@ const DATOS := {
 # punta) y el bate helado (conserje-48-bate-helado: el barrido del bate con la cabeza cubierta de escarcha, estela blanca
 # y azul clara con copos y cristalitos) y el látigo eléctrico (conserje-48-latigo-electrico: el latigazo con el cable
 # negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
-# (conserje-48-lanzallamas: la pistola de agua con el depósito rojo de gas, un tubo largo y la llamarada de la boca) y el
+# (conserje-48-lanzallamas: dos bombonas grises a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
+# el juego) y el
 # supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
 # la boca acampanada y una llamarada en cono) y el desintegrador (conserje-48-desintegrador: la pistola de agua con el
 # depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
@@ -124,14 +125,13 @@ const CREADAS := {
 	# el lanzallamas: no dispara, echa una llamarada continua mientras se ataca (llamarada.gd) que llega a 10 casillas.
 	# No tiene cargador: tiene un depósito de "deposito" segundos de fuego que se llena entero con una gasolina de la
 	# mochila (en "recarga" segundos; las balas no le valen). Su daño es por segundo, y empuja cada medio segundo. Johnny
-	# echa el fuego en la postura quieta de su hoja (la de apuntar, con el piloto encendido); la casilla es de 96x104,
-	# con los pies donde siempre. La boca es la punta del tubo de esa postura (donde está el piloto: el píxel del dibujo
-	# que más sale hacia donde apunta), no la de conserje-48-lanzallamas.json ("muzzle"), que es el centro de la
-	# llamarada del disparo de antes y caía 7 a 13 píxeles más allá: la llama salía despegada del tubo
+	# lleva dos bombonas a la espalda y echa el fuego en la postura quieta de su hoja (la de apuntar, con el piloto
+	# encendido); la casilla es la de siempre, de 96x96 con los pies en 48,72. La boca es la punta del tubo de esa
+	# postura (donde está el piloto: el píxel del dibujo que más sale hacia donde apunta), medida en la hoja
 	"lanzallamas": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "empuje": 0.5,
 		"efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
-		"boca": {"s": Vector2(0, 10), "se": Vector2(24, -12), "e": Vector2(27, -23), "ne": Vector2(20, -40),
-			"n": Vector2(8, -53), "no": Vector2(-21, -39), "o": Vector2(-27, -22), "so": Vector2(-23, -12)}},
+		"boca": {"s": Vector2(2, 1), "se": Vector2(26, -13), "e": Vector2(28, -22), "ne": Vector2(24, -39),
+			"n": Vector2(8, -52), "no": Vector2(-25, -40), "o": Vector2(-28, -21), "so": Vector2(-24, -10)}},
 	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el
 	# juego, armas_creadas.gd); la casilla es de 144x152, con los pies en 72,72, porque la llamarada llega a 69 píxeles a un
 	# lado y 77 hacia abajo. La boca NO es la que calcula arma.py (el centro de la llamarada, que cae a 40-50 píxeles de la

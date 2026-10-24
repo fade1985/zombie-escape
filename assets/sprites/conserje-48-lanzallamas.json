@@ -1,7 +1,7 @@
 {
   "cell": [
     96,
-    104
+    96
   ],
   "pivot": [
     48,
@@ -98,11 +98,11 @@
       "dirs": {
         "south": {
           "row": 9,
-          "frames": 10
+          "frames": 11
         },
         "south-east": {
           "row": 10,
-          "frames": 12
+          "frames": 8
         },
         "east": {
           "row": 11,
@@ -110,7 +110,7 @@
         },
         "north-east": {
           "row": 12,
-          "frames": 9
+          "frames": 8
         },
         "north": {
           "row": 13,
@@ -118,7 +118,7 @@
         },
         "north-west": {
           "row": 14,
-          "frames": 10
+          "frames": 8
         },
         "west": {
           "row": 15,
@@ -126,121 +126,49 @@
         },
         "south-west": {
           "row": 16,
-          "frames": 11
+          "frames": 8
         }
       }
     },
     "attack": {
-      "fps": 30,
+      "fps": 10,
       "loop": false,
       "dirs": {
         "south": {
           "row": 17,
-          "frames": 3
+          "frames": 1
         },
         "south-east": {
           "row": 18,
-          "frames": 3
+          "frames": 1
         },
         "east": {
           "row": 19,
-          "frames": 3
+          "frames": 1
         },
         "north-east": {
           "row": 20,
-          "frames": 3
+          "frames": 1
         },
         "north": {
           "row": 21,
-          "frames": 3
+          "frames": 1
         },
         "north-west": {
           "row": 22,
-          "frames": 3
+          "frames": 1
         },
         "west": {
           "row": 23,
-          "frames": 3
+          "frames": 1
         },
         "south-west": {
           "row": 24,
-          "frames": 3
+          "frames": 1
         }
       },
       "hit": 0.0
-    },
-    "fx": {
-      "fps": 30,
-      "loop": false,
-      "dirs": {
-        "south": {
-          "row": 25,
-          "frames": 3
-        },
-        "south-east": {
-          "row": 26,
-          "frames": 3
-        },
-        "east": {
-          "row": 27,
-          "frames": 3
-        },
-        "north-east": {
-          "row": 28,
-          "frames": 3
-        },
-        "north": {
-          "row": 29,
-          "frames": 3
-        },
-        "north-west": {
-          "row": 30,
-          "frames": 3
-        },
-        "west": {
-          "row": 31,
-          "frames": 3
-        },
-        "south-west": {
-          "row": 32,
-          "frames": 3
-        }
-      }
     }
   },
-  "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-lanzallamas/",
-  "muzzle": {
-    "south": [
-      -1,
-      22
-    ],
-    "south-east": [
-      32,
-      -8
-    ],
-    "east": [
-      34,
-      -26
-    ],
-    "north-east": [
-      32,
-      -46
-    ],
-    "north": [
-      11,
-      -51
-    ],
-    "north-west": [
-      -32,
-      -49
-    ],
-    "west": [
-      -30,
-      -21
-    ],
-    "south-west": [
-      -34,
-      1
-    ]
-  }
+  "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-lanzallamas/"
 }
