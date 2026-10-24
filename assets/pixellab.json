@@ -2086,7 +2086,43 @@
    "cost": "10 generaciones",
    "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 9001. Descartada: el depósito sale crema (parece un huevo o un saco) y la boquilla blanca casi no se distingue del cuerpo. Sus 8 posturas, en assets/sources/conserje-48-desintegrador/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la A, descartada)"
+  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la A, descartada) y 2 de la prueba del disparo (east y north)",
+  "ataque": {
+   "nota": "Disparo: un retroceso muy corto de pistola de agua y un chorrito fino de ácido verde pálido que sale de la boquilla blanca (se despega y vuela, luego se deshace en gotitas), sin fuego, sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES desde el principio (lección del supersoplete: con 96x96 el efecto largo sale cortado en seco por el borde): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una); PixelLab devolvió fotogramas de 168x96 (este) y 96x128 (norte). Fotogramas en assets/sources/conserje-48-desintegrador/ataque/<dirección>-<n>.png. PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas y no hay fogonazo ni llamas. East: fotograma 0 = reposo, 1 = chorro pegado a la boquilla (fino, 20 px), 2 = el chorro despegado volando (hasta x=135 del lienzo de 168), 3-4 = gotitas sueltas, 5-8 = vacío. North: 0-2 = reposo, 3 = chorro grueso recto hacia arriba junto a la cabeza, 4-5 = línea fina más larga (40 px), 6 = gotitas, 7-8 = reposo. El chorro del dibujo es más largo que la boca (54 px en el este): el juego pone las gotas, así que se usarán solo 2 fotogramas por disparo (ritmo 12, duracion <= 0,079 s). Boca: los píxeles naranja y amarillo vivos que busca arma.py ('boca': 'fogonazo') no existen con ácido verde: la boca va a mano en armas.gd, sacada del dibujo quieto.",
+   "animation_name": "disparo-desintegrador",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
+   "initial_pose": {
+    "east": "standing in a ready shooting stance facing right, both hands on the acid squirt gun, aiming it straight to the right, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the acid squirt gun held in front of him with its bottle and nozzle sticking up beside his head, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip"
+   },
+   "action_description": "He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thin jet of bright pale green acid spurts out of the white nozzle for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He brings the gun back level and settles cleanly into the starting two-handed aiming stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "east": {
+    "group": "7eb26c22-e529-4d76-9160-d01a4047ec83",
+    "animation_id": "6d53e4ab-548c-45fd-b0c4-61d48c28f4c4",
+    "animation_name": "disparo-desintegrador",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "9490f139-3972-4da7-8413-b3f13b520b8f",
+    "animation_id": "30cac749-321a-48bf-bde0-2eb9e11da40d",
+    "animation_name": "disparo-desintegrador-norte",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one single squirt with the acid squirt gun away from the camera, toward the top of the image. The gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, thin jet of bright pale green acid spurts out of the white nozzle straight up beside his head for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He settles cleanly into the starting stance, still seen from behind. Only one short squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "subidas": {
+    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab el 2026-10-24; caducan el 2026-10-27. Se subieron los 8 (los de las otras 6 direcciones se usan en la parte 3). Lienzo y posición de la postura (64x64): east 136x96 en (16,20); west 136x96 en (56,20); south 96x144 en (16,12); south-east 136x128 en (16,12); south-west 136x128 en (56,12); north 96x112 en (16,44); north-east 136x112 en (16,44); north-west 136x112 en (56,44).",
+    "east": "0ee67067-aa53-442f-b7a4-8680eda3bfa3",
+    "north": "53374401-d8c3-4f29-be16-1d59e069f7dc",
+    "west": "be42028e-60e4-46b4-858b-e378d07d124d",
+    "south": "fdaaecdf-7642-4f54-81aa-d1516dcea7ab",
+    "south-east": "2459bc0c-9dcc-436c-a140-295ebd01e4cf",
+    "south-west": "28f1701c-98fd-434b-96f7-44d9e0007af3",
+    "north-east": "7bf39e6e-4964-4af5-ba25-496ce6c3a6da",
+    "north-west": "f4415fc1-ec31-4ec6-9599-20e11d8155db"
+   },
+   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
