@@ -43,6 +43,12 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
 - **Arranca y saca fotos sin jugar** (se cierra solo, sin sonido, usa `guardado-prueba.json`):
   `"<Godot>_console.exe" --path . -- --captura`. Las fotos salen grandes: reducirlas antes de mirarlas.
   Sprites nuevos: importar antes con `--headless --path . --import`.
+- **Probar solo lo que se ha tocado.** `-- --captura` a secas es la **prueba larga**: recorre medio juego (sala,
+  exposición, un apartamento, todos los jefes, menús, ordenador…) y deja decenas de fotos. Para un cambio concreto,
+  lanzar **solo su parte** (`-- --captura --jefe gloton`, `--evento X`, `--skins`, `--sala`…; la lista entera, al
+  principio de `scripts/pruebas/partida_prueba.gd`). Si lo tocado no tiene parte, añadirle una pequeña y apuntarla en
+  esa lista. La larga, solo si se toca algo que usa todo el juego (`partida.gd`, `johnny.gd`, el guardado) o si el
+  dueño la pide. Mirar solo las fotos de lo que se ha tocado.
 - Errores: filtrar la salida por `ERROR` o `SCRIPT ERROR`.
 - Python es `py` (con Pillow); `PYTHONIOENCODING=utf-8` delante si escribe tildes.
 
