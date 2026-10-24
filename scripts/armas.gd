@@ -76,8 +76,9 @@ const DATOS := {
 # (conserje-48-inmovilizadora: el barrido con el bate con el táser atado a la punta, estela blanca con arcos
 # eléctricos celestes), el látigo escorpión (conserje-48-latigo: el latigazo hacia delante, con una raya blanca y
 # gotas verdes), la súper maza (conserje-48-supermaza: el giro entero con la maza de hierro, estela blanca circular con
-# polvo y piedrecitas) y el mangual (conserje-48-mangual: el mismo giro entero, con la cadena estirada y la mancuerna en la
-# punta), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# polvo y piedrecitas), el mangual (conserje-48-mangual: el mismo giro entero, con la cadena estirada y la mancuerna en la
+# punta) y el bate helado (conserje-48-bate-helado: el barrido del bate con la cabeza cubierta de escarcha, estela blanca
+# y azul clara con copos y cristalitos), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -98,10 +99,11 @@ const CREADAS := {
 		"pies": Vector2(64, 79), "hoja": preload("res://assets/sprites/conserje-48-supermaza.tres")},
 	# las del centro comercial (parte 6): el mangual echa muy lejos a todos los de alrededor y los deja un momento
 	# tirados (su casilla es 144x128, con los pies en 72,88, porque la cadena estirada llega lejos); el bate helado
-	# congela; el látigo eléctrico es el látigo con la descarga de la inmovilizadora
+	# congela (es el barrido del bate, con su casilla de siempre); el látigo eléctrico es el látigo con la descarga de la inmovilizadora
 	"mangual": {"base": "fregona", "ritmo": 1.2, "alcance": 90.0, "arco": 360.0, "empuje": 4.5, "efecto": "tira", "momento": 0.3,
 		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-mangual.tres")},
-	"bate_helado": {"base": "bate", "efecto": "congela", "detalle": Color("#e8f6ff")},
+	"bate_helado": {"base": "bate", "efecto": "congela", "momento": 0.222,
+		"hoja": preload("res://assets/sprites/conserje-48-bate-helado.tres")},
 	"latigo_electrico": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "descarga", "detalle": Color("#9fe8ff"), "sube": true},
 	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
 	"lanzallamas": {"base": "pistola", "ritmo": 10.0, "alcance": 170.0, "velocidad": 320.0, "cargador": 40, "recarga": 2.0,

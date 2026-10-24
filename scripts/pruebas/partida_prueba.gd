@@ -28,6 +28,8 @@
 #   --mangual      lo mismo con el mangual: su icono, su hoja, el giro con la cadena estirada (a 90 de alcance, pega a los
 #                  de todos los lados, los echa lejos y los deja aturdidos) en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.mangual)
+#   --bate-helado  lo mismo con el bate helado: su icono, su hoja, el golpe (que congela al zombi) en las 8 direcciones
+#                  y con las 4 skins (Armas.CREADAS.bate_helado)
 #   --ascensor  el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -141,6 +143,9 @@ func empezar_prueba() -> void:
 	elif "--mangual" in args:
 		set_process(false)   # sin la prueba larga
 		probar_mangual()
+	elif "--bate-helado" in args:
+		set_process(false)   # sin la prueba larga
+		probar_bate_helado()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3056,6 +3061,87 @@ func probar_mangual() -> void:
 		await get_tree().create_timer(0.17).timeout
 		Captura.foto("captura-mangual-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-mangual-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --bate-helado": el bate helado con su dibujo propio (Armas.CREADAS.bate_helado, conserje-48-bate-helado;
+# recetas.gd, su icono). Como la de la inmovilizadora: en la sala de mantenimiento, con dos en el baúl (una guardada antes
+# de que tuviera icono propio, con el del hielo seco), Johnny se arrima al baúl y cuenta el icono de cada una
+# (captura-bate-helado-baul.png). Saca una y cuenta su hoja, su momento del golpe y que ya no le salen chispitas; le da a
+# un zombi a 50 a su izquierda (le quita vida y lo congela) con otro a 140 detrás, fuera de su alcance (ni lo toca ni lo
+# congela; con una foto justo en el golpe, captura-bate-helado-congela.png) y luego ataca en las 8 direcciones, con una
+# foto de cada una justo en el golpe (captura-bate-helado-<dirección>.png). Con cada skin (portero, glotón, gymbro y
+# bombero), su hoja y una foto (captura-bate-helado-<skin>.png). Cada línea dice lo esperado. Deja el guardado como
+# estaba y se cierra
+func probar_bate_helado() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("bate_helado", "azul")
+	vieja.icono = "hielo_seco"   # como las que se crearon antes de que el bate helado tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("bate_helado", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"bate_helado\", \"bate_helado\"]) · en el banco «%s» (esperado: bate_helado)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("bate_helado")])
+	Captura.foto("captura-bate-helado-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Bate helado en la mano: hoja «%s» · momento %.3f · chispitas %s · icono «%s» (esperado: conserje-48-bate-helado.tres, 0.222, false, bate_helado)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.has("detalle"), Objetos.icono(id)])
+
+	# el golpe llega en su fotograma (a los 0,111 s: 0,5 × 0,222), le quita vida y lo congela; el otro, a 140, queda fuera
+	# del alcance del bate (66) y ni lo toca ni lo congela
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-50, 0), Vector2(-140, 0)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.17).timeout
+	Captura.foto("captura-bate-helado-congela.png")
+	print("Golpe a 50: vida del zombi %d (esperado: menos de 500) · congelado %.2f (esperado: más de 0)" % [
+		z[0].vida, z[0].congelado])
+	print("Zombi a 140: vida %d · congelado %.2f (esperado: 500 y 0)" % [z[1].vida, z[1].congelado])
+	await get_tree().create_timer(0.4).timeout
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.13).timeout
+		Captura.foto("captura-bate-helado-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con cada skin: su hoja del bate helado
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.13).timeout
+		Captura.foto("captura-bate-helado-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-bate-helado-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.5).timeout
 
 	Guardado.cambiar(func(g2):

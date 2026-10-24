@@ -10,11 +10,12 @@
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
-#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza y el mangual ya lo tienen:
+#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual y el bate helado ya lo tienen:
 #              assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png, partecuerpos.png, inmovilizadora.png,
-#              latigo.png, supermaza.png y mangual.png, de tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py,
-#              icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py e icono_mangual.py). Se lee siempre de
-#              aquí (icono_de), no del arma guardada en el baúl, para que las ya creadas cojan el dibujo nuevo
+#              latigo.png, supermaza.png, mangual.png y bate_helado.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
+#              icono_mangual.py e icono_bate_helado.py). Se lee siempre de aquí (icono_de), no del arma guardada en el baúl,
+#              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
@@ -70,7 +71,7 @@ const LISTA := {
 	"garfio": {"nombre": "Garfio", "con": ["cuerda", "perchas"], "hueco": "fuego", "icono": "perchas", "dano": 8,
 		"desc": "Engancha a un zombi y lo arrastra hasta ti; sin munición", "edificio": "mezcla"},
 	# solo del centro comercial
-	"bate_helado": {"nombre": "Bate helado", "con": ["bate", "hielo_seco"], "hueco": "cuerpo", "icono": "hielo_seco", "dano": 17,
+	"bate_helado": {"nombre": "Bate helado", "con": ["bate", "hielo_seco"], "hueco": "cuerpo", "icono": "bate_helado", "dano": 17,
 		"desc": "Cada golpe congela un momento", "edificio": "centro"},
 	"latigo_electrico": {"nombre": "Látigo eléctrico", "con": ["cable", "bateria"], "hueco": "cuerpo", "icono": "cable", "dano": 12,
 		"desc": "Alcance largo: la descarga aturde y salta a otro zombi", "edificio": "centro"},
