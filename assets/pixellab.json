@@ -649,7 +649,7 @@
    "seed": 7
   },
   "ataque": {
-   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-aplastacabezas --lienzos <carpeta>; los upload:<id> de los 8, en la nota 'subidas', caducan a los 3 días). Fotogramas en assets/sources/conserje-48-aplastacabezas/ataque/. De lado, el barrido del bate salió a la primera. De espaldas costó 5 intentos: con el barrido (incluso con el texto estricto del bate, que con él funcionó) Johnny se pone de perfil o se gira hacia la cámara; el bueno es un golpe de arriba abajo: levanta el bate sobre la cabeza, lo baja por delante y remata con la estela hacia la izquierda, siempre de espaldas.",
+   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-aplastacabezas --lienzos <carpeta>; los upload:<id> de los 8, en la nota 'subidas', caducan a los 3 días). Fotogramas en assets/sources/conserje-48-aplastacabezas/ataque/. De lado, el barrido del bate salió a la primera. De espaldas costó 5 intentos: con el barrido (incluso con el texto estricto del bate, que con él funcionó) Johnny se pone de perfil o se gira hacia la cámara; el bueno es un golpe de arriba abajo: levanta el bate sobre la cabeza, lo baja por delante y remata con la estela hacia la izquierda, siempre de espaldas. Parte 3 (2026-10-24): las otras 6 direcciones, cada una con el lienzo de partida de su dirección como fotograma de partida y de llegada. West, south-east y south-west, con el texto de east (en su mismo grupo); south, con el texto estricto de frente; north-east y north-west, con el texto estricto de tres cuartos de espaldas. Hubo que repetir el noreste (en el primero se giraba hacia la cámara a mitad del golpe). Al coger impulso, en el oeste y el noreste se gira un instante hacia la cámara (el giro del bateador): al montar se deja solo uno de esos dibujos (arma.json).",
    "subidas": "2026-10-24: south upload:71610642-77f3-4302-a701-c96dd64b0113, south-east upload:5773e416-9ee0-4496-905d-7069a0fed9ba, east upload:dd960a75-9469-4489-ac85-7f69cabcb7f6, north-east upload:289fbc25-956d-4deb-8476-8147b249f816, north upload:6b6f3a4e-003b-405f-98ae-25b63659c2bb, north-west upload:d17f76b6-8529-4744-9176-56cfb36335e8, west upload:7818ff5f-5aa2-455f-a041-5290bd475f2a (ya con la postura arreglada), south-west upload:3bdd63f4-0fc3-4016-9dbe-ebe39cfc13d9",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with long steel nails sticking out of its thick end",
    "east": {
@@ -676,7 +676,54 @@
     "ataque-aplastacabezas-norte-2": "grupo c5906a62-8088-4928-9445-a55d0bac171b. El mismo, más estricto ('both shoulders stay level and square to the camera', 'his hips do not rotate', 'Using only his arms'): se gira hacia la cámara y se le ve la cara.",
     "ataque-aplastacabezas-norte-arriba": "grupo b8b35b32-f8e0-46de-bab1-3dfcd0f7ab27. Golpe de arriba abajo 'in front of him, away from the camera, toward the top of the image, as if crushing something on the ground': levanta bien el bate, pero al bajarlo se inclina de perfil hacia la izquierda.",
     "ataque-aplastacabezas-norte-3": "grupo f57ae392-5d38-4f7d-8da1-2c15c29ca033. Barrido 'passing in front of him, which in this view is above his head': del 1 al 6 se gira hacia la cámara; del 7 al 12, bien de espaldas."
+   },
+   "comun": {
+    "nota": "west, south-east y south-west, con el texto de east (en su mismo grupo, c65c54c2) y su initial_pose. Las tres, a la primera.",
+    "cost": "3 generaciones",
+    "initial_pose": {
+     "west": "standing in a batter's guard stance facing left, gripping the spiked bat with both hands, the bat raised up and tilted back over his rear shoulder",
+     "south-east": "standing in a batter's guard stance in three-quarter front view, facing toward the camera and to the right, gripping the spiked bat with both hands, the bat raised up over his rear shoulder on the left side of the image",
+     "south-west": "standing in a batter's guard stance in three-quarter front view, facing toward the camera and to the left, gripping the spiked bat with both hands, the bat raised up over his rear shoulder on the right side of the image"
+    }
+   },
+   "south": {
+    "group": "c60a32a1-606d-4b8a-a681-e9c6728d649c",
+    "animation_name": "ataque-aplastacabezas-sur",
+    "cost": "1 generación",
+    "nota": "Bien a la primera: de frente todo el golpe, barre de izquierda a derecha por delante del cuerpo con la estela grande.",
+    "initial_pose": "standing in a batter's guard stance facing the camera, gripping the spiked bat with both hands, the bat raised up over his shoulder on the left side of the image",
+    "action_description": "Strict front view the whole time: he keeps facing the camera, his face, chest and both shoulders stay turned toward the camera, and his body never turns sideways. His feet stay planted. Using mostly his arms and shoulders, he swings the spiked bat hard and fast in one wide horizontal arc at chest height, from the left side of the image across to the right side, passing in front of his body, toward the camera. The bat leaves a bright white crescent-shaped swoosh of air behind it along the whole arc, and the steel nails on its thick end stay visible. The swoosh fades away quickly, he brings the bat back up over his shoulder on the left side of the image and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "3f642e50-755c-4449-9cd2-aba03d621f6d",
+    "animation_name": "ataque-aplastacabezas-noroeste",
+    "cost": "1 generación",
+    "nota": "Bien a la primera: de espaldas en tres cuartos todo el golpe.",
+    "initial_pose": "standing in a batter's guard stance in three-quarter back view, facing away from the camera and to the left, gripping the spiked bat with both hands, the bat raised up over his rear shoulder on the right side of the image",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, his face is never visible, and he never turns toward the camera. His feet stay planted. Using mostly his arms and shoulders, he swings the spiked bat hard and fast in one wide horizontal arc at chest height, sweeping across in front of him from right to left, toward the upper left of the image. The bat leaves a bright white crescent-shaped swoosh of air behind it along the whole arc of the swing, and the steel nails on its thick end stay visible. The swoosh fades away quickly, he brings the bat back up over his shoulder and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-east": {
+    "group": "14f2348e-6184-4859-bcb4-95566d47cff4",
+    "animation_name": "ataque-aplastacabezas-noreste-2",
+    "cost": "1 generación",
+    "nota": "La buena (segunda): de espaldas en tres cuartos desde el golpe; al coger impulso (1 a 3) se gira hacia la cámara, y al montar solo se usa el 3.",
+    "initial_pose": "standing in a batter's guard stance in three-quarter back view, facing away from the camera and to the right, gripping the spiked bat with both hands, the bat raised up over his rear shoulder on the left side of the image",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, the knot of the red bandana, his back and his right shoulder; his face and chest are never visible and he never turns toward the camera. He never bends over and never leans. His feet stay planted. Using only his arms and shoulders, he swings the spiked bat hard and fast in one wide flat arc at chest height, from the left side of the image across to the upper right, passing in front of him, which in this view is up and to the right of the image beyond his right shoulder, so the bat stays visible. A bright white crescent-shaped swoosh of air follows the bat along the arc. The swoosh fades away quickly, he brings the bat back over his shoulder on the left side of the image and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-east_descartado": {
+    "group": "0366212d-9d01-438b-b303-c389a0b017f4",
+    "animation_name": "ataque-aplastacabezas-noreste",
+    "cost": "1 generación",
+    "nota": "DESCARTADO (sigue en PixelLab, sin borrar; fotogramas en assets/sources/conserje-48-aplastacabezas/descartes/ataque/): con el texto de north-west cambiando el lado, del 3 al 8 se da la vuelta y mira a la cámara."
    }
+  },
+  "cost_total": "43 generaciones: 20 de los dos estados (el primero, descartado), 1 del retoque del oeste, 14 del golpe (8 direcciones; 5 intentos de espaldas y 2 del noreste) y 8 del andar",
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida. West, solo y primero, con la postura arreglada como fotograma de partida (upload:2e41d12b-e807-4bf9-b0bc-332310374816; en PixelLab el estado sigue con la vieja, la de los clavos blancos); las otras 7 en una sola llamada, sin fotograma de partida (usa la rotación de cada dirección), en el mismo grupo. Todas bien a la primera: no suelta el bate ni se gira. Fotogramas en assets/sources/conserje-48-aplastacabezas/walk/ (lienzos de 68 a 80; el oeste, de 64x80). Los tramos que hacen ciclo, a mano en arma.json.",
+   "group": "27966e3c-c458-4dd0-8f22-8cfcedcc578f",
+   "animation_name": "andar-aplastacabezas",
+   "cost": "8 generaciones",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the spiked bat in the same guard grip with both hands the whole time: the bat stays raised up and tilted back over his shoulder in the same place, only swaying very slightly with each step. His arms do not swing and never let go of the bat. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
   }
  },
  "zombi-venenoso-48": {
