@@ -1,6 +1,157 @@
 {
   "nota": "Datos para montar la hoja de sprites de Johnny con el mangual (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-mangual). La casilla es más ancha y alta que la de siempre (144x128, con los pies en 72,88, como la del látigo) porque el golpe es un giro entero con la cadena estirada a pulso (el mangual llega más lejos que la súper maza: alcance 90) y una estela circular que rodea a Johnny: con el lienzo de 96x96 se quedaría justa.",
-  "celda": [144, 128],
-  "pivote": [72, 88],
-  "lienzo_ataque": [144, 128, 40, 33]
+  "celda": [
+    144,
+    128
+  ],
+  "pivote": [
+    72,
+    88
+  ],
+  "lienzo_ataque": [
+    144,
+    128,
+    40,
+    33
+  ],
+  "andar": {
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. Van a mano, calculados mirando cuál se parece más el fotograma a+n al a (diferencia de píxeles entre los dos; el script de arma.py puede fallar con las armas que se mecen, como la cadena). Al cerrar cambian entre 12 y 127 píxeles (la mayoría, menos de 30; el sur, 88, y el suroeste, 127). Son 8 fotogramas en el este, el norte y el oeste, 9 en el noreste y el suroeste, 10 en el noroeste, 11 en el sureste y 12 en el sur (PixelLab da ahí un paso más lento); el fotograma 0 es el dibujo quieto y vale como parte del ciclo en el sur. Los zapatos negros que se ven al andar de espaldas son las suelas del pie levantado: ningún zapato relleno de negro con borde gris claro (la cuenta de píxeles (143, 130, 120) en las filas de abajo da 0-4).",
+    "ciclo": {
+      "south": [
+        0,
+        12
+      ],
+      "south-east": [
+        1,
+        11
+      ],
+      "east": [
+        1,
+        8
+      ],
+      "north-east": [
+        2,
+        9
+      ],
+      "north": [
+        4,
+        8
+      ],
+      "north-west": [
+        1,
+        10
+      ],
+      "west": [
+        4,
+        8
+      ],
+      "south-west": [
+        1,
+        9
+      ]
+    }
+  },
+  "ataque": {
+    "nota": "Qué fotogramas de PixelLab se usan en cada dirección y en qué orden (de 13: el de partida y 12 generados). El mangual ataca 1,2 veces por segundo (Armas.CREADAS.mangual, base fregona, ritmo 1,2) y el golpe dura 0,5 s: 10 fotogramas. En todas, el golpe (la primera estela blanca grande del giro, con la cadena estirada) cae en el cuarto (índice 3; Armas.CREADAS.mangual → momento 0,3): es el 5 en el sur, el este y el oeste, el 4 en el sureste, el noreste y el noroeste, el 3 en el norte y el 6 en el suroeste. Se saltan los fotogramas repetidos de la preparación y de la vuelta a la guardia; el último (12) es el de llegada, igual que el quieto.",
+    "duracion": 0.5,
+    "impacto": 3,
+    "fotogramas": {
+      "south": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "south-east": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ],
+      "east": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "north-east": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ],
+      "north": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        12
+      ],
+      "north-west": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12
+      ],
+      "west": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "south-west": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    }
+  }
 }
