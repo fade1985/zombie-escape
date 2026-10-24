@@ -43,7 +43,8 @@
 - `armas.gd`: los números de las armas (las creadas, en `Armas.CREADAS`: usan la hoja de Johnny de su arma base con
   chispitas del color `detalle` en la punta, menos las que ya tienen la suya, con su `hoja` y su `momento`: la lanza,
   `conserje-48-lanza`, con una estocada hacia delante, y el aplastacabezas, `conserje-48-aplastacabezas`, con el
-  barrido del bate de clavos, de espaldas de arriba abajo; con sus hojas de cada skin). `bala.gd`.
+  barrido del bate de clavos, de espaldas de arriba abajo, y el bate de fuego, `conserje-48-bate-fuego`, con el
+  mismo barrido con el bate ardiendo y una estela de llamas; con sus hojas de cada skin). `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas creadas (aturdir, prender, sangrar, descarga, congelar, dejar tirado…);
   `chorro.gd` (gotas de fuego y ácido, chispas de la pistola eléctrica y clavos de la bomba de clavos), `bumeran.gd`
   y `garfio.gd` (engancha a un zombi y lo trae hasta Johnny).
@@ -289,7 +290,8 @@
   acorazada), `--skins` (`probar_skins`: las skins de Johnny), `--baul` (`probar_baul`: guardar en el baúl lo
   de la mochila), `--lanza` (`probar_lanza`: la lanza con su dibujo propio, su icono y la estocada en las 8
   direcciones, `captura-lanza-<dirección>.png`), `--aplastacabezas` (`probar_aplastacabezas`: lo mismo con el aplastacabezas,
-  que además aturde y echa atrás, `captura-aplastacabezas-<dirección>.png`) o `--ascensor` (`probar_ascensor`: bajar en el ascensor a la sala y volver), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
+  que además aturde y echa atrás, `captura-aplastacabezas-<dirección>.png`), `--bate-fuego` (`probar_bate_fuego`: lo mismo
+  con el bate de fuego, que además prende al zombi, y con las cuatro skins, `captura-bate-fuego-<dirección o skin>.png`) o `--ascensor` (`probar_ascensor`: bajar en el ascensor a la sala y volver), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 
 **ui/**
@@ -385,7 +387,7 @@
 
 ## tools/
 
-`hacer_frames.py` (hoja → animaciones; si el `.json` de la hoja trae `durations` en una dirección, cada dibujo dura lo que diga); las hojas de Johnny con un arma se montan con `tools/arma.py` del juego JS, que no está aquí (`PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`, con lo de `assets/sources/conserje-48-<arma>/` y su `arma.json`; la receta entera, en la skill `arma-nueva` del juego JS; las últimas, la lanza y el aplastacabezas); `superviviente.py` (monta la hoja de un superviviente con lo de PixelLab: reposo a
+`hacer_frames.py` (hoja → animaciones; si el `.json` de la hoja trae `durations` en una dirección, cada dibujo dura lo que diga); las hojas de Johnny con un arma se montan con `tools/arma.py` del juego JS, que no está aquí (`PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-<arma>`, con lo de `assets/sources/conserje-48-<arma>/` y su `arma.json`; la receta entera, en la skill `arma-nueva` del juego JS; las últimas, la lanza, el aplastacabezas y el bate de fuego); `superviviente.py` (monta la hoja de un superviviente con lo de PixelLab: reposo a
 mano, andar alineado, acción con el fogonazo limpio, si la tiene, y caído; `py tools/superviviente.py policia`);
 para los zombis nuevos, las herramientas del JS copiadas aquí: `piel.py`
 (la piel a verde; admite otro tono de origen, la fila de los zapatos y la saturación máxima), `bajar_zip.py`, `bajar.py` y `bajar_fotogramas.py` (bajar de PixelLab; el último, una animación fotograma a fotograma con las URL de `get_character`, cuando el zip aún no deja, y monta una tira para mirarla), `espejo_oeste.py` (la animación hacia el oeste con la del este en espejo), `ritmo_andar.py` (iguala el ritmo del paso de Johnny en unas direcciones sin tocar los dibujos: cada dibujo dura según cuánto cambian las piernas hasta el siguiente; `py tools/ritmo_andar.py conserje-48-pistola south north`), `juntar_piernas.py` (cierra las piernas abiertas a lo ancho en unos dibujos del paso: cada fila de las piernas, más hacia dentro cuanto más abajo, con el zapato entero; `py tools/juntar_piernas.py conserje-48-pistola south 4,5 3`), `andar_arma.py` (rehace las filas de andar de la hoja de Johnny con un arma con los dibujos de PixelLab que se elijan en `arma.json` → `andar` → `fotogramas`, saltando los que repiten postura; además pone los pies siempre a la altura de Johnny quieto, quita los grises sueltos bajo los zapatos, pinta de marrón los zapatos de `zapatos_negros` y da menos tiempo a los dibujos casi repetidos en las direcciones de `ritmo_parejo`; hoy, la fregona), `hoja.py` (hoja de
@@ -411,7 +413,7 @@ muebles nuevos de sus estancias —plato de ducha, banco largo, váter y lavabo 
 el corcho del despacho, que también pasa a sprite, y les quita lo azulado que PixelLab pinta alrededor), `azotea.py` (las texturas de la azotea: hormigón, murete con la ciudad de noche, su tapa y el
 helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de las skins), `cara.py` (las skins de Johnny: pega
-la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos de las ocho hojas de armas (también la de la lanza y la del aplastacabezas), buscándola por
+la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos de las nueve hojas de armas (también la de la lanza, la del aplastacabezas y la del bate de fuego; con `py tools/cara.py <skin> <arma>`, solo la de esa arma), buscándola por
 el pañuelo rojo; lo que sobra del pelo de siempre alrededor, según la skin (`SOBRA`): teñido del pelo nuevo (el portero),
 quitado con lo que sobre del pañuelo (el glotón, calvo y sin pañuelo), quitado solo el pelo, respetando el pañuelo y sus
 puntas al viento (el gymbro, calvo con pañuelo), o quitado como en el glotón con un casco (el bombero: el casco va por
@@ -420,7 +422,8 @@ saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
 de la taquilla; con `muestra`, el antes y el después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
 (los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `icono_lanza.py` (el icono de la lanza, con los colores de los de la fregona y el cuchillo), `icono_aplastacabezas.py`
-(el icono del bate con clavos que asoman por los lados, con los grises del de los clavos), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
+(el icono del bate con clavos que asoman por los lados, con los grises del de los clavos), `icono_bate_fuego.py` (el icono del bate con la punta
+envuelta en trapos chamuscados y una llama encima), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 Música de 8 bits: `motor-8bit.mjs` (ondas de consola, percusión, eco y el .wav en bucle) y las canciones hechas con
 él, cada una con su partitura: `el-ultimo-inquilino.mjs` (menú), `puerta-a-puerta.mjs` (explorar),
