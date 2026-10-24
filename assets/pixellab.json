@@ -620,6 +620,28 @@
    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the spear in the same guard grip with both hands the whole time: the wooden shaft stays diagonal across his body and the knife blade stays raised up and forward in the same place, only swaying very slightly with each step. His arms do not swing and never let go of the spear. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
   }
  },
+ "conserje-48-aplastacabezas": {
+  "kind": "character_state",
+  "character_id": "3fc9b87f-5c1e-465d-8bfd-4ab893768388",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Aplastacabezas en guardia 2",
+  "nota": "Estado de Johnny con el aplastacabezas (el arma creada: bate de béisbol con clavos largos que atraviesan la punta gorda), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). La misma postura que el bate: en alto sobre el hombro, con las dos manos, en las 8 direcciones; los clavos asoman como púas grises por los dos lados de la punta. Es el segundo intento (ver descartado). Lienzo de 64x64, con use_color_palette_from_reference. Las 8 posturas, tal cual, en assets/sources/conserje-48-aplastacabezas/rotations/<dirección>.png.",
+  "request": {
+   "edit_description": "holding a homemade spiked club like a weapon: a wooden baseball bat with six long steel nails hammered all the way through its thick end, so the long sharp nail points stick far out of both sides of the bat like spikes, clearly visible beyond the outline of the bat; gripping the handle with both hands in a batter's ready stance, knees slightly bent; the bat is raised up and tilted back over one shoulder, the thick spiked end pointing up above shoulder height, away from his face; the bat stays raised over the shoulder in every view: front, side and back; light brown wooden bat with a dark outline, the nails are thin light grey metal spikes with dark outlines poking out of the thick end on both sides; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 2024
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "descartado": {
+   "character_id": "e5f57f50-d620-4e1c-8d08-7616d6d40e87",
+   "state_name": "Aplastacabezas en guardia",
+   "cost": "10 generaciones",
+   "nota": "DESCARTADO por el dueño (sigue en PixelLab, sin borrar): la postura salió bien, pero los clavos eran solo unos puntitos grises sobre la madera y se confundía con el bate de siempre. Sus 8 posturas, en assets/sources/conserje-48-aplastacabezas/descartes/rotations-1/. Se pedía 'several long steel nails hammered through its thick end, the nail points sticking out on all sides' con seed 1985: no basta; hay que insistir en que asoman lejos, por los dos lados, más allá del borde del bate."
+  }
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
