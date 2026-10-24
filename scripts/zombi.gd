@@ -14,6 +14,7 @@ extends CharacterBody2D
 
 signal murio   # avisa cuando se muere (la sala cuenta los muertos para sacar más)
 signal prendido   # avisa cuando empieza a arder (para el logro "Pirómano")
+signal herido(cantidad: int, golpe: bool)   # le quitan vida: con un golpe o una bala (golpe) o con el fuego y los charcos
 
 const FRENADA := 900.0     # lo rápido que se para después de que le empujen de un golpe
 const VISTA := 330.0       # dormido, a qué distancia ve a Johnny (si no hay un muro en medio)
@@ -66,6 +67,11 @@ var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (p
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var lio_angulo := 0.0
 var prisa := 0.0           # segundos que le quedan con prisa (el grito de la dependienta, zombi_dependienta.gd)
+# La diana de la sala de pruebas de armas (sala_armas.gd): no se muere (al quedarse sin vida la recupera entera), no
+# da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números de daño
+# los pone la sala, más grandes
+var diana := false
+var casa := Vector2.ZERO
 
 # La sangre: salta al pegarle, deja charco si muere a golpes o a tiros y, el lento, va dejando su rastro
 var color_sangre := Color("#7a1f1a")   # la pone la partida según el tipo (partida.gd, MANCHAS y SANGRE)
@@ -214,10 +220,23 @@ func cebo_cerca() -> Node2D:
 
 # Andar normal: va a por Johnny y, al llegar, le da un zarpazo. Los tipos especiales lo cambian
 func andar(delta: float, johnny: Node2D) -> void:
+	if diana:
+		quedarse(delta, johnny)
+		return
 	if dano > 0 and distancia_a(johnny) < radio + johnny.RADIO + alcance and se_ve(johnny):
 		empezar_zarpazo(johnny)
 		return
 	ir_hacia(delta, camino_hacia(johnny.global_position), velocidad)
+
+
+# La diana: quieta en su sitio, mirando a Johnny; si la han movido, vuelve
+func quedarse(delta: float, johnny: Node2D) -> void:
+	if global_position.distance_to(casa) > 6.0:
+		ir_hacia(delta, global_position.direction_to(casa), velocidad)
+		return
+	pedir_velocidad(Vector2.ZERO)
+	mirar_hacia(johnny.global_position - global_position)
+	poner_animacion("reposo")
 
 
 # Lo rellenan los tipos que tienen estados suyos
@@ -325,6 +344,7 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 		despertar()
 		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
 	vida -= cantidad
+	herido.emit(cantidad, true)
 	velocity = fuerza * empuje
 	numero_flotante(cantidad)
 	Sonido.tocar("golpe")
@@ -347,6 +367,10 @@ func encogerse() -> void:
 
 
 func morir() -> void:
+	if diana:
+		vida = vida_max
+		encogerse()
+		return
 	estado = "muerto"
 	Sonido.tocar("chof")
 	Sonido.tocar("muerte")
@@ -404,6 +428,7 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 		despertar()
 	var n := maxi(1, roundi(cantidad))
 	vida -= n
+	herido.emit(n, false)
 	a_golpes = false
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), str(n), color, 16)
 	if vida <= 0:
@@ -501,6 +526,8 @@ func mareo(delta: float) -> void:
 
 
 func numero_flotante(cantidad: int) -> void:
+	if diana:
+		return
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), str(cantidad))
 
 

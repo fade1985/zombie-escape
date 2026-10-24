@@ -22,7 +22,8 @@
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny (los minijefes de
 # los Apartamentos, con los números: 7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; 0, el científico jefe; con
 # Mayús, 7, 8, 9 y P llevan derecho a la habitación de ese minijefe). F9 lleva a
-# la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento. M saca el recuadro de
+# la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento; F11, igual, a la sala de pruebas
+# de armas (sala_armas.gd). M saca el recuadro de
 # las mutaciones sin tener que matar a la portera. Z le pone a Johnny la siguiente skin (skins.gd), sin guardarla.
 #
 # Con "-- --captura" no se juega esta, sino la partida de prueba (escenas/partida_prueba.tscn): la misma partida
@@ -147,7 +148,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · 7 Glotón · 8 Gymbro · 9 Bombero · 0 Científico · M mutación · F9 exposición · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · 7 Glotón · 8 Gymbro · 9 Bombero · 0 Científico · M mutación · F9 exposición · F11 sala de armas · F10 luz · H superviviente" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -1250,6 +1251,9 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_F9 and planta.expo >= 0 and not cerrada:
 		# a la exposición y de vuelta a la sala de mantenimiento
 		montar(planta.mantenimiento if aqui == planta.expo else planta.expo, 0)
+	elif evento.keycode == KEY_F11 and planta.armas >= 0 and not cerrada:
+		# a la sala de pruebas de armas (sala_armas.gd) y de vuelta a la de mantenimiento
+		montar(planta.mantenimiento if aqui == planta.armas else planta.armas, 0)
 	elif evento.keycode == KEY_F10:
 		luz.alternar()   # quitar o poner la penumbra, para comparar
 	elif evento.keycode == KEY_M:

@@ -115,7 +115,7 @@ func casillas() -> Array:
 				var puerta := Rect2(x - 3, PASILLO_Y - 8 if arriba else PASILLO_Y + 8, 6, 8)
 				lista.append({"r": Rect2(x - ancho / 2.0, y, ancho, alto), "color": color,
 					# (desde la exposición y las viviendas, que no salen en el plano, se marca la sala de mantenimiento)
-					"aqui": aqui == s.a or (planta.sitios[aqui].tipo in ["expo", "viviendas"] and sitio.tipo == "mantenimiento"),
+					"aqui": aqui == s.a or (planta.sitios[aqui].tipo in ["expo", "armas", "viviendas"] and sitio.tipo == "mantenimiento"),
 					"icono": icono, "sos": s.a == sos, "puerta": puerta, "sitio": s.a})
 	return lista
 

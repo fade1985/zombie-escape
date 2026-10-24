@@ -126,7 +126,14 @@
   y les mete prisa 5 s con `meter_prisa` de `zombi.gd`, un 30 % más rápidos; luego guarda las distancias y vuelve a
   gritar cada 8 s; acorralada, chilla en la cara: 6). Salen en las tiendas (`planta.gd`, `horda`).
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
-  números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque.
+  números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque. Con
+  `diana` es la de la sala de pruebas de armas: no se muere, no ataca y vuelve a su sitio (`casa`). La señal
+  `herido` avisa de cada daño (golpe o bala, o fuego y charcos).
+- `sala_armas.gd`: la sala de pruebas de armas (F11 en la planta baja; el sitio, `sala_armas` de `planta.gd`, y la
+  monta `mapa.gd`): la diana en el centro, todas las armas (coma y punto; las del banco, creadas en el acto), munición
+  sin fin pero recargando, las líneas de ayuda en el suelo (alcance, a quién apunta, por dónde irá la bala, el círculo
+  donde le da a cada zombi y el camino de verdad de cada bala) y el panel con la ficha del arma y el recuento. Al
+  salir, Johnny vuelve a llevar sus armas y balas. Prueba: `--captura --armas`.
 - `portera.gd`: la jefa, por estados (charcos de ácido, embestida, grito "¡VECINOS!"; números en sus constantes).
 - `minijefe.gd`: lo común de los cuatro minijefes del centro comercial (vida y barra, enfadarse a media vida con
   vapor, llamar zombis, moverse, recibir golpes con `danar()` para cambiar el daño, `quitar_vida()`, `morder()` (el
@@ -385,8 +392,8 @@
   apartamento: su `apt`, con todas las estancias ya vistas, sin niebla; la puerta del pasillo, abajo en el despacho, y
   la de las viviendas, a la derecha del taller; sus muebles de adorno, del catálogo, los pone ella, y el ordenador, el
   banco, el baúl, la taquilla y el corcho, `mapa.gd` (`ORDENADOR_X`, `BANCO_X`...), con el suelo y la pared de cada
-  estancia en `ESTILO_MANTENIMIENTO`—; y la de
-  exposición; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `viviendas.gd` (las
+  estancia en `ESTILO_MANTENIMIENTO`—; la de
+  exposición y la de pruebas de armas; en el centro comercial, la última planta es la azotea: `azotea` y `aparatos`), `viviendas.gd` (las
   viviendas de los supervivientes rescatados, detrás de la puerta de la derecha de la sala de mantenimiento: un pasillo
   largo con seis habitaciones, tres arriba para los de los Apartamentos y tres abajo para los del centro comercial,
   hecho como un apartamento —su `apt`, con niebla por habitación—; siempre igual: `habitacion(id)` y `casa(id)` dicen

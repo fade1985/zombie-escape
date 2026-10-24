@@ -56,6 +56,8 @@
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
+#   --armas        la sala de pruebas de armas (F11, sala_armas.gd): la diana que no se muere, la pistola desde 72
+#                  ángulos (desde cuáles falla), la munición sin fin, el cambio de arma y la vuelta con las armas de antes
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
@@ -199,6 +201,9 @@ func empezar_prueba() -> void:
 	elif "--sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_sala()
+	elif "--armas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_armas()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -1961,6 +1966,116 @@ func probar_sala() -> void:
 	await cruzar(0)
 	print("Por la puerta de abajo: en «%s» (esperado: pasillo)" % planta.sitios[aqui].tipo)
 	get_tree().quit()
+
+
+# Con "--captura --armas": la sala de pruebas de armas (sala_armas.gd). Desde la sala de mantenimiento, F11 lleva a
+# ella: cuenta en la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola. La
+# pistola, en el modo asistido y a 200 de la diana, desde 72 ángulos (cada 5°; 0° = disparando hacia la derecha, 90° =
+# hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla.
+# Luego, que la diana no se ha muerto (y los abatidos), que la reserva sigue llena y que ha recargado; que el punto pasa
+# a la escopeta y la coma vuelve (con el recuento a cero) y llega a las del banco de trabajo, que el guion esconde y
+# saca el panel; y que F11 vuelve a la sala
+# de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
+# panel, tras un fallo por el lado) y captura-armas-escopeta.png (los perdigones). Cada línea dice lo esperado
+func probar_armas() -> void:
+	johnny.coger("fregona")   # (entra con la de cuerpo a cuerpo en la mano, para ver que le pone la pistola)
+	var antes := [johnny.huecos.duplicate(), johnny.mano, johnny.balas, johnny.reserva]
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	var sitio: Dictionary = planta.sitios[aqui]
+	var centro := Vector2(sitio.ancho, sitio.alto) / 2.0
+	print("Sala de pruebas de armas: en «%s» (esperado: armas) · %d × %d · la diana en el centro %s, la única %s (esperado: true, true) · oscuridad %s (esperado: 0) · en la mano: %s (esperado: Pistola)" % [
+		sitio.tipo, sitio.ancho, sitio.alto, sala.diana.global_position.distance_to(centro) < 2.0,
+		get_tree().get_nodes_in_group("zombis").size() == 1, luz.oscuridad(), johnny.arma().nombre])
+	johnny.poner_modo("asistido")
+	var recargo := false
+	var resultados := []   # [ángulo, fin, pasa, dirección]
+	var foto := -1         # el primer ángulo que falla por el lado: su foto
+	for grados in range(0, 360, 5):
+		var a := deg_to_rad(grados)
+		johnny.position = sala.diana.global_position - Vector2.from_angle(a) * 200.0
+		johnny.velocity = Vector2.ZERO
+		var antes_tiros := sala.tiros
+		var espera := 0.0
+		while sala.tiros == antes_tiros and espera < 3.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+			recargo = recargo or johnny.recargando > 0.0
+		var b: Dictionary = sala.balas.back()
+		while b.fin == "" and espera < 5.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		resultados.append([grados, b.fin, b.pasa, johnny.direccion])
+		if b.fin == "lado" and foto < 0:
+			foto = grados
+			await get_tree().create_timer(0.05).timeout
+			Captura.foto("captura-armas.png")
+	var lineas := []
+	var fila := []
+	for r in resultados:
+		fila.append("%d° %s %s" % [r[0], r[3], "da" if r[1] == "acierto" else "%s a %d" % [r[1], roundi(r[2])]])
+		if fila.size() == 6:
+			lineas.append(" · ".join(fila))
+			fila = []
+	print("Pistola desde cada ángulo (dirección de Johnny, si da, o cómo falla y a cuánto pasa del centro; le da a menos de 23):
+  " + "
+  ".join(lineas))
+	var falla := resultados.filter(func(r): return r[1] != "acierto")
+	print("Da desde %d de %d ángulos; falla desde: %s" % [resultados.size() - falla.size(), resultados.size(),
+		", ".join(falla.map(func(r): return "%d°" % r[0])) if not falla.is_empty() else "ninguno"])
+	print("Diana: viva %s · vida %d de %d · abatidos %d (esperado: true, más de 0, más de 0) · aciertos del recuento %d" % [
+		sala.diana.estado != "muerto", sala.diana.vida, sala.diana.vida_max, sala.abatidos, sala.aciertos])
+	print("Munición: reserva %d (esperado: %d, siempre llena) · ha recargado %s (esperado: true)" % [johnny.reserva,
+		Armas.datos("pistola").cargador * johnny.RESERVA_MAX, recargo])
+	await pulsar_y_esperar(KEY_PERIOD)
+	for i in 2:
+		await get_tree().physics_frame
+	# (Johnny ya ha disparado con ella: lo que cuenta tienen que ser solo sus perdigones, cinco por disparo)
+	print("Con el punto: %s (esperado: Escopeta) · recuento a cero: %d disparos y %d balas (esperado: cinco balas por disparo)" % [
+		johnny.arma().nombre, johnny.disparos - sala.disparos_desde, sala.tiros])
+	johnny.position = sala.diana.global_position - Vector2(150, 0)
+	await get_tree().create_timer(1.3).timeout
+	Captura.foto("captura-armas-escopeta.png")
+	print("Escopeta a 150: balas %d · aciertos %d" % [sala.tiros, sala.aciertos])
+	await pulsar_y_esperar(KEY_MINUS)
+	await get_tree().physics_frame
+	var escondido: bool = not sala.panel.visible
+	await pulsar_y_esperar(KEY_MINUS)
+	await get_tree().physics_frame
+	print("Con el guion, el panel se esconde %s y vuelve %s (esperado: true, true)" % [escondido, sala.panel.visible])
+	await pulsar_y_esperar(KEY_COMMA)
+	await get_tree().physics_frame
+	var vuelta: String = johnny.arma().nombre
+	for i in 4:
+		await pulsar_y_esperar(KEY_COMMA)
+	print("Con la coma: %s (esperado: Pistola) · cuatro más atrás: %s (esperado: el último del banco de trabajo, %s)" % [
+		vuelta, johnny.arma().nombre, Recetas.LISTA[sala.lista.back()].nombre])
+	await pulsar_y_esperar(KEY_F11)
+	await get_tree().create_timer(0.3).timeout
+	print("De vuelta con F11: en «%s» (esperado: mantenimiento) · armas %s (esperado: true) · balas %d y %d (esperado: %d y %d)" % [
+		planta.sitios[aqui].tipo, [johnny.huecos, johnny.mano] == [antes[0], antes[1]], johnny.balas, johnny.reserva,
+		antes[2], antes[3]])
+	get_tree().quit()
+
+
+# Pulsa y suelta una tecla y, si con ella se cambia de sitio, espera a que acabe el fundido
+func pulsar_y_esperar(tecla: Key) -> void:
+	for pulsada in [true, false]:
+		var evento := InputEventKey.new()
+		evento.keycode = tecla
+		evento.pressed = pulsada
+		Input.parse_input_event(evento)
+	var espera := 0.0
+	while not cambiando and espera < 0.2:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+	while cambiando and espera < 3.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
 
 
 # Con "--captura --skins": las skins de Johnny (skins.gd). En la sala de mantenimiento, sin ninguna skin:

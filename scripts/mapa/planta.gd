@@ -32,6 +32,7 @@ const SALA_ESTANCIAS := [{"uso": "vestuario", "nombre": "Vestuario"}, {"uso": "d
 	{"uso": "taller", "nombre": "Taller"}]
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 153           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe, y para los muebles de la sala de mantenimiento)
+const ARMAS_CASILLAS := 34       # la sala de pruebas de armas (cuadrada): del centro a la pared caben 15 casillas
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
@@ -73,13 +74,13 @@ static func nombre_puerta(num: int, letra: String) -> String:
 # Genera la planta número "num". Devuelve:
 #   num, nombre      número (1 = baja) y nombre de la planta
 #   sitios           [pasillo, lo de detrás de A, B, C y D]. Cada sitio: {tipo ("pasillo", "apartamento",
-#                    "jefe", "mantenimiento", "viviendas" o "expo"), nombre, ancho, alto, apt (el apartamento, si lo es),
+#                    "jefe", "mantenimiento", "viviendas", "expo" o "armas"), nombre, ancho, alto, apt (el apartamento, si lo es),
 #                    dueno (el plano de las salas rectangulares), muebles (muebles.gd), surtido (qué variante
 #                    de cada mueble lleva), salidas, zombis, limpio, visitado}. El pasillo lleva además su estilo
 #                    (el del edificio: "pasillo" o "galeria", ver mapa.gd), sus apliques y, en el centro comercial,
 #                    los escaparates de las tiendas de arriba ({x, tienda})
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay), viviendas, el de las viviendas de los
-#                    rescatados (viviendas.gd), y expo, el de la exposición
+#                    rescatados (viviendas.gd), expo, el de la exposición, y armas, el de la sala de pruebas de armas
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
 #                    el guardia la suelte al caer; con la Alerta 5, igual: la lleva un vecino, {"llave": true} en zombis)
 #   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
@@ -109,7 +110,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var tiendas: bool = ed.generador == "tienda"
 	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
 	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
-		"jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "edificio": edificio,
+		"jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio,
 		"jefe": su_jefe if su_jefe != "" else ed.jefe, "el_jefe": mini.get("el", ed.el_jefe)}
 	var ancho := PASILLO_COLS * CASILLA
 	var alto := PASILLO_FILAS * CASILLA
@@ -244,6 +245,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	if baja:
 		planta.expo = planta.sitios.size()
 		planta.sitios.append(exposicion(planta.mantenimiento))
+		planta.armas = planta.sitios.size()
+		planta.sitios.append(sala_armas(planta.mantenimiento))
 
 	# Dificultad: los apartamentos normales, en un orden al azar, llevan cada vez más zombis
 	var normales := []
@@ -325,7 +328,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
 	var planta := {"num": num, "nombre": "Azotea", "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},
-		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "edificio": edificio, "jefe": jefe,
+		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio, "jefe": jefe,
 		"el_jefe": ed.el_final if jefe == ed.get("final", "") else ed.el_jefe, "superviviente": {}, "cientifico": {}}
 	var ancho := AZOTEA_COLS * CASILLA
 	var alto := AZOTEA_FILAS * CASILLA
@@ -457,6 +460,16 @@ static func exposicion(mant: int) -> Dictionary:
 		"dueno": Muebles.plano_rectangular(EXPO_COLS, EXPO_FILAS), "zombis": [], "limpio": true, "visitado": true,
 		"surtido": 0, "salidas": [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": mant, "vuelta": 0,
 		"cerrojo": "", "aviso": ""}]}
+
+
+# La sala de pruebas de armas del modo pruebas (tecla F11): una habitación vacía y con luz, con un zombi que no se
+# muere en el centro. Lo que tiene dentro lo pone sala_armas.gd. Su puerta lleva a la sala de mantenimiento.
+static func sala_armas(mant: int) -> Dictionary:
+	var lado := ARMAS_CASILLAS * CASILLA
+	return {"tipo": "armas", "nombre": "Sala de pruebas de armas", "ancho": lado, "alto": lado, "muebles": [],
+		"dueno": Muebles.plano_rectangular(ARMAS_CASILLAS, ARMAS_CASILLAS), "zombis": [], "limpio": true,
+		"visitado": true, "surtido": 0, "salidas": [{"dir": "abajo", "en": lado / 2, "tipo": "puerta", "a": mant,
+		"vuelta": 0, "cerrojo": "", "aviso": ""}]}
 
 
 # Los zombis de un apartamento: ya están dentro, dormidos y repartidos por las habitaciones según su

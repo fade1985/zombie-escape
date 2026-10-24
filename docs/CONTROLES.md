@@ -41,6 +41,17 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   página siguiente, con su piel y su pelo); su página se coge pero no se guarda. **Z**: la siguiente skin de
   Johnny (`skins.gd`; al final vuelve al conserje), sin guardarla.
 - **F9**: sala de exposición (todos los muebles con sus variantes y todos los zombis con sus ropas) y vuelta.
+- **F11** (en la planta baja): sala de pruebas de armas (`sala_armas.gd`) y vuelta. En el centro, una diana: un zombi
+  normal que no se muere (al quedarse sin vida la recupera y sale «¡Abatido!»), no ataca y vuelve a su sitio si lo
+  empujan, para probar desde todas las direcciones. Se entra con la pistola; **coma** y **punto** pasan por todas las
+  armas, también las del banco de trabajo (las 1-6 y Q también valen). La munición no se acaba, pero hay que recargar.
+  En el suelo, las líneas de ayuda: el alcance (círculo blanco; cuerpo a cuerpo, el abanico del golpe), a quién apunta
+  (amarillo), por dónde irá la bala (azul a rayas, desde la boca del arma), el círculo de cada zombi donde le da la
+  bala (rojo) y el camino de cada bala (verde si da, naranja si pasa por el lado de la diana, roja con una X si choca o
+  se le acaba el alcance). Arriba a la izquierda, la ficha del arma (con los talentos puestos) y el recuento:
+  disparos, aciertos, por qué falla, daño por segundo y abatidos (con cuánto tardó el último). **Retroceso** pone el
+  recuento a cero (también cambiar de arma); el **guion** esconde el panel. Al salir, Johnny vuelve a llevar las armas
+  y las balas con las que entró. En el navegador, F11 es también la pantalla completa.
 - **F10**: quitar y poner la penumbra. **H**: apartamento del superviviente ya sin zombis (rescate y horda).
   En el centro comercial, cada H trae al siguiente de sus tres (ferretero, farmacéutica, técnico): rehace
   la planta con su tienda y te lleva a ella, ya sin zombis. Con uno ya rescatado en la partida, no hace nada.
@@ -116,6 +127,14 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   cafetera en la habitación de la farmacéutica y no en la sala; desde el pasillo no dice nada, al entrar sí, si sales a
   medias lo vuelve a contar entero y la segunda vez ya no: `captura-cafetera.png`) y las cámaras del técnico
   (`captura-tecnico-*.png`). Cada línea dice lo esperado. Deja el guardado como estaba.
+- `--armas`: en vez de la prueba larga, la de la sala de pruebas de armas (`sala_armas.gd`): entra con F11 y cuenta en
+  la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola; la pistola en modo
+  asistido, a 200 de la diana, desde 72 ángulos (cada 5°; 0° = hacia la derecha, 90° = hacia abajo): si la primera bala
+  le da o cómo falla y a cuánto pasa del centro, y desde qué ángulos falla; que la diana no se ha muerto (y cuántos
+  abatidos), que la reserva sigue llena y ha recargado; que el punto pasa a la escopeta (el recuento empieza de cero),
+  la coma vuelve y llega a las del banco de trabajo, el guion esconde y saca el panel, y F11 vuelve a la sala de
+  mantenimiento con las armas y las balas de antes. Fotos: `captura-armas.png` (tras un fallo por el lado) y
+  `captura-armas-escopeta.png`.
 - `--sala`: en vez de la prueba larga, la de la sala de mantenimiento (`planta.gd`, sus tres estancias): cuenta en la
   terminal las estancias, sus puertas y en cuál ha quedado cada mueble, si desde el despacho se llega a la puerta del
   pasillo, a la de las viviendas y delante del ordenador, el banco, el baúl y la taquilla, y qué pone arriba en cada

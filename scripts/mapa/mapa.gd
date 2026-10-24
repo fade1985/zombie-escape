@@ -1,5 +1,5 @@
 # Monta un sitio de la planta (el pasillo, un apartamento, la sala de mantenimiento, las viviendas de los
-# rescatados o la exposición) a partir de sus datos (planta.gd):
+# rescatados, la exposición o la sala de pruebas de armas) a partir de sus datos (planta.gd):
 #   - el suelo de cada habitación y la tapa de los muros (vistos desde arriba), en un dibujo de fondo
 #   - las caras de los muros (de frente, 3 casillas de alto), ordenadas con los personajes
 #   - los choques de los muros, las puertas, los muebles (mueble.gd) y la llave
@@ -234,6 +234,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	if sitio.tipo == "expo":
 		poner_exposicion()
 	hornear(navegacion)
+	if sitio.tipo == "armas":
+		add_child(SalaArmas.new())   # la sala de pruebas de armas: la diana, las líneas de ayuda y su panel (sala_armas.gd)
 	if sitio.has("apt"):
 		preparar_niebla()
 	# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
