@@ -2473,6 +2473,29 @@
    "cost": "8 generaciones, todas a la primera"
   }
  },
+ "conserje-48-pistola-electrica": {
+  "kind": "character_state",
+  "character_id": "0d8b1d95-6b8e-4659-94f8-aa2235ccd272",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Pistola eléctrica en guardia",
+  "nota": "Estado de Johnny con la pistola eléctrica (el arma creada: pistola de agua + batería; base la pistola, ritmo 5, alcance 230, velocidad 460, cargador 30: chispas celestes que aturden y saltan al zombi de al lado, chorro.gd y armas_creadas.gd), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un táser compacto hecho con la pistola de agua, del tamaño de una pistola normal, de plástico azul marino y negro, con una batería pequeña gris (borne rojo y borne gris) pegada debajo del cañón y dos electrodos metálicos cortos en la boca con una chispita celeste entre ellos, sujeto a dos manos como la pistola (decidido con el dueño: táser oscuro, con una chispita pequeña siempre en la punta aunque Johnny esté quieto o andando, para que se vea cargada; las chispas grandes las pone el juego al disparar). Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 11001) y la B, con colores libres (seed 11002). Elegida la A (el dueño, 2026-10-24): cara y ropa limpias, 39 colores como el resto de Johnny, de frente el táser apunta recto hacia delante y de espaldas queda alto junto a la cabeza, sin cruzar el cuerpo ni asomar de lado (no hizo falta rehacer south y north). La chispa de la punta sale gris azulada y pálida, no celeste vivo. En la B salen solo 23 colores, la cara algo curtida (barba de dos días) y de frente el táser cruza el cuerpo en diagonal hacia la pierna, pero las chispas son de un celeste muy vivo. Las 8 posturas de la A, en assets/sources/conserje-48-pistola-electrica/rotations/<dirección>.png (64x64, pies en la fila 55); las de la B, en descartes/rotations-B/. Las imágenes se bajaron del zip de la hoja (api.pixellab.ai/mcp/characters/<id>/spritesheet) porque backblaze.pixellab.ai no respondía.",
+  "request": {
+   "edit_description": "holding a homemade electric stun gun with both hands in a ready shooting stance, knees slightly bent: a compact modified water pistol the size of a normal handgun, dark navy blue and black plastic body, a small grey battery pack with a red terminal and a grey terminal strapped under the barrel, and two short metal prongs at the front with a tiny bright cyan electric spark arcing between them; one hand gripping the handle and the other hand supporting the front, the prongs pointing straight ahead in the direction he is facing; the stun gun stays aimed forward in every view: front, side and back; dark navy body, grey battery, two metal prongs with a small cyan spark; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 11001
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_B": {
+   "character_id": "c736eb94-ef1d-4762-ba0f-0c293f90bde6",
+   "state_name": "Pistola eléctrica en guardia (colores libres)",
+   "cost": "10 generaciones",
+   "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 11002. Descartada: solo 23 colores, la cara algo curtida y de frente el táser cruza el cuerpo en diagonal. Sus 8 posturas, en assets/sources/conserje-48-pistola-electrica/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
+  },
+  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la B, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
