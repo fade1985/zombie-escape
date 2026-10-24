@@ -1,0 +1,15 @@
+{
+  "posturas": "Las posturas quietas de south y north NO son las del estado de PixelLab (allí el tubo cruzaba el cuerpo en diagonal): se rehicieron el 24 de octubre de 2026 con una animación corta en la que Johnny gira el arma, y se guardó el último fotograma en rotations/ (south mide 64x80 y north 64x78: el tubo asoma por abajo y por arriba; los pies quedan en la fila 55 como siempre). Las originales están en descartes/rotations-viejas/.",
+  "nota": "Datos para montar la hoja de sprites de Johnny con el lanzallamas (lo lee tools/arma.py). Las medidas y el ciclo del andar no se ponen: valen las de siempre y el script elige el ciclo solo.",
+  "ataque": {
+    "nota": "Disparo. El lanzallamas dispara 10 veces por segundo, así que cada disparo dura 0,1 s y solo caben 2-3 fotogramas de los 8 de PixelLab: el estallido de llamas y las brasas. El chorro lo pone el juego (chorro.gd); la hoja solo lleva el retroceso y la llamarada de la boca. 'boca': 'fogonazo' hace que el script busque dónde está la boca del arma en cada dirección para que las gotas nazcan ahí.",
+    "duracion": 0.1,
+    "impacto": 0,
+    "boca": "fogonazo",
+    "efectos": true,
+    "fotogramas": {
+      "east":  [3, 4, 5],
+      "north": [3, 4, 5]
+    }
+  }
+}

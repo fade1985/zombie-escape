@@ -1707,7 +1707,43 @@
    },
    "cost": "2 generaciones (1 por dirección)"
   },
-  "cost_total": "22 generaciones por ahora: 20 de los dos estados (la B, descartada) y 2 de las posturas de south y north"
+  "cost_total": "24 generaciones por ahora: 20 de los dos estados (la B, descartada), 2 de las posturas de south y north y 2 del disparo de prueba (east y north)",
+  "ataque": {
+   "nota": "Disparo: retroceso corto y una llamarada que sale de la boca del tubo (después, unas brasas rojas y vuelve la llamita del piloto), sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo de 96x96 como fotograma de partida y de llegada (arma.py --lienzos: lienzo_ataque por defecto, 96x96 con la postura en 16,20). Fotogramas en assets/sources/conserje-48-lanzallamas/ataque/. Prueba de east y north (2026-10-24): las dos salieron a la primera. En east, la llamarada empieza en el fotograma 3, llega a su máximo en el 4 (unos 28 píxeles de largo) y deja brasas en el 5; en north, la llama sube sobre el hombro en el 3 y el 4. El lienzo de 96x96 basta: PixelLab devolvió east en 132x96 (el dibujo desplazado 36 píxeles) y la llamarada llega a la columna 75 del lienzo de partida; north se queda en 96x96.",
+   "animation_name": "disparo-lanzallamas",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+   "initial_pose": {
+    "east": "standing in a ready shooting stance facing right, both hands on the flamethrower, the long metal nozzle pointing straight to the right with a small pilot flame at its tip"
+   },
+   "action_description": "He fires one short burst of flame with the flamethrower. The flamethrower kicks back a little: his hands and forearms jerk back slightly and his shoulders rock, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thick burst of bright orange and yellow flames bursts out of the end of the metal nozzle for an instant, about as long as his forearm, then shrinks back to the small pilot flame at the nozzle tip. The red gas canister and the black hose jiggle a little. He settles cleanly into the starting two-handed aiming stance. Only one burst, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "east": {
+    "group": "215cc9af-729c-41e0-938e-5e836ca3248f",
+    "animation_id": "fc0f7107-2644-4e22-8492-01f3b3acc52b",
+    "animation_name": "disparo-lanzallamas",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "b36f8596-4d25-4553-b5c4-bb31449cc951",
+    "animation_id": "19e490d6-710a-40e8-a67a-b7e3af37c95f",
+    "animation_name": "disparo-lanzallamas-norte",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade flamethrower with both hands",
+    "initial_pose": "standing seen from behind, his back to the camera, facing away toward the top of the image, the long metal nozzle of the flamethrower sticking straight up above his right shoulder with a small pilot flame at its tip",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one short burst of flame with the flamethrower away from the camera, toward the top of the image. The flamethrower kicks back a little: his shoulders and elbows jerk back slightly, while his feet stay planted. A short, thick burst of bright orange and yellow flames bursts out of the end of the nozzle for an instant, straight up above his right shoulder, then shrinks back to the small pilot flame at the nozzle tip. He settles cleanly into the starting stance, still seen from behind. Only one burst. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "subidas": {
+    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab; caducan el 2026-10-27",
+    "east": "b68038c5-9f0e-4ff6-a157-a6cef8f2b4ed",
+    "north": "9139843d-099c-4898-88f7-f6dfd523fad7",
+    "south": "2c3de37d-c623-4a9e-bc8c-58c8a94d6e90",
+    "south-east": "74b1c3e5-3c27-4f2f-ba15-dfe3a45f1467",
+    "south-west": "ae285454-7d4c-44a7-a1ee-a4cf39e69e4d",
+    "west": "1d91cfdd-0bee-404f-ba15-d5384888cc4a",
+    "north-east": "5a8f81bf-bcac-4ffb-adc3-75e6746f7054",
+    "north-west": "03d6840a-138c-458b-bd44-c9beaa29c0a1"
+   },
+   "cost": "2 generaciones por ahora (east y north)"
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
