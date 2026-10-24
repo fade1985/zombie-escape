@@ -2694,21 +2694,28 @@
    "cost": "10 generaciones",
    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 12002. Descartada: solo 27 colores y el gancho sale pequeño y de dos puntas (parece un martillo). Sus 8 posturas, en assets/sources/conserje-48-garfio/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la B, descartada) y 2 de la prueba del lanzamiento (east y north)",
+  "cost_total": "20 + 8 + 11 = 39 generaciones hasta la parte 3: 20 de los dos estados (la B, descartada), 8 del lanzamiento (2 de prueba y 6 de las otras direcciones, a la primera) y 11 del andar (8 de las direcciones y 3 repeticiones, ver andar.repeticiones)",
   "ataque": {
-   "nota": "Lanzamiento: el gesto de lanzar el garfio (el brazo atrás, lo lanza hacia delante y vuelve a la guardia con el gancho en la mano y el rollo de cuerda en la otra). El gancho que vuela, la cuerda estirada y el zombi arrastrado los dibuja el juego (scripts/garfio.gd): la hoja solo lleva el gesto. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una). Fotogramas en assets/sources/conserje-48-garfio/ataque/<dirección>-<n>.png, sacados del zip de la hoja (api.pixellab.ai/mcp/characters/<id>/spritesheet; backblaze seguía caído) con una ventana común (east 72x59, north 52x78). PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas, el gancho no sale cortado por el borde y no hay cuerda larga dibujada (solo un bucle corto que cuelga del gancho). East: 0 = guardia, 1-2 = el brazo se echa atrás con el gancho detrás, 3 = el gancho sube sobre la cabeza, 4-6 = el brazo estirado hacia delante con el gancho en la mano (lanzamiento), 7 = recoge el brazo, 8 = guardia. North: 0 = guardia, 1-2 = el brazo atrás, 3-6 = el brazo estirado recto hacia arriba con el gancho sobre la cabeza (lanzamiento), 7 = recoge, 8 = guardia. En ningún fotograma hay un gancho suelto: el gancho siempre está en la mano. Para el juego (parte 3, como el bumerán): 'impacto' 0, el gancho sale en el instante en que empieza 'attack', así que los fotogramas empiezan en el lanzamiento (brazo ya estirado) y acaban en la guardia; 'duracion' <= 0,85 s (ritmo 0,9). Sin 'boca': 'fogonazo' ni 'efectos' (como el bumerán, andando no hay gesto).",
+   "nota": "Lanzamiento: el gesto de lanzar el garfio (el brazo atrás, lo lanza hacia delante y vuelve a la guardia con el gancho en la mano y el rollo de cuerda en la otra). El gancho que vuela, la cuerda estirada y el zombi arrastrado los dibuja el juego (scripts/garfio.gd): la hoja solo lleva el gesto. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una). Fotogramas en assets/sources/conserje-48-garfio/ataque/<dirección>-<n>.png, sacados del zip de la hoja (api.pixellab.ai/mcp/characters/<id>/spritesheet; backblaze seguía caído) con una ventana común (east 72x59, north 52x78). PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas, el gancho no sale cortado por el borde y no hay cuerda larga dibujada (solo un bucle corto que cuelga del gancho). East: 0 = guardia, 1-2 = el brazo se echa atrás con el gancho detrás, 3 = el gancho sube sobre la cabeza, 4-6 = el brazo estirado hacia delante con el gancho en la mano (lanzamiento), 7 = recoge el brazo, 8 = guardia. North: 0 = guardia, 1-2 = el brazo atrás, 3-6 = el brazo estirado recto hacia arriba con el gancho sobre la cabeza (lanzamiento), 7 = recoge, 8 = guardia. En ningún fotograma hay un gancho suelto: el gancho siempre está en la mano. Para el juego (parte 3, como el bumerán): 'impacto' 0, el gancho sale en el instante en que empieza 'attack', así que los fotogramas empiezan en el lanzamiento (brazo ya estirado) y acaban en la guardia; 'duracion' <= 0,85 s (ritmo 0,9). Sin 'boca': 'fogonazo' ni 'efectos' (como el bumerán, andando no hay gesto). PARTE 3 (2026-10-24): las otras 6 direcciones (1 generación cada una, todas a la primera, Johnny no se da la vuelta de espaldas y el gancho sigue siendo uno solo). Lienzos de partida: los mismos 8 del desintegrador (ids en 'subidas'). En el sur el gancho cuelga hacia abajo de la mano (fotogramas 4-6, el brazo estirado hacia el suelo con el gancho en la mano) y el 3 lleva el gancho y una cuerda larga colgando hasta debajo de los pies (no vale); en noreste el fotograma 2 y en noroeste el 3 llevan la cuerda estirada con el gancho lejos (~80 px, no vale: la cuerda larga la pone el juego); en sureste el 2 trae un trocito suelto (una raya) que no se usa. Se usan 5 fotogramas por dirección (arma.py exige los mismos en todas): [4,5,6,7,8] en las 8 (4-6 el brazo estirado con el gancho en la mano, 7 lo recoge, 8 la guardia), duracion 0,7 s (ritmo 0,9: cabe hasta 1,1 s). No hay ningún trozo suelto en los fotogramas elegidos (sueltos.py no encontró nada). Sin 'boca': 'fogonazo' ni 'efectos' en arma.json. BACKBLAZE CAÍDO otra vez: los fotogramas se bajaron del zip https://api.pixellab.ai/mcp/characters/<id>/spritesheet (con curl -A curl/8.4.0) y se recortaron con una ventana común por animación (bajar_zip.py), por eso tienen lienzos menores que los pedidos: east 72x59, north 52x78, south 55x120, south-east 104x88, west 78x60, south-west 59x60, north-east 113x92, north-west 82x81.",
    "animation_name": "lanzar-garfio",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
    "initial_pose": {
     "east": "standing facing right, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
-    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side"
+    "west": "standing facing left, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "south": "standing facing the camera, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "south-east": "standing in three-quarter front view, facing toward the camera and to the right, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "south-west": "standing in three-quarter front view, facing toward the camera and to the left, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "north-east": "standing in three-quarter back view, facing away from the camera and to the right, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "north-west": "standing in three-quarter back view, facing away from the camera and to the left, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side"
    },
    "action_description": "He throws the hook once. His right arm winds back for an instant, then he whips it forward, toward the right of the image, in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
    "east": {
     "group": "01a0dc43-2575-4481-ac93-5b81770f270a",
     "job": "9999c1e2-3a8a-4662-870d-5657426b89f4",
     "animation_name": "lanzar-garfio",
-    "cost": "1 generación"
+    "cost": "1 generación",
+    "animation_id": "5b7ec4da-583e-44d1-b26d-d9d85a6ba3b5"
    },
    "north": {
     "group": "36f280ec-f5ea-4476-aa98-c417b71034ad",
@@ -2716,7 +2723,8 @@
     "animation_name": "lanzar-garfio-norte",
     "cost": "1 generación",
     "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
-    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He throws the hook once, away from the camera, toward the top of the image. His right arm winds back for an instant, then he whips it forward and up past his head in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the hook raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He throws the hook once, away from the camera, toward the top of the image. His right arm winds back for an instant, then he whips it forward and up past his head in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the hook raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout.",
+    "animation_id": "59d56372-320f-44a9-babe-82695eaf20be"
    },
    "subidas": {
     "nota": "Lienzos de partida (y de llegada) subidos a PixelLab el 2026-10-24; caducan el 2026-10-27. Se subieron los 8 (los de las otras 6 direcciones se usan en la parte 3). Lienzo y posición de la postura (64x64): east 136x96 en (16,20); west 136x96 en (56,20); south 96x144 en (16,12); south-east 136x128 en (16,12); south-west 136x128 en (56,12); north 96x112 en (16,44); north-east 136x112 en (16,44); north-west 136x112 en (56,44).",
@@ -2729,7 +2737,206 @@
     "north-east": "f4e905eb-148f-4273-9e69-d39f08e0d42e",
     "north-west": "3b91d4a4-6354-40f5-aeea-564a5ddf7190"
    },
-   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+   "cost": "8 generaciones: 2 de la prueba (east y north, parte 2) y 6 de las otras direcciones (parte 3), todas a la primera",
+   "textos_por_direccion": {
+    "east": "He throws the hook once. His right arm winds back for an instant, then he whips it forward, toward the right of the image, in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-east": "He throws the hook once. His right arm winds back for an instant, then he whips it forward toward the lower right of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "west": "He throws the hook once. His right arm winds back for an instant, then he whips it forward in front of him, toward the left of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-west": "He throws the hook once. His right arm winds back for an instant, then he whips it forward in front of him, toward the lower left of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south": "He keeps facing the camera the whole time and never turns. He throws the hook once, straight toward the camera. His right arm winds back for an instant, then he whips it down and forward toward the bottom of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+    "north": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He throws the hook once, away from the camera, toward the top of the image. His right arm winds back for an instant, then he whips it forward and up past his head in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the hook raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout.",
+    "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He throws the hook once. His right arm winds back for an instant, then he whips it forward toward the upper right of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the hook raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He throws the hook once. His right arm winds back for an instant, then he whips it forward toward the upper left of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the hook raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "south": {
+    "group": "fa13f8ba-d707-480c-9e47-9212d8aabb1f",
+    "job": "f24338a1-42bc-44ed-ad8a-b4c289241ee8",
+    "animation_id": "15867d34-06e0-46bb-af31-f3b584cb6ace",
+    "animation_name": "lanzar-garfio-sur",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand"
+   },
+   "south-east": {
+    "group": "33db7ec3-de4d-4705-98b5-2d0d93195629",
+    "job": "60009891-dac2-464d-a7f8-e03eaff33a64",
+    "animation_id": "786dae84-cc6c-41de-b67c-c313206566e9",
+    "animation_name": "lanzar-garfio",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand"
+   },
+   "west": {
+    "group": "fca2f551-ceaa-4be2-8cea-0b53ec132ca8",
+    "job": "6875f2d7-e07a-4292-a886-73c6296acc7d",
+    "animation_id": "b93269a7-676c-4d5d-9aa9-cde0ddb73056",
+    "animation_name": "lanzar-garfio",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand"
+   },
+   "south-west": {
+    "group": "68ba3e8a-afe0-4da4-88e3-62ac18b8cf6c",
+    "job": "8f0ca9c3-f8ce-4975-b65d-58d9230d11b0",
+    "animation_id": "0e4a44b2-f4b4-49d6-9f4f-283713d6d4a8",
+    "animation_name": "lanzar-garfio",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand"
+   },
+   "north-east": {
+    "group": "baa9de27-2e81-4188-b4fc-7596fcf8c104",
+    "job": "c6d386e7-be7d-4366-a31c-e7efb8f78c12",
+    "animation_id": "5fe77b2f-2e14-4ae2-a91d-3951021fa09c",
+    "animation_name": "lanzar-garfio-ne",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand"
+   },
+   "north-west": {
+    "group": "c7713f27-1b77-464d-94d0-5ddf624908a2",
+    "job": "f9db9a21-2d4c-4ea8-8036-913ef7b0cda7",
+    "animation_id": "68c9be39-8fbf-4084-9b76-a8a629270a20",
+    "animation_name": "lanzar-garfio-no",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand"
+   },
+   "fotogramas_usados": {
+    "south": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "south-east": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "east": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "north-east": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "north": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "north-west": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "west": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "south-west": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   }
+  },
+  "andar": {
+   "nota": "Andar: PixMiniMax, 12 fotogramas más el de partida, sin fotograma de partida ni de llegada (las rotaciones de PixelLab son las mismas posturas del proyecto). Estilo del andar de la pistola, el lanzallamas, el supersoplete, el desintegrador, el bumerán y la pistola eléctrica ('he quietly carries ... The hook and the rope are silent and still ... Nothing else appears in the image'), sin nombrar lo que no se quiere ver. Texto común para south-east, east, west y south-west (mismo animation_group_id) y uno propio para south, north, north-east y north-west (de espaldas, el texto estricto). Salieron a la primera 6 de las 8 direcciones. NORTE-OESTE y SUR-OESTE tenían manchas negras sueltas (rizos de cuerda dibujados como una mancha negra en 2 fotogramas cada uno: noroeste 3 y 11, suroeste 4 y 6) y el suroeste no cerraba el ciclo (233 píxeles de diferencia): se repitieron con otra palabra y otro animation_name cada vez (1 generación cada toma): andar-garfio-no-2 ('even pace': mancha oscura en los fotogramas 2-4, ciclo [0,11] con 48 de diferencia, descartado), andar-garfio-so-2 ('easy pace': limpio pero cerraba mal, 196-359, descartado) y andar-garfio-so-3 ('leisurely pace' y 'the last pose flows back into the first one': limpio y ciclo [4,8] con 26 de diferencia, ESTE es el que se usa). El noroeste usa el noreste dado la vuelta ('andar.espejo': {'north-west': 'north-east'}; el gancho y el rollo de cuerda cambian de lado igual que en el dibujo quieto de noreste y noroeste), que es limpio y cierra con 17 de diferencia. Fotogramas en assets/sources/conserje-48-garfio/walk/<dirección>-<n>.png (bajados del zip, ver ataque.nota); las tomas descartadas, en descartes/walk-1 (noroeste y suroeste, primera toma) y descartes/walk-2 (segunda toma). Ciclos a mano (ciclos.py: [a, n] = fotogramas a..a+n-1; diferencias de 8 a 55): south [0,12], south-east [4,8], east [0,11], north-east [4,8], north [3,9], west [4,8], south-west [4,8] (toma 3), north-west = north-east en espejo. Zapatos negros con borde gris: 0-2 píxeles sueltos por fotograma, no hizo falta zapato_negro.py.",
+   "animation_name": "andar-garfio",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
+   "group": "6e2169fe-d88a-46c2-8017-bc17c1822575 (east, west, south-east, south-west; el suroeste se repitió, ver nota)",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the gray three-pronged steel hook in his raised right hand beside his shoulder in the same place the whole time, his elbow bent, and the coil of straw-colored rope in his left hand at his side. The hook and the rope are silent and still. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "south": {
+    "group": "ebc89380-740a-4f26-9045-2140d93791b9",
+    "job": "95d0327c-0505-417e-a9d4-f8c6bf2e4c54",
+    "animation_id": "b5301a31-9d20-4748-9a80-6387dc1e7a52",
+    "animation_name": "andar-garfio-sur",
+    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the gray three-pronged steel hook in his raised right hand beside his shoulder in the same place the whole time, his elbow bent, and the coil of straw-colored rope in his left hand at his side. The hook and the rope are silent and still. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "a1cd6c34-d502-4d2d-8875-0b85c74a4b45",
+    "job": "eb2274df-ad0c-4c6c-89b2-2b99e2b7be21",
+    "animation_id": "817075f3-62f5-4d12-a5de-a5941178ff0d",
+    "animation_name": "andar-garfio-norte",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
+    "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the gray three-pronged steel hook in his raised right hand beside his shoulder in the same place the whole time, and the coil of straw-colored rope in his left hand at his side. The hook and the rope are calm and still. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "north-east": {
+    "group": "9a82b3bf-5935-4c3d-abc3-dfaa14f32a14",
+    "job": "169aae8e-0fa2-41c6-9e19-c2a759a6e3e4",
+    "animation_id": "4984a81a-9498-4744-8a6e-4f1ea89a39f1",
+    "animation_name": "andar-garfio-ne",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the gray three-pronged steel hook in his raised right hand beside his shoulder in the same place the whole time, and the coil of straw-colored rope in his left hand at his side. The hook and the rope are calm and still. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "9a374df1-011e-40f0-a986-3f427f297a85",
+    "job": "d4016cd8-d239-4292-b3ef-4802c8858d78",
+    "animation_id": "6aead492-0041-4ef7-8b7a-ad93bfb1f722",
+    "animation_name": "andar-garfio-no",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the gray three-pronged steel hook in his raised right hand beside his shoulder in the same place the whole time, and the coil of straw-colored rope in his left hand at his side. The hook and the rope are calm and still. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "descartada": "manchas negras en los fotogramas 3 y 11; repetida y al final sustituida por el espejo del noreste"
+   },
+   "comunes": {
+    "east": "0e518110-9c04-41d0-9977-ce07caee1b1b",
+    "west": "30f0d4ca-6a56-4679-879a-68e55163034d",
+    "south-east": "61097f88-aa09-4a0a-855b-42aa7f7cd48b",
+    "south-west": "c4786687-e61c-43e0-af4b-5af3a7457fad (primera toma, descartada)"
+   },
+   "repeticiones": {
+    "north-west-2": {
+     "group": "5a3ee128-41ab-4f0f-9ccd-9809ee7d8f0d",
+     "job": "d280a5a1-bafe-4686-a79e-e3383680032d",
+     "animation_id": "ccb94950-2b62-44ba-804a-8d4bf86b0c39",
+     "animation_name": "andar-garfio-no-2",
+     "cambio": "'steady pace' -> 'even pace'",
+     "resultado": "mancha oscura en los fotogramas 2-4; descartada"
+    },
+    "south-west-2": {
+     "group": "0f68f3ed-f65d-4e33-8b5d-00a818771666",
+     "job": "c746e08e-2901-4c60-8198-873675f9fe56",
+     "animation_id": "70a796ea-fc98-485c-bec2-666de5cd62ac",
+     "animation_name": "andar-garfio-so-2",
+     "cambio": "'steady pace' -> 'easy pace'",
+     "resultado": "limpia pero el ciclo cerraba mal (196-359); descartada"
+    },
+    "south-west-3": {
+     "group": "249662b7-fb33-4a52-b8ee-cc223a006406",
+     "job": "29bfcab9-b965-4834-af6c-5b97ed6c03e2",
+     "animation_id": "d189e8b6-d97e-4572-94b1-a3c23e760c0d",
+     "animation_name": "andar-garfio-so-3",
+     "cambio": "'steady pace' -> 'leisurely pace' y '... and the last pose flows back into the first one'",
+     "resultado": "limpia y ciclo [4,8] con 26 de diferencia; es la que se usa"
+    }
+   },
+   "cost": "11 generaciones: 8 de las 8 direcciones a la primera y 3 de las repeticiones (noroeste una vez, suroeste dos)"
+  },
+  "casilla": {
+   "nota": "Medida con arma.py en una carpeta temporal con celda [256,256] y pivote [128,128] y medir.py (con los fotogramas elegidos): el gesto llega a 41 píxeles a la izquierda, 41 a la derecha, 68 hacia arriba (north, con el brazo estirado hacia arriba) y 12 hacia abajo (south, el gancho colgando); el andar, a 24, 26, 47 y 2. Con 4 de margen: celda [90,88], pivote [45,72] (hoja de 1800x2200, arma.py no avisa de ningún fotograma fuera de la casilla). 'pies' en CREADAS = Vector2(45, 72).",
+   "celda": [
+    90,
+    88
+   ],
+   "pivote": [
+    45,
+    72
+   ]
   }
  },
  "zombi-venenoso-48": {

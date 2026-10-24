@@ -1,0 +1,33 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con el garfio (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-garfio). El gancho que sale volando, la cuerda estirada y el zombi arrastrado los dibuja el juego (scripts/garfio.gd): la hoja solo lleva el GESTO de lanzar, con el gancho en la mano al volver a la guardia. Sin 'boca': 'fogonazo' (no hay fogonazo naranja que buscar): arma.py no escribe 'muzzle' y la boca (la mano que lanza) va a mano en armas.gd, sacada del dibujo quieto (rotations/<dirección>.png, respecto a los pies 32,55).",
+  "celda": [90, 88],
+  "pivote": [45, 72],
+  "andar": {
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. Van a mano, calculados mirando cuál se parece más el fotograma a+n al a (ciclos.py). El fotograma 0 es el dibujo quieto.",
+    "ciclo": {
+      "south": [0, 12],
+      "south-east": [4, 8],
+      "east": [0, 11],
+      "north-east": [4, 8],
+      "north": [3, 9],
+      "west": [4, 8],
+      "south-west": [4, 8]
+    },
+    "espejo": { "north-west": "north-east" }
+  },
+  "ataque": {
+    "nota": "Gesto de lanzar. El gancho sale en el instante en que empieza 'attack' (el juego no retrasa las armas a distancia), así que los fotogramas empiezan en el lanzamiento (el brazo ya estirado hacia delante), sin preparación, y acaban en la guardia con el gancho en la mano. Se evitan los fotogramas en que PixelLab dibujó la cuerda estirada con el gancho lejos (south 3, north-east 2, north-west 3). Sin 'boca': 'fogonazo' ni 'efectos'.",
+    "duracion": 0.7,
+    "impacto": 0,
+    "fotogramas": {
+      "south":      [4, 5, 6, 7, 8],
+      "south-east": [4, 5, 6, 7, 8],
+      "east":       [4, 5, 6, 7, 8],
+      "north-east": [4, 5, 6, 7, 8],
+      "north":      [4, 5, 6, 7, 8],
+      "north-west": [4, 5, 6, 7, 8],
+      "west":       [4, 5, 6, 7, 8],
+      "south-west": [4, 5, 6, 7, 8]
+    }
+  }
+}
