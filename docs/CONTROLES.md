@@ -76,7 +76,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   (`captura-skins-desbloqueo.png`), y una segunda vez ya no es nuevo; el Glotón cae y desbloquea el glotón
   (`captura-skins-desbloqueo-gloton.png`) y el Gymbro, el gymbro (`captura-skins-desbloqueo-gymbro.png`); en la
   taquilla se eligen (`captura-skins-taquilla.png`, `captura-skins-taquilla-gloton.png` y
-  `captura-skins-taquilla-gymbro.png`, esta ya puesta, para ver que su frase cabe con «Puesta» al lado), Johnny cambia
+  `captura-skins-taquilla-gymbro.png`, estas dos ya puestas, para ver que su frase cabe entera), Johnny cambia
   de hoja y se guarda; la vuelta de la tecla Z; la cara en las 8 direcciones y con las seis armas, al lado del
   conserje de siempre (`captura-skins-caras.png`, el portero, `captura-skins-caras-gloton.png` y
   `captura-skins-caras-gymbro.png`); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero

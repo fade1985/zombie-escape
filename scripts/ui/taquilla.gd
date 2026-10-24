@@ -14,7 +14,7 @@ var info: Label
 var vista: AnimatedSprite2D      # Johnny de frente, con la skin marcada
 var nombre_vista: Label
 var cartas := {}                 # id → su botón ("" = el conserje de siempre)
-var puestos := {}                # id → la etiqueta «Puesto» de su carta
+var puestos := {}                # id → la etiqueta «Puesta» de su carta (al lado del nombre)
 var hoja: SpriteFrames           # la hoja de la fregona de siempre (la vista enseña la de cada skin)
 var tenidos: Array = []          # las skins que se tienen (al abrir)
 var marcado := ""                # la skin que enseña la vista
@@ -137,7 +137,15 @@ func abrir(p: Node) -> void:
 		textos.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		textos.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_child(textos)
-		etiqueta(textos, "%d. %s" % [i + 1, Skins.nombre(id) if tiene(id) else "???"], 22)
+		# arriba, el nombre y, a su derecha, «Puesta» (en la línea del nombre, para que la frase tenga todo el ancho)
+		var cabecera := HBoxContainer.new()
+		cabecera.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		textos.add_child(cabecera)
+		var nombre := etiqueta(cabecera, "%d. %s" % [i + 1, Skins.nombre(id) if tiene(id) else "???"], 22)
+		nombre.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		puestos[id] = etiqueta(cabecera, "", 18)
+		puestos[id].add_theme_color_override("font_color", Tema.VERDE)
+		puestos[id].size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		var frase: String
 		if not tiene(id):
 			frase = "Aún no la tienes: " + Skins.LISTA[id].como.to_lower()
@@ -148,9 +156,6 @@ func abrir(p: Node) -> void:
 		var desc := etiqueta(textos, frase, 15)
 		desc.theme_type_variation = "Sub"
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		puestos[id] = etiqueta(dentro, "", 18)
-		puestos[id].add_theme_color_override("font_color", Tema.VERDE)
-		puestos[id].size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 	info = Label.new()
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

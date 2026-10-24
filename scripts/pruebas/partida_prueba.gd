@@ -1981,13 +1981,13 @@ func probar_skins() -> void:
 			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
 		print("Uno que no existe: ¿puesto? %s (esperado: false) · Johnny sigue con «%s»" % [taquilla.elegir("astronauta"),
 			johnny.skin])
+		# (las fotos del glotón y del gymbro, ya puestas: que su frase quepa también con «Puesta»)
 		taquilla.marcar("gloton")
+		taquilla.elegir("gloton")
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-skins-taquilla-gloton.png")
-		taquilla.elegir("gloton")
 		print("Elegido el glotón: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
 			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
-		# (la foto, ya puesta: que su frase quepa también con «Puesta» al lado)
 		taquilla.marcar("gymbro")
 		taquilla.elegir("gymbro")
 		await get_tree().create_timer(0.4).timeout
