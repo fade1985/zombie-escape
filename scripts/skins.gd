@@ -31,14 +31,15 @@
 #     El hachazo del jefe y las explosiones, sí le quitan
 class_name Skins
 
+# "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
 const LISTA := {
-	"portero": {"nombre": "El portero", "desc": "Pelo largo blanco, coleta y barba. La fregona hace un 300 % más de daño.",
+	"portero": {"nombre": "El portero", "efecto": "La fregona hace un 300 % más de daño.",
 		"como": "Mata a la portera por primera vez.", "jefe": "portera", "fregona": 4.0},
-	"gloton": {"nombre": "El glotón", "desc": "Calvo y todo boca. Quien te hace daño lo paga: un zombi muere y un jefe pierde un 10 % de vida.",
+	"gloton": {"nombre": "El glotón", "efecto": "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 10 % de vida.",
 		"como": "Mata al Glotón por primera vez.", "jefe": "gloton", "mordisco": 0.1},
-	"gymbro": {"nombre": "El gymbro", "desc": "Calvo y barbudo. Las armas cuerpo a cuerpo hacen un 200 % más de daño.",
+	"gymbro": {"nombre": "El gymbro", "efecto": "Las armas cuerpo a cuerpo hacen un 200 % más de daño.",
 		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 3.0},
-	"bombero": {"nombre": "El bombero", "desc": "Casco de bombero. Las armas que queman hacen un 200 % más de daño y el fuego no te quema.",
+	"bombero": {"nombre": "El bombero", "efecto": "Las armas que queman hacen un 200 % más de daño y el fuego no te quema.",
 		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 3.0, "ignifugo": true},
 }
 

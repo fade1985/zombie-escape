@@ -185,7 +185,8 @@
   va a la mano como al sacarla del baúl, y el fajo de billetes) y el logro «Caja fuerte». El estado, en
   `planta.joyeria` (lo crea `planta.gd`). Lo engancha `partida.gd` como los eventos (`preparar`, `al_montar`,
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
-- `skins.gd`: las skins de Johnny, que se desbloquean haciendo algo y se quedan para siempre: `LISTA` (nombre, frase,
+- `skins.gd`: las skins de Johnny, que se desbloquean haciendo algo y se quedan para siempre: `LISTA` (nombre, `efecto`
+  (lo que hace llevarla puesta, tal cual sale en la taquilla; cómo es por fuera, no: eso ya se ve en Johnny),
   cómo se consigue, `jefe`, el que la suelta, y su ventaja: `fregona`, por cuánto se multiplica su daño; `cuerpo`, lo
   mismo con todas las armas cuerpo a cuerpo; `mordisco`, lo que pierde el jefe que te hace daño; `quema`, por cuánto se
   multiplica el daño de las armas que queman; `ignifugo`, si el fuego no le hace nada), `puesta()` y `poner()` (el guardado, `skin`), `tenidas()` y `desbloquear()`
@@ -315,7 +316,9 @@
   `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `taquilla.gd`: la ventanita de la
   taquilla de Johnny (la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con la skin marcada
   (`marcar`: su hoja de la fregona; en silueta si aún no se tiene) y la lista para ponerse una (`elegir`:
-  `Skins.poner` y `johnny.vestir`), con la cara de cada una de icono (`assets/ui/iconos/skin-<id>.png`).
+  `Skins.poner` y `johnny.vestir`), con la cara de cada una de icono (`assets/ui/iconos/skin-<id>.png`) y, debajo del
+  nombre, su efecto (las que faltan, cómo se consiguen; el conserje, «Sin efecto especial»). Cada carta es un marco
+  con el botón detrás, que crece si la frase parte en dos líneas, y `igualar` las deja todas tan altas como la más alta.
 - `tele.gd`: la tele de las noticias, dibujada con código. `ambiente.gd`: viñeteado, pantalla roja con poca vida y escarcha con frío.
 - `botones.gd` (autoload): el saltito de los botones.
 

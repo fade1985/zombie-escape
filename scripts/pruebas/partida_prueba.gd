@@ -1874,7 +1874,7 @@ func probar_sala() -> void:
 
 
 # Con "--captura --skins": las skins de Johnny (skins.gd). En la sala de mantenimiento, sin ninguna skin:
-#   - sin desbloquear, la taquilla no deja ponérsela (y dice cómo se consigue)
+#   - sin desbloquear, la taquilla no deja ponérsela (y dice cómo se consigue; captura-skins-taquilla-sin.png)
 #   - la portera cae y desbloquea el portero (se guarda; no se pone sola), con su aviso (captura-skins-desbloqueo.png);
 #     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png), el Gymbro, el
 #     gymbro (captura-skins-desbloqueo-gymbro.png), y el jefe de bomberos, el bombero (captura-skins-desbloqueo-bombero.png)
@@ -1909,8 +1909,12 @@ func probar_skins() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
 	if taquilla.abierta():
+		var puesto: bool = taquilla.elegir("portero")
+		# (la foto con todas en «???»: que su pista quepa en la carta, también la larga del jefe de bomberos)
+		await get_tree().create_timer(0.2).timeout
+		Captura.foto("captura-skins-taquilla-sin.png")
 		print("Sin desbloquear: ¿puesto? %s (esperado: false) · Johnny lleva «%s» · dice «%s»" % [
-			taquilla.elegir("portero"), johnny.skin, taquilla.info.text])
+			puesto, johnny.skin, taquilla.info.text])
 		taquilla.cerrar()
 	johnny.position = Vector2(690, 300)   # (en el despacho)
 	johnny.direccion = "e"
@@ -2010,7 +2014,7 @@ func probar_skins() -> void:
 			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
 		print("Uno que no existe: ¿puesto? %s (esperado: false) · Johnny sigue con «%s»" % [taquilla.elegir("astronauta"),
 			johnny.skin])
-		# (las fotos del glotón y del gymbro, ya puestas: que su frase quepa también con «Puesta»)
+		# (las fotos del glotón, del gymbro y del bombero, ya puestas: que su efecto quepa también con «Puesta»)
 		taquilla.marcar("gloton")
 		taquilla.elegir("gloton")
 		await get_tree().create_timer(0.4).timeout

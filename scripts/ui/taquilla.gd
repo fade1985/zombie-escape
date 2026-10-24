@@ -1,9 +1,9 @@
 # La taquilla de Johnny, en el vestuario de la sala de mantenimiento (la pone mapa.gd): al arrimarse
 # (mapa/arrimable.gd → partida.abrir_taquilla) el juego se para y sale esta ventanita para elegir la skin
 # (skins.gd): a la izquierda, Johnny de frente con la skin marcada (en silueta si aún no se tiene), y a la derecha
-# la lista: el conserje de siempre y las skins, con su cara de icono; las que faltan, con «???» y cómo se
-# consiguen. Se elige una y Johnny se la pone en el acto, y se queda puesta (Skins.poner). Va con el ratón o el
-# dedo, con flechas e Intro (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
+# la lista: el conserje de siempre y las skins, con su cara de icono y lo que hacen puestas; las que faltan, con «???»
+# y cómo se consiguen. Se elige una y Johnny se la pone en el acto, y se queda puesta (Skins.poner). Va con el ratón
+# o el dedo, con flechas e Intro (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
 extends CanvasLayer
 
 const COLOR := Color("#9fd3ff")   # el color de la taquilla (el del título)
@@ -63,11 +63,6 @@ func abrir(p: Node) -> void:
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.add_theme_color_override("font_color", COLOR)
 	columna.add_child(titulo)
-	var sub := Label.new()
-	sub.theme_type_variation = "Sub"
-	sub.text = "«Las skins que has desbloqueado. La que te pongas se queda puesta»"
-	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	columna.add_child(sub)
 
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 18)
@@ -97,29 +92,37 @@ func abrir(p: Node) -> void:
 	nombre_vista.add_theme_color_override("font_color", COLOR)
 	lado.add_child(nombre_vista)
 
-	# la lista: una carta por skin, con su cara de icono (tools/cara.py), su nombre y su frase
+	# la lista: una carta por skin, con su cara de icono (tools/cara.py), su nombre y su efecto
 	var lista := VBoxContainer.new()
 	lista.add_theme_constant_override("separation", 6)
+	lista.sort_children.connect(igualar.bind(lista))
 	fila.add_child(lista)
 	var todos := ids()
 	for i in todos.size():
 		var id: String = todos[i]
+		# la carta crece con su frase (un botón no se agranda solo con lo que lleva dentro): en un marco, el botón
+		# detrás y lo de dentro encima, y el marco se hace tan alto como haga falta para que no se salga nada
+		var marco := PanelContainer.new()
+		marco.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+		lista.add_child(marco)
 		var carta := Button.new()
-		carta.custom_minimum_size = Vector2(440, 60)
+		carta.custom_minimum_size = Vector2(500, 60)
 		carta.pressed.connect(elegir.bind(id))
 		carta.focus_entered.connect(marcar.bind(id))
 		carta.mouse_entered.connect(marcar.bind(id))
-		lista.add_child(carta)
+		marco.add_child(carta)
 		cartas[id] = carta
+		var margen := MarginContainer.new()
+		margen.add_theme_constant_override("margin_left", 12)
+		margen.add_theme_constant_override("margin_right", 16)   # (que «Puesta» no se arrime al remache)
+		for borde in ["top", "bottom"]:
+			margen.add_theme_constant_override("margin_" + borde, 9)
+		margen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		marco.add_child(margen)
 		var dentro := HBoxContainer.new()
-		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
-		dentro.offset_left = 12
-		dentro.offset_right = -12
-		dentro.offset_top = 6
-		dentro.offset_bottom = -6
 		dentro.add_theme_constant_override("separation", 10)
 		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		carta.add_child(dentro)
+		margen.add_child(dentro)
 		var imagen := TextureRect.new()
 		imagen.texture = load("res://assets/ui/iconos/skin-%s.png" % ("conserje" if id == "" else id))
 		imagen.custom_minimum_size = Vector2(32, 32)
@@ -146,16 +149,17 @@ func abrir(p: Node) -> void:
 		puestos[id] = etiqueta(cabecera, "", 18)
 		puestos[id].add_theme_color_override("font_color", Tema.VERDE)
 		puestos[id].size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		# debajo, lo que hace llevarla puesta (las que faltan, cómo se consiguen); parte las líneas y la carta crece
 		var frase: String
 		if not tiene(id):
 			frase = "Aún no la tienes: " + Skins.LISTA[id].como.to_lower()
 		elif id == "":
-			frase = "El de siempre: peto vaquero, camisa crema y pañuelo rojo."
+			frase = "Sin efecto especial."
 		else:
-			frase = Skins.LISTA[id].desc
-		var desc := etiqueta(textos, frase, 15)
-		desc.theme_type_variation = "Sub"
-		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			frase = Skins.LISTA[id].efecto
+		var efecto := etiqueta(textos, frase, 15)
+		efecto.theme_type_variation = "Sub"
+		efecto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 	info = Label.new()
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -177,6 +181,17 @@ func abrir(p: Node) -> void:
 	panel.scale = Vector2(0.9, 0.9)
 	panel.resized.connect(func(): panel.pivot_offset = panel.size / 2.0)
 	panel.create_tween().tween_property(panel, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+# Todas las cartas tan altas como la más alta (la de la frase más larga), para que la lista quede pareja. Se mira lo
+# que pide lo de dentro de cada una (no la carta, que ya lleva el alto igualado) y se repite cada vez que se recoloca
+func igualar(lista: VBoxContainer) -> void:
+	var alto := 0.0
+	for marco in lista.get_children():
+		for hijo in marco.get_children():
+			alto = maxf(alto, hijo.get_combined_minimum_size().y)
+	for marco in lista.get_children():
+		marco.custom_minimum_size.y = alto
 
 
 func etiqueta(padre: Container, texto: String, tamano: int) -> Label:

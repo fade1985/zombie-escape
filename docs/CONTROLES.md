@@ -72,12 +72,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   la vitrina del premio dentro (`captura-joyeria-premio.png`) y lo que pasa al pisarla, el guardia que suelta la
   tarjeta dorada junto a la suya (`captura-joyeria-dorada.png`) y la apertura con ella.
 - `--skins`: en vez de la prueba larga, la de las skins de Johnny (`skins.gd`), en la sala de mantenimiento y sin
-  ninguna: la taquilla no deja ponerse el portero sin tenerlo; la portera cae y lo desbloquea, con su aviso
+  ninguna: la taquilla no deja ponerse el portero sin tenerlo (`captura-skins-taquilla-sin.png`, todas con «???» y
+  su pista); la portera cae y lo desbloquea, con su aviso
   (`captura-skins-desbloqueo.png`), y una segunda vez ya no es nuevo; el Glotón cae y desbloquea el glotón
   (`captura-skins-desbloqueo-gloton.png`), el Gymbro, el gymbro (`captura-skins-desbloqueo-gymbro.png`), y el jefe
   de bomberos, el bombero (`captura-skins-desbloqueo-bombero.png`); en la taquilla se eligen
   (`captura-skins-taquilla.png` y `captura-skins-taquilla-<id>.png` del glotón, el gymbro y el bombero, estas ya
-  puestas, para ver que su frase cabe entera), Johnny cambia de hoja y se guarda; la vuelta de la tecla Z; la cara
+  puestas, para ver que su efecto cabe entero), Johnny cambia de hoja y se guarda; la vuelta de la tecla Z; la cara
   en las 8 direcciones y con las seis armas, al lado del conserje de siempre (`captura-skins-caras.png`, el
   portero, y `captura-skins-caras-<id>.png`, las demás); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero
   (y el del bate, igual), contado y con un golpe de verdad; el del gymbro, × 3 con la fregona, el bate, el cuchillo y
@@ -238,8 +239,8 @@ En el suelo, manchas de sangre.
 - En el despacho, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
   armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
   bestiario).
-- En el vestuario, la **taquilla** de Johnny: arrimarse para elegir la skin (las que ya hayas desbloqueado; las
-  demás salen con «???» y cómo se consiguen; la que te pongas se queda puesta). **El portero**: se desbloquea la
+- En el vestuario, la **taquilla** de Johnny: arrimarse para elegir la skin (las que ya hayas desbloqueado, cada una
+  con lo que hace puesta; las demás salen con «???» y cómo se consiguen; la que te pongas se queda puesta). **El portero**: se desbloquea la
   primera vez que matas a la portera; pelo largo blanco con coleta y barba, y la fregona hace un 300 % más de daño.
   **El glotón**: se desbloquea la primera vez que matas al Glotón; calvo y con la cara hecha una boca llena de
   dientes, y quien te hace daño lo paga («¡ÑAM!»): un zombi muere al momento y un jefe pierde un 10 % de su vida
