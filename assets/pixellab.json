@@ -1876,9 +1876,9 @@
    },
    "cost": "2 generaciones (1 por dirección), a la primera"
   },
-  "cost_total": "24 generaciones hasta ahora (partes 1 y 2): 20 de los dos estados (la A, descartada), 2 de las posturas de south y north y 2 del disparo de prueba (east y north)",
+  "cost_total": "44 generaciones hasta la parte 3: 20 de los dos estados (la A, descartada), 2 de las posturas de south y north, 14 del disparo (2 de prueba, 6 de las otras direcciones, 4 de repetir las cortadas y 2 de una tercera toma) y 8 del andar",
   "ataque": {
-   "nota": "Disparo de prueba (parte 2, 2026-10-24): retroceso fuerte de escopeta y una llamarada EN CONO ANCHO que sale de la boca acampanada (empieza pequeña, se abre, se apaga en un abanico y deja unas brasas), sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo de 96x96 como fotograma de partida y de llegada (arma.py --lienzos: lienzo_ataque por defecto, 96x96 con la postura en 16,20). Fotogramas en assets/sources/conserje-48-supersoplete/ataque/. East y north salieron a la primera. PixelLab devuelve lienzos de 100x96 (east) y 96x96 (north). El disparo es a ritmo 2: puede durar hasta 0,475 s; se usan 6 fotogramas (east [2..7], north [1..6]) y duracion 0,45.",
+   "nota": "Disparo: retroceso fuerte de escopeta y una llamarada naranja y amarilla que sale de la boca acampanada (empieza pequeña, se abre, se apaga en un abanico y deja unas brasas rojas), sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada (arma.py --lienzos: 96x96 con la postura en 16,20; ver 'lienzos_grandes'). Fotogramas en assets/sources/conserje-48-supersoplete/ataque/. Las 8 direcciones salieron mirando bien (2026-10-24), ninguna con la llama hacia atrás: east y north en la parte 2; las otras 6 en la parte 3 (en west y south-west se añadió 'in front of him' y a qué lado de la imagen va; en north-east y north-west, el texto estricto de espaldas). PROBLEMA: con el lienzo de 96x96 la llamarada de south, west, south-west y north-west salía CORTADA EN SECO por el borde del lienzo de PixelLab (el dibujo llegaba exactamente hasta ese borde: x=20 por la izquierda, y abajo en south): se repitieron con un lienzo más grande por ese lado (ver 'lienzos_grandes', 1 generación cada una, a la primera) y ya no se corta. Las primeras tomas cortadas, en descartes/ataque-llama-cortada/. En south y west se repitió una tercera vez pidiendo una llamarada 'only about as long as the barrel itself': no la acortó (el sur sale igual de largo, 70 px), así que no sirve el texto para controlar el largo; en west se prefirió la tercera toma (llama en cometa pegada a la boquilla; la segunda, en descartes/ataque-oeste-2/, era una bola redonda despegada) y en south la segunda (la llama crece de 30 a 70 px, la tercera sale entera desde el primer fotograma). El largo de la llamarada varía: este 23 px, sur 70 px, oeste 50 px. Se usan 6 fotogramas por dirección (el disparo dura 0,45 s, ritmo 2): south [3..8], south-east [2..7], east [2..7], north-east [3..8], north [1..6], north-west [2..7], west [2..7], south-west [2..7] (la llamarada empieza en el primero).",
    "animation_name": "disparo-supersoplete",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade blowtorch with both hands",
    "initial_pose": {
@@ -1918,7 +1918,151 @@
     "north-east": "cf150a0b-a22d-435a-8a45-5385099b53bd",
     "north-west": "02db0091-8bf6-4949-b27d-3d30d4dccd56"
    },
-   "cost": "2 generaciones (1 por dirección), a la primera"
+   "cost": "14 generaciones: 2 de la prueba (east y north), 6 de las otras direcciones (parte 3), 4 de repetir south, west, south-west y north-west con un lienzo mayor (la llamarada salía cortada) y 2 de una tercera toma de south y west (no acortó la llamarada)",
+   "textos_por_direccion": {
+    "east": "He fires one single blast with the blowtorch. The blowtorch kicks back hard with a heavy recoil like a shotgun: the barrel and the yellow gas tank jerk back, his arms and upper body rock back, while his feet stay planted and he keeps aiming in exactly the same direction. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He brings the barrel back level and settles cleanly into the starting two-handed aiming stance. Only one blast, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-east": "He fires one single blast with the blowtorch. The blowtorch kicks back hard with a heavy recoil like a shotgun: the barrel and the yellow gas tank jerk back, his arms and upper body rock back, while his feet stay planted and he keeps aiming in exactly the same direction. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle toward the lower right of the image for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He brings the barrel back level and settles cleanly into the starting two-handed aiming stance. Only one blast, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "west": "He fires one single blast with the blowtorch. The blowtorch kicks back hard with a heavy recoil like a shotgun: the barrel and the yellow gas tank jerk back, his arms and upper body rock back, while his feet stay planted and he keeps aiming in exactly the same direction. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle in front of him, toward the left of the image for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He brings the barrel back level and settles cleanly into the starting two-handed aiming stance. Only one blast, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-west": "He fires one single blast with the blowtorch. The blowtorch kicks back hard with a heavy recoil like a shotgun: the barrel and the yellow gas tank jerk back, his arms and upper body rock back, while his feet stay planted and he keeps aiming in exactly the same direction. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle in front of him, toward the lower left of the image for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He brings the barrel back level and settles cleanly into the starting two-handed aiming stance. Only one blast, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south": "He keeps facing the camera the whole time and never turns. He fires one single blast with the blowtorch straight down the image. The blowtorch kicks back hard like a shotgun: his hands jerk up and his shoulders rock, while his feet stay planted. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle straight down toward the bottom of the image for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He settles cleanly into the starting hip-fire stance. Only one blast, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+    "north": "Strict back view the whole time: we only ever see the back of his head and the back of his overalls; he never turns around and his face is never visible. He fires one single blast with the blowtorch away from the camera, toward the top of the image. The blowtorch kicks back hard like a shotgun: his shoulders and elbows jerk back, while his feet stay planted. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle for an instant, straight up above his right shoulder, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He settles cleanly into the starting stance, still seen from behind. Only one blast. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout.",
+    "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He fires one single blast with the blowtorch. The blowtorch kicks back hard like a shotgun: his shoulders and elbows jerk back, while his feet stay planted. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle toward the upper right of the image for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He settles cleanly into the starting stance, still seen from behind. Only one blast. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He fires one single blast with the blowtorch. The blowtorch kicks back hard like a shotgun: his shoulders and elbows jerk back, while his feet stay planted. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle toward the upper left of the image for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He settles cleanly into the starting stance, still seen from behind. Only one blast. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "nota": "Textos de la primera toma de cada dirección (los de south, west, south-west y north-west de la segunda toma llevan además 'about as long as his arm' tras 'for an instant'; los de south y west de la tercera, 'short, stubby, wide cone ... only about as long as the barrel itself')."
+   },
+   "south": {
+    "group": "78fa7179-31fa-4be0-8db9-a0bae5d7196e",
+    "animation_id": "8af004a0-3551-4d78-8e8e-85ebdf9909b4",
+    "animation_name": "disparo-supersoplete-sur-2",
+    "cost": "1 generación",
+    "nota": "USADA (2ª toma, lienzo 96x144). La 1ª (group 53f6e15c-738b-4e17-82af-f6e731b972c9, id 962fe0fa-9af1-429f-8c90-d2e8f7ccd6e4, lienzo 96x96) salía cortada abajo; la 3ª (group 8a1a3798-9d4f-4fc2-91d6-4c4353a46e39, id 5a9f5280-f153-4106-9828-02fecd589893, 'disparo-supersoplete-sur-3') igual de larga, descartada."
+   },
+   "south-east": {
+    "group": "b0afc11f-27ec-4167-a8c9-3bd7be528dca",
+    "animation_id": "8b41c216-f18b-48f6-888d-cdc41f78d9e9",
+    "animation_name": "disparo-supersoplete-sureste",
+    "cost": "1 generación"
+   },
+   "north-east": {
+    "group": "1662eb09-3b1d-437c-9eb1-e35008aeacfd",
+    "animation_id": "43340861-02d5-4151-9d10-4771a5873e72",
+    "animation_name": "disparo-supersoplete-noreste",
+    "cost": "1 generación"
+   },
+   "north-west": {
+    "group": "340512c7-09e8-4826-a639-e89c0aa928d0",
+    "animation_id": "730304c4-589a-42c6-b3d1-31c44df15312",
+    "animation_name": "disparo-supersoplete-noroeste-2",
+    "cost": "1 generación",
+    "nota": "USADA (2ª toma, lienzo 136x112). La 1ª (group 17caedbf-77b7-4a11-95e8-07e9739902d8, id 8c40dea5-daf4-480c-a39e-f2aff1f62ee2, lienzo 96x96) salía cortada a la izquierda."
+   },
+   "west": {
+    "group": "d54a87b7-2fce-4a22-8b94-de2a93631b53",
+    "animation_id": "c425adf4-f8ec-4f86-b477-6fe5e87d12e3",
+    "animation_name": "disparo-supersoplete-oeste-3",
+    "cost": "1 generación",
+    "nota": "USADA (3ª toma, lienzo 136x96). La 1ª (group 06288128-9046-4034-af0b-6127f652e9d0, id 0050aa10-3144-491f-84ec-60c954b9efcb) salía cortada a la izquierda; la 2ª (group f9d17acf-af0c-48f6-94a4-954ab513d644, id d3f775c0-55c1-4eae-a56a-3636b0340663, 'disparo-supersoplete-oeste-2') era una bola redonda despegada de la boquilla."
+   },
+   "south-west": {
+    "group": "8fa83ce5-6549-416a-94cc-e99f95c1ebe6",
+    "animation_id": "e8c34b65-3f00-4ee7-b4a8-c4326c027a5c",
+    "animation_name": "disparo-supersoplete-suroeste-2",
+    "cost": "1 generación",
+    "nota": "USADA (2ª toma, lienzo 136x128). La 1ª (group 99c75830-769a-486f-a996-2e8608d9cb82, id f31645bf-598a-425f-aad2-a6228a19c366, lienzo 96x96) salía cortada a la izquierda."
+   },
+   "lienzos_grandes": {
+    "nota": "Lienzos de partida (y de llegada) hechos a mano con la postura pegada en (x, y) dentro de un lienzo mayor, para que la llamarada no se corte; subidos a PixelLab, caducan el 2026-10-27.",
+    "south": {
+     "lienzo": [
+      96,
+      144
+     ],
+     "postura_en": [
+      16,
+      12
+     ],
+     "upload": "4d394de4-edf8-4099-b498-0114f8f0957d"
+    },
+    "west": {
+     "lienzo": [
+      136,
+      96
+     ],
+     "postura_en": [
+      56,
+      20
+     ],
+     "upload": "226a9a04-1608-4040-b341-f3ef3d01ce2e"
+    },
+    "south-west": {
+     "lienzo": [
+      136,
+      128
+     ],
+     "postura_en": [
+      56,
+      20
+     ],
+     "upload": "c3a56754-6b3a-422b-84ad-666e2b59cbd8"
+    },
+    "north-west": {
+     "lienzo": [
+      136,
+      112
+     ],
+     "postura_en": [
+      56,
+      36
+     ],
+     "upload": "c6fffc77-f650-4d2c-a3f9-43a54b7dc9de"
+    }
+   }
+  },
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida, 1 generación por dirección (8 en total), en cinco llamadas: común para south-east, east, west y south-west (sin fotograma de partida: se usa la rotación del estado); south y north con la postura NUEVA como fotograma de partida (lienzos 64x80 y 64x76 subidos); north-east y north-west con el texto estricto de espaldas. Estilo del andar de la pistola: sin nombrar lo que no se quiere ver ('It stays idle ... Nothing else appears in the image'). Los 8 salieron a la primera (2026-10-24): ninguno de perfil, sin llamaradas coladas, la bombona amarilla siempre a la vista. Fotogramas en assets/sources/conserje-48-supersoplete/walk/. Zapatos negros con borde gris: ninguno. Ciclos a mano en arma.json (ciclos.py): south [4,8], south-east [3,9], east [4,8], north-east [1,9], north [0,12], north-west [0,11], west [1,11], south-west [4,8] (diferencias de 13 a 89 píxeles).",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade blowtorch with both hands",
+   "subject_description_norte": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade blowtorch with both hands",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the blowtorch with both hands in the same two-handed stance the whole time, the short thick barrel held steady pointing forward in the same place, the yellow gas tank only swaying slightly with each step, and the small pilot flame in the nozzle burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "comun": {
+    "group": "d02df17f-2551-4677-88a1-238b42a50a7e",
+    "animation_name": "andar-supersoplete",
+    "east": "4684580e-acac-484c-8112-d18103f9a772",
+    "west": "89e3bc43-d019-4c75-bf47-dc71237279fb",
+    "south-east": "8b29a66c-ec15-4776-81fb-1cecec4270d7",
+    "south-west": "4675d400-d2bc-4824-b79c-2dad88a9ad49",
+    "cost": "4 generaciones (2 llamadas: east y west; south-east y south-west añadidas al mismo grupo)"
+   },
+   "south": {
+    "group": "b184d8d2-7d81-484c-9831-e53bfb2f6888",
+    "animation_id": "3a07b46e-4e8a-48e5-b11c-a76092187c8c",
+    "animation_name": "andar-supersoplete-sur",
+    "upload": "bcc2fa79-ef2e-4df8-bc08-d06541ef4b2c (partida: la postura nueva de south, 64x80, caduca el 2026-10-27)",
+    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the blowtorch low in front of his belly with both hands in a hip-fire stance, the short thick barrel hanging straight down in front of him, the yellow gas tank only swaying slightly with each step, and the small pilot flame in the nozzle burning steadily. It stays idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "5f417d56-263c-4a88-a047-996bcded70e3",
+    "animation_id": "1f782b71-3bd9-458e-ba33-2f8facd60853",
+    "animation_name": "andar-supersoplete-norte",
+    "upload": "ae70d608-e6cd-4ec2-8c9b-210ef9dd2e63 (partida: la postura nueva de north, 64x76, caduca el 2026-10-27)",
+    "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the blowtorch in front of him in the same two-handed stance the whole time, only the short thick barrel sticking straight up above his right shoulder, held steady in the same place, with the small pilot flame in the nozzle burning steadily. The blowtorch is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation.",
+    "cost": "1 generación"
+   },
+   "north-east": {
+    "group": "8f14e214-0589-4aa3-bc3a-321bbb584aff",
+    "animation_id": "e892bd7b-5073-4da6-adb2-f182ef238f3a",
+    "animation_name": "andar-supersoplete-noreste",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the blowtorch in the same two-handed stance the whole time, the short thick barrel pointing up and to the right of the image, held steady in the same place, with the small pilot flame in the nozzle burning steadily. The blowtorch is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "cost": "1 generación"
+   },
+   "north-west": {
+    "group": "9fa11c7b-f93c-405a-9160-f88849250d81",
+    "animation_id": "55b2a109-b669-4f59-a91d-20e9044dcc8e",
+    "animation_name": "andar-supersoplete-noroeste",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the blowtorch in the same two-handed stance the whole time, the short thick barrel pointing up and to the left of the image, held steady in the same place, with the small pilot flame in the nozzle burning steadily. The blowtorch is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "cost": "1 generación"
+   },
+   "cost": "8 generaciones, todas a la primera"
   }
  },
  "zombi-venenoso-48": {
