@@ -80,8 +80,9 @@ const DATOS := {
 # punta) y el bate helado (conserje-48-bate-helado: el barrido del bate con la cabeza cubierta de escarcha, estela blanca
 # y azul clara con copos y cristalitos) y el látigo eléctrico (conserje-48-latigo-electrico: el latigazo con el cable
 # negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
-# (conserje-48-lanzallamas: la pistola de agua con el depósito rojo de gas, un tubo largo y la llamarada de la boca),
-# con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# (conserje-48-lanzallamas: la pistola de agua con el depósito rojo de gas, un tubo largo y la llamarada de la boca) y el
+# supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
+# la boca acampanada y una llamarada en cono), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -118,8 +119,15 @@ const CREADAS := {
 		"empuje": 0.3, "efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
 		"boca": {"s": Vector2(-1, 22), "se": Vector2(32, -8), "e": Vector2(34, -26), "ne": Vector2(32, -46),
 			"n": Vector2(11, -51), "no": Vector2(-32, -49), "o": Vector2(-30, -21), "so": Vector2(-34, 1)}},
+	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el
+	# juego, armas_creadas.gd); la casilla es de 144x152, con los pies en 72,72, porque la llamarada llega a 69 píxeles a un
+	# lado y 77 hacia abajo. La boca NO es la que calcula arma.py (el centro de la llamarada, que cae a 40-50 píxeles de la
+	# boquilla): es el piloto del dibujo quieto, a mano (conserje-48-supersoplete.json, "muzzle", tiene los mismos valores)
 	"supersoplete": {"base": "escopeta", "perdigones": 1, "ritmo": 2.0, "alcance": 100.0, "velocidad": 300.0, "cargador": 12,
-		"recarga": 2.2, "cartucho": false, "empuje": 1.0, "efecto": "cono", "detalle": Color("#ffd23f"), "sube": true},
+		"recarga": 2.2, "cartucho": false, "empuje": 1.0, "efecto": "cono", "pies": Vector2(72, 72),
+		"hoja": preload("res://assets/sprites/conserje-48-supersoplete.tres"),
+		"boca": {"s": Vector2(-2, 10), "se": Vector2(25, -22), "e": Vector2(26, -31), "ne": Vector2(24, -41),
+			"n": Vector2(10, -52), "no": Vector2(-25, -40), "o": Vector2(-27, -30), "so": Vector2(-26, -22)}},
 	"desintegrador": {"base": "pistola", "ritmo": 12.0, "alcance": 220.0, "velocidad": 400.0, "cargador": 50, "recarga": 2.0,
 		"empuje": 0.2, "efecto": "acido", "detalle": Color("#c7e04a")},
 	"bumeran": {"base": "pistola", "ritmo": 1.0, "alcance": 300.0, "velocidad": 460.0, "cargador": 1, "recarga": 0.0,

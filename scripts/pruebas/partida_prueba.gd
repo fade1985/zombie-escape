@@ -35,6 +35,10 @@
 #   --lanzallamas  el lanzallamas (la primera creada a distancia con dibujo propio): su icono, su hoja con la llamarada en la
 #                  boca del tubo, sin chispitas, que el chorro quita vida y prende al zombi que tiene delante y no llega al
 #                  lejano, el disparo en las 8 direcciones y con las 4 skins (Armas.CREADAS.lanzallamas)
+#   --supersoplete el supersoplete (la segunda creada a distancia con dibujo propio): su icono, su hoja con la llamarada en
+#                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
+#                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
+#                  (Armas.CREADAS.supersoplete)
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -157,6 +161,9 @@ func empezar_prueba() -> void:
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
+	elif "--supersoplete" in args:
+		set_process(false)   # sin la prueba larga
+		probar_supersoplete()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3326,6 +3333,91 @@ func probar_lanzallamas() -> void:
 		Captura.foto("captura-lanzallamas-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-lanzallamas-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.6).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --supersoplete": el supersoplete con su dibujo propio (Armas.CREADAS.supersoplete, conserje-48-supersoplete: la
+# hoja lleva el retroceso de escopeta y la llamarada en cono de la boca acampanada del soplete; casilla de 144x152, con los pies
+# en 72,72; recetas.gd, su icono). Como el lanzallamas, en la sala de mantenimiento, con dos en el baúl (una guardada antes de
+# que tuviera icono propio, con el del spray), Johnny se arrima al baúl y cuenta el icono de cada una
+# (captura-supersoplete-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya
+# no le salen chispitas; dispara a un zombi a 60 a su izquierda (le quita vida y lo prende) con otro a 260 en la misma línea
+# (más lejos de lo que llega el cono: ni se entera), con una foto justo con la llamarada y las gotas saliendo
+# (captura-supersoplete-chorro.png) y cuenta cuántas balas gasta (una por disparo). Luego dispara en las 8 direcciones, con
+# una foto de cada una en el fotograma de la llamarada grande (captura-supersoplete-<dirección>.png): la llama del dibujo y las
+# gotas tienen que salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
+# (captura-supersoplete-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_supersoplete() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("supersoplete", "azul")
+	vieja.icono = "spray"   # como las que se crearon antes de que el supersoplete tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("supersoplete", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"supersoplete\", \"supersoplete\"]) · en el banco «%s» (esperado: supersoplete)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("supersoplete")])
+	Captura.foto("captura-supersoplete-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, su boca y sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Supersoplete en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-supersoplete.tres, 2, 100, (72, 72), (26, -31), false, supersoplete)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+
+	# el cono: sale de la boca hacia la izquierda, le quita vida al primero (a 60) y lo prende; el segundo, a 260, queda
+	# fuera de su alcance (100 desde la boca, que está a 54 de Johnny)
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-60, 0), Vector2(-260, 0)])
+	await get_tree().process_frame
+	var balas0: int = johnny.balas
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.19).timeout
+	Captura.foto("captura-supersoplete-chorro.png")
+	await get_tree().create_timer(0.5).timeout
+	print("Cono a 60: vida del zombi %d (esperado: menos de 500) · ardiendo %s (esperado: true)" % [z[0].vida, z[0].arder_t > 0.0])
+	print("Zombi a 260: vida %d · ardiendo %s (esperado: 500 y false)" % [z[1].vida, z[1].arder_t > 0.0])
+	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
+	zombis_de_prueba([])
+	await get_tree().create_timer(0.3).timeout
+
+	# las 8 direcciones, con una foto en la llamarada grande (el disparo dura 0,46 s, 6 fotogramas: el 3º, a los 0,19 s)
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.19).timeout
+		Captura.foto("captura-supersoplete-%s.png" % d)
+		await get_tree().create_timer(0.7).timeout
+
+	# con cada skin: su hoja del supersoplete
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.19).timeout
+		Captura.foto("captura-supersoplete-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-supersoplete-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.7).timeout
 
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = antes.baul_armas

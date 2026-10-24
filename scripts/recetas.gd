@@ -11,11 +11,12 @@
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico y el lanzallamas ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png,
-#              partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png y lanzallamas.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              eléctrico, el lanzallamas y el supersoplete ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
+#              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
+#              latigo_electrico.png, lanzallamas.png y supersoplete.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
-#              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py e icono_lanzallamas.py). Se lee siempre de
+#              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py e
+#              icono_supersoplete.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
@@ -39,7 +40,7 @@ const LISTA := {
 		"desc": "Chorro de fuego corto con depósito; prende fuego", "edificio": "apartamentos"},
 	"partecuerpos": {"nombre": "Partecuerpos", "con": ["bate", "cuchillas"], "hueco": "cuerpo", "icono": "partecuerpos", "dano": 22,
 		"desc": "Golpe en arco ancho que hace sangrar", "edificio": "apartamentos"},
-	"supersoplete": {"nombre": "Súpersoplete", "con": ["spray", "mechero"], "hueco": "fuego", "icono": "spray", "dano": 7,
+	"supersoplete": {"nombre": "Súpersoplete", "con": ["spray", "mechero"], "hueco": "fuego", "icono": "supersoplete", "dano": 7,
 		"desc": "Llamarada en cono, muy corta y muy fuerte", "edificio": "apartamentos"},
 	"desintegrador": {"nombre": "Desintegrador", "con": ["pistola_agua", "lejia"], "hueco": "fuego", "icono": "lejia", "dano": 3,
 		"desc": "Chorro de ácido: daño continuo y charco ácido", "edificio": "apartamentos"},
