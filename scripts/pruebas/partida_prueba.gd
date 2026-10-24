@@ -21,7 +21,9 @@
 #                  y con las 4 skins (Armas.CREADAS.partecuerpos)
 #   --inmovilizadora lo mismo con la inmovilizadora: su icono, su hoja, el golpe (que aturde y salta a otro zombi) en las
 #                  8 direcciones y con las 4 skins (Armas.CREADAS.inmovilizadora)
-#   --ascensor    el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
+#   --latigo       lo mismo con el látigo escorpión: su icono, su hoja, el golpe (a 110 de alcance, que envenena) en las
+#                  8 direcciones y con las 4 skins (Armas.CREADAS.latigo)
+#   --ascensor   el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
@@ -125,6 +127,9 @@ func empezar_prueba() -> void:
 	elif "--inmovilizadora" in args:
 		set_process(false)   # sin la prueba larga
 		probar_inmovilizadora()
+	elif "--latigo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_latigo()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -2799,6 +2804,85 @@ func probar_inmovilizadora() -> void:
 		await get_tree().create_timer(0.13).timeout
 		Captura.foto("captura-inmovilizadora-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-inmovilizadora-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --latigo": el látigo escorpión con su dibujo propio (Armas.CREADAS.latigo, conserje-48-latigo, de casilla
+# más grande: pies en 72,88; recetas.gd, su icono). Como la de la inmovilizadora: en la sala de mantenimiento, con dos en
+# el baúl (una guardada antes de que tuviera icono propio, con el de la cuerda), Johnny se arrima al baúl y cuenta el
+# icono de cada una (captura-latigo-baul.png). Saca una y cuenta su hoja, su momento del golpe, sus pies y que ya no le
+# salen chispitas; le da a un zombi a 100 a su izquierda (más lejos de lo que llega el cuchillo, que son 46: le quita
+# vida y lo deja envenenado: la herida de armas_creadas.gd) y luego ataca en las 8 direcciones, con una foto de cada
+# una justo en el golpe (captura-latigo-<dirección>.png). Con cada skin (portero, glotón, gymbro y bombero), su hoja y
+# una foto (captura-latigo-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_latigo() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("latigo", "azul")
+	vieja.icono = "cuerda"   # como las que se crearon antes de que el látigo tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("latigo", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"latigo\", \"latigo\"]) · en el banco «%s» (esperado: latigo)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("latigo")])
+	Captura.foto("captura-latigo-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Látigo en la mano: hoja «%s» · momento %.3f · alcance %.0f · pies %s · chispitas %s · icono «%s» (esperado: conserje-48-latigo.tres, 0.333, 110, (72, 88), false, latigo)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.alcance, w.pies, w.has("detalle"), Objetos.icono(id)])
+
+	# el golpe llega en su fotograma (a los 0,08 s: 0,2375 × 0,333), le quita vida a 100 (más que el cuchillo) y lo envenena
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-100, 0)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.2).timeout
+	var vida_golpe: int = z[0].vida
+	print("Golpe a 100: vida del zombi %d (esperado: menos de 500) · envenenado %s (esperado: true)" % [
+		vida_golpe, z[0].get_node_or_null("herida_veneno") != null])
+	await get_tree().create_timer(1.0).timeout
+	print("Un segundo después: vida del zombi %d (esperado: menos de %d, por el veneno)" % [z[0].vida, vida_golpe])
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-latigo-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con cada skin: su hoja del látigo
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-latigo-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-latigo-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.5).timeout
 
 	Guardado.cambiar(func(g2):

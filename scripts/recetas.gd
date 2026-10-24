@@ -10,11 +10,11 @@
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
-#              fuego, el partecuerpos y la inmovilizadora ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
-#              bate_fuego.png, partecuerpos.png e inmovilizadora.png, de tools/icono_lanza.py,
-#              icono_aplastacabezas.py, icono_bate_fuego.py, icono_partecuerpos.py e icono_inmovilizadora.py). Se
-#              lee siempre de aquí (icono_de), no del arma guardada en el baúl, para que las ya creadas cojan el
-#              dibujo nuevo
+#              fuego, el partecuerpos, la inmovilizadora y el látigo ya lo tienen: assets/ui/iconos/lanza.png,
+#              aplastacabezas.png, bate_fuego.png, partecuerpos.png, inmovilizadora.png y latigo.png, de
+#              tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py, icono_partecuerpos.py,
+#              icono_inmovilizadora.py e icono_latigo.py). Se lee siempre de aquí (icono_de), no del arma guardada en
+#              el baúl, para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
@@ -52,7 +52,7 @@ const LISTA := {
 		"desc": "La descarga aturde y salta a un zombi cercano", "edificio": "apartamentos"},
 	"bumeran": {"nombre": "Bumerán segador", "con": ["llave_inglesa", "hacha"], "hueco": "fuego", "icono": "hacha", "dano": 14,
 		"desc": "Se lanza, atraviesa zombis y vuelve a la mano; sin munición", "edificio": "apartamentos"},
-	"latigo": {"nombre": "Látigo escorpión", "con": ["cuerda", "cuchillo"], "hueco": "cuerpo", "icono": "cuerda", "dano": 12,
+	"latigo": {"nombre": "Látigo escorpión", "con": ["cuerda", "cuchillo"], "hueco": "cuerpo", "icono": "latigo", "dano": 12,
 		"desc": "Alcance largo y envenena", "edificio": "apartamentos"},
 	"supermaza": {"nombre": "Súper maza", "con": ["fregona", "mancuernas"], "hueco": "cuerpo", "icono": "mancuernas", "dano": 24,
 		"desc": "Lenta: golpe en círculo con temblor", "edificio": "apartamentos"},
@@ -157,7 +157,7 @@ static func para_soltar(s: Dictionary, en_suelo: Array) -> String:
 	return "" if quedan.is_empty() else quedan.pick_random()
 
 
-# El dibujo del arma que sale (el molotov, la lanza, el aplastacabezas, el bate de fuego y el partecuerpos tienen el suyo;
+# El dibujo del arma que sale (el molotov, la lanza, el aplastacabezas, el bate de fuego, el partecuerpos, la inmovilizadora y el látigo tienen el suyo;
 # las demás, de momento, el de un ingrediente)
 static func icono_de(id: String) -> String:
 	return "molotov" if id == "molotov" else Objetos.icono(LISTA[id].icono)

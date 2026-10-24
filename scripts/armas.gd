@@ -74,7 +74,8 @@ const DATOS := {
 # el bate ardiendo y una estela de llamas), el partecuerpos (conserje-48-partecuerpos: el barrido más ancho con el
 # bate de cuchillas, estela blanca con gotas de sangre; de espaldas, de arriba abajo) y la inmovilizadora
 # (conserje-48-inmovilizadora: el barrido con el bate con el táser atado a la punta, estela blanca con arcos
-# eléctricos celestes), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# eléctricos celestes) y el látigo escorpión (conserje-48-latigo: el latigazo hacia delante, con una raya blanca y
+# gotas verdes), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -87,7 +88,9 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-partecuerpos.tres")},
 	"inmovilizadora": {"base": "bate", "efecto": "descarga", "momento": 0.222,
 		"hoja": preload("res://assets/sprites/conserje-48-inmovilizadora.tres")},
-	"latigo": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "veneno", "detalle": Color("#9be564")},
+	# el látigo escorpión: su casilla es más ancha y alta (144x128, con los pies en 72,88) porque la cuerda se estira lejos
+	"latigo": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "veneno", "momento": 0.333,
+		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-latigo.tres")},
 	"supermaza": {"base": "fregona", "ritmo": 0.8, "arco": 360.0, "empuje": 2.5, "efecto": "circulo", "detalle": Color("#8a8a9a")},
 	# las del centro comercial (parte 6): el mangual echa muy lejos a todos los de alrededor y los deja un momento
 	# tirados; el bate helado congela; el látigo eléctrico es el látigo con la descarga de la inmovilizadora
