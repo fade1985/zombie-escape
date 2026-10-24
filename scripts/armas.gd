@@ -79,8 +79,9 @@ const DATOS := {
 # polvo y piedrecitas), el mangual (conserje-48-mangual: el mismo giro entero, con la cadena estirada y la mancuerna en la
 # punta) y el bate helado (conserje-48-bate-helado: el barrido del bate con la cabeza cubierta de escarcha, estela blanca
 # y azul clara con copos y cristalitos) y el látigo eléctrico (conserje-48-latigo-electrico: el latigazo con el cable
-# negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable), con sus hojas de cada skin
-# (tools/cara.py). Las de fuego usan el
+# negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
+# (conserje-48-lanzallamas: la pistola de agua con el depósito rojo de gas, un tubo largo y la llamarada de la boca),
+# con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -110,8 +111,13 @@ const CREADAS := {
 	"latigo_electrico": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "descarga", "momento": 0.286,
 		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-latigo-electrico.tres")},
 	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
+	# el lanzallamas: su hoja lleva la llamarada de la boca del tubo (las gotas de fuego las pone el juego, chorro.gd); la
+	# casilla es de 96x104 (la llamarada del sur baja por debajo de los pies), con los pies donde siempre; la boca sale de
+	# conserje-48-lanzallamas.json ("muzzle")
 	"lanzallamas": {"base": "pistola", "ritmo": 10.0, "alcance": 170.0, "velocidad": 320.0, "cargador": 40, "recarga": 2.0,
-		"empuje": 0.3, "efecto": "llama", "detalle": Color("#ff9f1c"), "sube": true},
+		"empuje": 0.3, "efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
+		"boca": {"s": Vector2(-1, 22), "se": Vector2(32, -8), "e": Vector2(34, -26), "ne": Vector2(32, -46),
+			"n": Vector2(11, -51), "no": Vector2(-32, -49), "o": Vector2(-30, -21), "so": Vector2(-34, 1)}},
 	"supersoplete": {"base": "escopeta", "perdigones": 1, "ritmo": 2.0, "alcance": 100.0, "velocidad": 300.0, "cargador": 12,
 		"recarga": 2.2, "cartucho": false, "empuje": 1.0, "efecto": "cono", "detalle": Color("#ffd23f"), "sube": true},
 	"desintegrador": {"base": "pistola", "ritmo": 12.0, "alcance": 220.0, "velocidad": 400.0, "cargador": 50, "recarga": 2.0,

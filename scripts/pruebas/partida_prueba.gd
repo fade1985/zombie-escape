@@ -32,7 +32,10 @@
 #                  y con las 4 skins (Armas.CREADAS.bate_helado)
 #   --latigo-electrico lo mismo con el látigo eléctrico: su icono, su hoja, el golpe (a 110 de alcance, que aturde y salta a
 #                  otro zombi cercano) en las 8 direcciones y con las 4 skins (Armas.CREADAS.latigo_electrico)
-#   --ascensor  el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
+#   --lanzallamas  el lanzallamas (la primera creada a distancia con dibujo propio): su icono, su hoja con la llamarada en la
+#                  boca del tubo, sin chispitas, que el chorro quita vida y prende al zombi que tiene delante y no llega al
+#                  lejano, el disparo en las 8 direcciones y con las 4 skins (Armas.CREADAS.lanzallamas)
+#   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
@@ -151,6 +154,9 @@ func empezar_prueba() -> void:
 	elif "--latigo-electrico" in args:
 		set_process(false)   # sin la prueba larga
 		probar_latigo_electrico()
+	elif "--lanzallamas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_lanzallamas()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3235,6 +3241,91 @@ func probar_latigo_electrico() -> void:
 		Captura.foto("captura-latigo-electrico-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-latigo-electrico-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --lanzallamas": el lanzallamas con su dibujo propio (Armas.CREADAS.lanzallamas, conserje-48-lanzallamas: la
+# hoja lleva el retroceso y la llamarada de la boca del tubo; casilla de 96x104; recetas.gd, su icono). Es la primera creada
+# a distancia con hoja propia, así que además del icono y la hoja se comprueba la boca: en la sala de mantenimiento, con dos
+# en el baúl (una guardada antes de que tuviera icono propio, con el de la pistola de agua), Johnny se arrima al baúl y cuenta
+# el icono de cada una (captura-lanzallamas-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia
+# el este y que ya no le salen chispitas; dispara a un zombi a 120 a su izquierda (le quita vida y lo prende) con otro a 330
+# en la misma línea (más lejos de lo que llega el chorro: ni se entera), con una foto justo con la llamarada y las gotas
+# saliendo (captura-lanzallamas-chorro.png) y cuenta cuántas balas gasta. Luego dispara en las 8 direcciones, con una foto de
+# cada una en el fotograma de la llamarada (captura-lanzallamas-<dirección>.png): la llama del dibujo y las gotas tienen que
+# salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
+# (captura-lanzallamas-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_lanzallamas() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("lanzallamas", "azul")
+	vieja.icono = "pistola_agua"   # como las que se crearon antes de que el lanzallamas tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("lanzallamas", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"lanzallamas\", \"lanzallamas\"]) · en el banco «%s» (esperado: lanzallamas)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("lanzallamas")])
+	Captura.foto("captura-lanzallamas-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, su boca y sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Lanzallamas en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-lanzallamas.tres, 10, 170, (48, 72), (34, -26), false, lanzallamas)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+
+	# el chorro: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y lo prende; el segundo, a 330, queda
+	# fuera de su alcance (170 desde la boca, que está a 68 de Johnny)
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-330, 0)])
+	await get_tree().process_frame
+	var balas0: int = johnny.balas
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-lanzallamas-chorro.png")
+	await get_tree().create_timer(0.5).timeout
+	print("Chorro a 120: vida del zombi %d (esperado: menos de 500) · ardiendo %s (esperado: true)" % [z[0].vida, z[0].arder_t > 0.0])
+	print("Zombi a 330: vida %d · ardiendo %s (esperado: 500 y false)" % [z[1].vida, z[1].arder_t > 0.0])
+	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
+	zombis_de_prueba([])
+	await get_tree().create_timer(0.3).timeout
+
+	# las 8 direcciones, con una foto en la llamarada (el disparo dura 0,095 s: el 2º de sus 3 fotogramas, a los 0,04 s)
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.04).timeout
+		Captura.foto("captura-lanzallamas-%s.png" % d)
+		await get_tree().create_timer(0.6).timeout
+
+	# con cada skin: su hoja del lanzallamas
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.04).timeout
+		Captura.foto("captura-lanzallamas-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-lanzallamas-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.6).timeout
 
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = antes.baul_armas

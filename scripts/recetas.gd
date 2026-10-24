@@ -10,12 +10,13 @@
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
-#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado y el látigo
-#              eléctrico ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png, partecuerpos.png,
-#              inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png y latigo_electrico.png, de
-#              tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py, icono_partecuerpos.py,
-#              icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py, icono_mangual.py, icono_bate_helado.py e
-#              icono_latigo_electrico.py). Se lee siempre de aquí (icono_de), no del arma guardada en el baúl,
+#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
+#              eléctrico y el lanzallamas ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png,
+#              partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
+#              latigo_electrico.png y lanzallamas.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
+#              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py e icono_lanzallamas.py). Se lee siempre de
+#              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
@@ -34,7 +35,7 @@ const LISTA := {
 		"desc": "Empuja mucho y aturde un instante", "edificio": "apartamentos"},
 	"bate_fuego": {"nombre": "Bate de fuego", "con": ["bate", "gasolina"], "hueco": "cuerpo", "icono": "bate_fuego", "dano": 20,
 		"desc": "Cada golpe prende fuego", "edificio": "apartamentos"},
-	"lanzallamas": {"nombre": "Lanzallamas", "con": ["pistola_agua", "gasolina"], "hueco": "fuego", "icono": "pistola_agua", "dano": 4,
+	"lanzallamas": {"nombre": "Lanzallamas", "con": ["pistola_agua", "gasolina"], "hueco": "fuego", "icono": "lanzallamas", "dano": 4,
 		"desc": "Chorro de fuego corto con depósito; prende fuego", "edificio": "apartamentos"},
 	"partecuerpos": {"nombre": "Partecuerpos", "con": ["bate", "cuchillas"], "hueco": "cuerpo", "icono": "partecuerpos", "dano": 22,
 		"desc": "Golpe en arco ancho que hace sangrar", "edificio": "apartamentos"},
