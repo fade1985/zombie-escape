@@ -2278,7 +2278,43 @@
    "cost": "10 generaciones",
    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 10002. Descartada: solo 21 colores y en el suroeste Johnny lleva dos bumeranes (uno en cada mano). Sus 8 posturas, en assets/sources/conserje-48-bumeran/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la B, descartada)"
+  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la B, descartada) y 2 de la prueba del lanzamiento (east y north)",
+  "ataque": {
+   "nota": "Lanzamiento: el gesto de lanzar el bumerán (el brazo atrás, lo lanza hacia delante y vuelve a la guardia con el bumerán en la mano). El bumerán que vuela y vuelve lo dibuja el juego (scripts/bumeran.gd): la hoja solo lleva el gesto. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una); PixelLab devolvió fotogramas de 192x96 (este) y 96x124 (norte). Fotogramas en assets/sources/conserje-48-bumeran/ataque/<dirección>-<n>.png. PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas. East: 0 = guardia, 1-2 = el brazo se echa atrás con el bumerán detrás de la cabeza, 3-4 = el brazo atrás del todo con el bumerán en horizontal a su espalda, 5 = el lanzamiento: brazo estirado hacia delante con la mano vacía y un bumerán volando dibujado aparte, separado de Johnny (componente suelto de 174 píxeles: se quita), 6 = brazo estirado con el bumerán en la mano apuntando hacia delante, 7 = el brazo sube con el bumerán sobre la cabeza (lo recoge), 8 = guardia. North: 0 = guardia, 1-3 = el brazo baja y se echa atrás, 4 = el brazo recto hacia arriba con el bumerán de canto (una raya fina de 30 px sobre la cabeza), 5-7 = el brazo arriba con el bumerán curvo sobre la cabeza, 8 = guardia. Fotogramas que valen para el gesto (el bumerán sale al empezar `attack`, así que tiene que empezar en el lanzamiento): east [5,6,7,8] (quitando lo que no toca a Johnny del 5) y north [4,5,6,7,8].",
+   "animation_name": "lanzar-bumeran",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
+   "initial_pose": {
+    "east": "standing facing right, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free"
+   },
+   "action_description": "He throws the boomerang once. His right arm winds back for an instant, then he whips it forward, toward the right of the image, in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "east": {
+    "group": "1aacb60a-0291-48b2-8c82-dc55d0a9f88f",
+    "animation_id": "27b4f9ae-b944-4739-b568-d0b21fb5c0ca",
+    "animation_name": "lanzar-bumeran",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "bc5c0f90-4a6a-4017-bc55-c02774ab1e66",
+    "animation_id": "46cd76cb-5f23-451c-a94f-25273175b028",
+    "animation_name": "lanzar-bumeran-norte",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He throws the boomerang once, away from the camera, toward the top of the image. His right arm winds back for an instant, then he whips it forward and up past his head in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the boomerang raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "subidas": {
+    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab el 2026-10-24; caducan el 2026-10-27. Se subieron los 8 (los de las otras 6 direcciones se usan en la parte 3). Lienzo y posición de la postura (64x64): east 136x96 en (16,20); west 136x96 en (56,20); south 96x144 en (16,12); south-east 136x128 en (16,12); south-west 136x128 en (56,12); north 96x112 en (16,44); north-east 136x112 en (16,44); north-west 136x112 en (56,44).",
+    "east": "2dab9119-647e-4294-8494-09c255fdc848",
+    "north": "f0f66469-bf09-4823-a583-9428a16ad47f",
+    "west": "c06db71a-4642-47e8-904b-aa430859ba89",
+    "south": "e6959b5a-ec72-480d-ba54-35a9e0ece071",
+    "south-east": "940cb90f-328f-4c47-815d-a86e48e30e38",
+    "south-west": "41f923ad-d843-4432-a82e-3d10b4bcf5cd",
+    "north-east": "633ea8f1-28a8-4c07-ae9d-5c202ffd2cf4",
+    "north-west": "c91e533f-d6d5-4e8a-b15d-d9499f0110b1"
+   },
+   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
