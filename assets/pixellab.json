@@ -1425,6 +1425,29 @@
    }
   }
  },
+ "conserje-48-bate-helado": {
+  "kind": "character_state",
+  "character_id": "6c1bb38c-36b2-49ec-bd25-ac79e13f3d10",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Bate helado en guardia (colores libres)",
+  "nota": "Estado de Johnny con el bate helado (el arma creada: el bate con la cabeza envuelta en una capa gruesa de escarcha azul claro y blanca, con cristales de hielo puntiagudos y un poco de vaho blanco azulado que sale del hielo), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). La misma postura que el bate: en alto sobre el hombro, con las dos manos, en las 8 direcciones. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 5001) y la B, con colores libres (seed 5002). La B es la elegida por el dueño (hielo azul claro con cristales y volutas de vaho, mango de madera a la vista; la A lo saca más blanco y roto, parecido a un chorro de agua) y sus 8 posturas están en assets/sources/conserje-48-bate-helado/rotations/<dirección>.png; la A, en descartes/rotations-A/. Lienzo de 64x64.",
+  "request": {
+   "edit_description": "holding a homemade frozen club like a weapon: a wooden baseball bat whose thick end is encased in a thick layer of pale ice blue and white frost, with sharp jagged ice crystals sticking out of it and a little white-blue cold vapor mist curling off the ice, clearly visible above the bat; gripping the handle with both hands in a batter's ready stance, knees slightly bent; the bat is raised up and tilted back over one shoulder, the frosted thick end pointing up above shoulder height, away from his face; the bat stays raised over the shoulder in every view: front, side and back; light brown wooden handle with a dark outline, icy light blue and white frost and crystals with dark outlines, drawn in flat pixel art colors; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 5002
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "ed38e322-bc22-4eb7-9251-cb59acfea1a6",
+   "state_name": "Bate helado en guardia",
+   "cost": "10 generaciones",
+   "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 5001. Johnny sale igual que siempre; el hielo, más blanco y roto, parecido a un chorro de agua. DESCARTADA por el dueño, que eligió la B (sigue en PixelLab, sin borrar). Sus 8 posturas, en assets/sources/conserje-48-bate-helado/descartes/rotations-A/."
+  },
+  "cost_total": "20 generaciones por ahora: los dos estados (la A, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
