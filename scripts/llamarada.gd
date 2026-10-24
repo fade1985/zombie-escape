@@ -7,7 +7,9 @@
 # Va de hija de Johnny. Johnny la mantiene encendida llamando a mantener() en cada paso en que echa fuego (johnny.gd,
 # echar_fuego); el paso en que no la llama, se apaga sola. Como la bala, la llama "de verdad" va por el suelo (desde
 # debajo de la boca) y se dibuja más arriba: sale a la altura de la boca y va bajando hasta el cuerpo de los zombis.
-# El dibujo es provisional (fase A): un cono de cuadraditos que pasa de amarillo a naranja y rojo, con humo al final.
+# El dibujo lo hace su shader (escenas/armas/llamarada.gdshader): fuego en pixel art, con las bocanadas, los colores y
+# el humo. Aquí, además, las chispas que saltan, la luz que alumbra alrededor mientras sale (más en los sitios oscuros)
+# y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
 class_name Llamarada
 extends Node2D
 
@@ -17,9 +19,13 @@ const ABRE := 0.2           # cuánto se abre el cono a cada lado (radianes, uno
 const BOCA := 6.0           # medio ancho de la llama en la boca
 const ALTURA := 50.0        # a qué altura sale de la boca (como la bala)
 const ALTURA_CUERPO := 26.0 # y a cuál llega al final
-const CRECE := 0.12         # lo que tarda en estirarse hasta su alcance al encenderla (y en encogerse al apagarla)
+const CRECE := 0.12         # lo que tarda en estirarse hasta su alcance al encenderla
+const APAGA := 0.22         # y lo que tarda en irse al apagarla (se despega de la boca y se aleja)
 const EMPUJE := 170.0       # empuje base, como el de las balas
-const HUMO := Color(0.16, 0.14, 0.16, 0.7)
+const SOMBREADO := preload("res://escenas/armas/llamarada.gdshader")
+const CHISPAS := 22.0       # chispas que saltan por segundo
+const LUZ := Color(1.0, 0.6, 0.28)
+const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
 
 var pedida := false         # se ha pedido fuego en este paso (mantener)
 var encendida := false
@@ -29,7 +35,9 @@ var dps := 0.0
 var empuje := 0.0
 var quema := 1.0
 var tope := 0.0             # hasta dónde llega, por el suelo: su alcance o la pared
-var largo := 0.0            # lo que se ve ahora (crece al encenderla y se encoge al apagarla)
+var largo := 0.0            # hasta dónde llega la punta que se ve (crece al encenderla)
+var cola := 0.0             # desde dónde se ve (al apagarla se despega de la boca y va hacia la punta)
+var luz: PointLight2D
 var tick_t := TICK          # (empieza lleno: el primer pellizco, en cuanto sale)
 var ticks := 0
 var tiempo := 0.0
@@ -37,9 +45,14 @@ var tiempo := 0.0
 
 func _ready() -> void:
 	z_index = 4   # por encima de Johnny y de los zombis, como el bumerán
-	var propio := CanvasItemMaterial.new()
-	propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # el fuego luce por sí mismo
+	var propio := ShaderMaterial.new()
+	propio.shader = SOMBREADO   # (unshaded: el fuego luce por sí mismo)
 	material = propio
+	luz = PointLight2D.new()
+	luz.texture = Luz.TEXTURA
+	luz.color = LUZ
+	luz.range_item_cull_mask = Luz.TODAS
+	add_child(luz)
 	visible = false
 
 
@@ -60,6 +73,7 @@ func _physics_process(delta: float) -> void:
 	tiempo += delta
 	if encendida:
 		tope = medir()
+		cola = 0.0
 		largo = minf(largo + alcance / CRECE * delta, tope)
 		Sonido.tocar("llamarada")
 		# el reloj de los pellizcos solo corre con la llama encendida (soltar y volver a pulsar no quema más deprisa)
@@ -67,10 +81,14 @@ func _physics_process(delta: float) -> void:
 		if tick_t >= TICK:
 			tick_t -= TICK
 			quemar()
-	else:
-		largo = maxf(0.0, largo - alcance / CRECE * delta)
+		chispas(delta)
+	elif largo > 0.0:
+		cola += alcance / APAGA * delta
+		if cola >= largo:
+			largo = 0.0
+			cola = 0.0
 	visible = largo > 0.0
-	queue_redraw()
+	pintar()
 
 
 # Hasta dónde llega la llama por el suelo: su alcance o, si antes hay una pared o un mueble, hasta ahí. Si la boca
@@ -125,47 +143,53 @@ func dentro(zombi: Node2D, johnny: Node2D, u: Vector2) -> bool:
 	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
 
 
-# Provisional: a trozos de 8 unidades por el suelo, de la boca a la punta, y en cada trozo una fila de cuadraditos de
-# lado a lado. Cada uno, de su color según lo "caliente" que esté: amarillo claro en el medio junto a la boca, luego
-# naranja, y rojo en los bordes y lejos; al final, humo. Ondula y tiembla con el tiempo
-func _draw() -> void:
-	if largo <= 0.0:
+# Chispas que saltan de la llama hacia delante y hacia arriba (Particulas), en sitios al azar de lo largo
+func chispas(delta: float) -> void:
+	if largo < 20.0 or randf() > CHISPAS * delta:
 		return
 	var u := Vector2.from_angle(angulo)
-	var n := u.orthogonal()
-	var d := 0.0
-	var i := 0
-	while d < largo:
-		var f := d / alcance
-		var ancho := BOCA + d * tan(ABRE)
-		var alto := lerpf(ALTURA, ALTURA_CUERPO, f)
-		var ola := sin(tiempo * 13.0 - d * 0.045) * d * 0.06
-		var lado_paso := clampf(ancho / 3.0, 3.0, 8.0)
-		var m := ceili(ancho / lado_paso)
-		for k in range(-m, m + 1):
-			var lado := absf(k * lado_paso) / ancho
-			if lado > 1.0:
-				continue
-			# los bordes y la punta, deshilachados: a ratos, nada
-			if (lado > 0.75 or d > largo - 24.0) and fmod(i * 7.3 + k * 3.1 + tiempo * 31.0, 5.0) < 1.6:
-				continue
-			var calor := 1.0 - maxf(f * 0.95, lado) - f * lado * 0.3 + sin(tiempo * 17.0 - d * 0.08 + k * 1.9) * 0.1
-			var color: Color
-			if d > largo - 28.0 and largo >= tope - 1.0 and f > 0.7:
-				color = HUMO
-			elif calor > 0.72:
-				color = Llamas.FUEGO[0]
-			elif calor > 0.52:
-				color = Llamas.FUEGO[1]
-			elif calor > 0.34:
-				color = Llamas.FUEGO[2]
-			elif calor > 0.17:
-				color = Llamas.FUEGO[3]
-			else:
-				color = Llamas.FUEGO[4]
-			var tam := roundf(lerpf(4.0, 10.0, f) / 2.0) * 2.0
-			var p := u * d + n * (k * lado_paso + ola) + Vector2(0, -alto)
-			p = (p / 2.0).round() * 2.0
-			draw_rect(Rect2(p - Vector2(tam, tam) / 2.0, Vector2(tam, tam)), color)
-		d += 8.0
-		i += 1
+	var d := randf_range(0.15, 0.9) * largo
+	var donde := global_position + u * d - Vector2(0, lerpf(ALTURA, ALTURA_CUERPO, d / alcance))
+	donde += u.orthogonal() * randf_range(-0.6, 0.6) * (BOCA + d * tan(ABRE))
+	var hacia := u * randf_range(60.0, 140.0) + Vector2(randf_range(-20.0, 20.0), -randf_range(40.0, 90.0))
+	Particulas.soltar(self, donde, hacia, Llamas.FUEGO[randi() % 3], 2.0, randf_range(0.3, 0.6))
+
+
+# Le pasa al shader dónde está la llama y cómo va (en la pantalla: el eje baja un poco, porque la llama baja de la
+# altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja
+func pintar() -> void:
+	luz.enabled = visible
+	if not visible:
+		return
+	var u := Vector2.from_angle(angulo)
+	var en_pantalla := u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)
+	var f := en_pantalla.length()   # lo que mide en la pantalla cada unidad de llama por el suelo
+	var eje := en_pantalla / f
+	var m: ShaderMaterial = material
+	m.set_shader_parameter("tiempo", tiempo)
+	m.set_shader_parameter("boca", global_position + Vector2(0, -ALTURA) - eje * ATRAS)
+	m.set_shader_parameter("eje", eje)
+	var cortada := tope < alcance - 1.0
+	m.set_shader_parameter("largo", largo * f + ATRAS + (8.0 if cortada else 0.0))   # (que toque la cara de la pared)
+	m.set_shader_parameter("cola", cola * f + ATRAS if cola > 0.0 else 0.0)
+	m.set_shader_parameter("alcance", alcance * f + ATRAS)
+	m.set_shader_parameter("cortada", 1.0 if cortada else 0.0)
+	# la luz: en medio de lo que se ve, tan grande como la llama, y temblando
+	var medio := (cola + largo) / 2.0
+	luz.position = Vector2(0, -ALTURA) + eje * medio * f
+	luz.texture_scale = ((largo - cola) * 0.6 + 80.0) / 128.0
+	luz.energy = 1.4 * Luz.fuerza() * (0.85 + 0.15 * sin(tiempo * 23.0) * sin(tiempo * 7.0))
+	queue_redraw()
+
+
+# Un rectángulo que cubre la llama entera (con sitio para que ondule, se abra y eche humo): lo demás lo pinta el shader
+func _draw() -> void:
+	if not visible:
+		return
+	var u := Vector2.from_angle(angulo)
+	var eje := (u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)).normalized()
+	var lado := eje.orthogonal() * 170.0
+	var boca := Vector2(0, -ALTURA)
+	var desde := boca - eje * (ATRAS + 10.0)
+	var hasta := boca + eje * (largo * 1.1 + 40.0)
+	draw_colored_polygon(PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)

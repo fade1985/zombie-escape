@@ -3496,10 +3496,14 @@ func probar_latigo_electrico() -> void:
 #     misma línea, a 120 y a 250 (los dos dentro: pierden vida, arden y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se entera).
 #     Johnny no pierde vida, no queda fuego en el suelo y el depósito gasta 1 s; al soltar, se apaga
 #     (captura-lanzallamas-llama.png, a media llama, con la barra de gasolina abajo)
+#   - a oscuras (Luz.evento, como en el apagón), la llama alumbra alrededor (captura-lanzallamas-oscuro.png); y al
+#     soltar, se despega de la boca y se va (captura-lanzallamas-apagando.png); y contra la pared, se corta en ella y se
+#     aplasta abriéndose (captura-lanzallamas-pared.png)
 #   - el depósito: casi vacío y con una gasolina en la mochila, al vaciarse se llena solo y la gasta; sin gasolina,
 #     «¡Sin gasolina!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-lanzallamas-sin-gasolina.png); al coger
 #     una gasolina del suelo vuelve a sacar el lanzallamas y lo llena
-#   - la llama en las 8 direcciones (captura-lanzallamas-<dirección>.png) y con las 4 skins, con su hoja
+#   - la llama en las 8 direcciones (captura-lanzallamas-<dirección>.png); andando, anda lo mismo que sin echar fuego
+#     (captura-lanzallamas-andando.png); y con las 4 skins, con su hoja
 #     (captura-lanzallamas-<skin>.png), con Johnny quieto en la postura de apuntar
 # Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_lanzallamas() -> void:
@@ -3530,7 +3534,7 @@ func probar_lanzallamas() -> void:
 	var w := Armas.datos(id)
 	johnny.modo = "mira"   # que no eche fuego por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
-	print("Lanzallamas en la mano: hoja «%s» · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: conserje-48-lanzallamas.tres, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (34, -26), false, lanzallamas, false)" % [
+	print("Lanzallamas en la mano: hoja «%s» · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: conserje-48-lanzallamas.tres, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (27, -23), false, lanzallamas, false)" % [
 		johnny.sprite.sprite_frames.resource_path.get_file(), w.alcance, w.alcance / Planta.CASILLA, w.deposito,
 		johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.quiere_municion()])
 
@@ -3568,7 +3572,7 @@ func probar_lanzallamas() -> void:
 	var encendida: bool = johnny.llamarada.encendida
 	var gastado: float = deposito0 - johnny.deposito
 	await get_tree().create_timer(0.3).timeout
-	print("Llamarada 1 s hacia la derecha: a 120 pierde %d, arde %s, empujado %.0f · a 250 pierde %d, arde %s (esperado: unos 70-110, true, más de 0, y lo mismo)" % [
+	print("Llamarada 1 s hacia la derecha: a 120 pierde %d, arde %s, empujado %.0f · a 250 pierde %d, arde %s (esperado: más de 50 (con lo que arde y los críticos), true, más de 0, y lo mismo)" % [
 		500 - z[0].vida, z[0].arder_t > 0.0, z[0].position.x - x0, 500 - z[1].vida, z[1].arder_t > 0.0])
 	print("Zombi a 430 (más allá de las 10 casillas): pierde %d · arde %s (esperado: 0 y false)" % [500 - z[2].vida, z[2].arder_t > 0.0])
 	print("Depósito gastado %.2f s (esperado: 1.00 más o menos) · Johnny -%d (esperado: 0) · fuego nuevo en el suelo %d (esperado: 0) · encendida mientras %s, al soltar %s (esperado: true, false)" % [
@@ -3577,6 +3581,28 @@ func probar_lanzallamas() -> void:
 	for zombi in z:
 		zombi.remove_from_group("zombis")
 		zombi.queue_free()
+
+	# a oscuras (como en el apagón): la llama alumbra alrededor; y al soltar, se despega de la boca y se va
+	Luz.evento = 0.85
+	await get_tree().create_timer(0.8).timeout
+	await echar_fuego(0.0, 0.6, "captura-lanzallamas-oscuro.png")
+	var alumbra: bool = johnny.llamarada.luz.enabled and johnny.llamarada.luz.energy > 0.5
+	for i in 4:
+		await get_tree().physics_frame
+	Captura.foto("captura-lanzallamas-apagando.png")
+	print("A oscuras: oscuridad %.2f · la llama alumbra %s · al soltar, despegada de la boca %.0f de %.0f (esperado: 0.85, true, más de 0)" % [
+		Luz.nivel, alumbra, johnny.llamarada.cola, johnny.llamarada.largo])
+	Luz.evento = 0.0
+	await get_tree().create_timer(0.8).timeout
+	# contra la pared: la llama se corta en ella y se aplasta abriéndose (captura-lanzallamas-pared.png)
+	var puesto: Vector2 = johnny.global_position
+	johnny.global_position = sala.diana.global_position + Vector2(380, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await echar_fuego(0.0, 0.5, "captura-lanzallamas-pared.png")
+	print("Contra la pared: la llama llega a %.0f de %.0f (esperado: menos de 320)" % [johnny.llamarada.tope, johnny.llamarada.alcance])
+	johnny.global_position = puesto
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
 
 	# el depósito: casi vacío y con una gasolina, se llena solo al vaciarse y la gasta
 	while "gasolina" in mochila:
@@ -3612,6 +3638,25 @@ func probar_lanzallamas() -> void:
 		posturas.append(johnny.sprite.animation)
 		await get_tree().create_timer(0.2).timeout
 	print("Postura echando fuego en cada dirección: %s (esperado: quieto_<dirección> en las 8)" % ", ".join(posturas))
+
+	# andando: echando fuego anda lo mismo que sin echarlo (0,8 s hacia la derecha cada vez, desde parado), con la llama
+	# saliendo del tubo mientras anda (captura-lanzallamas-andando.png)
+	var andado := []
+	for con_fuego in [false, true]:
+		johnny.global_position = sala.diana.global_position + Vector2(-300, 200)
+		johnny.velocity = Vector2.ZERO
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.2).timeout
+		var desde: Vector2 = johnny.global_position
+		Input.action_press("derecha")
+		if con_fuego:
+			await echar_fuego(0.0, 0.8, "captura-lanzallamas-andando.png")
+		else:
+			await get_tree().create_timer(0.8).timeout
+		Input.action_release("derecha")
+		andado.append(johnny.global_position.distance_to(desde))
+		await get_tree().create_timer(0.3).timeout
+	print("Andando 0,8 s: sin fuego %.0f · echando fuego %.0f (esperado: lo mismo, más o menos)" % andado)
 
 	# con cada skin: su hoja del lanzallamas
 	for skin in ["portero", "gloton", "gymbro", "bombero"]:

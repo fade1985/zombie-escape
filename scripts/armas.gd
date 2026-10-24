@@ -125,11 +125,13 @@ const CREADAS := {
 	# No tiene cargador: tiene un depósito de "deposito" segundos de fuego que se llena entero con una gasolina de la
 	# mochila (en "recarga" segundos; las balas no le valen). Su daño es por segundo, y empuja cada medio segundo. Johnny
 	# echa el fuego en la postura quieta de su hoja (la de apuntar, con el piloto encendido); la casilla es de 96x104,
-	# con los pies donde siempre; la boca sale de conserje-48-lanzallamas.json ("muzzle")
+	# con los pies donde siempre. La boca es la punta del tubo de esa postura (donde está el piloto: el píxel del dibujo
+	# que más sale hacia donde apunta), no la de conserje-48-lanzallamas.json ("muzzle"), que es el centro de la
+	# llamarada del disparo de antes y caía 7 a 13 píxeles más allá: la llama salía despegada del tubo
 	"lanzallamas": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "empuje": 0.5,
 		"efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
-		"boca": {"s": Vector2(-1, 22), "se": Vector2(32, -8), "e": Vector2(34, -26), "ne": Vector2(32, -46),
-			"n": Vector2(11, -51), "no": Vector2(-32, -49), "o": Vector2(-30, -21), "so": Vector2(-34, 1)}},
+		"boca": {"s": Vector2(0, 10), "se": Vector2(24, -12), "e": Vector2(27, -23), "ne": Vector2(20, -40),
+			"n": Vector2(8, -53), "no": Vector2(-21, -39), "o": Vector2(-27, -22), "so": Vector2(-23, -12)}},
 	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el
 	# juego, armas_creadas.gd); la casilla es de 144x152, con los pies en 72,72, porque la llamarada llega a 69 píxeles a un
 	# lado y 77 hacia abajo. La boca NO es la que calcula arma.py (el centro de la llamarada, que cae a 40-50 píxeles de la
