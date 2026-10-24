@@ -1837,6 +1837,47 @@
    }
   }
  },
+ "conserje-48-supersoplete": {
+  "kind": "character_state",
+  "character_id": "9571c2f3-6cfc-4ef2-b1e3-6fd36e8e0433",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Supersoplete en guardia (colores libres)",
+  "nota": "Estado de Johnny con el supersoplete (el arma creada: spray + mechero; base la escopeta, ritmo 2, alcance 100, llamarada en cono, muy corta y muy fuerte), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un soplete de plomero gigante llevado como una escopeta: una bombona de gas amarilla bajo un cañón corto y grueso de metal gris oscuro que acaba en una boquilla acampanada (la boca ancha), con una llamita naranja y amarilla (el piloto) en la boca, sujeto con las dos manos. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 8001) y la B, con colores libres (seed 8002). Elegida por el dueño la B: la bombona sale amarilla de verdad (en la A sale crema y parece un saco), así que se distingue a la primera del lanzallamas (depósito rojo, tubo largo y fino), del bate de fuego (un bate ardiendo) y de la escopeta (larga y de madera); la cara de Johnny sale algo curtida, como con barba de dos días, pero sin manchas. Las 8 posturas de la B, en assets/sources/conserje-48-supersoplete/rotations/<dirección>.png (south y north rehechas, ver 'posturas'); las de la A, en descartes/rotations-A/. Lienzo de 64x64 salvo south (64x80) y north (64x76), recortados con los pies en la fila 55 como los demás.",
+  "request": {
+   "edit_description": "holding a giant homemade blowtorch like a shotgun with both hands in a ready shooting stance, knees slightly bent: a big round yellow gas tank under a short thick dark grey metal barrel that ends in a wide flared bell-shaped nozzle, one hand gripping the handle under the tank and the other hand holding the barrel, the nozzle pointing straight ahead in the direction he is facing, with a small bright orange and yellow pilot flame burning at the mouth of the nozzle; the blowtorch stays aimed forward in every view: front, side and back; yellow gas tank, short thick dark grey barrel, flared bell-shaped nozzle, small flame at its mouth; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 8002
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "711b329e-a056-4bb8-97b6-80f9e5db1a4d",
+   "state_name": "Supersoplete en guardia",
+   "cost": "10 generaciones",
+   "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 8001. Descartada: la bombona sale crema (parece un saco) y de frente el cañón apunta hacia la cámara con la llama pegada al pecho; de espaldas el cañón sube recto junto a la cabeza, bien. Sus 8 posturas, en assets/sources/conserje-48-supersoplete/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
+  },
+  "posturas": {
+   "nota": "Las posturas quietas de south y north NO son las del estado de PixelLab de la B (allí el cañón cruzaba el cuerpo en diagonal de frente y asomaba hacia la izquierda de espaldas, como pasó con la escopeta, el MP5 y el lanzallamas): se rehicieron el 2026-10-24 con una animación corta de PixMiniMax (8 fotogramas más el de partida, 1 generación cada una, lienzo de partida de 64x64 = la postura vieja) en la que Johnny gira el arma, y se guardó el ÚLTIMO fotograma (el 8) recortado para que los pies queden en la fila 55 (el fotograma 0 es la postura vieja en un lienzo más grande: desplazamiento exacto dx 0, dy 16 en south y 12 en north): south 64x80 (el cañón apunta recto hacia abajo entre las piernas, con la boca acampanada y la llama en la fila 65) y north 64x76 (el cañón recto hacia arriba sobre el hombro derecho, la llama en la fila 1). Las viejas, en descartes/rotations-viejas/. En PixelLab el estado sigue con sus rotaciones originales: las nuevas solo existen en el proyecto. Ojo: arma.py usa 'pies_en_rotacion' [32, 55] y las rotaciones south y north son más altas que 64 (no pasa nada).",
+   "south": {
+    "group": "92dfbd5d-0b99-4aa5-adc2-e81c0779230b",
+    "animation_id": "091d35e1-7822-4952-95a0-ac6e3b37f76d",
+    "animation_name": "postura-supersoplete-abajo",
+    "upload": "9a6adc80-dab0-4468-92f6-738ecbc03087 (partida: la postura vieja, caduca el 2026-10-27)",
+    "action_description": "He keeps facing the camera the whole time, his face, chest and both shoulders square to the camera. He quickly lowers the blowtorch to his waist and turns it so the barrel points straight down the image: he holds it low at hip height in front of his belly with both hands, the big yellow gas tank at his side, the short thick dark grey barrel perfectly vertical in the image and pointing straight down toward the bottom edge of the image between his legs, with the wide flared bell-shaped nozzle at the bottom end and a small orange and yellow pilot flame burning in its mouth. The barrel does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "b3a74383-0d93-4898-bde8-a8a958d9ab1c",
+    "animation_id": "ca55aeb1-a104-40ef-a35a-50c73db84c21",
+    "animation_name": "postura-supersoplete-arriba",
+    "upload": "1799699e-dd48-4d59-a6c3-98a95e2dc15a (partida: la postura vieja, caduca el 2026-10-27)",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head and the back of his overalls; he never turns around and his face is never visible. He quickly straightens the blowtorch so it points straight ahead of him, away from the camera, toward the top edge of the image: he holds it in front of him with both hands, hidden behind his torso, and only the short thick dark grey barrel with its wide flared bell-shaped nozzle sticks straight up above his right shoulder, perfectly vertical in the image, next to his head, with a small orange and yellow pilot flame burning in its mouth at the top. The barrel does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "cost": "2 generaciones (1 por dirección), a la primera"
+  },
+  "cost_total": "22 generaciones hasta ahora (parte 1): 20 de los dos estados (la A, descartada) y 2 de las posturas de south y north"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
