@@ -30,6 +30,8 @@
 #                  (Armas.CREADAS.mangual)
 #   --bate-helado  lo mismo con el bate helado: su icono, su hoja, el golpe (que congela al zombi) en las 8 direcciones
 #                  y con las 4 skins (Armas.CREADAS.bate_helado)
+#   --latigo-electrico lo mismo con el látigo eléctrico: su icono, su hoja, el golpe (a 110 de alcance, que aturde y salta a
+#                  otro zombi cercano) en las 8 direcciones y con las 4 skins (Armas.CREADAS.latigo_electrico)
 #   --ascensor  el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -146,6 +148,9 @@ func empezar_prueba() -> void:
 	elif "--bate-helado" in args:
 		set_process(false)   # sin la prueba larga
 		probar_bate_helado()
+	elif "--latigo-electrico" in args:
+		set_process(false)   # sin la prueba larga
+		probar_latigo_electrico()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3142,6 +3147,93 @@ func probar_bate_helado() -> void:
 		await get_tree().create_timer(0.13).timeout
 		Captura.foto("captura-bate-helado-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-bate-helado-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --latigo-electrico": el látigo eléctrico con su dibujo propio (Armas.CREADAS.latigo_electrico,
+# conserje-48-latigo-electrico, de casilla más grande: pies en 72,88; recetas.gd, su icono). Como la del látigo escorpión:
+# en la sala de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio, con el del cable),
+# Johnny se arrima al baúl y cuenta el icono de cada una (captura-latigo-electrico-baul.png). Saca una y cuenta su hoja,
+# su momento del golpe, su alcance, sus pies y que ya no le salen chispitas; le da a un zombi a 100 a su izquierda (más
+# lejos de lo que llega el cuchillo, que son 46: le quita vida y lo aturde) con otro a 134 de Johnny pero fuera del
+# abanico del látigo (a 90 del primero: la descarga salta hasta él, que pierde vida y se queda aturdido sin que el golpe
+# lo alcance) y un tercero lejos de los dos (no le pasa nada); con una foto justo en el golpe
+# (captura-latigo-electrico-descarga.png). Luego ataca en las 8 direcciones, con una foto de cada una justo en el golpe
+# (captura-latigo-electrico-<dirección>.png). Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
+# (captura-latigo-electrico-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_latigo_electrico() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("latigo_electrico", "azul")
+	vieja.icono = "cable"   # como las que se crearon antes de que el látigo eléctrico tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("latigo_electrico", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"latigo_electrico\", \"latigo_electrico\"]) · en el banco «%s» (esperado: latigo_electrico)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("latigo_electrico")])
+	Captura.foto("captura-latigo-electrico-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Látigo eléctrico en la mano: hoja «%s» · momento %.3f · alcance %.0f · pies %s · chispitas %s · icono «%s» (esperado: conserje-48-latigo-electrico.tres, 0.286, 110, (72, 88), false, latigo_electrico)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.alcance, w.pies, w.has("detalle"), Objetos.icono(id)])
+
+	# el golpe llega en su fotograma (a los 0,07 s: 0,2375 × 0,286), le quita vida al primero a 100 (más que el cuchillo) y lo
+	# aturde; la descarga salta al segundo (a 90 del primero, fuera del abanico del látigo), que se lleva medio daño y también
+	# se queda aturdido; el tercero, a más de 130 de los dos, ni se entera
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-100, 0), Vector2(-100, 90), Vector2(-100, 230)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.09).timeout
+	Captura.foto("captura-latigo-electrico-descarga.png")
+	await get_tree().create_timer(0.1).timeout
+	print("Golpe a 100: vida del zombi %d (esperado: menos de 500) · aturdido %s (esperado: true)" % [
+		z[0].vida, z[0].aturdido > 0.0])
+	print("Salto a 90 del primero: vida del otro %d (esperado: menos de 500) · aturdido %s (esperado: true)" % [
+		z[1].vida, z[1].aturdido > 0.0])
+	print("Zombi lejos: vida %d · aturdido %s (esperado: 500 y false)" % [z[2].vida, z[2].aturdido > 0.0])
+	await get_tree().create_timer(0.4).timeout
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.09).timeout
+		Captura.foto("captura-latigo-electrico-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con cada skin: su hoja del látigo eléctrico
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.09).timeout
+		Captura.foto("captura-latigo-electrico-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-latigo-electrico-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.5).timeout
 
 	Guardado.cambiar(func(g2):

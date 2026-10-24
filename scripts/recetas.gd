@@ -10,11 +10,12 @@
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
-#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual y el bate helado ya lo tienen:
-#              assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png, partecuerpos.png, inmovilizadora.png,
-#              latigo.png, supermaza.png, mangual.png y bate_helado.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
-#              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
-#              icono_mangual.py e icono_bate_helado.py). Se lee siempre de aquí (icono_de), no del arma guardada en el baúl,
+#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado y el látigo
+#              eléctrico ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png, partecuerpos.png,
+#              inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png y latigo_electrico.png, de
+#              tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py, icono_partecuerpos.py,
+#              icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py, icono_mangual.py, icono_bate_helado.py e
+#              icono_latigo_electrico.py). Se lee siempre de aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
@@ -73,7 +74,7 @@ const LISTA := {
 	# solo del centro comercial
 	"bate_helado": {"nombre": "Bate helado", "con": ["bate", "hielo_seco"], "hueco": "cuerpo", "icono": "bate_helado", "dano": 17,
 		"desc": "Cada golpe congela un momento", "edificio": "centro"},
-	"latigo_electrico": {"nombre": "Látigo eléctrico", "con": ["cable", "bateria"], "hueco": "cuerpo", "icono": "cable", "dano": 12,
+	"latigo_electrico": {"nombre": "Látigo eléctrico", "con": ["cable", "bateria"], "hueco": "cuerpo", "icono": "latigo_electrico", "dano": 12,
 		"desc": "Alcance largo: la descarga aturde y salta a otro zombi", "edificio": "centro"},
 	"bomba_clavos": {"nombre": "Bomba de clavos", "con": ["cinta_americana", "clavos"], "hueco": "arrojadiza", "icono": "cinta_americana", "dano": 40, "unidades": 3,
 		"desc": "Explota y lanza clavos en todas direcciones que hacen sangrar", "edificio": "centro"},
