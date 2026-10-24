@@ -2494,7 +2494,43 @@
    "cost": "10 generaciones",
    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 11002. Descartada: solo 23 colores, la cara algo curtida y de frente el táser cruza el cuerpo en diagonal. Sus 8 posturas, en assets/sources/conserje-48-pistola-electrica/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la B, descartada)"
+  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la B, descartada) y 2 de la prueba del disparo (east y north)",
+  "ataque": {
+   "nota": "Disparo: un retroceso corto de pistola y una descarga eléctrica celeste que sale de los dos electrodos (una chispa gorda en la punta, luego un rayo en zigzag largo, luego chispitas sueltas), sin fuego, sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES desde el principio (lección del supersoplete: con 96x96 el efecto largo sale cortado en seco por el borde; son los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una). Fotogramas en assets/sources/conserje-48-pistola-electrica/ataque/<dirección>-<n>.png, sacados del zip de la hoja (backblaze seguía caído) con una ventana común (east 107x58, north 39x93). PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas, no hay fuego ni humo y el rayo no sale cortado por el borde. East: 0 = guardia con la chispita de siempre, 1 = chispa pequeña blanca en la punta, 2 = chispa gorda celeste y blanca pegada a los electrodos, 3 = rayo en zigzag de ~60 px que sale de la boca, 4 = el rayo despegado (línea en zigzag fina, sin tocar a Johnny), 5 = chispitas sueltas, 6-7 = el brazo vuelve, 8 = guardia. North: 0-1 = guardia, 2 = chispa gorda en la punta (sobre la cabeza), 3-5 = rayo recto hacia arriba de ~35 px junto a la cabeza (3 con chispitas alrededor), 6-8 = guardia. El rayo del dibujo es más largo que la boca: las chispas que vuelan y saltan las pone el juego (chorro.gd), así que la hoja usará solo los 2-3 fotogramas del principio de la descarga por disparo (ritmo 5, duracion <= 0,19 s; candidatos: east [1,2,3] o [2,3], north [2,3,4] o [3,4]). Sin 'boca': 'fogonazo' (no hay naranja que buscar), la boca va a mano en armas.gd.",
+   "animation_name": "disparo-pistola-electrica",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
+   "initial_pose": {
+    "east": "standing in a ready shooting stance facing right, both hands on the stun gun, aiming it straight to the right, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the stun gun held in front of him with its prongs sticking up beside his head, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them"
+   },
+   "action_description": "He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He brings the stun gun back level and settles cleanly into the starting two-handed aiming stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "east": {
+    "group": "8ebacbfd-b04d-42d2-8747-20cf80aa945b",
+    "job": "cfa434a4-110a-40f1-a7b4-8d41f4d31cea",
+    "animation_name": "disparo-pistola-electrica",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "eae93486-933d-413e-8fa4-671c368da6e2",
+    "job": "1fa71ce3-f531-4cd3-bbc9-b9b94fdc5421",
+    "animation_name": "disparo-pistola-electrica-norte",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one single electric shot with the stun gun away from the camera, toward the top of the image. The stun gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs straight up beside his head for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He settles cleanly into the starting stance, still seen from behind. Only one short shot. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "subidas": {
+    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab el 2026-10-24; caducan el 2026-10-27. Se subieron los 8 (los de las otras 6 direcciones se usan en la parte 3). Lienzo y posición de la postura (64x64): east 136x96 en (16,20); west 136x96 en (56,20); south 96x144 en (16,12); south-east 136x128 en (16,12); south-west 136x128 en (56,12); north 96x112 en (16,44); north-east 136x112 en (16,44); north-west 136x112 en (56,44).",
+    "east": "0cc315aa-b2bd-421e-a557-bc2251fb02e4",
+    "north": "51f7923f-28ce-4dca-8fcd-4ed2731b9694",
+    "west": "80687e93-2b31-439c-a2e8-86faebb34d28",
+    "south": "56f1d956-1fbd-41da-b1ed-7249d471b00d",
+    "south-east": "1ed0d21e-8822-4781-9b24-cbec218483fa",
+    "south-west": "4c41df2f-2556-4d1b-873a-26c52bdd87ef",
+    "north-east": "91afda3a-9020-462f-abea-bd486d56d06e",
+    "north-west": "d16ac5e5-3dee-4533-ad8a-e1e6c65b01d1"
+   },
+   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
