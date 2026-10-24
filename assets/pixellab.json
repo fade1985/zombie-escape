@@ -748,7 +748,7 @@
    "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 2024. Johnny sale igual que siempre, pero las llamas salen en rosa y rojo apagados. Sus 8 posturas, en assets/sources/conserje-48-bate-fuego/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
   },
   "ataque": {
-   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-bate-fuego --lienzos <carpeta>; los upload:<id> de los 8, en 'subidas', caducan a los 3 días). Fotogramas en assets/sources/conserje-48-bate-fuego/ataque/. De lado, el barrido salió a la primera: se prepara con el bate en alto (1-4), barre por delante dejando una estela enorme de llamas naranjas y amarillas (5-8; en el 6 y el 7 casi da la vuelta entera a Johnny y el lienzo sale de 112x96, puede salirse de la casilla de 96 al montar) y vuelve a la guardia. De espaldas, 3 intentos (1 generación cada uno): el primero es el elegido (el bate siempre se ve y no enseña la cara, aunque en 4-7 se gira un poco de perfil hacia la izquierda y baja el bate junto a la cadera; lo bueno: 3 el bate en alto con estela arriba y 8 la estela grande hacia la izquierda); el segundo, con un texto más estricto con la cabeza, se pone de perfil del todo en 5-7; el tercero, con 'smashes' en vez de 'chops', pierde el bate de vista en 8-9. Los dos descartados siguen en PixelLab (sin borrar) y en assets/sources/conserje-48-bate-fuego/descartes/ataque/norte-2 y norte-3.",
+   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-bate-fuego --lienzos <carpeta>; los upload:<id> de los 8, en 'subidas', caducan a los 3 días). Fotogramas en assets/sources/conserje-48-bate-fuego/ataque/. De lado, el barrido salió a la primera: se prepara con el bate en alto (1-4), barre por delante dejando una estela enorme de llamas naranjas y amarillas (5-8; en el 6 y el 7 casi da la vuelta entera a Johnny y el lienzo sale de 112x96, puede salirse de la casilla de 96 al montar) y vuelve a la guardia. De espaldas, 3 intentos (1 generación cada uno): el primero es el elegido (el bate siempre se ve y no enseña la cara, aunque en 4-7 se gira un poco de perfil hacia la izquierda y baja el bate junto a la cadera; lo bueno: 3 el bate en alto con estela arriba y 8 la estela grande hacia la izquierda); el segundo, con un texto más estricto con la cabeza, se pone de perfil del todo en 5-7; el tercero, con 'smashes' en vez de 'chops', pierde el bate de vista en 8-9. Los dos descartados siguen en PixelLab (sin borrar) y en assets/sources/conserje-48-bate-fuego/descartes/ataque/norte-2 y norte-3. Parte 3 (2026-10-24): las otras 6 direcciones, cada una con el lienzo de partida de su dirección como fotograma de partida y de llegada. West, south-east y south-west, con el texto de east (en su mismo grupo); south, con el texto estricto de frente; north-east y north-west, con el texto estricto de tres cuartos de espaldas. En todas la estela de fuego sale enorme (rodea a Johnny en los fotogramas centrales) y los lienzos de PixelLab son de 100 a 120 de ancho; al montar, nada se sale de la casilla de 96. Al coger impulso, en el oeste y el noreste se gira un instante hacia la cámara (el giro del bateador) y en el noroeste se le ve la cara de perfil en pleno golpe (fotogramas 3-6): al montar se salta el giro en el oeste y el noreste (se empieza por el quieto). El noroeste se repitió con el texto del noreste cambiando el lado (1 generación, descartes/ataque/noroeste-2) y se giró igual: se usa el primero. arma.json dice qué fotogramas van (9 por dirección, el golpe en el tercero en todas) y los tramos del andar que hacen ciclo.",
    "subidas": "2026-10-24: south upload:61e83864-e9c9-41dd-89ec-e736c7ca52ac, south-east upload:4326a760-5a4d-4b71-84f2-52bd89e3f5b8, east upload:27f527bc-d1bd-4935-9391-b3c0d8a908af, north-east upload:c7fb3afe-4071-46cf-b738-40b807af214a, north upload:0d0acb33-b62c-48da-be2d-b6196d8d3d52, north-west upload:163b1500-f9d0-44b0-ad39-9597e0140b76, west upload:f0dc754e-a382-42ed-b2fa-22f765bf8fb5, south-west upload:60d6ac98-4f82-40e3-99c6-7901c0c8804a",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with burning rags on its thick end, flames flickering from its tip",
    "east": {
@@ -773,9 +773,70 @@
     "cost": "2 generaciones",
     "ataque-bate-fuego-norte-2": "grupo ebd2abc0-c97a-40ae-b385-618c1fe7dc77 (carpeta norte-2). Texto con 'his head always faces away from the camera', sin 'never bends over' ni 'never drops down to his sides', y 'brings it down and forward': en 5-7 se pone de perfil y baja el bate al suelo.",
     "ataque-bate-fuego-norte-3": "grupo 701e444f-f3a9-4c9a-a10a-03c3217e63ff (carpeta norte-3). El mismo texto del elegido con 'smashes it forward' en vez de 'chops it forward': en 4 se gira de perfil con una estela enorme y en 8-9 el bate desaparece."
+   },
+   "west": {
+    "group": "9ad2377f-afd6-4518-bcec-33d8f7f3d0cf",
+    "animation_name": "ataque-bate-fuego",
+    "cost": "1 generación",
+    "nota": "Con el texto de east, en su mismo grupo. Bien a la primera (se gira hacia la cámara en 1-3, como en el aplastacabezas).",
+    "initial_pose": "standing in a batter's guard stance facing left, gripping the burning bat with both hands, the bat raised up and tilted back over his rear shoulder, flames flickering above its tip"
+   },
+   "south-east": {
+    "group": "9ad2377f-afd6-4518-bcec-33d8f7f3d0cf",
+    "animation_name": "ataque-bate-fuego",
+    "cost": "1 generación",
+    "nota": "Con el texto de east, en su mismo grupo. Bien a la primera.",
+    "initial_pose": "standing in a batter's guard stance in three-quarter front view, facing toward the camera and to the right, gripping the burning bat with both hands, the bat raised up over his rear shoulder on the left side of the image, flames flickering above its tip"
+   },
+   "south-west": {
+    "group": "9ad2377f-afd6-4518-bcec-33d8f7f3d0cf",
+    "animation_name": "ataque-bate-fuego",
+    "cost": "1 generación",
+    "nota": "Con el texto de east, en su mismo grupo. Bien a la primera.",
+    "initial_pose": "standing in a batter's guard stance in three-quarter front view, facing toward the camera and to the left, gripping the burning bat with both hands, the bat raised up over his rear shoulder on the right side of the image, flames flickering above its tip"
+   },
+   "south": {
+    "group": "7eced0f1-aa51-48a6-b476-8e925cdc8551",
+    "animation_name": "ataque-bate-fuego-sur",
+    "cost": "1 generación",
+    "nota": "Bien a la primera: de frente todo el golpe, barre de izquierda a derecha por delante del cuerpo con la estela de fuego grande.",
+    "initial_pose": "standing in a batter's guard stance facing the camera, gripping the burning bat with both hands, the bat raised up over his shoulder on the left side of the image, flames flickering above its tip",
+    "action_description": "Strict front view the whole time: he keeps facing the camera, his face, chest and both shoulders stay turned toward the camera, and his body never turns sideways. His feet stay planted. Using mostly his arms and shoulders, he swings the burning bat hard and fast in one wide horizontal arc at chest height, from the left side of the image across to the right side, passing in front of his body, toward the camera. The bat leaves a bright crescent-shaped trail of orange and yellow flames behind it along the whole arc, and the burning rags on its thick end stay lit. The trail of flames fades away quickly, he brings the bat back up over his shoulder on the left side of the image and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north-east": {
+    "group": "f3976724-0efc-4905-95ee-ab8b44e2839a",
+    "animation_name": "ataque-bate-fuego-noreste",
+    "cost": "1 generación",
+    "nota": "Bien a la primera, de espaldas en tres cuartos desde el golpe; al coger impulso (1-2) se gira hacia la cámara y al montar se empieza por el quieto (0) y se salta al 3.",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with burning rags on its thick end, flames flickering from its tip, seen from behind",
+    "initial_pose": "standing in a batter's guard stance in three-quarter back view, facing away from the camera and to the right, gripping the burning bat with both hands, the bat raised up over his shoulder on the left side of the image, flames flickering above its tip",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, the knot of the red bandana, his back and his right shoulder; his face and chest are never visible and he never turns toward the camera. He never bends over and never leans. His feet stay planted. Using only his arms and shoulders, he swings the burning bat hard and fast in one wide flat arc at chest height, from the left side of the image across to the upper right, passing in front of him, which in this view is up and to the right of the image beyond his right shoulder, so the bat stays visible. A bright crescent-shaped trail of orange and yellow flames follows the bat along the arc. The trail of flames fades away quickly, he brings the bat back over his shoulder on the left side of the image and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "318c4b1a-6b70-474b-9940-3545f77865fb",
+    "animation_name": "ataque-bate-fuego-noroeste",
+    "cost": "1 generación",
+    "nota": "El elegido (primer intento). De espaldas en tres cuartos, pero en el golpe (3-6) se le ve la cara de perfil y el pañuelo. La estela de fuego es muy buena.",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with burning rags on its thick end, flames flickering from its tip, seen from behind",
+    "initial_pose": "standing in a batter's guard stance in three-quarter back view, facing away from the camera and to the left, gripping the burning bat with both hands, the bat raised up over his rear shoulder on the right side of the image, flames flickering above its tip",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, his face is never visible, and he never turns toward the camera. His feet stay planted. Using mostly his arms and shoulders, he swings the burning bat hard and fast in one wide horizontal arc at chest height, sweeping across in front of him from right to left, toward the upper left of the image. The bat leaves a bright crescent-shaped trail of orange and yellow flames behind it along the whole arc of the swing, and the burning rags on its thick end stay lit. The trail of flames fades away quickly, he brings the bat back up over his shoulder and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west_descartado": {
+    "group": "ad06b8ea-0a94-431a-b364-0e31567a2bac",
+    "animation_name": "ataque-bate-fuego-noroeste-2",
+    "cost": "1 generación",
+    "nota": "DESCARTADO (sigue en PixelLab, sin borrar; fotogramas en assets/sources/conserje-48-bate-fuego/descartes/ataque/noroeste-2/): el texto del noreste cambiando el lado ('the knot of the red bandana', 'never bends over', 'beyond his left shoulder'). Se gira igual hacia la cámara en 3-5; el primero tiene la estela más grande."
    }
   },
-  "cost_total": "24 generaciones por ahora: 20 de los dos estados (la A, descartada) y 4 del golpe de prueba (1 de lado, 3 de espaldas)"
+  "cost_total": "39 generaciones por ahora: 20 de los dos estados (la A, descartada), 4 del golpe de prueba (1 de lado y 3 de espaldas), 7 del golpe en las otras 6 direcciones (una, el noroeste, repetida) y 8 del andar",
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida; las 8 direcciones en una sola llamada, sin fotograma de partida (usa la rotación de cada dirección). Todas bien a la primera: no suelta el bate, no se gira y las llamas parpadean sobre la punta. Fotogramas en assets/sources/conserje-48-bate-fuego/walk/ (lienzos de 84 a 92). Los tramos que hacen ciclo (casi todos de 8 fotogramas; sureste 10, noreste 9), a mano en arma.json: el script, con las llamas lejos del dibujo quieto, las tomaría por fogonazos y no encontraría ciclo.",
+   "group": "1f176461-acba-483b-90d1-980e32c6469b",
+   "animation_name": "andar-bate-fuego",
+   "cost": "8 generaciones",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with burning rags on its thick end, flames flickering from its tip",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the burning bat in the same guard grip with both hands the whole time: the bat stays raised up and tilted back over his shoulder in the same place, only swaying very slightly with each step, and its flames keep flickering above the tip. His arms do not swing and never let go of the bat. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
