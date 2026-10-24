@@ -1,0 +1,34 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con el bumerán segador (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-bumeran). El bumerán que sale volando y vuelve a la mano lo dibuja el juego (scripts/bumeran.gd): la hoja solo lleva el GESTO de lanzar, con el bumerán en la mano al volver a la guardia. Sin 'boca': 'fogonazo' (no hay fogonazo naranja que buscar): arma.py no escribe 'muzzle' y la boca (la mano) va a mano en armas.gd, sacada del dibujo quieto (rotations/<dirección>.png, respecto a los pies 32,55).",
+  "celda": [94, 92],
+  "pivote": [45, 76],
+  "andar": {
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. Van a mano, calculados mirando cuál se parece más el fotograma a+n al a (ciclos.py). El fotograma 0 es el dibujo quieto.",
+    "ciclo": {
+      "south": [0, 12],
+      "south-east": [2, 10],
+      "east": [3, 9],
+      "north-east": [2, 10],
+      "north": [1, 10],
+      "north-west": [4, 8],
+      "west": [0, 12],
+      "south-west": [0, 12]
+    },
+    "espejo": { "west": "east" }
+  },
+  "ataque": {
+    "nota": "Gesto de lanzar. El bumerán sale en el instante en que empieza 'attack' (el juego no retrasa las armas a distancia), así que los fotogramas empiezan en el lanzamiento (el brazo ya estirado hacia delante), sin preparación (en east se repite el 6, el brazo estirado con el bumerán, para que todas las direcciones tengan 5), y acaban en la guardia con el bumerán en la mano. Se quitan de los fotogramas elegidos los bumeranes que PixelLab dibujó volando aparte (east 5 y north-east 4). Sin 'boca': 'fogonazo' ni 'efectos'.",
+    "duracion": 0.6,
+    "impacto": 0,
+    "fotogramas": {
+      "south":      [4, 5, 6, 7, 8],
+      "south-east": [4, 5, 6, 7, 8],
+      "east":       [5, 6, 6, 7, 8],
+      "north-east": [4, 5, 6, 7, 8],
+      "north":      [4, 5, 6, 7, 8],
+      "north-west": [4, 5, 6, 7, 8],
+      "west":       [4, 5, 6, 7, 8],
+      "south-west": [4, 5, 6, 7, 8]
+    }
+  }
+}

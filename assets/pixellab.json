@@ -2278,14 +2278,20 @@
    "cost": "10 generaciones",
    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 10002. Descartada: solo 21 colores y en el suroeste Johnny lleva dos bumeranes (uno en cada mano). Sus 8 posturas, en assets/sources/conserje-48-bumeran/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la B, descartada) y 2 de la prueba del lanzamiento (east y north)",
+  "cost_total": "36 generaciones hasta la parte 3: 20 de los dos estados (la B, descartada), 8 del lanzamiento (2 de prueba y 6 de las otras direcciones) y 8 del andar; todo a la primera, sin repeticiones",
   "ataque": {
-   "nota": "Lanzamiento: el gesto de lanzar el bumerán (el brazo atrás, lo lanza hacia delante y vuelve a la guardia con el bumerán en la mano). El bumerán que vuela y vuelve lo dibuja el juego (scripts/bumeran.gd): la hoja solo lleva el gesto. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una); PixelLab devolvió fotogramas de 192x96 (este) y 96x124 (norte). Fotogramas en assets/sources/conserje-48-bumeran/ataque/<dirección>-<n>.png. PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas. East: 0 = guardia, 1-2 = el brazo se echa atrás con el bumerán detrás de la cabeza, 3-4 = el brazo atrás del todo con el bumerán en horizontal a su espalda, 5 = el lanzamiento: brazo estirado hacia delante con la mano vacía y un bumerán volando dibujado aparte, separado de Johnny (componente suelto de 174 píxeles: se quita), 6 = brazo estirado con el bumerán en la mano apuntando hacia delante, 7 = el brazo sube con el bumerán sobre la cabeza (lo recoge), 8 = guardia. North: 0 = guardia, 1-3 = el brazo baja y se echa atrás, 4 = el brazo recto hacia arriba con el bumerán de canto (una raya fina de 30 px sobre la cabeza), 5-7 = el brazo arriba con el bumerán curvo sobre la cabeza, 8 = guardia. Fotogramas que valen para el gesto (el bumerán sale al empezar `attack`, así que tiene que empezar en el lanzamiento): east [5,6,7,8] (quitando lo que no toca a Johnny del 5) y north [4,5,6,7,8].",
+   "nota": "Lanzamiento: el gesto de lanzar el bumerán (el brazo atrás, lo lanza hacia delante y vuelve a la guardia con el bumerán en la mano). El bumerán que vuela y vuelve lo dibuja el juego (scripts/bumeran.gd): la hoja solo lleva el gesto. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una); PixelLab devolvió fotogramas de 192x96 (este) y 96x124 (norte). Fotogramas en assets/sources/conserje-48-bumeran/ataque/<dirección>-<n>.png. PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas. East: 0 = guardia, 1-2 = el brazo se echa atrás con el bumerán detrás de la cabeza, 3-4 = el brazo atrás del todo con el bumerán en horizontal a su espalda, 5 = el lanzamiento: brazo estirado hacia delante con la mano vacía y un bumerán volando dibujado aparte, separado de Johnny (componente suelto de 174 píxeles: se quita), 6 = brazo estirado con el bumerán en la mano apuntando hacia delante, 7 = el brazo sube con el bumerán sobre la cabeza (lo recoge), 8 = guardia. North: 0 = guardia, 1-3 = el brazo baja y se echa atrás, 4 = el brazo recto hacia arriba con el bumerán de canto (una raya fina de 30 px sobre la cabeza), 5-7 = el brazo arriba con el bumerán curvo sobre la cabeza, 8 = guardia. Fotogramas que valen para el gesto (el bumerán sale al empezar `attack`, así que tiene que empezar en el lanzamiento): east [5,6,7,8] (quitando lo que no toca a Johnny del 5) y north [4,5,6,7,8]. PARTE 3 (2026-10-24): las otras 6 direcciones (1 generación cada una, todas a la primera, Johnny no se da la vuelta de espaldas, el bumerán sigue siendo uno solo). Lienzos de partida: los mismos 8 del desintegrador (ids en 'subidas'). En el sur, sureste y suroeste el fotograma 3 es el lanzamiento con el bumerán de canto como una raya de 90-100 px (no vale: es muy larga) y el 4-6 es el brazo estirado hacia abajo con el bumerán en la mano; en west 3-6, east 5-6, noreste 4-7 y noroeste 3-6 el brazo estirado con el bumerán en la mano; el 7 lo recoge junto a la cabeza y el 8 es la guardia. Se usan 5 fotogramas por dirección (arma.py exige los mismos en todas): [4,5,6,7,8] en todas menos east [5,6,6,7,8] (se repite el 6, el brazo estirado), duracion 0,6 s (ritmo 1: cabe hasta 0,95 s). Trozos sueltos que PixelLab dibujó aparte, el bumerán volando, quitados de los fotogramas elegidos con un script (el componente que no toca a Johnny): east 5 (174 px) y north-east 4 (82 px); en north-west 3 y south-west 3 también había uno, pero esos fotogramas no se usan. Sin 'boca': 'fogonazo' ni 'efectos' en arma.json (ver 'EN EL JUEGO'). BACKBLAZE CAÍDO: backblaze.pixellab.ai no respondía (timeout), así que los fotogramas se bajaron del zip https://api.pixellab.ai/mcp/characters/<id>/spritesheet (hoja de rejilla con las rotaciones y todas las animaciones; los fotogramas salen idénticos píxel a píxel a los originales, comprobado con east y north) y se recortaron con una ventana común por animación; por eso las 6 nuevas tienen lienzos menores que los de east y north (192x96 y 96x124).",
    "animation_name": "lanzar-bumeran",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
    "initial_pose": {
     "east": "standing facing right, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
-    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free"
+    "west": "standing facing left, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "south": "standing facing the camera, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "south-east": "standing in three-quarter front view, facing toward the camera and to the right, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "south-west": "standing in three-quarter front view, facing toward the camera and to the left, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "north-east": "standing in three-quarter back view, facing away from the camera and to the right, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free",
+    "north-west": "standing in three-quarter back view, facing away from the camera and to the left, his right arm raised with the elbow bent, the big steel V-shaped boomerang with a red handle held in his hand beside his shoulder, ready to throw it, his left hand free"
    },
    "action_description": "He throws the boomerang once. His right arm winds back for an instant, then he whips it forward, toward the right of the image, in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
    "east": {
@@ -2313,7 +2319,158 @@
     "north-east": "633ea8f1-28a8-4c07-ae9d-5c202ffd2cf4",
     "north-west": "c91e533f-d6d5-4e8a-b15d-d9499f0110b1"
    },
-   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+   "cost": "8 generaciones: 2 de la prueba (east y north, parte 2) y 6 de las otras direcciones (parte 3), todas a la primera",
+   "textos_por_direccion": {
+    "east": "He throws the boomerang once. His right arm winds back for an instant, then he whips it forward, toward the right of the image, in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-east": "He throws the boomerang once. His right arm winds back for an instant, then he whips it forward toward the lower right of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "west": "He throws the boomerang once. His right arm winds back for an instant, then he whips it forward in front of him, toward the left of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-west": "He throws the boomerang once. His right arm winds back for an instant, then he whips it forward in front of him, toward the lower left of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south": "He keeps facing the camera the whole time and never turns. He throws the boomerang once, straight toward the camera. His right arm winds back for an instant, then he whips it down and forward toward the bottom of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, the boomerang raised beside his shoulder and his left hand free. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+    "north": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He throws the boomerang once, away from the camera, toward the top of the image. His right arm winds back for an instant, then he whips it forward and up past his head in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the boomerang raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout.",
+    "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He throws the boomerang once. His right arm winds back for an instant, then he whips it forward toward the upper right of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the boomerang raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He throws the boomerang once. His right arm winds back for an instant, then he whips it forward toward the upper left of the image in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel boomerang the whole time and never lets go of it. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the boomerang raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "south": {
+    "group": "ff684484-3d41-4693-a00e-aa482fb82e6b",
+    "animation_id": "1ac163a4-7052-4cb8-a171-f154ba5b00d7",
+    "animation_name": "lanzar-bumeran-sur",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand"
+   },
+   "south-east": {
+    "group": "6c528276-d45e-4ae2-a480-76eea6d75c14",
+    "animation_id": "d4fbda10-e04e-465e-861d-b0718b45345e",
+    "animation_name": "lanzar-bumeran",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand"
+   },
+   "west": {
+    "group": "07688696-d6ae-4c78-9ca9-4962875d11e8",
+    "animation_id": "7ed18f6f-75e1-467a-b765-cffc9967d9a5",
+    "animation_name": "lanzar-bumeran",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand"
+   },
+   "south-west": {
+    "group": "948fc5ed-87d2-46b2-ae54-12fb1296274e",
+    "animation_id": "521bd3fb-e217-4d3e-a00e-2eaded0a385b",
+    "animation_name": "lanzar-bumeran",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand"
+   },
+   "north-east": {
+    "group": "1292d6c3-9bea-4e80-a864-baaa4302cc07",
+    "animation_id": "0b58439c-870e-4a03-ba29-a07dee06f304",
+    "animation_name": "lanzar-bumeran-ne",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand"
+   },
+   "north-west": {
+    "group": "f0fa3201-8da4-4471-bd63-f83c4365e77c",
+    "animation_id": "771be82a-022d-4b1b-917f-ecec2a0661a2",
+    "animation_name": "lanzar-bumeran-no",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand"
+   },
+   "fotogramas_usados": {
+    "south": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "south-east": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "east": [
+     5,
+     6,
+     6,
+     7,
+     8
+    ],
+    "north-east": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "north": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "north-west": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "west": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "south-west": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   }
+  },
+  "andar": {
+   "nota": "Andar: PixMiniMax, 12 fotogramas más el de partida, sin fotograma de partida ni de llegada (las rotaciones de PixelLab son las mismas posturas del proyecto). Estilo del andar de la pistola, el lanzallamas, el supersoplete y el desintegrador ('he quietly carries ... The boomerang is silent and still ... Nothing else appears in the image'), sin nombrar lo que no se quiere ver. Ocho llamadas de 1 generación (5 textos): texto común para south-east, east, west y south-west (mismo animation_group_id), y uno propio para south, north, north-east y north-west (de espaldas, el texto estricto). Los 8 salieron a la primera, ninguno de perfil, el bumerán siempre en la mano derecha junto al hombro y ningún bumerán volando colado. Fotogramas en assets/sources/conserje-48-bumeran/walk/<dirección>-<n>.png (bajados del zip, ver ataque.nota: backblaze caído). Ciclos a mano (ciclos.py: [a, n] = fotogramas a..a+n-1; diferencias de píxeles de 5 a 121): south [0,12], south-east [2,10], east [3,9], north-east [2,10], north [1,10], north-west [4,8], south-west [0,12]. WEST: el andar propio solo cierra con 163-219 píxeles de diferencia ([0,7] o [0,12]), así que west usa el de east dado la vuelta ('andar.espejo': {'west': 'east'}, como la pistola; arma.py lo movió (-4, 0) para que case con el dibujo quieto). Zapatos negros con borde gris: 1-15 píxeles sueltos por dirección en total (east 14, south-west 15), no hizo falta zapato_negro.py.",
+   "animation_name": "andar-bumeran",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
+   "group": "3d84a8bf-0955-4de3-a347-800ffc42684f (east, west, south-east, south-west)",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the big steel boomerang in his raised right hand beside his shoulder in the same place the whole time, his elbow bent, and his left hand hangs relaxed. The boomerang is silent and still. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "south": {
+    "group": "623b158d-a318-44f6-a120-b65d947fbb75",
+    "animation_id": "fed0b8a2-2f2d-4081-939c-54d1f5cf6a72",
+    "animation_name": "andar-bumeran-sur",
+    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the big steel boomerang in his raised right hand beside his shoulder in the same place the whole time, his elbow bent, and his left hand hangs relaxed. The boomerang is silent and still. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "676c8f88-e19b-4bcd-8deb-339ac8b7223b",
+    "animation_id": "d05005fc-b175-4ff5-b2a9-2e274159ff4d",
+    "animation_name": "andar-bumeran-norte",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
+    "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the big steel boomerang in his raised right hand beside his shoulder in the same place the whole time, his left hand hangs relaxed. The boomerang is calm and still. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "north-east": {
+    "group": "f142f10d-b2dc-4ebb-994a-cb2067d6290d",
+    "animation_id": "c58a60d0-a3d8-4e9b-bb6f-31e7dbb58bf2",
+    "animation_name": "andar-bumeran-ne",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the big steel boomerang in his raised right hand beside his shoulder in the same place the whole time, his left hand hangs relaxed. The boomerang is calm and still. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "a18f7f8e-2f56-45f0-9818-84eb6a231295",
+    "animation_id": "7be04966-374a-42a9-af15-21b161d2cf13",
+    "animation_name": "andar-bumeran-no",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a big steel boomerang in his raised right hand",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the big steel boomerang in his raised right hand beside his shoulder in the same place the whole time, his left hand hangs relaxed. The boomerang is calm and still. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "comunes": {
+    "east": "8891b34c-3046-4a7c-a2ac-6a7814901a2f",
+    "west": "a138b8c7-b442-4555-9037-b504fff66bb0",
+    "south-east": "f6c47cd3-09c4-4910-894e-9f9ce655ba22",
+    "south-west": "3f104a0b-05f6-4392-9315-2f78a9ead055"
+   },
+   "cost": "8 generaciones, todas a la primera"
   }
  },
  "zombi-venenoso-48": {
