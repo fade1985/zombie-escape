@@ -838,6 +838,29 @@
    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the burning bat in the same guard grip with both hands the whole time: the bat stays raised up and tilted back over his shoulder in the same place, only swaying very slightly with each step, and its flames keep flickering above the tip. His arms do not swing and never let go of the bat. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
   }
  },
+ "conserje-48-partecuerpos": {
+  "kind": "character_state",
+  "character_id": "f9252b8f-441f-484e-91a9-a1da5518915d",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Partecuerpos en guardia (colores libres)",
+  "nota": "Estado de Johnny con el partecuerpos (el arma creada: el bate con cuatro cuchillas de acero clavadas de canto a lo largo de la punta gorda, el filo hacia fuera, y sangre en los filos), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). La misma postura que el bate: en alto sobre el hombro, con las dos manos, en las 8 direcciones. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 3001) y la B, con colores libres (seed 3002). La B es la propuesta (cuchillas más grandes y planas, grises con filo blanco, y la punta del bate empapada de sangre roja; la A saca las cuchillas más pequeñas y se parece más a los clavos del aplastacabezas) y sus 8 posturas están en assets/sources/conserje-48-partecuerpos/rotations/<dirección>.png; la A, en descartes/rotations-A/. Lienzo de 64x64. Con los dos intentos las cuchillas salen como puntas grises triangulares con la punta roja: se distinguen del aplastacabezas por el tamaño y por la sangre, no por la forma.",
+  "request": {
+   "edit_description": "holding a homemade bladed club like a weapon: a wooden baseball bat with four large flat steel knife blades sunk edge-out into its thick end, one after another along the thick end, like the teeth of a saw: each blade is a wide flat shape with a sharp cutting edge pointing outwards, sticking far out of both sides of the bat, clearly visible beyond the outline of the bat; bright red blood smeared along the blade edges; gripping the handle with both hands in a batter's ready stance, knees slightly bent; the bat is raised up and tilted back over one shoulder, the bladed thick end pointing up above shoulder height, away from his face; the bat stays raised over the shoulder in every view: front, side and back; light brown wooden bat with a dark outline, the blades are light grey steel with dark outlines and a bright white edge highlight, red blood on their edges; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 3002
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "f667a4c5-0afc-42a0-bd9c-7d071dacde58",
+   "state_name": "Partecuerpos en guardia",
+   "cost": "10 generaciones",
+   "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 3001. Johnny sale igual que siempre; las cuchillas, más pequeñas, con la punta roja, y el bate con sangre por el lado. Sus 8 posturas, en assets/sources/conserje-48-partecuerpos/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
+  },
+  "cost_total": "20 generaciones por ahora: los dos estados (la A, descartada si el dueño elige la B)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
