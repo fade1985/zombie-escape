@@ -49,7 +49,11 @@
         1,
         9
       ]
-    }
+    },
+    "arreglos": [
+      "py tools/zapato_negro.py conserje-48-supermaza north 8"
+    ],
+    "nota_arreglos": "Después de montar la hoja con tools/arma.py (y antes de tools/cara.py): el andar al norte, fotograma 10 de PixelLab (el 8º del ciclo), tenía un zapato relleno de negro con un borde gris claro."
   },
   "ataque": {
     "nota": "Qué fotogramas de PixelLab se usan en cada dirección y en qué orden (de 13: el de partida y 12 generados). La súper maza ataca 0,8 veces por segundo y el golpe dura 0,5 s: 10 fotogramas. En todas, el golpe (la primera estela blanca grande del giro, con el anillo de polvo) cae en el cuarto (índice 3; Armas.CREADAS.supermaza → momento 0,3). Se saltan los fotogramas repetidos de la preparación y de la vuelta a la guardia; el último (12) es el de llegada, igual que el quieto.",

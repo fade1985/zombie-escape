@@ -23,6 +23,8 @@
 #                  8 direcciones y con las 4 skins (Armas.CREADAS.inmovilizadora)
 #   --latigo       lo mismo con el látigo escorpión: su icono, su hoja, el golpe (a 110 de alcance, que envenena) en las
 #                  8 direcciones y con las 4 skins (Armas.CREADAS.latigo)
+#   --supermaza    lo mismo con la súper maza: su icono, su hoja, el golpe en círculo (pega a los zombis de todos los lados) en
+#                  las 8 direcciones y con las 4 skins (Armas.CREADAS.supermaza)
 #   --ascensor   el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -130,6 +132,9 @@ func empezar_prueba() -> void:
 	elif "--latigo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_latigo()
+	elif "--supermaza" in args:
+		set_process(false)   # sin la prueba larga
+		probar_supermaza()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -2883,6 +2888,86 @@ func probar_latigo() -> void:
 		await get_tree().create_timer(0.1).timeout
 		Captura.foto("captura-latigo-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-latigo-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --supermaza": la súper maza con su dibujo propio (Armas.CREADAS.supermaza, conserje-48-supermaza, de
+# casilla más grande: pies en 64,79; recetas.gd, su icono). Como la del látigo: en la sala de mantenimiento, con dos en
+# el baúl (una guardada antes de que tuviera icono propio, con el de las mancuernas), Johnny se arrima al baúl y cuenta
+# el icono de cada una (captura-supermaza-baul.png). Saca una y cuenta su hoja, su momento del golpe, sus pies y que ya
+# no le salen chispitas; pone un zombi a cada lado (izquierda, derecha, arriba y abajo, a 45) y otro lejos (a 160),
+# ataca hacia la izquierda y cuenta que el golpe en círculo (arco 360) le quita vida a los cuatro de alrededor y al
+# lejano no (con una foto justo en el golpe, captura-supermaza-circulo.png); luego ataca en las 8 direcciones, con una
+# foto de cada una justo en el golpe (captura-supermaza-<dirección>.png). Con cada skin (portero, glotón, gymbro y
+# bombero), su hoja y una foto (captura-supermaza-<skin>.png). Cada línea dice lo esperado. Deja el guardado como
+# estaba y se cierra
+func probar_supermaza() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("supermaza", "azul")
+	vieja.icono = "mancuernas"   # como las que se crearon antes de que la súper maza tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("supermaza", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"supermaza\", \"supermaza\"]) · en el banco «%s» (esperado: supermaza)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("supermaza")])
+	Captura.foto("captura-supermaza-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacada del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Súper maza en la mano: hoja «%s» · momento %.3f · alcance %.0f · arco %.0f · pies %s · chispitas %s · icono «%s» (esperado: conserje-48-supermaza.tres, 0.300, 62, 360, (64, 79), false, supermaza)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.alcance, w.arco, w.pies, w.has("detalle"), Objetos.icono(id)])
+
+	# el golpe en círculo: llega en su fotograma (a los 0,15 s: 0,5 × 0,3) y pega a los de todos los lados, no al lejano
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-45, 0), Vector2(45, 0), Vector2(0, -45), Vector2(0, 45), Vector2(160, 0)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.17).timeout
+	Captura.foto("captura-supermaza-circulo.png")
+	await get_tree().create_timer(0.2).timeout
+	var vidas := z.map(func(o): return o.vida)
+	print("Golpe en círculo: vidas de los zombis (izquierda, derecha, arriba, abajo, lejos) %s (esperado: los cuatro primeros menos de 500 y el último, 500)" % [vidas])
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.17).timeout
+		Captura.foto("captura-supermaza-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con cada skin: su hoja de la súper maza
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.17).timeout
+		Captura.foto("captura-supermaza-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-supermaza-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.5).timeout
 
 	Guardado.cambiar(func(g2):
