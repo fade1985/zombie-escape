@@ -13,6 +13,8 @@
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
 #   --lanza        la lanza con su dibujo propio: su icono en el baúl, su hoja, la estocada en las 8 direcciones y
 #                  con una skin (Armas.CREADAS.lanza)
+#   --aplastacabezas  lo mismo con el aplastacabezas: su icono, su hoja, el golpe (que aturde) en las 8 direcciones
+#                  y con una skin (Armas.CREADAS.aplastacabezas)
 #   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -105,6 +107,9 @@ func empezar_prueba() -> void:
 	elif "--lanza" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanza()
+	elif "--aplastacabezas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_aplastacabezas()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -2467,6 +2472,82 @@ func probar_lanza() -> void:
 	await get_tree().create_timer(0.13).timeout
 	Captura.foto("captura-lanza-bombero.png")
 	print("Con el bombero: hoja «%s» (esperado: conserje-48-lanza-bombero.tres)" % johnny.sprite.sprite_frames.resource_path.get_file())
+	await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --aplastacabezas": el aplastacabezas con su dibujo propio (Armas.CREADAS.aplastacabezas,
+# conserje-48-aplastacabezas; recetas.gd, su icono). Como la de la lanza: en la sala de mantenimiento, con dos en el
+# baúl (una guardada antes de que tuviera icono propio, con el del bate), Johnny se arrima al baúl y cuenta el icono de
+# cada una (captura-aplastacabezas-baul.png). Saca una y cuenta su hoja, su momento del golpe y que ya no le salen
+# chispitas; le da a un zombi a 50 a su izquierda (lo aturde y lo echa atrás) y luego ataca en las 8 direcciones, con una
+# foto de cada una justo en el golpe (captura-aplastacabezas-<dirección>.png). Con la skin del portero, su hoja y una
+# foto (captura-aplastacabezas-portero.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_aplastacabezas() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("aplastacabezas", "azul")
+	vieja.icono = "bate"   # como las que se crearon antes de que el aplastacabezas tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("aplastacabezas", "morada")]
+		g2.skins = ["portero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"aplastacabezas\", \"aplastacabezas\"]) · en el banco «%s» (esperado: aplastacabezas)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("aplastacabezas")])
+	Captura.foto("captura-aplastacabezas-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Aplastacabezas en la mano: hoja «%s» · momento %.3f · chispitas %s · icono «%s» (esperado: conserje-48-aplastacabezas.tres, 0.222, false, aplastacabezas)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.has("detalle"), Objetos.icono(id)])
+
+	# el golpe llega en su fotograma (a los 0,111 s: 0,5 × 0,222), aturde y echa atrás (el zombi, a la izquierda:
+	# a la derecha hay una pared muy cerca y no le deja salir despedido)
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-50, 0)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.2).timeout
+	print("Golpe a 50: vida del zombi %d (esperado: menos de 500) · aturdido %s (esperado: true) · a %.0f de Johnny (esperado: más de 50)" % [
+		z[0].vida, z[0].aturdido > 0.0, z[0].position.distance_to(johnny.position)])
+	await get_tree().create_timer(0.4).timeout
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.13).timeout
+		Captura.foto("captura-aplastacabezas-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con la skin del portero: su hoja del aplastacabezas
+	Skins.poner("portero")
+	johnny.vestir("portero")
+	johnny.direccion = "e"
+	johnny.atacar(0.0)
+	await get_tree().create_timer(0.13).timeout
+	Captura.foto("captura-aplastacabezas-portero.png")
+	print("Con el portero: hoja «%s» (esperado: conserje-48-aplastacabezas-portero.tres)" % johnny.sprite.sprite_frames.resource_path.get_file())
 	await get_tree().create_timer(0.5).timeout
 
 	Guardado.cambiar(func(g2):
