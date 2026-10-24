@@ -859,7 +859,29 @@
    "cost": "10 generaciones",
    "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 3001. Johnny sale igual que siempre; las cuchillas, más pequeñas, con la punta roja, y el bate con sangre por el lado. Sus 8 posturas, en assets/sources/conserje-48-partecuerpos/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "20 generaciones por ahora: los dos estados (la A, descartada si el dueño elige la B)"
+  "cost_total": "22 generaciones por ahora: 20 de los dos estados (la A, descartada) y 2 del golpe de prueba (1 de lado y 1 de espaldas)",
+  "ataque": {
+   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-partecuerpos --lienzos <carpeta>; los upload:<id> de los 8, en 'subidas', caducan a los 3 días). Fotogramas en assets/sources/conserje-48-partecuerpos/ataque/. De lado salió a la primera: se prepara con el bate en alto (1-2), barre por delante con una estela blanca enorme de aire con bordes rojos y gotas de sangre (3-7, la más grande en 4-6; en 5 y 6 casi da la vuelta entera a Johnny de espaldas, y el lienzo sale de 124x96: puede salirse de la casilla de 96 al montar) y vuelve a la guardia (8-12). De espaldas también a la primera (1 generación): un golpe de arriba abajo, con el bate levantado sobre la cabeza (2), una estela blanca y roja que sale hacia abajo a la derecha (5) y luego grande hacia arriba (6), y vuelve al hombro derecho de la imagen (10-12); siempre se ve el bate, pero en 3-4 Johnny se gira un poco de perfil al bajar el bate cruzado por delante del pecho.",
+   "subidas": "2026-10-24: south upload:24a729f6-bc93-4a29-8e8a-7034bef31d02, south-east upload:e4b6ca14-cea4-47b5-8586-a2fae37a072f, east upload:61845539-5651-4d33-9164-900868da3ed9, north-east upload:89de68c0-54c0-4dfb-b6d7-0b6fbbf30bde, north upload:4786e6af-17ae-4f13-a675-b2ee1cf14b18, north-west upload:adc51bb7-1bfd-40de-b11d-21a6494d6bdd, west upload:e195f6e0-5363-48ae-bf63-774207e964b3, south-west upload:1d07a4c7-0ab2-42a7-981f-b4d4eab11579",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with steel knife blades sunk into its thick end, red blood on the blades",
+   "east": {
+    "group": "87a4e3c8-7d11-40db-b161-680372140837",
+    "animation_name": "ataque-partecuerpos",
+    "cost": "1 generación",
+    "nota": "Bien a la primera. PixelLab lo devuelve en 124x96.",
+    "initial_pose": "standing in a batter's guard stance facing right, gripping the bladed bat with both hands, the bat raised up and tilted back over his rear shoulder, the steel blades sticking out of its thick end above shoulder height",
+    "action_description": "He winds up, twisting his torso back with the bladed bat cocked over his rear shoulder, then steps forward with the lead foot and swings the bat hard and fast in one very wide horizontal arc at chest height, sweeping all the way across in front of him from one side to the other, hips and shoulders rotating through the blow. The bat leaves a bright white crescent-shaped swoosh of air behind it along the whole arc of the swing, with a few small red blood drops flying off the blades. He follows through with the bat wrapping around to his other side, the tail of the red bandana flicking with the motion. The swoosh fades away quickly, he brings the bat back up and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "ab11e484-d579-4b9c-9803-1bb72632eeba",
+    "animation_name": "ataque-partecuerpos-norte",
+    "cost": "1 generación",
+    "nota": "El elegido (primer intento): casi siempre de espaldas aunque en 3-4 se gira un poco de perfil; el bate siempre se ve. El texto es el del bate de fuego (golpe de arriba abajo) con el bate a la derecha de la imagen y la estela blanca con gotas rojas.",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat with steel knife blades sunk into its thick end, red blood on the blades, seen from behind",
+    "initial_pose": "standing in a batter's guard stance seen from behind, his back to the camera, facing away toward the top of the image, gripping the bladed bat with both hands, the bat raised up over his shoulder on the right side of the image, the steel blades sticking out of its thick end",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He never bends over or leans, and the bat never drops down to his sides. His feet stay planted. Using mostly his arms, he lifts the bladed bat straight up above his head, then chops it forward in one fast, hard blow away from the camera, so the blades land far ahead of him, straight up the image. Then a short crescent-shaped white swoosh of air appears above his head along the arc of the bat, with a few red blood drops. The swoosh vanishes at once as he brings the bat back over his shoulder on the right side of the image and settles cleanly into the starting guard stance. Only one blow. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   }
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
