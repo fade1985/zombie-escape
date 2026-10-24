@@ -1971,12 +1971,14 @@ func probar_sala() -> void:
 # Con "--captura --armas": la sala de pruebas de armas (sala_armas.gd). Desde la sala de mantenimiento, F11 lleva a
 # ella: cuenta en la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola. La
 # pistola, en el modo asistido y a 200 de la diana, desde 72 ángulos (cada 5°; 0° = disparando hacia la derecha, 90° =
-# hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla.
+# hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla
+# (desde el 24 oct la bala va de la boca al zombi: ninguno); y a quemarropa, a 40, desde 8 direcciones.
 # Luego, que la diana no se ha muerto ni ha perdido vida (y cuántos zombis normales habría matado), que la reserva sigue llena y que ha recargado; que el punto pasa
 # a la escopeta y la coma vuelve (con el recuento a cero) y llega a las del banco de trabajo, que el guion esconde y
 # saca el panel; y que F11 vuelve a la sala
 # de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
-# panel, tras un fallo por el lado) y captura-armas-escopeta.png (los perdigones). Cada línea dice lo esperado
+# panel, tras un fallo por el lado), captura-armas-pistola-<e, se, n, o>.png (Johnny disparando con la Beretta hacia cada
+# lado, con el fogonazo) y captura-armas-escopeta.png (los perdigones). Cada línea dice lo esperado
 func probar_armas() -> void:
 	johnny.coger("fregona")   # (entra con la de cuerpo a cuerpo en la mano, para ver que le pone la pistola)
 	var antes := [johnny.huecos.duplicate(), johnny.mano, johnny.balas, johnny.reserva]
@@ -2034,6 +2036,33 @@ func probar_armas() -> void:
 		sala.diana.estado != "muerto", vida_min, sala.diana.vida_max, sala.diana.vida_max, sala.abatidos, sala.aciertos])
 	print("Munición: reserva %d (esperado: %d, siempre llena) · ha recargado %s (esperado: true)" % [johnny.reserva,
 		Armas.datos("pistola").cargador * johnny.RESERVA_MAX, recargo])
+	# A quemarropa: a 40 del centro de la diana, la boca de la Beretta queda más allá del zombi (johnny.gd, tiro)
+	var pegado := 0
+	for grados in range(0, 360, 45):
+		johnny.position = sala.diana.global_position - Vector2.from_angle(deg_to_rad(grados)) * 40.0
+		johnny.velocity = Vector2.ZERO
+		var tiros_antes := sala.tiros
+		var espera := 0.0
+		while sala.tiros == tiros_antes and espera < 3.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		var b: Dictionary = sala.balas.back()
+		while b.fin == "" and espera < 5.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		pegado += 1 if b.fin == "acierto" else 0
+	print("A quemarropa (a 40 de la diana): da desde %d de 8 direcciones (esperado: 8)" % pegado)
+	# La Beretta disparando hacia la derecha, en diagonal hacia abajo, de espaldas y hacia la izquierda, justo al salir la bala
+	for d in [["e", 0], ["se", 45], ["n", 270], ["o", 180]]:
+		johnny.position = sala.diana.global_position - Vector2.from_angle(deg_to_rad(d[1])) * 140.0
+		johnny.velocity = Vector2.ZERO
+		var tiros_antes := sala.tiros
+		var espera := 0.0
+		while sala.tiros == tiros_antes and espera < 3.0:
+			await get_tree().physics_frame
+			espera += get_physics_process_delta_time()
+		await get_tree().create_timer(0.03).timeout
+		Captura.foto("captura-armas-pistola-%s.png" % d[0])
 	await pulsar_y_esperar(KEY_PERIOD)
 	for i in 2:
 		await get_tree().physics_frame

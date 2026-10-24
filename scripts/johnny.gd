@@ -554,18 +554,53 @@ func golpear(angulo: float) -> void:
 		Temblor.temblar(3.0 + tocados)
 
 
-# Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo
+# De dónde sale la bala y hacia dónde va: [salida, ángulo]. Sale de la boca del arma, como se ve en el dibujo (en
+# píxeles del dibujo desde los pies, x2 para pasar a unidades; los pies van 16 unidades por debajo del centro de
+# Johnny). La bala de verdad va 50 más abajo, a ras de suelo, y se dibuja 50 más arriba (ver bala.gd): así sale de la
+# boca y choca con lo que hay a la altura de los pies. Si la línea de tiro (desde el centro de Johnny) pasa por un
+# zombi, la bala va derecha de la boca a él: paralela a esa línea, con la boca lejos del centro pasaría por el lado.
+# Las armas creadas a distancia (gotas, bumerán, garfio...) van como siempre, paralelas
+func tiro(angulo: float, w: Dictionary, hacia: String) -> Array:
+	var boca: Vector2 = w.boca[hacia] * 2.0
+	var salida := global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
+	var blanco := blanco_en_linea(angulo, w)
+	if blanco == null or w.has("efecto"):
+		return [salida, angulo]
+	if (blanco.global_position - salida).dot(Vector2.from_angle(angulo)) > blanco.radio:
+		return [salida, (blanco.global_position - salida).angle()]
+	# A quemarropa (el zombi está más cerca que la boca): sale de Johnny, porque de la boca nacería detrás del zombi
+	return [global_position, (blanco.global_position - global_position).angle()]
+
+
+# El zombi al que apunta la línea de tiro: el más cercano, a tiro y a la vista, cuyo círculo de acierto (el de
+# bala.gd: su radio, el de la bala y 3 de margen) cruza la línea que sale del centro de Johnny
+func blanco_en_linea(angulo: float, w: Dictionary) -> Node2D:
+	var u := Vector2.from_angle(angulo)
+	var radio_bala := 3.0 if w.get("perdigones", 1) > 1 else 4.0
+	var mejor: Node2D = null
+	var cerca := INF
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		var hacia: Vector2 = zombi.global_position - global_position
+		var delante := hacia.dot(u)
+		if delante <= 0.0 or delante >= cerca or hacia.length() - zombi.radio > w.alcance:
+			continue
+		if absf(hacia.cross(u)) > zombi.radio + radio_bala + 3.0 or not se_ve(zombi):
+			continue
+		mejor = zombi
+		cerca = delante
+	return mejor
+
+
+# Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo, hacia el zombi al que apunta
 func disparar(angulo: float) -> void:
 	var w := arma()
 	if not w.get("sin_municion", false) and not pistola_sin_fin():
 		balas -= 1
 	disparos += 1
 	var seguro: bool = stats.mirilla and disparos % 4 == 0   # Mirilla: tras 3 disparos, uno crítico seguro
-	# La boca del arma está en píxeles del dibujo desde los pies (x2 para pasar a unidades); los pies van
-	# 16 unidades por debajo del centro de Johnny. La bala de verdad va 50 más abajo, a ras de suelo, y se
-	# dibuja 50 más arriba (ver bala.gd): así sale de la boca y choca con lo que hay a la altura de los pies
-	var boca: Vector2 = w.boca[direccion] * 2.0
-	var salida := global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
+	var t := tiro(angulo, w, direccion)
+	var salida: Vector2 = t[0]
+	angulo = t[1]
 	if w.has("efecto"):
 		# las armas creadas a distancia: gotas de fuego o ácido, o el bumerán (armas_creadas.gd)
 		ArmasCreadas.disparar(self, angulo, w, salida)

@@ -321,11 +321,11 @@ func _draw() -> void:
 		var c := to_local(objetivo.global_position)
 		draw_line(p, c, AMARILLO, 2.0)
 		draw_arc(c, 8.0, 0.0, TAU, 16, AMARILLO, 2.0)
-	# Por dónde irá la bala: sale de la boca del arma (como en johnny.gd, disparar) y va paralela a la línea amarilla
+	# Por dónde irá la bala: sale de la boca del arma y va al zombi que pille la línea de tiro (johnny.gd, tiro)
 	if fuego and w.has("boca") and angulo != INF:
-		var boca: Vector2 = w.boca[johnny.direccion_de(Vector2.from_angle(angulo))] * 2.0
-		var salida: Vector2 = johnny.global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
-		var fin: Vector2 = salida + Vector2.from_angle(angulo) * w.alcance
+		var t: Array = johnny.tiro(angulo, w, johnny.direccion_de(Vector2.from_angle(angulo)))
+		var salida: Vector2 = t[0]
+		var fin: Vector2 = salida + Vector2.from_angle(t[1]) * w.alcance
 		var pared := get_world_2d().direct_space_state.intersect_ray(PhysicsRayQueryParameters2D.create(salida, fin, 1))
 		if pared:
 			fin = pared.position

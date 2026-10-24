@@ -42,8 +42,8 @@ const DATOS := {
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.8, "cargador": 12, "recarga": 1.1,
 		"cartucho": false, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-pistola.tres"),
-		"boca": {"s": Vector2(-2, -31), "se": Vector2(23, -20), "e": Vector2(30, -33), "ne": Vector2(27, -45),
-			"n": Vector2(-1, -51), "no": Vector2(-20, -47), "o": Vector2(-30, -35), "so": Vector2(-21, -18)},
+		"boca": {"s": Vector2(0, -30), "se": Vector2(31, -27), "e": Vector2(33, -35), "ne": Vector2(31, -46),
+			"n": Vector2(8, -59), "no": Vector2(-33, -43), "o": Vector2(-35, -37), "so": Vector2(-26, -30)},
 	},
 	"escopeta": {
 		"nombre": "Escopeta", "tipo": "fuego", "dano": 7, "ritmo": 1.0, "alcance": 260.0, "velocidad": 540.0,

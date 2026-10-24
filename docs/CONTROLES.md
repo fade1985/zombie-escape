@@ -46,7 +46,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   las direcciones. Se entra con la pistola; **coma** y **punto** pasan por todas las
   armas, también las del banco de trabajo (las 1-6 y Q también valen). La munición no se acaba, pero hay que recargar.
   En el suelo, las líneas de ayuda: el alcance (círculo blanco; cuerpo a cuerpo, el abanico del golpe), a quién apunta
-  (amarillo), por dónde irá la bala (azul a rayas, desde la boca del arma), el círculo de cada zombi donde le da la
+  (amarillo), por dónde irá la bala (azul a rayas, desde la boca del arma hasta el zombi que pille la línea de tiro), el círculo de cada zombi donde le da la
   bala (rojo) y el camino de cada bala (verde si da, naranja si pasa por el lado de la diana, roja con una X si choca o
   se le acaba el alcance). Arriba a la izquierda, la ficha del arma (con los talentos puestos) y el recuento:
   disparos, aciertos, por qué falla, daño por segundo y cuántos zombis normales habría matado (con una vida de mentira
