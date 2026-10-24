@@ -74,7 +74,7 @@ const HACHA_PEGA := 4
 const GIRO_DESDE := 1
 const SENTIDO := 1.0
 
-var inmune_fuego := true     # lo miran proyectil.gd y armas_creadas.gd: ni el molotov ni el lanzallamas le hacen nada
+var inmune_fuego := true     # lo miran proyectil.gd, armas_creadas.gd y llamarada.gd: ni el molotov ni el lanzallamas le hacen nada
 var espera_bolas := 1.5
 var espera_giro := 4.5
 var espera_molotov := 3.0

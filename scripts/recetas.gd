@@ -36,8 +36,9 @@ const LISTA := {
 		"desc": "Empuja mucho y aturde un instante", "edificio": "apartamentos"},
 	"bate_fuego": {"nombre": "Bate de fuego", "con": ["bate", "gasolina"], "hueco": "cuerpo", "icono": "bate_fuego", "dano": 20,
 		"desc": "Cada golpe prende fuego", "edificio": "apartamentos"},
-	"lanzallamas": {"nombre": "Lanzallamas", "con": ["pistola_agua", "gasolina"], "hueco": "fuego", "icono": "lanzallamas", "dano": 4,
-		"desc": "Chorro de fuego corto con depósito; prende fuego", "edificio": "apartamentos"},
+	# el lanzallamas: su daño es por segundo (la llamarada es continua)
+	"lanzallamas": {"nombre": "Lanzallamas", "con": ["pistola_agua", "gasolina"], "hueco": "fuego", "icono": "lanzallamas", "dano": 60,
+		"desc": "Llamarada continua que quema a todos; se llena con gasolina", "edificio": "apartamentos"},
 	"partecuerpos": {"nombre": "Partecuerpos", "con": ["bate", "cuchillas"], "hueco": "cuerpo", "icono": "partecuerpos", "dano": 22,
 		"desc": "Golpe en arco ancho que hace sangrar", "edificio": "apartamentos"},
 	"supersoplete": {"nombre": "Súpersoplete", "con": ["spray", "mechero"], "hueco": "fuego", "icono": "supersoplete", "dano": 7,
@@ -122,9 +123,12 @@ static func crear(receta: String, rareza := "") -> Dictionary:
 		"unidades": r.unidades + RAREZAS[rareza].extra if r.has("unidades") else 0}
 
 
-# La línea de debajo del nombre: su daño (o sus unidades). La rareza ya se ve en el color del borde
+# La línea de debajo del nombre: su daño (por segundo, el del lanzallamas) o sus unidades. La rareza ya se ve en el
+# color del borde
 static func detalle(a: Dictionary) -> String:
-	return "%d unidades" % a.unidades if a.unidades > 0 else "daño %d" % a.dano
+	if a.unidades > 0:
+		return "%d unidades" % a.unidades
+	return ("daño %d/s" if Armas.CREADAS.get(a.get("receta", ""), {}).has("deposito") else "daño %d") % a.dano
 
 
 # ── Las recetas aprendidas ──

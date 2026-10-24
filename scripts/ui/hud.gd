@@ -6,6 +6,7 @@
 #     tiembla y lo perdido se queda en claro un momento antes de bajar; con poca vida, la sangre late.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
 #     reserva. Al recargar, las gastadas parpadean. Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
+#     Con el lanzallamas, en vez de las balas, el depósito: una barra de gasolina y las gasolinas de la mochila.
 #   - Al lado, las armas: la de la mano en una casilla grande con el borde amarillo y la otra, pequeña y
 #     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
 #   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás
@@ -484,10 +485,13 @@ func pintar_barra() -> void:
 	pintar_balas()
 
 
-# Las balas del cargador, en fila encima de la barra
+# Las balas del cargador, en fila encima de la barra (el lanzallamas, su depósito)
 func pintar_balas() -> void:
 	var w: Dictionary = Armas.datos(johnny.huecos.fuego)
 	var lejos: bool = johnny.mano != "fuego"
+	if w.has("deposito"):
+		pintar_deposito(w, lejos)
+		return
 	var parpadeo: bool = johnny.recargando > 0.0 and int(Time.get_ticks_msec() / 200) % 2 == 0
 	var tam := Vector2(5, 10) if w.cargador > 16 else Vector2(10, 20)   # las del MP5, más pequeñas para que quepan
 	var hueco := 2.0
@@ -530,3 +534,34 @@ func pintar_balas() -> void:
 	color_texto.a = 0.5 if lejos else 1.0
 	barra.draw_string_outline(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, color_texto.a))
 	barra.draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color_texto)
+
+
+# El depósito del lanzallamas, encima de la barra de vida: una barra de gasolina que se vacía mientras echa fuego,
+# con una rayita por cada segundo (con poco, late en rojo), y al lado las gasolinas de la mochila (en naranja si no
+# queda ninguna). Al recargar se va llenando. Más apagado si lleva en la mano el arma cuerpo a cuerpo
+func pintar_deposito(w: Dictionary, lejos: bool) -> void:
+	var a := 0.5 if lejos else 1.0
+	var r := Rect2(HUECO.position.x, -18.0, 120.0, 14.0)
+	var parte: float = johnny.deposito / w.deposito
+	if johnny.recargando > 0.0:
+		parte = 1.0 - johnny.recargando / w.recarga
+	barra.draw_rect(r.grow(2.0), Color(Tema.LINEA, a))
+	barra.draw_rect(r, Color(Color("#1a1620"), a))
+	var luz := 0.0
+	if parte < 0.25 and johnny.recargando <= 0.0:
+		luz = 0.6 * absf(sin(tiempo * PI * 2.5))
+	var lleno := Rect2(r.position, Vector2(roundf(r.size.x * clampf(parte, 0.0, 1.0) / 2.0) * 2.0, r.size.y))
+	barra.draw_rect(lleno, Color(Color("#ff9f1c").lerp(Color("#e0503a"), luz), a))
+	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, 4)), Color(Color("#ffd23f").lerp(Color("#ff8a6a"), luz), a))
+	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y - 4), Vector2(lleno.size.x, 4)), Color(Color("#b8561c"), a))
+	for i in range(1, ceili(w.deposito)):
+		var x := r.position.x + roundf(r.size.x * i / w.deposito)
+		barra.draw_rect(Rect2(x - 1, r.position.y, 2, r.size.y), Color(Color("#1a1620"), a * 0.8))
+	var g: int = johnny.gasolinas()
+	barra.draw_texture_rect(icono("obj-gasolina"), Rect2(r.end.x + 8, r.position.y - 1, 16, 16), false, Color(1, 1, 1, a))
+	var texto := "x%d" % g
+	var color := Color("#f0e8d4") if g > 0 else Color("#ff9f1c")
+	color.a = a
+	var donde := Vector2(r.end.x + 26, r.end.y)
+	barra.draw_string_outline(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, a))
+	barra.draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)

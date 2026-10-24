@@ -32,9 +32,10 @@
 #                  y con las 4 skins (Armas.CREADAS.bate_helado)
 #   --latigo-electrico lo mismo con el látigo eléctrico: su icono, su hoja, el golpe (a 110 de alcance, que aturde y salta a
 #                  otro zombi cercano) en las 8 direcciones y con las 4 skins (Armas.CREADAS.latigo_electrico)
-#   --lanzallamas  el lanzallamas (la primera creada a distancia con dibujo propio): su icono, su hoja con la llamarada en la
-#                  boca del tubo, sin chispitas, que el chorro quita vida y prende al zombi que tiene delante y no llega al
-#                  lejano, el disparo en las 8 direcciones y con las 4 skins (Armas.CREADAS.lanzallamas)
+#   --lanzallamas  el lanzallamas de la llamarada continua (Armas.CREADAS.lanzallamas, llamarada.gd): su icono y su daño
+#                  por segundo (también el de los de antes, en el baúl), sus números, que la llama atraviesa y quema a los de
+#                  dentro y no llega más allá de las 10 casillas, el depósito que se llena solo con la gasolina de la mochila y,
+#                  sin ella, «¡Sin gasolina!», la llama en las 8 direcciones y con las 4 skins (en la sala de pruebas de armas)
 #   --supersoplete el supersoplete (la segunda creada a distancia con dibujo propio): su icono, su hoja con la llamarada en
 #                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
 #                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
@@ -2167,8 +2168,8 @@ func pulsar_y_esperar(tecla: Key) -> void:
 #   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (también una creada en el banco, la lanza) y las de
 #     fuego, igual; contado y con un golpe de verdad (con el bate y con la lanza)
 #   - el daño de las armas que queman: × 3 con el bombero (el bate de fuego, el lanzallamas, el súpersoplete, el
-#     molotov y la bomba de aceite) y las demás, igual; contado y de verdad, con el golpe o el disparo y lo que sigue
-#     ardiendo el zombi (y un molotov de verdad); con la pistola y el bate, igual
+#     molotov y la bomba de aceite) y las demás, igual; contado y de verdad, con el golpe, el disparo o la llama y lo que
+#     sigue ardiendo el zombi (y un molotov de verdad); con la pistola y el bate, igual
 #   - el bombero, inmune al fuego: el fuego del suelo, un charco de molotov, los molotovs, el cono y las bolas del jefe
 #     de bomberos, de verdad: sin la skin Johnny pierde vida y sigue ardiendo; con ella, nada; el hachazo, sí le quita
 #   - el poder del glotón: un zombi normal que le da un zarpazo de verdad muere; el Gymbro (con su armadura) pierde
@@ -2499,8 +2500,8 @@ func probar_skins() -> void:
 # críticos:
 #   - el daño contado: × 3 las armas que queman (el bate de fuego, el lanzallamas, el súpersoplete, y lo que queman el
 #     molotov y la bomba de aceite) y × 1 las seis de siempre
-#   - de verdad, a un zombi quieto delante: el golpe o el disparo y lo que sigue ardiendo después, sin la skin y con
-#     ella (con el bate y la pistola, igual y sin arder); y un molotov de verdad
+#   - de verdad, a un zombi quieto delante: el golpe, el disparo o la llama (0,3 s) y lo que sigue ardiendo después, sin
+#     la skin y con ella (con el bate y la pistola, igual y sin arder); y un molotov de verdad
 #   - inmune al fuego, de verdad, sin la skin y con ella: el fuego del suelo (lo que hace cada paso al pisarlo) y lo
 #     que sigue ardiendo al salir, un charco de molotov a sus pies (con la skin, captura-skins-bombero-fuego.png), los
 #     molotovs, el cono y las bolas de fuego del jefe de bomberos; y su hachazo, que sí le quita
@@ -2547,6 +2548,11 @@ func probar_skin_bombero() -> void:
 		johnny.coger(arma)
 		var cuerpo: bool = Armas.datos(arma).tipo == "cuerpo"
 		var quita := {}
+		# el lanzallamas, más a la izquierda: a 46 por la derecha está el tabique del taller, y la llama no lo cruza (las
+		# balas y las gotas sí llegan: nacen en la boca, que ya está al otro lado)
+		var sitio: Vector2 = johnny.position
+		if Armas.datos(arma).has("deposito"):
+			johnny.position.x -= 200.0
 		for skin in ["", "bombero"]:
 			johnny.vestir(skin)
 			johnny.balas = 50
@@ -2559,6 +2565,12 @@ func probar_skin_bombero() -> void:
 			johnny.direccion = "e"
 			if cuerpo:
 				johnny.golpear(0.0)
+			elif Armas.datos(arma).has("deposito"):
+				# el lanzallamas: 0,3 s de llama, dos pellizcos (el primero, al salir), igual con la skin y sin ella
+				johnny.deposito = 8.0
+				johnny.llamarada.tick_t = Llamarada.TICK
+				await echar_fuego(0.0, 0.3)
+				await get_tree().create_timer(0.1).timeout
 			else:
 				johnny.disparar(0.0)
 				await get_tree().create_timer(0.3).timeout   # (lo que tarda en llegar)
@@ -2568,9 +2580,10 @@ func probar_skin_bombero() -> void:
 			quita[skin] = [golpe, vida_antes - zombi.vida - golpe]
 			zombi.queue_free()
 			await get_tree().process_frame
+		johnny.position = sitio
 		de_verdad.append("%s: golpe %d → %d, ardiendo %d → %d" % [Objetos.nombre(arma), quita[""][0], quita.bombero[0],
 			quita[""][1], quita.bombero[1]])
-	print("De verdad a un zombi, sin la skin → con el bombero: %s (esperado: el triple las tres que queman, redondeando cada gota; el bate y la pistola, igual y sin arder)" % " · ".join(de_verdad))
+	print("De verdad a un zombi, sin la skin → con el bombero: %s (esperado: el triple las tres que queman, redondeando cada gota o pellizco; el bate y la pistola, igual y sin arder)" % " · ".join(de_verdad))
 	var molotov := {}
 	for skin in ["", "bombero"]:
 		johnny.vestir(skin)
@@ -3471,21 +3484,29 @@ func probar_latigo_electrico() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --lanzallamas": el lanzallamas con su dibujo propio (Armas.CREADAS.lanzallamas, conserje-48-lanzallamas: la
-# hoja lleva el retroceso y la llamarada de la boca del tubo; casilla de 96x104; recetas.gd, su icono). Es la primera creada
-# a distancia con hoja propia, así que además del icono y la hoja se comprueba la boca: en la sala de mantenimiento, con dos
-# en el baúl (una guardada antes de que tuviera icono propio, con el de la pistola de agua), Johnny se arrima al baúl y cuenta
-# el icono de cada una (captura-lanzallamas-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia
-# el este y que ya no le salen chispitas; dispara a un zombi a 120 a su izquierda (le quita vida y lo prende) con otro a 330
-# en la misma línea (más lejos de lo que llega el chorro: ni se entera), con una foto justo con la llamarada y las gotas
-# saliendo (captura-lanzallamas-chorro.png) y cuenta cuántas balas gasta. Luego dispara en las 8 direcciones, con una foto de
-# cada una en el fotograma de la llamarada (captura-lanzallamas-<dirección>.png): la llama del dibujo y las gotas tienen que
-# salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
-# (captura-lanzallamas-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+# Con "--captura --lanzallamas": el lanzallamas de la llamarada continua (Armas.CREADAS.lanzallamas, llamarada.gd; su
+# daño, por segundo, en recetas.gd; la hoja de ahora, conserje-48-lanzallamas, en la postura de apuntar). Primero, en la
+# sala de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio y con el daño de una gota de
+# las de antes, que al cargar el guardado coge el de ahora), Johnny se arrima al baúl y cuenta el icono, el daño y la
+# línea de cada una (captura-lanzallamas-baul.png). Saca una y cuenta su hoja, su alcance (10 casillas), su depósito, su
+# recarga, su empuje, sus pies, su boca hacia el este, que no le salen chispitas y que las cajas de munición no le
+# valen. Luego, en la sala de pruebas de armas (F11: cabe la llama entera), con el lanzallamas sacado del baúl y gastando
+# gasolina de verdad:
+#   - la llamarada: 1 s echando fuego hacia la derecha (a la izquierda está el panel de la sala) con tres zombis en la
+#     misma línea, a 120 y a 250 (los dos dentro: pierden vida, arden y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se entera).
+#     Johnny no pierde vida, no queda fuego en el suelo y el depósito gasta 1 s; al soltar, se apaga
+#     (captura-lanzallamas-llama.png, a media llama, con la barra de gasolina abajo)
+#   - el depósito: casi vacío y con una gasolina en la mochila, al vaciarse se llena solo y la gasta; sin gasolina,
+#     «¡Sin gasolina!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-lanzallamas-sin-gasolina.png); al coger
+#     una gasolina del suelo vuelve a sacar el lanzallamas y lo llena
+#   - la llama en las 8 direcciones (captura-lanzallamas-<dirección>.png) y con las 4 skins, con su hoja
+#     (captura-lanzallamas-<skin>.png), con Johnny quieto en la postura de apuntar
+# Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_lanzallamas() -> void:
 	var antes := Guardado.cargar()
 	var vieja := Recetas.crear("lanzallamas", "azul")
 	vieja.icono = "pistola_agua"   # como las que se crearon antes de que el lanzallamas tuviera icono propio
+	vieja.dano = 5                 # y con el daño de una gota (el de antes de la llamarada continua)
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = [vieja, Recetas.crear("lanzallamas", "morada")]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
@@ -3495,65 +3516,132 @@ func probar_lanzallamas() -> void:
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
-	print("Baúl: abierto %s · iconos %s (esperado: true, [\"lanzallamas\", \"lanzallamas\"]) · en el banco «%s» (esperado: lanzallamas)" % [
-		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
-		Recetas.icono_de("lanzallamas")])
+	var baul: Array = Guardado.cargar().baul_armas
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"lanzallamas\", \"lanzallamas\"]) · daño %s · «%s» (esperado: [72, 87], daño 72/s: el de antes, con el de ahora) · en el banco «%s» (esperado: lanzallamas)" % [
+		inventario.abierto == "baul", baul.map(func(a): return Recetas.icono_de(a.receta)), baul.map(func(a): return a.dano),
+		Recetas.detalle(baul[0]), Recetas.icono_de("lanzallamas")])
 	Captura.foto("captura-lanzallamas-baul.png")
 	inventario.cerrar()
 	await get_tree().process_frame
 
-	# sacado del baúl: su hoja, su boca y sin chispitas
-	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	# sacado del baúl: sus números, su boca y sin chispitas; las balas no le valen
+	var id := Armas.apuntar(baul[0])
 	johnny.coger(id)
 	var w := Armas.datos(id)
-	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.modo = "mira"   # que no eche fuego por su cuenta: aquí lo echa la prueba
+	await get_tree().create_timer(0.3).timeout
+	print("Lanzallamas en la mano: hoja «%s» · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: conserje-48-lanzallamas.tres, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (34, -26), false, lanzallamas, false)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.alcance, w.alcance / Planta.CASILLA, w.deposito,
+		johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.quiere_municion()])
+
+	# a la sala de pruebas de armas (allí le ponen la pistola y la gasolina sin fin: se le vuelve a dar este, gastando)
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger(id)
+	johnny.gasolina_sin_fin = false
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "e"
-	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.3).timeout
-	print("Lanzallamas en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-lanzallamas.tres, 10, 170, (48, 72), (34, -26), false, lanzallamas)" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
-
-	# el chorro: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y lo prende; el segundo, a 330, queda
-	# fuera de su alcance (170 desde la boca, que está a 68 de Johnny)
-	johnny.direccion = "o"
-	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-330, 0)])
+	var z := []
+	for d in [Vector2(120, 0), Vector2(250, 0), Vector2(430, 0)]:
+		var zombi: Node2D = meter_zombi("lento", johnny.position + d)
+		zombi.vida = 500
+		z.append(zombi)
 	await get_tree().process_frame
-	var balas0: int = johnny.balas
-	johnny.atacar(PI)
-	await get_tree().create_timer(0.1).timeout
-	Captura.foto("captura-lanzallamas-chorro.png")
-	await get_tree().create_timer(0.5).timeout
-	print("Chorro a 120: vida del zombi %d (esperado: menos de 500) · ardiendo %s (esperado: true)" % [z[0].vida, z[0].arder_t > 0.0])
-	print("Zombi a 330: vida %d · ardiendo %s (esperado: 500 y false)" % [z[1].vida, z[1].arder_t > 0.0])
-	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
-	zombis_de_prueba([])
+	for zombi in z:
+		zombi.aturdido = 30.0   # quietos (los empujones sí les mueven)
+	var x0: float = z[0].position.x
+	while "gasolina" in mochila:
+		mochila.erase("gasolina")
+	mochila.append_array(["gasolina", "gasolina"])   # (para que la barra de abajo enseñe dos)
+	var deposito0: float = johnny.deposito
+	var vida_johnny: int = johnny.vida
+	var charcos: int = get_tree().get_nodes_in_group("charcos").size()
+	await echar_fuego(0.0, 1.0, "captura-lanzallamas-llama.png")
+	var encendida: bool = johnny.llamarada.encendida
+	var gastado: float = deposito0 - johnny.deposito
 	await get_tree().create_timer(0.3).timeout
+	print("Llamarada 1 s hacia la derecha: a 120 pierde %d, arde %s, empujado %.0f · a 250 pierde %d, arde %s (esperado: unos 70-110, true, más de 0, y lo mismo)" % [
+		500 - z[0].vida, z[0].arder_t > 0.0, z[0].position.x - x0, 500 - z[1].vida, z[1].arder_t > 0.0])
+	print("Zombi a 430 (más allá de las 10 casillas): pierde %d · arde %s (esperado: 0 y false)" % [500 - z[2].vida, z[2].arder_t > 0.0])
+	print("Depósito gastado %.2f s (esperado: 1.00 más o menos) · Johnny -%d (esperado: 0) · fuego nuevo en el suelo %d (esperado: 0) · encendida mientras %s, al soltar %s (esperado: true, false)" % [
+		gastado, vida_johnny - johnny.vida, get_tree().get_nodes_in_group("charcos").size() - charcos, encendida,
+		johnny.llamarada.visible])
+	for zombi in z:
+		zombi.remove_from_group("zombis")
+		zombi.queue_free()
 
-	# las 8 direcciones, con una foto en la llamarada (el disparo dura 0,095 s: el 2º de sus 3 fotogramas, a los 0,04 s)
+	# el depósito: casi vacío y con una gasolina, se llena solo al vaciarse y la gasta
+	while "gasolina" in mochila:
+		mochila.erase("gasolina")
+	mochila.append("gasolina")
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	var recarga: bool = johnny.recargando > 0.0
+	await get_tree().create_timer(1.7).timeout
+	print("Depósito vacío con una gasolina: recarga sola %s · depósito %.1f s · gasolinas que quedan %d (esperado: true, 8.0, 0)" % [
+		recarga, johnny.deposito, mochila.count("gasolina")])
+	# sin gasolina: se apaga, avisa y saca la de cuerpo a cuerpo, y la Q no deja volver
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	Captura.foto("captura-lanzallamas-sin-gasolina.png")
+	var mano: String = johnny.mano
+	johnny.cambiar_mano()
+	print("Sin gasolina: en la mano «%s» · después de la Q, «%s» · llama encendida %s (esperado: cuerpo, cuerpo, false)" % [
+		mano, johnny.mano, johnny.llamarada.encendida])
+	# coge una gasolina del suelo: vuelve a sacar el lanzallamas y lo llena
+	soltar_objeto("gasolina", johnny.position + Vector2(30, 0))
+	await get_tree().create_timer(2.2).timeout
+	print("Coge una gasolina del suelo: en la mano «%s» · depósito %.1f s · gasolinas %d (esperado: fuego, 8.0, 0)" % [
+		johnny.mano, johnny.deposito, mochila.count("gasolina")])
+
+	# las 8 direcciones, quieto en la postura de apuntar (con la gasolina sin fin: aquí ya no se cuenta)
+	johnny.gasolina_sin_fin = true
+	var posturas := []
 	for d in johnny.DIRS:
+		johnny.deposito = w.deposito
 		johnny.direccion = d
-		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
-		await get_tree().create_timer(0.04).timeout
-		Captura.foto("captura-lanzallamas-%s.png" % d)
-		await get_tree().create_timer(0.6).timeout
+		await echar_fuego(johnny.DIRS.find(d) * PI / 4, 0.4, "captura-lanzallamas-%s.png" % d)
+		posturas.append(johnny.sprite.animation)
+		await get_tree().create_timer(0.2).timeout
+	print("Postura echando fuego en cada dirección: %s (esperado: quieto_<dirección> en las 8)" % ", ".join(posturas))
 
 	# con cada skin: su hoja del lanzallamas
 	for skin in ["portero", "gloton", "gymbro", "bombero"]:
 		Skins.poner(skin)
 		johnny.vestir(skin)
 		johnny.direccion = "e"
-		johnny.atacar(0.0)
-		await get_tree().create_timer(0.04).timeout
-		Captura.foto("captura-lanzallamas-%s.png" % skin)
+		johnny.deposito = w.deposito
+		await echar_fuego(0.0, 0.3, "captura-lanzallamas-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-lanzallamas-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.2).timeout
 
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = antes.baul_armas
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# Johnny echa fuego con el lanzallamas hacia "angulo" durante "segundos" (en cada paso, como si se mantuviera el
+# botón) y, si se pide, saca una foto a la mitad. Lo usan probar_lanzallamas y probar_skin_bombero
+func echar_fuego(angulo: float, segundos: float, foto := "") -> void:
+	var t := 0.0
+	var hecha := foto == ""
+	while t < segundos:
+		johnny.intentar_atacar(angulo)
+		await get_tree().physics_frame
+		t += get_physics_process_delta_time()
+		if not hecha and t >= segundos / 2.0:
+			hecha = true
+			Captura.foto(foto)
 
 
 # Con "--captura --supersoplete": el supersoplete con su dibujo propio (Armas.CREADAS.supersoplete, conserje-48-supersoplete: la
@@ -4715,13 +4803,16 @@ func probar_gymbro() -> void:
 	print("Gymbro: pesas en el aire: %d" % get_tree().get_nodes_in_group("balas_zombi").size())
 
 
-# El jefe de bomberos: el fuego no le hace nada (una gota del lanzallamas, el fogonazo de un molotov y un charco
-# de fuego debajo de él no le quitan vida, y grita «¡INMUNE!»), pero un golpe sí (antes de que se ponga a girar para
+# El jefe de bomberos: el fuego no le hace nada (un pellizco de la llamarada del lanzallamas, el fogonazo de un molotov
+# y un charco de fuego debajo de él no le quitan vida, y grita «¡INMUNE!»), pero un golpe sí (antes de que se ponga a girar para
 # la foto: girando, su burbuja de fuego no deja); y lanza sus bolas de fuego y un molotov (para que salgan en la foto
 # de los 8,0, con el giro)
 func probar_bombero() -> void:
 	var vida_antes: int = jefa.vida
-	ArmasCreadas.golpe(jefa, Vector2.RIGHT, 20.0, 1.0, "llama")
+	# (la llamarada, puesta a 40 de él apuntándole, y un pellizco)
+	johnny.llamarada.mantener(jefa.global_position - Vector2(40, 0), 0.0, {"alcance": 320.0, "dano": 60.0, "empuje": 0.5})
+	johnny.llamarada.tope = 320.0
+	johnny.llamarada.quemar()
 	var sin_lanzallamas: int = vida_antes - jefa.vida
 	var molotov: Node2D = load("res://escenas/armas/proyectil.tscn").instantiate()
 	molotov.tipo = "molotov"

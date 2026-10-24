@@ -3,7 +3,8 @@
 #
 # Armas (los números están en armas.gd). Como en el juego de navegador, lleva dos: una de cuerpo a cuerpo y
 # otra de fuego, y se cambia entre ellas con Q, la rueda del ratón o el botón Y del mando. Para probar, las
-# teclas 1 a 6 ponen cualquiera de las seis. R (o el botón X del mando) recarga.
+# teclas 1 a 6 ponen cualquiera de las seis. R (o el botón X del mando) recarga. El lanzallamas no dispara: mientras
+# se ataca echa una llamarada continua (llamarada.gd) y gasta su depósito, que se llena con una gasolina de la mochila.
 # Tres modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
 # cambian de uno a otro; se guarda):
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
@@ -105,6 +106,9 @@ var reserva := 0           # balas de repuesto en la mochila, para recargar
 var sin_balas_sola := false   # se ha pasado sola a la de cuerpo a cuerpo al quedarse sin balas
 var municion_guardada := {}   # las balas de las armas de fuego que ha guardado: {id: [cargador, reserva]}
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
+var deposito := 0.0        # el lanzallamas: los segundos de fuego que le quedan en el depósito
+var gasolina_sin_fin := false   # la sala de pruebas de armas: el lanzallamas se llena sin gastar gasolina
+var llamarada: Llamarada   # la llama del lanzallamas: sale mientras se ataca con él
 var espera := 0.0          # tiempo que falta para poder atacar otra vez
 var ataque_t := -1.0       # tiempo desde que empezó el ataque en curso (-1 = no está atacando)
 var ataque_dur := 0.0      # lo que dura ese ataque
@@ -128,6 +132,8 @@ func _ready() -> void:
 	llamas.alto = 70.0
 	llamas.fuerza = 0.0
 	add_child(llamas)
+	llamarada = Llamarada.new()
+	add_child(llamarada)
 	estrellas = Node2D.new()
 	estrellas.name = "Estrellas"
 	estrellas.draw.connect(pintar_estrellas)
@@ -455,14 +461,31 @@ func ayuda_apunte(angulo: float) -> float:
 	return mejor
 
 
-# Ataca hacia ese ángulo si ya puede (ha pasado el hueco entre ataques y, si es de fuego, tiene bala)
+# Ataca hacia ese ángulo si ya puede (ha pasado el hueco entre ataques y, si es de fuego, tiene bala). El lanzallamas,
+# en cada paso en que se ataca con él, echa fuego
 func intentar_atacar(angulo: float) -> void:
 	var w := arma()
 	if espera > 0.0 or not (w.tipo == "cuerpo" or lista_para_disparar()):
 		return
-	espera = 1.0 / w.ritmo
 	direccion = direccion_de(Vector2.from_angle(angulo))
+	if w.has("deposito"):
+		echar_fuego(angulo, w)
+		return
+	espera = 1.0 / w.ritmo
 	atacar(angulo)
+
+
+# El lanzallamas: la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama aquí, se apaga) y
+# el depósito se va gastando. Va paralela a la línea de tiro (no se tuerce hacia el zombi como la bala: el cono ya lo
+# pilla, y torcida subía por encima de las cabezas). Sin sacudida ni retroceso: quieto, Johnny se queda en la postura de
+# apuntar (animar). Al vaciarse el depósito, se llena solo si lleva gasolina
+func echar_fuego(angulo: float, w: Dictionary) -> void:
+	var boca: Vector2 = w.boca[direccion] * 2.0
+	llamarada.mantener(global_position + Vector2(boca.x, 16.0 + boca.y + 50.0), angulo, w)
+	deposito = maxf(0.0, deposito - get_physics_process_delta_time())
+	if deposito <= 0.0:
+		empezar_recarga()
+		avisar_arma()
 
 
 # Un "rayo" de Johnny al zombi: si choca con algo de la capa 1 (paredes y muebles), no lo ve
@@ -656,40 +679,93 @@ func oir_disparo() -> void:
 			zombi.oir_disparo(global_position)
 
 
-# Antes de disparar: ¿hay bala en el cargador? Si no, recarga. La escopeta puede disparar a mitad de recarga
-# (con lo que lleve metido); las demás, no
+# Antes de disparar: ¿hay bala en el cargador (o fuego en el depósito)? Si no, recarga. La escopeta puede disparar
+# a mitad de recarga (con lo que lleve metido); las demás, no
 func lista_para_disparar() -> bool:
 	if recargando > 0.0:
 		if not arma().cartucho or balas <= 0:
 			return false
 		recargando = 0.0   # dispara y deja de meter cartuchos
-	if balas > 0:
+	if cargado() > 0.0:
 		return true
-	if reserva > 0:
+	if repuesto() > 0:
 		empezar_recarga()
 		return false
-	# sin balas: a la fregona (o la que lleve)
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), "¡Sin balas!", Color("#ff9f1c"), 18)
-	Sonido.tocar("click")
+	# sin balas (o sin gasolina): a la fregona (o la que lleve)
+	sin_municion_aviso()
 	sostener("cuerpo")
 	sin_balas_sola = true
 	return false
 
 
-# Empieza a recargar, si hace falta y le quedan balas de reserva
+# Lo que le queda en el arma de fuego (las balas del cargador o, en el lanzallamas, los segundos del depósito) y lo
+# que tiene para volver a llenarla (las balas de reserva, o las gasolinas de la mochila)
+func cargado() -> float:
+	return deposito if Armas.datos(huecos.fuego).has("deposito") else float(balas)
+
+
+func repuesto() -> int:
+	return gasolinas() if Armas.datos(huecos.fuego).has("deposito") else reserva
+
+
+# El aviso de que no le queda con qué disparar
+func sin_municion_aviso() -> void:
+	var texto := "¡Sin gasolina!" if Armas.datos(huecos.fuego).has("deposito") else "¡Sin balas!"
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), texto, Color("#ff9f1c"), 18)
+	Sonido.tocar("click")
+
+
+# Las gasolinas que lleva en la mochila de la partida (en la sala de pruebas de armas, sin fin)
+func gasolinas() -> int:
+	if gasolina_sin_fin:
+		return 99
+	var partida := get_tree().current_scene
+	return partida.mochila.count("gasolina") if "mochila" in partida else 0
+
+
+# Coge una gasolina del suelo (partida.gd): si se había pasado sola a la de cuerpo a cuerpo por quedarse sin, vuelve
+# a sacar el lanzallamas; y si tiene el depósito vacío, lo llena
+func coger_gasolina() -> void:
+	if not Armas.datos(huecos.fuego).has("deposito"):
+		return
+	if sin_balas_sola:
+		sostener("fuego")
+	if mano == "fuego":
+		empezar_recarga()
+
+
+# Empieza a recargar, si hace falta y le quedan balas de reserva. El lanzallamas, solo con el depósito vacío (con la R
+# a medias no se tira media gasolina) y si lleva gasolina
 func empezar_recarga() -> void:
 	var w := arma()
-	if w.tipo != "fuego" or recargando > 0.0 or balas >= w.cargador or reserva <= 0 or pistola_sin_fin():
+	if w.tipo != "fuego" or recargando > 0.0 or pistola_sin_fin():
+		return
+	if w.has("deposito"):
+		if deposito > 0.0 or gasolinas() <= 0:
+			return
+	elif balas >= w.cargador or reserva <= 0:
 		return
 	recargando = w.recarga
 	Sonido.tocar("recargar")
 	avisar_arma()
 
 
-# Mete el cargador entero o, en la escopeta, un cartucho (y sigue con el siguiente)
+# Mete el cargador entero o, en la escopeta, un cartucho (y sigue con el siguiente). El lanzallamas gasta una
+# gasolina de la mochila y llena el depósito entero
 func terminar_recarga() -> void:
 	var w := arma()
 	recargando = 0.0
+	if w.has("deposito"):
+		if gasolinas() <= 0:   # (la ha tirado desde el inventario mientras tanto)
+			avisar_arma()
+			return
+		if not gasolina_sin_fin:
+			var mochila: Array = get_tree().current_scene.mochila
+			mochila.remove_at(mochila.rfind("gasolina"))
+		deposito = w.deposito
+		Sonido.tocar("recargado")
+		avisar_arma()
+		return
 	Sonido.tocar("cartucho" if w.cartucho else "recargado")
 	var mete: int = mini(1 if w.cartucho else w.cargador - balas, reserva)
 	balas += mete
@@ -702,7 +778,8 @@ func terminar_recarga() -> void:
 # ¿Le cabe más munición? (para que la caja de munición vaya hacia él)
 func quiere_municion() -> bool:
 	var w: Dictionary = Armas.datos(huecos.fuego)
-	return not w.get("sin_municion", false) and reserva < w.cargador * RESERVA_MAX
+	# (al lanzallamas no le valen las balas: solo la gasolina)
+	return not w.get("sin_municion", false) and not w.has("deposito") and reserva < w.cargador * RESERVA_MAX
 
 
 # Recoge una caja de munición: un cargador más para el arma de fuego que lleve. Si se había pasado sola a la
@@ -719,7 +796,8 @@ func sumar_municion() -> void:
 
 # Coge un arma (teclas 1 a 6, la tienda, el inventario o el baúl): va a su hueco y se la pone en la mano. Si es
 # de fuego, con las balas que le quedaban al guardarla o, si es nueva, con el cargador lleno y la reserva de
-# partida (las creadas guardan las suyas en Armas.sacadas)
+# partida (las creadas guardan las suyas en Armas.sacadas; el lanzallamas, lo que le quedaba en el depósito, y si es
+# nuevo, lleno)
 func coger(id: String) -> void:
 	var w: Dictionary = Armas.datos(id)
 	if w.tipo == "fuego":
@@ -727,13 +805,16 @@ func coger(id: String) -> void:
 		if Armas.es_creada(vieja):
 			Armas.sacadas[vieja].balas = balas
 			Armas.sacadas[vieja].reserva = reserva
+			Armas.sacadas[vieja].deposito = deposito
 		else:
 			municion_guardada[vieja] = [balas, reserva]
 		balas = w.cargador
 		reserva = w.cargador * RESERVA_INICIO
+		deposito = w.get("deposito", 0.0)
 		if Armas.es_creada(id):
 			balas = Armas.sacadas[id].get("balas", balas)
 			reserva = Armas.sacadas[id].get("reserva", reserva)
+			deposito = Armas.sacadas[id].get("deposito", deposito)
 		elif municion_guardada.has(id):
 			balas = municion_guardada[id][0]
 			reserva = municion_guardada[id][1]
@@ -744,10 +825,9 @@ func coger(id: String) -> void:
 
 # Cambia a la otra arma (Q, rueda del ratón o botón Y)
 func cambiar_mano() -> void:
-	# a la de fuego sin balas no se cambia
-	if mano == "cuerpo" and balas <= 0 and reserva <= 0:
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), "¡Sin balas!", Color("#ff9f1c"), 18)
-		Sonido.tocar("click")
+	# a la de fuego sin balas (o sin gasolina) no se cambia
+	if mano == "cuerpo" and cargado() <= 0.0 and repuesto() <= 0:
+		sin_municion_aviso()
 		return
 	sostener("fuego" if mano == "cuerpo" else "cuerpo")
 	Sonido.tocar("cambiar")
@@ -781,7 +861,9 @@ func sostener(hueco: String) -> void:
 func avisar_arma() -> void:
 	var w := arma()
 	var texto: String = w.nombre
-	if w.tipo == "fuego":
+	if w.has("deposito"):
+		texto += "   %d s · %d gasolina" % [ceili(deposito), gasolinas()]
+	elif w.tipo == "fuego":
 		texto += "   %d/%d" % [balas, w.cargador]
 		if recargando > 0.0:
 			texto += "   recargando…"
@@ -818,7 +900,8 @@ func animar() -> void:
 		# Entero no puede girar las piernas: si va de espaldas a donde mira, el paso va marcha atrás
 		sprite.speed_scale = ritmo_andar(sprite, rapidez) * paso()[1]
 	else:
-		cambiar_animacion("reposo_" + direccion)
+		# quieto echando fuego con el lanzallamas: en la postura de apuntar, sin respirar
+		cambiar_animacion(("quieto_" if llamarada.pedida else "reposo_") + direccion)
 		sprite.speed_scale = 1.0
 
 

@@ -88,8 +88,9 @@ const DATOS := {
 # pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
 # celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd) y el garfio (conserje-48-garfio: el gesto de lanzar el
 # gancho de perchas con la cuerda enrollada en la otra mano; el gancho que vuela, la cuerda y el zombi que arrastra los dibuja el juego,
-# garfio.gd), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
-# cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
+# garfio.gd), con sus hojas de cada skin (tools/cara.py). El súpersoplete usa el cargador como depósito; el
+# lanzallamas tiene un depósito de verdad, en segundos. El daño no está aquí: lo trae cada arma creada (receta + rareza,
+# recetas.gd)
 const CREADAS := {
 	# la lanza: su casilla es más ancha (128x96, con los pies en 64,72) porque en la estocada Johnny se queda en su sitio
 	# y la lanza avanza (tools/estocada.py)
@@ -120,11 +121,13 @@ const CREADAS := {
 	"latigo_electrico": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "descarga", "momento": 0.286,
 		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-latigo-electrico.tres")},
 	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
-	# el lanzallamas: su hoja lleva la llamarada de la boca del tubo (las gotas de fuego las pone el juego, chorro.gd); la
-	# casilla es de 96x104 (la llamarada del sur baja por debajo de los pies), con los pies donde siempre; la boca sale de
-	# conserje-48-lanzallamas.json ("muzzle")
-	"lanzallamas": {"base": "pistola", "ritmo": 10.0, "alcance": 170.0, "velocidad": 320.0, "cargador": 40, "recarga": 2.0,
-		"empuje": 0.3, "efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
+	# el lanzallamas: no dispara, echa una llamarada continua mientras se ataca (llamarada.gd) que llega a 10 casillas.
+	# No tiene cargador: tiene un depósito de "deposito" segundos de fuego que se llena entero con una gasolina de la
+	# mochila (en "recarga" segundos; las balas no le valen). Su daño es por segundo, y empuja cada medio segundo. Johnny
+	# echa el fuego en la postura quieta de su hoja (la de apuntar, con el piloto encendido); la casilla es de 96x104,
+	# con los pies donde siempre; la boca sale de conserje-48-lanzallamas.json ("muzzle")
+	"lanzallamas": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "empuje": 0.5,
+		"efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
 		"boca": {"s": Vector2(-1, 22), "se": Vector2(32, -8), "e": Vector2(34, -26), "ne": Vector2(32, -46),
 			"n": Vector2(11, -51), "no": Vector2(-32, -49), "o": Vector2(-30, -21), "so": Vector2(-34, 1)}},
 	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el

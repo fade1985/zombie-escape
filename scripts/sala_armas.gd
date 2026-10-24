@@ -3,7 +3,8 @@
 #   - la diana: un zombi normal en el centro que no pierde vida, no ataca y vuelve a su sitio si un golpe lo mueve
 #     (zombi.gd, "diana"), para probar desde todas las direcciones. Sus números de daño, más grandes
 #   - todas las armas, también las del banco de trabajo: coma y punto pasan a la anterior y a la siguiente
-#   - munición sin fin, pero recargando: la reserva no se acaba nunca y el cargador sí
+#   - munición sin fin, pero recargando: la reserva no se acaba nunca y el cargador sí (y el lanzallamas se llena sin
+#     gastar gasolina)
 #   - las líneas de ayuda, en el suelo: el alcance del arma (de fuego, un círculo; cuerpo a cuerpo, el abanico del
 #     golpe), a quién apunta el apuntado (amarillo), por dónde irá la bala (azul: sale de la boca del arma, no del
 #     centro de Johnny), el círculo de cada zombi dentro del que le da la bala (rojo) y el camino de verdad de cada
@@ -31,7 +32,7 @@ const TINTA := Color(0.11, 0.1, 0.17)
 # Lo que hace cada arma creada (su "efecto", armas_creadas.gd), para la ficha
 const EFECTOS := {"aturde": "aturde", "fuego": "prende fuego", "sangra": "hace sangrar", "descarga": "aturde y salta a otro",
 	"veneno": "envenena", "circulo": "pega a todo alrededor", "tira": "echa lejos y tira al suelo", "congela": "congela",
-	"llama": "chorro de fuego", "cono": "cono de fuego", "acido": "chorro de ácido", "bumeran": "va, atraviesa y vuelve",
+	"llama": "llamarada continua que atraviesa", "cono": "cono de fuego", "acido": "chorro de ácido", "bumeran": "va, atraviesa y vuelve",
 	"chispa": "chispa que aturde y salta", "garfio": "engancha y trae"}
 
 var johnny: Node2D
@@ -106,6 +107,8 @@ func _exit_tree() -> void:
 	johnny.huecos = entrada.huecos
 	johnny.balas = entrada.balas
 	johnny.reserva = entrada.reserva
+	johnny.deposito = entrada.deposito
+	johnny.gasolina_sin_fin = false
 	johnny.municion_guardada = entrada.municion_guardada
 	johnny.sostener(entrada.mano)
 
@@ -117,7 +120,8 @@ func _physics_process(delta: float) -> void:
 		if johnny == null:
 			return
 		entrada = {"huecos": johnny.huecos.duplicate(), "mano": johnny.mano, "balas": johnny.balas,
-			"reserva": johnny.reserva, "municion_guardada": johnny.municion_guardada.duplicate(true)}
+			"reserva": johnny.reserva, "deposito": johnny.deposito, "municion_guardada": johnny.municion_guardada.duplicate(true)}
+		johnny.gasolina_sin_fin = true
 		johnny.coger(lista[indice])
 	reloj += delta
 	# Otra arma en la mano (con coma y punto, Q o 1-6): el recuento empieza de cero
@@ -356,7 +360,13 @@ func escribir() -> void:
 	l.append("PRUEBAS DE ARMAS  ·  F11 salir")
 	l.append("%s (%d de %d) · coma y punto: otra" % [w.nombre, indice + 1, lista.size()])
 	var perdigones: int = w.get("perdigones", 1)
-	if fuego:
+	var deposito: bool = w.has("deposito")
+	if deposito:
+		l.append("Daño %s por segundo · llamarada continua" % decimal(w.dano, 1))
+		l.append("Alcance %d (%s casillas)" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1)])
+		l.append("Depósito %s s · se llena con una gasolina en %s s" % [decimal(w.deposito, 1), decimal(w.recarga, 2)])
+		l.append("Empuje %s cada %s s" % [decimal(w.empuje, 1), decimal(Llamarada.TICK * Llamarada.EMPUJA, 1)])
+	elif fuego:
 		l.append("Daño %s%s · %s %s/s" % [decimal(w.dano, 1), " × %d perdigones" % perdigones if perdigones > 1
 			else " por disparo", decimal(w.ritmo, 1), "disparo" if is_equal_approx(w.ritmo, 1.0) else "disparos"])
 		l.append("Alcance %d (%s casillas)" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1)])
@@ -374,9 +384,11 @@ func escribir() -> void:
 		l.append("Alcance %d (%s casillas) · abanico %d°" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1), roundi(w.arco)])
 		l.append("Empuje %s" % decimal(w.empuje, 1))
 	l.append("Crítico: el %d %% de las veces (×2)" % roundi(johnny.stats.critico * 100.0))
-	var dps: float = w.dano * perdigones * w.ritmo
+	var dps: float = w.dano if deposito else w.dano * perdigones * w.ritmo
 	var con_recargas := ""
-	if fuego and not w.get("sin_municion", false):
+	if deposito:
+		con_recargas = " (recargando %s)" % decimal(w.dano * w.deposito / (w.deposito + w.recarga), 1)
+	elif fuego and not w.get("sin_municion", false):
 		var vaciar: float = w.cargador / w.ritmo + w.recarga * (w.cargador if w.cartucho else 1)
 		con_recargas = " (recargando %s)" % decimal(w.dano * perdigones * w.cargador / vaciar, 1)
 	l.append("Daño por segundo %s%s" % [decimal(dps, 1), con_recargas])
@@ -386,7 +398,7 @@ func escribir() -> void:
 	l.append("Modo %s (F1) · diana a %s casillas" % [johnny.MODOS[johnny.modo], decimal(lejos / Planta.CASILLA, 1)])
 	l.append("")
 	l.append("RECUENTO  ·  Retroceso: a cero")
-	if fuego:
+	if fuego and not deposito:
 		var disparos: int = johnny.disparos - disparos_desde
 		var linea := "Disparos %d" % disparos
 		if tiros > 0:

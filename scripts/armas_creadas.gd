@@ -4,7 +4,7 @@
 #     zombi, congelar (el bate helado) o dejarlo tirado (el mangual). Los jefes (la portera) no se aturden, ni
 #     arden, ni se congelan; sangrar y el veneno sí les hacen daño.
 #   - A distancia: las gotas de fuego, ácido o chispas (chorro.gd), el bumerán (bumeran.gd) y el garfio
-#     (garfio.gd), que trae al zombi hasta Johnny.
+#     (garfio.gd), que trae al zombi hasta Johnny. La llamarada del lanzallamas va aparte (llamarada.gd).
 #   - Las chispitas de color en la punta del arma que lleva Johnny.
 class_name ArmasCreadas
 

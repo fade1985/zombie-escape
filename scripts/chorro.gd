@@ -1,4 +1,4 @@
-# Una gota del lanzallamas, del súpersoplete o del desintegrador (los "chorros" de src/armas-creadas.js), una
+# Una gota del súpersoplete o del desintegrador (los "chorros" de src/armas-creadas.js), una
 # chispa de la pistola eléctrica o un clavo de la bomba de clavos (los dos del centro comercial). Vuela
 # recta, atraviesa a los zombis (a cada uno le da una vez), se para en las paredes y los muebles y se apaga al
 # llegar a su alcance. Como la bala, la gota "de verdad" va a ras de suelo y se dibuja más arriba.

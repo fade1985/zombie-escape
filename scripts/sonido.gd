@@ -49,6 +49,8 @@ const EFECTOS := {
 	"chof": {"hueco": 60, "notas": [[140, 0.12, "triangulo", 0.06, -80], [500, 0.06, "seno", 0.03, -300]]},
 	"lanzar": {"notas": [[300, 0.16, "seno", 0.05, 260]]},                             # toss
 	"fuego": {"notas": [[120, 0.5, "sierra", 0.05, -60], [700, 0.3, "sierra", 0.015, -500, 0.05]]},
+	# la llamarada del lanzallamas: suena mientras sale, un rugido que se repite pisándose (llamarada.gd)
+	"llamarada": {"hueco": 200, "notas": [[95, 0.26, "sierra", 0.035, -25], [420, 0.18, "sierra", 0.01, -250, 0.02]]},
 	"chisporroteo": {"hueco": 450, "notas": [[1800, 0.12, "sierra", 0.012, -900]]},    # sizzle (quemarse)
 	"curar": {"notas": [[660, 0.1, "seno", 0.05, 200], [990, 0.16, "seno", 0.045, 300, 0.08]]},
 	"disparo_aliado": {"hueco": 70, "notas": [[760, 0.05, "cuadrada", 0.018, -550]]},
