@@ -39,6 +39,10 @@
 #                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
 #                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.supersoplete)
+#   --desintegrador el desintegrador (la tercera creada a distancia con dibujo propio): su icono, su hoja con el chorrito de
+#                  ácido de la boquilla, sin chispitas, que el chorro quita vida y deja ácido al zombi que tiene delante y
+#                  no llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
+#                  (Armas.CREADAS.desintegrador)
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -164,6 +168,9 @@ func empezar_prueba() -> void:
 	elif "--supersoplete" in args:
 		set_process(false)   # sin la prueba larga
 		probar_supersoplete()
+	elif "--desintegrador" in args:
+		set_process(false)   # sin la prueba larga
+		probar_desintegrador()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3418,6 +3425,91 @@ func probar_supersoplete() -> void:
 		Captura.foto("captura-supersoplete-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-supersoplete-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.7).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --desintegrador": el desintegrador con su dibujo propio (Armas.CREADAS.desintegrador, conserje-48-desintegrador: la
+# hoja lleva el retroceso corto de pistola de agua y un chorrito fino de ácido verde pálido de la boquilla blanca; casilla de
+# 152x136, con los pies en 66,90; recetas.gd, su icono). Como el lanzallamas, en la sala de mantenimiento, con dos en el baúl
+# (una guardada antes de que tuviera icono propio, con el de la lejía), Johnny se arrima al baúl y cuenta el icono de cada una
+# (captura-desintegrador-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no
+# le salen chispitas; dispara a un zombi a 120 a su izquierda (le quita vida y le deja la herida de ácido) con otro a 330 en la
+# misma línea (más lejos de lo que llega el chorro: ni se entera), con una foto con las gotas saliendo
+# (captura-desintegrador-chorro.png) y cuenta cuántas balas gasta (una por disparo). Luego dispara en las 8 direcciones, con una
+# foto de cada una en el segundo fotograma del disparo, el del chorro largo (captura-desintegrador-<dirección>.png): el chorro
+# del dibujo y las gotas tienen que salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
+# (captura-desintegrador-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_desintegrador() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("desintegrador", "azul")
+	vieja.icono = "lejia"   # como las que se crearon antes de que el desintegrador tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("desintegrador", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"desintegrador\", \"desintegrador\"]) · en el banco «%s» (esperado: desintegrador)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("desintegrador")])
+	Captura.foto("captura-desintegrador-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, su boca y sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Desintegrador en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-desintegrador.tres, 12, 220, (66, 90), (24, -26), false, desintegrador)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+
+	# el chorro: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y le deja ácido; el segundo, a 330, queda
+	# fuera de su alcance (220 desde la boca, que está a 46 de Johnny)
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-330, 0)])
+	await get_tree().process_frame
+	var balas0: int = johnny.balas
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-desintegrador-chorro.png")
+	await get_tree().create_timer(0.5).timeout
+	print("Chorro a 120: vida del zombi %d (esperado: menos de 500) · con ácido %s (esperado: true)" % [z[0].vida, z[0].get_node_or_null("herida_acido") != null])
+	print("Zombi a 330: vida %d · con ácido %s (esperado: 500 y false)" % [z[1].vida, z[1].get_node_or_null("herida_acido") != null])
+	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
+	zombis_de_prueba([])
+	await get_tree().create_timer(0.3).timeout
+
+	# las 8 direcciones, con una foto en el chorro largo (el disparo dura 0,08 s, 2 fotogramas: el 2º, a los 0,045 s)
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.045).timeout
+		Captura.foto("captura-desintegrador-%s.png" % d)
+		await get_tree().create_timer(0.6).timeout
+
+	# con cada skin: su hoja del desintegrador
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.045).timeout
+		Captura.foto("captura-desintegrador-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-desintegrador-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.6).timeout
 
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = antes.baul_armas

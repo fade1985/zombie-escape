@@ -82,7 +82,8 @@ const DATOS := {
 # negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
 # (conserje-48-lanzallamas: la pistola de agua con el depósito rojo de gas, un tubo largo y la llamarada de la boca) y el
 # supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
-# la boca acampanada y una llamarada en cono), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# la boca acampanada y una llamarada en cono) y el desintegrador (conserje-48-desintegrador: la pistola de agua con el
+# depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -128,8 +129,16 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-supersoplete.tres"),
 		"boca": {"s": Vector2(-2, 10), "se": Vector2(25, -22), "e": Vector2(26, -31), "ne": Vector2(24, -41),
 			"n": Vector2(10, -52), "no": Vector2(-25, -40), "o": Vector2(-27, -30), "so": Vector2(-26, -22)}},
+	# el desintegrador: su hoja lleva el chorrito fino de ácido verde pálido de la boquilla blanca de la pistola de agua (las
+	# gotas las pone el juego, armas_creadas.gd y chorro.gd); la casilla es de 152x136, con los pies en 66,90, porque el chorro
+	# llega a 62 píxeles a un lado, 82 al otro, 87 hacia arriba y 39 hacia abajo. La boca NO sale de arma.py (con ácido verde no
+	# hay fogonazo naranja que buscar: conserje-48-desintegrador.json no tiene "muzzle"): es la punta blanca de la boquilla del
+	# dibujo quieto, a mano
 	"desintegrador": {"base": "pistola", "ritmo": 12.0, "alcance": 220.0, "velocidad": 400.0, "cargador": 50, "recarga": 2.0,
-		"empuje": 0.2, "efecto": "acido", "detalle": Color("#c7e04a")},
+		"empuje": 0.2, "efecto": "acido", "pies": Vector2(66, 90),
+		"hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
+		"boca": {"s": Vector2(0, -17), "se": Vector2(18, -19), "e": Vector2(24, -26), "ne": Vector2(25, -36),
+			"n": Vector2(6, -47), "no": Vector2(-23, -35), "o": Vector2(-23, -26), "so": Vector2(-19, -19)}},
 	"bumeran": {"base": "pistola", "ritmo": 1.0, "alcance": 300.0, "velocidad": 460.0, "cargador": 1, "recarga": 0.0,
 		"empuje": 1.5, "efecto": "bumeran", "detalle": Color("#c0c4d0"), "sin_municion": true},
 	# las del centro comercial: chispas que aturden y saltan, y el garfio, que sale y vuelve como el bumerán
