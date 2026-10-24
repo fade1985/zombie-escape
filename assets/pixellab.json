@@ -2065,6 +2065,29 @@
    "cost": "8 generaciones, todas a la primera"
   }
  },
+ "conserje-48-desintegrador": {
+  "kind": "character_state",
+  "character_id": "401bc1de-5a4b-4679-8d5d-db559ae0cf6f",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Desintegrador en guardia (colores libres)",
+  "nota": "Estado de Johnny con el desintegrador (el arma creada: pistola de agua + lejía; base la pistola, ritmo 12, alcance 220, chorro de ácido: daño continuo y charco ácido), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Una pistola de agua modificada del tamaño de una pistola normal: cuerpo de plástico gris claro, un depósito redondo y transparente lleno de ácido verde lima brillante encima del cuerpo y una boquilla ancha de plástico blanco con una gotita verde pálida en la punta (el piloto), sujeta con las dos manos. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 9001) y la B, con colores libres (seed 9002). Elegida la B: en la A el depósito sale crema (como los demás: la paleta de Johnny apaga los colores vivos nuevos) y la boquilla casi se pierde; en la B el depósito sale verde lima de verdad, así que se distingue a la primera de la pistola (negra y corta), del lanzallamas (depósito rojo, tubo largo) y del supersoplete (bombona amarilla, cañón corto con la boca acampanada). De frente el arma apunta a la cámara con el depósito delante del vientre y la gotita verde colgando; de espaldas se ve asomar el depósito y la boquilla junto a la cabeza: no hizo falta rehacer south y north (el arma no cruza el cuerpo en diagonal). Las 8 posturas de la B, en assets/sources/conserje-48-desintegrador/rotations/<dirección>.png (64x64, pies en la fila 55); las de la A, en descartes/rotations-A/.",
+  "request": {
+   "edit_description": "holding a homemade acid squirt gun with both hands in a ready shooting stance, knees slightly bent: a chunky modified water pistol the size of a normal handgun, light grey plastic body, a big round transparent bottle full of glowing lime green acid sitting on top of the body, and a wide white plastic nozzle at the front with a tiny pale green drip at its tip; one hand gripping the handle and the other hand supporting the front, the nozzle pointing straight ahead in the direction he is facing; the squirt gun stays aimed forward in every view: front, side and back; lime green acid bottle, light grey plastic body, wide white nozzle with a green drip; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 9002
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "fcea4a40-fa29-4e99-b528-752d0f3d9b82",
+   "state_name": "Desintegrador en guardia",
+   "cost": "10 generaciones",
+   "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 9001. Descartada: el depósito sale crema (parece un huevo o un saco) y la boquilla blanca casi no se distingue del cuerpo. Sus 8 posturas, en assets/sources/conserje-48-desintegrador/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
+  },
+  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la A, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
