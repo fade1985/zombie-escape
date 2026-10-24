@@ -11,12 +11,12 @@
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico, el lanzallamas, el supersoplete, el desintegrador, el bumerán y la pistola eléctrica ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
+#              eléctrico, el lanzallamas, el supersoplete, el desintegrador, el bumerán, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
 #              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png, bumeran.png y pistola_electrica.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png, bumeran.png, pistola_electrica.png y garfio.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
 #              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py e
-#              icono_supersoplete.py, icono_desintegrador.py, icono_bumeran.py e icono_pistola_electrica.py). Se lee siempre de
+#              icono_supersoplete.py, icono_desintegrador.py, icono_bumeran.py, icono_pistola_electrica.py e icono_garfio.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
@@ -71,7 +71,7 @@ const LISTA := {
 		"desc": "Se queda en el suelo y explota cuando pasa un zombi", "edificio": "mezcla"},
 	"nube_somnifera": {"nombre": "Nube somnífera", "con": ["spray", "jeringuilla"], "hueco": "arrojadiza", "icono": "jeringuilla", "dano": 0, "unidades": 3,
 		"desc": "Una nube de gas que duerme a los zombis unos segundos", "edificio": "mezcla"},
-	"garfio": {"nombre": "Garfio", "con": ["cuerda", "perchas"], "hueco": "fuego", "icono": "perchas", "dano": 8,
+	"garfio": {"nombre": "Garfio", "con": ["cuerda", "perchas"], "hueco": "fuego", "icono": "garfio", "dano": 8,
 		"desc": "Engancha a un zombi y lo arrastra hasta ti; sin munición", "edificio": "mezcla"},
 	# solo del centro comercial
 	"bate_helado": {"nombre": "Bate helado", "con": ["bate", "hielo_seco"], "hueco": "cuerpo", "icono": "bate_helado", "dano": 17,

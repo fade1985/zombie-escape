@@ -4,13 +4,16 @@
 # los mueve: solo les pega. Como el bumerán, no gasta munición.
 extends Node2D
 
-const ALTURA := 22.0      # se dibuja a esta altura sobre el suelo (va "de verdad" a ras de suelo, como la bala)
+const ALTURA_CUERPO := 22.0   # se dibuja a esta altura sobre el suelo (va "de verdad" a ras de suelo, como la bala)
+const BAJADA := 14.0          # lo rápido que baja de la mano a la altura del cuerpo
 const ARRASTRE := 520.0   # lo rápido que trae al zombi
 const CERCA := 56.0       # lo suelta a esta distancia de Johnny
 const SOLTAR := 0.6       # segundos que se queda aturdido al soltarlo
 
 var johnny: Node2D
+var mano_rel := Vector2.ZERO   # dónde está la mano que lanza, respecto a Johnny (la boca del dibujo): de ahí sale la cuerda
 var angulo := 0.0
+var altura := 50.0   # a qué altura sobre el suelo se dibuja el gancho: sale de la mano de Johnny y baja a la del cuerpo
 var dano := 8.0
 var alcance := 320.0
 var velocidad := 620.0
@@ -20,10 +23,15 @@ var vuelve := false
 var t := 0.0
 
 
+func _ready() -> void:
+	z_index = 4   # por encima de Johnny y de los zombis: sale de su mano y no debe quedar detrás de su dibujo
+
+
 func _physics_process(delta: float) -> void:
 	if origen == Vector2.INF:
 		origen = global_position
 	t += delta
+	altura += (ALTURA_CUERPO - altura) * (1.0 - exp(-delta * BAJADA))
 	if not is_instance_valid(johnny) or t > 3.0:
 		soltar()
 		return
@@ -86,9 +94,9 @@ func soltar() -> void:
 func _draw() -> void:
 	if not is_instance_valid(johnny):
 		return
-	# la cuerda, desde la mano de Johnny (con su borde oscuro)
-	var mano: Vector2 = to_local(johnny.global_position + Vector2(0, 16)) + Vector2(0, -ALTURA - 14.0)
-	var punta := Vector2(0, -ALTURA)
+	# la cuerda, desde la mano de Johnny que se ve en el dibujo (con su borde oscuro)
+	var mano: Vector2 = to_local(johnny.global_position + mano_rel)
+	var punta := Vector2(0, -altura)
 	for capa in [[4.0, Color("#1d1b2c")], [2.0, Color("#d8b25a")]]:
 		draw_line(mano, punta, capa[1], capa[0])
 	# el gancho: una percha doblada en forma de anzuelo, mirando hacia donde va

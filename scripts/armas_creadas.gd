@@ -129,6 +129,7 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 	if w.efecto == "garfio":
 		var g := GARFIO.new()
 		g.johnny = johnny
+		g.mano_rel = salida - Vector2(0, 50.0) - johnny.global_position   # la mano que lanza (salida está 50 más abajo: ver Johnny.disparar)
 		g.angulo = angulo
 		g.dano = w.dano
 		g.alcance = w.alcance

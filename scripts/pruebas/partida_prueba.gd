@@ -50,6 +50,9 @@
 #                  los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene delante y salta al
 #                  de al lado y no llega al lejano, una bala por disparo, disparar andando, el disparo en las 8 direcciones y con las
 #                  4 skins (Armas.CREADAS.pistola_electrica)
+#   --garfio       el garfio (la última creada con dibujo propio): su icono, su hoja con el gesto de lanzar, sin chispitas, que engancha al
+#                  zombi que tiene delante y se lo trae aturdido, que no llega al lejano y vuelve solo, no gasta bala, que andando
+#                  no hay gesto, el lanzamiento en las 8 direcciones y con las 4 skins (Armas.CREADAS.garfio)
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -184,6 +187,9 @@ func empezar_prueba() -> void:
 	elif "--pistola-electrica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pistola_electrica()
+	elif "--garfio" in args:
+		set_process(false)   # sin la prueba larga
+		probar_garfio()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3739,6 +3745,138 @@ func probar_pistola_electrica() -> void:
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# Con "--captura --garfio": el garfio con su dibujo propio (Armas.CREADAS.garfio, conserje-48-garfio: la hoja lleva solo el gesto de
+# lanzar el gancho de perchas, con el rollo de cuerda en la otra mano; el gancho que sale volando, la cuerda y el zombi arrastrado los
+# dibuja el juego, garfio.gd; casilla de 90x88, con los pies en 45,72; recetas.gd, su icono). Como el bumerán, en la sala de mantenimiento,
+# con dos en el baúl (una guardada antes de que tuviera icono propio, con el de las perchas), Johnny se arrima al baúl y cuenta el icono de
+# cada una (captura-garfio-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no le salen
+# chispitas; lanza el garfio a un zombi a 120 a su izquierda: lo engancha, le pega y se lo trae hasta delante de Johnny, aturdido (a los
+# 0,2 s, con la cuerda tensa, captura-garfio-lanzar.png; a los 0,6 s, ya soltado delante de Johnny, captura-garfio-traido.png). Luego lo
+# lanza hacia otro a 400 (más lejos de lo que llega: ni se entera y el garfio vuelve solo), cuenta que no gasta munición y lanza andando
+# (Johnny sigue andando, sin gesto y sin efectos). Luego lanza en las 8 direcciones, con una foto de cada una a los 0,05 s, con el brazo ya
+# estirado y el gancho saliendo de la mano (captura-garfio-<dirección>.png). Con cada skin (portero, glotón, gymbro y bombero), su hoja y una
+# foto (captura-garfio-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_garfio() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("garfio", "azul")
+	vieja.icono = "perchas"   # como las que se crearon antes de que el garfio tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("garfio", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"garfio\", \"garfio\"]) · en el banco «%s» (esperado: garfio)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("garfio")])
+	Captura.foto("captura-garfio-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, su boca y sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Garfio en la mano: hoja «%s» · ritmo %.1f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-garfio.tres, 0.9, 320, (45, 72), (-6, -33), false, garfio)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+
+	# el lanzamiento hacia un zombi a 120: lo engancha, le pega y se lo trae hasta delante de Johnny, aturdido
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-120, 0)])
+	await get_tree().process_frame
+	var pies: Vector2 = johnny.global_position + Vector2(0, 16)
+	var lejos0: float = z[0].global_position.distance_to(pies)
+	var balas0: int = johnny.balas
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-garfio-lanzar.png")
+	var volando := garfios_volando()
+	var z_index_garfio := 0
+	for n in johnny.get_parent().get_children():
+		if n.get_script() == ArmasCreadas.GARFIO:
+			z_index_garfio = n.z_index
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-garfio-traido.png")
+	print("Garfio en el aire a los 0,2 s: %d (esperado: 1) con z_index %d (esperado: 4) · tras 0,6 s: %d (esperado: 0: ya soltó al zombi)" % [
+		volando, z_index_garfio, garfios_volando()])
+	print("Zombi a 120: vida %d (esperado: menos de 500) · distancia a Johnny: de %.0f a %.0f (esperado: de 120 a unos 56) · aturdido %.2f s (esperado: más de 0)" % [
+		z[0].vida, lejos0, z[0].global_position.distance_to(pies), z[0].aturdido])
+	await get_tree().create_timer(0.8).timeout
+
+	# el lanzamiento hacia un zombi a 400: queda fuera de su alcance (320 desde la mano), el garfio vuelve solo
+	z = zombis_de_prueba([Vector2(-400, 0)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-garfio-lejos.png")
+	var volando2 := garfios_volando()
+	await get_tree().create_timer(1.6).timeout
+	print("Garfio en el aire a los 0,35 s: %d (esperado: 1) · tras 1,95 s: %d (esperado: 0: volvió solo)" % [volando2, garfios_volando()])
+	print("Zombi a 400: vida %d (esperado: 500) · aturdido %.2f (esperado: 0)" % [z[0].vida, z[0].aturdido])
+	print("Balas gastadas: %d (esperado: 0: no gasta munición)" % (balas0 - johnny.balas))
+	zombis_de_prueba([])
+	await get_tree().create_timer(0.3).timeout
+
+	# lanzar andando: sigue andando, sin gesto (sin efectos: la hoja no los tiene) ni retroceso
+	johnny.direccion = "e"
+	johnny.velocity = Vector2(120, 0)
+	johnny.atacar(0.0)
+	await get_tree().create_timer(0.1).timeout
+	print("Lanzado andando: ataque_t %.1f (esperado: -1.0) · efectos visibles %s (esperado: false) · retroceso %s (esperado: (0, 0))" % [
+		johnny.ataque_t, johnny.efectos.visible, johnny.patada])
+	johnny.velocity = Vector2.ZERO
+	quitar_garfios()
+	await get_tree().create_timer(0.3).timeout
+
+	# las 8 direcciones, con una foto a los 0,05 s: el brazo estirado y el gancho saliendo de la mano
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.05).timeout
+		Captura.foto("captura-garfio-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+		quitar_garfios()
+		await get_tree().create_timer(0.2).timeout
+
+	# con cada skin: su hoja del garfio
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.05).timeout
+		Captura.foto("captura-garfio-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-garfio-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.5).timeout
+		quitar_garfios()
+		await get_tree().create_timer(0.2).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Para probar_garfio: los garfios que van por el aire (los que lanzó Johnny y aún no han vuelto a su mano)
+func garfios_volando() -> int:
+	return johnny.get_parent().get_children().filter(func(n): return n.get_script() == ArmasCreadas.GARFIO).size()
+
+
+func quitar_garfios() -> void:
+	for n in johnny.get_parent().get_children():
+		if n.get_script() == ArmasCreadas.GARFIO:
+			n.queue_free()
 
 
 # Con "--captura --baul": guardar a mano en el baúl lo de la mochila (ui/inventario.gd, «Guardar de la mochila»).

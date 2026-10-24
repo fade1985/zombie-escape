@@ -65,10 +65,10 @@ const DATOS := {
 
 
 # ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
-# Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd). Hasta que tengan
-# dibujo propio, Johnny usa la hoja del arma base y le salen unas chispitas del color "detalle" en la punta
-# ("sube": hacia arriba, como fuego; si no, caen como gotas). Las que ya lo tienen llevan su "hoja" (y su
-# "momento", el del golpe en su animación) y no llevan "detalle": de momento, la lanza (conserje-48-lanza, hecha
+# Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd) y lleva su "hoja" (y su
+# "momento", el del golpe en su animación): ya no queda ninguna con el dibujo del arma base. (Una arma sin "hoja"
+# usaría la del arma base y le saldrían unas chispitas del color "detalle" en la punta, "sube": hacia arriba, como
+# fuego, o si no caen como gotas: lo hace ArmasCreadas.detalle(); ninguna lo usa ya.) Son: la lanza (conserje-48-lanza, hecha
 # con PixelLab: estocada hacia delante) y el aplastacabezas (conserje-48-aplastacabezas: el barrido del bate con el
 # bate de clavos; de espaldas, de arriba abajo), el bate de fuego (conserje-48-bate-fuego: el mismo barrido con
 # el bate ardiendo y una estela de llamas), el partecuerpos (conserje-48-partecuerpos: el barrido más ancho con el
@@ -86,7 +86,9 @@ const DATOS := {
 # depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
 # bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd) y la
 # pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
-# celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd) y el garfio (conserje-48-garfio: el gesto de lanzar el
+# gancho de perchas con la cuerda enrollada en la otra mano; el gancho que vuela, la cuerda y el zombi que arrastra los dibuja el juego,
+# garfio.gd), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -162,9 +164,17 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
 		"boca": {"s": Vector2(0, -31), "se": Vector2(19, -17), "e": Vector2(22, -30), "ne": Vector2(18, -42),
 			"n": Vector2(5, -48), "no": Vector2(-19, -42), "o": Vector2(-22, -30), "so": Vector2(-19, -17)}},
-	# el garfio, que sale y vuelve como el bumerán
+	# el garfio, que sale y vuelve como el bumerán: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia
+	# con el gancho en la mano y el rollo de cuerda en la otra; el gancho que sale volando, la cuerda y el zombi arrastrado los dibuja el
+	# juego, garfio.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla es de 90x88, con los pies en 45,72, porque el brazo
+	# llega a 41 píxeles a un lado, 41 al otro, 68 hacia arriba (de espaldas, con el brazo estirado) y 12 hacia abajo. La boca NO sale de
+	# arma.py (no hay fogonazo naranja que buscar: conserje-48-garfio.json no tiene "muzzle"): es la mano que sujeta el gancho del dibujo
+	# quieto, a mano
 	"garfio": {"base": "pistola", "ritmo": 0.9, "alcance": 320.0, "velocidad": 620.0, "cargador": 1, "recarga": 0.0,
-		"empuje": 0.0, "efecto": "garfio", "detalle": Color("#c0c4d0"), "sin_municion": true},
+		"empuje": 0.0, "efecto": "garfio", "sin_municion": true, "pies": Vector2(45, 72),
+		"hoja": preload("res://assets/sprites/conserje-48-garfio.tres"),
+		"boca": {"s": Vector2(-15, -30), "se": Vector2(-6, -30), "e": Vector2(-6, -33), "ne": Vector2(-13, -35),
+			"n": Vector2(15, -31), "no": Vector2(10, -35), "o": Vector2(7, -34), "so": Vector2(-16, -31)}},
 }
 
 # Las armas creadas sacadas del baúl en esta partida. Johnny y el inventario las nombran con un id como
