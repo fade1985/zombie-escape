@@ -1,0 +1,15 @@
+{
+  "posturas": "Las posturas quietas de south y north NO son las del estado de PixelLab (allí el cañón cruzaba el cuerpo en diagonal): se rehicieron el 24 de octubre de 2026 con una animación corta en la que Johnny gira el arma, y se guardó el último fotograma en rotations/ (south mide 64x80 y north 64x76: el cañón asoma por abajo y por arriba; los pies quedan en la fila 55 como siempre). Las originales están en descartes/rotations-viejas/. El andar de south y north, y el disparo, salen de esas posturas nuevas (fotograma de partida).",
+  "nota": "Datos para montar la hoja de sprites de Johnny con el supersoplete (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-supersoplete). De momento solo lleva lo de la prueba del disparo (este y norte); las medidas de la casilla y el ciclo del andar se ponen al montar las 8 direcciones.",
+  "ataque": {
+    "nota": "Disparo de prueba. El supersoplete dispara 2 veces por segundo, así que el disparo puede durar hasta 0,475 s y caben 6 fotogramas de los 8 de PixelLab: la llamarada empieza pequeña, se abre en cono ancho, se apaga en un abanico y deja unas brasas. Las gotas del cono las pone el juego (chorro.gd); la hoja solo lleva el retroceso y la llamarada de la boca. 'boca': 'fogonazo' hace que el script busque dónde está la boca del arma en cada dirección para que las gotas nazcan ahí. La llamarada empieza en el fotograma 2 de PixelLab en el este y en el 1 en el norte.",
+    "duracion": 0.45,
+    "impacto": 0,
+    "boca": "fogonazo",
+    "efectos": true,
+    "fotogramas": {
+      "east":  [2, 3, 4, 5, 6, 7],
+      "north": [1, 2, 3, 4, 5, 6]
+    }
+  }
+}

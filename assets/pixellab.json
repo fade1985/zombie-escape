@@ -1876,7 +1876,50 @@
    },
    "cost": "2 generaciones (1 por dirección), a la primera"
   },
-  "cost_total": "22 generaciones hasta ahora (parte 1): 20 de los dos estados (la A, descartada) y 2 de las posturas de south y north"
+  "cost_total": "24 generaciones hasta ahora (partes 1 y 2): 20 de los dos estados (la A, descartada), 2 de las posturas de south y north y 2 del disparo de prueba (east y north)",
+  "ataque": {
+   "nota": "Disparo de prueba (parte 2, 2026-10-24): retroceso fuerte de escopeta y una llamarada EN CONO ANCHO que sale de la boca acampanada (empieza pequeña, se abre, se apaga en un abanico y deja unas brasas), sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo de 96x96 como fotograma de partida y de llegada (arma.py --lienzos: lienzo_ataque por defecto, 96x96 con la postura en 16,20). Fotogramas en assets/sources/conserje-48-supersoplete/ataque/. East y north salieron a la primera. PixelLab devuelve lienzos de 100x96 (east) y 96x96 (north). El disparo es a ritmo 2: puede durar hasta 0,475 s; se usan 6 fotogramas (east [2..7], north [1..6]) y duracion 0,45.",
+   "animation_name": "disparo-supersoplete",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade blowtorch with both hands",
+   "initial_pose": {
+    "east": "standing in a ready shooting stance facing right, both hands on the blowtorch, the short thick barrel pointing straight to the right, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "west": "standing in a ready shooting stance facing left, both hands on the blowtorch, the short thick barrel pointing straight to the left, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "south": "standing facing the camera in a hip-fire stance, holding the blowtorch low in front of his belly with both hands, the short thick barrel pointing straight down toward the bottom of the image between his legs, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "south-east": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the right, both hands on the blowtorch, the short thick barrel pointing down and to the right of the image, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "south-west": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the left, both hands on the blowtorch, the short thick barrel pointing down and to the left of the image, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the short thick barrel of the blowtorch sticking straight up above his right shoulder, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "north-east": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the right, the short thick barrel pointing up and to the right of the image, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "north-west": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the left, the short thick barrel pointing up and to the left of the image, a flared bell-shaped nozzle with a small pilot flame in its mouth"
+   },
+   "action_description": "He fires one single blast with the blowtorch. The blowtorch kicks back hard with a heavy recoil like a shotgun: the barrel and the yellow gas tank jerk back, his arms and upper body rock back, while his feet stay planted and he keeps aiming in exactly the same direction. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle for an instant, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He brings the barrel back level and settles cleanly into the starting two-handed aiming stance. Only one blast, no second flare. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "east": {
+    "group": "75f05b4d-5c2c-427b-abc9-61352ef3e604",
+    "animation_id": "ee53113e-28b9-4037-bcb7-328c875e8147",
+    "animation_name": "disparo-supersoplete",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "5d743aca-dbd3-438e-991b-1b73cf9f9f7a",
+    "animation_id": "a20a99de-3e93-40c1-941d-af5c213900a8",
+    "animation_name": "disparo-supersoplete-norte",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade blowtorch with both hands",
+    "initial_pose": "standing seen from behind, his back to the camera, facing away toward the top of the image, the short thick barrel of the blowtorch sticking straight up above his right shoulder, a flared bell-shaped nozzle with a small pilot flame in its mouth",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head and the back of his overalls; he never turns around and his face is never visible. He fires one single blast with the blowtorch away from the camera, toward the top of the image. The blowtorch kicks back hard like a shotgun: his shoulders and elbows jerk back, while his feet stay planted. A short, wide cone of bright orange and yellow flames bursts out of the flared nozzle for an instant, straight up above his right shoulder, fat and spreading wider as it goes, then the flames die out quickly and only the small pilot flame stays in the nozzle mouth. He settles cleanly into the starting stance, still seen from behind. Only one blast. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "subidas": {
+    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab; caducan el 2026-10-27. Se subieron los 8 (los de las otras 6 direcciones se usan en la parte 3).",
+    "east": "2af8da2a-9180-4740-bd14-e022bf8af930",
+    "north": "b7459af3-42db-439d-ab3d-8a38a076a124",
+    "south": "11a08da9-29b2-45b5-8da6-58bee1f0b07a",
+    "south-east": "b54644e4-2397-4b60-a104-75fcf91a8fd3",
+    "south-west": "9fa2a23c-6894-4f14-a6f4-469773dd59fd",
+    "west": "cc7fc436-067d-4fa9-9bb1-7fcdd3003ba2",
+    "north-east": "cf150a0b-a22d-435a-8a45-5385099b53bd",
+    "north-west": "02db0091-8bf6-4949-b27d-3d30d4dccd56"
+   },
+   "cost": "2 generaciones (1 por dirección), a la primera"
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
