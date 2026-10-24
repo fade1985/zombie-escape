@@ -1545,6 +1545,29 @@
    }
   }
  },
+ "conserje-48-latigo-electrico": {
+  "kind": "character_state",
+  "character_id": "dec795eb-8092-4178-b941-335686efcb50",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Látigo eléctrico en guardia",
+  "nota": "Estado de Johnny con el látigo eléctrico (el arma creada: cable + batería; base el cuchillo, alcance 110, descarga que aturde y salta a otro zombi), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Johnny sujeta un mango de goma negro con la mano derecha y el brazo doblado delante del cuerpo; el cable negro grueso cuelga en un bucle suelto al costado y acaba en una batería de coche pequeña, gris, con dos bornes, colgando a la altura de la cadera, con chispas y arcos celestes y blancos alrededor. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 6001) y la B, con colores libres (seed 6002). Elegida por el dueño la A: la batería se ve entera colgando al final del cable (se lee a la primera como látigo con batería) aunque las chispas salen pálidas, casi blancas; la B saca las chispas de un celeste vivo, pero el cable da vueltas grandes alrededor del cuerpo y la batería queda pegada a la cintura, como una bolsita del cinturón. Las 8 posturas de la A, en assets/sources/conserje-48-latigo-electrico/rotations/<dirección>.png; las de la B, en descartes/rotations-B/. Lienzo de 64x64. Se distingue del látigo escorpión (cuerda trenzada color arena con aguijón de acero y gotas verdes) y de la inmovilizadora (un bate con una caja de táser) a la primera: cable negro con una batería, sin bate ni cuerda trenzada.",
+  "request": {
+   "edit_description": "holding a homemade electric whip like a weapon: a short black rubber handle gripped in his right hand with the arm bent in front of his body, and a long thick black electrical cable attached to it that hangs down and curls in one loose loop at his side, ending in a small boxy dark grey car battery with two metal terminals hanging at hip height at the end of the cable; bright cyan and white electric sparks and small lightning arcs crackle along the cable and around the battery, clearly visible; the whip stays held in the same hand in the same way in every view: front, side and back; thick black cable with a dark outline, grey battery box with dark outlines, bright cyan and white lightning drawn in flat pixel art colors; knees slightly bent in a ready stance; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 6001
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_B": {
+   "character_id": "26a54423-1b78-4fbc-b212-f794c3411d88",
+   "state_name": "Látigo eléctrico en guardia (colores libres)",
+   "cost": "10 generaciones",
+   "nota": "DESCARTADA por el dueño, que eligió la A (sigue en PixelLab, sin borrar). La B: mismo texto, con use_color_palette_from_reference false y seed 6002. Johnny sale igual que siempre; las chispas, de un celeste vivo, pero el cable negro da vueltas grandes alrededor del cuerpo y la batería queda pegada a la cintura. Sus 8 posturas, en assets/sources/conserje-48-latigo-electrico/descartes/rotations-B/."
+  },
+  "cost_total": "20 generaciones hasta ahora: las dos versiones del estado (la B, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
