@@ -2673,6 +2673,29 @@
    "cost": "8 generaciones, todas a la primera"
   }
  },
+ "conserje-48-garfio": {
+  "kind": "character_state",
+  "character_id": "663959f6-c876-40ba-98c8-751aa53b6370",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Garfio en guardia",
+  "nota": "Estado de Johnny con el garfio (el arma creada: cuerda + perchas; base la pistola, ritmo 0,9, alcance 320, velocidad 620, sin munición: sale recto, engancha al primer zombi que pilla y se lo trae hasta delante de Johnny aturdido; si no pilla nada o choca, vuelve solo; scripts/garfio.gd), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un garfio de escalada casero: un gancho grande de acero gris hecho de perchas de alambre, con el mango corto y tres uñas curvas abiertas como un ancla pequeña, sujeto con la mano derecha a la altura del hombro con el codo doblado, listo para lanzarlo, y un rollo grueso de cuerda trenzada color paja en la mano izquierda, pegado al costado, con un cabo de la cuerda atado al mango del gancho que cuelga en un bucle (decidido con el dueño: gancho en una mano y cuerda enrollada en la otra, gancho de perchas gris con 3 uñas y cuerda color paja; la hoja lo dibuja siempre en la mano aunque el juego lo dibuje volando encima, como en el bumerán). Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 12001) y la B, con colores libres (seed 12002). Propuesta la A: cara y ropa limpias, 42 colores como el resto de Johnny, el gancho de tres uñas se reconoce a la primera en las 8 direcciones y el rollo de cuerda queda claro al costado; de frente el gancho queda junto al hombro y no cruza el cuerpo, de espaldas queda alto junto a la cabeza sin asomar de lado (no hizo falta rehacer south y north). En la B salen solo 27 colores y el gancho sale más pequeño y de dos puntas, parecido a un martillo, con un cabo de cuerda corto con goteras amarillas. Las 8 posturas de la A, en assets/sources/conserje-48-garfio/rotations/<dirección>.png (64x64, pies en la fila 55); las de la B, en descartes/rotations-B/. Las imágenes se bajaron del zip de la hoja (api.pixellab.ai/mcp/characters/<id>/spritesheet) porque backblaze.pixellab.ai no respondía. Los dos estados tardaron unos 12 minutos.",
+  "request": {
+   "edit_description": "holding a homemade climbing grappling hook in his right hand, raised beside his shoulder with the elbow bent, ready to throw it, and a thick coil of straw-colored braided rope in his left hand, held low at his side: the hook is a chunky gray steel hook bent from wire coat hangers, with a short straight shank and three curved prongs spread like a small anchor, and a short end of the straw-yellow braided rope is tied to the shank and hangs down in a small loop to the coil; the hook stays raised beside his shoulder in every view: front, side and back; gray three-pronged steel hook, straw-yellow rope coil; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 12001
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_B": {
+   "character_id": "0693b0ee-224c-4466-9419-c5c7c81ffa01",
+   "state_name": "Garfio en guardia (colores libres)",
+   "cost": "10 generaciones",
+   "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 12002. Descartada: solo 27 colores y el gancho sale pequeño y de dos puntas (parece un martillo). Sus 8 posturas, en assets/sources/conserje-48-garfio/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
+  },
+  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la B, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
