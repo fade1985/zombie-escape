@@ -99,7 +99,9 @@ func caer(datos: Dictionary) -> void:
 				var a := randf() * TAU
 				Particulas.soltar(self, hasta, Vector2(cos(a) * 110.0, sin(a) * 65.0), Color("#d8f0ff"), 2, 0.3)
 	var johnny := get_tree().get_first_node_in_group("jugador")
-	if datos.golpe > 0 and johnny and johnny.vivo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
+	# (la botella del molotov del jefe de bomberos son llamas: con la skin del bombero, no le hace nada)
+	var ignifugo: bool = tipo == "molotov_jefe" and johnny and johnny.ignifugo()
+	if datos.golpe > 0 and johnny and johnny.vivo and not ignifugo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
 		johnny.recibir_dano(datos.golpe, dueno)
 	queue_free()
 

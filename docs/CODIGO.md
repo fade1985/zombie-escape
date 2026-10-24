@@ -30,7 +30,11 @@
   por la cintura: el cuerpo da el golpe y debajo otro dibujo (`Piernas`) sigue andando. Las skins (`skins.gd`):
   `vestir(id)` le cambia las hojas por las de esa skin sin cortarle la animación (`sostener` también coge la hoja de
   la skin al cambiar de arma); al empezar se pone la del guardado. Con el portero, `arma()` multiplica por 4 el daño de
-  la fregona, y con el gymbro, por 3 el de todas las armas cuerpo a cuerpo (también las creadas en el banco). `recibir_dano(cantidad, quien)`: "quien" es el que le pega (el zombi o el jefe; en lo que se lanza,
+  la fregona; con el gymbro, por 3 el de todas las armas cuerpo a cuerpo (también las creadas en el banco), y con el
+  bombero, por 3 el de las que queman (`ArmasCreadas.QUEMAN`: el bate de fuego, el lanzallamas y el súpersoplete; `quema`,
+  que también multiplica lo que sigue ardiendo el zombi que prenden). Con el bombero, `ignifugo()`: `pisar()` no apunta el
+  fuego de los charcos ni del suelo, y las bolas de fuego, el cono y la botella del molotov del jefe de bomberos no le
+  hacen nada (`bola_fuego.gd`, `bombero.gd`, `proyectil.gd`). `recibir_dano(cantidad, quien)`: "quien" es el que le pega (el zombi o el jefe; en lo que se lanza,
   balas, pesas, cuchillos, contratos, bolas de fuego y lo de `proyectil.gd`, su `dueno`), o nada si no es de nadie
   (charcos, agua con corriente, explosiones); con el glotón, `devolver(quien)` se lo cobra: el zombi muere y el jefe
   pierde un 10 % de su vida máxima (`morder()`). `caer(segundos)`: un tropezón (las mancuernas del gimnasio
@@ -183,17 +187,24 @@
   `recoger`). La prueba: `--captura --edificio centro --joyeria` (`probar_joyeria()` en `pruebas/partida_prueba.gd`).
 - `skins.gd`: las skins de Johnny, que se desbloquean haciendo algo y se quedan para siempre: `LISTA` (nombre, frase,
   cómo se consigue, `jefe`, el que la suelta, y su ventaja: `fregona`, por cuánto se multiplica su daño; `cuerpo`, lo
-  mismo con todas las armas cuerpo a cuerpo; `mordisco`, lo que pierde el jefe que te hace daño), `puesta()` y `poner()` (el guardado, `skin`), `tenidas()` y `desbloquear()`
+  mismo con todas las armas cuerpo a cuerpo; `mordisco`, lo que pierde el jefe que te hace daño; `quema`, por cuánto se
+  multiplica el daño de las armas que queman; `ignifugo`, si el fuego no le hace nada), `puesta()` y `poner()` (el guardado, `skin`), `tenidas()` y `desbloquear()`
   (`skins`), `de_jefe(tipo)` (la que suelta ese jefe al caer por primera vez: `partida.gd`, con su aviso),
   `siguiente()` (la tecla Z), `hoja(de_siempre, id)` (la hoja de esa skin para un arma: `conserje-48-<arma>-<id>.tres`),
-  `fregona(id)`, `cuerpo(id)` y `mordisco(id)`. **El portero** (la suelta la portera): viejo de pelo largo blanco, coleta y barba, con
+  `fregona(id)`, `cuerpo(id)`, `mordisco(id)`, `quema(id)` e `ignifugo(id)`. **El portero** (la suelta la portera): viejo de pelo largo blanco, coleta y barba, con
   el pañuelo de siempre, y la fregona × 4. **El glotón** (la suelta el Glotón): calvo y con la cara convertida en una
   boca llena de dientes; quien le hace daño lo paga (`johnny.devolver()`): un zombi normal (o un maniquí) muere al
   momento y un jefe pierde un 10 % de su vida máxima, directo a la vida (`morder()` en `minijefe.gd` y `portera.gd`: ni
   la armadura del Gymbro, ni el escudo del antidisturbios, ni la cúpula del científico lo paran; el científico y el
   gerente, antes de pincharse, no caen). **El gymbro** (la suelta el Gymbro): calvo, con el pañuelo de siempre y
   barba negra; las armas cuerpo a cuerpo hacen el triple de daño (todas las que lleve Johnny en la mano, también las
-  creadas en el banco de trabajo; el golpe de Ninja y los martillazos del ferretero, no). Sus hojas son las de siempre
+  creadas en el banco de trabajo; el golpe de Ninja y los martillazos del ferretero, no). **El bombero** (la suelta el
+  jefe de bomberos): un casco de bombero ajustado, negro con la raya amarilla, que tapa el pelo y el pañuelo; las armas
+  que queman hacen el triple de daño (el bate de fuego, el golpe y la quemadura; el lanzallamas y el súpersoplete, la
+  gota y la quemadura; el molotov y la bomba de aceite, por `dano_lanzar` en `lanzables.gd`), y también lo que sigue
+  ardiendo el zombi (`zombi.prender(quema)`); las armas de fuego de siempre, no. Y el fuego no le hace nada: el del
+  suelo y los charcos (también el aceite hirviendo del cocinero), el seguir ardiendo al salir, y el cono, las bolas, el
+  aro y los molotovs del jefe de bomberos (y las bolas de fuego del científico); el hachazo y las explosiones, sí. Sus hojas son las de siempre
   con la cabeza cambiada (`tools/cara.py`). Se
   eligen en la taquilla del vestuario (`ui/taquilla.gd`). La prueba: `--captura --skins` (`probar_skins()`).
 - `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 28 objetos; los que se usan desde el inventario, `USABLES`:
@@ -393,8 +404,10 @@ helipuerto, dibujadas con código), `centro_sprites.py`
 (escaparates y restos del centro comercial → sprites), `despixelar.py` (de PixelLab y Gemini), `dibujos_7b.py` (el armarito del baño), `taquilla.py` (la taquilla de las skins), `cara.py` (las skins de Johnny: pega
 la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos de las seis hojas de armas, buscándola por
 el pañuelo rojo; lo que sobra del pelo de siempre alrededor, según la skin (`SOBRA`): teñido del pelo nuevo (el portero),
-quitado con lo que sobre del pañuelo (el glotón, calvo y sin pañuelo) o quitado solo el pelo, respetando el pañuelo y sus
-puntas al viento (el gymbro, calvo con pañuelo); saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
+quitado con lo que sobre del pañuelo (el glotón, calvo y sin pañuelo), quitado solo el pelo, respetando el pañuelo y sus
+puntas al viento (el gymbro, calvo con pañuelo), o quitado como en el glotón con un casco (el bombero: el casco va por
+detrás de los brazos y las manos, `delante()`, y lo que se sale de la cabeza de siempre solo se pinta donde quede aire);
+saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
 de la taquilla; con `muestra`, el antes y el después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
 (los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con

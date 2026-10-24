@@ -20,6 +20,15 @@
 # siempre y una barba negra. Con ella puesta, las armas cuerpo a cuerpo hacen un 200 % más de daño (× 3, "cuerpo";
 # todas las que lleve Johnny en la mano, también las creadas en el banco de trabajo; el golpe de Ninja y los
 # martillazos del ferretero, no).
+#
+# La cuarta, el bombero (la suelta el jefe de bomberos al caer por primera vez, partida.gd): un casco de bombero
+# ajustado, negro con la raya amarilla reflectante, como el del jefe; tapa el pelo y el pañuelo. Con ella puesta:
+#   - las armas que queman hacen un 200 % más de daño (× 3, "quema"): el bate de fuego (el golpe y la quemadura), el
+#     lanzallamas, el súpersoplete, el molotov y la bomba de aceite, y lo que siguen ardiendo los zombis que prenden
+#     (zombi.gd, prender()). Las armas de fuego de siempre (pistola, escopeta, MP5), no: no queman
+#   - Johnny es inmune al fuego ("ignifugo"; johnny.gd, ignifugo()): el cono, las bolas, el aro y los molotovs del jefe
+#     de bomberos, el fuego del suelo y de los charcos, el aceite hirviendo del cocinero y el seguir ardiendo al salir.
+#     El hachazo del jefe y las explosiones, sí le quitan
 class_name Skins
 
 const LISTA := {
@@ -29,6 +38,8 @@ const LISTA := {
 		"como": "Mata al Glotón por primera vez.", "jefe": "gloton", "mordisco": 0.1},
 	"gymbro": {"nombre": "El gymbro", "desc": "Calvo y barbudo. Las armas cuerpo a cuerpo hacen un 200 % más de daño.",
 		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 3.0},
+	"bombero": {"nombre": "El bombero", "desc": "Casco de bombero. Las armas que queman hacen un 200 % más de daño y el fuego no te quema.",
+		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 3.0, "ignifugo": true},
 }
 
 
@@ -91,6 +102,16 @@ static func fregona(id: String) -> float:
 # Por cuánto se multiplica el daño de todas las armas cuerpo a cuerpo con esa skin
 static func cuerpo(id: String) -> float:
 	return LISTA[id].get("cuerpo", 1.0) if id in LISTA else 1.0
+
+
+# Por cuánto se multiplica el daño de las armas que queman con esa skin (también lo que siguen ardiendo los zombis)
+static func quema(id: String) -> float:
+	return LISTA[id].get("quema", 1.0) if id in LISTA else 1.0
+
+
+# Si con esa skin el fuego no le hace nada a Johnny
+static func ignifugo(id: String) -> bool:
+	return LISTA[id].get("ignifugo", false) if id in LISTA else false
 
 
 # Qué parte de su vida máxima pierde un jefe que le hace daño con esa skin (0 = nada: el poder del glotón no está)

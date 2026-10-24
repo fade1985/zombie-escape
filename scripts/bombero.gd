@@ -364,7 +364,8 @@ func hasta_la_pared(desde: Vector2, dir: Vector2) -> float:
 # quema a Johnny si está dentro (también rodando: la voltereta no lo cruza, solo se libra quien corre delante de él) y
 # prende a los zombis que pilla. Devuelve lo largo que es por el medio (desde él)
 func quemar_cono(a: float, johnny: Node2D, puntas: Array) -> float:
-	if johnny.vivo and en_cono(johnny.global_position, a, johnny.RADIO * 0.5):
+	# (con la skin del bombero, a Johnny el cono no le hace nada)
+	if johnny.vivo and not johnny.ignifugo() and en_cono(johnny.global_position, a, johnny.RADIO * 0.5):
 		# rodando, la voltereta le haría invulnerable: el cono se lo salta (una vez por cada rato sin poder darle)
 		if johnny.esquiva_t > 0.0 and quema_t <= 0.0:
 			johnny.invulnerable = 0.0

@@ -13,6 +13,9 @@ const BUMERAN := preload("res://scripts/bumeran.gd")
 const GARFIO := preload("res://scripts/garfio.gd")
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 const EMPUJE := 170.0   # empuje base, como el de las balas
+# Los efectos de las armas que queman: el bate de fuego, el lanzallamas y el súpersoplete (con la skin del bombero,
+# × 3: johnny.gd, arma())
+const QUEMAN := ["fuego", "llama", "cono"]
 
 # Números de los efectos (provisionales, como EFECTOS en el JS)
 const EFECTOS := {
@@ -39,7 +42,7 @@ static func efecto_golpe(zombi: Node2D, w: Dictionary, dano: float) -> void:
 		"aturde":
 			aturdir(zombi, EFECTOS.aturde)
 		"fuego":
-			prender(zombi)
+			prender(zombi, w.get("quema", 1.0))
 		"sangra", "veneno":
 			herir(zombi, w.efecto, dano)
 		"descarga":
@@ -75,10 +78,10 @@ static func aturdir(zombi: Node2D, t: float) -> void:
 		zombi.aturdido = maxf(zombi.aturdido, t)
 
 
-# Lo prende como el molotov. Los jefes no arden
-static func prender(zombi: Node2D) -> void:
+# Lo prende como el molotov ("quema": cuánto más arde; la skin del bombero, × 3). Los jefes no arden
+static func prender(zombi: Node2D, quema := 1.0) -> void:
 	if zombi is Zombi and zombi.is_in_group("zombis"):
-		zombi.prender()
+		zombi.prender(quema)
 
 
 # Sangrar, veneno o ácido: quita poco a poco una parte del golpe (con cada golpe vuelve a empezar)
@@ -159,6 +162,7 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		g.velocidad = Vector2.from_angle(a) * w.velocidad * randf_range(0.85, 1.15)
 		g.dano = w.dano
 		g.empuje = w.empuje
+		g.quema = w.get("quema", 1.0)
 		g.radio = 10.0 if cono else 8.0
 		g.vida_max = w.alcance / w.velocidad
 		sala.add_child(g)
@@ -169,8 +173,9 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		Luz.destello(johnny, salida - Vector2(0, 50), 170.0 if cono else 120.0, 0.08)
 
 
-# Lo que pasa cuando una gota, el bumerán, el garfio o un clavo de la bomba de clavos tocan a un zombi
-static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String) -> void:
+# Lo que pasa cuando una gota, el bumerán, el garfio o un clavo de la bomba de clavos tocan a un zombi ("quema":
+# cuánto más arde el que prende una gota de fuego)
+static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String, quema := 1.0) -> void:
 	# al jefe de bomberos (bombero.gd) el fuego no le hace nada: ni el daño ni prenderle
 	if (tipo == "llama" or tipo == "cono") and zombi.get("inmune_fuego"):
 		zombi.prender()
@@ -183,7 +188,7 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 	if tipo == "bumeran" or tipo == "garfio":
 		Sonido.tocar("porrazo")
 	if tipo == "llama" or tipo == "cono":
-		prender(zombi)
+		prender(zombi, quema)
 	elif tipo == "chispa":
 		descarga(zombi, d, EFECTOS.chispa)
 	elif tipo == "clavo":

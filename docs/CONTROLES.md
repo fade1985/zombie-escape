@@ -74,15 +74,19 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--skins`: en vez de la prueba larga, la de las skins de Johnny (`skins.gd`), en la sala de mantenimiento y sin
   ninguna: la taquilla no deja ponerse el portero sin tenerlo; la portera cae y lo desbloquea, con su aviso
   (`captura-skins-desbloqueo.png`), y una segunda vez ya no es nuevo; el Glotón cae y desbloquea el glotón
-  (`captura-skins-desbloqueo-gloton.png`) y el Gymbro, el gymbro (`captura-skins-desbloqueo-gymbro.png`); en la
-  taquilla se eligen (`captura-skins-taquilla.png`, `captura-skins-taquilla-gloton.png` y
-  `captura-skins-taquilla-gymbro.png`, estas dos ya puestas, para ver que su frase cabe entera), Johnny cambia
-  de hoja y se guarda; la vuelta de la tecla Z; la cara en las 8 direcciones y con las seis armas, al lado del
-  conserje de siempre (`captura-skins-caras.png`, el portero, `captura-skins-caras-gloton.png` y
-  `captura-skins-caras-gymbro.png`); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero
+  (`captura-skins-desbloqueo-gloton.png`), el Gymbro, el gymbro (`captura-skins-desbloqueo-gymbro.png`), y el jefe
+  de bomberos, el bombero (`captura-skins-desbloqueo-bombero.png`); en la taquilla se eligen
+  (`captura-skins-taquilla.png` y `captura-skins-taquilla-<id>.png` del glotón, el gymbro y el bombero, estas ya
+  puestas, para ver que su frase cabe entera), Johnny cambia de hoja y se guarda; la vuelta de la tecla Z; la cara
+  en las 8 direcciones y con las seis armas, al lado del conserje de siempre (`captura-skins-caras.png`, el
+  portero, y `captura-skins-caras-<id>.png`, las demás); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero
   (y el del bate, igual), contado y con un golpe de verdad; el del gymbro, × 3 con la fregona, el bate, el cuchillo y
-  una lanza creada en el banco, y × 1 con las de fuego, contado y con un golpe de verdad (con el bate y la lanza); y
-  el poder del glotón: el zombi que le da un zarpazo muere,
+  una lanza creada en el banco, y × 1 con las de fuego, contado y con un golpe de verdad (con el bate y la lanza); el
+  del bombero, × 3 con el bate de fuego, el lanzallamas, el súpersoplete, el molotov y la bomba de aceite, y × 1 con
+  las seis de siempre, contado y de verdad a un zombi quieto (el golpe o el disparo y lo que sigue ardiendo, y un
+  molotov de verdad); el bombero, inmune al fuego: pisando fuego, en un charco de molotov (`captura-skins-bombero-fuego.png`),
+  con los molotovs, el cono y las bolas del jefe de bomberos, sin la skin pierde vida y sigue ardiendo y con ella no
+  (su hachazo, sí le quita); y el poder del glotón: el zombi que le da un zarpazo muere,
   el Gymbro pierde un 10 % con un golpe suyo y con una pesa suya aunque tenga la armadura, y sin la skin, siendo
   invulnerable o con un daño que no es de nadie, nada. Cada línea de la terminal dice lo esperado.
 - `--baul`: en vez de la prueba larga, la de guardar a mano en el baúl lo de la mochila (`ui/inventario.gd`): con
@@ -243,7 +247,12 @@ En el suelo, manchas de sangre.
   o lo esquivas, ni lo que no es de nadie (charcos, fuego del suelo, agua con corriente, explosiones). **El gymbro**:
   se desbloquea la primera vez que matas al Gymbro; calvo, con el pañuelo rojo y barba negra, y las armas cuerpo a
   cuerpo hacen un 200 % más de daño (el triple: todas, también las creadas en el banco de trabajo; el golpe de Ninja
-  al acabar la esquiva y los martillazos del ferretero, no). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
+  al acabar la esquiva y los martillazos del ferretero, no). **El bombero**: se desbloquea la primera vez que matas al
+  jefe de bomberos; un casco de bombero negro con la raya amarilla, y las armas que queman (el bate de fuego, el
+  lanzallamas, el súpersoplete, el molotov y la bomba de aceite) hacen un 200 % más de daño, también lo que siguen
+  ardiendo los zombis que prenden; y el fuego no te hace nada: el del suelo, los charcos de fuego, el aceite hirviendo
+  del cocinero, el seguir ardiendo, y el cono, las bolas, el aro y los molotovs del jefe de bomberos (su hachazo y las
+  explosiones, sí). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando
   (cruceta y A); Esc o B cierra.
 - Los baños tienen un armarito con botiquín.
 - Por la **puerta de la derecha** del taller, las **viviendas** de los supervivientes rescatados (`mapa/viviendas.gd`): un

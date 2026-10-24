@@ -52,8 +52,9 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) < johnny.RADIO + RADIO \
 			and johnny.esquiva_t <= 0.0:
-		johnny.recibir_dano(dano, dueno)
-		johnny.pisar(quema)
+		if not johnny.ignifugo():   # (con la skin del bombero, se deshace en chispas sin hacerle nada)
+			johnny.recibir_dano(dano, dueno)
+			johnny.pisar(quema)
 		apagarse()
 
 

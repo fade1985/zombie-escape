@@ -228,7 +228,7 @@ func lanzar(donde: Vector2) -> void:
 		p.desde = johnny.global_position
 		p.alto_salida = 20.0
 		p.hasta = donde
-		p.dano_lanzar = johnny.stats.dano_lanzar
+		p.dano_lanzar = johnny.stats.dano_lanzar * Skins.quema(johnny.skin)   # (la skin del bombero: × 3)
 		p.fabricante = johnny.stats.fabricante
 		sala.add_child(p)
 	else:
@@ -253,7 +253,7 @@ func lanzar_creada(donde: Vector2, sala: Node) -> void:
 		p.desde = johnny.global_position
 		p.alto_salida = 20.0
 		p.hasta = donde
-		p.dano_lanzar = a.dano / float(Recetas.LISTA[tipo].dano) * johnny.stats.dano_lanzar   # la rareza quema más
+		p.dano_lanzar = a.dano / float(Recetas.LISTA[tipo].dano) * johnny.stats.dano_lanzar * Skins.quema(johnny.skin)   # la rareza quema más (y el bombero)
 		p.fabricante = johnny.stats.fabricante
 		sala.add_child(p)
 		if cuantas(tipo) <= 0:

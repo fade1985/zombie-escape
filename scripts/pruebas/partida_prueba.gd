@@ -1873,17 +1873,22 @@ func probar_sala() -> void:
 # Con "--captura --skins": las skins de Johnny (skins.gd). En la sala de mantenimiento, sin ninguna skin:
 #   - sin desbloquear, la taquilla no deja ponérsela (y dice cómo se consigue)
 #   - la portera cae y desbloquea el portero (se guarda; no se pone sola), con su aviso (captura-skins-desbloqueo.png);
-#     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png), y el Gymbro, el
-#     gymbro (captura-skins-desbloqueo-gymbro.png)
+#     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png), el Gymbro, el
+#     gymbro (captura-skins-desbloqueo-gymbro.png), y el jefe de bomberos, el bombero (captura-skins-desbloqueo-bombero.png)
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
-#     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón y el gymbro
-#     (captura-skins-taquilla-gloton.png, captura-skins-taquilla-gymbro.png); la tecla Z da la vuelta sin guardar
+#     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón, el gymbro y el bombero
+#     (captura-skins-taquilla-<id>.png); la tecla Z da la vuelta sin guardar
 #   - la cara en las 8 direcciones (con la fregona) y con las otras cinco armas, mirando al sur, al lado del
 #     conserje de siempre (captura-skins-caras.png, el portero; captura-skins-caras-<id>.png, las demás); y Johnny
 #     andando con la skin, que sigue con su paso
 #   - el daño de la fregona: × 4 con el portero (con el bate, igual), contado y con un golpe de verdad
 #   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (también una creada en el banco, la lanza) y las de
 #     fuego, igual; contado y con un golpe de verdad (con el bate y con la lanza)
+#   - el daño de las armas que queman: × 3 con el bombero (el bate de fuego, el lanzallamas, el súpersoplete, el
+#     molotov y la bomba de aceite) y las demás, igual; contado y de verdad, con el golpe o el disparo y lo que sigue
+#     ardiendo el zombi (y un molotov de verdad); con la pistola y el bate, igual
+#   - el bombero, inmune al fuego: el fuego del suelo, un charco de molotov, los molotovs, el cono y las bolas del jefe
+#     de bomberos, de verdad: sin la skin Johnny pierde vida y sigue ardiendo; con ella, nada; el hachazo, sí le quita
 #   - el poder del glotón: un zombi normal que le da un zarpazo de verdad muere; el Gymbro (con su armadura) pierde
 #     un 10 % de su vida con un golpe suyo y con una pesa suya, y la armadura no se lo para; sin la skin, nada; y nada
 #     si Johnny es invulnerable o si el daño no es de nadie
@@ -1940,8 +1945,8 @@ func probar_skins() -> void:
 	Captura.foto("captura-skins-desbloqueo-gloton.png")
 	print("Cae el Glotón (muerto: %s): skins %s · puesta «%s» (esperado: [\"portero\", \"gloton\"], «»)" % [
 		gloton.estado == "muerto", Skins.tenidas(), Skins.puesta()])
-	print("Otra vez: ¿nueva? %s (esperado: false) · un jefe sin skin (el bombero): «%s» (esperado: «»)" % [
-		Skins.desbloquear("gloton"), Skins.de_jefe("bombero")])
+	print("Otra vez: ¿nueva? %s (esperado: false) · un jefe sin skin (el cocinero): «%s» (esperado: «»)" % [
+		Skins.desbloquear("gloton"), Skins.de_jefe("cocinero")])
 	await get_tree().create_timer(2.0).timeout
 	if menus.abierto == "mutacion":
 		menus.elegir("canibal")
@@ -1965,6 +1970,27 @@ func probar_skins() -> void:
 		menus.elegir("insensible")
 	get_tree().paused = false
 	$Pantalla/Jefa.hide()
+	# y el jefe de bomberos (le pega un aliado, como al Glotón)
+	var jefe_bombero: Node2D = meter_zombi("bombero", johnny.position + Vector2(220, 0))
+	await get_tree().create_timer(0.2).timeout
+	for i in 60:
+		if jefe_bombero.estado == "muerto":
+			break
+		jefe_bombero.recibir_golpe(99999, Vector2.ZERO, false, true)
+		await get_tree().process_frame
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-skins-desbloqueo-bombero.png")
+	print("Cae el jefe de bomberos (muerto: %s): skins %s · puesta «%s» (esperado: [\"portero\", \"gloton\", \"gymbro\", \"bombero\"], «»)" % [
+		jefe_bombero.estado == "muerto", Skins.tenidas(), Skins.puesta()])
+	print("Otra vez: ¿nueva? %s (esperado: false)" % Skins.desbloquear("bombero"))
+	await get_tree().create_timer(2.0).timeout
+	if menus.abierto == "mutacion":
+		menus.elegir("canibal")
+	get_tree().paused = false
+	$Pantalla/Jefa.hide()
+	# (lo que haya dejado ardiendo al caer: fuera)
+	for c in get_tree().get_nodes_in_group("charcos"):
+		c.queue_free()
 
 	# ── La taquilla ──
 	johnny.position = Vector2(mapa.TAQUILLA_X, mapa.MURO + 36.0 + 22.0)
@@ -1994,6 +2020,12 @@ func probar_skins() -> void:
 		Captura.foto("captura-skins-taquilla-gymbro.png")
 		print("Elegido el gymbro: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
 			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
+		taquilla.marcar("bombero")
+		taquilla.elegir("bombero")
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-skins-taquilla-bombero.png")
+		print("Elegido el bombero: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
+			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
 	var vuelta := []
@@ -2001,7 +2033,7 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Tecla Z: %s (esperado: El portero > El glotón > El gymbro > Conserje)" % " > ".join(vuelta))
+	print("Tecla Z: %s (esperado: El portero > El glotón > El gymbro > El bombero > Conserje)" % " > ".join(vuelta))
 
 	# ── La cara: las 8 direcciones con la fregona, y las otras armas mirando al sur (una foto por skin) ──
 	johnny.position = Vector2(690, 330)
@@ -2009,7 +2041,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton", "gymbro"]:
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:
@@ -2113,6 +2145,8 @@ func probar_skins() -> void:
 	johnny.coger("pistola")
 	johnny.vestir("")
 
+	await probar_skin_bombero()
+
 	# ── El poder del glotón: quien le hace daño lo paga ──
 	var modo: String = johnny.modo
 	johnny.modo = "mira"   # que Johnny no pegue solo
@@ -2173,6 +2207,189 @@ func probar_skins() -> void:
 	johnny.modo = modo
 	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
 	get_tree().quit()
+
+
+# La skin del bombero (skins.gd), dentro de probar_skins(). Johnny en el despacho, sin pegar ni disparar solo y sin
+# críticos:
+#   - el daño contado: × 3 las armas que queman (el bate de fuego, el lanzallamas, el súpersoplete, y lo que queman el
+#     molotov y la bomba de aceite) y × 1 las seis de siempre
+#   - de verdad, a un zombi quieto delante: el golpe o el disparo y lo que sigue ardiendo después, sin la skin y con
+#     ella (con el bate y la pistola, igual y sin arder); y un molotov de verdad
+#   - inmune al fuego, de verdad, sin la skin y con ella: el fuego del suelo (lo que hace cada paso al pisarlo) y lo
+#     que sigue ardiendo al salir, un charco de molotov a sus pies (con la skin, captura-skins-bombero-fuego.png), los
+#     molotovs, el cono y las bolas de fuego del jefe de bomberos; y su hachazo, que sí le quita
+func probar_skin_bombero() -> void:
+	var modo: String = johnny.modo
+	johnny.modo = "mira"   # que Johnny no pegue ni dispare solo
+	var critico: float = johnny.stats.critico
+	johnny.stats.critico = 0.0
+	johnny.direccion = "e"
+	var queman := {}
+	for r in ["bate_fuego", "lanzallamas", "supersoplete"]:
+		queman[r] = Armas.apuntar(Recetas.crear(r, "verde"))
+	# ── contado ──
+	var cuentas := []
+	for arma in ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5", queman.bate_fuego, queman.lanzallamas,
+			queman.supersoplete]:
+		johnny.coger(arma)
+		johnny.vestir("")
+		var siempre: float = johnny.arma().dano
+		johnny.vestir("bombero")
+		cuentas.append("%s × %.1f" % [Objetos.nombre(arma), johnny.arma().dano / siempre])
+	print("Daño con el bombero: %s (esperado: × 1 las seis de siempre, × 3 las tres que queman)" % " · ".join(cuentas))
+	var lanzados := []
+	for tipo in ["molotov", "bomba_aceite"]:
+		var cuanto := {}
+		for skin in ["", "bombero"]:
+			johnny.vestir(skin)
+			if tipo == "molotov":
+				lanzables.cantidades.molotov = maxi(lanzables.cantidades.molotov, 1)
+			else:
+				lanzables.sacar(Recetas.crear("bomba_aceite", "verde"))
+			lanzables.tipo = tipo
+			lanzables.lanzar(johnny.global_position + Vector2(-200, 100))
+			var p: Node = johnny.get_parent().get_children().filter(func(n): return n.get("hasta") != null and n.get("dano_lanzar") != null).back()
+			cuanto[skin] = p.dano_lanzar
+			p.queue_free()   # (que no caiga: solo se mira lo que quemará)
+		lanzados.append("%s × %.1f" % [lanzables.nombre(tipo), cuanto.bombero / cuanto[""]])
+	lanzables.tipo = "molotov"
+	print("Lo que quema lo que se lanza, con el bombero: %s (esperado: × 3 los dos)" % " · ".join(lanzados))
+
+	# ── de verdad: el golpe o el disparo, y lo que sigue ardiendo el zombi ──
+	var de_verdad := []
+	for arma in [queman.bate_fuego, queman.lanzallamas, queman.supersoplete, "bate", "pistola"]:
+		johnny.coger(arma)
+		var cuerpo: bool = Armas.datos(arma).tipo == "cuerpo"
+		var quita := {}
+		for skin in ["", "bombero"]:
+			johnny.vestir(skin)
+			johnny.balas = 50
+			# (a distancia, justo delante de la boca: que le den las nueve gotas del súpersoplete)
+			var zombi: Node2D = meter_zombi("normal", johnny.position + Vector2(50 if cuerpo else 80, 0))
+			zombi.vida = 2000
+			await get_tree().process_frame
+			zombi.aturdido = 5.0   # quieto, delante
+			var vida_antes: int = zombi.vida
+			johnny.direccion = "e"
+			if cuerpo:
+				johnny.golpear(0.0)
+			else:
+				johnny.disparar(0.0)
+				await get_tree().create_timer(0.3).timeout   # (lo que tarda en llegar)
+			var golpe: int = vida_antes - zombi.vida
+			zombi.position = johnny.position + Vector2(220, 0)   # lejos mientras arde (pegado a Johnny, algo le pellizca)
+			await get_tree().create_timer(2.6).timeout
+			quita[skin] = [golpe, vida_antes - zombi.vida - golpe]
+			zombi.queue_free()
+			await get_tree().process_frame
+		de_verdad.append("%s: golpe %d → %d, ardiendo %d → %d" % [Objetos.nombre(arma), quita[""][0], quita.bombero[0],
+			quita[""][1], quita.bombero[1]])
+	print("De verdad a un zombi, sin la skin → con el bombero: %s (esperado: el triple las tres que queman, redondeando cada gota; el bate y la pistola, igual y sin arder)" % " · ".join(de_verdad))
+	var molotov := {}
+	for skin in ["", "bombero"]:
+		johnny.vestir(skin)
+		var zombi: Node2D = meter_zombi("normal", johnny.position + Vector2(170, 0))
+		zombi.vida = 2000
+		await get_tree().process_frame
+		zombi.aturdido = 6.0
+		lanzables.cantidades.molotov = maxi(lanzables.cantidades.molotov, 1)
+		lanzables.tipo = "molotov"
+		var vida_antes: int = zombi.vida
+		lanzables.lanzar(zombi.global_position)
+		await get_tree().create_timer(3.0).timeout
+		molotov[skin] = vida_antes - zombi.vida
+		zombi.queue_free()
+		for c in get_tree().get_nodes_in_group("charcos"):
+			c.queue_free()
+		await get_tree().process_frame
+	print("Un molotov de verdad a un zombi quieto: en 3 s le quita %d sin la skin y %d con el bombero (× %.1f; esperado: × 3, más o menos)" % [
+		molotov[""], molotov.bombero, molotov.bombero / maxf(1.0, molotov[""])])
+
+	# ── inmune al fuego (que los que le acompañan no le disparen al jefe) ──
+	var aliados: Array = get_tree().get_nodes_in_group("aliados")
+	for a in aliados:
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	var puesto: Vector2 = johnny.position
+	var jefe: Node2D = meter_zombi("bombero", puesto + Vector2(-160, 0))   # (en el despacho: a la derecha está la pared)
+	await get_tree().create_timer(0.2).timeout
+	jefe.process_mode = Node.PROCESS_MODE_DISABLED   # quieto: lo que hace, se le manda
+	$Pantalla/Jefa.hide()
+	var a_punto := func() -> void:   # en su sitio, con toda la vida, sin parpadeo y sin arder
+		johnny.position = puesto
+		johnny.velocity = Vector2.ZERO
+		johnny.vida = johnny.stats.vida_max
+		johnny.invulnerable = 0.0
+		johnny.estados.clear()
+		johnny.estado_dano = 0.0
+	var pierde := func() -> int:
+		return johnny.stats.vida_max - johnny.vida
+	for skin in ["", "bombero"]:
+		johnny.vestir(skin)
+		var r := {}
+		# el fuego del suelo (la cocina, el cerco de la sala del jefe): lo que le hace a cada paso mientras lo pisa
+		a_punto.call()
+		for i in 60:
+			johnny.pisar({"fuego": {"dps": Peligros.FUEGO.dps}})
+			await get_tree().physics_frame
+		r.suelo = pierde.call()
+		r.ardiendo = johnny.estados.has("fuego")
+		await get_tree().create_timer(1.0).timeout
+		r.sigue = pierde.call() - r.suelo
+		# un charco de fuego de molotov a sus pies
+		a_punto.call()
+		var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = "fuego"
+		charco.position = johnny.position
+		johnny.get_parent().add_child(charco)
+		await get_tree().create_timer(1.5).timeout
+		if skin == "bombero":
+			Captura.foto("captura-skins-bombero-fuego.png")
+		r.charco = pierde.call()
+		charco.queue_free()
+		# los molotovs del jefe, encima (la botella y su fuego)
+		a_punto.call()
+		jefe.lanzar_molotovs(johnny)
+		await get_tree().create_timer(1.8).timeout
+		r.molotov = pierde.call()
+		for c in get_tree().get_nodes_in_group("charcos"):
+			c.queue_free()
+		# su cono, 1 s apuntándole
+		a_punto.call()
+		var a: float = (johnny.global_position - jefe.global_position).angle()
+		var puntas := []
+		puntas.resize(jefe.RAYOS + 1)
+		puntas.fill(150.0)
+		for i in 60:
+			jefe.quemar_cono(a, johnny, puntas)
+			await get_tree().physics_frame
+		r.cono = pierde.call()
+		# sus bolas de fuego
+		a_punto.call()
+		jefe.mirada = (johnny.global_position - jefe.global_position).normalized()
+		jefe.lanzar_bolas(johnny)
+		await get_tree().create_timer(1.2).timeout
+		r.bolas = pierde.call()
+		# y su hachazo, de cerca
+		a_punto.call()
+		jefe.position = puesto + Vector2(-50, 0)
+		jefe.mirada = Vector2.RIGHT
+		jefe.dar_hachazo(johnny)
+		r.hacha = pierde.call()
+		jefe.position = puesto + Vector2(-160, 0)
+		print("Inmune al fuego, con «%s»: pisando fuego 1 s pierde %d · ardiendo %s, y al salir %d más en 1 s · un charco de molotov 1,5 s, %d · los molotovs del jefe, %d · su cono 1 s, %d · sus bolas, %d · su hachazo, %d (esperado: %s)" % [
+			skin, r.suelo, r.ardiendo, r.sigue, r.charco, r.molotov, r.cono, r.bolas, r.hacha,
+			"0 · false, 0 · 0 · 0 · 0 · 0 · más de 0" if skin == "bombero" else "más de 0 en todo y ardiendo true"])
+	a_punto.call()
+	jefe.queue_free()
+	for a in aliados:
+		if is_instance_valid(a):
+			a.process_mode = Node.PROCESS_MODE_INHERIT
+	johnny.stats.critico = critico
+	johnny.modo = modo
+	johnny.coger("fregona")
+	johnny.coger("pistola")
+	johnny.vestir("")
+	await get_tree().process_frame
 
 
 # Con "--captura --baul": guardar a mano en el baúl lo de la mochila (ui/inventario.gd, «Guardar de la mochila»).

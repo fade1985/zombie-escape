@@ -95,6 +95,21 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
     la paleta, dentro de la cabeza, se tapan con la cabeza nueva, como en el glotón. La barba se pega con el trozo de
     contorno del cuello que la rodea: en algún golpe en que el hombro se mueve, asoma una rayita oscura junto a la barba
     (al portero le pasa igual). Las hojas del portero y del glotón salen iguales al volver a sacarlas.
+  - **La cuarta, el bombero (24 oct, `skin-bombero`)**, igual: una petición, 10 generaciones, a la primera (unos 2
+    minutos). El texto pide un casco de bombero ajustado, redondo y de ala corta (nada de ala ancha: cuanto menos
+    sobresalga, menos problemas al pegarlo), negro brillante con grises (para que no se pierda contra el contorno negro)
+    y la raya amarilla reflectante, que tape todo el pelo y el pañuelo con sus puntas; de lado, el casco de perfil con
+    el ala corta, y de espaldas, la parte de atrás con la raya. Salió con una plaquita amarilla delante y, de perfil,
+    el ala de atrás un poco caída. Lo aprendido al pegarlo (`SOBRA` = "casco"): un casco tapa más que el pelo, así que
+    en los golpes con los brazos por encima de la cabeza (la fregona y el bate al norte) lo pegado tapaba los brazos y
+    dejaba rayas oscuras sobre ellos. Ahora el casco va por detrás de la camisa, el peto y las manos (la piel que tapa
+    el pelo o el pañuelo de siempre, en trozos gruesos), y lo que se sale de la cabeza de siempre (el ala) solo se
+    pinta sobre el aire o sobre el pelo y el pañuelo viejos (si no, al final, donde haya quedado aire). Además, en
+    algunos golpes PixelLab pintó las puntas del pañuelo con un rojo oscuro fuera de la paleta de Johnny, que pasaba
+    por el arma: con el casco, esas sombras también cuentan como pañuelo y se quitan; y el rojo vivísimo de los
+    cartuchos de la escopeta se respeta. Como en las otras, en los golpes del bate al norte y al noreste Johnny se gira
+    y el casco pegado sale de espaldas, y donde el palo pasa justo por delante de la cara el casco lo tapa un poco. Las
+    hojas del portero, el glotón y el gymbro salen iguales al volver a sacarlas.
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

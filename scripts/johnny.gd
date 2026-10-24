@@ -210,6 +210,9 @@ func arma() -> Dictionary:
 		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
 	if w.tipo == "cuerpo":
 		w.dano = w.dano * Skins.cuerpo(skin)    # el gymbro: × 3 (todas, también las creadas en el banco)
+	if w.get("efecto", "") in ArmasCreadas.QUEMAN:
+		w.quema = Skins.quema(skin)             # el bombero: × 3 el golpe o la gota, y lo que sigue ardiendo el zombi
+		w.dano = w.dano * w.quema
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
 	if w.tipo == "fuego":
@@ -946,10 +949,20 @@ func devolver(quien) -> void:
 
 
 # Lo llaman los charcos en cada paso mientras los pisa (charco.gd): apunta sus estados. La esquiva cruza
-# cualquier charco sin que le pase nada
+# cualquier charco sin que le pase nada. Con la skin del bombero, el fuego tampoco (lo demás del charco, sí)
 func pisar(estados_charco: Dictionary) -> void:
 	if vivo and esquiva_t <= 0.0:
-		Estados.pisar(pisando, estados_charco)
+		var pisados := estados_charco
+		if ignifugo() and pisados.has("fuego"):
+			pisados = estados_charco.duplicate()
+			pisados.erase("fuego")
+		Estados.pisar(pisando, pisados)
+
+
+# Si el fuego no le hace nada (la skin del bombero): ni el fuego del suelo ni los charcos (pisar()), ni las bolas
+# de fuego (bola_fuego.gd), ni el cono del jefe de bomberos (bombero.gd), ni la botella de su molotov (proyectil.gd)
+func ignifugo() -> bool:
+	return Skins.ignifugo(skin)
 
 
 # Ansiedad: cuántos zombis despiertos hay en la pantalla (sin contar los de habitaciones a oscuras)
