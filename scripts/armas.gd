@@ -80,7 +80,7 @@ const DATOS := {
 # punta) y el bate helado (conserje-48-bate-helado: el barrido del bate con la cabeza cubierta de escarcha, estela blanca
 # y azul clara con copos y cristalitos) y el látigo eléctrico (conserje-48-latigo-electrico: el latigazo con el cable
 # negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
-# (conserje-48-lanzallamas: dos bombonas grises a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
+# (conserje-48-lanzallamas: dos bombonas rojas a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
 # el juego) y el
 # supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
 # la boca acampanada y una llamarada en cono) y el desintegrador (conserje-48-desintegrador: la pistola de agua con el

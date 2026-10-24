@@ -46,6 +46,16 @@ DE_JOHNNY = 34    # un color es "de Johnny" si se parece así a alguno de sus co
 # de la cabeza de siempre va por detrás de los brazos, pegar())
 SOBRA = {"portero": "tenir", "gloton": "quitar", "gymbro": "calvo", "bombero": "casco"}
 QUITAN = ("quitar", "calvo", "casco")   # los modos que quitan lo que sobra (y tapan los rojos vivos del pañuelo)
+# Las bombonas del lanzallamas se pintaron de rojo sobre el gris que dibujó PixelLab. Para pegar la cabeza se miran
+# como si siguieran grises: el rojo se parece a la piel y al pañuelo, y la cabeza nueva quedaba detrás de las
+# bombonas (motas rojas en la barba del portero) o les borraba brillos. Al acabar, lo que siga gris vuelve a su rojo.
+COMO_GRIS = {"lanzallamas": {
+    (238, 96, 74): (163, 184, 199),
+    (200, 58, 40): (119, 142, 155),
+    (166, 50, 36): (143, 130, 120),
+    (122, 40, 30): (98, 86, 73),
+    (78, 36, 34): (52, 63, 76),
+}}
 
 
 def dist(a, b):
@@ -480,6 +490,14 @@ def main():
         hoja = cargar(SPRITES / f"{nombre}.png")
         antes = hoja.copy()
         px = hoja.load()
+        grises = COMO_GRIS.get(arma, {})
+        rojos = {}
+        for y in range(hoja.height) if grises else ():
+            for x in range(hoja.width):
+                c = px[x, y]
+                if c[3] and c[:3] in grises:
+                    rojos[(x, y)] = c
+                    px[x, y] = grises[c[:3]] + (c[3],)
         # dónde está la cabeza en el dibujo quieto de cada dirección (para cuando el pañuelo no se vea)
         cerca = {}
         for direc, v in datos["anims"]["still"]["dirs"].items():
@@ -496,6 +514,9 @@ def main():
                 dudosos.append(f"{anim} {direc} {col} ({parecido:.2f})")
             pegar(px, x0, y0, cw, ch, t, cabezas[direc], quietos[direc], johnny, claros[direc], sobra, pieles[direc])
             hechos.append((anim, direc, fila, col, t))
+        for (x, y), c in rojos.items():
+            if px[x, y] == grises[c[:3]] + (c[3],):
+                px[x, y] = c
         hoja.save(SPRITES / f"{nombre}-{skin}.png", optimize=True)
         tres = (SPRITES / f"{nombre}.tres").read_text(encoding="utf-8")
         tres = tres.replace(f"res://assets/sprites/{nombre}.png", f"res://assets/sprites/{nombre}-{skin}.png")

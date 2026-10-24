@@ -58,7 +58,7 @@
   pies en `pies` 72,88, y el bate helado, `conserje-48-bate-helado`, con el barrido del bate con la cabeza cubierta de escarcha,
   una estela blanca y azul clara con copos y cristalitos, y el látigo eléctrico, `conserje-48-latigo-electrico`, con el latigazo
   del cable negro con la batería en la punta, una raya blanca y rayos celestes en zigzag a lo largo, en una casilla de 144×128 con los
-  pies en `pies` 72,88, y el lanzallamas, `conserje-48-lanzallamas`, con dos bombonas grises de combustible a la espalda, una
+  pies en `pies` 72,88, y el lanzallamas, `conserje-48-lanzallamas`, con dos bombonas rojas de combustible a la espalda, una
   manguera negra hasta el tubo y el tubo sujeto con las dos manos apuntando, con el piloto encendido (desde el 25 oct no
   dispara: echa una llamarada continua, `llamarada.gd`, y Johnny la echa en la postura quieta de la hoja, la de apuntar; la
   hoja no lleva llamarada ni disparo, y su `boca` es la punta del tubo de cada postura quieta, medida en la hoja; casilla de
@@ -489,8 +489,9 @@ la cabeza nueva que hizo PixelLab en sus 8 dibujos quietos en todos los dibujos 
 el pañuelo rojo; lo que sobra del pelo de siempre alrededor, según la skin (`SOBRA`): teñido del pelo nuevo (el portero),
 quitado con lo que sobre del pañuelo (el glotón, calvo y sin pañuelo), quitado solo el pelo, respetando el pañuelo y sus
 puntas al viento (el gymbro, calvo con pañuelo), o quitado como en el glotón con un casco (el bombero: el casco va por
-detrás de los brazos y las manos, `delante()`, y lo que se sale de la cabeza de siempre solo se pinta donde quede aire);
-saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
+detrás de los brazos y las manos, `delante()`, y lo que se sale de la cabeza de siempre solo se pinta donde quede aire;
+las bombonas rojas del lanzallamas se miran como si fueran grises, `COMO_GRIS`, porque el rojo lo confundía con la piel
+y el pañuelo y la cabeza nueva quedaba detrás de ellas); saca `conserje-48-<arma>-<skin>.png` y `.tres` y los iconos
 de la taquilla; con `muestra`, el antes y el después de cada hoja en `captura-cara-<arma>.png`), `objetos16.py`
 (los 28 objetos a 16×16), `icono_dosier.py`, `icono_noticias.py`, `icono_colecciones.py` (el álbum de pegatinas de
 Colecciones), `recortes_bestiario.py` (escribe en `bestiario.gd` el trozo dibujado de cada retrato), `icono_receta.py` (el papel de las recetas), `icono_lanza.py` (el icono de la lanza, con los colores de los de la fregona y el cuchillo), `estocada.py` (recoloca los dibujos de la estocada de
