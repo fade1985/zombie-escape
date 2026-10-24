@@ -1,0 +1,6 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con el látigo escorpión (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-latigo). La casilla es más ancha y alta que la de siempre (144x128, con los pies en 72,88) porque la cuerda del látigo se estira muy lejos: con el lienzo de 96x96 PixelLab la cortaba en el borde y no se veía el aguijón.",
+  "celda": [144, 128],
+  "pivote": [72, 88],
+  "lienzo_ataque": [144, 128, 40, 33]
+}
