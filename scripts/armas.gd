@@ -75,8 +75,9 @@ const DATOS := {
 # bate de cuchillas, estela blanca con gotas de sangre; de espaldas, de arriba abajo) y la inmovilizadora
 # (conserje-48-inmovilizadora: el barrido con el bate con el táser atado a la punta, estela blanca con arcos
 # eléctricos celestes), el látigo escorpión (conserje-48-latigo: el latigazo hacia delante, con una raya blanca y
-# gotas verdes) y la súper maza (conserje-48-supermaza: el giro entero con la maza de hierro, estela blanca circular con
-# polvo y piedrecitas), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# gotas verdes), la súper maza (conserje-48-supermaza: el giro entero con la maza de hierro, estela blanca circular con
+# polvo y piedrecitas) y el mangual (conserje-48-mangual: el mismo giro entero, con la cadena estirada y la mancuerna en la
+# punta), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -96,8 +97,10 @@ const CREADAS := {
 	"supermaza": {"base": "fregona", "ritmo": 0.8, "arco": 360.0, "empuje": 2.5, "efecto": "circulo", "momento": 0.3,
 		"pies": Vector2(64, 79), "hoja": preload("res://assets/sprites/conserje-48-supermaza.tres")},
 	# las del centro comercial (parte 6): el mangual echa muy lejos a todos los de alrededor y los deja un momento
-	# tirados; el bate helado congela; el látigo eléctrico es el látigo con la descarga de la inmovilizadora
-	"mangual": {"base": "fregona", "ritmo": 1.2, "alcance": 90.0, "arco": 360.0, "empuje": 4.5, "efecto": "tira", "detalle": Color("#c0c4d0")},
+	# tirados (su casilla es 144x128, con los pies en 72,88, porque la cadena estirada llega lejos); el bate helado
+	# congela; el látigo eléctrico es el látigo con la descarga de la inmovilizadora
+	"mangual": {"base": "fregona", "ritmo": 1.2, "alcance": 90.0, "arco": 360.0, "empuje": 4.5, "efecto": "tira", "momento": 0.3,
+		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-mangual.tres")},
 	"bate_helado": {"base": "bate", "efecto": "congela", "detalle": Color("#e8f6ff")},
 	"latigo_electrico": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "descarga", "detalle": Color("#9fe8ff"), "sube": true},
 	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro

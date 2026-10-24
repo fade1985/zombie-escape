@@ -10,10 +10,10 @@
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
-#              fuego, el partecuerpos, la inmovilizadora, el látigo y la súper maza ya lo tienen:
+#              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza y el mangual ya lo tienen:
 #              assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png, partecuerpos.png, inmovilizadora.png,
-#              latigo.png y supermaza.png, de tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py,
-#              icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py e icono_supermaza.py). Se lee siempre de
+#              latigo.png, supermaza.png y mangual.png, de tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py,
+#              icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py e icono_mangual.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl, para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
@@ -61,7 +61,7 @@ const LISTA := {
 		"desc": "Chorro eléctrico: aturde y salta al zombi de al lado", "edificio": "mezcla"},
 	"bomba_aceite": {"nombre": "Bomba de aceite", "con": ["trapo", "aceite"], "hueco": "arrojadiza", "icono": "aceite", "dano": 22, "unidades": 3,
 		"desc": "Deja un charco que resbala y a los 2 s arde", "edificio": "mezcla"},
-	"mangual": {"nombre": "Mangual", "con": ["mancuernas", "cadena"], "hueco": "cuerpo", "icono": "cadena", "dano": 16,
+	"mangual": {"nombre": "Mangual", "con": ["mancuernas", "cadena"], "hueco": "cuerpo", "icono": "mangual", "dano": 16,
 		"desc": "Golpe girando que echa lejos a todos los de alrededor", "edificio": "mezcla"},
 	"mina_despertador": {"nombre": "Mina despertador", "con": ["despertador", "bombona"], "hueco": "arrojadiza", "icono": "bombona", "dano": 90, "unidades": 2,
 		"desc": "Se queda en el suelo y explota cuando pasa un zombi", "edificio": "mezcla"},
