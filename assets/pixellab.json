@@ -1038,6 +1038,29 @@
    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the stun bat in the same guard grip with both hands the whole time: the bat stays raised up and tilted back over his shoulder in the same place, only swaying very slightly with each step, and the taser stays fixed on its thick end with small cyan sparks between its prongs. His arms do not swing and never let go of the bat. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
   }
  },
+ "conserje-48-latigo": {
+  "kind": "character_state",
+  "character_id": "4c0c3c8f-77cf-4361-862d-598557e536a1",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Látigo escorpión en guardia (colores libres)",
+  "nota": "Estado de Johnny con el látigo escorpión (el arma creada: cuerda + cuchillo; base el cuchillo, alcance 110, veneno), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Johnny sujeta un asa de madera con la mano derecha y el brazo doblado delante del cuerpo; la cuerda trenzada color arena cuelga en un bucle suelto al costado y acaba en una cuchilla de acero curva, como el aguijón de un escorpión, con gotas verdes (#9be564) de veneno. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 5001) y la B, con colores libres (seed 5002). Elegida por el dueño la B: el bucle es más recogido y bajo y el veneno sale verde (aunque pequeño); la A tiene bucles enormes que suben hasta la cabeza y, sin verde en la paleta de Johnny, las gotas salen color crema. Las 8 posturas de la B, en assets/sources/conserje-48-latigo/rotations/<dirección>.png; las de la A, en descartes/rotations-A/. Lienzo de 64x64. Se distingue del cuchillo a la primera (cuerda larga en bucle con aguijón curvo, en las 8 vistas).",
+  "request": {
+   "edit_description": "holding a homemade scorpion whip like a weapon: a short wooden handle gripped in his right hand with the arm bent in front of his body, and a long thick braided tan rope whip attached to it that hangs down and curls in one big loose loop at his side, ending in a curved steel blade shaped like a scorpion's stinger, curving up and pointing forward at hip height, with bright green venom dripping from the sharp point; the whip stays held in the same hand in the same way in every view: front, side and back; thick braided tan rope with a dark outline, small curved light grey steel stinger blade with a dark outline, a few bright green poison drops; knees slightly bent in a ready stance; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 5002
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "edc43faa-9b66-4338-9fad-b4bf009b3241",
+   "state_name": "Látigo escorpión en guardia",
+   "cost": "10 generaciones",
+   "nota": "DESCARTADA por el dueño, que eligió la B (sigue en PixelLab, sin borrar). La A: mismo texto, con use_color_palette_from_reference true y seed 5001. Johnny sale igual que siempre; la cuerda hace bucles grandes que suben por encima de los hombros y las gotas del aguijón salen color crema (la paleta de Johnny no tiene verde). Sus 8 posturas, en assets/sources/conserje-48-latigo/descartes/rotations-A/."
+  },
+  "cost_total": "20 generaciones hasta ahora: los dos estados (la A, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
