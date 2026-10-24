@@ -46,6 +46,10 @@
 #   --bumeran      el bumerán segador (la cuarta creada con dibujo propio que dispara): su icono, su hoja con el gesto de lanzar, sin
 #                  chispitas, que el bumerán atraviesa a los zombis que tiene delante, no llega al lejano, vuelve a la mano y no gasta
 #                  bala, que andando no hay gesto, el lanzamiento en las 8 direcciones y con las 4 skins (Armas.CREADAS.bumeran)
+#   --pistola-electrica la pistola eléctrica (la quinta creada a distancia con dibujo propio): su icono, su hoja con la descarga celeste de
+#                  los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene delante y salta al
+#                  de al lado y no llega al lejano, una bala por disparo, disparar andando, el disparo en las 8 direcciones y con las
+#                  4 skins (Armas.CREADAS.pistola_electrica)
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -177,6 +181,9 @@ func empezar_prueba() -> void:
 	elif "--bumeran" in args:
 		set_process(false)   # sin la prueba larga
 		probar_bumeran()
+	elif "--pistola-electrica" in args:
+		set_process(false)   # sin la prueba larga
+		probar_pistola_electrica()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3633,6 +3640,105 @@ func quitar_bumeranes() -> void:
 	for n in johnny.get_parent().get_children():
 		if n.get_script() == ArmasCreadas.BUMERAN:
 			n.queue_free()
+
+
+# Con "--captura --pistola-electrica": la pistola eléctrica con su dibujo propio (Armas.CREADAS.pistola_electrica,
+# conserje-48-pistola-electrica: la hoja lleva el retroceso corto de pistola y una descarga celeste en zigzag que sale de los dos
+# electrodos del táser azul marino; casilla de 180x168, con los pies en 90,88; recetas.gd, su icono). Como el desintegrador, en la sala
+# de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio, con el de la batería), Johnny se arrima al
+# baúl y cuenta el icono de cada una (captura-pistola-electrica-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies,
+# su boca hacia el este y que ya no le salen chispitas de adorno; dispara a un zombi a 120 a su izquierda (le quita vida y lo aturde),
+# con otro cerca de él (la descarga salta y lo aturde también) y otro a 330 (más lejos de lo que llega la chispa: ni se entera), con
+# una foto con las chispas saliendo (captura-pistola-electrica-chispa.png) y cuenta cuántas balas gasta (una por disparo). Luego
+# dispara andando (sigue andando, con los efectos del disparo pintados encima y el retroceso) y en las 8 direcciones, con una foto de
+# cada una a los 0,09 s, con la descarga ya saliendo (captura-pistola-electrica-<dirección>.png): lo dibujado y las chispas del
+# juego tienen que salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
+# (captura-pistola-electrica-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_pistola_electrica() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("pistola_electrica", "azul")
+	vieja.icono = "bateria"   # como las que se crearon antes de que la pistola eléctrica tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("pistola_electrica", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"pistola_electrica\", \"pistola_electrica\"]) · en el banco «%s» (esperado: pistola_electrica)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("pistola_electrica")])
+	Captura.foto("captura-pistola-electrica-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacada del baúl: su hoja, su boca y sin chispitas de adorno
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Pistola eléctrica en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas de adorno %s · icono «%s» (esperado: conserje-48-pistola-electrica.tres, 5, 230, (90, 88), (22, -30), false, pistola_electrica)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+
+	# la chispa: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y lo aturde, salta al que tiene cerca (a 100
+	# de él: también pierde vida y se queda aturdido) y no llega al tercero, a 330 (230 desde la boca, que está a 44 de Johnny)
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-200, 60), Vector2(-330, 0)])
+	await get_tree().process_frame
+	var balas0: int = johnny.balas
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-pistola-electrica-chispa.png")
+	await get_tree().create_timer(0.15).timeout
+	print("Aturdidos a los 0,27 s: el de 120 %s · el que está a su lado %s · el de 330 %s (esperado: true, true, false)" % [
+		z[0].aturdido > 0.0, z[1].aturdido > 0.0, z[2].aturdido > 0.0])
+	await get_tree().create_timer(0.4).timeout
+	print("Zombi a 120: vida %d · el de al lado: vida %d (esperado: menos de 500 los dos) · a 330: vida %d (esperado: 500)" % [z[0].vida, z[1].vida, z[2].vida])
+	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
+	zombis_de_prueba([])
+	await get_tree().create_timer(0.3).timeout
+
+	# disparar andando: sigue andando (sin el gesto entero), con los efectos del disparo pintados encima y el retroceso
+	johnny.direccion = "e"
+	johnny.velocity = Vector2(120, 0)
+	johnny.atacar(0.0)
+	await get_tree().create_timer(0.07).timeout
+	Captura.foto("captura-pistola-electrica-andando.png")
+	print("Disparado andando: ataque_t %.1f (esperado: -1.0) · efectos visibles %s (esperado: true) · retroceso %s (esperado: distinto de (0, 0))" % [
+		johnny.ataque_t, johnny.efectos.visible, johnny.patada])
+	johnny.velocity = Vector2.ZERO
+	await get_tree().create_timer(0.5).timeout
+
+	# las 8 direcciones, con una foto a los 0,09 s: la descarga dibujada y las chispas del juego saliendo
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.09).timeout
+		Captura.foto("captura-pistola-electrica-%s.png" % d)
+		await get_tree().create_timer(0.6).timeout
+
+	# con cada skin: su hoja de la pistola eléctrica
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.09).timeout
+		Captura.foto("captura-pistola-electrica-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-pistola-electrica-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.6).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
 
 
 # Con "--captura --baul": guardar a mano en el baúl lo de la mochila (ui/inventario.gd, «Guardar de la mochila»).

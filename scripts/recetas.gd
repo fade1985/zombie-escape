@@ -11,12 +11,12 @@
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico, el lanzallamas, el supersoplete, el desintegrador y el bumerán ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
+#              eléctrico, el lanzallamas, el supersoplete, el desintegrador, el bumerán y la pistola eléctrica ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
 #              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png y bumeran.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png, bumeran.png y pistola_electrica.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
 #              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py e
-#              icono_supersoplete.py, icono_desintegrador.py e icono_bumeran.py). Se lee siempre de
+#              icono_supersoplete.py, icono_desintegrador.py, icono_bumeran.py e icono_pistola_electrica.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
@@ -61,7 +61,7 @@ const LISTA := {
 	"supermaza": {"nombre": "Súper maza", "con": ["fregona", "mancuernas"], "hueco": "cuerpo", "icono": "supermaza", "dano": 24,
 		"desc": "Lenta: golpe en círculo con temblor", "edificio": "apartamentos"},
 	# mezclan los dos edificios: una cosa de casa y otra del centro comercial
-	"pistola_electrica": {"nombre": "Pistola eléctrica", "con": ["pistola_agua", "bateria"], "hueco": "fuego", "icono": "bateria", "dano": 5,
+	"pistola_electrica": {"nombre": "Pistola eléctrica", "con": ["pistola_agua", "bateria"], "hueco": "fuego", "icono": "pistola_electrica", "dano": 5,
 		"desc": "Chorro eléctrico: aturde y salta al zombi de al lado", "edificio": "mezcla"},
 	"bomba_aceite": {"nombre": "Bomba de aceite", "con": ["trapo", "aceite"], "hueco": "arrojadiza", "icono": "aceite", "dano": 22, "unidades": 3,
 		"desc": "Deja un charco que resbala y a los 2 s arde", "edificio": "mezcla"},

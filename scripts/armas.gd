@@ -84,8 +84,9 @@ const DATOS := {
 # supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
 # la boca acampanada y una llamarada en cono) y el desintegrador (conserje-48-desintegrador: la pistola de agua con el
 # depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
-# bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd), con sus
-# hojas de cada skin (tools/cara.py). Las de fuego usan el
+# bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd) y la
+# pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
+# celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -151,9 +152,17 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-bumeran.tres"),
 		"boca": {"s": Vector2(-11, -36), "se": Vector2(-7, -35), "e": Vector2(-1, -37), "ne": Vector2(7, -37),
 			"n": Vector2(12, -36), "no": Vector2(9, -38), "o": Vector2(2, -40), "so": Vector2(4, -35)}},
-	# las del centro comercial: chispas que aturden y saltan, y el garfio, que sale y vuelve como el bumerán
+	# la pistola eléctrica: su hoja lleva el retroceso corto y la descarga celeste en zigzag que sale de los dos electrodos del táser
+	# (las chispas que vuelan, aturden y saltan al zombi de al lado las pone el juego, armas_creadas.gd y chorro.gd); la casilla es de
+	# 180x168, con los pies en 90,88, porque la descarga llega a 88 píxeles a un lado, 86 al otro, 86 hacia arriba y 77 hacia abajo.
+	# La boca NO sale de arma.py (las chispas son celestes: no hay fogonazo naranja que buscar, conserje-48-pistola-electrica.json no
+	# tiene "muzzle"): es el centro de la chispita de los dos electrodos del dibujo quieto, a mano
 	"pistola_electrica": {"base": "pistola", "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0, "cargador": 30, "recarga": 2.0,
-		"empuje": 0.2, "efecto": "chispa", "detalle": Color("#9fe8ff"), "sube": true},
+		"empuje": 0.2, "efecto": "chispa", "pies": Vector2(90, 88),
+		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
+		"boca": {"s": Vector2(0, -31), "se": Vector2(19, -17), "e": Vector2(22, -30), "ne": Vector2(18, -42),
+			"n": Vector2(5, -48), "no": Vector2(-19, -42), "o": Vector2(-22, -30), "so": Vector2(-19, -17)}},
+	# el garfio, que sale y vuelve como el bumerán
 	"garfio": {"base": "pistola", "ritmo": 0.9, "alcance": 320.0, "velocidad": 620.0, "cargador": 1, "recarga": 0.0,
 		"empuje": 0.0, "efecto": "garfio", "detalle": Color("#c0c4d0"), "sin_municion": true},
 }

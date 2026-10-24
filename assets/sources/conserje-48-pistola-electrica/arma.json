@@ -1,6 +1,6 @@
 {
-  "nota": "Datos para montar la hoja de sprites de Johnny con la pistola eléctrica (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-pistola-electrica). La casilla mide 176x168 con los pies en 90,88: la descarga llega a 88 píxeles a la izquierda de los pies (suroeste), 83 a la derecha (este), 86 hacia arriba (norte) y 77 hacia abajo (sur). Las posturas de south y north son las del estado de PixelLab tal cual (el arma no cruza el cuerpo). La boca NO sale de arma.py: las descargas son celestes, no hay píxeles naranja y amarillo vivos que buscar ('boca': 'fogonazo' fallaría con 'no encuentro el fogonazo'), así que no se pide y no se escribe 'muzzle': la boca va a mano en armas.gd, sacada de los dos electrodos del dibujo quieto (rotations/<dirección>.png, respecto a los pies 32,55).",
-  "celda": [176, 168],
+  "nota": "Datos para montar la hoja de sprites de Johnny con la pistola eléctrica (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-pistola-electrica). La casilla mide 180x168 con los pies en 90,88: la descarga llega a 88 píxeles a la izquierda de los pies (suroeste), 86 a la derecha (sureste), 86 hacia arriba (norte) y 77 hacia abajo (sur). Las posturas de south y north son las del estado de PixelLab tal cual (el arma no cruza el cuerpo). La boca NO sale de arma.py: las descargas son celestes, no hay píxeles naranja y amarillo vivos que buscar ('boca': 'fogonazo' fallaría con 'no encuentro el fogonazo'), así que no se pide y no se escribe 'muzzle': la boca va a mano en armas.gd, sacada de los dos electrodos del dibujo quieto (rotations/<dirección>.png, respecto a los pies 32,55).",
+  "celda": [180, 168],
   "pivote": [90, 88],
   "andar": {
     "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. Van a mano, calculados mirando cuál se parece más el fotograma a+n al a (diferencia de píxeles entre los dos, con ciclos.py de la sesión): de 15 a 30, todos cierran muy bien. El fotograma 0 es el dibujo quieto. Zapatos negros con borde gris: 0-3 píxeles sueltos por fotograma, nada.",
@@ -16,17 +16,17 @@
     }
   },
   "ataque": {
-    "nota": "Disparo. La pistola eléctrica dispara 5 veces por segundo, así que el disparo dura como mucho 0,19 s y caben 3 fotogramas de los 8 de PixelLab, empezando por las chispas en los electrodos y la descarga que sale (east, west, south-east, south-west, north-east y north desde el 1; north-west desde el 2, que es donde asoman las primeras chispitas; south desde el 3, que es donde empieza el rayo). Las chispas que vuelan y saltan al zombi de al lado las pone el juego (chorro.gd); la hoja solo lleva el retroceso corto y la descarga celeste. Sin 'boca': 'fogonazo' (ver la nota de arriba) el script no quita tintes ni calcula la boca; 'efectos' sí funciona con la descarga celeste (cuenta como clara y lejos del cuerpo, y el núcleo blanco como fuego); 'margen_efectos' 9 para que no se cuelen trocitos de mano en fx.",
+    "nota": "Disparo. La pistola eléctrica dispara 5 veces por segundo, así que el disparo dura como mucho 0,19 s y caben 3 fotogramas de los 8 de PixelLab, empezando por la chispa gorda en los electrodos y la descarga que sale (east, south-east, north-east, north y north-west desde el 2; west y south-west desde el 1, donde ya hay chispa y rayo; south desde el 3, que es donde empieza el rayo). Así, al disparar andando, 'fx' lleva el rayo en 2 o 3 de los 3 fotogramas (la chispita pequeña del 1 queda pegada a los electrodos y no cuenta como efecto). Las chispas que vuelan y saltan al zombi de al lado las pone el juego (chorro.gd); la hoja solo lleva el retroceso corto y la descarga celeste. Sin 'boca': 'fogonazo' (ver la nota de arriba) el script no quita tintes ni calcula la boca; 'efectos' sí funciona con la descarga celeste (cuenta como clara y lejos del cuerpo, y el núcleo blanco como fuego); 'margen_efectos' 9 para que no se cuelen trocitos de mano en fx.",
     "duracion": 0.18,
     "impacto": 0,
     "efectos": true,
     "margen_efectos": 9,
     "fotogramas": {
       "south":      [3, 4, 5],
-      "south-east": [1, 2, 3],
-      "east":       [1, 2, 3],
-      "north-east": [1, 2, 3],
-      "north":      [1, 2, 3],
+      "south-east": [2, 3, 4],
+      "east":       [2, 3, 4],
+      "north-east": [2, 3, 4],
+      "north":      [2, 3, 4],
       "north-west": [2, 3, 4],
       "west":       [1, 2, 3],
       "south-west": [1, 2, 3]
