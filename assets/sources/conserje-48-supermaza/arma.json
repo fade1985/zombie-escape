@@ -1,0 +1,6 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con la súper maza (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-supermaza). La casilla es más ancha y alta que la de siempre (128x112, con los pies en 64,79) porque el golpe es un giro entero con la maza a pulso y una estela circular que rodea a Johnny: con el lienzo de 96x96 se quedaría justa.",
+  "celda": [128, 112],
+  "pivote": [64, 79],
+  "lienzo_ataque": [128, 112, 32, 24]
+}
