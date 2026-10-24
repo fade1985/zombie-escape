@@ -1,0 +1,35 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con el desintegrador (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-desintegrador). La casilla mide 152x136 con los pies en 66,90: el chorro llega a 62 píxeles a la izquierda de los pies (noroeste), 82 a la derecha (sureste y noreste), 87 hacia arriba (norte) y 39 hacia abajo (sur). Las posturas de south y north son las del estado de PixelLab tal cual (el arma no cruza el cuerpo). La boca NO sale de arma.py: con ácido verde no hay píxeles naranja y amarillo vivos que buscar ('boca': 'fogonazo' fallaría con 'no encuentro el fogonazo'), así que no se pide y no se escribe 'muzzle': la boca va a mano en armas.gd, sacada de la punta blanca de la boquilla del dibujo quieto (rotations/<dirección>.png, respecto a los pies 32,55).",
+  "celda": [152, 136],
+  "pivote": [66, 90],
+  "andar": {
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. Van a mano, calculados mirando cuál se parece más el fotograma a+n al a (diferencia de píxeles entre los dos, con tools de la sesión: ciclos.py): de 15 a 142, todos cierran bien. El fotograma 0 es el dibujo quieto. Zapatos negros con borde gris: ninguno (0 píxeles en los 104 fotogramas).",
+    "ciclo": {
+      "south": [3, 9],
+      "south-east": [1, 11],
+      "east": [1, 8],
+      "north-east": [3, 9],
+      "north": [0, 12],
+      "north-west": [2, 10],
+      "west": [4, 8],
+      "south-west": [2, 9]
+    }
+  },
+  "ataque": {
+    "nota": "Disparo. El desintegrador dispara 12 veces por segundo, así que el disparo dura menos de 0,083 s y solo caben 2 fotogramas de los 8 de PixelLab: el chorro de ácido pegado a la boquilla y creciendo (south y east empiezan en el 1; south-east, north-east, north-west, west y south-west en el 2; north en el 3, que es donde empieza el chorro). Las gotas del chorro las pone el juego (chorro.gd); la hoja solo lleva el retroceso corto y un chorrito verde pálido. Sin 'boca': 'fogonazo' (ver la nota de arriba) el script no quita tintes ni calcula la boca; 'efectos' sí funciona con el chorro verde (cuenta como claro y lejos del cuerpo); 'margen_efectos' 9 para que no se cuelen trocitos de mano en fx.",
+    "duracion": 0.079,
+    "impacto": 0,
+    "efectos": true,
+    "margen_efectos": 9,
+    "fotogramas": {
+      "south":      [1, 2],
+      "south-east": [2, 3],
+      "east":       [1, 2],
+      "north-east": [2, 3],
+      "north":      [3, 4],
+      "north-west": [2, 3],
+      "west":       [2, 3],
+      "south-west": [2, 3]
+    }
+  }
+}

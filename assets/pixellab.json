@@ -2086,14 +2086,20 @@
    "cost": "10 generaciones",
    "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 9001. Descartada: el depósito sale crema (parece un huevo o un saco) y la boquilla blanca casi no se distingue del cuerpo. Sus 8 posturas, en assets/sources/conserje-48-desintegrador/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la A, descartada) y 2 de la prueba del disparo (east y north)",
+  "cost_total": "36 generaciones hasta la parte 3: 20 de los dos estados (la A, descartada), 8 del disparo (2 de prueba y 6 de las otras direcciones) y 8 del andar; todo a la primera, sin repeticiones",
   "ataque": {
-   "nota": "Disparo: un retroceso muy corto de pistola de agua y un chorrito fino de ácido verde pálido que sale de la boquilla blanca (se despega y vuela, luego se deshace en gotitas), sin fuego, sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES desde el principio (lección del supersoplete: con 96x96 el efecto largo sale cortado en seco por el borde): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una); PixelLab devolvió fotogramas de 168x96 (este) y 96x128 (norte). Fotogramas en assets/sources/conserje-48-desintegrador/ataque/<dirección>-<n>.png. PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas y no hay fogonazo ni llamas. East: fotograma 0 = reposo, 1 = chorro pegado a la boquilla (fino, 20 px), 2 = el chorro despegado volando (hasta x=135 del lienzo de 168), 3-4 = gotitas sueltas, 5-8 = vacío. North: 0-2 = reposo, 3 = chorro grueso recto hacia arriba junto a la cabeza, 4-5 = línea fina más larga (40 px), 6 = gotitas, 7-8 = reposo. El chorro del dibujo es más largo que la boca (54 px en el este): el juego pone las gotas, así que se usarán solo 2 fotogramas por disparo (ritmo 12, duracion <= 0,079 s). Boca: los píxeles naranja y amarillo vivos que busca arma.py ('boca': 'fogonazo') no existen con ácido verde: la boca va a mano en armas.gd, sacada del dibujo quieto.",
+   "nota": "Disparo: un retroceso muy corto de pistola de agua y un chorrito fino de ácido verde pálido que sale de la boquilla blanca (empieza pegado a la boquilla, crece, se despega y vuela, luego se deshace en gotitas), sin fuego, sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (lección del supersoplete): ninguno salió cortado por el borde. Las 8 direcciones salieron bien a la primera (2026-10-24), ninguna con el chorro hacia atrás ni Johnny dado la vuelta, sin fuego. Fotogramas en assets/sources/conserje-48-desintegrador/ataque/<dirección>-<n>.png. El chorro del dibujo es más largo que la boca (30-55 px más allá de la boquilla), pero el juego pone las gotas (chorro.gd), así que se usan solo 2 fotogramas por disparo (ritmo 12, duracion 0,079 s): south [1,2], east [1,2], south-east [2,3], north-east [2,3], north [3,4], north-west [2,3], west [2,3] y south-west [2,3] (el chorro empieza pegado a la boquilla y crece). Sin 'boca': 'fogonazo' en arma.json (con ácido verde el script no encuentra píxeles naranja y amarillo vivos y falla): arma.py no escribe 'muzzle', no quita tintes (no hace falta: Johnny no se tiñe de verde) y la boca va a mano en armas.gd. 'efectos': true SÍ funciona con el chorro verde (cuenta como claro y lejos del cuerpo); con el margen por defecto (5) se colaban trocitos de mano en fx en north-west y west: 'margen_efectos': 9.",
    "animation_name": "disparo-desintegrador",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
    "initial_pose": {
     "east": "standing in a ready shooting stance facing right, both hands on the acid squirt gun, aiming it straight to the right, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
-    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the acid squirt gun held in front of him with its bottle and nozzle sticking up beside his head, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip"
+    "west": "standing in a ready shooting stance facing left, both hands on the acid squirt gun, aiming it straight to the left, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "south": "standing facing the camera, both hands on the acid squirt gun held in front of his belly, aiming it straight at the camera, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "south-east": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the right, both hands on the acid squirt gun, aiming it down and to the right of the image, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "south-west": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the left, both hands on the acid squirt gun, aiming it down and to the left of the image, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the acid squirt gun held in front of him with its bottle and nozzle sticking up beside his head, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "north-east": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the right, both hands on the acid squirt gun, aiming it up and to the right of the image, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip",
+    "north-west": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the left, both hands on the acid squirt gun, aiming it up and to the left of the image, a lime green acid bottle on top of it and a white nozzle with a small green drip at its tip"
    },
    "action_description": "He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thin jet of bright pale green acid spurts out of the white nozzle for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He brings the gun back level and settles cleanly into the starting two-handed aiming stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
    "east": {
@@ -2121,7 +2127,134 @@
     "north-east": "7bf39e6e-4964-4af5-ba25-496ce6c3a6da",
     "north-west": "f4415fc1-ec31-4ec6-9599-20e11d8155db"
    },
-   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+   "cost": "8 generaciones: 2 de la prueba (east y north, parte 2) y 6 de las otras direcciones (parte 3), todas a la primera",
+   "textos_por_direccion": {
+    "east": "He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thin jet of bright pale green acid spurts out of the white nozzle for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He brings the gun back level and settles cleanly into the starting two-handed aiming stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-east": "He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thin jet of bright pale green acid spurts out of the white nozzle toward the lower right of the image for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He brings the gun back level and settles cleanly into the starting two-handed aiming stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "west": "He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thin jet of bright pale green acid spurts out of the white nozzle in front of him, toward the left of the image for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He brings the gun back level and settles cleanly into the starting two-handed aiming stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-west": "He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, thin jet of bright pale green acid spurts out of the white nozzle in front of him, toward the lower left of the image for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He brings the gun back level and settles cleanly into the starting two-handed aiming stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south": "He keeps facing the camera the whole time and never turns. He fires one single squirt with the acid squirt gun straight down the image. The gun gives a small, quick recoil: his hands jerk up a little and his shoulders rock, while his feet stay planted. A short, thin jet of bright pale green acid spurts out of the white nozzle straight down toward the bottom of the image for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He settles cleanly into the starting stance. Only one short squirt, no second squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+    "north": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one single squirt with the acid squirt gun away from the camera, toward the top of the image. The gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, thin jet of bright pale green acid spurts out of the white nozzle straight up beside his head for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He settles cleanly into the starting stance, still seen from behind. Only one short squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout.",
+    "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, thin jet of bright pale green acid spurts out of the white nozzle toward the upper right of the image for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He settles cleanly into the starting stance, still seen from behind. Only one short squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He fires one single squirt with the acid squirt gun. The gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, thin jet of bright pale green acid spurts out of the white nozzle toward the upper left of the image for an instant, a few drops flying off its tip, then it stops and only the small green drip stays at the nozzle. He settles cleanly into the starting stance, still seen from behind. Only one short squirt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "south": {
+    "group": "368b3205-bc98-49b9-8992-5be7076dc7e5",
+    "animation_id": "144e5050-9300-4665-9a06-34144c376d5b",
+    "animation_name": "disparo-desintegrador-sur",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands"
+   },
+   "south-east": {
+    "group": "c8740cc6-ce73-4f01-9db5-c6b1455776e7",
+    "animation_id": "80971765-498f-4c7b-94f1-b5ef231b6658",
+    "animation_name": "disparo-desintegrador",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands"
+   },
+   "west": {
+    "group": "80b7d40b-b596-423e-bb8b-ca192f1257d2",
+    "animation_id": "d7210d0f-5d97-4f57-b12d-990752734372",
+    "animation_name": "disparo-desintegrador",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands"
+   },
+   "south-west": {
+    "group": "eb1a21e2-8b44-4fbc-bf51-cbe7b6ce6d62",
+    "animation_id": "7d092c7f-4448-4374-bdd9-276e7bd01447",
+    "animation_name": "disparo-desintegrador",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands"
+   },
+   "north-east": {
+    "group": "aa5b29d2-4002-42af-aa69-cfd21fc5a46d",
+    "animation_id": "41aef748-15ab-4648-a5ae-06cdfe617442",
+    "animation_name": "disparo-desintegrador-ne",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands"
+   },
+   "north-west": {
+    "group": "9885c682-83d5-4e66-84c5-39d4916398cd",
+    "animation_id": "7632808a-11ec-47db-a994-f18fc115f8fd",
+    "animation_name": "disparo-desintegrador-no",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands"
+   },
+   "fotogramas_usados": {
+    "south": [
+     1,
+     2
+    ],
+    "south-east": [
+     2,
+     3
+    ],
+    "east": [
+     1,
+     2
+    ],
+    "north-east": [
+     2,
+     3
+    ],
+    "north": [
+     3,
+     4
+    ],
+    "north-west": [
+     2,
+     3
+    ],
+    "west": [
+     2,
+     3
+    ],
+    "south-west": [
+     2,
+     3
+    ]
+   }
+  },
+  "andar": {
+   "nota": "Andar: PixMiniMax, 12 fotogramas más el de partida, sin fotograma de partida ni de llegada (las rotaciones de PixelLab son las mismas posturas del proyecto, no hizo falta subir la postura). Estilo del andar de la pistola, el lanzallamas y el supersoplete ('quietly carries ... The squirt gun is silent and idle ... Nothing else appears in the image'), sin nombrar lo que no se quiere ver. Cinco llamadas, 8 generaciones: texto común para south-east, east, west y south-west (mismo animation_group_id), y uno propio para south, north, north-east y north-west (de espaldas, el texto estricto). Los 8 salieron a la primera, ninguno de perfil, sin chorros colados (solo la gotita verde de la boquilla, que a veces cae y se queda como un puntito). Fotogramas en assets/sources/conserje-48-desintegrador/walk/<dirección>-<n>.png. Ciclos a mano (ciclos.py: [a, n] = fotogramas a..a+n-1; diferencias de píxeles de 15 a 142): south [3,9], south-east [1,11], east [1,8], north-east [3,9], north [0,12], north-west [2,10], west [4,8], south-west [2,9]. Zapatos negros con borde gris: 0 píxeles en los 104 fotogramas.",
+   "animation_name": "andar-desintegrador",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
+   "group": "cae73146-072a-4361-abea-87b73524f9b5 (south-east, east, west, south-west)",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the acid squirt gun with both hands in the same two-handed stance the whole time, pointing forward and held steady in the same place, the green acid in the bottle only swaying slightly with each step. The squirt gun is silent and idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "south": {
+    "group": "18df4911-094c-455b-a5da-f859dd06a5eb",
+    "animation_id": "aaa9cfcf-7f53-40bc-804c-cc3964d8cf66",
+    "animation_name": "andar-desintegrador-sur",
+    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the acid squirt gun in front of his belly with both hands, pointing at the camera and held steady in the same place, the green acid in the bottle only swaying slightly with each step. The squirt gun is silent and idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "d43a6bc5-0a68-44c5-9278-c21a98307b71",
+    "animation_id": "b1acd107-37ca-447f-8642-7699297bc25c",
+    "animation_name": "andar-desintegrador-norte",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
+    "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the acid squirt gun in front of him in the same two-handed stance the whole time, only its green bottle and white nozzle sticking up beside his head, held steady in the same place. The squirt gun is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "north-east": {
+    "group": "aac4d4bd-2fb3-413f-acba-208c7df13393",
+    "animation_id": "252b86f3-bc76-4b1a-9bb6-848a1e099ea9",
+    "animation_name": "andar-desintegrador-ne",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the acid squirt gun in the same two-handed stance the whole time, pointing up and to the right of the image, held steady in the same place. The squirt gun is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "3d2c41a8-f5dc-4339-aa74-78b84e3041b4",
+    "animation_id": "377716e1-db4b-47a3-99fe-8198c07c471d",
+    "animation_name": "andar-desintegrador-no",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade acid squirt gun with both hands",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the acid squirt gun in the same two-handed stance the whole time, pointing up and to the left of the image, held steady in the same place. The squirt gun is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "comunes": {
+    "east": "31e7fe1d-9395-4229-af1c-acd5abe04f76",
+    "west": "6f67021a-0ca9-402a-be9e-396350ed59c5",
+    "south-east": "dcc80323-6da1-4a6a-9fb9-7210915cd9f3",
+    "south-west": "055f31ff-3e5a-4de7-ab8c-9738a8db063b"
+   },
+   "cost": "8 generaciones, todas a la primera"
   }
  },
  "zombi-venenoso-48": {
