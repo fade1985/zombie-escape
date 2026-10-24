@@ -938,6 +938,29 @@
    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the bladed bat in the same guard grip with both hands the whole time: the bat stays raised up and tilted back over his shoulder in the same place, only swaying very slightly with each step, and the blades stay fixed on its thick end. His arms do not swing and never let go of the bat. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
   }
  },
+ "conserje-48-inmovilizadora": {
+  "kind": "character_state",
+  "character_id": "444b7c73-99be-4384-94d5-446fc2c484a2",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Inmovilizadora en guardia (colores libres)",
+  "nota": "Estado de Johnny con la inmovilizadora (el arma creada: el bate con un táser atado a la punta gorda: una caja de metal gris con dos púas y chispazos celestes y blancos saltando entre ellas, y un cable negro que baja por el bate), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). La misma postura que el bate: en alto sobre el hombro, con las dos manos, en las 8 direcciones. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 4001) y la B, con colores libres (seed 4002). La B es la propuesta (aparato más largo y limpio y chispas de un celeste vivo que se ven a la primera; la A saca las chispas blancas grisáceas, apagadas, y un bucle grande de cable negro por detrás del hombro) y sus 8 posturas están en assets/sources/conserje-48-inmovilizadora/rotations/<dirección>.png; la A, en descartes/rotations-A/. Lienzo de 64x64. Pendiente el visto bueno del dueño.",
+  "request": {
+   "edit_description": "holding a homemade electric stun club like a weapon: a wooden baseball bat with a taser stun device strapped to its thick end: a small chunky grey metal box with two thick metal prongs pointing straight up from the tip of the bat, with bright cyan and white electric sparks and small lightning arcs crackling between the two prongs, clearly visible above the bat; a thick black cable runs from the box down along the bat; gripping the handle with both hands in a batter's ready stance, knees slightly bent; the bat is raised up and tilted back over one shoulder, the electric thick end pointing up above shoulder height, away from his face; the bat stays raised over the shoulder in every view: front, side and back; light brown wooden bat with a dark outline, grey steel box and prongs with dark outlines, bright cyan and white lightning sparks drawn in flat pixel art colors; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 4002
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "eed4dfc6-9fec-4d87-b74c-2d9c11b68283",
+   "state_name": "Inmovilizadora en guardia",
+   "cost": "10 generaciones",
+   "nota": "Propuesta descartada hasta que el dueño elija (sigue en PixelLab, sin borrar). La A: mismo texto, con use_color_palette_from_reference true y seed 4001. Johnny sale igual que siempre; el táser, con chispas blancas y celestes pálidas y un bucle de cable negro. Sus 8 posturas, en assets/sources/conserje-48-inmovilizadora/descartes/rotations-A/."
+  },
+  "cost_total": "20 generaciones por ahora (los dos estados, uno de ellos descartado)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
