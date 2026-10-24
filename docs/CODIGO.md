@@ -353,7 +353,8 @@
   `cara_pared.gd`, `puerta.gd` (las de la pared de arriba, dibujos de PixelLab: `puerta-piso` en los Apartamentos,
   `puerta-tienda` de cristal en el centro comercial y `puerta-servicio` de acero en la sala de mantenimiento de los dos;
   las de los otros muros, el ascensor y las escaleras, con código; también la escalera de incendios de la azotea, las placas con la letra de cada piso y el cartel de la planta junto al ascensor; encima de las puertas ya no se escribe adónde llevan, ni dentro de las estancias ni en el pasillo ni en la azotea), `puerta_bano.gd` (la del superviviente, y la de las habitaciones cerradas de las viviendas; de frente, el dibujo `puerta-bano`), `placa.gd` (la placa de latón con el nombre de cada habitación de las viviendas), `neon.gd` (el letrero de neón de una tienda).
-- `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de las skins: `TAQUILLA_X` en `mapa.gd`),
+- `ordenador.gd` (la mesa), `arrimable.gd` (baúl, banco y la taquilla de las skins: `TAQUILLA_X` en `mapa.gd`; ni la
+  mesa ni estos llevan su nombre escrito debajo),
   `armarito.gd` (botiquín), `cientifico.gd` (el
   científico muerto con su página: sprite de PixelLab en tres capas, con la piel y el pelo de su página; los que
   no son científicos, con su ropa y aún dibujados con código), `cafetera.gd` (la de Johnny, en la

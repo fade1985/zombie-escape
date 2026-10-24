@@ -6,7 +6,7 @@
 # dedo, con flechas e Intro (o 1 a 5) o con el mando (cruceta y A). Esc o B la cierra.
 extends CanvasLayer
 
-const COLOR := Color("#9fd3ff")   # el color de la taquilla (su letrero en la sala, y el título)
+const COLOR := Color("#9fd3ff")   # el color de la taquilla (el del título)
 
 var partida: Node
 var fondo: ColorRect

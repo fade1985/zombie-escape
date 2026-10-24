@@ -1,7 +1,8 @@
 # Un mueble de la sala de mantenimiento que se usa al arrimarse (Baul y BancoTrabajo en src/props.js del JS):
-# pegado a la pared de arriba, con su letrero debajo. Delante tiene una zona invisible: cuando Johnny se
-# arrima, avisa con "usar" y la partida abre su pantalla (ui/inventario.gd). Al cerrarla hay que apartarse un
-# poco antes de que se vuelva a abrir. Como la mesa del ordenador (ordenador.gd), pero sin luz.
+# pegado a la pared de arriba, sin su nombre escrito (se reconoce por el dibujo). Delante tiene una zona
+# invisible: cuando Johnny se arrima, avisa con "usar" y la partida abre su pantalla (ui/inventario.gd). Al
+# cerrarla hay que apartarse un poco antes de que se vuelva a abrir. Como la mesa del ordenador (ordenador.gd),
+# pero sin luz.
 extends StaticBody2D
 
 signal usar
@@ -10,8 +11,7 @@ var lista := true     # se pone a false al abrirse, y vuelve a true cuando Johnn
 
 
 # "x": su centro; "arriba": donde acaba el muro de arriba; "ancho" y "hondo": lo que ocupa en el suelo
-func montar(nombre: String, dibujo: String, letrero_texto: String, color: Color, x: float, arriba: float,
-		ancho: float, hondo: float) -> void:
+func montar(nombre: String, dibujo: String, x: float, arriba: float, ancho: float, hondo: float) -> void:
 	name = nombre
 	add_to_group("obstaculos")
 	position = Vector2(x, arriba + hondo)   # el pie, para ordenarse con los personajes
@@ -29,16 +29,6 @@ func montar(nombre: String, dibujo: String, letrero_texto: String, color: Color,
 	forma.shape = rect
 	forma.position = Vector2(0, -hondo / 2.0)
 	add_child(forma)
-
-	var letrero := Label.new()
-	letrero.text = letrero_texto
-	letrero.theme = Tema.crear()
-	letrero.add_theme_color_override("font_color", color)
-	letrero.size = Vector2(160, 20)
-	letrero.position = Vector2(-80, 4)
-	letrero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	letrero.z_index = 5
-	add_child(letrero)
 
 	# la zona de delante, donde se para Johnny para usarlo
 	var zona := Area2D.new()

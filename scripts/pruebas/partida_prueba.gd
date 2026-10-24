@@ -1825,6 +1825,9 @@ func probar_sala() -> void:
 	var donde := []
 	for n in usables:
 		donde.append("%s en %s" % [n, mapa.nombre_zona(mapa.zona_en(usables[n][0].position - Vector2(0, 4)))])
+	# ninguno lleva ya su nombre escrito debajo
+	var con_nombre := usables.keys().filter(func(n): return not usables[n][0].find_children("*", "Label").is_empty())
+	print("Muebles de la sala con su nombre escrito: %s (esperado: ninguno)" % ("ninguno" if con_nombre.is_empty() else ", ".join(con_nombre)))
 	for m in mapa.muebles:
 		donde.append("%s en %s" % [m.datos.tipo, mapa.nombre_zona(m.zona)])
 	var corcho: Node2D = mapa.cosas.get_node_or_null("Corcho")

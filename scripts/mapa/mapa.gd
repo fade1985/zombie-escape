@@ -505,13 +505,13 @@ func poner_muebles() -> void:
 		ordenador.montar(ORDENADOR_X, MURO)
 		cosas.add_child(ordenador)
 		baul = ARRIMABLE.new()
-		baul.montar("Baul", "res://assets/sprites/baul.png", "Baúl", Color("#ffd98a"), BAUL_X, MURO, 60.0, 36.0)
+		baul.montar("Baul", "res://assets/sprites/baul.png", BAUL_X, MURO, 60.0, 36.0)
 		cosas.add_child(baul)
 		banco = ARRIMABLE.new()
-		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", "Banco", Color("#ffb36b"), BANCO_X, MURO, 76.0, 36.0)
+		banco.montar("Banco", "res://assets/sprites/banco-trabajo.png", BANCO_X, MURO, 76.0, 36.0)
 		cosas.add_child(banco)
 		taquilla = ARRIMABLE.new()   # la de las skins de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
-		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", "Taquilla", Color("#9fd3ff"), TAQUILLA_X, MURO, 56.0, 36.0)
+		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", TAQUILLA_X, MURO, 56.0, 36.0)
 		cosas.add_child(taquilla)
 		# el corcho del despacho, colgado en la cara del muro de arriba (en su pie, como los escaparates de la galería,
 		# para ordenarse con ella), con su borde de abajo a media pared

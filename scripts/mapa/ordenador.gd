@@ -43,16 +43,6 @@ func montar(x: float, arriba: float) -> void:
 	brillo.position = Vector2(-2, -76)
 	add_child(brillo)
 
-	var letrero := Label.new()
-	letrero.text = "Ordenador"
-	letrero.theme = Tema.crear()
-	letrero.add_theme_color_override("font_color", Color("#9fe8ff"))
-	letrero.size = Vector2(160, 20)
-	letrero.position = Vector2(-80, 4)
-	letrero.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	letrero.z_index = 5
-	add_child(letrero)
-
 	# la zona de delante, donde se para Johnny para usarlo
 	var zona := Area2D.new()
 	zona.collision_layer = 0
