@@ -1566,7 +1566,29 @@
    "cost": "10 generaciones",
    "nota": "DESCARTADA por el dueño, que eligió la A (sigue en PixelLab, sin borrar). La B: mismo texto, con use_color_palette_from_reference false y seed 6002. Johnny sale igual que siempre; las chispas, de un celeste vivo, pero el cable negro da vueltas grandes alrededor del cuerpo y la batería queda pegada a la cintura. Sus 8 posturas, en assets/sources/conserje-48-latigo-electrico/descartes/rotations-B/."
   },
-  "cost_total": "20 generaciones hasta ahora: las dos versiones del estado (la B, descartada)"
+  "cost_total": "22 generaciones hasta ahora: 20 de los dos estados (la B, descartada) y 2 de la prueba del golpe de lado y de espaldas",
+  "ataque": {
+   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 8 fotogramas más el de partida (no 12: el látigo ataca con el ritmo del cuchillo, 4 por segundo, y solo se usan 6); fotograma de partida y de llegada: el dibujo quieto en un lienzo de 144x128 con Johnny en el centro (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-latigo-electrico --lienzos <carpeta>; medidas en assets/sources/conserje-48-latigo-electrico/arma.json: 'lienzo_ataque', y la casilla del juego, 'celda' 144x128 con los pies en 'pivote' 72,88, como el látigo escorpión). Los dos salieron a la primera (1 generación cada uno). Fotogramas en assets/sources/conserje-48-latigo-electrico/ataque/. De lado (east, lienzo de 204x128): guardia con el cable recogido (0), latigazo con una raya blanca en arco y el cable en bucle (1), el cable recto con rayitas blancas (2), el golpe: rayos celestes y blancos en zigzag a lo largo de todo el cable (3-4), chispas celestes (5), recoge con la batería al final (6), bucle (7) y guardia (8). De espaldas (north, lienzo de 144x180): casi todo el golpe de espaldas (en 1 se gira un poco de lado al coger impulso); el cable da un arco por encima con la batería al final y una media luna gris (2-3), sube recto con la batería arriba (3), un rayo celeste y blanco en zigzag a lo largo del cable (4-5; en 5 baja hasta por debajo de los pies), recoge (6-7) y guardia (8). Ningún fotograma parece salirse de la casilla de 144x128 (por medir con cabe.py en la parte 3).",
+   "subidas": "2026-10-24, lienzos de 144x128 (caducan a los 3 días): south upload:9a2ffdec-31c1-488c-aba6-6b4e5527b978, south-east upload:02ff7610-812a-4f3b-a5e0-1ba695b770e8, east upload:1a3d90e4-b4e3-450a-9baa-a01513dc7f22, north-east upload:3cffee2a-be2d-4daf-9acd-a4cce72dd92b, north upload:f1e0d9a8-c8aa-4cb0-95e0-b426a21cdcea, north-west upload:babc7edf-e495-4ffd-9b75-4ce732834a3c, west upload:74685e99-ffd6-450c-a285-a2719cbde85d, south-west upload:bb6f5a8e-265d-44d1-a768-e0b61f6de4f1",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding an electric whip: a black electrical cable with a small grey car battery tied at its end",
+   "east": {
+    "group": "7339774a-becd-4f67-92d3-f8e9e1d7616f",
+    "animation_name": "ataque-latigo-electrico",
+    "cost": "1 generación",
+    "nota": "A la primera. PixelLab lo devuelve en 204x128.",
+    "initial_pose": "standing in a ready guard stance facing right, holding the whip handle in his right hand with his arm bent in front of his body, the black cable hanging in a loose loop at his side, the small grey battery at hip height",
+    "action_description": "He steps forward with the lead foot and snaps the whip forward in one fast lash: his right arm whips straight out in front of him at chest height, and the long black electrical cable uncoils and shoots forward in a thin, straight line away from his hand, the small grey car battery at its end flying out ahead of him. At the moment the cable is fully stretched, a thin white streak of air appears along it, pointing straight ahead in the direction of the lash, with bright cyan and white lightning arcs crackling along the cable and the battery. The streak and arcs vanish at once as he pulls the whip back, the cable recoils into a loose loop, and he settles cleanly into the starting guard stance. Only one lash. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "12f7ff6c-e885-45ee-a75b-46fa519a6b91",
+    "animation_name": "ataque-latigo-electrico-norte",
+    "cost": "1 generación",
+    "nota": "A la primera. PixelLab lo devuelve en 144x180.",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding an electric whip: a black electrical cable with a small grey car battery tied at its end, seen from behind",
+    "initial_pose": "seen from behind, his back to the camera, facing away toward the top of the image, holding the whip handle in his right hand with his arm bent in front of his body, the black cable hanging in a loose loop at his side",
+    "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. With his right arm he snaps the whip in one fast lash away from the camera, toward the top of the image: the black electrical cable uncoils and shoots up the image in a thin line, the small grey car battery at its end flying out above his head. When the cable is fully stretched, a thin white streak of air appears along it, pointing up the image, with bright cyan and white lightning arcs crackling along the cable and the battery. The streak and arcs vanish at once as he pulls the whip back, the cable recoils into a loose loop, and he settles cleanly into the starting guard stance. Only one lash. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   }
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
