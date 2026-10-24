@@ -726,6 +726,28 @@
    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the spiked bat in the same guard grip with both hands the whole time: the bat stays raised up and tilted back over his shoulder in the same place, only swaying very slightly with each step. His arms do not swing and never let go of the bat. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
   }
  },
+ "conserje-48-bate-fuego": {
+  "kind": "character_state",
+  "character_id": "a369ce1a-5c22-4a07-b8bb-d9ecdcd18022",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Bate de fuego en guardia (colores libres)",
+  "nota": "Estado de Johnny con el bate de fuego (el arma creada: el bate con la punta envuelta en trapos empapados de gasolina, ardiendo), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). La misma postura que el bate: en alto sobre el hombro, con las dos manos, en las 8 direcciones; las llamas naranjas y amarillas (y unas brasas rojas sueltas) salen de la punta. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 2024) y la B, con colores libres (seed 2025). La B es la propuesta (llamas vivas, amarillas y naranjas; la A las saca rosadas y apagadas) y sus 8 posturas están en assets/sources/conserje-48-bate-fuego/rotations/<dirección>.png; la A, en descartes/rotations-A/. Pendiente del visto bueno del dueño. Lienzo de 64x64. Ojo: en la B, de espaldas (north) el bate queda a la izquierda de la imagen (en la A, a la derecha, como en el bate); las brasas sueltas llegan a la fila 0-1 del lienzo.",
+  "request": {
+   "edit_description": "holding a homemade flaming club like a weapon: a wooden baseball bat whose thick end is wrapped in rags soaked in gasoline and is burning, with bright orange and yellow flames and a few red embers flickering up from the tip of the bat, clearly visible above the bat; gripping the handle with both hands in a batter's ready stance, knees slightly bent; the bat is raised up and tilted back over one shoulder, the burning thick end pointing up above shoulder height, away from his face; the bat stays raised over the shoulder in every view: front, side and back; light brown wooden bat with a dark outline, charred dark rags on the thick end, flames drawn in flat pixel art colors; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": false,
+   "seed": 2025
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_A": {
+   "character_id": "3fde8a02-18e6-4bc7-a622-1d81fb217c51",
+   "state_name": "Bate de fuego en guardia",
+   "cost": "10 generaciones",
+   "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 2024. Johnny sale igual que siempre, pero las llamas salen en rosa y rojo apagados. Sus 8 posturas, en assets/sources/conserje-48-bate-fuego/descartes/rotations-A/ (sigue en PixelLab, sin borrar)."
+  }
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
