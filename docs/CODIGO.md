@@ -127,7 +127,7 @@
   gritar cada 8 s; acorralada, chilla en la cara: 6). Salen en las tiendas (`planta.gd`, `horda`).
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque. Con
-  `diana` es la de la sala de pruebas de armas: no se muere, no ataca y vuelve a su sitio (`casa`). La señal
+  `diana` es la de la sala de pruebas de armas: no pierde vida, no ataca y vuelve a su sitio (`casa`). La señal
   `herido` avisa de cada daño (golpe o bala, o fuego y charcos).
 - `sala_armas.gd`: la sala de pruebas de armas (F11 en la planta baja; el sitio, `sala_armas` de `planta.gd`, y la
   monta `mapa.gd`): la diana en el centro, todas las armas (coma y punto; las del banco, creadas en el acto), munición

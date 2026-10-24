@@ -1,6 +1,6 @@
 # La sala de pruebas de armas (tecla F11 en la planta baja; el sitio lo hace planta.gd): una habitación vacía y con
 # luz para ver con detalle cómo funciona cada arma. La monta mapa.gd al entrar y se va con él al salir. Tiene:
-#   - la diana: un zombi normal en el centro que no se muere, no ataca y vuelve a su sitio si un golpe lo mueve
+#   - la diana: un zombi normal en el centro que no pierde vida, no ataca y vuelve a su sitio si un golpe lo mueve
 #     (zombi.gd, "diana"), para probar desde todas las direcciones. Sus números de daño, más grandes
 #   - todas las armas, también las del banco de trabajo: coma y punto pasan a la anterior y a la siguiente
 #   - munición sin fin, pero recargando: la reserva no se acaba nunca y el cargador sí
@@ -9,7 +9,8 @@
 #     centro de Johnny), el círculo de cada zombi dentro del que le da la bala (rojo) y el camino de verdad de cada
 #     bala (verde si da; naranja si pasa por el lado de la diana; roja si choca con la pared o se le acaba el alcance)
 #   - el panel de arriba a la izquierda: la ficha del arma y el recuento de disparos, aciertos, fallos (y por qué),
-#     daño por segundo y zombis abatidos (Retroceso lo pone a cero; el guion lo esconde y lo vuelve a sacar)
+#     daño por segundo y cuántos zombis normales habría matado, con una vida de mentira (Retroceso lo pone a cero; el
+#     guion lo esconde y lo vuelve a sacar)
 # Entra con la pistola en la mano; al salir, Johnny vuelve a llevar las armas y las balas con las que entró.
 class_name SalaArmas
 extends Node2D
@@ -56,8 +57,11 @@ var fallos := {"lado": 0, "pared": 0, "alcance": 0}
 var ultimo_fallo := ""
 var golpes: Array = []     # [momento, daño] de cada vez que le quitan vida a la diana, de los últimos 3 s
 var total := 0
+# La vida de mentira: la diana no pierde vida, pero se cuenta la que perdería un zombi normal para saber cuántos
+# habría matado y cuánto ha tardado con el último
+var vida_mentira := 0
 var abatidos := 0
-var vida_desde := 0.0      # cuándo le quitaron vida a la diana por primera vez desde que la tiene entera
+var vida_desde := 0.0      # cuándo le quitaron vida por primera vez desde que la tiene entera
 var vida_golpes := 0       # y cuántas veces desde entonces
 var ultima_muerte := ""
 
@@ -183,6 +187,7 @@ func a_cero() -> void:
 	total = 0
 	abatidos = 0
 	ultima_muerte = ""
+	vida_mentira = diana.vida_max
 	for b in balas:
 		if b.fin != "":
 			b.t = RASTRO   # los caminos de antes se borran
@@ -237,26 +242,27 @@ func acabar_bala(b: Dictionary) -> void:
 
 # ═════════════ La diana ═════════════
 
-# Le han quitado vida a la diana: el número grande, el recuento y, si se habría muerto, «¡Abatido!»
+# Le han hecho daño a la diana: el número grande y el recuento (y la vida de mentira: si se acaba, uno más)
 func _al_herir(cantidad: int, golpe: bool) -> void:
-	if diana.vida + cantidad >= diana.vida_max:   # el primero desde que tiene la vida entera
+	if vida_mentira >= diana.vida_max:   # el primero desde que la tiene entera
 		vida_desde = reloj
 		vida_golpes = 0
 	vida_golpes += 1
+	vida_mentira -= cantidad
 	golpes.append([reloj, cantidad])
 	total += cantidad
 	# (lo del fuego y los charcos ya lo enseña la diana, pequeño y de su color: zombi.gd, herir)
 	if golpe:
 		var critico: bool = johnny != null and cantidad > roundi(johnny.arma().dano)   # el doble: un crítico
-		numero(str(cantidad) + ("!" if critico else ""), CRITICO if critico else Color.WHITE, 0.0)
-	if diana.vida <= 0:
+		numero(str(cantidad) + ("!" if critico else ""), CRITICO if critico else Color.WHITE)
+	if vida_mentira <= 0:
 		abatidos += 1
 		ultima_muerte = "%s s, %d %s" % [decimal(reloj - vida_desde, 1), vida_golpes, "golpe" if vida_golpes == 1 else "golpes"]
-		numero("¡Abatido!", ROJO, 34.0)
+		vida_mentira = diana.vida_max
 
 
 # Un texto grande que sube despacio sobre la diana y se desvanece
-func numero(cual: String, color: Color, mas_alto: float) -> void:
+func numero(cual: String, color: Color) -> void:
 	var etiqueta := Label.new()
 	etiqueta.text = cual
 	etiqueta.theme = Tema.crear()
@@ -265,7 +271,7 @@ func numero(cual: String, color: Color, mas_alto: float) -> void:
 	etiqueta.add_theme_constant_override("outline_size", 8)
 	etiqueta.add_theme_color_override("font_outline_color", TINTA)
 	add_child(etiqueta)
-	etiqueta.global_position = diana.global_position + Vector2(randf_range(-26.0, 6.0), -diana.altura - 24.0 - mas_alto)
+	etiqueta.global_position = diana.global_position + Vector2(randf_range(-26.0, 6.0), -diana.altura - 24.0)
 	var tween := etiqueta.create_tween()
 	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 44.0, 1.1).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(etiqueta, "modulate:a", 0.0, 0.5).set_delay(0.6)
@@ -398,7 +404,9 @@ func escribir() -> void:
 	for g in golpes:
 		en_ventana += g[1]
 	l.append("Daño %d · %s por segundo (últimos 3 s)" % [total, decimal(en_ventana / VENTANA, 1)])
-	l.append("Abatidos %d%s" % [abatidos, " · el último en " + ultima_muerte if ultima_muerte != "" else ""])
+	l.append("Habría matado %d %s" % [abatidos, "zombi normal" if abatidos == 1 else "zombis normales"])
+	if ultima_muerte != "":
+		l.append("  el último, en " + ultima_muerte)
 	l.append("Guion: esconder este panel")
 	texto.text = "
 ".join(l)

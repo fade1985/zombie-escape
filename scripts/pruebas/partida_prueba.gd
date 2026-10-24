@@ -1972,7 +1972,7 @@ func probar_sala() -> void:
 # ella: cuenta en la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola. La
 # pistola, en el modo asistido y a 200 de la diana, desde 72 ángulos (cada 5°; 0° = disparando hacia la derecha, 90° =
 # hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla.
-# Luego, que la diana no se ha muerto (y los abatidos), que la reserva sigue llena y que ha recargado; que el punto pasa
+# Luego, que la diana no se ha muerto ni ha perdido vida (y cuántos zombis normales habría matado), que la reserva sigue llena y que ha recargado; que el punto pasa
 # a la escopeta y la coma vuelve (con el recuento a cero) y llega a las del banco de trabajo, que el guion esconde y
 # saca el panel; y que F11 vuelve a la sala
 # de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
@@ -1993,6 +1993,7 @@ func probar_armas() -> void:
 		get_tree().get_nodes_in_group("zombis").size() == 1, luz.oscuridad(), johnny.arma().nombre])
 	johnny.poner_modo("asistido")
 	var recargo := false
+	var vida_min: int = sala.diana.vida_max   # la vida más baja que se le ha visto a la diana
 	var resultados := []   # [ángulo, fin, pasa, dirección]
 	var foto := -1         # el primer ángulo que falla por el lado: su foto
 	for grados in range(0, 360, 5):
@@ -2005,10 +2006,12 @@ func probar_armas() -> void:
 			await get_tree().physics_frame
 			espera += get_physics_process_delta_time()
 			recargo = recargo or johnny.recargando > 0.0
+			vida_min = mini(vida_min, sala.diana.vida)
 		var b: Dictionary = sala.balas.back()
 		while b.fin == "" and espera < 5.0:
 			await get_tree().physics_frame
 			espera += get_physics_process_delta_time()
+			vida_min = mini(vida_min, sala.diana.vida)
 		resultados.append([grados, b.fin, b.pasa, johnny.direccion])
 		if b.fin == "lado" and foto < 0:
 			foto = grados
@@ -2027,8 +2030,8 @@ func probar_armas() -> void:
 	var falla := resultados.filter(func(r): return r[1] != "acierto")
 	print("Da desde %d de %d ángulos; falla desde: %s" % [resultados.size() - falla.size(), resultados.size(),
 		", ".join(falla.map(func(r): return "%d°" % r[0])) if not falla.is_empty() else "ninguno"])
-	print("Diana: viva %s · vida %d de %d · abatidos %d (esperado: true, más de 0, más de 0) · aciertos del recuento %d" % [
-		sala.diana.estado != "muerto", sala.diana.vida, sala.diana.vida_max, sala.abatidos, sala.aciertos])
+	print("Diana: viva %s · la vida más baja que se le ha visto %d de %d (esperado: true, %d, siempre llena) · habría matado %d zombis normales (esperado: más de 0) · aciertos del recuento %d" % [
+		sala.diana.estado != "muerto", vida_min, sala.diana.vida_max, sala.diana.vida_max, sala.abatidos, sala.aciertos])
 	print("Munición: reserva %d (esperado: %d, siempre llena) · ha recargado %s (esperado: true)" % [johnny.reserva,
 		Armas.datos("pistola").cargador * johnny.RESERVA_MAX, recargo])
 	await pulsar_y_esperar(KEY_PERIOD)

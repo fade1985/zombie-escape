@@ -67,9 +67,9 @@ var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (p
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var lio_angulo := 0.0
 var prisa := 0.0           # segundos que le quedan con prisa (el grito de la dependienta, zombi_dependienta.gd)
-# La diana de la sala de pruebas de armas (sala_armas.gd): no se muere (al quedarse sin vida la recupera entera), no
-# da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números de daño
-# los pone la sala, más grandes
+# La diana de la sala de pruebas de armas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
+# acto), no da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números
+# de daño los pone la sala, más grandes
 var diana := false
 var casa := Vector2.ZERO
 
@@ -345,6 +345,8 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
 	vida -= cantidad
 	herido.emit(cantidad, true)
+	if diana:
+		vida = vida_max
 	velocity = fuerza * empuje
 	numero_flotante(cantidad)
 	Sonido.tocar("golpe")
@@ -367,7 +369,7 @@ func encogerse() -> void:
 
 
 func morir() -> void:
-	if diana:
+	if diana:   # (por si algo la mata de golpe: la diana no se muere)
 		vida = vida_max
 		encogerse()
 		return
@@ -429,6 +431,8 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 	var n := maxi(1, roundi(cantidad))
 	vida -= n
 	herido.emit(n, false)
+	if diana:
+		vida = vida_max
 	a_golpes = false
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), str(n), color, 16)
 	if vida <= 0:
