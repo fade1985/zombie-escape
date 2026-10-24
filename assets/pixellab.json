@@ -513,7 +513,7 @@
   "character_id": "8333198c-825f-47c6-b9af-365a8654f84e",
   "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
   "state_name": "Lanza en guardia",
-  "nota": "Estado de Johnny con la lanza (el arma creada: palo de fregona con un cuchillo de cocina atado en la punta), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Salió a la primera: la sujeta con las dos manos en diagonal, con la hoja arriba y hacia delante, en las 8 direcciones. Lienzo de 64x64; con use_color_palette_from_reference conserva unos 41 colores, y mide lo mismo que con el bate y el cuchillo. Las 8 posturas, tal cual, en assets/sources/conserje-48-lanza/rotations/<dirección>.png. Falta: ataque (estocada) y andar.",
+  "nota": "Estado de Johnny con la lanza (el arma creada: palo de fregona con un cuchillo de cocina atado en la punta), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Salió a la primera: la sujeta con las dos manos en diagonal, con la hoja arriba y hacia delante, en las 8 direcciones. Lienzo de 64x64; con use_color_palette_from_reference conserva unos 41 colores, y mide lo mismo que con el bate y el cuchillo. Las 8 posturas, tal cual, en assets/sources/conserje-48-lanza/rotations/<dirección>.png. Falta: el ataque en las otras 6 direcciones y el andar.",
   "request": {
    "edit_description": "holding a homemade spear like a weapon: a long thin wooden mop handle with no mop head, with a kitchen knife tied to its top end with grey duct tape, the steel blade pointing outward as the spear tip; gripping the shaft with both hands in a ready fighting stance, knees slightly bent; the shaft is held diagonally across his body with the blade end raised up and forward above shoulder height, away from his face, and the bottom end of the shaft pointing down toward the opposite hip; the spear stays held the same way, blade up, in every view: front, side and back; light brown wooden shaft with a dark outline, small light grey steel blade, grey tape wrapped around the joint; same face, same hair and red bandana, same clothes, same body size and proportions",
    "override_width": 64,
@@ -522,7 +522,36 @@
    "seed": 1985
   },
   "cost": "10 generaciones",
-  "updated": "2026-10-24"
+  "updated": "2026-10-24",
+  "ataque": {
+   "nota": "Estocada hacia delante con una rayita blanca de aire en la punta (2026-10-24, parte 2: prueba de lado y de espaldas). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanza --lienzos <carpeta>). Fotogramas en assets/sources/conserje-48-lanza/ataque/. PixelLab devuelve el este en 108x96 y el norte en 96x120 (el lienzo se mide alrededor del golpe). La rayita sale en la punta y luego se despega hacia delante.",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade spear made of a wooden mop handle with a kitchen knife taped to its tip",
+   "east": {
+    "group": "2713389e-e33e-4767-9cc0-fb583bfe9ec9",
+    "animation_name": "ataque-lanza",
+    "cost": "1 generación",
+    "nota": "Salió bien a la primera: recoge la lanza, la pone horizontal a la altura del pecho y la clava hacia delante.",
+    "initial_pose": "standing in a ready guard stance facing right, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the right side of the image",
+    "action_description": "He steps forward with the lead foot and drives the spear straight ahead in one fast, hard, powerful thrust: he lowers the shaft to chest height, level and pointing straight ahead, and pushes it forward with both hands, arms extending, so the knife blade stabs far out in front of him. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing straight ahead in the direction of the thrust, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance, the blade raised up and forward again. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "429458e7-eaa9-4710-99e4-83f27c05766b",
+    "animation_name": "ataque-lanza-norte-2",
+    "cost": "1 generación",
+    "nota": "La segunda prueba de espaldas, la buena: con el texto estricto se queda de espaldas todo el golpe; sube la lanza recta y la clava por encima de la cabeza.",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade spear made of a wooden mop handle with a kitchen knife taped to its tip, seen from behind",
+    "initial_pose": "seen from behind, his back to the camera, gripping the spear shaft diagonally with both hands, the knife blade raised up on the left side of the image",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. His feet stay planted. Using mostly his arms, he lifts the spear shaft straight up in front of his chest, pointing up the image, and drives it in one fast, hard thrust away from the camera, toward the top of the image, so the knife blade stabs far out above his head. At the moment the arms are fully extended, a short straight white streak of air appears just above the blade tip, pointing up the image, no longer than the blade itself. The streak vanishes at once as he pulls the spear back down and settles cleanly into the starting guard stance, the blade raised on the left side of the image. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "north_descartado": {
+    "group": "8af4adbc-ab39-4a25-a770-17693c21311e",
+    "animation_name": "ataque-lanza-norte",
+    "cost": "1 generación",
+    "nota": "DESCARTADO (sigue en PixelLab, sin borrar): con el texto de espaldas de siempre Johnny se ponía de perfil a mitad del golpe.",
+    "action_description": "Seen from behind the whole time: he keeps his back to the camera and never turns around, his face is never visible. He steps forward with the lead foot and drives the spear in one fast, hard thrust away from the camera, toward the top of the image: he brings the shaft up in front of him and pushes it forward with both hands, so the knife blade stabs far out ahead of him, above his head, pointing up the image. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing up the image, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   }
+  },
+  "cost_total": "13 generaciones hasta ahora: 10 del estado y 3 de la prueba del ataque (una de espaldas, repetida)"
  },
  "zombi-venenoso-48": {
   "kind": "character",
