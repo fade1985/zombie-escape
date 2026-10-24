@@ -1670,6 +1670,45 @@
    }
   }
  },
+ "conserje-48-lanzallamas": {
+  "kind": "character_state",
+  "character_id": "74572bbd-8873-463b-b0d7-8693ff99c7b0",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Lanzallamas en guardia",
+  "nota": "Estado de Johnny con el lanzallamas (el arma creada: pistola de agua + gasolina; base la pistola, ritmo 10, alcance 170, chorro de llamas), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un lanzallamas casero: un depósito rojo de gas pequeño bajo un tubo largo de metal gris oscuro con una manguera negra, sujeto con las dos manos apuntando al frente y una llama pequeña naranja y amarilla (el piloto) en la punta del tubo. Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 7001) y la B, con colores libres (seed 7002). Elegida por el dueño la A: la cara de Johnny sale limpia (en la B sale con manchas rojas, como salpicaduras) y los colores le pegan; la B sacaba el tubo recto hacia arriba de espaldas, pero con Johnny rígido y sin depósito a la vista. Las 8 posturas de la A, en assets/sources/conserje-48-lanzallamas/rotations/<dirección>.png; las de la B, en descartes/rotations-B/. Lienzo de 64x64 salvo south (64x80) y north (64x78), recortados con los pies en la fila 55 como los demás (ver 'posturas'). Se distingue de la pistola (negra y corta) y del bate de fuego (un bate ardiendo en alto) a la primera: depósito rojo, tubo largo gris y llamita en la punta.",
+  "request": {
+   "edit_description": "holding a homemade flamethrower with both hands in a ready shooting stance, knees slightly bent: a small red gas canister attached under a short black hose and a thick dark grey metal nozzle pipe, one hand gripping the handle under the canister and the other hand holding the nozzle pipe, the nozzle pointing straight ahead in the direction he is facing, with a small bright orange and yellow pilot flame burning at the very tip of the nozzle; the flamethrower stays aimed forward in every view: front, side and back; red canister, black hose, dark grey metal nozzle, small flame at its tip; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 7001
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_B": {
+   "character_id": "8a65a4dc-e57f-4dc7-89d4-5b19a7c67500",
+   "state_name": "Lanzallamas en guardia (colores libres)",
+   "cost": "10 generaciones",
+   "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 7002. Sus 8 posturas, en assets/sources/conserje-48-lanzallamas/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
+  },
+  "posturas": {
+   "nota": "Las posturas quietas de south y north NO son las del estado de PixelLab de la A (allí el tubo cruzaba el cuerpo en diagonal de frente y asomaba en diagonal por el hombro izquierdo de espaldas, como pasó con la escopeta y el MP5, y al disparar la llama habría salido de lado mientras el chorro va recto): se rehicieron el 2026-10-24 con una animación corta de PixMiniMax (8 fotogramas más el de partida, 1 generación cada una, lienzo de partida de 64x64 = la postura vieja) en la que Johnny gira el arma, y se guardó el ÚLTIMO fotograma (el 8) recortado para que los pies queden en la fila 55: south 64x80 (el tubo apunta recto hacia abajo entre las piernas, la llama en la fila 66) y north 64x78 (el tubo recto hacia arriba sobre el hombro derecho, la llama en la fila 2). Las viejas, en descartes/rotations-viejas/. En PixelLab el estado sigue con sus rotaciones originales: las nuevas solo existen en el proyecto. Ojo: arma.py usa 'pies_en_rotacion' [32, 55] y las rotaciones south y north son más altas que 64 (no pasa nada: la casilla es de 96x96).",
+   "south": {
+    "group": "3ec72c5e-07cd-4f16-b943-e3fea0a9c8eb",
+    "animation_name": "postura-lanzallamas-abajo",
+    "upload": "c155d73f-c164-45bf-ab0e-5b74c2e051eb (partida: la postura vieja, caduca el 2026-10-27)",
+    "action_description": "He keeps facing the camera the whole time, his face, chest and both shoulders square to the camera. He quickly lowers the flamethrower to his waist and turns it so the nozzle points straight down the image: he holds it low at hip height in front of his belly with both hands, the black hose and the red gas canister at his side, the long dark grey nozzle pipe perfectly vertical in the image and pointing straight down toward the bottom edge of the image between his legs, with the small orange and yellow pilot flame burning at the bottom end of the nozzle. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "89188a75-6eb2-4073-aafc-3cbeaabc64b0",
+    "animation_name": "postura-lanzallamas-arriba",
+    "upload": "786f432d-7048-4b40-8616-707b423785bc (partida: la postura vieja, caduca el 2026-10-27)",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls, his shoulders square to the camera; he never turns around and his face is never visible. He quickly straightens the flamethrower so it points straight ahead of him, away from the camera, toward the top edge of the image: he holds it in front of him with both hands, hidden behind his torso, and only the long dark grey nozzle pipe sticks straight up above his right shoulder, perfectly vertical in the image, next to his head, with the small orange and yellow pilot flame burning at the top end. The nozzle does not lean left or right. Then he holds completely still in that pose for the rest of the animation, feet planted in the same place. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "cost": "2 generaciones (1 por dirección)"
+  },
+  "cost_total": "22 generaciones por ahora: 20 de los dos estados (la B, descartada) y 2 de las posturas de south y north"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
