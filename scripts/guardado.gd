@@ -79,9 +79,10 @@ static func cargar() -> Dictionary:
 	for a in s.baul_armas:
 		a.dano = int(a.dano)
 		a.unidades = int(a.unidades)
-		# los lanzallamas de antes de la llamarada continua (24 oct) se crearon con el daño de una gota (4 a 6): ahora
-		# es por segundo, así que cogen el de ahora con su rareza, y su frase nueva
-		if a.get("receta", "") == "lanzallamas" and a.dano < 20:
+		# los lanzallamas cogen siempre el daño de la receta con su rareza, y su frase: los de antes de la llamarada
+		# continua (24 oct) se crearon con el daño de una gota (4 a 6), y los de después, con 60 por segundo antes de
+		# bajarlo a la mitad (25 oct)
+		if a.get("receta", "") == "lanzallamas":
 			var nuevo := Recetas.crear("lanzallamas", a.rareza)
 			a.dano = nuevo.dano
 			a.desc = nuevo.desc

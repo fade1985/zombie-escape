@@ -36,8 +36,8 @@ const LISTA := {
 		"desc": "Empuja mucho y aturde un instante", "edificio": "apartamentos"},
 	"bate_fuego": {"nombre": "Bate de fuego", "con": ["bate", "gasolina"], "hueco": "cuerpo", "icono": "bate_fuego", "dano": 20,
 		"desc": "Cada golpe prende fuego", "edificio": "apartamentos"},
-	# el lanzallamas: su daño es por segundo (la llamarada es continua)
-	"lanzallamas": {"nombre": "Lanzallamas", "con": ["pistola_agua", "gasolina"], "hueco": "fuego", "icono": "lanzallamas", "dano": 60,
+	# el lanzallamas: su daño es por segundo (la llamarada es continua); era 60 y se bajó a la mitad (25 oct)
+	"lanzallamas": {"nombre": "Lanzallamas", "con": ["pistola_agua", "gasolina"], "hueco": "fuego", "icono": "lanzallamas", "dano": 30,
 		"desc": "Llamarada continua que quema a todos; se llena con gasolina", "edificio": "apartamentos"},
 	"partecuerpos": {"nombre": "Partecuerpos", "con": ["bate", "cuchillas"], "hueco": "cuerpo", "icono": "partecuerpos", "dano": 22,
 		"desc": "Golpe en arco ancho que hace sangrar", "edificio": "apartamentos"},

@@ -3511,8 +3511,10 @@ func probar_lanzallamas() -> void:
 	var vieja := Recetas.crear("lanzallamas", "azul")
 	vieja.icono = "pistola_agua"   # como las que se crearon antes de que el lanzallamas tuviera icono propio
 	vieja.dano = 5                 # y con el daño de una gota (el de antes de la llamarada continua)
+	var de_60 := Recetas.crear("lanzallamas", "morada")
+	de_60.dano = 87                # y otra con el de antes de bajarlo a la mitad (60 por segundo, épica)
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = [vieja, Recetas.crear("lanzallamas", "morada")]
+		g2.baul_armas = [vieja, de_60]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
 		g2.skin = "")
 	johnny.vestir("")
@@ -3521,7 +3523,7 @@ func probar_lanzallamas() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.5).timeout
 	var baul: Array = Guardado.cargar().baul_armas
-	print("Baúl: abierto %s · iconos %s (esperado: true, [\"lanzallamas\", \"lanzallamas\"]) · daño %s · «%s» (esperado: [72, 87], daño 72/s: el de antes, con el de ahora) · en el banco «%s» (esperado: lanzallamas)" % [
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"lanzallamas\", \"lanzallamas\"]) · daño %s · «%s» (esperado: [36, 44], daño 36/s: los de antes, con el de ahora) · en el banco «%s» (esperado: lanzallamas)" % [
 		inventario.abierto == "baul", baul.map(func(a): return Recetas.icono_de(a.receta)), baul.map(func(a): return a.dano),
 		Recetas.detalle(baul[0]), Recetas.icono_de("lanzallamas")])
 	Captura.foto("captura-lanzallamas-baul.png")
