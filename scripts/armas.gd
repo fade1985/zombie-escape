@@ -71,9 +71,10 @@ const DATOS := {
 # "momento", el del golpe en su animación) y no llevan "detalle": de momento, la lanza (conserje-48-lanza, hecha
 # con PixelLab: estocada hacia delante) y el aplastacabezas (conserje-48-aplastacabezas: el barrido del bate con el
 # bate de clavos; de espaldas, de arriba abajo), el bate de fuego (conserje-48-bate-fuego: el mismo barrido con
-# el bate ardiendo y una estela de llamas) y el partecuerpos (conserje-48-partecuerpos: el barrido más ancho con el
-# bate de cuchillas, estela blanca con gotas de sangre; de espaldas, de arriba abajo), con sus hojas de cada skin
-# (tools/cara.py). Las de fuego usan el
+# el bate ardiendo y una estela de llamas), el partecuerpos (conserje-48-partecuerpos: el barrido más ancho con el
+# bate de cuchillas, estela blanca con gotas de sangre; de espaldas, de arriba abajo) y la inmovilizadora
+# (conserje-48-inmovilizadora: el barrido con el bate con el táser atado a la punta, estela blanca con arcos
+# eléctricos celestes), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -84,7 +85,8 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-bate-fuego.tres")},
 	"partecuerpos": {"base": "bate", "arco": 170.0, "efecto": "sangra", "momento": 0.222,
 		"hoja": preload("res://assets/sprites/conserje-48-partecuerpos.tres")},
-	"inmovilizadora": {"base": "bate", "efecto": "descarga", "detalle": Color("#9fe8ff"), "sube": true},
+	"inmovilizadora": {"base": "bate", "efecto": "descarga", "momento": 0.222,
+		"hoja": preload("res://assets/sprites/conserje-48-inmovilizadora.tres")},
 	"latigo": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "veneno", "detalle": Color("#9be564")},
 	"supermaza": {"base": "fregona", "ritmo": 0.8, "arco": 360.0, "empuje": 2.5, "efecto": "circulo", "detalle": Color("#8a8a9a")},
 	# las del centro comercial (parte 6): el mangual echa muy lejos a todos los de alrededor y los deja un momento

@@ -19,6 +19,8 @@
 #                  con las 4 skins (Armas.CREADAS.bate_fuego)
 #   --partecuerpos lo mismo con el partecuerpos: su icono, su hoja, el golpe (que hace sangrar) en las 8 direcciones
 #                  y con las 4 skins (Armas.CREADAS.partecuerpos)
+#   --inmovilizadora lo mismo con la inmovilizadora: su icono, su hoja, el golpe (que aturde y salta a otro zombi) en las
+#                  8 direcciones y con las 4 skins (Armas.CREADAS.inmovilizadora)
 #   --ascensor    el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -120,6 +122,9 @@ func empezar_prueba() -> void:
 	elif "--partecuerpos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_partecuerpos()
+	elif "--inmovilizadora" in args:
+		set_process(false)   # sin la prueba larga
+		probar_inmovilizadora()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -2713,6 +2718,87 @@ func probar_partecuerpos() -> void:
 		await get_tree().create_timer(0.13).timeout
 		Captura.foto("captura-partecuerpos-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-partecuerpos-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
+
+
+# Con "--captura --inmovilizadora": la inmovilizadora con su dibujo propio (Armas.CREADAS.inmovilizadora,
+# conserje-48-inmovilizadora; recetas.gd, su icono). Como la del partecuerpos: en la sala de mantenimiento, con dos en el
+# baúl (una guardada antes de que tuviera icono propio, con el del táser), Johnny se arrima al baúl y cuenta el icono de
+# cada una (captura-inmovilizadora-baul.png). Saca una y cuenta su hoja, su momento del golpe y que ya no le salen
+# chispitas; le da a un zombi a 50 a su izquierda (le quita vida y lo aturde) con otro a 140 detrás, a donde salta la
+# descarga (también pierde vida y se queda aturdido, sin que el golpe lo alcance) y luego ataca en las 8 direcciones,
+# con una foto de cada una justo en el golpe (captura-inmovilizadora-<dirección>.png). Con cada skin (portero, glotón,
+# gymbro y bombero), su hoja y una foto (captura-inmovilizadora-<skin>.png). Cada línea dice lo esperado. Deja el
+# guardado como estaba y se cierra
+func probar_inmovilizadora() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("inmovilizadora", "azul")
+	vieja.icono = "taser"   # como las que se crearon antes de que la inmovilizadora tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("inmovilizadora", "morada")]
+		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos %s (esperado: true, [\"inmovilizadora\", \"inmovilizadora\"]) · en el banco «%s» (esperado: inmovilizadora)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("inmovilizadora")])
+	Captura.foto("captura-inmovilizadora-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacado del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Inmovilizadora en la mano: hoja «%s» · momento %.3f · chispitas %s · icono «%s» (esperado: conserje-48-inmovilizadora.tres, 0.222, false, inmovilizadora)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.has("detalle"), Objetos.icono(id)])
+
+	# el golpe llega en su fotograma (a los 0,111 s: 0,5 × 0,222), le quita vida y lo aturde; la descarga salta al
+	# otro, que está fuera del alcance del bate (66) pero a menos de 130 del primero
+	johnny.direccion = "o"
+	var z := zombis_de_prueba([Vector2(-50, 0), Vector2(-140, 0)])
+	await get_tree().process_frame
+	johnny.atacar(PI)
+	await get_tree().create_timer(0.2).timeout
+	print("Golpe a 50: vida del zombi %d (esperado: menos de 500) · aturdido %s (esperado: true)" % [
+		z[0].vida, z[0].aturdido > 0.0])
+	print("Salto a 140: vida del otro %d (esperado: menos de 500) · aturdido %s (esperado: true)" % [
+		z[1].vida, z[1].aturdido > 0.0])
+	await get_tree().create_timer(0.4).timeout
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.13).timeout
+		Captura.foto("captura-inmovilizadora-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con cada skin: su hoja de la inmovilizadora
+	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+		Skins.poner(skin)
+		johnny.vestir(skin)
+		johnny.direccion = "e"
+		johnny.atacar(0.0)
+		await get_tree().create_timer(0.13).timeout
+		Captura.foto("captura-inmovilizadora-%s.png" % skin)
+		print("Con %s: hoja «%s» (esperado: conserje-48-inmovilizadora-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.5).timeout
 
 	Guardado.cambiar(func(g2):

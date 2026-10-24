@@ -10,10 +10,11 @@
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
-#              fuego y el partecuerpos ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png, bate_fuego.png y
-#              partecuerpos.png, de tools/icono_lanza.py, icono_aplastacabezas.py, icono_bate_fuego.py e
-#              icono_partecuerpos.py). Se lee siempre de aquí (icono_de), no del arma guardada en el baúl, para que
-#              las ya creadas cojan el dibujo nuevo
+#              fuego, el partecuerpos y la inmovilizadora ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
+#              bate_fuego.png, partecuerpos.png e inmovilizadora.png, de tools/icono_lanza.py,
+#              icono_aplastacabezas.py, icono_bate_fuego.py, icono_partecuerpos.py e icono_inmovilizadora.py). Se
+#              lee siempre de aquí (icono_de), no del arma guardada en el baúl, para que las ya creadas cojan el
+#              dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
@@ -47,7 +48,7 @@ const LISTA := {
 		"desc": "Explota y deja a los zombis congelados 3 s", "edificio": "apartamentos"},
 	"lluvia_acida": {"nombre": "Lluvia ácida", "con": ["explosivos", "lejia"], "hueco": "arrojadiza", "icono": "explosivos", "dano": 50, "unidades": 3,
 		"desc": "Explota y deja un charco ácido grande", "edificio": "apartamentos"},
-	"inmovilizadora": {"nombre": "Inmovilizadora", "con": ["taser", "bate"], "hueco": "cuerpo", "icono": "taser", "dano": 20,
+	"inmovilizadora": {"nombre": "Inmovilizadora", "con": ["taser", "bate"], "hueco": "cuerpo", "icono": "inmovilizadora", "dano": 20,
 		"desc": "La descarga aturde y salta a un zombi cercano", "edificio": "apartamentos"},
 	"bumeran": {"nombre": "Bumerán segador", "con": ["llave_inglesa", "hacha"], "hueco": "fuego", "icono": "hacha", "dano": 14,
 		"desc": "Se lanza, atraviesa zombis y vuelve a la mano; sin munición", "edificio": "apartamentos"},
