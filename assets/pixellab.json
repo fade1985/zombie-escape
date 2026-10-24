@@ -2494,14 +2494,20 @@
    "cost": "10 generaciones",
    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 11002. Descartada: solo 23 colores, la cara algo curtida y de frente el táser cruza el cuerpo en diagonal. Sus 8 posturas, en assets/sources/conserje-48-pistola-electrica/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la B, descartada) y 2 de la prueba del disparo (east y north)",
+  "cost_total": "36 generaciones hasta la parte 3: 20 de los dos estados (la B, descartada), 8 del disparo (2 de prueba y 6 de las otras direcciones) y 8 del andar; todo a la primera, sin repeticiones",
   "ataque": {
-   "nota": "Disparo: un retroceso corto de pistola y una descarga eléctrica celeste que sale de los dos electrodos (una chispa gorda en la punta, luego un rayo en zigzag largo, luego chispitas sueltas), sin fuego, sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES desde el principio (lección del supersoplete: con 96x96 el efecto largo sale cortado en seco por el borde; son los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una). Fotogramas en assets/sources/conserje-48-pistola-electrica/ataque/<dirección>-<n>.png, sacados del zip de la hoja (backblaze seguía caído) con una ventana común (east 107x58, north 39x93). PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas, no hay fuego ni humo y el rayo no sale cortado por el borde. East: 0 = guardia con la chispita de siempre, 1 = chispa pequeña blanca en la punta, 2 = chispa gorda celeste y blanca pegada a los electrodos, 3 = rayo en zigzag de ~60 px que sale de la boca, 4 = el rayo despegado (línea en zigzag fina, sin tocar a Johnny), 5 = chispitas sueltas, 6-7 = el brazo vuelve, 8 = guardia. North: 0-1 = guardia, 2 = chispa gorda en la punta (sobre la cabeza), 3-5 = rayo recto hacia arriba de ~35 px junto a la cabeza (3 con chispitas alrededor), 6-8 = guardia. El rayo del dibujo es más largo que la boca: las chispas que vuelan y saltan las pone el juego (chorro.gd), así que la hoja usará solo los 2-3 fotogramas del principio de la descarga por disparo (ritmo 5, duracion <= 0,19 s; candidatos: east [1,2,3] o [2,3], north [2,3,4] o [3,4]). Sin 'boca': 'fogonazo' (no hay naranja que buscar), la boca va a mano en armas.gd.",
+   "nota": "Disparo: un retroceso corto de pistola y una descarga eléctrica celeste que sale de los dos electrodos (una chispa pequeña, una gorda, un rayo en zigzag de 60-90 px que sale de la boca y luego se despega y se deshace en chispitas), sin fuego, sin humo ni casquillo. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): ningún rayo salió cortado por el borde. Las 8 direcciones salieron bien a la primera (2026-10-24), ninguna con la descarga hacia atrás ni Johnny dado la vuelta, sin fuego. Fotogramas en assets/sources/conserje-48-pistola-electrica/ataque/<dirección>-<n>.png, sacados del zip de la hoja (api.pixellab.ai/mcp/characters/<id>/spritesheet; backblaze.pixellab.ai no respondía) con una ventana común por dirección (bajar_zip.py). En el dibujo el rayo es más largo que la boca (south 77 px hacia abajo, east 83, north 86, south-west 88), pero las chispas que vuelan y saltan las pone el juego (chorro.gd): se usan 3 fotogramas por disparo (ritmo 5, duracion 0,18 s): east, west, south-east, south-west, north-east y north [1,2,3] (chispa pequeña, chispa gorda, rayo), north-west [2,3,4] (en el 1 y el 2 solo hay unos puntitos) y south [3,4,5] (el 3 es el principio del rayo bajando por delante del cuerpo). En south-west el tercero es el rayo ya despegado. Sin 'boca': 'fogonazo' en arma.json (la descarga es celeste, no hay naranja y amarillo vivos y el script fallaría con 'no encuentro el fogonazo'): arma.py no escribe 'muzzle', no quita tintes (Johnny no se tiñe de celeste) y la boca va a mano en armas.gd. 'efectos': true SÍ funciona con la descarga celeste (cuenta como clara y lejos del cuerpo, y el núcleo blanco como fuego); 'margen_efectos': 9.",
    "animation_name": "disparo-pistola-electrica",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
    "initial_pose": {
     "east": "standing in a ready shooting stance facing right, both hands on the stun gun, aiming it straight to the right, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
-    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the stun gun held in front of him with its prongs sticking up beside his head, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them"
+    "west": "standing in a ready shooting stance facing left, both hands on the stun gun, aiming it straight to the left, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "south": "standing facing the camera, both hands on the stun gun held in front of his belly, aiming it straight at the camera, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "south-east": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the right, both hands on the stun gun, aiming it down and to the right of the image, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "south-west": "standing in a ready shooting stance in three-quarter front view, facing toward the camera and to the left, both hands on the stun gun, aiming it down and to the left of the image, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, the stun gun held in front of him with its prongs sticking up beside his head, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "north-east": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the right, both hands on the stun gun, aiming it up and to the right of the image, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them",
+    "north-west": "standing in a ready shooting stance in three-quarter back view, facing away from the camera and to the left, both hands on the stun gun, aiming it up and to the left of the image, a small grey battery pack under its barrel and two short metal prongs at its tip with a tiny cyan spark between them"
    },
    "action_description": "He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He brings the stun gun back level and settles cleanly into the starting two-handed aiming stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
    "east": {
@@ -2529,7 +2535,142 @@
     "north-east": "91afda3a-9020-462f-abea-bd486d56d06e",
     "north-west": "d16ac5e5-3dee-4533-ad8a-e1e6c65b01d1"
    },
-   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+   "cost": "8 generaciones: 2 de la prueba (east y north, parte 2) y 6 de las otras direcciones (parte 3), todas a la primera",
+   "textos_por_direccion": {
+    "east": "He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He brings the stun gun back level and settles cleanly into the starting two-handed aiming stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-east": "He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs toward the lower right of the image for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He brings the stun gun back level and settles cleanly into the starting two-handed aiming stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "west": "He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs in front of him, toward the left of the image for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He brings the stun gun back level and settles cleanly into the starting two-handed aiming stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south-west": "He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his hands and forearms jerk back a little, while his feet stay planted and he keeps aiming in exactly the same direction. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs in front of him, toward the lower left of the image for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He brings the stun gun back level and settles cleanly into the starting two-handed aiming stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+    "south": "He keeps facing the camera the whole time and never turns. He fires one single electric shot with the stun gun straight down the image. The stun gun gives a small, quick recoil: his hands jerk up a little and his shoulders rock, while his feet stay planted. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs straight down toward the bottom of the image for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He settles cleanly into the starting stance. Only one short shot, no second bolt. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation.",
+    "north": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He fires one single electric shot with the stun gun away from the camera, toward the top of the image. The stun gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs straight up beside his head for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He settles cleanly into the starting stance, still seen from behind. Only one short shot. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout.",
+    "north-east": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs toward the upper right of the image for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He settles cleanly into the starting stance, still seen from behind. Only one short shot. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation.",
+    "north-west": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He fires one single electric shot with the stun gun. The stun gun gives a small, quick recoil: his elbows and shoulders jerk back a little, while his feet stay planted. A short, jagged bolt of bright cyan electricity crackles out of the two metal prongs toward the upper left of the image for an instant, a few small cyan sparks flying off, then it stops and only the tiny cyan spark stays between the prongs. He settles cleanly into the starting stance, still seen from behind. Only one short shot. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "south": {
+    "group": "d32bbecb-57a7-46c2-878a-f6bc581138e5",
+    "job": "66712efe-42e5-4ea7-8188-a45eaac01c1f",
+    "animation_name": "disparo-pistola-electrica-sur",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands"
+   },
+   "south-east": {
+    "group": "c3585470-399e-43aa-b852-88a1e615d22b",
+    "job": "6fdf473e-6421-4a24-a618-c3be3b454813",
+    "animation_name": "disparo-pistola-electrica",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands"
+   },
+   "west": {
+    "group": "ed099cd9-5185-482d-8791-44304e9965ee",
+    "job": "27d87658-46ec-4f2d-802b-7c19495224ff",
+    "animation_name": "disparo-pistola-electrica",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands"
+   },
+   "south-west": {
+    "group": "8b11ff4f-905b-4597-a04d-09b20b3ad05c",
+    "job": "d8f88472-ea93-4f39-bb81-c939f4171852",
+    "animation_name": "disparo-pistola-electrica",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands"
+   },
+   "north-east": {
+    "group": "793bb88f-8b3b-4c90-86bf-b27b45cfadd7",
+    "job": "73a3e0ae-8cdd-4526-8c64-28126c9fdcac",
+    "animation_name": "disparo-pistola-electrica-ne",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands"
+   },
+   "north-west": {
+    "group": "c5fe353c-f5e1-430b-8092-c2f9cd98ba57",
+    "job": "0fe630f6-d703-44ef-a825-3f9de79ed5de",
+    "animation_name": "disparo-pistola-electrica-no",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands"
+   },
+   "fotogramas_usados": {
+    "south": [
+     3,
+     4,
+     5
+    ],
+    "south-east": [
+     1,
+     2,
+     3
+    ],
+    "east": [
+     1,
+     2,
+     3
+    ],
+    "north-east": [
+     1,
+     2,
+     3
+    ],
+    "north": [
+     1,
+     2,
+     3
+    ],
+    "north-west": [
+     2,
+     3,
+     4
+    ],
+    "west": [
+     1,
+     2,
+     3
+    ],
+    "south-west": [
+     1,
+     2,
+     3
+    ]
+   }
+  },
+  "andar": {
+   "nota": "Andar: PixMiniMax, 12 fotogramas más el de partida, sin fotograma de partida ni de llegada (las rotaciones de PixelLab son las mismas posturas del proyecto, no hizo falta subir la postura). Estilo del andar de la pistola, el desintegrador y el lanzallamas ('quietly carries ... The stun gun is silent and idle ... Nothing else appears in the image'), sin nombrar lo que no se quiere ver (solo la chispita de la punta, que 'flickers a little'). Cinco llamadas, 8 generaciones: texto común para south-east, east, west y south-west (mismo animation_group_id, se añadieron al del este con animation_group_id y el mismo animation_name), y uno propio para south, north, north-east y north-west (de espaldas, el texto estricto). Los 8 salieron a la primera, ninguno de perfil ni dado la vuelta, sin rayos colados (solo la chispita celeste de la punta que parpadea). Fotogramas en assets/sources/conserje-48-pistola-electrica/walk/<dirección>-<n>.png. Ciclos a mano (ciclos.py: [a, n] = fotogramas a..a+n-1; diferencias de píxeles de 15 a 30): south [0,12], south-east [4,8], east [0,12], north-east [0,11], north [0,12], north-west [2,10], west [2,9], south-west [0,12]. Zapatos negros con borde gris: 0-3 píxeles sueltos en un fotograma, nada.",
+   "animation_name": "andar-pistola-electrica",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
+   "group": "d0050334-9938-4f70-b975-fb4b1562aec6 (east, west, south-east, south-west)",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. His upper body stays almost still: he quietly carries the stun gun with both hands in the same two-handed stance the whole time, pointing forward and held steady in the same place, only the tiny cyan spark at its tip flickering a little. The stun gun is silent and idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "south": {
+    "group": "58781286-fd1e-4e51-a7bf-70c41cf66d5f",
+    "job": "50bd161e-776c-4a50-a77e-a93b86db4881",
+    "animation_name": "andar-pistola-electrica-sur",
+    "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing the camera the whole time and never turns. His upper body stays almost still: he quietly carries the stun gun in front of his belly with both hands, pointing at the camera and held steady in the same place, only the tiny cyan spark at its tip flickering a little. The stun gun is silent and idle. The tail of the red bandana sways a little. Nothing else appears in the image: only the walking man on an empty background. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "7e59e1c0-c8ae-4e4b-b638-42d3915bbc69",
+    "job": "3f78418d-7572-4976-bf56-656b7090bab4",
+    "animation_name": "andar-pistola-electrica-norte",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
+    "action_description": "Strict back view the whole time: we only see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the stun gun in front of him in the same two-handed stance the whole time, only its prongs sticking up beside his head, held steady in the same place. The stun gun is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "north-east": {
+    "group": "3e0989fa-f6de-42b4-a506-e6169237756b",
+    "job": "b17944ba-0df9-496f-80db-90bc2a267138",
+    "animation_name": "andar-pistola-electrica-ne",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the stun gun in the same two-handed stance the whole time, pointing up and to the right of the image, held steady in the same place. The stun gun is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "4a1eaf3e-7c34-4641-ba0f-f920b104195f",
+    "job": "9e146c84-1654-4898-947e-24965bedf3b3",
+    "animation_name": "andar-pistola-electrica-no",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a dark navy stun gun with both hands",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the left: we only see the back of his head, his back and his left shoulder, and his body never turns sideways. He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, with a slight bob of the torso on each step. He quietly carries the stun gun in the same two-handed stance the whole time, pointing up and to the left of the image, held steady in the same place. The stun gun is calm and idle. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "comunes": {
+    "east": "dfd61ac6-961c-44a3-bfaa-104b13b70d5e",
+    "west": "12635507-01a6-48fc-81cd-07d4992ffa9e",
+    "south-east": "3cee33cc-6f37-41e7-af04-a6d47e28de97",
+    "south-west": "1a489ff4-6ec1-424d-83a3-4d6873ece1dd"
+   },
+   "cost": "8 generaciones, todas a la primera"
   }
  },
  "zombi-venenoso-48": {
