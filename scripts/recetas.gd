@@ -9,7 +9,9 @@
 #   nombre     lo que sale
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
-#   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo)
+#   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza ya lo tiene: "lanza",
+#              assets/ui/iconos/lanza.png, de tools/icono_lanza.py). Se lee siempre de aquí (icono_de), no del arma
+#              guardada en el baúl, para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
@@ -21,7 +23,7 @@ class_name Recetas
 const ARMAS := ["fregona", "bate", "cuchillo"]   # las armas que entran en las recetas
 
 const LISTA := {
-	"lanza": {"nombre": "Lanza", "con": ["fregona", "cuchillo"], "hueco": "cuerpo", "icono": "fregona", "dano": 11,
+	"lanza": {"nombre": "Lanza", "con": ["fregona", "cuchillo"], "hueco": "cuerpo", "icono": "lanza", "dano": 11,
 		"desc": "Alcance largo: una estocada estrecha que atraviesa", "edificio": "apartamentos"},
 	"aplastacabezas": {"nombre": "Aplastacabezas", "con": ["bate", "clavos"], "hueco": "cuerpo", "icono": "bate", "dano": 21,
 		"desc": "Empuja mucho y aturde un instante", "edificio": "apartamentos"},
@@ -152,7 +154,7 @@ static func para_soltar(s: Dictionary, en_suelo: Array) -> String:
 	return "" if quedan.is_empty() else quedan.pick_random()
 
 
-# El dibujo del arma que sale (el molotov tiene el suyo; las demás, de momento, el de un ingrediente)
+# El dibujo del arma que sale (el molotov y la lanza tienen el suyo; las demás, de momento, el de un ingrediente)
 static func icono_de(id: String) -> String:
 	return "molotov" if id == "molotov" else Objetos.icono(LISTA[id].icono)
 

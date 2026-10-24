@@ -67,10 +67,13 @@ const DATOS := {
 # ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
 # Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd). Hasta que tengan
 # dibujo propio, Johnny usa la hoja del arma base y le salen unas chispitas del color "detalle" en la punta
-# ("sube": hacia arriba, como fuego; si no, caen como gotas). Las de fuego usan el cargador como depósito.
-# El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
+# ("sube": hacia arriba, como fuego; si no, caen como gotas). Las que ya lo tienen llevan su "hoja" (y su
+# "momento", el del golpe en su animación) y no llevan "detalle": de momento, la lanza (conserje-48-lanza, hecha
+# con PixelLab: estocada hacia delante; con sus hojas de cada skin, tools/cara.py). Las de fuego usan el cargador
+# como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
-	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "detalle": Color("#dfe4ef")},   # estocada que atraviesa
+	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
+		"hoja": preload("res://assets/sprites/conserje-48-lanza.tres")},
 	"aplastacabezas": {"base": "bate", "empuje": 3.0, "efecto": "aturde", "detalle": Color("#9a9aa8")},
 	"bate_fuego": {"base": "bate", "efecto": "fuego", "detalle": Color("#ff9f1c"), "sube": true},
 	"partecuerpos": {"base": "bate", "arco": 170.0, "efecto": "sangra", "detalle": Color("#c0392b")},

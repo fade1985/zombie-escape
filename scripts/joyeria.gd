@@ -228,7 +228,7 @@ func poner_premio() -> void:
 	var cosa := BILLETE.new()
 	cosa.name = "Vitrina"
 	cosa.johnny = partida.johnny
-	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(a.icono))
+	cosa.icono = load("res://assets/ui/iconos/%s.png" % Recetas.icono_de(a.receta))
 	cosa.tamano = 2.0
 	cosa.tirado = true   # (quieta: no sale despedida)
 	cosa.position = d.premio.pos

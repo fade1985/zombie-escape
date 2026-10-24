@@ -1,0 +1,31 @@
+{
+  "nota": "Datos para montar la hoja de sprites de Johnny con la lanza (lo lee tools/arma.py del juego JS: py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanza). Las medidas no se ponen: valen las de siempre.",
+  "andar": {
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. En el sur, el sureste, el este y el noroeste los 12 dibujos dan la vuelta entera y el 12 vuelve a ser casi el quieto, así que van los 12 (el script solo busca tramos de 6 a 10 y elegía mal); en el noreste, del 1 al 11 (el 12 es casi el 1); en los demás, los que elegía el script, que cierran bien. El juego ajusta el ritmo al número de dibujos (johnny.gd, ritmo_andar).",
+    "ciclo": {
+      "south":      [1, 12],
+      "south-east": [1, 12],
+      "east":       [1, 12],
+      "north-east": [1, 11],
+      "north":      [4, 8],
+      "north-west": [1, 12],
+      "west":       [1, 8],
+      "south-west": [1, 8]
+    }
+  },
+  "ataque": {
+    "nota": "Qué fotogramas de PixelLab se usan en cada dirección y en qué orden (de 13: el de partida y 12 generados). La lanza ataca 1,8 veces por segundo y el golpe dura 0,5 s: 9 fotogramas. En todas, la lanza llega estirada con la rayita blanca en el tercero (índice 2; Armas.CREADAS.lanza → momento 0,222). Se quitan el dibujo de llegada (igual que el quieto) y casi todos los de la rayita despegándose. En el sur, el 0 (la guardia) va primero porque PixelLab clava ya en el 2; en el sureste se salta el 3, con una raya larga y curva que no pega.",
+    "duracion": 0.5,
+    "impacto": 2,
+    "fotogramas": {
+      "south":      [0, 1, 2, 3, 4, 6, 9, 10, 11],
+      "south-east": [1, 2, 4, 5, 6, 8, 9, 10, 11],
+      "east":       [1, 2, 3, 4, 5, 7, 9, 10, 11],
+      "north-east": [2, 3, 4, 5, 6, 7, 9, 10, 11],
+      "north":      [2, 3, 4, 5, 6, 8, 9, 10, 11],
+      "north-west": [2, 3, 4, 5, 6, 7, 9, 10, 11],
+      "west":       [2, 3, 4, 5, 6, 8, 9, 10, 11],
+      "south-west": [2, 3, 4, 5, 6, 7, 9, 10, 11]
+    }
+  }
+}

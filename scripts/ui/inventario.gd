@@ -225,7 +225,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	var n := 0
 	for i in s.baul_armas.size():
 		var a: Dictionary = s.baul_armas[i]
-		casilla(rejilla, "a%d" % i, Objetos.icono(a.icono), a.nombre, Recetas.detalle(a), Recetas.RAREZAS[a.rareza].color)
+		casilla(rejilla, "a%d" % i, Recetas.icono_de(a.receta), a.nombre, Recetas.detalle(a), Recetas.RAREZAS[a.rareza].color)
 		n += 1
 	for id in Objetos.NOMBRES:
 		if s.baul.get(id, 0) > 0:

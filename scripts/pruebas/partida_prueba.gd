@@ -11,6 +11,8 @@
 #                  portera en la baja)
 #   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y lo que hace cada una
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
+#   --lanza        la lanza con su dibujo propio: su icono en el baúl, su hoja, la estocada en las 8 direcciones y
+#                  con una skin (Armas.CREADAS.lanza)
 #   --ascensor     el ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -100,6 +102,9 @@ func empezar_prueba() -> void:
 	elif "--baul" in args:
 		set_process(false)   # sin la prueba larga
 		probar_baul()
+	elif "--lanza" in args:
+		set_process(false)   # sin la prueba larga
+		probar_lanza()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -2397,6 +2402,78 @@ func probar_skin_bombero() -> void:
 	johnny.coger("pistola")
 	johnny.vestir("")
 	await get_tree().process_frame
+
+
+# Con "--captura --lanza": la lanza con su dibujo propio (Armas.CREADAS.lanza, conserje-48-lanza; recetas.gd, su icono).
+# En la sala de mantenimiento, con dos lanzas en el baúl (una guardada antes de que tuviera icono propio, con el de la
+# fregona), Johnny se arrima al baúl y cuenta el icono de cada una (captura-lanza-baul.png). Saca una y cuenta su hoja,
+# su momento del golpe y que ya no le salen chispitas; le da una estocada a un zombi a 80 de distancia (con la fregona
+# no llegaría) y luego ataca en las 8 direcciones, con una foto de cada una justo en el golpe
+# (captura-lanza-<dirección>.png). Con la skin del bombero puesta, su hoja de la lanza y una foto
+# (captura-lanza-bombero.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+func probar_lanza() -> void:
+	var antes := Guardado.cargar()
+	var vieja := Recetas.crear("lanza", "azul")
+	vieja.icono = "fregona"   # como las que se crearon antes de que la lanza tuviera icono propio
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = [vieja, Recetas.crear("lanza", "morada")]
+		g2.skins = ["bombero"]
+		g2.skin = "")
+	johnny.vestir("")
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	print("Baúl: abierto %s · iconos de las lanzas %s (esperado: true, [\"lanza\", \"lanza\"]) · en el banco «%s» (esperado: lanza)" % [
+		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
+		Recetas.icono_de("lanza")])
+	Captura.foto("captura-lanza-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+
+	# sacada del baúl: su hoja, sin chispitas
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	johnny.coger(id)
+	var w := Armas.datos(id)
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("Lanza en la mano: hoja «%s» · momento %.3f · chispitas %s · icono «%s» (esperado: conserje-48-lanza.tres, 0.222, false, lanza)" % [
+		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.has("detalle"), Objetos.icono(id)])
+
+	# la estocada llega lejos: un zombi a 80 (el alcance de la lanza es 96; el de la fregona, 62)
+	var z := zombis_de_prueba([Vector2(80, 0)])
+	await get_tree().process_frame
+	johnny.atacar(0.0)
+	await get_tree().create_timer(0.6).timeout
+	print("Estocada a 80: vida del zombi %d (esperado: menos de 500)" % z[0].vida)
+	zombis_de_prueba([])
+
+	# las 8 direcciones, con una foto en el golpe (llega a los 0,111 s: 0,5 × 0,222)
+	for d in johnny.DIRS:
+		johnny.direccion = d
+		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
+		await get_tree().create_timer(0.13).timeout
+		Captura.foto("captura-lanza-%s.png" % d)
+		await get_tree().create_timer(0.5).timeout
+
+	# con la skin del bombero: su hoja de la lanza
+	Skins.poner("bombero")
+	johnny.vestir("bombero")
+	johnny.direccion = "e"
+	johnny.atacar(0.0)
+	await get_tree().create_timer(0.13).timeout
+	Captura.foto("captura-lanza-bombero.png")
+	print("Con el bombero: hoja «%s» (esperado: conserje-48-lanza-bombero.tres)" % johnny.sprite.sprite_frames.resource_path.get_file())
+	await get_tree().create_timer(0.5).timeout
+
+	Guardado.cambiar(func(g2):
+		g2.baul_armas = antes.baul_armas
+		g2.skins = antes.skins
+		g2.skin = antes.skin)
+	get_tree().quit()
 
 
 # Con "--captura --baul": guardar a mano en el baúl lo de la mochila (ui/inventario.gd, «Guardar de la mochila»).

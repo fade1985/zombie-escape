@@ -71,7 +71,7 @@ static func icono(id: String) -> String:
 	if id in USABLES:
 		return USABLES[id].icono
 	if Armas.es_creada(id):
-		return icono(Armas.sacadas[id].icono)   # hasta que tengan el suyo, el de un ingrediente
+		return Recetas.icono_de(Armas.sacadas[id].receta)   # el de su receta (hasta que tengan el suyo, el de un ingrediente)
 	return {"mp5": "pistola"}.get(id, id)
 
 
