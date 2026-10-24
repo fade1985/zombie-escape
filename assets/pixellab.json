@@ -1286,6 +1286,29 @@
    }
   }
  },
+ "conserje-48-mangual": {
+  "kind": "character_state",
+  "character_id": "69a8882d-6826-41c8-98a6-bbce844b760a",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Mangual en guardia",
+  "nota": "Estado de Johnny con el mangual (el arma creada: mancuernas + cadena; base la fregona, golpe en círculo de 360° que echa lejos a todos los de alrededor y los deja tirados un momento), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Johnny lo lleva con las dos manos, el palo de fregona (madera clara) cruzado sobre el hombro, y de la punta cuelga por detrás una cadena gorda de eslabones de hierro que acaba en una mancuerna pequeña de hierro (la bola del mangual). Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 7001) y la B, con colores libres (seed 7002). Elegida por el dueño la A. Las dos salieron a la primera y se parecen mucho: la cadena cuelga por detrás y la mancuerna queda a la altura de la cadera, en las 8 vistas; la B tiene la cadena más clara (gris azulada) y de espaldas se lee algo mejor (la cadena cae a un lado); en la A, de espaldas la cadena cae detrás del cuerpo y la mancuerna asoma entre las piernas. Se distingue de la súper maza (un disco enorme pegado al palo) y de la fregona (la mopa clara) a la primera: aquí hay cadena y una mancuerna pequeña colgando. Las 8 posturas de la A, en assets/sources/conserje-48-mangual/rotations/<dirección>.png; las de la B, en descartes/rotations-B/ (la B sigue en PixelLab, sin borrar). Lienzo de 64x64.",
+  "request": {
+   "edit_description": "holding a homemade gym flail like a weapon: a long light wooden mop handle gripped with both hands, with a thick chain of big dark iron links hanging from its top end and ending in a small round dark charcoal-grey iron dumbbell weight (a short steel bar with a round weight disc on each end) swinging at the end of the chain; ready stance, knees slightly bent; the handle is rested over one shoulder and the chain hangs down behind his back with the small iron dumbbell dangling low behind his hip, away from his face; the flail stays like this in every view: front, side and back; light brown wooden handle with a dark outline, chain of dark grey links with light grey highlights, charcoal grey iron dumbbell with a dark outline; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 7001
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_B": {
+   "character_id": "3c78f490-a91b-4be1-900b-2bea21a43cf3",
+   "state_name": "Mangual en guardia (colores libres)",
+   "cost": "10 generaciones",
+   "nota": "DESCARTADA por el dueño, que eligió la A (sigue en PixelLab, sin borrar). La B: mismo texto, con use_color_palette_from_reference false y seed 7002. Cadena más clara, gris azulada; de espaldas la cadena cae a un lado y la mancuerna se ve entera. Sus 8 posturas, en assets/sources/conserje-48-mangual/descartes/rotations-B/."
+  },
+  "cost_total": "20 generaciones hasta ahora (los dos estados, la B descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
