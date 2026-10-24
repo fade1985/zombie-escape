@@ -513,7 +513,7 @@
   "character_id": "8333198c-825f-47c6-b9af-365a8654f84e",
   "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
   "state_name": "Lanza en guardia",
-  "nota": "Estado de Johnny con la lanza (el arma creada: palo de fregona con un cuchillo de cocina atado en la punta), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Salió a la primera: la sujeta con las dos manos en diagonal, con la hoja arriba y hacia delante, en las 8 direcciones. Lienzo de 64x64; con use_color_palette_from_reference conserva unos 41 colores, y mide lo mismo que con el bate y el cuchillo. Las 8 posturas, tal cual, en assets/sources/conserje-48-lanza/rotations/<dirección>.png. Falta: el ataque en las otras 6 direcciones y el andar.",
+  "nota": "Estado de Johnny con la lanza (el arma creada: palo de fregona con un cuchillo de cocina atado en la punta), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Salió a la primera: la sujeta con las dos manos en diagonal, con la hoja arriba y hacia delante, en las 8 direcciones. Lienzo de 64x64; con use_color_palette_from_reference conserva unos 41 colores, y mide lo mismo que con el bate y el cuchillo. Las 8 posturas, tal cual, en assets/sources/conserje-48-lanza/rotations/<dirección>.png. Ya tiene el ataque y el andar en las 8 direcciones (parte 3); falta montar la hoja y meterla en el juego.",
   "request": {
    "edit_description": "holding a homemade spear like a weapon: a long thin wooden mop handle with no mop head, with a kitchen knife tied to its top end with grey duct tape, the steel blade pointing outward as the spear tip; gripping the shaft with both hands in a ready fighting stance, knees slightly bent; the shaft is held diagonally across his body with the blade end raised up and forward above shoulder height, away from his face, and the bottom end of the shaft pointing down toward the opposite hip; the spear stays held the same way, blade up, in every view: front, side and back; light brown wooden shaft with a dark outline, small light grey steel blade, grey tape wrapped around the joint; same face, same hair and red bandana, same clothes, same body size and proportions",
    "override_width": 64,
@@ -524,13 +524,13 @@
   "cost": "10 generaciones",
   "updated": "2026-10-24",
   "ataque": {
-   "nota": "Estocada hacia delante con una rayita blanca de aire en la punta (2026-10-24, parte 2: prueba de lado y de espaldas). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanza --lienzos <carpeta>). Fotogramas en assets/sources/conserje-48-lanza/ataque/. PixelLab devuelve el este en 108x96 y el norte en 96x120 (el lienzo se mide alrededor del golpe). La rayita sale en la punta y luego se despega hacia delante.",
+   "nota": "Estocada hacia delante con una rayita blanca de aire en la punta (2026-10-24, parte 2: prueba de lado y de espaldas). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanza --lienzos <carpeta>). Fotogramas en assets/sources/conserje-48-lanza/ataque/. PixelLab devuelve el este en 108x96 y el norte en 96x120 (el lienzo se mide alrededor del golpe). La rayita sale en la punta y luego se despega hacia delante. Parte 3 (2026-10-24): las otras 6 direcciones. En todas se usa el lienzo de partida de su dirección como fotograma de partida y de llegada. Hubo que repetir el sur (el primero clava en diagonal hacia el suelo; el segundo, en vertical, tapa la cara con el palo: el dueño elige), el noreste (en el primero se giraba hacia la cámara al empezar) y el sureste (en el primero clavaba hacia la derecha, como el este).",
    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a homemade spear made of a wooden mop handle with a kitchen knife taped to its tip",
    "east": {
     "group": "2713389e-e33e-4767-9cc0-fb583bfe9ec9",
     "animation_name": "ataque-lanza",
     "cost": "1 generación",
-    "nota": "Salió bien a la primera: recoge la lanza, la pone horizontal a la altura del pecho y la clava hacia delante.",
+    "nota": "Salió bien a la primera: recoge la lanza, la pone horizontal a la altura del pecho y la clava hacia delante. El mismo grupo y el mismo texto sirven para west y south-west (cambiando initial_pose); el south-east de este grupo está descartado.",
     "initial_pose": "standing in a ready guard stance facing right, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the right side of the image",
     "action_description": "He steps forward with the lead foot and drives the spear straight ahead in one fast, hard, powerful thrust: he lowers the shaft to chest height, level and pointing straight ahead, and pushes it forward with both hands, arms extending, so the knife blade stabs far out in front of him. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing straight ahead in the direction of the thrust, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance, the blade raised up and forward again. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
    },
@@ -549,9 +549,76 @@
     "cost": "1 generación",
     "nota": "DESCARTADO (sigue en PixelLab, sin borrar): con el texto de espaldas de siempre Johnny se ponía de perfil a mitad del golpe.",
     "action_description": "Seen from behind the whole time: he keeps his back to the camera and never turns around, his face is never visible. He steps forward with the lead foot and drives the spear in one fast, hard thrust away from the camera, toward the top of the image: he brings the shaft up in front of him and pushes it forward with both hands, so the knife blade stabs far out ahead of him, above his head, pointing up the image. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing up the image, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   },
+   "comun": {
+    "nota": "west y south-west, con el texto de east (en su mismo grupo, 2713389e) y su initial_pose. Las dos, bien a la primera.",
+    "cost": "2 generaciones",
+    "initial_pose": {
+     "west": "standing in a ready guard stance facing left, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the left side of the image",
+     "south-west": "standing in a ready guard stance in three-quarter front view, facing toward the camera and to the left, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the left side of the image"
+    }
+   },
+   "south": {
+    "group": "cfeba9d1-9240-46f8-abfc-7809db44fe22",
+    "animation_name": "ataque-lanza-sur",
+    "cost": "1 generación",
+    "nota": "La que hay en assets/sources/conserje-48-lanza/ataque/ (pendiente de que el dueño elija): clava la lanza en diagonal hacia abajo a la derecha, hacia el suelo junto al pie, con una estela blanca en forma de flecha.",
+    "initial_pose": "standing in a ready guard stance facing the camera, gripping the spear shaft diagonally across his chest with both hands, the knife blade raised up on the right side of the image",
+    "action_description": "Strict front view the whole time: he keeps facing the camera, his face, chest and both shoulders stay turned toward the camera, and his body never turns sideways. His feet stay planted. Using mostly his arms, he lowers the spear in front of his body, pointing down the image, and drives it in one fast, hard thrust toward the camera, toward the bottom of the image, so the knife blade stabs far out in front of him, below his waist. At the moment the arms are fully extended, a short straight white streak of air appears just below the blade tip, pointing down the image, no longer than the blade itself. The streak vanishes at once as he pulls the spear back up and settles cleanly into the starting guard stance, the blade raised on the right side of the image. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "south_2": {
+    "group": "532356f6-10c0-4ada-a07e-56b67b0b20a6",
+    "animation_name": "ataque-lanza-sur-2",
+    "cost": "1 generación",
+    "nota": "La otra del sur (no está en assets/sources; se vuelve a bajar gratis si el dueño la elige): pone el palo vertical delante del cuerpo y clava hacia abajo entre los pies, con una raya blanca larga; el palo le tapa la cara casi todo el golpe.",
+    "initial_pose": "standing in a ready guard stance facing the camera, gripping the spear shaft diagonally across his chest with both hands, the knife blade raised up on the right side of the image",
+    "action_description": "Strict front view the whole time: he keeps facing the camera, his face, chest and both shoulders stay turned toward the camera, and his body never turns sideways. His feet stay planted. He swings the spear down in front of the middle of his body until the shaft is straight up and down, the knife blade pointing straight down the image, and drives it in one fast, hard thrust toward the camera: the blade shoots straight down in the middle of the image, between his feet and past them. At the moment the arms are fully extended, a short thin straight white line appears just below the blade tip, pointing straight down, no longer than the blade itself. The line vanishes at once as he pulls the spear back up and settles cleanly into the starting guard stance, the blade raised on the right side of the image. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down front view throughout the entire fluid animation."
+   },
+   "south-east": {
+    "group": "7c81bb78-4b89-4270-976c-4419d3e6250c",
+    "animation_name": "ataque-lanza-sureste-2",
+    "cost": "1 generación",
+    "nota": "La buena (segunda): clava hacia abajo a la derecha. En el fotograma 3 sale una raya blanca larga y curva que no pega: quitarlo al elegir.",
+    "initial_pose": "standing in a ready guard stance in three-quarter front view, facing toward the camera and to the right, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the right side of the image",
+    "action_description": "He keeps the same three-quarter front view the whole time, facing toward the camera and to the right. He steps forward with the lead foot and drives the spear in one fast, hard, powerful thrust toward the lower right of the image: he lowers the shaft to waist height, angled down and to the right, and pushes it forward with both hands, arms extending, so the knife blade stabs far out ahead of him toward the lower right. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing down and to the right, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance, the blade raised up and forward again. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+   },
+   "south-east_descartado": {
+    "group": "2713389e-e33e-4767-9cc0-fb583bfe9ec9",
+    "cost": "1 generación",
+    "nota": "DESCARTADO (sigue en PixelLab, sin borrar, dentro del grupo de east, west y south-west): con el texto común clavaba hacia la derecha, como el este."
+   },
+   "north-east": {
+    "group": "a8c801dd-4efc-4ae8-975b-1a3d83fcade2",
+    "animation_name": "ataque-lanza-noreste-2",
+    "cost": "1 generación",
+    "nota": "La buena (segunda), con el texto estricto: se queda de espaldas en tres cuartos todo el golpe.",
+    "initial_pose": "standing in a ready guard stance in three-quarter back view, facing away from the camera and to the right, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the right side of the image",
+    "action_description": "Strict three-quarter back view the whole time, facing away from the camera and to the right: we only see the back of his head, his back and his right shoulder, his face is never visible, and he never turns toward the camera. His feet stay planted. Using mostly his arms and shoulders, he drives the spear in one fast, hard thrust away from the camera, toward the upper right of the image: the shaft stays angled up and to the right and he pushes it forward with both hands, so the knife blade stabs far out ahead of him toward the upper right. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing up and to the right, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-east_descartado": {
+    "group": "de6430d9-ee9b-494b-9a2d-328851725af0",
+    "animation_name": "ataque-lanza-diagonales",
+    "cost": "1 generación",
+    "nota": "DESCARTADO (sigue en PixelLab, sin borrar): en los fotogramas 1 a 3 se giraba hacia la cámara.",
+    "action_description": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the right, and never turns to face the camera. He steps forward with the lead foot and drives the spear in one fast, hard thrust away from the camera, toward the upper right of the image: he levels the shaft and pushes it forward with both hands, so the knife blade stabs far out ahead of him, pointing up and to the right. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing up and to the right, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
+   },
+   "north-west": {
+    "group": "a517904d-cce5-41cf-acb0-c57953837b29",
+    "animation_name": "ataque-lanza-diagonales-oeste",
+    "cost": "1 generación",
+    "nota": "Bien a la primera.",
+    "initial_pose": "standing in a ready guard stance in three-quarter back view, facing away from the camera and to the left, gripping the spear shaft diagonally with both hands, the knife blade raised up and forward on the left side of the image",
+    "action_description": "He keeps the same three-quarter back view the whole time, facing away from the camera and to the left, and never turns to face the camera. He steps forward with the lead foot and drives the spear in one fast, hard thrust away from the camera, toward the upper left of the image: he levels the shaft and pushes it forward with both hands, so the knife blade stabs far out ahead of him, pointing up and to the left. At the moment the arms are fully extended, a short straight white streak of air appears just ahead of the blade tip, pointing up and to the left, no longer than the blade itself. The streak vanishes at once as he pulls the spear back and settles cleanly into the starting guard stance. Only one thrust. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down three-quarter back view throughout the entire fluid animation."
    }
   },
-  "cost_total": "13 generaciones hasta ahora: 10 del estado y 3 de la prueba del ataque (una de espaldas, repetida)"
+  "cost_total": "30 generaciones: 10 del estado, 12 del ataque (8 direcciones y 4 repetidas: norte, sur, noreste y sureste) y 8 del andar",
+  "andar": {
+   "nota": "PixMiniMax, 12 fotogramas más el de partida, las 8 direcciones en una sola llamada sin fotograma de partida ni de llegada (usa la rotación de cada dirección). Todas bien a la primera: no suelta la lanza ni se gira. Fotogramas en assets/sources/conserje-48-lanza/walk/ (lienzos de 80x80, el norte de 72x72 y el noroeste de 76x76).",
+   "group": "ed127316-3410-4792-955a-b5971008cfca",
+   "animation_name": "andar-lanza",
+   "cost": "8 generaciones",
+   "action_description": "He walks forward in place at a steady pace in a smooth, seamless looping walk cycle: his legs stride alternately, knees lifting and boots stepping one after the other, with a slight bob of the torso on each step. He keeps facing exactly the same direction the whole time and never turns. He keeps holding the spear in the same guard grip with both hands the whole time: the wooden shaft stays diagonal across his body and the knife blade stays raised up and forward in the same place, only swaying very slightly with each step. His arms do not swing and never let go of the spear. The tail of the red bandana sways a little. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
