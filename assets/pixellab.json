@@ -2257,6 +2257,29 @@
    "cost": "8 generaciones, todas a la primera"
   }
  },
+ "conserje-48-bumeran": {
+  "kind": "character_state",
+  "character_id": "b5bb95c9-00f1-4b87-989d-09d7e5229bcd",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "state_name": "Bumerán en guardia",
+  "nota": "Estado de Johnny con el bumerán segador (el arma creada: llave inglesa + hacha; base la pistola, ritmo 1, alcance 300, velocidad 460, sin munición: sale girando, atraviesa a los zombis y vuelve a la mano, scripts/bumeran.gd), hecho el 2026-10-24 con la receta /arma-nueva del juego JS (paso 1). Un bumerán grande de acero pulido, curvo como una hoja de hacha, con el filo blanco brillante por fuera y el mango de la llave inglesa envuelto en rojo en el codo de la V, sujeto con la mano derecha a la altura del hombro, con el codo doblado, como quien va a lanzarlo, y la otra mano libre (decidido con el dueño: una mano lista para lanzar, mango rojo, y la hoja lo dibuja siempre en la mano aunque el juego lo dibuje volando encima, como en los látigos). Se pidieron dos versiones a la vez con el mismo texto (20 generaciones): la A, con los colores de Johnny (use_color_palette_from_reference, seed 10001) y la B, con colores libres (seed 10002). Elegida la A (el dueño, 2026-10-24): cara y ropa limpias, unos 40 colores como el resto de Johnny, un solo bumerán en las 8 direcciones y el acero claro con el mango rojo se distingue de la pistola (negra), el desintegrador (gris con depósito verde), el lanzallamas (rojo) y el supersoplete (amarillo). En la B salen solo 21 colores y el suroeste lleva DOS bumeranes, uno en cada mano. En las dos la forma sale más de hoz que de V. De frente y de espaldas el bumerán queda junto al hombro y no cruza el cuerpo: no hizo falta rehacer south y north. Las 8 posturas de la A, en assets/sources/conserje-48-bumeran/rotations/<dirección>.png (64x64, pies en la fila 55, el bumerán llega a las filas 1-4); las de la B, en descartes/rotations-B/.",
+  "request": {
+   "edit_description": "holding a big steel boomerang in his right hand, raised beside his shoulder with the elbow bent, ready to throw it, his left hand relaxed and free: a large chunky V-shaped boomerang made of bright polished steel, shaped like a curved axe blade with a bright white sharp edge along its outer curve, and a short red-wrapped wrench handle at the elbow of the V; the boomerang stays raised beside his shoulder in every view: front, side and back; bright steel V-shaped blade with a white edge and a red handle; same face, same hair and red bandana, same clothes, same body size and proportions",
+   "override_width": 64,
+   "override_height": 64,
+   "use_color_palette_from_reference": true,
+   "seed": 10001
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-10-24",
+  "alternativa_B": {
+   "character_id": "d4909466-9ce8-40b1-ad59-e8818b4db90d",
+   "state_name": "Bumerán en guardia (colores libres)",
+   "cost": "10 generaciones",
+   "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 10002. Descartada: solo 21 colores y en el suroeste Johnny lleva dos bumeranes (uno en cada mano). Sus 8 posturas, en assets/sources/conserje-48-bumeran/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
+  },
+  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la B, descartada)"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",
