@@ -2694,7 +2694,43 @@
    "cost": "10 generaciones",
    "nota": "La B: mismo texto, con use_color_palette_from_reference false y seed 12002. Descartada: solo 27 colores y el gancho sale pequeño y de dos puntas (parece un martillo). Sus 8 posturas, en assets/sources/conserje-48-garfio/descartes/rotations-B/ (sigue en PixelLab, sin borrar)."
   },
-  "cost_total": "20 generaciones hasta ahora (parte 1): 20 de los dos estados (la B, descartada)"
+  "cost_total": "22 generaciones hasta ahora (parte 2): 20 de los dos estados (la B, descartada) y 2 de la prueba del lanzamiento (east y north)",
+  "ataque": {
+   "nota": "Lanzamiento: el gesto de lanzar el garfio (el brazo atrás, lo lanza hacia delante y vuelve a la guardia con el gancho en la mano y el rollo de cuerda en la otra). El gancho que vuela, la cuerda estirada y el zombi arrastrado los dibuja el juego (scripts/garfio.gd): la hoja solo lleva el gesto. PixMiniMax, 8 fotogramas más el de partida, con el lienzo como fotograma de partida y de llegada. LIENZOS GRANDES hechos a mano desde el principio (los mismos del desintegrador): east 136x96 con la postura en (16,20) y north 96x112 en (16,44) (1 generación cada una). Fotogramas en assets/sources/conserje-48-garfio/ataque/<dirección>-<n>.png, sacados del zip de la hoja (api.pixellab.ai/mcp/characters/<id>/spritesheet; backblaze seguía caído) con una ventana común (east 72x59, north 52x78). PRUEBA (parte 2, 2026-10-24): east y north salieron bien a la primera, Johnny no se da la vuelta de espaldas, el gancho no sale cortado por el borde y no hay cuerda larga dibujada (solo un bucle corto que cuelga del gancho). East: 0 = guardia, 1-2 = el brazo se echa atrás con el gancho detrás, 3 = el gancho sube sobre la cabeza, 4-6 = el brazo estirado hacia delante con el gancho en la mano (lanzamiento), 7 = recoge el brazo, 8 = guardia. North: 0 = guardia, 1-2 = el brazo atrás, 3-6 = el brazo estirado recto hacia arriba con el gancho sobre la cabeza (lanzamiento), 7 = recoge, 8 = guardia. En ningún fotograma hay un gancho suelto: el gancho siempre está en la mano. Para el juego (parte 3, como el bumerán): 'impacto' 0, el gancho sale en el instante en que empieza 'attack', así que los fotogramas empiezan en el lanzamiento (brazo ya estirado) y acaban en la guardia; 'duracion' <= 0,85 s (ritmo 0,9). Sin 'boca': 'fogonazo' ni 'efectos' (como el bumerán, andando no hay gesto).",
+   "animation_name": "lanzar-garfio",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
+   "initial_pose": {
+    "east": "standing facing right, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side",
+    "north": "standing seen from behind, his back to the camera, facing away toward the top of the image, his right arm raised with the elbow bent, the gray three-pronged steel hook held in his hand beside his shoulder, ready to throw it, the coil of straw-colored rope in his left hand at his side"
+   },
+   "action_description": "He throws the hook once. His right arm winds back for an instant, then he whips it forward, toward the right of the image, in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted and he keeps facing exactly the same direction. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, the hook raised beside his shoulder and the rope coil at his side. Only one throw, no second throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation.",
+   "east": {
+    "group": "01a0dc43-2575-4481-ac93-5b81770f270a",
+    "job": "9999c1e2-3a8a-4662-870d-5657426b89f4",
+    "animation_name": "lanzar-garfio",
+    "cost": "1 generación"
+   },
+   "north": {
+    "group": "36f280ec-f5ea-4476-aa98-c417b71034ad",
+    "job": "e78a58f2-8091-4082-be02-4e063e8fca96",
+    "animation_name": "lanzar-garfio-norte",
+    "cost": "1 generación",
+    "subject_description": "a young male janitor seen from behind, brown hair and a red bandana, cream shirt and blue work overalls, holding a gray three-pronged steel hook in his raised right hand and a coil of straw-colored rope in his left hand",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head, the knot of the red bandana and the back of his overalls; he never turns around and his face is never visible. He throws the hook once, away from the camera, toward the top of the image. His right arm winds back for an instant, then he whips it forward and up past his head in a quick overhand throw, snapping his wrist as the arm reaches full extension, while his feet stay planted. He keeps a firm grip on the steel hook the whole time and never lets go of it, and the coil of rope stays in his left hand. Then he draws the arm back and settles cleanly into the starting stance, still seen from behind, the hook raised beside his shoulder. Only one throw. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout."
+   },
+   "subidas": {
+    "nota": "Lienzos de partida (y de llegada) subidos a PixelLab el 2026-10-24; caducan el 2026-10-27. Se subieron los 8 (los de las otras 6 direcciones se usan en la parte 3). Lienzo y posición de la postura (64x64): east 136x96 en (16,20); west 136x96 en (56,20); south 96x144 en (16,12); south-east 136x128 en (16,12); south-west 136x128 en (56,12); north 96x112 en (16,44); north-east 136x112 en (16,44); north-west 136x112 en (56,44).",
+    "east": "a788d3af-408d-488d-88f1-b77d706d0b32",
+    "north": "01798791-2802-43aa-9111-81c608209f76",
+    "west": "78d25771-7d4f-42da-bd89-ff91e2c9f4ad",
+    "south": "555ee4a8-cb49-41e1-85b6-9e1d5f13899a",
+    "south-east": "2c3b58bf-8cd1-4559-9226-c784a1dd4a0d",
+    "south-west": "7753c9f6-6187-4f16-9902-d362547de654",
+    "north-east": "f4e905eb-148f-4273-9e69-d39f08e0d42e",
+    "north-west": "3b91d4a4-6354-40f5-aeea-564a5ddf7190"
+   },
+   "cost": "2 generaciones hasta ahora (parte 2): east y north de prueba"
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
