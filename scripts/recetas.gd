@@ -11,12 +11,12 @@
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico, el lanzallamas, el supersoplete y el desintegrador ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
+#              eléctrico, el lanzallamas, el supersoplete, el desintegrador y el bumerán ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
 #              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png, lanzallamas.png, supersoplete.png y desintegrador.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png y bumeran.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
 #              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py e
-#              icono_supersoplete.py e icono_desintegrador.py). Se lee siempre de
+#              icono_supersoplete.py, icono_desintegrador.py e icono_bumeran.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
@@ -54,7 +54,7 @@ const LISTA := {
 		"desc": "Explota y deja un charco ácido grande", "edificio": "apartamentos"},
 	"inmovilizadora": {"nombre": "Inmovilizadora", "con": ["taser", "bate"], "hueco": "cuerpo", "icono": "inmovilizadora", "dano": 20,
 		"desc": "La descarga aturde y salta a un zombi cercano", "edificio": "apartamentos"},
-	"bumeran": {"nombre": "Bumerán segador", "con": ["llave_inglesa", "hacha"], "hueco": "fuego", "icono": "hacha", "dano": 14,
+	"bumeran": {"nombre": "Bumerán segador", "con": ["llave_inglesa", "hacha"], "hueco": "fuego", "icono": "bumeran", "dano": 14,
 		"desc": "Se lanza, atraviesa zombis y vuelve a la mano; sin munición", "edificio": "apartamentos"},
 	"latigo": {"nombre": "Látigo escorpión", "con": ["cuerda", "cuchillo"], "hueco": "cuerpo", "icono": "latigo", "dano": 12,
 		"desc": "Alcance largo y envenena", "edificio": "apartamentos"},

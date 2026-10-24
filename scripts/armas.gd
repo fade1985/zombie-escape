@@ -83,7 +83,9 @@ const DATOS := {
 # (conserje-48-lanzallamas: la pistola de agua con el depósito rojo de gas, un tubo largo y la llamarada de la boca) y el
 # supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
 # la boca acampanada y una llamarada en cono) y el desintegrador (conserje-48-desintegrador: la pistola de agua con el
-# depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido), con sus hojas de cada skin (tools/cara.py). Las de fuego usan el
+# depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
+# bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd), con sus
+# hojas de cada skin (tools/cara.py). Las de fuego usan el
 # cargador como depósito. El daño no está aquí: lo trae cada arma creada (receta + rareza, recetas.gd)
 const CREADAS := {
 	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
@@ -139,8 +141,16 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
 		"boca": {"s": Vector2(0, -17), "se": Vector2(18, -19), "e": Vector2(24, -26), "ne": Vector2(25, -36),
 			"n": Vector2(6, -47), "no": Vector2(-23, -35), "o": Vector2(-23, -26), "so": Vector2(-19, -19)}},
+	# el bumerán segador: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia con el bumerán en
+	# la mano; el que sale volando y vuelve lo dibuja el juego, bumeran.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla
+	# es de 94x92, con los pies en 45,76, porque el brazo llega a 41 píxeles a un lado, 45 al otro, 72 hacia arriba (de espaldas, con
+	# el bumerán de canto) y 12 hacia abajo. La boca NO sale de arma.py (no hay fogonazo naranja que buscar:
+	# conserje-48-bumeran.json no tiene "muzzle"): es la mano que sujeta el bumerán (el mango rojo) del dibujo quieto, a mano
 	"bumeran": {"base": "pistola", "ritmo": 1.0, "alcance": 300.0, "velocidad": 460.0, "cargador": 1, "recarga": 0.0,
-		"empuje": 1.5, "efecto": "bumeran", "detalle": Color("#c0c4d0"), "sin_municion": true},
+		"empuje": 1.5, "efecto": "bumeran", "sin_municion": true, "pies": Vector2(45, 76),
+		"hoja": preload("res://assets/sprites/conserje-48-bumeran.tres"),
+		"boca": {"s": Vector2(-11, -36), "se": Vector2(-7, -35), "e": Vector2(-1, -37), "ne": Vector2(7, -37),
+			"n": Vector2(12, -36), "no": Vector2(9, -38), "o": Vector2(2, -40), "so": Vector2(4, -35)}},
 	# las del centro comercial: chispas que aturden y saltan, y el garfio, que sale y vuelve como el bumerán
 	"pistola_electrica": {"base": "pistola", "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0, "cargador": 30, "recarga": 2.0,
 		"empuje": 0.2, "efecto": "chispa", "detalle": Color("#9fe8ff"), "sube": true},

@@ -2,7 +2,8 @@
 # alcance o chocar con una pared o un mueble, da la vuelta y vuelve a Johnny (pegando otra vez a la vuelta).
 extends Node2D
 
-const ALTURA := 22.0
+const ALTURA_CUERPO := 22.0
+const BAJADA := 14.0
 
 var johnny: Node2D
 var angulo := 0.0
@@ -15,6 +16,11 @@ var origen := Vector2.INF   # de dónde salió (se apunta en el primer paso, ya 
 var golpeados: Array = []
 var giro := 0.0
 var t := 0.0
+var altura := 50.0   # a qué altura sobre sus pies se dibuja: sale de la mano de Johnny y baja a la del cuerpo
+
+
+func _ready() -> void:
+	z_index = 4   # por encima de Johnny y de los zombis: sale de su mano y no debe quedar detrás de su dibujo
 
 
 func _physics_process(delta: float) -> void:
@@ -22,6 +28,7 @@ func _physics_process(delta: float) -> void:
 		origen = global_position
 	t += delta
 	giro += delta * 22.0
+	altura += (ALTURA_CUERPO - altura) * (1.0 - exp(-delta * BAJADA))
 	var hacia := Vector2.from_angle(angulo)
 	if ida:
 		var despues := global_position + hacia * velocidad * delta
@@ -52,6 +59,6 @@ func _physics_process(delta: float) -> void:
 
 func _draw() -> void:
 	# una "V" plateada con su borde oscuro, girando
-	draw_set_transform(Vector2(0, -ALTURA), giro)
+	draw_set_transform(Vector2(0, -altura), giro)
 	for capa in [[9.0, Color("#1d1b2c")], [5.0, Color("#cfd3dc")]]:
 		draw_polyline(PackedVector2Array([Vector2(-13, -11), Vector2.ZERO, Vector2(13, -11)]), capa[1], capa[0])

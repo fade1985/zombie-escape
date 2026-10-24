@@ -508,15 +508,17 @@ func atacar(angulo: float) -> void:
 		ataque_dur = minf(largo_anim, 0.95 / w.ritmo)
 	var ritmo_anim := largo_anim / ataque_dur
 	if w.tipo == "fuego" and velocity.length() > 20.0:
-		# Disparando mientras anda: sigue andando y los efectos del disparo se pintan encima
-		efectos.speed_scale = ritmo_anim
-		efectos.play("efectos_" + direccion)
-		efectos.set_frame_and_progress(0, 0.0)
-		efectos.show()
+		# Disparando mientras anda: sigue andando y los efectos del disparo se pintan encima. El bumerán no tiene
+		# (su hoja solo lleva el gesto de lanzar, que no se pinta andando): sigue andando sin gesto y sin retroceso
 		ataque_t = -1.0   # las piernas siguen con la animación de andar
-		# como andando no se ve el retroceso de los brazos, el disparo empuja a Johnny entero hacia atrás
-		patada = -Vector2.from_angle(angulo) * PATADA * (1.6 if w.get("perdigones", 1) > 1 else 1.0)
-		patada_t = 0.0
+		if efectos.sprite_frames.has_animation("efectos_" + direccion):
+			efectos.speed_scale = ritmo_anim
+			efectos.play("efectos_" + direccion)
+			efectos.set_frame_and_progress(0, 0.0)
+			efectos.show()
+			# como andando no se ve el retroceso de los brazos, el disparo empuja a Johnny entero hacia atrás
+			patada = -Vector2.from_angle(angulo) * PATADA * (1.6 if w.get("perdigones", 1) > 1 else 1.0)
+			patada_t = 0.0
 	else:
 		if sprite.animation.begins_with("andar"):
 			# Si golpea andando, las piernas siguen el paso desde donde iba (animar() las enseña)
