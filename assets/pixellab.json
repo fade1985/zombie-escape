@@ -1446,7 +1446,29 @@
    "cost": "10 generaciones",
    "nota": "La A: mismo texto, con use_color_palette_from_reference true y seed 5001. Johnny sale igual que siempre; el hielo, más blanco y roto, parecido a un chorro de agua. DESCARTADA por el dueño, que eligió la B (sigue en PixelLab, sin borrar). Sus 8 posturas, en assets/sources/conserje-48-bate-helado/descartes/rotations-A/."
   },
-  "cost_total": "20 generaciones por ahora: los dos estados (la A, descartada)"
+  "cost_total": "22 generaciones por ahora: 20 de los dos estados (la A, descartada) y 2 de la prueba del golpe de lado y de espaldas",
+  "ataque": {
+   "nota": "Prueba de lado y de espaldas (2026-10-24, parte 2). PixMiniMax, 12 fotogramas más el de partida; fotograma de partida y de llegada: el dibujo quieto en un lienzo de 96x96 (PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-bate-helado --lienzos <carpeta>; los upload:<id> de los 8, en 'subidas', caducan a los 3 días). Fotogramas en assets/sources/conserje-48-bate-helado/ataque/. Los dos salieron a la primera (1 generación cada uno). Textos adaptados de los de la inmovilizadora (sin rayos: estela blanca y azul claro de aire helado con copos de nieve y cristalitos de hielo). De lado: se prepara con el bate al hombro (0-2), barre por delante con una estela enorme blanca y azul claro que da la vuelta entera a Johnny (3-7, la más grande en 4-5; el lienzo sale de 136x104) y vuelve a la guardia (8-12). De espaldas: casi todo el golpe de espaldas (0-6, con la estela grande en el 6); en 7-10 se gira de perfil, mirando a la izquierda de la imagen, con el bate abajo cruzado por delante, y en 11-12 vuelve al hombro derecho de la imagen.",
+   "subidas": "2026-10-24: south upload:44fddaab-9445-4448-9ed7-8b0f66e50dbd, south-east upload:b43b4ba9-c7a8-4bd6-a642-eb0e1af8d469, east upload:8f72aac1-3ab9-4dcd-b03b-6834e66888c3, north-east upload:e305e0a3-d224-48ba-8453-bc7a823d711e, north upload:c5291be2-546b-40a1-9fb0-813b9486865b, north-west upload:68c68924-2ea5-4b8c-990a-bdaf662967a5, west upload:060cefdf-604f-462f-8db9-611cc89ef02b, south-west upload:442fbacf-329e-4bfc-be4f-f97c2347eced",
+   "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat whose thick end is covered in light blue ice and frost with ice crystals",
+   "east": {
+    "group": "c4d41475-12e8-46d4-917d-6019e573120a",
+    "animation_name": "ataque-bate-helado",
+    "cost": "1 generación",
+    "nota": "Bien a la primera. PixelLab lo devuelve en 136x104.",
+    "initial_pose": "standing in a batter's guard stance facing right, gripping the frozen bat with both hands, the bat raised up and tilted back over his rear shoulder, the frosted end with ice crystals sticking up above shoulder height",
+    "action_description": "He winds up, twisting his torso back with the frozen bat cocked over his rear shoulder, then steps forward with the lead foot and swings the bat hard in one wide horizontal arc at chest height, sweeping across in front of him from one side to the other, hips and shoulders rotating through the blow. The bat leaves a bright white and light blue crescent-shaped swoosh of icy air behind it along the whole arc of the swing, with snowflakes and small ice crystals flying off it. He follows through with the bat wrapping around to his other side, the tail of the red bandana flicking with the motion. The swoosh fades away, he brings the bat back up and settles cleanly into the starting guard stance. Only one swing. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+   },
+   "north": {
+    "group": "77cb4823-08af-4024-bbc6-28481bff0489",
+    "animation_name": "ataque-bate-helado-norte",
+    "cost": "1 generación",
+    "nota": "Bien a la primera: de espaldas casi todo el golpe, la estela grande en el 6; en 7-10 se gira de perfil. El texto es el estricto del partecuerpos/inmovilizadora con el bate helado y la estela blanca y azul claro (sin rayos). PixelLab lo devuelve en 96x96.",
+    "subject_description": "a young male janitor with brown hair and a red bandana, cream shirt and blue work overalls, holding a wooden baseball bat whose thick end is covered in light blue ice and frost with ice crystals, seen from behind",
+    "initial_pose": "standing in a batter's guard stance seen from behind, his back to the camera, facing away toward the top of the image, gripping the frozen bat with both hands, the bat raised up over his shoulder on the right side of the image, the frosted end with ice crystals sticking up",
+    "action_description": "Strict back view the whole time: we only ever see the back of his head and his back, both shoulders stay level and square to the camera, and his body never turns sideways. He never bends over, and the bat never drops to his sides. His feet stay planted. Using mostly his arms, he lifts the frozen bat straight up above his head, then chops it forward in one fast, hard blow away from the camera, so the icy end lands far ahead. Then a short crescent-shaped white and light blue swoosh of icy air appears above his head along the arc of the bat, with snowflakes and small ice crystals flying off it. The swoosh vanishes at once as he brings the bat back over his shoulder on the right side of the image and settles cleanly into the starting guard stance. Only one blow. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down back view throughout the entire fluid animation."
+   }
+  }
  },
  "zombi-venenoso-48": {
   "kind": "character",
