@@ -7,6 +7,7 @@
     15,
     65
   ],
+  "scale": 1,
   "anims": {
     "idle": {
       "fps": 1,
