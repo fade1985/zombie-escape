@@ -1,5 +1,5 @@
 # Los efectos de sonido (como src/sfx.js del JS): no hay archivos de audio, cada efecto son unas notas
-# sintetizadas (onda cuadrada, triangular, senoidal o de sierra que baja o sube de tono y se apaga).
+# sintetizadas (onda cuadrada, triangular, senoidal o de sierra que baja o sube de tono y se apaga, o ruido: un siseo).
 # La primera vez que suena un efecto se "graba" en memoria y luego se reutiliza.
 #
 # Es un nodo que siempre está (autoload en project.godot), así que desde cualquier script:
@@ -51,6 +51,9 @@ const EFECTOS := {
 	"fuego": {"notas": [[120, 0.5, "sierra", 0.05, -60], [700, 0.3, "sierra", 0.015, -500, 0.05]]},
 	# la llamarada del lanzallamas: suena mientras sale, un rugido que se repite pisándose (llamarada.gd)
 	"llamarada": {"hueco": 200, "notas": [[95, 0.26, "sierra", 0.035, -25], [420, 0.18, "sierra", 0.01, -250, 0.02]]},
+	# el chorro del lanza ácido: un siseo de agua a presión (fino y grave a la vez) que se repite pisándose (llamarada.gd)
+	"chorro_acido": {"hueco": 120, "notas": [[3200, 0.2, "ruido", 0.018, -1400], [900, 0.17, "ruido", 0.012, -300, 0.03]]},
+	"gota": {"hueco": 150, "notas": [[1500, 0.06, "seno", 0.01, -900]]},   # la gota del lanza ácido llega al suelo (goteo.gd)
 	"chisporroteo": {"hueco": 450, "notas": [[1800, 0.12, "sierra", 0.012, -900]]},    # sizzle (quemarse)
 	"curar": {"notas": [[660, 0.1, "seno", 0.05, 200], [990, 0.16, "seno", 0.045, 300, 0.08]]},
 	"disparo_aliado": {"hueco": 70, "notas": [[760, 0.05, "cuadrada", 0.018, -550]]},
@@ -276,10 +279,15 @@ func sintetizar(notas: Array) -> AudioStreamWAV:
 		var empieza := int(nota(n, 5, 0.0) * MEZCLA)
 		var cuantas := int(dur * MEZCLA)
 		var fase := 0.0
+		var azar := 0.0
 		for i in cuantas:
 			var t := float(i) / cuantas
+			var antes := fase
 			fase = fmod(fase + f0 * pow(f1 / f0, t) / MEZCLA, 1.0)
-			muestras[empieza + i] += forma(onda, fase) * vol * pow(0.0001 / vol, t)
+			# el ruido: un número al azar nuevo en cada vuelta (cuanto más agudo, más fino el siseo)
+			if onda == "ruido" and fase < antes:
+				azar = randf_range(-1.0, 1.0)
+			muestras[empieza + i] += (azar if onda == "ruido" else forma(onda, fase)) * vol * pow(0.0001 / vol, t)
 	var datos := PackedByteArray()
 	datos.resize(muestras.size() * 2)
 	for i in muestras.size():

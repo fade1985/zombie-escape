@@ -40,11 +40,12 @@
 #                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
 #                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.supersoplete)
-#   --desintegrador el desintegrador, en el juego «Lanza ácido» (la tercera creada a distancia con dibujo propio): su nombre
-#                  (también el de las creadas cuando se llamaba «Desintegrador»), su icono, su hoja con el chorrito de
-#                  ácido de la boquilla, sin chispitas, que el chorro quita vida y deja ácido al zombi que tiene delante y
-#                  no llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
-#                  (Armas.CREADAS.desintegrador)
+#   --desintegrador el lanza ácido (por dentro, el desintegrador), un lanzallamas de ácido: su nombre (también el de las
+#                  creadas cuando se llamaba «Desintegrador»), su icono, su hoja (la del lanzallamas con las bombonas
+#                  verdes), la gota de ácido que cuelga de la boquilla y cae, el chorro que quita vida y deja la herida de
+#                  ácido a los de dentro y no llega al lejano, sin charcos ni luz, despegándose al soltar, contra la pared,
+#                  el jefe de bomberos (el ácido sí le hace daño), en las 8 direcciones y con las 4 skins
+#                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd)
 #   --bumeran      el bumerán segador (la cuarta creada con dibujo propio que dispara): su icono, su hoja con el gesto de lanzar, sin
 #                  chispitas, que el bumerán atraviesa a los zombis que tiene delante, no llega al lejano, vuelve a la mano y no gasta
 #                  bala, que andando no hay gesto, el lanzamiento en las 8 direcciones y con las 4 skins (Armas.CREADAS.bumeran)
@@ -3678,8 +3679,9 @@ func probar_lanzallamas() -> void:
 	get_tree().quit()
 
 
-# Johnny echa fuego con el lanzallamas hacia "angulo" durante "segundos" (en cada paso, como si se mantuviera el
-# botón) y, si se pide, saca una foto a la mitad. Lo usan probar_lanzallamas y probar_skin_bombero
+# Johnny echa fuego con el lanzallamas (o el chorro del lanza ácido) hacia "angulo" durante "segundos" (en cada paso,
+# como si se mantuviera el botón) y, si se pide, saca una foto a la mitad. Lo usan probar_lanzallamas,
+# probar_desintegrador y probar_skin_bombero
 func echar_fuego(angulo: float, segundos: float, foto := "") -> void:
 	var t := 0.0
 	var hecha := foto == ""
@@ -3777,18 +3779,25 @@ func probar_supersoplete() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --desintegrador": el desintegrador con su dibujo propio (Armas.CREADAS.desintegrador, conserje-48-desintegrador: la
-# del lanzallamas con las bombonas verdes de ácido y sin la llamita, tools/hoja_lanza_acido.py; casilla de 96x96, con los pies en
-# 48,72; recetas.gd, su icono). En el juego se llama «Lanza ácido» (25 oct). Como el lanzallamas, en la
-# sala de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía y
-# llamándose «Desintegrador»), Johnny se arrima al baúl y cuenta el icono y el nombre de cada una
-# (captura-desintegrador-baul.png). Saca una y cuenta su nombre, su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no
-# le salen chispitas; dispara a un zombi a 120 a su izquierda (le quita vida y le deja la herida de ácido) con otro a 330 en la
-# misma línea (más lejos de lo que llega el chorro: ni se entera), con una foto con las gotas saliendo
-# (captura-desintegrador-chorro.png) y cuenta cuántas balas gasta (una por disparo). Luego dispara en las 8 direcciones, con una
-# foto de cada una en el segundo fotograma del disparo, el del chorro largo (captura-desintegrador-<dirección>.png): el chorro
-# del dibujo y las gotas tienen que salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
-# (captura-desintegrador-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+# Con "--captura --desintegrador": el lanza ácido (Armas.CREADAS.desintegrador: en el juego «Lanza ácido» y por dentro
+# el desintegrador), un lanzallamas de ácido. Su hoja es la del lanzallamas con las bombonas verdes y sin la llamita
+# (tools/hoja_lanza_acido.py; casilla de 96x96 con los pies en 48,72) y su chorro, el de la llamarada con "acido"
+# (llamarada.gd y chorro_acido.gdshader). Como el lanzallamas, en la sala de mantenimiento, con dos en el baúl (una
+# guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía y llamándose «Desintegrador»), Johnny se
+# arrima al baúl y cuenta el icono y el nombre de cada una (captura-desintegrador-baul.png). Saca una y cuenta sus
+# números, su boca y que las balas no le valen. Luego, en la sala de pruebas de armas (F11), con el depósito sin fin:
+#   - quieto, sin echar el chorro, la gota de ácido de la boquilla (goteo.gd): se hincha, cuelga entera
+#     (captura-desintegrador-gota.png) y se suelta y cae (captura-desintegrador-cae.png)
+#   - el chorro: 1 s hacia la derecha con tres zombis en la misma línea, a 120 y a 250 (los dos dentro: pierden vida,
+#     se quedan con la herida de ácido y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se
+#     entera). Johnny no pierde vida, no queda ningún charco y no alumbra; al soltar, se apaga
+#     (captura-desintegrador-chorro.png, a medio chorro), y la gota que colgaba se ha soltado
+#   - al soltar, se despega de la boquilla y se va (captura-desintegrador-soltando.png); y contra la pared se corta
+#     en ella y salpica (captura-desintegrador-pared.png)
+#   - el chorro en las 8 direcciones (captura-desintegrador-<dirección>.png), con la gota colgando antes de echarlo
+#     (captura-desintegrador-gota-<dirección>.png), y con las 4 skins, con su hoja (captura-desintegrador-<skin>.png)
+#   - al jefe de bomberos, al que el fuego no le hace nada, el ácido sí le quita vida (al final: su barra de vida se queda)
+# Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_desintegrador() -> void:
 	var antes := Guardado.cargar()
 	var vieja := Recetas.crear("desintegrador", "azul")
@@ -3812,52 +3821,128 @@ func probar_desintegrador() -> void:
 	inventario.cerrar()
 	await get_tree().process_frame
 
-	# sacado del baúl: su hoja, su boca y sin chispitas
-	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
+	# sacado del baúl: sus números, su boca y sin chispitas; las balas no le valen
+	var id := Armas.apuntar(Guardado.cargar().baul_armas[1])
 	johnny.coger(id)
 	var w := Armas.datos(id)
-	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.modo = "mira"   # que no eche el chorro por su cuenta: aquí lo echa la prueba
+	await get_tree().create_timer(0.3).timeout
+	print("Lanza ácido en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · recarga %.1f s · empuje %.1f · daño %.0f/s · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: Lanza ácido, conserje-48-desintegrador.tres, acido, 320 (10), 8, 1.5, 0.5, el de una morada, (48, 72), (26, -20), false, desintegrador, false)" % [
+		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
+		w.deposito, w.recarga, w.empuje, w.dano, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.quiere_municion()])
+
+	# a la sala de pruebas de armas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger(id)
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "e"
-	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.3).timeout
-	print("Desintegrador en la mano: nombre «%s» · hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, 12, 220, (48, 72), (26, -20), false, desintegrador)" % [
-		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
 
-	# el chorro: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y le deja ácido; el segundo, a 330, queda
-	# fuera de su alcance (220 desde la boca, que está a 46 de Johnny)
-	johnny.direccion = "o"
-	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-330, 0)])
-	await get_tree().process_frame
-	var balas0: int = johnny.balas
-	johnny.atacar(PI)
-	await get_tree().create_timer(0.1).timeout
-	Captura.foto("captura-desintegrador-chorro.png")
+	# la gota de la boquilla: se hincha, cuelga entera (la foto) y se suelta y cae
+	await get_tree().create_timer(0.3).timeout
+	var hinchandose: bool = johnny.goteo.t > 0.0
+	johnny.goteo.t = johnny.goteo.dura * 0.8
+	await get_tree().physics_frame
+	Captura.foto("captura-desintegrador-gota.png")
+	johnny.goteo.t = johnny.goteo.dura + Goteo.CUELGA - 0.01
+	await get_tree().physics_frame
+	var cae: bool = johnny.goteo.cayendo.size() > 0
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-desintegrador-cae.png")
 	await get_tree().create_timer(0.5).timeout
-	print("Chorro a 120: vida del zombi %d (esperado: menos de 500) · con ácido %s (esperado: true)" % [z[0].vida, z[0].get_node_or_null("herida_acido") != null])
-	print("Zombi a 330: vida %d · con ácido %s (esperado: 500 y false)" % [z[1].vida, z[1].get_node_or_null("herida_acido") != null])
-	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
-	zombis_de_prueba([])
+	print("La gota de la boquilla: se hincha %s · se suelta y cae %s · ya en el suelo %s (esperado: true, true, true)" % [
+		hinchandose, cae, johnny.goteo.cayendo.is_empty()])
+
+	# el chorro: 1 s hacia la derecha con tres zombis en la misma línea
+	var z := []
+	for d in [Vector2(120, 0), Vector2(250, 0), Vector2(430, 0)]:
+		var zombi: Node2D = meter_zombi("lento", johnny.position + d)
+		zombi.vida = 500
+		z.append(zombi)
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.aturdido = 30.0   # quietos (los empujones sí les mueven)
+	var x0: float = z[0].position.x
+	var vida_johnny: int = johnny.vida
+	var charcos: int = get_tree().get_nodes_in_group("charcos").size()
+	johnny.goteo.t = johnny.goteo.dura * 0.8   # (una gota colgando: al echar el chorro se suelta)
+	await get_tree().physics_frame
+	await echar_fuego(0.0, 1.0, "captura-desintegrador-chorro.png")
+	var encendido: bool = johnny.llamarada.encendida
+	var alumbra: bool = johnny.llamarada.luz.enabled
+	var gota_suelta: bool = johnny.goteo.t == 0.0
 	await get_tree().create_timer(0.3).timeout
+	print("Chorro 1 s hacia la derecha: a 120 pierde %d, ácido %s, empujado %.0f · a 250 pierde %d, ácido %s (esperado: más de 30 (con los críticos), true, más de 0, y lo mismo)" % [
+		500 - z[0].vida, z[0].get_node_or_null("herida_acido") != null, z[0].position.x - x0, 500 - z[1].vida,
+		z[1].get_node_or_null("herida_acido") != null])
+	print("Zombi a 430 (más allá de las 10 casillas): pierde %d · ácido %s (esperado: 0 y false)" % [500 - z[2].vida,
+		z[2].get_node_or_null("herida_acido") != null])
+	print("Johnny -%d (esperado: 0) · charcos nuevos %d (esperado: 0) · encendido mientras %s, al soltar %s · alumbra %s · la gota que colgaba, suelta %s (esperado: true, false, false, true)" % [
+		vida_johnny - johnny.vida, get_tree().get_nodes_in_group("charcos").size() - charcos, encendido,
+		johnny.llamarada.visible, alumbra, gota_suelta])
+	for zombi in z:
+		zombi.remove_from_group("zombis")
+		zombi.queue_free()
 
-	# las 8 direcciones, con una foto en el chorro largo (el disparo dura 0,08 s, 2 fotogramas: el 2º, a los 0,045 s)
+	# al soltar, se despega de la boquilla y se va; y contra la pared, se corta en ella y salpica
+	await echar_fuego(0.0, 0.6)
+	for i in 4:
+		await get_tree().physics_frame
+	Captura.foto("captura-desintegrador-soltando.png")
+	print("Al soltar: despegado de la boquilla %.0f de %.0f (esperado: más de 0)" % [johnny.llamarada.cola, johnny.llamarada.largo])
+	await get_tree().create_timer(0.5).timeout
+	var puesto: Vector2 = johnny.global_position
+	johnny.global_position = sala.diana.global_position + Vector2(380, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await echar_fuego(0.0, 0.5, "captura-desintegrador-pared.png")
+	print("Contra la pared: el chorro llega a %.0f de %.0f (esperado: menos de 320)" % [johnny.llamarada.tope, johnny.llamarada.alcance])
+	johnny.global_position = puesto
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
+
+	# las 8 direcciones: la gota colgando antes y el chorro saliendo del tubo, en la postura de apuntar
+	var posturas := []
 	for d in johnny.DIRS:
+		johnny.deposito = w.deposito
 		johnny.direccion = d
-		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
-		await get_tree().create_timer(0.045).timeout
-		Captura.foto("captura-desintegrador-%s.png" % d)
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().physics_frame
+		johnny.goteo.t = johnny.goteo.dura * 0.8
+		await get_tree().physics_frame
+		Captura.foto("captura-desintegrador-gota-%s.png" % d)
+		await echar_fuego(johnny.DIRS.find(d) * PI / 4, 0.4, "captura-desintegrador-%s.png" % d)
+		posturas.append(johnny.sprite.animation)
+		await get_tree().create_timer(0.4).timeout
+	print("Postura echando el chorro en cada dirección: %s (esperado: quieto_<dirección> en las 8)" % ", ".join(posturas))
 
-	# con cada skin: su hoja del desintegrador
+	# con cada skin: su hoja del lanza ácido
 	for skin in ["portero", "gloton", "gymbro", "bombero"]:
 		Skins.poner(skin)
 		johnny.vestir(skin)
 		johnny.direccion = "e"
-		johnny.atacar(0.0)
-		await get_tree().create_timer(0.045).timeout
-		Captura.foto("captura-desintegrador-%s.png" % skin)
-		print("Con %s: hoja «%s» (esperado: conserje-48-desintegrador-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
-		await get_tree().create_timer(0.6).timeout
+		johnny.deposito = w.deposito
+		await echar_fuego(0.0, 0.3, "captura-desintegrador-%s.png" % skin)
+		print("Con %s: hoja «%s» · puntas de la gota %s (esperado: conserje-48-desintegrador-%s.tres, true)" % [skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(), johnny.sprite.sprite_frames.has_meta("puntas"), skin])
+		await get_tree().create_timer(0.2).timeout
+
+	# al jefe de bomberos el fuego no le hace nada; el ácido, sí (quieto: que no ataque)
+	var jefe: Node2D = meter_zombi("bombero", johnny.position + Vector2(150, 0))
+	await get_tree().process_frame
+	jefe.process_mode = Node.PROCESS_MODE_DISABLED
+	var vida_jefe: int = jefe.vida
+	await echar_fuego(0.0, 1.0)
+	print("Jefe de bomberos (inmune al fuego %s): pierde %d con 1 s de ácido (esperado: true, más de 30)" % [
+		jefe.get("inmune_fuego"), vida_jefe - jefe.vida])
+	jefe.remove_from_group("zombis")
+	jefe.queue_free()
 
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = antes.baul_armas

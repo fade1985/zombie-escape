@@ -10,12 +10,19 @@
 # El dibujo lo hace su shader (escenas/armas/llamarada.gdshader): fuego en pixel art, con las bocanadas y los colores
 # (sin humo). Aquí, además, las chispas que saltan, la luz que alumbra alrededor mientras sale (más en los sitios
 # oscuros) y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
+#
+# El lanza ácido (Armas.CREADAS.desintegrador, efecto "acido") echa por aquí su chorro, igual de largo y con el mismo
+# cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: un chorro de manguera de bomberos, verde),
+# el sonido (un siseo de agua a presión), que no alumbra, que en vez de chispas suelta gotitas que caen (y salpican
+# contra la pared) y que, en vez de prenderlos, deja a los zombis la herida de ácido (ArmasCreadas.herir). Como no es
+# fuego, al jefe de bomberos también le quita vida.
 class_name Llamarada
 extends Node2D
 
 const TICK := 0.25          # cada cuánto quita vida a los que están dentro
 const EMPUJA := 2           # empuja uno de cada tantos pellizcos (cada medio segundo)
 const ABRE := 0.2           # cuánto se abre el cono a cada lado (radianes, unos 11°): a 10 casillas, 70 de ancho a cada lado
+const ABRE_ACIDO := 0.13    # el chorro del lanza ácido, más estrecho (unos 7°: a 10 casillas, 48 a cada lado), como se ve
 const BOCA := 6.0           # medio ancho de la llama en la boca
 const ALTURA := 50.0        # a qué altura sale de la boca (como la bala)
 const ALTURA_CUERPO := 26.0 # y a cuál llega al final
@@ -23,11 +30,15 @@ const CRECE := 0.12         # lo que tarda en estirarse hasta su alcance al ence
 const APAGA := 0.22         # y lo que tarda en irse al apagarla (se despega de la boca y se aleja)
 const EMPUJE := 170.0       # empuje base, como el de las balas
 const SOMBREADO := preload("res://escenas/armas/llamarada.gdshader")
+const SOMBREADO_ACIDO := preload("res://escenas/armas/chorro_acido.gdshader")
 const CHISPAS := 22.0       # chispas que saltan por segundo
+const GOTITAS := 26.0       # el ácido: gotitas que se escapan del final del chorro por segundo (contra la pared, el doble)
+const VERDES := [Color("#ecf896"), Color("#c7e04a"), Color("#96b430")]   # las del chorro (chorro_acido.gdshader)
 const LUZ := Color(1.0, 0.6, 0.28)
 const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
 
 var pedida := false         # se ha pedido fuego en este paso (mantener)
+var acido := false          # es el chorro del lanza ácido (lo dice el arma, en mantener)
 var encendida := false
 var angulo := 0.0
 var alcance := 320.0
@@ -65,6 +76,9 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 	dps = w.dano
 	empuje = w.empuje
 	quema = w.get("quema", 1.0)
+	if acido != (w.get("efecto", "") == "acido"):
+		acido = not acido
+		(material as ShaderMaterial).shader = SOMBREADO_ACIDO if acido else SOMBREADO
 
 
 func _physics_process(delta: float) -> void:
@@ -75,13 +89,16 @@ func _physics_process(delta: float) -> void:
 		tope = medir()
 		cola = 0.0
 		largo = minf(largo + alcance / CRECE * delta, tope)
-		Sonido.tocar("llamarada")
+		Sonido.tocar("chorro_acido" if acido else "llamarada")
 		# el reloj de los pellizcos solo corre con la llama encendida (soltar y volver a pulsar no quema más deprisa)
 		tick_t += delta
 		if tick_t >= TICK:
 			tick_t -= TICK
 			quemar()
-		chispas(delta)
+		if acido:
+			gotitas(delta)
+		else:
+			chispas(delta)
 	elif largo > 0.0:
 		cola += alcance / APAGA * delta
 		if cola >= largo:
@@ -103,7 +120,9 @@ func medir() -> float:
 	return alcance if choque.is_empty() else global_position.distance_to(choque.position)
 
 
-# Un pellizco a todos los zombis que están dentro de la llama (y, uno de cada EMPUJA, con empujón)
+# Un pellizco a todos los zombis que están dentro de la llama (y, uno de cada EMPUJA, con empujón). El ácido, en vez
+# de prenderlos, les deja la herida de ácido; y al jefe de bomberos sí le hace daño, pero por el golpe (su herir() es
+# el de las llamas de los charcos, que no le quita vida), y sin la herida (que también le llegaría por herir())
 func quemar() -> void:
 	ticks += 1
 	var johnny: Node2D = get_parent()
@@ -112,6 +131,15 @@ func quemar() -> void:
 	johnny.oir_disparo()   # el fuego se oye: despierta a los que duermen cerca
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if not dentro(zombi, johnny, u):
+			continue
+		if acido:
+			var da: int = johnny.con_critico(dps * TICK)
+			if empuja or zombi.get("inmune_fuego"):
+				zombi.recibir_golpe(da, u * EMPUJE * empuje if empuja else Vector2.ZERO)
+			else:
+				zombi.herir(da, ArmasCreadas.EFECTOS.acido.color)
+			if not zombi.get("inmune_fuego"):
+				ArmasCreadas.herir(zombi, "acido", da)
 			continue
 		if zombi.get("inmune_fuego"):
 			zombi.prender()   # al jefe de bomberos el fuego no le hace nada
@@ -137,10 +165,15 @@ func dentro(zombi: Node2D, johnny: Node2D, u: Vector2) -> bool:
 		if q.dot(u) < -r or absf(q.cross(u)) > BOCA * 2.0 + r:
 			return false
 		desde = johnny.global_position
-	elif delante > tope + r or absf(p.cross(u)) > BOCA + delante * tan(ABRE) + r:
+	elif delante > tope + r or absf(p.cross(u)) > BOCA + delante * abre() + r:
 		return false
 	var rayo := PhysicsRayQueryParameters2D.create(desde, zombi.global_position, 1)
 	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
+
+
+# Lo que se abre el cono a cada lado por cada unidad de largo (el del ácido, más estrecho)
+func abre() -> float:
+	return tan(ABRE_ACIDO if acido else ABRE)
 
 
 # Chispas que saltan de la llama hacia delante y hacia arriba (Particulas), en sitios al azar de lo largo
@@ -155,10 +188,25 @@ func chispas(delta: float) -> void:
 	Particulas.soltar(self, donde, hacia, Llamas.FUEGO[randi() % 3], 2.0, randf_range(0.3, 0.6))
 
 
+# El ácido: gotitas que se escapan del final del chorro hacia delante y caen al suelo; contra la pared, el doble, y
+# salpican hacia atrás y a los lados (Particulas.volar: caen por su peso y se acaban al llegar al suelo, sin charco)
+func gotitas(delta: float) -> void:
+	var cortada := tope < alcance - 1.0
+	if largo < 20.0 or randf() > GOTITAS * delta * (2.0 if cortada else 1.0):
+		return
+	var u := Vector2.from_angle(angulo)
+	var d := randf_range(0.75, 1.0) * largo
+	var pie := global_position + u * d + u.orthogonal() * randf_range(-0.5, 0.5) * (BOCA + d * abre())
+	var hacia := u * (randf_range(-110.0, -30.0) if cortada else randf_range(30.0, 110.0))
+	hacia += u.orthogonal() * randf_range(-60.0, 60.0) * (1.6 if cortada else 1.0)
+	Particulas.volar(self, pie, lerpf(ALTURA, ALTURA_CUERPO, d / alcance), hacia, randf_range(10.0, 70.0),
+		VERDES[randi() % VERDES.size()], 2.0)
+
+
 # Le pasa al shader dónde está la llama y cómo va (en la pantalla: el eje baja un poco, porque la llama baja de la
 # altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja
 func pintar() -> void:
-	luz.enabled = visible
+	luz.enabled = visible and not acido   # (el ácido no alumbra)
 	if not visible:
 		return
 	var u := Vector2.from_angle(angulo)

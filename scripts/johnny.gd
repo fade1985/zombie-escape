@@ -108,7 +108,8 @@ var municion_guardada := {}   # las balas de las armas de fuego que ha guardado:
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var deposito := 0.0        # el lanzallamas: los segundos de fuego que le quedan en el depósito
 var gasolina_sin_fin := false   # la sala de pruebas de armas: el lanzallamas se llena sin gastar gasolina
-var llamarada: Llamarada   # la llama del lanzallamas: sale mientras se ataca con él
+var llamarada: Llamarada   # la llama del lanzallamas (y el chorro del lanza ácido): sale mientras se ataca con él
+var goteo: Goteo           # la gota de ácido que cuelga de la boquilla del lanza ácido mientras no echa el chorro
 var espera := 0.0          # tiempo que falta para poder atacar otra vez
 var ataque_t := -1.0       # tiempo desde que empezó el ataque en curso (-1 = no está atacando)
 var ataque_dur := 0.0      # lo que dura ese ataque
@@ -134,6 +135,8 @@ func _ready() -> void:
 	add_child(llamas)
 	llamarada = Llamarada.new()
 	add_child(llamarada)
+	goteo = Goteo.new()
+	add_child(goteo)
 	estrellas = Node2D.new()
 	estrellas.name = "Estrellas"
 	estrellas.draw.connect(pintar_estrellas)
@@ -347,6 +350,7 @@ func _physics_process(delta: float) -> void:
 			ataque_t = -1.0
 
 	animar()
+	gotear()
 	if Armas.es_creada(huecos[mano]):
 		ArmasCreadas.detalle(self, Armas.datos(huecos[mano]), delta)   # chispitas de color en la punta
 
@@ -903,6 +907,18 @@ func animar() -> void:
 		# quieto echando fuego con el lanzallamas: en la postura de apuntar, sin respirar
 		cambiar_animacion(("quieto_" if llamarada.pedida else "reposo_") + direccion)
 		sprite.speed_scale = 1.0
+
+
+# El lanza ácido gotea por la boquilla (goteo.gd) mientras lo lleva en la mano de pie, sin echar el chorro y con
+# ácido en el depósito: se le dice dónde está el labio de la boquilla en el dibujo de ahora (las "puntas" de su hoja,
+# que solo tiene las del reposo). Andando o echando el chorro no se le dice, y la gota se suelta
+func gotear() -> void:
+	var puntas: Dictionary = sprite.sprite_frames.get_meta("puntas", {})
+	var dibujo := String(sprite.animation)
+	if deposito <= 0.0 or llamarada.pedida or not puntas.has(dibujo) or Armas.datos(huecos[mano]).get("efecto", "") != "acido":
+		return
+	var p: Array = puntas[dibujo]
+	goteo.gotear(sprite.global_position + p[sprite.frame % p.size()] * 2.0, direccion)
 
 
 # El paso va según lo que avanza de verdad: más despacio al arrancar y al frenar.

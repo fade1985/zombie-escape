@@ -3,15 +3,15 @@
 #   - Cuerpo a cuerpo, al golpear: aturdir, prender, hacer sangrar, envenenar, la descarga que salta a otro
 #     zombi, congelar (el bate helado) o dejarlo tirado (el mangual). Los jefes (la portera) no se aturden, ni
 #     arden, ni se congelan; sangrar y el veneno sí les hacen daño.
-#   - A distancia: las gotas de fuego, ácido o chispas (chorro.gd), el bumerán (bumeran.gd) y el garfio
-#     (garfio.gd), que trae al zombi hasta Johnny. La llamarada del lanzallamas va aparte (llamarada.gd).
+#   - A distancia: las gotas de fuego o chispas (chorro.gd), el bumerán (bumeran.gd) y el garfio
+#     (garfio.gd), que trae al zombi hasta Johnny. La llamarada del lanzallamas y el chorro del lanza ácido van
+#     aparte (llamarada.gd).
 #   - Las chispitas de color en la punta del arma que lleva Johnny.
 class_name ArmasCreadas
 
 const CHORRO := preload("res://scripts/chorro.gd")
 const BUMERAN := preload("res://scripts/bumeran.gd")
 const GARFIO := preload("res://scripts/garfio.gd")
-const CHARCO := preload("res://escenas/armas/charco.tscn")
 const EMPUJE := 170.0   # empuje base, como el de las balas
 # Los efectos de las armas que queman: el bate de fuego, el lanzallamas y el súpersoplete (con la skin del bombero,
 # × 3: johnny.gd, arma())
@@ -22,16 +22,13 @@ const EFECTOS := {
 	"aturde": 0.6,                                                   # segundos aturdido (el aplastacabezas)
 	"sangra": {"t": 3.0, "total": 0.6, "color": Color("#ff4d6d")},   # dura 3 s y quita en total el 60 % del golpe
 	"veneno": {"t": 4.0, "total": 1.0, "color": Color("#9be564")},   # dura 4 s y quita en total otro golpe entero
-	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a")},    # el ácido sigue royendo: el triple de una gota
+	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a")},    # el ácido sigue royendo: el triple de un pellizco
 	"descarga": {"aturde": 1.0, "salto": 130.0, "dano": 0.5},        # aturde 1 s y salta al más cercano con medio daño
 	"chispa": 0.4,                                                   # la pistola eléctrica: cada chispa aturde 0,4 s (y salta)
 	"congela": 1.0,                                                  # segundos congelado con cada golpe del bate helado
 	"tira": 0.5,                                                     # segundos que deja tirado el mangual
 	"tick": 0.5,                                                     # cada cuánto se quitan los pellizcos
 }
-const ACIDO_CHARCO := 0.6   # cada cuánto puede dejar el desintegrador un charco de ácido
-
-static var acido_espera := 0   # cuándo (en milisegundos) puede salir el siguiente charco de ácido
 
 
 # Lo que hace un arma creada cuerpo a cuerpo al golpear a un zombi (lo llama golpear de johnny.gd)
@@ -196,13 +193,6 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 		herir(zombi, "sangra", d)
 	elif tipo == "acido":
 		herir(zombi, "acido", d)
-		# de vez en cuando, un charco de ácido a sus pies (el de Gastroenteritis: solo daña a los zombis)
-		if Time.get_ticks_msec() >= acido_espera:
-			acido_espera = Time.get_ticks_msec() + roundi(ACIDO_CHARCO * 1000)
-			var charco := CHARCO.instantiate()
-			charco.tipo = "vomito"
-			charco.position = (zombi.position / 2.0).round() * 2.0 + Vector2(0, zombi.radio * 0.5)
-			zombi.get_parent().add_child(charco)
 
 
 # Sangrar, veneno o ácido en un zombi: va de hijo suyo, le quita vida a pellizcos y le hace gotear

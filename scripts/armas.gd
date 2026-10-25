@@ -141,11 +141,16 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-supersoplete.tres"),
 		"boca": {"s": Vector2(-2, 10), "se": Vector2(25, -22), "e": Vector2(26, -31), "ne": Vector2(24, -41),
 			"n": Vector2(10, -52), "no": Vector2(-25, -40), "o": Vector2(-27, -30), "so": Vector2(-26, -22)}},
-	# el desintegrador (en el juego, «Lanza ácido»): su hoja es la del lanzallamas con las dos bombonas de la espalda en verde
-	# ácido y sin la llamita del piloto (tools/hoja_lanza_acido.py); la casilla es la de siempre, de 96x96 con los pies en 48,72.
-	# La boca es la punta del tubo de la postura quieta (el píxel del dibujo que más sale hacia donde apunta), medida en la hoja
-	"desintegrador": {"base": "pistola", "ritmo": 12.0, "alcance": 220.0, "velocidad": 400.0, "cargador": 50, "recarga": 2.0,
-		"empuje": 0.2, "efecto": "acido", "hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
+	# el desintegrador (en el juego, «Lanza ácido»): un lanzallamas de ácido. Como el lanzallamas, no dispara: echa un chorro
+	# continuo de ácido mientras se ataca (llamarada.gd, con su efecto "acido") que llega a 10 casillas, con un depósito
+	# de "deposito" segundos que se llena entero en "recarga" segundos; su daño es por segundo, empuja cada medio segundo
+	# y, en vez de prenderlos, deja a los zombis la herida de ácido. Su hoja es la del lanzallamas con las dos bombonas
+	# de la espalda en verde ácido y sin la llamita del piloto (tools/hoja_lanza_acido.py), que trae dónde está la punta
+	# del tubo en cada dibujo de reposo, de donde cuelga la gota de ácido (goteo.gd); la casilla es la de siempre, de
+	# 96x96 con los pies en 48,72. La boca es la punta del tubo de la postura quieta (el píxel del dibujo que más sale
+	# hacia donde apunta), medida en la hoja
+	"desintegrador": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "empuje": 0.5,
+		"efecto": "acido", "hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
 		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),
 			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)}},
 	# el bumerán segador: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia con el bumerán en

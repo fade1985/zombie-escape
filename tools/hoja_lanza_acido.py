@@ -9,8 +9,13 @@
 #      las chispitas que queden sueltas en el aire, y los huecos que deja la llama dentro de Johnny (de frente, la llama
 #      tapaba las perneras) se rellenan con el color de alrededor. Los colores de la llama también son de la piel y la
 #      camisa: por eso solo se mira cerca de la punta.
+#   3. La punta del tubo de cada dibujo de reposo (el píxel que más sale hacia donde apunta y, de ahí, el de más abajo
+#      de esa columna: el labio de abajo de la boquilla, de donde cuelga la gota de ácido, goteo.gd; al respirar se
+#      mueve uno o dos píxeles). Va en el .tres, en "puntas": para cada dirección (reposo_s, reposo_se...), un Vector2
+#      por dibujo, en píxeles del dibujo desde los pies. Andando no hace falta: la gota se suelta en cuanto echa a andar.
 # Saca assets/sprites/conserje-48-desintegrador.png, su .json y su .tres (los de la hoja del lanzallamas, con su
-# imagen). Las skins, después, con tools/cara.py (que mira estos verdes como si fueran los grises de PixelLab, COMO_GRIS):
+# imagen y las puntas). Las skins, después, con tools/cara.py (que mira estos verdes como si fueran los grises de
+# PixelLab, COMO_GRIS, y copia el .tres con las puntas):
 #   py tools/hoja_lanza_acido.py            → la hoja (y luego, para cada skin, py tools/cara.py <skin> desintegrador)
 #   py tools/hoja_lanza_acido.py muestra    → además, captura-lanza-acido.png: la punta del tubo en todos los dibujos,
 #                                             antes y después, al cuádruple, para revisarla
@@ -151,6 +156,40 @@ def quitar_llama(px, x0, y0, cw, ch, pivote, direc):
     return len(borrar)
 
 
+def punta(px, x0, y0, cw, ch, pivote, direc):
+    """El labio de abajo de la boquilla del dibujo de la casilla (x0, y0), en píxeles del dibujo desde los pies."""
+    bx, by = pivote[0] + BOCA[direc][0], pivote[1] + BOCA[direc][1]
+    hx, hy = HACIA[direc]
+    tubo = [(x, y) for y in range(max(0, by - CERCA), min(ch, by + CERCA + 1))
+            for x in range(max(0, bx - CERCA), min(cw, bx + CERCA + 1)) if px[x0 + x, y0 + y][3]]
+    if direc in ("south", "north"):   # de frente y de espaldas, junto al tubo están las piernas y la cabeza
+        tubo = [(x, y) for x, y in tubo if abs(x - bx) <= (4 if direc == "south" else 3)]
+    lejos = max(p[0] * hx + p[1] * hy for p in tubo)
+    igual = [p for p in tubo if p[0] * hx + p[1] * hy == lejos]
+    x, y = igual[len(igual) // 2]   # (si hay varios igual de lejos, el del medio)
+    while y + 1 < ch and px[x0 + x, y0 + y + 1][3] and y + 1 - by <= CERCA:
+        y += 1
+    return x - pivote[0], y - pivote[1]
+
+
+# Las animaciones del juego (las del .tres) por las de la hoja, y las direcciones cortas
+NOMBRES = {"still": "quieto", "idle": "reposo", "walk": "andar", "attack": "ataque"}
+CORTAS = {"south": "s", "south-east": "se", "east": "e", "north-east": "ne", "north": "n", "north-west": "no",
+          "west": "o", "south-west": "so"}
+
+
+def puntas_tres(px, datos, cw, ch, pivote):
+    """La línea "metadata/puntas" del .tres: para cada dirección del reposo, la punta de cada uno de sus dibujos."""
+    partes = []
+    for anim, v in datos["anims"].items():
+        for direc, dv in v["dirs"].items() if anim == "idle" else ():
+            lista = [punta(px, (dv.get("col", 0) + i) * cw, dv["row"] * ch, cw, ch, pivote, direc)
+                     for i in range(dv["frames"])]
+            vectores = ", ".join(f"Vector2({x}, {y})" for x, y in lista)
+            partes.append(f'"{NOMBRES[anim]}_{CORTAS[direc]}": [{vectores}]')
+    return "metadata/puntas = {" + ", ".join(partes) + "}\n"
+
+
 def revisar(antes, despues, lista, cw, ch, pivote, salida):
     """La punta del tubo de cada dibujo, antes (arriba) y después (abajo), una fila por dirección, al cuádruple."""
     lado = 2 * CERCA + 1
@@ -193,8 +232,9 @@ def main():
     with open(SPRITES / f"{A}.json", "w", encoding="utf-8", newline="\n") as f:
         json.dump(datos, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    tres = (SPRITES / f"{DE}.tres").read_text(encoding="utf-8")
-    (SPRITES / f"{A}.tres").write_text(tres.replace(f"{DE}.png", f"{A}.png"), encoding="utf-8", newline="\n")
+    tres = (SPRITES / f"{DE}.tres").read_text(encoding="utf-8").replace(f"{DE}.png", f"{A}.png")
+    tres = tres.rstrip("\n") + "\n" + puntas_tres(px, datos, cw, ch, pivote)
+    (SPRITES / f"{A}.tres").write_text(tres, encoding="utf-8", newline="\n")
     print(f"{A}: {verdes} píxeles de las bombonas en verde; {len(lista)} dibujos, {borrados} píxeles de llama borrados",
           f"(sin llama que borrar: {', '.join(sin_llama)})" if sin_llama else "")
     if "muestra" in sys.argv:
