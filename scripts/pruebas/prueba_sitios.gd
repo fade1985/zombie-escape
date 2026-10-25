@@ -6,10 +6,11 @@ extends "res://scripts/pruebas/prueba_fotos.gd"
 
 # Con "--captura --piso-pasillo": el piso con pasillo en T (apartamento.gd: probar_pasillo), que de momento solo sale en
 # esta prueba (con ella, todos los pisos normales salen así: prueba_comun.gd). Primero genera 200, la mitad con la puerta
-# abajo y la otra mitad arriba, y cuenta los que salen mal. Luego, en la 1ª planta, entra en uno con la puerta abajo (los
+# abajo y la otra mitad arriba, y cuenta los que salen mal: sin la puerta en el centro o sin justo un salón, una cocina,
+# un dormitorio de matrimonio y otro individual, cada uno con su baño dentro (con una sola puerta, a él). Luego, en la 1ª planta, entra en uno con la puerta abajo (los
 # de encima del pasillo del edificio) y en otro con ella arriba (los de debajo), sin zombis, y de cada uno dice sus
 # habitaciones, si la puerta está en el centro y si desde ella se llega andando a todas, y dibuja su plano con letras
-# (S salón, C cocina, D dormitorio, B baño, . pasillo, # muro, E la entrada). Fotos: lo que se ve al entrar
+# (S salón, C cocina, M dormitorio de matrimonio, I individual, B baño, . pasillo, # muro, E la entrada). Fotos: lo que se ve al entrar
 # (captura-piso-pasillo-abajo-entrada.png y -arriba-entrada.png) y el piso entero, sin niebla ni penumbra
 # (captura-piso-pasillo-abajo.png y -arriba.png). Luego se cierra
 func probar_piso_pasillo() -> void:
@@ -18,9 +19,18 @@ func probar_piso_pasillo() -> void:
 		var otro := Apartamento.generar(7000 + i * 131, false, "abajo" if i % 2 == 0 else "arriba")
 		if otro.is_empty() or otro.get("forma", "") != "pasillo" or otro.entrada.c != (otro.cols - Apartamento.PUERTA) / 2:
 			mal += 1
+			continue
+		var hay: Array = otro.salas.map(func(s): return s.get("tipo", "") if s.uso == "dormitorio" else s.uso)
+		hay.sort()
+		var banos_bien := true
+		for b in otro.salas.filter(func(s): return s.uso == "bano"):
+			if b.puertas.size() != 1 or otro.salas[b.dueno_bano].get("bano", -1) != b.id or not b.dueno_bano in [b.puertas[0].a, b.puertas[0].b]:
+				banos_bien = false
+		if hay != ["bano", "bano", "cocina", "individual", "matrimonio", "pasillo", "salon"] or not banos_bien:
+			mal += 1
 	print("Piso con pasillo: de 200 generados, mal %d (esperado: 0)" % mal)
 	nueva_planta(2)
-	var letra := {"salon": "S", "cocina": "C", "dormitorio": "D", "bano": "B", "pasillo": "."}
+	var letra := {"salon": "S", "cocina": "C", "matrimonio": "M", "individual": "I", "bano": "B", "pasillo": "."}
 	for lado in ["abajo", "arriba"]:
 		var idx := -1
 		for i in planta.sitios.size():
@@ -44,8 +54,13 @@ func probar_piso_pasillo() -> void:
 		var red: RID = mapa.get_node("Navegacion").get_navigation_map()
 		var llega := []
 		for s in apt.salas:
-			var camino := NavigationServer2D.map_get_path(red, johnny.position, s.centro, true)
-			llega.append("%s %s" % [s.nombre, not camino.is_empty() and camino[-1].distance_to(s.centro) < 24.0])
+			# (al punto andable más cercano a su centro, que puede caer en un mueble; el baño del superviviente, cerrado)
+			if planta.superviviente.get("sitio", -1) == idx and planta.superviviente.sala == s.id:
+				llega.append("%s cerrado, con el superviviente" % s.nombre)
+				continue
+			var meta := NavigationServer2D.map_get_closest_point(red, s.centro)
+			var camino := NavigationServer2D.map_get_path(red, johnny.position, meta, true)
+			llega.append("%s %s" % [s.nombre, mapa.zona_en(meta) == s.id and not camino.is_empty() and camino[-1].distance_to(meta) < 24.0])
 		print("Piso con pasillo (puerta %s): desde la entrada se llega andando a %s (esperado: todas true)" % [lado,
 			" · ".join(llega)])
 		for f in apt.filas:
@@ -53,7 +68,8 @@ func probar_piso_pasillo() -> void:
 			for c in apt.cols:
 				var v: int = apt.dueno[f * apt.cols + c]
 				var entrada: bool = (c - apt.entrada.c) in [0, 1] and (f < Apartamento.BORDE if lado == "arriba" else f >= apt.filas - Apartamento.BORDE)
-				linea += "E" if entrada else "#" if v == -1 else " " if v == -2 else letra[apt.salas[v].uso]
+				var sala: Dictionary = apt.salas[maxi(v, 0)]
+				linea += "E" if entrada else "#" if v == -1 else " " if v == -2 else letra[sala.tipo if sala.uso == "dormitorio" else sala.uso]
 			print("    " + linea)
 		# el piso entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
 		for s in apt.salas:

@@ -16,18 +16,20 @@
 #
 # Hay otra receta, el piso con pasillo en T (probar_pasillo; de momento solo sale en la prueba --piso-pasillo, con
 # "con_pasillo"): la puerta de entrada, siempre en el centro de la pared, da a un recibidor que sube hasta un pasillo que
-# cruza el piso de lado a lado. A un lado del recibidor queda el salón y al otro la cocina (o un dormitorio); detrás del
-# pasillo, en fila, lo demás: los dormitorios, el baño y, si no está delante, la cocina. Todas las puertas dan al pasillo
-# (las de delante, a veces, al recibidor):
+# cruza el piso de lado a lado. A un lado del recibidor queda el salón y al otro la cocina; detrás del pasillo, en fila,
+# los dormitorios (2 o 3), cada uno con su baño dentro, recortado en una esquina del fondo. Las puertas de las
+# habitaciones dan al pasillo (las de delante, a veces, al recibidor) y la de cada baño, a su dormitorio:
 #
-#     ┌──────┬────┬────────┐
-#     │ dorm │baño│  dorm  │
-#     ├─  ───┴─  ─┴─────  ─┤
-#     │       pasillo      │
-#     ├───  ─┐    ┌───  ───┤
-#     │ salón│    │ cocina │
-#     └──────┴─  ─┴────────┘
-#             entrada
+#     ┌────┬──────┬──────┬────┐
+#     │baño│ dorm │ dorm │baño│
+#     ├─  ─┘      │      └─  ─┤
+#     │    dorm   │   dorm    │
+#     ├──────  ───┴────  ─────┤
+#     │         pasillo       │
+#     ├────  ──┐    ┌───  ────┤
+#     │  salón │    │ cocina  │
+#     └────────┴─  ─┴─────────┘
+#               entrada
 #
 # Se trabaja en casillas de 32 unidades. "dueno" dice de quién es cada casilla: el número de su habitación,
 # -1 si es muro y -2 si es el hueco de una puerta.
@@ -50,11 +52,17 @@ const NOMBRES := {"salon": "Salón", "cocina": "Cocina", "bano": "Baño", "dormi
 # El piso con pasillo (todo en casillas). Los fondos cuentan con la cara de los tabiques, que tapa las dos últimas filas
 # de lo que queda encima de ellos: del pasillo se ven 4 o 5 filas
 const RECIBIDOR := [4, 6]        # ancho del recibidor: par, para que quede centrado encima de la puerta
-const LADO := [11, 19]           # ancho del salón y de lo que hay al otro lado del recibidor (los dos, igual)
-const FONDO_DETRAS := [9, 11]    # fondo de las habitaciones de detrás del pasillo
+const LADO := [11, 19]           # ancho del salón y de la cocina, a los lados del recibidor (los dos, igual)
+const FONDO_DETRAS := [11, 13]   # fondo de los dormitorios: cabe su baño y, delante de él, 4 filas de dormitorio
 const FONDO_PASILLO := [6, 7]
-const FONDO_DELANTE := [8, 10]   # y de las de delante, las de los lados del recibidor
-const ANCHOS := {"dormitorio": [11, 19], "cocina": [10, 16], "bano": [7, 10]}   # ancho de las de detrás
+const FONDO_DELANTE := [10, 12]  # y del salón y la cocina
+# Los dos dormitorios: su ancho (su baño, de BANO_ANCHO, deja al menos LIBRE_JUNTO casillas a su lado) y cómo se llaman él
+# y su baño
+const DORMITORIOS := {
+	"matrimonio": {"ancho": [17, 21], "nombre": "Dormitorio de matrimonio", "bano": "Baño principal"},
+	"individual": {"ancho": [13, 15], "nombre": "Dormitorio individual", "bano": "Baño"},
+}
+const LIBRE_JUNTO := 6
 const A_RECIBIDOR := 0.35        # lo que salen las puertas de delante en la pared del recibidor, y no en la del pasillo
 
 static var rng := RandomNumberGenerator.new()
@@ -72,7 +80,7 @@ static func generar(semilla: int, jefe := false, lado := "abajo") -> Dictionary:
 	for intento in 1500:
 		rng.seed = semilla + intento * 7919
 		var dormitorios := 0 if jefe else rng.randi_range(1, 3)
-		var apt := probar_pasillo(dormitorios) if con_pasillo and not jefe else probar(dormitorios, jefe)
+		var apt := probar_pasillo() if con_pasillo and not jefe else probar(dormitorios, jefe)
 		if apt.is_empty() or not fallos(apt).is_empty():
 			continue
 		if lado == "arriba":
@@ -393,30 +401,24 @@ static func probar(dormitorios: int, jefe: bool) -> Dictionary:
 
 # Un piso con pasillo en T (ver arriba), con la puerta de entrada abajo. Devuelve lo mismo que probar(), o {} si esta vez
 # no cuadra
-static func probar_pasillo(dormitorios: int) -> Dictionary:
-	# 1. Qué va delante, a los lados del recibidor: el salón a un lado y, al otro, la cocina o un dormitorio. Y qué va
-	#    detrás del pasillo, en fila y en cualquier orden: el baño, los demás dormitorios y, si no está delante, la cocina
-	var otro := "cocina" if dormitorios == 1 or rng.randf() < 0.6 else "dormitorio"
-	var fila := ["bano", "dormitorio" if otro == "cocina" else "cocina"]
-	for i in dormitorios - 1:
-		fila.append("dormitorio")
-	barajar(fila)
-
-	# 2. Las medidas. El ancho del piso sale de lo que tiene que caber detrás; los dos lados del recibidor miden lo
-	#    mismo, así el recibidor y la puerta quedan en el centro
+static func probar_pasillo() -> Dictionary:
+	# 1. Las medidas. El ancho del piso sale de lo que tienen que medir los dos dormitorios, uno al lado del otro detrás
+	#    del pasillo (cuál va a la izquierda, al azar); a los lados del recibidor, el salón y la cocina miden lo mismo, así
+	#    el recibidor y la puerta quedan en el centro
+	var camas: Array = barajar(DORMITORIOS.keys())
 	var recibidor: int = escoger(RECIBIDOR)
-	var minimo := fila.size() - 1   # (los tabiques entre las de detrás)
-	var maximo := fila.size() - 1
-	for uso in fila:
-		minimo += ANCHOS[uso][0]
-		maximo += ANCHOS[uso][1]
+	var minimo := camas.size() - 1   # (con el tabique de entre ellos)
+	var maximo := camas.size() - 1
+	for cama in camas:
+		minimo += DORMITORIOS[cama].ancho[0]
+		maximo += DORMITORIOS[cama].ancho[1]
 	var lado_min := maxi(LADO[0], ceili((minimo - recibidor - 2) / 2.0))
 	var lado_max := mini(LADO[1], floori((maximo - recibidor - 2) / 2.0))
 	if lado_min > lado_max:
 		return {}
 	var lado := rng.randi_range(lado_min, lado_max)
 	var iw := lado * 2 + recibidor + 2
-	var anchos := repartir_fila(fila, iw)
+	var anchos := repartir_fila(camas, iw)
 	if anchos.is_empty():
 		return {}
 	var detras := rng.randi_range(FONDO_DETRAS[0], FONDO_DETRAS[1])
@@ -427,21 +429,33 @@ static func probar_pasillo(dormitorios: int) -> Dictionary:
 	var tabique1 := BORDE + detras           # el tabique de encima del pasillo
 	var tabique2 := tabique1 + pasillo + 1   # y el de debajo
 
-	# 3. Las habitaciones: el salón primero (la habitación 0, como en los otros pisos), luego lo de delante, lo de
-	#    detrás y, la última, el pasillo con su recibidor
+	# 2. Las habitaciones: el salón primero (la habitación 0, como en los otros pisos), luego la cocina, los
+	#    dormitorios, sus baños y, el último, el pasillo con su recibidor
 	var izquierda := rng.randf() < 0.5   # el salón, a la izquierda del recibidor
 	var c_izq := BORDE
 	var c_der := BORDE + lado + 1 + recibidor + 1
 	var salas := [
 		{"id": 0, "uso": "salon", "c0": c_izq if izquierda else c_der, "f0": tabique2 + 1, "ancho": lado, "fondo": delante, "puertas": []},
-		{"id": 1, "uso": otro, "c0": c_der if izquierda else c_izq, "f0": tabique2 + 1, "ancho": lado, "fondo": delante, "puertas": []}]
+		{"id": 1, "uso": "cocina", "c0": c_der if izquierda else c_izq, "f0": tabique2 + 1, "ancho": lado, "fondo": delante, "puertas": []}]
 	var c := BORDE
-	for i in fila.size():
-		salas.append({"id": salas.size(), "uso": fila[i], "c0": c, "f0": BORDE, "ancho": anchos[i], "fondo": detras, "puertas": []})
+	for i in camas.size():
+		# ("tipo": sus muebles serán los de "dormitorio-<tipo>" del catálogo cuando los haya; si no, los de "dormitorio")
+		salas.append({"id": salas.size(), "uso": "dormitorio", "tipo": camas[i], "c0": c, "f0": BORDE, "ancho": anchos[i],
+			"fondo": detras, "puertas": []})
 		c += anchos[i] + 1
 	for s in salas:
 		if maxi(s.ancho, s.fondo) > MAX_LARGO * mini(s.ancho, s.fondo):
 			return {}
+	# el baño de cada dormitorio, en una de sus esquinas del fondo, contra la pared de fuera: le quedan al menos
+	# LIBRE_JUNTO casillas de dormitorio al lado (donde cabe la cama) y otras 4 delante, por donde se llega a su puerta
+	# del pasillo
+	for cuarto in salas.filter(func(s): return s.uso == "dormitorio"):
+		var bw := rng.randi_range(BANO_ANCHO[0], mini(BANO_ANCHO[1], cuarto.ancho - LIBRE_JUNTO - 1))
+		var bh := rng.randi_range(BANO_FONDO[0], mini(BANO_FONDO[1], cuarto.fondo - 5))
+		var bano := {"id": salas.size(), "uso": "bano", "puertas": [], "dueno_bano": cuarto.id, "f0": cuarto.f0,
+			"c0": cuarto.c0 if rng.randf() < 0.5 else cuarto.c0 + cuarto.ancho - bw, "ancho": bw, "fondo": bh}
+		cuarto.bano = bano.id
+		salas.append(bano)
 	# (el pasillo, "tipo" piso: sus muebles, los de "pasillo-piso" del catálogo, y su suelo, el del salón: mapa.gd)
 	var hueco := {"id": salas.size(), "uso": "pasillo", "tipo": "piso", "c0": BORDE, "f0": tabique1 + 1, "ancho": iw,
 		"fondo": filas - BORDE - tabique1 - 1, "puertas": []}
@@ -449,7 +463,7 @@ static func probar_pasillo(dormitorios: int) -> Dictionary:
 	var dueno := PackedInt32Array()
 	dueno.resize(cols * filas)
 	dueno.fill(-1)
-	var trozos := salas.slice(0, -1).map(func(s): return [s.id, Rect2i(s.c0, s.f0, s.ancho, s.fondo)])
+	var trozos := salas.filter(func(s): return s.uso != "bano" and s != hueco).map(func(s): return [s.id, Rect2i(s.c0, s.f0, s.ancho, s.fondo)])
 	trozos.append([hueco.id, Rect2i(BORDE, tabique1 + 1, iw, pasillo)])   # el pasillo, de lado a lado
 	trozos.append([hueco.id, Rect2i(BORDE + lado + 1, tabique2, recibidor, filas - BORDE - tabique2)])   # y el recibidor
 	for t in trozos:
@@ -457,44 +471,62 @@ static func probar_pasillo(dormitorios: int) -> Dictionary:
 		for f in range(r.position.y, r.end.y):
 			for cc in range(r.position.x, r.end.x):
 				dueno[f * cols + cc] = t[0]
+	# y cada baño, dentro de su dormitorio, con el tabique en L que los separa
+	for bano in salas.filter(func(s): return s.uso == "bano"):
+		var cuarto: Dictionary = salas[bano.dueno_bano]
+		for f in range(bano.f0 - 1, bano.f0 + bano.fondo + 1):
+			for cc in range(bano.c0 - 1, bano.c0 + bano.ancho + 1):
+				if cc < cuarto.c0 or f < cuarto.f0 or cc >= cuarto.c0 + cuarto.ancho or f >= cuarto.f0 + cuarto.fondo:
+					continue
+				var dentro: bool = cc >= bano.c0 and cc < bano.c0 + bano.ancho and f >= bano.f0 and f < bano.f0 + bano.fondo
+				dueno[f * cols + cc] = bano.id if dentro else -1
 
-	# 4. Las puertas, todas al pasillo: las de detrás, en el tabique de encima; las de delante, en el de debajo o, a
-	#    veces, en la pared del recibidor. Siempre con un trozo de muro a cada lado
+	# 3. Las puertas, siempre con un trozo de muro a cada lado. Las de los dormitorios, al pasillo, en el tabique de
+	#    encima; las del salón y la cocina, también al pasillo, en el de debajo o, a veces, en la pared del recibidor; y la
+	#    de cada baño, a su dormitorio, en el lado o en el frente del tabique en L
 	var puertas := []
 	for s in salas.slice(0, -1):
 		var p := {}
-		if s.f0 == BORDE:
+		var a: int = hueco.id
+		if s.uso == "bano":
+			a = s.dueno_bano
+			if rng.randf() < 0.5:
+				p = {"c": s.c0 + s.ancho if s.c0 == salas[a].c0 else s.c0 - 1,
+					"f": rng.randi_range(s.f0 + 1, s.f0 + s.fondo - PUERTA - 1), "ancho": 1, "fondo": PUERTA}
+			else:
+				p = {"c": rng.randi_range(s.c0 + 1, s.c0 + s.ancho - PUERTA - 1), "f": s.f0 + s.fondo, "ancho": PUERTA, "fondo": 1}
+		elif s.f0 == BORDE:
 			p = {"c": rng.randi_range(s.c0 + 1, s.c0 + s.ancho - PUERTA - 1), "f": tabique1, "ancho": PUERTA, "fondo": 1}
 		elif rng.randf() < A_RECIBIDOR:
 			p = {"c": s.c0 + s.ancho if s.c0 == c_izq else s.c0 - 1, "f": rng.randi_range(tabique2 + 2, filas - BORDE - PUERTA - 2),
 				"ancho": 1, "fondo": PUERTA}
 		else:
 			p = {"c": rng.randi_range(s.c0 + 1, s.c0 + s.ancho - PUERTA - 1), "f": tabique2, "ancho": PUERTA, "fondo": 1}
-		p.a = hueco.id
+		p.a = a
 		p.b = s.id
 		for f in range(p.f, p.f + p.fondo):
 			for cc in range(p.c, p.c + p.ancho):
 				dueno[f * cols + cc] = -2
 		puertas.append(p)
 		s.puertas.append(p)
-		hueco.puertas.append(p)
+		salas[a].puertas.append(p)
 
-	# 5. La puerta de entrada, en el centro de la pared de abajo: da al recibidor
+	# 4. La puerta de entrada, en el centro de la pared de abajo: da al recibidor
 	var apt := {"cols": cols, "filas": filas, "dueno": dueno, "salas": salas, "puertas": puertas,
 		"entrada": {"c": (cols - PUERTA) / 2, "lado": "abajo"}, "jefe": false, "forma": "pasillo"}
 	describir(apt)
 	return apt
 
 
-# Los anchos de las habitaciones de la fila de detrás del pasillo, para que con sus tabiques llenen justo "ancho"
-# (cada una entre su mínimo y su máximo de ANCHOS), o [] si no caben
-static func repartir_fila(fila: Array, ancho: int) -> Array:
-	var anchos: Array = fila.map(func(uso): return ANCHOS[uso][0])
-	var sobra: int = ancho - (fila.size() - 1)
+# Los anchos de los dormitorios de detrás del pasillo ("camas": de qué tipo es cada uno, de DORMITORIOS), para que con
+# sus tabiques llenen justo "ancho" (cada uno entre su mínimo y su máximo), o [] si no caben
+static func repartir_fila(camas: Array, ancho: int) -> Array:
+	var anchos: Array = camas.map(func(cama): return DORMITORIOS[cama].ancho[0])
+	var sobra: int = ancho - (camas.size() - 1)
 	for a in anchos:
 		sobra -= a
 	while sobra > 0:
-		var crecen: Array = range(fila.size()).filter(func(i): return anchos[i] < ANCHOS[fila[i]][1])
+		var crecen: Array = range(camas.size()).filter(func(i): return anchos[i] < DORMITORIOS[camas[i]].ancho[1])
 		if crecen.is_empty():
 			return []
 		anchos[escoger(crecen)] += 1
@@ -531,14 +563,14 @@ static func describir(apt: Dictionary) -> void:
 				if k - 1 > mejor:
 					mejor = k - 1
 					s.centro = Vector2((c + 0.5) * CASILLA, (f + 0.5) * CASILLA)
-	# los dormitorios se numeran si hay más de uno, y cada baño lleva el número del suyo (en el piso con pasillo, el
-	# baño es de todos: "Baño", sin número)
+	# los dormitorios se numeran si hay más de uno, y cada baño lleva el número del suyo (en el piso con pasillo, se
+	# llaman por su cama: DORMITORIOS)
 	var camas: Array = apt.salas.filter(func(s): return s.uso == "dormitorio")
 	if camas.size() > 1:
 		for i in camas.size():
-			camas[i].nombre = "Dormitorio %d" % (i + 1)
-			if camas[i].has("bano"):
-				apt.salas[camas[i].bano].nombre = "Baño %d" % (i + 1)
+			var tipo: Dictionary = DORMITORIOS.get(camas[i].get("tipo", ""), {})
+			camas[i].nombre = tipo.get("nombre", "Dormitorio %d" % (i + 1))
+			apt.salas[camas[i].bano].nombre = tipo.get("bano", "Baño %d" % (i + 1))
 
 
 # Le da la vuelta de arriba abajo (para los que tienen el pasillo por arriba)
@@ -578,16 +610,12 @@ static func fallos(apt: Dictionary) -> Array:
 			malos.append(s.uso + " sin puerta")
 		if s.casillas < 20:
 			malos.append(s.uso + " demasiado pequeño")
-	if apt.get("forma", "") == "pasillo":
-		# (en el piso con pasillo todas dan al pasillo; el baño, con una sola puerta: ahí se puede esconder el superviviente)
-		for s in apt.salas:
-			if s.uso == "bano" and s.puertas.size() != 1:
-				malos.append("el baño no tiene una sola puerta")
-	elif not apt.jefe:
+	if not apt.jefe:
 		var unidas := func(a: Dictionary, b: Dictionary) -> bool:
 			return a.puertas.any(func(p): return (p.a == a.id and p.b == b.id) or (p.a == b.id and p.b == a.id))
+		var en_t: bool = apt.get("forma", "") == "pasillo"   # (en el piso con pasillo, todas dan al pasillo, no al salón)
 		for s in apt.salas:
-			if (s.uso == "cocina" or s.uso == "dormitorio") and not unidas.call(s, apt.salas[0]):
+			if not en_t and (s.uso == "cocina" or s.uso == "dormitorio") and not unidas.call(s, apt.salas[0]):
 				malos.append(s.uso + " sin puerta al salón")
 			if s.uso == "bano" and (s.puertas.size() != 1 or not unidas.call(s, apt.salas[s.dueno_bano])):
 				malos.append("el baño no tiene una sola puerta, la de su dormitorio")
