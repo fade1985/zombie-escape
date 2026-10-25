@@ -270,7 +270,7 @@ func abanico(delta: float, hacia: Vector2, apunta: float) -> void:
 		var desplazado := abierto / (n - 1) / 2.0 if datos.i % 2 == 1 else 0.0
 		for i in n:
 			var a: float = apunta - abierto / 2.0 + float(i) / (n - 1) * abierto + desplazado
-			disparar(global_position + Vector2.from_angle(apunta) * 30.0, a, VELOCIDAD_GOTA, DANO_GOTA, 9.0)
+			disparar(global_position + Vector2.from_angle(apunta) * 30.0, a, VELOCIDAD_GOTA, DANO_GOTA, randf_range(7.5, 10.5))
 		datos.i += 1
 		datos.siguiente = 0.4
 		Sonido.tocar("escobazo")

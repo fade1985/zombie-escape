@@ -871,3 +871,60 @@ func pedir_andar(dir: Vector2) -> void:
 			Input.action_press(par[0], par[1])
 		else:
 			Input.action_release(par[0])
+
+
+# Con "--captura --jefe portera --gotas": el abanico de agua sucia de la portera (bala_zombi.gd) en su cuarto de la
+# limpieza, con Johnny quieto delante. Cuenta las gotas y las salpicaduras (salpicadura.gd) y que se secan solas.
+# Saca captura-gotas.png (las gotas volando), captura-gotas-salpica.png (la que le da a Johnny) y
+# captura-gotas-pared.png (de lejos) y captura-gotas-cerca.png (tres salpicaduras de cerca, con su mancha) y se cierra
+func probar_gotas() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe portera, la suya
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca sola: se la mete a mano
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true   # todo descubierto
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()   # sin penumbra, para que se vea todo
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	johnny.position = centro + Vector2(230, 0)
+	johnny.velocity = Vector2.ZERO
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(1.0, 1.0)
+	camara.reset_smoothing()
+	var jefa: Node2D = meter_zombi("portera", centro - Vector2(60, 0))
+	await get_tree().create_timer(0.3, false).timeout
+	jefa.position = centro - Vector2(60, 0)
+	johnny.position = centro + Vector2(230, 0)
+	camara.reset_smoothing()
+	print("Gotas: Johnny en %s, la portera en %s, centro %s" % [johnny.position, jefa.position, centro])
+	jefa.cambiar("aviso_abanico")
+	jefa.t = jefa.AVISO_ABANICO - 0.02
+	await get_tree().create_timer(0.32, false).timeout
+	print("Gotas: volando %d (esperado: 7 o más)" % get_tree().get_nodes_in_group("balas_zombi").size())
+	Captura.foto("captura-gotas.png")
+	await get_tree().create_timer(0.75, false).timeout
+	print("Gotas: salpicaduras %d (esperado: varias)" % get_tree().get_nodes_in_group("salpicaduras").size())
+	Captura.foto("captura-gotas-salpica.png")
+	jefa.process_mode = Node.PROCESS_MODE_DISABLED
+	camara.zoom = Vector2(0.7, 0.7)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.9, false).timeout
+	Captura.foto("captura-gotas-pared.png")
+	# de cerca: tres salpicaduras junto a Johnny, una recién chocada, otra cayendo y otra ya en el suelo
+	camara.zoom = Vector2(2.0, 2.0)
+	camara.reset_smoothing()
+	for i in 3:
+		Salpicadura.lanzar(mapa.cosas, johnny.position + Vector2(-90 + i * 70, 50), Vector2(1, -0.3), BalaZombi.AGUA)
+		await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-gotas-cerca.png")
+	await get_tree().create_timer(8.0, false).timeout   # (la 2ª tanda tarda en llegar a la pared)
+	print("Gotas: tras 8 s quedan %d salpicaduras (esperado: 0, se secan)" % get_tree().get_nodes_in_group("salpicaduras").size())
+	get_tree().quit()
