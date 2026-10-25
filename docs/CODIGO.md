@@ -60,7 +60,7 @@ en una línea.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
   `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
   (también el de la portera) es `vapor_rabia.gd`; el aviso de la franja (pixel art que se llena, con flechas y
-  destello final), `aviso.gd`. Heredan:
+  destello final), `aviso.gd` (lo pinta el shader `escenas/personajes/aviso.gdshader`). Heredan:
   - Apartamentos: `gloton.gd`, `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.

@@ -1049,12 +1049,13 @@ func probar_franja() -> void:
 		johnny.position = jefe.position + Vector2(150, 40)
 		johnny.velocity = Vector2.ZERO
 		camara.reset_smoothing()
-		for k in [0.3, 0.75, 0.95]:
+		for k in [0.3, 0.75, 0.97]:
 			jefe.t = k
-			jefe.queue_redraw()
-			await get_tree().create_timer(0.1, false).timeout
+			for i in 6:   # (sin pensar, el jefe no se repinta solo)
+				jefe.queue_redraw()
+				await RenderingServer.frame_post_draw
 			Captura.foto("captura-franja-%s-%d.png" % [par[0], roundi(k * 100)])
+		print("Franja (%s): aviso %s (esperado: sí)" % [par[0], "sí" if jefe.has_node("Aviso") else "no"])
 		jefe.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
-	print("Franja: casillas calculadas %d (esperado: 1 o más)" % Aviso.franjas.size())
 	get_tree().quit()
