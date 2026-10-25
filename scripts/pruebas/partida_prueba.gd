@@ -36,7 +36,8 @@
 #                  por segundo (también el de los de antes, en el baúl), sus números, que la llama atraviesa y quema a los de
 #                  dentro y no llega más allá de las 10 casillas, el depósito que se llena solo con la gasolina de la mochila y,
 #                  sin ella, «¡Sin gasolina!», la llama hacia zombis entre dos direcciones (sale recta por el tubo y
-#                  su cono de 35° le da al que no está justo en la línea), en las 8 direcciones y con las 4 skins (en la sala de pruebas de armas)
+#                  su cono de 45° le da al que no está justo en la línea; al que queda fuera, se gira lo justo para que
+#                  entre), en las 8 direcciones y con las 4 skins (en la sala de pruebas de armas)
 #   --supersoplete el supersoplete (la segunda creada a distancia con dibujo propio): su icono, su hoja con la llamarada en
 #                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
 #                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
@@ -45,8 +46,8 @@
 #                  creadas cuando se llamaba «Desintegrador»), su icono, su hoja (la del lanzallamas con las bombonas
 #                  verdes), la gota de ácido que cuelga de la boquilla y cae, el chorro que quita vida y deja la herida de
 #                  ácido a los de dentro y no llega al lejano, sin charcos ni luz, despegándose al soltar, contra la pared,
-#                  hacia zombis entre dos direcciones (sale recto por el tubo y su cono de 35° le da al que no está
-#                  justo en la línea),
+#                  hacia zombis entre dos direcciones (sale recto por el tubo y su cono de 45° le da al que no está
+#                  justo en la línea; al que queda fuera, se gira lo justo para que entre),
 #                  el jefe de bomberos (el ácido sí le hace daño), en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd); el depósito, que se llena con los bidones de
 #                  ácido de la mochila y, sin ellos, «¡Sin ácido!»; los del baúl con el daño de una gota cogen el de
@@ -3506,9 +3507,9 @@ func probar_latigo_electrico() -> void:
 #   - a oscuras (Luz.evento, como en el apagón), la llama alumbra alrededor (captura-lanzallamas-oscuro.png); y al
 #     soltar, se despega de la boca y se va (captura-lanzallamas-apagando.png); y contra la pared, se corta en ella y se
 #     aplasta abriéndose (captura-lanzallamas-pared.png)
-#   - hacia zombis entre dos direcciones del dibujo (chorro_torcido): sale recto por donde apunta el tubo y su cono
-#     de 35° le da al un poco apartado de la línea, y al del hueco entre la diagonal y abajo no; sin bailar entre dos
-#     direcciones (captura-lanzallamas-recto.png y captura-lanzallamas-hueco.png)
+#   - hacia zombis entre dos direcciones del dibujo (chorro_torcido): al un poco apartado de la línea, sale recto por
+#     donde apunta el tubo y su cono de 45° le da; al del hueco entre la diagonal y abajo, se gira lo justo para que
+#     entre por el borde; sin bailar entre dos direcciones (captura-lanzallamas-recto.png y captura-lanzallamas-hueco.png)
 #   - el depósito: casi vacío y con una gasolina en la mochila, al vaciarse se llena solo y la gasta; sin gasolina,
 #     «¡Sin gasolina!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-lanzallamas-sin-gasolina.png); al coger
 #     una gasolina del suelo vuelve a sacar el lanzallamas y lo llena
@@ -3616,6 +3617,7 @@ func probar_lanzallamas() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4).timeout
 	# hacia zombis entre dos direcciones del dibujo: sale recto por el tubo y el cono le da al que no está justo en él
+	# (al que queda fuera, se gira lo justo)
 	johnny.global_position = sala.diana.global_position + Vector2(-150, -100)
 	johnny.get_node("Camara").reset_smoothing()
 	await chorro_torcido("lanzallamas")
@@ -3711,14 +3713,16 @@ func echar_fuego(angulo: float, segundos: float, foto := "") -> void:
 
 # El chorro del lanza ácido (o la llama del lanzallamas) hacia zombis que no caen en ninguna de las 8 direcciones del
 # dibujo (abajo a la derecha, más hacia abajo que la diagonal, como en la foto del dueño del 25 oct). Johnny mira hacia
-# abajo (el tubo de la diagonal va más tumbado y le quedaría más lejos) y el chorro sale recto por donde apunta el tubo,
-# sin cambiar de dirección mientras. Con su cono de 35°, al zombi un poco apartado de esa línea le da
-# (captura-<arma>-recto.png); al que cae justo en el hueco entre la diagonal y abajo, no (captura-<arma>-hueco.png, como
-# se decidió). Luego el zombi va de la diagonal a abajo mientras le echa el chorro: Johnny pasa de una a otra una sola
-# vez (no baila entre las dos)
+# abajo (el tubo de la diagonal va más tumbado y le quedaría más lejos), sin cambiar de dirección mientras. Al zombi un
+# poco apartado de la línea del tubo ya le pilla su cono de 45°: el chorro sale recto por el tubo, sin girarse nada, y
+# le da (captura-<arma>-recto.png). Al que cae justo en el hueco entre la diagonal y abajo (a unos 36° del tubo), el
+# chorro se gira desde el tubo lo justo para que entre por el borde, con el margen (MARGEN_CHORRO: queda a 19,5° del
+# chorro), y le da (captura-<arma>-hueco.png). Luego el zombi va de la diagonal a abajo mientras le echa el chorro:
+# Johnny pasa de una a otra una sola vez (no baila entre las dos)
 func chorro_torcido(arma: String) -> void:
 	var w: Dictionary = johnny.arma()
-	for caso in [["recto", Vector2(25, 160), "más de 0"], ["hueco", Vector2(80, 150), "0"]]:
+	var borde := rad_to_deg(Llamarada.ABRE - johnny.MARGEN_CHORRO)
+	for caso in [["recto", Vector2(25, 160)], ["hueco", Vector2(80, 150)]]:
 		var zombi: Node2D = meter_zombi("lento", johnny.position + caso[1])
 		zombi.vida = 500
 		await get_tree().process_frame
@@ -3742,11 +3746,15 @@ func chorro_torcido(arma: String) -> void:
 		var tubo := deg_to_rad(w.cano[johnny.direccion])
 		var cuerpo: Vector2 = zombi.global_position - Vector2(0, Llamarada.ALTURA_CUERPO)   # (donde se le ve el cuerpo)
 		var de_boca: Vector2 = johnny.global_position + Vector2(w.boca[johnny.direccion].x * 2.0, 16.0 + w.boca[johnny.direccion].y * 2.0)
-		print("Chorro hacia un zombi %s: mira «%s» (postura «%s») · cambios de dirección %d · sale a %.1f de la boca del dibujo · entre el tubo y el chorro %.0f° · el zombi, a %.0f° del tubo · le quita %d (esperado: s (quieto_s), 0, 0.0, 0, %s, %s)" % [
-			"un poco apartado de la línea del tubo" if caso[0] == "recto" else "en el hueco entre la diagonal y abajo",
-			johnny.direccion, johnny.sprite.animation, cambios, boca.distance_to(de_boca),
-			rad_to_deg(absf(angle_difference(eje.angle(), tubo))), rad_to_deg(absf(angle_difference((cuerpo - boca).angle(), tubo))),
-			500 - zombi.vida, "menos de 17" if caso[0] == "recto" else "más de 17", caso[2]])
+		var del_tubo := rad_to_deg(absf(angle_difference((cuerpo - boca).angle(), tubo)))
+		print("Chorro hacia un zombi %s: mira «%s» (postura «%s») · cambios de dirección %d · sale a %.1f de la boca del dibujo · el zombi, a %.1f° del tubo · entre el tubo y el chorro %.1f° · el zombi, a %.1f° del chorro · le quita %d (esperado: s (quieto_s), 0, 0.0, %s, %s, %s, más de 0)" % [
+			"un poco apartado de la línea del tubo (ya dentro del cono)" if caso[0] == "recto" else "en el hueco entre la diagonal y abajo (fuera del cono)",
+			johnny.direccion, johnny.sprite.animation, cambios, boca.distance_to(de_boca), del_tubo,
+			rad_to_deg(absf(angle_difference(eje.angle(), tubo))), rad_to_deg(absf(angle_difference((cuerpo - boca).angle(), eje.angle()))),
+			500 - zombi.vida,
+			"menos de %.1f" % borde if caso[0] == "recto" else "más de 22,5",
+			"0.0, sin girarse" if caso[0] == "recto" else "%.1f, girado solo lo que se pasa" % (del_tubo - borde),
+			"igual que del tubo" if caso[0] == "recto" else "%.1f, al borde con el margen" % borde])
 		zombi.remove_from_group("zombis")
 		zombi.queue_free()
 		await get_tree().create_timer(0.4).timeout
@@ -3869,9 +3877,10 @@ func probar_supersoplete() -> void:
 #     (captura-desintegrador-chorro.png, a medio chorro), y la gota que colgaba se ha soltado
 #   - al soltar, se despega de la boquilla y se va (captura-desintegrador-soltando.png); y contra la pared se corta
 #     en ella y salpica (captura-desintegrador-pared.png)
-#   - hacia zombis entre dos direcciones del dibujo (chorro_torcido): sale recto por donde apunta el tubo y su cono
-#     de 35° le da al un poco apartado de la línea, y al del hueco entre la diagonal y abajo no; sin bailar entre dos
-#     direcciones (captura-desintegrador-recto.png y captura-desintegrador-hueco.png)
+#   - hacia zombis entre dos direcciones del dibujo (chorro_torcido): al un poco apartado de la línea, sale recto por
+#     donde apunta el tubo y su cono de 45° le da; al del hueco entre la diagonal y abajo, se gira lo justo para que
+#     entre por el borde; sin bailar entre dos direcciones (captura-desintegrador-recto.png y
+#     captura-desintegrador-hueco.png)
 #   - el depósito: casi vacío y con un bidón de ácido en la mochila, al vaciarse se llena solo y lo gasta; sin bidones,
 #     «¡Sin ácido!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-desintegrador-sin-acido.png, con la barra
 #     verde del depósito vacía; una gasolina no le vale); al coger un bidón del suelo (captura-desintegrador-bidon.png,
@@ -4002,6 +4011,7 @@ func probar_desintegrador() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4).timeout
 	# hacia zombis entre dos direcciones del dibujo: sale recto por el tubo y el cono le da al que no está justo en él
+	# (al que queda fuera, se gira lo justo)
 	johnny.global_position = sala.diana.global_position + Vector2(-150, -100)
 	johnny.get_node("Camara").reset_smoothing()
 	await chorro_torcido("desintegrador")

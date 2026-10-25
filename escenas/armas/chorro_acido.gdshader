@@ -3,7 +3,7 @@
 // aunque el chorro vaya en diagonal) se calcula lo "espeso" que está y se pinta con los verdes del ácido del juego (el
 // del medio, #c7e04a, el de EFECTOS.acido y las bombonas), a bandas, sin degradados. Como ácido a presión:
 //   - Sale fino y recto de la boquilla (no ondula como la llama) y se abre en abanico, tanto como el cono que moja
-//     (35° entre los dos bordes)
+//     (45° entre los dos bordes)
 //   - Es más claro y espeso en el centro (casi blanco junto a la boquilla) y lleva vetas a lo largo que corren
 //     hacia fuera muy deprisa
 //   - Alrededor, un rocío de gotitas sueltas; y, cuanto más lejos, más se rompe el chorro, hasta acabar en rocío
@@ -62,9 +62,9 @@ void fragment() {
 	// contra la pared, en la punta, se aplasta: se ensancha y salpica a los lados
 	float pared = cortada * smoothstep(largo - 40.0, largo, x);
 	// lo ancho: el chorro, fino en la boquilla y que se abre en abanico, y el rocío de alrededor, hasta el cono que
-	// moja (llamarada.gd: BOCA + x * tan(ABRE), 17,5° a cada lado)
-	float nucleo = 2.5 + x * 0.2 + pared * 14.0;
-	float rocio = 4.0 + x * 0.315 + pared * 44.0;
+	// moja (llamarada.gd: BOCA + x * tan(ABRE), 22,5° a cada lado)
+	float nucleo = 2.5 + x * 0.26 + pared * 14.0;
+	float rocio = 4.0 + x * 0.414 + pared * 44.0;
 	// las vetas: un ruido estirado a lo largo, que corre hacia fuera muy deprisa
 	float vetas = capas(vec2(x * 0.025 - tiempo * 13.0, y * 0.45));
 	// lejos de la boquilla el chorro se va llenando de huecos y acaba en rocío (contra la pared, se deshace antes)

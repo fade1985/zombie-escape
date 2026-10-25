@@ -21,10 +21,10 @@ extends Node2D
 
 const TICK := 0.25          # cada cuánto quita vida a los que están dentro
 const EMPUJA := 2           # empuja uno de cada tantos pellizcos (cada medio segundo)
-# cuánto se abre el cono a cada lado (17,5°: 35° entre los dos bordes; a 10 casillas, 100 de ancho a cada lado), en
-# los dos (el lanza ácido, igual), como se ve. Va recto por donde apunta el tubo del dibujo, y Johnny solo tiene 8:
-# así le da también al zombi que no está justo en esa línea (al que cae entre dos, a veces no)
-const ABRE := 0.305
+# cuánto se abre el cono a cada lado (22,5°: 45° entre los dos bordes; a 10 casillas, 133 de ancho a cada lado), en
+# los dos (el lanza ácido, igual), como se ve. Sale recto por donde apunta el tubo del dibujo, y Johnny solo tiene 8:
+# al zombi que queda fuera del cono, el chorro se le gira lo justo para que entre (johnny.gd, echar_fuego)
+const ABRE := 0.3927
 const BOCA := 6.0           # medio ancho de la llama en la boca
 const ALTURA := 50.0        # a qué altura sale de la boca (como la bala)
 const ALTURA_CUERPO := 26.0 # y a cuál llega al final
@@ -70,7 +70,7 @@ func _ready() -> void:
 
 
 # Johnny echa fuego en este paso: "desde", el suelo debajo de la boca; "a", hacia dónde va en la pantalla (por donde
-# apunta el tubo del dibujo: sale recta de él); "w", su arma (arma())
+# apunta el tubo del dibujo, o girada lo justo hacia el zombi: sale recta, sin doblarse); "w", su arma (arma())
 func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 	pedida = true
 	global_position = desde
@@ -244,7 +244,7 @@ func _draw() -> void:
 		return
 	var u := Vector2.from_angle(angulo)
 	var eje := (u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)).normalized()
-	var lado := eje.orthogonal() * 200.0
+	var lado := eje.orthogonal() * 240.0
 	var boca := Vector2(0, -ALTURA)
 	var desde := boca - eje * (ATRAS + 10.0)
 	var hasta := boca + eje * (largo * 1.1 + 12.0)
