@@ -1,19 +1,22 @@
 # Pruebas de sitios: la sala de mantenimiento (--sala), el ascensor (--ascensor), las viviendas (--viviendas),
-# el piso de los apartamentos (--piso), el pasillo de la planta (--pasillo), la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte
-# de la cadena de la partida de prueba (ver partida_prueba.gd).
+# el piso de los apartamentos (--piso), el pasillo de la planta y su cartel (--pasillo), la joyería (--joyeria) y cómo suena la pistola en cada sitio
+# (--acustica). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_fotos.gd"
 
 
-# Con "--captura --pasillo": el pasillo de la 1ª planta, que de momento va sin muebles. Dice cuántos hay (esperado: 0)
-# y saca captura-pasillo.png. Luego se cierra
+# Con "--captura --pasillo": el pasillo de las cuatro plantas con ascensor (la baja y la 1ª a la 3ª), con su cartel
+# pintado junto al ascensor (el número de la planta, de suelo a moldura) y, de momento, sin muebles. De cada una dice
+# cuántos muebles tiene (esperado: 0) y saca captura-pasillo-<planta>.png, con Johnny delante del ascensor. Luego se cierra
 func probar_pasillo() -> void:
-	nueva_planta(2)
-	await montar(0, 0, false)
-	johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.8).timeout
-	print("Pasillo de la planta: muebles %d (esperado: 0, de momento va vacío)" % get_tree().get_nodes_in_group("muebles").size())
-	Captura.foto("captura-pasillo.png")
+	for num in [1, 2, 3, 4]:
+		nueva_planta(num)
+		await montar(0, 0, false)
+		johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		print("Pasillo de la planta %d: muebles %d (esperado: 0, de momento va vacío)" % [num - 1,
+			get_tree().get_nodes_in_group("muebles").size()])
+		Captura.foto("captura-pasillo-%d.png" % (num - 1))
 	get_tree().quit()
 
 
@@ -199,7 +202,7 @@ func probar_sala() -> void:
 # baja en él a la sala de mantenimiento, las guarda en el baúl y vuelve a la 1ª planta, delante del ascensor. En la
 # 2ª planta vuelve a estar averiado, y en la azotea no hay. Cada línea de la terminal dice lo esperado. Saca
 # captura-placas.png (antes de nada, el pasillo de la planta baja con las placas de las puertas y el cartel de la
-# planta junto al ascensor), captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
+# planta, pintado junto al ascensor), captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
 # sala, ya abajo) y captura-ascensor-baul.png (lo de la mochila, ya en el baúl). Deja el baúl como estaba y se cierra
 func probar_ascensor() -> void:
 	var antes := Guardado.cargar()

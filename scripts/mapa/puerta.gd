@@ -13,6 +13,10 @@ signal empujada(indice: int)
 const DIBUJO := {"piso": preload("res://assets/sprites/puerta-piso.png"),
 	"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
+# El número de la planta pintado en la pared junto al ascensor (de suelo a moldura): 28 × 42 píxeles, 56 × 84 unidades.
+# Planta baja (0) a 3ª (la azotea no tiene ascensor)
+const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
+	preload("res://assets/sprites/cartel-planta-2.png"), preload("res://assets/sprites/cartel-planta-3.png")]
 const MARCO := Color("2b1d16")
 const HOJA := Color("6b4329")
 const HUECO := Color("1a1410")
@@ -45,14 +49,6 @@ const LETRAS := {
 	"8": [".XXX.", "X...X", "X...X", ".XXX.", "X...X", "X...X", ".XXX."],
 	"9": [".XXX.", "X...X", "X...X", ".XXXX", "....X", "...X.", ".XX.."],
 	"llave": ["....X.X", "....XXX", "...XXX.", "..XX...", ".XX....", "XX.....", "X......"],   # la llave inglesa (7 × 7)
-}
-# y las de "PLANTA", más pequeñas: 3 × 5
-const LETRITAS := {
-	"P": ["XXX", "X.X", "XXX", "X..", "X.."],
-	"L": ["X..", "X..", "X..", "X..", "XXX"],
-	"A": ["XXX", "X.X", "XXX", "X.X", "X.X"],
-	"N": ["X.X", "XXX", "XXX", "XXX", "X.X"],
-	"T": ["XXX", ".X.", ".X.", ".X.", ".X."],
 }
 
 var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
@@ -178,7 +174,7 @@ func ascensor() -> void:
 		draw_rect(Rect2(x0 - 10, -20, w + 20, 2), CINTA_SOMBRA)
 		cinta(x0 - 10, -30, w + 20)
 	if salida.has("planta"):
-		cartel_planta(Vector2(x0 - 76, -84))
+		cartel_planta()
 
 
 # La placa de un piso, con su esquina de arriba a la izquierda en "donde": la letra en una placa de latón (22 × 26)
@@ -190,15 +186,13 @@ func placa_de_piso(donde: Vector2) -> void:
 	letra(filas, donde + Vector2(6, 6), 2, metal.letra)
 
 
-# El cartel de la planta, junto al ascensor: una placa de acero (58 × 58) con "PLANTA" en pequeño y debajo el número
-# en grande (la planta baja, el 0, como en los botones de los ascensores)
-func cartel_planta(donde: Vector2) -> void:
-	placa(Rect2(donde, Vector2(58, 58)), CHAPA)
-	var x := donde.x + 6
-	for c in "PLANTA":
-		letra(LETRITAS[c], Vector2(x, donde.y + 8), 2, CHAPA.letra)
-		x += 8
-	letra(LETRAS[str(salida.planta)], donde + Vector2(19, 24), 4, CHAPA.letra)
+# El cartel de la planta, junto al ascensor, a su izquierda (a 10 unidades del marco): el número pintado con plantilla
+# en la pared, con «PLANTA» pequeño encima, de suelo a moldura (la planta baja, el 0, como en los botones de los
+# ascensores). Las pinturas son de PixelLab (tools/guias_cartel.py)
+func cartel_planta() -> void:
+	var planta: int = salida.planta
+	if planta >= 0 and planta < CARTELES.size():
+		draw_texture_rect(CARTELES[planta], Rect2(-114, -84, 56, 84), false)
 
 
 # Una placa: el borde oscuro y el metal, con su brillo arriba y a la izquierda y su sombra abajo y a la derecha
@@ -212,7 +206,7 @@ func placa(r: Rect2, metal: Dictionary) -> void:
 	draw_rect(Rect2(dentro.end.x - 2, dentro.position.y + 2, 2, dentro.size.y - 2), metal.sombra)
 
 
-# Una letra de LETRAS o de LETRITAS, con su esquina de arriba a la izquierda en "donde"; "px", lo que mide cada píxel
+# Una letra de LETRAS, con su esquina de arriba a la izquierda en "donde"; "px", lo que mide cada píxel
 func letra(filas: Array, donde: Vector2, px: float, color: Color) -> void:
 	for f in filas.size():
 		for c in filas[f].length():

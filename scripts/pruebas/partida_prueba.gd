@@ -54,7 +54,7 @@
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles           [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados, la cafetera y las cámaras           [prueba_sitios.gd]
-#   --pasillo           el pasillo de la planta (de momento sin muebles)                     [prueba_sitios.gd]
+#   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel y sin muebles    [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
