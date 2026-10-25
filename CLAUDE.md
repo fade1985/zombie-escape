@@ -24,7 +24,9 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
   innecesarios. Comentarios del código y commits, también en español.
 - Por tareas: al terminar, resumen + captura, commit, push y **esperar su visto bueno**.
 - Antes de cambios grandes, **contar el plan y preguntar**. Si dice "no hagas nada, solo dime", solo se responde.
-- Directamente en `main`, sin pull requests salvo que los pida.
+- Directamente en `main`, sin pull requests salvo que los pida. El juego lo hacen **dos personas**, el dueño y un
+  amigo, cada uno en su equipo y los dos en `main`: `git pull` antes de empezar y otra vez antes de subir, por si el
+  otro ha subido algo.
 - **`PENDIENTES.md`** (en la raíz) es la lista del dueño de fallos, mejoras y cosas por limar: él dicta los
   puntos y Claude solo los apunta. **No se trabaja en ningún punto hasta que él lo pida**; al terminar uno con
   visto bueno, se borra de la lista en el mismo commit.
@@ -41,7 +43,8 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
 
 ## Probar
 
-- **Godot** (dos equipos, dos rutas; si no existe ninguna, buscar `Godot_v4.7.2-stable_win64_console.exe`):
+- **Godot** (una ruta en cada equipo, el del dueño y el de su amigo; si no existe ninguna, buscar
+  `Godot_v4.7.2-stable_win64_console.exe`):
   `C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe` o
   `C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe`.
 - **Arranca y saca fotos sin jugar** (se cierra solo, sin sonido, usa `guardado-prueba.json`):
