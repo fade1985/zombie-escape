@@ -71,7 +71,9 @@ cada prueba se explica lo que comprueba y las fotos que saca.
 La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba pone en cuál estás):
 
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
-  tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera.
+  tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
+  cuerpo, A distancia y especiales, y los arrojables de uno en uno (molotov y granada $5, atraedora y congeladora $8)
+  hasta su máximo; todo, para esa partida.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona × 4), el glotón (el
   Glotón; quien te hace daño lo paga), el gymbro (el Gymbro; cuerpo a cuerpo × 3) y el bombero (el jefe de bomberos;
@@ -90,7 +92,7 @@ La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (mitad izquierda de la pantalla); abajo a la
 derecha, según el modo: esquivar grande (asistido) o joystick derecho (libre).
-En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de fuego en la mano recarga) y lanzar (arrastrar y
+En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de a distancia en la mano recarga) y lanzar (arrastrar y
 soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa. En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.
 

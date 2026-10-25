@@ -14,7 +14,8 @@
 #     la mano al repuesto y al revés (a_la_mano, al_repuesto).
 #   - La atraedora y la congeladora (ARROJADIZAS): se lanzan como la granada, con su propio efecto. Hasta el 25 oct
 #     se creaban en el banco de trabajo con una receta; ahora se cuentan como el molotov y la granada, pero no se
-#     tienen al empezar ni las sueltan los zombis.
+#     tienen al empezar ni las sueltan los zombis: solo se compran.
+#   - Los cuatro se compran de uno en uno en la tienda de armas del ordenador (PRECIOS; ordenador.gd, comprar_lanzable).
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
 # explota a los 2 s (granada.gd).
 class_name Lanzables
@@ -69,6 +70,9 @@ const ARROJADIZAS := {"atraedora": ATRAEDORA, "congeladora": CONGELADORA}
 const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de la atraedora o la congeladora
 const DATOS := {"molotov": MOLOTOV, "granada": GRANADA, "atraedora": ATRAEDORA, "congeladora": CONGELADORA}
 const NOMBRES := {"molotov": "molotovs", "granada": "granadas", "atraedora": "atraedoras", "congeladora": "congeladoras"}
+const UNO := {"molotov": "Molotov", "granada": "Granada", "atraedora": "Atraedora", "congeladora": "Congeladora"}
+# Lo que cuesta uno en la tienda de armas del ordenador (el dueño, 25 oct): se compran de uno en uno, para esa partida
+const PRECIOS := {"molotov": 5, "granada": 5, "atraedora": 8, "congeladora": 8}
 const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a"), "atraedora": Color("#ffd23f"),
 	"congeladora": Color("#9fe8ff")}   # (los de ARROJADIZAS)
 const ARTIFICIERO := ["molotov", "granada"]   # a los que el talento Artificiero les suma unidades (lanzar_extra)

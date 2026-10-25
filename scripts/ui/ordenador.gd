@@ -7,6 +7,8 @@
 #     desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
 #     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho). Desde el
 #     25 oct también vende el lanzallamas, el lanza ácido y la pistola eléctrica, que antes se creaban en el banco.
+#     Cuatro secciones, las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
+#     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, para esta partida, hasta su máximo.
 #   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
 #     cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
@@ -38,6 +40,14 @@ const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGRO
 const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"noticias": "Noticias de Canal 8", "colecciones": "Colecciones y bestiario"}
 const ICONO_ARMA := {"mp5": "pistola"}
+# Las secciones de armas de la tienda: [familia (Armas.familia), título]. Las especiales, aparte (como sus piezas),
+# aunque van en el hueco de las de A distancia. Debajo, los arrojables
+const SECCIONES := [
+	["cuerpo", "Cuerpo a cuerpo"],
+	["distancia", "A distancia · llenas, y con munición de reserva"],
+	["especial", "Especiales · llenas; van en el hueco de las de A distancia"],
+]
+const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
 const TARJETA := Color("#d8d1bb")
@@ -537,29 +547,40 @@ func programa_armas(c: VBoxContainer) -> void:
 	nota_partida(c)
 	var ids := Armas.PRECIOS.keys()
 	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
-	for tipo in ["cuerpo", "fuego"]:
-		var lista := rejilla(grupo(c, "Cuerpo a cuerpo" if tipo == "cuerpo" else "De fuego · llenas, y las de balas con munición de reserva"))
+	for seccion in SECCIONES:
+		var lista := rejilla(grupo(c, seccion[1]))
 		for id in ids:
-			var w: Dictionary = Armas.DATOS[id]
-			if w.tipo != tipo:
+			if Armas.familia(id) != seccion[0]:
 				continue
+			var w: Dictionary = Armas.DATOS[id]
 			var precio: int = Armas.PRECIOS[id]
-			var lleva: bool = partida.johnny.huecos[tipo] == id
+			var lleva: bool = partida.johnny.huecos[w.tipo] == id
 			var etiqueta := "LA LLEVAS" if lleva else ("GRATIS" if precio == 0 else "$%d" % precio)
 			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
 			var b := tarjeta(lista, "b_" + id, ICONO_ARMA.get(id, id), w.nombre, resumen_corto(w), etiqueta, estado)
 			enlazar(b, resumen(w), comprar_arma.bind(id))
+	# los arrojables, de uno en uno: «AL MÁXIMO» (en verde) si ya lleva todos los que caben
+	var lz: Lanzables = partida.lanzables
+	var lista := rejilla(grupo(c, "Arrojables · de uno en uno, hasta los que caben"))
+	for k in Lanzables.PRECIOS:
+		var precio: int = Lanzables.PRECIOS[k]
+		var lleno := lz.cuantas(k) >= lz.maximo(k)
+		var estado := "lleno" if lleno else ("" if s.dolares >= precio and not Reto.sin_municion() else "bloqueada")
+		var b := tarjeta(lista, "b_" + k, k, Lanzables.UNO[k], "Llevas %d de %d" % [lz.cuantas(k), lz.maximo(k)],
+			"AL MÁXIMO" if lleno else "$%d" % precio, estado)
+		var que: String = INVENTARIO.QUE_HACE[k]
+		enlazar(b, "%s: %s%s Cada uno, $%d." % [Lanzables.UNO[k], que[0].to_lower(), que.substr(1), precio],
+			comprar_lanzable.bind(k))
 	info.text = "Elige un arma: se paga con los dólares ahorrados."
 
 
-# Debajo del nombre, como weaponSummary del JS: "Cuerpo a cuerpo · Daño 9 · 4 ataques/s" (el lanzallamas y el lanza
-# ácido, su daño por segundo y su depósito)
+# Debajo del nombre, como weaponSummary del JS pero sin el tipo (ya lo dice su sección): "Daño 9 · 4 ataques/s" (el
+# lanzallamas y el lanza ácido, su daño por segundo y su depósito)
 func resumen_corto(w: Dictionary) -> String:
 	if w.has("deposito"):
-		return "De fuego · Daño %d/s · Depósito %d s" % [w.dano, roundi(w.deposito)]
+		return "Daño %d/s · Depósito %d s" % [w.dano, roundi(w.deposito)]
 	var dano := "%d × %d" % [w.dano, w.perdigones] if w.get("perdigones", 1) > 1 else str(w.dano)
-	var texto := "%s · Daño %s · %s ataques/s" % ["Cuerpo a cuerpo" if w.tipo == "cuerpo" else "De fuego", dano,
-		str(w.ritmo).trim_suffix(".0")]
+	var texto := "Daño %s · %s ataques/s" % [dano, str(w.ritmo).trim_suffix(".0")]
 	if w.tipo == "fuego":
 		texto += " · Cargador %d" % w.cargador
 	return texto
@@ -607,6 +628,33 @@ func comprar_arma(id: String) -> void:
 	abrir("armas", "b_" + id)
 	info.set_deferred("text", ("¡Compra hecha! %s a la mano; %s pasa al repuesto." if suelo == "" else
 		"¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.") % [w.nombre, vieja])   # después de marcar el botón (que pone su explicación)
+
+
+# Un arrojable más para esta partida (como cogerlo del suelo: lanzables.sumar), si cabe y le llega
+func comprar_lanzable(k: String) -> void:
+	var lz: Lanzables = partida.lanzables
+	var no := ""
+	if Reto.sin_municion():
+		no = "En el reto «%s» no se lleva nada que lanzar." % Reto.REGLAS.cuerpo.nombre
+	elif lz.cuantas(k) >= lz.maximo(k):
+		no = "Ya llevas el máximo de %s (%d)." % [Lanzables.NOMBRES[k], lz.maximo(k)]
+	elif not lz.hay_hueco(k):
+		no = "No te queda hueco para otro arrojable: deja alguno desde el inventario."
+	var s := Guardado.cargar()
+	var precio: int = Lanzables.PRECIOS[k]
+	if no == "" and s.dolares < precio:
+		no = "No te llega: te faltan $%d." % (precio - s.dolares)
+	if no != "":
+		info.text = no
+		Sonido.tocar("no")
+		return
+	Sonido.tocar("compra")
+	s.dolares -= precio
+	Guardado.escribir(s)
+	partida.ahorrados = s.dolares
+	lz.sumar(k)
+	abrir("armas", "b_" + k)
+	info.set_deferred("text", "¡Compra hecha! Ya llevas %d/%d %s." % [lz.cuantas(k), lz.maximo(k), Lanzables.NOMBRES[k]])
 
 
 # ── Logros ──

@@ -28,7 +28,7 @@ const LISTA := [
 	{"id": "camorrista", "rama": "militar", "nivel": 2, "nombre": "Camorrista", "max": 5, "icono": "bate", "pide": "ataque",
 		"desc": "+10 % de daño cuerpo a cuerpo por punto"},
 	{"id": "tirador", "rama": "militar", "nivel": 2, "nombre": "Tirador", "max": 5, "icono": "pistola", "pide": "ataque",
-		"desc": "+10 % de daño con armas de fuego por punto"},
+		"desc": "+10 % de daño con armas a distancia por punto"},
 	{"id": "artificiero", "rama": "militar", "nivel": 2, "nombre": "Artificiero", "max": 3, "icono": "molotov", "pide": "punteria",
 		"desc": "+1 molotov y +1 granada por punto"},
 	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "guantes", "pide": "camorrista",

@@ -30,6 +30,7 @@
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
 #   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto               [prueba_inventario.gd]
+#   --tienda            la tienda de armas: sus secciones y comprar arrojables de uno en uno [prueba_inventario.gd]
 #   --municion          la munición por tipos y los arrojables (3 a mano y 8 de repuesto)    [prueba_inventario.gd]
 #   --municion-suelo    la munición en el suelo (con luz y a oscuras) y la caja según el arma [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
@@ -96,6 +97,9 @@ func empezar_prueba() -> void:
 	elif "--repuesto" in args:
 		set_process(false)   # sin la prueba larga
 		probar_repuesto()
+	elif "--tienda" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tienda()
 	elif "--municion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion()

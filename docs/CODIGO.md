@@ -29,12 +29,14 @@ en una línea.
   munición (`municion`, `reserva()`, `meter_municion()`, `arma_de_caja()`) y el depósito del lanzallamas y el lanza
   ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
 - `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
-  llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. `bala.gd`.
+  llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. `familia()`:
+  cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
   ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas.
 - `llamarada.gd`: la llama continua del lanzallamas y el chorro del lanza ácido (cono, daño cada 0,25 s, empuje,
   luz). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
-- `lanzables.gd`: molotov, granada y arrojadizas: 3 a mano (`mano`, F cambia) y 8 de repuesto (`repuesto`).
+- `lanzables.gd`: molotov, granada, atraedora y congeladora: 3 a mano (`mano`, F cambia) y 8 de repuesto (`repuesto`);
+  lo que cuesta uno en la tienda (`PRECIOS`).
   `granada.gd`: también la atraedora y la congeladora.
 - `sala_armas.gd`: la sala de pruebas de armas (F11): la diana, todas las armas, las líneas de ayuda y su panel.
 
@@ -89,7 +91,8 @@ en una línea.
   jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»), `opciones.gd`, `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias).
-- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones).
+- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
+  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`).
 - `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`), arrastrar con ratón o dedo
   (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
 

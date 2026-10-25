@@ -28,6 +28,13 @@ const ORDEN := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]   #
 const PRECIOS := {"cuchillo": 10, "bate": 15, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
+# La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
+# "distancia" (pistola, escopeta y MP5) o "especial" (lanzallamas, lanza ácido y pistola eléctrica: las de "efecto").
+# Por dentro, las de A distancia y las especiales son de tipo "fuego" y van en el mismo hueco
+static func familia(id: String) -> String:
+	var w: Dictionary = DATOS[id]
+	return "cuerpo" if w.tipo == "cuerpo" else ("especial" if w.has("efecto") else "distancia")
+
 # Hacia dónde apunta el tubo en el dibujo quieto del lanzallamas en cada dirección (el del lanza ácido es el mismo: su
 # hoja sale de la del lanzallamas), en grados en la pantalla (0 = a la derecha, 90 = abajo), medido en las hojas: las
 # diagonales van más tumbadas que 45° (unos 24°), como se ven desde arriba. Con él se elige hacia dónde mira Johnny al

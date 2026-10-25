@@ -407,7 +407,7 @@ func arrojable(r: Rect2, clave: String, k: String, margen := 12.0) -> Control:
 
 
 func nombre_lanzable(k: String) -> String:
-	return {"molotov": "Molotov", "granada": "Granada", "atraedora": "Atraedora", "congeladora": "Congeladora"}[k]
+	return Lanzables.UNO[k]
 
 
 func icono_lanzable(k: String) -> String:
