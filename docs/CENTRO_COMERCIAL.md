@@ -1034,10 +1034,12 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      |---|---|---|
      | Ferretería | clavos, hacha, llave inglesa, cuchillas, spray | cinta americana, cadena |
      | Electrónica | táser, extintor | batería, cable |
-     | Restaurante | alcohol, gasolina, mechero, extintor | aceite, bombona de gas |
-     | Supermercado | lejía, alcohol, mechero | hielo seco |
+     | Restaurante | alcohol, gasolina, extintor | aceite, bombona de gas |
+     | Supermercado | lejía, alcohol | hielo seco |
      | Farmacia | alcohol, lejía | jeringuilla |
      | Tienda de ropa | cuchillas, spray | perchas |
+
+     (El mechero salía en el restaurante y en el supermercado; se quitó del juego el 25 oct, con el súpersoplete.)
 
      - Todos los de la lista de una tienda salen igual de a menudo. En el pasillo se elige una tienda al azar y luego
        uno de su lista. El jefe de la planta suelta sus dos objetos seguros de su tienda (si no tiene, como en el pasillo).

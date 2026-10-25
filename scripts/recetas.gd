@@ -1,6 +1,6 @@
 # Las recetas del banco de trabajo (src/recetas.js del JS). Cada receta junta dos ingredientes: objetos
-# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 14 primeras se hacen con lo de los
-# Apartamentos (eran 15: la lanza se quitó del juego el 25 oct); las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
+# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 13 primeras se hacen con lo de los
+# Apartamentos (eran 15: la lanza y el súpersoplete se quitaron del juego el 25 oct); las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
 # tres últimas, solo cosas del centro (parte 6 de docs/CENTRO_COMERCIAL.md). El arma que sale lleva una rareza al azar que
 # multiplica su daño, y va al baúl (guardado: "baul_armas"). Desde el baúl se sacan para una partida; lo que
 # hacen está en Armas.CREADAS y armas_creadas.gd (fase 7b2).
@@ -11,18 +11,18 @@
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico, el lanzallamas, el supersoplete, el desintegrador, el bumerán, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/aplastacabezas.png,
+#              eléctrico, el lanzallamas, el desintegrador, el bumerán, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/aplastacabezas.png,
 #              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png, bumeran.png, pistola_electrica.png y garfio.png, de tools/icono_aplastacabezas.py,
+#              latigo_electrico.png, lanzallamas.png, desintegrador.png, bumeran.png, pistola_electrica.png y garfio.png, de tools/icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
-#              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py e
-#              icono_supersoplete.py, icono_desintegrador.py, icono_bumeran.py, icono_pistola_electrica.py e icono_garfio.py). Se lee siempre de
+#              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py,
+#              icono_desintegrador.py, icono_bumeran.py, icono_pistola_electrica.py e icono_garfio.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
-#   edificio   con lo de qué edificio se hace: "apartamentos" (las 14 primeras), "mezcla" (una cosa de casa y otra
+#   edificio   con lo de qué edificio se hace: "apartamentos" (las 13 primeras), "mezcla" (una cosa de casa y otra
 #              del centro comercial) o "centro" (solo cosas del centro). Las Colecciones del ordenador cuentan las
 #              de "mezcla" y "centro" en el centro comercial (de_edificio)
 class_name Recetas
@@ -39,8 +39,6 @@ const LISTA := {
 		"desc": "Llamarada continua que quema a todos; se llena con gasolina", "edificio": "apartamentos"},
 	"partecuerpos": {"nombre": "Partecuerpos", "con": ["bate", "cuchillas"], "hueco": "cuerpo", "icono": "partecuerpos", "dano": 22,
 		"desc": "Golpe en arco ancho que hace sangrar", "edificio": "apartamentos"},
-	"supersoplete": {"nombre": "Súpersoplete", "con": ["spray", "mechero"], "hueco": "fuego", "icono": "supersoplete", "dano": 7,
-		"desc": "Llamarada en cono, muy corta y muy fuerte", "edificio": "apartamentos"},
 	# el lanza ácido: antes se llamaba desintegrador (25 oct); por dentro (el id, sus dibujos, el guardado) sigue siéndolo.
 	# Desde el 25 oct es un lanzallamas de ácido: su daño es por segundo, como el del lanzallamas (antes, 3 por gota)
 	"desintegrador": {"nombre": "Lanza ácido", "con": ["pistola_agua", "lejia"], "hueco": "fuego", "icono": "desintegrador", "dano": 30,
@@ -174,7 +172,7 @@ static func icono_de(id: String) -> String:
 # ── Colecciones (el programa del ordenador) ──
 # Las creadas alguna vez se apuntan en el guardado ("creadas"), y el ordenador las cuenta por edificio.
 
-# Las que se hacen con lo de un edificio, en el orden de LISTA: en los Apartamentos, las 14 primeras; en el centro
+# Las que se hacen con lo de un edificio, en el orden de LISTA: en los Apartamentos, las 13 primeras; en el centro
 # comercial, las de "mezcla" y las de "centro" (9). Otro valor: todas
 static func de_edificio(edificio: String) -> Array:
 	match edificio:

@@ -1,4 +1,4 @@
-# Una gota del súpersoplete o del desintegrador (los "chorros" de src/armas-creadas.js), una
+# Una gota de fuego o de ácido (los "chorros" de src/armas-creadas.js), una
 # chispa de la pistola eléctrica o un clavo de la bomba de clavos (los dos del centro comercial). Vuela
 # recta, atraviesa a los zombis (a cada uno le da una vez), se para en las paredes y los muebles y se apaga al
 # llegar a su alcance. Como la bala, la gota "de verdad" va a ras de suelo y se dibuja más arriba.
@@ -8,7 +8,7 @@ extends Node2D
 const ALTURA_CUERPO := 22.0
 const BAJADA := 14.0
 
-var tipo := "llama"          # "llama", "cono" (el súpersoplete), "acido", "chispa" o "clavo"
+var tipo := "llama"          # "llama", "acido", "chispa" o "clavo"
 var velocidad := Vector2.ZERO
 var dano := 0.0
 var empuje := 1.0

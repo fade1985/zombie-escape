@@ -196,7 +196,7 @@ la lumbre.
 - **El jefe de bomberos** (`scripts/bombero.gd`, `escenas/personajes/bombero.tscn`; las bolas de fuego,
   `scripts/bola_fuego.gd`). Ya sale en el sorteo (no la portera en su lugar). Los números que han quedado
   (provisionales, se ajustan jugando): vida 560 (+25 % por planta), velocidad 70, 10 por contacto.
-  - *Inmune al fuego:* el molotov (ni el fogonazo ni el charco), el lanzallamas y el súpersoplete, el fuego del bate
+  - *Inmune al fuego:* el molotov (ni el fogonazo ni el charco), el lanzallamas, el fuego del bate
     de fuego y el aceite ardiendo no le quitan nada; grita «¡INMUNE!». Los golpes, las balas y las explosiones, sí
     (menos mientras gira: la burbuja de fuego).
     Por dentro: `inmune_fuego` en el jefe, que miran `proyectil.gd` y `armas_creadas.gd`; los charcos de fuego le

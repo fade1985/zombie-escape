@@ -87,16 +87,14 @@ const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 17
 # y azul clara con copos y cristalitos) y el látigo eléctrico (conserje-48-latigo-electrico: el latigazo con el cable
 # negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
 # (conserje-48-lanzallamas: dos bombonas rojas a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
-# el juego) y el
-# supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
-# la boca acampanada y una llamarada en cono) y el desintegrador, en el juego «Lanza ácido» (conserje-48-desintegrador: la
+# el juego) y el desintegrador, en el juego «Lanza ácido» (conserje-48-desintegrador: la
 # del lanzallamas con las bombonas verdes de ácido y sin la llamita en la punta del tubo) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
 # bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd) y la
 # pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
 # celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd) y el garfio (conserje-48-garfio: el gesto de lanzar el
 # gancho de perchas con la cuerda enrollada en la otra mano; el gancho que vuela, la cuerda y el zombi que arrastra los dibuja el juego,
-# garfio.gd), con sus hojas de cada skin (tools/cara.py). El súpersoplete usa el cargador como depósito; el
-# lanzallamas tiene un depósito de verdad, en segundos. El daño no está aquí: lo trae cada arma creada (receta + rareza,
+# garfio.gd), con sus hojas de cada skin (tools/cara.py). El lanzallamas y el lanza ácido tienen un depósito, en
+# segundos. El daño no está aquí: lo trae cada arma creada (receta + rareza,
 # recetas.gd)
 const CREADAS := {
 	"aplastacabezas": {"base": "bate", "empuje": 3.0, "efecto": "aturde", "momento": 0.222,
@@ -135,15 +133,6 @@ const CREADAS := {
 		"boca": {"s": Vector2(2, 1), "se": Vector2(26, -13), "e": Vector2(28, -22), "ne": Vector2(24, -39),
 			"n": Vector2(8, -52), "no": Vector2(-25, -40), "o": Vector2(-28, -21), "so": Vector2(-24, -10)},
 		"cano": CANO_LANZALLAMAS},
-	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el
-	# juego, armas_creadas.gd); la casilla es de 144x152, con los pies en 72,72, porque la llamarada llega a 69 píxeles a un
-	# lado y 77 hacia abajo. La boca NO es la que calcula arma.py (el centro de la llamarada, que cae a 40-50 píxeles de la
-	# boquilla): es el piloto del dibujo quieto, a mano (conserje-48-supersoplete.json, "muzzle", tiene los mismos valores)
-	"supersoplete": {"base": "escopeta", "perdigones": 1, "ritmo": 2.0, "alcance": 100.0, "velocidad": 300.0, "cargador": 12,
-		"recarga": 2.2, "cartucho": false, "empuje": 1.0, "efecto": "cono", "pies": Vector2(72, 72),
-		"hoja": preload("res://assets/sprites/conserje-48-supersoplete.tres"),
-		"boca": {"s": Vector2(-2, 10), "se": Vector2(25, -22), "e": Vector2(26, -31), "ne": Vector2(24, -41),
-			"n": Vector2(10, -52), "no": Vector2(-25, -40), "o": Vector2(-27, -30), "so": Vector2(-26, -22)}},
 	# el desintegrador (en el juego, «Lanza ácido»): un lanzallamas de ácido. Como el lanzallamas, no dispara: echa un chorro
 	# continuo de ácido mientras se ataca (llamarada.gd, con su efecto "acido") que llega a 10 casillas, con un depósito
 	# de "deposito" segundos que se llena entero en "recarga" segundos con un bidón de ácido de la mochila (los suelta el
