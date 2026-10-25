@@ -21,6 +21,7 @@
 #   --gotas             (con --jefe portera) el abanico de agua sucia y sus salpicaduras    [prueba_jefes_salas.gd]
 #   --vapor             el vapor de la cabeza de cada minijefe al enfadarse                [prueba_jefes_salas.gd]
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
+#   --golpes            el aviso de los golpes cuerpo a cuerpo de cada jefe                 [prueba_jefes_salas.gd]
 #   --ir-jefe           Mayús + 7, 8, 9 y P: derecho a la habitación de cada jefe          [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --armas             la sala de pruebas de armas (F11)                                    [prueba_armas.gd]
@@ -98,6 +99,9 @@ func empezar_prueba() -> void:
 	elif "--franja" in args:
 		set_process(false)   # sin la prueba larga
 		probar_franja()
+	elif "--golpes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_golpes()
 	elif "--gotas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gotas()

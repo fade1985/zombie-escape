@@ -271,15 +271,8 @@ func _draw() -> void:
 				var desde := Vector2.from_angle(a) * radio
 				draw_line(desde, desde + Vector2.from_angle(a) * LARGO_RAYAS * k, Color(rojo, 0.35 + 0.5 * k), 3.0)
 		"aviso_cuchillazo":
-			var k := minf(1.0, t / AVISO_CUCHILLAZO)
-			var puntos := PackedVector2Array([Vector2.ZERO])
-			for i in 17:
-				var b: float = datos.angulo - MEDIO_CUCHILLAZO + i / 16.0 * MEDIO_CUCHILLAZO * 2.0
-				puntos.append(Vector2.from_angle(b) * ALCANCE_CUCHILLAZO)
-			draw_set_transform(Vector2(0, 6))
-			draw_colored_polygon(puntos, Color(rojo, 0.1 + k * 0.25))
-			puntos.append(Vector2.ZERO)
-			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
+			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_CUCHILLAZO, ALCANCE_CUCHILLAZO,
+				minf(1.0, t / AVISO_CUCHILLAZO), tiempo)
 
 
 # La lluvia: al soltarlos, los cuchillos suben dando vueltas hasta salir de la pantalla (luego caen sobre sus marcas)

@@ -372,15 +372,8 @@ func _draw() -> void:
 	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_tijeretazo":
-			var k := minf(1.0, t / AVISO_TIJERETAZO)
-			var puntos := PackedVector2Array([Vector2.ZERO])
-			for i in 17:
-				var b: float = datos.angulo - MEDIO_TIJERETAZO + i / 16.0 * MEDIO_TIJERETAZO * 2.0
-				puntos.append(Vector2.from_angle(b) * ALCANCE_TIJERETAZO)
-			draw_set_transform(Vector2(0, 6))
-			draw_colored_polygon(puntos, Color(rojo, 0.1 + k * 0.25))
-			puntos.append(Vector2.ZERO)
-			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
+			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
+				minf(1.0, t / AVISO_TIJERETAZO), tiempo)
 		"aviso_alfileres":
 			# una raya fina por donde irán los alfileres, que se va llenando
 			var k := minf(1.0, t / datos.aviso)

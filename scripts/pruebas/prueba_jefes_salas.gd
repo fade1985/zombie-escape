@@ -1075,3 +1075,49 @@ func probar_franja() -> void:
 		jefe.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
 	get_tree().quit()
+
+
+# --golpes: el aviso de los golpes cuerpo a cuerpo (aviso.gd) de cada jefe, congelado a medio cargar y casi al final:
+# captura-golpe-<jefe>-<llenado>.png
+func probar_golpes() -> void:
+	set_process(false)
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	johnny.invulnerable = 999.0
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2.0, 2.0)
+	var golpes := [["portera", "aviso_fregonazo", 0.6], ["antidisturbios", "aviso_porrazo", 0.5],
+		["cocinero", "aviso_cuchillazo", 0.5], ["modista", "aviso_tijeretazo", 0.5],
+		["gerente", "aviso_maletinazo", 0.5], ["bombero", "aviso_hacha", 0.4]]
+	for g in golpes:
+		var jefe: Node2D = meter_zombi(g[0], centro)
+		await get_tree().create_timer(0.1, false).timeout
+		jefe.set_physics_process(false)   # quieto, con el aviso a mano
+		jefe.mirada = Vector2.from_angle(PI - 0.3)   # hacia la izquierda: que no lo tape el jefe
+		jefe.cambiar(g[1], {"angulo": PI - 0.3})
+		johnny.position = jefe.position + Vector2(-40, -90)
+		johnny.velocity = Vector2.ZERO
+		camara.reset_smoothing()
+		for k in [0.5, 0.97]:
+			jefe.t = g[2] * k
+			for i in 6:   # (sin pensar, el jefe no se repinta solo)
+				jefe.queue_redraw()
+				await RenderingServer.frame_post_draw
+			Captura.foto("captura-golpe-%s-%d.png" % [g[0], roundi(k * 100)])
+		print("Golpes (%s): aviso %s (esperado: sí)" % [g[0], "sí" if jefe.has_node("Aviso") else "no"])
+		jefe.queue_free()
+		await get_tree().create_timer(0.1, false).timeout
+	get_tree().quit()

@@ -572,14 +572,8 @@ func _draw() -> void:
 	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_fregonazo":
-			var k := minf(1.0, t / AVISO_FREGONAZO)
-			var puntos := PackedVector2Array([Vector2(0, 6)])
-			for i in 17:
-				var a: float = datos.angulo - MEDIO_FREGONAZO + i / 16.0 * MEDIO_FREGONAZO * 2.0
-				puntos.append(Vector2(0, 6) + Vector2.from_angle(a) * ALCANCE_FREGONAZO)
-			draw_colored_polygon(puntos, Color(rojo, 0.1 + k * 0.25))
-			puntos.append(Vector2(0, 6))
-			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
+			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_FREGONAZO, ALCANCE_FREGONAZO,
+				minf(1.0, t / AVISO_FREGONAZO), tiempo)
 		"aviso_abanico":
 			var johnny := get_tree().get_first_node_in_group("jugador")
 			if johnny == null:
@@ -592,12 +586,9 @@ func _draw() -> void:
 				var a: float = apunta - abierto / 2.0 + float(i) / (n - 1) * abierto
 				draw_dashed_line(Vector2.from_angle(a) * 40.0, Vector2.from_angle(a) * 170.0, color, 2.5, 8.0)
 		"aviso_embestida":
-			# franja roja por donde va a embestir
-			var k := minf(1.0, t / datos.aviso)
-			var largo := VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA
-			draw_set_transform(Vector2(0, 6), datos.angulo)
-			draw_rect(Rect2(0, -radio, largo, radio * 2.0), Color(rojo, 0.08 + k * 0.2))
-			draw_rect(Rect2(0, -radio, largo * k, radio * 2.0), Color(rojo, 0.9), false, 3.0)
+			# el camino por donde va a embestir (aviso.gd)
+			Aviso.franja(self, Vector2(0, 6), datos.angulo, VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA, radio,
+				minf(1.0, t / datos.aviso), tiempo)
 		"aviso_circulo":
 			var k := minf(1.0, t / AVISO_CIRCULO)
 			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.8))

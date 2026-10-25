@@ -222,22 +222,14 @@ func morir() -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	# el escudo: un arco azulado a sus pies, por delante
 	var a := mirada.angle()
 	draw_set_transform(Vector2(0, PIE - 6), 0.0, Vector2(1, 0.7))
 	draw_arc(Vector2.ZERO, radio + 14.0, a - FRENTE, a + FRENTE, 16, Color("#bfe9ff", 0.35), 3.0)
 	match estado:
 		"aviso_porrazo":
-			var k := minf(1.0, t / AVISO_PORRAZO)
-			var puntos := PackedVector2Array([Vector2.ZERO])
-			for i in 17:
-				var b: float = datos.angulo - MEDIO_PORRAZO + i / 16.0 * MEDIO_PORRAZO * 2.0
-				puntos.append(Vector2.from_angle(b) * ALCANCE_PORRAZO)
-			draw_set_transform(Vector2(0, 6))
-			draw_colored_polygon(puntos, Color(rojo, 0.1 + k * 0.25))
-			puntos.append(Vector2.ZERO)
-			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
+			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_PORRAZO, ALCANCE_PORRAZO,
+				minf(1.0, t / AVISO_PORRAZO), tiempo)
 		"aviso_carga":
 			franja(VELOCIDAD_CARGA * TIEMPO_CARGA, minf(1.0, t / datos.aviso))
 
