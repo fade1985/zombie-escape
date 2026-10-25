@@ -1,4 +1,4 @@
-# El Glotón: uno de los cuatro minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md, apartado 1). Un zombi
+# El Glotón: uno de los cuatro minijefes de los Apartamentos (docs/historial/JEFES_APARTAMENTOS.md, apartado 1). Un zombi
 # grotesco que va a gatas, con la cabeza tan grande como el cuerpo y llena de ampollas de ácido, y una boca enorme
 # con varias filas de dientes de la que salen lenguas como látigos. Lo común de los minijefes, en minijefe.gd.
 #

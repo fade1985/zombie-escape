@@ -1,4 +1,4 @@
-# El Gymbro: uno de los cuatro minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md, apartado 2). Un zombi
+# El Gymbro: uno de los cuatro minijefes de los Apartamentos (docs/historial/JEFES_APARTAMENTOS.md, apartado 2). Un zombi
 # de gimnasio musculoso a reventar, con los cuádriceps y las manos tan grandes que las arrastra por el suelo, calvo
 # y con barba, la piel cayéndosele a cachos. Lo común de los minijefes, en minijefe.gd.
 #

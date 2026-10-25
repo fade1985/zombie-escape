@@ -1,4 +1,4 @@
-# El jefe de bomberos: uno de los cuatro minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md, apartado 3).
+# El jefe de bomberos: uno de los cuatro minijefes de los Apartamentos (docs/historial/JEFES_APARTAMENTOS.md, apartado 3).
 # Un bombero zombi grande y ancho, con el traje ignífugo chamuscado y abierto por el pecho (arde por dentro), el
 # casco con la visera rota, la botella de la espalda hecha depósito de gasolina y una manguera que escupe fuego.
 # Lo común de los minijefes, en minijefe.gd.

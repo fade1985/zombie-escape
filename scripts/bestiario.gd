@@ -91,7 +91,7 @@ const LISTA := {
 		"frase": "Ya no le hace falta dormir. Ni el traje. Cuatro tentáculos y el helicóptero esperando en la azotea.",
 		"edificios": ["centro"], "hoja": "res://assets/sprites/jefe-gerente-mutado.tres",
 		"recorte": Rect2i(17, 31, 127, 127), "retrato": "quieto_s", "escala": 2, "jefe": true},
-	# los minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md)
+	# los minijefes de los Apartamentos (docs/historial/JEFES_APARTAMENTOS.md)
 	"gloton": {"nombre": "El Glotón",
 		"frase": "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe tuyo te salpica.",
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-gloton.tres",

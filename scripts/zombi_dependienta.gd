@@ -1,4 +1,4 @@
-# La dependienta del centro comercial (parte 4 del plan, docs/CENTRO_COMERCIAL.md): flojita (vida 20) pero
+# La dependienta del centro comercial (parte 4 del plan, docs/historial/CENTRO_COMERCIAL.md): flojita (vida 20) pero
 # rápida, y lo peor es su grito:
 #   - Al despertar grita «¡OFERTAS!»: despierta a toda la tienda y durante 5 s todos los zombis van un 30 % más
 #     rápido (zombi.gd, meter_prisa).

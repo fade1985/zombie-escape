@@ -1,4 +1,4 @@
-# El rescate propio del ferretero del centro comercial (docs/CENTRO_COMERCIAL.md, «Supervivientes»). Se ha
+# El rescate propio del ferretero del centro comercial (docs/historial/CENTRO_COMERCIAL.md, «Supervivientes»). Se ha
 # atrincherado en el almacén de la ferretería: la puerta tiene tablas clavadas (mapa/puerta_bano.gd: "tablas").
 # Al limpiar la tienda no se abre: él se pone a quitar la barricada desde dentro y, mientras tanto, la horda de
 # siempre, más corta (2 minutos): la entrada de la tienda se cierra de golpe y van entrando zombis, cada vez más.

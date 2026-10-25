@@ -1,4 +1,4 @@
-# El rescate propio de la farmacéutica del centro comercial (docs/CENTRO_COMERCIAL.md, «Supervivientes»). Está
+# El rescate propio de la farmacéutica del centro comercial (docs/historial/CENTRO_COMERCIAL.md, «Supervivientes»). Está
 # herida en la rebotica de la farmacia y, en vez de la horda de siempre, hay que llevarla hasta la puerta de las
 # escaleras de su planta. Va detrás de Johnny, cojeando (aliado.gd: "herida"), y mientras tanto van saliendo
 # zombis: un grupo entra en la farmacia al poco de unirse ella y, en el pasillo, salen por las puertas de las

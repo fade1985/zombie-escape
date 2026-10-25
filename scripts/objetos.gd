@@ -7,7 +7,7 @@
 # la batería son además la munición del lanzallamas, el lanza ácido y la pistola eléctrica: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
 #
-# Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
+# Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/historial/CENTRO_COMERCIAL.md): en los Apartamentos, los
 # 7 de siempre; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS). Las cosas de casa
 # (SOLO_CASA) no salen en el centro, y las vendas (SOLO_CENTRO) solo salen allí. Eran 26: el 25 oct se quitaron del
 # juego el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, el

@@ -131,7 +131,7 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
 El método anterior (fondos enteros dibujados con ChatGPT/Gemini, abandonado) está en
 [`archivo/FONDOS-CHATGPT.md`](archivo/FONDOS-CHATGPT.md), con sus textos en `archivo/PROMPTS_*.md`.
 
-## El centro comercial (21 oct, parte 2 de `CENTRO_COMERCIAL.md`)
+## El centro comercial (21 oct, parte 2 de `docs/historial/CENTRO_COMERCIAL.md`)
 
 Todo de PixelLab (recetas e ids en `assets/pixellab.json` → `centro-comercial`); originales en `assets/sources/centro/`.
 Las herramientas del JS se copiaron a `tools/` (`textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, sin cambios).

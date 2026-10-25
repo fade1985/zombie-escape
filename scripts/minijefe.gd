@@ -1,5 +1,5 @@
 # Lo común de los cuatro minijefes del centro comercial (antidisturbios, cocinero, modista y mascota; parte 4
-# del plan, docs/CENTRO_COMERCIAL.md). Cada uno es un script que hereda de este y pone sus ataques.
+# del plan, docs/historial/CENTRO_COMERCIAL.md). Cada uno es un script que hereda de este y pone sus ataques.
 #
 # Funcionan como la portera, por ESTADOS: andan un rato hacia Johnny, eligen un ataque, lo AVISAN (siempre se
 # puede esquivar) y lo hacen. Lo que es igual en todos está aquí:

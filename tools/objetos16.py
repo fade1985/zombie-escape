@@ -1,6 +1,6 @@
 # Dibuja los 9 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
 # les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 7 de siempre
-# (la batería era del centro comercial: parte 6 de docs/CENTRO_COMERCIAL.md), las vendas de curar (parte 9) y el
+# (la batería era del centro comercial: parte 6 de docs/historial/CENTRO_COMERCIAL.md), las vendas de curar (parte 9) y el
 # bidón de ácido que llena el lanza ácido (el bidón de la gasolina, en verde ácido). El 25 oct se quitaron del juego el
 # mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el
 # hielo seco, el cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona
