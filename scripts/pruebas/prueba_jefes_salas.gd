@@ -877,7 +877,8 @@ func pedir_andar(dir: Vector2) -> void:
 # limpieza, con Johnny quieto delante. Cuenta las gotas y las salpicaduras (salpicadura.gd) y que se secan solas.
 # Saca captura-gotas.png (las gotas volando), captura-gotas-salpica.png (la que le da a Johnny) y
 # captura-gotas-pared.png (de lejos), captura-gotas-cerca.png (tres salpicaduras de cerca, con su mancha) y, ya
-# enfadada, captura-gotas-roja.png (el agua rojiza) y captura-gotas-polvo.png (el polvo del giro) y se cierra
+# enfadada, captura-gotas-roja.png (el agua rojiza), captura-gotas-polvo.png (el polvo del giro) y el vapor de la
+# cabeza: captura-gotas-vapor-grito.png (el chorro al enfadarse) y captura-gotas-vapor.png (las bocanadas). Se cierra
 func probar_gotas() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe portera, la suya
@@ -949,4 +950,24 @@ func probar_gotas() -> void:
 	var polvo: Array = get_tree().get_nodes_in_group("balas_zombi").filter(func(b): return b.forma == "polvo")
 	print("Gotas: el giro, nubecitas de polvo %d (esperado: 10 o más)" % polvo.size())
 	Captura.foto("captura-gotas-polvo.png")
+	# el vapor de la cabeza, de cerca: el chorro de golpe al enfadarse y luego las bocanadas
+	for b in get_tree().get_nodes_in_group("balas_zombi"):
+		b.queue_free()
+	jefa.cambiar("andar")
+	jefa.dur = 9.0   # que no ataque mientras tanto
+	jefa.process_mode = Node.PROCESS_MODE_DISABLED
+	jefa.position = johnny.position + Vector2(-110, 0)
+	jefa.process_mode = Node.PROCESS_MODE_INHERIT
+	camara.zoom = Vector2(2.0, 2.0)
+	camara.reset_smoothing()
+	jefa.enfadarse(johnny)
+	johnny.position = jefa.position + Vector2(90, -100)   # (más arriba: así la cabeza de ella sale en medio de la foto)
+	johnny.velocity = Vector2.ZERO
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.35, false).timeout
+	print("Gotas: vapor al enfadarse, %d nubecitas (esperado: 8 o más)" % jefa.bocanadas.size())
+	Captura.foto("captura-gotas-vapor-grito.png")
+	await get_tree().create_timer(1.6, false).timeout
+	print("Gotas: vapor andando, %d nubecitas (esperado: de 1 a 6)" % jefa.bocanadas.size())
+	Captura.foto("captura-gotas-vapor.png")
 	get_tree().quit()

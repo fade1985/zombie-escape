@@ -127,8 +127,9 @@ static func dibujar_gota(radio: float, angulo: float, estira: float, colores: Di
 	return pintar(dentro, n, colores, Vector2(-0.2, -0.35) * ancho, maxf(ancho * 0.28, PIXEL * 1.1))
 
 
-# Los píxeles de una nubecita de polvo: una bola en medio y tres alrededor, giradas "vuelta"
-static func dibujar_polvo(radio: float, vuelta: float) -> Array:
+# Los píxeles de una nubecita de polvo (o del vapor de la portera, con otros colores): una bola en medio y tres
+# alrededor, giradas "vuelta"
+static func dibujar_polvo(radio: float, vuelta: float, colores := POLVO) -> Array:
 	var bolas := [[Vector2.ZERO, radio * 0.62]]
 	for i in 3:
 		bolas.append([Vector2.from_angle(vuelta + i * TAU / 3.0) * radio * 0.55, radio * 0.48])
@@ -137,7 +138,7 @@ static func dibujar_polvo(radio: float, vuelta: float) -> Array:
 			if c.distance_to(b[0]) <= b[1] + crece:
 				return true
 		return false
-	return pintar(dentro, ceili(radio * 1.2 / PIXEL) + 2, POLVO, Vector2.ZERO, 0.0)
+	return pintar(dentro, ceili(radio * 1.2 / PIXEL) + 2, colores, Vector2.ZERO, 0.0)
 
 
 # Pinta píxel a píxel lo que está "dentro" (una función: si el punto está dentro, con el borde "crece" más gordo):
