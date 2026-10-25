@@ -87,6 +87,11 @@ func poner_sitio(tipo: String, de_golpe := true) -> void:
 		pintar()
 
 
+# Quitar o poner la penumbra (las pruebas con --captura, para que se vea todo en las fotos)
+func alternar() -> void:
+	apagada = not apagada
+
+
 # Lo oscuro que tiene que estar este sitio
 func oscuridad() -> float:
 	return clampf(objetivo + extra + evento, 0.0, 0.97)

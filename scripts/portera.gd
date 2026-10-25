@@ -3,7 +3,7 @@
 #
 # Funciona por ESTADOS: anda un rato hacia Johnny, elige un ataque, lo AVISA (siempre se puede esquivar) y lo
 # hace. Sus ataques:
-#   - abanico: levanta la fregona (aviso: líneas en el suelo) y lanza agua sucia en abanico, 2 tandas
+#   - abanico: levanta la fregona (el aviso, solo eso) y lanza agua sucia en abanico, 2 tandas
 #   - fregonazo: si Johnny está cerca, marca un trozo de suelo en rojo y da un golpe que quita 20 y empuja
 #   - lejía: tira botellas alrededor de Johnny (la primera, justo donde va a estar) que dejan charco
 #   - ácido (20 oct): levanta la fregona y salpica charcos de ácido (el primero, justo donde va a estar Johnny)
@@ -573,43 +573,24 @@ func bajar(k: float, dir: String) -> int:
 
 # Los avisos, en el suelo (por debajo de ella)
 func _draw() -> void:
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_fregonazo":
 			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_FREGONAZO, ALCANCE_FREGONAZO,
 				minf(1.0, t / AVISO_FREGONAZO), tiempo)
-		"aviso_abanico":
-			var johnny := get_tree().get_first_node_in_group("jugador")
-			if johnny == null:
-				return
-			var apunta: float = (johnny.global_position - global_position).angle()
-			var n := CHORROS + 3 if enfadada() else CHORROS
-			var abierto := ABERTURA * (1.3 if enfadada() else 1.0)
-			var color := Color("#ff5d73", minf(1.0, t / AVISO_ABANICO) * 0.7)
-			for i in n:
-				var a: float = apunta - abierto / 2.0 + float(i) / (n - 1) * abierto
-				draw_dashed_line(Vector2.from_angle(a) * 40.0, Vector2.from_angle(a) * 170.0, color, 2.5, 8.0)
 		"aviso_embestida":
 			# el camino por donde va a embestir (aviso.gd)
 			Aviso.franja(self, Vector2(0, 6), datos.angulo, VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA, radio,
 				minf(1.0, t / datos.aviso), tiempo)
 		"aviso_circulo":
-			var k := minf(1.0, t / AVISO_CIRCULO)
-			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.8))
-			draw_circle(Vector2.ZERO, RADIO_CIRCULO, Color(rojo, 0.08 + k * 0.22))
-			draw_arc(Vector2.ZERO, RADIO_CIRCULO, 0, TAU, 48, Color(rojo, 0.9), 3.0)
-			draw_circle(Vector2.ZERO, RADIO_CIRCULO * k, Color(rojo, 0.25))
+			# el círculo entero, que se llena de ella hacia fuera (aviso.gd)
+			Aviso.abanico(self, Vector2(0, 6), 0.0, PI, RADIO_CIRCULO, minf(1.0, t / AVISO_CIRCULO), tiempo, 0.8)
 		"circulo":
 			# el anillo de polvo del golpe, que se abre y se desvanece
 			var k := minf(1.0, t / 0.35)
 			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.8))
 			draw_arc(Vector2.ZERO, RADIO_CIRCULO * (0.6 + k * 0.4), 0, TAU, 48, Color("#cbb994", 1.0 - k), 6.0)
 		"aviso_giro":
-			var k := minf(1.0, t / 0.6)
-			draw_set_transform(Vector2(0, 10), 0.0, Vector2(1, 0.75))
-			draw_circle(Vector2.ZERO, 70.0, Color(rojo, 0.08 + k * 0.22))
-			draw_arc(Vector2.ZERO, 70.0, 0, TAU, 40, Color(rojo, 0.9), 3.0)
-			draw_circle(Vector2.ZERO, 70.0 * k, Color(rojo, 0.25))
+			Aviso.abanico(self, Vector2(0, 10), 0.0, PI, 70.0, minf(1.0, t / 0.6), tiempo, 0.75)
 
 
 # Enfadada, el vapor de la cabeza (va en un nodo aparte, "Vapor", para que se pinte por encima de ella)

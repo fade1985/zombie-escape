@@ -1069,7 +1069,7 @@ func probar_franja() -> void:
 
 
 # --golpes: el aviso de los golpes cuerpo a cuerpo (aviso.gd) de cada jefe, congelado a medio cargar y casi al final:
-# captura-golpe-<jefe>-<llenado>.png
+# captura-golpe-<golpe>-<llenado>.png (también los círculos de la portera: el del final de la embestida y el del giro)
 func probar_golpes() -> void:
 	set_process(false)
 	nueva_planta(2)
@@ -1090,7 +1090,9 @@ func probar_golpes() -> void:
 	johnny.invulnerable = 999.0
 	var camara: Camera2D = johnny.get_node("Camara")
 	camara.zoom = Vector2(2.0, 2.0)
-	var golpes := [["portera", "aviso_fregonazo", 0.6], ["antidisturbios", "aviso_porrazo", 0.5],
+	var golpes := [["portera", "aviso_fregonazo", 0.6], ["portera", "aviso_circulo", 0.35], ["portera", "aviso_giro", 0.6],
+		["portera", "aviso_abanico", 0.55],
+		["antidisturbios", "aviso_porrazo", 0.5],
 		["cocinero", "aviso_cuchillazo", 0.5], ["modista", "aviso_tijeretazo", 0.5],
 		["gerente", "aviso_maletinazo", 0.5], ["bombero", "aviso_hacha", 0.4]]
 	for g in golpes:
@@ -1107,8 +1109,9 @@ func probar_golpes() -> void:
 			for i in 6:   # (sin pensar, el jefe no se repinta solo)
 				jefe.queue_redraw()
 				await RenderingServer.frame_post_draw
-			Captura.foto("captura-golpe-%s-%d.png" % [g[0], roundi(k * 100)])
-		print("Golpes (%s): aviso %s (esperado: sí)" % [g[0], "sí" if jefe.has_node("Aviso") else "no"])
+			Captura.foto("captura-golpe-%s-%d.png" % [g[1].trim_prefix("aviso_"), roundi(k * 100)])
+		print("Golpes (%s, %s): aviso %s (esperado: %s)" % [g[0], g[1], "sí" if jefe.has_node("Aviso") else "no",
+			"no" if g[1] == "aviso_abanico" else "sí"])   # (el abanico de agua: sin rayas, solo la fregona en alto)
 		jefe.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
 	get_tree().quit()
