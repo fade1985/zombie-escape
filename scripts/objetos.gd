@@ -25,7 +25,7 @@
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
-const BAUL := 32             # casillas del baúl: una por cada objeto distinto
+const BAUL := 32             # casillas del baúl: una por cada objeto distinto, y una por cada arma y cada paquete de arrojables
 const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)
 const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
@@ -118,13 +118,19 @@ static func cabe(mochila: Array, id: String) -> bool:
 	return id in mochila or casillas(mochila).size() < MOCHILA
 
 
-# Casillas ocupadas del baúl: una por cada objeto distinto
+# Casillas ocupadas del baúl: una por cada objeto distinto, y una por cada arma y cada paquete de arrojables
+# ("baul_equipo" del guardado)
 static func casillas_baul(s: Dictionary) -> int:
-	var n := 0
+	var n: int = s.get("baul_equipo", []).size()
 	for id in s.baul:
 		if s.baul[id] > 0:
 			n += 1
 	return n
+
+
+# ¿Queda alguna casilla libre en el baúl? (para un arma o un paquete de arrojables, que siempre van en una nueva)
+static func hueco_baul(s: Dictionary) -> bool:
+	return casillas_baul(s) < BAUL
 
 
 # ¿Va al baúl? Todo menos lo de curar (USABLES), que se pierde al acabar la partida

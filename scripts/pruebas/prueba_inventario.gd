@@ -1,5 +1,5 @@
 # Pruebas del inventario y del baúl (--inventario, --arrastrar, --baul, --repuesto, --tienda, --municion,
-# --municion-suelo), de los objetos de curar y de las piezas de mejora (--piezas). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# --municion-suelo), de los objetos de curar, de las piezas de mejora (--piezas) y de las calidades (--calidades). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_skins.gd"
 
 var en_el_aire := {}         # arrastrar: lo que se veía justo antes de soltar
@@ -17,12 +17,15 @@ func dar_lanzable(k: String) -> void:
 # se arrima al baúl y cuenta en la terminal: que se abre con la marca en lo primero que se puede guardar, que guardar
 # una casilla mete todos los de esa casilla (y la marca se queda en la siguiente), que las vendas no se guardan, que la
 # gasolina se guarda desde la munición y se saca de una en una (la marca se queda en «Sacar uno») y que «Guardar todo»
-# lo mete todo menos lo de curar. Cada línea dice lo esperado. Saca captura-baul-guardar.png (la gasolina elegida,
-# para guardarla), deja el baúl como estaba y se cierra. (Hasta el 25 oct también sacaba un arrojable creado y llenaba
-# las 32 casillas con armas creadas; con solo objetos ya no se llena: volverá cuando las armas vayan al baúl)
+# lo mete todo menos lo de curar. Y el baúl lleno: con 31 armas y una pieza (cada arma, en su casilla) no deja guardar
+# otra arma, y con más de 32 (al completar el edificio entra todo) las casillas se hacen más pequeñas. Cada línea dice
+# lo esperado. Saca captura-baul-guardar.png (la gasolina elegida, para guardarla) y captura-baul-lleno.png, deja el
+# baúl como estaba y se cierra
 func probar_baul() -> void:
 	var antes := Guardado.cargar()
-	Guardado.cambiar(func(g2): g2.baul = {"pieza_especial": 2})
+	Guardado.cambiar(func(g2):
+		g2.baul = {"pieza_especial": 2}
+		g2.baul_equipo = [])
 	mochila.clear()
 	mochila.append_array(["gasolina", "gasolina", "pieza_especial", "vendas", "pieza_cuerpo", "pieza_distancia", "pieza_distancia", "pieza_distancia"])
 	var marca := func() -> String:   # el botón o la casilla marcada (la del mando y las flechas)
@@ -94,10 +97,173 @@ func probar_baul() -> void:
 	g = Guardado.cargar()
 	print("«Guardar todo» con sitio: mochila %s (esperado: [\"vendas\"]) · baúl %s (esperado: pieza_especial 3, gasolina 5: las 3 y las 2 sacadas, pieza_cuerpo 1, pieza_distancia 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
 		mochila, g.baul, boton.call("guardar_todo"), marca.call()])
+	# el baúl lleno: una pieza y 31 armas, cada una en su casilla (de las cuatro calidades)
+	Guardado.cambiar(func(g2):
+		g2.baul = {"pieza_especial": 1}
+		g2.baul_equipo = []
+		for i in Objetos.BAUL - 1:
+			g2.baul_equipo.append({"id": ["bate", "cuchillo", "escopeta", "mp5"][i % 4], "calidad": i % 4}))
+	llevar_arma("bate", 2)
+	inventario.pintar()
+	inventario.tocar("p0")
+	await get_tree().process_frame
+	print("Baúl lleno: %d / %d casillas · «Guardar en el baúl» del bate Raro de la mano %s (esperado: 32 / 32, apagado) · dice «%s»" % [
+		Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL, boton.call("guardar"), dice.call()])
+	# con más de 32 (al completar el edificio entra lo que lleva aunque no quepa): casillas más pequeñas
+	Guardado.cambiar(func(g2):
+		for i in 9:
+			g2.baul_equipo.append({"id": "cuchillo", "calidad": 3}))
+	inventario.pintar()
+	inventario.tocar("b%d" % (inventario.cosas_baul(Guardado.cargar()).size() - 1))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-baul-lleno.png")
+	print("Baúl con más de 32: %d casillas, se ven %d (esperado: 41, 41: todas, más pequeñas) · la última: «%s»" % [
+		Objetos.casillas_baul(Guardado.cargar()), inventario.fondo.find_children("b*", "", true, false).size(), dice.call()])
 	inventario.cerrar()
 	await get_tree().process_frame
 	print("Baúl cerrado: juego en pausa %s (esperado: false)" % get_tree().paused)
-	Guardado.cambiar(func(g2): g2.baul = antes.baul)
+	Guardado.cambiar(func(g2):
+		g2.baul = antes.baul
+		g2.baul_equipo = antes.baul_equipo)
+	get_tree().quit()
+
+
+# Con "--captura --calidades": las calidades de las armas y de los paquetes de arrojables (Armas.CALIDADES; parte 4 de la
+# tienda y las piezas). Cada línea dice lo esperado. Cuenta: lo que da cada calidad (el bate Raro, la pistola Épica, el
+# lanzallamas Raro, la pistola eléctrica Poco común y los molotovs Raros); que Johnny lleva una de cada arma (al coger
+# otro bate, se cambian y el viejo se queda en el suelo); que en el baúl (con lo de la tecla U) se guardan el bate y los
+# molotovs Raros, pero no la fregona ni los molotovs Normales, y que al sacar un arma la que sobra entra en su lugar; las
+# casillas con el color de su calidad (captura-calidades-baul.png y captura-calidades-inventario.png); que si cae no
+# guarda nada y que al completar el edificio pasan al baúl sus armas (menos la fregona y la pistola Normales) y los
+# paquetes mejorados. Deja el guardado como estaba y se cierra
+func probar_calidades() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {}
+		g2.baul_equipo = [])
+	var dice := func() -> String:    # el texto de la ficha
+		var t: Label = inventario.fondo.find_child("nota", true, false)
+		return t.text if t else "-"
+	var boton := func(nombre: String) -> String:
+		var b: Button = inventario.fondo.find_child(nombre, true, false)
+		return "no está" if b == null else ("apagado" if b.disabled else "activo")
+	var en_baul := func(id: String, calidad: int) -> String:   # la casilla de un arma o un paquete en el baúl ("b5")
+		var cosas: Array = inventario.cosas_baul(Guardado.cargar())
+		for i in cosas.size():
+			if cosas[i].equipo >= 0 and cosas[i].id == id and cosas[i].calidad == calidad:
+				return "b%d" % i
+		return "-"
+	var equipo := func() -> Array:   # el equipo del baúl, corto: ["bate 1", "molotov 2 ×4"...]
+		return Guardado.cargar().baul_equipo.map(func(e): return "%s %d%s" % [e.id, e.calidad, " ×%d" % e.n if e.has("n") else ""])
+	# lo que da cada calidad
+	var w := Armas.con_calidad("bate", 2)
+	print("Bate Raro: daño %.1f, alcance %.1f, abanico %.1f (esperado: 23.2, 79.2, 132.0: +45 %%, +20 %%, +20 %%)" % [w.dano, w.alcance, w.arco])
+	w = Armas.con_calidad("pistola", 3)
+	print("Pistola Épica: daño %.1f, cargador %d, recarga %.3f (esperado: 17.5, 21, 0.605: +75 %%, +75 %%, un 45 %% más rápida)" % [
+		w.dano, w.cargador, w.recarga])
+	w = Armas.con_calidad("lanzallamas", 2)
+	print("Lanzallamas Raro: daño %.1f, depósito %.1f s (esperado: 43.5, 12.0) · pistola eléctrica Poco común: saltos %d, cargador %d (esperado: 1, 30)" % [
+		w.dano, w.deposito, Armas.con_calidad("pistola_electrica", 1).saltos, Armas.con_calidad("pistola_electrica", 1).cargador])
+	print("Lo que dice la ficha: «%s» · «%s»" % [Armas.que_da("bate", 2), Armas.que_da("molotov", 3)])
+	# una de cada arma: el bate Raro a la mano (la fregona al repuesto) y luego otro bate, Poco común: se cambian
+	llevar_arma("bate", 2)
+	var dano_raro: float = johnny.arma().dano
+	print("Bate Raro a la mano: calidad %d, de repuesto «%s» (esperado: 2, fregona)" % [johnny.calidad("bate"), repuesto("cuerpo")])
+	var suelta := llevar_arma("bate", 1)
+	print("Otro bate, Poco común: sobra %s, en la mano el bate %d, daño Raro / Poco común %.3f (esperado: {id: bate, calidad: 2}, 1, 1.208)" % [
+		suelta, johnny.calidad("bate"), dano_raro / johnny.arma().dano])
+	# la pistola Épica, cambiada por la Normal: viene llena, con su cargador más grande
+	suelta = llevar_arma("pistola", 3)
+	print("Pistola Épica: sobra %s, balas %d de %d (esperado: {id: pistola, calidad: 0}, 21 de 21)" % [suelta, johnny.balas,
+		johnny.base("pistola").cargador])
+	# los molotovs Raros: un paquete aparte, con su hueco, su máximo y su radio
+	var entran := lanzables.meter("molotov:2", 4)
+	var tipo_antes: String = lanzables.tipo
+	lanzables.tipo = "molotov:2"
+	var radio_raro := lanzables.radio_zona()
+	lanzables.tipo = "molotov"
+	print("Molotovs Raros: entran %d, a mano %s, caben %d (esperado: 4, [molotov, granada, molotov:2], %d) · radio Raro / Normal %.2f (esperado: 1.20)" % [
+		entran, lanzables.mano, lanzables.maximo("molotov:2"), lanzables.maximo("molotov") + 2, radio_raro / lanzables.radio_zona()])
+	lanzables.tipo = tipo_antes
+	# el baúl, con lo de la tecla U (piezas, y armas y arrojables de cada calidad)
+	dar_objetos()
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	if inventario.abierto != "baul":
+		print("Baúl: no se ha abierto (esperado: abierto)")
+		Guardado.escribir(antes)
+		get_tree().quit()
+		return
+	print("Baúl con la tecla U: %d casillas, equipo %s (esperado: 10: 4 piezas y 6 de equipo)" % [
+		Objetos.casillas_baul(Guardado.cargar()), equipo.call()])
+	inventario.tocar("p0")
+	await get_tree().process_frame
+	print("El bate Poco común de la mano: «Guardar en el baúl» %s (esperado: activo) · dice «%s»" % [boton.call("guardar"), dice.call()])
+	inventario.guardar()
+	await get_tree().process_frame
+	print("Guardado: equipo %s · en la mano «%s», de repuesto «%s» (esperado: termina en bate 1 · fregona, nada)" % [
+		equipo.call(), johnny.huecos.cuerpo, repuesto("cuerpo")])
+	inventario.tocar("p0")
+	await get_tree().process_frame
+	print("La fregona Normal: «Guardar en el baúl» %s (esperado: no está) · dice «%s»" % [boton.call("guardar"), dice.call()])
+	inventario.tocar("l2")
+	await get_tree().process_frame
+	inventario.guardar()
+	await get_tree().process_frame
+	print("Los molotovs Raros, guardados: equipo %s · a mano %s (esperado: termina en molotov 2 ×4 · [molotov, granada])" % [
+		equipo.call(), lanzables.mano])
+	inventario.tocar("l0")
+	await get_tree().process_frame
+	print("Los molotovs Normales: «Guardar en el baúl» %s (esperado: no está) · dice «%s»" % [boton.call("guardar"), dice.call()])
+	# sacar: el bate a la mano (la fregona, al repuesto); la escopeta Rara a la mano (la pistola Épica al repuesto) y
+	# la pistola Rara, que se cambia por la Épica de repuesto (la Épica entra en el baúl en su lugar)
+	inventario.tocar(en_baul.call("bate", 1))
+	await get_tree().process_frame
+	print("El bate del baúl: «Sacar» %s (esperado: activo) · dice «%s»" % [boton.call("sacar"), dice.call()])
+	inventario.sacar()
+	inventario.tocar(en_baul.call("escopeta", 2))
+	inventario.sacar()
+	inventario.tocar(en_baul.call("pistola", 2))
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Sacados el bate, la escopeta y la pistola Rara: manos %s, repuesto %s, calidades %s · equipo %s (esperado: bate y escopeta · fregona y pistola · bate 1, escopeta 2, pistola 2 · la pistola 3 donde estaba la 2) · dice «%s»" % [
+		johnny.huecos, armas_guardadas, johnny.calidades, equipo.call(), dice.call()])
+	inventario.tocar(en_baul.call("molotov", 2))
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Sacados los molotovs Raros: a mano %s, quedan %d (esperado: [molotov, granada, molotov:2], 4)" % [lanzables.mano,
+		lanzables.cuantas("molotov:2")])
+	inventario.tocar(en_baul.call("lanzallamas", 3))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-calidades-baul.png")
+	print("El lanzallamas Épico del baúl: dice «%s»" % dice.call())
+	inventario.cerrar()
+	await get_tree().process_frame
+	# el inventario, con los bordes de colores
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.3).timeout
+	inventario.tocar("p1")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-calidades-inventario.png")
+	print("La escopeta Rara en el inventario: dice «%s»" % dice.call())
+	inventario.cerrar()
+	await get_tree().process_frame
+	# si cae, nada; al completar el edificio, lo que lleva (menos la fregona y la pistola Normales) y los paquetes mejorados
+	var encima := equipo_encima()
+	var cuantos: int = Guardado.cargar().baul_equipo.size()
+	terminar(false)
+	await get_tree().create_timer(0.3).timeout
+	print("Cae: el baúl tiene %d de equipo (esperado: %d, lo mismo)" % [Guardado.cargar().baul_equipo.size(), cuantos])
+	terminada = false
+	get_tree().paused = false
+	terminar(true)
+	await get_tree().create_timer(0.3).timeout
+	print("Completa el edificio: lo que lleva %s · el baúl tiene %d de equipo (esperado: bate 1, escopeta 2, pistola 2 y molotov 2 ×4, sin la fregona · %d)" % [
+		encima.map(func(e): return "%s %d%s" % [e.id, e.calidad, " ×%d" % e.n if e.has("n") else ""]),
+		Guardado.cargar().baul_equipo.size(), cuantos + encima.size()])
+	Guardado.escribir(antes)
 	get_tree().quit()
 
 

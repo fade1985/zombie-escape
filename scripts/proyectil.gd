@@ -35,6 +35,7 @@ var alto_salida := 0.0       # a qué altura sobre el suelo sale
 var hasta := Vector2.ZERO    # dónde caerá
 var dano_lanzar := 1.0       # molotov: Puntería
 var fabricante := false      # molotov: fuego más grande y más largo
+var escala := 1.0            # molotov: lo grande que es el fuego por su calidad (Armas.CALIDADES, "radio")
 var dueno: Node2D = null     # quien lo lanza (al cocinero no le quema su aceite; y la skin del glotón le muerde)
 var t := 0.0
 var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de todos
@@ -68,7 +69,7 @@ func caer(datos: Dictionary) -> void:
 	charco.position = (hasta / 2.0).round() * 2.0
 	charco.dueno = dueno
 	if tipo == "molotov":
-		charco.escala = Lanzables.FABRICANTE.radio if fabricante else 1.0
+		charco.escala = (Lanzables.FABRICANTE.radio if fabricante else 1.0) * escala
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
 		charco.dano_lanzar = dano_lanzar
 	elif tipo == "molotov_jefe":

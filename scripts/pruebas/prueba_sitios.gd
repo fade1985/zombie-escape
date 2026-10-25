@@ -224,8 +224,8 @@ func probar_joyeria() -> void:
 	await get_tree().create_timer(0.8, false).timeout
 	Captura.foto("captura-joyeria-abierta.png")
 	# el premio: la vitrina dentro de la cámara y el logro; al pisarla, el arma a la mano y el fajo
-	print("Premio: %s (esperado: un arma de la tienda que no llevas; manos %s, guardadas %s) · fajo $%d · vitrina en %s · logro Caja fuerte: %s" % [
-		d.premio.arma, johnny.huecos, armas_guardadas, d.premio.fajo, d.premio.pos, Logros.estado(Guardado.cargar(), "caja_fuerte")])
+	print("Premio: %s, calidad %d (esperado: un arma de la tienda que no llevas, Épica: 3; manos %s, guardadas %s) · fajo $%d · vitrina en %s · logro Caja fuerte: %s" % [
+		d.premio.arma, d.premio.calidad, johnny.huecos, armas_guardadas, d.premio.fajo, d.premio.pos, Logros.estado(Guardado.cargar(), "caja_fuerte")])
 	var manos_antes: Dictionary = johnny.huecos.duplicate()
 	var dolares_antes := dolares
 	var molotovs_antes: int = lanzables.cantidades.molotov
@@ -235,8 +235,9 @@ func probar_joyeria() -> void:
 	Captura.foto("captura-joyeria-premio.png")
 	johnny.position = d.premio.pos
 	await get_tree().create_timer(0.6, false).timeout
-	print("Cogido: %s · manos %s → %s · guardadas %s · dólares %d → %d · molotovs %d → %d · dice «%s»" % [d.premio.cogido,
-		manos_antes, johnny.huecos, armas_guardadas, dolares_antes, dolares, molotovs_antes, lanzables.cantidades.molotov, aviso.text])
+	print("Cogido: %s · manos %s → %s · guardadas %s · calidad de la nueva %d (esperado: 3) · dólares %d → %d · molotovs %d → %d · dice «%s»" % [d.premio.cogido,
+		manos_antes, johnny.huecos, armas_guardadas, johnny.calidad(d.premio.arma), dolares_antes, dolares, molotovs_antes,
+		lanzables.cantidades.molotov, aviso.text])
 	# la segunda apertura, más abajo, prepara otro premio
 	d.erase("premio")
 	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya

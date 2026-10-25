@@ -36,6 +36,8 @@
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, la tecla U y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas (U) [prueba_larga.gd]
+#   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
+#                       completar el edificio                                          [prueba_inventario.gd]
 #   --municion          la munición por tipos y los arrojables (3 a mano y 8 de repuesto)    [prueba_inventario.gd]
 #   --municion-suelo    la munición en el suelo (con luz y a oscuras) y la caja según el arma [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
@@ -114,6 +116,9 @@ func empezar_prueba() -> void:
 	elif "--piezas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piezas()
+	elif "--calidades" in args:
+		set_process(false)   # sin la prueba larga
+		probar_calidades()
 	elif "--objetos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_objetos()

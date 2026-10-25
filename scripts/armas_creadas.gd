@@ -25,21 +25,28 @@ const EFECTOS := {
 
 
 # La descarga: aturde al zombi y salta al más cercano (a menos de "salto"), que se lleva medio daño y también
-# se queda aturdido. La usan las chispas de la pistola eléctrica
-static func descarga(zombi: Node2D, dano: float, aturde: float) -> void:
+# se queda aturdido. La usan las chispas de la pistola eléctrica; mejorada ("saltos" más, por su calidad), sigue
+# saltando de ese al más cercano que aún no ha pillado
+static func descarga(zombi: Node2D, dano: float, aturde: float, saltos := 0) -> void:
 	aturdir(zombi, aturde)
-	var otro: Node2D = null
-	var mejor: float = EFECTOS.descarga.salto
-	for o in zombi.get_tree().get_nodes_in_group("zombis"):
-		var d: float = o.global_position.distance_to(zombi.global_position)
-		if o != zombi and d < mejor:
-			mejor = d
-			otro = o
-	if otro:
-		rayo(zombi, zombi.global_position + Vector2(0, -40), otro.global_position + Vector2(0, -40))
-		var hacia := (otro.global_position - zombi.global_position).normalized()
+	var pillados: Array = [zombi]
+	var desde := zombi
+	for vez in 1 + saltos:
+		var otro: Node2D = null
+		var mejor: float = EFECTOS.descarga.salto
+		for o in zombi.get_tree().get_nodes_in_group("zombis"):
+			var d: float = o.global_position.distance_to(desde.global_position)
+			if not o in pillados and d < mejor:
+				mejor = d
+				otro = o
+		if otro == null:
+			return
+		rayo(zombi, desde.global_position + Vector2(0, -40), otro.global_position + Vector2(0, -40))
+		var hacia := (otro.global_position - desde.global_position).normalized()
 		otro.recibir_golpe(roundi(dano * EFECTOS.descarga.dano), hacia * EMPUJE * 0.5)
 		aturdir(otro, aturde)
+		pillados.append(otro)
+		desde = otro
 
 
 # Se queda quieto echando chispitas amarillas (como con la mutación Tentacular). Los jefes, no
@@ -102,6 +109,7 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 	g.dano = w.dano
 	g.empuje = w.empuje
 	g.quema = w.get("quema", 1.0)
+	g.saltos = w.get("saltos", 0)
 	g.vida_max = w.alcance / w.velocidad
 	sala.add_child(g)
 	g.global_position = salida
@@ -113,7 +121,8 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 
 # Lo que pasa cuando una gota o una chispa tocan a un zombi ("quema": cuánto más arde el que prende una gota de
 # fuego)
-static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String, quema := 1.0) -> void:
+static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String, quema := 1.0,
+		saltos := 0) -> void:
 	# al jefe de bomberos (bombero.gd) el fuego no le hace nada: ni el daño ni prenderle
 	if tipo == "llama" and zombi.get("inmune_fuego"):
 		zombi.prender()
@@ -126,7 +135,7 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 	if tipo == "llama":
 		prender(zombi, quema)
 	elif tipo == "chispa":
-		descarga(zombi, d, EFECTOS.chispa)
+		descarga(zombi, d, EFECTOS.chispa, saltos)
 	elif tipo == "acido":
 		herir(zombi, "acido", d)
 

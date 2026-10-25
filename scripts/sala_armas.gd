@@ -99,6 +99,7 @@ func _exit_tree() -> void:
 		return
 	# Johnny vuelve a llevar lo que llevaba al entrar
 	johnny.huecos = entrada.huecos
+	johnny.calidades = entrada.calidades
 	johnny.balas = entrada.balas
 	johnny.municion = entrada.municion
 	johnny.deposito = entrada.deposito
@@ -114,7 +115,9 @@ func _physics_process(delta: float) -> void:
 		if johnny == null:
 			return
 		entrada = {"huecos": johnny.huecos.duplicate(), "mano": johnny.mano, "balas": johnny.balas,
-			"municion": johnny.municion.duplicate(), "deposito": johnny.deposito, "cargadores": johnny.cargadores.duplicate()}
+			"municion": johnny.municion.duplicate(), "deposito": johnny.deposito, "cargadores": johnny.cargadores.duplicate(),
+			"calidades": johnny.calidades.duplicate()}
+		johnny.calidades = {}   # (aquí se prueban como son, en Normal)
 		johnny.municion_sin_fin = true   # munición sin fin, pero recargando: la reserva no se acaba nunca
 		johnny.coger(lista[indice])
 	reloj += delta

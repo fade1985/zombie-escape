@@ -35,6 +35,79 @@ static func familia(id: String) -> String:
 	var w: Dictionary = DATOS[id]
 	return "cuerpo" if w.tipo == "cuerpo" else ("especial" if w.has("efecto") else "distancia")
 
+# Las calidades de las armas y de los paquetes de arrojables, de peor a mejor (parte 4 de la tienda y las piezas): cada
+# arma que lleva Johnny o que hay en el baúl tiene la suya (0 = Normal, la de la tienda; la joyería da una Épica). Se
+# ve en el borde de su casilla. Cada una da más daño ("dano") y una cosa de su familia (números provisionales, para
+# ajustarlos jugando):
+#   cuerpo a cuerpo   el golpe llega más lejos y barre más ancho ("golpe": alcance y abanico)
+#   a distancia       cargador más grande ("cargador") y recarga más rápida ("recarga": lo que tarda)
+#   especiales        depósito más grande (el lanzallamas y el lanza ácido, "deposito") y la chispa de la pistola
+#                     eléctrica salta a más zombis ("saltos")
+#   arrojables        radio más grande ("radio") y caben más ("unidades"; lanzables.gd)
+const CALIDADES := [
+	{"nombre": "Normal", "color": Color("#8a8494"), "dano": 1.0, "golpe": 1.0, "cargador": 1.0, "recarga": 1.0,
+		"deposito": 1.0, "saltos": 0, "radio": 1.0, "unidades": 0},
+	{"nombre": "Poco común", "color": Color("#5fd35f"), "dano": 1.2, "golpe": 1.1, "cargador": 1.25, "recarga": 0.85,
+		"deposito": 1.25, "saltos": 1, "radio": 1.1, "unidades": 1},
+	{"nombre": "Rara", "color": Color("#4aa3ff"), "dano": 1.45, "golpe": 1.2, "cargador": 1.5, "recarga": 0.7,
+		"deposito": 1.5, "saltos": 2, "radio": 1.2, "unidades": 2},
+	{"nombre": "Épica", "color": Color("#c06bff"), "dano": 1.75, "golpe": 1.3, "cargador": 1.75, "recarga": 0.55,
+		"deposito": 1.75, "saltos": 3, "radio": 1.3, "unidades": 3},
+]
+const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar: en Normal no van al baúl
+
+
+# ¿Va al baúl? Las armas, todas menos la fregona y la pistola Normales (SIEMPRE: las tiene siempre); los paquetes de
+# arrojables (su id de Lanzables.DATOS), los mejorados (los Normales se compran en la tienda y los sueltan los zombis)
+static func al_baul(id: String, calidad: int) -> bool:
+	if not DATOS.has(id):
+		return calidad > 0
+	return calidad > 0 or not id in SIEMPRE.values()
+
+
+# Los datos de un arma con su calidad ya aplicada (sin los atributos de Johnny: eso lo hace johnny.gd, arma_de)
+static func con_calidad(id: String, calidad: int) -> Dictionary:
+	var w: Dictionary = DATOS[id].duplicate()
+	var c: Dictionary = CALIDADES[clampi(calidad, 0, CALIDADES.size() - 1)]
+	w.calidad = calidad
+	w.dano = w.dano * c.dano
+	match familia(id):
+		"cuerpo":
+			w.alcance = w.alcance * c.golpe
+			w.arco = w.arco * c.golpe
+		"distancia":
+			w.cargador = roundi(w.cargador * c.cargador)
+			w.recarga = w.recarga * c.recarga
+		"especial":
+			if w.has("deposito"):
+				w.deposito = w.deposito * c.deposito
+			else:
+				w.saltos = c.saltos   # la pistola eléctrica: a cuántos zombis más salta la chispa
+	return w
+
+
+# Lo que da una calidad a un arma o a un arrojable (su id de Lanzables.DATOS), para las fichas («Rara: daño +45 %,
+# golpe un 20 % más largo y ancho.»). "" la Normal
+static func que_da(id: String, calidad: int) -> String:
+	if calidad <= 0:
+		return ""
+	var c: Dictionary = CALIDADES[calidad]
+	var extra := ""
+	match "arrojable" if not DATOS.has(id) else familia(id):
+		"cuerpo":
+			extra = "golpe un %d %% más largo y ancho" % roundi((c.golpe - 1.0) * 100)
+		"distancia":
+			extra = "cargador un %d %% más grande y recarga un %d %% más rápida" % [roundi((c.cargador - 1.0) * 100),
+				roundi((1.0 - c.recarga) * 100)]
+		"especial":
+			if DATOS[id].has("deposito"):
+				extra = "depósito un %d %% más grande" % roundi((c.deposito - 1.0) * 100)
+			else:
+				extra = "la chispa salta a %d %s más" % [c.saltos, "zombi" if c.saltos == 1 else "zombis"]
+		"arrojable":
+			extra = "radio un %d %% más grande y caben %d más" % [roundi((c.radio - 1.0) * 100), c.unidades]
+	return "%s: daño +%d %%, %s." % [c.nombre, roundi((c.dano - 1.0) * 100), extra]
+
 # Hacia dónde apunta el tubo en el dibujo quieto del lanzallamas en cada dirección (el del lanza ácido es el mismo: su
 # hoja sale de la del lanzallamas), en grados en la pantalla (0 = a la derecha, 90 = abajo), medido en las hojas: las
 # diagonales van más tumbadas que 45° (unos 24°), como se ven desde arriba. Con él se elige hacia dónde mira Johnny al
@@ -137,6 +210,21 @@ const DATOS := {
 
 # Cómo se dice cada tipo de arma en las fichas («Cuerpo a cuerpo · En la mano»)
 const HUECOS := {"cuerpo": "Cuerpo a cuerpo", "fuego": "A distancia"}
+
+# El color de una calidad (el borde de las casillas)
+static func color(calidad: int) -> Color:
+	return CALIDADES[clampi(calidad, 0, CALIDADES.size() - 1)].color
+
+
+# Cómo se dice una calidad («Rara»)
+static func calidad_nombre(calidad: int) -> String:
+	return CALIDADES[clampi(calidad, 0, CALIDADES.size() - 1)].nombre
+
+
+# Cómo se dice un arma (o un arrojable: su id de Lanzables.DATOS) con su calidad: «Bate» o «Bate (Rara)»
+static func nombre(id: String, calidad := 0) -> String:
+	var es: String = Objetos.nombre(id) if DATOS.has(id) else Lanzables.UNO[id]
+	return es if calidad <= 0 else "%s (%s)" % [es, calidad_nombre(calidad)]
 
 # Lo que llena las armas que tienen "relleno" (un objeto de la mochila): cómo se dice uno (en la sala de pruebas de
 # armas). Su nombre y su icono, los de cualquier objeto; su aviso cuando ya no queda, en MUNICION

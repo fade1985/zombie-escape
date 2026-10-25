@@ -101,6 +101,8 @@ var sombra_ancho := 0.0    # lo ancha que es su sombra de pie (tumbado, se alarg
 var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuando está en el suelo
 
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
+var calidades := {}        # la calidad de las armas que lleva, en la mano o de repuesto (Armas.CALIDADES): {id: 2};
+                           # la que no está, Normal. Lleva una de cada arma, así que basta con su id (partida.llevar_arma)
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
 var balas := 0             # balas que quedan en el cargador del arma de fuego
 var municion := {}         # la munición de reserva, por tipos (Armas.MUNICION): {"balas": 24, ...}. La gasolina, los
@@ -149,8 +151,8 @@ func _ready() -> void:
 	add_child(estrellas)
 	sombra_ancho = $Sombra.ancho
 	vida = stats.vida_max
-	balas = Armas.datos(huecos.fuego).cargador
-	municion = {Armas.municion(huecos.fuego): balas * RESERVA_INICIO}
+	balas = base(huecos.fuego).cargador
+	municion = {Armas.municion(huecos.fuego): Armas.datos(huecos.fuego).cargador * RESERVA_INICIO}
 	skin = Skins.puesta()   # la skin que lleva puesta (antes de coger el arma: cada skin tiene sus hojas)
 	sostener(mano)
 	# Al empezar, que la barra se ponga llena
@@ -225,7 +227,7 @@ func arma() -> Dictionary:
 # Los datos de un arma con los atributos de Johnny ya aplicados (la de la mano o, para la ficha del inventario,
 # cualquiera de las que lleva)
 func arma_de(id: String) -> Dictionary:
-	var w: Dictionary = Armas.datos(id).duplicate()
+	var w := base(id)
 	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
 	if id == "fregona":
 		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
@@ -241,6 +243,16 @@ func arma_de(id: String) -> Dictionary:
 	elif stats.ansiedad:
 		w.ritmo = w.ritmo * (1.0 + minf(0.5, 0.05 * a_la_vista))   # Ansiedad: +5 % por zombi a la vista
 	return w
+
+
+# La calidad de un arma que lleva (0 = Normal)
+func calidad(id: String) -> int:
+	return calidades.get(id, 0)
+
+
+# Los datos de un arma que lleva con su calidad, sin los atributos de Johnny (el cargador o el depósito de verdad)
+func base(id: String) -> Dictionary:
+	return Armas.con_calidad(id, calidad(id))
 
 
 # El daño de un golpe o una bala: a veces, crítico (el doble). "seguro": crítico sí o sí (Mirilla)
@@ -302,8 +314,8 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("cambiar_modo"):
 		cambiar_modo()
 	# Pistola sin fin: si se pone la ayuda con el cargador a medias, se llena (y deja de recargar)
-	if pistola_sin_fin() and balas < Armas.datos("pistola").cargador:
-		balas = Armas.datos("pistola").cargador
+	if pistola_sin_fin() and balas < base("pistola").cargador:
+		balas = base("pistola").cargador
 		recargando = 0.0
 		avisar_arma()
 	if recargando > 0.0:
@@ -398,7 +410,7 @@ func soltar_estela() -> void:
 # Ninja: al acabar la esquiva, un barrido en círculo con el arma cuerpo a cuerpo. Los zombis que pilla mueren
 # al momento; a la jefa le quita un 10 % de su vida
 func golpe_ninja() -> void:
-	var w: Dictionary = Armas.datos(huecos.cuerpo)
+	var w: Dictionary = base(huecos.cuerpo)
 	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
@@ -902,7 +914,7 @@ func sumar_municion() -> void:
 # nueva, con el cargador lleno y RESERVA_INICIO cargadores de su munición (los que quepan; las que se llenan con un
 # objeto de la mochila, solo llenas: la gasolina, el ácido o las baterías se buscan)
 func coger(id: String) -> void:
-	var w: Dictionary = Armas.datos(id)
+	var w := base(id)   # (con su calidad: el cargador o el depósito, del tamaño de la suya)
 	if w.tipo == "fuego":
 		var vieja: String = huecos.fuego
 		if vieja != "":
@@ -911,12 +923,12 @@ func coger(id: String) -> void:
 		deposito = w.get("deposito", 0.0)
 		if cargadores.has(id):
 			if w.has("deposito"):
-				deposito = cargadores[id]
+				deposito = minf(cargadores[id], w.deposito)
 			else:
-				balas = cargadores[id]
+				balas = mini(cargadores[id], w.cargador)
 			cargadores.erase(id)
 		elif not w.has("relleno"):
-			meter_municion(Armas.municion(id), w.cargador * RESERVA_INICIO)
+			meter_municion(Armas.municion(id), Armas.datos(id).cargador * RESERVA_INICIO)
 	huecos[w.tipo] = id
 	sostener(w.tipo)
 

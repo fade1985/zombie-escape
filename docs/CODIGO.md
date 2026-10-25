@@ -30,13 +30,17 @@ en una línea.
   ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
 - `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
   llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. `familia()`:
-  cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). `bala.gd`.
+  cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). Las **calidades**
+  (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño y lo de su familia; `con_calidad()`,
+  `que_da()`, `al_baul()`): cada arma que lleva Johnny tiene la suya (`johnny.calidades`, `johnny.base()`; lleva una
+  de cada arma: `partida.llevar_arma`) y el baúl guarda armas y paquetes de arrojables con la suya. `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
   ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas.
 - `llamarada.gd`: la llama continua del lanzallamas y el chorro del lanza ácido (cono, daño cada 0,25 s, empuje,
   luz). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora: 3 a mano (`mano`, F cambia) y 8 de repuesto (`repuesto`);
-  lo que cuesta uno en la tienda (`PRECIOS`).
+  lo que cuesta uno en la tienda (`PRECIOS`). Cada paquete tiene su calidad y va en su hueco: su clave es el tipo y,
+  si no es Normal, la calidad detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`).
   `granada.gd`: también la atraedora y la congeladora.
 - `sala_armas.gd`: la sala de pruebas de armas (F11): la diana, todas las armas, las líneas de ayuda y su panel.
 
@@ -83,7 +87,8 @@ en una línea.
   alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); el banco que las gastará
   aún no está. Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
   `talentos.gd`, `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
-- `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego), `logros.gd` (uno = una línea en
+- `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
+  `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en
   `LISTA`), `historia.gd` (dosier, noticias y la cafetera; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
@@ -99,7 +104,8 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
   secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`).
-- `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`), arrastrar con ratón o dedo
+- `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
+  arrojables; `guardar_equipo`, `sacar_equipo`), arrastrar con ratón o dedo
   (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
 
 **mapa/**

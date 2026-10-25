@@ -12,6 +12,7 @@ var velocidad := Vector2.ZERO
 var dano := 0.0
 var empuje := 1.0
 var quema := 1.0             # el fuego: por cuánto se multiplica lo que sigue ardiendo el zombi (la skin del bombero)
+var saltos := 0              # la chispa: a cuántos zombis más salta la descarga (la calidad de la pistola eléctrica)
 var radio := 8.0
 var vida_max := 0.5
 var vida := -1.0
@@ -37,7 +38,7 @@ func _physics_process(delta: float) -> void:
 		if zombi in golpeados or global_position.distance_to(zombi.global_position) >= zombi.radio + radio:
 			continue
 		golpeados.append(zombi)
-		ArmasCreadas.golpe(zombi, velocidad, dano, empuje, tipo, quema)
+		ArmasCreadas.golpe(zombi, velocidad, dano, empuje, tipo, quema, saltos)
 	queue_redraw()
 
 

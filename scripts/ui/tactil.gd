@@ -340,6 +340,14 @@ func dibujar() -> void:
 			borde = Color(Tema.ROJO, 0.7)
 		lienzo.draw_circle(donde, r, OSCURO)
 		lienzo.draw_arc(donde, r, 0, TAU, 40, borde, 2.5 if nombre == johnny.mano else 2.0)
+		# lo que no es Normal (Armas.CALIDADES), un aro de su color por dentro
+		var calidad := 0
+		if nombre in ["cuerpo", "fuego"]:
+			calidad = johnny.calidad(johnny.huecos[nombre])
+		elif nombre == "lanzar":
+			calidad = Lanzables.calidad_de(lz.tipo)
+		if calidad > 0:
+			lienzo.draw_arc(donde, r - 4.0 * esc, 0, TAU, 40, Color(Armas.color(calidad), 0.85), 2.0)
 		match nombre:
 			"esquivar":
 				icono(donde, "dash", 52 * esc)
@@ -349,20 +357,20 @@ func dibujar() -> void:
 				icono(donde, Objetos.icono(johnny.huecos[nombre]), 40 * esc)
 				# recargando: un aro blanco que se va llenando (como en el JS)
 				if nombre == "fuego" and johnny.recargando > 0.0:
-					var w: Dictionary = Armas.datos(johnny.huecos.fuego)
+					var w: Dictionary = johnny.base(johnny.huecos.fuego)
 					var hecho: float = 1.0 - johnny.recargando / maxf(0.01, w.get("recarga", 1.0))
 					lienzo.draw_arc(donde, r + 4 * esc, -PI / 2, -PI / 2 + TAU * clampf(hecho, 0, 1), 32, Color.WHITE, 3.0)
 			"lanzar":
 				var k: String = lz.tipo
 				if k != "":   # (sin nada a mano, el botón vacío)
-					icono(donde, k, 40 * esc)
+					icono(donde, Lanzables.tipo_de(k), 40 * esc)
 					texto(lienzo, donde + Vector2(r * 0.6, r * 0.75), str(lz.cuantas(k)), roundi(16 * esc), Tema.TINTA)
 			"cambiar_lanzable":
 				# el que vendría después de los que lleva a mano (el ⇄ del JS: la fuente pixel art no tiene flechas)
 				var ks := lz.tipos()
 				if not ks.is_empty():
 					var otro: String = ks[(ks.find(lz.tipo) + 1) % ks.size()]
-					icono(donde, otro, 22 * esc)
+					icono(donde, Lanzables.tipo_de(otro), 22 * esc)
 			"atacar":
 				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56 * esc)
 			"modo":

@@ -906,42 +906,79 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Un arma en el suelo (tirada desde el inventario, o la que suelta Johnny al llevar ya dos de ese tipo): al volver a
-# cogerla, al repuesto si está libre (llevar_arma)
-func soltar_arma(id: String, donde: Vector2) -> void:
+# Un arma en el suelo (tirada desde el inventario, o la que suelta Johnny al llevar ya dos de ese tipo), con su
+# calidad (las mejoradas, con un brillo de su color): al volver a cogerla, al repuesto si está libre (llevar_arma)
+func soltar_arma(id: String, donde: Vector2, calidad := 0) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
 	cosa.tamano = 1.4
 	cosa.tirado = true
 	cosa.position = donde
+	if calidad > 0:
+		var brillo := PointLight2D.new()
+		brillo.texture = load("res://escenas/luces/luz_suave.tres")
+		brillo.texture_scale = 0.25
+		brillo.color = Armas.color(calidad)
+		brillo.position = Vector2(0, -10)
+		cosa.add_child(brillo)
 	cosa.cogido.connect(func():
-		llevar_arma(id, false)
+		llevar_arma(id, calidad, false)
 		Sonido.tocar("compra")
-		numero(cosa.position, Objetos.nombre(id), Tema.TINTA))
+		numero(cosa.position, Armas.nombre(id, calidad), Armas.color(calidad) if calidad > 0 else Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
 # Johnny lleva como mucho dos armas de cada tipo (cuerpo a cuerpo y a distancia): la de la mano y la de repuesto
-# (armas_guardadas). Al llevarse otra (comprarla, sacarla del baúl o de la vitrina de la joyería), va a la mano y
-# la que llevaba pasa al repuesto; si ya tenía una de repuesto, la de la mano se queda en el suelo, a sus pies.
-# La que coge del suelo ("a_la_mano" falso) va al repuesto si está libre, para no cambiarle el arma en plena pelea.
-# Devuelve el arma que ha dejado en el suelo ("" si ninguna)
-func llevar_arma(id: String, a_la_mano := true) -> String:
+# (armas_guardadas), y una de cada arma, cada una con su calidad (johnny.calidades). Al llevarse otra (comprarla,
+# sacarla del baúl o de la vitrina de la joyería), va a la mano y la que llevaba pasa al repuesto; si ya tenía una de
+# repuesto, la de la mano se queda en el suelo, a sus pies. Si ya llevaba esa misma arma, se cambian: la nueva ocupa
+# su sitio (llena) y la vieja se queda en el suelo. La que coge del suelo ("a_la_mano" falso) va al repuesto si está
+# libre, para no cambiarle el arma en plena pelea. Con "al_suelo" falso (al sacarla del baúl), la que sobra no se deja
+# en el suelo: solo se devuelve, para guardarla en su lugar. Devuelve la que sobra ({"id", "calidad"}; vacío si ninguna)
+func llevar_arma(id: String, calidad := 0, a_la_mano := true, al_suelo := true) -> Dictionary:
 	var tipo: String = Armas.datos(id).tipo
-	armas_guardadas.erase(id)   # si ya la llevaba de repuesto, no se queda repetida
-	if not a_la_mano and repuesto(tipo) == "":
+	var fuera := {}
+	if id == johnny.huecos[tipo] or id in armas_guardadas:
+		fuera = {"id": id, "calidad": johnny.calidad(id)}
+		johnny.calidades[id] = calidad
+		johnny.cargadores.erase(id)   # (la nueva viene llena)
+		if id == johnny.huecos[tipo]:
+			johnny.coger(id)
+			var w: Dictionary = johnny.base(id)
+			if tipo == "fuego":
+				johnny.balas = w.cargador
+				johnny.deposito = w.get("deposito", 0.0)
+	elif not a_la_mano and repuesto(tipo) == "":
 		armas_guardadas.append(id)
-		return ""
-	var vieja: String = johnny.huecos[tipo]
-	var suelo := ""
-	if repuesto(tipo) == "":
-		armas_guardadas.append(vieja)
+		johnny.calidades[id] = calidad
 	else:
-		suelo = vieja
-		soltar_arma(vieja, johnny.position + Vector2(0, 34))
-	johnny.coger(id)
-	return suelo
+		var vieja: String = johnny.huecos[tipo]
+		if repuesto(tipo) == "":
+			armas_guardadas.append(vieja)
+		else:
+			fuera = {"id": vieja, "calidad": johnny.calidad(vieja)}
+		johnny.calidades[id] = calidad
+		johnny.coger(id)
+		if not fuera.is_empty():
+			johnny.calidades.erase(vieja)
+	if not fuera.is_empty() and al_suelo:
+		soltar_arma(fuera.id, johnny.position + Vector2(0, 34), fuera.calidad)
+	return fuera
+
+
+# Lo que lleva encima que va al baúl al completar el edificio (Armas.al_baul), como en el guardado ("baul_equipo"):
+# sus armas, menos la fregona y la pistola Normales, y los paquetes de arrojables mejorados
+func equipo_encima() -> Array:
+	var lista := []
+	for id in johnny.huecos.values() + armas_guardadas:
+		if Armas.al_baul(id, johnny.calidad(id)):
+			lista.append({"id": id, "calidad": johnny.calidad(id)})
+	for k in lanzables.mano + lanzables.repuesto:
+		var calidad := Lanzables.calidad_de(k)
+		if calidad > 0 and lanzables.cuantas(k) > 0:
+			lista.append({"id": Lanzables.tipo_de(k), "calidad": calidad, "n": lanzables.cuantas(k)})
+	return lista
 
 
 # El arma de repuesto de ese tipo ("cuerpo" o "fuego"), o "" si no lleva
@@ -1056,6 +1093,7 @@ func terminar(gano: bool, abandona := false) -> void:
 	var mejor := [false]    # el reto del día: se ha mejorado la marca de hoy
 	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
+	var equipo := equipo_encima() if gano else []
 	var s := Guardado.cambiar(func(g):
 		# el superviviente rescatado en esta partida se viene a vivir a las viviendas (su puerta ya estará abierta)
 		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
@@ -1069,10 +1107,12 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.mejor_planta = maxi(g.mejor_planta, planta.num)
 			e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
-			# los objetos de la mochila pasan al baúl (si caes, se pierden); el botiquín, no (se pierde)
+			# los objetos de la mochila pasan al baúl (si caes, se pierden); el botiquín, no (se pierde). Y las armas que
+			# lleva y los paquetes de arrojables mejorados (equipo_encima), aunque no quepan
 			for id in mochila:
 				if Objetos.al_baul(id):
 					g.baul[id] = g.baul.get(id, 0) + 1
+			g.baul_equipo.append_array(equipo)
 			g.dolares += dolares + extra
 			g.dolares_total += dolares + extra
 			g.victorias += 1
@@ -1358,9 +1398,14 @@ func ir_al_jefe(tipo: String) -> void:
 			return
 
 
-# Tecla U: mete en el baúl 10 piezas de cada familia (Objetos.PIEZAS), para probar el baúl y el banco
+# Tecla U: mete en el baúl 10 piezas de cada familia (Objetos.PIEZAS) y unas armas y paquetes de arrojables de cada
+# calidad (PRUEBA_EQUIPO), para probar el baúl y el banco (aunque no quepan)
+const PRUEBA_EQUIPO := [{"id": "bate", "calidad": 1}, {"id": "escopeta", "calidad": 2}, {"id": "lanzallamas", "calidad": 3},
+	{"id": "pistola", "calidad": 2}, {"id": "molotov", "calidad": 2, "n": 4}, {"id": "congeladora", "calidad": 3, "n": 3}]
+
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
 		for id in Objetos.PIEZAS:
-			g.baul[id] = g.baul.get(id, 0) + 10)
-	decir("10 piezas de cada familia al baúl")
+			g.baul[id] = g.baul.get(id, 0) + 10
+		g.baul_equipo.append_array(PRUEBA_EQUIPO.duplicate(true)))
+	decir("10 piezas de cada familia y unas armas y arrojables mejorados al baúl")

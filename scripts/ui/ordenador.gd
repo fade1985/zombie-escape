@@ -3,8 +3,8 @@
 # barra de tareas con el reloj y una ventana para cada programa:
 #   - "Compra de puntos e intercambio": cambia los dólares ahorrados por puntos de talento (talentos.gd) y los
 #     gasta en el árbol de talentos. Lo comprado se nota al momento.
-#   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS) para esta partida, y queda
-#     desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
+#   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS), en calidad Normal (parte 4 de la
+#     tienda y las piezas: Armas.CALIDADES), y queda desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
 #     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho). Desde el
 #     25 oct también vende el lanzallamas, el lanza ácido y la pistola eléctrica, que antes se creaban en el banco.
 #     Cuatro secciones, las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
@@ -543,7 +543,7 @@ func subir(id: String) -> void:
 func programa_armas(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
 	saldo(c, s)
-	nota(c, "Lo que compres es para esta partida y queda desbloqueado. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo.")
+	nota(c, "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo.")
 	nota_partida(c)
 	var ids := Armas.PRECIOS.keys()
 	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
@@ -623,10 +623,10 @@ func comprar_arma(id: String) -> void:
 		s.armas.append(id)
 	Guardado.escribir(s)
 	partida.ahorrados = s.dolares
-	var vieja: String = Objetos.nombre(johnny.huecos[w.tipo])
-	var suelo: String = partida.llevar_arma(id)
+	var vieja: String = Armas.nombre(johnny.huecos[w.tipo], johnny.calidad(johnny.huecos[w.tipo]))
+	var suelo: Dictionary = partida.llevar_arma(id)   # (en Normal: las mejoradas salen del banco y de la joyería)
 	abrir("armas", "b_" + id)
-	info.set_deferred("text", ("¡Compra hecha! %s a la mano; %s pasa al repuesto." if suelo == "" else
+	info.set_deferred("text", ("¡Compra hecha! %s a la mano; %s pasa al repuesto." if suelo.is_empty() else
 		"¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.") % [w.nombre, vieja])   # después de marcar el botón (que pone su explicación)
 
 

@@ -308,7 +308,7 @@ func existe(clave: String) -> bool:
 		"u": return i < partida.johnny.huecos_municion().size()
 		"l": return i < lz.mano.size()
 		"e": return i < lz.repuesto.size()
-		"b": return i < objetos_baul(Guardado.cargar()).size()
+		"b": return i < cosas_baul(Guardado.cargar()).size()
 	return false
 
 
@@ -403,15 +403,17 @@ func arrojable(r: Rect2, clave: String, k: String, margen := 12.0) -> Control:
 	if k == "":
 		return casilla_inv(r)
 	var lz: Lanzables = partida.lanzables
-	return casilla_inv(r, clave, icono_lanzable(k), "%d/%d" % [lz.cuantas(k), lz.maximo(k)], GRIS, margen)
+	return casilla_inv(r, clave, icono_lanzable(k), "%d/%d" % [lz.cuantas(k), lz.maximo(k)],
+		Armas.color(Lanzables.calidad_de(k)), margen)
 
 
+# El nombre de un paquete por su clave, con su calidad («Molotov (Rara)»)
 func nombre_lanzable(k: String) -> String:
-	return Lanzables.UNO[k]
+	return Armas.nombre(Lanzables.tipo_de(k), Lanzables.calidad_de(k))
 
 
 func icono_lanzable(k: String) -> String:
-	return k   # (assets/ui/iconos/<tipo>.png)
+	return Lanzables.tipo_de(k)   # (assets/ui/iconos/<tipo>.png)
 
 
 # Lo que le queda a un arma de fuego que lleva: en el cargador (balas) o, las de depósito, en el depósito (segundos).
@@ -419,7 +421,7 @@ func icono_lanzable(k: String) -> String:
 # nunca en la mano, lleno
 func carga(id: String) -> float:
 	var johnny: Node2D = partida.johnny
-	var w: Dictionary = Armas.datos(id)
+	var w: Dictionary = johnny.base(id)
 	var deposito: bool = w.has("deposito")
 	if johnny.huecos.fuego == id:
 		return johnny.deposito if deposito else float(johnny.balas)
@@ -429,7 +431,7 @@ func carga(id: String) -> float:
 # Lo que se ve en la esquina de la casilla de un arma de fuego: «8/12» o, las de depósito, «6 s» ("" las de cuerpo a
 # cuerpo)
 func carga_corta(id: String) -> String:
-	var w: Dictionary = Armas.datos(id)
+	var w: Dictionary = partida.johnny.base(id)
 	if w.tipo != "fuego":
 		return ""
 	if w.has("deposito"):
@@ -551,8 +553,8 @@ func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String) 
 func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 	var johnny: Node2D = partida.johnny
 	var w: Dictionary = johnny.arma_de(id)
-	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s" % [Armas.HUECOS[w.tipo],
-		"En la mano" if puesta else "De repuesto"])
+	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s · %s" % [Armas.HUECOS[w.tipo],
+		Armas.calidad_nombre(johnny.calidad(id)), "En la mano" if puesta else "De repuesto"])
 	if w.tipo == "fuego":
 		var tipo := Armas.municion(id)
 		espacio(caja, 4)
@@ -565,7 +567,7 @@ func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 	espacio(caja, 8)
 	for b in barras(w):
 		barra(caja, b[0], b[1])
-	var que: String = QUE_HACE.get(id, "")
+	var que: String = que_hace(id)
 	if not puesta:
 		return {"que": que, "botones": [["poner", "Ponérmela", poner_guardada, false], ["tirar", "Tirar al suelo", tirar, false]]}
 	var otra: String = partida.repuesto(w.tipo)
@@ -667,7 +669,7 @@ func ficha_lanzable(caja: VBoxContainer, k: String, a_mano: bool) -> Dictionary:
 	var lz: Lanzables = partida.lanzables
 	cabeza(caja, icono_lanzable(k), nombre_lanzable(k), "Arrojable · %s" % ("A mano" if a_mano else "De repuesto"))
 	renglon(caja, "Te quedan %d de %d" % [lz.cuantas(k), lz.maximo(k)], Tema.TINTA)
-	var que: String = QUE_HACE[k]
+	var que: String = que_hace(k)
 	if a_mano:
 		que += " Es lo que lanzas ahora." if k == lz.tipo else " Con F lo eliges para lanzarlo."
 		return {"que": que, "botones": [["al_repuesto", "Al repuesto", mover_lanzable, lz.repuesto.size() >= Lanzables.REPUESTO]]}
@@ -803,9 +805,9 @@ func mover_lanzable(por := "") -> void:
 	pintar()
 
 
-# El borde de la casilla de un arma: gris (hasta el 25 oct, las creadas en el banco llevaban el color de su rareza)
-func borde(_id: String) -> Color:
-	return GRIS
+# El borde de la casilla de un arma que lleva: el color de su calidad (Armas.CALIDADES; la Normal, gris)
+func borde(id: String) -> Color:
+	return Armas.color(partida.johnny.calidad(id))
 
 
 # El objeto de la casilla de la mochila elegida ("" si no hay ninguna elegida)
@@ -898,7 +900,8 @@ func tirar(todo := false) -> void:
 	elif sel.begins_with("g"):
 		var id: String = partida.armas_guardadas[i]
 		partida.armas_guardadas.remove_at(i)
-		partida.soltar_arma(id, suelo)
+		partida.soltar_arma(id, suelo, johnny.calidad(id))   # (con su calidad)
+		johnny.calidades.erase(id)
 		sel = ""
 	elif sel.begins_with("p"):
 		var tipo := "cuerpo" if sel == "p0" else "fuego"
@@ -912,7 +915,8 @@ func tirar(todo := false) -> void:
 		johnny.coger(otra)
 		if johnny.mano != mano:
 			johnny.sostener(mano)   # (la otra mano sigue con la suya)
-		partida.soltar_arma(id, suelo)
+		partida.soltar_arma(id, suelo, johnny.calidad(id))
+		johnny.calidades.erase(id)
 		salta = [sel]
 		salta_johnny = true
 	else:
@@ -925,10 +929,11 @@ func tirar(todo := false) -> void:
 # ── Baúl ──
 # La pantalla del baúl (parte 4 del inventario nuevo; la maqueta es maqueta-baul-parte4.png), hecha como la del
 # inventario: cada cosa en su sitio, en coordenadas de la pantalla. A la izquierda, lo que lleva Johnny: sus armas y los
-# arrojables a mano (para verlos: no van al baúl) y, en filas de 8, los objetos, la munición y los arrojables de
-# repuesto. A la derecha, las casillas del baúl: los objetos guardados (hasta el 25 oct, también las armas creadas en
-# el banco de trabajo). Abajo, la ficha de lo elegido con su botón, «Guardar en el baúl» o «Sacar uno». Al moverse la
-# marca solo se vuelve a pintar la ficha (pintar_ficha_baul)
+# arrojables a mano y, en filas de 8, los objetos, la munición y los arrojables de repuesto. A la derecha, las casillas
+# del baúl: los objetos guardados y, cada una en su casilla y con el borde del color de su calidad, las armas y los
+# paquetes de arrojables (cosas_baul; parte 4 de la tienda y las piezas: van al baúl todas las armas menos la fregona y
+# la pistola Normales, y los arrojables mejorados: Armas.al_baul). Abajo, la ficha de lo elegido con su botón,
+# «Guardar en el baúl», «Sacar uno» o «Sacar». Al moverse la marca solo se vuelve a pintar la ficha (pintar_ficha_baul)
 
 const MITAD := 476.0          # donde empieza la mitad del baúl
 const ANCHO_NOTA := 380.0     # lo ancho que es el texto de la ficha del baúl
@@ -981,18 +986,20 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	# las dos mitades, para arrastrar de una a otra (guardar y sacar)
 	sitio("llevas", Rect2(52, 80, 394, 316))
 	sitio("baul", Rect2(MITAD - 8, 80, 428, 316))
-	# a la derecha, el baúl: los objetos, con cuántos hay. Si pasa de 32 (al completar el edificio, lo de la mochila
-	# entra aunque no quepa), las casillas se hacen más pequeñas para que quepan todas
-	var objetos := objetos_baul(s)
-	var filas := maxi(ceili(Objetos.BAUL / 8.0), ceili(objetos.size() / 8.0))
+	# a la derecha, el baúl: los objetos, con cuántos hay, y las armas y los paquetes de arrojables, con el color de su
+	# calidad. Si pasa de 32 (al completar el edificio, lo que lleva entra aunque no quepa), las casillas se hacen más
+	# pequeñas para que quepan todas
+	var cosas := cosas_baul(s)
+	var filas := maxi(ceili(Objetos.BAUL / 8.0), ceili(cosas.size() / 8.0))
 	var paso := mini(52, floori(264.0 / filas))
 	rotulo(lienzo, "Baúl  %d / %d" % [Objetos.casillas_baul(s), Objetos.BAUL], MITAD, 86, Color("#e6dec8"))
-	rotulo(lienzo, "Objetos guardados", MITAD, 110, Tema.GRIS)
+	rotulo(lienzo, "Objetos, armas y arrojables", MITAD, 110, Tema.GRIS)
 	for i in filas * 8:
 		var r := Rect2(MITAD + (i % 8) * paso, 132 + floori(i / 8.0) * paso, paso - 6, paso - 6)
-		if i < objetos.size():
-			var o: Array = objetos[i]
-			casilla_inv(r, "b%d" % i, Objetos.icono(o[0]), str(o[1]), GRIS, 8.0)
+		if i < cosas.size():
+			var o: Dictionary = cosas[i]
+			casilla_inv(r, "b%d" % i, Objetos.icono(o.id), str(o.n) if o.n > 0 else "",
+				GRIS if o.equipo < 0 else Armas.color(o.calidad), 8.0)
 		else:
 			casilla_inv(r)
 	if filas * 8 == Objetos.BAUL:
@@ -1023,6 +1030,32 @@ func objetos_baul(s: Dictionary) -> Array:
 		if s.baul.get(id, 0) > 0:
 			lista.append([id, int(s.baul[id])])
 	return lista
+
+
+# Las casillas del baúl, en orden: primero los objetos (objetos_baul) y luego las armas y los paquetes de arrojables
+# ("baul_equipo" del guardado), cada uno en la suya: [{id, n (cuántos; las armas, 0), calidad, equipo (su sitio en
+# "baul_equipo"; los objetos, -1)}, ...]
+func cosas_baul(s: Dictionary) -> Array:
+	var lista := []
+	for o in objetos_baul(s):
+		lista.append({"id": o[0], "n": o[1], "calidad": 0, "equipo": -1})
+	for i in s.baul_equipo.size():
+		var e: Dictionary = s.baul_equipo[i]
+		lista.append({"id": e.id, "n": int(e.get("n", 0)), "calidad": int(e.calidad), "equipo": i})
+	return lista
+
+
+# ¿Se puede sacar esa casilla del baúl? Un objeto, si le cabe en la mochila o en la munición; un arma, siempre (la que
+# sobre entra en el baúl en su lugar); un paquete de arrojables, si tiene hueco y no lleva ya el máximo de esos
+func se_saca(o: Dictionary) -> bool:
+	var johnny: Node2D = partida.johnny
+	if o.equipo < 0:
+		return johnny.sitio(o.id) > 0 if o.id in Armas.MUNICION else Objetos.cabe(partida.mochila, o.id)
+	if Armas.DATOS.has(o.id):
+		return true
+	var k := Lanzables.clave(o.id, o.calidad)
+	var lz: Lanzables = partida.lanzables
+	return lz.hay_hueco(k) and lz.cuantas(k) < lz.maximo(k)
 
 
 # ── Baúl: la ficha ──
@@ -1072,9 +1105,10 @@ func pintar_ficha_baul() -> void:
 
 
 # Lo que dice la ficha de lo elegido en el baúl: el dibujo, el nombre, qué es, cuántos, lo que hace o lo que pasa al
-# guardarlo o sacarlo ("que") y su botón ([nombre, texto, al pulsar, apagado], o ninguno). Las armas y los arrojables
-# que lleva no van al baúl; lo de la mochila y la munición que también es un objeto (la gasolina, el bidón de
-# ácido...), sí; del baúl se sacan los objetos, de uno en uno
+# guardarlo o sacarlo ("que") y su botón ([nombre, texto, al pulsar, apagado], o ninguno). Van al baúl lo de la
+# mochila, la munición que también es un objeto (la gasolina, el bidón de ácido...), las armas (menos la fregona y la
+# pistola Normales) y los paquetes de arrojables mejorados; del baúl se sacan los objetos de uno en uno, y las armas y
+# los paquetes enteros
 func ficha_baul() -> Dictionary:
 	var i := sel.substr(1).to_int()
 	var johnny: Node2D = partida.johnny
@@ -1085,9 +1119,16 @@ func ficha_baul() -> Dictionary:
 		"p", "g":
 			var id: String = johnny.huecos["cuerpo" if i == 0 else "fuego"] if sel[0] == "p" else partida.armas_guardadas[i]
 			var w: Dictionary = johnny.arma_de(id)
+			var calidad: int = johnny.calidad(id)
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
-				"que_es": "%s · %s" % [Armas.HUECOS[w.tipo], "En la mano" if sel[0] == "p" else "De repuesto"],
-				"que": que_hace(id) + " Las armas no van al baúl."}, true)
+				"que_es": "%s · %s · %s" % [Armas.HUECOS[w.tipo], Armas.calidad_nombre(calidad),
+					"En la mano" if sel[0] == "p" else "De repuesto"],
+				"que": que_hace(id) + " "}, true)
+			if Armas.al_baul(id, calidad):
+				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo)
+				d.boton = ["guardar", "Guardar en el baúl", guardar, not Objetos.hueco_baul(s)]
+			else:
+				d.que += "La %s Normal no va al baúl: la tienes siempre." % Objetos.nombre(id).to_lower()
 			if w.tipo == "fuego":
 				d.cuanto = "%s · reserva %d" % ["Depósito %d de %d s" % [ceili(carga(id)), roundi(w.deposito)]
 					if w.has("deposito") else "Cargador %d de %d" % [roundi(carga(id)), w.cargador],
@@ -1095,9 +1136,16 @@ func ficha_baul() -> Dictionary:
 		"l", "e":
 			var k: String = lz.mano[i] if sel[0] == "l" else lz.repuesto[i]
 			d.merge({"icono": icono_lanzable(k), "nombre": nombre_lanzable(k),
-				"que_es": "Arrojable · %s" % ("A mano" if sel[0] == "l" else "De repuesto"),
+				"que_es": "Arrojable · %s · %s" % [Armas.calidad_nombre(Lanzables.calidad_de(k)),
+					"A mano" if sel[0] == "l" else "De repuesto"],
 				"cuanto": "Te quedan %d de %d" % [lz.cuantas(k), lz.maximo(k)],
-				"que": que_hace(k) + " Los arrojables no van al baúl."}, true)
+				"que": que_hace(k) + " "}, true)
+			if Lanzables.calidad_de(k) > 0:
+				d.que += "Se guarda el paquete entero. %s" % ("En el baúl queda a salvo aunque caigas." if
+					Objetos.hueco_baul(s) else "El baúl está lleno: haz sitio sacando algo.")
+				d.boton = ["guardar", "Guardar en el baúl", guardar, not Objetos.hueco_baul(s)]
+			else:
+				d.que += "Los Normales no van al baúl: se compran en la tienda y los sueltan los zombis."
 		"m":
 			var c: Array = Objetos.casillas(partida.mochila)[i]
 			var id: String = c[0]
@@ -1120,13 +1168,16 @@ func ficha_baul() -> Dictionary:
 			else:
 				d.que = "No va al baúl: es la munición de %s y se queda contigo." % m.para
 		"b":
-			var o: Array = objetos_baul(s)[i]
-			var id: String = o[0]
+			var o: Dictionary = cosas_baul(s)[i]
+			var id: String = o.id
+			if o.equipo >= 0:
+				d.merge(ficha_equipo(o), true)
+				return d
 			var municion: bool = id in Armas.MUNICION
-			var cabe: bool = johnny.sitio(id) > 0 if municion else Objetos.cabe(partida.mochila, id)
+			var cabe := se_saca(o)
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
 				"que_es": "%s · En el baúl" % ("Munición" if municion else "Pieza" if id in Objetos.PIEZAS else "Objeto"),
-				"cuanto": "Hay %d en el baúl" % o[1], "boton": ["sacar", "Sacar uno", sacar, not cabe]}, true)
+				"cuanto": "Hay %d en el baúl" % o.n, "boton": ["sacar", "Sacar uno", sacar, not cabe]}, true)
 			d.que = "Llena %s. " % Armas.MUNICION[id].para if municion else que_pieza(id)
 			if cabe:
 				d.que += "Sale de uno en uno a tu %s; fuera del baúl, se pierde si caes." % ("munición" if municion else "mochila")
@@ -1135,9 +1186,53 @@ func ficha_baul() -> Dictionary:
 	return d
 
 
-# Lo que hace un arma (por su id) o un arrojable (por su tipo): lo de QUE_HACE
-func que_hace(id: String) -> String:
-	return QUE_HACE.get(id, "")
+# La ficha de un arma o un paquete de arrojables del baúl (o, de cosas_baul): sale entero con «Sacar»
+func ficha_equipo(o: Dictionary) -> Dictionary:
+	var arma := Armas.DATOS.has(o.id)
+	var cabe := se_saca(o)
+	var d := {"icono": Objetos.icono(o.id), "nombre": Armas.nombre(o.id, o.calidad), "cuanto": "",
+		"boton": ["sacar", "Sacar", sacar, not cabe]}
+	if arma:
+		var tipo: String = Armas.datos(o.id).tipo
+		d.que_es = "%s · %s · En el baúl" % [Armas.HUECOS[tipo], Armas.calidad_nombre(o.calidad)]
+		d.que = que_hace(o.id, o.calidad) + " Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de " + \
+			"la mano entra en el baúl en su lugar)."
+	else:
+		var k := Lanzables.clave(o.id, o.calidad)
+		var lz: Lanzables = partida.lanzables
+		d.que_es = "Arrojable · %s · En el baúl" % Armas.calidad_nombre(o.calidad)
+		d.cuanto = "Hay %d en el baúl" % o.n
+		d.que = que_hace(k) + " "
+		if cabe:
+			d.que += "Sale el paquete entero (los que te quepan; los demás se quedan)."
+		elif not lz.hay_hueco(k):
+			d.que += "No te cabe: tienes llenos los huecos de arrojables."
+		else:
+			d.que += "No te cabe: ya llevas el máximo de esos (%d)." % lz.maximo(k)
+	return d
+
+
+# Lo que pasa al guardar un arma en el baúl ("sin_otra": es la de la mano y no lleva otra de repuesto de su tipo)
+func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String) -> String:
+	if not Objetos.hueco_baul(s):
+		return "El baúl está lleno: haz sitio sacando algo."
+	if sin_otra:
+		return "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre." % \
+			Objetos.nombre(Armas.SIEMPRE[tipo]).to_lower()
+	return "En el baúl queda a salvo aunque caigas."
+
+
+# Lo que hace un arma (por su id) o un arrojable (por la clave de su paquete): lo de QUE_HACE y, si no es Normal, lo que
+# le da su calidad (Armas.que_da; la del arma, la que lleva Johnny si no se dice otra)
+func que_hace(id: String, calidad := -1) -> String:
+	if Lanzables.DATOS.has(Lanzables.tipo_de(id)):
+		calidad = Lanzables.calidad_de(id)
+		id = Lanzables.tipo_de(id)
+	elif calidad < 0 and Armas.DATOS.has(id):
+		calidad = partida.johnny.calidad(id)
+	var que: String = QUE_HACE.get(id, "")
+	var da := Armas.que_da(id, calidad) if Armas.DATOS.has(id) or Lanzables.DATOS.has(id) else ""
+	return que if da == "" else "%s %s" % [que, da]
 
 
 # Lo que pasa al guardar en el baúl los "n" de esa casilla o hueco (o, con el baúl lleno, por qué no se puede)
@@ -1151,12 +1246,55 @@ func que_guardar(s: Dictionary, id: String, n: int, donde: String) -> String:
 
 # ── Baúl: guardar y sacar ──
 
-# Saca del baúl lo elegido: un objeto, uno (sacar_objeto). Hasta el 25 oct, también las armas creadas en el banco
+# Saca del baúl lo elegido: un objeto, uno (sacar_objeto); un arma o un paquete de arrojables, entero (sacar_equipo)
 func sacar() -> void:
 	var i := sel.substr(1).to_int()
-	var objetos := objetos_baul(Guardado.cargar())
-	if sel.begins_with("b") and i < objetos.size():
-		sacar_objeto(objetos[i][0])
+	var cosas := cosas_baul(Guardado.cargar())
+	if not sel.begins_with("b") or i >= cosas.size():
+		return
+	if cosas[i].equipo < 0:
+		sacar_objeto(cosas[i].id)
+	else:
+		sacar_equipo(cosas[i])
+
+
+# Saca del baúl un arma o un paquete de arrojables. El arma va a la mano como al comprarla (partida.llevar_arma): la
+# que llevaba pasa al repuesto o, si ya lleva dos (o esa misma), entra en el baúl en su lugar (la fregona y la pistola
+# Normales, que no van al baúl, se quedan en el suelo). Del paquete salen los que quepan (lanzables.meter)
+func sacar_equipo(o: Dictionary) -> void:
+	if not se_saca(o):
+		Sonido.tocar("no")
+		return
+	var fuera := {}
+	var quedan := 0
+	if Armas.DATOS.has(o.id):
+		fuera = partida.llevar_arma(o.id, o.calidad, true, false)
+		if not fuera.is_empty() and not Armas.al_baul(fuera.id, fuera.calidad):
+			partida.soltar_arma(fuera.id, partida.johnny.position + Vector2(0, 34), fuera.calidad)
+			fuera = {}
+	else:
+		quedan = o.n - partida.lanzables.meter(Lanzables.clave(o.id, o.calidad), o.n)
+	Guardado.cambiar(func(g):
+		if quedan > 0:
+			g.baul_equipo[o.equipo].n = quedan
+		elif not fuera.is_empty():
+			g.baul_equipo[o.equipo] = fuera   # (en la misma casilla)
+		else:
+			g.baul_equipo.remove_at(o.equipo))
+	Sonido.tocar("soltar" if con_dedo else "cambiar")
+	if Armas.DATOS.has(o.id):
+		var mano := "p0" if Armas.datos(o.id).tipo == "cuerpo" else "p1"
+		salta = [mano] if fuera.is_empty() else [mano, sel]
+		salta_johnny = true
+		if not fuera.is_empty():
+			aviso = "%s a la mano; %s entra en el baúl en su lugar." % [Armas.nombre(o.id, o.calidad),
+				Armas.nombre(fuera.id, fuera.calidad)]
+	else:
+		var k := Lanzables.clave(o.id, o.calidad)
+		var lz: Lanzables = partida.lanzables
+		salta = ["l%d" % lz.mano.find(k) if k in lz.mano else "e%d" % lz.repuesto.find(k)]
+	foco = sel if existe(sel) else ""
+	pintar()
 
 
 # Saca del baúl uno de ese objeto: a la mochila o, si es munición (la gasolina, el bidón de ácido...), a sus huecos (y
@@ -1178,8 +1316,8 @@ func sacar_objeto(id: String) -> void:
 		johnny.avisar_arma()
 	Sonido.tocar("soltar" if con_dedo else "cambiar")
 	var i := sel.substr(1).to_int()
-	var objetos := objetos_baul(Guardado.cargar())
-	foco = "sacar" if i < objetos.size() and objetos[i][0] == id else sel
+	var cosas := cosas_baul(Guardado.cargar())
+	foco = "sacar" if i < cosas.size() and cosas[i].id == id else sel
 	salta = [donde_esta(id)]
 	pintar()
 
@@ -1209,13 +1347,67 @@ func guardar() -> void:
 		if i < huecos.size() and huecos[i][0] in Objetos.NOMBRES:
 			id = huecos[i][0]
 			n = huecos[i][1]
+	elif sel[0] in ["p", "g", "l", "e"]:
+		guardar_equipo()
+		return
 	if not meter_en_baul(id, n):
 		Sonido.tocar("no")
 		return
 	partida.johnny.avisar_arma()
 	Sonido.tocar("soltar" if con_dedo else "cambiar")
-	salta = ["b%d" % objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find(id)]
+	salta = ["b%d" % objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find(id)]   # (los objetos van primero)
 	foco = sel
+	pintar()
+
+
+# Guarda en el baúl el arma o el paquete de arrojables elegido, en una casilla nueva (al final). Si es el arma de la
+# mano, la de repuesto de su tipo pasa a la mano o, si no lleva, la de siempre (la fregona o la pistola, Normales:
+# Armas.SIEMPRE)
+func guardar_equipo() -> void:
+	var i := sel.substr(1).to_int()
+	var johnny: Node2D = partida.johnny
+	var lz: Lanzables = partida.lanzables
+	var s := Guardado.cargar()
+	var e := {}
+	match sel[0]:
+		"p", "g":
+			var tipo: String = ("cuerpo" if i == 0 else "fuego") if sel[0] == "p" else Armas.datos(partida.armas_guardadas[i]).tipo
+			var id: String = johnny.huecos[tipo] if sel[0] == "p" else partida.armas_guardadas[i]
+			if Armas.al_baul(id, johnny.calidad(id)) and Objetos.hueco_baul(s):
+				e = {"id": id, "calidad": johnny.calidad(id)}
+				johnny.calidades.erase(id)
+				johnny.cargadores.erase(id)
+				if sel[0] == "g":
+					partida.armas_guardadas.remove_at(i)
+				else:
+					var mano: String = johnny.mano
+					var otra: String = partida.repuesto(tipo)
+					if otra != "":
+						partida.armas_guardadas.erase(otra)
+					else:
+						otra = Armas.SIEMPRE[tipo]
+						var w: Dictionary = Armas.datos(otra)
+						if w.tipo == "fuego":   # (llena, pero sin regalar munición de reserva: johnny.coger)
+							johnny.cargadores[otra] = w.get("deposito", w.cargador)
+					johnny.coger(otra)
+					if johnny.mano != mano:
+						johnny.sostener(mano)   # (la otra mano sigue con la suya)
+					salta_johnny = true
+		"l", "e":
+			var k: String = lz.mano[i] if sel[0] == "l" else lz.repuesto[i]
+			if Lanzables.calidad_de(k) > 0 and Objetos.hueco_baul(s):
+				e = {"id": Lanzables.tipo_de(k), "calidad": Lanzables.calidad_de(k), "n": lz.quitar(k)}
+	if e.is_empty():
+		Sonido.tocar("no")
+		return
+	var antes: int = cosas_baul(s).size()
+	Guardado.cambiar(func(g): g.baul_equipo.append(e))
+	johnny.avisar_arma()
+	Sonido.tocar("soltar" if con_dedo else "cambiar")
+	salta = ["b%d" % antes]
+	if sel[0] == "p":
+		salta.append(sel)
+	foco = sel if existe(sel) else ""
 	pintar()
 
 
@@ -1332,9 +1524,17 @@ func destinos(clave: String) -> Dictionary:
 				var tipo: String = johnny.huecos_municion()[i][0]
 				if tipo in Objetos.NOMBRES and Objetos.cabe_baul(s, tipo):
 					d["baul"] = "guardar"
+			"p", "g":
+				var id: String = johnny.huecos["cuerpo" if i == 0 else "fuego"] if clave[0] == "p" else partida.armas_guardadas[i]
+				if Armas.al_baul(id, johnny.calidad(id)) and Objetos.hueco_baul(s):
+					d["baul"] = "guardar"
+			"l", "e":
+				var lz: Lanzables = partida.lanzables
+				var k: String = lz.mano[i] if clave[0] == "l" else lz.repuesto[i]
+				if Lanzables.calidad_de(k) > 0 and Objetos.hueco_baul(s):
+					d["baul"] = "guardar"
 			"b":
-				var id: String = objetos_baul(s)[i][0]
-				if (johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(partida.mochila, id)):
+				if se_saca(cosas_baul(s)[i]):
 					d["llevas"] = "sacar"
 		return d
 	match clave[0]:

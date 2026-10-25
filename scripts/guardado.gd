@@ -1,7 +1,7 @@
 # El guardado entre partidas (como src/save.js del JS): un archivo de texto en user://guardado.json.
 # En Windows, user:// es %APPDATA%\Godot\app_userdata\Zombie Escape.
 #
-# Se guarda: dólares, puntos y talentos, armas encontradas, el baúl, los supervivientes rescatados, récords, el
+# Se guarda: dólares, puntos y talentos, armas encontradas, el baúl (objetos, armas y arrojables), los supervivientes rescatados, récords, el
 # progreso de cada edificio y las colecciones (lo encontrado y visto alguna vez).
 # Las partidas a medias NO se guardan: si cierras, empiezas el edificio de nuevo.
 #
@@ -23,6 +23,9 @@ const NUEVO := {
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...} (fase 7b)
+	"baul_equipo": [],    # las armas y los paquetes de arrojables del baúl, cada uno en su casilla y con su calidad
+	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},
+	                      # {"id": "molotov", "calidad": 1, "n": 3}, ...]
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)
@@ -82,6 +85,16 @@ static func cargar() -> Dictionary:
 			baul[id] = int(s.baul[id])
 	s.baul = baul
 	s.encontrados = s.encontrados.filter(func(id): return Objetos.NOMBRES.has(id))
+	# el equipo del baúl: solo armas y arrojables que existen, con su calidad (y los arrojables, cuántos) en enteros
+	var equipo := []
+	for e in s.baul_equipo:
+		var id: String = str(e.get("id", "")) if e is Dictionary else ""
+		var calidad := clampi(int(e.get("calidad", 0)), 0, Armas.CALIDADES.size() - 1) if e is Dictionary else 0
+		if Armas.DATOS.has(id):
+			equipo.append({"id": id, "calidad": calidad})
+		elif Lanzables.DATOS.has(id) and int(e.get("n", 0)) > 0:
+			equipo.append({"id": id, "calidad": calidad, "n": int(e.n)})
+	s.baul_equipo = equipo
 	# las recetas del banco de trabajo se quitaron del juego el 25 oct: las armas creadas del baúl ("baul_armas"), las
 	# recetas aprendidas ("recetas") y las creadas alguna vez ("creadas", de Colecciones) de un guardado viejo no se
 	# leen (solo se copia lo que está en NUEVO) y desaparecen al volver a escribirlo

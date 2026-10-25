@@ -16,6 +16,11 @@
 #     se creaban en el banco de trabajo con una receta; ahora se cuentan como el molotov y la granada, pero no se
 #     tienen al empezar ni las sueltan los zombis: solo se compran.
 #   - Los cuatro se compran de uno en uno en la tienda de armas del ordenador (PRECIOS; ordenador.gd, comprar_lanzable).
+#   - Cada paquete tiene su calidad (Armas.CALIDADES; parte 4 de la tienda y las piezas): la que no es Normal hace más
+#     daño, con más radio, y caben más. Los de un tipo con dos calidades son dos paquetes, cada uno en su hueco: su
+#     "clave" es el tipo y, si no es Normal, su calidad detrás («molotov:2», unos molotovs Raros; clave, tipo_de y
+#     calidad_de). Lo de la tienda, lo de empezar y lo que sueltan los zombis es Normal; los mejorados se guardan en el
+#     baúl (los Normales no) y salen de él.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
 # explota a los 2 s (granada.gd).
 class_name Lanzables
@@ -83,10 +88,10 @@ const REPUESTO := 8        # y los de repuesto
 
 var johnny: Node2D
 var partida: Node
-var cantidades := {"molotov": 0, "granada": 0, "atraedora": 0, "congeladora": 0}
-var mano: Array = []           # los tipos que lleva a mano, en el orden de F
+var cantidades := {"molotov": 0, "granada": 0, "atraedora": 0, "congeladora": 0}   # cuántos de cada paquete (por su clave)
+var mano: Array = []           # los paquetes que lleva a mano (sus claves), en el orden de F
 var repuesto: Array = []       # y los de repuesto
-var tipo := "molotov"          # lo que se lanza ahora ("" si no lleva nada a mano)
+var tipo := "molotov"          # el paquete que se lanza ahora (su clave; "" si no lleva nada a mano)
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
 var apuntando := false         # se ha visto el botón apretado: al soltarlo, se lanza (y solo entonces)
 var t := 0.0
@@ -97,9 +102,25 @@ func _ready() -> void:
 	z_index = 15
 
 
-# Al empezar la partida: las de siempre, más las del Artificiero, a mano
+# La clave de un paquete: el tipo y, si no es Normal, su calidad («molotov:2»)
+static func clave(k: String, calidad: int) -> String:
+	return k if calidad <= 0 else "%s:%d" % [k, calidad]
+
+
+# El tipo de un paquete por su clave («molotov»)
+static func tipo_de(k: String) -> String:
+	return k.get_slice(":", 0)
+
+
+# Y su calidad (0 = Normal)
+static func calidad_de(k: String) -> int:
+	return k.get_slice(":", 1).to_int() if ":" in k else 0
+
+
+# Al empezar la partida: las de siempre, más las del Artificiero, a mano (todas Normales)
 func reiniciar(stats: Dictionary) -> void:
-	for k in cantidades:
+	cantidades = {}
+	for k in DATOS:
 		cantidades[k] = DATOS[k].inicio + (stats.lanzar_extra if k in ARTIFICIERO else 0)
 	mano = ["molotov", "granada"]
 	repuesto = []
@@ -115,7 +136,7 @@ func vaciar() -> void:
 
 # ¿Tiene dónde llevar uno de ese tipo? En su hueco, si ya lleva (a mano o de repuesto), o en uno libre
 func hay_hueco(k: String) -> bool:
-	return k in mano or k in repuesto or mano.size() < MANO or repuesto.size() < REPUESTO
+	return k in mano or k in repuesto or mano.size() < MANO or repuesto.size() < REPUESTO   # (cada paquete, en uno)
 
 
 # Le busca hueco a ese tipo si aún no lo tiene: a mano si hay sitio (y si no llevaba nada a mano, es lo que se
@@ -134,6 +155,9 @@ func colocar(k: String) -> void:
 # Quita los que se han acabado: el hueco de la mano lo ocupa el primero de repuesto. Si se acaba el que se lanzaba, se
 # lanza el que ocupa su sitio (o el siguiente de la mano)
 func repasar() -> void:
+	for k in cantidades.keys():   # (los mejorados que se acaban, fuera)
+		if calidad_de(k) > 0 and cantidades[k] <= 0:
+			cantidades.erase(k)
 	repuesto = repuesto.filter(func(k): return cuantas(k) > 0)
 	var i := 0
 	while i < mano.size():
@@ -183,25 +207,57 @@ func cuantas(k: String) -> int:
 
 
 func nombre(k: String) -> String:
-	return NOMBRES[k]
+	return NOMBRES[tipo_de(k)]
 
 
+# El color de su tipo (el de los textos y el apunte; el de la calidad, en el borde de la casilla: Armas.color)
 func color(k: String) -> Color:
-	return COLORES.get(k, Color(0.67, 0.67, 0.67))   # ("": sin nada a mano, en gris)
+	return COLORES.get(tipo_de(k), Color(0.67, 0.67, 0.67))   # ("": sin nada a mano, en gris)
 
 
+# Los que caben en un paquete: los de su tipo, más los del Artificiero y los de su calidad
 func maximo(k: String) -> int:
-	return DATOS[k].maximo + (johnny.stats.lanzar_extra if k in ARTIFICIERO else 0)
+	var t := tipo_de(k)
+	var extra: int = johnny.stats.lanzar_extra if t in ARTIFICIERO else 0
+	return DATOS[t].maximo + extra + Armas.CALIDADES[calidad_de(k)].unidades
 
 
 # Coger uno del suelo: solo si no llega a su máximo y tiene hueco para él
 func cabe(k: String) -> bool:
-	return cantidades[k] < maximo(k) and hay_hueco(k)
+	return cuantas(k) < maximo(k) and hay_hueco(k)
 
 
 func sumar(k: String) -> void:
-	cantidades[k] = mini(cantidades[k] + 1, maximo(k))
+	cantidades[k] = mini(cuantas(k) + 1, maximo(k))
 	colocar(k)
+
+
+# Mete "n" en ese paquete (sacándolos del baúl), hasta su máximo y si tiene hueco: devuelve los que han entrado
+func meter(k: String, n: int) -> int:
+	if not hay_hueco(k):
+		return 0
+	var entran := mini(n, maximo(k) - cuantas(k))
+	if entran > 0:
+		cantidades[k] = cuantas(k) + entran
+		colocar(k)
+	return maxi(entran, 0)
+
+
+# Quita el paquete entero (al guardarlo en el baúl): devuelve cuántos tenía
+func quitar(k: String) -> int:
+	var n := cuantas(k)
+	cantidades[k] = 0
+	repasar()
+	return n
+
+
+# Cuántos lleva de un tipo, sumando todos sus paquetes (el menú de pausa)
+func total(t: String) -> int:
+	var n := 0
+	for k in cantidades:
+		if tipo_de(k) == t:
+			n += cantidades[k]
+	return n
 
 
 # Lo que se puede lanzar, en el orden del botón de cambiar: los que lleva a mano
@@ -217,10 +273,11 @@ func cambiar() -> void:
 
 
 func radio_zona() -> float:
-	var fab: float = FABRICANTE.radio if johnny.stats.fabricante else 1.0
-	if ARROJADIZAS.has(tipo):
-		return ARROJADIZAS[tipo].radio * fab
-	return (MOLOTOV.radio if tipo == "molotov" else GRANADA.radio) * fab
+	var fab: float = (FABRICANTE.radio if johnny.stats.fabricante else 1.0) * Armas.CALIDADES[calidad_de(tipo)].radio
+	var t := tipo_de(tipo)
+	if ARROJADIZAS.has(t):
+		return ARROJADIZAS[t].radio * fab
+	return (MOLOTOV.radio if t == "molotov" else GRANADA.radio) * fab
 
 
 func _physics_process(delta: float) -> void:
@@ -288,25 +345,28 @@ func lanzar(donde: Vector2) -> void:
 	Sonido.tocar("lanzar")
 	var sala: Node = johnny.get_parent()
 	cantidades[tipo] -= 1
-	if tipo == "molotov":
+	var t := tipo_de(tipo)
+	var calidad: Dictionary = Armas.CALIDADES[calidad_de(tipo)]
+	if t == "molotov":
 		partida.logros.molotov_lanzado()
 		var p := PROYECTIL.instantiate()
 		p.tipo = "molotov"
 		p.desde = johnny.global_position
 		p.alto_salida = 20.0
 		p.hasta = donde
-		p.dano_lanzar = johnny.stats.dano_lanzar * Skins.quema(johnny.skin)   # (la skin del bombero: × 3)
+		p.dano_lanzar = johnny.stats.dano_lanzar * Skins.quema(johnny.skin) * calidad.dano   # (la skin del bombero: × 3)
 		p.fabricante = johnny.stats.fabricante
+		p.escala = calidad.radio
 		sala.add_child(p)
 	else:
 		# la granada, o la atraedora o la congeladora (la misma granada, con su mecha, su radio y su efecto)
 		var g := BOMBA.new()
-		g.tipo = tipo
+		g.tipo = t
 		g.desde = johnny.global_position
 		g.hasta = donde
 		g.radio = radio_zona()
-		g.dano_zombis = roundi(DATOS[tipo].dano * johnny.stats.dano_lanzar)
-		if ARROJADIZAS.has(tipo):
+		g.dano_zombis = roundi(DATOS[t].dano * johnny.stats.dano_lanzar * calidad.dano)
+		if ARROJADIZAS.has(t):
 			g.fabricante = johnny.stats.fabricante
 		sala.add_child(g)
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
@@ -325,11 +385,12 @@ func _draw() -> void:
 	# la zona que arderá o explotará, latiendo, con su borde a trozos que gira
 	var r := radio_zona()
 	draw_set_transform(apunte, 0.0, Vector2(1.0, 0.6))
-	draw_circle(Vector2.ZERO, r, Color(tono, (0.35 if tipo == "molotov" else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
+	var molotov := tipo_de(tipo) == "molotov"
+	draw_circle(Vector2.ZERO, r, Color(tono, (0.35 if molotov else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
 	draw_arc(Vector2.ZERO, r, 0.0, TAU, 64, Color(0.11, 0.1, 0.17, 0.6), 6.0)
 	draw_set_transform(Vector2.ZERO)
 	elipse_a_trozos(apunte, r, tono, 2.0, t * 0.6)
-	if tipo == "molotov":
+	if molotov:
 		# la cruz del centro: donde se rompe la botella
 		draw_rect(Rect2(apunte + Vector2(-6, -1), Vector2(12, 2)), tono)
 		draw_rect(Rect2(apunte + Vector2(-1, -6), Vector2(2, 12)), tono)

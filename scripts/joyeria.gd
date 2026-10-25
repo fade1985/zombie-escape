@@ -8,13 +8,13 @@
 #     una cuenta atrás de CUENTA segundos y zombis entrando por la entrada de la tienda y por las habitaciones, en
 #     grupos cada vez mayores. Hay que aguantar dentro de la joyería: si Johnny sale, la cuenta se para hasta que
 #     vuelve. Al acabar, la puerta se abre con un clac.
-# Dentro, el premio (trozo 3): una vitrina con un arma al azar de las de la tienda que no lleve Johnny (hasta el
-# 25 oct, un arma creada morada; cuando las armas tengan calidad, será épica), que al pisarla va a la mano como al
+# Dentro, el premio (trozo 3): una vitrina con un arma Épica (EPICA; Armas.CALIDADES) al azar de las de la tienda,
+# mejor una que no lleve Johnny (hasta el 25 oct, un arma creada morada), que al pisarla va a la mano como al
 # comprarla, y un fajo de billetes (FAJO, más FAJO_POR_PLANTA por planta). Y el logro «Caja fuerte» al abrir
 # la cámara la primera vez (logros.gd). El estado va en planta.joyeria (lo crea planta.gd):
 #   sitio, sala (la de la cámara), puerta (su hueco, de apt.puertas), abierta, dorada ("guardia", "suelo", "tengo" o
 #   "usada"), suelo ({sitio, pos} mientras está en el suelo), alarma (-1 sin empezar; si no, los segundos que
-#   quedan) y, con la cámara abierta, premio ({arma, fajo, pos, cogido}).
+#   quedan) y, con la cámara abierta, premio ({arma, calidad, fajo, pos, cogido}).
 # Lo engancha partida.gd: preparar(), al_montar(), recoger(), soltar_dorada() y coger_dorada(). Los números son
 # provisionales.
 class_name Joyeria
@@ -24,7 +24,8 @@ const PUERTA := preload("res://scripts/mapa/puerta_bano.gd")
 const BILLETE := preload("res://scripts/billete.gd")
 const FAJO := 15              # el fajo de billetes de la cámara...
 const FAJO_POR_PLANTA := 5    # ...y lo que suma por planta
-const BRILLO := Color("#c06bff")   # el brillo morado de la vitrina
+const EPICA := 3              # la calidad del arma de la vitrina (Armas.CALIDADES)
+const BRILLO := Color("#c06bff")   # el brillo morado de la vitrina (el color de la Épica)
 const CUENTA := 40.0          # segundos de la apertura de emergencia
 const CADA := [5.0, 3.0]      # segundos entre grupo y grupo, al principio y al final
 const GRUPO := [2, 4]         # zombis por grupo, al principio y al final (y uno más por cada dos plantas)
@@ -213,7 +214,7 @@ func preparar_premio() -> void:
 	var armas: Array = Armas.PRECIOS.keys().filter(func(id): return not id in lleva)
 	if armas.is_empty():
 		armas = Armas.PRECIOS.keys()
-	d.premio = {"arma": armas.pick_random(), "fajo": FAJO + FAJO_POR_PLANTA * (partida.planta.num - 1),
+	d.premio = {"arma": armas.pick_random(), "calidad": EPICA, "fajo": FAJO + FAJO_POR_PLANTA * (partida.planta.num - 1),
 		"pos": Vector2.INF, "cogido": false}
 
 
@@ -250,12 +251,12 @@ func coger_premio() -> void:
 	d.premio.cogido = true
 	var id: String = d.premio.arma
 	var johnny: Node2D = partida.johnny
-	var suelo: String = partida.llevar_arma(id)
-	var como := "Ya la llevas en la mano" if suelo == "" else "Ya la llevas en la mano; %s se queda en el suelo" % Objetos.nombre(suelo)
+	var suelo: Dictionary = partida.llevar_arma(id, d.premio.calidad)
+	var como := "Ya la llevas en la mano" if suelo.is_empty() else "Ya la llevas en la mano; %s se queda en el suelo" % 		Armas.nombre(suelo.id, suelo.calidad)
 	partida.dolares += d.premio.fajo
 	Sonido.tocar("compra")
 	partida.numero(johnny.position + Vector2(0, -60), "+$%d" % d.premio.fajo, Tema.VERDE)
-	partida.decir("¡%s! %s. Y un fajo de billetes: +$%d" % [Objetos.nombre(id), como, d.premio.fajo], 4.5)
+	partida.decir("¡%s! %s. Y un fajo de billetes: +$%d" % [Armas.nombre(id, d.premio.calidad), como, d.premio.fajo], 4.5)
 
 
 # Un grupo de zombis entra por la entrada de la tienda o por una habitación donde no esté Johnny (nunca la cámara)

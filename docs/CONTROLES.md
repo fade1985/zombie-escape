@@ -47,7 +47,7 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | N | derecho a la azotea; en **Elige edificio**, abre todos los edificios hasta cerrar el juego |
 | M | recuadro de mutaciones |
 | O | soltar un objeto al azar de los que salen donde estás |
-| U | 10 piezas de cada familia (cuerpo a cuerpo, a distancia, especial y arrojable) al baúl |
+| U | 10 piezas de cada familia (cuerpo a cuerpo, a distancia, especial y arrojable) y unas armas y arrojables mejorados (de cada calidad) al baúl |
 | X | un científico muerto con la página siguiente (no se guarda) |
 | Z | la siguiente skin de Johnny (no se guarda) |
 | F8 | Colecciones al completo |
@@ -72,15 +72,18 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
 
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
-  cuerpo, A distancia y especiales, y los arrojables de uno en uno (molotov y granada $5, atraedora y congeladora $8)
-  hasta su máximo; todo, para esa partida.
+  cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
+  atraedora y congeladora $8) hasta su máximo; todo, para esa partida.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona × 4), el glotón (el
   Glotón; quien te hace daño lo paga), el gymbro (el Gymbro; cuerpo a cuerpo × 3) y el bombero (el jefe de bomberos;
   lo que quema × 3 y el fuego no le hace nada).
 - **Taller** (derecha): el **banco de trabajo** (en obras: servirá para mejorar las armas con las piezas que sueltan los zombis y los jefes) y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
-  otra). Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a
+  otra). Guarda objetos, armas (menos la fregona y la pistola Normales) y paquetes de arrojables mejorados, cada arma
+  y cada paquete en su casilla con el borde del color de su **calidad** (gris Normal, verde Poco común, azul Rara,
+  morado Épica). Lo que lleva encima se pierde si cae; al completar el edificio, sus armas y sus arrojables mejorados
+  pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a
   la vez).
 
 Al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el **ascensor** del pasillo: baja a esta sala y

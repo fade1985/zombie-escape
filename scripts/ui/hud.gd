@@ -138,16 +138,19 @@ func icono(nombre: String) -> Texture2D:
 func icono_lanzable(k: String) -> String:
 	if k == "":
 		return ""   # no lleva nada a mano para lanzar
-	return k   # (assets/ui/iconos/<tipo>.png)
+	return Lanzables.tipo_de(k)   # (assets/ui/iconos/<tipo>.png; "k" es la clave del paquete)
 
 
 # Una casilla: el marco de metal (casilla-*.png) y el icono dentro. "luz" apaga la que no está en uso. El icono
-# puede ir corrido ("corrido", para la animación del tambor) y se recorta al hueco de dentro.
-func casilla(c: Control, r: Rect2, nombre: String, luz := 1.0, corrido := Vector2.ZERO) -> void:
+# puede ir corrido ("corrido", para la animación del tambor) y se recorta al hueco de dentro. Lo que no es Normal
+# ("calidad": la del arma o el paquete; Armas.CALIDADES) lleva una raya de su color por dentro del marco
+func casilla(c: Control, r: Rect2, nombre: String, luz := 1.0, corrido := Vector2.ZERO, calidad := 0) -> void:
 	var marco: Texture2D = MARCOS.grande if r.size.x > 38 else (MARCOS.mediana if r.size.x > 31 else MARCOS.pequena)
 	var m := 0.55 + 0.45 * luz
 	c.draw_texture_rect(marco, r, false, Color(m, m, m))
 	c.draw_rect(hueco_de(r), Color("#5a4e63", 0.55 * luz))   # el hueco, algo encendido si está en uso
+	if calidad > 0:
+		c.draw_rect(hueco_de(r).grow(-1), Color(Armas.color(calidad), 0.5 + 0.5 * luz), false, 2.0)
 	if nombre != "":
 		icono_dentro(c, nombre, r, corrido, Color(luz, luz, luz, 0.4 + 0.6 * luz))
 
@@ -258,13 +261,13 @@ func pintar_armas() -> void:
 	var arco := Vector2(0, -sin(cambio * PI) * 12.0)
 	var vieja := mezclar(grande, pequena, k)
 	vieja.position -= arco * 0.4
-	casilla(armas, vieja, Objetos.icono(otra), lerpf(1.0, 0.6, cambio))
+	casilla(armas, vieja, Objetos.icono(otra), lerpf(1.0, 0.6, cambio), Vector2.ZERO, johnny.calidad(otra))
 	if cambio >= 1.0:
 		tecla(armas, pequena.position + Vector2(PEQUENA - 8, -8), "Q")
 	var nueva := mezclar(pequena, grande, k)
 	nueva.position += arco
 	con_salto(armas, nueva, salto_arma)
-	casilla(armas, nueva, Objetos.icono(en_mano), lerpf(0.6, 1.0, cambio))
+	casilla(armas, nueva, Objetos.icono(en_mano), lerpf(0.6, 1.0, cambio), Vector2.ZERO, johnny.calidad(en_mano))
 	destello(armas, nueva, destello_arma)
 	if cambio > 0.6:
 		esquinas(armas, nueva, (1.0 - cambio) * 25.0)
@@ -272,7 +275,7 @@ func pintar_armas() -> void:
 	# el nombre, encima un momento al cambiar (y se apaga al final)
 	if nombre_arma > 0.0:
 		var a := clampf(nombre_arma / 0.4, 0.0, 1.0)
-		texto(armas, Vector2(2, -30), Armas.datos(en_mano).nombre, 16, Color(Tema.AMARILLO, a))
+		texto(armas, Vector2(2, -30), Armas.nombre(en_mano, johnny.calidad(en_mano)), 16, Color(Tema.AMARILLO, a))
 
 
 # ── Los lanzables ──
@@ -303,7 +306,8 @@ func pintar_lanzar() -> void:
 	var n := lz.cuantas(lz.tipo)
 	var r := Rect2(2, 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
 	var k := muelle(giro)
-	casilla(lanzar, r, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35, Vector2((1.0 - k) * MEDIANA, 0))
+	casilla(lanzar, r, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35, Vector2((1.0 - k) * MEDIANA, 0),
+		Lanzables.calidad_de(lz.tipo))
 	if giro < 1.0 and tipo_antes != "":
 		var m := 1.0 if lz.cuantas(tipo_antes) > 0 else 0.35
 		icono_dentro(lanzar, icono_lanzable(tipo_antes), r, Vector2(-k * MEDIANA, 0), Color(m, m, m, 1.0 - giro))
@@ -496,7 +500,7 @@ func pintar_barra() -> void:
 
 # Las balas del cargador, en fila encima de la barra (el lanzallamas y el lanza ácido, su depósito)
 func pintar_balas() -> void:
-	var w: Dictionary = Armas.datos(johnny.huecos.fuego)
+	var w: Dictionary = johnny.base(johnny.huecos.fuego)
 	var lejos: bool = johnny.mano != "fuego"
 	if w.has("deposito"):
 		pintar_deposito(w, lejos)
@@ -504,6 +508,9 @@ func pintar_balas() -> void:
 	var parpadeo: bool = johnny.recargando > 0.0 and int(Time.get_ticks_msec() / 200) % 2 == 0
 	var tam := Vector2(5, 10) if w.cargador > 16 else Vector2(10, 20)   # las del MP5, más pequeñas para que quepan
 	var hueco := 2.0
+	if w.cargador > 32:   # (la MP5 mejorada, aún más pequeñas)
+		tam = Vector2(3, 8)
+		hueco = 1.0
 	var x := HUECO.position.x
 	var abajo := -4.0
 	var dibujo: Texture2D = CARTUCHO if w.cartucho else BALA
