@@ -877,10 +877,10 @@ func icono_municion(tipo: String) -> Texture2D:
 
 # El dibujo de una caja de munición del suelo: el de la munición que daría al cogerla (la del arma de
 # johnny.arma_de_caja; la MP5 gasta las balas de la pistola, pero se pinta su caja verde). Si ahora no es para ninguna,
-# el de la munición del arma de fuego que lleva, o las balas de pistola si esa es de depósito
+# el de la munición del arma de fuego que lleva, o las balas de pistola si esa se llena con un objeto de la mochila
 func icono_caja() -> Texture2D:
 	var id: String = johnny.arma_de_caja()
-	if id == "" and johnny.huecos.fuego != "" and not Armas.datos(johnny.huecos.fuego).has("deposito"):
+	if id == "" and johnny.huecos.fuego != "" and not Armas.datos(johnny.huecos.fuego).has("relleno"):
 		id = johnny.huecos.fuego
 	if id == "mp5":
 		return ICONO_MP5
@@ -888,15 +888,15 @@ func icono_caja() -> Texture2D:
 	return icono_municion(tipo if tipo in Armas.MUNICION else "balas")
 
 
-# Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina y el
-# bidón de ácido, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
+# Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
+# bidón de ácido y la batería, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
 # a la mochila hasta que se aparte)
 func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
 	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
-	cosa.a_oscuras = id in Armas.MUNICION   # la gasolina y el bidón de ácido se ven a oscuras, como la munición
+	cosa.a_oscuras = id in Armas.MUNICION   # la gasolina, el bidón de ácido y la batería se ven a oscuras, como la munición
 	cosa.tirado = tirado
 	cosa.position = donde
 	cosa.puede = func() -> bool: return johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(mochila, id)
@@ -905,7 +905,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
 		Sonido.tocar("compra")
 		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA)
-		johnny.coger_municion(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (y el lanza ácido, con un bidón)
+		johnny.coger_municion(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (el lanza ácido, con un bidón, y la pistola eléctrica, con una batería)
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
@@ -999,8 +999,8 @@ func curar_con(cura: int, sobre: Node2D) -> void:
 			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
 
 
-# Usar desde el inventario un objeto de curar de la mochila (Objetos.USABLES: el botiquín de la farmacéutica, las
-# vendas y el bocadillo): se gasta y cura lo suyo. Si no se puede (con la vida llena), no se gasta y devuelve por qué
+# Usar desde el inventario un objeto de curar de la mochila (Objetos.USABLES: el botiquín de la farmacéutica y las
+# vendas): se gasta y cura lo suyo. Si no se puede (con la vida llena), no se gasta y devuelve por qué
 func usar_objeto(id: String) -> String:
 	if not id in mochila or not id in Objetos.USABLES:
 		return "No se puede usar"

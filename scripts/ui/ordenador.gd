@@ -5,7 +5,8 @@
 #     gasta en el árbol de talentos. Lo comprado se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS) para esta partida, y queda
 #     desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
-#     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho).
+#     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho). Desde el
+#     25 oct también vende el lanzallamas, el lanza ácido y la pistola eléctrica, que antes se creaban en el banco.
 #   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
 #     cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
@@ -537,7 +538,7 @@ func programa_armas(c: VBoxContainer) -> void:
 	var ids := Armas.PRECIOS.keys()
 	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
 	for tipo in ["cuerpo", "fuego"]:
-		var lista := rejilla(grupo(c, "Cuerpo a cuerpo" if tipo == "cuerpo" else "De fuego · con el cargador lleno y munición de reserva"))
+		var lista := rejilla(grupo(c, "Cuerpo a cuerpo" if tipo == "cuerpo" else "De fuego · llenas, y las de balas con munición de reserva"))
 		for id in ids:
 			var w: Dictionary = Armas.DATOS[id]
 			if w.tipo != tipo:
@@ -551,8 +552,11 @@ func programa_armas(c: VBoxContainer) -> void:
 	info.text = "Elige un arma: se paga con los dólares ahorrados."
 
 
-# Debajo del nombre, como weaponSummary del JS: "Cuerpo a cuerpo · Daño 9 · 4 ataques/s"
+# Debajo del nombre, como weaponSummary del JS: "Cuerpo a cuerpo · Daño 9 · 4 ataques/s" (el lanzallamas y el lanza
+# ácido, su daño por segundo y su depósito)
 func resumen_corto(w: Dictionary) -> String:
+	if w.has("deposito"):
+		return "De fuego · Daño %d/s · Depósito %d s" % [w.dano, roundi(w.deposito)]
 	var dano := "%d × %d" % [w.dano, w.perdigones] if w.get("perdigones", 1) > 1 else str(w.dano)
 	var texto := "%s · Daño %s · %s ataques/s" % ["Cuerpo a cuerpo" if w.tipo == "cuerpo" else "De fuego", dano,
 		str(w.ritmo).trim_suffix(".0")]
@@ -561,13 +565,17 @@ func resumen_corto(w: Dictionary) -> String:
 	return texto
 
 
+# La línea de abajo: sus números y, las que se llenan con un objeto de la mochila, con cuál
 func resumen(w: Dictionary) -> String:
+	var lleno := " que se llena con %s" % Armas.RELLENOS[w.relleno].uno if w.has("relleno") else ""
+	if w.has("deposito"):
+		return "%s: daño %d por segundo, chorro continuo, depósito de %d s%s." % [w.nombre, w.dano, roundi(w.deposito), lleno]
 	var texto := "%s: daño %d" % [w.nombre, w.dano]
 	if w.get("perdigones", 1) > 1:
 		texto += " x%d perdigones" % w.perdigones
 	texto += ", %.1f ataques por segundo" % w.ritmo
 	if w.tipo == "fuego":
-		texto += ", cargador de %d" % w.cargador
+		texto += ", cargador de %d%s" % [w.cargador, lleno]
 	return texto + "."
 
 
@@ -813,6 +821,7 @@ func programa_colecciones(c: VBoxContainer) -> void:
 			["dosier", "dosier", "Dosier", paginas.filter(func(p): return Historia.encontrada(s, p.id)).size(), paginas.size(),
 				"páginas del dosier"],
 		]
+		fichas = fichas.filter(func(f): return f[4] > 0)   # (las armas creadas del centro comercial: ya no queda ninguna)
 		var hecho := 0
 		var meta := 0
 		for f in fichas:

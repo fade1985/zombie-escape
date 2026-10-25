@@ -13,7 +13,7 @@
 #     coge). Cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto. Desde el inventario se pasan de
 #     la mano al repuesto y al revés (a_la_mano, al_repuesto).
 #   - Las arrojadizas creadas (fase 7b2, sacadas del baúl): se lanzan como la granada con su propio efecto
-#     (ARROJADIZAS). El cóctel molotov no está aquí: sus botellas se suman a los molotovs.
+#     (ARROJADIZAS).
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
 # explota a los 2 s (granada.gd).
 class_name Lanzables
@@ -58,23 +58,12 @@ const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y expl
 # Las arrojadizas creadas (ARROJADIZAS de src/armas-creadas.js). El daño lo trae cada una (receta + rareza)
 #   mecha    segundos hasta que revienta · radio  de la explosión · color  del dibujo, el aviso y los anillos
 #   atrae    la atraedora suena y los zombis (a menos de esa distancia) van hacia ella en vez de hacia Johnny
-#   congela  segundos que quedan quietos los que pilla · charco  deja la lluvia ácida (charco.gd, solo zombis)
-# Las del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md):
-#   rompe    la bomba de aceite no bota: se rompe al caer, como el molotov (proyectil.gd), y deja el charco de
-#            aceite, que resbala y a los 2 s arde (charco.gd). Su daño es el del fuego (22 = como el molotov)
-#   mina     no tiene mecha: se queda en el suelo y, ya quieta, explota cuando un zombi pasa a menos de "pisa".
-#            "dibujo": se ve el icono de ese objeto en vez de la granada
-#   nube     no explota: suelta la nube somnífera (nube.gd), que dura esos segundos y duerme "duerme" s más
-#   clavos   cuántos salen disparados al explotar (chorro.gd), cada uno con "pincha" del daño, y hacen sangrar
+#   congela  segundos que quedan quietos los que pilla
+# Quedan esas dos: el 25 oct se quitaron del juego la lluvia ácida y las cuatro del centro comercial (la bomba de
+# aceite, la mina despertador, la nube somnífera y la bomba de clavos), y el cóctel molotov del banco
 const ARROJADIZAS := {
 	"atraedora": {"mecha": 3.0, "radio": 110.0, "color": Color("#ffd23f"), "atrae": 520.0},
 	"congeladora": {"mecha": 2.0, "radio": 120.0, "color": Color("#9fe8ff"), "congela": 3.0},
-	"lluvia_acida": {"mecha": 2.0, "radio": 90.0, "color": Color("#c7e04a"), "charco": true},
-	"bomba_aceite": {"mecha": 0.0, "radio": 54.0, "color": Color("#e8c547"), "rompe": true},
-	"mina_despertador": {"mecha": 0.0, "radio": 110.0, "color": Color("#ff9f1c"), "mina": true, "pisa": 50.0,
-		"dibujo": "despertador"},
-	"nube_somnifera": {"mecha": 1.2, "radio": 120.0, "color": Color("#c9a0ff"), "nube": 3.0, "duerme": 3.0},
-	"bomba_clavos": {"mecha": 2.0, "radio": 90.0, "color": Color("#c0c4d0"), "clavos": 14, "pincha": 0.35},
 }
 const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de una arrojadiza creada
 const DATOS := {"molotov": MOLOTOV, "granada": GRANADA}
@@ -120,15 +109,11 @@ func vaciar() -> void:
 	repasar()
 
 
-# Una arrojadiza creada sacada del baúl: el cóctel suma sus botellas a los molotovs (aunque pase del máximo). Va a su
-# hueco (colocar); si no le cabe, no la coge y devuelve false
+# Una arrojadiza creada sacada del baúl. Va a su hueco (colocar); si no le cabe, no la coge y devuelve false
 func sacar(a: Dictionary) -> bool:
-	if not hay_hueco(a.receta):   # (la receta del cóctel es "molotov")
+	if not hay_hueco(a.receta):
 		return false
-	if a.receta == "molotov":
-		cantidades.molotov += a.unidades
-	else:
-		creadas.append(a.duplicate())
+	creadas.append(a.duplicate())
 	colocar(a.receta)
 	return true
 
@@ -339,23 +324,12 @@ func lanzar(donde: Vector2) -> void:
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
 
 
-# Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto; la
-# bomba de aceite, como el molotov)
+# Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto)
 func lanzar_creada(donde: Vector2, sala: Node) -> void:
 	var a: Dictionary = creadas.filter(func(o): return o.receta == tipo)[0]
 	a.unidades -= 1
 	if a.unidades <= 0:
 		creadas.erase(a)
-	if ARROJADIZAS[tipo].has("rompe"):
-		var p := PROYECTIL.instantiate()
-		p.tipo = "aceite"
-		p.desde = johnny.global_position
-		p.alto_salida = 20.0
-		p.hasta = donde
-		p.dano_lanzar = a.dano / float(Recetas.LISTA[tipo].dano) * johnny.stats.dano_lanzar * Skins.quema(johnny.skin)   # la rareza quema más (y el bombero)
-		p.fabricante = johnny.stats.fabricante
-		sala.add_child(p)
-		return
 	var g := BOMBA.new()
 	g.tipo = tipo
 	g.desde = johnny.global_position

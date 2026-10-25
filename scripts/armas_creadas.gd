@@ -1,10 +1,11 @@
-# Lo que hacen las armas creadas (fase 7b2; src/armas-creadas.js del JS). Sus números están en Armas.CREADAS;
-# aquí, sus efectos. Son todas a distancia (las de cuerpo a cuerpo y el garfio se quitaron del juego el 25 oct):
+# Lo que hacen las armas con efecto (fase 7b2; src/armas-creadas.js del JS): el lanzallamas, el lanza ácido y la
+# pistola eléctrica, que eran armas creadas del banco de trabajo y desde el 25 oct se compran en la tienda de armas.
+# Sus números están en Armas.DATOS (su "efecto"); aquí, lo que hacen:
 #   - Las chispas de la pistola eléctrica (chorro.gd), que aturden y saltan a otro zombi. La llamarada del
 #     lanzallamas y el chorro del lanza ácido van aparte (llamarada.gd).
-#   - Lo que dejan en el zombi: la quemadura (que se contagia a los de al lado: zombi.gd), el ácido que sigue
-#     royendo y le come la armadura (con_acido) y la herida que sangra (la de los clavos de la bomba de clavos,
-#     granada.gd). Los jefes no se aturden ni arden; sangrar y el ácido sí les hacen daño.
+#   - Lo que dejan en el zombi: la quemadura (que se contagia a los de al lado: zombi.gd) y el ácido que sigue
+#     royendo y le come la armadura (con_acido). Los jefes no se aturden ni arden; el ácido sí les hace daño. (La
+#     herida que sangra, la de los clavos de la bomba de clavos, se quitó del juego con ella el 25 oct.)
 class_name ArmasCreadas
 
 const CHORRO := preload("res://scripts/chorro.gd")
@@ -14,7 +15,6 @@ const QUEMAN := ["llama"]
 
 # Números de los efectos (provisionales, como EFECTOS en el JS)
 const EFECTOS := {
-	"sangra": {"t": 3.0, "total": 0.6, "color": Color("#ff4d6d")},   # dura 3 s y quita en total el 60 % del golpe
 	# el ácido sigue royendo (el triple de un pellizco) y, mientras le dura, le come la armadura: todo le quita un
 	# 50 % más ("corroe": con_acido)
 	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a"), "corroe": 1.5},
@@ -54,7 +54,7 @@ static func prender(zombi: Node2D, quema := 1.0) -> void:
 		zombi.prender(quema)
 
 
-# Sangrar o ácido: quita poco a poco una parte del golpe (con cada golpe vuelve a empezar)
+# El ácido: quita poco a poco una parte del golpe (con cada golpe vuelve a empezar)
 static func herir(zombi: Node2D, tipo: String, dano: float) -> void:
 	if not zombi.is_in_group("zombis") or not zombi.has_method("herir"):
 		return
@@ -111,8 +111,8 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		Luz.destello(johnny, salida - Vector2(0, 50), 120.0, 0.08)
 
 
-# Lo que pasa cuando una gota o un clavo de la bomba de clavos tocan a un zombi ("quema":
-# cuánto más arde el que prende una gota de fuego)
+# Lo que pasa cuando una gota o una chispa tocan a un zombi ("quema": cuánto más arde el que prende una gota de
+# fuego)
 static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String, quema := 1.0) -> void:
 	# al jefe de bomberos (bombero.gd) el fuego no le hace nada: ni el daño ni prenderle
 	if tipo == "llama" and zombi.get("inmune_fuego"):
@@ -127,15 +127,12 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 		prender(zombi, quema)
 	elif tipo == "chispa":
 		descarga(zombi, d, EFECTOS.chispa)
-	elif tipo == "clavo":
-		herir(zombi, "sangra", d)
 	elif tipo == "acido":
 		herir(zombi, "acido", d)
 
 
-# Sangrar o ácido en un zombi: va de hijo suyo y le quita vida a pellizcos. Sangrar le hace gotear; el ácido, no: lo
-# tiñe de verde (a los zombis, zombi.gd, que lo junta con el fuego; a los jefes, aquí) y, mientras está, todo le quita
-# más (con_acido). Al jefe de bomberos el ácido
+# El ácido en un zombi: va de hijo suyo y le quita vida a pellizcos. Lo tiñe de verde (a los zombis, zombi.gd, que lo
+# junta con el fuego; a los jefes, aquí) y, mientras está, todo le quita más (con_acido). Al jefe de bomberos el ácido
 # solo lo tiñe: su herir() es el del fuego de los charcos (la vida se la quita el chorro, llamarada.gd)
 class Herida extends Node:
 	var t := 0.0
@@ -156,9 +153,6 @@ class Herida extends Node:
 		puesta += delta
 		if acido:
 			pintar(zombi, true)
-		elif randf() < 6.0 * delta:   # gotitas que caen
-			Particulas.soltar(zombi, zombi.global_position + Vector2(randf_range(-10, 10), -40),
-				Vector2(randf_range(-15, 15), randf_range(20, 50)), color, 2, 0.4)
 		if tick >= ArmasCreadas.EFECTOS.tick:
 			tick -= ArmasCreadas.EFECTOS.tick
 			if not zombi.get("inmune_fuego"):

@@ -1,6 +1,6 @@
 # Un charco en el suelo: el moco verde del venenoso, la lejía de la portera, el vómito de Johnny (mutación
-# Gastroenteritis), el fuego del molotov, el aceite de la bomba de aceite (centro comercial), que resbala y al
-# secarse arde: se convierte en un fuego como el del molotov, un poco más grande, o el aceite hirviendo del cocinero.
+# Gastroenteritis), el fuego del molotov, el aceite de la probeta del científico jefe, que resbala y al secarse arde:
+# se convierte en un fuego como el del molotov, un poco más grande, o el aceite hirviendo del cocinero.
 # Cada uno pone sus estados (estados.gd) a quien lo pisa: el veneno te sigue envenenando al salir, la lejía resbala,
 # el ácido solo daña a los zombis... Al rato se seca.
 # Como HAZARDS en src/game-ataques.js.
@@ -27,8 +27,6 @@ const TIPOS := {
 		"tinte": Color(1.0, 1.0, 0.55)},
 	"vomito": {"dibujo": VENENO, "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true,
 		"tinte": Color(1.0, 1.0, 0.45)},
-	"lluvia": {"dibujo": VENENO, "radio": 150.0, "vida": 7.0, "estados": {"acido": {"dps": 10.0}}, "solo_zombis": true,
-		"tinte": Color(1.0, 1.0, 0.45)},   # la lluvia ácida (arrojadiza creada)
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
 	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
 	"hirviendo": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},   # el del cocinero

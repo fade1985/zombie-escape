@@ -6,8 +6,8 @@
 #     3 arrojables a mano (lanzables.gd). En medio, tres grupos de 8: la mochila, la munición (por tipos:
 #     Armas.MUNICION) y los arrojables de repuesto. A la derecha, la ficha de lo elegido (qué es, el cargador, las
 #     barras, qué hace o para qué receta sirve) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
-#     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina y
-#     los bidones de ácido, de uno en uno; las balas, el hueco entero en una caja; y las armas: la de la mano, solo si
+#     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina,
+#     los bidones de ácido y las baterías, de uno en uno; las balas, el hueco entero en una caja; y las armas: la de la mano, solo si
 #     lleva otra de repuesto, que pasa a la mano). Con las flechas o el mando, la ficha sigue a la marca; A (o tocar)
 #     la lleva al botón principal de la ficha (A dos veces y hecho), X (o Supr) tira, Y hace lo del botón principal y F
 #     cambia el arrojable que se lanza.
@@ -131,7 +131,7 @@ func dar_foco(c) -> void:   # (sin tipo: puede llegar ya borrado)
 const ORIGEN := Vector2(24, 12)    # la esquina del panel del inventario en la pantalla
 const LADO := 52                   # las casillas de los tres grupos de 8
 const ANCHO_FICHA := 222.0         # lo ancho que es lo de dentro de la ficha
-# Lo que hace cada arma de siempre, el molotov y la granada (las creadas, lo de su receta: Recetas.LISTA)
+# Lo que hace cada arma de la tienda, el molotov y la granada (las creadas, lo de su receta: Recetas.LISTA)
 const QUE_HACE := {
 	"fregona": "Barre un abanico muy ancho y echa lejos a los zombis.",
 	"bate": "Un golpe fuerte que empuja a los zombis.",
@@ -139,12 +139,15 @@ const QUE_HACE := {
 	"pistola": "Dispara de una en una, recto y lejos.",
 	"escopeta": "Cinco perdigones en abanico. Se recarga de cartucho en cartucho.",
 	"mp5": "Ráfagas muy rápidas. Gasta las mismas balas que la pistola.",
+	"lanzallamas": "Llamarada continua que quema a todos. Se llena con gasolina.",
+	"desintegrador": "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido.",
+	"pistola_electrica": "Chispas que aturden y saltan al zombi de al lado. Cada batería le llena el cargador.",
 	"molotov": "Se rompe y deja un charco de fuego que quema a los zombis.",
 	"granada": "Bota, rueda y explota a los 2 segundos.",
 }
 # Cómo se dice la munición de reserva en la ficha («Reserva: 2 gasolinas»)
-const RESERVA := {"balas": "balas", "cartuchos": "cartuchos", "pilas": "pilas", "gasolina": "gasolinas",
-	"bidon_acido": "bidones de ácido"}
+const RESERVA := {"balas": "balas", "cartuchos": "cartuchos", "gasolina": "gasolinas",
+	"bidon_acido": "bidones de ácido", "bateria": "baterías"}
 const PRINCIPALES := ["poner", "usar", "a_la_mano", "al_repuesto"]   # los botones de la ficha que no son tirar
 
 
@@ -383,7 +386,7 @@ func carga(id: String) -> float:
 		return johnny.deposito if deposito else float(johnny.balas)
 	if Armas.es_creada(id):
 		return float(Armas.sacadas[id].get("deposito" if deposito else "balas", w.get("deposito", w.cargador)))
-	return float(johnny.cargadores.get(id, w.cargador))
+	return float(johnny.cargadores.get(id, w.get("deposito", w.cargador)))
 
 
 # Lo que se ve en la esquina de la casilla de un arma de fuego: «8/12» o, las de depósito, «6 s» ("" las de cuerpo a
@@ -609,8 +612,8 @@ func recetas_de(id: String) -> String:
 	return "Sirve para crear en el banco: %s.%s" % [lista, " Y para %s que aún no tienes." % recetas if otras > 0 else ""]
 
 
-# La ficha de un hueco de munición ([tipo, cuánta]): cuánta lleva y quién la gasta. La gasolina y el ácido se tiran de
-# uno en uno; las balas, el hueco entero en una caja
+# La ficha de un hueco de munición ([tipo, cuánta]): cuánta lleva y quién la gasta. La gasolina, el ácido y las
+# baterías se tiran de uno en uno; las balas, el hueco entero en una caja
 func ficha_municion(caja: VBoxContainer, h: Array) -> Dictionary:
 	var tipo: String = h[0]
 	var m: Dictionary = Armas.MUNICION[tipo]
@@ -618,8 +621,8 @@ func ficha_municion(caja: VBoxContainer, h: Array) -> Dictionary:
 	renglon(caja, "%d en este hueco · llevas %d" % [h[1], partida.johnny.cuanta(tipo)], Tema.TINTA)
 	var que := "La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja." % [
 		m.para, m.hueco]
-	if tipo in Objetos.NOMBRES:   # la gasolina y el bidón de ácido
-		que = "Llena %s (caben %d en cada hueco) y vale para las recetas del banco. Se tira de uno en uno." % [m.para, m.hueco]
+	if tipo in Objetos.NOMBRES:   # la gasolina, el bidón de ácido y la batería
+		que = "Llena %s (caben %d en cada hueco). Se tira de uno en uno." % [m.para, m.hueco]
 	return {"que": que, "botones": [["tirar", "Tirar al suelo", tirar, false]]}
 
 
@@ -760,7 +763,7 @@ func borde(id: String) -> Color:
 
 
 # El objeto de la casilla de la mochila elegida ("" si no hay ninguna elegida). En el baúl, para guardar, la mochila
-# lleva también la gasolina y los bidones de ácido (que en el inventario van con la munición)
+# lleva también la gasolina, los bidones de ácido y las baterías (que en el inventario van con la munición)
 func elegido() -> String:
 	var llenas := Objetos.casillas(partida.mochila, guardando)
 	var i := sel.substr(1).to_int()
@@ -800,7 +803,7 @@ func poner_guardada() -> void:
 
 
 # Tira al suelo, a los pies de Johnny, lo elegido: un objeto de la mochila (uno), un arma (la de la mano, solo si lleva
-# otra de repuesto, que pasa a la mano) o munición (la gasolina y los bidones de ácido, de uno en uno; las balas, todas
+# otra de repuesto, que pasa a la mano) o munición (la gasolina, los bidones de ácido y las baterías, de uno en uno; las balas, todas
 # las del hueco en una caja que las devuelve). Si ya no queda nada de lo elegido, la ficha vuelve al arma de la mano
 func tirar() -> void:
 	var i := sel.substr(1).to_int()
@@ -883,8 +886,7 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	if sel.begins_with("a"):
 		var a: Dictionary = s.baul_armas[sel.substr(1).to_int()]
 		texto = "%s (%s, %s): %s. %s" % [a.nombre, Recetas.RAREZAS[a.rareza].nombre.to_lower(),
-			Recetas.HUECOS[a.hueco].to_lower(), a.desc, AL_SACAR[a.hueco] if a.receta != "molotov" else
-			"Al sacarla, sus botellas se suman a tus molotovs."]
+			Recetas.HUECOS[a.hueco].to_lower(), a.desc, AL_SACAR[a.hueco]]
 	elif not guardables().is_empty():
 		texto = "Lo que llevas en la mochila se pierde si caes: con «Guardar de la mochila» lo metes aquí y queda a salvo."
 	elif n > 0:
@@ -912,9 +914,8 @@ const AL_SACAR := {
 
 
 # Saca del baúl el arma elegida para esta partida (sacarDelBaul en src/banco.js): la de cuerpo a cuerpo y la de
-# fuego, a la mano (la que llevara pasa al repuesto o, si ya tiene una, al suelo: partida.llevar_arma); el cóctel
-# molotov suma sus botellas a los molotovs; las demás arrojadizas, a la mano o al repuesto (lanzables.gd; si no le
-# cabe, se queda en el baúl)
+# fuego, a la mano (la que llevara pasa al repuesto o, si ya tiene una, al suelo: partida.llevar_arma); las
+# arrojadizas, a la mano o al repuesto (lanzables.gd; si no le cabe, se queda en el baúl)
 func sacar() -> void:
 	var i := sel.substr(1).to_int()
 	var lista: Array = Guardado.cargar().baul_armas
@@ -1001,8 +1002,8 @@ func ver_mochila(si: bool) -> void:
 	pintar()
 
 
-# Los objetos distintos de la mochila que pueden ir al baúl (todos menos los de curar; también la gasolina y los
-# bidones de ácido, que van con la munición)
+# Los objetos distintos de la mochila que pueden ir al baúl (todos menos los de curar; también la gasolina, los
+# bidones de ácido y las baterías, que van con la munición)
 func guardables() -> Array:
 	return Objetos.casillas(partida.mochila, true).map(func(c): return c[0]).filter(func(id): return Objetos.al_baul(id))
 

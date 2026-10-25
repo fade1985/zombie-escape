@@ -1,5 +1,4 @@
-# Una gota de fuego o de ácido (los "chorros" de src/armas-creadas.js), una
-# chispa de la pistola eléctrica o un clavo de la bomba de clavos (los dos del centro comercial). Vuela
+# Una gota de fuego o de ácido (los "chorros" de src/armas-creadas.js) o una chispa de la pistola eléctrica. Vuela
 # recta, atraviesa a los zombis (a cada uno le da una vez), se para en las paredes y los muebles y se apaga al
 # llegar a su alcance. Como la bala, la gota "de verdad" va a ras de suelo y se dibuja más arriba.
 # El fuego crece y pasa de amarillo a naranja y rojo; el ácido, de verde claro a verde.
@@ -8,7 +7,7 @@ extends Node2D
 const ALTURA_CUERPO := 22.0
 const BAJADA := 14.0
 
-var tipo := "llama"          # "llama", "acido", "chispa" o "clavo"
+var tipo := "llama"          # "llama", "acido" o "chispa"
 var velocidad := Vector2.ZERO
 var dano := 0.0
 var empuje := 1.0
@@ -43,12 +42,6 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if tipo == "clavo":
-		# un clavo gris que vuela de punta, con su borde oscuro
-		var dir := velocidad.normalized()
-		for capa in [[4.0, Color("#1d1b2c")], [2.0, Color("#d0d4da")]]:
-			draw_line(Vector2(0, -altura) - dir * 6.0, Vector2(0, -altura) + dir * 6.0, capa[1], capa[0])
-		return
 	if tipo == "chispa":
 		# chispas azules y blancas que tiemblan
 		for i in 3:

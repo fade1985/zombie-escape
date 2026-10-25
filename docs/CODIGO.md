@@ -43,8 +43,11 @@
   del Gymbro, los cubos de la portera): se queda tirado sin andar, atacar ni rodar, con el dibujo tumbado y estrellitas en la cabeza, y luego
   se levanta; rodando no se tropieza. `mejoras.gd`: sus atributos (el baseStats del JS).
 - `armas.gd`: los números de las armas (la pistola, desde el 24 oct, es una Beretta 92 algo más grande de lo real,
-  `conserje-48-pistola`, con su `boca`; las creadas, en `Armas.CREADAS`, son todas a distancia desde el 25 oct, cuando se
-  quitaron del juego las nueve de cuerpo a cuerpo y el garfio, y cada una lleva su propia `hoja`: el lanzallamas, `conserje-48-lanzallamas`, con dos bombonas rojas de combustible a la espalda, una
+  `conserje-48-pistola`, con su `boca`; el lanzallamas, el lanza ácido y la pistola eléctrica, que eran armas creadas del
+  banco de trabajo, desde el 25 oct están en `Armas.DATOS` y se compran en la tienda de armas del ordenador como las demás
+  (`Armas.PRECIOS`: 60, 60 y 45 dólares; `Armas.CREADAS`, el de las creadas que se llevan en la mano, se queda vacío). Se
+  llenan con un objeto de la mochila, su `relleno`: el lanzallamas y el lanza ácido, su depósito; la pistola eléctrica,
+  una batería le llena el cargador entero. Cada una lleva su propia `hoja`: el lanzallamas, `conserje-48-lanzallamas`, con dos bombonas rojas de combustible a la espalda, una
   manguera negra hasta el tubo y el tubo sujeto con las dos manos apuntando, con el piloto encendido (desde el 25 oct no
   dispara: echa una llamarada continua, `llamarada.gd`, y Johnny la echa en la postura quieta de la hoja, la de apuntar; la
   hoja no lleva llamarada ni disparo, y su `boca` es la punta del tubo de cada postura quieta, medida en la hoja; casilla de
@@ -58,10 +61,10 @@
   vuelan, aturden y saltan al zombi de al lado las pone el juego, `armas_creadas.gd` y `chorro.gd`; la hoja lleva `efectos` y andando se pinta
   la descarga encima del andar); con sus hojas de cada skin). Andando, `johnny.gd` solo pinta los `efectos_*` del disparo si la
   hoja los tiene. `bala.gd`.
-- `armas_creadas.gd`: lo que hacen las armas creadas (la descarga que aturde y salta, prender, sangrar, el ácido…);
-  `chorro.gd` (gotas de fuego, chispas de la pistola eléctrica y clavos de la bomba de clavos).
+- `armas_creadas.gd`: lo que hacen las armas con `efecto` (el lanzallamas, el lanza ácido y la pistola eléctrica: la
+  descarga que aturde y salta, prender, el ácido…); `chorro.gd` (gotas de fuego y chispas de la pistola eléctrica).
 - `llamarada.gd`: la llama del lanzallamas, hija de Johnny. Mientras se ataca, `johnny.gd` (`echar_fuego`) la mantiene
-  encendida en cada paso y gasta el depósito (`deposito`, 8 s; sin balas: `Armas.CREADAS.lanzallamas` no tiene cargador).
+  encendida en cada paso y gasta el depósito (`deposito`, 8 s; sin balas: `Armas.DATOS.lanzallamas` no tiene cargador).
   Sale de la boca, estrecha, y se abre en cono hasta 10 casillas (la cortan las paredes), 45° entre los dos bordes
   (`ABRE`, 22,5° a cada lado; igual en el lanza ácido, y los dos dibujos se abren lo mismo). Va siempre recta, sin
   doblarse, y sale por donde apunta el tubo del dibujo, medido en `Armas.CANO_LANZALLAMAS` (las diagonales, a unos
@@ -71,23 +74,23 @@
   dos, entre la diagonal y abajo, por ejemplo): entonces `echar_fuego` gira el chorro desde el tubo hacia él lo justo
   para que entre por el borde, con 3° de margen (`MARGEN_CHORRO`), medido en la pantalla, como se ve (de la boca al
   cuerpo); si ya estaba dentro, o no hay zombi, sale recto por el tubo (25 oct). Cada 0,25 s quita a todos los
-  zombis de dentro su parte del daño por segundo (el de la receta, 30 × rareza) y los prende, y cada 0,5 s los empuja.
+  zombis de dentro su parte del daño por segundo (30) y los prende, y cada 0,5 s los empuja.
   Solo a los zombis (al jefe de bomberos, nada). El depósito se llena entero con lo que diga su `relleno` en
-  `Armas.CREADAS` (el lanzallamas, una gasolina de la mochila; el lanza ácido, un bidón de ácido): solo, al vaciarse;
+  `Armas.DATOS` (el lanzallamas, una gasolina de la mochila; el lanza ácido, un bidón de ácido): solo, al vaciarse;
   con la R, solo vacío; al coger uno del suelo, también (`johnny.coger_relleno`, desde `partida.soltar_objeto`). Sin
   ninguno sale el aviso de `Armas.RELLENOS` («¡Sin gasolina!», «¡Sin ácido!») y saca la de cuerpo a cuerpo; cuántos
   lleva lo cuenta `johnny.rellenos()` (en la sala de pruebas de armas, sin fin: `deposito_sin_fin`). En el HUD
   (`ui/hud.gd`, `pintar_deposito`), una barra en vez de las balas, del color de lo que lo llena (`COLORES_DEPOSITO`:
-  naranja de gasolina o verde de ácido), con su icono y cuántos lleva. Los lanzallamas y los lanza ácido viejos del
-  baúl (con el daño de una gota) cogen el de ahora y la frase de la receta al cargar el guardado (`guardado.gd`). La dibuja su shader,
+  naranja de gasolina o verde de ácido), con su icono y cuántos lleva. Los lanzallamas y los lanza ácido creados en el
+  banco antes del 25 oct desaparecen del baúl al cargar el guardado (`guardado.gd`): ahora se compran. La dibuja su shader,
   `escenas/armas/llamarada.gdshader`, sobre un rectángulo que la cubre: en cada píxel del dibujo (de 2 unidades,
   alineados con el mundo) calcula lo caliente que está con un ruido que corre hacia fuera y lo pinta a bandas con los
   colores de `Llamas.FUEGO` (blanco y amarillo junto a la boca, naranja en medio, rojo en los bordes), con los bordes en
   damero y sin humo; contra una pared se aplasta y se abre. `llamarada.gd` le pasa dónde va, suelta
   chispas (`Particulas`), lleva una luz que alumbra alrededor (más en los sitios oscuros) y, al soltar, la llama se
   despega de la boca y se va.
-  El lanza ácido (`Armas.CREADAS.desintegrador`, efecto `acido`) echa por aquí su chorro, con el mismo alcance, el
-  mismo depósito, el mismo cono y el mismo daño por segundo (30 × rareza): lo dibuja
+  El lanza ácido (`Armas.DATOS.desintegrador`, efecto `acido`) echa por aquí su chorro, con el mismo alcance, el
+  mismo depósito, el mismo cono y el mismo daño por segundo (30): lo dibuja
   `escenas/armas/chorro_acido.gdshader`, como ácido a presión (fino, recto y casi blanco al salir de la boquilla, se
   abre en abanico tanto como el cono, más claro y espeso en el centro, con vetas que corren hacia fuera
   y un rocío de gotitas alrededor, y lejos se rompe en rocío; contra la pared se aplasta y salpica), con los verdes del
@@ -103,8 +106,9 @@
   trae la hoja en su `.tres`, de `tools/hoja_lanza_acido.py`); andando o echando el chorro, la gota se suelta. De
   espaldas no gotea (el tubo apunta hacia arriba).
 - La munición (parte 2 del inventario nuevo): `Armas.MUNICION` (balas de pistola, que gastan la pistola y la MP5;
-  cartuchos; pilas, de la pistola eléctrica; gasolina y bidón de ácido), 8 huecos de dos cargadores. En `johnny.gd`,
-  `municion` (por tipos; la gasolina y el ácido son objetos de `partida.mochila`, que no ocupan casilla de la mochila:
+  cartuchos; gasolina, bidón de ácido y batería, de la pistola eléctrica: una le llena el cargador entero; las pilas
+  que gastaba antes se quitaron el 25 oct), 8 huecos de dos cargadores. En `johnny.gd`,
+  `municion` (por tipos; la gasolina, el ácido y la batería son objetos de `partida.mochila`, que no ocupan casilla de la mochila:
   `Objetos.casillas`), `cargadores` (lo que quedaba en el de cada arma dejada), `reserva()`, `cuanta()`,
   `huecos_municion()`, `sitio()`, `meter_municion()` y `arma_de_caja()`. Prueba: `--captura --municion`.
   Sus dibujos (PixelLab, 25 oct; `assets/pixellab.json` → `municion-iconos`): `assets/ui/iconos/municion-pistola.png`,
@@ -115,9 +119,9 @@
   `a_oscuras`, con `escenas/luces/suelo_a_oscuras.gdshader`). Prueba: `--captura --municion-suelo`.
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (apuntar, lanzar; `Lanzables.tipos()`). Tres tipos a mano
   (`mano`, F cambia entre ellos) y ocho de repuesto (`repuesto`): `colocar`, `repasar`, `a_la_mano`, `al_repuesto`.
-  `granada.gd`: también la atraedora, la congeladora, la lluvia ácida, la mina despertador, la nube somnífera (que
-  suelta `nube.gd`) y la bomba de clavos. La bomba de aceite va como el molotov (`proyectil.gd`).
-- `charco.gd` (veneno, lejía, vómito, fuego, ácido, aceite, que al acabar arde, el agua de los aspersores y el
+  `granada.gd`: también la atraedora y la congeladora (la lluvia ácida y las cuatro del centro comercial, la bomba de
+  aceite, la mina despertador, la nube somnífera y la bomba de clavos, se quitaron del juego el 25 oct).
+- `charco.gd` (veneno, lejía, vómito, fuego, ácido, el aceite de la probeta del científico jefe, que al acabar arde, el agua de los aspersores y el
   aceite hirviendo del cocinero, que no quema a quien lo tira) y `estados.gd` (lo que hacen los charcos; también el
   frío y el calambrazo de los peligros, y `frenado`).
 - `peligros/`: los peligros de las tiendas del centro comercial. `peligros.gd` (sus números y dónde va cada uno, al
@@ -167,7 +171,7 @@
   prender así; números en `Lanzables.MOLOTOV`), y el ácido les come la armadura (`ArmasCreadas.con_acido`: mientras
   lo llevan, la herida o el de un charco, todo les quita un 50 % más, también a los jefes; a Johnny, no).
 - `sala_armas.gd`: la sala de pruebas de armas (F11 en la planta baja; el sitio, `sala_armas` de `planta.gd`, y la
-  monta `mapa.gd`): la diana en el centro, todas las armas (coma y punto; las del banco, creadas en el acto), munición
+  monta `mapa.gd`): la diana en el centro, todas las armas de la tienda (coma y punto), munición
   sin fin pero recargando, las líneas de ayuda en el suelo (alcance, a quién apunta, por dónde irá la bala, el círculo
   donde le da a cada zombi y el camino de verdad de cada bala) y el panel con la ficha del arma y el recuento. Al
   salir, Johnny vuelve a llevar sus armas y balas. Prueba: `--captura --armas`.
@@ -219,7 +223,7 @@
 - `helicoptero.gd`: el helicóptero de Velaria que llega a la azotea cuando cae el gerente (dibujado con código, a
   cuadraditos): viene volando, se queda encima del helipuerto con el rotor girando y un foco (una luz de verdad) que
   busca a Johnny por el suelo. No ataca.
-- `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov, bomba de aceite, la sartén del cocinero y las
+- `bala_zombi.gd`, `proyectil.gd` (moco, lejía, ácido, molotov, la sartén del cocinero y las
   probetas del científico jefe en parábola), `cuchillo.gd` (los cuchillos del cocinero, dibujados con código: lanzados en línea recta o cayendo sobre
   su marca; se quedan clavados un rato), `contrato.gd` (los contratos del gerente, dibujados con código: vuelan
   girando, cortan 10 y al toparse con algo caen al suelo), `explosion.gd`.
@@ -289,32 +293,35 @@
   martillazos del ferretero, no). **El bombero** (la suelta el
   jefe de bomberos): un casco de bombero ajustado, negro con la raya amarilla, que tapa el pelo y el pañuelo; las armas
   que queman hacen el triple de daño (el lanzallamas, la llama y la quemadura;
-  el molotov y la bomba de aceite, por `dano_lanzar` en `lanzables.gd`), y también lo que sigue
+  el molotov, por `dano_lanzar` en `lanzables.gd`), y también lo que sigue
   ardiendo el zombi (`zombi.prender(quema)`); las armas de fuego de siempre, no. Y el fuego no le hace nada: el del
   suelo y los charcos (también el aceite hirviendo del cocinero), el seguir ardiendo al salir, y el cono, las bolas, el
   aro y los molotovs del jefe de bomberos (y las bolas de fuego del científico); el hachazo y las explosiones, sí. Sus hojas son las de siempre
   con la cabeza cambiada (`tools/cara.py`). Se
   eligen en la taquilla del vestuario (`ui/taquilla.gd`). La prueba: `--captura --skins` (`probar_skins()`).
-- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 18 objetos; los que se usan desde el inventario, `USABLES`:
-  el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado, con lo que curan, que no
+- `talentos.gd` (árbol y compra de puntos), `objetos.gd` (los 9 objetos: gasolina, alcohol, trapo, explosivos,
+  despertador, extintor, bidón de ácido, batería y vendas; los que se usan desde el inventario, `USABLES`:
+  el botiquín de la farmacéutica y las vendas de las tiendas, con lo que curan, que no
   entran en recetas ni van al baúl: `partida.usar_objeto()` y `cura_de()`; mochila, baúl de 32 casillas, con
   `al_baul()` y `cabe_baul()` para guardar en él, lo que
-  sueltan los zombis: en los Apartamentos, los 10 de siempre (el mechero, que solo entraba en el súpersoplete, la llave inglesa y el hacha, que solo
-  entraban en el bumerán, y las cuchillas, el táser, la cuerda y las mancuernas, que solo entraban en las de cuerpo a cuerpo y el garfio, se
-  quitaron el 25 oct; con ellas, también la cadena, el cable, el hielo seco y las perchas del centro comercial); en el centro comercial, la lista de la tienda donde cae
+  sueltan los zombis: en los Apartamentos, los 7 de siempre; en el centro comercial, la lista de la tienda donde cae
   el zombi, `TIENDAS`, y en el pasillo, la de una tienda cualquiera; y los que solo suelta un zombi, `DE_UN_ZOMBI`, 1 de
   cada 4 veces y en los dos edificios: los explosivos, el dinamitero, y el bidón de ácido, que llena el lanza ácido, el
-  gordo; no salen al azar ni de los jefes), `recetas.gd` (11 recetas y rarezas: 6 de los
-  Apartamentos, 4 que mezclan los dos edificios y 1 solo del centro; el 25 oct se quitaron la lanza, el súpersoplete, el
-  bumerán, el garfio y las nueve de cuerpo a cuerpo: el aplastacabezas, el bate de fuego, el partecuerpos, la
-  inmovilizadora, el látigo escorpión, la súper maza, el mangual, el bate helado y el látigo eléctrico. La fregona, el
-  bate y el cuchillo ya no entran en ninguna, pero el banco sigue sabiendo gastarlos, `Recetas.ARMAS`; solo se crean las aprendidas, `recetas` del
-  guardado: el molotov de serie y las demás, en el papel que suelta cada jefe al morir, `soltar_receta` de
-  `partida.gd`, una al azar sin repetir; la prueba `--captura` las prueba en `probar_soltar_recetas`), `billete.gd`, `minimapa.gd` (con el técnico
+  gordo; no salen al azar ni de los jefes. El 25 oct se quitaron del juego el mechero, la llave inglesa, el hacha, las
+  cuchillas, el táser, la cuerda, las mancuernas, la cadena, el cable, el hielo seco y las perchas (con las armas que los
+  pedían) y luego los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas,
+  la jeringuilla, el aceite y el bocadillo; el trapo y el alcohol se quedan, aunque ya no entran en ninguna receta),
+  `recetas.gd` (2 recetas, la atraedora y la congeladora, y las rarezas; el 25 oct se quitaron la lanza, el
+  súpersoplete, el bumerán, el garfio, las nueve de cuerpo a cuerpo, el cóctel molotov, la lluvia ácida y las cuatro
+  arrojadizas del centro comercial, y el lanzallamas, el lanza ácido y la pistola eléctrica pasaron a la tienda de
+  armas. La fregona, el bate y el cuchillo ya no entran en ninguna, pero el banco sigue sabiendo gastarlos,
+  `Recetas.ARMAS`; solo se crean las aprendidas, `recetas` del guardado: ninguna de serie, `DE_SERIE`, y las que
+  suelta cada jefe al morir en un papel, `soltar_receta` de `partida.gd`, una al azar sin repetir; la prueba
+  `--captura` las prueba en `probar_soltar_recetas`), `billete.gd`, `minimapa.gd` (con el técnico
   rescatado, `camaras`: un puntito por zombi en cada sala). La prueba
   `--captura` cuenta el reparto de cada sitio (`probar_objetos` de `pruebas/partida_prueba.gd`) y saca `captura-objetos-nuevos.png`,
-  `captura-banco-todo.png` y `captura-baul-todo.png`; luego prueba cada arma nueva contra zombis (`probar_recetas`)
-  y saca `captura-arma-<receta>.png`.
+  `captura-banco-todo.png` y `captura-baul-todo.png`; luego comprueba las recetas que quedan y que las tres armas de
+  efecto están en la tienda (`probar_recetas`).
 - `guardado.gd`: el guardado entre partidas. Para Colecciones: `encontrados` (objetos cogidos alguna vez), `creadas`
   (armas creadas alguna vez en el banco), `bestiario` (enemigos vistos) y `colecciones_nuevo` (hay algo nuevo desde
   la última vez que se abrió el programa; el icono avisa). Un guardado de antes los rellena una vez con lo del baúl.
@@ -378,9 +385,9 @@
   `captura-galeria-<n>.png`, y las de los peligros, `captura-peligro-<...>.png`), `--fotos-luz`, `--fotos-ayudas`,
   `--alerta N`, `--evento X`, `--reto si` (`probar_reto`: el reto del día), `--joyeria` (`probar_joyeria`: la cámara
   acorazada), `--skins` (`probar_skins`: las skins de Johnny), `--baul` (`probar_baul`: guardar en el baúl lo
-  de la mochila), `--repuesto` (`probar_repuesto`: dos armas de cada tipo, la de la mano y la de repuesto), `--banco` (`probar_banco`: las 13 armas creadas quitadas del juego (la lanza, el súpersoplete, el bumerán, el garfio y las nueve de cuerpo a cuerpo) y los 11 objetos quitados (el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco y el cable), de antes en el guardado, desaparecen al cargar, y la pistola eléctrica se queda; luego el banco,
+  de la mochila), `--repuesto` (`probar_repuesto`: dos armas de cada tipo, la de la mano y la de repuesto), `--banco` (`probar_banco`: las 22 armas creadas quitadas del juego o pasadas a la tienda (la lanza, el súpersoplete, el bumerán, el garfio, las nueve de cuerpo a cuerpo, el cóctel molotov, la lluvia ácida, las cuatro del centro comercial, el lanzallamas, el lanza ácido y la pistola eléctrica) y los 20 objetos quitados, de antes en el guardado, desaparecen al cargar, y la atraedora y el trapo se quedan; luego el banco,
   las recetas y las Colecciones, sin la prueba larga),
-  `--lanzallamas` (`probar_lanzallamas`: el lanzallamas de la llamarada continua, su icono y su daño por segundo en el baúl (también el de uno de antes) y en el banco, sus números y su boca sin chispitas, que las balas no le valen; en la sala de pruebas de armas, 1 s de llama que quema a los zombis a 120 y a 250 y no toca al de 430, sin quitarle vida a Johnny ni dejar fuego en el suelo, a oscuras alumbrando, despegándose de la boca al soltar, aplastada contra la pared, el depósito que se llena solo con una gasolina, «¡Sin gasolina!» y la gasolina cogida del suelo (con la barra naranja), la llama hacia zombis entre dos direcciones (sale recto por el tubo; su cono de 45° le da al que no está justo en la línea, y al del hueco entre la diagonal y abajo, que queda fuera, el chorro se le gira lo justo para que entre por el borde), la postura de apuntar y la llama saliendo del tubo en las 8 direcciones, andando igual que sin echar fuego y con las 4 skins, `captura-lanzallamas-<baul, llama, oscuro, apagando, pared, recto, hueco, sin-gasolina, dirección, andando o skin>.png`), `--desintegrador` (`probar_desintegrador`: el lanza ácido, un lanzallamas de ácido: su nombre, su icono y su hoja (la del lanzallamas con las bombonas verdes), sus números y su boca; en la sala de pruebas de armas, la gota de ácido que cuelga de la boquilla y cae, 1 s de chorro que quita vida y deja la herida de ácido a los zombis a 120 y a 250 y no toca al de 430, sin charcos ni luz y soltando la gota al echarlo, despegándose de la boquilla al soltar, contra la pared, el depósito que se llena solo con un bidón de ácido, «¡Sin ácido!» (una gasolina no le vale) y el bidón cogido del suelo (con la barra verde), hacia zombis entre dos direcciones (sale recto por el tubo; su cono de 45° le da al que no está justo en la línea, y al del hueco entre la diagonal y abajo, que queda fuera, el chorro se le gira lo justo para que entre por el borde), en las 8 direcciones y con las 4 skins (con las puntas de la gota en su hoja) y el jefe de bomberos, al que el ácido sí le quita vida; también los del baúl con el daño de una gota, que cogen el de ahora, y que los bidones solo los suelta el gordo, 1 de cada 4 veces, y salen en las Colecciones de los dos edificios, `captura-desintegrador-<baul, gota, cae, chorro, soltando, pared, recto, hueco, sin-acido, bidon, dirección, gota-dirección o skin>.png`), `--pistola-electrica` (`probar_pistola_electrica`: la pistola eléctrica con su dibujo propio, su icono en el baúl y en el banco, su hoja y su boca sin chispitas de adorno, que la chispa a 120 quita vida al zombi y lo aturde, salta al que tiene al lado y también lo aturde, no toca al de 330, que gasta una bala por disparo, que disparando andando sigue andando con los efectos encima y el retroceso, la descarga dibujada y las chispas saliendo del mismo sitio en las 8 direcciones y con las 4 skins, `captura-pistola-electrica-<baul, chispa, andando, dirección o skin>.png`)
+  `--lanzallamas` (`probar_lanzallamas`: el lanzallamas de la llamarada continua, comprado en la tienda de armas, su daño por segundo, sus números y su boca sin chispitas, que las balas no le valen; en la sala de pruebas de armas, 1 s de llama que quema a los zombis a 120 y a 250 y no toca al de 430, sin quitarle vida a Johnny ni dejar fuego en el suelo, a oscuras alumbrando, despegándose de la boca al soltar, aplastada contra la pared, el depósito que se llena solo con una gasolina, «¡Sin gasolina!» y la gasolina cogida del suelo (con la barra naranja), la llama hacia zombis entre dos direcciones (sale recto por el tubo; su cono de 45° le da al que no está justo en la línea, y al del hueco entre la diagonal y abajo, que queda fuera, el chorro se le gira lo justo para que entre por el borde), la postura de apuntar y la llama saliendo del tubo en las 8 direcciones, andando igual que sin echar fuego y con las 4 skins, `captura-lanzallamas-<tienda, llama, oscuro, apagando, pared, recto, hueco, sin-gasolina, dirección, andando o skin>.png`), `--desintegrador` (`probar_desintegrador`: el lanza ácido, un lanzallamas de ácido, comprado en la tienda de armas: su nombre, su icono y su hoja (la del lanzallamas con las bombonas verdes), sus números y su boca; en la sala de pruebas de armas, la gota de ácido que cuelga de la boquilla y cae, 1 s de chorro que quita vida y deja la herida de ácido a los zombis a 120 y a 250 y no toca al de 430, sin charcos ni luz y soltando la gota al echarlo, despegándose de la boquilla al soltar, contra la pared, el depósito que se llena solo con un bidón de ácido, «¡Sin ácido!» (una gasolina no le vale) y el bidón cogido del suelo (con la barra verde), hacia zombis entre dos direcciones (sale recto por el tubo; su cono de 45° le da al que no está justo en la línea, y al del hueco entre la diagonal y abajo, que queda fuera, el chorro se le gira lo justo para que entre por el borde), en las 8 direcciones y con las 4 skins (con las puntas de la gota en su hoja) y el jefe de bomberos, al que el ácido sí le quita vida; y que los bidones solo los suelta el gordo, 1 de cada 4 veces, y salen en las Colecciones de los dos edificios, `captura-desintegrador-<tienda, gota, cae, chorro, soltando, pared, recto, hueco, sin-acido, bidon, dirección, gota-dirección o skin>.png`), `--pistola-electrica` (`probar_pistola_electrica`: la pistola eléctrica con su dibujo propio, comprada en la tienda de armas, su hoja y su boca sin chispitas de adorno, que la chispa a 120 quita vida al zombi y lo aturde, salta al que tiene al lado y también lo aturde, no toca al de 330, que gasta una bala por disparo, que una batería le llena el cargador y sin baterías no recarga, que disparando andando sigue andando con los efectos encima y el retroceso, la descarga dibujada y las chispas saliendo del mismo sitio en las 8 direcciones y con las 4 skins, `captura-pistola-electrica-<tienda, chispa, andando, dirección o skin>.png`)
   o `--ascensor` (`probar_ascensor`: bajar en el ascensor a la sala y volver), solo esa parte. `partida.gd` la avisa en tres momentos de su `_ready()`:
   `preparar_prueba()`, `ordenar_jefes_prueba()` y `empezar_prueba()` (en la partida de verdad no hacen nada).
 

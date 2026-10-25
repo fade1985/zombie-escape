@@ -1,8 +1,11 @@
-# Dibuja los 18 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
-# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 10 de siempre,
-# los 5 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md), los 2 de curar (parte 9) y el bidón de ácido que
-# llena el lanza ácido (el bidón de la gasolina, en verde ácido). El 25 oct se quitaron del juego el mechero, la llave
-# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco y el cable.
+# Dibuja los 9 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
+# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 7 de siempre
+# (la batería era del centro comercial: parte 6 de docs/CENTRO_COMERCIAL.md), las vendas de curar (parte 9) y el
+# bidón de ácido que llena el lanza ácido (el bidón de la gasolina, en verde ácido). El 25 oct se quitaron del juego el
+# mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el
+# hielo seco, el cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona
+# de gas, la jeringuilla, el aceite y el bocadillo. (La gasolina y el bidón de ácido tienen ya dibujo de PixelLab:
+# este los pisaría.)
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
@@ -34,24 +37,6 @@ PALETA = {
 }
 
 DIBUJOS = {
-    "clavos": [
-        ".oooo...........",
-        "oGGGGo...oooo...",
-        "oddddo..oGGGGo..",
-        ".oGgo...oddddo..",
-        "..oGo....oGgo...",
-        "..oGo.....oGo...",
-        "..ogo.....ogo...",
-        "..ogo.....ogo...",
-        "..odo.....odo...",
-        "...o.......o....",
-        ".oo.............",
-        "oGGo............",
-        "oGgoooooooooooo.",
-        "oGgGGGGGgggggddo",
-        "oGgoooooooooooo.",
-        ".oo.............",
-    ],
     "gasolina": [
         "................",
         "...ooo..........",
@@ -69,60 +54,6 @@ DIBUJOS = {
         "..oRRRRRRRRRRo..",
         "..oooooooooooo..",
         "................",
-    ],
-    "pistola_agua": [
-        "................",
-        ".......ooo......",
-        "......ovvvo.....",
-        "......olvvo.....",
-        "..oooooVVVoooo..",
-        ".onLLLLLLLLLnnoo",
-        ".onnnnnnnnnnnnbo",
-        ".onNNNNNNNNNNnbo",
-        ".ooonnnNoooooooo",
-        "...onnnNo.ono...",
-        "...onnnNo.oo....",
-        "...onnnNo.......",
-        "...onnnNo.......",
-        "...oNNNNo.......",
-        "...ooooo........",
-        "................",
-    ],
-    "spray": [
-        "................",
-        "......ooo..p....",
-        "......oKko...p..",
-        "......ooo.p.....",
-        "....oooooooo....",
-        "....oGGGGgdo....",
-        "...oooooooooo...",
-        "...oWppppppqo...",
-        "...oppppppqqo...",
-        "...owwwwwwweo...",
-        "...owkwkwkweo...",
-        "...owwwwwwweo...",
-        "...oppppppqqo...",
-        "...oppppppqqo...",
-        "...oGGGGGgddo...",
-        "...oooooooooo...",
-    ],
-    "lejia": [
-        "......oooo......",
-        "......obbo......",
-        "......oBBo......",
-        ".....oowwoo.....",
-        "....owwwwwweo...",
-        "...owwwwwwwweo..",
-        "...oWwwwwwwweo..",
-        "...obbbbbbbbBo..",
-        "...obccbbbbbBo..",
-        "...obcbwwbbbBo..",
-        "...obbbbbbbbBo..",
-        "...owwwwwwwweo..",
-        "...oWwwwwwwweo..",
-        "...owwwwwwwweo..",
-        "...oeeeeeeeeeo..",
-        "...ooooooooooo..",
     ],
     "alcohol": [
         ".......oo.......",
@@ -196,7 +127,7 @@ DIBUJOS = {
         "....oRRRRRRo....",
         "....oooooooo....",
     ],
-    # ── Los del centro comercial (los demás, con código: ver más abajo) ──
+    # la batería (era del centro comercial; ahora, la munición de la pistola eléctrica)
     "bateria": [
         "................",
         "...ooo....ooo...",
@@ -215,43 +146,7 @@ DIBUJOS = {
         ".oooooooooooooo.",
         "................",
     ],
-    "aceite": [
-        "................",
-        "......oooo......",
-        "......ovlo......",
-        "......oVVo......",
-        ".....oooooo.....",
-        "....oLyyyyYo....",
-        "...oLyyyyyyYo...",
-        "..oLyyyyyyyyYo..",
-        "..oLywwwwwwyYo..",
-        "..oLywwlvwwyYo..",
-        "..oLywvVwwwyYo..",
-        "..oLywwwwwwyYo..",
-        "..oLyyyyyyyyYo..",
-        "..oyyyyyyyyYYo..",
-        "..oYYYYYYYYYYo..",
-        "..oooooooooooo..",
-    ],
-    "bombona": [
-        "................",
-        "....oooooooo....",
-        "....oGo..odo....",
-        "....oGoKKodo....",
-        "...oooooooooo...",
-        "..onLLnnnnnnNo..",
-        ".onLnnnnnnnnnNo.",
-        ".onLnnnnnnnnnNo.",
-        ".onnnnnnnnnnnNo.",
-        ".oNNNNNNNNNNNNo.",
-        ".onnnnnnnnnnnNo.",
-        ".onnnnnnnnnnNNo.",
-        ".onnnnnnnnnnNNo.",
-        "..oNnnnnnnnnNo..",
-        "..oKKKKKKKKKKo..",
-        "..oooooooooooo..",
-    ],
-    # los dos de curar (parte 9): el rollo de vendas con una tira con su cruz roja, y el bocadillo por el lado
+    # las vendas, de curar (parte 9): el rollo de vendas con una tira con su cruz roja
     "vendas": [
         "................",
         "...oooooooo.....",
@@ -269,24 +164,6 @@ DIBUJOS = {
         "......owwrwwwwo.",
         "......oeeeeeeeo.",
         "......ooooooooo.",
-    ],
-    "bocadillo": [
-        "................",
-        "................",
-        "....oooooooo....",
-        "..ooLhhhhhhhoo..",
-        ".oLhhhhhhhhhhho.",
-        ".ohhhhhhhhhhhmo.",
-        ".ommmmmmmmmmmmo.",
-        ".ovlvvlvvlvvlvo.",
-        ".oyyyyyyyyyyyyo.",
-        ".oPrrPPrrPPrrPo.",
-        ".ohhhhhhhhhhhmo.",
-        ".ohhhhhhhhhhmmo.",
-        "..oohhhhhhhmoo..",
-        "....oooooooo....",
-        "................",
-        "................",
     ],
 }
 
@@ -328,53 +205,7 @@ def despertador(x, y):
     return "w"
 
 
-def cinta_americana(x, y):
-    # un rollo de cinta gris visto un poco desde arriba: la cara de arriba con el cartón marrón y el agujero, el
-    # canto por delante y la tira que cuelga por la derecha
-    dx = x - 7.5
-    arriba = (dx / 7.2) ** 2 + ((y - 5.0) / 4.4) ** 2 <= 1.0
-    abajo = (dx / 7.2) ** 2 + ((y - 8.5) / 4.4) ** 2 <= 1.0
-    if arriba:
-        hueco = (dx / 2.4) ** 2 + ((y - 5.0) / 1.5) ** 2
-        if hueco <= 1.0:
-            return "K"
-        if hueco <= 2.6:
-            return "h"
-        return "G" if dx < 2 and y < 5 else "g"
-    if 10 <= x <= 12 and 9 <= y <= 15:
-        if y == 15 and x == 11:
-            return "."   # el borde roto
-        return "g" if x < 12 else "d"
-    if abajo or (abs(dx) <= 7.2 and 5.0 <= y <= 8.5):
-        return "d" if y > 9 or dx > 4 else "g"
-    return "."
-
-
-def jeringuilla(x, y):
-    # en diagonal: el émbolo abajo a la izquierda, el cuerpo con el líquido azul y la aguja arriba a la derecha
-    dx, dy = x - 7.5, y - 7.5
-    u = (dx - dy) / math.sqrt(2)   # hacia arriba a la derecha
-    v = (dx + dy) / math.sqrt(2)
-    if 3.2 < u <= 8.2 and abs(v) <= 0.4:
-        return "G"   # la aguja
-    if 2.4 < u <= 3.2 and abs(v) <= 1.0:
-        return "g"
-    if -3.6 <= u <= 2.4 and abs(v) <= 2.0:
-        if u > -1.2 and abs(v) <= 1.1:
-            return "c"   # el líquido
-        return "w" if v < 0.8 else "e"
-    if -4.4 <= u < -3.6 and abs(v) <= 3.2:
-        return "e"   # las aletas
-    if -7.6 <= u < -4.4 and abs(v) <= 0.9:
-        return "g"   # el émbolo
-    if -8.4 <= u < -7.6 and abs(v) <= 2.4:
-        return "G"
-    return "."
-
-
 DIBUJOS["despertador"] = disco(despertador)
-DIBUJOS["cinta_americana"] = disco(cinta_americana)
-DIBUJOS["jeringuilla"] = disco(jeringuilla)
 # el bidón de ácido: el de la gasolina con el rojo cambiado por el verde ácido
 DIBUJOS["bidon_acido"] = [f.translate(str.maketrans("rRP", "aAs")) for f in DIBUJOS["gasolina"]]
 

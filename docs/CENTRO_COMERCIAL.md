@@ -310,7 +310,11 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   hielo seco no entran en las seis): por ejemplo, un **bate helado** (bate + hielo seco) que congela.
 - (El 25 oct se quitaron del juego el mangual, el garfio, el bate helado y el látigo eléctrico, con todas las armas
   creadas de cuerpo a cuerpo, y con ellos la cadena, el cable, el hielo seco y las perchas: quedan cinco objetos
-  nuevos y cinco recetas del centro.)
+  nuevos y cinco recetas del centro. Luego, ese mismo día, se quitaron las otras cuatro recetas del centro (la bomba
+  de aceite, la mina despertador, la nube somnífera y la bomba de clavos) y sus objetos (el aceite, la bombona de
+  gas, la jeringuilla y la cinta americana, y los clavos, el spray y la lejía); la pistola eléctrica dejó de crearse:
+  se compra en la tienda de armas y gasta baterías. Del centro comercial solo quedan la batería, que sale ya en los
+  dos edificios, y las vendas, y ninguna receta.)
 - **Más adelante, como parte aparte** (lo decidió el dueño): los objetos de curar de la farmacia y el súper
   (vendas, comida que cura desde la mochila; ya se puede usar algo desde el inventario: el botiquín de la
   farmacéutica, `Objetos.USABLES`) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
@@ -332,13 +336,15 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 - Prueba: la larga (`--captura`, con o sin `--edificio centro`), en `probar_curas`: con la vida baja y los dos en la
   mochila, saca el inventario con las vendas elegidas (`captura-vendas.png`), usa cada uno y cuenta la vida antes y
   después; dice dónde salen, que no entran en recetas y los 23 objetos de Colecciones.
+- (El bocadillo se quitó del juego el 25 oct: queda solo el de las vendas, que sueltan la farmacia y el supermercado.
+  Colecciones cuenta ahora 8 objetos en cada edificio.)
 
 ### Decidido con el dueño (22 oct 2026, para la parte 10: la joyería, la sala opcional con riesgo)
 
 - **Una tienda nueva, la Joyería** (el séptimo tipo): sala de venta con vitrinas, trastienda y, al fondo, la **cámara
   acorazada**. **Una por partida**, en una planta al azar de la 1.ª a la 3.ª (como la tienda del superviviente), para
-  que se sienta como la sala del tesoro de *Isaac*. Sus zombis, los de siempre con más vigilantes; suelta baterías y
-  spray (también cadenas y cuchillas, hasta que se quitaron del juego el 25 oct); sin peligro propio: el riesgo es la cámara.
+  que se sienta como la sala del tesoro de *Isaac*. Sus zombis, los de siempre con más vigilantes; suelta baterías
+  (también spray, cadenas y cuchillas, hasta que se quitaron del juego el 25 oct); sin peligro propio: el riesgo es la cámara.
 - **La cámara acorazada** tiene la puerta cerrada y un lector de tarjetas. Se abre de dos maneras: con la **tarjeta
   dorada**, que lleva el guardia de la planta junto a la suya (al caer suelta las dos), o con la **apertura de
   emergencia**: un botón junto a la puerta que hace saltar la sirena, una cuenta atrás de 40 s y zombis entrando por
@@ -407,7 +413,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   (`planta.joyeria.premio`: arma, fajo, sitio y si se ha cogido; si Johnny sale y vuelve, sigue ahí):
   - **La vitrina:** un arma creada de rareza **morada** (la «épica» del banco: ×1,45 de daño, +2 unidades) de una
     receta que ya se sepa, al azar sin contar el molotov; si solo se sabe el molotov, un cóctel molotov morado (5
-    botellas). Se ve como el icono del arma en grande con un brillo morado, en un sitio libre de la cámara, y se
+    botellas). (Desde el 25 oct, sin la receta del cóctel: si no se sabe ninguna, de una cualquiera.) Se ve como el icono del arma en grande con un brillo morado, en un sitio libre de la cámara, y se
     coge pisándola, como lo del suelo: la de cuerpo a cuerpo o de fuego va a la mano (la que llevaba, al
     inventario), el cóctel suma sus botellas a los molotovs y las demás arrojadizas van al botón de lanzar, igual
     que al sacarla del baúl. Cuenta en Colecciones como arma creada alguna vez.
@@ -1046,7 +1052,11 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      (El mechero salía en el restaurante y en el supermercado; se quitó del juego el 25 oct, con el súpersoplete. La llave
      inglesa y el hacha salían en la ferretería; se quitaron el mismo día, con el bumerán. También ese día, con las armas
      de cuerpo a cuerpo y el garfio, se quitaron las cuchillas (ferretería, ropa y joyería), el táser (electrónica), la
-     cadena (ferretería y joyería), el cable (electrónica), el hielo seco (supermercado) y las perchas (ropa).)
+     cadena (ferretería y joyería), el cable (electrónica), el hielo seco (supermercado) y las perchas (ropa). Y más
+     tarde, los clavos, el spray, la lejía, la cinta americana, el aceite, la bombona de gas, la jeringuilla, la pistola
+     de agua y el bocadillo. Las listas de ahora: ferretería, batería, extintor y gasolina; electrónica, extintor y
+     batería; restaurante, alcohol, gasolina y extintor; supermercado, alcohol, batería y vendas; farmacia, alcohol y
+     vendas; tienda de ropa, el trapo; joyería, la batería.)
 
      - Todos los de la lista de una tienda salen igual de a menudo. En el pasillo se elige una tienda al azar y luego
        uno de su lista. El jefe de la planta suelta sus dos objetos seguros de su tienda (si no tiene, como en el pasillo).
@@ -1068,7 +1078,8 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      | Bomba de clavos | cinta americana + clavos | arrojadiza (3) | explota (40) y lanza 14 clavos en todas direcciones que atraviesan, pinchan y hacen sangrar |
 
      - El mangual, el garfio, el bate helado y el látigo eléctrico también salieron de aquí; se quitaron del juego el
-       25 oct.
+       25 oct. Ese mismo día se quitaron también las cinco de esta tabla: la pistola eléctrica pasó a la tienda de armas
+       (gasta baterías: una le llena el cargador) y las cuatro arrojadizas, del juego.
      - Los jefes no se congelan ni se duermen, como pasaba ya con aturdir y prender.
      - `--captura` (en los dos edificios) prueba cada una contra zombis y saca `captura-arma-<receta>.png`.
 7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). La página del gerente, también

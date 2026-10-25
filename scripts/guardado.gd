@@ -22,9 +22,9 @@ const NUEVO := {
 	"partidas": 0,
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
-	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"clavos": 2, ...} (fase 7b)
+	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...} (fase 7b)
 	"baul_armas": [],     # armas creadas en el banco de trabajo, esperando en el baúl (recetas.gd)
-	"recetas": ["molotov"], # recetas del banco de trabajo aprendidas (las sueltan los jefes): no se pierden nunca
+	"recetas": [],        # recetas del banco de trabajo aprendidas (las sueltan los jefes): no se pierden nunca
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)
@@ -75,8 +75,9 @@ static func cargar() -> Dictionary:
 	for t in s.talentos:
 		s.talentos[t] = int(s.talentos[t])
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
-	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco y
-	# el cable se quitaron del juego el 25 oct
+	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el
+	# cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas, la
+	# jeringuilla, el aceite y el bocadillo se quitaron del juego el 25 oct
 	var baul := {}
 	for id in s.baul:
 		if Objetos.NOMBRES.has(id):
@@ -84,8 +85,9 @@ static func cargar() -> Dictionary:
 	s.baul = baul
 	s.encontrados = s.encontrados.filter(func(id): return Objetos.NOMBRES.has(id))
 	# las armas cuya receta ya no existe desaparecen del baúl, y la receta, de las aprendidas y de las creadas
-	# (Colecciones): la lanza, el súpersoplete, el bumerán, el garfio y todas las de cuerpo a cuerpo se quitaron del
-	# juego el 25 oct
+	# (Colecciones): la lanza, el súpersoplete, el bumerán, el garfio, todas las de cuerpo a cuerpo, el cóctel molotov,
+	# la lluvia ácida y las cuatro arrojadizas del centro comercial se quitaron del juego el 25 oct; el lanzallamas, el
+	# lanza ácido y la pistola eléctrica dejaron de crearse (se compran en la tienda de armas), y las del baúl se van
 	s.baul_armas = s.baul_armas.filter(func(a): return Recetas.LISTA.has(a.get("receta", "")))
 	s.recetas = s.recetas.filter(func(id): return Recetas.LISTA.has(id))
 	s.creadas = s.creadas.filter(func(id): return Recetas.LISTA.has(id))
@@ -93,17 +95,8 @@ static func cargar() -> Dictionary:
 		a.dano = int(a.dano)
 		a.unidades = int(a.unidades)
 		# el nombre, siempre el de su receta: el arma lleva una copia del de cuando se creó, y así coge el nuevo si se
-		# cambia (el desintegrador pasó a llamarse «Lanza ácido», 25 oct)
-		if Recetas.LISTA.has(a.get("receta", "")):
-			a.nombre = Recetas.LISTA[a.receta].nombre
-		# los lanzallamas y los lanza ácido cogen siempre el daño de la receta con su rareza, y su frase: los
-		# lanzallamas de antes de la llamarada continua (24 oct) se crearon con el daño de una gota (4 a 6), y los de
-		# después, con 60 por segundo antes de bajarlo a la mitad (25 oct); los lanza ácido de antes del chorro continuo
-		# (25 oct), con el de una gota (3 a 4)
-		if a.get("receta", "") in ["lanzallamas", "desintegrador"]:
-			var nuevo := Recetas.crear(a.receta, a.rareza)
-			a.dano = nuevo.dano
-			a.desc = nuevo.desc
+		# cambia
+		a.nombre = Recetas.LISTA[a.receta].nombre
 	for id in s.edificios:
 		s.edificios[id] = EDIFICIO.merged(s.edificios[id], true)
 		for clave in ["partidas", "victorias", "mejor_planta", "alerta_max", "alerta"]:

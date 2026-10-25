@@ -9,7 +9,7 @@
 #     grupos cada vez mayores. Hay que aguantar dentro de la joyería: si Johnny sale, la cuenta se para hasta que
 #     vuelve. Al acabar, la puerta se abre con un clac.
 # Dentro, el premio (trozo 3): una vitrina con un arma creada de rareza morada (la mejor) de una receta que ya se
-# sepa (si solo se sabe el molotov, un cóctel morado con todas sus botellas), que al pisarla va a la mano como al
+# sepa (si no se sabe ninguna, de una cualquiera), que al pisarla va a la mano como al
 # sacarla del baúl, y un fajo de billetes (FAJO, más FAJO_POR_PLANTA por planta). Y el logro «Caja fuerte» al abrir
 # la cámara la primera vez (logros.gd). El estado va en planta.joyeria (lo crea planta.gd):
 #   sitio, sala (la de la cámara), puerta (su hueco, de apt.puertas), abierta, dorada ("guardia", "suelo", "tengo" o
@@ -205,12 +205,12 @@ func abrir(texto: String) -> void:
 
 # ── El premio ──
 
-# Qué hay en la vitrina: un arma creada morada de una receta que ya se sepa (sin contar el molotov; si no se sabe
-# otra, el cóctel molotov morado) y el fajo de billetes de esta planta
+# Qué hay en la vitrina: un arma creada morada de una receta que ya se sepa (si no se sabe ninguna, de una cualquiera)
+# y el fajo de billetes de esta planta
 func preparar_premio() -> void:
 	var d := datos()
-	var sabidas: Array = Recetas.sabidas(Guardado.cargar()).filter(func(r): return r != "molotov")
-	var receta: String = sabidas.pick_random() if not sabidas.is_empty() else "molotov"
+	var sabidas: Array = Recetas.sabidas(Guardado.cargar())
+	var receta: String = sabidas.pick_random() if not sabidas.is_empty() else Recetas.LISTA.keys().pick_random()
 	d.premio = {"arma": Recetas.crear(receta, RAREZA), "fajo": FAJO + FAJO_POR_PLANTA * (partida.planta.num - 1),
 		"pos": Vector2.INF, "cogido": false}
 
@@ -244,8 +244,8 @@ func poner_premio() -> void:
 	partida.mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Al pisar la vitrina: el arma, como al sacarla del baúl (la de cuerpo a cuerpo o de fuego, a la mano; el cóctel
-# suma sus botellas a los molotovs; las demás arrojadizas, a la mano o al repuesto), cuenta en Colecciones como creada, y
+# Al pisar la vitrina: el arma, como al sacarla del baúl (la de cuerpo a cuerpo o de fuego, a la mano; las
+# arrojadizas, a la mano o al repuesto), cuenta en Colecciones como creada, y
 # el fajo a los dólares de la partida
 func coger_premio() -> void:
 	var d := datos()
@@ -255,7 +255,7 @@ func coger_premio() -> void:
 	var como := ""
 	if a.hueco == "arrojadiza":
 		partida.lanzables.sacar(a)
-		como = "Sus botellas se suman a tus molotovs" if a.receta == "molotov" else "Lista para lanzar (F para elegirla)"
+		como = "Lista para lanzar (F para elegirla)"
 		if a.receta in partida.lanzables.repuesto:
 			como = "Va al repuesto: pásala a la mano desde el inventario"
 	else:

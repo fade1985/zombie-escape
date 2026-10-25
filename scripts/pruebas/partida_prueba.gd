@@ -20,30 +20,31 @@
 #                  ven un poco) y en el inventario; la caja que suelta un zombi cambia de dibujo con el arma
 #   --inventario   la pantalla del inventario «todo a la vista» (ui/inventario.gd): la ficha que sigue a la marca, las
 #                  flechas, Intro, Y, Supr y F, ponerse y tirar armas (también la de la mano) y mover arrojables; luego,
-#                  las otras pruebas que usan el inventario (las vendas y el bocadillo, y el botiquín)
-#   --banco        una lanza, un súpersoplete, un bumerán, un mechero, una llave inglesa y un hacha de antes en el
-#                  guardado (se quitaron del juego) desaparecen al cargar; luego el banco de trabajo, las recetas y las
-#                  Colecciones, sin la prueba larga (probar_cosas, probar_recetas y probar_colecciones)
-#   --lanzallamas  el lanzallamas de la llamarada continua (Armas.CREADAS.lanzallamas, llamarada.gd): su icono y su daño
-#                  por segundo (también el de los de antes, en el baúl), sus números, que la llama atraviesa y quema a los de
+#                  las otras pruebas que usan el inventario (las vendas y el botiquín)
+#   --banco        las armas creadas y los objetos que se quitaron del juego (25 oct), viejos en el guardado,
+#                  desaparecen al cargar; luego el banco de trabajo, las recetas y las Colecciones, sin la prueba larga
+#                  (probar_cosas, probar_recetas y probar_colecciones)
+#   --lanzallamas  el lanzallamas de la llamarada continua (Armas.DATOS.lanzallamas, llamarada.gd): comprado en la tienda
+#                  de armas del ordenador, su daño por segundo, sus números, que la llama atraviesa y quema a los de
 #                  dentro y no llega más allá de las 10 casillas, el depósito que se llena solo con la gasolina de la mochila y,
 #                  sin ella, «¡Sin gasolina!», la llama hacia zombis entre dos direcciones (sale recta por el tubo y
 #                  su cono de 45° le da al que no está justo en la línea; al que queda fuera, se gira lo justo para que
 #                  entre), en las 8 direcciones y con las 4 skins (en la sala de pruebas de armas)
-#   --desintegrador el lanza ácido (por dentro, el desintegrador), un lanzallamas de ácido: su nombre (también el de las
-#                  creadas cuando se llamaba «Desintegrador»), su icono, su hoja (la del lanzallamas con las bombonas
+#   --desintegrador el lanza ácido (por dentro, el desintegrador), un lanzallamas de ácido: comprado en la tienda de
+#                  armas del ordenador, su nombre, su icono, su hoja (la del lanzallamas con las bombonas
 #                  verdes), la gota de ácido que cuelga de la boquilla y cae, el chorro que quita vida y deja la herida de
 #                  ácido a los de dentro y no llega al lejano, sin charcos ni luz, despegándose al soltar, contra la pared,
 #                  hacia zombis entre dos direcciones (sale recto por el tubo y su cono de 45° le da al que no está
 #                  justo en la línea; al que queda fuera, se gira lo justo para que entre),
 #                  el jefe de bomberos (el ácido sí le hace daño), en las 8 direcciones y con las 4 skins
-#                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd); el depósito, que se llena con los bidones de
-#                  ácido de la mochila y, sin ellos, «¡Sin ácido!»; los del baúl con el daño de una gota cogen el de
-#                  ahora; y que los bidones solo los suelta el gordo, 1 de cada 4 veces
-#   --pistola-electrica la pistola eléctrica (la quinta creada a distancia con dibujo propio): su icono, su hoja con la descarga celeste de
-#                  los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene delante y salta al
-#                  de al lado y no llega al lejano, una bala por disparo, disparar andando, el disparo en las 8 direcciones y con las
-#                  4 skins (Armas.CREADAS.pistola_electrica)
+#                  (Armas.DATOS.desintegrador, llamarada.gd, goteo.gd); el depósito, que se llena con los bidones de
+#                  ácido de la mochila y, sin ellos, «¡Sin ácido!»; y que los bidones solo los suelta el gordo, 1 de cada 4
+#                  veces
+#   --pistola-electrica la pistola eléctrica: comprada en la tienda de armas del ordenador, su icono, su hoja con la descarga
+#                  celeste de los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene
+#                  delante y salta al de al lado y no llega al lejano, una bala por disparo, que una batería de la mochila
+#                  le llena el cargador (y sin baterías no recarga), disparar andando, el disparo en las 8 direcciones y con
+#                  las 4 skins (Armas.DATOS.pistola_electrica)
 #   --tintes       el fuego y el ácido de los enemigos, pintados por su shader (zombi.gd, quemaduras): zombis ardiendo,
 #                  con ácido y con las dos cosas, a la luz y a oscuras (lo que luce brilla, brillo.gd), un jefe con ácido y
 #                  uno que muere ardiendo
@@ -1952,7 +1953,7 @@ func probar_sala() -> void:
 # hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla
 # (desde el 24 oct la bala va de la boca al zombi: ninguno); y a quemarropa, a 40, desde 8 direcciones.
 # Luego, que la diana no se ha muerto ni ha perdido vida (y cuántos zombis normales habría matado), que la reserva sigue llena y que ha recargado; que el punto pasa
-# a la escopeta y la coma vuelve (con el recuento a cero) y llega a las del banco de trabajo, que el guion esconde y
+# a la escopeta y la coma vuelve (con el recuento a cero) y llega a la última de la tienda (la pistola eléctrica), que el guion esconde y
 # saca el panel; y que F11 vuelve a la sala
 # de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
 # panel, tras un fallo por el lado), captura-armas-pistola-<e, se, n, o>.png (Johnny disparando con la Beretta hacia cada
@@ -2062,8 +2063,8 @@ func probar_armas() -> void:
 	var vuelta: String = johnny.arma().nombre
 	for i in 4:
 		await pulsar_y_esperar(KEY_COMMA)
-	print("Con la coma: %s (esperado: Pistola) · cuatro más atrás: %s (esperado: el último del banco de trabajo, %s)" % [
-		vuelta, johnny.arma().nombre, Recetas.LISTA[sala.lista.back()].nombre])
+	print("Con la coma: %s (esperado: Pistola) · cuatro más atrás: %s (esperado: la última de la tienda, %s)" % [
+		vuelta, johnny.arma().nombre, Armas.DATOS[sala.lista.back()].nombre])
 	await pulsar_y_esperar(KEY_F11)
 	await get_tree().create_timer(0.3).timeout
 	print("De vuelta con F11: en «%s» (esperado: mantenimiento) · armas %s (esperado: true) · balas %d y %d (esperado: %d y %d)" % [
@@ -2102,8 +2103,7 @@ func pulsar_y_esperar(tecla: Key) -> void:
 #   - el daño de la fregona: × 4 con el portero (con el bate, igual), contado y con un golpe de verdad
 #   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (la fregona, el bate y el cuchillo) y las de fuego, igual;
 #     contado y con un golpe de verdad (con el bate)
-#   - el daño de las armas que queman: × 3 con el bombero (el lanzallamas, el molotov y la bomba
-#     de aceite) y las demás, igual; contado y de verdad, con el golpe, el disparo o la llama y lo que
+#   - el daño de las armas que queman: × 3 con el bombero (el lanzallamas y el molotov) y las demás, igual; contado y de verdad, con el golpe, el disparo o la llama y lo que
 #     sigue ardiendo el zombi (y un molotov de verdad); con la pistola y el bate, igual
 #   - el bombero, inmune al fuego: el fuego del suelo, un charco de molotov, los molotovs, el cono y las bolas del jefe
 #     de bomberos, de verdad: sin la skin Johnny pierde vida y sigue ardiendo; con ella, nada; el hachazo, sí le quita
@@ -2432,8 +2432,7 @@ func probar_skins() -> void:
 
 # La skin del bombero (skins.gd), dentro de probar_skins(). Johnny en el despacho, sin pegar ni disparar solo y sin
 # críticos:
-#   - el daño contado: × 3 las armas que queman (el lanzallamas, y lo que queman el molotov y la bomba de aceite) y
-#     × 1 las seis de siempre
+#   - el daño contado: × 3 las armas que queman (el lanzallamas, y lo que quema el molotov) y × 1 las seis de siempre
 #   - de verdad, a un zombi quieto delante: el disparo o la llama (0,3 s) y lo que sigue ardiendo después, sin
 #     la skin y con ella (con el bate y la pistola, igual y sin arder); y un molotov de verdad
 #   - inmune al fuego, de verdad, sin la skin y con ella: el fuego del suelo (lo que hace cada paso al pisarlo) y lo
@@ -2445,12 +2444,9 @@ func probar_skin_bombero() -> void:
 	var critico: float = johnny.stats.critico
 	johnny.stats.critico = 0.0
 	johnny.direccion = "e"
-	var queman := {}
-	for r in ["lanzallamas"]:
-		queman[r] = Armas.apuntar(Recetas.crear(r, "verde"))
 	# ── contado ──
 	var cuentas := []
-	for arma in ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5", queman.lanzallamas]:
+	for arma in ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5", "lanzallamas"]:
 		johnny.coger(arma)
 		johnny.vestir("")
 		var siempre: float = johnny.arma().dano
@@ -2458,14 +2454,11 @@ func probar_skin_bombero() -> void:
 		cuentas.append("%s × %.1f" % [Objetos.nombre(arma), johnny.arma().dano / siempre])
 	print("Daño con el bombero: %s (esperado: × 1 las seis de siempre, × 3 la que quema)" % " · ".join(cuentas))
 	var lanzados := []
-	for tipo in ["molotov", "bomba_aceite"]:
+	for tipo in ["molotov"]:
 		var cuanto := {}
 		for skin in ["", "bombero"]:
 			johnny.vestir(skin)
-			if tipo == "molotov":
-				lanzables.cantidades.molotov = maxi(lanzables.cantidades.molotov, 1)
-			else:
-				lanzables.sacar(Recetas.crear("bomba_aceite", "verde"))
+			lanzables.cantidades.molotov = maxi(lanzables.cantidades.molotov, 1)
 			lanzables.tipo = tipo
 			lanzables.lanzar(johnny.global_position + Vector2(-200, 100))
 			var p: Node = johnny.get_parent().get_children().filter(func(n): return n.get("hasta") != null and n.get("dano_lanzar") != null).back()
@@ -2473,11 +2466,11 @@ func probar_skin_bombero() -> void:
 			p.queue_free()   # (que no caiga: solo se mira lo que quemará)
 		lanzados.append("%s × %.1f" % [lanzables.nombre(tipo), cuanto.bombero / cuanto[""]])
 	lanzables.tipo = "molotov"
-	print("Lo que quema lo que se lanza, con el bombero: %s (esperado: × 3 los dos)" % " · ".join(lanzados))
+	print("Lo que quema lo que se lanza, con el bombero: %s (esperado: × 3)" % " · ".join(lanzados))
 
 	# ── de verdad: el golpe o el disparo, y lo que sigue ardiendo el zombi ──
 	var de_verdad := []
-	for arma in [queman.lanzallamas, "bate", "pistola"]:
+	for arma in ["lanzallamas", "bate", "pistola"]:
 		johnny.coger(arma)
 		var cuerpo: bool = Armas.datos(arma).tipo == "cuerpo"
 		var quita := {}
@@ -2623,14 +2616,12 @@ func probar_skin_bombero() -> void:
 	await get_tree().process_frame
 
 
-# Con "--captura --lanzallamas": el lanzallamas de la llamarada continua (Armas.CREADAS.lanzallamas, llamarada.gd; su
-# daño, por segundo, en recetas.gd; la hoja de ahora, conserje-48-lanzallamas, en la postura de apuntar). Primero, en la
-# sala de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio y con el daño de una gota de
-# las de antes, que al cargar el guardado coge el de ahora), Johnny se arrima al baúl y cuenta el icono, el daño y la
-# línea de cada una (captura-lanzallamas-baul.png). Saca una y cuenta su hoja, su alcance (10 casillas), su depósito, su
-# recarga, su empuje, sus pies, su boca hacia el este, que no le salen chispitas y que las cajas de munición no le
-# valen. Luego, en la sala de pruebas de armas (F11: cabe la llama entera), con el lanzallamas sacado del baúl y gastando
-# gasolina de verdad:
+# Con "--captura --lanzallamas": el lanzallamas de la llamarada continua (Armas.DATOS.lanzallamas, llamarada.gd; la
+# hoja de ahora, conserje-48-lanzallamas, en la postura de apuntar). Primero, en la sala de mantenimiento, Johnny lo
+# compra en la tienda de armas del ordenador (captura-lanzallamas-tienda.png, con él marcado) y cuenta su hoja, su daño
+# por segundo, su alcance (10 casillas), su depósito, su recarga, su empuje, sus pies, su boca hacia el este, que no le
+# salen chispitas y que las cajas de munición no le valen. Luego, en la sala de pruebas de armas (F11: cabe la llama
+# entera), con el lanzallamas comprado y gastando gasolina de verdad:
 #   - la llamarada: 1 s echando fuego hacia la derecha (a la izquierda está el panel de la sala) con tres zombis en la
 #     misma línea, a 120 y a 250 (los dos dentro: pierden vida, arden y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se entera).
 #     Johnny no pierde vida, no queda fuego en el suelo y el depósito gasta 1 s; al soltar, se apaga
@@ -2650,37 +2641,20 @@ func probar_skin_bombero() -> void:
 # Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_lanzallamas() -> void:
 	var antes := Guardado.cargar()
-	var vieja := Recetas.crear("lanzallamas", "azul")
-	vieja.icono = "pistola_agua"   # como las que se crearon antes de que el lanzallamas tuviera icono propio
-	vieja.dano = 5                 # y con el daño de una gota (el de antes de la llamarada continua)
-	var de_60 := Recetas.crear("lanzallamas", "morada")
-	de_60.dano = 87                # y otra con el de antes de bajarlo a la mitad (60 por segundo, épica)
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = [vieja, de_60]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
 		g2.skin = "")
 	johnny.vestir("")
-	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
-	johnny.direccion = "n"
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.5).timeout
-	var baul: Array = Guardado.cargar().baul_armas
-	print("Baúl: abierto %s · iconos %s (esperado: true, [\"lanzallamas\", \"lanzallamas\"]) · daño %s · «%s» (esperado: [36, 44], daño 36/s: los de antes, con el de ahora) · en el banco «%s» (esperado: lanzallamas)" % [
-		inventario.abierto == "baul", baul.map(func(a): return Recetas.icono_de(a.receta)), baul.map(func(a): return a.dano),
-		Recetas.detalle(baul[0]), Recetas.icono_de("lanzallamas")])
-	Captura.foto("captura-lanzallamas-baul.png")
-	inventario.cerrar()
-	await get_tree().process_frame
+	await comprar_en_tienda("lanzallamas", "captura-lanzallamas-tienda.png")
 
-	# sacado del baúl: sus números, su boca y sin chispitas; las balas no le valen
-	var id := Armas.apuntar(baul[0])
-	johnny.coger(id)
+	# comprado: sus números, su boca y sin chispitas; las balas no le valen
+	var id := "lanzallamas"
 	var w := Armas.datos(id)
 	johnny.modo = "mira"   # que no eche fuego por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
-	print("Lanzallamas en la mano: hoja «%s» · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: conserje-48-lanzallamas.tres, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (28, -22), false, lanzallamas, false)" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), w.alcance, w.alcance / Planta.CASILLA, w.deposito,
-		johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.quiere_municion()])
+	print("Lanzallamas en la mano: %s · hoja «%s» · daño %d/s · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: lanzallamas, conserje-48-lanzallamas.tres, 30, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (28, -22), false, lanzallamas, pistola: la de repuesto)" % [
+		johnny.huecos.fuego, johnny.sprite.sprite_frames.resource_path.get_file(), w.dano, w.alcance, w.alcance / Planta.CASILLA,
+		w.deposito, johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
 	# a la sala de pruebas de armas (allí le ponen la pistola y la gasolina sin fin: se le vuelve a dar este, gastando)
 	await pulsar_y_esperar(KEY_F11)
@@ -2821,10 +2795,28 @@ func probar_lanzallamas() -> void:
 		await get_tree().create_timer(0.2).timeout
 
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = antes.baul_armas
+		g2.dolares = antes.dolares
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# Compra un arma en la tienda de armas del ordenador (con dólares de sobra): antes, una foto de la tienda con ella
+# marcada y lo que dice de ella. Lo usan probar_lanzallamas, probar_desintegrador y probar_pistola_electrica
+func comprar_en_tienda(id: String, foto: String) -> void:
+	Guardado.cambiar(func(g2): g2.dolares = maxi(g2.dolares, 200))
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas", "b_" + id)
+	await get_tree().create_timer(0.3).timeout
+	print("En la tienda: %s a la venta por $%d · dice «%s»" % [Armas.DATOS[id].nombre, Armas.PRECIOS[id], ordenador.info.text])
+	Captura.foto(foto)
+	ordenador.comprar_arma(id)
+	await get_tree().process_frame
+	print("Comprado: en la mano %s · dice «%s»" % [johnny.huecos.fuego, ordenador.info.text])
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
 
 
 # Johnny echa fuego con el lanzallamas (o el chorro del lanza ácido) hacia "angulo" durante "segundos" (en cada paso,
@@ -2907,14 +2899,12 @@ func chorro_torcido(arma: String) -> void:
 	zombi.queue_free()
 
 
-# Con "--captura --desintegrador": el lanza ácido (Armas.CREADAS.desintegrador: en el juego «Lanza ácido» y por dentro
+# Con "--captura --desintegrador": el lanza ácido (Armas.DATOS.desintegrador: en el juego «Lanza ácido» y por dentro
 # el desintegrador), un lanzallamas de ácido. Su hoja es la del lanzallamas con las bombonas verdes y sin la llamita
 # (tools/hoja_lanza_acido.py; casilla de 96x96 con los pies en 48,72) y su chorro, el de la llamarada con "acido"
-# (llamarada.gd y chorro_acido.gdshader). Como el lanzallamas, en la sala de mantenimiento, con dos en el baúl (una
-# guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía, llamándose «Desintegrador» y con el
-# daño de una gota, que al cargar el guardado coge el de ahora), Johnny se arrima al baúl y cuenta el icono, el nombre,
-# el daño y la frase de cada una (captura-desintegrador-baul.png). Saca una y cuenta sus números, su boca y que las
-# balas no le valen. Luego, en la sala de pruebas de armas (F11), gastando bidones de ácido de verdad:
+# (llamarada.gd y chorro_acido.gdshader). Como el lanzallamas, en la sala de mantenimiento, Johnny lo compra en la
+# tienda de armas del ordenador (captura-desintegrador-tienda.png, con él marcado) y cuenta sus números, su boca y que
+# las balas no le valen. Luego, en la sala de pruebas de armas (F11), gastando bidones de ácido de verdad:
 #   - quieto, sin echar el chorro, la gota de ácido de la boquilla (goteo.gd): se hincha, cuelga entera
 #     (captura-desintegrador-gota.png) y se suelta y cae (captura-desintegrador-cae.png)
 #   - el chorro: 1 s hacia la derecha con tres zombis en la misma línea, a 120 y a 250 (los dos dentro: pierden vida,
@@ -2940,41 +2930,20 @@ func chorro_torcido(arma: String) -> void:
 # Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_desintegrador() -> void:
 	var antes := Guardado.cargar()
-	var vieja := Recetas.crear("desintegrador", "azul")
-	vieja.icono = "lejia"   # como las que se crearon antes de que el desintegrador tuviera icono propio
-	vieja.nombre = "Desintegrador"   # y antes de que pasara a llamarse «Lanza ácido»
-	vieja.dano = 3                   # y con el daño de una gota (el de antes del chorro continuo), y su frase de entonces
-	vieja.desc = "Chorro de ácido: daño continuo y charco ácido"
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = [vieja, Recetas.crear("desintegrador", "morada")]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
 		g2.skin = "")
 	johnny.vestir("")
-	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
-	johnny.direccion = "n"
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.5).timeout
-	print("Baúl: abierto %s · iconos %s (esperado: true, [\"desintegrador\", \"desintegrador\"]) · en el banco «%s» (esperado: desintegrador)" % [
-		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
-		Recetas.icono_de("desintegrador")])
-	print("Nombres en el baúl: %s · en el banco «%s» (esperado: [\"Lanza ácido\", \"Lanza ácido\"] y Lanza ácido)" % [
-		Guardado.cargar().baul_armas.map(func(a): return a.nombre), Recetas.LISTA.desintegrador.nombre])
-	var baul: Array = Guardado.cargar().baul_armas
-	print("Daño en el baúl: %s · «%s» · frase de la vieja «%s» (esperado: [36, 44], daño 36/s: la de una gota, con el de ahora; la de la receta)" % [
-		baul.map(func(a): return a.dano), Recetas.detalle(baul[0]), baul[0].desc])
-	Captura.foto("captura-desintegrador-baul.png")
-	inventario.cerrar()
-	await get_tree().process_frame
+	await comprar_en_tienda("desintegrador", "captura-desintegrador-tienda.png")
 
-	# sacado del baúl: sus números, su boca y sin chispitas; las balas no le valen
-	var id := Armas.apuntar(Guardado.cargar().baul_armas[1])
-	johnny.coger(id)
+	# comprado: sus números, su boca y sin chispitas; las balas no le valen
+	var id := "desintegrador"
 	var w := Armas.datos(id)
 	johnny.modo = "mira"   # que no eche el chorro por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
-	print("Lanza ácido en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · recarga %.1f s · empuje %.1f · daño %.0f/s · pies %s · boca este %s · chispitas %s · icono «%s» · quiere munición %s (esperado: Lanza ácido, conserje-48-desintegrador.tres, acido, 320 (10), 8, 1.5, 0.5, el de una morada, (48, 72), (26, -20), false, desintegrador, false)" % [
+	print("Lanza ácido en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · recarga %.1f s · empuje %.1f · daño %.0f/s · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, acido, 320 (10), 8, 1.5, 0.5, 30, (48, 72), (26, -20), false, desintegrador, pistola: la de repuesto)" % [
 		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
-		w.deposito, w.recarga, w.empuje, w.dano, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.quiere_municion()])
+		w.deposito, w.recarga, w.empuje, w.dano, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
 	# a la sala de pruebas de armas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
 	await pulsar_y_esperar(KEY_F11)
@@ -3156,7 +3125,7 @@ func probar_desintegrador() -> void:
 		Objetos.al_baul("bidon_acido")])
 
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = antes.baul_armas
+		g2.dolares = antes.dolares
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
@@ -3400,41 +3369,29 @@ func probar_fuego_acido() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --pistola-electrica": la pistola eléctrica con su dibujo propio (Armas.CREADAS.pistola_electrica,
+# Con "--captura --pistola-electrica": la pistola eléctrica con su dibujo propio (Armas.DATOS.pistola_electrica,
 # conserje-48-pistola-electrica: la hoja lleva el retroceso corto de pistola y una descarga celeste en zigzag que sale de los dos
-# electrodos del táser azul marino; casilla de 180x168, con los pies en 90,88; recetas.gd, su icono). Como el desintegrador, en la sala
-# de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio, con el de la batería), Johnny se arrima al
-# baúl y cuenta el icono de cada una (captura-pistola-electrica-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies,
-# su boca hacia el este y que ya no le salen chispitas de adorno; dispara a un zombi a 120 a su izquierda (le quita vida y lo aturde),
-# con otro cerca de él (la descarga salta y lo aturde también) y otro a 330 (más lejos de lo que llega la chispa: ni se entera), con
-# una foto con las chispas saliendo (captura-pistola-electrica-chispa.png) y cuenta cuántas balas gasta (una por disparo). Luego
+# electrodos del táser azul marino; casilla de 180x168, con los pies en 90,88). Como el lanza ácido, en la sala de mantenimiento,
+# Johnny la compra en la tienda de armas del ordenador (captura-pistola-electrica-tienda.png, con ella marcada) y cuenta su hoja, su
+# ritmo, su alcance, sus pies, su boca hacia el este y que ya no le salen chispitas de adorno; dispara a un zombi a 120 a su
+# izquierda (le quita vida y lo aturde), con otro cerca de él (la descarga salta y lo aturde también) y otro a 330 (más lejos de lo
+# que llega la chispa: ni se entera), con una foto con las chispas saliendo (captura-pistola-electrica-chispa.png) y cuenta cuántas
+# balas gasta (una por disparo). Las baterías: con el cargador vacío, una de la mochila lo llena entero; sin ellas, no recarga; y
+# las cajas de munición no le valen. Luego
 # dispara andando (sigue andando, con los efectos del disparo pintados encima y el retroceso) y en las 8 direcciones, con una foto de
 # cada una a los 0,09 s, con la descarga ya saliendo (captura-pistola-electrica-<dirección>.png): lo dibujado y las chispas del
 # juego tienen que salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
 # (captura-pistola-electrica-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_pistola_electrica() -> void:
 	var antes := Guardado.cargar()
-	var vieja := Recetas.crear("pistola_electrica", "azul")
-	vieja.icono = "bateria"   # como las que se crearon antes de que la pistola eléctrica tuviera icono propio
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = [vieja, Recetas.crear("pistola_electrica", "morada")]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
 		g2.skin = "")
 	johnny.vestir("")
-	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
-	johnny.direccion = "n"
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.5).timeout
-	print("Baúl: abierto %s · iconos %s (esperado: true, [\"pistola_electrica\", \"pistola_electrica\"]) · en el banco «%s» (esperado: pistola_electrica)" % [
-		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
-		Recetas.icono_de("pistola_electrica")])
-	Captura.foto("captura-pistola-electrica-baul.png")
-	inventario.cerrar()
-	await get_tree().process_frame
+	await comprar_en_tienda("pistola_electrica", "captura-pistola-electrica-tienda.png")
 
-	# sacada del baúl: su hoja, su boca y sin chispitas de adorno
-	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
-	johnny.coger(id)
+	# comprada: su hoja, su boca y sin chispitas de adorno
+	var id := "pistola_electrica"
 	var w := Armas.datos(id)
 	johnny.position = Vector2(690, 300)   # (en el despacho)
 	johnny.direccion = "e"
@@ -3461,6 +3418,22 @@ func probar_pistola_electrica() -> void:
 	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
 	zombis_de_prueba([])
 	await get_tree().create_timer(0.3).timeout
+
+	# las baterías: con el cargador vacío y una batería en la mochila, la recarga la gasta y lo llena entero; sin
+	# baterías no recarga; y las cajas de munición no le valen
+	while "bateria" in mochila:
+		mochila.erase("bateria")
+	mochila.append("bateria")
+	johnny.balas = 0
+	johnny.empezar_recarga()
+	await get_tree().create_timer(w.recarga + 0.2).timeout
+	print("Recarga con una batería: cargador %d de %d · baterías %d · gasta «%s» · la caja es para «%s» (esperado: 30 de 30, 0, Batería, pistola: la de repuesto, a la eléctrica no le vale)" % [
+		johnny.balas, w.cargador, mochila.count("bateria"), Armas.MUNICION[Armas.municion(id)].nombre, johnny.arma_de_caja()])
+	johnny.balas = 0
+	johnny.empezar_recarga()
+	print("Sin baterías: recargando %s · el aviso «%s» (esperado: false, ¡Sin batería!)" % [johnny.recargando > 0.0,
+		Armas.MUNICION[Armas.municion(id)].sin])
+	johnny.balas = w.cargador
 
 	# disparar andando: sigue andando (sin el gesto entero), con los efectos del disparo pintados encima y el retroceso
 	johnny.direccion = "e"
@@ -3493,15 +3466,15 @@ func probar_pistola_electrica() -> void:
 		await get_tree().create_timer(0.6).timeout
 
 	Guardado.cambiar(func(g2):
-		g2.baul_armas = antes.baul_armas
+		g2.dolares = antes.dolares
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
 
 
 # Con "--captura --baul": guardar a mano en el baúl lo de la mochila (ui/inventario.gd, «Guardar de la mochila»).
-# En la sala de mantenimiento, con dos clavos en el baúl y en la mochila gasolina, clavos, vendas, spray y
-# lejía, Johnny se arrima al baúl y cuenta en la terminal: que se abre, que se ve la mochila, que guardar una casilla
+# En la sala de mantenimiento, con dos trapos en el baúl y en la mochila gasolina, un trapo, vendas, alcohol y
+# despertadores, Johnny se arrima al baúl y cuenta en la terminal: que se abre, que se ve la mochila, que guardar una casilla
 # mete todos los de esa casilla (y salen de la mochila), que las vendas no se guardan, que con el baúl lleno solo
 # caben más de lo que ya tiene (y lo que dice «Guardar todo» de lo que no cabe), y que con sitio «Guardar todo» lo
 # mete todo menos lo de curar. Cada línea dice lo esperado. Saca captura-baul-mochila.png (la mochila en la ventana
@@ -3510,10 +3483,10 @@ func probar_pistola_electrica() -> void:
 func probar_baul() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):
-		g2.baul = {"clavos": 2}
+		g2.baul = {"trapo": 2}
 		g2.baul_armas = [])
 	mochila.clear()
-	mochila.append_array(["gasolina", "gasolina", "clavos", "vendas", "spray", "lejia", "lejia", "lejia"])
+	mochila.append_array(["gasolina", "gasolina", "trapo", "vendas", "alcohol", "despertador", "despertador", "despertador"])
 	var marca := func() -> String:   # el botón o la casilla marcada (la del mando y las flechas)
 		var f := get_viewport().gui_get_focus_owner()
 		return String(f.name) if f else "-"
@@ -3538,7 +3511,7 @@ func probar_baul() -> void:
 	await get_tree().process_frame
 	print("La mochila en el baúl: %d casillas, la marca en «%s» (esperado: 5, m0) · «Guardar todo» %s (esperado: activo) · dice «%s»" % [
 		Objetos.casillas(mochila, true).size(), marca.call(), boton.call("guardar_todo"), dice.call()])
-	# las casillas: m0 gasolina × 2, m1 clavos, m2 vendas, m3 spray, m4 lejía × 3
+	# las casillas: m0 gasolina × 2, m1 trapo, m2 vendas, m3 alcohol, m4 despertador × 3
 	inventario.tocar("m0")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-baul-mochila.png")
@@ -3547,41 +3520,41 @@ func probar_baul() -> void:
 	inventario.guardar()
 	await get_tree().process_frame
 	var g := Guardado.cargar()
-	print("Guardada la gasolina: en el baúl %d, en la mochila %d (esperado: 2, 0) · los clavos del baúl %d (esperado: 2, no se tocan) · la marca en «%s» (esperado: m0, ahora los clavos)" % [
-		g.baul.get("gasolina", 0), mochila.count("gasolina"), g.baul.get("clavos", 0), marca.call()])
-	# ahora: m0 clavos, m1 vendas, m2 spray, m3 lejía × 3
+	print("Guardada la gasolina: en el baúl %d, en la mochila %d (esperado: 2, 0) · los trapos del baúl %d (esperado: 2, no se tocan) · la marca en «%s» (esperado: m0, ahora el trapo)" % [
+		g.baul.get("gasolina", 0), mochila.count("gasolina"), g.baul.get("trapo", 0), marca.call()])
+	# ahora: m0 trapo, m1 vendas, m2 alcohol, m3 despertador × 3
 	inventario.tocar("m1")
 	await get_tree().process_frame
 	print("Elegidas las vendas: «Guardar» %s (esperado: no está) · dice «%s»" % [boton.call("guardar"), dice.call()])
 	inventario.guardar()
 	print("Guardar las vendas igualmente: en la mochila %d, en el baúl %d (esperado: 1, 0)" % [mochila.count("vendas"),
 		Guardado.cargar().baul.get("vendas", 0)])
-	# el baúl lleno: los objetos que faltan (menos el spray y la lejía) y 16 armas, 32 casillas
+	# el baúl lleno: los objetos que faltan (menos el alcohol y el despertador) y armas hasta las 32 casillas
 	Guardado.cambiar(func(g2):
 		for id in Objetos.NOMBRES:
-			if Objetos.al_baul(id) and not id in ["spray", "lejia"] and not id in g2.baul:
+			if Objetos.al_baul(id) and not id in ["alcohol", "despertador"] and not id in g2.baul:
 				g2.baul[id] = 1
-		for i in 16:
-			g2.baul_armas.append(Recetas.crear("molotov")))
+		while Objetos.casillas_baul(g2) < Objetos.BAUL:
+			g2.baul_armas.append(Recetas.crear("atraedora")))
 	inventario.tocar("m2")
 	await get_tree().process_frame
-	print("Baúl lleno (%d / %d, esperado: 32 / 32) · elegido el spray: «Guardar» %s, la marca en «%s» (esperado: apagado, m2) · dice «%s»" % [
+	print("Baúl lleno (%d / %d, esperado: 32 / 32) · elegido el alcohol: «Guardar» %s, la marca en «%s» (esperado: apagado, m2) · dice «%s»" % [
 		Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL, boton.call("guardar"), marca.call(), dice.call()])
 	inventario.guardar_todo()
 	await get_tree().process_frame
 	g = Guardado.cargar()
-	print("«Guardar todo» con el baúl lleno: clavos en el baúl %d, en la mochila %d (esperado: 3, 0: ya los tenía) · se quedan spray %d y lejía %d (esperado: 1, 3) · baúl %d / %d · dice «%s»" % [
-		g.baul.get("clavos", 0), mochila.count("clavos"), mochila.count("spray"), mochila.count("lejia"),
+	print("«Guardar todo» con el baúl lleno: trapos en el baúl %d, en la mochila %d (esperado: 3, 0: ya los tenía) · se quedan alcohol %d y despertadores %d (esperado: 1, 3) · baúl %d / %d · dice «%s»" % [
+		g.baul.get("trapo", 0), mochila.count("trapo"), mochila.count("alcohol"), mochila.count("despertador"),
 		Objetos.casillas_baul(g), Objetos.BAUL, dice.call()])
 	# con sitio: fuera las armas y los objetos de relleno
 	Guardado.cambiar(func(g2):
-		g2.baul = {"clavos": 3, "gasolina": 2}
-		g2.baul_armas = [Recetas.crear("lanzallamas", "azul")])
+		g2.baul = {"trapo": 3, "gasolina": 2}
+		g2.baul_armas = [Recetas.crear("atraedora", "azul")])
 	inventario.pintar()
 	inventario.guardar_todo()
 	await get_tree().process_frame
 	g = Guardado.cargar()
-	print("«Guardar todo» con sitio: mochila %s (esperado: [\"vendas\"]) · baúl %s (esperado: clavos 3, gasolina 2, spray 1, lejia 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, ver_baul)" % [
+	print("«Guardar todo» con sitio: mochila %s (esperado: [\"vendas\"]) · baúl %s (esperado: trapo 3, gasolina 2, alcohol 1, despertador 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, ver_baul)" % [
 		mochila, g.baul, boton.call("guardar_todo"), marca.call()])
 	inventario.ver_mochila(false)
 	await get_tree().create_timer(0.3).timeout
@@ -3598,19 +3571,18 @@ func probar_baul() -> void:
 
 
 # Con "--captura --repuesto": Johnny lleva como mucho dos armas de cada tipo, la de la mano y la de repuesto
-# (partida.llevar_arma). Saca del baúl un lanza ácido y una pistola eléctrica (con la segunda ya llevaba dos de fuego:
-# el lanza ácido se queda en el suelo), compra en la tienda del ordenador el bate y el cuchillo (el cuchillo deja el
-# bate en el suelo) y no le deja comprar la pistola que lleva de repuesto, tira la fregona de repuesto desde el
+# (partida.llevar_arma). Compra en la tienda del ordenador un lanza ácido y una pistola eléctrica (con la segunda ya
+# llevaba dos de fuego: el lanza ácido se queda en el suelo), el bate y el cuchillo (el cuchillo deja el bate en el
+# suelo) y no le deja comprar la pistola que lleva de repuesto, tira la fregona de repuesto desde el
 # inventario y vuelve a coger el bate del suelo (va al repuesto, sin cambiarle la de la mano). Saca
-# captura-repuesto.png (el inventario con las dos de repuesto). Cada línea dice lo esperado. Deja el baúl, los
-# dólares y las armas compradas como estaban
+# captura-repuesto.png (el inventario con las dos de repuesto). Cada línea dice lo esperado. Deja los dólares y las
+# armas compradas como estaban
 func probar_repuesto() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
-		g.baul_armas = [Recetas.crear("desintegrador"), Recetas.crear("pistola_electrica")]
-		g.dolares = 100
+		g.dolares = 200
 		g.armas = [])
-	ahorrados = 100
+	ahorrados = 200
 	johnny.coger("fregona")
 	johnny.coger("pistola")
 	armas_guardadas.clear()
@@ -3624,22 +3596,17 @@ func probar_repuesto() -> void:
 		return mapa.cosas.get_children().filter(es_arma).map(func(c): return c.icono.resource_path.get_file().get_basename())
 	await get_tree().create_timer(0.5).timeout
 	print("Al empezar: %s (esperado: mano Fregona y Pistola · repuesto [])" % armas.call())
-	abrir_cosas("baul")
-	inventario.tocar("a0")
-	inventario.sacar()
-	print("Saca el lanza ácido: %s (esperado: mano Fregona y Lanza ácido · repuesto [\"Pistola\"])" % armas.call())
-	inventario.tocar("a0")
-	inventario.sacar()
-	await get_tree().process_frame
-	var dice: Label = inventario.fondo.find_child("nota", true, false)
-	print("Saca la pistola eléctrica: %s · en el suelo %s (esperado: mano Fregona y Pistola eléctrica · repuesto [\"Pistola\"] · [\"desintegrador\"]) · dice «%s»" % [
-		armas.call(), suelo.call(), dice.text])
-	inventario.cerrar()
-	await get_tree().process_frame
 	# la tienda del ordenador
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
 	ordenador.abrir("armas")
+	ordenador.comprar_arma("desintegrador")
+	await get_tree().process_frame
+	print("Compra el lanza ácido: %s (esperado: mano Fregona y Lanza ácido · repuesto [\"Pistola\"])" % armas.call())
+	ordenador.comprar_arma("pistola_electrica")
+	await get_tree().process_frame
+	print("Compra la pistola eléctrica: %s · en el suelo %s (esperado: mano Fregona y Pistola eléctrica · repuesto [\"Pistola\"] · [\"desintegrador\"]) · dice «%s»" % [
+		armas.call(), suelo.call(), ordenador.info.text])
 	ordenador.comprar_arma("bate")
 	await get_tree().process_frame
 	print("Compra el bate: %s · dice «%s» (esperado: mano Bate y Pistola eléctrica · repuesto [\"Pistola\", \"Fregona\"] · la fregona pasa al repuesto)" % [
@@ -3676,7 +3643,6 @@ func probar_repuesto() -> void:
 	Captura.foto("captura-repuesto.png")
 	inventario.cerrar()
 	Guardado.cambiar(func(g):
-		g.baul_armas = antes.baul_armas
 		g.dolares = antes.dolares
 		g.armas = antes.armas)
 	get_tree().quit()
@@ -3713,12 +3679,12 @@ func probar_municion() -> void:
 	johnny.coger("escopeta")
 	print("Coge la escopeta: %s · sin munición diría «%s» (esperado: balas 24, balas 24, balas 6, cartuchos 12 · ¡Sin cartuchos!)" % [
 		huecos.call(), Armas.MUNICION[Armas.municion(johnny.huecos.fuego)].sin])
-	mochila.append_array(["gasolina", "gasolina", "gasolina", "gasolina", "bidon_acido", "clavos"])
-	print("Con 4 gasolinas, un bidón de ácido y unos clavos: %s · mochila %s (esperado: balas 24, balas 24, balas 6, cartuchos 12, gasolina 3, gasolina 1, bidon_acido 1 · [[\"clavos\", 1]])" % [
+	mochila.append_array(["gasolina", "gasolina", "gasolina", "gasolina", "bidon_acido", "trapo"])
+	print("Con 4 gasolinas, un bidón de ácido y un trapo: %s · mochila %s (esperado: balas 24, balas 24, balas 6, cartuchos 12, gasolina 3, gasolina 1, bidon_acido 1 · [[\"trapo\", 1]])" % [
 		huecos.call(), Objetos.casillas(mochila)])
 	# con el lanzallamas en la mano (no gasta balas), la caja es para la de repuesto
-	llevar_arma(Armas.apuntar(Recetas.crear("lanzallamas", "verde")))
-	print("Saca el lanzallamas: mano %s · repuesto %s · la caja es para la %s (esperado: Lanzallamas · [\"escopeta\"] · escopeta)" % [
+	llevar_arma("lanzallamas")
+	print("Coge el lanzallamas: mano %s · repuesto %s · la caja es para la %s (esperado: Lanzallamas · [\"escopeta\"] · escopeta)" % [
 		Objetos.nombre(johnny.huecos.fuego), armas_guardadas, johnny.arma_de_caja()])
 	johnny.sumar_municion()
 	print("Coge una caja: cartuchos %d · huecos %d / 8 (esperado: 18 · 8)" % [johnny.cuanta("cartuchos"), johnny.huecos_municion().size()])
@@ -3747,26 +3713,23 @@ func probar_municion() -> void:
 	var arrojables := func() -> String:
 		return "a mano %s (lanza %s) · repuesto %s" % [lz.mano, lz.tipo, lz.repuesto]
 	print("Arrojables al empezar: %s (esperado: a mano [\"molotov\", \"granada\"] (lanza molotov) · repuesto [])" % arrojables.call())
-	var molotovs := lz.cuantas("molotov")
-	for receta in ["atraedora", "congeladora", "lluvia_acida", "molotov"]:
+	for receta in ["atraedora", "congeladora"]:
 		lz.sacar(Recetas.crear(receta, "verde"))
-	print("Saca una atraedora, una congeladora, una lluvia ácida y un cóctel: %s · molotovs %d → %d (esperado: a mano [molotov, granada, atraedora] · repuesto [congeladora, lluvia_acida] · 3 más)" % [
-		arrojables.call(), molotovs, lz.cuantas("molotov")])
+	print("Saca una atraedora y una congeladora: %s (esperado: a mano [molotov, granada, atraedora] · repuesto [congeladora])" % arrojables.call())
 	lz.tipo = "granada"
 	johnny.invulnerable = 2.6   # (por si alguna rebota hacia él)
 	while lz.cuantas("granada") > 0:
 		lz.lanzar(johnny.global_position + Vector2(-280, 60))
-	print("Lanza todas las granadas: %s (esperado: a mano [molotov, congeladora, atraedora] (lanza congeladora) · repuesto [lluvia_acida]: la congeladora ocupa su hueco)" % arrojables.call())
+	print("Lanza todas las granadas: %s (esperado: a mano [molotov, congeladora, atraedora] (lanza congeladora) · repuesto []: la congeladora ocupa su hueco)" % arrojables.call())
 	await get_tree().create_timer(2.8).timeout   # (que exploten antes de las fotos)
 	var vistos := [lz.tipo]
 	for _i in 3:
 		lz.cambiar()
 		vistos.append(lz.tipo)
 	print("F tres veces: %s (esperado: congeladora → atraedora → molotov → congeladora)" % " → ".join(vistos))
-	lz.a_la_mano("lluvia_acida")
-	print("Pone a mano la lluvia ácida: %s (esperado: a mano [molotov, lluvia_acida, atraedora] (lanza lluvia_acida) · repuesto [congeladora]: cambia por la que lanzaba)" % arrojables.call())
 	lz.al_repuesto("atraedora")
-	print("Guarda la atraedora: %s (esperado: a mano [molotov, lluvia_acida] (lanza lluvia_acida) · repuesto [congeladora, atraedora])" % arrojables.call())
+	print("Guarda la atraedora: %s (esperado: a mano [molotov, congeladora] (lanza congeladora) · repuesto [atraedora])" % arrojables.call())
+	lz.cantidades.molotov = lz.maximo("molotov")
 	print("Un molotov del suelo con %d de %d: ¿lo coge? %s (esperado: false, ya tiene el máximo)" % [lz.cuantas("molotov"),
 		lz.maximo("molotov"), lz.cabe("molotov")])
 	await get_tree().create_timer(0.3).timeout
@@ -3778,12 +3741,12 @@ func probar_municion() -> void:
 	await get_tree().create_timer(0.2).timeout
 	Captura.foto("captura-municion-arrojables.png")
 	inventario.mover_lanzable()
-	print("«A la mano» con la congeladora: %s (esperado: a mano [molotov, lluvia_acida, congeladora] (lanza congeladora) · repuesto [atraedora])" % arrojables.call())
+	print("«A la mano» con la atraedora: %s (esperado: a mano [molotov, congeladora, atraedora] (lanza atraedora) · repuesto [])" % arrojables.call())
 	inventario.cerrar()
 	await get_tree().process_frame
 	abrir_cosas("baul")
 	inventario.ver_mochila(true)
-	print("En el baúl, para guardar: %s (esperado: gasolina, bidón de ácido y clavos)" % [inventario.guardables()])
+	print("En el baúl, para guardar: %s (esperado: gasolina, bidón de ácido y trapo)" % [inventario.guardables()])
 	inventario.cerrar()
 	await get_tree().process_frame
 	# el lanzallamas vacío se llena con una de las gasolinas de la munición
@@ -3800,15 +3763,15 @@ func probar_municion() -> void:
 
 # Con "--captura --inventario": la pantalla del inventario «todo a la vista» (ui/inventario.gd, parte 3 del inventario
 # nuevo), en la sala de mantenimiento y con un poco de todo: el bate y la pistola en la mano, la fregona y la escopeta de
-# repuesto, clavos, una pistola de agua, un botiquín y gasolina en la mochila, balas y cartuchos, una atraedora rara a mano
+# repuesto, trapos, una botella de alcohol, un botiquín y gasolina en la mochila, balas y cartuchos, una atraedora rara a mano
 # y una congeladora de repuesto, y la skin del bombero. Al abrir, la ficha enseña el arma de la mano; la flecha abajo
 # lleva la marca a la escopeta y la ficha la sigue; Intro salta a «Ponérmela» e Y del mando se la pone; Supr tira un
-# clavo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
-# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (una pistola eléctrica épica: nombre
-# largo, rareza y 30 balitas) y la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas
-# y el bocadillo (probar_curas) y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
+# trapo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
+# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (la pistola eléctrica: nombre largo y
+# 30 balitas) y la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas (probar_curas)
+# y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
 # Fotos: captura-inventario-nuevo.png (al abrir), captura-inventario-escopeta.png (la marca en la escopeta de
-# repuesto), captura-inventario-objeto.png (la pistola de agua, con sus recetas), captura-inventario-municion.png,
+# repuesto), captura-inventario-objeto.png (el alcohol, que ya no sirve para ninguna receta), captura-inventario-municion.png,
 # captura-inventario-arrojable.png, captura-inventario-pistola_electrica.png y captura-inventario-lanzallamas.png
 func probar_inventario() -> void:
 	var lz: Lanzables = lanzables
@@ -3824,7 +3787,7 @@ func probar_inventario() -> void:
 	llevar_arma("pistola")     # la pistola a la mano y la escopeta al repuesto
 	johnny.balas = 8
 	johnny.meter_municion("balas", 30)
-	mochila.append_array(["clavos", "clavos", "pistola_agua", "botiquin", "gasolina", "gasolina"])
+	mochila.append_array(["trapo", "trapo", "alcohol", "botiquin", "gasolina", "gasolina"])
 	lz.creadas.clear()
 	lz.mano = ["molotov", "granada"]
 	lz.repuesto = []
@@ -3857,10 +3820,10 @@ func probar_inventario() -> void:
 	var supr := InputEventKey.new()
 	supr.keycode = KEY_DELETE
 	await pulsar_evento(supr)
-	print("Supr con los clavos: mochila %s (esperado: [[\"clavos\", 1], [\"pistola_agua\", 1], [\"botiquin\", 1]])" % [Objetos.casillas(mochila)])
+	print("Supr con los trapos: mochila %s (esperado: [[\"trapo\", 1], [\"alcohol\", 1], [\"botiquin\", 1]])" % [Objetos.casillas(mochila)])
 	inv.tocar("m1")
 	await get_tree().create_timer(0.2).timeout
-	print("La pistola de agua: dice «%s»" % nota.call())
+	print("El alcohol: dice «%s» (esperado: No sirve para ninguna receta del banco...)" % nota.call())
 	Captura.foto("captura-inventario-objeto.png")
 	inv.tocar("m2")
 	await get_tree().process_frame
@@ -3888,17 +3851,17 @@ func probar_inventario() -> void:
 	Captura.foto("captura-inventario-arrojable.png")
 	await pulsar_evento(accion("ui_cancel"))
 	print("Esc: abierto «%s» · juego en pausa %s (esperado: «» · false)" % [inv.abierto, get_tree().paused])
-	# la ficha más llena: un arma creada de nombre largo, con su rareza y 30 balitas; y una de depósito
-	for receta in ["pistola_electrica", "lanzallamas"]:
-		llevar_arma(Armas.apuntar(Recetas.crear(receta, "morada")))
+	# la ficha más llena: la pistola eléctrica, de nombre largo y con 30 balitas; y una de depósito
+	for arma in ["pistola_electrica", "lanzallamas"]:
+		llevar_arma(arma)
 		abrir_cosas("inventario")
 		await get_tree().create_timer(0.3).timeout
 		print("%s en la mano: elegida %s · dice «%s» (esperado: p1)" % [Objetos.nombre(johnny.huecos.fuego), inv.sel, nota.call()])
-		Captura.foto("captura-inventario-%s.png" % receta)
+		Captura.foto("captura-inventario-%s.png" % arma)
 		inv.cerrar()
 		await get_tree().process_frame
 	johnny.skin = skin_antes
-	# y las otras pruebas que usan el inventario (sin la prueba larga): las vendas y el bocadillo, y el botiquín
+	# y las otras pruebas que usan el inventario (sin la prueba larga): las vendas y el botiquín
 	await probar_curas()
 	await supervivientes.probar_botiquin()
 	get_tree().quit()
@@ -3964,7 +3927,7 @@ func probar_municion_suelo() -> void:
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-municion-suelo-inventario.png")
 	inventario.cerrar()
-	llevar_arma(Armas.apuntar(Recetas.crear("lanzallamas", "verde")))
+	llevar_arma("lanzallamas")
 	await get_tree().create_timer(0.5).timeout
 	Captura.foto("captura-municion-suelo-hud.png")
 	get_tree().quit()
@@ -4020,7 +3983,7 @@ func probar_ascensor() -> void:
 	Captura.foto("captura-ascensor-arreglado.png")
 	# con cosas en la mochila, abajo
 	mochila.clear()
-	mochila.append_array(["gasolina", "gasolina", "clavos"])
+	mochila.append_array(["gasolina", "gasolina", "trapo"])
 	Guardado.cambiar(func(g2):
 		g2.baul = {}
 		g2.baul_armas = [])
@@ -4045,8 +4008,8 @@ func probar_ascensor() -> void:
 		await get_tree().create_timer(0.3).timeout
 		Captura.foto("captura-ascensor-baul.png")
 	var g := Guardado.cargar()
-	print("Baúl: abierto %s · guardado gasolina %d, clavos %d · en la mochila %d (esperado: true, 2, 1, 0)" % [
-		abierto, g.baul.get("gasolina", 0), g.baul.get("clavos", 0), mochila.size()])
+	print("Baúl: abierto %s · guardado gasolina %d, trapo %d · en la mochila %d (esperado: true, 2, 1, 0)" % [
+		abierto, g.baul.get("gasolina", 0), g.baul.get("trapo", 0), mochila.size()])
 	inventario.cerrar()
 	await get_tree().process_frame
 	# y de vuelta: la puerta de la sala lleva al ascensor de la 1ª planta
@@ -4133,9 +4096,9 @@ func probar_joyeria() -> void:
 	await get_tree().create_timer(0.6, false).timeout
 	print("Cogido: %s · manos %s → %s · guardadas %s · dólares %d → %d · molotovs %d → %d · dice «%s»" % [d.premio.cogido,
 		manos_antes, johnny.huecos, armas_guardadas, dolares_antes, dolares, molotovs_antes, lanzables.cantidades.molotov, aviso.text])
-	# si solo se sabe el molotov, el premio es un cóctel morado (la segunda apertura, más abajo, lo enseña)
+	# si no se sabe ninguna receta, el premio es de una cualquiera (la segunda apertura, más abajo, lo enseña)
 	var recetas_antes: Array = Guardado.cargar().recetas.duplicate()
-	Guardado.cambiar(func(g): g.recetas = ["molotov"])
+	Guardado.cambiar(func(g): g.recetas = [])
 	d.erase("premio")
 	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya
 	await montar(0, 0, false)
@@ -4160,7 +4123,7 @@ func probar_joyeria() -> void:
 	joyeria.mirar_lector()
 	print("Con la tarjeta dorada: abierta %s · alarma %s · dorada %s · dice «%s»" % [d.abierta, joyeria.alarma(), d.dorada, aviso.text])
 	a = d.premio.arma
-	print("Premio sabiendo solo el molotov: %s (%s, %s) · fajo $%d" % [a.nombre, a.rareza, Recetas.detalle(a), d.premio.fajo])
+	print("Premio sin saber ninguna receta: %s (%s, %s) · fajo $%d (esperado: una atraedora o una congeladora, morada)" % [a.nombre, a.rareza, Recetas.detalle(a), d.premio.fajo])
 	Guardado.cambiar(func(g): g.recetas = recetas_antes)
 	get_tree().quit()
 
@@ -4757,7 +4720,7 @@ func probar_historia() -> void:
 
 
 # Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (8 objetos y los
-# explosivos, tres o cuatro armas, cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
+# explosivos, una de las dos armas, cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
 # (captura-escritorio-nuevo.png), los objetos de este edificio (captura-colecciones.png), la ficha del vecino
 # (captura-bestiario.png) y la del gerente, sin ver (captura-bestiario-falta.png). Luego cuenta en la terminal lo
 # encontrado, creado y visto de cada edificio, y comprueba los totales
@@ -4767,10 +4730,9 @@ func probar_colecciones() -> void:
 	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 8)
 	if not "explosivos" in encontrados:
 		encontrados.append("explosivos")
-	var creadas: Array = ["molotov", "lanzallamas", "atraedora"]
+	var creadas: Array = ["atraedora"]
 	var vistos: Array = ["normal", "lento", "rapido", "portera"]
 	if edificio == "centro":
-		creadas.append("bomba_clavos")
 		vistos += ["dependienta", "guardia", "antidisturbios"]
 	Guardado.cambiar(func(g):
 		g.encontrados = encontrados
@@ -4799,10 +4761,10 @@ func probar_colecciones() -> void:
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 11 or Objetos.de_edificio("centro").size() != 15:
-		push_error("Colecciones: los objetos por edificio no son 11 y 15")
-	if Recetas.de_edificio("apartamentos").size() != 6 or Recetas.de_edificio("centro").size() != 5:
-		push_error("Colecciones: las recetas por edificio no son 6 y 5")
+	if Objetos.de_edificio("apartamentos").size() != 8 or Objetos.de_edificio("centro").size() != 8:
+		push_error("Colecciones: los objetos por edificio no son 8 y 8")
+	if Recetas.de_edificio("apartamentos").size() != 2 or Recetas.de_edificio("centro").size() != 0:
+		push_error("Colecciones: las recetas por edificio no son 2 y 0")
 	if Bestiario.LISTA.size() != 22:
 		push_error("Colecciones: el bestiario no tiene 22 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
@@ -4842,40 +4804,48 @@ func probar_noticias() -> void:
 	ordenador.apagar()
 
 
-# Con "--captura --banco": una lanza, un súpersoplete, un bumerán, el garfio y las nueve de cuerpo a cuerpo creados antes de
-# quitarlos del juego (25 oct) en el guardado, en el baúl, en las recetas aprendidas y en las creadas (Colecciones), y unos
-# mecheros, llaves inglesas, hachas, cuchillas, táseres, cuerdas, mancuernas, cadenas, perchas, hielo seco y cables
-# (también quitados) en el baúl y en los encontrados (Colecciones): al cargar desaparecen de todo (guardado.gd); la
-# pistola eléctrica, que sigue, se queda. Luego, el baúl abierto con lo que queda
-# (captura-banco-baul.png), la mochila, el banco y el baúl (probar_cosas), las recetas nuevas (probar_recetas) y las
-# Colecciones (probar_colecciones). Cada línea dice lo esperado y se cierra
+# Con "--captura --banco": las armas creadas que se quitaron del juego (25 oct: la lanza, el súpersoplete, el bumerán,
+# el garfio, las nueve de cuerpo a cuerpo, el cóctel molotov, la lluvia ácida, las cuatro arrojadizas del centro
+# comercial, y el lanzallamas, el lanza ácido y la pistola eléctrica, que ahora se compran) en el guardado, en el baúl,
+# en las recetas aprendidas y en las creadas (Colecciones), y los objetos quitados (los de las armas de cuerpo a cuerpo
+# y los clavos, el spray, la lejía, la pistola de agua, la cinta americana, la bombona, la jeringuilla, el aceite y el
+# bocadillo) en el baúl y en los encontrados (Colecciones): al cargar desaparecen de todo (guardado.gd); la atraedora y
+# el trapo, que siguen, se quedan. Luego, el baúl abierto con lo que queda (captura-banco-baul.png), la mochila, el
+# banco y el baúl (probar_cosas), las recetas (probar_recetas) y las Colecciones (probar_colecciones). Cada línea dice
+# lo esperado y se cierra
 func probar_banco() -> void:
 	var s := Guardado.cargar()
 	var viejas := {"lanza": "Lanza", "supersoplete": "Súpersoplete", "bumeran": "Bumerán segador", "garfio": "Garfio",
 		"aplastacabezas": "Aplastacabezas", "bate_fuego": "Bate de fuego", "partecuerpos": "Partecuerpos",
 		"inmovilizadora": "Inmovilizadora", "latigo": "Látigo escorpión", "supermaza": "Súper maza", "mangual": "Mangual",
-		"bate_helado": "Bate helado", "latigo_electrico": "Látigo eléctrico"}
+		"bate_helado": "Bate helado", "latigo_electrico": "Látigo eléctrico", "molotov": "Cóctel molotov",
+		"lluvia_acida": "Lluvia ácida", "bomba_aceite": "Bomba de aceite", "mina_despertador": "Mina despertador",
+		"nube_somnifera": "Nube somnífera", "bomba_clavos": "Bomba de clavos", "lanzallamas": "Lanzallamas",
+		"desintegrador": "Lanza ácido", "pistola_electrica": "Pistola eléctrica"}
 	s.baul_armas = []
 	for id in viejas:
-		var vieja := Recetas.crear("molotov", "azul")
+		var vieja := Recetas.crear("atraedora", "azul")
 		vieja.receta = id   # como las que se crearon cuando estaba en el juego
 		vieja.nombre = viejas[id]
 		vieja.icono = id
 		s.baul_armas.append(vieja)
-	s.baul_armas.append(Recetas.crear("pistola_electrica", "verde"))
-	s.recetas = ["molotov"] + viejas.keys() + ["pistola_electrica"]
-	s.creadas = viejas.keys() + ["pistola_electrica"]
+	s.baul_armas.append(Recetas.crear("atraedora", "verde"))
+	s.recetas = viejas.keys() + ["atraedora"]
+	s.creadas = viejas.keys() + ["atraedora"]
 	var quitados := ["mechero", "llave_inglesa", "hacha", "cuchillas", "taser", "cuerda", "mancuernas", "cadena", "perchas",
-		"hielo_seco", "cable"]
-	s.baul = {"clavos": 1}
+		"hielo_seco", "cable", "clavos", "spray", "lejia", "pistola_agua", "cinta_americana", "bombona", "jeringuilla",
+		"aceite", "bocadillo"]
+	s.baul = {"trapo": 1}
 	for id in quitados:
 		s.baul[id] = 2
-	s.encontrados = quitados + ["clavos"]
+	s.encontrados = quitados + ["trapo"]
 	Guardado.escribir(s)
 	var leido := Guardado.cargar()
-	print("Las 13 armas quitadas, viejas, al cargar: baúl %s · aprendidas %s · creadas %s (esperado: [\"pistola_electrica\"], [\"molotov\", \"pistola_electrica\"], [\"pistola_electrica\"])" % [
-		leido.baul_armas.map(func(a): return a.receta), leido.recetas, leido.creadas])
-	print("Los 11 objetos quitados, viejos, al cargar: baúl %s · encontrados %s (esperado: { \"clavos\": 1 }, [\"clavos\"])" % [leido.baul, leido.encontrados])
+	print("Las %d armas quitadas, viejas, al cargar: baúl %s · aprendidas %s · creadas %s (esperado: [\"atraedora\"], [\"atraedora\"], [\"atraedora\"])" % [
+		viejas.size(), leido.baul_armas.map(func(a): return a.receta), leido.recetas, leido.creadas])
+	print("Los %d objetos quitados, viejos, al cargar: baúl %s · encontrados %s (esperado: { \"trapo\": 1 }, [\"trapo\"])" % [
+		quitados.size(), leido.baul, leido.encontrados])
+	print("Un guardado nuevo sabe de serie: %s (esperado: [])" % [Guardado.NUEVO.recetas])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco-baul.png")
@@ -4893,12 +4863,12 @@ func probar_banco() -> void:
 func probar_cosas() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 20
-		g.baul = {"clavos": 1, "lejia": 2}
+		g.baul = {"trapo": 1, "extintor": 2}
 		g.baul_armas = []
-		g.recetas = ["molotov", "lanzallamas", "lluvia_acida"])
+		g.recetas = ["atraedora"])
 	ahorrados = 20
-	mochila = ["gasolina", "gasolina", "pistola_agua", "trapo", "despertador"]
-	soltar_objeto("spray", johnny.position + Vector2(30, 0))
+	mochila = ["gasolina", "gasolina", "explosivos", "trapo", "despertador"]
+	soltar_objeto("alcohol", johnny.position + Vector2(30, 0))
 	await get_tree().create_timer(0.6).timeout
 	abrir_ordenador()
 	ordenador.abrir("armas")
@@ -4911,15 +4881,15 @@ func probar_cosas() -> void:
 	Captura.foto("captura-inventario.png")
 	inventario.cerrar()
 	abrir_cosas("banco")
-	inventario.tocar("r_lanzallamas")   # la pistola de agua y una gasolina de la mochila
+	inventario.tocar("r_atraedora")   # los explosivos y el despertador de la mochila
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco.png")
 	inventario.crear_arma()
-	inventario.tocar("r_desintegrador")   # tiene la lejía del baúl, pero no la receta (ni ya la pistola de agua): no hace nada
+	inventario.tocar("r_congeladora")   # tiene los extintores del baúl, pero no la receta (ni ya los explosivos): no hace nada
 	inventario.crear_arma()
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco2.png")
-	print("Banco: creadas %s (solo el lanzallamas)" % Guardado.cargar().baul_armas.map(func(a): return a.receta))
+	print("Banco: creadas %s (solo la atraedora)" % Guardado.cargar().baul_armas.map(func(a): return a.receta))
 	inventario.cerrar()
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
@@ -4930,22 +4900,23 @@ func probar_cosas() -> void:
 		johnny.huecos.cuerpo, g.baul, g.baul_armas.map(func(a): return "%s %s %d" % [a.nombre, a.rareza, a.dano])])
 
 
-# Las armas creadas (fase 7b2): saca cuatro del baúl, dispara la pistola eléctrica, se pone el lanza ácido desde el
-# inventario y dispara, y lanza la congeladora. Cuenta lo que pasa y hace una foto
+# Las armas creadas (fase 7b2) y las de efecto de la tienda: saca dos arrojadizas del baúl, lleva el lanza ácido y la
+# pistola eléctrica, dispara la pistola eléctrica, se pone el lanza ácido desde el inventario y dispara, y lanza la
+# congeladora. Cuenta lo que pasa y hace una foto
 func probar_creadas() -> void:
-	Guardado.cambiar(func(g): g.baul_armas = [Recetas.crear("desintegrador"), Recetas.crear("pistola_electrica", "morada"),
-		Recetas.crear("congeladora"), Recetas.crear("molotov")])
-	var molotovs: int = lanzables.cantidades.molotov
+	Guardado.cambiar(func(g): g.baul_armas = [Recetas.crear("congeladora"), Recetas.crear("atraedora", "morada")])
 	abrir_cosas("baul")
-	for i in 4:
+	for i in 2:
 		inventario.tocar("a0")
 		inventario.sacar()
-		if i == 0:   # dos de fuego como mucho (partida.llevar_arma): se deja la de repuesto, para que el lanza ácido pase a serlo
-			armas_guardadas.assign(armas_guardadas.filter(func(id): return Armas.datos(id).tipo != "fuego"))
 	inventario.cerrar()
-	print("Creadas sacadas: mano %s | guardadas %s | molotovs %d -> %d | lanzables %s | baúl %d" % [
+	llevar_arma("desintegrador")
+	# dos de fuego como mucho (partida.llevar_arma): se deja la de repuesto, para que el lanza ácido pase a serlo
+	armas_guardadas.assign(armas_guardadas.filter(func(id): return Armas.datos(id).tipo != "fuego"))
+	llevar_arma("pistola_electrica")
+	print("Creadas sacadas: mano %s | guardadas %s | lanzables %s | baúl %d" % [
 		[Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego)], armas_guardadas.map(Objetos.nombre),
-		molotovs, lanzables.cantidades.molotov, lanzables.tipos(), Guardado.cargar().baul_armas.size()])
+		lanzables.tipos(), Guardado.cargar().baul_armas.size()])
 	johnny.direccion = "e"
 	johnny.sostener("fuego")
 	var z1 := meter_zombi("lento", johnny.position + Vector2(80, 0))
@@ -4982,7 +4953,8 @@ func probar_creadas() -> void:
 
 # El reparto de objetos (parte 6 del centro comercial): cuenta qué sale en cada sitio de los dos edificios y
 # comprueba que las cosas de casa no salen en el centro ni las del centro en los Apartamentos. Luego deja en el
-# suelo los nueve nuevos, mete uno de cada objeto en el baúl (lo de la tecla U) y hace fotos del banco y del baúl
+# suelo los del centro (SOLO_CENTRO), mete uno de cada objeto en el baúl (lo de la tecla U) y hace fotos del banco y
+# del baúl
 func probar_objetos() -> void:
 	var fallos := []
 	for ed_id in ["apartamentos", "centro"]:
@@ -5009,7 +4981,7 @@ func probar_objetos() -> void:
 	var baul_antes: Dictionary = Guardado.cargar().baul
 	dar_objetos()
 	abrir_cosas("banco")
-	inventario.tocar("r_pistola_electrica")
+	inventario.tocar("r_atraedora")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco-todo.png")
 	inventario.cerrar()
@@ -5024,29 +4996,30 @@ func probar_objetos() -> void:
 
 # Las recetas que sueltan los jefes: sabiendo todas menos dos, suelta tres (la tercera ya no sale: las dos que
 # quedan están en el suelo), foto del papel en el suelo, lo coge y foto del aviso
-# Los objetos de curar de las tiendas (parte 9: las vendas y el bocadillo, Objetos.USABLES): con la vida baja y los
-# dos en la mochila, saca el inventario con las vendas elegidas (captura-vendas.png) y usa cada uno, contando la
-# vida antes y después; luego dice dónde salen, que no entran en recetas y cuántos objetos cuenta Colecciones
+# Los objetos de curar de las tiendas (parte 9: las vendas, Objetos.USABLES; el bocadillo se quitó del juego el 25
+# oct): con la vida baja y las vendas en la mochila, saca el inventario con ellas elegidas (captura-vendas.png) y las
+# usa, contando la vida antes y después; luego dice dónde salen, que no entran en recetas y cuántos objetos cuenta
+# Colecciones
 func probar_curas() -> void:
 	var antes := [mochila.duplicate(), johnny.vida]
-	mochila = ["vendas", "bocadillo", "clavos"]
+	mochila = ["vendas", "trapo"]
 	johnny.vida = roundi(johnny.vida_tope() * 0.4)
 	abrir_cosas("inventario")
 	inventario.tocar("m0")
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	Captura.foto("captura-vendas.png")
-	for id in ["vendas", "bocadillo"]:
+	for id in ["vendas"]:
 		var v: int = johnny.vida
 		if inventario.abierto == "":
 			abrir_cosas("inventario")
 		if inventario.elegido() != id:
-			inventario.tocar("m0")   # el primero de la mochila: primero las vendas y, gastadas, el bocadillo
+			inventario.tocar("m0")   # el primero de la mochila: las vendas
 		inventario.usar()
 		print("%s: vida %d -> %d (cura %d) | mochila %s | cerrado %s" % [Objetos.nombre(id), v, johnny.vida, cura_de(id),
 			mochila, inventario.abierto == ""])
-	print("Curas · en alguna receta: %s · dónde salen: vendas en %s, bocadillo en %s · Colecciones del centro: %d objetos" % [
-		Recetas.LISTA.values().any(func(r): return "vendas" in r.con or "bocadillo" in r.con),
-		Objetos.donde("vendas", "centro"), Objetos.donde("bocadillo", "centro"), Objetos.de_edificio("centro").size()])
+	print("Curas · en alguna receta: %s · dónde salen las vendas: %s · Colecciones del centro: %d objetos (esperado: false, Supermercado y farmacia, 8)" % [
+		Recetas.LISTA.values().any(func(r): return "vendas" in r.con), Objetos.donde("vendas", "centro"),
+		Objetos.de_edificio("centro").size()])
 	if inventario.abierto != "":
 		inventario.cerrar()   # por si alguno no se ha podido usar: que no se quede el juego en pausa
 	mochila = antes[0]
@@ -5054,7 +5027,7 @@ func probar_curas() -> void:
 
 
 func probar_soltar_recetas() -> void:
-	var faltan := ["nube_somnifera", "bomba_clavos"]
+	var faltan := ["atraedora", "congeladora"]
 	Guardado.cambiar(func(g): g.recetas = Recetas.LISTA.keys().filter(func(r): return not r in faltan))
 	var donde: Vector2 = johnny.position + Vector2(220, 0)
 	var soltadas := [soltar_receta(donde), soltar_receta(donde), soltar_receta(donde)]
@@ -5074,79 +5047,21 @@ func probar_soltar_recetas() -> void:
 		Recetas.sabidas(Guardado.cargar()).size(), Recetas.LISTA.size(), recetas_en_suelo, soltar_receta(donde)])
 
 
-# Las armas de las recetas nuevas (parte 6 del centro comercial): comprueba que las cinco recetas salen en el banco
-# y prueba cada arma contra zombis lentos de 500 de vida (que no muera ninguno), contando en la terminal lo que pasa
-# y con una foto de cada una: captura-arma-<receta>.png
+# Las recetas del banco: las dos que quedan (la atraedora y la congeladora) se encuentran en el banco, y ninguna de las
+# quitadas el 25 oct sigue ni en el banco ni entre las arrojadizas; el lanzallamas, el lanza ácido y la pistola eléctrica
+# ya no se crean: se venden en la tienda de armas. Lo cuenta en la terminal
 func probar_recetas() -> void:
-	var nuevas := ["pistola_electrica", "bomba_aceite", "mina_despertador", "nube_somnifera", "bomba_clavos"]
-	print("Recetas nuevas en el banco: ", nuevas.all(func(r): return Recetas.buscar(Recetas.LISTA[r].con[1], Recetas.LISTA[r].con[0]) == r))
-	# en medio del cuarto, mirando a la derecha, y sin atacar por su cuenta (aquí ataca la prueba)
-	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
-	johnny.get_node("Camara").reset_smoothing()
-	johnny.direccion = "e"
-	johnny.espera = 1000.0
-	# a distancia: las chispas de la pistola eléctrica
-	var z := zombis_de_prueba([Vector2(160, 0), Vector2(220, 40)])
-	johnny.coger(Armas.apuntar(Recetas.crear("pistola_electrica")))
-	await get_tree().create_timer(0.1).timeout
-	for i in 4:
-		johnny.disparar(0.0)
-		await get_tree().create_timer(0.08).timeout
-	await foto_arma("pistola_electrica")
-	await get_tree().create_timer(0.3).timeout
-	print("Pistola eléctrica: balas %d | aturdidos %s | vidas %s" % [johnny.balas, z.map(func(o): return snappedf(o.aturdido, 0.1)),
-		z.map(func(o): return o.vida)])
-	# arrojadizas: el aceite resbala y luego arde, la mina espera a que pase un zombi, la nube duerme y los clavos
-	z = zombis_de_prueba([Vector2(170, 0), Vector2(190, 30)])
-	for r in ["bomba_aceite", "mina_despertador", "nube_somnifera", "bomba_clavos"]:
-		lanzables.sacar(Recetas.crear(r))
-	for o in z:
-		o.aturdido = 4.0   # que se queden en el charco
-	lanzables.tipo = "bomba_aceite"
-	lanzables.lanzar(johnny.global_position + Vector2(180, 10))
-	await get_tree().create_timer(1.0).timeout
-	var aceite := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "aceite").size()
-	await foto_arma("bomba_aceite")
-	await get_tree().create_timer(2.0).timeout
-	print("Bomba de aceite: charcos de aceite %d | luego fuegos %d | zombis ardiendo %s" % [aceite,
-		get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "fuego").size(), z.map(func(o): return o.arder_t > 0.0)])
-	await foto_arma("bomba_aceite_arde")
-	z = zombis_de_prueba([])
-	lanzables.tipo = "mina_despertador"
-	lanzables.lanzar(johnny.global_position + Vector2(-170, 0))
-	await get_tree().create_timer(1.3).timeout
-	await foto_arma("mina_despertador")
-	var mina: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() == Lanzables.BOMBA)[-1]
-	var donde: Vector2 = mina.global_position - johnny.global_position
-	z = zombis_de_prueba([Vector2(-330, 0)])   # viene hacia Johnny y pasa por encima
-	for i in 40:
-		await get_tree().create_timer(0.1).timeout
-		if not is_instance_valid(mina):
-			break
-	await get_tree().create_timer(0.1).timeout
-	print("Mina despertador: en %s | ha explotado %s | el zombi que pasa, vida %d (de 500) | vida de Johnny %d" % [
-		donde.round(), not is_instance_valid(mina), z[0].vida, johnny.vida])
-	z = zombis_de_prueba([Vector2(180, 0), Vector2(200, 40), Vector2(150, -30)])
-	lanzables.tipo = "nube_somnifera"
-	lanzables.lanzar(johnny.global_position + Vector2(180, 10))
-	await get_tree().create_timer(1.9).timeout
-	await foto_arma("nube_somnifera")
-	print("Nube somnífera: dormidos %s" % [z.map(func(o): return snappedf(o.aturdido, 0.1))])
-	z = zombis_de_prueba([Vector2(120, 0), Vector2(200, 50), Vector2(80, -60)])
-	lanzables.tipo = "bomba_clavos"
-	lanzables.lanzar(johnny.global_position + Vector2(150, 0))
-	await get_tree().create_timer(2.15).timeout
-	await foto_arma("bomba_clavos")
-	await get_tree().create_timer(0.35).timeout
-	print("Bomba de clavos: vidas %s | sangran %s | quedan %s" % [z.map(func(o): return o.vida),
-		z.map(func(o): return o.has_node("herida_sangra")), lanzables.tipos()])
-	zombis_de_prueba([])
-	johnny.vida = johnny.stats.vida_max
-	johnny.espera = 0.0
+	var quitadas := ["molotov", "lluvia_acida", "bomba_aceite", "mina_despertador", "nube_somnifera", "bomba_clavos",
+		"lanzallamas", "desintegrador", "pistola_electrica"]
+	print("Recetas del banco: %s · todas se encuentran %s · de las quitadas siguen %s (esperado: [\"atraedora\", \"congeladora\"], true, [])" % [
+		Recetas.LISTA.keys(), Recetas.LISTA.keys().all(func(r): return Recetas.buscar(Recetas.LISTA[r].con[1], Recetas.LISTA[r].con[0]) == r),
+		quitadas.filter(func(r): return r in Recetas.LISTA or r in Lanzables.ARROJADIZAS)])
+	print("En la tienda de armas: %s (esperado: Lanzallamas $60, Lanza ácido $60, Pistola eléctrica $45)" % [
+		["lanzallamas", "desintegrador", "pistola_electrica"].map(func(id): return "%s $%d" % [Armas.DATOS[id].nombre, Armas.PRECIOS[id]])])
 
 
-# Para probar_recetas: quita los zombis y los charcos que haya, cura a Johnny y saca zombis lentos de 500 de vida
-# en esos sitios (respecto a Johnny)
+# Para probar_pistola_electrica: quita los zombis y los charcos que haya, cura a Johnny y saca zombis lentos de 500 de
+# vida en esos sitios (respecto a Johnny)
 func zombis_de_prueba(donde: Array) -> Array:
 	for o in get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("charcos"):
 		o.remove_from_group("zombis")
@@ -5159,13 +5074,6 @@ func zombis_de_prueba(donde: Array) -> Array:
 		lista.append(zombi)
 	return lista
 
-
-# Para probar_recetas: la foto de un arma nueva (sin el recuadro de las mutaciones, si ha salido)
-func foto_arma(nombre: String) -> void:
-	menus.visible = false
-	await get_tree().process_frame
-	Captura.foto("captura-arma-%s.png" % nombre)
-	menus.visible = true
 
 
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
@@ -5442,7 +5350,7 @@ func probar_mutado(camara: Camera2D) -> void:
 func probar_menus() -> void:
 	set_process(false)
 	# Johnny, como nuevo y sin charcos alrededor: el bombero deja el suelo ardiendo y le seguía quemando hasta
-	# dejarle en un tercio; con la vida tan baja el bocadillo no se podía usar (se quedaba el inventario abierto y
+	# dejarle en un tercio; con la vida tan baja las curas no se podían usar (se quedaba el inventario abierto y
 	# el juego en pausa, y la prueba no se cerraba nunca) y en la azotea moría
 	for c in get_tree().get_nodes_in_group("charcos"):
 		c.remove_from_group("charcos")

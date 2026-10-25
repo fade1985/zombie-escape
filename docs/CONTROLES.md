@@ -9,10 +9,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **Opciones** (menú principal y pausa): modo de atacar (se guarda), música, sonido, las **Ayudas** (pestaña propia, Sí/No, se guardan en `ajustes` y se notan al momento: *Vida entera*, sin tercios; *Pistola sin fin*, sin gastar balas; *Lanzar apuntando solo*, los lanzables al zombi más cercano a la vista; no cambian récords) y la lista de controles, que se pueden cambiar (pulsar la casilla y luego la tecla o el botón; si ya la usaba otra acción, se intercambian; "Restablecer controles" vuelve a los de serie). **F1**, **C** o la cruceta abajo también cambian el modo de atacar: *asistido* (apunta y ataca solo, como en el JS), *hacia donde mira* (J, clic o
   RT) y *libre* (ratón + clic, o stick derecho).
 - **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar (de la munición de su tipo: balas de pistola,
-  que también gasta la MP5; cartuchos; pilas, la pistola eléctrica; gasolina, el lanzallamas; bidones de ácido, el
-  lanza ácido). La munición va en 8 huecos (en cada uno, dos cargadores; la gasolina y el ácido, 3): con todos llenos
-  no se coge más. Una caja de munición da un cargador del arma a distancia de la mano (si es el lanzallamas o el lanza
-  ácido, de la de repuesto).
+  que también gasta la MP5; cartuchos; gasolina, el lanzallamas; bidones de ácido, el lanza ácido; baterías, la
+  pistola eléctrica, y cada una le llena el cargador). La munición va en 8 huecos (en cada uno, dos cargadores; la
+  gasolina, el ácido y las baterías, 3): con todos llenos no se coge más. Una caja de munición da un cargador del arma
+  a distancia de la mano (si es el lanzallamas, el lanza ácido o la pistola eléctrica, de la de repuesto).
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): lo que lleva a mano para lanzar (3 huecos; al
   empezar, el molotov y la granada); **F** / RB cambia entre ellos. Hay 8 huecos más de repuesto: ahí va lo que no cabe
   en la mano, y cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto.
@@ -60,7 +60,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **F11** (en la planta baja): sala de pruebas de armas (`sala_armas.gd`) y vuelta. En el centro, una diana: un zombi
   normal que no pierde vida (ni sale su barra), no ataca y vuelve a su sitio si lo empujan, para probar desde todas
   las direcciones. Se entra con la pistola; **coma** y **punto** pasan por todas las
-  armas, también las del banco de trabajo (las 1-6 y Q también valen). La munición no se acaba, pero hay que recargar (el lanzallamas se llena sin gastar gasolina).
+  armas de la tienda, también el lanzallamas, el lanza ácido y la pistola eléctrica (las 1-6 y Q también valen). La munición no se acaba, pero hay que recargar (el lanzallamas se llena sin gastar gasolina, y la pistola eléctrica, sin gastar baterías).
   En el suelo, las líneas de ayuda: el alcance (círculo blanco; cuerpo a cuerpo, el abanico del golpe), a quién apunta
   (amarillo), por dónde irá la bala (azul a rayas, desde la boca del arma hasta el zombi que pille la línea de tiro), el círculo de cada zombi donde le da la
   bala (rojo) y el camino de cada bala (verde si da, naranja si pasa por el lado de la diana, roja con una X si choca o
@@ -111,7 +111,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   portero, y `captura-skins-caras-<id>.png`, las demás); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero
   (y el del bate, igual), contado y con un golpe de verdad; el del gymbro, × 3 con la fregona, el bate y el cuchillo, y
   × 1 con las de fuego, contado y con un golpe de verdad (con el bate); el
-  del bombero, × 3 con el lanzallamas, el molotov y la bomba de aceite, y × 1 con
+  del bombero, × 3 con el lanzallamas y el molotov, y × 1 con
   las seis de siempre, contado y de verdad a un zombi quieto (el disparo y lo que sigue ardiendo, y un
   molotov de verdad); el bombero, inmune al fuego: pisando fuego, en un charco de molotov (`captura-skins-bombero-fuego.png`),
   con los molotovs, el cono y las bolas del jefe de bomberos, sin la skin pierde vida y sigue ardiendo y con ella no
@@ -119,15 +119,15 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   el Gymbro pierde un 10 % con un golpe suyo y con una pesa suya aunque tenga la armadura, y sin la skin, siendo
   invulnerable o con un daño que no es de nadie, nada. Cada línea de la terminal dice lo esperado.
 - `--baul`: en vez de la prueba larga, la de guardar a mano en el baúl lo de la mochila (`ui/inventario.gd`): con
-  gasolina, clavos, vendas, spray y lejía en la mochila, Johnny se arrima al baúl y comprueba en la terminal que
+  gasolina, un trapo, vendas, alcohol y despertadores en la mochila, Johnny se arrima al baúl y comprueba en la terminal que
   se abre, que «Guardar de la mochila» enseña la mochila (`captura-baul-mochila.png`, con la gasolina elegida), que
   «Guardar» mete toda la casilla en el baúl, que las vendas no se guardan, que con el baúl lleno solo caben más de lo
   que ya tiene, y que «Guardar todo» mete lo demás (`captura-baul-guardado.png`, el baúl al volver). Cada línea
   dice lo esperado. Deja el baúl del guardado de prueba como estaba.
-- `--repuesto`: en vez de la prueba larga, la de las dos armas de cada tipo (`partida.llevar_arma`): saca del baúl
-  un lanza ácido y una pistola eléctrica (el lanza ácido se queda en el suelo), compra el bate y el cuchillo (el bate
-  se queda en el suelo), no deja comprar la pistola que lleva de repuesto, tira la fregona y vuelve a coger el bate
-  (al repuesto). Cada línea dice lo esperado; saca `captura-repuesto.png`. Deja el baúl y los dólares como estaban.
+- `--repuesto`: en vez de la prueba larga, la de las dos armas de cada tipo (`partida.llevar_arma`): compra en la
+  tienda del ordenador un lanza ácido y una pistola eléctrica (el lanza ácido se queda en el suelo), el bate y el
+  cuchillo (el bate se queda en el suelo), no deja comprar la pistola que lleva de repuesto, tira la fregona y vuelve a
+  coger el bate (al repuesto). Cada línea dice lo esperado; saca `captura-repuesto.png`. Deja los dólares como estaban.
 - `--municion`: en vez de la prueba larga, la de la munición por tipos y los arrojables (`Armas.MUNICION`, `johnny.gd`,
   `lanzables.gd`): la MP5 trae y gasta las mismas balas que la pistola, la escopeta trae cartuchos, la gasolina y el
   bidón de ácido ocupan huecos de munición (no de la mochila; en el baúl sí se guardan), con el lanzallamas en la mano
@@ -138,9 +138,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - `--inventario`: en vez de la prueba larga, la de la pantalla del inventario «todo a la vista» (`ui/inventario.gd`),
   con un poco de todo y la skin del bombero: al abrir, la ficha del arma de la mano; la flecha abajo lleva la marca a
   la escopeta de repuesto y la ficha la sigue; Intro salta a **Ponérmela** e Y del mando se la pone; Supr tira un
-  clavo; tirar el arma de la mano pone la de repuesto; F cambia el arrojable; **A la mano** con la mano llena; Esc
-  cierra. Luego, las otras pruebas que usan el inventario: las vendas y el bocadillo, y el botiquín de la
-  farmacéutica. Cada línea dice lo esperado. Fotos: `captura-inventario-nuevo.png`, `-escopeta`, `-objeto`,
+  trapo; tirar el arma de la mano pone la de repuesto; F cambia el arrojable; **A la mano** con la mano llena; Esc
+  cierra. Luego, las otras pruebas que usan el inventario: las vendas y el botiquín de la farmacéutica. Cada línea dice lo esperado. Fotos: `captura-inventario-nuevo.png`, `-escopeta`, `-objeto`,
   `-municion`, `-arrojable`, `-pistola_electrica` y `-lanzallamas` (la ficha más llena y la de depósito).
 - `--ascensor`: en vez de la prueba larga, la del ascensor (`partida.gd`, `arreglar_ascensor`): comprueba en la
   terminal que en la planta baja no se arregla, que en la 1ª planta sigue averiado hasta que cae el jefe, que al
@@ -167,7 +166,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   asistido, a 200 de la diana, desde 72 ángulos (cada 5°; 0° = hacia la derecha, 90° = hacia abajo): si la primera bala
   le da o cómo falla y a cuánto pasa del centro, y desde qué ángulos falla; que la diana no ha perdido vida nunca (y
   cuántos zombis normales habría matado), que la munición no se acaba y ha recargado; que el punto pasa a la escopeta (el recuento empieza de cero),
-  la coma vuelve y llega a las del banco de trabajo, el guion esconde y saca el panel, y F11 vuelve a la sala de
+  la coma vuelve y llega a la pistola eléctrica, la última, el guion esconde y saca el panel, y F11 vuelve a la sala de
   mantenimiento con las armas y las balas de antes. Fotos: `captura-armas.png` (tras un fallo por el lado) y
   `captura-armas-escopeta.png`.
 - `--sala`: en vez de la prueba larga, la de la sala de mantenimiento (`planta.gd`, sus tres estancias): cuenta en la
@@ -281,9 +280,11 @@ puertas sin hoja, como las de dentro de los pisos: a la izquierda al vestuario y
   conserje.
 En el suelo, manchas de sangre.
 - En el taller, el **banco de trabajo**: todas las recetas en hojas de papel (las que aún no tienes,
-  con un «?»). Se toca una y, si tienes lo que pide (en la mochila, el baúl o la mano), se crea el arma. El molotov
-  viene aprendido; las demás las suelta cada jefe al morir (los de planta y el de la azotea), en un papel que hay que
-  recoger. Lo aprendido no se pierde nunca.
+  con un «?»). Se toca una y, si tienes lo que pide (en la mochila, el baúl o la mano), se crea el arma. Quedan dos,
+  la atraedora y la congeladora; ninguna viene aprendida (el cóctel molotov, que venía, se quitó el 25 oct): las
+  suelta cada jefe al morir (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se
+  pierde nunca. El lanzallamas, el lanza ácido y la pistola eléctrica ya no se crean: se compran en la tienda de armas
+  del ordenador.
 - A su derecha, el **baúl**: las armas creadas (se sacan para la partida) y los objetos guardados. Con
   «Guardar de la mochila» se ve la mochila: se toca una casilla y «Guardar» mete en el baúl todos los de esa
   casilla, o «Guardar todo»; así ya no se pierden si Johnny cae (lo que quede en la mochila pasa solo al completar
@@ -304,7 +305,7 @@ En el suelo, manchas de sangre.
   cuerpo hacen un 200 % más de daño (el triple: la fregona, el bate y el cuchillo; el golpe de Ninja
   al acabar la esquiva y los martillazos del ferretero, no). **El bombero**: se desbloquea la primera vez que matas al
   jefe de bomberos; un casco de bombero negro con la raya amarilla, y las armas que queman (el
-  lanzallamas, el molotov y la bomba de aceite) hacen un 200 % más de daño, también lo que siguen
+  lanzallamas y el molotov) hacen un 200 % más de daño, también lo que siguen
   ardiendo los zombis que prenden; y el fuego no te hace nada: el del suelo, los charcos de fuego, el aceite hirviendo
   del cocinero, el seguir ardiendo, y el cono, las bolas, el aro y los molotovs del jefe de bomberos (su hachazo y las
   explosiones, sí). Con el ratón o el dedo, flechas e Intro (o 1 a 5) o el mando

@@ -3,14 +3,18 @@
 # baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se
 # pueden guardar a mano (ui/inventario.gd, «Guardar de la mochila»). En el banco de trabajo se
 # juntan de dos en dos para crear armas (recetas.gd). Todos son de rareza gris (común).
-# Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py). La gasolina y el bidón de ácido
-# llenan el lanzallamas y el lanza ácido: van en la mochila, pero ocupan los huecos de la munición (Armas.MUNICION).
+# Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py). La gasolina, el bidón de ácido y
+# la batería son además la munición del lanzallamas, el lanza ácido y la pistola eléctrica: van en la mochila, pero
+# ocupan los huecos de la munición (Armas.MUNICION).
 #
 # Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
-# 10 de siempre (eran 17: el 25 oct se quitaron del juego el mechero, con el súpersoplete; la llave inglesa y el
-# hacha, con el bumerán, y las cuchillas, el táser, la cuerda y las mancuernas, con las armas de cuerpo a cuerpo); en
-# el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS), que mezclan algunos de siempre con
-# los cinco nuevos (SOLO_CENTRO; eran nueve: la cadena, el cable, el hielo seco y las perchas se quitaron con ellas). Las cosas de casa (SOLO_CASA) no salen en el centro.
+# 7 de siempre; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS). Las cosas de casa
+# (SOLO_CASA) no salen en el centro, y las vendas (SOLO_CENTRO) solo salen allí. Eran 26: el 25 oct se quitaron del
+# juego el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, el
+# cable, el hielo seco y las perchas (con las armas que los pedían), y luego los clavos, el spray de pintura, la
+# lejía, la pistola de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (con las
+# arrojadizas del centro comercial; el lanzallamas, el lanza ácido y la pistola eléctrica pasaron a la tienda de
+# armas). El trapo y la botella de alcohol se quedan, aunque ya no entran en ninguna receta.
 # Dos solo los suelta un zombi, en los dos edificios (DE_UN_ZOMBI): los explosivos y el bidón de ácido.
 class_name Objetos
 
@@ -23,39 +27,35 @@ const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelt
 const DE_UN_ZOMBI := {"explosivos": "explosivo", "bidon_acido": "venenoso"}
 
 const NOMBRES := {
-	"clavos": "Clavos", "gasolina": "Gasolina", "pistola_agua": "Pistola de agua",
-	"spray": "Spray de pintura", "lejia": "Lejía", "alcohol": "Botella de alcohol",
-	"trapo": "Trapo", "explosivos": "Explosivos", "despertador": "Despertador", "extintor": "Extintor",
+	"gasolina": "Gasolina", "alcohol": "Botella de alcohol", "trapo": "Trapo", "explosivos": "Explosivos",
+	"despertador": "Despertador", "extintor": "Extintor",
 	# el bidón de ácido, en los dos edificios: solo lo suelta el gordo (DE_UN_ZOMBI)
 	"bidon_acido": "Bidón de ácido",
-	# los cinco del centro comercial
-	"cinta_americana": "Cinta americana", "bateria": "Batería", "aceite": "Aceite", "bombona": "Bombona de gas",
-	"jeringuilla": "Jeringuilla",
-	# los dos de curar del centro comercial (parte 9): no son chatarra, se usan desde el inventario (USABLES)
-	"vendas": "Vendas", "bocadillo": "Bocadillo",
+	# la batería, la munición de la pistola eléctrica: en los dos edificios
+	"bateria": "Batería",
+	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan desde el inventario (USABLES)
+	"vendas": "Vendas",
 }
 # Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no entran en las recetas ni
 # pasan al baúl (al acabar la partida, se pierden). El botiquín de la farmacéutica (supervivientes.gd; cura lo de
-# partida.BOTIQUIN; su icono, assets/ui/iconos/botiquin.png), y los de curar de las tiendas, con lo que curan
-# ("cura"; más con el talento Sanitario, y con la Alerta 4, la mitad): las vendas de la farmacia y el bocadillo del
-# supermercado. Cuentan en Colecciones como los demás (están en NOMBRES y en TIENDAS)
+# partida.BOTIQUIN; su icono, assets/ui/iconos/botiquin.png), y las vendas de las tiendas, con lo que curan ("cura";
+# más con el talento Sanitario, y con la Alerta 4, la mitad). Las vendas cuentan en Colecciones como los demás (están
+# en NOMBRES y en TIENDAS)
 const USABLES := {
 	"botiquin": {"nombre": "Botiquín", "icono": "botiquin"},
 	"vendas": {"cura": 25},
-	"bocadillo": {"cura": 15},
 }
-const SOLO_CASA := ["despertador", "pistola_agua", "trapo"]   # solo en los Apartamentos
-const SOLO_CENTRO := ["cinta_americana", "bateria", "aceite", "bombona", "jeringuilla", "vendas",
-	"bocadillo"]   # solo en el centro comercial
+const SOLO_CASA := ["despertador"]   # solo en los Apartamentos
+const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
 const TIENDAS := {
-	"ferreteria": ["clavos", "spray", "cinta_americana"],
+	"ferreteria": ["bateria", "extintor", "gasolina"],
 	"electronica": ["extintor", "bateria"],
-	"restaurante": ["alcohol", "gasolina", "extintor", "aceite", "bombona"],
-	"supermercado": ["lejia", "alcohol", "bocadillo"],
-	"farmacia": ["alcohol", "lejia", "jeringuilla", "vendas"],
-	"ropa": ["spray"],
-	"joyeria": ["bateria", "spray"],
+	"restaurante": ["alcohol", "gasolina", "extintor"],
+	"supermercado": ["alcohol", "bateria", "vendas"],
+	"farmacia": ["alcohol", "vendas"],
+	"ropa": ["trapo"],
+	"joyeria": ["bateria"],
 }
 
 
@@ -82,8 +82,8 @@ static func icono(id: String) -> String:
 
 
 # Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron.
-# La gasolina y el bidón de ácido no ocupan casilla de la mochila, sino de la munición (Armas.MUNICION; Johnny los
-# cuenta ahí), salvo con "con_municion" (para guardarlos en el baúl)
+# La gasolina, el bidón de ácido y la batería no ocupan casilla de la mochila, sino de la munición (Armas.MUNICION;
+# Johnny los cuenta ahí), salvo con "con_municion" (para guardarlos en el baúl)
 static func casillas(mochila: Array, con_municion := false) -> Array:
 	var cuantos := {}
 	for id in mochila:
@@ -95,8 +95,8 @@ static func casillas(mochila: Array, con_municion := false) -> Array:
 	return lista
 
 
-# ¿Cabe uno más? Si ya lleva alguno va a su casilla; si no, hace falta una libre (la gasolina y el bidón de ácido
-# van con la munición: johnny.sitio)
+# ¿Cabe uno más? Si ya lleva alguno va a su casilla; si no, hace falta una libre (la gasolina, el bidón de ácido y
+# la batería van con la munición: johnny.sitio)
 static func cabe(mochila: Array, id: String) -> bool:
 	return id in mochila or casillas(mochila).size() < MOCHILA
 
@@ -149,7 +149,7 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 # ── Colecciones (el programa del ordenador) ──
 # Lo encontrado alguna vez se apunta en el guardado ("encontrados"), y el ordenador lo cuenta por edificio.
 
-# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 10 de siempre (con los
+# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 7 de siempre (con los
 # explosivos) y el bidón de ácido; en el centro comercial, todos menos las cosas de casa. Otro valor: todos
 static func de_edificio(edificio: String) -> Array:
 	match edificio:
@@ -162,7 +162,7 @@ static func de_edificio(edificio: String) -> Array:
 
 # Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier zombi (los
 # explosivos, solo el explosivo, y el bidón de ácido, solo el gordo, en los dos edificios); en el centro comercial,
-# las tiendas que lo sueltan ("Ferretería y tienda de ropa")
+# las tiendas que lo sueltan ("Ferretería, electrónica y supermercado")
 static func donde(id: String, edificio: String) -> String:
 	if id == "explosivos":
 		return "lo suelta el zombi explosivo"
@@ -183,7 +183,7 @@ static func donde(id: String, edificio: String) -> String:
 
 
 # Apunta un objeto como encontrado alguna vez (al cogerlo del suelo). El botiquín de la
-# farmacéutica no cuenta (no está en NOMBRES); las vendas y el bocadillo, sí
+# farmacéutica no cuenta (no está en NOMBRES); las vendas, sí
 static func apuntar_encontrado(id: String) -> void:
 	if not id in NOMBRES:
 		return

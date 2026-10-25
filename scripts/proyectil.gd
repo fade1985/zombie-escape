@@ -1,6 +1,5 @@
 # Algo que se lanza en parábola: el moco del venenoso, la botella de lejía de la portera, el cóctel molotov de
-# Johnny, la bomba de aceite (arrojadiza creada del centro comercial), su vómito (mutación Gastroenteritis), el
-# ácido que salpica la portera o la sartén de aceite hirviendo del cocinero (con su marca roja en el suelo, donde
+# Johnny, su vómito (mutación Gastroenteritis), el ácido que salpica la portera o la sartén de aceite hirviendo del cocinero (con su marca roja en el suelo, donde
 # caerá). Vuela por encima de todo y, al caer, deja un charco. Los de
 # los zombis, si Johnny está justo donde caen, le hacen daño; el molotov suelta una llamarada que prende a los
 # zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js).
@@ -17,7 +16,6 @@ const TIPOS := {
 	"lejia": {"vuelo": 0.9, "altura": 130.0, "golpe": 10, "charco": "lejia"},
 	"acido": {"vuelo": 0.75, "altura": 110.0, "golpe": 8, "charco": "acido"},   # lo que salpica la portera con la fregona
 	"molotov": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "fuego"},
-	"aceite": {"vuelo": 0.55, "altura": 110.0, "golpe": 0, "charco": "aceite"},
 	"vomito": {"vuelo": 0.45, "altura": 70.0, "golpe": 0, "charco": "vomito"},
 	# la sartén del cocinero ("marca": el radio de la marca en el suelo, el del charco "hirviendo" en charco.gd)
 	"sarten": {"vuelo": 0.8, "altura": 130.0, "golpe": 0, "charco": "hirviendo", "marca": 60.0},
@@ -68,7 +66,7 @@ func caer(datos: Dictionary) -> void:
 	# el centro, en píxel entero del dibujo, para que cuadre con el resto del suelo
 	charco.position = (hasta / 2.0).round() * 2.0
 	charco.dueno = dueno
-	if tipo == "molotov" or tipo == "aceite":
+	if tipo == "molotov":
 		charco.escala = Lanzables.FABRICANTE.radio if fabricante else 1.0
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
 		charco.dano_lanzar = dano_lanzar
@@ -83,16 +81,16 @@ func caer(datos: Dictionary) -> void:
 		"sarten":
 			Sonido.tocar("chof")
 			Sonido.tocar("chisporroteo")
-		"aceite", "probeta_acido", "probeta_veneno", "probeta_aceite":
+		"probeta_acido", "probeta_veneno", "probeta_aceite":
 			Sonido.tocar("cristal")
 			Sonido.tocar("chof")
 		_: Sonido.tocar("chof")
 	if tipo == "molotov" or tipo == "molotov_jefe":
 		llamarada(charco.radio())
-	elif tipo == "vomito" or tipo == "acido" or tipo == "aceite" or tipo == "sarten" or datos.has("liquido"):
+	elif tipo == "vomito" or tipo == "acido" or tipo == "sarten" or datos.has("liquido"):
 		for i in 8:
 			var a := randf() * TAU
-			var color: Color = datos.get("liquido", Color("#e8c547") if tipo == "aceite" or tipo == "sarten" else Color("#c7e04a"))
+			var color: Color = datos.get("liquido", Color("#e8c547") if tipo == "sarten" else Color("#c7e04a"))
 			Particulas.soltar(self, hasta, Vector2(cos(a), sin(a)) * randf_range(60, 160), color, randf_range(3, 5), 0.4)
 		if datos.has("liquido"):   # la probeta: también sus cristales
 			for i in 4:
@@ -144,16 +142,6 @@ func _draw() -> void:
 			sarten(self, donde, t * 9.0)
 		"probeta_acido", "probeta_veneno", "probeta_aceite":
 			probeta(self, donde, t * 11.0, datos.liquido)
-		"aceite":
-			# la botella de aceite: amarilla con el tapón verde, dando vueltas
-			draw_set_transform(donde, t * 10.0)
-			var contorno := Color("#1d1b2c")
-			draw_rect(Rect2(-8, -10, 16, 20), contorno)
-			draw_rect(Rect2(-6, -8, 12, 16), Color("#f2c94c"))
-			draw_rect(Rect2(-6, -8, 3, 16), Color("#fff0a0"))
-			draw_rect(Rect2(-4.5, -16, 9, 7), contorno)
-			draw_rect(Rect2(-3, -15, 6, 5), Color("#5aa05a"))
-			draw_rect(Rect2(-4, -2, 8, 4), Color("#f1f1e6"))
 		_:
 			# La botella de lejía, dando vueltas (dibujada con código, como en el juego)
 			draw_set_transform(donde, t * 10.0)

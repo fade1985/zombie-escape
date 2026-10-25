@@ -22,9 +22,8 @@
 #
 # La cuarta, el bombero (la suelta el jefe de bomberos al caer por primera vez, partida.gd): un casco de bombero
 # ajustado, negro con la raya amarilla reflectante, como el del jefe; tapa el pelo y el pañuelo. Con ella puesta:
-#   - las armas que queman hacen un 200 % más de daño (× 3, "quema"): el lanzallamas, el molotov y la bomba de
-#     aceite, y lo que siguen ardiendo los zombis que prenden
-#     (zombi.gd, prender()). Las armas de fuego de siempre (pistola, escopeta, MP5), no: no queman
+#   - las armas que queman hacen un 200 % más de daño (× 3, "quema"): el lanzallamas y el molotov, y lo que siguen
+#     ardiendo los zombis que prenden (zombi.gd, prender()). Las armas de fuego de siempre (pistola, escopeta, MP5), no: no queman
 #   - Johnny es inmune al fuego ("ignifugo"; johnny.gd, ignifugo()): el cono, las bolas, el aro y los molotovs del jefe
 #     de bomberos, el fuego del suelo y de los charcos, el aceite hirviendo del cocinero y el seguir ardiendo al salir.
 #     El hachazo del jefe y las explosiones, sí le quitan

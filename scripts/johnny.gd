@@ -6,7 +6,8 @@
 # teclas 1 a 6 ponen cualquiera de las seis. R (o el botón X del mando) recarga: cada arma lleva solo su cargador, y la
 # munición de reserva va por tipos, compartida por las armas que la gastan (Armas.MUNICION). El lanzallamas y el lanza ácido no
 # disparan: mientras se ataca echan un chorro continuo (llamarada.gd) y gastan su depósito, que se llena con un objeto
-# de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido: el "relleno" de armas.gd).
+# de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido: el "relleno" de armas.gd). La
+# pistola eléctrica sí dispara, pero su cargador también se llena con un objeto de la mochila: una batería.
 # Tres modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
 # cambian de uno a otro; se guarda):
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
@@ -103,13 +104,14 @@ var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuan
 var huecos := {"cuerpo": "fregona", "fuego": "pistola"}   # las dos armas que lleva
 var mano := "cuerpo"       # cuál de las dos tiene en la mano
 var balas := 0             # balas que quedan en el cargador del arma de fuego
-var municion := {}         # la munición de reserva, por tipos (Armas.MUNICION): {"balas": 24, ...}. La gasolina y los
-                           # bidones de ácido no están aquí: son objetos de la mochila de la partida (cuanta)
+var municion := {}         # la munición de reserva, por tipos (Armas.MUNICION): {"balas": 24, ...}. La gasolina, los
+                           # bidones de ácido y las baterías no están aquí: son objetos de la mochila de la partida (cuanta)
 var sin_balas_sola := false   # se ha pasado sola a la de cuerpo a cuerpo al quedarse sin balas
-var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego que ha dejado: {id: balas}
+var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego que ha dejado: {id: balas} (las de
+                           # depósito, los segundos que les quedaban)
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var deposito := 0.0        # el lanzallamas y el lanza ácido: los segundos de chorro que le quedan en el depósito
-var municion_sin_fin := false   # la sala de pruebas de armas: se recarga sin gastar munición (ni gasolina, ni bidones)
+var municion_sin_fin := false   # la sala de pruebas de armas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
 var mirando_chorro := ""   # hacia dónde miraba echando el chorro en el paso de antes (mirar_con_chorro)
 const CAMBIA_CHORRO := 0.105   # lo que tiene que ganar otra dirección para cambiar a ella echando el chorro (6°)
 const MARGEN_CHORRO := 0.052   # lo que el zombi queda por dentro del borde del cono cuando se le gira el chorro (3°)
@@ -759,13 +761,14 @@ func cargado() -> float:
 	return deposito if Armas.datos(huecos.fuego).has("deposito") else float(balas)
 
 
-# Lo que tiene para volver a llenarla: la munición de su tipo (las balas de reserva, o las gasolinas o los bidones de
-# ácido de la mochila; en la sala de pruebas de armas, sin fin)
+# Lo que tiene para volver a llenarla: la munición de su tipo (las balas de reserva, o las gasolinas, los bidones de
+# ácido o las baterías de la mochila; en la sala de pruebas de armas, sin fin)
 func reserva() -> int:
 	return 99 if municion_sin_fin else cuanta(Armas.municion(huecos.fuego))
 
 
-# Cuánta lleva de un tipo de munición (Armas.MUNICION): la gasolina y el bidón de ácido, los de la mochila de la partida
+# Cuánta lleva de un tipo de munición (Armas.MUNICION): la gasolina, el bidón de ácido y la batería, los de la mochila
+# de la partida
 func cuanta(tipo: String) -> int:
 	if tipo in Objetos.NOMBRES:
 		var partida := get_tree().current_scene
@@ -792,8 +795,8 @@ func sitio(tipo: String) -> int:
 	return maxi(0, (Armas.HUECOS_MUNICION - otros) * Armas.MUNICION[tipo].hueco - cuanta(tipo))
 
 
-# Mete munición de ese tipo (la que quepa) y devuelve cuánta ha metido. La gasolina y los bidones de ácido no: se
-# cogen del suelo como los demás objetos (partida.soltar_objeto)
+# Mete munición de ese tipo (la que quepa) y devuelve cuánta ha metido. La gasolina, los bidones de ácido y las
+# baterías no: se cogen del suelo como los demás objetos (partida.soltar_objeto)
 func meter_municion(tipo: String, cuanto: int) -> int:
 	var mete := mini(cuanto, sitio(tipo))
 	if mete > 0:
@@ -808,7 +811,7 @@ func sin_municion_aviso() -> void:
 	Sonido.tocar("click")
 
 
-# Ha cogido munición (una caja; o del suelo, una gasolina o un bidón de ácido). Si es de la que gasta su arma de fuego
+# Ha cogido munición (una caja; o del suelo, una gasolina, un bidón de ácido o una batería). Si es de la que gasta su arma de fuego
 # y se había pasado sola a la de cuerpo a cuerpo por quedarse sin, vuelve a sacarla; y si la tiene vacía, la recarga
 func coger_municion(tipo: String) -> void:
 	if Armas.municion(huecos.fuego) != tipo:
@@ -820,14 +823,14 @@ func coger_municion(tipo: String) -> void:
 	avisar_arma()
 
 
-# Empieza a recargar, si hace falta y le queda munición de reserva. Las de depósito, solo con el depósito vacío (con la
-# R a medias no se tira media gasolina) y si llevan con qué llenarlo
+# Empieza a recargar, si hace falta y le queda munición de reserva. Las que se llenan con un objeto de la mochila (su
+# "relleno"), solo vacías (con la R a medias no se tira media gasolina ni media batería) y si llevan con qué llenarlas
 func empezar_recarga() -> void:
 	var w := arma()
 	if w.tipo != "fuego" or recargando > 0.0 or pistola_sin_fin():
 		return
-	if w.has("deposito"):
-		if deposito > 0.0 or reserva() <= 0:
+	if w.has("relleno"):
+		if cargado() > 0.0 or reserva() <= 0:
 			return
 	elif balas >= w.cargador or reserva() <= 0:
 		return
@@ -836,20 +839,23 @@ func empezar_recarga() -> void:
 	avisar_arma()
 
 
-# Mete el cargador entero o, en la escopeta, un cartucho (y sigue con el siguiente). Las de depósito gastan una
-# gasolina (o un bidón de ácido) de la mochila y lo llenan entero
+# Mete el cargador entero o, en la escopeta, un cartucho (y sigue con el siguiente). Las que se llenan con un objeto
+# de la mochila gastan uno (una gasolina, un bidón de ácido o una batería) y se llenan enteras: el depósito o el cargador
 func terminar_recarga() -> void:
 	var w := arma()
 	recargando = 0.0
 	var tipo := Armas.municion(huecos.fuego)
-	if w.has("deposito"):
+	if w.has("relleno"):
 		if reserva() <= 0:   # (lo ha tirado desde el inventario mientras tanto)
 			avisar_arma()
 			return
 		if not municion_sin_fin:
 			var mochila: Array = get_tree().current_scene.mochila
 			mochila.remove_at(mochila.rfind(tipo))
-		deposito = w.deposito
+		if w.has("deposito"):
+			deposito = w.deposito
+		else:
+			balas = w.cargador
 		Sonido.tocar("recargado")
 		avisar_arma()
 		return
@@ -865,14 +871,14 @@ func terminar_recarga() -> void:
 	avisar_arma()
 
 
-# El arma de fuego para la que es una caja de munición: la que saca con Q o, si es de depósito (el lanzallamas o el
-# lanza ácido no gastan balas), la de repuesto. "" si ninguna gasta balas o ya no le cabe ninguna de las suyas (la caja
-# se queda en el suelo)
+# El arma de fuego para la que es una caja de munición: la que saca con Q o, si se llena con un objeto de la mochila
+# (el lanzallamas, el lanza ácido y la pistola eléctrica no gastan balas), la de repuesto. "" si ninguna gasta balas o
+# ya no le cabe ninguna de las suyas (la caja se queda en el suelo)
 func arma_de_caja() -> String:
 	var partida := get_tree().current_scene
 	var de_repuesto: String = partida.repuesto("fuego") if partida.has_method("repuesto") else ""
 	for id in [huecos.fuego, de_repuesto]:
-		if id != "" and not Armas.datos(id).has("deposito"):
+		if id != "" and not Armas.datos(id).has("relleno"):
 			return id if sitio(Armas.municion(id)) > 0 else ""
 	return ""
 
@@ -896,7 +902,7 @@ func sumar_municion() -> void:
 # Coge un arma (teclas 1 a 6, la tienda, el inventario o el baúl): va a su hueco y se la pone en la mano. Si es
 # de fuego, con lo que le quedaba en el cargador al dejarla (las creadas lo guardan en Armas.sacadas; las de depósito,
 # lo que les quedaba en él) o, si es nueva, con el cargador lleno y RESERVA_INICIO cargadores de su munición (los que
-# quepan; las de depósito, con el depósito lleno)
+# quepan; las que se llenan con un objeto de la mochila, solo llenas: la gasolina, el ácido o las baterías se buscan)
 func coger(id: String) -> void:
 	var w: Dictionary = Armas.datos(id)
 	if w.tipo == "fuego":
@@ -904,17 +910,20 @@ func coger(id: String) -> void:
 		if Armas.es_creada(vieja):
 			Armas.sacadas[vieja].balas = balas
 			Armas.sacadas[vieja].deposito = deposito
-		else:
-			cargadores[vieja] = balas
+		elif vieja != "":
+			cargadores[vieja] = deposito if Armas.datos(vieja).has("deposito") else balas
 		balas = w.cargador
 		deposito = w.get("deposito", 0.0)
 		if Armas.es_creada(id) and Armas.sacadas[id].has("balas"):
 			balas = Armas.sacadas[id].balas
 			deposito = Armas.sacadas[id].deposito
 		elif cargadores.has(id):
-			balas = cargadores[id]
+			if w.has("deposito"):
+				deposito = cargadores[id]
+			else:
+				balas = cargadores[id]
 			cargadores.erase(id)
-		elif not w.has("deposito"):
+		elif not w.has("relleno"):
 			meter_municion(Armas.municion(id), w.cargador * RESERVA_INICIO)
 	huecos[w.tipo] = id
 	sostener(w.tipo)
@@ -962,6 +971,8 @@ func avisar_arma() -> void:
 		texto += "   %d s · %s x%d" % [ceili(deposito), Objetos.nombre(w.relleno).to_lower(), reserva()]
 	elif w.tipo == "fuego":
 		texto += "   %d/%d" % [balas, w.cargador]
+		if w.has("relleno"):   # la pistola eléctrica: cuántas baterías le quedan
+			texto += " · %s x%d" % [Objetos.nombre(w.relleno).to_lower(), reserva()]
 		if recargando > 0.0:
 			texto += "   recargando…"
 	var otra: String = huecos["fuego" if mano == "cuerpo" else "cuerpo"]

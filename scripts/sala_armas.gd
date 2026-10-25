@@ -2,9 +2,10 @@
 # luz para ver con detalle cómo funciona cada arma. La monta mapa.gd al entrar y se va con él al salir. Tiene:
 #   - la diana: un zombi normal en el centro que no pierde vida, no ataca y vuelve a su sitio si un golpe lo mueve
 #     (zombi.gd, "diana"), para probar desde todas las direcciones. Sus números de daño, más grandes
-#   - todas las armas, también las del banco de trabajo: coma y punto pasan a la anterior y a la siguiente
-#   - munición sin fin, pero recargando: la reserva no se acaba nunca y el cargador sí (y el lanzallamas y el lanza
-#     ácido se llenan sin gastar gasolina ni bidones de ácido)
+#   - todas las armas de la tienda (también el lanzallamas, el lanza ácido y la pistola eléctrica): coma y punto pasan a
+#     la anterior y a la siguiente
+#   - munición sin fin, pero recargando: la reserva no se acaba nunca y el cargador sí (y el lanzallamas, el lanza
+#     ácido y la pistola eléctrica se llenan sin gastar gasolina, bidones de ácido ni baterías)
 #   - las líneas de ayuda, en el suelo: el alcance del arma (de fuego, un círculo; cuerpo a cuerpo, el abanico del
 #     golpe), a quién apunta el apuntado (amarillo), por dónde irá la bala (azul: sale de la boca del arma, no del
 #     centro de Johnny), el círculo de cada zombi dentro del que le da la bala (rojo) y el camino de verdad de cada
@@ -29,16 +30,15 @@ const ROJO := Color("#ff5d5d")
 const BLANCO := Color(1, 1, 1, 0.45)
 const CRITICO := Color("#ffb020")
 const TINTA := Color(0.11, 0.1, 0.17)
-# Lo que hace cada arma creada (su "efecto", armas_creadas.gd), para la ficha
+# Lo que hace cada arma con efecto (su "efecto", armas_creadas.gd), para la ficha
 const EFECTOS := {"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa",
 	"chispa": "chispa que aturde y salta"}
 
 var johnny: Node2D
 var diana: Zombi
-var lista: Array = []      # las armas, en el orden en que se pasan: las seis de siempre y las del banco de trabajo
+var lista: Array = []      # las armas, en el orden en que se pasan: las de la tienda (Armas.DATOS)
 var indice := 0            # la que lleva en la mano, de la lista
 var en_mano := ""          # el id del arma que lleva en la mano (para saber cuándo cambia, también con Q o 1-6)
-var creadas := {}          # receta → id de su arma creada (se hacen al cogerlas, una vez por visita)
 var entrada := {}          # las armas y balas con las que entró Johnny (se le devuelven al salir)
 var panel: ColorRect
 var con_panel := true      # el guion lo esconde y lo vuelve a sacar
@@ -75,11 +75,7 @@ func _ready() -> void:
 	mapa.cosas.add_child(diana)
 	diana.herido.connect(_al_herir)
 	get_tree().node_added.connect(_al_aparecer)
-	for id in Armas.ORDEN:
-		lista.append(id)
-	for receta in Recetas.LISTA:
-		if Armas.CREADAS.has(receta):
-			lista.append(receta)
+	lista = Armas.DATOS.keys()
 	indice = lista.find("pistola")
 	# el panel, en la pantalla (como el minimapa: por debajo del fundido a negro)
 	var partida := get_tree().current_scene
@@ -125,9 +121,8 @@ func _physics_process(delta: float) -> void:
 	# Otra arma en la mano (con coma y punto, Q o 1-6): el recuento empieza de cero
 	if johnny.huecos[johnny.mano] != en_mano:
 		en_mano = johnny.huecos[johnny.mano]
-		var clave: String = Armas.sacadas[en_mano].receta if Armas.es_creada(en_mano) else en_mano
-		if clave in lista:
-			indice = lista.find(clave)
+		if en_mano in lista:
+			indice = lista.find(en_mano)
 		a_cero()
 	for b in balas:
 		if b.fin == "":
@@ -161,17 +156,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 # Coma y punto: el arma anterior o la siguiente de la lista
 func cambiar(paso: int) -> void:
 	indice = posmod(indice + paso, lista.size())
-	johnny.coger(id_de(lista[indice]))
+	johnny.coger(lista[indice])
 	Sonido.tocar("cambiar")
-
-
-# El id con el que Johnny coge esa arma: las de siempre, el suyo; las del banco, una creada con su daño de serie
-func id_de(clave: String) -> String:
-	if Armas.DATOS.has(clave):
-		return clave
-	if not creadas.has(clave):
-		creadas[clave] = Armas.apuntar(Recetas.crear(clave, "verde"))
-	return creadas[clave]
 
 
 func a_cero() -> void:
@@ -365,7 +351,8 @@ func escribir() -> void:
 			else " por disparo", decimal(w.ritmo, 1), "disparo" if is_equal_approx(w.ritmo, 1.0) else "disparos"])
 		l.append("Alcance %d (%s casillas)" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1)])
 		l.append("Bala: %d/s, tarda %s s en llegar" % [roundi(w.velocidad), decimal(w.alcance / w.velocidad, 2)])
-		l.append("Cargador %d · recarga %s s%s" % [w.cargador, decimal(w.recarga, 2), " por cartucho" if w.cartucho else ""])
+		l.append("Cargador %d · recarga %s s%s" % [w.cargador, decimal(w.recarga, 2), " por cartucho" if w.cartucho
+			else (" · se llena con " + Armas.RELLENOS[w.relleno].uno) if w.has("relleno") else ""])
 		var extra := "Empuje %s" % decimal(w.empuje, 1)
 		if w.get("temblor", 0.0) > 0.0:
 			extra += " · desvío %d°" % roundi(rad_to_deg(w.temblor) / 2.0)
