@@ -1,12 +1,17 @@
 # Lo que Johnny lanza con el botón de lanzar (clic derecho, E o el gatillo LT): el cóctel molotov y la granada
-# (src/molotov.js y src/granada.js del JS). Son aparte de sus dos armas y tienen su propia munición.
+# (src/molotov.js y src/granada.js del JS) y las arrojadizas creadas. Son aparte de sus armas y no gastan munición:
+# se cuentan por unidades (el molotov y la granada, hasta su "maximo").
 #   - Se MANTIENE el botón para apuntar: en el suelo se ven el alcance (la elipse de puntos alrededor de
 #     Johnny), la zona que arderá o explotará y la trayectoria. Al SOLTAR, lo lanza.
 #   - Con ratón apunta al puntero; con mando, hacia donde se empuja el stick derecho (tan lejos como se
 #     empuje). Si no se apunta a nada, al zombi más cercano a tiro (o, si no hay, un poco por delante).
 #   - Con la ayuda "Lanzar apuntando solo" (Opciones > Ayudas), va siempre al zombi más cercano a la vista
 #     (el mismo que buscaría el modo de atacar asistido); si no se ve ninguno, se apunta como siempre.
-#   - F o RB cambian lo que se lanza: molotov → granada → las arrojadizas creadas que queden → molotov.
+#   - Lleva MANO tipos a mano y REPUESTO de repuesto (parte 2 del inventario nuevo); cada tipo, en un hueco. F o RB
+#     cambian lo que se lanza entre los de la mano. Al empezar, el molotov y la granada, a mano. Lo que consigue de un
+#     tipo que ya lleva va a su hueco; si es de otro, a la mano si hay sitio y si no, al repuesto (y si tampoco, no lo
+#     coge). Cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto. Desde el inventario se pasan de
+#     la mano al repuesto y al revés (a_la_mano, al_repuesto).
 #   - Las arrojadizas creadas (fase 7b2, sacadas del baúl): se lanzan como la granada con su propio efecto
 #     (ARROJADIZAS). El cóctel molotov no está aquí: sus botellas se suman a los molotovs.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
@@ -77,12 +82,16 @@ const NOMBRES := {"molotov": "molotovs", "granada": "granadas"}
 const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a")}
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
+const MANO := 3            # los tipos que lleva a mano (F cambia entre ellos)
+const REPUESTO := 8        # y los de repuesto
 
 var johnny: Node2D
 var partida: Node
 var cantidades := {"molotov": 0, "granada": 0}
 var creadas: Array = []        # las arrojadizas creadas sacadas del baúl, cada una con sus "unidades"
-var tipo := "molotov"          # lo que se lanza ahora
+var mano: Array = []           # los tipos que lleva a mano, en el orden de F (molotov, granada o la receta de una creada)
+var repuesto: Array = []       # y los de repuesto
+var tipo := "molotov"          # lo que se lanza ahora ("" si no lleva nada a mano)
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
 var apuntando := false         # se ha visto el botón apretado: al soltarlo, se lanza (y solo entonces)
 var t := 0.0
@@ -93,20 +102,98 @@ func _ready() -> void:
 	z_index = 15
 
 
-# Al empezar la partida: las de siempre, más las del Artificiero
+# Al empezar la partida: las de siempre, más las del Artificiero, a mano
 func reiniciar(stats: Dictionary) -> void:
 	for k in cantidades:
 		cantidades[k] = DATOS[k].inicio + stats.lanzar_extra
 	creadas.clear()
+	mano = ["molotov", "granada"]
+	repuesto = []
 	tipo = "molotov"
 
 
-# Una arrojadiza creada sacada del baúl: el cóctel suma sus botellas a los molotovs (aunque pase del máximo)
-func sacar(a: Dictionary) -> void:
+# El reto "Solo cuerpo a cuerpo": sin nada que lanzar
+func vaciar() -> void:
+	for k in cantidades:
+		cantidades[k] = 0
+	creadas.clear()
+	repasar()
+
+
+# Una arrojadiza creada sacada del baúl: el cóctel suma sus botellas a los molotovs (aunque pase del máximo). Va a su
+# hueco (colocar); si no le cabe, no la coge y devuelve false
+func sacar(a: Dictionary) -> bool:
+	if not hay_hueco(a.receta):   # (la receta del cóctel es "molotov")
+		return false
 	if a.receta == "molotov":
 		cantidades.molotov += a.unidades
 	else:
 		creadas.append(a.duplicate())
+	colocar(a.receta)
+	return true
+
+
+# ¿Tiene dónde llevar uno de ese tipo? En su hueco, si ya lleva (a mano o de repuesto), o en uno libre
+func hay_hueco(k: String) -> bool:
+	return k in mano or k in repuesto or mano.size() < MANO or repuesto.size() < REPUESTO
+
+
+# Le busca hueco a ese tipo si aún no lo tiene: a mano si hay sitio (y si no llevaba nada a mano, es lo que se
+# lanza) y si no, de repuesto
+func colocar(k: String) -> void:
+	if k in mano or k in repuesto:
+		return
+	if mano.size() < MANO:
+		mano.append(k)
+		if tipo == "":
+			tipo = k
+	elif repuesto.size() < REPUESTO:
+		repuesto.append(k)
+
+
+# Quita los que se han acabado: el hueco de la mano lo ocupa el primero de repuesto. Si se acaba el que se lanzaba, se
+# lanza el que ocupa su sitio (o el siguiente de la mano)
+func repasar() -> void:
+	repuesto = repuesto.filter(func(k): return cuantas(k) > 0)
+	var i := 0
+	while i < mano.size():
+		if cuantas(mano[i]) > 0:
+			i += 1
+			continue
+		var era: String = mano[i]
+		if repuesto.is_empty():
+			mano.remove_at(i)
+		else:
+			mano[i] = repuesto.pop_front()
+		if tipo == era:
+			tipo = mano[mini(i, mano.size() - 1)] if not mano.is_empty() else ""
+	if not tipo in mano:
+		tipo = mano[0] if not mano.is_empty() else ""
+
+
+# Desde el inventario: pasa ese tipo del repuesto a la mano, y es lo que se lanza. Con la mano llena, cambia por lo
+# que se lanzaba, que pasa a su sitio en el repuesto
+func a_la_mano(k: String) -> void:
+	var i := repuesto.find(k)
+	if i < 0:
+		return
+	if mano.size() < MANO:
+		repuesto.remove_at(i)
+		mano.append(k)
+	else:
+		repuesto[i] = tipo
+		mano[mano.find(tipo)] = k
+	tipo = k
+
+
+# Y al revés: de la mano al repuesto, si hay sitio
+func al_repuesto(k: String) -> void:
+	if not k in mano or repuesto.size() >= REPUESTO:
+		return
+	mano.erase(k)
+	repuesto.append(k)
+	if tipo == k:
+		tipo = mano[0] if not mano.is_empty() else ""
 
 
 # Las que le quedan de ese tipo (de siempre o creada, sumando todas las que haya sacado)
@@ -125,30 +212,34 @@ func nombre(k: String) -> String:
 
 
 func color(k: String) -> Color:
-	return COLORES[k] if COLORES.has(k) else ARROJADIZAS[k].color
+	if ARROJADIZAS.has(k):
+		return ARROJADIZAS[k].color
+	return COLORES.get(k, Color(0.67, 0.67, 0.67))   # ("": sin nada a mano, en gris)
 
 
 func maximo(k: String) -> int:
 	return DATOS[k].maximo + johnny.stats.lanzar_extra
 
 
-# Coger uno del suelo: solo si cabe en la mochila
+# Coger uno del suelo: solo si no llega a su máximo y tiene hueco para él
 func cabe(k: String) -> bool:
-	return cantidades[k] < maximo(k)
+	return cantidades[k] < maximo(k) and hay_hueco(k)
 
 
 func sumar(k: String) -> void:
 	cantidades[k] = mini(cantidades[k] + 1, maximo(k))
+	colocar(k)
 
 
-# Lo que se puede lanzar, en el orden del botón de cambiar: molotov, granada y las creadas que queden
+# Lo que se puede lanzar, en el orden del botón de cambiar: los que lleva a mano
 func tipos() -> Array:
-	return ["molotov", "granada"] + ARROJADIZAS.keys().filter(func(k): return cuantas(k) > 0)
+	return mano.duplicate()
 
 
 func cambiar() -> void:
-	var ks := tipos()
-	tipo = ks[(ks.find(tipo) + 1) % ks.size()]
+	if mano.is_empty():
+		return
+	tipo = mano[(mano.find(tipo) + 1) % mano.size()]
 	Sonido.tocar("pitido")
 
 
@@ -216,14 +307,16 @@ func mas_cercano() -> Node2D:
 
 
 func lanzar(donde: Vector2) -> void:
-	if cuantas(tipo) <= 0:
-		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), "¡Sin %s!" % nombre(tipo), color(tipo), 18)
+	if tipo == "" or cuantas(tipo) <= 0:
+		var aviso := "¡Sin %s!" % nombre(tipo) if tipo != "" else "¡Nada que lanzar!"
+		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), aviso, color(tipo), 18)
 		Sonido.tocar("no")
 		return
 	Sonido.tocar("lanzar")
 	var sala: Node = johnny.get_parent()
 	if ARROJADIZAS.has(tipo):
 		lanzar_creada(donde, sala)
+		repasar()   # (si era la última, su hueco lo ocupa el primero de repuesto)
 		return
 	cantidades[tipo] -= 1
 	if tipo == "molotov":
@@ -243,6 +336,7 @@ func lanzar(donde: Vector2) -> void:
 		g.radio = radio_zona()
 		g.dano_zombis = roundi(GRANADA.dano * johnny.stats.dano_lanzar)
 		sala.add_child(g)
+	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
 
 
 # Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto; la
@@ -261,8 +355,6 @@ func lanzar_creada(donde: Vector2, sala: Node) -> void:
 		p.dano_lanzar = a.dano / float(Recetas.LISTA[tipo].dano) * johnny.stats.dano_lanzar * Skins.quema(johnny.skin)   # la rareza quema más (y el bombero)
 		p.fabricante = johnny.stats.fabricante
 		sala.add_child(p)
-		if cuantas(tipo) <= 0:
-			tipo = "molotov"
 		return
 	var g := BOMBA.new()
 	g.tipo = tipo
@@ -272,8 +364,6 @@ func lanzar_creada(donde: Vector2, sala: Node) -> void:
 	g.dano_zombis = roundi(a.dano * johnny.stats.dano_lanzar)
 	g.fabricante = johnny.stats.fabricante
 	sala.add_child(g)
-	if cuantas(tipo) <= 0:
-		tipo = "molotov"   # era la última: vuelve al molotov
 
 
 # ── Dibujo del apunte ──

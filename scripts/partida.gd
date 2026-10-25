@@ -227,9 +227,8 @@ func _ready() -> void:
 	lanzables.reiniciar(johnny.stats)
 	if Reto.sin_municion():   # el reto "Solo cuerpo a cuerpo": la pistola vacía y sin lanzables
 		johnny.balas = 0
-		johnny.reserva = 0
-		for k in lanzables.cantidades:
-			lanzables.cantidades[k] = 0
+		johnny.municion.clear()
+		lanzables.vaciar()
 	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	supervivientes.elegir()
 	# la joyería del centro comercial (parte 9): una por partida, en una planta al azar de la 1ª a la 3ª
@@ -838,26 +837,36 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Una caja de munición: un cargador más para el arma de fuego. Va hacia Johnny solo si le cabe (en el reto
-# "Solo cuerpo a cuerpo", no caen)
-func soltar_municion(donde: Vector2) -> void:
-	if Reto.sin_municion():
+# Una caja de munición: un cargador más para el arma de fuego (johnny.sumar_municion). Va hacia Johnny solo si le cabe
+# (en el reto "Solo cuerpo a cuerpo", no caen). Con "tipo", la que ha tirado Johnny desde el inventario: vuelve entera
+# ("cuanta" de ese tipo), si le cabe
+func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
+	if Reto.sin_municion() and tipo == "":
 		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
 	cosa.icono = ICONO_MUNICION
 	cosa.tamano = 2.0
 	cosa.position = donde
-	cosa.puede = johnny.quiere_municion
+	if tipo == "":
+		cosa.puede = johnny.quiere_municion
+	else:
+		cosa.tirado = true
+		cosa.puede = func() -> bool: return johnny.sitio(tipo) >= cuanta
 	cosa.cogido.connect(func():
-		johnny.sumar_municion()
+		if tipo == "":
+			johnny.sumar_municion()
+		else:
+			johnny.meter_municion(tipo, cuanta)
+			johnny.coger_municion(tipo)
 		Sonido.tocar("recargado")
 		numero(cosa.position, "+munición", Color("#ffd23f")))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila. "tirado":
-# lo ha tirado Johnny desde el inventario (no vuelve a la mochila hasta que se aparte)
+# Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina y el
+# bidón de ácido, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
+# a la mochila hasta que se aparte)
 func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
@@ -865,13 +874,13 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
 	cosa.tirado = tirado
 	cosa.position = donde
-	cosa.puede = func() -> bool: return Objetos.cabe(mochila, id)
+	cosa.puede = func() -> bool: return johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(mochila, id)
 	cosa.cogido.connect(func():
 		mochila.append(id)
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
 		Sonido.tocar("compra")
 		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA)
-		johnny.coger_relleno(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (y el lanza ácido, con un bidón)
+		johnny.coger_municion(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (y el lanza ácido, con un bidón)
 	mapa.cosas.add_child.call_deferred(cosa)
 
 

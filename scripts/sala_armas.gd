@@ -104,10 +104,10 @@ func _exit_tree() -> void:
 	# Johnny vuelve a llevar lo que llevaba al entrar
 	johnny.huecos = entrada.huecos
 	johnny.balas = entrada.balas
-	johnny.reserva = entrada.reserva
+	johnny.municion = entrada.municion
 	johnny.deposito = entrada.deposito
-	johnny.deposito_sin_fin = false
-	johnny.municion_guardada = entrada.municion_guardada
+	johnny.municion_sin_fin = false
+	johnny.cargadores = entrada.cargadores
 	johnny.sostener(entrada.mano)
 
 
@@ -118,8 +118,8 @@ func _physics_process(delta: float) -> void:
 		if johnny == null:
 			return
 		entrada = {"huecos": johnny.huecos.duplicate(), "mano": johnny.mano, "balas": johnny.balas,
-			"reserva": johnny.reserva, "deposito": johnny.deposito, "municion_guardada": johnny.municion_guardada.duplicate(true)}
-		johnny.deposito_sin_fin = true
+			"municion": johnny.municion.duplicate(), "deposito": johnny.deposito, "cargadores": johnny.cargadores.duplicate()}
+		johnny.municion_sin_fin = true   # munición sin fin, pero recargando: la reserva no se acaba nunca
 		johnny.coger(lista[indice])
 	reloj += delta
 	# Otra arma en la mano (con coma y punto, Q o 1-6): el recuento empieza de cero
@@ -129,9 +129,6 @@ func _physics_process(delta: float) -> void:
 		if clave in lista:
 			indice = lista.find(clave)
 		a_cero()
-	# Munición sin fin, pero recargando: la reserva siempre llena
-	var w: Dictionary = Armas.datos(johnny.huecos.fuego)
-	johnny.reserva = maxi(johnny.reserva, w.cargador * johnny.RESERVA_MAX)
 	for b in balas:
 		if b.fin == "":
 			if is_instance_valid(b.nodo):

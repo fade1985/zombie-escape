@@ -3,7 +3,8 @@
 # baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se
 # pueden guardar a mano (ui/inventario.gd, «Guardar de la mochila»). En el banco de trabajo se
 # juntan de dos en dos para crear armas (recetas.gd). Todos son de rareza gris (común).
-# Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py).
+# Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py). La gasolina y el bidón de ácido
+# llenan el lanzallamas y el lanza ácido: van en la mochila, pero ocupan los huecos de la munición (Armas.MUNICION).
 #
 # Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
 # 10 de siempre (eran 17: el 25 oct se quitaron del juego el mechero, con el súpersoplete; la llave inglesa y el
@@ -80,18 +81,22 @@ static func icono(id: String) -> String:
 	return {"mp5": "pistola"}.get(id, id)
 
 
-# Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron
-static func casillas(mochila: Array) -> Array:
+# Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron.
+# La gasolina y el bidón de ácido no ocupan casilla de la mochila, sino de la munición (Armas.MUNICION; Johnny los
+# cuenta ahí), salvo con "con_municion" (para guardarlos en el baúl)
+static func casillas(mochila: Array, con_municion := false) -> Array:
 	var cuantos := {}
 	for id in mochila:
-		cuantos[id] = cuantos.get(id, 0) + 1
+		if con_municion or not id in Armas.MUNICION:
+			cuantos[id] = cuantos.get(id, 0) + 1
 	var lista := []
 	for id in cuantos:
 		lista.append([id, cuantos[id]])
 	return lista
 
 
-# ¿Cabe uno más? Si ya lleva alguno va a su casilla; si no, hace falta una libre
+# ¿Cabe uno más? Si ya lleva alguno va a su casilla; si no, hace falta una libre (la gasolina y el bidón de ácido
+# van con la munición: johnny.sitio)
 static func cabe(mochila: Array, id: String) -> bool:
 	return id in mochila or casillas(mochila).size() < MOCHILA
 

@@ -11,8 +11,8 @@
 #   momento   en qué punto de la animación de golpe llega el arma (lo dice la hoja del juego)
 #   De fuego: velocidad de la bala, perdigones, abertura (radianes entre el primero y el último perdigón),
 #   temblor (cuánto se desvía cada bala al azar), cargador, recarga (segundos) y cartucho (recarga de uno en uno,
-#   como la escopeta, y se puede disparar a mitad). "boca": dónde está la boca del arma en cada dirección, en
-#   píxeles desde los pies (sale de la hoja .json del juego)
+#   como la escopeta, y se puede disparar a mitad). "municion": el tipo de munición que gasta (MUNICION). "boca":
+#   dónde está la boca del arma en cada dirección, en píxeles desde los pies (sale de la hoja .json del juego)
 class_name Armas
 
 const ORDEN := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]   # las teclas 1 a 6
@@ -40,7 +40,7 @@ const DATOS := {
 	"pistola": {
 		"nombre": "Pistola", "tipo": "fuego", "dano": 10, "ritmo": 2.5, "alcance": 420.0, "velocidad": 620.0,
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.8, "cargador": 12, "recarga": 1.1,
-		"cartucho": false, "pies": Vector2(48, 72),
+		"cartucho": false, "municion": "balas", "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-pistola.tres"),
 		"boca": {"s": Vector2(0, -30), "se": Vector2(31, -27), "e": Vector2(33, -35), "ne": Vector2(31, -46),
 			"n": Vector2(8, -59), "no": Vector2(-33, -43), "o": Vector2(-35, -37), "so": Vector2(-26, -30)},
@@ -48,7 +48,7 @@ const DATOS := {
 	"escopeta": {
 		"nombre": "Escopeta", "tipo": "fuego", "dano": 7, "ritmo": 1.0, "alcance": 260.0, "velocidad": 540.0,
 		"perdigones": 5, "abertura": 0.55, "temblor": 0.06, "empuje": 1.2, "cargador": 6, "recarga": 0.45,
-		"cartucho": true, "pies": Vector2(48, 96),
+		"cartucho": true, "municion": "cartuchos", "pies": Vector2(48, 96),
 		"hoja": preload("res://assets/sprites/conserje-48-escopeta.tres"),
 		"boca": {"s": Vector2(1, 9), "se": Vector2(26, -20), "e": Vector2(36, -32), "ne": Vector2(27, -48),
 			"n": Vector2(12, -66), "no": Vector2(-28, -48), "o": Vector2(-39, -30), "so": Vector2(-35, -8)},
@@ -56,7 +56,7 @@ const DATOS := {
 	"mp5": {
 		"nombre": "MP5", "tipo": "fuego", "dano": 4, "ritmo": 8.0, "alcance": 340.0, "velocidad": 640.0,
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.14, "empuje": 0.3, "cargador": 30, "recarga": 1.8,
-		"cartucho": false, "pies": Vector2(48, 72),
+		"cartucho": false, "municion": "balas", "pies": Vector2(48, 72),   # (las mismas balas que la pistola)
 		"hoja": preload("res://assets/sprites/conserje-48-mp5.tres"),
 		"boca": {"s": Vector2(-1, 4), "se": Vector2(32, -23), "e": Vector2(33, -31), "ne": Vector2(27, -42),
 			"n": Vector2(7, -61), "no": Vector2(-26, -40), "o": Vector2(-32, -30), "so": Vector2(-29, -21)},
@@ -114,18 +114,34 @@ const CREADAS := {
 	# La boca NO sale de arma.py (las chispas son celestes: no hay fogonazo naranja que buscar, conserje-48-pistola-electrica.json no
 	# tiene "muzzle"): es el centro de la chispita de los dos electrodos del dibujo quieto, a mano
 	"pistola_electrica": {"base": "pistola", "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0, "cargador": 30, "recarga": 2.0,
-		"empuje": 0.2, "efecto": "chispa", "pies": Vector2(90, 88),
+		"municion": "pilas", "empuje": 0.2, "efecto": "chispa", "pies": Vector2(90, 88),
 		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
 		"boca": {"s": Vector2(0, -31), "se": Vector2(19, -17), "e": Vector2(22, -30), "ne": Vector2(18, -42),
 			"n": Vector2(5, -48), "no": Vector2(-19, -42), "o": Vector2(-22, -30), "so": Vector2(-19, -17)}},
 }
 
-# Lo que llena el depósito de las armas que lo tienen (su "relleno", un objeto de la mochila): el aviso cuando ya no
-# queda ninguno y cómo se dice uno (en la sala de pruebas de armas). Su nombre y su icono, los de cualquier objeto
+# Lo que llena el depósito de las armas que lo tienen (su "relleno", un objeto de la mochila): cómo se dice uno (en la
+# sala de pruebas de armas). Su nombre y su icono, los de cualquier objeto; su aviso cuando ya no queda, en MUNICION
 const RELLENOS := {
-	"gasolina": {"sin": "¡Sin gasolina!", "uno": "una gasolina"},
-	"bidon_acido": {"sin": "¡Sin ácido!", "uno": "un bidón de ácido"},
+	"gasolina": {"uno": "una gasolina"},
+	"bidon_acido": {"uno": "un bidón de ácido"},
 }
+
+# La munición, por tipos (parte 2 del inventario nuevo): cada arma a distancia gasta la de su "municion" (las de
+# depósito, lo que las llena: su "relleno"), y la comparten todas las que gastan la misma (la MP5 gasta las balas de la
+# pistola). Johnny la lleva en HUECOS_MUNICION huecos y en cada uno caben "hueco" (dos cargadores; si lleva más, ese tipo
+# ocupa otro hueco): con todos llenos ya no coge más. "sin": el aviso cuando se le acaba; "para": las armas que la gastan
+# (en el inventario). La gasolina y el bidón de ácido son además objetos (objetos.gd): van en la mochila de la partida y
+# valen para las recetas, pero no ocupan casilla de la mochila, sino de la munición
+const MUNICION := {
+	"balas": {"nombre": "Balas de pistola", "icono": "bala", "hueco": 24, "sin": "¡Sin balas!", "para": "la pistola y la MP5"},
+	"cartuchos": {"nombre": "Cartuchos", "icono": "cartucho", "hueco": 12, "sin": "¡Sin cartuchos!", "para": "la escopeta"},
+	"pilas": {"nombre": "Pilas", "icono": "obj-bateria", "hueco": 60, "sin": "¡Sin pilas!", "para": "la pistola eléctrica"},
+	"gasolina": {"nombre": "Gasolina", "icono": "obj-gasolina", "hueco": 3, "sin": "¡Sin gasolina!", "para": "el lanzallamas"},
+	"bidon_acido": {"nombre": "Bidón de ácido", "icono": "obj-bidon_acido", "hueco": 3, "sin": "¡Sin ácido!",
+		"para": "el lanza ácido"},
+}
+const HUECOS_MUNICION := 8
 
 # Las armas creadas sacadas del baúl en esta partida. Johnny y el inventario las nombran con un id como
 # "creada_3" (así van en los mismos sitios que las de siempre): aquí está a qué arma creada corresponde cada uno.
@@ -149,6 +165,12 @@ static func apuntar(a: Dictionary) -> String:
 
 static func es_creada(id: String) -> bool:
 	return sacadas.has(id)
+
+
+# El tipo de munición que gasta un arma (MUNICION): las de depósito, lo que las llena ("" las de cuerpo a cuerpo)
+static func municion(id: String) -> String:
+	var w := datos(id)
+	return w.get("relleno", w.get("municion", ""))
 
 
 # Los datos de un arma por su id: las de siempre, de DATOS; las creadas, los de su base con lo suyo encima

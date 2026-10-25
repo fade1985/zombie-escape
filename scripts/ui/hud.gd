@@ -5,13 +5,14 @@
 #     con rayas oscuras, porque ya no se curan. Encima, la vida en números. Al recibir un golpe, la barra
 #     tiembla y lo perdido se queda en claro un momento antes de bajar; con poca vida, la sangre late.
 #   - Sobre la barra, las balas del cargador: una por cada bala que cabe (las gastadas, apagadas) y la
-#     reserva. Al recargar, las gastadas parpadean. Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
+#     reserva (la munición de su tipo, compartida con las armas que la gastan). Al recargar, las gastadas parpadean.
+#     Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
 #     Con el lanzallamas, en vez de las balas, el depósito: una barra de gasolina y las gasolinas de la mochila
 #     (con el lanza ácido, la barra en verde y sus bidones de ácido).
 #   - Al lado, las armas: la de la mano en una casilla grande con el borde amarillo y la otra, pequeña y
 #     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
-#   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás
-#     en pequeño al lado (en gris si no queda ninguno).
+#   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás que
+#     lleva a mano (F cambia entre ellos; los de repuesto no se ven) en pequeño al lado.
 #   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo), la mochila (una
 #     cajita por casilla, las llenas encendidas) y los dólares, que suben contando con un "+5" que flota.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
@@ -135,6 +136,8 @@ func icono(nombre: String) -> Texture2D:
 
 
 func icono_lanzable(k: String) -> String:
+	if k == "":
+		return ""   # no lleva nada a mano para lanzar
 	return k if k in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[k].icono)
 
 
@@ -290,7 +293,7 @@ func mirar_lanzar(delta: float) -> void:
 	salto_cuenta = move_toward(salto_cuenta, 0.0, delta * 5.0)
 	destello_lanzar = move_toward(destello_lanzar, 0.0, delta * 4.0)
 	# el ancho depende de cuántos otros haya al lado
-	lanzar.custom_minimum_size.x = MEDIANA + 8 + 26 * (lz.tipos().size() - 1)
+	lanzar.custom_minimum_size.x = MEDIANA + 8 + 26 * maxi(0, lz.tipos().size() - 1)
 
 
 # Al cambiar de lanzable, como el tambor de un revólver: el viejo sale por la izquierda y el nuevo entra por
@@ -301,7 +304,7 @@ func pintar_lanzar() -> void:
 	var r := Rect2(2, 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
 	var k := muelle(giro)
 	casilla(lanzar, r, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35, Vector2((1.0 - k) * MEDIANA, 0))
-	if giro < 1.0:
+	if giro < 1.0 and tipo_antes != "":
 		var m := 1.0 if lz.cuantas(tipo_antes) > 0 else 0.35
 		icono_dentro(lanzar, icono_lanzable(tipo_antes), r, Vector2(-k * MEDIANA, 0), Color(m, m, m, 1.0 - giro))
 	destello(lanzar, r, destello_lanzar)
@@ -533,10 +536,11 @@ func pintar_balas() -> void:
 		barra.draw_set_transform(Vector2(sitios[i], abajo - tam.y) + tam / 2.0 + salto, t * 9.0)
 		barra.draw_texture_rect(dibujo, Rect2(-tam / 2.0, tam), false, c)
 		barra.draw_set_transform(Vector2.ZERO)
-	# La reserva: las balas de repuesto que lleva (en naranja si ya no le queda ninguna)
+	# La reserva: la munición de su tipo que lleva, la que comparte con las otras armas que la gastan (en naranja si ya
+	# no le queda ninguna)
 	var donde := Vector2(x + 4, abajo - 2)
-	var texto := "+∞" if johnny.pistola_sin_fin() else "+%d" % johnny.reserva
-	var color_texto := Color("#f0e8d4") if johnny.reserva > 0 or texto == "+∞" else Color("#ff9f1c")
+	var texto := "+∞" if johnny.pistola_sin_fin() else "+%d" % johnny.reserva()
+	var color_texto := Color("#f0e8d4") if johnny.reserva() > 0 or texto == "+∞" else Color("#ff9f1c")
 	color_texto.a = 0.5 if lejos else 1.0
 	barra.draw_string_outline(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, color_texto.a))
 	barra.draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color_texto)
@@ -565,7 +569,7 @@ func pintar_deposito(w: Dictionary, lejos: bool) -> void:
 	for i in range(1, ceili(w.deposito)):
 		var x := r.position.x + roundf(r.size.x * i / w.deposito)
 		barra.draw_rect(Rect2(x - 1, r.position.y, 2, r.size.y), Color(Color("#1a1620"), a * 0.8))
-	var g: int = johnny.rellenos()
+	var g: int = johnny.reserva()
 	barra.draw_texture_rect(icono(Objetos.icono(w.relleno)), Rect2(r.end.x + 8, r.position.y - 1, 16, 16), false, Color(1, 1, 1, a))
 	var texto := "x%d" % g
 	var color := Color("#f0e8d4") if g > 0 else Color("#ff9f1c")

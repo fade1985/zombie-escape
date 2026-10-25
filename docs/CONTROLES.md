@@ -8,9 +8,16 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **Moverse:** WASD, flechas o stick izquierdo. **Esquivar:** Espacio, Mayús, A o LB.
 - **Opciones** (menú principal y pausa): modo de atacar (se guarda), música, sonido, las **Ayudas** (pestaña propia, Sí/No, se guardan en `ajustes` y se notan al momento: *Vida entera*, sin tercios; *Pistola sin fin*, sin gastar balas; *Lanzar apuntando solo*, los lanzables al zombi más cercano a la vista; no cambian récords) y la lista de controles, que se pueden cambiar (pulsar la casilla y luego la tecla o el botón; si ya la usaba otra acción, se intercambian; "Restablecer controles" vuelve a los de serie). **F1**, **C** o la cruceta abajo también cambian el modo de atacar: *asistido* (apunta y ataca solo, como en el JS), *hacia donde mira* (J, clic o
   RT) y *libre* (ratón + clic, o stick derecho).
-- **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar.
-- **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
-- **Tab**, **I** o Select: inventario (las armas, las de repuesto y la mochila; ponérselas y tirar al suelo). Johnny
+- **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar (de la munición de su tipo: balas de pistola,
+  que también gasta la MP5; cartuchos; pilas, la pistola eléctrica; gasolina, el lanzallamas; bidones de ácido, el
+  lanza ácido). La munición va en 8 huecos (en cada uno, dos cargadores; la gasolina y el ácido, 3): con todos llenos
+  no se coge más. Una caja de munición da un cargador del arma a distancia de la mano (si es el lanzallamas o el lanza
+  ácido, de la de repuesto).
+- **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): lo que lleva a mano para lanzar (3 huecos; al
+  empezar, el molotov y la granada); **F** / RB cambia entre ellos. Hay 8 huecos más de repuesto: ahí va lo que no cabe
+  en la mano, y cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto.
+- **Tab**, **I** o Select: inventario (las armas, las de repuesto y la mochila; ponérselas y tirar al suelo; a la
+  derecha, la munición y los arrojables, con **A la mano** y **Al repuesto**). Johnny
   lleva como mucho dos de cada tipo: la de la mano y una de repuesto. Al comprar o sacar otra, va a la mano y la que
   llevaba pasa al repuesto (o, si ya tiene una, se queda en el suelo); la que coge del suelo va al repuesto si está
   libre. Los
@@ -115,6 +122,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   un lanza ácido y una pistola eléctrica (el lanza ácido se queda en el suelo), compra el bate y el cuchillo (el bate
   se queda en el suelo), no deja comprar la pistola que lleva de repuesto, tira la fregona y vuelve a coger el bate
   (al repuesto). Cada línea dice lo esperado; saca `captura-repuesto.png`. Deja el baúl y los dólares como estaban.
+- `--municion`: en vez de la prueba larga, la de la munición por tipos y los arrojables (`Armas.MUNICION`, `johnny.gd`,
+  `lanzables.gd`): la MP5 trae y gasta las mismas balas que la pistola, la escopeta trae cartuchos, la gasolina y el
+  bidón de ácido ocupan huecos de munición (no de la mochila; en el baúl sí se guardan), con el lanzallamas en la mano
+  la caja es para la de repuesto, con el hueco lleno la caja ya no va, y las balas tiradas quedan en una caja que las
+  devuelve; los arrojables, 3 a mano y 8 de repuesto (la mano llena manda al repuesto, al acabarse uno entra el primero
+  de repuesto, F, **A la mano** y **Al repuesto**, el molotov del suelo con el máximo). Cada línea dice lo esperado.
+  Fotos: `captura-municion.png` (el inventario), `captura-municion-arrojables.png` y `captura-municion-hud.png`.
 - `--ascensor`: en vez de la prueba larga, la del ascensor (`partida.gd`, `arreglar_ascensor`): comprueba en la
   terminal que en la planta baja no se arregla, que en la 1ª planta sigue averiado hasta que cae el jefe, que al
   salir al pasillo Johnny dice que lo ha arreglado (`captura-ascensor-arreglado.png`), que baja a la sala de
@@ -139,7 +153,7 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola; la pistola en modo
   asistido, a 200 de la diana, desde 72 ángulos (cada 5°; 0° = hacia la derecha, 90° = hacia abajo): si la primera bala
   le da o cómo falla y a cuánto pasa del centro, y desde qué ángulos falla; que la diana no ha perdido vida nunca (y
-  cuántos zombis normales habría matado), que la reserva sigue llena y ha recargado; que el punto pasa a la escopeta (el recuento empieza de cero),
+  cuántos zombis normales habría matado), que la munición no se acaba y ha recargado; que el punto pasa a la escopeta (el recuento empieza de cero),
   la coma vuelve y llega a las del banco de trabajo, el guion esconde y saca el panel, y F11 vuelve a la sala de
   mantenimiento con las armas y las balas de antes. Fotos: `captura-armas.png` (tras un fallo por el lado) y
   `captura-armas-escopeta.png`.

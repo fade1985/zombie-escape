@@ -232,6 +232,8 @@ func poner_premio() -> void:
 	cosa.tamano = 2.0
 	cosa.tirado = true   # (quieta: no sale despedida)
 	cosa.position = d.premio.pos
+	# una arrojadiza, solo si le cabe (a mano o de repuesto: lanzables.gd)
+	cosa.puede = func() -> bool: return a.hueco != "arrojadiza" or partida.lanzables.hay_hueco(a.receta)
 	var brillo := PointLight2D.new()
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")
 	brillo.texture_scale = 0.35
@@ -243,7 +245,7 @@ func poner_premio() -> void:
 
 
 # Al pisar la vitrina: el arma, como al sacarla del baúl (la de cuerpo a cuerpo o de fuego, a la mano; el cóctel
-# suma sus botellas a los molotovs; las demás arrojadizas, al botón de lanzar), cuenta en Colecciones como creada, y
+# suma sus botellas a los molotovs; las demás arrojadizas, a la mano o al repuesto), cuenta en Colecciones como creada, y
 # el fajo a los dólares de la partida
 func coger_premio() -> void:
 	var d := datos()
@@ -254,6 +256,8 @@ func coger_premio() -> void:
 	if a.hueco == "arrojadiza":
 		partida.lanzables.sacar(a)
 		como = "Sus botellas se suman a tus molotovs" if a.receta == "molotov" else "Lista para lanzar (F para elegirla)"
+		if a.receta in partida.lanzables.repuesto:
+			como = "Va al repuesto: pásala a la mano desde el inventario"
 	else:
 		var suelo: String = partida.llevar_arma(Armas.apuntar(a))   # la que llevaba, al repuesto (o al suelo, si ya tiene dos)
 		como = "Ya la llevas en la mano" if suelo == "" else "Ya la llevas en la mano; %s se queda en el suelo" % Objetos.nombre(suelo)

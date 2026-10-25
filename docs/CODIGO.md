@@ -102,7 +102,13 @@
   gota (fina arriba y gorda abajo). Johnny le dice en cada paso dónde está el labio (`gotear()`, con las `puntas` que
   trae la hoja en su `.tres`, de `tools/hoja_lanza_acido.py`); andando o echando el chorro, la gota se suelta. De
   espaldas no gotea (el tubo apunta hacia arriba).
-- `lanzables.gd`: molotov, granada y arrojadizas creadas (munición, apuntar, lanzar; `Lanzables.tipos()`).
+- La munición (parte 2 del inventario nuevo): `Armas.MUNICION` (balas de pistola, que gastan la pistola y la MP5;
+  cartuchos; pilas, de la pistola eléctrica; gasolina y bidón de ácido), 8 huecos de dos cargadores. En `johnny.gd`,
+  `municion` (por tipos; la gasolina y el ácido son objetos de `partida.mochila`, que no ocupan casilla de la mochila:
+  `Objetos.casillas`), `cargadores` (lo que quedaba en el de cada arma dejada), `reserva()`, `cuanta()`,
+  `huecos_municion()`, `sitio()`, `meter_municion()` y `arma_de_caja()`. Prueba: `--captura --municion`.
+- `lanzables.gd`: molotov, granada y arrojadizas creadas (apuntar, lanzar; `Lanzables.tipos()`). Tres tipos a mano
+  (`mano`, F cambia entre ellos) y ocho de repuesto (`repuesto`): `colocar`, `repasar`, `a_la_mano`, `al_repuesto`.
   `granada.gd`: también la atraedora, la congeladora, la lluvia ácida, la mina despertador, la nube somnífera (que
   suelta `nube.gd`) y la bomba de clavos. La bomba de aceite va como el molotov (`proyectil.gd`).
 - `charco.gd` (veneno, lejía, vómito, fuego, ácido, aceite, que al acabar arde, el agua de los aspersores y el
