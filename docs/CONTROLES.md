@@ -48,7 +48,8 @@ arrojables).
   rayas), dónde le da a cada zombi (rojo) y el camino de cada bala (verde si da, naranja si pasa rozando, rojo con X
   si choca).
 - **El panel de daño**, arriba a la izquierda: la ficha del arma y el recuento (disparos, aciertos, daño por
-  segundo...). **Retroceso** pone el recuento a cero; el **guion** esconde el panel.
+  segundo...). **Retroceso** pone el recuento a cero.
+- **Guion (-):** esconde de golpe las líneas de ayuda y el panel de daño; otra vez, vuelven como estaban.
 - **El baúl de pruebas** (arriba a la izquierda): todas las armas y los arrojables en cada calidad, para cogerlos y
   cambiarlos. Es de mentira: el baúl de verdad y la partida guardada no se tocan.
 - **Atajos**, también con el panel cerrado: **1…8**, un zombi de cada tipo; **Mayús + 1…0**, un jefe (portera,
@@ -60,7 +61,7 @@ arrojables).
 |---|---|
 | Jefes | un botón por jefe (atajo: **Mayús + 1…0**); **A media vida** (sale ya enfadado) y **Quieto** (ataca y avisa, pero no se mueve) |
 | Zombis | un botón por tipo (atajo: **1…8**: normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
-| Ayudas | se encienden y se apagan: cada línea de ayuda, el panel de daño, los avisos de los jefes en el suelo y la penumbra |
+| Ayudas | se encienden y se apagan: cada línea de ayuda, el panel de daño, los avisos de los jefes en el suelo, la penumbra y **Esconder todo** (como el guion) |
 | Johnny | **Invencible**, **Munición sin fin**, la **Diana** (ponerla o quitarla) y **Siguiente skin** (no se guarda) |
 | Ir a | la **Exposición** (todos los muebles y zombis; F11 vuelve), la **Azotea**, el **Superviviente** (su apartamento ya sin zombis; en el centro comercial, cada vez el siguiente) y la sala de cada minijefe del edificio, en la planta que le tocó |
 | Varios | **Mutaciones**, **Soltar un objeto**, **Piezas al baúl** (10 de cada familia y unas armas y arrojables mejorados, al baúl de verdad, para probar el banco), **Colecciones completas** y **Científico muerto** (la página siguiente; no se guarda) |

@@ -125,6 +125,7 @@ func elegir(nombre: String) -> void:
 			for k in AYUDAS:
 				interruptor(AYUDAS[k], SalaArmas.ayudas[k], func(si): SalaArmas.ayudas[k] = si)
 			interruptor("Panel de daño", SalaArmas.con_panel, func(si): SalaArmas.con_panel = si)
+			interruptor("Esconder todo (-)", SalaArmas.escondido, func(si): SalaArmas.escondido = si)
 			interruptor("Avisos de los jefes", not Aviso.apagados, func(si): Aviso.apagados = not si)
 			interruptor("Penumbra", not Luz.apagada, func(si): Luz.apagada = not si)
 		"Johnny":

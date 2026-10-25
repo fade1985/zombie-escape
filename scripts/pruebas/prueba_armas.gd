@@ -10,7 +10,7 @@ extends "res://scripts/pruebas/prueba_jefes.gd"
 # hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla
 # (desde el 24 oct la bala va de la boca al zombi: ninguno); y a quemarropa, a 40, desde 8 direcciones.
 # Luego, que la diana no se ha muerto ni ha perdido vida (y cuántos zombis normales habría matado), que la reserva sigue llena y que ha recargado; que el punto pasa
-# a la escopeta y la coma vuelve (con el recuento a cero) y llega a la última de la tienda (la pistola eléctrica), que el guion esconde y
+# a la escopeta y la coma vuelve (con el recuento a cero) y llega a la última de la tienda (la pistola eléctrica), que el guion esconde las líneas y
 # saca el panel; y que F11 vuelve a la sala
 # de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
 # panel, tras un fallo por el lado), captura-armas-pistola-<e, se, n, o>.png (Johnny disparando con la Beretta hacia cada
@@ -111,10 +111,11 @@ func probar_armas() -> void:
 	print("Escopeta a 150: balas %d · aciertos %d" % [sala.tiros, sala.aciertos])
 	await pulsar_y_esperar(KEY_MINUS)
 	await get_tree().physics_frame
-	var escondido: bool = not sala.panel.visible
+	var escondido: bool = not sala.panel.visible and SalaArmas.escondido
 	await pulsar_y_esperar(KEY_MINUS)
 	await get_tree().physics_frame
-	print("Con el guion, el panel se esconde %s y vuelve %s (esperado: true, true)" % [escondido, sala.panel.visible])
+	print("Con el guion, las líneas y el panel se esconden %s y vuelven %s (esperado: true, true)" % [escondido,
+		sala.panel.visible and not SalaArmas.escondido])
 	await pulsar_y_esperar(KEY_COMMA)
 	await get_tree().physics_frame
 	var vuelta: String = johnny.arma().nombre

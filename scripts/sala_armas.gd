@@ -18,7 +18,8 @@
 #     se le acaba el alcance)
 #   - el panel de daño, arriba a la izquierda: la ficha del arma y el recuento de disparos, aciertos, fallos (y por
 #     qué), daño por segundo y cuántos zombis normales habría matado, con una vida de mentira (Retroceso lo pone a
-#     cero; el guion lo esconde y lo vuelve a sacar)
+#     cero)
+#   - el guion esconde de golpe las líneas y el panel de daño, y otra vez los vuelve a sacar como estaban
 # Entra con la pistola en la mano; al salir, Johnny vuelve a llevar lo que llevaba al entrar: armas, balas, mochila y
 # arrojables. Lo que se gana aquí no cuenta (partida.gd, en_pruebas: los zombis no sueltan nada).
 class_name SalaArmas
@@ -50,7 +51,8 @@ var en_mano := ""          # el id del arma que lleva en la mano (para saber cu�
 var entrada := {}          # las armas y balas con las que entró Johnny (se le devuelven al salir)
 var panel: ColorRect
 # Lo que se enciende y se apaga en el panel de pruebas (static: se acuerda de una vez para otra)
-static var con_panel := true      # el panel de daño (también con el guion)
+static var con_panel := true      # el panel de daño
+static var escondido := false     # el guion: fuera todo de golpe (las líneas y el panel de daño); otra vez, vuelve como estaba
 static var ayudas := {"alcance": true, "apuntado": true, "trayectoria": true, "circulos": true, "balas": true}
 static var con_diana := true
 static var sin_fin := true        # munición sin fin
@@ -207,7 +209,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 		KEY_BACKSPACE:
 			a_cero()
 		KEY_MINUS:
-			con_panel = not con_panel
+			escondido = not escondido
 		_:
 			return
 	get_viewport().set_input_as_handled()
@@ -332,7 +334,7 @@ func numero(cual: String, color: Color) -> void:
 # ═════════════ Las líneas de ayuda ═════════════
 
 func _draw() -> void:
-	if johnny == null:
+	if johnny == null or escondido:
 		return
 	var w: Dictionary = johnny.arma()
 	var p := to_local(johnny.global_position)
@@ -398,8 +400,8 @@ func _draw() -> void:
 # ═════════════ El panel ═════════════
 
 func escribir() -> void:
-	panel.visible = con_panel
-	if not con_panel:
+	panel.visible = con_panel and not escondido
+	if not panel.visible:
 		return
 	var w: Dictionary = johnny.arma()
 	var fuego: bool = w.tipo == "fuego"
@@ -468,7 +470,7 @@ func escribir() -> void:
 	l.append("Habría matado %d %s" % [abatidos, "zombi normal" if abatidos == 1 else "zombis normales"])
 	if ultima_muerte != "":
 		l.append("  el último, en " + ultima_muerte)
-	l.append("Guion: esconder este panel")
+	l.append("Guion: esconder las líneas y este panel")
 	texto.text = "
 ".join(l)
 	panel.size = texto.get_minimum_size() + Vector2(16, 10)
