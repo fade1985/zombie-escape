@@ -110,7 +110,7 @@ var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no re
 var deposito := 0.0        # el lanzallamas y el lanza ácido: los segundos de chorro que le quedan en el depósito
 var deposito_sin_fin := false   # la sala de pruebas de armas: el depósito se llena sin gastar gasolina (o bidones)
 var mirando_chorro := ""   # hacia dónde miraba echando el chorro en el paso de antes (mirar_con_chorro)
-const CAMBIA_CHORRO := 0.175   # lo que tiene que ganar otra dirección para cambiar a ella echando el chorro (10°)
+const CAMBIA_CHORRO := 0.105   # lo que tiene que ganar otra dirección para cambiar a ella echando el chorro (6°)
 var llamarada: Llamarada   # la llama del lanzallamas (y el chorro del lanza ácido): sale mientras se ataca con él
 var goteo: Goteo           # la gota de ácido que cuelga de la boquilla del lanza ácido mientras no echa el chorro
 var espera := 0.0          # tiempo que falta para poder atacar otra vez
@@ -483,18 +483,19 @@ func intentar_atacar(angulo: float) -> void:
 
 
 # El lanzallamas (y el lanza ácido): la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama
-# aquí, se apaga) y el depósito se va gastando. Si la línea de tiro pasa por un zombi (blanco_en_linea, como la bala),
-# va recta de la boca a su cuerpo; si no, paralela a la línea de tiro. Johnny mira hacia donde el tubo del dibujo
-# apunte más hacia ella (mirar_con_chorro). Sin sacudida ni retroceso: quieto, Johnny se queda en la postura de apuntar
+# aquí, se apaga) y el depósito se va gastando. Sale siempre recta por donde apunta el tubo del dibujo ("cano" en
+# armas.gd), y su cono, ancho, pilla al zombi aunque no esté justo en esa línea. Johnny mira hacia donde el tubo
+# apunte más hacia el zombi al que apunta (si la línea de tiro pasa por uno, blanco_en_linea, como la bala) o hacia
+# donde apunta (mirar_con_chorro). Sin sacudida ni retroceso: quieto, Johnny se queda en la postura de apuntar
 # (animar). Al vaciarse el depósito, se llena solo si lleva con qué (gasolina o bidones de ácido)
 func echar_fuego(angulo: float, w: Dictionary) -> void:
 	var blanco := blanco_en_linea(angulo, w)
 	var hacia := Vector2.INF
-	# (a quemarropa, con el zombi más cerca que la boca, no: se torcería hacia atrás)
+	# (a quemarropa, con el zombi más cerca que la boca, no: desde la boca quedaría hacia atrás)
 	if blanco and (blanco.global_position - suelo_de_boca(w, direccion)).dot(Vector2.from_angle(angulo)) > blanco.radio:
 		hacia = blanco.global_position
 	direccion = mirar_con_chorro(angulo, w, hacia)
-	llamarada.mantener(suelo_de_boca(w, direccion), angulo, w, hacia)
+	llamarada.mantener(suelo_de_boca(w, direccion), deg_to_rad(w.cano[direccion]), w)
 	deposito = maxf(0.0, deposito - get_physics_process_delta_time())
 	if deposito <= 0.0:
 		empezar_recarga()
@@ -508,8 +509,8 @@ func suelo_de_boca(w: Dictionary, d: String) -> Vector2:
 
 
 # Hacia dónde mira Johnny echando el chorro: la dirección cuyo tubo, en el dibujo ("cano" en armas.gd), apunte más
-# hacia donde va el chorro (con un zombi, de la boca a su cuerpo; si no, paralelo a la línea de tiro), para que el tubo
-# y el chorro vayan lo más seguidos posible. Las diagonales del dibujo van más tumbadas que 45°: mirando solo el
+# hacia el zombi (de la boca a su cuerpo) o, sin zombi, hacia donde apunta (la línea de tiro), que es por donde saldrá
+# el chorro. Las diagonales del dibujo van más tumbadas que 45°: mirando solo el
 # ángulo, a un zombi algo más abajo que la diagonal le apuntaría con el tubo casi de lado, y así mira hacia abajo. Si
 # la de antes casi vale igual (CAMBIA_CHORRO), se queda en ella: que no baile entre dos y el chorro salte de boca
 func mirar_con_chorro(angulo: float, w: Dictionary, hacia: Vector2) -> String:

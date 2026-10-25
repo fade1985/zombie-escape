@@ -64,9 +64,9 @@ void fragment() {
 	float yy = y - onda;
 	// las bocanadas: un ruido que corre hacia fuera (unas 260 unidades por segundo)
 	float n = capas(vec2(x * 0.045 - tiempo * 11.7, yy * 0.07 + tiempo * 0.7));
-	// lo ancha: estrecha en la boca y se abre (como el cono que quema, llamarada.gd), con las bocanadas; contra la
+	// lo ancha: estrecha en la boca y se abre (como el cono que quema, llamarada.gd: 17,5° a cada lado), con las bocanadas; contra la
 	// pared, en la punta, se aplasta y se abre
-	float ancho0 = 5.0 + x * 0.21;
+	float ancho0 = 5.0 + x * 0.315;
 	ancho0 *= 1.0 + cortada * 0.6 * smoothstep(largo - 60.0, largo, x);
 	ancho0 += cortada * 26.0 * smoothstep(largo - 36.0, largo, x);
 	float ancho = ancho0 * (0.7 + 0.6 * n);

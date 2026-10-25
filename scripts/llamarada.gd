@@ -12,7 +12,7 @@
 # oscuros) y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
 #
 # El lanza ácido (Armas.CREADAS.desintegrador, efecto "acido") echa por aquí su chorro, igual de largo y con el mismo
-# cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: un chorro de manguera de bomberos, verde),
+# cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: un chorro de ácido a presión que se abre en abanico, verde),
 # el sonido (un siseo de agua a presión), que no alumbra, que en vez de chispas suelta gotitas que caen (y salpican
 # contra la pared) y que, en vez de prenderlos, deja a los zombis la herida de ácido (ArmasCreadas.herir). Como no es
 # fuego, al jefe de bomberos también le quita vida.
@@ -21,8 +21,10 @@ extends Node2D
 
 const TICK := 0.25          # cada cuánto quita vida a los que están dentro
 const EMPUJA := 2           # empuja uno de cada tantos pellizcos (cada medio segundo)
-const ABRE := 0.2           # cuánto se abre el cono a cada lado (radianes, unos 11°): a 10 casillas, 70 de ancho a cada lado
-const ABRE_ACIDO := 0.13    # el chorro del lanza ácido, más estrecho (unos 7°: a 10 casillas, 48 a cada lado), como se ve
+# cuánto se abre el cono a cada lado (17,5°: 35° entre los dos bordes; a 10 casillas, 100 de ancho a cada lado), en
+# los dos (el lanza ácido, igual), como se ve. Va recto por donde apunta el tubo del dibujo, y Johnny solo tiene 8:
+# así le da también al zombi que no está justo en esa línea (al que cae entre dos, a veces no)
+const ABRE := 0.305
 const BOCA := 6.0           # medio ancho de la llama en la boca
 const ALTURA := 50.0        # a qué altura sale de la boca (como la bala)
 const ALTURA_CUERPO := 26.0 # y a cuál llega al final
@@ -67,23 +69,18 @@ func _ready() -> void:
 	visible = false
 
 
-# Johnny echa fuego en este paso: "desde", el suelo debajo de la boca; "a", hacia dónde; "w", su arma (arma());
-# "blanco", el zombi al que apunta (su sitio en el suelo; Vector2.INF si no hay ninguno).
-# Con un zombi, el chorro va recto de la boca a su cuerpo (no paralelo a la línea que sale del centro de Johnny, que
-# con la boca a un lado pasaría junto a él): en la pantalla, de la boca al cuerpo, que se dibuja ALTURA_CUERPO por
-# encima de su sitio
-func mantener(desde: Vector2, a: float, w: Dictionary, blanco := Vector2.INF) -> void:
+# Johnny echa fuego en este paso: "desde", el suelo debajo de la boca; "a", hacia dónde va en la pantalla (por donde
+# apunta el tubo del dibujo: sale recta de él); "w", su arma (arma())
+func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 	pedida = true
 	global_position = desde
 	alcance = w.alcance
-	var u := Vector2.from_angle(a)
-	if blanco != Vector2.INF:
-		var baja := Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)   # lo que baja en la pantalla por cada unidad de suelo
-		var eje := (blanco - Vector2(0, ALTURA_CUERPO) - (desde - Vector2(0, ALTURA))).normalized()   # de la boca al cuerpo
-		# la dirección por el suelo que, con lo que baja, se ve así: u + baja tiene que ir por el eje, con u de largo 1
-		var e := eje.dot(baja)
-		u = (e + sqrt(e * e + 1.0 - baja.length_squared())) * eje - baja
-	angulo = u.angle()
+	# por el suelo, la dirección que, con lo que baja de la altura de la boca a la del cuerpo, se ve así: u + baja
+	# tiene que ir hacia "a", con u de largo 1
+	var eje := Vector2.from_angle(a)
+	var baja := Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)   # lo que baja en la pantalla por cada unidad de suelo
+	var e := eje.dot(baja)
+	angulo = ((e + sqrt(e * e + 1.0 - baja.length_squared())) * eje - baja).angle()
 	dps = w.dano
 	empuje = w.empuje
 	quema = w.get("quema", 1.0)
@@ -182,9 +179,9 @@ func dentro(zombi: Node2D, johnny: Node2D, u: Vector2) -> bool:
 	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
 
 
-# Lo que se abre el cono a cada lado por cada unidad de largo (el del ácido, más estrecho)
+# Lo que se abre el cono a cada lado por cada unidad de largo
 func abre() -> float:
-	return tan(ABRE_ACIDO if acido else ABRE)
+	return tan(ABRE)
 
 
 # Chispas que saltan de la llama hacia delante y hacia arriba (Particulas), en sitios al azar de lo largo
@@ -247,7 +244,7 @@ func _draw() -> void:
 		return
 	var u := Vector2.from_angle(angulo)
 	var eje := (u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)).normalized()
-	var lado := eje.orthogonal() * 170.0
+	var lado := eje.orthogonal() * 200.0
 	var boca := Vector2(0, -ALTURA)
 	var desde := boca - eje * (ATRAS + 10.0)
 	var hasta := boca + eje * (largo * 1.1 + 12.0)
