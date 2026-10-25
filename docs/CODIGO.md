@@ -60,9 +60,11 @@ en una línea.
 - `portera.gd`: la jefa por defecto, por estados.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
   `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
-  (también el de la portera) es `vapor_rabia.gd`; los avisos en el suelo de las cargas (flechas que se encienden
-  hasta la pared) y de los golpes cuerpo a cuerpo (arcos que se encienden), `aviso.gd` (los pinta el shader
-  `escenas/personajes/aviso.gdshader`; también los de la portera). Heredan:
+  (también el de la portera) es `vapor_rabia.gd`; todos los avisos en el suelo de los jefes son `aviso.gd` (los
+  pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
+  encienden hasta la pared), los golpes, saltos y círculos (se llenan hacia fuera; pueden llegar hasta las paredes,
+  cambiar de color y llevar ondas, como el aspirado del glotón), las barras rectas (lenguas, latigazos, alfileres,
+  rayas de los disparos) y las flechas del giro del bombero. Se prueban con `--golpes`, `--franja` y `--avisos`. Heredan:
   - Apartamentos: `gloton.gd`, `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.

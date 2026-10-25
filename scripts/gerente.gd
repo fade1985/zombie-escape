@@ -449,26 +449,23 @@ func morir() -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_contratos":
+			# una barra fina por donde irá cada contrato, que se llena hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_CONTRATOS[fase - 1])
 			var n: int = CONTRATOS[fase - 1]
-			draw_set_transform(Vector2(0, 6))
 			for i in n:
 				var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
-				var desde := Vector2.from_angle(a) * radio
-				draw_line(desde, desde + Vector2.from_angle(a) * LARGO_RAYAS * k, Color(rojo, 0.35 + 0.5 * k), 3.0)
+				Aviso.barra(self, Vector2(0, 6), a, radio, radio + LARGO_RAYAS, 3.0, k, tiempo, i)
 		"aviso_maletinazo":
 			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_MALETINAZO, ALCANCE_MALETINAZO,
 				minf(1.0, t / AVISO_MALETINAZO), tiempo)
 		"aviso_latigazo":
-			# las tres franjas de los latigazos, cada vez más rojas
+			# las tres barras de los latigazos, que se llenan hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_LATIGAZO)
-			for a in angulos_latigazo():
-				draw_set_transform(Vector2(0, 6), a)
-				draw_rect(Rect2(radio * 0.5, -ANCHO_LATIGAZO, LARGO_LATIGAZO - radio * 0.5, ANCHO_LATIGAZO * 2.0), Color(rojo, 0.1 + k * 0.3))
-				draw_rect(Rect2(radio * 0.5, -ANCHO_LATIGAZO, LARGO_LATIGAZO - radio * 0.5, ANCHO_LATIGAZO * 2.0), Color(rojo, 0.9), false, 3.0)
+			var latigos := angulos_latigazo()
+			for i in latigos.size():
+				Aviso.barra(self, Vector2(0, 6), latigos[i], radio * 0.5, LARGO_LATIGAZO, ANCHO_LATIGAZO, k, tiempo, i)
 		"latigazo":
 			# los tentáculos salen disparados por las franjas, culebrean y se recogen
 			var largo := LARGO_LATIGAZO * minf(1.0, t / 0.08) * clampf((DESPUES - t) / 0.2, 0.0, 1.0)

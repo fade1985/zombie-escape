@@ -1069,8 +1069,33 @@ func probar_franja() -> void:
 
 
 # --golpes: el aviso de los golpes cuerpo a cuerpo (aviso.gd) de cada jefe, congelado a medio cargar y casi al final:
-# captura-golpe-<golpe>-<llenado>.png (también los círculos de la portera: el del final de la embestida y el del giro)
+# captura-golpe-<golpe>-<llenado>.png (también los círculos de la portera: el del final de la embestida y el del giro,
+# y los saltos)
 func probar_golpes() -> void:
+	await fotos_de_avisos("golpe", [["portera", "aviso_fregonazo", 0.6], ["portera", "aviso_circulo", 0.35],
+		["portera", "aviso_giro", 0.6], ["portera", "aviso_abanico", 0.55],
+		["antidisturbios", "aviso_porrazo", 0.5],
+		["cocinero", "aviso_cuchillazo", 0.5], ["modista", "aviso_tijeretazo", 0.5],
+		["gerente", "aviso_maletinazo", 0.5], ["bombero", "aviso_hacha", 0.4],
+		["mascota", "salto", 0.8], ["gymbro", "salto", 1.1]])   # (el salto: el círculo de donde va a caer)
+
+
+# --avisos: el resto de los avisos (aviso.gd), congelados a medio cargar y casi al final: el torbellino del gymbro, las
+# lenguas y los latigazos, los alfileres, las rayas de los disparos, los círculos del científico, el giro del bombero
+# (y sus conos ya girando) y el aspirado del glotón (y aspirando): captura-aviso-<jefe>-<estado>-<llenado>.png
+func probar_avisos() -> void:
+	await fotos_de_avisos("aviso", [["gymbro", "aviso_torbellino", 1.0], ["gloton", "aviso_latigazo", "AVISO_LATIGAZO"],
+		["gloton", "aviso_aspirar", "AVISO_ASPIRAR"], ["gloton", "aspirar", 1.0],
+		["gerente", "aviso_latigazo", "AVISO_LATIGAZO"], ["gerente", "aviso_contratos", "AVISO_CONTRATOS"],
+		["cientifico_jefe", "aviso_lenguas", "AVISO_LENGUAS"], ["cientifico_jefe", "aviso_punetazo", "AVISO_PUNETAZO"],
+		["cientifico_jefe", "aviso_probetas", "AVISO_PROBETAS"], ["cientifico_jefe", "aviso_fuego", "AVISO_FUEGO"],
+		["modista", "aviso_alfileres", 1.0], ["cocinero", "aviso_abanico", "AVISO_ABANICO"],
+		["bombero", "aviso_giro", "AVISO_GIRO"], ["bombero", "giro", 1.0]])
+
+
+# Para --golpes y --avisos: cada jefe de la lista ([jefe, estado, lo que dura el aviso: un número o el nombre de su
+# constante]), solo, quieto y mirando a la izquierda, con su aviso a medio cargar y casi al final
+func fotos_de_avisos(prefijo: String, lista: Array) -> void:
 	set_process(false)
 	nueva_planta(2)
 	var idx := -1
@@ -1090,31 +1115,39 @@ func probar_golpes() -> void:
 	johnny.invulnerable = 999.0
 	var camara: Camera2D = johnny.get_node("Camara")
 	camara.zoom = Vector2(2.0, 2.0)
-	var golpes := [["portera", "aviso_fregonazo", 0.6], ["portera", "aviso_circulo", 0.35], ["portera", "aviso_giro", 0.6],
-		["portera", "aviso_abanico", 0.55],
-		["antidisturbios", "aviso_porrazo", 0.5],
-		["cocinero", "aviso_cuchillazo", 0.5], ["modista", "aviso_tijeretazo", 0.5],
-		["gerente", "aviso_maletinazo", 0.5], ["bombero", "aviso_hacha", 0.4],
-		["mascota", "salto", 0.8], ["gymbro", "salto", 1.1]]   # (el salto: el círculo de donde va a caer)
-	for g in golpes:
+	for g in lista:
 		var jefe: Node2D = meter_zombi(g[0], centro)
 		await get_tree().create_timer(0.1, false).timeout
 		jefe.set_physics_process(false)   # quieto, con el aviso a mano
-		jefe.mirada = Vector2.from_angle(PI - 0.3)   # hacia la izquierda: que no lo tape el jefe
-		jefe.cambiar(g[1], {"angulo": PI - 0.3, "desde": jefe.position, "hasta": jefe.position + Vector2(-110, 30),
-			"vuelo": g[2]})
+		var dura = g[2]
+		if dura is String:
+			dura = jefe.get_script().get_script_constant_map()[dura]
+		if dura is Array:
+			dura = dura[0]
+		var a := PI - 0.3   # hacia la izquierda: que no lo tape el jefe
+		jefe.mirada = Vector2.from_angle(a)
+		jefe.cambiar(g[1], {"angulo": a, "desde": jefe.position, "hasta": jefe.position + Vector2(-110, 30),
+			"vuelo": dura, "aviso": dura, "sentido": 1.0, "quedan": 1, "puntas": [],
+			"destinos": [jefe.position + Vector2(-150, 30), jefe.position + Vector2(-70, 110),
+				jefe.position + Vector2(-210, -50)]})
+		if jefe.has_method("medir_conos"):
+			jefe.datos.puntas = jefe.medir_conos()   # (el bombero: hasta dónde llega cada cono)
 		johnny.position = jefe.position + Vector2(-40, -90)
 		johnny.velocity = Vector2.ZERO
 		camara.reset_smoothing()
 		for k in [0.5, 0.97]:
-			jefe.t = g[2] * k
+			jefe.t = dura * k
 			for i in 6:   # (sin pensar, el jefe no se repinta solo)
 				jefe.queue_redraw()
 				await RenderingServer.frame_post_draw
-			Captura.foto("captura-golpe-%s-%d.png" % [g[1].trim_prefix("aviso_") + ("-" + g[0] if g[1] == "salto" else ""),
-				roundi(k * 100)])
-		print("Golpes (%s, %s): aviso %s (esperado: %s)" % [g[0], g[1], "sí" if jefe.has_node("Aviso") else "no",
-			"no" if g[1] == "aviso_abanico" else "sí"])   # (el abanico de agua: sin rayas, solo la fregona en alto)
+			var nombre: String = g[1].trim_prefix("aviso_")
+			if prefijo == "aviso":
+				nombre = g[0] + "-" + g[1]   # (entero: el aviso del giro y el giro, cada uno con su foto)
+			elif g[1] == "salto":
+				nombre = g[0] + "-" + nombre
+			Captura.foto("captura-%s-%s-%d.png" % [prefijo, nombre, roundi(k * 100)])
+		print("Avisos (%s, %s): aviso %s (esperado: %s)" % [g[0], g[1], "sí" if jefe.has_node("Aviso") else "no",
+			"no" if g[1] == "aviso_abanico" and g[0] == "portera" else "sí"])   # (el abanico de agua: sin aviso)
 		jefe.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
 	get_tree().quit()

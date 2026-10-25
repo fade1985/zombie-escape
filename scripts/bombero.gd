@@ -537,8 +537,8 @@ func animar() -> void:
 
 
 # Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, el cono por donde va cada fuego,
-# desde sus pies hasta la pared (en el aviso, rojo y creciendo, con su borde, la raya del medio por donde empieza y las
-# flechas del lado al que va a girar; girando, naranja). Y el borde de la burbuja de fuego
+# desde sus pies hasta la pared (aviso.gd: en el aviso, rojo y llenándose, con las flechas del lado al que va a girar;
+# girando, naranja). Y el borde de la burbuja de fuego
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -557,49 +557,15 @@ func _draw() -> void:
 			var n: int = CONOS[fase - 1]
 			for i in mini(n, datos.puntas.size()):
 				var a: float = datos.angulo + i * TAU / n
-				if estado == "aviso_giro":
-					var punta := abanico(pies, a, datos.puntas[i], k, Color(ROJO, 0.2 + 0.35 * k))
-					# el borde del cono y la raya del medio, por donde empieza
-					draw_polyline(punta, Color(ROJO, 0.9), 3.0)
-					draw_polyline(PackedVector2Array([punta[0], pies, punta[RAYOS]]), Color(ROJO, 0.9), 3.0)
-					draw_line(pies, punta[RAYOS / 2], Color(ROJO, 0.9), 4.0)
-				else:
-					abanico(pies, a, datos.puntas[i], 1.0, Color(Llamas.FUEGO[2], 0.3))
+				# el cono, hasta la pared (aviso.gd): en el aviso se llena; girando, lleno y naranja
+				var cono := Aviso.abanico(self, pies, a, ABERTURA, 0.0, k, tiempo, 1.0, 0.0, i)
+				cono.rayos(datos.puntas[i])
+				if estado == "giro":
+					cono.tinte = Llamas.FUEGO[2]
+					cono.destella = false
 			if estado == "aviso_giro":
-				flechas(pies, datos.sentido, minf(1.0, k * 3.0))
+				Aviso.flechas_giro(self, pies, datos.sentido, minf(1.0, k * 3.0), tiempo, CONOS.max())
 	draw_set_transform(Vector2.ZERO)
-
-
-# Un cono en el suelo, de "desde" hacia "a" hasta lo que llega cada rayo ("puntas", por "k": en el aviso va creciendo),
-# relleno de "color", trozo a trozo (así se corta bien en la pared, aunque la pille de lado). Devuelve sus puntas, de
-# un borde al otro
-func abanico(desde: Vector2, a: float, puntas: Array, k: float, color: Color) -> PackedVector2Array:
-	var punta := PackedVector2Array()
-	for j in RAYOS + 1:
-		punta.append(desde + Vector2.from_angle(angulo_rayo(a, j)) * float(puntas[j]) * k)
-	var colores := PackedColorArray([color, color, color])
-	for j in RAYOS:
-		draw_primitive(PackedVector2Array([desde, punta[j], punta[j + 1]]), colores, PackedVector2Array())
-	return punta
-
-
-# Las flechas del aviso del giro: dos anillos de puntas de flecha en el suelo, alrededor de "centro", que corren hacia
-# el lado al que va a girar el cono ("sentido": 1, como las agujas del reloj; -1, al revés). Rojas y con el borde
-# oscuro, para que se vean en cualquier suelo. "k", lo que se ven (0 a 1)
-func flechas(centro: Vector2, sentido: float, k: float) -> void:
-	for anillo in [[110.0, 6], [200.0, 10]]:
-		var r: float = anillo[0]
-		var n: int = anillo[1]
-		for j in n:
-			var b := j * TAU / n + tiempo * 1.2 * sentido
-			var fuera := Vector2.from_angle(b)
-			var hacia := Vector2.from_angle(b + PI / 2.0 * sentido)   # por donde va a girar
-			var p := centro + fuera * r
-			var punta := PackedVector2Array([p + hacia * 11.0, p - hacia * 9.0 + fuera * 14.0, p - hacia * 3.0,
-				p - hacia * 9.0 - fuera * 14.0])
-			draw_colored_polygon(punta, Color(ROJO, 0.95 * k))
-			punta.append(punta[0])
-			draw_polyline(punta, Color(0.16, 0.03, 0.05, 0.8 * k), 2.0)
 
 
 # Por encima de él: la burbuja de fuego y los conos de fuego del giro (por encima de la burbuja: salen de dentro)

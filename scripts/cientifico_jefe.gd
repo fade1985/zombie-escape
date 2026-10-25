@@ -666,15 +666,12 @@ func morir() -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_probetas":
-			# un anillo rojo donde caerá cada probeta, que se va llenando
+			# un círculo donde caerá cada probeta, que se llena hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_PROBETAS)
-			for destino in datos.destinos:
-				draw_set_transform(destino - global_position, 0.0, Vector2(1, 0.6))
-				draw_circle(Vector2.ZERO, 50.0 * k, Color(rojo, 0.1 + 0.15 * k))
-				draw_arc(Vector2.ZERO, 50.0, 0.0, TAU, 32, Color(rojo, 0.5 + 0.4 * k), 3.0)
+			for i in datos.destinos.size():
+				Aviso.abanico(self, datos.destinos[i] - global_position, 0.0, PI, 50.0, k, tiempo, 0.6, 0.0, i)
 		"cupula_sube", "cupula", "cupula_baja":
 			# el borde de la cúpula en el suelo
 			var k := minf(1.0, t / CUPULA_SUBE)
@@ -686,20 +683,14 @@ func _draw() -> void:
 			draw_circle(Vector2.ZERO, 78.0 * k, Color(CRISTAL, 0.12))
 			draw_arc(Vector2.ZERO, 78.0 * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
 		"aviso_lenguas":
-			# las tres franjas de las lenguas, cada vez más rojas
+			# las tres barras de las lenguas, que se llenan hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_LENGUAS)
-			for a in angulos_lenguas():
-				draw_set_transform(Vector2(0, 6), a)
-				var franja := Rect2(radio * 0.5, -ANCHO_LENGUA, LARGO_LENGUA - radio * 0.5, ANCHO_LENGUA * 2.0)
-				draw_rect(franja, Color(rojo, 0.1 + k * 0.3))
-				draw_rect(franja, Color(rojo, 0.9), false, 3.0)
+			var lenguas := angulos_lenguas()
+			for i in lenguas.size():
+				Aviso.barra(self, Vector2(0, 6), lenguas[i], radio * 0.5, LARGO_LENGUA, ANCHO_LENGUA, k, tiempo, i)
 		"aviso_punetazo":
-			# el círculo de la onda, que se va llenando
-			var k := minf(1.0, t / AVISO_PUNETAZO)
-			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.7))
-			draw_circle(Vector2.ZERO, RADIO_ONDA, Color(rojo, 0.08 + 0.18 * k))
-			draw_circle(Vector2.ZERO, RADIO_ONDA * k, Color(rojo, 0.12))
-			draw_arc(Vector2.ZERO, RADIO_ONDA, 0.0, TAU, 48, Color(rojo, 0.5 + 0.4 * k), 3.0)
+			# el círculo de la onda, que se llena de él hacia fuera (aviso.gd)
+			Aviso.abanico(self, Vector2(0, 6), 0.0, PI, RADIO_ONDA, minf(1.0, t / AVISO_PUNETAZO), tiempo, 0.7)
 		"punetazo":
 			# la onda: un anillo que crece desde los puños y se apaga
 			var k := minf(1.0, t / DURA_ONDA)
@@ -707,13 +698,11 @@ func _draw() -> void:
 			draw_arc(Vector2.ZERO, RADIO_ONDA * k, 0.0, TAU, 48, Color(1, 0.9, 0.7, 0.9 * (1.0 - k)), 10.0 * (1.0 - k) + 3.0)
 			draw_arc(Vector2.ZERO, RADIO_ONDA * k * 0.85, 0.0, TAU, 48, Color(1, 0.6, 0.3, 0.5 * (1.0 - k)), 4.0)
 		"aviso_fuego":
-			# tres rayas por donde irán las bolas
+			# una barra fina por donde irá cada bola, que se llena hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_FUEGO)
-			draw_set_transform(Vector2(0, 6))
 			for i in BOLAS:
 				var a: float = datos.angulo + (i - (BOLAS - 1) / 2.0) * ABRE_BOLAS
-				var desde := Vector2.from_angle(a) * radio
-				draw_line(desde, desde + Vector2.from_angle(a) * 320.0 * k, Color(rojo, 0.35 + 0.5 * k), 3.0)
+				Aviso.barra(self, Vector2(0, 6), a, radio, radio + 320.0, 3.0, k, tiempo, i)
 	draw_set_transform(Vector2.ZERO)
 
 

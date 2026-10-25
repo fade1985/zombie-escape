@@ -369,18 +369,14 @@ func animar() -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_tijeretazo":
 			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
 				minf(1.0, t / AVISO_TIJERETAZO), tiempo)
 		"aviso_alfileres":
-			# una raya fina por donde irán los alfileres, que se va llenando
-			var k := minf(1.0, t / datos.aviso)
-			var fija: bool = t >= datos.aviso - FIJA
-			draw_set_transform(Vector2(0, 6), datos.angulo)
-			draw_rect(Rect2(radio, -5, ALCANCE_ALFILERES, 10), Color(rojo, 0.08 + k * 0.15))
-			draw_line(Vector2(radio, 0), Vector2(radio + ALCANCE_ALFILERES * k, 0), Color(rojo, 0.95 if fija else 0.6), 2.0)
+			# una barra fina por donde irán los alfileres, que se llena hacia fuera (aviso.gd)
+			Aviso.barra(self, Vector2(0, 6), datos.angulo, radio, radio + ALCANCE_ALFILERES, 5.0,
+				minf(1.0, t / datos.aviso), tiempo)
 
 
 # El brillo de los ojos: antes de cambiarse de sitio (cada vez más fuerte) y al llegar al sitio nuevo (se apaga)

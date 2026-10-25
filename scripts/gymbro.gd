@@ -323,14 +323,11 @@ func animar() -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_torbellino":
-			var k := minf(1.0, t / datos.aviso)
-			var largo := VELOCIDAD_TORBELLINO * TIEMPO_TORBELLINO
-			draw_set_transform(Vector2(0, 6), mirada.angle())
-			draw_rect(Rect2(0, -BRAZOS, largo, BRAZOS * 2.0), Color(rojo, 0.08 + k * 0.2))
-			draw_rect(Rect2(0, -BRAZOS, largo * k, BRAZOS * 2.0), Color(rojo, 0.9), false, 3.0)
+			# por donde irá, tan ancho como sus brazos: las flechas de las cargas (aviso.gd)
+			Aviso.franja(self, Vector2(0, 6), mirada.angle(), VELOCIDAD_TORBELLINO * TIEMPO_TORBELLINO, BRAZOS,
+				minf(1.0, t / datos.aviso), tiempo)
 		"torbellino":
 			# el remolino: arcos que dan vueltas a la altura de los brazos
 			draw_set_transform(Vector2(0, PIE - 6), 0.0, Vector2(1, 0.6))

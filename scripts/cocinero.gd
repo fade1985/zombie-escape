@@ -260,16 +260,14 @@ func soltar(anim: String, dir: String, golpe: int) -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_abanico":
+			# una barra fina por donde irá cada cuchillo, que se llena hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_ABANICO)
 			var n: int = CUCHILLOS[fase - 1]
-			draw_set_transform(Vector2(0, 6))
 			for i in n:
 				var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
-				var desde := Vector2.from_angle(a) * radio
-				draw_line(desde, desde + Vector2.from_angle(a) * LARGO_RAYAS * k, Color(rojo, 0.35 + 0.5 * k), 3.0)
+				Aviso.barra(self, Vector2(0, 6), a, radio, radio + LARGO_RAYAS, 3.0, k, tiempo, i)
 		"aviso_cuchillazo":
 			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_CUCHILLAZO, ALCANCE_CUCHILLAZO,
 				minf(1.0, t / AVISO_CUCHILLAZO), tiempo)

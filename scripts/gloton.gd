@@ -57,7 +57,6 @@ const CONTORNO := Color("#2a1416")
 var espera_latigazo := 1.5
 var espera_aspirar := 6.0
 var acido_t := 0.0                     # para no salpicar ácido con cada perdigón
-var aire := 0.0                        # por dónde van los arcos del aspirado (corren más cuanto más fuerte aspira)
 var elipse = null                      # la elipse limpia de su habitación, en unidades (la_elipse(); null, sin buscar)
 
 
@@ -166,7 +165,6 @@ func latigazos(johnny: Node2D) -> void:
 # Tira de Johnny hacia la boca mientras esté en el cono, le vea y no esté esquivando. Si llega, se lo come
 func aspirar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
 	var fuerza := fuerza_aspirado()
-	aire += delta * (0.4 + 1.6 * fuerza)
 	# el aire que entra: motas que vuelan hacia la boca (más, más deprisa y más blancas cuanto más fuerte aspira)
 	if randf() < delta * 60.0 * fuerza:
 		var a := mirada.angle() + randf_range(-MEDIO_ASPIRAR, MEDIO_ASPIRAR)
@@ -329,40 +327,27 @@ func morir() -> void:
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	var rojo := Color(1, 0.24, 0.35)
 	match estado:
 		"aviso_latigazo":
-			# una franja roja por cada lengua, cada vez más roja
+			# una barra por cada lengua, que se llena hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_LATIGAZO)
-			for a in angulos_lenguas():
-				draw_set_transform(Vector2(0, 6), a)
-				var franja := Rect2(radio * 0.5, -ANCHO_LENGUA, LARGO_LENGUA - radio * 0.5, ANCHO_LENGUA * 2.0)
-				draw_rect(franja, Color(rojo, 0.1 + k * 0.3))
-				draw_rect(franja, Color(rojo, 0.9), false, 3.0)
+			var lenguas := angulos_lenguas()
+			for i in lenguas.size():
+				Aviso.barra(self, Vector2(0, 6), lenguas[i], radio * 0.5, LARGO_LENGUA, ANCHO_LENGUA, k, tiempo, i)
 		"aviso_aspirar", "aspirar":
-			# el cono por donde aspira; aspirando, arcos que se le meten en la boca. Cuanto más fuerte aspira, más
-			# verde el cono y más deprisa, más vivos y más gruesos los arcos
+			# el cono por donde aspira (verde, hasta las paredes), que se llena en el aviso; aspirando, lleno y con
+			# ondas que se le meten en la boca, más deprisa cuanto más fuerte aspira (aviso.gd)
 			var k := minf(1.0, t / AVISO_ASPIRAR) if estado == "aviso_aspirar" else 1.0
-			var fuerza := fuerza_aspirado() if estado == "aspirar" else 0.0
-			# (el borde del cono, en la elipse: cada raya hasta donde llega, como poco 30 para que siempre se vea algo)
-			var borde := PackedVector2Array()
+			var puntas := []   # (cada rayo hasta donde llega, como poco 30 para que siempre se vea algo)
 			for i in 21:
 				var b: float = mirada.angle() - MEDIO_ASPIRAR + i / 20.0 * MEDIO_ASPIRAR * 2.0
-				borde.append(Vector2.from_angle(b) * maxf(30.0, largo_aspirado(b, global_position + Vector2(0, 6))))
-			var puntos := PackedVector2Array([Vector2.ZERO])
-			puntos.append_array(borde)
-			draw_set_transform(Vector2(0, 6))
-			draw_colored_polygon(puntos, Color(VERDE, 0.06 + k * 0.12 + fuerza * 0.12))
-			puntos.append(Vector2.ZERO)
-			draw_polyline(puntos, Color(VERDE, 0.4 + k * 0.5), 3.0)
+				puntas.append(maxf(30.0, largo_aspirado(b, global_position + Vector2(0, 6))))
+			var cono := Aviso.abanico(self, Vector2(0, 6), mirada.angle(), MEDIO_ASPIRAR, 0.0, k, tiempo)
+			cono.rayos(puntas)
+			cono.tinte = VERDE
 			if estado == "aspirar":
-				# los arcos: el borde, encogido hacia la boca
-				for i in 3:
-					var f := 1.0 - fmod(aire + i / 3.0, 1.0)
-					var arco := PackedVector2Array()
-					for p in borde:
-						arco.append(p * f)
-					draw_polyline(arco, Color(VERDE, (0.3 + 0.5 * fuerza) * f), 2.0 + 2.0 * fuerza)
+				cono.ondas = 60.0 + 160.0 * fuerza_aspirado()
+				cono.destella = false
 	draw_set_transform(Vector2.ZERO)
 
 
