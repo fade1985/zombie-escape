@@ -4,27 +4,42 @@
 # También sirve para los molotovs y granadas que sueltan los zombis (fase 7a): otro "icono" y "puede", que
 # dice si cabe en la mochila (si no cabe, se queda en el suelo). Y para los objetos y las armas de la fase 7b:
 # lo que Johnny tira desde el inventario ("tirado") no sale despedido ni vuelve solo hasta que él se aparta.
+# La munición (y la gasolina y el ácido) lleva "a_oscuras": se ve un poco aunque la sala esté a oscuras. Y la caja de
+# munición, "que_icono": su dibujo cambia con el arma que lleva Johnny.
 extends Node2D
 
 signal cogido
 
 const ICONO := preload("res://assets/ui/iconos/billete.png")
+const A_OSCURAS := preload("res://escenas/luces/suelo_a_oscuras.gdshader")
 
 var johnny: Node2D
 var icono: Texture2D = ICONO
 var tamano := 0.75
 var puede := func() -> bool: return true
 var tirado := false
+var a_oscuras := false
+var que_icono := Callable()   # si lo hay, el dibujo que toca ahora (a 32 unidades de ancho, como los objetos)
 var velocidad := Vector2.ZERO
 var t := 0.0
+var dibujo: Sprite2D
+var brillo: Sprite2D   # la copia del dibujo que se ve a oscuras (solo con "a_oscuras")
 
 
 func _ready() -> void:
-	var dibujo := Sprite2D.new()
+	dibujo = Sprite2D.new()
 	dibujo.texture = icono
 	dibujo.scale = Vector2(tamano, tamano)
 	dibujo.offset = Vector2(0, -10)
 	add_child(dibujo)
+	if a_oscuras:
+		# encima del dibujo, una copia que no oscurece la penumbra (escenas/luces/suelo_a_oscuras.gdshader)
+		brillo = Sprite2D.new()
+		brillo.texture = icono
+		brillo.offset = dibujo.offset
+		brillo.material = ShaderMaterial.new()
+		brillo.material.shader = A_OSCURAS
+		dibujo.add_child(brillo)
 	# Sale despedido hacia un lado al azar
 	if not tirado:
 		velocidad = Vector2.from_angle(randf() * TAU) * randf_range(80.0, 200.0)
@@ -33,8 +48,16 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	t += delta
 	velocidad *= exp(-delta * 5.0)
+	if que_icono.is_valid():
+		var nuevo: Texture2D = que_icono.call()
+		if nuevo != icono:
+			icono = nuevo
+			dibujo.texture = nuevo
+			dibujo.scale = Vector2.ONE * 32.0 / nuevo.get_width()
+			if brillo:
+				brillo.texture = nuevo
 	# Flota un poco arriba y abajo
-	get_child(0).position.y = sin(t * 4.0) * 2.0
+	dibujo.position.y = sin(t * 4.0) * 2.0
 	if johnny and johnny.vivo and puede.call():
 		var hacia: Vector2 = johnny.global_position - global_position
 		var d := hacia.length()

@@ -3274,5 +3274,85 @@
   },
   "cost": "10 generaciones",
   "updated": "2026-10-24"
+ },
+ "municion-iconos": {
+  "nota": "Los dibujos de la munición, la gasolina y el bidón de ácido (25 oct, lo pidió el dueño: hacerlos bien con el arte del juego, de frente y un poco desde arriba, en tres cuartos). create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png (el baúl de la sala de mantenimiento, 32x29, en tres cuartos) como imagen de estilo sin copiar sus colores (style_options color_palette false). Dos intentos de cada uno (semillas X001 y X002), todos en assets/sources/municion/intentos/; hoja para elegir: assets/sources/municion/elegir.png. ELEGIDOS por el dueño: pistola A (assets/ui/iconos/municion-pistola.png), escopeta A (municion-escopeta.png, quitado un píxel blanco suelto de la esquina), gasolina B (obj-gasolina.png) y ácido A (obj-bidon_acido.png). Los cuatro cargadores de la MP5 (A y B de pie, C tumbado en diagonal y D dos cargadores pegados con cinta) no le gustaron: la de la MP5 (municion-mp5.png) es la caja de la pistola pintada de verde oscuro militar con assets/sources/municion/verde_militar.py. En el juego: la caja que suelta un zombi enseña la munición del arma que la recibiría (partida.icono_caja; la MP5, la caja verde) y se ve un poco a oscuras (billete.gd, a_oscuras); en el inventario, los iconos de Armas.MUNICION. Prueba: -- --captura --municion-suelo.",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "municion-pistola": {
+    "seeds": [
+     21001,
+     21002
+    ],
+    "ids": [
+     "35975405-fa82-41bf-bd2a-dde047a83517",
+     "edb75f20-64fd-4d92-b63a-39c0740a375b"
+    ],
+    "description": "A small open cardboard box of pistol ammunition, dark blue-grey box with a yellow label, the open top showing rows of shiny brass 9mm bullets with copper tips. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective [...]. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "municion-escopeta": {
+    "seeds": [
+     22001,
+     22002
+    ],
+    "ids": [
+     "0ec4261f-a4f4-4fc9-8867-658ef053eece",
+     "3200b048-4ce1-4807-b5f1-e2eab9e65397"
+    ],
+    "description": "A small open cardboard tray holding five bright red plastic shotgun shells standing upright side by side, each shell with a shiny brass metal base. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective [...]. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "municion-mp5": {
+    "seeds": [
+     23001,
+     23002,
+     23003,
+     23004
+    ],
+    "ids": [
+     "577ed0e2-cd3f-4efc-85ab-1fb36b54886b",
+     "0c21d6ef-9744-4d97-a082-c8f6a3c53d24",
+     "49de3c7a-5999-4463-a599-c5ce6ae17a48",
+     "bfdee037-24fd-497f-874a-8bbcee067bed"
+    ],
+    "description": "A y B: a long slightly curved black metal submachine gun magazine (MP5 style) standing upright, with brass bullets at its open top and two loose bullets at its foot. C: one wide curved magazine lying diagonally. D: two magazines taped together with grey duct tape. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective [...]. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "gasolina": {
+    "seeds": [
+     24001,
+     24002
+    ],
+    "ids": [
+     "e60ed9fe-4737-4808-b68e-a369a0a04eab",
+     "0a6b3ea3-ea4c-4582-bcd0-11e01691adac"
+    ],
+    "description": "A red metal jerry can of gasoline with a black screw cap spout and a handle on top, bright fire-engine red with an orange highlight, a small yellow flammable warning label, dented and dirty. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective [...]. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "bidon-acido": {
+    "seeds": [
+     25001,
+     25002
+    ],
+    "ids": [
+     "5bce09a5-7fc1-4b0a-b7be-881bdeb5cfa6",
+     "635a42c9-47ec-4528-a677-d65a8ff36684"
+    ],
+    "description": "A round green plastic chemical drum of acid with a screw cap on top, bright toxic green, a yellow and black hazard label with a skull, a drip of glowing green acid running down its side and a small green puddle at its foot. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective [...]. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   }
+  },
+  "cost": "60 generaciones (12 objetos de 5)",
+  "updated": "2026-10-25"
  }
 }

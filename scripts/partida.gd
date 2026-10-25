@@ -85,7 +85,7 @@ const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido"
 const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "tentaculos": Color("#7b4fa0")}
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
-const ICONO_MUNICION := preload("res://assets/ui/iconos/municion.png")
+const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const ICONO_RECETA := preload("res://assets/ui/iconos/receta.png")   # la hoja de receta que sueltan los jefes
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
 const BOTIQUIN := 50               # lo que cura el botiquín de los baños (BOTIQUIN_CURA en el JS)
@@ -845,8 +845,14 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 		return
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
-	cosa.icono = ICONO_MUNICION
-	cosa.tamano = 2.0
+	if tipo == "":
+		cosa.que_icono = icono_caja   # cambia si Johnny cambia de arma antes de cogerla
+		cosa.icono = icono_caja()
+	else:
+		cosa.icono = icono_municion(tipo)
+	cosa.tamano = 32.0 / cosa.icono.get_width()
+	cosa.a_oscuras = true
+	cosa.add_to_group("cajas_municion")
 	cosa.position = donde
 	if tipo == "":
 		cosa.puede = johnny.quiere_municion
@@ -864,6 +870,24 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
+# El dibujo de la munición de un tipo (Armas.MUNICION)
+func icono_municion(tipo: String) -> Texture2D:
+	return load("res://assets/ui/iconos/%s.png" % Armas.MUNICION[tipo].icono)
+
+
+# El dibujo de una caja de munición del suelo: el de la munición que daría al cogerla (la del arma de
+# johnny.arma_de_caja; la MP5 gasta las balas de la pistola, pero se pinta su caja verde). Si ahora no es para ninguna,
+# el de la munición del arma de fuego que lleva, o las balas de pistola si esa es de depósito
+func icono_caja() -> Texture2D:
+	var id: String = johnny.arma_de_caja()
+	if id == "" and johnny.huecos.fuego != "" and not Armas.datos(johnny.huecos.fuego).has("deposito"):
+		id = johnny.huecos.fuego
+	if id == "mp5":
+		return ICONO_MP5
+	var tipo := Armas.municion(id) if id != "" else ""
+	return icono_municion(tipo if tipo in Armas.MUNICION else "balas")
+
+
 # Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina y el
 # bidón de ácido, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
 # a la mochila hasta que se aparte)
@@ -872,6 +896,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	cosa.johnny = johnny
 	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
 	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
+	cosa.a_oscuras = id in Armas.MUNICION   # la gasolina y el bidón de ácido se ven a oscuras, como la munición
 	cosa.tirado = tirado
 	cosa.position = donde
 	cosa.puede = func() -> bool: return johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(mochila, id)

@@ -134,8 +134,8 @@ const RELLENOS := {
 # (en el inventario). La gasolina y el bidón de ácido son además objetos (objetos.gd): van en la mochila de la partida y
 # valen para las recetas, pero no ocupan casilla de la mochila, sino de la munición
 const MUNICION := {
-	"balas": {"nombre": "Balas de pistola", "icono": "bala", "hueco": 24, "sin": "¡Sin balas!", "para": "la pistola y la MP5"},
-	"cartuchos": {"nombre": "Cartuchos", "icono": "cartucho", "hueco": 12, "sin": "¡Sin cartuchos!", "para": "la escopeta"},
+	"balas": {"nombre": "Balas de pistola", "icono": "municion-pistola", "hueco": 24, "sin": "¡Sin balas!", "para": "la pistola y la MP5"},
+	"cartuchos": {"nombre": "Cartuchos", "icono": "municion-escopeta", "hueco": 12, "sin": "¡Sin cartuchos!", "para": "la escopeta"},
 	"pilas": {"nombre": "Pilas", "icono": "obj-bateria", "hueco": 60, "sin": "¡Sin pilas!", "para": "la pistola eléctrica"},
 	"gasolina": {"nombre": "Gasolina", "icono": "obj-gasolina", "hueco": 3, "sin": "¡Sin gasolina!", "para": "el lanzallamas"},
 	"bidon_acido": {"nombre": "Bidón de ácido", "icono": "obj-bidon_acido", "hueco": 3, "sin": "¡Sin ácido!",

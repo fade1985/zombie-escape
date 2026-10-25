@@ -16,6 +16,8 @@
 #   --municion     la munición por tipos, compartida por las armas que la gastan, en 8 huecos (Armas.MUNICION, johnny.gd):
 #                  la MP5 y la pistola, la gasolina y el ácido con la munición, las cajas (también con el lanzallamas en la
 #                  mano), tirar balas y volver a cogerlas; y los arrojables, 3 a mano y 8 de repuesto (lanzables.gd)
+#   --municion-suelo  los dibujos de la munición, la gasolina y el ácido en el suelo (con luz y a oscuras, donde se
+#                  ven un poco) y en el inventario; la caja que suelta un zombi cambia de dibujo con el arma
 #   --banco        una lanza, un súpersoplete, un bumerán, un mechero, una llave inglesa y un hacha de antes en el
 #                  guardado (se quitaron del juego) desaparecen al cargar; luego el banco de trabajo, las recetas y las
 #                  Colecciones, sin la prueba larga (probar_cosas, probar_recetas y probar_colecciones)
@@ -144,6 +146,9 @@ func empezar_prueba() -> void:
 	elif "--municion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion()
+	elif "--municion-suelo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_municion_suelo()
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
@@ -3724,7 +3729,7 @@ func probar_municion() -> void:
 	inventario.tirar()
 	inventario.cerrar()
 	await get_tree().create_timer(0.1).timeout
-	var cajas: Array = mapa.cosas.get_children().filter(func(c): return "icono" in c and c.icono == ICONO_MUNICION)
+	var cajas: Array = mapa.cosas.get_children().filter(func(c): return c.is_in_group("cajas_municion"))
 	print("Tira un hueco de balas: balas %d · cajas en el suelo %d (esperado: 30 · 1)" % [johnny.cuanta("balas"), cajas.size()])
 	if not cajas.is_empty():
 		cajas[0].position = johnny.position + Vector2(300, 0)
@@ -3784,6 +3789,55 @@ func probar_municion() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Con la MP5 en la mano: cargador %d · reserva %d (esperado: 30 · 54)" % [johnny.balas, johnny.reserva()])
 	Captura.foto("captura-municion-hud.png")
+	get_tree().quit()
+
+
+# Con "--captura --municion-suelo": los dibujos de la munición (PixelLab, 25 oct) en el suelo y en el inventario. En
+# fila a la derecha de Johnny: una caja de balas y otra de cartuchos tiradas, la caja que suelta un zombi con la MP5 en
+# la mano (la caja verde; cambia a la de cartuchos al sacar la escopeta), una gasolina y un bidón de ácido. Fotos:
+# captura-municion-suelo.png (con luz), captura-municion-suelo-oscuras.png (a oscuras se ven un poco),
+# captura-municion-suelo-inventario.png y captura-municion-suelo-hud.png (el lanzallamas, con la gasolina junto a su
+# barra)
+func probar_municion_suelo() -> void:
+	mochila.clear()
+	armas_guardadas.clear()
+	johnny.coger("pistola")
+	johnny.coger("mp5")
+	johnny.direccion = "o"   # (que la linterna no alumbre la fila)
+	await get_tree().create_timer(0.5).timeout
+	var donde := func(i: int) -> Vector2: return johnny.position + Vector2(130 + i * 48, 0)
+	soltar_municion(donde.call(0), "balas", 12)
+	soltar_municion(donde.call(1), "cartuchos", 6)
+	soltar_municion(donde.call(2))
+	soltar_objeto("gasolina", donde.call(3), true)
+	soltar_objeto("bidon_acido", donde.call(4), true)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var cajas: Array = get_tree().get_nodes_in_group("cajas_municion")
+	var del_zombi: Node2D = cajas.filter(func(c): return c.que_icono.is_valid())[0]
+	del_zombi.velocidad = Vector2.ZERO   # (sale despedida: quieta en su sitio)
+	del_zombi.position = donde.call(2)
+	print("Cajas en el suelo: %s (esperado: municion-pistola, municion-escopeta, municion-mp5)" % [
+		cajas.map(func(c): return c.icono.resource_path.get_file().get_basename())])
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-municion-suelo.png")
+	johnny.coger("escopeta")
+	await get_tree().create_timer(0.1).timeout
+	print("Saca la escopeta: la del zombi es ahora %s (esperado: municion-escopeta)" % del_zombi.icono.resource_path.get_file().get_basename())
+	johnny.coger("mp5")
+	luz.objetivo = 0.92
+	await get_tree().create_timer(1.5).timeout
+	Captura.foto("captura-municion-suelo-oscuras.png")
+	luz.objetivo = 0.0
+	johnny.meter_municion("cartuchos", 12)
+	mochila.append_array(["gasolina", "gasolina", "bidon_acido"])
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-municion-suelo-inventario.png")
+	inventario.cerrar()
+	llevar_arma(Armas.apuntar(Recetas.crear("lanzallamas", "verde")))
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-municion-suelo-hud.png")
 	get_tree().quit()
 
 

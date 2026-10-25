@@ -107,6 +107,12 @@
   `municion` (por tipos; la gasolina y el ácido son objetos de `partida.mochila`, que no ocupan casilla de la mochila:
   `Objetos.casillas`), `cargadores` (lo que quedaba en el de cada arma dejada), `reserva()`, `cuanta()`,
   `huecos_municion()`, `sitio()`, `meter_municion()` y `arma_de_caja()`. Prueba: `--captura --municion`.
+  Sus dibujos (PixelLab, 25 oct; `assets/pixellab.json` → `municion-iconos`): `assets/ui/iconos/municion-pistola.png`,
+  `municion-escopeta.png`, `municion-mp5.png` (la de la pistola en verde militar, `assets/sources/municion/verde_militar.py`),
+  `obj-gasolina.png` y `obj-bidon_acido.png`, de 32×32. La caja que suelta un zombi (`partida.soltar_municion`) enseña
+  la munición del arma que la recibiría (`partida.icono_caja`: con la MP5, la caja verde) y cambia si Johnny cambia de
+  arma (`billete.gd`, `que_icono`); la munición, la gasolina y el ácido del suelo se ven un poco a oscuras (`billete.gd`,
+  `a_oscuras`, con `escenas/luces/suelo_a_oscuras.gdshader`). Prueba: `--captura --municion-suelo`.
 - `lanzables.gd`: molotov, granada y arrojadizas creadas (apuntar, lanzar; `Lanzables.tipos()`). Tres tipos a mano
   (`mano`, F cambia entre ellos) y ocho de repuesto (`repuesto`): `colocar`, `repasar`, `a_la_mano`, `al_repuesto`.
   `granada.gd`: también la atraedora, la congeladora, la lluvia ácida, la mina despertador, la nube somnífera (que
