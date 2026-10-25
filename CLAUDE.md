@@ -30,11 +30,13 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
   visto bueno, se borra de la lista en el mismo commit.
 - Si hay varias sesiones a la vez, en el commit solo los archivos propios (nada de `git add -A`).
 - **Borrar en PixelLab no se puede deshacer:** solo con confirmación expresa del dueño.
-- **Ahorrar cuota:** sesiones cortas (si pasa de ~80 pasos, proponer seguir en otra con un resumen); Sonnet para
-  recetas ya rodadas, Opus para lo nuevo o difícil; capturas reducidas con `py` (Pillow) antes de abrirlas;
-  filtrar lo que imprime Godot (`grep`); leer por trozos los `docs/` y los archivos grandes (`.gd`, `.tscn`,
-  `.tres`): buscar el apartado o la función con `grep` y leer solo eso; en PixelLab, lanzar las generaciones de
-  golpe y comprobar una vez.
+- **Ahorrar cuota:** sesiones cortas (si pasa de ~80 pasos, proponer seguir en otra con un resumen); **Sonnet**
+  para lo que ya sabemos hacer y **Opus** para lo nuevo o difícil, también en subagentes y sesiones nuevas (una
+  sesión no puede cambiarse su propio modelo: si no es el que toca, decírselo al dueño para que lo cambie en el
+  menú de modelos); nada de enjambres de agentes en tareas sencillas; capturas reducidas con `py` (Pillow) antes
+  de abrirlas; filtrar lo que imprime Godot (`grep`); leer por trozos los `docs/` y los archivos grandes (`.gd`,
+  `.tscn`, `.tres`): buscar el apartado o la función con `grep` y leer solo eso; en PixelLab, lanzar las
+  generaciones de golpe y comprobar una vez.
 
 ## Probar
 
