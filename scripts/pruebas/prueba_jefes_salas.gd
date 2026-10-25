@@ -1020,7 +1020,8 @@ func probar_vapor() -> void:
 
 
 # --franja: el aviso de las cargas (aviso.gd) del antidisturbios y de la mascota, congelado a medio llenar y casi
-# lleno (con el destello): captura-franja-<jefe>-<llenado>.png
+# lleno (con el destello): captura-franja-<jefe>-<llenado>.png; y contra una pared, cortado:
+# captura-franja-<jefe>-pared.png
 func probar_franja() -> void:
 	set_process(false)
 	nueva_planta(2)
@@ -1055,6 +1056,21 @@ func probar_franja() -> void:
 				jefe.queue_redraw()
 				await RenderingServer.frame_post_draw
 			Captura.foto("captura-franja-%s-%d.png" % [par[0], roundi(k * 100)])
+		# contra una pared (la de arriba, a unos 220): se corta donde se estrellaría
+		var rayo := PhysicsRayQueryParameters2D.create(centro, centro + Vector2(0, -3000), 1)
+		var choque := jefe.get_world_2d().direct_space_state.intersect_ray(rayo)
+		if not choque.is_empty():
+			jefe.position = choque.position + Vector2(0, 220)
+		jefe.mirada = Vector2.from_angle(-PI / 2.0 - 0.45)
+		johnny.position = jefe.position + Vector2(150, 40)
+		camara.reset_smoothing()
+		jefe.t = 0.6
+		for i in 6:
+			jefe.queue_redraw()
+			await RenderingServer.frame_post_draw
+		print("Franja (%s): contra la pared, largo %d (esperado: menos de %d)" % [par[0], jefe.get_node("Aviso").largo,
+			jefe.VELOCIDAD_CARGA * jefe.TIEMPO_CARGA if "VELOCIDAD_CARGA" in jefe else jefe.VELOCIDAD_EMBESTIDA * jefe.TIEMPO_EMBESTIDA])
+		Captura.foto("captura-franja-%s-pared.png" % par[0])
 		print("Franja (%s): aviso %s (esperado: sí)" % [par[0], "sí" if jefe.has_node("Aviso") else "no"])
 		jefe.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
