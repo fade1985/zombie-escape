@@ -83,11 +83,12 @@ static func cargar() -> Dictionary:
 		# cambia (el desintegrador pasó a llamarse «Lanza ácido», 25 oct)
 		if Recetas.LISTA.has(a.get("receta", "")):
 			a.nombre = Recetas.LISTA[a.receta].nombre
-		# los lanzallamas cogen siempre el daño de la receta con su rareza, y su frase: los de antes de la llamarada
-		# continua (24 oct) se crearon con el daño de una gota (4 a 6), y los de después, con 60 por segundo antes de
-		# bajarlo a la mitad (25 oct)
-		if a.get("receta", "") == "lanzallamas":
-			var nuevo := Recetas.crear("lanzallamas", a.rareza)
+		# los lanzallamas y los lanza ácido cogen siempre el daño de la receta con su rareza, y su frase: los
+		# lanzallamas de antes de la llamarada continua (24 oct) se crearon con el daño de una gota (4 a 6), y los de
+		# después, con 60 por segundo antes de bajarlo a la mitad (25 oct); los lanza ácido de antes del chorro continuo
+		# (25 oct), con el de una gota (3 a 4)
+		if a.get("receta", "") in ["lanzallamas", "desintegrador"]:
+			var nuevo := Recetas.crear(a.receta, a.rareza)
 			a.dano = nuevo.dano
 			a.desc = nuevo.desc
 	for id in s.edificios:

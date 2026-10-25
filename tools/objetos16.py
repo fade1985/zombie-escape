@@ -1,6 +1,7 @@
-# Dibuja los 28 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
+# Dibuja los 29 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
 # les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 17 de siempre,
-# los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md) y los 2 de curar (parte 9).
+# los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md), los 2 de curar (parte 9) y el bidón de ácido
+# que llena el lanza ácido (el bidón de la gasolina, en verde ácido).
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
@@ -14,7 +15,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 ICONOS = RAIZ / "assets" / "ui" / "iconos"
 
 # Una letra = un color (el punto es hueco). Las minúsculas son el tono normal; las mayúsculas, el oscuro
-# (y P, L, W, c, l, h, e los claros)
+# (y P, L, W, c, l, h, e, s los claros)
 PALETA = {
     "o": "#2a1f2e",                                   # contorno
     "k": "#1a1a1a", "K": "#3a3a44",                   # negro y gris muy oscuro
@@ -28,6 +29,7 @@ PALETA = {
     "v": "#5aa05a", "V": "#3a6a3a", "l": "#8ad08a",   # verde
     "n": "#ff9f1c", "N": "#c06a10",                   # naranja
     "p": "#e07be0", "q": "#a04aa0",                   # rosa
+    "a": "#c7e04a", "A": "#608028", "s": "#ecf896",   # verde ácido (el del lanza ácido)
 }
 
 DIBUJOS = {
@@ -568,6 +570,8 @@ DIBUJOS["cadena"] = disco(cadena)
 DIBUJOS["cable"] = disco(cable)
 DIBUJOS["jeringuilla"] = disco(jeringuilla)
 DIBUJOS["perchas"] = disco(percha)
+# el bidón de ácido: el de la gasolina con el rojo cambiado por el verde ácido
+DIBUJOS["bidon_acido"] = [f.translate(str.maketrans("rRP", "aAs")) for f in DIBUJOS["gasolina"]]
 
 
 def hexa(c):

@@ -45,7 +45,9 @@
 #                  verdes), la gota de ácido que cuelga de la boquilla y cae, el chorro que quita vida y deja la herida de
 #                  ácido a los de dentro y no llega al lejano, sin charcos ni luz, despegándose al soltar, contra la pared,
 #                  el jefe de bomberos (el ácido sí le hace daño), en las 8 direcciones y con las 4 skins
-#                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd)
+#                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd); el depósito, que se llena con los bidones de
+#                  ácido de la mochila y, sin ellos, «¡Sin ácido!»; los del baúl con el daño de una gota cogen el de
+#                  ahora; y que los bidones solo los suelta el gordo, 1 de cada 4 veces
 #   --bumeran      el bumerán segador (la cuarta creada con dibujo propio que dispara): su icono, su hoja con el gesto de lanzar, sin
 #                  chispitas, que el bumerán atraviesa a los zombis que tiene delante, no llega al lejano, vuelve a la mano y no gasta
 #                  bala, que andando no hay gesto, el lanzamiento en las 8 direcciones y con las 4 skins (Armas.CREADAS.bumeran)
@@ -3550,7 +3552,7 @@ func probar_lanzallamas() -> void:
 			sala = n
 	await get_tree().create_timer(0.3).timeout
 	johnny.coger(id)
-	johnny.gasolina_sin_fin = false
+	johnny.deposito_sin_fin = false
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
@@ -3633,7 +3635,7 @@ func probar_lanzallamas() -> void:
 		johnny.mano, johnny.deposito, mochila.count("gasolina")])
 
 	# las 8 direcciones, quieto en la postura de apuntar (con la gasolina sin fin: aquí ya no se cuenta)
-	johnny.gasolina_sin_fin = true
+	johnny.deposito_sin_fin = true
 	var posturas := []
 	for d in johnny.DIRS:
 		johnny.deposito = w.deposito
@@ -3783,9 +3785,10 @@ func probar_supersoplete() -> void:
 # el desintegrador), un lanzallamas de ácido. Su hoja es la del lanzallamas con las bombonas verdes y sin la llamita
 # (tools/hoja_lanza_acido.py; casilla de 96x96 con los pies en 48,72) y su chorro, el de la llamarada con "acido"
 # (llamarada.gd y chorro_acido.gdshader). Como el lanzallamas, en la sala de mantenimiento, con dos en el baúl (una
-# guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía y llamándose «Desintegrador»), Johnny se
-# arrima al baúl y cuenta el icono y el nombre de cada una (captura-desintegrador-baul.png). Saca una y cuenta sus
-# números, su boca y que las balas no le valen. Luego, en la sala de pruebas de armas (F11), con el depósito sin fin:
+# guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía, llamándose «Desintegrador» y con el
+# daño de una gota, que al cargar el guardado coge el de ahora), Johnny se arrima al baúl y cuenta el icono, el nombre,
+# el daño y la frase de cada una (captura-desintegrador-baul.png). Saca una y cuenta sus números, su boca y que las
+# balas no le valen. Luego, en la sala de pruebas de armas (F11), gastando bidones de ácido de verdad:
 #   - quieto, sin echar el chorro, la gota de ácido de la boquilla (goteo.gd): se hincha, cuelga entera
 #     (captura-desintegrador-gota.png) y se suelta y cae (captura-desintegrador-cae.png)
 #   - el chorro: 1 s hacia la derecha con tres zombis en la misma línea, a 120 y a 250 (los dos dentro: pierden vida,
@@ -3794,15 +3797,24 @@ func probar_supersoplete() -> void:
 #     (captura-desintegrador-chorro.png, a medio chorro), y la gota que colgaba se ha soltado
 #   - al soltar, se despega de la boquilla y se va (captura-desintegrador-soltando.png); y contra la pared se corta
 #     en ella y salpica (captura-desintegrador-pared.png)
+#   - el depósito: casi vacío y con un bidón de ácido en la mochila, al vaciarse se llena solo y lo gasta; sin bidones,
+#     «¡Sin ácido!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-desintegrador-sin-acido.png, con la barra
+#     verde del depósito vacía; una gasolina no le vale); al coger un bidón del suelo (captura-desintegrador-bidon.png,
+#     el bidón en el suelo) vuelve a sacar el lanza ácido y lo llena
 #   - el chorro en las 8 direcciones (captura-desintegrador-<dirección>.png), con la gota colgando antes de echarlo
-#     (captura-desintegrador-gota-<dirección>.png), y con las 4 skins, con su hoja (captura-desintegrador-<skin>.png)
+#     (captura-desintegrador-gota-<dirección>.png), y con las 4 skins, con su hoja (captura-desintegrador-<skin>.png),
+#     con el depósito sin fin
 #   - al jefe de bomberos, al que el fuego no le hace nada, el ácido sí le quita vida (al final: su barra de vida se queda)
+#   - los bidones de ácido: de 4000 gordos, cerca de 1 de cada 4 suelta uno (y nada más); ni los otros zombis ni el
+#     reparto al azar los dan nunca; y en las Colecciones salen en los dos edificios, con «lo suelta el gordo»
 # Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_desintegrador() -> void:
 	var antes := Guardado.cargar()
 	var vieja := Recetas.crear("desintegrador", "azul")
 	vieja.icono = "lejia"   # como las que se crearon antes de que el desintegrador tuviera icono propio
 	vieja.nombre = "Desintegrador"   # y antes de que pasara a llamarse «Lanza ácido»
+	vieja.dano = 3                   # y con el daño de una gota (el de antes del chorro continuo), y su frase de entonces
+	vieja.desc = "Chorro de ácido: daño continuo y charco ácido"
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = [vieja, Recetas.crear("desintegrador", "morada")]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
@@ -3817,6 +3829,9 @@ func probar_desintegrador() -> void:
 		Recetas.icono_de("desintegrador")])
 	print("Nombres en el baúl: %s · en el banco «%s» (esperado: [\"Lanza ácido\", \"Lanza ácido\"] y Lanza ácido)" % [
 		Guardado.cargar().baul_armas.map(func(a): return a.nombre), Recetas.LISTA.desintegrador.nombre])
+	var baul: Array = Guardado.cargar().baul_armas
+	print("Daño en el baúl: %s · «%s» · frase de la vieja «%s» (esperado: [36, 44], daño 36/s: la de una gota, con el de ahora; la de la receta)" % [
+		baul.map(func(a): return a.dano), Recetas.detalle(baul[0]), baul[0].desc])
 	Captura.foto("captura-desintegrador-baul.png")
 	inventario.cerrar()
 	await get_tree().process_frame
@@ -3839,6 +3854,10 @@ func probar_desintegrador() -> void:
 			sala = n
 	await get_tree().create_timer(0.3).timeout
 	johnny.coger(id)
+	johnny.deposito_sin_fin = false
+	while "bidon_acido" in mochila:
+		mochila.erase("bidon_acido")
+	mochila.append_array(["bidon_acido", "bidon_acido"])   # (para que la barra de abajo enseñe dos)
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
@@ -3908,7 +3927,40 @@ func probar_desintegrador() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4).timeout
 
-	# las 8 direcciones: la gota colgando antes y el chorro saliendo del tubo, en la postura de apuntar
+	# el depósito: casi vacío y con un bidón de ácido, se llena solo al vaciarse y lo gasta
+	while "bidon_acido" in mochila:
+		mochila.erase("bidon_acido")
+	mochila.append("bidon_acido")
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	var recarga: bool = johnny.recargando > 0.0
+	await get_tree().create_timer(1.7).timeout
+	print("Depósito vacío con un bidón: recarga sola %s · depósito %.1f s · bidones que quedan %d · el texto «%s» (esperado: true, 8.0, 0, Lanza ácido   8 s · bidón de ácido x0)" % [
+		recarga, johnny.deposito, mochila.count("bidon_acido"), texto_del_arma()])
+	# sin bidones (con una gasolina en la mochila, que no le vale): se apaga, avisa y saca la de cuerpo a cuerpo, y la Q
+	# no deja volver
+	mochila.append("gasolina")
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	var aviso: Array = johnny.get_parent().get_children().filter(
+		func(n): return n is Label and n.text.begins_with("¡Sin")).map(func(n): return n.text)
+	Captura.foto("captura-desintegrador-sin-acido.png")
+	var mano: String = johnny.mano
+	johnny.cambiar_mano()
+	print("Sin bidones (con una gasolina): aviso %s · en la mano «%s» · después de la Q, «%s» · chorro encendido %s · gasolinas %d (esperado: [\"¡Sin ácido!\"], cuerpo, cuerpo, false, 1)" % [
+		aviso, mano, johnny.mano, johnny.llamarada.encendida, mochila.count("gasolina")])
+	mochila.erase("gasolina")
+	# coge un bidón del suelo (la foto, antes de que vuele hacia él): vuelve a sacar el lanza ácido y lo llena
+	soltar_objeto("bidon_acido", johnny.position + Vector2(60, 0))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-desintegrador-bidon.png")
+	await get_tree().create_timer(2.2).timeout
+	print("Coge un bidón del suelo: en la mano «%s» · depósito %.1f s · bidones %d · icono «%s» (esperado: fuego, 8.0, 0, obj-bidon_acido)" % [
+		johnny.mano, johnny.deposito, mochila.count("bidon_acido"), Objetos.icono("bidon_acido")])
+
+	# las 8 direcciones: la gota colgando antes y el chorro saliendo del tubo, en la postura de apuntar (con el
+	# depósito sin fin: aquí ya no se cuenta)
+	johnny.deposito_sin_fin = true
 	var posturas := []
 	for d in johnny.DIRS:
 		johnny.deposito = w.deposito
@@ -3944,11 +3996,42 @@ func probar_desintegrador() -> void:
 	jefe.remove_from_group("zombis")
 	jefe.queue_free()
 
+	# los bidones de ácido: solo los suelta el gordo, 1 de cada 4 (y entonces nada más), en los dos edificios
+	var suelta := {}
+	for ed in ["apartamentos", "centro"]:
+		for i in 2000:
+			var obj := Objetos.que_suelta("venenoso", ed, "ferreteria" if ed == "centro" else "")
+			suelta[obj] = suelta.get(obj, 0) + 1
+	var otros := 0   # bidones de los demás zombis o del reparto al azar
+	for tipo in ["normal", "lento", "rapido", "explosivo", "tentaculos"]:
+		for i in 400:
+			if Objetos.que_suelta(tipo) == "bidon_acido" or Objetos.que_suelta(tipo, "centro", "restaurante") == "bidon_acido":
+				otros += 1
+	for i in 2000:
+		if Objetos.al_azar() == "bidon_acido" or Objetos.al_azar("centro") == "bidon_acido":
+			otros += 1
+	print("De 4000 gordos: %s (esperado: cerca de 1000 bidon_acido y el resto \"\", nada más) · bidones de otros zombis o al azar %d (esperado: 0)" % [
+		suelta, otros])
+	print("Colecciones: en los Apartamentos %s, en el centro %s · «%s» y «%s» · nombre «%s» · al baúl %s (esperado: true, true, lo suelta el gordo dos veces, Bidón de ácido, true)" % [
+		"bidon_acido" in Objetos.de_edificio("apartamentos"), "bidon_acido" in Objetos.de_edificio("centro"),
+		Objetos.donde("bidon_acido", "apartamentos"), Objetos.donde("bidon_acido", "centro"), Objetos.nombre("bidon_acido"),
+		Objetos.al_baul("bidon_acido")])
+
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = antes.baul_armas
 		g2.skins = antes.skins
 		g2.skin = antes.skin)
 	get_tree().quit()
+
+
+# El texto del arma que lleva Johnny (el del cartel de la sala de mantenimiento: johnny.avisar_arma), su primera línea
+func texto_del_arma() -> String:
+	var texto := [""]   # (en una lista: la función de dentro no puede cambiar una variable de fuera)
+	var f := func(t): texto[0] = t
+	johnny.arma_cambiada.connect(f)
+	johnny.avisar_arma()
+	johnny.arma_cambiada.disconnect(f)
+	return texto[0].get_slice("\n", 0)
 
 
 # Con "--captura --bumeran": el bumerán segador con su dibujo propio (Armas.CREADAS.bumeran, conserje-48-bumeran: la hoja lleva solo el
@@ -5220,8 +5303,8 @@ func probar_colecciones() -> void:
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 23:
-		push_error("Colecciones: los objetos por edificio no son 17 y 23")
+	if Objetos.de_edificio("apartamentos").size() != 18 or Objetos.de_edificio("centro").size() != 24:
+		push_error("Colecciones: los objetos por edificio no son 18 y 24")
 	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
 		push_error("Colecciones: las recetas por edificio no son 15 y 9")
 	if Bestiario.LISTA.size() != 22:
@@ -5367,7 +5450,7 @@ func probar_objetos() -> void:
 			for i in 2000:
 				var id := Objetos.al_azar(ed_id, tienda)
 				salen[id] = salen.get(id, 0) + 1
-				if id == "explosivos" or (ed_id == "centro" and id in Objetos.SOLO_CASA) \
+				if id in Objetos.DE_UN_ZOMBI or (ed_id == "centro" and id in Objetos.SOLO_CASA) \
 						or (ed_id == "apartamentos" and id in Objetos.SOLO_CENTRO):
 					fallos.append("%s %s: %s" % [ed_id, tienda, id])
 			print("Objetos en %s %s: %d distintos %s" % [ed_id, tienda if tienda != "" else "(pasillo)", salen.size(), salen.keys()])

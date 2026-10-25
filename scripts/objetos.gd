@@ -8,12 +8,16 @@
 # Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
 # 17 de siempre; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS), que mezclan
 # algunos de siempre con los nueve nuevos (SOLO_CENTRO). Las cosas de casa (SOLO_CASA) no salen en el centro.
+# Dos solo los suelta un zombi, en los dos edificios (DE_UN_ZOMBI): los explosivos y el bidón de ácido.
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
 const BAUL := 32             # casillas del baúl: una por cada objeto distinto y una por cada arma creada
 const SUELTA := 0.10         # probabilidad de que un zombi suelte un objeto (provisional, como en el JS)
-const SUELTA_EXPLOSIVOS := 0.25   # los explosivos, solo los zombis explosivos
+const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
+# Lo que solo suelta un tipo de zombi, y nunca sale al azar: los explosivos, el explosivo (el dinamitero); el bidón de
+# ácido, que llena el lanza ácido, el gordo (venenoso)
+const DE_UN_ZOMBI := {"explosivos": "explosivo", "bidon_acido": "venenoso"}
 
 const NOMBRES := {
 	"clavos": "Clavos", "gasolina": "Gasolina", "cuchillas": "Cuchillas", "pistola_agua": "Pistola de agua",
@@ -21,6 +25,8 @@ const NOMBRES := {
 	"trapo": "Trapo", "explosivos": "Explosivos", "despertador": "Despertador", "extintor": "Extintor",
 	"taser": "Táser", "llave_inglesa": "Llave inglesa", "hacha": "Hacha", "cuerda": "Cuerda",
 	"mancuernas": "Mancuernas",
+	# el bidón de ácido, en los dos edificios: solo lo suelta el gordo (DE_UN_ZOMBI)
+	"bidon_acido": "Bidón de ácido",
 	# los nueve del centro comercial
 	"cinta_americana": "Cinta americana", "cadena": "Cadena", "bateria": "Batería", "cable": "Cable",
 	"aceite": "Aceite", "bombona": "Bombona de gas", "hielo_seco": "Hielo seco", "jeringuilla": "Jeringuilla",
@@ -110,21 +116,23 @@ static func cabe_baul(s: Dictionary, id: String) -> bool:
 	return s.baul.get(id, 0) > 0 or casillas_baul(s) < BAUL
 
 
-# Qué objeto suelta un zombi al morir ("" = nada): los explosivos solo los dejan los zombis explosivos. "tienda"
-# es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento)
+# Qué objeto suelta un zombi al morir ("" = nada): el explosivo y el gordo, solo lo suyo (DE_UN_ZOMBI: los
+# explosivos y el bidón de ácido), 1 de cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el
+# pasillo o en un apartamento)
 static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -> String:
-	if tipo == "explosivo":
-		return "explosivos" if randf() < SUELTA_EXPLOSIVOS else ""
+	for id in DE_UN_ZOMBI:
+		if DE_UN_ZOMBI[id] == tipo:
+			return id if randf() < SUELTA_PROPIO else ""
 	return al_azar(edificio, tienda) if randf() < SUELTA else ""
 
 
-# Un objeto cualquiera de los que salen ahí, menos los explosivos (el jefe suelta dos seguros). En los
+# Un objeto cualquiera de los que salen ahí, menos los de un solo zombi (DE_UN_ZOMBI; el jefe suelta dos seguros). En los
 # Apartamentos, uno de los de siempre; en el centro comercial, uno de la lista de su tienda (en el pasillo, de
 # una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar
 static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 	var lista: Array
 	if edificio == "apartamentos":
-		lista = NOMBRES.keys().filter(func(id): return id != "explosivos" and id not in SOLO_CENTRO)
+		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO)
 	else:
 		if tienda not in TIENDAS:
 			tienda = TIENDAS.keys().pick_random()
@@ -138,7 +146,7 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 # Lo encontrado alguna vez se apunta en el guardado ("encontrados"), y el ordenador lo cuenta por edificio.
 
 # Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 17 de siempre (con los
-# explosivos); en el centro comercial, todos menos las cosas de casa. Otro valor: todos
+# explosivos) y el bidón de ácido; en el centro comercial, todos menos las cosas de casa. Otro valor: todos
 static func de_edificio(edificio: String) -> Array:
 	match edificio:
 		"apartamentos":
@@ -149,10 +157,13 @@ static func de_edificio(edificio: String) -> Array:
 
 
 # Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier zombi (los
-# explosivos, solo el explosivo); en el centro comercial, las tiendas que lo sueltan ("Ferretería y tienda de ropa")
+# explosivos, solo el explosivo, y el bidón de ácido, solo el gordo, en los dos edificios); en el centro comercial,
+# las tiendas que lo sueltan ("Ferretería y tienda de ropa")
 static func donde(id: String, edificio: String) -> String:
 	if id == "explosivos":
 		return "lo suelta el zombi explosivo"
+	if id == "bidon_acido":
+		return "lo suelta el gordo"
 	if edificio != "centro":
 		return "lo suelta cualquier zombi"
 	var tiendas := []

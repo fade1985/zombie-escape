@@ -125,7 +125,7 @@ static func crear(receta: String, rareza := "") -> Dictionary:
 		"unidades": r.unidades + RAREZAS[rareza].extra if r.has("unidades") else 0}
 
 
-# La línea de debajo del nombre: su daño (por segundo, el del lanzallamas) o sus unidades. La rareza ya se ve en el
+# La línea de debajo del nombre: su daño (por segundo, el del lanzallamas y el lanza ácido) o sus unidades. La rareza ya se ve en el
 # color del borde
 static func detalle(a: Dictionary) -> String:
 	if a.unidades > 0:

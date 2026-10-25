@@ -123,13 +123,13 @@ const CREADAS := {
 		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-latigo-electrico.tres")},
 	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
 	# el lanzallamas: no dispara, echa una llamarada continua mientras se ataca (llamarada.gd) que llega a 10 casillas.
-	# No tiene cargador: tiene un depósito de "deposito" segundos de fuego que se llena entero con una gasolina de la
-	# mochila (en "recarga" segundos; las balas no le valen). Su daño es por segundo, y empuja cada medio segundo. Johnny
+	# No tiene cargador: tiene un depósito de "deposito" segundos de fuego que se llena entero con lo de "relleno" (una
+	# gasolina de la mochila; en "recarga" segundos, y las balas no le valen). Su daño es por segundo, y empuja cada medio segundo. Johnny
 	# lleva dos bombonas a la espalda y echa el fuego en la postura quieta de su hoja (la de apuntar, con el piloto
 	# encendido); la casilla es la de siempre, de 96x96 con los pies en 48,72. La boca es la punta del tubo de esa
 	# postura (donde está el piloto: el píxel del dibujo que más sale hacia donde apunta), medida en la hoja
-	"lanzallamas": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "empuje": 0.5,
-		"efecto": "llama", "hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
+	"lanzallamas": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "relleno": "gasolina", "empuje": 0.5,
+		"efecto": "llama","hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
 		"boca": {"s": Vector2(2, 1), "se": Vector2(26, -13), "e": Vector2(28, -22), "ne": Vector2(24, -39),
 			"n": Vector2(8, -52), "no": Vector2(-25, -40), "o": Vector2(-28, -21), "so": Vector2(-24, -10)}},
 	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el
@@ -143,13 +143,14 @@ const CREADAS := {
 			"n": Vector2(10, -52), "no": Vector2(-25, -40), "o": Vector2(-27, -30), "so": Vector2(-26, -22)}},
 	# el desintegrador (en el juego, «Lanza ácido»): un lanzallamas de ácido. Como el lanzallamas, no dispara: echa un chorro
 	# continuo de ácido mientras se ataca (llamarada.gd, con su efecto "acido") que llega a 10 casillas, con un depósito
-	# de "deposito" segundos que se llena entero en "recarga" segundos; su daño es por segundo, empuja cada medio segundo
+	# de "deposito" segundos que se llena entero en "recarga" segundos con un bidón de ácido de la mochila (los suelta el
+	# gordo); su daño es por segundo, empuja cada medio segundo
 	# y, en vez de prenderlos, deja a los zombis la herida de ácido. Su hoja es la del lanzallamas con las dos bombonas
 	# de la espalda en verde ácido y sin la llamita del piloto (tools/hoja_lanza_acido.py), que trae dónde está la punta
 	# del tubo en cada dibujo de reposo, de donde cuelga la gota de ácido (goteo.gd); la casilla es la de siempre, de
 	# 96x96 con los pies en 48,72. La boca es la punta del tubo de la postura quieta (el píxel del dibujo que más sale
 	# hacia donde apunta), medida en la hoja
-	"desintegrador": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "empuje": 0.5,
+	"desintegrador": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "relleno": "bidon_acido", "empuje": 0.5,
 		"efecto": "acido", "hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
 		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),
 			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)}},
@@ -184,6 +185,13 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-garfio.tres"),
 		"boca": {"s": Vector2(-15, -30), "se": Vector2(-6, -30), "e": Vector2(-6, -33), "ne": Vector2(-13, -35),
 			"n": Vector2(15, -31), "no": Vector2(10, -35), "o": Vector2(7, -34), "so": Vector2(-16, -31)}},
+}
+
+# Lo que llena el depósito de las armas que lo tienen (su "relleno", un objeto de la mochila): el aviso cuando ya no
+# queda ninguno y cómo se dice uno (en la sala de pruebas de armas). Su nombre y su icono, los de cualquier objeto
+const RELLENOS := {
+	"gasolina": {"sin": "¡Sin gasolina!", "uno": "una gasolina"},
+	"bidon_acido": {"sin": "¡Sin ácido!", "uno": "un bidón de ácido"},
 }
 
 # Las armas creadas sacadas del baúl en esta partida. Johnny y el inventario las nombran con un id como
