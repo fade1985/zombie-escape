@@ -171,11 +171,11 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# ninguno; el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza; el jefe
 			# de bomberos, ninguno)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
-		# Los pisos, de momento, vacíos: sus muebles se van a poner a mano, cada uno en su sitio
+		# Los pisos solo llevan los muebles que el dueño ha puesto a mano, cada uno en su sitio (Muebles.de_piso)
 		var piso := not jefe and not tiendas
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
-			"visitado": false, "muebles": [] if piso else Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
+			"visitado": false, "muebles": Muebles.de_piso(apt) if piso else Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
 		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		if jefe and su_jefe == "gloton":

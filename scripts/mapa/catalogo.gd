@@ -118,6 +118,9 @@ const MUEBLES := {
 #               el orden de "quitar". Cada mueble sale una vez por plantilla (nunca dos lavadoras en el mismo
 #               baño). Con plantillas, solo se amuebla la pared del fondo; si en ella no cabe nada (una puerta
 #               en medio), muebles sueltos en las demás paredes, como en las otras salas.
+#   colocados   en vez de plantillas, los muebles puestos a mano en la pared de arriba, siempre en el mismo sitio, según el
+#               lado de la entrada del piso: {"abajo": [[tipo, centro en casillas desde la pared izquierda], ...]}
+#               (ver Muebles.de_piso: es lo único que lleva un piso)
 #   fondo_max   el fondo máximo de sus muebles (para sitios estrechos)
 #   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas de la portera)
 #   fijos       en vez de unos cuantos sueltos, cada pared con sus muebles en un orden fijo (siempre igual), de punta
@@ -213,6 +216,10 @@ const SALAS := {
 			["desk?", "wardrobe?", "nightstand?", "doublebed", "nightstand?", "lamp?"],
 		],
 		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
+		# puestos a mano en la pared de arriba, en el piso normal (el que se entra por abajo): el armario sobre las casillas 2 y
+		# 3, la mesilla en la 6, la cama de la 7 a la 10 y la otra mesilla en la 11 (idea del dueño). Los pisos volteados
+		# (entrada "arriba") todavía no tienen la suya: la puerta del pasillo cae en esa pared y se está viendo cómo
+		"colocados": {"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]]},
 	},
 	"dormitorio-individual": {
 		"muebles": ["bed", "wardrobe", "nightstand", "desk", "lamp"],

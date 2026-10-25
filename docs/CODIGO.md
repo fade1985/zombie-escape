@@ -130,9 +130,10 @@ en una línea.
   `acustica_en(pos)`: cómo suena ahí la pistola, "seca", "eco" o "duro", según el sitio y el uso de la habitación.
 - `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
-  puerta da arriba; de momento sin muebles), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
+  puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
+  puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
   `viviendas.gd`, el pasillo de los rescatados.
-- `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`), `mueble.gd`.
+- `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
 - `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd`, `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`.
 

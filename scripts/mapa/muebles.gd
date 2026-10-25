@@ -67,6 +67,27 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 	return lista
 
 
+# Los muebles de un piso: los que el dueño ha puesto a mano, siempre en el mismo sitio. Cada habitación lleva los
+# "colocados" de su sala en Catalogo.SALAS ("<uso>-<tipo>", p. ej. "dormitorio-matrimonio"), según el lado por el que se
+# entra al piso ("abajo" los normales, "arriba" los volteados); la que no tiene, vacía.
+static func de_piso(apt: Dictionary) -> Array:
+	var lista := []
+	for s in apt.salas:
+		var datos: Dictionary = Catalogo.SALAS.get("%s-%s" % [s.uso, s.get("tipo", "")], {})
+		lista += colocados(datos.get("colocados", {}).get(apt.entrada.lado, []), s)
+	return lista
+
+
+# Los muebles de una habitación puestos a mano en su pared de arriba. Cada uno, [tipo, dónde está su centro, en casillas
+# contadas desde la pared izquierda de la habitación]: 2.0 es justo en medio de las casillas 2 y 3, y 5.5 el centro de la
+# casilla 6.
+static func colocados(lista: Array, sala: Dictionary) -> Array:
+	var puestos := []
+	for c in lista:
+		puestos.append(nuevo(c[0], {"lado": "arriba", "base": sala.f0 * float(CASILLA)}, (sala.c0 + c[1]) * float(CASILLA), sala.id))
+	return puestos
+
+
 # ═════════════ Filas en medio de la sala ═════════════
 
 # Las salas de venta de las tiendas son grandes: además de los muebles de las paredes, filas de muebles en medio
