@@ -66,7 +66,8 @@
   de un soplete (una bombona amarilla, un cañón corto y grueso con la boca acampanada y una llamarada en cono; casilla de 144×152 con los pies en
   `pies` 72,72, porque la llamarada llega a 69 píxeles a un lado y 77 hacia abajo; su `boca` va a mano, sacada del piloto del
   dibujo quieto, porque la que calcula `arma.py` cae en medio de la llamarada, a 40-50 píxeles de la boquilla; las gotas del
-  cono las pone el juego, `armas_creadas.gd`), y el desintegrador, `conserje-48-desintegrador`, con la pistola de agua modificada
+  cono las pone el juego, `armas_creadas.gd`), y el desintegrador (en el juego se llama «Lanza ácido» desde el 25 oct; por dentro
+  sigue siendo `desintegrador`), `conserje-48-desintegrador`, con la pistola de agua modificada
   (un depósito redondo de ácido verde lima encima, la boquilla ancha y blanca y un chorrito fino de ácido verde pálido; casilla de 152×136 con los
   pies en `pies` 66,90; su `boca` va a mano, sacada de la punta blanca de la boquilla del dibujo quieto, porque con ácido verde `arma.py` no
   encuentra ningún fogonazo naranja; las gotas de ácido las pone el juego, `armas_creadas.gd`), y el bumerán, `conserje-48-bumeran`, con el bumerán segador de acero con el filo

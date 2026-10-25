@@ -43,7 +43,8 @@ const LISTA := {
 		"desc": "Golpe en arco ancho que hace sangrar", "edificio": "apartamentos"},
 	"supersoplete": {"nombre": "Súpersoplete", "con": ["spray", "mechero"], "hueco": "fuego", "icono": "supersoplete", "dano": 7,
 		"desc": "Llamarada en cono, muy corta y muy fuerte", "edificio": "apartamentos"},
-	"desintegrador": {"nombre": "Desintegrador", "con": ["pistola_agua", "lejia"], "hueco": "fuego", "icono": "desintegrador", "dano": 3,
+	# el lanza ácido: antes se llamaba desintegrador (25 oct); por dentro (el id, sus dibujos, el guardado) sigue siéndolo
+	"desintegrador": {"nombre": "Lanza ácido", "con": ["pistola_agua", "lejia"], "hueco": "fuego", "icono": "desintegrador", "dano": 3,
 		"desc": "Chorro de ácido: daño continuo y charco ácido", "edificio": "apartamentos"},
 	"molotov": {"nombre": "Cóctel molotov", "con": ["alcohol", "trapo"], "hueco": "arrojadiza", "icono": "alcohol", "dano": 0, "unidades": 3,
 		"desc": "Botellas que dejan un charco de fuego", "edificio": "apartamentos"},

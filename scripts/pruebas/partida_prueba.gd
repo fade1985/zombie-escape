@@ -40,7 +40,8 @@
 #                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
 #                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.supersoplete)
-#   --desintegrador el desintegrador (la tercera creada a distancia con dibujo propio): su icono, su hoja con el chorrito de
+#   --desintegrador el desintegrador, en el juego «Lanza ácido» (la tercera creada a distancia con dibujo propio): su nombre
+#                  (también el de las creadas cuando se llamaba «Desintegrador»), su icono, su hoja con el chorrito de
 #                  ácido de la boquilla, sin chispitas, que el chorro quita vida y deja ácido al zombi que tiene delante y
 #                  no llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.desintegrador)
@@ -3778,9 +3779,10 @@ func probar_supersoplete() -> void:
 
 # Con "--captura --desintegrador": el desintegrador con su dibujo propio (Armas.CREADAS.desintegrador, conserje-48-desintegrador: la
 # hoja lleva el retroceso corto de pistola de agua y un chorrito fino de ácido verde pálido de la boquilla blanca; casilla de
-# 152x136, con los pies en 66,90; recetas.gd, su icono). Como el lanzallamas, en la sala de mantenimiento, con dos en el baúl
-# (una guardada antes de que tuviera icono propio, con el de la lejía), Johnny se arrima al baúl y cuenta el icono de cada una
-# (captura-desintegrador-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no
+# 152x136, con los pies en 66,90; recetas.gd, su icono). En el juego se llama «Lanza ácido» (25 oct). Como el lanzallamas, en la
+# sala de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía y
+# llamándose «Desintegrador»), Johnny se arrima al baúl y cuenta el icono y el nombre de cada una
+# (captura-desintegrador-baul.png). Saca una y cuenta su nombre, su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no
 # le salen chispitas; dispara a un zombi a 120 a su izquierda (le quita vida y le deja la herida de ácido) con otro a 330 en la
 # misma línea (más lejos de lo que llega el chorro: ni se entera), con una foto con las gotas saliendo
 # (captura-desintegrador-chorro.png) y cuenta cuántas balas gasta (una por disparo). Luego dispara en las 8 direcciones, con una
@@ -3791,6 +3793,7 @@ func probar_desintegrador() -> void:
 	var antes := Guardado.cargar()
 	var vieja := Recetas.crear("desintegrador", "azul")
 	vieja.icono = "lejia"   # como las que se crearon antes de que el desintegrador tuviera icono propio
+	vieja.nombre = "Desintegrador"   # y antes de que pasara a llamarse «Lanza ácido»
 	Guardado.cambiar(func(g2):
 		g2.baul_armas = [vieja, Recetas.crear("desintegrador", "morada")]
 		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
@@ -3803,6 +3806,8 @@ func probar_desintegrador() -> void:
 	print("Baúl: abierto %s · iconos %s (esperado: true, [\"desintegrador\", \"desintegrador\"]) · en el banco «%s» (esperado: desintegrador)" % [
 		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
 		Recetas.icono_de("desintegrador")])
+	print("Nombres en el baúl: %s · en el banco «%s» (esperado: [\"Lanza ácido\", \"Lanza ácido\"] y Lanza ácido)" % [
+		Guardado.cargar().baul_armas.map(func(a): return a.nombre), Recetas.LISTA.desintegrador.nombre])
 	Captura.foto("captura-desintegrador-baul.png")
 	inventario.cerrar()
 	await get_tree().process_frame
@@ -3816,8 +3821,8 @@ func probar_desintegrador() -> void:
 	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	print("Desintegrador en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-desintegrador.tres, 12, 220, (66, 90), (24, -26), false, desintegrador)" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+	print("Desintegrador en la mano: nombre «%s» · hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, 12, 220, (66, 90), (24, -26), false, desintegrador)" % [
+		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
 
 	# el chorro: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y le deja ácido; el segundo, a 330, queda
 	# fuera de su alcance (220 desde la boca, que está a 46 de Johnny)

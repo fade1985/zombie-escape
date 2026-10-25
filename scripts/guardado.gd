@@ -79,6 +79,10 @@ static func cargar() -> Dictionary:
 	for a in s.baul_armas:
 		a.dano = int(a.dano)
 		a.unidades = int(a.unidades)
+		# el nombre, siempre el de su receta: el arma lleva una copia del de cuando se creó, y así coge el nuevo si se
+		# cambia (el desintegrador pasó a llamarse «Lanza ácido», 25 oct)
+		if Recetas.LISTA.has(a.get("receta", "")):
+			a.nombre = Recetas.LISTA[a.receta].nombre
 		# los lanzallamas cogen siempre el daño de la receta con su rareza, y su frase: los de antes de la llamarada
 		# continua (24 oct) se crearon con el daño de una gota (4 a 6), y los de después, con 60 por segundo antes de
 		# bajarlo a la mitad (25 oct)
