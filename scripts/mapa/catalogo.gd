@@ -33,9 +33,12 @@ const MUEBLES := {
 	"stove":      {"len": 56,  "dep": 50,  "paredes": "",      "archivo": "cocina/fogon"},
 	# la mesa de la cocina con sus dos sillas, una a cada lado (un solo dibujo: van siempre juntas)
 	"kitchentable": {"len": 112, "dep": 54, "paredes": "",     "archivo": "cocina/mesa"},
+	# el dormitorio rehecho de frente (PixelLab, con las guías de tools/guias_dormitorio.py): la cama de matrimonio y la
+	# individual, con el cabecero contra la pared y los pies abajo. La mesilla (con su lamparita) no tiene dibujo de lado
+	"doublebed":  {"len": 124, "dep": 140, "paredes": "",      "archivo": "dormitorio/cama-matrimonio"},
 	"bed":        {"len": 84,  "dep": 140, "paredes": "",      "archivo": "dormitorio/cama"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
-	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
+	"nightstand": {"len": 40,  "dep": 36,  "paredes": "",      "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
 	"shoerack":   {"len": 74,  "dep": 34,  "paredes": "",      "archivo": "pasillo/zapatero"},
 	"coatstand":  {"len": 36,  "dep": 30,  "paredes": "todas", "archivo": "pasillo/perchero"},
@@ -196,18 +199,45 @@ const SALAS := {
 		],
 		"quitar": ["plant", "counter", "kitchentable", "fridge"],
 	},
-	"dormitorio": {
-		"muebles": ["bed", "wardrobe", "nightstand", "desk", "lamp"],
+	# cada dormitorio del apartamento es "de matrimonio" o "individual" (apartamento.gd): el primero lleva la cama grande, con
+	# una mesilla a cada lado (si falta sitio, se caen las dos juntas), y el segundo la pequeña, con una sola mesilla. La
+	# cama es obligatoria
+	"dormitorio-matrimonio": {
+		"muebles": ["doublebed", "wardrobe", "nightstand", "desk", "lamp"],
 		"cuantos": [2, 4],
 		"iguales": {"nightstand": 2},
-		# la cama es obligatoria, casi siempre con una mesilla a cada lado (si falta sitio, se caen las dos juntas)
 		"plantillas": [
-			["wardrobe?", "nightstand?", "bed", "nightstand?", "lamp?"],
-			["desk?", "nightstand?", "bed", "nightstand?", "wardrobe?"],
+			["wardrobe?", "nightstand?", "doublebed", "nightstand?", "lamp?"],
+			["desk?", "nightstand?", "doublebed", "nightstand?", "wardrobe?"],
+			["lamp?", "nightstand?", "doublebed", "nightstand?", "desk?"],
+			["desk?", "wardrobe?", "nightstand?", "doublebed", "nightstand?", "lamp?"],
+		],
+		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
+	},
+	"dormitorio-individual": {
+		"muebles": ["bed", "wardrobe", "nightstand", "desk", "lamp"],
+		"cuantos": [2, 4],
+		"plantillas": [
 			["bed", "nightstand?", "wardrobe?", "desk?"],
 			["lamp?", "wardrobe?", "bed", "nightstand?", "desk?"],
 			["wardrobe?", "bed", "nightstand?", "lamp?"],
-			["nightstand?", "bed", "nightstand?", "desk?"],
+			["desk?", "bed", "nightstand?", "wardrobe?"],
+		],
+		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
+	},
+	# el de respaldo, para un dormitorio sin tipo: la mitad de las plantillas con la cama de matrimonio y la otra mitad con
+	# la individual
+	"dormitorio": {
+		"muebles": ["bed", "doublebed", "wardrobe", "nightstand", "desk", "lamp"],
+		"cuantos": [2, 4],
+		"iguales": {"nightstand": 2},
+		"plantillas": [
+			["wardrobe?", "nightstand?", "doublebed", "nightstand?", "lamp?"],
+			["desk?", "nightstand?", "doublebed", "nightstand?", "wardrobe?"],
+			["lamp?", "nightstand?", "doublebed", "nightstand?", "desk?"],
+			["bed", "nightstand?", "wardrobe?", "desk?"],
+			["lamp?", "wardrobe?", "bed", "nightstand?", "desk?"],
+			["wardrobe?", "bed", "nightstand?", "lamp?"],
 		],
 		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
 	},

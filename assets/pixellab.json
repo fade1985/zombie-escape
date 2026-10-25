@@ -3473,5 +3473,52 @@
     "intento 4, semilla 404": "b656a843-74e2-4ca3-ad03-4c9367ab6e5a"
    }
   }
+ },
+ "dormitorio-pisos": {
+  "kind": "images",
+  "fecha": "2026-10-25",
+  "nota": "El dormitorio de los pisos y la lámpara de pie, rehechos con la receta de la cocina nueva (nevera-pisos, encimera-fogon-pisos, mesa-cocina-pisos). Seis dibujos: la cama de matrimonio (doublebed, mueble nuevo, 124 de largo y 140 de fondo), la cama individual (bed, 84 por 140), la mesilla (nightstand, 40 por 36, con su lamparita y un despertador encima), el armario (wardrobe, 96 por 44), el escritorio (desk, 92 por 50, sin silla) y la lámpara de pie (lamp, 30 por 30: sale de BLOQUE de tools/importar.py y se reduce a su len como los demás; sustituye a las dos de antes, lampara y lampara-b, en todo el juego). Guías de py tools/guias_dormitorio.py (las tapas vistas desde arriba con lo de encima dibujado y el frente debajo; las camas, con el cabecero de frente de 12 píxeles del juego, el colchón de 54 con las almohadas, la colcha y su dobladillo, y los pies de 10; la mesilla, con la pantalla de la lámpara subiendo sobre el borde de atrás; la lámpara, con el borde de la pantalla como un óvalo) como init_image con fuerza 45, no_background false, single color black outline y high top-down, 4 semillas cada una. Las guías se pasaron con get_upload_url + curl + init_image_url, porque el base64 pegado en la llamada se corrompe al copiarlo; y PixelLab solo admite 10 trabajos a la vez. Salieron rectos, menos dos casos: la cama individual (intentos 1 a 4: la colcha verde de la guía quedó en una franja turquesa y sin pies de cama; se repitió con otra guía de colcha mostaza (5 y 6) y otra granate (7 y 8), con fuerza 55 y 'una colcha gruesa que cubre casi todo el colchón hasta los pies' en el texto, y salieron bien) y el escritorio 4 (dibujó una silla). Elegidos por Claude con el visto bueno del dueño: la cama de matrimonio 2 (granate, con sangre en una almohada), la individual 5 (mostaza, con sangre), la mesilla 4 (lámpara de pantalla crema y despertador de campana), el armario 1 (una maleta ensangrentada encima y tiradores de latón), el escritorio 1 (portátil, papeles y taza, y cajones a los dos lados) y la lámpara 1 (pantalla gastada y barra de latón). Fondo quitado con py tools/guias_centro.py quita y py tools/guias_cocina.py limpia. Con --todo se comía lo azulado de dentro (la pantalla del portátil, el libro, el despertador), así que ni la mesilla, ni el armario, ni el escritorio, ni la lámpara lo llevan; al escritorio se le quitó a mano el suelo que se veía entre los cajones (un solo color, 31 49 65). Sprites con py tools/importar.py, todos en SIN_HALO: doublebed 62×76, bed 42×72, nightstand 20×33, wardrobe 48×72, desk 46×41, lamp 15×47. En el catálogo: la mesilla solo en la pared del fondo (no tiene dibujo de lado) y plantillas nuevas, dormitorio-matrimonio (cama grande y dos mesillas) y dormitorio-individual (cama pequeña y una mesilla), que usará el piso con pasillo, donde cada dormitorio trae su tipo; y dormitorio, el de respaldo, que es el que usan hoy los pisos normales, con la mitad de las plantillas con cada cama. Quitadas la lámpara B y su sprite mueble-lamp-b. Los intentos con fondo siguen en assets/sources/salas/descartes/ hasta que el dueño pida borrarlos.",
+  "textos": {
+   "cama-matrimonio": "double bed with a dark wooden frame seen in 3/4 top-down view, a mattress with two pillows and a quilt seen from above, the wooden headboard facing the viewer against the wall and the foot of the bed facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "cama (intentos 1 a 4)": "single bed with a dark wooden frame seen in 3/4 top-down view, a mattress with one pillow and a quilt seen from above, the wooden headboard facing the viewer against the wall and the foot of the bed facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "cama (intentos 5 a 8, fuerza 55)": "single bed with a dark wooden frame seen in 3/4 top-down view, a mattress with one pillow and a thick quilt covering most of the mattress down to the footboard seen from above, the wooden headboard facing the viewer against the wall and the wooden foot of the bed facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "mesilla": "wooden bedside nightstand seen in 3/4 top-down view, a small table lamp with a cream fabric shade and an alarm clock on its wooden top, the lamp shade rising above the back edge, two drawers with knobs facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "armario": "tall wooden wardrobe seen in 3/4 top-down view, a cardboard box and an old suitcase on its top seen from above, two wooden doors with brass handles facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "escritorio": "wooden desk seen in 3/4 top-down view, an open laptop, a stack of books, loose papers and a mug on its wooden desktop seen from above, a drawer pedestal on each side and a dark knee space between them facing the viewer, no chair, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "lampara": "tall floor lamp seen in 3/4 top-down view, a cream fabric lampshade with its round rim seen from above, a thin brass pole and a round dark base, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors"
+  },
+  "coste": "28 generaciones (24, más 4 de repetir la cama individual)",
+  "piezas": {
+   "cama de matrimonio (intento 2, semilla 202)": "6e6d300d-d1f4-4290-951b-18fe34eab05b",
+   "cama individual (intento 5, semilla 101, colcha mostaza)": "7c75eab3-4d57-424e-b418-de29c882ce06",
+   "mesilla (intento 4, semilla 404)": "023276c5-0450-42f6-ab9e-067100ee1f5e",
+   "armario (intento 1, semilla 101)": "ffbb2cd7-640c-4e6d-8da0-36b53df8d6a6",
+   "escritorio (intento 1, semilla 101)": "553f6bb7-90fe-451e-b142-841e21bbd5ee",
+   "lampara (intento 1, semilla 101)": "049bbdcf-58cd-4d5a-9381-d5a353578fb9",
+   "descartadas": {
+    "cama de matrimonio, intento 1, semilla 101": "8d025013-9ec4-4167-b18a-b4d91c000849",
+    "cama de matrimonio, intento 3, semilla 303": "e00edef2-6548-4bf0-b994-985943843b06",
+    "cama de matrimonio, intento 4, semilla 404": "0dedc5a4-9fec-4a71-b429-9b03daaa82c8",
+    "cama individual, intento 1, semilla 101 (colcha verde, mal)": "c1be3a35-acdf-4315-8830-5921247862c3",
+    "cama individual, intento 2, semilla 202 (colcha verde, mal)": "fa275356-1b9b-437f-adaa-2e0ead8aea1c",
+    "cama individual, intento 3, semilla 303 (colcha verde, mal)": "deb2a88b-417d-4a8a-a8eb-2375a2739fe2",
+    "cama individual, intento 4, semilla 404 (colcha verde, mal)": "4067362f-d2e8-4340-99ce-a40e9c1941a9",
+    "cama individual, intento 6, semilla 202, colcha mostaza": "423d1655-d381-4249-bc40-37d71642ee21",
+    "cama individual, intento 7, semilla 303, colcha granate": "d65a1f3f-6cfe-4491-afe5-df660568ddc6",
+    "cama individual, intento 8, semilla 404, colcha granate": "bf045050-30d0-413c-a673-730756feca2b",
+    "mesilla, intento 1, semilla 101": "7b53e20c-540a-41b3-81e9-418bac142c86",
+    "mesilla, intento 2, semilla 202": "85118345-0d14-42f0-93a0-88eea2959c71",
+    "mesilla, intento 3, semilla 303": "43d34552-2d7e-47d2-a201-b53825be5f4f",
+    "armario, intento 2, semilla 202": "dd32436b-693e-44f7-a3fd-cbde967e434f",
+    "armario, intento 3, semilla 303": "e391be89-c419-425f-8bf9-fe82873f1d5e",
+    "armario, intento 4, semilla 404": "aadad8e7-de53-4f3f-b318-f42fa49f6086",
+    "escritorio, intento 2, semilla 202": "324c5d03-2da0-4d8d-8c87-da9d6d642d65",
+    "escritorio, intento 3, semilla 303": "19943577-80ee-4340-8c75-e035febd2397",
+    "escritorio, intento 4, semilla 404 (con silla)": "b4603b82-cd26-4df4-a94c-afa4dfdb324f",
+    "lampara, intento 2, semilla 202": "006ea136-fa6a-48fd-8b92-492a0781fe9d",
+    "lampara, intento 3, semilla 303": "59cbfd3f-a155-407f-a193-f5a7afa73324",
+    "lampara, intento 4, semilla 404": "75094eb4-ca0e-4501-b3a2-43da2f9a65df"
+   }
+  }
  }
 }

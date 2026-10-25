@@ -113,7 +113,6 @@
   "objeto-fx-chispa",
   "objeto-fx-humo",
   "objeto-restos",
-  "mueble-lamp-b",
   "mueble-sofa-b",
   "mueble-sofa-c",
   "mueble-sofa-d",
@@ -210,5 +209,6 @@
   "mueble-staffsink-lado",
   "mueble-showertray",
   "mueble-stafftoilet-lado",
-  "mueble-kitchentable"
+  "mueble-kitchentable",
+  "mueble-doublebed"
 ]
