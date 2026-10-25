@@ -8,11 +8,10 @@
 # disparan: mientras se ataca echan un chorro continuo (llamarada.gd) y gastan su depósito, que se llena con un objeto
 # de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido: el "relleno" de armas.gd). La
 # pistola eléctrica sí dispara, pero su cargador también se llena con un objeto de la mochila: una batería.
-# Tres modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
+# Dos modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
 # cambian de uno a otro; se guarda):
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
 #             está a tiro, le pega o le dispara. El jugador solo se preocupa de moverse
-#   mira      ataca mientras se pulsa J, el clic izquierdo o el gatillo RT del mando, hacia donde mira Johnny
 #   libre     apunta con el ratón (y ataca con el clic o J) o con el stick derecho del mando (y ataca mientras
 #             lo empuja). Con una ayuda suave: si apuntas casi encima de un zombi, se tuerce un poco hacia él
 #
@@ -67,7 +66,7 @@ const BALA := preload("res://escenas/armas/bala.tscn")
 const RESERVA_INICIO := 2
 const RESERVA_CAJA := 1
 
-const MODOS := {"asistido": "Asistido", "mira": "Hacia donde mira", "libre": "Apuntar libre"}
+const MODOS := {"asistido": "Asistido", "libre": "Apuntar libre"}
 const AYUDA_ANGULO := 0.2  # modo libre: radianes (unos 11°) de margen para que el apunte se tuerza hacia un zombi
 
 # Nombre corto de cada dirección, empezando por el este y girando hacia abajo (sentido de las agujas
@@ -344,12 +343,10 @@ func _physics_process(delta: float) -> void:
 	if pedido.length() > 0.1:
 		direccion = direccion_de(pedido)
 
+	# (las pruebas le ponen "quieto", que no está en MODOS: ni apunta ni ataca solo, y no le mueve el ratón)
 	match modo:
 		"asistido":
 			apuntar_y_atacar()
-		"mira":
-			if Input.is_action_pressed("atacar"):
-				intentar_atacar(DIRS.find(direccion) * PI / 4)
 		"libre":
 			apuntar_libre()
 
@@ -705,7 +702,8 @@ func disparar(angulo: float) -> void:
 		bala.vida = w.alcance / w.velocidad
 		get_parent().add_child(bala)
 		bala.global_position = salida
-	Sonido.tocar("escopeta" if w.perdigones > 1 else "pistola")
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	Sonido.tocar("escopeta" if w.perdigones > 1 else "pistola_" + (mapa.acustica_en(global_position) if mapa else "seca"))
 	soltar_casquillo(angulo, w.perdigones > 1)
 	if w.perdigones > 1:
 		Temblor.temblar(4.0)   # la escopeta da un buen golpe

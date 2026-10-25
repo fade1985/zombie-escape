@@ -39,7 +39,15 @@ const EFECTOS := {
 	"no": {"notas": [[150, 0.15, "cuadrada", 0.04, -40]]},                             # nope
 	"barrido": {"hueco": 40, "notas": [[520, 0.1, "triangulo", 0.035, -380]]},        # swing (cuerpo a cuerpo)
 	"porrazo": {"hueco": 40, "notas": [[150, 0.09, "cuadrada", 0.05, -70], [90, 0.12, "triangulo", 0.06, -30]]},
-	"pistola": {"hueco": 50, "notas": [[950, 0.05, "cuadrada", 0.03, -750], [170, 0.08, "triangulo", 0.05, -90]]},
+	# la pistola suena distinta según dónde dispares (acustica_en, en mapa.gd): un chasquido de ruido, un golpe grave y lo
+	# que rebota. Seca al aire libre o entre muebles blandos; con eco en pasillos y salas grandes; con un rebote
+	# corto en los cuartos pequeños de azulejo o metal
+	"pistola_seca": {"hueco": 50, "notas": [[4500, 0.05, "ruido", 0.05, -3200], [160, 0.09, "seno", 0.07, -110],
+		[1500, 0.18, "ruido", 0.016, -1000, 0.03]]},
+	"pistola_eco": {"hueco": 50, "notas": [[6000, 0.04, "ruido", 0.05, -4000], [2000, 0.12, "ruido", 0.03, -1600],
+		[120, 0.13, "triangulo", 0.07, -70], [700, 0.4, "ruido", 0.014, -400, 0.06]]},
+	"pistola_duro": {"hueco": 50, "notas": [[3000, 0.06, "ruido", 0.045, -2400], [140, 0.1, "seno", 0.07, -90],
+		[2500, 0.04, "ruido", 0.022, -1800, 0.035], [1000, 0.12, "ruido", 0.01, -600, 0.05]]},
 	"escopeta": {"notas": [[120, 0.2, "sierra", 0.07, -60], [700, 0.1, "cuadrada", 0.035, -600]]},
 	"pitido": {"notas": [[1200, 0.06, "cuadrada", 0.03]]},                             # beep (mecha)
 	"explosion": {"notas": [[90, 0.45, "sierra", 0.09, -60], [50, 0.5, "triangulo", 0.1, -20, 0.02],

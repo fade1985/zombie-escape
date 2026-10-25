@@ -449,6 +449,7 @@
   (monta uno).
 - `mapa.gd`: monta un sitio (suelos, tapas, caras de pared, choques, muebles, peligros, niebla, navegación; y
   `muro_entre(a, b)`, la primera pared que corta una línea sin contar los muebles: la usa el vómito de Gastroenteritis;
+  `acustica_en(pos)`, cómo suena ahí la pistola: "seca", "eco" o "duro", según el sitio y el uso de la habitación;
   en el cuarto de la limpieza de la portera, `colgados`: fregonas y cubos colgados en la pared de arriba). Los suelos y
   paredes de cada sala salen de `ESTILO_DE` (pisos), `ESTILO_TIENDA` (tiendas: por uso, o por `"<uso>-<tipo>"` si ese
   tipo tiene el suyo, como el mármol de la joyería) y `PASILLOS` (el pasillo de cada

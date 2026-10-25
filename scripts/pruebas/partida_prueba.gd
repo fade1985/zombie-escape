@@ -58,6 +58,8 @@
 #                  pegados (zombi.gd, contagiar) y el ácido les come la armadura, también a los jefes (ArmasCreadas.con_acido)
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
+#   --acustica     cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o con un
+#                  rebote corto (mapa.acustica_en); con --edificio centro, en las tiendas
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
 #   --armas        la sala de pruebas de armas (F11, sala_armas.gd): la diana que no se muere, la pistola desde 72
 #                  ángulos (desde cuáles falla), la munición sin fin, el cambio de arma y la vuelta con las armas de antes
@@ -187,6 +189,9 @@ func empezar_prueba() -> void:
 	elif "--viviendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_viviendas()
+	elif "--acustica" in args:
+		set_process(false)   # sin la prueba larga
+		probar_acustica()
 	elif "--sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_sala()
@@ -266,6 +271,35 @@ func fotos_ayudas() -> void:
 # acompañar y volver, y desde la 1ª planta por el ascensor (supervivientes.gd: probar_viviendas); luego los seis a la
 # vez, el guiño de la cafetera y las cámaras del técnico. Cada línea de la terminal dice lo esperado. Deja el guardado
 # como estaba y se cierra
+# Con "--captura --acustica" (y "--edificio centro" para las tiendas): cómo suena la pistola en cada sitio de la
+# planta baja, habitación a habitación, y en la azotea (mapa.acustica_en); dispara una vez en cada una
+func probar_acustica() -> void:
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger("pistola")
+	var vistos := {}
+	for i in planta.sitios.size():
+		await montar(i, 0, false)
+		var s: Dictionary = planta.sitios[i]
+		var salas: Array = s.apt.salas if s.has("apt") else [{"id": 0, "uso": "-"}]
+		for sala in salas:
+			var clave := "%s/%s/%s" % [s.tipo, s.get("tienda", ""), sala.uso]
+			if vistos.has(clave):
+				continue
+			vistos[clave] = true
+			# el centro de la primera casilla de suelo de esa habitación
+			var pos := Vector2(-1, -1)
+			for n in mapa.cols * mapa.filas:
+				if mapa.dueno[n] == sala.id:
+					pos = Vector2(n % mapa.cols + 0.5, n / mapa.cols + 0.5) * mapa.CASILLA
+					break
+			print("ACUSTICA %-40s %s" % [clave, mapa.acustica_en(pos)])
+			Sonido.tocar("pistola_" + mapa.acustica_en(pos))
+	await montar(0, 0, false)   # de vuelta al pasillo: el minimapa no sabría dónde está si salta desde otro sitio
+	await ir_a_azotea()
+	print("ACUSTICA %-40s %s" % ["azotea", mapa.acustica_en(johnny.global_position)])
+	get_tree().quit()
+
+
 func probar_viviendas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await supervivientes.probar_viviendas()
@@ -1023,7 +1057,7 @@ func probar_llamas() -> void:
 	print("Llamas: en el medio, pasado el ardor, pierde %d en 1 s (esperado: 0) · ardiendo %s (esperado: false)" % [
 		antes - johnny.vida, johnny.estados.has("fuego")])
 	# el bombero, en el medio; que nadie le dispare (ni Johnny solo, ni los que le acompañan)
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	for a in get_tree().get_nodes_in_group("aliados"):
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 	var jefe: Node2D = meter_zombi("bombero", centro)
@@ -2380,7 +2414,7 @@ func probar_skins() -> void:
 
 	# ── El poder del glotón: quien le hace daño lo paga ──
 	var modo: String = johnny.modo
-	johnny.modo = "mira"   # que Johnny no pegue solo
+	johnny.modo = "quieto"   # que Johnny no pegue solo
 	var a_punto := func() -> void:   # con toda la vida y sin el parpadeo de invulnerable, para que el golpe entre
 		johnny.vida = johnny.stats.vida_max
 		johnny.invulnerable = 0.0
@@ -2450,7 +2484,7 @@ func probar_skins() -> void:
 #     molotovs, el cono y las bolas de fuego del jefe de bomberos; y su hachazo, que sí le quita
 func probar_skin_bombero() -> void:
 	var modo: String = johnny.modo
-	johnny.modo = "mira"   # que Johnny no pegue ni dispare solo
+	johnny.modo = "quieto"   # que Johnny no pegue ni dispare solo
 	var critico: float = johnny.stats.critico
 	johnny.stats.critico = 0.0
 	johnny.direccion = "e"
@@ -2660,7 +2694,7 @@ func probar_lanzallamas() -> void:
 	# comprado: sus números, su boca y sin chispitas; las balas no le valen
 	var id := "lanzallamas"
 	var w := Armas.datos(id)
-	johnny.modo = "mira"   # que no eche fuego por su cuenta: aquí lo echa la prueba
+	johnny.modo = "quieto"   # que no eche fuego por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
 	print("Lanzallamas en la mano: %s · hoja «%s» · daño %d/s · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: lanzallamas, conserje-48-lanzallamas.tres, 30, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (28, -22), false, lanzallamas, pistola: la de repuesto)" % [
 		johnny.huecos.fuego, johnny.sprite.sprite_frames.resource_path.get_file(), w.dano, w.alcance, w.alcance / Planta.CASILLA,
@@ -2949,7 +2983,7 @@ func probar_desintegrador() -> void:
 	# comprado: sus números, su boca y sin chispitas; las balas no le valen
 	var id := "desintegrador"
 	var w := Armas.datos(id)
-	johnny.modo = "mira"   # que no eche el chorro por su cuenta: aquí lo echa la prueba
+	johnny.modo = "quieto"   # que no eche el chorro por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
 	print("Lanza ácido en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · recarga %.1f s · empuje %.1f · daño %.0f/s · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, acido, 320 (10), 8, 1.5, 0.5, 30, (48, 72), (26, -20), false, desintegrador, pistola: la de repuesto)" % [
 		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
@@ -3169,7 +3203,7 @@ func probar_tintes() -> void:
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
@@ -3274,7 +3308,7 @@ func probar_fuego_acido() -> void:
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
@@ -4728,7 +4762,7 @@ func probar_cocinero() -> void:
 	# que nadie le dispare mientras tanto (ni Johnny solo, ni el superviviente que le acompaña): así se ve lo que
 	# le quita su aceite
 	var modo: String = johnny.modo
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	for a in get_tree().get_nodes_in_group("aliados"):
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 	for donde in [jefa.position, johnny.position]:

@@ -277,6 +277,25 @@ func zona_en(pos: Vector2) -> int:
 	return sala_de(c, f)
 
 
+# Cómo suena un disparo en un punto (la pistola tiene una versión de cada, en sonido.gd): "seca" al aire libre o
+# donde hay sofás, camas o ropa que se comen el eco; "eco" en pasillos y salas grandes; "duro" en los cuartos
+# pequeños de azulejo o metal (baño, cocina, cámara, almacén, la sala de mantenimiento...)
+func acustica_en(pos: Vector2) -> String:
+	if sitio.get("azotea", false):
+		return "seca"
+	var zona := zona_en(pos)
+	if not sitio.has("apt") or zona < 0:
+		return "eco"   # el pasillo de la planta, la exposición, la sala de pruebas de armas
+	match String(sitio.apt.salas[zona].uso):
+		"salon", "dormitorio", "probadores", "habitacion":
+			return "seca"
+		"tienda":
+			return "seca" if sitio.get("tienda", "") == "ropa" else "eco"
+		"jefe", "pasillo":
+			return "eco"
+	return "duro"
+
+
 func nombre_zona(zona: int) -> String:
 	if not sitio.has("apt") or zona < 0:
 		return ""
