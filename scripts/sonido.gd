@@ -12,7 +12,7 @@
 # La música de fondo: una canción de 8 bits para cada momento, hecha aquí (cada una tiene su partitura en
 # tools/<canción>.mjs, que saca assets/musica/<canción>.ogg ya con su volumen). Suena en bucle sin cortes (el
 # final empalma con el principio) y, al cambiar de momento, la nueva entra mientras la vieja se apaga:
-#     Sonido.musica("explorar")   # "menu", "explorar", "jefe" o "" (se apaga despacio)
+#     Sonido.musica("menu")       # "menu" (los menús y explorar las plantas), "jefe" o "" (se apaga despacio)
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 #
 # Cuando el juego no se ve (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana sin foco en el
@@ -108,8 +108,7 @@ var siguiente := 0
 # La canción de cada momento (assets/musica/<nombre>.ogg) y cuántos compases tiene (los de su partitura), para
 # que empiece siempre al principio de uno
 const CANCIONES := {
-	"menu": {"nombre": "el-ultimo-inquilino", "compases": 32},   # «El último inquilino»
-	"explorar": {"nombre": "puerta-a-puerta", "compases": 40},    # «Puerta a puerta»
+	"menu": {"nombre": "el-ultimo-inquilino", "compases": 32},   # «El último inquilino»: los menús y explorar
 	"jefe": {"nombre": "turno-de-noche", "compases": 52},         # «Turno de noche»: jefes, hordas y rescates
 }
 const FUNDIDO := 3.0     # segundos que tarda en pasar de una canción a otra

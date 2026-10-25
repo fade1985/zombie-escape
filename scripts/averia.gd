@@ -186,7 +186,7 @@ func acabar() -> void:
 	partida.logros.cumplir("buen_vecino")
 	partida.cerrada = false
 	partida.actualizar_puertas()
-	Sonido.musica("explorar")
+	Sonido.musica("menu")
 	a.decir("¡Arreglado! Ya puedes dar la luz")
 	partida.decir("¡El %s ha arreglado el cable! El agua ya no da calambres" % a.def.nombre, 3.5)
 	Sonido.tocar("limpio")

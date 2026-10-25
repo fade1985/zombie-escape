@@ -421,7 +421,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if fundir:
 		await create_tween().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
-	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "explorar")
+	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "menu")   # la de los menús también suena al explorar
 	# En el apartamento de la jefa, aparece ella (si aún no ha caído)
 	if sitio.tipo == "jefe" and not sitio.limpio:
 		await get_tree().create_timer(JEFE_TARDA).timeout
@@ -608,7 +608,7 @@ func _physics_process(delta: float) -> void:
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
 			arreglar_ascensor()
-			Sonido.musica("explorar")
+			Sonido.musica("menu")
 			decir("¡%s ha caído! %s" % [planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1),
 				"La escalera de incendios ya está abierta" if sitio.get("azotea", false) else "Las escaleras ya están abiertas"], 4.0)
 			logros.cumplir("desahucio")

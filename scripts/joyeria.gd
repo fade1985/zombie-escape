@@ -194,7 +194,7 @@ func abrir(texto: String) -> void:
 		puerta.abrir()
 		partida.mapa.rehornear()
 	Sonido.tocar("limpio")
-	Sonido.musica("explorar")
+	Sonido.musica("menu")
 	partida.decir(texto, 3.5)
 	capa.queue_redraw()
 	if not d.has("premio"):

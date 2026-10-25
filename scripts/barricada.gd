@@ -256,7 +256,7 @@ func acabar() -> void:
 	quitar_diana()
 	sup.rescate.horda_hecha = true   # al salir con él ya no hay otra horda
 	partida.logros.cumplir("buen_vecino")
-	Sonido.musica("explorar")
+	Sonido.musica("menu")
 	partida.cerrada = false
 	partida.actualizar_puertas()
 	partida.decir("¡Barricada fuera! La entrada se ha abierto", 3.0)

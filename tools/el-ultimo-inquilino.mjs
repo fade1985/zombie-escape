@@ -8,7 +8,8 @@
 //  que se repite en escalón: sobre re menor, sobre sol menor y sobre si bemol. Antes de volver,
 //  siempre pasa por mi bemol mayor, el acorde «raro» que da el escalofrío.
 //
-//  En el juego es la música del menú (assets/musica/el-ultimo-inquilino.ogg, ver scripts/sonido.gd).
+//  En el juego es la música de los menús y de explorar las plantas (assets/musica/el-ultimo-inquilino.ogg, ver
+//  scripts/sonido.gd).
 //
 //  node tools/el-ultimo-inquilino.mjs   → tools/efectos/el-ultimo-inquilino.wav y assets/musica/el-ultimo-inquilino.ogg (necesita ffmpeg)
 //  Sale en bucle perfecto. El sonido lo hace tools/motor-8bit.mjs; aquí solo van los instrumentos

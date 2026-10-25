@@ -478,7 +478,7 @@ func empezar_horda() -> void:
 
 # Tres minutos después: la puerta se abre. Los zombis que queden siguen ahí, pero ya se puede salir
 func acabar_horda() -> void:
-	Sonido.musica("explorar")
+	Sonido.musica("menu")
 	var a: Aliado = rescate.amigo
 	horda = {}
 	rescate.horda_hecha = true

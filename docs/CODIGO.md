@@ -448,9 +448,9 @@
 
 - `sprites/`: copia de los sprites del JS (`.png` + `.json` + `manifest.json`); los `.tres` de al lado son sus
   animaciones. Hoja nueva → `py tools/hacer_frames.py assets/sprites/zombi-normal`.
-- `musica/`: las tres canciones de 8 bits hechas aquí, una por momento (ver `tools/`): `el-ultimo-inquilino.ogg`
-  (menú), `puerta-a-puerta.ogg` (explorar) y `turno-de-noche.ogg` (peleas). Suenan en bucle; la de cada momento se
-  elige en `CANCIONES` de `sonido.gd` (con sus compases, para que entre siempre al principio de uno).
+- `musica/`: las dos canciones de 8 bits hechas aquí (ver `tools/`): `el-ultimo-inquilino.ogg` (los menús y
+  explorar las plantas) y `turno-de-noche.ogg` (peleas). Suenan en bucle; la de cada momento se elige en
+  `CANCIONES` de `sonido.gd` (con sus compases, para que entre siempre al principio de uno).
 - `ui/`, `fuentes/`: HUD y menús del JS (la fuente es nítida a 16 y 32). En `fuentes/` también, la letra de los
   nombres de los jefes: `jersey-25.ttf` (Jersey 25, de Google Fonts; nítida a 25 y 50), con su licencia OFL
   `jersey-25-OFL.txt`, que tiene que ir siempre con ella. `tiles/`: texturas para los TileSets.
@@ -504,8 +504,8 @@ Beretta 92 de lado, con la corredera larga y el cañón de acero asomando por el
 guardamonte redondo hueco y la empuñadura inclinada con las cachas de rombos), `zapato_negro.py` (arregla en una hoja de andar ya montada un zapato que PixelLab dibujó relleno de negro con un borde gris claro, solo con Pillow: `py tools/zapato_negro.py <sprite> north 8`; hay que repetirlo si se vuelve a montar la hoja; se hizo para la súper maza, que se quitó el 25 oct, y usa los colores de su hoja), `cientifico_muerto.py` (parte el científico muerto en cuerpo, piel y pelo), `hacer_casillas.py` (marcos de las casillas del HUD), `ver_dibujos.tscn` (foto de los dibujos hechos con
 código) y `probar_sonido.gd` (guarda los efectos en `tools/efectos/*.wav`, no van a git).
 Música de 8 bits: `motor-8bit.mjs` (ondas de consola, percusión, eco y el .wav en bucle) y las canciones hechas con
-él, cada una con su partitura: `el-ultimo-inquilino.mjs` (menú), `puerta-a-puerta.mjs` (explorar),
-`turno-de-noche.mjs` (peleas) y `villancico-8bit.mjs` (prueba, no está en el juego).
+él, cada una con su partitura: `el-ultimo-inquilino.mjs` (los menús y explorar), `turno-de-noche.mjs` (peleas) y
+`villancico-8bit.mjs` (prueba, no está en el juego).
 `node tools/<canción>.mjs` saca el .wav en `tools/efectos/` y `assets/musica/<canción>.ogg` ya a su volumen; con `--veces 4`, además,
 el .wav repetido para oír si cansa en bucle.
 

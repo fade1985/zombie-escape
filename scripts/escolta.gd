@@ -150,7 +150,7 @@ func acabar(llego: bool) -> void:
 	if not sup.rescate.is_empty():
 		sup.rescate.horda_hecha = true   # ya no hay horda para ella
 	sup.partida.logros.cumplir("buen_vecino")
-	Sonido.musica("explorar")
+	Sonido.musica("menu")
 	if not llego:
 		return
 	a.decir("Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo")

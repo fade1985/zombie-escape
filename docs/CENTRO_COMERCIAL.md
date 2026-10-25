@@ -390,7 +390,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   Johnny (nunca la cámara): grupos de 2 a 4 (uno más por cada dos plantas), cada 5 s al principio y cada 3 al final,
   con 24 a la vez como mucho; primero normales, lentos, rápidos y dependientas, luego rápidos, vigilantes y
   explosivos. Si Johnny sale de la joyería, la cuenta se para hasta que vuelve. Al acabar: «¡Clac!», la puerta se
-  abre y la música vuelve a la de explorar.
+  abre y la música vuelve a la de explorar (la de los menús).
 - **La tarjeta dorada:** el guardia de la planta de la joyería la lleva junto a la suya y, al caer, suelta las dos
   (la dorada, de oro con el chip azul: `Mapa.dibujo_tarjeta(true)`; `poner_llave(..., dorada)` avisa con
   `dorada_cogida`). Si se queda en el suelo, al volver al pasillo sigue ahí.
