@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" path="res://escenas/muebles/lavabo.tscn" id="lavabo"]
 [ext_resource type="PackedScene" path="res://escenas/muebles/lavadora.tscn" id="lavadora"]
 [ext_resource type="Script" path="res://scripts/sala.gd" id="script"]
-[ext_resource type="PackedScene" path="res://escenas/personajes/zombi_normal.tscn" id="zombi"]
 [ext_resource type="PackedScene" path="res://escenas/muebles/vater.tscn" id="vater"]
 
 
@@ -68,15 +67,6 @@ position = Vector2(660, 400)
 
 [node name="Johnny" parent="Cosas" unique_id=1174706944 instance=ExtResource("johnny")]
 position = Vector2(480, 460)
-
-[node name="Zombi1" parent="Cosas" instance=ExtResource("zombi")]
-position = Vector2(150, 470)
-
-[node name="Zombi2" parent="Cosas" instance=ExtResource("zombi")]
-position = Vector2(820, 520)
-
-[node name="Zombi3" parent="Cosas" instance=ExtResource("zombi")]
-position = Vector2(760, 330)
 
 [node name="Pantalla" type="CanvasLayer" parent="."]
 

@@ -1,6 +1,6 @@
 # La sala: al empezar saca el mapa de por dónde se puede andar (para los zombis), une la pantalla (barra de
-# vida y cartel del arma) con Johnny, saca otra tanda de zombis (de tipos mezclados) cuando se acaban y, si a
-# Johnny le pillan, vuelve a empezar.
+# vida y cartel del arma) con Johnny y, si a Johnny le pillan, vuelve a empezar. Empieza sin zombis: solo salen
+# los que se piden con las teclas.
 #
 # Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos y
 # venenoso) y P, la portera.
@@ -22,15 +22,12 @@ const ZOMBIS := {
 	"venenoso": preload("res://escenas/personajes/zombi_venenoso.tscn"),
 	"portera": preload("res://escenas/personajes/portera.tscn"),
 }
-# Qué tipos salen en las tandas: los que se repiten salen más a menudo
-const MEZCLA := ["normal", "normal", "normal", "lento", "lento", "rapido", "rapido", "explosivo", "tentaculos", "venenoso"]
 # Las teclas de prueba
 const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
 	KEY_F7: "venenoso", KEY_P: "portera"}
-# Dónde salen las tandas nuevas de zombis (en las esquinas y los bordes del baño, lejos del centro)
+# Dónde salen los zombis que se piden (en las esquinas y los bordes del baño, lejos del centro)
 const SALIDAS := [Vector2(110, 520), Vector2(850, 520), Vector2(850, 250), Vector2(110, 300), Vector2(480, 580),
 	Vector2(300, 560)]
-const POR_TANDA := 3
 
 var tiempo := 0.0
 var captura := false
@@ -52,8 +49,6 @@ func _ready() -> void:
 	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · 1-6 arma · Q cambiar · R recargar · F2-F7 zombis · P portera" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.avisar_arma()
-	for zombi in get_tree().get_nodes_in_group("zombis"):
-		zombi.murio.connect(_al_morir_zombi)
 
 	captura = Captura.activa()
 	if captura:
@@ -83,7 +78,6 @@ func _al_morir_johnny() -> void:
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
 	zombi.position = donde
-	zombi.murio.connect(_al_morir_zombi)
 	if tipo == "portera":
 		# Su barra de vida grande, arriba, y los vecinos que llama
 		var barra_jefa: ProgressBar = $Pantalla/Jefa
@@ -105,16 +99,6 @@ func _unhandled_input(evento: InputEvent) -> void:
 				lejos = salida
 		meter_zombi(TECLAS[evento.keycode], lejos)
 
-
-# Cuando cae el último zombi, al rato sale otra tanda, de tipos mezclados (para poder seguir probando)
-func _al_morir_zombi() -> void:
-	if not get_tree().get_nodes_in_group("zombis").is_empty():
-		return
-	await get_tree().create_timer(1.5).timeout
-	var salidas := SALIDAS.duplicate()
-	salidas.shuffle()
-	for i in POR_TANDA:
-		meter_zombi(MEZCLA.pick_random(), salidas[i])
 
 
 # Solo con --captura: la prueba sola
