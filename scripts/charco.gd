@@ -46,10 +46,10 @@ const BURBUJEO := {
 	"vomito": {"borde": Color("#5a4214"), "oscuro": Color("#8a6e22"), "medio": Color("#b89a34"), "centro": Color("#d6bc4c"),
 		"brillo": Color("#f2e08c"), "burbuja": Color("#d8c25a"), "luz": Color("#fff2bc"), "vapor": Color(0.9, 0.85, 0.5, 0.3),
 		"mancha": Color("#2e2410", 0.5)},
-	# la lejía: azulada, y sus burbujas son espuma blanca
-	"lejia": {"borde": Color("#2c5a78"), "oscuro": Color("#4a8cb4"), "medio": Color("#7cc0e0"), "centro": Color("#b4e4f4"),
-		"brillo": Color("#ffffff"), "burbuja": Color("#eef8ff"), "luz": Color("#ffffff"), "vapor": Color(0.85, 0.95, 1.0, 0.3),
-		"mancha": Color("#2a3a44", 0.45)},
+	# la lejía: blanquecina, con un punto azulado gris (que no parezca agua), y sus burbujas son espuma blanca
+	"lejia": {"borde": Color("#76888e"), "oscuro": Color("#a8b8bc"), "medio": Color("#cfdcdd"), "centro": Color("#e9f0ee"),
+		"brillo": Color("#ffffff"), "burbuja": Color("#fbfdfc"), "luz": Color("#ffffff"), "vapor": Color(0.95, 0.97, 0.97, 0.3),
+		"mancha": Color("#3a4246", 0.4)},
 }
 # Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
 const DERRAMA := 0.25
