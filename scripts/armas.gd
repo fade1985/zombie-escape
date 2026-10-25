@@ -71,56 +71,18 @@ const DATOS := {
 const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 170.0, "no": 205.0, "n": 270.0, "ne": 334.0}
 
 # ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
-# Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd) y lleva su "hoja" (y su
-# "momento", el del golpe en su animación): ya no queda ninguna con el dibujo del arma base. (Una arma sin "hoja"
-# usaría la del arma base y le saldrían unas chispitas del color "detalle" en la punta, "sube": hacia arriba, como
-# fuego, o si no caen como gotas: lo hace ArmasCreadas.detalle(); ninguna lo usa ya.) Son: el aplastacabezas
-# (conserje-48-aplastacabezas: el barrido del bate con el
-# bate de clavos; de espaldas, de arriba abajo), el bate de fuego (conserje-48-bate-fuego: el mismo barrido con
-# el bate ardiendo y una estela de llamas), el partecuerpos (conserje-48-partecuerpos: el barrido más ancho con el
-# bate de cuchillas, estela blanca con gotas de sangre; de espaldas, de arriba abajo) y la inmovilizadora
-# (conserje-48-inmovilizadora: el barrido con el bate con el táser atado a la punta, estela blanca con arcos
-# eléctricos celestes), el látigo escorpión (conserje-48-latigo: el latigazo hacia delante, con una raya blanca y
-# gotas verdes), la súper maza (conserje-48-supermaza: el giro entero con la maza de hierro, estela blanca circular con
-# polvo y piedrecitas), el mangual (conserje-48-mangual: el mismo giro entero, con la cadena estirada y la mancuerna en la
-# punta) y el bate helado (conserje-48-bate-helado: el barrido del bate con la cabeza cubierta de escarcha, estela blanca
-# y azul clara con copos y cristalitos) y el látigo eléctrico (conserje-48-latigo-electrico: el latigazo con el cable
-# negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
+# Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd) y lleva su "hoja". Son todas a
+# distancia (las de cuerpo a cuerpo y el garfio se quitaron del juego el 25 oct): el lanzallamas
 # (conserje-48-lanzallamas: dos bombonas rojas a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
 # el juego) y el desintegrador, en el juego «Lanza ácido» (conserje-48-desintegrador: la
 # del lanzallamas con las bombonas verdes de ácido y sin la llamita en la punta del tubo) y la
 # pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
-# celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd) y el garfio (conserje-48-garfio: el gesto de lanzar el
-# gancho de perchas con la cuerda enrollada en la otra mano; el gancho que vuela, la cuerda y el zombi que arrastra los dibuja el juego,
-# garfio.gd), con sus hojas de cada skin (tools/cara.py). El lanzallamas y el lanza ácido tienen un depósito, en
+# celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd), con sus hojas de cada skin
+# (tools/cara.py). El lanzallamas y el lanza ácido tienen un depósito, en
 # segundos. El daño no está aquí: lo trae cada arma creada (receta + rareza,
 # recetas.gd)
 const CREADAS := {
-	"aplastacabezas": {"base": "bate", "empuje": 3.0, "efecto": "aturde", "momento": 0.222,
-		"hoja": preload("res://assets/sprites/conserje-48-aplastacabezas.tres")},
-	"bate_fuego": {"base": "bate", "efecto": "fuego", "momento": 0.222,
-		"hoja": preload("res://assets/sprites/conserje-48-bate-fuego.tres")},
-	"partecuerpos": {"base": "bate", "arco": 170.0, "efecto": "sangra", "momento": 0.222,
-		"hoja": preload("res://assets/sprites/conserje-48-partecuerpos.tres")},
-	"inmovilizadora": {"base": "bate", "efecto": "descarga", "momento": 0.222,
-		"hoja": preload("res://assets/sprites/conserje-48-inmovilizadora.tres")},
-	# el látigo escorpión: su casilla es más ancha y alta (144x128, con los pies en 72,88) porque la cuerda se estira lejos
-	"latigo": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "veneno", "momento": 0.333,
-		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-latigo.tres")},
-	# la súper maza: su casilla es más ancha y alta (128x112, con los pies en 64,79) porque el giro rodea a Johnny con la estela
-	"supermaza": {"base": "fregona", "ritmo": 0.8, "arco": 360.0, "empuje": 2.5, "efecto": "circulo", "momento": 0.3,
-		"pies": Vector2(64, 79), "hoja": preload("res://assets/sprites/conserje-48-supermaza.tres")},
-	# las del centro comercial (parte 6): el mangual echa muy lejos a todos los de alrededor y los deja un momento
-	# tirados (su casilla es 144x128, con los pies en 72,88, porque la cadena estirada llega lejos); el bate helado
-	# congela (es el barrido del bate, con su casilla de siempre); el látigo eléctrico es un látigo de cable (casilla 144x128 como
-	# la del látigo escorpión, con los pies en 72,88) cuya descarga aturde y salta
-	"mangual": {"base": "fregona", "ritmo": 1.2, "alcance": 90.0, "arco": 360.0, "empuje": 4.5, "efecto": "tira", "momento": 0.3,
-		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-mangual.tres")},
-	"bate_helado": {"base": "bate", "efecto": "congela", "momento": 0.222,
-		"hoja": preload("res://assets/sprites/conserje-48-bate-helado.tres")},
-	"latigo_electrico": {"base": "cuchillo", "alcance": 110.0, "arco": 50.0, "efecto": "descarga", "momento": 0.286,
-		"pies": Vector2(72, 88), "hoja": preload("res://assets/sprites/conserje-48-latigo-electrico.tres")},
-	# a distancia: "alcance" y "velocidad" mandan en lo lejos que llega el chorro
+	# "alcance" y "velocidad" mandan en lo lejos que llega el chorro
 	# el lanzallamas: no dispara, echa una llamarada continua mientras se ataca (llamarada.gd) que llega a 10 casillas.
 	# No tiene cargador: tiene un depósito de "deposito" segundos de fuego que se llena entero con lo de "relleno" (una
 	# gasolina de la mochila; en "recarga" segundos, y las balas no le valen). Su daño es por segundo, y empuja cada medio segundo. Johnny
@@ -156,17 +118,6 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
 		"boca": {"s": Vector2(0, -31), "se": Vector2(19, -17), "e": Vector2(22, -30), "ne": Vector2(18, -42),
 			"n": Vector2(5, -48), "no": Vector2(-19, -42), "o": Vector2(-22, -30), "so": Vector2(-19, -17)}},
-	# el garfio, que sale y vuelve a la mano: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia
-	# con el gancho en la mano y el rollo de cuerda en la otra; el gancho que sale volando, la cuerda y el zombi arrastrado los dibuja el
-	# juego, garfio.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla es de 90x88, con los pies en 45,72, porque el brazo
-	# llega a 41 píxeles a un lado, 41 al otro, 68 hacia arriba (de espaldas, con el brazo estirado) y 12 hacia abajo. La boca NO sale de
-	# arma.py (no hay fogonazo naranja que buscar: conserje-48-garfio.json no tiene "muzzle"): es la mano que sujeta el gancho del dibujo
-	# quieto, a mano
-	"garfio": {"base": "pistola", "ritmo": 0.9, "alcance": 320.0, "velocidad": 620.0, "cargador": 1, "recarga": 0.0,
-		"empuje": 0.0, "efecto": "garfio", "sin_municion": true, "pies": Vector2(45, 72),
-		"hoja": preload("res://assets/sprites/conserje-48-garfio.tres"),
-		"boca": {"s": Vector2(-15, -30), "se": Vector2(-6, -30), "e": Vector2(-6, -33), "ne": Vector2(-13, -35),
-			"n": Vector2(15, -31), "no": Vector2(10, -35), "o": Vector2(7, -34), "so": Vector2(-16, -31)}},
 }
 
 # Lo que llena el depósito de las armas que lo tienen (su "relleno", un objeto de la mochila): el aviso cuando ya no

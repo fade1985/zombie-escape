@@ -57,7 +57,7 @@ var tiempo := 0.0
 
 
 func _ready() -> void:
-	z_index = 4   # por encima de Johnny y de los zombis, como el garfio
+	z_index = 4   # por encima de Johnny y de los zombis
 	var propio := ShaderMaterial.new()
 	propio.shader = SOMBREADO   # (unshaded: el fuego luce por sí mismo)
 	material = propio

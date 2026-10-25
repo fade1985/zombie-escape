@@ -180,7 +180,7 @@ hecha **depósito de gasolina** y una **manguera que escupe fuego** en vez de ag
 la lumbre.
 
 **Fase 1**
-- El traje lo protege: **el fuego no le hace nada** (molotov, lanzallamas, bate de fuego...), así que obliga a
+- El traje lo protege: **el fuego no le hace nada** (molotov, lanzallamas...), así que obliga a
   cambiar de arma.
 - Bolas de fuego: daño al dar y daño con el tiempo.
 - Se pone en el centro de la sala y **gira con el lanzallamas**: daño al dar y con el tiempo.

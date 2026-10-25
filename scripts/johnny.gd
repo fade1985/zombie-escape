@@ -222,9 +222,9 @@ func arma() -> Dictionary:
 	if huecos[mano] == "fregona":
 		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
 	if w.tipo == "cuerpo":
-		w.dano = w.dano * Skins.cuerpo(skin)    # el gymbro: × 3 (todas, también las creadas en el banco)
+		w.dano = w.dano * Skins.cuerpo(skin)    # el gymbro: × 3 (la fregona, el bate y el cuchillo)
 	if w.get("efecto", "") in ArmasCreadas.QUEMAN:
-		w.quema = Skins.quema(skin)             # el bombero: × 3 el golpe o la gota, y lo que sigue ardiendo el zombi
+		w.quema = Skins.quema(skin)             # el bombero: × 3 la llamarada, y lo que sigue ardiendo el zombi
 		w.dano = w.dano * w.quema
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
@@ -355,8 +355,6 @@ func _physics_process(delta: float) -> void:
 
 	animar()
 	gotear()
-	if Armas.es_creada(huecos[mano]):
-		ArmasCreadas.detalle(self, Armas.datos(huecos[mano]), delta)   # chispitas de color en la punta
 
 
 # La esquiva: sale lanzado hacia donde se mueve (o, quieto, hacia donde mira) y un momento no le hacen daño
@@ -584,8 +582,8 @@ func atacar(angulo: float) -> void:
 		ataque_dur = minf(largo_anim, 0.95 / w.ritmo)
 	var ritmo_anim := largo_anim / ataque_dur
 	if w.tipo == "fuego" and velocity.length() > 20.0:
-		# Disparando mientras anda: sigue andando y los efectos del disparo se pintan encima. El garfio no tiene
-		# (su hoja solo lleva el gesto de lanzar, que no se pinta andando): sigue andando sin gesto y sin retroceso
+		# Disparando mientras anda: sigue andando y los efectos del disparo se pintan encima (si su hoja no los
+		# tiene, sigue andando sin gesto y sin retroceso)
 		ataque_t = -1.0   # las piernas siguen con la animación de andar
 		if efectos.sprite_frames.has_animation("efectos_" + direccion):
 			efectos.speed_scale = ritmo_anim
@@ -621,8 +619,6 @@ func golpear(angulo: float) -> void:
 			var dano := con_critico(w.dano)
 			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * w.empuje)
 			tocados += 1
-			if w.has("efecto"):
-				ArmasCreadas.efecto_golpe(zombi, w, dano)   # las armas creadas: aturdir, prender, sangrar...
 	if tocados > 0:
 		Sonido.tocar("porrazo")
 		# el parón y el temblor del golpe (como en el JS): más fuerte cuantos más pilla
@@ -635,7 +631,7 @@ func golpear(angulo: float) -> void:
 # Johnny). La bala de verdad va 50 más abajo, a ras de suelo, y se dibuja 50 más arriba (ver bala.gd): así sale de la
 # boca y choca con lo que hay a la altura de los pies. Si la línea de tiro (desde el centro de Johnny) pasa por un
 # zombi, la bala va derecha de la boca a él: paralela a esa línea, con la boca lejos del centro pasaría por el lado.
-# Las armas creadas a distancia (gotas, garfio...) van como siempre, paralelas
+# Las armas creadas a distancia (las gotas y las chispas) van como siempre, paralelas
 func tiro(angulo: float, w: Dictionary, hacia: String) -> Array:
 	var boca: Vector2 = w.boca[hacia] * 2.0
 	var salida := global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
@@ -670,7 +666,7 @@ func blanco_en_linea(angulo: float, w: Dictionary) -> Node2D:
 # Saca la bala (o los perdigones) por la boca del arma, como se ve en el dibujo, hacia el zombi al que apunta
 func disparar(angulo: float) -> void:
 	var w := arma()
-	if not w.get("sin_municion", false) and not pistola_sin_fin():
+	if not pistola_sin_fin():
 		balas -= 1
 	disparos += 1
 	var seguro: bool = stats.mirilla and disparos % 4 == 0   # Mirilla: tras 3 disparos, uno crítico seguro
@@ -678,7 +674,7 @@ func disparar(angulo: float) -> void:
 	var salida: Vector2 = t[0]
 	angulo = t[1]
 	if w.has("efecto"):
-		# las armas creadas a distancia: gotas de fuego o ácido, o el garfio (armas_creadas.gd)
+		# las armas creadas a distancia: gotas de fuego o ácido, o chispas (armas_creadas.gd)
 		ArmasCreadas.disparar(self, angulo, w, salida)
 		oir_disparo()
 		if balas <= 0:
@@ -835,7 +831,7 @@ func terminar_recarga() -> void:
 func quiere_municion() -> bool:
 	var w: Dictionary = Armas.datos(huecos.fuego)
 	# (a las de depósito no les valen las balas: solo la gasolina o los bidones de ácido)
-	return not w.get("sin_municion", false) and not w.has("deposito") and reserva < w.cargador * RESERVA_MAX
+	return not w.has("deposito") and reserva < w.cargador * RESERVA_MAX
 
 
 # Recoge una caja de munición: un cargador más para el arma de fuego que lleve. Si se había pasado sola a la

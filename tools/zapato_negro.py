@@ -1,13 +1,14 @@
 """Arregla un zapato que PixelLab ha dibujado relleno de negro y con un borde gris claro, en un fotograma del andar de la hoja.
 
-  py tools/zapato_negro.py conserje-48-supermaza north 8
+  py tools/zapato_negro.py <sprite> north 8
 
 Es la hoja de assets/sprites/<sprite>.png: la dirección y el número de fotograma (empezando en 0) de su fila de andar.
 Se busca el borde gris claro del zapato (los grises sueltos de abajo) y, dentro de ese rectángulo, el relleno negro (los
 píxeles negros con dibujo arriba, abajo y a los lados) se pinta de marrón, y el borde gris, de negro. Es lo que hace
 tools/andar_arma.py con 'zapatos_negros', pero solo con Pillow (ese pide numpy) y sobre una hoja ya montada: si se
 vuelve a montar la hoja con tools/arma.py, hay que pasarlo otra vez. Saca de nuevo el .tres con tools/hacer_frames.py.
-Los colores son los de la hoja de la súper maza (paleta de Johnny con colores libres de PixelLab).
+Se hizo para la hoja de la súper maza, que se quitó del juego el 25 oct: los colores son los de esa hoja (paleta de
+Johnny con colores libres de PixelLab); con otra hoja, mirar antes que le cuadren.
 """
 import json, subprocess, sys
 from PIL import Image

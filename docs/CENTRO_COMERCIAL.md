@@ -278,9 +278,10 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   jugando solo ahí).
 - **Centro comercial: cada tienda, lo suyo.** El zombi que cae suelta (con la misma probabilidad de ahora) un objeto
   de la lista de la tienda donde está; si te falta algo, sabes a qué tienda ir. Las listas mezclan objetos de
-  siempre que pegan con la tienda (en la ferretería clavos y cuchillas; en el restaurante
-  alcohol y gasolina; en la electrónica el táser...) y los nuevos. Los zombis del pasillo, de cualquier lista.
-- **Solo en los Apartamentos** (cosas de casa): despertador, mancuernas, pistola de agua, trapo y cuerda.
+  siempre que pegan con la tienda (en la ferretería clavos; en el restaurante
+  alcohol y gasolina; en la electrónica el extintor...) y los nuevos. Los zombis del pasillo, de cualquier lista.
+- **Solo en los Apartamentos** (cosas de casa): despertador, pistola de agua y trapo (las mancuernas y la cuerda
+  también lo eran: se quitaron del juego el 25 oct).
 - **Nueve objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`;
   el plan decía «ocho», pero eran nueve nombres y el dueño se quedó con los nueve):
 
@@ -307,6 +308,9 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 - Para que se usen todos los nuevos, alguna receta más **solo del centro** si hace falta (cinta americana, cable e
   hielo seco no entran en las seis): por ejemplo, un **bate helado** (bate + hielo seco) que congela.
+- (El 25 oct se quitaron del juego el mangual, el garfio, el bate helado y el látigo eléctrico, con todas las armas
+  creadas de cuerpo a cuerpo, y con ellos la cadena, el cable, el hielo seco y las perchas: quedan cinco objetos
+  nuevos y cinco recetas del centro.)
 - **Más adelante, como parte aparte** (lo decidió el dueño): los objetos de curar de la farmacia y el súper
   (vendas, comida que cura desde la mochila; ya se puede usar algo desde el inventario: el botiquín de la
   farmacéutica, `Objetos.USABLES`) y la ropa de la tienda de ropa para cambiar el aspecto de Johnny en las
@@ -333,8 +337,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 
 - **Una tienda nueva, la Joyería** (el séptimo tipo): sala de venta con vitrinas, trastienda y, al fondo, la **cámara
   acorazada**. **Una por partida**, en una planta al azar de la 1.ª a la 3.ª (como la tienda del superviviente), para
-  que se sienta como la sala del tesoro de *Isaac*. Sus zombis, los de siempre con más vigilantes; suelta cadenas,
-  cuchillas, baterías y spray; sin peligro propio: el riesgo es la cámara.
+  que se sienta como la sala del tesoro de *Isaac*. Sus zombis, los de siempre con más vigilantes; suelta baterías y
+  spray (también cadenas y cuchillas, hasta que se quitaron del juego el 25 oct); sin peligro propio: el riesgo es la cámara.
 - **La cámara acorazada** tiene la puerta cerrada y un lector de tarjetas. Se abre de dos maneras: con la **tarjeta
   dorada**, que lleva el guardia de la planta junto a la suya (al caer suelta las dos), o con la **apertura de
   emergencia**: un botón junto a la puerta que hace saltar la sirena, una cuenta atrás de 40 s y zombis entrando por
@@ -363,7 +367,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   almacén.
 - Muebles por sala (`catalogo.gd`): la sala de venta con vitrinas bajas en filas y vitrinas altas, caja y banco; la
   trastienda con estanterías, banco de trabajo, taquillas y palés; la cámara acorazada con cajas fuertes y una
-  estantería. Objetos: `Objetos.TIENDAS["joyeria"]` (cadena, cuchillas, batería, spray). Zombis: los de las tiendas,
+  estantería. Objetos: `Objetos.TIENDAS["joyeria"]` (batería y spray). Zombis: los de las tiendas,
   con el vigilante dos veces más en la lista.
 - Prueba: `--captura --edificio centro --fotos-tiendas` pone la joyería en la 1.ª planta y saca
   `captura-tienda-joyeria.png` como las demás.
@@ -469,8 +473,8 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 ### ✅ Hecho (22 oct 2026, parte 11, trozo 2: cómo se consiguen)
 
 - **Cada traje es un objeto** (`Objetos.NOMBRES`, `traje_<id>`: «Uniforme de vigilante», «Bata de farmacéutico»,
-  «Delantal de cocinero» y «Chándal») de la lista de la **tienda de ropa** (`Objetos.TIENDAS["ropa"]`, junto a las
-  cuchillas, el spray y las perchas): sus zombis los sueltan con la probabilidad de siempre, pero **solo los que
+  «Delantal de cocinero» y «Chándal») de la lista de la **tienda de ropa** (`Objetos.TIENDAS["ropa"]`, junto al
+  spray): sus zombis los sueltan con la probabilidad de siempre, pero **solo los que
   aún no se tienen** (`al_azar` mira `trajes` del guardado); con los cuatro, la tienda vuelve a soltar solo lo de
   siempre. Como el pasillo sortea una tienda cualquiera, alguna vez sale allí. Nunca con la tecla U (no van al baúl
   ni entran en recetas).
@@ -1032,15 +1036,17 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 
      | Tienda | De siempre | Nuevos |
      |---|---|---|
-     | Ferretería | clavos, cuchillas, spray | cinta americana, cadena |
-     | Electrónica | táser, extintor | batería, cable |
+     | Ferretería | clavos, spray | cinta americana |
+     | Electrónica | extintor | batería |
      | Restaurante | alcohol, gasolina, extintor | aceite, bombona de gas |
-     | Supermercado | lejía, alcohol | hielo seco |
+     | Supermercado | lejía, alcohol | — |
      | Farmacia | alcohol, lejía | jeringuilla |
-     | Tienda de ropa | cuchillas, spray | perchas |
+     | Tienda de ropa | spray | — |
 
      (El mechero salía en el restaurante y en el supermercado; se quitó del juego el 25 oct, con el súpersoplete. La llave
-     inglesa y el hacha salían en la ferretería; se quitaron el mismo día, con el bumerán.)
+     inglesa y el hacha salían en la ferretería; se quitaron el mismo día, con el bumerán. También ese día, con las armas
+     de cuerpo a cuerpo y el garfio, se quitaron las cuchillas (ferretería, ropa y joyería), el táser (electrónica), la
+     cadena (ferretería y joyería), el cable (electrónica), el hielo seco (supermercado) y las perchas (ropa).)
 
      - Todos los de la lista de una tienda salen igual de a menudo. En el pasillo se elige una tienda al azar y luego
        uno de su lista. El jefe de la planta suelta sus dos objetos seguros de su tienda (si no tiene, como en el pasillo).
@@ -1050,22 +1056,20 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
      - Tecla de prueba **U**: uno de cada objeto al baúl. `--captura` cuenta lo que sale en cada sitio de los dos
        edificios y saca `captura-objetos-nuevos.png`, `captura-banco-todo.png` y `captura-baul-todo.png`.
    - ✅ **Trozo B: las recetas** (21 oct). Las seis que mezclan los dos edificios y tres solo del centro, que el dueño
-     aprobó: el banco de trabajo tiene ahora 24 recetas. Cada arma, con sus números en `Recetas.LISTA`, `Armas.CREADAS`
+     aprobó: el banco de trabajo tenía entonces 24 recetas (desde el 25 oct, 11). Cada arma, con sus números en `Recetas.LISTA`, `Armas.CREADAS`
      y `Lanzables.ARROJADIZAS`, aprovechando lo que ya había:
 
      | Arma | Ingredientes | Tipo | Qué hace (con rareza verde) |
      |---|---|---|---|
-     | Pistola eléctrica | pistola de agua + batería | a distancia | chispas (daño 5, 5 por segundo, depósito de 30) que aturden 0,4 s y saltan al zombi de al lado con medio daño, como la inmovilizadora |
+     | Pistola eléctrica | pistola de agua + batería | a distancia | chispas (daño 5, 5 por segundo, depósito de 30) que aturden 0,4 s y saltan al zombi de al lado con medio daño |
      | Bomba de aceite | trapo + aceite | arrojadiza (3) | se rompe al caer, como el molotov; el charco resbala y a los 2 s arde: un fuego como el del molotov, un 25 % más grande |
-     | Mangual | mancuernas + cadena | cuerpo a cuerpo | golpe en círculo (daño 16) que echa muy lejos a todos los de alrededor y los deja tirados medio segundo |
      | Mina despertador | despertador + bombona de gas | arrojadiza (2) | se queda en el suelo haciendo tic-tac (se ve el despertador) y, ya quieta, explota (90) cuando un zombi pasa cerca |
      | Nube somnífera | spray + jeringuilla | arrojadiza (3) | a los 1,2 s suelta una nube morada que dura 3 s: los zombis que pilla se duermen mientras están dentro y 3 s más, con sus «z» |
-     | Garfio | cuerda + perchas | a distancia | sale con la cuerda (alcance 320), engancha al primer zombi (daño 8) y lo trae hasta delante de Johnny, aturdido; sin munición. A los jefes solo les pega |
-     | Bate helado | bate + hielo seco | cuerpo a cuerpo | cada golpe (17) congela 1 s |
-     | Látigo eléctrico | cable + batería | cuerpo a cuerpo | el alcance del látigo escorpión (daño 12) con la descarga de la inmovilizadora |
      | Bomba de clavos | cinta americana + clavos | arrojadiza (3) | explota (40) y lanza 14 clavos en todas direcciones que atraviesan, pinchan y hacen sangrar |
 
-     - Los jefes no se congelan, ni se duermen, ni se dejan arrastrar, como pasaba ya con aturdir y prender.
+     - El mangual, el garfio, el bate helado y el látigo eléctrico también salieron de aquí; se quitaron del juego el
+       25 oct.
+     - Los jefes no se congelan ni se duermen, como pasaba ya con aturdir y prender.
      - `--captura` (en los dos edificios) prueba cada una contra zombis y saca `captura-arma-<receta>.png`.
 7. ✅ **La historia:** dosier, noticias y el guiño de la cafetera (ver «Historia»). La página del gerente, también
    (sale al caer él, en la parte 3 del trozo 6 de la parte 4).

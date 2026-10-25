@@ -30,10 +30,8 @@ const BLANCO := Color(1, 1, 1, 0.45)
 const CRITICO := Color("#ffb020")
 const TINTA := Color(0.11, 0.1, 0.17)
 # Lo que hace cada arma creada (su "efecto", armas_creadas.gd), para la ficha
-const EFECTOS := {"aturde": "aturde", "fuego": "prende fuego", "sangra": "hace sangrar", "descarga": "aturde y salta a otro",
-	"veneno": "envenena", "circulo": "pega a todo alrededor", "tira": "echa lejos y tira al suelo", "congela": "congela",
-	"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa",
-	"chispa": "chispa que aturde y salta", "garfio": "engancha y trae"}
+const EFECTOS := {"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa",
+	"chispa": "chispa que aturde y salta"}
 
 var johnny: Node2D
 var diana: Zombi
@@ -133,8 +131,7 @@ func _physics_process(delta: float) -> void:
 		a_cero()
 	# Munición sin fin, pero recargando: la reserva siempre llena
 	var w: Dictionary = Armas.datos(johnny.huecos.fuego)
-	if not w.get("sin_municion", false):
-		johnny.reserva = maxi(johnny.reserva, w.cargador * johnny.RESERVA_MAX)
+	johnny.reserva = maxi(johnny.reserva, w.cargador * johnny.RESERVA_MAX)
 	for b in balas:
 		if b.fin == "":
 			if is_instance_valid(b.nodo):
@@ -371,8 +368,7 @@ func escribir() -> void:
 			else " por disparo", decimal(w.ritmo, 1), "disparo" if is_equal_approx(w.ritmo, 1.0) else "disparos"])
 		l.append("Alcance %d (%s casillas)" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1)])
 		l.append("Bala: %d/s, tarda %s s en llegar" % [roundi(w.velocidad), decimal(w.alcance / w.velocidad, 2)])
-		if not w.get("sin_municion", false):
-			l.append("Cargador %d · recarga %s s%s" % [w.cargador, decimal(w.recarga, 2), " por cartucho" if w.cartucho else ""])
+		l.append("Cargador %d · recarga %s s%s" % [w.cargador, decimal(w.recarga, 2), " por cartucho" if w.cartucho else ""])
 		var extra := "Empuje %s" % decimal(w.empuje, 1)
 		if w.get("temblor", 0.0) > 0.0:
 			extra += " · desvío %d°" % roundi(rad_to_deg(w.temblor) / 2.0)
@@ -388,7 +384,7 @@ func escribir() -> void:
 	var con_recargas := ""
 	if deposito:
 		con_recargas = " (recargando %s)" % decimal(w.dano * w.deposito / (w.deposito + w.recarga), 1)
-	elif fuego and not w.get("sin_municion", false):
+	elif fuego:
 		var vaciar: float = w.cargador / w.ritmo + w.recarga * (w.cargador if w.cartucho else 1)
 		con_recargas = " (recargando %s)" % decimal(w.dano * perdigones * w.cargador / vaciar, 1)
 	l.append("Daño por segundo %s%s" % [decimal(dps, 1), con_recargas])

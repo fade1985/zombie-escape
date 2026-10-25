@@ -75,7 +75,8 @@ static func cargar() -> Dictionary:
 	for t in s.talentos:
 		s.talentos[t] = int(s.talentos[t])
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
-	# inglesa y el hacha se quitaron del juego el 25 oct
+	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco y
+	# el cable se quitaron del juego el 25 oct
 	var baul := {}
 	for id in s.baul:
 		if Objetos.NOMBRES.has(id):
@@ -83,7 +84,8 @@ static func cargar() -> Dictionary:
 	s.baul = baul
 	s.encontrados = s.encontrados.filter(func(id): return Objetos.NOMBRES.has(id))
 	# las armas cuya receta ya no existe desaparecen del baúl, y la receta, de las aprendidas y de las creadas
-	# (Colecciones): la lanza, el súpersoplete y el bumerán se quitaron del juego el 25 oct
+	# (Colecciones): la lanza, el súpersoplete, el bumerán, el garfio y todas las de cuerpo a cuerpo se quitaron del
+	# juego el 25 oct
 	s.baul_armas = s.baul_armas.filter(func(a): return Recetas.LISTA.has(a.get("receta", "")))
 	s.recetas = s.recetas.filter(func(id): return Recetas.LISTA.has(id))
 	s.creadas = s.creadas.filter(func(id): return Recetas.LISTA.has(id))
