@@ -4,8 +4,8 @@
 #   - "Compra de puntos e intercambio": cambia los dólares ahorrados por puntos de talento (talentos.gd) y los
 #     gasta en el árbol de talentos. Lo comprado se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS) para esta partida, y queda
-#     desbloqueada en el guardado. La que llevaras en ese hueco: si es cuerpo a cuerpo, va al inventario (para
-#     el banco de trabajo); si es de fuego, se pierde.
+#     desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
+#     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho).
 #   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
 #     cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
@@ -532,7 +532,7 @@ func subir(id: String) -> void:
 func programa_armas(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
 	saldo(c, s)
-	nota(c, "Lo que compres es para esta partida y queda desbloqueado. La de cuerpo a cuerpo que llevaras va al inventario; la de fuego, se pierde.")
+	nota(c, "Lo que compres es para esta partida y queda desbloqueado. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo.")
 	nota_partida(c)
 	var ids := Armas.PRECIOS.keys()
 	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
@@ -578,6 +578,10 @@ func comprar_arma(id: String) -> void:
 		info.text = "Ya llevas %s." % w.nombre.to_lower()
 		Sonido.tocar("no")
 		return
+	if partida.repuesto(w.tipo) == id:
+		info.text = "Ya llevas %s de repuesto: póntela desde el inventario." % w.nombre.to_lower()
+		Sonido.tocar("no")
+		return
 	var s := Guardado.cargar()
 	var precio: int = Armas.PRECIOS[id]
 	if s.dolares < precio:
@@ -590,13 +594,11 @@ func comprar_arma(id: String) -> void:
 		s.armas.append(id)
 	Guardado.escribir(s)
 	partida.ahorrados = s.dolares
-	var vieja: String = Armas.datos(johnny.huecos[w.tipo]).nombre
-	if w.tipo == "cuerpo" or Armas.es_creada(johnny.huecos[w.tipo]):
-		partida.armas_guardadas.append(johnny.huecos[w.tipo])   # al inventario (las creadas de fuego, también)
-		partida.armas_guardadas.erase(id)   # si la compras teniéndola guardada, no se queda repetida
-	johnny.coger(id)
+	var vieja: String = Objetos.nombre(johnny.huecos[w.tipo])
+	var suelo: String = partida.llevar_arma(id)
 	abrir("armas", "b_" + id)
-	info.set_deferred("text", ("¡%s comprada! %s va al inventario." if w.tipo == "cuerpo" else "¡%s comprada! Dejas %s.") % [w.nombre, vieja if w.tipo == "cuerpo" else vieja.to_lower()])   # después de marcar el botón (que pone su explicación)
+	info.set_deferred("text", ("¡Compra hecha! %s a la mano; %s pasa al repuesto." if suelo == "" else
+		"¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.") % [w.nombre, vieja])   # después de marcar el botón (que pone su explicación)
 
 
 # ── Logros ──

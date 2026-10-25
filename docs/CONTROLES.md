@@ -10,7 +10,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   RT) y *libre* (ratón + clic, o stick derecho).
 - **Q** / rueda / Y: cambiar entre las dos armas. **R** / X: recargar.
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): molotov o granada; **F** / RB cambia entre ellos.
-- **Tab**, **I** o Select: inventario (las armas, las guardadas y la mochila; ponérselas y tirar al suelo). Los
+- **Tab**, **I** o Select: inventario (las armas, las de repuesto y la mochila; ponérselas y tirar al suelo). Johnny
+  lleva como mucho dos de cada tipo: la de la mano y una de repuesto. Al comprar o sacar otra, va a la mano y la que
+  llevaba pasa al repuesto (o, si ya tiene una, se queda en el suelo); la que coge del suelo va al repuesto si está
+  libre. Los
   objetos de curar (el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado) se
   usan desde aquí: al elegir uno, la marca salta a **Usar** (con el mando, A dos veces).
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
@@ -108,6 +111,10 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   «Guardar» mete toda la casilla en el baúl, que las vendas no se guardan, que con el baúl lleno solo caben más de lo
   que ya tiene, y que «Guardar todo» mete lo demás (`captura-baul-guardado.png`, el baúl al volver). Cada línea
   dice lo esperado. Deja el baúl del guardado de prueba como estaba.
+- `--repuesto`: en vez de la prueba larga, la de las dos armas de cada tipo (`partida.llevar_arma`): saca del baúl
+  un lanza ácido y una pistola eléctrica (el lanza ácido se queda en el suelo), compra el bate y el cuchillo (el bate
+  se queda en el suelo), no deja comprar la pistola que lleva de repuesto, tira la fregona y vuelve a coger el bate
+  (al repuesto). Cada línea dice lo esperado; saca `captura-repuesto.png`. Deja el baúl y los dólares como estaban.
 - `--ascensor`: en vez de la prueba larga, la del ascensor (`partida.gd`, `arreglar_ascensor`): comprueba en la
   terminal que en la planta baja no se arregla, que en la 1ª planta sigue averiado hasta que cae el jefe, que al
   salir al pasillo Johnny dice que lo ha arreglado (`captura-ascensor-arreglado.png`), que baja a la sala de

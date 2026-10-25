@@ -255,9 +255,8 @@ func coger_premio() -> void:
 		partida.lanzables.sacar(a)
 		como = "Sus botellas se suman a tus molotovs" if a.receta == "molotov" else "Lista para lanzar (F para elegirla)"
 	else:
-		partida.armas_guardadas.append(johnny.huecos[a.hueco])
-		johnny.coger(Armas.apuntar(a))
-		como = "Ya la llevas en la mano"
+		var suelo: String = partida.llevar_arma(Armas.apuntar(a))   # la que llevaba, al repuesto (o al suelo, si ya tiene dos)
+		como = "Ya la llevas en la mano" if suelo == "" else "Ya la llevas en la mano; %s se queda en el suelo" % Objetos.nombre(suelo)
 	Guardado.cambiar(func(g):
 		if not a.receta in g.creadas:   # (Colecciones: cuenta como creada alguna vez)
 			g.creadas.append(a.receta)

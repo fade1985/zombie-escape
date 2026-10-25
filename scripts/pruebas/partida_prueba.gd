@@ -11,6 +11,8 @@
 #                  portera en la baja)
 #   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y lo que hace cada una
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
+#   --repuesto     dos armas de cada tipo como mucho, la de la mano y la de repuesto (partida.llevar_arma): el baúl, la
+#                  tienda, tirar y volver a coger del suelo
 #   --banco        una lanza, un súpersoplete, un bumerán, un mechero, una llave inglesa y un hacha de antes en el
 #                  guardado (se quitaron del juego) desaparecen al cargar; luego el banco de trabajo, las recetas y las
 #                  Colecciones, sin la prueba larga (probar_cosas, probar_recetas y probar_colecciones)
@@ -131,6 +133,9 @@ func empezar_prueba() -> void:
 	elif "--baul" in args:
 		set_process(false)   # sin la prueba larga
 		probar_baul()
+	elif "--repuesto" in args:
+		set_process(false)   # sin la prueba larga
+		probar_repuesto()
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
@@ -3443,6 +3448,91 @@ func probar_baul() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --repuesto": Johnny lleva como mucho dos armas de cada tipo, la de la mano y la de repuesto
+# (partida.llevar_arma). Saca del baúl un lanza ácido y una pistola eléctrica (con la segunda ya llevaba dos de fuego:
+# el lanza ácido se queda en el suelo), compra en la tienda del ordenador el bate y el cuchillo (el cuchillo deja el
+# bate en el suelo) y no le deja comprar la pistola que lleva de repuesto, tira la fregona de repuesto desde el
+# inventario y vuelve a coger el bate del suelo (va al repuesto, sin cambiarle la de la mano). Saca
+# captura-repuesto.png (el inventario con las dos de repuesto). Cada línea dice lo esperado. Deja el baúl, los
+# dólares y las armas compradas como estaban
+func probar_repuesto() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.baul_armas = [Recetas.crear("desintegrador"), Recetas.crear("pistola_electrica")]
+		g.dolares = 100
+		g.armas = [])
+	ahorrados = 100
+	johnny.coger("fregona")
+	johnny.coger("pistola")
+	armas_guardadas.clear()
+	var armas := func() -> String:
+		return "mano %s y %s · repuesto %s" % [Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego),
+			armas_guardadas.map(Objetos.nombre)]
+	var es_arma := func(c: Node) -> bool:   # una de las armas de la prueba tirada en el suelo (por su icono)
+		return "icono" in c and c.icono != null and c.icono.resource_path.get_file().get_basename() in [
+			"desintegrador", "pistola_electrica", "pistola", "fregona", "bate", "cuchillo"]
+	var suelo := func() -> Array:
+		return mapa.cosas.get_children().filter(es_arma).map(func(c): return c.icono.resource_path.get_file().get_basename())
+	await get_tree().create_timer(0.5).timeout
+	print("Al empezar: %s (esperado: mano Fregona y Pistola · repuesto [])" % armas.call())
+	abrir_cosas("baul")
+	inventario.tocar("a0")
+	inventario.sacar()
+	print("Saca el lanza ácido: %s (esperado: mano Fregona y Lanza ácido · repuesto [\"Pistola\"])" % armas.call())
+	inventario.tocar("a0")
+	inventario.sacar()
+	await get_tree().process_frame
+	var dice: Label = inventario.fondo.find_child("nota", true, false)
+	print("Saca la pistola eléctrica: %s · en el suelo %s (esperado: mano Fregona y Pistola eléctrica · repuesto [\"Pistola\"] · [\"desintegrador\"]) · dice «%s»" % [
+		armas.call(), suelo.call(), dice.text])
+	inventario.cerrar()
+	await get_tree().process_frame
+	# la tienda del ordenador
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas")
+	ordenador.comprar_arma("bate")
+	await get_tree().process_frame
+	print("Compra el bate: %s · dice «%s» (esperado: mano Bate y Pistola eléctrica · repuesto [\"Pistola\", \"Fregona\"] · la fregona pasa al repuesto)" % [
+		armas.call(), ordenador.info.text])
+	ordenador.comprar_arma("cuchillo")
+	await get_tree().process_frame
+	print("Compra el cuchillo: %s · en el suelo %s · dice «%s» (esperado: mano Cuchillo y Pistola eléctrica · repuesto [\"Pistola\", \"Fregona\"] · [\"desintegrador\", \"bate\"] · el bate se queda en el suelo)" % [
+		armas.call(), suelo.call(), ordenador.info.text])
+	var dolares_antes: int = Guardado.cargar().dolares
+	ordenador.comprar_arma("pistola")
+	await get_tree().process_frame
+	print("Compra la pistola de repuesto: %s · $%d → $%d · dice «%s» (esperado: igual, sin pagar, ya la llevas de repuesto)" % [
+		armas.call(), dolares_antes, Guardado.cargar().dolares, ordenador.info.text])
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
+	# tira la fregona de repuesto y vuelve a coger el bate del suelo, lejos de lo demás
+	abrir_cosas("inventario")
+	inventario.tocar("g%d" % armas_guardadas.find("fregona"))
+	inventario.tirar()
+	inventario.cerrar()
+	await get_tree().process_frame
+	print("Tira la fregona: %s · en el suelo %s (esperado: mano Cuchillo y Pistola eléctrica · repuesto [\"Pistola\"] · [\"desintegrador\", \"bate\", \"fregona\"])" % [
+		armas.call(), suelo.call()])
+	var bate: Node2D = mapa.cosas.get_children().filter(func(c): return es_arma.call(c) and c.icono.resource_path.ends_with("/bate.png"))[0]
+	bate.position = johnny.position + Vector2(300, 0)
+	await get_tree().create_timer(0.3).timeout
+	johnny.position = bate.position
+	await get_tree().create_timer(0.8).timeout
+	print("Coge el bate del suelo: %s · en el suelo %s (esperado: mano Cuchillo y Pistola eléctrica · repuesto [\"Pistola\", \"Bate\"] · [\"desintegrador\", \"fregona\"])" % [
+		armas.call(), suelo.call()])
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-repuesto.png")
+	inventario.cerrar()
+	Guardado.cambiar(func(g):
+		g.baul_armas = antes.baul_armas
+		g.dolares = antes.dolares
+		g.armas = antes.armas)
+	get_tree().quit()
+
+
 # Con "--captura --ascensor": el ascensor (partida.gd, arreglar_ascensor). En la planta baja no se arregla (la sala
 # está ahí mismo); en la 1ª planta está averiado hasta que cae el jefe (se hace como si cayera: Johnny entra en su
 # sala y el jefe no llega a salir), y al salir al pasillo Johnny dice que lo ha arreglado. Con cosas en la mochila,
@@ -4413,6 +4503,8 @@ func probar_creadas() -> void:
 	for i in 4:
 		inventario.tocar("a0")
 		inventario.sacar()
+		if i == 0:   # dos de fuego como mucho (partida.llevar_arma): se deja la de repuesto, para que el lanza ácido pase a serlo
+			armas_guardadas.assign(armas_guardadas.filter(func(id): return Armas.datos(id).tipo != "fuego"))
 	inventario.cerrar()
 	print("Creadas sacadas: mano %s | guardadas %s | molotovs %d -> %d | lanzables %s | baúl %d" % [
 		[Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego)], armas_guardadas.map(Objetos.nombre),

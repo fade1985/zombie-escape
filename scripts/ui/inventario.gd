@@ -1,12 +1,13 @@
 # Las pantallas de las cosas de Johnny (fase 7b; en el JS, showInventario y showBaul de src/ui.js y el banco
 # de src/banco.js). El juego se para mientras están abiertas:
-#   - Inventario (Tab, I o Select): las dos armas que lleva, las que guarda (la que deja al comprar otra
-#     cuerpo a cuerpo, o al sacar una creada del baúl) y la mochila. Al tocar una casilla se elige y salen sus
-#     botones: "Ponérmela" (las armas guardadas), "Usar" (el botiquín de la farmacéutica: Objetos.USABLES) y
-#     "Tirar al suelo" (los objetos, de uno en uno, y las armas).
+#   - Inventario (Tab, I o Select): las dos armas que lleva en la mano, las de repuesto (como mucho una de cada
+#     tipo: partida.llevar_arma) y la mochila. Al tocar una casilla se elige y salen sus botones: "Ponérmela" (las
+#     de repuesto), "Usar" (el botiquín de la farmacéutica: Objetos.USABLES) y "Tirar al suelo" (los objetos, de
+#     uno en uno, y las armas de repuesto).
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): los objetos guardados de otras partidas y las armas
 #     creadas en el banco. Un arma creada se puede sacar para esta partida (fase 7b2): la de cuerpo a cuerpo o
-#     de fuego va a la mano (y la que llevaba, al inventario); las arrojadizas, al botón de lanzar.
+#     de fuego va a la mano (y la que llevaba, al repuesto o, si ya tiene una, al suelo); las arrojadizas, al botón
+#     de lanzar.
 #     Con «Guardar de la mochila» se ve la mochila: se toca una casilla y «Guardar» mete en el baúl todos los de
 #     esa casilla (o «Guardar todo»), y ya no se pierden si Johnny cae. Lo de curar no se guarda (Objetos.al_baul) y,
 #     con el baúl lleno, solo caben más de lo que ya tiene. Los objetos no se sacan del baúl: el banco los usa ahí.
@@ -112,7 +113,7 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 		casilla(armas, "", Objetos.icono(id), Armas.datos(id).nombre, "En la mano" if hueco == "cuerpo" else "De fuego",
 			borde(id))
 	for i in guardadas.size():
-		casilla(armas, "g%d" % i, Objetos.icono(guardadas[i]), Objetos.nombre(guardadas[i]), "Guardada", borde(guardadas[i]))
+		casilla(armas, "g%d" % i, Objetos.icono(guardadas[i]), Objetos.nombre(guardadas[i]), "De repuesto", borde(guardadas[i]))
 	var llenas := Objetos.casillas(mochila)
 	subtitulo(columna, "Mochila · %d / %d" % [llenas.size(), Objetos.MOCHILA], "mochila")
 	var rejilla := GridContainer.new()
@@ -243,6 +244,9 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 		texto = "Lo que llevas en la mochila se pierde si caes: con «Guardar de la mochila» lo metes aquí y queda a salvo."
 	elif n > 0:
 		texto = "Aquí se guarda lo que traes en la mochila (lo guardas tú o pasa solo al completar un edificio), y las armas que creas en el banco de trabajo."
+	if aviso != "":
+		texto = aviso
+		aviso = ""
 	nota(columna, texto, 640)
 	var botones := fila(columna, true)
 	if sel.begins_with("a"):
@@ -256,15 +260,15 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 
 
 const AL_SACAR := {
-	"cuerpo": "Al sacarla, es tuya para esta partida: te la pones y la que llevas pasa al inventario.",
-	"fuego": "Al sacarla, es tuya para esta partida: va a la mano de fuego y la que llevas pasa al inventario.",
+	"cuerpo": "Al sacarla, es tuya para esta partida: te la pones y la que llevas pasa al repuesto (si ya tienes una de repuesto, se queda en el suelo).",
+	"fuego": "Al sacarla, es tuya para esta partida: va a la mano de fuego y la que llevas pasa al repuesto (si ya tienes una de repuesto, se queda en el suelo).",
 	"arrojadiza": "Al sacarla, es tuya para esta partida: se lanza como la granada (F para elegirla).",
 }
 
 
 # Saca del baúl el arma elegida para esta partida (sacarDelBaul en src/banco.js): la de cuerpo a cuerpo y la de
-# fuego, a la mano (lo que llevara pasa al inventario); el cóctel molotov suma sus botellas a los molotovs; las
-# demás arrojadizas, al botón de lanzar (lanzables.gd)
+# fuego, a la mano (la que llevara pasa al repuesto o, si ya tiene una, al suelo: partida.llevar_arma); el cóctel
+# molotov suma sus botellas a los molotovs; las demás arrojadizas, al botón de lanzar (lanzables.gd)
 func sacar() -> void:
 	var i := sel.substr(1).to_int()
 	var lista: Array = Guardado.cargar().baul_armas
@@ -273,13 +277,13 @@ func sacar() -> void:
 	var a: Dictionary = lista[i]
 	Guardado.cambiar(func(s): s.baul_armas.remove_at(i))
 	Sonido.tocar("compra")
-	var johnny: Node2D = partida.johnny
 	var lz: Lanzables = partida.lanzables
 	if a.hueco == "arrojadiza":
 		lz.sacar(a)
 	else:
-		partida.armas_guardadas.append(johnny.huecos[a.hueco])
-		johnny.coger(Armas.apuntar(a))
+		var suelo: String = partida.llevar_arma(Armas.apuntar(a))
+		if suelo != "":
+			aviso = "Ya llevabas dos armas de ese tipo: %s se queda en el suelo, a tus pies." % Objetos.nombre(suelo)
 	sel = ""
 	foco = "cerrar"
 	pintar()

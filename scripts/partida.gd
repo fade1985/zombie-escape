@@ -127,7 +127,7 @@ var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (ev
 var joyeria := Joyeria.new()       # la cámara acorazada de la joyería del centro comercial (joyeria.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var recetas_en_suelo: Array = []   # las recetas soltadas por los jefes que aún no se han cogido (no se repiten)
-var armas_guardadas: Array = []   # las armas que lleva sin usar (la que deja al comprar otra cuerpo a cuerpo)
+var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
@@ -875,7 +875,8 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
-# Un arma tirada desde el inventario: al volver a cogerla, otra vez a las guardadas
+# Un arma en el suelo (tirada desde el inventario, o la que suelta Johnny al llevar ya dos de ese tipo): al volver a
+# cogerla, al repuesto si está libre (llevar_arma)
 func soltar_arma(id: String, donde: Vector2) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
@@ -884,10 +885,40 @@ func soltar_arma(id: String, donde: Vector2) -> void:
 	cosa.tirado = true
 	cosa.position = donde
 	cosa.cogido.connect(func():
-		armas_guardadas.append(id)
+		llevar_arma(id, false)
 		Sonido.tocar("compra")
 		numero(cosa.position, Objetos.nombre(id), Tema.TINTA))
 	mapa.cosas.add_child.call_deferred(cosa)
+
+
+# Johnny lleva como mucho dos armas de cada tipo (cuerpo a cuerpo y a distancia): la de la mano y la de repuesto
+# (armas_guardadas). Al llevarse otra (comprarla, sacarla del baúl o de la vitrina de la joyería), va a la mano y
+# la que llevaba pasa al repuesto; si ya tenía una de repuesto, la de la mano se queda en el suelo, a sus pies.
+# La que coge del suelo ("a_la_mano" falso) va al repuesto si está libre, para no cambiarle el arma en plena pelea.
+# Devuelve el arma que ha dejado en el suelo ("" si ninguna)
+func llevar_arma(id: String, a_la_mano := true) -> String:
+	var tipo: String = Armas.datos(id).tipo
+	armas_guardadas.erase(id)   # si ya la llevaba de repuesto, no se queda repetida
+	if not a_la_mano and repuesto(tipo) == "":
+		armas_guardadas.append(id)
+		return ""
+	var vieja: String = johnny.huecos[tipo]
+	var suelo := ""
+	if repuesto(tipo) == "":
+		armas_guardadas.append(vieja)
+	else:
+		suelo = vieja
+		soltar_arma(vieja, johnny.position + Vector2(0, 34))
+	johnny.coger(id)
+	return suelo
+
+
+# El arma de repuesto de ese tipo ("cuerpo" o "fuego"), o "" si no lleva
+func repuesto(tipo: String) -> String:
+	for id in armas_guardadas:
+		if Armas.datos(id).tipo == tipo:
+			return id
+	return ""
 
 
 # La hoja de una receta del banco de trabajo (recetas.gd): la sueltan los jefes al morir. Una al azar de las que
