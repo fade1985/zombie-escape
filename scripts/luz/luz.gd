@@ -57,7 +57,7 @@ const CAMBIO := 1.5                        # lo rápido que entra o se va la osc
 static var nivel := 0.0     # lo oscuro que está ahora (0 nada, 1 negro)
 static var extra := 0.0     # oscuridad de más (o de menos) del sitio: la tienda de electrónica, con y sin corriente (agua.gd)
 static var evento := 0.0    # y la de un evento sorpresa: el apagón de toda la planta (eventos.gd)
-static var apagada := false # F10: sin penumbra, para comparar
+static var apagada := false # sin penumbra, para comparar (el panel de la sala de pruebas)
 static var destellos := 0
 
 var objetivo := 0.0
@@ -90,10 +90,6 @@ func poner_sitio(tipo: String, de_golpe := true) -> void:
 # Lo oscuro que tiene que estar este sitio
 func oscuridad() -> float:
 	return clampf(objetivo + extra + evento, 0.0, 0.97)
-
-
-func alternar() -> void:
-	apagada = not apagada
 
 
 # Johnny siempre se distingue un poco, aunque esté lejos de las luces (un brillito a su alrededor), y lleva

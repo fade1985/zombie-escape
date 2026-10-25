@@ -1,4 +1,4 @@
-# Controles y teclas de prueba
+# Controles y sala de pruebas
 
 ## Jugar
 
@@ -34,33 +34,35 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 - **Elige edificio:** **<** y **>** cambian el nivel de alerta (completar el edificio abre el siguiente, hasta el 5).
   El botón **Reto del día**: el edificio igual para todo el mundo ese día, con la regla rara de hoy.
 
-## Teclas de prueba
+## La sala de pruebas
 
-| Tecla | Qué hace |
+Todo lo de probar está en un solo sitio. **F11**, desde cualquier sitio de cualquier planta, lleva a la **sala de
+pruebas**; **F11** otra vez (o su puerta) vuelve justo adonde estabas. Con la puerta de un apartamento cerrada, no se
+puede ir. En el navegador, F11 también pone la pantalla completa. Lo que pasa allí no cuenta: los zombis no sueltan
+nada, no se apuntan en las Colecciones y, al salir, Johnny vuelve a llevar lo que llevaba (armas, balas, mochila y
+arrojables).
+
+- **La diana:** un zombi en el centro que no muere ni ataca. **Coma** y **punto** pasan por todas las armas de la
+  tienda; munición sin fin, pero hay que recargar.
+- **Las líneas de ayuda**, en el suelo: alcance (blanco), a quién apunta (amarillo), por dónde irá la bala (azul a
+  rayas), dónde le da a cada zombi (rojo) y el camino de cada bala (verde si da, naranja si pasa rozando, rojo con X
+  si choca).
+- **El panel de daño**, arriba a la izquierda: la ficha del arma y el recuento (disparos, aciertos, daño por
+  segundo...). **Retroceso** pone el recuento a cero; el **guion** esconde el panel.
+- **El baúl de pruebas** (arriba a la izquierda): todas las armas y los arrojables en cada calidad, para cogerlos y
+  cambiarlos. Es de mentira: el baúl de verdad y la partida guardada no se tocan.
+- **El panel de pruebas** (**P**; P, Esc o B lo cierran). Con el juego parado, por pestañas:
+
+| Pestaña | Qué tiene |
 |---|---|
-| 1-6 | poner cualquier arma |
-| F2-F7 | un zombi de cada tipo (normal, lento, rápido, explosivo, tentáculos, venenoso) |
-| V / B | un vigilante / una dependienta (centro comercial) |
-| P, K, G, T, J, L | la portera, el antidisturbios, el cocinero, la modista, la mascota, el gerente |
-| 7, 8, 9, 0 | el Glotón, el Gymbro, el jefe de bomberos, el científico jefe |
-| Mayús + 7, 8, 9 o P | (Apartamentos) derecho a la habitación de ese jefe, en la planta que le tocó (`ir_al_jefe`) |
-| N | derecho a la azotea; en **Elige edificio**, abre todos los edificios hasta cerrar el juego |
-| M | recuadro de mutaciones |
-| O | soltar un objeto al azar de los que salen donde estás |
-| U | 10 piezas de cada familia (cuerpo a cuerpo, a distancia, especial y arrojable) y unas armas y arrojables mejorados (de cada calidad) al baúl, para probar el baúl y el banco |
-| X | un científico muerto con la página siguiente (no se guarda) |
-| Z | la siguiente skin de Johnny (no se guarda) |
-| F8 | Colecciones al completo |
-| F9 | sala de exposición (todos los muebles y zombis) y vuelta |
-| F10 | quitar y poner la penumbra |
-| F11 | (planta baja) sala de pruebas de armas y vuelta; en el navegador, también pantalla completa |
-| H | el apartamento del superviviente ya sin zombis; en el centro comercial, cada H trae al siguiente de los tres |
+| Jefes | un botón por jefe; **A media vida** (sale ya enfadado) y **Quieto** (ataca y avisa, pero no se mueve) |
+| Zombis | un botón por tipo (normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
+| Ayudas | se encienden y se apagan: cada línea de ayuda, el panel de daño, los avisos de los jefes en el suelo y la penumbra |
+| Johnny | **Invencible**, **Munición sin fin**, la **Diana** (ponerla o quitarla) y **Siguiente skin** (no se guarda) |
+| Ir a | la **Exposición** (todos los muebles y zombis; F11 vuelve), la **Azotea**, el **Superviviente** (su apartamento ya sin zombis; en el centro comercial, cada vez el siguiente) y la sala de cada minijefe del edificio, en la planta que le tocó |
+| Varios | **Mutaciones**, **Soltar un objeto**, **Piezas al baúl** (10 de cada familia y unas armas y arrojables mejorados, al baúl de verdad, para probar el banco), **Colecciones completas** y **Científico muerto** (la página siguiente; no se guarda) |
 
-**Sala de pruebas de armas** (F11): una diana que no muere ni ataca. **Coma** y **punto** pasan por todas las armas
-de la tienda; munición sin fin, pero hay que recargar. En el suelo, las líneas de ayuda: alcance (blanco), a quién
-apunta (amarillo), por dónde irá la bala (azul a rayas), dónde le da a cada zombi (rojo) y el camino de cada bala
-(verde si da, naranja si pasa rozando, rojo con X si choca). Arriba a la izquierda, la ficha del arma y el recuento
-(disparos, aciertos, daño por segundo...). **Retroceso** pone el recuento a cero; el **guion** esconde el panel.
+En **Elige edificio**, la **N** abre todos los edificios hasta cerrar el juego.
 
 **Pruebas sin jugar** (`--captura`, ver CLAUDE.md): la lista de opciones (`--jefe X`, `--armas`, `--inventario`,
 `--evento X`...) está al principio de `scripts/pruebas/partida_prueba.gd`, con el archivo de cada una; encima de
@@ -94,8 +96,6 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
 
 Al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el **ascensor** del pasillo: baja a esta sala y
 vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado y la azotea no tiene.
-
-La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 
 ## Móvil (táctil)
 

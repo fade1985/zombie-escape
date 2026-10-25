@@ -64,6 +64,7 @@ const GOLPE_FREGONA := {"s": 4, "se": 4, "e": 4, "ne": 4, "n": 4, "no": 5, "o": 
 var vida := 600
 var fase := 1                 # 2 = enfadada
 var enfado := 0.5             # a qué parte de la vida se enfada (con la Alerta 3, antes: alerta.gd)
+var quieto := false           # la sala de pruebas: ataca y avisa como siempre, pero no se mueve de su sitio
 var estado := "andar"
 var t := 0.0                  # tiempo que lleva en el estado
 var dur := 1.2                # cuánto anda antes de atacar
@@ -427,8 +428,11 @@ func mirar(delta: float, hacia: Vector2) -> void:
 
 
 func mover() -> void:
+	var antes := global_position
 	velocity = marcha
 	move_and_slide()
+	if quieto:
+		global_position = antes   # (se mueve y se le devuelve: así cree que corre y no que se ha chocado)
 
 
 # ── Recibir golpes y morir ──

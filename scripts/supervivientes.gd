@@ -729,7 +729,7 @@ func flecha(hacia: Vector2, color: Color, grande: bool) -> void:
 
 # ═════════════ Para probar ═════════════
 
-# Tecla H: el superviviente pasa a esta planta y Johnny va a su apartamento, ya sin zombis (se abre el baño al
+# El panel de pruebas («Superviviente»): el superviviente pasa a esta planta y Johnny va a su apartamento, ya sin zombis (se abre el baño al
 # entrar). Sirve para probar el rescate y la horda sin jugar hasta su planta. En el centro comercial, cada vez
 # trae al siguiente de los tres (ferretero, farmacéutica, técnico) y rehace la planta con su tienda. Con "quien"
 # (para las pruebas), ese

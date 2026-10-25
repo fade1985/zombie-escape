@@ -132,7 +132,7 @@ func probar_baul() -> void:
 # Con "--captura --calidades": las calidades de las armas y de los paquetes de arrojables (Armas.CALIDADES; parte 4 de la
 # tienda y las piezas). Cada línea dice lo esperado. Cuenta: lo que da cada calidad (el bate Raro, la pistola Épica, el
 # lanzallamas Raro, la pistola eléctrica Poco común y los molotovs Raros); que Johnny lleva una de cada arma (al coger
-# otro bate, se cambian y el viejo se queda en el suelo); que en el baúl (con lo de la tecla U) se guardan el bate y los
+# otro bate, se cambian y el viejo se queda en el suelo); que en el baúl (con lo de «Piezas al baúl» del panel de pruebas) se guardan el bate y los
 # molotovs Raros, pero no la fregona ni los molotovs Normales, y que al sacar un arma la que sobra entra en su lugar; las
 # casillas con el color de su calidad (captura-calidades-baul.png y captura-calidades-inventario.png); que si cae no
 # guarda nada y que al completar el edificio pasan al baúl sus armas (menos la fregona y la pistola Normales) y los
@@ -186,7 +186,7 @@ func probar_calidades() -> void:
 	print("Molotovs Raros: entran %d, a mano %s, caben %d (esperado: 4, [molotov, granada, molotov:2], %d) · radio Raro / Normal %.2f (esperado: 1.20)" % [
 		entran, lanzables.mano, lanzables.maximo("molotov:2"), lanzables.maximo("molotov") + 2, radio_raro / lanzables.radio_zona()])
 	lanzables.tipo = tipo_antes
-	# el baúl, con lo de la tecla U (piezas, y armas y arrojables de cada calidad)
+	# el baúl, con lo de «Piezas al baúl» (piezas, y armas y arrojables de cada calidad)
 	dar_objetos()
 	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
 	johnny.direccion = "n"
@@ -197,7 +197,7 @@ func probar_calidades() -> void:
 		Guardado.escribir(antes)
 		get_tree().quit()
 		return
-	print("Baúl con la tecla U: %d casillas, equipo %s (esperado: 10: 4 piezas y 6 de equipo)" % [
+	print("Baúl con «Piezas al baúl»: %d casillas, equipo %s (esperado: 10: 4 piezas y 6 de equipo)" % [
 		Objetos.casillas_baul(Guardado.cargar()), equipo.call()])
 	inventario.tocar("p0")
 	await get_tree().process_frame
@@ -354,7 +354,7 @@ func probar_banco_mejorar() -> void:
 # Con "--captura --piezas": las piezas de mejora de las armas (Objetos.PIEZAS) y la limpieza de objetos del 25 oct. Cada
 # línea dice lo esperado. Cuenta: que hay 4 piezas con su nombre y su icono, y que ya no están los 5 objetos quitados
 # (explosivos, despertador, extintor, trapo y alcohol: ni en NOMBRES, ni su icono, ni en 3000 sorteos de lo que cae al
-# azar); las tasas (zombi 6 %, jefe 4; con la Alerta 5, 12 % y 8); la tecla U (10 de cada pieza al baúl) y la ficha de
+# azar); las tasas (zombi 6 %, jefe 4; con la Alerta 5, 12 % y 8); «Piezas al baúl» del panel de pruebas (10 de cada pieza al baúl) y la ficha de
 # una pieza en el baúl; un zombi normal que suelta una pieza de verdad al caer (se mata uno tras otro hasta que sale) y
 # la portera, que suelta cuatro; Johnny las recoge, la mochila las apila y su ficha dice para qué armas son
 # (captura-piezas-mochila.png; la del baúl, captura-piezas-baul.png); y al completar el edificio (terminar(true)) pasan
@@ -409,12 +409,10 @@ func probar_piezas() -> void:
 	print("Tasas: %s | %s | %s (esperado: zombi 6,0 y jefe 4 | zombi 9,0 y jefe 6 | zombi 12,0 y jefe 8, con unas décimas de más o de menos)" % [
 		tasa.call(0), tasa.call(3), tasa.call(5)])
 	print("Resumen de la Alerta 5: «%s»" % Alerta.resumen(5).replace("\n", " · "))
-	# la tecla U (de verdad, con su evento) mete 10 de cada pieza en el baúl
+	# «Piezas al baúl» (el botón del panel de pruebas) mete 10 de cada pieza en el baúl
 	Guardado.cambiar(func(g): g.baul = {"gasolina": 1})
-	var u := InputEventKey.new()
-	u.keycode = KEY_U
-	await pulsar_evento(u)
-	print("Tecla U: baúl %s (esperado: gasolina 1 y 10 de cada pieza)" % [Guardado.cargar().baul])
+	dar_objetos()
+	print("Piezas al baúl: baúl %s (esperado: gasolina 1 y 10 de cada pieza)" % [Guardado.cargar().baul])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
 	var nota := func() -> String: return inventario.fondo.find_child("nota", true, false).text

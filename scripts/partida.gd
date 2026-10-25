@@ -19,12 +19,9 @@
 # talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos. La taquilla (ui/taquilla.gd),
 # igual: al arrimarse sale la ventanita para elegir la skin de Johnny (skins.gd).
 #
-# Teclas solo para probar: F2 a F7 sacan un zombi de cada tipo y P, la portera, lejos de Johnny (los minijefes de
-# los Apartamentos, con los números: 7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; 0, el científico jefe; con
-# Mayús, 7, 8, 9 y P llevan derecho a la habitación de ese minijefe). F9 lleva a
-# la sala de exposición (todos los muebles y zombis) y vuelve a la de mantenimiento; F11, igual, a la sala de pruebas
-# de armas (sala_armas.gd). M saca el recuadro de
-# las mutaciones sin tener que matar a la portera. Z le pone a Johnny la siguiente skin (skins.gd), sin guardarla.
+# Para probar: F11, desde cualquier sitio, lleva a la sala de pruebas (sala_armas.gd) y, otra vez, de vuelta adonde
+# se estaba. Allí, la P abre el panel de pruebas (ui/panel_pruebas.gd): sacar jefes y zombis, encender y apagar las
+# ayudas, ir a la exposición o a la sala de un jefe... Lo que pasa en la sala no cuenta (en_pruebas).
 #
 # Con "-- --captura" no se juega esta, sino la partida de prueba (escenas/partida_prueba.tscn): la misma partida
 # más las fotos y las comprobaciones, que están en scripts/pruebas/partida_prueba.gd.
@@ -57,12 +54,6 @@ const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "
 	"cientifico_jefe"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
 const MINIMAPA := preload("res://scripts/minimapa.gd")
-const TECLAS := {KEY_F2: "normal", KEY_F3: "lento", KEY_F4: "rapido", KEY_F5: "explosivo", KEY_F6: "tentaculos",
-	KEY_F7: "venenoso", KEY_V: "vigilante", KEY_B: "dependienta", KEY_P: "portera", KEY_K: "antidisturbios",
-	KEY_G: "cocinero", KEY_T: "modista", KEY_J: "mascota", KEY_L: "gerente", KEY_7: "gloton", KEY_8: "gymbro",
-	KEY_9: "bombero", KEY_0: "cientifico_jefe"}
-# Mayús + la tecla de un minijefe de los Apartamentos: derecho a su habitación (ir_al_jefe)
-const SALAS_JEFE := {KEY_7: "gloton", KEY_8: "gymbro", KEY_9: "bombero", KEY_P: "portera"}
 const BILLETE := preload("res://scripts/billete.gd")
 const HUD := preload("res://scripts/ui/hud.gd")
 const AMBIENTE := preload("res://scripts/ui/ambiente.gd")
@@ -72,6 +63,7 @@ const TAQUILLA := preload("res://scripts/ui/taquilla.gd")
 const PRESENTACION := preload("res://scripts/ui/presentacion.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
+const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 2               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas)
 const BILLETES_GUARDIA := 2
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
@@ -114,6 +106,8 @@ var luz := Luz.new()       # la penumbra (luz.gd)
 var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
 var taquilla := TAQUILLA.new()     # la ventanita de la taquilla de las skins de Johnny (skins.gd)
+var panel_pruebas := PANEL_PRUEBAS.new()   # el panel de la sala de pruebas (tecla P allí dentro)
+var de_pruebas := {}       # de dónde se vino a la sala de pruebas (F11): {planta, sitio, pos}, para volver allí
 var presentacion := PRESENTACION.new()   # la presentación de cada jefe al aparecer (ui/presentacion.gd)
 var presentar_en_prueba := false   # en la partida de prueba la presentación se salta, salvo en la suya (--presentacion)
 const JEFE_TARDA := 0.6            # lo que tarda el jefe en salir al entrar en su sala
@@ -136,7 +130,7 @@ var terminada := false
 @onready var lugar: Label = $Pantalla/Lugar
 @onready var aviso: Label = $Pantalla/Mensaje
 var aviso_tween: Tween     # el que va borrando el aviso (decir)
-var de_prueba := 0         # tecla X: la página del siguiente científico de prueba (probar_cientifico)
+var de_prueba := 0         # «Científico muerto» del panel de pruebas: la página del siguiente (probar_cientifico)
 @onready var negro: ColorRect = $Pantalla/Negro
 
 
@@ -146,7 +140,7 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · 1-6 arma · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F2-F7 zombis · P portera · K antidisturbios · G cocinero · T modista · J mascota · L gerente · 7 Glotón · 8 Gymbro · 9 Bombero · 0 Científico · M mutación · F9 exposición · F11 sala de armas · F10 luz · H superviviente" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F11 sala de pruebas (P: panel)" % nombre)
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -183,6 +177,7 @@ func _ready() -> void:
 	add_child(inventario)
 	inventario.cerrado.connect(func(): get_tree().paused = false)
 	add_child(taquilla)
+	add_child(panel_pruebas)
 	presentacion.preparar(self)
 	lanzables.johnny = johnny
 	lanzables.partida = self
@@ -378,12 +373,13 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	mapa.dorada_cogida.connect(joyeria.coger_dorada)
 	if mapa.ordenador:
 		mapa.ordenador.usar.connect(abrir_ordenador)
-		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
 		mapa.taquilla.usar.connect(abrir_taquilla)
 		# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
 		if fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
 			avisar_noticias()
+	if mapa.baul:   # (el de la sala de mantenimiento o el de pruebas)
+		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
 		armarito.usar.connect(coger_botiquin.bind(armarito))
@@ -482,6 +478,9 @@ func poner_lugar() -> void:
 # Johnny ha empujado la salida "i" del sitio en el que está
 func cruzar(i: int) -> void:
 	if cambiando or not johnny.vivo:
+		return
+	if aqui == planta.armas:
+		pruebas()   # la puerta de la sala de pruebas vuelve adonde se estaba
 		return
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
@@ -1191,16 +1190,21 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 # Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
-	Bestiario.apuntar(tipo)   # visto: al bestiario de las Colecciones del ordenador
+	var de_mentira := en_pruebas()   # en la sala de pruebas no cuentan: ni se apuntan, ni sueltan nada
+	if not de_mentira:
+		Bestiario.apuntar(tipo)   # visto: al bestiario de las Colecciones del ordenador
 	zombi.position = donde
 	if "color_sangre" in zombi:
 		zombi.color_sangre = MANCHAS.get(tipo, SANGRE)
 	if "talla_restos" in zombi:
 		zombi.talla_restos = {"rapido": "pequeno", "venenoso": "grande"}.get(tipo, "mediano")   # el rápido es un niño
 	# Al caer: se cuenta, y a veces suelta un billete (la portera, varios)
-	if zombi.has_signal("prendido"):   # la portera no arde
+	if zombi.has_signal("prendido") and not de_mentira:   # la portera no arde
 		zombi.prendido.connect(logros.zombi_prendido)
 	zombi.murio.connect(func():
+		if de_mentira:
+			sangre(tipo, zombi)
+			return
 		muertos += 1
 		var ardia: bool = zombi.get("arder_t") != null and zombi.arder_t > 0.0
 		logros.zombi_muerto(johnny.huecos[johnny.mano] == "fregona" and not ardia)
@@ -1327,41 +1331,64 @@ func _unhandled_input(evento: InputEvent) -> void:
 		return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando or presentacion.activa:
 		return
-	if evento.shift_pressed and evento.keycode in SALAS_JEFE:
-		ir_al_jefe(SALAS_JEFE[evento.keycode])   # derecho a la habitación de ese minijefe, para pelear con él
-	elif evento.keycode in TECLAS:
-		meter_zombi(TECLAS[evento.keycode], mapa.punto_libre(johnny.position, 300.0))
-	elif evento.keycode == KEY_F9 and planta.expo >= 0 and not cerrada:
-		# a la exposición y de vuelta a la sala de mantenimiento
-		montar(planta.mantenimiento if aqui == planta.expo else planta.expo, 0)
-	elif evento.keycode == KEY_F11 and planta.armas >= 0 and not cerrada:
-		# a la sala de pruebas de armas (sala_armas.gd) y de vuelta a la de mantenimiento
-		montar(planta.mantenimiento if aqui == planta.armas else planta.armas, 0)
-	elif evento.keycode == KEY_F10:
-		luz.alternar()   # quitar o poner la penumbra, para comparar
-	elif evento.keycode == KEY_M:
-		abrir_mutacion()   # para probar las mutaciones sin matar a la portera
-	elif evento.keycode == KEY_H:
-		supervivientes.probar_aqui()   # al apartamento del superviviente, ya limpio (para probar la horda)
-	elif evento.keycode == KEY_O:
-		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
-	elif evento.keycode == KEY_U:
-		dar_objetos()   # 10 piezas de cada familia al baúl, para probar el baúl y el banco
-	elif evento.keycode == KEY_F8:
-		# todo encontrado y visto, para probar el programa Colecciones del ordenador (bestiario.gd)
-		Bestiario.todo_visto()
-		decir("Colecciones: todo encontrado y visto")
-	elif evento.keycode == KEY_X:
-		probar_cientifico()   # un científico muerto a los pies, para ver su dibujo
-	elif evento.keycode == KEY_Z:
-		# la siguiente skin de Johnny (skins.gd), para verlas sin tener que conseguirlas (no se guarda)
-		johnny.vestir(Skins.siguiente(johnny.skin))
-		decir("Skin: " + Skins.nombre(johnny.skin))
-	elif evento.keycode == KEY_N and ed.get("azotea", false) and not cerrada and not planta.get("azotea", false):
-		ir_a_azotea()   # derecho a la azotea (los dos edificios la tienen), para probar al jefe final
+	if evento.keycode == KEY_F11:
+		pruebas()
+	elif evento.keycode == KEY_P and aqui == planta.armas:
+		abrir_panel_pruebas()
 
 
-# Tecla X: un científico muerto a los pies de Johnny, cada vez con la siguiente página de todos los edificios (su
+# ═════════════ La sala de pruebas ═════════════
+
+# F11: a la sala de pruebas (sala_armas.gd) desde donde se esté y, desde ella (o desde la exposición, a la que se va
+# con su panel), de vuelta al mismo sitio y al mismo punto. Con la puerta del apartamento cerrada, no se puede
+func pruebas() -> void:
+	if cambiando or terminada or not johnny.vivo:
+		return
+	if en_pruebas():
+		var volver := de_pruebas
+		de_pruebas = {}
+		if volver.is_empty() or not is_same(volver.planta, planta):
+			# (se ha cambiado de planta desde el panel: a la sala de mantenimiento o, si no la hay, al pasillo)
+			await montar(maxi(planta.mantenimiento, 0), 0)
+			return
+		await montar(volver.sitio, 0)
+		johnny.position = volver.pos
+		johnny.get_node("Camara").reset_smoothing()
+		return
+	if cerrada:
+		decir("Con la puerta cerrada no se puede ir a la sala de pruebas")
+		Sonido.tocar("no")
+		return
+	sitio_pruebas()
+	de_pruebas = {"planta": planta, "sitio": aqui, "pos": johnny.position}
+	await montar(planta.armas, 0)
+	decir("Sala de pruebas · P: panel de pruebas · F11: volver", 3.0)
+
+
+# La sala de pruebas y la exposición, como dos sitios más de la planta (la planta baja ya las trae: planta.gd)
+func sitio_pruebas() -> void:
+	if planta.armas >= 0:
+		return
+	planta.armas = planta.sitios.size()
+	planta.sitios.append(Planta.sala_armas(-1))
+	planta.expo = planta.sitios.size()
+	planta.sitios.append(Planta.exposicion(planta.armas))
+
+
+# Si Johnny está en la sala de pruebas o en la exposición: lo que pasa ahí no cuenta
+func en_pruebas() -> bool:
+	return aqui == planta.armas or aqui == planta.expo
+
+
+# La P en la sala de pruebas: se para el juego y sale el panel de pruebas (ui/panel_pruebas.gd)
+func abrir_panel_pruebas() -> void:
+	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
+		return
+	get_tree().paused = true
+	panel_pruebas.abrir(self)
+
+
+# El panel de pruebas: un científico muerto a los pies de Johnny, cada vez con la siguiente página de todos los edificios (su
 # piel y su pelo, o su ropa). Solo para verlo: su página se coge, pero no se lee ni se guarda
 func probar_cientifico() -> void:
 	var paginas := []
@@ -1376,14 +1403,14 @@ func probar_cientifico() -> void:
 	decir("Científico de prueba: " + p.cuerpo)
 
 
-# Tecla N: derecho a la azotea, sin subir planta a planta
+# El panel de pruebas: derecho a la azotea, sin subir planta a planta
 func ir_a_azotea() -> void:
 	nueva_planta(Planta.PLANTAS)
 	await montar(0, puerta_de_tipo("llegada"))
 	decir("Azotea · ¡El último combate del edificio!", 2.5)
 
 
-# Mayús + la tecla de un minijefe (7, el Glotón; 8, el Gymbro; 9, el jefe de bomberos; P, la portera): derecho a su
+# El panel de pruebas (los de los Apartamentos: el Glotón, el Gymbro, el jefe de bomberos y la portera): derecho a su
 # habitación, sin jugar hasta ella. Rehace la planta que le tocó en el sorteo de esta partida (como recién llegado) y
 # Johnny entra por la puerta: el jefe sale como siempre, con su presentación (acaba cuando ya ha salido)
 func ir_al_jefe(tipo: String) -> void:
@@ -1398,13 +1425,13 @@ func ir_al_jefe(tipo: String) -> void:
 			return
 
 
-# Tecla U: mete en el baúl 10 piezas de cada familia (Objetos.PIEZAS) y unas armas y paquetes de arrojables de cada
-# calidad (PRUEBA_EQUIPO), para probar el baúl y el banco (aunque no quepan)
+# El panel de pruebas: mete en el baúl de verdad 10 piezas de cada familia (Objetos.PIEZAS) y unas armas y paquetes de
+# arrojables de cada calidad (PRUEBA_EQUIPO), para probar el baúl y el banco (aunque no quepan)
 const PRUEBA_EQUIPO := [{"id": "bate", "calidad": 1}, {"id": "escopeta", "calidad": 2}, {"id": "lanzallamas", "calidad": 3},
 	{"id": "pistola", "calidad": 2}, {"id": "molotov", "calidad": 2, "n": 4}, {"id": "congeladora", "calidad": 3, "n": 3}]
 
 func dar_objetos() -> void:
-	Guardado.cambiar(func(g):
+	Guardado.cambiar_real(func(g):
 		for id in Objetos.PIEZAS:
 			g.baul[id] = g.baul.get(id, 0) + 10
 		g.baul_equipo.append_array(PRUEBA_EQUIPO.duplicate(true)))

@@ -587,24 +587,15 @@ func bolas_y_molotovs(jefe: Node2D, centro: Vector2) -> void:
 	Captura.foto("captura-llamas-bolas.png")
 
 
-# Con "--captura --ir-jefe": desde la sala de mantenimiento, pulsa Mayús + la tecla de cada minijefe de los
-# Apartamentos (SALAS_JEFE e ir_al_jefe, partida.gd; la última, el jefe de bomberos) y cuenta en la terminal, de cada
-# uno: que está en la planta que le tocó en el sorteo, que Johnny está en la habitación del jefe, junto a la puerta, y
-# que el jefe que ha salido es ese. Saca captura-ir-jefe.png (el jefe de bomberos en su habitación en llamas) y se
-# cierra
+# Con "--captura --ir-jefe": desde la sala de mantenimiento, va derecho a la habitación de cada minijefe de los
+# Apartamentos (ir_al_jefe, partida.gd, lo que hacen los botones «Sala: ...» del panel de pruebas; la última, el jefe
+# de bomberos) y cuenta en la terminal, de cada uno: que está en la planta que le tocó en el sorteo, que Johnny está en
+# la habitación del jefe, junto a la puerta, y que el jefe que ha salido es ese. Saca captura-ir-jefe.png (el jefe de
+# bomberos en su habitación en llamas) y se cierra
 func probar_ir_jefe() -> void:
-	var teclas: Array = SALAS_JEFE.keys()
-	teclas.erase(KEY_9)
-	teclas.append(KEY_9)   # (el jefe de bomberos, el último: el de la foto)
-	for tecla in teclas:
-		var tipo: String = SALAS_JEFE[tecla]
+	for tipo in ["gloton", "gymbro", "portera", "bombero"]:   # (el jefe de bomberos, el último: el de la foto)
 		johnny.vida = johnny.stats.vida_max
-		for pulsada in [true, false]:
-			var evento := InputEventKey.new()
-			evento.keycode = tecla
-			evento.shift_pressed = true
-			evento.pressed = pulsada
-			Input.parse_input_event(evento)
+		ir_al_jefe(tipo)
 		# hasta que empieza a cambiar de sitio (mientras se funde a negro, "jefa" aún es el de antes) y luego, hasta que
 		# sale el jefe (en la prueba, sin presentación)
 		var espera := 0.0
@@ -615,8 +606,8 @@ func probar_ir_jefe() -> void:
 			await get_tree().physics_frame
 			espera += get_physics_process_delta_time()
 		var sitio: Dictionary = planta.sitios[aqui]
-		print("Ir al jefe (Mayús + %s): a la %s, la suya del sorteo %s (esperado: true) · en la habitación del jefe %s (esperado: true) · Johnny, a %d de la puerta (esperado: menos de 100) · ha salido %s (esperado: %s)" % [
-			OS.get_keycode_string(tecla), planta.nombre, planta.num == orden_jefes.find(tipo) + 1, sitio.tipo == "jefe",
+		print("Ir al jefe (%s): a la %s, la suya del sorteo %s (esperado: true) · en la habitación del jefe %s (esperado: true) · Johnny, a %d de la puerta (esperado: menos de 100) · ha salido %s (esperado: %s)" % [
+			tipo, planta.nombre, planta.num == orden_jefes.find(tipo) + 1, sitio.tipo == "jefe",
 			roundi(johnny.position.distance_to(mapa.puertas[0].llegada())),
 			jefa.scene_file_path.get_file().get_basename() if is_instance_valid(jefa) else "nadie", ZOMBIS[tipo].resource_path.get_file().get_basename()])
 	await get_tree().create_timer(1.0).timeout

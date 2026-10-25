@@ -21,7 +21,6 @@
 #   efecto    lo que hacen al dar (armas_creadas.gd): "llama", "acido" o "chispa" · cano  hacia dónde apunta el tubo
 class_name Armas
 
-const ORDEN := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]   # las teclas 1 a 6 (las de probar)
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
 # no se vende: se lleva siempre. El lanzallamas, el lanza ácido y la pistola eléctrica, las más caras (25 oct)

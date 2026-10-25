@@ -71,7 +71,7 @@ var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (p
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var lio_angulo := 0.0
 var prisa := 0.0           # segundos que le quedan con prisa (el grito de la dependienta, zombi_dependienta.gd)
-# La diana de la sala de pruebas de armas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
+# La diana de la sala de pruebas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
 # acto), no da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números
 # de daño los pone la sala, más grandes
 var diana := false

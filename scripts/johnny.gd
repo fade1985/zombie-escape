@@ -112,7 +112,8 @@ var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego
                            # depósito, los segundos que les quedaban)
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var deposito := 0.0        # el lanzallamas y el lanza ácido: los segundos de chorro que le quedan en el depósito
-var municion_sin_fin := false   # la sala de pruebas de armas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
+var municion_sin_fin := false   # la sala de pruebas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
+var invencible := false    # la sala de pruebas: no pierde vida
 var gracia := 0            # el golpe de gracia de las Épicas cuerpo a cuerpo: los golpes que han dado desde el último
                            # crítico seguro (Armas.TRUCO; golpear)
 var mirando_chorro := ""   # hacia dónde miraba echando el chorro en el paso de antes (mirar_con_chorro)
@@ -305,10 +306,6 @@ func _physics_process(delta: float) -> void:
 		seguir_caido(delta)
 		return
 
-	# Teclas de las armas
-	for i in Armas.ORDEN.size():
-		if Input.is_action_just_pressed("arma_%d" % (i + 1)):
-			coger(Armas.ORDEN[i])
 	if Input.is_action_just_pressed("cambiar_arma"):
 		cambiar_mano()
 	if Input.is_action_just_pressed("recargar"):
@@ -785,7 +782,7 @@ func cargado() -> float:
 
 
 # Lo que tiene para volver a llenarla: la munición de su tipo (las balas de reserva, o las gasolinas, los bidones de
-# ácido o las baterías de la mochila; en la sala de pruebas de armas, sin fin)
+# ácido o las baterías de la mochila; en la sala de pruebas, sin fin)
 func reserva() -> int:
 	return 99 if municion_sin_fin else cuanta(Armas.municion(huecos.fuego))
 
@@ -1239,6 +1236,8 @@ func empujar(fuerza: Vector2) -> void:
 
 
 func quitar_vida(cantidad: int) -> void:
+	if invencible:
+		return
 	vida = max(vida - cantidad, 0)
 	# Al bajar de un tercio, ese tercio se pierde (vidaTope en el JS); con la ayuda "Vida entera", no
 	if not Guardado.ajuste("vida_entera"):

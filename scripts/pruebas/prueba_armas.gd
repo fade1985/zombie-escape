@@ -1,10 +1,10 @@
-# Pruebas de las armas: la sala de pruebas de armas (--armas), el lanzallamas, el lanza ácido y la pistola
+# Pruebas de las armas: la sala de pruebas (--armas), el lanzallamas, el lanza ácido y la pistola
 # eléctrica (--lanzallamas, --desintegrador, --pistola-electrica) y el fuego y el ácido en los enemigos (--tintes,
 # --fuego-acido) y los trucos de las Épicas (--epicas). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_jefes.gd"
 
 
-# Con "--captura --armas": la sala de pruebas de armas (sala_armas.gd). Desde la sala de mantenimiento, F11 lleva a
+# Con "--captura --armas": la sala de pruebas (sala_armas.gd). Desde la sala de mantenimiento, F11 lleva a
 # ella: cuenta en la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola. La
 # pistola, en el modo asistido y a 200 de la diana, desde 72 ángulos (cada 5°; 0° = disparando hacia la derecha, 90° =
 # hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla
@@ -26,7 +26,7 @@ func probar_armas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	var sitio: Dictionary = planta.sitios[aqui]
 	var centro := Vector2(sitio.ancho, sitio.alto) / 2.0
-	print("Sala de pruebas de armas: en «%s» (esperado: armas) · %d × %d · la diana en el centro %s, la única %s (esperado: true, true) · oscuridad %s (esperado: 0) · en la mano: %s (esperado: Pistola)" % [
+	print("Sala de pruebas: en «%s» (esperado: armas) · %d × %d · la diana en el centro %s, la única %s (esperado: true, true) · oscuridad %s (esperado: 0) · en la mano: %s (esperado: Pistola)" % [
 		sitio.tipo, sitio.ancho, sitio.alto, sala.diana.global_position.distance_to(centro) < 2.0,
 		get_tree().get_nodes_in_group("zombis").size() == 1, luz.oscuridad(), johnny.arma().nombre])
 	johnny.poner_modo("asistido")
@@ -150,7 +150,7 @@ func pulsar_y_esperar(tecla: Key) -> void:
 # hoja de ahora, conserje-48-lanzallamas, en la postura de apuntar). Primero, en la sala de mantenimiento, Johnny lo
 # compra en la tienda de armas del ordenador (captura-lanzallamas-tienda.png, con él marcado) y cuenta su hoja, su daño
 # por segundo, su alcance (10 casillas), su depósito, su recarga, su empuje, sus pies, su boca hacia el este, que no le
-# salen chispitas y que las cajas de munición no le valen. Luego, en la sala de pruebas de armas (F11: cabe la llama
+# salen chispitas y que las cajas de munición no le valen. Luego, en la sala de pruebas (F11: cabe la llama
 # entera), con el lanzallamas comprado y gastando gasolina de verdad:
 #   - la llamarada: 1 s echando fuego hacia la derecha (a la izquierda está el panel de la sala) con tres zombis en la
 #     misma línea, a 120 y a 250 (los dos dentro: pierden vida, arden y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se entera).
@@ -186,7 +186,7 @@ func probar_lanzallamas() -> void:
 		johnny.huecos.fuego, johnny.sprite.sprite_frames.resource_path.get_file(), w.dano, w.alcance, w.alcance / Planta.CASILLA,
 		w.deposito, johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
-	# a la sala de pruebas de armas (allí le ponen la pistola y la gasolina sin fin: se le vuelve a dar este, gastando)
+	# a la sala de pruebas (allí le ponen la pistola y la gasolina sin fin: se le vuelve a dar este, gastando)
 	await pulsar_y_esperar(KEY_F11)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
@@ -434,7 +434,7 @@ func chorro_torcido(arma: String) -> void:
 # (tools/hoja_lanza_acido.py; casilla de 96x96 con los pies en 48,72) y su chorro, el de la llamarada con "acido"
 # (llamarada.gd y chorro_acido.gdshader). Como el lanzallamas, en la sala de mantenimiento, Johnny lo compra en la
 # tienda de armas del ordenador (captura-desintegrador-tienda.png, con él marcado) y cuenta sus números, su boca y que
-# las balas no le valen. Luego, en la sala de pruebas de armas (F11), gastando bidones de ácido de verdad:
+# las balas no le valen. Luego, en la sala de pruebas (F11), gastando bidones de ácido de verdad:
 #   - quieto, sin echar el chorro, la gota de ácido de la boquilla (goteo.gd): se hincha, cuelga entera
 #     (captura-desintegrador-gota.png) y se suelta y cae (captura-desintegrador-cae.png)
 #   - el chorro: 1 s hacia la derecha con tres zombis en la misma línea, a 120 y a 250 (los dos dentro: pierden vida,
@@ -475,7 +475,7 @@ func probar_desintegrador() -> void:
 		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
 		w.deposito, w.recarga, w.empuje, w.dano, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
-	# a la sala de pruebas de armas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
+	# a la sala de pruebas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
 	await pulsar_y_esperar(KEY_F11)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
@@ -673,7 +673,7 @@ func texto_del_arma() -> String:
 
 # Con "--captura --tintes": el fuego y el ácido de los enemigos, pintados por su shader (zombi.gd, quemaduras;
 # escenas/personajes/quemaduras.gdshaderinc; armas_creadas.gd, la herida): llamas que suben desde los pies, lenguas
-# por encima y chispas; manchas de ácido con burbujas y gotas. En la sala de pruebas de armas, cuatro zombis quietos
+# por encima y chispas; manchas de ácido con burbujas y gotas. En la sala de pruebas, cuatro zombis quietos
 # (como la diana): uno sin nada, uno ardiendo, uno con el ácido del lanza ácido y uno con las dos cosas a la vez, y un
 # jefe (el gymbro, quieto) con ácido. Fotos a la luz, otra un poco después (las llamas suben y las manchas han crecido)
 # y a oscuras (lo que luce brilla: la copia de brillo.gd; el que arde lleva la luz naranja de sus llamas y el del
@@ -773,7 +773,7 @@ func probar_tintes() -> void:
 
 
 # Con "--captura --charcos": los charcos que burbujean (charco.gd: veneno, ácido y vómito) junto a uno de fuego, para
-# compararlos. En la sala de pruebas de armas, en fila delante de Johnny: fotos al caer (se extienden), con sus
+# compararlos. En la sala de pruebas, en fila delante de Johnny: fotos al caer (se extienden), con sus
 # burbujas, cuando empiezan a secarse a trozos y con la mancha que dejan. Cuenta si se pisan y se cierra
 func probar_charcos() -> void:
 	await pulsar_y_esperar(KEY_F11)
@@ -1076,7 +1076,7 @@ func zombis_de_prueba(donde: Array) -> Array:
 
 
 # Con "--captura --epicas": el truco de la Épica de cada familia (Armas.TRUCO; parte 6 de la tienda y las piezas), en la
-# sala de pruebas de armas, con zombis lentos de 500 de vida. Cada línea dice lo esperado. Cuenta: lo que dice la ficha
+# sala de pruebas, con zombis lentos de 500 de vida. Cada línea dice lo esperado. Cuenta: lo que dice la ficha
 # de cada Épica; el golpe de gracia (el bate Épico: el 4.º golpe que da hace el doble; captura-epica-gracia.png); las
 # balas que atraviesan (la pistola Épica da a los dos zombis en fila, la Normal solo al primero;
 # captura-epica-balas.png, con la estela morada); el estallido (el zombi que mata un golpe Épico de fuego, ácido o
@@ -1189,3 +1189,71 @@ func probar_epicas() -> void:
 		Armas.CALIDADES[3].radio, Armas.TRUCO.racimo, Armas.CALIDADES[3].radio * Armas.TRUCO.racimo_tamano])
 	Captura.foto("captura-epica-molotov.png")
 	get_tree().quit()
+
+
+# Con "--captura --sala-pruebas": la sala de pruebas con su panel (sala_armas.gd y ui/panel_pruebas.gd). Desde la sala
+# de mantenimiento, F11 lleva a ella: cuenta en la terminal que hay baúl y que el baúl que se ve es el de pruebas (todas
+# las armas y los arrojables en cada calidad). La P abre el panel; con sus botones, Johnny invencible y, con «Quieto», el
+# antidisturbios: que ha salido y que, tras 3 s, sigue en su sitio. Luego apaga los avisos de los jefes y el alcance
+# del arma, y los vuelve a encender. Al final, F11 vuelve al mismo sitio de la sala de mantenimiento, con el baúl de
+# verdad sin tocar. Fotos: captura-sala-pruebas-panel.png (el panel, en Jefes), captura-sala-pruebas-jefe.png (el
+# antidisturbios quieto, con sus avisos) y captura-sala-pruebas-sin-ayudas.png (lo mismo, sin avisos ni alcance)
+func probar_sala_pruebas() -> void:
+	var real: int = Guardado.cargar().baul_equipo.size()
+	johnny.position += Vector2(60, -40)
+	var desde: Vector2 = johnny.position
+	var de: int = aqui
+	await pulsar_y_esperar(KEY_F11)
+	await get_tree().create_timer(0.3).timeout
+	var esperado := (Armas.DATOS.size() + Lanzables.DATOS.size()) * Armas.CALIDADES.size()
+	print("Sala de pruebas: en «%s» (esperado: armas) · baúl %s (esperado: true) · en el baúl %d cosas (esperado: %d)" % [
+		planta.sitios[aqui].tipo, mapa.baul != null, Guardado.cargar().baul_equipo.size(), esperado])
+	await pulsar_y_esperar(KEY_P)
+	await get_tree().create_timer(0.3).timeout
+	print("Panel de pruebas: abierto %s, juego parado %s (esperado: true, true)" % [panel_pruebas.abierto(), get_tree().paused])
+	Captura.foto("captura-sala-pruebas-panel.png")
+	panel_pruebas.elegir("Johnny")
+	pulsar_en_panel("Invencible")
+	panel_pruebas.elegir("Jefes")
+	if not PANEL_PRUEBAS.quieto:
+		pulsar_en_panel("Quieto")
+	pulsar_en_panel("Antidisturbios")
+	await get_tree().create_timer(0.2).timeout
+	var jefe: Node2D = null
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.scene_file_path.get_file() == "antidisturbios.tscn":
+			jefe = z
+	var sitio_jefe: Vector2 = jefe.global_position if jefe else Vector2.ZERO
+	await get_tree().create_timer(3.0).timeout
+	print("Jefe del panel: ha salido %s, el panel se ha cerrado %s · quieto: se ha movido %d (esperado: true, true, 0) · Johnny invencible, vida %d de %d" % [
+		jefe != null, not panel_pruebas.abierto(), roundi(jefe.global_position.distance_to(sitio_jefe)) if jefe else -1,
+		johnny.vida, johnny.stats.vida_max])
+	Captura.foto("captura-sala-pruebas-jefe.png")
+	abrir_panel_pruebas()
+	panel_pruebas.elegir("Ayudas")
+	pulsar_en_panel("Avisos de los jefes")
+	pulsar_en_panel("Alcance del arma")
+	print("Ayudas apagadas: avisos %s, alcance %s (esperado: true, false)" % [Aviso.apagados, SalaArmas.ayudas.alcance])
+	panel_pruebas.cerrar()
+	await get_tree().create_timer(1.0).timeout
+	Captura.foto("captura-sala-pruebas-sin-ayudas.png")
+	abrir_panel_pruebas()
+	panel_pruebas.elegir("Ayudas")
+	pulsar_en_panel("Avisos de los jefes")
+	pulsar_en_panel("Alcance del arma")
+	print("Ayudas encendidas: avisos %s, alcance %s (esperado: false, true)" % [Aviso.apagados, SalaArmas.ayudas.alcance])
+	panel_pruebas.cerrar()
+	await pulsar_y_esperar(KEY_F11)
+	await get_tree().create_timer(0.3).timeout
+	print("De vuelta: al mismo sitio %s, al mismo punto %s · el baúl de verdad, %d cosas (esperado: true, true, %d)" % [
+		aqui == de, johnny.position.distance_to(desde) < 2.0, Guardado.cargar().baul_equipo.size(), real])
+	get_tree().quit()
+
+
+# Pulsa el botón del panel de pruebas que empieza por "texto"
+func pulsar_en_panel(texto: String) -> void:
+	for b in panel_pruebas.hoja.get_children():
+		if b.text.begins_with(texto):
+			b.pressed.emit()
+			return
+	print("ERROR: en el panel no está el botón «%s»" % texto)

@@ -21,6 +21,7 @@ var medio := 32.0       # la franja: el ancho a cada lado; el abanico: el medio 
 var aplasta := 1.0      # el abanico: lo aplastado que se ve en el suelo (de arriba abajo)
 var choca := false
 var pedido := 0         # el último fotograma en que se pidió (si deja de pedirse, se esconde)
+static var apagados := false   # el panel de la sala de pruebas los apaga, para ver a los jefes sin ellos
 
 
 # El camino de una carga: desde "desde" (en el jefe), hacia "angulo", de "largo" y "medio" de ancho a cada lado. "k"
@@ -64,7 +65,7 @@ static func pedir(jefe: Node2D, forma_: int, desde_: Vector2, angulo_: float, k:
 	aviso.desde = desde_
 	aviso.angulo = angulo_
 	aviso.pedido = Engine.get_process_frames()
-	aviso.visible = true
+	aviso.visible = not apagados
 	var m: ShaderMaterial = aviso.material
 	m.set_shader_parameter("k", k)
 	m.set_shader_parameter("tiempo", tiempo)

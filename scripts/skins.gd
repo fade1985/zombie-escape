@@ -79,7 +79,7 @@ static func desbloquear(id: String) -> bool:
 	return true
 
 
-# La que va después de esa (tecla Z): la de siempre, las de la lista en orden y vuelta a empezar
+# La que va después de esa («Siguiente skin» del panel de pruebas): la de siempre, las de la lista en orden y vuelta a empezar
 static func siguiente(id: String) -> String:
 	var todas: Array = [""] + LISTA.keys()
 	return todas[(todas.find(id) + 1) % todas.size()]

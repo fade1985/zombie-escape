@@ -32,7 +32,7 @@ const SALA_ESTANCIAS := [{"uso": "vestuario", "nombre": "Vestuario"}, {"uso": "d
 	{"uso": "taller", "nombre": "Taller"}]
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 153           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe, y para los muebles de la sala de mantenimiento)
-const ARMAS_CASILLAS := 34       # la sala de pruebas de armas (cuadrada): del centro a la pared caben 15 casillas
+const ARMAS_CASILLAS := 34       # la sala de pruebas (cuadrada): del centro a la pared caben 15 casillas
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
@@ -80,7 +80,7 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    (el del edificio: "pasillo" o "galeria", ver mapa.gd), sus apliques y, en el centro comercial,
 #                    los escaparates de las tiendas de arriba ({x, tienda})
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay), viviendas, el de las viviendas de los
-#                    rescatados (viviendas.gd), expo, el de la exposición, y armas, el de la sala de pruebas de armas
+#                    rescatados (viviendas.gd), expo, el de la exposición, y armas, el de la sala de pruebas
 #   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
 #                    el guardia la suelte al caer; con la Alerta 5, igual: la lleva un vecino, {"llave": true} en zombis)
 #   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
@@ -243,10 +243,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng,
 		delante_escaparates)
 	if baja:
-		planta.expo = planta.sitios.size()
-		planta.sitios.append(exposicion(planta.mantenimiento))
 		planta.armas = planta.sitios.size()
 		planta.sitios.append(sala_armas(planta.mantenimiento))
+		planta.expo = planta.sitios.size()
+		planta.sitios.append(exposicion(planta.armas))
 
 	# Dificultad: los apartamentos normales, en un orden al azar, llevan cada vez más zombis
 	var normales := []
@@ -451,22 +451,23 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 	return sitio
 
 
-# La sala de exposición del modo pruebas (tecla F9): todos los muebles y todos los zombis, para ver cómo
-# quedan. Lo que se expone lo pone mapa.gd. Su puerta lleva a la sala de mantenimiento.
-static func exposicion(mant: int) -> Dictionary:
+# La sala de exposición (el botón del panel de la sala de pruebas): todos los muebles y todos los zombis, para ver
+# cómo quedan. Lo que se expone lo pone mapa.gd. Su puerta lleva a la sala de pruebas ("pruebas").
+static func exposicion(pruebas: int) -> Dictionary:
 	var ancho := EXPO_COLS * CASILLA
 	var alto := EXPO_FILAS * CASILLA
 	return {"tipo": "expo", "nombre": "Exposición", "ancho": ancho, "alto": alto, "muebles": [],
 		"dueno": Muebles.plano_rectangular(EXPO_COLS, EXPO_FILAS), "zombis": [], "limpio": true, "visitado": true,
-		"surtido": 0, "salidas": [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": mant, "vuelta": 0,
+		"surtido": 0, "salidas": [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": pruebas, "vuelta": 0,
 		"cerrojo": "", "aviso": ""}]}
 
 
-# La sala de pruebas de armas del modo pruebas (tecla F11): una habitación vacía y con luz, con un zombi que no se
-# muere en el centro. Lo que tiene dentro lo pone sala_armas.gd. Su puerta lleva a la sala de mantenimiento.
+# La sala de pruebas (tecla F11): una habitación vacía y con luz, con un zombi que no se muere en el centro y el baúl
+# de pruebas. Lo que tiene dentro lo pone sala_armas.gd. Su puerta vuelve al sitio del que se vino (partida.gd, cruzar;
+# "mant" solo sirve de relleno: en las plantas de arriba es -1).
 static func sala_armas(mant: int) -> Dictionary:
 	var lado := ARMAS_CASILLAS * CASILLA
-	return {"tipo": "armas", "nombre": "Sala de pruebas de armas", "ancho": lado, "alto": lado, "muebles": [],
+	return {"tipo": "armas", "nombre": "Sala de pruebas", "ancho": lado, "alto": lado, "muebles": [],
 		"dueno": Muebles.plano_rectangular(ARMAS_CASILLAS, ARMAS_CASILLAS), "zombis": [], "limpio": true,
 		"visitado": true, "surtido": 0, "salidas": [{"dir": "abajo", "en": lado / 2, "tipo": "puerta", "a": mant,
 		"vuelta": 0, "cerrojo": "", "aviso": ""}]}

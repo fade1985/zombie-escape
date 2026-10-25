@@ -1,5 +1,5 @@
 # Monta un sitio de la planta (el pasillo, un apartamento, la sala de mantenimiento, las viviendas de los
-# rescatados, la exposición o la sala de pruebas de armas) a partir de sus datos (planta.gd):
+# rescatados, la exposición o la sala de pruebas) a partir de sus datos (planta.gd):
 #   - el suelo de cada habitación y la tapa de los muros (vistos desde arriba), en un dibujo de fondo
 #   - las caras de los muros (de frente, 3 casillas de alto), ordenadas con los personajes
 #   - los choques de los muros, las puertas, los muebles (mueble.gd) y la llave
@@ -236,7 +236,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		poner_exposicion()
 	hornear(navegacion)
 	if sitio.tipo == "armas":
-		add_child(SalaArmas.new())   # la sala de pruebas de armas: la diana, las líneas de ayuda y su panel (sala_armas.gd)
+		add_child(SalaArmas.new())   # la sala de pruebas: la diana, las líneas de ayuda, su panel de daño y el baúl de pruebas (sala_armas.gd)
 	if sitio.has("apt"):
 		preparar_niebla()
 	# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
@@ -286,7 +286,7 @@ func acustica_en(pos: Vector2) -> String:
 		return "seca"
 	var zona := zona_en(pos)
 	if not sitio.has("apt") or zona < 0:
-		return "eco"   # el pasillo de la planta, la exposición, la sala de pruebas de armas
+		return "eco"   # el pasillo de la planta, la exposición, la sala de pruebas
 	match String(sitio.apt.salas[zona].uso):
 		"salon", "dormitorio", "probadores", "habitacion":
 			return "seca"
@@ -522,6 +522,11 @@ func poner_muebles() -> void:
 		muebles.append(mueble)
 		if m.tipo == "lamp" or m.tipo == "nightstand":
 			poner_lampara(mueble, m)
+	if sitio.tipo == "armas":
+		# el baúl de pruebas de la sala de pruebas (sala_armas.gd), arriba a la izquierda
+		baul = ARRIMABLE.new()
+		baul.montar("Baul", "res://assets/sprites/baul.png", MURO + 4 * Planta.CASILLA, MURO, 60.0, 36.0)
+		cosas.add_child(baul)
 	if sitio.tipo == "mantenimiento":
 		ordenador = ORDENADOR.new()
 		ordenador.montar(ORDENADOR_X, MURO)

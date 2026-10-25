@@ -10,6 +10,9 @@
 class_name Guardado
 
 static var archivo := "user://guardado.json"   # la prueba con --captura usa otro
+# El baúl de pruebas (la sala de pruebas, sala_armas.gd): mientras tiene algo, el baúl que se lee y se cambia es este,
+# {baul, baul_equipo}, que solo vive en la memoria; al archivo se sigue escribiendo el baúl de verdad, sin tocarlo
+static var baul_prueba := {}
 
 # Lo que tiene un guardado nuevo. Al cargar uno viejo, lo que le falte se rellena con esto
 const NUEVO := {
@@ -59,6 +62,15 @@ const RETO := {"fecha": "", "regla": "", "intentos": 0, "planta": 0, "completado
 
 
 static func cargar() -> Dictionary:
+	var s := cargar_archivo()
+	if not baul_prueba.is_empty():
+		s.baul = baul_prueba.baul.duplicate(true)
+		s.baul_equipo = baul_prueba.baul_equipo.duplicate(true)
+	return s
+
+
+# Lo que hay de verdad en el archivo (con el baúl de verdad, aunque esté puesto el de pruebas)
+static func cargar_archivo() -> Dictionary:
 	var s: Dictionary = NUEVO.duplicate(true)
 	var leido = leer(archivo)
 	if not leido is Dictionary:
@@ -128,6 +140,13 @@ static var escrituras := 0   # cuántas veces se ha escrito: Bestiario mira si e
 # guardado.json.tmp; solo cuando está entero, el guardado de antes pasa a ser la copia (guardado.json.bak) y el
 # nuevo ocupa su sitio. Pase lo que pase, siempre queda uno entero: el bueno o la copia (cargar mira los dos)
 static func escribir(s: Dictionary) -> void:
+	# con el baúl de pruebas puesto, lo que cambia en el baúl se queda en él y al archivo va el de verdad
+	if not baul_prueba.is_empty():
+		baul_prueba = {"baul": s.baul.duplicate(true), "baul_equipo": s.baul_equipo.duplicate(true)}
+		var real := cargar_archivo()
+		s = s.duplicate()
+		s.baul = real.baul
+		s.baul_equipo = real.baul_equipo
 	var tmp := archivo + ".tmp"
 	var bak := archivo + ".bak"
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
@@ -164,6 +183,14 @@ static func cambiar(cambio: Callable) -> Dictionary:
 	cambio.call(s)
 	escribir(s)
 	return s
+
+
+# Como cambiar, pero en el baúl de verdad aunque esté puesto el de pruebas (el botón de las piezas del panel)
+static func cambiar_real(cambio: Callable) -> void:
+	var prueba := baul_prueba
+	baul_prueba = {}
+	cambiar(cambio)
+	baul_prueba = prueba
 
 
 # El progreso de un edificio (lo crea si aún no se ha jugado)

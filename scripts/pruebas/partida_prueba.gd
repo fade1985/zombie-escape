@@ -22,9 +22,11 @@
 #   --vapor             el vapor de la cabeza de cada minijefe al enfadarse                [prueba_jefes_salas.gd]
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
 #   --golpes            el aviso de los golpes cuerpo a cuerpo de cada jefe                 [prueba_jefes_salas.gd]
-#   --ir-jefe           Mayús + 7, 8, 9 y P: derecho a la habitación de cada jefe          [prueba_jefes_salas.gd]
+#   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
-#   --armas             la sala de pruebas de armas (F11)                                    [prueba_armas.gd]
+#   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
+#   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
+#                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
@@ -38,9 +40,9 @@
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
 #   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto               [prueba_inventario.gd]
 #   --tienda            la tienda de armas: sus secciones y comprar arrojables de uno en uno [prueba_inventario.gd]
-#   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, la tecla U y los 5 objetos
+#   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
-#   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas (U) [prueba_larga.gd]
+#   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
 #                       completar el edificio                                          [prueba_inventario.gd]
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
@@ -109,6 +111,9 @@ func empezar_prueba() -> void:
 	elif "--llamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamas()
+	elif "--sala-pruebas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_sala_pruebas()
 	elif "--ir-jefe" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ir_jefe()

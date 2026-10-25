@@ -82,9 +82,8 @@ func _process(delta: float) -> void:
 		lanzables.cambiar()
 	# un tiro de pistola para despertar a los de cerca
 	if antes < 2.5 and tiempo >= 2.5:
-		Input.action_press("arma_4")
+		johnny.coger("pistola")
 	if antes < 2.6 and tiempo >= 2.6:
-		Input.action_release("arma_4")
 		Input.action_press("atacar")
 	# las trazadoras (normal, perdigón y crítica), quietas al lado de Johnny para la foto
 	if antes < 2.65 and tiempo >= 2.65:
@@ -589,7 +588,7 @@ func probar_efectos() -> void:
 
 # El reparto de objetos (parte 6 del centro comercial): cuenta qué sale en cada sitio de los dos edificios y
 # comprueba que las vendas (del centro) no salen en los Apartamentos y que ni las piezas ni lo de un solo zombi salen al
-# azar. Luego deja en el suelo los del centro (SOLO_CENTRO), mete las piezas en el baúl (lo de la tecla U) y hace una
+# azar. Luego deja en el suelo los del centro (SOLO_CENTRO), mete las piezas en el baúl (lo de «Piezas al baúl» del panel de pruebas) y hace una
 # foto del baúl
 func probar_objetos() -> void:
 	var fallos := []
@@ -619,7 +618,7 @@ func probar_objetos() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-baul-todo.png")
 	inventario.cerrar()
-	print("Baúl con las piezas (tecla U): %d casillas de %d (esperado: 4)" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
+	print("Baúl con las piezas: %d casillas de %d (esperado: 4)" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
 	Guardado.cambiar(func(g): g.baul = baul_antes)
 
 

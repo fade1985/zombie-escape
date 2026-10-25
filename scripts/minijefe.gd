@@ -42,6 +42,7 @@ var contacto := 0
 var tiempo := 0.0
 var vapor := true              # el vapor de la cabeza al enfadarse (el gerente mutado no echa)
 var rabia: VaporRabia          # las nubecitas de ese vapor
+var quieto := false            # la sala de pruebas: ataca y avisa como siempre, pero no se mueve de su sitio
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -167,8 +168,11 @@ func frenar(delta: float, cuanto := 10.0) -> void:
 
 
 func mover() -> void:
+	var antes := global_position
 	velocity = marcha
 	move_and_slide()
+	if quieto:
+		global_position = antes   # (se mueve y se le devuelve: así cree que corre y no que se ha chocado)
 
 
 # ── Embestir (la carga del antidisturbios y la embestida de la mascota) ──

@@ -5,7 +5,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | Archivo | Cuándo leerlo |
 |---|---|
 | `docs/CODIGO.md` | Qué hace cada escena, script, asset y herramienta |
-| `docs/CONTROLES.md` | Teclas, mando, móvil, teclas de prueba (F2-F10, H, M, O…), sala de mantenimiento, guardado |
+| `docs/CONTROLES.md` | Teclas, mando, móvil, la sala de pruebas (F11 y su panel), sala de mantenimiento, guardado |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica solo con cada push a main) |
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
