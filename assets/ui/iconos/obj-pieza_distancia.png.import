@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ihh3q5ldqyo4"
-path="res://.godot/imported/obj-explosivos.png-d450d01be803aa44771d6a54a6137ad6.ctex"
+uid="uid://dosyb3rd1cf00"
+path="res://.godot/imported/obj-pieza_distancia.png-5251875ef76998bc181e7d77eaf26ba2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-explosivos.png"
-dest_files=["res://.godot/imported/obj-explosivos.png-d450d01be803aa44771d6a54a6137ad6.ctex"]
+source_file="res://assets/ui/iconos/obj-pieza_distancia.png"
+dest_files=["res://.godot/imported/obj-pieza_distancia.png-5251875ef76998bc181e7d77eaf26ba2.ctex"]
 
 [params]
 

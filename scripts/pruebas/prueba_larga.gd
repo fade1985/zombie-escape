@@ -391,17 +391,15 @@ func probar_historia() -> void:
 	await probar_noticias()
 
 
-# Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (8 objetos y los
-# explosivos, cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
+# Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (6 objetos,
+# cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
 # (captura-escritorio-nuevo.png), los objetos de este edificio (captura-colecciones.png), la ficha del vecino
 # (captura-bestiario.png) y la del gerente, sin ver (captura-bestiario-falta.png). Luego cuenta en la terminal lo
 # encontrado y visto de cada edificio, y comprueba los totales
 func probar_colecciones() -> void:
 	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
 	print("Bestiario apuntado por la prueba hasta aquí: %s" % [Guardado.cargar().get("bestiario", [])])
-	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 8)
-	if not "explosivos" in encontrados:
-		encontrados.append("explosivos")
+	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 6)
 	var vistos: Array = ["normal", "lento", "rapido", "portera"]
 	if edificio == "centro":
 		vistos += ["dependienta", "guardia", "antidisturbios"]
@@ -429,8 +427,8 @@ func probar_colecciones() -> void:
 		print("Colecciones de %s: objetos %d/%d | bestiario %d/%d" % [e,
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 8 or Objetos.de_edificio("centro").size() != 8:
-		push_error("Colecciones: los objetos por edificio no son 8 y 8")
+	if Objetos.de_edificio("apartamentos").size() != 7 or Objetos.de_edificio("centro").size() != 8:
+		push_error("Colecciones: los objetos por edificio no son 7 y 8")
 	if Bestiario.LISTA.size() != 22:
 		push_error("Colecciones: el bestiario no tiene 22 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
@@ -473,8 +471,9 @@ func probar_noticias() -> void:
 # Con "--captura --banco": lo de las recetas en un guardado viejo (las armas creadas del baúl, "baul_armas"; las
 # recetas aprendidas, "recetas", y las armas creadas alguna vez, "creadas", de Colecciones), que se quitó el 25 oct, y
 # los objetos quitados ese día (los de las armas de cuerpo a cuerpo y los clavos, el spray, la lejía, la pistola de
-# agua, la cinta americana, la bombona, la jeringuilla, el aceite y el bocadillo) en el baúl y en los encontrados
-# (Colecciones): al cargar desaparece todo (guardado.gd); el trapo, que sigue, se queda. Luego, el baúl abierto con lo
+# agua, la cinta americana, la bombona, la jeringuilla, el aceite y el bocadillo) y los que se quitaron con las piezas
+# (los explosivos, el despertador, el extintor, el trapo y el alcohol) en el baúl y en los encontrados (Colecciones):
+# al cargar desaparece todo (guardado.gd); la gasolina, que sigue, se queda. Luego, el baúl abierto con lo
 # que queda (captura-banco-baul.png), la mochila, el banco en obras y el baúl (probar_cosas), los arrojables y las
 # armas de efecto (probar_efectos) y las Colecciones (probar_colecciones). Cada línea dice lo esperado y se cierra
 func probar_banco() -> void:
@@ -485,16 +484,16 @@ func probar_banco() -> void:
 	s["creadas"] = ["atraedora"]
 	var quitados := ["mechero", "llave_inglesa", "hacha", "cuchillas", "taser", "cuerda", "mancuernas", "cadena", "perchas",
 		"hielo_seco", "cable", "clavos", "spray", "lejia", "pistola_agua", "cinta_americana", "bombona", "jeringuilla",
-		"aceite", "bocadillo"]
-	s.baul = {"trapo": 1}
+		"aceite", "bocadillo", "explosivos", "despertador", "extintor", "trapo", "alcohol"]
+	s.baul = {"gasolina": 1}
 	for id in quitados:
 		s.baul[id] = 2
-	s.encontrados = quitados + ["trapo"]
+	s.encontrados = quitados + ["gasolina"]
 	Guardado.escribir(s)
 	var leido := Guardado.cargar()
 	print("Lo de las recetas, viejo, al cargar: baul_armas %s · recetas %s · creadas %s (esperado: false, false, false)" % [
 		leido.has("baul_armas"), leido.has("recetas"), leido.has("creadas")])
-	print("Los %d objetos quitados, viejos, al cargar: baúl %s · encontrados %s (esperado: { \"trapo\": 1 }, [\"trapo\"])" % [
+	print("Los %d objetos quitados, viejos, al cargar: baúl %s · encontrados %s (esperado: { \"gasolina\": 1 }, [\"gasolina\"])" % [
 		quitados.size(), leido.baul, leido.encontrados])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.3).timeout
@@ -512,10 +511,10 @@ func probar_banco() -> void:
 func probar_cosas() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 20
-		g.baul = {"trapo": 1, "extintor": 2})
+		g.baul = {"pieza_cuerpo": 1, "pieza_especial": 2})
 	ahorrados = 20
-	mochila = ["gasolina", "gasolina", "explosivos", "trapo", "despertador"]
-	soltar_objeto("alcohol", johnny.position + Vector2(30, 0))
+	mochila = ["gasolina", "gasolina", "pieza_especial", "pieza_cuerpo", "pieza_arrojable"]
+	soltar_objeto("pieza_distancia", johnny.position + Vector2(30, 0))
 	await get_tree().create_timer(0.6).timeout
 	abrir_ordenador()
 	ordenador.abrir("armas")
@@ -589,8 +588,9 @@ func probar_efectos() -> void:
 
 
 # El reparto de objetos (parte 6 del centro comercial): cuenta qué sale en cada sitio de los dos edificios y
-# comprueba que las cosas de casa no salen en el centro ni las del centro en los Apartamentos. Luego deja en el
-# suelo los del centro (SOLO_CENTRO), mete uno de cada objeto en el baúl (lo de la tecla U) y hace una foto del baúl
+# comprueba que las vendas (del centro) no salen en los Apartamentos y que ni las piezas ni lo de un solo zombi salen al
+# azar. Luego deja en el suelo los del centro (SOLO_CENTRO), mete las piezas en el baúl (lo de la tecla U) y hace una
+# foto del baúl
 func probar_objetos() -> void:
 	var fallos := []
 	for ed_id in ["apartamentos", "centro"]:
@@ -599,8 +599,7 @@ func probar_objetos() -> void:
 			for i in 2000:
 				var id := Objetos.al_azar(ed_id, tienda)
 				salen[id] = salen.get(id, 0) + 1
-				if id in Objetos.DE_UN_ZOMBI or (ed_id == "centro" and id in Objetos.SOLO_CASA) \
-						or (ed_id == "apartamentos" and id in Objetos.SOLO_CENTRO):
+				if id in Objetos.DE_UN_ZOMBI or id in Objetos.PIEZAS or (ed_id == "apartamentos" and id in Objetos.SOLO_CENTRO):
 					fallos.append("%s %s: %s" % [ed_id, tienda, id])
 			print("Objetos en %s %s: %d distintos %s" % [ed_id, tienda if tienda != "" else "(pasillo)", salen.size(), salen.keys()])
 	print("Reparto de objetos: ", "bien" if fallos.is_empty() else "MAL %s" % str(fallos.slice(0, 5)))
@@ -620,7 +619,7 @@ func probar_objetos() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-baul-todo.png")
 	inventario.cerrar()
-	print("Baúl con uno de cada: %d casillas de %d" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
+	print("Baúl con las piezas (tecla U): %d casillas de %d (esperado: 4)" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
 	Guardado.cambiar(func(g): g.baul = baul_antes)
 
 

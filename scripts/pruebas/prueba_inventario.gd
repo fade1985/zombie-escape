@@ -1,5 +1,5 @@
 # Pruebas del inventario y del baúl (--inventario, --arrastrar, --baul, --repuesto, --tienda, --municion,
-# --municion-suelo) y de los objetos de curar. Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# --municion-suelo), de los objetos de curar y de las piezas de mejora (--piezas). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_skins.gd"
 
 var en_el_aire := {}         # arrastrar: lo que se veía justo antes de soltar
@@ -12,7 +12,8 @@ func dar_lanzable(k: String) -> void:
 
 
 # Con "--captura --baul": la pantalla del baúl (ui/inventario.gd, la parte 4 del inventario nuevo). En la sala de
-# mantenimiento, con dos explosivos en el baúl y en la mochila gasolina, explosivos, vendas, un trapo y alcohol, Johnny
+# mantenimiento, con dos piezas especiales en el baúl y en la mochila gasolina, una pieza especial, vendas, una pieza
+# cuerpo a cuerpo y tres a distancia, Johnny
 # se arrima al baúl y cuenta en la terminal: que se abre con la marca en lo primero que se puede guardar, que guardar
 # una casilla mete todos los de esa casilla (y la marca se queda en la siguiente), que las vendas no se guardan, que la
 # gasolina se guarda desde la munición y se saca de una en una (la marca se queda en «Sacar uno») y que «Guardar todo»
@@ -21,9 +22,9 @@ func dar_lanzable(k: String) -> void:
 # las 32 casillas con armas creadas; con solo objetos ya no se llena: volverá cuando las armas vayan al baúl)
 func probar_baul() -> void:
 	var antes := Guardado.cargar()
-	Guardado.cambiar(func(g2): g2.baul = {"explosivos": 2})
+	Guardado.cambiar(func(g2): g2.baul = {"pieza_especial": 2})
 	mochila.clear()
-	mochila.append_array(["gasolina", "gasolina", "explosivos", "vendas", "trapo", "alcohol", "alcohol", "alcohol"])
+	mochila.append_array(["gasolina", "gasolina", "pieza_especial", "vendas", "pieza_cuerpo", "pieza_distancia", "pieza_distancia", "pieza_distancia"])
 	var marca := func() -> String:   # el botón o la casilla marcada (la del mando y las flechas)
 		var f := get_viewport().gui_get_focus_owner()
 		return String(f.name) if f else "-"
@@ -44,19 +45,19 @@ func probar_baul() -> void:
 	if not abierto:
 		get_tree().quit()
 		return
-	# las casillas de la mochila: m0 explosivos, m1 vendas, m2 trapo, m3 alcohol × 3 (la gasolina va con la munición)
-	print("Al abrir: la marca en «%s» (esperado: m0, los explosivos: lo primero que se puede guardar) · «Guardar todo» %s (esperado: activo) · dice «%s»" % [
+	# las casillas de la mochila: m0 pieza especial, m1 vendas, m2 pieza cuerpo a cuerpo, m3 pieza a distancia × 3 (la gasolina va con la munición)
+	print("Al abrir: la marca en «%s» (esperado: m0, la pieza especial: lo primero que se puede guardar) · «Guardar todo» %s (esperado: activo) · dice «%s»" % [
 		marca.call(), boton.call("guardar_todo"), dice.call()])
 	inventario.tocar("m0")
 	await get_tree().process_frame
-	print("Elegidos los explosivos: «Guardar en el baúl» %s, la marca en «%s» (esperado: activo, guardar) · dice «%s»" % [
+	print("Elegida la pieza especial: «Guardar en el baúl» %s, la marca en «%s» (esperado: activo, guardar) · dice «%s»" % [
 		boton.call("guardar"), marca.call(), dice.call()])
 	inventario.guardar()
 	await get_tree().process_frame
 	var g := Guardado.cargar()
-	print("Guardados los explosivos: en el baúl %d, en la mochila %d (esperado: 3, 0) · la marca en «%s», en la casilla de %s (esperado: m0, Vendas: la siguiente)" % [
-		g.baul.get("explosivos", 0), mochila.count("explosivos"), marca.call(), Objetos.nombre(Objetos.casillas(mochila)[0][0])])
-	# ahora: m0 vendas, m1 trapo, m2 alcohol × 3
+	print("Guardada la pieza especial: en el baúl %d, en la mochila %d (esperado: 3, 0) · la marca en «%s», en la casilla de %s (esperado: m0, Vendas: la siguiente)" % [
+		g.baul.get("pieza_especial", 0), mochila.count("pieza_especial"), marca.call(), Objetos.nombre(Objetos.casillas(mochila)[0][0])])
+	# ahora: m0 vendas, m1 pieza cuerpo a cuerpo, m2 pieza a distancia × 3
 	inventario.tocar("m0")
 	await get_tree().process_frame
 	print("Elegidas las vendas: «Guardar en el baúl» %s (esperado: no está) · dice «%s»" % [boton.call("guardar"), dice.call()])
@@ -83,20 +84,169 @@ func probar_baul() -> void:
 		Guardado.cargar().baul.get("gasolina", 0), mochila.count("gasolina"), marca.call()])
 	inventario.sacar()
 	await get_tree().process_frame
-	print("Sacada otra: en el baúl %d, en la mochila %d · la marca en «%s» (esperado: 0, 2, %s: ya no queda, la casilla pasa a los explosivos)" % [
-		Guardado.cargar().baul.get("gasolina", 0), mochila.count("gasolina"), marca.call(), en_baul.call("explosivos")])
+	print("Sacada otra: en el baúl %d, en la mochila %d · la marca en «%s» (esperado: 0, 2, %s: ya no queda, la casilla pasa a la pieza especial)" % [
+		Guardado.cargar().baul.get("gasolina", 0), mochila.count("gasolina"), marca.call(), en_baul.call("pieza_especial")])
 	# «Guardar todo», con la gasolina sacada otra vez en la munición
-	Guardado.cambiar(func(g2): g2.baul = {"explosivos": 3, "gasolina": 3})
+	Guardado.cambiar(func(g2): g2.baul = {"pieza_especial": 3, "gasolina": 3})
 	inventario.pintar()
 	inventario.guardar_todo()
 	await get_tree().process_frame
 	g = Guardado.cargar()
-	print("«Guardar todo» con sitio: mochila %s (esperado: [\"vendas\"]) · baúl %s (esperado: explosivos 3, gasolina 5: las 3 y las 2 sacadas, trapo 1, alcohol 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
+	print("«Guardar todo» con sitio: mochila %s (esperado: [\"vendas\"]) · baúl %s (esperado: pieza_especial 3, gasolina 5: las 3 y las 2 sacadas, pieza_cuerpo 1, pieza_distancia 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
 		mochila, g.baul, boton.call("guardar_todo"), marca.call()])
 	inventario.cerrar()
 	await get_tree().process_frame
 	print("Baúl cerrado: juego en pausa %s (esperado: false)" % get_tree().paused)
 	Guardado.cambiar(func(g2): g2.baul = antes.baul)
+	get_tree().quit()
+
+
+# Con "--captura --piezas": las piezas de mejora de las armas (Objetos.PIEZAS) y la limpieza de objetos del 25 oct. Cada
+# línea dice lo esperado. Cuenta: que hay 4 piezas con su nombre y su icono, y que ya no están los 5 objetos quitados
+# (explosivos, despertador, extintor, trapo y alcohol: ni en NOMBRES, ni su icono, ni en 3000 sorteos de lo que cae al
+# azar); las tasas (zombi 6 %, jefe 4; con la Alerta 5, 12 % y 8); la tecla U (10 de cada pieza al baúl) y la ficha de
+# una pieza en el baúl; un zombi normal que suelta una pieza de verdad al caer (se mata uno tras otro hasta que sale) y
+# la portera, que suelta cuatro; Johnny las recoge, la mochila las apila y su ficha dice para qué armas son
+# (captura-piezas-mochila.png; la del baúl, captura-piezas-baul.png); y al completar el edificio (terminar(true)) pasan
+# al baúl. Deja el guardado como estaba y se cierra
+func probar_piezas() -> void:
+	var antes := Guardado.cargar()
+	await get_tree().create_timer(0.5).timeout
+	var quitados := ["explosivos", "despertador", "extintor", "trapo", "alcohol"]
+	print("Piezas: %s · nombres %s (esperado: 4 · Pieza cuerpo a cuerpo, Pieza a distancia, Pieza especial, Pieza arrojable)" % [
+		Objetos.PIEZAS.size(), Objetos.PIEZAS.keys().map(Objetos.nombre)])
+	print("Familias: %s (esperado: cuerpo, distancia, especial, arrojable) · iconos que faltan: %s (esperado: [])" % [
+		Objetos.PIEZAS.values(), Objetos.PIEZAS.keys().filter(
+			func(id): return not FileAccess.file_exists("res://assets/ui/iconos/%s.png" % Objetos.icono(id)))])
+	print("Los 5 quitados: en NOMBRES %s · con icono %s (esperado: [] · [])" % [
+		quitados.filter(func(id): return Objetos.NOMBRES.has(id)),
+		quitados.filter(func(id): return FileAccess.file_exists("res://assets/ui/iconos/obj-%s.png" % id))])
+	print("Siguen los dos copiados aparte: atraedora %s · congeladora %s (esperado: true, true)" % [
+		FileAccess.file_exists("res://assets/ui/iconos/atraedora.png"), FileAccess.file_exists("res://assets/ui/iconos/congeladora.png")])
+	# lo que cae al azar (y lo que suelta un zombi concreto): ni piezas ni los quitados
+	var raros := []
+	var distintos := {}
+	for ed_id in ["apartamentos", "centro"]:
+		for tienda in [""] + (Objetos.TIENDAS.keys() + ["ropa"] if ed_id == "centro" else []):
+			for i in 400:
+				var id := Objetos.al_azar(ed_id, tienda)
+				distintos[id] = true
+				if id in Objetos.PIEZAS or id in quitados:
+					raros.append(id)
+	for tipo in ["normal", "explosivo", "venenoso"]:
+		for i in 3000:
+			var id := Objetos.que_suelta(tipo)
+			if id != "":
+				distintos[id] = true
+				if id in Objetos.PIEZAS or id in quitados:
+					raros.append(id)
+	print("Sorteos: salen %s · piezas o quitados entre ellos %d (esperado: gasolina, bateria, vendas, bidon_acido · 0)" % [
+		distintos.keys(), raros.size()])
+	print("Colecciones: Apartamentos %d objetos, centro %d (esperado: 7, 8) · dónde sale la pieza: «%s»" % [
+		Objetos.de_edificio("apartamentos").size(), Objetos.de_edificio("centro").size(), Objetos.donde("pieza_cuerpo", "apartamentos")])
+	print("Probabilidad de que un zombi suelte un objeto: %.2f (esperado: 0.04)" % Objetos.SUELTA)
+	# las tasas, sin y con alerta
+	var tasa := func(nivel: int) -> String:
+		var nivel_antes := Alerta.nivel
+		Alerta.nivel = nivel
+		var salen := 0
+		for i in 20000:
+			if Objetos.pieza_de_zombi() != "":
+				salen += 1
+		var del_jefe := Objetos.piezas_de_jefe().size()
+		Alerta.nivel = nivel_antes
+		return "alerta %d: zombi %.1f %% · jefe %d" % [nivel, salen / 200.0, del_jefe]
+	print("Tasas: %s | %s | %s (esperado: zombi 6,0 y jefe 4 | zombi 9,0 y jefe 6 | zombi 12,0 y jefe 8, con unas décimas de más o de menos)" % [
+		tasa.call(0), tasa.call(3), tasa.call(5)])
+	print("Resumen de la Alerta 5: «%s»" % Alerta.resumen(5).replace("\n", " · "))
+	# la tecla U (de verdad, con su evento) mete 10 de cada pieza en el baúl
+	Guardado.cambiar(func(g): g.baul = {"gasolina": 1})
+	var u := InputEventKey.new()
+	u.keycode = KEY_U
+	await pulsar_evento(u)
+	print("Tecla U: baúl %s (esperado: gasolina 1 y 10 de cada pieza)" % [Guardado.cargar().baul])
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.4).timeout
+	var nota := func() -> String: return inventario.fondo.find_child("nota", true, false).text
+	inventario.tocar("b%d" % inventario.objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find("pieza_distancia"))
+	await get_tree().create_timer(0.2).timeout
+	print("Ficha de la pieza a distancia en el baúl: «%s» (esperado: Sirve para mejorar las armas a distancia...)" % nota.call())
+	Captura.foto("captura-piezas-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+	Guardado.cambiar(func(g): g.baul = {"gasolina": 1})
+	# un zombi normal suelta una pieza de verdad (seis de cada cien): se matan de veinte en veinte hasta que sale una
+	var piezas_en_suelo := func() -> Array:
+		return mapa.cosas.get_children().filter(func(c): return c.get_script() == BILLETE and c.icono != null and "obj-pieza_" in c.icono.resource_path)
+	var matados := 0
+	while piezas_en_suelo.call().is_empty() and matados < 600:
+		for i in 20:
+			var z: Node2D = meter_zombi("normal", johnny.position + Vector2(260, 0))
+			z.recibir_golpe(9999, Vector2.ZERO)
+		matados += 20
+		await get_tree().process_frame
+		await get_tree().process_frame
+	print("Zombis normales matados hasta que suelta una pieza: %d (esperado: salió alguna, unos 17 de media; piezas en el suelo: %d)" % [
+		matados, piezas_en_suelo.call().size()])
+	# la portera suelta cuatro
+	var antes_jefe: int = piezas_en_suelo.call().size()
+	var portera: Node2D = meter_zombi("portera", johnny.position + Vector2(-260, 0))
+	portera.recibir_golpe(99999, Vector2.ZERO)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var del_jefe: int = piezas_en_suelo.call().size() - antes_jefe
+	print("La portera al caer suelta %d piezas (esperado: 4)" % del_jefe)
+	var total_suelo: int = piezas_en_suelo.call().size()
+	# Johnny las recoge: de una en una, yendo a cada sitio donde quedan
+	var cogidas := 0
+	for vuelta in 4:
+		var sitios := []
+		for c in piezas_en_suelo.call():
+			if not c.position in sitios:
+				sitios.append(c.position)
+		if sitios.is_empty():
+			break
+		for sitio in sitios:
+			johnny.position = sitio
+			await get_tree().create_timer(0.5).timeout
+	var en_mochila := mochila.filter(func(id): return id in Objetos.PIEZAS)
+	print("Johnny las recoge: en el suelo quedan %d · en la mochila %d piezas, casillas %s (esperado: 0 · %d, y se apilan por familia)" % [
+		piezas_en_suelo.call().size(), en_mochila.size(), Objetos.casillas(mochila).filter(func(c): return c[0] in Objetos.PIEZAS),
+		total_suelo])
+	# (la portera trae las mutaciones 2 s después de caer: se elige una y se sigue)
+	for i in 30:
+		if menus.abierto == "mutacion":
+			break
+		await get_tree().create_timer(0.1).timeout
+	if menus.abierto == "mutacion":
+		menus.elegir("insensible")
+	get_tree().paused = false
+	await get_tree().process_frame
+	# su ficha en la mochila
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	var primera: String = Objetos.casillas(mochila).map(func(c): return c[0]).filter(func(id): return id in Objetos.PIEZAS)[0]
+	inventario.tocar("m%d" % Objetos.casillas(mochila).map(func(c): return c[0]).find(primera))
+	await get_tree().create_timer(0.2).timeout
+	print("Ficha de «%s» en la mochila: «%s» (esperado: Sirve para mejorar las armas ... llega pronto. Si caes, se pierde...)" % [
+		Objetos.nombre(primera), nota.call()])
+	Captura.foto("captura-piezas-mochila.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+	# al completar el edificio, pasan al baúl
+	var contadas := {}
+	for id in en_mochila:
+		contadas[id] = contadas.get(id, 0) + 1
+	terminar(true)
+	await get_tree().create_timer(0.3).timeout
+	var baul: Dictionary = Guardado.cargar().baul
+	var pasaron := true
+	for id in contadas:
+		if baul.get(id, 0) != contadas[id]:
+			pasaron = false
+	print("Al completar el edificio: piezas llevadas %s · baúl %s · pasaron todas %s (esperado: lo mismo en las dos, true)" % [
+		contadas, baul, pasaron])
+	Guardado.escribir(antes)
 	get_tree().quit()
 
 
@@ -273,8 +423,8 @@ func probar_municion() -> void:
 	johnny.coger("escopeta")
 	print("Coge la escopeta: %s · sin munición diría «%s» (esperado: balas 24, balas 24, balas 6, cartuchos 12 · ¡Sin cartuchos!)" % [
 		huecos.call(), Armas.MUNICION[Armas.municion(johnny.huecos.fuego)].sin])
-	mochila.append_array(["gasolina", "gasolina", "gasolina", "gasolina", "bidon_acido", "trapo"])
-	print("Con 4 gasolinas, un bidón de ácido y un trapo: %s · mochila %s (esperado: balas 24, balas 24, balas 6, cartuchos 12, gasolina 3, gasolina 1, bidon_acido 1 · [[\"trapo\", 1]])" % [
+	mochila.append_array(["gasolina", "gasolina", "gasolina", "gasolina", "bidon_acido", "pieza_cuerpo"])
+	print("Con 4 gasolinas, un bidón de ácido y una pieza cuerpo a cuerpo: %s · mochila %s (esperado: balas 24, balas 24, balas 6, cartuchos 12, gasolina 3, gasolina 1, bidon_acido 1 · [[\"pieza_cuerpo\", 1]])" % [
 		huecos.call(), Objetos.casillas(mochila)])
 	# con el lanzallamas en la mano (no gasta balas), la caja es para la de repuesto
 	llevar_arma("lanzallamas")
@@ -339,7 +489,7 @@ func probar_municion() -> void:
 	inventario.cerrar()
 	await get_tree().process_frame
 	abrir_cosas("baul")
-	print("En el baúl, para guardar: %s (esperado: gasolina, bidón de ácido y trapo)" % [inventario.guardables()])
+	print("En el baúl, para guardar: %s (esperado: gasolina, bidón de ácido y pieza_cuerpo)" % [inventario.guardables()])
 	inventario.cerrar()
 	await get_tree().process_frame
 	# el lanzallamas vacío se llena con una de las gasolinas de la munición
@@ -356,15 +506,15 @@ func probar_municion() -> void:
 
 # Con "--captura --inventario": la pantalla del inventario «todo a la vista» (ui/inventario.gd, parte 3 del inventario
 # nuevo), en la sala de mantenimiento y con un poco de todo: el bate y la pistola en la mano, la fregona y la escopeta de
-# repuesto, trapos, una botella de alcohol, un botiquín y gasolina en la mochila, balas y cartuchos, la atraedora a mano
+# repuesto, piezas cuerpo a cuerpo, una pieza a distancia, un botiquín y gasolina en la mochila, balas y cartuchos, la atraedora a mano
 # y una congeladora de repuesto, y la skin del bombero. Al abrir, la ficha enseña el arma de la mano; la flecha abajo
 # lleva la marca a la escopeta y la ficha la sigue; Intro salta a «Ponérmela» e Y del mando se la pone; Supr tira un
-# trapo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
+# pieza cuerpo a cuerpo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
 # mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (la pistola eléctrica: nombre largo y
 # 30 balitas) y la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas (probar_curas)
 # y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
 # Fotos: captura-inventario-nuevo.png (al abrir), captura-inventario-escopeta.png (la marca en la escopeta de
-# repuesto), captura-inventario-objeto.png (el alcohol, que ya no sirve para nada), captura-inventario-municion.png,
+# repuesto), captura-inventario-objeto.png (la pieza a distancia, con su ficha), captura-inventario-municion.png,
 # captura-inventario-arrojable.png, captura-inventario-pistola_electrica.png y captura-inventario-lanzallamas.png
 func probar_inventario() -> void:
 	var lz: Lanzables = lanzables
@@ -380,7 +530,7 @@ func probar_inventario() -> void:
 	llevar_arma("pistola")     # la pistola a la mano y la escopeta al repuesto
 	johnny.balas = 8
 	johnny.meter_municion("balas", 30)
-	mochila.append_array(["trapo", "trapo", "alcohol", "botiquin", "gasolina", "gasolina"])
+	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "pieza_distancia", "botiquin", "gasolina", "gasolina"])
 	lz.mano = ["molotov", "granada"]
 	lz.repuesto = []
 	lz.tipo = "molotov"
@@ -412,10 +562,10 @@ func probar_inventario() -> void:
 	var supr := InputEventKey.new()
 	supr.keycode = KEY_DELETE
 	await pulsar_evento(supr)
-	print("Supr con los trapos: mochila %s (esperado: [[\"trapo\", 1], [\"alcohol\", 1], [\"botiquin\", 1]])" % [Objetos.casillas(mochila)])
+	print("Supr con las piezas cuerpo a cuerpo: mochila %s (esperado: [[\"pieza_cuerpo\", 1], [\"pieza_distancia\", 1], [\"botiquin\", 1]])" % [Objetos.casillas(mochila)])
 	inv.tocar("m1")
 	await get_tree().create_timer(0.2).timeout
-	print("El alcohol: dice «%s» (esperado: Si caes, se pierde (en el baúl queda a salvo).)" % nota.call())
+	print("La pieza a distancia: dice «%s» (esperado: Sirve para mejorar las armas a distancia (la pistola, la MP5 y la escopeta). El banco de trabajo que las usa llega pronto. Si caes, se pierde (en el baúl queda a salvo).)" % nota.call())
 	Captura.foto("captura-inventario-objeto.png")
 	inv.tocar("m2")
 	await get_tree().process_frame
@@ -460,17 +610,17 @@ func probar_inventario() -> void:
 
 
 # Con "--captura --arrastrar": arrastrar con el ratón en el inventario y en el baúl (ui/inventario.gd, la parte 5 del
-# inventario nuevo). Con el bate y la pistola en la mano, la fregona y la escopeta de repuesto, dos trapos, un botiquín
+# inventario nuevo). Con el bate y la pistola en la mano, la fregona y la escopeta de repuesto, dos piezas cuerpo a cuerpo, un botiquín
 # y dos gasolinas, y de arrojables el molotov, la granada y la atraedora a mano y la congeladora de repuesto, cuenta en
 # la terminal (cada línea con lo esperado). Tres arrastres son de verdad, moviendo el ratón (arrastrar: el cursor se
 # mueve un momento y luego vuelve a su sitio): la escopeta a la mano (lo que se enciende y lo que crece bajo el ratón),
-# los dos trapos a la zona roja y, en el baúl, el alcohol al baúl. Los demás sueltan directamente donde caerían
+# las dos piezas cuerpo a cuerpo a la zona roja y, en el baúl, la pieza a distancia al baúl. Los demás sueltan directamente donde caerían
 # (inventario.soltar_en): la pistola en Johnny, el botiquín en Johnny (cura y el inventario sigue abierto), la granada
 # al repuesto, la congeladora encima del molotov (se cambian), el bate en Johnny (no se puede: vuelve), el bate en su
 # repuesto (se cambia por la fregona), las gasolinas en la zona roja y un molotov soltado en el título (vuelve sin
-# más); en el baúl, las vendas (no van), un explosivo sacado y la fregona (no va). Fotos: captura-arrastrar-escopeta.png
+# más); en el baúl, las vendas (no van), una pieza especial sacada y la fregona (no va). Fotos: captura-arrastrar-escopeta.png
 # (a medio arrastrar, sobre la mano), captura-arrastrar-salto.png (la escopeta y Johnny dando su saltito),
-# captura-arrastrar-tirar.png (la zona roja con los trapos) y captura-arrastrar-baul.png (el alcohol sobre el baúl).
+# captura-arrastrar-tirar.png (la zona roja con las piezas) y captura-arrastrar-baul.png (la pieza a distancia sobre el baúl).
 # Deja el baúl como estaba y se cierra
 func probar_arrastrar() -> void:
 	var lz: Lanzables = lanzables
@@ -484,7 +634,7 @@ func probar_arrastrar() -> void:
 	llevar_arma("bate")        # el bate a la mano y la fregona al repuesto
 	llevar_arma("pistola")     # la pistola a la mano y la escopeta al repuesto
 	johnny.meter_municion("balas", 30)
-	mochila.append_array(["trapo", "trapo", "botiquin", "gasolina", "gasolina"])
+	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "botiquin", "gasolina", "gasolina"])
 	lz.mano = ["molotov", "granada"]
 	lz.repuesto = []
 	lz.tipo = "molotov"
@@ -511,9 +661,9 @@ func probar_arrastrar() -> void:
 	await soltar.call(guardada.call("pistola"), "johnny")
 	print("La pistola en Johnny: mano %s · repuesto %s (esperado: Pistola · [\"fregona\", \"escopeta\"])" % [
 		Objetos.nombre(johnny.huecos.fuego), armas_guardadas])
-	# los dos trapos (m0) a la zona roja, de verdad: se tira la casilla entera
+	# las dos piezas cuerpo a cuerpo (m0) a la zona roja, de verdad: se tira la casilla entera
 	await arrastrar("m0", Vector2(773, 338), "captura-arrastrar-tirar.png")
-	print("Los trapos a la zona roja: encendidos %s · bajo el ratón «%s» · mochila %s (esperado: [\"luz_tirar\"] · tirar · [[\"botiquin\", 1]])" % [
+	print("Las piezas cuerpo a cuerpo a la zona roja: encendidos %s · bajo el ratón «%s» · mochila %s (esperado: [\"luz_tirar\"] · tirar · [[\"botiquin\", 1]])" % [
 		en_el_aire.luces, en_el_aire.encima, Objetos.casillas(mochila)])
 	# el botiquín (ahora m0) en Johnny: se cura y el inventario sigue abierto
 	var vida_antes = johnny.vida
@@ -546,20 +696,20 @@ func probar_arrastrar() -> void:
 		lz.repuesto, lz.mano])
 	inv.cerrar()
 	await get_tree().process_frame
-	# el baúl: m0 el alcohol (×2) y m1 las vendas; en el baúl, dos explosivos
-	Guardado.cambiar(func(g1): g1.baul = {"explosivos": 2})
-	mochila.append_array(["alcohol", "alcohol", "vendas"])
+	# el baúl: m0 la pieza a distancia (×2) y m1 las vendas; en el baúl, dos piezas especiales
+	Guardado.cambiar(func(g1): g1.baul = {"pieza_especial": 2})
+	mochila.append_array(["pieza_distancia", "pieza_distancia", "vendas"])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
 	await arrastrar("m0", Vector2(680, 240), "captura-arrastrar-baul.png")
-	print("El alcohol al baúl, de verdad: encendidos %s · en el baúl %d · en la mochila %d (esperado: [\"luz_baul\"] · 2 · 0)" % [
-		en_el_aire.luces, Guardado.cargar().baul.get("alcohol", 0), mochila.count("alcohol")])
+	print("La pieza a distancia al baúl, de verdad: encendidos %s · en el baúl %d · en la mochila %d (esperado: [\"luz_baul\"] · 2 · 0)" % [
+		en_el_aire.luces, Guardado.cargar().baul.get("pieza_distancia", 0), mochila.count("pieza_distancia")])
 	print("Las vendas se pueden soltar en %s (esperado: [])" % [inv.destinos("m0").keys()])
 	await soltar.call("m0", "baul")
 	print("Las vendas al baúl: en la mochila %d (esperado: 1)" % mochila.count("vendas"))
-	await soltar.call("b%d" % inv.objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find("explosivos"), "llevas")
-	print("Un explosivo fuera del baúl: en el baúl %d · en la mochila %d (esperado: 1 · 1)" % [
-		Guardado.cargar().baul.get("explosivos", 0), mochila.count("explosivos")])
+	await soltar.call("b%d" % inv.objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find("pieza_especial"), "llevas")
+	print("Una pieza especial fuera del baúl: en el baúl %d · en la mochila %d (esperado: 1 · 1)" % [
+		Guardado.cargar().baul.get("pieza_especial", 0), mochila.count("pieza_especial")])
 	await soltar.call("p0", "baul")
 	print("La fregona al baúl: se puede soltar en %s · mano %s (esperado: [] · Fregona)" % [inv.destinos("p0").keys(),
 		Objetos.nombre(johnny.huecos.cuerpo)])
@@ -687,7 +837,7 @@ func probar_municion_suelo() -> void:
 # usa, contando la vida antes y después; luego dice dónde salen y cuántos objetos cuenta Colecciones
 func probar_curas() -> void:
 	var antes := [mochila.duplicate(), johnny.vida]
-	mochila = ["vendas", "trapo"]
+	mochila = ["vendas", "pieza_cuerpo"]
 	johnny.vida = roundi(johnny.vida_tope() * 0.4)
 	abrir_cosas("inventario")
 	inventario.tocar("m0")

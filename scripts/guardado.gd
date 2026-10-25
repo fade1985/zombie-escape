@@ -74,7 +74,8 @@ static func cargar() -> Dictionary:
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
 	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el
 	# cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas, la
-	# jeringuilla, el aceite y el bocadillo se quitaron del juego el 25 oct
+	# jeringuilla, el aceite y el bocadillo se quitaron del juego el 25 oct, y luego los explosivos, el despertador, el
+	# extintor, el trapo y el alcohol (las piezas de mejora de las armas ocuparon su sitio)
 	var baul := {}
 	for id in s.baul:
 		if Objetos.NOMBRES.has(id):

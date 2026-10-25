@@ -1,17 +1,17 @@
-# Dibuja los 9 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
-# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 7 de siempre
-# (la batería era del centro comercial: parte 6 de docs/historial/CENTRO_COMERCIAL.md), las vendas de curar (parte 9) y el
-# bidón de ácido que llena el lanza ácido (el bidón de la gasolina, en verde ácido). El 25 oct se quitaron del juego el
-# mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el
-# hielo seco, el cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona
-# de gas, la jeringuilla, el aceite y el bocadillo. (La gasolina y el bidón de ácido tienen ya dibujo de PixelLab:
-# este los pisaría.)
+# Dibuja los 2 objetos de la mochila que aún son de 16×16 píxeles: la batería y las vendas (más detalle que los de
+# 10×10 de src/objetos.js, que les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la
+# derecha. La batería era del centro comercial (parte 6 de docs/historial/CENTRO_COMERCIAL.md) y las vendas son de curar
+# (parte 9). Todos los demás se quitaron o tienen ya dibujo de PixelLab, de 32×32, que este script NO toca: la gasolina
+# y el bidón de ácido (assets/pixellab.json → municion-iconos) y las piezas de mejora de las armas (pieza_*, → piezas).
+# Los objetos que se quitaron del juego: el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda,
+# las mancuernas, la cadena, las perchas, el hielo seco, el cable, los clavos, el spray de pintura, la lejía, la pistola
+# de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (25 oct), y luego los
+# explosivos, el despertador, el extintor, el trapo y el alcohol.
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
-import math
-import sys
 from pathlib import Path
+import sys
 
 from PIL import Image
 
@@ -37,96 +37,6 @@ PALETA = {
 }
 
 DIBUJOS = {
-    "gasolina": [
-        "................",
-        "...ooo..........",
-        "...odo..ooooo...",
-        "..ooooooorrrro..",
-        "..oPPrrrroooRo..",
-        "..oPrrrrrrrrRo..",
-        "..orRRRRRRRRRo..",
-        "..orRwwwwwwRRo..",
-        "..orRwkkkkwRRo..",
-        "..orRwwwwwwRRo..",
-        "..orRRRRRRRRRo..",
-        "..orrrrrrrrrRo..",
-        "..orrrrrrrrrRo..",
-        "..oRRRRRRRRRRo..",
-        "..oooooooooooo..",
-        "................",
-    ],
-    "alcohol": [
-        ".......oo.......",
-        "......oMMo......",
-        "......oooo......",
-        "......ovlo......",
-        "......ovVo......",
-        ".....ovvVVo.....",
-        "....ovlvvVVo....",
-        "...ovlvvvvVVo...",
-        "...owwwwwwwwo...",
-        "...owRRRRRRwo...",
-        "...owwwwwwwwo...",
-        "...ovlvvvvVVo...",
-        "...ovlvvvvVVo...",
-        "...ovvvvvvVVo...",
-        "...oVVVVVVVVo...",
-        "...oooooooooo...",
-    ],
-    "trapo": [
-        "................",
-        "................",
-        "...ooooooo......",
-        "..owwwwwwwoo....",
-        ".owwbwwwwwwwo...",
-        ".owwbwwwwweewo..",
-        "..owbwwwweeeewo.",
-        "..owbbbbbbbbewo.",
-        ".owwwwwbwwweewo.",
-        "owwwwwwbweewwo..",
-        "oewwwwwbeewwwo..",
-        ".oeewwwbwwweo...",
-        "..ooeeeeeeeo....",
-        "....ooooooo.....",
-        "................",
-        "................",
-    ],
-    "explosivos": [
-        "..........L.....",
-        ".........ny.....",
-        "........o.......",
-        "..ooooooooooooo.",
-        "..oPrRoPrRoPrRo.",
-        "..oPrRoPrRoPrRo.",
-        "..oPrRoPrRoPrRo.",
-        "..okkkokkkokkko.",
-        "..oKkkoKkkoKkko.",
-        "..oPrRoPrRoPrRo.",
-        "..oPrRoPrRoPrRo.",
-        "..oPrRoPrRoPrRo.",
-        "..oPrRoPrRoPrRo.",
-        "..oRRRoRRRoRRRo.",
-        "..ooooooooooooo.",
-        "................",
-    ],
-    "extintor": [
-        "......oooo......",
-        "....oooGdooooo..",
-        "...okkkkkkkkkko.",
-        "....oooGdoooooo.",
-        "......oooo.o....",
-        ".....oPrrRo.o...",
-        "....oPrrrrRoko..",
-        "....oPrrrrRoko..",
-        "....owwwwwRo.o..",
-        "....owkkwwRo.ko.",
-        "....owwwwwRo.ko.",
-        "....oPrrrrRo..o.",
-        "....oPrrrrRo....",
-        "....orrrrrRo....",
-        "....oRRRRRRo....",
-        "....oooooooo....",
-    ],
     # la batería (era del centro comercial; ahora, la munición de la pistola eléctrica)
     "bateria": [
         "................",
@@ -166,48 +76,6 @@ DIBUJOS = {
         "......ooooooooo.",
     ],
 }
-
-
-def disco(fn):
-    """Un dibujo redondo hecho con código: fn(x, y) da la letra de cada píxel (o '.') y luego se le pone el
-    contorno a todo lo que toca un hueco"""
-    rejilla = [[fn(x, y) for x in range(16)] for y in range(16)]
-    salida = [fila[:] for fila in rejilla]
-    for y in range(16):
-        for x in range(16):
-            if rejilla[y][x] in ".o":
-                continue
-            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nx, ny = x + dx, y + dy
-                if not (0 <= nx < 16 and 0 <= ny < 16) or rejilla[ny][nx] == ".":
-                    salida[y][x] = "o"
-    return ["".join(f) for f in salida]
-
-
-def despertador(x, y):
-    # campanas, cuerpo rojo con la esfera blanca, agujas y patas
-    for cx in (3.0, 12.0):
-        if math.hypot(x - cx, y - 2.5) <= 2.3:
-            return "L" if x < cx and y < 2.5 else "y"
-    if y == 15 and x in (3, 4, 11, 12):
-        return "K"
-    dx, dy = x - 7.5, y - 8.5
-    d = math.hypot(dx, dy)
-    if d > 6.6:
-        return "."
-    if d > 4.6:
-        luz = -(dx + dy) / max(d, 0.1)
-        return "P" if luz > 0.6 else "r" if luz > -0.6 else "R"
-    if (x == 7 and 5 <= y <= 8) or (y == 8 and 7 <= x <= 10):
-        return "k"
-    if d > 3.6 and (x + y) % 4 == 0:
-        return "e"
-    return "w"
-
-
-DIBUJOS["despertador"] = disco(despertador)
-# el bidón de ácido: el de la gasolina con el rojo cambiado por el verde ácido
-DIBUJOS["bidon_acido"] = [f.translate(str.maketrans("rRP", "aAs")) for f in DIBUJOS["gasolina"]]
 
 
 def hexa(c):

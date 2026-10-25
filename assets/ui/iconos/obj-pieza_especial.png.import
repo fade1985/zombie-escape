@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjam0tpag0fnt"
-path="res://.godot/imported/obj-extintor.png-7bc3d428475847e70512272feac2b42b.ctex"
+uid="uid://ul5btlfuuhwl"
+path="res://.godot/imported/obj-pieza_especial.png-959f86ebe43a3c46beeb52c9c06768e8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-extintor.png"
-dest_files=["res://.godot/imported/obj-extintor.png-7bc3d428475847e70512272feac2b42b.ctex"]
+source_file="res://assets/ui/iconos/obj-pieza_especial.png"
+dest_files=["res://.godot/imported/obj-pieza_especial.png-959f86ebe43a3c46beeb52c9c06768e8.ctex"]
 
 [params]
 

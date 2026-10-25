@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6ktt10nx4exh"
-path="res://.godot/imported/obj-trapo.png-7e93dbd661fe968be5558627d9d93136.ctex"
+uid="uid://ckj7qn4fbtmxi"
+path="res://.godot/imported/obj-pieza_cuerpo.png-cbd4dd733974d20c42d33eb2b069755f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-trapo.png"
-dest_files=["res://.godot/imported/obj-trapo.png-7e93dbd661fe968be5558627d9d93136.ctex"]
+source_file="res://assets/ui/iconos/obj-pieza_cuerpo.png"
+dest_files=["res://.godot/imported/obj-pieza_cuerpo.png-cbd4dd733974d20c42d33eb2b069755f.ctex"]
 
 [params]
 

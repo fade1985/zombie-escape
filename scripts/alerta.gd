@@ -1,7 +1,7 @@
 # Los niveles de alerta (parte 8 del centro comercial; como las ascensiones de The Binding of Isaac): de la
 # Alerta 1 a la 5, por edificio. Cada nivel pone una regla fija y se suman: en la Alerta 3 valen la 1, la 2 y la 3.
-# A cambio, un 20 % más de dólares por nivel (hasta el 25 oct, también armas de mejor rareza en el banco de trabajo,
-# que ya no las crea).
+# A cambio, un 20 % más de dólares y de piezas de mejora (Objetos.PIEZAS) por nivel (hasta el 25 oct, también armas de
+# mejor rareza en el banco de trabajo, que ya no las crea).
 #
 # Se desbloquean de una en una: completar un edificio abre su Alerta 1; completarlo con la 1, la 2, y así. La más
 # alta abierta y la elegida van en el progreso de cada edificio del guardado (alerta_max y alerta).
@@ -28,6 +28,7 @@ const BOTIQUIN := 0.5        # A4: lo que curan los botiquines
 const GUARDIA_VIDA := 2.0    # A5: la vida del guardia de la tarjeta (o del vecino que lleva la llave)...
 const OIDO := 1.5            # ...y la distancia a la que se oyen los disparos
 const DOLARES := 0.2         # recompensa: dólares de más por cada nivel (al completar el edificio)
+const PIEZAS := 0.2          # recompensa: piezas de más por cada nivel (las que sueltan los zombis y los jefes)
 
 # El nivel de la partida que se juega (0 = sin alerta)
 static var nivel := 0
@@ -66,6 +67,11 @@ static func dolares_extra(dolares: int) -> int:
 	return roundi(dolares * DOLARES * nivel)
 
 
+# Por cuánto se multiplican las piezas que sueltan los zombis (y las de los jefes): 1 + 0,2 por nivel (con la Alerta 5,
+# el doble: del 6 % al 12 %, y de 4 a 8 por jefe)
+static func mas_piezas() -> float:
+	return 1.0 + PIEZAS * nivel
+
 
 # El nombre corto ("Alerta 3") y lo que trae ese nivel, para los textos
 static func nombre(n := nivel) -> String:
@@ -75,5 +81,5 @@ static func nombre(n := nivel) -> String:
 static func resumen(n := nivel) -> String:
 	if n <= 0:
 		return "Como siempre"
-	return "%s%s\n+%d %% de dólares" % [REGLAS[n], " (y lo de antes)" if n > 1 else "",
+	return "%s%s\n+%d %% de dólares y de piezas" % [REGLAS[n], " (y lo de antes)" if n > 1 else "",
 		roundi(DOLARES * n * 100)]

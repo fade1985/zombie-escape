@@ -2,40 +2,61 @@
 # mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al baúl de la sala de
 # mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se pueden guardar a mano
 # (ui/inventario.gd, «Guardar de la mochila»). Hasta el 25 oct se juntaban de dos en dos en el banco de trabajo para
-# crear armas; las recetas se quitaron, y los explosivos, el despertador, el extintor, el trapo y el alcohol ya no
-# sirven para nada: se irán cuando lleguen las piezas para mejorar las armas en el banco.
-# Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py). La gasolina, el bidón de ácido y
-# la batería son además la munición del lanzallamas, el lanza ácido y la pistola eléctrica: van en la mochila, pero
+# crear armas; las recetas se quitaron, y los explosivos, el despertador, el extintor, el trapo y el alcohol (que ya no
+# servían para nada) se fueron con ellas: en su lugar llegaron las piezas (PIEZAS), para mejorar las armas en el banco.
+# Su dibujo es assets/ui/iconos/obj-<id>.png: el de la batería y las vendas, de 16×16 (lo saca tools/objetos16.py); el
+# de la gasolina, el bidón de ácido y las piezas, de 32×32 (de PixelLab). La gasolina, el bidón de ácido y la
+# batería son además la munición del lanzallamas, el lanza ácido y la pistola eléctrica: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
 #
-# Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/historial/CENTRO_COMERCIAL.md): en los Apartamentos, los
-# 7 de siempre; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS). Las cosas de casa
-# (SOLO_CASA) no salen en el centro, y las vendas (SOLO_CENTRO) solo salen allí. Eran 26: el 25 oct se quitaron del
+# Las piezas (PIEZAS) son de 4 familias, las de las armas: cuerpo a cuerpo, a distancia, especiales y arrojables. Las
+# suelta un zombi alguna vez (PIEZA_ZOMBI) y cada jefe, seguras (PIEZAS_JEFE); con la alerta, más (Alerta.mas_piezas).
+# No salen al azar (al_azar) ni en las tiendas del centro, y no se compran: solo las sueltan los zombis y los jefes.
+#
+# Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/historial/CENTRO_COMERCIAL.md): en los Apartamentos,
+# la gasolina y la batería; en el centro comercial, los de la lista de la tienda donde cae el zombi (TIENDAS). Las
+# vendas (SOLO_CENTRO) solo salen allí. Eran 26: el 25 oct se quitaron del
 # juego el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, el
 # cable, el hielo seco y las perchas (con las armas que los pedían), y luego los clavos, el spray de pintura, la
 # lejía, la pistola de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (con las
 # arrojadizas del centro comercial; el lanzallamas, el lanza ácido y la pistola eléctrica pasaron a la tienda de
 # armas).
-# Dos solo los suelta un zombi, en los dos edificios (DE_UN_ZOMBI): los explosivos y el bidón de ácido.
+# Uno solo lo suelta un zombi, en los dos edificios (DE_UN_ZOMBI): el bidón de ácido.
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
 const BAUL := 32             # casillas del baúl: una por cada objeto distinto
-const SUELTA := 0.10         # probabilidad de que un zombi suelte un objeto (provisional, como en el JS)
+const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)
 const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
-# Lo que solo suelta un tipo de zombi, y nunca sale al azar: los explosivos, el explosivo (el dinamitero); el bidón de
-# ácido, que llena el lanza ácido, el gordo (venenoso)
-const DE_UN_ZOMBI := {"explosivos": "explosivo", "bidon_acido": "venenoso"}
+# Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
+# (venenoso)
+const DE_UN_ZOMBI := {"bidon_acido": "venenoso"}
+# Las piezas para mejorar las armas en el banco de trabajo (el banco nuevo aún no está hecho): una por familia, con la
+# familia de armas a la que sirven (Armas.familia; los arrojables, aparte). Las sueltan los zombis y los jefes, y nada más
+const PIEZAS := {
+	"pieza_cuerpo": "cuerpo", "pieza_distancia": "distancia", "pieza_especial": "especial", "pieza_arrojable": "arrojable",
+}
+# Para qué armas sirve cada familia de piezas, para la ficha (ui/inventario.gd, que_pieza)
+const PIEZA_PARA := {
+	"cuerpo": "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)",
+	"distancia": "las armas a distancia (la pistola, la MP5 y la escopeta)",
+	"especial": "las armas especiales (el lanzallamas, el lanza ácido y la pistola eléctrica)",
+	"arrojable": "los arrojables (el molotov, la granada, la atraedora y la congeladora)",
+}
+const PIEZA_ZOMBI := 0.06    # probabilidad de que cualquier zombi suelte una pieza (una de las cuatro, al azar)
+const PIEZAS_JEFE := 4       # las que suelta cada jefe al caer, seguras (cada una, de una familia al azar)
 
 const NOMBRES := {
-	"gasolina": "Gasolina", "alcohol": "Botella de alcohol", "trapo": "Trapo", "explosivos": "Explosivos",
-	"despertador": "Despertador", "extintor": "Extintor",
+	"gasolina": "Gasolina",
 	# el bidón de ácido, en los dos edificios: solo lo suelta el gordo (DE_UN_ZOMBI)
 	"bidon_acido": "Bidón de ácido",
 	# la batería, la munición de la pistola eléctrica: en los dos edificios
 	"bateria": "Batería",
 	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan desde el inventario (USABLES)
 	"vendas": "Vendas",
+	# las piezas para mejorar las armas (PIEZAS): solo las sueltan los zombis y los jefes
+	"pieza_cuerpo": "Pieza cuerpo a cuerpo", "pieza_distancia": "Pieza a distancia", "pieza_especial": "Pieza especial",
+	"pieza_arrojable": "Pieza arrojable",
 }
 # Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no
 # pasan al baúl (al acabar la partida, se pierden). El botiquín de la farmacéutica (supervivientes.gd; cura lo de
@@ -46,16 +67,15 @@ const USABLES := {
 	"botiquin": {"nombre": "Botiquín", "icono": "botiquin"},
 	"vendas": {"cura": 25},
 }
-const SOLO_CASA := ["despertador"]   # solo en los Apartamentos
 const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
+# (y los de una tienda que no está aquí, como la de ropa, sueltan lo de una tienda cualquiera)
 const TIENDAS := {
-	"ferreteria": ["bateria", "extintor", "gasolina"],
-	"electronica": ["extintor", "bateria"],
-	"restaurante": ["alcohol", "gasolina", "extintor"],
-	"supermercado": ["alcohol", "bateria", "vendas"],
-	"farmacia": ["alcohol", "vendas"],
-	"ropa": ["trapo"],
+	"ferreteria": ["bateria", "gasolina"],
+	"electronica": ["bateria"],
+	"restaurante": ["gasolina"],
+	"supermercado": ["bateria", "vendas"],
+	"farmacia": ["vendas"],
 	"joyeria": ["bateria"],
 }
 
@@ -117,9 +137,9 @@ static func cabe_baul(s: Dictionary, id: String) -> bool:
 	return s.baul.get(id, 0) > 0 or casillas_baul(s) < BAUL
 
 
-# Qué objeto suelta un zombi al morir ("" = nada): el explosivo y el gordo, solo lo suyo (DE_UN_ZOMBI: los
-# explosivos y el bidón de ácido), 1 de cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el
-# pasillo o en un apartamento)
+# Qué objeto suelta un zombi al morir ("" = nada): el gordo, solo lo suyo (DE_UN_ZOMBI: el bidón de ácido), 1 de
+# cada 4 veces. "tienda" es el tipo de la tienda donde ha caído ("" en el pasillo o en un apartamento). Las piezas van
+# aparte (pieza_de_zombi)
 static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -> String:
 	for id in DE_UN_ZOMBI:
 		if DE_UN_ZOMBI[id] == tipo:
@@ -127,13 +147,13 @@ static func que_suelta(tipo: String, edificio := "apartamentos", tienda := "") -
 	return al_azar(edificio, tienda) if randf() < SUELTA else ""
 
 
-# Un objeto cualquiera de los que salen ahí, menos los de un solo zombi (DE_UN_ZOMBI; el jefe suelta dos seguros). En los
-# Apartamentos, uno de los de siempre; en el centro comercial, uno de la lista de su tienda (en el pasillo, de
-# una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar
+# Un objeto cualquiera de los que salen ahí, menos los de un solo zombi (DE_UN_ZOMBI; el jefe suelta dos seguros) y
+# las piezas (PIEZAS). En los Apartamentos, la gasolina o la batería; en el centro comercial, uno de la lista de su
+# tienda (en el pasillo, de una tienda cualquiera). Con el reto del día "Sin curas" (reto.gd), sin los de curar
 static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 	var lista: Array
 	if edificio == "apartamentos":
-		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO)
+		lista = NOMBRES.keys().filter(func(id): return id not in DE_UN_ZOMBI and id not in SOLO_CENTRO and id not in PIEZAS)
 	else:
 		if tienda not in TIENDAS:
 			tienda = TIENDAS.keys().pick_random()
@@ -143,26 +163,37 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 	return lista.pick_random()
 
 
+# La pieza que suelta un zombi al morir ("" = ninguna): PIEZA_ZOMBI de las veces, una de las cuatro al azar. Con la
+# alerta, más veces (Alerta.mas_piezas)
+static func pieza_de_zombi() -> String:
+	return PIEZAS.keys().pick_random() if randf() < PIEZA_ZOMBI * Alerta.mas_piezas() else ""
+
+
+# Cuántas piezas suelta un jefe al caer (PIEZAS_JEFE, y más con la alerta); cada una, de una familia al azar
+static func piezas_de_jefe() -> Array:
+	var lista := []
+	for i in roundi(PIEZAS_JEFE * Alerta.mas_piezas()):
+		lista.append(PIEZAS.keys().pick_random())
+	return lista
+
+
 # ── Colecciones (el programa del ordenador) ──
 # Lo encontrado alguna vez se apunta en el guardado ("encontrados"), y el ordenador lo cuenta por edificio.
 
-# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 7 de siempre (con los
-# explosivos) y el bidón de ácido; en el centro comercial, todos menos las cosas de casa. Otro valor: todos
+# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, todos menos las vendas; en el centro
+# comercial, todos. Otro valor: todos
 static func de_edificio(edificio: String) -> Array:
-	match edificio:
-		"apartamentos":
-			return NOMBRES.keys().filter(func(id): return not id in SOLO_CENTRO)
-		"centro":
-			return NOMBRES.keys().filter(func(id): return not id in SOLO_CASA)
+	if edificio == "apartamentos":
+		return NOMBRES.keys().filter(func(id): return not id in SOLO_CENTRO)
 	return NOMBRES.keys()
 
 
-# Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier zombi (los
-# explosivos, solo el explosivo, y el bidón de ácido, solo el gordo, en los dos edificios); en el centro comercial,
-# las tiendas que lo sueltan ("Ferretería, electrónica y supermercado")
+# Dónde sale un objeto, para la línea de abajo de su ficha: en los Apartamentos lo suelta cualquier zombi (el bidón
+# de ácido, solo el gordo, y las piezas, los zombis y los jefes, en los dos edificios); en el centro comercial, las
+# tiendas que lo sueltan ("Ferretería, electrónica y supermercado")
 static func donde(id: String, edificio: String) -> String:
-	if id == "explosivos":
-		return "lo suelta el zombi explosivo"
+	if id in PIEZAS:
+		return "la suelta algún zombi, y los jefes seguro"
 	if id == "bidon_acido":
 		return "lo suelta el gordo"
 	if edificio != "centro":

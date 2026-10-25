@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i07uledm02yx"
-path="res://.godot/imported/obj-despertador.png-18cd293a56add5bc334e060bf657e0f4.ctex"
+uid="uid://d2oknl3jcwq23"
+path="res://.godot/imported/obj-pieza_arrojable.png-8acc3e9739da85df55f5a37cd2bc729d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/obj-despertador.png"
-dest_files=["res://.godot/imported/obj-despertador.png-18cd293a56add5bc334e060bf657e0f4.ctex"]
+source_file="res://assets/ui/iconos/obj-pieza_arrojable.png"
+dest_files=["res://.godot/imported/obj-pieza_arrojable.png-8acc3e9739da85df55f5a37cd2bc729d.ctex"]
 
 [params]
 

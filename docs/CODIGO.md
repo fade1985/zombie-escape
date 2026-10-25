@@ -74,8 +74,12 @@ en una línea.
 - `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio, horda), `reto.gd` (el reto del
   día) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`).
-- `objetos.gd`: los objetos, los que se usan (`USABLES`), qué sale en cada tienda (`TIENDAS`), los que suelta un
-  solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32.
+- `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los que se usan (`USABLES`), qué sale en
+  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32. Y las **piezas**
+  de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta
+  cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
+  alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); el banco que las gastará
+  aún no está. Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
   `talentos.gd`, `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego), `logros.gd` (uno = una línea en
   `LISTA`), `historia.gd` (dosier, noticias y la cafetera; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
@@ -143,7 +147,8 @@ en una línea.
   nuevos → sprites; lee `catalogo.gd`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `texturas_bano.py`, `azotea.py` (ver
   `FONDOS.md`).
-- **Iconos:** `icono_*.py`, `objetos16.py`, `hacer_casillas.py`, `recortes_bestiario.py`.
+- **Iconos:** `icono_*.py`, `objetos16.py` (solo la batería y las vendas, de 16×16: los demás objetos son de PixelLab),
+  `hacer_casillas.py`, `recortes_bestiario.py`.
 - **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
   `tools/efectos/*.wav`, que no van a git).
 - **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`el-ultimo-inquilino.mjs`, `turno-de-noche.mjs`,

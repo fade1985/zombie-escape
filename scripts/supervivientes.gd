@@ -1107,7 +1107,7 @@ func probar_botiquin() -> void:
 	var sin_ella := botiquin_al_empezar()
 	Guardado.cambiar(func(x): x.rescatados = ["farmaceutica"])
 	var con_ella := botiquin_al_empezar()
-	partida.mochila.append_array(["trapo", "trapo", "alcohol"])
+	partida.mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "pieza_distancia"])
 	johnny.vida = roundi(johnny.vida_tope() * 0.5)
 	partida.abrir_cosas("inventario")
 	print("Botiquín al empezar: sin ella %s | con ella %s | mochila %s" % [sin_ella, con_ella, partida.mochila])

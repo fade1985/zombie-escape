@@ -624,18 +624,27 @@ func balitas(caja: VBoxContainer, tipo: String, llenas: int, total: int) -> void
 
 
 # La ficha de una casilla de la mochila ([id, cuántos]): lo de curar se usa; lo demás, solo se lleva (hasta el 25 oct
-# decía para qué recetas del banco de trabajo servía)
+# decía para qué recetas del banco de trabajo servía; ahora las piezas dicen para qué armas son, que_pieza)
 func ficha_objeto(caja: VBoxContainer, c: Array) -> Dictionary:
 	var id: String = c[0]
 	var curar := id in Objetos.USABLES
-	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "Para curar" if curar else "Objeto · Común")
+	cabeza(caja, Objetos.icono(id), Objetos.nombre(id),
+		"Para curar" if curar else "Pieza · Mejora armas" if id in Objetos.PIEZAS else "Objeto · Común")
 	if c[1] > 1:
 		renglon(caja, "Llevas %d" % c[1], Tema.TINTA)
 	if curar:
 		return {"que": "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_de(id),
 			"botones": [["usar", "Usar", usar, false], ["tirar", "Tirar al suelo", tirar, false]]}
-	return {"que": "Si caes, se pierde (en el baúl queda a salvo).",
+	return {"que": que_pieza(id) + "Si caes, se pierde (en el baúl queda a salvo).",
 		"botones": [["tirar", "Tirar al suelo", tirar, false]]}
+
+
+# Lo que dice la ficha de una pieza (Objetos.PIEZAS): para qué armas es y que el banco que las usa llega pronto. De
+# lo demás, nada ("")
+func que_pieza(id: String) -> String:
+	if not id in Objetos.PIEZAS:
+		return ""
+	return "Sirve para mejorar %s. El banco de trabajo que las usa llega pronto. " % Objetos.PIEZA_PARA[Objetos.PIEZAS[id]]
 
 
 # La ficha de un hueco de munición ([tipo, cuánta]): cuánta lleva y quién la gasta. La gasolina, el ácido y las
@@ -1093,10 +1102,10 @@ func ficha_baul() -> Dictionary:
 			var c: Array = Objetos.casillas(partida.mochila)[i]
 			var id: String = c[0]
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
-				"que_es": "%s · En la mochila" % ("Objeto" if Objetos.al_baul(id) else "Para curar"),
+				"que_es": "%s · En la mochila" % ("Pieza" if id in Objetos.PIEZAS else "Objeto" if Objetos.al_baul(id) else "Para curar"),
 				"cuanto": "Llevas %d" % c[1] if c[1] > 1 else ""}, true)
 			if Objetos.al_baul(id):
-				d.que = que_guardar(s, id, c[1], "esta casilla")
+				d.que = que_pieza(id) + que_guardar(s, id, c[1], "esta casilla")
 				d.boton = ["guardar", "Guardar en el baúl", guardar, not Objetos.cabe_baul(s, id)]
 			else:
 				d.que = "Lo de curar no va al baúl: úsalo en la partida, porque al acabarla se pierde."
@@ -1116,9 +1125,9 @@ func ficha_baul() -> Dictionary:
 			var municion: bool = id in Armas.MUNICION
 			var cabe: bool = johnny.sitio(id) > 0 if municion else Objetos.cabe(partida.mochila, id)
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
-				"que_es": "%s · En el baúl" % ("Munición" if municion else "Objeto"), "cuanto": "Hay %d en el baúl" % o[1],
-				"boton": ["sacar", "Sacar uno", sacar, not cabe]}, true)
-			d.que = "Llena %s. " % Armas.MUNICION[id].para if municion else ""
+				"que_es": "%s · En el baúl" % ("Munición" if municion else "Pieza" if id in Objetos.PIEZAS else "Objeto"),
+				"cuanto": "Hay %d en el baúl" % o[1], "boton": ["sacar", "Sacar uno", sacar, not cabe]}, true)
+			d.que = "Llena %s. " % Armas.MUNICION[id].para if municion else que_pieza(id)
 			if cabe:
 				d.que += "Sale de uno en uno a tu %s; fuera del baúl, se pierde si caes." % ("munición" if municion else "mochila")
 			else:

@@ -3354,5 +3354,72 @@
   },
   "cost": "60 generaciones (12 objetos de 5)",
   "updated": "2026-10-25"
+ },
+ "piezas-iconos": {
+  "nota": "Los iconos de las 4 piezas de mejora de las armas (25 oct; pieza_cuerpo, pieza_distancia, pieza_especial y pieza_arrojable). Misma receta que municion-iconos: create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png de imagen de estilo sin copiar sus colores (color_palette false), y además 'sin brillos ni destellos blancos' en el texto. Dos intentos de cada una (A y B), en assets/sources/piezas/intentos/; hoja para elegir: assets/sources/piezas/elegir.png. ELEGIDOS por el dueño: cuerpo B (piedra de afilar con una lima), distancia A (muelle de acero), especial A (válvula de latón con rueda roja y cables) y arrojable B (detonador con botón rojo); van a assets/ui/iconos/obj-pieza_<familia>.png. La B de a distancia (cerrojo de pistola) la rechazó el filtro de contenido de PixelLab (sin cobrar): se reescribió como «bloque de acero con agujero» (semilla 32003, pieza-distancia-B.png), pero no se eligió. Coste real: 5 generaciones por dibujo (7 buenos + el reintento = 40), no 1.",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "pieza-cuerpo": {
+    "seeds": [
+     31001,
+     31002
+    ],
+    "ids": [
+     "75534981-53ea-4fae-be6e-70501036bbe4",
+     "492a3fc3-17ab-4e3c-85fe-8293cf4e5bd2"
+    ],
+    "description": "A: a worn grey steel knife handle wrapped tightly with dirty black cloth tape, with a short stub of blade. B (elegida): a rough rectangular grey sharpening stone (whetstone) with a worn dip in the middle, resting next to a short rusty steel file. A weapon part ... Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "pieza-distancia": {
+    "seeds": [
+     32001,
+     32002,
+     32003
+    ],
+    "ids": [
+     "183c27f1-d198-4b46-9e9f-7f0e2cb8ae28",
+     "bdd2f85b-0b49-4d7d-abde-5c067679e0bd (rechazada por el filtro)",
+     "fe439a64-dcfd-4b00-8e47-623649386972"
+    ],
+    "description": "A (elegida): a strong steel coil spring (a pistol recoil spring) lying slightly tilted, dark blue-grey metal with worn dull edges. B (cerrojo de pistola, rechazada) y B2 (bloque de acero con agujero): a chunky rectangular block of dark blue-grey steel with grooves on top and a round hole. A weapon part ... Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "pieza-especial": {
+    "seeds": [
+     33001,
+     33002
+    ],
+    "ids": [
+     "dc494c52-dddf-4922-880d-4f77ca596975",
+     "cba94489-4b83-4ac2-ad33-f40bad53c91d"
+    ],
+    "description": "A (elegida): an old brass pipe valve with a round red hand wheel on top and a short piece of rusty pipe, with a tangle of two thin cables coming out. B: a copper wire coil (an electromagnet bobbin) wound on a small dark plastic spool, with two loose insulated cables, one red and one black. A weapon part ... Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   },
+   "pieza-arrojable": {
+    "seeds": [
+     34001,
+     34002
+    ],
+    "ids": [
+     "d2157301-aa3e-4c20-b1e7-ef76e64aac2c",
+     "d5907249-bffc-4cf9-b702-f86372950252"
+    ],
+    "description": "A: a coiled length of orange-brown cord fuse wrapped in a loose spiral, with a small dull grey metal cap crimped on one end. B (elegida): a small hand detonator, a squat dark metal box with a red plunger push button on top, a short antenna wire and two stubs of cable with exposed copper ends. A weapon part ... Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   }
+  },
+  "cost": "40 generaciones (8 objetos de 5; el primero de a distancia B fallo sin cobrar y se repitio)",
+  "updated": "2026-10-25"
  }
 }

@@ -133,7 +133,7 @@ func probar_ascensor() -> void:
 	Captura.foto("captura-ascensor-arreglado.png")
 	# con cosas en la mochila, abajo
 	mochila.clear()
-	mochila.append_array(["gasolina", "gasolina", "trapo"])
+	mochila.append_array(["gasolina", "gasolina", "pieza_cuerpo"])
 	Guardado.cambiar(func(g2): g2.baul = {})
 	await cruzar(asc)
 	var minimapa = $Pantalla/Minimapa
@@ -152,8 +152,8 @@ func probar_ascensor() -> void:
 		await get_tree().create_timer(0.3).timeout
 		Captura.foto("captura-ascensor-baul.png")
 	var g := Guardado.cargar()
-	print("Baúl: abierto %s · guardado gasolina %d, trapo %d · en la mochila %d (esperado: true, 2, 1, 0)" % [
-		abierto, g.baul.get("gasolina", 0), g.baul.get("trapo", 0), mochila.size()])
+	print("Baúl: abierto %s · guardado gasolina %d, pieza_cuerpo %d · en la mochila %d (esperado: true, 2, 1, 0)" % [
+		abierto, g.baul.get("gasolina", 0), g.baul.get("pieza_cuerpo", 0), mochila.size()])
 	inventario.cerrar()
 	await get_tree().process_frame
 	# y de vuelta: la puerta de la sala lleva al ascensor de la 1ª planta

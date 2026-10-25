@@ -1190,6 +1190,14 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			var obj := Objetos.que_suelta(tipo, edificio, tienda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
+		# y piezas de mejora de las armas: los jefes, cuatro seguras; cualquier otro zombi, a veces una
+		if tipo in JEFES:
+			for pieza in Objetos.piezas_de_jefe():
+				soltar_objeto(pieza, zombi.position)
+		else:
+			var pieza := Objetos.pieza_de_zombi()
+			if pieza != "":
+				soltar_objeto(pieza, zombi.position)
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
@@ -1298,7 +1306,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_O:
 		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
 	elif evento.keycode == KEY_U:
-		dar_objetos()   # uno de cada objeto al baúl, para probar el baúl
+		dar_objetos()   # 10 piezas de cada familia al baúl, para probar el baúl y el banco
 	elif evento.keycode == KEY_F8:
 		# todo encontrado y visto, para probar el programa Colecciones del ordenador (bestiario.gd)
 		Bestiario.todo_visto()
@@ -1350,10 +1358,9 @@ func ir_al_jefe(tipo: String) -> void:
 			return
 
 
-# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios)
+# Tecla U: mete en el baúl 10 piezas de cada familia (Objetos.PIEZAS), para probar el baúl y el banco
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
-		for id in Objetos.NOMBRES:
-			if not id in Objetos.USABLES:   # (los de curar no van al baúl)
-				g.baul[id] = g.baul.get(id, 0) + 1)
-	decir("Uno de cada objeto al baúl")
+		for id in Objetos.PIEZAS:
+			g.baul[id] = g.baul.get(id, 0) + 10)
+	decir("10 piezas de cada familia al baúl")
