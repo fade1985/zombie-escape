@@ -1,6 +1,85 @@
 # Pruebas de sitios: la sala de mantenimiento (--sala), el ascensor (--ascensor), las viviendas (--viviendas),
-# la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# el piso con pasillo (--piso-pasillo), la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte
+# de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_fotos.gd"
+
+
+# Con "--captura --piso-pasillo": el piso con pasillo en T (apartamento.gd: probar_pasillo), que de momento solo sale en
+# esta prueba (con ella, todos los pisos normales salen así: prueba_comun.gd). Primero genera 200, la mitad con la puerta
+# abajo y la otra mitad arriba, y cuenta los que salen mal. Luego, en la 1ª planta, entra en uno con la puerta abajo (los
+# de encima del pasillo del edificio) y en otro con ella arriba (los de debajo), sin zombis, y de cada uno dice sus
+# habitaciones, si la puerta está en el centro y si desde ella se llega andando a todas, y dibuja su plano con letras
+# (S salón, C cocina, D dormitorio, B baño, . pasillo, # muro, E la entrada). Fotos: lo que se ve al entrar
+# (captura-piso-pasillo-abajo-entrada.png y -arriba-entrada.png) y el piso entero, sin niebla ni penumbra
+# (captura-piso-pasillo-abajo.png y -arriba.png). Luego se cierra
+func probar_piso_pasillo() -> void:
+	var mal := 0
+	for i in 200:
+		var otro := Apartamento.generar(7000 + i * 131, false, "abajo" if i % 2 == 0 else "arriba")
+		if otro.is_empty() or otro.get("forma", "") != "pasillo" or otro.entrada.c != (otro.cols - Apartamento.PUERTA) / 2:
+			mal += 1
+	print("Piso con pasillo: de 200 generados, mal %d (esperado: 0)" % mal)
+	nueva_planta(2)
+	var letra := {"salon": "S", "cocina": "C", "dormitorio": "D", "bano": "B", "pasillo": "."}
+	for lado in ["abajo", "arriba"]:
+		var idx := -1
+		for i in planta.sitios.size():
+			if planta.sitios[i].tipo == "apartamento" and planta.sitios[i].apt.entrada.lado == lado:
+				idx = i
+				break
+		if idx < 0:
+			print("Piso con pasillo: en la 1ª planta no hay ninguno con la puerta %s" % lado)
+			continue
+		var sitio: Dictionary = planta.sitios[idx]
+		var apt: Dictionary = sitio.apt
+		sitio.limpio = true   # sin zombis: aquí se mira el piso
+		await montar(idx, 0, false)
+		await get_tree().create_timer(0.4).timeout
+		Captura.foto("captura-piso-pasillo-%s-entrada.png" % lado)
+		print("Piso con pasillo (puerta %s): %d × %d casillas · %s" % [lado, apt.cols, apt.filas,
+			" · ".join(apt.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
+		var salida: Dictionary = sitio.salidas[0]
+		print("Piso con pasillo (puerta %s): la puerta, en la pared de %s %s y en su centro %s (esperado: true y true)" % [
+			lado, salida.dir, salida.dir == lado, is_equal_approx(salida.en, sitio.ancho / 2.0)])
+		var red: RID = mapa.get_node("Navegacion").get_navigation_map()
+		var llega := []
+		for s in apt.salas:
+			var camino := NavigationServer2D.map_get_path(red, johnny.position, s.centro, true)
+			llega.append("%s %s" % [s.nombre, not camino.is_empty() and camino[-1].distance_to(s.centro) < 24.0])
+		print("Piso con pasillo (puerta %s): desde la entrada se llega andando a %s (esperado: todas true)" % [lado,
+			" · ".join(llega)])
+		for f in apt.filas:
+			var linea := ""
+			for c in apt.cols:
+				var v: int = apt.dueno[f * apt.cols + c]
+				var entrada: bool = (c - apt.entrada.c) in [0, 1] and (f < Apartamento.BORDE if lado == "arriba" else f >= apt.filas - Apartamento.BORDE)
+				linea += "E" if entrada else "#" if v == -1 else " " if v == -2 else letra[apt.salas[v].uso]
+			print("    " + linea)
+		# el piso entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
+		for s in apt.salas:
+			mapa.vistas[s.id] = true
+			mapa.niebla[s.id] = 0.0
+		mapa.actualizar_niebla(0.0)
+		var camara: Camera2D = johnny.get_node("Camara")
+		var pantalla := get_viewport_rect().size
+		var zoom := minf(pantalla.x / sitio.ancho, pantalla.y / (sitio.alto + ARRIBA_EXTRA))
+		camara.zoom = Vector2(zoom, zoom)
+		camara.limit_left = -100000
+		camara.limit_top = -100000
+		camara.limit_right = 100000
+		camara.limit_bottom = 100000
+		Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - ARRIBA_EXTRA) / 2.0) - johnny.position
+		camara.reset_smoothing()
+		$Pantalla.hide()
+		luz.alternar()
+		await get_tree().create_timer(0.6).timeout
+		Captura.foto("captura-piso-pasillo-%s.png" % lado)
+		luz.alternar()
+		$Pantalla.show()
+		camara.zoom = Vector2.ONE
+		Temblor.desplazamiento = Vector2.ZERO
+		encuadrar(sitio)
+	get_tree().quit()
 
 
 # Con "--captura --viviendas": las viviendas de los supervivientes rescatados (mapa/viviendas.gd), detrás de la puerta

@@ -171,7 +171,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 				continue
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
 			if s.uso == "pasillo":   # el pasillo de las viviendas: como el de los pisos
-				estilos[s.id] = textura("pasillo", "")
+				# (el de dentro de un piso con pasillo, apartamento.gd, como su salón, que va primero: como en una casa)
+				estilos[s.id] = estilos[0] if s.get("tipo", "") == "piso" else textura("pasillo", "")
 				continue
 			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
 			if tienda and (ESTILO_TIENDA.has(propio) or ESTILO_TIENDA.has(s.uso)):

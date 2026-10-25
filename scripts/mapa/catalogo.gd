@@ -229,6 +229,12 @@ const SALAS := {
 		"cuantos": [5, 8],
 		"fondo_max": 46,   # el pasillo de cada planta es estrecho: solo muebles poco hondos
 	},
+	# el pasillo de dentro de un piso con pasillo (apartamento.gd: probar_pasillo), con su recibidor: pocos muebles
+	"pasillo-piso": {
+		"muebles": ["shoerack", "coatstand", "console", "plant"],
+		"cuantos": [2, 4],
+		"fondo_max": 46,
+	},
 	# Las salas de las tiendas del centro comercial (tienda.gd). La sala de venta va por tipo de tienda
 	# ("tienda-<tipo>", y "tienda" si un tipo no tiene la suya); la cocina del restaurante es "cocina-restaurante"
 	# (Muebles.de_apartamento busca primero "<uso>-<tipo de tienda>"). Sin plantillas: son salas grandes y se

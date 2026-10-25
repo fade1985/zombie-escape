@@ -119,7 +119,7 @@ const FRASES := [
 	[0.92, "¡Un poco más!"],
 ]
 # Por dónde entra cada grupo (en las tiendas, también por sus habitaciones)
-const POR := {"salon": "el salón", "cocina": "la cocina", "dormitorio": "el dormitorio", "bano": "el baño",
+const POR := {"salon": "el salón", "cocina": "la cocina", "dormitorio": "el dormitorio", "bano": "el baño", "pasillo": "el pasillo",
 	"tienda": "la tienda", "almacen": "el almacén", "camara": "la cámara", "taller": "el taller",
 	"taquillas": "las taquillas", "probadores": "los probadores", "rebotica": "la rebotica"}
 
