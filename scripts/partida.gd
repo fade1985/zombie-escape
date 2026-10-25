@@ -1364,7 +1364,7 @@ func pruebas() -> void:
 	sitio_pruebas()
 	de_pruebas = {"planta": planta, "sitio": aqui, "pos": johnny.position}
 	await montar(planta.armas, 0)
-	decir("Sala de pruebas · P: panel de pruebas · F11: volver", 3.0)
+	decir("Sala de pruebas · P: panel de pruebas · guion: líneas y daño · F11: volver", 3.5)
 
 
 # La sala de pruebas y la exposición, como dos sitios más de la planta (la planta baja ya las trae: planta.gd)
