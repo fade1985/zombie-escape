@@ -4,8 +4,8 @@
 #   - franja(): el camino de una carga o embestida. Flechas grandes que se encienden una tras otra hacia donde va,
 #     raíles de puntos que marcan el ancho y, al final, una estrella si se va a estrellar contra la pared o una X si no.
 #     Se corta donde se estrellaría el cuerpo del jefe (contra una pared o un mueble).
-#   - abanico(): el trozo que barre un golpe cuerpo a cuerpo (porrazo, fregonazo, hachazo...). Arcos que se encienden
-#     del jefe hacia fuera, el borde por donde llega y los lados de puntos.
+#   - abanico(): el trozo que barre un golpe cuerpo a cuerpo (porrazo, fregonazo, hachazo...). Se va llenando del jefe
+#     hacia fuera, como una barra de carga, sin bordes.
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Va en un nodo hijo del
 # jefe, por detrás de él, que se crea solo la primera vez y se esconde cuando deja de pedirse.
 class_name Aviso

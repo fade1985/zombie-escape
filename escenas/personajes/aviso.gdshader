@@ -4,8 +4,8 @@
 //   - la franja de una carga: flechas grandes (>), del ancho del jefe, que se encienden una tras otra hacia donde va;
 //     a los lados, raíles de puntos que marcan el ancho; y al final, una estrella de choque si se va a estrellar contra
 //     la pared (y quedarse atontado) o una X si no.
-//   - el abanico de un golpe: arcos que se encienden del jefe hacia fuera, el borde hasta donde llega y los lados de
-//     puntos.
+//   - el abanico de un golpe: se va llenando del jefe hacia fuera, como una barra de carga, sin bordes; lo que falta,
+//     a cuadros flojitos.
 shader_type canvas_item;
 
 uniform int forma = 0;          // 0: franja; 1: abanico
@@ -25,10 +25,6 @@ const float PASO = 40.0;        // de una a la siguiente
 const float GROSOR = 10.0;
 const float ABRE = 0.7;         // lo abiertas que están (los lados van por detrás de la punta)
 const float FINAL = 26.0;       // el sitio que se deja al final para la marca
-// los arcos del abanico
-const float INICIO_ARCOS = 14.0;
-const float PASO_ARCOS = 22.0;
-const float GROSOR_ARCOS = 8.0;
 
 const vec3 ROJO = vec3(1.0, 0.24, 0.35);
 const vec4 OSCURO = vec4(0.227, 0.039, 0.078, 0.75);   // el contorno, para que se vea en cualquier suelo
@@ -41,7 +37,7 @@ void vertex() {
 	mundo = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
 }
 
-// Una tira de cosas que se encienden una tras otra (las flechas o los arcos): "d", lo que se ha avanzado desde la
+// Una tira de cosas que se encienden una tras otra (las flechas): "d", lo que se ha avanzado desde la
 // primera; "n", cuántas hay; "a_lado", si está pegado al lado (ahí, contorno). Devuelve su color (transparente si no
 // cae en ninguna)
 vec4 tira(float d, float n, float paso, float grosor, bool a_lado) {
@@ -118,25 +114,19 @@ vec4 abanico(vec2 p) {
 	vec2 q = vec2(p.x, p.y / aplasta);
 	float r = length(q);
 	float giro = acos(clamp(dot(q, hacia) / max(r, 0.001), -1.0, 1.0));   // lo que se aparta del medio
-	float al_lado = (medio - giro) * r;   // lo lejos que está del lado (más o menos, en unidades)
-	if (r > largo + CELDA * 1.5 || al_lado < -CELDA * 1.5) {
+	if (r > largo || giro > medio) {
 		return vec4(0.0);
 	}
-	if (r > largo || al_lado < 0.0) {
-		return OSCURO;   // el contorno de fuera
+	float lleno = largo * k;
+	if (r > lleno) {
+		// lo que falta: a cuadros, flojito
+		vec2 celda = floor((p + origen) / CELDA);
+		return mod(celda.x + celda.y, 2.0) < 0.5 ? vec4(0.0) : vec4(ROJO, 0.22 + 0.1 * k);
 	}
-	// el borde hasta donde llega
-	if (r > largo - CELDA * 1.5) {
-		return vec4(ROJO, 0.5 + 0.45 * k);
+	if (lleno - r < 6.0) {
+		return vec4(BRILLO, 0.8);   // el frente, que avanza hacia fuera
 	}
-	// los arcos
-	float n = max(1.0, floor((largo - CELDA * 2.0 - INICIO_ARCOS - GROSOR_ARCOS) / PASO_ARCOS) + 1.0);
-	vec4 color = tira(r - INICIO_ARCOS, n, PASO_ARCOS, GROSOR_ARCOS, al_lado < CELDA);
-	// los lados: puntos
-	if (color.a == 0.0 && al_lado < CELDA * 1.5 && mod(r, 8.0) < 4.0) {
-		color = vec4(ROJO, 0.3 + 0.35 * k);
-	}
-	return color;
+	return vec4(ROJO, 0.3 + 0.25 * k * (r / largo));   // lo lleno, algo más fuerte hacia fuera
 }
 
 void fragment() {
