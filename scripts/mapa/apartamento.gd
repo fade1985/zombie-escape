@@ -3,7 +3,7 @@
 # Los pisos son siempre el mismo, dibujado con letras en PLANO_PASILLO: la puerta de entrada, en el centro de la pared
 # que da al pasillo del edificio, lleva a un recibidor que sube hasta un pasillo que cruza el piso de lado a lado. A los
 # lados del recibidor, la cocina y el salón; detrás del pasillo, el dormitorio individual y el de matrimonio, cada uno
-# con su baño dentro, en la esquina de fuera. Todas las puertas dan al pasillo, menos la de cada baño, que da a su
+# con su baño dentro, en el lado de fuera. Todas las puertas dan al pasillo, menos la de cada baño, que da a su
 # dormitorio. Está dibujado con la puerta abajo (los pisos de encima del pasillo del edificio); los de debajo, con la
 # puerta arriba, salen volteados. (Hasta el 25 de octubre de 2026 cada piso se sorteaba, como en src/apartment.js del
 # juego JS; está en git.)
@@ -28,31 +28,24 @@ const NOMBRES := {"salon": "Salón", "cocina": "Cocina", "bano": "Baño", "dormi
 #   S  salón            C  cocina       M  dormitorio de matrimonio       I  dormitorio individual
 #   B  baño (es del dormitorio al que da su puerta)                       .  pasillo y recibidor
 # Cada trozo seguido de una misma letra es una habitación. Los tabiques de lado a lado tienen cara (3 casillas de alto),
-# que tapa las dos últimas filas de lo que queda encima: del pasillo, de 7 filas, se ven 5. Los dormitorios son grandes
-# para que la cama y sus muebles quepan contra la pared de arriba en las dos orientaciones: con la puerta abajo, en la
-# franja de al lado del baño (11 y 12 casillas de ancho); volteado, contra la pared del pasillo, con 9 filas de fondo
-# por encima del baño. Se puede retocar a mano (todas las filas, igual de largas, y la E en el centro); la prueba
-# --piso dice si algo ha quedado mal.
+# que tapa las dos últimas filas de lo que queda encima: del pasillo, de 7 filas, se ven 5. Cada dormitorio es un
+# rectángulo de 9 filas de fondo, con el baño a su lado, de arriba abajo (con la puerta en medio de la pared): así la
+# cama y sus muebles caben contra la pared de arriba en las dos orientaciones (con la puerta abajo, la de fuera;
+# volteado, la del pasillo). Las puertas, lejos de las esquinas. Se puede retocar a mano (todas las filas, igual de
+# largas, y la E en el centro); la prueba --piso dice si algo ha quedado mal.
 const PLANO_PASILLO := [
 	"##############################################",
 	"##############################################",
-	"##BBBBBBBB#IIIIIIIIIII#MMMMMMMMMMMM#BBBBBBBB##",
-	"##BBBBBBBB#IIIIIIIIIII#MMMMMMMMMMMM#BBBBBBBB##",
-	"##BBBBBBBB#IIIIIIIIIII#MMMMMMMMMMMM#BBBBBBBB##",
-	"##BBBBBBBB#IIIIIIIIIII#MMMMMMMMMMMM#BBBBBBBB##",
-	"##BBBBBBBB#IIIIIIIIIII#MMMMMMMMMMMM#BBBBBBBB##",
-	"##BBBBBBBB#IIIIIIIIIII#MMMMMMMMMMMM#BBBBBBBB##",
-	"#####  ####IIIIIIIIIII#MMMMMMMMMMMM####  #####",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"##IIIIIIIIIIIIIIIIIIII#MMMMMMMMMMMMMMMMMMMMM##",
-	"################  ##########  ################",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"##BBBBBBB IIIIIIIIIIII#MMMMMMMMMMMMM BBBBBBB##",
+	"##BBBBBBB IIIIIIIIIIII#MMMMMMMMMMMMM BBBBBBB##",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
+	"################  #########  #################",
 	"##..........................................##",
 	"##..........................................##",
 	"##..........................................##",
@@ -61,8 +54,6 @@ const PLANO_PASILLO := [
 	"##..........................................##",
 	"##..........................................##",
 	"#######  ############....############  #######",
-	"##CCCCCCCCCCCCCCCCCC#....#SSSSSSSSSSSSSSSSSS##",
-	"##CCCCCCCCCCCCCCCCCC#....#SSSSSSSSSSSSSSSSSS##",
 	"##CCCCCCCCCCCCCCCCCC#....#SSSSSSSSSSSSSSSSSS##",
 	"##CCCCCCCCCCCCCCCCCC#....#SSSSSSSSSSSSSSSSSS##",
 	"##CCCCCCCCCCCCCCCCCC#....#SSSSSSSSSSSSSSSSSS##",
