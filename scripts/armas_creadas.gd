@@ -61,6 +61,7 @@ static func herir(zombi: Node2D, tipo: String, dano: float) -> void:
 		h = Herida.new()
 		h.name = "herida_" + tipo
 		h.color = ef.color
+		h.acido = tipo == "acido"
 		zombi.add_child(h)
 	h.t = ef.t
 	h.dps = dano * ef.total / ef.t
@@ -120,25 +121,48 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 		herir(zombi, "acido", d)
 
 
-# Sangrar o ácido en un zombi: va de hijo suyo, le quita vida a pellizcos y le hace gotear
+# Sangrar o ácido en un zombi: va de hijo suyo y le quita vida a pellizcos. Sangrar le hace gotear; el ácido, no: lo
+# tiñe de verde (a los zombis, zombi.gd, que lo junta con el fuego; a los jefes, aquí). Al jefe de bomberos el ácido
+# solo lo tiñe: su herir() es el del fuego de los charcos (la vida se la quita el chorro, llamarada.gd)
 class Herida extends Node:
 	var t := 0.0
 	var dps := 0.0
 	var color := Color.WHITE
 	var tick := 0.0
+	var acido := false
+	var puesta := 0.0   # lo que lleva puesta (para que el verde lata)
 
 	func _physics_process(delta: float) -> void:
 		var zombi: Node2D = get_parent()
 		if not zombi.is_in_group("zombis"):
+			pintar(zombi, false)
 			queue_free()
 			return
 		t -= delta
 		tick += delta
-		if randf() < 6.0 * delta:   # gotitas que caen
+		puesta += delta
+		if acido:
+			pintar(zombi, true)
+		elif randf() < 6.0 * delta:   # gotitas que caen
 			Particulas.soltar(zombi, zombi.global_position + Vector2(randf_range(-10, 10), -40),
 				Vector2(randf_range(-15, 15), randf_range(20, 50)), color, 2, 0.4)
 		if tick >= ArmasCreadas.EFECTOS.tick:
 			tick -= ArmasCreadas.EFECTOS.tick
-			zombi.herir(dps * ArmasCreadas.EFECTOS.tick, color)
+			if not zombi.get("inmune_fuego"):
+				zombi.herir(dps * ArmasCreadas.EFECTOS.tick, color)
 		if t <= 0.0:
+			pintar(zombi, false)
 			queue_free()
+
+	# El verde del ácido en un jefe (que no es Zombi): con el shader de los zombis (el del destello), que se le pone
+	# la primera vez
+	func pintar(jefe: Node2D, si: bool) -> void:
+		if not acido or jefe is Zombi or not jefe.get("sprite") is CanvasItem:
+			return
+		var s: CanvasItem = jefe.get("sprite")
+		if not s.material is ShaderMaterial:
+			if not si:
+				return
+			s.material = ShaderMaterial.new()
+			s.material.shader = Zombi.DESTELLO
+		s.material.set_shader_parameter("tinte", Zombi.tinte_fuerte(false, si, puesta))

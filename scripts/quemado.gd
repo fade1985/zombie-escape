@@ -1,5 +1,5 @@
 # El cuerpo de un zombi que muere ardiendo (Corpse de src/zombies.js). Se engancha al zombi muerto y, contando
-# desde que toca el suelo: cae en llamas, se apaga mientras se vuelve carbón, le quedan brasas que parpadean y
+# desde que toca el suelo: cae ardiendo (teñido de fuego), se apaga mientras se vuelve carbón, le quedan brasas que parpadean y
 # columnas de humo, y al final se deshace en ceniza. Quedan una quemadura en el suelo y unos huesos (que ya no
 # se van). Las brasas, el humo y los restos salen de los píxeles de verdad de su dibujo tendido.
 class_name Quemado
@@ -9,7 +9,6 @@ const CARBON := 1.5     # segundos en apagarse y ennegrecer (BURNT.char del JS)
 const BRASAS := 5.0     # hasta aquí le quedan brasas y humo
 const CENIZA := 6.5     # y entre BRASAS y CENIZA se deshace: debajo aparecen sus restos
 const NEGRO := Color("#2c211c")   # el carbón (se multiplica: oscurece sin borrar las sombras)
-const FUEGO := Color("#ff7a1c")   # el tinte de arder (el mismo que en vida, zombi.gd)
 const BRASA := [Color("#ffd23f"), Color("#f0541e")]
 const HUMO := [Color("#4a4542"), Color("#6b6560")]
 const CENIZAS := [Color("#3a3330"), Color("#76706a")]
@@ -62,16 +61,19 @@ func _process(delta: float) -> void:
 	var llamas: Llamas = zombi.llamas
 	if tg < 0.0:
 		# cae ardiendo, como en vida
-		sprite.self_modulate = Color.WHITE.lerp(FUEGO, 0.35 + 0.2 * sin(t * 6.0))
+		sprite.self_modulate = Color.WHITE
+		pintar_fuego(1.0)
 	elif tg < CARBON:
 		# en el suelo: el fuego se apaga mientras el carbón aparece por encima
 		var k := tg / CARBON
-		sprite.self_modulate = Color.WHITE.lerp(FUEGO, 0.5).lerp(NEGRO, k)
+		sprite.self_modulate = Color.WHITE.lerp(NEGRO, k)
+		pintar_fuego(1.0 - k)
 		if llamas:
 			llamas.fuerza = 1.0 - k
 	elif tg < CENIZA:
 		# carbón; al final se va deshaciendo y debajo aparecen sus restos
 		sprite.self_modulate = NEGRO
+		pintar_fuego(0.0)
 		if llamas:
 			llamas.fuerza = 0.0
 		var k := maxf(0.0, (tg - BRASAS) / (CENIZA - BRASAS))
@@ -87,6 +89,13 @@ func _process(delta: float) -> void:
 		restos.modulate.a = 1.0
 		set_process(false)
 	queue_redraw()
+
+
+# El tinte de arder, el mismo que en vida (Zombi.tinte_fuerte), con "k" de fuerza (0 = nada)
+func pintar_fuego(k: float) -> void:
+	var c := Zombi.tinte_fuerte(true, false, t)
+	c.a *= k
+	sprite.material.set_shader_parameter("tinte", c)
 
 
 # Se deshace: copos de ceniza que se levantan del cuerpo

@@ -34,6 +34,8 @@
 #                  los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene delante y salta al
 #                  de al lado y no llega al lejano, una bala por disparo, disparar andando, el disparo en las 8 direcciones y con las
 #                  4 skins (Armas.CREADAS.pistola_electrica)
+#   --tintes       el fuego y el ácido tiñen a los enemigos, sin llamas ni gotas (zombi.gd, tinte_fuerte): zombis ardiendo,
+#                  con ácido y con las dos cosas, a la luz y a oscuras, un jefe con ácido y uno que muere ardiendo
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -137,6 +139,9 @@ func empezar_prueba() -> void:
 	elif "--pistola-electrica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pistola_electrica()
+	elif "--tintes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tintes()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3137,6 +3142,101 @@ func texto_del_arma() -> String:
 	johnny.avisar_arma()
 	johnny.arma_cambiada.disconnect(f)
 	return texto[0].get_slice("\n", 0)
+
+
+# Con "--captura --tintes": el fuego y el ácido tiñen a los enemigos, sin llamas ni gotas (zombi.gd, tinte_fuerte;
+# armas_creadas.gd, la herida). En la sala de pruebas de armas, cuatro zombis quietos (como la diana): uno sin nada,
+# uno ardiendo, uno con el ácido del lanza ácido y uno con las dos cosas (medio segundo naranja y medio verde), y un
+# jefe (el gymbro, quieto) con ácido. Fotos a la luz, otra un poco después (el fuego tiembla y el de las dos cosas
+# cambia de color) y a oscuras (el que arde lleva la luz de sus llamas); luego el jefe y su verde que se va al acabarse
+# el ácido, y uno que muere ardiendo (cae teñido y se vuelve carbón)
+func probar_tintes() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "mira"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	var z := []
+	for i in 4:
+		z.append(meter_zombi("normal", johnny.position + Vector2(-165 + i * 110, -90)))
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.diana = true   # quietos en su sitio y sin perder vida
+		zombi.casa = zombi.position
+	var tinte := func(nodo: Node2D) -> float:
+		var m: Material = nodo.get_node("Sprite").material
+		return m.get_shader_parameter("tinte").a if m is ShaderMaterial and m.get_shader_parameter("tinte") != null else 0.0
+	# el fuego y el ácido se renuevan cada medio segundo, mientras se hacen las fotos
+	var sigue := [true]
+	var renovar := func() -> void:
+		while sigue[0]:
+			for i in [1, 3]:
+				z[i].prender()
+			for i in [2, 3]:
+				ArmasCreadas.herir(z[i], "acido", 4)
+			await get_tree().create_timer(0.5).timeout
+	renovar.call()
+	await get_tree().create_timer(0.7).timeout
+	Captura.foto("captura-tintes-luz.png")
+	print("Tintes: sin nada %.2f · ardiendo %.2f · ácido %.2f · las dos %.2f (esperado: 0.00 y los otros tres más de 0.2) · llamas dibujadas %s (esperado: false) · luz del fuego %s (esperado: true)" % [
+		tinte.call(z[0]), tinte.call(z[1]), tinte.call(z[2]), tinte.call(z[3]), z[1].llamas.cuerpo, z[1].llamas.luz.visible])
+	await get_tree().create_timer(0.55).timeout
+	Captura.foto("captura-tintes-luz-2.png")
+	var colores := []
+	for i in 12:   # el de las dos cosas: naranja y verde, a ratos
+		var c: Color = z[3].get_node("Sprite").material.get_shader_parameter("tinte")
+		colores.append("verde" if c.g > c.r else "naranja")
+		await get_tree().create_timer(0.1).timeout
+	print("Tintes: el de las dos cosas, cada 0,1 s: %s (esperado: naranja y verde, a tramos de medio segundo)" % [colores])
+	Luz.evento = 0.85
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-tintes-oscuro.png")
+	Luz.evento = 0.0
+	sigue[0] = false
+	for zombi in z:
+		zombi.remove_from_group("zombis")
+		zombi.queue_free()
+	await get_tree().create_timer(0.8).timeout
+
+	# un jefe con ácido: verde mientras le dura, y se le va al acabarse
+	var jefe: Node2D = meter_zombi("gymbro", johnny.position + Vector2(0, -150))
+	await get_tree().create_timer(0.2).timeout
+	jefe.process_mode = Node.PROCESS_MODE_DISABLED   # quieto (la herida sigue: va aparte)
+	ArmasCreadas.herir(jefe, "acido", 4)
+	var herida: Node = jefe.get_node("herida_acido")
+	herida.process_mode = Node.PROCESS_MODE_ALWAYS
+	var vida0: int = jefe.vida
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-tintes-jefe.png")
+	var con: float = tinte.call(jefe)
+	await get_tree().create_timer(3.0).timeout
+	print("Tintes: el jefe con ácido %.2f, al acabarse %.2f (esperado: más de 0.2 y 0.00) · pierde %d (esperado: más de 0) · herida acabada %s (esperado: true)" % [
+		con, tinte.call(jefe), vida0 - jefe.vida, not is_instance_valid(herida)])
+	jefe.remove_from_group("zombis")
+	jefe.queue_free()
+	await get_tree().create_timer(0.3).timeout
+
+	# uno que muere ardiendo: cae teñido de fuego y se vuelve carbón
+	var quemado: Node2D = meter_zombi("normal", johnny.position + Vector2(0, -110))
+	await get_tree().process_frame
+	quemado.aturdido = 30.0
+	quemado.vida = 3
+	quemado.prender(4.0)
+	await get_tree().create_timer(0.55).timeout
+	Captura.foto("captura-tintes-cae.png")
+	await get_tree().create_timer(1.6).timeout
+	Captura.foto("captura-tintes-carbon.png")
+	print("Tintes: el quemado, muerto %s · tinte mientras ennegrece %.2f (esperado: true y menos de 0.3: se va apagando)" % [
+		quemado.estado == "muerto", tinte.call(quemado)])
+	get_tree().quit()
 
 
 # Con "--captura --pistola-electrica": la pistola eléctrica con su dibujo propio (Armas.CREADAS.pistola_electrica,

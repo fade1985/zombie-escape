@@ -1,7 +1,8 @@
 # Llamas de pixel art (drawFlame de src/molotov.js). Dos usos:
 #   - Llamas.llama(...): pinta una llama en cualquier dibujo (el charco de fuego del molotov la usa).
-#   - Como nodo: las llamas de alguien que arde (un zombi prendido, Johnny con el estado "fuego"). Se pone de
-#     hijo, encima del cuerpo, con su lucecita naranja (escenas/luces/fuego.tscn), y se apaga con "fuerza".
+#   - Como nodo: las llamas de alguien que arde (Johnny con el estado "fuego"). Se pone de hijo, encima del
+#     cuerpo, con su lucecita naranja (escenas/luces/fuego.tscn), y se apaga con "fuerza". A un zombi prendido
+#     solo le pone la luz ("cuerpo" a false): a él arder lo tiñe (zombi.gd, tinte_fuerte).
 class_name Llamas
 extends Node2D
 
@@ -13,6 +14,7 @@ const U := 2.0   # un píxel del dibujo, en unidades
 var alto := 60.0     # lo que mide el cuerpo que arde (las llamas suben hasta ahí)
 var ancho := 16.0    # medio ancho del cuerpo
 var fuerza := 1.0    # 0 = apagadas; entre medias, más pequeñas
+var cuerpo := true   # si se dibujan las llamas por el cuerpo (si no, solo la luz)
 var t := 0.0
 var luz: PointLight2D
 
@@ -30,11 +32,12 @@ func _process(delta: float) -> void:
 	t += delta
 	luz.visible = fuerza > 0.0
 	luz.fuerza = 0.75 * fuerza
-	queue_redraw()
+	if cuerpo:
+		queue_redraw()
 
 
 func _draw() -> void:
-	if fuerza <= 0.0:
+	if fuerza <= 0.0 or not cuerpo:
 		return
 	# tres llamas por el cuerpo: una alta en medio y dos más bajas a los lados
 	llama(self, -ancho * 0.55, -alto * 0.15, 5, 11, t, 1.3, fuerza)

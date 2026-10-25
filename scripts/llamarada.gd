@@ -130,7 +130,7 @@ func medir() -> float:
 
 # Un pellizco a todos los zombis que están dentro de la llama (y, uno de cada EMPUJA, con empujón). El ácido, en vez
 # de prenderlos, les deja la herida de ácido; y al jefe de bomberos sí le hace daño, pero por el golpe (su herir() es
-# el de las llamas de los charcos, que no le quita vida), y sin la herida (que también le llegaría por herir())
+# el de las llamas de los charcos, que no le quita vida), y la herida solo lo tiñe de verde (ArmasCreadas.Herida)
 func quemar() -> void:
 	ticks += 1
 	var johnny: Node2D = get_parent()
@@ -146,8 +146,7 @@ func quemar() -> void:
 				zombi.recibir_golpe(da, u * EMPUJE * empuje if empuja else Vector2.ZERO)
 			else:
 				zombi.herir(da, ArmasCreadas.EFECTOS.acido.color)
-			if not zombi.get("inmune_fuego"):
-				ArmasCreadas.herir(zombi, "acido", da)
+			ArmasCreadas.herir(zombi, "acido", da)
 			continue
 		if zombi.get("inmune_fuego"):
 			zombi.prender()   # al jefe de bomberos el fuego no le hace nada

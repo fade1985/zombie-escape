@@ -378,8 +378,9 @@ func morir() -> void:
 	Sonido.tocar("muerte")
 	$Sombra.apagar()
 	var cae: bool = sprite.sprite_frames.has_animation("muerte_" + direccion)
+	sprite.material.set_shader_parameter("tinte", Color.TRANSPARENT)   # (si cae ardiendo, lo vuelve a teñir quemado.gd)
 	if arder_t > 0.0 and not cae:
-		# murió ardiendo (sin animación de caer): queda chamuscado y las llamas se apagan poco a poco
+		# murió ardiendo (sin animación de caer): queda chamuscado y su luz se apaga poco a poco
 		sprite.self_modulate = Color(0.32, 0.27, 0.27)
 		create_tween().tween_property(llamas, "fuerza", 0.0, 0.6)
 	else:
@@ -409,7 +410,8 @@ func pisar(estados_charco: Dictionary) -> void:
 	Estados.pisar(pisando, estados_charco, true)
 
 
-# El fuego lo prende (o le renueva la quemadura si ya ardía)
+# El fuego lo prende (o le renueva la quemadura si ya ardía). No se le dibujan llamas: arder lo tiñe (tinte_fuerte), y
+# de las llamas solo lleva su luz naranja, que le alumbra a él y alrededor
 func prender(dano_lanzar := 1.0) -> void:
 	if arder_t <= 0.0 and estado != "muerto":
 		prendido.emit()
@@ -419,6 +421,7 @@ func prender(dano_lanzar := 1.0) -> void:
 		llamas = Llamas.new()
 		llamas.alto = altura * 0.8
 		llamas.ancho = radio
+		llamas.cuerpo = false
 		add_child(llamas)
 
 
@@ -465,15 +468,38 @@ func sufrir(delta: float) -> void:
 		arder(delta)
 	if llamas:
 		llamas.fuerza = clampf(arder_t / 0.5, 0.0, 1.0)
-	sprite.self_modulate = Estados.tinte(estados, tiempo)
-	if arder_t > 0.0:
-		sprite.self_modulate = Color.WHITE.lerp(Color("#ff7a1c"), 0.35 + 0.2 * sin(tiempo * 6.0))
+	# arder y el ácido (el de los charcos o el que le sigue royendo del lanza ácido: armas_creadas.gd, la herida) lo
+	# tiñen fuerte; los demás estados, con su tinte suave
+	var arde := arder_t > 0.0
+	var acido := estados.has("acido") or has_node("herida_acido")
+	sprite.self_modulate = Color.WHITE if arde or acido else Estados.tinte(estados, tiempo)
+	sprite.material.set_shader_parameter("tinte", Zombi.tinte_fuerte(arde, acido, tiempo))
 	if congelado > 0.0:
 		congelado -= delta
 		if congelado <= 0.0:
 			sprite.material.set_shader_parameter("hielo", 0.0)
 			sprite.play()   # se deshiela: vuelve a moverse su dibujo
 	Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
+
+
+# El tinte de quien arde o tiene ácido, para el "tinte" de su shader (el del destello): el fuego, naranja-rojo que
+# tiembla a saltos, como una llama; el ácido, verde que late despacio, como burbujeando; con los dos, medio segundo
+# cada uno. En "a", cuánto se mezcla con el dibujo (0 = nada). También lo usan quemado.gd y, con el ácido, los jefes
+# (armas_creadas.gd, la herida)
+static func tinte_fuerte(arde: bool, acido: bool, t: float) -> Color:
+	if arde and acido:
+		arde = int(t * 2.0) % 2 == 0
+		acido = not arde
+	if arde:
+		var salto := fposmod(sin(floorf(t * 12.0) * 12.9898) * 43758.5453, 1.0)   # cambia a saltos, 12 veces por segundo
+		var c: Color = Llamas.FUEGO[2].lerp(Llamas.FUEGO[3], salto)
+		c.a = 0.5 + 0.25 * salto
+		return c
+	if acido:
+		var c := Color("#7ddc3a")
+		c.a = 0.45 + 0.2 * sin(t * 3.0)
+		return c
+	return Color.TRANSPARENT
 
 
 # Se queda helado: quieto, azul y con el dibujo parado, soltando escarcha

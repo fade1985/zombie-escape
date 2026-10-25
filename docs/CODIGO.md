@@ -92,8 +92,9 @@
   abre en abanico tanto como el cono, más claro y espeso en el centro, con vetas que corren hacia fuera
   y un rocío de gotitas alrededor, y lejos se rompe en rocío; contra la pared se aplasta y salpica), con los verdes del
   ácido. No alumbra, suena a agua a presión (`chorro_acido`, con la onda de ruido de `sonido.gd`), suelta gotitas que
-  caen en vez de chispas y, en vez de prender, deja a los zombis la herida de ácido (sin charcos); al jefe de bomberos
-  sí le quita vida (por `recibir_golpe`: su `herir()` es el de las llamas). Su depósito se llena con los bidones de
+  caen en vez de chispas y, en vez de prender, deja a los zombis la herida de ácido (sin charcos), que los tiñe de
+  verde; al jefe de bomberos sí le quita vida (por `recibir_golpe`: su `herir()` es el de las llamas), y la herida
+  solo lo tiñe. Su depósito se llena con los bidones de
   ácido que suelta el gordo (`objetos.gd`).
 - `goteo.gd`: la gota de ácido que cuelga de la boquilla del lanza ácido mientras Johnny lo lleva de pie, sin echar
   el chorro y con ácido en el depósito: se hincha en el labio de abajo de la boquilla, cuelga estirándose, se suelta, cae
@@ -143,7 +144,10 @@
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque. Con
   `diana` es la de la sala de pruebas de armas: no pierde vida, no ataca y vuelve a su sitio (`casa`). La señal
-  `herido` avisa de cada daño (golpe o bala, o fuego y charcos).
+  `herido` avisa de cada daño (golpe o bala, o fuego y charcos). Arder y el ácido no se le dibujan encima: lo tiñen
+  (`tinte_fuerte`, con el `tinte` de su shader, `escenas/personajes/destello.gdshader`, el del destello y el hielo):
+  el fuego, naranja-rojo que tiembla a saltos (de las llamas solo lleva su luz: `Llamas.cuerpo`); el ácido, verde que
+  late; con los dos, medio segundo cada uno. A los jefes, el ácido los tiñe igual (`ArmasCreadas.Herida`).
 - `sala_armas.gd`: la sala de pruebas de armas (F11 en la planta baja; el sitio, `sala_armas` de `planta.gd`, y la
   monta `mapa.gd`): la diana en el centro, todas las armas (coma y punto; las del banco, creadas en el acto), munición
   sin fin pero recargando, las líneas de ayuda en el suelo (alcance, a quién apunta, por dónde irá la bala, el círculo
