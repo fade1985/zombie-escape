@@ -1,11 +1,11 @@
 {
   "cell": [
-    152,
-    136
+    96,
+    96
   ],
   "pivot": [
-    66,
-    90
+    48,
+    72
   ],
   "anims": {
     "still": {
@@ -98,115 +98,77 @@
       "dirs": {
         "south": {
           "row": 9,
-          "frames": 9
+          "frames": 11
         },
         "south-east": {
           "row": 10,
-          "frames": 11
+          "frames": 8
         },
         "east": {
           "row": 11,
-          "frames": 8
+          "frames": 9
         },
         "north-east": {
           "row": 12,
-          "frames": 9
+          "frames": 8
         },
         "north": {
           "row": 13,
-          "frames": 12
+          "frames": 9
         },
         "north-west": {
           "row": 14,
-          "frames": 10
+          "frames": 8
         },
         "west": {
           "row": 15,
-          "frames": 8
+          "frames": 9
         },
         "south-west": {
           "row": 16,
-          "frames": 9
+          "frames": 8
         }
       }
     },
     "attack": {
-      "fps": 25,
+      "fps": 10,
       "loop": false,
       "dirs": {
         "south": {
           "row": 17,
-          "frames": 2
+          "frames": 1
         },
         "south-east": {
           "row": 18,
-          "frames": 2
+          "frames": 1
         },
         "east": {
           "row": 19,
-          "frames": 2
+          "frames": 1
         },
         "north-east": {
           "row": 20,
-          "frames": 2
+          "frames": 1
         },
         "north": {
           "row": 21,
-          "frames": 2
+          "frames": 1
         },
         "north-west": {
           "row": 22,
-          "frames": 2
+          "frames": 1
         },
         "west": {
           "row": 23,
-          "frames": 2
+          "frames": 1
         },
         "south-west": {
           "row": 24,
-          "frames": 2
+          "frames": 1
         }
       },
       "hit": 0.0
-    },
-    "fx": {
-      "fps": 25,
-      "loop": false,
-      "dirs": {
-        "south": {
-          "row": 25,
-          "frames": 2
-        },
-        "south-east": {
-          "row": 26,
-          "frames": 2
-        },
-        "east": {
-          "row": 27,
-          "frames": 2
-        },
-        "north-east": {
-          "row": 28,
-          "frames": 2
-        },
-        "north": {
-          "row": 29,
-          "frames": 2
-        },
-        "north-west": {
-          "row": 30,
-          "frames": 2
-        },
-        "west": {
-          "row": 31,
-          "frames": 2
-        },
-        "south-west": {
-          "row": 32,
-          "frames": 2
-        }
-      }
     }
   },
-  "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-desintegrador/"
+  "source": "Hecha con tools/hoja_lanza_acido.py a partir de conserje-48-lanzallamas.png (la del lanzallamas)"
 }

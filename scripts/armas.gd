@@ -83,8 +83,8 @@ const DATOS := {
 # (conserje-48-lanzallamas: dos bombonas rojas a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
 # el juego) y el
 # supersoplete (conserje-48-supersoplete: la escopeta casera hecha de un soplete, con la bombona amarilla, el cañón corto con
-# la boca acampanada y una llamarada en cono) y el desintegrador (conserje-48-desintegrador: la pistola de agua con el
-# depósito verde de ácido, la boquilla blanca y un chorrito fino de ácido) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
+# la boca acampanada y una llamarada en cono) y el desintegrador, en el juego «Lanza ácido» (conserje-48-desintegrador: la
+# del lanzallamas con las bombonas verdes de ácido y sin la llamita en la punta del tubo) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
 # bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd) y la
 # pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
 # celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd) y el garfio (conserje-48-garfio: el gesto de lanzar el
@@ -141,16 +141,13 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-supersoplete.tres"),
 		"boca": {"s": Vector2(-2, 10), "se": Vector2(25, -22), "e": Vector2(26, -31), "ne": Vector2(24, -41),
 			"n": Vector2(10, -52), "no": Vector2(-25, -40), "o": Vector2(-27, -30), "so": Vector2(-26, -22)}},
-	# el desintegrador: su hoja lleva el chorrito fino de ácido verde pálido de la boquilla blanca de la pistola de agua (las
-	# gotas las pone el juego, armas_creadas.gd y chorro.gd); la casilla es de 152x136, con los pies en 66,90, porque el chorro
-	# llega a 62 píxeles a un lado, 82 al otro, 87 hacia arriba y 39 hacia abajo. La boca NO sale de arma.py (con ácido verde no
-	# hay fogonazo naranja que buscar: conserje-48-desintegrador.json no tiene "muzzle"): es la punta blanca de la boquilla del
-	# dibujo quieto, a mano
+	# el desintegrador (en el juego, «Lanza ácido»): su hoja es la del lanzallamas con las dos bombonas de la espalda en verde
+	# ácido y sin la llamita del piloto (tools/hoja_lanza_acido.py); la casilla es la de siempre, de 96x96 con los pies en 48,72.
+	# La boca es la punta del tubo de la postura quieta (el píxel del dibujo que más sale hacia donde apunta), medida en la hoja
 	"desintegrador": {"base": "pistola", "ritmo": 12.0, "alcance": 220.0, "velocidad": 400.0, "cargador": 50, "recarga": 2.0,
-		"empuje": 0.2, "efecto": "acido", "pies": Vector2(66, 90),
-		"hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
-		"boca": {"s": Vector2(0, -17), "se": Vector2(18, -19), "e": Vector2(24, -26), "ne": Vector2(25, -36),
-			"n": Vector2(6, -47), "no": Vector2(-23, -35), "o": Vector2(-23, -26), "so": Vector2(-19, -19)}},
+		"empuje": 0.2, "efecto": "acido", "hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
+		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),
+			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)}},
 	# el bumerán segador: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia con el bumerán en
 	# la mano; el que sale volando y vuelve lo dibuja el juego, bumeran.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla
 	# es de 94x92, con los pies en 45,76, porque el brazo llega a 41 píxeles a un lado, 45 al otro, 72 hacia arriba (de espaldas, con

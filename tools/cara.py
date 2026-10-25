@@ -49,12 +49,19 @@ QUITAN = ("quitar", "calvo", "casco")   # los modos que quitan lo que sobra (y t
 # Las bombonas del lanzallamas se pintaron de rojo sobre el gris que dibujó PixelLab. Para pegar la cabeza se miran
 # como si siguieran grises: el rojo se parece a la piel y al pañuelo, y la cabeza nueva quedaba detrás de las
 # bombonas (motas rojas en la barba del portero) o les borraba brillos. Al acabar, lo que siga gris vuelve a su rojo.
+# Lo mismo con las del lanza ácido (el desintegrador), verdes (tools/hoja_lanza_acido.py: cada rojo por su verde)
 COMO_GRIS = {"lanzallamas": {
     (238, 96, 74): (163, 184, 199),
     (200, 58, 40): (119, 142, 155),
     (166, 50, 36): (143, 130, 120),
     (122, 40, 30): (98, 86, 73),
     (78, 36, 34): (52, 63, 76),
+}, "desintegrador": {
+    (236, 248, 150): (163, 184, 199),
+    (199, 224, 74): (119, 142, 155),
+    (150, 180, 48): (143, 130, 120),
+    (96, 128, 40): (98, 86, 73),
+    (48, 80, 44): (52, 63, 76),
 }}
 
 

@@ -3778,8 +3778,8 @@ func probar_supersoplete() -> void:
 
 
 # Con "--captura --desintegrador": el desintegrador con su dibujo propio (Armas.CREADAS.desintegrador, conserje-48-desintegrador: la
-# hoja lleva el retroceso corto de pistola de agua y un chorrito fino de ácido verde pálido de la boquilla blanca; casilla de
-# 152x136, con los pies en 66,90; recetas.gd, su icono). En el juego se llama «Lanza ácido» (25 oct). Como el lanzallamas, en la
+# del lanzallamas con las bombonas verdes de ácido y sin la llamita, tools/hoja_lanza_acido.py; casilla de 96x96, con los pies en
+# 48,72; recetas.gd, su icono). En el juego se llama «Lanza ácido» (25 oct). Como el lanzallamas, en la
 # sala de mantenimiento, con dos en el baúl (una guardada antes de que tuviera icono propio y nombre nuevo, con el de la lejía y
 # llamándose «Desintegrador»), Johnny se arrima al baúl y cuenta el icono y el nombre de cada una
 # (captura-desintegrador-baul.png). Saca una y cuenta su nombre, su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no
@@ -3821,7 +3821,7 @@ func probar_desintegrador() -> void:
 	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	print("Desintegrador en la mano: nombre «%s» · hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, 12, 220, (66, 90), (24, -26), false, desintegrador)" % [
+	print("Desintegrador en la mano: nombre «%s» · hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, 12, 220, (48, 72), (26, -20), false, desintegrador)" % [
 		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
 
 	# el chorro: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y le deja ácido; el segundo, a 330, queda
