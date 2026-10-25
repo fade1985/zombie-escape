@@ -791,6 +791,10 @@ func probar_charcos() -> void:
 		charco.position = johnny.position + Vector2(-100 + i * 140, -110)
 		johnny.get_parent().add_child(charco)
 		charcos[tipo] = charco
+	var lejia: Node2D = load("res://escenas/armas/charco.tscn").instantiate()   # la lejía, en otra fila, más arriba
+	lejia.tipo = "lejia"
+	lejia.position = johnny.position + Vector2(-30, -250)
+	johnny.get_parent().add_child(lejia)
 	await get_tree().create_timer(0.1).timeout
 	Captura.foto("captura-charcos-caen.png")
 	await get_tree().create_timer(0.8).timeout
@@ -808,6 +812,18 @@ func probar_charcos() -> void:
 	Luz.evento = 0.0
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-charcos-mancha.png")
+	# los mocos en el aire (proyectil.gd): miran hacia donde van, hacia arriba al salir y de cabeza al caer. Tres a la
+	# vez, a la derecha, a la izquierda y hacia arriba; fotos al salir, en lo alto y al caer
+	for hacia in [Vector2(260, -40), Vector2(-260, -40), Vector2(30, -260)]:
+		var moco: Node2D = load("res://escenas/armas/proyectil.tscn").instantiate()
+		moco.tipo = "veneno"
+		moco.desde = johnny.global_position + Vector2(0, -60)
+		moco.alto_salida = 30.0
+		moco.hasta = moco.desde + hacia
+		johnny.get_parent().add_child(moco)
+	for i in 3:
+		await get_tree().create_timer(0.22).timeout
+		Captura.foto("captura-charcos-moco-%d.png" % (i + 1))
 	print("Charcos: el veneno se pisa en el centro %s, lejos %s, en el borde al secarse %s · quedan %d (esperado: true, false, false y 0)" % [
 		centro, fuera, borde, get_tree().get_nodes_in_group("charcos").size()])
 	get_tree().quit()

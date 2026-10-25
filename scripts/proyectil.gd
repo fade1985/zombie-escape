@@ -134,7 +134,11 @@ func _draw() -> void:
 	var donde := Vector2(0, -alto)
 	match tipo:
 		"veneno", "vomito", "acido":
-			draw_set_transform(donde, 0.0, Vector2(2, 2))
+			# el moco mira hacia donde va (sus gotas, detrás) y se estira un poco en la dirección del vuelo: hacia
+			# arriba al salir, de lado en lo alto y de cabeza al caer. Su velocidad en pantalla: lo que avanza por
+			# el suelo más lo que sube o baja (la derivada de la altura)
+			var vel: Vector2 = (hasta - desde) / datos.vuelo + Vector2(0, (alto_salida - PI * datos.altura * cos(k * PI)) / datos.vuelo)
+			draw_set_transform(donde, vel.angle() + PI / 2.0, Vector2(1.8, 2.3))
 			draw_texture(MOCO, -Vector2(MOCO.get_size()) / 2.0, Color.WHITE if tipo == "veneno" else Color(1, 1, 0.45))
 		"molotov", "molotov_jefe":
 			botella(donde, t * 12.0)

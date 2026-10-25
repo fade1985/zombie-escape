@@ -12,7 +12,7 @@
 # El aceite hirviendo del cocinero ("hirviendo") quema como el fuego (a Johnny y a los zombis, pero no a él: es su
 # "dueno"); se dibuja también con código, una mancha dorada con burbujas que revientan y algo de vapor.
 #
-# El veneno, el ácido y el vómito ("burbujas" en TIPOS) se dibujan como el fuego, a cuadraditos y con el borde
+# El veneno, el ácido, el vómito y la lejía ("burbujas" en TIPOS) se dibujan como el fuego, a cuadraditos y con el borde
 # ondulado: se extienden desde el centro, sus colores tiemblan, en vez de llamas tienen burbujitas que crecen y
 # revientan, echan algo de vapor y al secarse desaparecen a trozos, antes por los bordes, dejando una mancha.
 extends Node2D
@@ -24,7 +24,7 @@ const LUZ_FUEGO := preload("res://escenas/luces/fuego.tscn")
 # hace nada. El del molotov tiene sus números en MOLOTOV (lanzables.gd)
 const TIPOS := {
 	"veneno": {"burbujas": "veneno", "radio": 64.0, "vida": 4.0, "estados": {"veneno": {}}},
-	"lejia": {"dibujo": LEJIA, "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
+	"lejia": {"burbujas": "lejia", "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
 	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
 	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
 	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
@@ -46,6 +46,10 @@ const BURBUJEO := {
 	"vomito": {"borde": Color("#5a4214"), "oscuro": Color("#8a6e22"), "medio": Color("#b89a34"), "centro": Color("#d6bc4c"),
 		"brillo": Color("#f2e08c"), "burbuja": Color("#d8c25a"), "luz": Color("#fff2bc"), "vapor": Color(0.9, 0.85, 0.5, 0.3),
 		"mancha": Color("#2e2410", 0.5)},
+	# la lejía: azulada, y sus burbujas son espuma blanca
+	"lejia": {"borde": Color("#2c5a78"), "oscuro": Color("#4a8cb4"), "medio": Color("#7cc0e0"), "centro": Color("#b4e4f4"),
+		"brillo": Color("#ffffff"), "burbuja": Color("#eef8ff"), "luz": Color("#ffffff"), "vapor": Color(0.85, 0.95, 1.0, 0.3),
+		"mancha": Color("#2a3a44", 0.45)},
 }
 # Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
 const DERRAMA := 0.25
