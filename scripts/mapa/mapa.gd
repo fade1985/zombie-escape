@@ -590,13 +590,15 @@ func poner_viviendas() -> void:
 		cosas.add_child(cafetera)
 
 
-# Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques.
+# Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques, y las
+# lamparitas de las mesillas siempre (la casa lleva días sin que nadie la arregle). Cada una a su aire: la semilla sale
+# de su sitio, así que dos mesillas no fallan a la vez.
 # Su propia sombra se quita: la luz sale de dentro de su hueco y lo dejaría todo a oscuras.
 func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
 	mueble.get_node("Sombra").free()
 	var luz := LAMPARA.instantiate()
 	luz.semilla = fposmod(sin(m.x * 12.9898 + m.y * 78.233) * 43758.5453, 1.0)
-	luz.parpadea = luz.semilla < 0.2
+	luz.parpadea = m.tipo == "nightstand" or luz.semilla < 0.2
 	luz.alto = 72.0 if m.tipo == "lamp" else 56.0
 	luz.radio = 210.0 if m.tipo == "lamp" else 150.0
 	luz.mapa = self

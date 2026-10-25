@@ -17,7 +17,7 @@ y el frente. Las tapas son más cortas que el fondo del catálogo, para que se v
 Después, igual que con la cocina: py tools/guias_centro.py quita <png>… y py tools/guias_cocina.py limpia [--todo] <png>…
 Se pasan al juego con py tools/importar.py (sus originales, en assets/sources/salas/dormitorio/ y comun/).
 """
-import os, sys
+import math, os, sys
 from PIL import Image, ImageDraw
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -31,6 +31,7 @@ ALMOHADA = (230, 228, 220)
 #   mesilla: 8 de pantalla de la lámpara sobre el borde de atrás + 14 de tapa
 T = {
     'cama-matrimonio': (124, 66, 10),
+    'cama-matrimonio-revuelta': (124, 66, 10),
     'cama':            (84, 66, 10),
     'mesilla':         (40, 22, 14),
     'armario':         (96, 20, 52),
@@ -78,6 +79,65 @@ def cama_individual(dr, x, y, w, d, h):
     # la colcha, mostaza: con una verde oliva PixelLab dibujaba casi todo el colchón blanco, con una franja turquesa abajo
     # y sin pies de cama (lo mismo con un tono granate pero con menos ganas: la de matrimonio ya es granate)
     cama(dr, x, y, w, d, h, 1, (185, 140, 55), ((10, 22), (11, 23), (28, 34), (29, 35)))
+
+
+def rotado(x, y, cx, cy, mitad_ancho, mitad_alto, grados):
+    """Las cuatro esquinas de un rectángulo girado, en píxeles de la guía (el centro y las medidas, en píxeles del juego)"""
+    a = math.radians(grados)
+    puntos = []
+    for (dx, dy) in ((-1, -1), (1, -1), (1, 1), (-1, 1)):
+        px, py = dx * mitad_ancho, dy * mitad_alto
+        puntos.append((x + (cx + px * math.cos(a) - py * math.sin(a)) * S, y + (cy + px * math.sin(a) + py * math.cos(a)) * S))
+    return puntos
+
+
+def cama_revuelta(dr, x, y, w, d, h):
+    """La cama de matrimonio después del apocalipsis: la sábana arrugada y manchada, las dos almohadas torcidas y fuera de
+    su sitio (una con sangre), la colcha hecha un montón abajo a la derecha, y los pies de la cama con una punta de colcha
+    colgando. Todo dentro de lo que ocupa la cama (si se saliera, el sprite se encogería al reducirlo)"""
+    def P(*pts):
+        return [(x + px * S, y + py * S) for (px, py) in pts]
+    cab = 12 * S
+    # el cabecero y el marco, como en la cama ordenada
+    caja(dr, x, y, x + w, y + cab, tono(MADERA, 0.6))
+    caja(dr, x + 3 * S, y + 3 * S, x + w - 3 * S, y + cab - S, tono(MADERA, 0.78))
+    caja(dr, x, y, x + 3 * S, y + cab, tono(MADERA, 0.5))
+    caja(dr, x + w - 3 * S, y, x + w, y + cab, tono(MADERA, 0.5))
+    top = y + cab
+    caja(dr, x, top, x + w, y + d, tono(MADERA, 0.7))
+    # la sábana bajera, arrugada
+    dr.rectangle((x + 2 * S, top, x + w - 2 * S - 1, y + d - 1), fill=SABANA)
+    for (a, b) in (((6, 16), (14, 20)), ((30, 14), (40, 18)), ((8, 30), (16, 27)), ((22, 44), (32, 40)), ((48, 20), (56, 24))):
+        dr.line(P(a, b), fill=tono(SABANA, 0.82), width=S)
+    # la colcha: un montón abajo a la derecha, con sus pliegues
+    colcha = (140, 50, 55)
+    dr.polygon(P((60, 33), (53, 31), (45, 37), (37, 35), (29, 43), (21, 45), (13, 51), (6, 55), (4, 66), (60, 66)),
+               fill=colcha + (255,), outline=RAYA)
+    dr.polygon(P((45, 37), (53, 39), (50, 49), (40, 46)), fill=tono(colcha, 0.78))
+    dr.polygon(P((22, 46), (32, 48), (28, 58), (14, 58)), fill=tono(colcha, 0.78))
+    dr.polygon(P((36, 52), (50, 54), (52, 64), (34, 64)), fill=tono(colcha, 1.22))
+    dr.line(P((30, 44), (42, 38)), fill=tono(colcha, 1.35), width=S)
+    dr.line(P((12, 53), (24, 47)), fill=tono(colcha, 1.35), width=S)
+    # una punta de la sábana arrastrada, a medias bajo la colcha
+    dr.polygon(P((3, 36), (14, 38), (10, 46), (3, 48)), fill=tono(SABANA, 1.05), outline=RAYA)
+    # las almohadas, torcidas y fuera de su sitio: una pegada a la esquina, otra caída hacia el medio
+    dr.polygon(rotado(x, y, 18, 23, 12, 5.5, -20), fill=ALMOHADA + (255,), outline=RAYA)
+    dr.polygon(rotado(x, y, 44, 29, 12, 5.5, 27), fill=tono(ALMOHADA, 0.92), outline=RAYA)
+    # sangre: un charco y un arrastre sobre la sábana, salpicaduras en la almohada y en la colcha
+    for (px, py, r) in ((15, 35, 4), (17, 40, 3), (22, 36, 2)):
+        dr.ellipse((x + (px - r) * S, y + (py - r) * S, x + (px + r) * S, y + (py + r) * S), fill=SANGRE)
+    dr.line(P((19, 38), (28, 33), (31, 36)), fill=SANGRE, width=2 * S)
+    for (px, py) in ((15, 21), (16, 22), (19, 24), (42, 28), (44, 30), (46, 31)):
+        punto(dr, x, y, px, py, SANGRE)
+    for (px, py) in ((30, 52), (31, 53), (44, 44), (45, 45), (20, 58)):
+        punto(dr, x, y, px, py, tono(SANGRE[:3], 0.7))
+    # los pies de la cama, con una punta de colcha colgando por encima
+    pie = y + d
+    caja(dr, x, pie, x + w, pie + h, tono(MADERA, 0.65))
+    caja(dr, x + 3 * S, pie + S, x + w - 3 * S, pie + h - 2 * S, tono(MADERA, 0.8))
+    caja(dr, x, pie, x + 3 * S, pie + h, tono(MADERA, 0.5))
+    caja(dr, x + w - 3 * S, pie, x + w, pie + h, tono(MADERA, 0.5))
+    dr.polygon(P((5, 66), (17, 66), (15, 70), (8, 69)), fill=colcha + (255,), outline=RAYA)
 
 
 def mesilla(dr, x, y, w, d, h):
@@ -182,7 +242,7 @@ def lampara(dr, x, y, w, d, h):
     punto(dr, x, y + d, 5, 24, SANGRE)
 
 
-FUNCIONES = {'cama-matrimonio': cama_matrimonio, 'cama': cama_individual, 'mesilla': mesilla, 'armario': armario,
+FUNCIONES = {'cama-matrimonio': cama_matrimonio, 'cama-matrimonio-revuelta': cama_revuelta, 'cama': cama_individual, 'mesilla': mesilla, 'armario': armario,
              'escritorio': escritorio, 'lampara': lampara}
 
 
