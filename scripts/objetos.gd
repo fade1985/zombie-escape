@@ -31,7 +31,7 @@ const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelt
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
 # (venenoso)
 const DE_UN_ZOMBI := {"bidon_acido": "venenoso"}
-# Las piezas para mejorar las armas en el banco de trabajo (el banco nuevo aún no está hecho): una por familia, con la
+# Las piezas para mejorar las armas en el banco de trabajo (ui/inventario.gd, «Banco de trabajo»): una por familia, con la
 # familia de armas a la que sirven (Armas.familia; los arrojables, aparte). Las sueltan los zombis y los jefes, y nada más
 const PIEZAS := {
 	"pieza_cuerpo": "cuerpo", "pieza_distancia": "distancia", "pieza_especial": "especial", "pieza_arrojable": "arrojable",

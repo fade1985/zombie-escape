@@ -47,7 +47,7 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | N | derecho a la azotea; en **Elige edificio**, abre todos los edificios hasta cerrar el juego |
 | M | recuadro de mutaciones |
 | O | soltar un objeto al azar de los que salen donde estás |
-| U | 10 piezas de cada familia (cuerpo a cuerpo, a distancia, especial y arrojable) y unas armas y arrojables mejorados (de cada calidad) al baúl |
+| U | 10 piezas de cada familia (cuerpo a cuerpo, a distancia, especial y arrojable) y unas armas y arrojables mejorados (de cada calidad) al baúl, para probar el baúl y el banco |
 | X | un científico muerto con la página siguiente (no se guarda) |
 | Z | la siguiente skin de Johnny (no se guarda) |
 | F8 | Colecciones al completo |
@@ -78,7 +78,10 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona × 4), el glotón (el
   Glotón; quien te hace daño lo paga), el gymbro (el Gymbro; cuerpo a cuerpo × 3) y el bombero (el jefe de bomberos;
   lo que quema × 3 y el fuego no le hace nada).
-- **Taller** (derecha): el **banco de trabajo** (en obras: servirá para mejorar las armas con las piezas que sueltan los zombis y los jefes) y el **baúl**
+- **Taller** (derecha): el **banco de trabajo**, que sube de calidad, nivel a nivel, las armas y los
+  paquetes de arrojables (los que lleva y los del baúl) con las piezas de su familia que sueltan los zombis y los
+  jefes: 3 para Poco común, 6 para Rara y 10 para Épica. Valen las de la mochila (se gastan primero) y las del baúl. Se
+  maneja como el baúl: elegir la casilla y «Mejorar» (o Y en el mando). Y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
   otra). Guarda objetos, armas (menos la fregona y la pistola Normales) y paquetes de arrojables mejorados, cada arma
   y cada paquete en su casilla con el borde del color de su **calidad** (gris Normal, verde Poco común, azul Rara,

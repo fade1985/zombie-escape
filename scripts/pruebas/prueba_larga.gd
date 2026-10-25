@@ -474,7 +474,7 @@ func probar_noticias() -> void:
 # agua, la cinta americana, la bombona, la jeringuilla, el aceite y el bocadillo) y los que se quitaron con las piezas
 # (los explosivos, el despertador, el extintor, el trapo y el alcohol) en el baúl y en los encontrados (Colecciones):
 # al cargar desaparece todo (guardado.gd); la gasolina, que sigue, se queda. Luego, el baúl abierto con lo
-# que queda (captura-banco-baul.png), la mochila, el banco en obras y el baúl (probar_cosas), los arrojables y las
+# que queda (captura-banco-baul.png), la mochila, el banco de trabajo y el baúl (probar_cosas), los arrojables y las
 # armas de efecto (probar_efectos) y las Colecciones (probar_colecciones). Cada línea dice lo esperado y se cierra
 func probar_banco() -> void:
 	var s := Guardado.cargar()
@@ -507,7 +507,7 @@ func probar_banco() -> void:
 
 
 # La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al
-# inventario), se arrima al banco de trabajo (en obras: solo avisa) y hace fotos
+# inventario), abre el banco de trabajo (como al arrimarse; lo de mejorar, en --banco-mejorar) y hace fotos
 func probar_cosas() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 20
@@ -528,8 +528,8 @@ func probar_cosas() -> void:
 	inventario.cerrar()
 	mapa.banco.usar.emit()   # como al arrimarse
 	await get_tree().process_frame
-	print("Banco: abre pantalla %s · dice «%s» (esperado: false, El banco de trabajo está en obras...)" % [
-		inventario.abierto != "", aviso.text])
+	print("Banco: abre la pantalla «%s» (esperado: banco)" % inventario.abierto)
+	inventario.cerrar()
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-baul.png")

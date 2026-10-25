@@ -379,7 +379,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if mapa.ordenador:
 		mapa.ordenador.usar.connect(abrir_ordenador)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
-		mapa.banco.usar.connect(func(): decir("El banco de trabajo está en obras: pronto servirá para mejorar las armas", 3.0))
+		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
 		mapa.taquilla.usar.connect(abrir_taquilla)
 		# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
 		if fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
@@ -1032,7 +1032,7 @@ func cura_de(id: String) -> int:
 	return roundi((base + johnny.stats.botiquin_extra) * Alerta.botiquin())
 
 
-# El inventario (Tab, I o Select) o el baúl: se para el juego y sale su pantalla
+# El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
 func abrir_cosas(que: String) -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return

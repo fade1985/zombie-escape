@@ -251,6 +251,27 @@ func quitar(k: String) -> int:
 	return n
 
 
+# Sube un paquete a esa calidad (en el banco de trabajo): pasa a su clave nueva en el mismo hueco o, si ya llevaba otro
+# de esa calidad, se junta con él (el banco mira antes que quepan). Devuelve la clave nueva
+func mejorar(k: String, calidad: int) -> String:
+	var nueva := clave(tipo_de(k), calidad)
+	var n := cuantas(k)
+	if cuantas(nueva) > 0:
+		cantidades[nueva] += n
+		quitar(k)
+		return nueva
+	cantidades[nueva] = n
+	cantidades[k] = 0
+	for lista in [mano, repuesto]:
+		var i: int = lista.find(k)
+		if i >= 0:
+			lista[i] = nueva
+	if tipo == k:
+		tipo = nueva
+	repasar()   # (la clave vieja, si era de un mejorado, fuera)
+	return nueva
+
+
 # Cuántos lleva de un tipo, sumando todos sus paquetes (el menú de pausa)
 func total(t: String) -> int:
 	var n := 0

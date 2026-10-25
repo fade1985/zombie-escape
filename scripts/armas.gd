@@ -35,6 +35,11 @@ static func familia(id: String) -> String:
 	var w: Dictionary = DATOS[id]
 	return "cuerpo" if w.tipo == "cuerpo" else ("especial" if w.has("efecto") else "distancia")
 
+
+# La pieza que gasta en el banco un arma o un arrojable (su id de Lanzables.DATOS): la de su familia (Objetos.PIEZAS)
+static func pieza(id: String) -> String:
+	return "pieza_" + (familia(id) if DATOS.has(id) else "arrojable")
+
 # Las calidades de las armas y de los paquetes de arrojables, de peor a mejor (parte 4 de la tienda y las piezas): cada
 # arma que lleva Johnny o que hay en el baúl tiene la suya (0 = Normal, la de la tienda; la joyería da una Épica). Se
 # ve en el borde de su casilla. Cada una da más daño ("dano") y una cosa de su familia (números provisionales, para
@@ -44,15 +49,17 @@ static func familia(id: String) -> String:
 #   especiales        depósito más grande (el lanzallamas y el lanza ácido, "deposito") y la chispa de la pistola
 #                     eléctrica salta a más zombis ("saltos")
 #   arrojables        radio más grande ("radio") y caben más ("unidades"; lanzables.gd)
+# Y "piezas": lo que cuesta subir a esa calidad en el banco de trabajo (parte 5), en piezas de su familia (pieza); de
+# una en una: de Normal a Poco común 3, luego 6 a Rara y 10 a Épica (19 en total; provisional)
 const CALIDADES := [
 	{"nombre": "Normal", "color": Color("#8a8494"), "dano": 1.0, "golpe": 1.0, "cargador": 1.0, "recarga": 1.0,
-		"deposito": 1.0, "saltos": 0, "radio": 1.0, "unidades": 0},
+		"deposito": 1.0, "saltos": 0, "radio": 1.0, "unidades": 0, "piezas": 0},
 	{"nombre": "Poco común", "color": Color("#5fd35f"), "dano": 1.2, "golpe": 1.1, "cargador": 1.25, "recarga": 0.85,
-		"deposito": 1.25, "saltos": 1, "radio": 1.1, "unidades": 1},
+		"deposito": 1.25, "saltos": 1, "radio": 1.1, "unidades": 1, "piezas": 3},
 	{"nombre": "Rara", "color": Color("#4aa3ff"), "dano": 1.45, "golpe": 1.2, "cargador": 1.5, "recarga": 0.7,
-		"deposito": 1.5, "saltos": 2, "radio": 1.2, "unidades": 2},
+		"deposito": 1.5, "saltos": 2, "radio": 1.2, "unidades": 2, "piezas": 6},
 	{"nombre": "Épica", "color": Color("#c06bff"), "dano": 1.75, "golpe": 1.3, "cargador": 1.75, "recarga": 0.55,
-		"deposito": 1.75, "saltos": 3, "radio": 1.3, "unidades": 3},
+		"deposito": 1.75, "saltos": 3, "radio": 1.3, "unidades": 3, "piezas": 10},
 ]
 const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar: en Normal no van al baúl
 

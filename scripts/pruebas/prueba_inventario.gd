@@ -1,5 +1,6 @@
 # Pruebas del inventario y del baúl (--inventario, --arrastrar, --baul, --repuesto, --tienda, --municion,
-# --municion-suelo), de los objetos de curar, de las piezas de mejora (--piezas) y de las calidades (--calidades). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# --municion-suelo), de los objetos de curar, de las piezas de mejora (--piezas), de las calidades (--calidades) y del
+# banco que las sube (--banco-mejorar). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_skins.gd"
 
 var en_el_aire := {}         # arrastrar: lo que se veía justo antes de soltar
@@ -267,6 +268,89 @@ func probar_calidades() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --banco-mejorar": el banco de trabajo (parte 5 de la tienda y las piezas). Cada línea dice lo
+# esperado. Con 2 piezas cuerpo a cuerpo en la mochila y 2 en el baúl, 10 arrojables y 20 a distancia en el baúl, en el
+# baúl una escopeta Rara, un lanzallamas Épico y 3 molotovs Poco comunes, y 5 molotovs Poco comunes a mano: Johnny se
+# arrima al banco y se abre (captura-banco.png); sube la fregona a Poco común (gasta primero las 2 de la mochila y 1 del
+# baúl) y se cumple el logro Manitas; para Rara le faltan; la granada sube en su mismo hueco; los molotovs Normales no
+# caben con los Poco comunes y, con uno solo, se juntan; la escopeta del baúl sube a Épica y el lanzallamas Épico ya no
+# sube (captura-banco-mejorado.png); los molotovs del baúl, sin piezas bastantes. Deja el guardado como estaba y se cierra
+func probar_banco_mejorar() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {"pieza_cuerpo": 2, "pieza_arrojable": 10, "pieza_distancia": 20}
+		g2.baul_equipo = [{"id": "escopeta", "calidad": 2}, {"id": "lanzallamas", "calidad": 3},
+			{"id": "molotov", "calidad": 1, "n": 3}]
+		g2.logros.erase("manitas"))
+	mochila = ["pieza_cuerpo", "gasolina", "pieza_cuerpo"]
+	lanzables.meter("molotov:1", 5)
+	var dice := func(nombre: String) -> String:   # un texto de la ficha: lo que gana ("nota") o lo que cuesta ("coste")
+		var t: Label = inventario.fondo.find_child(nombre, true, false)
+		return t.text if t else "-"
+	var boton := func() -> String:   # el botón de mejorar
+		var b: Button = inventario.fondo.find_child("mejorar", true, false)
+		return "no está" if b == null else "%s «%s»" % ["apagado" if b.disabled else "activo", b.text]
+	var piezas := func(p: String) -> String:   # las de esa familia: en la mochila y en el baúl
+		return "%d y %d" % [mochila.count(p), Guardado.cargar().baul.get(p, 0)]
+	# se arrima al banco
+	johnny.position = Vector2(mapa.BANCO_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	if inventario.abierto != "banco":
+		print("Banco: no se ha abierto (esperado: abierto)")
+		Guardado.escribir(antes)
+		get_tree().quit()
+		return
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-banco.png")
+	# la fregona de la mano: a Poco común
+	print("La fregona: elegida %s · botón %s · «%s» · «%s» (esperado: p0 · activo «Mejorar a Poco común» · Sube a Poco común: daño +20 %%... · Cuesta 3 piezas cuerpo a cuerpo (tienes 4).)" % [
+		inventario.sel, boton.call(), dice.call("nota"), dice.call("coste")])
+	inventario.mejorar()
+	await get_tree().process_frame
+	print("Mejorada: calidad %d · piezas cuerpo a cuerpo %s · logro Manitas «%s» · dice «%s» (esperado: 1 · 0 y 1 · conseguido · ¡Mejorado! Ahora es Fregona (Poco común).)" % [
+		johnny.calidad("fregona"), piezas.call("pieza_cuerpo"), Logros.estado(Guardado.cargar(), "manitas"), dice.call("nota")])
+	print("Otra vez: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 6 piezas cuerpo a cuerpo y tienes 1: te faltan 5.)" % [
+		boton.call(), dice.call("coste")])
+	inventario.mejorar()
+	print("Sin piezas: calidad %d (esperado: 1)" % johnny.calidad("fregona"))
+	# los arrojables a mano: la granada sube en su hueco; los molotovs Normales, con los Poco comunes
+	inventario.tocar("l1")
+	inventario.mejorar()
+	await get_tree().process_frame
+	print("La granada: a mano %s, quedan %d · elegida %s · piezas arrojables %s (esperado: [molotov, granada:1, molotov:1], 2 · l1 · 0 y 7)" % [
+		lanzables.mano, lanzables.cuantas("granada:1"), inventario.sel, piezas.call("pieza_arrojable")])
+	inventario.tocar("l0")
+	await get_tree().process_frame
+	print("Los 2 molotovs Normales, con 5 Poco comunes: botón %s · «%s» (esperado: apagado · Ya llevas otro paquete Poco común y juntos no caben (como mucho, 6)...)" % [
+		boton.call(), dice.call("coste")])
+	lanzables.cantidades["molotov"] = 1
+	inventario.repintar()
+	inventario.mejorar()
+	await get_tree().process_frame
+	print("Con 1 Normal, se juntan: a mano %s, Poco comunes %d · elegida %s · piezas arrojables %s (esperado: [granada:1, molotov:1], 6 · l1 · 0 y 4)" % [
+		lanzables.mano, lanzables.cuantas("molotov:1"), inventario.sel, piezas.call("pieza_arrojable")])
+	# lo del baúl: la escopeta Rara a Épica; el lanzallamas Épico, ya no; los molotovs, sin piezas bastantes
+	inventario.tocar("q0")
+	inventario.mejorar()
+	await get_tree().process_frame
+	print("La escopeta del baúl: calidad %d · piezas a distancia %s · botón %s (esperado: 3 · 0 y 10 · apagado «Ya es Épica»)" % [
+		Guardado.cargar().baul_equipo[0].calidad, piezas.call("pieza_distancia"), boton.call()])
+	inventario.tocar("q1")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-banco-mejorado.png")
+	print("El lanzallamas Épico: botón %s · «%s» · «%s» (esperado: apagado «Ya es Épica» · Épica: daño +75 %%, depósito un 75 %% más grande. · Ya es Épica: no se puede mejorar más.)" % [
+		boton.call(), dice.call("nota"), dice.call("coste")])
+	inventario.tocar("q2")
+	await get_tree().process_frame
+	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 6 piezas arrojables y tienes 4: te faltan 2.)" % [
+		boton.call(), dice.call("coste")])
+	inventario.cerrar()
+	Guardado.escribir(antes)
+	get_tree().quit()
+
+
 # Con "--captura --piezas": las piezas de mejora de las armas (Objetos.PIEZAS) y la limpieza de objetos del 25 oct. Cada
 # línea dice lo esperado. Cuenta: que hay 4 piezas con su nombre y su icono, y que ya no están los 5 objetos quitados
 # (explosivos, despertador, extintor, trapo y alcohol: ni en NOMBRES, ni su icono, ni en 3000 sorteos de lo que cae al
@@ -394,7 +478,7 @@ func probar_piezas() -> void:
 	var primera: String = Objetos.casillas(mochila).map(func(c): return c[0]).filter(func(id): return id in Objetos.PIEZAS)[0]
 	inventario.tocar("m%d" % Objetos.casillas(mochila).map(func(c): return c[0]).find(primera))
 	await get_tree().create_timer(0.2).timeout
-	print("Ficha de «%s» en la mochila: «%s» (esperado: Sirve para mejorar las armas ... llega pronto. Si caes, se pierde...)" % [
+	print("Ficha de «%s» en la mochila: «%s» (esperado: Sirve para mejorar las armas ... en el banco de trabajo del taller. Si caes, se pierde...)" % [
 		Objetos.nombre(primera), nota.call()])
 	Captura.foto("captura-piezas-mochila.png")
 	inventario.cerrar()
@@ -731,7 +815,7 @@ func probar_inventario() -> void:
 	print("Supr con las piezas cuerpo a cuerpo: mochila %s (esperado: [[\"pieza_cuerpo\", 1], [\"pieza_distancia\", 1], [\"botiquin\", 1]])" % [Objetos.casillas(mochila)])
 	inv.tocar("m1")
 	await get_tree().create_timer(0.2).timeout
-	print("La pieza a distancia: dice «%s» (esperado: Sirve para mejorar las armas a distancia (la pistola, la MP5 y la escopeta). El banco de trabajo que las usa llega pronto. Si caes, se pierde (en el baúl queda a salvo).)" % nota.call())
+	print("La pieza a distancia: dice «%s» (esperado: Sirve para mejorar las armas a distancia (la pistola, la MP5 y la escopeta) en el banco de trabajo del taller. Si caes, se pierde (en el baúl queda a salvo).)" % nota.call())
 	Captura.foto("captura-inventario-objeto.png")
 	inv.tocar("m2")
 	await get_tree().process_frame

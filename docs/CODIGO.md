@@ -31,8 +31,8 @@ en una línea.
 - `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
   llena cada depósito (`relleno`, `RELLENOS`). El lanza ácido, por dentro, se llama `desintegrador`. `familia()`:
   cuerpo a cuerpo, A distancia o especial (por dentro, las dos últimas son de tipo `"fuego"`). Las **calidades**
-  (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño y lo de su familia; `con_calidad()`,
-  `que_da()`, `al_baul()`): cada arma que lleva Johnny tiene la suya (`johnny.calidades`, `johnny.base()`; lleva una
+  (`CALIDADES`: Normal, Poco común, Rara y Épica, con su color, su daño, lo de su familia y las piezas que cuesta
+  subir a ella en el banco; `con_calidad()`, `que_da()`, `al_baul()`, `pieza()`): cada arma que lleva Johnny tiene la suya (`johnny.calidades`, `johnny.base()`; lleva una
   de cada arma: `partida.llevar_arma`) y el baúl guarda armas y paquetes de arrojables con la suya. `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
   ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas.
@@ -40,7 +40,8 @@ en una línea.
   luz). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora: 3 a mano (`mano`, F cambia) y 8 de repuesto (`repuesto`);
   lo que cuesta uno en la tienda (`PRECIOS`). Cada paquete tiene su calidad y va en su hueco: su clave es el tipo y,
-  si no es Normal, la calidad detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`).
+  si no es Normal, la calidad detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con
+  `mejorar`).
   `granada.gd`: también la atraedora y la congeladora.
 - `sala_armas.gd`: la sala de pruebas de armas (F11): la diana, todas las armas, las líneas de ayuda y su panel.
 
@@ -85,8 +86,8 @@ en una línea.
   cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32. Y las **piezas**
   de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta
   cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
-  alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); el banco que las gastará
-  aún no está. Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
+  alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco
+  de trabajo (`inventario.gd`). Sus iconos, `assets/ui/iconos/obj-pieza_*.png` (PixelLab, 32×32; ver `assets/pixellab.json` → `piezas`).
   `talentos.gd`, `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en
@@ -106,8 +107,9 @@ en una línea.
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
   secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`).
 - `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
-  arrojables; `guardar_equipo`, `sacar_equipo`), arrastrar con ratón o dedo
-  (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
+  arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
+  `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
+  y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
 
 **mapa/**
 - `mapa.gd`: monta un sitio (suelos, paredes, choques, muebles, peligros, niebla, navegación; escaparates y neones del
