@@ -64,6 +64,12 @@ const DATOS := {
 }
 
 
+# Hacia dónde apunta el tubo en el dibujo quieto del lanzallamas en cada dirección (el del lanza ácido es el mismo: su
+# hoja sale de la del lanzallamas), en grados en la pantalla (0 = a la derecha, 90 = abajo), medido en las hojas: las
+# diagonales van más tumbadas que 45° (unos 24°), como se ven desde arriba. Con él se elige hacia dónde mira Johnny al
+# echar el chorro y desde dónde se dobla el chorro al salir (johnny.gd, llamarada.gd)
+const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 170.0, "no": 205.0, "n": 270.0, "ne": 334.0}
+
 # ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
 # Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd) y lleva su "hoja" (y su
 # "momento", el del golpe en su animación): ya no queda ninguna con el dibujo del arma base. (Una arma sin "hoja"
@@ -131,7 +137,8 @@ const CREADAS := {
 	"lanzallamas": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "relleno": "gasolina", "empuje": 0.5,
 		"efecto": "llama","hoja": preload("res://assets/sprites/conserje-48-lanzallamas.tres"),
 		"boca": {"s": Vector2(2, 1), "se": Vector2(26, -13), "e": Vector2(28, -22), "ne": Vector2(24, -39),
-			"n": Vector2(8, -52), "no": Vector2(-25, -40), "o": Vector2(-28, -21), "so": Vector2(-24, -10)}},
+			"n": Vector2(8, -52), "no": Vector2(-25, -40), "o": Vector2(-28, -21), "so": Vector2(-24, -10)},
+		"cano": CANO_LANZALLAMAS},
 	# el supersoplete: su hoja lleva la llamarada en cono de la boca acampanada del soplete (las gotas del cono las pone el
 	# juego, armas_creadas.gd); la casilla es de 144x152, con los pies en 72,72, porque la llamarada llega a 69 píxeles a un
 	# lado y 77 hacia abajo. La boca NO es la que calcula arma.py (el centro de la llamarada, que cae a 40-50 píxeles de la
@@ -153,7 +160,8 @@ const CREADAS := {
 	"desintegrador": {"base": "pistola", "alcance": 320.0, "deposito": 8.0, "recarga": 1.5, "relleno": "bidon_acido", "empuje": 0.5,
 		"efecto": "acido", "hoja": preload("res://assets/sprites/conserje-48-desintegrador.tres"),
 		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),
-			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)}},
+			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)},
+		"cano": CANO_LANZALLAMAS},
 	# el bumerán segador: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia con el bumerán en
 	# la mano; el que sale volando y vuelve lo dibuja el juego, bumeran.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla
 	# es de 94x92, con los pies en 45,76, porque el brazo llega a 41 píxeles a un lado, 45 al otro, 72 hacia arriba (de espaldas, con

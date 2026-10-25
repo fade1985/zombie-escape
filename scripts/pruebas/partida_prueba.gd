@@ -35,7 +35,8 @@
 #   --lanzallamas  el lanzallamas de la llamarada continua (Armas.CREADAS.lanzallamas, llamarada.gd): su icono y su daño
 #                  por segundo (también el de los de antes, en el baúl), sus números, que la llama atraviesa y quema a los de
 #                  dentro y no llega más allá de las 10 casillas, el depósito que se llena solo con la gasolina de la mochila y,
-#                  sin ella, «¡Sin gasolina!», la llama en las 8 direcciones y con las 4 skins (en la sala de pruebas de armas)
+#                  sin ella, «¡Sin gasolina!», la llama hacia un zombi entre dos direcciones (sale del tubo y se dobla
+#                  hacia él), en las 8 direcciones y con las 4 skins (en la sala de pruebas de armas)
 #   --supersoplete el supersoplete (la segunda creada a distancia con dibujo propio): su icono, su hoja con la llamarada en
 #                  cono de la boca acampanada, sin chispitas, que el cono quita vida y prende al zombi que tiene cerca y no
 #                  llega al lejano, una bala por disparo, el disparo en las 8 direcciones y con las 4 skins
@@ -44,6 +45,7 @@
 #                  creadas cuando se llamaba «Desintegrador»), su icono, su hoja (la del lanzallamas con las bombonas
 #                  verdes), la gota de ácido que cuelga de la boquilla y cae, el chorro que quita vida y deja la herida de
 #                  ácido a los de dentro y no llega al lejano, sin charcos ni luz, despegándose al soltar, contra la pared,
+#                  hacia un zombi entre dos direcciones (sale del tubo y se dobla hacia él),
 #                  el jefe de bomberos (el ácido sí le hace daño), en las 8 direcciones y con las 4 skins
 #                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd); el depósito, que se llena con los bidones de
 #                  ácido de la mochila y, sin ellos, «¡Sin ácido!»; los del baúl con el daño de una gota cogen el de
@@ -3503,6 +3505,8 @@ func probar_latigo_electrico() -> void:
 #   - a oscuras (Luz.evento, como en el apagón), la llama alumbra alrededor (captura-lanzallamas-oscuro.png); y al
 #     soltar, se despega de la boca y se va (captura-lanzallamas-apagando.png); y contra la pared, se corta en ella y se
 #     aplasta abriéndose (captura-lanzallamas-pared.png)
+#   - hacia un zombi entre dos direcciones del dibujo (chorro_torcido): sale hacia donde apunta el tubo, se dobla
+#     hacia él y pasa por su cuerpo (captura-lanzallamas-torcido.png)
 #   - el depósito: casi vacío y con una gasolina en la mochila, al vaciarse se llena solo y la gasta; sin gasolina,
 #     «¡Sin gasolina!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-lanzallamas-sin-gasolina.png); al coger
 #     una gasolina del suelo vuelve a sacar el lanzallamas y lo llena
@@ -3609,6 +3613,13 @@ func probar_lanzallamas() -> void:
 	johnny.global_position = puesto
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4).timeout
+	# hacia un zombi entre dos direcciones del dibujo: sale hacia donde apunta el tubo y se dobla hacia él
+	johnny.global_position = sala.diana.global_position + Vector2(-150, -100)
+	johnny.get_node("Camara").reset_smoothing()
+	await chorro_torcido("captura-lanzallamas-torcido.png")
+	johnny.global_position = puesto
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
 
 	# el depósito: casi vacío y con una gasolina, se llena solo al vaciarse y la gasta
 	while "gasolina" in mochila:
@@ -3694,6 +3705,28 @@ func echar_fuego(angulo: float, segundos: float, foto := "") -> void:
 		if not hecha and t >= segundos / 2.0:
 			hecha = true
 			Captura.foto(foto)
+
+
+# El chorro del lanza ácido (o la llama del lanzallamas) hacia un zombi que no cae en ninguna de las 8 direcciones del
+# dibujo (abajo a la derecha, más hacia abajo que la diagonal, como en la foto del dueño del 25 oct): Johnny mira hacia
+# abajo (el tubo de la diagonal va más tumbado: tendría que doblarse más), el chorro sale hacia donde apunta el tubo, se
+# dobla hacia el zombi y pasa por su cuerpo (antes miraba a la diagonal y el chorro iba paralelo a la línea que sale
+# del centro de Johnny: pasaba unos 40 a su lado). Saca la foto "foto" a medio chorro
+func chorro_torcido(foto: String) -> void:
+	var zombi: Node2D = meter_zombi("lento", johnny.position + Vector2(80, 150))
+	zombi.vida = 500
+	await get_tree().process_frame
+	zombi.aturdido = 30.0   # quieto (los empujones sí le mueven)
+	var hacia: Vector2 = zombi.global_position - johnny.global_position
+	await echar_fuego(hacia.angle(), 0.6, foto)
+	var l: Llamarada = johnny.llamarada
+	var boca: Vector2 = l.global_position - Vector2(0, Llamarada.ALTURA)
+	var eje := (Vector2.from_angle(l.angulo) + Vector2(0, (Llamarada.ALTURA - Llamarada.ALTURA_CUERPO) / l.alcance)).normalized()
+	var cuerpo: Vector2 = zombi.global_position - Vector2(0, Llamarada.ALTURA_CUERPO)   # (donde se le ve el cuerpo)
+	print("Hacia un zombi entre dos direcciones: mira «%s» · al salir del tubo se tuerce %.0f° · pasa a %.1f del cuerpo del zombi · le quita %d (esperado: s, entre 10 y 45, menos de 3, más de 0)" % [
+		johnny.direccion, rad_to_deg(absf(l.giro)), absf((cuerpo - boca).cross(eje)), 500 - zombi.vida])
+	zombi.remove_from_group("zombis")
+	zombi.queue_free()
 
 
 # Con "--captura --supersoplete": el supersoplete con su dibujo propio (Armas.CREADAS.supersoplete, conserje-48-supersoplete: la
@@ -3797,6 +3830,8 @@ func probar_supersoplete() -> void:
 #     (captura-desintegrador-chorro.png, a medio chorro), y la gota que colgaba se ha soltado
 #   - al soltar, se despega de la boquilla y se va (captura-desintegrador-soltando.png); y contra la pared se corta
 #     en ella y salpica (captura-desintegrador-pared.png)
+#   - hacia un zombi entre dos direcciones del dibujo (chorro_torcido): sale hacia donde apunta el tubo, se dobla
+#     hacia él y pasa por su cuerpo (captura-desintegrador-torcido.png)
 #   - el depósito: casi vacío y con un bidón de ácido en la mochila, al vaciarse se llena solo y lo gasta; sin bidones,
 #     «¡Sin ácido!», saca la de cuerpo a cuerpo y la Q no deja volver (captura-desintegrador-sin-acido.png, con la barra
 #     verde del depósito vacía; una gasolina no le vale); al coger un bidón del suelo (captura-desintegrador-bidon.png,
@@ -3923,6 +3958,13 @@ func probar_desintegrador() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await echar_fuego(0.0, 0.5, "captura-desintegrador-pared.png")
 	print("Contra la pared: el chorro llega a %.0f de %.0f (esperado: menos de 320)" % [johnny.llamarada.tope, johnny.llamarada.alcance])
+	johnny.global_position = puesto
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
+	# hacia un zombi entre dos direcciones del dibujo: sale hacia donde apunta el tubo y se dobla hacia él
+	johnny.global_position = sala.diana.global_position + Vector2(-150, -100)
+	johnny.get_node("Camara").reset_smoothing()
+	await chorro_torcido("captura-desintegrador-torcido.png")
 	johnny.global_position = puesto
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.4).timeout

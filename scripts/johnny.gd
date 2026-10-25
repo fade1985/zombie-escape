@@ -480,17 +480,49 @@ func intentar_atacar(angulo: float) -> void:
 	atacar(angulo)
 
 
-# El lanzallamas: la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama aquí, se apaga) y
-# el depósito se va gastando. Va paralela a la línea de tiro (no se tuerce hacia el zombi como la bala: el cono ya lo
-# pilla, y torcida subía por encima de las cabezas). Sin sacudida ni retroceso: quieto, Johnny se queda en la postura de
-# apuntar (animar). Al vaciarse el depósito, se llena solo si lleva con qué (gasolina o bidones de ácido)
+# El lanzallamas (y el lanza ácido): la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama
+# aquí, se apaga) y el depósito se va gastando. Si la línea de tiro pasa por un zombi (blanco_en_linea, como la bala),
+# va de la boca a su cuerpo, saliendo hacia donde apunta el tubo en el dibujo ("cano" en armas.gd) y doblándose hacia
+# él; si no, paralela a la línea de tiro. Johnny mira hacia donde menos se tenga que doblar (mirar_con_chorro). Sin
+# sacudida ni retroceso: quieto, Johnny se queda en la postura de apuntar (animar). Al vaciarse el depósito, se llena
+# solo si lleva con qué (gasolina o bidones de ácido)
 func echar_fuego(angulo: float, w: Dictionary) -> void:
-	var boca: Vector2 = w.boca[direccion] * 2.0
-	llamarada.mantener(global_position + Vector2(boca.x, 16.0 + boca.y + 50.0), angulo, w)
+	var blanco := blanco_en_linea(angulo, w)
+	var hacia := Vector2.INF
+	# (a quemarropa, con el zombi más cerca que la boca, no: se torcería hacia atrás)
+	if blanco and (blanco.global_position - suelo_de_boca(w, direccion)).dot(Vector2.from_angle(angulo)) > blanco.radio:
+		hacia = blanco.global_position
+	direccion = mirar_con_chorro(angulo, w, hacia)
+	llamarada.mantener(suelo_de_boca(w, direccion), angulo, w, deg_to_rad(w.cano[direccion]), hacia)
 	deposito = maxf(0.0, deposito - get_physics_process_delta_time())
 	if deposito <= 0.0:
 		empezar_recarga()
 		avisar_arma()
+
+
+# El suelo debajo de la boca del arma mirando hacia "d" (como la bala, en tiro())
+func suelo_de_boca(w: Dictionary, d: String) -> Vector2:
+	var boca: Vector2 = w.boca[d] * 2.0
+	return global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
+
+
+# Hacia dónde mira Johnny echando el chorro: la dirección cuyo tubo, en el dibujo, apunte más hacia donde va el chorro
+# (con un zombi, de la boca a su cuerpo; si no, paralelo a la línea de tiro), para que se doble lo menos posible al
+# salir. Las diagonales del dibujo van más tumbadas que 45°: mirando solo el ángulo, a un zombi algo más abajo que la
+# diagonal le apuntaría con el tubo casi de lado, y así mira hacia abajo
+func mirar_con_chorro(angulo: float, w: Dictionary, hacia: Vector2) -> String:
+	var baja := Vector2(0, (Llamarada.ALTURA - Llamarada.ALTURA_CUERPO) / w.alcance)
+	var mejor := direccion
+	var menos := INF
+	for d in DIRS:
+		var eje := Vector2.from_angle(angulo) + baja
+		if hacia != Vector2.INF:
+			eje = hacia - Vector2(0, Llamarada.ALTURA_CUERPO) - (suelo_de_boca(w, d) - Vector2(0, Llamarada.ALTURA))
+		var tuerce := absf(angle_difference(eje.angle(), deg_to_rad(w.cano[d])))
+		if tuerce < menos:
+			menos = tuerce
+			mejor = d
+	return mejor
 
 
 # Un "rayo" de Johnny al zombi: si choca con algo de la capa 1 (paredes y muebles), no lo ve
