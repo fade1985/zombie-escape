@@ -410,7 +410,7 @@
 - `ordenador.gd`: la pantalla de ConserjeOS (puntos, talentos, tienda de armas, logros, Dosier, Noticias y
   Colecciones: por cada edificio, los objetos encontrados, las armas creadas y las páginas del dosier, en porcentaje,
   y el bestiario con cada enemigo visto, su dibujo y su frase; el icono avisa con «¡NUEVO!» mientras
-  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario (ponerse, usar y tirar), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `taquilla.gd`: la ventanita de la
+  `colecciones_nuevo` del guardado esté puesto). `inventario.gd`: inventario «todo a la vista» (Johnny grande entre sus armas, los tres grupos de 8 y la ficha de lo elegido, cada cosa en su sitio a 960×640; al moverse la marca solo se repinta la ficha, `pintar_ficha`; la prueba, `--captura --inventario`, `probar_inventario()`), baúl (sacar armas y guardar a mano lo de la mochila: `pintar_guardar`, `guardar`, `guardar_todo`; la prueba, `--captura --baul`, `probar_baul()`) y banco. `taquilla.gd`: la ventanita de la
   taquilla de Johnny (la abre `partida.abrir_taquilla` al arrimarse): Johnny de muestra con la skin marcada
   (`marcar`: su hoja de la fregona; en silueta si aún no se tiene) y la lista para ponerse una (`elegir`:
   `Skins.poner` y `johnny.vestir`), con la cara de cada una de icono (`assets/ui/iconos/skin-<id>.png`) y, debajo del

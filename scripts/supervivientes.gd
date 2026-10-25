@@ -1116,7 +1116,7 @@ func probar_botiquin() -> void:
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	var marcado := get_viewport().gui_get_focus_owner()
 	print("Botiquín elegido: marcado '%s' | dice '%s'" % [marcado.name if marcado else "-",
-		inv.fondo.find_children("*", "Label", true, false).filter(func(t): return t.theme_type_variation == "Sub").back().text])
+		inv.fondo.find_child("nota", true, false).text])
 	Captura.foto("captura-farmaceutica-botiquin.png")
 	var vida_media: int = johnny.vida
 	johnny.vida = johnny.vida_tope()

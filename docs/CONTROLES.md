@@ -16,13 +16,19 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
 - **E**, clic derecho o LT (mantener para apuntar, soltar para lanzar): lo que lleva a mano para lanzar (3 huecos; al
   empezar, el molotov y la granada); **F** / RB cambia entre ellos. Hay 8 huecos más de repuesto: ahí va lo que no cabe
   en la mano, y cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto.
-- **Tab**, **I** o Select: inventario (las armas, las de repuesto y la mochila; ponérselas y tirar al suelo; a la
-  derecha, la munición y los arrojables, con **A la mano** y **Al repuesto**). Johnny
+- **Tab**, **I** o Select: inventario «todo a la vista». Johnny grande en medio; a su izquierda las armas de cuerpo a
+  cuerpo y a su derecha las de distancia (arriba la de la mano, abajo la de repuesto, con las balas del cargador); debajo,
+  los 3 arrojables a mano (**F** cambia el que se lanza, también aquí). En medio, la mochila, la munición y los
+  arrojables de repuesto (8 de cada); a la derecha, la ficha de lo elegido con sus botones: **Ponérmela**, **Usar**,
+  **A la mano**, **Al repuesto** y **Tirar al suelo** (el arma de la mano solo se tira si llevas otra de repuesto, que
+  pasa a la mano). Con las flechas o el mando la ficha sigue a la marca; Intro o A la lleva al botón principal (A dos
+  veces y hecho), **X** o **Supr** tira, **Y** hace lo del botón principal y B, Esc o Tab cierran; con el ratón, se
+  toca. Johnny
   lleva como mucho dos de cada tipo: la de la mano y una de repuesto. Al comprar o sacar otra, va a la mano y la que
   llevaba pasa al repuesto (o, si ya tiene una, se queda en el suelo); la que coge del suelo va al repuesto si está
   libre. Los
   objetos de curar (el botiquín de la farmacéutica, las vendas de la farmacia y el bocadillo del supermercado) se
-  usan desde aquí: al elegir uno, la marca salta a **Usar** (con el mando, A dos veces).
+  usan desde aquí, con **Usar**.
 - **Esc** / Start: pausa. Los menús van con ratón, flechas + Intro o mando (cruceta o stick, A pulsar, B volver).
 - **Elige edificio:** debajo de cada tarjeta, **<** y **>** cambian el nivel de alerta (de los abiertos; se
   recuerda el último elegido). Completar el edificio con una alerta abre la siguiente, hasta la 5. Debajo, el botón
@@ -129,6 +135,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   devuelve; los arrojables, 3 a mano y 8 de repuesto (la mano llena manda al repuesto, al acabarse uno entra el primero
   de repuesto, F, **A la mano** y **Al repuesto**, el molotov del suelo con el máximo). Cada línea dice lo esperado.
   Fotos: `captura-municion.png` (el inventario), `captura-municion-arrojables.png` y `captura-municion-hud.png`.
+- `--inventario`: en vez de la prueba larga, la de la pantalla del inventario «todo a la vista» (`ui/inventario.gd`),
+  con un poco de todo y la skin del bombero: al abrir, la ficha del arma de la mano; la flecha abajo lleva la marca a
+  la escopeta de repuesto y la ficha la sigue; Intro salta a **Ponérmela** e Y del mando se la pone; Supr tira un
+  clavo; tirar el arma de la mano pone la de repuesto; F cambia el arrojable; **A la mano** con la mano llena; Esc
+  cierra. Luego, las otras pruebas que usan el inventario: las vendas y el bocadillo, y el botiquín de la
+  farmacéutica. Cada línea dice lo esperado. Fotos: `captura-inventario-nuevo.png`, `-escopeta`, `-objeto`,
+  `-municion`, `-arrojable`, `-pistola_electrica` y `-lanzallamas` (la ficha más llena y la de depósito).
 - `--ascensor`: en vez de la prueba larga, la del ascensor (`partida.gd`, `arreglar_ascensor`): comprueba en la
   terminal que en la planta baja no se arregla, que en la 1ª planta sigue averiado hasta que cae el jefe, que al
   salir al pasillo Johnny dice que lo ha arreglado (`captura-ascensor-arreglado.png`), que baja a la sala de

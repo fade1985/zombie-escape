@@ -218,9 +218,15 @@ func poner_modo(nuevo: String) -> void:
 
 # El arma que tiene en la mano: sus datos, con los atributos de Johnny ya aplicados
 func arma() -> Dictionary:
-	var w: Dictionary = Armas.datos(huecos[mano]).duplicate()
+	return arma_de(huecos[mano])
+
+
+# Los datos de un arma con los atributos de Johnny ya aplicados (la de la mano o, para la ficha del inventario,
+# cualquiera de las que lleva)
+func arma_de(id: String) -> Dictionary:
+	var w: Dictionary = Armas.datos(id).duplicate()
 	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
-	if huecos[mano] == "fregona":
+	if id == "fregona":
 		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
 	if w.tipo == "cuerpo":
 		w.dano = w.dano * Skins.cuerpo(skin)    # el gymbro: × 3 (la fregona, el bate y el cuchillo)

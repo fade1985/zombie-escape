@@ -18,6 +18,9 @@
 #                  mano), tirar balas y volver a cogerlas; y los arrojables, 3 a mano y 8 de repuesto (lanzables.gd)
 #   --municion-suelo  los dibujos de la munición, la gasolina y el ácido en el suelo (con luz y a oscuras, donde se
 #                  ven un poco) y en el inventario; la caja que suelta un zombi cambia de dibujo con el arma
+#   --inventario   la pantalla del inventario «todo a la vista» (ui/inventario.gd): la ficha que sigue a la marca, las
+#                  flechas, Intro, Y, Supr y F, ponerse y tirar armas (también la de la mano) y mover arrojables; luego,
+#                  las otras pruebas que usan el inventario (las vendas y el bocadillo, y el botiquín)
 #   --banco        una lanza, un súpersoplete, un bumerán, un mechero, una llave inglesa y un hacha de antes en el
 #                  guardado (se quitaron del juego) desaparecen al cargar; luego el banco de trabajo, las recetas y las
 #                  Colecciones, sin la prueba larga (probar_cosas, probar_recetas y probar_colecciones)
@@ -149,6 +152,9 @@ func empezar_prueba() -> void:
 	elif "--municion-suelo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion_suelo()
+	elif "--inventario" in args:
+		set_process(false)   # sin la prueba larga
+		probar_inventario()
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
@@ -3792,6 +3798,129 @@ func probar_municion() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --inventario": la pantalla del inventario «todo a la vista» (ui/inventario.gd, parte 3 del inventario
+# nuevo), en la sala de mantenimiento y con un poco de todo: el bate y la pistola en la mano, la fregona y la escopeta de
+# repuesto, clavos, una pistola de agua, un botiquín y gasolina en la mochila, balas y cartuchos, una atraedora rara a mano
+# y una congeladora de repuesto, y la skin del bombero. Al abrir, la ficha enseña el arma de la mano; la flecha abajo
+# lleva la marca a la escopeta y la ficha la sigue; Intro salta a «Ponérmela» e Y del mando se la pone; Supr tira un
+# clavo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
+# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (una pistola eléctrica épica: nombre
+# largo, rareza y 30 balitas) y la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas
+# y el bocadillo (probar_curas) y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
+# Fotos: captura-inventario-nuevo.png (al abrir), captura-inventario-escopeta.png (la marca en la escopeta de
+# repuesto), captura-inventario-objeto.png (la pistola de agua, con sus recetas), captura-inventario-municion.png,
+# captura-inventario-arrojable.png, captura-inventario-pistola_electrica.png y captura-inventario-lanzallamas.png
+func probar_inventario() -> void:
+	var lz: Lanzables = lanzables
+	var inv = inventario
+	var skin_antes: String = johnny.skin
+	johnny.skin = "bombero"
+	mochila.clear()
+	armas_guardadas.clear()
+	johnny.municion.clear()
+	johnny.coger("fregona")
+	johnny.coger("escopeta")   # (trae sus cartuchos)
+	llevar_arma("bate")        # el bate a la mano y la fregona al repuesto
+	llevar_arma("pistola")     # la pistola a la mano y la escopeta al repuesto
+	johnny.balas = 8
+	johnny.meter_municion("balas", 30)
+	mochila.append_array(["clavos", "clavos", "pistola_agua", "botiquin", "gasolina", "gasolina"])
+	lz.creadas.clear()
+	lz.mano = ["molotov", "granada"]
+	lz.repuesto = []
+	lz.tipo = "molotov"
+	lz.sacar(Recetas.crear("atraedora", "azul"))
+	lz.sacar(Recetas.crear("congeladora", "verde"))
+	await get_tree().create_timer(0.5).timeout
+	var nota := func() -> String: return inv.fondo.find_child("nota", true, false).text
+	var marca := func() -> String:
+		var b := get_viewport().gui_get_focus_owner()
+		return String(b.name) if b else "-"
+	var hoja := func() -> String: return inv.fondo.find_child("johnny", true, false).sprite_frames.resource_path.get_file()
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	print("Al abrir: elegida %s · marca %s · Johnny %s · dice «%s» (esperado: p1 · p1 · conserje-48-pistola-bombero.tres · Dispara de una en una...)" % [
+		inv.sel, marca.call(), hoja.call(), nota.call()])
+	Captura.foto("captura-inventario-nuevo.png")
+	await pulsar_evento(accion("ui_down"))
+	print("Flecha abajo: elegida %s · marca %s · dice «%s» (esperado: g1 · g1 · Cinco perdigones...)" % [inv.sel, marca.call(), nota.call()])
+	Captura.foto("captura-inventario-escopeta.png")
+	await pulsar_evento(accion("ui_accept"))
+	print("Intro: marca %s (esperado: poner)" % marca.call())
+	var y := InputEventJoypadButton.new()
+	y.button_index = JOY_BUTTON_Y
+	await pulsar_evento(y)
+	await get_tree().create_timer(0.2).timeout
+	print("Y del mando: mano %s · repuesto %s · elegida %s · Johnny %s (esperado: Escopeta · [\"fregona\", \"pistola\"] · p1 · conserje-48-escopeta-bombero.tres)" % [
+		Objetos.nombre(johnny.huecos.fuego), armas_guardadas, inv.sel, hoja.call()])
+	inv.tocar("m0")
+	var supr := InputEventKey.new()
+	supr.keycode = KEY_DELETE
+	await pulsar_evento(supr)
+	print("Supr con los clavos: mochila %s (esperado: [[\"clavos\", 1], [\"pistola_agua\", 1], [\"botiquin\", 1]])" % [Objetos.casillas(mochila)])
+	inv.tocar("m1")
+	await get_tree().create_timer(0.2).timeout
+	print("La pistola de agua: dice «%s»" % nota.call())
+	Captura.foto("captura-inventario-objeto.png")
+	inv.tocar("m2")
+	await get_tree().process_frame
+	print("Toca el botiquín: marca %s (esperado: usar)" % marca.call())
+	inv.tocar("p0")
+	inv.tirar()
+	await get_tree().process_frame
+	print("Tira el bate de la mano: mano %s y %s (sacada la de %s) · repuesto %s (esperado: Fregona y Escopeta (sacada la de fuego) · [\"pistola\"])" % [
+		Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego), johnny.mano, armas_guardadas])
+	inv.tocar("p0")
+	print("Sin repuesto, «Tirar al suelo» apagado: %s (esperado: true)" % inv.fondo.find_child("tirar", true, false).disabled)
+	await pulsar_evento(accion("cambiar_lanzable"))
+	print("F: lanza %s (esperado: granada)" % lz.tipo)
+	inv.tocar("e0")
+	inv.mover_lanzable()
+	print("«A la mano» con la congeladora: a mano %s (lanza %s) · repuesto %s · elegida %s (esperado: [molotov, congeladora, atraedora] (congeladora) · [granada] · l1)" % [
+		lz.mano, lz.tipo, lz.repuesto, inv.sel])
+	inv.tocar("u0")
+	await get_tree().create_timer(0.2).timeout
+	print("Las balas: dice «%s»" % nota.call())
+	Captura.foto("captura-inventario-municion.png")
+	inv.tocar("l2")
+	await get_tree().create_timer(0.2).timeout
+	print("La atraedora: dice «%s»" % nota.call())
+	Captura.foto("captura-inventario-arrojable.png")
+	await pulsar_evento(accion("ui_cancel"))
+	print("Esc: abierto «%s» · juego en pausa %s (esperado: «» · false)" % [inv.abierto, get_tree().paused])
+	# la ficha más llena: un arma creada de nombre largo, con su rareza y 30 balitas; y una de depósito
+	for receta in ["pistola_electrica", "lanzallamas"]:
+		llevar_arma(Armas.apuntar(Recetas.crear(receta, "morada")))
+		abrir_cosas("inventario")
+		await get_tree().create_timer(0.3).timeout
+		print("%s en la mano: elegida %s · dice «%s» (esperado: p1)" % [Objetos.nombre(johnny.huecos.fuego), inv.sel, nota.call()])
+		Captura.foto("captura-inventario-%s.png" % receta)
+		inv.cerrar()
+		await get_tree().process_frame
+	johnny.skin = skin_antes
+	# y las otras pruebas que usan el inventario (sin la prueba larga): las vendas y el bocadillo, y el botiquín
+	await probar_curas()
+	await supervivientes.probar_botiquin()
+	get_tree().quit()
+
+
+# Una acción pulsada (para pulsar_evento)
+func accion(nombre: String) -> InputEventAction:
+	var a := InputEventAction.new()
+	a.action = nombre
+	return a
+
+
+# Pulsa y suelta un botón, una tecla o una acción, como si lo hiciera el jugador, y espera a que llegue
+func pulsar_evento(evento: InputEvent) -> void:
+	for pulsada in [true, false]:
+		var e = evento.duplicate()
+		e.pressed = pulsada
+		Input.parse_input_event(e)
+		await get_tree().process_frame
+	await get_tree().process_frame
+
+
 # Con "--captura --municion-suelo": los dibujos de la munición (PixelLab, 25 oct) en el suelo y en el inventario. En
 # fila a la derecha de Johnny: una caja de balas y otra de cartuchos tiradas, la caja que suelta un zombi con la MP5 en
 # la mano (la caja verde; cambia a la de cartuchos al sacar la escopeta), una gasolina y un bidón de ácido. Fotos:
@@ -4910,7 +5039,7 @@ func probar_curas() -> void:
 		var v: int = johnny.vida
 		if inventario.abierto == "":
 			abrir_cosas("inventario")
-		if inventario.elegido() != id:   # (tocar la casilla ya elegida la deselecciona)
+		if inventario.elegido() != id:
 			inventario.tocar("m0")   # el primero de la mochila: primero las vendas y, gastadas, el bocadillo
 		inventario.usar()
 		print("%s: vida %d -> %d (cura %d) | mochila %s | cerrado %s" % [Objetos.nombre(id), v, johnny.vida, cura_de(id),

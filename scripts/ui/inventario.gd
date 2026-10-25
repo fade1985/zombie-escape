@@ -1,12 +1,16 @@
 # Las pantallas de las cosas de Johnny (fase 7b; en el JS, showInventario y showBaul de src/ui.js y el banco
 # de src/banco.js). El juego se para mientras están abiertas:
-#   - Inventario (Tab, I o Select): las dos armas que lleva en la mano, las de repuesto (como mucho una de cada
-#     tipo: partida.llevar_arma) y la mochila; a la derecha, en casillas pequeñas, la munición (por tipos, en sus 8
-#     huecos: Armas.MUNICION) y los arrojables (3 a mano y 8 de repuesto: lanzables.gd). Al tocar una casilla se elige
-#     y salen sus botones: "Ponérmela" (las de repuesto), "Usar" (el botiquín de la farmacéutica: Objetos.USABLES),
-#     "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina y los bidones de
-#     ácido, de uno en uno; las balas, el hueco entero en una caja; y las armas de repuesto). La pantalla nueva del
-#     inventario (todo a la vista) es la parte 3: esto es lo justo para ver y mover la munición y los arrojables.
+#   - Inventario (Tab, I o Select; «todo a la vista», la parte 3 del inventario nuevo): Johnny grande en medio, de
+#     frente, con su skin y el arma que tiene en la mano; a los lados, sus armas (a la izquierda las de cuerpo a cuerpo
+#     y a la derecha las de distancia; arriba la de la mano y abajo la de repuesto: partida.llevar_arma), y debajo, los
+#     3 arrojables a mano (lanzables.gd). En medio, tres grupos de 8: la mochila, la munición (por tipos:
+#     Armas.MUNICION) y los arrojables de repuesto. A la derecha, la ficha de lo elegido (qué es, el cargador, las
+#     barras, qué hace o para qué receta sirve) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
+#     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina y
+#     los bidones de ácido, de uno en uno; las balas, el hueco entero en una caja; y las armas: la de la mano, solo si
+#     lleva otra de repuesto, que pasa a la mano). Con las flechas o el mando, la ficha sigue a la marca; A (o tocar)
+#     la lleva al botón principal de la ficha (A dos veces y hecho), X (o Supr) tira, Y hace lo del botón principal y F
+#     cambia el arrojable que se lanza.
 #   - Baúl (al arrimarse a él en la sala de mantenimiento): los objetos guardados de otras partidas y las armas
 #     creadas en el banco. Un arma creada se puede sacar para esta partida (fase 7b2): la de cuerpo a cuerpo o
 #     de fuego va a la mano (y la que llevaba, al repuesto o, si ya tiene una, al suelo); las arrojadizas, al botón
@@ -25,7 +29,6 @@ extends CanvasLayer
 signal cerrado
 
 const CASILLA := Vector2(108, 100)
-const PEQUENA := Vector2(72, 56)            # la munición y los arrojables: el icono y cuántos (el nombre va en la nota)
 const HOJA := Vector2(92, 88)               # una receta en el banco
 const PAPEL := Color("#e8dcbc")              # las hojas de las recetas
 const TINTA_PAPEL := Color("#3a3226")
@@ -35,12 +38,17 @@ var partida: Node
 var fondo: ColorRect
 var abierto := ""          # "inventario", "baul", "banco" o "" (nada)
 var sel := ""              # la casilla elegida: "m2" la 3.ª de la mochila, "g0" la 1.ª arma guardada, "a1" la 2.ª arma del baúl,
-                           # "u1" el 2.º hueco de munición, "l0" el 1.er arrojable a mano, "e3" el 4.º de repuesto
+                           # "u1" el 2.º hueco de munición, "l0" el 1.er arrojable a mano, "e3" el 4.º de repuesto,
+                           # "p0" y "p1" las armas de la mano (la de cuerpo a cuerpo y la de distancia)
 var receta := ""           # banco: la receta elegida (su id de Recetas.LISTA)
 var hecha := {}            # banco: el arma que se acaba de crear (para enseñarla)
 var foco := ""             # el botón que tiene que quedar marcado al volver a pintar
 var aviso := ""            # inventario y baúl: lo que se dice abajo una vez (por qué no se puede usar o no cabe)
 var guardando := false     # baúl: en vez del baúl, la mochila, para elegir lo que se guarda en él
+var lienzo: Control        # inventario: donde va todo, cada cosa en su sitio
+var viva: Control          # inventario: lo que cambia al moverse la marca (la ficha y la ayuda de abajo)
+var huecos_inv: Array = [] # inventario: las casillas que se pueden elegir (para marcar la elegida)
+var moviendo_marca := false   # la marca la está poniendo el juego (dar_foco), no el jugador
 
 
 func _ready() -> void:
@@ -101,155 +109,648 @@ func pintar(entrar := false) -> void:
 	if marcado == null or not marcado.focus_mode == Control.FOCUS_ALL or (marcado is BaseButton and marcado.disabled):
 		marcado = primero
 	if marcado:
-		marcado.grab_focus.call_deferred()
+		dar_foco.call_deferred(marcado)
+
+
+# Pone la marca en un botón (al pintar, o al tocar una casilla del inventario). La pone el juego, no el jugador: en el
+# inventario no cambia lo elegido (seguir_marca). Si mientras tanto se ha vuelto a pintar, la de la pantalla quitada
+# ya no cuenta
+func dar_foco(c) -> void:   # (sin tipo: puede llegar ya borrado)
+	if not is_instance_valid(c) or not is_instance_valid(fondo) or not fondo.is_ancestor_of(c):
+		return
+	moviendo_marca = true
+	c.grab_focus()
+	moviendo_marca = false
 
 
 # ── Inventario ──
+# La pantalla «todo a la vista» (parte 3 del inventario nuevo; la maqueta es diseno-1-prueba.png), hecha para la
+# pantalla de 960×640: cada cosa va en su sitio, en coordenadas de la pantalla (el panel va de 24,12 a 936,628). Al
+# moverse la marca solo se vuelven a pintar la ficha y la ayuda de abajo (pintar_ficha); todo, al hacer algo.
+
+const ORIGEN := Vector2(24, 12)    # la esquina del panel del inventario en la pantalla
+const LADO := 52                   # las casillas de los tres grupos de 8
+const ANCHO_FICHA := 222.0         # lo ancho que es lo de dentro de la ficha
+# Lo que hace cada arma de siempre, el molotov y la granada (las creadas, lo de su receta: Recetas.LISTA)
+const QUE_HACE := {
+	"fregona": "Barre un abanico muy ancho y echa lejos a los zombis.",
+	"bate": "Un golpe fuerte que empuja a los zombis.",
+	"cuchillo": "Muy rápido, pero hay que arrimarse.",
+	"pistola": "Dispara de una en una, recto y lejos.",
+	"escopeta": "Cinco perdigones en abanico. Se recarga de cartucho en cartucho.",
+	"mp5": "Ráfagas muy rápidas. Gasta las mismas balas que la pistola.",
+	"molotov": "Se rompe y deja un charco de fuego que quema a los zombis.",
+	"granada": "Bota, rueda y explota a los 2 segundos.",
+}
+# Cómo se dice la munición de reserva en la ficha («Reserva: 2 gasolinas»)
+const RESERVA := {"balas": "balas", "cartuchos": "cartuchos", "pilas": "pilas", "gasolina": "gasolinas",
+	"bidon_acido": "bidones de ácido"}
+const PRINCIPALES := ["poner", "usar", "a_la_mano", "al_repuesto"]   # los botones de la ficha que no son tirar
+
 
 func pintar_inventario(columna: VBoxContainer) -> Control:
 	var johnny: Node2D = partida.johnny
-	var mochila: Array = partida.mochila
-	var guardadas: Array = partida.armas_guardadas
 	var lz: Lanzables = partida.lanzables
-	titulo(columna, "Inventario")
-	# a la izquierda, las armas y la mochila; a la derecha, la munición y los arrojables
-	var lados := HBoxContainer.new()
-	lados.add_theme_constant_override("separation", 24)
-	columna.add_child(lados)
-	var izquierda := VBoxContainer.new()
-	izquierda.add_theme_constant_override("separation", 8)
-	lados.add_child(izquierda)
-	var derecha := VBoxContainer.new()
-	derecha.add_theme_constant_override("separation", 8)
-	lados.add_child(derecha)
-	subtitulo(izquierda, "Armas", "")
-	var armas := fila(izquierda)
-	for hueco in ["cuerpo", "fuego"]:
-		var id: String = johnny.huecos[hueco]
-		casilla(armas, "", Objetos.icono(id), Armas.datos(id).nombre, "En la mano" if hueco == "cuerpo" else "De fuego",
-			borde(id))
-	for i in guardadas.size():
-		casilla(armas, "g%d" % i, Objetos.icono(guardadas[i]), Objetos.nombre(guardadas[i]), "De repuesto", borde(guardadas[i]))
-	var llenas := Objetos.casillas(mochila)
-	subtitulo(izquierda, "Mochila · %d / %d" % [llenas.size(), Objetos.MOCHILA], "mochila")
-	var rejilla := cuadricula(izquierda)
+	asegurar_sel()
+	# el panel, sin márgenes por dentro: lo de dentro va cada cosa en su sitio
+	var panel: PanelContainer = columna.get_parent()
+	var marco: StyleBox = panel.get_theme_stylebox("panel").duplicate()
+	for lado in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		marco.set_content_margin(lado, 0)
+	panel.add_theme_stylebox_override("panel", marco)
+	lienzo = Control.new()
+	lienzo.custom_minimum_size = Vector2(912, 616)
+	columna.add_child(lienzo)
+	viva = null
+	huecos_inv.clear()
+	rotulo(lienzo, "Inventario", 480, 26, Color("#e6dec8"), HORIZONTAL_ALIGNMENT_CENTER).theme_type_variation = "Titulo"
+	# Johnny, grande, entre sus armas: a la izquierda las de cuerpo a cuerpo y a la derecha las de distancia (arriba
+	# la de la mano y abajo la de repuesto)
+	muneco(johnny)
+	rotulo(lienzo, "Cuerpo a cuerpo", 64, 90, Tema.AMARILLO)
+	rotulo(lienzo, "A distancia", 384, 90, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_RIGHT)
+	for i in 2:
+		var tipo: String = ["cuerpo", "fuego"][i]
+		var x := 64.0 if i == 0 else 308.0
+		var id: String = johnny.huecos[tipo]
+		casilla_inv(Rect2(x, 122, 76, 76), "p%d" % i, Objetos.icono(id), carga_corta(id), borde(id))
+		rotulo(lienzo, "En la mano", x + 38, 202, Tema.AMARILLO, HORIZONTAL_ALIGNMENT_CENTER)
+		var otra: String = partida.repuesto(tipo)
+		if otra != "":
+			casilla_inv(Rect2(x, 232, 76, 76), "g%d" % partida.armas_guardadas.find(otra), Objetos.icono(otra),
+				carga_corta(otra), borde(otra))
+		else:
+			casilla_inv(Rect2(x, 232, 76, 76))
+		rotulo(lienzo, "De repuesto", x + 38, 312, Tema.GRIS, HORIZONTAL_ALIGNMENT_CENTER)
+	# debajo, los arrojables a mano (F cambia entre ellos): el que se lanza ahora, con un marco amarillo alrededor
+	rotulo(lienzo, "Arrojables", 64, 350, Tema.AMARILLO)
+	rotulo(lienzo, "F cambia", 384, 350, Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
+	for i in Lanzables.MANO:
+		var x := 82.0 + i * 102
+		var k: String = lz.mano[i] if i < lz.mano.size() else ""
+		arrojable(Rect2(x, 380, 84, 84), "l%d" % i, k)
+		if k == "":
+			continue
+		rotulo(lienzo, nombre_lanzable(k), x + 42, 468, Tema.TINTA, HORIZONTAL_ALIGNMENT_CENTER, 100)
+		if k == lz.tipo:
+			var ahora := Panel.new()
+			var e := StyleBoxFlat.new()
+			e.draw_center = false
+			e.border_color = Tema.AMARILLO
+			e.set_border_width_all(2)
+			e.set_corner_radius_all(4)
+			ahora.add_theme_stylebox_override("panel", e)
+			ahora.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			lienzo.add_child(ahora)
+			ahora.position = Vector2(x - 4, 376) - ORIGEN
+			ahora.size = Vector2(92, 92)
+	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y los arrojables de repuesto
+	var raya := ColorRect.new()
+	raya.color = Color("#3d3647")
+	raya.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lienzo.add_child(raya)
+	raya.position = Vector2(393, 92) - ORIGEN
+	raya.size = Vector2(2, 492)
+	var llenas := Objetos.casillas(partida.mochila)
+	rotulo(lienzo, "Objetos  %d / %d" % [llenas.size(), Objetos.MOCHILA], 406, 89, Tema.AMARILLO)
 	for i in Objetos.MOCHILA:
 		if i < llenas.size():
-			var id: String = llenas[i][0]
 			var n: int = llenas[i][1]
-			casilla(rejilla, "m%d" % i, Objetos.icono(id), Objetos.nombre(id), "× %d" % n if n > 1 else "", Recetas.GRIS)
+			casilla_inv(rejilla(i, 116), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "")
 		else:
-			casilla(rejilla, "", "", "", "", Color(0, 0, 0, 0))
-	# la munición, cada tipo en los huecos que le hagan falta (johnny.huecos_municion)
+			casilla_inv(rejilla(i, 116))
 	var balas: Array = johnny.huecos_municion()
-	subtitulo(derecha, "Munición · %d / %d" % [balas.size(), Armas.HUECOS_MUNICION], "municion")
-	var cajas := cuadricula(derecha)
+	rotulo(lienzo, "Munición  %d / %d" % [balas.size(), Armas.HUECOS_MUNICION], 406, 239, Tema.AMARILLO)
 	for i in Armas.HUECOS_MUNICION:
 		if i < balas.size():
-			casilla(cajas, "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), "", Recetas.GRIS, true, false, PEQUENA)
+			casilla_inv(rejilla(i, 266), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]))
 		else:
-			casilla(cajas, "", "", "", "", Color(0, 0, 0, 0), true, false, PEQUENA)
-	# los arrojables: los de la mano (F cambia entre ellos) y los de repuesto
-	subtitulo(derecha, "Arrojables a mano · F", "")
-	var a_mano := fila(derecha)
-	for i in Lanzables.MANO:
-		lanzable(a_mano, "l%d" % i, lz.mano[i] if i < lz.mano.size() else "")
-	subtitulo(derecha, "De repuesto · %d / %d" % [lz.repuesto.size(), Lanzables.REPUESTO], "")
-	var de_repuesto := cuadricula(derecha)
+			casilla_inv(rejilla(i, 266))
+	rotulo(lienzo, "Arrojables  %d / %d" % [lz.repuesto.size(), Lanzables.REPUESTO], 406, 389, Tema.AMARILLO)
 	for i in Lanzables.REPUESTO:
-		lanzable(de_repuesto, "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "")
-	var texto := "Lo que llevas en la mochila pasa al baúl si completas el edificio (o si lo guardas tú en él). Si caes, se pierde."
-	var usable := elegido() in Objetos.USABLES
-	var cual := sel.substr(1).to_int()
-	if usable:   # el botiquín, las vendas o el bocadillo: cada uno cura lo suyo
-		texto = "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_de(elegido())
-	elif sel.begins_with("u") and cual < balas.size():
-		texto = nota_municion(balas[cual][0], balas[cual][1])
-	elif sel.begins_with("l") and cual < lz.mano.size():
-		var k: String = lz.mano[cual]
-		texto = "%s: te quedan %s. %s" % [nombre_lanzable(k), lz.cuantas(k), "Es lo que lanzas ahora." if k == lz.tipo
-			else "Con F lo eliges para lanzarlo."]
-	elif sel.begins_with("e") and cual < lz.repuesto.size():
-		var k: String = lz.repuesto[cual]
-		texto = "%s: %d de repuesto. «A la mano» lo pone para lanzarlo%s." % [nombre_lanzable(k), lz.cuantas(k),
-			" en lugar de %s, que pasa aquí" % nombre_lanzable(lz.tipo).to_lower() if lz.mano.size() >= Lanzables.MANO else ""]
-	elif sel != "":
-		texto = "Si lo tiras, se queda en el suelo: puedes volver a cogerlo." + (" Se tira de uno en uno." if sel[0] == "m" else "")
-	if aviso != "":
-		texto = aviso
-		aviso = ""
-	nota(columna, texto, 760)
-	var botones := fila(columna, true)
-	if usable:
-		boton(botones, "usar", "Usar", usar, "BotonGrande")
-	if sel.begins_with("g"):
-		boton(botones, "poner", "Ponérmela", poner_guardada)
-	if sel.begins_with("e"):
-		boton(botones, "a_la_mano", "A la mano", mover_lanzable, "BotonGrande")
-	if sel.begins_with("l"):
-		boton(botones, "al_repuesto", "Al repuesto", mover_lanzable).disabled = lz.repuesto.size() >= Lanzables.REPUESTO
-	if sel != "" and not sel[0] in ["l", "e"]:
-		boton(botones, "tirar", "Tirar al suelo", tirar, "BotonRojo")
-	boton(botones, "cerrar", "Seguir", cerrar)
-	return fondo.find_child("m0", true, false) if not llenas.is_empty() else fondo.find_child("cerrar", true, false)
+		arrojable(rejilla(i, 416), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "")
+	var seguir := boton(lienzo, "cerrar", "Seguir", cerrar)
+	seguir.position = Vector2(406, 544) - ORIGEN
+	seguir.size = Vector2(226, 38)
+	pintar_ficha()
+	return lienzo.find_child(sel, false, false)
 
 
-# Una cuadrícula de 4 columnas (la mochila, la munición, los arrojables de repuesto)
-func cuadricula(padre: Container) -> GridContainer:
-	var rejilla := GridContainer.new()
-	rejilla.columns = 4
-	rejilla.add_theme_constant_override("h_separation", 6)
-	rejilla.add_theme_constant_override("v_separation", 6)
-	padre.add_child(rejilla)
-	return rejilla
+# El sitio de la casilla i de un grupo de 8 (4 por fila) que empieza en "y"
+func rejilla(i: int, y: float) -> Rect2:
+	return Rect2(406 + (i % 4) * (LADO + 6), y + floori(i / 4.0) * (LADO + 6), LADO, LADO)
 
 
-# La casilla pequeña de un arrojable ("" la deja vacía): su icono y cuántos quedan (el molotov y la granada, de su
-# máximo), con el borde del color de su rareza si es creado
-func lanzable(padre: Container, clave: String, k: String) -> void:
+# Si lo elegido ya no está (o no hay nada elegido), se elige el arma que tiene en la mano: la ficha nunca está vacía
+func asegurar_sel() -> void:
+	if not existe(sel):
+		sel = "p0" if partida.johnny.mano == "cuerpo" else "p1"
+
+
+# ¿Hay algo en esa casilla del inventario?
+func existe(clave: String) -> bool:
+	if clave.length() < 2:
+		return false
+	var i := clave.substr(1).to_int()
+	var lz: Lanzables = partida.lanzables
+	match clave[0]:
+		"p": return i < 2
+		"g": return i < partida.armas_guardadas.size()
+		"m": return i < Objetos.casillas(partida.mochila).size()
+		"u": return i < partida.johnny.huecos_municion().size()
+		"l": return i < lz.mano.size()
+		"e": return i < lz.repuesto.size()
+	return false
+
+
+# Johnny grande (× 4) en medio, con su sombra: de frente y respirando, con su skin y el arma que tiene en la mano
+func muneco(johnny: Node2D) -> void:
+	var pies := Vector2(224, 330) - ORIGEN
+	var sombra := Control.new()
+	sombra.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sombra.draw.connect(func():
+		sombra.draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.24))
+		sombra.draw_circle(Vector2.ZERO, 34.0, Color(0, 0, 0, 0.43)))
+	lienzo.add_child(sombra)
+	sombra.position = pies
+	var w: Dictionary = Armas.datos(johnny.huecos[johnny.mano])
+	var vista := AnimatedSprite2D.new()
+	vista.name = "johnny"
+	vista.sprite_frames = Skins.hoja(w.hoja, johnny.skin)
+	vista.centered = false
+	vista.offset = -w.pies
+	vista.scale = Vector2(4, 4)
+	vista.position = pies
+	vista.material = johnny.sprite.material.duplicate()   # (el de partir la cintura, entero, como en la taquilla)
+	vista.material.set_shader_parameter("parte", 0)
+	lienzo.add_child(vista)
+	vista.play("reposo_s")
+
+
+# Una casilla del inventario en su sitio (en coordenadas de la pantalla): su dibujo, lo más grande que quepa, y abajo
+# a la derecha cuántos. Sin "clave", vacía (no se elige). Al llegarle la marca (flechas o mando), la ficha enseña lo suyo
+func casilla_inv(r: Rect2, clave := "", icono := "", cuenta := "", color := Recetas.GRIS) -> void:
+	var c: Control
+	if clave == "":
+		c = Panel.new()
+		c.add_theme_stylebox_override("panel", estilo(Color("#2a2631"), false, false))
+	else:
+		var b := Button.new()
+		b.name = clave
+		b.set_meta("borde", color)
+		b.pressed.connect(tocar.bind(clave))
+		b.focus_entered.connect(seguir_marca.bind(clave, b))
+		huecos_inv.append(b)
+		marcar_hueco(b)
+		c = b
+	lienzo.add_child(c)
+	c.position = r.position - ORIGEN
+	c.size = r.size
+	if icono != "":
+		dibujo(c, icono, r.size, 12.0)
+	if cuenta != "":
+		var t := Label.new()
+		t.text = cuenta
+		t.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		t.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		c.add_child(t)
+		t.size = r.size - Vector2(5, 1)
+
+
+# El borde y el fondo de una casilla según esté elegida o no
+func marcar_hueco(b: Button) -> void:
+	var color: Color = b.get_meta("borde")
+	var elegida: bool = b.name == sel
+	b.add_theme_stylebox_override("normal", estilo(color, elegida, false))
+	b.add_theme_stylebox_override("hover", estilo(color, elegida, true))
+	b.add_theme_stylebox_override("pressed", estilo(color, true, true))
+	b.add_theme_stylebox_override("focus", estilo(color, elegida, true))
+
+
+# El dibujo de un icono en medio de una casilla de ese tamaño, lo más grande que quepa a escala entera (para que los
+# píxeles no se deformen)
+func dibujo(padre: Control, icono: String, lado: Vector2, margen: float) -> void:
+	var tex: Texture2D = load("res://assets/ui/iconos/%s.png" % icono)
+	var k := maxi(1, floori(minf((lado.x - margen) / tex.get_width(), (lado.y - margen) / tex.get_height())))
+	var r := TextureRect.new()
+	r.texture = tex
+	r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	r.stretch_mode = TextureRect.STRETCH_SCALE
+	r.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	padre.add_child(r)
+	r.size = tex.get_size() * k
+	r.position = ((lado - r.size) / 2.0).floor()
+
+
+# La casilla de un arrojable ("" la deja vacía): su dibujo y cuántos quedan (el molotov y la granada, de su máximo),
+# con el borde del color de su rareza si es creado
+func arrojable(r: Rect2, clave: String, k: String) -> void:
 	if k == "":
-		casilla(padre, "", "", "", "", Color(0, 0, 0, 0), true, false, PEQUENA)
+		casilla_inv(r)
 		return
 	var lz: Lanzables = partida.lanzables
-	var icono: String = k if k in Lanzables.DATOS else Recetas.icono_de(k)
 	var cuenta := "%d/%d" % [lz.cuantas(k), lz.maximo(k)] if k in Lanzables.DATOS else str(lz.cuantas(k))
-	var color := Recetas.GRIS
-	for a in lz.creadas:
-		if a.receta == k:
-			color = Recetas.RAREZAS[a.rareza].color   # (el de la que se lanza primero)
-			break
-	casilla(padre, clave, icono, cuenta, "", color, true, false, PEQUENA)
+	var rareza := rareza_lanzable(k)
+	casilla_inv(r, clave, icono_lanzable(k), cuenta, Recetas.RAREZAS[rareza].color if rareza != "" else Recetas.GRIS)
 
 
 func nombre_lanzable(k: String) -> String:
 	return {"molotov": "Molotov", "granada": "Granada"}[k] if k in Lanzables.DATOS else Recetas.LISTA[k].nombre
 
 
-# Lo que se dice de un hueco de munición: cuánta lleva de ese tipo, quién la gasta y qué pasa si se tira
-func nota_municion(tipo: String, n: int) -> String:
+func icono_lanzable(k: String) -> String:
+	return k if k in Lanzables.DATOS else Recetas.icono_de(k)
+
+
+# La rareza de un arrojable creado (la del que se lanza primero; "" el molotov y la granada)
+func rareza_lanzable(k: String) -> String:
+	for a in partida.lanzables.creadas:
+		if a.receta == k:
+			return a.rareza
+	return ""
+
+
+# Lo que le queda a un arma de fuego que lleva: en el cargador (balas) o, las de depósito, en el depósito (segundos).
+# La de la mano, lo de ahora; la de repuesto, lo que le quedaba al dejarla (johnny.coger) o, si no la ha llevado
+# nunca en la mano, lleno
+func carga(id: String) -> float:
+	var johnny: Node2D = partida.johnny
+	var w: Dictionary = Armas.datos(id)
+	var deposito: bool = w.has("deposito")
+	if johnny.huecos.fuego == id:
+		return johnny.deposito if deposito else float(johnny.balas)
+	if Armas.es_creada(id):
+		return float(Armas.sacadas[id].get("deposito" if deposito else "balas", w.get("deposito", w.cargador)))
+	return float(johnny.cargadores.get(id, w.cargador))
+
+
+# Lo que se ve en la esquina de la casilla de un arma de fuego: «8/12» o, las de depósito, «6 s» ("" las de cuerpo a
+# cuerpo)
+func carga_corta(id: String) -> String:
+	var w: Dictionary = Armas.datos(id)
+	if w.tipo != "fuego":
+		return ""
+	if w.has("deposito"):
+		return "%d s" % ceili(carga(id))
+	return "%d/%d" % [roundi(carga(id)), w.cargador]
+
+
+# ── Inventario: la ficha ──
+
+# La ficha de lo elegido, a la derecha, con sus botones debajo, y la línea de ayuda de abajo (con lo que hacen X e Y
+# con lo elegido). Es lo que cambia al moverse la marca: se quita la de antes (ya, para que no haya dos «nota») y se
+# pinta la nueva
+func pintar_ficha() -> void:
+	if viva:
+		lienzo.remove_child(viva)
+		viva.queue_free()
+	viva = Control.new()
+	viva.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lienzo.add_child(viva)
+	var marco := Panel.new()
+	var e := StyleBoxFlat.new()
+	e.bg_color = Color("#141119")
+	e.border_color = Color("#3d3647")
+	e.set_border_width_all(2)
+	e.set_corner_radius_all(4)
+	marco.add_theme_stylebox_override("panel", e)
+	viva.add_child(marco)
+	marco.position = Vector2(650, 92) - ORIGEN
+	marco.size = Vector2(246, 492)
+	var caja := VBoxContainer.new()
+	caja.add_theme_constant_override("separation", 0)
+	caja.custom_minimum_size.x = ANCHO_FICHA
+	viva.add_child(caja)
+	caja.position = Vector2(662, 104) - ORIGEN
+	asegurar_sel()
+	# lo de cada cosa: la cabeza de la ficha y lo de debajo, lo que hace ("que") y sus botones ([nombre, texto, al
+	# pulsar, apagado])
+	var i := sel.substr(1).to_int()
+	var lz: Lanzables = partida.lanzables
+	var d: Dictionary
+	match sel[0]:
+		"p": d = ficha_arma(caja, partida.johnny.huecos["cuerpo" if i == 0 else "fuego"], true)
+		"g": d = ficha_arma(caja, partida.armas_guardadas[i], false)
+		"m": d = ficha_objeto(caja, Objetos.casillas(partida.mochila)[i])
+		"u": d = ficha_municion(caja, partida.johnny.huecos_municion()[i])
+		"l": d = ficha_lanzable(caja, lz.mano[i], true)
+		_: d = ficha_lanzable(caja, lz.repuesto[i], false)
+	espacio(caja, 8)
+	var nota := renglon(caja, d.que if aviso == "" else aviso, Tema.TINTA if aviso == "" else Tema.AMARILLO,
+		HORIZONTAL_ALIGNMENT_LEFT)
+	nota.name = "nota"   # (las pruebas la leen)
+	aviso = ""
+	# los botones, abajo del todo; el principal, con las letras amarillas
+	var botones := VBoxContainer.new()
+	botones.add_theme_constant_override("separation", 4)
+	botones.custom_minimum_size.x = 214
+	viva.add_child(botones)
+	var atajos := {}   # lo que hacen X e Y con lo elegido, para la línea de ayuda
+	for b in d.botones:
+		var pulsar := boton(botones, b[0], b[1], b[2], "BotonRojo" if b[0] == "tirar" else "")
+		pulsar.disabled = b[3]
+		if b[0] in PRINCIPALES:
+			for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
+				pulsar.add_theme_color_override(c, Tema.AMARILLO)
+		if not b[3]:
+			atajos["X" if b[0] == "tirar" else "Y"] = "tirar" if b[0] == "tirar" else b[1].to_lower()
+	botones.position = Vector2(666, 578 - botones.get_combined_minimum_size().y) - ORIGEN
+	# la ayuda de abajo: los botones del mando
+	var ayuda := HBoxContainer.new()
+	ayuda.add_theme_constant_override("separation", 5)
+	viva.add_child(ayuda)
+	ayuda.position = Vector2(64, 590) - ORIGEN
+	var partes := [["A", "elegir"]]
+	for k in ["X", "Y"]:
+		if k in atajos:
+			partes.append([k, atajos[k]])
+	partes.append(["B", "cerrar"])
+	for p in partes:
+		ayuda.add_child(tecla(p[0]))
+		var t := Label.new()
+		t.text = p[1]
+		t.add_theme_color_override("font_color", Tema.GRIS)
+		ayuda.add_child(t)
+		var hueco := Control.new()
+		hueco.custom_minimum_size.x = 11
+		ayuda.add_child(hueco)
+	rotulo(viva, "Ratón o dedo: tocar", 896, 591, Tema.GRIS, HORIZONTAL_ALIGNMENT_RIGHT)
+
+
+# Lo de arriba de la ficha: el dibujo grande (con el borde del color de su rareza, si la tiene), el nombre y, debajo,
+# qué es (y su rareza)
+func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String, rareza := "") -> void:
+	var grande := Panel.new()
+	grande.custom_minimum_size = Vector2(108, 108)
+	grande.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	grande.add_theme_stylebox_override("panel", estilo(Recetas.RAREZAS[rareza].color if rareza != "" else Tema.AMARILLO,
+		false, false))
+	caja.add_child(grande)
+	dibujo(grande, icono, Vector2(108, 108), 12.0)
+	espacio(caja, 4)
+	renglon(caja, nombre, Color("#e6dec8")).theme_type_variation = "Titulo"
+	renglon(caja, que_es, Tema.GRIS)
+	if rareza != "":
+		renglon(caja, Recetas.RAREZAS[rareza].nombre, Recetas.RAREZAS[rareza].color)
+
+
+# La ficha de un arma ("puesta": la de la mano; si no, la de repuesto): si es de fuego, lo que le queda en el cargador
+# (con sus balitas) y en la reserva; las barras, lo que hace y sus botones. La de la mano se puede tirar si lleva otra de
+# repuesto (que pasa a la mano)
+func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
+	var johnny: Node2D = partida.johnny
+	var w: Dictionary = johnny.arma_de(id)
+	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s" % [Recetas.HUECOS[w.tipo],
+		"En la mano" if puesta else "De repuesto"], Armas.sacadas[id].rareza if Armas.es_creada(id) else "")
+	if w.tipo == "fuego":
+		var tipo := Armas.municion(id)
+		espacio(caja, 4)
+		if w.has("deposito"):
+			renglon(caja, "Depósito: %d de %d s" % [ceili(carga(id)), roundi(w.deposito)], Tema.TINTA)
+		else:
+			balitas(caja, tipo, roundi(carga(id)), w.cargador)
+			renglon(caja, "Cargador %d de %d" % [roundi(carga(id)), w.cargador], Tema.TINTA)
+		renglon(caja, "Reserva: %d %s" % [johnny.cuanta(tipo), RESERVA[tipo]], Tema.GRIS)
+	espacio(caja, 8)
+	for b in barras(w):
+		barra(caja, b[0], b[1])
+	var que: String = Recetas.LISTA[Armas.sacadas[id].receta].desc + "." if Armas.es_creada(id) else QUE_HACE.get(id, "")
+	if not puesta:
+		return {"que": que, "botones": [["poner", "Ponérmela", poner_guardada, false], ["tirar", "Tirar al suelo", tirar, false]]}
+	var otra: String = partida.repuesto(w.tipo)
+	if otra != "":
+		que += " Si la tiras, la de repuesto pasa a la mano."
+	return {"que": que, "botones": [["tirar", "Tirar al suelo", tirar, otra == ""]]}
+
+
+# Las barras de la ficha de un arma, de 1 a 10 (con los talentos y la skin ya contados: johnny.arma_de): cuánto pega
+# cada golpe (o cada segundo, las de depósito), lo rápido que ataca, hasta dónde llega y lo rápido que recarga; las de
+# cuerpo a cuerpo, en vez de recargar, lo ancho que barren. La barra llena: 40 de daño, 8 ataques por segundo, el
+# alcance del bate (cuerpo a cuerpo) o de la pistola, y el barrido de la fregona
+func barras(w: Dictionary) -> Array:
+	var lista := [["Daño", w.dano * w.get("perdigones", 1) / 4.0],
+		["Ritmo", 10.0 if w.has("deposito") else w.ritmo / 0.8]]
+	if w.tipo == "cuerpo":
+		lista.append(["Alcance", w.alcance / 7.0])
+		lista.append(["Barrido", w.arco / 14.0])
+	else:
+		lista.append(["Alcance", w.alcance / 42.0])
+		lista.append(["Recarga", 10.0 - w.recarga * (w.cargador if w.cartucho else 1) * 3.0])   # (la escopeta, uno a uno)
+	return lista.map(func(b): return [b[0], clampi(ceili(b[1]), 1, 10)])
+
+
+# Una barra de la ficha: su nombre y 10 cuadraditos, llenos los que diga "valor"
+func barra(caja: VBoxContainer, nombre: String, valor: int) -> void:
+	var hilera := HBoxContainer.new()
+	hilera.add_theme_constant_override("separation", 0)
+	caja.add_child(hilera)
+	var t := Label.new()
+	t.text = nombre
+	t.custom_minimum_size.x = 96
+	hilera.add_child(t)
+	var cuadros := Control.new()
+	cuadros.custom_minimum_size = Vector2(109, 9)
+	cuadros.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	cuadros.draw.connect(func():
+		for i in 10:
+			var r := Rect2(i * 11, 0, 8, 9)
+			cuadros.draw_rect(r, Tema.AMARILLO if i < valor else Color("#332e3a"))
+			cuadros.draw_rect(r, Tema.LINEA, false, 1.0))
+	hilera.add_child(cuadros)
+
+
+# Las balitas del cargador, una por bala (las gastadas, apagadas); los cartuchos, con su dibujo
+func balitas(caja: VBoxContainer, tipo: String, llenas: int, total: int) -> void:
+	var tex: Texture2D = load("res://assets/ui/iconos/%s.png" % ("cartucho" if tipo == "cartuchos" else "bala"))
+	var paso := mini(7, floori(ANCHO_FICHA / total))
+	var hilera := Control.new()
+	hilera.custom_minimum_size = Vector2(total * paso - 2, 12)
+	hilera.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	hilera.draw.connect(func():
+		for i in total:
+			hilera.draw_texture(tex, Vector2(i * paso, 1), Color.WHITE if i < llenas else Color(0.35, 0.35, 0.4, 0.8)))
+	caja.add_child(hilera)
+
+
+# La ficha de una casilla de la mochila ([id, cuántos]): lo de curar se usa; lo demás dice para qué recetas sirve
+func ficha_objeto(caja: VBoxContainer, c: Array) -> Dictionary:
+	var id: String = c[0]
+	var curar := id in Objetos.USABLES
+	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "Para curar" if curar else "Objeto · Común")
+	if c[1] > 1:
+		renglon(caja, "Llevas %d" % c[1], Tema.TINTA)
+	if curar:
+		return {"que": "Te cura %d de vida. Si no lo usas, se pierde al acabar la partida (no va al baúl)." % partida.cura_de(id),
+			"botones": [["usar", "Usar", usar, false], ["tirar", "Tirar al suelo", tirar, false]]}
+	return {"que": recetas_de(id) + " Si caes, se pierde (en el baúl queda a salvo).",
+		"botones": [["tirar", "Tirar al suelo", tirar, false]]}
+
+
+# Para qué recetas del banco de trabajo sirve un objeto: las que se saben, con el otro ingrediente; las que no, cuántas
+func recetas_de(id: String) -> String:
+	var s := Guardado.cargar()
+	var sabidas := []
+	var otras := 0
+	for r in Recetas.LISTA:
+		var con: Array = Recetas.LISTA[r].con
+		if not id in con:
+			continue
+		if Recetas.sabe(s, r):
+			sabidas.append("%s (con %s)" % [Recetas.LISTA[r].nombre, Objetos.nombre(con[1] if con[0] == id else con[0]).to_lower()])
+		else:
+			otras += 1
+	var recetas := "una receta" if otras == 1 else "%d recetas" % otras
+	if sabidas.is_empty():
+		return "Sirve para %s del banco que aún no tienes (las sueltan los jefes)." % recetas if otras > 0 \
+			else "No sirve para ninguna receta del banco."
+	var lista: String = ", ".join(sabidas.slice(0, -1)) + " y " + sabidas[-1] if sabidas.size() > 1 else sabidas[0]
+	return "Sirve para crear en el banco: %s.%s" % [lista, " Y para %s que aún no tienes." % recetas if otras > 0 else ""]
+
+
+# La ficha de un hueco de munición ([tipo, cuánta]): cuánta lleva y quién la gasta. La gasolina y el ácido se tiran de
+# uno en uno; las balas, el hueco entero en una caja
+func ficha_municion(caja: VBoxContainer, h: Array) -> Dictionary:
+	var tipo: String = h[0]
 	var m: Dictionary = Armas.MUNICION[tipo]
-	var total: int = partida.johnny.cuanta(tipo)
+	cabeza(caja, m.icono, m.nombre, "Munición")
+	renglon(caja, "%d en este hueco · llevas %d" % [h[1], partida.johnny.cuanta(tipo)], Tema.TINTA)
+	var que := "La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja." % [
+		m.para, m.hueco]
 	if tipo in Objetos.NOMBRES:   # la gasolina y el bidón de ácido
-		return "%s: llevas %d (caben %d en cada hueco). Llena %s y vale para las recetas del banco. Se tira de uno en uno." % [
-			m.nombre, total, m.hueco, m.para]
-	return "%s: llevas %d (caben %d en cada hueco). Las gastan %s. Si las tiras, las %d de este hueco se quedan en el suelo en una caja." % [
-		m.nombre, total, m.hueco, m.para, n]
+		que = "Llena %s (caben %d en cada hueco) y vale para las recetas del banco. Se tira de uno en uno." % [m.para, m.hueco]
+	return {"que": que, "botones": [["tirar", "Tirar al suelo", tirar, false]]}
 
 
-# Pasa el arrojable elegido de la mano al repuesto o al revés (lanzables.gd)
+# La ficha de un arrojable ("a_mano": de los de la mano; si no, de repuesto): cuántos quedan y lo que hace; se pasa de
+# la mano al repuesto y al revés (no se tiran)
+func ficha_lanzable(caja: VBoxContainer, k: String, a_mano: bool) -> Dictionary:
+	var lz: Lanzables = partida.lanzables
+	cabeza(caja, icono_lanzable(k), nombre_lanzable(k), "Arrojable · %s" % ("A mano" if a_mano else "De repuesto"),
+		rareza_lanzable(k))
+	renglon(caja, "Te quedan %d de %d" % [lz.cuantas(k), lz.maximo(k)] if k in Lanzables.DATOS
+		else "Te quedan %d" % lz.cuantas(k), Tema.TINTA)
+	var que: String = QUE_HACE[k] if k in QUE_HACE else Recetas.LISTA[k].desc + "."
+	if a_mano:
+		que += " Es lo que lanzas ahora." if k == lz.tipo else " Con F lo eliges para lanzarlo."
+		return {"que": que, "botones": [["al_repuesto", "Al repuesto", mover_lanzable, lz.repuesto.size() >= Lanzables.REPUESTO]]}
+	if lz.mano.size() >= Lanzables.MANO:
+		que += " «A la mano» lo cambia por %s, que pasa aquí." % nombre_lanzable(lz.tipo).to_lower()
+	return {"que": que, "botones": [["a_la_mano", "A la mano", mover_lanzable, false]]}
+
+
+# Una línea de la ficha (si no cabe, se parte en varias)
+func renglon(caja: VBoxContainer, s: String, color: Color, alinear := HORIZONTAL_ALIGNMENT_CENTER) -> Label:
+	var t := Label.new()
+	t.text = s
+	t.horizontal_alignment = alinear
+	t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	t.custom_minimum_size.x = ANCHO_FICHA
+	t.add_theme_constant_override("line_spacing", -2)
+	t.add_theme_color_override("font_color", color)
+	caja.add_child(t)
+	return t
+
+
+func espacio(caja: BoxContainer, alto: int) -> void:
+	var c := Control.new()
+	c.custom_minimum_size.y = alto
+	caja.add_child(c)
+
+
+# Una tecla del mando en la ayuda de abajo: su letra en una cajita de metal
+func tecla(letra: String) -> PanelContainer:
+	var c := PanelContainer.new()
+	var e := StyleBoxFlat.new()
+	e.bg_color = Tema.METAL
+	e.border_color = Tema.GRIS
+	e.set_border_width_all(2)
+	e.set_corner_radius_all(2)
+	e.content_margin_left = 6
+	e.content_margin_right = 6
+	c.add_theme_stylebox_override("panel", e)
+	var t := Label.new()
+	t.text = letra
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	c.add_child(t)
+	return c
+
+
+# Un texto en su sitio (en coordenadas de la pantalla): a la izquierda empieza en x; centrado, x es su centro, y a la
+# derecha, su borde derecho. Con "ancho", se parte en líneas si no cabe
+func rotulo(padre: Control, s: String, x: float, y: float, color := Tema.TINTA, alinear := HORIZONTAL_ALIGNMENT_LEFT,
+		ancho := 0.0) -> Label:
+	var t := Label.new()
+	t.text = s
+	t.horizontal_alignment = alinear
+	t.add_theme_color_override("font_color", color)
+	var w := ancho if ancho > 0.0 else 300.0
+	if ancho > 0.0:
+		t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		t.add_theme_constant_override("line_spacing", -4)
+	padre.add_child(t)
+	var dx: float = {HORIZONTAL_ALIGNMENT_CENTER: w / 2.0, HORIZONTAL_ALIGNMENT_RIGHT: w}.get(alinear, 0.0)
+	t.position = Vector2(x - dx, y) - ORIGEN
+	t.size = Vector2(w, 0)
+	return t
+
+
+# ── Inventario: elegir y hacer ──
+
+# Elige una casilla del inventario: se marca y la ficha enseña lo suyo
+func elegir(clave: String) -> void:
+	sel = clave
+	asegurar_sel()
+	for b in huecos_inv:
+		marcar_hueco(b)
+	pintar_ficha()
+
+
+# Con las flechas o el mando, la ficha enseña lo de la casilla que tiene la marca, sin pulsar nada (con el ratón, al
+# tocarla). Cuando la marca la pone el juego (dar_foco), no
+func seguir_marca(clave: String, b: Control) -> void:
+	if abierto == "inventario" and sel != clave and not moviendo_marca and is_instance_valid(lienzo) \
+			and lienzo.is_ancestor_of(b):
+		elegir(clave)
+
+
+# El botón de la ficha que hace lo suyo con lo elegido («Ponérmela», «Usar», «A la mano» o «Al repuesto»; no «Tirar
+# al suelo»), si se puede pulsar
+func principal() -> Button:
+	if not is_instance_valid(viva):
+		return null
+	for nombre in PRINCIPALES:
+		var b: Button = viva.find_child(nombre, true, false)
+		if b and not b.disabled:
+			return b
+	return null
+
+
+# Vuelve a pintar todo, con la marca donde estaba
+func repintar() -> void:
+	var dueno := get_viewport().gui_get_focus_owner()
+	foco = String(dueno.name) if dueno and fondo and fondo.is_ancestor_of(dueno) else ""
+	pintar()
+
+
+# Pasa el arrojable elegido de la mano al repuesto o al revés (lanzables.gd); la ficha sigue con él, en su sitio nuevo
 func mover_lanzable() -> void:
 	var lz: Lanzables = partida.lanzables
 	var i := sel.substr(1).to_int()
+	var k := ""
 	if sel.begins_with("e") and i < lz.repuesto.size():
-		lz.a_la_mano(lz.repuesto[i])
+		k = lz.repuesto[i]
+		lz.a_la_mano(k)
 	elif sel.begins_with("l") and i < lz.mano.size() and lz.repuesto.size() < Lanzables.REPUESTO:
-		lz.al_repuesto(lz.mano[i])
+		k = lz.mano[i]
+		lz.al_repuesto(k)
 	else:
 		Sonido.tocar("no")
 		return
 	Sonido.tocar("cambiar")
-	sel = ""
-	foco = "cerrar"
+	sel = "l%d" % lz.mano.find(k) if k in lz.mano else "e%d" % lz.repuesto.find(k)
+	foco = sel
 	pintar()
 
 
@@ -267,7 +768,7 @@ func elegido() -> String:
 
 
 # Usa lo elegido de la mochila (el botiquín): se cierra el inventario y Johnny se cura. Si no se puede (con la
-# vida llena), lo dice abajo y no se gasta
+# vida llena), lo dice en la ficha y no se gasta
 func usar() -> void:
 	var no: String = partida.usar_objeto(elegido())
 	if no != "":
@@ -280,28 +781,32 @@ func usar() -> void:
 	cerrar()
 
 
-# Se pone en la mano el arma guardada elegida; la que llevaba (de su mismo tipo) pasa a las guardadas
+# Se pone en la mano el arma de repuesto elegida; la que llevaba (de su mismo tipo) pasa al repuesto. La ficha enseña
+# la que se acaba de poner
 func poner_guardada() -> void:
 	var i := sel.substr(1).to_int()
 	var guardadas: Array = partida.armas_guardadas
-	if i >= guardadas.size():
+	if not sel.begins_with("g") or i >= guardadas.size():
 		return
 	var johnny: Node2D = partida.johnny
 	var id: String = guardadas[i]
-	guardadas[i] = johnny.huecos[Armas.datos(id).tipo]
+	var tipo: String = Armas.datos(id).tipo
+	guardadas[i] = johnny.huecos[tipo]
 	johnny.coger(id)
 	Sonido.tocar("cambiar")
-	sel = ""
-	foco = "cerrar"
+	sel = "p0" if tipo == "cuerpo" else "p1"
+	foco = sel
 	pintar()
 
 
-# Tira al suelo, a los pies de Johnny, lo elegido: un objeto de la mochila (uno), un arma guardada o munición (la
-# gasolina y los bidones de ácido, de uno en uno; las balas, todas las del hueco en una caja que las devuelve)
+# Tira al suelo, a los pies de Johnny, lo elegido: un objeto de la mochila (uno), un arma (la de la mano, solo si lleva
+# otra de repuesto, que pasa a la mano) o munición (la gasolina y los bidones de ácido, de uno en uno; las balas, todas
+# las del hueco en una caja que las devuelve). Si ya no queda nada de lo elegido, la ficha vuelve al arma de la mano
 func tirar() -> void:
 	var i := sel.substr(1).to_int()
 	var mochila: Array = partida.mochila
 	var johnny: Node2D = partida.johnny
+	var suelo: Vector2 = johnny.position + Vector2(0, 34)
 	if sel.begins_with("u"):
 		var huecos: Array = johnny.huecos_municion()
 		if i >= huecos.size():
@@ -309,15 +814,16 @@ func tirar() -> void:
 		var tipo: String = huecos[i][0]
 		if tipo in Objetos.NOMBRES:
 			mochila.remove_at(mochila.rfind(tipo))
-			partida.soltar_objeto(tipo, johnny.position + Vector2(0, 34), true)
+			partida.soltar_objeto(tipo, suelo, true)
 		else:
 			var n: int = huecos[i][1]
 			johnny.municion[tipo] -= n
 			if johnny.municion[tipo] <= 0:
 				johnny.municion.erase(tipo)
-			partida.soltar_municion(johnny.position + Vector2(0, 34), tipo, n)
+			partida.soltar_municion(suelo, tipo, n)
 		johnny.avisar_arma()
-		if i >= johnny.huecos_municion().size():
+		huecos = johnny.huecos_municion()
+		if i >= huecos.size() or huecos[i][0] != tipo:
 			sel = ""
 	elif sel.begins_with("m"):
 		var llenas := Objetos.casillas(mochila)
@@ -325,15 +831,30 @@ func tirar() -> void:
 			return
 		var id: String = llenas[i][0]
 		mochila.remove_at(mochila.rfind(id))
-		partida.soltar_objeto(id, partida.johnny.position + Vector2(0, 34), true)
+		partida.soltar_objeto(id, suelo, true)
 		if not id in mochila:
 			sel = ""
 	elif sel.begins_with("g"):
 		var id: String = partida.armas_guardadas[i]
 		partida.armas_guardadas.remove_at(i)
-		partida.soltar_arma(id, partida.johnny.position + Vector2(0, 34))
+		partida.soltar_arma(id, suelo)
 		sel = ""
-	foco = sel if sel != "" else "cerrar"
+	elif sel.begins_with("p"):
+		var tipo := "cuerpo" if sel == "p0" else "fuego"
+		var otra: String = partida.repuesto(tipo)
+		if otra == "":
+			Sonido.tocar("no")
+			return
+		var id: String = johnny.huecos[tipo]
+		var mano: String = johnny.mano
+		partida.armas_guardadas.erase(otra)
+		johnny.coger(otra)
+		if johnny.mano != mano:
+			johnny.sostener(mano)   # (la otra mano sigue con la suya)
+		partida.soltar_arma(id, suelo)
+	else:
+		return
+	foco = sel
 	pintar()
 
 
@@ -773,7 +1294,7 @@ func signo(f: HBoxContainer, texto: String) -> void:
 	f.add_child(t)
 
 
-func boton(caja: Container, nombre: String, texto: String, al_pulsar: Callable, variacion := "") -> Button:
+func boton(caja: Control, nombre: String, texto: String, al_pulsar: Callable, variacion := "") -> Button:
 	var b := Button.new()
 	b.name = nombre
 	b.text = texto
@@ -850,26 +1371,29 @@ func estilo(borde: Color, elegida: bool, encima: bool) -> StyleBoxFlat:
 	return e
 
 
-# Al tocar una casilla: en el banco, una receta ("r_lanza") enseña lo que pide; en los demás, se elige (o se deja
-# de elegir)
+# Al tocar una casilla: en el banco, una receta ("r_lanza") enseña lo que pide; en el inventario, se elige y, si su
+# ficha tiene un botón que hace lo suyo («Ponérmela», «Usar», «A la mano» o «Al repuesto»), la marca salta a él (con
+# el mando o las flechas, A dos veces y hecho); en el baúl, se elige (o se deja de elegir)
 func tocar(clave: String) -> void:
 	Sonido.tocar("click")
 	if abierto == "banco":
 		elegir_receta(clave.trim_prefix("r_"))
 		return
+	if abierto == "inventario":
+		elegir(clave)
+		var b: Control = principal()
+		dar_foco.call_deferred(b if b else lienzo.find_child(sel, false, false))
+		return
 	sel = "" if sel == clave else clave
 	foco = clave
-	if abierto == "inventario" and elegido() in Objetos.USABLES:
-		foco = "usar"   # con el mando o las flechas, la marca salta a «Usar»: A dos veces y te curas
-	elif abierto == "inventario" and sel.begins_with("e"):
-		foco = "a_la_mano"   # y con un arrojable de repuesto, a «A la mano»
-	elif guardando and Objetos.al_baul(elegido()) and Objetos.cabe_baul(Guardado.cargar(), elegido()):
-		foco = "guardar"   # y en el baúl, a «Guardar»: A dos veces y se guarda
+	if guardando and Objetos.al_baul(elegido()) and Objetos.cabe_baul(Guardado.cargar(), elegido()):
+		foco = "guardar"   # en el baúl, la marca salta a «Guardar»: A dos veces y se guarda
 	pintar()
 
 
 # Esc, B del mando o (en el inventario) la misma tecla que lo abrió: cerrar. Va en _input porque Godot usa el
-# Tabulador para pasar de un botón a otro y no llegaría
+# Tabulador para pasar de un botón a otro y no llegaría. En el inventario, además, los atajos: F (o RB) cambia el
+# arrojable que se lanza, X (o Supr) tira lo elegido e Y hace lo del botón principal de la ficha
 func _input(evento: InputEvent) -> void:
 	if abierto == "":
 		return
@@ -877,3 +1401,20 @@ func _input(evento: InputEvent) -> void:
 			or (abierto == "inventario" and evento.is_action_pressed("inventario")):
 		get_viewport().set_input_as_handled()
 		cerrar()
+		return
+	if abierto != "inventario":
+		return
+	if evento.is_action_pressed("cambiar_lanzable"):
+		get_viewport().set_input_as_handled()
+		partida.lanzables.cambiar()
+		repintar()
+		return
+	var b: Button = null
+	if evento is InputEventJoypadButton and evento.pressed and evento.button_index == JOY_BUTTON_Y:
+		b = principal()
+	elif (evento is InputEventJoypadButton and evento.pressed and evento.button_index == JOY_BUTTON_X) \
+			or (evento is InputEventKey and evento.pressed and not evento.echo and evento.keycode == KEY_DELETE):
+		b = viva.find_child("tirar", true, false) if is_instance_valid(viva) else null
+	if b and not b.disabled:
+		get_viewport().set_input_as_handled()
+		b.pressed.emit()
