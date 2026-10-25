@@ -20,6 +20,7 @@ var largo := 100.0      # lo largo de la franja o hasta dónde llega el abanico
 var medio := 32.0       # la franja: el ancho a cada lado; el abanico: el medio ángulo que barre
 var aplasta := 1.0      # el abanico: lo aplastado que se ve en el suelo (de arriba abajo)
 var choca := false
+var sombra := 0.0       # el abanico de un salto: lo que ocupa la sombra de quien cae (0 a 1)
 var pedido := 0         # el último fotograma en que se pidió (si deja de pedirse, se esconde)
 static var apagados := false   # el panel de la sala de pruebas los apaga, para ver a los jefes sin ellos
 
@@ -42,14 +43,16 @@ static func franja(jefe: CharacterBody2D, desde_: Vector2, angulo_: float, largo
 	aviso.medio = medio_
 
 
-# El trozo que barre un golpe: desde "desde", hacia "angulo", "medio" ángulo a cada lado y hasta "alcance". "aplasta":
-# lo aplastado que se ve (1, redondo)
+# El trozo que barre un golpe: desde "desde", hacia "angulo", "medio" ángulo a cada lado (PI: el círculo entero) y
+# hasta "alcance". "aplasta": lo aplastado que se ve (1, redondo); "sombra_": en un salto, la sombra de quien cae en el
+# medio (lo que ocupa, 0 a 1)
 static func abanico(jefe: Node2D, desde_: Vector2, angulo_: float, medio_: float, alcance: float, k: float,
-		tiempo: float, aplasta_ := 1.0) -> void:
+		tiempo: float, aplasta_ := 1.0, sombra_ := 0.0) -> void:
 	var aviso := pedir(jefe, 1, desde_, angulo_, k, tiempo)
 	aviso.largo = alcance
 	aviso.medio = medio_
 	aviso.aplasta = aplasta_
+	aviso.sombra = sombra_
 
 
 # El aviso del jefe (si no lo tiene, se lo pone), ya pedido para este fotograma
@@ -92,6 +95,7 @@ func _draw() -> void:
 	m.set_shader_parameter("medio", medio)
 	m.set_shader_parameter("aplasta", aplasta)
 	m.set_shader_parameter("choca", choca)
+	m.set_shader_parameter("sombra", sombra)
 	# un rectángulo que tapa el aviso: el shader decide qué cuadraditos se ven
 	if forma == 0:
 		draw_set_transform(desde, angulo)

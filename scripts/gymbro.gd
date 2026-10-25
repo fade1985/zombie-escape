@@ -6,7 +6,7 @@
 #     línea recta. Si pilla a Johnny le quita 20 y le tira (esquivando, le pasa de largo). Si se come una pared,
 #     se queda mareado (¡a por él!).
 #   - Salto: se agacha y salta hacia Johnny. Mientras está en el aire (1,1 s) se ve en el suelo la zona donde va a
-#     caer (una sombra con el borde rojo, de 400 de ancho); al caer, si Johnny está dentro, le quita 24 y le tira.
+#     caer (un círculo rojo de 400 de ancho que se llena hacia fuera, con su sombra en el medio); al caer, si Johnny está dentro, le quita 24 y le tira.
 #     En el aire no se le puede dar.
 #   - Pesas: lanza mancuernas en curva (pesa.gd) a donde está Johnny y a donde va a estar, cada una con su marca
 #     roja en el suelo.
@@ -318,7 +318,7 @@ func animar() -> void:
 
 
 # Los avisos, en el suelo (por debajo de él): la franja del torbellino (tan ancha como sus brazos), el círculo
-# que barre girando y la zona del salto (la sombra de donde va a caer, que se agranda, y su borde rojo: lo que
+# que barre girando y la zona del salto (el círculo de donde va a caer, que se llena, con su sombra en el medio: lo que
 # golpea, en_la_zona())
 func _draw() -> void:
 	if estado == "muerto":
@@ -338,10 +338,10 @@ func _draw() -> void:
 				var a := tiempo * 14.0 + i * TAU / 3.0
 				draw_arc(Vector2.ZERO, BRAZOS, a, a + 1.4, 12, Color(1, 1, 1, 0.5), 4.0)
 		"salto":
+			# donde cae: el círculo se llena hacia fuera y su sombra crece en el medio (aviso.gd)
 			var k := minf(1.0, t / datos.vuelo)
-			draw_set_transform(datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, Vector2(1, 0.6))
-			draw_circle(Vector2.ZERO, RADIO_SALTO * (0.35 + 0.65 * k), Color(0, 0, 0, 0.2 + 0.3 * k))
-			draw_arc(Vector2.ZERO, RADIO_SALTO, 0.0, TAU, 64, Color(rojo, 0.4 + 0.5 * k), 3.0)
+			Aviso.abanico(self, datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, PI, RADIO_SALTO, k, tiempo,
+				0.6, 0.15 + 0.3 * k)
 	draw_set_transform(Vector2.ZERO)
 
 

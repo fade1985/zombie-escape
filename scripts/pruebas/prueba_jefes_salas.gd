@@ -1094,13 +1094,15 @@ func probar_golpes() -> void:
 		["portera", "aviso_abanico", 0.55],
 		["antidisturbios", "aviso_porrazo", 0.5],
 		["cocinero", "aviso_cuchillazo", 0.5], ["modista", "aviso_tijeretazo", 0.5],
-		["gerente", "aviso_maletinazo", 0.5], ["bombero", "aviso_hacha", 0.4]]
+		["gerente", "aviso_maletinazo", 0.5], ["bombero", "aviso_hacha", 0.4],
+		["mascota", "salto", 0.8], ["gymbro", "salto", 1.1]]   # (el salto: el círculo de donde va a caer)
 	for g in golpes:
 		var jefe: Node2D = meter_zombi(g[0], centro)
 		await get_tree().create_timer(0.1, false).timeout
 		jefe.set_physics_process(false)   # quieto, con el aviso a mano
 		jefe.mirada = Vector2.from_angle(PI - 0.3)   # hacia la izquierda: que no lo tape el jefe
-		jefe.cambiar(g[1], {"angulo": PI - 0.3})
+		jefe.cambiar(g[1], {"angulo": PI - 0.3, "desde": jefe.position, "hasta": jefe.position + Vector2(-110, 30),
+			"vuelo": g[2]})
 		johnny.position = jefe.position + Vector2(-40, -90)
 		johnny.velocity = Vector2.ZERO
 		camara.reset_smoothing()
@@ -1109,7 +1111,8 @@ func probar_golpes() -> void:
 			for i in 6:   # (sin pensar, el jefe no se repinta solo)
 				jefe.queue_redraw()
 				await RenderingServer.frame_post_draw
-			Captura.foto("captura-golpe-%s-%d.png" % [g[1].trim_prefix("aviso_"), roundi(k * 100)])
+			Captura.foto("captura-golpe-%s-%d.png" % [g[1].trim_prefix("aviso_") + ("-" + g[0] if g[1] == "salto" else ""),
+				roundi(k * 100)])
 		print("Golpes (%s, %s): aviso %s (esperado: %s)" % [g[0], g[1], "sí" if jefe.has_node("Aviso") else "no",
 			"no" if g[1] == "aviso_abanico" else "sí"])   # (el abanico de agua: sin rayas, solo la fregona en alto)
 		jefe.queue_free()

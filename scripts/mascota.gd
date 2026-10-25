@@ -224,8 +224,7 @@ func _draw() -> void:
 		"aviso_embestida":
 			franja(VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA, minf(1.0, t / datos.aviso))
 		"salto":
+			# donde cae: el círculo se llena hacia fuera y su sombra crece en el medio (aviso.gd)
 			var k := minf(1.0, t / VUELO)
-			draw_set_transform(datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, Vector2(1, 0.6))
-			draw_circle(Vector2.ZERO, RADIO_SALTO * (0.35 + 0.65 * k), Color(0, 0, 0, 0.2 + 0.3 * k))
-			draw_arc(Vector2.ZERO, RADIO_SALTO, 0.0, TAU, 40, Color(1, 0.24, 0.35, 0.4 + 0.5 * k), 3.0)
-			draw_set_transform(Vector2.ZERO)
+			Aviso.abanico(self, datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, PI, RADIO_SALTO, k, tiempo,
+				0.6, 0.3 + 0.4 * k)

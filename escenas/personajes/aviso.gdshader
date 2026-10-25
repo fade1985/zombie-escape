@@ -5,7 +5,8 @@
 //     a los lados, raíles de puntos que marcan el ancho; y al final, una estrella de choque si se va a estrellar contra
 //     la pared (y quedarse atontado) o una X si no.
 //   - el abanico de un golpe: se va llenando del jefe hacia fuera, como una barra de carga, sin bordes; lo que falta,
-//     a cuadros flojitos.
+//     a cuadros flojitos. Con medio ángulo PI, un círculo entero (los de la portera, donde cae un salto); en un salto,
+//     además, la sombra de quien cae en el medio.
 shader_type canvas_item;
 
 uniform int forma = 0;          // 0: franja; 1: abanico
@@ -17,6 +18,7 @@ uniform float aplasta = 1.0;    // el abanico: lo aplastado que se ve en el suel
 uniform float k = 0.0;          // lo que lleva (0 a 1)
 uniform float tiempo = 0.0;
 uniform bool choca = false;     // la franja acaba en una pared
+uniform float sombra = 0.0;     // el abanico de un salto: la sombra de quien cae, en el medio (lo que ocupa, 0 a 1)
 
 const float CELDA = 2.0;
 // las flechas de la franja
@@ -118,15 +120,21 @@ vec4 abanico(vec2 p) {
 		return vec4(0.0);
 	}
 	float lleno = largo * k;
+	vec4 color;
 	if (r > lleno) {
 		// lo que falta: a cuadros, flojito
 		vec2 celda = floor((p + origen) / CELDA);
-		return mod(celda.x + celda.y, 2.0) < 0.5 ? vec4(0.0) : vec4(ROJO, 0.22 + 0.1 * k);
+		color = mod(celda.x + celda.y, 2.0) < 0.5 ? vec4(0.0) : vec4(ROJO, 0.22 + 0.1 * k);
+	} else if (lleno - r < 6.0) {
+		color = vec4(BRILLO, 0.8);   // el frente, que avanza hacia fuera
+	} else {
+		color = vec4(ROJO, 0.3 + 0.25 * k * (r / largo));   // lo lleno, algo más fuerte hacia fuera
 	}
-	if (lleno - r < 6.0) {
-		return vec4(BRILLO, 0.8);   // el frente, que avanza hacia fuera
+	// la sombra de quien cae, que crece según baja
+	if (r < largo * sombra) {
+		color = vec4(mix(color.rgb, vec3(0.06, 0.02, 0.04), 0.8), max(color.a, 0.3 + 0.3 * k));
 	}
-	return vec4(ROJO, 0.3 + 0.25 * k * (r / largo));   // lo lleno, algo más fuerte hacia fuera
+	return color;
 }
 
 void fragment() {
