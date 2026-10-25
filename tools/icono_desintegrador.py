@@ -42,7 +42,9 @@ GOTAS = [(27, 6, VERDE),
          (26, 9, VERDE_CLARO), (27, 9, VERDE), (28, 9, VERDE), (29, 9, VERDE_OSCURO),
          (26, 10, VERDE), (27, 10, VERDE), (28, 10, VERDE_OSCURO), (29, 10, VERDE_OSCURO),
          (27, 11, VERDE_OSCURO), (28, 11, VERDE_OSCURO),
-         (27, 14, VERDE_CLARO), (28, 14, VERDE), (27, 15, VERDE), (28, 15, VERDE_OSCURO)]
+         (28, 15, VERDE), (28, 16, VERDE),
+         (27, 17, VERDE_CLARO), (28, 17, VERDE), (29, 17, VERDE_OSCURO),
+         (27, 18, VERDE), (28, 18, VERDE_OSCURO), (29, 18, VERDE_OSCURO)]
 
 
 def linea(a, b):
