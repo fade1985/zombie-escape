@@ -1,6 +1,6 @@
 # Las recetas del banco de trabajo (src/recetas.js del JS). Cada receta junta dos ingredientes: objetos
-# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 15 primeras se hacen con lo de los
-# Apartamentos; las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
+# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 14 primeras se hacen con lo de los
+# Apartamentos (eran 15: la lanza se quitó del juego el 25 oct); las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
 # tres últimas, solo cosas del centro (parte 6 de docs/CENTRO_COMERCIAL.md). El arma que sale lleva una rareza al azar que
 # multiplica su daño, y va al baúl (guardado: "baul_armas"). Desde el baúl se sacan para una partida; lo que
 # hacen está en Armas.CREADAS y armas_creadas.gd (fase 7b2).
@@ -9,11 +9,11 @@
 #   nombre     lo que sale
 #   con        los dos ingredientes
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
-#   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; la lanza, el aplastacabezas, el bate de
+#   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico, el lanzallamas, el supersoplete, el desintegrador, el bumerán, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/lanza.png, aplastacabezas.png,
+#              eléctrico, el lanzallamas, el supersoplete, el desintegrador, el bumerán, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/aplastacabezas.png,
 #              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png, bumeran.png, pistola_electrica.png y garfio.png, de tools/icono_lanza.py, icono_aplastacabezas.py,
+#              latigo_electrico.png, lanzallamas.png, supersoplete.png, desintegrador.png, bumeran.png, pistola_electrica.png y garfio.png, de tools/icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
 #              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py e
 #              icono_supersoplete.py, icono_desintegrador.py, icono_bumeran.py, icono_pistola_electrica.py e icono_garfio.py). Se lee siempre de
@@ -22,7 +22,7 @@
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
-#   edificio   con lo de qué edificio se hace: "apartamentos" (las 15 primeras), "mezcla" (una cosa de casa y otra
+#   edificio   con lo de qué edificio se hace: "apartamentos" (las 14 primeras), "mezcla" (una cosa de casa y otra
 #              del centro comercial) o "centro" (solo cosas del centro). Las Colecciones del ordenador cuentan las
 #              de "mezcla" y "centro" en el centro comercial (de_edificio)
 class_name Recetas
@@ -30,8 +30,6 @@ class_name Recetas
 const ARMAS := ["fregona", "bate", "cuchillo"]   # las armas que entran en las recetas
 
 const LISTA := {
-	"lanza": {"nombre": "Lanza", "con": ["fregona", "cuchillo"], "hueco": "cuerpo", "icono": "lanza", "dano": 11,
-		"desc": "Alcance largo: una estocada estrecha que atraviesa", "edificio": "apartamentos"},
 	"aplastacabezas": {"nombre": "Aplastacabezas", "con": ["bate", "clavos"], "hueco": "cuerpo", "icono": "aplastacabezas", "dano": 21,
 		"desc": "Empuja mucho y aturde un instante", "edificio": "apartamentos"},
 	"bate_fuego": {"nombre": "Bate de fuego", "con": ["bate", "gasolina"], "hueco": "cuerpo", "icono": "bate_fuego", "dano": 20,
@@ -167,7 +165,7 @@ static func para_soltar(s: Dictionary, en_suelo: Array) -> String:
 	return "" if quedan.is_empty() else quedan.pick_random()
 
 
-# El dibujo del arma que sale (el molotov, la lanza, el aplastacabezas, el bate de fuego, el partecuerpos, la inmovilizadora, el látigo y la súper maza tienen el suyo;
+# El dibujo del arma que sale (el molotov, el aplastacabezas, el bate de fuego, el partecuerpos, la inmovilizadora, el látigo y la súper maza tienen el suyo;
 # las demás, de momento, el de un ingrediente)
 static func icono_de(id: String) -> String:
 	return "molotov" if id == "molotov" else Objetos.icono(LISTA[id].icono)
@@ -176,7 +174,7 @@ static func icono_de(id: String) -> String:
 # ── Colecciones (el programa del ordenador) ──
 # Las creadas alguna vez se apuntan en el guardado ("creadas"), y el ordenador las cuenta por edificio.
 
-# Las que se hacen con lo de un edificio, en el orden de LISTA: en los Apartamentos, las 15 primeras; en el centro
+# Las que se hacen con lo de un edificio, en el orden de LISTA: en los Apartamentos, las 14 primeras; en el centro
 # comercial, las de "mezcla" y las de "centro" (9). Otro valor: todas
 static func de_edificio(edificio: String) -> Array:
 	match edificio:

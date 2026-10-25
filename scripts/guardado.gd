@@ -76,6 +76,11 @@ static func cargar() -> Dictionary:
 		s.talentos[t] = int(s.talentos[t])
 	for id in s.baul:
 		s.baul[id] = int(s.baul[id])
+	# las armas cuya receta ya no existe desaparecen del baúl, y la receta, de las aprendidas y de las creadas
+	# (Colecciones): la lanza se quitó del juego el 25 oct
+	s.baul_armas = s.baul_armas.filter(func(a): return Recetas.LISTA.has(a.get("receta", "")))
+	s.recetas = s.recetas.filter(func(id): return Recetas.LISTA.has(id))
+	s.creadas = s.creadas.filter(func(id): return Recetas.LISTA.has(id))
 	for a in s.baul_armas:
 		a.dano = int(a.dano)
 		a.unidades = int(a.unidades)

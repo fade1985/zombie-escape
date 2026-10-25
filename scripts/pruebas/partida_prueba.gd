@@ -11,10 +11,11 @@
 #                  portera en la baja)
 #   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y lo que hace cada una
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
-#   --lanza        la lanza con su dibujo propio: su icono en el baúl, su hoja, la estocada en las 8 direcciones y
-#                  con una skin (Armas.CREADAS.lanza)
-#   --aplastacabezas  lo mismo con el aplastacabezas: su icono, su hoja, el golpe (que aturde) en las 8 direcciones
-#                  y con una skin (Armas.CREADAS.aplastacabezas)
+#   --banco        una lanza de antes en el guardado (se quitó del juego) desaparece al cargar; luego el banco de
+#                  trabajo, las recetas y las Colecciones, sin la prueba larga (probar_cosas, probar_recetas y
+#                  probar_colecciones)
+#   --aplastacabezas  el aplastacabezas con su dibujo propio: su icono en el baúl, su hoja, el golpe (que aturde) en
+#                  las 8 direcciones y con una skin (Armas.CREADAS.aplastacabezas)
 #   --bate-fuego   lo mismo con el bate de fuego: su icono, su hoja, el golpe (que prende) en las 8 direcciones y
 #                  con las 4 skins (Armas.CREADAS.bate_fuego)
 #   --partecuerpos lo mismo con el partecuerpos: su icono, su hoja, el golpe (que hace sangrar) en las 8 direcciones
@@ -67,8 +68,6 @@
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
 #   --armas        la sala de pruebas de armas (F11, sala_armas.gd): la diana que no se muere, la pistola desde 72
 #                  ángulos (desde cuáles falla), la munición sin fin, el cambio de arma y la vuelta con las armas de antes
-#   --estocada     en la sala de pruebas de armas (F11), la estocada de la lanza desde las 8 direcciones: Johnny se queda
-#                  en su sitio y la lanza avanza (tools/estocada.py), con tres fotos de cada una
 #   --gastro       el vómito de la mutación Gastroenteritis (mutaciones.gd) no cruza las paredes
 #   --caza         el acompañante va a por los zombis que ve (aliado.gd, cazar)
 #   --porqueria    (con --jefe gloton) la habitación del Glotón: sin muebles y llena de su porquería, que quema
@@ -152,12 +151,12 @@ func empezar_prueba() -> void:
 	elif "--skins" in args:
 		set_process(false)   # sin la prueba larga
 		probar_skins()
+	elif "--banco" in args:
+		set_process(false)   # sin la prueba larga
+		probar_banco()
 	elif "--baul" in args:
 		set_process(false)   # sin la prueba larga
 		probar_baul()
-	elif "--lanza" in args:
-		set_process(false)   # sin la prueba larga
-		probar_lanza()
 	elif "--aplastacabezas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_aplastacabezas()
@@ -215,9 +214,6 @@ func empezar_prueba() -> void:
 	elif "--armas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_armas()
-	elif "--estocada" in args:
-		set_process(false)   # sin la prueba larga
-		probar_estocada()
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
@@ -2108,43 +2104,6 @@ func probar_armas() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --estocada": la estocada de la lanza en la sala de pruebas de armas (F11, sala_armas.gd), desde que
-# Johnny se queda en su sitio al clavar y es la lanza la que avanza (24 oct, tools/estocada.py). Coge la lanza de la
-# lista de la sala y, a 80 de la diana, ataca desde las 8 direcciones: cuenta su hoja, que los pies van en el sitio de
-# su casilla ancha y el daño que le hace a la diana desde cada una, con tres fotos de cada dirección (tomando impulso,
-# en el golpe y con la lanza estirada: captura-estocada-<dirección>-<1, 2, 3>.png). Cada línea dice lo esperado
-func probar_estocada() -> void:
-	await pulsar_y_esperar(KEY_F11)
-	var sala: SalaArmas = null
-	for n in mapa.get_children():
-		if n is SalaArmas:
-			sala = n
-	await get_tree().create_timer(0.3).timeout
-	sala.indice = sala.lista.find("lanza")
-	sala.cambiar(0)
-	johnny.espera = 1000.0   # que no ataque por su cuenta: aquí ataca la prueba
-	await get_tree().process_frame
-	print("Lanza en la mano: hoja «%s» · pies %s (esperado: conserje-48-lanza o la de la skin puesta, (-64.0, -72.0))" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), johnny.sprite.offset])
-	var danos := []
-	for d in johnny.DIRS:
-		var angulo: float = johnny.DIRS.find(d) * PI / 4
-		johnny.global_position = sala.diana.global_position - Vector2.from_angle(angulo) * 80.0
-		johnny.direccion = d
-		johnny.get_node("Camara").reset_smoothing()
-		await get_tree().create_timer(0.3).timeout
-		var antes: int = sala.total
-		johnny.atacar(angulo)
-		# el golpe llega a los 0,111 s (0,5 × 0,222) y la lanza acaba de estirarse en el fotograma siguiente
-		for foto in [[0.03, 1], [0.1, 2], [0.07, 3]]:
-			await get_tree().create_timer(foto[0]).timeout
-			Captura.foto("captura-estocada-%s-%d.png" % [d, foto[1]])
-		await get_tree().create_timer(0.5).timeout
-		danos.append("%s %d" % [d, sala.total - antes])
-	print("Daño a la diana desde cada dirección: %s (esperado: más de 0 en todas)" % ", ".join(danos))
-	get_tree().quit()
-
-
 # Pulsa y suelta una tecla y, si con ella se cambia de sitio, espera a que acabe el fundido
 func pulsar_y_esperar(tecla: Key) -> void:
 	for pulsada in [true, false]:
@@ -2173,8 +2132,8 @@ func pulsar_y_esperar(tecla: Key) -> void:
 #     conserje de siempre (captura-skins-caras.png, el portero; captura-skins-caras-<id>.png, las demás); y Johnny
 #     andando con la skin, que sigue con su paso
 #   - el daño de la fregona: × 4 con el portero (con el bate, igual), contado y con un golpe de verdad
-#   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (también una creada en el banco, la lanza) y las de
-#     fuego, igual; contado y con un golpe de verdad (con el bate y con la lanza)
+#   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (también una creada en el banco, el aplastacabezas) y las de
+#     fuego, igual; contado y con un golpe de verdad (con el bate y con el aplastacabezas)
 #   - el daño de las armas que queman: × 3 con el bombero (el bate de fuego, el lanzallamas, el súpersoplete, el
 #     molotov y la bomba de aceite) y las demás, igual; contado y de verdad, con el golpe, el disparo o la llama y lo que
 #     sigue ardiendo el zombi (y un molotov de verdad); con la pistola y el bate, igual
@@ -2408,19 +2367,19 @@ func probar_skins() -> void:
 		quitado[""], quitado["portero"]])
 
 	# ── El daño cuerpo a cuerpo del gymbro: × 3 con todas, también las creadas en el banco; las de fuego, igual ──
-	var lanza := Armas.apuntar(Recetas.crear("lanza", "verde"))
+	var aplasta := Armas.apuntar(Recetas.crear("aplastacabezas", "verde"))
 	var cuentas := []
-	for arma in ["fregona", "bate", "cuchillo", lanza, "pistola", "escopeta", "mp5"]:
+	for arma in ["fregona", "bate", "cuchillo", aplasta, "pistola", "escopeta", "mp5"]:
 		johnny.coger(arma)
 		johnny.vestir("")
 		var siempre: float = johnny.arma().dano
 		johnny.vestir("gymbro")
 		cuentas.append("%s × %.1f" % [Objetos.nombre(arma), johnny.arma().dano / siempre])
 	print("Daño con el gymbro: %s (esperado: × 3 las cuatro primeras, × 1 las de fuego)" % " · ".join(cuentas))
-	# golpes de verdad, sin críticos, con el bate y con la lanza
+	# golpes de verdad, sin críticos, con el bate y con el aplastacabezas
 	johnny.stats.critico = 0.0
 	var golpes := []
-	for arma in ["bate", lanza]:
+	for arma in ["bate", aplasta]:
 		johnny.coger(arma)
 		var quita := {}
 		for skin in ["", "gymbro"]:
@@ -2699,80 +2658,8 @@ func probar_skin_bombero() -> void:
 	await get_tree().process_frame
 
 
-# Con "--captura --lanza": la lanza con su dibujo propio (Armas.CREADAS.lanza, conserje-48-lanza; recetas.gd, su icono).
-# En la sala de mantenimiento, con dos lanzas en el baúl (una guardada antes de que tuviera icono propio, con el de la
-# fregona), Johnny se arrima al baúl y cuenta el icono de cada una (captura-lanza-baul.png). Saca una y cuenta su hoja,
-# su momento del golpe y que ya no le salen chispitas; le da una estocada a un zombi a 80 de distancia (con la fregona
-# no llegaría) y luego ataca en las 8 direcciones, con una foto de cada una justo en el golpe
-# (captura-lanza-<dirección>.png). Con la skin del bombero puesta, su hoja de la lanza y una foto
-# (captura-lanza-bombero.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
-func probar_lanza() -> void:
-	var antes := Guardado.cargar()
-	var vieja := Recetas.crear("lanza", "azul")
-	vieja.icono = "fregona"   # como las que se crearon antes de que la lanza tuviera icono propio
-	Guardado.cambiar(func(g2):
-		g2.baul_armas = [vieja, Recetas.crear("lanza", "morada")]
-		g2.skins = ["bombero"]
-		g2.skin = "")
-	johnny.vestir("")
-	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
-	johnny.direccion = "n"
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.5).timeout
-	print("Baúl: abierto %s · iconos de las lanzas %s (esperado: true, [\"lanza\", \"lanza\"]) · en el banco «%s» (esperado: lanza)" % [
-		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
-		Recetas.icono_de("lanza")])
-	Captura.foto("captura-lanza-baul.png")
-	inventario.cerrar()
-	await get_tree().process_frame
-
-	# sacada del baúl: su hoja, sin chispitas
-	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
-	johnny.coger(id)
-	var w := Armas.datos(id)
-	johnny.position = Vector2(690, 300)   # (en el despacho)
-	johnny.direccion = "e"
-	johnny.espera = 1000.0                # que no ataque por su cuenta: aquí ataca la prueba
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.3).timeout
-	print("Lanza en la mano: hoja «%s» · momento %.3f · chispitas %s · icono «%s» (esperado: conserje-48-lanza.tres, 0.222, false, lanza)" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), w.momento, w.has("detalle"), Objetos.icono(id)])
-
-	# la estocada llega lejos: un zombi a 80 (el alcance de la lanza es 96; el de la fregona, 62)
-	var z := zombis_de_prueba([Vector2(80, 0)])
-	await get_tree().process_frame
-	johnny.atacar(0.0)
-	await get_tree().create_timer(0.6).timeout
-	print("Estocada a 80: vida del zombi %d (esperado: menos de 500)" % z[0].vida)
-	zombis_de_prueba([])
-
-	# las 8 direcciones, con una foto en el golpe (llega a los 0,111 s: 0,5 × 0,222)
-	for d in johnny.DIRS:
-		johnny.direccion = d
-		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
-		await get_tree().create_timer(0.13).timeout
-		Captura.foto("captura-lanza-%s.png" % d)
-		await get_tree().create_timer(0.5).timeout
-
-	# con la skin del bombero: su hoja de la lanza
-	Skins.poner("bombero")
-	johnny.vestir("bombero")
-	johnny.direccion = "e"
-	johnny.atacar(0.0)
-	await get_tree().create_timer(0.13).timeout
-	Captura.foto("captura-lanza-bombero.png")
-	print("Con el bombero: hoja «%s» (esperado: conserje-48-lanza-bombero.tres)" % johnny.sprite.sprite_frames.resource_path.get_file())
-	await get_tree().create_timer(0.5).timeout
-
-	Guardado.cambiar(func(g2):
-		g2.baul_armas = antes.baul_armas
-		g2.skins = antes.skins
-		g2.skin = antes.skin)
-	get_tree().quit()
-
-
 # Con "--captura --aplastacabezas": el aplastacabezas con su dibujo propio (Armas.CREADAS.aplastacabezas,
-# conserje-48-aplastacabezas; recetas.gd, su icono). Como la de la lanza: en la sala de mantenimiento, con dos en el
+# conserje-48-aplastacabezas; recetas.gd, su icono). En la sala de mantenimiento, con dos en el
 # baúl (una guardada antes de que tuviera icono propio, con el del bate), Johnny se arrima al baúl y cuenta el icono de
 # cada una (captura-aplastacabezas-baul.png). Saca una y cuenta su hoja, su momento del golpe y que ya no le salen
 # chispitas; le da a un zombi a 50 a su izquierda (lo aturde y lo echa atrás) y luego ataca en las 8 direcciones, con una
@@ -5363,7 +5250,7 @@ func probar_colecciones() -> void:
 	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 8)
 	if not "explosivos" in encontrados:
 		encontrados.append("explosivos")
-	var creadas: Array = ["molotov", "lanza", "supermaza"]
+	var creadas: Array = ["molotov", "aplastacabezas", "supermaza"]
 	var vistos: Array = ["normal", "lento", "rapido", "portera"]
 	if edificio == "centro":
 		creadas.append("bate_helado")
@@ -5397,8 +5284,8 @@ func probar_colecciones() -> void:
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
 	if Objetos.de_edificio("apartamentos").size() != 18 or Objetos.de_edificio("centro").size() != 24:
 		push_error("Colecciones: los objetos por edificio no son 18 y 24")
-	if Recetas.de_edificio("apartamentos").size() != 15 or Recetas.de_edificio("centro").size() != 9:
-		push_error("Colecciones: las recetas por edificio no son 15 y 9")
+	if Recetas.de_edificio("apartamentos").size() != 14 or Recetas.de_edificio("centro").size() != 9:
+		push_error("Colecciones: las recetas por edificio no son 14 y 9")
 	if Bestiario.LISTA.size() != 22:
 		push_error("Colecciones: el bestiario no tiene 22 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
@@ -5438,6 +5325,34 @@ func probar_noticias() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --banco": una lanza creada antes de quitarla del juego (25 oct) en el guardado, en el baúl, en las
+# recetas aprendidas y en las creadas (Colecciones): al cargar desaparece de las tres (guardado.gd). Luego, el baúl
+# abierto con lo que queda (captura-banco-baul.png), la mochila, el banco y el baúl (probar_cosas), las recetas
+# nuevas (probar_recetas) y las Colecciones (probar_colecciones). Cada línea dice lo esperado y se cierra
+func probar_banco() -> void:
+	var s := Guardado.cargar()
+	var lanza := Recetas.crear("aplastacabezas", "azul")
+	lanza.receta = "lanza"   # como las que se crearon cuando estaba en el juego
+	lanza.nombre = "Lanza"
+	lanza.icono = "lanza"
+	s.baul_armas = [lanza, Recetas.crear("aplastacabezas", "verde")]
+	s.recetas = ["molotov", "lanza", "aplastacabezas"]
+	s.creadas = ["lanza", "aplastacabezas"]
+	Guardado.escribir(s)
+	var leido := Guardado.cargar()
+	print("Lanza vieja al cargar: baúl %s · aprendidas %s · creadas %s (esperado: [\"aplastacabezas\"], [\"molotov\", \"aplastacabezas\"], [\"aplastacabezas\"])" % [
+		leido.baul_armas.map(func(a): return a.receta), leido.recetas, leido.creadas])
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-banco-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+	await probar_cosas()
+	await probar_recetas()
+	await probar_colecciones()
+	get_tree().quit()
+
+
 # La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al
 # inventario), crea un arma con una receta sabida, prueba una sin saber, y hace fotos. Luego, las recetas que
 # sueltan los jefes (probar_soltar_recetas)
@@ -5446,7 +5361,7 @@ func probar_cosas() -> void:
 		g.dolares = 20
 		g.baul = {"clavos": 1, "lejia": 2}
 		g.baul_armas = []
-		g.recetas = ["molotov", "aplastacabezas", "partecuerpos", "lanza"])
+		g.recetas = ["molotov", "aplastacabezas", "partecuerpos", "supermaza"])
 	ahorrados = 20
 	mochila = ["gasolina", "gasolina", "cuchillas", "taser", "cuerda"]
 	soltar_objeto("mechero", johnny.position + Vector2(30, 0))

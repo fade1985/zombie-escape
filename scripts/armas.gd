@@ -74,8 +74,8 @@ const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 17
 # Cada una es su arma base con algunos números cambiados y un efecto (armas_creadas.gd) y lleva su "hoja" (y su
 # "momento", el del golpe en su animación): ya no queda ninguna con el dibujo del arma base. (Una arma sin "hoja"
 # usaría la del arma base y le saldrían unas chispitas del color "detalle" en la punta, "sube": hacia arriba, como
-# fuego, o si no caen como gotas: lo hace ArmasCreadas.detalle(); ninguna lo usa ya.) Son: la lanza (conserje-48-lanza, hecha
-# con PixelLab: estocada hacia delante) y el aplastacabezas (conserje-48-aplastacabezas: el barrido del bate con el
+# fuego, o si no caen como gotas: lo hace ArmasCreadas.detalle(); ninguna lo usa ya.) Son: el aplastacabezas
+# (conserje-48-aplastacabezas: el barrido del bate con el
 # bate de clavos; de espaldas, de arriba abajo), el bate de fuego (conserje-48-bate-fuego: el mismo barrido con
 # el bate ardiendo y una estela de llamas), el partecuerpos (conserje-48-partecuerpos: el barrido más ancho con el
 # bate de cuchillas, estela blanca con gotas de sangre; de espaldas, de arriba abajo) y la inmovilizadora
@@ -99,10 +99,6 @@ const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 17
 # lanzallamas tiene un depósito de verdad, en segundos. El daño no está aquí: lo trae cada arma creada (receta + rareza,
 # recetas.gd)
 const CREADAS := {
-	# la lanza: su casilla es más ancha (128x96, con los pies en 64,72) porque en la estocada Johnny se queda en su sitio
-	# y la lanza avanza (tools/estocada.py)
-	"lanza": {"base": "fregona", "alcance": 96.0, "arco": 35.0, "momento": 0.222,   # estocada que atraviesa
-		"pies": Vector2(64, 72), "hoja": preload("res://assets/sprites/conserje-48-lanza.tres")},
 	"aplastacabezas": {"base": "bate", "empuje": 3.0, "efecto": "aturde", "momento": 0.222,
 		"hoja": preload("res://assets/sprites/conserje-48-aplastacabezas.tres")},
 	"bate_fuego": {"base": "bate", "efecto": "fuego", "momento": 0.222,

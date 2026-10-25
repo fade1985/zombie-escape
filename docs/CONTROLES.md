@@ -94,7 +94,8 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   en las 8 direcciones y con las seis armas, al lado del conserje de siempre (`captura-skins-caras.png`, el
   portero, y `captura-skins-caras-<id>.png`, las demás); ponérsela andando no le corta el paso; el daño de la fregona, × 4 con el portero
   (y el del bate, igual), contado y con un golpe de verdad; el del gymbro, × 3 con la fregona, el bate, el cuchillo y
-  una lanza creada en el banco, y × 1 con las de fuego, contado y con un golpe de verdad (con el bate y la lanza); el
+  un aplastacabezas creado en el banco, y × 1 con las de fuego, contado y con un golpe de verdad (con el bate y el
+  aplastacabezas); el
   del bombero, × 3 con el bate de fuego, el lanzallamas, el súpersoplete, el molotov y la bomba de aceite, y × 1 con
   las seis de siempre, contado y de verdad a un zombi quieto (el golpe o el disparo y lo que sigue ardiendo, y un
   molotov de verdad); el bombero, inmune al fuego: pisando fuego, en un charco de molotov (`captura-skins-bombero-fuego.png`),
