@@ -216,12 +216,10 @@ func estrellarse() -> void:
 
 
 # El aviso de la embestida, en el suelo: una franja roja de "largo" por donde va a pasar, que se llena en "k" (0 a 1)
+# (de pixel art, con flechas: aviso.gd)
 func franja(largo: float, k: float) -> void:
-	var rojo := Color(1, 0.24, 0.35)
-	draw_set_transform(Vector2(0, 6), mirada.angle())
-	draw_rect(Rect2(0, -radio, largo, radio * 2.0), Color(rojo, 0.08 + k * 0.2))
-	draw_rect(Rect2(0, -radio, largo * k, radio * 2.0), Color(rojo, 0.9), false, 3.0)
 	draw_set_transform(Vector2.ZERO)
+	Aviso.franja(self, Vector2(0, 6), mirada.angle(), largo, radio, k, tiempo)
 
 
 # ── Recibir golpes y morir ──

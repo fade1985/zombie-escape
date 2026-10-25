@@ -1017,3 +1017,44 @@ func probar_vapor() -> void:
 			cosa.queue_free()
 		await get_tree().create_timer(0.1, false).timeout
 	get_tree().quit()
+
+
+# --franja: el aviso de las cargas (aviso.gd) del antidisturbios y de la mascota, congelado a medio llenar y casi
+# lleno (con el destello): captura-franja-<jefe>-<llenado>.png
+func probar_franja() -> void:
+	set_process(false)
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	johnny.invulnerable = 999.0
+	var camara: Camera2D = johnny.get_node("Camara")
+	for par in [["antidisturbios", "aviso_carga"], ["mascota", "aviso_embestida"]]:
+		var jefe: Node2D = meter_zombi(par[0], centro)
+		await get_tree().create_timer(0.1, false).timeout
+		jefe.set_physics_process(false)   # quieto, con el aviso a mano
+		jefe.mirada = Vector2.from_angle(0.5)
+		jefe.cambiar(par[1], {"quedan": 1, "aviso": 1.0})
+		johnny.position = jefe.position + Vector2(150, 40)
+		johnny.velocity = Vector2.ZERO
+		camara.reset_smoothing()
+		for k in [0.3, 0.75, 0.95]:
+			jefe.t = k
+			jefe.queue_redraw()
+			await get_tree().create_timer(0.1, false).timeout
+			Captura.foto("captura-franja-%s-%d.png" % [par[0], roundi(k * 100)])
+		jefe.queue_free()
+		await get_tree().create_timer(0.1, false).timeout
+	print("Franja: casillas calculadas %d (esperado: 1 o más)" % Aviso.franjas.size())
+	get_tree().quit()
