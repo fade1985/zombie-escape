@@ -3436,5 +3436,27 @@
     "intento 3, semilla 303": "32edeb41-fcd7-4dbf-b56b-8eb993ec2bbb"
    }
   }
+ },
+ "encimera-fogon-pisos": {
+  "kind": "images",
+  "fecha": "2026-10-25",
+  "nota": "La encimera (counter) y el fogón (stove) de las cocinas de los pisos, rehechos para que peguen con la nevera nueva (nevera-pisos). Misma receta: las guías de py tools/guias_cocina.py (las dos con la tapa de 20 píxeles del juego y el frente de 22, para que queden a la par; la encimera, de 79 de ancho, con el fregadero y su grifo, una tabla de cortar con cuchillo y tomate, un plato y una taza encima y cuatro puertas blancas; el fogón, de 28, con cuatro fuegos de gas sobre la placa negra, los mandos y la puerta del horno con su cristal) como init_image con fuerza 45, no_background false, single color black outline y high top-down, 4 semillas cada uno. Las ocho salieron rectas. Encimeras: la 1 (tapa gris, puertas blancas con marco oscuro), la 2 (sobre patas y algo de costado), la 3 (tapa lila) y la 4 (tapa azulada y puertas crema con marco de madera). Fogones: el 1 (blanco con placa gris y un manchurrón de sangre), el 2 (placa negra y cuerpo crema), el 3 (rosado, lleno de sangre) y el 4 (vitrocerámica). Elegidos por Claude la encimera 1 y el fogón 2, la combinación que más pega con la nevera; las ocho, con fondo, en assets/sources/salas/descartes/encimera-1..4.png y fogon-1..4.png, y los de antes en descartes/antiguos/encimera-vieja.png y fogon-viejo.png. Fondo quitado con py tools/guias_centro.py quita y, después, py tools/guias_cocina.py limpia (la sombra azulada que PixelLab pinta debajo; también se le pasó a la nevera: 2 filas de sombra). Sprites con py tools/importar.py: counter 79×42, stove 28×39 (los dos en SIN_HALO).",
+  "textos": {
+   "encimera": "kitchen counter with white cabinets seen in 3/4 top-down view, a stainless steel sink with a faucet, a wooden cutting board with a knife and a tomato, a plate and a mug on its light grey stone countertop seen from above, four white cabinet doors with handles facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+   "fogon": "white kitchen stove seen in 3/4 top-down view, four black gas burners with iron grates on its cooktop seen from above, the control knobs and the oven door with a dark glass window and a handle facing the viewer, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors"
+  },
+  "coste": "8 generaciones",
+  "piezas": {
+   "encimera (intento 1, semilla 101)": "9aefd67a-a841-47cd-8752-0c1f2d6396ad",
+   "fogon (intento 2, semilla 202)": "bf2cd2a9-e23c-442e-974d-3ae6940f65b1",
+   "descartadas": {
+    "encimera, intento 2, semilla 202": "1a8ca73b-060d-4bcf-a695-188d869f6116",
+    "encimera, intento 3, semilla 303": "323362e2-c0fa-4f34-8302-936ff0fc5fb6",
+    "encimera, intento 4, semilla 404": "255f0543-7eb4-4bac-b35c-16f6abb622b4",
+    "fogon, intento 1, semilla 101": "f885b74a-ab50-411f-90cd-49370f485937",
+    "fogon, intento 3, semilla 303": "3569ffd4-781c-4a6e-9ad2-07623ab2594a",
+    "fogon, intento 4, semilla 404": "cc566e65-8da7-431c-a3d8-fc1e69e8cfae"
+   }
+  }
  }
 }

@@ -160,15 +160,15 @@
     "sprite": "mueble-jewelcase"
   },
   "cocina/encimera.png": {
-    "huella": "5d9751d7bb869abc",
+    "huella": "1a870b28b74b5fcd",
     "sprite": "mueble-counter"
   },
   "cocina/fogon.png": {
-    "huella": "c308523680f5280a",
+    "huella": "9526c1ce904cbb26",
     "sprite": "mueble-stove"
   },
   "cocina/nevera.png": {
-    "huella": "3634a45e9e0c148c",
+    "huella": "2f4cf7617e1e7693",
     "sprite": "mueble-fridge"
   },
   "comun/lampara-b.png": {

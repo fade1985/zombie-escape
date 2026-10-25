@@ -42,7 +42,7 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'treadmill', 'benchpress', 'cablemachine', 'dumbbellrack', 'weightplates',   # (las máquinas del gimnasio del Gymbro)
             'wheeliebin', 'trashcan', 'janitorcart',   # (y lo del cuarto de la limpieza de la portera)
             'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket',   # (y los de la sala de mantenimiento)
-            'fridge'}   # (y la nevera de los pisos, rehecha de frente: tools/guias_cocina.py)
+            'fridge', 'counter', 'stove'}   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
 
 
 def catalogo():
