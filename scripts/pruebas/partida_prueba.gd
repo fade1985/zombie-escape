@@ -22,6 +22,11 @@
 #   --inventario   la pantalla del inventario «todo a la vista» (ui/inventario.gd): la ficha que sigue a la marca, las
 #                  flechas, Intro, Y, Supr y F, ponerse y tirar armas (también la de la mano) y mover arrojables; luego,
 #                  las otras pruebas que usan el inventario (las vendas y el botiquín)
+#   --arrastrar    arrastrar con el ratón (o el dedo) en el inventario y en el baúl (ui/inventario.gd, la parte 5 del
+#                  inventario nuevo; tres arrastres mueven el cursor de verdad un momento): las armas a la mano, a su
+#                  repuesto y a Johnny, tirar la casilla entera en la zona roja, curarse soltando el botiquín en Johnny,
+#                  los arrojables de la mano al repuesto y cambiados uno por otro, lo que no se puede (vuelve a su
+#                  casilla), y en el baúl guardar y sacar uno arrastrando de una mitad a la otra
 #   --banco        las armas creadas y los objetos que se quitaron del juego (25 oct), viejos en el guardado,
 #                  desaparecen al cargar; luego el banco de trabajo, las recetas y las Colecciones, sin la prueba larga
 #                  (probar_cosas, probar_recetas y probar_colecciones)
@@ -71,6 +76,7 @@ extends "res://scripts/partida.gd"
 var tiempo := 0.0            # los segundos que lleva la prueba larga (_process)
 var grito_visto := false     # fotos_tiendas: la foto del grito de la dependienta, solo una vez
 var peligros_vistos := {}    # fotos_tiendas: los peligros que ya tienen sus fotos (fotos_peligros)
+var en_el_aire := {}         # arrastrar: lo que se veía justo antes de soltar
 
 
 func _ready() -> void:
@@ -157,6 +163,9 @@ func empezar_prueba() -> void:
 	elif "--inventario" in args:
 		set_process(false)   # sin la prueba larga
 		probar_inventario()
+	elif "--arrastrar" in args:
+		set_process(false)   # sin la prueba larga
+		probar_arrastrar()
 	elif "--lanzallamas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lanzallamas()
@@ -3893,6 +3902,168 @@ func probar_inventario() -> void:
 	await probar_curas()
 	await supervivientes.probar_botiquin()
 	get_tree().quit()
+
+
+# Con "--captura --arrastrar": arrastrar con el ratón en el inventario y en el baúl (ui/inventario.gd, la parte 5 del
+# inventario nuevo). Con el bate y la pistola en la mano, la fregona y la escopeta de repuesto, dos trapos, un botiquín
+# y dos gasolinas, y de arrojables el molotov, la granada y la atraedora a mano y la congeladora de repuesto, cuenta en
+# la terminal (cada línea con lo esperado). Tres arrastres son de verdad, moviendo el ratón (arrastrar: el cursor se
+# mueve un momento y luego vuelve a su sitio): la escopeta a la mano (lo que se enciende y lo que crece bajo el ratón),
+# los dos trapos a la zona roja y, en el baúl, el alcohol al baúl. Los demás sueltan directamente donde caerían
+# (inventario.soltar_en): la pistola en Johnny, el botiquín en Johnny (cura y el inventario sigue abierto), la granada
+# al repuesto, la congeladora encima del molotov (se cambian), el bate en Johnny (no se puede: vuelve), el bate en su
+# repuesto (se cambia por la fregona), las gasolinas en la zona roja y un molotov soltado en el título (vuelve sin
+# más); en el baúl, las vendas (no van), un explosivo sacado y la fregona (no va). Fotos: captura-arrastrar-escopeta.png
+# (a medio arrastrar, sobre la mano), captura-arrastrar-salto.png (la escopeta y Johnny dando su saltito),
+# captura-arrastrar-tirar.png (la zona roja con los trapos) y captura-arrastrar-baul.png (el alcohol sobre el baúl).
+# Deja el baúl como estaba y se cierra
+func probar_arrastrar() -> void:
+	var lz: Lanzables = lanzables
+	var inv = inventario
+	var antes := Guardado.cargar()
+	mochila.clear()
+	armas_guardadas.clear()
+	johnny.municion.clear()
+	johnny.coger("fregona")
+	johnny.coger("escopeta")
+	llevar_arma("bate")        # el bate a la mano y la fregona al repuesto
+	llevar_arma("pistola")     # la pistola a la mano y la escopeta al repuesto
+	johnny.meter_municion("balas", 30)
+	mochila.append_array(["trapo", "trapo", "botiquin", "gasolina", "gasolina"])
+	lz.creadas.clear()
+	lz.mano = ["molotov", "granada"]
+	lz.repuesto = []
+	lz.tipo = "molotov"
+	lz.sacar(Recetas.crear("atraedora", "azul"))      # a la mano (la tercera)
+	lz.sacar(Recetas.crear("congeladora", "verde"))   # al repuesto
+	johnny.vida = johnny.vida_tope() - 60
+	await get_tree().create_timer(0.5).timeout
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	var nota := func() -> String: return inv.fondo.find_child("nota", true, false).text
+	var guardada := func(id: String) -> String: return "g%d" % armas_guardadas.find(id)
+	var soltar := func(clave: String, a_donde: String) -> void:   # suelta donde caería, sin mover el ratón
+		inv.soltar_en(clave, a_donde)
+		await get_tree().process_frame
+	# la escopeta (de repuesto) a la mano, de verdad: se encienden la mano, Johnny y la zona roja, y la mano crece
+	await arrastrar(guardada.call("escopeta"), Vector2(346, 160), "captura-arrastrar-escopeta.png")
+	print("Arrastrando la escopeta: el ratón empezó en su casilla %s · se arrastraba %s · encendidos %s · bajo el ratón «%s» (esperado: true · true · [\"luz_johnny\", \"luz_p1\", \"luz_tirar\"] · p1)" % [
+		en_el_aire.casilla, en_el_aire.arrastrando, en_el_aire.luces, en_el_aire.encima])
+	await get_tree().create_timer(0.06).timeout
+	Captura.foto("captura-arrastrar-salto.png")
+	print("Soltada en la mano: mano %s · repuesto %s · elegida %s · todo apagado %s (esperado: Escopeta · [\"fregona\", \"pistola\"] · p1 · true)" % [
+		Objetos.nombre(johnny.huecos.fuego), armas_guardadas, inv.sel, inv.arrastre.is_empty() and inv.capa == null])
+	# la pistola (ahora de repuesto), encima de Johnny: se la pone
+	await soltar.call(guardada.call("pistola"), "johnny")
+	print("La pistola en Johnny: mano %s · repuesto %s (esperado: Pistola · [\"fregona\", \"escopeta\"])" % [
+		Objetos.nombre(johnny.huecos.fuego), armas_guardadas])
+	# los dos trapos (m0) a la zona roja, de verdad: se tira la casilla entera
+	await arrastrar("m0", Vector2(773, 338), "captura-arrastrar-tirar.png")
+	print("Los trapos a la zona roja: encendidos %s · bajo el ratón «%s» · mochila %s (esperado: [\"luz_tirar\"] · tirar · [[\"botiquin\", 1]])" % [
+		en_el_aire.luces, en_el_aire.encima, Objetos.casillas(mochila)])
+	# el botiquín (ahora m0) en Johnny: se cura y el inventario sigue abierto
+	var vida_antes = johnny.vida
+	await soltar.call("m0", "johnny")
+	print("El botiquín en Johnny: vida %s → %s · abierto «%s» · dice «%s» (esperado: sube · inventario · Te has curado...)" % [
+		vida_antes, johnny.vida, inv.abierto, nota.call()])
+	# la granada (l1) a una casilla vacía del repuesto (e1): pasa al repuesto
+	await soltar.call("l1", "e1")
+	print("La granada al repuesto: a mano %s · repuesto %s (esperado: [\"molotov\", \"atraedora\"] · [\"congeladora\", \"granada\"])" % [
+		lz.mano, lz.repuesto])
+	# la congeladora (e0) encima del molotov (l0): se cambian
+	await soltar.call("e0", "l0")
+	print("La congeladora encima del molotov: a mano %s (lanza %s) · repuesto %s (esperado: [\"congeladora\", \"atraedora\"] (congeladora) · [\"molotov\", \"granada\"])" % [
+		lz.mano, lz.tipo, lz.repuesto])
+	# el bate (p0) en Johnny: no se puede (ya lo lleva en la mano), vuelve a su casilla
+	print("El bate se puede soltar en %s (esperado: [\"r0\", \"tirar\"])" % [inv.destinos("p0").keys()])
+	await soltar.call("p0", "johnny")
+	print("El bate en Johnny: mano %s (esperado: Bate)" % Objetos.nombre(johnny.huecos.cuerpo))
+	# el bate en su repuesto (la fregona): se cambian
+	await soltar.call("p0", "r0")
+	print("El bate al repuesto: mano %s · repuesto %s (esperado: Fregona · [\"bate\", \"escopeta\"])" % [
+		Objetos.nombre(johnny.huecos.cuerpo), armas_guardadas])
+	# el hueco de las gasolinas a la zona roja: el hueco entero
+	var u: int = johnny.huecos_municion().map(func(h): return h[0]).find("gasolina")
+	await soltar.call("u%d" % u, "tirar")
+	print("Las gasolinas a la zona roja: en la mochila %d (esperado: 0)" % mochila.count("gasolina"))
+	# el molotov (e0) soltado en el título: vuelve sin más
+	await soltar.call("e0", "")
+	print("El molotov en el título: repuesto %s · a mano %s (esperado: [\"molotov\", \"granada\"] · [\"congeladora\", \"atraedora\"])" % [
+		lz.repuesto, lz.mano])
+	inv.cerrar()
+	await get_tree().process_frame
+	# el baúl: m0 el alcohol (×2) y m1 las vendas; en el baúl, dos explosivos
+	Guardado.cambiar(func(g1):
+		g1.baul = {"explosivos": 2}
+		g1.baul_armas = [])
+	mochila.append_array(["alcohol", "alcohol", "vendas"])
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.4).timeout
+	await arrastrar("m0", Vector2(680, 240), "captura-arrastrar-baul.png")
+	print("El alcohol al baúl, de verdad: encendidos %s · en el baúl %d · en la mochila %d (esperado: [\"luz_baul\"] · 2 · 0)" % [
+		en_el_aire.luces, Guardado.cargar().baul.get("alcohol", 0), mochila.count("alcohol")])
+	print("Las vendas se pueden soltar en %s (esperado: [])" % [inv.destinos("m0").keys()])
+	await soltar.call("m0", "baul")
+	print("Las vendas al baúl: en la mochila %d (esperado: 1)" % mochila.count("vendas"))
+	await soltar.call("b%d" % inv.objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find("explosivos"), "llevas")
+	print("Un explosivo fuera del baúl: en el baúl %d · en la mochila %d (esperado: 1 · 1)" % [
+		Guardado.cargar().baul.get("explosivos", 0), mochila.count("explosivos")])
+	await soltar.call("p0", "baul")
+	print("La fregona al baúl: se puede soltar en %s · mano %s (esperado: [] · Fregona)" % [inv.destinos("p0").keys(),
+		Objetos.nombre(johnny.huecos.cuerpo)])
+	inv.cerrar()
+	Guardado.cambiar(func(g2):
+		g2.baul = antes.baul
+		g2.baul_armas = antes.baul_armas)
+	get_tree().quit()
+
+
+# Arrastra con el ratón, de verdad, lo de la casilla "desde" del inventario o del baúl hasta "a" (un punto de la
+# pantalla de 960×640, como en la maqueta): aprieta en la casilla, mueve el ratón en 10 pasos y suelta. En Windows, Godot
+# mira dónde está el cursor de verdad al soltar, así que también se mueve el cursor (y al acabar vuelve a donde
+# estaba). Justo antes de soltar apunta en en_el_aire lo que se ve (si el ratón empezó en la casilla, si se arrastra, lo
+# encendido y lo que hay bajo el ratón) y, con "foto", la saca
+func arrastrar(desde: String, a: Vector2, foto := "") -> void:
+	var inv = inventario
+	var b: Control = inv.lienzo.get_node(desde)
+	var ida: Vector2 = b.get_global_rect().get_center()
+	var llegada: Vector2 = inv.lienzo.get_global_transform() * (a - inv.ORIGEN)
+	var ventana := get_viewport().get_screen_transform()
+	var estaba := get_viewport().get_mouse_position()
+	var raton := func(e: InputEventMouse, p: Vector2) -> void:
+		e.position = ventana * p
+		e.global_position = e.position
+		Input.warp_mouse(e.position)
+		Input.parse_input_event(e)
+	var apretar := InputEventMouseButton.new()
+	apretar.button_index = MOUSE_BUTTON_LEFT
+	apretar.button_mask = MOUSE_BUTTON_MASK_LEFT
+	apretar.pressed = true
+	raton.call(apretar, ida)
+	await get_tree().process_frame
+	en_el_aire = {"casilla": get_viewport().get_mouse_position().distance_to(ida) < 2.0}
+	var antes := ida
+	for k in range(1, 11):
+		var p := ida.lerp(llegada, k / 10.0)
+		var paso := InputEventMouseMotion.new()
+		paso.button_mask = MOUSE_BUTTON_MASK_LEFT
+		paso.relative = ventana.basis_xform(p - antes)
+		raton.call(paso, p)
+		antes = p
+		await get_tree().process_frame
+	await get_tree().create_timer(0.15).timeout   # (a que crezca lo de debajo)
+	en_el_aire.arrastrando = get_viewport().gui_is_dragging()
+	en_el_aire.luces = inv.capa.get_children().map(func(n): return String(n.name)) if is_instance_valid(inv.capa) else []
+	en_el_aire.encima = inv.encima
+	if foto != "":
+		Captura.foto(foto)
+	var dejar := InputEventMouseButton.new()
+	dejar.button_index = MOUSE_BUTTON_LEFT
+	dejar.pressed = false
+	raton.call(dejar, llegada)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	Input.warp_mouse(ventana * estaba)
 
 
 # Una acción pulsada (para pulsar_evento)

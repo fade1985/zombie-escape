@@ -23,7 +23,13 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   **A la mano**, **Al repuesto** y **Tirar al suelo** (el arma de la mano solo se tira si llevas otra de repuesto, que
   pasa a la mano). Con las flechas o el mando la ficha sigue a la marca; Intro o A la lleva al botón principal (A dos
   veces y hecho), **X** o **Supr** tira, **Y** hace lo del botón principal y B, Esc o Tab cierran; con el ratón, se
-  toca. Johnny
+  toca. Con el ratón o el dedo, además, se **arrastra**: al levantar algo se encienden los sitios donde se puede
+  soltar (el sitio bajo el dedo crece un poco): el arma de repuesto a la mano de su tipo o encima de Johnny (se la
+  pone; y la de la mano a su repuesto, se cambian), las curas encima de Johnny (se usan y el inventario sigue
+  abierto), los arrojables de la mano al repuesto y al revés (encima de otro, se cambian esos dos) y la ficha, que se
+  vuelve una zona roja: lo que se suelta ahí se tira entero (la casilla o el hueco) a los pies de Johnny. Si se suelta
+  donde no vale, vuelve a su casilla (y tiembla). Lo que llega a su sitio nuevo da un saltito (también con los
+  botones y el mando), y Johnny también al ponerse un arma o curarse. Johnny
   lleva como mucho dos de cada tipo: la de la mano y una de repuesto. Al comprar o sacar otra, va a la mano y la que
   llevaba pasa al repuesto (o, si ya tiene una, se queda en el suelo); la que coge del suelo va al repuesto si está
   libre. Los
@@ -143,6 +149,14 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   trapo; tirar el arma de la mano pone la de repuesto; F cambia el arrojable; **A la mano** con la mano llena; Esc
   cierra. Luego, las otras pruebas que usan el inventario: las vendas y el botiquín de la farmacéutica. Cada línea dice lo esperado. Fotos: `captura-inventario-nuevo.png`, `-escopeta`, `-objeto`,
   `-municion`, `-arrojable`, `-pistola_electrica` y `-lanzallamas` (la ficha más llena y la de depósito).
+- `--arrastrar`: en vez de la prueba larga, la de arrastrar con el ratón o el dedo en el inventario y en el baúl
+  (`ui/inventario.gd`, la parte 5 del inventario nuevo). Tres arrastres son de verdad (el cursor se mueve un momento y
+  luego vuelve a su sitio): la escopeta de repuesto a la mano (lo que se enciende y lo que crece bajo el ratón), los
+  trapos a la zona roja y, en el baúl, el alcohol al baúl. Los demás sueltan directamente donde caerían: la pistola y
+  el botiquín encima de Johnny, la granada al repuesto, la congeladora encima del molotov, el bate en Johnny (no
+  vale: vuelve) y en su repuesto, las gasolinas a la zona roja, un molotov en el título y, en el baúl, las vendas y la
+  fregona (no van) y un explosivo sacado. Cada línea dice lo esperado. Fotos: `captura-arrastrar-escopeta.png`,
+  `-salto` (la escopeta y Johnny dando su saltito), `-tirar` y `-baul`. Deja el baúl como estaba.
 - `--ascensor`: en vez de la prueba larga, la del ascensor (`partida.gd`, `arreglar_ascensor`): comprueba en la
   terminal que en la planta baja no se arregla, que en la 1ª planta sigue averiado hasta que cae el jefe, que al
   salir al pasillo Johnny dice que lo ha arreglado (`captura-ascensor-arreglado.png`), que baja a la sala de
@@ -295,7 +309,8 @@ En el suelo, manchas de sangre.
   partida (la atraedora o la congeladora, a la mano si hay sitio y si no, al repuesto; ya no vuelve al baúl) o un
   objeto, de uno en uno. «Guardar todo» mete todo lo que se pueda. Lo de curar no se guarda, y con el baúl
   lleno solo caben más de lo que ya tiene. Se maneja como el inventario: la ficha sigue a la marca, A salta a su
-  botón (A dos veces y hecho), Y lo hace directamente y Esc o B cierra; con el ratón o el dedo, se toca.
+  botón (A dos veces y hecho), Y lo hace directamente y Esc o B cierra; con el ratón o el dedo, se toca o se arrastra
+  de una mitad a la otra (a la del baúl, se guarda la casilla entera; del baúl a la tuya, sale uno).
 - En el despacho, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
   armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
   bestiario).

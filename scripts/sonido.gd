@@ -88,6 +88,9 @@ const EFECTOS := {
 	"recargado": {"notas": [[300, 0.05, "cuadrada", 0.035, 200], [1400, 0.04, "cuadrada", 0.025, 0, 0.07]]},
 	"cartucho": {"notas": [[700, 0.04, "cuadrada", 0.025, -300], [1200, 0.03, "cuadrada", 0.02, 0, 0.05]]},
 	"cambiar": {"notas": [[420, 0.07, "triangulo", 0.035, 260]]},                      # swap
+	# el inventario y el baúl, arrastrando con el ratón o el dedo: un «pop» al levantar algo y un «toc» al dejarlo
+	"coger": {"hueco": 60, "notas": [[600, 0.06, "seno", 0.05, 500]]},
+	"soltar": {"hueco": 60, "notas": [[260, 0.07, "triangulo", 0.07, -120], [1300, 0.02, "cuadrada", 0.01, -500]]},
 	# los peligros del centro comercial: el calambrazo del agua, la chispa del cable pelado y el cuadro eléctrico
 	"calambre": {"hueco": 300, "notas": [[95, 0.2, "cuadrada", 0.045, 25], [1500, 0.12, "sierra", 0.018, -1000, 0.01],
 		[2600, 0.06, "cuadrada", 0.01, -1800, 0.08]]},

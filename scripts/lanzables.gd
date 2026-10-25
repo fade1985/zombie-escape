@@ -157,17 +157,18 @@ func repasar() -> void:
 
 
 # Desde el inventario: pasa ese tipo del repuesto a la mano, y es lo que se lanza. Con la mano llena, cambia por lo
-# que se lanzaba, que pasa a su sitio en el repuesto
-func a_la_mano(k: String) -> void:
+# que se lanzaba, que pasa a su sitio en el repuesto. Con "por" (arrastrándolo encima de uno de la mano), cambia por ese
+func a_la_mano(k: String, por := "") -> void:
 	var i := repuesto.find(k)
 	if i < 0:
 		return
-	if mano.size() < MANO:
+	if mano.size() < MANO and not por in mano:
 		repuesto.remove_at(i)
 		mano.append(k)
 	else:
-		repuesto[i] = tipo
-		mano[mano.find(tipo)] = k
+		var fuera := por if por in mano else tipo
+		repuesto[i] = fuera
+		mano[mano.find(fuera)] = k
 	tipo = k
 
 
