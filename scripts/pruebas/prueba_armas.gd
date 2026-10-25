@@ -1194,7 +1194,8 @@ func probar_epicas() -> void:
 
 # Con "--captura --sala-pruebas": la sala de pruebas con su panel (sala_armas.gd y ui/panel_pruebas.gd). Desde la sala
 # de mantenimiento, F11 lleva a ella: cuenta en la terminal que hay baúl y que el baúl que se ve es el de pruebas (todas
-# las armas y los arrojables en cada calidad). La P abre el panel; con sus botones, Johnny invencible y, con «Quieto», el
+# las armas y los arrojables en cada calidad), y que Mayús + 1 saca a la portera sin haber abierto antes el panel. La
+# P abre el panel; con sus botones, Johnny invencible y, con «Quieto», el
 # antidisturbios: que ha salido y que, tras 3 s, sigue en su sitio. Luego apaga los avisos de los jefes y el alcance
 # del arma, y los vuelve a encender; y con los atajos (2 y Mayús + 7), un zombi lento y el Glotón
 # (captura-sala-pruebas-atajos.png). Al final, F11 vuelve al mismo sitio de la sala de mantenimiento, con el baúl de
@@ -1210,6 +1211,21 @@ func probar_sala_pruebas() -> void:
 	var esperado := (Armas.DATOS.size() + Lanzables.DATOS.size()) * Armas.CALIDADES.size()
 	print("Sala de pruebas: en «%s» (esperado: armas) · baúl %s (esperado: true) · en el baúl %d cosas (esperado: %d)" % [
 		planta.sitios[aqui].tipo, mapa.baul != null, Guardado.cargar().baul_equipo.size(), esperado])
+	# un atajo nada más entrar, sin haber abierto el panel (Mayús + 1, la portera): antes fallaba
+	var mayus_1 := InputEventKey.new()
+	mayus_1.keycode = KEY_1
+	mayus_1.shift_pressed = true
+	mayus_1.pressed = true
+	Input.parse_input_event(mayus_1)
+	await get_tree().create_timer(0.2).timeout
+	var portera: Node2D = null
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.scene_file_path.get_file() == "portera.tscn":
+			portera = z
+	print("Atajo sin abrir el panel (Mayús + 1): portera %s (esperado: true)" % (portera != null))
+	if portera:
+		portera.queue_free()
+		get_node("Pantalla/Jefa").hide()
 	await pulsar_y_esperar(KEY_P)
 	await get_tree().create_timer(0.3).timeout
 	print("Panel de pruebas: abierto %s, juego parado %s (esperado: true, true)" % [panel_pruebas.abierto(), get_tree().paused])

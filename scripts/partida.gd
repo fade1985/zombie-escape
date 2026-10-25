@@ -178,6 +178,7 @@ func _ready() -> void:
 	inventario.cerrado.connect(func(): get_tree().paused = false)
 	add_child(taquilla)
 	add_child(panel_pruebas)
+	panel_pruebas.partida = self   # (los atajos funcionan sin haber abierto antes el panel)
 	presentacion.preparar(self)
 	lanzables.johnny = johnny
 	lanzables.partida = self
