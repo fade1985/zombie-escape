@@ -7,8 +7,9 @@
 # aquí y solo cambia lo suyo.
 #
 # Fase 7a: los charcos les ponen estados (estados.gd), el fuego del molotov los prende (siguen ardiendo un
-# rato al salir) y las mutaciones de Johnny los aturden (se quedan quietos) o los desorientan (dan vueltas sin
-# rumbo). Aturdidos o desorientados no hacen daño.
+# rato al salir, y el que arde prende a los que tiene pegados: contagiar) y las mutaciones de Johnny los aturden
+# (se quedan quietos) o los desorientan (dan vueltas sin rumbo). Aturdidos o desorientados no hacen daño. Con
+# ácido, todo les quita más (ArmasCreadas.con_acido).
 class_name Zombi
 extends CharacterBody2D
 
@@ -59,6 +60,8 @@ var arder_tick := 0.0
 var arder_acc := 0.0       # la quemadura que lleva sin enseñar
 var arder_texto := 0.0
 var arder_dano := 1.0      # Puntería de quien lo prendió
+var contagio_t := 0.0      # lo que lleva ardiendo desde que lo pasó a los de al lado (contagiar)
+var chamuscado := 0.0      # recién apagado: lo que le queda para poder contagiarse otra vez
 var llamas: Llamas
 var acido_t := 0.0         # lo que lleva el ácido royéndole (las manchas crecen)
 var talla_restos := "mediano"   # si muere quemado, la talla de su calavera y sus huesos (quemado.gd)
@@ -341,13 +344,15 @@ func empezar_zarpazo(johnny: Node2D) -> void:
 
 
 # Lo llaman las armas de Johnny (golpes y balas) y las explosiones. "fuerza" es hacia dónde y con qué
-# fuerza sale despedido (la de un zombi normal: cada tipo la multiplica por su "empuje")
+# fuerza sale despedido (la de un zombi normal: cada tipo la multiplica por su "empuje"). Con ácido, le quita más
+# (ArmasCreadas.con_acido)
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto":
 		return
 	if dormido:
 		despertar()
 		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
+	cantidad = ArmasCreadas.con_acido(self, cantidad)
 	vida -= cantidad
 	herido.emit(cantidad, true)
 	if diana:
@@ -422,6 +427,7 @@ func pisar(estados_charco: Dictionary) -> void:
 func prender(dano_lanzar := 1.0) -> void:
 	if arder_t <= 0.0 and estado != "muerto":
 		prendido.emit()
+		contagio_t = 0.0
 	arder_t = Lanzables.MOLOTOV.sigue
 	arder_dano = dano_lanzar
 	if llamas == null:
@@ -432,13 +438,14 @@ func prender(dano_lanzar := 1.0) -> void:
 		add_child(llamas)
 
 
-# Daño sin golpe (los estados, el fuego): no le empuja ni se encoge; el número sale del color de lo que le daña
+# Daño sin golpe (los estados, el fuego): no le empuja ni se encoge; el número sale del color de lo que le daña. Con
+# ácido, como los golpes, le quita más
 func herir(cantidad: float, color := Color.WHITE) -> void:
 	if estado == "muerto":
 		return
 	if dormido:
 		despertar()
-	var n := maxi(1, roundi(cantidad))
+	var n := ArmasCreadas.con_acido(self, maxi(1, roundi(cantidad)))
 	vida -= n
 	herido.emit(n, false)
 	if diana:
@@ -471,6 +478,7 @@ func sufrir(delta: float) -> void:
 			herir(cuanto, color)
 	else:
 		estado_tick = 0.0
+	chamuscado = maxf(chamuscado - delta, 0.0)
 	if arder_t > 0.0:
 		arder(delta)
 	if llamas:
@@ -526,10 +534,17 @@ func congelar(segundos: float) -> void:
 			Vector2(randf_range(-50, 50), randf_range(-60, 10)), Color.WHITE if i % 2 else Color("#9fd8ff"), randf_range(2, 4), 0.4)
 
 
-# Ardiendo: la quemadura a pellizcos, y el número cada medio segundo (o si ya le mata)
+# Ardiendo: la quemadura a pellizcos, y el número cada medio segundo (o si ya le mata). Cada "contagia" segundos
+# prende a los que tiene pegados (contagiar), y al apagarse se queda chamuscado
 func arder(delta: float) -> void:
 	var m := Lanzables.MOLOTOV
 	arder_t -= delta
+	if arder_t <= 0.0:
+		chamuscado = m.chamuscado
+	contagio_t += delta
+	if contagio_t >= m.contagia:
+		contagio_t -= m.contagia
+		contagiar()
 	arder_tick += delta
 	if arder_tick < m.tick:
 		return
@@ -541,6 +556,24 @@ func arder(delta: float) -> void:
 		arder_acc = 0.0
 		arder_texto = 0.0
 		herir(cuanto, Llamas.FUEGO[2])
+
+
+# El fuego se contagia: prende a los zombis que tiene pegados que no ardan ya ni se acaben de apagar (chamuscado), con
+# la misma fuerza que su fuego, durante "contagio" segundos, y les salta una chispa. Los jefes no arden
+func contagiar() -> void:
+	var m := Lanzables.MOLOTOV
+	var desde := global_position + Vector2(0, -altura * 0.5)
+	for o in get_tree().get_nodes_in_group("zombis"):
+		if o == self or not o is Zombi or o.estado == "muerto" or o.arder_t > 0.0 or o.chamuscado > 0.0:
+			continue
+		if global_position.distance_to(o.global_position) > radio + o.radio + m.pegado:
+			continue
+		o.prender(arder_dano)
+		o.arder_t = m.contagio
+		var hacia: Vector2 = desde.direction_to(o.global_position + Vector2(0, -o.altura * 0.5))
+		for i in 4:
+			Particulas.soltar(self, desde + Vector2(randf_range(-4, 4), randf_range(-6, 6)),
+				hacia * randf_range(90, 150) + Vector2(0, -randf_range(10, 40)), Llamas.FUEGO[i % 3], 2, randf_range(0.25, 0.4))
 
 
 # Aturdido no se mueve (salvo lo que le hayan empujado); desorientado anda despacio hacia un lado y otro.

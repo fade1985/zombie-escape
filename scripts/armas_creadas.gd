@@ -2,8 +2,9 @@
 # aquí, sus efectos. Son todas a distancia (las de cuerpo a cuerpo y el garfio se quitaron del juego el 25 oct):
 #   - Las chispas de la pistola eléctrica (chorro.gd), que aturden y saltan a otro zombi. La llamarada del
 #     lanzallamas y el chorro del lanza ácido van aparte (llamarada.gd).
-#   - Lo que dejan en el zombi: la quemadura, el ácido que sigue royendo y la herida que sangra (la de los clavos
-#     de la bomba de clavos, granada.gd). Los jefes no se aturden ni arden; sangrar y el ácido sí les hacen daño.
+#   - Lo que dejan en el zombi: la quemadura (que se contagia a los de al lado: zombi.gd), el ácido que sigue
+#     royendo y le come la armadura (con_acido) y la herida que sangra (la de los clavos de la bomba de clavos,
+#     granada.gd). Los jefes no se aturden ni arden; sangrar y el ácido sí les hacen daño.
 class_name ArmasCreadas
 
 const CHORRO := preload("res://scripts/chorro.gd")
@@ -14,7 +15,9 @@ const QUEMAN := ["llama"]
 # Números de los efectos (provisionales, como EFECTOS en el JS)
 const EFECTOS := {
 	"sangra": {"t": 3.0, "total": 0.6, "color": Color("#ff4d6d")},   # dura 3 s y quita en total el 60 % del golpe
-	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a")},    # el ácido sigue royendo: el triple de un pellizco
+	# el ácido sigue royendo (el triple de un pellizco) y, mientras le dura, le come la armadura: todo le quita un
+	# 50 % más ("corroe": con_acido)
+	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a"), "corroe": 1.5},
 	"descarga": {"salto": 130.0, "dano": 0.5},                       # salta al más cercano con medio daño
 	"chispa": 0.4,                                                   # la pistola eléctrica: cada chispa aturde 0,4 s (y salta)
 	"tick": 0.5,                                                     # cada cuánto se quitan los pellizcos
@@ -65,6 +68,15 @@ static func herir(zombi: Node2D, tipo: String, dano: float) -> void:
 		zombi.add_child(h)
 	h.t = ef.t
 	h.dps = dano * ef.total / ef.t
+
+
+# El ácido le come la armadura: mientras lo lleva (el que le sigue royendo o el de un charco: se le ven las manchas),
+# todo lo que le hace daño le quita "corroe" veces más, también el propio ácido. Lo miran los que reciben los golpes
+# (zombi.gd, minijefe.gd, portera.gd y maniqui_vivo.gd). A Johnny, no
+static func con_acido(nodo: Node, cantidad: int) -> int:
+	if nodo.has_node("herida_acido") or (nodo is Zombi and nodo.estados.has("acido")):
+		return roundi(cantidad * EFECTOS.acido.corroe)
+	return cantidad
 
 
 # El rayo de la descarga: una línea en zigzag de puntitos azules y blancos
@@ -122,7 +134,8 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 
 
 # Sangrar o ácido en un zombi: va de hijo suyo y le quita vida a pellizcos. Sangrar le hace gotear; el ácido, no: lo
-# tiñe de verde (a los zombis, zombi.gd, que lo junta con el fuego; a los jefes, aquí). Al jefe de bomberos el ácido
+# tiñe de verde (a los zombis, zombi.gd, que lo junta con el fuego; a los jefes, aquí) y, mientras está, todo le quita
+# más (con_acido). Al jefe de bomberos el ácido
 # solo lo tiñe: su herir() es el del fuego de los charcos (la vida se la quita el chorro, llamarada.gd)
 class Herida extends Node:
 	var t := 0.0

@@ -150,6 +150,10 @@
   chispas (de `Llamas` solo lleva su luz naranja: `Llamas.cuerpo`); el ácido, manchas verdes que crecen, con burbujas
   y gotas, y una luz verde que late (`Brillo.luz_acido`). Lo que luce brilla a oscuras: `brillo.gd` le pone encima
   una copia del dibujo, sin penumbra, que solo pinta eso. A los jefes, el ácido igual (`ArmasCreadas.Herida`).
+  Además de quitar vida un rato, cada uno hace lo suyo: el fuego se contagia (`contagiar`: cada medio segundo, el
+  que arde prende a los zombis que tiene pegados, 1,5 s; al apagarse se queda un rato chamuscado y no se vuelve a
+  prender así; números en `Lanzables.MOLOTOV`), y el ácido les come la armadura (`ArmasCreadas.con_acido`: mientras
+  lo llevan, la herida o el de un charco, todo les quita un 50 % más, también a los jefes; a Johnny, no).
 - `sala_armas.gd`: la sala de pruebas de armas (F11 en la planta baja; el sitio, `sala_armas` de `planta.gd`, y la
   monta `mapa.gd`): la diana en el centro, todas las armas (coma y punto; las del banco, creadas en el acto), munición
   sin fin pero recargando, las líneas de ayuda en el suelo (alcance, a quién apunta, por dónde irá la bala, el círculo

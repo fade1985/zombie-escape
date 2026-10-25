@@ -224,11 +224,12 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 
 
 # "de_aliado": el golpe es de un superviviente que acompaña a Johnny (sus balas o el martillazo del ferretero). Aquí no
-# cambia nada: lo mira el Glotón, que entonces no salpica a Johnny con su ácido
+# cambia nada: lo mira el Glotón, que entonces no salpica a Johnny con su ácido. Con ácido, lo que pasa sus defensas
+# le quita más (ArmasCreadas.con_acido)
 func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, _de_aliado := false) -> void:
 	if estado == "muerto" or invulnerable:
 		return
-	quitar_vida(danar(cantidad, fuerza, de_lleno), fuerza)
+	quitar_vida(ArmasCreadas.con_acido(self, danar(cantidad, fuerza, de_lleno)), fuerza)
 
 
 # El mordisco de la skin del glotón (johnny.gd, devolver()): le ha hecho daño a Johnny y pierde esa vida, directa (ni

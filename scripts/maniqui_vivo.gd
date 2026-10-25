@@ -86,6 +86,7 @@ func lo_mira(johnny: Node2D) -> bool:
 func recibir_golpe(cantidad: int, fuerza: Vector2, _de_lleno := false) -> void:
 	if estado == "muerto":
 		return
+	cantidad = ArmasCreadas.con_acido(self, cantidad)   # (con ácido, le quita más)
 	vida = maxi(vida - cantidad, 0)
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-20, 0), -130), str(cantidad))
 	Sonido.tocar("golpe")

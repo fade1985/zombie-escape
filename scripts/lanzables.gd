@@ -29,6 +29,11 @@ const MOLOTOV := {
 	"dps": 12.0,       # daño por segundo a Johnny dentro del fuego (la esquiva lo cruza sin quemarse)
 	"tick": 0.25,      # cada cuánto se reparte la quemadura a los zombis
 	"sigue": 2.0,      # segundos que un zombi sigue ardiendo después de salir del fuego
+	# el fuego se contagia (zombi.gd, contagiar): el que arde prende a los zombis que tiene pegados
+	"contagia": 0.5,   # cada cuánto lo pasa
+	"pegado": 24.0,    # "pegados": a menos de esto, de borde a borde (en una horda apretada se quedan a unos 14: zombi_*.tscn, avoidance)
+	"contagio": 1.5,   # segundos que arde el que se contagia
+	"chamuscado": 2.0, # recién apagado, lo que tarda en poder contagiarse otra vez (si no, dos pegados se prenderían sin fin)
 }
 # Números de la granada
 const GRANADA := {

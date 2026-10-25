@@ -429,7 +429,7 @@ func mover() -> void:
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto" or invulnerable:
 		return
-	quitar_vida(cantidad, fuerza)
+	quitar_vida(ArmasCreadas.con_acido(self, cantidad), fuerza)   # (con ácido, le quita más)
 
 
 # El mordisco de la skin del glotón (johnny.gd, devolver()): le ha hecho daño a Johnny y pierde esa vida, aunque esté

@@ -39,6 +39,8 @@
 #   --tintes       el fuego y el ácido de los enemigos, pintados por su shader (zombi.gd, quemaduras): zombis ardiendo,
 #                  con ácido y con las dos cosas, a la luz y a oscuras (lo que luce brilla, brillo.gd), un jefe con ácido y
 #                  uno que muere ardiendo
+#   --fuego-acido  lo que hacen el fuego y el ácido además de quitar vida un rato: el fuego se contagia a los zombis
+#                  pegados (zombi.gd, contagiar) y el ácido les come la armadura, también a los jefes (ArmasCreadas.con_acido)
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -148,6 +150,9 @@ func empezar_prueba() -> void:
 	elif "--tintes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tintes()
+	elif "--fuego-acido" in args:
+		set_process(false)   # sin la prueba larga
+		probar_fuego_acido()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
@@ -3248,6 +3253,133 @@ func probar_tintes() -> void:
 	Captura.foto("captura-tintes-carbon.png")
 	print("Tintes: el quemado, muerto %s · fuego/ácido mientras ennegrece %s (esperado: true y el fuego entre 0 y 0.6: se va apagando)" % [
 		quemado.estado == "muerto", efecto.call(quemado)])
+	get_tree().quit()
+
+
+# Con "--captura --fuego-acido": lo que hacen el fuego y el ácido, además de quitar vida un rato. En la sala de pruebas
+# de armas:
+#   1) El fuego se contagia (zombi.gd, contagiar): cuatro zombis en fila, pegados, y uno apartado, quietos y sin perder
+#      vida (como la diana). Se prende el primero y el fuego pasa de uno a otro cada medio segundo, con la fuerza del
+#      primero, hasta el último; el apartado no se prende. Como al apagarse se quedan chamuscados, cada uno arde una vez
+#      y el fuego se acaba (no va y vuelve entre dos pegados sin fin). Foto con el fuego a mitad de la fila
+#      (captura-fuego-acido-contagio.png).
+#   2) El ácido les come la armadura (ArmasCreadas.con_acido): a un zombi, el mismo golpe y el mismo daño sin golpe le
+#      quitan un 50 % más con la herida de ácido que sin ella, y al acabarse la herida, lo de siempre; igual con el ácido
+#      de un charco de vómito, y al salir de él, lo de siempre. A un jefe (el cocinero, quieto), igual, con una foto de
+#      su número (captura-fuego-acido-jefe.png).
+# Cada línea dice lo esperado. Se cierra sola
+func probar_fuego_acido() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "mira"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+
+	# 1) el contagio: la fila, pegados (entre los bordes, 14: lo que se apartan solos en una horda apretada, y menos de lo
+	# que hace falta para contagiarse), y el apartado
+	var todos := []
+	for i in 5:
+		todos.append(meter_zombi("normal", johnny.position + Vector2(-150 + i * 60, -90)))
+	await get_tree().process_frame
+	var paso: float = todos[0].radio * 2.0 + 14.0
+	for i in 5:
+		var z: Node2D = todos[i]
+		z.position = johnny.position + Vector2(-130 + (i * paso if i < 4 else 3 * paso + 150), -90)
+		z.diana = true   # quietos en su sitio y sin perder vida
+		z.casa = z.position
+	await get_tree().process_frame
+	var primera := [-1.0, -1.0, -1.0, -1.0, -1.0]   # cuándo se prende cada uno
+	var veces := [0, 0, 0, 0, 0]                    # cuántas veces se prende
+	var ardia := [false, false, false, false, false]
+	todos[0].prender(2.0)
+	var t := 0.0
+	var foto := false
+	while t < 6.0:
+		await get_tree().physics_frame
+		t += get_physics_process_delta_time()
+		for i in 5:
+			var arde: bool = todos[i].arder_t > 0.0
+			if arde and not ardia[i]:
+				veces[i] += 1
+				if primera[i] < 0.0:
+					primera[i] = t
+			ardia[i] = arde
+		if not foto and t >= 1.25:
+			foto = true
+			Captura.foto("captura-fuego-acido-contagio.png")
+	var cuando := []
+	for s in primera:
+		cuando.append("%.2f" % s)
+	print("Fuego, contagio: se prenden a los %s s (esperado: 0, 0.5, 1, 1.5 más o menos y -1: el apartado, nunca) · veces %s (esperado: [1, 1, 1, 1, 0]) · el último arde con fuerza %.1f (esperado: 2.0) · a los 6 s arde alguno %s (esperado: false)" % [
+		", ".join(cuando), veces, todos[3].arder_dano, todos.any(func(z): return z.arder_t > 0.0)])
+	for z in todos:
+		z.remove_from_group("zombis")
+		z.queue_free()
+	await get_tree().create_timer(0.3).timeout
+
+	# 2) el ácido: lo que quitan un golpe de 10 y 10 sin golpe ("golpe/sin golpe"), según lo que lleve
+	var zh: Node2D = meter_zombi("normal", johnny.position + Vector2(-90, -90))
+	var c: Node2D = meter_zombi("normal", johnny.position + Vector2(90, -90))
+	await get_tree().process_frame
+	var ultimo := {}
+	for zz in [zh, c]:
+		zz.diana = true
+		zz.casa = zz.position
+		zz.herido.connect(func(n: int, _golpe: bool): ultimo[zz] = n)
+	var quita := func(zz: Node2D) -> String:
+		zz.recibir_golpe(10, Vector2.ZERO)
+		var a: int = ultimo[zz]
+		zz.herir(10.0)
+		return "%d/%d" % [a, ultimo[zz]]
+	var sin: String = quita.call(zh)
+	ArmasCreadas.herir(zh, "acido", 4)
+	var con: String = quita.call(zh)
+	await get_tree().create_timer(3.4).timeout
+	print("Ácido, herida: sin ácido %s · con la herida %s · al acabarse (herida %s) %s (esperado: 10/10, 15/15, false y 10/10)" % [
+		sin, con, zh.has_node("herida_acido"), quita.call(zh)])
+	var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+	charco.tipo = "vomito"
+	charco.position = johnny.get_parent().to_local(c.global_position)
+	johnny.get_parent().add_child(charco)
+	await get_tree().create_timer(0.4).timeout
+	var en_charco: String = quita.call(c)
+	var pisa: bool = c.estados.has("acido")
+	c.position += Vector2(110, 0)
+	c.casa = c.position
+	await get_tree().create_timer(0.3).timeout
+	print("Ácido, charco de vómito: dentro (ácido %s) %s · fuera (ácido %s) %s (esperado: true, 15/15, false y 10/10)" % [
+		pisa, en_charco, c.estados.has("acido"), quita.call(c)])
+	charco.queue_free()
+	for zz in [zh, c]:
+		zz.remove_from_group("zombis")
+		zz.queue_free()
+	await get_tree().create_timer(0.3).timeout
+
+	# a un jefe (el cocinero, quieto: la herida sigue, va aparte), lo que le quita un golpe de 20
+	var jefe: Node2D = meter_zombi("cocinero", johnny.position + Vector2(0, -150))
+	await get_tree().create_timer(0.2).timeout
+	jefe.process_mode = Node.PROCESS_MODE_DISABLED
+	jefe.invulnerable = false
+	var v0: int = jefe.vida
+	jefe.recibir_golpe(20, Vector2.ZERO)
+	var jefe_sin: int = v0 - jefe.vida
+	ArmasCreadas.herir(jefe, "acido", 4)
+	jefe.get_node("herida_acido").process_mode = Node.PROCESS_MODE_ALWAYS
+	await get_tree().create_timer(0.6).timeout
+	v0 = jefe.vida
+	jefe.recibir_golpe(20, Vector2.ZERO)
+	var jefe_con: int = v0 - jefe.vida
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-fuego-acido-jefe.png")
+	print("Ácido, jefe: un golpe de 20 le quita %d sin ácido y %d con él (esperado: 20 y 30)" % [jefe_sin, jefe_con])
 	get_tree().quit()
 
 
