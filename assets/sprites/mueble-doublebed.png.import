@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ba5wmv6ayqmwt"
-path="res://.godot/imported/mueble-lamp-b.png-6c74eceb9fc0deb7a9f9ee6ed5c2c798.ctex"
+uid="uid://dknsf43y3gsuj"
+path="res://.godot/imported/mueble-doublebed.png-d61c580cf29dd93caa3568198e41f136.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-lamp-b.png"
-dest_files=["res://.godot/imported/mueble-lamp-b.png-6c74eceb9fc0deb7a9f9ee6ed5c2c798.ctex"]
+source_file="res://assets/sprites/mueble-doublebed.png"
+dest_files=["res://.godot/imported/mueble-doublebed.png-d61c580cf29dd93caa3568198e41f136.ctex"]
 
 [params]
 

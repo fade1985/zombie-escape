@@ -4,7 +4,7 @@
 extends "res://scripts/pruebas/prueba_fotos.gd"
 
 
-# Con "--captura --piso-pasillo": el piso con pasillo en T (apartamento.gd: probar_pasillo), que de momento solo sale en
+# Con "--captura --piso-pasillo": el piso con pasillo en T (apartamento.gd: PLANO_PASILLO), que de momento solo sale en
 # esta prueba (con ella, todos los pisos normales salen así: prueba_comun.gd). Primero genera 200, la mitad con la puerta
 # abajo y la otra mitad arriba, y cuenta los que salen mal: sin la puerta en el centro o sin justo un salón, una cocina,
 # un dormitorio de matrimonio y otro individual, cada uno con su baño dentro (con una sola puerta, a él). Luego, en la 1ª planta, entra en uno con la puerta abajo (los

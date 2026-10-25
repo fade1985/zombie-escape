@@ -32,7 +32,7 @@ IMAGENES = ('.png', '.webp', '.jpg', '.jpeg')
 # Muebles dibujados "a tamaño de personaje": cada píxel del juego son N píxeles del original. Se encogen justo
 # N veces (no al ancho del catálogo) y salen con la escala indicada ("scale": 1 = el mismo tamaño de píxel que Johnny).
 # Para añadir otro mueble así: su tipo (el del catálogo), el N y la escala.
-BLOQUE = {'lamp': (8, 1), 'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7, 1), 'bookshelf': (12.7, 1)}  # tipo: (N, scale del .json: 1 = 2 unidades por píxel, 0.5 = 1)
+BLOQUE = {'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7, 1), 'bookshelf': (12.7, 1)}  # tipo: (N, scale del .json: 1 = 2 unidades por píxel, 0.5 = 1)
 # Muebles de PixelLab (los del centro comercial): salen con el fondo transparente de verdad, sin halo blanco, así que
 # no se les quita lo blanco (si no, se agujerearían la escarcha, los cristales o el maniquí)
 SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 'tvshelf', 'pharmacycounter',
@@ -42,7 +42,8 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'treadmill', 'benchpress', 'cablemachine', 'dumbbellrack', 'weightplates',   # (las máquinas del gimnasio del Gymbro)
             'wheeliebin', 'trashcan', 'janitorcart',   # (y lo del cuarto de la limpieza de la portera)
             'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket',   # (y los de la sala de mantenimiento)
-            'fridge', 'counter', 'stove', 'kitchentable'}   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
+            'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
+            'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp'}   # (y el dormitorio y la lámpara de pie: tools/guias_dormitorio.py)
 
 
 def catalogo():
