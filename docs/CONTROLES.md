@@ -118,12 +118,14 @@ Los de serie del mando siguen lo habitual en juegos de dos sticks: los gatillos 
   (su hachazo, sí le quita); y el poder del glotón: el zombi que le da un zarpazo muere,
   el Gymbro pierde un 10 % con un golpe suyo y con una pesa suya aunque tenga la armadura, y sin la skin, siendo
   invulnerable o con un daño que no es de nadie, nada. Cada línea de la terminal dice lo esperado.
-- `--baul`: en vez de la prueba larga, la de guardar a mano en el baúl lo de la mochila (`ui/inventario.gd`): con
-  gasolina, un trapo, vendas, alcohol y despertadores en la mochila, Johnny se arrima al baúl y comprueba en la terminal que
-  se abre, que «Guardar de la mochila» enseña la mochila (`captura-baul-mochila.png`, con la gasolina elegida), que
-  «Guardar» mete toda la casilla en el baúl, que las vendas no se guardan, que con el baúl lleno solo caben más de lo
-  que ya tiene, y que «Guardar todo» mete lo demás (`captura-baul-guardado.png`, el baúl al volver). Cada línea
-  dice lo esperado. Deja el baúl del guardado de prueba como estaba.
+- `--baul`: en vez de la prueba larga, la de la pantalla del baúl (`ui/inventario.gd`, la parte 4 del inventario
+  nuevo): con gasolina, explosivos, vendas, un trapo y alcohol en la mochila y un arrojable creado en el baúl, Johnny
+  se arrima al baúl y comprueba en la terminal que se abre con la marca en lo primero que se puede guardar, que
+  «Guardar en el baúl» mete toda la casilla (y la marca pasa a la siguiente), que las vendas no se guardan, que la
+  gasolina se guarda desde la munición (`captura-baul-guardar.png`) y se saca de una en una, que el arrojable creado
+  sale a la mano (`captura-baul-sacar.png`), que con el baúl lleno solo caben más de lo que ya tiene
+  (`captura-baul-lleno.png`) y que «Guardar todo» mete lo demás. Cada línea dice lo esperado. Deja el baúl del
+  guardado de prueba como estaba.
 - `--repuesto`: en vez de la prueba larga, la de las dos armas de cada tipo (`partida.llevar_arma`): compra en la
   tienda del ordenador un lanza ácido y una pistola eléctrica (el lanza ácido se queda en el suelo), el bate y el
   cuchillo (el bate se queda en el suelo), no deja comprar la pistola que lleva de repuesto, tira la fregona y vuelve a
@@ -285,12 +287,15 @@ En el suelo, manchas de sangre.
   suelta cada jefe al morir (los de planta y el de la azotea), en un papel que hay que recoger. Lo aprendido no se
   pierde nunca. El lanzallamas, el lanza ácido y la pistola eléctrica ya no se crean: se compran en la tienda de armas
   del ordenador.
-- A su derecha, el **baúl**: las armas creadas (se sacan para la partida) y los objetos guardados. Con
-  «Guardar de la mochila» se ve la mochila: se toca una casilla y «Guardar» mete en el baúl todos los de esa
-  casilla, o «Guardar todo»; así ya no se pierden si Johnny cae (lo que quede en la mochila pasa solo al completar
-  el edificio). Lo de curar no se guarda, y con el baúl lleno (32 casillas) solo caben más de lo que ya tiene. Con
-  el ratón o el dedo, flechas e Intro o el mando (A elige, y la marca salta a «Guardar»: A dos veces); Esc o B
-  cierra.
+- A su derecha, el **baúl** (al arrimarse): la pantalla partida en dos. A la izquierda, lo que llevas (las armas y
+  los arrojables a mano, para verlos; los objetos, la munición y los arrojables de repuesto) y a la derecha, sus 32
+  casillas: las armas creadas y los objetos guardados. Abajo, la ficha de lo elegido: «Guardar en el baúl» mete
+  todos los de esa casilla (de la munición, solo la gasolina, el ácido y las baterías), y así ya no se pierden si
+  Johnny cae (lo que quede en la mochila pasa solo al completar el edificio); «Sacar» saca un arma creada para esta
+  partida (la atraedora o la congeladora, a la mano si hay sitio y si no, al repuesto; ya no vuelve al baúl) o un
+  objeto, de uno en uno. «Guardar todo» mete todo lo que se pueda. Lo de curar no se guarda, y con el baúl
+  lleno solo caben más de lo que ya tiene. Se maneja como el inventario: la ficha sigue a la marca, A salta a su
+  botón (A dos veces y hecho), Y lo hace directamente y Esc o B cierra; con el ratón o el dedo, se toca.
 - En el despacho, la mesa del ordenador: **ConserjeOS** (puntos de talento, árbol de talentos, tienda de
   armas, logros, Dosier VD-7, Noticias de Canal 8 y Colecciones: lo encontrado, creado y leído de cada edificio, y el
   bestiario).
