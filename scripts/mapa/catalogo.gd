@@ -216,10 +216,14 @@ const SALAS := {
 			["desk?", "wardrobe?", "nightstand?", "doublebed", "nightstand?", "lamp?"],
 		],
 		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
-		# puestos a mano en la pared de arriba, en el piso normal (el que se entra por abajo): el armario sobre las casillas 2 y
-		# 3, la mesilla en la 6, la cama de la 7 a la 10 y la otra mesilla en la 11 (idea del dueño). Los pisos volteados
-		# (entrada "arriba") todavía no tienen la suya: la puerta del pasillo cae en esa pared y se está viendo cómo
-		"colocados": {"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]]},
+		# puestos a mano en la pared de arriba. En el piso normal (el que se entra por abajo): el armario sobre las casillas 2 y
+		# 3, la mesilla en la 6, la cama de la 7 a la 10 y la otra mesilla en la 11 (idea del dueño). En el volteado (entrada
+		# "arriba") esa pared es la del pasillo y la puerta (casillas 5 y 6) cae en ella: la mesilla de la 6 la taparía, así que
+		# la cama y las dos mesillas van una casilla a la derecha (mesilla en la 7, cama de la 8 a la 11, mesilla en la 12)
+		"colocados": {
+			"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]],
+			"arriba": [["wardrobe", 2.0], ["nightstand", 6.5], ["doublebed", 9.0], ["nightstand", 11.5]],
+		},
 	},
 	"dormitorio-individual": {
 		"muebles": ["bed", "wardrobe", "nightstand", "desk", "lamp"],
