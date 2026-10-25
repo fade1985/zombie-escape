@@ -460,15 +460,8 @@ func _draw() -> void:
 				var desde := Vector2.from_angle(a) * radio
 				draw_line(desde, desde + Vector2.from_angle(a) * LARGO_RAYAS * k, Color(rojo, 0.35 + 0.5 * k), 3.0)
 		"aviso_maletinazo":
-			var k := minf(1.0, t / AVISO_MALETINAZO)
-			var puntos := PackedVector2Array([Vector2.ZERO])
-			for i in 17:
-				var b: float = datos.angulo - MEDIO_MALETINAZO + i / 16.0 * MEDIO_MALETINAZO * 2.0
-				puntos.append(Vector2.from_angle(b) * ALCANCE_MALETINAZO)
-			draw_set_transform(Vector2(0, 6))
-			draw_colored_polygon(puntos, Color(rojo, 0.1 + k * 0.25))
-			puntos.append(Vector2.ZERO)
-			draw_polyline(puntos, Color(rojo, 0.9), 3.0)
+			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_MALETINAZO, ALCANCE_MALETINAZO,
+				minf(1.0, t / AVISO_MALETINAZO), tiempo)
 		"aviso_latigazo":
 			# las tres franjas de los latigazos, cada vez más rojas
 			var k := minf(1.0, t / AVISO_LATIGAZO)

@@ -549,11 +549,8 @@ func _draw() -> void:
 		draw_set_transform(Vector2.ZERO)
 	match estado:
 		"aviso_hacha":
-			var k := minf(1.0, t / AVISO_HACHA)
-			var r := ALCANCE_HACHA + 10.0
-			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.6))
-			draw_colored_polygon(sector(mirada.angle(), 1.1, r), Color(ROJO, 0.1 + 0.2 * k))
-			draw_arc(Vector2.ZERO, r, mirada.angle() - 1.1, mirada.angle() + 1.1, 16, Color(ROJO, 0.9), 3.0)
+			Aviso.abanico(self, Vector2(0, 6), mirada.angle(), 1.1, ALCANCE_HACHA + 10.0, minf(1.0, t / AVISO_HACHA),
+				tiempo, 0.6)
 		"aviso_giro", "giro":
 			var k := minf(1.0, t / AVISO_GIRO) if estado == "aviso_giro" else 1.0
 			var pies := Vector2(0, PIE - 6)
@@ -603,14 +600,6 @@ func flechas(centro: Vector2, sentido: float, k: float) -> void:
 			draw_colored_polygon(punta, Color(ROJO, 0.95 * k))
 			punta.append(punta[0])
 			draw_polyline(punta, Color(0.16, 0.03, 0.05, 0.8 * k), 2.0)
-
-
-# Los puntos de un sector de círculo: del centro, el arco de "a - ancho" a "a + ancho" a "r" de distancia
-func sector(a: float, ancho: float, r: float) -> PackedVector2Array:
-	var puntos := PackedVector2Array([Vector2.ZERO])
-	for i in 13:
-		puntos.append(Vector2.from_angle(a - ancho + 2.0 * ancho * i / 12.0) * r)
-	return puntos
 
 
 # Por encima de él: la burbuja de fuego y los conos de fuego del giro (por encima de la burbuja: salen de dentro)

@@ -219,18 +219,7 @@ func estrellarse() -> void:
 # "k" (0 a 1) (de pixel art: aviso.gd). Si hay una pared o un mueble por medio, llega solo hasta ahí, hasta donde se
 # estrellaría su cuerpo, y acaba en una estrella
 func franja(largo: float, k: float) -> void:
-	var cuerpo := PhysicsShapeQueryParameters2D.new()
-	cuerpo.shape = $Choque.shape
-	cuerpo.transform = $Choque.global_transform
-	cuerpo.motion = mirada * largo
-	cuerpo.collision_mask = collision_mask
-	cuerpo.exclude = [get_rid()]
-	var hasta := get_world_2d().direct_space_state.cast_motion(cuerpo)
-	var choca := hasta[1] < 1.0 and largo * hasta[0] + radio < largo
-	if choca:
-		largo = largo * hasta[0] + radio
-	draw_set_transform(Vector2.ZERO)
-	Aviso.franja(self, Vector2(0, 6), mirada.angle(), largo, radio, k, tiempo, choca)
+	Aviso.franja(self, Vector2(0, 6), mirada.angle(), largo, radio, k, tiempo)
 
 
 # ── Recibir golpes y morir ──
