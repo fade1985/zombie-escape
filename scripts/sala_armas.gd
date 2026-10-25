@@ -19,7 +19,8 @@
 #   - el panel de daño, arriba a la izquierda: la ficha del arma y el recuento de disparos, aciertos, fallos (y por
 #     qué), daño por segundo y cuántos zombis normales habría matado, con una vida de mentira (Retroceso lo pone a
 #     cero)
-#   - el guion esconde de golpe las líneas y el panel de daño, y otra vez los vuelve a sacar como estaban
+#   - el guion esconde de golpe las líneas y el panel de daño, y otra vez los vuelve a sacar como estaban. La sala
+#     empieza con ellos escondidos (el guion los saca) y se acuerda de cómo se dejaron hasta que acaba la partida
 # Entra con la pistola en la mano; al salir, Johnny vuelve a llevar lo que llevaba al entrar: armas, balas, mochila y
 # arrojables. Lo que se gana aquí no cuenta (partida.gd, en_pruebas: los zombis no sueltan nada).
 class_name SalaArmas
@@ -52,7 +53,8 @@ var entrada := {}          # las armas y balas con las que entró Johnny (se le 
 var panel: ColorRect
 # Lo que se enciende y se apaga en el panel de pruebas (static: se acuerda de una vez para otra)
 static var con_panel := true      # el panel de daño
-static var escondido := false     # el guion: fuera todo de golpe (las líneas y el panel de daño); otra vez, vuelve como estaba
+static var escondido := true      # el guion: fuera todo de golpe (las líneas y el panel de daño); otra vez, vuelve como estaba.
+                                  # Al empezar la partida, la sala sale así, limpia
 static var ayudas := {"alcance": true, "apuntado": true, "trayectoria": true, "circulos": true, "balas": true}
 static var con_diana := true
 static var sin_fin := true        # munición sin fin

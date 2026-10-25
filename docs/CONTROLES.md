@@ -49,7 +49,8 @@ arrojables).
   si choca).
 - **El panel de daño**, arriba a la izquierda: la ficha del arma y el recuento (disparos, aciertos, daño por
   segundo...). **Retroceso** pone el recuento a cero.
-- **Guion (-):** esconde de golpe las líneas de ayuda y el panel de daño; otra vez, vuelven como estaban.
+- **Guion (-):** saca y esconde de golpe las líneas de ayuda y el panel de daño. La sala **empieza con ellos
+  escondidos**; si los sacas, se quedan así hasta que acabe la partida.
 - **El baúl de pruebas** (arriba a la izquierda): todas las armas y los arrojables en cada calidad, para cogerlos y
   cambiarlos. Es de mentira: el baúl de verdad y la partida guardada no se tocan.
 - **Atajos**, también con el panel cerrado: **1…8**, un zombi de cada tipo; **Mayús + 1…0**, un jefe (portera,
