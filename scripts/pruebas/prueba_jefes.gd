@@ -277,7 +277,7 @@ func probar_cocinero() -> void:
 	# que nadie le dispare mientras tanto (ni Johnny solo, ni el superviviente que le acompaña): así se ve lo que
 	# le quita su aceite
 	var modo: String = johnny.modo
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	for a in get_tree().get_nodes_in_group("aliados"):
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 	for donde in [jefa.position, johnny.position]:

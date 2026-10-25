@@ -283,7 +283,7 @@ func probar_skins() -> void:
 
 	# ── El poder del glotón: quien le hace daño lo paga ──
 	var modo: String = johnny.modo
-	johnny.modo = "mira"   # que Johnny no pegue solo
+	johnny.modo = "quieto"   # que Johnny no pegue solo
 	var a_punto := func() -> void:   # con toda la vida y sin el parpadeo de invulnerable, para que el golpe entre
 		johnny.vida = johnny.stats.vida_max
 		johnny.invulnerable = 0.0
@@ -353,7 +353,7 @@ func probar_skins() -> void:
 #     molotovs, el cono y las bolas de fuego del jefe de bomberos; y su hachazo, que sí le quita
 func probar_skin_bombero() -> void:
 	var modo: String = johnny.modo
-	johnny.modo = "mira"   # que Johnny no pegue ni dispare solo
+	johnny.modo = "quieto"   # que Johnny no pegue ni dispare solo
 	var critico: float = johnny.stats.critico
 	johnny.stats.critico = 0.0
 	johnny.direccion = "e"

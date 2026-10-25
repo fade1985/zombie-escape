@@ -513,7 +513,7 @@ func probar_llamas() -> void:
 	print("Llamas: en el medio, pasado el ardor, pierde %d en 1 s (esperado: 0) · ardiendo %s (esperado: false)" % [
 		antes - johnny.vida, johnny.estados.has("fuego")])
 	# el bombero, en el medio; que nadie le dispare (ni Johnny solo, ni los que le acompañan)
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	for a in get_tree().get_nodes_in_group("aliados"):
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 	var jefe: Node2D = meter_zombi("bombero", centro)

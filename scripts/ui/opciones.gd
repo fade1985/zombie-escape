@@ -19,7 +19,6 @@ signal cerrado
 # Lo que se explica de cada modo de atacar
 const MODOS_AYUDA := {
 	"asistido": "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte.",
-	"mira": "Johnny ataca mientras mantienes pulsado atacar, hacia donde está mirando.",
 	"libre": "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil.",
 }
 
@@ -45,7 +44,6 @@ const FILAS := [
 # En el móvil, los botones táctiles (scripts/ui/tactil.gd)
 const TACTIL := [
 	["Moverse", "Joystick: toca y arrastra en la mitad izquierda"],
-	["Atacar", "Solo en \"hacia donde mira\": el botón grande de abajo a la derecha"],
 	["Apuntar", "Solo en \"apuntar libre\": el joystick de abajo a la derecha"],
 	["Esquivar", "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"],
 	["Armas", "Toca la otra arma para sacarla; toca la de fuego en la mano para recargar"],

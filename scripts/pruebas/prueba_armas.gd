@@ -180,7 +180,7 @@ func probar_lanzallamas() -> void:
 	# comprado: sus números, su boca y sin chispitas; las balas no le valen
 	var id := "lanzallamas"
 	var w := Armas.datos(id)
-	johnny.modo = "mira"   # que no eche fuego por su cuenta: aquí lo echa la prueba
+	johnny.modo = "quieto"   # que no eche fuego por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
 	print("Lanzallamas en la mano: %s · hoja «%s» · daño %d/s · alcance %.0f (%.0f casillas) · depósito %.0f s (lleno: %.1f) · recarga %.1f s · empuje %.1f · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: lanzallamas, conserje-48-lanzallamas.tres, 30, 320 (10), 8 (8.0), 1.5, 0.5, (48, 72), (28, -22), false, lanzallamas, pistola: la de repuesto)" % [
 		johnny.huecos.fuego, johnny.sprite.sprite_frames.resource_path.get_file(), w.dano, w.alcance, w.alcance / Planta.CASILLA,
@@ -469,7 +469,7 @@ func probar_desintegrador() -> void:
 	# comprado: sus números, su boca y sin chispitas; las balas no le valen
 	var id := "desintegrador"
 	var w := Armas.datos(id)
-	johnny.modo = "mira"   # que no eche el chorro por su cuenta: aquí lo echa la prueba
+	johnny.modo = "quieto"   # que no eche el chorro por su cuenta: aquí lo echa la prueba
 	await get_tree().create_timer(0.3).timeout
 	print("Lanza ácido en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · recarga %.1f s · empuje %.1f · daño %.0f/s · pies %s · boca este %s · chispitas %s · icono «%s» · la caja es para «%s» (esperado: Lanza ácido, conserje-48-desintegrador.tres, acido, 320 (10), 8, 1.5, 0.5, 30, (48, 72), (26, -20), false, desintegrador, pistola: la de repuesto)" % [
 		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
@@ -689,7 +689,7 @@ func probar_tintes() -> void:
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
@@ -794,7 +794,7 @@ func probar_fuego_acido() -> void:
 	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
 		a.process_mode = Node.PROCESS_MODE_DISABLED
 		a.visible = false
-	johnny.modo = "mira"
+	johnny.modo = "quieto"
 	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()

@@ -284,8 +284,6 @@ func _draw() -> void:
 			objetivo = johnny.buscar_objetivo(w)
 			if objetivo:
 				angulo = (objetivo.global_position - johnny.global_position).angle()
-		"mira":
-			angulo = johnny.DIRS.find(johnny.direccion) * PI / 4
 		"libre":
 			if johnny.con_raton:
 				angulo = johnny.ayuda_apunte((get_global_mouse_position() - johnny.global_position).angle())
@@ -375,7 +373,7 @@ func escribir() -> void:
 	if w.has("efecto"):
 		l.append("Efecto: " + EFECTOS.get(w.efecto, w.efecto))
 	var lejos := johnny.global_position.distance_to(diana.global_position)
-	l.append("Modo %s (F1) · diana a %s casillas" % [johnny.MODOS[johnny.modo], decimal(lejos / Planta.CASILLA, 1)])
+	l.append("Modo %s (F1) · diana a %s casillas" % [johnny.MODOS.get(johnny.modo, johnny.modo), decimal(lejos / Planta.CASILLA, 1)])
 	l.append("")
 	l.append("RECUENTO  ·  Retroceso: a cero")
 	if fuego and not deposito:

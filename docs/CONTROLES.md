@@ -9,7 +9,7 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 |---|---|---|
 | Moverse | WASD o flechas | stick izquierdo |
 | Esquivar | Espacio o Mayús | A o LB |
-| Atacar | según el modo: solo (asistido), J o clic (hacia donde mira), ratón + clic (libre) | RT / stick derecho |
+| Atacar | según el modo: solo (asistido) o ratón + clic o J (libre) | RT / stick derecho |
 | Cambiar modo de atacar | F1 o C | cruceta abajo |
 | Cambiar de arma (cuerpo a cuerpo / distancia) | Q o rueda | Y |
 | Recargar | R | X |
@@ -90,7 +90,7 @@ La sala de pruebas de las fases 1-3: abrir `escenas/salas/bano.tscn` y **F6**.
 ## Móvil (táctil)
 
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (mitad izquierda de la pantalla); abajo a la
-derecha, según el modo: esquivar grande (asistido), botón de atacar (hacia donde mira) o joystick derecho (libre).
+derecha, según el modo: esquivar grande (asistido) o joystick derecho (libre).
 En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de fuego en la mano recarga) y lanzar (arrastrar y
 soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa. En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.

@@ -122,9 +122,8 @@ func _process(delta: float) -> void:
 	tiempo += delta
 	# Le "pulsamos" las teclas como si fuéramos el jugador: [cuándo se pulsa, cuándo se suelta, qué]
 	#  - modo asistido: 4 pistola, 5 escopeta
-	#  - F1 al modo "hacia donde mira", y J pulsada
 	#  - 6 MP5, F1 al modo libre y el stick derecho empujado hacia la derecha
-	var pasos := [[1.6, 1.7, "arma_4"], [2.4, 2.5, "arma_5"], [3.0, 3.1, "cambiar_modo"], [3.0, 3.8, "atacar"],
+	var pasos := [[1.6, 1.7, "arma_4"], [2.4, 2.5, "arma_5"],
 		[3.8, 3.9, "arma_6"], [3.9, 4.0, "cambiar_modo"], [4.0, 4.8, "apuntar_derecha"]]
 	for paso in pasos:
 		if tiempo > paso[0] and tiempo - delta <= paso[0]:
