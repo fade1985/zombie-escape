@@ -1,7 +1,11 @@
 # Jefes de los Apartamentos (decidido con el dueño, 22 oct 2026)
 
+> **Terminado: es historia.** Todo lo de este plan está hecho (25 oct 2026). Muchas cosas cambiaron después
+> (objetos y recetas quitados, inventario nuevo...): lo que vale es el código y `docs/CODIGO.md`. Leer solo el
+> apartado que haga falta para saber por qué se decidió algo.
+
 Hoy en los Apartamentos la portera es la jefa de todas las plantas. Pasan a tener, como el centro comercial
-(`docs/CENTRO_COMERCIAL.md`, trozos 2 y 6), **cuatro minijefes al azar** y **un jefe final en la azotea**.
+(`docs/historial/CENTRO_COMERCIAL.md`, trozos 2 y 6), **cuatro minijefes al azar** y **un jefe final en la azotea**.
 
 ## Lo decidido
 
@@ -260,7 +264,7 @@ la lumbre.
 
 ## 4. El científico jefe (jefe final de la azotea; de Claude, con visto bueno)
 
-Grande como el gerente (lienzo de 128). Encaja con la historia de Velaria (`docs/CENTRO_COMERCIAL.md`): es quien
+Grande como el gerente (lienzo de 128). Encaja con la historia de Velaria (`docs/historial/CENTRO_COMERCIAL.md`): es quien
 estaba detrás de lo que pasa en el edificio.
 
 **Fase 1: el científico.** Bata blanca manchada, gafas de laboratorio y una jeringa enorme. Rápido, no pega de cerca:

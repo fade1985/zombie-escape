@@ -1,4 +1,4 @@
-# El rescate propio del técnico del centro comercial (docs/CENTRO_COMERCIAL.md, «Supervivientes»). Está encerrado
+# El rescate propio del técnico del centro comercial (docs/historial/CENTRO_COMERCIAL.md, «Supervivientes»). Está encerrado
 # en el almacén de la tienda de electrónica, la del agua con corriente (peligros/agua.gd). Al unirse no se quiere
 # ir sin arreglar el cable pelado, pero con corriente no lo puede tocar: Johnny tiene que bajar la palanca del
 # cuadro eléctrico (peligros/cuadro.gd) y la tienda se queda a oscuras. Entonces se pone a arreglarlo, de espaldas,

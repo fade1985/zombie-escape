@@ -1,4 +1,4 @@
-# El helicóptero de Velaria (trozo 6 de la parte 4, docs/CENTRO_COMERCIAL.md). Cuando cae el gerente mutado,
+# El helicóptero de Velaria (trozo 6 de la parte 4, docs/historial/CENTRO_COMERCIAL.md). Cuando cae el gerente mutado,
 # llega volando a la azotea a por el Sujeto 0 (Johnny), como decía la orden de recogida del dosier (historia.gd).
 # Viene de fuera, por la derecha, bajando poco a poco, y se queda encima del helipuerto con el rotor girando y un
 # foco que busca a Johnny por el suelo. No ataca: es la señal de que hay que irse por la escalera de incendios.

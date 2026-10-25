@@ -1,4 +1,4 @@
-# Los peligros de las tiendas del centro comercial (docs/CENTRO_COMERCIAL.md, parte 3): el frío de la cámara
+# Los peligros de las tiendas del centro comercial (docs/historial/CENTRO_COMERCIAL.md, parte 3): el frío de la cámara
 # frigorífica, el fuego de la cocina del restaurante y el agua con corriente de la tienda de electrónica.
 # Son como los charcos (charco.gd), pero no se secan nunca. Les hacen daño a Johnny y a los zombis despiertos (a
 # los dormidos no: si no, los de la cámara se morirían solos antes de que llegaras), para que se puedan usar a

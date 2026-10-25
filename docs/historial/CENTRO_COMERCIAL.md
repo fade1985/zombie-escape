@@ -1,5 +1,9 @@
 # Segundo edificio: el centro comercial
 
+> **Terminado: es historia.** Todo lo de este plan está hecho (25 oct 2026). Muchas cosas cambiaron después
+> (objetos y recetas quitados, inventario nuevo...): lo que vale es el código y `docs/CODIGO.md`. Leer solo el
+> apartado que haga falta para saber por qué se decidió algo.
+
 Decidido con el dueño el 21 de octubre de 2026. Es el plan entero; se hace por partes, cada una con su visto
 bueno. Cuando una parte esté hecha, se marca aquí con ✅ y lo que haya cambiado respecto al plan.
 

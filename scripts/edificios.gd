@@ -59,7 +59,7 @@ const LISTA := {
 }
 
 # Los minijefes: cómo se les nombra y, en el centro comercial (parte 4 del plan), cómo se llama su tienda (sola y
-# con su artículo). En los Apartamentos (docs/JEFES_APARTAMENTOS.md) viven en un piso más, sin nombre propio.
+# con su artículo). En los Apartamentos (docs/historial/JEFES_APARTAMENTOS.md) viven en un piso más, sin nombre propio.
 # Mientras no tengan su escena en partida.gd (ZOMBIS), en su planta sale la portera
 const MINIJEFES := {
 	"portera": {"el": "la portera"},

@@ -134,7 +134,7 @@ JEFES = {
         "motas": {"lanzar": 300},      # la botella que sale volando
         "sin": {"lanzar_s": [6, 7]},   # de frente, la botella se ve enorme al venir hacia la cámara
     },
-    # el Glotón (minijefe de los Apartamentos, docs/JEFES_APARTAMENTOS.md): las lenguas largas del latigazo y el
+    # el Glotón (minijefe de los Apartamentos, docs/historial/JEFES_APARTAMENTOS.md): las lenguas largas del latigazo y el
     # cono de aspirar salen con código (gloton.gd); "aspirar" acaba con la boca abierta y el juego la mantiene
     "gloton-72": {
         "anims": {

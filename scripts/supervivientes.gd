@@ -23,7 +23,7 @@
 # se lo dice (Historia.CAFETERA).
 #
 # Los del centro comercial se esconden igual, pero cada uno tiene su propio rescate en vez de la horda de siempre
-# (docs/CENTRO_COMERCIAL.md, «Supervivientes»): la farmacéutica ("rescate": "escolta"), sin horda, hay que llevarla
+# (docs/historial/CENTRO_COMERCIAL.md, «Supervivientes»): la farmacéutica ("rescate": "escolta"), sin horda, hay que llevarla
 # herida hasta las escaleras (escolta.gd); el técnico ("rescate": "averia"), bajar la palanca del cuadro y aguantar
 # a oscuras mientras arregla el cable (averia.gd); y el ferretero ("rescate": "barricada"), defender la puerta de
 # su almacén mientras quita las tablas (barricada.gd).

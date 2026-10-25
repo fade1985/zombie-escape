@@ -1,7 +1,7 @@
 # El científico jefe: el jefe final de los Apartamentos, en la azotea. El doctor Héctor Salas, director del estudio
 # del VD-7 (historia.gd): el que estaba detrás de todo lo que pasa en el edificio. Grande como el gerente (lienzo
 # de 128), con la bata manchada, las gafas de laboratorio y una jeringa enorme. Lo común con los minijefes (la vida
-# y su barra, llamar a otros, moverse y morir), en minijefe.gd. Diseño: docs/JEFES_APARTAMENTOS.md, apartado 4.
+# y su barra, llamar a otros, moverse y morir), en minijefe.gd. Diseño: docs/historial/JEFES_APARTAMENTOS.md, apartado 4.
 #
 # FASE 1, el científico. Rápido y cobarde: no pega de cerca, se mantiene a distancia de Johnny (si se le acerca,
 # se aleja) y desde ahí hace cuatro cosas, cada una con su aviso:

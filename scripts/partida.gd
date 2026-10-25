@@ -46,7 +46,7 @@ const ZOMBIS := {
 	"cocinero": preload("res://escenas/personajes/cocinero.tscn"),
 	"modista": preload("res://escenas/personajes/modista.tscn"),
 	"gerente": preload("res://escenas/personajes/gerente.tscn"),   # el jefe final del centro comercial (la azotea)
-	"gloton": preload("res://escenas/personajes/gloton.tscn"),     # minijefes de los Apartamentos (docs/JEFES_APARTAMENTOS.md)
+	"gloton": preload("res://escenas/personajes/gloton.tscn"),     # minijefes de los Apartamentos (docs/historial/JEFES_APARTAMENTOS.md)
 	"gymbro": preload("res://escenas/personajes/gymbro.tscn"),
 	"bombero": preload("res://escenas/personajes/bombero.tscn"),
 	"cientifico_jefe": preload("res://escenas/personajes/cientifico_jefe.tscn"),   # el jefe final de los Apartamentos (la azotea)

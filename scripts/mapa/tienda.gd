@@ -1,4 +1,4 @@
-# Generador de tiendas del centro comercial (el segundo edificio: docs/CENTRO_COMERCIAL.md)
+# Generador de tiendas del centro comercial (el segundo edificio: docs/historial/CENTRO_COMERCIAL.md)
 #
 # Una tienda es como un apartamento (apartamento.gd): un rectángulo con su puerta al pasillo. Por dentro:
 #

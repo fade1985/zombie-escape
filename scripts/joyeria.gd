@@ -1,4 +1,4 @@
-# La cámara acorazada de la joyería (parte 10 del centro comercial, trozo 2; docs/CENTRO_COMERCIAL.md, «Decidido
+# La cámara acorazada de la joyería (parte 10 del centro comercial, trozo 2; docs/historial/CENTRO_COMERCIAL.md, «Decidido
 # con el dueño (22 oct 2026, para la parte 10)»). La joyería sale una vez por partida (planta.gd, joyeria_planta) y
 # su cámara, al fondo, tiene la puerta blindada cerrada (mapa/puerta_bano.gd con "acero") y un lector de tarjetas:
 # arrimarse a la puerta por el lado de la tienda. Se abre de dos maneras:

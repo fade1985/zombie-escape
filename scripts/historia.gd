@@ -70,7 +70,7 @@ Tendrás que quitársela.",
 		],
 	},
 	# «Turno infinito»: el gerente del centro pone VD-7 en el café de sus empleados para que trabajen sin parar, y
-	# quiere entregarle a Johnny a Velaria a cambio de «la dosis buena» (docs/CENTRO_COMERCIAL.md, Historia)
+	# quiere entregarle a Johnny a Velaria a cambio de «la dosis buena» (docs/historial/CENTRO_COMERCIAL.md, Historia)
 	"centro": {
 		"titulo": "Dosier VD-7 · Centro comercial",
 		"nota": "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre.",
