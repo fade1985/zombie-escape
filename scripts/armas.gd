@@ -40,6 +40,11 @@ static func familia(id: String) -> String:
 static func pieza(id: String) -> String:
 	return "pieza_" + (familia(id) if DATOS.has(id) else "arrojable")
 
+
+# Las piezas que cuesta subir un arma o un arrojable a esa calidad en el banco (CALIDADES: "piezas" o "piezas_arrojable")
+static func coste(id: String, calidad: int) -> int:
+	return CALIDADES[calidad]["piezas" if DATOS.has(id) else "piezas_arrojable"]
+
 # Las calidades de las armas y de los paquetes de arrojables, de peor a mejor (parte 4 de la tienda y las piezas): cada
 # arma que lleva Johnny o que hay en el baúl tiene la suya (0 = Normal, la de la tienda; la joyería da una Épica). Se
 # ve en el borde de su casilla. Cada una da más daño ("dano") y una cosa de su familia (números provisionales, para
@@ -50,17 +55,27 @@ static func pieza(id: String) -> String:
 #                     eléctrica salta a más zombis ("saltos")
 #   arrojables        radio más grande ("radio") y caben más ("unidades"; lanzables.gd)
 # Y "piezas": lo que cuesta subir a esa calidad en el banco de trabajo (parte 5), en piezas de su familia (pieza); de
-# una en una: de Normal a Poco común 3, luego 6 a Rara y 10 a Épica (19 en total; provisional)
+# una en una: las armas, de Normal a Poco común 3, luego 6 a Rara y 10 a Épica (19 en total); los arrojables,
+# "piezas_arrojable", más baratos porque el paquete se gasta al lanzarlo: 1, 2 y 4 (7 en total). Provisional (parte 6)
 const CALIDADES := [
 	{"nombre": "Normal", "color": Color("#8a8494"), "dano": 1.0, "golpe": 1.0, "cargador": 1.0, "recarga": 1.0,
-		"deposito": 1.0, "saltos": 0, "radio": 1.0, "unidades": 0, "piezas": 0},
+		"deposito": 1.0, "saltos": 0, "radio": 1.0, "unidades": 0, "piezas": 0, "piezas_arrojable": 0},
 	{"nombre": "Poco común", "color": Color("#5fd35f"), "dano": 1.2, "golpe": 1.1, "cargador": 1.25, "recarga": 0.85,
-		"deposito": 1.25, "saltos": 1, "radio": 1.1, "unidades": 1, "piezas": 3},
+		"deposito": 1.25, "saltos": 1, "radio": 1.1, "unidades": 1, "piezas": 3, "piezas_arrojable": 1},
 	{"nombre": "Rara", "color": Color("#4aa3ff"), "dano": 1.45, "golpe": 1.2, "cargador": 1.5, "recarga": 0.7,
-		"deposito": 1.5, "saltos": 2, "radio": 1.2, "unidades": 2, "piezas": 6},
+		"deposito": 1.5, "saltos": 2, "radio": 1.2, "unidades": 2, "piezas": 6, "piezas_arrojable": 2},
 	{"nombre": "Épica", "color": Color("#c06bff"), "dano": 1.75, "golpe": 1.3, "cargador": 1.75, "recarga": 0.55,
-		"deposito": 1.75, "saltos": 3, "radio": 1.3, "unidades": 3, "piezas": 10},
+		"deposito": 1.75, "saltos": 3, "radio": 1.3, "unidades": 3, "piezas": 10, "piezas_arrojable": 4},
 ]
+const EPICA := 3   # la calidad más alta, la que trae el truco
+# El truco de la Épica (parte 6), además de lo de su calidad; uno por familia:
+#   cuerpo a cuerpo   golpe de gracia: cada "gracia" golpes que dan, uno es crítico seguro (johnny.gd, golpear)
+#   a distancia       las balas (y los perdigones) atraviesan a "atraviesa" zombis y siguen (bala.gd)
+#   especiales        estallido: el zombi que matan revienta y pasa su efecto (fuego, ácido o calambre) a los que
+#                     tiene a menos de "estallido" (ArmasCreadas.estallido)
+#   arrojables        racimo: al romperse o explotar sueltan "racimo" más pequeños alrededor, de "racimo_tamano" su
+#                     tamaño y su daño (proyectil.gd y granada.gd)
+const TRUCO := {"gracia": 4, "atraviesa": 1, "estallido": 80.0, "racimo": 2, "racimo_tamano": 0.5}
 const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar: en Normal no van al baúl
 
 
@@ -113,7 +128,21 @@ static func que_da(id: String, calidad: int) -> String:
 				extra = "la chispa salta a %d %s más" % [c.saltos, "zombi" if c.saltos == 1 else "zombis"]
 		"arrojable":
 			extra = "radio un %d %% más grande y caben %d más" % [roundi((c.radio - 1.0) * 100), c.unidades]
-	return "%s: daño +%d %%, %s." % [c.nombre, roundi((c.dano - 1.0) * 100), extra]
+	var da := "%s: daño +%d %%, %s." % [c.nombre, roundi((c.dano - 1.0) * 100), extra]
+	return da if calidad < EPICA else "%s %s" % [da, truco(id)]
+
+
+# Lo que dice la ficha del truco de la Épica (TRUCO) de un arma o un arrojable
+static func truco(id: String) -> String:
+	match "arrojable" if not DATOS.has(id) else familia(id):
+		"cuerpo":
+			return "Truco: cada %d golpes que dan, uno es crítico (doble daño)." % TRUCO.gracia
+		"distancia":
+			return "Truco: sus balas atraviesan a un zombi y siguen." if TRUCO.atraviesa == 1 else \
+				"Truco: sus balas atraviesan a %d zombis y siguen." % TRUCO.atraviesa
+		"especial":
+			return "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
+	return "Truco: al %s suelta %d más pequeños alrededor." % ["romperse" if id == "molotov" else "explotar", TRUCO.racimo]
 
 # Hacia dónde apunta el tubo en el dibujo quieto del lanzallamas en cada dirección (el del lanza ácido es el mismo: su
 # hoja sale de la del lanzallamas), en grados en la pantalla (0 = a la derecha, 90 = abajo), medido en las hojas: las

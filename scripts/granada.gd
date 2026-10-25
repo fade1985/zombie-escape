@@ -7,11 +7,13 @@
 #   atraedora    mientras suena, los zombis cercanos van hacia ella (grupo "cebos", zombi.gd)
 #   congeladora  los zombis que pilla se quedan quietos y azules 3 s (la portera, no)
 # (La lluvia ácida, la mina despertador, la nube somnífera y la bomba de clavos se quitaron del juego el 25 oct.)
+# La Épica, al explotar, suelta granaditas de su tipo que explotan enseguida alrededor (el racimo: Armas.TRUCO)
 extends Node2D
 
 const EXPLOSION := preload("res://escenas/armas/explosion.tscn")
 const DIBUJO := preload("res://assets/sprites/objeto-granada.png")
 const G := Lanzables.GRANADA
+const HIJA_MECHA := 0.7   # lo que tardan en explotar las granaditas del racimo
 
 var desde := Vector2.ZERO
 var hasta := Vector2.ZERO
@@ -26,6 +28,8 @@ var mecha := 2.0
 var parpadeo := 0.0
 var boto := false
 var giro := 0.0
+var racimo := 0        # la Épica: cuántas granaditas suelta al explotar (Armas.TRUCO)
+var hija := false      # es una de esas granaditas: mecha corta, y a Johnny le hace menos
 
 
 func _ready() -> void:
@@ -38,6 +42,8 @@ func _ready() -> void:
 		mecha = Lanzables.ARROJADIZAS[tipo].mecha
 		if tipo == "atraedora":
 			add_to_group("cebos")
+	if hija:
+		mecha = HIJA_MECHA
 
 
 func _physics_process(delta: float) -> void:
@@ -91,9 +97,29 @@ func explotar() -> void:
 	if tipo != "granada":
 		boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)   # a Johnny, como mucho 25
 		efecto_creada(Lanzables.ARROJADIZAS[tipo])
+	if hija:
+		boom.dano = roundi(boom.dano * Armas.TRUCO.racimo_tamano)
 	get_parent().add_child(boom)
 	Mancha.quemado(get_parent(), position, radio * 0.5)
+	if racimo > 0:
+		soltar_racimo()
 	queue_free()
+
+
+# El racimo de la Épica: "racimo" granaditas de su tipo que saltan repartidas alrededor y explotan enseguida, con
+# Armas.TRUCO.racimo_tamano su radio y su daño (ellas, sin racimo)
+func soltar_racimo() -> void:
+	var giro_racimo := randf() * TAU
+	for i in racimo:
+		var g: Node2D = get_script().new()
+		g.tipo = tipo
+		g.desde = global_position
+		g.hasta = global_position + Vector2.from_angle(giro_racimo + TAU * i / racimo) * Vector2(1.0, 0.7) * radio * 0.8
+		g.radio = radio * Armas.TRUCO.racimo_tamano
+		g.dano_zombis = roundi(dano_zombis * Armas.TRUCO.racimo_tamano)
+		g.fabricante = fabricante
+		g.hija = true
+		get_parent().add_child.call_deferred(g)
 
 
 # Lo suyo de cada arrojadiza creada al explotar, y dos anillos de su color para que se note cuál ha sido

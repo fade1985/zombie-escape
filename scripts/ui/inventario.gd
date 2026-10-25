@@ -1459,7 +1459,7 @@ func meter_en_baul(id: String, cuantos := 0) -> bool:
 # ── Banco de trabajo ──
 # Al arrimarse al banco del taller (parte 5 de la tienda y las piezas): sube de calidad las armas y los paquetes de
 # arrojables, de uno en uno y nivel a nivel (Normal → Poco común → Rara → Épica), gastando piezas de su familia
-# (Armas.pieza; lo que cuesta cada nivel, "piezas" de Armas.CALIDADES). Valen las piezas de la mochila y las del baúl
+# (Armas.pieza; lo que cuesta cada nivel, Armas.coste). Valen las piezas de la mochila y las del baúl
 # (se gastan primero las de la mochila, que son las que se pierden si cae). Se parece al baúl: arriba, las piezas que
 # tiene; a la izquierda, sus armas y sus arrojables (las casillas de siempre: "p", "g", "l" y "e"); a la derecha, las
 # armas y los paquetes del baúl ("q": su sitio en "baul_equipo"); abajo, la ficha de lo elegido, con lo que gana, lo que
@@ -1593,7 +1593,7 @@ func pintar_ficha_banco() -> void:
 	var no := no_mejora(o, s)
 	var coste := no
 	if no == "":
-		coste = "Cuesta %s (tienes %d)." % [cuantas_piezas(Armas.CALIDADES[o.calidad + 1].piezas, pieza), piezas(pieza, s)]
+		coste = "Cuesta %s (tienes %d)." % [cuantas_piezas(Armas.coste(o.id, o.calidad + 1), pieza), piezas(pieza, s)]
 	renglon(caja, coste, Tema.AMARILLO if no != "" else Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA).name = "coste"
 	var b := boton(viva, "mejorar", "Ya es Épica" if epica else "Mejorar a %s" % arriba, mejorar)
 	b.disabled = no != ""
@@ -1629,7 +1629,7 @@ func no_mejora(o: Dictionary, s: Dictionary) -> String:
 	if o.calidad >= Armas.CALIDADES.size() - 1:
 		return "Ya es Épica: no se puede mejorar más."
 	var pieza := Armas.pieza(o.id)
-	var cuesta: int = Armas.CALIDADES[o.calidad + 1].piezas
+	var cuesta: int = Armas.coste(o.id, o.calidad + 1)
 	var hay := piezas(pieza, s)
 	if hay < cuesta:
 		return "Cuesta %s y tienes %d: te faltan %d." % [cuantas_piezas(cuesta, pieza), hay, cuesta - hay]
@@ -1663,7 +1663,7 @@ func mejorar() -> void:
 		return
 	var calidad: int = o.calidad + 1
 	var pieza := Armas.pieza(o.id)
-	var n: int = Armas.CALIDADES[calidad].piezas
+	var n: int = Armas.coste(o.id, calidad)
 	while n > 0 and pieza in partida.mochila:
 		partida.mochila.erase(pieza)
 		n -= 1

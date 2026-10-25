@@ -47,6 +47,7 @@ var alcance := 320.0
 var dps := 0.0
 var empuje := 0.0
 var quema := 1.0
+var epica := false          # es de un arma Épica: el zombi que mata revienta (ArmasCreadas.estallido)
 var tope := 0.0             # hasta dónde llega, por el suelo: su alcance o la pared
 var largo := 0.0            # hasta dónde llega la punta que se ve (crece al encenderla)
 var cola := 0.0             # desde dónde se ve (al apagarla se despega de la boca y va hacia la punta)
@@ -84,6 +85,7 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 	dps = w.dano
 	empuje = w.empuje
 	quema = w.get("quema", 1.0)
+	epica = w.get("calidad", 0) >= Armas.EPICA
 	if acido != (w.get("efecto", "") == "acido"):
 		acido = not acido
 		(material as ShaderMaterial).shader = SOMBREADO_ACIDO if acido else SOMBREADO
@@ -147,6 +149,8 @@ func quemar() -> void:
 			else:
 				zombi.herir(da, ArmasCreadas.EFECTOS.acido.color)
 			ArmasCreadas.herir(zombi, "acido", da)
+			if epica and not zombi.is_in_group("zombis"):
+				ArmasCreadas.estallido(zombi, "acido", da)
 			continue
 		if zombi.get("inmune_fuego"):
 			zombi.prender()   # al jefe de bomberos el fuego no le hace nada
@@ -157,6 +161,8 @@ func quemar() -> void:
 		else:
 			zombi.herir(d, Llamas.FUEGO[2])   # sin empujón ni encogerse, con el número del color del fuego
 		ArmasCreadas.prender(zombi, quema)
+		if epica and not zombi.is_in_group("zombis"):
+			ArmasCreadas.estallido(zombi, "llama", d, quema)
 
 
 # ¿Está el zombi dentro de la llama? Por el suelo: en el cono que sale de la boca (estrecho en ella, y se abre hasta

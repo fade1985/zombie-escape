@@ -269,16 +269,16 @@ func probar_calidades() -> void:
 
 
 # Con "--captura --banco-mejorar": el banco de trabajo (parte 5 de la tienda y las piezas). Cada línea dice lo
-# esperado. Con 2 piezas cuerpo a cuerpo en la mochila y 2 en el baúl, 10 arrojables y 20 a distancia en el baúl, en el
+# esperado. Con 2 piezas cuerpo a cuerpo en la mochila y 2 en el baúl, 3 arrojables y 20 a distancia en el baúl, en el
 # baúl una escopeta Rara, un lanzallamas Épico y 3 molotovs Poco comunes, y 5 molotovs Poco comunes a mano: Johnny se
 # arrima al banco y se abre (captura-banco.png); sube la fregona a Poco común (gasta primero las 2 de la mochila y 1 del
 # baúl) y se cumple el logro Manitas; para Rara le faltan; la granada sube en su mismo hueco; los molotovs Normales no
-# caben con los Poco comunes y, con uno solo, se juntan; la escopeta del baúl sube a Épica y el lanzallamas Épico ya no
+# caben con los Poco comunes y, con uno solo, se juntan (los arrojables cuestan menos: 1, 2 y 4); la escopeta del baúl sube a Épica y el lanzallamas Épico ya no
 # sube (captura-banco-mejorado.png); los molotovs del baúl, sin piezas bastantes. Deja el guardado como estaba y se cierra
 func probar_banco_mejorar() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):
-		g2.baul = {"pieza_cuerpo": 2, "pieza_arrojable": 10, "pieza_distancia": 20}
+		g2.baul = {"pieza_cuerpo": 2, "pieza_arrojable": 3, "pieza_distancia": 20}
 		g2.baul_equipo = [{"id": "escopeta", "calidad": 2}, {"id": "lanzallamas", "calidad": 3},
 			{"id": "molotov", "calidad": 1, "n": 3}]
 		g2.logros.erase("manitas"))
@@ -319,7 +319,7 @@ func probar_banco_mejorar() -> void:
 	inventario.tocar("l1")
 	inventario.mejorar()
 	await get_tree().process_frame
-	print("La granada: a mano %s, quedan %d · elegida %s · piezas arrojables %s (esperado: [molotov, granada:1, molotov:1], 2 · l1 · 0 y 7)" % [
+	print("La granada: a mano %s, quedan %d · elegida %s · piezas arrojables %s (esperado: [molotov, granada:1, molotov:1], 2 · l1 · 0 y 2)" % [
 		lanzables.mano, lanzables.cuantas("granada:1"), inventario.sel, piezas.call("pieza_arrojable")])
 	inventario.tocar("l0")
 	await get_tree().process_frame
@@ -329,7 +329,7 @@ func probar_banco_mejorar() -> void:
 	inventario.repintar()
 	inventario.mejorar()
 	await get_tree().process_frame
-	print("Con 1 Normal, se juntan: a mano %s, Poco comunes %d · elegida %s · piezas arrojables %s (esperado: [granada:1, molotov:1], 6 · l1 · 0 y 4)" % [
+	print("Con 1 Normal, se juntan: a mano %s, Poco comunes %d · elegida %s · piezas arrojables %s (esperado: [granada:1, molotov:1], 6 · l1 · 0 y 1)" % [
 		lanzables.mano, lanzables.cuantas("molotov:1"), inventario.sel, piezas.call("pieza_arrojable")])
 	# lo del baúl: la escopeta Rara a Épica; el lanzallamas Épico, ya no; los molotovs, sin piezas bastantes
 	inventario.tocar("q0")
@@ -340,11 +340,11 @@ func probar_banco_mejorar() -> void:
 	inventario.tocar("q1")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco-mejorado.png")
-	print("El lanzallamas Épico: botón %s · «%s» · «%s» (esperado: apagado «Ya es Épica» · Épica: daño +75 %%, depósito un 75 %% más grande. · Ya es Épica: no se puede mejorar más.)" % [
+	print("El lanzallamas Épico: botón %s · «%s» · «%s» (esperado: apagado «Ya es Épica» · Épica: daño +75 %%, depósito un 75 %% más grande. Truco: los zombis que mata revientan y pasan su efecto a los de al lado. · Ya es Épica: no se puede mejorar más.)" % [
 		boton.call(), dice.call("nota"), dice.call("coste")])
 	inventario.tocar("q2")
 	await get_tree().process_frame
-	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 6 piezas arrojables y tienes 4: te faltan 2.)" % [
+	print("Los 3 molotovs Poco comunes del baúl: botón %s · «%s» (esperado: apagado «Mejorar a Rara» · Cuesta 2 piezas arrojables y tienes 1: te faltan 1.)" % [
 		boton.call(), dice.call("coste")])
 	inventario.cerrar()
 	Guardado.escribir(antes)

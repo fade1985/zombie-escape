@@ -2,7 +2,8 @@
 # Johnny, su vómito (mutación Gastroenteritis), el ácido que salpica la portera o la sartén de aceite hirviendo del cocinero (con su marca roja en el suelo, donde
 # caerá). Vuela por encima de todo y, al caer, deja un charco. Los de
 # los zombis, si Johnny está justo donde caen, le hacen daño; el molotov suelta una llamarada que prende a los
-# zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js).
+# zombis que pilla. Como lob y updateHazards en src/game-ataques.js (y molotovLand en src/molotov.js). El molotov
+# Épico, al romperse, suelta botellitas que dejan charcos más pequeños alrededor (el racimo: Armas.TRUCO)
 extends Node2D
 
 # El charco se carga al caer, no al principio: charco.gd usa Lanzables, y Lanzables carga este proyectil; si
@@ -36,6 +37,7 @@ var hasta := Vector2.ZERO    # dónde caerá
 var dano_lanzar := 1.0       # molotov: Puntería
 var fabricante := false      # molotov: fuego más grande y más largo
 var escala := 1.0            # molotov: lo grande que es el fuego por su calidad (Armas.CALIDADES, "radio")
+var racimo := 0              # molotov Épico: cuántas botellitas suelta al romperse (Armas.TRUCO)
 var dueno: Node2D = null     # quien lo lanza (al cocinero no le quema su aceite; y la skin del glotón le muerde)
 var t := 0.0
 var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de todos
@@ -89,6 +91,8 @@ func caer(datos: Dictionary) -> void:
 		_: Sonido.tocar("chof")
 	if tipo == "molotov" or tipo == "molotov_jefe":
 		llamarada(charco.radio())
+	if racimo > 0:
+		soltar_racimo(charco.radio())
 	elif tipo == "vomito" or tipo == "acido" or tipo == "sarten" or datos.has("liquido"):
 		for i in 8:
 			var a := randf() * TAU
@@ -104,6 +108,26 @@ func caer(datos: Dictionary) -> void:
 	if datos.golpe > 0 and johnny and johnny.vivo and not ignifugo and hasta.distance_to(johnny.global_position) < charco.radio() + johnny.RADIO * 0.5:
 		johnny.recibir_dano(datos.golpe, dueno)
 	queue_free()
+
+
+# El racimo del molotov Épico: "racimo" botellitas que saltan del charco, repartidas alrededor y un poco más allá de
+# su borde (sin pasar las paredes), y dejan charcos de Armas.TRUCO.racimo_tamano su tamaño y su daño (ellas, sin racimo)
+func soltar_racimo(r: float) -> void:
+	var giro := randf() * TAU
+	for i in racimo:
+		var hacia := Vector2.from_angle(giro + TAU * i / racimo) * Vector2(1.0, 0.7) * r * 1.6
+		var rayo := PhysicsRayQueryParameters2D.create(hasta, hasta + hacia, 1)
+		var pared := get_world_2d().direct_space_state.intersect_ray(rayo)
+		var b: Node2D = load("res://escenas/armas/proyectil.tscn").instantiate()
+		b.tipo = tipo
+		b.desde = hasta
+		b.alto_salida = 10.0
+		b.hasta = hasta + hacia if pared.is_empty() else pared.position - hacia.normalized() * 14.0
+		b.dano_lanzar = dano_lanzar * Armas.TRUCO.racimo_tamano
+		b.fabricante = fabricante
+		b.escala = escala * Armas.TRUCO.racimo_tamano
+		b.dueno = dueno
+		get_parent().add_child.call_deferred(b)
 
 
 # La botella se rompe: llamarada (chispas y cristales) y daño a los zombis que pilla de lleno, que ya se prenden

@@ -4,7 +4,8 @@
 #   - Las chispas de la pistola eléctrica (chorro.gd), que aturden y saltan a otro zombi. La llamarada del
 #     lanzallamas y el chorro del lanza ácido van aparte (llamarada.gd).
 #   - Lo que dejan en el zombi: la quemadura (que se contagia a los de al lado: zombi.gd) y el ácido que sigue
-#     royendo y le come la armadura (con_acido). Los jefes no se aturden ni arden; el ácido sí les hace daño. (La
+#     royendo y le come la armadura (con_acido).
+#   - El estallido de las Épicas (estallido): el zombi que matan revienta y pasa su efecto a los de al lado. Los jefes no se aturden ni arden; el ácido sí les hace daño. (La
 #     herida que sangra, la de los clavos de la bomba de clavos, se quitó del juego con ella el 25 oct.)
 class_name ArmasCreadas
 
@@ -47,6 +48,33 @@ static func descarga(zombi: Node2D, dano: float, aturde: float, saltos := 0) -> 
 		aturdir(otro, aturde)
 		pillados.append(otro)
 		desde = otro
+
+
+# El truco de las Épicas especiales (Armas.TRUCO): el zombi que acaban de matar revienta y pasa su efecto a los que
+# tiene a menos de "estallido": los prende (el fuego; "quema", como la llamarada), les deja la herida de ácido o les da
+# un calambre (los aturde y les quita medio daño, con su rayo). Se ve un anillo y unas chispas de su color
+static func estallido(zombi: Node2D, tipo: String, dano: float, quema := 1.0) -> void:
+	var color: Color = {"llama": Llamas.FUEGO[2], "acido": EFECTOS.acido.color, "chispa": Color("#9fe8ff")}[tipo]
+	var sala: Node = zombi.get_parent()
+	var donde: Vector2 = zombi.global_position
+	Particulas.anillo(sala, donde + Vector2(0, -20), Armas.TRUCO.estallido, color, 0.35)
+	for i in 10:
+		var v := Vector2.from_angle(randf() * TAU) * randf_range(80.0, 200.0)
+		Particulas.soltar(sala, donde + Vector2(0, -24), v, color if i % 3 else Color.WHITE, randf_range(3.0, 5.0), 0.35)
+	Sonido.tocar({"llama": "fuego", "acido": "escupitajo", "chispa": "chispa"}[tipo])
+	for otro in zombi.get_tree().get_nodes_in_group("zombis"):
+		if otro == zombi or otro.global_position.distance_to(donde) > Armas.TRUCO.estallido + otro.radio:
+			continue
+		match tipo:
+			"llama":
+				if not otro.get("inmune_fuego"):
+					prender(otro, quema)
+			"acido":
+				herir(otro, "acido", dano)
+			"chispa":
+				rayo(sala, donde + Vector2(0, -40), otro.global_position + Vector2(0, -40))
+				otro.recibir_golpe(roundi(dano * EFECTOS.descarga.dano), (otro.global_position - donde).normalized() * EMPUJE * 0.5)
+				aturdir(otro, EFECTOS.chispa)
 
 
 # Se queda quieto echando chispitas amarillas (como con la mutación Tentacular). Los jefes, no
@@ -110,6 +138,7 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 	g.empuje = w.empuje
 	g.quema = w.get("quema", 1.0)
 	g.saltos = w.get("saltos", 0)
+	g.epica = w.get("calidad", 0) >= Armas.EPICA
 	g.vida_max = w.alcance / w.velocidad
 	sala.add_child(g)
 	g.global_position = salida
@@ -120,9 +149,9 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 
 
 # Lo que pasa cuando una gota o una chispa tocan a un zombi ("quema": cuánto más arde el que prende una gota de
-# fuego)
+# fuego; "epica": si lo mata, revienta, estallido)
 static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String, quema := 1.0,
-		saltos := 0) -> void:
+		saltos := 0, epica := false) -> void:
 	# al jefe de bomberos (bombero.gd) el fuego no le hace nada: ni el daño ni prenderle
 	if tipo == "llama" and zombi.get("inmune_fuego"):
 		zombi.prender()
@@ -131,6 +160,8 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 	var d: int = johnny.con_critico(dano) if johnny else roundi(dano)
 	zombi.recibir_golpe(d, hacia.normalized() * EMPUJE * empuje)
 	if not zombi.is_in_group("zombis"):
+		if epica:
+			estallido(zombi, tipo, d, quema)
 		return
 	if tipo == "llama":
 		prender(zombi, quema)

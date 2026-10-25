@@ -1,6 +1,6 @@
 # Pruebas de las armas: la sala de pruebas de armas (--armas), el lanzallamas, el lanza ácido y la pistola
 # eléctrica (--lanzallamas, --desintegrador, --pistola-electrica) y el fuego y el ácido en los enemigos (--tintes,
-# --fuego-acido). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# --fuego-acido) y los trucos de las Épicas (--epicas). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_jefes.gd"
 
 
@@ -1073,3 +1073,119 @@ func zombis_de_prueba(donde: Array) -> Array:
 		zombi.vida = 500
 		lista.append(zombi)
 	return lista
+
+
+# Con "--captura --epicas": el truco de la Épica de cada familia (Armas.TRUCO; parte 6 de la tienda y las piezas), en la
+# sala de pruebas de armas, con zombis lentos de 500 de vida. Cada línea dice lo esperado. Cuenta: lo que dice la ficha
+# de cada Épica; el golpe de gracia (el bate Épico: el 4.º golpe que da hace el doble; captura-epica-gracia.png); las
+# balas que atraviesan (la pistola Épica da a los dos zombis en fila, la Normal solo al primero;
+# captura-epica-balas.png, con la estela morada); el estallido (el zombi que mata un golpe Épico de fuego, ácido o
+# chispa pasa su efecto a uno de al lado y no a uno lejos; sin ser Épico, a nadie; captura-epica-estallido.png) y el
+# racimo (lanzados a 180 por encima de Johnny, la granada Épica suelta 2 granaditas y el molotov Épico 2 charcos más
+# pequeños; captura-epica-racimo.png y
+# captura-epica-molotov.png). Se cierra
+func probar_epicas() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.stats.critico = 0.0   # (sin críticos al azar: solo los del truco)
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	print("Fichas de la Épica: «%s» · «%s» · «%s» · «%s»" % [Armas.que_da("bate", 3), Armas.que_da("pistola", 3),
+		Armas.que_da("pistola_electrica", 3), Armas.que_da("molotov", 3)])
+	print("Precios: un arma %s, un arrojable %s (esperado: [0, 3, 6, 10], [0, 1, 2, 4])" % [
+		range(4).map(func(c): return Armas.coste("bate", c)), range(4).map(func(c): return Armas.coste("granada", c))])
+
+	# 1) el golpe de gracia: 4 golpes con el bate Épico al mismo zombi
+	llevar_arma("bate", 3)
+	johnny.gracia = 0
+	var z: Array = zombis_de_prueba([Vector2(0, -50)])
+	var quita := []
+	for i in 4:
+		z[0].position = johnny.position + Vector2(0, -50)
+		await get_tree().create_timer(0.25).timeout
+		var antes: int = z[0].vida
+		johnny.golpear(-PI / 2)
+		quita.append(antes - z[0].vida)
+		if i == 3:
+			await get_tree().create_timer(0.1).timeout
+			Captura.foto("captura-epica-gracia.png")
+	print("Golpe de gracia: quita %s (esperado: tres iguales y el 4.º el doble: %d, %d, %d, %d)" % [quita,
+		roundi(johnny.arma().dano), roundi(johnny.arma().dano), roundi(johnny.arma().dano), roundi(johnny.arma().dano) * 2])
+
+	# 2) las balas que atraviesan: dos zombis quietos en fila, el segundo justo detrás del primero según va la bala (que
+	# sale de la boca, a un lado de Johnny); la pistola Épica y luego la Normal. Lo que les quita, por su señal "herido"
+	var vidas := []
+	for calidad in [3, 0]:
+		llevar_arma("pistola", calidad)
+		z = zombis_de_prueba([Vector2(0, -110), Vector2(0, -110)])
+		var salida: Vector2 = johnny.tiro(-PI / 2, johnny.arma(), johnny.direccion)[0]
+		z[1].position = z[0].position + (z[0].position - salida).normalized() * 80.0
+		var quitado := [0, 0]
+		for i in 2:
+			z[i].diana = true   # (quietos en su sitio)
+			z[i].casa = z[i].position
+			z[i].herido.connect(func(cantidad, _golpe): quitado[i] += cantidad)
+		await get_tree().create_timer(0.1).timeout
+		johnny.disparar(-PI / 2)
+		if calidad == 3:
+			await get_tree().create_timer(0.09).timeout
+			Captura.foto("captura-epica-balas.png")
+		await get_tree().create_timer(0.5).timeout
+		vidas.append(quitado)
+	print("Balas: la Épica quita %s, la Normal %s (esperado: a los dos · solo al primero, el segundo 0)" % [vidas[0], vidas[1]])
+
+	# 3) el estallido: el de en medio muere de un golpe Épico; el de al lado lo pilla, el lejano no
+	for tipo in ["llama", "acido", "chispa", "sin"]:
+		z = zombis_de_prueba([Vector2(0, -120), Vector2(55, -120), Vector2(-260, -120)])
+		z[0].vida = 1
+		await get_tree().create_timer(0.1).timeout
+		ArmasCreadas.golpe(z[0], Vector2(0, -1), 10.0, 0.5, "llama" if tipo == "sin" else tipo, 1.0, 0, tipo != "sin")
+		var pilla := func(o: Node2D) -> bool:
+			return o.arder_t > 0.0 or o.has_node("herida_acido") or o.aturdido > 0.0
+		print("Estallido de %s: muere %s · el de al lado %s · el lejano %s (esperado: true · %s · false)" % [
+			tipo, z[0].estado == "muerto", pilla.call(z[1]), pilla.call(z[2]), tipo != "sin"])
+		if tipo == "llama":
+			await get_tree().create_timer(0.12).timeout
+			Captura.foto("captura-epica-estallido.png")
+	llevar_arma("lanzallamas", 3)
+	johnny.llamarada.mantener(johnny.global_position, -PI / 2, johnny.arma())
+	print("La llamarada del lanzallamas Épico: Épica %s (esperado: true)" % johnny.llamarada.epica)
+
+	# 4) el racimo: la granada Épica y el molotov Épico, lanzados a 180 por encima de Johnny
+	zombis_de_prueba([])
+	var cuantas := func(hijas: bool) -> int:
+		return johnny.get_parent().get_children().filter(func(n):
+			return n.get_script() == Lanzables.BOMBA and n.hija == hijas).size()
+	lanzables.meter("granada:3", 2)
+	lanzables.tipo = "granada:3"
+	lanzables.lanzar(johnny.position + Vector2(0, -180))
+	await get_tree().create_timer(Lanzables.GRANADA.mecha + 0.15).timeout
+	print("Racimo de la granada: granaditas %d, la grande %d (esperado: %d, 0)" % [cuantas.call(true), cuantas.call(false),
+		Armas.TRUCO.racimo])
+	await get_tree().create_timer(0.75).timeout
+	Captura.foto("captura-epica-racimo.png")
+	await get_tree().create_timer(0.4).timeout
+	print("Las granaditas, ya: %d (esperado: 0)" % cuantas.call(true))
+	for c in get_tree().get_nodes_in_group("charcos"):
+		c.queue_free()
+	await get_tree().process_frame
+	lanzables.meter("molotov:3", 2)
+	lanzables.tipo = "molotov:3"
+	lanzables.lanzar(johnny.position + Vector2(0, -180))
+	await get_tree().create_timer(1.4).timeout
+	var charcos: Array = get_tree().get_nodes_in_group("charcos").map(func(c): return snappedf(c.escala, 0.01))
+	print("Racimo del molotov: charcos de tamaño %s (esperado: uno de %.2f y %d de %.2f)" % [charcos,
+		Armas.CALIDADES[3].radio, Armas.TRUCO.racimo, Armas.CALIDADES[3].radio * Armas.TRUCO.racimo_tamano])
+	Captura.foto("captura-epica-molotov.png")
+	get_tree().quit()

@@ -113,6 +113,8 @@ var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var deposito := 0.0        # el lanzallamas y el lanza ácido: los segundos de chorro que le quedan en el depósito
 var municion_sin_fin := false   # la sala de pruebas de armas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
+var gracia := 0            # el golpe de gracia de las Épicas cuerpo a cuerpo: los golpes que han dado desde el último
+                           # crítico seguro (Armas.TRUCO; golpear)
 var mirando_chorro := ""   # hacia dónde miraba echando el chorro en el paso de antes (mirar_con_chorro)
 const CAMBIA_CHORRO := 0.105   # lo que tiene que ganar otra dirección para cambiar a ella echando el chorro (6°)
 const MARGEN_CHORRO := 0.052   # lo que el zombi queda por dentro del borde del cono cuando se le gira el chorro (3°)
@@ -621,11 +623,14 @@ func atacar(angulo: float) -> void:
 		sprite.set_frame_and_progress(0, 0.0)
 
 
-# Golpe cuerpo a cuerpo: pega a todos los zombis que estén dentro del abanico (meleeHit en el juego)
+# Golpe cuerpo a cuerpo: pega a todos los zombis que estén dentro del abanico (meleeHit en el juego). Con una Épica,
+# el golpe de gracia: cada Armas.TRUCO.gracia golpes que dan, ese es crítico seguro para todos los que pilla, con un
+# destello morado
 func golpear(angulo: float) -> void:
 	var w := arma()
 	var mitad := deg_to_rad(w.arco) / 2.0
 	var tocados := 0
+	var de_gracia: bool = w.calidad >= Armas.EPICA and gracia >= Armas.TRUCO.gracia - 1
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
@@ -634,9 +639,16 @@ func golpear(angulo: float) -> void:
 		# angle_difference da lo que hay que girar de un ángulo al otro (de -180° a 180°)
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
-			var dano := con_critico(w.dano)
+			var dano := con_critico(w.dano, de_gracia)
 			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * w.empuje)
 			tocados += 1
+			if de_gracia:
+				Particulas.anillo(get_parent(), zombi.global_position + Vector2(0, -20), zombi.radio + 10.0, Armas.color(Armas.EPICA), 0.3)
+	if tocados > 0 and w.calidad >= Armas.EPICA:
+		gracia = 0 if de_gracia else gracia + 1
+		if de_gracia:
+			Zombi.texto_flotante(get_parent(), global_position + Vector2(-60, -90), "¡GOLPE DE GRACIA!", Armas.color(Armas.EPICA), 16)
+			Temblor.temblar(4.0)
 	if tocados > 0:
 		Sonido.tocar("porrazo")
 		# el parón y el temblor del golpe (como en el JS): más fuerte cuantos más pilla
@@ -711,6 +723,7 @@ func disparar(angulo: float) -> void:
 		bala.empuje = w.empuje
 		bala.radio = 3.0 if w.perdigones > 1 else 4.0
 		bala.critico = bala.dano > roundi(w.dano)
+		bala.atraviesa = Armas.TRUCO.atraviesa if w.calidad >= Armas.EPICA else 0   # (el truco de la Épica)
 		bala.vida = w.alcance / w.velocidad
 		get_parent().add_child(bala)
 		bala.global_position = salida

@@ -378,6 +378,7 @@ func lanzar(donde: Vector2) -> void:
 		p.dano_lanzar = johnny.stats.dano_lanzar * Skins.quema(johnny.skin) * calidad.dano   # (la skin del bombero: × 3)
 		p.fabricante = johnny.stats.fabricante
 		p.escala = calidad.radio
+		p.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
 		sala.add_child(p)
 	else:
 		# la granada, o la atraedora o la congeladora (la misma granada, con su mecha, su radio y su efecto)
@@ -389,6 +390,7 @@ func lanzar(donde: Vector2) -> void:
 		g.dano_zombis = roundi(DATOS[t].dano * johnny.stats.dano_lanzar * calidad.dano)
 		if ARROJADIZAS.has(t):
 			g.fabricante = johnny.stats.fabricante
+		g.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
 		sala.add_child(g)
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
 
