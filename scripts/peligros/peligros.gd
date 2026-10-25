@@ -178,7 +178,7 @@ static func franja_y_ovalo(sitio: Dictionary, parte: float) -> Dictionary:
 
 # El acceso limpio de la habitación del jefe, de la puerta de entrada (arriba o abajo) a la elipse de franja_y_ovalo:
 # el hueco de delante de la puerta (Muebles.delante_de; ahí aparece Johnny) y un pasillo de su mismo ancho, unas 5
-# casillas, de la puerta hacia el centro de la sala. La puerta está siempre en el centro de la pared (Apartamento.probar),
+# casillas, de la puerta hacia el centro de la sala. La puerta está siempre en el centro de la pared (Apartamento.habitacion_jefe),
 # así que el pasillo va recto hasta la elipse. Devuelve sus casillas (casilla -> true)
 static func acceso(apt: Dictionary) -> Dictionary:
 	var sala: Dictionary = apt.salas[0]

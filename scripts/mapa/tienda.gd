@@ -58,7 +58,7 @@ static var rng := RandomNumberGenerator.new()
 # destrozado de la portera). "lado": dónde está la puerta al pasillo, "abajo" o "arriba"
 static func generar(semilla: int, tipo: String, jefe := false, lado := "abajo") -> Dictionary:
 	if jefe:
-		var local := Apartamento.generar(semilla, true, lado)
+		var local := Apartamento.generar(true, lado)
 		local.salas[0].nombre = "Tienda destrozada"
 		local.tipo = "tienda"   # sus muebles, los de "jefe-tienda" del catálogo (no los del salón de un piso)
 		return local

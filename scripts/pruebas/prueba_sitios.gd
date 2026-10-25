@@ -1,24 +1,24 @@
 # Pruebas de sitios: la sala de mantenimiento (--sala), el ascensor (--ascensor), las viviendas (--viviendas),
-# el piso con pasillo (--piso-pasillo), la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte
+# el piso de los apartamentos (--piso), la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte
 # de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_fotos.gd"
 
 
-# Con "--captura --piso-pasillo": el piso con pasillo en T (apartamento.gd: PLANO_PASILLO), que de momento solo sale en
-# esta prueba (con ella, todos los pisos normales salen así: prueba_comun.gd). Primero genera 200, la mitad con la puerta
-# abajo y la otra mitad arriba, y cuenta los que salen mal: sin la puerta en el centro o sin justo un salón, una cocina,
-# un dormitorio de matrimonio y otro individual, cada uno con su baño dentro (con una sola puerta, a él). Luego, en la 1ª planta, entra en uno con la puerta abajo (los
-# de encima del pasillo del edificio) y en otro con ella arriba (los de debajo), sin zombis, y de cada uno dice sus
-# habitaciones, si la puerta está en el centro y si desde ella se llega andando a todas, y dibuja su plano con letras
-# (S salón, C cocina, M dormitorio de matrimonio, I individual, B baño, . pasillo, # muro, E la entrada). Fotos: lo que se ve al entrar
-# (captura-piso-pasillo-abajo-entrada.png y -arriba-entrada.png) y el piso entero, sin niebla ni penumbra
-# (captura-piso-pasillo-abajo.png y -arriba.png). Luego se cierra
-func probar_piso_pasillo() -> void:
-	var mal := 0
-	for i in 200:
-		var otro := Apartamento.generar(7000 + i * 131, false, "abajo" if i % 2 == 0 else "arriba")
-		if otro.is_empty() or otro.get("forma", "") != "pasillo" or otro.entrada.c != (otro.cols - Apartamento.PUERTA) / 2:
-			mal += 1
+# Con "--captura --piso": el piso de los apartamentos (apartamento.gd: PLANO_PASILLO), siempre el mismo. Primero lo
+# genera con la puerta abajo y con ella arriba y mira que esté bien: la puerta en el centro y justo un salón, una
+# cocina, un dormitorio de matrimonio y otro individual, cada uno con su baño dentro (con una sola puerta, a él). Luego,
+# en la 1ª planta, entra en uno con la puerta abajo (los de encima del pasillo del edificio) y en otro con ella arriba
+# (los de debajo), sin zombis, y de cada uno dice sus habitaciones, si está sin muebles, si la puerta está en el centro
+# y si desde ella se llega andando a todas, y dibuja su plano con letras (S salón, C cocina, M dormitorio de
+# matrimonio, I individual, B baño, . pasillo, # muro, E la entrada). Fotos: lo que se ve al entrar
+# (captura-piso-abajo-entrada.png y -arriba-entrada.png) y el piso entero, sin niebla ni penumbra (captura-piso-abajo.png
+# y -arriba.png). Luego se cierra
+func probar_piso() -> void:
+	var mal := []
+	for lado in ["abajo", "arriba"]:
+		var otro := Apartamento.generar(false, lado)
+		if otro.get("forma", "") != "pasillo" or otro.entrada.c != (otro.cols - Apartamento.PUERTA) / 2:
+			mal.append(lado)
 			continue
 		var hay: Array = otro.salas.map(func(s): return s.get("tipo", "") if s.uso == "dormitorio" else s.uso)
 		hay.sort()
@@ -27,8 +27,8 @@ func probar_piso_pasillo() -> void:
 			if b.puertas.size() != 1 or otro.salas[b.dueno_bano].get("bano", -1) != b.id or not b.dueno_bano in [b.puertas[0].a, b.puertas[0].b]:
 				banos_bien = false
 		if hay != ["bano", "bano", "cocina", "individual", "matrimonio", "pasillo", "salon"] or not banos_bien:
-			mal += 1
-	print("Piso con pasillo: de 200 generados, mal %d (esperado: 0)" % mal)
+			mal.append(lado)
+	print("Piso: con la puerta abajo y arriba, mal %s (esperado: [])" % [mal])
 	nueva_planta(2)
 	var letra := {"salon": "S", "cocina": "C", "matrimonio": "M", "individual": "I", "bano": "B", "pasillo": "."}
 	for lado in ["abajo", "arriba"]:
@@ -38,18 +38,20 @@ func probar_piso_pasillo() -> void:
 				idx = i
 				break
 		if idx < 0:
-			print("Piso con pasillo: en la 1ª planta no hay ninguno con la puerta %s" % lado)
+			print("Piso: en la 1ª planta no hay ninguno con la puerta %s" % lado)
 			continue
 		var sitio: Dictionary = planta.sitios[idx]
 		var apt: Dictionary = sitio.apt
 		sitio.limpio = true   # sin zombis: aquí se mira el piso
 		await montar(idx, 0, false)
 		await get_tree().create_timer(0.4).timeout
-		Captura.foto("captura-piso-pasillo-%s-entrada.png" % lado)
-		print("Piso con pasillo (puerta %s): %d × %d casillas · %s" % [lado, apt.cols, apt.filas,
+		Captura.foto("captura-piso-%s-entrada.png" % lado)
+		print("Piso (puerta %s): %d × %d casillas · %s" % [lado, apt.cols, apt.filas,
 			" · ".join(apt.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
+		print("Piso (puerta %s): muebles %d (esperado: 0, de momento van vacíos)" % [lado,
+			get_tree().get_nodes_in_group("muebles").size()])
 		var salida: Dictionary = sitio.salidas[0]
-		print("Piso con pasillo (puerta %s): la puerta, en la pared de %s %s y en su centro %s (esperado: true y true)" % [
+		print("Piso (puerta %s): la puerta, en la pared de %s %s y en su centro %s (esperado: true y true)" % [
 			lado, salida.dir, salida.dir == lado, is_equal_approx(salida.en, sitio.ancho / 2.0)])
 		var red: RID = mapa.get_node("Navegacion").get_navigation_map()
 		var llega := []
@@ -61,7 +63,7 @@ func probar_piso_pasillo() -> void:
 			var meta := NavigationServer2D.map_get_closest_point(red, s.centro)
 			var camino := NavigationServer2D.map_get_path(red, johnny.position, meta, true)
 			llega.append("%s %s" % [s.nombre, mapa.zona_en(meta) == s.id and not camino.is_empty() and camino[-1].distance_to(meta) < 24.0])
-		print("Piso con pasillo (puerta %s): desde la entrada se llega andando a %s (esperado: todas true)" % [lado,
+		print("Piso (puerta %s): desde la entrada se llega andando a %s (esperado: todas true)" % [lado,
 			" · ".join(llega)])
 		for f in apt.filas:
 			var linea := ""
@@ -87,10 +89,10 @@ func probar_piso_pasillo() -> void:
 		Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - ARRIBA_EXTRA) / 2.0) - johnny.position
 		camara.reset_smoothing()
 		$Pantalla.hide()
-		luz.alternar()
+		Luz.apagada = not Luz.apagada   # sin penumbra, para que se vea todo
 		await get_tree().create_timer(0.6).timeout
-		Captura.foto("captura-piso-pasillo-%s.png" % lado)
-		luz.alternar()
+		Captura.foto("captura-piso-%s.png" % lado)
+		Luz.apagada = not Luz.apagada
 		$Pantalla.show()
 		camara.zoom = Vector2.ONE
 		Temblor.desplazamiento = Vector2.ZERO
@@ -281,7 +283,7 @@ func probar_joyeria() -> void:
 	if d.is_empty():
 		get_tree().quit()
 		return
-	luz.alternar()
+	Luz.apagada = not Luz.apagada
 	await montar(d.sitio, 0, false)
 	for z in get_tree().get_nodes_in_group("zombis"):
 		z.queue_free()

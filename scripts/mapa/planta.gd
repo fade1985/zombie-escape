@@ -160,7 +160,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var jefe: bool = h == de_jefa
 		# la puerta del apartamento está en el lado que da al pasillo
 		var lado := "abajo" if h.dir == "arriba" else "arriba"
-		var apt := Tienda.generar(rng.randi(), tipo_tienda, jefe, lado) if tiendas else Apartamento.generar(rng.randi(), jefe, lado)
+		var apt := Tienda.generar(rng.randi(), tipo_tienda, jefe, lado) if tiendas else Apartamento.generar(jefe, lado)
 		if jefe and mini.has("tienda"):
 			# la tienda de un minijefe se llama según quién esté (la Oficina de seguridad del antidisturbios...)
 			nombre = mini.tienda
@@ -171,9 +171,11 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			# ninguno; el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza; el jefe
 			# de bomberos, ninguno)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
+		# Los pisos, de momento, vacíos: sus muebles se van a poner a mano, cada uno en su sitio
+		var piso := not jefe and not tiendas
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
-			"visitado": false, "muebles": Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
+			"visitado": false, "muebles": [] if piso else Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
 		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		if jefe and su_jefe == "gloton":

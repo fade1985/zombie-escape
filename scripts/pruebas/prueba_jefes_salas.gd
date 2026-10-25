@@ -646,7 +646,7 @@ func luz_fija_de_jefe() -> String:
 		luces.filter(func(l): return l.energy > 0.0).size()]
 
 
-# La puerta de entrada de la habitación del jefe, en el centro de su pared (Apartamento.probar). Devuelve el trozo de
+# La puerta de entrada de la habitación del jefe, en el centro de su pared (Apartamento.habitacion_jefe). Devuelve el trozo de
 # línea que lo cuenta, con lo esperado
 func puerta_en_medio(sitio: Dictionary) -> String:
 	var apt: Dictionary = sitio.apt

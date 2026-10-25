@@ -259,7 +259,7 @@ const SALAS := {
 		"cuantos": [5, 8],
 		"fondo_max": 46,   # el pasillo de cada planta es estrecho: solo muebles poco hondos
 	},
-	# el pasillo de dentro de un piso con pasillo (apartamento.gd: probar_pasillo), con su recibidor: pocos muebles
+	# el pasillo de dentro de un piso (apartamento.gd: PLANO_PASILLO), con su recibidor: pocos muebles
 	"pasillo-piso": {
 		"muebles": ["shoerack", "coatstand", "console", "plant"],
 		"cuantos": [2, 4],
