@@ -88,8 +88,7 @@ const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 17
 # negro y la batería en la punta, raya blanca y rayos celestes en zigzag a lo largo del cable) y el lanzallamas
 # (conserje-48-lanzallamas: dos bombonas rojas a la espalda y una manguera hasta el tubo, apuntando; la llama la pinta
 # el juego) y el desintegrador, en el juego «Lanza ácido» (conserje-48-desintegrador: la
-# del lanzallamas con las bombonas verdes de ácido y sin la llamita en la punta del tubo) y el bumerán (conserje-48-bumeran: el gesto de lanzar el
-# bumerán de acero con el mango rojo, con el bumerán en la mano al volver a la guardia; el que vuela lo dibuja el juego, bumeran.gd) y la
+# del lanzallamas con las bombonas verdes de ácido y sin la llamita en la punta del tubo) y la
 # pistola eléctrica (conserje-48-pistola-electrica: un táser azul marino con una batería gris pegada debajo, dos electrodos y una descarga
 # celeste en zigzag; las chispas que vuelan y saltan las pone el juego, chorro.gd) y el garfio (conserje-48-garfio: el gesto de lanzar el
 # gancho de perchas con la cuerda enrollada en la otra mano; el gancho que vuela, la cuerda y el zombi que arrastra los dibuja el juego,
@@ -147,16 +146,6 @@ const CREADAS := {
 		"boca": {"s": Vector2(1, 0), "se": Vector2(24, -11), "e": Vector2(26, -20), "ne": Vector2(24, -33),
 			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)},
 		"cano": CANO_LANZALLAMAS},
-	# el bumerán segador: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia con el bumerán en
-	# la mano; el que sale volando y vuelve lo dibuja el juego, bumeran.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla
-	# es de 94x92, con los pies en 45,76, porque el brazo llega a 41 píxeles a un lado, 45 al otro, 72 hacia arriba (de espaldas, con
-	# el bumerán de canto) y 12 hacia abajo. La boca NO sale de arma.py (no hay fogonazo naranja que buscar:
-	# conserje-48-bumeran.json no tiene "muzzle"): es la mano que sujeta el bumerán (el mango rojo) del dibujo quieto, a mano
-	"bumeran": {"base": "pistola", "ritmo": 1.0, "alcance": 300.0, "velocidad": 460.0, "cargador": 1, "recarga": 0.0,
-		"empuje": 1.5, "efecto": "bumeran", "sin_municion": true, "pies": Vector2(45, 76),
-		"hoja": preload("res://assets/sprites/conserje-48-bumeran.tres"),
-		"boca": {"s": Vector2(-11, -36), "se": Vector2(-7, -35), "e": Vector2(-1, -37), "ne": Vector2(7, -37),
-			"n": Vector2(12, -36), "no": Vector2(9, -38), "o": Vector2(2, -40), "so": Vector2(4, -35)}},
 	# la pistola eléctrica: su hoja lleva el retroceso corto y la descarga celeste en zigzag que sale de los dos electrodos del táser
 	# (las chispas que vuelan, aturden y saltan al zombi de al lado las pone el juego, armas_creadas.gd y chorro.gd); la casilla es de
 	# 180x168, con los pies en 90,88, porque la descarga llega a 88 píxeles a un lado, 86 al otro, 86 hacia arriba y 77 hacia abajo.
@@ -167,7 +156,7 @@ const CREADAS := {
 		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
 		"boca": {"s": Vector2(0, -31), "se": Vector2(19, -17), "e": Vector2(22, -30), "ne": Vector2(18, -42),
 			"n": Vector2(5, -48), "no": Vector2(-19, -42), "o": Vector2(-22, -30), "so": Vector2(-19, -17)}},
-	# el garfio, que sale y vuelve como el bumerán: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia
+	# el garfio, que sale y vuelve a la mano: su hoja lleva solo el GESTO de lanzar (el brazo hacia delante y la vuelta a la guardia
 	# con el gancho en la mano y el rollo de cuerda en la otra; el gancho que sale volando, la cuerda y el zombi arrastrado los dibuja el
 	# juego, garfio.gd, y andando no hay gesto: la hoja no tiene efectos); la casilla es de 90x88, con los pies en 45,72, porque el brazo
 	# llega a 41 píxeles a un lado, 41 al otro, 68 hacia arriba (de espaldas, con el brazo estirado) y 12 hacia abajo. La boca NO sale de

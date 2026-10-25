@@ -3,14 +3,13 @@
 #   - Cuerpo a cuerpo, al golpear: aturdir, prender, hacer sangrar, envenenar, la descarga que salta a otro
 #     zombi, congelar (el bate helado) o dejarlo tirado (el mangual). Los jefes (la portera) no se aturden, ni
 #     arden, ni se congelan; sangrar y el veneno sí les hacen daño.
-#   - A distancia: las gotas de fuego o chispas (chorro.gd), el bumerán (bumeran.gd) y el garfio
-#     (garfio.gd), que trae al zombi hasta Johnny. La llamarada del lanzallamas y el chorro del lanza ácido van
+#   - A distancia: las gotas de fuego o chispas (chorro.gd) y el garfio (garfio.gd), que trae al zombi
+#     hasta Johnny. La llamarada del lanzallamas y el chorro del lanza ácido van
 #     aparte (llamarada.gd).
 #   - Las chispitas de color en la punta del arma que lleva Johnny.
 class_name ArmasCreadas
 
 const CHORRO := preload("res://scripts/chorro.gd")
-const BUMERAN := preload("res://scripts/bumeran.gd")
 const GARFIO := preload("res://scripts/garfio.gd")
 const EMPUJE := 170.0   # empuje base, como el de las balas
 # Los efectos de las armas que queman: el bate de fuego y el lanzallamas (con la skin del bombero, × 3: johnny.gd,
@@ -119,8 +118,7 @@ static func detalle(johnny: Node2D, w: Dictionary, delta: float) -> void:
 # ── A distancia ──
 
 # Disparo de un arma creada a distancia desde la boca del arma. Las de chorro sueltan gotas de fuego, ácido o
-# chispas que atraviesan a los zombis; el bumerán sale una vez y vuelve a la mano, y el garfio, igual, pero
-# trayéndose al zombi que pille
+# chispas que atraviesan a los zombis; el garfio sale una vez y vuelve a la mano, trayéndose al zombi que pille
 static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vector2) -> void:
 	var sala: Node = johnny.get_parent()
 	if w.efecto == "garfio":
@@ -133,18 +131,6 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		g.velocidad = w.velocidad
 		sala.add_child(g)
 		g.global_position = salida
-		Sonido.tocar("latigazo")
-		return
-	if w.efecto == "bumeran":
-		var b := BUMERAN.new()
-		b.johnny = johnny
-		b.angulo = angulo
-		b.dano = w.dano
-		b.empuje = w.empuje
-		b.alcance = w.alcance
-		b.velocidad = w.velocidad
-		sala.add_child(b)
-		b.global_position = salida
 		Sonido.tocar("latigazo")
 		return
 	Sonido.tocar({"acido": "escupitajo", "chispa": "chispa"}.get(w.efecto, "fuego"))
@@ -163,7 +149,7 @@ static func disparar(johnny: Node2D, angulo: float, w: Dictionary, salida: Vecto
 		Luz.destello(johnny, salida - Vector2(0, 50), 120.0, 0.08)
 
 
-# Lo que pasa cuando una gota, el bumerán, el garfio o un clavo de la bomba de clavos tocan a un zombi ("quema":
+# Lo que pasa cuando una gota, el garfio o un clavo de la bomba de clavos tocan a un zombi ("quema":
 # cuánto más arde el que prende una gota de fuego)
 static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tipo: String, quema := 1.0) -> void:
 	# al jefe de bomberos (bombero.gd) el fuego no le hace nada: ni el daño ni prenderle
@@ -175,7 +161,7 @@ static func golpe(zombi: Node2D, hacia: Vector2, dano: float, empuje: float, tip
 	zombi.recibir_golpe(d, hacia.normalized() * EMPUJE * empuje)
 	if not zombi.is_in_group("zombis"):
 		return
-	if tipo == "bumeran" or tipo == "garfio":
+	if tipo == "garfio":
 		Sonido.tocar("porrazo")
 	if tipo == "llama":
 		prender(zombi, quema)

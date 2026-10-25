@@ -1,7 +1,7 @@
 # El garfio (arma creada del centro comercial: cuerda + perchas). Sale recto desde la boca del arma con la cuerda
 # detrás. Si pilla a un zombi, le pega, lo engancha y lo arrastra hasta delante de Johnny (lo suelta aturdido un
 # momento); si choca con una pared o un mueble, o llega a su alcance, vuelve solo. A los jefes (no son Zombi) no
-# los mueve: solo les pega. Como el bumerán, no gasta munición.
+# los mueve: solo les pega. No gasta munición.
 extends Node2D
 
 const ALTURA_CUERPO := 22.0   # se dibuja a esta altura sobre el suelo (va "de verdad" a ras de suelo, como la bala)

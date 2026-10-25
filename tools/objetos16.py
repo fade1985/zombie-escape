@@ -1,7 +1,8 @@
-# Dibuja los 28 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
-# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 16 de siempre
-# (el mechero se quitó del juego el 25 oct), los 9 del centro comercial (parte 6 de docs/CENTRO_COMERCIAL.md), los 2
-# de curar (parte 9) y el bidón de ácido que llena el lanza ácido (el bidón de la gasolina, en verde ácido).
+# Dibuja los 26 objetos de la mochila a 16×16 píxeles (más detalle que los de 10×10 de src/objetos.js, que
+# les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Los 14 de siempre
+# (el mechero, la llave inglesa y el hacha se quitaron del juego el 25 oct), los 9 del centro comercial (parte 6 de
+# docs/CENTRO_COMERCIAL.md), los 2 de curar (parte 9) y el bidón de ácido que llena el lanza ácido (el bidón de la
+# gasolina, en verde ácido).
 # Los saca en assets/ui/iconos/obj-<id>.png (los usan el suelo, la mochila, el baúl y el banco).
 #   py tools/objetos16.py            → los iconos
 #   py tools/objetos16.py muestra    → además, tools/objetos16.png con todos en grande, para revisarlos
@@ -212,42 +213,6 @@ DIBUJOS = {
         ".......oKKKKo...",
         ".......oooooo...",
         "................",
-    ],
-    "llave_inglesa": [
-        "...oo....oo.....",
-        "..oGo....oGo....",
-        "..oGGo..oGgo....",
-        "..oGGGooGggo....",
-        "...oGGGGGgo.....",
-        "....oGGggo......",
-        ".....oGgo.......",
-        ".....oGgo.......",
-        ".....oGgo.......",
-        ".....oGdo.......",
-        ".....oGdo.......",
-        ".....oGdo.......",
-        "....ooGgdoo.....",
-        "...oGo...odo....",
-        "...oGdo.odo.....",
-        "....oooooo......",
-    ],
-    "hacha": [
-        "........ooo.....",
-        "..ooooooohMo....",
-        ".oWGGGGgohMo....",
-        "oGGGggggohMo....",
-        "oGGgggggohMo....",
-        "oGggggddohMo....",
-        ".oGgddooohMo....",
-        "..oooo..ohMo....",
-        "........ohMo....",
-        "........omMo....",
-        "........omMo....",
-        "........omMo....",
-        "........omMo....",
-        "........omMo....",
-        "........oMMo....",
-        "........oooo....",
     ],
     "mancuernas": [
         "................",

@@ -584,7 +584,7 @@ func atacar(angulo: float) -> void:
 		ataque_dur = minf(largo_anim, 0.95 / w.ritmo)
 	var ritmo_anim := largo_anim / ataque_dur
 	if w.tipo == "fuego" and velocity.length() > 20.0:
-		# Disparando mientras anda: sigue andando y los efectos del disparo se pintan encima. El bumerán no tiene
+		# Disparando mientras anda: sigue andando y los efectos del disparo se pintan encima. El garfio no tiene
 		# (su hoja solo lleva el gesto de lanzar, que no se pinta andando): sigue andando sin gesto y sin retroceso
 		ataque_t = -1.0   # las piernas siguen con la animación de andar
 		if efectos.sprite_frames.has_animation("efectos_" + direccion):
@@ -635,7 +635,7 @@ func golpear(angulo: float) -> void:
 # Johnny). La bala de verdad va 50 más abajo, a ras de suelo, y se dibuja 50 más arriba (ver bala.gd): así sale de la
 # boca y choca con lo que hay a la altura de los pies. Si la línea de tiro (desde el centro de Johnny) pasa por un
 # zombi, la bala va derecha de la boca a él: paralela a esa línea, con la boca lejos del centro pasaría por el lado.
-# Las armas creadas a distancia (gotas, bumerán, garfio...) van como siempre, paralelas
+# Las armas creadas a distancia (gotas, garfio...) van como siempre, paralelas
 func tiro(angulo: float, w: Dictionary, hacia: String) -> Array:
 	var boca: Vector2 = w.boca[hacia] * 2.0
 	var salida := global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
@@ -678,7 +678,7 @@ func disparar(angulo: float) -> void:
 	var salida: Vector2 = t[0]
 	angulo = t[1]
 	if w.has("efecto"):
-		# las armas creadas a distancia: gotas de fuego o ácido, o el bumerán (armas_creadas.gd)
+		# las armas creadas a distancia: gotas de fuego o ácido, o el garfio (armas_creadas.gd)
 		ArmasCreadas.disparar(self, angulo, w, salida)
 		oir_disparo()
 		if balas <= 0:

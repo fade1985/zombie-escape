@@ -278,7 +278,7 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
   jugando solo ahí).
 - **Centro comercial: cada tienda, lo suyo.** El zombi que cae suelta (con la misma probabilidad de ahora) un objeto
   de la lista de la tienda donde está; si te falta algo, sabes a qué tienda ir. Las listas mezclan objetos de
-  siempre que pegan con la tienda (en la ferretería clavos, hacha, llave inglesa y cuchillas; en el restaurante
+  siempre que pegan con la tienda (en la ferretería clavos y cuchillas; en el restaurante
   alcohol y gasolina; en la electrónica el táser...) y los nuevos. Los zombis del pasillo, de cualquier lista.
 - **Solo en los Apartamentos** (cosas de casa): despertador, mancuernas, pistola de agua, trapo y cuerda.
 - **Nueve objetos nuevos, solo del centro comercial** (iconos de 16×16 dibujados con código, `tools/objetos16.py`;
@@ -1032,14 +1032,15 @@ existen. Números provisionales (los puso Claude; se ajustan al probar):
 
      | Tienda | De siempre | Nuevos |
      |---|---|---|
-     | Ferretería | clavos, hacha, llave inglesa, cuchillas, spray | cinta americana, cadena |
+     | Ferretería | clavos, cuchillas, spray | cinta americana, cadena |
      | Electrónica | táser, extintor | batería, cable |
      | Restaurante | alcohol, gasolina, extintor | aceite, bombona de gas |
      | Supermercado | lejía, alcohol | hielo seco |
      | Farmacia | alcohol, lejía | jeringuilla |
      | Tienda de ropa | cuchillas, spray | perchas |
 
-     (El mechero salía en el restaurante y en el supermercado; se quitó del juego el 25 oct, con el súpersoplete.)
+     (El mechero salía en el restaurante y en el supermercado; se quitó del juego el 25 oct, con el súpersoplete. La llave
+     inglesa y el hacha salían en la ferretería; se quitaron el mismo día, con el bumerán.)
 
      - Todos los de la lista de una tienda salen igual de a menudo. En el pasillo se elige una tienda al azar y luego
        uno de su lista. El jefe de la planta suelta sus dos objetos seguros de su tienda (si no tiene, como en el pasillo).

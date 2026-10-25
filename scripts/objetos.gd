@@ -6,7 +6,8 @@
 # Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py).
 #
 # Cada edificio suelta lo suyo (parte 6 del centro comercial, docs/CENTRO_COMERCIAL.md): en los Apartamentos, los
-# 16 de siempre (eran 17: el mechero se quitó del juego el 25 oct, con el súpersoplete); en el centro comercial, los
+# 14 de siempre (eran 17: el 25 oct se quitaron del juego el mechero, con el súpersoplete, y la llave inglesa y el
+# hacha, con el bumerán); en el centro comercial, los
 # de la lista de la tienda donde cae el zombi (TIENDAS), que mezclan algunos de siempre con los nueve nuevos (SOLO_CENTRO). Las cosas de casa (SOLO_CASA) no salen en el centro.
 # Dos solo los suelta un zombi, en los dos edificios (DE_UN_ZOMBI): los explosivos y el bidón de ácido.
 class_name Objetos
@@ -23,7 +24,7 @@ const NOMBRES := {
 	"clavos": "Clavos", "gasolina": "Gasolina", "cuchillas": "Cuchillas", "pistola_agua": "Pistola de agua",
 	"spray": "Spray de pintura", "lejia": "Lejía", "alcohol": "Botella de alcohol",
 	"trapo": "Trapo", "explosivos": "Explosivos", "despertador": "Despertador", "extintor": "Extintor",
-	"taser": "Táser", "llave_inglesa": "Llave inglesa", "hacha": "Hacha", "cuerda": "Cuerda",
+	"taser": "Táser", "cuerda": "Cuerda",
 	"mancuernas": "Mancuernas",
 	# el bidón de ácido, en los dos edificios: solo lo suelta el gordo (DE_UN_ZOMBI)
 	"bidon_acido": "Bidón de ácido",
@@ -49,7 +50,7 @@ const SOLO_CENTRO := ["cinta_americana", "cadena", "bateria", "cable", "aceite",
 	"jeringuilla", "perchas", "vendas", "bocadillo"]   # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
 const TIENDAS := {
-	"ferreteria": ["clavos", "hacha", "llave_inglesa", "cuchillas", "spray", "cinta_americana", "cadena"],
+	"ferreteria": ["clavos", "cuchillas", "spray", "cinta_americana", "cadena"],
 	"electronica": ["taser", "extintor", "bateria", "cable"],
 	"restaurante": ["alcohol", "gasolina", "extintor", "aceite", "bombona"],
 	"supermercado": ["lejia", "alcohol", "hielo_seco", "bocadillo"],
@@ -145,7 +146,7 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 # ── Colecciones (el programa del ordenador) ──
 # Lo encontrado alguna vez se apunta en el guardado ("encontrados"), y el ordenador lo cuenta por edificio.
 
-# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 16 de siempre (con los
+# Los que salen en un edificio, en el orden de NOMBRES: en los Apartamentos, los 14 de siempre (con los
 # explosivos) y el bidón de ácido; en el centro comercial, todos menos las cosas de casa. Otro valor: todos
 static func de_edificio(edificio: String) -> Array:
 	match edificio:

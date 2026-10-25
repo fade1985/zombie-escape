@@ -1,6 +1,6 @@
 # Las recetas del banco de trabajo (src/recetas.js del JS). Cada receta junta dos ingredientes: objetos
-# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 13 primeras se hacen con lo de los
-# Apartamentos (eran 15: la lanza y el súpersoplete se quitaron del juego el 25 oct); las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
+# (objetos.gd) o armas de la tienda (fregona, bate, cuchillo). Las 12 primeras se hacen con lo de los
+# Apartamentos (eran 15: la lanza, el súpersoplete y el bumerán se quitaron del juego el 25 oct); las seis de "mezclan los dos edificios" piden una cosa de casa y otra del centro comercial, y las
 # tres últimas, solo cosas del centro (parte 6 de docs/CENTRO_COMERCIAL.md). El arma que sale lleva una rareza al azar que
 # multiplica su daño, y va al baúl (guardado: "baul_armas"). Desde el baúl se sacan para una partida; lo que
 # hacen está en Armas.CREADAS y armas_creadas.gd (fase 7b2).
@@ -11,18 +11,18 @@
 #   hueco      "cuerpo" (cuerpo a cuerpo), "fuego" (a distancia) o "arrojadiza"
 #   icono      de qué ingrediente se toma el dibujo (hasta que tenga el suyo; el aplastacabezas, el bate de
 #              fuego, el partecuerpos, la inmovilizadora, el látigo, la súper maza, el mangual, el bate helado, el látigo
-#              eléctrico, el lanzallamas, el desintegrador, el bumerán, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/aplastacabezas.png,
+#              eléctrico, el lanzallamas, el desintegrador, la pistola eléctrica y el garfio ya lo tienen: assets/ui/iconos/aplastacabezas.png,
 #              bate_fuego.png, partecuerpos.png, inmovilizadora.png, latigo.png, supermaza.png, mangual.png, bate_helado.png,
-#              latigo_electrico.png, lanzallamas.png, desintegrador.png, bumeran.png, pistola_electrica.png y garfio.png, de tools/icono_aplastacabezas.py,
+#              latigo_electrico.png, lanzallamas.png, desintegrador.png, pistola_electrica.png y garfio.png, de tools/icono_aplastacabezas.py,
 #              icono_bate_fuego.py, icono_partecuerpos.py, icono_inmovilizadora.py, icono_latigo.py, icono_supermaza.py,
 #              icono_mangual.py, icono_bate_helado.py, icono_latigo_electrico.py, icono_lanzallamas.py,
-#              icono_desintegrador.py, icono_bumeran.py, icono_pistola_electrica.py e icono_garfio.py). Se lee siempre de
+#              icono_desintegrador.py, icono_pistola_electrica.py e icono_garfio.py). Se lee siempre de
 #              aquí (icono_de), no del arma guardada en el baúl,
 #              para que las ya creadas cojan el dibujo nuevo
 #   dano       daño con rareza verde (provisional; en las arrojadizas, el de la explosión o el fuego)
 #   unidades   las arrojadizas: cuántas salen (la rareza da más)
 #   desc       qué hace, en una frase
-#   edificio   con lo de qué edificio se hace: "apartamentos" (las 13 primeras), "mezcla" (una cosa de casa y otra
+#   edificio   con lo de qué edificio se hace: "apartamentos" (las 12 primeras), "mezcla" (una cosa de casa y otra
 #              del centro comercial) o "centro" (solo cosas del centro). Las Colecciones del ordenador cuentan las
 #              de "mezcla" y "centro" en el centro comercial (de_edificio)
 class_name Recetas
@@ -53,8 +53,6 @@ const LISTA := {
 		"desc": "Explota y deja un charco ácido grande", "edificio": "apartamentos"},
 	"inmovilizadora": {"nombre": "Inmovilizadora", "con": ["taser", "bate"], "hueco": "cuerpo", "icono": "inmovilizadora", "dano": 20,
 		"desc": "La descarga aturde y salta a un zombi cercano", "edificio": "apartamentos"},
-	"bumeran": {"nombre": "Bumerán segador", "con": ["llave_inglesa", "hacha"], "hueco": "fuego", "icono": "bumeran", "dano": 14,
-		"desc": "Se lanza, atraviesa zombis y vuelve a la mano; sin munición", "edificio": "apartamentos"},
 	"latigo": {"nombre": "Látigo escorpión", "con": ["cuerda", "cuchillo"], "hueco": "cuerpo", "icono": "latigo", "dano": 12,
 		"desc": "Alcance largo y envenena", "edificio": "apartamentos"},
 	"supermaza": {"nombre": "Súper maza", "con": ["fregona", "mancuernas"], "hueco": "cuerpo", "icono": "supermaza", "dano": 24,

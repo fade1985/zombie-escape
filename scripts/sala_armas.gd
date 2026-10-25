@@ -32,7 +32,7 @@ const TINTA := Color(0.11, 0.1, 0.17)
 # Lo que hace cada arma creada (su "efecto", armas_creadas.gd), para la ficha
 const EFECTOS := {"aturde": "aturde", "fuego": "prende fuego", "sangra": "hace sangrar", "descarga": "aturde y salta a otro",
 	"veneno": "envenena", "circulo": "pega a todo alrededor", "tira": "echa lejos y tira al suelo", "congela": "congela",
-	"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa", "bumeran": "va, atraviesa y vuelve",
+	"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa",
 	"chispa": "chispa que aturde y salta", "garfio": "engancha y trae"}
 
 var johnny: Node2D

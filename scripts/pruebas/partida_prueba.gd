@@ -11,9 +11,9 @@
 #                  portera en la baja)
 #   --skins        las skins de Johnny (skins.gd): el desbloqueo, la taquilla, la cara y lo que hace cada una
 #   --baul         guardar a mano en el baúl lo de la mochila (ui/inventario.gd)
-#   --banco        una lanza, un súpersoplete y un mechero de antes en el guardado (se quitaron del juego)
-#                  desaparecen al cargar; luego el banco de trabajo, las recetas y las Colecciones, sin la prueba larga
-#                  (probar_cosas, probar_recetas y probar_colecciones)
+#   --banco        una lanza, un súpersoplete, un bumerán, un mechero, una llave inglesa y un hacha de antes en el
+#                  guardado (se quitaron del juego) desaparecen al cargar; luego el banco de trabajo, las recetas y las
+#                  Colecciones, sin la prueba larga (probar_cosas, probar_recetas y probar_colecciones)
 #   --aplastacabezas  el aplastacabezas con su dibujo propio: su icono en el baúl, su hoja, el golpe (que aturde) en
 #                  las 8 direcciones y con una skin (Armas.CREADAS.aplastacabezas)
 #   --bate-fuego   lo mismo con el bate de fuego: su icono, su hoja, el golpe (que prende) en las 8 direcciones y
@@ -49,9 +49,6 @@
 #                  (Armas.CREADAS.desintegrador, llamarada.gd, goteo.gd); el depósito, que se llena con los bidones de
 #                  ácido de la mochila y, sin ellos, «¡Sin ácido!»; los del baúl con el daño de una gota cogen el de
 #                  ahora; y que los bidones solo los suelta el gordo, 1 de cada 4 veces
-#   --bumeran      el bumerán segador (la cuarta creada con dibujo propio que dispara): su icono, su hoja con el gesto de lanzar, sin
-#                  chispitas, que el bumerán atraviesa a los zombis que tiene delante, no llega al lejano, vuelve a la mano y no gasta
-#                  bala, que andando no hay gesto, el lanzamiento en las 8 direcciones y con las 4 skins (Armas.CREADAS.bumeran)
 #   --pistola-electrica la pistola eléctrica (la quinta creada a distancia con dibujo propio): su icono, su hoja con la descarga celeste de
 #                  los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene delante y salta al
 #                  de al lado y no llega al lejano, una bala por disparo, disparar andando, el disparo en las 8 direcciones y con las
@@ -186,9 +183,6 @@ func empezar_prueba() -> void:
 	elif "--desintegrador" in args:
 		set_process(false)   # sin la prueba larga
 		probar_desintegrador()
-	elif "--bumeran" in args:
-		set_process(false)   # sin la prueba larga
-		probar_bumeran()
 	elif "--pistola-electrica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pistola_electrica()
@@ -3919,117 +3913,6 @@ func texto_del_arma() -> String:
 	return texto[0].get_slice("\n", 0)
 
 
-# Con "--captura --bumeran": el bumerán segador con su dibujo propio (Armas.CREADAS.bumeran, conserje-48-bumeran: la hoja lleva solo el
-# gesto de lanzar el bumerán de acero con el mango rojo; el que sale volando y vuelve a la mano lo dibuja el juego, bumeran.gd; casilla de
-# 94x92, con los pies en 45,76; recetas.gd, su icono). Como el desintegrador, en la sala de mantenimiento, con dos en el baúl (una guardada
-# antes de que tuviera icono propio, con el del hacha), Johnny se arrima al baúl y cuenta el icono de cada una (captura-bumeran-baul.png).
-# Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no le salen chispitas; lanza el bumerán a un
-# zombi a 120 a su izquierda con otro detrás, a 200 (los dos pierden vida: atraviesa), con otro a 420 en la misma línea (más lejos de lo que
-# llega: ni se entera), y cuenta que el bumerán vuelve a la mano (se acaba solo) y que no gasta munición (captura-bumeran-lanzar.png). Lanza
-# andando y cuenta que Johnny sigue andando, sin gesto y sin efectos (la hoja no los tiene). Luego lanza en las 8 direcciones, con una foto
-# de cada una a los 0,05 s, con el brazo ya estirado y el bumerán de verdad saliendo de la mano (captura-bumeran-<dirección>.png). Con cada
-# skin (portero, glotón, gymbro y bombero), su hoja y una foto (captura-bumeran-<skin>.png). Cada línea dice lo esperado. Deja el guardado
-# como estaba y se cierra
-func probar_bumeran() -> void:
-	var antes := Guardado.cargar()
-	var vieja := Recetas.crear("bumeran", "azul")
-	vieja.icono = "hacha"   # como las que se crearon antes de que el bumerán tuviera icono propio
-	Guardado.cambiar(func(g2):
-		g2.baul_armas = [vieja, Recetas.crear("bumeran", "morada")]
-		g2.skins = ["portero", "gloton", "gymbro", "bombero"]
-		g2.skin = "")
-	johnny.vestir("")
-	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
-	johnny.direccion = "n"
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.5).timeout
-	print("Baúl: abierto %s · iconos %s (esperado: true, [\"bumeran\", \"bumeran\"]) · en el banco «%s» (esperado: bumeran)" % [
-		inventario.abierto == "baul", Guardado.cargar().baul_armas.map(func(a): return Recetas.icono_de(a.receta)),
-		Recetas.icono_de("bumeran")])
-	Captura.foto("captura-bumeran-baul.png")
-	inventario.cerrar()
-	await get_tree().process_frame
-
-	# sacado del baúl: su hoja, su boca y sin chispitas
-	var id := Armas.apuntar(Guardado.cargar().baul_armas[0])
-	johnny.coger(id)
-	var w := Armas.datos(id)
-	johnny.position = Vector2(690, 300)   # (en el despacho)
-	johnny.direccion = "e"
-	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
-	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.3).timeout
-	print("Bumerán en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas %s · icono «%s» (esperado: conserje-48-bumeran.tres, 1, 300, (45, 76), (-1, -37), false, bumeran)" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
-
-	# el lanzamiento: atraviesa al primero (a 120) y al segundo (a 200); el tercero, a 420, queda fuera de su alcance (300 desde la mano)
-	johnny.direccion = "o"
-	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-200, 0), Vector2(-420, 0)])
-	await get_tree().process_frame
-	var balas0: int = johnny.balas
-	johnny.atacar(PI)
-	await get_tree().create_timer(0.35).timeout
-	Captura.foto("captura-bumeran-lanzar.png")
-	var volando := bumeranes_volando()
-	await get_tree().create_timer(1.6).timeout
-	print("Bumerán en el aire a los 0,35 s: %d (esperado: 1) · tras 1,95 s: %d (esperado: 0: volvió a la mano)" % [volando, bumeranes_volando()])
-	print("Zombi a 120: vida %d · a 200: vida %d (esperado: menos de 500 los dos) · a 420: vida %d (esperado: 500)" % [z[0].vida, z[1].vida, z[2].vida])
-	print("Balas gastadas: %d (esperado: 0: no gasta munición)" % (balas0 - johnny.balas))
-	zombis_de_prueba([])
-	await get_tree().create_timer(0.3).timeout
-
-	# lanzar andando: sigue andando, sin gesto (sin efectos: la hoja no los tiene) ni retroceso
-	johnny.direccion = "e"
-	johnny.velocity = Vector2(120, 0)
-	johnny.atacar(0.0)
-	await get_tree().create_timer(0.1).timeout
-	print("Lanzado andando: ataque_t %.1f (esperado: -1.0) · efectos visibles %s (esperado: false) · retroceso %s (esperado: (0, 0))" % [
-		johnny.ataque_t, johnny.efectos.visible, johnny.patada])
-	johnny.velocity = Vector2.ZERO
-	quitar_bumeranes()
-	await get_tree().create_timer(0.3).timeout
-
-	# las 8 direcciones, con una foto a los 0,05 s: el brazo estirado y el bumerán saliendo de la mano
-	for d in johnny.DIRS:
-		johnny.direccion = d
-		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
-		await get_tree().create_timer(0.05).timeout
-		Captura.foto("captura-bumeran-%s.png" % d)
-		await get_tree().create_timer(0.5).timeout
-		quitar_bumeranes()
-		await get_tree().create_timer(0.2).timeout
-
-	# con cada skin: su hoja del bumerán
-	for skin in ["portero", "gloton", "gymbro", "bombero"]:
-		Skins.poner(skin)
-		johnny.vestir(skin)
-		johnny.direccion = "e"
-		johnny.atacar(0.0)
-		await get_tree().create_timer(0.05).timeout
-		Captura.foto("captura-bumeran-%s.png" % skin)
-		print("Con %s: hoja «%s» (esperado: conserje-48-bumeran-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
-		await get_tree().create_timer(0.5).timeout
-		quitar_bumeranes()
-		await get_tree().create_timer(0.2).timeout
-
-	Guardado.cambiar(func(g2):
-		g2.baul_armas = antes.baul_armas
-		g2.skins = antes.skins
-		g2.skin = antes.skin)
-	get_tree().quit()
-
-
-# Para probar_bumeran: los bumeranes que van por el aire (los que lanzó Johnny y aún no han vuelto a su mano)
-func bumeranes_volando() -> int:
-	return johnny.get_parent().get_children().filter(func(n): return n.get_script() == ArmasCreadas.BUMERAN).size()
-
-
-func quitar_bumeranes() -> void:
-	for n in johnny.get_parent().get_children():
-		if n.get_script() == ArmasCreadas.BUMERAN:
-			n.queue_free()
-
-
 # Con "--captura --pistola-electrica": la pistola eléctrica con su dibujo propio (Armas.CREADAS.pistola_electrica,
 # conserje-48-pistola-electrica: la hoja lleva el retroceso corto de pistola y una descarga celeste en zigzag que sale de los dos
 # electrodos del táser azul marino; casilla de 180x168, con los pies en 90,88; recetas.gd, su icono). Como el desintegrador, en la sala
@@ -4131,7 +4014,7 @@ func probar_pistola_electrica() -> void:
 
 # Con "--captura --garfio": el garfio con su dibujo propio (Armas.CREADAS.garfio, conserje-48-garfio: la hoja lleva solo el gesto de
 # lanzar el gancho de perchas, con el rollo de cuerda en la otra mano; el gancho que sale volando, la cuerda y el zombi arrastrado los
-# dibuja el juego, garfio.gd; casilla de 90x88, con los pies en 45,72; recetas.gd, su icono). Como el bumerán, en la sala de mantenimiento,
+# dibuja el juego, garfio.gd; casilla de 90x88, con los pies en 45,72; recetas.gd, su icono). Como el desintegrador, en la sala de mantenimiento,
 # con dos en el baúl (una guardada antes de que tuviera icono propio, con el de las perchas), Johnny se arrima al baúl y cuenta el icono de
 # cada una (captura-garfio-baul.png). Saca una y cuenta su hoja, su ritmo, su alcance, sus pies, su boca hacia el este y que ya no le salen
 # chispitas; lanza el garfio a un zombi a 120 a su izquierda: lo engancha, le pega y se lo trae hasta delante de Johnny, aturdido (a los
@@ -5188,10 +5071,10 @@ func probar_colecciones() -> void:
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
 			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
-	if Objetos.de_edificio("apartamentos").size() != 17 or Objetos.de_edificio("centro").size() != 23:
-		push_error("Colecciones: los objetos por edificio no son 17 y 23")
-	if Recetas.de_edificio("apartamentos").size() != 13 or Recetas.de_edificio("centro").size() != 9:
-		push_error("Colecciones: las recetas por edificio no son 13 y 9")
+	if Objetos.de_edificio("apartamentos").size() != 15 or Objetos.de_edificio("centro").size() != 21:
+		push_error("Colecciones: los objetos por edificio no son 15 y 21")
+	if Recetas.de_edificio("apartamentos").size() != 12 or Recetas.de_edificio("centro").size() != 9:
+		push_error("Colecciones: las recetas por edificio no son 12 y 9")
 	if Bestiario.LISTA.size() != 22:
 		push_error("Colecciones: el bestiario no tiene 22 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
@@ -5231,9 +5114,9 @@ func probar_noticias() -> void:
 	ordenador.apagar()
 
 
-# Con "--captura --banco": una lanza y un súpersoplete creados antes de quitarlos del juego (25 oct) en el guardado, en
-# el baúl, en las recetas aprendidas y en las creadas (Colecciones), y unos mecheros (también quitados) en el baúl y en
-# los encontrados (Colecciones): al cargar desaparecen de todo (guardado.gd). Luego, el baúl abierto con lo que queda
+# Con "--captura --banco": una lanza, un súpersoplete y un bumerán creados antes de quitarlos del juego (25 oct) en el
+# guardado, en el baúl, en las recetas aprendidas y en las creadas (Colecciones), y unos mecheros, llaves inglesas y
+# hachas (también quitados) en el baúl y en los encontrados (Colecciones): al cargar desaparecen de todo (guardado.gd). Luego, el baúl abierto con lo que queda
 # (captura-banco-baul.png), la mochila, el banco y el baúl (probar_cosas), las recetas nuevas (probar_recetas) y las
 # Colecciones (probar_colecciones). Cada línea dice lo esperado y se cierra
 func probar_banco() -> void:
@@ -5246,16 +5129,20 @@ func probar_banco() -> void:
 	soplete.receta = "supersoplete"   # igual
 	soplete.nombre = "Súpersoplete"
 	soplete.icono = "supersoplete"
-	s.baul_armas = [lanza, soplete, Recetas.crear("aplastacabezas", "verde")]
-	s.recetas = ["molotov", "lanza", "supersoplete", "aplastacabezas"]
-	s.creadas = ["lanza", "supersoplete", "aplastacabezas"]
-	s.baul = {"mechero": 2, "clavos": 1}
-	s.encontrados = ["mechero", "clavos"]
+	var bumeran := Recetas.crear("garfio", "azul")
+	bumeran.receta = "bumeran"   # igual
+	bumeran.nombre = "Bumerán segador"
+	bumeran.icono = "bumeran"
+	s.baul_armas = [lanza, soplete, bumeran, Recetas.crear("aplastacabezas", "verde")]
+	s.recetas = ["molotov", "lanza", "supersoplete", "bumeran", "aplastacabezas"]
+	s.creadas = ["lanza", "supersoplete", "bumeran", "aplastacabezas"]
+	s.baul = {"mechero": 2, "llave_inglesa": 1, "hacha": 3, "clavos": 1}
+	s.encontrados = ["mechero", "llave_inglesa", "hacha", "clavos"]
 	Guardado.escribir(s)
 	var leido := Guardado.cargar()
-	print("Lanza y súpersoplete viejos al cargar: baúl %s · aprendidas %s · creadas %s (esperado: [\"aplastacabezas\"], [\"molotov\", \"aplastacabezas\"], [\"aplastacabezas\"])" % [
+	print("Lanza, súpersoplete y bumerán viejos al cargar: baúl %s · aprendidas %s · creadas %s (esperado: [\"aplastacabezas\"], [\"molotov\", \"aplastacabezas\"], [\"aplastacabezas\"])" % [
 		leido.baul_armas.map(func(a): return a.receta), leido.recetas, leido.creadas])
-	print("Mecheros viejos al cargar: baúl %s · encontrados %s (esperado: { \"clavos\": 1 }, [\"clavos\"])" % [leido.baul, leido.encontrados])
+	print("Mecheros, llaves inglesas y hachas viejos al cargar: baúl %s · encontrados %s (esperado: { \"clavos\": 1 }, [\"clavos\"])" % [leido.baul, leido.encontrados])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco-baul.png")
@@ -5310,11 +5197,11 @@ func probar_cosas() -> void:
 		johnny.huecos.cuerpo, g.baul, g.baul_armas.map(func(a): return "%s %s %d" % [a.nombre, a.rareza, a.dano])])
 
 
-# Las armas creadas (fase 7b2): saca cinco del baúl, golpea con la inmovilizadora, lanza el bumerán, se pone
+# Las armas creadas (fase 7b2): saca cinco del baúl, golpea con la inmovilizadora, lanza el garfio, se pone
 # el desintegrador desde el inventario y dispara, y lanza la congeladora. Cuenta lo que pasa y hace una foto
 func probar_creadas() -> void:
 	Guardado.cambiar(func(g): g.baul_armas = [Recetas.crear("inmovilizadora", "morada"), Recetas.crear("desintegrador"),
-		Recetas.crear("bumeran"), Recetas.crear("congeladora"), Recetas.crear("molotov")])
+		Recetas.crear("garfio"), Recetas.crear("congeladora"), Recetas.crear("molotov")])
 	var molotovs: int = lanzables.cantidades.molotov
 	abrir_cosas("baul")
 	for i in 5:
@@ -5336,7 +5223,7 @@ func probar_creadas() -> void:
 	johnny.sostener("fuego")
 	johnny.disparar(0.0)
 	await get_tree().create_timer(0.3).timeout
-	print("Bumerán: balas %d (no gasta) | zombi 1 vida %d | zombi 2 vida %d" % [johnny.balas, z1.vida, z2.vida])
+	print("Garfio: balas %d (no gasta) | zombi 1 vida %d | zombi 2 vida %d" % [johnny.balas, z1.vida, z2.vida])
 	abrir_cosas("inventario")
 	inventario.tocar("g%d" % armas_guardadas.find(armas_guardadas.filter(func(id): return Objetos.nombre(id) == "Desintegrador")[0]))
 	inventario.poner_guardada()
