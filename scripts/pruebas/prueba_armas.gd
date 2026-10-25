@@ -814,9 +814,10 @@ func probar_charcos() -> void:
 	Captura.foto("captura-charcos-mancha.png")
 	# los mocos en el aire (proyectil.gd): miran hacia donde van, hacia arriba al salir y de cabeza al caer. Tres a la
 	# vez, a la derecha, a la izquierda y hacia arriba; fotos al salir, en lo alto y al caer
-	for hacia in [Vector2(260, -40), Vector2(-260, -40), Vector2(30, -260)]:
+	# (y dos garrafas de lejía, que van dando vueltas)
+	for hacia in [Vector2(260, -40), Vector2(-260, -40), Vector2(30, -260), Vector2(160, -200), Vector2(-160, -200)]:
 		var moco: Node2D = load("res://escenas/armas/proyectil.tscn").instantiate()
-		moco.tipo = "veneno"
+		moco.tipo = "lejia" if absf(hacia.x) == 160.0 else "veneno"
 		moco.desde = johnny.global_position + Vector2(0, -60)
 		moco.alto_salida = 30.0
 		moco.hasta = moco.desde + hacia

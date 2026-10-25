@@ -9,6 +9,7 @@ extends Node2D
 # cada uno cargase al otro al empezar, según qué se cargue antes uno se queda a medias (pasaba en bano.tscn)
 const CHARCO := "res://escenas/armas/charco.tscn"
 const MOCO := preload("res://assets/sprites/objeto-moco.png")
+const LEJIA := preload("res://assets/sprites/objeto-botella-lejia.png")
 
 # Cada tipo: cuánto tarda en caer, lo alto que sube, el daño al caer y el charco que deja
 const TIPOS := {
@@ -147,14 +148,9 @@ func _draw() -> void:
 		"probeta_acido", "probeta_veneno", "probeta_aceite":
 			probeta(self, donde, t * 11.0, datos.liquido)
 		_:
-			# La botella de lejía, dando vueltas (dibujada con código, como en el juego)
-			draw_set_transform(donde, t * 10.0)
-			var contorno := Color("#1d1b2c")
-			draw_rect(Rect2(-8, -10, 16, 20), contorno)
-			draw_rect(Rect2(-6, -8, 12, 16), Color("#f4f8ff"))
-			draw_rect(Rect2(-4.5, -16, 9, 7), contorno)
-			draw_rect(Rect2(-3, -15, 6, 5), Color("#4c9fd6"))
-			draw_rect(Rect2(-6, -2, 12, 4), Color("#4c9fd6"))
+			# La garrafa de lejía, dando vueltas
+			draw_set_transform(donde, t * 10.0, Vector2(2, 2))
+			draw_texture(LEJIA, -Vector2(LEJIA.get_size()) / 2.0)
 
 
 # La sartén del cocinero, con su aceite dentro
