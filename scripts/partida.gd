@@ -20,7 +20,7 @@
 # igual: al arrimarse sale la ventanita para elegir la skin de Johnny (skins.gd).
 #
 # Para probar: F11, desde cualquier sitio, lleva a la sala de pruebas (sala_armas.gd) y, otra vez, de vuelta adonde
-# se estaba. Allí, la P abre el panel de pruebas (ui/panel_pruebas.gd): sacar jefes y zombis, encender y apagar las
+# se estaba. Allí, 1 a 8 sacan un zombi y Mayús + 1 a 0, un jefe, y la P abre el panel de pruebas (ui/panel_pruebas.gd): sacar jefes y zombis, encender y apagar las
 # ayudas, ir a la exposición o a la sala de un jefe... Lo que pasa en la sala no cuenta (en_pruebas).
 #
 # Con "-- --captura" no se juega esta, sino la partida de prueba (escenas/partida_prueba.tscn): la misma partida
@@ -1335,6 +1335,8 @@ func _unhandled_input(evento: InputEvent) -> void:
 		pruebas()
 	elif evento.keycode == KEY_P and aqui == planta.armas:
 		abrir_panel_pruebas()
+	elif aqui == planta.armas and panel_pruebas.atajo(evento):
+		pass   # (1 a 8, un zombi; Mayús + 1 a 0, un jefe: ui/panel_pruebas.gd)
 
 
 # ═════════════ La sala de pruebas ═════════════

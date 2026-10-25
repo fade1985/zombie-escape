@@ -1195,7 +1195,8 @@ func probar_epicas() -> void:
 # de mantenimiento, F11 lleva a ella: cuenta en la terminal que hay baúl y que el baúl que se ve es el de pruebas (todas
 # las armas y los arrojables en cada calidad). La P abre el panel; con sus botones, Johnny invencible y, con «Quieto», el
 # antidisturbios: que ha salido y que, tras 3 s, sigue en su sitio. Luego apaga los avisos de los jefes y el alcance
-# del arma, y los vuelve a encender. Al final, F11 vuelve al mismo sitio de la sala de mantenimiento, con el baúl de
+# del arma, y los vuelve a encender; y con los atajos (2 y Mayús + 7), un zombi lento y el Glotón
+# (captura-sala-pruebas-atajos.png). Al final, F11 vuelve al mismo sitio de la sala de mantenimiento, con el baúl de
 # verdad sin tocar. Fotos: captura-sala-pruebas-panel.png (el panel, en Jefes), captura-sala-pruebas-jefe.png (el
 # antidisturbios quieto, con sus avisos) y captura-sala-pruebas-sin-ayudas.png (lo mismo, sin avisos ni alcance)
 func probar_sala_pruebas() -> void:
@@ -1243,6 +1244,24 @@ func probar_sala_pruebas() -> void:
 	pulsar_en_panel("Alcance del arma")
 	print("Ayudas encendidas: avisos %s, alcance %s (esperado: false, true)" % [Aviso.apagados, SalaArmas.ayudas.alcance])
 	panel_pruebas.cerrar()
+	# los atajos, con el panel cerrado: el 2, un zombi lento; Mayús + 7, el Glotón
+	var antes := get_tree().get_nodes_in_group("zombis").size()
+	for tecla in [[KEY_2, false], [KEY_7, true]]:
+		var evento := InputEventKey.new()
+		evento.keycode = tecla[0]
+		evento.shift_pressed = tecla[1]
+		evento.pressed = true
+		Input.parse_input_event(evento)
+		await get_tree().physics_frame
+		evento = evento.duplicate()
+		evento.pressed = false
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.2).timeout
+	var nuevos := get_tree().get_nodes_in_group("zombis").map(func(z): return z.scene_file_path.get_file().get_basename())
+	print("Atajos (2 y Mayús + 7): %d nuevos, lento %s, Glotón %s (esperado: %d, true, true)" % [nuevos.size() - antes,
+		"zombi_lento" in nuevos, "gloton" in nuevos, 1 + PANEL_PRUEBAS.cuantos])
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-sala-pruebas-atajos.png")
 	await pulsar_y_esperar(KEY_F11)
 	await get_tree().create_timer(0.3).timeout
 	print("De vuelta: al mismo sitio %s, al mismo punto %s · el baúl de verdad, %d cosas (esperado: true, true, %d)" % [
@@ -1253,7 +1272,7 @@ func probar_sala_pruebas() -> void:
 # Pulsa el botón del panel de pruebas que empieza por "texto"
 func pulsar_en_panel(texto: String) -> void:
 	for b in panel_pruebas.hoja.get_children():
-		if b.text.begins_with(texto):
+		if b.text.begins_with(texto) or b.text.ends_with("· " + texto):
 			b.pressed.emit()
 			return
 	print("ERROR: en el panel no está el botón «%s»" % texto)

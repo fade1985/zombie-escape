@@ -1,8 +1,8 @@
 # El panel de la sala de pruebas (sala_armas.gd): con la P, allí dentro, se para el juego y sale esta ventana. A la
 # izquierda, las pestañas; a la derecha, sus botones:
-#   Jefes     uno por jefe, y dos casillas: «a media vida» (sale ya enfadado) y «quieto» (ataca y avisa, pero no se
+#   Jefes     uno por jefe (atajo en la sala: Mayús + 1 a 0), y dos casillas: «a media vida» (sale ya enfadado) y «quieto» (ataca y avisa, pero no se
 #             mueve de su sitio: para mirar sus avisos)
-#   Zombis    uno por tipo, cuántos sacar de golpe y «borrar todos»
+#   Zombis    uno por tipo (atajo en la sala: 1 a 8), cuántos sacar de golpe y «borrar todos»
 #   Ayudas    cada una se enciende y se apaga: las líneas de la sala, el panel de daño, los avisos de los jefes en el
 #             suelo (aviso.gd) y la penumbra
 #   Johnny    invencible, munición sin fin, la diana y la siguiente skin
@@ -19,6 +19,9 @@ const JEFES := {"portera": "Portera", "antidisturbios": "Antidisturbios", "cocin
 const ZOMBIS := {"normal": "Normal", "lento": "Lento", "rapido": "Rápido", "explosivo": "Explosivo",
 	"tentaculos": "Tentáculos", "venenoso": "Venenoso", "vigilante": "Vigilante", "dependienta": "Dependienta"}
 const CUANTOS := [1, 3, 5, 10]
+# Los atajos de la sala de pruebas (también con el panel cerrado): 1 a 8, los zombis; Mayús + 1 a 0, los jefes (en
+# el orden de JEFES y ZOMBIS)
+const NUMEROS := [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
 const AYUDAS := {"alcance": "Alcance del arma", "apuntado": "A quién apunta", "trayectoria": "Por dónde irá la bala",
 	"circulos": "Círculos de acierto", "balas": "Camino de las balas"}
 
@@ -103,14 +106,16 @@ func elegir(nombre: String) -> void:
 	var la_sala := sala()
 	match nombre:
 		"Jefes":
-			for tipo in JEFES:
-				boton(JEFES[tipo], sacar_jefe.bind(tipo))
+			for i in JEFES.size():
+				var tipo: String = JEFES.keys()[i]
+				boton("%d · %s" % [(i + 1) % 10, JEFES[tipo]], sacar_jefe.bind(tipo))
 			interruptor("A media vida", media_vida, func(si): media_vida = si)
 			interruptor("Quieto", quieto, func(si): quieto = si)
-			pie.text = "Salen lejos de Johnny. Lo que pasa en la sala no cuenta  ·  " + pie.text
+			pie.text = "Atajo en la sala: Mayús + el número. Salen lejos de Johnny  ·  " + pie.text
 		"Zombis":
-			for tipo in ZOMBIS:
-				boton(ZOMBIS[tipo], sacar_zombis.bind(tipo))
+			for i in ZOMBIS.size():
+				var tipo: String = ZOMBIS.keys()[i]
+				boton("%d · %s" % [i + 1, ZOMBIS[tipo]], sacar_zombis.bind(tipo))
 			boton("Cuántos: %d" % cuantos, func():
 				cuantos = CUANTOS[(CUANTOS.find(cuantos) + 1) % CUANTOS.size()]
 				elegir("Zombis")
@@ -240,8 +245,24 @@ func quitar() -> void:
 	pestanas.clear()
 
 
+# Un atajo de la sala de pruebas (partida.gd lo pasa aquí): si la tecla es de un zombi o de un jefe, lo saca (con
+# las opciones del panel) y dice que sí
+func atajo(evento: InputEventKey) -> bool:
+	var n := NUMEROS.find(evento.keycode)
+	if evento.shift_pressed and n >= 0 and n < JEFES.size():
+		sacar_jefe(JEFES.keys()[n])
+	elif not evento.shift_pressed and n >= 0 and n < ZOMBIS.size():
+		sacar_zombis(ZOMBIS.keys()[n])
+	else:
+		return false
+	return true
+
+
 func _unhandled_input(evento: InputEvent) -> void:
 	if fondo == null:
+		return
+	if evento is InputEventKey and evento.pressed and not evento.echo and atajo(evento):
+		get_viewport().set_input_as_handled()
 		return
 	if evento.is_action_pressed("ui_cancel") or evento.is_action_pressed("pausa") \
 			or (evento is InputEventKey and evento.pressed and not evento.echo and evento.keycode == KEY_P):

@@ -51,12 +51,15 @@ arrojables).
   segundo...). **Retroceso** pone el recuento a cero; el **guion** esconde el panel.
 - **El baúl de pruebas** (arriba a la izquierda): todas las armas y los arrojables en cada calidad, para cogerlos y
   cambiarlos. Es de mentira: el baúl de verdad y la partida guardada no se tocan.
+- **Atajos**, también con el panel cerrado: **1…8**, un zombi de cada tipo; **Mayús + 1…0**, un jefe (portera,
+  antidisturbios, cocinero, modista, mascota, gerente, Glotón, Gymbro, jefe de bomberos, científico jefe). Salen con
+  las opciones del panel (a media vida, quieto, cuántos). El número de cada uno está en su botón.
 - **El panel de pruebas** (**P**; P, Esc o B lo cierran). Con el juego parado, por pestañas:
 
 | Pestaña | Qué tiene |
 |---|---|
-| Jefes | un botón por jefe; **A media vida** (sale ya enfadado) y **Quieto** (ataca y avisa, pero no se mueve) |
-| Zombis | un botón por tipo (normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
+| Jefes | un botón por jefe (atajo: **Mayús + 1…0**); **A media vida** (sale ya enfadado) y **Quieto** (ataca y avisa, pero no se mueve) |
+| Zombis | un botón por tipo (atajo: **1…8**: normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
 | Ayudas | se encienden y se apagan: cada línea de ayuda, el panel de daño, los avisos de los jefes en el suelo y la penumbra |
 | Johnny | **Invencible**, **Munición sin fin**, la **Diana** (ponerla o quitarla) y **Siguiente skin** (no se guarda) |
 | Ir a | la **Exposición** (todos los muebles y zombis; F11 vuelve), la **Azotea**, el **Superviviente** (su apartamento ya sin zombis; en el centro comercial, cada vez el siguiente) y la sala de cada minijefe del edificio, en la planta que le tocó |
