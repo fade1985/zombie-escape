@@ -1,5 +1,5 @@
 # El cuerpo de un zombi que muere ardiendo (Corpse de src/zombies.js). Se engancha al zombi muerto y, contando
-# desde que toca el suelo: cae ardiendo (teñido de fuego), se apaga mientras se vuelve carbón, le quedan brasas que parpadean y
+# desde que toca el suelo: cae ardiendo (con sus llamas), se apaga mientras se vuelve carbón, le quedan brasas que parpadean y
 # columnas de humo, y al final se deshace en ceniza. Quedan una quemadura en el suelo y unos huesos (que ya no
 # se van). Las brasas, el humo y los restos salen de los píxeles de verdad de su dibujo tendido.
 class_name Quemado
@@ -91,11 +91,9 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-# El tinte de arder, el mismo que en vida (Zombi.tinte_fuerte), con "k" de fuerza (0 = nada)
+# Las llamas de su shader, las mismas que en vida (Zombi.quemaduras), con "k" de fuerza (0 = apagadas)
 func pintar_fuego(k: float) -> void:
-	var c := Zombi.tinte_fuerte(true, false, t)
-	c.a *= k
-	sprite.material.set_shader_parameter("tinte", c)
+	Zombi.quemaduras(sprite, k, 0.0, t)
 
 
 # Se deshace: copos de ceniza que se levantan del cuerpo

@@ -144,10 +144,12 @@
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, golpes); normal, lento y rápido solo cambian
   números. `zombi_explosivo.gd`, `zombi_tentaculos.gd` y `zombi_venenoso.gd` heredan y añaden su ataque. Con
   `diana` es la de la sala de pruebas de armas: no pierde vida, no ataca y vuelve a su sitio (`casa`). La señal
-  `herido` avisa de cada daño (golpe o bala, o fuego y charcos). Arder y el ácido no se le dibujan encima: lo tiñen
-  (`tinte_fuerte`, con el `tinte` de su shader, `escenas/personajes/destello.gdshader`, el del destello y el hielo):
-  el fuego, naranja-rojo que tiembla a saltos (de las llamas solo lleva su luz: `Llamas.cuerpo`); el ácido, verde que
-  late; con los dos, medio segundo cada uno. A los jefes, el ácido los tiñe igual (`ArmasCreadas.Herida`).
+  `herido` avisa de cada daño (golpe o bala, o fuego y charcos). Arder y el ácido se los pinta su shader
+  (`Zombi.quemaduras`, con `fuego` y `acido`; `escenas/personajes/destello.gdshader`, el del destello y el hielo, que
+  lo tiene todo en `quemaduras.gdshaderinc`): el fuego, llamas que suben desde los pies, lenguas cortas por encima y
+  chispas (de `Llamas` solo lleva su luz naranja: `Llamas.cuerpo`); el ácido, manchas verdes que crecen, con burbujas
+  y gotas, y una luz verde que late (`Brillo.luz_acido`). Lo que luce brilla a oscuras: `brillo.gd` le pone encima
+  una copia del dibujo, sin penumbra, que solo pinta eso. A los jefes, el ácido igual (`ArmasCreadas.Herida`).
 - `sala_armas.gd`: la sala de pruebas de armas (F11 en la planta baja; el sitio, `sala_armas` de `planta.gd`, y la
   monta `mapa.gd`): la diana en el centro, todas las armas (coma y punto; las del banco, creadas en el acto), munición
   sin fin pero recargando, las líneas de ayuda en el suelo (alcance, a quién apunta, por dónde irá la bala, el círculo
@@ -208,7 +210,8 @@
 - `persona.gd`: una persona dibujada con formas (drawHuman del JS; sabe también lo de cada oficio: chaleco, bata,
   cascos, moño, bigote, martillo). Los seis supervivientes ya no la usan: van con su hoja de PixelLab (`aliado.gd`,
   `HOJAS`); `aliado.gd` la sigue sabiendo usar para quien no tenga hoja.
-- `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `particulas.gd`, `mancha.gd`.
+- `mutaciones.gd`, `llamas.gd`, `quemado.gd` (el cuerpo que muere ardiendo), `brillo.gd` (lo que arde o tiene ácido
+  brilla a oscuras), `particulas.gd`, `mancha.gd`.
 
 **Partida y progreso**
 - `edificios.gd`: la ficha de cada edificio (Apartamentos, Centro comercial) y el elegido en el menú; `MINIJEFES`,

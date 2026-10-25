@@ -60,6 +60,7 @@ var arder_acc := 0.0       # la quemadura que lleva sin enseñar
 var arder_texto := 0.0
 var arder_dano := 1.0      # Puntería de quien lo prendió
 var llamas: Llamas
+var acido_t := 0.0         # lo que lleva el ácido royéndole (las manchas crecen)
 var talla_restos := "mediano"   # si muere quemado, la talla de su calavera y sus huesos (quemado.gd)
 var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
@@ -98,6 +99,10 @@ func _ready() -> void:
 	sprite.animation_finished.connect(_al_acabar_animacion)
 	sprite.material = ShaderMaterial.new()
 	sprite.material.shader = DESTELLO
+	# para el fuego y el ácido de su shader: que cada uno arda distinto, y lo que mide su cuerpo en píxeles del dibujo
+	# (de los pies, que están en el 0 del dibujo, a lo alto de la cabeza, un poco por debajo de sus números de daño)
+	sprite.material.set_shader_parameter("semilla", randf() * 100.0)
+	sprite.material.set_shader_parameter("alto", (altura + sprite.position.y) / sprite.scale.y * 0.85)
 	# la barrita de vida encima de la cabeza (sale al herirle)
 	var barra := BARRA.new()
 	barra.zombi = self
@@ -378,7 +383,9 @@ func morir() -> void:
 	Sonido.tocar("muerte")
 	$Sombra.apagar()
 	var cae: bool = sprite.sprite_frames.has_animation("muerte_" + direccion)
-	sprite.material.set_shader_parameter("tinte", Color.TRANSPARENT)   # (si cae ardiendo, lo vuelve a teñir quemado.gd)
+	Zombi.quemaduras(sprite, 0.0, 0.0, tiempo)   # (si cae ardiendo, le vuelve a poner el fuego quemado.gd)
+	if has_node("LuzAcido"):
+		get_node("LuzAcido").queue_free()
 	if arder_t > 0.0 and not cae:
 		# murió ardiendo (sin animación de caer): queda chamuscado y su luz se apaga poco a poco
 		sprite.self_modulate = Color(0.32, 0.27, 0.27)
@@ -410,8 +417,8 @@ func pisar(estados_charco: Dictionary) -> void:
 	Estados.pisar(pisando, estados_charco, true)
 
 
-# El fuego lo prende (o le renueva la quemadura si ya ardía). No se le dibujan llamas: arder lo tiñe (tinte_fuerte), y
-# de las llamas solo lleva su luz naranja, que le alumbra a él y alrededor
+# El fuego lo prende (o le renueva la quemadura si ya ardía). Las llamas se las pinta su shader (quemaduras), y de
+# Llamas solo lleva su luz naranja, que le alumbra a él y alrededor
 func prender(dano_lanzar := 1.0) -> void:
 	if arder_t <= 0.0 and estado != "muerto":
 		prendido.emit()
@@ -468,12 +475,17 @@ func sufrir(delta: float) -> void:
 		arder(delta)
 	if llamas:
 		llamas.fuerza = clampf(arder_t / 0.5, 0.0, 1.0)
-	# arder y el ácido (el de los charcos o el que le sigue royendo del lanza ácido: armas_creadas.gd, la herida) lo
-	# tiñen fuerte; los demás estados, con su tinte suave
+	# arder y el ácido (el de los charcos o el que le sigue royendo del lanza ácido: armas_creadas.gd, la herida) se
+	# los pinta su shader, con su luz; los demás estados, con su tinte suave
 	var arde := arder_t > 0.0
 	var acido := estados.has("acido") or has_node("herida_acido")
+	acido_t = acido_t + delta if acido else 0.0
 	sprite.self_modulate = Color.WHITE if arde or acido else Estados.tinte(estados, tiempo)
-	sprite.material.set_shader_parameter("tinte", Zombi.tinte_fuerte(arde, acido, tiempo))
+	Zombi.quemaduras(sprite, 1.0 if arde else 0.0, Zombi.cuanto_acido(acido_t), tiempo)
+	if acido or has_node("LuzAcido"):
+		var luz := Brillo.luz_acido(self, altura * 0.8)
+		luz.visible = acido
+		luz.fuerza = 0.55
 	if congelado > 0.0:
 		congelado -= delta
 		if congelado <= 0.0:
@@ -482,24 +494,24 @@ func sufrir(delta: float) -> void:
 	Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
 
 
-# El tinte de quien arde o tiene ácido, para el "tinte" de su shader (el del destello): el fuego, naranja-rojo que
-# tiembla a saltos, como una llama; el ácido, verde que late despacio, como burbujeando; con los dos, medio segundo
-# cada uno. En "a", cuánto se mezcla con el dibujo (0 = nada). También lo usan quemado.gd y, con el ácido, los jefes
+# El fuego y el ácido de un dibujo con el shader de los zombis (escenas/personajes/quemaduras.gdshaderinc): "fuego"
+# (0-1, con menos las llamas se encogen) y "acido" (0-1, las manchas crecen), con "t" de reloj. Si hay algo, le pone
+# encima la copia que brilla a oscuras (Brillo). También lo usan quemado.gd y, con el ácido, los jefes
 # (armas_creadas.gd, la herida)
-static func tinte_fuerte(arde: bool, acido: bool, t: float) -> Color:
-	if arde and acido:
-		arde = int(t * 2.0) % 2 == 0
-		acido = not arde
-	if arde:
-		var salto := fposmod(sin(floorf(t * 12.0) * 12.9898) * 43758.5453, 1.0)   # cambia a saltos, 12 veces por segundo
-		var c: Color = Llamas.FUEGO[2].lerp(Llamas.FUEGO[3], salto)
-		c.a = 0.5 + 0.25 * salto
-		return c
-	if acido:
-		var c := Color("#7ddc3a")
-		c.a = 0.45 + 0.2 * sin(t * 3.0)
-		return c
-	return Color.TRANSPARENT
+static func quemaduras(s: CanvasItem, fuego: float, acido: float, t: float) -> void:
+	var m := s.material as ShaderMaterial
+	m.set_shader_parameter("fuego", fuego)
+	m.set_shader_parameter("acido", acido)
+	m.set_shader_parameter("t", fmod(t, 100.0))   # (con números pequeños, el ruido del shader no se estropea)
+	if (fuego > 0.0 or acido > 0.0) and s is AnimatedSprite2D:
+		Brillo.de(s)
+	elif s.has_node("Brillo"):
+		s.get_node("Brillo").hide()   # (se esconde ya, sin esperar a su paso)
+
+
+# Cuánto le han crecido las manchas de ácido tras "puesto" segundos (de un poco a todo en segundo y medio; 0 sin ácido)
+static func cuanto_acido(puesto: float) -> float:
+	return 0.0 if puesto <= 0.0 else clampf(0.3 + puesto / 1.5, 0.0, 1.0)
 
 
 # Se queda helado: quieto, azul y con el dibujo parado, soltando escarcha

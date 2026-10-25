@@ -1,12 +1,15 @@
 # La luz de un fuego: naranja y temblando siempre (brilloFuego de src/luz.js). Preparada para la fase 7: el
 # charco de fuego del molotov la lleva con radio = 3 veces el del fuego y se le pone `vida` (se apaga en su
 # último segundo); un zombi ardiendo, una pequeña (radio 90, fuerza 0.75) que va con él.
+# También la del ácido que roe a un zombi o a un jefe (Brillo.luz_acido): verde y con "latido", que no tiembla como
+# una llama sino que late despacio, como burbujeando.
 # Sin sombras: un fuego se mueve o dura poco, y las sombras son lo que más cuesta.
 extends PointLight2D
 
 @export var radio := 90.0
 @export var fuerza := 1.0
 @export var vida := INF            # segundos que le quedan (INF: hasta que se quite)
+@export var latido := false        # el ácido: late despacio en vez de temblar
 
 var semilla := randf()
 var tiempo := 0.0
@@ -23,4 +26,6 @@ func _process(delta: float) -> void:
 		queue_free()
 		return
 	var b := minf(1.0, vida) * (0.82 + 0.1 * sin(tiempo * 11.0 + semilla * 7.0) + 0.08 * sin(tiempo * 23.7 + semilla * 3.0))
+	if latido:
+		b = minf(1.0, vida) * (0.8 + 0.2 * sin(tiempo * 3.0 + semilla * 7.0))
 	energy = 0.9 * fuerza * b * Luz.fuerza()

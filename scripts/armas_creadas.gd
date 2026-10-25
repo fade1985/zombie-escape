@@ -154,8 +154,8 @@ class Herida extends Node:
 			pintar(zombi, false)
 			queue_free()
 
-	# El verde del ácido en un jefe (que no es Zombi): con el shader de los zombis (el del destello), que se le pone
-	# la primera vez
+	# El ácido en un jefe (que no es Zombi): con el shader de los zombis (el del destello), que se le pone la primera
+	# vez, y su luz verde, que se quita al acabarse
 	func pintar(jefe: Node2D, si: bool) -> void:
 		if not acido or jefe is Zombi or not jefe.get("sprite") is CanvasItem:
 			return
@@ -165,4 +165,10 @@ class Herida extends Node:
 				return
 			s.material = ShaderMaterial.new()
 			s.material.shader = Zombi.DESTELLO
-		s.material.set_shader_parameter("tinte", Zombi.tinte_fuerte(false, si, puesta))
+			s.material.set_shader_parameter("semilla", randf() * 100.0)
+		Zombi.quemaduras(s, 0.0, Zombi.cuanto_acido(puesta) if si else 0.0, puesta)
+		if si:
+			var alto: float = jefe.get("arriba") if jefe.get("arriba") != null else 120.0   # (Minijefe.arriba)
+			Brillo.luz_acido(jefe, alto).fuerza = 0.55
+		elif jefe.has_node("LuzAcido"):
+			jefe.get_node("LuzAcido").queue_free()

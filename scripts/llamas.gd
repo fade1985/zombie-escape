@@ -2,7 +2,7 @@
 #   - Llamas.llama(...): pinta una llama en cualquier dibujo (el charco de fuego del molotov la usa).
 #   - Como nodo: las llamas de alguien que arde (Johnny con el estado "fuego"). Se pone de hijo, encima del
 #     cuerpo, con su lucecita naranja (escenas/luces/fuego.tscn), y se apaga con "fuerza". A un zombi prendido
-#     solo le pone la luz ("cuerpo" a false): a él arder lo tiñe (zombi.gd, tinte_fuerte).
+#     solo le pone la luz ("cuerpo" a false): sus llamas se las pinta su shader (Zombi.quemaduras).
 class_name Llamas
 extends Node2D
 

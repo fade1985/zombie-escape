@@ -34,8 +34,9 @@
 #                  los electrodos, sin chispitas de adorno, que la chispa quita vida y aturde al zombi que tiene delante y salta al
 #                  de al lado y no llega al lejano, una bala por disparo, disparar andando, el disparo en las 8 direcciones y con las
 #                  4 skins (Armas.CREADAS.pistola_electrica)
-#   --tintes       el fuego y el ácido tiñen a los enemigos, sin llamas ni gotas (zombi.gd, tinte_fuerte): zombis ardiendo,
-#                  con ácido y con las dos cosas, a la luz y a oscuras, un jefe con ácido y uno que muere ardiendo
+#   --tintes       el fuego y el ácido de los enemigos, pintados por su shader (zombi.gd, quemaduras): zombis ardiendo,
+#                  con ácido y con las dos cosas, a la luz y a oscuras (lo que luce brilla, brillo.gd), un jefe con ácido y
+#                  uno que muere ardiendo
 #   --ascensorel ascensor arreglado: baja a la sala de mantenimiento y vuelve a la planta (partida.gd)
 #   --viviendas    las viviendas de los rescatados, por la puerta de la derecha de la sala (mapa/viviendas.gd)
 #   --sala         la sala de mantenimiento: sus tres estancias, sus muebles y una foto de cada una (planta.gd)
@@ -3144,12 +3145,14 @@ func texto_del_arma() -> String:
 	return texto[0].get_slice("\n", 0)
 
 
-# Con "--captura --tintes": el fuego y el ácido tiñen a los enemigos, sin llamas ni gotas (zombi.gd, tinte_fuerte;
-# armas_creadas.gd, la herida). En la sala de pruebas de armas, cuatro zombis quietos (como la diana): uno sin nada,
-# uno ardiendo, uno con el ácido del lanza ácido y uno con las dos cosas (medio segundo naranja y medio verde), y un
-# jefe (el gymbro, quieto) con ácido. Fotos a la luz, otra un poco después (el fuego tiembla y el de las dos cosas
-# cambia de color) y a oscuras (el que arde lleva la luz de sus llamas); luego el jefe y su verde que se va al acabarse
-# el ácido, y uno que muere ardiendo (cae teñido y se vuelve carbón)
+# Con "--captura --tintes": el fuego y el ácido de los enemigos, pintados por su shader (zombi.gd, quemaduras;
+# escenas/personajes/quemaduras.gdshaderinc; armas_creadas.gd, la herida): llamas que suben desde los pies, lenguas
+# por encima y chispas; manchas de ácido con burbujas y gotas. En la sala de pruebas de armas, cuatro zombis quietos
+# (como la diana): uno sin nada, uno ardiendo, uno con el ácido del lanza ácido y uno con las dos cosas a la vez, y un
+# jefe (el gymbro, quieto) con ácido. Fotos a la luz, otra un poco después (las llamas suben y las manchas han crecido)
+# y a oscuras (lo que luce brilla: la copia de brillo.gd; el que arde lleva la luz naranja de sus llamas y el del
+# ácido, una verde); luego el jefe con su ácido y su luz verde, que se van al acabarse, y uno que muere ardiendo
+# (cae en llamas, se apagan y se vuelve carbón)
 func probar_tintes() -> void:
 	await pulsar_y_esperar(KEY_F11)
 	var sala: SalaArmas = null
@@ -3171,9 +3174,16 @@ func probar_tintes() -> void:
 	for zombi in z:
 		zombi.diana = true   # quietos en su sitio y sin perder vida
 		zombi.casa = zombi.position
-	var tinte := func(nodo: Node2D) -> float:
-		var m: Material = nodo.get_node("Sprite").material
-		return m.get_shader_parameter("tinte").a if m is ShaderMaterial and m.get_shader_parameter("tinte") != null else 0.0
+	# lo que tiene puesto: "fuego/ácido", y si brilla a oscuras (la copia de brillo.gd, visible)
+	var efecto := func(nodo: Node2D) -> String:
+		var s: Node = nodo.get_node("Sprite") if nodo.has_node("Sprite") else nodo.get("sprite")
+		var m: Material = s.material
+		if not m is ShaderMaterial:
+			return "0.00/0.00 sin brillo"
+		var b: Node = s.get_node_or_null("Brillo")
+		return "%.2f/%.2f %s" % [Brillo.valor(m, "fuego"), Brillo.valor(m, "acido"), "brilla" if b and b.visible else "sin brillo"]
+	var luz_acido := func(nodo: Node2D) -> bool:
+		return nodo.has_node("LuzAcido") and nodo.get_node("LuzAcido").visible and not nodo.get_node("LuzAcido").is_queued_for_deletion()
 	# el fuego y el ácido se renuevan cada medio segundo, mientras se hacen las fotos
 	var sigue := [true]
 	var renovar := func() -> void:
@@ -3186,16 +3196,12 @@ func probar_tintes() -> void:
 	renovar.call()
 	await get_tree().create_timer(0.7).timeout
 	Captura.foto("captura-tintes-luz.png")
-	print("Tintes: sin nada %.2f · ardiendo %.2f · ácido %.2f · las dos %.2f (esperado: 0.00 y los otros tres más de 0.2) · llamas dibujadas %s (esperado: false) · luz del fuego %s (esperado: true)" % [
-		tinte.call(z[0]), tinte.call(z[1]), tinte.call(z[2]), tinte.call(z[3]), z[1].llamas.cuerpo, z[1].llamas.luz.visible])
+	print("Tintes (fuego/ácido): sin nada %s · ardiendo %s · ácido %s · las dos %s (esperado: 0.00/0.00 sin brillo, 1.00/0.00 brilla, 0.00/más de 0.5 brilla y 1.00/más de 0.5 brilla)" % [
+		efecto.call(z[0]), efecto.call(z[1]), efecto.call(z[2]), efecto.call(z[3])])
+	print("Tintes: luz del fuego %s · luz verde del ácido: sin nada %s, ardiendo %s, ácido %s, las dos %s (esperado: true; false, false, true y true)" % [
+		z[1].llamas.luz.visible, luz_acido.call(z[0]), luz_acido.call(z[1]), luz_acido.call(z[2]), luz_acido.call(z[3])])
 	await get_tree().create_timer(0.55).timeout
 	Captura.foto("captura-tintes-luz-2.png")
-	var colores := []
-	for i in 12:   # el de las dos cosas: naranja y verde, a ratos
-		var c: Color = z[3].get_node("Sprite").material.get_shader_parameter("tinte")
-		colores.append("verde" if c.g > c.r else "naranja")
-		await get_tree().create_timer(0.1).timeout
-	print("Tintes: el de las dos cosas, cada 0,1 s: %s (esperado: naranja y verde, a tramos de medio segundo)" % [colores])
 	Luz.evento = 0.85
 	await get_tree().create_timer(0.8).timeout
 	Captura.foto("captura-tintes-oscuro.png")
@@ -3216,10 +3222,11 @@ func probar_tintes() -> void:
 	var vida0: int = jefe.vida
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-tintes-jefe.png")
-	var con: float = tinte.call(jefe)
+	var con: String = efecto.call(jefe)
+	var con_luz: bool = luz_acido.call(jefe)
 	await get_tree().create_timer(3.0).timeout
-	print("Tintes: el jefe con ácido %.2f, al acabarse %.2f (esperado: más de 0.2 y 0.00) · pierde %d (esperado: más de 0) · herida acabada %s (esperado: true)" % [
-		con, tinte.call(jefe), vida0 - jefe.vida, not is_instance_valid(herida)])
+	print("Tintes: el jefe con ácido %s y luz verde %s; al acabarse %s y luz verde %s (esperado: 0.00/más de 0.3 brilla, true, 0.00/0.00 sin brillo y false) · pierde %d (esperado: más de 0) · herida acabada %s (esperado: true)" % [
+		con, con_luz, efecto.call(jefe), luz_acido.call(jefe), vida0 - jefe.vida, not is_instance_valid(herida)])
 	jefe.remove_from_group("zombis")
 	jefe.queue_free()
 	await get_tree().create_timer(0.3).timeout
@@ -3234,8 +3241,8 @@ func probar_tintes() -> void:
 	Captura.foto("captura-tintes-cae.png")
 	await get_tree().create_timer(1.6).timeout
 	Captura.foto("captura-tintes-carbon.png")
-	print("Tintes: el quemado, muerto %s · tinte mientras ennegrece %.2f (esperado: true y menos de 0.3: se va apagando)" % [
-		quemado.estado == "muerto", tinte.call(quemado)])
+	print("Tintes: el quemado, muerto %s · fuego/ácido mientras ennegrece %s (esperado: true y el fuego entre 0 y 0.6: se va apagando)" % [
+		quemado.estado == "muerto", efecto.call(quemado)])
 	get_tree().quit()
 
 
