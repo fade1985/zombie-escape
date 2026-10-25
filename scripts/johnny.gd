@@ -898,24 +898,18 @@ func sumar_municion() -> void:
 
 
 # Coge un arma (teclas 1 a 6, la tienda, el inventario o el baúl): va a su hueco y se la pone en la mano. Si es
-# de fuego, con lo que le quedaba en el cargador al dejarla (las creadas lo guardan en Armas.sacadas; las de depósito,
-# lo que les quedaba en él) o, si es nueva, con el cargador lleno y RESERVA_INICIO cargadores de su munición (los que
-# quepan; las que se llenan con un objeto de la mochila, solo llenas: la gasolina, el ácido o las baterías se buscan)
+# de fuego, con lo que le quedaba en el cargador al dejarla (las de depósito, lo que les quedaba en él) o, si es
+# nueva, con el cargador lleno y RESERVA_INICIO cargadores de su munición (los que quepan; las que se llenan con un
+# objeto de la mochila, solo llenas: la gasolina, el ácido o las baterías se buscan)
 func coger(id: String) -> void:
 	var w: Dictionary = Armas.datos(id)
 	if w.tipo == "fuego":
 		var vieja: String = huecos.fuego
-		if Armas.es_creada(vieja):
-			Armas.sacadas[vieja].balas = balas
-			Armas.sacadas[vieja].deposito = deposito
-		elif vieja != "":
+		if vieja != "":
 			cargadores[vieja] = deposito if Armas.datos(vieja).has("deposito") else balas
 		balas = w.cargador
 		deposito = w.get("deposito", 0.0)
-		if Armas.es_creada(id) and Armas.sacadas[id].has("balas"):
-			balas = Armas.sacadas[id].balas
-			deposito = Armas.sacadas[id].deposito
-		elif cargadores.has(id):
+		if cargadores.has(id):
 			if w.has("deposito"):
 				deposito = cargadores[id]
 			else:

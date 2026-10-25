@@ -47,8 +47,7 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | N | derecho a la azotea; en **Elige edificio**, abre todos los edificios hasta cerrar el juego |
 | M | recuadro de mutaciones |
 | O | soltar un objeto al azar de los que salen donde estás |
-| U | uno de cada objeto al baúl y todas las recetas aprendidas |
-| Y | el papel de una receta que aún no tienes |
+| U | uno de cada objeto al baúl |
 | X | un científico muerto con la página siguiente (no se guarda) |
 | Z | la siguiente skin de Johnny (no se guarda) |
 | F8 | Colecciones al completo |
@@ -77,10 +76,10 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona × 4), el glotón (el
   Glotón; quien te hace daño lo paga), el gymbro (el Gymbro; cuerpo a cuerpo × 3) y el bombero (el jefe de bomberos;
   lo que quema × 3 y el fuego no le hace nada).
-- **Taller** (derecha): el **banco de trabajo** (las recetas aprendidas, que suelta cada jefe al morir en un papel;
-  quedan la atraedora y la congeladora) y el **baúl** (32 casillas; lo guardado no se pierde si Johnny cae; se maneja
-  como el inventario y se arrastra de una mitad a la otra). Por la puerta de la derecha, las **viviendas** de los
-  rescatados: arrimarse a uno para que te acompañe (uno a la vez).
+- **Taller** (derecha): el **banco de trabajo** (en obras: servirá para mejorar las armas con piezas) y el **baúl**
+  (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
+  otra). Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a
+  la vez).
 
 Al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el **ascensor** del pasillo: baja a esta sala y
 vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado y la azotea no tiene.

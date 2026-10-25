@@ -1,6 +1,6 @@
 # Lo que Johnny lanza con el botón de lanzar (clic derecho, E o el gatillo LT): el cóctel molotov y la granada
-# (src/molotov.js y src/granada.js del JS) y las arrojadizas creadas. Son aparte de sus armas y no gastan munición:
-# se cuentan por unidades (el molotov y la granada, hasta su "maximo").
+# (src/molotov.js y src/granada.js del JS), la atraedora y la congeladora. Son aparte de sus armas y no gastan
+# munición: se cuentan por unidades (hasta su "maximo").
 #   - Se MANTIENE el botón para apuntar: en el suelo se ven el alcance (la elipse de puntos alrededor de
 #     Johnny), la zona que arderá o explotará y la trayectoria. Al SOLTAR, lo lanza.
 #   - Con ratón apunta al puntero; con mando, hacia donde se empuja el stick derecho (tan lejos como se
@@ -12,8 +12,9 @@
 #     tipo que ya lleva va a su hueco; si es de otro, a la mano si hay sitio y si no, al repuesto (y si tampoco, no lo
 #     coge). Cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto. Desde el inventario se pasan de
 #     la mano al repuesto y al revés (a_la_mano, al_repuesto).
-#   - Las arrojadizas creadas (fase 7b2, sacadas del baúl): se lanzan como la granada con su propio efecto
-#     (ARROJADIZAS).
+#   - La atraedora y la congeladora (ARROJADIZAS): se lanzan como la granada, con su propio efecto. Hasta el 25 oct
+#     se creaban en el banco de trabajo con una receta; ahora se cuentan como el molotov y la granada, pero no se
+#     tienen al empezar ni las sueltan los zombis.
 # El molotov vuela en parábola (proyectil.gd) y deja un charco de fuego (charco.gd). La granada bota, rueda y
 # explota a los 2 s (granada.gd).
 class_name Lanzables
@@ -55,20 +56,22 @@ const GRANADA := {
 	"roce": 7.0,       # lo que frena al rodar
 }
 const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y explosiones más grandes y largos
-# Las arrojadizas creadas (ARROJADIZAS de src/armas-creadas.js). El daño lo trae cada una (receta + rareza)
+# La atraedora y la congeladora (ARROJADIZAS de src/armas-creadas.js): granadas con otro efecto
+#   inicio y maximo  como en el molotov y la granada (no se tiene ninguna al empezar) · dano  de la explosión
 #   mecha    segundos hasta que revienta · radio  de la explosión · color  del dibujo, el aviso y los anillos
 #   atrae    la atraedora suena y los zombis (a menos de esa distancia) van hacia ella en vez de hacia Johnny
 #   congela  segundos que quedan quietos los que pilla
 # Quedan esas dos: el 25 oct se quitaron del juego la lluvia ácida y las cuatro del centro comercial (la bomba de
 # aceite, la mina despertador, la nube somnífera y la bomba de clavos), y el cóctel molotov del banco
-const ARROJADIZAS := {
-	"atraedora": {"mecha": 3.0, "radio": 110.0, "color": Color("#ffd23f"), "atrae": 520.0},
-	"congeladora": {"mecha": 2.0, "radio": 120.0, "color": Color("#9fe8ff"), "congela": 3.0},
-}
-const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de una arrojadiza creada
-const DATOS := {"molotov": MOLOTOV, "granada": GRANADA}
-const NOMBRES := {"molotov": "molotovs", "granada": "granadas"}
-const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a")}
+const ATRAEDORA := {"inicio": 0, "maximo": 3, "dano": 80, "mecha": 3.0, "radio": 110.0, "color": Color("#ffd23f"), "atrae": 520.0}
+const CONGELADORA := {"inicio": 0, "maximo": 3, "dano": 50, "mecha": 2.0, "radio": 120.0, "color": Color("#9fe8ff"), "congela": 3.0}
+const ARROJADIZAS := {"atraedora": ATRAEDORA, "congeladora": CONGELADORA}
+const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de la atraedora o la congeladora
+const DATOS := {"molotov": MOLOTOV, "granada": GRANADA, "atraedora": ATRAEDORA, "congeladora": CONGELADORA}
+const NOMBRES := {"molotov": "molotovs", "granada": "granadas", "atraedora": "atraedoras", "congeladora": "congeladoras"}
+const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a"), "atraedora": Color("#ffd23f"),
+	"congeladora": Color("#9fe8ff")}   # (los de ARROJADIZAS)
+const ARTIFICIERO := ["molotov", "granada"]   # a los que el talento Artificiero les suma unidades (lanzar_extra)
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
 const MANO := 3            # los tipos que lleva a mano (F cambia entre ellos)
@@ -76,9 +79,8 @@ const REPUESTO := 8        # y los de repuesto
 
 var johnny: Node2D
 var partida: Node
-var cantidades := {"molotov": 0, "granada": 0}
-var creadas: Array = []        # las arrojadizas creadas sacadas del baúl, cada una con sus "unidades"
-var mano: Array = []           # los tipos que lleva a mano, en el orden de F (molotov, granada o la receta de una creada)
+var cantidades := {"molotov": 0, "granada": 0, "atraedora": 0, "congeladora": 0}
+var mano: Array = []           # los tipos que lleva a mano, en el orden de F
 var repuesto: Array = []       # y los de repuesto
 var tipo := "molotov"          # lo que se lanza ahora ("" si no lleva nada a mano)
 var apunte := Vector2.INF      # dónde caería, mientras se mantiene el botón (INF: no se apunta)
@@ -94,8 +96,7 @@ func _ready() -> void:
 # Al empezar la partida: las de siempre, más las del Artificiero, a mano
 func reiniciar(stats: Dictionary) -> void:
 	for k in cantidades:
-		cantidades[k] = DATOS[k].inicio + stats.lanzar_extra
-	creadas.clear()
+		cantidades[k] = DATOS[k].inicio + (stats.lanzar_extra if k in ARTIFICIERO else 0)
 	mano = ["molotov", "granada"]
 	repuesto = []
 	tipo = "molotov"
@@ -105,17 +106,7 @@ func reiniciar(stats: Dictionary) -> void:
 func vaciar() -> void:
 	for k in cantidades:
 		cantidades[k] = 0
-	creadas.clear()
 	repasar()
-
-
-# Una arrojadiza creada sacada del baúl. Va a su hueco (colocar); si no le cabe, no la coge y devuelve false
-func sacar(a: Dictionary) -> bool:
-	if not hay_hueco(a.receta):
-		return false
-	creadas.append(a.duplicate())
-	colocar(a.receta)
-	return true
 
 
 # ¿Tiene dónde llevar uno de ese tipo? En su hueco, si ya lleva (a mano o de repuesto), o en uno libre
@@ -182,29 +173,21 @@ func al_repuesto(k: String) -> void:
 		tipo = mano[0] if not mano.is_empty() else ""
 
 
-# Las que le quedan de ese tipo (de siempre o creada, sumando todas las que haya sacado)
+# Las que le quedan de ese tipo
 func cuantas(k: String) -> int:
-	if cantidades.has(k):
-		return cantidades[k]
-	var n := 0
-	for a in creadas:
-		if a.receta == k:
-			n += a.unidades
-	return n
+	return cantidades.get(k, 0)
 
 
 func nombre(k: String) -> String:
-	return NOMBRES[k] if NOMBRES.has(k) else Recetas.LISTA[k].nombre.to_lower()
+	return NOMBRES[k]
 
 
 func color(k: String) -> Color:
-	if ARROJADIZAS.has(k):
-		return ARROJADIZAS[k].color
 	return COLORES.get(k, Color(0.67, 0.67, 0.67))   # ("": sin nada a mano, en gris)
 
 
 func maximo(k: String) -> int:
-	return DATOS[k].maximo + johnny.stats.lanzar_extra
+	return DATOS[k].maximo + (johnny.stats.lanzar_extra if k in ARTIFICIERO else 0)
 
 
 # Coger uno del suelo: solo si no llega a su máximo y tiene hueco para él
@@ -300,10 +283,6 @@ func lanzar(donde: Vector2) -> void:
 		return
 	Sonido.tocar("lanzar")
 	var sala: Node = johnny.get_parent()
-	if ARROJADIZAS.has(tipo):
-		lanzar_creada(donde, sala)
-		repasar()   # (si era la última, su hueco lo ocupa el primero de repuesto)
-		return
 	cantidades[tipo] -= 1
 	if tipo == "molotov":
 		partida.logros.molotov_lanzado()
@@ -316,29 +295,17 @@ func lanzar(donde: Vector2) -> void:
 		p.fabricante = johnny.stats.fabricante
 		sala.add_child(p)
 	else:
+		# la granada, o la atraedora o la congeladora (la misma granada, con su mecha, su radio y su efecto)
 		var g := BOMBA.new()
+		g.tipo = tipo
 		g.desde = johnny.global_position
 		g.hasta = donde
 		g.radio = radio_zona()
-		g.dano_zombis = roundi(GRANADA.dano * johnny.stats.dano_lanzar)
+		g.dano_zombis = roundi(DATOS[tipo].dano * johnny.stats.dano_lanzar)
+		if ARROJADIZAS.has(tipo):
+			g.fabricante = johnny.stats.fabricante
 		sala.add_child(g)
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
-
-
-# Lanza una unidad de la arrojadiza creada elegida (como la granada, con su mecha, su radio y su efecto)
-func lanzar_creada(donde: Vector2, sala: Node) -> void:
-	var a: Dictionary = creadas.filter(func(o): return o.receta == tipo)[0]
-	a.unidades -= 1
-	if a.unidades <= 0:
-		creadas.erase(a)
-	var g := BOMBA.new()
-	g.tipo = tipo
-	g.desde = johnny.global_position
-	g.hasta = donde
-	g.radio = radio_zona()
-	g.dano_zombis = roundi(a.dano * johnny.stats.dano_lanzar)
-	g.fabricante = johnny.stats.fabricante
-	sala.add_child(g)
 
 
 # ── Dibujo del apunte ──

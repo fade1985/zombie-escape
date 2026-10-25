@@ -155,11 +155,10 @@ static func apuntar(id: String) -> void:
 	apuntados_en = Guardado.escrituras   # la escritura es nuestra: lo recordado sigue valiendo
 
 
-# Tecla F8 (partida.gd): todo encontrado, creado y visto, para probar el programa Colecciones
+# Tecla F8 (partida.gd): todo encontrado y visto, para probar el programa Colecciones
 static func todo_visto() -> void:
 	Guardado.cambiar(func(g):
 		g.encontrados = Objetos.NOMBRES.keys()
-		g.creadas = Recetas.LISTA.keys()
 		g.bestiario = LISTA.keys()
 		g.colecciones_nuevo = true)
 

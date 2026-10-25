@@ -138,7 +138,7 @@ func icono(nombre: String) -> Texture2D:
 func icono_lanzable(k: String) -> String:
 	if k == "":
 		return ""   # no lleva nada a mano para lanzar
-	return k if k in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[k].icono)
+	return k   # (assets/ui/iconos/<tipo>.png)
 
 
 # Una casilla: el marco de metal (casilla-*.png) y el icono dentro. "luz" apaga la que no está en uso. El icono

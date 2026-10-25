@@ -1,8 +1,9 @@
 # La granada de Johnny (src/granada.js). Vuela en parábola, bota una vez, rueda un poco frenando, rebota en
 # las paredes y los muebles, parpadea en rojo (cada vez más deprisa) y a los 2 s explota: la explosión de
 # siempre (explosion.gd), que también hace daño a Johnny, y una mancha chamuscada en el suelo.
-# Las arrojadizas creadas (fase 7b2) son esta misma granada con otro "tipo" (Lanzables.ARROJADIZAS): su mecha,
-# su color (el dibujo de la granada, teñido) y lo suyo al explotar. A Johnny le hacen como mucho 25:
+# La atraedora y la congeladora (antes, arrojadizas creadas del banco) son esta misma granada con otro "tipo"
+# (Lanzables.ARROJADIZAS): su mecha, su color (el dibujo de la granada, teñido) y lo suyo al explotar. A Johnny
+# le hacen como mucho 25:
 #   atraedora    mientras suena, los zombis cercanos van hacia ella (grupo "cebos", zombi.gd)
 #   congeladora  los zombis que pilla se quedan quietos y azules 3 s (la portera, no)
 # (La lluvia ácida, la mina despertador, la nube somnífera y la bomba de clavos se quitaron del juego el 25 oct.)

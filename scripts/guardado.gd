@@ -1,8 +1,8 @@
 # El guardado entre partidas (como src/save.js del JS): un archivo de texto en user://guardado.json.
 # En Windows, user:// es %APPDATA%\Godot\app_userdata\Zombie Escape.
 #
-# Se guarda: dólares, puntos y talentos, armas encontradas, el baúl, las recetas aprendidas, los supervivientes
-# rescatados, récords, el progreso de cada edificio y las colecciones (lo encontrado, creado y visto alguna vez).
+# Se guarda: dólares, puntos y talentos, armas encontradas, el baúl, los supervivientes rescatados, récords, el
+# progreso de cada edificio y las colecciones (lo encontrado y visto alguna vez).
 # Las partidas a medias NO se guardan: si cierras, empiezas el edificio de nuevo.
 #
 # Se usa así:  var s := Guardado.cargar()  ·  s.dolares += 5  ·  Guardado.escribir(s)
@@ -23,8 +23,6 @@ const NUEVO := {
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...} (fase 7b)
-	"baul_armas": [],     # armas creadas en el banco de trabajo, esperando en el baúl (recetas.gd)
-	"recetas": [],        # recetas del banco de trabajo aprendidas (las sueltan los jefes): no se pierden nunca
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)
@@ -33,7 +31,6 @@ const NUEVO := {
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
-	"creadas": [],        # armas creadas alguna vez en el banco de trabajo (ids de Recetas.LISTA): Colecciones
 	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
 	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
 	"cafetera": false,    # la farmacéutica ya ha encontrado el VD-7 en la cafetera (Historia.CAFETERA): no lo repite
@@ -84,19 +81,9 @@ static func cargar() -> Dictionary:
 			baul[id] = int(s.baul[id])
 	s.baul = baul
 	s.encontrados = s.encontrados.filter(func(id): return Objetos.NOMBRES.has(id))
-	# las armas cuya receta ya no existe desaparecen del baúl, y la receta, de las aprendidas y de las creadas
-	# (Colecciones): la lanza, el súpersoplete, el bumerán, el garfio, todas las de cuerpo a cuerpo, el cóctel molotov,
-	# la lluvia ácida y las cuatro arrojadizas del centro comercial se quitaron del juego el 25 oct; el lanzallamas, el
-	# lanza ácido y la pistola eléctrica dejaron de crearse (se compran en la tienda de armas), y las del baúl se van
-	s.baul_armas = s.baul_armas.filter(func(a): return Recetas.LISTA.has(a.get("receta", "")))
-	s.recetas = s.recetas.filter(func(id): return Recetas.LISTA.has(id))
-	s.creadas = s.creadas.filter(func(id): return Recetas.LISTA.has(id))
-	for a in s.baul_armas:
-		a.dano = int(a.dano)
-		a.unidades = int(a.unidades)
-		# el nombre, siempre el de su receta: el arma lleva una copia del de cuando se creó, y así coge el nuevo si se
-		# cambia
-		a.nombre = Recetas.LISTA[a.receta].nombre
+	# las recetas del banco de trabajo se quitaron del juego el 25 oct: las armas creadas del baúl ("baul_armas"), las
+	# recetas aprendidas ("recetas") y las creadas alguna vez ("creadas", de Colecciones) de un guardado viejo no se
+	# leen (solo se copia lo que está en NUEVO) y desaparecen al volver a escribirlo
 	for id in s.edificios:
 		s.edificios[id] = EDIFICIO.merged(s.edificios[id], true)
 		for clave in ["partidas", "victorias", "mejor_planta", "alerta_max", "alerta"]:
@@ -105,15 +92,12 @@ static func cargar() -> Dictionary:
 		s.retos[id] = RETO.merged(s.retos[id], true)
 		for clave in ["intentos", "planta"]:
 			s.retos[id][clave] = int(s.retos[id][clave])
-	# Un guardado de antes de las Colecciones (sin "encontrados"): lo encontrado y lo creado se saca del baúl, una
-	# sola vez (en cuanto se escriba, el archivo ya lleva las claves)
+	# Un guardado de antes de las Colecciones (sin "encontrados"): lo encontrado se saca del baúl, una sola vez (en
+	# cuanto se escriba, el archivo ya lleva la clave)
 	if not leido.has("encontrados"):
 		for id in s.baul:
 			if s.baul[id] > 0:
 				s.encontrados.append(id)
-		for a in s.baul_armas:
-			if not a.receta in s.creadas:
-				s.creadas.append(a.receta)
 	return s
 
 

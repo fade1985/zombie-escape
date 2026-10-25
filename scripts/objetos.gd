@@ -1,8 +1,9 @@
-# Los objetos para crear armas (src/objetos.js del JS). Son chatarra: los sueltan los zombis al morir y Johnny
-# los lleva en la mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al
-# baúl de la sala de mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se
-# pueden guardar a mano (ui/inventario.gd, «Guardar de la mochila»). En el banco de trabajo se
-# juntan de dos en dos para crear armas (recetas.gd). Todos son de rareza gris (común).
+# Los objetos (src/objetos.js del JS). Son chatarra: los sueltan los zombis al morir y Johnny los lleva en la
+# mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al baúl de la sala de
+# mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se pueden guardar a mano
+# (ui/inventario.gd, «Guardar de la mochila»). Hasta el 25 oct se juntaban de dos en dos en el banco de trabajo para
+# crear armas; las recetas se quitaron, y los explosivos, el despertador, el extintor, el trapo y el alcohol ya no
+# sirven para nada: se irán cuando lleguen las piezas para mejorar las armas en el banco.
 # Su dibujo es assets/ui/iconos/obj-<id>.png, de 16×16 (lo saca tools/objetos16.py). La gasolina, el bidón de ácido y
 # la batería son además la munición del lanzallamas, el lanza ácido y la pistola eléctrica: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
@@ -14,12 +15,12 @@
 # cable, el hielo seco y las perchas (con las armas que los pedían), y luego los clavos, el spray de pintura, la
 # lejía, la pistola de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (con las
 # arrojadizas del centro comercial; el lanzallamas, el lanza ácido y la pistola eléctrica pasaron a la tienda de
-# armas). El trapo y la botella de alcohol se quedan, aunque ya no entran en ninguna receta.
+# armas).
 # Dos solo los suelta un zombi, en los dos edificios (DE_UN_ZOMBI): los explosivos y el bidón de ácido.
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
-const BAUL := 32             # casillas del baúl: una por cada objeto distinto y una por cada arma creada
+const BAUL := 32             # casillas del baúl: una por cada objeto distinto
 const SUELTA := 0.10         # probabilidad de que un zombi suelte un objeto (provisional, como en el JS)
 const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: los explosivos, el explosivo (el dinamitero); el bidón de
@@ -36,7 +37,7 @@ const NOMBRES := {
 	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan desde el inventario (USABLES)
 	"vendas": "Vendas",
 }
-# Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no entran en las recetas ni
+# Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no
 # pasan al baúl (al acabar la partida, se pierden). El botiquín de la farmacéutica (supervivientes.gd; cura lo de
 # partida.BOTIQUIN; su icono, assets/ui/iconos/botiquin.png), y las vendas de las tiendas, con lo que curan ("cura";
 # más con el talento Sanitario, y con la Alerta 4, la mitad). Las vendas cuentan en Colecciones como los demás (están
@@ -59,14 +60,12 @@ const TIENDAS := {
 }
 
 
-# El nombre de un objeto o de un arma (las armas de la tienda también entran en las recetas)
+# El nombre de un objeto o de un arma
 static func nombre(id: String) -> String:
 	if id in NOMBRES:
 		return NOMBRES[id]
 	if id in USABLES:
 		return USABLES[id].nombre
-	if Armas.es_creada(id):
-		return Armas.sacadas[id].nombre
 	return Armas.DATOS[id].nombre if id in Armas.DATOS else id
 
 
@@ -76,8 +75,6 @@ static func icono(id: String) -> String:
 		return "obj-" + id
 	if id in USABLES:
 		return USABLES[id].icono
-	if Armas.es_creada(id):
-		return Recetas.icono_de(Armas.sacadas[id].receta)   # el de su receta (hasta que tengan el suyo, el de un ingrediente)
 	return {"mp5": "pistola"}.get(id, id)
 
 
@@ -101,13 +98,13 @@ static func cabe(mochila: Array, id: String) -> bool:
 	return id in mochila or casillas(mochila).size() < MOCHILA
 
 
-# Casillas ocupadas del baúl: una por cada objeto distinto y una por cada arma creada
+# Casillas ocupadas del baúl: una por cada objeto distinto
 static func casillas_baul(s: Dictionary) -> int:
 	var n := 0
 	for id in s.baul:
 		if s.baul[id] > 0:
 			n += 1
-	return n + s.baul_armas.size()
+	return n
 
 
 # ¿Va al baúl? Todo menos lo de curar (USABLES), que se pierde al acabar la partida

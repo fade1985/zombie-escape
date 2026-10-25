@@ -128,13 +128,8 @@ const DATOS := {
 }
 
 
-# ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
-# Las del banco de trabajo que se llevan en la mano: su arma base ("base", de DATOS) con algunos números cambiados, su
-# efecto (armas_creadas.gd) y su "hoja"; el daño lo trae cada arma creada (receta + rareza, recetas.gd). Ahora no
-# queda ninguna: las de cuerpo a cuerpo y el garfio se quitaron del juego el 25 oct, y el lanzallamas, el lanza ácido
-# y la pistola eléctrica pasaron a la tienda de armas (DATOS). Las recetas que quedan son arrojadizas (lanzables.gd),
-# pero esto se queda por si vuelve alguna
-const CREADAS := {}
+# Cómo se dice cada tipo de arma en las fichas («Cuerpo a cuerpo · En la mano»)
+const HUECOS := {"cuerpo": "Cuerpo a cuerpo", "fuego": "A distancia"}
 
 # Lo que llena las armas que tienen "relleno" (un objeto de la mochila): cómo se dice uno (en la sala de pruebas de
 # armas). Su nombre y su icono, los de cualquier objeto; su aviso cuando ya no queda, en MUNICION
@@ -161,29 +156,6 @@ const MUNICION := {
 }
 const HUECOS_MUNICION := 8
 
-# Las armas creadas sacadas del baúl en esta partida. Johnny y el inventario las nombran con un id como
-# "creada_3" (así van en los mismos sitios que las de siempre): aquí está a qué arma creada corresponde cada uno.
-# Lo que le quedaba en el depósito al guardarla se apunta en "balas"
-static var sacadas := {}
-static var contador := 0
-
-
-# Al empezar una partida: las del baúl que se sacaron en la anterior ya se gastaron
-static func olvidar_sacadas() -> void:
-	sacadas.clear()
-
-
-# Apunta un arma creada sacada del baúl y devuelve su id
-static func apuntar(a: Dictionary) -> String:
-	contador += 1
-	var id := "creada_%d" % contador
-	sacadas[id] = a.duplicate()
-	return id
-
-
-static func es_creada(id: String) -> bool:
-	return sacadas.has(id)
-
 
 # El tipo de munición que gasta un arma (MUNICION): las de "relleno", lo que las llena ("" las de cuerpo a cuerpo)
 static func municion(id: String) -> String:
@@ -191,14 +163,6 @@ static func municion(id: String) -> String:
 	return w.get("relleno", w.get("municion", ""))
 
 
-# Los datos de un arma por su id: las de siempre, de DATOS; las creadas, los de su base con lo suyo encima
+# Los datos de un arma por su id (DATOS)
 static func datos(id: String) -> Dictionary:
-	if DATOS.has(id):
-		return DATOS[id]
-	var a: Dictionary = sacadas[id]
-	var c: Dictionary = CREADAS[a.receta]
-	var w: Dictionary = DATOS[c.base].merged(c, true)
-	w.nombre = a.nombre
-	w.dano = a.dano
-	w.creada = a
-	return w
+	return DATOS[id]

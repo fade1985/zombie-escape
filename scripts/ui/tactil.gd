@@ -355,15 +355,14 @@ func dibujar() -> void:
 			"lanzar":
 				var k: String = lz.tipo
 				if k != "":   # (sin nada a mano, el botón vacío)
-					var ico: String = k if k in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[k].icono)
-					icono(donde, ico, 40 * esc)
+					icono(donde, k, 40 * esc)
 					texto(lienzo, donde + Vector2(r * 0.6, r * 0.75), str(lz.cuantas(k)), roundi(16 * esc), Tema.TINTA)
 			"cambiar_lanzable":
 				# el que vendría después de los que lleva a mano (el ⇄ del JS: la fuente pixel art no tiene flechas)
 				var ks := lz.tipos()
 				if not ks.is_empty():
 					var otro: String = ks[(ks.find(lz.tipo) + 1) % ks.size()]
-					icono(donde, otro if otro in ["molotov", "granada"] else Objetos.icono(Recetas.LISTA[otro].icono), 22 * esc)
+					icono(donde, otro, 22 * esc)
 			"atacar":
 				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56 * esc)
 			"modo":

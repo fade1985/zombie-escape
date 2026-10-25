@@ -41,11 +41,6 @@ func probar_alerta() -> void:
 	# A4 y A5
 	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_botiquin(), BOTIQUIN + johnny.stats.botiquin_extra])
 	print("A5 · los disparos se oyen a %.0f (sin alerta, %.0f)" % [Zombi.OIDO * Alerta.oido(), Zombi.OIDO])
-	# las rarezas del banco, en 2000 armas
-	var rarezas := {"verde": 0, "azul": 0, "morada": 0}
-	for i in 2000:
-		rarezas[Recetas.rareza_al_azar()] += 1
-	print("Banco · de 2000 armas: %d verdes, %d azules, %d moradas" % [rarezas.verde, rarezas.azul, rarezas.morada])
 	# el guardia (centro) o el vecino de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
 	if ed.cerrojo == "tarjeta":
 		await montar(0, 0, false)

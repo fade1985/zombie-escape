@@ -1,6 +1,7 @@
 # Los niveles de alerta (parte 8 del centro comercial; como las ascensiones de The Binding of Isaac): de la
 # Alerta 1 a la 5, por edificio. Cada nivel pone una regla fija y se suman: en la Alerta 3 valen la 1, la 2 y la 3.
-# A cambio, un 20 % más de dólares por nivel y armas de mejor rareza en el banco de trabajo.
+# A cambio, un 20 % más de dólares por nivel (hasta el 25 oct, también armas de mejor rareza en el banco de trabajo,
+# que ya no las crea).
 #
 # Se desbloquean de una en una: completar un edificio abre su Alerta 1; completarlo con la 1, la 2, y así. La más
 # alta abierta y la elegida van en el progreso de cada edificio del guardado (alerta_max y alerta).
@@ -27,9 +28,6 @@ const BOTIQUIN := 0.5        # A4: lo que curan los botiquines
 const GUARDIA_VIDA := 2.0    # A5: la vida del guardia de la tarjeta (o del vecino que lleva la llave)...
 const OIDO := 1.5            # ...y la distancia a la que se oyen los disparos
 const DOLARES := 0.2         # recompensa: dólares de más por cada nivel (al completar el edificio)
-# Recompensa: lo que pasa de las verdes a las azules y a las moradas por cada nivel (recetas.gd, RAREZAS:
-# sin alerta, 75 / 20 / 5 %; con la 5, 30 / 50 / 20 %)
-const RAREZA := {"verde": -0.09, "azul": 0.06, "morada": 0.03}
 
 # El nivel de la partida que se juega (0 = sin alerta)
 static var nivel := 0
@@ -68,10 +66,6 @@ static func dolares_extra(dolares: int) -> int:
 	return roundi(dolares * DOLARES * nivel)
 
 
-# La probabilidad de una rareza en el banco de trabajo, con la alerta
-static func prob_rareza(rareza: String, prob: float) -> float:
-	return prob + RAREZA.get(rareza, 0.0) * nivel
-
 
 # El nombre corto ("Alerta 3") y lo que trae ese nivel, para los textos
 static func nombre(n := nivel) -> String:
@@ -81,5 +75,5 @@ static func nombre(n := nivel) -> String:
 static func resumen(n := nivel) -> String:
 	if n <= 0:
 		return "Como siempre"
-	return "%s%s\n+%d %% de dólares y mejores armas en el banco" % [REGLAS[n], " (y lo de antes)" if n > 1 else "",
+	return "%s%s\n+%d %% de dólares" % [REGLAS[n], " (y lo de antes)" if n > 1 else "",
 		roundi(DOLARES * n * 100)]

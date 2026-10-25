@@ -73,7 +73,7 @@ en una línea.
   día) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`).
 - `objetos.gd`: los objetos, los que se usan (`USABLES`), qué sale en cada tienda (`TIENDAS`), los que suelta un
-  solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32. `recetas.gd`: las recetas que quedan y las rarezas.
+  solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32.
   `talentos.gd`, `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego), `logros.gd` (uno = una línea en
   `LISTA`), `historia.gd` (dosier, noticias y la cafetera; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
@@ -91,7 +91,7 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones).
 - `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`), arrastrar con ratón o dedo
-  (`levantar`, `destinos`, `soltar_en`) y el banco de trabajo. `taquilla.gd`: la ventanita de las skins.
+  (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
 
 **mapa/**
 - `mapa.gd`: monta un sitio (suelos, paredes, choques, muebles, peligros, niebla, navegación; escaparates y neones del

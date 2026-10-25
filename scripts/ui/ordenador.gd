@@ -13,7 +13,7 @@
 #     los edificios, para releerlas. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
 #     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
-#   - "Colecciones": lo encontrado, creado y visto alguna vez, por edificio y en porcentaje, y el bestiario
+#   - "Colecciones": lo encontrado y visto alguna vez, por edificio y en porcentaje, y el bestiario
 #     (bestiario.gd) con cada enemigo, su dibujo y una frase. Queda entre partidas; el icono avisa si hay algo nuevo.
 # Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
@@ -768,10 +768,11 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 
 # ── Colecciones ──
 
-# Lo que se ha encontrado, creado y visto alguna vez, de todos los edificios (Guardado: "encontrados", "creadas",
-# "bestiario"). Arriba, las cuentas totales; a la izquierda, por edificio, tres fichas (objetos, armas creadas y
-# páginas del dosier) con su barra, y el bestiario con una ficha por enemigo; a la derecha, lo que se esté
-# mirando: la rejilla de objetos o de armas, las páginas, o el dibujo del enemigo (en silueta si no se ha visto)
+# Lo que se ha encontrado y visto alguna vez, de todos los edificios (Guardado: "encontrados" y "bestiario").
+# Arriba, las cuentas totales; a la izquierda, por edificio, dos fichas (objetos y páginas del dosier) con su barra, y
+# el bestiario con una ficha por enemigo; a la derecha, lo que se esté mirando: la rejilla de objetos, las páginas,
+# o el dibujo del enemigo (en silueta si no se ha visto). Hasta el 25 oct había otra ficha, la de las armas creadas
+# en el banco de trabajo
 func programa_colecciones(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
 	if s.colecciones_nuevo:
@@ -785,7 +786,6 @@ func programa_colecciones(c: VBoxContainer) -> void:
 	fila.add_theme_constant_override("separation", 8)
 	c.add_child(fila)
 	cajita(fila, "Objetos", "mochila", "%d / %d" % [cuantos(Objetos.NOMBRES.keys(), s.encontrados), Objetos.NOMBRES.size()])
-	cajita(fila, "Armas creadas", "herramientas", "%d / %d" % [cuantos(Recetas.LISTA.keys(), s.creadas), Recetas.LISTA.size()])
 	var vistos := cuantos(Bestiario.LISTA.keys(), s.bestiario)
 	cajita(fila, "Bestiario", "zombi", "%d / %d" % [vistos, Bestiario.LISTA.size()])
 	# la lista y el visor se quedan con el hueco que dejan las cajas (con un alto fijo, el contenido se pasaba unos
@@ -816,12 +816,10 @@ func programa_colecciones(c: VBoxContainer) -> void:
 		var fichas := [
 			["objetos", "mochila", "Objetos", cuantos(Objetos.de_edificio(ed), s.encontrados), Objetos.de_edificio(ed).size(),
 				"objetos encontrados"],
-			["armas", "herramientas", "Armas creadas", cuantos(Recetas.de_edificio(ed), s.creadas), Recetas.de_edificio(ed).size(),
-				"armas creadas"],
 			["dosier", "dosier", "Dosier", paginas.filter(func(p): return Historia.encontrada(s, p.id)).size(), paginas.size(),
 				"páginas del dosier"],
 		]
-		fichas = fichas.filter(func(f): return f[4] > 0)   # (las armas creadas del centro comercial: ya no queda ninguna)
+		fichas = fichas.filter(func(f): return f[4] > 0)
 		var hecho := 0
 		var meta := 0
 		for f in fichas:
@@ -852,7 +850,7 @@ func programa_colecciones(c: VBoxContainer) -> void:
 			else "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí.", ver)
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
-	info.text = "Lo que encuentras, creas o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+	info.text = "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
 
 
 # Cuántos de estos ids están ya en una lista del guardado
@@ -891,8 +889,8 @@ func mostrar(lado: CenterContainer, clave: String, hacer: Callable) -> void:
 			b.grab_focus()
 
 
-# La ficha de un edificio en el visor: sus objetos o sus armas creadas (una rejilla de casillas, apagadas las que
-# faltan) o sus páginas del dosier (solo los títulos: se leen en DOSIER.TXT)
+# La ficha de un edificio en el visor: sus objetos (una rejilla de casillas, apagadas las que faltan) o sus páginas
+# del dosier (solo los títulos: se leen en DOSIER.TXT)
 func ficha_edificio(s: Dictionary, ed: String, cual: String) -> Control:
 	var nombre: String = Edificios.datos(ed).nombre
 	var columna := VBoxContainer.new()
@@ -908,33 +906,22 @@ func ficha_edificio(s: Dictionary, ed: String, cual: String) -> Control:
 			if Historia.encontrada(s, paginas[i].id):
 				columna.add_child(texto_tarjeta("Página %d · %s" % [i + 1, paginas[i].titulo], TINTA_SUAVE))
 		return columna
-	columna.add_child(texto_tarjeta("%s · %s" % ["Objetos" if cual == "objetos" else "Armas creadas", nombre], TINTA))
+	columna.add_child(texto_tarjeta("Objetos · %s" % nombre, TINTA))
 	var casillas := GridContainer.new()
 	casillas.columns = 6
 	casillas.add_theme_constant_override("h_separation", 4)
 	casillas.add_theme_constant_override("v_separation", 4)
 	columna.add_child(casillas)
-	if cual == "objetos":
-		for id in Objetos.de_edificio(ed):
-			var tiene: bool = id in s.encontrados
-			var b := casilla(casillas, "o_" + id, "obj-" + id, tiene, false)
-			enlazar(b, "%s%s · %s" % [Objetos.NOMBRES[id], "" if tiene else " (sin encontrar)", Objetos.donde(id, ed)], func(): pass)
-		return columna
-	for id in Recetas.de_edificio(ed):
-		var r: Dictionary = Recetas.LISTA[id]
-		var creada: bool = id in s.creadas
-		var sabe := Recetas.sabe(s, id)
-		var b := casilla(casillas, "a_" + id, Recetas.icono_de(id), creada, not sabe)
-		var texto: String = r.desc if creada else ("receta aprendida: créala en el banco de trabajo" if sabe
-			else "sin receta: la suelta un jefe al caer")
-		enlazar(b, "%s · %s" % [r.nombre, texto], func(): pass)
+	for id in Objetos.de_edificio(ed):
+		var tiene: bool = id in s.encontrados
+		var b := casilla(casillas, "o_" + id, "obj-" + id, tiene)
+		enlazar(b, "%s%s · %s" % [Objetos.NOMBRES[id], "" if tiene else " (sin encontrar)", Objetos.donde(id, ed)], func(): pass)
 	return columna
 
 
-# Una casilla de la rejilla de objetos o armas: un botón de 52 × 52 con el icono a 32 × 32; apagado si aún no se
-# tiene y, si además falta la receta, con un candado en la esquina. Se marca (el mando entra en la rejilla) pero
-# no hace nada al pulsarlo: solo explica en la línea de abajo
-func casilla(padre: Container, nombre: String, icono: String, tiene: bool, candado: bool) -> Button:
+# Una casilla de la rejilla de objetos: un botón de 52 × 52 con el icono a 32 × 32; apagado si aún no se tiene. Se
+# marca (el mando entra en la rejilla) pero no hace nada al pulsarlo: solo explica en la línea de abajo
+func casilla(padre: Container, nombre: String, icono: String, tiene: bool) -> Button:
 	var b := Button.new()
 	b.name = nombre
 	b.focus_mode = Control.FOCUS_ALL
@@ -957,16 +944,6 @@ func casilla(padre: Container, nombre: String, icono: String, tiene: bool, canda
 	if not tiene:
 		imagen.modulate = Color(1, 1, 1, 0.35)   # apagado, como las tarjetas "bloqueada"
 	centro.add_child(imagen)
-	if candado:
-		var cerrojo := TextureRect.new()
-		cerrojo.texture = load("res://assets/ui/iconos/candado.png")
-		cerrojo.position = Vector2(34, 2)
-		cerrojo.size = Vector2(16, 16)
-		cerrojo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		cerrojo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		cerrojo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		cerrojo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		b.add_child(cerrojo)
 	return b
 
 

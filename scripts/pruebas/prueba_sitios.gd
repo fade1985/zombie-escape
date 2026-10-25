@@ -134,9 +134,7 @@ func probar_ascensor() -> void:
 	# con cosas en la mochila, abajo
 	mochila.clear()
 	mochila.append_array(["gasolina", "gasolina", "trapo"])
-	Guardado.cambiar(func(g2):
-		g2.baul = {}
-		g2.baul_armas = [])
+	Guardado.cambiar(func(g2): g2.baul = {})
 	await cruzar(asc)
 	var minimapa = $Pantalla/Minimapa
 	print("Abajo: en «%s» (esperado: mantenimiento) · arriba pone «%s» (esperado: Planta baja · Mantenimiento) · el minimapa, «%s» (esperado: Planta baja) · la planta sigue siendo la %d (esperado: 2)" % [
@@ -171,9 +169,7 @@ func probar_ascensor() -> void:
 	await ir_a_azotea()
 	arreglar_ascensor()
 	print("Azotea: sala de mantenimiento %d (esperado: -1)" % planta.mantenimiento)
-	Guardado.cambiar(func(g2):
-		g2.baul = antes.baul
-		g2.baul_armas = antes.baul_armas)
+	Guardado.cambiar(func(g2): g2.baul = antes.baul)
 	get_tree().quit()
 
 
@@ -228,9 +224,8 @@ func probar_joyeria() -> void:
 	await get_tree().create_timer(0.8, false).timeout
 	Captura.foto("captura-joyeria-abierta.png")
 	# el premio: la vitrina dentro de la cámara y el logro; al pisarla, el arma a la mano y el fajo
-	var a: Dictionary = d.premio.arma
-	print("Premio: %s (%s, %s) · fajo $%d · vitrina en %s · logro Caja fuerte: %s" % [a.nombre, a.rareza, Recetas.detalle(a),
-		d.premio.fajo, d.premio.pos, Logros.estado(Guardado.cargar(), "caja_fuerte")])
+	print("Premio: %s (esperado: un arma de la tienda que no llevas; manos %s, guardadas %s) · fajo $%d · vitrina en %s · logro Caja fuerte: %s" % [
+		d.premio.arma, johnny.huecos, armas_guardadas, d.premio.fajo, d.premio.pos, Logros.estado(Guardado.cargar(), "caja_fuerte")])
 	var manos_antes: Dictionary = johnny.huecos.duplicate()
 	var dolares_antes := dolares
 	var molotovs_antes: int = lanzables.cantidades.molotov
@@ -242,9 +237,7 @@ func probar_joyeria() -> void:
 	await get_tree().create_timer(0.6, false).timeout
 	print("Cogido: %s · manos %s → %s · guardadas %s · dólares %d → %d · molotovs %d → %d · dice «%s»" % [d.premio.cogido,
 		manos_antes, johnny.huecos, armas_guardadas, dolares_antes, dolares, molotovs_antes, lanzables.cantidades.molotov, aviso.text])
-	# si no se sabe ninguna receta, el premio es de una cualquiera (la segunda apertura, más abajo, lo enseña)
-	var recetas_antes: Array = Guardado.cargar().recetas.duplicate()
-	Guardado.cambiar(func(g): g.recetas = [])
+	# la segunda apertura, más abajo, prepara otro premio
 	d.erase("premio")
 	# la otra manera: el guardia cae en el pasillo y suelta la tarjeta dorada junto a la suya
 	await montar(0, 0, false)
@@ -268,9 +261,8 @@ func probar_joyeria() -> void:
 	joyeria.listo = true
 	joyeria.mirar_lector()
 	print("Con la tarjeta dorada: abierta %s · alarma %s · dorada %s · dice «%s»" % [d.abierta, joyeria.alarma(), d.dorada, aviso.text])
-	a = d.premio.arma
-	print("Premio sin saber ninguna receta: %s (%s, %s) · fajo $%d (esperado: una atraedora o una congeladora, morada)" % [a.nombre, a.rareza, Recetas.detalle(a), d.premio.fajo])
-	Guardado.cambiar(func(g): g.recetas = recetas_antes)
+	print("Segundo premio: %s (esperado: un arma de la tienda que no llevas; manos %s, guardadas %s) · fajo $%d" % [d.premio.arma,
+		johnny.huecos, armas_guardadas, d.premio.fajo])
 	get_tree().quit()
 
 

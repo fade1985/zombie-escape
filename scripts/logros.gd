@@ -24,7 +24,7 @@ const LISTA := [
 	{"id": "buen_vecino", "nombre": "Buen vecino", "icono": "corazon", "premio": 15, "meta": 1, "cuenta": "",
 		"desc": "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."},
 	{"id": "manitas", "nombre": "Manitas", "icono": "herramientas", "premio": 10, "meta": 1, "cuenta": "",
-		"desc": "Crea un arma en el banco de trabajo."},
+		"desc": "Mejora un arma en el banco de trabajo."},
 	{"id": "piromano", "nombre": "Pirómano", "icono": "molotov", "premio": 15, "meta": 5, "cuenta": "partida",
 		"desc": "Prende fuego a 5 zombis con un mismo molotov."},
 	{"id": "intocable", "nombre": "Intocable", "icono": "reflejos", "premio": 25, "meta": 1, "cuenta": "",

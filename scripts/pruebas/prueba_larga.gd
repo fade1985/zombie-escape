@@ -1,5 +1,5 @@
 # La prueba larga (--captura a secas, en _process) y lo que mira por el camino: el ordenador, la historia, las
-# Colecciones, los objetos, las recetas, los menús... También --banco. Parte de la cadena de la partida de
+# Colecciones, los objetos, los menús... También --banco. Parte de la cadena de la partida de
 # prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_varias.gd"
 
@@ -392,23 +392,21 @@ func probar_historia() -> void:
 
 
 # Colecciones (bestiario.gd y el programa del ordenador): deja en el guardado parte de lo que hay (8 objetos y los
-# explosivos, una de las dos armas, cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
+# explosivos, cuatro o siete enemigos) y hace las fotos: el escritorio con el aviso de "¡NUEVO!"
 # (captura-escritorio-nuevo.png), los objetos de este edificio (captura-colecciones.png), la ficha del vecino
 # (captura-bestiario.png) y la del gerente, sin ver (captura-bestiario-falta.png). Luego cuenta en la terminal lo
-# encontrado, creado y visto de cada edificio, y comprueba los totales
+# encontrado y visto de cada edificio, y comprueba los totales
 func probar_colecciones() -> void:
 	# lo que la prueba ha ido apuntando sola (meter_zombi avisa al bestiario con cada enemigo que nace)
 	print("Bestiario apuntado por la prueba hasta aquí: %s" % [Guardado.cargar().get("bestiario", [])])
 	var encontrados: Array = Objetos.de_edificio(edificio).slice(0, 8)
 	if not "explosivos" in encontrados:
 		encontrados.append("explosivos")
-	var creadas: Array = ["atraedora"]
 	var vistos: Array = ["normal", "lento", "rapido", "portera"]
 	if edificio == "centro":
 		vistos += ["dependienta", "guardia", "antidisturbios"]
 	Guardado.cambiar(func(g):
 		g.encontrados = encontrados
-		g.creadas = creadas
 		g.bestiario = vistos
 		g.colecciones_nuevo = true)
 	abrir_ordenador()
@@ -427,16 +425,12 @@ func probar_colecciones() -> void:
 	var g := Guardado.cargar()
 	for e in Edificios.LISTA:
 		var objetos: Array = Objetos.de_edificio(e)
-		var armas: Array = Recetas.de_edificio(e)
 		var bichos: Array = Bestiario.de_edificio(e)
-		print("Colecciones de %s: objetos %d/%d | armas %d/%d | bestiario %d/%d" % [e,
+		print("Colecciones de %s: objetos %d/%d | bestiario %d/%d" % [e,
 			objetos.filter(func(id): return id in g.encontrados).size(), objetos.size(),
-			armas.filter(func(id): return id in g.creadas).size(), armas.size(),
 			bichos.filter(func(id): return id in g.bestiario).size(), bichos.size()])
 	if Objetos.de_edificio("apartamentos").size() != 8 or Objetos.de_edificio("centro").size() != 8:
 		push_error("Colecciones: los objetos por edificio no son 8 y 8")
-	if Recetas.de_edificio("apartamentos").size() != 2 or Recetas.de_edificio("centro").size() != 0:
-		push_error("Colecciones: las recetas por edificio no son 2 y 0")
 	if Bestiario.LISTA.size() != 22:
 		push_error("Colecciones: el bestiario no tiene 22 fichas")
 	if Bestiario.retrato("gerente_mutado") == null:
@@ -476,34 +470,19 @@ func probar_noticias() -> void:
 	ordenador.apagar()
 
 
-# Con "--captura --banco": las armas creadas que se quitaron del juego (25 oct: la lanza, el súpersoplete, el bumerán,
-# el garfio, las nueve de cuerpo a cuerpo, el cóctel molotov, la lluvia ácida, las cuatro arrojadizas del centro
-# comercial, y el lanzallamas, el lanza ácido y la pistola eléctrica, que ahora se compran) en el guardado, en el baúl,
-# en las recetas aprendidas y en las creadas (Colecciones), y los objetos quitados (los de las armas de cuerpo a cuerpo
-# y los clavos, el spray, la lejía, la pistola de agua, la cinta americana, la bombona, la jeringuilla, el aceite y el
-# bocadillo) en el baúl y en los encontrados (Colecciones): al cargar desaparecen de todo (guardado.gd); la atraedora y
-# el trapo, que siguen, se quedan. Luego, el baúl abierto con lo que queda (captura-banco-baul.png), la mochila, el
-# banco y el baúl (probar_cosas), las recetas (probar_recetas) y las Colecciones (probar_colecciones). Cada línea dice
-# lo esperado y se cierra
+# Con "--captura --banco": lo de las recetas en un guardado viejo (las armas creadas del baúl, "baul_armas"; las
+# recetas aprendidas, "recetas", y las armas creadas alguna vez, "creadas", de Colecciones), que se quitó el 25 oct, y
+# los objetos quitados ese día (los de las armas de cuerpo a cuerpo y los clavos, el spray, la lejía, la pistola de
+# agua, la cinta americana, la bombona, la jeringuilla, el aceite y el bocadillo) en el baúl y en los encontrados
+# (Colecciones): al cargar desaparece todo (guardado.gd); el trapo, que sigue, se queda. Luego, el baúl abierto con lo
+# que queda (captura-banco-baul.png), la mochila, el banco en obras y el baúl (probar_cosas), los arrojables y las
+# armas de efecto (probar_efectos) y las Colecciones (probar_colecciones). Cada línea dice lo esperado y se cierra
 func probar_banco() -> void:
 	var s := Guardado.cargar()
-	var viejas := {"lanza": "Lanza", "supersoplete": "Súpersoplete", "bumeran": "Bumerán segador", "garfio": "Garfio",
-		"aplastacabezas": "Aplastacabezas", "bate_fuego": "Bate de fuego", "partecuerpos": "Partecuerpos",
-		"inmovilizadora": "Inmovilizadora", "latigo": "Látigo escorpión", "supermaza": "Súper maza", "mangual": "Mangual",
-		"bate_helado": "Bate helado", "latigo_electrico": "Látigo eléctrico", "molotov": "Cóctel molotov",
-		"lluvia_acida": "Lluvia ácida", "bomba_aceite": "Bomba de aceite", "mina_despertador": "Mina despertador",
-		"nube_somnifera": "Nube somnífera", "bomba_clavos": "Bomba de clavos", "lanzallamas": "Lanzallamas",
-		"desintegrador": "Lanza ácido", "pistola_electrica": "Pistola eléctrica"}
-	s.baul_armas = []
-	for id in viejas:
-		var vieja := Recetas.crear("atraedora", "azul")
-		vieja.receta = id   # como las que se crearon cuando estaba en el juego
-		vieja.nombre = viejas[id]
-		vieja.icono = id
-		s.baul_armas.append(vieja)
-	s.baul_armas.append(Recetas.crear("atraedora", "verde"))
-	s.recetas = viejas.keys() + ["atraedora"]
-	s.creadas = viejas.keys() + ["atraedora"]
+	s["baul_armas"] = [{"receta": "atraedora", "nombre": "Atraedora", "hueco": "arrojadiza", "icono": "despertador",
+		"rareza": "azul", "dano": 96, "unidades": 4}]
+	s["recetas"] = ["atraedora", "congeladora"]
+	s["creadas"] = ["atraedora"]
 	var quitados := ["mechero", "llave_inglesa", "hacha", "cuchillas", "taser", "cuerda", "mancuernas", "cadena", "perchas",
 		"hielo_seco", "cable", "clavos", "spray", "lejia", "pistola_agua", "cinta_americana", "bombona", "jeringuilla",
 		"aceite", "bocadillo"]
@@ -513,31 +492,27 @@ func probar_banco() -> void:
 	s.encontrados = quitados + ["trapo"]
 	Guardado.escribir(s)
 	var leido := Guardado.cargar()
-	print("Las %d armas quitadas, viejas, al cargar: baúl %s · aprendidas %s · creadas %s (esperado: [\"atraedora\"], [\"atraedora\"], [\"atraedora\"])" % [
-		viejas.size(), leido.baul_armas.map(func(a): return a.receta), leido.recetas, leido.creadas])
+	print("Lo de las recetas, viejo, al cargar: baul_armas %s · recetas %s · creadas %s (esperado: false, false, false)" % [
+		leido.has("baul_armas"), leido.has("recetas"), leido.has("creadas")])
 	print("Los %d objetos quitados, viejos, al cargar: baúl %s · encontrados %s (esperado: { \"trapo\": 1 }, [\"trapo\"])" % [
 		quitados.size(), leido.baul, leido.encontrados])
-	print("Un guardado nuevo sabe de serie: %s (esperado: [])" % [Guardado.NUEVO.recetas])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-banco-baul.png")
 	inventario.cerrar()
 	await get_tree().process_frame
 	await probar_cosas()
-	await probar_recetas()
+	await probar_efectos()
 	await probar_colecciones()
 	get_tree().quit()
 
 
 # La mochila, el banco y el baúl: unos objetos en la mochila y en el baúl, compra el bate (la fregona va al
-# inventario), crea un arma con una receta sabida, prueba una sin saber, y hace fotos. Luego, las recetas que
-# sueltan los jefes (probar_soltar_recetas)
+# inventario), se arrima al banco de trabajo (en obras: solo avisa) y hace fotos
 func probar_cosas() -> void:
 	Guardado.cambiar(func(g):
 		g.dolares = 20
-		g.baul = {"trapo": 1, "extintor": 2}
-		g.baul_armas = []
-		g.recetas = ["atraedora"])
+		g.baul = {"trapo": 1, "extintor": 2})
 	ahorrados = 20
 	mochila = ["gasolina", "gasolina", "explosivos", "trapo", "despertador"]
 	soltar_objeto("alcohol", johnny.position + Vector2(30, 0))
@@ -552,43 +527,33 @@ func probar_cosas() -> void:
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-inventario.png")
 	inventario.cerrar()
-	abrir_cosas("banco")
-	inventario.tocar("r_atraedora")   # los explosivos y el despertador de la mochila
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-banco.png")
-	inventario.crear_arma()
-	inventario.tocar("r_congeladora")   # tiene los extintores del baúl, pero no la receta (ni ya los explosivos): no hace nada
-	inventario.crear_arma()
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-banco2.png")
-	print("Banco: creadas %s (solo la atraedora)" % Guardado.cargar().baul_armas.map(func(a): return a.receta))
-	inventario.cerrar()
+	mapa.banco.usar.emit()   # como al arrimarse
+	await get_tree().process_frame
+	print("Banco: abre pantalla %s · dice «%s» (esperado: false, El banco de trabajo está en obras...)" % [
+		inventario.abierto != "", aviso.text])
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-baul.png")
 	inventario.cerrar()
 	var g := Guardado.cargar()
-	print("Cosas: mochila %s | guardadas %s | mano %s | baúl %s | armas del baúl %s" % [mochila, armas_guardadas,
-		johnny.huecos.cuerpo, g.baul, g.baul_armas.map(func(a): return "%s %s %d" % [a.nombre, a.rareza, a.dano])])
+	print("Cosas: mochila %s | guardadas %s | mano %s | baúl %s" % [mochila, armas_guardadas, johnny.huecos.cuerpo, g.baul])
 
 
-# Las armas creadas (fase 7b2) y las de efecto de la tienda: saca dos arrojadizas del baúl, lleva el lanza ácido y la
-# pistola eléctrica, dispara la pistola eléctrica, se pone el lanza ácido desde el inventario y dispara, y lanza la
-# congeladora. Cuenta lo que pasa y hace una foto
-func probar_creadas() -> void:
-	Guardado.cambiar(func(g): g.baul_armas = [Recetas.crear("congeladora"), Recetas.crear("atraedora", "morada")])
-	abrir_cosas("baul")
-	for i in 2:
-		inventario.tocar("a0")
-		inventario.sacar()
-	inventario.cerrar()
+# Los arrojables y las armas de efecto: coge congeladoras y atraedoras, lleva el lanza ácido y la pistola eléctrica
+# (de la tienda de armas), dispara la pistola eléctrica, se pone el lanza ácido desde el inventario y dispara, y lanza
+# la congeladora. Cuenta lo que pasa y hace una foto
+func probar_efectos() -> void:
+	dar_lanzable("congeladora")
+	dar_lanzable("atraedora")
 	llevar_arma("desintegrador")
 	# dos de fuego como mucho (partida.llevar_arma): se deja la de repuesto, para que el lanza ácido pase a serlo
 	armas_guardadas.assign(armas_guardadas.filter(func(id): return Armas.datos(id).tipo != "fuego"))
 	llevar_arma("pistola_electrica")
-	print("Creadas sacadas: mano %s | guardadas %s | lanzables %s | baúl %d" % [
+	print("Armas de efecto: mano %s | guardadas %s | lanzables a mano %s, de repuesto %s" % [
 		[Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego)], armas_guardadas.map(Objetos.nombre),
-		lanzables.tipos(), Guardado.cargar().baul_armas.size()])
+		lanzables.mano, lanzables.repuesto])
+	print("En la tienda de armas: %s (esperado: Lanzallamas $60, Lanza ácido $60, Pistola eléctrica $45)" % [
+		["lanzallamas", "desintegrador", "pistola_electrica"].map(func(id): return "%s $%d" % [Armas.DATOS[id].nombre, Armas.PRECIOS[id]])])
 	johnny.direccion = "e"
 	johnny.sostener("fuego")
 	var z1 := meter_zombi("lento", johnny.position + Vector2(80, 0))
@@ -610,7 +575,7 @@ func probar_creadas() -> void:
 	await get_tree().create_timer(0.2).timeout
 	menus.visible = false   # por si ha salido el recuadro de una mutación
 	await get_tree().process_frame
-	Captura.foto("captura-creadas.png")
+	Captura.foto("captura-efectos.png")
 	menus.visible = true
 	print("Lanza ácido: mano %s balas %d | zombi 2 vida %d heridas %s | charcos %d" % [Objetos.nombre(johnny.huecos.fuego),
 		johnny.balas, z2.vida, z2.get_children().filter(func(n): return n.name.begins_with("herida")).map(func(n): return n.name),
@@ -625,8 +590,7 @@ func probar_creadas() -> void:
 
 # El reparto de objetos (parte 6 del centro comercial): cuenta qué sale en cada sitio de los dos edificios y
 # comprueba que las cosas de casa no salen en el centro ni las del centro en los Apartamentos. Luego deja en el
-# suelo los del centro (SOLO_CENTRO), mete uno de cada objeto en el baúl (lo de la tecla U) y hace fotos del banco y
-# del baúl
+# suelo los del centro (SOLO_CENTRO), mete uno de cada objeto en el baúl (lo de la tecla U) y hace una foto del baúl
 func probar_objetos() -> void:
 	var fallos := []
 	for ed_id in ["apartamentos", "centro"]:
@@ -652,52 +616,12 @@ func probar_objetos() -> void:
 			cosa.queue_free()
 	var baul_antes: Dictionary = Guardado.cargar().baul
 	dar_objetos()
-	abrir_cosas("banco")
-	inventario.tocar("r_atraedora")
-	await get_tree().create_timer(0.3).timeout
-	Captura.foto("captura-banco-todo.png")
-	inventario.cerrar()
 	abrir_cosas("baul")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-baul-todo.png")
 	inventario.cerrar()
 	print("Baúl con uno de cada: %d casillas de %d" % [Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL])
 	Guardado.cambiar(func(g): g.baul = baul_antes)
-	await probar_soltar_recetas()
-
-
-func probar_soltar_recetas() -> void:
-	var faltan := ["atraedora", "congeladora"]
-	Guardado.cambiar(func(g): g.recetas = Recetas.LISTA.keys().filter(func(r): return not r in faltan))
-	var donde: Vector2 = johnny.position + Vector2(220, 0)
-	var soltadas := [soltar_receta(donde), soltar_receta(donde), soltar_receta(donde)]
-	print("Recetas soltadas: %s (dos distintas de %s y la tercera vacía)" % [soltadas, faltan])
-	menus.visible = false   # por si ha salido el recuadro de una mutación
-	await get_tree().create_timer(0.5).timeout
-	Captura.foto("captura-receta-suelo.png")
-	for cosa in mapa.cosas.get_children():
-		if cosa.get_script() == BILLETE and cosa.icono == ICONO_RECETA:
-			cosa.cogido.emit()
-			cosa.queue_free()
-	await get_tree().create_timer(0.4).timeout
-	Captura.foto("captura-receta-cogida.png")
-	print("Aviso al coger la receta: '%s' (se ve: %s)" % [aviso.text, aviso.modulate.a > 0.5 and aviso.is_visible_in_tree()])
-	menus.visible = true
-	print("Recetas sabidas: %d de %d | en el suelo: %s | otra al morir un jefe: '%s'" % [
-		Recetas.sabidas(Guardado.cargar()).size(), Recetas.LISTA.size(), recetas_en_suelo, soltar_receta(donde)])
-
-
-# Las recetas del banco: las dos que quedan (la atraedora y la congeladora) se encuentran en el banco, y ninguna de las
-# quitadas el 25 oct sigue ni en el banco ni entre las arrojadizas; el lanzallamas, el lanza ácido y la pistola eléctrica
-# ya no se crean: se venden en la tienda de armas. Lo cuenta en la terminal
-func probar_recetas() -> void:
-	var quitadas := ["molotov", "lluvia_acida", "bomba_aceite", "mina_despertador", "nube_somnifera", "bomba_clavos",
-		"lanzallamas", "desintegrador", "pistola_electrica"]
-	print("Recetas del banco: %s · todas se encuentran %s · de las quitadas siguen %s (esperado: [\"atraedora\", \"congeladora\"], true, [])" % [
-		Recetas.LISTA.keys(), Recetas.LISTA.keys().all(func(r): return Recetas.buscar(Recetas.LISTA[r].con[1], Recetas.LISTA[r].con[0]) == r),
-		quitadas.filter(func(r): return r in Recetas.LISTA or r in Lanzables.ARROJADIZAS)])
-	print("En la tienda de armas: %s (esperado: Lanzallamas $60, Lanza ácido $60, Pistola eléctrica $45)" % [
-		["lanzallamas", "desintegrador", "pistola_electrica"].map(func(id): return "%s $%d" % [Armas.DATOS[id].nombre, Armas.PRECIOS[id]])])
 
 
 # El recuadro de las mutaciones: foto, elige la primera y comprueba que cambia los atributos
@@ -728,10 +652,9 @@ func probar_menus() -> void:
 	print("Dólares de la partida: %d | muertos: %d" % [dolares, muertos])
 	await probar_ordenador()
 	await probar_cosas()
-	await probar_creadas()
+	await probar_efectos()
 	await probar_objetos()
 	await probar_curas()
-	await probar_recetas()
 	await supervivientes.probar()
 	await probar_sangre()
 	await probar_mutaciones()

@@ -16,7 +16,7 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       vsync, guardado en disco (no en el navegador), mando desde el primer menú.
 - [ ] **Inglés.** El juego está solo en español; sin inglés se pierde casi todo el mercado de Steam. Godot traduce
       con una tabla CSV (`tr()`), pero hoy solo cuatro scripts la usan. Pasar menús, HUD, logros, talentos,
-      recetas, frases de supervivientes y noticias; decidir qué hacer con los carteles dibujados en sprites.
+      armas y objetos, frases de supervivientes y noticias; decidir qué hacer con los carteles dibujados en sprites.
       Dejar el español como idioma de origen y el inglés como segundo; otros idiomas, más adelante.
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
       ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,

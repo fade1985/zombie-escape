@@ -86,7 +86,6 @@ const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
-const ICONO_RECETA := preload("res://assets/ui/iconos/receta.png")   # la hoja de receta que sueltan los jefes
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
 const BOTIQUIN := 50               # lo que cura el botiquín de los baños (BOTIQUIN_CURA en el JS)
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
@@ -120,13 +119,12 @@ var presentar_en_prueba := false   # en la partida de prueba la presentación se
 const JEFE_TARDA := 0.6            # lo que tarda el jefe en salir al entrar en su sala
 var lanzables := Lanzables.new()   # el molotov y la granada (lanzables.gd)
 var mutaciones := Mutaciones.new() # las mutaciones de esta partida (mutaciones.gd)
-var inventario := INVENTARIO.new() # las pantallas del inventario, el baúl y el banco de trabajo
+var inventario := INVENTARIO.new() # las pantallas del inventario y el baúl
 var supervivientes := Supervivientes.new()   # el superviviente de la partida, la horda y los vecinos
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
 var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
 var joyeria := Joyeria.new()       # la cámara acorazada de la joyería del centro comercial (joyeria.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
-var recetas_en_suelo: Array = []   # las recetas soltadas por los jefes que aún no se han cogido (no se repiten)
 var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
@@ -229,7 +227,6 @@ func _ready() -> void:
 		johnny.balas = 0
 		johnny.municion.clear()
 		lanzables.vaciar()
-	Armas.olvidar_sacadas()   # las armas creadas sacadas del baúl en la partida anterior ya se gastaron
 	supervivientes.elegir()
 	# la joyería del centro comercial (parte 9): una por partida, en una planta al azar de la 1ª a la 3ª
 	Planta.joyeria_planta = randi_range(2, Planta.PLANTAS - 1) if ed.generador == "tienda" else 0
@@ -382,7 +379,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if mapa.ordenador:
 		mapa.ordenador.usar.connect(abrir_ordenador)
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
-		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
+		mapa.banco.usar.connect(func(): decir("El banco de trabajo está en obras: pronto servirá para mejorar las armas", 3.0))
 		mapa.taquilla.usar.connect(abrir_taquilla)
 		# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
 		if fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
@@ -888,7 +885,7 @@ func icono_caja() -> Texture2D:
 	return icono_municion(tipo if tipo in Armas.MUNICION else "balas")
 
 
-# Un objeto para el banco de trabajo en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
+# Un objeto en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
 # bidón de ácido y la batería, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
 # a la mochila hasta que se aparte)
 func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
@@ -955,31 +952,6 @@ func repuesto(tipo: String) -> String:
 	return ""
 
 
-# La hoja de una receta del banco de trabajo (recetas.gd): la sueltan los jefes al morir. Una al azar de las que
-# aún no se saben, sin repetir las que ya están en el suelo sin recoger (recetas_en_suelo). Al cogerla se aprende
-# para siempre. Devuelve cuál ha soltado ("" si ya se saben todas)
-func soltar_receta(donde: Vector2) -> String:
-	var id := Recetas.para_soltar(Guardado.cargar(), recetas_en_suelo)
-	if id == "":
-		return ""
-	recetas_en_suelo.append(id)
-	var cosa := BILLETE.new()
-	cosa.johnny = johnny
-	cosa.icono = ICONO_RECETA
-	cosa.tamano = 2.0
-	cosa.position = donde
-	cosa.cogido.connect(func():
-		recetas_en_suelo.erase(id)
-		Recetas.aprender(id)
-		Sonido.tocar("compra")
-		numero(cosa.position, "Receta: " + Recetas.LISTA[id].nombre, Tema.AMARILLO)
-		decir("¡Receta nueva: %s! Ya puedes crearla en el banco de trabajo" % Recetas.LISTA[id].nombre, 3.5))
-	# si se queda sin coger y Johnny se va de la sala, el papel se pierde: otro jefe la podrá volver a soltar
-	cosa.tree_exited.connect(func(): recetas_en_suelo.erase(id))
-	mapa.cosas.add_child.call_deferred(cosa)
-	return id
-
-
 # Delante del armarito de un baño: el botiquín cura (más con Sanitario); con la vida llena se deja para luego
 func coger_botiquin(armarito: Node2D) -> void:
 	if johnny.vida >= johnny.vida_tope():
@@ -1023,7 +995,7 @@ func cura_de(id: String) -> int:
 	return roundi((base + johnny.stats.botiquin_extra) * Alerta.botiquin())
 
 
-# El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
+# El inventario (Tab, I o Select) o el baúl: se para el juego y sale su pantalla
 func abrir_cosas(que: String) -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return
@@ -1209,7 +1181,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 				soltar_municion(zombi.position)
 		elif not soltado and randf() < MUNICION_ZOMBI:
 			soltar_municion(zombi.position)
-		# y a veces un objeto para el banco de trabajo (los jefes, dos seguros), de los que salen aquí
+		# y a veces un objeto (los jefes, dos seguros), de los que salen aquí
 		var tienda: String = planta.sitios[aqui].get("tienda", "")
 		if tipo in JEFES:
 			for i in 2:
@@ -1221,9 +1193,6 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		# Caníbal: cada zombi que matas te cura
 		if johnny.stats.canibal > 0.0:
 			johnny.curar(maxi(1, roundi(johnny.stats.canibal * johnny.stats.vida_max)))
-		# los jefes, siempre una receta del banco de trabajo que aún no se tenga (si queda alguna)
-		if tipo in JEFES:
-			soltar_receta(zombi.position)
 		# algunos jefes, la primera vez, sueltan una skin (skins.gd: la portera, el portero; el Glotón, el glotón; el
 		# Gymbro, el gymbro), para siempre (se pone en la taquilla)
 		var skin := Skins.de_jefe(tipo)
@@ -1329,15 +1298,11 @@ func _unhandled_input(evento: InputEvent) -> void:
 	elif evento.keycode == KEY_O:
 		soltar_objeto(Objetos.al_azar(edificio, planta.sitios[aqui].get("tienda", "")), johnny.position + Vector2(0, 50))   # un objeto, para probar
 	elif evento.keycode == KEY_U:
-		dar_objetos()   # uno de cada objeto al baúl y todas las recetas, para probar el banco de trabajo
+		dar_objetos()   # uno de cada objeto al baúl, para probar el baúl
 	elif evento.keycode == KEY_F8:
-		# todo encontrado, creado y visto, para probar el programa Colecciones del ordenador (bestiario.gd)
+		# todo encontrado y visto, para probar el programa Colecciones del ordenador (bestiario.gd)
 		Bestiario.todo_visto()
-		decir("Colecciones: todo encontrado, creado y visto")
-	elif evento.keycode == KEY_Y:
-		# una receta a los pies, como la que suelta un jefe al morir
-		if soltar_receta(johnny.position + Vector2(0, 50)) == "":
-			decir("Ya tienes todas las recetas (o están en el suelo)")
+		decir("Colecciones: todo encontrado y visto")
 	elif evento.keycode == KEY_X:
 		probar_cientifico()   # un científico muerto a los pies, para ver su dibujo
 	elif evento.keycode == KEY_Z:
@@ -1385,11 +1350,10 @@ func ir_al_jefe(tipo: String) -> void:
 			return
 
 
-# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios) y enseña todas las recetas, para probarlas
+# Tecla U: mete en el baúl uno de cada objeto (de los dos edificios)
 func dar_objetos() -> void:
 	Guardado.cambiar(func(g):
 		for id in Objetos.NOMBRES:
 			if not id in Objetos.USABLES:   # (los de curar no van al baúl)
-				g.baul[id] = g.baul.get(id, 0) + 1
-		g.recetas = Recetas.LISTA.keys())
-	decir("Uno de cada objeto al baúl, y todas las recetas")
+				g.baul[id] = g.baul.get(id, 0) + 1)
+	decir("Uno de cada objeto al baúl")

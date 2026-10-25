@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://caymggq454krj"
-path="res://.godot/imported/receta.png-70262302536fcb2e426a5dbb8a8c1a19.ctex"
+uid="uid://kb7qou351kx0"
+path="res://.godot/imported/atraedora.png-cc0740bcee0d9967fdb7829264b934b8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/iconos/receta.png"
-dest_files=["res://.godot/imported/receta.png-70262302536fcb2e426a5dbb8a8c1a19.ctex"]
+source_file="res://assets/ui/iconos/atraedora.png"
+dest_files=["res://.godot/imported/atraedora.png-cc0740bcee0d9967fdb7829264b934b8.ctex"]
 
 [params]
 

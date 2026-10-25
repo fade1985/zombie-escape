@@ -1,4 +1,4 @@
-# La llamarada del lanzallamas de Johnny (Armas.CREADAS.lanzallamas): mientras se ataca, un chorro de fuego fijo que
+# La llamarada del lanzallamas de Johnny (Armas.DATOS.lanzallamas): mientras se ataca, un chorro de fuego fijo que
 # sale de la boca del tubo, estrecho, y se abre en cono hasta su alcance (las paredes y los muebles lo cortan).
 # Quema a todos los zombis que pilla dentro, uno detrás de otro: cada TICK les quita su parte del daño por segundo y
 # los deja ardiendo, y uno de cada EMPUJA pellizcos (cada medio segundo) los empuja un poco. Solo a los zombis: ni a
@@ -11,7 +11,7 @@
 # (sin humo). Aquí, además, las chispas que saltan, la luz que alumbra alrededor mientras sale (más en los sitios
 # oscuros) y el apagado: al soltar, la llama se despega de la boca y se va (CRECE, APAGA).
 #
-# El lanza ácido (Armas.CREADAS.desintegrador, efecto "acido") echa por aquí su chorro, igual de largo y con el mismo
+# El lanza ácido (Armas.DATOS.desintegrador, efecto "acido") echa por aquí su chorro, igual de largo y con el mismo
 # cono: lo que cambia es el dibujo (escenas/armas/chorro_acido.gdshader: un chorro de ácido a presión que se abre en abanico, verde),
 # el sonido (un siseo de agua a presión), que no alumbra, que en vez de chispas suelta gotitas que caen (y salpican
 # contra la pared) y que, en vez de prenderlos, deja a los zombis la herida de ácido (ArmasCreadas.herir). Como no es

@@ -1,4 +1,4 @@
-# La gota de ácido que cuelga de la boquilla del lanza ácido (Armas.CREADAS.desintegrador) mientras Johnny no echa el
+# La gota de ácido que cuelga de la boquilla del lanza ácido (Armas.DATOS.desintegrador) mientras Johnny no echa el
 # chorro: se va hinchando en el labio de abajo de la boquilla, cuelga un momento estirándose, se suelta y cae al suelo,
 # donde salpica un poquito (sin charco) con un «plic». Luego empieza otra. Se pinta a píxeles del dibujo de Johnny (de
 # 2 unidades, en su misma rejilla) y con los verdes del ácido, para que parezca parte del dibujo.

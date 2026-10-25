@@ -12,7 +12,7 @@
 # archivo de su tema, su opción en empezar_prueba() (abajo) y su línea en esta lista.
 #
 # Sin nada más, la prueba larga (_process, en prueba_larga.gd): un apartamento, el jefe, los menús, el ordenador, el
-# inventario, las recetas, la historia, las Colecciones... y se cierra. Con algo más, solo una parte:
+# inventario, las armas de efecto, la historia, las Colecciones... y se cierra. Con algo más, solo una parte:
 #   --edificio centro   en el centro comercial (vale también con las demás; lo lee menu_principal.gd)
 #   --jefe X            el jefe de la 1ª planta (centro: el antidisturbios si no se dice; Apartamentos: la portera, en la
 #                       planta baja)
@@ -44,7 +44,7 @@
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --evento X          ese evento sorpresa: apagon, incendio u horda                        [eventos.gd, probar()]
-#   --banco             lo quitado del juego desaparece del guardado; luego el banco, las recetas y las Colecciones
+#   --banco             lo quitado desaparece del guardado; luego el banco, las armas de efecto y Colecciones
 #                                                                                            [prueba_larga.gd]
 extends "res://scripts/pruebas/prueba_larga.gd"
 
