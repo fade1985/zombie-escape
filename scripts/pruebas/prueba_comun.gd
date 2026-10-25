@@ -14,7 +14,7 @@ func preparar_prueba() -> void:
 	Alerta.nivel = int(Captura.dato("--alerta", "0"))
 	# con "--evento apagon" (incendio, horda), la prueba de ese evento sorpresa (eventos.gd)
 	eventos.forzado = Captura.dato("--evento")
-	# con "--piso-pasillo", los pisos normales salen con pasillo en T (apartamento.gd: probar_pasillo)
+	# con "--piso-pasillo", los pisos normales salen con pasillo en T (apartamento.gd: PLANO_PASILLO)
 	Apartamento.con_pasillo = "--piso-pasillo" in OS.get_cmdline_user_args()
 
 
