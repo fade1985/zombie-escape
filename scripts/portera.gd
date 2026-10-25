@@ -57,13 +57,6 @@ const BAJAR := {"s": 0, "se": 3, "e": 0, "ne": 1, "n": 1, "no": 0, "o": 0, "so":
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 # El fotograma del fregonazo en el que la fregona toca el suelo, en cada dirección
 const GOLPE_FREGONA := {"s": 4, "se": 4, "e": 4, "ne": 4, "n": 4, "no": 5, "o": 5, "so": 4}
-# El vapor de la rabia (enfadada): nubecitas de pixel art que salen a bocanadas de las orejas y de lo alto de la
-# cabeza, rosadas al salir y blancas al subir. Los colores, como los de BalaZombi.POLVO
-const VAPOR_ROSA := {"borde": Color("#8a5a62", 0.55), "oscuro": Color("#d89aa0", 0.7), "medio": Color("#f0c0c0", 0.75),
-	"claro": Color("#fff0ee", 0.85), "brillo": Color("#fff0ee", 0.85)}
-const VAPOR_BLANCO := {"borde": Color("#8c8a90", 0.45), "oscuro": Color("#c8c6cc", 0.6), "medio": Color("#e6e4e8", 0.65),
-	"claro": Color("#ffffff", 0.75), "brillo": Color("#ffffff", 0.75)}
-const SALIDAS := [Vector2(-18, -82), Vector2(18, -82), Vector2(0, -98)]   # las orejas y la coronilla
 
 @export var vida_max := 600
 @export var radio := 32.0
@@ -84,8 +77,7 @@ var mirada := Vector2.DOWN    # hacia dónde mira (gira suave)
 var invulnerable := false
 var contacto := DANO_CONTACTO
 var tiempo := 0.0
-var bocanadas := []           # el vapor: [sitio, velocidad, edad, lo que dura, tamaño, balanceo, vuelta]
-var siguiente_bocanada := 0.0
+var vapor := VaporRabia.new(98.0)   # el vapor de la cabeza, enfadada (vapor_rabia.gd)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -112,7 +104,7 @@ func _physics_process(delta: float) -> void:
 		return
 	tiempo += delta
 	t += delta
-	echar_vapor(delta)
+	vapor.actualizar(delta, enfadada() and estado != "muerto", estado not in ["andar", "recuperar"])
 	espera_fregonazo -= delta
 	espera_llamar -= delta
 	invulnerable = false
@@ -386,8 +378,7 @@ func enfadarse(johnny: Node2D) -> void:
 	for bala in get_tree().get_nodes_in_group("balas_zombi"):
 		bala.queue_free()
 	gritar("¡QUE ACABO DE FREGAR!", Color("#ffd23f"), 26)
-	for i in 8:   # un chorro de vapor de golpe
-		bocanada(SALIDAS[i % 3], randf_range(1.3, 1.6), 1.5)
+	vapor.chorro()
 	Sonido.tocar("rugido")
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < 260.0:
@@ -477,6 +468,7 @@ func herir(cantidad: float, _color := Color.WHITE) -> void:
 
 func morir() -> void:
 	estado = "muerto"
+	vapor.bocanadas.clear()   # (si no, las nubecitas se quedarían quietas encima del cuerpo)
 	Sonido.tocar("explosion")
 	$Sombra.apagar(1.0)
 	remove_from_group("zombis")
@@ -625,48 +617,6 @@ func _draw() -> void:
 			draw_circle(Vector2.ZERO, 70.0 * k, Color(rojo, 0.25))
 
 
-# Enfadada, le sale vapor de la cabeza a bocanadas (pff... pff...): más a menudo mientras ataca que cuando anda
-func echar_vapor(delta: float) -> void:
-	for b in bocanadas:
-		b[2] += delta
-		b[0] += b[1] * delta
-		b[1] *= 1.0 - delta * 1.5   # se frena al subir
-	bocanadas = bocanadas.filter(func(b): return b[2] < b[3])
-	if not enfadada() or estado == "muerto":
-		return
-	siguiente_bocanada -= delta
-	if siguiente_bocanada <= 0.0:
-		var ataca := estado != "andar" and estado != "recuperar"
-		siguiente_bocanada = randf_range(0.2, 0.3) if ataca else randf_range(0.35, 0.55)
-		var grande := randf() < 0.2   # de vez en cuando, una más gorda
-		var donde: Vector2 = SALIDAS.pick_random()
-		bocanada(donde, 1.4 if grande else 1.0)
-		if grande or ataca:
-			bocanada(SALIDAS.pick_random(), 0.8)
-
-
-# Una nubecita de vapor en "donde": sube (y, si sale de una oreja, se abre hacia ese lado)
-func bocanada(donde: Vector2, tamano: float, fuerza := 1.0) -> void:
-	var hacia := Vector2(signf(donde.x) * randf_range(20.0, 40.0) + randf_range(-10.0, 10.0), -randf_range(60.0, 90.0))
-	bocanadas.append([donde + Vector2(randf_range(-3, 3), 0), hacia * fuerza, 0.0, randf_range(1.1, 1.4), 9.0 * tamano,
-		randf() * TAU, randi() % 4])
-
-
-# Cada nubecita se hincha al subir, se balancea a los lados, pasa de rosa a blanco y al final se deshace a trozos
-# (los dibujos, de BalaZombi.dibujar_polvo; va en un nodo aparte, "Vapor", para que se pinte por encima de ella)
+# Enfadada, el vapor de la cabeza (va en un nodo aparte, "Vapor", para que se pinte por encima de ella)
 func _pintar_vapor() -> void:
-	for b in bocanadas:
-		var k: float = b[2] / b[3]
-		var tam := roundi(b[4] * (0.7 + 0.7 * k))
-		var rosa := k < 0.35
-		var clave := "vapor_%d_%d_%d" % [int(rosa), tam, b[6]]
-		if not BalaZombi.dibujos.has(clave):
-			BalaZombi.dibujos[clave] = BalaZombi.dibujar_polvo(tam, b[6] * TAU / 12.0, VAPOR_ROSA if rosa else VAPOR_BLANCO)
-		var centro: Vector2 = b[0] + Vector2(sin(b[2] * 6.0 + b[5]) * 4.0, 0.0)
-		centro = (centro / 2.0).round() * 2.0   # en la cuadrícula de los píxeles del dibujo
-		var deshace := (k - 0.65) / 0.35   # pasados dos tercios, cada vez le faltan más trozos
-		var pixeles: Array = BalaZombi.dibujos[clave]
-		for i in pixeles.size():
-			if deshace > 0.0 and fmod(i * 0.618 + b[5], 1.0) < deshace:
-				continue
-			$Vapor.draw_rect(Rect2(centro + pixeles[i][0], Vector2(2, 2)), pixeles[i][1])
+	vapor.pintar($Vapor)

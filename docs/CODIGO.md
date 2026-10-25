@@ -52,7 +52,8 @@ en una línea.
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
 - `portera.gd`: la jefa por defecto, por estados.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
-  `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). Heredan:
+  `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
+  (también el de la portera) es `vapor_rabia.gd`. Heredan:
   - Apartamentos: `gloton.gd`, `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.

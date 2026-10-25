@@ -19,6 +19,7 @@
 #   --porqueria, --gimnasio, --cubos, --llamas   (con --jefe gloton, gymbro, portera o bombero) la habitación de ese
 #                       jefe; con --llamas, también su giro con el lanzallamas            [prueba_jefes_salas.gd]
 #   --gotas             (con --jefe portera) el abanico de agua sucia y sus salpicaduras    [prueba_jefes_salas.gd]
+#   --vapor             el vapor de la cabeza de cada minijefe al enfadarse                [prueba_jefes_salas.gd]
 #   --ir-jefe           Mayús + 7, 8, 9 y P: derecho a la habitación de cada jefe          [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --armas             la sala de pruebas de armas (F11)                                    [prueba_armas.gd]
@@ -86,6 +87,9 @@ func empezar_prueba() -> void:
 	elif "--cubos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cubos()
+	elif "--vapor" in args:
+		set_process(false)   # sin la prueba larga
+		probar_vapor()
 	elif "--gotas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gotas()

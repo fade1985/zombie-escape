@@ -22,6 +22,10 @@ const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 @export var vida_max := 500
 @export var radio := 32.0
 @export var arriba := 120.0        # a qué altura tiene la cabeza (los textos, el vapor y las estrellitas)
+# El vapor de la cabeza (vapor_rabia.gd): a qué altura tiene la coronilla (0: 20 por debajo de "arriba") y lo
+# separadas que tiene las orejas
+@export var coronilla := 0.0
+@export var orejas := 18.0
 @export var dano_contacto := 8     # si Johnny se le pega, también hace daño
 
 var vida := 500
@@ -37,6 +41,7 @@ var invulnerable := false
 var contacto := 0
 var tiempo := 0.0
 var vapor := true              # el vapor de la cabeza al enfadarse (el gerente mutado no echa)
+var rabia: VaporRabia          # las nubecitas de ese vapor
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -45,6 +50,7 @@ var vapor := true              # el vapor de la cabeza al enfadarse (el gerente 
 func _ready() -> void:
 	vida = vida_max
 	contacto = dano_contacto
+	rabia = VaporRabia.new(coronilla if coronilla > 0.0 else arriba - 20.0, orejas)
 	$Vapor.draw.connect(_pintar_encima)
 	vida_cambiada.emit.call_deferred(vida, vida_max)
 
@@ -69,6 +75,7 @@ func _physics_process(delta: float) -> void:
 		return
 	tiempo += delta
 	t += delta
+	rabia.actualizar(delta, enfadado() and vapor, estado not in ["andar", "recuperar", "atontado"])
 	invulnerable = false
 	contacto = dano_contacto
 	var johnny := get_tree().get_first_node_in_group("jugador")
@@ -82,6 +89,8 @@ func _physics_process(delta: float) -> void:
 		fase = 2
 		cambiar("grito")
 		al_enfadarse(johnny)
+		if vapor:
+			rabia.chorro()
 	if estado == "grito":
 		# un momento gritando, sin que le hagan daño
 		invulnerable = true
@@ -309,10 +318,7 @@ func poner(nombre: String, velocidad := 1.0) -> void:
 func _pintar_encima() -> void:
 	if estado == "muerto":
 		return
-	if enfadado() and vapor:
-		for i in 3:
-			var k := fmod(tiempo * 1.2 + i / 3.0, 1.0)
-			$Vapor.draw_circle(Vector2((i - 1) * 18.0, -arriba + 6.0 - k * 36.0), 3.0 + k * 7.0, Color(1, 1, 1, 0.75 * (1.0 - k)))
+	rabia.pintar($Vapor)
 	if estado == "atontado":
 		for i in 3:
 			var b := tiempo * 5.0 + i * TAU / 3.0

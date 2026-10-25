@@ -965,9 +965,55 @@ func probar_gotas() -> void:
 	johnny.velocity = Vector2.ZERO
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.35, false).timeout
-	print("Gotas: vapor al enfadarse, %d nubecitas (esperado: 8 o más)" % jefa.bocanadas.size())
+	print("Gotas: vapor al enfadarse, %d nubecitas (esperado: 8 o más)" % jefa.vapor.bocanadas.size())
 	Captura.foto("captura-gotas-vapor-grito.png")
 	await get_tree().create_timer(1.6, false).timeout
-	print("Gotas: vapor andando, %d nubecitas (esperado: de 1 a 6)" % jefa.bocanadas.size())
+	print("Gotas: vapor andando, %d nubecitas (esperado: de 1 a 6)" % jefa.vapor.bocanadas.size())
 	Captura.foto("captura-gotas-vapor.png")
+	get_tree().quit()
+
+
+# Con "--captura --vapor": el vapor de la cabeza (vapor_rabia.gd) de cada minijefe que echa, de uno en uno junto a
+# Johnny (que no recibe daño): se le baja la vida a la mitad para que se enfade solo. Cuenta las nubecitas y saca
+# captura-vapor-<jefe>-grito.png (el chorro al enfadarse) y captura-vapor-<jefe>.png (las bocanadas) y se cierra
+func probar_vapor() -> void:
+	set_process(false)
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true   # que no aparezca su jefe: se meten a mano
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2.0, 2.0)
+	for tipo in ["antidisturbios", "cocinero", "modista", "mascota", "gloton", "gymbro", "bombero"]:
+		var jefe: Node2D = meter_zombi(tipo, centro)
+		await get_tree().create_timer(0.1, false).timeout
+		jefe.vida = int(jefe.vida_max * jefe.enfado)   # en el siguiente paso, se enfada
+		await get_tree().create_timer(0.05, false).timeout
+		johnny.invulnerable = 999.0
+		johnny.position = jefe.position + Vector2(90, -100)   # (más arriba: así la cabeza sale en medio de la foto)
+		johnny.velocity = Vector2.ZERO
+		camara.reset_smoothing()
+		await get_tree().create_timer(0.3, false).timeout
+		print("Vapor (%s): al enfadarse %d nubecitas (esperado: 8 o más)" % [tipo, jefe.rabia.bocanadas.size()])
+		Captura.foto("captura-vapor-%s-grito.png" % tipo)
+		await get_tree().create_timer(1.3, false).timeout
+		johnny.position = jefe.position + Vector2(90, -100)
+		camara.reset_smoothing()
+		await get_tree().process_frame
+		print("Vapor (%s): luego, %d nubecitas (esperado: de 1 a 12)" % [tipo, jefe.rabia.bocanadas.size()])
+		Captura.foto("captura-vapor-%s.png" % tipo)
+		for cosa in get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("balas_zombi"):
+			cosa.queue_free()
+		await get_tree().create_timer(0.1, false).timeout
 	get_tree().quit()
