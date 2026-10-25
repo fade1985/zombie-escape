@@ -36,8 +36,6 @@ const GOTITAS := 26.0       # el ácido: gotitas que se escapan del final del ch
 const VERDES := [Color("#ecf896"), Color("#c7e04a"), Color("#96b430")]   # las del chorro (chorro_acido.gdshader)
 const LUZ := Color(1.0, 0.6, 0.28)
 const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
-const DOBLEZ := 32.0        # en cuánto se dobla desde la dirección del tubo hacia el zombi (en la pantalla)
-const GIRO_MAX := PI / 3.0  # lo más que se dobla (60°)
 
 var pedida := false         # se ha pedido fuego en este paso (mantener)
 var acido := false          # es el chorro del lanza ácido (lo dice el arma, en mantener)
@@ -54,8 +52,6 @@ var luz: PointLight2D
 var tick_t := TICK          # (empieza lleno: el primer pellizco, en cuanto sale)
 var ticks := 0
 var tiempo := 0.0
-var giro := 0.0             # lo que se tuerce al salir: del eje del chorro a la dirección del tubo (radianes)
-var doblez := DOBLEZ
 
 
 func _ready() -> void:
@@ -71,30 +67,23 @@ func _ready() -> void:
 	visible = false
 
 
-# Johnny echa fuego en este paso: "desde", el suelo debajo de la boca; "a", hacia dónde; "w", su arma (arma()); "cano",
-# hacia dónde apunta el tubo en el dibujo (solo hay 8 direcciones); "blanco", el zombi al que apunta (su sitio en el
-# suelo; Vector2.INF si no hay ninguno).
-# Con un zombi, el chorro va de la boca a su cuerpo (no paralelo a la línea que sale del centro de Johnny, que con la
-# boca a un lado pasaría junto a él): en la pantalla, de la boca al cuerpo, que se dibuja ALTURA_CUERPO por encima de
-# su sitio. Como el tubo solo apunta a 8 sitios y el zombi puede estar en cualquiera, el chorro sale hacia donde apunta
-# el tubo y se dobla enseguida hacia el zombi ("giro"; lo dibuja el shader), como el agua de una manguera al moverla
-func mantener(desde: Vector2, a: float, w: Dictionary, cano := a, blanco := Vector2.INF) -> void:
+# Johnny echa fuego en este paso: "desde", el suelo debajo de la boca; "a", hacia dónde; "w", su arma (arma());
+# "blanco", el zombi al que apunta (su sitio en el suelo; Vector2.INF si no hay ninguno).
+# Con un zombi, el chorro va recto de la boca a su cuerpo (no paralelo a la línea que sale del centro de Johnny, que
+# con la boca a un lado pasaría junto a él): en la pantalla, de la boca al cuerpo, que se dibuja ALTURA_CUERPO por
+# encima de su sitio
+func mantener(desde: Vector2, a: float, w: Dictionary, blanco := Vector2.INF) -> void:
 	pedida = true
 	global_position = desde
 	alcance = w.alcance
 	var u := Vector2.from_angle(a)
-	var baja := Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)   # lo que baja en la pantalla por cada unidad de suelo
-	var eje := (u + baja).normalized()   # hacia dónde va en la pantalla
-	doblez = DOBLEZ
 	if blanco != Vector2.INF:
-		var hasta := blanco - Vector2(0, ALTURA_CUERPO) - (desde - Vector2(0, ALTURA))   # de la boca al cuerpo
-		eje = hasta.normalized()
-		doblez = clampf(hasta.length() / 3.0, 4.0, DOBLEZ)   # (con el zombi cerca, se dobla antes)
+		var baja := Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)   # lo que baja en la pantalla por cada unidad de suelo
+		var eje := (blanco - Vector2(0, ALTURA_CUERPO) - (desde - Vector2(0, ALTURA))).normalized()   # de la boca al cuerpo
 		# la dirección por el suelo que, con lo que baja, se ve así: u + baja tiene que ir por el eje, con u de largo 1
 		var e := eje.dot(baja)
 		u = (e + sqrt(e * e + 1.0 - baja.length_squared())) * eje - baja
 	angulo = u.angle()
-	giro = clampf(angle_difference(eje.angle(), cano), -GIRO_MAX, GIRO_MAX)
 	dps = w.dano
 	empuje = w.empuje
 	quema = w.get("quema", 1.0)
@@ -226,7 +215,7 @@ func gotitas(delta: float) -> void:
 
 
 # Le pasa al shader dónde está la llama y cómo va (en la pantalla: el eje baja un poco, porque la llama baja de la
-# altura de la boca a la del cuerpo, y lo que se tuerce al salir del tubo), pone la luz en medio de la llama y la redibuja
+# altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja
 func pintar() -> void:
 	luz.enabled = visible and not acido   # (el ácido no alumbra)
 	if not visible:
@@ -244,8 +233,6 @@ func pintar() -> void:
 	m.set_shader_parameter("cola", cola * f + ATRAS if cola > 0.0 else 0.0)
 	m.set_shader_parameter("alcance", alcance * f + ATRAS)
 	m.set_shader_parameter("cortada", 1.0 if cortada else 0.0)
-	m.set_shader_parameter("tuerce", tan(giro))
-	m.set_shader_parameter("doblez", doblez)
 	# la luz: en medio de lo que se ve, tan grande como la llama, y temblando
 	var medio := (cola + largo) / 2.0
 	luz.position = Vector2(0, -ALTURA) + eje * medio * f

@@ -18,8 +18,6 @@ uniform float largo = 0.0;           // hasta dónde llega la punta (en la panta
 uniform float cola = 0.0;            // desde dónde empieza (al soltarlo se despega de la boquilla)
 uniform float alcance = 320.0;       // lo más lejos que llega (para lo que se rompe)
 uniform float cortada = 0.0;         // 1 si lo corta una pared antes de su alcance
-uniform float tuerce = 0.0;          // lo que se tuerce al salir hacia donde apunta el tubo (llamarada.gd, "giro")
-uniform float doblez = 32.0;         // y en cuánto se endereza
 
 const vec3 BLANCO = vec3(0.957, 1.0, 0.851);   // #f4ffd9
 const vec3 CLARO = vec3(0.925, 0.973, 0.588);  // #ecf896
@@ -57,9 +55,6 @@ void fragment() {
 	vec2 r = p - boca;
 	float x = dot(r, eje);
 	float y = dot(r, vec2(-eje.y, eje.x));
-	// sale de la boquilla hacia donde apunta el tubo y se dobla enseguida hacia el eje (el del zombi), como una manguera
-	float xd = max(x, 0.0);
-	y -= tuerce * xd * exp(-xd / doblez);
 	float t = clamp(x / alcance, 0.0, 1.0);
 	float damero = mod(floor(p.x / 2.0) + floor(p.y / 2.0), 2.0) - 0.5;
 

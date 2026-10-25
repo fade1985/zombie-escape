@@ -109,6 +109,8 @@ var municion_guardada := {}   # las balas de las armas de fuego que ha guardado:
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
 var deposito := 0.0        # el lanzallamas y el lanza ácido: los segundos de chorro que le quedan en el depósito
 var deposito_sin_fin := false   # la sala de pruebas de armas: el depósito se llena sin gastar gasolina (o bidones)
+var mirando_chorro := ""   # hacia dónde miraba echando el chorro en el paso de antes (mirar_con_chorro)
+const CAMBIA_CHORRO := 0.175   # lo que tiene que ganar otra dirección para cambiar a ella echando el chorro (10°)
 var llamarada: Llamarada   # la llama del lanzallamas (y el chorro del lanza ácido): sale mientras se ataca con él
 var goteo: Goteo           # la gota de ácido que cuelga de la boquilla del lanza ácido mientras no echa el chorro
 var espera := 0.0          # tiempo que falta para poder atacar otra vez
@@ -482,10 +484,9 @@ func intentar_atacar(angulo: float) -> void:
 
 # El lanzallamas (y el lanza ácido): la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama
 # aquí, se apaga) y el depósito se va gastando. Si la línea de tiro pasa por un zombi (blanco_en_linea, como la bala),
-# va de la boca a su cuerpo, saliendo hacia donde apunta el tubo en el dibujo ("cano" en armas.gd) y doblándose hacia
-# él; si no, paralela a la línea de tiro. Johnny mira hacia donde menos se tenga que doblar (mirar_con_chorro). Sin
-# sacudida ni retroceso: quieto, Johnny se queda en la postura de apuntar (animar). Al vaciarse el depósito, se llena
-# solo si lleva con qué (gasolina o bidones de ácido)
+# va recta de la boca a su cuerpo; si no, paralela a la línea de tiro. Johnny mira hacia donde el tubo del dibujo
+# apunte más hacia ella (mirar_con_chorro). Sin sacudida ni retroceso: quieto, Johnny se queda en la postura de apuntar
+# (animar). Al vaciarse el depósito, se llena solo si lleva con qué (gasolina o bidones de ácido)
 func echar_fuego(angulo: float, w: Dictionary) -> void:
 	var blanco := blanco_en_linea(angulo, w)
 	var hacia := Vector2.INF
@@ -493,7 +494,7 @@ func echar_fuego(angulo: float, w: Dictionary) -> void:
 	if blanco and (blanco.global_position - suelo_de_boca(w, direccion)).dot(Vector2.from_angle(angulo)) > blanco.radio:
 		hacia = blanco.global_position
 	direccion = mirar_con_chorro(angulo, w, hacia)
-	llamarada.mantener(suelo_de_boca(w, direccion), angulo, w, deg_to_rad(w.cano[direccion]), hacia)
+	llamarada.mantener(suelo_de_boca(w, direccion), angulo, w, hacia)
 	deposito = maxf(0.0, deposito - get_physics_process_delta_time())
 	if deposito <= 0.0:
 		empezar_recarga()
@@ -506,22 +507,25 @@ func suelo_de_boca(w: Dictionary, d: String) -> Vector2:
 	return global_position + Vector2(boca.x, 16.0 + boca.y + 50.0)
 
 
-# Hacia dónde mira Johnny echando el chorro: la dirección cuyo tubo, en el dibujo, apunte más hacia donde va el chorro
-# (con un zombi, de la boca a su cuerpo; si no, paralelo a la línea de tiro), para que se doble lo menos posible al
-# salir. Las diagonales del dibujo van más tumbadas que 45°: mirando solo el ángulo, a un zombi algo más abajo que la
-# diagonal le apuntaría con el tubo casi de lado, y así mira hacia abajo
+# Hacia dónde mira Johnny echando el chorro: la dirección cuyo tubo, en el dibujo ("cano" en armas.gd), apunte más
+# hacia donde va el chorro (con un zombi, de la boca a su cuerpo; si no, paralelo a la línea de tiro), para que el tubo
+# y el chorro vayan lo más seguidos posible. Las diagonales del dibujo van más tumbadas que 45°: mirando solo el
+# ángulo, a un zombi algo más abajo que la diagonal le apuntaría con el tubo casi de lado, y así mira hacia abajo. Si
+# la de antes casi vale igual (CAMBIA_CHORRO), se queda en ella: que no baile entre dos y el chorro salte de boca
 func mirar_con_chorro(angulo: float, w: Dictionary, hacia: Vector2) -> String:
 	var baja := Vector2(0, (Llamarada.ALTURA - Llamarada.ALTURA_CUERPO) / w.alcance)
+	var desvios := {}
 	var mejor := direccion
-	var menos := INF
 	for d in DIRS:
 		var eje := Vector2.from_angle(angulo) + baja
 		if hacia != Vector2.INF:
 			eje = hacia - Vector2(0, Llamarada.ALTURA_CUERPO) - (suelo_de_boca(w, d) - Vector2(0, Llamarada.ALTURA))
-		var tuerce := absf(angle_difference(eje.angle(), deg_to_rad(w.cano[d])))
-		if tuerce < menos:
-			menos = tuerce
+		desvios[d] = absf(angle_difference(eje.angle(), deg_to_rad(w.cano[d])))
+		if desvios[d] < desvios.get(mejor, INF):
 			mejor = d
+	if desvios.has(mirando_chorro) and desvios[mirando_chorro] < desvios[mejor] + CAMBIA_CHORRO:
+		mejor = mirando_chorro
+	mirando_chorro = mejor
 	return mejor
 
 

@@ -19,8 +19,6 @@ uniform float largo = 0.0;           // hasta dónde llega la punta (en la panta
 uniform float cola = 0.0;            // desde dónde empieza (al apagarla se despega de la boca)
 uniform float alcance = 320.0;       // lo más lejos que llega (para lo que se enfría)
 uniform float cortada = 0.0;         // 1 si la corta una pared antes de su alcance
-uniform float tuerce = 0.0;          // lo que se tuerce al salir hacia donde apunta el tubo (llamarada.gd, "giro")
-uniform float doblez = 32.0;         // y en cuánto se endereza
 
 const vec3 BLANCO = vec3(1.0, 0.99, 0.92);
 const vec3 FUEGO0 = vec3(1.0, 0.953, 0.69);    // #fff3b0
@@ -59,9 +57,6 @@ void fragment() {
 	vec2 r = p - boca;
 	float x = dot(r, eje);
 	float y = dot(r, vec2(-eje.y, eje.x));
-	// sale de la boca hacia donde apunta el tubo y se dobla enseguida hacia el eje (el del zombi), como una manguera
-	float xd = max(x, 0.0);
-	y -= tuerce * xd * exp(-xd / doblez);
 	float t = clamp(x / alcance, 0.0, 1.0);
 
 	// ondula como una manguera, más cuanto más lejos, y la onda corre hacia fuera

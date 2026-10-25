@@ -67,7 +67,7 @@ const DATOS := {
 # Hacia dónde apunta el tubo en el dibujo quieto del lanzallamas en cada dirección (el del lanza ácido es el mismo: su
 # hoja sale de la del lanzallamas), en grados en la pantalla (0 = a la derecha, 90 = abajo), medido en las hojas: las
 # diagonales van más tumbadas que 45° (unos 24°), como se ven desde arriba. Con él se elige hacia dónde mira Johnny al
-# echar el chorro y desde dónde se dobla el chorro al salir (johnny.gd, llamarada.gd)
+# echar el chorro: la dirección cuyo tubo apunte más hacia él (johnny.gd, mirar_con_chorro)
 const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 170.0, "no": 205.0, "n": 270.0, "ne": 334.0}
 
 # ── Armas creadas (fase 7b2; CREADAS de src/armas-creadas.js) ──
