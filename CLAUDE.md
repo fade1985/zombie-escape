@@ -9,6 +9,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica solo con cada push a main) |
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
+| `docs/TRAILER.md` | El trailer: cómo se graba (`py tools/trailer.py`) y su guion de escenas y textos |
 | `PENDIENTES.md` (raíz) | Lista del dueño de fallos, mejoras y cosas por limar: solo se toca un punto cuando él lo pide |
 | `docs/PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md` | Del juego JS: ideas y números |
 

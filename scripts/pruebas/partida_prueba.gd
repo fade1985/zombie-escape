@@ -6,7 +6,7 @@
 # tiene todos. Así, para tocar una prueba basta con abrir su archivo:
 #   prueba_comun.gd (hereda de partida.gd) → prueba_jefes_salas.gd → prueba_jefes.gd → prueba_armas.gd →
 #   prueba_skins.gd → prueba_inventario.gd → prueba_fotos.gd → prueba_sitios.gd → prueba_varias.gd →
-#   prueba_larga.gd → partida_prueba.gd
+#   prueba_larga.gd → trailer.gd → partida_prueba.gd
 # Una función solo puede llamar a las de su archivo o a las de los de antes en la cadena (si no, Godot no compila y
 # arranca la partida normal): lo que usen varios archivos va en el primero de ellos. Prueba nueva: su función en el
 # archivo de su tema, su opción en empezar_prueba() (abajo) y su línea en esta lista.
@@ -48,13 +48,16 @@
 #   --evento X          ese evento sorpresa: apagon, incendio u horda                        [eventos.gd, probar()]
 #   --banco             lo quitado desaparece del guardado; luego el banco, las armas de efecto y Colecciones
 #                                                                                            [prueba_larga.gd]
-extends "res://scripts/pruebas/prueba_larga.gd"
+#   --trailer           el trailer: Johnny juega solo unas escenas con textos y el título (docs/TRAILER.md) [trailer.gd]
+extends "res://scripts/pruebas/trailer.gd"
 
 
 # Ya en la sala de mantenimiento: la prueba que se haya pedido (si no, la larga, que sigue en _process)
 func empezar_prueba() -> void:
 	var args := OS.get_cmdline_user_args()
-	if "--fotos-tiendas" in args:
+	if "--trailer" in args:
+		grabar_trailer()
+	elif "--fotos-tiendas" in args:
 		fotos_tiendas()
 	elif "--fotos-luz" in args:
 		fotos_luz()

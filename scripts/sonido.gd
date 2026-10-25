@@ -140,7 +140,7 @@ func _ready() -> void:
 		voces.append(v)
 	sonando = reproductor_musica()
 	otro = reproductor_musica()
-	if Captura.activa():
+	if Captura.activa() and not "--trailer" in OS.get_cmdline_user_args():   # (el trailer se graba con sus sonidos)
 		silenciar(true)
 	musica_si(Guardado.cargar().ajustes.musica)
 	if OS.has_feature("web"):
