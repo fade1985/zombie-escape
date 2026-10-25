@@ -254,11 +254,9 @@ const SALAS := {
 		],
 		"quitar": ["bathtub", "washer", "sink"],
 	},
-	"pasillo": {
-		"muebles": ["shoerack", "coatstand", "console", "plant", "bookshelf"],
-		"cuantos": [5, 8],
-		"fondo_max": 46,   # el pasillo de cada planta es estrecho: solo muebles poco hondos
-	},
+	# el pasillo de cada planta de los Apartamentos: de momento, sin muebles (si vuelven, solo poco hondos: el pasillo es
+	# estrecho, "fondo_max": 46; los de antes: shoerack, coatstand, console, plant y bookshelf, de 5 a 8)
+	"pasillo": {"muebles": [], "cuantos": [0, 0]},
 	# el pasillo de dentro de un piso (apartamento.gd: PLANO_PASILLO), con su recibidor: pocos muebles
 	"pasillo-piso": {
 		"muebles": ["shoerack", "coatstand", "console", "plant"],

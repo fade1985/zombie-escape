@@ -1,7 +1,20 @@
 # Pruebas de sitios: la sala de mantenimiento (--sala), el ascensor (--ascensor), las viviendas (--viviendas),
-# el piso de los apartamentos (--piso), la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte
+# el piso de los apartamentos (--piso), el pasillo de la planta (--pasillo), la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte
 # de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_fotos.gd"
+
+
+# Con "--captura --pasillo": el pasillo de la 1ª planta, que de momento va sin muebles. Dice cuántos hay (esperado: 0)
+# y saca captura-pasillo.png. Luego se cierra
+func probar_pasillo() -> void:
+	nueva_planta(2)
+	await montar(0, 0, false)
+	johnny.position = Vector2(planta.sitios[0].ancho / 2.0, planta.sitios[0].alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.8).timeout
+	print("Pasillo de la planta: muebles %d (esperado: 0, de momento va vacío)" % get_tree().get_nodes_in_group("muebles").size())
+	Captura.foto("captura-pasillo.png")
+	get_tree().quit()
 
 
 # Con "--captura --piso": el piso de los apartamentos (apartamento.gd: PLANO_PASILLO), siempre el mismo. Primero lo
