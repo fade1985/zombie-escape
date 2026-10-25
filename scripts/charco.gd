@@ -11,28 +11,45 @@
 #
 # El aceite hirviendo del cocinero ("hirviendo") quema como el fuego (a Johnny y a los zombis, pero no a él: es su
 # "dueno"); se dibuja también con código, una mancha dorada con burbujas que revientan y algo de vapor.
+#
+# El veneno, el ácido y el vómito ("burbujas" en TIPOS) se dibujan como el fuego, a cuadraditos y con el borde
+# ondulado: se extienden desde el centro, sus colores tiemblan, en vez de llamas tienen burbujitas que crecen y
+# revientan, echan algo de vapor y al secarse desaparecen a trozos, antes por los bordes, dejando una mancha.
 extends Node2D
 
-const VENENO := preload("res://assets/sprites/objeto-charco-veneno.png")
 const LEJIA := preload("res://assets/sprites/objeto-charco-lejia.png")
 const LUZ_FUEGO := preload("res://escenas/luces/fuego.tscn")
 
 # Cada tipo: su dibujo, su tamaño (radio), cuánto dura y los estados que pone. "solo_zombis": a Johnny no le
 # hace nada. El del molotov tiene sus números en MOLOTOV (lanzables.gd)
 const TIPOS := {
-	"veneno": {"dibujo": VENENO, "radio": 64.0, "vida": 4.0, "estados": {"veneno": {}}},
+	"veneno": {"burbujas": "veneno", "radio": 64.0, "vida": 4.0, "estados": {"veneno": {}}},
 	"lejia": {"dibujo": LEJIA, "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
 	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
-	"acido": {"dibujo": VENENO, "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}},
-		"tinte": Color(1.0, 1.0, 0.55)},
-	"vomito": {"dibujo": VENENO, "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true,
-		"tinte": Color(1.0, 1.0, 0.45)},
+	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
+	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
 	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
 	"hirviendo": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},   # el del cocinero
 	# el agua de los aspersores (la alarma de incendios, eventos.gd): solo resbala, y no se seca mientras dure
 	"agua": {"dibujo": LEJIA, "radio": 54.0, "vida": 99999.0, "estados": {"resbaladizo": {}}, "tinte": Color(0.55, 0.8, 1.0)},
 }
+# Los colores de los charcos que burbujean: del borde al centro, los brillos, la burbuja (y su brillo), el vapor y
+# la mancha que dejan al secarse
+const BURBUJEO := {
+	"veneno": {"borde": Color("#1d4a1a"), "oscuro": Color("#2f7a22"), "medio": Color("#4fae2c"), "centro": Color("#7ad63a"),
+		"brillo": Color("#c8f77a"), "burbuja": Color("#8fe04a"), "luz": Color("#e6ffb0"), "vapor": Color(0.6, 1.0, 0.4, 0.35),
+		"mancha": Color("#1a2e14", 0.55)},
+	"acido": {"borde": Color("#4a4a12"), "oscuro": Color("#7d8a1c"), "medio": Color("#b4c62a"), "centro": Color("#dceb44"),
+		"brillo": Color("#f8ff9c"), "burbuja": Color("#e4f25a"), "luz": Color("#ffffd0"), "vapor": Color(0.95, 1.0, 0.5, 0.35),
+		"mancha": Color("#2e2c12", 0.55)},
+	"vomito": {"borde": Color("#5a4214"), "oscuro": Color("#8a6e22"), "medio": Color("#b89a34"), "centro": Color("#d6bc4c"),
+		"brillo": Color("#f2e08c"), "burbuja": Color("#d8c25a"), "luz": Color("#fff2bc"), "vapor": Color(0.9, 0.85, 0.5, 0.3),
+		"mancha": Color("#2e2410", 0.5)},
+}
+# Cuánto tarda en extenderse al caer y cuánto antes de acabar empieza a secarse
+const DERRAMA := 0.25
+const SECA := 1.2
 const ACEITE_ARDE := 1.25   # el fuego del aceite, así de grande respecto al del molotov
 # El fuego por fuera: cuánto tarda en extenderse, cuánto antes de acabar empieza a apagarse, lo que brilla en
 # blanco el frente y lo que dura la brasa de un trozo recién apagado
@@ -54,7 +71,7 @@ var tick := 0.0
 var celdas: Array = []     # el fuego: [posición, distancia al centro (0-1), cuándo prende, cuándo se apaga, ruido]
 var llamas: Array = []     # [x, y, ancho, alto, semilla, prende, apaga]
 var ascuas: Array = []
-var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada cuánto revienta]
+var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada cuánto revienta]; el veneno, ver hacer_burbujeo
 
 
 func _ready() -> void:
@@ -64,6 +81,8 @@ func _ready() -> void:
 	add_to_group("charcos")
 	if tipo == "hirviendo":
 		hacer_hirviendo()
+	if burbujea():
+		hacer_burbujeo()
 	if tipo == "fuego":
 		hacer_fuego()
 		var luz := LUZ_FUEGO.instantiate()
@@ -76,11 +95,15 @@ func radio() -> float:
 	return TIPOS[tipo].radio * escala
 
 
+func burbujea() -> bool:
+	return TIPOS[tipo].has("burbujas")
+
+
 func _physics_process(delta: float) -> void:
 	vida -= delta
 	t += delta
 	if vida <= 0.0:
-		if tipo == "fuego":
+		if tipo == "fuego" or burbujea():
 			dejar_ceniza()
 		elif tipo == "aceite":
 			arder()
@@ -90,6 +113,8 @@ func _physics_process(delta: float) -> void:
 		quemar(delta)
 	elif tipo == "aceite":
 		modulate.a = 1.0   # el aceite no se seca: arde
+	elif burbujea():
+		echar_vapor()   # se seca a trozos (en _draw), no transparentándose entero
 	else:
 		if TIPOS[tipo].get("prende", false):
 			prender_zombis(delta)
@@ -122,11 +147,13 @@ func dentro(punto: Vector2, margen: float) -> bool:
 func arde_en(punto: Vector2, margen: float) -> bool:
 	if not dentro(punto, margen):
 		return false
-	if tipo != "fuego":
+	if tipo != "fuego" and not burbujea():
 		return true
 	var d := punto - global_position
 	var k := Vector2(d.x, d.y / 0.6).length() / radio()
 	var e := vida_max - vida
+	if burbujea():
+		return e >= k * DERRAMA and vida > SECA * k * 0.5
 	return e >= k * EXTIENDE and vida > APAGA * k * 0.5
 
 
@@ -209,13 +236,109 @@ func arder() -> void:
 			randf_range(2, 4), 0.5)
 
 
-# Al apagarse del todo, la ceniza se queda en el suelo como una mancha más
+# Al apagarse del todo, la ceniza se queda en el suelo como una mancha más (el veneno, el ácido y el vómito dejan
+# la suya, más clarita y solo por el centro)
 func dejar_ceniza() -> void:
 	var m := Mancha.new()
 	m.position = position
 	for c in celdas:
-		m.celdas.append([c[0], Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6)])
+		if burbujea():
+			if c[1] < 0.75 and c[4] < 0.7:
+				m.celdas.append([c[0], BURBUJEO[TIPOS[tipo].burbujas].mancha])
+		else:
+			m.celdas.append([c[0], Color("#1c120e", 0.7) if c[4] < 0.5 else Color("#2a1a14", 0.6)])
 	get_parent().add_child(m)
+
+
+# ── El veneno, el ácido y el vómito ──
+
+# Su forma, como la del fuego: cuadraditos con el borde ondulado, que aparecen del centro hacia fuera y se secan a
+# trozos, antes por los bordes. Y las burbujas, en sitios al azar
+func hacer_burbujeo() -> void:
+	var r := radio()
+	var ondas := []
+	for k in [3, 5, 7]:
+		ondas.append([k, randf() * TAU, randf_range(0.05, 0.11)])
+	var n := ceili(r / CELDA)
+	for y in range(-n, n + 1):
+		for x in range(-n, n + 1):
+			var p := Vector2(x, y) * CELDA
+			var a := atan2(p.y / 0.6, p.x)
+			var borde := 1.0
+			for o in ondas:
+				borde += sin(a * o[0] + o[1]) * o[2]
+			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
+			var ruido := randf()
+			if d > 1.0 or (d > 0.9 and ruido < 0.35):
+				continue
+			var aparece := d * DERRAMA + ruido * 0.04
+			var seca := vida_max - SECA * (1.0 - d * 0.6) * (0.5 + ruido * 0.5)
+			celdas.append([p, d, aparece, seca, ruido])
+	# cada burbuja: [su celda, cuándo empieza, cada cuánto revienta, lo grande que se hace (en píxeles del dibujo)]
+	for i in 30:
+		var c: Array = celdas.pick_random()
+		if c[1] < 0.8:
+			burbujas.append([c, randf() * 2.0, randf_range(0.9, 1.8), 2 + i % 2])
+		if burbujas.size() >= 11:
+			break
+
+
+# Algo de vapor que sube de donde aún hay charco
+func echar_vapor() -> void:
+	if randf() < 6.0 * get_physics_process_delta_time():
+		var a := randf() * TAU
+		var r := sqrt(randf()) * radio() * 0.8
+		var p := global_position + Vector2(cos(a) * r, sin(a) * r * 0.6)
+		if arde_en(p, 0.0):
+			Particulas.soltar(self, p, Vector2(randf_range(-6, 6), randf_range(-45, -25)), BURBUJEO[TIPOS[tipo].burbujas].vapor,
+				randf_range(2, 4), 0.8)
+
+
+func pintar_burbujeo() -> void:
+	var col: Dictionary = BURBUJEO[TIPOS[tipo].burbujas]
+	var e := vida_max - vida
+	for c in celdas:
+		if e < c[2] or e >= c[3] + 0.2:
+			continue
+		var color: Color
+		if e >= c[3]:
+			color = Color(col.borde, 0.6)   # recién secado: un momento más oscuro, y se va
+		else:
+			var d: float = c[1] + 0.08 * sin(t * 4.0 + c[4] * 20.0)   # tiembla, más despacio que el fuego (es líquido)
+			color = col.centro if d < 0.3 else col.medio if d < 0.6 else col.oscuro if d < 0.86 else col.borde
+			if c[4] > 0.95 and sin(t * 3.0 + c[4] * 50.0) > 0.3:
+				color = col.brillo
+		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
+	# las burbujas: crecen a saltos de píxel y revientan en gotitas, cada una a su ritmo (no si su trozo ya se seca)
+	for b in burbujas:
+		var c: Array = b[0]
+		if e < c[2] + 0.15 or e >= c[3] - 0.3:
+			continue
+		var k: float = fmod(t + b[1], b[2]) / b[2]
+		var p: Vector2 = c[0] + Vector2(2, 2)
+		var grande: int = b[3]
+		if k < 0.75:
+			var r := 1 + int(k / 0.75 * grande)
+			burbuja(p + Vector2(0, 2), r, col.borde, col.borde)   # su sombra, un píxel más abajo
+			burbuja(p, r, col.burbuja, col.luz)
+		elif k < 0.9:
+			var lejos := 4.0 + grande * 2.0
+			for o in [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(-0.7, -0.7), Vector2(0.7, -0.7)]:
+				draw_rect(Rect2((p + o * lejos - Vector2(1, 1)).snapped(Vector2(2, 2)), Vector2(2, 2)), col.luz)
+
+
+# Una burbuja de pixel art: un cuadrado con las esquinas recortadas, de "r" píxeles del dibujo de radio, y su brillo
+func burbuja(p: Vector2, r: int, color: Color, luz: Color) -> void:
+	var u := 2.0   # un píxel del dibujo
+	var lado := r * 2 * u
+	var esquina := p - Vector2(r, r) * u
+	if r == 1:
+		draw_rect(Rect2(esquina, Vector2(lado, lado)), color)
+		draw_rect(Rect2(esquina, Vector2(u, u)), luz)
+		return
+	draw_rect(Rect2(esquina + Vector2(u, 0), Vector2(lado - 2 * u, lado)), color)
+	draw_rect(Rect2(esquina + Vector2(0, u), Vector2(lado, lado - 2 * u)), color)
+	draw_rect(Rect2(esquina + Vector2(u, u), Vector2(u, u)), luz)
 
 
 # ── El aceite hirviendo del cocinero ──
@@ -275,6 +398,9 @@ func pintar_hirviendo() -> void:
 func _draw() -> void:
 	if tipo == "hirviendo":
 		pintar_hirviendo()
+		return
+	if burbujea():
+		pintar_burbujeo()
 		return
 	if tipo != "fuego":
 		var datos: Dictionary = TIPOS[tipo]

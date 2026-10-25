@@ -772,6 +772,47 @@ func probar_tintes() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --charcos": los charcos que burbujean (charco.gd: veneno, ácido y vómito) junto a uno de fuego, para
+# compararlos. En la sala de pruebas de armas, en fila delante de Johnny: fotos al caer (se extienden), con sus
+# burbujas, cuando empiezan a secarse a trozos y con la mancha que dejan. Cuenta si se pisan y se cierra
+func probar_charcos() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.direccion = "n"
+	var charcos := {}
+	for i in 4:
+		var tipo: String = ["veneno", "acido", "vomito", "fuego"][i]
+		var charco: Node2D = load("res://escenas/armas/charco.tscn").instantiate()
+		charco.tipo = tipo
+		charco.position = johnny.position + Vector2(-100 + i * 140, -110)
+		johnny.get_parent().add_child(charco)
+		charcos[tipo] = charco
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-charcos-caen.png")
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-charcos.png")
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-charcos-2.png")
+	var centro: bool = charcos.veneno.arde_en(charcos.veneno.global_position, 0.0)
+	var fuera: bool = charcos.veneno.arde_en(charcos.veneno.global_position + Vector2(200, 0), 0.0)
+	await get_tree().create_timer(2.25).timeout
+	Captura.foto("captura-charcos-secan.png")
+	var borde: bool = charcos.veneno.arde_en(charcos.veneno.global_position + Vector2(56, 0), 0.0)
+	Luz.evento = 0.85
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-charcos-oscuro.png")
+	Luz.evento = 0.0
+	await get_tree().create_timer(3.0).timeout
+	Captura.foto("captura-charcos-mancha.png")
+	print("Charcos: el veneno se pisa en el centro %s, lejos %s, en el borde al secarse %s · quedan %d (esperado: true, false, false y 0)" % [
+		centro, fuera, borde, get_tree().get_nodes_in_group("charcos").size()])
+	get_tree().quit()
+
+
 # Con "--captura --fuego-acido": lo que hacen el fuego y el ácido, además de quitar vida un rato. En la sala de pruebas
 # de armas:
 #   1) El fuego se contagia (zombi.gd, contagiar): cuatro zombis en fila, pegados, y uno apartado, quietos y sin perder

@@ -25,6 +25,7 @@
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
+#   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
 #   --skins             las skins: desbloqueo, taquilla, caras y lo que hace cada una        [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
@@ -124,6 +125,9 @@ func empezar_prueba() -> void:
 	elif "--tintes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tintes()
+	elif "--charcos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_charcos()
 	elif "--fuego-acido" in args:
 		set_process(false)   # sin la prueba larga
 		probar_fuego_acido()
