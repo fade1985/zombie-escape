@@ -876,7 +876,8 @@ func pedir_andar(dir: Vector2) -> void:
 # Con "--captura --jefe portera --gotas": el abanico de agua sucia de la portera (bala_zombi.gd) en su cuarto de la
 # limpieza, con Johnny quieto delante. Cuenta las gotas y las salpicaduras (salpicadura.gd) y que se secan solas.
 # Saca captura-gotas.png (las gotas volando), captura-gotas-salpica.png (la que le da a Johnny) y
-# captura-gotas-pared.png (de lejos) y captura-gotas-cerca.png (tres salpicaduras de cerca, con su mancha) y se cierra
+# captura-gotas-pared.png (de lejos), captura-gotas-cerca.png (tres salpicaduras de cerca, con su mancha) y, ya
+# enfadada, captura-gotas-roja.png (el agua rojiza) y captura-gotas-polvo.png (el polvo del giro) y se cierra
 func probar_gotas() -> void:
 	set_process(false)
 	nueva_planta(2)   # la 1ª planta: con --jefe portera, la suya
@@ -927,4 +928,25 @@ func probar_gotas() -> void:
 	Captura.foto("captura-gotas-cerca.png")
 	await get_tree().create_timer(8.0, false).timeout   # (la 2ª tanda tarda en llegar a la pared)
 	print("Gotas: tras 8 s quedan %d salpicaduras (esperado: 0, se secan)" % get_tree().get_nodes_in_group("salpicaduras").size())
+	# enfadada: el abanico, rojizo, y luego el giro, que escupe nubecitas de polvo
+	johnny.vida = johnny.stats.vida_max
+	jefa.fase = 2
+	jefa.process_mode = Node.PROCESS_MODE_INHERIT
+	jefa.position = centro - Vector2(60, 0)
+	camara.zoom = Vector2(1.0, 1.0)
+	camara.reset_smoothing()
+	jefa.cambiar("aviso_abanico")
+	jefa.t = jefa.AVISO_ABANICO - 0.02
+	await get_tree().create_timer(0.32, false).timeout
+	var rojas: Array = get_tree().get_nodes_in_group("balas_zombi").filter(func(b): return b.agua == BalaZombi.AGUA_ROJA)
+	print("Gotas: enfadada, rojizas %d (esperado: 10 o más)" % rojas.size())
+	Captura.foto("captura-gotas-roja.png")
+	await get_tree().create_timer(1.5, false).timeout
+	johnny.vida = johnny.stats.vida_max
+	jefa.position = centro - Vector2(60, 0)
+	jefa.cambiar("giro", {"siguiente": 0.0})
+	await get_tree().create_timer(0.7, false).timeout
+	var polvo: Array = get_tree().get_nodes_in_group("balas_zombi").filter(func(b): return b.forma == "polvo")
+	print("Gotas: el giro, nubecitas de polvo %d (esperado: 10 o más)" % polvo.size())
+	Captura.foto("captura-gotas-polvo.png")
 	get_tree().quit()

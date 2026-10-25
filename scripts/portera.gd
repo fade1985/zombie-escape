@@ -365,7 +365,7 @@ func girar(delta: float, johnny: Node2D) -> void:
 	if datos.siguiente <= 0.0:
 		datos.siguiente = 0.11
 		for k in [0.0, PI]:
-			disparar(global_position, giro * 0.45 + k, 170.0, 10, 8.0)
+			disparar(global_position, giro * 0.45 + k, 170.0, 10, 8.0, "polvo")
 		Sonido.tocar("escobazo")
 	if t >= TIEMPO_GIRO:
 		cambiar("recuperar", {"dur": 0.9})
@@ -387,8 +387,12 @@ func gritar(texto: String, color: Color, tamano := 24) -> void:
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(-60, -ARRIBA - 50), texto, color, tamano)
 
 
-func disparar(desde: Vector2, angulo: float, rapidez: float, dano: int, tamano: float) -> void:
+# El agua sucia (rojiza, enfadada) o, en el giro, el polvo (bala_zombi.gd)
+func disparar(desde: Vector2, angulo: float, rapidez: float, dano: int, tamano: float, forma := "gota") -> void:
 	var bala := BALA.instantiate()
+	bala.forma = forma
+	if enfadada():
+		bala.agua = BalaZombi.AGUA_ROJA
 	bala.dueno = self
 	bala.position = desde
 	bala.velocidad = Vector2.from_angle(angulo) * rapidez

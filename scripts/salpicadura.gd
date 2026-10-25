@@ -14,12 +14,15 @@ var colores: Dictionary
 var gotitas := []      # [posición en el suelo, velocidad, altura, velocidad hacia arriba, tamaño]
 var mojado := []       # [posición, color] de cada cuadradito de la mancha
 var t := 0.0
+var polvo := false
 var suelo: Node2D      # la mancha va en el suelo, por debajo de todo; las gotitas, a la altura de las balas
 
 
-# "hacia": hacia dónde salen (contra una pared, de vuelta; contra Johnny, hacia delante)
-static func lanzar(sala: Node, donde: Vector2, hacia: Vector2, colores_agua: Dictionary) -> void:
+# "hacia": hacia dónde salen (contra una pared, de vuelta; contra Johnny, hacia delante). "de_polvo": el polvo del
+# giro, que se deshace sin dejar mancha
+static func lanzar(sala: Node, donde: Vector2, hacia: Vector2, colores_agua: Dictionary, de_polvo := false) -> void:
 	var s := Salpicadura.new()
+	s.polvo = de_polvo
 	s.position = donde
 	s.colores = colores_agua
 	s.z_index = 4
@@ -28,6 +31,9 @@ static func lanzar(sala: Node, donde: Vector2, hacia: Vector2, colores_agua: Dic
 		var a := base + randf_range(-1.3, 1.3)
 		s.gotitas.append([Vector2.ZERO, Vector2.from_angle(a) * randf_range(60.0, 150.0), ALTO,
 			randf_range(100.0, 260.0), PIXEL * (2.0 if i < 4 else 1.0)])
+	if de_polvo:
+		sala.add_child(s)
+		return
 	# la mancha donde cae lo gordo: un borrón pequeño y aplastado
 	var r := randf_range(10.0, 14.0)
 	var n := ceili(r / CELDA)
@@ -57,7 +63,7 @@ func _process(delta: float) -> void:
 		g[0] += g[1] * delta
 		g[3] -= GRAVEDAD * delta
 		g[2] += g[3] * delta
-		if g[2] <= 0.0:   # ha caído: deja su gotita mojada en el suelo
+		if g[2] <= 0.0 and not polvo:   # ha caído: deja su gotita mojada en el suelo
 			mojado.append([((g[0] - Vector2(PIXEL, PIXEL)) / PIXEL).round() * PIXEL, Color(colores.oscuro, 0.7), g[4] + PIXEL])
 	if t >= SECA:
 		queue_free()
