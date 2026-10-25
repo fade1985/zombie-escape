@@ -3458,5 +3458,20 @@
     "fogon, intento 4, semilla 404": "cc566e65-8da7-431c-a3d8-fc1e69e8cfae"
    }
   }
+ },
+ "mesa-cocina-pisos": {
+  "kind": "images",
+  "fecha": "2026-10-25",
+  "nota": "La mesa de la cocina de los pisos con sus dos sillas, una a cada lado (kitchentable, mueble nuevo: un solo dibujo, 112 de largo y 54 de fondo, solo en la pared del fondo; sale como opcional en tres plantillas de la cocina y, si no cabe todo, se va antes la encimera que la mesa). Con la receta de la nevera, la encimera y el fogón nuevos (nevera-pisos, encimera-fogon-pisos): la guía de py tools/guias_cocina.py (mesa: 56 píxeles del juego de ancho; la mesa de madera en medio, de 36, con la tapa de 22 vista desde arriba con dos platos, un frutero y una taza, y el frente de 18 con el faldón y dos patas; a cada lado una silla de 10 vista de perfil, con el respaldo hacia fuera) como init_image con fuerza 45, no_background false, single color black outline y high top-down, 4 semillas. Las cuatro salieron rectas: la 1 (madera oscura, platos sucios de sangre, frutero, taza y sillas con cojín rojo), la 2 (mesa más grande y pesada; las sillas se entienden peor), la 3 (más limpia, taza verde y un cuenco) y la 4 (madera clara y contorno grueso morado). Elegida por el dueño la 1. Fondo quitado con py tools/guias_centro.py quita y py tools/guias_cocina.py limpia --todo (también el borde gris azulado de las patas y los respaldos y los huecos del fondo entre los barrotes de las sillas, que limpia a secas no quitaba). Sprite de 56×36 con py tools/importar.py (en SIN_HALO, por los platos blancos). Los cuatro intentos con fondo, en assets/sources/salas/descartes/mesa-1..4.png.",
+  "texto": "wooden kitchen table with two wooden chairs seen in 3/4 top-down view, two plates, a fruit bowl and a mug on its wooden plank tabletop seen from above, the table apron and legs facing the viewer, one chair on each side seen in profile with its backrest facing outward, dirty, dented, scratched, a few blood splatters, zombie apocalypse, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+  "coste": "4 generaciones",
+  "piezas": {
+   "mesa (intento 1, semilla 101)": "cf815e76-5dcb-4cfa-9afc-27f2ba8e1646",
+   "descartadas": {
+    "intento 2, semilla 202": "fef259ac-47ef-491a-8311-0a8950ea246b",
+    "intento 3, semilla 303": "958a2572-1e74-4273-9943-481bff799b23",
+    "intento 4, semilla 404": "b656a843-74e2-4ca3-ad03-4c9367ab6e5a"
+   }
+  }
  }
 }

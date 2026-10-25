@@ -31,6 +31,8 @@ const MUEBLES := {
 	"counter":    {"len": 158, "dep": 50,  "paredes": "",      "archivo": "cocina/encimera"},
 	"fridge":     {"len": 62,  "dep": 58,  "paredes": "",      "archivo": "cocina/nevera"},
 	"stove":      {"len": 56,  "dep": 50,  "paredes": "",      "archivo": "cocina/fogon"},
+	# la mesa de la cocina con sus dos sillas, una a cada lado (un solo dibujo: van siempre juntas)
+	"kitchentable": {"len": 112, "dep": 54, "paredes": "",     "archivo": "cocina/mesa"},
 	"bed":        {"len": 84,  "dep": 140, "paredes": "",      "archivo": "dormitorio/cama"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
 	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
@@ -181,16 +183,18 @@ const SALAS := {
 		"muebles": ["counter", "fridge", "stove", "counter", "plant"],
 		"cuantos": [2, 4],
 		"iguales": {"counter": 2},
-		# el fogón es obligatorio; la encimera es larga (158), así que en las cocinas pequeñas se queda fuera
+		# el fogón es obligatorio; la encimera es larga (158), así que en las cocinas pequeñas se queda fuera. La mesa
+		# con sus sillas sale en tres plantillas; si no cabe todo, se va antes la encimera que la mesa
 		"plantillas": [
 			["fridge", "counter?", "stove", "plant?"],
 			["counter?", "stove", "fridge?", "plant?"],
-			["fridge?", "stove", "counter?"],
-			["plant?", "fridge?", "counter?", "stove"],
+			["fridge?", "stove", "counter?", "kitchentable?"],
+			["plant?", "fridge?", "counter?", "stove", "kitchentable?"],
 			["counter?", "stove", "counter?", "fridge?"],
 			["fridge?", "counter?", "stove", "counter?"],
+			["kitchentable?", "fridge?", "stove", "plant?"],
 		],
-		"quitar": ["plant", "counter", "fridge"],
+		"quitar": ["plant", "counter", "kitchentable", "fridge"],
 	},
 	"dormitorio": {
 		"muebles": ["bed", "wardrobe", "nightstand", "desk", "lamp"],

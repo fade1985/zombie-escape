@@ -11,11 +11,14 @@ desde arriba. La encimera y el fogón llevan la misma tapa y el mismo alto, para
   - encimera: el fregadero con su grifo, una tabla de cortar con un cuchillo, un plato y una taza encima; cuatro
     puertas de armario con sus tiradores
   - fogón: cuatro fuegos de gas sobre la placa negra; los mandos y la puerta del horno con su cristal y su asa
+  - mesa: la mesa de madera con dos platos, un frutero y una taza encima, y a cada lado una silla vista de perfil,
+    con el respaldo hacia fuera (un solo dibujo: van siempre juntas)
 
-  py tools/guias_cocina.py               → assets/sources/centro/guias/<nevera|encimera|fogon>.png
+  py tools/guias_cocina.py               → assets/sources/centro/guias/<nevera|encimera|fogon|mesa>.png
   py tools/guias_centro.py quita <png>…  quita el fondo azul de lo que devuelve PixelLab
   py tools/guias_cocina.py limpia <png>… después de quita: la sombra azulada que PixelLab pinta debajo y las gotas
-                                         sueltas que quedan fuera del mueble
+                                         sueltas que quedan fuera del mueble (con --todo, también el borde azulado
+                                         de alrededor, en toda la imagen: la mesa)
 Se pasan al juego con py tools/importar.py (sus originales, en assets/sources/salas/cocina/).
 """
 import os, sys
@@ -32,7 +35,9 @@ T = {
     'nevera':   (62, 22, 46),
     'encimera': (158, 20, 22),
     'fogon':    (56, 20, 22),
+    'mesa':     (112, 22, 18),
 }
+MADERA = (150, 100, 60)
 
 
 def caja(dr, x0, y0, x1, y1, color):
@@ -119,20 +124,67 @@ def fogon(dr, x, y, w, d, h):
         punto(dr, x, top, bx, by, SANGRE)
 
 
+def silla(dr, x, y, izquierda):
+    """Una silla de madera vista de perfil, de 10 píxeles de ancho, con el respaldo hacia fuera. Está junto a la mesa,
+    más cerca de la pared que su borde: el asiento (visto desde arriba) a 11 píxeles del suelo y el respaldo a 22,
+    contados con la perspectiva del juego (lo que está a v píxeles de la pared y z de alto se pinta 18 + v - z
+    píxeles por debajo de la tapa de la mesa)"""
+    def c(u0, f0, u1, f1, color):
+        a, b = (u0, u1) if izquierda else (10 - u1, 10 - u0)
+        caja(dr, x + a * S, y + f0 * S, x + b * S, y + f1 * S, color)
+    c(0, 13, 10, 23, tono(MADERA, 0.95))    # el asiento, desde arriba
+    c(0, 23, 10, 25, tono(MADERA, 0.65))    # su canto
+    c(0, 25, 2, 34, tono(MADERA, 0.55))     # las patas: la de fuera y la de junto a la mesa
+    c(8, 25, 10, 34, tono(MADERA, 0.55))
+    c(0, 2, 3, 13, tono(MADERA, 0.9))       # el respaldo: su canto de arriba, visto desde arriba...
+    c(0, 12, 3, 23, tono(MADERA, 0.7))      # ...y de perfil, del asiento hacia arriba
+
+
+def mesa(dr, x, y, w, d, h):
+    # las dos sillas a los lados (10 píxeles cada una) y la mesa en medio
+    silla(dr, x, y, True)
+    silla(dr, x + w - 10 * S, y, False)
+    mx, mw = x + 10 * S, w - 20 * S
+    # la tapa, desde arriba: tablones de madera; un plato a cada lado (el de la izquierda con comida y el de la derecha
+    # con un cuchillo), un frutero en medio y una taza
+    caja(dr, mx, y, mx + mw, y + d, MADERA)
+    for f in (7, 15):
+        dr.rectangle((mx + S, y + f * S, mx + mw - S - 1, y + f * S + S - 1), fill=tono(MADERA, 0.8))
+    t = Tapa(dr, mx, y, mw, d, False)
+    t.caja(0.05, 0.35, 0.25, 0.8, (225, 225, 220))
+    t.caja(0.09, 0.45, 0.2, 0.7, (150, 90, 50), raya=False)
+    t.caja(0.75, 0.35, 0.95, 0.8, (225, 225, 220))
+    t.caja(0.78, 0.5, 0.92, 0.58, (200, 200, 205), raya=False)
+    t.caja(0.38, 0.1, 0.62, 0.55, (175, 140, 90))
+    t.caja(0.42, 0.18, 0.49, 0.35, (180, 50, 40), raya=False)
+    t.caja(0.51, 0.2, 0.58, 0.38, (200, 170, 50), raya=False)
+    t.caja(0.46, 0.36, 0.53, 0.48, (90, 140, 60), raya=False)
+    t.caja(0.31, 0.65, 0.37, 0.88, (60, 90, 150))
+    # el frente: el faldón y dos patas; entre ellas, por debajo, se ve el suelo
+    top = y + d
+    caja(dr, mx, top, mx + mw, top + 4 * S, tono(MADERA, 0.7))
+    for px in (mx, mx + mw - 3 * S):
+        caja(dr, px, top, px + 3 * S, top + h, tono(MADERA, 0.6))
+    for (bx, by) in ((8, 1), (9, 2), (11, 2), (30, 1), (34, 8), (34, 9)):
+        punto(dr, mx, top, bx, by, SANGRE)
+
+
 def guia(nombre, largo, tapa, alto):
     w, d, h = largo // 2 * S, tapa * S, alto * S
     im = Image.new('RGBA', (w + 2 * M, d + h + 2 * M), FONDO + (255,))
-    {'nevera': nevera, 'encimera': encimera, 'fogon': fogon}[nombre](ImageDraw.Draw(im), M, M, w, d, h)
+    {'nevera': nevera, 'encimera': encimera, 'fogon': fogon, 'mesa': mesa}[nombre](ImageDraw.Draw(im), M, M, w, d, h)
     os.makedirs(OUT, exist_ok=True)
     ruta = f'{OUT}/{nombre}.png'
     im.save(ruta)
     print(ruta, im.size)
 
 
-def limpia(ruta):
+def limpia(ruta, todo=False):
     """Quita la sombra azulada que PixelLab pinta debajo del mueble (más oscura que el fondo, así que quita() no se la
-    lleva): lo azulado pegado a lo transparente en la quinta parte de abajo. Y luego las manchitas sueltas (menos de 8
-    píxeles sin tocar el mueble), como una gota de sangre que caiga fuera. Sobrescribe el archivo, ya sin fondo"""
+    lleva): lo azulado pegado a lo transparente en la quinta parte de abajo. Con todo=True, todo lo azulado de la
+    imagen, también un poco menos azul: el borde gris azulado que queda alrededor de las patas y los respaldos y los
+    huecos del fondo entre los barrotes (la mesa; solo para muebles sin nada azul). Y luego las manchitas sueltas (menos
+    de 8 píxeles sin tocar el mueble), como una gota de sangre que caiga fuera. Sobrescribe el archivo, ya sin fondo"""
     im = Image.open(ruta).convert('RGBA')
     px = im.load()
     W, H = im.size
@@ -143,6 +195,13 @@ def limpia(ruta):
 
     pila = [(x, y) for y in range(y0, H) for x in range(W) if px[x, y][3] == 0]
     quitados = 0
+    if todo:
+        for y in range(H):
+            for x in range(W):
+                c = px[x, y]
+                if c[3] > 0 and c[2] > c[0] + 20 and c[2] >= c[1] and max(c[:3]) < 170:
+                    px[x, y] = (0, 0, 0, 0)
+                    quitados += 1
     while pila:
         x, y = pila.pop()
         for v in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
@@ -174,8 +233,10 @@ def limpia(ruta):
 
 if __name__ == '__main__':
     if sys.argv[1:2] == ['limpia']:
+        todo = '--todo' in sys.argv
         for r in sys.argv[2:]:
-            limpia(r)
+            if r != '--todo':
+                limpia(r, todo)
         sys.exit()
     for nombre, (largo, tapa, alto) in T.items():
         guia(nombre, largo, tapa, alto)
