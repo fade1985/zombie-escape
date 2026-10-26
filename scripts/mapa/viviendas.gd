@@ -25,7 +25,7 @@ const ANCHO := 12            # cada habitación, de ancho
 const FONDO_ARRIBA := 9      # y de fondo: las de arriba (sus dos últimas filas quedan detrás de la cara del tabique)
 const FONDO_ABAJO := 7       # y las de abajo (se ven enteras): así parecen igual de hondas
 const PASILLO := 7           # el fondo del pasillo (sus dos últimas filas, detrás de la cara del tabique de abajo)
-const ENTRADA := 6           # el trozo de pasillo antes de las habitaciones (ahí está la puerta por la que se llega)
+const ENTRADA := 0           # el trozo de pasillo antes de las habitaciones: nada, la pared de la entrada es la de las primeras
 const FINAL := 0             # y el que queda después de la última: nada, el pasillo acaba con las habitaciones
 const PUERTA := 2            # el ancho de las puertas, en casillas
 const COLS := BORDE * 2 + ENTRADA + ANCHO * 3 + 2 + FINAL
@@ -33,8 +33,8 @@ const FILAS := BORDE * 2 + FONDO_ARRIBA + 1 + PASILLO + 1 + FONDO_ABAJO
 const PASILLO_F := BORDE + FONDO_ARRIBA + 1     # la primera fila del pasillo
 const ABAJO_F := PASILLO_F + PASILLO + 1        # y la de las habitaciones de abajo
 const LLEGADA := 14                             # la puerta de la izquierda (la de la sala), en las filas 14 y 15
-const CARTEL := 7.5                             # el cartel de «TRASTEROS» (mapa.gd): su centro, en la casilla 7,5 del pasillo,
-                                                # a la izquierda de la primera puerta de arriba
+const CARTEL := 2.5                             # el cartel de «TRASTEROS» (mapa.gd): su centro, en la casilla 2,5 del pasillo,
+                                                # en medio de la pared de la izquierda de la primera puerta de arriba
 # Dónde espera cada uno, contando desde el medio de lo que se ve de su habitación (si no está aquí, en medio): el
 # técnico, a la izquierda
 const SITIO := {"tecnico": Vector2(-96, 32)}

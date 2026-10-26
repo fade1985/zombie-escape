@@ -468,11 +468,11 @@ const SALAS := {
 	# izquierda una mesilla con la lamparita apagada (sin luz: solo el dibujo) y, en la esquina de arriba a la izquierda,
 	# un armario limpio, algo separado de ella (el centro, en la casilla 2,5: queda una casilla libre entre él y el muro)
 	# El pasillo, el de una zona de trasteros: cajas de cartón y alguna carretilla contra la pared de arriba (la de abajo
-	# queda detrás de la cara del tabique), lejos de las puertas de las habitaciones (en las casillas 11 y 12, 24 y 25, 37
-	# y 38 del pasillo) y de la entrada, a la izquierda; a la izquierda de la primera puerta de arriba no hay nada: allí va el
-	# cartel de «TRASTEROS» (mapa.gd). La carretilla de la derecha, contra el final del pasillo (que acaba en la casilla 44)
-	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["handtruck", 16.0], ["boxpile", 20.5],
-		["boxstack", 30.5], ["boxpile", 32.6], ["handtruck", 42.5]]}},
+	# queda detrás de la cara del tabique), lejos de las puertas de las habitaciones (en las casillas 5 y 6, 18 y 19, 31 y 32
+	# del pasillo) y de la entrada, a la izquierda; a la izquierda de la primera puerta de arriba no hay nada: allí va el
+	# cartel de «TRASTEROS» (mapa.gd). La carretilla de la derecha, contra el final del pasillo (que acaba en la casilla 38)
+	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["handtruck", 10.0], ["boxpile", 14.5],
+		["boxstack", 24.5], ["boxpile", 26.6], ["handtruck", 36.5]]}},
 	"habitacion": {"muebles": [], "cuantos": [0, 0]},
 	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_policia", 10.6]]}},
 	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_medico", 10.6]]}},
