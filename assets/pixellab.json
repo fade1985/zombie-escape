@@ -3223,6 +3223,18 @@
    "puerta abierta 203 (fuerza 80, semilla 203)": "4ec0dedd-755c-5167-8d2e-3275c1f4760e"
   }
  },
+ "puerta-bano-lado-cerrada": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "La puerta de dentro (puerta_bano.gd) CERRADA en los tabiques verticales: era una tira marrón lisa de 14 unidades de ancho en un hueco de 32, con un cuadradito dorado, que dejaba suelo a los dos lados y no pegaba con el arte. Ahora es una hoja de madera que llena todo el hueco (16 × 32 píxeles del juego, 32 × 64 unidades), con su marco claro, sus dos paneles con relieve y el pomo, como una versión tumbada de nuestra puerta de frente (los tabiques verticales se ven planos, sin cara; la bisagra, arriba, y el pomo, hacia la punta de abajo, la que se abre). Con la receta de las puertas: la guía de py tools/puerta_lado_cerrada.py (contorno, marco, hoja, dos paneles y el pomo, con los colores de la puerta de frente, al doble y con 4 píxeles de azul alrededor; 40×72, subida con get_upload_url) como init_image, no_background false, single color black outline, medium shading, medium detail, text_guidance_scale 10, fuerza 50 (semillas 401 y 403) y 80 (402 y 404), 401 y 402 con view side y 403 y 404 con view low top-down. Texto: 'closed interior wooden door, narrow and long, filling a wall opening, two long recessed raised panels, round brass doorknob near the bottom end, dark wooden door frame on both sides, scratched and dented, a few blood smears, zombie apocalypse, horror game, muted colors, game sprite on a plain blue background'. Los dos de fuerza 50 (401 y 403) dibujaron una pared y un suelo alrededor; el 402 salió bien pero con manchas rojizas grandes. Elegido el 404 (fuerza 80, view low top-down): el más limpio y el que más se parece a nuestra puerta (marco de madera clara con bisel, paneles marrones oscuros, una mancha de sangre, y llena todo el rectángulo); los cuatro, con fondo, en assets/sources/puertas/descartes/ (bano-lado-cerrada-<semilla>.png) y el elegido sin fondo (py tools/guias_centro.py quita) en assets/sources/puertas/bano-lado-cerrada.png. Sprite con py tools/puerta_lado_cerrada.py sprite assets/sources/puertas/bano-lado-cerrada.png: recorte, a la mitad (16×32), la madera pasada al marrón de nuestra puerta y, a mano, el pomo (PixelLab lo dibujó como un aro negro a la izquierda: se borra y se pinta el de latón de nuestra puerta hacia la punta de abajo). puerta_bano.gd (hoja_de_lado) la dibuja cerrada y la va quitando (en el primer 20 % de la apertura) mientras la puerta de verdad empieza a girar.",
+  "coste": "4 generaciones",
+  "piezas": {
+   "puerta cerrada de lado 404 (fuerza 80, semilla 404; elegida)": "cf73b898-2067-5e73-aebe-6adab2552204",
+   "puerta cerrada de lado 401 (fuerza 50, semilla 401)": "a5287a0a-b70c-57e7-b742-93274f5cb12c",
+   "puerta cerrada de lado 402 (fuerza 80, semilla 402)": "3cee58e8-18cc-5125-8456-842b5b2471a9",
+   "puerta cerrada de lado 403 (fuerza 50, semilla 403)": "c48c4d7e-9643-55d3-b69d-56aec0870ead"
+  }
+ },
  "puerta-bano-abierta-lado": {
   "kind": "images",
   "fecha": "2026-10-26",

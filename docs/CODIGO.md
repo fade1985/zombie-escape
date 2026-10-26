@@ -155,7 +155,8 @@ en una línea.
   sobre su umbral. De frente, abierta del todo es un dibujo de PixelLab (`puerta-bano-abierta.png`, la puerta casi de
   canto con su canto, su pomo y su sombra; la hace `tools/puerta_abierta.py`: guía con nuestra puerta, PixelLab,
   recolor al marrón de la cerrada); mientras gira, se tuerce por código a 63 grados (`GIRO`). La de lado (tabiques
-  verticales; `hoja_de_lado`) cerrada es la tabla de siempre; al abrirse gira la puerta de verdad hacia la habitación de
+  verticales; `hoja_de_lado`) cerrada es `puerta-bano-lado-cerrada.png`, nuestra puerta tumbada que llena todo el hueco
+  (16 × 32; `py tools/puerta_lado_cerrada.py`); al abrirse gira la puerta de verdad hacia la habitación de
   la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
   la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
   tablas siguen con la hoja vista desde arriba. Se prueba con `--puertas`.

@@ -3,10 +3,11 @@
 # balas y la vista de los zombis (sus rayos chocan con la capa 1, como con los muros). Al abrirse deja de chocar y
 # gira sobre las bisagras. De frente es un dibujo de PixelLab (puerta-bano) que se tuerce hacia la habitación de
 # abajo hasta quedarse casi de canto, dentro de un marco que llena el hueco hasta el dintel (el trozo de muro de
-# encima, que pone mapa.gd); de lado, una hoja de madera vista desde arriba, de punta a punta del hueco y sobre su
-# umbral, que gira hasta quedarse de través. Abierta, se queda así: lo apunta en su hueco ("abierta") para que siga
-# abierta al volver. De frente, abierta del todo es otro dibujo de PixelLab (puerta-bano-abierta, de tools/puerta_abierta.py):
-# nuestra puerta casi de canto, con su canto, su pomo y su sombra en el suelo.
+# encima, que pone mapa.gd); de lado (hoja_de_lado), la puerta tumbada a lo largo del hueco, que lo llena entero
+# (puerta-bano-lado-cerrada, de tools/puerta_lado_cerrada.py), y que al abrirse gira de pie hasta quedarse casi pegada a
+# la pared. Abierta, se queda así: lo apunta en su hueco ("abierta") para que siga abierta al volver. Abierta del todo
+# es otro dibujo de PixelLab (de frente puerta-bano-abierta y de lado puerta-bano-abierta-lado, de
+# tools/puerta_abierta.py): nuestra puerta casi de canto, con su canto, su pomo y su sombra en el suelo.
 #
 # Las "libres" las pone mapa.gd en cada hueco de los pisos, las tiendas y la sala de mantenimiento: empiezan cerradas
 # y las abren Johnny y los que le acompañan con solo arrimarse, y los zombis despiertos empujándolas un momento. La
@@ -31,7 +32,8 @@ const GIRO := 1.1071        # lo que gira de frente al abrirse del todo, 63 grad
 const ABIERTA_LADO := preload("res://assets/sprites/puerta-bano-abierta-lado.png")   # la de lado, abierta del todo: 14 × 67
 const SOMBRA_LADO := 3      # las filas de abajo de ese dibujo que son la sombra del suelo
 const GIRO_LADO := 2.6779   # lo que gira de lado al abrirse del todo, 153 grados: casi pegada a la pared (cada píxel hacia un lado, dos hacia arriba)
-const FIN_TABLA := 0.2      # de lado, lo que tarda en irse la tabla de la cerrada al empezar a abrirse
+const CERRADA_LADO := preload("res://assets/sprites/puerta-bano-lado-cerrada.png")   # la de lado, cerrada: 16 × 32 (el hueco entero)
+const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
 const MIRAR := 0.1          # cada cuánto mira una libre si alguien la empuja
@@ -228,20 +230,17 @@ func _draw() -> void:
 			hoja_de_lado(r, temblor)
 
 
-# La hoja de madera de un tabique de lado, con la bisagra arriba del hueco: cerrada, la tabla de siempre, vista desde
-# arriba (en cuanto empieza a girar se va); al abrirse, la puerta de verdad (la cerrada, torcida) gira hacia la habitación
-# de la derecha hasta quedarse casi pegada a la pared, de pie, con su cara hacia quien mira y su canto de la bisagra a la
-# izquierda; y abierta del todo es su dibujo (puerta-bano-abierta-lado). La bisagra pasa del medio del hueco al borde de la
-# habitación para que la hoja no se quede encima del tabique
+# La hoja de madera de un tabique de lado, con la bisagra arriba del hueco: cerrada, su dibujo (puerta-bano-lado-cerrada:
+# la puerta tumbada a lo largo del hueco, que lo llena entero; en cuanto empieza a girar se va); al abrirse, la puerta de
+# verdad (la de frente, torcida) gira hacia la habitación de la derecha hasta quedarse casi pegada a la pared, de pie,
+# con su cara hacia quien mira y su canto de la bisagra a la izquierda; y abierta del todo es su dibujo
+# (puerta-bano-abierta-lado). La bisagra pasa del medio del hueco al borde de la habitación para que la hoja no se
+# quede encima del tabique
 func hoja_de_lado(r: Rect2, temblor: float) -> void:
-	if abierta < FIN_TABLA:
-		var tabla_c := Color.WHITE
-		tabla_c.a = 1.0 - abierta / FIN_TABLA
-		var grueso := 14.0
-		var cerrada := Rect2(r.get_center().x - grueso / 2 + temblor, r.position.y, grueso, r.size.y)
-		draw_rect(cerrada, Color("#6e4b35") * tabla_c)
-		draw_rect(cerrada, LINEA * tabla_c, false, 2.0)
-		draw_rect(Rect2(cerrada.position.x + 4, cerrada.end.y - 14, 5, 5), Color("#c9a227") * tabla_c)   # el pomo
+	if abierta < FIN_CERRADA:
+		var tinte := Color.WHITE
+		tinte.a = 1.0 - abierta / FIN_CERRADA
+		draw_texture_rect(CERRADA_LADO, Rect2(r.position.x + temblor, r.position.y, r.size.x, r.size.y), false, tinte)
 	if abierta <= 0.0:
 		return
 	var bisagra := Vector2(lerpf(r.get_center().x, r.end.x - 2.0, abierta) + temblor, r.position.y + 4.0)
