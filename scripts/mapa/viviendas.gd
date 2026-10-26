@@ -3,7 +3,8 @@
 # pueden vivir en ningún piso: la horda los ha destrozado todos), así que todas son iguales, de chapa metálica (mapa.gd
 # les pone el estilo "trastero" y la puerta azul lisa de puerta_bano.gd), y el pasillo es el de una zona de trasteros: el
 # mismo hormigón, con una línea amarilla pintada a lo largo, la misma chapa con una franja de chapa lagrimada abajo,
-# cajas de cartón y carretillas contra la pared y, al entrar, el cartel de «TRASTEROS» (cartel_trasteros.gd). Las de los tres de los
+# cajas de cartón y carretillas contra la pared y, a la izquierda de la primera puerta de arriba, el cartel de
+# «TRASTEROS» (cartel_trasteros.gd). Las de los tres de los
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
 # comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
 # nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están
@@ -25,14 +26,15 @@ const FONDO_ARRIBA := 9      # y de fondo: las de arriba (sus dos últimas filas
 const FONDO_ABAJO := 7       # y las de abajo (se ven enteras): así parecen igual de hondas
 const PASILLO := 7           # el fondo del pasillo (sus dos últimas filas, detrás de la cara del tabique de abajo)
 const ENTRADA := 6           # el trozo de pasillo antes de las habitaciones (ahí está la puerta por la que se llega)
-const FINAL := 4             # y el que queda después de la última
+const FINAL := 0             # y el que queda después de la última: nada, el pasillo acaba con las habitaciones
 const PUERTA := 2            # el ancho de las puertas, en casillas
 const COLS := BORDE * 2 + ENTRADA + ANCHO * 3 + 2 + FINAL
 const FILAS := BORDE * 2 + FONDO_ARRIBA + 1 + PASILLO + 1 + FONDO_ABAJO
 const PASILLO_F := BORDE + FONDO_ARRIBA + 1     # la primera fila del pasillo
 const ABAJO_F := PASILLO_F + PASILLO + 1        # y la de las habitaciones de abajo
 const LLEGADA := 14                             # la puerta de la izquierda (la de la sala), en las filas 14 y 15
-const CARTEL := 3                               # el cartel de «TRASTEROS» (mapa.gd), sobre la casilla 3 del pasillo
+const CARTEL := 7.5                             # el cartel de «TRASTEROS» (mapa.gd): su centro, en la casilla 7,5 del pasillo,
+                                                # a la izquierda de la primera puerta de arriba
 # Dónde espera cada uno, contando desde el medio de lo que se ve de su habitación (si no está aquí, en medio): el
 # técnico, a la izquierda
 const SITIO := {"tecnico": Vector2(-96, 32)}
