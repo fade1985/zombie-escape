@@ -5,8 +5,9 @@
 #   apagon    toda la planta a oscuras y con las lámparas apagadas: solo se ve con la linterna (Luz.evento)
 #   incendio  la alarma de incendios: llueve de los aspersores, el suelo se llena de charcos que resbalan (charco.gd,
 #             "agua") y en algunos cae un cable pelado que da calambrazos a Johnny y a los zombis (Cable, abajo)
-#   horda     bajan zombis por las escaleras del fondo del pasillo, en tres oleadas, cada vez más y peores; si
-#             Johnny se mete en un piso, los que quedan le esperan en el pasillo. Al acabar con todos, un premio
+#   horda     una horda grande llena el pasillo: salen todos de golpe, repartidos por él y lejos de Johnny (fuera
+#             de pantalla), y van a por él; si Johnny se mete en un piso, los que quedan le esperan en el pasillo.
+#             Al acabar con todos, un premio
 #
 # Empieza la primera vez que Johnny pisa el pasillo de la planta (en la planta baja, al salir de la sala de
 # mantenimiento), con un cartel grande en la pantalla. Lo que dura, toda la planta.
@@ -27,8 +28,8 @@ const DATOS := {
 		"texto": "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"},
 	"incendio": {"nombre": "Alarma de incendios", "titulo": "¡ALARMA DE INCENDIOS!", "color": Color("#ff5d4a"),
 		"sonido": "alarma", "texto": "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"},
-	"horda": {"nombre": "Horda", "titulo": "¡HORDA POR LAS ESCALERAS!", "color": Color("#ff9f1c"), "sonido": "rugido",
-		"texto": "Algo baja por las escaleras %s... ¡prepárate!"},
+	"horda": {"nombre": "Horda", "titulo": "¡HORDA EN EL PASILLO!", "color": Color("#ff9f1c"), "sonido": "rugido",
+		"texto": "Una horda enorme avanza por el pasillo... ¡prepárate!"},
 }
 # Números provisionales
 const APAGON := 0.4          # oscuridad de más (con la del pasillo, casi negro: el tope de luz.gd es 0,97)
@@ -39,11 +40,12 @@ const INCENDIO := {
 	"sirena": 12.0,          # cada cuánto vuelve a sonar la sirena
 }
 const HORDA := {
-	"oleadas": [4, 6, 8],    # los zombis de cada oleada en la planta baja...
+	"zombis": 18,            # los zombis de la horda en la planta baja...
 	"por_planta": 0.15,      # ...y un 15 % más por cada planta (y con la Alerta 1, más: Alerta.mas_zombis)
-	"primera": 4.0,          # segundos hasta la primera oleada
-	"entre": 10.0,           # entre oleada y oleada (si ya no queda ninguno, la siguiente baja enseguida)
-	"goteo": 0.35,           # bajan de uno en uno, con este hueco
+	"nivel": 1,              # lo peor que sale: el nivel de cada planta (num) más este (tipos_horda)
+	"primera": 4.0,          # segundos desde que Johnny pisa el pasillo hasta que sale la horda
+	"goteo": 0.15,           # salen de uno en uno, con este hueco (así no se apilan)
+	"lejos": 720.0,          # a cuánto de Johnny salen como poco: fuera de pantalla, nadie aparece delante de él
 	"billetes": 3,           # el premio: estos billetes, uno más por planta, y una caja de munición
 }
 
@@ -55,7 +57,7 @@ var forzado := ""          # con --captura --evento X: ese, en todas las plantas
 var empezado := false      # si ya ha empezado (Johnny ha pisado el pasillo)
 var activo := false        # si Johnny está en un sitio con el evento (no en la sala del jefe ni en mantenimiento)
 var charcos := {}          # incendio: sitio -> [{pos, cable, avisado}]
-var horda := {}            # {oleada, t, goteo, cola, vivos, quedan, hecha}
+var horda := {}            # {salio, t, goteo, cola, vivos, quedan, hecha}
 var sirena_t := 0.0
 var cartel: VBoxContainer
 var cartel_titulo: Label
@@ -151,7 +153,7 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		"horda":
 			if idx == 0:
 				for tipo in horda.quedan:
-					bajar(tipo, false)
+					soltar(tipo)
 				horda.quedan = []
 
 
@@ -160,8 +162,7 @@ func empezar() -> void:
 	var d: Dictionary = DATOS[evento]
 	var texto: String = d.texto
 	if evento == "horda":
-		texto = texto % ("mecánicas" if partida.ed.generador == "tienda" else "de incendios")
-		horda = {"oleada": 0, "t": HORDA.primera, "goteo": 0.0, "cola": [], "vivos": [], "quedan": [], "hecha": false}
+		horda = {"salio": false, "t": HORDA.primera, "goteo": 0.0, "cola": [], "vivos": [], "quedan": [], "hecha": false}
 	sirena_t = INCENDIO.sirena
 	mostrar_cartel(d.titulo, texto, d.color)
 	get_tree().create_timer(0.3, false).timeout.connect(Sonido.tocar.bind(d.sonido))
@@ -259,7 +260,7 @@ func repartir_charcos(sitio: Dictionary) -> Array:
 	return lista
 
 
-# ── La horda por las escaleras ──
+# ── La horda del pasillo ──
 
 func avanzar_horda(delta: float) -> void:
 	var h := horda
@@ -267,30 +268,27 @@ func avanzar_horda(delta: float) -> void:
 		return
 	h.vivos = h.vivos.filter(func(z): return is_instance_valid(z) and z.estado != "muerto")
 	h.t -= delta
-	if h.vivos.is_empty() and h.cola.is_empty() and h.oleada > 0:
-		h.t = minf(h.t, 2.0)   # si ya no queda ninguno, la siguiente oleada no se hace esperar
-	if h.t <= 0.0 and h.oleada < HORDA.oleadas.size():
+	if h.t <= 0.0 and not h.salio:
 		var num: int = partida.planta.num
-		var n := roundi(HORDA.oleadas[h.oleada] * (1.0 + HORDA.por_planta * (num - 1)) * Alerta.mas_zombis() * Reto.mas_zombis())
-		var tipos := tipos_horda(h.oleada, num)
+		var n := roundi(HORDA.zombis * (1.0 + HORDA.por_planta * (num - 1)) * Alerta.mas_zombis() * Reto.mas_zombis())
+		var tipos := tipos_horda(num)
 		for i in n:
 			h.cola.append(tipos.pick_random())
-		h.oleada += 1
-		h.t = HORDA.entre
+		h.salio = true
 		Sonido.tocar("rugido")
-		partida.decir("¡Oleada %d de %d! Bajan por las escaleras" % [h.oleada, HORDA.oleadas.size()], 2.5)
+		partida.decir("¡Ahí viene la horda!", 2.5)
 	h.goteo -= delta
 	if not h.cola.is_empty() and h.goteo <= 0.0:
 		h.goteo = HORDA.goteo
-		bajar(h.cola.pop_front(), true)
-	if h.oleada >= HORDA.oleadas.size() and h.cola.is_empty() and h.vivos.is_empty() and h.quedan.is_empty():
+		soltar(h.cola.pop_front())
+	if h.salio and h.cola.is_empty() and h.vivos.is_empty() and h.quedan.is_empty():
 		h.hecha = true
 		premio()
 
 
-# Qué zombis bajan: cada oleada y cada planta, peores (en el centro comercial, también vigilantes)
-func tipos_horda(oleada: int, num: int) -> Array:
-	var nivel := oleada + num
+# Qué zombis salen: cada planta, peores (en el centro comercial, también vigilantes)
+func tipos_horda(num: int) -> Array:
+	var nivel: int = HORDA.nivel + num
 	var tipos := ["lento", "normal", "normal"]
 	if nivel >= 2:
 		tipos += ["rapido", "rapido"]
@@ -303,19 +301,15 @@ func tipos_horda(oleada: int, num: int) -> Array:
 	return tipos
 
 
-# Un zombi de la horda: baja por la puerta de las escaleras o, si ya estaba (Johnny se fue y ha vuelto), espera
-# en algún sitio del pasillo lejos de él
-func bajar(tipo: String, por_escaleras: bool) -> void:
+# Un zombi de la horda: sale en algún sitio del pasillo lejos de Johnny, fuera de pantalla (también los que esperaban
+# cuando Johnny se fue a un piso y ha vuelto), y va a por él. No salen por ninguna puerta
+func soltar(tipo: String) -> void:
 	var mapa: Node = partida.mapa
-	var donde: Vector2 = mapa.punto_libre(partida.johnny.position, 400.0)
-	if por_escaleras:
-		donde = mapa.puertas[partida.puerta_de_tipo("escaleras")].llegada() + Vector2(randf_range(-40, 0), randf_range(-50, 50))
+	var donde: Vector2 = mapa.punto_libre(partida.johnny.position, HORDA.lejos)
 	var z: Node2D = partida.meter_zombi(tipo, donde)
 	z.set_meta("tipo", tipo)
 	z.zona = mapa.zona_en(donde)
 	horda.vivos.append(z)
-	if por_escaleras:
-		Particulas.anillo(z, donde, 30.0, Color("#8a7f6a"), 0.3)
 
 
 func premio() -> void:
@@ -444,9 +438,11 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	johnny.set_physics_process(false)   # quieto, que no le muevan los empujones
 	johnny.position = Vector2(partida.planta.sitios[0].ancho - 520, partida.planta.sitios[0].alto / 2.0)
 	johnny.get_node("Camara").reset_smoothing()
-	await esperar.call(HORDA.primera + 2.5)
+	await esperar.call(HORDA.primera + 5.0)
 	var z := get_tree().get_nodes_in_group("zombis")
-	print("Horda · oleada %d · bajados %d · en cola %d" % [horda.oleada, z.size(), horda.cola.size()])
+	var cerca := z.filter(func(zz): return zz.global_position.distance_to(johnny.global_position) < HORDA.lejos).size()
+	print("Horda · salió %s · en el pasillo %d (esperado %d) · en cola %d · ya cerca de Johnny %d" % [horda.salio, z.size(),
+		roundi(HORDA.zombis * Alerta.mas_zombis() * Reto.mas_zombis()), horda.cola.size(), cerca])
 	foto.call("horda")
 	# Johnny se mete en un piso: los que quedan le esperarán en el pasillo
 	await partida.montar(piso(false), 0, false)
@@ -456,7 +452,7 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 	await partida.montar(0, 1, false)
 	await esperar.call(0.3)
 	print("Horda · al volver, en el pasillo: %d" % get_tree().get_nodes_in_group("zombis").size())
-	# las otras dos oleadas, de golpe, y todos al suelo
+	# los que quedan, de golpe, y todos al suelo
 	var dolares: int = partida.dolares
 	horda.t = 0.0
 	for i in 60:
@@ -469,7 +465,7 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 		horda.t = minf(horda.t, 0.0)
 	johnny.set_physics_process(true)
 	await esperar.call(1.5)
-	print("Horda · vencida: %s · oleadas %d · dólares %d -> %d · aviso '%s' · lugar '%s'" % [horda.hecha, horda.oleada,
+	print("Horda · vencida: %s · dólares %d -> %d · aviso '%s' · lugar '%s'" % [horda.hecha,
 		dolares, partida.dolares, partida.aviso.text, partida.lugar.text])
 	foto.call("horda-premio")
 
