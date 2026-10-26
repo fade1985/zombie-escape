@@ -321,6 +321,62 @@ func probar_cocinero() -> void:
 	johnny.vida = antes_johnny
 
 
+# --azotea: solo la azotea (la de los Apartamentos, con el científico; con --edificio centro, la del gerente)
+func probar_azotea_sola() -> void:
+	await get_tree().create_timer(0.3).timeout
+	await probar_azotea()
+	get_tree().quit()
+
+
+# El helipuerto elevado de la azotea (planta.gd, mapa.gd y partida.gd, mirar_ring): que está en el centro, que ni la
+# base ni el dibujo de ningún aparato lo tocan, que de abajo solo se sube por la rampa, que el jefe espera arriba sin
+# recibir daño y que, al subir Johnny, la valla cierra la rampa (captura-azotea-valla.png) y ya no se baja
+func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
+	var p := Planta.plataforma(s)
+	var huella := Planta.huella_helipuerto(s)
+	var encima := 0
+	for m in s.muebles:
+		var r := Muebles.hueco(m)
+		var alto: float = load("res://assets/sprites/mueble-%s.png" % m.tipo).get_height() * 2.0
+		var dibujo := Rect2(r.position.x, r.end.y - alto, r.size.x, alto)
+		if huella.any(func(h): return h.intersects(r) or h.intersects(dibujo)):
+			encima += 1
+	print("  helipuerto: en el centro %s | aparatos encima (o su dibujo): %d (esperado: 0)" % [
+		p.get_center() == Vector2(s.ancho, s.alto) / 2.0, encima])
+	# de abajo (por delante de la cara) al centro: el camino pasa por la rampa
+	var nav := mapa.get_world_2d().navigation_map
+	var abajo := Vector2(s.helipuerto.x, p.end.y + Planta.PLATAFORMA_ALTO + 50.0)
+	var camino := NavigationServer2D.map_get_path(nav, abajo, s.helipuerto, true)
+	var rampa := Planta.rampa(s)
+	var por_la_rampa := false   # (las esquinas del camino quedan fuera, a un radio de zombi: se mira cada tramo)
+	for i in camino.size() - 1:
+		for k in 11:
+			por_la_rampa = por_la_rampa or rampa.has_point(camino[i].lerp(camino[i + 1], k / 10.0))
+	print("  camino de abajo al centro: %d puntos | pasa por la rampa %s | llega %s" % [camino.size(), por_la_rampa,
+		not camino.is_empty() and camino[-1].distance_to(s.helipuerto) < 4.0])
+	# el jefe espera arriba: los golpes no le hacen nada
+	if jefa is Minijefe:
+		var vida_antes: int = jefa.vida
+		jefa.recibir_golpe(50, Vector2.RIGHT * 300.0)
+		print("  el jefe espera: %s | estado %s | en el helipuerto %s | un golpe le quita %d (esperado: 0)" % [jefa.esperando,
+			jefa.estado, mapa.en_plataforma(jefa.position), vida_antes - jefa.vida])
+	# Johnny sube por la rampa: la valla se cierra detrás
+	johnny.position = Vector2(Planta.rampa(s).position.x + 30.0, s.helipuerto.y)
+	camara.reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	print("  en la rampa: valla %s" % ("cerrada" if mapa.valla.cerrada else "abierta"))
+	johnny.position = Vector2(p.position.x + 60.0, s.helipuerto.y)
+	await get_tree().create_timer(0.5).timeout
+	camara.zoom = Vector2(0.8, 0.8)
+	camara.reset_smoothing()
+	Captura.foto("captura-azotea-valla.png")
+	camara.zoom = Vector2.ONE
+	var fuera := NavigationServer2D.map_get_path(nav, s.helipuerto, abajo, true)
+	print("  arriba: valla %s | el jefe espera %s | aviso: '%s' | se puede bajar andando %s (esperado: false)" % [
+		"cerrada" if mapa.valla.cerrada else "abierta", jefa is Minijefe and jefa.esperando, aviso.text,
+		not fuera.is_empty() and fuera[-1].distance_to(abajo) < 4.0])
+
+
 # La azotea del centro comercial: Johnny llega por la escalera y sale el jefe (captura-azotea.png); la azotea entera,
 # sin penumbra y desde lejos (captura-azotea-entera.png); y, quitado el jefe, la escalera de incendios abierta
 # (captura-azotea-incendios.png)
@@ -339,11 +395,12 @@ func probar_azotea() -> void:
 	print("  ha salido el jefe: %s | escalera de llegada %s | incendios %s | aviso: '%s'" % [jefa != null,
 		"cerrada" if cerrada else "abierta", "abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
 	var camara: Camera2D = johnny.get_node("Camara")
+	await probar_helipuerto(s, camara)
 	# el gerente, con Johnny delante, lanzándole los contratos (captura-gerente.png)
 	if jefa and jefa.has_method("lanzar_contratos"):
 		for i in 60:
-			johnny.position = jefa.position + Vector2.from_angle(PI + randf_range(-0.8, 0.8)) * 300.0
-			if mapa.zona_en(johnny.position) >= 0 and jefa.a_la_vista(johnny):   # sin aparatos en medio
+			johnny.position = jefa.position + Vector2.from_angle(PI + randf_range(-0.8, 0.8)) * 220.0
+			if mapa.en_plataforma(johnny.position, johnny.RADIO) and jefa.a_la_vista(johnny):   # dentro del ring
 				break
 		camara.reset_smoothing()
 		jefa.foto(johnny)
@@ -354,7 +411,7 @@ func probar_azotea() -> void:
 		# el maletinazo, con Johnny pegado (captura-gerente-maletinazo.png)
 		for i in 60:
 			johnny.position = jefa.position + Vector2.from_angle(PI + randf_range(-0.5, 0.5)) * 115.0
-			if mapa.zona_en(johnny.position) >= 0:
+			if mapa.en_plataforma(johnny.position, johnny.RADIO):
 				break
 		camara.reset_smoothing()
 		for papel in get_tree().get_nodes_in_group("balas_zombi"):
@@ -406,8 +463,8 @@ func probar_azotea() -> void:
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-azotea-incendios.png")
-	print("  sin el jefe: jefe muerto %s | incendios %s | aviso: '%s'" % [planta.jefa_muerta,
-		"abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
+	print("  sin el jefe: jefe muerto %s | incendios %s | valla del helipuerto %s | aviso: '%s'" % [planta.jefa_muerta,
+		"abierta" if mapa.puertas[1].abierta else "cerrada", "cerrada" if mapa.valla.cerrada else "abierta", aviso.text])
 	if es_final:
 		# al rato, su página del dosier (con el juego parado); al cerrarla, el helicóptero (captura-helicoptero.png)
 		await get_tree().create_timer(1.3).timeout
@@ -436,11 +493,12 @@ func probar_cientifico_jefe(camara: Camera2D) -> void:
 	var cerca := func(lejos: float, hacia := PI / 2.0) -> void:   # Johnny cerca de él, donde se pueda estar y a la vista
 		for i in 60:
 			johnny.position = jefa.position + Vector2.from_angle(hacia + randf_range(-0.6, 0.6)) * lejos
-			if mapa.zona_en(johnny.position) >= 0 and jefa.a_la_vista(johnny):
+			if mapa.en_plataforma(johnny.position, johnny.RADIO) and jefa.a_la_vista(johnny):   # (dentro del ring)
 				break
 		camara.reset_smoothing()
+		johnny.vida = johnny.stats.vida_max   # (en el ring siempre hay charcos cerca: que no caiga a media prueba)
 	# las probetas, recién tiradas
-	cerca.call(300.0, PI)
+	cerca.call(220.0, PI)
 	jefa.foto(johnny)
 	await get_tree().create_timer(0.35).timeout
 	Captura.foto("captura-cientifico.png")
@@ -515,7 +573,7 @@ func probar_cientifico_jefe(camara: Camera2D) -> void:
 	print("  puñetazo: %s | a Johnny le ha quitado %d" % [jefa.estado, vida_johnny - johnny.vida])
 	# y escupe fuego
 	await get_tree().create_timer(0.5).timeout
-	cerca.call(380.0, 0.0)
+	cerca.call(250.0, 0.0)
 	jefa.empezar("aviso_fuego", (johnny.position - jefa.position).angle())
 	jefa.t = jefa.AVISO_FUEGO - 0.05
 	await get_tree().create_timer(0.3).timeout
@@ -538,9 +596,10 @@ func probar_mutado(camara: Camera2D) -> void:
 	var cerca := func(lejos: float, hacia := PI / 2.0) -> void:   # Johnny cerca de él, donde se pueda estar y a la vista
 		for i in 60:
 			johnny.position = jefa.position + Vector2.from_angle(hacia + randf_range(-0.6, 0.6)) * lejos
-			if mapa.zona_en(johnny.position) >= 0 and jefa.a_la_vista(johnny):
+			if mapa.en_plataforma(johnny.position, johnny.RADIO) and jefa.a_la_vista(johnny):   # (dentro del ring)
 				break
 		camara.reset_smoothing()
+		johnny.vida = johnny.stats.vida_max   # (en el ring siempre hay charcos cerca: que no caiga a media prueba)
 	cerca.call(170.0, PI)   # (a un lado: así se le ve entero, con la jeringa)
 	jefa.andar(5.0)
 	jefa.recibir_golpe(int(jefa.vida - jefa.vida_max * 0.5), Vector2.ZERO)
@@ -568,7 +627,7 @@ func probar_mutado(camara: Camera2D) -> void:
 	print("  latigazos: %s | a Johnny le han quitado %d" % [jefa.estado, vida_johnny - johnny.vida])
 	# y la embestida: la franja roja, y luego sale corriendo
 	await get_tree().create_timer(0.5).timeout
-	cerca.call(400.0, 0.0)
+	cerca.call(250.0, 0.0)
 	jefa.empezar("aviso_embestida", (johnny.position - jefa.position).angle())
 	await get_tree().create_timer(0.55).timeout
 	Captura.foto("captura-mutado-embestida.png")

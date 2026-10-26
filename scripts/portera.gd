@@ -85,6 +85,7 @@ var vapor := VaporRabia.new(98.0)   # el vapor de la cabeza, enfadada (vapor_rab
 
 
 func _ready() -> void:
+	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	vida = vida_max
 	$Vapor.draw.connect(_pintar_vapor)
 	vida_cambiada.emit.call_deferred(vida, vida_max)

@@ -25,6 +25,8 @@
 #   --avisos            el resto de los avisos de los jefes (lenguas, rayas, círculos...)  [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
+#   --azotea            la azotea y su helipuerto elevado: la rampa, el jefe esperando, la valla y el jefe final
+#                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
 #   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
 #                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
@@ -125,6 +127,9 @@ func empezar_prueba() -> void:
 	elif "--presentacion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_presentacion()
+	elif "--azotea" in args:
+		set_process(false)   # sin la prueba larga
+		probar_azotea_sola()
 	elif "--skins" in args:
 		set_process(false)   # sin la prueba larga
 		probar_skins()

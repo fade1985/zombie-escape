@@ -139,6 +139,7 @@ var con_raton := false     # modo libre: si se está apuntando con el ratón (se
 
 
 func _ready() -> void:
+	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	efectos.animation_finished.connect(efectos.hide)
 	llamas = Llamas.new()
 	llamas.alto = 70.0

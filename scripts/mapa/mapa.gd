@@ -53,6 +53,7 @@ const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
+const VALLA := preload("res://scripts/mapa/valla.gd")
 # El suelo y la pared de las habitaciones de un piso que no dependen de dónde caen (que cambia al voltear el piso):
 # "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>; con "" en uno, ese
 # se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
@@ -137,6 +138,7 @@ var centro := false               # si es del centro comercial (una tienda, la g
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
+var valla: Node2D = null          # la valla de la rampa del helipuerto (solo en la azotea; valla.gd)
 
 
 func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
@@ -237,6 +239,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_caras()
 	poner_puertas()
 	poner_muebles()
+	poner_helipuerto()
 	poner_apliques()
 	poner_escaparates()
 	poner_peligros()
@@ -408,9 +411,9 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		var largo := (cols - 4) * 16 - 56
 		var y := filas * 8 - 16
 		lienzo.draw_texture_rect_region(alfombra, Rect2(32 + 28, y, largo, 32), Rect2(0, 0, largo * 2, alfombra.get_height()))
-	# el helipuerto pintado de la azotea
+	# el helipuerto de la azotea: la plataforma, con su cara y su rampa a la izquierda (sus choques, poner_helipuerto)
 	if sitio.has("helipuerto"):
-		lienzo.draw_texture(HELIPUERTO, (sitio.helipuerto / 2.0 - HELIPUERTO.get_size() / 2.0).floor())
+		lienzo.draw_texture(HELIPUERTO, Vector2(Planta.rampa(sitio).position.x, Planta.plataforma(sitio).position.y) / 2.0)
 	# las manchas de sangre de la sala de mantenimiento (y la azotea): cada una gira de 90 en 90 grados y se voltea al azar
 	for m in sitio.get("manchas", []):
 		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
@@ -420,6 +423,61 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		var t: Texture2D = r.dibujo
 		lienzo.draw_set_transform(r.pos, r.giro * PI / 2.0, Vector2(-2 if r.espejo else 2, 2))
 		lienzo.draw_texture(t, -(t.get_size() / 2.0).floor())
+
+
+# Los choques del helipuerto de la azotea (planta.gd): a la plataforma solo se sube por la rampa. Chocan su borde, la
+# cara de delante, las barandillas de la rampa y la cara de la rampa (un triángulo, que crece hacia la plataforma), en
+# la capa Planta.CAPA_BORDE: paran a los que andan, no a las balas, porque es bajo. La navegación lo recorta (grupo
+# "obstaculos"), así que los zombis y el jefe también suben y bajan por la rampa. En lo alto de la rampa, la valla
+# (valla.gd), metida en el suelo hasta que empieza la pelea
+func poner_helipuerto() -> void:
+	if not sitio.has("helipuerto"):
+		return
+	var p := Planta.plataforma(sitio)
+	var r := Planta.rampa(sitio)
+	var b := Planta.PLATAFORMA_BORDE
+	var alto := Planta.PLATAFORMA_ALTO
+	var bar := Planta.BARANDILLA
+	var cuerpo := StaticBody2D.new()
+	cuerpo.name = "Helipuerto"
+	cuerpo.collision_layer = Planta.CAPA_BORDE
+	cuerpo.collision_mask = 0
+	cuerpo.add_to_group("obstaculos")
+	add_child(cuerpo)
+	for caja in [Rect2(p.position.x, p.position.y, p.size.x, b),            # el borde de arriba
+			Rect2(p.end.x - b, p.position.y, b, p.size.y),                    # el de la derecha
+			Rect2(p.position.x, p.end.y - b, p.size.x, b + alto),             # el de abajo, con la cara de delante
+			Rect2(p.position.x, p.position.y, b, r.position.y + bar - p.position.y),   # el de la izquierda, encima
+			Rect2(p.position.x, r.end.y - bar, b, p.end.y - r.end.y + bar),            # y debajo de la rampa
+			Rect2(r.position.x, r.position.y, r.size.x, bar),                 # las barandillas de la rampa
+			Rect2(r.position.x, r.end.y - bar, r.size.x, bar)]:
+		var forma := CollisionShape2D.new()
+		var rect := RectangleShape2D.new()
+		rect.size = caja.size
+		forma.shape = rect
+		forma.position = caja.get_center()
+		cuerpo.add_child(forma)
+	var cara := CollisionShape2D.new()
+	var triangulo := ConvexPolygonShape2D.new()
+	triangulo.points = PackedVector2Array([Vector2(r.position.x, r.end.y), Vector2(r.end.x, r.end.y), Vector2(r.end.x, r.end.y + alto)])
+	cara.shape = triangulo
+	cuerpo.add_child(cara)
+	valla = VALLA.new()
+	valla.montar(Rect2(p.position.x, r.position.y, b, r.size.y), self)
+	cosas.add_child(valla)
+
+
+# Si un punto está encima del helipuerto, donde se puede estar (sin el borde). "margen": lo que tiene que quedar
+# hasta el borde (el radio de quien esté ahí)
+func en_plataforma(pos: Vector2, margen := 0.0) -> bool:
+	return sitio.has("helipuerto") and Planta.plataforma(sitio).grow(-Planta.PLATAFORMA_BORDE - margen).has_point(pos)
+
+
+# El punto de encima del helipuerto más cercano a "pos", con "margen" hasta el borde (los zombis que llama el jefe con
+# la valla cerrada: que salgan dentro del ring)
+func a_la_plataforma(pos: Vector2, margen: float) -> Vector2:
+	var dentro := Planta.plataforma(sitio).grow(-Planta.PLATAFORMA_BORDE - margen)
+	return pos.clamp(dentro.position, dentro.end)
 
 
 # Los choques de los muros: rectángulos grandes (se juntan las casillas seguidas de cada fila, y las filas
@@ -698,6 +756,9 @@ func preparar_restos() -> void:
 	if libres.is_empty():
 		return
 	var azotea: bool = sitio.get("estilo", "") == "azotea"
+	if sitio.has("helipuerto"):   # en la azotea, nada encima del helipuerto
+		var huella := Planta.huella_helipuerto(sitio)
+		libres = libres.filter(func(c): return not huella.any(func(h): return h.grow(CASILLA).has_point((c + Vector2(0.5, 0.5)) * CASILLA)))
 	var cuantos := clampi(roundi(libres.size() * RESTOS_POR_CASILLA), 4, RESTOS_AZOTEA_MAX if azotea else 24)
 	var lista: Array = RESTOS_AZOTEA if azotea else RESTOS_SUELO
 	for i in cuantos:

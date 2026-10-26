@@ -35,7 +35,18 @@ const EXPO_FILAS := 153           # (alargada para los zombis, los minijefes, el
 const ARMAS_CASILLAS := 34       # la sala de pruebas (cuadrada): del centro a la pared caben 15 casillas
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
-const HELIPUERTO_RADIO := 160.0   # lo que ocupa el helipuerto pintado (helipuerto.png): ahí no va ningún aparato
+# El helipuerto (helipuerto.png, de tools/azotea.py): una plataforma un poco más alta que el suelo, siempre en el
+# centro de la azotea, con la rampa a la izquierda (de cara a la escalera por la que se llega). Es el ring del jefe
+# final: espera arriba y, en cuanto sube Johnny, una valla cierra la rampa hasta que cae (mapa.gd y partida.gd)
+const PLATAFORMA := Vector2(512, 384)   # lo de arriba, 16 × 12 casillas (con su borde, que no se pisa)
+const PLATAFORMA_ALTO := 24.0           # lo que se eleva: la cara de delante, que se ve por debajo
+const PLATAFORMA_BORDE := 8.0           # el borde de arriba: choca, como la cara
+const RAMPA := Vector2(128, 96)         # largo y ancho de la rampa (con sus dos barandillas)
+const BARANDILLA := 6.0                 # el grosor de cada barandilla de la rampa
+const PLATAFORMA_LIBRE := 64.0          # lo que queda libre alrededor de la plataforma, para rodearla andando
+# La capa de choque 4 ("bordes bajos"): el borde del helipuerto. Para a los que andan (Johnny, los zombis, los jefes y
+# los acompañantes la llevan en su máscara), no a lo que vuela (las balas y lo que se lanza solo miran la capa 1)
+const CAPA_BORDE := 8
 # Los aparatos de la azotea de cada edificio (catalogo.gd): cuántos de cada uno [mínimo, máximo]
 const APARATOS := {
 	"centro": {"acunit": [2, 3], "airhandler": [1, 2], "chimney": [2, 3], "vent": [3, 4]},
@@ -321,11 +332,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 
 # La azotea (la última planta del centro comercial y de los Apartamentos, como en el juego JS): un solo sitio grande
 # y abierto, sin pasillo ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el
-# helipuerto pintado y los aparatos sueltos (en el centro, aire acondicionado, climatizadoras, chimeneas y
-# extractores; en los Apartamentos, depósitos de agua, antenas, tendederos, chimeneas y extractores), que sirven para
-# cubrirse. Se llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la derecha, la escalera de
-# incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe": el jefe aparece al
-# llegar y, al caer, se abren las escaleras (partida.gd), como en el piso de la portera.
+# helipuerto elevado en el centro (PLATAFORMA) y los aparatos sueltos alrededor (en el centro, aire acondicionado,
+# climatizadoras, chimeneas y extractores; en los Apartamentos, depósitos de agua, antenas, tendederos, chimeneas y
+# extractores). Se llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la derecha, la escalera
+# de incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe": el jefe aparece al
+# llegar, encima del helipuerto, y espera ahí a Johnny; al caer, se abren las escaleras (partida.gd), como en el piso de
+# la portera.
 static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
@@ -336,7 +348,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var alto := AZOTEA_FILAS * CASILLA
 	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",
 		"dueno": Muebles.plano_rectangular(AZOTEA_COLS, AZOTEA_FILAS), "zombis": [], "limpio": false, "visitado": true,
-		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(roundf(ancho * 0.6 / 2.0) * 2.0, roundf(alto * 0.54 / 2.0) * 2.0)}
+		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(ancho / 2.0, alto / 2.0)}   # (el centro de lo de arriba)
 	sitio.salidas = [
 		{"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 			"aviso": "Ya no hay vuelta atrás"},
@@ -345,21 +357,25 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	]
 	sitio.muebles = aparatos(sitio, edificio)
 	# manchas de sangre sueltas (las de manchas-suelo.png), fuera del helipuerto
+	var huella := huella_helipuerto(sitio)
 	for i in rng.randi_range(5, 8):
 		var pos := Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60), rng.randf_range(MURO + 60, alto - MURO - 60))
-		if pos.distance_to(sitio.helipuerto) > HELIPUERTO_RADIO and lejos_de_muebles(sitio, pos, 20.0):
+		if not huella.any(func(h): return h.grow(40.0).has_point(pos)) and lejos_de_muebles(sitio, pos, 20.0):
 			sitio.manchas.append({"pos": pos, "dibujo": rng.randi() % 10, "giro": rng.randi() % 4, "espejo": rng.randf() < 0.5})
 	planta.sitios.append(sitio)
 	return planta
 
 
 # Los aparatos sueltos por la azotea, cada uno lejos de los demás (para que se pueda pasar entre ellos, también el
-# jefe), del helipuerto, de las dos puertas y del murete
+# jefe), de las dos puertas y del murete. Del helipuerto, más: su base, a PLATAFORMA_LIBRE (para rodearlo andando), y
+# su dibujo, que sube desde la base (los de abajo, altos, se pintarían encima de la plataforma), sin tocarlo
 static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 	var puestos := []
 	var puertas := [Vector2(MURO, sitio.alto / 2.0), Vector2(sitio.ancho - MURO, sitio.alto / 2.0)]
+	var huella := huella_helipuerto(sitio)
 	var cuantos: Dictionary = APARATOS.get(edificio, APARATOS.centro)
 	for tipo in cuantos:
+		var dibujo_alto: float = load("res://assets/sprites/mueble-%s.png" % tipo).get_height() * 2.0
 		for i in rng.randi_range(cuantos[tipo][0], cuantos[tipo][1]):
 			var p: Dictionary = Catalogo.MUEBLES[tipo]
 			for intento in 60:
@@ -367,8 +383,8 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 				var y := roundf(rng.randf_range(MURO + 40, sitio.alto - MURO - 60 - p.dep) / 2.0) * 2.0
 				var m := Muebles.nuevo(tipo, {"lado": "arriba", "base": y}, x, 0)
 				var r := Muebles.hueco(m)
-				var cerca := Vector2(clampf(sitio.helipuerto.x, r.position.x, r.end.x), clampf(sitio.helipuerto.y, r.position.y, r.end.y))
-				if cerca.distance_to(sitio.helipuerto) < HELIPUERTO_RADIO + 30.0:
+				var dibujo := Rect2(r.position.x, r.end.y - dibujo_alto, r.size.x, dibujo_alto)
+				if huella.any(func(h): return h.grow(PLATAFORMA_LIBRE).intersects(r) or h.grow(8.0).intersects(dibujo)):
 					continue
 				if puertas.any(func(d): return d.distance_to(r.get_center()) < 220.0):
 					continue
@@ -377,6 +393,22 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 				puestos.append(m)
 				break
 	return puestos
+
+
+# Lo de arriba del helipuerto (con su borde), en unidades
+static func plataforma(sitio: Dictionary) -> Rect2:
+	return Rect2(sitio.helipuerto - PLATAFORMA / 2.0, PLATAFORMA)
+
+
+# La rampa, pegada a la izquierda de la plataforma y en medio de ese lado (con sus barandillas)
+static func rampa(sitio: Dictionary) -> Rect2:
+	var p := plataforma(sitio)
+	return Rect2(p.position.x - RAMPA.x, sitio.helipuerto.y - RAMPA.y / 2.0, RAMPA.x, RAMPA.y)
+
+
+# Lo que ocupa el helipuerto en el suelo: la plataforma y la rampa, cada una con su cara de delante
+static func huella_helipuerto(sitio: Dictionary) -> Array:
+	return [plataforma(sitio).grow_side(SIDE_BOTTOM, PLATAFORMA_ALTO), rampa(sitio).grow_side(SIDE_BOTTOM, PLATAFORMA_ALTO)]
 
 
 # La sala de mantenimiento, donde empieza la partida: tres estancias una al lado de otra (SALA_ESTANCIAS), hecha como

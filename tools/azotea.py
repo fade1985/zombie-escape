@@ -6,7 +6,9 @@
                        de noche a lo lejos (256 × 48, se repite a lo largo)
   techo-azotea.png     la moldura de encima de la cara (6 píxeles): en la azotea, cielo
   tapa-azotea.png      el murete visto desde arriba (los de los lados y el de abajo): bloques de remate de 32
-  helipuerto.png       el helipuerto pintado en el suelo: el círculo amarillo y la H, gastados (160 × 160)
+  helipuerto.png       el helipuerto: la plataforma elevada (losas claras, el círculo amarillo y la H gastados, un
+                       borde de franjas y la cara de delante) y, a su izquierda, la rampa de chapa con sus
+                       barandillas (320 × 207; las medidas, las de planta.gd: PLATAFORMA, RAMPA...)
 
   py tools/azotea.py   → assets/sprites/
 Siempre salen iguales (cada una con su semilla).
@@ -153,40 +155,134 @@ def tapa():
     im.save(f'{OUT}/tapa-azotea.png')
 
 
+# Las medidas del helipuerto, en píxeles del dibujo (la mitad de las unidades de planta.gd: PLATAFORMA, RAMPA...)
+RAMPA_LARGO, RAMPA_ANCHO = 64, 48
+ARRIBA_ANCHO, ARRIBA_ALTO = 256, 192
+CARA = 12          # lo que se eleva: la cara de delante
+SOMBRA = 3
+BORDE = 4          # el borde de franjas de arriba
+BARANDILLA = 3
+HORMIGON_CARA = ((114, 116, 122), (72, 74, 80))   # la cara, de arriba abajo
+
+
 def helipuerto():
     rnd = random.Random('helipuerto')
-    W = 160
-    c = W / 2
-    im = Image.new('RGBA', (W, W), (0, 0, 0, 0))
+    R = RAMPA_LARGO
+    W, H = R + ARRIBA_ANCHO, ARRIBA_ALTO + CARA + SOMBRA
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     px = im.load()
-    AMARILLO = (196, 160, 52)
-    BLANCO = (212, 212, 204)
-    for y in range(W):
-        for x in range(W):
-            d = math.hypot(x + 0.5 - c, y + 0.5 - c)
-            color = None
-            if 70 <= d < 76:
-                color = AMARILLO
-            elif 60 <= d < 62:   # el aro fino de dentro
-                color = AMARILLO
-            # la H: dos palos y el travesaño
-            hx, hy = x - c, y - c
+    ry0 = ARRIBA_ALTO // 2 - RAMPA_ANCHO // 2
+    ry1 = ry0 + RAMPA_ANCHO
+
+    # lo de arriba: losas de hormigón de 32, más claras que el suelo de la azotea, con sus juntas y grava
+    for y in range(ARRIBA_ALTO):
+        for x in range(R, W):
+            lx = x - R
+            t = ((lx // 32) * 5 + (y // 32) * 3) % 5 - 2
+            c = tuple(v + t * 2 for v in (98, 108, 106))
+            if lx % 32 == 0 or y % 32 == 0:
+                c = mezcla(c, (70, 78, 78), 0.55)
+            px[x, y] = ruido(rnd, c, 3) + (255,)
+    for i in range(500):
+        x, y = rnd.randrange(R, W), rnd.randrange(ARRIBA_ALTO)
+        px[x, y] = ruido(rnd, (116, 126, 124) if rnd.random() < 0.5 else (80, 90, 88), 5) + (255,)
+
+    # el círculo amarillo y la H blanca, en medio, gastados (calvas de pintura a grupos, como de años de sol)
+    cx, cy = R + ARRIBA_ANCHO / 2, ARRIBA_ALTO / 2
+    pintura = {}
+    for y in range(ARRIBA_ALTO):
+        for x in range(R, W):
+            d = math.hypot(x + 0.5 - cx, y + 0.5 - cy)
+            hx, hy = x + 0.5 - cx, y + 0.5 - cy
+            if 70 <= d < 76 or 60 <= d < 62:   # el aro gordo y el fino de dentro
+                pintura[(x, y)] = (204, 166, 54)
             if abs(hy) < 26 and (14 <= abs(hx) < 24 or (abs(hx) < 14 and abs(hy) < 5)):
-                color = BLANCO
-            if color:
-                px[x, y] = color + (230,)
-    # gastado: calvas de pintura (a grupos), como si la hubieran pisado y le hubiera dado el sol años
-    for i in range(70):
-        cx, cy, r = rnd.randrange(W), rnd.randrange(W), rnd.uniform(1.0, 4.5)
+                pintura[(x, y)] = (222, 222, 214)
+    calvas = set()
+    for i in range(80):
+        ox, oy, r = rnd.uniform(R, W), rnd.uniform(0, ARRIBA_ALTO), rnd.uniform(1.0, 4.5)
         for dy in range(-5, 6):
             for dx in range(-5, 6):
-                x, y = cx + dx, cy + dy
-                if 0 <= x < W and 0 <= y < W and math.hypot(dx, dy) < r and px[x, y][3] > 0 and rnd.random() < 0.8:
-                    px[x, y] = px[x, y][:3] + (rnd.choice([0, 0, 90]),)
-    for x in range(W):
-        for y in range(W):
-            if px[x, y][3] > 0 and rnd.random() < 0.12:
-                px[x, y] = mezcla(px[x, y][:3], (110, 110, 112), 0.5) + (px[x, y][3],)
+                if math.hypot(dx, dy) < r and rnd.random() < 0.8:
+                    calvas.add((int(ox) + dx, int(oy) + dy))
+    for (x, y), c in pintura.items():
+        if (x, y) in calvas:
+            if rnd.random() < 0.3:
+                px[x, y] = mezcla(px[x, y][:3], c, 0.35) + (255,)
+            continue
+        if rnd.random() < 0.12:
+            c = mezcla(c, (98, 108, 106), 0.45)
+        px[x, y] = ruido(rnd, c, 4) + (255,)
+
+    # el borde: franjas amarillas y negras en diagonal (menos en la boca de la rampa), con el canto de fuera oscuro
+    for y in range(ARRIBA_ALTO):
+        for x in range(R, W):
+            lx = x - R
+            if not (lx < BORDE or lx >= ARRIBA_ANCHO - BORDE or y < BORDE or y >= ARRIBA_ALTO - BORDE):
+                continue
+            if lx < BORDE and ry0 <= y < ry1:
+                continue
+            c = (206, 170, 58) if ((x + y) // 4) % 2 == 0 else (44, 44, 48)
+            if lx == 0 or lx == ARRIBA_ANCHO - 1 or y == 0 or y == ARRIBA_ALTO - 1:
+                c = mezcla(c, (28, 28, 32), 0.5)
+            if rnd.random() < 0.1:
+                c = mezcla(c, (120, 120, 122), 0.4)
+            px[x, y] = ruido(rnd, c, 3) + (255,)
+    # luces de balizamiento: en las esquinas y en medio de cada lado (menos el de la rampa), verdes
+    for bx, by in [(R + 6, 6), (W - 7, 6), (R + 6, ARRIBA_ALTO - 7), (W - 7, ARRIBA_ALTO - 7),
+                   (int(cx) - 1, 6), (int(cx) - 1, ARRIBA_ALTO - 7), (W - 7, int(cy) - 1)]:
+        for dx in range(2):
+            for dy in range(2):
+                px[bx + dx, by + dy] = ((150, 236, 150) if dx == 0 and dy == 0 else (70, 170, 90)) + (255,)
+
+    # la cara de delante: hormigón más oscuro hacia abajo, el canto de arriba claro y una junta cada 32
+    for j in range(CARA):
+        y = ARRIBA_ALTO + j
+        for x in range(R, W):
+            c = mezcla(*HORMIGON_CARA, j / (CARA - 1))
+            if j == 0:
+                c = (170, 172, 176)
+            elif (x - R) % 32 == 0:
+                c = mezcla(c, (56, 58, 62), 0.6)
+            px[x, y] = ruido(rnd, c, 3) + (255,)
+    for i in range(30):   # desconchones
+        x, y = rnd.randrange(R, W), rnd.randrange(ARRIBA_ALTO + 2, ARRIBA_ALTO + CARA)
+        px[x, y] = (62, 64, 70, 255)
+    # la sombra que echa en el suelo
+    for i in range(SOMBRA):
+        for x in range(R + 1, W):
+            px[x, ARRIBA_ALTO + CARA + i] = (0, 0, 0, [90, 55, 25][i])
+
+    # la rampa: chapa de lágrimas, más oscura abajo y más clara arriba (así se ve que sube); entra en el borde
+    for y in range(ry0 + BARANDILLA, ry1 - BARANDILLA):
+        for x in range(R + BORDE):
+            c = mezcla((88, 94, 102), (140, 146, 152), min(1.0, x / R))
+            ox, oy = x % 4, (y - ry0) % 4
+            celda = (x // 4 + (y - ry0) // 4) % 2
+            if (celda == 0 and ox == oy and ox in (1, 2)) or (celda == 1 and ox + oy == 3 and ox in (1, 2)):
+                c = mezcla(c, (196, 200, 204), 0.45)
+            elif (celda == 0 and ox == oy + 1 and ox in (2, 3)) or (celda == 1 and ox + oy == 4 and ox in (2, 3)):
+                c = mezcla(c, (50, 54, 60), 0.4)
+            if x == 0:
+                c = mezcla(c, (40, 42, 46), 0.5)   # el canto de abajo, contra el suelo
+            px[x, y] = ruido(rnd, c, 2) + (255,)
+    # las barandillas, amarillas, a los dos lados de la rampa (con un poste cada 16)
+    for x in range(R):
+        for j in range(BARANDILLA):
+            for y in (ry0 + j, ry1 - 1 - j):
+                c = [(150, 120, 40), (226, 190, 70), (120, 96, 34)][j if y < cy else BARANDILLA - 1 - j]
+                if x % 16 == 0:
+                    c = mezcla(c, (60, 60, 64), 0.5)
+                px[x, y] = c + (255,)
+    # la cara de la rampa: un triángulo debajo, que crece de nada (contra el suelo) a lo que se eleva la plataforma
+    for x in range(R):
+        alto = round(CARA * (x + 1) / R)
+        for j in range(alto):
+            c = mezcla(*HORMIGON_CARA, j / (CARA - 1))
+            px[x, ry1 + j] = ruido(rnd, c, 3) + (255,)
+        for i in range(SOMBRA if x > 2 else 0):
+            if px[x, ry1 + alto + i][3] == 0:
+                px[x, ry1 + alto + i] = (0, 0, 0, [90, 55, 25][i])
     im.save(f'{OUT}/helipuerto.png')
 
 

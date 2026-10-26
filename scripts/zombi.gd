@@ -90,6 +90,7 @@ const BARRA := preload("res://scripts/barra_zombi.gd")
 
 
 func _ready() -> void:
+	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	vida = vida_max
 	if not ropas.is_empty():
 		sprite.sprite_frames = ropas.pick_random()

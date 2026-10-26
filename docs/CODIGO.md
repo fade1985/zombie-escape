@@ -129,13 +129,18 @@ en una línea.
   centro, la azotea, las viviendas). Estilos de cada sala: `ESTILO_DE`, `ESTILO_TIENDA`, `PASILLOS`.
   `acustica_en(pos)`: cómo suena ahí la pistola, "seca", "eco" o "duro", según el sitio y el uso de la habitación.
 - `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
+  La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda: `plataforma()`,
+  `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
+  (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).
+  Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
   `viviendas.gd`, el pasillo de los rescatados.
 - `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
 - `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd`, `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
-  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`.
+  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`,
+  `valla.gd` (la del helipuerto de la azotea).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.
 

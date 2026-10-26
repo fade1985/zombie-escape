@@ -114,7 +114,7 @@ func preparar(datos: Dictionary, en_modo: String) -> void:
 	modo = en_modo
 	add_to_group("aliados")
 	collision_layer = 0
-	collision_mask = 1     # solo choca con paredes y muebles
+	collision_mask = 1 | Planta.CAPA_BORDE   # solo choca con paredes y muebles (y el borde del helipuerto)
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	var forma := CollisionShape2D.new()
 	var circulo := CircleShape2D.new()

@@ -433,9 +433,14 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			Sonido.tocar("jefe")
 			# en medio de la sala (la pelea empieza en el centro, nunca junto a una pared); en la azotea, en el helipuerto
 			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.centro_libre())
+			# (en la azotea, espera arriba a que suba Johnny: mirar_ring)
+			if sitio.has("helipuerto") and jefa is Minijefe:
+				jefa.esperando = true
 			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
+			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
+				decir("Te espera arriba, en el helipuerto: sube por la rampa", 3.0)
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
@@ -602,6 +607,7 @@ func _physics_process(delta: float) -> void:
 	if sitio.tipo == "pasillo" or sitio.limpio:
 		return
 	var quedan: bool = not get_tree().get_nodes_in_group("zombis").is_empty() or (sitio.tipo == "jefe" and not jefa_salio)
+	mirar_ring(sitio)
 	# Al alejarse de la puerta de entrada, se cierra detrás de Johnny
 	if not cerrada and quedan and johnny.position.distance_to(mapa.puertas[0].llegada()) > CIERRE:
 		cerrada = true
@@ -611,6 +617,8 @@ func _physics_process(delta: float) -> void:
 	elif not quedan:
 		sitio.limpio = true
 		cerrada = false
+		if mapa.valla:
+			mapa.valla.abrir()   # (la del helipuerto: ya se puede bajar)
 		if sitio.tipo == "jefe":
 			planta.jefa_muerta = true
 			arreglar_ascensor()
@@ -625,6 +633,31 @@ func _physics_process(delta: float) -> void:
 		Sonido.tocar("limpio")
 		get_tree().create_timer(0.25).timeout.connect(Sonido.tocar.bind("puerta"))
 		supervivientes.piso_limpio(aqui)
+
+
+# El ring del helipuerto (la azotea): el jefe espera arriba (minijefe.gd, esperando) y, en cuanto Johnny sube por la
+# rampa y pisa la plataforma, la valla cierra la rampa (valla.gd) y empieza la pelea; de ahí no se baja hasta que cae
+# el jefe (al quedar limpia la azotea se abre). Los acompañantes que se hayan quedado abajo suben con él
+func mirar_ring(sitio: Dictionary) -> void:
+	if not sitio.has("helipuerto") or mapa.valla == null or not jefa_salio:
+		return
+	if mapa.valla.cerrada:
+		# nadie sale del ring: el borde es fino, y un empujón muy fuerte podría colar a alguien al otro lado
+		for n in [johnny] + get_tree().get_nodes_in_group("zombis") + get_tree().get_nodes_in_group("aliados"):
+			if not mapa.en_plataforma(n.global_position):
+				n.global_position = mapa.a_la_plataforma(n.global_position, n.radio + 4.0 if "radio" in n else 24.0)
+		return
+	if not mapa.en_plataforma(johnny.global_position, johnny.RADIO + 6.0):
+		return
+	mapa.valla.cerrar()
+	if is_instance_valid(jefa) and jefa is Minijefe:
+		jefa.esperando = false
+	var lado := -1.0
+	for a in get_tree().get_nodes_in_group("aliados"):
+		if not mapa.en_plataforma(a.global_position, 16.0):
+			a.global_position = mapa.a_la_plataforma(johnny.global_position + Vector2(36.0, 40.0 * lado), 24.0)
+			lado = -lado
+	decir("¡Se ha cerrado la valla! De aquí no se baja hasta acabar con " + planta.el_jefe, 3.0)
 
 
 # El científico muerto de esta planta, si está en este sitio y su página falta por encontrar (historia.gd). Si
@@ -1198,8 +1231,11 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 		Mancha.sangre(zombi.get_parent(), donde, randf_range(14.0, 20.0) * (1.8 if jefa else 1.0), color)
 
 
-# Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa
+# Saca un zombi del tipo que se pida (o la portera) en ese sitio del mapa. Con la valla del helipuerto cerrada, dentro
+# del ring (los que llama el jefe, aunque los pida cerca del borde)
 func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
+	if mapa.valla and mapa.valla.cerrada:
+		donde = mapa.a_la_plataforma(donde, 30.0)
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
 	var de_mentira := en_pruebas()   # en la sala de pruebas no cuentan: ni se apuntan, ni sueltan nada
 	if not de_mentira:

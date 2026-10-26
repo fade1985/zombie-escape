@@ -25,6 +25,7 @@ var agente: NavigationAgent2D
 
 
 func _ready() -> void:
+	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	add_to_group("zombis")
 	collision_layer = 4    # como los zombis: choca con paredes y muebles, y no tapa la vista
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
