@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://efi64cxmydqn"
-path="res://.godot/imported/mueble-bed_militar.png-5d0c48219470c280ce3ea56a0758bbb3.ctex"
+uid="uid://b0idrx8sj4hl3"
+path="res://.godot/imported/mueble-mattress_tecnico.png-b85076cc0bd945c146297825ff26face.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-bed_militar.png"
-dest_files=["res://.godot/imported/mueble-bed_militar.png-5d0c48219470c280ce3ea56a0758bbb3.ctex"]
+source_file="res://assets/sprites/mueble-mattress_tecnico.png"
+dest_files=["res://.godot/imported/mueble-mattress_tecnico.png-b85076cc0bd945c146297825ff26face.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://x127k85q8e7n"
-path="res://.godot/imported/mueble-bed_policia.png-1b52c46a2d8147a2b8cabd2930f4836a.ctex"
+uid="uid://dx5ffiqpgmqp7"
+path="res://.godot/imported/mueble-storageshelf.png-b003affbe65f54cc1893fc94e27230ea.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-bed_policia.png"
-dest_files=["res://.godot/imported/mueble-bed_policia.png-1b52c46a2d8147a2b8cabd2930f4836a.ctex"]
+source_file="res://assets/sprites/mueble-storageshelf.png"
+dest_files=["res://.godot/imported/mueble-storageshelf.png-b003affbe65f54cc1893fc94e27230ea.ctex"]
 
 [params]
 

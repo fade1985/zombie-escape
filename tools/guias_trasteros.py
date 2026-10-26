@@ -1,10 +1,14 @@
-"""Bocetos (guías) de lo que hay en el pasillo de los trasteros (el de las viviendas, viviendas.gd), para pedírselo a
-PixelLab recto: cajas de cartón apiladas y una carretilla de mano cargada, todo contra la pared de arriba, de frente.
+"""Bocetos (guías) de lo que hay en los trasteros de las viviendas (viviendas.gd), para pedírselo a PixelLab recto: en el
+pasillo, cajas de cartón apiladas y una carretilla de mano cargada; en cada habitación, una estantería metálica vacía
+y un colchón en el suelo. Todo contra la pared de arriba, de frente.
 
 Lo mismo que tools/guias_limpieza.py (de tools/guias_centro.py salen la perspectiva, los colores de la raya y del fondo
 azul y cómo se quita el fondo después). En la perspectiva del juego el suelo se ve desde arriba sin encoger y lo que
 tiene altura sube hacia arriba de la pantalla, así que cada caja es su tapa (ancho × fondo) y debajo su frente
 (ancho × alto); una caja encima de otra, subida lo que mide de alto la de abajo.
+
+El colchón no se dibuja con cajas: es la cama de siempre (assets/sources/salas/dormitorio/cama.png, sin la sangre) sin el
+cabecero ni el pie de madera, con el canto del colchón delante, para que PixelLab deje la almohada descolocada como está.
 
   py tools/guias_trasteros.py               → assets/sources/centro/guias/<archivo>.png
   py tools/guias_centro.py quita <png>…     quita el fondo azul de lo que devuelve PixelLab
@@ -27,7 +31,14 @@ T = {
     'cajas-pila':  (32, 18, 25),
     'cajas-bajas': (28, 16, 19),
     'carretilla':  (20, 14, 34),
+    'estanteria-trastero': (44, 18, 46),
 }
+GALVA = (165, 170, 178)      # la estantería, de acero galvanizado
+# el colchón: de qué fila a qué fila de la cama se coge (de la sábana de debajo del cabecero a la de antes del pie de madera),
+# y su canto de delante, de arriba abajo: la colcha que cuelga, la tela del colchón a rayas y el contorno (píxeles de la guía)
+COLCHON = (33, 147)
+CUELGA, TELA, CONTORNO = 6, 4, 2
+TELA_COLOR = [(206, 208, 216), (176, 182, 196)]   # la tela del colchón: el claro y la raya
 
 
 def rect(dr, x0, y0, x1, y1, color, raya=True):
@@ -79,11 +90,28 @@ def carretilla(dr, suelo):
     caja(dr, 5, suelo, 10, 8, 8, base=10, atras=2, etiqueta=False)
 
 
+def estanteria(dr, suelo):
+    """Una estantería de trastero, vacía: la balda de arriba vista desde arriba, y de frente los dos postes de angular
+    agujereado y cuatro baldas sin nada, cada una con su canto y, detrás, lo que se ve de su tabla"""
+    rect(dr, 0, suelo - 46, 44, suelo - 28, GALVA)
+    rect(dr, 2, suelo - 44, 42, suelo - 30, tono(GALVA, 1.08), False)
+    baldas = [suelo - 28, suelo - 14, suelo, suelo + 14]
+    for y0, y1 in zip(baldas, baldas[1:] + [suelo + 18]):
+        rect(dr, 3, y0, 41, y1, tono(GALVA, 0.55))                 # el hueco, en sombra
+        if y1 - y0 > 6:
+            rect(dr, 3, y1 - 6, 41, y1, tono(GALVA, 0.85), False)  # la tabla de la balda de debajo, que se ve desde arriba
+        rect(dr, 3, y0, 41, y0 + 2, tono(GALVA, 1.12))             # el canto de la balda
+    for x in (0, 41):
+        rect(dr, x, suelo - 28, x + 3, suelo + 18, tono(GALVA, 0.8))
+        for y in range(suelo - 26, suelo + 16, 3):
+            rect(dr, x + 1, y, x + 2, y + 1, tono(GALVA, 0.4), False)   # los agujeros del angular
+
+
 def guia(nombre, largo, fondo, alto):
     im = Image.new('RGBA', (largo * S + 2 * M, (fondo + alto) * S + 2 * M), FONDO + (255,))
     capa = Image.new('RGBA', (largo * S, (fondo + alto) * S), (0, 0, 0, 0))
     dr = ImageDraw.Draw(capa)
-    {'cajas-pila': cajas_pila, 'cajas-bajas': cajas_bajas, 'carretilla': carretilla}[nombre](dr, alto)
+    {'cajas-pila': cajas_pila, 'cajas-bajas': cajas_bajas, 'carretilla': carretilla, 'estanteria-trastero': estanteria}[nombre](dr, alto)
     im.alpha_composite(capa, (M, M))
     os.makedirs(OUT, exist_ok=True)
     ruta = f'{OUT}/{nombre}.png'
@@ -91,6 +119,41 @@ def guia(nombre, largo, fondo, alto):
     print(ruta, im.size)
 
 
+def guia_colchon():
+    from camas_viviendas import CAMA, sin_sangre
+    cama = sin_sangre(Image.open(CAMA).convert('RGBA'))
+    W = cama.width
+    arriba, abajo = COLCHON
+    top = cama.crop((0, arriba, W, abajo))
+    tp = top.load()
+    alto = CONTORNO + top.height + CUELGA + TELA + CONTORNO
+    capa = Image.new('RGBA', (W, alto), (0, 0, 0, 0))
+    capa.alpha_composite(top, (0, CONTORNO))
+    px = capa.load()
+    for x in range(W):
+        c = tp[x, 0]
+        if c[3]:   # el contorno de arriba, donde estaba el cabecero
+            for y in range(CONTORNO):
+                px[x, y] = RAYA
+        c = tp[x, top.height - 1]
+        if not c[3]:
+            continue
+        y = CONTORNO + top.height
+        oscuro = c[:3] == RAYA[:3] or max(c[:3]) < 50
+        for i in range(CUELGA):   # la colcha, que cuelga por delante (en sombra)
+            px[x, y + i] = RAYA if oscuro else tono(c[:3], 0.72)
+        for i in range(TELA):     # la tela del colchón, a rayas
+            px[x, y + CUELGA + i] = RAYA if oscuro else TELA_COLOR[(x // 4) % 2] + (255,)
+        for i in range(CONTORNO):
+            px[x, y + CUELGA + TELA + i] = RAYA
+    im = Image.new('RGBA', (W + 2 * M, alto + 2 * M), FONDO + (255,))
+    im.alpha_composite(capa, (M, M))
+    ruta = f'{OUT}/colchon.png'
+    im.save(ruta)
+    print(ruta, im.size)
+
+
 if __name__ == '__main__':
     for nombre, (largo, fondo, alto) in T.items():
         guia(nombre, largo, fondo, alto)
+    guia_colchon()

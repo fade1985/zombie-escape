@@ -40,15 +40,16 @@ const MUEBLES := {
 	# tienen también dibujo de lado (cama-matrimonio-lado y mesilla-lado: PixelLab los giró a partir de los de frente)
 	"doublebed":  {"len": 124, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio"},
 	"bed":        {"len": 84,  "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama"},
-	# la cama individual de cada superviviente (viviendas.gd), la misma con la colcha de su color (tools/camas_viviendas.py)
-	"bed_policia":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-policia"},
-	"bed_medico":       {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-medico"},
-	"bed_militar":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-militar"},
-	"bed_ferretero":    {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-ferretero"},
-	"bed_farmaceutica": {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-farmaceutica"},
-	"bed_tecnico":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-tecnico"},
-	# y su armario, el de siempre pero limpio, sin sangre ni arañazos (tools/armario_vivienda.py)
-	"wardrobe_vivienda": {"len": 96, "dep": 44, "paredes": "", "archivo": "viviendas/armario-limpio"},
+	# lo de las habitaciones de los supervivientes (viviendas.gd), que son trasteros: un colchón en el suelo, con la almohada
+	# descolocada y la colcha del color de cada uno (PixelLab, con la guía de tools/guias_trasteros.py; los colores, de
+	# tools/camas_viviendas.py), y una estantería metálica vacía (PixelLab, con su guía)
+	"mattress_policia":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-policia"},
+	"mattress_medico":       {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-medico"},
+	"mattress_militar":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-militar"},
+	"mattress_ferretero":    {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-ferretero"},
+	"mattress_farmaceutica": {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-farmaceutica"},
+	"mattress_tecnico":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-tecnico"},
+	"storageshelf":          {"len": 88, "dep": 36,  "paredes": "", "archivo": "viviendas/estanteria-trastero"},
 	# lo del pasillo de los trasteros (el de las viviendas): cajas de cartón apiladas, unas altas y otras bajas, y una carretilla
 	# de mano cargada con dos cajas (PixelLab, con las guías de tools/guias_trasteros.py)
 	"boxstack":  {"len": 64, "dep": 36, "paredes": "", "archivo": "viviendas/cajas-pila"},
@@ -463,10 +464,9 @@ const SALAS := {
 	},
 	# Las viviendas de los supervivientes rescatados (viviendas.gd): el pasillo y la habitación de cada uno
 	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). Sin muebles sueltos: solo los "colocados" (la
-	# entrada de las viviendas es "izquierda"): una cama individual en la esquina de arriba a la derecha (el mismo sitio que
-	# en el dormitorio individual de los pisos), con la colcha del color de cada uno, para distinguir las habitaciones, a su
-	# izquierda una mesilla con la lamparita apagada (sin luz: solo el dibujo) y, en la esquina de arriba a la izquierda,
-	# un armario limpio, algo separado de ella (el centro, en la casilla 2,5: queda una casilla libre entre él y el muro)
+	# entrada de las viviendas es "izquierda"). Cada habitación es un trastero: un colchón en el suelo en la esquina de arriba a
+	# la derecha (donde estaba la cama), con la colcha del color de cada uno, para distinguir las habitaciones, y en la de
+	# arriba a la izquierda una estantería metálica vacía, algo separada de ella (el centro, en la casilla 2,5)
 	# El pasillo, el de una zona de trasteros: cajas de cartón y alguna carretilla contra la pared de arriba (la de abajo
 	# queda detrás de la cara del tabique), lejos de las puertas de las habitaciones (en las casillas 5 y 6, 18 y 19, 31 y 32
 	# del pasillo) y de la entrada, a la izquierda; a la izquierda de la primera puerta de arriba no hay nada: allí va el
@@ -474,10 +474,10 @@ const SALAS := {
 	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["handtruck", 10.0], ["boxpile", 14.5],
 		["boxstack", 24.5], ["boxpile", 26.6], ["handtruck", 36.5]]}},
 	"habitacion": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_policia", 10.6]]}},
-	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_medico", 10.6]]}},
-	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_militar", 10.6]]}},
-	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_ferretero", 10.6]]}},
-	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_farmaceutica", 10.6]]}},
-	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_tecnico", 10.6]]}},
+	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_policia", 10.6]]}},
+	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_medico", 10.6]]}},
+	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_militar", 10.6]]}},
+	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_ferretero", 10.6]]}},
+	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_farmaceutica", 10.6]]}},
+	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_tecnico", 10.6]]}},
 }

@@ -1,25 +1,27 @@
-"""Las camas de las habitaciones de los supervivientes (viviendas.gd): la cama individual de siempre, con la colcha
-del color de cada uno (el mismo de Supervivientes.DATOS en scripts/supervivientes.gd), para que se distinga de quién es
-cada habitación.
+"""Las camas de las habitaciones de los supervivientes (viviendas.gd), que son trasteros: un colchón en el suelo, con la
+almohada descolocada y la colcha del color de cada uno (el mismo de Supervivientes.DATOS en scripts/supervivientes.gd),
+para que se distinga de quién es cada habitación.
 
-  py tools/camas_viviendas.py   → assets/sources/salas/viviendas/cama-<id>.png (y luego: py tools/importar.py)
+  py tools/camas_viviendas.py   → assets/sources/salas/viviendas/colchon-<id>.png (y luego: py tools/importar.py)
 
-Parte de assets/sources/salas/dormitorio/cama.png, le quita la sangre de la almohada y la sábana (la cama de un
-superviviente, limpia) y solo toca los píxeles de la colcha (la mostaza: tono naranja y saturados, que en ese dibujo son
-solo la colcha; la madera y las sábanas no). A cada uno le cambia el tono y deja la luminosidad, así que las sombras y los
-pliegues quedan como en el original (los mismos pocos colores).
+Parte del colchón de PixelLab (assets/sources/viviendas/colchon.png, con la colcha mostaza; su guía, la cama individual de
+siempre sin el cabecero ni el pie: tools/guias_trasteros.py) y solo toca los píxeles de la colcha (la mostaza: tono naranja
+y saturados, que en ese dibujo son solo la colcha; las sábanas y la almohada no). A cada uno le cambia el tono y deja la
+luminosidad, así que las sombras y los pliegues quedan como en el original (los mismos pocos colores).
 """
 import colorsys, os
 from collections import Counter
 from PIL import Image
 
-ORIGEN = 'assets/sources/salas/dormitorio/cama.png'
+ORIGEN = 'assets/sources/viviendas/colchon.png'
+CAMA = 'assets/sources/salas/dormitorio/cama.png'   # la cama de siempre, de la que sale la guía del colchón
 SALIDA = 'assets/sources/salas/viviendas'
 # el color de cada superviviente (Supervivientes.DATOS)
 COLORES = {'policia': '#6fa8ff', 'medico': '#80ed99', 'militar': '#c9e265',
            'ferretero': '#ff9a3c', 'farmaceutica': '#3ddc84', 'tecnico': '#4fe3ff'}
 SAT_MIN, SAT_MAX = 0.45, 0.85   # la colcha no ha de quedar ni grisácea ni chillona
-# los colores de la sangre del original (la mancha de la almohada y el reguero de la sábana, y un píxel suelto de su borde)
+# los colores de la sangre de la cama de siempre (la mancha de la almohada y el reguero de la sábana, y un píxel suelto de su
+# borde): tools/guias_trasteros.py la quita antes de hacer la guía del colchón
 SANGRE = {(113, 48, 49), (87, 14, 30), (134, 93, 73)}
 CABECERO = 36   # de aquí hacia arriba es el cabecero (su madera no se toca)
 
@@ -42,7 +44,7 @@ def rellenar(im, manchas, evitar=()):
     """Cada píxel de "manchas" (un conjunto de (x, y): sangre, arañazos...) pasa a ser el color que más se repite entre
     sus vecinos que no lo son (sábana, almohada, madera), de fuera hacia dentro, hasta que no queda ninguno. Los colores
     de "evitar" (los oscuros del borde de un dibujo) solo se usan cuando ya no queda ningún píxel con otro vecino que
-    rellenar. También lo usa tools/armario_vivienda.py"""
+    rellenar"""
     px = im.load()
     while manchas:
         limpios = {}
@@ -66,7 +68,7 @@ def rellenar(im, manchas, evitar=()):
 
 
 def main():
-    original = sin_sangre(Image.open(ORIGEN).convert('RGBA'))
+    original = Image.open(ORIGEN).convert('RGBA')
     os.makedirs(SALIDA, exist_ok=True)
     for id, hexa in COLORES.items():
         th = tono(hexa)
@@ -85,8 +87,8 @@ def main():
                 r, g, b = (round(c * 255) for c in colorsys.hls_to_rgb(th, l, s))
                 px[x, y] = (r, g, b, a)
                 cambiados += 1
-        im.save(f'{SALIDA}/cama-{id}.png')
-        print(f'  cama-{id}.png: {cambiados} píxeles de colcha')
+        im.save(f'{SALIDA}/colchon-{id}.png')
+        print(f'  colchon-{id}.png: {cambiados} píxeles de colcha')
 
 
 if __name__ == '__main__':

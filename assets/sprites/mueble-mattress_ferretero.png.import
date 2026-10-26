@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqkrotcmkjtj4"
-path="res://.godot/imported/mueble-wardrobe_vivienda.png-0b6e812a5bd6da74bfc9775a8b06af5e.ctex"
+uid="uid://dvkx5xpsql8ui"
+path="res://.godot/imported/mueble-mattress_ferretero.png-3573e46d455b770f9951b114d62a9ab3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-wardrobe_vivienda.png"
-dest_files=["res://.godot/imported/mueble-wardrobe_vivienda.png-0b6e812a5bd6da74bfc9775a8b06af5e.ctex"]
+source_file="res://assets/sprites/mueble-mattress_ferretero.png"
+dest_files=["res://.godot/imported/mueble-mattress_ferretero.png-3573e46d455b770f9951b114d62a9ab3.ctex"]
 
 [params]
 

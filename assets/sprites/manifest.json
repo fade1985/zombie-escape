@@ -215,14 +215,14 @@
   "mueble-nightstand-lado",
   "mueble-bed-lado",
   "mueble-sofaback",
-  "mueble-bed_farmaceutica",
-  "mueble-bed_ferretero",
-  "mueble-bed_medico",
-  "mueble-bed_militar",
-  "mueble-bed_policia",
-  "mueble-bed_tecnico",
-  "mueble-wardrobe_vivienda",
   "mueble-boxpile",
   "mueble-boxstack",
-  "mueble-handtruck"
+  "mueble-handtruck",
+  "mueble-mattress_farmaceutica",
+  "mueble-mattress_ferretero",
+  "mueble-mattress_medico",
+  "mueble-mattress_militar",
+  "mueble-mattress_policia",
+  "mueble-mattress_tecnico",
+  "mueble-storageshelf"
 ]

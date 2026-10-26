@@ -4022,5 +4022,18 @@
    "carretilla 2": "7bf394bd-0b73-4504-8a78-61640bf19d26"
   },
   "coste": "6 generaciones"
+ },
+ "trasteros-habitaciones": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "Lo de dentro de las habitaciones de los supervivientes (viviendas.gd), que son trasteros: el armario limpio pasa a ser una estantería metálica vacía (storageshelf, 88 por 36) y la cama individual, un colchón en el suelo con la almohada descolocada (mattress_<id>, 84 por 124); fuera las mesillas. Con la receta de los muebles (trasteros-pasillo): guías de py tools/guias_trasteros.py como init_image, no_background false, single color black outline y high top-down, 2 semillas. La estantería, con fuerza 45: las dos salieron rectas; elegida por Claude la 2 (angulares agujereados y tornillos). La guía del colchón es la cama de siempre (dormitorio/cama.png, sin la sangre) sin el cabecero ni el pie, con el canto del colchón delante (la colcha que cuelga y la tela a rayas), para que la almohada quede como estaba; la 1 con fuerza 70 y la 2 con 130; elegida por Claude la 1 (más limpia, con las esquinas redondeadas y el canto del colchón). La guía tuvo que ser de alto par (100 × 136). Fondo quitado con py tools/guias_centro.py quita. El colchón (con la colcha mostaza) en assets/sources/viviendas/colchon.png; sus seis colores, con py tools/camas_viviendas.py (assets/sources/salas/viviendas/colchon-<id>.png). La estantería, en assets/sources/salas/viviendas/estanteria-trastero.png. Sprites con py tools/importar.py (en SIN_HALO). Se borraron las camas de colores (cama-<id>), el armario limpio y tools/armario_vivienda.py (quedan en el historial de git).",
+  "texto": "an empty galvanized steel storage shelving unit seen in 3/4 top-down view, its plain metal top shelf seen from above, four bare empty metal shelves with nothing on them and two slotted angle steel posts facing the viewer ... / a single mattress lying directly on the floor seen in 3/4 top-down view, no bed frame, no headboard, no legs, a crumpled white pillow lying askew near the top, rumpled white sheet, a thick mustard yellow quilt covering the lower half and hanging over the front edge, the side of the mattress with striped ticking facing the viewer ... not rotated, not isometric, game furniture sprite on a plain blue background, muted colors",
+  "piezas": {
+   "estantería 1": "c81317ee-e013-4963-92e3-20b77d9d0af6",
+   "estantería 2 (elegida)": "910f156b-4d92-4b2b-b4a3-d666b08effbd",
+   "colchón 1, fuerza 70 (elegido)": "b9359e6c-2cd3-41be-a49e-78ceb5ea71ff",
+   "colchón 2, fuerza 130": "8ef42d3a-f056-4ef2-be4f-579fe8c8dce8"
+  },
+  "coste": "4 generaciones"
  }
 }

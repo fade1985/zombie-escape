@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://burmqwfrc0png"
-path="res://.godot/imported/mueble-bed_tecnico.png-25e66d2b5773130aee30e6f752efa749.ctex"
+uid="uid://6sx1uyhxdaaw"
+path="res://.godot/imported/mueble-mattress_farmaceutica.png-be49f8cb24d7b419c95a7d94d4b2978e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/mueble-bed_tecnico.png"
-dest_files=["res://.godot/imported/mueble-bed_tecnico.png-25e66d2b5773130aee30e6f752efa749.ctex"]
+source_file="res://assets/sprites/mueble-mattress_farmaceutica.png"
+dest_files=["res://.godot/imported/mueble-mattress_farmaceutica.png-be49f8cb24d7b419c95a7d94d4b2978e.ctex"]
 
 [params]
 

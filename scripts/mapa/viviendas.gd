@@ -14,9 +14,9 @@
 # Es un sitio de la planta baja como los demás (planta.gd), hecho como un apartamento ("apt": su plano por casillas,
 # sus habitaciones y sus puertas), así cada habitación lleva su niebla y no se ve por dentro hasta que se abre. Es
 # siempre igual; qué puertas están abiertas lo decide mapa.gd al montarlo (poner_viviendas), con el guardado de ese
-# momento. Por dentro, de momento, solo la cama individual de cada uno, en la esquina de arriba a la derecha y con la
-# colcha de su color (catalogo.gd: "habitacion-<id>" para cada una y "pasillo-viviendas" para el pasillo, con sus
-# "colocados"; Muebles.colocados).
+# momento. Por dentro, lo de un trastero: el colchón en el suelo de cada uno, en la esquina de arriba a la derecha y con
+# la colcha de su color, y una estantería metálica vacía en la de arriba a la izquierda (catalogo.gd: "habitacion-<id>"
+# para cada una y "pasillo-viviendas" para el pasillo, con sus "colocados"; Muebles.colocados).
 class_name Viviendas
 
 const CASILLA := 32
@@ -81,7 +81,7 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = semilla
 	sitio.muebles = Muebles.de_apartamento(apt, rng)
-	# y a cada habitación, lo suyo puesto a mano (su cama...), y al pasillo, sus cajas y sus carretillas: los "colocados" de
+	# y a cada habitación, lo suyo puesto a mano (su colchón y su estantería), y al pasillo, sus cajas y sus carretillas: los "colocados" de
 	# cada sala en el catálogo ("habitacion-<id>" y "pasillo-viviendas")
 	for s in salas:
 		sitio.muebles += Muebles.colocados(Catalogo.SALAS.get(s.uso + "-" + s.tipo, {}).get("colocados", {}).get("izquierda", []), s)

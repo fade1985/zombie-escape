@@ -359,10 +359,6 @@
     "huella": "6c3969fda369d75f",
     "sprite": "mueble-stafftoilet-lado"
   },
-  "viviendas/armario-limpio.png": {
-    "huella": "2476fcb8046aa927",
-    "sprite": "mueble-wardrobe_vivienda"
-  },
   "viviendas/cajas-bajas.png": {
     "huella": "87f5623da3a3eaf6",
     "sprite": "mueble-boxpile"
@@ -371,32 +367,36 @@
     "huella": "bea1bda3bced6db5",
     "sprite": "mueble-boxstack"
   },
-  "viviendas/cama-farmaceutica.png": {
-    "huella": "b9b4be2a7835c2a9",
-    "sprite": "mueble-bed_farmaceutica"
-  },
-  "viviendas/cama-ferretero.png": {
-    "huella": "cb7db14982902d15",
-    "sprite": "mueble-bed_ferretero"
-  },
-  "viviendas/cama-medico.png": {
-    "huella": "b89f3ae1d3d587c7",
-    "sprite": "mueble-bed_medico"
-  },
-  "viviendas/cama-militar.png": {
-    "huella": "fd9d8118af695dbd",
-    "sprite": "mueble-bed_militar"
-  },
-  "viviendas/cama-policia.png": {
-    "huella": "60f902122e9f9666",
-    "sprite": "mueble-bed_policia"
-  },
-  "viviendas/cama-tecnico.png": {
-    "huella": "f0ec968d490c428b",
-    "sprite": "mueble-bed_tecnico"
-  },
   "viviendas/carretilla.png": {
     "huella": "d9c0737107a94dba",
     "sprite": "mueble-handtruck"
+  },
+  "viviendas/colchon-farmaceutica.png": {
+    "huella": "557200504f8b3b08",
+    "sprite": "mueble-mattress_farmaceutica"
+  },
+  "viviendas/colchon-ferretero.png": {
+    "huella": "b4c40116e1090a42",
+    "sprite": "mueble-mattress_ferretero"
+  },
+  "viviendas/colchon-medico.png": {
+    "huella": "61685af18d1c2153",
+    "sprite": "mueble-mattress_medico"
+  },
+  "viviendas/colchon-militar.png": {
+    "huella": "9c5f8462d05fd44e",
+    "sprite": "mueble-mattress_militar"
+  },
+  "viviendas/colchon-policia.png": {
+    "huella": "c626bff029adf284",
+    "sprite": "mueble-mattress_policia"
+  },
+  "viviendas/colchon-tecnico.png": {
+    "huella": "0e032da24748cabf",
+    "sprite": "mueble-mattress_tecnico"
+  },
+  "viviendas/estanteria-trastero.png": {
+    "huella": "8ba9cc16dc7516c9",
+    "sprite": "mueble-storageshelf"
   }
 }
