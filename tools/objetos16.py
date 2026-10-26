@@ -1,8 +1,8 @@
-# Dibuja los 2 objetos de la mochila que aún son de 16×16 píxeles: la batería y las vendas (más detalle que los de
-# 10×10 de src/objetos.js, que les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la
-# derecha. La batería era del centro comercial (parte 6 de docs/historial/CENTRO_COMERCIAL.md) y las vendas son de curar
-# (parte 9). Todos los demás se quitaron o tienen ya dibujo de PixelLab, de 32×32, que este script NO toca: la gasolina
-# y el bidón de ácido (assets/pixellab.json → municion-iconos) y las piezas de mejora de las armas (pieza_*, → piezas).
+# Dibuja el único objeto de la mochila que aún es de 16×16 píxeles: las vendas (más detalle que los de 10×10 de
+# src/objetos.js, que les sirven de modelo): contorno oscuro, luz arriba a la izquierda y sombra abajo a la derecha. Las
+# vendas son de curar (parte 9). Todos los demás se quitaron o tienen ya dibujo de PixelLab, de 32×32, que este script NO
+# toca: la gasolina, el bidón de ácido y la batería (assets/pixellab.json → municion-iconos y bateria-icono; la batería
+# era de 16×16, de este script, hasta el 26 oct) y las piezas de mejora de las armas (pieza_*, → piezas).
 # Los objetos que se quitaron del juego: el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda,
 # las mancuernas, la cadena, las perchas, el hielo seco, el cable, los clavos, el spray de pintura, la lejía, la pistola
 # de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (25 oct), y luego los
@@ -37,25 +37,6 @@ PALETA = {
 }
 
 DIBUJOS = {
-    # la batería (era del centro comercial; ahora, la munición de la pistola eléctrica)
-    "bateria": [
-        "................",
-        "...ooo....ooo...",
-        "...oPo....oGo...",
-        "...oro....odo...",
-        ".oooooooooooooo.",
-        ".oGGGGGGGGGGGdo.",
-        ".oddddddddddddo.",
-        ".oKKKKKKKKKKKko.",
-        ".oKKrKKKKKKKKko.",
-        ".oKrrrKKKKwwwko.",
-        ".oKKrKKKKKKKKko.",
-        ".oKKKKKKKKKKKko.",
-        ".oKKKKKKKKKKKko.",
-        ".okkkkkkkkkkkko.",
-        ".oooooooooooooo.",
-        "................",
-    ],
     # las vendas, de curar (parte 9): el rollo de vendas con una tira con su cruz roja
     "vendas": [
         "................",

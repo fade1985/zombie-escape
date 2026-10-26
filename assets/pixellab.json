@@ -1106,6 +1106,25 @@
    "cost": "4 generaciones (2 de posturas, 2 de andar)"
   }
  },
+ "bateria-icono": {
+  "nota": "El icono de la batería (la munición del lanza rayos), 26 oct 2026, pedido por el dueño con una foto de un cilindro de tapas metálicas y tubo verde translúcido: parecido, pero con las tapas totalmente metálicas (sin las ranuras ni la raya verde) y el tubo del centro del color del rayo (celeste), con nuestro arte (de frente y en tres cuartos desde arriba). Antes era un dibujo de 16x16 hecho por código (tools/objetos16.py, una pila con dos bornes: sigue en git). Mismos parámetros que los iconos de la munición (municion-iconos): create_object_pro_flash 32x32, 1 dirección, view low top-down, assets/sprites/baul.png como imagen de estilo (subida con get_upload_url) sin copiar sus colores. Dos intentos (semillas 23001 y 23002), a la primera, en assets/sources/municion/intentos/bateria-A.png y bateria-B.png; hoja para elegir: assets/sources/municion/elegir-bateria.png. ELEGIDA LA A por el dueño (2026-10-26): el celeste más vivo y sin la raya casi blanca que tenía la B (el dueño no quiere brillos blancos en los objetos del suelo). Es assets/ui/iconos/obj-bateria.png tal cual (30 colores, 30x18 de dibujo). En el suelo se ve del mismo tamaño que antes (partida.gd: 32 unidades) pero con más detalle; en el HUD, junto a la barra celeste del depósito del lanza rayos. Prueba: -- --captura --pistola-electrica.",
+  "herramienta": "create_object_pro_flash",
+  "intentos": {
+   "A": {
+    "seed": 23001,
+    "id": "a2daf791-82c0-46c5-9c71-e9d1876c4c76",
+    "elegida": true
+   },
+   "B": {
+    "seed": 23002,
+    "id": "018d1cc8-2be3-4840-8bce-e7b8b5a5886e",
+    "nota": "tubo más oscuro y una raya clara casi blanca por arriba y por el medio"
+   },
+   "description": "A battery power cell shaped like a short thick cylinder lying horizontally, a bit turned: two solid brushed-steel metal end caps, plain grey steel, completely metallic, with no slots, no stripes and no green parts, and between them a clear translucent tube filled with a glowing bright cyan energy liquid, the same cyan color as an electric lightning bolt (bright cyan with a darker cyan shade). Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse. No white glare or shiny highlight spots."
+  },
+  "cost": "10 generaciones (2 dibujos de 5)",
+  "updated": "2026-10-26"
+ },
  "zombi-venenoso-48": {
   "kind": "character",
   "character_id": "d8d5f941-74ff-400e-b52b-20d9dc6d6b06",

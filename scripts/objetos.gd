@@ -4,8 +4,8 @@
 # (ui/inventario.gd, «Guardar de la mochila»). Hasta el 25 oct se juntaban de dos en dos en el banco de trabajo para
 # crear armas; las recetas se quitaron, y los explosivos, el despertador, el extintor, el trapo y el alcohol (que ya no
 # servían para nada) se fueron con ellas: en su lugar llegaron las piezas (PIEZAS), para mejorar las armas en el banco.
-# Su dibujo es assets/ui/iconos/obj-<id>.png: el de la batería y las vendas, de 16×16 (lo saca tools/objetos16.py); el
-# de la gasolina, el bidón de ácido y las piezas, de 32×32 (de PixelLab). La gasolina, el bidón de ácido y la
+# Su dibujo es assets/ui/iconos/obj-<id>.png: el de las vendas, de 16×16 (lo saca tools/objetos16.py); el
+# de la gasolina, el bidón de ácido, la batería y las piezas, de 32×32 (de PixelLab). La gasolina, el bidón de ácido y la
 # batería son además la munición del lanzallamas, el lanza ácido y el lanza rayos: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
 #
