@@ -46,6 +46,7 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket',   # (y los de la sala de mantenimiento)
             'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
             'bed_policia', 'bed_medico', 'bed_militar', 'bed_ferretero', 'bed_farmaceutica', 'bed_tecnico', 'wardrobe_vivienda',   # (las camas y el armario de las viviendas: tools/camas_viviendas.py y armario_vivienda.py)
+            'boxstack', 'boxpile', 'handtruck',   # (y lo del pasillo de los trasteros: tools/guias_trasteros.py)
             'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp', 'sofaback'}   # (y el dormitorio y la lámpara de pie: tools/guias_dormitorio.py)
 
 

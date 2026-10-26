@@ -363,6 +363,14 @@
     "huella": "2476fcb8046aa927",
     "sprite": "mueble-wardrobe_vivienda"
   },
+  "viviendas/cajas-bajas.png": {
+    "huella": "87f5623da3a3eaf6",
+    "sprite": "mueble-boxpile"
+  },
+  "viviendas/cajas-pila.png": {
+    "huella": "bea1bda3bced6db5",
+    "sprite": "mueble-boxstack"
+  },
   "viviendas/cama-farmaceutica.png": {
     "huella": "b9b4be2a7835c2a9",
     "sprite": "mueble-bed_farmaceutica"
@@ -386,5 +394,9 @@
   "viviendas/cama-tecnico.png": {
     "huella": "f0ec968d490c428b",
     "sprite": "mueble-bed_tecnico"
+  },
+  "viviendas/carretilla.png": {
+    "huella": "d9c0737107a94dba",
+    "sprite": "mueble-handtruck"
   }
 }

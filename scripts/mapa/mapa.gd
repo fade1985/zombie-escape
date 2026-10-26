@@ -47,6 +47,8 @@ const CAFETERA_JUNTO := Vector2(64, -8)   # la cafetera de Johnny, en la habitac
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
 const CARTEL_SALIDA := preload("res://scripts/mapa/cartel_salida.gd")   # el EXIT de la salida de incendios (encima de la pared de arriba del pasillo)
 const CARTEL_SALIDA_A := 76.0   # a cuánto del fondo del pasillo va su centro
+const CARTEL_TRASTEROS := preload("res://scripts/mapa/cartel_trasteros.gd")   # el de la entrada del pasillo de las viviendas
+const LINEA_TRASTERO := preload("res://assets/sprites/linea-trastero.png")   # la línea amarilla del suelo de ese pasillo (tools/trastero.py)
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
@@ -178,13 +180,20 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 					"pared": load("res://assets/sprites/pared-%s.png" % de[1]), "techo": load("res://assets/sprites/techo-%s.png" % de[1])}
 				continue
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
-			if s.uso == "pasillo":   # el pasillo de las viviendas: como el de los pisos
-				# (el de dentro de un piso con pasillo, apartamento.gd, como su salón, que va primero: como en una casa)
-				estilos[s.id] = (comun if not comun.is_empty() else estilos[0]) if s.get("tipo", "") == "piso" else textura("pasillo", "")
+			if s.uso == "pasillo" and s.get("tipo", "") == "piso":
+				# el de dentro de un piso con pasillo (apartamento.gd), como su salón, que va primero: como en una casa
+				estilos[s.id] = comun if not comun.is_empty() else estilos[0]
+				continue
+			if s.uso == "pasillo":
+				# el pasillo de las viviendas, el de una zona de trasteros: el suelo de hormigón de los trasteros (con su
+				# línea amarilla: dibujar_fondo) y su chapa, con la franja de chapa lagrimada abajo (tools/trastero.py)
+				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-trastero.png"),
+					"pared": load("res://assets/sprites/pared-trastero-pasillo.png"),
+					"techo": load("res://assets/sprites/techo-trastero.png")}
 				continue
 			if s.uso == "habitacion":
 				# las habitaciones de las viviendas son los trasteros del edificio: todas iguales, de chapa crema con el suelo
-				# de hormigón gris azulado (suelo-, pared- y techo-trastero: tools/trastero.py; su pasillo, el de los pisos)
+				# de hormigón gris azulado (suelo-, pared- y techo-trastero: tools/trastero.py)
 				estilos[s.id] = textura("trastero", "")
 				continue
 			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
@@ -415,6 +424,11 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		var largo := (cols - 4) * 16 - 56
 		var y := filas * 8 - 16
 		lienzo.draw_texture_rect_region(alfombra, Rect2(32 + 28, y, largo, 32), Rect2(0, 0, largo * 2, alfombra.get_height()))
+	# la línea amarilla pintada a lo largo del pasillo de las viviendas (viviendas.gd: "linea"), de punta a punta
+	for s in sitio.get("apt", {}).get("salas", []):
+		if s.has("linea"):
+			var linea := Rect2(s.c0 * 16, s.linea / 2.0 - 1, s.ancho * 16, LINEA_TRASTERO.get_height())
+			lienzo.draw_texture_rect_region(LINEA_TRASTERO, linea, Rect2(linea.position.x, 0, linea.size.x, linea.size.y))
 	# el helipuerto de la azotea: la plataforma, con su cara y su rampa a la izquierda (sus choques, poner_helipuerto)
 	if sitio.has("helipuerto"):
 		lienzo.draw_texture(HELIPUERTO, Vector2(Planta.rampa(sitio).position.x, Planta.plataforma(sitio).position.y) / 2.0)
@@ -696,6 +710,10 @@ func poner_viviendas() -> void:
 			hoja.montar(d)
 			descubiertas[d.a] = true
 		cosas.add_child(hoja)
+	# el cartel de «TRASTEROS», en la pared de arriba, nada más entrar (en el pie de la cara del muro, para ordenarse con ella)
+	var cartel := CARTEL_TRASTEROS.new()
+	cartel.position = Vector2((Viviendas.BORDE + Viviendas.CARTEL) * CASILLA, Viviendas.PASILLO_F * CASILLA + 1)
+	cosas.add_child(cartel)
 	if "farmaceutica" in rescatados:
 		var cafetera := CAFETERA.new()
 		cafetera.position = Viviendas.casa("farmaceutica") + CAFETERA_JUNTO

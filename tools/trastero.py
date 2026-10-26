@@ -6,6 +6,10 @@ claro y las puertas azules lisas con el pomo de metal. Todo dibujado aquí, a la
   py tools/trastero.py   → assets/sprites/suelo-trastero.png    el suelo (128 × 128, se repite)
                            assets/sprites/pared-trastero.png    la cara de la pared de arriba (192 × 48, se repite a lo largo)
                            assets/sprites/techo-trastero.png    su moldura de arriba: el perfil de chapa galvanizada (192 × 6)
+                           assets/sprites/pared-trastero-pasillo.png   la del pasillo de los trasteros: la misma chapa, con
+                                                                       una franja de chapa lagrimada abajo (192 × 48)
+                           assets/sprites/linea-trastero.png    la línea amarilla pintada a lo largo del suelo del pasillo
+                                                                (128 × 3, se repite; la pinta mapa.gd)
                            assets/sprites/puerta-trastero.png   la hoja cerrada, de frente (28 × 43, como puerta-bano)
                            assets/sprites/puerta-trastero-abierta.png   abierta del todo, de frente (14 × 67, como
                                                                         puerta-bano-abierta: su forma, repintada)
@@ -37,6 +41,16 @@ TORNILLO = (120, 116, 106)
 SUCIO = (150, 142, 124)          # los chorretones de mugre de abajo
 # el perfil de abajo (de chapa galvanizada, como el de arriba): de arriba abajo
 RODAPIE = [(96, 100, 110), (184, 190, 199), (156, 162, 172), (118, 124, 134)]
+# ── La chapa lagrimada de abajo de la pared del pasillo (la de la foto): acero galvanizado con su relieve de rombos ──
+LAGRIMADA = 14                   # lo que sube desde el suelo, en píxeles
+LAGRIMADA_TONOS = [(146, 152, 162), (152, 158, 168)]   # el liso (dos, muy juntos, a manchas)
+LAGRIMA_LUZ = (196, 202, 211)    # el relieve: la cara que da a la luz
+LAGRIMA_SOMBRA = (110, 116, 127) # y su sombrita, debajo
+LAGRIMADA_FILO = [(98, 102, 112), (204, 210, 218), (170, 176, 186)]   # el canto de arriba, doblado: junta, filo con luz y bajada
+LAGRIMADA_PIE = (96, 100, 110)   # la última fila, en la sombra del suelo
+# ── La línea amarilla del suelo del pasillo: pintura vieja, gastada a trozos ──
+LINEA_ANCHO, LINEA_ALTO = 128, 3
+PINTURA = [(214, 172, 58), (224, 186, 82), (190, 150, 52)]   # la de siempre, la gastada (más clara) y la sucia
 # ── La moldura de arriba: el perfil galvanizado que remata la chapa, de arriba abajo ──
 TECHO = [(92, 96, 106), (198, 204, 212), (174, 180, 189), (152, 158, 168), (126, 132, 142), (98, 102, 112)]
 
@@ -89,11 +103,14 @@ def suelo():
     im.save(f'{SALIDA}/suelo-trastero.png')
 
 
-def pared():
+def pared(lagrimada=False):
+    """La cara de la pared de chapa acanalada. La del pasillo (lagrimada) lleva abajo, en vez del perfil, una franja de
+    chapa lagrimada que sube LAGRIMADA píxeles, como las de los pasillos de trasteros de verdad: que no se raye la chapa
+    con los carros y las cajas"""
     rng = random.Random(7)
     im = Image.new('RGB', (PARED_ANCHO, PARED_ALTO))
     px = im.load()
-    chapa = PARED_ALTO - len(RODAPIE)
+    chapa = PARED_ALTO - (LAGRIMADA if lagrimada else len(RODAPIE))
     for x in range(PARED_ANCHO):
         k = x % PERIODO
         for y in range(chapa):
@@ -113,8 +130,9 @@ def pared():
             px[x, y] = c
         # la fila de arriba, en la sombra del perfil
         px[x, 0] = tuple(round(v * 0.85) for v in px[x, 0])
-        for i, c in enumerate(RODAPIE):
-            px[x, chapa + i] = c
+        if not lagrimada:
+            for i, c in enumerate(RODAPIE):
+                px[x, chapa + i] = c
     # los tornillos, arriba y abajo, en medio del liso de cada canal
     for x in range(5, PARED_ANCHO, PERIODO):
         px[x, 3] = TORNILLO
@@ -127,6 +145,10 @@ def pared():
         for y in range(chapa - 1, chapa - 1 - rng.randint(3, 9), -1):
             if rng.random() < 0.7:
                 px[x, y] = SUCIO
+    if lagrimada:
+        lagrimas(px, chapa, rng)
+        im.save(f'{SALIDA}/pared-trastero-pasillo.png')
+        return
     im.save(f'{SALIDA}/pared-trastero.png')
     techo = Image.new('RGB', (PARED_ANCHO, len(TECHO)))
     tp = techo.load()
@@ -138,6 +160,52 @@ def pared():
         for y in range(1, len(TECHO) - 1):
             tp[x, y] = TECHO[-1]
     techo.save(f'{SALIDA}/techo-trastero.png')
+
+
+def lagrimas(px, y0, rng):
+    """La franja de chapa lagrimada, de y0 al suelo: el canto doblado arriba, el liso a manchas y el relieve, rayitas
+    de 2 píxeles en diagonal, una "\\" y una "/" al tresbolillo (cada 8 a lo ancho, que casa con los 192 de la pared),
+    cada una con su luz y, debajo, su sombrita"""
+    manchas = ruido_toro(PARED_ANCHO, 16, rng)
+    for x in range(PARED_ANCHO):
+        for i, c in enumerate(LAGRIMADA_FILO):
+            px[x, y0 + i] = c
+        for y in range(y0 + len(LAGRIMADA_FILO), PARED_ALTO - 1):
+            px[x, y] = LAGRIMADA_TONOS[manchas[y % PARED_ANCHO][x] > 0.5]
+        px[x, PARED_ALTO - 1] = LAGRIMADA_PIE
+    arriba = y0 + len(LAGRIMADA_FILO) + 1
+    for fila, y in enumerate(range(arriba, PARED_ALTO - 3, 3)):
+        for x in range(1 if fila % 2 == 0 else 5, PARED_ANCHO, 8):
+            if fila % 2 == 0:   # "\"
+                luces, sombras = [(x, y), (x + 1, y + 1)], [(x, y + 1), (x + 1, y + 2)]
+            else:               # "/"
+                luces, sombras = [(x + 1, y), (x, y + 1)], [(x + 1, y + 1), (x, y + 2)]
+            for p in sombras:
+                px[p] = LAGRIMA_SOMBRA
+            for p in luces:
+                px[p] = LAGRIMA_LUZ
+    # algún roce oscuro de los carros, a la altura de las ruedas
+    for _ in range(10):
+        x, y = rng.randrange(PARED_ANCHO - 6), rng.randrange(PARED_ALTO - 7, PARED_ALTO - 2)
+        for k in range(rng.randint(2, 6)):
+            px[x + k, y] = LAGRIMA_SOMBRA
+
+
+def linea():
+    """La línea amarilla pintada a lo largo del suelo del pasillo, como en un garaje: tres filas de pintura gastada, con
+    algún trozo levantado (transparente: se ve el hormigón) y alguno sucio, más en los bordes que en medio"""
+    rng = random.Random(3)
+    im = Image.new('RGBA', (LINEA_ANCHO, LINEA_ALTO), (0, 0, 0, 0))
+    px = im.load()
+    for x in range(LINEA_ANCHO):
+        for y in range(LINEA_ALTO):
+            borde = y != 1
+            r = rng.random()
+            if r < (0.1 if borde else 0.03):
+                continue   # levantada
+            c = PINTURA[1] if r < 0.2 else PINTURA[2] if r < (0.3 if borde else 0.24) else PINTURA[0]
+            px[x, y] = c + (255,)
+    im.save(f'{SALIDA}/linea-trastero.png')
 
 
 def puerta_cerrada():
@@ -218,6 +286,9 @@ def puerta_abierta():
 if __name__ == '__main__':
     suelo()
     pared()
+    pared(lagrimada=True)
+    linea()
     puerta_cerrada()
     puerta_abierta()
-    print('  suelo-trastero, pared-trastero, techo-trastero, puerta-trastero y puerta-trastero-abierta')
+    print('  suelo-trastero, pared-trastero, techo-trastero, pared-trastero-pasillo, linea-trastero, puerta-trastero y '
+          'puerta-trastero-abierta')

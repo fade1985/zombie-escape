@@ -152,6 +152,13 @@ en una línea.
   crema acanalada con el suelo de hormigón gris azulado y la puerta azul lisa con pomo de metal (`suelo-`, `pared-`,
   `techo-` y `puerta-trastero`, de `tools/trastero.py`; la puerta, `trastero` en `puerta_bano.gd`). Cada una lleva su cama individual en la esquina de arriba a la derecha, con la
   colcha del color del superviviente y, a su izquierda, una mesilla con la luz apagada, y un armario limpio (sin sangre ni arañazos) en la esquina de arriba a la izquierda (algo separado de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`; las camas, con `tools/camas_viviendas.py`, y el armario, con `tools/armario_vivienda.py`.
+  El pasillo es el de una zona de trasteros: el mismo suelo de hormigón con una línea amarilla pintada a lo largo
+  (`linea-trastero`, la pinta `mapa.dibujar_fondo` a la altura que dice `"linea"` en la sala del pasillo) y la misma
+  chapa con una franja de chapa lagrimada abajo (`pared-trastero-pasillo`), las dos de `tools/trastero.py`; contra la
+  pared de arriba, cajas de cartón apiladas (`boxstack`, `boxpile`) y carretillas cargadas (`handtruck`), de PixelLab con
+  las guías de `tools/guias_trasteros.py` (`colocados` de `pasillo-viviendas` en `catalogo.gd`, lejos de las puertas), y
+  al entrar, en la pared de arriba, el cartel de «TRASTEROS» (`cartel_trasteros.gd`: placa azul con letras blancas de
+  `Tema.FUENTE`).
 - `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
 - `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
@@ -222,7 +229,7 @@ en una línea.
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
   `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
-  nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (la cama con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
+  nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (la cama con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las cajas y la carretilla de ese pasillo), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `azotea.py` (ver
   `FONDOS.md`).
 - **Iconos:** `icono_*.py`, `objetos16.py` (solo la batería y las vendas, de 16×16: los demás objetos son de PixelLab),

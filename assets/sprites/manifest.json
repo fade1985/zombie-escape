@@ -221,5 +221,8 @@
   "mueble-bed_militar",
   "mueble-bed_policia",
   "mueble-bed_tecnico",
-  "mueble-wardrobe_vivienda"
+  "mueble-wardrobe_vivienda",
+  "mueble-boxpile",
+  "mueble-boxstack",
+  "mueble-handtruck"
 ]

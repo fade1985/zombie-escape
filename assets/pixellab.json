@@ -4007,5 +4007,20 @@
   "fecha": "2026-10-26",
   "nota": "La salida de incendios del fondo del pasillo (puerta.gd y cartel_salida.gd), hecha SIN PixelLab. Se pensó con PixelLab (una puerta metálica de emergencia de un solo color rojo, con marco y hoja lisos y una barra antipánico de aluminio a media altura, vista de frente en la pared de arriba, con un cartel verde EXIT encima), pero el dueño prefirió dejarla en el muro de la derecha, vista desde arriba como las puertas de dentro cerradas de los tabiques verticales (un tablón fino con el pomo sobresaliendo), solo que roja y con una barra larga que sobresale; y el cartel EXIT, en la pared de arriba al final del pasillo. A esos tamaños (una hoja de 5 píxeles de ancho; un cartel de 36 × 13) PixelLab no dibuja nada (sale un color por columna: ver puerta-bano-lado-cerrada), así que lo dibuja py tools/puerta_salida.py con el contorno oscuro del juego y el aluminio de la puerta de servicio: assets/sprites/puerta-salida.png (36 × 36: hoja roja, barra de aluminio con soportes y caja del cierre, y las escaleras detrás), cartel-salida-apagado.png y cartel-salida-encendido.png (36 × 13: el muñequito corriendo y EXIT). El cartel luce, con su luz verde, cuando cae el jefe de la planta (cartel_salida.gd). Gastadas 0 generaciones.",
   "coste": "0 generaciones"
+ },
+ "trasteros-pasillo": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "Lo del pasillo de las viviendas, convertido en el de una zona de trasteros (viviendas.gd): cajas de cartón apiladas y una carretilla de mano cargada, contra la pared de arriba. Con la receta de los muebles (limpieza-portera, dormitorio-pisos): la guía de py tools/guias_trasteros.py como init_image (subida con get_upload_url + curl), fuerza 45, no_background false, single color black outline y high top-down, 2 semillas cada una. La pila de cajas 2 y las cajas bajas 1 salieron giradas en diagonal (descartadas); elegidas por Claude la pila 1 (tres cajas, dos abajo y una encima: boxstack, 64 por 36), las bajas 2 (dos montones de dos: boxpile, 56 por 32) y la carretilla 1 (roja, con dos cajas: handtruck, 40 por 28; la 2 también valía). Fondo quitado con py tools/guias_centro.py quita; en la carretilla, además, el azul encerrado entre los tubos (todo lo que se parece al fondo) y py tools/guias_cocina.py limpia; en las bajas, py tools/guias_cocina.py limpia --todo (la sombra azulada de la izquierda). Originales en assets/sources/salas/viviendas/ (cajas-pila, cajas-bajas y carretilla); sprites con py tools/importar.py (en SIN_HALO).",
+  "texto": "a stack of three cardboard moving boxes / a low pile of three cardboard moving boxes / a red metal two-wheeled hand truck dolly standing upright against the wall ... seen in 3/4 top-down view, ... the box fronts facing the viewer, brown corrugated cardboard, beige packing tape, a small white paper label, slightly worn and dusty, zombie apocalypse storage room, not rotated, not isometric, game furniture sprite on a plain blue background, horror game, muted colors",
+  "piezas": {
+   "cajas-pila 1 (elegida)": "2711b967-9339-4c31-8f46-60fcc5c437ac",
+   "cajas-pila 2": "4b159e59-7b15-47d5-b71a-09817b048531",
+   "cajas-bajas 1": "6826f7fa-f8c1-4f36-bb67-7e7817bce220",
+   "cajas-bajas 2 (elegida)": "4cb35068-136c-4bfb-8f12-2e4d8144a431",
+   "carretilla 1 (elegida)": "175756a0-dd04-4305-9755-3d3d14abca8e",
+   "carretilla 2": "7bf394bd-0b73-4504-8a78-61640bf19d26"
+  },
+  "coste": "6 generaciones"
  }
 }

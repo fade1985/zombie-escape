@@ -49,6 +49,11 @@ const MUEBLES := {
 	"bed_tecnico":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-tecnico"},
 	# y su armario, el de siempre pero limpio, sin sangre ni arañazos (tools/armario_vivienda.py)
 	"wardrobe_vivienda": {"len": 96, "dep": 44, "paredes": "", "archivo": "viviendas/armario-limpio"},
+	# lo del pasillo de los trasteros (el de las viviendas): cajas de cartón apiladas, unas altas y otras bajas, y una carretilla
+	# de mano cargada con dos cajas (PixelLab, con las guías de tools/guias_trasteros.py)
+	"boxstack":  {"len": 64, "dep": 36, "paredes": "", "archivo": "viviendas/cajas-pila"},
+	"boxpile":   {"len": 56, "dep": 32, "paredes": "", "archivo": "viviendas/cajas-bajas"},
+	"handtruck": {"len": 40, "dep": 28, "paredes": "", "archivo": "viviendas/carretilla"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
 	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
@@ -462,7 +467,11 @@ const SALAS := {
 	# en el dormitorio individual de los pisos), con la colcha del color de cada uno, para distinguir las habitaciones, a su
 	# izquierda una mesilla con la lamparita apagada (sin luz: solo el dibujo) y, en la esquina de arriba a la izquierda,
 	# un armario limpio, algo separado de ella (el centro, en la casilla 2,5: queda una casilla libre entre él y el muro)
-	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0]},
+	# El pasillo, el de una zona de trasteros: cajas de cartón y alguna carretilla contra la pared de arriba (la de abajo
+	# queda detrás de la cara del tabique), lejos de las puertas de las habitaciones (en las casillas 11 y 12, 24 y 25, 37
+	# y 38 del pasillo) y de la entrada, a la izquierda, donde va el cartel de «TRASTEROS» (mapa.gd)
+	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["boxstack", 7.5], ["handtruck", 16.0],
+		["boxpile", 20.5], ["boxstack", 30.5], ["boxpile", 32.6], ["handtruck", 42.5], ["boxstack", 46.0]]}},
 	"habitacion": {"muebles": [], "cuantos": [0, 0]},
 	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_policia", 10.6]]}},
 	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_medico", 10.6]]}},

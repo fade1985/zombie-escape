@@ -1,7 +1,9 @@
 # Las viviendas de los supervivientes rescatados: detrás de la puerta de la derecha de la sala de mantenimiento, un
 # pasillo largo con seis habitaciones, una por superviviente (Supervivientes.DATOS). Son los trasteros del edificio (no
 # pueden vivir en ningún piso: la horda los ha destrozado todos), así que todas son iguales, de chapa metálica (mapa.gd
-# les pone el estilo "trastero" y la puerta azul lisa de puerta_bano.gd). Las de los tres de los
+# les pone el estilo "trastero" y la puerta azul lisa de puerta_bano.gd), y el pasillo es el de una zona de trasteros: el
+# mismo hormigón, con una línea amarilla pintada a lo largo, la misma chapa con una franja de chapa lagrimada abajo,
+# cajas de cartón y carretillas contra la pared y, al entrar, el cartel de «TRASTEROS» (cartel_trasteros.gd). Las de los tres de los
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
 # comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
 # nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están
@@ -30,6 +32,7 @@ const FILAS := BORDE * 2 + FONDO_ARRIBA + 1 + PASILLO + 1 + FONDO_ABAJO
 const PASILLO_F := BORDE + FONDO_ARRIBA + 1     # la primera fila del pasillo
 const ABAJO_F := PASILLO_F + PASILLO + 1        # y la de las habitaciones de abajo
 const LLEGADA := 14                             # la puerta de la izquierda (la de la sala), en las filas 14 y 15
+const CARTEL := 3                               # el cartel de «TRASTEROS» (mapa.gd), sobre la casilla 3 del pasillo
 # Dónde espera cada uno, contando desde el medio de lo que se ve de su habitación (si no está aquí, en medio): el
 # técnico, a la izquierda
 const SITIO := {"tecnico": Vector2(-96, 32)}
@@ -41,8 +44,9 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	dueno.resize(COLS * FILAS)
 	dueno.fill(-1)
 	# (el pasillo se llama como el sitio, para que arriba ponga solo «Viviendas»; "tipo" elige sus muebles en el catálogo)
+	# ("linea", la "y" de la línea amarilla pintada a lo largo del suelo, mapa.gd: en medio de lo que se ve de él)
 	var pasillo := {"id": 0, "uso": "pasillo", "tipo": "viviendas", "nombre": "Viviendas", "c0": BORDE, "f0": PASILLO_F,
-		"ancho": COLS - BORDE * 2, "fondo": PASILLO, "puertas": []}
+		"ancho": COLS - BORDE * 2, "fondo": PASILLO, "puertas": [], "linea": (PASILLO_F + (PASILLO - 2) / 2.0) * CASILLA}
 	var salas := [pasillo]
 	var puertas := []
 	for id: String in Supervivientes.DATOS:
@@ -75,10 +79,10 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = semilla
 	sitio.muebles = Muebles.de_apartamento(apt, rng)
-	# y a cada habitación, lo suyo puesto a mano (su cama): los "colocados" de su sala en el catálogo
+	# y a cada habitación, lo suyo puesto a mano (su cama...), y al pasillo, sus cajas y sus carretillas: los "colocados" de
+	# cada sala en el catálogo ("habitacion-<id>" y "pasillo-viviendas")
 	for s in salas:
-		if s.uso == "habitacion":
-			sitio.muebles += Muebles.colocados(Catalogo.SALAS["habitacion-" + s.tipo].get("colocados", {}).get("izquierda", []), s)
+		sitio.muebles += Muebles.colocados(Catalogo.SALAS.get(s.uso + "-" + s.tipo, {}).get("colocados", {}).get("izquierda", []), s)
 	return sitio
 
 
