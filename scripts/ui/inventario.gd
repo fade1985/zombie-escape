@@ -1202,8 +1202,12 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 	if arma:
 		var tipo: String = Armas.datos(o.id).tipo
 		d.que_es = "%s · %s · En el baúl" % [Armas.HUECOS[tipo], Armas.calidad_nombre(o.calidad)]
-		d.que = que_hace(o.id, o.calidad) + " Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de " + \
-			"la mano entra en el baúl en su lugar)."
+		if o.id == partida.johnny.huecos[tipo] or o.id in partida.armas_guardadas:
+			d.que = que_hace(o.id, o.calidad) + " Ya llevas una: se cambian, esta ocupa su sitio y la tuya entra en " + \
+				"el baúl en su lugar."
+		else:
+			d.que = que_hace(o.id, o.calidad) + " Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, " + \
+				"la de la mano entra en el baúl en su lugar)."
 	else:
 		var k := Lanzables.clave(o.id, o.calidad)
 		var lz: Lanzables = partida.lanzables
@@ -1266,19 +1270,18 @@ func sacar() -> void:
 
 
 # Saca del baúl un arma o un paquete de arrojables. El arma va a la mano como al comprarla (partida.llevar_arma): la
-# que llevaba pasa al repuesto o, si ya lleva dos (o esa misma), entra en el baúl en su lugar (la fregona y la pistola
-# Normales, que no van al baúl, se quedan en el suelo). Del paquete salen los que quepan (lanzables.meter)
+# que llevaba pasa al repuesto o, si ya lleva dos, entra en el baúl en su lugar. Si ya llevaba esa misma (en la mano o
+# de repuesto), se cambian: la del baúl ocupa su sitio y la suya entra en el baúl. Nunca se queda en el suelo, ni la
+# fregona o la pistola Normales (que no se pueden guardar a mano). Del paquete salen los que quepan (lanzables.meter)
 func sacar_equipo(o: Dictionary) -> void:
 	if not se_saca(o):
 		Sonido.tocar("no")
 		return
 	var fuera := {}
 	var quedan := 0
+	var de_repuesto: bool = o.id in partida.armas_guardadas   # (ya la llevaba de repuesto: se cambia ahí)
 	if Armas.DATOS.has(o.id):
 		fuera = partida.llevar_arma(o.id, o.calidad, true, false)
-		if not fuera.is_empty() and not Armas.al_baul(fuera.id, fuera.calidad):
-			partida.soltar_arma(fuera.id, partida.johnny.position + Vector2(0, 34), fuera.calidad)
-			fuera = {}
 	else:
 		quedan = o.n - partida.lanzables.meter(Lanzables.clave(o.id, o.calidad), o.n)
 	Guardado.cambiar(func(g):
@@ -1291,11 +1294,13 @@ func sacar_equipo(o: Dictionary) -> void:
 	Sonido.tocar("soltar" if con_dedo else "cambiar")
 	if Armas.DATOS.has(o.id):
 		var mano := "p0" if Armas.datos(o.id).tipo == "cuerpo" else "p1"
+		if de_repuesto:
+			mano = "g%d" % partida.armas_guardadas.find(o.id)
 		salta = [mano] if fuera.is_empty() else [mano, sel]
 		salta_johnny = true
 		if not fuera.is_empty():
-			aviso = "%s a la mano; %s entra en el baúl en su lugar." % [Armas.nombre(o.id, o.calidad),
-				Armas.nombre(fuera.id, fuera.calidad)]
+			aviso = "%s %s; %s entra en el baúl en su lugar." % [Armas.nombre(o.id, o.calidad),
+				"al repuesto" if de_repuesto else "a la mano", Armas.nombre(fuera.id, fuera.calidad)]
 	else:
 		var k := Lanzables.clave(o.id, o.calidad)
 		var lz: Lanzables = partida.lanzables

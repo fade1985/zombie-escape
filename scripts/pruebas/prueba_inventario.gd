@@ -18,10 +18,12 @@ func dar_lanzable(k: String) -> void:
 # se arrima al baúl y cuenta en la terminal: que se abre con la marca en lo primero que se puede guardar, que guardar
 # una casilla mete todos los de esa casilla (y la marca se queda en la siguiente), que las vendas no se guardan, que la
 # gasolina se guarda desde la munición y se saca de una en una (la marca se queda en «Sacar uno») y que «Guardar todo»
-# lo mete todo menos lo de curar. Y el baúl lleno: con 31 armas y una pieza (cada arma, en su casilla) no deja guardar
-# otra arma, y con más de 32 (al completar el edificio entra todo) las casillas se hacen más pequeñas. Cada línea dice
-# lo esperado. Saca captura-baul-guardar.png (la gasolina elegida, para guardarla) y captura-baul-lleno.png, deja el
-# baúl como estaba y se cierra
+# lo mete todo menos lo de curar. Que al sacar un arma que ya lleva (la fregona Épica, con la Normal de repuesto, y la
+# pistola Rara, con la Normal en la mano) se cambian y la suya entra en el baúl, sin dejar nada en el suelo. Y el baúl
+# lleno: con 31 armas y una pieza (cada arma, en su casilla) no deja guardar otra arma, y con más de 32 (al completar el
+# edificio entra todo) las casillas se hacen más pequeñas. Cada línea dice lo esperado. Saca captura-baul-guardar.png
+# (la gasolina elegida, para guardarla), captura-baul-cambio.png (tras sacar la pistola Rara) y captura-baul-lleno.png,
+# deja el baúl como estaba y se cierra
 func probar_baul() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):
@@ -98,6 +100,29 @@ func probar_baul() -> void:
 	g = Guardado.cargar()
 	print("«Guardar todo» con sitio: mochila %s (esperado: [\"vendas\"]) · baúl %s (esperado: pieza_especial 3, gasolina 5: las 3 y las 2 sacadas, pieza_cuerpo 1, pieza_distancia 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
 		mochila, g.baul, boton.call("guardar_todo"), marca.call()])
+	# sacar un arma que ya lleva: se cambian y la suya entra en el baúl en su lugar, aunque sea la fregona o la pistola
+	# Normales (nada al suelo). Con el bate a la mano, para que la fregona quede de repuesto
+	Guardado.cambiar(func(g2):
+		g2.baul_equipo = [{"id": "fregona", "calidad": 3}, {"id": "pistola", "calidad": 2}])
+	llevar_arma("bate", 1)
+	inventario.pintar()
+	await get_tree().process_frame
+	var en_suelo: int = mapa.cosas.get_child_count()
+	var arma_baul := func(id: String) -> String:   # la casilla de un arma en el baúl ("b4")
+		return "b%d" % inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id if o.equipo >= 0 else "").find(id)
+	inventario.tocar(arma_baul.call("fregona"))
+	await get_tree().process_frame
+	print("La fregona Épica del baúl (con la Normal de repuesto): «Sacar» %s (esperado: activo) · dice «%s»" % [
+		boton.call("sacar"), dice.call()])
+	inventario.sacar()
+	inventario.tocar(arma_baul.call("pistola"))
+	inventario.sacar()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-baul-cambio.png")
+	print("Sacadas la fregona Épica y la pistola Rara: en la mano %s, de repuesto %s, calidades %s · baúl %s · cosas nuevas en el suelo %d (esperado: bate y pistola · fregona · bate 1, fregona 3, pistola 2 · fregona 0 y pistola 0, cada una en su casilla · 0)" % [
+		johnny.huecos, armas_guardadas, johnny.calidades,
+		Guardado.cargar().baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad]),
+		mapa.cosas.get_child_count() - en_suelo])
 	# el baúl lleno: una pieza y 31 armas, cada una en su casilla (de las cuatro calidades)
 	Guardado.cambiar(func(g2):
 		g2.baul = {"pieza_especial": 1}
