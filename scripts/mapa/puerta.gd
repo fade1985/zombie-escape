@@ -110,9 +110,6 @@ func _draw() -> void:
 		_:
 			# En los laterales del pasillo: las escaleras (peldaños) o la puerta por donde se ha llegado
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
-			if salida.get("incendios", false):
-				incendios(x0)
-				return
 			draw_rect(Rect2(x0, -36, 64, 72), MARCO)
 			if salida.tipo == "escaleras":
 				for i in 8:
@@ -121,25 +118,6 @@ func _draw() -> void:
 				draw_rect(Rect2(x0, -32, 64, 64), HUECO)
 			var borde := -8.0 if salida.dir == "izquierda" else 0.0   # la hoja, en el borde de dentro
 			draw_rect(Rect2(borde, -32, 8, 64), HOJA)
-
-
-# La escalera de incendios de la azotea, en el murete: los peldaños de rejilla de metal, que bajan hacia fuera, y la
-# barandilla roja a los dos lados. Mientras esté cerrada (hasta que cae el jefe), con una cinta de peligro cruzada
-func incendios(x0: float) -> void:
-	draw_rect(Rect2(x0, -36, 64, 72), OSCURO)
-	for i in 8:
-		var x := x0 + (i * 8.0 if salida.dir == "derecha" else 56.0 - i * 8.0)
-		draw_rect(Rect2(x, -30, 6, 60), Color("7a7e84") if i % 2 else Color("62666c"))
-		draw_rect(Rect2(x, -30, 6, 2), Color("9a9ea4"))
-		for y in range(-26, 30, 8):   # la rejilla
-			draw_rect(Rect2(x, y, 6, 2), Color("3a3c40"))
-	for y in [-36.0, 32.0]:
-		draw_rect(Rect2(x0, y, 64, 4), Color("a8342a"))
-		draw_rect(Rect2(x0, y, 64, 2), Color("d0503e"))
-	if not abierta:
-		draw_set_transform(Vector2(x0 + (20.0 if salida.dir == "derecha" else 44.0), 0), PI / 2.0)
-		cinta(-42, -5, 84)
-		draw_set_transform(Vector2.ZERO)
 
 
 # El ascensor averiado, de frente: más ancho que una puerta, con su marco, dos hojas de acero cerradas, la
@@ -226,7 +204,7 @@ func cinta(x: float, y: float, largo: float) -> void:
 
 # Cinta de peligro en diagonal, con su línea del medio de "desde" a "hasta" y su sombrita debajo. Se pinta píxel a
 # píxel (de 2 en 2 unidades) para que tenga el mismo tamaño de píxel que todo lo demás: girada con
-# draw_set_transform, como la de incendios, saldría con escalones más finos. Las rayas negras van en horizontal, que
+# draw_set_transform, saldría con escalones más finos. Las rayas negras van en horizontal, que
 # en una cinta inclinada quedan en diagonal sobre la franja, como las de cinta()
 func cinta_cruzada(desde: Vector2, hasta: Vector2) -> void:
 	var largo := desde.distance_to(hasta)

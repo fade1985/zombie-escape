@@ -324,7 +324,7 @@ func probar_cocinero() -> void:
 # --azotea: solo la azotea (la de los Apartamentos, con el científico; con --edificio centro, la del gerente)
 func probar_azotea_sola() -> void:
 	await get_tree().create_timer(0.3).timeout
-	await probar_azotea()
+	await probar_azotea(true)
 	get_tree().quit()
 
 
@@ -378,9 +378,10 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 
 
 # La azotea del centro comercial: Johnny llega por la escalera y sale el jefe (captura-azotea.png); la azotea entera,
-# sin penumbra y desde lejos (captura-azotea-entera.png); y, quitado el jefe, la escalera de incendios abierta
-# (captura-azotea-incendios.png)
-func probar_azotea() -> void:
+# sin penumbra y desde lejos (captura-azotea-entera.png); y, quitado el jefe, el helicóptero con su escalera de cuerda
+# (captura-helicoptero.png). "acabar": que Johnny llegue a la escalera de verdad y se acabe la partida (la prueba larga
+# la acaba ella, más tarde: ahí solo se comprueba que la escalera lo agarra)
+func probar_azotea(acabar := false) -> void:
 	nueva_planta(Planta.PLANTAS)
 	await montar(0, puerta_de_tipo("llegada"), false)
 	var s: Dictionary = planta.sitios[0]
@@ -392,8 +393,8 @@ func probar_azotea() -> void:
 	johnny.position = mapa.puertas[0].llegada() + Vector2(200, 0)   # se aleja de la escalera: se cierra detrás
 	await get_tree().create_timer(1.4).timeout
 	Captura.foto("captura-azotea.png")
-	print("  ha salido el jefe: %s | escalera de llegada %s | incendios %s | aviso: '%s'" % [jefa != null,
-		"cerrada" if cerrada else "abierta", "abierta" if mapa.puertas[1].abierta else "cerrada", aviso.text])
+	print("  ha salido el jefe: %s | escalera de llegada %s | puertas %d (esperado: 1, sin escalera de incendios) | aviso: '%s'" % [
+		jefa != null, "cerrada" if cerrada else "abierta", mapa.puertas.size(), aviso.text])
 	var camara: Camera2D = johnny.get_node("Camara")
 	await probar_helipuerto(s, camara)
 	# el gerente, con Johnny delante, lanzándole los contratos (captura-gerente.png)
@@ -441,7 +442,7 @@ func probar_azotea() -> void:
 	Captura.foto("captura-azotea-entera.png")
 	camara.zoom = Vector2.ONE
 	luz.alternar()
-	# sin el jefe se abre la escalera de incendios. El gerente cae de verdad (el jefe final no saca mutaciones); la
+	# sin el jefe llega el helicóptero. El gerente cae de verdad (el jefe final no saca mutaciones); la
 	# portera (si aún no estuviera el gerente), quitada sin que caiga: así no salen las mutaciones
 	var es_final := jefa != null and not final_de(planta.jefe).is_empty()
 	if es_final:
@@ -459,12 +460,11 @@ func probar_azotea() -> void:
 		else:
 			jefa.queue_free()
 			$Pantalla/Jefa.hide()
-	johnny.position = mapa.puertas[1].llegada() + Vector2(-90, 0)
+	johnny.position = s.helipuerto + Vector2(-150, 120)
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.6).timeout
-	Captura.foto("captura-azotea-incendios.png")
-	print("  sin el jefe: jefe muerto %s | incendios %s | valla del helipuerto %s | aviso: '%s'" % [planta.jefa_muerta,
-		"abierta" if mapa.puertas[1].abierta else "cerrada", "cerrada" if mapa.valla.cerrada else "abierta", aviso.text])
+	print("  sin el jefe: jefe muerto %s | valla del helipuerto %s | aviso: '%s'" % [planta.jefa_muerta,
+		"cerrada" if mapa.valla.cerrada else "abierta", aviso.text])
 	if es_final:
 		# al rato, su página del dosier (con el juego parado); al cerrarla, el helicóptero (captura-helicoptero.png)
 		await get_tree().create_timer(1.3).timeout
@@ -476,11 +476,28 @@ func probar_azotea() -> void:
 		camara.zoom = Vector2(0.8, 0.8)
 		camara.reset_smoothing()
 		await get_tree().create_timer(0.8 + Helicoptero.LLEGADA + 0.5).timeout
-		Captura.foto("captura-helicoptero.png")
 		var helis: Array = mapa.cosas.get_children().filter(func(n): return n is Helicoptero)
-		print("  helicóptero de Velaria: %d | sobre el helipuerto %s | aviso: '%s'" % [helis.size(),
-			not helis.is_empty() and helis[0].llegado and helis[0].position.distance_to(helipuerto) < 1.0, aviso.text])
+		print("  helicóptero de Velaria: %d | sobre el helipuerto %s | escalera recogida (bajada %.1f) | aviso: '%s'" % [helis.size(),
+			not helis.is_empty() and helis[0].llegado and helis[0].position.distance_to(helipuerto) < 1.0,
+			helis[0].escalera if not helis.is_empty() else -1.0, aviso.text])
+		await get_tree().create_timer(Helicoptero.ESCALERA_ESPERA + Helicoptero.ESCALERA_TIEMPO * 0.5).timeout
+		Captura.foto("captura-helicoptero-escalera-bajando.png")
+		await get_tree().create_timer(Helicoptero.ESCALERA_TIEMPO * 0.5 + 0.4).timeout
+		Captura.foto("captura-helicoptero.png")
+		print("  la escalera llega al suelo: %s | aviso: '%s'" % [helis[0].escalera >= 1.0, aviso.text])
 		camara.zoom = Vector2.ONE
+		# lejos de la escalera no se agarra; junto a ella, sí, y se acaba el edificio
+		var agarro := [false]
+		helis[0].agarrada.connect(func(): agarro[0] = true)
+		johnny.position = helis[0].punta() + Vector2(0, 120)
+		await get_tree().create_timer(0.3).timeout
+		var lejos: bool = agarro[0]
+		cambiando = not acabar   # (en la prueba larga no se acaba aquí: ya lo hace ella al final)
+		johnny.position = helis[0].punta() + Vector2(0, 24)
+		await get_tree().create_timer(0.3).timeout
+		print("  Johnny lejos de la escalera: agarrada %s (esperado: false) | junto a ella: agarrada %s (esperado: true) | partida acabada %s (esperado: %s)" % [
+			lejos, agarro[0], terminada, acabar])
+		cambiando = false
 		print("  al caer el gerente, mutación: %s" % ("sí (¡no debería!)" if menus.abierto == "mutacion" else "no"))
 
 

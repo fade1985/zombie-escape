@@ -334,10 +334,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 # y abierto, sin pasillo ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el
 # helipuerto elevado en el centro (PLATAFORMA) y los aparatos sueltos alrededor (en el centro, aire acondicionado,
 # climatizadoras y extractores; en los Apartamentos, depósitos de agua, antenas y extractores; la chimenea
-# de ladrillo y el tendedero ya no salen). Se llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la
-# derecha, la escalera de incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe":
-# el jefe aparece al llegar, encima del helipuerto, y espera ahí a Johnny; al caer, se abren las escaleras
-# (partida.gd), como en el piso de la portera.
+# de ladrillo y el tendedero ya no salen). Se llega por la izquierda, por la escalera, que se cierra detrás para siempre;
+# no tiene más puerta: al caer el jefe llega el helicóptero de Velaria y suelta una escalera de cuerda sobre el
+# helipuerto (helicoptero.gd); al llegar Johnny a ella se acaba el edificio (partida.gd, subir_al_helicoptero). Es un
+# sitio "jefe": el jefe aparece al llegar, encima del helipuerto, y espera ahí a Johnny.
 static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
@@ -349,11 +349,9 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",
 		"dueno": Muebles.plano_rectangular(AZOTEA_COLS, AZOTEA_FILAS), "zombis": [], "limpio": false, "visitado": true,
 		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(ancho / 2.0, alto / 2.0)}   # (el centro de lo de arriba)
-	sitio.salidas = [
+	sitio.salidas = [   # (la única: de aquí se sale en el helicóptero, que suelta su escalera al caer el jefe)
 		{"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 			"aviso": "Ya no hay vuelta atrás"},
-		{"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "incendios": true, "a": -1, "vuelta": -1, "cerrojo": "jefa",
-			"aviso": "Bloqueada: acaba antes con " + planta.el_jefe},
 	]
 	sitio.muebles = aparatos(sitio, edificio)
 	# manchas de sangre sueltas (las de manchas-suelo.png), fuera del helipuerto

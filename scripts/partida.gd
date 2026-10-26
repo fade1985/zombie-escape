@@ -623,8 +623,10 @@ func _physics_process(delta: float) -> void:
 			planta.jefa_muerta = true
 			arreglar_ascensor()
 			Sonido.musica("menu")
-			decir("¡%s ha caído! %s" % [planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1),
-				"La escalera de incendios ya está abierta" if sitio.get("azotea", false) else "Las escaleras ya están abiertas"], 4.0)
+			decir("¡%s ha caído!%s" % [planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1),
+				"" if sitio.get("azotea", false) else " Las escaleras ya están abiertas"], 4.0)
+			if sitio.get("azotea", false) and final_de(planta.jefe).is_empty():
+				fin_del_edificio()   # (el jefe de relleno de una azotea sin su final: el de verdad lo llama al caer)
 			logros.cumplir("desahucio")
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
@@ -697,7 +699,8 @@ func pagina_del_jefe() -> void:
 
 # Ha caído el jefe final (el gerente mutado, en la azotea): cuando se ha visto caer, su página del dosier (si aún
 # falta; con el juego parado) y, al cerrarla, llega el helicóptero de Velaria a por Johnny (helicoptero.gd). La
-# escalera de incendios ya se abre sola al quedar la azotea limpia: por ahí se va
+# azotea no tiene más salida: el helicóptero suelta una escalera de cuerda y, al llegar Johnny a ella, se acaba el
+# edificio (subir_al_helicoptero)
 func fin_del_edificio() -> void:
 	var donde := aqui
 	await get_tree().create_timer(1.6, false).timeout
@@ -710,8 +713,17 @@ func fin_del_edificio() -> void:
 	var heli := Helicoptero.new()
 	heli.destino = planta.sitios[aqui].get("helipuerto", johnny.position)
 	heli.johnny = johnny
+	heli.escalera_lista.connect(func(): decir("¡Acércate a la escalera para subir al helicóptero!", 4.0))
+	heli.agarrada.connect(subir_al_helicoptero)
 	mapa.cosas.add_child(heli)
-	decir("¡Un helicóptero de Velaria viene a por ti! Vete por la escalera de incendios", 4.5)
+	decir("¡Un helicóptero de Velaria viene a por ti!", 4.0)
+
+
+# Johnny ha llegado a la escalera de cuerda del helicóptero: se acaba el edificio, como al subir las últimas escaleras
+func subir_al_helicoptero() -> void:
+	if cambiando or terminada or not johnny.vivo:
+		return
+	subir()
 
 
 # Apunta la página para siempre y la enseña con el juego parado; al cerrarla, avisa si trae noticias

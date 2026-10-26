@@ -83,6 +83,11 @@ const EFECTOS := {
 	"jefe": {"notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},
 	"rugido": {"notas": [[160, 0.5, "sierra", 0.07, -90], [120, 0.6, "cuadrada", 0.04, -60, 0.05]]},
 	"rotor": {"hueco": 200, "notas": [[64, 0.07, "cuadrada", 0.03, -15], [60, 0.07, "cuadrada", 0.025, -15, 0.2]]},   # el helicóptero de Velaria
+	# la escalera de cuerda del helicóptero se desenrolla: una fila de chasquidos, cada vez más seguidos y graves
+	"cuerda": {"notas": [[1100, 0.03, "cuadrada", 0.02, -500, 0.0], [980, 0.03, "cuadrada", 0.02, -500, 0.2],
+		[1100, 0.03, "cuadrada", 0.02, -500, 0.4], [900, 0.03, "cuadrada", 0.022, -450, 0.58], [1000, 0.03, "cuadrada", 0.022, -450, 0.74],
+		[820, 0.03, "cuadrada", 0.024, -400, 0.9], [900, 0.03, "cuadrada", 0.024, -400, 1.04], [760, 0.03, "cuadrada", 0.026, -350, 1.16],
+		[820, 0.03, "cuadrada", 0.026, -350, 1.27], [700, 0.04, "cuadrada", 0.03, -300, 1.37]]},
 	"jeringa": {"notas": [[1800, 0.05, "seno", 0.03, 400], [240, 0.5, "sierra", 0.05, -150, 0.08]]},   # el gerente se pincha
 	"mordisco": {"hueco": 60, "notas": [[520, 0.04, "cuadrada", 0.04, -300], [170, 0.09, "cuadrada", 0.05, -90, 0.06]]},   # el ¡ÑAM! del glotón (skin)
 	"escobazo": {"hueco": 90, "notas": [[900, 0.12, "sierra", 0.018, -700]]},          # broom (la portera)

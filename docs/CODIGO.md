@@ -69,7 +69,8 @@ en una línea.
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
-    `gerente.gd` (+ `contrato.gd`) y `cientifico_jefe.gd` (el doctor Salas). `helicoptero.gd`: el que llega al final.
+    `gerente.gd` (+ `contrato.gd`) y `cientifico_jefe.gd` (el doctor Salas). `helicoptero.gd`: el que llega al final y suelta su escalera de cuerda sobre el helipuerto; al llegar Johnny
+    a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
   alfileres de la modista), `salpicadura.gd`
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
@@ -132,7 +133,8 @@ en una línea.
   La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda: `plataforma()`,
   `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
   (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).
-  Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Se prueba con `--azotea`.
+  Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). La azotea no tiene más puerta que
+  la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
