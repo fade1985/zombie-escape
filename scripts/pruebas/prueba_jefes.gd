@@ -343,6 +343,26 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 			encima += 1
 	print("  helipuerto: en el centro %s | aparatos encima (o su dibujo): %d (esperado: 0)" % [
 		p.get_center() == Vector2(s.ancho, s.alto) / 2.0, encima])
+	# los aparatos, siempre en el mismo sitio (planta.gd, APARATOS): sin pisarse, dentro del suelo, lejos de la puerta
+	var juntos := 0
+	var sin_suelo := 0
+	var cerca_puerta := 0
+	var sin_pasillo := 0
+	var suelo := Rect2(Planta.MURO, Planta.MURO, s.ancho - 2.0 * Planta.MURO, s.alto - 2.0 * Planta.MURO)
+	var puerta := Vector2(Planta.MURO, s.alto / 2.0)
+	for i in s.muebles.size():
+		var r := Muebles.hueco(s.muebles[i])
+		if not suelo.encloses(r):
+			sin_suelo += 1
+		if puerta.distance_to(r.get_center()) < 180.0:
+			cerca_puerta += 1
+		if huella.any(func(h): return h.grow(Planta.PLATAFORMA_LIBRE - 1.0).intersects(r)):
+			sin_pasillo += 1
+		for j in range(i + 1, s.muebles.size()):
+			if Muebles.hueco(s.muebles[j]).grow(40.0).intersects(r):
+				juntos += 1
+	print("  aparatos fijos: %d | pegados entre sí %d | fuera del suelo %d | cerca de la puerta %d | sin pasillo al helipuerto %d (esperado: 0 en todos)" % [
+		s.muebles.size(), juntos, sin_suelo, cerca_puerta, sin_pasillo])
 	# de abajo (por delante de la cara) al centro: el camino pasa por la rampa
 	var nav := mapa.get_world_2d().navigation_map
 	var abajo := Vector2(s.helipuerto.x, p.end.y + Planta.PLATAFORMA_ALTO + 50.0)

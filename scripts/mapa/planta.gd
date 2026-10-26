@@ -47,10 +47,20 @@ const PLATAFORMA_LIBRE := 48.0          # lo que queda libre alrededor de la pla
 # La capa de choque 4 ("bordes bajos"): el borde del helipuerto. Para a los que andan (Johnny, los zombis, los jefes y
 # los acompañantes la llevan en su máscara), no a lo que vuela (las balas y lo que se lanza solo miran la capa 1)
 const CAPA_BORDE := 8
-# Los aparatos de la azotea de cada edificio (catalogo.gd): cuántos de cada uno [mínimo, máximo]
+# Los aparatos de la azotea de cada edificio (catalogo.gd), siempre en el mismo sitio: [tipo, x del centro, y de
+# arriba de lo que ocupa], en unidades de la azotea (44 × 30 casillas). Van por los lados y las esquinas, fuera del
+# helipuerto y de su pasillo libre (PLATAFORMA_LIBRE), y lejos de la puerta de llegada (a la izquierda, en medio)
 const APARATOS := {
-	"centro": {"acunit": [2, 3], "airhandler": [1, 2], "vent": [3, 4]},
-	"apartamentos": {"watertank": [1, 2], "antennas": [2, 3], "vent": [1, 2]},
+	"centro": [
+		["acunit", 150, 150], ["acunit", 1240, 150], ["acunit", 1240, 650],
+		["airhandler", 704, 84], ["airhandler", 168, 700],
+		["vent", 420, 90], ["vent", 990, 90], ["vent", 480, 840], ["vent", 930, 840],
+	],
+	"apartamentos": [
+		["watertank", 1240, 200], ["watertank", 1240, 640],
+		["antennas", 130, 190], ["antennas", 130, 700], ["antennas", 1200, 400],
+		["vent", 900, 90], ["vent", 500, 840],
+	],
 }
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
@@ -364,32 +374,13 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	return planta
 
 
-# Los aparatos sueltos por la azotea, cada uno lejos de los demás (para que se pueda pasar entre ellos, también el
-# jefe), de las dos puertas y del murete. Del helipuerto, más: su base, a PLATAFORMA_LIBRE (para rodearlo andando), y
-# su dibujo, que sube desde la base (los de abajo, altos, se pintarían encima de la plataforma), sin tocarlo
-static func aparatos(sitio: Dictionary, edificio: String) -> Array:
+# Los aparatos de la azotea de ese edificio (APARATOS): la misma distribución en cada partida. Ninguno toca el
+# helipuerto: ni su base, que queda a PLATAFORMA_LIBRE (para rodearlo andando), ni su dibujo, que sube desde la base
+# (los de abajo, altos, se pintarían encima de la plataforma); lo comprueba la prueba --azotea
+static func aparatos(_sitio: Dictionary, edificio: String) -> Array:
 	var puestos := []
-	var puertas := [Vector2(MURO, sitio.alto / 2.0), Vector2(sitio.ancho - MURO, sitio.alto / 2.0)]
-	var huella := huella_helipuerto(sitio)
-	var cuantos: Dictionary = APARATOS.get(edificio, APARATOS.centro)
-	for tipo in cuantos:
-		var dibujo_alto: float = load("res://assets/sprites/mueble-%s.png" % tipo).get_height() * 2.0
-		for i in rng.randi_range(cuantos[tipo][0], cuantos[tipo][1]):
-			var p: Dictionary = Catalogo.MUEBLES[tipo]
-			for intento in 60:
-				var x := roundf(rng.randf_range(MURO + 50 + p.len / 2.0, sitio.ancho - MURO - 50 - p.len / 2.0) / 2.0) * 2.0
-				var y := roundf(rng.randf_range(MURO + 40, sitio.alto - MURO - 60 - p.dep) / 2.0) * 2.0
-				var m := Muebles.nuevo(tipo, {"lado": "arriba", "base": y}, x, 0)
-				var r := Muebles.hueco(m)
-				var dibujo := Rect2(r.position.x, r.end.y - dibujo_alto, r.size.x, dibujo_alto)
-				if huella.any(func(h): return h.grow(PLATAFORMA_LIBRE).intersects(r) or h.grow(8.0).intersects(dibujo)):
-					continue
-				if puertas.any(func(d): return d.distance_to(r.get_center()) < 180.0):
-					continue
-				if puestos.any(func(o): return Muebles.hueco(o).grow(50.0).intersects(r)):
-					continue
-				puestos.append(m)
-				break
+	for a in APARATOS.get(edificio, APARATOS.centro):
+		puestos.append(Muebles.nuevo(a[0], {"lado": "arriba", "base": float(a[2])}, float(a[1]), 0))
 	return puestos
 
 

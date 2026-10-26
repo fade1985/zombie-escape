@@ -133,8 +133,8 @@ en una línea.
   La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda: `plataforma()`,
   `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
   (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).
-  Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). La azotea no tiene más puerta que
-  la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
+  Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Sus aparatos van siempre en el
+  mismo sitio (`APARATOS`, uno por edificio). No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
