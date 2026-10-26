@@ -4001,5 +4001,11 @@
    "coste": "10 generaciones"
   },
   "coste": "34 generaciones"
+ },
+ "puerta-salida": {
+  "kind": "a mano",
+  "fecha": "2026-10-26",
+  "nota": "La salida de incendios del fondo del pasillo (puerta.gd y cartel_salida.gd), hecha SIN PixelLab. Se pensó con PixelLab (una puerta metálica de emergencia de un solo color rojo, con marco y hoja lisos y una barra antipánico de aluminio a media altura, vista de frente en la pared de arriba, con un cartel verde EXIT encima), pero el dueño prefirió dejarla en el muro de la derecha, vista desde arriba como las puertas de dentro cerradas de los tabiques verticales (un tablón fino con el pomo sobresaliendo), solo que roja y con una barra larga que sobresale; y el cartel EXIT, en la pared de arriba al final del pasillo. A esos tamaños (una hoja de 5 píxeles de ancho; un cartel de 36 × 13) PixelLab no dibuja nada (sale un color por columna: ver puerta-bano-lado-cerrada), así que lo dibuja py tools/puerta_salida.py con el contorno oscuro del juego y el aluminio de la puerta de servicio: assets/sprites/puerta-salida.png (36 × 36: hoja roja, barra de aluminio con soportes y caja del cierre, y las escaleras detrás), cartel-salida-apagado.png y cartel-salida-encendido.png (36 × 13: el muñequito corriendo y EXIT). El cartel luce, con su luz verde, cuando cae el jefe de la planta (cartel_salida.gd). Gastadas 0 generaciones.",
+  "coste": "0 generaciones"
  }
 }

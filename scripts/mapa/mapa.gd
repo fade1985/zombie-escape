@@ -48,6 +48,8 @@ const CAMARAS := preload("res://scripts/mapa/camaras.gd")
 const CAMARAS_DETRAS := Vector2(0, -68)  # las pantallas de las cámaras, detrás del técnico, en su habitación (viviendas.gd)
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
 const PLACA := preload("res://scripts/mapa/placa.gd")
+const CARTEL_SALIDA := preload("res://scripts/mapa/cartel_salida.gd")   # el EXIT de la salida de incendios (encima de la pared de arriba del pasillo)
+const CARTEL_SALIDA_A := 76.0   # a cuánto del fondo del pasillo va su centro
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
@@ -601,6 +603,13 @@ func poner_puertas() -> void:
 		else:
 			add_child(puerta)
 			move_child(puerta, 1)   # justo encima del suelo, por debajo de los personajes
+		if salida.tipo == "escaleras":
+			# la salida de incendios: su cartel EXIT en la pared de arriba, al final del pasillo, que se enciende cuando
+			# se puede pasar (la puerta se lo dice: puerta.gd)
+			var cartel := CARTEL_SALIDA.new()
+			cartel.position = Vector2(sitio.ancho - MURO - CARTEL_SALIDA_A, MURO + 1)
+			cosas.add_child(cartel)
+			puerta.cartel = cartel
 		puertas.append(puerta)
 
 

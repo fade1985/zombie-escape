@@ -1,7 +1,8 @@
-# Una salida de un mapa: las puertas de los apartamentos, el ascensor averiado, las escaleras y por donde se
-# ha llegado. Las puertas vistas de frente (en la pared de arriba) son dibujos de PixelLab (tools/guias_puertas.py):
-# la de madera de los pisos, la de cristal de las tiendas y la de acero de la sala de mantenimiento. Lo demás se
-# dibuja a mano, con rectángulos de colores (en múltiplos de 2 unidades, como un píxel del dibujo).
+# Una salida de un mapa: las puertas de los apartamentos, el ascensor averiado, las escaleras (la salida de incendios,
+# roja, con su cartel EXIT: cartel_salida.gd) y por donde se ha llegado. Las puertas vistas de frente (en la pared de
+# arriba) son dibujos de PixelLab (tools/guias_puertas.py): la de madera de los pisos, la de cristal de las tiendas y
+# la de acero de la sala de mantenimiento. Lo demás se dibuja a mano, con rectángulos de colores (en múltiplos de 2
+# unidades, como un píxel del dibujo).
 #
 # Delante tiene una zona invisible: cuando Johnny la pisa, avisa con "empujada" y la partida decide si se
 # pasa al otro lado o se le dice por qué no se abre.
@@ -17,6 +18,11 @@ const DIBUJO := {"piso": preload("res://assets/sprites/puerta-piso.png"),
 # Planta baja (0) a 3ª (la azotea no tiene ascensor)
 const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
 	preload("res://assets/sprites/cartel-planta-2.png"), preload("res://assets/sprites/cartel-planta-3.png")]
+# La salida de incendios del fondo del pasillo (las escaleras, en el muro de la derecha): una hoja de chapa roja metida en el
+# hueco, vista de canto desde arriba, con su barra antipánico larga sobresaliendo hacia el pasillo y las escaleras detrás.
+# 36 × 36 píxeles (72 × 72 unidades): los 4 primeros píxeles son del suelo del pasillo, por donde sobresale la barra
+# (tools/puerta_salida.py, hecha a mano: a 5 píxeles de ancho PixelLab no dibuja)
+const SALIDA := preload("res://assets/sprites/puerta-salida.png")
 const MARCO := Color("2b1d16")
 const HOJA := Color("6b4329")
 const HUECO := Color("1a1410")
@@ -54,9 +60,12 @@ const LETRAS := {
 var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
+var cartel: Node2D = null   # las escaleras: su cartel EXIT de la pared de arriba (cartel_salida.gd, lo pone mapa.gd)
 var abierta := true:     # si se puede pasar
 	set(valor):
 		abierta = valor
+		if cartel:
+			cartel.encender(valor)   # el cartel de las escaleras luce cuando se pueden usar
 		queue_redraw()
 
 
@@ -108,14 +117,14 @@ func _draw() -> void:
 			if salida.has("placa"):
 				placa_de_piso(Vector2(42, 6))   # encima del muro, a la derecha del hueco
 		_:
-			# En los laterales del pasillo: las escaleras (peldaños) o la puerta por donde se ha llegado
+			# En los laterales del pasillo: las escaleras (la salida de incendios, en el muro de la derecha) o la puerta
+			# por donde se ha llegado
+			if salida.tipo == "escaleras":
+				draw_texture_rect(SALIDA, Rect2(-8, -36, 72, 72), false)
+				return
 			var x0 := -64.0 if salida.dir == "izquierda" else 0.0
 			draw_rect(Rect2(x0, -36, 64, 72), MARCO)
-			if salida.tipo == "escaleras":
-				for i in 8:
-					draw_rect(Rect2(x0 + i * 8, -32, 8, 64), Color("6d6d72") if i % 2 else Color("57575c"))
-			else:
-				draw_rect(Rect2(x0, -32, 64, 64), HUECO)
+			draw_rect(Rect2(x0, -32, 64, 64), HUECO)
 			var borde := -8.0 if salida.dir == "izquierda" else 0.0   # la hoja, en el borde de dentro
 			draw_rect(Rect2(borde, -32, 8, 64), HOJA)
 

@@ -20,6 +20,36 @@ func probar_pasillo() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --salida": la salida de incendios del fondo del pasillo (la puerta roja de las escaleras, en el muro de la
+# derecha, y su cartel EXIT en la pared de arriba), con Johnny delante: primero con la planta sin pasar (cartel apagado) y
+# luego, al caer el jefe, con el cartel encendido y alumbrando. Dice si cada cosa está como toca y, al volver al pasillo de una
+# planta ya pasada, que el cartel nace encendido y sin parpadeo. Fotos: captura-salida-cerrada.png y captura-salida-abierta.png.
+# Luego se cierra
+func probar_salida() -> void:
+	nueva_planta(2)
+	await montar(0, puerta_de_tipo("llegada"), false)
+	var escaleras: Node2D = mapa.puertas[puerta_de_tipo("escaleras")]
+	johnny.position = escaleras.llegada()
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.8).timeout
+	print("Salida (planta sin pasar): se puede pasar %s, cartel encendido %s (esperado: false, false)" % [
+		escaleras.abierta, escaleras.cartel.luce()])
+	Captura.foto("captura-salida-cerrada.png")
+	planta.jefa_muerta = true
+	actualizar_puertas()
+	print("Salida (cae el jefe): se puede pasar %s, cartel encendido %s, arrancando %s (esperado: true, true, true)" % [
+		escaleras.abierta, escaleras.cartel.encendido, escaleras.cartel.arrancando >= 0.0])
+	await get_tree().create_timer(2.0).timeout
+	print("Salida (2 s después): cartel encendido %s, ya fijo %s (esperado: true, true)" % [
+		escaleras.cartel.luce(), escaleras.cartel.arrancando < 0.0])
+	Captura.foto("captura-salida-abierta.png")
+	await montar(0, puerta_de_tipo("llegada"), false)
+	escaleras = mapa.puertas[puerta_de_tipo("escaleras")]
+	print("Salida (al volver al pasillo ya pasado): cartel encendido %s, ya fijo %s (esperado: true, true)" % [
+		escaleras.cartel.luce(), escaleras.cartel.arrancando < 0.0])
+	get_tree().quit()
+
+
 # Con "--captura --piso": el piso de los apartamentos (apartamento.gd: PLANO_PASILLO), siempre el mismo. Primero lo
 # genera con la puerta abajo y con ella arriba y mira que esté bien: la puerta en el centro y justo un salón, una
 # cocina, un dormitorio de matrimonio y otro individual, cada uno con su baño dentro (con una sola puerta, a él). Luego,

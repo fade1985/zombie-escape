@@ -161,7 +161,16 @@ en una línea.
   la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
   la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
   tablas siguen con la hoja vista desde arriba. Se prueba con `--puertas`.
-- `cara_pared.gd`, `puerta.gd` (las salidas), `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
+- `puerta.gd` (las salidas) y `cartel_salida.gd`: la salida de incendios es la puerta de las escaleras, al fondo del
+  pasillo, en el muro de la derecha. Se abre cuando cae el jefe de la planta (`jefa_muerta` en `partida.gd`, que llama a
+  `actualizar_puertas`). Vista desde arriba, es una hoja de chapa roja fina metida en el hueco, con su barra antipánico
+  de aluminio sobresaliendo hacia el pasillo y las escaleras detrás (`puerta-salida.png`, 36 × 36). Encima, en la pared de
+  arriba, un cartel EXIT (`cartel-salida-apagado.png` / `-encendido.png`, 36 × 13) que `mapa.gd` crea junto a la puerta y
+  que la puerta enciende (`abierta`): apagado es verde oscuro y sin luz; al caer el jefe arranca con unos parpadeos y se
+  queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
+  vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
+  no dibuja). Se prueba con `--salida`.
+- `cara_pared.gd`, `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`,
   `valla.gd` (la del helipuerto de la azotea).
 
@@ -199,6 +208,8 @@ en una línea.
   ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
   quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`) y
   `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
+- **La salida de incendios:** `puerta_salida.py` dibuja a mano, sin PixelLab, la puerta roja de las escaleras y el
+  cartel EXIT (apagado y encendido): `py tools/puerta_salida.py`.
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
   `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
