@@ -1118,6 +1118,28 @@ func probar_municion_suelo() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --atraedora": el dibujo nuevo de la atraedora (PixelLab, 26 oct: el haz de dinamita con el
+# despertador). Johnny lleva tres a mano: una lanzada, a mitad de vuelo (captura-atraedora-vuelo.png), el HUD con ella
+# a mano (captura-atraedora-hud.png) y el inventario con ella elegida (captura-atraedora-inventario.png)
+func probar_atraedora() -> void:
+	johnny.direccion = "o"   # (que la linterna no alumbre la fila)
+	lanzables.meter("atraedora", 3)
+	lanzables.tipo = "atraedora"
+	await get_tree().create_timer(0.3).timeout
+	lanzables.lanzar(johnny.position + Vector2(220, 20))   # (hacia un lado: hacia arriba lo tapa la pared)
+	await get_tree().create_timer(0.27).timeout
+	var en_vuelo: Array = johnny.get_parent().get_children().filter(func(n): return "tipo" in n and n.get("tipo") == "atraedora")
+	print("Atraedora lanzada: le quedan %d, en vuelo: %d (esperado: 2 y 1)" % [lanzables.cuantas("atraedora"), en_vuelo.size()])
+	Captura.foto("captura-atraedora-vuelo.png")
+	await get_tree().create_timer(1.0).timeout
+	Captura.foto("captura-atraedora-hud.png")
+	abrir_cosas("inventario")
+	inventario.tocar("l%d" % lanzables.mano.find("atraedora"))
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-atraedora-inventario.png")
+	get_tree().quit()
+
+
 # Los objetos de curar de las tiendas (parte 9: las vendas, Objetos.USABLES; el bocadillo se quitó del juego el 25
 # oct): con la vida baja y las vendas en la mochila, saca el inventario con ellas elegidas (captura-vendas.png) y las
 # usa, contando la vida antes y después; luego dice dónde salen y cuántos objetos cuenta Colecciones

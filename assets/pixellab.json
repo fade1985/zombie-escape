@@ -3638,6 +3638,38 @@
   "cost": "10 generaciones (2 objetos de 5)",
   "updated": "2026-10-26"
  },
+ "atraedora-icono": {
+  "nota": "El icono de la atraedora (26 oct, lo pidió el dueño con una imagen de referencia: un haz de dinamita roja con un despertador, 'sin el cable ni el amarillo ni el azul'). Antes era un despertador de 16x16 hecho a mano. Misma receta que molotov-icono: create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png de imagen de estilo sin copiar sus colores (color_palette false) y 'sin brillos blancos' en el texto. Dos intentos (A y B) en assets/sources/atraedora/intentos/. ELEGIDO por el dueño: B (el haz tumbado, cuatro cartuchos rojos con dos cintas gris oscuro y el despertador gris encima, esfera crema con agujas verdes) → assets/ui/iconos/atraedora.png (32x32). La A eran tres cartuchos de pie con el despertador delante. Sirve para el inventario, el HUD, la tienda y la atraedora en vuelo (granada.gd, DIBUJO_ATRAEDORA, que antes la dibujaba con el dibujo de la granada teñido de amarillo; al parpadear se oscurece un poco). No cae al suelo (solo el molotov y la granada lo hacen). Prueba: -- --captura --atraedora (captura-atraedora-vuelo.png, -hud.png y -inventario.png).",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "atraedora": {
+    "seeds": [
+     42001,
+     42002
+    ],
+    "ids": [
+     "243621b1-bc60-4749-995f-df307b748958",
+     "50ca22d7-bb7e-4d83-9502-ab65353bb683 (B, elegida)"
+    ],
+    "description": "A: a bundle of three red dynamite sticks standing upright side by side, held together by two dark grey straps, with a round grey metal alarm clock strapped on the front: cream-white clock face with two green clock hands and a small bell on each side on top of the clock. B (elegida): a bundle of four red dynamite sticks lying tilted diagonally, held together by two dark grey straps, with a round grey metal alarm clock strapped on top of the middle (mismo reloj). Los dos: No wires, no cables, no yellow parts, no blue parts. Single game loot pickup item. Seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   }
+  },
+  "cost": "10 generaciones (2 objetos de 5)",
+  "updated": "2026-10-26"
+ },
  "nevera-pisos": {
   "kind": "images",
   "fecha": "2026-10-25",

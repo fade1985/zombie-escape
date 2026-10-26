@@ -48,7 +48,7 @@ en una línea.
   lo que cuesta uno en la tienda (`PRECIOS`). Cada paquete tiene su calidad y va en su hueco: su clave es el tipo y,
   si no es Normal, la calidad detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con
   `mejorar`).
-  `granada.gd`: también la atraedora y la congeladora.
+  `granada.gd`: también la atraedora (con su propio dibujo, el icono `atraedora.png`) y la congeladora.
 - `sala_armas.gd`: la sala de pruebas (F11 desde cualquier sitio; F11 otra vez, de vuelta): la diana, todas las armas,
   las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
   salir, Johnny vuelve a llevar lo que llevaba. Su panel de pruebas (tecla P) es `ui/panel_pruebas.gd`.

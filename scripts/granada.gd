@@ -2,7 +2,7 @@
 # las paredes y los muebles, parpadea en rojo (cada vez más deprisa) y a los 2 s explota: la explosión de
 # siempre (explosion.gd), que también hace daño a Johnny, y una mancha chamuscada en el suelo.
 # La atraedora y la congeladora (antes, arrojadizas creadas del banco) son esta misma granada con otro "tipo"
-# (Lanzables.ARROJADIZAS): su mecha, su color (el dibujo de la granada, teñido) y lo suyo al explotar. A Johnny
+# (Lanzables.ARROJADIZAS): su mecha, su color (el dibujo de la granada, teñido; la atraedora lleva el suyo) y lo suyo al explotar. A Johnny
 # le hacen como mucho 25:
 #   atraedora    mientras suena, los zombis cercanos van hacia ella (grupo "cebos", zombi.gd)
 #   congeladora  los zombis que pilla se quedan quietos y azules 3 s (la portera, no)
@@ -12,6 +12,7 @@ extends Node2D
 
 const EXPLOSION := preload("res://escenas/armas/explosion.tscn")
 const DIBUJO := preload("res://assets/sprites/objeto-granada.png")
+const DIBUJO_ATRAEDORA := preload("res://assets/ui/iconos/atraedora.png")   # el haz de dinamita con despertador (PixelLab): el mismo del inventario
 const G := Lanzables.GRANADA
 const HIJA_MECHA := 0.7   # lo que tardan en explotar las granaditas del racimo
 
@@ -142,5 +143,9 @@ func _draw() -> void:
 	# el dibujo del dueño (19×27) a 0,8: unas 15×22 unidades. En el aire gira; en el suelo, derecha
 	var rojo := int(parpadeo) % 2 == 1
 	draw_set_transform(Vector2(0, -z - 8.0), giro if z > 0.0 else 0.0, Vector2(0.8, 0.8))
+	if tipo == "atraedora":
+		# lleva su propio dibujo, sin teñir (ya es rojo: al parpadear se oscurece un poco, como el pitido)
+		draw_texture(DIBUJO_ATRAEDORA, -DIBUJO_ATRAEDORA.get_size() / 2.0, Color(1.0, 0.55, 0.5) if rojo else Color.WHITE)
+		return
 	var tinte: Color = Color.WHITE if tipo == "granada" else Lanzables.ARROJADIZAS[tipo].color
 	draw_texture(DIBUJO, -Vector2(9.5, 16.0), Color(1.0, 0.35, 0.3) if rojo else tinte)
