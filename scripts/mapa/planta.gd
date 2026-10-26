@@ -38,12 +38,12 @@ const AZOTEA_FILAS := 30
 # El helipuerto (helipuerto.png, de tools/azotea.py): una plataforma un poco más alta que el suelo, siempre en el
 # centro de la azotea, con la rampa a la izquierda (de cara a la escalera por la que se llega). Es el ring del jefe
 # final: espera arriba y, en cuanto sube Johnny, una valla cierra la rampa hasta que cae (mapa.gd y partida.gd)
-const PLATAFORMA := Vector2(512, 384)   # lo de arriba, 16 × 12 casillas (con su borde, que no se pisa)
+const PLATAFORMA := Vector2(640, 512)   # lo de arriba, 20 × 16 casillas (con su borde, que no se pisa)
 const PLATAFORMA_ALTO := 24.0           # lo que se eleva: la cara de delante, que se ve por debajo
 const PLATAFORMA_BORDE := 8.0           # el borde de arriba: choca, como la cara
 const RAMPA := Vector2(128, 96)         # largo y ancho de la rampa (con sus dos barandillas)
 const BARANDILLA := 6.0                 # el grosor de cada barandilla de la rampa
-const PLATAFORMA_LIBRE := 64.0          # lo que queda libre alrededor de la plataforma, para rodearla andando
+const PLATAFORMA_LIBRE := 48.0          # lo que queda libre alrededor de la plataforma, para rodearla andando
 # La capa de choque 4 ("bordes bajos"): el borde del helipuerto. Para a los que andan (Johnny, los zombis, los jefes y
 # los acompañantes la llevan en su máscara), no a lo que vuela (las balas y lo que se lanza solo miran la capa 1)
 const CAPA_BORDE := 8
