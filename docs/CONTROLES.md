@@ -89,7 +89,7 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   paquetes de arrojables (los que lleva y los del baúl) con las piezas de su familia que sueltan los zombis y los
   jefes: las armas, 3 para Poco común, 6 para Rara y 10 para Épica; los arrojables, que se gastan, 1, 2 y 4. Valen las
   de la mochila (se gastan primero) y las del baúl. Se maneja como el baúl: elegir la casilla y «Mejorar» (o Y en el
-  mando). La **Épica** trae un truco: cuerpo a cuerpo, cada 4 golpes uno es crítico («¡GOLPE DE GRACIA!»); a distancia,
+  mando). La **Épica** trae un truco: cuerpo a cuerpo, cada 4 golpes uno es crítico (con un anillo morado en cada zombi que pilla); a distancia,
   las balas atraviesan a un zombi (estela morada); especiales, el zombi que matan revienta y prende, echa ácido o da
   calambre a los de al lado; arrojables, al romperse o explotar sueltan 2 más pequeños. Y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la

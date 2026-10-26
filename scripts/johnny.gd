@@ -649,7 +649,6 @@ func golpear(angulo: float) -> void:
 	if tocados > 0 and w.calidad >= Armas.EPICA:
 		gracia = 0 if de_gracia else gracia + 1
 		if de_gracia:
-			Zombi.texto_flotante(get_parent(), global_position + Vector2(-60, -90), "¡GOLPE DE GRACIA!", Armas.color(Armas.EPICA), 16)
 			Temblor.temblar(4.0)
 	if tocados > 0:
 		Sonido.tocar("porrazo")
