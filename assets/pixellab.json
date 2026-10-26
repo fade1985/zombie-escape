@@ -3211,6 +3211,18 @@
    ]
   }
  },
+ "puerta-bano-abierta": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "La puerta de dentro (puerta_bano.gd) abierta del todo, de frente: hasta hoy era la puerta cerrada torcida por código, una cuña con rayas y un rectángulo naranja liso de canto, y quedaba mal. Con create_image_pixflux y la receta de las puertas: la guía de py tools/puerta_abierta.py guia (nuestra puerta de madera, puerta-bano.png, estrechada a 12 columnas que bajan 2 píxeles cada una —la pendiente 2 a 1, unos 63 grados— y con su canto de 2 píxeles de grueso, al doble y con 4 de azul alrededor; 36×142, subida con get_upload_url) como init_image, view side, no_background false, single color black outline, medium shading, medium detail, text_guidance_scale 10, fuerza 50 (semillas 201 y 202) y 80 (203 y 204). Texto: 'open interior wooden door swung wide open toward the viewer, seen at a steep angle so the door leaf looks like a thin slanted parallelogram with two recessed panels, round brass doorknob near the free edge, lighter wood edge of the door on the right, scratched, a bloody handprint, zombie apocalypse, horror game, muted colors, game sprite on a plain blue background'. El 202 dibujó una habitación entera con la puerta entreabierta (descartado); el 201 salió con buen relieve pero gris y con un segundo pomo suelto; el 203, más claro y con sangre. Elegido el 204 (fuerza 80), el más cercano a nuestra puerta (marrón rojizo oscuro, paneles con bisel, canto naranja y pomo de latón); los cuatro, con fondo, en assets/sources/puertas/descartes/ (bano-abierta-<semilla>.png), y el elegido sin fondo (py tools/guias_centro.py quita) en assets/sources/puertas/bano-abierta.png. Sprite con py tools/puerta_abierta.py sprite <png>: recorte, a la mitad exacta (14×64), la madera pasada al matiz y la saturación de nuestra puerta (PixelLab la pinta granate y con azul en el borde de arriba), y 3 filas de sombra transparente bajo el borde de abajo (assets/sprites/puerta-bano-abierta.png, 14×67). puerta_bano.gd la dibuja cuando abierta llega a 1; mientras gira, sigue el giro por código, ahora a 63 grados (GIRO) para que case con el dibujo.",
+  "coste": "4 generaciones",
+  "piezas": {
+   "puerta abierta 204 (fuerza 80, semilla 204; elegida)": "83e9fa03-8f18-530b-b1d7-a9b6044e908e",
+   "puerta abierta 201 (fuerza 50, semilla 201)": "d617ad87-cb9b-5494-9f3e-f3d9f5ad7364",
+   "puerta abierta 202 (fuerza 50, semilla 202)": "25de6443-0486-5c12-9896-f0ddd5d856e7",
+   "puerta abierta 203 (fuerza 80, semilla 203)": "4ec0dedd-755c-5167-8d2e-3275c1f4760e"
+  }
+ },
  "puertas": {
   "kind": "images",
   "fecha": "2026-10-23",

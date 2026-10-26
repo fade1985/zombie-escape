@@ -5,7 +5,8 @@
 # abajo hasta quedarse casi de canto, dentro de un marco que llena el hueco hasta el dintel (el trozo de muro de
 # encima, que pone mapa.gd); de lado, una hoja de madera vista desde arriba, de punta a punta del hueco y sobre su
 # umbral, que gira hasta quedarse de través. Abierta, se queda así: lo apunta en su hueco ("abierta") para que siga
-# abierta al volver.
+# abierta al volver. De frente, abierta del todo es otro dibujo de PixelLab (puerta-bano-abierta, de tools/puerta_abierta.py):
+# nuestra puerta casi de canto, con su canto, su pomo y su sombra en el suelo.
 #
 # Las "libres" las pone mapa.gd en cada hueco de los pisos, las tiendas y la sala de mantenimiento: empiezan cerradas
 # y las abren Johnny y los que le acompañan con solo arrimarse, y los zombis despiertos empujándolas un momento. La
@@ -25,7 +26,8 @@ const LINEA := Color("#1d1b2c")
 const DIBUJO := preload("res://assets/sprites/puerta-bano.png")   # la hoja de frente: 28 × 43 píxeles (56 × 86 unidades)
 const MARCO := 4.0          # de frente, el grueso del marco (2 píxeles): con la hoja, llena el hueco de lado a lado
 const DINTEL := ALTO + MARCO   # de frente, lo alto del marco; por encima va el dintel (mapa.gd: poner_caras)
-const GIRO := PI * 5.0 / 12.0  # lo que gira de frente al abrirse del todo, 75 grados (a 90 ya no se vería su cara)
+const ABIERTA := preload("res://assets/sprites/puerta-bano-abierta.png")   # la hoja abierta del todo, de frente: 14 × 67 píxeles (64 de hoja y 3 de sombra)
+const GIRO := 1.1071        # lo que gira de frente al abrirse del todo, 63 grados (cada píxel hacia un lado, dos hacia abajo)
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
 const MIRAR := 0.1          # cada cuánto mira una libre si alguien la empuja
@@ -166,19 +168,23 @@ func _draw() -> void:
 		var ancho := r.size.x - MARCO * 2
 		var giro := abierta * GIRO
 		var bisagra := Vector2(r.position.x + MARCO + temblor, r.end.y)
-		draw_set_transform_matrix(Transform2D(Vector2(cos(giro), sin(giro)), Vector2(0, 1), bisagra))
-		var hoja := Rect2(0, -ALTO, ancho, ALTO)
-		if acero:
-			acero_de_frente(hoja)
+		if abierta >= 1.0 and not acero:
+			# abierta del todo: su dibujo, con la esquina de arriba a la izquierda en la bisagra (con su canto y su sombra)
+			draw_texture_rect(ABIERTA, Rect2(bisagra - Vector2(0, ALTO), ABIERTA.get_size() * 2.0), false)
 		else:
-			draw_texture_rect(DIBUJO, hoja, false, Color.WHITE.darkened(0.15 * abierta))
-		draw_set_transform_matrix(Transform2D.IDENTITY)
-		if abierta > 0.0:
-			# el canto de fuera, que da a la luz
-			var punta := bisagra + Vector2(cos(giro), sin(giro)) * ancho
-			var canto := Rect2(punta.x, punta.y - ALTO, maxf(2.0, 6.0 * sin(giro)), ALTO)
-			draw_rect(canto, Color("#9aa3aa") if acero else Color("#b07a4e"))
-			draw_rect(canto, LINEA, false, 2.0)
+			draw_set_transform_matrix(Transform2D(Vector2(cos(giro), sin(giro)), Vector2(0, 1), bisagra))
+			var hoja := Rect2(0, -ALTO, ancho, ALTO)
+			if acero:
+				acero_de_frente(hoja)
+			else:
+				draw_texture_rect(DIBUJO, hoja, false, Color.WHITE.darkened(0.15 * abierta))
+			draw_set_transform_matrix(Transform2D.IDENTITY)
+			if abierta > 0.0:
+				# el canto de fuera, que da a la luz
+				var punta := bisagra + Vector2(cos(giro), sin(giro)) * ancho
+				var canto := Rect2(punta.x, punta.y - ALTO, maxf(2.0, 6.0 * sin(giro)), ALTO)
+				draw_rect(canto, Color("#9aa3aa") if acero else Color("#b07a4e"))
+				draw_rect(canto, LINEA, false, 2.0)
 		# la barricada: tablas torcidas de lado a lado, más anchas que la puerta, con un clavo en cada punta
 		for i in tablas:
 			var y: float = r.end.y - ALTO + ALTO * [0.18, 0.4, 0.62, 0.84][i]
