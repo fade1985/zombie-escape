@@ -1,8 +1,8 @@
 # Las viviendas de los supervivientes rescatados: detrás de la puerta de la derecha de la sala de mantenimiento, un
 # pasillo largo con seis habitaciones, una por superviviente (Supervivientes.DATOS). Las de los tres de los
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
-# comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio y, junto a ella, una
-# placa con su nombre (placa.gd). Las de quien aún no está rescatado (Guardado.rescatados) están cerradas y a oscuras,
+# comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
+# nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están cerradas y a oscuras,
 # para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos)
 # y lo suyo: las pantallas de las cámaras del técnico y, junto a la farmacéutica, la cafetera de Johnny.
 #

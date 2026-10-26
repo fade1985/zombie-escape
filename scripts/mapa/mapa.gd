@@ -47,7 +47,6 @@ const CAFETERA_JUNTO := Vector2(64, -8)   # la cafetera de Johnny, en la habitac
 const CAMARAS := preload("res://scripts/mapa/camaras.gd")
 const CAMARAS_DETRAS := Vector2(0, -68)  # las pantallas de las cámaras, detrás del técnico, en su habitación (viviendas.gd)
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
-const PLACA := preload("res://scripts/mapa/placa.gd")
 const CARTEL_SALIDA := preload("res://scripts/mapa/cartel_salida.gd")   # el EXIT de la salida de incendios (encima de la pared de arriba del pasillo)
 const CARTEL_SALIDA_A := 76.0   # a cuánto del fondo del pasillo va su centro
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
@@ -672,7 +671,7 @@ func poner_hojas() -> void:
 		hojas.append(hoja)
 
 
-# Las viviendas de los supervivientes (viviendas.gd): junto a cada puerta, la placa con su nombre. Las de quien aún no
+# Las viviendas de los supervivientes (viviendas.gd). Las de quien aún no
 # está rescatado, cerradas (con su hoja, que no deja pasar ni ver lo de dentro: la niebla sigue); las de los rescatados,
 # abiertas y ya descubiertas. Con el técnico rescatado, sus pantallas de las cámaras detrás de él (su mejora: el
 # minimapa enseña los zombis, minimapa.gd); y con la farmacéutica, la cafetera de Johnny junto a ella (la primera vez
@@ -683,11 +682,6 @@ func poner_viviendas() -> void:
 	var descubiertas: Dictionary = sitio.get_or_add("vistas", {})
 	descubiertas[0] = true   # el pasillo
 	for d in sitio.apt.puertas:
-		var placa := PLACA.new()
-		placa.texto = Supervivientes.DATOS[d.vecino].nombre
-		placa.color = Supervivientes.DATOS[d.vecino].color
-		placa.position = Vector2((d.c + d.ancho / 2.0) * CASILLA, (d.f + 1) * CASILLA + 1)
-		cosas.add_child(placa)
 		d.cerrada = d.vecino not in rescatados
 		var hoja := PUERTA_BANO.new()
 		if d.cerrada:

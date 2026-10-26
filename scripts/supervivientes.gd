@@ -839,7 +839,7 @@ func probar_horda() -> void:
 
 # Las viviendas (mapa/viviendas.gd), con cuatro rescatados (el policía, el militar, el ferretero y el técnico) y sin
 # acompañante. En la sala de mantenimiento ya no espera nadie y hay una puerta a la derecha (captura-viviendas-puerta.png);
-# por ella, al pasillo de las viviendas: seis puertas con su placa, cerradas las de la médica y la farmacéutica (que
+# por ella, al pasillo de las viviendas: seis puertas, cerradas las de la médica y la farmacéutica (que
 # no dejan pasar, y sus habitaciones siguen a oscuras) y abiertas las demás, cada uno en la suya (el ferretero, en
 # medio de la suya: captura-viviendas-ferretero.png) y las cámaras del técnico. Fotos del pasillo (captura-viviendas.png,
 # la mitad de la izquierda, y captura-viviendas-derecha.png) y de una habitación por dentro
@@ -880,9 +880,8 @@ func probar_viviendas() -> void:
 	for d in casas.apt.puertas:
 		(cerradas if d.cerrada else abiertas).append(DATOS[d.vecino].nombre)
 	var hojas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == PUERTA_BANO)
-	var placas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == mapa.PLACA)
-	print("Viviendas: placas %d · cerradas %s · abiertas %s · hojas %d, de ellas abiertas %d (esperado: 6, [Médica, Farmacéutica], los otros cuatro, 6, 4)" % [
-		placas.size(), cerradas, abiertas, hojas.size(), hojas.filter(func(h): return h.abierta == 1.0).size()])
+	print("Viviendas: cerradas %s · abiertas %s · hojas %d, de ellas abiertas %d (esperado: [Médica, Farmacéutica], los otros cuatro, 6, 4)" % [
+		cerradas, abiertas, hojas.size(), hojas.filter(func(h): return h.abierta == 1.0).size()])
 	var oscuras: Array = casas.apt.salas.filter(func(s): return mapa.oculto(s.centro)).map(func(s): return s.nombre)
 	print("Viviendas: a oscuras %s (esperado: [Médica, Farmacéutica])" % [oscuras])
 	print("Viviendas: vecinos %s (esperado: cada uno en la suya)" % [vecinos.map(func(v):

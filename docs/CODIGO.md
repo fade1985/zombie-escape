@@ -176,7 +176,7 @@ en una línea.
   queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
   vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
   no dibuja). Se prueba con `--salida`.
-- `cara_pared.gd`, `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
+- `cara_pared.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`,
   `valla.gd` (la del helipuerto de la azotea).
 
