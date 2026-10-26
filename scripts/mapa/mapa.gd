@@ -53,6 +53,9 @@ const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
 const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
+# El suelo de las habitaciones de un piso que no depende de dónde caen (que cambia al voltear el piso): "<uso>-<tipo>" -> el
+# sufijo de su suelo (suelo-<estilo><sufijo>). El del dormitorio de matrimonio, el gris azulado, igual con la puerta arriba y abajo
+const SUELO_FIJO := {"dormitorio-matrimonio": "-a"}
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
 	"habitacion": "dormitorio"}   # (las habitaciones de las viviendas, viviendas.gd; su pasillo, el de los pisos)
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
@@ -187,7 +190,9 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			if estilo == "bano":
 				estilos[s.id] = textura("bano", "-a" if h % 2 else "-b", "-a" if (h >> 1) % 2 else "-b")
 			else:
-				estilos[s.id] = textura(estilo, ["-a", "-b", "-c"][h % 3], ["-a", "-b", "-c"][(h / 3) % 3])
+				# el suelo, el de su tipo si lo tiene fijo (SUELO_FIJO) y si no, uno según dónde cae la habitación
+				var suelo: String = SUELO_FIJO.get(s.uso + "-" + s.get("tipo", ""), ["-a", "-b", "-c"][h % 3])
+				estilos[s.id] = textura(estilo, suelo, ["-a", "-b", "-c"][(h / 3) % 3])
 
 	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea"]
 	if centro:
