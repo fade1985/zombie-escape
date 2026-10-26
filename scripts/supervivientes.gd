@@ -841,7 +841,7 @@ func probar_horda() -> void:
 # acompañante. En la sala de mantenimiento ya no espera nadie y hay una puerta a la derecha (captura-viviendas-puerta.png);
 # por ella, al pasillo de las viviendas: seis puertas, cerradas las de la médica y la farmacéutica (que
 # no dejan pasar, y sus habitaciones siguen a oscuras) y abiertas las demás, cada uno en la suya (el ferretero, en
-# medio de la suya: captura-viviendas-ferretero.png) y las cámaras del técnico. Fotos del pasillo (captura-viviendas.png,
+# medio de la suya: captura-viviendas-ferretero.png) y el técnico. Fotos del pasillo (captura-viviendas.png,
 # la mitad de la izquierda, y captura-viviendas-derecha.png) y de una habitación por dentro
 # (captura-viviendas-habitacion.png). Luego, arrimarse
 # al policía (te acompaña), al militar (el policía vuelve a la suya) y volver a la sala con él por la puerta de la
@@ -890,9 +890,6 @@ func probar_viviendas() -> void:
 		vecinos.map(func(v):
 			var r := Viviendas.habitacion(v.def.id)
 			return "%s %d" % [v.def.nombre, roundi(v.position.x - (r.position.x + r.size.x / 2.0) * Planta.CASILLA)])])
-	var camaras: Node2D = mapa.cosas.get_node_or_null("Camaras")
-	print("Viviendas: cámaras %s en «%s» (esperado: true, Técnico)" % [camaras != null,
-		mapa.nombre_zona(mapa.zona_en(camaras.position)) if camaras else "-"])
 	# la habitación del ferretero, con él en medio
 	johnny.position = Viviendas.casa("ferretero") + Vector2(-70, 50)
 	johnny.get_node("Camara").reset_smoothing()
