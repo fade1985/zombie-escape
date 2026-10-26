@@ -27,8 +27,9 @@ func probar_pasillo() -> void:
 # (los de debajo), sin zombis, y de cada uno dice sus habitaciones, si está sin muebles, si la puerta está en el centro
 # y si desde ella se llega andando a todas, y dibuja su plano con letras (S salón, C cocina, M dormitorio de
 # matrimonio, I individual, B baño, . pasillo, # muro, E la entrada). Fotos: lo que se ve al entrar
-# (captura-piso-abajo-entrada.png y -arriba-entrada.png), cada dormitorio con Johnny dentro y la penumbra, para ver sus
-# muebles y la luz de las mesillas (captura-piso-abajo-matrimonio.png, -individual.png, y las mismas con -arriba) y el piso
+# (captura-piso-abajo-entrada.png y -arriba-entrada.png), cada dormitorio, el salón y la cocina con Johnny dentro y la
+# penumbra, para ver sus muebles y sus luces (captura-piso-abajo-matrimonio.png, -individual.png, -salon.png, -cocina.png, y
+# las mismas con -arriba) y el piso
 # entero, sin niebla ni penumbra (captura-piso-abajo.png y -arriba.png). Luego se cierra
 func probar_piso() -> void:
 	var mal := []
@@ -63,16 +64,17 @@ func probar_piso() -> void:
 		await montar(idx, 0, false)
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-piso-%s-entrada.png" % lado)
-		# los dos dormitorios, con Johnny dentro: sus muebles y la luz de las mesillas, con la penumbra
+		# los dos dormitorios, el salón y la cocina, con Johnny dentro: sus muebles y sus luces, con la penumbra
 		for s in apt.salas:
-			if s.uso == "dormitorio":
+			if s.uso in ["dormitorio", "salon", "cocina"]:
 				johnny.position = s.centro
 				await get_tree().create_timer(0.8).timeout
-				Captura.foto("captura-piso-%s-%s.png" % [lado, s.tipo])
+				Captura.foto("captura-piso-%s-%s.png" % [lado, s.get("tipo", s.uso)])
 		print("Piso (puerta %s): %d × %d casillas · %s" % [lado, apt.cols, apt.filas,
 			" · ".join(apt.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
-		# (de momento, solo los puestos a mano: los 4 del dormitorio de matrimonio, los 4 del individual y los 7 del salón)
-		print("Piso (puerta %s): muebles %d (esperado: 15, los puestos a mano; Muebles.de_piso)" % [lado,
+		# (de momento, solo los puestos a mano: los 4 del dormitorio de matrimonio, los 4 del individual, los 7 del salón y los 5
+		# de la cocina)
+		print("Piso (puerta %s): muebles %d (esperado: 20, los puestos a mano; Muebles.de_piso)" % [lado,
 			get_tree().get_nodes_in_group("muebles").size()])
 		var salida: Dictionary = sitio.salidas[0]
 		print("Piso (puerta %s): la puerta, en la pared de %s %s y en su centro %s (esperado: true y true)" % [

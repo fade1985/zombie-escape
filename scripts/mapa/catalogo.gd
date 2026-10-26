@@ -216,6 +216,13 @@ const SALAS := {
 			["kitchentable?", "fridge?", "stove", "plant?"],
 		],
 		"quitar": ["plant", "counter", "kitchentable", "fridge"],
+		# puestos a mano en los pisos (idea del dueño), igual en el normal y en el volteado, en la pared de arriba: la planta en la
+		# casilla 2, la nevera sobre la 9 y la 10, el fogón sobre la 11 y la 12 y la encimera de la 13 a la 17; y la mesa con sus
+		# sillas a la derecha, en las filas 4 y 5, sin pegarse a la pared
+		"colocados": {
+			"abajo": [["plant", 1.5], ["fridge", 9.0], ["stove", 11.0], ["counter", 14.5], ["kitchentable", 15.25, "libre", 4.0]],
+			"arriba": [["plant", 1.5], ["fridge", 9.0], ["stove", 11.0], ["counter", 14.5], ["kitchentable", 15.25, "libre", 4.0]],
+		},
 	},
 	# cada dormitorio del apartamento es "de matrimonio" o "individual" (apartamento.gd): el primero lleva la cama grande, con
 	# una mesilla a cada lado (si falta sitio, se caen las dos juntas), y el segundo la pequeña, con una sola mesilla. La
