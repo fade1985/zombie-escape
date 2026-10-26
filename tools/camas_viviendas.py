@@ -4,11 +4,13 @@ cada habitación.
 
   py tools/camas_viviendas.py   → assets/sources/salas/viviendas/cama-<id>.png (y luego: py tools/importar.py)
 
-Parte de assets/sources/salas/dormitorio/cama.png y solo toca los píxeles de la colcha (la mostaza: tono naranja y
-saturados, que en ese dibujo son solo la colcha; la madera, las sábanas y la sangre no). A cada uno le cambia el tono y
-deja la luminosidad, así que las sombras y los pliegues quedan como en el original (los mismos pocos colores).
+Parte de assets/sources/salas/dormitorio/cama.png, le quita la sangre de la almohada y la sábana (la cama de un
+superviviente, limpia) y solo toca los píxeles de la colcha (la mostaza: tono naranja y saturados, que en ese dibujo son
+solo la colcha; la madera y las sábanas no). A cada uno le cambia el tono y deja la luminosidad, así que las sombras y los
+pliegues quedan como en el original (los mismos pocos colores).
 """
 import colorsys, os
+from collections import Counter
 from PIL import Image
 
 ORIGEN = 'assets/sources/salas/dormitorio/cama.png'
@@ -17,6 +19,9 @@ SALIDA = 'assets/sources/salas/viviendas'
 COLORES = {'policia': '#6fa8ff', 'medico': '#80ed99', 'militar': '#c9e265',
            'ferretero': '#ff9a3c', 'farmaceutica': '#3ddc84', 'tecnico': '#4fe3ff'}
 SAT_MIN, SAT_MAX = 0.45, 0.85   # la colcha no ha de quedar ni grisácea ni chillona
+# los colores de la sangre del original (la mancha de la almohada y el reguero de la sábana, y un píxel suelto de su borde)
+SANGRE = {(113, 48, 49), (87, 14, 30), (134, 93, 73)}
+CABECERO = 36   # de aquí hacia arriba es el cabecero (su madera no se toca)
 
 
 def es_colcha(h, s):
@@ -28,8 +33,29 @@ def tono(hexa):
     return colorsys.rgb_to_hls(r, g, b)[0]
 
 
+def sin_sangre(im):
+    """Cada píxel de sangre pasa a ser el color que más se repite entre sus vecinos (sábana o almohada), de fuera hacia
+    dentro de la mancha, hasta que no queda ninguno"""
+    px = im.load()
+    manchas = {(x, y) for y in range(CABECERO, im.height) for x in range(im.width) if px[x, y][:3] in SANGRE}
+    while manchas:
+        limpios = {}
+        for x, y in manchas:
+            vecinos = Counter(px[x + dx, y + dy] for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                              if (dx or dy) and 0 <= x + dx < im.width and 0 <= y + dy < im.height
+                              and (x + dx, y + dy) not in manchas and px[x + dx, y + dy][3] > 0)
+            if vecinos:
+                limpios[(x, y)] = vecinos.most_common(1)[0][0]
+        if not limpios:
+            break
+        for q, color in limpios.items():
+            px[q] = color
+            manchas.discard(q)
+    return im
+
+
 def main():
-    original = Image.open(ORIGEN).convert('RGBA')
+    original = sin_sangre(Image.open(ORIGEN).convert('RGBA'))
     os.makedirs(SALIDA, exist_ok=True)
     for id, hexa in COLORES.items():
         th = tono(hexa)
