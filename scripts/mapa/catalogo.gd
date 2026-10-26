@@ -37,7 +37,7 @@ const MUEBLES := {
 	# individual, con el cabecero contra la pared y los pies abajo. La cama de matrimonio y la mesilla (con su lamparita)
 	# tienen también dibujo de lado (cama-matrimonio-lado y mesilla-lado: PixelLab los giró a partir de los de frente)
 	"doublebed":  {"len": 124, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio"},
-	"bed":        {"len": 84,  "dep": 140, "paredes": "",      "archivo": "dormitorio/cama"},
+	"bed":        {"len": 84,  "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
 	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
@@ -242,11 +242,15 @@ const SALAS := {
 			["desk?", "bed", "nightstand?", "wardrobe?"],
 		],
 		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
-		# puestos a mano en la pared de arriba (idea del dueño), por ahora solo en el piso normal: el escritorio sobre las casillas
-		# 2 a 4, el armario sobre la 6 y la 7, y de la 9 a la 12 la mesilla pegada a la cama (la mesilla a la izquierda). El piso
-		# volteado (entrada "arriba") todavía no tiene la suya: va vacío
+		# puestos a mano (idea del dueño). En el piso normal, en la pared de arriba: el escritorio sobre las casillas 2 a 4, el
+		# armario sobre la 6 y la 7, y de la 9 a la 12 la mesilla pegada a la cama (la mesilla a la izquierda). En el volteado
+		# (entrada "arriba"), la pared de arriba es la del pasillo, con la puerta en las casillas 7 y 8: el escritorio en medio del
+		# trozo largo, a su izquierda (casilla 3), el armario en medio del corto, a su derecha (casilla 10), y en la pared de la
+		# derecha la cama, de lado, con el cabecero contra ella, en la mitad algo más abajo, y la mesilla debajo (el dibujo de la
+		# mesilla de lado, en espejo)
 		"colocados": {
 			"abajo": [["desk", 2.5], ["wardrobe", 6.0], ["nightstand", 8.65], ["bed", 10.6]],
+			"arriba": [["desk", 3.0], ["wardrobe", 10.0], ["bed", 5.0, "derecha"], ["nightstand", 6.95, "derecha"]],
 		},
 	},
 	# el de respaldo, para un dormitorio sin tipo: la mitad de las plantillas con la cama de matrimonio y la otra mitad con

@@ -191,6 +191,10 @@
     "huella": "bbd505b8fc6f90c9",
     "sprite": "mueble-wardrobe"
   },
+  "dormitorio/cama-lado.png": {
+    "huella": "476d96e8e443b9fc",
+    "sprite": "mueble-bed-lado"
+  },
   "dormitorio/cama-matrimonio-lado.png": {
     "huella": "52f73a154bf205c0",
     "sprite": "mueble-doublebed-lado"
