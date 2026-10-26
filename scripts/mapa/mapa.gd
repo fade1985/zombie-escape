@@ -192,7 +192,10 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 				continue
 			var estilo: String = ESTILO_DE[s.uso]
 			if estilo == "bano":
-				estilos[s.id] = textura("bano", "-a" if h % 2 else "-b", "-a" if (h >> 1) % 2 else "-b")
+				# los baños de los pisos, siempre de azulejo verde (suelo y pared "-b", como el vestuario de mantenimiento); los
+				# aseos de las tiendas, unos según dónde caen
+				estilos[s.id] = textura("bano", "-b", "-b") if not tienda else \
+					textura("bano", "-a" if h % 2 else "-b", "-a" if (h >> 1) % 2 else "-b")
 			else:
 				# el suelo y la pared, los de su tipo si los tiene fijos (ESTILO_FIJO) y si no, unos según dónde cae la habitación
 				var fijo: Array = ESTILO_FIJO.get(s.uso + ("-" + s.tipo if s.has("tipo") else ""), [])
@@ -605,14 +608,16 @@ func poner_viviendas() -> void:
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques, y las
-# lamparitas de las mesillas siempre (la casa lleva días sin que nadie la arregle). Cada una a su aire: la semilla sale
-# de su sitio, así que dos mesillas no fallan a la vez.
+# lamparitas de las mesillas siempre (la casa lleva días sin que nadie la arregle). En los apartamentos (los pisos y la
+# habitación de cada jefe), todas las que están encendidas: la instalación eléctrica está fallando. Cada una a su aire: la
+# semilla sale de su sitio, así que dos lámparas no fallan a la vez.
 # Su propia sombra se quita: la luz sale de dentro de su hueco y lo dejaría todo a oscuras.
 func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
 	mueble.get_node("Sombra").free()
 	var luz := LAMPARA.instantiate()
 	luz.semilla = fposmod(sin(m.x * 12.9898 + m.y * 78.233) * 43758.5453, 1.0)
-	luz.parpadea = m.tipo == "nightstand" or luz.semilla < 0.2
+	var apartamento: bool = sitio.tipo in ["apartamento", "jefe"] and sitio.get("tienda", "") == ""
+	luz.parpadea = apartamento or m.tipo == "nightstand" or luz.semilla < 0.2
 	luz.alto = 72.0 if m.tipo == "lamp" else 56.0
 	luz.radio = 210.0 if m.tipo == "lamp" else 150.0
 	luz.mapa = self

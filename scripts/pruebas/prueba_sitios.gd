@@ -77,6 +77,15 @@ func probar_piso() -> void:
 		# de la cocina y los 3 de cada baño)
 		print("Piso (puerta %s): muebles %d (esperado: 26, los puestos a mano; Muebles.de_piso)" % [lado,
 			get_tree().get_nodes_in_group("muebles").size()])
+		# las lámparas encendidas del piso (las de pie y las lamparitas de las mesillas) parpadean todas, como si fallase la luz
+		var lamparas := 0
+		var parpadean := 0
+		for m in get_tree().get_nodes_in_group("muebles"):
+			for hijo in m.get_children():
+				if hijo.get("parpadea") != null:
+					lamparas += 1
+					parpadean += 1 if hijo.parpadea else 0
+		print("Piso (puerta %s): lámparas encendidas %d, parpadean %d (esperado: las mismas)" % [lado, lamparas, parpadean])
 		var salida: Dictionary = sitio.salidas[0]
 		print("Piso (puerta %s): la puerta, en la pared de %s %s y en su centro %s (esperado: true y true)" % [
 			lado, salida.dir, salida.dir == lado, is_equal_approx(salida.en, sitio.ancho / 2.0)])
