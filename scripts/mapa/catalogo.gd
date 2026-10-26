@@ -242,6 +242,12 @@ const SALAS := {
 			["desk?", "bed", "nightstand?", "wardrobe?"],
 		],
 		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
+		# puestos a mano en la pared de arriba (idea del dueño), por ahora solo en el piso normal: el escritorio sobre las casillas
+		# 2 a 4, el armario sobre la 6 y la 7, y de la 9 a la 12 la mesilla pegada a la cama (la mesilla a la izquierda). El piso
+		# volteado (entrada "arriba") todavía no tiene la suya: va vacío
+		"colocados": {
+			"abajo": [["desk", 2.5], ["wardrobe", 6.0], ["nightstand", 8.65], ["bed", 10.6]],
+		},
 	},
 	# el de respaldo, para un dormitorio sin tipo: la mitad de las plantillas con la cama de matrimonio y la otra mitad con
 	# la individual

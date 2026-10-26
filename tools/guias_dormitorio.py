@@ -4,7 +4,7 @@ rectos, de frente y con el mismo estilo que la cocina nueva (tools/guias_cocina.
 Lo mismo que allí (de tools/guias_centro.py salen la perspectiva, los colores de la raya y del fondo azul y cómo se quita
 el fondo después): de arriba abajo, lo que se ve desde arriba (con lo que hay encima: si es liso, PixelLab lo deja liso)
 y el frente. Las tapas son más cortas que el fondo del catálogo, para que se vean de frente y solo un poco desde arriba.
-  - cama de matrimonio y cama individual: el cabecero de madera de frente contra la pared, el colchón visto desde arriba
+  - cama de matrimonio y cama individual (y las dos revueltas: cama-matrimonio-revuelta y cama-revuelta): el cabecero de madera de frente contra la pared, el colchón visto desde arriba
     (las almohadas arriba y la colcha con su dobladillo hasta abajo) y los pies de la cama, de frente
   - mesilla: la lamparita encima (su pantalla sube por encima del borde de atrás, sobre la pared; es la que da luz en el
     juego), un despertador, y dos cajones de frente
@@ -32,6 +32,7 @@ ALMOHADA = (230, 228, 220)
 T = {
     'cama-matrimonio': (124, 66, 10),
     'cama-matrimonio-revuelta': (124, 66, 10),
+    'cama-revuelta': (84, 66, 10),
     'cama':            (84, 66, 10),
     'mesilla':         (40, 22, 14),
     'armario':         (96, 20, 52),
@@ -140,6 +141,43 @@ def cama_revuelta(dr, x, y, w, d, h):
     dr.polygon(P((5, 66), (17, 66), (15, 70), (8, 69)), fill=colcha + (255,), outline=RAYA)
 
 
+def cama_individual_revuelta(dr, x, y, w, d, h):
+    """La cama individual después del apocalipsis: una almohada torcida y con sangre, la colcha mostaza hecha un montón abajo,
+    la sábana arrugada con un charco de sangre, y los pies de la cama con una punta de colcha colgando"""
+    def P(*pts):
+        return [(x + px * S, y + py * S) for (px, py) in pts]
+    colcha = (185, 140, 55)
+    cab = 12 * S
+    caja(dr, x, y, x + w, y + cab, tono(MADERA, 0.6))
+    caja(dr, x + 3 * S, y + 3 * S, x + w - 3 * S, y + cab - S, tono(MADERA, 0.78))
+    caja(dr, x, y, x + 3 * S, y + cab, tono(MADERA, 0.5))
+    caja(dr, x + w - 3 * S, y, x + w, y + cab, tono(MADERA, 0.5))
+    top = y + cab
+    caja(dr, x, top, x + w, y + d, tono(MADERA, 0.7))
+    dr.rectangle((x + 2 * S, top, x + w - 2 * S - 1, y + d - 1), fill=SABANA)
+    for (a, b) in (((6, 16), (13, 20)), ((26, 14), (34, 18)), ((8, 32), (14, 29)), ((20, 46), (28, 42))):
+        dr.line(P(a, b), fill=tono(SABANA, 0.82), width=S)
+    dr.polygon(P((40, 33), (34, 36), (27, 34), (19, 40), (11, 44), (6, 50), (4, 58), (4, 66), (40, 66)),
+               fill=colcha + (255,), outline=RAYA)
+    dr.polygon(P((26, 36), (34, 38), (30, 48), (20, 45)), fill=tono(colcha, 0.78))
+    dr.polygon(P((16, 52), (28, 54), (30, 64), (14, 62)), fill=tono(colcha, 1.22))
+    dr.line(P((22, 42), (32, 37)), fill=tono(colcha, 1.35), width=S)
+    dr.polygon(rotado(x, y, 20, 24, 10.5, 5.5, -16), fill=ALMOHADA + (255,), outline=RAYA)
+    for (px, py) in ((15, 22), (16, 23), (19, 26), (24, 22), (25, 23)):
+        punto(dr, x, y, px, py, SANGRE)
+    for (px, py, r) in ((12, 35, 3), (15, 38, 2.5)):
+        dr.ellipse((x + (px - r) * S, y + (py - r) * S, x + (px + r) * S, y + (py + r) * S), fill=SANGRE)
+    dr.line(P((14, 35), (22, 31), (25, 34)), fill=SANGRE, width=2 * S)
+    for (px, py) in ((24, 50), (25, 51), (33, 44), (14, 56)):
+        punto(dr, x, y, px, py, tono(SANGRE[:3], 0.7))
+    pie = y + d
+    caja(dr, x, pie, x + w, pie + h, tono(MADERA, 0.65))
+    caja(dr, x + 3 * S, pie + S, x + w - 3 * S, pie + h - 2 * S, tono(MADERA, 0.8))
+    caja(dr, x, pie, x + 3 * S, pie + h, tono(MADERA, 0.5))
+    caja(dr, x + w - 3 * S, pie, x + w, pie + h, tono(MADERA, 0.5))
+    dr.polygon(P((6, 66), (16, 66), (14, 70), (8, 69)), fill=colcha + (255,), outline=RAYA)
+
+
 def mesilla(dr, x, y, w, d, h):
     luz = 8 * S                       # la pantalla de la lámpara sube por encima del borde de atrás
     sup = y + luz
@@ -242,7 +280,8 @@ def lampara(dr, x, y, w, d, h):
     punto(dr, x, y + d, 5, 24, SANGRE)
 
 
-FUNCIONES = {'cama-matrimonio': cama_matrimonio, 'cama-matrimonio-revuelta': cama_revuelta, 'cama': cama_individual, 'mesilla': mesilla, 'armario': armario,
+FUNCIONES = {'cama-matrimonio': cama_matrimonio, 'cama-matrimonio-revuelta': cama_revuelta,
+             'cama-revuelta': cama_individual_revuelta, 'cama': cama_individual, 'mesilla': mesilla, 'armario': armario,
              'escritorio': escritorio, 'lampara': lampara}
 
 

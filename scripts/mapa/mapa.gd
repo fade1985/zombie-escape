@@ -54,9 +54,10 @@ const LLAVE := preload("res://assets/sprites/objeto-llave-puerta.png")
 const MANCHAS := preload("res://assets/sprites/manchas-suelo.png")
 const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la azotea (tools/azotea.py)
 # El suelo y la pared de las habitaciones de un piso que no dependen de dónde caen (que cambia al voltear el piso):
-# "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>). El dormitorio de
-# matrimonio, siempre con el suelo gris azulado y el papel beige, con la puerta arriba y abajo
-const ESTILO_FIJO := {"dormitorio-matrimonio": ["-a", "-b"]}
+# "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>; con "" en uno, ese
+# se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
+# puerta arriba y abajo; el individual, con el suelo rojo
+const ESTILO_FIJO := {"dormitorio-matrimonio": ["-a", "-b"], "dormitorio-individual": ["-b", ""]}
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
 	"habitacion": "dormitorio"}   # (las habitaciones de las viviendas, viviendas.gd; su pasillo, el de los pisos)
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
@@ -193,8 +194,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			else:
 				# el suelo y la pared, los de su tipo si los tiene fijos (ESTILO_FIJO) y si no, unos según dónde cae la habitación
 				var fijo: Array = ESTILO_FIJO.get(s.uso + "-" + s.get("tipo", ""), [])
-				estilos[s.id] = textura(estilo, fijo[0] if not fijo.is_empty() else ["-a", "-b", "-c"][h % 3],
-					fijo[1] if not fijo.is_empty() else ["-a", "-b", "-c"][(h / 3) % 3])
+				estilos[s.id] = textura(estilo, fijo[0] if not fijo.is_empty() and fijo[0] != "" else ["-a", "-b", "-c"][h % 3],
+					fijo[1] if not fijo.is_empty() and fijo[1] != "" else ["-a", "-b", "-c"][(h / 3) % 3])
 
 	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea"]
 	if centro:
