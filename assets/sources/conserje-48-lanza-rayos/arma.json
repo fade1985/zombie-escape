@@ -1,35 +1,41 @@
 {
-  "nota": "Datos para montar la hoja de sprites de Johnny con el lanza rayos (lo lee tools/arma.py del juego JS: PYTHONPATH=tools py C:/Users/angel/Projects/game/tools/arma.py conserje-48-lanza-rayos). Es el rediseño del 26 oct del antiguo táser (conserje-48-pistola-electrica): un arma de tamaño escopeta, blanca y gris con una franja de luz celeste en el costado, a dos manos. Las 8 posturas de rotations/ son las de la versión B de PixelLab (colores libres, 23 colores); las de la A, sin franja celeste, están en descartes/rotations-A. La casilla mide 208x186 con los pies en 104,104: la descarga llega a unos 119 píxeles a la derecha de los pies (sureste), 117 a la izquierda (suroeste), 120 hacia arriba (norte) y 82 hacia abajo (sur), y se recorta lo que pasa de 104 (solo las puntas finas del rayo; con la casilla entera la hoja pasaba de 33 millones de píxeles). La boca NO sale de arma.py (la descarga es celeste, no hay fogonazo naranja que buscar, y 'boca': 'fogonazo' fallaría): va a mano en armas.gd, sacada de la punta del arma en rotations/<dirección>.png con el script de la sesión (bocas.py), respecto a los pies del dibujo quieto (32,55).",
-  "celda": [208, 186],
-  "pivote": [104, 104],
+  "nota": "Datos para montar la hoja de sprites de Johnny con el lanza rayos (lo lee tools/arma.py del juego JS, que llama tools/hoja_lanza_rayos.py: PYTHONPATH=tools py tools/hoja_lanza_rayos.py). Es el rediseño del 26 oct del antiguo táser (conserje-48-pistola-electrica): un arma de tamaño escopeta, blanca y gris con una franja de luz celeste en el costado, a dos manos; y desde ese mismo día no dispara: echa un rayo continuo como el lanzallamas (llamarada.gd, que lo dibuja a código), así que la hoja no lleva el disparo ni los efectos: el ataque es un solo fotograma, la postura quieta, y la casilla vuelve a ser pequeña. Las 8 posturas de rotations/ son las de la versión B de PixelLab (colores libres, 23 colores; las de la A, sin franja celeste, están en descartes/rotations-A) con las de south y north rehechas con el arma vertical (de frente con la boca hacia el suelo y de espaldas sobre el hombro, con la boca arriba) para que el rayo salga hacia donde mira Johnny (posturas-nuevas/, último fotograma; las de antes, en descartes/rotations-B-sur-norte-antes). Todas con 17 filas transparentes por arriba (el arma de north sobresale de la cabeza) y 12 por abajo: 64x93, con los pies en 32,72. La casilla mide 96x104 con los pies en 48,80. La boca NO sale de arma.py (no hay fogonazo naranja que buscar): va a mano en armas.gd, sacada de la punta del arma de cada rotations/<dirección>.png con un script de la sesión (bocas.py), respecto a los pies (32,72).",
+  "celda": [96, 104],
+  "pivote": [48, 80],
+  "pies_en_rotacion": [32, 72],
+  "reposo": {
+    "nota": "Filas de la cabeza al cuello para el reposo (la respiración). Las de siempre, menos north: arma.py mide desde lo más alto que haya en las columnas de la cabeza y en north es la punta del arma vertical (fila 8), no el pelo (fila 32): 44 - 8 = 36.",
+    "cuello": {
+      "south": 13, "south-east": 13, "south-west": 13, "east": 14, "west": 14,
+      "north": 36, "north-east": 12, "north-west": 12
+    }
+  },
   "andar": {
-    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. A mano, calculados mirando cuál se parece más el fotograma a+n al a (diferencia de píxeles entre los dos; arma.py elegía solo tramos que cerraban muy mal, de 168 a 218): south [0,8]=46, south-east [4,8]=26, east [4,8]=9, north-east [0,10]=37, north [0,8]=27, north-west [0,12]=41, west [0,12]=32, south-west [3,8]=26. El del oeste y el del noreste son la segunda toma (descartes/walk-oeste-1: el arma se volvía casi negra en 4 fotogramas; descartes/walk-noreste-1: no cerraba ningún ciclo, 196 de diferencia o más).",
+    "nota": "Tramo de los fotogramas de PixelLab que hace ciclo en cada dirección: [primero, cuántos]. A mano, calculados mirando cuál se parece más el fotograma a+n al a (diferencia de píxeles entre los dos; arma.py elegía solo tramos que cerraban muy mal, de 168 a 218): south [0,8]=26, south-east [4,8]=26, east [4,8]=9, north-east [0,10]=37, north [1,8]=26, north-west [0,12]=41, west [0,12]=32, south-west [3,8]=26. El del oeste y el del noreste son la segunda toma (descartes/walk-oeste-1: el arma se volvía casi negra en 4 fotogramas; descartes/walk-noreste-1: no cerraba ningún ciclo). El de south y el de north son de las posturas verticales nuevas (descartes/walk-sur-norte-1 son los de las posturas viejas).",
     "ciclo": {
       "south": [0, 8],
       "south-east": [4, 8],
       "east": [4, 8],
       "north-east": [0, 10],
-      "north": [0, 8],
+      "north": [1, 8],
       "north-west": [0, 12],
       "west": [0, 12],
       "south-west": [3, 8]
     }
   },
   "ataque": {
-    "nota": "Disparo: la franja de luz brilla, sale un rayo celeste en zigzag de la punta del arma y se deshace en chispitas. El lanza rayos dispara 5 veces por segundo, así que el disparo dura como mucho 0,18 s y se usan 3 fotogramas de los 8 de PixelLab, elegidos mirando la hoja de revisión: los que llevan el rayo (south [3,4,5]: el 3 es el destello en la punta; north [1,3,4]: destello gordo, rayo y rayo; west [3,4,5]: el rayo aparece en el 3, la toma buena es la segunda, 'disparo-lanza-rayos-oeste-2'; los demás [2,3,4]). Sin 'boca': 'fogonazo' (ver la nota de arriba): arma.py no quita tintes ni calcula la boca. 'efectos': true para disparar andando; 'margen_efectos' 9 como en el táser, para que no se cuelen trocitos de mano.",
+    "nota": "Sin disparo: arma.py pide un ataque, así que es el fotograma 0 de cada dirección (la postura quieta; el de south y north, el primero del andar nuevo). Nada lo usa: el lanza rayos echa el rayo en la postura quieta, como el lanzallamas. Los disparos de antes (3 fotogramas de 8 con el rayo dibujado) están en ataque/ y en la entrada de assets/pixellab.json.",
     "duracion": 0.18,
     "impacto": 0,
-    "efectos": true,
-    "margen_efectos": 9,
     "fotogramas": {
-      "south":      [3, 4, 5],
-      "south-east": [2, 3, 4],
-      "east":       [2, 3, 4],
-      "north-east": [2, 3, 4],
-      "north":      [1, 3, 4],
-      "north-west": [2, 3, 4],
-      "west":       [3, 4, 5],
-      "south-west": [2, 3, 4]
+      "south":      [0],
+      "south-east": [0],
+      "east":       [0],
+      "north-east": [0],
+      "north":      [0],
+      "north-west": [0],
+      "west":       [0],
+      "south-west": [0]
     }
   }
 }

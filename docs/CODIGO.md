@@ -17,7 +17,7 @@ en una línea.
   shaders: `cintura` (Johnny partido por la cintura al golpear andando), `destello` + `quemaduras.gdshaderinc` (destello,
   hielo, fuego y ácido de los enemigos) y `brillo`.
 - `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas) y
-  `chorro_acido` (lanza ácido).
+  `chorro_acido` (lanza ácido); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
 - `luces/`: `lampara.tscn`, `fuego.tscn`, `luz_suave.tres` y los shaders `niebla` y `suelo_a_oscuras`.
 
 ## scripts/
@@ -39,9 +39,11 @@ en una línea.
   revienta y pasa su efecto: `ArmasCreadas.estallido`, desde `llamarada.gd` y `chorro.gd`) y racimo (2 más pequeños
   al romperse o explotar: `soltar_racimo` de `proyectil.gd` y `granada.gd`). `bala.gd`.
 - `armas_creadas.gd`: lo que hacen las armas con `efecto` (la descarga que aturde y salta, prender, la herida de
-  ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas.
-- `llamarada.gd`: la llama continua del lanzallamas y el chorro del lanza ácido (cono, daño cada 0,25 s, empuje,
-  luz). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
+  ácido `Herida` y `con_acido`, `QUEMAN`); `chorro.gd`, las gotas de fuego y las chispas (ya no las echa ningún arma).
+- `llamarada.gd`: la llama continua del lanzallamas, el chorro del lanza ácido y el rayo del lanza rayos (cono, daño
+  cada 0,25 s, empuje, luz; `variante`: "llama", "acido" o "rayo". El rayo se dibuja a código —zigzag, ramitas y
+  arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
+  `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora: 3 a mano (`mano`, F cambia) y 8 de repuesto (`repuesto`);
   lo que cuesta uno en la tienda (`PRECIOS`). Cada paquete tiene su calidad y va en su hueco: su clave es el tipo y,
   si no es Normal, la calidad detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con
@@ -185,7 +187,7 @@ en una línea.
   naranja, sin `boca: fogonazo` y la boca a mano en `armas.gd`; `andar.ciclo` y `andar.espejo` para el andar. Retoques:
   `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
   ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
-  rehace los efectos del disparo y el parpadeo de espaldas; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`) y
+  quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`) y
   `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),

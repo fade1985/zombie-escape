@@ -1,4 +1,5 @@
-# Una gota de fuego o de ácido (los "chorros" de src/armas-creadas.js) o una chispa del lanza rayos. Vuela
+# Una gota de fuego o de ácido (los "chorros" de src/armas-creadas.js) o una chispa. Ya no la echa ningún arma (el
+# lanzallamas, el lanza ácido y el lanza rayos van por llamarada.gd desde el 26 oct). Vuela
 # recta, atraviesa a los zombis (a cada uno le da una vez), se para en las paredes y los muebles y se apaga al
 # llegar a su alcance. Como la bala, la gota "de verdad" va a ras de suelo y se dibuja más arriba.
 # El fuego crece y pasa de amarillo a naranja y rojo; el ácido, de verde claro a verde.
@@ -12,7 +13,7 @@ var velocidad := Vector2.ZERO
 var dano := 0.0
 var empuje := 1.0
 var quema := 1.0             # el fuego: por cuánto se multiplica lo que sigue ardiendo el zombi (la skin del bombero)
-var saltos := 0              # la chispa: a cuántos zombis más salta la descarga (la calidad del lanza rayos)
+var saltos := 0              # la chispa: a cuántos zombis más salta la descarga
 var epica := false           # es de un arma Épica: el zombi que mata revienta (ArmasCreadas.estallido)
 var radio := 8.0
 var vida_max := 0.5

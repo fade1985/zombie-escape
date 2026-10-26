@@ -4,10 +4,10 @@
 # Armas (los números están en armas.gd). Como en el juego de navegador, lleva dos: una de cuerpo a cuerpo y
 # otra de fuego, y se cambia entre ellas con Q, la rueda del ratón o el botón Y del mando. Para probar, las
 # teclas 1 a 6 ponen cualquiera de las seis. R (o el botón X del mando) recarga: cada arma lleva solo su cargador, y la
-# munición de reserva va por tipos, compartida por las armas que la gastan (Armas.MUNICION). El lanzallamas y el lanza ácido no
-# disparan: mientras se ataca echan un chorro continuo (llamarada.gd) y gastan su depósito, que se llena con un objeto
-# de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido: el "relleno" de armas.gd). El
-# lanza rayos sí dispara, pero su cargador también se llena con un objeto de la mochila: una batería.
+# munición de reserva va por tipos, compartida por las armas que la gastan (Armas.MUNICION). El lanzallamas, el lanza ácido
+# y el lanza rayos no disparan: mientras se ataca echan un chorro continuo (llamarada.gd) y gastan su depósito, que se llena
+# con un objeto de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido; el lanza rayos,
+# con una batería: el "relleno" de armas.gd).
 # Dos modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
 # cambian de uno a otro; se guarda):
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
@@ -111,7 +111,7 @@ var sin_balas_sola := false   # se ha pasado sola a la de cuerpo a cuerpo al que
 var cargadores := {}       # lo que quedaba en el cargador de las armas de fuego que ha dejado: {id: balas} (las de
                            # depósito, los segundos que les quedaban)
 var recargando := 0.0      # tiempo que falta para acabar de recargar (0 = no recarga)
-var deposito := 0.0        # el lanzallamas y el lanza ácido: los segundos de chorro que le quedan en el depósito
+var deposito := 0.0        # el lanzallamas, el lanza ácido y el lanza rayos: los segundos de chorro que le quedan en el depósito
 var municion_sin_fin := false   # la sala de pruebas: se recarga sin gastar munición (ni gasolina, ni bidones, ni baterías)
 var invencible := false    # la sala de pruebas: no pierde vida
 var gracia := 0            # el golpe de gracia de las Épicas cuerpo a cuerpo: los golpes que han dado desde el último
@@ -499,14 +499,14 @@ func intentar_atacar(angulo: float) -> void:
 	atacar(angulo)
 
 
-# El lanzallamas (y el lanza ácido): la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama
+# El lanzallamas (y el lanza ácido y el lanza rayos): la llamarada sale de la boca del tubo (llamarada.gd; si en este paso no se llama
 # aquí, se apaga) y el depósito se va gastando. Sale recta, sin doblarse, por donde apunta el tubo del dibujo ("cano"
 # en armas.gd), y su cono, ancho (45°), pilla al zombi aunque no esté justo en esa línea. Johnny mira hacia donde el
 # tubo apunte más hacia el zombi al que apunta (si la línea de tiro pasa por uno, blanco_en_linea, como la bala) o
 # hacia donde apunta (mirar_con_chorro). Si aun así el zombi queda fuera del cono (Johnny solo tiene 8 dibujos), el
 # chorro se gira desde el tubo hacia él lo justo para que entre, por el borde y con un poco de margen (MARGEN_CHORRO),
 # sin llegar a apuntarle de lleno. Sin sacudida ni retroceso: quieto, Johnny se queda en la postura de apuntar
-# (animar). Al vaciarse el depósito, se llena solo si lleva con qué (gasolina o bidones de ácido)
+# (animar). Al vaciarse el depósito, se llena solo si lleva con qué (gasolina, bidones de ácido o baterías)
 func echar_fuego(angulo: float, w: Dictionary) -> void:
 	var blanco := blanco_en_linea(angulo, w)
 	var hacia := Vector2.INF
@@ -519,7 +519,7 @@ func echar_fuego(angulo: float, w: Dictionary) -> void:
 		# en la pantalla, como se ve: de la boca al cuerpo del zombi, y cuánto se aparta del tubo
 		var boca := suelo_de_boca(w, direccion) - Vector2(0, Llamarada.ALTURA)
 		var desvio := angle_difference(a, (hacia - Vector2(0, Llamarada.ALTURA_CUERPO) - boca).angle())
-		var sobra := absf(desvio) - (Llamarada.ABRE - MARGEN_CHORRO)
+		var sobra := absf(desvio) - (Llamarada.abre_de(w) - MARGEN_CHORRO)
 		if sobra > 0.0:
 			a += signf(desvio) * sobra
 	llamarada.mantener(suelo_de_boca(w, direccion), a, w)

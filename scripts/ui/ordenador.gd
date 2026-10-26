@@ -575,7 +575,7 @@ func programa_armas(c: VBoxContainer) -> void:
 
 
 # Debajo del nombre, como weaponSummary del JS pero sin el tipo (ya lo dice su sección): "Daño 9 · 4 ataques/s" (el
-# lanzallamas y el lanza ácido, su daño por segundo y su depósito)
+# lanzallamas, el lanza ácido y el lanza rayos, su daño por segundo y su depósito)
 func resumen_corto(w: Dictionary) -> String:
 	if w.has("deposito"):
 		return "Daño %d/s · Depósito %d s" % [w.dano, roundi(w.deposito)]
@@ -590,7 +590,8 @@ func resumen_corto(w: Dictionary) -> String:
 func resumen(w: Dictionary) -> String:
 	var lleno := " que se llena con %s" % Armas.RELLENOS[w.relleno].uno if w.has("relleno") else ""
 	if w.has("deposito"):
-		return "%s: daño %d por segundo, chorro continuo, depósito de %d s%s." % [w.nombre, w.dano, roundi(w.deposito), lleno]
+		var chorro := "rayo continuo" if w.get("efecto", "") == "rayo" else "chorro continuo"
+		return "%s: daño %d por segundo, %s, depósito de %d s%s." % [w.nombre, w.dano, chorro, roundi(w.deposito), lleno]
 	var texto := "%s: daño %d" % [w.nombre, w.dano]
 	if w.get("perdigones", 1) > 1:
 		texto += " x%d perdigones" % w.perdigones

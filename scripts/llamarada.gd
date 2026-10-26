@@ -16,6 +16,14 @@
 # el sonido (un siseo de agua a presión), que no alumbra, que en vez de chispas suelta gotitas que caen (y salpican
 # contra la pared) y que, en vez de prenderlos, deja a los zombis la herida de ácido (ArmasCreadas.herir). Como no es
 # fuego, al jefe de bomberos también le quita vida.
+#
+# El lanza rayos (Armas.DATOS.pistola_electrica, efecto "rayo") también echa por aquí un chorro continuo, pero de
+# electricidad: un rayo celeste en zigzag, más estrecho (ABRE_RAYO), que se dibuja a código (dibujar_rayo: no usa shader y
+# cambia de forma FORMAS veces por segundo), con su luz celeste y sus chispas. En cada pellizco quita su parte del daño
+# por segundo a los zombis que toca y los aturde (ATURDE); y la descarga salta de cada uno al zombi más cercano que
+# tenga a menos de "salto" (ArmasCreadas.EFECTOS.descarga), 1 + "saltos" veces (la calidad del arma), que se lleva medio
+# daño y también se queda aturdido (los arcos se ven, entre zombi y zombi). Ni empuja ni deja nada en el suelo. Al jefe
+# de bomberos también le quita vida (no es fuego).
 class_name Llamarada
 extends Node2D
 
@@ -37,10 +45,21 @@ const CHISPAS := 22.0       # chispas que saltan por segundo
 const GOTITAS := 26.0       # el ácido: gotitas que se escapan del final del chorro por segundo (contra la pared, el doble)
 const VERDES := [Color("#ecf896"), Color("#c7e04a"), Color("#96b430")]   # las del chorro (chorro_acido.gdshader)
 const LUZ := Color(1.0, 0.6, 0.28)
+# El rayo del lanza rayos
+const ABRE_RAYO := 0.1571   # su cono es más estrecho (9° a cada lado)
+const ATURDE := 0.5         # lo que aturde cada pellizco (y lo que sigue aturdido el zombi al soltar)
+const FORMAS := 18.0        # veces por segundo que cambia el zigzag
+const PASO_RAYO := 14.0     # lo que mide cada tramo del zigzag, en la pantalla
+const TEMBLOR_RAYO := 6.0   # lo que se aparta del eje en cada punto
+const CELESTES := [Color("#9fe8ff"), Color("#2cf2f0"), Color("#ecffff")]   # las chispas
+const LUZ_RAYO := Color(0.45, 0.9, 1.0)
+const RAYO_BORDE := Color("#0aa0a2")
+const RAYO_MEDIO := Color("#2cf2f0")
+const RAYO_CENTRO := Color("#ecffff")
 const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
 
 var pedida := false         # se ha pedido fuego en este paso (mantener)
-var acido := false          # es el chorro del lanza ácido (lo dice el arma, en mantener)
+var variante := "llama"     # "llama" (el lanzallamas), "acido" (el lanza ácido) o "rayo" (el lanza rayos): lo dice el arma
 var encendida := false
 var angulo := 0.0
 var alcance := 320.0
@@ -55,11 +74,22 @@ var luz: PointLight2D
 var tick_t := TICK          # (empieza lleno: el primer pellizco, en cuanto sale)
 var ticks := 0
 var tiempo := 0.0
+var saltos := 0             # el rayo: a cuántos zombis más salta la descarga, además del primero (la calidad)
+var abertura := ABRE        # lo que se abre el cono a cada lado (el del rayo, más estrecho)
+var blancos: Array = []     # el rayo: los zombis que toca
+var arcos: Array = []       # el rayo: lo que salta de uno a otro, [desde, hasta] (los zombis)
+var forma := 0              # el rayo: cuál de sus zigzags (cambia FORMAS veces por segundo)
+var propio: ShaderMaterial  # el del fuego o el del ácido (el rayo se dibuja sin shader)
+
+
+# Lo que se abre el cono de un arma a cada lado (Johnny lo usa para girar el chorro hacia el zombi)
+static func abre_de(w: Dictionary) -> float:
+	return ABRE_RAYO if w.get("efecto", "") == "rayo" else ABRE
 
 
 func _ready() -> void:
 	z_index = 4   # por encima de Johnny y de los zombis
-	var propio := ShaderMaterial.new()
+	propio = ShaderMaterial.new()
 	propio.shader = SOMBREADO   # (unshaded: el fuego luce por sí mismo)
 	material = propio
 	luz = PointLight2D.new()
@@ -86,26 +116,35 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 	empuje = w.empuje
 	quema = w.get("quema", 1.0)
 	epica = w.get("calidad", 0) >= Armas.EPICA
-	if acido != (w.get("efecto", "") == "acido"):
-		acido = not acido
-		(material as ShaderMaterial).shader = SOMBREADO_ACIDO if acido else SOMBREADO
+	saltos = w.get("saltos", 0)
+	abertura = abre_de(w)
+	var efecto: String = w.get("efecto", "llama")
+	if efecto != variante:
+		variante = efecto
+		# el fuego y el ácido, con su shader; el rayo se dibuja a código, y alumbra de celeste
+		material = null if variante == "rayo" else propio
+		propio.shader = SOMBREADO_ACIDO if variante == "acido" else SOMBREADO
+		luz.color = LUZ_RAYO if variante == "rayo" else LUZ
 
 
 func _physics_process(delta: float) -> void:
 	encendida = pedida
 	pedida = false
 	tiempo += delta
+	forma = floori(tiempo * FORMAS)
 	if encendida:
 		tope = medir()
 		cola = 0.0
 		largo = minf(largo + alcance / CRECE * delta, tope)
-		Sonido.tocar("chorro_acido" if acido else "llamarada")
+		Sonido.tocar({"acido": "chorro_acido", "rayo": "rayo"}.get(variante, "llamarada"))
+		if variante == "rayo":
+			buscar_blancos()
 		# el reloj de los pellizcos solo corre con la llama encendida (soltar y volver a pulsar no quema más deprisa)
 		tick_t += delta
 		if tick_t >= TICK:
 			tick_t -= TICK
 			quemar()
-		if acido:
+		if variante == "acido":
 			gotitas(delta)
 		else:
 			chispas(delta)
@@ -114,6 +153,9 @@ func _physics_process(delta: float) -> void:
 		if cola >= largo:
 			largo = 0.0
 			cola = 0.0
+	if not encendida:
+		blancos.clear()
+		arcos.clear()
 	visible = largo > 0.0
 	pintar()
 
@@ -139,10 +181,13 @@ func quemar() -> void:
 	var u := Vector2.from_angle(angulo)
 	var empuja := ticks % EMPUJA == 1
 	johnny.oir_disparo()   # el fuego se oye: despierta a los que duermen cerca
+	if variante == "rayo":
+		electrocutar(johnny)
+		return
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if not dentro(zombi, johnny, u):
 			continue
-		if acido:
+		if variante == "acido":
 			var da: int = johnny.con_critico(dps * TICK)
 			if empuja or zombi.get("inmune_fuego"):
 				zombi.recibir_golpe(da, u * EMPUJE * empuje if empuja else Vector2.ZERO)
@@ -186,7 +231,7 @@ func dentro(zombi: Node2D, johnny: Node2D, u: Vector2) -> bool:
 
 # Lo que se abre el cono a cada lado por cada unidad de largo
 func abre() -> float:
-	return tan(ABRE)
+	return tan(abertura)
 
 
 # Chispas que saltan de la llama hacia delante y hacia arriba (Particulas), en sitios al azar de lo largo
@@ -196,9 +241,10 @@ func chispas(delta: float) -> void:
 	var u := Vector2.from_angle(angulo)
 	var d := randf_range(0.15, 0.9) * largo
 	var donde := global_position + u * d - Vector2(0, lerpf(ALTURA, ALTURA_CUERPO, d / alcance))
-	donde += u.orthogonal() * randf_range(-0.6, 0.6) * (BOCA + d * tan(ABRE))
+	donde += u.orthogonal() * randf_range(-0.6, 0.6) * (BOCA + d * abre())
 	var hacia := u * randf_range(60.0, 140.0) + Vector2(randf_range(-20.0, 20.0), -randf_range(40.0, 90.0))
-	Particulas.soltar(self, donde, hacia, Llamas.FUEGO[randi() % 3], 2.0, randf_range(0.3, 0.6))
+	var colores: Array = CELESTES if variante == "rayo" else Llamas.FUEGO
+	Particulas.soltar(self, donde, hacia, colores[randi() % 3], 2.0, randf_range(0.3, 0.6))
 
 
 # El ácido: gotitas que se escapan del final del chorro hacia delante y caen al suelo; contra la pared, el doble, y
@@ -217,40 +263,171 @@ func gotitas(delta: float) -> void:
 
 
 # Le pasa al shader dónde está la llama y cómo va (en la pantalla: el eje baja un poco, porque la llama baja de la
-# altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja
+# altura de la boca a la del cuerpo), pone la luz en medio de la llama y la redibuja (el rayo no usa shader: se dibuja
+# a código en _draw)
 func pintar() -> void:
-	luz.enabled = visible and not acido   # (el ácido no alumbra)
+	luz.enabled = visible and variante != "acido"   # (el ácido no alumbra)
 	if not visible:
 		return
 	var u := Vector2.from_angle(angulo)
 	var en_pantalla := u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)
 	var f := en_pantalla.length()   # lo que mide en la pantalla cada unidad de llama por el suelo
 	var eje := en_pantalla / f
-	var m: ShaderMaterial = material
-	m.set_shader_parameter("tiempo", tiempo)
-	m.set_shader_parameter("boca", global_position + Vector2(0, -ALTURA) - eje * ATRAS)
-	m.set_shader_parameter("eje", eje)
 	var cortada := tope < alcance - 1.0
-	m.set_shader_parameter("largo", largo * f + ATRAS + (8.0 if cortada else 0.0))   # (que toque la cara de la pared)
-	m.set_shader_parameter("cola", cola * f + ATRAS if cola > 0.0 else 0.0)
-	m.set_shader_parameter("alcance", alcance * f + ATRAS)
-	m.set_shader_parameter("cortada", 1.0 if cortada else 0.0)
+	if variante != "rayo":
+		var m: ShaderMaterial = material
+		m.set_shader_parameter("tiempo", tiempo)
+		m.set_shader_parameter("boca", global_position + Vector2(0, -ALTURA) - eje * ATRAS)
+		m.set_shader_parameter("eje", eje)
+		m.set_shader_parameter("largo", largo * f + ATRAS + (8.0 if cortada else 0.0))   # (que toque la cara de la pared)
+		m.set_shader_parameter("cola", cola * f + ATRAS if cola > 0.0 else 0.0)
+		m.set_shader_parameter("alcance", alcance * f + ATRAS)
+		m.set_shader_parameter("cortada", 1.0 if cortada else 0.0)
 	# la luz: en medio de lo que se ve, tan grande como la llama, y temblando
 	var medio := (cola + largo) / 2.0
 	luz.position = Vector2(0, -ALTURA) + eje * medio * f
 	luz.texture_scale = ((largo - cola) * 0.6 + 80.0) / 128.0
-	luz.energy = 1.4 * Luz.fuerza() * (0.85 + 0.15 * sin(tiempo * 23.0) * sin(tiempo * 7.0))
+	if variante == "rayo":
+		luz.energy = 1.1 * Luz.fuerza() * randf_range(0.65, 1.0)   # el rayo parpadea
+	else:
+		luz.energy = 1.4 * Luz.fuerza() * (0.85 + 0.15 * sin(tiempo * 23.0) * sin(tiempo * 7.0))
 	queue_redraw()
 
 
-# Un rectángulo que cubre la llama entera (con sitio para que ondule y se abra): lo demás lo pinta el shader
+# Un rectángulo que cubre la llama entera (con sitio para que ondule y se abra): lo demás lo pinta el shader. El rayo
+# se dibuja a código (dibujar_rayo)
 func _draw() -> void:
 	if not visible:
 		return
 	var u := Vector2.from_angle(angulo)
-	var eje := (u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)).normalized()
+	var en_pantalla := u + Vector2(0, (ALTURA - ALTURA_CUERPO) / alcance)
+	var eje := en_pantalla.normalized()
+	if variante == "rayo":
+		dibujar_rayo(eje, en_pantalla.length())
+		return
 	var lado := eje.orthogonal() * 240.0
 	var boca := Vector2(0, -ALTURA)
 	var desde := boca - eje * (ATRAS + 10.0)
 	var hasta := boca + eje * (largo * 1.1 + 12.0)
 	draw_colored_polygon(PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)
+
+
+# ── El rayo del lanza rayos ──
+
+# Los zombis que toca el rayo (en su cono estrecho, sin paredes en medio) y a los que salta la descarga: de cada uno,
+# al más cercano que tenga a menos de "salto" y aún no esté pillado, y de ese al siguiente, 1 + "saltos" veces. Se mira
+# en cada paso (para dibujar los arcos); el daño va a pellizcos (electrocutar)
+func buscar_blancos() -> void:
+	blancos.clear()
+	arcos.clear()
+	var johnny: Node2D = get_parent()
+	var u := Vector2.from_angle(angulo)
+	for zombi in get_tree().get_nodes_in_group("zombis"):
+		if dentro(zombi, johnny, u):
+			blancos.append(zombi)
+	var pillados: Array = blancos.duplicate()
+	for zombi in blancos:
+		var desde: Node2D = zombi
+		for vez in 1 + saltos:
+			var otro := mas_cercano(desde, pillados)
+			if otro == null:
+				break
+			arcos.append([desde, otro])
+			pillados.append(otro)
+			desde = otro
+
+
+# El zombi más cercano a "desde" (a menos de lo que salta la descarga, y sin una pared en medio) que no esté en "menos"
+func mas_cercano(desde: Node2D, menos: Array) -> Node2D:
+	var otro: Node2D = null
+	var mejor: float = ArmasCreadas.EFECTOS.descarga.salto
+	var espacio := get_world_2d().direct_space_state
+	for o in get_tree().get_nodes_in_group("zombis"):
+		var d: float = o.global_position.distance_to(desde.global_position)
+		if o in menos or d >= mejor:
+			continue
+		if not espacio.intersect_ray(PhysicsRayQueryParameters2D.create(desde.global_position, o.global_position, 1)).is_empty():
+			continue
+		mejor = d
+		otro = o
+	return otro
+
+
+# Un pellizco de electricidad: su parte del daño por segundo a los zombis que toca, y medio daño a los que salta la
+# descarga, y a todos los deja aturdidos. Sin empujón
+func electrocutar(johnny: Node2D) -> void:
+	for zombi in blancos:
+		golpe_de_rayo(zombi, johnny, 1.0)
+	for arco in arcos:
+		golpe_de_rayo(arco[1], johnny, ArmasCreadas.EFECTOS.descarga.dano)
+
+
+func golpe_de_rayo(zombi: Node2D, johnny: Node2D, parte: float) -> void:
+	if not is_instance_valid(zombi) or not zombi.is_inside_tree():
+		return
+	var d: int = johnny.con_critico(dps * TICK * parte)
+	if zombi.get("inmune_fuego"):
+		zombi.recibir_golpe(d, Vector2.ZERO)   # (el herir() del jefe de bomberos es el del fuego: no le quita vida)
+	else:
+		zombi.herir(d, CELESTES[0])
+	ArmasCreadas.aturdir(zombi, ATURDE)
+	var donde: Vector2 = zombi.global_position - global_position - Vector2(0, ALTURA_CUERPO)
+	for i in 2:
+		var v := Vector2.from_angle(randf() * TAU) * randf_range(50.0, 120.0)
+		Particulas.soltar(self, donde, v, CELESTES[randi() % 3], 2.0, randf_range(0.15, 0.3))
+	if epica and not zombi.is_in_group("zombis"):
+		ArmasCreadas.estallido(zombi, "chispa", d)
+
+
+# El zigzag que sale de "desde" y llega a "hasta": un punto cada PASO_RAYO, apartado del eje hasta "temblor", siempre
+# el mismo con el mismo "rng" (que no tiemble a cada fotograma: cambia FORMAS veces por segundo)
+func zigzag(desde: Vector2, hasta: Vector2, temblor: float, rng: RandomNumberGenerator) -> PackedVector2Array:
+	var largo_t := desde.distance_to(hasta)
+	var lado := (hasta - desde).normalized().orthogonal()
+	var n := maxi(2, roundi(largo_t / PASO_RAYO))
+	var puntos := PackedVector2Array([desde])
+	for i in range(1, n):
+		var p := desde.lerp(hasta, float(i) / n) + lado * rng.randf_range(-temblor, temblor)
+		puntos.append((p / 2.0).round() * 2.0)   # (en la rejilla de los dibujos: de 2 en 2)
+	puntos.append(hasta)
+	return puntos
+
+
+# Una línea con su borde oscuro, su cuerpo celeste y su centro blanco
+func linea_de_rayo(puntos: PackedVector2Array, ancho: float) -> void:
+	draw_polyline(puntos, RAYO_BORDE, ancho)
+	draw_polyline(puntos, RAYO_MEDIO, ancho * 0.6)
+	draw_polyline(puntos, RAYO_CENTRO, 2.0)
+
+
+# El rayo: del labio de la boca (si se acaba, se despega y se va: cola) hasta donde llega, con un par de ramitas, un
+# destello donde choca con la pared y los arcos que saltan de un zombi a otro
+func dibujar_rayo(eje: Vector2, f: float) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = forma * 7919 + 1
+	var boca := Vector2(0, -ALTURA)
+	var cortada := tope < alcance - 1.0
+	var desde := boca + eje * (cola * f)
+	var hasta := boca + eje * (largo * f + (8.0 if cortada else 0.0))
+	var puntos := zigzag(desde, hasta, TEMBLOR_RAYO, rng)
+	linea_de_rayo(puntos, 10.0)
+	# ramitas: salen de dos puntos al azar, hacia un lado, cortas
+	for i in 2:
+		if puntos.size() < 4:
+			break
+		var k := rng.randi_range(1, puntos.size() - 2)
+		var rumbo := (eje * 0.7 + eje.orthogonal() * (1.0 if rng.randf() < 0.5 else -1.0) * 0.7).normalized()
+		var ramita := zigzag(puntos[k], puntos[k] + rumbo * rng.randf_range(22.0, 42.0), 4.0, rng)
+		linea_de_rayo(ramita, 6.0)
+	if cortada and largo > 0.0 and cola <= 0.0:
+		for i in 5:
+			var rayito := Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(8.0, 18.0)
+			draw_line(hasta, hasta + rayito, RAYO_MEDIO, 4.0)
+		draw_rect(Rect2(hasta - Vector2(4, 4), Vector2(8, 8)), RAYO_CENTRO)
+	# los arcos entre zombis
+	for arco in arcos:
+		if not is_instance_valid(arco[0]) or not is_instance_valid(arco[1]):
+			continue
+		var a: Vector2 = to_local(arco[0].global_position) - Vector2(0, ALTURA_CUERPO)
+		var b: Vector2 = to_local(arco[1].global_position) - Vector2(0, ALTURA_CUERPO)
+		linea_de_rayo(zigzag(a, b, 5.0, rng), 6.0)

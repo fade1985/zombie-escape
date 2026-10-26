@@ -17,8 +17,9 @@
 #   hasta el 25 oct; ahora se compran en la tienda de armas como las demás. Llevan además:
 #   relleno   no gastan munición de reserva: un objeto de la mochila (la gasolina, el bidón de ácido o la batería, que
 #             van en los huecos de la munición) las llena enteras en "recarga" segundos
-#   deposito  el lanzallamas y el lanza ácido no tienen cargador: un depósito de esos segundos de chorro
-#   efecto    lo que hacen al dar (armas_creadas.gd): "llama", "acido" o "chispa" · cano  hacia dónde apunta el tubo
+#   deposito  el lanzallamas, el lanza ácido y el lanza rayos no tienen cargador: un depósito de esos segundos de chorro
+#   efecto    lo que hacen (llamarada.gd): "llama", "acido" o "rayo" · cano  hacia dónde apunta el tubo · saltos  el rayo
+#             salta a ese número de zombis más, además del primero (la calidad suma)
 class_name Armas
 
 
@@ -50,8 +51,8 @@ static func coste(id: String, calidad: int) -> int:
 # ajustarlos jugando):
 #   cuerpo a cuerpo   el golpe llega más lejos y barre más ancho ("golpe": alcance y abanico)
 #   a distancia       cargador más grande ("cargador") y recarga más rápida ("recarga": lo que tarda)
-#   especiales        depósito más grande (el lanzallamas y el lanza ácido, "deposito") y la chispa de la pistola
-#                     eléctrica salta a más zombis ("saltos")
+#   especiales        depósito más grande (el lanzallamas, el lanza ácido y el lanza rayos, "deposito") y la descarga
+#                     del lanza rayos salta a más zombis ("saltos")
 #   arrojables        radio más grande ("radio") y caben más ("unidades"; lanzables.gd)
 # Y "piezas": lo que cuesta subir a esa calidad en el banco de trabajo (parte 5), en piezas de su familia (pieza); de
 # una en una: las armas, de Normal a Poco común 3, luego 6 a Rara y 10 a Épica (19 en total); los arrojables,
@@ -102,8 +103,8 @@ static func con_calidad(id: String, calidad: int) -> Dictionary:
 		"especial":
 			if w.has("deposito"):
 				w.deposito = w.deposito * c.deposito
-			else:
-				w.saltos = c.saltos   # el lanza rayos: a cuántos zombis más salta la chispa
+			if w.has("saltos"):
+				w.saltos = c.saltos   # el lanza rayos: a cuántos zombis más salta la descarga (además del primero)
 	return w
 
 
@@ -121,10 +122,9 @@ static func que_da(id: String, calidad: int) -> String:
 			extra = "cargador un %d %% más grande y recarga un %d %% más rápida" % [roundi((c.cargador - 1.0) * 100),
 				roundi((1.0 - c.recarga) * 100)]
 		"especial":
-			if DATOS[id].has("deposito"):
-				extra = "depósito un %d %% más grande" % roundi((c.deposito - 1.0) * 100)
-			else:
-				extra = "la chispa salta a %d %s más" % [c.saltos, "zombi" if c.saltos == 1 else "zombis"]
+			extra = "depósito un %d %% más grande" % roundi((c.deposito - 1.0) * 100)
+			if DATOS[id].has("saltos"):
+				extra += " y la descarga salta a %d %s más" % [c.saltos, "zombi" if c.saltos == 1 else "zombis"]
 		"arrojable":
 			extra = "radio un %d %% más grande y caben %d más" % [roundi((c.radio - 1.0) * 100), c.unidades]
 	var da := "%s: daño +%d %%, %s." % [c.nombre, roundi((c.dano - 1.0) * 100), extra]
@@ -148,6 +148,9 @@ static func truco(id: String) -> String:
 # diagonales van más tumbadas que 45° (unos 24°), como se ven desde arriba. Con él se elige hacia dónde mira Johnny al
 # echar el chorro: la dirección cuyo tubo apunte más hacia él (johnny.gd, mirar_con_chorro)
 const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 170.0, "no": 205.0, "n": 270.0, "ne": 334.0}
+# Lo mismo del lanza rayos (el eje del arma en cada dibujo quieto de su hoja): de frente la lleva vertical, con la
+# boca hacia el suelo, y de espaldas vertical sobre el hombro, con la boca arriba
+const CANO_LANZA_RAYOS := {"e": 4.0, "se": 31.0, "s": 90.0, "so": 146.0, "o": 176.0, "no": 197.0, "n": 270.0, "ne": 341.0}
 
 const DATOS := {
 	"fregona": {
@@ -225,20 +228,23 @@ const DATOS := {
 		"cano": CANO_LANZALLAMAS,
 	},
 	# el lanza rayos: un arma de tamaño escopeta, blanca y gris con una franja de luz celeste en el costado, que Johnny
-	# lleva a dos manos (conserje-48-lanza-rayos; antes era un táser pequeño, el id sigue siendo "pistola_electrica").
-	# Su hoja lleva el retroceso y la descarga celeste en zigzag que sale de la punta (las chispas que vuelan, aturden y
-	# saltan al zombi de al lado las pone el juego, armas_creadas.gd y chorro.gd); la casilla es de 208x186, con los pies
-	# en 104,104, porque la descarga llega a unos 120 píxeles (se recorta lo que pasa de 104: solo la punta fina del
-	# rayo). La boca NO sale de arma.py (las chispas son celestes: no hay fogonazo naranja que buscar,
-	# conserje-48-lanza-rayos.json no tiene "muzzle"): es la punta del arma del dibujo quieto, a mano. Gasta baterías:
-	# una de la mochila le llena el cargador entero (antes gastaba pilas, una munición de reserva como las balas)
+	# lleva a dos manos (conserje-48-lanza-rayos; antes era un táser pequeño que disparaba chispas sueltas, y desde el
+	# 26 oct echa un rayo continuo, como el lanzallamas y el lanza ácido; el id sigue siendo "pistola_electrica"). No
+	# dispara: mientras se ataca sale un rayo celeste en zigzag de la punta (llamarada.gd, con su efecto "rayo") que llega
+	# a 8 casillas, con un depósito de "deposito" segundos que se llena entero en "recarga" segundos con una batería de
+	# la mochila; su daño es por segundo, sin empuje: aturde a los zombis que toca y la descarga salta de cada uno a
+	# 1 + "saltos" zombis más, con medio daño. Su hoja se monta con tools/hoja_lanza_rayos.py: la casilla es de 96x104,
+	# con los pies en 48,80, y echa el rayo en la postura quieta (de frente la lleva vertical con la boca al suelo y de
+	# espaldas vertical sobre el hombro, para que el rayo salga hacia donde Johnny mira). La boca NO sale de arma.py: es
+	# la punta del arma de cada postura quieta, medida en la hoja
 	"pistola_electrica": {
-		"nombre": "Lanza rayos", "tipo": "fuego", "dano": 5, "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0,
-		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.2, "cargador": 30, "recarga": 2.0,
-		"cartucho": false, "relleno": "bateria", "efecto": "chispa", "pies": Vector2(104, 104),
+		"nombre": "Lanza rayos", "tipo": "fuego", "dano": 25, "ritmo": 2.5, "alcance": 256.0, "velocidad": 620.0,
+		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.0, "cargador": 12, "recarga": 1.5,
+		"cartucho": false, "deposito": 8.0, "relleno": "bateria", "efecto": "rayo", "saltos": 0, "pies": Vector2(48, 80),
 		"hoja": preload("res://assets/sprites/conserje-48-lanza-rayos.tres"),
-		"boca": {"s": Vector2(9, -24), "se": Vector2(21, -18), "e": Vector2(26, -30), "ne": Vector2(21, -39),
-			"n": Vector2(-10, -39), "no": Vector2(-22, -39), "o": Vector2(-26, -30), "so": Vector2(-22, -18)},
+		"boca": {"s": Vector2(-3, 3), "se": Vector2(21, -18), "e": Vector2(26, -30), "ne": Vector2(21, -39),
+			"n": Vector2(3, -70), "no": Vector2(-22, -39), "o": Vector2(-26, -30), "so": Vector2(-22, -18)},
+		"cano": CANO_LANZA_RAYOS,
 	},
 }
 

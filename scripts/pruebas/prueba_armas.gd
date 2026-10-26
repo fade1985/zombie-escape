@@ -958,19 +958,23 @@ func probar_fuego_acido() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --pistola-electrica": el lanza rayos con su dibujo propio (Armas.DATOS.pistola_electrica,
-# conserje-48-lanza-rayos: la hoja lleva el retroceso y una descarga celeste en zigzag que sale de la punta del arma, blanca y gris con una
-# franja de luz; casilla de 208x186, con los pies en 104,104). Como el lanza ácido, en la sala de mantenimiento,
-# Johnny la compra en la tienda de armas del ordenador (captura-pistola-electrica-tienda.png, con ella marcada) y cuenta su hoja, su
-# ritmo, su alcance, sus pies, su boca hacia el este y que ya no le salen chispitas de adorno; dispara a un zombi a 120 a su
-# izquierda (le quita vida y lo aturde), con otro cerca de él (la descarga salta y lo aturde también) y otro a 330 (más lejos de lo
-# que llega la chispa: ni se entera), con una foto con las chispas saliendo (captura-pistola-electrica-chispa.png) y cuenta cuántas
-# balas gasta (una por disparo). Las baterías: con el cargador vacío, una de la mochila lo llena entero; sin ellas, no recarga; y
-# las cajas de munición no le valen. Luego
-# dispara andando (sigue andando, con los efectos del disparo pintados encima y el retroceso) y en las 8 direcciones, con una foto de
-# cada una a los 0,09 s, con la descarga ya saliendo (captura-pistola-electrica-<dirección>.png): lo dibujado y las chispas del
-# juego tienen que salir del mismo sitio. Con cada skin (portero, glotón, gymbro y bombero), su hoja y una foto
-# (captura-pistola-electrica-<skin>.png). Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
+# Con "--captura --pistola-electrica": el lanza rayos (Armas.DATOS.pistola_electrica; llamarada.gd, con su efecto "rayo": un
+# rayo continuo como el chorro del lanza ácido, que aturde y salta de un zombi a otro). Como el lanza ácido, en la sala de
+# mantenimiento, Johnny lo compra en la tienda de armas del ordenador (captura-pistola-electrica-tienda.png, con él
+# marcado) y cuenta su hoja, sus números y su boca. Luego, en la sala de pruebas (F11), gastando baterías de verdad:
+#   - el rayo: 1 s hacia la derecha con zombis a 120 y a 230 en la misma línea (los dos pierden vida y se quedan aturdidos,
+#     sin empujón), otro cerca del primero pero fuera del rayo (la descarga salta a él: medio daño, aturdido), y otro a
+#     430 (más allá de las 8 casillas: ni se entera). Johnny no pierde vida, no queda ningún charco y el rayo alumbra;
+#     al soltar se apaga (captura-pistola-electrica-rayo.png, a medio rayo, con el arco hasta el zombi de al lado)
+#   - al soltar, se despega de la boca y se va; y contra la pared se corta en ella (captura-pistola-electrica-pared.png)
+#   - el depósito: casi vacío y con una batería en la mochila, al vaciarse se llena solo y la gasta; sin baterías,
+#     «¡Sin batería!», saca la de cuerpo a cuerpo y la Q no deja volver (una gasolina no le vale); al coger una batería
+#     del suelo vuelve a sacar el lanza rayos y lo llena
+#   - el rayo en las 8 direcciones (captura-pistola-electrica-<dirección>.png) y con las 4 skins, con su hoja
+#     (captura-pistola-electrica-<skin>.png), con el depósito sin fin
+#   - las calidades: la Poco común, depósito de 10 s y la descarga salta a 1 + 1 zombis; la Épica lo es (estallido)
+#   - al jefe de bomberos, al que el fuego no le hace nada, el rayo sí le quita vida
+# Cada línea dice lo esperado. Deja el guardado como estaba y se cierra
 func probar_pistola_electrica() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g2):
@@ -979,80 +983,152 @@ func probar_pistola_electrica() -> void:
 	johnny.vestir("")
 	await comprar_en_tienda("pistola_electrica", "captura-pistola-electrica-tienda.png")
 
-	# comprada: su hoja, su boca y sin chispitas de adorno
+	# comprado: sus números, su boca y sin chispitas; las balas no le valen
 	var id := "pistola_electrica"
 	var w := Armas.datos(id)
-	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.modo = "quieto"   # que no eche el rayo por su cuenta: aquí lo echa la prueba
+	await get_tree().create_timer(0.3).timeout
+	print("Lanza rayos en la mano: nombre «%s» · hoja «%s» · efecto %s · alcance %.0f (%.0f casillas) · depósito %.0f s · recarga %.1f s · daño %.0f/s · saltos %d · pies %s · boca este %s · icono «%s» · caja de munición para «%s» (esperado: Lanza rayos, conserje-48-lanza-rayos.tres, rayo, 256 (8 casillas), 8 s, 1.5 s, 25/s, 0, (48, 80), (26, -30), pistola_electrica, pistola: la de repuesto, al lanza rayos no le vale)" % [
+		w.nombre, johnny.sprite.sprite_frames.resource_path.get_file(), w.efecto, w.alcance, w.alcance / Planta.CASILLA,
+		w.deposito, w.recarga, w.dano, w.saltos, w.pies, w.boca.e, Objetos.icono(id), johnny.arma_de_caja()])
+
+	# a la sala de pruebas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.coger(id)
+	johnny.municion_sin_fin = false
+	while "bateria" in mochila:
+		mochila.erase("bateria")
+	mochila.append_array(["bateria", "bateria"])   # (para que la barra de abajo enseñe dos)
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
 	johnny.direccion = "e"
-	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
-	await get_tree().create_timer(0.3).timeout
-	print("Lanza rayos en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas de adorno %s · icono «%s» (esperado: conserje-48-lanza-rayos.tres, 5, 230, (104, 104), (26, -30), false, pistola_electrica)" % [
-		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
+	johnny.stats.critico = 0.0   # (sin críticos al azar: los números salen redondos)
 
-	# la chispa: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y lo aturde, salta al que tiene cerca (a 100
-	# de él: también pierde vida y se queda aturdido) y no llega al tercero, a 330 (230 desde la boca, que está a 44 de Johnny)
-	johnny.direccion = "o"
-	var z := zombis_de_prueba([Vector2(-120, 0), Vector2(-200, 60), Vector2(-330, 0)])
+	# el rayo: 1 s hacia la derecha con dos zombis en la misma línea, uno al lado del primero y otro lejos
+	var z := []
+	for d in [Vector2(120, 0), Vector2(230, 0), Vector2(120, 90), Vector2(430, 0)]:
+		var zombi: Node2D = meter_zombi("lento", johnny.position + d)
+		zombi.vida = 500
+		z.append(zombi)
 	await get_tree().process_frame
-	var balas0: int = johnny.balas
-	johnny.atacar(PI)
-	await get_tree().create_timer(0.12).timeout
-	Captura.foto("captura-pistola-electrica-chispa.png")
-	await get_tree().create_timer(0.15).timeout
-	print("Aturdidos a los 0,27 s: el de 120 %s · el que está a su lado %s · el de 330 %s (esperado: true, true, false)" % [
-		z[0].aturdido > 0.0, z[1].aturdido > 0.0, z[2].aturdido > 0.0])
-	await get_tree().create_timer(0.4).timeout
-	print("Zombi a 120: vida %d · el de al lado: vida %d (esperado: menos de 500 los dos) · a 330: vida %d (esperado: 500)" % [z[0].vida, z[1].vida, z[2].vida])
-	print("Balas gastadas: %d (esperado: 1)" % (balas0 - johnny.balas))
-	zombis_de_prueba([])
-	await get_tree().create_timer(0.3).timeout
+	var x0: float = z[0].position.x
+	var vida_johnny: int = johnny.vida
+	var charcos: int = get_tree().get_nodes_in_group("charcos").size()
+	await echar_fuego(0.0, 1.0, "captura-pistola-electrica-rayo.png")
+	var encendido: bool = johnny.llamarada.encendida
+	var alumbra: bool = johnny.llamarada.luz.enabled
+	var arcos: int = johnny.llamarada.arcos.size()
+	print("Rayo 1 s hacia la derecha: a 120 pierde %d, aturdido %s, empujado %.0f · a 230 pierde %d, aturdido %s (esperado: unos 25, true, 0, unos 25, true)" % [
+		500 - z[0].vida, z[0].aturdido > 0.0, z[0].position.x - x0, 500 - z[1].vida, z[1].aturdido > 0.0])
+	print("El de al lado del primero (fuera del rayo): pierde %d, aturdido %s · arcos %d (esperado: unos 12, true, 1 o más)" % [
+		500 - z[2].vida, z[2].aturdido > 0.0, arcos])
+	print("Zombi a 430 (más allá de las 8 casillas): pierde %d, aturdido %s (esperado: 0 y false)" % [500 - z[3].vida, z[3].aturdido > 0.0])
+	print("Johnny -%d (esperado: 0) · charcos nuevos %d (esperado: 0) · encendido mientras %s · alumbra %s (esperado: true, true)" % [
+		vida_johnny - johnny.vida, get_tree().get_nodes_in_group("charcos").size() - charcos, encendido, alumbra])
+	for zombi in z:
+		zombi.remove_from_group("zombis")
+		zombi.queue_free()
 
-	# las baterías: con el cargador vacío y una batería en la mochila, la recarga la gasta y lo llena entero; sin
-	# baterías no recarga; y las cajas de munición no le valen
+	# al soltar, se despega de la boca y se va; y contra la pared, se corta en ella
+	await echar_fuego(0.0, 0.6)
+	for i in 4:
+		await get_tree().physics_frame
+	print("Al soltar: despegado de la boca %.0f de %.0f (esperado: más de 0)" % [johnny.llamarada.cola, johnny.llamarada.largo])
+	await get_tree().create_timer(0.5).timeout
+	var puesto: Vector2 = johnny.global_position
+	johnny.global_position = sala.diana.global_position + Vector2(380, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	await echar_fuego(0.0, 0.5, "captura-pistola-electrica-pared.png")
+	print("Contra la pared: el rayo llega a %.0f de %.0f (esperado: menos de 256)" % [johnny.llamarada.tope, johnny.llamarada.alcance])
+	johnny.global_position = puesto
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.4).timeout
+
+	# el depósito: casi vacío y con una batería, se llena solo al vaciarse y la gasta
 	while "bateria" in mochila:
 		mochila.erase("bateria")
 	mochila.append("bateria")
-	johnny.balas = 0
-	johnny.empezar_recarga()
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	var recarga: bool = johnny.recargando > 0.0
 	await get_tree().create_timer(w.recarga + 0.2).timeout
-	print("Recarga con una batería: cargador %d de %d · baterías %d · gasta «%s» · la caja es para «%s» (esperado: 30 de 30, 0, Batería, pistola: la de repuesto, al lanza rayos no le vale)" % [
-		johnny.balas, w.cargador, mochila.count("bateria"), Armas.MUNICION[Armas.municion(id)].nombre, johnny.arma_de_caja()])
-	johnny.balas = 0
-	johnny.empezar_recarga()
-	print("Sin baterías: recargando %s · el aviso «%s» (esperado: false, ¡Sin batería!)" % [johnny.recargando > 0.0,
-		Armas.MUNICION[Armas.municion(id)].sin])
-	johnny.balas = w.cargador
+	print("Depósito vacío con una batería: recarga sola %s · depósito %.1f s · baterías que quedan %d · el texto «%s» (esperado: true, 8.0, 0, Lanza rayos   8 s · batería x0)" % [
+		recarga, johnny.deposito, mochila.count("bateria"), texto_del_arma()])
+	# sin baterías (con una gasolina en la mochila, que no le vale): se apaga, avisa y saca la de cuerpo a cuerpo, y la Q
+	# no deja volver
+	mochila.append("gasolina")
+	johnny.deposito = 0.1
+	await echar_fuego(PI, 0.3)
+	var aviso: Array = johnny.get_parent().get_children().filter(
+		func(n): return n is Label and n.text.begins_with("¡Sin")).map(func(n): return n.text)
+	Captura.foto("captura-pistola-electrica-sin-bateria.png")
+	var mano: String = johnny.mano
+	johnny.cambiar_mano()
+	print("Sin baterías (con una gasolina): aviso %s · en la mano «%s» · después de la Q, «%s» · rayo encendido %s · gasolinas %d (esperado: [\"¡Sin batería!\"], cuerpo, cuerpo, false, 1)" % [
+		aviso, mano, johnny.mano, johnny.llamarada.encendida, mochila.count("gasolina")])
+	mochila.erase("gasolina")
+	# coge una batería del suelo (la foto, antes de que vuele hacia él): vuelve a sacar el lanza rayos y lo llena
+	soltar_objeto("bateria", johnny.position + Vector2(60, 0))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-pistola-electrica-bateria.png")
+	await get_tree().create_timer(2.2).timeout
+	print("Coge una batería del suelo: en la mano «%s» · depósito %.1f s · baterías %d · icono «%s» (esperado: fuego, 8.0, 0, obj-bateria)" % [
+		johnny.mano, johnny.deposito, mochila.count("bateria"), Objetos.icono("bateria")])
 
-	# disparar andando: sigue andando (sin el gesto entero), con los efectos del disparo pintados encima y el retroceso
-	johnny.direccion = "e"
-	johnny.velocity = Vector2(120, 0)
-	johnny.atacar(0.0)
-	await get_tree().create_timer(0.07).timeout
-	Captura.foto("captura-pistola-electrica-andando.png")
-	print("Disparado andando: ataque_t %.1f (esperado: -1.0) · efectos visibles %s (esperado: true) · retroceso %s (esperado: distinto de (0, 0))" % [
-		johnny.ataque_t, johnny.efectos.visible, johnny.patada])
-	johnny.velocity = Vector2.ZERO
-	await get_tree().create_timer(0.5).timeout
-
-	# las 8 direcciones, con una foto a los 0,09 s: la descarga dibujada y las chispas del juego saliendo
+	# el rayo en las 8 direcciones, en la postura de apuntar (con el depósito sin fin: aquí ya no se cuenta)
+	johnny.municion_sin_fin = true
+	var posturas := []
 	for d in johnny.DIRS:
+		johnny.deposito = w.deposito
 		johnny.direccion = d
-		johnny.atacar(johnny.DIRS.find(d) * PI / 4)
-		await get_tree().create_timer(0.09).timeout
-		Captura.foto("captura-pistola-electrica-%s.png" % d)
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().physics_frame
+		await echar_fuego(johnny.DIRS.find(d) * PI / 4, 0.4, "captura-pistola-electrica-%s.png" % d)
+		posturas.append(johnny.sprite.animation)
+		await get_tree().create_timer(0.4).timeout
+	print("Postura echando el rayo en cada dirección: %s (esperado: quieto_<dirección> en las 8)" % ", ".join(posturas))
 
 	# con cada skin: su hoja del lanza rayos
 	for skin in ["portero", "gloton", "gymbro", "bombero"]:
 		Skins.poner(skin)
 		johnny.vestir(skin)
 		johnny.direccion = "e"
-		johnny.atacar(0.0)
-		await get_tree().create_timer(0.09).timeout
-		Captura.foto("captura-pistola-electrica-%s.png" % skin)
+		johnny.deposito = w.deposito
+		await echar_fuego(0.0, 0.3, "captura-pistola-electrica-%s.png" % skin)
 		print("Con %s: hoja «%s» (esperado: conserje-48-lanza-rayos-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.2).timeout
+	Skins.poner("")
+	johnny.vestir("")
+
+	# las calidades: más depósito y la descarga salta a más zombis; la Épica lo es (el zombi que mata revienta)
+	for calidad in [1, 3]:
+		var wc := Armas.con_calidad(id, calidad)
+		print("Calidad %d: depósito %.1f s · saltos %d · «%s» (esperado: %s)" % [calidad, wc.deposito, wc.saltos, Armas.que_da(id, calidad),
+			"10 s y 1" if calidad == 1 else "14 s y 3"])
+	llevar_arma(id, 3)
+	johnny.llamarada.mantener(johnny.global_position, 0.0, johnny.arma())
+	print("El rayo del lanza rayos Épico: Épica %s · saltos %d (esperado: true, 3)" % [johnny.llamarada.epica, johnny.llamarada.saltos])
+	llevar_arma(id, 0)
+	johnny.municion_sin_fin = true
+	johnny.deposito = w.deposito
+
+	# al jefe de bomberos el fuego no le hace nada; el rayo, sí (quieto: que no ataque)
+	var jefe: Node2D = meter_zombi("bombero", johnny.position + Vector2(150, 0))
+	await get_tree().process_frame
+	jefe.process_mode = Node.PROCESS_MODE_DISABLED
+	var vida_jefe: int = jefe.vida
+	await echar_fuego(0.0, 1.0)
+	print("Jefe de bomberos (inmune al fuego %s): pierde %d con 1 s de rayo (esperado: true, más de 15)" % [
+		jefe.get("inmune_fuego"), vida_jefe - jefe.vida])
+	jefe.remove_from_group("zombis")
+	jefe.queue_free()
 
 	Guardado.cambiar(func(g2):
 		g2.dolares = antes.dolares

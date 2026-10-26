@@ -42,7 +42,7 @@ const CRITICO := Color("#ffb020")
 const TINTA := Color(0.11, 0.1, 0.17)
 # Lo que hace cada arma con efecto (su "efecto", armas_creadas.gd), para la ficha
 const EFECTOS := {"llama": "llamarada continua que atraviesa", "acido": "chorro de ácido continuo que atraviesa",
-	"chispa": "chispa que aturde y salta"}
+	"rayo": "rayo continuo que aturde y salta de un zombi a otro"}
 
 var johnny: Node2D
 var diana: Zombi
@@ -413,10 +413,13 @@ func escribir() -> void:
 	var perdigones: int = w.get("perdigones", 1)
 	var deposito: bool = w.has("deposito")
 	if deposito:
-		l.append("Daño %s por segundo · %s" % [decimal(w.dano, 1), "chorro de ácido continuo" if w.efecto == "acido" else "llamarada continua"])
+		l.append("Daño %s por segundo · %s" % [decimal(w.dano, 1), {"acido": "chorro de ácido continuo", "rayo": "rayo continuo"}.get(w.efecto, "llamarada continua")])
 		l.append("Alcance %d (%s casillas)" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1)])
 		l.append("Depósito %s s · se llena con %s en %s s" % [decimal(w.deposito, 1), Armas.RELLENOS[w.relleno].uno, decimal(w.recarga, 2)])
-		l.append("Empuje %s cada %s s" % [decimal(w.empuje, 1), decimal(Llamarada.TICK * Llamarada.EMPUJA, 1)])
+		if w.efecto == "rayo":
+			l.append("Aturde %s s · la descarga salta a %d zombis más" % [decimal(Llamarada.ATURDE, 1), 1 + w.get("saltos", 0)])
+		else:
+			l.append("Empuje %s cada %s s" % [decimal(w.empuje, 1), decimal(Llamarada.TICK * Llamarada.EMPUJA, 1)])
 	elif fuego:
 		l.append("Daño %s%s · %s %s/s" % [decimal(w.dano, 1), " × %d perdigones" % perdigones if perdigones > 1
 			else " por disparo", decimal(w.ritmo, 1), "disparo" if is_equal_approx(w.ritmo, 1.0) else "disparos"])

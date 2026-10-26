@@ -1,11 +1,11 @@
 {
   "cell": [
-    208,
-    186
+    96,
+    104
   ],
   "pivot": [
-    104,
-    104
+    48,
+    80
   ],
   "anims": {
     "still": {
@@ -131,81 +131,43 @@
       }
     },
     "attack": {
-      "fps": 17,
+      "fps": 6,
       "loop": false,
       "dirs": {
         "south": {
           "row": 17,
-          "frames": 3
+          "frames": 1
         },
         "south-east": {
           "row": 18,
-          "frames": 3
+          "frames": 1
         },
         "east": {
           "row": 19,
-          "frames": 3
+          "frames": 1
         },
         "north-east": {
           "row": 20,
-          "frames": 3
+          "frames": 1
         },
         "north": {
           "row": 21,
-          "frames": 3
+          "frames": 1
         },
         "north-west": {
           "row": 22,
-          "frames": 3
+          "frames": 1
         },
         "west": {
           "row": 23,
-          "frames": 3
+          "frames": 1
         },
         "south-west": {
           "row": 24,
-          "frames": 3
+          "frames": 1
         }
       },
       "hit": 0.0
-    },
-    "fx": {
-      "fps": 17,
-      "loop": false,
-      "dirs": {
-        "south": {
-          "row": 25,
-          "frames": 3
-        },
-        "south-east": {
-          "row": 26,
-          "frames": 3
-        },
-        "east": {
-          "row": 27,
-          "frames": 3
-        },
-        "north-east": {
-          "row": 28,
-          "frames": 3
-        },
-        "north": {
-          "row": 29,
-          "frames": 3
-        },
-        "north-west": {
-          "row": 30,
-          "frames": 3
-        },
-        "west": {
-          "row": 31,
-          "frames": 3
-        },
-        "south-west": {
-          "row": 32,
-          "frames": 3
-        }
-      }
     }
   },
   "source": "Hecha con tools/arma.py a partir de assets/sources/conserje-48-lanza-rayos/"

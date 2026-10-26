@@ -1,8 +1,9 @@
-# Lo que hacen las armas con efecto (fase 7b2; src/armas-creadas.js del JS): el lanzallamas, el lanza ácido y la
+# Lo que hacen las armas con efecto (fase 7b2; src/armas-creadas.js del JS): el lanzallamas, el lanza ácido y el
 # lanza rayos, que eran armas creadas del banco de trabajo y desde el 25 oct se compran en la tienda de armas.
 # Sus números están en Armas.DATOS (su "efecto"); aquí, lo que hacen:
-#   - Las chispas del lanza rayos (chorro.gd), que aturden y saltan a otro zombi. La llamarada del
-#     lanzallamas y el chorro del lanza ácido van aparte (llamarada.gd).
+#   - Las gotas y chispas sueltas (chorro.gd, disparar y golpe): de cuando eran armas a distancia; desde el 26 oct las tres
+#     echan un chorro continuo que va aparte (llamarada.gd: la llamarada, el chorro de ácido y el rayo, que aturde y
+#     salta de un zombi a otro), y ya no las usa ninguna.
 #   - Lo que dejan en el zombi: la quemadura (que se contagia a los de al lado: zombi.gd) y el ácido que sigue
 #     royendo y le come la armadura (con_acido).
 #   - El estallido de las Épicas (estallido): el zombi que matan revienta y pasa su efecto a los de al lado. Los jefes no se aturden ni arden; el ácido sí les hace daño. (La
@@ -20,14 +21,14 @@ const EFECTOS := {
 	# 50 % más ("corroe": con_acido)
 	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a"), "corroe": 1.5},
 	"descarga": {"salto": 130.0, "dano": 0.5},                       # salta al más cercano con medio daño
-	"chispa": 0.4,                                                   # el lanza rayos: cada chispa aturde 0,4 s (y salta)
+	"chispa": 0.4,                                                   # el calambre del estallido del lanza rayos Épico: aturde 0,4 s
 	"tick": 0.5,                                                     # cada cuánto se quitan los pellizcos
 }
 
 
 # La descarga: aturde al zombi y salta al más cercano (a menos de "salto"), que se lleva medio daño y también
-# se queda aturdido. La usan las chispas del lanza rayos; mejorada ("saltos" más, por su calidad), sigue
-# saltando de ese al más cercano que aún no ha pillado
+# se queda aturdido; mejorada ("saltos" más, por su calidad), sigue saltando de ese al más cercano que aún no ha
+# pillado. La usaban las chispas sueltas; el rayo continuo (llamarada.gd) usa sus mismos números ("descarga")
 static func descarga(zombi: Node2D, dano: float, aturde: float, saltos := 0) -> void:
 	aturdir(zombi, aturde)
 	var pillados: Array = [zombi]

@@ -39,6 +39,7 @@ const NOMBRE := 1.6       # lo que se ve el nombre del arma al cambiar (segundos
 const COLORES_DEPOSITO := {
 	"gasolina": [Color("#ff9f1c"), Color("#ffd23f"), Color("#b8561c")],
 	"bidon_acido": [Color("#c7e04a"), Color("#ecf896"), Color("#608028")],
+	"bateria": [Color("#2cc8e8"), Color("#b8f4ff"), Color("#1b7f9c")],
 }
 
 var johnny: Node2D
@@ -553,8 +554,8 @@ func pintar_balas() -> void:
 	barra.draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color_texto)
 
 
-# El depósito del lanzallamas o del lanza ácido, encima de la barra de vida: una barra (naranja de gasolina o verde de
-# ácido, COLORES_DEPOSITO) que se vacía mientras echa el chorro, con una rayita por cada segundo (con poco, late en
+# El depósito del lanzallamas, del lanza ácido o del lanza rayos, encima de la barra de vida: una barra (naranja de
+# gasolina, verde de ácido o celeste de batería, COLORES_DEPOSITO) que se vacía mientras echa el chorro, con una rayita por cada segundo (con poco, late en
 # rojo), y al lado el icono de lo que lo llena con cuántos lleva en la mochila (en naranja si no queda ninguno). Al
 # recargar se va llenando. Más apagado si lleva en la mano el arma cuerpo a cuerpo
 func pintar_deposito(w: Dictionary, lejos: bool) -> void:

@@ -188,8 +188,8 @@ func probar_calidades() -> void:
 	print("Pistola Épica: daño %.1f, cargador %d, recarga %.3f (esperado: 17.5, 21, 0.605: +75 %%, +75 %%, un 45 %% más rápida)" % [
 		w.dano, w.cargador, w.recarga])
 	w = Armas.con_calidad("lanzallamas", 2)
-	print("Lanzallamas Raro: daño %.1f, depósito %.1f s (esperado: 43.5, 12.0) · lanza rayos Poco común: saltos %d, cargador %d (esperado: 1, 30)" % [
-		w.dano, w.deposito, Armas.con_calidad("pistola_electrica", 1).saltos, Armas.con_calidad("pistola_electrica", 1).cargador])
+	print("Lanzallamas Raro: daño %.1f, depósito %.1f s (esperado: 43.5, 12.0) · lanza rayos Poco común: saltos %d, depósito %.1f s (esperado: 1, 10.0)" % [
+		w.dano, w.deposito, Armas.con_calidad("pistola_electrica", 1).saltos, Armas.con_calidad("pistola_electrica", 1).deposito])
 	print("Lo que dice la ficha: «%s» · «%s»" % [Armas.que_da("bate", 2), Armas.que_da("molotov", 3)])
 	# una de cada arma: el bate Raro a la mano (la fregona al repuesto) y luego otro bate, Poco común: se cambian
 	llevar_arma("bate", 2)
@@ -783,8 +783,8 @@ func probar_municion() -> void:
 # y una congeladora de repuesto, y la skin del bombero. Al abrir, la ficha enseña el arma de la mano; la flecha abajo
 # lleva la marca a la escopeta y la ficha la sigue; Intro salta a «Ponérmela» e Y del mando se la pone; Supr tira un
 # pieza cuerpo a cuerpo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
-# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (el lanza rayos: nombre largo y
-# 30 balitas) y la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas (probar_curas)
+# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha del lanza rayos (nombre largo, depósito) y
+# la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas (probar_curas)
 # y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
 # Fotos: captura-inventario-nuevo.png (al abrir), captura-inventario-escopeta.png (la marca en la escopeta de
 # repuesto), captura-inventario-objeto.png (la pieza a distancia, con su ficha), captura-inventario-municion.png,
@@ -866,7 +866,7 @@ func probar_inventario() -> void:
 	Captura.foto("captura-inventario-arrojable.png")
 	await pulsar_evento(accion("ui_cancel"))
 	print("Esc: abierto «%s» · juego en pausa %s (esperado: «» · false)" % [inv.abierto, get_tree().paused])
-	# la ficha más llena: el lanza rayos, de nombre largo y con 30 balitas; y una de depósito
+	# la ficha de nombre largo: el lanza rayos (depósito, con su barra celeste); y la de otro de depósito
 	for arma in ["pistola_electrica", "lanzallamas"]:
 		llevar_arma(arma)
 		abrir_cosas("inventario")

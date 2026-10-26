@@ -149,7 +149,7 @@ const QUE_HACE := {
 	"mp5": "Ráfagas muy rápidas. Gasta las mismas balas que la pistola.",
 	"lanzallamas": "Llamarada continua que quema a todos. Se llena con gasolina.",
 	"desintegrador": "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido.",
-	"pistola_electrica": "Chispas que aturden y saltan al zombi de al lado. Cada batería le llena el cargador.",
+	"pistola_electrica": "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías.",
 	"molotov": "Se rompe y deja un charco de fuego que quema a los zombis.",
 	"granada": "Bota, rueda y explota a los 2 segundos.",
 	"atraedora": "Suena, atrae a los zombis 3 s y explota.",
