@@ -495,7 +495,9 @@ func probar_azotea(acabar := false) -> void:
 		johnny.position = helipuerto + Vector2(-170, 150)
 		camara.zoom = Vector2(0.8, 0.8)
 		camara.reset_smoothing()
-		await get_tree().create_timer(0.8 + Helicoptero.LLEGADA + 0.5).timeout
+		await get_tree().create_timer(0.8 + Helicoptero.LLEGADA * 0.5).timeout
+		Captura.foto("captura-helicoptero-llegando.png")   # (aún bajando, con el morro inclinado)
+		await get_tree().create_timer(Helicoptero.LLEGADA * 0.5 + 0.5).timeout
 		var helis: Array = mapa.cosas.get_children().filter(func(n): return n is Helicoptero)
 		print("  helicóptero de Velaria: %d | sobre el helipuerto %s | escalera recogida (bajada %.1f) | aviso: '%s'" % [helis.size(),
 			not helis.is_empty() and helis[0].llegado and helis[0].position.distance_to(helipuerto) < 1.0,

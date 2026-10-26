@@ -3590,5 +3590,43 @@
     "36×32, fuerza 120, semilla 404": "2d6cbaf3-6261-5ff2-8f3d-6092580b77bd"
    }
   }
+ },
+ "helicoptero-velaria": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "El helicóptero de Velaria del final de la azotea (scripts/helicoptero.gd), que estaba dibujado con rectángulos desde el código y se veía muy cuadrado. Con create_image_pixflux y la receta de los muebles del centro comercial: la guía de py tools/helicoptero.py guia (el dibujo de antes, de lado y mirando a la izquierda, con la tapa del motor y sin aspas, al doble y sobre azul; 316×140) como init_image con fuerza 45, no_background false, single color black outline, low top-down y direction west, 4 semillas. Las cuatro salieron bien; el dueño eligió la 3 (la hoja de Velaria en la puerta, la raya verde y la rejilla del motor). La 1 llevaba letras en la cola y la 2 un logo que parecía una cruz de hospital. Fondo quitado con py tools/guias_centro.py quita y el azul encerrado entre los patines con py tools/helicoptero.py, que monta el sprite de 155×61 (2 unidades por píxel). Las aspas y la luz roja de la aleta las pinta el código. Originales en assets/sources/helicoptero/ (intentos/, con fondo; elegir.png, la hoja para elegir).",
+  "texto": "sleek black corporate helicopter seen from the side and slightly from above (3/4 top-down view), facing left, nose and tinted glass cockpit on the left, long tail boom with a small tail fin on the right, two landing skids below, engine cover and rotor mast on top, no rotor blades, green stripes and a small green leaf logo on the door, side door with a window, dark metal panels with rivets, game sprite on a plain blue background, not rotated, not isometric",
+  "parametros": {
+   "tool": "create_image_pixflux",
+   "init_image": "assets/sources/helicoptero/guia.png",
+   "init_image_strength": 45,
+   "no_background": false,
+   "outline": "single color black outline",
+   "view": "low top-down",
+   "direction": "west",
+   "width": 316,
+   "height": 140
+  },
+  "intentos": {
+   "1": {
+    "seed": 1,
+    "job_id": "fcd1cf2d-5454-4036-907d-337c082b05b2"
+   },
+   "2": {
+    "seed": 2,
+    "job_id": "cce5f329-acd4-403a-8aa7-c3b5735338df"
+   },
+   "3": {
+    "seed": 3,
+    "job_id": "cf0b5d14-0e57-41a2-8b74-17607cce6926"
+   },
+   "4": {
+    "seed": 4,
+    "job_id": "6448ac49-b680-4688-9a21-f2dabd0b5f65"
+   }
+  },
+  "elegido": "3",
+  "sprite": "assets/sprites/helicoptero.png",
+  "coste": "4 generaciones"
  }
 }

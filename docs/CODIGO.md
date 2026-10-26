@@ -69,8 +69,9 @@ en una línea.
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
-    `gerente.gd` (+ `contrato.gd`) y `cientifico_jefe.gd` (el doctor Salas). `helicoptero.gd`: el que llega al final y suelta su escalera de cuerda sobre el helipuerto; al llegar Johnny
-    a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
+    `gerente.gd` (+ `contrato.gd`) y `cientifico_jefe.gd` (el doctor Salas). `helicoptero.gd`: el que llega al final (su cuerpo,
+    `helicoptero.png` de PixelLab; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
+    el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
   alfileres de la modista), `salpicadura.gd`
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
@@ -178,7 +179,7 @@ en una línea.
   ácido sale de la del lanzallamas) y `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
-  `taquilla.py`, `centro_sprites.py`, `importar.py` (muebles
+  `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `centro_sprites.py`, `importar.py` (muebles
   nuevos → sprites; lee `catalogo.gd`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `azotea.py` (ver
   `FONDOS.md`).

@@ -3,9 +3,9 @@
 # Viene de fuera, por la derecha, bajando poco a poco, y se queda encima del helipuerto con el rotor girando y un
 # foco que busca a Johnny por el suelo. No ataca: al rato suelta una escalera de cuerda hasta el suelo, en el centro
 # del helipuerto, y en cuanto Johnny llega a ella se acaba el edificio (la señal "agarrada", que recoge partida.gd).
-# Dibujado con código, a cuadraditos de 2 unidades como los dibujos (y como el contrato del gerente): el cuerpo
-# negro con la hoja verde de Velaria, la cabina, la cola con su rotor pequeño, los patines y las luces que
-# parpadean. El nodo está en el suelo (ahí va su sombra) y el aparato se pinta "altura" unidades más arriba.
+# El cuerpo es un dibujo de PixelLab (helicoptero.png, de tools/helicoptero.py): negro, con la raya verde y la hoja
+# de Velaria. Lo que se mueve lo pinta el código encima: el rotor grande y el de la cola girando, y la luz roja de la
+# aleta, que parpadea. El nodo está en el suelo (ahí va su sombra) y el aparato se pinta "altura" unidades más arriba.
 # Se crea con Helicoptero.new(), poniéndole "destino" (el centro del helipuerto) y "johnny".
 class_name Helicoptero
 extends Node2D
@@ -16,8 +16,13 @@ signal agarrada         # Johnny ha llegado a la punta de la escalera
 const ALTURA := 170.0              # a qué altura se queda encima del helipuerto
 const LLEGADA := 4.0               # lo que tarda en llegar desde fuera
 const DESDE := Vector2(900, -420)  # de dónde viene, respecto al helipuerto
-const ROTOR := 72.0                # lo largo de cada pala, en píxeles del dibujo
-const ESCALA := 1.5                # va más cerca de la cámara que el suelo: se ve más grande (píxeles de 3)
+const DIBUJO := preload("res://assets/sprites/helicoptero.png")   # el cuerpo, sin las aspas (2 unidades por píxel)
+# Sitios del dibujo, en sus píxeles (los da py tools/helicoptero.py al montarlo)
+const ORIGEN := Vector2(48.0, 34.5)    # el centro de la cabina: lo que va a "altura" encima del nodo
+const BUJE := Vector2(55.0, 1.0)       # la punta del mástil, donde gira el rotor grande
+const COLA := Vector2(146.0, 20.0)     # el rotor pequeño, en el costado de la aleta
+const LUZ_ROJA := Vector2(150.0, 3.0)  # en lo alto de la aleta
+const ROTOR := 216.0               # lo largo de cada pala, en unidades
 const FOCO_ALCANCE := 300.0        # lo lejos del helipuerto que llega a mirar el foco
 const ESCALERA_ESPERA := 1.0       # lo que espera, ya quieto, a soltar la escalera
 const ESCALERA_TIEMPO := 2.0       # lo que tarda en desenrollarse hasta el suelo
@@ -29,13 +34,6 @@ const CUERDA_SOMBRA := "#6e5632"
 const PELDANO := "#8e6a38"
 const PELDANO_LUZ := "#b88d4e"
 const CONTORNO := "#0d0e12"
-const CHAPA := "#353a45"
-const CHAPA_LUZ := "#5a6273"
-const CHAPA_SOMBRA := "#22252d"
-const CRISTAL := "#1a2a3a"
-const REFLEJO := "#6d8fae"
-const VELARIA := "#5fbf4a"
-const VELARIA_OSCURO := "#2f6e2a"
 
 var destino := Vector2.ZERO
 var johnny: Node2D
@@ -79,7 +77,7 @@ func _process(delta: float) -> void:
 			llegado = true
 	else:
 		altura = ALTURA + sin(t * 2.0) * 4.0   # se mece un poco en el aire
-		inclinado = sin(t * 1.3) * 0.02
+		inclinado = 0.0   # (quieto, recto: un dibujo de píxeles girado tan poco sale con dientes)
 		quieto += delta
 		if quieto >= ESCALERA_ESPERA and escalera < 1.0:
 			if escalera == 0.0:
@@ -130,7 +128,7 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, 70.0, Color(1, 0.96, 0.8, 0.22))
 	draw_set_transform(Vector2.ZERO)
 	dibujar_escalera()
-	cuerpo(Vector2(0, -altura))
+	cuerpo(Vector2(0, -roundf(altura / 2.0) * 2.0))   # (de 2 en 2, como sus píxeles)
 
 
 # La escalera de cuerda, a cuadraditos de 2 unidades: cuelga de los patines y baja frenando hasta el suelo. Una vez
@@ -159,83 +157,31 @@ func dibujar_escalera() -> void:
 		draw_set_transform(Vector2.ZERO)
 
 
-# El aparato, a cuadraditos, mirando a la izquierda (por donde viene): (0, 0) es el centro de la cabina
+# El aparato, mirando a la izquierda (por donde viene): el dibujo con el centro de la cabina en "donde" y, encima,
+# los rotores girando y la luz de la aleta
 func cuerpo(donde: Vector2) -> void:
-	draw_set_transform(donde, inclinado, Vector2.ONE * ESCALA)
-	var px := func(x: float, y: float, w: float, h: float, c) -> void:
-		draw_rect(Rect2(x * 2.0, y * 2.0, w * 2.0, h * 2.0), c if c is Color else Color(c))
-	# la cola: una viga que se estrecha hacia atrás, con la aleta y el rotor pequeño
-	for x in range(16, 66):
-		var arriba := -9.0 + (x - 16) * 0.1
-		var abajo := 3.0 - (x - 16) * 0.12
-		px.call(x, arriba - 1, 1, abajo - arriba + 2, CONTORNO)
-		px.call(x, arriba, 1, abajo - arriba, CHAPA)
-		px.call(x, arriba, 1, 1, CHAPA_LUZ)
-	for i in 8:
-		px.call(60 + i * 0.6, -20 + i * 2, 4, 3, CONTORNO)
-		px.call(61 + i * 0.6, -19 + i * 2, 2, 2, CHAPA)
-	px.call(30, -6, 26, 1, VELARIA)                      # una raya verde a lo largo de la cola
-	var cola := Vector2(68, -12) * 2.0
-	var palita := Vector2.from_angle(giro * 1.6) * 14.0
-	draw_circle(cola, 15.0, Color(0.7, 0.72, 0.76, 0.12))
-	draw_line(cola - palita, cola + palita, Color(CONTORNO), 3.0)
-	# los patines: el de detrás (más oscuro) y el de delante, con sus patas
-	px.call(-24, 13, 44, 2, CHAPA_SOMBRA)
-	for x in [-14, 8]:
-		px.call(x, 9, 2, 8, CONTORNO)
-	px.call(-28, 16, 48, 2, CONTORNO)
-	px.call(-30, 15, 3, 2, CONTORNO)                     # la punta, doblada hacia arriba
-	# la cabina: una cápsula con brillo arriba y sombra abajo
-	capsula(px, -6, -2, 50, 26, CONTORNO)
-	capsula(px, -6, -2, 48, 24, CHAPA)
-	capsula(px, -8, -7, 38, 10, CHAPA_LUZ)
-	px.call(-24, 7, 34, 3, CHAPA_SOMBRA)
-	# la cristalera del morro, con un reflejo
-	capsula(px, -22, -4, 18, 15, CONTORNO)
-	capsula(px, -22, -4, 16, 13, CRISTAL)
-	for i in 4:
-		px.call(-27 + i, -8 + i, 1, 1, REFLEJO)
-	# la puerta y la hoja de Velaria
-	px.call(-6, -8, 1, 15, CHAPA_SOMBRA)
-	px.call(10, -8, 1, 15, CHAPA_SOMBRA)
-	px.call(-12, 4, 34, 1, VELARIA)
-	hoja(px, Vector2(2, -2))
-	# el mástil y el rotor grande: un disco borroso y dos palas que giran (visto un poco desde arriba)
-	px.call(-3, -18, 4, 4, CONTORNO)
-	px.call(-2, -17, 2, 3, CHAPA_LUZ)
-	var buje := Vector2(-1, -19) * 2.0
-	draw_set_transform(donde + (buje * ESCALA).rotated(inclinado), inclinado, Vector2(ESCALA, ESCALA * 0.22))
-	draw_circle(Vector2.ZERO, ROTOR * 2.0, Color(0.72, 0.75, 0.8, 0.16))
-	draw_set_transform(donde, inclinado, Vector2.ONE * ESCALA)
+	var en := func(p: Vector2) -> Vector2:   # un sitio del dibujo, en unidades (con el morro bajado, si va inclinado)
+		return donde + ((p - ORIGEN) * 2.0).rotated(inclinado)
+	draw_set_transform(donde, inclinado, Vector2(2, 2))
+	draw_texture(DIBUJO, -ORIGEN)
+	draw_set_transform(Vector2.ZERO)
+	# el rotor de la cola: un disco borroso y una pala que gira
+	var cola: Vector2 = en.call(COLA)
+	var palita := Vector2.from_angle(giro * 1.6) * 21.0
+	draw_circle(cola, 22.0, Color(0.7, 0.72, 0.76, 0.12))
+	draw_line(cola - palita, cola + palita, Color(CONTORNO), 4.0)
+	# el rotor grande: un disco borroso y dos palas que giran (visto un poco desde arriba)
+	var buje: Vector2 = en.call(BUJE)
+	draw_set_transform(buje, inclinado, Vector2(1.0, 0.22))
+	draw_circle(Vector2.ZERO, ROTOR, Color(0.72, 0.75, 0.8, 0.16))
+	draw_set_transform(Vector2.ZERO)
 	for i in 2:
 		var a := giro + i * PI
-		var punta := buje + Vector2(cos(a) * ROTOR * 2.0, sin(a) * ROTOR * 2.0 * 0.22)
-		draw_line(buje, punta, Color(CONTORNO, 0.9), 4.0)
-	px.call(-3, -21, 4, 2, CONTORNO)
-	# las luces: la roja de la aleta parpadea, la verde y la blanca de abajo, fijas; y la lámpara del foco
+		var hasta := Vector2(cos(a) * ROTOR, sin(a) * ROTOR * 0.22).rotated(inclinado)
+		draw_line(buje, buje + hasta, Color(CONTORNO, 0.9), 6.0)
+	draw_rect(Rect2(buje - Vector2(6, 3), Vector2(12, 6)), Color(CONTORNO))
+	# la luz roja de la aleta, que parpadea
 	if fmod(t, 1.0) < 0.18:
-		px.call(64, -22, 2, 2, "#ff3b3b")
-		draw_circle(Vector2(65, -21) * 2.0, 9.0, Color(1, 0.2, 0.2, 0.3))
-	px.call(-31, 2, 2, 2, "#7dff7a")
-	px.call(-20, 10, 4, 2, "#fff3c4")
-	draw_set_transform(Vector2.ZERO)
-
-
-# Una cápsula de píxeles (los lados casi rectos y las esquinas redondeadas), centrada en (cx, cy)
-func capsula(px: Callable, cx: float, cy: float, w: float, h: float, c) -> void:
-	var filas := int(h)
-	for i in filas:
-		var y := (i + 0.5) / filas * 2.0 - 1.0
-		var medio := roundf(w / 2.0 * pow(1.0 - pow(absf(y), 4.0), 0.25))
-		if medio > 0:
-			px.call(cx - medio, cy - h / 2.0 + i, medio * 2.0, 1, c)
-
-
-# La hoja verde de Velaria (el mismo logo que la tarjeta del gerente y los contratos)
-func hoja(px: Callable, en: Vector2) -> void:
-	for fila in [[-3, 1, 1], [-2, 0, 3], [-1, -1, 4], [0, -2, 5], [1, -2, 4], [2, -1, 2]]:
-		px.call(en.x + fila[1], en.y + fila[0], fila[2], 1, VELARIA)
-	px.call(en.x - 2, en.y + 3, 1, 1, VELARIA_OSCURO)   # el rabito
-	px.call(en.x - 1, en.y + 2, 1, 1, VELARIA_OSCURO)
-	px.call(en.x, en.y + 1, 1, 1, VELARIA_OSCURO)       # el nervio
-	px.call(en.x + 1, en.y, 1, 1, VELARIA_OSCURO)
+		var luz: Vector2 = en.call(LUZ_ROJA)
+		draw_rect(Rect2(luz - Vector2(2, 2), Vector2(4, 4)), Color("#ff3b3b"))
+		draw_circle(luz, 9.0, Color(1, 0.2, 0.2, 0.3))
