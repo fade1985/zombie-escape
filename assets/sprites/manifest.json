@@ -214,5 +214,11 @@
   "mueble-doublebed-lado",
   "mueble-nightstand-lado",
   "mueble-bed-lado",
-  "mueble-sofaback"
+  "mueble-sofaback",
+  "mueble-bed_farmaceutica",
+  "mueble-bed_ferretero",
+  "mueble-bed_medico",
+  "mueble-bed_militar",
+  "mueble-bed_policia",
+  "mueble-bed_tecnico"
 ]

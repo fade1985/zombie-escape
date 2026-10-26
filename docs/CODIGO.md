@@ -148,7 +148,8 @@ en una línea.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
-  `viviendas.gd`, el pasillo de los rescatados.
+  `viviendas.gd`, el pasillo de los rescatados (cada habitación lleva su cama individual en la esquina de arriba a la derecha, con la
+  colcha del color del superviviente: `colocados` de `habitacion-<id>` en `catalogo.gd`; las camas, con `tools/camas_viviendas.py`).
 - `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
 - `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
@@ -219,7 +220,7 @@ en una línea.
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
   `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
-  nuevos → sprites; lee `catalogo.gd`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
+  nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (la cama con la colcha de cada superviviente), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `azotea.py` (ver
   `FONDOS.md`).
 - **Iconos:** `icono_*.py`, `objetos16.py` (solo la batería y las vendas, de 16×16: los demás objetos son de PixelLab),

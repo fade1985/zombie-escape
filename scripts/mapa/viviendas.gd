@@ -2,15 +2,16 @@
 # pasillo largo con seis habitaciones, una por superviviente (Supervivientes.DATOS). Las de los tres de los
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
 # comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
-# nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están cerradas y a oscuras,
-# para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos)
+# nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están
+# cerradas y a oscuras, para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos)
 # y lo suyo: las pantallas de las cámaras del técnico y, junto a la farmacéutica, la cafetera de Johnny.
 #
 # Es un sitio de la planta baja como los demás (planta.gd), hecho como un apartamento ("apt": su plano por casillas,
 # sus habitaciones y sus puertas), así cada habitación lleva su niebla y no se ve por dentro hasta que se abre. Es
 # siempre igual; qué puertas están abiertas lo decide mapa.gd al montarlo (poner_viviendas), con el guardado de ese
-# momento. Por dentro, de momento, vacías: sus muebles saldrán del catálogo (catalogo.gd: "habitacion-<id>" para
-# cada una y "pasillo-viviendas" para el pasillo), con Muebles.de_apartamento.
+# momento. Por dentro, de momento, solo la cama individual de cada uno, en la esquina de arriba a la derecha y con la
+# colcha de su color (catalogo.gd: "habitacion-<id>" para cada una y "pasillo-viviendas" para el pasillo, con sus
+# "colocados"; Muebles.colocados).
 class_name Viviendas
 
 const CASILLA := 32
@@ -72,6 +73,10 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = semilla
 	sitio.muebles = Muebles.de_apartamento(apt, rng)
+	# y a cada habitación, lo suyo puesto a mano (su cama): los "colocados" de su sala en el catálogo
+	for s in salas:
+		if s.uso == "habitacion":
+			sitio.muebles += Muebles.colocados(Catalogo.SALAS["habitacion-" + s.tipo].get("colocados", {}).get("izquierda", []), s)
 	return sitio
 
 

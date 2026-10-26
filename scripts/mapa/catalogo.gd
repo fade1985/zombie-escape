@@ -40,6 +40,13 @@ const MUEBLES := {
 	# tienen también dibujo de lado (cama-matrimonio-lado y mesilla-lado: PixelLab los giró a partir de los de frente)
 	"doublebed":  {"len": 124, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio"},
 	"bed":        {"len": 84,  "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama"},
+	# la cama individual de cada superviviente (viviendas.gd), la misma con la colcha de su color (tools/camas_viviendas.py)
+	"bed_policia":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-policia"},
+	"bed_medico":       {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-medico"},
+	"bed_militar":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-militar"},
+	"bed_ferretero":    {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-ferretero"},
+	"bed_farmaceutica": {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-farmaceutica"},
+	"bed_tecnico":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-tecnico"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
 	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
@@ -448,13 +455,15 @@ const SALAS := {
 		"fondo_max": 46,   # estrecho, como el de los pisos
 	},
 	# Las viviendas de los supervivientes rescatados (viviendas.gd): el pasillo y la habitación de cada uno
-	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). De momento, vacías: se decoran en otra tarea
+	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). Sin muebles sueltos: solo los "colocados" (la
+	# entrada de las viviendas es "izquierda"): una cama individual en la esquina de arriba a la derecha (el mismo sitio que
+	# en el dormitorio individual de los pisos), con la colcha del color de cada uno, para distinguir las habitaciones
 	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0]},
 	"habitacion": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-policia": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-medico": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-militar": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0]},
+	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_policia", 10.6]]}},
+	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_medico", 10.6]]}},
+	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_militar", 10.6]]}},
+	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_ferretero", 10.6]]}},
+	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_farmaceutica", 10.6]]}},
+	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_tecnico", 10.6]]}},
 }

@@ -358,5 +358,29 @@
   "vestuario/vater-vestuario-lado.png": {
     "huella": "6c3969fda369d75f",
     "sprite": "mueble-stafftoilet-lado"
+  },
+  "viviendas/cama-farmaceutica.png": {
+    "huella": "a61a852cb6246856",
+    "sprite": "mueble-bed_farmaceutica"
+  },
+  "viviendas/cama-ferretero.png": {
+    "huella": "d625c56e711d7435",
+    "sprite": "mueble-bed_ferretero"
+  },
+  "viviendas/cama-medico.png": {
+    "huella": "770355ec096e7c9a",
+    "sprite": "mueble-bed_medico"
+  },
+  "viviendas/cama-militar.png": {
+    "huella": "777087748fb12203",
+    "sprite": "mueble-bed_militar"
+  },
+  "viviendas/cama-policia.png": {
+    "huella": "d35a96bc1e8e2687",
+    "sprite": "mueble-bed_policia"
+  },
+  "viviendas/cama-tecnico.png": {
+    "huella": "fd602f37b78e3416",
+    "sprite": "mueble-bed_tecnico"
   }
 }
