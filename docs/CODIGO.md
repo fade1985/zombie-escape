@@ -109,7 +109,7 @@ en una línea.
   `talentos.gd`, `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en
-  `LISTA`), `historia.gd` (dosier, noticias y la cafetera; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
+  `LISTA`), `historia.gd` (dosier y noticias; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
@@ -190,7 +190,7 @@ en una línea.
   vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
   no dibuja). Se prueba con `--salida`.
 - `cara_pared.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
-  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`,
+  (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página),
   `valla.gd` (la del helipuerto de la azotea).
 
 **luz/**: `luz.gd` (penumbra de cada sitio, luz de Johnny, fogonazos), `lampara.gd`, `fuego.gd`.

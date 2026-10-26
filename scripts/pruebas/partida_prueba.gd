@@ -61,7 +61,7 @@
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles           [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
-#   --viviendas         las viviendas de los rescatados y la cafetera                      [prueba_sitios.gd]
+#   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel y sin muebles    [prueba_sitios.gd]
 #   --llegada           por dónde se llega a cada planta: portal y azotea a la izquierda, las demás por las escaleras [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]

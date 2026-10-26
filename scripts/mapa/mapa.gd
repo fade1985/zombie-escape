@@ -42,8 +42,6 @@ const TAQUILLA_X := 260.0
 # friso de madera de los salones. [suelo, pared]: sprites suelo-<x>, pared-<x> y techo-<x>
 const ESTILO_MANTENIMIENTO := {"taller": ["mantenimiento", "mantenimiento"], "vestuario": ["bano-b", "bano-b"],
 	"despacho": ["salon-a", "salon-c"]}
-const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
-const CAFETERA_JUNTO := Vector2(64, -8)   # la cafetera de Johnny, en la habitación de la farmacéutica (viviendas.gd): a su derecha, por debajo de su bocadillo (el pie de su mesita)
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
 const CARTEL_SALIDA := preload("res://scripts/mapa/cartel_salida.gd")   # el EXIT de la salida de incendios (encima de la pared de arriba del pasillo)
 const CARTEL_SALIDA_A := 76.0   # a cuánto del fondo del pasillo va su centro
@@ -689,9 +687,7 @@ func poner_hojas() -> void:
 
 # Las viviendas de los supervivientes (viviendas.gd). Las de quien aún no
 # está rescatado, cerradas (con su hoja, que no deja pasar ni ver lo de dentro: la niebla sigue); las de los rescatados,
-# abiertas y ya descubiertas. Con la farmacéutica rescatada, la cafetera de Johnny junto a ella (la primera vez
-# que Johnny entra en su habitación, le encuentra el doble fondo: supervivientes.gd). Se mira el guardado cada vez
-# que se monta
+# abiertas y ya descubiertas. Se mira el guardado cada vez que se monta
 func poner_viviendas() -> void:
 	var rescatados: Array = Guardado.cargar().rescatados
 	var descubiertas: Dictionary = sitio.get_or_add("vistas", {})
@@ -714,10 +710,6 @@ func poner_viviendas() -> void:
 	var cartel := CARTEL_TRASTEROS.new()
 	cartel.position = Vector2((Viviendas.BORDE + Viviendas.CARTEL) * CASILLA, Viviendas.PASILLO_F * CASILLA + 1)
 	cosas.add_child(cartel)
-	if "farmaceutica" in rescatados:
-		var cafetera := CAFETERA.new()
-		cafetera.position = Viviendas.casa("farmaceutica") + CAFETERA_JUNTO
-		cosas.add_child(cafetera)
 
 
 # Las lámparas de pie y las mesillas (con su lamparita) dan luz de verdad; algunas fallan, como los apliques, y las

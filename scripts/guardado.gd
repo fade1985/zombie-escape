@@ -39,7 +39,6 @@ const NUEVO := {
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
 	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
 	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
-	"cafetera": false,    # la farmacéutica ya ha encontrado el VD-7 en la cafetera (Historia.CAFETERA): no lo repite
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"retos": {},          # el reto del día (reto.gd): la marca de hoy en cada edificio: {"apartamentos": {...}} (ver RETO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
@@ -90,7 +89,8 @@ static func cargar_archivo() -> Dictionary:
 	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el
 	# cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas, la
 	# jeringuilla, el aceite y el bocadillo se quitaron del juego el 25 oct, y luego los explosivos, el despertador, el
-	# extintor, el trapo y el alcohol (las piezas de mejora de las armas ocuparon su sitio)
+	# extintor, el trapo y el alcohol (las piezas de mejora de las armas ocuparon su sitio). Tampoco se lee la marca
+	# "cafetera" de los guardados viejos (la cafetera de Johnny se quitó el 27 oct)
 	var baul := {}
 	for id in s.baul:
 		if Objetos.NOMBRES.has(id):

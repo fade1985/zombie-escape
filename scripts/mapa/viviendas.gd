@@ -8,8 +8,7 @@
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
 # comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
 # nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están
-# cerradas y a oscuras, para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos)
-# y lo suyo: junto a la farmacéutica, la cafetera de Johnny.
+# cerradas y a oscuras, para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos).
 #
 # Es un sitio de la planta baja como los demás (planta.gd), hecho como un apartamento ("apt": su plano por casillas,
 # sus habitaciones y sus puertas), así cada habitación lleva su niebla y no se ve por dentro hasta que se abre. Es

@@ -131,7 +131,9 @@ suyo): `assets/pixellab.json` → `centro-comercial-parte4`, vistas en `assets/s
 | **Farmacéutica** | Herida en la rebotica de la farmacia: escoltarla hasta las escaleras; anda despacio y van saliendo zombis; si la tumban, hay que levantarla (como ahora) | Cada partida empieza con un botiquín en la mochila | Los charcos de veneno y ácido te hacen la mitad |
 | **Técnico** | En la tienda de electrónica con el agua electrificada: bajar la palanca del cuadro (la tienda a oscuras) y aguantar la horda a oscuras unos 90 s mientras arregla algo | Arregla las cámaras de seguridad: el minimapa enseña los zombis | Descarga cada 4 s: aturde 1 s al zombi más cercano |
 
-- ✅ **Guiño para la historia (parte 7; hecho el 21 oct):** según el dosier, la cafetera de la sala se la regaló
+- ✅ **Guiño para la historia (parte 7; hecho el 21 oct; **quitado del juego el 27 oct** a petición del dueño: ya no hay
+  cafetera, ni las tres frases, ni la marca `cafetera` del guardado; la página «Sujeto 0» del dosier se quedó como
+  estaba):** según el dosier, la cafetera de la sala se la regaló
   Velaria a Johnny y por ahí le metían el VD-7. La arreglaba la camarera, que ya no está: **lo descubre la
   farmacéutica** (decidido con el dueño el 21 oct, en la parte 7).
   - La cafetera, dibujada con código (`scripts/mapa/cafetera.gd`): sobre una mesita, con su jarra, la taza de

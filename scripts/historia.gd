@@ -160,19 +160,6 @@ const NOTICIAS := [
 ]
 
 
-# ── El guiño de la cafetera ──
-# La cafetera de Johnny se la regaló Velaria, y con ella le daban el VD-7 (página «Sujeto 0»). Ahora está en la
-# habitación de la farmacéutica del centro comercial, en las viviendas (decidido con el dueño el 21 oct, al quitar
-# a la camarera; en su habitación desde el 23 oct): la primera vez que Johnny entra allí después de rescatarla,
-# ella le ha encontrado un doble fondo con cápsulas y se lo dice, frase a frase; desde entonces el café es solo
-# café. Lo dice supervivientes.gd (guino_cafetera); la cafetera la dibuja mapa/cafetera.gd
-const CAFETERA := [
-	"Johnny, esta cafetera tiene doble fondo.",
-	"Hay cápsulas escondidas. Pone «VD-7».",
-	"Las he tirado todas. Desde hoy, tu café es solo café.",
-]
-
-
 # Las noticias ya emitidas (las que se pueden ver en el ordenador), en su orden
 static func noticias_emitidas(s: Dictionary) -> Array:
 	return NOTICIAS.filter(func(n): return emitida(s, n))

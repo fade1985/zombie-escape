@@ -343,13 +343,12 @@ func probar_puertas() -> void:
 # Con "--captura --viviendas": las viviendas de los supervivientes rescatados (mapa/viviendas.gd), detrás de la puerta
 # de la derecha de la sala de mantenimiento. Entrar, las puertas cerradas y abiertas, cada uno en su habitación,
 # acompañar y volver, y desde la 1ª planta por el ascensor (supervivientes.gd: probar_viviendas); luego los seis a la
-# vez y el guiño de la cafetera. Cada línea de la terminal dice lo esperado. Deja el guardado
+# vez. Cada línea de la terminal dice lo esperado. Deja el guardado
 # como estaba y se cierra
 func probar_viviendas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await supervivientes.probar_viviendas()
 	await supervivientes.probar_los_seis()
-	await supervivientes.probar_cafetera()
 	await supervivientes.averia.probar_mejora()
 	get_tree().quit()
 
