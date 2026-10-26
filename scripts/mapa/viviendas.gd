@@ -1,5 +1,7 @@
 # Las viviendas de los supervivientes rescatados: detrás de la puerta de la derecha de la sala de mantenimiento, un
-# pasillo largo con seis habitaciones, una por superviviente (Supervivientes.DATOS). Las de los tres de los
+# pasillo largo con seis habitaciones, una por superviviente (Supervivientes.DATOS). Son los trasteros del edificio (no
+# pueden vivir en ningún piso: la horda los ha destrozado todos), así que todas son iguales, de chapa metálica (mapa.gd
+# les pone el estilo "trastero" y la puerta azul lisa de puerta_bano.gd). Las de los tres de los
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
 # comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
 # nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están

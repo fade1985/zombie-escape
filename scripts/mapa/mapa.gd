@@ -59,8 +59,7 @@ const VALLA := preload("res://scripts/mapa/valla.gd")
 # puerta arriba y abajo; el individual, con el suelo rojo; el salón, con el suelo de madera de nogal, oscuro y con las tablas en
 # horizontal (tools/suelo_salon.py), para que no se confunda con el del pasillo (que sigue con el de siempre)
 const ESTILO_FIJO := {"dormitorio-matrimonio": ["-a", "-b"], "dormitorio-individual": ["-b", ""], "salon": ["-nogal", ""]}
-const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
-	"habitacion": "dormitorio"}   # (las habitaciones de las viviendas, viviendas.gd; su pasillo, el de los pisos)
+const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano"}
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
 # techo-<x>. El aseo de las tiendas usa los del baño de los pisos (ESTILO_DE).
 const ESTILO_TIENDA := {
@@ -182,6 +181,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			if s.uso == "pasillo":   # el pasillo de las viviendas: como el de los pisos
 				# (el de dentro de un piso con pasillo, apartamento.gd, como su salón, que va primero: como en una casa)
 				estilos[s.id] = (comun if not comun.is_empty() else estilos[0]) if s.get("tipo", "") == "piso" else textura("pasillo", "")
+				continue
+			if s.uso == "habitacion":
+				# las habitaciones de las viviendas son los trasteros del edificio: todas iguales, de chapa crema con el suelo
+				# de hormigón gris azulado (suelo-, pared- y techo-trastero: tools/trastero.py; su pasillo, el de los pisos)
+				estilos[s.id] = textura("trastero", "")
 				continue
 			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
 			if tienda and (ESTILO_TIENDA.has(propio) or ESTILO_TIENDA.has(s.uso)):
@@ -681,6 +685,7 @@ func poner_viviendas() -> void:
 	for d in sitio.apt.puertas:
 		d.cerrada = d.vecino not in rescatados
 		var hoja := PUERTA_BANO.new()
+		hoja.trastero = true   # la puerta de un trastero: azul lisa, con el pomo de metal
 		if d.cerrada:
 			hoja.montar(d)
 			descubiertas.erase(d.a)

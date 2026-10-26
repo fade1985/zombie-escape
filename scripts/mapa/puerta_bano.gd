@@ -18,6 +18,9 @@
 #     Tiembla cuando él da golpes desde dentro ("golpes", lo pone supervivientes.gd al gritar). La del almacén del
 #     ferretero lleva además tablas clavadas por encima ("tablas", las que quedan): las va quitando él (barricada.gd)
 #   - las de las viviendas de quien aún no está rescatado (mapa.gd)
+# Las de las viviendas ("trastero": son los trasteros del edificio) son azules lisas, con el pomo de metal y el marco
+# de chapa crema: los mismos dibujos de frente repintados (puerta-trastero y puerta-trastero-abierta, de
+# tools/trastero.py). Todas van en tabiques horizontales: de lado no tienen dibujo propio.
 #   - la blindada de la cámara acorazada de la joyería (joyeria.gd): de acero ("acero", también en su hueco)
 extends StaticBody2D
 
@@ -32,6 +35,8 @@ const GIRO := 1.1071        # lo que gira de frente al abrirse del todo, 63 grad
 const ABIERTA_LADO := preload("res://assets/sprites/puerta-bano-abierta-lado.png")   # la de lado, abierta del todo: 14 × 67
 const SOMBRA_LADO := 3      # las filas de abajo de ese dibujo que son la sombra del suelo
 const GIRO_LADO := 2.6779   # lo que gira de lado al abrirse del todo, 153 grados: casi pegada a la pared (cada píxel hacia un lado, dos hacia arriba)
+const DIBUJO_TRASTERO := preload("res://assets/sprites/puerta-trastero.png")
+const ABIERTA_TRASTERO := preload("res://assets/sprites/puerta-trastero-abierta.png")
 const CERRADA_LADO := preload("res://assets/sprites/puerta-bano-lado-cerrada.png")   # la de lado, cerrada: un tablón de 16 × 32 (el hueco entero, con el tablón en medio)
 const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
@@ -50,6 +55,7 @@ var tablas := 0:            # las tablas que le quedan clavadas (la barricada de
 		tablas = n
 		queue_redraw()
 var acero := false          # la puerta blindada de la cámara acorazada de la joyería (joyeria.gd): de acero, sin madera
+var trastero := false       # la de un trastero de las viviendas (mapa.gd): azul lisa (ver arriba)
 var libre := false          # se abre empujando (ver arriba)
 var empuje := 0.0           # lo que lleva un zombi empujándola
 var mirar_t := 0.0
@@ -160,8 +166,8 @@ func _draw() -> void:
 	r.position -= position
 	if de_frente:
 		# el marco, que llena el hueco de lado a lado y hasta el dintel: oscuro por fuera y claro por dentro
-		var oscuro := Color("#2b3036") if acero else Color("#4a2e1e")
-		var claro := Color("#7a848c") if acero else Color("#a0704a")
+		var oscuro := Color("#2b3036") if acero else Color("#7d776a") if trastero else Color("#4a2e1e")
+		var claro := Color("#7a848c") if acero else Color("#d8d2c0") if trastero else Color("#a0704a")
 		var arriba := r.end.y - DINTEL
 		draw_rect(Rect2(r.position.x, arriba, r.size.x, MARCO), claro)
 		draw_rect(Rect2(r.position.x, arriba, MARCO, DINTEL), claro)
@@ -176,20 +182,21 @@ func _draw() -> void:
 		var bisagra := Vector2(r.position.x + MARCO + temblor, r.end.y)
 		if abierta >= 1.0 and not acero:
 			# abierta del todo: su dibujo, con la esquina de arriba a la izquierda en la bisagra (con su canto y su sombra)
-			draw_texture_rect(ABIERTA, Rect2(bisagra - Vector2(0, ALTO), ABIERTA.get_size() * 2.0), false)
+			var dibujo := ABIERTA_TRASTERO if trastero else ABIERTA
+			draw_texture_rect(dibujo, Rect2(bisagra - Vector2(0, ALTO), dibujo.get_size() * 2.0), false)
 		else:
 			draw_set_transform_matrix(Transform2D(Vector2(cos(giro), sin(giro)), Vector2(0, 1), bisagra))
 			var hoja := Rect2(0, -ALTO, ancho, ALTO)
 			if acero:
 				acero_de_frente(hoja)
 			else:
-				draw_texture_rect(DIBUJO, hoja, false, Color.WHITE.darkened(0.15 * abierta))
+				draw_texture_rect(DIBUJO_TRASTERO if trastero else DIBUJO, hoja, false, Color.WHITE.darkened(0.15 * abierta))
 			draw_set_transform_matrix(Transform2D.IDENTITY)
 			if abierta > 0.0:
 				# el canto de fuera, que da a la luz
 				var punta := bisagra + Vector2(cos(giro), sin(giro)) * ancho
 				var canto := Rect2(punta.x, punta.y - ALTO, maxf(2.0, 6.0 * sin(giro)), ALTO)
-				draw_rect(canto, Color("#9aa3aa") if acero else Color("#b07a4e"))
+				draw_rect(canto, Color("#9aa3aa") if acero else Color("#568abe") if trastero else Color("#b07a4e"))
 				draw_rect(canto, LINEA, false, 2.0)
 		# la barricada: tablas torcidas de lado a lado, más anchas que la puerta, con un clavo en cada punta
 		for i in tablas:
