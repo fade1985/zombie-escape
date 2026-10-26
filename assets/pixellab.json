@@ -3670,6 +3670,38 @@
   "cost": "10 generaciones (2 objetos de 5)",
   "updated": "2026-10-26"
  },
+ "congeladora-icono": {
+  "nota": "El icono de la congeladora (26 oct, lo pidió el dueño: 'un extintor con un temporizador digital pegado y que los números se vean en rojo'). Antes era un extintor rojo de 16x16 hecho a mano, sin temporizador. Misma receta que atraedora-icono y molotov-icono: create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png de imagen de estilo sin copiar sus colores (color_palette false) y 'sin brillos blancos' en el texto. Dos intentos (A y B) en assets/sources/congeladora/intentos/. ELEGIDO por el dueño: A (extintor rojo con manguera, asa y válvula negras y la caja negra del temporizador con dos correas delante, con los dígitos en rojo) → assets/ui/iconos/congeladora.png (32x32). La B era un extintor de acero gris con boquilla negra (el temporizador se veía como un bloque rojo, no como dígitos). Sirve para el inventario, el HUD, la tienda y la congeladora en vuelo (granada.gd, DIBUJOS_PROPIOS, que antes usaba la granada teñida de azul claro; al parpadear se oscurece un poco). El color del efecto (anillos, HUD) sigue siendo el celeste #9fe8ff de lanzables.gd. Prueba: -- --captura --atraedora (saca también captura-congeladora-vuelo.png, -hud.png y -inventario.png).",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "congeladora": {
+    "seeds": [
+     43001,
+     43002
+    ],
+    "ids": [
+     "c704240d-f8cf-4df7-b76a-1be02539623a (A, elegida)",
+     "65d96d08-6a29-4637-a929-bec605e7a081"
+    ],
+    "description": "A (elegida): a red fire extinguisher standing upright, with a black hose, a black handle and valve on top, and a small black digital timer box strapped with two dark grey straps to the front of the body, its small screen showing bright red seven-segment digital numbers on black. B: lo mismo con un extintor gris acero (silver-grey steel) y una boquilla de cuerno negra. Los dos: No wires, no cables. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   }
+  },
+  "cost": "10 generaciones (2 objetos de 5)",
+  "updated": "2026-10-26"
+ },
  "nevera-pisos": {
   "kind": "images",
   "fecha": "2026-10-25",

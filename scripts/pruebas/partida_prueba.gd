@@ -54,7 +54,8 @@
 #   --municion          la munición por tipos y los arrojables (3 a mano y 8 de repuesto)    [prueba_inventario.gd]
 #   --municion-suelo    la munición, un molotov y una granada en el suelo (con luz y a oscuras), la caja según el arma y un
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
-#   --atraedora         la atraedora (haz de dinamita con despertador) en vuelo, en el HUD y en el inventario  [prueba_inventario.gd]
+#   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
+#                       en el HUD y en el inventario                                       [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles           [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
