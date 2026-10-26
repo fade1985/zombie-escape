@@ -403,7 +403,7 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 # la acaba ella, más tarde: ahí solo se comprueba que la escalera lo agarra)
 func probar_azotea(acabar := false) -> void:
 	nueva_planta(Planta.PLANTAS)
-	await montar(0, puerta_de_tipo("llegada"), false)
+	await montar(0, puerta_de_llegada(), false)
 	var s: Dictionary = planta.sitios[0]
 	var tipos := {}
 	for m in s.muebles:

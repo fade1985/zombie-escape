@@ -27,7 +27,7 @@ func probar_pasillo() -> void:
 # Luego se cierra
 func probar_salida() -> void:
 	nueva_planta(2)
-	await montar(0, puerta_de_tipo("llegada"), false)
+	await montar(0, puerta_de_llegada(), false)
 	var escaleras: Node2D = mapa.puertas[puerta_de_tipo("escaleras")]
 	johnny.position = escaleras.llegada()
 	johnny.get_node("Camara").reset_smoothing()
@@ -43,11 +43,50 @@ func probar_salida() -> void:
 	print("Salida (2 s después): cartel encendido %s, ya fijo %s (esperado: true, true)" % [
 		escaleras.cartel.luce(), escaleras.cartel.arrancando < 0.0])
 	Captura.foto("captura-salida-abierta.png")
-	await montar(0, puerta_de_tipo("llegada"), false)
+	await montar(0, puerta_de_llegada(), false)
 	escaleras = mapa.puertas[puerta_de_tipo("escaleras")]
 	print("Salida (al volver al pasillo ya pasado): cartel encendido %s, ya fijo %s (esperado: true, true)" % [
 		escaleras.cartel.luce(), escaleras.cartel.arrancando < 0.0])
 	get_tree().quit()
+
+
+# Con "--captura --llegada": por dónde se llega a cada planta. La planta baja (el portal del edificio) y la azotea (la
+# escalera por la que se sube) tienen su puerta de llegada a la izquierda; las demás plantas, ninguna: se llega por las
+# escaleras de la derecha, las mismas por las que se sale. De cada una dice cuántas puertas tiene a la izquierda, por
+# cuál se llega y a cuánto de ella aparece Johnny; y subiendo de verdad (subir, de la 1ª a la 2ª y de la 3ª a la azotea) dónde
+# aparece. Fotos: captura-llegada-<planta>.png (la 1ª y la 2ª, con Johnny recién llegado) y captura-llegada-izquierda.png (el otro extremo del
+# pasillo de la 1ª, sin puerta). Luego se cierra
+func probar_llegada() -> void:
+	for num in [1, 2, 3, 5]:
+		nueva_planta(num)
+		await montar(0, puerta_de_llegada(), false)
+		await get_tree().create_timer(0.6).timeout
+		avisar_llegada("Montada")
+		if num in [2, 3]:
+			Captura.foto("captura-llegada-%d.png" % num)
+		if num == 2:
+			# y el otro extremo del pasillo, donde estaba la puerta de llegada: ahora, pared lisa
+			johnny.position = Vector2(150, planta.sitios[0].alto / 2.0)
+			johnny.get_node("Camara").reset_smoothing()
+			await get_tree().create_timer(0.6).timeout
+			Captura.foto("captura-llegada-izquierda.png")
+	for num in [2, 4]:
+		nueva_planta(num)
+		await montar(0, puerta_de_llegada(), false)
+		await subir()
+		await get_tree().create_timer(0.6).timeout
+		avisar_llegada("Subiendo a la planta %d" % (num + 1))
+	get_tree().quit()
+
+
+# Lo que dice probar_llegada de la planta en la que se está
+func avisar_llegada(texto: String) -> void:
+	var izquierda: int = planta.sitios[0].salidas.filter(func(s): return s.dir == "izquierda").size()
+	var llega: Node2D = mapa.puertas[puerta_de_llegada()]
+	var baja_o_azotea: bool = planta.num == 1 or planta.get("azotea", false)
+	print("%s: planta %d, puertas a la izquierda %d (esperado %d), llega por la %s (esperado %s), Johnny a %d de ella (esperado 60)" % [
+		texto, planta.num, izquierda, 1 if baja_o_azotea else 0, llega.salida.dir, "izquierda" if baja_o_azotea else "derecha",
+		roundi(johnny.position.distance_to(llega.position))])
 
 
 # Con "--captura --piso": el piso de los apartamentos (apartamento.gd: PLANO_PASILLO), siempre el mismo. Primero lo
@@ -403,7 +442,7 @@ func probar_ascensor() -> void:
 		planta.mantenimiento, sala_de_siempre, planta.sitios[0].salidas[asc].cerrojo])
 	# a la 1ª planta, al pasillo (por la llegada, como al subir)
 	nueva_planta(2)
-	await montar(0, puerta_de_tipo("llegada"), false)
+	await montar(0, puerta_de_llegada(), false)
 	asc = puerta_de_tipo("ascensor")
 	cruzar(asc)
 	await get_tree().process_frame

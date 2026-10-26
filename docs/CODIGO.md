@@ -134,6 +134,9 @@ en una línea.
   centro, la azotea, las viviendas). Estilos de cada sala: `ESTILO_DE`, `ESTILO_TIENDA`, `PASILLOS`.
   `acustica_en(pos)`: cómo suena ahí la pistola, "seca", "eco" o "duro", según el sitio y el uso de la habitación.
 - `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
+  Por dónde se llega: solo la planta baja (el portal del edificio) y la azotea tienen una puerta de llegada a la izquierda;
+  en las demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo
+  no tiene puerta a la izquierda (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
   La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda: `plataforma()`,
   `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
   (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).

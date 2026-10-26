@@ -5,8 +5,8 @@
 # comercial, una tienda (tienda.gd) o la del jefe, cerrada con la tarjeta que lleva el guardia. En la planta
 # baja, la puerta A es la sala de mantenimiento, donde empieza la partida, y por la puerta de su derecha se va a
 # las viviendas de los supervivientes rescatados (viviendas.gd). En el pasillo hay además un
-# ascensor averiado, por la izquierda la puerta por la que se ha llegado y, a la derecha, las escaleras, que
-# no se abren hasta acabar con la jefa.
+# ascensor averiado y, a la derecha, las escaleras, que no se abren hasta acabar con la jefa y por las que se llega a
+# la planta de arriba; solo la planta baja tiene, a la izquierda, el portal del edificio.
 #
 # Aquí solo se decide qué hay y dónde (son datos); lo dibuja y lo monta mapa.gd.
 class_name Planta
@@ -246,9 +246,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
 		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": num - 1})
-	# por donde se ha llegado (en la planta baja, el portal del edificio) y por donde se sigue subiendo
-	pasillo.salidas.append({"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
-		"aviso": "El edificio sigue infestado: aún no puedes irte" if baja else "Por ahí has subido"})
+	# por donde se ha llegado: solo en la planta baja, el portal del edificio, a la izquierda. En las demás plantas no hay otra
+	# puerta: se llega por las escaleras de la derecha, las mismas por las que se salió de la planta de abajo (como en un
+	# edificio de verdad, que no hay que rodear); y por ellas se sigue subiendo
+	if baja:
+		pasillo.salidas.append({"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1,
+			"cerrojo": "nunca", "aviso": "El edificio sigue infestado: aún no puedes irte"})
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
 		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + planta.el_jefe})
 	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo

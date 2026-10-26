@@ -340,6 +340,13 @@ func puerta_de_tipo(tipo: String) -> int:
 	return 0
 
 
+# La salida por la que se llega a la planta en la que se está: el portal de la izquierda en la planta baja y la escalera
+# de la azotea; en las demás plantas, las escaleras de la derecha (las mismas por las que se salió de la de abajo)
+func puerta_de_llegada() -> int:
+	var i := puerta_de_tipo("llegada")
+	return i if planta.sitios[0].salidas[i].tipo == "llegada" else puerta_de_tipo("escaleras")
+
+
 # Monta el sitio "idx" y pone a Johnny delante de su salida "por"
 func montar(idx: int, por: int, fundir := true) -> void:
 	cambiando = true
@@ -586,7 +593,7 @@ func subir() -> void:
 		terminar(true)
 		return
 	nueva_planta(planta.num + 1)
-	await montar(0, puerta_de_tipo("llegada"))
+	await montar(0, puerta_de_llegada())
 	decir("Azotea · ¡El último combate del edificio!" if planta.get("azotea", false) else planta.nombre, 2.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
@@ -1467,7 +1474,7 @@ func probar_cientifico() -> void:
 # El panel de pruebas: derecho a la azotea, sin subir planta a planta
 func ir_a_azotea() -> void:
 	nueva_planta(Planta.PLANTAS)
-	await montar(0, puerta_de_tipo("llegada"))
+	await montar(0, puerta_de_llegada())
 	decir("Azotea · ¡El último combate del edificio!", 2.5)
 
 
