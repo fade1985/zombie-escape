@@ -440,7 +440,7 @@ func probar_colecciones() -> void:
 
 # Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
 # centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
-# programa, deja hablar a la reportera un poco y hace la foto
+# programa, deja hablar a la reportera un poco y hace la foto; luego otra con todo lo que dice
 func probar_noticias() -> void:
 	var ids: Array = Historia.dosier(edificio).paginas.map(func(p): return p.id)
 	var centro := edificio == "centro"
@@ -462,6 +462,13 @@ func probar_noticias() -> void:
 	ordenador.abrir("noticias")
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-noticias.png")
+	# luego, sin el rótulo del nombre (sale solo al empezar) y con todo lo que dice la reportera (¿cabe en su cuadro?)
+	await get_tree().create_timer(2.0).timeout
+	for t in ordenador.find_children("*", "", true, false):
+		if t is Tele:
+			t.saltar()
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-noticias-entera.png")
 	print("Noticias vistas tras abrir: ", Guardado.cargar().noticias_vistas)
 	ordenador.abrir("")
 	ordenador.apagar()

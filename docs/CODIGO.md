@@ -115,7 +115,8 @@ en una línea.
 - `hud.gd`, `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
   jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»), `opciones.gd`, `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
-  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias).
+  (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
+  `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
   secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`).
 - `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
@@ -188,7 +189,7 @@ en una línea.
   `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
-  `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `centro_sprites.py`, `importar.py` (muebles
+  `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `tele.py` (la tele de las Noticias), `centro_sprites.py`, `importar.py` (muebles
   nuevos → sprites; lee `catalogo.gd`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `azotea.py` (ver
   `FONDOS.md`).

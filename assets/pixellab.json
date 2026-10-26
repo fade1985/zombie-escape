@@ -3731,5 +3731,98 @@
   "elegido": "3",
   "sprite": "assets/sprites/helicoptero.png",
   "coste": "4 generaciones"
+ },
+ "tele-noticias": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "La tele del programa Noticias del ordenador (scripts/ui/tele.gd), que estaba dibujada con rectángulos desde el código. Tres cosas: el mueble (create_image_pixflux con la guía de py tools/tele.py guia, la tele de antes de frente sobre azul, 400×256, 1 píxel por unidad), la reportera de medio cuerpo y las dos calles (create_image_pro, a los píxeles del juego). El dueño eligió que la reportera esté en la calle, delante del edificio (el número 14 o el centro comercial, según la noticia: campo sitio de Historia.NOTICIAS). Elegidos: el mueble 2 (fuerza 45, con vetas de madera; los de fuerza 90 salieron lisos), la reportera 1 de 16, la calle del 14 nº 1 y la del centro nº 4. La boca (entreabierta y abierta) y los ojos cerrados, a mano en tools/tele.py: create_vocal_animation solo acepta la imagen pegada en base64 y llegó cortada, y en una cara de 12 píxeles la boca mide 2. py tools/tele.py monta assets/ui/tele/ (el mueble reducido a la mitad con la pantalla hueca de 144×82 y esquinas redondeadas). Originales en assets/sources/tele/intentos/.",
+  "mueble": {
+   "texto": "front view of an old 1970s wooden CRT television set, walnut wood grain cabinet with rounded corners, dark grey plastic bezel around a dark curved glass screen, two cream round dial knobs and a speaker grille on the right side panel, V-shaped rabbit ear antenna on top, two short black legs, pixel art game UI asset on a plain blue background, flat front view, not rotated, no text",
+   "parametros": {
+    "tool": "create_image_pixflux",
+    "init_image": "assets/sources/tele/guia.png",
+    "no_background": false,
+    "outline": "single color black outline",
+    "width": 400,
+    "height": 256
+   },
+   "intentos": {
+    "1": {
+     "seed": 1,
+     "init_image_strength": 45,
+     "job_id": "9073a4d5-5b0c-44b6-aa34-0a5959f1fffe"
+    },
+    "2": {
+     "seed": 2,
+     "init_image_strength": 45,
+     "job_id": "787b0a6a-bfb0-47c0-9d85-d5aa8d45a7fc"
+    },
+    "3": {
+     "seed": 1,
+     "init_image_strength": 90,
+     "job_id": "08f46286-5f97-4d5b-a050-0f24721d2a71"
+    },
+    "4": {
+     "seed": 2,
+     "init_image_strength": 90,
+     "job_id": "817ef94b-6b1d-477b-9b25-aeb17df66728"
+    }
+   },
+   "elegido": "2",
+   "coste": "4 generaciones"
+  },
+  "reportera": {
+   "texto": "female TV news reporter, waist-up medium shot facing the viewer, shoulder-length dark brown hair, teal blue blazer over a white blouse, holding a black handheld microphone in her hand just below her chin, the microphone has a small white cube with a navy blue band, serious professional expression, mouth closed, eyes open, pixel art character, dark outline, same art style as the reference, transparent background",
+   "parametros": {
+    "tool": "create_image_pro",
+    "width": 56,
+    "height": 72,
+    "no_background": true,
+    "style_image": "conserje-48, sur (quieto)",
+    "seed": 1
+   },
+   "job_id": "23f8f420-9c13-4de6-9d1f-9fcfba42e1af",
+   "elegido": "1 (de 16)",
+   "coste": "10 generaciones"
+  },
+  "calle-14": {
+   "texto": "night street seen from a TV news camera. On the right half: the entrance of an old shabby six-storey brick apartment building with a few lit windows and one broken window, a police car with flashing red and blue lights parked by the door, yellow and black police cordon tape and metal barriers across the entrance. Wet sidewalk, a street lamp, dark blue night sky. The left part of the image is plain dark street and sky. Pixel art scene, dark outlines, muted colors, no text, no letters, no people",
+   "parametros": {
+    "tool": "create_image_pro",
+    "width": 144,
+    "height": 82,
+    "no_background": false,
+    "style_image": "assets/sprites/helicoptero.png",
+    "style_copy": [
+     "outline",
+     "shading",
+     "detail"
+    ],
+    "seed": 1
+   },
+   "job_id": "d1cb863c-3938-4b6a-b4d6-55a1ababccb7",
+   "elegido": "1 (de 4)",
+   "coste": "10 generaciones"
+  },
+  "calle-centro": {
+   "texto": "night, seen from a TV news camera in front of a closed modern shopping mall. On the right half: a two-storey shopping mall facade with big glass entrance doors and lights on inside, metal shutters half down, a police car with flashing red and blue lights, yellow and black cordon tape. An empty parking lot with a lamp post and an abandoned shopping cart, dark blue night sky. The left part of the image is plain dark parking lot and sky. Pixel art scene, dark outlines, muted colors, no text, no letters, no people",
+   "parametros": {
+    "tool": "create_image_pro",
+    "width": 144,
+    "height": 82,
+    "no_background": false,
+    "style_image": "assets/sprites/helicoptero.png",
+    "style_copy": [
+     "outline",
+     "shading",
+     "detail"
+    ],
+    "seed": 1
+   },
+   "job_id": "edd0e377-5e72-47b8-aa6b-1543f86e1344",
+   "elegido": "4 (de 4)",
+   "coste": "10 generaciones"
+  },
+  "coste": "34 generaciones"
  }
 }

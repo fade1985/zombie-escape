@@ -1,35 +1,44 @@
-# La tele vieja del programa Noticias (ui/ordenador.gd), dibujada con código, sin sprites: el mueble de madera
-# con su antena, sus botones y su altavoz; en la pantalla, el estudio de Canal 8 con la reportera (Marta Ruiz,
-# hecha con rectángulos), "EN DIRECTO" parpadeando, el logo, el rótulo con el titular y la cinta de abajo que
+# La tele vieja del programa Noticias (ui/ordenador.gd). Los dibujos son de PixelLab (tools/tele.py): el mueble de
+# madera con su antena, sus ruedas y su altavoz, que va por encima y tiene la pantalla hueca; dentro, la calle de
+# noche delante del edificio de la noticia (el número 14 o el centro comercial) con la policía, y la reportera de
+# Canal 8 (Marta Ruiz) con su micro, que mueve la boca al hablar y parpadea. Por código: "EN DIRECTO" parpadeando, el
+# logo, el rótulo con su nombre (solo al empezar, como en la tele de verdad), el del titular y la cinta de abajo que
 # corre. Debajo, lo que dice la reportera, saliendo letra a letra (con un "bip" de voz).
 # Se usa así:  var tele := Tele.new()  ·  tele.poner(noticia)   (una de Historia.NOTICIAS)
 class_name Tele
 extends Control
 
 const LETRAS_POR_SEGUNDO := 30.0
-const MADERA := Color("#7a5434")
-const MADERA_OSCURA := Color("#563a24")
+const MUEBLE := preload("res://assets/ui/tele/mueble.png")
+# La reportera: 4 dibujos en fila (la boca cerrada, entreabierta y abierta, y los ojos cerrados)
+const REPORTERA := preload("res://assets/ui/tele/reportera.png")
+const CALLES := {"14": preload("res://assets/ui/tele/calle-14.png"),
+	"centro": preload("res://assets/ui/tele/calle-centro.png")}
 const CONTORNO := Color("#1d1b2c")
-const PIEL := Color("#f1c27d")
-const PELO := Color("#4a2a1a")
-const CHAQUETA := Color("#2f6b8a")
 const ROJO := Color("#c0392b")
-const PANTALLA := Rect2(30, 48, 304, 170)   # dentro del mueble
-const CAJA_TEXTO := Rect2(8, 254, 424, 140)
+const AZUL := Color("#1d2a6b")
+const MUEBLE_EN := Vector2(24, 0)   # centrado encima del cuadro del texto
+const PANTALLA := Rect2(46, 54, 288, 164)   # el hueco del mueble (lo dice tools/tele.py), más MUEBLE_EN
+const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # cabe la noticia más larga (unas 300 letras)
+const NOMBRE_SEGUNDOS := 4.0   # lo que se ve el rótulo con el nombre de la reportera al empezar
 
 var noticia: Dictionary
 var pantalla: Control
 var directo: Label
+var canal: Label
+var nombre: Label
 var titular: Label
 var cinta: Label
 var texto: Label
 var tiempo := 0.0
+var en_antena := 0.0    # lo que lleva la noticia puesta (para el rótulo del nombre)
 var letras := 0.0
+var boca := 0           # el dibujo de la reportera mientras habla (0, 1 o 2)
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(440, CAJA_TEXTO.end.y)
+	custom_minimum_size = CAJA_TEXTO.end
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pantalla = Control.new()
 	pantalla.position = PANTALLA.position
@@ -39,10 +48,19 @@ func _init() -> void:
 	pantalla.draw.connect(pintar_pantalla)
 	add_child(pantalla)
 	directo = rotulo("EN DIRECTO", Color.WHITE, Vector2(24, 4))
-	rotulo("CANAL 8", Color("#1d2a6b"), Vector2(PANTALLA.size.x - 70, 6))
-	rotulo("%s · %s" % [Historia.REPORTERA.to_upper(), Historia.CANAL.to_upper()], Color("#e8e8d0"), Vector2(6, 111))
-	titular = rotulo("", Color.WHITE, Vector2(6, 132))
-	cinta = rotulo("", Color("#1b1712"), Vector2(PANTALLA.size.x, 152))
+	canal = rotulo("CANAL 8", AZUL, Vector2(PANTALLA.size.x - 76, 6))
+	nombre = rotulo("%s · %s" % [Historia.REPORTERA.to_upper(), Historia.CANAL.to_upper()], Color("#e8e8d0"),
+		Vector2(6, 105))
+	titular = rotulo("", Color.WHITE, Vector2(6, 126))
+	cinta = rotulo("", Color("#1b1712"), Vector2(PANTALLA.size.x, 146))
+	# el mueble, por encima de la emisión: su hueco tiene las esquinas redondeadas de una tele vieja
+	var marco := TextureRect.new()
+	marco.texture = MUEBLE
+	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	marco.position = MUEBLE_EN
+	marco.size = MUEBLE.get_size() * 2.0
+	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(marco)
 	texto = Label.new()
 	texto.position = CAJA_TEXTO.position + Vector2(12, 8)
 	texto.size = CAJA_TEXTO.size - Vector2(24, 16)
@@ -50,6 +68,7 @@ func _init() -> void:
 	texto.add_theme_color_override("font_color", Color("#e8e8d0"))
 	texto.add_theme_constant_override("outline_size", 0)
 	texto.add_theme_font_size_override("font_size", 16)
+	texto.add_theme_constant_override("line_spacing", -4)
 	add_child(texto)
 
 
@@ -73,6 +92,8 @@ func poner(n: Dictionary) -> void:
 	texto.text = n.texto
 	texto.visible_characters = 0
 	letras = 0.0
+	en_antena = 0.0
+	boca = 0
 	nieve = 0.3
 
 
@@ -93,88 +114,70 @@ func _process(delta: float) -> void:
 	tiempo += delta
 	if nieve > 0.0:
 		nieve -= delta
-	elif hablando():
-		letras += delta * LETRAS_POR_SEGUNDO
-		var antes := texto.visible_characters
-		texto.visible_characters = mini(int(letras), texto.get_total_character_count())
-		if texto.visible_characters > antes and texto.text[texto.visible_characters - 1] != " ":
-			Sonido.tocar("voz")
+	else:
+		en_antena += delta
+		if hablando():
+			letras += delta * LETRAS_POR_SEGUNDO
+			var antes := texto.visible_characters
+			texto.visible_characters = mini(int(letras), texto.get_total_character_count())
+			if texto.visible_characters > antes:
+				var letra := texto.text[texto.visible_characters - 1]
+				if letra != " ":
+					Sonido.tocar("voz")
+				boca = boca_de(letra)
+		else:
+			boca = 0
 	directo.visible = fmod(tiempo, 1.0) < 0.6
+	nombre.visible = en_antena < NOMBRE_SEGUNDOS
+	canal.position.x = PANTALLA.size.x - canal.size.x - 10
 	cinta.position.x -= delta * 60.0
 	if cinta.position.x < -cinta.size.x:
 		cinta.position.x = PANTALLA.size.x
 	pantalla.queue_redraw()
 
 
-# El mueble: la antena, la madera con su borde, el marco de la pantalla, los botones, el altavoz y las patas.
-# Debajo, la caja de lo que dice la reportera
+# La boca para cada letra: abierta en la a, la o y la u; entreabierta en la e, la i y las demás letras que suenan;
+# cerrada en los espacios, los signos y la m, la b y la p (que se dicen con los labios juntos)
+func boca_de(letra: String) -> int:
+	letra = letra.to_lower()
+	if letra in ["a", "á", "o", "ó", "u", "ú"]:
+		return 2
+	if letra in ["m", "b", "p"] or not (letra >= "a" and letra <= "z" or letra in ["é", "í", "ñ", "ü"]):
+		return 0
+	return 1
+
+
+# El cuadro de lo que dice la reportera (el mueble es una imagen, encima de la pantalla)
 func _draw() -> void:
-	draw_line(Vector2(220, 26), Vector2(170, 2), Color("#8c8c96"), 3.0)
-	draw_line(Vector2(220, 26), Vector2(274, 6), Color("#8c8c96"), 3.0)
-	draw_rect(Rect2(206, 18, 28, 10), CONTORNO)
-	for x in [40, 372]:
-		draw_rect(Rect2(x, 240, 28, 8), CONTORNO)
-	var mueble := Rect2(8, 26, 424, 214)
-	draw_rect(mueble, MADERA)
-	draw_rect(Rect2(mueble.position, Vector2(mueble.size.x, 6)), MADERA.lightened(0.15))
-	draw_rect(Rect2(mueble.position.x, mueble.end.y - 10, mueble.size.x, 10), MADERA_OSCURA)
-	draw_rect(mueble, CONTORNO, false, 3.0)
-	draw_rect(PANTALLA.grow(8), Color("#2a2a2e"))
-	draw_rect(PANTALLA.grow(8), CONTORNO, false, 2.0)
-	for y in [80, 124]:
-		draw_circle(Vector2(386, y), 14, CONTORNO)
-		draw_circle(Vector2(386, y), 11, Color("#dcc896"))
-		draw_line(Vector2(386, y), Vector2(386, y) + Vector2.from_angle(y * 0.7) * 9, CONTORNO, 2.0)
-	for y in range(154, 224, 6):
-		draw_rect(Rect2(362, y, 48, 2), MADERA_OSCURA)
 	draw_rect(CAJA_TEXTO, Color("#10141c"))
 	draw_rect(CAJA_TEXTO, CONTORNO, false, 3.0)
 
 
-# Lo de dentro de la pantalla: el estudio, la reportera y los rótulos
+# Lo de dentro de la pantalla: la calle, la reportera y los rótulos
 func pintar_pantalla() -> void:
 	var t := PANTALLA.size
 	if nieve > 0.0:
+		pantalla.draw_rect(Rect2(Vector2.ZERO, t), Color("#202020"))
 		for i in 260:
 			var g := randf()
 			pantalla.draw_rect(Rect2(randi() % int(t.x), randi() % int(t.y), 8, 4), Color(g, g, g))
 		return
-	pantalla.draw_rect(Rect2(Vector2.ZERO, t), Color("#1b2a4a"))
-	# la ciudad de noche, detrás (unos edificios con ventanas encendidas)
-	var azotea := [60, 40, 74, 52, 34, 66, 48]
-	for i in azotea.size():
-		var x := 140 + i * 24
-		pantalla.draw_rect(Rect2(x, azotea[i], 22, 112 - azotea[i]), Color("#24385f"))
-		for v in range(azotea[i] + 6, 108, 10):
-			if (x + v) % 3 != 0:
-				pantalla.draw_rect(Rect2(x + 5, v, 4, 4), Color("#e8c45a", 0.8))
-	# la reportera
-	var cx := 92.0
-	pantalla.draw_circle(Vector2(cx, 62), 25, PELO)
-	pantalla.draw_rect(Rect2(cx - 25, 62, 50, 40), PELO)
-	pantalla.draw_rect(Rect2(cx - 7, 86, 14, 16), PIEL.darkened(0.1))
-	pantalla.draw_rect(Rect2(cx - 17, 50, 34, 40), PIEL)
-	pantalla.draw_rect(Rect2(cx - 19, 44, 38, 10), PELO)
-	pantalla.draw_rect(Rect2(cx - 19, 50, 6, 18), PELO)
+	var calle: Texture2D = CALLES.get(noticia.get("sitio", "14"), CALLES["14"])
+	pantalla.draw_texture_rect(calle, Rect2(Vector2.ZERO, t), false)
+	# la reportera, a la izquierda; la cintura queda tapada por los rótulos
 	var parpadeo := fmod(tiempo, 3.2) < 0.12
-	for x in [cx - 10, cx + 6]:
-		pantalla.draw_rect(Rect2(x, 66 if not parpadeo else 68, 4, 4 if not parpadeo else 1), CONTORNO)
-	var boca := 5 if hablando() and nieve <= 0.0 and int(tiempo * 9.0) % 2 == 0 else 2
-	pantalla.draw_rect(Rect2(cx - 5, 80, 10, boca), Color("#7a2a2a"))
-	pantalla.draw_colored_polygon(PackedVector2Array([Vector2(cx - 50, t.y), Vector2(cx - 38, 102),
-		Vector2(cx + 38, 102), Vector2(cx + 50, t.y)]), CHAQUETA)
-	pantalla.draw_colored_polygon(PackedVector2Array([Vector2(cx - 10, 102), Vector2(cx + 10, 102), Vector2(cx, 118)]), Color("#e8e8e8"))
-	# el micro de Canal 8
-	pantalla.draw_rect(Rect2(cx + 25, 96, 6, 24), Color("#8c8c96"))
-	pantalla.draw_circle(Vector2(cx + 28, 94), 8, Color("#222228"))
-	pantalla.draw_rect(Rect2(cx + 21, 106, 14, 10), PIEL)
+	var dibujo := 3 if parpadeo else boca
+	var w := REPORTERA.get_width() / 4
+	var h := REPORTERA.get_height()
+	pantalla.draw_texture_rect_region(REPORTERA, Rect2(30, 128 - h * 2, w * 2, h * 2), Rect2(dibujo * w, 0, w, h))
 	# EN DIRECTO y el logo
 	if directo.visible:
 		pantalla.draw_circle(Vector2(14, 14), 5, ROJO)
-	pantalla.draw_rect(Rect2(t.x - 76, 6, 68, 22), Color("#f4efe0"))
-	# los rótulos de abajo: el nombre, el titular y la cinta que corre
-	pantalla.draw_rect(Rect2(0, 110, t.x, 20), Color("#1d2a6b"))
-	pantalla.draw_rect(Rect2(0, 130, t.x, 22), ROJO)
-	pantalla.draw_rect(Rect2(0, 152, t.x, 18), Color("#e8b923"))
+	pantalla.draw_rect(Rect2(canal.position.x - 6, 6, canal.size.x + 12, 22), Color("#f4efe0"))
+	# los rótulos de abajo: el nombre (al empezar), el titular y la cinta que corre
+	if nombre.visible:
+		pantalla.draw_rect(Rect2(0, 104, t.x, 20), AZUL)
+	pantalla.draw_rect(Rect2(0, 124, t.x, 22), ROJO)
+	pantalla.draw_rect(Rect2(0, 146, t.x, 18), Color("#e8b923"))
 	# el brillo del cristal
-	pantalla.draw_rect(Rect2(6, 4, t.x * 0.4, 3), Color(1, 1, 1, 0.08))
+	pantalla.draw_rect(Rect2(10, 4, t.x * 0.4, 2), Color(1, 1, 1, 0.08))

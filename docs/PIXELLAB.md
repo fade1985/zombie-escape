@@ -110,6 +110,10 @@ Los sprites se generan con PixelLab. Desde el 12 de octubre de 2026 está conect
     cartuchos de la escopeta se respeta. Como en las otras, en los golpes del bate al norte y al noreste Johnny se gira
     y el casco pegado sale de espaldas, y donde el palo pasa justo por delante de la cara el casco lo tapa un poco. Las
     hojas del portero, el glotón y el gymbro salen iguales al volver a sacarlas.
+- **La tele de las Noticias (26 oct, `pixellab.json` → `tele-noticias`):** el mueble con guía de frente (`create_image_pixflux`,
+  fuerza 45: con 90 sale liso, sin vetas) y la reportera y las dos calles con `create_image_pro` a los píxeles del juego
+  (16 reporteras o 4 calles para elegir por 10 generaciones). `create_vocal_animation` (las bocas para hablar) solo acepta
+  la imagen pegada en base64 y llega cortada; en una cara tan pequeña la boca se hizo a mano (`tools/tele.py`).
 - **Receta para animar un personaje nuevo:** probar 3 o 4 plantillas en una sola dirección (de perfil, `east`),
   elegir la mejor y lanzar las otras 7 direcciones en el mismo grupo (`animation_group_id`).
 - **Animaciones a medida (sin plantilla): usar el modo `pixminimax`, no `v3`.** Probados los dos con Johnny el

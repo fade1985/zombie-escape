@@ -123,6 +123,8 @@ const REPORTERA := "Marta Ruiz"
 #   (si no depende de nada, sale desde la primera partida)
 #   titular   el rótulo de abajo de la pantalla (corto: unas 30 letras)
 #   texto     lo que cuenta la reportera
+#   sitio     dónde está la reportera (la calle de detrás, ui/tele.gd): "centro" en las del centro comercial; si no
+#             está, delante del número 14
 const NOTICIAS := [
 	{"id": "n_cierre", "pagina": "", "victoria": "",
 		"titular": "Cierran un edificio por un virus",
@@ -140,19 +142,19 @@ const NOTICIAS := [
 		"titular": "Velaria busca a un conserje",
 		"texto": "Última hora: el edificio está en silencio. Velaria dice que el «virus» ya está vencido y que todo era un malentendido. Pero hoy busca a un empleado de mantenimiento desaparecido. Si lo ven, no se acerquen y llamen al teléfono de Velaria. Dicen que es muy importante para ellos. ¿Por qué?"},
 	# El centro comercial: «Turno infinito»
-	{"id": "n_reformas", "pagina": "", "victoria": "apartamentos",
+	{"id": "n_reformas", "sitio": "centro", "pagina": "", "victoria": "apartamentos",
 		"titular": "El centro cierra «por reformas»",
 		"texto": "Buenas noches. El centro comercial de la avenida cierra por las noches desde hoy, «por reformas». Pero los vecinos ven las luces encendidas hasta el amanecer, y gente moviéndose dentro. Velaria, que tiene allí una farmacia, dice que no sabe nada: «Nosotros solo alquilamos un local»."},
-	{"id": "n_velaria_noche", "pagina": "cc_albaran", "victoria": "",
+	{"id": "n_velaria_noche", "sitio": "centro", "pagina": "cc_albaran", "victoria": "",
 		"titular": "Velaria vende su somnífero",
 		"texto": "Ya está a la venta «Velaria Noche», el nuevo somnífero de Velaria. Sin receta y a 3,99 €. Las cajas se agotan en horas. ¿Es lo mismo que se probó en el edificio del 14? Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."},
-	{"id": "n_turnos", "pagina": "cc_turno", "victoria": "",
+	{"id": "n_turnos", "sitio": "centro", "pagina": "cc_turno", "victoria": "",
 		"titular": "Empleados que no vuelven a casa",
 		"texto": "Varias familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa desde hace días. Si llaman a la tienda, alguien coge el teléfono y repite el precio de una oferta. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Velaria no quiere hacer comentarios."},
-	{"id": "n_audio", "pagina": "cc_correo", "victoria": "",
+	{"id": "n_audio", "sitio": "centro", "pagina": "cc_correo", "victoria": "",
 		"titular": "Se filtra un audio del gerente",
 		"texto": "Canal 8 ha recibido un audio. Se oye al gerente del centro comercial, al teléfono: «Sí, lo tengo aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."},
-	{"id": "n_helicoptero", "pagina": "", "victoria": "centro",
+	{"id": "n_helicoptero", "sitio": "centro", "pagina": "", "victoria": "centro",
 		"titular": "Un helicóptero en la azotea",
 		"texto": "Última hora: esta madrugada, un helicóptero de Velaria ha aterrizado en la azotea del centro comercial. A los diez minutos ha despegado otra vez... vacío. Velaria dice que era «un vuelo de reparto de medicinas». Y vuelve a buscar a su empleado de mantenimiento. Ahora, con recompensa."},
 ]

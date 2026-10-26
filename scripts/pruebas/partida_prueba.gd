@@ -46,6 +46,7 @@
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
+#   --noticias          el programa de Noticias del ordenador: la tele con la reportera hablando [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
 #                       completar el edificio                                          [prueba_inventario.gd]
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
@@ -161,6 +162,10 @@ func empezar_prueba() -> void:
 	elif "--objetos" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_objetos()
+		get_tree().quit()
+	elif "--noticias" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_noticias()
 		get_tree().quit()
 	elif "--municion" in args:
 		set_process(false)   # sin la prueba larga
