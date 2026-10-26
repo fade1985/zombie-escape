@@ -457,13 +457,14 @@ const SALAS := {
 	# Las viviendas de los supervivientes rescatados (viviendas.gd): el pasillo y la habitación de cada uno
 	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). Sin muebles sueltos: solo los "colocados" (la
 	# entrada de las viviendas es "izquierda"): una cama individual en la esquina de arriba a la derecha (el mismo sitio que
-	# en el dormitorio individual de los pisos), con la colcha del color de cada uno, para distinguir las habitaciones
+	# en el dormitorio individual de los pisos), con la colcha del color de cada uno, para distinguir las habitaciones, y a
+	# su izquierda una mesilla con la lamparita apagada (sin luz: solo el dibujo)
 	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0]},
 	"habitacion": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_policia", 10.6]]}},
-	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_medico", 10.6]]}},
-	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_militar", 10.6]]}},
-	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_ferretero", 10.6]]}},
-	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_farmaceutica", 10.6]]}},
-	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["bed_tecnico", 10.6]]}},
+	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["nightstand", 8.65, "arriba", "apagada"], ["bed_policia", 10.6]]}},
+	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["nightstand", 8.65, "arriba", "apagada"], ["bed_medico", 10.6]]}},
+	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["nightstand", 8.65, "arriba", "apagada"], ["bed_militar", 10.6]]}},
+	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["nightstand", 8.65, "arriba", "apagada"], ["bed_ferretero", 10.6]]}},
+	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["nightstand", 8.65, "arriba", "apagada"], ["bed_farmaceutica", 10.6]]}},
+	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["nightstand", 8.65, "arriba", "apagada"], ["bed_tecnico", 10.6]]}},
 }
