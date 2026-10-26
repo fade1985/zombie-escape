@@ -368,7 +368,7 @@ func piso_limpio(idx: int) -> void:
 # Se abre la puerta de su escondite y, al poco, dice lo suyo
 func abrir_escondite(idx: int) -> void:
 	var sup: Dictionary = partida.planta.superviviente
-	sup.puerta.cerrada = false
+	sup.puerta.merge({"cerrada": false, "abierta": true}, true)   # al volver, mapa.gd la pone abierta
 	partida.mapa.vistas[sup.sala] = true
 	if npc:
 		npc.asustado = false

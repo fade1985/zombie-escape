@@ -1,6 +1,6 @@
 # Pruebas de sitios: la sala de mantenimiento (--sala), el ascensor (--ascensor), las viviendas (--viviendas),
-# el piso de los apartamentos (--piso), el pasillo de la planta y su cartel (--pasillo), la joyería (--joyeria) y cómo suena la pistola en cada sitio
-# (--acustica). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# el piso de los apartamentos (--piso), las puertas de dentro (--puertas), el pasillo de la planta y su cartel (--pasillo),
+# la joyería (--joyeria) y cómo suena la pistola en cada sitio (--acustica). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_fotos.gd"
 
 
@@ -109,30 +109,165 @@ func probar_piso() -> void:
 				var sala: Dictionary = apt.salas[maxi(v, 0)]
 				linea += "E" if entrada else "#" if v == -1 else " " if v == -2 else letra[sala.tipo if sala.uso == "dormitorio" else sala.uso]
 			print("    " + linea)
-		# el piso entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
-		for s in apt.salas:
-			mapa.vistas[s.id] = true
-			mapa.niebla[s.id] = 0.0
-		mapa.actualizar_niebla(0.0)
-		var camara: Camera2D = johnny.get_node("Camara")
-		var pantalla := get_viewport_rect().size
-		var zoom := minf(pantalla.x / sitio.ancho, pantalla.y / (sitio.alto + ARRIBA_EXTRA))
-		camara.zoom = Vector2(zoom, zoom)
-		camara.limit_left = -100000
-		camara.limit_top = -100000
-		camara.limit_right = 100000
-		camara.limit_bottom = 100000
-		Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - ARRIBA_EXTRA) / 2.0) - johnny.position
-		camara.reset_smoothing()
-		$Pantalla.hide()
-		Luz.apagada = not Luz.apagada   # sin penumbra, para que se vea todo
-		await get_tree().create_timer(0.6).timeout
-		Captura.foto("captura-piso-%s.png" % lado)
-		Luz.apagada = not Luz.apagada
-		$Pantalla.show()
-		camara.zoom = Vector2.ONE
-		Temblor.desplazamiento = Vector2.ZERO
-		encuadrar(sitio)
+		await foto_entera(sitio, "captura-piso-%s.png" % lado)
+	get_tree().quit()
+
+
+# Una foto del sitio montado entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
+func foto_entera(sitio: Dictionary, nombre: String) -> void:
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	var camara: Camera2D = johnny.get_node("Camara")
+	var pantalla := get_viewport_rect().size
+	var zoom := minf(pantalla.x / sitio.ancho, pantalla.y / (sitio.alto + ARRIBA_EXTRA))
+	camara.zoom = Vector2(zoom, zoom)
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - ARRIBA_EXTRA) / 2.0) - johnny.position
+	camara.reset_smoothing()
+	$Pantalla.hide()
+	Luz.apagada = not Luz.apagada   # sin penumbra, para que se vea todo
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto(nombre)
+	Luz.apagada = not Luz.apagada
+	$Pantalla.show()
+	camara.zoom = Vector2.ONE
+	Temblor.desplazamiento = Vector2.ZERO
+	encuadrar(sitio)
+
+
+# Con "--captura --puertas": las puertas de dentro (mapa/puerta_bano.gd con "libre"), en el sitio de la 1ª planta que
+# más tenga (un piso; con --edificio centro, una tienda), sin zombis: que haya una en cada hueco (menos en los cerrados con llave) y empiecen
+# cerradas; Johnny se arrima a una y se abre; un zombi despierto, encerrado en una habitación de una sola puerta, va a
+# por Johnny, la empuja y la abre; uno dormido pegado a otra no la abre, ni ve a Johnny a través de ella. Al volver a
+# entrar, las abiertas siguen abiertas y las demás, cerradas. Y la sala de mantenimiento, con las suyas. Fotos: el
+# sitio entero con todas cerradas (captura-puertas-cerradas.png), Johnny abriendo una (captura-puertas-abriendo.png),
+# el zombi empujando (captura-puertas-zombi.png), el sitio entero con todas abiertas (captura-puertas-abiertas.png), de
+# cerca con Johnny en una habitación (captura-puertas-cerca.png) y la sala (captura-puertas-sala.png). Luego se cierra
+func probar_puertas() -> void:
+	nueva_planta(2)
+	johnny.invencible = true
+	# el sitio con más puertas de dentro (las tiendas se sortean: unas tienen dos y otras más)
+	var idx := -1
+	var mas := 1
+	for i in planta.sitios.size():
+		var s: Dictionary = planta.sitios[i]
+		var cuantas: int = s.apt.puertas.filter(func(d): return not d.get("cerrada", false)).size() if s.tipo == "apartamento" else 0
+		if cuantas > mas:
+			idx = i
+			mas = cuantas
+	if idx < 0:
+		print("Puertas: en la 1ª planta no hay ningún sitio con dos puertas de dentro")
+		get_tree().quit()
+		return
+	var sitio: Dictionary = planta.sitios[idx]
+	var apt: Dictionary = sitio.apt
+	sitio.limpio = true   # sin zombis: los pone la prueba
+	await montar(idx, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	var libres: Array = apt.puertas.filter(func(d): return not d.get("cerrada", false))
+	print("Puertas (%s): %d en %d huecos sin llave, cerradas %d (esperado: las mismas las tres)" % [sitio.nombre,
+		mapa.hojas.size(), libres.size(), mapa.hojas.filter(func(h): return h.abierta == 0.0).size()])
+	await foto_entera(sitio, "captura-puertas-cerradas.png")
+
+	# Johnny se arrima a una de frente (o a la primera, si no hay) desde abajo
+	var de_frente: Array = mapa.hojas.filter(func(h): return h.de_frente)
+	var una: Node2D = de_frente[0] if not de_frente.is_empty() else mapa.hojas[0]
+	johnny.position = una.caja.get_center() + (Vector2(0, una.caja.size.y / 2 + 20) if una.de_frente else Vector2(una.caja.size.x / 2 + 20, 0))
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.25).timeout
+	Captura.foto("captura-puertas-abriendo.png")
+	await get_tree().create_timer(0.6).timeout
+	var choca := una.get_children().any(func(h): return h is CollisionShape2D and not h.disabled)
+	print("Puertas: Johnny se arrima y se abre %s, ya no choca %s, apuntada en su hueco %s (esperado: true las tres)" % [
+		una.abierta == 1.0, not choca, una.hueco.get("abierta", false)])
+
+	# un zombi despierto en una habitación de una sola puerta (cerrada); Johnny, en la de al lado
+	var otra: Node2D = null
+	var dentro: Dictionary = {}
+	for h in mapa.hojas:
+		if h.abierta > 0.0:
+			continue
+		for id in [h.hueco.a, h.hueco.b]:
+			if apt.salas[id].puertas.size() == 1:
+				otra = h
+				dentro = apt.salas[id]
+		if otra:
+			break
+	if otra == null:
+		print("Puertas: no hay ninguna habitación de una sola puerta para el zombi")
+	else:
+		var fuera: Dictionary = apt.salas[otra.hueco.b if otra.hueco.a == dentro.id else otra.hueco.a]
+		# el zombi, dentro y a 90 de la puerta (ahí no hay muebles: muebles.gd deja libre delante de cada puerta), y
+		# Johnny, al otro lado
+		var hacia: Vector2 = dentro.centro - otra.caja.get_center()
+		hacia = Vector2(0, signf(hacia.y)) if otra.de_frente else Vector2(signf(hacia.x), 0)
+		var zombi: Node2D = meter_zombi("lento", otra.caja.get_center() + hacia * 90.0)
+		zombi.zona = dentro.id
+		johnny.position = otra.caja.get_center() - hacia * 110.0
+		johnny.get_node("Camara").reset_smoothing()
+		mapa.vistas[dentro.id] = true   # (para que se vea en la foto)
+		var t := 0.0
+		var foto := false
+		while otra.abierta == 0.0 and t < 10.0:
+			await get_tree().create_timer(0.1).timeout
+			t += 0.1
+			if not foto and otra.empuje >= 0.2:
+				foto = true
+				Captura.foto("captura-puertas-zombi.png")
+		print("Puertas: el zombi de «%s» abre la de «%s» empujando %s, en %.1f s (esperado: true, unos segundos) · foto %s" % [
+			dentro.nombre, fuera.nombre, otra.abierta > 0.0, t, foto])
+		zombi.queue_free()
+
+	# uno dormido pegado a otra cerrada, por detrás; Johnny, delante, fuera de su alcance
+	var tercera: Node2D = null
+	for h in mapa.hojas:
+		if h.abierta == 0.0:
+			tercera = h
+			break
+	if tercera:
+		var hacia := Vector2(0, 1) if tercera.de_frente else Vector2(1, 0)
+		var medio: float = (tercera.caja.size.y if tercera.de_frente else tercera.caja.size.x) / 2
+		var dormido: Node2D = meter_zombi("lento", tercera.caja.get_center() - hacia * (medio + 20))
+		dormido.dormido = true
+		dormido.zona = mapa.zona_en(dormido.position)
+		johnny.position = tercera.caja.get_center() + hacia * (medio + 70)
+		await get_tree().create_timer(1.2).timeout
+		print("Puertas: un zombi dormido pegado a una cerrada no la abre %s, ni ve a Johnny a través de ella %s, y sigue dormido %s (esperado: true las tres)" % [
+			tercera.abierta == 0.0, not dormido.se_ve(johnny), dormido.dormido])
+		dormido.queue_free()
+
+	# al volver a entrar, las abiertas siguen abiertas
+	var abiertas: int = mapa.hojas.filter(func(h): return h.abierta > 0.0).size()
+	await montar(idx, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	print("Puertas: al volver a entrar, abiertas %d de %d (esperado: %d)" % [
+		mapa.hojas.filter(func(h): return h.abierta == 1.0).size(), mapa.hojas.size(), abiertas])
+	for h in mapa.hojas:
+		h.abrir()
+	await get_tree().create_timer(0.6).timeout
+	await foto_entera(sitio, "captura-puertas-abiertas.png")
+	var cuarto: Array = apt.salas.filter(func(s): return s.get("tipo", "") == "individual")
+	johnny.position = (cuarto[0] if not cuarto.is_empty() else apt.salas[0]).centro
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-puertas-cerca.png")
+
+	# la sala de mantenimiento (en la planta baja)
+	nueva_planta(1)
+	var sala: int = planta.mantenimiento
+	await montar(sala, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	print("Puertas: la sala de mantenimiento, %d en %d huecos (esperado: los mismos)" % [mapa.hojas.size(),
+		planta.sitios[sala].apt.puertas.size()])
+	for h in mapa.hojas:
+		h.abrir()
+	await get_tree().create_timer(0.6).timeout
+	await foto_entera(planta.sitios[sala], "captura-puertas-sala.png")
 	get_tree().quit()
 
 
@@ -387,6 +522,7 @@ func probar_joyeria() -> void:
 	print("Cogida: dorada %s · dice «%s»" % [d.dorada, aviso.text])
 	# con la cámara otra vez cerrada, el lector la abre con la tarjeta y sin alarma
 	d.abierta = false
+	d.puerta.merge({"cerrada": true, "abierta": false}, true)   # (su hueco también: mapa/puerta_bano.gd)
 	d.alarma = -1.0
 	await montar(d.sitio, 0, false)
 	for z in get_tree().get_nodes_in_group("zombis"):

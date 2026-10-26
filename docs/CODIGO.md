@@ -141,7 +141,14 @@ en una línea.
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
   `viviendas.gd`, el pasillo de los rescatados.
 - `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
-- `cara_pared.gd`, `puerta.gd`, `puerta_bano.gd`, `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
+- `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
+  mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
+  los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Cerradas paran la luz,
+  las balas, la vista de los zombis y la niebla. Y las cerradas con llave (su hueco lleva `cerrada`): el baño del
+  superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Llenan el hueco: de frente,
+  con su marco y, encima, el dintel (un trozo de `cara_pared.gd` con `desde`, que pone `mapa.poner_caras`); de lado,
+  sobre su umbral. Se prueba con `--puertas`.
+- `cara_pared.gd`, `puerta.gd` (las salidas), `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`,
   `valla.gd` (la del helipuerto de la azotea).
 

@@ -46,7 +46,7 @@ const CAFETERA := preload("res://scripts/mapa/cafetera.gd")
 const CAFETERA_JUNTO := Vector2(64, -8)   # la cafetera de Johnny, en la habitación de la farmacéutica (viviendas.gd): a su derecha, por debajo de su bocadillo (el pie de su mesita)
 const CAMARAS := preload("res://scripts/mapa/camaras.gd")
 const CAMARAS_DETRAS := Vector2(0, -68)  # las pantallas de las cámaras, detrás del técnico, en su habitación (viviendas.gd)
-const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # (la de las habitaciones cerradas de las viviendas)
+const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
 const PLACA := preload("res://scripts/mapa/placa.gd")
 const LAMPARA := preload("res://escenas/luces/lampara.tscn")
 const APLIQUE := preload("res://assets/sprites/aplique-pared.png")
@@ -116,6 +116,7 @@ var tapa: Texture2D
 var alfombra: Texture2D
 var cosas: Node2D                 # personajes, muebles y caras de muro, ordenados por su "y"
 var puertas: Array = []           # una por salida, en el mismo orden
+var hojas: Array = []             # las puertas de dentro (puerta_bano.gd), una por hueco entre habitaciones
 var muebles: Array = []
 var ordenador: Node2D = null     # la mesa del ordenador (solo en la sala de mantenimiento)
 var baul: Node2D = null          # y el baúl y el banco de trabajo
@@ -554,6 +555,21 @@ func poner_caras() -> void:
 				caras[sala] = []
 			caras[sala].append(cara)
 			c = fin
+	# Encima de cada puerta de un tabique de lado a lado, el dintel: el trozo de muro que queda sobre su marco
+	# (puerta_bano.gd), con el papel de la habitación de debajo, como lo de los lados
+	for d in sitio.get("apt", {}).get("puertas", []):
+		if d.fondo != 1:
+			continue
+		var sala := sala_de(d.c, d.f + 1)
+		var dintel := CARA.new()
+		dintel.position = Vector2(d.c * CASILLA, (d.f + 1) * CASILLA)
+		dintel.ancho = d.ancho * CASILLA
+		dintel.desde = PUERTA_BANO.DINTEL
+		dintel.pared = estilos[sala].pared
+		dintel.techo = estilos[sala].techo
+		dintel.puede_tapar = true
+		cosas.add_child(dintel)
+		caras.get_or_add(sala, []).append(dintel)
 
 
 func poner_puertas() -> void:
@@ -629,6 +645,22 @@ func poner_muebles() -> void:
 		cosas.add_child(corcho)
 	if sitio.tipo == "viviendas":
 		poner_viviendas()
+	elif sitio.has("apt"):
+		poner_hojas()
+
+
+# Las puertas de dentro de los pisos, las tiendas y la sala de mantenimiento (puerta_bano.gd con "libre"): una en cada
+# hueco entre habitaciones, cerrada hasta que alguien la abre. Menos en los cerrados con llave (el baño del superviviente
+# y la cámara acorazada): esas las ponen supervivientes.gd y joyeria.gd
+func poner_hojas() -> void:
+	for d in sitio.apt.puertas:
+		if d.get("cerrada", false):
+			continue
+		var hoja := PUERTA_BANO.new()
+		hoja.libre = true
+		hoja.montar(d)
+		cosas.add_child(hoja)
+		hojas.append(hoja)
 
 
 # Las viviendas de los supervivientes (viviendas.gd): junto a cada puerta, la placa con su nombre. Las de quien aún no
@@ -879,8 +911,8 @@ func actualizar_niebla(delta: float) -> void:
 		if aqui >= 0:
 			vistas[aqui] = true
 		for d in sitio.apt.puertas:
-			if d.get("cerrada", false):
-				continue   # la puerta del baño del superviviente: no deja ver lo de dentro (supervivientes.gd)
+			if d.get("cerrada", false) or not d.get("abierta", true):
+				continue   # una puerta cerrada (puerta_bano.gd) no deja ver lo de dentro
 			if c >= d.c - 1 and c <= d.c + d.ancho and f >= d.f - 1 and f <= d.f + d.fondo:
 				vistas[d.a] = true
 				vistas[d.b] = true

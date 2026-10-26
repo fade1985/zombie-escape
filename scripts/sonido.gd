@@ -70,6 +70,9 @@ const EFECTOS := {
 		[170, 0.07, "cuadrada", 0.06, -60, 0.3], [760, 0.4, "seno", 0.025, -260, 0.45]]},
 	"socorro_lejos": {"notas": [[150, 0.06, "cuadrada", 0.02, -50, 0.0], [150, 0.06, "cuadrada", 0.02, -50, 0.15],
 		[150, 0.06, "cuadrada", 0.02, -50, 0.3], [700, 0.35, "seno", 0.01, -240, 0.45]]},
+	# una puerta de dentro que se abre (mapa/puerta_bano.gd): el chirrido de las bisagras y el golpecito contra el tope
+	"crujido": {"hueco": 120, "notas": [[190, 0.2, "sierra", 0.016, 130], [300, 0.1, "sierra", 0.01, -110, 0.15],
+		[95, 0.07, "triangulo", 0.045, -30, 0.26]]},
 	"portazo": {"notas": [[110, 0.16, "cuadrada", 0.07, -50], [70, 0.22, "triangulo", 0.08, -20, 0.03]]},
 	"clonc": {"hueco": 70, "notas": [[1500, 0.04, "cuadrada", 0.04, -400], [620, 0.16, "triangulo", 0.05, -120, 0.02]]},   # el escudo del antidisturbios
 	"boing": {"hueco": 120, "notas": [[150, 0.22, "triangulo", 0.08, 330], [300, 0.12, "seno", 0.03, 200, 0.06]]},   # la mascota salta o rebota

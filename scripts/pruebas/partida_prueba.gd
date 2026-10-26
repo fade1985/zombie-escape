@@ -58,6 +58,8 @@
 #   --viviendas         las viviendas de los rescatados, la cafetera y las cámaras           [prueba_sitios.gd]
 #   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel y sin muebles    [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
+#   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
+#                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
@@ -65,6 +67,8 @@
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
+#   --rescate           el superviviente encerrado en su baño (y su horda), los vecinos de las viviendas, la barricada,
+#                       la escolta y la avería: lo mismo que en la prueba larga          [supervivientes.gd, probar()]
 #   --evento X          ese evento sorpresa: apagon, incendio u horda                        [eventos.gd, probar()]
 #   --banco             lo quitado desaparece del guardado; luego el banco, las armas de efecto y Colecciones
 #                                                                                            [prueba_larga.gd]
@@ -194,6 +198,10 @@ func empezar_prueba() -> void:
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()
+	elif "--rescate" in args:
+		set_process(false)   # sin la prueba larga
+		await supervivientes.probar()
+		get_tree().quit()
 	elif "--viviendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_viviendas()
@@ -209,6 +217,9 @@ func empezar_prueba() -> void:
 	elif "--piso" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piso()
+	elif "--puertas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_puertas()
 	elif "--armas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_armas()

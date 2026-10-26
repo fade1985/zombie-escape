@@ -225,6 +225,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			var acorazada: Dictionary = apt.salas.filter(func(s): return s.uso == "acorazada")[0]
 			planta.joyeria = {"sitio": idx, "sala": acorazada.id, "abierta": false, "dorada": "guardia", "suelo": {},
 				"alarma": -1.0, "puerta": apt.puertas.filter(func(p): return p.a == acorazada.id or p.b == acorazada.id)[0]}
+			# su hueco, de acero y cerrado con llave (mapa/puerta_bano.gd: ahí mapa.gd no pone la puerta de siempre)
+			planta.joyeria.puerta.merge({"cerrada": true, "acero": true})
 		sitio.salidas.append({"dir": apt.entrada.lado, "en": (apt.entrada.c + 1) * CASILLA, "tipo": "puerta",
 			"a": 0, "vuelta": pasillo.salidas.size(), "cerrojo": "", "aviso": ""})
 		var puerta := {"dir": h.dir, "en": h.en, "tipo": "puerta", "a": idx, "vuelta": 0, "cerrojo": "",
@@ -411,7 +413,7 @@ static func huella_helipuerto(sitio: Dictionary) -> Array:
 #   - el taller, a la derecha: la estantería con botes, el banco de trabajo y el baúl (fase 7b; los dos, mapa.gd) en la
 #     pared de arriba, el carrito del conserje en la de la derecha y, en esa misma pared, la puerta de las viviendas de
 #     los supervivientes rescatados (viviendas.gd; adónde lleva lo pone generar)
-# Entre estancia y estancia, una puerta sin hoja, como las de dentro de los pisos. Y manchas de sangre por el suelo.
+# Entre estancia y estancia, una puerta de madera, como las de dentro de los pisos (la pone mapa.gd). Y manchas de sangre por el suelo.
 # "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA

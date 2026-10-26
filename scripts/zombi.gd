@@ -314,7 +314,7 @@ func distancia_a(nodo: Node2D) -> float:
 	return global_position.distance_to(nodo.global_position)
 
 
-# Un "rayo" del zombi a Johnny: si choca con una pared o un mueble (capa 1), no le ve
+# Un "rayo" del zombi a Johnny: si choca con una pared, un mueble o una puerta cerrada (capa 1), no le ve
 func se_ve(nodo: Node2D) -> bool:
 	var rayo := PhysicsRayQueryParameters2D.create(global_position, nodo.global_position, 1)
 	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()

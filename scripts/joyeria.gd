@@ -191,6 +191,7 @@ func abrir(texto: String) -> void:
 	var d := datos()
 	d.abierta = true
 	d.alarma = -1.0
+	d.puerta.merge({"cerrada": false, "abierta": true}, true)   # al volver, mapa.gd la pone abierta
 	if is_instance_valid(puerta):
 		puerta.abrir()
 		partida.mapa.rehornear()
