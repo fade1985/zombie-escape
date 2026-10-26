@@ -520,8 +520,8 @@ func poner_muebles() -> void:
 		mueble.montar(m, sitio.surtido)
 		cosas.add_child(mueble)
 		muebles.append(mueble)
-		if m.tipo == "lamp" or m.tipo == "nightstand":
-			poner_lampara(mueble, m)
+		if (m.tipo == "lamp" or m.tipo == "nightstand") and not m.get("apagada", false):
+			poner_lampara(mueble, m)   # (las apagadas, sin luz ni brillo: solo el dibujo)
 	if sitio.tipo == "armas":
 		# el baúl de pruebas de la sala de pruebas (sala_armas.gd), arriba a la izquierda
 		baul = ARRIMABLE.new()
@@ -605,26 +605,6 @@ func poner_lampara(mueble: Node2D, m: Dictionary) -> void:
 	luz.zona = m.zona
 	if sitio.has("apt"):   # en un apartamento, solo alumbra su habitación (y las tapas de los muros)
 		luz.get_node("LuzCosas").range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(m.zona)
-	# Si el punto de luz del suelo cae dentro del hueco de otro mueble (la mesilla pegada a la cama), la sombra de ese mueble
-	# recorta toda la luz de fuera y solo se alumbra su rectángulo: se saca por el borde más cercano de ese hueco que dé a
-	# suelo (no a un muro: dentro de un muro la luz se apagaría del todo)
-	var punto: Vector2 = mueble.position + luz.suelo
-	var geo := {"cols": cols, "filas": filas, "dueno": dueno}
-	for otro in sitio.get("muebles", []):
-		if otro.x == m.x and otro.y == m.y:
-			continue   # (él mismo)
-		var hueco := Muebles.hueco(otro)
-		if not hueco.has_point(punto):
-			continue
-		var salidas := [[punto.x - hueco.position.x, Vector2.LEFT], [hueco.end.x - punto.x, Vector2.RIGHT],
-			[punto.y - hueco.position.y, Vector2.UP], [hueco.end.y - punto.y, Vector2.DOWN]]
-		salidas.sort_custom(func(p, q): return p[0] < q[0])
-		for salida in salidas:
-			var fuera: Vector2 = punto + salida[1] * (salida[0] + 4.0)
-			if Muebles.en_suelo(geo, Rect2(fuera - Vector2(2, 2), Vector2(4, 4))):
-				punto = fuera
-				break
-	luz.suelo = punto - mueble.position
 	mueble.add_child(luz)
 
 

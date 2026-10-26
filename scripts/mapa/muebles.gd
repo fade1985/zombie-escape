@@ -78,10 +78,11 @@ static func de_piso(apt: Dictionary) -> Array:
 	return lista
 
 
-# Los muebles de una habitación puestos a mano, cada uno en una pared. Cada uno, [tipo, dónde está su centro, pared]: el
+# Los muebles de una habitación puestos a mano, cada uno en una pared. Cada uno, [tipo, dónde está su centro, pared, "apagada"]: el
 # centro, en casillas contadas desde la esquina de arriba a la izquierda de la habitación (2.0 es justo en medio de las
 # casillas 2 y 3; 5.5, el centro de la casilla 6), a lo largo de su pared (de izquierda a derecha en la de arriba y la de
-# abajo; de arriba abajo en las de los lados); la pared, "arriba" (sin ponerla) "izquierda", "derecha" o "abajo".
+# abajo; de arriba abajo en las de los lados); la pared, "arriba" (sin ponerla) "izquierda", "derecha" o "abajo"; y, si es una
+# lámpara o una mesilla con su lamparita, "apagada" si no ha de dar luz (se pone un "arriba" si no importa la pared).
 static func colocados(lista: Array, sala: Dictionary) -> Array:
 	var puestos := []
 	for c in lista:
@@ -101,7 +102,10 @@ static func colocados(lista: Array, sala: Dictionary) -> Array:
 			_:
 				base = (sala.c0 + sala.ancho) * float(CASILLA)
 				a_lo_largo = (sala.f0 + c[1]) * float(CASILLA)
-		puestos.append(nuevo(c[0], {"lado": pared, "base": base}, a_lo_largo, sala.id))
+		var puesto := nuevo(c[0], {"lado": pared, "base": base}, a_lo_largo, sala.id)
+		if c.size() > 3 and c[3] == "apagada":
+			puesto.apagada = true
+		puestos.append(puesto)
 	return puestos
 
 

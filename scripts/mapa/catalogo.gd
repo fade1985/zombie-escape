@@ -122,7 +122,8 @@ const MUEBLES := {
 #   colocados   en vez de plantillas, los muebles puestos a mano, siempre en el mismo sitio, según el lado de la entrada
 #               del piso: {"abajo": [[tipo, centro en casillas desde la esquina de arriba a la izquierda, pared], ...]};
 #               la pared ("izquierda", "derecha" o "abajo"; sin ponerla, la de arriba) es la de la habitación, y el centro
-#               va a lo largo de ella (ver Muebles.colocados y Muebles.de_piso: es lo único que lleva un piso)
+#               va a lo largo de ella; un cuarto dato, "apagada", deja sin luz una lámpara o una mesilla (ver
+#               Muebles.colocados y Muebles.de_piso: es lo único que lleva un piso)
 #   fondo_max   el fondo máximo de sus muebles (para sitios estrechos)
 #   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas de la portera)
 #   fijos       en vez de unos cuantos sueltos, cada pared con sus muebles en un orden fijo (siempre igual), de punta
@@ -223,10 +224,11 @@ const SALAS := {
 		# "arriba"), la pared de arriba es la del pasillo y la puerta (casillas 5 y 6) cae en ella: allí, el armario en medio de
 		# esa pared (sobre las casillas 8 a 10, donde estaba la cama) y la cama con sus dos mesillas pegada a la pared de la
 		# izquierda, con el cabecero contra ella y algo más abajo del centro (el centro de la cama, en la fila 5,25 de 9; las
-		# mesillas, una a cada lado)
+		# mesillas, una a cada lado). La de arriba, pegada a la cama, con la lamparita apagada: su luz salía recortada por la
+		# sombra de la cama; la de abajo, encendida, y parpadeando
 		"colocados": {
 			"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]],
-			"arriba": [["wardrobe", 9.0], ["nightstand", 3.85, "izquierda"], ["doublebed", 5.25, "izquierda"],
+			"arriba": [["wardrobe", 9.0], ["nightstand", 3.85, "izquierda", "apagada"], ["doublebed", 5.25, "izquierda"],
 				["nightstand", 7.88, "izquierda"]],
 		},
 	},
