@@ -2,8 +2,10 @@
 #   - los 17 objetos de src/objetos.js (10×10 píxeles): ya no se usan, los saca a 16×16 tools/objetos16.py
 #   - el baúl y el banco de trabajo de src/props.js también salían de aquí; desde el 23 oct son de PixelLab, al estilo
 #     de los muebles: tools/baul_mantenimiento.py y tools/banco_mantenimiento.py
-#   - el armarito del baño con su botiquín (cerrado y abierto) → assets/sprites/armarito.png (2 fotogramas)
-# Se lanza con:  py tools/dibujos_7b.py   (y luego importar en Godot)
+#   - el armarito del baño con su botiquín también salía de aquí; desde el 26 oct es de PixelLab, al estilo de los
+#     muebles: tools/botiquin.py
+# Ya no saca nada (el último, el armarito, se fue a PixelLab): quedan los colores, hexa() y el Lienzo, que se copió en
+# tools/taquilla.py
 from pathlib import Path
 from PIL import Image
 
@@ -82,33 +84,3 @@ class Lienzo:
             for j in range(y, y + h):
                 if 0 <= i < self.img.width and 0 <= j < self.img.height:
                     self.img.putpixel((i, j), c)
-
-
-# El armarito del baño (Armarito en props.js, que se dibujaba con rectángulos de 36×40): aquí a 2 unidades por
-# píxel, 26×22 con hueco para las puertas abiertas. Fotograma 0 cerrado (con la cruz roja), 1 abierto y vacío
-def armarito():
-    hoja = Image.new("RGBA", (52, 22), (0, 0, 0, 0))
-    linea, caja, balda, tornillo = "#1d1a24", "#e9edf1", "#c9d1da", "#5c6470"
-    for f in range(2):
-        g = Lienzo(26, 22)
-        l = 4   # la caja va de 4 a 22 (18 de ancho)
-        g.px(l + 2, 3, 18, 18, "#0b0812")        # sombra en la pared
-        g.px(l, 0, 18, 20, linea); g.px(l + 1, 1, 16, 18, caja)
-        g.px(l - 1, 17, 20, 4, linea); g.px(l, 18, 18, 2, balda)   # la balda de abajo, más ancha
-        if f == 0:
-            g.px(l + 8, 1, 1, 16, linea)                # la raja entre las dos puertas
-            g.px(l + 5, 5, 8, 3, "#e63946"); g.px(l + 7, 3, 4, 7, "#e63946")   # la cruz roja
-            g.px(l + 6, 12, 1, 2, "#8d99ae"); g.px(l + 11, 12, 1, 2, "#8d99ae")   # tiradores
-        else:
-            g.px(l + 1, 1, 16, 16, "#4a5568")           # el hueco oscuro
-            g.px(l + 1, 8, 16, 1, balda)                # una balda
-            g.px(0, 0, 4, 18, linea); g.px(1, 1, 2, 16, caja)       # las puertas abiertas, a los lados
-            g.px(22, 0, 4, 18, linea); g.px(23, 1, 2, 16, caja)
-        g.px(l + 2, 1, 1, 1, tornillo); g.px(l + 15, 1, 1, 1, tornillo)
-        hoja.paste(g.img, (f * 26, 0))
-    hoja.save(SPRITES / "armarito.png")
-
-
-if __name__ == "__main__":
-    armarito()
-    print("Hecho: el armarito")

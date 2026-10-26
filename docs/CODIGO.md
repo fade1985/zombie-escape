@@ -170,7 +170,8 @@ en una línea.
   `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
   ácido sale de la del lanzallamas) y `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
-  `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `taquilla.py`, `centro_sprites.py`, `importar.py` (muebles
+  `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
+  `taquilla.py`, `centro_sprites.py`, `importar.py` (muebles
   nuevos → sprites; lee `catalogo.gd`), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `azotea.py` (ver
   `FONDOS.md`).

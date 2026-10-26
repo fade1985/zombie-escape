@@ -3563,5 +3563,32 @@
   "piezas": {
    "sofa visto por detrás (objeto de 8 direcciones; se usa la vista norte)": "e98cf596-4774-49b0-96c0-2772b0646d17"
   }
+ },
+ "botiquin": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "El botiquín del baño (armarito.gd, colgado de la pared de arriba; 2 fotogramas de 26×22: cerrado con la cruz roja y abierto y vacío), que era un dibujo de rectángulos (tools/dibujos_7b.py). El cerrado, con create_image_pixflux y la receta de los muebles: la guía de py tools/guias_botiquin.py (cerrado: la caja blanca con sus dos puertas, la cruz roja, dos tiradores y la balda de abajo; el doble de píxeles que el juego, 60×52) como init_image, no_background false, single color black outline, basic shading, medium detail y view side, con el texto de abajo; 4 semillas × fuerza 60 y 120. También se probó pedirlo a tamaño del juego (guía de 36×32, otras 8): salió borroso y se descartó. El dueño eligió la 8 (fuerza 60, semilla 404) pero pidió quitarle un sombreado raro en la punta derecha de la cruz (la cruz del original mide 15 de ancho y al encoger quedaba una columna rosa): se le quita esa columna. Se encoge de 60×52 a 26×22 bloque a bloque de 2×2 conservando el contorno oscuro (con la media de todos se teñía de gris). El abierto no sale de PixelLab: se dibuja encima del cerrado ya encogido (hueco oscuro, balda y las dos puertas a los lados), con sus mismos colores. Fondo quitado con py tools/guias_centro.py quita; sprite con py tools/botiquin.py. Originales en assets/sources/botiquin/ (intentos/, con fondo).",
+  "texto": "wall mounted white metal first aid cabinet seen from the front, two closed doors with a red cross in the middle, two small grey handles, a small shelf ledge at the bottom, clean pixel art",
+  "coste": "16 generaciones (8 al doble del tamaño del juego y 8 a tamaño del juego)",
+  "piezas": {
+   "botiquin cerrado (60×52, fuerza 60, semilla 404)": "569931f1-6d93-53c6-a306-70e6cd27bdc6",
+   "descartadas": {
+    "60×52, fuerza 60, semilla 101": "6a051b60-9b0f-54f1-9963-690f0136b6f2",
+    "60×52, fuerza 60, semilla 202": "8b7569fa-5dff-5ae7-ae6d-7fe7ce5ebe2f",
+    "60×52, fuerza 60, semilla 303": "74129f13-48e9-5615-b415-701483bdc9ac",
+    "60×52, fuerza 120, semilla 101": "aeba4e73-db1c-50df-8dd4-1e4b55037f20",
+    "60×52, fuerza 120, semilla 202": "f1bf53ad-c911-5f9f-b0b8-969338cfbb9b",
+    "60×52, fuerza 120, semilla 303": "5a6fbc22-f124-5944-99bc-f61224a2d555",
+    "60×52, fuerza 120, semilla 404": "f6580fdd-eb75-5382-9db3-36e623208b69",
+    "36×32, fuerza 60, semilla 101": "d502f240-dd76-5951-b9d4-a960cda4a391",
+    "36×32, fuerza 60, semilla 202": "130f472e-c324-56d7-ae8a-0d9398aecf67",
+    "36×32, fuerza 60, semilla 303": "c248ca8d-7386-570c-9ea6-578f1e8bcf5b",
+    "36×32, fuerza 60, semilla 404": "30d259aa-197a-533e-ae89-ea342c4aa802",
+    "36×32, fuerza 120, semilla 101": "4cc7f30f-1d73-5dbf-9722-bee31f862e3b",
+    "36×32, fuerza 120, semilla 202": "c9d51822-310a-5e22-af59-a14efaf3b05c",
+    "36×32, fuerza 120, semilla 303": "45a021ec-519f-5017-9756-14f3225c2324",
+    "36×32, fuerza 120, semilla 404": "2d6cbaf3-6261-5ff2-8f3d-6092580b77bd"
+   }
+  }
  }
 }

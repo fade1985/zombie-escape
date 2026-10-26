@@ -69,30 +69,39 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 
 # Los muebles de un piso: los que el dueño ha puesto a mano, siempre en el mismo sitio. Cada habitación lleva los
 # "colocados" de su sala en Catalogo.SALAS ("<uso>-<tipo>", p. ej. "dormitorio-matrimonio"), según el lado por el que se
-# entra al piso ("abajo" los normales, "arriba" los volteados); la que no tiene, vacía.
+# entra al piso ("abajo" los normales, "arriba" los volteados); la que no tiene, vacía. Cada baño toma el tipo de su
+# dormitorio ("bano-matrimonio", "bano-individual"): uno es el espejo del otro.
 static func de_piso(apt: Dictionary) -> Array:
 	var lista := []
 	for s in apt.salas:
-		var datos: Dictionary = Catalogo.SALAS.get(s.uso + ("-" + s.tipo if s.has("tipo") else ""), {})
+		var clave: String = s.uso + ("-" + s.tipo if s.has("tipo") else "")
+		if s.uso == "bano" and s.has("dueno_bano"):
+			clave += "-" + apt.salas[s.dueno_bano].get("tipo", "")
+		var datos: Dictionary = Catalogo.SALAS.get(clave, {})
 		lista += colocados(datos.get("colocados", {}).get(apt.entrada.lado, []), s)
 	return lista
 
 
-# Los muebles de una habitación puestos a mano, cada uno en una pared. Cada uno, [tipo, dónde está su centro, pared, "apagada"]: el
+# Los muebles de una habitación puestos a mano, cada uno en una pared. Cada uno, [tipo, dónde está su centro, pared, extra]: el
 # centro, en casillas contadas desde la esquina de arriba a la izquierda de la habitación (2.0 es justo en medio de las
 # casillas 2 y 3; 5.5, el centro de la casilla 6), a lo largo de su pared (de izquierda a derecha en la de arriba y la de
-# abajo; de arriba abajo en las de los lados); la pared, "arriba" (sin ponerla) "izquierda", "derecha" o "abajo"; y, si es una
-# lámpara o una mesilla con su lamparita, "apagada" si no ha de dar luz (se pone un "arriba" si no importa la pared). Un mueble
-# suelto, que no va pegado a ninguna pared (la mesa de la cocina en el salón), se pone con [tipo, x, "libre", y]: el centro de su
-# hueco, en casillas desde la esquina de arriba a la izquierda, a lo ancho y a lo hondo.
+# abajo; de arriba abajo en las de los lados); la pared, "arriba" (sin ponerla) "izquierda", "derecha" o "abajo"; y el extra,
+# "apagada" si una lámpara o una mesilla con su lamparita no ha de dar luz, o "espejo" para el dibujo del revés (la ducha de
+# la esquina de arriba a la derecha, que es la de la izquierda vuelta); se pone un "arriba" si no importa la pared. Un mueble
+# suelto, que no va pegado a ninguna pared (la mesa de la cocina en el salón), se pone con [tipo, x, "libre", y, extra]: el
+# centro de su hueco, en casillas desde la esquina de arriba a la izquierda, a lo ancho y a lo hondo (también sirve para
+# meter uno unos pocos píxeles en el muro, y que su dibujo quede pegado a la pared, sin suelo entre medias).
 static func colocados(lista: Array, sala: Dictionary) -> Array:
 	var puestos := []
 	for c in lista:
 		var pared: String = c[2] if c.size() > 2 else "arriba"
 		if pared == "libre":
 			var p: Dictionary = Catalogo.MUEBLES[c[0]]
-			puestos.append({"tipo": c[0], "lado": "arriba", "zona": sala.id, "x": (sala.c0 + c[1]) * float(CASILLA),
-				"y": (sala.f0 + c[3]) * float(CASILLA), "w": p.len, "h": p.dep})
+			var suelto := {"tipo": c[0], "lado": "arriba", "zona": sala.id, "x": (sala.c0 + c[1]) * float(CASILLA),
+				"y": (sala.f0 + c[3]) * float(CASILLA), "w": p.len, "h": p.dep}
+			if c.size() > 4 and c[4] == "espejo":
+				suelto.espejo = true
+			puestos.append(suelto)
 			continue
 		var base: float
 		var a_lo_largo: float
@@ -112,6 +121,8 @@ static func colocados(lista: Array, sala: Dictionary) -> Array:
 		var puesto := nuevo(c[0], {"lado": pared, "base": base}, a_lo_largo, sala.id)
 		if c.size() > 3 and c[3] == "apagada":
 			puesto.apagada = true
+		if c.size() > 3 and c[3] == "espejo":
+			puesto.espejo = true
 		puestos.append(puesto)
 	return puestos
 

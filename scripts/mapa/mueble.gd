@@ -56,7 +56,7 @@ func montar(m: Dictionary, surtido: int) -> void:
 	sprite.texture = load(queda[0])
 	sprite.scale = Vector2(2, 2)   # cada píxel del dibujo, 2 unidades (como los personajes)
 	sprite.centered = false
-	sprite.flip_h = queda[1]
+	sprite.flip_h = queda[1] != m.get("espejo", false)   # (con "espejo", el dibujo del revés: muebles.gd, colocados)
 	var t := sprite.texture.get_size()
 	sprite.offset = Vector2(-floorf(t.x / 2.0), -t.y)
 	add_child(sprite)

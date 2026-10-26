@@ -124,8 +124,9 @@ const MUEBLES := {
 #   colocados   en vez de plantillas, los muebles puestos a mano, siempre en el mismo sitio, según el lado de la entrada
 #               del piso: {"abajo": [[tipo, centro en casillas desde la esquina de arriba a la izquierda, pared], ...]};
 #               la pared ("izquierda", "derecha" o "abajo"; sin ponerla, la de arriba) es la de la habitación, y el centro
-#               va a lo largo de ella; un cuarto dato, "apagada", deja sin luz una lámpara o una mesilla (ver
-#               Muebles.colocados y Muebles.de_piso: es lo único que lleva un piso)
+#               va a lo largo de ella; un cuarto dato, "apagada", deja sin luz una lámpara o una mesilla y "espejo"
+#               pone el dibujo del revés (ver Muebles.colocados y Muebles.de_piso: es lo único que lleva un piso; los
+#               baños de los pisos van por "bano-<tipo de su dormitorio>")
 #   fondo_max   el fondo máximo de sus muebles (para sitios estrechos)
 #   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas de la portera)
 #   fijos       en vez de unos cuantos sueltos, cada pared con sus muebles en un orden fijo (siempre igual), de punta
@@ -300,6 +301,25 @@ const SALAS := {
 			["bathtub?", "sink?", "toilet"],
 		],
 		"quitar": ["bathtub", "washer", "sink"],
+	},
+	# los dos baños de los pisos, con los muebles del vestuario de la sala de mantenimiento, puestos a mano (idea del dueño;
+	# cada baño, 7 casillas de ancho): el de la derecha, el de matrimonio, con la ducha en la esquina de arriba a la izquierda
+	# (la de la pared de la puerta, que queda más abajo), como en el vestuario de mantenimiento, pero metida unas unidades en
+	# los muros ("libre": 4 a un lado y 6 arriba) para que el borde del plato toque las dos paredes y no se vea suelo entre
+	# medias; el lavabo, pegado a la pared de la derecha, centrado en la casilla 3 (más arriba, el espejo sobresaldría
+	# del muro) y el váter en esa misma pared sobre las casillas 6 y 7; el de la izquierda, el del individual, es su espejo (todo cambia de
+	# pared y la ducha lleva su dibujo del revés). Igual en los pisos volteados
+	"bano-matrimonio": {
+		"colocados": {
+			"abajo": [["showertray", 1.0, "libre", 0.8125], ["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+			"arriba": [["showertray", 1.0, "libre", 0.8125], ["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		},
+	},
+	"bano-individual": {
+		"colocados": {
+			"abajo": [["showertray", 6.0, "libre", 0.8125, "espejo"], ["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+			"arriba": [["showertray", 6.0, "libre", 0.8125, "espejo"], ["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		},
 	},
 	# el pasillo de cada planta de los Apartamentos: de momento, sin muebles (si vuelven, solo poco hondos: el pasillo es
 	# estrecho, "fondo_max": 46; los de antes: shoerack, coatstand, console, plant y bookshelf, de 5 a 8)
