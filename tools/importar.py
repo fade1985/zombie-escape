@@ -45,7 +45,7 @@ SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 't
             'wheeliebin', 'trashcan', 'janitorcart',   # (y lo del cuarto de la limpieza de la portera)
             'showertray', 'lockerbench', 'stafftoilet', 'staffsink', 'canshelf', 'wastebasket',   # (y los de la sala de mantenimiento)
             'fridge', 'counter', 'stove', 'kitchentable',   # (y la cocina de los pisos, rehecha de frente: tools/guias_cocina.py)
-            'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp'}   # (y el dormitorio y la lámpara de pie: tools/guias_dormitorio.py)
+            'doublebed', 'bed', 'wardrobe', 'nightstand', 'desk', 'lamp', 'sofaback'}   # (y el dormitorio y la lámpara de pie: tools/guias_dormitorio.py)
 
 
 def catalogo():

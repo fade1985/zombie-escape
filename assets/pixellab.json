@@ -3554,5 +3554,14 @@
    "3 (fuerza 80, semilla 201)": "3a084712-1d4d-4afb-a994-32e09b19cd14",
    "descartada: 2-b (fuerza 150, semilla 202)": "3fb017d3-3847-444f-bcf1-6b0bef8f9fef"
   }
+ },
+ "salon-pisos": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "El salón de los pisos, amueblado a mano (catálogo, salon, colocados; el piso normal y el volteado igual, salvo la mesa, algo más arriba en el volteado porque la pared del pasillo le tapa las dos últimas filas): la tele sobre las casillas 3 a 5, una lámpara de pie en la 1 y otra en la 18, la planta en la 9, la estantería sobre la 16 y la 17, el sofá de cara a la tele (centrado bajo ella, en las filas 3 y 4) y la mesa de la cocina cerca de la esquina de abajo a la derecha, sin pegarse. Lo único nuevo: el sofá visto por detrás (sofaback, 132 por 60, de salon/sofa-espalda), girado 180 grados con create_8_direction_object, con el sofá de ahora (mueble-sofa, ampliado al doble y cuantizado a 24 colores) como reference_image_base64, view high top-down, 25 generaciones; se usa la vista norte (sprite de 66×33; la vista sur salió con agujeros y no se usa). El resto de muebles, los de siempre; las lámparas, las nuevas de PixelLab (lamp).",
+  "coste": "25 generaciones",
+  "piezas": {
+   "sofa visto por detrás (objeto de 8 direcciones; se usa la vista norte)": "e98cf596-4774-49b0-96c0-2772b0646d17"
+  }
  }
 }

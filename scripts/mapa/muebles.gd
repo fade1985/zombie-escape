@@ -73,7 +73,7 @@ static func de_apartamento(apt: Dictionary, rng: RandomNumberGenerator) -> Array
 static func de_piso(apt: Dictionary) -> Array:
 	var lista := []
 	for s in apt.salas:
-		var datos: Dictionary = Catalogo.SALAS.get("%s-%s" % [s.uso, s.get("tipo", "")], {})
+		var datos: Dictionary = Catalogo.SALAS.get(s.uso + ("-" + s.tipo if s.has("tipo") else ""), {})
 		lista += colocados(datos.get("colocados", {}).get(apt.entrada.lado, []), s)
 	return lista
 
@@ -82,11 +82,18 @@ static func de_piso(apt: Dictionary) -> Array:
 # centro, en casillas contadas desde la esquina de arriba a la izquierda de la habitación (2.0 es justo en medio de las
 # casillas 2 y 3; 5.5, el centro de la casilla 6), a lo largo de su pared (de izquierda a derecha en la de arriba y la de
 # abajo; de arriba abajo en las de los lados); la pared, "arriba" (sin ponerla) "izquierda", "derecha" o "abajo"; y, si es una
-# lámpara o una mesilla con su lamparita, "apagada" si no ha de dar luz (se pone un "arriba" si no importa la pared).
+# lámpara o una mesilla con su lamparita, "apagada" si no ha de dar luz (se pone un "arriba" si no importa la pared). Un mueble
+# suelto, que no va pegado a ninguna pared (la mesa de la cocina en el salón), se pone con [tipo, x, "libre", y]: el centro de su
+# hueco, en casillas desde la esquina de arriba a la izquierda, a lo ancho y a lo hondo.
 static func colocados(lista: Array, sala: Dictionary) -> Array:
 	var puestos := []
 	for c in lista:
 		var pared: String = c[2] if c.size() > 2 else "arriba"
+		if pared == "libre":
+			var p: Dictionary = Catalogo.MUEBLES[c[0]]
+			puestos.append({"tipo": c[0], "lado": "arriba", "zona": sala.id, "x": (sala.c0 + c[1]) * float(CASILLA),
+				"y": (sala.f0 + c[3]) * float(CASILLA), "w": p.len, "h": p.dep})
+			continue
 		var base: float
 		var a_lo_largo: float
 		match pared:

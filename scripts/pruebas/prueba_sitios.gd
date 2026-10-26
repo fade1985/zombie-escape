@@ -71,8 +71,8 @@ func probar_piso() -> void:
 				Captura.foto("captura-piso-%s-%s.png" % [lado, s.tipo])
 		print("Piso (puerta %s): %d × %d casillas · %s" % [lado, apt.cols, apt.filas,
 			" · ".join(apt.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
-		# (de momento, solo los puestos a mano: los 4 del dormitorio de matrimonio y los 4 del individual, en los dos pisos)
-		print("Piso (puerta %s): muebles %d (esperado: 8, los puestos a mano; Muebles.de_piso)" % [lado,
+		# (de momento, solo los puestos a mano: los 4 del dormitorio de matrimonio, los 4 del individual y los 7 del salón)
+		print("Piso (puerta %s): muebles %d (esperado: 15, los puestos a mano; Muebles.de_piso)" % [lado,
 			get_tree().get_nodes_in_group("muebles").size()])
 		var salida: Dictionary = sitio.salidas[0]
 		print("Piso (puerta %s): la puerta, en la pared de %s %s y en su centro %s (esperado: true y true)" % [

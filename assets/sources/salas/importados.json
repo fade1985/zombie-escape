@@ -327,6 +327,10 @@
     "huella": "8973e340da3eba97",
     "sprite": "mueble-sofa-d"
   },
+  "salon/sofa-espalda.png": {
+    "huella": "e6268544673b99ec",
+    "sprite": "mueble-sofaback"
+  },
   "salon/sofa-lado.png": {
     "huella": "88b3c62ac96c033b",
     "sprite": "mueble-sofa-lado"

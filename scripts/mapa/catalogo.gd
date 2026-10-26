@@ -24,6 +24,8 @@ class_name Catalogo
 #   archivo  nombre del original en assets/sources/salas/<carpeta>/
 const MUEBLES := {
 	"sofa":       {"len": 132, "dep": 60,  "paredes": "lados", "archivo": "salon/sofa"},
+	# el sofá visto por detrás (girado 180° por PixelLab a partir del de frente), para ponerlo de cara a la tele, en medio del salón
+	"sofaback":   {"len": 132, "dep": 60,  "paredes": "",      "archivo": "salon/sofa-espalda"},
 	"tv":         {"len": 80,  "dep": 40,  "paredes": "",      "archivo": "salon/tele"},
 	"armchair":   {"len": 90,  "dep": 60,  "paredes": "lados", "archivo": "salon/sillon"},
 	"bookshelf":  {"len": 46,  "dep": 34,  "paredes": "",      "archivo": "salon/estanteria"},
@@ -142,6 +144,16 @@ const SALAS := {
 			["plant?", "armchair?", "sofa", "tv?"],
 		],
 		"quitar": ["plant", "lamp", "armchair", "bookshelf", "tv"],
+		# puestos a mano en los pisos (idea del dueño), igual en el normal y en el volteado, en la pared de arriba: la tele sobre
+		# las casillas 3 a 5, una lámpara de pie en la 1 y otra en la 18, la planta en la 9 y la estantería sobre la 16 y la 17;
+		# el sofá, visto por detrás, de cara a la tele, en las filas 3 y 4; y la mesa de la cocina cerca de la esquina de abajo a
+		# la derecha, sin pegarse. En el piso volteado, la pared del pasillo tapa las dos últimas filas: allí la mesa, más arriba
+		"colocados": {
+			"abajo": [["tv", 3.5], ["lamp", 0.5], ["lamp", 17.5], ["plant", 8.5], ["bookshelf", 16.0],
+				["sofaback", 3.5, "libre", 3.0], ["kitchentable", 15.25, "libre", 6.15]],
+			"arriba": [["tv", 3.5], ["lamp", 0.5], ["lamp", 17.5], ["plant", 8.5], ["bookshelf", 16.0],
+				["sofaback", 3.5, "libre", 3.0], ["kitchentable", 15.25, "libre", 4.15]],
+		},
 	},
 	# el apartamento destrozado de la jefa: los muebles del salón, menos y sin plantillas
 	"jefe": {
