@@ -10,7 +10,6 @@ const EMPUJE := 170.0         # empuje base de un zombi normal (el del arma lo m
 # Los colores de la trazadora (TRACER del JS), de la punta a la cola; las críticas, más rojizas
 const TRAZA := [Color("#fffbe0"), Color("#ffe066"), Color("#ffb020"), Color("#f0701a"), Color("#b8400e")]
 const TRAZA_CRITICA := [Color("#ffffff"), Color("#ffe9a8"), Color("#ff9a3c"), Color("#ff4d2e"), Color("#b3122a")]
-const TRAZA_EPICA := [Color("#fbf0ff"), Color("#e2b8ff"), Color("#c06bff"), Color("#9a45d9"), Color("#5e2391")]   # (Armas.CALIDADES)
 const LINEA := Color("#1d1b2c")
 
 var velocidad := Vector2.ZERO
@@ -18,6 +17,7 @@ var dano := 0
 var empuje := 1.0
 var radio := 4.0
 var critico := false        # las críticas se ven más rojizas (y saltan más chispas)
+var calidad := 0            # la calidad del arma de Johnny que la dispara (Armas.CALIDADES): su trazadora, del color de la calidad
 var atraviesa := 0          # a cuántos zombis más puede dar (la Épica a distancia): al darle a uno, sigue
 var tocados: Array = []     # los que ya ha atravesado (no les vuelve a dar)
 var vida := 1.0             # segundos que le quedan (alcance ÷ velocidad)
@@ -83,11 +83,14 @@ func chocar(pared := false, sigue := false) -> void:
 		queue_free()
 
 
-# Los colores de la trazadora y de sus chispas: la de la Épica, morada; la crítica, rojiza
+# Los colores de la trazadora y de sus chispas: la de la Épica, morada; la crítica, rojiza; las de un arma mejorada,
+# del color de su calidad (Armas.traza)
 func estela() -> Array:
 	if atraviesa > 0 or not tocados.is_empty():
-		return TRAZA_EPICA
-	return TRAZA_CRITICA if critico else TRAZA
+		return Armas.traza(Armas.EPICA)
+	if critico:
+		return TRAZA_CRITICA
+	return Armas.traza(calidad) if calidad > 0 else TRAZA
 
 
 # La trazadora (drawTracer del JS): cuadraditos de pixel art en fila hacia atrás, encajados en la cuadrícula

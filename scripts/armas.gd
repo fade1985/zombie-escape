@@ -77,6 +77,22 @@ const EPICA := 3   # la calidad más alta, la que trae el truco
 #                     tamaño y su daño (proyectil.gd y granada.gd)
 const TRUCO := {"gracia": 4, "atraviesa": 1, "estallido": 80.0, "racimo": 2, "racimo_tamano": 0.5}
 const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar: en Normal no van al baúl
+# Lo que se ve de la calidad del arma que Johnny lleva en la mano (aura_arma.gd, tajo.gd y la trazadora de bala.gd; la
+# Normal, nada). Por calidad:
+#   "luz"      lo grande que es la luz de su color pegada al arma (unidades) y "fuerza", lo fuerte que luce (alumbra el
+#              sitio: a oscuras se nota mucho, con luz casi nada)
+#   "halo"     lo grande que es el brillo suave que lleva el arma (unidades) y "brillo", lo fuerte que es: luce por sí
+#              mismo, también en las salas iluminadas
+#   "chispas"  las chispas que saltan de la punta del arma, por segundo
+#   "tajo"     lo grueso que es el golpe de un arma cuerpo a cuerpo (en píxeles del dibujo)
+# (números provisionales, para ajustarlos mirando). "punta" de las armas cuerpo a cuerpo: dónde tienen su extremo en el
+# dibujo de reposo de cada dirección (píxeles del dibujo desde los pies, medidos en la hoja; como "boca" en las de fuego)
+const AURA := [
+	{},
+	{"luz": 60.0, "fuerza": 0.5, "halo": 34.0, "brillo": 0.3, "chispas": 0.0, "tajo": 2},
+	{"luz": 80.0, "fuerza": 0.65, "halo": 44.0, "brillo": 0.4, "chispas": 1.5, "tajo": 3},
+	{"luz": 105.0, "fuerza": 0.85, "halo": 56.0, "brillo": 0.55, "chispas": 4.0, "tajo": 4},
+]
 
 
 # ¿Va al baúl? Las armas, todas menos la fregona y la pistola Normales (SIEMPRE: las tiene siempre); los paquetes de
@@ -157,16 +173,22 @@ const DATOS := {
 		"nombre": "Fregona", "tipo": "cuerpo", "dano": 8, "ritmo": 1.8, "alcance": 62.0, "arco": 140.0,
 		"empuje": 2.0, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-guardia.tres"),
+		"punta": {"s": Vector2(21, -38), "se": Vector2(-18, -36), "e": Vector2(-18, -39), "ne": Vector2(-19, -38),
+			"n": Vector2(-21, -38), "no": Vector2(18, -40), "o": Vector2(18, -39), "so": Vector2(20, -38)},
 	},
 	"bate": {
 		"nombre": "Bate", "tipo": "cuerpo", "dano": 16, "ritmo": 1.6, "alcance": 66.0, "arco": 110.0,
 		"empuje": 1.5, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-bate.tres"),
+		"punta": {"s": Vector2(-19, -47), "se": Vector2(-17, -46), "e": Vector2(-18, -45), "ne": Vector2(-17, -45),
+			"n": Vector2(17, -48), "no": Vector2(18, -45), "o": Vector2(18, -46), "so": Vector2(19, -46)},
 	},
 	"cuchillo": {
 		"nombre": "Cuchillo", "tipo": "cuerpo", "dano": 9, "ritmo": 4.0, "alcance": 46.0, "arco": 60.0,
 		"empuje": 0.5, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-cuchillo.tres"),
+		"punta": {"s": Vector2(-10, -14), "se": Vector2(19, -27), "e": Vector2(16, -24), "ne": Vector2(18, -27),
+			"n": Vector2(15, -30), "no": Vector2(-18, -27), "o": Vector2(-16, -28), "so": Vector2(-19, -27)},
 	},
 	"pistola": {
 		"nombre": "Pistola", "tipo": "fuego", "dano": 10, "ritmo": 2.5, "alcance": 420.0, "velocidad": 620.0,
@@ -255,6 +277,20 @@ const HUECOS := {"cuerpo": "Cuerpo a cuerpo", "fuego": "A distancia"}
 # El color de una calidad (el borde de las casillas)
 static func color(calidad: int) -> Color:
 	return CALIDADES[clampi(calidad, 0, CALIDADES.size() - 1)].color
+
+
+static var _trazas := {}
+
+
+# Los 5 tonos de la trazadora de una bala y del tajo de un golpe de esa calidad, de la punta a la cola: del casi blanco
+# al color de la calidad y de ahí a uno oscuro (hechos del color de la calidad; la Épica, la morada de siempre)
+static func traza(calidad: int) -> Array:
+	var q := clampi(calidad, 0, CALIDADES.size() - 1)
+	if not _trazas.has(q):
+		var c := color(q)
+		_trazas[q] = [Color.from_hsv(c.h, c.s * 0.1, 1.0), Color.from_hsv(c.h, c.s * 0.5, 1.0), c,
+			Color.from_hsv(c.h, minf(1.0, c.s + 0.1), c.v * 0.85), Color.from_hsv(c.h, minf(1.0, c.s + 0.18), c.v * 0.57)]
+	return _trazas[q]
 
 
 # Cómo se dice una calidad («Rara»)

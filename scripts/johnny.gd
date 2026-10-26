@@ -149,6 +149,9 @@ func _ready() -> void:
 	add_child(llamarada)
 	goteo = Goteo.new()
 	add_child(goteo)
+	var aura := AuraArma.new()   # la luz y las chispas del color de la calidad del arma que lleva
+	aura.name = "Aura"
+	add_child(aura)
 	estrellas = Node2D.new()
 	estrellas.name = "Estrellas"
 	estrellas.draw.connect(pintar_estrellas)
@@ -629,6 +632,7 @@ func golpear(angulo: float) -> void:
 	var mitad := deg_to_rad(w.arco) / 2.0
 	var tocados := 0
 	var de_gracia: bool = w.calidad >= Armas.EPICA and gracia >= Armas.TRUCO.gracia - 1
+	Tajo.lanzar(self, angulo, w)   # (el golpe de un arma mejorada deja su estela del color de la calidad)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var hacia: Vector2 = zombi.global_position - global_position
 		var distancia := hacia.length()
@@ -722,6 +726,7 @@ func disparar(angulo: float) -> void:
 		bala.radio = 3.0 if w.perdigones > 1 else 4.0
 		bala.critico = bala.dano > roundi(w.dano)
 		bala.atraviesa = Armas.TRUCO.atraviesa if w.calidad >= Armas.EPICA else 0   # (el truco de la Épica)
+		bala.calidad = w.calidad
 		bala.vida = w.alcance / w.velocidad
 		get_parent().add_child(bala)
 		bala.global_position = salida

@@ -1268,6 +1268,63 @@ func probar_epicas() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --aura": lo que se ve de la calidad del arma que Johnny lleva en la mano (Armas.AURA; aura_arma.gd, tajo.gd y
+# la trazadora de bala.gd), en la sala de pruebas y mirando a la derecha. Con el bate y la pistola de cada calidad: una foto
+# recortada de Johnny quieto con luz y otra a oscuras (captura-aura-<arma>-<calidad>-luz.png y -oscuro.png) y, con luz, la
+# del golpe del bate o del disparo de la pistola en pleno vuelo (-golpe.png). Cada línea dice lo esperado. Se cierra
+func probar_aura() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.stats.critico = 0.0
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	var aura: AuraArma = johnny.get_node("Aura")
+	for oscuro in [false, true]:
+		Luz.evento = 0.85 if oscuro else 0.0
+		for id in ["bate", "pistola"]:
+			for calidad in 4:
+				llevar_arma(id, calidad, true, false)
+				johnny.direccion = "e"
+				johnny.balas = johnny.arma().cargador if id == "pistola" else 0
+				await get_tree().create_timer(1.0 if oscuro and calidad == 0 else 0.7).timeout
+				var nombre := "captura-aura-%s-%d" % [id, calidad]
+				print("%s (%s), %s: aura de calidad %d · luz %s de color %s, radio %.0f (esperado: %d · %s · %s, %s)" % [
+					id, Armas.calidad_nombre(calidad), "a oscuras" if oscuro else "con luz", aura.calidad,
+					aura.luz != null and aura.luz.visible, aura.luz.color.to_html(false) if aura.luz else "-",
+					aura.luz.radio if aura.luz else 0.0, calidad, calidad > 0, Armas.color(calidad).to_html(false) if calidad > 0 else "-",
+					Armas.AURA[calidad].get("luz", 0.0)])
+				recorte(nombre + ("-oscuro.png" if oscuro else "-luz.png"))
+				if oscuro:
+					continue
+				if id == "bate":
+					johnny.golpear(0.0)
+				else:
+					johnny.disparar(0.0)
+				await get_tree().create_timer(0.07).timeout
+				recorte(nombre + "-golpe.png")
+				await get_tree().create_timer(0.3).timeout
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
+# Una foto de la pantalla recortada alrededor de Johnny (que está en el centro): 300 × 240 unidades
+func recorte(archivo: String) -> void:
+	var img := get_tree().root.get_texture().get_image()
+	var e := img.get_width() / 960.0
+	var tam := Vector2i(Vector2(300, 240) * e)
+	img.get_region(Rect2i(Vector2i(img.get_size() / 2) - Vector2i(Vector2(150, 140) * e), tam)).save_png("res://" + archivo)
+
+
 # Con "--captura --sala-pruebas": la sala de pruebas con su panel (sala_armas.gd y ui/panel_pruebas.gd). Desde la sala
 # de mantenimiento, F11 lleva a ella: cuenta en la terminal que hay baúl y que el baúl que se ve es el de pruebas (todas
 # las armas y los arrojables en cada calidad), y que Mayús + 1 saca a la portera sin haber abierto antes el panel. La
