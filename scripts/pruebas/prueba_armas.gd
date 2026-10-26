@@ -10,7 +10,7 @@ extends "res://scripts/pruebas/prueba_jefes.gd"
 # hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla
 # (desde el 24 oct la bala va de la boca al zombi: ninguno); y a quemarropa, a 40, desde 8 direcciones.
 # Luego, que la diana no se ha muerto ni ha perdido vida (y cuántos zombis normales habría matado), que la reserva sigue llena y que ha recargado; que el punto pasa
-# a la escopeta y la coma vuelve (con el recuento a cero) y llega a la última de la tienda (la pistola eléctrica), que el guion esconde las líneas y
+# a la escopeta y la coma vuelve (con el recuento a cero) y llega a la última de la tienda (el lanza rayos), que el guion esconde las líneas y
 # saca el panel; y que F11 vuelve a la sala
 # de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
 # panel, tras un fallo por el lado), captura-armas-pistola-<e, se, n, o>.png (Johnny disparando con la Beretta hacia cada
@@ -958,7 +958,7 @@ func probar_fuego_acido() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --pistola-electrica": la pistola eléctrica con su dibujo propio (Armas.DATOS.pistola_electrica,
+# Con "--captura --pistola-electrica": el lanza rayos con su dibujo propio (Armas.DATOS.pistola_electrica,
 # conserje-48-pistola-electrica: la hoja lleva el retroceso corto de pistola y una descarga celeste en zigzag que sale de los dos
 # electrodos del táser azul marino; casilla de 180x168, con los pies en 90,88). Como el lanza ácido, en la sala de mantenimiento,
 # Johnny la compra en la tienda de armas del ordenador (captura-pistola-electrica-tienda.png, con ella marcada) y cuenta su hoja, su
@@ -987,7 +987,7 @@ func probar_pistola_electrica() -> void:
 	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	print("Pistola eléctrica en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas de adorno %s · icono «%s» (esperado: conserje-48-pistola-electrica.tres, 5, 230, (90, 88), (22, -30), false, pistola_electrica)" % [
+	print("Lanza rayos en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas de adorno %s · icono «%s» (esperado: conserje-48-pistola-electrica.tres, 5, 230, (90, 88), (22, -30), false, pistola_electrica)" % [
 		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
 
 	# la chispa: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y lo aturde, salta al que tiene cerca (a 100
@@ -1016,7 +1016,7 @@ func probar_pistola_electrica() -> void:
 	johnny.balas = 0
 	johnny.empezar_recarga()
 	await get_tree().create_timer(w.recarga + 0.2).timeout
-	print("Recarga con una batería: cargador %d de %d · baterías %d · gasta «%s» · la caja es para «%s» (esperado: 30 de 30, 0, Batería, pistola: la de repuesto, a la eléctrica no le vale)" % [
+	print("Recarga con una batería: cargador %d de %d · baterías %d · gasta «%s» · la caja es para «%s» (esperado: 30 de 30, 0, Batería, pistola: la de repuesto, al lanza rayos no le vale)" % [
 		johnny.balas, w.cargador, mochila.count("bateria"), Armas.MUNICION[Armas.municion(id)].nombre, johnny.arma_de_caja()])
 	johnny.balas = 0
 	johnny.empezar_recarga()
@@ -1043,7 +1043,7 @@ func probar_pistola_electrica() -> void:
 		Captura.foto("captura-pistola-electrica-%s.png" % d)
 		await get_tree().create_timer(0.6).timeout
 
-	# con cada skin: su hoja de la pistola eléctrica
+	# con cada skin: su hoja del lanza rayos
 	for skin in ["portero", "gloton", "gymbro", "bombero"]:
 		Skins.poner(skin)
 		johnny.vestir(skin)

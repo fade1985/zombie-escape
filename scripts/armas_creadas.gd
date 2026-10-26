@@ -1,7 +1,7 @@
 # Lo que hacen las armas con efecto (fase 7b2; src/armas-creadas.js del JS): el lanzallamas, el lanza ácido y la
-# pistola eléctrica, que eran armas creadas del banco de trabajo y desde el 25 oct se compran en la tienda de armas.
+# lanza rayos, que eran armas creadas del banco de trabajo y desde el 25 oct se compran en la tienda de armas.
 # Sus números están en Armas.DATOS (su "efecto"); aquí, lo que hacen:
-#   - Las chispas de la pistola eléctrica (chorro.gd), que aturden y saltan a otro zombi. La llamarada del
+#   - Las chispas del lanza rayos (chorro.gd), que aturden y saltan a otro zombi. La llamarada del
 #     lanzallamas y el chorro del lanza ácido van aparte (llamarada.gd).
 #   - Lo que dejan en el zombi: la quemadura (que se contagia a los de al lado: zombi.gd) y el ácido que sigue
 #     royendo y le come la armadura (con_acido).
@@ -20,13 +20,13 @@ const EFECTOS := {
 	# 50 % más ("corroe": con_acido)
 	"acido": {"t": 3.0, "total": 3.0, "color": Color("#c7e04a"), "corroe": 1.5},
 	"descarga": {"salto": 130.0, "dano": 0.5},                       # salta al más cercano con medio daño
-	"chispa": 0.4,                                                   # la pistola eléctrica: cada chispa aturde 0,4 s (y salta)
+	"chispa": 0.4,                                                   # el lanza rayos: cada chispa aturde 0,4 s (y salta)
 	"tick": 0.5,                                                     # cada cuánto se quitan los pellizcos
 }
 
 
 # La descarga: aturde al zombi y salta al más cercano (a menos de "salto"), que se lleva medio daño y también
-# se queda aturdido. La usan las chispas de la pistola eléctrica; mejorada ("saltos" más, por su calidad), sigue
+# se queda aturdido. La usan las chispas del lanza rayos; mejorada ("saltos" más, por su calidad), sigue
 # saltando de ese al más cercano que aún no ha pillado
 static func descarga(zombi: Node2D, dano: float, aturde: float, saltos := 0) -> void:
 	aturdir(zombi, aturde)

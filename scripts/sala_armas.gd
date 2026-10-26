@@ -7,10 +7,10 @@
 #     aquí, el baúl que se ve es ese (Guardado.baul_prueba); el de verdad no se toca
 #   - la diana: un zombi normal en el centro que no pierde vida, no ataca y vuelve a su sitio si un golpe lo mueve
 #     (zombi.gd, "diana"), para probar desde todas las direcciones. Sus números de daño, más grandes
-#   - todas las armas de la tienda (también el lanzallamas, el lanza ácido y la pistola eléctrica): coma y punto pasan a
+#   - todas las armas de la tienda (también el lanzallamas, el lanza ácido y el lanza rayos): coma y punto pasan a
 #     la anterior y a la siguiente
 #   - munición sin fin, pero recargando: la reserva no se acaba nunca y el cargador sí (y el lanzallamas, el lanza
-#     ácido y la pistola eléctrica se llenan sin gastar gasolina, bidones de ácido ni baterías)
+#     ácido y el lanza rayos se llenan sin gastar gasolina, bidones de ácido ni baterías)
 #   - las líneas de ayuda, en el suelo (cada una se apaga en el panel): el alcance del arma (de fuego, un círculo;
 #     cuerpo a cuerpo, el abanico del golpe), a quién apunta el apuntado (amarillo), por dónde irá la bala (azul: sale
 #     de la boca del arma, no del centro de Johnny), el círculo de cada zombi dentro del que le da la bala (rojo) y el

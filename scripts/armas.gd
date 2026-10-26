@@ -13,7 +13,7 @@
 #   temblor (cuánto se desvía cada bala al azar), cargador, recarga (segundos) y cartucho (recarga de uno en uno,
 #   como la escopeta, y se puede disparar a mitad). "municion": el tipo de munición que gasta (MUNICION). "boca":
 #   dónde está la boca del arma en cada dirección, en píxeles desde los pies (sale de la hoja .json del juego)
-#   Las tres últimas (el lanzallamas, el lanza ácido y la pistola eléctrica) eran armas creadas del banco de trabajo
+#   Las tres últimas (el lanzallamas, el lanza ácido y el lanza rayos) eran armas creadas del banco de trabajo
 #   hasta el 25 oct; ahora se compran en la tienda de armas como las demás. Llevan además:
 #   relleno   no gastan munición de reserva: un objeto de la mochila (la gasolina, el bidón de ácido o la batería, que
 #             van en los huecos de la munición) las llena enteras en "recarga" segundos
@@ -23,12 +23,12 @@ class_name Armas
 
 
 # Lo que cuesta cada una en la tienda de armas del ordenador (price en src/weapons.js; 0 = gratis). La fregona
-# no se vende: se lleva siempre. El lanzallamas, el lanza ácido y la pistola eléctrica, las más caras (25 oct)
+# no se vende: se lleva siempre. El lanzallamas, el lanza ácido y el lanza rayos, las más caras (25 oct)
 const PRECIOS := {"cuchillo": 10, "bate": 15, "pistola": 0, "escopeta": 30, "mp5": 40, "pistola_electrica": 45,
 	"lanzallamas": 60, "desintegrador": 60}
 
 # La familia de un arma (como las piezas del banco; las secciones de la tienda): "cuerpo" (cuerpo a cuerpo),
-# "distancia" (pistola, escopeta y MP5) o "especial" (lanzallamas, lanza ácido y pistola eléctrica: las de "efecto").
+# "distancia" (pistola, escopeta y MP5) o "especial" (lanzallamas, lanza ácido y lanza rayos: las de "efecto").
 # Por dentro, las de A distancia y las especiales son de tipo "fuego" y van en el mismo hueco
 static func familia(id: String) -> String:
 	var w: Dictionary = DATOS[id]
@@ -103,7 +103,7 @@ static func con_calidad(id: String, calidad: int) -> Dictionary:
 			if w.has("deposito"):
 				w.deposito = w.deposito * c.deposito
 			else:
-				w.saltos = c.saltos   # la pistola eléctrica: a cuántos zombis más salta la chispa
+				w.saltos = c.saltos   # el lanza rayos: a cuántos zombis más salta la chispa
 	return w
 
 
@@ -224,7 +224,7 @@ const DATOS := {
 			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)},
 		"cano": CANO_LANZALLAMAS,
 	},
-	# la pistola eléctrica: un táser azul marino con una batería gris pegada debajo y dos electrodos
+	# el lanza rayos: un táser azul marino con una batería gris pegada debajo y dos electrodos
 	# (conserje-48-pistola-electrica). Su hoja lleva el retroceso corto y la descarga celeste en zigzag que sale de los
 	# electrodos (las chispas que vuelan, aturden y saltan al zombi de al lado las pone el juego, armas_creadas.gd y
 	# chorro.gd); la casilla es de 180x168, con los pies en 90,88, porque la descarga llega a 88 píxeles a un lado, 86
@@ -233,7 +233,7 @@ const DATOS := {
 	# electrodos del dibujo quieto, a mano. Gasta baterías: una de la mochila le llena el cargador entero (antes
 	# gastaba pilas, una munición de reserva como las balas)
 	"pistola_electrica": {
-		"nombre": "Pistola eléctrica", "tipo": "fuego", "dano": 5, "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0,
+		"nombre": "Lanza rayos", "tipo": "fuego", "dano": 5, "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0,
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.2, "cargador": 30, "recarga": 2.0,
 		"cartucho": false, "relleno": "bateria", "efecto": "chispa", "pies": Vector2(90, 88),
 		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
@@ -274,7 +274,7 @@ const RELLENOS := {
 # Johnny la lleva en HUECOS_MUNICION huecos y en cada uno caben "hueco" (dos cargadores; si lleva más, ese tipo ocupa
 # otro hueco): con todos llenos ya no coge más. "sin": el aviso cuando se le acaba; "para": las armas que la gastan
 # (en el inventario). La gasolina, el bidón de ácido y la batería son además objetos (objetos.gd): van en la mochila de
-# la partida, pero no ocupan casilla de la mochila, sino de la munición. Las pilas de la pistola eléctrica se quitaron
+# la partida, pero no ocupan casilla de la mochila, sino de la munición. Las pilas del lanza rayos se quitaron
 # del juego el 25 oct: ahora gasta baterías
 const MUNICION := {
 	"balas": {"nombre": "Balas de pistola", "icono": "municion-pistola", "hueco": 24, "sin": "¡Sin balas!", "para": "la pistola y la MP5"},
@@ -282,7 +282,7 @@ const MUNICION := {
 	"gasolina": {"nombre": "Gasolina", "icono": "obj-gasolina", "hueco": 3, "sin": "¡Sin gasolina!", "para": "el lanzallamas"},
 	"bidon_acido": {"nombre": "Bidón de ácido", "icono": "obj-bidon_acido", "hueco": 3, "sin": "¡Sin ácido!",
 		"para": "el lanza ácido"},
-	"bateria": {"nombre": "Batería", "icono": "obj-bateria", "hueco": 3, "sin": "¡Sin batería!", "para": "la pistola eléctrica"},
+	"bateria": {"nombre": "Batería", "icono": "obj-bateria", "hueco": 3, "sin": "¡Sin batería!", "para": "el lanza rayos"},
 }
 const HUECOS_MUNICION := 8
 

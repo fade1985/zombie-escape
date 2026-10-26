@@ -6,8 +6,8 @@
 # teclas 1 a 6 ponen cualquiera de las seis. R (o el botón X del mando) recarga: cada arma lleva solo su cargador, y la
 # munición de reserva va por tipos, compartida por las armas que la gastan (Armas.MUNICION). El lanzallamas y el lanza ácido no
 # disparan: mientras se ataca echan un chorro continuo (llamarada.gd) y gastan su depósito, que se llena con un objeto
-# de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido: el "relleno" de armas.gd). La
-# pistola eléctrica sí dispara, pero su cargador también se llena con un objeto de la mochila: una batería.
+# de la mochila (el lanzallamas, con una gasolina; el lanza ácido, con un bidón de ácido: el "relleno" de armas.gd). El
+# lanza rayos sí dispara, pero su cargador también se llena con un objeto de la mochila: una batería.
 # Dos modos de atacar (se elige en Opciones, o F1, C o la cruceta abajo del mando
 # cambian de uno a otro; se guarda):
 #   asistido  apunta y ataca solo, como en el juego (src/aim.js): busca el zombi más cercano que vea y, si
@@ -893,7 +893,7 @@ func terminar_recarga() -> void:
 
 
 # El arma de fuego para la que es una caja de munición: la que saca con Q o, si se llena con un objeto de la mochila
-# (el lanzallamas, el lanza ácido y la pistola eléctrica no gastan balas), la de repuesto. "" si ninguna gasta balas o
+# (el lanzallamas, el lanza ácido y el lanza rayos no gastan balas), la de repuesto. "" si ninguna gasta balas o
 # ya no le cabe ninguna de las suyas (la caja se queda en el suelo)
 func arma_de_caja() -> String:
 	var partida := get_tree().current_scene
@@ -986,7 +986,7 @@ func avisar_arma() -> void:
 		texto += "   %d s · %s x%d" % [ceili(deposito), Objetos.nombre(w.relleno).to_lower(), reserva()]
 	elif w.tipo == "fuego":
 		texto += "   %d/%d" % [balas, w.cargador]
-		if w.has("relleno"):   # la pistola eléctrica: cuántas baterías le quedan
+		if w.has("relleno"):   # el lanza rayos: cuántas baterías le quedan
 			texto += " · %s x%d" % [Objetos.nombre(w.relleno).to_lower(), reserva()]
 		if recargando > 0.0:
 			texto += "   recargando…"

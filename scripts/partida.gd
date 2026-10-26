@@ -957,7 +957,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
 		Sonido.tocar("compra")
 		numero(cosa.position, "+1 " + Objetos.nombre(id), Tema.TINTA)
-		johnny.coger_municion(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (el lanza ácido, con un bidón, y la pistola eléctrica, con una batería)
+		johnny.coger_municion(id))   # si es una gasolina, el lanzallamas vacío se llena con ella (el lanza ácido, con un bidón, y el lanza rayos, con una batería)
 	mapa.cosas.add_child.call_deferred(cosa)
 
 

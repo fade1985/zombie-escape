@@ -537,8 +537,8 @@ func probar_cosas() -> void:
 	print("Cosas: mochila %s | guardadas %s | mano %s | baúl %s" % [mochila, armas_guardadas, johnny.huecos.cuerpo, g.baul])
 
 
-# Los arrojables y las armas de efecto: coge congeladoras y atraedoras, lleva el lanza ácido y la pistola eléctrica
-# (de la tienda de armas), dispara la pistola eléctrica, se pone el lanza ácido desde el inventario y dispara, y lanza
+# Los arrojables y las armas de efecto: coge congeladoras y atraedoras, lleva el lanza ácido y el lanza rayos
+# (de la tienda de armas), dispara el lanza rayos, se pone el lanza ácido desde el inventario y dispara, y lanza
 # la congeladora. Cuenta lo que pasa y hace una foto
 func probar_efectos() -> void:
 	dar_lanzable("congeladora")
@@ -550,7 +550,7 @@ func probar_efectos() -> void:
 	print("Armas de efecto: mano %s | guardadas %s | lanzables a mano %s, de repuesto %s" % [
 		[Objetos.nombre(johnny.huecos.cuerpo), Objetos.nombre(johnny.huecos.fuego)], armas_guardadas.map(Objetos.nombre),
 		lanzables.mano, lanzables.repuesto])
-	print("En la tienda de armas: %s (esperado: Lanzallamas $60, Lanza ácido $60, Pistola eléctrica $45)" % [
+	print("En la tienda de armas: %s (esperado: Lanzallamas $60, Lanza ácido $60, Lanza rayos $45)" % [
 		["lanzallamas", "desintegrador", "pistola_electrica"].map(func(id): return "%s $%d" % [Armas.DATOS[id].nombre, Armas.PRECIOS[id]])])
 	johnny.direccion = "e"
 	johnny.sostener("fuego")
@@ -561,7 +561,7 @@ func probar_efectos() -> void:
 	await get_tree().create_timer(0.1).timeout
 	johnny.disparar(0.0)
 	await get_tree().create_timer(0.3).timeout
-	print("Pistola eléctrica: balas %d | zombi 1 aturdido %.1f vida %d | zombi 2 aturdido %.1f vida %d" % [johnny.balas,
+	print("Lanza rayos: balas %d | zombi 1 aturdido %.1f vida %d | zombi 2 aturdido %.1f vida %d" % [johnny.balas,
 		z1.aturdido, z1.vida, z2.aturdido, z2.vida])
 	abrir_cosas("inventario")
 	inventario.tocar("g%d" % armas_guardadas.find(armas_guardadas.filter(func(id): return Objetos.nombre(id) == "Lanza ácido")[0]))

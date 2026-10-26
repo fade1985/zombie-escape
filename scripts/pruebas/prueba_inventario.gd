@@ -156,7 +156,7 @@ func probar_baul() -> void:
 
 # Con "--captura --calidades": las calidades de las armas y de los paquetes de arrojables (Armas.CALIDADES; parte 4 de la
 # tienda y las piezas). Cada línea dice lo esperado. Cuenta: lo que da cada calidad (el bate Raro, la pistola Épica, el
-# lanzallamas Raro, la pistola eléctrica Poco común y los molotovs Raros); que Johnny lleva una de cada arma (al coger
+# lanzallamas Raro, el lanza rayos Poco común y los molotovs Raros); que Johnny lleva una de cada arma (al coger
 # otro bate, se cambian y el viejo se queda en el suelo); que en el baúl (con lo de «Piezas al baúl» del panel de pruebas) se guardan el bate y los
 # molotovs Raros, pero no la fregona ni los molotovs Normales, y que al sacar un arma la que sobra entra en su lugar; las
 # casillas con el color de su calidad (captura-calidades-baul.png y captura-calidades-inventario.png); que si cae no
@@ -188,7 +188,7 @@ func probar_calidades() -> void:
 	print("Pistola Épica: daño %.1f, cargador %d, recarga %.3f (esperado: 17.5, 21, 0.605: +75 %%, +75 %%, un 45 %% más rápida)" % [
 		w.dano, w.cargador, w.recarga])
 	w = Armas.con_calidad("lanzallamas", 2)
-	print("Lanzallamas Raro: daño %.1f, depósito %.1f s (esperado: 43.5, 12.0) · pistola eléctrica Poco común: saltos %d, cargador %d (esperado: 1, 30)" % [
+	print("Lanzallamas Raro: daño %.1f, depósito %.1f s (esperado: 43.5, 12.0) · lanza rayos Poco común: saltos %d, cargador %d (esperado: 1, 30)" % [
 		w.dano, w.deposito, Armas.con_calidad("pistola_electrica", 1).saltos, Armas.con_calidad("pistola_electrica", 1).cargador])
 	print("Lo que dice la ficha: «%s» · «%s»" % [Armas.que_da("bate", 2), Armas.que_da("molotov", 3)])
 	# una de cada arma: el bate Raro a la mano (la fregona al repuesto) y luego otro bate, Poco común: se cambian
@@ -524,7 +524,7 @@ func probar_piezas() -> void:
 
 
 # Con "--captura --repuesto": Johnny lleva como mucho dos armas de cada tipo, la de la mano y la de repuesto
-# (partida.llevar_arma). Compra en la tienda del ordenador un lanza ácido y una pistola eléctrica (con la segunda ya
+# (partida.llevar_arma). Compra en la tienda del ordenador un lanza ácido y un lanza rayos (con el segundo ya
 # llevaba dos de fuego: el lanza ácido se queda en el suelo), el bate y el cuchillo (el cuchillo deja el bate en el
 # suelo) y no le deja comprar la pistola que lleva de repuesto, tira la fregona de repuesto desde el
 # inventario y vuelve a coger el bate del suelo (va al repuesto, sin cambiarle la de la mano). Saca
@@ -558,15 +558,15 @@ func probar_repuesto() -> void:
 	print("Compra el lanza ácido: %s (esperado: mano Fregona y Lanza ácido · repuesto [\"Pistola\"])" % armas.call())
 	ordenador.comprar_arma("pistola_electrica")
 	await get_tree().process_frame
-	print("Compra la pistola eléctrica: %s · en el suelo %s (esperado: mano Fregona y Pistola eléctrica · repuesto [\"Pistola\"] · [\"desintegrador\"]) · dice «%s»" % [
+	print("Compra el lanza rayos: %s · en el suelo %s (esperado: mano Fregona y Lanza rayos · repuesto [\"Pistola\"] · [\"desintegrador\"]) · dice «%s»" % [
 		armas.call(), suelo.call(), ordenador.info.text])
 	ordenador.comprar_arma("bate")
 	await get_tree().process_frame
-	print("Compra el bate: %s · dice «%s» (esperado: mano Bate y Pistola eléctrica · repuesto [\"Pistola\", \"Fregona\"] · la fregona pasa al repuesto)" % [
+	print("Compra el bate: %s · dice «%s» (esperado: mano Bate y Lanza rayos · repuesto [\"Pistola\", \"Fregona\"] · la fregona pasa al repuesto)" % [
 		armas.call(), ordenador.info.text])
 	ordenador.comprar_arma("cuchillo")
 	await get_tree().process_frame
-	print("Compra el cuchillo: %s · en el suelo %s · dice «%s» (esperado: mano Cuchillo y Pistola eléctrica · repuesto [\"Pistola\", \"Fregona\"] · [\"desintegrador\", \"bate\"] · el bate se queda en el suelo)" % [
+	print("Compra el cuchillo: %s · en el suelo %s · dice «%s» (esperado: mano Cuchillo y Lanza rayos · repuesto [\"Pistola\", \"Fregona\"] · [\"desintegrador\", \"bate\"] · el bate se queda en el suelo)" % [
 		armas.call(), suelo.call(), ordenador.info.text])
 	var dolares_antes: int = Guardado.cargar().dolares
 	ordenador.comprar_arma("pistola")
@@ -582,14 +582,14 @@ func probar_repuesto() -> void:
 	inventario.tirar()
 	inventario.cerrar()
 	await get_tree().process_frame
-	print("Tira la fregona: %s · en el suelo %s (esperado: mano Cuchillo y Pistola eléctrica · repuesto [\"Pistola\"] · [\"desintegrador\", \"bate\", \"fregona\"])" % [
+	print("Tira la fregona: %s · en el suelo %s (esperado: mano Cuchillo y Lanza rayos · repuesto [\"Pistola\"] · [\"desintegrador\", \"bate\", \"fregona\"])" % [
 		armas.call(), suelo.call()])
 	var bate: Node2D = mapa.cosas.get_children().filter(func(c): return es_arma.call(c) and c.icono.resource_path.ends_with("/bate.png"))[0]
 	bate.position = johnny.position + Vector2(300, 0)
 	await get_tree().create_timer(0.3).timeout
 	johnny.position = bate.position
 	await get_tree().create_timer(0.8).timeout
-	print("Coge el bate del suelo: %s · en el suelo %s (esperado: mano Cuchillo y Pistola eléctrica · repuesto [\"Pistola\", \"Bate\"] · [\"desintegrador\", \"fregona\"])" % [
+	print("Coge el bate del suelo: %s · en el suelo %s (esperado: mano Cuchillo y Lanza rayos · repuesto [\"Pistola\", \"Bate\"] · [\"desintegrador\", \"fregona\"])" % [
 		armas.call(), suelo.call()])
 	abrir_cosas("inventario")
 	await get_tree().create_timer(0.4).timeout
@@ -783,7 +783,7 @@ func probar_municion() -> void:
 # y una congeladora de repuesto, y la skin del bombero. Al abrir, la ficha enseña el arma de la mano; la flecha abajo
 # lleva la marca a la escopeta y la ficha la sigue; Intro salta a «Ponérmela» e Y del mando se la pone; Supr tira un
 # pieza cuerpo a cuerpo; tirar el arma de la mano pone en su sitio la de repuesto; F cambia el arrojable que se lanza; «A la mano» con la
-# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (la pistola eléctrica: nombre largo y
+# mano llena cambia por el que se lanzaba; Esc cierra. Luego, la ficha más llena (el lanza rayos: nombre largo y
 # 30 balitas) y la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas (probar_curas)
 # y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
 # Fotos: captura-inventario-nuevo.png (al abrir), captura-inventario-escopeta.png (la marca en la escopeta de
@@ -866,7 +866,7 @@ func probar_inventario() -> void:
 	Captura.foto("captura-inventario-arrojable.png")
 	await pulsar_evento(accion("ui_cancel"))
 	print("Esc: abierto «%s» · juego en pausa %s (esperado: «» · false)" % [inv.abierto, get_tree().paused])
-	# la ficha más llena: la pistola eléctrica, de nombre largo y con 30 balitas; y una de depósito
+	# la ficha más llena: el lanza rayos, de nombre largo y con 30 balitas; y una de depósito
 	for arma in ["pistola_electrica", "lanzallamas"]:
 		llevar_arma(arma)
 		abrir_cosas("inventario")

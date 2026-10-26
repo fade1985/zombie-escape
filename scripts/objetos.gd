@@ -6,7 +6,7 @@
 # servían para nada) se fueron con ellas: en su lugar llegaron las piezas (PIEZAS), para mejorar las armas en el banco.
 # Su dibujo es assets/ui/iconos/obj-<id>.png: el de la batería y las vendas, de 16×16 (lo saca tools/objetos16.py); el
 # de la gasolina, el bidón de ácido y las piezas, de 32×32 (de PixelLab). La gasolina, el bidón de ácido y la
-# batería son además la munición del lanzallamas, el lanza ácido y la pistola eléctrica: van en la mochila, pero
+# batería son además la munición del lanzallamas, el lanza ácido y el lanza rayos: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
 #
 # Las piezas (PIEZAS) son de 4 familias, las de las armas: cuerpo a cuerpo, a distancia, especiales y arrojables. Las
@@ -19,7 +19,7 @@
 # juego el mechero, la llave inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, el
 # cable, el hielo seco y las perchas (con las armas que los pedían), y luego los clavos, el spray de pintura, la
 # lejía, la pistola de agua, la cinta americana, la bombona de gas, la jeringuilla, el aceite y el bocadillo (con las
-# arrojadizas del centro comercial; el lanzallamas, el lanza ácido y la pistola eléctrica pasaron a la tienda de
+# arrojadizas del centro comercial; el lanzallamas, el lanza ácido y el lanza rayos pasaron a la tienda de
 # armas).
 # Uno solo lo suelta un zombi, en los dos edificios (DE_UN_ZOMBI): el bidón de ácido.
 class_name Objetos
@@ -40,7 +40,7 @@ const PIEZAS := {
 const PIEZA_PARA := {
 	"cuerpo": "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)",
 	"distancia": "las armas a distancia (la pistola, la MP5 y la escopeta)",
-	"especial": "las armas especiales (el lanzallamas, el lanza ácido y la pistola eléctrica)",
+	"especial": "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)",
 	"arrojable": "los arrojables (el molotov, la granada, la atraedora y la congeladora)",
 }
 const PIEZA_ZOMBI := 0.06    # probabilidad de que cualquier zombi suelte una pieza (una de las cuatro, al azar)
@@ -50,7 +50,7 @@ const NOMBRES := {
 	"gasolina": "Gasolina",
 	# el bidón de ácido, en los dos edificios: solo lo suelta el gordo (DE_UN_ZOMBI)
 	"bidon_acido": "Bidón de ácido",
-	# la batería, la munición de la pistola eléctrica: en los dos edificios
+	# la batería, la munición del lanza rayos: en los dos edificios
 	"bateria": "Batería",
 	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan desde el inventario (USABLES)
 	"vendas": "Vendas",

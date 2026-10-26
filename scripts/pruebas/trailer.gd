@@ -70,7 +70,7 @@ func grabar_trailer() -> void:
 	soltar_zombis(sala, ["rapido", "normal", "rapido", "normal"], 140.0)
 	await esperar(2.0)
 
-	# 5) la tienda del ordenador: el lanzallamas; luego, él, el lanza ácido y la pistola eléctrica
+	# 5) la tienda del ordenador: el lanzallamas; luego, él, el lanza ácido y el lanza rayos
 	await cerrar_telon()
 	Guardado.cambiar(func(g): g.dolares = maxi(g.dolares, 500))
 	abrir_ordenador()

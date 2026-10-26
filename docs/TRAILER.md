@@ -40,7 +40,7 @@ Para verlo sin grabar (con la ventana normal, para probar cambios): `"<Godot>_co
 | El edificio está infestado. | Un piso a oscuras, con la linterna, y zombis |
 | Limpia piso a piso. | Una habitación llena y la escopeta |
 | Busca armas. | El bate y la MP5 |
-| Compra lo que necesites. | La tienda del ordenador; luego el lanzallamas, el lanza ácido y la pistola eléctrica |
+| Compra lo que necesites. | La tienda del ordenador; luego el lanzallamas, el lanza ácido y el lanza rayos |
 | Guarda lo que encuentres. | El inventario |
 | Sobrevive a ellos. | El Glotón (con su presentación) y el Gymbro |
 | Nunca es el mismo edificio. | Cuatro pisos distintos, muy seguidos |
