@@ -586,9 +586,10 @@ func poner_caras() -> void:
 		cosas.add_child(dintel)
 		caras.get_or_add(sala, []).append(dintel)
 	# Donde un tabique cuelga de una pared con suelo encima (el pasillo de las viviendas, la cocina junto al pasillo de
-	# un piso...), las paredes de los lados tienen su cara pero el tabique no la tenía: dejaba un hueco con el suelo de
-	# arriba a la vista y la pared parecía más baja. Ahí la cara sigue por encima del tabique (con el papel de cada lado,
-	# mitad y mitad si son dos habitaciones). Va al final, aparte, para no cambiar los restos al azar de las demás
+	# un piso...), las paredes de los lados tienen su cara de 3 casillas pero el tabique solo empezaba al pie de ella:
+	# dejaba un hueco con el suelo de arriba a la vista y la pared parecía más baja. Ahí el tabique sube hasta lo alto
+	# de la pared de al lado (con la tapa del muro), así cada habitación queda cerrada por los lados a toda su altura.
+	# Va al final, aparte, para no cambiar los restos al azar de las demás caras
 	for f in filas - 1:
 		var c := 0
 		while c < cols:
@@ -600,31 +601,24 @@ func poner_caras() -> void:
 				fin += 1
 			var izq := es_muro(c - 1, f) and not es_muro(c - 1, f + 1)   # a cada lado, ¿la pared tiene cara?
 			var der := es_muro(fin, f) and not es_muro(fin, f + 1)
-			var x := c * CASILLA
-			var ancho := (fin - c) * CASILLA
-			if izq and der and sala_de(c - 1, f + 1) != sala_de(fin, f + 1):
-				poner_cara_de_tabique(x, ancho / 2.0, f, sala_de(c - 1, f + 1))
-				poner_cara_de_tabique(x + ancho / 2.0, ancho / 2.0, f, sala_de(fin, f + 1))
-			elif izq or der:
-				poner_cara_de_tabique(x, ancho, f, sala_de(c - 1, f + 1) if izq else sala_de(fin, f + 1))
+			if izq or der:
+				var tabique := CARA.new()
+				tabique.position = Vector2(c * CASILLA, (f + 1) * CASILLA)
+				tabique.ancho = (fin - c) * CASILLA
+				tabique.tapa = tapa
+				tabique.velo = VELO
+				tabique.filo = FILO
+				tabique.contorno = CONTORNO
+				tabique.borde_izq = not es_muro(c - 1, f)   # el contorno oscuro, donde da al suelo
+				tabique.borde_der = not es_muro(fin, f)
+				tabique.puede_tapar = f > 1
+				cosas.add_child(tabique)
 			c = fin
 
 
 # Un trozo de muro con muro debajo y suelo encima: de él cuelga un tabique (poner_caras)
 func tabique_colgado(c: int, f: int) -> bool:
 	return es_muro(c, f) and es_muro(c, f + 1) and not es_muro(c, f - 1)
-
-
-# El trozo de cara que sigue por encima de un tabique, con el papel de la habitación "sala"
-func poner_cara_de_tabique(x: float, ancho: float, f: int, sala: int) -> void:
-	var cara := CARA.new()
-	cara.position = Vector2(x, (f + 1) * CASILLA)
-	cara.ancho = ancho
-	cara.pared = estilos[sala].pared
-	cara.techo = estilos[sala].techo
-	cara.puede_tapar = f > 1
-	cosas.add_child(cara)
-	caras.get_or_add(sala, []).append(cara)
 
 
 func poner_puertas() -> void:
