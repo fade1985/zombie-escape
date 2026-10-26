@@ -38,7 +38,7 @@ const AZOTEA_FILAS := 30
 # El helipuerto (helipuerto.png, de tools/azotea.py): una plataforma un poco más alta que el suelo, siempre en el
 # centro de la azotea, con la rampa a la izquierda (de cara a la escalera por la que se llega). Es el ring del jefe
 # final: espera arriba y, en cuanto sube Johnny, una valla cierra la rampa hasta que cae (mapa.gd y partida.gd)
-const PLATAFORMA := Vector2(640, 512)   # lo de arriba, 20 × 16 casillas (con su borde, que no se pisa)
+const PLATAFORMA := Vector2(768, 576)   # lo de arriba, 24 × 18 casillas (con su borde, que no se pisa)
 const PLATAFORMA_ALTO := 24.0           # lo que se eleva: la cara de delante, que se ve por debajo
 const PLATAFORMA_BORDE := 8.0           # el borde de arriba: choca, como la cara
 const RAMPA := Vector2(128, 96)         # largo y ancho de la rampa (con sus dos barandillas)
@@ -386,9 +386,9 @@ static func aparatos(sitio: Dictionary, edificio: String) -> Array:
 				var dibujo := Rect2(r.position.x, r.end.y - dibujo_alto, r.size.x, dibujo_alto)
 				if huella.any(func(h): return h.grow(PLATAFORMA_LIBRE).intersects(r) or h.grow(8.0).intersects(dibujo)):
 					continue
-				if puertas.any(func(d): return d.distance_to(r.get_center()) < 220.0):
+				if puertas.any(func(d): return d.distance_to(r.get_center()) < 180.0):
 					continue
-				if puestos.any(func(o): return Muebles.hueco(o).grow(90.0).intersects(r)):
+				if puestos.any(func(o): return Muebles.hueco(o).grow(50.0).intersects(r)):
 					continue
 				puestos.append(m)
 				break

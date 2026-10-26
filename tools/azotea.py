@@ -8,7 +8,7 @@
   tapa-azotea.png      el murete visto desde arriba (los de los lados y el de abajo): bloques de remate de 32
   helipuerto.png       el helipuerto: la plataforma elevada (losas claras, el círculo amarillo y la H gastados, un
                        borde de franjas y la cara de delante) y, a su izquierda, la rampa de chapa con sus
-                       barandillas (384 × 271; las medidas, las de planta.gd: PLATAFORMA, RAMPA...)
+                       barandillas (448 × 303; las medidas, las de planta.gd: PLATAFORMA, RAMPA...)
 
   py tools/azotea.py   → assets/sprites/
 Siempre salen iguales (cada una con su semilla).
@@ -157,7 +157,7 @@ def tapa():
 
 # Las medidas del helipuerto, en píxeles del dibujo (la mitad de las unidades de planta.gd: PLATAFORMA, RAMPA...)
 RAMPA_LARGO, RAMPA_ANCHO = 64, 48
-ARRIBA_ANCHO, ARRIBA_ALTO = 320, 256
+ARRIBA_ANCHO, ARRIBA_ALTO = 384, 288
 CARA = 12          # lo que se eleva: la cara de delante
 SOMBRA = 3
 BORDE = 4          # el borde de franjas de arriba
@@ -183,7 +183,7 @@ def helipuerto():
             if lx % 32 == 0 or y % 32 == 0:
                 c = mezcla(c, (70, 78, 78), 0.55)
             px[x, y] = ruido(rnd, c, 3) + (255,)
-    for i in range(830):
+    for i in range(ARRIBA_ANCHO * ARRIBA_ALTO // 98):   # grava: una cada ~100 píxeles
         x, y = rnd.randrange(R, W), rnd.randrange(ARRIBA_ALTO)
         px[x, y] = ruido(rnd, (116, 126, 124) if rnd.random() < 0.5 else (80, 90, 88), 5) + (255,)
 
@@ -199,7 +199,7 @@ def helipuerto():
             if abs(hy) < 26 and (14 <= abs(hx) < 24 or (abs(hx) < 14 and abs(hy) < 5)):
                 pintura[(x, y)] = (222, 222, 214)
     calvas = set()
-    for i in range(133):
+    for i in range(ARRIBA_ANCHO * ARRIBA_ALTO // 614):   # calvas de pintura: una cada ~600
         ox, oy, r = rnd.uniform(R, W), rnd.uniform(0, ARRIBA_ALTO), rnd.uniform(1.0, 4.5)
         for dy in range(-5, 6):
             for dx in range(-5, 6):
