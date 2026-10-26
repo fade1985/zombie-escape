@@ -4,7 +4,8 @@ extends "res://scripts/pruebas/prueba_jefes_salas.gd"
 
 
 # Con "--captura --presentacion" (y --jefe gloton, u otro): la presentación del jefe (ui/presentacion.gd). Entra en el
-# piso del jefe de la 1ª planta y, cuando él aparece, mira al gritar (captura-presentacion-grito.png) que no sale
+# piso del jefe de la 1ª planta; mientras el jefe tarda en salir, mira que Johnny no se mueve aunque se le dé a andar;
+# cuando él aparece, mira al gritar (captura-presentacion-grito.png) que no sale
 # ninguna frase escrita y que Johnny está callado; a mitad de la presentación (captura-presentacion.png), que la
 # cámara está acercada y sobre el jefe, Johnny quieto y sin poder recibir daño, el jefe gritando, el nombre en
 # pantalla y la barra de vida aún oculta; y al acabar, que la cámara ha vuelto, Johnny se mueve (y dice lo que se ha
@@ -45,11 +46,19 @@ func probar_presentacion() -> void:
 	# Johnny, a 200 de donde saldrá el jefe (en medio de la sala): desde la puerta, el vómito (420) no le llegaría
 	johnny.position = Vector2(planta.sitios[idx].ancho / 2.0, planta.sitios[idx].alto / 2.0 + 200.0)
 	johnny.get_node("Camara").reset_smoothing()
+	# hasta que empieza la presentación (lo que tarda el jefe en salir), Johnny parado aunque se le dé a andar
+	var antes: Vector2 = johnny.position
+	var suelto := false
+	Input.action_press("derecha")
 	# y, nada más empezar la presentación (hasta ahí, sin nadie a quien hacérselo, esperan listas), un zombi quieto a su
 	# lado, para que Tentacular, Locura y Flatulento tengan a quién (el vómito también va a él; con mucha vida, que no
 	# lo maten)
 	while not presentacion.activa:
 		await get_tree().physics_frame
+		suelto = suelto or johnny.is_physics_processing()
+	Input.action_release("derecha")
+	print("Presentación, antes de salir el jefe: Johnny suelto algún fotograma %s · se ha movido %d dándole a andar (esperado: false, 0)" % [
+		suelto, roundi(johnny.position.distance_to(antes))])
 	var vecino := meter_zombi("normal", johnny.position + Vector2(40, 0))
 	vecino.set_physics_process(false)
 	vecino.vida = 100000

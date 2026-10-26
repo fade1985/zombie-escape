@@ -392,6 +392,12 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	mapa.cosas.add_child(johnny)
 	johnny.position = mapa.puertas[por].llegada()
 	johnny.velocity = Vector2.ZERO
+	# En la sala de un jefe que aún no ha caído, Johnny no se mueve desde que entra hasta que acaba la presentación del
+	# jefe (ni en el fundido ni en lo que tarda en salir; luego le para la presentación)
+	var presentara: bool = sitio.tipo == "jefe" and not sitio.limpio and (not captura or presentar_en_prueba)
+	if presentara:
+		johnny.set_physics_process(false)
+		johnny.quedarse_quieto()
 	supervivientes.al_montar(idx, sitio)
 	joyeria.al_montar(idx, sitio)   # la puerta blindada de la cámara acorazada, y la tarjeta dorada si está en el suelo
 	encuadrar(sitio)
@@ -418,13 +424,17 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	# En el apartamento de la jefa, aparece ella (si aún no ha caído)
 	if sitio.tipo == "jefe" and not sitio.limpio:
 		await get_tree().create_timer(JEFE_TARDA).timeout
+		# se le suelta justo antes de la presentación, que lo vuelve a parar en el acto (sin un fotograma de por medio)
+		# y lo suelta al acabar
+		if presentara:
+			johnny.set_physics_process(true)
 		if aqui == idx and not jefa_salio:
 			jefa_salio = true
 			Sonido.tocar("jefe")
 			# en medio de la sala (la pelea empieza en el centro, nunca junto a una pared); en la azotea, en el helipuerto
 			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.centro_libre())
 			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
-			if not captura or presentar_en_prueba:
+			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 
 

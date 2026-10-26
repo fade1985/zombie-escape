@@ -2,7 +2,8 @@
 # él mientras suelta su grito (la pose y el rugido, sin ninguna frase escrita: con el zoom no se leería), entran dos
 # franjas negras de cine y sale su nombre en grande; luego la cámara vuelve y empieza la pelea. La monta partida.gd
 # al sacar al jefe (presentar); en la partida de prueba se salta, salvo en su prueba (--captura --presentacion).
-# Mientras dura: Johnny, los acompañantes y los demás zombis se quedan quietos (y Johnny no puede recibir daño); el
+# Mientras dura: Johnny, los acompañantes y los demás zombis se quedan quietos (y Johnny no puede recibir daño; quieto
+# ya lo estaba desde que entró en la sala, partida.montar, y se le suelta justo antes, en el mismo fotograma); el
 # HUD, el minimapa y la barra del jefe se esconden; Johnny se calla (lo que estuviera diciendo, como el aviso de la
 # habitación al entrar, y lo que fuera a decir: partida.decir lo deja en "pendiente") y lo dice al acabar; el jefe se
 # pone en su pose de gritar (su estado "grito", el mismo de cuando se enfada, que también lo deja sin recibir daño) y
