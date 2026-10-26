@@ -148,7 +148,9 @@ en una línea.
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y
   los zombis despiertos empujando medio segundo, y se quedan abiertas (`abierta` en su hueco). Cerradas paran la luz,
   las balas, la vista de los zombis y la niebla. Y las cerradas con llave (su hueco lleva `cerrada`): el baño del
-  superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Llenan el hueco: de frente,
+  superviviente, las viviendas sin rescatar y la cámara acorazada de la joyería (`acero`). Las viviendas de los ya
+  rescatados llevan la suya abierta del todo (`libre` y `abierta` desde el principio: no choca ni tapa la luz; la
+  pone `mapa.poner_viviendas`). Llenan el hueco: de frente,
   con su marco y, encima, el dintel (un trozo de `cara_pared.gd` con `desde`, que pone `mapa.poner_caras`); de lado,
   sobre su umbral. Se prueba con `--puertas`.
 - `cara_pared.gd`, `puerta.gd` (las salidas), `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`

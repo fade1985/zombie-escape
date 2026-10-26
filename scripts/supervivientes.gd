@@ -881,8 +881,8 @@ func probar_viviendas() -> void:
 		(cerradas if d.cerrada else abiertas).append(DATOS[d.vecino].nombre)
 	var hojas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == PUERTA_BANO)
 	var placas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == mapa.PLACA)
-	print("Viviendas: placas %d · cerradas %s con su hoja %d · abiertas %s (esperado: 6, [Médica, Farmacéutica], 2, los otros cuatro)" % [
-		placas.size(), cerradas, hojas.size(), abiertas])
+	print("Viviendas: placas %d · cerradas %s · abiertas %s · hojas %d, de ellas abiertas %d (esperado: 6, [Médica, Farmacéutica], los otros cuatro, 6, 4)" % [
+		placas.size(), cerradas, abiertas, hojas.size(), hojas.filter(func(h): return h.abierta == 1.0).size()])
 	var oscuras: Array = casas.apt.salas.filter(func(s): return mapa.oculto(s.centro)).map(func(s): return s.nombre)
 	print("Viviendas: a oscuras %s (esperado: [Médica, Farmacéutica])" % [oscuras])
 	print("Viviendas: vecinos %s (esperado: cada uno en la suya)" % [vecinos.map(func(v):

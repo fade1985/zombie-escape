@@ -336,9 +336,9 @@ func probar() -> void:
 	hecho = DURA * 0.5 - 0.2
 	grupo_t = 0.4
 	await get_tree().create_timer(1.2, false).timeout
-	print("Barricada a %d s: tablas %d | zombis %d | provisiones en el suelo %d" % [int(hecho), sup.puerta.tablas,
+	print("Barricada a %d s: tablas %d | zombis %d | provisiones en el suelo %d (esperado: de 1 a 4, el molotov, la granada y 2 cajas de munición menos las que ya haya cogido Johnny)" % [int(hecho), sup.puerta.tablas,
 		get_tree().get_nodes_in_group("zombis").size(), partida.mapa.cosas.get_children().filter(
-		func(n): return n.get("icono") in sup.iconos_lanzables() or n.get("icono") == partida.ICONO_MUNICION).size()])
+		func(n): return n.get("icono") in sup.iconos_lanzables() or n.is_in_group("cajas_municion")).size()])
 	Captura.foto("captura-ferretero-barricada.png")
 	# un zombi pegado a la puerta: no avanza
 	for z in get_tree().get_nodes_in_group("zombis"):

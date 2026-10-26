@@ -680,13 +680,17 @@ func poner_viviendas() -> void:
 		placa.position = Vector2((d.c + d.ancho / 2.0) * CASILLA, (d.f + 1) * CASILLA + 1)
 		cosas.add_child(placa)
 		d.cerrada = d.vecino not in rescatados
+		var hoja := PUERTA_BANO.new()
 		if d.cerrada:
-			var hoja := PUERTA_BANO.new()
 			hoja.montar(d)
-			cosas.add_child(hoja)
 			descubiertas.erase(d.a)
 		else:
+			# la de un rescatado, abierta de par en par (libre y ya abierta: no choca ni tapa la luz)
+			hoja.libre = true
+			d.abierta = true
+			hoja.montar(d)
 			descubiertas[d.a] = true
+		cosas.add_child(hoja)
 	if "tecnico" in rescatados:
 		var camaras := CAMARAS.new()
 		camaras.position = Viviendas.casa("tecnico") + CAMARAS_DETRAS
