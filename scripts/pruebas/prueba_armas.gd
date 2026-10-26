@@ -959,8 +959,8 @@ func probar_fuego_acido() -> void:
 
 
 # Con "--captura --pistola-electrica": el lanza rayos con su dibujo propio (Armas.DATOS.pistola_electrica,
-# conserje-48-pistola-electrica: la hoja lleva el retroceso corto de pistola y una descarga celeste en zigzag que sale de los dos
-# electrodos del táser azul marino; casilla de 180x168, con los pies en 90,88). Como el lanza ácido, en la sala de mantenimiento,
+# conserje-48-lanza-rayos: la hoja lleva el retroceso y una descarga celeste en zigzag que sale de la punta del arma, blanca y gris con una
+# franja de luz; casilla de 208x186, con los pies en 104,104). Como el lanza ácido, en la sala de mantenimiento,
 # Johnny la compra en la tienda de armas del ordenador (captura-pistola-electrica-tienda.png, con ella marcada) y cuenta su hoja, su
 # ritmo, su alcance, sus pies, su boca hacia el este y que ya no le salen chispitas de adorno; dispara a un zombi a 120 a su
 # izquierda (le quita vida y lo aturde), con otro cerca de él (la descarga salta y lo aturde también) y otro a 330 (más lejos de lo
@@ -987,7 +987,7 @@ func probar_pistola_electrica() -> void:
 	johnny.espera = 1000.0                # que no dispare por su cuenta: aquí dispara la prueba
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
-	print("Lanza rayos en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas de adorno %s · icono «%s» (esperado: conserje-48-pistola-electrica.tres, 5, 230, (90, 88), (22, -30), false, pistola_electrica)" % [
+	print("Lanza rayos en la mano: hoja «%s» · ritmo %.0f · alcance %.0f · pies %s · boca este %s · chispitas de adorno %s · icono «%s» (esperado: conserje-48-lanza-rayos.tres, 5, 230, (104, 104), (26, -30), false, pistola_electrica)" % [
 		johnny.sprite.sprite_frames.resource_path.get_file(), w.ritmo, w.alcance, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id)])
 
 	# la chispa: sale de la boca hacia la izquierda, le quita vida al primero (a 120) y lo aturde, salta al que tiene cerca (a 100
@@ -1051,7 +1051,7 @@ func probar_pistola_electrica() -> void:
 		johnny.atacar(0.0)
 		await get_tree().create_timer(0.09).timeout
 		Captura.foto("captura-pistola-electrica-%s.png" % skin)
-		print("Con %s: hoja «%s» (esperado: conserje-48-pistola-electrica-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
+		print("Con %s: hoja «%s» (esperado: conserje-48-lanza-rayos-%s.tres)" % [skin, johnny.sprite.sprite_frames.resource_path.get_file(), skin])
 		await get_tree().create_timer(0.6).timeout
 
 	Guardado.cambiar(func(g2):

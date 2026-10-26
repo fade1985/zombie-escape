@@ -176,7 +176,9 @@ en una línea.
   Si el arma se sale de la casilla, `celda`, `pivote` y `lienzo_ataque` en su `arma.json`; si el fogonazo no es
   naranja, sin `boca: fogonazo` y la boca a mano en `armas.gd`; `andar.ciclo` y `andar.espejo` para el andar. Retoques:
   `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
-  ácido sale de la del lanzallamas) y `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
+  ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
+  rehace los efectos del disparo y el parpadeo de espaldas; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`) y
+  `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
   `baul_mantenimiento.py`, `ordenador_mantenimiento.py`, `botiquin.py` (el del baño; sus bocetos, `guias_botiquin.py`),
   `taquilla.py`, `helicoptero.py` (el helicóptero de Velaria), `centro_sprites.py`, `importar.py` (muebles

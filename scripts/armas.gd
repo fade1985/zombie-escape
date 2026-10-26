@@ -224,21 +224,21 @@ const DATOS := {
 			"n": Vector2(9, -45), "no": Vector2(-24, -33), "o": Vector2(-26, -20), "so": Vector2(-25, -11)},
 		"cano": CANO_LANZALLAMAS,
 	},
-	# el lanza rayos: un táser azul marino con una batería gris pegada debajo y dos electrodos
-	# (conserje-48-pistola-electrica). Su hoja lleva el retroceso corto y la descarga celeste en zigzag que sale de los
-	# electrodos (las chispas que vuelan, aturden y saltan al zombi de al lado las pone el juego, armas_creadas.gd y
-	# chorro.gd); la casilla es de 180x168, con los pies en 90,88, porque la descarga llega a 88 píxeles a un lado, 86
-	# al otro, 86 hacia arriba y 77 hacia abajo. La boca NO sale de arma.py (las chispas son celestes: no hay fogonazo
-	# naranja que buscar, conserje-48-pistola-electrica.json no tiene "muzzle"): es el centro de la chispita de los dos
-	# electrodos del dibujo quieto, a mano. Gasta baterías: una de la mochila le llena el cargador entero (antes
-	# gastaba pilas, una munición de reserva como las balas)
+	# el lanza rayos: un arma de tamaño escopeta, blanca y gris con una franja de luz celeste en el costado, que Johnny
+	# lleva a dos manos (conserje-48-lanza-rayos; antes era un táser pequeño, el id sigue siendo "pistola_electrica").
+	# Su hoja lleva el retroceso y la descarga celeste en zigzag que sale de la punta (las chispas que vuelan, aturden y
+	# saltan al zombi de al lado las pone el juego, armas_creadas.gd y chorro.gd); la casilla es de 208x186, con los pies
+	# en 104,104, porque la descarga llega a unos 120 píxeles (se recorta lo que pasa de 104: solo la punta fina del
+	# rayo). La boca NO sale de arma.py (las chispas son celestes: no hay fogonazo naranja que buscar,
+	# conserje-48-lanza-rayos.json no tiene "muzzle"): es la punta del arma del dibujo quieto, a mano. Gasta baterías:
+	# una de la mochila le llena el cargador entero (antes gastaba pilas, una munición de reserva como las balas)
 	"pistola_electrica": {
 		"nombre": "Lanza rayos", "tipo": "fuego", "dano": 5, "ritmo": 5.0, "alcance": 230.0, "velocidad": 460.0,
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 0.2, "cargador": 30, "recarga": 2.0,
-		"cartucho": false, "relleno": "bateria", "efecto": "chispa", "pies": Vector2(90, 88),
-		"hoja": preload("res://assets/sprites/conserje-48-pistola-electrica.tres"),
-		"boca": {"s": Vector2(0, -31), "se": Vector2(19, -17), "e": Vector2(22, -30), "ne": Vector2(18, -42),
-			"n": Vector2(5, -48), "no": Vector2(-19, -42), "o": Vector2(-22, -30), "so": Vector2(-19, -17)},
+		"cartucho": false, "relleno": "bateria", "efecto": "chispa", "pies": Vector2(104, 104),
+		"hoja": preload("res://assets/sprites/conserje-48-lanza-rayos.tres"),
+		"boca": {"s": Vector2(9, -24), "se": Vector2(21, -18), "e": Vector2(26, -30), "ne": Vector2(21, -39),
+			"n": Vector2(-10, -39), "no": Vector2(-22, -39), "o": Vector2(-26, -30), "so": Vector2(-22, -18)},
 	},
 }
 
