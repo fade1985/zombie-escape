@@ -3,9 +3,9 @@
 # balas y la vista de los zombis (sus rayos chocan con la capa 1, como con los muros). Al abrirse deja de chocar y
 # gira sobre las bisagras. De frente es un dibujo de PixelLab (puerta-bano) que se tuerce hacia la habitación de
 # abajo hasta quedarse casi de canto, dentro de un marco que llena el hueco hasta el dintel (el trozo de muro de
-# encima, que pone mapa.gd); de lado (hoja_de_lado), la puerta tumbada a lo largo del hueco, que lo llena entero
-# (puerta-bano-lado-cerrada, de tools/puerta_lado_cerrada.py), y que al abrirse gira de pie hasta quedarse casi pegada a
-# la pared. Abierta, se queda así: lo apunta en su hueco ("abierta") para que siga abierta al volver. Abierta del todo
+# encima, que pone mapa.gd); de lado (hoja_de_lado), un tablón de madera fino metido en el hueco, con su pomo de latón
+# sobresaliendo por los dos lados (puerta-bano-lado-cerrada, de tools/puerta_lado_cerrada.py), y que al abrirse gira de pie
+# hasta quedarse casi pegada a la pared. Abierta, se queda así: lo apunta en su hueco ("abierta") para que siga abierta al volver. Abierta del todo
 # es otro dibujo de PixelLab (de frente puerta-bano-abierta y de lado puerta-bano-abierta-lado, de
 # tools/puerta_abierta.py): nuestra puerta casi de canto, con su canto, su pomo y su sombra en el suelo.
 #
@@ -32,7 +32,7 @@ const GIRO := 1.1071        # lo que gira de frente al abrirse del todo, 63 grad
 const ABIERTA_LADO := preload("res://assets/sprites/puerta-bano-abierta-lado.png")   # la de lado, abierta del todo: 14 × 67
 const SOMBRA_LADO := 3      # las filas de abajo de ese dibujo que son la sombra del suelo
 const GIRO_LADO := 2.6779   # lo que gira de lado al abrirse del todo, 153 grados: casi pegada a la pared (cada píxel hacia un lado, dos hacia arriba)
-const CERRADA_LADO := preload("res://assets/sprites/puerta-bano-lado-cerrada.png")   # la de lado, cerrada: 16 × 32 (el hueco entero)
+const CERRADA_LADO := preload("res://assets/sprites/puerta-bano-lado-cerrada.png")   # la de lado, cerrada: un tablón de 16 × 32 (el hueco entero, con el tablón en medio)
 const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
@@ -231,7 +231,7 @@ func _draw() -> void:
 
 
 # La hoja de madera de un tabique de lado, con la bisagra arriba del hueco: cerrada, su dibujo (puerta-bano-lado-cerrada:
-# la puerta tumbada a lo largo del hueco, que lo llena entero; en cuanto empieza a girar se va); al abrirse, la puerta de
+# un tablón fino con su pomo, de canto, a lo largo del hueco; en cuanto empieza a girar se va); al abrirse, la puerta de
 # verdad (la de frente, torcida) gira hacia la habitación de la derecha hasta quedarse casi pegada a la pared, de pie,
 # con su cara hacia quien mira y su canto de la bisagra a la izquierda; y abierta del todo es su dibujo
 # (puerta-bano-abierta-lado). La bisagra pasa del medio del hueco al borde de la habitación para que la hoja no se
