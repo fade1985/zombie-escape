@@ -47,6 +47,8 @@ const MUEBLES := {
 	"bed_ferretero":    {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-ferretero"},
 	"bed_farmaceutica": {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-farmaceutica"},
 	"bed_tecnico":      {"len": 84, "dep": 140, "paredes": "", "archivo": "viviendas/cama-tecnico"},
+	# y su armario, el de siempre pero limpio, sin sangre ni arañazos (tools/armario_vivienda.py)
+	"wardrobe_vivienda": {"len": 96, "dep": 44, "paredes": "", "archivo": "viviendas/armario-limpio"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
 	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
@@ -459,13 +461,13 @@ const SALAS := {
 	# entrada de las viviendas es "izquierda"): una cama individual en la esquina de arriba a la derecha (el mismo sitio que
 	# en el dormitorio individual de los pisos), con la colcha del color de cada uno, para distinguir las habitaciones, a su
 	# izquierda una mesilla con la lamparita apagada (sin luz: solo el dibujo) y, en la esquina de arriba a la izquierda,
-	# un armario, algo separado de ella (el centro, en la casilla 2,5: queda una casilla libre entre él y el muro)
+	# un armario limpio, algo separado de ella (el centro, en la casilla 2,5: queda una casilla libre entre él y el muro)
 	"pasillo-viviendas": {"muebles": [], "cuantos": [0, 0]},
 	"habitacion": {"muebles": [], "cuantos": [0, 0]},
-	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_policia", 10.6]]}},
-	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_medico", 10.6]]}},
-	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_militar", 10.6]]}},
-	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_ferretero", 10.6]]}},
-	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_farmaceutica", 10.6]]}},
-	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_tecnico", 10.6]]}},
+	"habitacion-policia": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_policia", 10.6]]}},
+	"habitacion-medico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_medico", 10.6]]}},
+	"habitacion-militar": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_militar", 10.6]]}},
+	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_ferretero", 10.6]]}},
+	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_farmaceutica", 10.6]]}},
+	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["wardrobe_vivienda", 2.5], ["nightstand", 8.65, "arriba", "apagada"], ["bed_tecnico", 10.6]]}},
 }

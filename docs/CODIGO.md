@@ -149,7 +149,7 @@ en una línea.
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
   `viviendas.gd`, el pasillo de los rescatados (cada habitación lleva su cama individual en la esquina de arriba a la derecha, con la
-  colcha del color del superviviente y, a su izquierda, una mesilla con la luz apagada, y un armario en la esquina de arriba a la izquierda (algo separado de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`; las camas, con `tools/camas_viviendas.py`).
+  colcha del color del superviviente y, a su izquierda, una mesilla con la luz apagada, y un armario limpio (sin sangre ni arañazos) en la esquina de arriba a la izquierda (algo separado de ella): `colocados` de `habitacion-<id>` en `catalogo.gd`; las camas, con `tools/camas_viviendas.py`, y el armario, con `tools/armario_vivienda.py`).
 - `catalogo.gd` (qué muebles lleva cada sala), `muebles.gd` (dónde va cada uno; `islas`, `fijos`, `de_piso` para los puestos a mano), `mueble.gd`.
 - `puerta_bano.gd`: las puertas de dentro. Una en cada hueco entre habitaciones de los pisos, las tiendas y la sala de
   mantenimiento (`libre`, las pone `mapa.poner_hojas`): cerradas al empezar, las abren Johnny y los suyos al arrimarse y

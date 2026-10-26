@@ -359,6 +359,10 @@
     "huella": "6c3969fda369d75f",
     "sprite": "mueble-stafftoilet-lado"
   },
+  "viviendas/armario-limpio.png": {
+    "huella": "2476fcb8046aa927",
+    "sprite": "mueble-wardrobe_vivienda"
+  },
   "viviendas/cama-farmaceutica.png": {
     "huella": "b9b4be2a7835c2a9",
     "sprite": "mueble-bed_farmaceutica"

@@ -34,18 +34,29 @@ def tono(hexa):
 
 
 def sin_sangre(im):
-    """Cada píxel de sangre pasa a ser el color que más se repite entre sus vecinos (sábana o almohada), de fuera hacia
-    dentro de la mancha, hasta que no queda ninguno"""
     px = im.load()
-    manchas = {(x, y) for y in range(CABECERO, im.height) for x in range(im.width) if px[x, y][:3] in SANGRE}
+    return rellenar(im, {(x, y) for y in range(CABECERO, im.height) for x in range(im.width) if px[x, y][:3] in SANGRE})
+
+
+def rellenar(im, manchas, evitar=()):
+    """Cada píxel de "manchas" (un conjunto de (x, y): sangre, arañazos...) pasa a ser el color que más se repite entre
+    sus vecinos que no lo son (sábana, almohada, madera), de fuera hacia dentro, hasta que no queda ninguno. Los colores
+    de "evitar" (los oscuros del borde de un dibujo) solo se usan cuando ya no queda ningún píxel con otro vecino que
+    rellenar. También lo usa tools/armario_vivienda.py"""
+    px = im.load()
     while manchas:
         limpios = {}
+        con_oscuros = {}
         for x, y in manchas:
             vecinos = Counter(px[x + dx, y + dy] for dx in (-1, 0, 1) for dy in (-1, 0, 1)
                               if (dx or dy) and 0 <= x + dx < im.width and 0 <= y + dy < im.height
                               and (x + dx, y + dy) not in manchas and px[x + dx, y + dy][3] > 0)
-            if vecinos:
-                limpios[(x, y)] = vecinos.most_common(1)[0][0]
+            claros = Counter({c: n for c, n in vecinos.items() if c[:3] not in evitar})
+            if claros:
+                limpios[(x, y)] = claros.most_common(1)[0][0]
+            elif vecinos:
+                con_oscuros[(x, y)] = vecinos.most_common(1)[0][0]
+        limpios = limpios or con_oscuros
         if not limpios:
             break
         for q, color in limpios.items():
