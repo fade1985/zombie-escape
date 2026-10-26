@@ -154,7 +154,11 @@ en una línea.
   con su marco y, encima, el dintel (un trozo de `cara_pared.gd` con `desde`, que pone `mapa.poner_caras`); de lado,
   sobre su umbral. De frente, abierta del todo es un dibujo de PixelLab (`puerta-bano-abierta.png`, la puerta casi de
   canto con su canto, su pomo y su sombra; la hace `tools/puerta_abierta.py`: guía con nuestra puerta, PixelLab,
-  recolor al marrón de la cerrada); mientras gira, se tuerce por código a 63 grados (`GIRO`). Se prueba con `--puertas`.
+  recolor al marrón de la cerrada); mientras gira, se tuerce por código a 63 grados (`GIRO`). La de lado (tabiques
+  verticales; `hoja_de_lado`) cerrada es la tabla de siempre; al abrirse gira la puerta de verdad hacia la habitación de
+  la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
+  la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
+  tablas siguen con la hoja vista desde arriba. Se prueba con `--puertas`.
 - `cara_pared.gd`, `puerta.gd` (las salidas), `placa.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `cafetera.gd`, `camaras.gd`,
   `valla.gd` (la del helipuerto de la azotea).

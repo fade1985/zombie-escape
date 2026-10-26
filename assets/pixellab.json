@@ -3223,6 +3223,18 @@
    "puerta abierta 203 (fuerza 80, semilla 203)": "4ec0dedd-755c-5167-8d2e-3275c1f4760e"
   }
  },
+ "puerta-bano-abierta-lado": {
+  "kind": "images",
+  "fecha": "2026-10-26",
+  "nota": "La puerta de dentro (puerta_bano.gd) abierta del todo en los tabiques verticales (entre dos habitaciones una al lado de la otra): era la hoja vista desde arriba, como en un plano, una tabla marrón plana con un cuadradito dorado, y quedaba mal. Ahora la hoja se queda de pie en la habitación de la derecha, casi pegada a la pared, con la bisagra arriba del hueco: la misma forma que la puerta de frente (puerta-bano-abierta) pero al revés, porque se aleja de quien mira y sus columnas suben a la derecha; se ve su cara y, a la izquierda, el canto de la bisagra. Con la receta de la de frente: la guía de py tools/puerta_abierta.py guia lado (nuestra puerta de madera, 12 columnas que suben 2 píxeles cada una, el canto de 2 píxeles de la bisagra con dos bisagras de metal, al doble y con 4 de azul alrededor; 36×142, subida con get_upload_url) como init_image, view side, no_background false, single color black outline, medium shading, medium detail, text_guidance_scale 10, fuerza 50 (semillas 301 y 302) y 80 (303 y 304). Texto: 'open interior wooden door swung open and leaning away from the viewer at a steep angle, seen as a thin slanted parallelogram rising to the right, with two recessed panels, round brass doorknob near the right edge, the thin lighter wood hinge edge of the door on the left with two small metal hinges, scratched, a bloody handprint, zombie apocalypse, horror game, muted colors, game sprite on a plain blue background'. El 301 salió de frente y casi sin la inclinación, el 302 rosado y con su propia sombra azul pintada, y el 304 con dos ventanas de cristal que no son de nuestra puerta. Elegido el 303 (fuerza 80): conserva la inclinación y es de la madera marrón oscura con bisel de la nuestra; los cuatro, con fondo, en assets/sources/puertas/descartes/ (bano-abierta-lado-<semilla>.png) y el elegido sin fondo en assets/sources/puertas/bano-abierta-lado.png. Sprite con py tools/puerta_abierta.py sprite assets/sources/puertas/bano-abierta-lado.png lado: igual que la de frente (recorte, a la mitad exacta, madera al marrón de nuestra puerta, 3 filas de sombra; 14×67) y, además, el pomo, que PixelLab dibujó junto a la bisagra, se borra y se pinta el de latón de nuestra puerta en el canto libre, a la derecha. puerta_bano.gd (hoja_de_lado): mientras gira, la puerta cerrada torcida por código hasta 153 grados (GIRO_LADO), con la bisagra pasando del medio del hueco al borde de la habitación; abierta del todo, este dibujo. La blindada de acero y la del almacén con tablas siguen con la hoja vista desde arriba.",
+  "coste": "4 generaciones",
+  "piezas": {
+   "puerta abierta de lado 303 (fuerza 80, semilla 303; elegida)": "c7b03873-1d55-56de-b69d-23a380b8f46b",
+   "puerta abierta de lado 301 (fuerza 50, semilla 301)": "c0d5102e-2a36-5b70-bee6-fd84e6dc174e",
+   "puerta abierta de lado 302 (fuerza 50, semilla 302)": "7aff2032-e185-5acb-8968-ba1633bf67fc",
+   "puerta abierta de lado 304 (fuerza 80, semilla 304)": "a5160aed-ecf6-52c9-bd84-eccba64a8328"
+  }
+ },
  "puertas": {
   "kind": "images",
   "fecha": "2026-10-23",

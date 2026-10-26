@@ -28,6 +28,10 @@ const MARCO := 4.0          # de frente, el grueso del marco (2 píxeles): con l
 const DINTEL := ALTO + MARCO   # de frente, lo alto del marco; por encima va el dintel (mapa.gd: poner_caras)
 const ABIERTA := preload("res://assets/sprites/puerta-bano-abierta.png")   # la hoja abierta del todo, de frente: 14 × 67 píxeles (64 de hoja y 3 de sombra)
 const GIRO := 1.1071        # lo que gira de frente al abrirse del todo, 63 grados (cada píxel hacia un lado, dos hacia abajo)
+const ABIERTA_LADO := preload("res://assets/sprites/puerta-bano-abierta-lado.png")   # la de lado, abierta del todo: 14 × 67
+const SOMBRA_LADO := 3      # las filas de abajo de ese dibujo que son la sombra del suelo
+const GIRO_LADO := 2.6779   # lo que gira de lado al abrirse del todo, 153 grados: casi pegada a la pared (cada píxel hacia un lado, dos hacia arriba)
+const FIN_TABLA := 0.2      # de lado, lo que tarda en irse la tabla de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
 const MIRAR := 0.1          # cada cuánto mira una libre si alguien la empuja
@@ -99,11 +103,11 @@ func abrir() -> void:
 	arriba_de_lado()
 
 
-# La de lado, abierta, se queda de través arriba del hueco: se ordena con lo demás por ahí (si no, taparía a quien
-# pase por debajo de ella)
+# La de lado, abierta, se queda de pie arriba del hueco (su bisagra, 4 unidades por debajo del borde): se ordena con lo
+# demás por ahí (si no, taparía a quien pase por debajo de ella)
 func arriba_de_lado() -> void:
 	if not de_frente:
-		position.y = caja.position.y + 18
+		position.y = caja.position.y + 4
 
 
 # Una libre, cerrada: si Johnny o uno de los suyos se arrima, se abre; si un zombi despierto la empuja, tiembla y,
@@ -201,24 +205,55 @@ func _draw() -> void:
 			draw_rect(r, umbral)
 			draw_rect(Rect2(r.position.x, r.position.y, 2, r.size.y), borde)
 			draw_rect(Rect2(r.end.x - 2, r.position.y, 2, r.size.y), borde)
-		# y la hoja vista desde arriba, de punta a punta del hueco, con la bisagra arriba; gira hacia la habitación de
-		# la derecha hasta quedarse de través, contra el marco
-		var grueso := 18.0 if acero else 14.0
-		draw_set_transform(Vector2(r.get_center().x + temblor, r.position.y + grueso / 2), -abierta * PI / 2)
-		var hoja := Rect2(-grueso / 2, -grueso / 2, grueso, r.size.y)
-		if acero:
-			draw_rect(hoja, Color("#5c646c"))
-			draw_rect(Rect2(hoja.position.x + 3, hoja.position.y, 4, hoja.size.y), Color("#7a848c"))
-			draw_rect(hoja, LINEA, false, 2.0)
-			draw_rect(Rect2(hoja.position.x + 6, hoja.end.y - 16, 6, 6), Color("#23272b"))
+		if acero or tablas > 0:
+			# la blindada y la del almacén con tablas: la hoja vista desde arriba, de punta a punta del hueco, con la
+			# bisagra arriba; gira hacia la habitación de la derecha hasta quedarse de través, contra el marco
+			var grueso := 18.0 if acero else 14.0
+			draw_set_transform(Vector2(r.get_center().x + temblor, r.position.y + grueso / 2), -abierta * PI / 2)
+			var hoja := Rect2(-grueso / 2, -grueso / 2, grueso, r.size.y)
+			if acero:
+				draw_rect(hoja, Color("#5c646c"))
+				draw_rect(Rect2(hoja.position.x + 3, hoja.position.y, 4, hoja.size.y), Color("#7a848c"))
+				draw_rect(hoja, LINEA, false, 2.0)
+				draw_rect(Rect2(hoja.position.x + 6, hoja.end.y - 16, 6, 6), Color("#23272b"))
+			else:
+				draw_rect(hoja, Color("#6e4b35"))
+				draw_rect(hoja, LINEA, false, 2.0)
+				draw_rect(Rect2(hoja.position.x + 4, hoja.end.y - 14, 5, 5), Color("#c9a227"))   # el pomo
+			for i in tablas:
+				var y: float = hoja.position.y + r.size.y * (i + 1) / (tablas + 1.0)
+				tabla(Vector2(hoja.position.x - 10, y - 3), Vector2(hoja.end.x + 10, y + 3))
+			draw_set_transform(Vector2.ZERO)
 		else:
-			draw_rect(hoja, Color("#6e4b35"))
-			draw_rect(hoja, LINEA, false, 2.0)
-			draw_rect(Rect2(hoja.position.x + 4, hoja.end.y - 14, 5, 5), Color("#c9a227"))   # el pomo
-		for i in tablas:
-			var y: float = hoja.position.y + r.size.y * (i + 1) / (tablas + 1.0)
-			tabla(Vector2(hoja.position.x - 10, y - 3), Vector2(hoja.end.x + 10, y + 3))
-		draw_set_transform(Vector2.ZERO)
+			hoja_de_lado(r, temblor)
+
+
+# La hoja de madera de un tabique de lado, con la bisagra arriba del hueco: cerrada, la tabla de siempre, vista desde
+# arriba (en cuanto empieza a girar se va); al abrirse, la puerta de verdad (la cerrada, torcida) gira hacia la habitación
+# de la derecha hasta quedarse casi pegada a la pared, de pie, con su cara hacia quien mira y su canto de la bisagra a la
+# izquierda; y abierta del todo es su dibujo (puerta-bano-abierta-lado). La bisagra pasa del medio del hueco al borde de la
+# habitación para que la hoja no se quede encima del tabique
+func hoja_de_lado(r: Rect2, temblor: float) -> void:
+	if abierta < FIN_TABLA:
+		var tabla_c := Color.WHITE
+		tabla_c.a = 1.0 - abierta / FIN_TABLA
+		var grueso := 14.0
+		var cerrada := Rect2(r.get_center().x - grueso / 2 + temblor, r.position.y, grueso, r.size.y)
+		draw_rect(cerrada, Color("#6e4b35") * tabla_c)
+		draw_rect(cerrada, LINEA * tabla_c, false, 2.0)
+		draw_rect(Rect2(cerrada.position.x + 4, cerrada.end.y - 14, 5, 5), Color("#c9a227") * tabla_c)   # el pomo
+	if abierta <= 0.0:
+		return
+	var bisagra := Vector2(lerpf(r.get_center().x, r.end.x - 2.0, abierta) + temblor, r.position.y + 4.0)
+	if abierta >= 1.0:
+		# (la esquina de arriba a la izquierda del dibujo, 4 unidades a la izquierda de la cara: el canto de la bisagra)
+		var tam := ABIERTA_LADO.get_size() * 2.0
+		draw_texture_rect(ABIERTA_LADO, Rect2(bisagra + Vector2(-4.0, -tam.y + SOMBRA_LADO * 2.0), tam), false)
+		return
+	var giro := abierta * GIRO_LADO
+	draw_set_transform_matrix(Transform2D(Vector2(sin(giro), cos(giro)), Vector2(0, 1), bisagra))
+	draw_texture_rect(DIBUJO, Rect2(0, -ALTO, r.size.y - 8.0, ALTO), false, Color.WHITE.darkened(0.15 * abierta))
+	draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
 # La puerta blindada de la cámara acorazada de la joyería, de frente ("hoja" con el pie en 0): una plancha de acero con

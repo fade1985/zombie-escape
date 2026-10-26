@@ -11,11 +11,18 @@ bisagra: es un paralelogramo de lados verticales. De 28 píxeles de ancho pasa a
 píxeles (2 a 1: la pendiente limpia del pixel art, unos 63 grados de giro). Al final, el canto de la hoja, con su grosor,
 que da hacia quien mira.
 
-  py tools/puerta_abierta.py guia           → assets/sources/puertas/guias/bano-abierta.png (el boceto, sobre azul)
+Con "lado", la de los tabiques verticales (entre dos habitaciones una al lado de la otra). Hasta el 26 oct, abierta era la
+hoja vista desde arriba, como en un plano: una tabla marrón plana con un cuadradito dorado, que no casaba con nada. Ahora
+la hoja se queda de pie en la habitación de la derecha, casi pegada a la pared, con la bisagra arriba: la misma forma que
+la de frente pero al revés, porque se aleja de quien mira y sus columnas SUBEN (CAIDA, hacia arriba). Lo que se ve es su
+cara y, a la izquierda, el canto de la bisagra (el libre queda detrás).
+
+  py tools/puerta_abierta.py guia [lado]    → assets/sources/puertas/guias/bano-abierta[-lado].png (el boceto, sobre azul)
   py tools/guias_centro.py quita <png>…     quita el fondo azul de lo que devuelve PixelLab
-  py tools/puerta_abierta.py base           → assets/sources/puertas/bano-abierta-base.png (la forma sola, sin PixelLab)
-  py tools/puerta_abierta.py sprite <png>   → assets/sprites/puerta-bano-abierta.png (de un intento ya sin fondo, a la
-                                              mitad, con la sombra del suelo); sin <png>, de la base
+  py tools/puerta_abierta.py base [lado]    → assets/sources/puertas/bano-abierta[-lado]-base.png (la forma sola)
+  py tools/puerta_abierta.py sprite <png> [lado]
+                                            → assets/sprites/puerta-bano-abierta[-lado].png (de un intento ya sin fondo,
+                                              a la mitad, con la sombra del suelo); sin <png>, de la base
 """
 import colorsys, os, sys
 from PIL import Image
@@ -38,8 +45,9 @@ ANCHO_FINAL = COLUMNAS + CANTO
 ALTO_FINAL = ALTO + CAIDA * COLUMNAS
 
 
-def hoja_abierta():
-    """La base: nuestra puerta, estrechada y torcida, con su canto y su contorno (píxeles del juego, sin fondo)"""
+def hoja_abierta(lado=False):
+    """La base: nuestra puerta, estrechada y torcida, con su canto y su contorno (píxeles del juego, sin fondo). De lado,
+    sus columnas suben a la derecha y el canto con grosor es el de la bisagra, a la izquierda"""
     src = Image.open(f'{SPRITES}/puerta-bano.png').convert('RGBA')
     out = Image.new('RGBA', (ANCHO_FINAL, ALTO_FINAL), (0, 0, 0, 0))
     # la cara: cada columna de ahora, de las de antes que le tocan (la primera y la última tal cual: son el contorno)
@@ -58,12 +66,23 @@ def hoja_abierta():
             r, g, bl = (sum(p[k] for p in visibles) // len(visibles) for k in range(3))
             if (r, g, bl) != OUTLINE[:3]:
                 r, g, bl = (int(c * OSCURECE) for c in (r, g, bl))
-            out.putpixel((i, y + CAIDA * i), (r, g, bl, 255))
-    # el canto: la punta de la hoja, con su grosor, un poco más abajo que la última columna
+            if lado:
+                out.putpixel((CANTO + i, y + CAIDA * (COLUMNAS - 1 - i)), (r, g, bl, 255))
+            else:
+                out.putpixel((i, y + CAIDA * i), (r, g, bl, 255))
+    # el canto, con su grosor, un poco más abajo que la columna de al lado: de frente, la punta de la hoja; de lado, la
+    # bisagra (con sus dos bisagras de metal)
     y0 = CAIDA * COLUMNAS - 1
     for k in range(CANTO):
         for y in range(1, ALTO - 1):
-            out.putpixel((COLUMNAS + k, y0 + y), CANTO_CLARO if k == 0 else CANTO_SOMBRA)
+            if lado:
+                out.putpixel((k, y0 + y), CANTO_SOMBRA if k == 0 else CANTO_CLARO)
+            else:
+                out.putpixel((COLUMNAS + k, y0 + y), CANTO_CLARO if k == 0 else CANTO_SOMBRA)
+    if lado:
+        for y in (7, ALTO - 9):
+            for dy in range(3):
+                out.putpixel((0, y0 + y + dy), (88, 92, 100, 255))
     # el contorno: cada hueco pegado al dibujo (también por abajo: la hoja se ve sobre el suelo)
     borde = [(x, y) for y in range(ALTO_FINAL) for x in range(ANCHO_FINAL) if out.getpixel((x, y))[3] == 0 and any(
         0 <= x + dx < ANCHO_FINAL and 0 <= y + dy < ALTO_FINAL and out.getpixel((x + dx, y + dy))[3] == 255
@@ -73,13 +92,13 @@ def hoja_abierta():
     return out
 
 
-def guia():
+def guia(lado=False):
     """El boceto para PixelLab: la base al doble (cada píxel del juego, 2×2), con un margen, sobre azul"""
-    base = hoja_abierta()
+    base = hoja_abierta(lado)
     im = Image.new('RGBA', (ANCHO_FINAL * S + 2 * M, ALTO_FINAL * S + 2 * M), FONDO + (255,))
     im.alpha_composite(base.resize((ANCHO_FINAL * S, ALTO_FINAL * S), Image.NEAREST), (M, M))
     os.makedirs(OUT, exist_ok=True)
-    ruta = f'{OUT}/bano-abierta.png'
+    ruta = f'{OUT}/bano-abierta{"-lado" if lado else ""}.png'
     im.save(ruta)
     print(ruta, im.size)
 
@@ -109,6 +128,21 @@ def a_nuestra_madera(im):
     return im
 
 
+def pomo_a_la_punta(im):
+    """De lado, PixelLab dibujó el pomo junto al canto de la bisagra (el intento 303: en x 3 a 5, y 37 a 40) y va en el
+    canto libre, a la derecha. Se borra de ahí (con la madera de al lado) y se pinta el de nuestra puerta (sus tres
+    píxeles de latón, de puerta-bano.png) a media altura de la última columna de la cara"""
+    madera = im.getpixel((6, 36))
+    for y in range(37, 41):
+        for x in range(3, 6):
+            im.putpixel((x, y), madera)
+    arriba = min(y for y in range(im.height) if im.getpixel((11, y))[3] == 255)
+    pomo = Image.open(f'{SPRITES}/puerta-bano.png').convert('RGBA')
+    for dx, dy in ((0, 0), (0, 1), (1, 1)):
+        im.putpixel((11 + dx, arriba + 22 + dy), pomo.getpixel((23 + dx, 21 + dy)))
+    return im
+
+
 def sombra(im):
     """La sombra que echa la hoja en el suelo: una tira oscura y transparente por debajo del borde de abajo"""
     w, h = im.size
@@ -125,10 +159,10 @@ def sombra(im):
     return out
 
 
-def sprite(ruta=None):
+def sprite(ruta=None, lado=False):
     """De un intento de PixelLab ya sin fondo (o de la base): recortado y a la mitad, como las puertas cerradas"""
     if ruta is None:
-        im = hoja_abierta()
+        im = hoja_abierta(lado)
     else:
         im = Image.open(ruta).convert('RGBA')
         im = im.crop(im.getbbox())
@@ -144,18 +178,24 @@ def sprite(ruta=None):
                     r, g, b, _ = color.getpixel((x, y))
                     im.putpixel((x, y), (r, g, b, 255))
         im = a_nuestra_madera(im)
+        if lado:
+            im = pomo_a_la_punta(im)
     im = sombra(im)
-    im.save(f'{SPRITES}/puerta-bano-abierta.png')
-    print(f'puerta-bano-abierta: {im.width}x{im.height} (con la sombra de abajo)')
+    nombre = f'puerta-bano-abierta{"-lado" if lado else ""}'
+    im.save(f'{SPRITES}/{nombre}.png')
+    print(f'{nombre}: {im.width}x{im.height} (con la sombra de abajo)')
 
 
 if __name__ == '__main__':
-    orden = sys.argv[1] if len(sys.argv) > 1 else 'guia'
+    args = [a for a in sys.argv[1:] if a != 'lado']
+    lado = 'lado' in sys.argv[1:]
+    orden = args[0] if args else 'guia'
     if orden == 'guia':
-        guia()
+        guia(lado)
     elif orden == 'base':
         os.makedirs(SRC, exist_ok=True)
-        hoja_abierta().save(f'{SRC}/bano-abierta-base.png')
-        print(f'{SRC}/bano-abierta-base.png')
+        ruta = f'{SRC}/bano-abierta{"-lado" if lado else ""}-base.png'
+        hoja_abierta(lado).save(ruta)
+        print(ruta)
     elif orden == 'sprite':
-        sprite(sys.argv[2] if len(sys.argv) > 2 else None)
+        sprite(args[1] if len(args) > 1 else None, lado)
