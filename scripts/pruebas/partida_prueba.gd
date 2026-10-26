@@ -52,7 +52,8 @@
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
 #                       gastando piezas                                                [prueba_inventario.gd]
 #   --municion          la munición por tipos y los arrojables (3 a mano y 8 de repuesto)    [prueba_inventario.gd]
-#   --municion-suelo    la munición en el suelo (con luz y a oscuras) y la caja según el arma [prueba_inventario.gd]
+#   --municion-suelo    la munición, un molotov y una granada en el suelo (con luz y a oscuras), la caja según el arma y un
+#                       molotov en vuelo                                                   [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles           [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]

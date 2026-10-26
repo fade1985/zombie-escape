@@ -1058,8 +1058,9 @@ func pulsar_evento(evento: InputEvent) -> void:
 
 # Con "--captura --municion-suelo": los dibujos de la munición (PixelLab, 25 oct) en el suelo y en el inventario. En
 # fila a la derecha de Johnny: una caja de balas y otra de cartuchos tiradas, la caja que suelta un zombi con la MP5 en
-# la mano (la caja verde; cambia a la de cartuchos al sacar la escopeta), una gasolina y un bidón de ácido. Fotos:
-# captura-municion-suelo.png (con luz), captura-municion-suelo-oscuras.png (a oscuras se ven un poco),
+# la mano (la caja verde; cambia a la de cartuchos al sacar la escopeta), una gasolina y un bidón de ácido; debajo, un
+# molotov y una granada del suelo. Fotos: captura-municion-suelo.png (con luz), captura-municion-suelo-oscuras.png (a
+# oscuras se ven un poco), captura-municion-suelo-vuelo.png (un molotov lanzado, a mitad de vuelo),
 # captura-municion-suelo-inventario.png y captura-municion-suelo-hud.png (el lanzallamas, con la gasolina junto a su
 # barra)
 func probar_municion_suelo() -> void:
@@ -1075,6 +1076,8 @@ func probar_municion_suelo() -> void:
 	soltar_municion(donde.call(2))
 	soltar_objeto("gasolina", donde.call(3), true)
 	soltar_objeto("bidon_acido", donde.call(4), true)
+	soltar_lanzable("molotov", donde.call(0) + Vector2(0, 70))   # (más abajo: más lejos que el imán de Johnny)
+	soltar_lanzable("granada", donde.call(1) + Vector2(0, 70))
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var cajas: Array = get_tree().get_nodes_in_group("cajas_municion")
@@ -1093,6 +1096,16 @@ func probar_municion_suelo() -> void:
 	await get_tree().create_timer(1.5).timeout
 	Captura.foto("captura-municion-suelo-oscuras.png")
 	luz.objetivo = 0.0
+	await get_tree().create_timer(1.5).timeout   # (que vuelva la luz)
+	lanzables.meter("molotov", 1)   # un molotov en el aire, a mitad de vuelo
+	lanzables.tipo = "molotov"
+	var antes: int = lanzables.cuantas("molotov")
+	lanzables.lanzar(johnny.position + Vector2(220, 20))   # (hacia un lado: hacia arriba lo tapa la pared)
+	await get_tree().create_timer(0.27).timeout
+	var en_vuelo: Array = johnny.get_parent().get_children().filter(func(n): return "tipo" in n and n.get("tipo") == "molotov")
+	print("Molotov lanzado: tenía %d y ahora %d; en vuelo: %d (esperado: uno menos y 1 en vuelo)" % [antes,
+		lanzables.cuantas("molotov"), en_vuelo.size()])
+	Captura.foto("captura-municion-suelo-vuelo.png")
 	johnny.meter_municion("cartuchos", 12)
 	mochila.append_array(["gasolina", "gasolina", "bidon_acido"])
 	abrir_cosas("inventario")

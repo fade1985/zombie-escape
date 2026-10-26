@@ -11,6 +11,7 @@ extends Node2D
 const CHARCO := "res://escenas/armas/charco.tscn"
 const MOCO := preload("res://assets/sprites/objeto-moco.png")
 const LEJIA := preload("res://assets/sprites/objeto-botella-lejia.png")
+const MOLOTOV := preload("res://assets/ui/iconos/molotov.png")   # el mismo dibujo (PixelLab) que el del suelo y el inventario
 
 # Cada tipo: cuánto tarda en caer, lo alto que sube, el daño al caer y el charco que deja
 const TIPOS := {
@@ -212,18 +213,7 @@ func pintar_marca() -> void:
 	marca.draw_arc(Vector2.ZERO, r, 0.0, TAU, 32, Color(rojo, 0.5 + 0.4 * k), 3.0)
 
 
-# La botella del molotov (drawMolotov del JS): cristal verde, trapo y la llama del trapo, que baila
+# La botella del molotov, con el dibujo del icono (botella de cristal, líquido naranja y trapo ardiendo), dando vueltas
 func botella(donde: Vector2, giro: float) -> void:
 	draw_set_transform(donde, giro)
-	var px := func(x: float, y: float, w: float, h: float, c: String) -> void:
-		draw_rect(Rect2(x * 2.0, y * 2.0, w * 2.0, h * 2.0), Color(c))
-	px.call(-3, -2, 6, 7, "#472937")
-	px.call(-2, -5, 4, 3, "#472937")
-	px.call(-2, -1, 4, 5, "#4a7a4a")
-	px.call(-2, -1, 1, 4, "#78aa60")
-	px.call(1, 0, 1, 4, "#2e523a")
-	px.call(-1, -4, 2, 3, "#4a7a4a")
-	px.call(-1, -6, 2, 2, "#d6c4a0")
-	var f := int(t * 12.0) % 2
-	px.call(-1, -8 - f, 2, 2 + f, "#ff9f1c")
-	px.call(0, -9 - f, 1, 1, "#ffd23f")
+	draw_texture(MOLOTOV, -Vector2(MOLOTOV.get_size()) / 2.0)

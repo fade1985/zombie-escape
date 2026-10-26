@@ -3582,6 +3582,38 @@
   "cost": "40 generaciones (8 objetos de 5; el primero de a distancia B fallo sin cobrar y se repitio)",
   "updated": "2026-10-25"
  },
+ "molotov-icono": {
+  "nota": "El icono del cóctel molotov (26 oct, lo pidió el dueño: el de antes, una botella verde hecha por código, se veía mal y fuera del arte del juego). Misma receta que municion-iconos y piezas-iconos: create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png de imagen de estilo sin copiar sus colores (color_palette false) y 'sin brillos ni destellos blancos' en el texto. Dos intentos (A y B) en assets/sources/molotov/intentos/. ELEGIDO por el dueño: B (botella de cristal claro con líquido naranja, trapo claro y llama) → assets/ui/iconos/molotov.png. La A era una botella de cristal marrón oscuro con líquido ámbar. El icono sirve para el suelo, el inventario, el HUD, la tienda y la botella en vuelo (proyectil.gd, botella(), que antes se dibujaba con código y ahora gira con este dibujo). Prueba: -- --captura --municion-suelo (fotos captura-municion-suelo*.png: el molotov y la granada en el suelo, el molotov en vuelo y el HUD).",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "molotov": {
+    "seeds": [
+     41001,
+     41002
+    ],
+    "ids": [
+     "f4eedf56-f473-4872-ad8d-a02500d87265",
+     "a2aab706-94b9-49f7-beb1-3e9c5b1ad1e3 (B, elegida)"
+    ],
+    "description": "A: a dirty dark green glass wine bottle standing upright, filled with amber flammable liquid, a twisted brown cloth rag stuffed in its neck and a small orange and yellow flame on the rag. B (elegida): a clear glass whiskey bottle standing upright, filled with orange-yellow flammable liquid, a torn strip of dirty beige cloth in its neck as a wick and a small orange and yellow flame on the cloth. Single game loot pickup item. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective, no ground shadow, no text. Matte surfaces, no white shine, no white highlights or sparkles on the glass. Centered, filling most of the canvas. Pixel art in the same style as the reference: dark single-color outline, medium detail, soft shading lit from the top-left, a bit dirty and worn, zombie apocalypse."
+   }
+  },
+  "cost": "10 generaciones (2 objetos de 5)",
+  "updated": "2026-10-26"
+ },
  "nevera-pisos": {
   "kind": "images",
   "fecha": "2026-10-25",
