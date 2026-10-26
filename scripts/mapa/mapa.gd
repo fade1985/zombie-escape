@@ -56,8 +56,9 @@ const HELIPUERTO := preload("res://assets/sprites/helipuerto.png")   # el de la 
 # El suelo y la pared de las habitaciones de un piso que no dependen de dónde caen (que cambia al voltear el piso):
 # "<uso>-<tipo>" -> [sufijo del suelo, sufijo de la pared] (suelo-<estilo><sufijo>, pared-<estilo><sufijo>; con "" en uno, ese
 # se sigue eligiendo según dónde cae). El dormitorio de matrimonio, siempre con el suelo gris azulado y el papel beige, con la
-# puerta arriba y abajo; el individual, con el suelo rojo
-const ESTILO_FIJO := {"dormitorio-matrimonio": ["-a", "-b"], "dormitorio-individual": ["-b", ""]}
+# puerta arriba y abajo; el individual, con el suelo rojo; el salón, con el suelo de madera de nogal, oscuro y con las tablas en
+# horizontal (tools/suelo_salon.py), para que no se confunda con el del pasillo (que sigue con el de siempre)
+const ESTILO_FIJO := {"dormitorio-matrimonio": ["-a", "-b"], "dormitorio-individual": ["-b", ""], "salon": ["-nogal", ""]}
 const ESTILO_DE := {"salon": "salon", "jefe": "salon", "cocina": "cocina", "dormitorio": "dormitorio", "bano": "bano",
 	"habitacion": "dormitorio"}   # (las habitaciones de las viviendas, viviendas.gd; su pasillo, el de los pisos)
 # Las salas de las tiendas del centro comercial: [suelos (uno al azar), pared]. Sprites suelo-<x>, pared-<x> y
@@ -168,6 +169,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-pasillo.png"
 			if sitio.tipo == "viviendas" else "res://assets/sprites/tapa-generica.png" if sitio.tipo == "mantenimiento"
 			else "res://assets/sprites/tapa-salon.png")
+		var comun: Dictionary = {}   # el estilo de siempre del salón: el pasillo del piso toma este, aunque el salón lleve otro suelo
 		for s in sitio.apt.salas:
 			if sitio.tipo == "mantenimiento":
 				var de: Array = ESTILO_MANTENIMIENTO[s.uso]
@@ -177,7 +179,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
 			if s.uso == "pasillo":   # el pasillo de las viviendas: como el de los pisos
 				# (el de dentro de un piso con pasillo, apartamento.gd, como su salón, que va primero: como en una casa)
-				estilos[s.id] = estilos[0] if s.get("tipo", "") == "piso" else textura("pasillo", "")
+				estilos[s.id] = (comun if not comun.is_empty() else estilos[0]) if s.get("tipo", "") == "piso" else textura("pasillo", "")
 				continue
 			var propio: String = s.uso + "-" + sitio.get("tienda", "")   # el estilo de ese tipo de tienda, si lo tiene
 			if tienda and (ESTILO_TIENDA.has(propio) or ESTILO_TIENDA.has(s.uso)):
@@ -193,9 +195,13 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 				estilos[s.id] = textura("bano", "-a" if h % 2 else "-b", "-a" if (h >> 1) % 2 else "-b")
 			else:
 				# el suelo y la pared, los de su tipo si los tiene fijos (ESTILO_FIJO) y si no, unos según dónde cae la habitación
-				var fijo: Array = ESTILO_FIJO.get(s.uso + "-" + s.get("tipo", ""), [])
-				estilos[s.id] = textura(estilo, fijo[0] if not fijo.is_empty() and fijo[0] != "" else ["-a", "-b", "-c"][h % 3],
-					fijo[1] if not fijo.is_empty() and fijo[1] != "" else ["-a", "-b", "-c"][(h / 3) % 3])
+				var fijo: Array = ESTILO_FIJO.get(s.uso + ("-" + s.tipo if s.has("tipo") else ""), [])
+				var suelo_h: String = ["-a", "-b", "-c"][h % 3]
+				var pared_h: String = ["-a", "-b", "-c"][(h / 3) % 3]
+				if s.uso == "salon":
+					comun = textura(estilo, suelo_h, pared_h)
+				estilos[s.id] = textura(estilo, fijo[0] if not fijo.is_empty() and fijo[0] != "" else suelo_h,
+					fijo[1] if not fijo.is_empty() and fijo[1] != "" else pared_h)
 
 	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea"]
 	if centro:
