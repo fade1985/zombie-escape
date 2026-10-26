@@ -191,6 +191,10 @@
     "huella": "bbd505b8fc6f90c9",
     "sprite": "mueble-wardrobe"
   },
+  "dormitorio/cama-matrimonio-lado.png": {
+    "huella": "52f73a154bf205c0",
+    "sprite": "mueble-doublebed-lado"
+  },
   "dormitorio/cama-matrimonio.png": {
     "huella": "abc245bab15a1f39",
     "sprite": "mueble-doublebed"
@@ -202,6 +206,10 @@
   "dormitorio/escritorio.png": {
     "huella": "f263b7ba9c895f40",
     "sprite": "mueble-desk"
+  },
+  "dormitorio/mesilla-lado.png": {
+    "huella": "59ef2c12dac63034",
+    "sprite": "mueble-nightstand-lado"
   },
   "dormitorio/mesilla.png": {
     "huella": "5e826ad131e1b2eb",

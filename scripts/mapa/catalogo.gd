@@ -34,11 +34,12 @@ const MUEBLES := {
 	# la mesa de la cocina con sus dos sillas, una a cada lado (un solo dibujo: van siempre juntas)
 	"kitchentable": {"len": 112, "dep": 54, "paredes": "",     "archivo": "cocina/mesa"},
 	# el dormitorio rehecho de frente (PixelLab, con las guías de tools/guias_dormitorio.py): la cama de matrimonio y la
-	# individual, con el cabecero contra la pared y los pies abajo. La mesilla (con su lamparita) no tiene dibujo de lado
-	"doublebed":  {"len": 124, "dep": 140, "paredes": "",      "archivo": "dormitorio/cama-matrimonio"},
+	# individual, con el cabecero contra la pared y los pies abajo. La cama de matrimonio y la mesilla (con su lamparita)
+	# tienen también dibujo de lado (cama-matrimonio-lado y mesilla-lado: PixelLab los giró a partir de los de frente)
+	"doublebed":  {"len": 124, "dep": 140, "paredes": "lados", "archivo": "dormitorio/cama-matrimonio"},
 	"bed":        {"len": 84,  "dep": 140, "paredes": "",      "archivo": "dormitorio/cama"},
 	"wardrobe":   {"len": 96,  "dep": 44,  "paredes": "",      "archivo": "dormitorio/armario"},
-	"nightstand": {"len": 40,  "dep": 36,  "paredes": "",      "archivo": "dormitorio/mesilla"},
+	"nightstand": {"len": 40,  "dep": 36,  "paredes": "lados", "archivo": "dormitorio/mesilla"},
 	"desk":       {"len": 92,  "dep": 50,  "paredes": "",      "archivo": "dormitorio/escritorio"},
 	"shoerack":   {"len": 74,  "dep": 34,  "paredes": "",      "archivo": "pasillo/zapatero"},
 	"coatstand":  {"len": 36,  "dep": 30,  "paredes": "todas", "archivo": "pasillo/perchero"},
@@ -118,9 +119,10 @@ const MUEBLES := {
 #               el orden de "quitar". Cada mueble sale una vez por plantilla (nunca dos lavadoras en el mismo
 #               baño). Con plantillas, solo se amuebla la pared del fondo; si en ella no cabe nada (una puerta
 #               en medio), muebles sueltos en las demás paredes, como en las otras salas.
-#   colocados   en vez de plantillas, los muebles puestos a mano en la pared de arriba, siempre en el mismo sitio, según el
-#               lado de la entrada del piso: {"abajo": [[tipo, centro en casillas desde la pared izquierda], ...]}
-#               (ver Muebles.de_piso: es lo único que lleva un piso)
+#   colocados   en vez de plantillas, los muebles puestos a mano, siempre en el mismo sitio, según el lado de la entrada
+#               del piso: {"abajo": [[tipo, centro en casillas desde la esquina de arriba a la izquierda, pared], ...]};
+#               la pared ("izquierda", "derecha" o "abajo"; sin ponerla, la de arriba) es la de la habitación, y el centro
+#               va a lo largo de ella (ver Muebles.colocados y Muebles.de_piso: es lo único que lleva un piso)
 #   fondo_max   el fondo máximo de sus muebles (para sitios estrechos)
 #   primero     muebles que se ponen antes que los demás, uno de cada en la lista (las lámparas de la portera)
 #   fijos       en vez de unos cuantos sueltos, cada pared con sus muebles en un orden fijo (siempre igual), de punta
@@ -216,13 +218,16 @@ const SALAS := {
 			["desk?", "wardrobe?", "nightstand?", "doublebed", "nightstand?", "lamp?"],
 		],
 		"quitar": ["lamp", "desk", "wardrobe", "nightstand"],
-		# puestos a mano en la pared de arriba. En el piso normal (el que se entra por abajo): el armario sobre las casillas 2 y
-		# 3, la mesilla en la 6, la cama de la 7 a la 10 y la otra mesilla en la 11 (idea del dueño). En el volteado (entrada
-		# "arriba") esa pared es la del pasillo y la puerta (casillas 5 y 6) cae en ella: la mesilla de la 6 la taparía, así que
-		# la cama y las dos mesillas van una casilla a la derecha (mesilla en la 7, cama de la 8 a la 11, mesilla en la 12)
+		# puestos a mano (idea del dueño). En el piso normal (el que se entra por abajo), en la pared de arriba: el armario sobre
+		# las casillas 2 y 3, la mesilla en la 6, la cama de la 7 a la 10 y la otra mesilla en la 11. En el volteado (entrada
+		# "arriba"), la pared de arriba es la del pasillo y la puerta (casillas 5 y 6) cae en ella: allí, el armario en medio de
+		# esa pared (sobre las casillas 8 a 10, donde estaba la cama) y la cama con sus dos mesillas pegada a la pared de la
+		# izquierda, con el cabecero contra ella y algo más abajo del centro (el centro de la cama, en la fila 5,25 de 9; las
+		# mesillas, una a cada lado)
 		"colocados": {
 			"abajo": [["wardrobe", 2.0], ["nightstand", 5.5], ["doublebed", 8.0], ["nightstand", 10.5]],
-			"arriba": [["wardrobe", 2.0], ["nightstand", 6.5], ["doublebed", 9.0], ["nightstand", 11.5]],
+			"arriba": [["wardrobe", 9.0], ["nightstand", 3.85, "izquierda"], ["doublebed", 5.25, "izquierda"],
+				["nightstand", 7.88, "izquierda"]],
 		},
 	},
 	"dormitorio-individual": {

@@ -78,13 +78,30 @@ static func de_piso(apt: Dictionary) -> Array:
 	return lista
 
 
-# Los muebles de una habitación puestos a mano en su pared de arriba. Cada uno, [tipo, dónde está su centro, en casillas
-# contadas desde la pared izquierda de la habitación]: 2.0 es justo en medio de las casillas 2 y 3, y 5.5 el centro de la
-# casilla 6.
+# Los muebles de una habitación puestos a mano, cada uno en una pared. Cada uno, [tipo, dónde está su centro, pared]: el
+# centro, en casillas contadas desde la esquina de arriba a la izquierda de la habitación (2.0 es justo en medio de las
+# casillas 2 y 3; 5.5, el centro de la casilla 6), a lo largo de su pared (de izquierda a derecha en la de arriba y la de
+# abajo; de arriba abajo en las de los lados); la pared, "arriba" (sin ponerla) "izquierda", "derecha" o "abajo".
 static func colocados(lista: Array, sala: Dictionary) -> Array:
 	var puestos := []
 	for c in lista:
-		puestos.append(nuevo(c[0], {"lado": "arriba", "base": sala.f0 * float(CASILLA)}, (sala.c0 + c[1]) * float(CASILLA), sala.id))
+		var pared: String = c[2] if c.size() > 2 else "arriba"
+		var base: float
+		var a_lo_largo: float
+		match pared:
+			"arriba":
+				base = sala.f0 * float(CASILLA)
+				a_lo_largo = (sala.c0 + c[1]) * float(CASILLA)
+			"abajo":
+				base = (sala.f0 + sala.fondo) * float(CASILLA)
+				a_lo_largo = (sala.c0 + c[1]) * float(CASILLA)
+			"izquierda":
+				base = sala.c0 * float(CASILLA)
+				a_lo_largo = (sala.f0 + c[1]) * float(CASILLA)
+			_:
+				base = (sala.c0 + sala.ancho) * float(CASILLA)
+				a_lo_largo = (sala.f0 + c[1]) * float(CASILLA)
+		puestos.append(nuevo(c[0], {"lado": pared, "base": base}, a_lo_largo, sala.id))
 	return puestos
 
 

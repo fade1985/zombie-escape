@@ -32,7 +32,9 @@ IMAGENES = ('.png', '.webp', '.jpg', '.jpeg')
 # Muebles dibujados "a tamaño de personaje": cada píxel del juego son N píxeles del original. Se encogen justo
 # N veces (no al ancho del catálogo) y salen con la escala indicada ("scale": 1 = el mismo tamaño de píxel que Johnny).
 # Para añadir otro mueble así: su tipo (el del catálogo), el N y la escala.
-BLOQUE = {'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7, 1), 'bookshelf': (12.7, 1)}  # tipo: (N, scale del .json: 1 = 2 unidades por píxel, 0.5 = 1)
+# tipo: (N, scale del .json: 1 = 2 unidades por píxel, 0.5 = 1). Con "-lado" en el tipo, solo vale para el dibujo de lado
+BLOQUE = {'sofa': (12.7, 1), 'tv': (12.7, 1), 'armchair': (12.7, 1), 'bookshelf': (12.7, 1),
+          'nightstand-lado': (2.33, 1)}   # (la mesilla de lado, girada por PixelLab: a la misma escala que la de frente)
 # Muebles de PixelLab (los del centro comercial): salen con el fondo transparente de verdad, sin halo blanco, así que
 # no se les quita lo blanco (si no, se agujerearían la escarcha, los cristales o el maniquí)
 SIN_HALO = {'gondola', 'checkout', 'drinkfridge', 'clothesrack', 'mannequin', 'tvshelf', 'pharmacycounter',
@@ -138,7 +140,7 @@ def main(forzar):
         if isinstance(que, str): avisos.append(f'{rel}: {que}'); continue
         tipo, largo, fondo, variante, lado = que
         sid = f'mueble-{tipo}' + (f'-{variante}' if variante else '') + ('-lado' if lado else '')
-        bloque, escala = BLOQUE.get(tipo, (None, 1))
+        bloque, escala = BLOQUE.get(f'{tipo}-lado' if lado and f'{tipo}-lado' in BLOQUE else tipo, (None, 1))
         # a la densidad de los personajes: cada píxel, 2 unidades del juego (el ancho del catálogo va en unidades)
         im = convierte(ruta, round((fondo if lado else largo) / 2), bloque, tipo not in SIN_HALO)
         if im is None: avisos.append(f'{rel}: no tiene fondo transparente (¿un damero pintado?); no se convierte'); continue
