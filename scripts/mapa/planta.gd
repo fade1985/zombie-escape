@@ -49,8 +49,8 @@ const PLATAFORMA_LIBRE := 64.0          # lo que queda libre alrededor de la pla
 const CAPA_BORDE := 8
 # Los aparatos de la azotea de cada edificio (catalogo.gd): cuántos de cada uno [mínimo, máximo]
 const APARATOS := {
-	"centro": {"acunit": [2, 3], "airhandler": [1, 2], "chimney": [2, 3], "vent": [3, 4]},
-	"apartamentos": {"watertank": [1, 2], "antennas": [2, 3], "clothesline": [2, 3], "chimney": [2, 3], "vent": [1, 2]},
+	"centro": {"acunit": [2, 3], "airhandler": [1, 2], "vent": [3, 4]},
+	"apartamentos": {"watertank": [1, 2], "antennas": [2, 3], "clothesline": [2, 3], "vent": [1, 2]},
 }
 
 # El superviviente del centro comercial de esta partida: {planta, tienda, sala} (lo pone supervivientes.gd al
@@ -333,11 +333,11 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 # La azotea (la última planta del centro comercial y de los Apartamentos, como en el juego JS): un solo sitio grande
 # y abierto, sin pasillo ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el
 # helipuerto elevado en el centro (PLATAFORMA) y los aparatos sueltos alrededor (en el centro, aire acondicionado,
-# climatizadoras, chimeneas y extractores; en los Apartamentos, depósitos de agua, antenas, tendederos, chimeneas y
-# extractores). Se llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la derecha, la escalera
-# de incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe": el jefe aparece al
-# llegar, encima del helipuerto, y espera ahí a Johnny; al caer, se abren las escaleras (partida.gd), como en el piso de
-# la portera.
+# climatizadoras y extractores; en los Apartamentos, depósitos de agua, antenas, tendederos y extractores; la chimenea
+# de ladrillo ya no sale). Se llega por la izquierda, por la escalera, que se cierra detrás para siempre; a la
+# derecha, la escalera de incendios, cerrada hasta que caiga el jefe: por ahí se acaba el edificio. Es un sitio "jefe":
+# el jefe aparece al llegar, encima del helipuerto, y espera ahí a Johnny; al caer, se abren las escaleras
+# (partida.gd), como en el piso de la portera.
 static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
