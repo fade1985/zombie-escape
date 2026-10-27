@@ -580,12 +580,12 @@ func poner_caras() -> void:
 	for f in filas - 1:
 		var c := 0
 		while c < cols:
-			if not (es_muro(c, f) and not es_muro(c, f + 1)):
+			if not (es_muro(c, f) and not es_muro(c, f + 1)) or (cajas and not cara_de_caja(c, f)):
 				c += 1
 				continue
 			var sala := sala_de(c, f + 1)
 			var fin := c + 1
-			while fin < cols and es_muro(fin, f) and not es_muro(fin, f + 1) and sala_de(fin, f + 1) == sala:
+			while fin < cols and es_muro(fin, f) and not es_muro(fin, f + 1) and sala_de(fin, f + 1) == sala 					and (not cajas or cara_de_caja(fin, f)):
 				fin += 1
 			var cara := CARA.new()
 			cara.position = Vector2(c * CASILLA, (f + 1) * CASILLA)
@@ -720,9 +720,10 @@ func borde_en(c: int, y: int) -> bool:
 	return (es_muro(c, y) and es_tabique(c, y) and c >= 0 and y >= 0 and c < cols and y < filas) 		or alzados.has(Vector2i(c, y))
 
 
-# Un muro del que cae una cara: con suelo debajo
+# Con "cajas": un muro del que cae una cara: con suelo debajo y de un tabique de lado a lado (el final de uno de los
+# lados, encima de una puerta entre dos habitaciones de lado, no: ese se ve plano, con el hueco de la puerta)
 func cara_de_caja(c: int, f: int) -> bool:
-	return es_muro(c, f) and f + 1 < filas and not es_muro(c, f + 1)
+	return es_muro(c, f) and f + 1 < filas and not es_muro(c, f + 1) and (es_tabique(c - 1, f) or es_tabique(c + 1, f))
 
 
 func poner_puertas() -> void:

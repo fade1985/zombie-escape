@@ -140,6 +140,9 @@ en una línea.
   pared con suelo encima (`tabique_colgado`) les sube la tapa del muro hasta lo alto de la pared de al lado (`tapa` de
   `cara_pared.gd`), para que cada habitación quede cerrada a su altura y no se vea el suelo de arriba en un hueco.
 - `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
+  La sala de mantenimiento se ve como las viviendas ("cajas": vestuario, despacho y taller, cada uno en su caja de
+  tabiques con cemento alrededor). Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
+  (`mapa.cara_de_caja`): encima de una puerta de lado entre dos estancias no sale cara, el tabique se ve plano.
   Por dónde se llega: solo la planta baja (el portal del edificio) y la azotea tienen una puerta de llegada a la izquierda;
   en las demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo
   no tiene puerta a la izquierda (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
