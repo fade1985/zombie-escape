@@ -190,13 +190,14 @@ func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	mapa.actualizar_niebla(0.0)
 	var camara: Camera2D = johnny.get_node("Camara")
 	var pantalla := get_viewport_rect().size
-	var zoom := minf(pantalla.x / sitio.ancho, pantalla.y / (sitio.alto + ARRIBA_EXTRA))
+	var arriba := float(sitio.get("arriba_extra", ARRIBA_EXTRA))   # (con "cajas", también el tabique de encima)
+	var zoom := minf(pantalla.x / sitio.ancho, pantalla.y / (sitio.alto + arriba))
 	camara.zoom = Vector2(zoom, zoom)
 	camara.limit_left = -100000
 	camara.limit_top = -100000
 	camara.limit_right = 100000
 	camara.limit_bottom = 100000
-	Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - ARRIBA_EXTRA) / 2.0) - johnny.position
+	Temblor.desplazamiento = Vector2(sitio.ancho / 2.0, (sitio.alto - arriba) / 2.0) - johnny.position
 	camara.reset_smoothing()
 	$Pantalla.hide()
 	Luz.apagada = not Luz.apagada   # sin penumbra, para que se vea todo
@@ -209,22 +210,24 @@ func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	encuadrar(sitio)
 
 
-# Con "--captura --edificio centro --tiendas": cada tienda de las tres primeras plantas, entera, sin zombis, sin
-# penumbra y con todo descubierto (captura-tiendas-<tipo>-<lado de su puerta>.png), para ver sus habitaciones de dentro
-# y lo que tapan sus paredes. La joyería, en la 1ª planta. Luego se cierra
+# Con "--captura --edificio centro --tiendas": cada tienda de las cuatro primeras plantas, entera, sin zombis, sin
+# penumbra y con todo descubierto (captura-tiendas-<tipo>-<lado de su puerta>.png; la del minijefe de la planta,
+# captura-tiendas-jefe-<minijefe>-<lado>.png), para ver sus habitaciones de dentro y lo que tapan sus paredes. La
+# joyería, en la 1ª planta. Luego se cierra
 func probar_tiendas() -> void:
 	Planta.joyeria_planta = 2
-	for num in [1, 2, 3]:
+	for num in [1, 2, 3, 4]:
 		if num > 1:
 			nueva_planta(num)
 		for i in range(1, planta.sitios.size()):
 			var s: Dictionary = planta.sitios[i]
-			if s.get("tienda", "") == "" or s.tipo == "jefe":
+			if s.get("tienda", "") == "" and s.tipo != "jefe":
 				continue
 			s.limpio = true   # sin zombis: aquí se mira la tienda
 			await montar(i, 0, false)
 			await get_tree().create_timer(0.4).timeout
-			var nombre := "captura-tiendas-%s-%s.png" % [s.tienda, s.apt.entrada.lado]
+			var tipo: String = "jefe-" + planta.jefe if s.tipo == "jefe" else s.tienda
+			var nombre := "captura-tiendas-%s-%s.png" % [tipo, s.apt.entrada.lado]
 			print("Tienda: ", s.nombre, " -> ", nombre)
 			await foto_entera(s, nombre)
 	get_tree().quit()
