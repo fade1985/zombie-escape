@@ -5,7 +5,7 @@
 # choca con una pared o un mueble (el cubo, además, vuelca y salpica agua sucia). Dónde se queda se apunta en el
 # sitio: al volver, sigue ahí. A los zombis y al jefe no les pasa nada.
 # Cada cosa tiene su forma ("mancuerna": el mismo dibujo que las pesas que lanza el Gymbro, pesa.gd; "cubo": un cubo
-# de fregar, dibujado aquí a cuadraditos). Para otra, basta con darle su tamaño en caja(), su dibujo en _draw() y su
+# de fregar, un dibujo de PixelLab). Para otra, basta con darle su tamaño en caja(), su dibujo en _draw() y su
 # aviso en AVISOS.
 extends Node2D
 
@@ -14,39 +14,10 @@ const PIES := 14.0        # los pies de Johnny, por debajo de su centro (donde a
 # Lo que dice Johnny la primera vez que entra en la habitación
 const AVISOS := {"mancuerna": "Cuidado con las mancuernas del suelo: si piso una, me la pego",
 	"cubo": "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"}
-# El cubo, píxel a píxel (cada letra, un píxel del dibujo; los colores en CUBO_COLORES): de pie, con el agua sucia
-# (y su espuma) dentro y el asa a los lados, y volcado, con la boca hacia la derecha (hacia la izquierda, en espejo)
-const CUBO_DE_PIE := [
-	"   OOOOOOO   ",
-	"  OLLLLLLLO  ",
-	" OLWWSWWWWLO ",
-	" OLWWWWWSWLO ",
-	" HLLWWWWWLLH ",
-	" OCLLLLLLLCO ",
-	" OCCCCCCCCDO ",
-	" ODDDDDDDDDO ",
-	"  OCCCCCCDO  ",
-	"  OCCCCCCDO  ",
-	"  OCCCCCCDO  ",
-	"   OOOOOOO   ",
-]
-const CUBO_VOLCADO := [
-	"    OOOOOOOO  ",
-	"  OOCCCCCCCLO ",
-	" OCCCCCCDCLVLO",
-	"OCCCCCCCDCLVLO",
-	"ODCCCCCCDCLVLO",
-	" ODDDDDDDDLVLO",
-	"  OODDDDDDDLO ",
-	"    OOOOOOOO  ",
-]
-# Los tres colores de cubo (cuerpo, sombra y brillo; vivos, para que se vean en la penumbra) y lo que tienen todos:
-# contorno, agua, espuma, el hueco y el asa
-const CUBO_COLORES := [[Color("#4a7fc0"), Color("#2f5688"), Color("#8fb6e0")],
-	[Color("#b84a3e"), Color("#7e3329"), Color("#e08a7a")],
-	[Color("#d4ad42"), Color("#977a2c"), Color("#f0d688")]]
-const CUBO_FIJOS := {"O": Color("#1d1b2c"), "W": Color("#6b7a6e"), "S": Color("#a9b8aa"), "V": Color("#24262c"),
-	"H": Color("#9aa0a8")}
+# El cubo: dos dibujos de PixelLab (tools/cubos.py), de pie (con el agua sucia dentro) y tumbado (volcado, con la boca
+# hacia la derecha y el agua derramada; hacia la izquierda, en espejo). Todos del mismo gris azulado
+const CUBO_DE_PIE := preload("res://assets/sprites/cubo-de-pie.png")
+const CUBO_VOLCADO := preload("res://assets/sprites/cubo-volcado.png")
 const AGUA := Color("#6f7f6a")   # las gotas que salpica al volcar
 
 var datos: Dictionary
@@ -90,11 +61,11 @@ func _physics_process(delta: float) -> void:
 
 
 # Lo que ocupa una cosa en el suelo (la mancuerna: 14 × 8 píxeles del dibujo, tumbada a lo ancho o a lo largo; el
-# cubo: 13 × 9 de pie y 14 × 8 volcado)
+# cubo: 12 × 9 de pie y 14 × 8 volcado)
 func caja(c: Dictionary) -> Rect2:
 	var tam := Vector2(28, 16)
 	if c.forma == "cubo":
-		tam = Vector2(26, 18) if int(c.get("volcado", 0)) == 0 else Vector2(28, 16)
+		tam = Vector2(24, 18) if int(c.get("volcado", 0)) == 0 else Vector2(28, 16)
 	elif absf(c.giro) > 0.1:
 		tam = Vector2(tam.y, tam.x)
 	return Rect2(c.pos - tam / 2.0, tam)
@@ -151,17 +122,13 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Un cubo a cuadraditos (CUBO_DE_PIE o CUBO_VOLCADO, en espejo si tiene la boca a la izquierda), con sus colores
+# Un cubo (CUBO_DE_PIE o CUBO_VOLCADO, en espejo si tiene la boca a la izquierda), con su base a 8 por debajo de "p"
 func dibujar_cubo(p: Vector2, c: Dictionary) -> void:
 	var volcado := int(c.get("volcado", 0))
-	var filas: Array = CUBO_DE_PIE if volcado == 0 else CUBO_VOLCADO
-	var tonos: Array = CUBO_COLORES[int(c.get("color", 0)) % CUBO_COLORES.size()]
-	var colores := CUBO_FIJOS.merged({"C": tonos[0], "D": tonos[1], "L": tonos[2]})
-	var ancho: int = filas[0].length()
-	var origen := p + (Vector2(-12, -16) if volcado == 0 else Vector2(-14, -8))
-	for f in filas.size():
-		var fila: String = filas[f]
-		for i in ancho:
-			var letra := fila[i] if volcado >= 0 else fila[ancho - 1 - i]
-			if letra != " ":
-				draw_rect(Rect2(origen + Vector2(i, f) * 2.0, Vector2(2, 2)), colores[letra])
+	var tex: Texture2D = CUBO_DE_PIE if volcado == 0 else CUBO_VOLCADO
+	var tam := tex.get_size() * 2.0   # (2 unidades por píxel del dibujo)
+	var arriba_izquierda := p + Vector2(-tam.x / 2.0, 8.0 - tam.y)
+	if volcado < 0:   # (la boca a la izquierda: el mismo dibujo, al revés)
+		draw_texture_rect(tex, Rect2(arriba_izquierda + Vector2(tam.x, 0), Vector2(-tam.x, tam.y)), false)
+	else:
+		draw_texture_rect(tex, Rect2(arriba_izquierda, tam), false)

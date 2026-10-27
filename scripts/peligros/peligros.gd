@@ -17,7 +17,7 @@
 #   porqueria.gd  la habitación del Glotón   {tipo, sala, casillas (casilla -> 1 charco, 2 con montón),
 #                                             paredes (casilla de muro -> forma del pegote), ovalo, avisado}
 #   tropiezos.gd  el gimnasio del Gymbro     {tipo, sala, cosas ([{pos, forma, giro}]: "mancuerna"), avisado}
-#                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado, color}])
+#                 y el cuarto de la limpieza de la portera (las cosas: [{pos, forma "cubo", giro, volcado}])
 #                 (cosas tiradas por el suelo que hacen caer a Johnny: johnny.gd, caer)
 #   luz_jefe.gd   la luz fija de las habitaciones de los jefes de los Apartamentos (no es un peligro: la última de
 #                 sus entradas; el gimnasio del Gymbro no tiene otra)   {tipo, sala, luces ([Vector2])}
@@ -234,7 +234,7 @@ static func luz_de_jefe(sitio: Dictionary) -> Dictionary:
 	return {"tipo": "luz_jefe", "sala": sala.id, "luces": luces}
 
 
-# Los cubos del cuarto de la limpieza de la portera: de pie, con agua sucia, de tres colores (tirar_cosas)
+# Los cubos del cuarto de la limpieza de la portera: de pie, con agua sucia, todos iguales (tirar_cosas)
 static func de_la_portera(sitio: Dictionary) -> Array:
 	return tirar_cosas(sitio, "cubo", TROPIEZOS.cubos, 6217)
 
@@ -242,7 +242,7 @@ static func de_la_portera(sitio: Dictionary) -> Array:
 # Cosas con las que se tropieza ("mancuerna" o "cubo"), repartidas al azar por el suelo libre de la habitación del
 # jefe (la única sala de su piso), separadas unas de otras, sin pegarse a los muebles ni a las paredes y lejos de la
 # puerta de entrada. Con su propio dado, como de_tienda. La mancuerna, tumbada a lo ancho o a lo largo ("giro"); el
-# cubo, de pie ("volcado": 0; al tropezar con él, vuelca: tropiezos.gd) y de uno de tres colores ("color")
+# cubo, de pie ("volcado": 0; al tropezar con él, vuelca: tropiezos.gd)
 static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla: int) -> Array:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(sitio.surtido) + semilla
@@ -265,7 +265,6 @@ static func tirar_cosas(sitio: Dictionary, forma: String, cuantas: int, semilla:
 		if forma == "cubo":
 			cosa.giro = 0.0
 			cosa.volcado = 0
-			cosa.color = rng.randi() % 3
 		cosas.append(cosa)
 	return [{"tipo": "tropiezos", "sala": sala.id, "cosas": cosas, "avisado": false}]
 

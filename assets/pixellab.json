@@ -4111,5 +4111,87 @@
    "colchón 2, fuerza 130": "8ef42d3a-f056-4ef2-be4f-579fe8c8dce8"
   },
   "coste": "4 generaciones"
+ },
+ "cubos-suelo": {
+  "nota": "Los cubos del suelo del cuarto de la limpieza de la portera (M11 de PENDIENTES.md): antes eran cuadraditos pintados con código, de tres colores, y el dueño pidió que fueran de PixelLab, al estilo del juego, todos del mismo color (gris azulado) y del tamaño de los de antes (11 x 12 de pie y 14 x 8 volcado, en píxeles del dibujo). Con create_object_pro_flash, 1 dirección, view low top-down, 5 generaciones por dibujo, tres tandas de 4 (60 en total). 1) 32x32 con assets/sprites/baul.png de estilo (la receta de los iconos de la munición): salieron bonitos pero el doble de grandes (22 a 32 px). 2) 16x16, con esos mismos grandes reducidos a la mitad como estilo: de la medida, pero borrosos y dos con un brillo blanco (que el dueño no quiere en objetos del suelo). 3) 16x16 NÍTIDOS: paleta cerrada de 9 colores (grises azulados, agua verde grisácea y el contorno #1d1b2c del juego), el cubo de antes (cuadraditos) como imagen de estilo y un texto pidiendo forma simple, colores planos, sin ruido ni dithering ni brillos. El dueño tuvo delante todo el rato una hoja con el cubo de ahora y Johnny a la misma escala (assets/sources/cubos/elegir.png). ELEGIDO por Claude (tanda 3, el de pie B, que se lee mejor como cubo que el A, más redondo, como un barril); el volcado nítido salió como un bulto verde en las dos semillas, así que el cubo tumbado es el de pie B girado 90° con el agua de dentro quitada y un charquito derramado (py tools/cubos.py → assets/sprites/cubo-de-pie.png y cubo-volcado.png; el volcado con la boca a la izquierda se pinta en espejo, tropiezos.gd). Originales de todos los intentos en assets/sources/cubos/intentos/.",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "tanda 1": {
+    "width": 32,
+    "height": 32,
+    "n_directions": 1,
+    "view": "low top-down",
+    "style_image": "assets/sprites/baul.png (32x29)",
+    "style_options": {
+     "color_palette": false,
+     "detail": true,
+     "outline": true,
+     "shading": true
+    }
+   },
+   "tanda 2": {
+    "width": 16,
+    "height": 16,
+    "n_directions": 1,
+    "view": "low top-down",
+    "style_image": "los cubos grandes de la tanda 1 (pie B y volcado A), reducidos a la mitad con el vecino más cercano (11x13 y 12x12)",
+    "style_options": {
+     "color_palette": false,
+     "detail": true,
+     "outline": true,
+     "shading": true
+    }
+   },
+   "tanda 3": {
+    "width": 16,
+    "height": 16,
+    "n_directions": 1,
+    "view": "low top-down",
+    "palette": [
+     "#1d1b2c",
+     "#2f3a52",
+     "#4a5874",
+     "#6f7f9c",
+     "#9aa6bc",
+     "#5a6a52",
+     "#7e8f72",
+     "#a9b8aa",
+     "#6b6f78"
+    ],
+    "style_image": "el cubo de antes (cuadraditos de tropiezos.gd), recortado: 11x12 de pie y 14x8 volcado",
+    "style_options": {
+     "color_palette": false,
+     "detail": true,
+     "outline": true,
+     "shading": true
+    }
+   }
+  },
+  "descripciones": {
+   "de pie (tandas 1 y 2)": "An old plastic janitor's mop bucket standing upright on the floor, dull dark grey-blue plastic, dented and scratched, with a thin metal wire handle folded down to one side, filled to the brim with murky dirty grey-green water with a little grey foam on top. Single game floor prop. Front view facing the viewer, seen slightly from above in 3/4 top-down RPG perspective. [...] Pixel art in the same style as the reference: dark single-color outline, soft shading lit from the top-left, a bit dirty and worn, muted colors, zombie apocalypse. No white shine or glint.",
+   "de pie (tanda 3)": "A tiny pixel art mop bucket, clean and sharp, instantly readable as a bucket: a simple tapered cylinder wider at the top, with a thick dark outline, a lighter rim ring on top around a flat oval of murky grey-green dirty water with a few light foam pixels, and a thin wire handle arc on one side. Only a few flat colors, strong contrast between the lit left side and the dark right side, no noise, no dithering, no blur, no texture. Front view seen slightly from above, 3/4 top-down RPG perspective. Centered, filling most of the canvas. Same crisp style as the reference. No white shine or glint.",
+   "volcado": "lo mismo, lying on its side with its open mouth facing right, un poco de agua sucia saliendo de la boca"
+  },
+  "intentos": {
+   "tanda 1 (32x32)": {
+    "de pie A (seed 31001)": "a7746d0b-db47-4d71-89c5-89dadc0c333d",
+    "de pie B (31002)": "ed3283a1-8b81-47d6-8484-556d64c36a5f",
+    "volcado A (32001)": "391f2400-dc55-4ef3-9ad1-e2db443612b3",
+    "volcado B (32002)": "c9bb2757-684b-4e06-a05f-e8583bc84a57"
+   },
+   "tanda 2 (16x16)": {
+    "de pie A (33001)": "3980c6c6-75a4-4491-80a2-64894e9ca226",
+    "de pie B (33002)": "1ec41ea6-5202-4467-a105-37d8325f7c50",
+    "volcado A (34001)": "b4fd745f-380c-4f08-b430-6907a49e62a9",
+    "volcado B (34002)": "a1b09a3d-28ab-43ca-8bb1-feb90800d1c4"
+   },
+   "tanda 3 (16x16 nítidos)": {
+    "de pie A (35001)": "2fc91215-65be-47dd-b530-72c6fc77ce5e",
+    "de pie B (35002, ELEGIDO)": "89c56db5-656b-45ed-8006-84ed79eca2a0",
+    "volcado A (36001)": "ea3a123e-1c18-4267-8610-0a93d314d1e8",
+    "volcado B (36002)": "e82e701f-0044-420e-9f66-115643dad282"
+   }
+  },
+  "coste": "60 generaciones (12 dibujos x 5)"
  }
 }

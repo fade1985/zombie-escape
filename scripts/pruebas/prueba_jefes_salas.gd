@@ -278,11 +278,8 @@ func probar_cubos() -> void:
 		for b in datos.cosas:
 			if a != b:
 				cerca = minf(cerca, a.pos.distance_to(b.pos))
-	var colores := {}
-	for k in datos.cosas:
-		colores[k.color] = colores.get(k.color, 0) + 1
-	print("Cubos: en el suelo %d (esperado: 10) · todos cubos y de pie %s (esperado: true) · de qué color %s (esperado: de 2 o 3) · el más cercano a otro, a %d (esperado: 110 o más) · alguno junto a la puerta %s (esperado: false) · alguno junto a un mueble %s (esperado: false) · donde aparece Johnny, sin cubo %s (esperado: true)" % [
-		datos.cosas.size(), datos.cosas.all(func(k): return k.forma == "cubo" and k.volcado == 0), colores, roundi(cerca),
+	print("Cubos: en el suelo %d (esperado: 10) · todos cubos y de pie %s (esperado: true) · el más cercano a otro, a %d (esperado: 110 o más) · alguno junto a la puerta %s (esperado: false) · alguno junto a un mueble %s (esperado: false) · donde aparece Johnny, sin cubo %s (esperado: true)" % [
+		datos.cosas.size(), datos.cosas.all(func(k): return k.forma == "cubo" and k.volcado == 0), roundi(cerca),
 		datos.cosas.any(func(k): return entrada.grow(60.0).has_point(k.pos)),
 		datos.cosas.any(func(k): return sitio.muebles.any(func(m): return Muebles.hueco(m).grow(20.0).has_point(k.pos))),
 		datos.cosas.all(func(k): return k.pos.distance_to(johnny.position) > 60.0)])

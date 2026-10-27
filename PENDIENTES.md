@@ -15,7 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M11.** Habitación de la portera: los cubos del suelo, dibujados de nuevo con PixelLab al estilo del juego.
 - **M12.** Logros: si se enciende alguna de las ayudas de Opciones (o todas), los logros se desactivan.
 - **M13.** Reescribir la historia: se han añadido muchas cosas nuevas y se han quitado otras. Con lo que hay ahora en
   el juego, las notas y la tele: algo bueno y que enganche.
