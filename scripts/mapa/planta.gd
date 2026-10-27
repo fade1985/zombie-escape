@@ -373,9 +373,8 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",
 		"dueno": Muebles.plano_rectangular(AZOTEA_COLS, AZOTEA_FILAS), "zombis": [], "limpio": false, "visitado": true,
 		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(ancho / 2.0, alto / 2.0)}   # (el centro de lo de arriba)
-	if edificio == "apartamentos":
-		# como los pisos ("cajas"), con el murete gris y plano alrededor y oscuro por fuera (mapa.gd: al_aire)
-		sitio.cajas = true
+	# como los pisos ("cajas"), con el murete gris y plano alrededor y oscuro por fuera (mapa.gd: al_aire)
+	sitio.cajas = true
 	sitio.salidas = [   # (la única: de aquí se sale en el helicóptero, que suelta su escalera al caer el jefe)
 		{"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 			"aviso": "Ya no hay vuelta atrás"},
