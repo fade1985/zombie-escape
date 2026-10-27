@@ -1,5 +1,5 @@
 # Un trozo de tabique que sube (mapa.gd: poner_tabiques): con "cajas", lo alto de la pared de arriba de una habitación,
-# de una casilla de grueso, liso y claro, a la altura de la pared (SUBE casillas por encima de la suya), con la cara de
+# de una casilla de grueso, liso y gris oscuro, a la altura de la pared (SUBE casillas por encima de la suya), con la cara de
 # la pared cayendo de él (cara_pared.gd). Donde no cae cara (las esquinas y donde se junta un tabique de los lados)
 # baja hasta su casilla, para que el de los lados llegue hasta arriba. Lleva su filo de luz y su contorno oscuro donde
 # se acaba, como el tabique plano (mapa.dibujar_tapas). Va con los personajes, ordenado por su "y" (el pie de su
@@ -7,7 +7,7 @@
 extends Node2D
 
 const SUBE := 3                       # lo que sube la pared (la cara, cara_pared.gd: ALTO), en casillas
-const COLOR := Color("#c3c0b7")       # el tabique: liso y claro
+const COLOR := Color("#34333b")       # el tabique: liso y de un gris muy oscuro, para que destaque lo de dentro
 const FILO := Color(1, 1, 1, 0.3)     # el filo de luz, junto al contorno
 const CONTORNO := Color("#1d1b2c")    # la raya oscura donde se acaba (mapa.gd: CONTORNO)
 
