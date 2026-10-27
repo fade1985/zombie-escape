@@ -15,8 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M9.** Baúl: que se pueda guardar toda la munición (ahora solo la que también es un objeto, como la gasolina; las
-  balas «se quedan contigo»).
 - **M10.** Objetos: que den también la opción «Destruir», y que se eliminen del inventario o del baúl.
 - **M11.** Habitación de la portera: los cubos del suelo, dibujados de nuevo con PixelLab al estilo del juego.
 - **M12.** Logros: si se enciende alguna de las ayudas de Opciones (o todas), los logros se desactivan.

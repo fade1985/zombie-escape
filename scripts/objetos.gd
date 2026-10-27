@@ -90,6 +90,8 @@ static func nombre(id: String) -> String:
 		return NOMBRES[id]
 	if id in USABLES:
 		return USABLES[id].nombre
+	if id in Armas.MUNICION:   # las balas y los cartuchos (en el baúl)
+		return Armas.MUNICION[id].nombre
 	return Armas.DATOS[id].nombre if id in Armas.DATOS else id
 
 
@@ -99,6 +101,8 @@ static func icono(id: String) -> String:
 		return "obj-" + id
 	if id in USABLES:
 		return USABLES[id].icono
+	if id in Armas.MUNICION:   # las balas y los cartuchos (en el baúl)
+		return Armas.MUNICION[id].icono
 	return {"mp5": "pistola"}.get(id, id)
 
 
@@ -139,14 +143,24 @@ static func hueco_baul(s: Dictionary) -> bool:
 	return casillas_baul(s) < BAUL
 
 
-# Todos los objetos que pueden ir en la mochila y en el baúl, en el orden de NOMBRES y, al final, el botiquín (que no
-# es de NOMBRES: no sale al azar ni cuenta en Colecciones)
+# Todo lo que puede ir en el baúl como objeto, en el orden de NOMBRES y, al final, el botiquín (que no es de NOMBRES:
+# no sale al azar ni cuenta en Colecciones) y la munición que no es un objeto (las balas y los cartuchos: se guardan
+# en el baúl, pero en la partida no van en la mochila sino en los huecos de munición; Armas.MUNICION)
 static func todos() -> Array:
 	var lista := NOMBRES.keys()
 	for id in USABLES:
 		if not id in lista:
 			lista.append(id)
+	for id in Armas.MUNICION:
+		if not id in lista:
+			lista.append(id)
 	return lista
+
+
+# Cuántos salen del baúl de una vez al sacarlos: las balas y los cartuchos, hasta un hueco de munición entero (de uno
+# en uno serían eternos); todo lo demás (la gasolina, las piezas, las curas...), de uno en uno
+static func tanda(id: String) -> int:
+	return 1 if id in NOMBRES or not id in Armas.MUNICION else int(Armas.MUNICION[id].hueco)
 
 
 # ¿Cabe en el baúl? Si ya tiene alguno va a su casilla; si no, hace falta una libre

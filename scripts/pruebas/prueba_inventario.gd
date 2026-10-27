@@ -18,7 +18,9 @@ func dar_lanzable(k: String) -> void:
 # se arrima al baúl y cuenta en la terminal: que se abre con la marca en lo primero que se puede guardar, que guardar
 # una casilla mete todos los de esa casilla (y la marca se queda en la siguiente), que las vendas también se guardan
 # (y se vuelven a poner), que la gasolina se guarda desde la munición y se saca de una en una (la marca se queda en
-# «Sacar uno») y que «Guardar todo» lo mete todo. Que al sacar un arma que ya lleva (la fregona Épica, con la Normal de repuesto, y la
+# «Sacar uno»), que las balas y los cartuchos también se guardan (el hueco entero, y también arrastrando) y salen
+# hasta un hueco de una vez, o lo que quepa (captura-baul-municion.png), y que «Guardar todo» lo mete todo, la
+# munición también. Que al sacar un arma que ya lleva (la fregona Épica, con la Normal de repuesto, y la
 # pistola Rara, con la Normal en la mano) se cambian y la suya entra en el baúl, sin dejar nada en el suelo. Y el baúl
 # lleno: con 31 armas y una pieza (cada arma, en su casilla) no deja guardar otra arma, y con más de 32 (al completar el
 # edificio entra todo) las casillas se hacen más pequeñas. Cada línea dice lo esperado. Saca captura-baul-guardar.png
@@ -97,14 +99,62 @@ func probar_baul() -> void:
 	await get_tree().process_frame
 	print("Sacada otra: en el baúl %d, en la mochila %d · la marca en «%s» (esperado: 0, 2, %s: ya no queda, la casilla pasa a la pieza especial)" % [
 		Guardado.cargar().baul.get("gasolina", 0), mochila.count("gasolina"), marca.call(), en_baul.call("pieza_especial")])
-	# «Guardar todo», con la gasolina sacada otra vez en la munición
+	# las balas y los cartuchos: desde su hueco de munición se guarda el hueco entero (también arrastrándolo) y salen de una
+	# tanda (un hueco: 24 balas, 12 cartuchos), o lo que quepa. 60 balas son tres huecos (24, 24 y 12)
+	var texto_boton := func(nombre: String) -> String:
+		var b: Button = inventario.fondo.find_child(nombre, true, false)
+		return "no está" if b == null else b.text
+	johnny.municion = {"balas": 60, "cartuchos": 7}
+	inventario.pintar()
+	inventario.tocar("u0")
+	await get_tree().process_frame
+	print("Elegido el 1.er hueco de balas: «Guardar en el baúl» %s · arrastrándolo, destinos %s · dice «%s» (esperado: activo · {baul: guardar} · es para la pistola y la MP5, se guardan los 24)" % [
+		boton.call("guardar"), inventario.destinos("u0"), dice.call()])
+	inventario.guardar()
+	await get_tree().process_frame
+	print("Guardado el hueco: en el baúl %d balas, Johnny lleva %d (esperado: 24, 36) · la marca en «%s» (esperado: u0, el hueco siguiente)" % [
+		Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas"), marca.call()])
+	inventario.tocar(en_baul.call("balas"))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-baul-municion.png")
+	print("Elegidas las balas del baúl: botón «%s», %s · dice «%s» (esperado: Sacar 24, activo · es para la pistola, salen hasta 24 de una vez)" % [
+		texto_boton.call("sacar"), boton.call("sacar"), dice.call()])
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Sacadas: en el baúl %d balas, Johnny lleva %d (esperado: 0, 60: se acaba la casilla)" % [
+		Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas")])
+	# con poco sitio salen solo las que quepan: 40 balas (2 huecos), 60 cartuchos (5) y la gasolina (1) dejan sitio a 8 más
+	johnny.municion = {"balas": 40, "cartuchos": 60}
+	Guardado.cambiar(func(g2): g2.baul["balas"] = 100)
+	inventario.pintar()
+	inventario.tocar(en_baul.call("balas"))
+	await get_tree().process_frame
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Con sitio para 8: en el baúl %d balas, Johnny lleva %d (esperado: 92, 48)" % [Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas")])
+	print("Sin sitio: «Sacar» %s, dice «%s» (esperado: apagado · no te cabe: llenos los huecos de munición)" % [boton.call("sacar"), dice.call()])
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Sacar sin sitio: en el baúl %d balas, Johnny lleva %d (esperado: 92, 48: no cambia nada)" % [Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas")])
+	# los cartuchos, también
+	johnny.municion = {"balas": 0, "cartuchos": 30}
+	Guardado.cambiar(func(g2): g2.baul = {"pieza_especial": 3, "cartuchos": 5})
+	inventario.pintar()
+	inventario.tocar(en_baul.call("cartuchos"))
+	await get_tree().process_frame
+	print("Cartuchos del baúl: botón «%s» (esperado: Sacar 5: solo hay 5)" % texto_boton.call("sacar"))
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Sacados: en el baúl %d, Johnny lleva %d (esperado: 0, 35)" % [Guardado.cargar().baul.get("cartuchos", 0), johnny.cuanta("cartuchos")])
+	# «Guardar todo», con la gasolina sacada otra vez en la munición y 30 balas encima
+	johnny.municion = {"balas": 30}
 	Guardado.cambiar(func(g2): g2.baul = {"pieza_especial": 3, "gasolina": 3})
 	inventario.pintar()
 	inventario.guardar_todo()
 	await get_tree().process_frame
 	g = Guardado.cargar()
-	print("«Guardar todo» con sitio: mochila %s (esperado: []) · baúl %s (esperado: pieza_especial 3, gasolina 5: las 3 y las 2 sacadas, vendas 1, pieza_cuerpo 1, pieza_distancia 3) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
-		mochila, g.baul, boton.call("guardar_todo"), marca.call()])
+	print("«Guardar todo» con sitio: mochila %s, balas que lleva %d (esperado: [], 0) · baúl %s (esperado: pieza_especial 3, gasolina 5: las 3 y las 2 sacadas, vendas 1, pieza_cuerpo 1, pieza_distancia 3, balas 30) · «Guardar todo» %s, la marca en «%s» (esperado: apagado, b0: ya no hay nada que guardar)" % [
+		mochila, johnny.cuanta("balas"), g.baul, boton.call("guardar_todo"), marca.call()])
 	# sacar un arma que ya lleva: se cambian y la suya entra en el baúl en su lugar, aunque sea la fregona o la pistola
 	# Normales (nada al suelo). Con el bate a la mano, para que la fregona quede de repuesto
 	Guardado.cambiar(func(g2):

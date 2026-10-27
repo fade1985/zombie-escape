@@ -30,7 +30,9 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la cierran. El botón **Tutorial** del menú
   principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega*).
 - **Munición:** va por tipos (balas de pistola, que también gasta la MP5; cartuchos; gasolina, ácido y baterías) en 8
-  huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano.
+  huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
+  en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12
+  cartuchos; la gasolina, el ácido y las baterías, de una en una) o lo que quepa.
 - **Lanzables:** 3 a mano y 8 de repuesto; al acabarse uno de la mano, entra el primero de repuesto.
 - **Vida en tercios:** el tercio que pierdes ya no se cura y, por cada uno, Johnny anda un 15 % más lento (210, 179 y
   147; el zombi rápido va a 165). Solo el botiquín devuelve un tercio perdido.
@@ -114,7 +116,7 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   las balas atraviesan a un zombi (estela morada); especiales, el zombi que matan revienta y prende, echa ácido o da
   calambre a los de al lado; arrojables, al romperse o explotar sueltan 2 más pequeños. Y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
-  otra). Guarda objetos, armas (menos la fregona y la pistola Normales) y paquetes de arrojables mejorados, cada arma
+  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (menos la fregona y la pistola Normales) y paquetes de arrojables mejorados, cada arma
   y cada paquete en su casilla con el borde del color de su **calidad** (gris Normal, verde Poco común, azul Rara,
   morado Épica). Lo que lleva encima se pierde si cae; al completar el edificio, sus armas y sus arrojables mejorados
   pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a
