@@ -29,7 +29,7 @@ const ANCHO := 236.0      # la barra a tamaño 1 (el dibujo mide 236×26)
 const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
-const FRANJA := 64.0      # el alto de la franja de abajo (el grosor del muro de abajo)
+const ABAJO := 8.0        # lo que queda entre el borde de abajo de la pantalla y la barra o las casillas
 const GRANDE := 52.0      # la casilla del arma en la mano (casilla-grande.png, de 22 píxeles, con los lados estirados)
 const MEDIANA := 36.0     # la de la otra arma y la de cada lanzable (casilla-mediana.png, de 18, al doble)
 const MARCOS := {
@@ -126,11 +126,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	tiempo += delta
 	var pantalla := get_viewport_rect().size
-	# en la franja de abajo (las balas se pintan por encima de la barra de vida)
-	fila.position = Vector2(14, roundf(pantalla.y - FRANJA / 2.0 - fila.size.y / 2.0) - 7.0)
-	# las casillas, en la esquina de abajo a la derecha; en el móvil, al lado de la barra
+	# en la franja de abajo, con la barra de vida pegada abajo (las balas se pintan por encima de ella)
+	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - ALTO / 2.0 - fila.size.y / 2.0))
+	# las casillas, en la esquina de abajo a la derecha, con su borde de abajo a la altura del de la barra (sus
+	# dibujos dejan 2 de aire debajo); en el móvil, al lado de la barra
 	var x := fila.position.x + fila.size.x + 14 if Tactil.activo else pantalla.x - 14 - derecha.size.x
-	derecha.position = Vector2(x, pantalla.y - 15 - derecha.size.y)
+	derecha.position = Vector2(x, pantalla.y - ABAJO + 2 - derecha.size.y)
 	if johnny == null:
 		return
 	mirar_armas(delta)
