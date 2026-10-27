@@ -87,7 +87,9 @@ func probar_alerta() -> void:
 					print("Llave · al volver a entrar: zombis con llave %d, llave en el suelo: %s (esperado: 0 y true)" % [
 						get_tree().get_nodes_in_group("zombis").filter(func(o): return o.has_meta("llave")).size(),
 						mapa.cosas.has_node("Llave")])
-					# la llave en el suelo, con Johnny al lado (captura-alerta-llave-suelo.png)
+					# la llave en el suelo, con un bidón de ácido al lado para comparar el tamaño y Johnny cerca
+					# (captura-alerta-llave-suelo.png)
+					soltar_objeto("bidon_acido", planta.llave.pos + Vector2(60, 0))
 					johnny.position = planta.llave.pos + Vector2(0, 90)
 					johnny.get_node("Camara").reset_smoothing()
 					luz.alternar()   # (sin penumbra, para que se vea bien)

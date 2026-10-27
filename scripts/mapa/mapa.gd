@@ -1241,8 +1241,9 @@ func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
 	zona.add_child(forma)
 	var dibujo := Sprite2D.new()
 	dibujo.texture = dibujo_tarjeta(dorada) if tarjeta else LLAVE
-	dibujo.scale = Vector2(2, 2)
-	dibujo.offset = Vector2(0, -8)
+	# la llave (32×32), al tamaño de un bidón de ácido en el suelo; la tarjeta (12×8), al doble
+	dibujo.scale = Vector2(2, 2) if tarjeta else Vector2.ONE
+	dibujo.offset = Vector2(0, -8) if tarjeta else Vector2(0, -16)
 	zona.add_child(dibujo)
 	cosas.add_child(zona)
 	var vaiven := dibujo.create_tween().set_loops()
