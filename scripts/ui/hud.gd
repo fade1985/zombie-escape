@@ -13,8 +13,8 @@
 #     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
 #   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás que
 #     lleva a mano (F cambia entre ellos; los de repuesto no se ven) en pequeño al lado.
-#   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo), la mochila (una
-#     cajita por casilla, las llenas encendidas) y los dólares, que suben contando con un "+5" que flota.
+#   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo) y la mochila (una
+#     cajita por casilla, las llenas encendidas). Los dólares no están aquí: se ven en el inventario.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
 
@@ -49,7 +49,7 @@ var fila := HBoxContainer.new()
 var barra := Control.new()
 var armas := Control.new()      # las dos casillas de las armas
 var lanzar := Control.new()     # el lanzable de ahora y los demás
-var recursos := Control.new()   # la llave, la mochila y el dinero, pegados a la derecha
+var recursos := Control.new()   # la llave y la mochila, pegadas a la derecha
 var texturas := {}              # los iconos ya cargados
 
 # Las armas: cuál estaba en la mano y las animaciones al cambiar (de 0 a 1 el intercambio; las demás, de 1 a 0)
@@ -66,10 +66,6 @@ var cuenta_antes := -1
 var giro := 1.0
 var salto_cuenta := 0.0
 var destello_lanzar := 0.0
-# El dinero que se ve (sube contando hasta el de verdad) y los "+5" que flotan: [cantidad, tiempo]
-var dinero_visto := -1.0
-var dinero_real := -1
-var ganado: Array = []
 var llave_t := -1.0             # desde cuándo lleva la llave (para el brillo al cogerla)
 
 # La barra que se mueve: al perder vida, el trozo perdido se queda un momento en claro y luego baja
@@ -335,48 +331,24 @@ func pintar_lanzar() -> void:
 		x += 26
 
 
-# ── La llave, la mochila y el dinero ──
+# ── La llave y la mochila ──
 
 func mirar_recursos(delta: float) -> void:
-	var dinero: int = partida.cartera()
-	if dinero_real < 0 or dinero < dinero_real:
-		dinero_visto = dinero   # al empezar, o si gasta: de golpe
-	elif dinero > dinero_real:
-		# lo que acaba de coger, en un "+N" (si coge varios seguidos, se suman en el mismo)
-		if ganado.is_empty() or ganado[-1][1] > 0.3:
-			ganado.append([0, 0.0])
-		ganado[-1][0] += dinero - dinero_real
-	dinero_real = dinero
-	# el contador sube contando (más deprisa cuanto más falta)
-	dinero_visto = move_toward(dinero_visto, dinero, delta * maxf(12.0, (dinero - dinero_visto) * 4.0))
-	for g in ganado:
-		g[1] += delta
-	ganado = ganado.filter(func(g): return g[1] < 1.1)
 	if partida.planta.tiene_llave:
 		llave_t = 0.0 if llave_t < 0.0 else llave_t + delta
 	else:
 		llave_t = -1.0
 
 
-# De derecha a izquierda: el dinero pegado al borde, la mochila y la llave
+# De derecha a izquierda: la mochila pegada al borde y la llave
 func pintar_recursos() -> void:
 	var y := roundf(fila.size.y / 2.0)
 	var x := get_viewport_rect().size.x - 28.0
-	# el dinero (en amarillo mientras sube) y los "+N" que suben y se apagan
-	var contando: bool = roundi(dinero_visto) < dinero_real
-	var s := "$%d" % roundi(dinero_visto)
-	x -= ancho_texto(s, 16)
-	texto(recursos, Vector2(x, y + 6), s, 16, Tema.AMARILLO if contando else Tema.TINTA)
-	for g in ganado:
-		var t: float = g[1]
-		texto(recursos, Vector2(x + 4, y - 14 - t * 18.0), "+%d" % g[0], 14, Color(Tema.VERDE, clampf((1.1 - t) / 0.4, 0.0, 1.0)))
-	x -= 28
-	recursos.draw_texture_rect(icono("billete"), Rect2(x, y - 12, 24, 24), false)
 	# la mochila: una cajita por casilla, en dos filas; las llenas encendidas (si está llena, parpadea)
 	var llenas := Objetos.casillas(partida.mochila).size()
 	var columnas := ceili(Objetos.MOCHILA / 2.0)
 	var llena := llenas >= Objetos.MOCHILA and int(tiempo * 3.0) % 2 == 0
-	x -= 18 + columnas * 7
+	x -= columnas * 7
 	for i in Objetos.MOCHILA:
 		var r := Rect2(x + (i % columnas) * 7, y - 7 + (i / columnas) * 7, 5, 5)
 		recursos.draw_rect(r.grow(1), Tema.LINEA)
