@@ -10,8 +10,8 @@
 #     Con el lanzallamas, en vez de las balas, el depósito: una barra de gasolina y las gasolinas de la mochila
 #     (con el lanza ácido, la barra en verde y sus bidones de ácido).
 #   - A la derecha de la barra de vida, las curas que lleva (las vendas y el botiquín; Objetos.USABLES), cada una en su
-#     casilla con cuántas tiene y su tecla (1 y 2: partida.usar_cura). Solo salen las que lleva; con la vida llena se
-#     apagan, porque no se pueden usar. Al coger una o gastarla, la casilla da un saltito (y al gastarla, un destello).
+#     casilla con cuántas tiene y su tecla (1 y 2: partida.usar_cura). Solo salen las que lleva; mientras no sirven se
+#     apagan (con la vida llena; el botiquín, que devuelve un tercio, si además no ha perdido ninguno). Al coger una o gastarla, la casilla da un saltito (y al gastarla, un destello).
 #   - En la esquina de abajo a la derecha, las armas: la de la mano en la misma esquina, en la casilla más grande
 #     y con el borde amarillo, y la otra a su lado, apagada (con la tecla de cambiar). Al cambiar dan un saltito
 #     y el nombre sale encima un momento.
@@ -411,15 +411,15 @@ func mirar_curas(delta: float) -> void:
 	curas.custom_minimum_size.x = maxi(1, llevadas) * (MEDIANA + 10) - 4
 
 
-# Cada cura en su casilla, con cuántas lleva en la esquina y su tecla encima; apagadas con la vida llena
+# Cada cura en su casilla, con cuántas lleva en la esquina y su tecla encima; apagadas mientras no sirven (con la vida
+# llena; el botiquín, con la vida llena y los tres tercios)
 func pintar_curas() -> void:
-	var lleno: bool = johnny.vida >= johnny.vida_tope()
 	var lista := curas_llevadas()
 	for i in lista.size():
 		var id: String = lista[i][0]
 		var r := sitio_cura(i)
 		con_salto(curas, r, salto_curas.get(id, 0.0))
-		casilla(curas, r, Objetos.icono(id), 0.6 if lleno else 1.0)
+		casilla(curas, r, Objetos.icono(id), 1.0 if partida.puede_curar(id) else 0.6)
 		destello(curas, r, destello_curas.get(id, 0.0))
 		curas.draw_set_transform(Vector2.ZERO)
 		var s := "x%d" % lista[i][1]

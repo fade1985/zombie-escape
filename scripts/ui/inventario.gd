@@ -669,8 +669,10 @@ func ficha_objeto(caja: VBoxContainer, c: Array) -> Dictionary:
 	if c[1] > 1:
 		renglon(caja, "Llevas %d" % c[1], Tema.TINTA)
 	if curar:
-		return {"que": "Te cura %d de vida. Sin abrir el inventario, se usa con la tecla %s. Si caes, se pierde (en el baúl queda a salvo)." %
-				[partida.cura_de(id), Controles.tecla_de(Objetos.USABLES[id].accion)],
+		var cura := ("Te devuelve un tercio de vida perdido y te cura %d." if Objetos.USABLES[id].get("tercio", false)
+			else "Te cura %d de vida, sin pasar del tercio en el que estás.") % partida.cura_de(id)
+		return {"que": "%s Sin abrir el inventario, se usa con la tecla %s. Si caes, se pierde (en el baúl queda a salvo)." %
+				[cura, Controles.tecla_de(Objetos.USABLES[id].accion)],
 			"botones": [["usar", "Usar", usar, false], ["tirar", "Tirar al suelo", tirar, false]]}
 	return {"que": que_pieza(id) + "Si caes, se pierde (en el baúl queda a salvo).",
 		"botones": [["tirar", "Tirar al suelo", tirar, false]]}

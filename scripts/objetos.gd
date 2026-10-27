@@ -61,11 +61,12 @@ const NOMBRES := {
 # ("accion": 1 las vendas y 2 el botiquín; sus casillas junto a la barra de vida, ui/hud.gd), y van al baúl como los
 # demás. Las vendas (de las tiendas del centro comercial) curan 25 y el botiquín, 50 (el que suelta el armarito de los
 # baños, y el que te prepara la farmacéutica, supervivientes.gd; su icono, assets/ui/iconos/botiquin.png); más con el
-# talento Sanitario, y con la Alerta 4, la mitad ("cura"). Las vendas cuentan en Colecciones como los demás (están en
-# NOMBRES y en TIENDAS); el botiquín, no. El orden es el de sus casillas en el HUD
+# talento Sanitario, y con la Alerta 4, la mitad ("cura"). Las vendas solo curan dentro del tercio de vida en el que
+# estás; el botiquín, además, devuelve un tercio perdido ("tercio"; johnny.gd, devolver_tercio). Las vendas cuentan en
+# Colecciones como los demás (están en NOMBRES y en TIENDAS); el botiquín, no. El orden es el de sus casillas en el HUD
 const USABLES := {
 	"vendas": {"cura": 25, "accion": "usar_vendas"},
-	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 50, "accion": "usar_botiquin"},
+	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 50, "accion": "usar_botiquin", "tercio": true},
 }
 const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera

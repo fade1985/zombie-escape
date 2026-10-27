@@ -3,7 +3,7 @@
 # Los puntos de talento se compran con los dólares ahorrados en el ordenador de la sala de mantenimiento
 # (ui/ordenador.gd) y se gastan aquí, de uno en uno: cada punto sube un nivel del talento. Lo comprado es para
 # siempre (se guarda en "talentos" del guardado). Los dólares de la partida en curso no cuentan hasta que
-# completas el edificio.
+# acaba (todos si completas el edificio; la mitad si caes).
 #
 # Para tocar un talento basta con cambiar su línea en LISTA: "max" es cuántos puntos admite, "pide" el talento
 # que hay que tener al máximo antes; lo que hace con n puntos está en aplicar_uno(). Lo que no es un número

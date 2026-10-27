@@ -12,7 +12,8 @@
 # y arriba a la derecha, el minimapa. Esc o Start abren la pausa (menus.gd).
 #
 # Dinero y guardado (como game.js y game-combate.js del JS): los zombis sueltan billetes a veces (la portera,
-# varios). Los dólares de la partida solo se guardan si completas el edificio; si caes, se pierden. Al acabar
+# varios). Los dólares de la partida se guardan al acabarla: todos si completas el edificio; si caes (o abandonas),
+# la mitad (DOLARES_AL_CAER). Al acabar
 # (ganes, caigas o abandones) se guardan los récords y los zombis matados (guardado.gd).
 #
 # El ordenador de la sala de mantenimiento (ui/ordenador.gd): al arrimarse a su mesa, el juego se pausa y sale
@@ -80,6 +81,7 @@ const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
+const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
 const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
@@ -1071,16 +1073,24 @@ func curar_con(cura: int, sobre: Node2D) -> void:
 
 
 # Usar un objeto de curar de la mochila (Objetos.USABLES: las vendas y el botiquín) desde el inventario o desde su tecla
-# (1 y 2; casillas junto a la barra de vida, ui/hud.gd): se gasta y cura lo suyo. Si no se puede (con la vida llena), no
-# se gasta y devuelve por qué
+# (1 y 2; casillas junto a la barra de vida, ui/hud.gd): se gasta y cura lo suyo (el botiquín, antes, devuelve un tercio
+# perdido). Si no se puede (con la vida llena), no se gasta y devuelve por qué
 func usar_objeto(id: String) -> String:
 	if not id in mochila or not id in Objetos.USABLES:
 		return "No se puede usar"
-	if johnny.vida >= johnny.vida_tope():
+	if not puede_curar(id):
 		return "Tienes la vida al máximo: guárdalo para luego"
 	mochila.remove_at(mochila.rfind(id))
+	if Objetos.USABLES[id].get("tercio", false):
+		johnny.devolver_tercio()
 	curar_con(cura_de(id), johnny)
 	return ""
+
+
+# ¿Le sirve ahora a Johnny? Las vendas, si le falta vida en su tercio; el botiquín, también si ha perdido un tercio
+func puede_curar(id: String) -> bool:
+	var tercio: bool = Objetos.USABLES[id].get("tercio", false) and johnny.tercios_vivos() < 3
+	return johnny.vida < johnny.vida_tope() or tercio
 
 
 # La tecla de un objeto de curar (1 las vendas, 2 el botiquín): lo usa sin abrir el inventario. Con la vida llena avisa
@@ -1143,8 +1153,8 @@ func seguir() -> void:
 	get_tree().paused = false
 
 
-# Se acabó la partida (endRun en game.js): se guardan los récords y, si ganas, los dólares. Si se abandona
-# desde la pausa, no hay cartel: directo al menú principal
+# Se acabó la partida (endRun en game.js): se guardan los récords y los dólares (si no ganas, la mitad). Si se
+# abandona desde la pausa, no hay cartel: directo al menú principal
 func terminar(gano: bool, abandona := false) -> void:
 	if terminada:
 		return
@@ -1159,6 +1169,7 @@ func terminar(gano: bool, abandona := false) -> void:
 	var abierta := [0]      # la alerta que se abre al ganar (0: ninguna)
 	var mejor := [false]    # el reto del día: se ha mejorado la marca de hoy
 	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
+	var salvados := dolares + extra if gano else roundi(dolares * DOLARES_AL_CAER)   # los que pasan a la cartera
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var equipo := equipo_encima() if gano else []
 	var s := Guardado.cambiar(func(g):
@@ -1179,9 +1190,9 @@ func terminar(gano: bool, abandona := false) -> void:
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
 			g.baul_equipo.append_array(equipo)
-			g.dolares += dolares + extra
-			g.dolares_total += dolares + extra
 			g.victorias += 1
+		g.dolares += salvados
+		g.dolares_total += salvados
 		if gano and not Reto.activo:   # (el reto no cuenta como edificio completado ni abre alertas)
 			e.victorias += 1
 			e.completado = true
@@ -1221,6 +1232,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"visitados": "%d / %d" % [visitados, apartamentos],
 		"tiempo": tiempo,
 		"dolares": dolares,
+		"salvados": salvados,
 		"cartera": s.dolares,
 		"alerta": Alerta.nivel,
 		"extra": extra,

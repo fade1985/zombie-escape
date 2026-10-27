@@ -17,7 +17,8 @@
 #     han visto llevan "¡NUEVA!" (y el icono del escritorio avisa).
 #   - "Colecciones": lo encontrado y visto alguna vez, por edificio y en porcentaje, y el bestiario
 #     (bestiario.gd) con cada enemigo, su dibujo y una frase. Queda entre partidas; el icono avisa si hay algo nuevo.
-# Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta completar el edificio.
+# Solo se pueden gastar los dólares ahorrados: los de la partida en curso no cuentan hasta que acaba (todos si
+# completas el edificio; la mitad si caes).
 # Va con el ratón, con flechas + Intro o con el mando. Esc (o B) cierra la ventana y, si no hay ninguna, apaga.
 extends CanvasLayer
 
@@ -419,7 +420,7 @@ func cajita(fila: HBoxContainer, rotulo: String, icono: String, valor: String) -
 
 func nota_partida(c: VBoxContainer) -> void:
 	if partida.dolares > 0:
-		nota(c, "Los $%d de esta partida no se pueden gastar hasta que completes el edificio." % partida.dolares)
+		nota(c, "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes." % partida.dolares)
 
 
 func nota(c: VBoxContainer, texto: String) -> void:

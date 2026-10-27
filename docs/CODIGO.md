@@ -103,7 +103,8 @@ en una línea.
   día) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`).
 - `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
-  botiquín, 50, que va como las demás cosas de la mochila y del baúl; se usan con la tecla 1 y la 2,
+  botiquín, 50, que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
+  la mochila y del baúl; se usan con la tecla 1 y la 2,
   `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín lo
   suelta el armarito de cada baño, `partida.abrir_armarito`, y lo prepara la Farmacéutica), qué sale en
   cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32. Y las **piezas**

@@ -16,8 +16,8 @@
 #             lo empuja). Con una ayuda suave: si apuntas casi encima de un zombi, se tuerce un poco hacia él
 #
 # Tiene vida: los zarpazos se la quitan y, cuando cambia, lo avisa con la señal "vida_cambiada". La vida va
-# en tres tercios: el tercio que pierde ya no se cura, y por cada uno anda un 25 % más lento (como en el JS).
-# Con la ayuda "Vida entera" (Opciones > Ayudas) no se pierden tercios; con "Pistola sin fin", la pistola no
+# en tres tercios: el tercio que pierde ya no se cura (solo el botiquín lo devuelve), y por cada uno anda un 15 %
+# más lento (LENTO_TERCIO; en el JS, un 25 %). Con la ayuda "Vida entera" (Opciones > Ayudas) no se pierden tercios; con "Pistola sin fin", la pistola no
 # gasta balas.
 # Sus atributos (vida máxima, velocidad, daño, ritmo, alcance...) están en "stats" (mejoras.gd): los números
 # de las armas se multiplican por ellos.
@@ -47,6 +47,9 @@ const PASO := {"e": 96.0, "o": 96.0, "se": 84.0, "so": 84.0, "ne": 84.0, "no": 8
 const RADIO := 18.0        # su círculo de choque (los zombis lo usan para saber si está a tiro)
 
 const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (parpadea), como en el juego
+# Lo que anda más lento por cada tercio de vida perdido: con 210 (mejoras.gd), 179 y 147. Con un tercio perdido aún
+# huye del zombi rápido (165); con dos, ya no. En el JS era 0,25 (aquí serían 210, 158 y 105)
+const LENTO_TERCIO := 0.15
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
 const REGENERA_CADA := 3.0 # Lobezno: segundos entre cura y cura
@@ -206,6 +209,11 @@ func pistola_sin_fin() -> bool:
 	return huecos.fuego == "pistola" and Guardado.ajuste("pistola_sin_fin") and not Reto.sin_municion()
 
 
+# El botiquín, además de curar, devuelve un tercio perdido (si le falta alguno): sube el tope antes de curar
+func devolver_tercio() -> void:
+	tercios = mini(tercios + 1, 3)
+
+
 func curar(cantidad: int) -> void:
 	if not vivo or vida >= vida_tope():
 		return
@@ -350,7 +358,7 @@ func _physics_process(delta: float) -> void:
 		# Acelera suave hacia la velocidad deseada, como en el juego
 		# (en la lejía cuesta frenar y girar: menos agarre)
 		var k := 1.0 - exp(-delta * ARRANQUE * maxf(0.08, Estados.agarre(estados)))
-		var rapidez: float = stats.velocidad * (1.0 - 0.25 * (3 - tercios_vivos()))   # más lento por cada tercio perdido
+		var rapidez: float = stats.velocidad * (1.0 - LENTO_TERCIO * (3 - tercios_vivos()))   # más lento por cada tercio perdido
 		rapidez *= Estados.frenado(estados)   # el frío de la cámara, el calambrazo del agua
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella

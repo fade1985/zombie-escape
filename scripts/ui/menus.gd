@@ -156,7 +156,7 @@ func pausa(partida: Node) -> void:
 	seguir.grab_focus.call_deferred()
 
 
-# r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, cartera y, con los niveles de alerta
+# r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, salvados, cartera y, con los niveles de alerta
 # (alerta.gd), alerta (la de la partida), extra (los dólares de más por ella) y abierta (la que se abre, o 0);
 # con el reto del día (reto.gd), reto (el nombre de su regla), marca (la mejor de hoy) y mejor (si se acaba de mejorar)
 func fin(r: Dictionary) -> void:
@@ -180,7 +180,9 @@ func fin(r: Dictionary) -> void:
 		if r.get("abierta", 0) > 0:
 			dato(lista, "alerta", "¡Nivel nuevo!", Alerta.nombre(r.abierta) + " abierta", Color("#f7c440"))
 	else:
-		dato(lista, "billete", "Dólares perdidos", "$%d  (tienes $%d)" % [r.dolares, r.cartera], Tema.ROJO)
+		# si caes, te quedas la mitad de lo recogido (partida.gd, DOLARES_AL_CAER) y la otra mitad se pierde
+		dato(lista, "billete", "Dólares salvados (la mitad)", "+$%d  (tienes $%d)" % [r.salvados, r.cartera], Tema.VERDE)
+		dato(lista, "billete", "Dólares perdidos", "$%d" % (r.dolares - r.salvados), Tema.ROJO)
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)

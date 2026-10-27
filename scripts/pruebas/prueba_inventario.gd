@@ -1188,9 +1188,11 @@ func probar_curas() -> void:
 # Con "--captura --curas": las vendas y el botiquín como objetos que se usan con su tecla (partida.usar_cura; sus
 # casillas junto a la barra de vida, ui/hud.gd). Sin ninguno, las casillas no salen; con dos vendas y un botiquín y la
 # vida a medias salen (captura-curas-hud.png). La tecla 1 (teclado de verdad) usa las vendas y cura 25, la 2 el
-# botiquín y cura 50; con la vida llena no se gasta nada. Cómo queda en el móvil (captura-curas-movil.png). En el baúl se
-# guardan y se sacan como los demás objetos (captura-curas-baul.png). Y en un baño, el armarito se abre y suelta un
-# botiquín (captura-curas-armarito.png) que Johnny recoge, y no cura al acercarse. Cada línea dice lo esperado. Se cierra
+# botiquín y cura 50; con la vida llena no se gasta nada. Cómo queda en el móvil (captura-curas-movil.png). Con un solo
+# tercio y lleno, las vendas no sirven y el botiquín sí: devuelve un tercio y cura (captura-curas-tercio.png); y lo que
+# anda Johnny con 3, 2 y 1 tercios. En el baúl se guardan y se sacan como los demás objetos (captura-curas-baul.png). En
+# un baño, el armarito se abre y suelta un botiquín (captura-curas-armarito.png) que Johnny recoge, y no cura al
+# acercarse. Y al caer, la mitad de los dólares a la cartera (captura-curas-caer.png). Cada línea dice lo esperado. Se cierra
 func probar_curas_rapidas() -> void:
 	set_process(false)
 	var antes := Guardado.cargar()
@@ -1230,6 +1232,31 @@ func probar_curas_rapidas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-curas-movil.png")
 	Tactil.activo = false
+	# los tercios: con uno solo y su tercio lleno, las vendas no sirven (casilla apagada) y el botiquín sí: devuelve un
+	# tercio y cura
+	mochila.clear()
+	mochila.append_array(["vendas", "botiquin"])
+	johnny.tercios = 1
+	johnny.vida = johnny.vida_tope()
+	await get_tree().create_timer(0.3).timeout
+	print("Curas · con un tercio y lleno: sirven las vendas %s, el botiquín %s (esperado: false, true)" % [
+		puede_curar("vendas"), puede_curar("botiquin")])
+	Captura.foto("captura-curas-tercio.png")
+	v = johnny.vida
+	await pulsar.call(KEY_2)
+	print("Curas · el botiquín con un tercio: tercios %d · vida %d -> %d (esperado: 2 · %d -> %d, el tope de dos tercios)" % [
+		johnny.tercios, v, johnny.vida, v, mini(v + cura_de("botiquin"), johnny.vida_tope())])
+	# la velocidad andando con 3, 2 y 1 tercios (LENTO_TERCIO: un 15 % menos por cada tercio perdido)
+	var rapidez := []
+	Input.action_press("derecha")
+	for n in [3, 2, 1]:
+		johnny.tercios = n
+		await get_tree().create_timer(0.4).timeout
+		rapidez.append(roundi(johnny.velocity.length()))
+	Input.action_release("derecha")
+	johnny.tercios = 3
+	print("Velocidad con 3, 2 y 1 tercios: %s (esperado: %s; el zombi rápido anda a 165)" % [rapidez,
+		[3, 2, 1].map(func(n): return roundi(johnny.stats.velocidad * (1.0 - johnny.LENTO_TERCIO * (3 - n))))])
 	# el baúl
 	mochila.clear()
 	mochila.append_array(["vendas", "botiquin", "botiquin"])
@@ -1282,4 +1309,12 @@ func probar_curas_rapidas() -> void:
 	await get_tree().create_timer(1.0, false).timeout
 	print("Curas · el armarito: abierto %s · vida %d -> %d (esperado: true · sin cambio) · botiquines en la mochila %d (esperado: 1)" % [
 		a.datos.cogido, v, johnny.vida, mochila.count("botiquin")])
+	# al caer, la mitad de los dólares recogidos pasa a la cartera (DOLARES_AL_CAER), con su cartel; luego se deja como estaba
+	var cartera: int = Guardado.cargar().dolares
+	dolares = 7
+	terminar(false)
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-curas-caer.png")
+	print("Al caer con $7: la cartera %d -> %d (esperado: +4)" % [cartera, Guardado.cargar().dolares])
+	Guardado.cambiar(func(g): g.dolares = cartera)
 	get_tree().quit()
