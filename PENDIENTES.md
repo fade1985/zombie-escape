@@ -15,8 +15,16 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-_(ninguna por ahora)_
+- **M9.** Baúl: que se pueda guardar toda la munición (ahora solo la que también es un objeto, como la gasolina; las
+  balas «se quedan contigo»).
+- **M10.** Objetos: que den también la opción «Destruir», y que se eliminen del inventario o del baúl.
+- **M11.** Habitación de la portera: los cubos del suelo, dibujados de nuevo con PixelLab al estilo del juego.
+- **M12.** Logros: si se enciende alguna de las ayudas de Opciones (o todas), los logros se desactivan.
+- **M13.** Reescribir la historia: se han añadido muchas cosas nuevas y se han quitado otras. Con lo que hay ahora en
+  el juego, las notas y la tele: algo bueno y que enganche.
 
 ## Por limar
 
-_(nada por ahora)_
+- **L5.** El ascensor averiado: solo una cinta horizontal (ahora lleva dos en aspa y una horizontal).
+- **L6.** Mutación Flatulento: más alcance.
+- **L7.** En el menú, los dos retos del día no están alineados y queda mal: alinearlos.
