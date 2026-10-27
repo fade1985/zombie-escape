@@ -21,8 +21,14 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Pausa | Esc | Start |
 
 - **Opciones** (menú y pausa): modo de atacar, música, sonido, la pestaña **Ayudas** (*Vida entera*, *Pistola sin
-  fin*, *Lanzar apuntando solo*; no cambian récords) y la lista de controles (pulsar la casilla y luego la tecla; si
-  ya la usaba otra acción, se intercambian).
+  fin*, *Lanzar apuntando solo*; no cambian récords; y *Tutoriales*, con el botón *Que vuelvan a salir todos*) y la
+  lista de controles (pulsar la casilla y luego la tecla; si ya la usaba otra acción, se intercambian).
+- **Tutoriales:** la primera vez que se encuentra algo nuevo (empezar, el pasillo, la primera pelea, recargar, perder
+  un tercio, la primera cura, objeto, billete, pieza o arma, el primer jefe, la mutación, el ascensor, un
+  superviviente, cada evento sorpresa, el ordenador, la taquilla, el banco, el baúl, el centro comercial, sus peligros
+  y la alerta) sale una ventana con el juego parado: foto, qué pasa y con qué teclas (las del jugador, las del mando si
+  hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la cierran. El botón **Tutorial** del menú
+  principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega*).
 - **Munición:** va por tipos (balas de pistola, que también gasta la MP5; cartuchos; gasolina, ácido y baterías) en 8
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano.
 - **Lanzables:** 3 a mano y 8 de repuesto; al acabarse uno de la mano, entra el primero de repuesto.

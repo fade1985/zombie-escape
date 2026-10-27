@@ -25,6 +25,10 @@
 # se estaba. Allí, 1 a 8 sacan un zombi y Mayús + 1 a 0, un jefe, y la P abre el panel de pruebas (ui/panel_pruebas.gd): sacar jefes y zombis, encender y apagar las
 # ayudas, ir a la exposición o a la sala de un jefe... Lo que pasa en la sala no cuenta (en_pruebas).
 #
+# Los tutoriales (tutoriales.gd, ui/tutorial.gd): la primera vez que Johnny se encuentra algo nuevo, una ventana con el
+# juego parado explica qué pasa y cómo se hace (tutorial(); los de lo que cambia en Johnny o en la mochila, en
+# mirar_tutoriales). En la sala de pruebas no salen, ni en la partida de prueba salvo en la suya (--tutorial).
+#
 # Con "-- --captura" no se juega esta, sino la partida de prueba (escenas/partida_prueba.tscn): la misma partida
 # más las fotos y las comprobaciones, que están en scripts/pruebas/partida_prueba.gd.
 extends Node2D
@@ -127,6 +131,8 @@ var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
 var duracion := 0.0        # segundos jugados (sin contar la pausa)
 var terminada := false
+var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial()); el primero, el que sale o va a salir
+var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
 
 @onready var johnny := $Johnny
 @onready var lugar: Label = $Pantalla/Lugar
@@ -249,6 +255,7 @@ func _ready() -> void:
 La Farmacéutica te ha preparado un botiquín: está en la mochila" if botiquin else ""), 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
+		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
 
 
 # Lo que hace la partida de prueba al empezar (pruebas/partida_prueba.gd). En la partida de verdad, nada
@@ -309,6 +316,8 @@ func abrir_mutacion() -> void:
 		abrir_mutacion()
 		return
 	get_tree().paused = true
+	if puede_tutorial("mutaciones"):
+		await ver_tutorial("mutaciones")   # la primera vez, antes de las cartas, qué son
 	menus.mutacion(opciones, mutaciones.tengo.size(), elegir_mutacion)
 
 
@@ -332,6 +341,8 @@ func abrir_ordenador() -> void:
 	if terminada or cambiando or not johnny.vivo:
 		return
 	get_tree().paused = true
+	if puede_tutorial("ordenador"):
+		await ver_tutorial("ordenador")
 	ordenador.encender(self)
 
 
@@ -427,6 +438,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	cerrada = false
 	actualizar_puertas()
 	poner_lugar()
+	if sitio.get("peligros", []).any(func(p): return p.tipo in ["frio", "fuego", "agua"]):
+		tutorial("peligros")   # (la cámara frigorífica, la cocina o el agua de las tiendas del centro comercial)
 	if fundir:
 		await create_tween().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
@@ -449,6 +462,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
+				tutorial("jefes")
 			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
 				decir("Te espera arriba, en el helipuerto: sube por la rampa", 3.0)
 
@@ -552,12 +566,14 @@ func cruzar(i: int) -> void:
 	await montar(salida.a, salida.vuelta)
 	if planta.sitios[aqui].tipo != "pasillo":
 		return
+	tutorial("centro" if ed.cerrojo == "tarjeta" else "apartamentos")
 	if salida.tipo == "ascensor":
 		decir(planta.nombre, 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
 	elif planta.get("ascensor_nuevo", false):
 		# al salir al pasillo tras acabar con el jefe (con el ascensor ya a la vista), Johnny cuenta que lo ha arreglado
 		planta.erase("ascensor_nuevo")
 		decir("Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»", 5.0)
+		tutorial("ascensor")
 
 
 # El ascensor (M5): al caer el jefe de la planta, Johnny lo arregla. Solo baja a la sala de mantenimiento de la
@@ -614,6 +630,7 @@ func _physics_process(delta: float) -> void:
 	if johnny.vivo and johnny.vida < johnny.stats.vida_max * 0.3 and latido <= 0.0:
 		latido = 0.9
 		Sonido.tocar("latido")
+	mirar_tutoriales()
 	var sitio: Dictionary = planta.sitios[aqui]
 	poner_lugar()
 	if sitio.tipo == "pasillo" or sitio.limpio:
@@ -626,6 +643,7 @@ func _physics_process(delta: float) -> void:
 		actualizar_puertas()
 		decir("¡La puerta se ha cerrado detrás de ti!")
 		Sonido.tocar("portazo")
+		tutorial("lanzables")   # (la primera pelea)
 	elif not quedan:
 		sitio.limpio = true
 		cerrada = false
@@ -1120,6 +1138,8 @@ func abrir_cosas(que: String) -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return
 	get_tree().paused = true
+	if que in ["banco", "baul"] and puede_tutorial(que):
+		await ver_tutorial(que)
 	inventario.abrir(que, self)
 
 
@@ -1128,7 +1148,57 @@ func abrir_taquilla() -> void:
 	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa:
 		return
 	get_tree().paused = true
+	if puede_tutorial("taquilla"):
+		await ver_tutorial("taquilla")
 	taquilla.abrir(self)
+
+
+# La ventana del tutorial de algo nuevo (tutoriales.gd), si aún no se ha visto: en cuanto no haya otra pantalla abierta,
+# ni la presentación de un jefe, ni se esté cambiando de sitio. Si llegan varios, salen uno detrás de otro
+func tutorial(id: String) -> void:
+	if not puede_tutorial(id) or id in cola_tutoriales:
+		return
+	cola_tutoriales.append(id)
+	if cola_tutoriales.size() > 1:
+		return   # (ya hay otro esperando o abierto: este sale después)
+	while not cola_tutoriales.is_empty():
+		while terminada or get_tree().paused or presentacion.activa or cambiando or not johnny.vivo:
+			if terminada:
+				cola_tutoriales.clear()
+				return
+			await get_tree().create_timer(0.3, false).timeout   # (con el juego parado no corre)
+		if puede_tutorial(cola_tutoriales[0]):   # (por si se ha ido a la sala de pruebas mientras esperaba)
+			await ver_tutorial(cola_tutoriales[0])
+		cola_tutoriales.pop_front()
+
+
+# Los tutoriales de lo que cambia en Johnny o en la mochila (los demás los pide quien toca, con tutorial())
+func mirar_tutoriales() -> void:
+	if johnny.recargando > 0.0:
+		tutorial("municion")
+	if johnny.tercios_vivos() < 3:
+		tutorial("tercios")
+	if dolares > 0:
+		tutorial("dolares")
+	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego != "pistola" or not armas_guardadas.is_empty():
+		tutorial("armas")
+	for id in mochila:
+		tutorial("curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
+
+
+# En la sala de pruebas no salen, ni en la partida de prueba (salvo en la suya, --tutorial)
+func puede_tutorial(id: String) -> bool:
+	return Tutoriales.toca(id) and not en_pruebas() and (not captura or tutoriales_prueba)
+
+
+# La enseña ya y espera a que se cierre. El juego, parado mientras tanto; luego, como estaba (el ordenador, el baúl y la
+# mutación la sacan con el juego ya parado, y se abren detrás)
+func ver_tutorial(id: String) -> void:
+	Tutoriales.apuntar(id)
+	var parado := get_tree().paused
+	get_tree().paused = true
+	await Tutorial.ventana(self, id).cerrado
+	get_tree().paused = parado
 
 
 # Un texto que sube y se desvanece (al coger un billete)

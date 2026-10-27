@@ -665,3 +665,89 @@ func probar_equilibrio() -> void:
 	await get_tree().create_timer(0.4, false).timeout
 	Captura.foto("captura-equilibrio-incendio.png")
 	get_tree().quit()
+
+
+# Con "--captura --tutorial": los tutoriales (tutoriales.gd, ui/tutorial.gd). Empieza con todos sin ver: la ventana de
+# «Cómo se juega» con el juego parado (captura-tutorial-ventana.png); otro pedido mientras está abierta sale detrás
+# (captura-tutorial-cola.png); al cerrarlos, el juego sigue y no se repiten. La lista del apartado Tutorial desde la
+# pausa (con su botón: captura-tutorial-pausa.png), con los vistos y los «???» (captura-tutorial-lista.png). El del
+# baúl sale antes de abrirlo y, al cerrarlo, se abre el baúl; con la casilla de Ayudas apagada no sale ninguno. Y el
+# texto de una ficha con teclado y en el móvil
+func probar_tutorial() -> void:
+	Tutoriales.olvidar()
+	tutoriales_prueba = true
+	var ventana := func() -> Tutorial:
+		for h in get_children():
+			if h is Tutorial and not h.is_queued_for_deletion():
+				return h
+		return null
+	await get_tree().create_timer(0.3).timeout
+	tutorial("jugar")
+	await get_tree().create_timer(0.8).timeout
+	print("Tutorial · «Cómo se juega» abierta: %s · juego parado: %s (esperado: true, true)" % [ventana.call() != null, get_tree().paused])
+	Captura.foto("captura-tutorial-ventana.png")
+	tutorial("lanzables")
+	tutorial("jugar")   # (repetido: no se pone dos veces en la cola)
+	print("Tutorial · en la cola: %s (esperado: jugar y lanzables)" % [cola_tutoriales])
+	ventana.call().cerrar()
+	await get_tree().create_timer(1.2).timeout
+	var t: Tutorial = ventana.call()
+	print("Tutorial · al cerrar, la siguiente: %s (esperado: lanzables)" % (t.id if t else "ninguna"))
+	Captura.foto("captura-tutorial-cola.png")
+	t.cerrar()
+	await get_tree().create_timer(0.5).timeout
+	print("Tutorial · cerrados: juego parado %s, cola %s · vistos jugar %s, lanzables %s (esperado: false, [], true, true)" % [
+		get_tree().paused, cola_tutoriales, Tutoriales.visto("jugar"), Tutoriales.visto("lanzables")])
+	tutorial("jugar")
+	await get_tree().create_timer(0.5).timeout
+	print("Tutorial · «Cómo se juega» otra vez: %s (esperado: no sale)" % ("sale" if ventana.call() else "no sale"))
+	# el texto, con las teclas del jugador y con los botones del móvil
+	var limpio := func(texto: String) -> String:
+		var r := RegEx.create_from_string(r"\[/?color[^\]]*\]")
+		return r.sub(texto, "", true)
+	print("Tutorial · texto con teclado:\n" + limpio.call(Tutoriales.texto("jugar")))
+	Tactil.activo = true
+	print("Tutorial · texto en el móvil:\n" + limpio.call(Tutoriales.texto("lanzables")))
+	Tactil.activo = false
+	# la lista, desde la pausa
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-tutorial-pausa.png")
+	for b: Button in menus.fondo.find_children("*", "Button", true, false):
+		if b.text == "Tutorial":
+			b.pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	var lista: Tutorial = null
+	for h in menus.get_children():
+		if h is Tutorial:
+			lista = h
+	print("Tutorial · lista abierta desde la pausa: %s · pausa escondida: %s · ??? : %d de %d (esperado: true, true, %d)" % [
+		lista != null, not menus.fondo.visible, lista.botones.values().filter(func(b): return b.disabled).size(),
+		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 2])
+	lista.ver("lanzables")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-tutorial-lista.png")
+	lista.cerrar()
+	await get_tree().create_timer(0.2).timeout
+	print("Tutorial · lista cerrada: pausa a la vista %s, abierto «%s» (esperado: true, pausa)" % [menus.fondo.visible, menus.abierto])
+	seguir()
+	await get_tree().create_timer(0.3).timeout
+	# el del baúl, antes del baúl
+	abrir_cosas("baul")
+	await get_tree().create_timer(0.8).timeout
+	t = ventana.call()
+	print("Tutorial · al abrir el baúl, primero su ficha: %s · baúl abierto: «%s» (esperado: baul, «»)" % [
+		t.id if t else "ninguna", inventario.abierto])
+	t.cerrar()
+	await get_tree().create_timer(0.3).timeout
+	print("Tutorial · cerrada la ficha, abierto: «%s» · juego parado %s (esperado: «baul», true)" % [
+		inventario.abierto, get_tree().paused])
+	inventario.cerrar()
+	await get_tree().create_timer(0.3).timeout
+	# apagados en Opciones → Ayudas
+	Guardado.cambiar(func(g): g.ajustes.tutoriales = false)
+	tutorial("dolares")
+	await get_tree().create_timer(0.5).timeout
+	print("Tutorial · con la casilla de Ayudas apagada: %s (esperado: no sale)" % ("sale" if ventana.call() else "no sale"))
+	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)
+	get_tree().quit()

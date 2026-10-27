@@ -1,6 +1,7 @@
-# El menú principal (showMenu de src/ui.js): el logo, JUGAR, Opciones (opciones.gd), pantalla completa y salir, y el
-# récord. Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings de src/ui.js): una
-# tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida (escenas/partida.tscn).
+# El menú principal (showMenu de src/ui.js): el logo, JUGAR, Tutorial (tutorial.gd), Opciones (opciones.gd), pantalla
+# completa y salir, y el récord. Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
+# de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
+# (escenas/partida.tscn).
 # Debajo de cada tarjeta, el nivel de alerta con el que se juega (alerta.gd): se cambia con las flechas, entre los
 # que estén abiertos, y se apunta en el guardado para la próxima vez.
 # Con "-- --captura" saca fotos (captura-menu.png y captura-edificios.png) y pasa sola a la partida, para seguir
@@ -48,7 +49,17 @@ func _ready() -> void:
 	columna.add_child(lema)
 
 	var jugar := boton(columna, "JUGAR", elegir_edificio, "BotonGrande")
-	var opciones := boton(columna, "Opciones", func(): pass)
+	# Tutorial y Opciones, uno al lado del otro (uno debajo del otro, el menú ya no cabe en la pantalla)
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 6)
+	columna.add_child(fila)
+	var tutorial := boton(fila, "Tutorial", func(): pass)
+	tutorial.custom_minimum_size.x = 127
+	tutorial.pressed.connect(func():
+		Tutorial.lista(self, centro).cerrado.connect(tutorial.grab_focus))
+	var opciones := boton(fila, "Opciones", func(): pass)
+	opciones.custom_minimum_size.x = 127
 	opciones.pressed.connect(func():
 		Opciones.abrir(self, centro).cerrado.connect(opciones.grab_focus))
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
@@ -102,6 +113,7 @@ func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "")
 # (el centro comercial, hasta completar los Apartamentos) salen con candado
 func elegir_edificio() -> void:
 	centro.hide()
+	tutorial_alerta.call_deferred()
 	if edificios:
 		edificios.show()
 		primera_tarjeta().grab_focus.call_deferred()
@@ -236,6 +248,17 @@ func jugar_reto(id: String) -> void:
 	if Captura.activa() and Captura.dato("--reto") in Reto.REGLAS:
 		Reto.regla = Captura.dato("--reto")
 	get_tree().change_scene_to_file("res://escenas/partida_prueba.tscn" if Captura.activa() else "res://escenas/partida.tscn")
+
+
+# Con el primer edificio completado (ya hay alguna alerta abierta), la primera vez: el tutorial de la alerta y el reto
+# del día (tutoriales.gd)
+func tutorial_alerta() -> void:
+	if Captura.activa() or not Tutoriales.toca("alerta"):
+		return
+	if not Guardado.cargar().edificios.values().any(func(p): return int(p.alerta_max) > 0):
+		return
+	Tutoriales.apuntar("alerta")
+	Tutorial.ventana(self, "alerta").cerrado.connect(func(): primera_tarjeta().grab_focus())
 
 
 func volver_al_menu() -> void:

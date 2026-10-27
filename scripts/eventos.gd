@@ -169,6 +169,7 @@ func empezar() -> void:
 	sirena_t = INCENDIO.sirena
 	mostrar_cartel(d.titulo, texto, d.color)
 	get_tree().create_timer(0.3, false).timeout.connect(Sonido.tocar.bind(d.sonido))
+	get_tree().create_timer(2.5, false).timeout.connect(partida.tutorial.bind(evento))   # (tras el cartel, la primera vez)
 
 
 # El cartel: entra con un salto, se queda unos segundos y se va

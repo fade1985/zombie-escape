@@ -386,6 +386,7 @@ func unir(a: Aliado) -> void:
 	rescate.sitio = partida.aqui
 	npc = null
 	partida.decir("¡%s se une al equipo! %s" % [a.def.nombre, a.def.desc], 3.5)
+	partida.tutorial("supervivientes")
 	Sonido.tocar("limpio")
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
 	if a.def.get("rescate", "") == "escolta":

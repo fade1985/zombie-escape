@@ -5,7 +5,8 @@
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
 #     En el móvil, qué hace cada botón táctil.
 #   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin, lanzar apuntando solo). Se guardan y se
-#     notan al momento, también desde la pausa (johnny.gd y hud.gd las miran con Guardado.ajuste).
+#     notan al momento, también desde la pausa (johnny.gd y hud.gd las miran con Guardado.ajuste). Y los
+#     tutoriales (tutoriales.gd): si salen sus ventanas, y que vuelvan a salir todos.
 # Se maneja igual que los otros menús: ratón, flechas + Intro o mando (A pulsar, B volver).
 #
 # Se usa así:  Opciones.abrir(self, lo_que_tapa, johnny)  (johnny puede ser null en el menú principal).
@@ -231,6 +232,14 @@ func ayudas() -> void:
 	explicar("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre.")
 	rotar("Lanzar apuntando solo", "lanzar_solo", SI_NO)
 	explicar("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre.")
+	rotar("Tutoriales", "tutoriales", SI_NO)
+	explicar("La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial.")
+	var otra_vez := opcion("Que vuelvan a salir todos")
+	otra_vez.pressed.connect(func():
+		Tutoriales.olvidar()
+		Sonido.tocar("click")
+		otra_vez.text = "Volverán a salir desde el principio"
+		otra_vez.disabled = true)
 
 
 func explicar(texto: String) -> void:

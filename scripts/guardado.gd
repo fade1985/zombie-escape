@@ -39,15 +39,16 @@ const NUEVO := {
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
 	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
 	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
+	"tutoriales": [],     # tutoriales ya vistos (ids de Tutoriales.LISTA): cada uno sale una sola vez
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
 	"retos": {},          # el reto del día (reto.gd): la marca de hoy en cada edificio: {"apartamentos": {...}} (ver RETO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
 	# vida_entera, pistola_sin_fin y lanzar_solo: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
-	# lanzables.gd las miran)
+	# lanzables.gd las miran) · tutoriales: si salen las ventanas de los tutoriales (tutoriales.gd)
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true,
-		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false},
+		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"

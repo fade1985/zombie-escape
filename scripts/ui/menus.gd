@@ -1,6 +1,7 @@
 # Los menús de dentro de la partida (como showPause y showEnd de src/ui.js):
 #   - Pausa (Esc o Start): el sitio en el que estás, los atributos de Johnny y sus armas, y los botones
-#     Continuar, Opciones (opciones.gd) y Abandonar partida. El juego se para mientras está abierta.
+#     Continuar, Opciones (opciones.gd), Tutorial (tutorial.gd) y Abandonar partida. El juego se para mientras está
+#     abierta.
 #   - El cartel del final: "¡Edificio completado!" o "¡Derrota!", con lo que has hecho en la partida y los
 #     botones de volver a jugar o ir al menú principal.
 #   - Las mutaciones (showMutacion del JS): tras caer la portera, dos cartas para elegir una (también con 1 y 2).
@@ -15,7 +16,7 @@ signal reintentar
 signal menu_principal
 
 var fondo: ColorRect
-var abierto := ""         # "pausa", "fin", "mutacion" o "" (nada)
+var abierto := ""         # "pausa", "fin", "mutacion", "pagina", "opciones", "tutorial" o "" (nada)
 var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
 var cartas: Array = []    # las dos mutaciones que se ofrecen
 var al_leer := Callable()  # a quién avisar al cerrar la página del dosier
@@ -149,6 +150,13 @@ func pausa(partida: Node) -> void:
 		Opciones.abrir(self, fondo, johnny).cerrado.connect(func():
 			abierto = "pausa"
 			opciones.grab_focus()))
+	# El apartado Tutorial (ui/tutorial.gd): las fichas de los tutoriales vistos, para volver a leerlas
+	var tutorial := boton(botones, "Tutorial", func(): pass)
+	tutorial.pressed.connect(func():
+		abierto = "tutorial"
+		Tutorial.lista(self, fondo).cerrado.connect(func():
+			abierto = "pausa"
+			tutorial.grab_focus()))
 	# En el móvil, también aquí la pantalla completa (si el navegador la deja)
 	if Tactil.activo and Tactil.puede_pantalla_completa():
 		boton(botones, "Pantalla completa", Tactil.pantalla_completa)

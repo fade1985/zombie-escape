@@ -117,6 +117,12 @@ en una línea.
   `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en
   `LISTA`), `historia.gd` (dosier y noticias; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
+- `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
+  llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
+  (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste de Ayudas. Cada uno sale una sola vez: los
+  pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
+  mutación sacan el suyo antes de abrirse), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba
+  con `--tutorial`.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).
@@ -134,6 +140,9 @@ en una línea.
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
   y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
+- `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
+  y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
+  y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.
 - `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos), zombis, las ayudas
   que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
   antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).
@@ -228,7 +237,7 @@ en una línea.
   `py tools/hacer_frames.py assets/sprites/<nombre>`.
 - `musica/`: `el-ultimo-inquilino.ogg` (menús y explorar) y `turno-de-noche.ogg` (peleas); se eligen en `CANCIONES`
   de `sonido.gd`.
-- `ui/` (HUD, menús e iconos), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
+- `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
 - `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab.
 
@@ -256,6 +265,8 @@ en una línea.
   `FONDOS.md`).
 - **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
   `hacer_casillas.py`, `recortes_bestiario.py`.
+- **Fotos de los tutoriales:** `fotos_tutorial.py` recorta de las capturas de la prueba (520 × 180, a tamaño real) la
+  foto de cada ficha; al lado de cada una, la prueba que saca su captura: `py tools/fotos_tutorial.py [id...]`.
 - **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
   `tools/efectos/*.wav`, que no van a git).
 - **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`el-ultimo-inquilino.mjs`, `turno-de-noche.mjs`,

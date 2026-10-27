@@ -79,6 +79,8 @@
 #   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
 #   --curas             las vendas y el botiquín: casillas del HUD, teclas 1 y 2, el tercio que devuelve el botiquín, la
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
+#   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
+#                       la casilla de Ayudas                                                [prueba_varias.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F) y en el móvil [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno, los
@@ -276,6 +278,9 @@ func empezar_prueba() -> void:
 	elif "--hud" in args:
 		set_process(false)   # sin la prueba larga
 		probar_hud()
+	elif "--tutorial" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tutorial()
 	elif "--equilibrio" in args:
 		set_process(false)   # sin la prueba larga
 		probar_equilibrio()
