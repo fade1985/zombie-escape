@@ -141,7 +141,7 @@ en una línea.
   `cara_pared.gd`), para que cada habitación quede cerrada a su altura y no se vea el suelo de arriba en un hueco.
 - `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
   La sala de mantenimiento se ve como las viviendas ("cajas": vestuario, despacho y taller, cada uno en su caja de
-  tabiques con cemento alrededor). Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
+  tabiques con oscuro alrededor). Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
   (`mapa.cara_de_caja`): encima de una puerta de lado entre dos estancias no sale cara, el tabique se ve plano.
   Por dónde se llega: solo la planta baja (el portal del edificio) y la azotea tienen una puerta de llegada a la izquierda;
   en las demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo
@@ -157,8 +157,8 @@ en una línea.
   `viviendas.gd`, el pasillo de los rescatados. Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
   habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y claros (`tabique.gd` y
   `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los
-  lados subiendo hasta él), los demás tabiques se ven planos y el muro que sobra alrededor es cemento gris
-  (`mapa.CEMENTO`). Las de arriba tapan sus tres últimas filas (la pared del pasillo) y el pasillo, las suyas (la de las
+  lados subiendo hasta él), los demás tabiques se ven planos y el muro que sobra alrededor se ve oscuro,
+  como fuera del mapa (`mapa.FUERA`). Las de arriba tapan sus tres últimas filas (la pared del pasillo) y el pasillo, las suyas (la de las
   de abajo): `Viviendas.TAPADAS`. Sus habitaciones son los trasteros del edificio: todas iguales, de chapa
   crema acanalada con el suelo de hormigón gris azulado y la puerta azul lisa con pomo de metal (`suelo-`, `pared-`,
   `techo-` y `puerta-trastero`, de `tools/trastero.py`; la puerta, `trastero` en `puerta_bano.gd`). Cada una lleva un colchón en el suelo en la esquina de arriba a la derecha, con la

@@ -19,13 +19,13 @@
 #
 # Cada habitación (y el pasillo) es una caja cerrada por sus cuatro tabiques, de una casilla de grueso, como se ve una
 # casa por dentro desde arriba: la pared de arriba de cada una con su altura (su cara y, encima, su tabique) y los
-# demás tabiques planos; el muro que sobra, alrededor, es cemento ("cajas" en el sitio: mapa.gd, poner_tabiques). La
+# demás tabiques planos; el muro que sobra, alrededor, se ve oscuro, como fuera del mapa ("cajas" en el sitio: mapa.gd, poner_tabiques). La
 # pared de arriba de las de abajo y la del pasillo tapan las tres últimas filas de lo que tienen detrás (dos la cara y
 # una su tabique).
 class_name Viviendas
 
 const CASILLA := 32
-const BORDE := 2             # el muro de fuera, en casillas (el tabique y, por fuera, una de cemento)
+const BORDE := 2             # el muro de fuera, en casillas (el tabique y, por fuera, una oscura)
 const ANCHO := 12            # cada habitación, de ancho
 const FONDO_ARRIBA := 10     # y de fondo: las de arriba (sus tres últimas filas quedan detrás de la pared del pasillo)
 const FONDO_ABAJO := 7       # y las de abajo (se ven enteras): así se ve lo mismo de todas

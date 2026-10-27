@@ -447,7 +447,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		salas[otra].puertas.append(p)
 	var apt := {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": dueno, "salas": salas, "puertas": puertas, "jefe": false,
 		"tipo": "mantenimiento"}
-	# ("cajas": cada estancia, cerrada por sus tabiques, con cemento alrededor, como las viviendas: mapa.poner_tabiques)
+	# ("cajas": cada estancia, cerrada por sus tabiques, con oscuro alrededor, como las viviendas: mapa.poner_tabiques)
 	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "apt": apt, "ancho": ancho, "alto": alto,
 		"zombis": [], "limpio": true, "visitado": false, "surtido": rng.randi(), "manchas": [],
 		"vistas": {0: true, 1: true, 2: true}, "cajas": true, "arriba_extra": 68}

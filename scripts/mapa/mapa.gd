@@ -23,7 +23,7 @@ const FILO := Color(1, 1, 1, 0.14)      # el filo de luz de la tapa de los muros
 const PLETINA := [Color("#2a221c"), Color("#b8a37a"), Color("#8a7552"), Color("#4a3c2c")]
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const TABIQUE := preload("res://scripts/mapa/tabique.gd")   # lo alto de las paredes, con "cajas" (poner_cajas)
-const CEMENTO := Color("#5d6064")   # con "cajas", el muro que sobra entre las habitaciones y alrededor: gris liso
+const FUERA := Color(0.05, 0.04, 0.06)   # con "cajas", el muro que sobra alrededor: oscuro, como el fondo de fuera del mapa
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
@@ -136,7 +136,7 @@ var textura_niebla: ImageTexture
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
-var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con cemento entre medias (viviendas.gd)
+var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con oscuro alrededor (viviendas.gd)
 var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
@@ -345,9 +345,9 @@ func nombre_zona(zona: int) -> String:
 func dibujar_tapas(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
 	if cajas:
-		# la franja de encima del mapa y el muro que sobra, de cemento; los tabiques, planos, vistos desde arriba, con
+		# la franja de encima del mapa y el muro que sobra, oscuros, como fuera del mapa; los tabiques, planos, vistos desde arriba, con
 		# su filo de luz y su contorno donde se acaban (donde no sigue tabique, ni plano ni de los que suben)
-		lienzo.draw_rect(Rect2(-16, -48, cols * 16 + 32, 48), CEMENTO)
+		lienzo.draw_rect(Rect2(-16, -48, cols * 16 + 32, 48), FUERA)
 		for f in filas:
 			for c in cols:
 				if not es_muro(c, f):
@@ -355,7 +355,7 @@ func dibujar_tapas(lienzo: Node2D) -> void:
 				var x := c * 16
 				var y := f * 16
 				if not es_tabique(c, f):
-					lienzo.draw_rect(Rect2(x, y, 16, 16), CEMENTO)
+					lienzo.draw_rect(Rect2(x, y, 16, 16), FUERA)
 					continue
 				lienzo.draw_rect(Rect2(x, y, 16, 16), TABIQUE.COLOR)
 				if not borde_en(c, f - 1):
@@ -700,7 +700,7 @@ func poner_tabiques() -> void:
 
 
 # Con "cajas": ¿es tabique esta casilla? Los muros que tocan un suelo (también en diagonal: las esquinas) y los huecos
-# de las puertas; el resto del muro es cemento
+# de las puertas; el resto del muro se ve oscuro (FUERA)
 func es_tabique(c: int, f: int) -> bool:
 	var v := dueno_en(c, f)
 	if v != -1:
