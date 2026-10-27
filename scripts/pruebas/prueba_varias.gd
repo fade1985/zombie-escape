@@ -7,7 +7,8 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 # números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
 # Apartamentos, el zombi que lleva la llave (con la Alerta 5, con el doble de vida; al caer suelta la llave, y al
 # salir y volver a entrar no la lleva otra vez; al cogerla, el grito ¡¡¡LA LLAVE!!! encima de Johnny, en
-# captura-alerta-llave-cogida.png); en el centro comercial, el guardia) y
+# captura-alerta-llave-cogida.png, y su hueco encendido en el inventario, en captura-alerta-llave-inventario.png);
+# en el centro comercial, el guardia) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
 func probar_alerta() -> void:
 	var n := Alerta.nivel
@@ -92,6 +93,11 @@ func probar_alerta() -> void:
 					print("Llave · al cogerla: la lleva %s, en el suelo: %s (esperado: true y false)" % [
 						planta.tiene_llave, mapa.cosas.has_node("Llave")])
 					Captura.foto("captura-alerta-llave-cogida.png")
+					# y en el inventario, su hueco encendido (captura-alerta-llave-inventario.png)
+					abrir_cosas("inventario")
+					await get_tree().create_timer(0.4).timeout   # (con el juego en pausa: el temporizador de siempre)
+					Captura.foto("captura-alerta-llave-inventario.png")
+					inventario.cerrar()
 					break
 	if ed.cerrojo == "tarjeta":
 		johnny.get_node("Camara").reset_smoothing()

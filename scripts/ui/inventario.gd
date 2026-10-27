@@ -3,7 +3,7 @@
 #   - Inventario (Tab, I o Select; «todo a la vista», la parte 3 del inventario nuevo): Johnny grande en medio, de
 #     frente, con su skin y el arma que tiene en la mano; a los lados, sus armas (a la izquierda las de cuerpo a cuerpo
 #     y a la derecha las de distancia; arriba la de la mano y abajo la de repuesto: partida.llevar_arma), y debajo, los
-#     3 arrojables a mano (lanzables.gd) y, abajo del todo, el dinero (no está en el HUD). En medio, tres grupos de 8: la mochila, la munición (por tipos:
+#     3 arrojables a mano (lanzables.gd) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, tres grupos de 8: la mochila, la munición (por tipos:
 #     Armas.MUNICION) y los arrojables de repuesto. A la derecha, la ficha de lo elegido (qué es, el cargador, las
 #     barras y qué hace) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
 #     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina,
@@ -210,17 +210,18 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			lienzo.add_child(ahora)
 			ahora.position = Vector2(x - 4, 376) - ORIGEN
 			ahora.size = Vector2(92, 92)
-	# y abajo del todo, a la altura de «Seguir», el dinero (en el HUD no se ve)
+	# y abajo del todo, a la altura de «Seguir», el dinero y el hueco de la llave (en el HUD no se ven)
 	var caja := Panel.new()
 	caja.add_theme_stylebox_override("panel", estilo(Color("#2a2631"), false, false))
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lienzo.add_child(caja)
 	caja.position = Vector2(64, 544) - ORIGEN
-	caja.size = Vector2(320, 38)
+	caja.size = Vector2(200, 38)
 	var billete := dibujo(caja, "billete", Vector2(38, 38), 0.0)
 	billete.position.x += 4
 	rotulo(lienzo, "Dinero", 112, 552, Tema.AMARILLO)
-	rotulo(lienzo, "$%d" % partida.cartera(), 372, 552, Tema.TINTA, HORIZONTAL_ALIGNMENT_RIGHT)
+	rotulo(lienzo, "$%d" % partida.cartera(), 252, 552, Tema.TINTA, HORIZONTAL_ALIGNMENT_RIGHT)
+	hueco_llave()
 	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y los arrojables de repuesto
 	raya(Rect2(393, 92, 2, 492))
 	var llenas := Objetos.casillas(partida.mochila)
@@ -247,6 +248,22 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	sitio("tirar", Rect2(650, 92, 246, 492))   # la ficha: al arrastrar algo que se puede tirar, se vuelve la zona roja
 	pintar_ficha()
 	return lienzo.find_child(sel, false, false)
+
+
+# El hueco de la llave de la jefa (o de la tarjeta de acceso, en el centro comercial), al lado del dinero: apagado y con
+# su nombre en gris hasta que Johnny la coge; entonces se enciende, con borde amarillo y el nombre de la puerta que abre
+func hueco_llave() -> void:
+	var tiene: bool = partida.planta.tiene_llave
+	var caja := Panel.new()
+	caja.add_theme_stylebox_override("panel", estilo(Tema.AMARILLO if tiene else Color("#2a2631"), false, false))
+	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lienzo.add_child(caja)
+	caja.position = Vector2(270, 544) - ORIGEN
+	caja.size = Vector2(114, 38)
+	var icono := dibujo(caja, "llave", Vector2(38, 38), 8.0)
+	icono.modulate = Color.WHITE if tiene else Color(1, 1, 1, 0.25)
+	var nombre: String = "Tarjeta" if partida.ed.cerrojo == "tarjeta" else "Llave"
+	rotulo(lienzo, partida.nombre_jefa() if tiene else nombre, 312, 552, Tema.AMARILLO if tiene else Tema.GRIS)
 
 
 # El panel, sin márgenes por dentro, con el lienzo donde va cada cosa en su sitio (el inventario y el baúl)

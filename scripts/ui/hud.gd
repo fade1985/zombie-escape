@@ -13,8 +13,7 @@
 #     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
 #   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás que
 #     lleva a mano (F cambia entre ellos; los de repuesto no se ven) en pequeño al lado.
-#   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo). Ni la mochila ni los
-#     dólares están aquí: se ven en el inventario.
+#   - Ni la llave de la portera, ni la mochila, ni los dólares están aquí: se ven en el inventario.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
 
@@ -49,7 +48,6 @@ var fila := HBoxContainer.new()
 var barra := Control.new()
 var armas := Control.new()      # las dos casillas de las armas
 var lanzar := Control.new()     # el lanzable de ahora y los demás
-var recursos := Control.new()   # la llave, pegada a la derecha
 var texturas := {}              # los iconos ya cargados
 
 # Las armas: cuál estaba en la mano y las animaciones al cambiar (de 0 a 1 el intercambio; las demás, de 1 a 0)
@@ -66,7 +64,6 @@ var cuenta_antes := -1
 var giro := 1.0
 var salto_cuenta := 0.0
 var destello_lanzar := 0.0
-var llave_t := -1.0             # desde cuándo lleva la llave (para el brillo al cogerla)
 
 # La barra que se mueve: al perder vida, el trozo perdido se queda un momento en claro y luego baja
 # poco a poco (como en los juegos de lucha); al curarse, sube poco a poco
@@ -103,27 +100,21 @@ func _ready() -> void:
 	lanzar.custom_minimum_size = Vector2(MEDIANA, GRANDE + 4)
 	lanzar.draw.connect(pintar_lanzar)
 	fila.add_child(lanzar)
-	recursos.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	recursos.draw.connect(pintar_recursos)
-	add_child(recursos)
 
 
 func _process(delta: float) -> void:
 	tiempo += delta
 	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
 	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 7.0)
-	recursos.position = fila.position
 	if johnny == null:
 		return
 	mirar_armas(delta)
 	mirar_lanzar(delta)
-	mirar_recursos(delta)
 	mover_barra(delta)
 	mirar_balas(delta)
 	barra.queue_redraw()
 	armas.queue_redraw()
 	lanzar.queue_redraw()
-	recursos.queue_redraw()
 
 
 func icono(nombre: String) -> Texture2D:
@@ -329,34 +320,6 @@ func pintar_lanzar() -> void:
 		lanzar.draw_texture_rect(icono(icono_lanzable(t)), Rect2(x, r.position.y, 20, 20), false, Color(l, l, l, 0.5 + 0.5 * l))
 		texto(lanzar, Vector2(x + 10, r.end.y), str(m), 12, Color(Tema.GRIS, 0.5 + 0.5 * l), true)
 		x += 26
-
-
-# ── La llave ──
-
-func mirar_recursos(delta: float) -> void:
-	if partida.planta.tiene_llave:
-		llave_t = 0.0 if llave_t < 0.0 else llave_t + delta
-	else:
-		llave_t = -1.0
-
-
-# La llave, pegada al borde de la derecha (solo se ve si la lleva)
-func pintar_recursos() -> void:
-	# la llave: al cogerla, entra grande con un brillo amarillo que se apaga
-	if llave_t < 0.0:
-		return
-	var y := roundf(fila.size.y / 2.0)
-	var x := get_viewport_rect().size.x - 28.0
-	var nombre: String = partida.nombre_jefa()
-	x -= 28 + ancho_texto(nombre, 14)
-	texto(recursos, Vector2(x + 28, y + 5), nombre, 14, Tema.AMARILLO)
-	var r := Rect2(x, y - 12, 24, 24)
-	var k := clampf(1.0 - llave_t / 1.2, 0.0, 1.0)
-	if k > 0.0:
-		recursos.draw_circle(r.get_center(), 14.0 + 10.0 * k, Color(Tema.AMARILLO, 0.45 * k))
-	con_salto(recursos, r, k)
-	recursos.draw_texture_rect(icono("llave"), r, false)
-	recursos.draw_set_transform(Vector2.ZERO)
 
 
 func mover_barra(delta: float) -> void:
