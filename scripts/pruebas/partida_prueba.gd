@@ -69,6 +69,7 @@
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
+#   --tiendas           (con --edificio centro) cada tienda de las tres primeras plantas, entera [prueba_sitios.gd]
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
 #   --alerta N          las reglas de esa alerta (1 a 5)                                     [prueba_varias.gd]
@@ -244,6 +245,9 @@ func empezar_prueba() -> void:
 	elif "--puertas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_puertas()
+	elif "--tiendas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tiendas()
 	elif "--armas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_armas()
