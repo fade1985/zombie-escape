@@ -36,6 +36,8 @@ const FILAS := [
 	["Recargar", ["recargar"]],
 	["Lanzar (mantener y soltar)", ["lanzar"]],
 	["Molotov o granada", ["cambiar_lanzable"]],
+	["Usar vendas", ["usar_vendas"]],
+	["Usar botiquín", ["usar_botiquin"]],
 	["Inventario", ["inventario"]],
 	["Pausa", ["pausa"]],
 	["Modo de atacar", ["cambiar_modo"]],
@@ -49,6 +51,7 @@ const TACTIL := [
 	["Armas", "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"],
 	["Lanzar", "Arrastra desde el botón para apuntar y suelta para tirar"],
 	["Molotov o granada", "El botoncito de al lado de lanzar"],
+	["Vendas y botiquín", "Los botones de debajo del minimapa (solo salen si llevas)"],
 	["Modo, inventario y pausa", "Los botones de debajo del minimapa"],
 ]
 

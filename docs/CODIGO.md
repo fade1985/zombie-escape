@@ -102,7 +102,10 @@ en una línea.
 - `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio, horda), `reto.gd` (el reto del
   día) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`).
-- `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los que se usan (`USABLES`), qué sale en
+- `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
+  botiquín, 50, que va como las demás cosas de la mochila y del baúl; se usan con la tecla 1 y la 2,
+  `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín lo
+  suelta el armarito de cada baño, `partida.abrir_armarito`, y lo prepara la Farmacéutica), qué sale en
   cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32. Y las **piezas**
   de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta
   cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
@@ -250,7 +253,7 @@ en una línea.
   nuevos → sprites; lee `catalogo.gd`), `camas_viviendas.py` (el colchón con la colcha de cada superviviente), `trastero.py` (suelo, pared y puertas de los trasteros de las viviendas, y la pared con chapa lagrimada y la línea amarilla de su pasillo), `guias_trasteros.py` (las cajas y la carretilla de ese pasillo, y la estantería y el colchón de sus habitaciones), `despixelar.py`, `dibujos_7b.py`, `cientifico_muerto.py`.
 - **Texturas:** `textura_suelo.py`, `textura_pared.py`, `textura_tapa.py`, `azotea.py` (ver
   `FONDOS.md`).
-- **Iconos:** `icono_*.py`, `objetos16.py` (solo la batería y las vendas, de 16×16: los demás objetos son de PixelLab),
+- **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
   `hacer_casillas.py`, `recortes_bestiario.py`.
 - **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
   `tools/efectos/*.wav`, que no van a git).

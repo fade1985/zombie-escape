@@ -578,8 +578,8 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 	return zombis
 
 
-# Un armarito con un botiquín colgado en la pared de arriba de cada baño (Armarito en src/props.js del JS): es
-# lo único que cura. Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
+# Un armarito con un botiquín colgado en la pared de arriba de cada baño (Armarito en src/props.js del JS): al
+# abrirlo suelta el botiquín. Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
 # lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido}
 static func armaritos(sitio: Dictionary) -> Array:
 	var apt: Dictionary = sitio.apt

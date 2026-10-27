@@ -653,7 +653,7 @@ func probar_desintegrador() -> void:
 	print("Colecciones: en los Apartamentos %s, en el centro %s · «%s» y «%s» · nombre «%s» · al baúl %s (esperado: true, true, lo suelta el gordo dos veces, Bidón de ácido, true)" % [
 		"bidon_acido" in Objetos.de_edificio("apartamentos"), "bidon_acido" in Objetos.de_edificio("centro"),
 		Objetos.donde("bidon_acido", "apartamentos"), Objetos.donde("bidon_acido", "centro"), Objetos.nombre("bidon_acido"),
-		Objetos.al_baul("bidon_acido")])
+		"bidon_acido" in Objetos.todos()])
 
 	Guardado.cambiar(func(g2):
 		g2.dolares = antes.dolares

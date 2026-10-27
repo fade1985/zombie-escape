@@ -601,7 +601,8 @@ func llevar_vecino(v: Aliado) -> void:
 # ═════════════ El botiquín de la farmacéutica ═════════════
 
 # Al empezar la partida, con la farmacéutica rescatada (en los dos edificios): un botiquín en la mochila. Se usa
-# desde el inventario («Usar», Objetos.USABLES) y no va al baúl. Devuelve si lo ha puesto (para decirlo al empezar)
+# con la tecla 2 o desde el inventario (Objetos.USABLES); si no se usa, pasa al baúl como los demás objetos. Devuelve si lo ha
+# puesto (para decirlo al empezar)
 func botiquin_al_empezar() -> bool:
 	if "farmaceutica" not in Guardado.cargar().rescatados or Reto.sin_curas():   # (en ese reto, nadie te lo prepara)
 		return false
@@ -999,7 +1000,7 @@ func probar_botiquin() -> void:
 	johnny.vida = vida_media
 	inv.usar()
 	print("Botiquín usado: vida %d -> %d (cura %d) | abierto %s | juego en pausa %s | mochila %s" % [vida_media,
-		johnny.vida, partida.cura_botiquin(), inv.abierto != "", get_tree().paused, partida.mochila])
+		johnny.vida, partida.cura_de("botiquin"), inv.abierto != "", get_tree().paused, partida.mochila])
 	partida.mochila.append("botiquin")
 	partida.abrir_cosas("inventario")
 	inv.tocar("m%d" % (Objetos.casillas(partida.mochila).size() - 1))

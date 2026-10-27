@@ -3638,6 +3638,50 @@
   "cost": "10 generaciones (2 dibujos de 5)",
   "updated": "2026-10-27"
  },
+ "curas-iconos": {
+  "nota": "Los iconos del botiquín y de las vendas (27 oct 2026, los pidió el dueño al hacer de las curas objetos de la mochila y del baúl que se usan con las teclas 1 y 2, partida.usar_cura). Sustituyen a la tirita de assets/ui/iconos/botiquin.png (hecha por código) y al rollo con cruz de assets/ui/iconos/obj-vendas.png (16x16, tools/objetos16.py, que se borró: sigue en git). Misma receta que municion-iconos: create_object_pro_flash 32x32, 1 dirección, view low top-down, assets/sprites/baul.png de imagen de estilo (en base64) sin copiar sus colores, 'sin brillos ni destellos blancos' en el texto. Dos intentos de cada uno (semillas 25001 a 25004), en assets/sources/curas/ (botiquin-A.png, botiquin-B.png, vendas-A.png, vendas-B.png; hoja para elegir: elegir.png). Sirven para el suelo, el inventario y el baúl, las casillas del HUD (ui/hud.gd) y los botones del móvil (ui/tactil.gd); el de botiquin.png también es el icono del talento Sanitario. Prueba: -- --captura --curas.",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "botiquin": {
+    "seeds": [
+     25001,
+     25002
+    ],
+    "ids": [
+     "1d15fbd7-43d2-4fb4-b8e8-425e79ac7c05",
+     "b4856eda-9268-4fc3-804a-5175064c1c15"
+    ],
+    "description": "a single first-aid kit: a small boxy matte off-white plastic medical case with a bold red cross on the front, a carry handle on top and two small metal latches, slightly worn and scuffed. Front view from slightly above, three-quarter view. No shine, no sparkles, no white highlights. A y B salieron muy parecidos; B tiene más desgaste y detalle."
+   },
+   "vendas": {
+    "seeds": [
+     25003,
+     25004
+    ],
+    "ids": [
+     "f59bc92f-2da7-4912-89dc-463fea89840a",
+     "dcb37f08-509f-4b96-8f93-842c556bb3c5"
+    ],
+    "description": "A: a single roll of white medical gauze bandage, tightly wound into a thick cylinder, with a short loose end hanging down the front and a small strip of tan adhesive tape wrapped around it. B: two rolls of white medical gauze bandage lying side by side, one in front of the other, each wrapped tight with a loose end curling out, tied with a thin light blue strip. Cream-white cloth, slightly worn, matte; three-quarter view; no shine, no sparkles, no white highlights."
+   }
+  },
+  "elegidos": "El dueño eligió la B del botiquín (más desgaste y detalle) y la B de las vendas (dos rollos con una tira azul): son assets/ui/iconos/botiquin.png y assets/ui/iconos/obj-vendas.png tal cual (copiados de assets/sources/curas/).",
+  "cost": "20 generaciones (4 dibujos de 5)",
+  "updated": "2026-10-27"
+ },
  "molotov-icono": {
   "nota": "El icono del cóctel molotov (26 oct, lo pidió el dueño: el de antes, una botella verde hecha por código, se veía mal y fuera del arte del juego). Misma receta que municion-iconos y piezas-iconos: create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png de imagen de estilo sin copiar sus colores (color_palette false) y 'sin brillos ni destellos blancos' en el texto. Dos intentos (A y B) en assets/sources/molotov/intentos/. ELEGIDO por el dueño: B (botella de cristal claro con líquido naranja, trapo claro y llama) → assets/ui/iconos/molotov.png. La A era una botella de cristal marrón oscuro con líquido ámbar. El icono sirve para el suelo, el inventario, el HUD, la tienda y la botella en vuelo (proyectil.gd, botella(), que antes se dibujaba con código y ahora gira con este dibujo). Prueba: -- --captura --municion-suelo (fotos captura-municion-suelo*.png: el molotov y la granada en el suelo, el molotov en vuelo y el HUD).",
   "herramienta": "create_object_pro_flash",

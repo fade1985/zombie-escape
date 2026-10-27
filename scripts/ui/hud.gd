@@ -9,6 +9,9 @@
 #     Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
 #     Con el lanzallamas, en vez de las balas, el depósito: una barra de gasolina y las gasolinas de la mochila
 #     (con el lanza ácido, la barra en verde y sus bidones de ácido).
+#   - A la derecha de la barra de vida, las curas que lleva (las vendas y el botiquín; Objetos.USABLES), cada una en su
+#     casilla con cuántas tiene y su tecla (1 y 2: partida.usar_cura). Solo salen las que lleva; con la vida llena se
+#     apagan, porque no se pueden usar. Al coger una o gastarla, la casilla da un saltito (y al gastarla, un destello).
 #   - En la esquina de abajo a la derecha, las armas: la de la mano en la misma esquina, en la casilla más grande
 #     y con el borde amarillo, y la otra a su lado, apagada (con la tecla de cambiar). Al cambiar dan un saltito
 #     y el nombre sale encima un momento.
@@ -51,6 +54,7 @@ var partida: Node
 var fila := HBoxContainer.new()
 var derecha := HBoxContainer.new()   # los lanzables y las armas, en la esquina de la derecha
 var barra := Control.new()
+var curas := Control.new()      # las vendas y el botiquín, al lado de la barra
 var armas := Control.new()      # las dos casillas de las armas
 var lanzar := Control.new()     # el lanzable de ahora y los demás
 var texturas := {}              # los iconos ya cargados
@@ -69,6 +73,10 @@ var cuenta_antes := -1
 var giro := 1.0
 var salto_cuenta := 0.0
 var destello_lanzar := 0.0
+# Las curas: cuántas llevaba cada una la última vez (para ver si ha cogido o gastado) y las animaciones de cada casilla
+var cuentas_curas := {}
+var salto_curas := {}
+var destello_curas := {}
 
 # La barra que se mueve: al perder vida, el trozo perdido se queda un momento en claro y luego baja
 # poco a poco (como en los juegos de lucha); al curarse, sube poco a poco
@@ -99,6 +107,11 @@ func _ready() -> void:
 	barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	barra.draw.connect(pintar_barra)
 	fila.add_child(barra)
+	curas.custom_minimum_size = Vector2(MEDIANA, MEDIANA + 4)
+	curas.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	curas.draw.connect(pintar_curas)
+	curas.visible = false
+	fila.add_child(curas)
 	derecha.add_theme_constant_override("separation", 14)
 	derecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(derecha)
@@ -122,9 +135,11 @@ func _process(delta: float) -> void:
 		return
 	mirar_armas(delta)
 	mirar_lanzar(delta)
+	mirar_curas(delta)
 	mover_barra(delta)
 	mirar_balas(delta)
 	barra.queue_redraw()
+	curas.queue_redraw()
 	armas.queue_redraw()
 	lanzar.queue_redraw()
 
@@ -361,6 +376,56 @@ func pintar_lanzar() -> void:
 		esquinas(lanzar, cursor)
 	if lista.size() > 1:
 		tecla(lanzar, cursor.position + Vector2(MEDIANA - 6, -10), "F")
+
+
+# ── Las curas ──
+
+# Lo que lleva de cada cura, en el orden de sus casillas: [[id, cuántas], ...]
+func curas_llevadas() -> Array:
+	var lista := []
+	for id in Objetos.USABLES:
+		var n: int = partida.mochila.count(id)
+		if n > 0:
+			lista.append([id, n])
+	return lista
+
+
+# La casilla de la cura "i" (todas en fila, con el hueco de arriba para la tecla)
+func sitio_cura(i: int) -> Rect2:
+	return Rect2(2 + i * (MEDIANA + 10), 2, MEDIANA, MEDIANA)
+
+
+func mirar_curas(delta: float) -> void:
+	for id in Objetos.USABLES:
+		var n: int = partida.mochila.count(id)
+		var antes: int = cuentas_curas.get(id, n)
+		if n != antes:
+			salto_curas[id] = 1.0                # una más o una menos: la casilla da un saltito
+			if n < antes:
+				destello_curas[id] = 1.0         # gastada
+		cuentas_curas[id] = n
+		salto_curas[id] = move_toward(salto_curas.get(id, 0.0), 0.0, delta * 5.0)
+		destello_curas[id] = move_toward(destello_curas.get(id, 0.0), 0.0, delta * 4.0)
+	var llevadas := curas_llevadas().size()
+	curas.visible = llevadas > 0
+	curas.custom_minimum_size.x = maxi(1, llevadas) * (MEDIANA + 10) - 4
+
+
+# Cada cura en su casilla, con cuántas lleva en la esquina y su tecla encima; apagadas con la vida llena
+func pintar_curas() -> void:
+	var lleno: bool = johnny.vida >= johnny.vida_tope()
+	var lista := curas_llevadas()
+	for i in lista.size():
+		var id: String = lista[i][0]
+		var r := sitio_cura(i)
+		con_salto(curas, r, salto_curas.get(id, 0.0))
+		casilla(curas, r, Objetos.icono(id), 0.6 if lleno else 1.0)
+		destello(curas, r, destello_curas.get(id, 0.0))
+		curas.draw_set_transform(Vector2.ZERO)
+		var s := "x%d" % lista[i][1]
+		texto(curas, Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1), s, 16, Tema.TINTA)
+		if not Tactil.activo:   # (en el móvil, los botones de debajo del minimapa)
+			tecla(curas, r.position + Vector2(MEDIANA - 6, -10), Controles.tecla_de(Objetos.USABLES[id].accion).left(1))
 
 
 func mover_barra(delta: float) -> void:

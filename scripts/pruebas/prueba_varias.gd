@@ -44,7 +44,7 @@ func probar_alerta() -> void:
 	jefe.queue_free()
 	$Pantalla/Jefa.hide()
 	# A4 y A5
-	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_botiquin(), BOTIQUIN + johnny.stats.botiquin_extra])
+	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_de("botiquin"), Objetos.USABLES.botiquin.cura + johnny.stats.botiquin_extra])
 	print("A5 · los disparos se oyen a %.0f (sin alerta, %.0f)" % [Zombi.OIDO * Alerta.oido(), Zombi.OIDO])
 	# el guardia (centro) o el zombi de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
 	if ed.cerrojo == "tarjeta":

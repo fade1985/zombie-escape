@@ -93,7 +93,7 @@ static func cargar_archivo() -> Dictionary:
 	# "cafetera" de los guardados viejos (la cafetera de Johnny se quitó el 27 oct)
 	var baul := {}
 	for id in s.baul:
-		if Objetos.NOMBRES.has(id):
+		if id in Objetos.todos():
 			baul[id] = int(s.baul[id])
 	s.baul = baul
 	s.encontrados = s.encontrados.filter(func(id): return Objetos.NOMBRES.has(id))

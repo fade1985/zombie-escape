@@ -15,6 +15,8 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Recargar | R | X |
 | Lanzar (mantener para apuntar, soltar para lanzar) | E o clic derecho | LT |
 | Cambiar lo que se lanza (3 a mano) | F | RB |
+| Usar las vendas (curan 25) | 1 | cruceta izquierda |
+| Usar el botiquín (cura 50) | 2 | cruceta derecha |
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
@@ -24,6 +26,11 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 - **Munición:** va por tipos (balas de pistola, que también gasta la MP5; cartuchos; gasolina, ácido y baterías) en 8
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano.
 - **Lanzables:** 3 a mano y 8 de repuesto; al acabarse uno de la mano, entra el primero de repuesto.
+- **Curas:** las vendas (25 de vida) y el botiquín (50) van en la mochila y en el baúl como los demás objetos. A la
+  derecha de la barra de vida salen sus casillas (solo las que llevas, con cuántas y su tecla); pulsar la tecla lo usa
+  al momento, y con la vida llena avisa y no gasta nada. El botiquín lo suelta el armarito de cada baño al acercarse
+  (se recoge pasando por encima) y la Farmacéutica te prepara uno cada partida; las vendas salen en el centro comercial.
+  El talento Sanitario y la alerta 4 siguen cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.
 - **Inventario «todo a la vista»:** Johnny en medio con sus armas (dos de cada tipo: la de la mano y la de repuesto) y
   sus 3 arrojables; la mochila, la munición y los arrojables de repuesto (8 de cada); a la derecha, la ficha de lo
   elegido con sus botones (**Ponérmela**, **Usar**, **A la mano**, **Al repuesto**, **Tirar al suelo**).
@@ -107,7 +114,7 @@ vuelve a la misma planta, delante del ascensor. En la planta baja sigue averiado
 `scripts/ui/tactil.gd`, solo mientras se juega. Joystick izquierdo (mitad izquierda de la pantalla); abajo a la
 derecha, según el modo: esquivar grande (asistido) o joystick derecho (libre).
 En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de a distancia en la mano recarga) y lanzar (arrastrar y
-soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa. En los menús el dedo hace
+soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.
 
 En Opciones → General, apartado **Móvil** (solo en táctil): tamaño de los botones (0,8 a 1,4), transparencia (100 a

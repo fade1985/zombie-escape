@@ -13,7 +13,15 @@ class_name Controles
 
 # Las acciones que se pueden cambiar (las de probar, como 1-6, no)
 const ACCIONES := ["arriba", "izquierda", "abajo", "derecha", "atacar", "esquivar", "cambiar_arma", "recargar",
-	"lanzar", "cambiar_lanzable", "inventario", "pausa", "cambiar_modo"]
+	"lanzar", "cambiar_lanzable", "usar_vendas", "usar_botiquin", "inventario", "pausa", "cambiar_modo"]
+
+
+# La tecla del teclado de una acción, para enseñarla (en el HUD y en las fichas): "-" si no tiene
+static func tecla_de(accion: String) -> String:
+	for ev in eventos(accion, false):
+		if ev is InputEventKey:
+			return Opciones.nombre_evento(ev)
+	return "-"
 
 
 # Al arrancar (menú principal y partida): pone los controles guardados encima de los de serie

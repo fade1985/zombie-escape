@@ -18,6 +18,7 @@ var icono: Texture2D = ICONO
 var tamano := 0.75
 var puede := func() -> bool: return true
 var tirado := false
+var salida := Vector2.ZERO    # si no es cero, hacia dónde sale despedido (en vez de a un lado al azar)
 var a_oscuras := false
 var que_icono := Callable()   # si lo hay, el dibujo que toca ahora (a 32 unidades de ancho, como los objetos)
 var velocidad := Vector2.ZERO
@@ -42,7 +43,7 @@ func _ready() -> void:
 		dibujo.add_child(brillo)
 	# Sale despedido hacia un lado al azar
 	if not tirado:
-		velocidad = Vector2.from_angle(randf() * TAU) * randf_range(80.0, 200.0)
+		velocidad = salida if salida != Vector2.ZERO else Vector2.from_angle(randf() * TAU) * randf_range(80.0, 200.0)
 
 
 func _physics_process(delta: float) -> void:

@@ -75,6 +75,7 @@
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
 #   --alerta N          las reglas de esa alerta (1 a 5)                                     [prueba_varias.gd]
 #   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
+#   --curas             las vendas y el botiquín: casillas del HUD, teclas 1 y 2, baúl y el armarito del baño [prueba_inventario.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F) y en el móvil [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
@@ -260,6 +261,9 @@ func empezar_prueba() -> void:
 	elif "--llave" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llave()
+	elif "--curas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_curas_rapidas()
 	elif "--hud" in args:
 		set_process(false)   # sin la prueba larga
 		probar_hud()

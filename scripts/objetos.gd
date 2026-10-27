@@ -4,8 +4,7 @@
 # (ui/inventario.gd, «Guardar de la mochila»). Hasta el 25 oct se juntaban de dos en dos en el banco de trabajo para
 # crear armas; las recetas se quitaron, y los explosivos, el despertador, el extintor, el trapo y el alcohol (que ya no
 # servían para nada) se fueron con ellas: en su lugar llegaron las piezas (PIEZAS), para mejorar las armas en el banco.
-# Su dibujo es assets/ui/iconos/obj-<id>.png: el de las vendas, de 16×16 (lo saca tools/objetos16.py); el
-# de la gasolina, el bidón de ácido, la batería y las piezas, de 32×32 (de PixelLab). La gasolina, el bidón de ácido y la
+# Su dibujo es assets/ui/iconos/obj-<id>.png (el del botiquín, botiquin.png), todos de 32×32 y de PixelLab. La gasolina, el bidón de ácido y la
 # batería son además la munición del lanzallamas, el lanza ácido y el lanza rayos: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).
 #
@@ -52,20 +51,21 @@ const NOMBRES := {
 	"bidon_acido": "Bidón de ácido",
 	# la batería, la munición del lanza rayos: en los dos edificios
 	"bateria": "Batería",
-	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan desde el inventario (USABLES)
+	# las vendas, de curar (parte 9 del centro comercial): no son chatarra, se usan con su tecla o desde el inventario (USABLES)
 	"vendas": "Vendas",
 	# las piezas para mejorar las armas (PIEZAS): solo las sueltan los zombis y los jefes
 	"pieza_cuerpo": "Pieza cuerpo a cuerpo", "pieza_distancia": "Pieza a distancia", "pieza_especial": "Pieza especial",
 	"pieza_arrojable": "Pieza arrojable",
 }
-# Los que no son chatarra: se usan desde el inventario («Usar», partida.usar_objeto) y no
-# pasan al baúl (al acabar la partida, se pierden). El botiquín de la farmacéutica (supervivientes.gd; cura lo de
-# partida.BOTIQUIN; su icono, assets/ui/iconos/botiquin.png), y las vendas de las tiendas, con lo que curan ("cura";
-# más con el talento Sanitario, y con la Alerta 4, la mitad). Las vendas cuentan en Colecciones como los demás (están
-# en NOMBRES y en TIENDAS)
+# Los de curar: no son chatarra, se usan (partida.usar_objeto) desde el inventario («Usar») o con su tecla sin abrirlo
+# ("accion": 1 las vendas y 2 el botiquín; sus casillas junto a la barra de vida, ui/hud.gd), y van al baúl como los
+# demás. Las vendas (de las tiendas del centro comercial) curan 25 y el botiquín, 50 (el que suelta el armarito de los
+# baños, y el que te prepara la farmacéutica, supervivientes.gd; su icono, assets/ui/iconos/botiquin.png); más con el
+# talento Sanitario, y con la Alerta 4, la mitad ("cura"). Las vendas cuentan en Colecciones como los demás (están en
+# NOMBRES y en TIENDAS); el botiquín, no. El orden es el de sus casillas en el HUD
 const USABLES := {
-	"botiquin": {"nombre": "Botiquín", "icono": "botiquin"},
-	"vendas": {"cura": 25},
+	"vendas": {"cura": 25, "accion": "usar_vendas"},
+	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 50, "accion": "usar_botiquin"},
 }
 const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
@@ -133,9 +133,14 @@ static func hueco_baul(s: Dictionary) -> bool:
 	return casillas_baul(s) < BAUL
 
 
-# ¿Va al baúl? Todo menos lo de curar (USABLES), que se pierde al acabar la partida
-static func al_baul(id: String) -> bool:
-	return not id in USABLES
+# Todos los objetos que pueden ir en la mochila y en el baúl, en el orden de NOMBRES y, al final, el botiquín (que no
+# es de NOMBRES: no sale al azar ni cuenta en Colecciones)
+static func todos() -> Array:
+	var lista := NOMBRES.keys()
+	for id in USABLES:
+		if not id in lista:
+			lista.append(id)
+	return lista
 
 
 # ¿Cabe en el baúl? Si ya tiene alguno va a su casilla; si no, hace falta una libre

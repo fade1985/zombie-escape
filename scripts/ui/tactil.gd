@@ -6,7 +6,8 @@
 #   - Alrededor, en arco: esquivar, las dos armas (tocar la otra la saca; tocar la de fuego que ya está en la
 #     mano, recarga) y lanzar (se arrastra desde él para apuntar y se suelta para tirar), con el ⇄ al lado
 #     para cambiar lo que se lanza.
-#   - Bajo el minimapa: cambiar el modo de atacar, el inventario y la pausa.
+#   - Bajo el minimapa: cambiar el modo de atacar, el inventario y la pausa; y, a su izquierda, las vendas y el
+#     botiquín si lleva (tocar uno lo usa: partida.usar_cura).
 # Los botones "pulsan" las mismas acciones que el teclado y el mando (eventos de acción), así que Johnny y
 # los lanzables no saben si es un dedo o una tecla.
 # En Opciones se cambian el tamaño de los botones (también lo que ocupa cada uno al tocarlo), lo
@@ -166,6 +167,12 @@ func botones() -> Dictionary:
 		b.fuego = [en_arco.call(235.0, 115.0), 34.0 * k]
 		b.lanzar = [en_arco.call(280.0, 115.0), 38.0 * k]
 	b["cambiar_lanzable"] = [b.lanzar[0] + Vector2(56, -24) * k, 20.0 * k]
+	# las curas que lleva, a la izquierda de los de debajo del minimapa (si no lleva ninguna, no salen)
+	var sitio := 0
+	for id in Objetos.USABLES:
+		if partida.mochila.has(id):
+			b[id] = [bajo_mapa.call(203.0 + sitio * 53.0), 22.0 * k]
+			sitio += 1
 	return b
 
 
@@ -258,6 +265,9 @@ func pulsar(nombre: String, abajo: bool) -> void:
 			accion("recargar" if johnny.mano == nombre else "cambiar_arma", abajo)
 		"modo":
 			accion("cambiar_modo", abajo)
+		"vendas", "botiquin":
+			if abajo:
+				partida.usar_cura(nombre)
 		"inventario":
 			if abajo:
 				partida.abrir_cosas("inventario")
@@ -375,6 +385,9 @@ func dibujar() -> void:
 				icono(donde, Objetos.icono(johnny.huecos[johnny.mano]), 56 * esc)
 			"modo":
 				icono(donde, "diana", 26 * esc)
+			"vendas", "botiquin":
+				icono(donde, Objetos.icono(nombre), 28 * esc)
+				texto(lienzo, donde + Vector2(r * 0.55, r * 0.8), str(partida.mochila.count(nombre)), roundi(14 * esc), Tema.TINTA)
 			"inventario":
 				icono(donde, "mochila", 26 * esc)
 			"pausa":

@@ -80,7 +80,6 @@ const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
 const BILLETES_JEFA := 3           # los que suelta la portera al caer
-const BOTIQUIN := 50               # lo que cura el botiquín de los baños (BOTIQUIN_CURA en el JS)
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
 const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
@@ -392,7 +391,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
 	for armarito in mapa.armaritos:
 		armarito.johnny = johnny
-		armarito.usar.connect(coger_botiquin.bind(armarito))
+		armarito.usar.connect(abrir_armarito.bind(armarito))
 		if Reto.sin_curas():   # el reto del día "Sin curas": todos vacíos
 			armarito.vaciar()
 	poner_cientifico(idx)
@@ -949,10 +948,11 @@ func icono_caja() -> Texture2D:
 
 # Un objeto en el suelo: se coge pasando por encima, si cabe en la mochila (la gasolina, el
 # bidón de ácido y la batería, si caben en la munición: johnny.sitio). "tirado": lo ha tirado Johnny desde el inventario (no vuelve
-# a la mochila hasta que se aparte)
-func soltar_objeto(id: String, donde: Vector2, tirado := false) -> void:
+# a la mochila hasta que se aparte). "salida": hacia dónde sale despedido, en vez de a un lado al azar (el armarito del baño)
+func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector2.ZERO) -> void:
 	var cosa := BILLETE.new()
 	cosa.johnny = johnny
+	cosa.salida = salida
 	cosa.icono = load("res://assets/ui/iconos/%s.png" % Objetos.icono(id))
 	cosa.tamano = 32.0 / cosa.icono.get_width()   # los de 16×16, cada píxel 2 unidades (el botiquín es de 32×32)
 	cosa.a_oscuras = id in Armas.MUNICION   # la gasolina, el bidón de ácido y la batería se ven a oscuras, como la munición
@@ -1052,13 +1052,12 @@ func repuesto(tipo: String) -> String:
 	return ""
 
 
-# Delante del armarito de un baño: el botiquín cura (más con Sanitario); con la vida llena se deja para luego
-func coger_botiquin(armarito: Node2D) -> void:
-	if johnny.vida >= johnny.vida_tope():
-		numero(armarito.position + Vector2(0, -40), "Tienes la vida al máximo", Tema.TINTA)
-		return
+# Delante del armarito de un baño: se abre y suelta un botiquín al suelo, hacia Johnny, que se coge pasando por encima
+# (si la mochila está llena, se queda allí). Se usa luego con la tecla 2 o desde el inventario
+func abrir_armarito(armarito: Node2D) -> void:
 	armarito.vaciar()
-	curar_con(cura_botiquin(), armarito)
+	Sonido.tocar("puerta")
+	soltar_objeto("botiquin", armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
 
 
 # Cura "cura" de vida, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)
@@ -1071,8 +1070,9 @@ func curar_con(cura: int, sobre: Node2D) -> void:
 			Vector2.from_angle(randf() * TAU) * randf_range(40.0, 120.0), Tema.VERDE, 4.0, 0.6)
 
 
-# Usar desde el inventario un objeto de curar de la mochila (Objetos.USABLES: el botiquín de la farmacéutica y las
-# vendas): se gasta y cura lo suyo. Si no se puede (con la vida llena), no se gasta y devuelve por qué
+# Usar un objeto de curar de la mochila (Objetos.USABLES: las vendas y el botiquín) desde el inventario o desde su tecla
+# (1 y 2; casillas junto a la barra de vida, ui/hud.gd): se gasta y cura lo suyo. Si no se puede (con la vida llena), no
+# se gasta y devuelve por qué
 func usar_objeto(id: String) -> String:
 	if not id in mochila or not id in Objetos.USABLES:
 		return "No se puede usar"
@@ -1083,16 +1083,20 @@ func usar_objeto(id: String) -> String:
 	return ""
 
 
-# Lo que cura un botiquín (el de los baños o el de la farmacéutica)
-func cura_botiquin() -> int:
-	return cura_de("botiquin")
+# La tecla de un objeto de curar (1 las vendas, 2 el botiquín): lo usa sin abrir el inventario. Con la vida llena avisa
+# y no lo gasta (en la sala de pruebas no vale: allí el 1 y el 2 sacan zombis, ui/panel_pruebas.gd; _unhandled_input)
+func usar_cura(id: String) -> void:
+	if terminada or cambiando or not johnny.vivo or get_tree().paused or presentacion.activa or not id in mochila:
+		return
+	if usar_objeto(id) != "":
+		Sonido.tocar("no")
+		numero(johnny.position + Vector2(0, -50), "Tienes la vida al máximo", Tema.TINTA)
 
 
-# Lo que cura un objeto de curar: lo suyo (el botiquín, BOTIQUIN; los demás, su "cura" de Objetos.USABLES), más el
-# talento Sanitario y, con la Alerta 4, la mitad
+# Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 50), más el talento Sanitario y, con la
+# Alerta 4, la mitad
 func cura_de(id: String) -> int:
-	var base: int = BOTIQUIN if id == "botiquin" else Objetos.USABLES[id].cura
-	return roundi((base + johnny.stats.botiquin_extra) * Alerta.botiquin())
+	return roundi((Objetos.USABLES[id].cura + johnny.stats.botiquin_extra) * Alerta.botiquin())
 
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla
@@ -1170,11 +1174,10 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.mejor_planta = maxi(g.mejor_planta, planta.num)
 			e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
-			# los objetos de la mochila pasan al baúl (si caes, se pierden); el botiquín, no (se pierde). Y las armas que
-			# lleva y los paquetes de arrojables mejorados (equipo_encima), aunque no quepan
+			# los objetos de la mochila pasan al baúl (si caes, se pierden), también las vendas y el botiquín. Y las armas
+			# que lleva y los paquetes de arrojables mejorados (equipo_encima), aunque no quepan
 			for id in mochila:
-				if Objetos.al_baul(id):
-					g.baul[id] = g.baul.get(id, 0) + 1
+				g.baul[id] = g.baul.get(id, 0) + 1
 			g.baul_equipo.append_array(equipo)
 			g.dolares += dolares + extra
 			g.dolares_total += dolares + extra
@@ -1396,6 +1399,11 @@ func _unhandled_input(evento: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		abrir_cosas("inventario")
 		return
+	for id in Objetos.USABLES:
+		if evento.is_action_pressed(Objetos.USABLES[id].accion, false, true) and not cambiando and aqui != planta.armas:
+			get_viewport().set_input_as_handled()
+			usar_cura(id)
+			return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando or presentacion.activa:
 		return
 	if evento.keycode == KEY_F11:
