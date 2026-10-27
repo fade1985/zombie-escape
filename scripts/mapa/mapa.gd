@@ -24,7 +24,6 @@ const PLETINA := [Color("#2a221c"), Color("#b8a37a"), Color("#8a7552"), Color("#
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
 const TABIQUE := preload("res://scripts/mapa/tabique.gd")   # lo alto de las paredes, con "cajas" (poner_cajas)
 const FUERA := Color(0.05, 0.04, 0.06)   # con "cajas", el muro que sobra alrededor: oscuro, como el fondo de fuera del mapa
-const MURETE := Color("#8e8f93")         # con "cajas", en la azotea: lo alto del murete, de hormigón (pared-azotea.png)
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
@@ -138,7 +137,7 @@ var expo_sprites: Array = []      # los zombis de la exposición, que van girand
 var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
 var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con oscuro alrededor (viviendas.gd)
-var al_aire := false              # con cajas, la azotea: el murete, gris y plano por los cuatro lados (arriba, en su cara)
+var al_aire := false              # con cajas, la azotea: el murete, gris oscuro y plano por los cuatro lados (arriba, en su cara)
 var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
@@ -360,7 +359,7 @@ func dibujar_tapas(lienzo: Node2D) -> void:
 				if not es_tabique(c, f):
 					lienzo.draw_rect(Rect2(x, y, 16, 16), FUERA)
 					continue
-				lienzo.draw_rect(Rect2(x, y, 16, 16), MURETE if al_aire else TABIQUE.COLOR)
+				lienzo.draw_rect(Rect2(x, y, 16, 16), TABIQUE.COLOR)   # (en la azotea, el murete: del mismo gris)
 				if not borde_en(c, f - 1):
 					lienzo.draw_rect(Rect2(x, y + 1, 16, 1), TABIQUE.FILO)
 					lienzo.draw_rect(Rect2(x, y - 1, 16, 2), CONTORNO)
