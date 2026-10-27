@@ -146,9 +146,9 @@ func _ready() -> void:
 	Controles.aplicar()   # las teclas cambiadas en Opciones (por si se abre la partida directamente)
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
 	# los textos de la pantalla, con la fuente pixel art de los menús
-	for etiqueta in [lugar, aviso, $Pantalla/Ayuda]:
+	for etiqueta in [lugar, aviso]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): $Pantalla/Ayuda.text = "Modo: %s (F1 o C cambia) · Espacio esquivar · Q cambiar · R recargar · E/clic dcho. lanzar · F molotov/granada · Tab inventario · Esc pausa · F11 sala de pruebas (P: panel)" % nombre)
+	johnny.modo_cambiado.connect(func(nombre): decir("Modo de atacar: %s" % nombre, 1.6))
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
@@ -207,8 +207,6 @@ func _ready() -> void:
 	tactil.partida = self
 	tactil.johnny = johnny
 	add_child(tactil)
-	if Tactil.activo:
-		$Pantalla/Ayuda.hide()   # las teclas no pintan nada en el móvil
 
 	if captura:
 		preparar_prueba()   # el guardado de prueba, la alerta y el evento que se piden

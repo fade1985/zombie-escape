@@ -18,7 +18,6 @@ func grabar_trailer() -> void:
 	set_process(false)   # sin la prueba larga
 	grabando = true
 	get_window().content_scale_size = TRAILER_PANTALLA
-	$Pantalla/Ayuda.hide()   # la línea de las teclas de abajo
 	Sonido.musica_si(false)   # la música va luego en el montaje, entera y sin cortes; aquí, solo los efectos
 	montar_capa_trailer()
 	await get_tree().process_frame

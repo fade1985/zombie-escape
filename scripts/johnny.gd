@@ -36,7 +36,7 @@ extends CharacterBody2D
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
 signal murio
 signal arma_cambiada(texto: String)            # el cartel del arma (y sus balas) de la pantalla escucha esta
-signal modo_cambiado(nombre: String)           # y la ayuda de abajo, el modo de atacar
+signal modo_cambiado(nombre: String)           # al cambiar el modo de atacar con su tecla: la partida lo avisa
 signal resucito                                # Desfibrilador: la partida saca el aviso
 
 const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igual que en el juego
@@ -178,7 +178,6 @@ func _ready() -> void:
 	var guardado := Guardado.cargar()
 	if guardado.ajustes.modo in MODOS:
 		modo = guardado.ajustes.modo
-	modo_cambiado.emit.call_deferred(MODOS[modo])
 
 
 # Si se mueve el ratón, se apunta con él; si se empuja el stick derecho, con el mando
@@ -234,11 +233,11 @@ func cambiar_modo() -> void:
 	var nuevo: String = nombres[(nombres.find(modo) + 1) % nombres.size()]
 	poner_modo(nuevo)
 	Guardado.cambiar(func(g): g.ajustes.modo = nuevo)
+	modo_cambiado.emit(MODOS[modo])
 
 
 func poner_modo(nuevo: String) -> void:
 	modo = nuevo
-	modo_cambiado.emit(MODOS[modo])
 
 
 # El arma que tiene en la mano: sus datos, con los atributos de Johnny ya aplicados

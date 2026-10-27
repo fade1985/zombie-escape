@@ -223,6 +223,14 @@ func probar_hud() -> void:
 	lanzables.cambiar()
 	await get_tree().create_timer(0.08).timeout
 	Captura.foto("captura-hud-f.png")
+	# el modo de atacar con su tecla (F1 o C): ya no hay línea de teclas abajo, sale un aviso
+	var modo_antes: String = johnny.modo
+	johnny.cambiar_modo()
+	await get_tree().create_timer(0.3).timeout
+	print("HUD · modo de atacar: %s → %s, aviso: %s" % [modo_antes, johnny.modo, aviso.text])
+	Captura.foto("captura-hud-modo.png")
+	johnny.poner_modo(modo_antes)
+	Guardado.cambiar(func(g): g.ajustes.modo = modo_antes)
 	await get_tree().create_timer(0.5).timeout
 	Tactil.activo = true   # (solo el HUD: los botones del móvil no se montan a mitad de partida)
 	await get_tree().create_timer(0.1).timeout

@@ -126,9 +126,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	tiempo += delta
 	var pantalla := get_viewport_rect().size
-	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
+	# en la franja de abajo (las balas se pintan por encima de la barra de vida)
 	fila.position = Vector2(14, roundf(pantalla.y - FRANJA / 2.0 - fila.size.y / 2.0) - 7.0)
-	# las casillas, con su borde de abajo justo encima de la línea de ayuda; en el móvil, al lado de la barra
+	# las casillas, en la esquina de abajo a la derecha; en el móvil, al lado de la barra
 	var x := fila.position.x + fila.size.x + 14 if Tactil.activo else pantalla.x - 14 - derecha.size.x
 	derecha.position = Vector2(x, pantalla.y - 15 - derecha.size.y)
 	if johnny == null:
