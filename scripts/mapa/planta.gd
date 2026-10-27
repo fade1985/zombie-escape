@@ -138,6 +138,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var pasillo := {"tipo": "pasillo", "nombre": planta.nombre, "ancho": ancho, "alto": alto, "salidas": [],
 		"zombis": [], "limpio": true, "visitado": true, "dueno": Muebles.plano_rectangular(PASILLO_COLS, PASILLO_FILAS),
 		"surtido": rng.randi(), "estilo": ed.pasillo, "escaparates": []}
+	if ed.pasillo == "pasillo":
+		# el de los apartamentos, como las viviendas ("cajas": cerrado por sus tabiques, con oscuro alrededor)
+		pasillo.cajas = true
+		pasillo.arriba_extra = 68
 	planta.sitios.append(pasillo)
 
 	var huecos := [{"letra": "A", "dir": "arriba", "en": PUERTA_A}, {"letra": "B", "dir": "arriba", "en": ancho - PUERTA_A},
