@@ -111,10 +111,15 @@ func montar_lista(columna: VBoxContainer) -> void:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.follow_focus = true
 	lado.add_child(scroll)
+	# un margen a la izquierda, para que los temas no vayan pegados al borde de la ventana
+	var margen := MarginContainer.new()
+	margen.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margen.add_theme_constant_override("margin_left", 16)
+	scroll.add_child(margen)
 	var temas := VBoxContainer.new()
 	temas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	temas.add_theme_constant_override("separation", 0)
-	scroll.add_child(temas)
+	margen.add_child(temas)
 	var vacio := StyleBoxEmpty.new()
 	for grupo in Tutoriales.GRUPOS:
 		var g := Label.new()
