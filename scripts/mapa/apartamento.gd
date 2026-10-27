@@ -27,8 +27,9 @@ const NOMBRES := {"salon": "Salón", "cocina": "Cocina", "bano": "Baño", "dormi
 #   #  muro             (espacio)  hueco de una puerta          E  la puerta de entrada, en el muro de fuera
 #   S  salón            C  cocina       M  dormitorio de matrimonio       I  dormitorio individual
 #   B  baño (es del dormitorio al que da su puerta)                       .  pasillo y recibidor
-# Cada trozo seguido de una misma letra es una habitación. Los tabiques de lado a lado tienen cara (3 casillas de alto),
-# que tapa las dos últimas filas de lo que queda encima: del pasillo, de 7 filas, se ven 5. Cada dormitorio es un
+# Cada trozo seguido de una misma letra es una habitación. Los tabiques de lado a lado tienen cara (3 casillas de alto) y,
+# encima, su tabique (el piso va con "cajas", como las viviendas: mapa.poner_tabiques), que tapan las tres últimas filas
+# de lo que queda encima: del pasillo, de 7 filas, se ven 4. Cada dormitorio es un
 # rectángulo de 9 filas de fondo, con el baño a su lado, de arriba abajo (con la puerta en medio de la pared): así la
 # cama y sus muebles caben contra la pared de arriba en las dos orientaciones (con la puerta abajo, la de fuera;
 # volteado, la del pasillo). Las puertas, lejos de las esquinas. Se puede retocar a mano (todas las filas, igual de

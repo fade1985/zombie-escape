@@ -201,6 +201,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var sitio := {"tipo": "jefe" if jefe else "apartamento", "nombre": nombre, "apt": apt, "tienda": tipo_tienda,
 			"ancho": apt.cols * CASILLA, "alto": apt.filas * CASILLA, "salidas": [], "zombis": [], "limpio": false,
 			"visitado": false, "muebles": Muebles.de_piso(apt) if piso else Muebles.de_apartamento(apt, rng), "surtido": rng.randi()}
+		if piso:
+			# como las viviendas ("cajas": cada habitación, cerrada por sus tabiques, con oscuro alrededor)
+			sitio.cajas = true
+			sitio.arriba_extra = 68
 		# los peligros de la tienda (el frío de la cámara, el fuego de la cocina, el agua con corriente)
 		sitio.peligros = Peligros.de_tienda(sitio) if tipo_tienda != "" and not jefe else []
 		if jefe and su_jefe == "gloton":
