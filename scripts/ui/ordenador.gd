@@ -177,6 +177,10 @@ func montar_monitor() -> void:
 				apagar()
 			else:
 				abrir(programa))
+		# el marco de madera sigue al ratón (solo con el escritorio a la vista: con un programa abierto, el foco es suyo)
+		b.mouse_entered.connect(func():
+			if abierta == "":
+				b.grab_focus())
 		iconos.add_child(b)
 
 	# la barra de tareas

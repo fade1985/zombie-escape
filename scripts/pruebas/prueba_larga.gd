@@ -459,6 +459,9 @@ func probar_noticias() -> void:
 	abrir_ordenador()
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-escritorio.png")
+	# el marco de madera sigue al ratón: pasar por encima de «Logros» lo marca
+	ordenador.iconos.get_child(2).mouse_entered.emit()
+	print("Escritorio · ratón sobre Logros, marcado: %s (esperado: icono_logros)" % get_viewport().gui_get_focus_owner().name)
 	ordenador.abrir("noticias")
 	await get_tree().create_timer(3.0).timeout
 	Captura.foto("captura-noticias.png")
