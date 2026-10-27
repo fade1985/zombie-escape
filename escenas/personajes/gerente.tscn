@@ -5,29 +5,29 @@
 [ext_resource type="SpriteFrames" path="res://assets/sprites/jefe-gerente.tres" id="frames"]
 
 [sub_resource type="CircleShape2D" id="cuerpo"]
-radius = 38.0
+radius = 32.0
 
 [node name="Gerente" type="CharacterBody2D" groups=["zombis"]]
 collision_layer = 4
 motion_mode = 1
 script = ExtResource("script")
 vida_max = 1400
-radio = 38.0
-arriba = 200.0
+radio = 32.0
+arriba = 120.0
 dano_contacto = 10
 
 [node name="Sombra" type="Node2D" parent="."]
 position = Vector2(0, 32)
 script = ExtResource("sombra")
-ancho = 100.0
-alto = 28.0
+ancho = 76.0
+alto = 22.0
 
 [node name="Choque" type="CollisionShape2D" parent="."]
 shape = SubResource("cuerpo")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, 34)
-scale = Vector2(2, 2)
+scale = Vector2(1.2, 1.2)
 sprite_frames = ExtResource("frames")
 animation = &"reposo_s"
 autoplay = "reposo_s"
@@ -41,4 +41,4 @@ z_index = 1
 path_desired_distance = 16.0
 target_desired_distance = 16.0
 path_max_distance = 80.0
-radius = 40.0
+radius = 36.0

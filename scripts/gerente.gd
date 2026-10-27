@@ -1,6 +1,8 @@
 # El gerente: el jefe final del centro comercial, en la azotea. Arturo Salcedo, el que firmó con Velaria el
 # «Turno infinito» (historia.gd). Alto como la portera, con su traje roto, la corbata floja y el maletín. Lo común
 # con los minijefes (la vida y su barra, enfadarse, llamar a otros, moverse y morir), en minijefe.gd.
+# Su dibujo es de lienzo 128, como el del mutado: la escena lo pone a escala 1,2 en vez de 2 para que antes de
+# mutar mida lo que los minijefes, y al mutar (mutar()) crece hasta 2 y se ve bien que se ha hecho más fuerte.
 #
 # Anda despacio hacia Johnny, muy seguro de sí mismo, y hace tres cosas, cada una con su aviso:
 #   - Contratos: saca un taco de papeles (unas rayas rojas en el suelo marcan por dónde irán) y los lanza en
@@ -234,8 +236,8 @@ func morder(cantidad: int) -> void:
 	super(cantidad if mutado else mini(cantidad, vida - 1))
 
 
-# El cambio: otro dibujo (más grande), un fogonazo verde, temblor y un rugido. Crece de golpe desde un poco más
-# pequeño, como si se hinchara
+# El cambio: otro dibujo (más grande), un fogonazo verde, temblor y un rugido. Se hincha de golpe desde el tamaño
+# que tenía (escala 1,2, la de los minijefes) hasta la escala de todos (2)
 func mutar() -> void:
 	mutado = true
 	vapor = false   # (el vapor de enfadado es de los minijefes)
@@ -252,10 +254,9 @@ func mutar() -> void:
 	$Sombra.ancho = 124.0
 	$Sombra.alto = 34.0
 	$Sombra.queue_redraw()
-	sprite.scale = Vector2(1.5, 1.5)
 	sprite.modulate = Color(2.2, 2.6, 1.8)
 	var tw := create_tween().set_parallel()
-	tw.tween_property(sprite, "scale", Vector2(2, 2), 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(sprite, "scale", Vector2(2, 2), 0.8).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	tw.tween_property(sprite, "modulate", Color.WHITE, 0.6)
 	Luz.destello(self, global_position + Vector2(0, -100), 420.0, 0.7, 1.8, VERDE)
 	Temblor.temblar(14.0)

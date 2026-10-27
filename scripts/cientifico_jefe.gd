@@ -1,7 +1,8 @@
 # El científico jefe: el jefe final de los Apartamentos, en la azotea. El doctor Héctor Salas, director del estudio
-# del VD-7 (historia.gd): el que estaba detrás de todo lo que pasa en el edificio. Grande como el gerente (lienzo
-# de 128), con la bata manchada, las gafas de laboratorio y una jeringa enorme. Lo común con los minijefes (la vida
-# y su barra, llamar a otros, moverse y morir), en minijefe.gd. Diseño: docs/historial/JEFES_APARTAMENTOS.md, apartado 4.
+# del VD-7 (historia.gd): el que estaba detrás de todo lo que pasa en el edificio. Como el gerente (lienzo de 128,
+# que la escena pone a escala 1,2 en vez de 2 para que mida lo que los minijefes y al mutar se le vea crecer), con
+# la bata manchada, las gafas de laboratorio y una jeringa enorme. Lo común con los minijefes (la vida y su barra,
+# llamar a otros, moverse y morir), en minijefe.gd. Diseño: docs/historial/JEFES_APARTAMENTOS.md, apartado 4.
 #
 # FASE 1, el científico. Rápido y cobarde: no pega de cerca, se mantiene a distancia de Johnny (si se le acerca,
 # se aleja) y desde ahí hace cuatro cosas, cada una con su aviso:
@@ -49,6 +50,7 @@ const SUERO_VIDA := 1.6                  # la vida máxima se multiplica por est
 const SUERO_VELOCIDAD := 1.3
 const SUERO_DANO := 6
 const CUPULA_VIDA := 140
+const CUPULA_RADIO := 62.0               # lo ancha que es (a la medida del doctor sin mutar)
 const CUPULA_DURA := 7.0                 # lo que aguanta dentro si no se la rompen
 const CUPULA_SUBE := 0.4                 # lo que tarda en subir (y en bajar)
 const CUPULA_PROBETAS := 1.6             # dentro, cada cuánto tira probetas
@@ -339,7 +341,7 @@ func romper_cupula() -> void:
 	gritar("¡MI CÚPULA!", CRISTAL, 22)
 	for i in 22:
 		var a := randf() * TAU
-		Particulas.soltar(self, global_position + Vector2(cos(a) * 60.0, -arriba * 0.45 + sin(a) * 80.0),
+		Particulas.soltar(self, global_position + Vector2(cos(a) * 48.0, -arriba * 0.45 + sin(a) * 64.0),
 			Vector2(cos(a) * randf_range(80, 200), sin(a) * randf_range(40, 120) - 60.0), [CRISTAL, Color.WHITE].pick_random(), 3, 0.6)
 	cambiar("tambaleo")
 
@@ -387,7 +389,7 @@ func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 
 
 # El cambio: otro dibujo (más grande), un fogonazo verde, temblor, un rugido y trozos de la bata por los aires.
-# Crece de golpe desde un poco más pequeño, como si se hinchara
+# Se hincha de golpe desde el tamaño que tenía (escala 1,2, la de los minijefes) hasta la escala de todos (2)
 func mutar() -> void:
 	mutado = true
 	Bestiario.apuntar("criatura")   # visto: al bestiario de las Colecciones del ordenador
@@ -404,10 +406,9 @@ func mutar() -> void:
 	$Sombra.ancho = 130.0
 	$Sombra.alto = 36.0
 	$Sombra.queue_redraw()
-	sprite.scale = Vector2(1.5, 1.5)
 	sprite.modulate = Color(2.2, 2.6, 1.8)
 	var tw := create_tween().set_parallel()
-	tw.tween_property(sprite, "scale", Vector2(2, 2), 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(sprite, "scale", Vector2(2, 2), 0.8).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	tw.tween_property(sprite, "modulate", Color.WHITE, 0.6)
 	Luz.destello(self, global_position + Vector2(0, -100), 440.0, 0.7, 1.8, VERDE)
 	Temblor.temblar(14.0)
@@ -680,8 +681,8 @@ func _draw() -> void:
 			elif estado == "cupula_baja":
 				k = 1.0 - k
 			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.55))
-			draw_circle(Vector2.ZERO, 78.0 * k, Color(CRISTAL, 0.12))
-			draw_arc(Vector2.ZERO, 78.0 * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
+			draw_circle(Vector2.ZERO, CUPULA_RADIO * k, Color(CRISTAL, 0.12))
+			draw_arc(Vector2.ZERO, CUPULA_RADIO * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
 		"aviso_lenguas":
 			# las tres barras de las lenguas, que se llenan hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_LENGUAS)
@@ -718,16 +719,16 @@ func pintar_encima(lienzo: Node2D) -> void:
 				k = 1.0 - k
 			var centro := Vector2(0, -arriba * 0.42)
 			lienzo.draw_set_transform(centro, 0.0, Vector2(1, 1.25) * k)
-			lienzo.draw_circle(Vector2.ZERO, 78.0, Color(CRISTAL, 0.22))
-			lienzo.draw_arc(Vector2.ZERO, 78.0, 0.0, TAU, 48, Color(CRISTAL, 0.85), 3.0)
-			lienzo.draw_arc(Vector2(-14, -14), 54.0, PI * 1.05, PI * 1.55, 16, Color(1, 1, 1, 0.55), 4.0)   # el brillo
+			lienzo.draw_circle(Vector2.ZERO, CUPULA_RADIO, Color(CRISTAL, 0.22))
+			lienzo.draw_arc(Vector2.ZERO, CUPULA_RADIO, 0.0, TAU, 48, Color(CRISTAL, 0.85), 3.0)
+			lienzo.draw_arc(Vector2(-11, -11), 43.0, PI * 1.05, PI * 1.55, 16, Color(1, 1, 1, 0.55), 4.0)   # el brillo
 			# las grietas, según lo que le han dado
 			var dano := 1.0 - float(cupula) / CUPULA_VIDA if cupula > 0 else 0.0
 			for i in int(dano * 8.0):
 				var a := i * 2.4 + 0.7
-				var p := Vector2.from_angle(a) * 20.0
-				lienzo.draw_line(p, p + Vector2.from_angle(a + 0.3) * 40.0, Color(1, 1, 1, 0.8), 2.0)
-				lienzo.draw_line(p + Vector2.from_angle(a + 0.3) * 20.0, p + Vector2.from_angle(a - 0.5) * 42.0, Color(1, 1, 1, 0.6), 2.0)
+				var p := Vector2.from_angle(a) * 16.0
+				lienzo.draw_line(p, p + Vector2.from_angle(a + 0.3) * 32.0, Color(1, 1, 1, 0.8), 2.0)
+				lienzo.draw_line(p + Vector2.from_angle(a + 0.3) * 16.0, p + Vector2.from_angle(a - 0.5) * 34.0, Color(1, 1, 1, 0.6), 2.0)
 			lienzo.draw_set_transform(Vector2.ZERO)
 		"suero":
 			# los rayos verdes de la jeringa a cada zombi, mientras dura el grito
