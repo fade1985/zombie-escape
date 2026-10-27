@@ -18,13 +18,13 @@ const CELDA := 4.0                  # 2 píxeles del dibujo, como el fuego de la
 const BORDE := 12.0                 # el borde deshilachado, en unidades (como en fuego.gd)
 const PINTA := 1.0 / 15.0           # cada cuánto se repintan las llamas y las celdas que tiemblan
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
+const FUEGO := preload("res://scripts/peligros/fuego.gd")   # (su ruido_de: el ruido de cada casilla)
 const LUZ_RADIO := 300.0
 const LUZ_FUERZA := 0.85
 
 var datos: Dictionary
 var mapa: Node
 var suelo: Node2D                   # lo que no cambia, pintado una vez
-var ruido := {}                     # casilla -> [64 números al azar, siempre los mismos para esa casilla]
 var fin := {}                       # casilla -> hacia qué lados se acaba el fuego (izquierda, derecha, arriba, abajo)
 var luces: Array = []
 var t := 0.0
@@ -109,18 +109,6 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 
-# El ruido de cada casilla (siempre el mismo para esa casilla), como en fuego.gd
-func ruido_de(c: Vector2i) -> Array:
-	if not ruido.has(c):
-		var r := RandomNumberGenerator.new()
-		r.seed = hash(c)
-		var lista := []
-		for i in 64:
-			lista.append(r.randf())
-		ruido[c] = lista
-	return ruido[c]
-
-
 # Lo que le falta a la celda "p" (dentro de su casilla) para llegar a un lado donde se acaba el fuego (en unidades)
 func hondo_de(lados: Array, p: Vector2) -> float:
 	var hondo := 99.0
@@ -148,7 +136,7 @@ func pintar_suelo() -> void:
 		if not lados.has(true):
 			suelo.draw_rect(Rect2(o, Vector2(CASILLA, CASILLA)), Color(Llamas.FUEGO[2], 0.9))
 			continue
-		var r := ruido_de(c)
+		var r := FUEGO.ruido_de(c)
 		for i in 64:
 			var p := Vector2(i % 8, i / 8) * CELDA
 			var hondo := hondo_de(lados, p)
@@ -166,7 +154,7 @@ func _draw() -> void:
 		var o := Vector2(c) * CASILLA
 		if not vista.has_point(o):
 			continue
-		var r := ruido_de(c)
+		var r := FUEGO.ruido_de(c)
 		var lados: Array = fin[c]
 		for i in 6:
 			var k := int(r[i] * 64.0)

@@ -26,6 +26,7 @@ const MOSCA := Color("#15100c")
 # El resplandor del ácido: unas luces verdosas suaves repartidas por la franja (como las del fuego de la cocina, sin
 # sombras), que laten despacio; son la luz de la habitación (no hay lámparas) y con ellas se ve bien dónde pisar
 const TEXTURA := preload("res://escenas/luces/luz_suave.tres")
+const FUEGO := preload("res://scripts/peligros/fuego.gd")   # (su ruido_de: el ruido de cada casilla)
 const LUCES := 8                    # cuántas, repartidas por el borde del óvalo limpio
 const LUZ_RADIO := 380.0            # (llegan hasta el medio de la zona de pelea)
 const LUZ_COLOR := Color(0.62, 0.86, 0.38)
@@ -34,7 +35,6 @@ const LUZ_FUERZA := 0.5
 var datos: Dictionary
 var mapa: Node
 var suelo: Node2D                   # lo que no cambia (charcos y montones), pintado una vez
-var ruido := {}                     # casilla -> [64 números al azar, siempre los mismos para esa casilla]
 var moscas: Array = []              # [casilla del montón, fase] de cada mosca que zumba
 var luces: Array = []               # las del resplandor del ácido
 var t := 0.0
@@ -105,23 +105,11 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 
-# El ruido de cada casilla (siempre el mismo para esa casilla), como en fuego.gd
-func ruido_de(c: Vector2i) -> Array:
-	if not ruido.has(c):
-		var r := RandomNumberGenerator.new()
-		r.seed = hash(c)
-		var lista := []
-		for i in 64:
-			lista.append(r.randf())
-		ruido[c] = lista
-	return ruido[c]
-
-
 # Los charcos (cada casilla sucia entera; donde se acaban, el borde a celdas deshilachado con el ruido) y, encima,
 # los montones. Se pinta una sola vez
 func pintar_suelo() -> void:
 	for c in datos.casillas:
-		var r := ruido_de(c)
+		var r := FUEGO.ruido_de(c)
 		var o := Vector2(c) * CASILLA
 		# hacia qué lados se acaba el charco (ahí el borde se deshilacha y se oscurece)
 		var fin := []
@@ -149,13 +137,13 @@ func pintar_suelo() -> void:
 	for c in datos.casillas:
 		if datos.casillas[c] != 2:
 			continue
-		var r := ruido_de(c)
+		var r := FUEGO.ruido_de(c)
 		# un poco descentrado en su casilla, y en celdas enteras para que case con el resto del dibujo
 		var o: Vector2 = ((Peligros.centro(c) + Vector2(r[10] - 0.5, r[11] - 0.5) * 8.0) / CELDA).round() * CELDA
 		monton(o, r)
 	# los pegotes de los lomos de los muros (este nodo va por encima de las tapas de los muros, que están a z -10)
 	for c in datos.get("paredes", {}):
-		pegote(c, ruido_de(c), datos.paredes[c])
+		pegote(c, FUEGO.ruido_de(c), datos.paredes[c])
 
 
 # Un pegote de mierda en el lomo de un muro, visto desde arriba: un racimo de celdas, con alguna del borde más
@@ -204,7 +192,7 @@ func monton(o: Vector2, r: Array) -> void:
 # de su casilla), y las moscas dando vueltas sobre los montones
 func _draw() -> void:
 	for c in datos.casillas:
-		var r := ruido_de(c)
+		var r := FUEGO.ruido_de(c)
 		if r[24] > 0.33:
 			continue
 		var ciclo := fmod(t * (0.25 + r[20] * 0.2) + r[21] * 10.0, 1.0)

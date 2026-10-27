@@ -20,7 +20,8 @@ var datos: Dictionary
 var mapa: Node
 var se_quema := {}                  # las casillas que pueden arder
 var prendida := {}                  # casilla -> cuándo empezó a arder (para dibujarla creciendo)
-var ruido := {}                     # casilla -> [ruido de cada celda] (para que el borde sea irregular)
+static var ruido := {}              # casilla -> [64 números al azar, siempre los mismos para esa casilla] (para que el
+                                    # borde sea irregular; lo comparten cerco.gd y porqueria.gd)
 var t := 0.0
 var ronda := 0.0
 var tick := 0.0
@@ -196,8 +197,9 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 
-# El ruido de cada celda de una casilla (siempre el mismo para esa casilla)
-func ruido_de(c: Vector2i) -> Array:
+# El ruido de cada celda de una casilla (siempre el mismo para esa casilla). También lo usan el cerco del bombero y la
+# porquería del Glotón: FUEGO.ruido_de(c)
+static func ruido_de(c: Vector2i) -> Array:
 	if not ruido.has(c):
 		var r := RandomNumberGenerator.new()
 		r.seed = hash(c)
