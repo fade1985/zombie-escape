@@ -205,8 +205,8 @@ func probar_reto() -> void:
 
 # Con "--captura --hud": el HUD (hud.gd), con las armas y los lanzables en la esquina de abajo a la derecha. Con
 # tres lanzables a mano, saca el HUD quieto (captura-hud.png), a medio cambiar de arma con la Q
-# (captura-hud-cambio.png), con el nombre del arma nueva (captura-hud-nombre.png), a medio cambiar de lanzable con la
-# F (captura-hud-f.png) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
+# (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la
+# F (captura-hud-f.png), el aviso del modo de atacar (captura-hud-modo.png) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
 func probar_hud() -> void:
 	set_process(false)
 	for t in ["granada", "atraedora"]:
@@ -219,7 +219,7 @@ func probar_hud() -> void:
 	await get_tree().create_timer(0.1).timeout
 	Captura.foto("captura-hud-cambio.png")
 	await get_tree().create_timer(0.4).timeout
-	Captura.foto("captura-hud-nombre.png")
+	Captura.foto("captura-hud-q.png")
 	lanzables.cambiar()
 	await get_tree().create_timer(0.08).timeout
 	Captura.foto("captura-hud-f.png")

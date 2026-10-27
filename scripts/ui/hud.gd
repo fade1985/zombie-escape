@@ -14,7 +14,7 @@
 #     apagan (con la vida llena; el botiquín, que devuelve un tercio, si además no ha perdido ninguno). Al coger una o gastarla, la casilla da un saltito (y al gastarla, un destello).
 #   - En la esquina de abajo a la derecha, las armas: la de la mano en la misma esquina, en la casilla más grande
 #     y con el borde amarillo, y la otra a su lado, apagada (con la tecla de cambiar). Al cambiar dan un saltito
-#     y el nombre sale encima un momento.
+#     (sin el nombre encima: el arma se ve en su dibujo).
 #   - A su izquierda, los lanzables que lleva a mano (los de repuesto no se ven), cada uno en su casilla con
 #     cuántos le quedan: el que se lanza ahora, encendido y con las esquinas amarillas, que la F pasa al siguiente.
 #   - En el móvil, las armas y los lanzables van al lado de la barra: la esquina de la derecha es de los botones.
@@ -40,7 +40,6 @@ const MARCOS := {
 # pantalla (hasta el hueco de dentro)
 const CORTE := {"grande": 4, "mediana": 4}
 const GRUESO := {"grande": 8.0, "mediana": 7.0}
-const NOMBRE := 1.6       # lo que se ve el nombre del arma al cambiar (segundos)
 # La barra del depósito, del color de lo que lo llena: [el relleno, su brillo de arriba, su sombra de abajo]
 const COLORES_DEPOSITO := {
 	"gasolina": [Color("#ff9f1c"), Color("#ffd23f"), Color("#b8561c")],
@@ -65,7 +64,6 @@ var mano_antes := ""
 var cambio := 1.0
 var salto_arma := 0.0
 var destello_arma := 0.0
-var nombre_arma := 0.0            # el rato que le queda al nombre
 # Los lanzables: el que se ve, el de antes (de donde vienen las esquinas al cambiar) y cuántos había
 var tipo_visto := ""
 var tipo_antes := ""
@@ -276,13 +274,11 @@ func mirar_armas(delta: float) -> void:
 			else:
 				salto_arma = 1.0   # ha cogido otra arma en la misma mano: saltito
 			destello_arma = 1.0
-			nombre_arma = NOMBRE
 		en_mano = ahora
 		mano_antes = johnny.mano
 	cambio = move_toward(cambio, 1.0, delta / 0.24)
 	salto_arma = move_toward(salto_arma, 0.0, delta * 5.0)
 	destello_arma = move_toward(destello_arma, 0.0, delta * 4.0)
-	nombre_arma = maxf(nombre_arma - delta, 0.0)
 
 
 # Al cambiar de arma, la nueva salta de la casilla pequeña a la grande (haciendo un arco por arriba) y la
@@ -308,11 +304,6 @@ func pintar_armas() -> void:
 	if cambio > 0.6:
 		esquinas(armas, nueva, (1.0 - cambio) * 25.0)
 	armas.draw_set_transform(Vector2.ZERO)
-	# el nombre, encima un momento al cambiar (y se apaga al final), acabando donde la casilla para no salirse
-	if nombre_arma > 0.0:
-		var a := clampf(nombre_arma / 0.4, 0.0, 1.0)
-		var s: String = Armas.nombre(en_mano, johnny.calidad(en_mano))
-		texto(armas, Vector2(grande.end.x - ancho_texto(s, 16), -16), s, 16, Color(Tema.AMARILLO, a))
 
 
 # ── Los lanzables ──
