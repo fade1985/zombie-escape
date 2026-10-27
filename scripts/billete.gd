@@ -1,8 +1,8 @@
 # Un billete de dólar en el suelo (los "cash" de src/game-combate.js). Sale despedido del zombi que lo suelta,
 # frena, y cuando Johnny pasa cerca (su "iman") vuela hacia él y se lo queda. Los dólares de la partida no se
 # guardan hasta completar el edificio: si te matan, se pierden.
-# También sirve para los molotovs y granadas que sueltan los zombis (fase 7a): otro "icono" y "puede", que
-# dice si cabe en la mochila (si no cabe, se queda en el suelo). Y para los objetos y las armas de la fase 7b:
+# También sirve para los molotovs y granadas que sueltan los zombis: otro "icono" y "puede", que
+# dice si cabe en la mochila (si no cabe, se queda en el suelo). Y para los objetos y las armas:
 # lo que Johnny tira desde el inventario ("tirado") no sale despedido ni vuelve solo hasta que él se aparta.
 # La munición (y la gasolina y el ácido) lleva "a_oscuras": se ve un poco aunque la sala esté a oscuras. Y la caja de
 # munición, "que_icono": su dibujo cambia con el arma que lleva Johnny.

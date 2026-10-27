@@ -29,7 +29,7 @@ const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
 # Lo que se usa de la sala de mantenimiento, en la pared de arriba de sus estancias (planta.gd; lo demás son muebles
 # del catálogo): la mesa del ordenador, en medio de la del despacho, con el corcho colgado a su izquierda; el banco de
-# trabajo (fase 7b) y el baúl, en el taller, a la derecha de la estantería; y la taquilla de las skins de Johnny
+# trabajo y el baúl, en el taller, a la derecha de la estantería; y la taquilla de las skins de Johnny
 # (skins.gd), en el vestuario, en medio de lo que deja libre el plato de ducha
 const ORDENADOR_X := 576.0
 const CORCHO_X := 480.0

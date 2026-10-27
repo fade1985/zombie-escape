@@ -19,13 +19,13 @@ const NUEVO := {
 	"mejor_planta": 0,    # la planta más alta a la que se ha llegado en cualquier edificio
 	"dolares": 0,         # dólares ahorrados (en el JS se llamaban "keys")
 	"dolares_total": 0,   # dólares conseguidos en total
-	"puntos": 0,          # puntos de talento sin gastar (se compran con dólares en el ordenador: fase 6b)
-	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...} (fase 6b)
+	"puntos": 0,          # puntos de talento sin gastar (se compran con dólares en el ordenador)
+	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
-	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...} (fase 7b)
+	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...}
 	"baul_equipo": [],    # las armas y los paquetes de arrojables del baúl, cada uno en su casilla y con su calidad
 	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},
 	                      # {"id": "molotov", "calidad": 1, "n": 3}, ...]

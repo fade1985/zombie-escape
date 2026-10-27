@@ -1,9 +1,7 @@
 # Los objetos (src/objetos.js del JS). Son chatarra: los sueltan los zombis al morir y Johnny los lleva en la
 # mochila (MOCHILA casillas; los iguales se apilan en una). Al completar el edificio pasan al baúl de la sala de
 # mantenimiento (guardado: "baul"); si Johnny cae, se pierden. Antes, al arrimarse al baúl, se pueden guardar a mano
-# (ui/inventario.gd, «Guardar de la mochila»). Hasta el 25 oct se juntaban de dos en dos en el banco de trabajo para
-# crear armas; las recetas se quitaron, y los explosivos, el despertador, el extintor, el trapo y el alcohol (que ya no
-# servían para nada) se fueron con ellas: en su lugar llegaron las piezas (PIEZAS), para mejorar las armas en el banco.
+# (ui/inventario.gd, «Guardar de la mochila»). Las piezas (PIEZAS) sirven para mejorar las armas en el banco de trabajo.
 # Su dibujo es assets/ui/iconos/obj-<id>.png (el del botiquín, botiquin.png), todos de 32×32 y de PixelLab. La gasolina, el bidón de ácido y la
 # batería son además la munición del lanzallamas, el lanza ácido y el lanza rayos: van en la mochila, pero
 # ocupan los huecos de la munición (Armas.MUNICION).

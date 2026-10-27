@@ -12,9 +12,8 @@
 #     tipo que ya lleva va a su hueco; si es de otro, a la mano si hay sitio y si no, al repuesto (y si tampoco, no lo
 #     coge). Cuando se acaba uno de la mano, su hueco lo ocupa el primero de repuesto. Desde el inventario se pasan de
 #     la mano al repuesto y al revés (a_la_mano, al_repuesto).
-#   - La atraedora y la congeladora (ARROJADIZAS): se lanzan como la granada, con su propio efecto. Hasta el 25 oct
-#     se creaban en el banco de trabajo con una receta; ahora se cuentan como el molotov y la granada, pero no se
-#     tienen al empezar ni las sueltan los zombis: solo se compran.
+#   - La atraedora y la congeladora (ARROJADIZAS): se lanzan como la granada, con su propio efecto. Se
+#     cuentan como el molotov y la granada, pero no se tienen al empezar ni las sueltan los zombis: solo se compran.
 #   - Los cuatro se compran de uno en uno en la tienda de armas del ordenador (PRECIOS; ordenador.gd, comprar_lanzable).
 #   - Cada paquete tiene su calidad (Armas.CALIDADES; parte 4 de la tienda y las piezas): la que no es Normal hace más
 #     daño, con más radio, y caben más. Los de un tipo con dos calidades son dos paquetes, cada uno en su hueco: su

@@ -1,4 +1,4 @@
-# La luz de un fuego: naranja y temblando siempre (brilloFuego de src/luz.js). Preparada para la fase 7: el
+# La luz de un fuego: naranja y temblando siempre (brilloFuego de src/luz.js). El
 # charco de fuego del molotov la lleva con radio = 3 veces el del fuego y se le pone `vida` (se apaga en su
 # último segundo); un zombi ardiendo, una pequeña (radio 90, fuerza 0.75) que va con él.
 # También la del ácido que roe a un zombi o a un jefe (Brillo.luz_acido): verde y con "latido", que no tiembla como

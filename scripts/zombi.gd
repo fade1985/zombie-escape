@@ -417,7 +417,7 @@ func morir() -> void:
 	murio.emit()
 
 
-# ── Estados, fuego y mareo (fase 7a) ──
+# ── Estados, fuego y mareo ──
 
 # Lo llaman los charcos en cada paso mientras los pisa
 func pisar(estados_charco: Dictionary) -> void:

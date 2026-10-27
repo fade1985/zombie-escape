@@ -12,7 +12,7 @@ func dar_lanzable(k: String) -> void:
 	lanzables.colocar(k)
 
 
-# Con "--captura --baul": la pantalla del baúl (ui/inventario.gd, la parte 4 del inventario nuevo). En la sala de
+# Con "--captura --baul": la pantalla del baúl (ui/inventario.gd). En la sala de
 # mantenimiento, con dos piezas especiales en el baúl y en la mochila gasolina, una pieza especial, vendas, una pieza
 # cuerpo a cuerpo y tres a distancia, Johnny
 # se arrima al baúl y cuenta en la terminal: que se abre con la marca en lo primero que se puede guardar, que guardar

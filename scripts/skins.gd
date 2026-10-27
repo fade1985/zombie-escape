@@ -10,7 +10,7 @@
 #
 # La primera, el portero (la portera la suelta al caer por primera vez, partida.gd): un viejo de pelo largo blanco
 # con coleta y barba blanca, con el pañuelo rojo de siempre. Con ella puesta, la fregona hace un 100 % más de daño
-# (+100 %, "fregona"; solo la fregona de siempre, no las armas creadas a partir de ella). Hasta el 27 oct era × 4.
+# (+100 %, "fregona"; solo la fregona de siempre, no las armas creadas a partir de ella).
 #
 # Lo que dan de daño las skins se SUMA a lo de los talentos (Ataque, Camorrista, Tirador, Puntería), no se
 # multiplica: con Ataque 5, Camorrista 5 y el gymbro, +50 +50 +50 = +150 % (johnny.gd, arma_de()). Antes se
@@ -23,7 +23,7 @@
 #
 # La tercera, el gymbro (la suelta el Gymbro al caer por primera vez, partida.gd): calvo, con el pañuelo rojo de
 # siempre y una barba negra. Con ella puesta, las armas cuerpo a cuerpo hacen un 50 % más de daño (+50 %, "cuerpo";
-# la fregona, el bate y el cuchillo; el golpe de Ninja y los martillazos del ferretero, no). Hasta el 27 oct era × 3.
+# la fregona, el bate y el cuchillo; el golpe de Ninja y los martillazos del ferretero, no).
 #
 # La cuarta, el bombero (la suelta el jefe de bomberos al caer por primera vez, partida.gd): un casco de bombero
 # ajustado, negro con la raya amarilla reflectante, como el del jefe; tapa el pelo y el pañuelo. Con ella puesta:

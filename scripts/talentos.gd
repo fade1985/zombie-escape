@@ -17,8 +17,6 @@ const RAMAS := [
 	{"id": "superviviente", "nombre": "Superviviente", "icono": "medico"},
 ]
 
-# Los que llevan "(fase 7)" en la nota se pueden comprar, pero aún no hacen nada: van con el molotov, la
-# granada y los botiquines
 const LISTA := [
 	# ── Militar
 	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "fuerza",
@@ -55,9 +53,6 @@ const LISTA := [
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "medico", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 ]
-
-# Los que aún no hacen nada
-const MAS_ADELANTE := []
 
 
 static func talento(id: String) -> Dictionary:

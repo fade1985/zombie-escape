@@ -430,7 +430,7 @@ static func huella_helipuerto(sitio: Dictionary) -> Array:
 #     izquierda y el banco largo suelto, abajo a la derecha, sin tapar la puerta
 #   - el despacho, en medio: la puerta del pasillo abajo y la mesa del ordenador en medio de la pared de arriba (fases 6
 #     y 7), con el corcho colgado a su izquierda (mapa.gd) y la papelera a su derecha
-#   - el taller, a la derecha: la estantería con botes, el banco de trabajo y el baúl (fase 7b; los dos, mapa.gd) en la
+#   - el taller, a la derecha: la estantería con botes, el banco de trabajo y el baúl (los dos, mapa.gd) en la
 #     pared de arriba, el carrito del conserje en la de la derecha y, en esa misma pared, la puerta de las viviendas de
 #     los supervivientes rescatados (viviendas.gd; adónde lleva lo pone generar)
 # Entre estancia y estancia, una puerta de madera, como las de dentro de los pisos (la pone mapa.gd). Y manchas de sangre por el suelo.

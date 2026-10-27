@@ -1,6 +1,6 @@
-# Las pantallas de las cosas de Johnny (fase 7b; en el JS, showInventario y showBaul de src/ui.js). El juego se para
+# Las pantallas de las cosas de Johnny (en el JS, showInventario y showBaul de src/ui.js). El juego se para
 # mientras están abiertas:
-#   - Inventario (Tab, I o Select; «todo a la vista», la parte 3 del inventario nuevo): Johnny grande en medio, de
+#   - Inventario (Tab, I o Select): Johnny grande en medio, de
 #     frente, con su skin y el arma que tiene en la mano; a los lados, sus armas (a la izquierda las de cuerpo a cuerpo
 #     y a la derecha las de distancia; arriba la de la mano y abajo la de repuesto: partida.llevar_arma), y debajo, los
 #     3 arrojables a mano (lanzables.gd) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, tres grupos de 8: la mochila, la munición (por tipos:
@@ -11,7 +11,7 @@
 #     lleva otra de repuesto, que pasa a la mano). Con las flechas o el mando, la ficha sigue a la marca; A (o tocar)
 #     la lleva al botón principal de la ficha (A dos veces y hecho), X (o Supr) tira, Y hace lo del botón principal y F
 #     cambia el arrojable que se lanza.
-#   - Baúl (al arrimarse a él en la sala de mantenimiento; la parte 4 del inventario nuevo): la pantalla partida en
+#   - Baúl (al arrimarse a él en la sala de mantenimiento): la pantalla partida en
 #     dos y se maneja como el inventario. A la izquierda, lo que lleva Johnny: sus armas y los arrojables a mano (solo
 #     para verlos) y los objetos, la munición y los arrojables de repuesto. A la derecha, sus 32 casillas: los objetos
 #     guardados, que ya no se pierden si Johnny cae. Abajo, la ficha de lo elegido
@@ -19,9 +19,9 @@
 #     hueco de munición, balas y cartuchos incluidos; con el baúl lleno, solo caben más de lo que ya tiene) y
 #     «Sacar uno», un objeto de uno en uno (a la mochila o a la munición; las balas y los cartuchos, hasta un hueco
 #     entero de una vez: Objetos.tanda). «Guardar todo» mete todo lo que se pueda, la munición también.
-#   - Banco de trabajo (al arrimarse a él en el taller; la parte 5 de la tienda y las piezas): como el baúl, pero para
+#   - Banco de trabajo (al arrimarse a él en el taller): como el baúl, pero para
 #     subir de calidad las armas y los paquetes de arrojables, los que lleva y los del baúl, gastando piezas de su
-#     familia (ver «Banco de trabajo», abajo). Hasta el 25 oct creaba armas con recetas.
+#     familia (ver «Banco de trabajo», abajo).
 #   - «Destruir» (el botón rojo de debajo de «Tirar al suelo»; en el baúl, bajo el botón principal): quita para siempre
 #     la casilla elegida, entera: los objetos de la mochila y la munición (el hueco), y en el baúl, además, sus
 #     objetos, armas y paquetes de arrojables (para hacer sitio). No se puede deshacer, así que pide confirmación: la
@@ -29,7 +29,7 @@
 #     otra casilla o esperar 3 s lo cancela. Sin atajo del mando y sin arrastrar. Las armas y los arrojables que
 #     lleva Johnny no se destruyen (para eso, «Tirar al suelo»)
 # Van con el ratón, con flechas + Intro o con el mando (A elige, B cierra). En el inventario y en el baúl, además, las
-# cosas se arrastran con el ratón o el dedo (la parte 5 del inventario nuevo: ver «arrastrar», abajo), y lo que llega a
+# cosas se arrastran con el ratón o el dedo (ver «arrastrar», abajo), y lo que llega a
 # su sitio nuevo da un saltito (también con los botones y el mando).
 extends CanvasLayer
 
@@ -1860,7 +1860,7 @@ func mejorar() -> void:
 
 
 # ── Inventario y baúl: arrastrar ──
-# Con el ratón o el dedo (la parte 5 del inventario nuevo): se aprieta en una casilla y, al mover un poco, lo de dentro
+# Con el ratón o el dedo: se aprieta en una casilla y, al mover un poco, lo de dentro
 # se levanta y sigue al dedo, y su casilla se queda apagada (levantar; va con el arrastrar de Godot, así que el botón ya
 # no cuenta como tocado). Se encienden los sitios donde se puede soltar (destinos): en el inventario, la mano o el
 # repuesto de su tipo (las armas se cambian), Johnny (se pone el arma o usa la cura), los arrojables de la mano al

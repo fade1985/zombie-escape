@@ -508,8 +508,6 @@ func nodo_talento(lista: VBoxContainer, s: Dictionary, t: Dictionary) -> void:
 	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, t.nombre, debajo, etiqueta,
 		estado, [n, t.max])
 	var texto: String = t.desc
-	if t.id in Talentos.MAS_ADELANTE:
-		texto += " (llega con los objetos, en la fase 7)"
 	match motivo:
 		"bloqueado": texto = "Necesitas %s al máximo. %s" % [Talentos.talento(t.pide).nombre, texto]
 		"max": texto = "¡Al máximo! " + texto
@@ -824,8 +822,7 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 # Lo que se ha encontrado y visto alguna vez, de todos los edificios (Guardado: "encontrados" y "bestiario").
 # Arriba, las cuentas totales; a la izquierda, por edificio, dos fichas (objetos y páginas del dosier) con su barra, y
 # el bestiario con una ficha por enemigo; a la derecha, lo que se esté mirando: la rejilla de objetos, las páginas,
-# o el dibujo del enemigo (en silueta si no se ha visto). Hasta el 25 oct había otra ficha, la de las armas creadas
-# en el banco de trabajo
+# o el dibujo del enemigo (en silueta si no se ha visto)
 func programa_colecciones(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
 	if s.colecciones_nuevo:

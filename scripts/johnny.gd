@@ -247,7 +247,7 @@ func arma() -> Dictionary:
 
 # Los datos de un arma con los atributos de Johnny ya aplicados (la de la mano o, para la ficha del inventario,
 # cualquiera de las que lleva). Lo que dan de daño los talentos y la skin se SUMA (+50 % y +50 % = +100 %, no × 2,25);
-# la calidad del arma, que ya va en base(), sí multiplica. Hasta el 27 oct se multiplicaba todo
+# la calidad del arma, que ya va en base(), sí multiplica
 func arma_de(id: String) -> Dictionary:
 	var w := base(id)
 	var extra: float = stats.dano - 1.0 + (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego) - 1.0

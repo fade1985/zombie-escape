@@ -28,7 +28,7 @@ const VIDA := 0.5           # cristal: la vida máxima de Johnny (partida.gd, ap
 const MAS_ZOMBIS := 2.0     # llena: el presupuesto de zombis de cada sitio (planta.gd, horda) y las oleadas de la horda
 const OIDO := 3.0           # oido: la distancia a la que los zombis dormidos oyen los disparos (zombi.gd)
 # El premio: estos dólares de más la primera vez que se completa el reto de hoy en cada edificio (premio(); se suman
-# a los recogidos en partida.gd, terminar). Hasta el 27 oct el reto no daba nada más que su marca
+# a los recogidos en partida.gd, terminar)
 const PREMIO := 10
 # "oscuras" usa lo del apagón (eventos.gd, al_montar) y "cuerpo" y "curas" se miran donde se reparte cada cosa
 

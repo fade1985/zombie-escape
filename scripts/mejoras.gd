@@ -1,6 +1,6 @@
 # Los atributos de Johnny al empezar un edificio (baseStats de src/upgrades.js del JS).
 # Johnny los lleva en "stats" y los lee al moverse, atacar y recibir golpes. Los de ataque multiplican los
-# números del arma que lleve. Los talentos (talentos.gd), los objetos y las mutaciones (fase 7) los cambian.
+# números del arma que lleve. Los talentos (talentos.gd), los objetos y las mutaciones los cambian.
 class_name Mejoras
 
 
@@ -17,7 +17,7 @@ static func base() -> Dictionary:
 		"velocidad": 210.0,      # unidades por segundo
 		"iman": 120.0,           # radio en el que los billetes vienen hacia ti
 		"esquiva_espera": 0.9,   # segundos que tarda en recargarse la esquiva
-		# Del árbol de talentos (fase 6b)
+		# Del árbol de talentos
 		"dano_cuerpo": 1.0,      # x daño cuerpo a cuerpo (Camorrista)
 		"dano_fuego": 1.0,       # x daño con armas de fuego (Tirador)
 		"dano_lanzar": 1.0,      # x daño del molotov y la granada (Puntería)
@@ -31,7 +31,7 @@ static func base() -> Dictionary:
 		"escudo": 0,             # escudo al empezar cada planta (Acero)
 		"ninja": false,          # golpe en área al acabar la esquiva (Ninja)
 		"resucitar": false,      # resucitar una vez por edificio (Desfibrilador)
-		# De las mutaciones (fase 7a): solo duran la partida
+		# De las mutaciones: solo duran la partida
 		"canibal": 0.0,          # parte de la vida que cura cada zombi que matas (Caníbal)
 		"ansiedad": false,       # golpes más rápidos cuantos más zombis a la vista (Ansiedad)
 		"escudo_mut": 0,         # escudo de más en cada planta (Endurecimiento)
