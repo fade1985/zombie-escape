@@ -101,7 +101,7 @@ static func icono(id: String) -> String:
 		return USABLES[id].icono
 	if id in Armas.MUNICION:   # las balas y los cartuchos (en el baúl)
 		return Armas.MUNICION[id].icono
-	return {"mp5": "pistola"}.get(id, id)
+	return id
 
 
 # Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron.

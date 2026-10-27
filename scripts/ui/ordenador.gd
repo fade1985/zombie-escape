@@ -39,7 +39,6 @@ const NOMBRES := {"puntos": "PUNTOS.EXE", "armas": "ARMAS.EXE", "logros": "LOGRO
 	"colecciones": "COLECCION.EXE"}
 const TAREAS := {"puntos": "Compra de puntos e intercambio", "armas": "Tienda de armas", "logros": "Logros", "dosier": "Dosier VD-7",
 	"noticias": "Noticias de Canal 8", "colecciones": "Colecciones y bestiario"}
-const ICONO_ARMA := {"mp5": "pistola"}
 # Las secciones de armas de la tienda: [familia (Armas.familia), título]. Las especiales, aparte (como sus piezas),
 # aunque van en el hueco de las de A distancia. Debajo, los arrojables
 const SECCIONES := [
@@ -559,7 +558,7 @@ func programa_armas(c: VBoxContainer) -> void:
 			var lleva: bool = partida.johnny.huecos[w.tipo] == id
 			var etiqueta := "LA LLEVAS" if lleva else ("GRATIS" if precio == 0 else "$%d" % precio)
 			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
-			var b := tarjeta(lista, "b_" + id, ICONO_ARMA.get(id, id), w.nombre, resumen_corto(w), etiqueta, estado)
+			var b := tarjeta(lista, "b_" + id, id, w.nombre, resumen_corto(w), etiqueta, estado)
 			enlazar(b, resumen(w), comprar_arma.bind(id))
 	# los arrojables, de uno en uno: «AL MÁXIMO» (en verde) si ya lleva todos los que caben
 	var lz: Lanzables = partida.lanzables

@@ -3,8 +3,8 @@
 # cañón de acero claro, y el cañón saliendo un poco por delante; el martillo atrás, las ranuras de la corredera y un
 # puntito rojo; el guardamonte redondo con el gatillo dentro (hueco: se ve el fondo); y la empuñadura grande con las
 # cachas negras de rombos, el medallón y los dos tornillos. Negro azulado, algo más claro que el del dibujo de Johnny
-# para que se lea sobre los paneles oscuros, con el borde oscuro de un píxel. 32×32. También es el icono de la MP5
-# (objetos.gd) hasta que tenga el suyo.
+# para que se lea sobre los paneles oscuros, con el borde oscuro de un píxel. 32×32. La MP5 tiene el
+# suyo (assets/sources/icono-mp5).
 #   py tools/icono_pistola.py   → assets/ui/iconos/pistola.png
 from pathlib import Path
 
