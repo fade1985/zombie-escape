@@ -22,7 +22,7 @@
 # Saca assets/sprites/conserje-48-<arma>-<id>.png y su .tres (el mismo con la otra imagen), y los iconos de la
 # taquilla: assets/ui/iconos/skin-<id>.png y skin-conserje.png (la cara de frente, 16×16).
 #   py tools/cara.py portero            → las hojas y los iconos (y luego importar en Godot)
-#   py tools/cara.py portero muestra    → además, captura-cara-<arma>.png con antes y después, para revisarlos
+#   py tools/cara.py portero muestra    → además, capturas/captura-cara-<arma>.png con antes y después, para revisarlos
 #   py tools/cara.py gloton muestra     → lo mismo, con el glotón (gymbro, con el gymbro; bombero, con el bombero)
 import colorsys
 import json
@@ -531,7 +531,7 @@ def main():
         print(f"{nombre}-{skin}: {len(hechos)} dibujos; con la cabeza poco clara: {len(dudosos)}",
               ("(" + ", ".join(dudosos[:8]) + ("..." if len(dudosos) > 8 else "") + ")") if dudosos else "")
         if muestra:
-            revisar(antes, hoja, hechos, cw, ch, RAIZ / f"captura-cara-{arma}.png")
+            revisar(antes, hoja, hechos, cw, ch, RAIZ / "capturas" / f"captura-cara-{arma}.png")
 
     # los iconos de la taquilla: la cara de frente, 16×16
     iconos = RAIZ / "assets" / "ui" / "iconos"
@@ -563,6 +563,7 @@ def revisar(antes, despues, hechos, cw, ch, salida):
         caja = (x0, y0, x0 + w, y0 + h)
         img.alpha_composite(antes.crop(caja), (X, Y))
         img.alpha_composite(despues.crop(caja), (X, Y + h))
+    salida.parent.mkdir(exist_ok=True)
     img.resize((img.width * 3, img.height * 3), Image.NEAREST).save(salida)
 
 

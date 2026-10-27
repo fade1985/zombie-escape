@@ -2,7 +2,11 @@
 .godot/
 # Lo que crea Godot al exportar
 /exportar/
-# Fotos de prueba sacadas con --captura
+# Fotos de prueba sacadas con --captura (scripts/pruebas/captura.gd): van a capturas/. Solo va en git su .gdignore,
+# para que Godot no las importe como si fueran dibujos del juego
+capturas/*
+!capturas/.gdignore
+# (las que quedaron en la raíz de antes)
 captura*.png
 captura*.png.import
 # Python

@@ -9,6 +9,7 @@ from PIL import Image
 
 ANCHO, ALTO = 520, 180
 RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+CAPTURAS = os.path.join(RAIZ, "capturas")   # (donde las deja la prueba: Captura.foto)
 SALIDA = os.path.join(RAIZ, "assets", "ui", "tutorial")
 
 # id: (captura, x, y)   · la prueba que la saca
@@ -45,7 +46,7 @@ if __name__ == "__main__":
 	for id, (captura, x, y) in FOTOS.items():
 		if solo and id not in solo:
 			continue
-		ruta = os.path.join(RAIZ, captura)
+		ruta = os.path.join(CAPTURAS, captura)
 		if not os.path.exists(ruta):
 			print("falta %s (para %s)" % (captura, id))
 			continue

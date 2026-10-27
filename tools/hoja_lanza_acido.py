@@ -17,7 +17,7 @@
 # imagen y las puntas). Las skins, después, con tools/cara.py (que mira estos verdes como si fueran los grises de
 # PixelLab, COMO_GRIS, y copia el .tres con las puntas):
 #   py tools/hoja_lanza_acido.py            → la hoja (y luego, para cada skin, py tools/cara.py <skin> desintegrador)
-#   py tools/hoja_lanza_acido.py muestra    → además, captura-lanza-acido.png: la punta del tubo en todos los dibujos,
+#   py tools/hoja_lanza_acido.py muestra    → además, capturas/captura-lanza-acido.png: la punta del tubo en todos los dibujos,
 #                                             antes y después, al cuádruple, para revisarla
 import json
 import sys
@@ -202,6 +202,7 @@ def revisar(antes, despues, lista, cw, ch, pivote, salida):
             caja = (col * cw + bx - CERCA, fila * ch + by - CERCA, col * cw + bx + CERCA + 1, fila * ch + by + CERCA + 1)
             img.alpha_composite(antes.crop(caja), (k * lado, i * lado * 2))
             img.alpha_composite(despues.crop(caja), (k * lado, i * lado * 2 + lado))
+    salida.parent.mkdir(exist_ok=True)
     img.resize((img.width * 4, img.height * 4), Image.NEAREST).save(salida)
 
 
@@ -238,7 +239,7 @@ def main():
     print(f"{A}: {verdes} píxeles de las bombonas en verde; {len(lista)} dibujos, {borrados} píxeles de llama borrados",
           f"(sin llama que borrar: {', '.join(sin_llama)})" if sin_llama else "")
     if "muestra" in sys.argv:
-        revisar(antes, hoja, lista, cw, ch, pivote, RAIZ / "captura-lanza-acido.png")
+        revisar(antes, hoja, lista, cw, ch, pivote, RAIZ / "capturas" / "captura-lanza-acido.png")
 
 
 if __name__ == "__main__":

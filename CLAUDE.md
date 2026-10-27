@@ -49,7 +49,7 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
   `C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe` o
   `C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe`.
 - **Arranca y saca fotos sin jugar** (se cierra solo, sin sonido, usa `guardado-prueba.json`):
-  `"<Godot>_console.exe" --path . -- --captura`. Las fotos salen grandes: reducirlas antes de mirarlas.
+  `"<Godot>_console.exe" --path . -- --captura`. Las fotos van a `capturas/` (fuera de git) y salen grandes: reducirlas antes de mirarlas.
   Sprites nuevos: importar antes con `--headless --path . --import`.
 - **Probar solo lo que se ha tocado.** `-- --captura` a secas es la **prueba larga**: recorre medio juego (sala,
   exposición, un apartamento, todos los jefes, menús, ordenador…) y deja decenas de fotos. Para un cambio concreto,

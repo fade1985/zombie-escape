@@ -15,7 +15,11 @@ static func dato(nombre: String, si_no := "") -> String:
 	return args[i + 1] if i >= 0 and i + 1 < args.size() else si_no
 
 
-# Guarda lo que se ve en la pantalla en la carpeta del juego: Captura.foto("captura-menu.png")
+# Guarda lo que se ve en la pantalla en la carpeta capturas/ del juego: Captura.foto("captura-menu.png"). Esa carpeta
+# lleva un .gdignore, para que Godot no importe las fotos como si fueran dibujos del juego
+const CARPETA := "res://capturas/"
+
 static func foto(archivo: String) -> void:
+	DirAccess.make_dir_recursive_absolute(CARPETA)
 	var raiz: Window = (Engine.get_main_loop() as SceneTree).root
-	raiz.get_texture().get_image().save_png("res://" + archivo)
+	raiz.get_texture().get_image().save_png(CARPETA + archivo)
