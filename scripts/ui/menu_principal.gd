@@ -61,7 +61,7 @@ func _ready() -> void:
 	columna.add_child(ayuda)
 	var texto := Label.new()
 	texto.theme_type_variation = "Sub"
-	texto.text = ("Limpia cada apartamento para abrir su puerta y busca la llave de la portera\n"
+	texto.text = ("Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
 		+ "Los controles y el modo de atacar están en Opciones")
 	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ayuda.add_child(texto)

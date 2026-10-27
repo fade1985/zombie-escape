@@ -2,7 +2,8 @@
 # puerta, funde a negro y monta el del otro lado. Lleva también la pantalla (vida, arma, avisos) y las reglas
 # del mapa:
 #   - Al entrar en un apartamento la puerta se cierra, y no se abre hasta que no queda ni un zombi.
-#   - El apartamento de la jefa está cerrado con llave; la llave está en el suelo de otro apartamento.
+#   - El apartamento de la jefa está cerrado con llave; la lleva un zombi al azar de los otros apartamentos y la suelta
+#     al caer (zombi_de_la_llave).
 #   - Al entrar, aparece la portera. Cuando cae, se abren las escaleras a la planta siguiente y Johnny arregla
 #     el ascensor, que solo baja a la sala de mantenimiento y vuelve a esa planta (arreglar_ascensor).
 #   - Después de la última planta, el edificio está limpio: cartel de victoria.
@@ -419,7 +420,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		zombi.dormido = true
 		zombi.zona = mapa.zona_en(z.pos)
 		if z.get("llave", false):
-			vecino_de_la_llave(zombi)
+			zombi_de_la_llave(zombi, z)
 	if sitio.tipo == "pasillo" and planta.get("guardia", {}).get("vivo", false):
 		poner_guardia()
 	cerrada = false
@@ -809,11 +810,14 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso" + (" y la tarjeta dorada de la Joyería" if dorada else ""), 3.0)
 
 
-# Con la Alerta 5, en los Apartamentos: el vecino que lleva la llave (planta.gd) aguanta el doble, como el guardia,
-# y lleva la llave flotando encima. Al caer la suelta donde estaba
-func vecino_de_la_llave(zombi: Node2D) -> void:
-	zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
-	zombi.vida = zombi.vida_max
+# En los Apartamentos, el zombi que lleva la llave del apartamento de la jefa (planta.gd lo elige al azar entre los de
+# la planta): lleva la llave flotando encima y, al caer, la suelta donde estaba. Con la Alerta 5 aguanta el doble, como el
+# guardia. "dato" es su apunte en la lista de zombis del sitio: al caer se le quita la llave, para que no vuelva a
+# llevarla si Johnny sale del sitio sin limpiar y vuelve a entrar
+func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
+	if Alerta.guardia() > 1.0:
+		zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
+		zombi.vida = zombi.vida_max
 	zombi.set_meta("llave", true)
 	var llave := Sprite2D.new()
 	llave.texture = MAPA.LLAVE
@@ -825,9 +829,10 @@ func vecino_de_la_llave(zombi: Node2D) -> void:
 	vaiven.tween_property(llave, "position:y", -zombi.altura - 10, 0.6).set_trans(Tween.TRANS_SINE)
 	zombi.murio.connect(func():
 		llave.hide()
+		dato.erase("llave")
 		planta.llave = {"sitio": aqui, "pos": zombi.position}
 		mapa.call_deferred("poner_llave", zombi.position)
-		decir("¡El vecino ha caído! Ha soltado la llave del " + nombre_jefa(), 3.0))
+		decir("¡Ha caído el zombi de la llave! Ha soltado la llave del " + nombre_jefa(), 3.0))
 
 
 # El nombre del apartamento de la jefa ("2ºC"...)

@@ -102,8 +102,9 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    los escaparates de las tiendas de arriba ({x, tienda})
 #   mantenimiento    el sitio de la sala de mantenimiento (-1 si no hay), viviendas, el de las viviendas de los
 #                    rescatados (viviendas.gd), expo, el de la exposición, y armas, el de la sala de pruebas
-#   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (con tarjeta, sitio -1 hasta que
-#                    el guardia la suelte al caer; con la Alerta 5, igual: la lleva un vecino, {"llave": true} en zombis)
+#   llave            {sitio, pos} dónde está la llave del apartamento de la jefa (sitio -1 mientras la lleva alguien: con
+#                    tarjeta, el guardia; con llave, un zombi al azar de los apartamentos, {"llave": true} en zombis; en
+#                    los dos casos la suelta al caer)
 #   guardia          solo con tarjeta: {vivo, vida (-1: entera), alerta, silbidos} el guardia de seguridad del
 #                    pasillo, que lleva la tarjeta (zombi_guardia.gd)
 #   edificio         el id del edificio (edificios.gd)
@@ -330,10 +331,15 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			pos = sala.centro
 	if ed.cerrojo == "llave":
 		planta.llave = {"sitio": donde, "pos": pos}
-		# con la Alerta 5 (alerta.gd), no está en el suelo: la lleva un vecino que espera allí y la suelta al caer
-		if Alerta.guardia() > 1.0:
+		# no está en el suelo: la lleva un zombi al azar de los apartamentos normales ({"llave": true} en su dato; la
+		# partida le pone la llave flotando encima) y la suelta al caer. Solo si no hubiera ningún zombi, se queda en el
+		# suelo de la habitación elegida
+		var candidatos: Array = []
+		for i in normales:
+			candidatos.append_array(planta.sitios[i].zombis)
+		if not candidatos.is_empty():
+			candidatos[rng.randi() % candidatos.size()].llave = true
 			planta.llave = {"sitio": -1, "pos": Vector2.ZERO}
-			planta.sitios[donde].zombis.append({"tipo": "normal", "pos": pos, "llave": true})
 	# El científico muerto de Velaria (historia.gd), en una habitación de otro apartamento normal si se puede (que
 	# no sea el baño del superviviente). Si sale o no, lo decide la partida: solo si su página falta por encontrar
 	var otros: Array = normales.filter(func(i): return i != donde)

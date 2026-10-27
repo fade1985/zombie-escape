@@ -5,7 +5,8 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 
 # Con "--captura --alerta N" (en vez de la prueba larga): comprueba las reglas de esa alerta (alerta.gd) con sus
 # números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
-# Apartamentos, el vecino que lleva la llave, que solo sale con la Alerta 5; en el centro comercial, el guardia) y
+# Apartamentos, el zombi que lleva la llave (con la Alerta 5, con el doble de vida; al caer suelta la llave, y al
+# salir y volver a entrar no la lleva otra vez); en el centro comercial, el guardia) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
 func probar_alerta() -> void:
 	var n := Alerta.nivel
@@ -21,7 +22,7 @@ func probar_alerta() -> void:
 		for i in 5:
 			Planta.semilla = 1000 + i
 			for s in Planta.generar(2, edificio, jefe_de(2)).sitios:
-				for z in s.get("zombis", []).filter(func(z): return not z.get("llave", false)):
+				for z in s.get("zombis", []):
 					total += 1
 					coste += Planta.COSTE[z.tipo]
 		Planta.semilla = 0
@@ -41,23 +42,27 @@ func probar_alerta() -> void:
 	# A4 y A5
 	print("A4 · un botiquín cura %d (sin alerta, %d)" % [cura_botiquin(), BOTIQUIN + johnny.stats.botiquin_extra])
 	print("A5 · los disparos se oyen a %.0f (sin alerta, %.0f)" % [Zombi.OIDO * Alerta.oido(), Zombi.OIDO])
-	# el guardia (centro) o el vecino de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
+	# el guardia (centro) o el zombi de la llave (Apartamentos), en su sitio y sin penumbra para que se vea bien
 	if ed.cerrojo == "tarjeta":
 		await montar(0, 0, false)
 		print("A5 · el guardia: vida %d" % guardia.vida_max)
 		johnny.position = guardia.position + Vector2(-160, 40)   # (que no se quede en la puerta, que la cruzaría)
 	else:
 		var vecino := -1
+		var con_llave := 0
 		for i in planta.sitios.size():
-			if planta.sitios[i].get("zombis", []).any(func(z): return z.get("llave", false)):
+			var cuantos: int = planta.sitios[i].get("zombis", []).filter(func(z): return z.get("llave", false)).size()
+			con_llave += cuantos
+			if cuantos > 0:
 				vecino = i
-		print("A5 · llave en el suelo: %s | vecino de la llave en %s" % [planta.llave.sitio >= 0,
-			planta.sitios[vecino].nombre if vecino >= 0 else "ningún sitio"])
+		print("Llave · en el suelo: %s | zombis que la llevan: %d, en %s (esperado: ninguna en el suelo y uno)" % [
+			planta.llave.sitio >= 0, con_llave, planta.sitios[vecino].nombre if vecino >= 0 else "ningún sitio"])
 		if vecino >= 0:
 			await montar(vecino, 0, false)
 			for z in get_tree().get_nodes_in_group("zombis"):
 				if z.has_meta("llave"):
-					print("A5 · el vecino: vida %d" % z.vida_max)
+					print("Llave · el zombi (%s): vida %d (el doble solo con la Alerta 5)" % [
+						z.scene_file_path.get_file().get_basename(), z.vida_max])
 					johnny.position = z.position + Vector2(0, 90)
 					for k in 16:   # Johnny, cerca de él y en su misma habitación
 						var p: Vector2 = z.position + Vector2.from_angle(k * TAU / 16.0) * 90.0
@@ -71,8 +76,15 @@ func probar_alerta() -> void:
 					luz.alternar()
 					z.recibir_golpe(9999, Vector2.ZERO)
 					await get_tree().create_timer(0.5, false).timeout
-					print("A5 · al caer: llave en %s, en el suelo: %s" % [planta.sitios[planta.llave.sitio].nombre
+					print("Llave · al caer: llave en %s, en el suelo: %s" % [planta.sitios[planta.llave.sitio].nombre
 						if planta.llave.sitio >= 0 else "ningún sitio", mapa.cosas.has_node("Llave")])
+					# si sale del sitio sin limpiar y vuelve, la llave sigue en el suelo y nadie más la lleva
+					await montar(vecino, 0, false)
+					await get_tree().create_timer(0.4, false).timeout
+					print("Llave · al volver a entrar: zombis con llave %d, llave en el suelo: %s (esperado: 0 y true)" % [
+						get_tree().get_nodes_in_group("zombis").filter(func(o): return o.has_meta("llave")).size(),
+						mapa.cosas.has_node("Llave")])
+					break
 	if ed.cerrojo == "tarjeta":
 		johnny.get_node("Camara").reset_smoothing()
 		await get_tree().create_timer(0.4, false).timeout

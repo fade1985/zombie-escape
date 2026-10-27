@@ -5,7 +5,7 @@
 #   el_nombre         con su artículo, para las frases ("los Apartamentos", "el Centro comercial")
 #   generador         qué hay detrás de las puertas de cada planta: "apartamento" (apartamento.gd) o "tienda" (tienda.gd)
 #   sitios            cómo se llaman esos sitios en los avisos ("apartamentos", "tiendas")
-#   cerrojo           cómo se abre el sitio del jefe: "llave" (en el suelo de otro sitio) o "tarjeta" (la lleva
+#   cerrojo           cómo se abre el sitio del jefe: "llave" (la lleva un zombi al azar de los otros sitios) o "tarjeta" (la lleva
 #                     el guardia de seguridad, que ronda el pasillo: zombi_guardia.gd)
 #   jefe, el_jefe     el zombi jefe de cada planta (una escena de partida.gd, ZOMBIS) y cómo se le nombra
 #   minijefes         los minijefes de las plantas (las de tiendas en el centro comercial), uno por planta desde la baja:
@@ -35,7 +35,7 @@ const LISTA := {
 		"azotea": true,
 		"final": "cientifico_jefe",
 		"el_final": "el doctor Salas",
-		"objetivo": "limpia los apartamentos y busca la llave de la portera",
+		"objetivo": "limpia los apartamentos y caza al zombi que lleva la llave de la portera",
 		"abre": "",
 		"pasillo": "pasillo",
 	},

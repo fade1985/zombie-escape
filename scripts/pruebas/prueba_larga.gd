@@ -23,7 +23,7 @@ func contar_planta() -> void:
 			" ".join(salas), s.muebles.size(), tipos])
 	print("  pasillo: %d muebles | llave en %s" % [planta.sitios[0].muebles.size(),
 		planta.sitios[planta.llave.sitio].nombre if planta.llave.sitio >= 0
-		else "el guardia del pasillo" if ed.cerrojo == "tarjeta" else "un vecino (Alerta 5)"])
+		else "el guardia del pasillo" if ed.cerrojo == "tarjeta" else "un zombi al azar"])
 
 
 func _process(delta: float) -> void:
