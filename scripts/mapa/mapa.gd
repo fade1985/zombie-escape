@@ -22,6 +22,8 @@ const FILO := Color(1, 1, 1, 0.14)      # el filo de luz de la tapa de los muros
 # la pletina de latón gastado del paso entre dos habitaciones, en rayas de 1 píxel: sombra, brillo, latón y sombra
 const PLETINA := [Color("#2a221c"), Color("#b8a37a"), Color("#8a7552"), Color("#4a3c2c")]
 const CARA := preload("res://scripts/mapa/cara_pared.gd")
+const TABIQUE := preload("res://scripts/mapa/tabique.gd")   # lo alto de las paredes, con "cajas" (poner_cajas)
+const CEMENTO := Color("#5d6064")   # con "cajas", el muro que sobra entre las habitaciones y alrededor: gris liso
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
@@ -134,6 +136,8 @@ var textura_niebla: ImageTexture
 var expo_sprites: Array = []      # los zombis de la exposición, que van girando
 var expo_t := 0.0
 var centro := false               # si es del centro comercial (una tienda, la galería o la azotea): lleva restos sueltos
+var cajas := false                # cada habitación, una caja cerrada por sus tabiques, con cemento entre medias (viviendas.gd)
+var alzados := {}                 # con cajas, las casillas de la pantalla con tabique que sube (poner_tabiques): Vector2i -> true
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
@@ -143,6 +147,7 @@ var valla: Node2D = null          # la valla de la rampa del helipuerto (solo en
 func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	sitio = datos
 	add_to_group("mapa")
+	cajas = sitio.get("cajas", false)
 	cols = int(sitio.ancho / CASILLA)
 	filas = int(sitio.alto / CASILLA)
 	if sitio.has("dueno"):
@@ -339,6 +344,33 @@ func nombre_zona(zona: int) -> String:
 # que los atraviesa
 func dibujar_tapas(lienzo: Node2D) -> void:
 	lienzo.draw_set_transform(Vector2.ZERO, 0.0, Vector2(2, 2))
+	if cajas:
+		# la franja de encima del mapa y el muro que sobra, de cemento; los tabiques, planos, vistos desde arriba, con
+		# su filo de luz y su contorno donde se acaban (donde no sigue tabique, ni plano ni de los que suben)
+		lienzo.draw_rect(Rect2(-16, -48, cols * 16 + 32, 48), CEMENTO)
+		for f in filas:
+			for c in cols:
+				if not es_muro(c, f):
+					continue
+				var x := c * 16
+				var y := f * 16
+				if not es_tabique(c, f):
+					lienzo.draw_rect(Rect2(x, y, 16, 16), CEMENTO)
+					continue
+				lienzo.draw_rect(Rect2(x, y, 16, 16), TABIQUE.COLOR)
+				if not borde_en(c, f - 1):
+					lienzo.draw_rect(Rect2(x, y + 1, 16, 1), TABIQUE.FILO)
+					lienzo.draw_rect(Rect2(x, y - 1, 16, 2), CONTORNO)
+				if not borde_en(c, f + 1):
+					lienzo.draw_rect(Rect2(x, y + 14, 16, 1), TABIQUE.FILO)
+					lienzo.draw_rect(Rect2(x, y + 15, 16, 2), CONTORNO)
+				if not borde_en(c - 1, f):
+					lienzo.draw_rect(Rect2(x + 1, y, 1, 16), TABIQUE.FILO)
+					lienzo.draw_rect(Rect2(x - 1, y, 2, 16), CONTORNO)
+				if not borde_en(c + 1, f):
+					lienzo.draw_rect(Rect2(x + 14, y, 1, 16), TABIQUE.FILO)
+					lienzo.draw_rect(Rect2(x + 15, y, 2, 16), CONTORNO)
+		return
 	# la franja de tapa de encima del mapa (la cámara deja ver un poco más arriba, por la cara del muro de arriba)
 	lienzo.draw_texture_rect_region(tapa, Rect2(-16, -48, cols * 16 + 32, 48), Rect2(-16, -48, cols * 16 + 32, 48), VELO)
 	for f in filas:
@@ -560,6 +592,7 @@ func poner_caras() -> void:
 			cara.ancho = (fin - c) * CASILLA
 			cara.pared = estilos[sala].pared
 			cara.techo = estilos[sala].techo
+			cara.moldura = not cajas   # con cajas, encima va su tabique
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			if centro and sitio.get("estilo", "") != "azotea":   # (el murete es bajo: lo de encima es el cielo)
 				cara.adornos = restos_de_pared(cara.ancho)
@@ -582,9 +615,13 @@ func poner_caras() -> void:
 		dintel.desde = PUERTA_BANO.DINTEL
 		dintel.pared = estilos[sala].pared
 		dintel.techo = estilos[sala].techo
+		dintel.moldura = not cajas
 		dintel.puede_tapar = true
 		cosas.add_child(dintel)
 		caras.get_or_add(sala, []).append(dintel)
+	if cajas:
+		poner_tabiques()
+		return
 	# Donde un tabique cuelga de una pared con suelo encima (el pasillo de las viviendas, la cocina junto al pasillo de
 	# un piso...), las paredes de los lados tienen su cara de 3 casillas pero el tabique solo empezaba al pie de ella:
 	# dejaba un hueco con el suelo de arriba a la vista y la pared parecía más baja. Ahí el tabique sube hasta lo alto
@@ -619,6 +656,73 @@ func poner_caras() -> void:
 # Un trozo de muro con muro debajo y suelo encima: de él cuelga un tabique (poner_caras)
 func tabique_colgado(c: int, f: int) -> bool:
 	return es_muro(c, f) and es_muro(c, f + 1) and not es_muro(c, f - 1)
+
+
+# Con "cajas" (las viviendas), como se ve una casa por dentro desde arriba: cada habitación, cerrada por sus tabiques
+# (es_tabique), de una casilla de grueso. Solo la pared de arriba de cada una tiene altura: su cara (poner_caras), y
+# encima, a lo alto de la pared, su tabique (tabique.gd), con los de los lados subiendo hasta él. Lo demás de los
+# tabiques (los lados y la pared de abajo) se ve plano, desde arriba, sin tapar nada (mapa.dibujar_tapas). Aquí se
+# deciden los trozos de tabique que suben ("alzados", en casillas de la pantalla) y se ponen
+func poner_tabiques() -> void:
+	alzados.clear()
+	var tramos := []   # [fila, primera columna, la de después de la última]
+	for f in filas:
+		var c := 0
+		while c < cols:
+			if not es_tabique(c, f):
+				c += 1
+				continue
+			var fin := c + 1
+			while fin < cols and es_tabique(fin, f):
+				fin += 1
+			# un trozo de muro de lado a lado con alguna cara: sube entero, y donde no cae cara (las esquinas y donde
+			# se junta un tabique de los lados), baja hasta su casilla, para que el tabique de los lados siga hasta arriba
+			if range(c, fin).any(func(k): return cara_de_caja(k, f)):
+				tramos.append([f, c, fin])
+				for k in range(c, fin):
+					alzados[Vector2i(k, f - TABIQUE.SUBE)] = true
+					if not cara_de_caja(k, f) and dueno_en(k, f) != -2:   # (encima de una puerta, su dintel)
+						for y in range(f - TABIQUE.SUBE + 1, f):
+							alzados[Vector2i(k, y)] = true
+			c = fin
+	for t in tramos:
+		var f: int = t[0]
+		var tramo := TABIQUE.new()
+		tramo.position = Vector2(t[1] * CASILLA, (f + 1) * CASILLA)   # ordenado con la cara que cae de él
+		tramo.ancho = (t[2] - t[1]) * CASILLA
+		var y := f - TABIQUE.SUBE
+		for k in range(t[1], t[2]):
+			var baja := alzados.has(Vector2i(k, y + 1))
+			tramo.casillas.append({"baja": baja, "arriba": not borde_en(k, y - 1), "abajo": not baja,
+				"izq": [not borde_en(k - 1, y), not borde_en(k - 1, y + 1), not borde_en(k - 1, y + 2)],
+				"der": [not borde_en(k + 1, y), not borde_en(k + 1, y + 1), not borde_en(k + 1, y + 2)]})
+		cosas.add_child(tramo)
+
+
+# Con "cajas": ¿es tabique esta casilla? Los muros que tocan un suelo (también en diagonal: las esquinas) y los huecos
+# de las puertas; el resto del muro es cemento
+func es_tabique(c: int, f: int) -> bool:
+	var v := dueno_en(c, f)
+	if v != -1:
+		return v == -2
+	if c < 0 or f < 0 or c >= cols or f >= filas:
+		return false
+	for df in [-1, 0, 1]:
+		for dc in [-1, 0, 1]:
+			var w := dueno_en(c + dc, f + df)
+			if w >= 0 or w == -2:
+				return true
+	return false
+
+
+# Con "cajas": ¿se ve tabique en esta casilla de la pantalla? El plano (un muro que es tabique) o uno que sube
+func borde_en(c: int, y: int) -> bool:
+	return (es_muro(c, y) and es_tabique(c, y) and c >= 0 and y >= 0 and c < cols and y < filas) 		or alzados.has(Vector2i(c, y))
+
+
+# Un muro del que cae una cara: con suelo debajo
+func cara_de_caja(c: int, f: int) -> bool:
+	return es_muro(c, f) and f + 1 < filas and not es_muro(c, f + 1)
 
 
 func poner_puertas() -> void:
@@ -943,6 +1047,8 @@ func pintar_mascara() -> void:
 
 # ¿Tapa esta casilla de suelo la cara de un muro de debajo?
 func tapada(c: int, f: int) -> bool:
+	if cajas and alzados.has(Vector2i(c, f)):
+		return true   # la tapa un tabique que sube
 	for k in [1, 2]:
 		if es_muro(c, f + k) and f + k + 1 < filas and not es_muro(c, f + k + 1):
 			return true

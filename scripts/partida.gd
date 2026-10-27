@@ -457,7 +457,7 @@ func encuadrar(sitio: Dictionary) -> void:
 	var pantalla := get_viewport_rect().size
 	var x0 := 0.0
 	var x1: float = sitio.ancho
-	var y0 := -float(ARRIBA_EXTRA)
+	var y0 := -float(sitio.get("arriba_extra", ARRIBA_EXTRA))
 	var y1: float = sitio.alto
 	if x1 - x0 < pantalla.x:
 		x0 = (x1 - pantalla.x) / 2.0

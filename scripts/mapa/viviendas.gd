@@ -16,14 +16,21 @@
 # momento. Por dentro, lo de un trastero: el colchón en el suelo de cada uno, en la esquina de arriba a la derecha y con
 # la colcha de su color, y una estantería metálica vacía en la de arriba a la izquierda (catalogo.gd: "habitacion-<id>"
 # para cada una y "pasillo-viviendas" para el pasillo, con sus "colocados"; Muebles.colocados).
+#
+# Cada habitación (y el pasillo) es una caja cerrada por sus cuatro tabiques, de una casilla de grueso, como se ve una
+# casa por dentro desde arriba: la pared de arriba de cada una con su altura (su cara y, encima, su tabique) y los
+# demás tabiques planos; el muro que sobra, alrededor, es cemento ("cajas" en el sitio: mapa.gd, poner_tabiques). La
+# pared de arriba de las de abajo y la del pasillo tapan las tres últimas filas de lo que tienen detrás (dos la cara y
+# una su tabique).
 class_name Viviendas
 
 const CASILLA := 32
-const BORDE := 2             # el muro de fuera, en casillas
+const BORDE := 2             # el muro de fuera, en casillas (el tabique y, por fuera, una de cemento)
 const ANCHO := 12            # cada habitación, de ancho
-const FONDO_ARRIBA := 9      # y de fondo: las de arriba (sus dos últimas filas quedan detrás de la cara del tabique)
-const FONDO_ABAJO := 7       # y las de abajo (se ven enteras): así parecen igual de hondas
-const PASILLO := 7           # el fondo del pasillo (sus dos últimas filas, detrás de la cara del tabique de abajo)
+const FONDO_ARRIBA := 10     # y de fondo: las de arriba (sus tres últimas filas quedan detrás de la pared del pasillo)
+const FONDO_ABAJO := 7       # y las de abajo (se ven enteras): así se ve lo mismo de todas
+const TAPADAS := 3           # las filas de detrás de una pared que tapan su cara (2) y su tabique (1)
+const PASILLO := 8           # el fondo del pasillo (sus tres últimas filas, detrás de la pared de las de abajo)
 const ENTRADA := 0           # el trozo de pasillo antes de las habitaciones: nada, la pared de la entrada es la de las primeras
 const FINAL := 0             # y el que queda después de la última: nada, el pasillo acaba con las habitaciones
 const PUERTA := 2            # el ancho de las puertas, en casillas
@@ -31,7 +38,7 @@ const COLS := BORDE * 2 + ENTRADA + ANCHO * 3 + 2 + FINAL
 const FILAS := BORDE * 2 + FONDO_ARRIBA + 1 + PASILLO + 1 + FONDO_ABAJO
 const PASILLO_F := BORDE + FONDO_ARRIBA + 1     # la primera fila del pasillo
 const ABAJO_F := PASILLO_F + PASILLO + 1        # y la de las habitaciones de abajo
-const LLEGADA := 14                             # la puerta de la izquierda (la de la sala), en las filas 14 y 15
+const LLEGADA := PASILLO_F + 2                  # la puerta de la izquierda (la de la sala), en esta fila y la siguiente
 const CARTEL := 2.5                             # el cartel de «TRASTEROS» (mapa.gd): su centro, en la casilla 2,5 del pasillo,
                                                 # en medio de la pared de la izquierda de la primera puerta de arriba
 # Dónde espera cada uno, contando desde el medio de lo que se ve de su habitación (si no está aquí, en medio): el
@@ -47,7 +54,7 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	# (el pasillo se llama como el sitio, para que arriba ponga solo «Viviendas»; "tipo" elige sus muebles en el catálogo)
 	# ("linea", la "y" de la línea amarilla pintada a lo largo del suelo, mapa.gd: en medio de lo que se ve de él)
 	var pasillo := {"id": 0, "uso": "pasillo", "tipo": "viviendas", "nombre": "Viviendas", "c0": BORDE, "f0": PASILLO_F,
-		"ancho": COLS - BORDE * 2, "fondo": PASILLO, "puertas": [], "linea": (PASILLO_F + (PASILLO - 2) / 2.0) * CASILLA}
+		"ancho": COLS - BORDE * 2, "fondo": PASILLO, "puertas": [], "linea": (PASILLO_F + (PASILLO - TAPADAS) / 2.0) * CASILLA}
 	var salas := [pasillo]
 	var puertas := []
 	for id: String in Supervivientes.DATOS:
@@ -74,6 +81,7 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	var apt := {"cols": COLS, "filas": FILAS, "dueno": dueno, "salas": salas, "puertas": puertas, "jefe": false,
 		"entrada": {"c": LLEGADA, "lado": "izquierda"}, "tipo": "viviendas"}
 	var sitio := {"tipo": "viviendas", "nombre": "Viviendas", "apt": apt, "ancho": COLS * CASILLA, "alto": FILAS * CASILLA,
+		"cajas": true, "arriba_extra": 68,   # (la cámara deja ver el tabique de arriba, que sube más que la moldura de siempre)
 		"zombis": [], "limpio": true, "visitado": false, "surtido": semilla,
 		"salidas": [{"dir": "izquierda", "en": (LLEGADA + 1) * CASILLA, "tipo": "puerta", "a": mant, "vuelta": vuelta,
 			"cerrojo": "", "aviso": ""}]}
@@ -102,8 +110,8 @@ static func habitacion(id: String) -> Rect2i:
 
 
 # Dónde espera cada uno en su habitación (su "casa", en unidades): en medio de lo que se ve de ella (de las de arriba,
-# sin sus dos últimas filas, que tapa la cara del tabique), o donde diga SITIO
+# sin sus tres últimas filas, que tapa la pared del pasillo), o donde diga SITIO
 static func casa(id: String) -> Vector2:
 	var r := habitacion(id)
-	var fondo := r.size.y - (2 if r.position.y < PASILLO_F else 0)
+	var fondo := r.size.y - (TAPADAS if r.position.y < PASILLO_F else 0)
 	return Vector2(r.position.x + r.size.x / 2.0, r.position.y + fondo / 2.0) * CASILLA + SITIO.get(id, Vector2.ZERO)

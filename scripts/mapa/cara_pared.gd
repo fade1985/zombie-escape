@@ -17,6 +17,7 @@ var puede_tapar := false   # solo los tabiques de dentro tienen a alguien detrá
 var niebla := 0.0          # la oscuridad de su habitación, si aún no se ha pisado (la pone mapa.gd)
 var desde := 0.0           # el dintel de encima de una puerta (mapa.gd): el papel no baja de aquí (unidades desde el pie)
 var adornos := []          # restos pintados encima del papel (salpicones, huellas...; mapa.gd): {dibujo, x, y}
+var moldura := true        # la moldura de arriba; sin ella, con "cajas" (mapa.gd: poner_cajas), encima va el tabique
 var tapa: Texture2D        # si lleva, un tabique de la misma altura en vez del papel: su tapa, oscurecida con "velo"
 var velo := Color.WHITE
 var filo := Color.TRANSPARENT      # el filo de luz y el contorno oscuro (mapa.gd: FILO y CONTORNO)
@@ -42,11 +43,13 @@ func _draw() -> void:
 		return
 	var alto := (ALTO - desde) / 2.0   # lo que se ve del papel, en píxeles (de arriba abajo)
 	draw_texture_rect_region(pared, Rect2(0, -ALTO / 2.0, w, alto), Rect2(x0, 0, w, pared.get_height() * alto * 2.0 / ALTO))
-	draw_texture_rect_region(techo, Rect2(0, -(ALTO + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
+	if moldura:
+		draw_texture_rect_region(techo, Rect2(0, -(ALTO + TECHO) / 2.0, w, TECHO / 2.0), Rect2(x0, 0, w, techo.get_height()))
 	for a in adornos:
 		draw_texture(a.dibujo, Vector2(a.x, a.y))
 	if niebla > 0.0:
-		draw_rect(Rect2(0, -(ALTO + TECHO) / 2.0, w, (ALTO + TECHO - desde) / 2.0), Color(0.07, 0.063, 0.11, 0.8 * niebla))
+		var arriba := ALTO + (TECHO if moldura else 0.0)
+		draw_rect(Rect2(0, -arriba / 2.0, w, (arriba - desde) / 2.0), Color(0.07, 0.063, 0.11, 0.8 * niebla))
 
 
 # La tapa del muro de la altura de la cara (con su moldura), sin costura con la del tabique de debajo (que se dibuja
