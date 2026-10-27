@@ -91,15 +91,15 @@ func _physics_process(delta: float) -> void:
 		explotar()
 
 
-# ¡Boom! La explosión de siempre (con Puntería, más daño a los zombis; a Johnny le hace lo de siempre)
+# ¡Boom! La explosión de siempre (con Puntería, más daño a los zombis). A Johnny, como mucho DANO_JOHNNY (25), como
+# la atraedora y la congeladora: hasta el 27 oct su propia granada le quitaba 80, casi toda la vida y dos tercios
 func explotar() -> void:
 	var boom := EXPLOSION.instantiate()
 	boom.radio = radio
-	boom.dano = G.dano
+	boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)
 	boom.dano_zombis = dano_zombis
 	boom.position = position
 	if tipo != "granada":
-		boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)   # a Johnny, como mucho 25
 		efecto_creada(Lanzables.ARROJADIZAS[tipo])
 	if hija:
 		boom.dano = roundi(boom.dano * Armas.TRUCO.racimo_tamano)

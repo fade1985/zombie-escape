@@ -55,7 +55,7 @@ const GRANADA := {
 	"vuelo": 0.45,     # segundos hasta tocar el suelo
 	"mecha": 2.0,      # segundos desde el lanzamiento hasta que explota
 	"radio": 110.0,    # radio de la explosión
-	"dano": 80,        # daño de la explosión (a zombis y a Johnny)
+	"dano": 80,        # daño de la explosión a los zombis (a Johnny, como mucho DANO_JOHNNY)
 	"gravedad": 1400.0,
 	"bote": 0.35,      # cuánta altura conserva al botar
 	"rebote": 0.35,    # cuánta velocidad en el suelo conserva al botar
@@ -72,7 +72,7 @@ const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y expl
 const ATRAEDORA := {"inicio": 0, "maximo": 3, "dano": 80, "mecha": 3.0, "radio": 110.0, "color": Color("#ffd23f"), "atrae": 520.0}
 const CONGELADORA := {"inicio": 0, "maximo": 3, "dano": 50, "mecha": 2.0, "radio": 120.0, "color": Color("#9fe8ff"), "congela": 3.0}
 const ARROJADIZAS := {"atraedora": ATRAEDORA, "congeladora": CONGELADORA}
-const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de la atraedora o la congeladora
+const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de una granada, una atraedora o una congeladora
 const DATOS := {"molotov": MOLOTOV, "granada": GRANADA, "atraedora": ATRAEDORA, "congeladora": CONGELADORA}
 const NOMBRES := {"molotov": "molotovs", "granada": "granadas", "atraedora": "atraedoras", "congeladora": "congeladoras"}
 const UNO := {"molotov": "Molotov", "granada": "Granada", "atraedora": "Atraedora", "congeladora": "Congeladora"}

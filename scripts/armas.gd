@@ -169,8 +169,10 @@ const CANO_LANZALLAMAS := {"e": 4.0, "se": 23.0, "s": 90.0, "so": 157.0, "o": 17
 const CANO_LANZA_RAYOS := {"e": 4.0, "se": 31.0, "s": 90.0, "so": 146.0, "o": 176.0, "no": 197.0, "n": 270.0, "ne": 341.0}
 
 const DATOS := {
+	# (la fregona hacía 8 hasta el 27 oct: con 10, un zombi normal cae en 3 golpes y no en 4, y la primera partida se
+	# lleva mejor; valoración del equilibrio)
 	"fregona": {
-		"nombre": "Fregona", "tipo": "cuerpo", "dano": 8, "ritmo": 1.8, "alcance": 62.0, "arco": 140.0,
+		"nombre": "Fregona", "tipo": "cuerpo", "dano": 10, "ritmo": 1.8, "alcance": 62.0, "arco": 140.0,
 		"empuje": 2.0, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-guardia.tres"),
 		"punta": {"s": Vector2(21, -38), "se": Vector2(-18, -36), "e": Vector2(-18, -39), "ne": Vector2(-19, -38),
@@ -183,8 +185,10 @@ const DATOS := {
 		"punta": {"s": Vector2(-19, -47), "se": Vector2(-17, -46), "e": Vector2(-18, -45), "ne": Vector2(-17, -45),
 			"n": Vector2(17, -48), "no": Vector2(18, -45), "o": Vector2(18, -46), "so": Vector2(19, -46)},
 	},
+	# (el cuchillo daba 4 golpes por segundo hasta el 27 oct: 36 de daño por segundo, el mejor cuerpo a cuerpo y el más
+	# barato a la vez; con 3, 27, algo más que el bate)
 	"cuchillo": {
-		"nombre": "Cuchillo", "tipo": "cuerpo", "dano": 9, "ritmo": 4.0, "alcance": 46.0, "arco": 60.0,
+		"nombre": "Cuchillo", "tipo": "cuerpo", "dano": 9, "ritmo": 3.0, "alcance": 46.0, "arco": 60.0,
 		"empuje": 0.5, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-cuchillo.tres"),
 		"punta": {"s": Vector2(-10, -14), "se": Vector2(19, -27), "e": Vector2(16, -24), "ne": Vector2(18, -27),
@@ -206,8 +210,10 @@ const DATOS := {
 		"boca": {"s": Vector2(1, 9), "se": Vector2(26, -20), "e": Vector2(36, -32), "ne": Vector2(27, -48),
 			"n": Vector2(12, -66), "no": Vector2(-28, -48), "o": Vector2(-39, -30), "so": Vector2(-35, -8)},
 	},
+	# (la MP5 hacía 4 por bala hasta el 27 oct: con las recargas, casi lo mismo que la pistola gratis; con 5, 40 de daño
+	# por segundo disparando, para que valga sus $40)
 	"mp5": {
-		"nombre": "MP5", "tipo": "fuego", "dano": 4, "ritmo": 8.0, "alcance": 340.0, "velocidad": 640.0,
+		"nombre": "MP5", "tipo": "fuego", "dano": 5, "ritmo": 8.0, "alcance": 340.0, "velocidad": 640.0,
 		"perdigones": 1, "abertura": 0.0, "temblor": 0.14, "empuje": 0.3, "cargador": 30, "recarga": 1.8,
 		"cartucho": false, "municion": "balas", "pies": Vector2(48, 72),   # (las mismas balas que la pistola)
 		"hoja": preload("res://assets/sprites/conserje-48-mp5.tres"),

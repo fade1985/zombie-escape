@@ -467,7 +467,8 @@ func probar_gastro() -> void:
 # Con "--captura --equilibrio": los números del equilibrio del 27 oct, contados en la terminal con lo esperado. En el
 # apartamento más grande, sin zombis: los talentos y la skin se suman (Ataque 5 y Camorrista 5 con el gymbro y con el
 # portero); el daño mínimo de un golpe (Durito 5 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
-# vez cada 3 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); los premios del reto
+# vez cada 3 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
+# cuchillo, la MP5 y la cura de la médica; su propia granada a los pies (como mucho 25); los premios del reto
 # del día y los billetes de los jefes. Al final sube a la planta 2 con el incendio superado: el aviso con su premio
 # (captura-equilibrio-incendio.png). Se cierra
 func probar_equilibrio() -> void:
@@ -498,7 +499,7 @@ func probar_equilibrio() -> void:
 	johnny.coger("fregona")
 	johnny.vestir("portero")
 	var fregona: float = johnny.arma().dano
-	print("Ataque 5 + Camorrista 5: cuchillo con el gymbro %.1f (esperado: 9 × 2,5 = 22,5) · fregona con el portero %.1f (esperado: 8 × 3 = 24)" % [
+	print("Ataque 5 + Camorrista 5: cuchillo con el gymbro %.1f (esperado: 9 × 2,5 = 22,5) · fregona con el portero %.1f (esperado: 10 × 3 = 30)" % [
 		cuchillo, fregona])
 	johnny.vestir(skin_antes)
 
@@ -556,6 +557,24 @@ func probar_equilibrio() -> void:
 		sin_alerta, a_medias, johnny.vida - v0])
 	Alerta.nivel = 0
 	johnny.stats = antes
+
+	# ── Las armas, la médica y la granada propia ──
+	var fr: Dictionary = Armas.datos("fregona")
+	var cu: Dictionary = Armas.datos("cuchillo")
+	var mp: Dictionary = Armas.datos("mp5")
+	var med: Dictionary = Supervivientes.DATOS.medico.habilidad
+	print("Fregona %d por golpe (esperado: 10) · cuchillo %.1f golpes por segundo (esperado: 3.0) · MP5 %d por bala (esperado: 5) · la médica cura %d cada %.1f s (esperado: 5 cada 6.0)" % [
+		fr.dano, cu.ritmo, mp.dano, med.cura, med.cada])
+	# una granada a los pies de Johnny: le quita como mucho 25 (menos, si lleva Durito)
+	johnny.invulnerable = 0.0
+	johnny.escudo = 0.0
+	lanzables.cantidades.granada = maxi(lanzables.cantidades.granada, 1)
+	lanzables.tipo = "granada"
+	lanzables.lanzar(johnny.global_position)
+	v0 = johnny.vida
+	await get_tree().create_timer(2.8, false).timeout
+	print("Su propia granada, a sus pies, le quita %d (esperado: 25 o menos, y más de 0; Durito del guardado %d)" % [
+		v0 - johnny.vida, johnny.stats.armadura])
 
 	# ── El dinero ──
 	var s := {"retos": {}}

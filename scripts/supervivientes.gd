@@ -45,8 +45,9 @@ const DATOS := {
 	"medico": {"id": "medico", "nombre": "Médica", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
 		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
 			"shoes": Color("#3b3550"), "cross": true},
-		"desc": "Te cura 3 cada 8 s y 10 al limpiar cada piso",
-		"habilidad": {"tipo": "curar", "cada": 8.0, "cura": 3, "al_limpiar": 10}},
+		"desc": "Te cura 5 cada 6 s y 10 al limpiar cada piso",
+		# (hasta el 27 oct, 3 cada 8 s: 22 de vida por minuto, casi lo mismo que Lobezno con un punto; ahora, 50)
+		"habilidad": {"tipo": "curar", "cada": 6.0, "cura": 5, "al_limpiar": 10}},
 	"militar": {"id": "militar", "nombre": "Militar", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
 		"look": {"skin": Color("#c68642"), "hair": Color("#3b2a1a"), "shirt": Color("#6b8e23"), "pants": Color("#4b5320"),
 			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
