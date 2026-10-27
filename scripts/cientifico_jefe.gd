@@ -77,7 +77,6 @@ const ABRE_LENGUAS := 0.4
 const LARGO_LENGUA := 330.0
 const ANCHO_LENGUA := 14.0               # medio ancho de cada franja
 const AVISO_LENGUAS := 0.65
-const DURA_LENGUAS := 0.45
 const DANO_LENGUA := 18
 const BOCA := 0.5                        # a qué altura tiene la boca (parte de "arriba"): de ahí salen las lenguas
 const AVISO_PUNETAZO := 0.75

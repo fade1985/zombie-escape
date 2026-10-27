@@ -17,7 +17,7 @@ HUECO = (26, 22, 32)
 HUECO_SOMBRA = (14, 10, 20)
 HUECO_LUZ = (38, 32, 46)
 
-TAMANOS = {"grande": 22, "mediana": 18, "pequena": 14}   # en píxeles del dibujo (por dentro, 6 menos)
+TAMANOS = {"grande": 22, "mediana": 18}   # en píxeles del dibujo (por dentro, 6 menos)
 
 
 def casilla(n: int, semilla: int) -> Image.Image:

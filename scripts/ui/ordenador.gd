@@ -25,7 +25,6 @@ extends CanvasLayer
 signal apagado
 
 const ESCRITORIO := Color("#15595d")   # el fondo del escritorio
-const TITULO := Color("#20357a")       # la barra de título de las ventanas
 const CARCASA := Color("#a49a83")      # el plástico del monitor, amarillento de viejo
 const ICONOS := [   # [programa, icono, nombre]
 	["puntos", "billete", "Puntos e\nintercambio"],
