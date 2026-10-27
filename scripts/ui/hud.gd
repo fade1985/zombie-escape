@@ -107,11 +107,11 @@ func _ready() -> void:
 	fila.scale = Vector2(ESCALA, ESCALA)
 	add_child(fila)
 	barra.custom_minimum_size = Vector2(ANCHO, ALTO)
-	barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	barra.size_flags_vertical = Control.SIZE_SHRINK_END   # la barra y las curas, con el borde de abajo a la par
 	barra.draw.connect(pintar_barra)
 	fila.add_child(barra)
 	curas.custom_minimum_size = Vector2(MEDIANA, MEDIANA + 4)
-	curas.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	curas.size_flags_vertical = Control.SIZE_SHRINK_END
 	curas.draw.connect(pintar_curas)
 	curas.visible = false
 	fila.add_child(curas)
@@ -132,7 +132,7 @@ func _process(delta: float) -> void:
 	var pantalla := get_viewport_rect().size
 	# en la franja de abajo, con la barra de vida pegada abajo (las balas se pintan por encima de ella); las medidas
 	# de dentro, agrandadas (ESCALA)
-	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - (ALTO + fila.size.y) / 2.0 * ESCALA))
+	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - fila.size.y * ESCALA))
 	# las casillas, en la esquina de abajo a la derecha, con su borde de abajo a la altura del de la barra (sus
 	# dibujos dejan 2 de aire debajo); en el móvil, al lado de la barra
 	var x := fila.position.x + (fila.size.x + 14) * ESCALA if Tactil.activo else pantalla.x - 14 - derecha.size.x * ESCALA
@@ -402,9 +402,10 @@ func curas_llevadas() -> Array:
 	return lista
 
 
-# La casilla de la cura "i" (todas en fila, con el hueco de arriba para la tecla)
+# La casilla de la cura "i" (todas en fila, con el hueco de arriba para la tecla y el borde de abajo como el de la barra
+# y el de las casillas de la derecha)
 func sitio_cura(i: int) -> Rect2:
-	return Rect2(2 + i * (MEDIANA + 10), 2, MEDIANA, MEDIANA)
+	return Rect2(2 + i * (MEDIANA + 10), 4, MEDIANA, MEDIANA)
 
 
 func mirar_curas(delta: float) -> void:
@@ -459,7 +460,7 @@ func mover_barra(delta: float) -> void:
 	perdida = maxf(perdida, vista)
 	temblor = move_toward(temblor, 0.0, delta * 3.0)
 	barra.position.x = roundf(sin(tiempo * 70.0) * 3.0 * temblor)
-	barra.position.y = roundf(cos(tiempo * 55.0) * 2.0 * temblor)
+	barra.position.y = fila.size.y - ALTO + roundf(cos(tiempo * 55.0) * 2.0 * temblor)   # (abajo en la fila, como las curas)
 
 
 # Compara las balas con las del fotograma anterior: las que faltan salen volando, las que sobran entran
