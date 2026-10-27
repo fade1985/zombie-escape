@@ -1,8 +1,14 @@
 # Exportar a web y publicar
 
-## Publicar: solo con hacer push a main
+## Publicar: subir main a la rama production
 
-- **Cada push a `main` se publica solo** en https://zombie-escape-two.vercel.app (la cuenta de Vercel es del dueño).
+- **Los commits a `main` ya no se publican.** Se publica lo que se sube a la rama **`production`**, en
+  https://zombie-escape-two.vercel.app (la cuenta de Vercel es del dueño). Para publicar lo que hay en `main`:
+
+  ```
+  git push origin main:production
+  ```
+
   Lo hace un robot de GitHub, `.github/workflows/web.yml`: descarga Godot, exporta el juego y lo sube a Vercel. Tarda
   unos minutos; se ve en la pestaña **Actions** del repositorio (y ahí está el botón **Run workflow** para publicar a
   mano). Si el push solo cambia notas (`docs/` o archivos `.md`), no publica.
@@ -10,7 +16,8 @@
 - El robot necesita tres **secretos** del repositorio (GitHub → Settings → Secrets and variables → Actions):
   - `VERCEL_TOKEN`: una llave de Vercel (Account Settings → Tokens).
   - `VERCEL_ORG_ID` y `VERCEL_PROJECT_ID`: los códigos del proyecto (Vercel → el proyecto → Settings → General).
-- En Vercel el proyecto está **desconectado de git** (Settings → Git): lo publica el robot, no Vercel por su cuenta.
+- Vercel **no publica por su cuenta** desde git (`"git": { "deploymentEnabled": false }` en `vercel.json`): no tiene
+  Godot y publicaría la carpeta `web/` vacía (pasó el 27 oct y la web dio 404). Lo publica siempre el robot.
 
 ## Exportar en el ordenador, para probar
 

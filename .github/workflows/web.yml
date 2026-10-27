@@ -1,4 +1,4 @@
-# Publicar la web: cada push a main, GitHub exporta el juego con Godot y lo sube a Vercel
+# Publicar la web: cada push a la rama production, GitHub exporta el juego con Godot y lo sube a Vercel
 # (https://zombie-escape-two.vercel.app). Así la carpeta web/ no va en git y el repositorio no crece 20 MB cada vez.
 # Necesita tres secretos del repositorio (Settings → Secrets and variables → Actions):
 # VERCEL_TOKEN, VERCEL_ORG_ID y VERCEL_PROJECT_ID. Explicado en docs/WEB.md
@@ -6,7 +6,7 @@ name: Publicar la web
 
 on:
   push:
-    branches: [main]
+    branches: [production]   # main ya no publica: para publicar, se sube main a production
     paths-ignore: ["docs/**", "**.md"]   # si solo cambian las notas, no hace falta publicar
   workflow_dispatch:   # el botón "Run workflow" de la pestaña Actions, para publicar a mano
 

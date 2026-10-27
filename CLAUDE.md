@@ -6,7 +6,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 |---|---|
 | `docs/CODIGO.md` | Qué hace cada escena, script, asset y herramienta |
 | `docs/CONTROLES.md` | Teclas, mando, móvil, la sala de pruebas (F11 y su panel), sala de mantenimiento, guardado |
-| `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica solo con cada push a main) |
+| `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica al subir main a la rama `production`) |
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
 | `docs/TRAILER.md` | El trailer: cómo se graba (`py tools/trailer.py`) y su guion de escenas y textos |
@@ -71,5 +71,5 @@ de 48 px. Pantalla base **960×640**, agrandada por **números enteros** con fil
 - **Juego JS viejo:** `C:\Users\angel\Projects\game` (GitHub `fade1985/game`; su `CLAUDE.md` explica el código).
   Se mira para copiar números y comportamientos, no se cambia.
 - **Prueba en Godot:** `D:\Personal\Proyectos\zombie-godot-poc` (navegación, lámparas, penumbra y sombras).
-- **Web publicada:** https://zombie-escape-two.vercel.app, se publica sola con cada push a `main`; `web/` no va
+- **Web publicada:** https://zombie-escape-two.vercel.app, se publica al subir `main` a la rama `production`; `web/` no va
   en git (ver `docs/WEB.md`).
