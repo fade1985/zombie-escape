@@ -609,8 +609,10 @@ func numero_flotante(cantidad: int) -> void:
 
 # Un texto que sube y se desvanece (los números de daño, los gritos de la portera...). Va en la sala, no
 # en quien lo dice, para que no se mueva con él ni desaparezca si se muere. "static": se puede usar desde
-# cualquier sitio sin tener un zombi, escribiendo Zombi.texto_flotante(...)
-static func texto_flotante(sala: Node, donde: Vector2, texto: String, color := Color.WHITE, tamano := 18) -> void:
+# cualquier sitio sin tener un zombi, escribiendo Zombi.texto_flotante(...). "donde" es la esquina de arriba a la
+# izquierda del texto, o su medio si es "centrado"; "dura" son los segundos que sube (0,6 en los números de daño)
+static func texto_flotante(sala: Node, donde: Vector2, texto: String, color := Color.WHITE, tamano := 18,
+		centrado := false, dura := 0.6) -> void:
 	var etiqueta := Label.new()
 	etiqueta.text = texto
 	etiqueta.theme = Tema.crear()
@@ -621,10 +623,10 @@ static func texto_flotante(sala: Node, donde: Vector2, texto: String, color := C
 	etiqueta.add_theme_color_override("font_outline_color", Color(0.11, 0.1, 0.17))
 	etiqueta.z_index = 10
 	sala.add_child(etiqueta)
-	etiqueta.global_position = donde
+	etiqueta.global_position = donde - Vector2(etiqueta.get_minimum_size().x / 2.0 if centrado else 0.0, 0.0)
 	var tween := etiqueta.create_tween()
-	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 30.0, 0.6).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(etiqueta, "modulate:a", 0.0, 0.6).set_delay(0.25)
+	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 30.0, dura).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(etiqueta, "modulate:a", 0.0, dura).set_delay(dura * 0.25 / 0.6)
 	tween.tween_callback(etiqueta.queue_free)
 
 

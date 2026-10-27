@@ -6,7 +6,8 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 # Con "--captura --alerta N" (en vez de la prueba larga): comprueba las reglas de esa alerta (alerta.gd) con sus
 # números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
 # Apartamentos, el zombi que lleva la llave (con la Alerta 5, con el doble de vida; al caer suelta la llave, y al
-# salir y volver a entrar no la lleva otra vez); en el centro comercial, el guardia) y
+# salir y volver a entrar no la lleva otra vez; al cogerla, el grito ¡¡¡LA LLAVE!!! encima de Johnny, en
+# captura-alerta-llave-cogida.png); en el centro comercial, el guardia) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
 func probar_alerta() -> void:
 	var n := Alerta.nivel
@@ -84,6 +85,13 @@ func probar_alerta() -> void:
 					print("Llave · al volver a entrar: zombis con llave %d, llave en el suelo: %s (esperado: 0 y true)" % [
 						get_tree().get_nodes_in_group("zombis").filter(func(o): return o.has_meta("llave")).size(),
 						mapa.cosas.has_node("Llave")])
+					# y Johnny la coge: sale el grito encima de él (captura-alerta-llave-cogida.png)
+					johnny.position = planta.llave.pos
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.3, false).timeout
+					print("Llave · al cogerla: la lleva %s, en el suelo: %s (esperado: true y false)" % [
+						planta.tiene_llave, mapa.cosas.has_node("Llave")])
+					Captura.foto("captura-alerta-llave-cogida.png")
 					break
 	if ed.cerrojo == "tarjeta":
 		johnny.get_node("Camara").reset_smoothing()

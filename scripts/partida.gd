@@ -761,6 +761,9 @@ func _al_coger_llave() -> void:
 		decir("Has cogido la tarjeta de acceso: abre " + tienda, 3.0)
 	else:
 		decir("Has cogido la llave del " + nombre_jefa(), 3.0)
+		# un grito grande encima de Johnny, para que se vea que la ha cogido
+		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -110), "¡¡¡LA LLAVE!!!", Tema.AMARILLO,
+			32, true, 1.4)
 
 
 # ── El guardia de seguridad (centro comercial): lleva la tarjeta y ronda el pasillo ──
