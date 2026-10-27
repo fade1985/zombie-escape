@@ -31,6 +31,9 @@ const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
 const ABAJO := 8.0        # lo que queda entre el borde de abajo de la pantalla y la barra o las casillas
+# Todo el HUD, una vez y media más grande que sus medidas (cada píxel del dibujo, 3 de pantalla en vez de 2: se sigue
+# viendo nítido). Más no cabe: al doble, la parte de la izquierda y la de la derecha se pisarían en una pantalla de 960
+const ESCALA := 1.5
 const GRANDE := 52.0      # la casilla del arma en la mano (casilla-grande.png, de 22 píxeles, con los lados estirados)
 const MEDIANA := 36.0     # la de la otra arma y la de cada lanzable (casilla-mediana.png, de 18, al doble)
 const MARCOS := {
@@ -101,6 +104,7 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	fila.add_theme_constant_override("separation", 14)
 	fila.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fila.scale = Vector2(ESCALA, ESCALA)
 	add_child(fila)
 	barra.custom_minimum_size = Vector2(ANCHO, ALTO)
 	barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -113,6 +117,7 @@ func _ready() -> void:
 	fila.add_child(curas)
 	derecha.add_theme_constant_override("separation", 14)
 	derecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	derecha.scale = Vector2(ESCALA, ESCALA)
 	add_child(derecha)
 	lanzar.custom_minimum_size = Vector2(GRANDE, GRANDE + 4)
 	lanzar.draw.connect(pintar_lanzar)
@@ -125,12 +130,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	tiempo += delta
 	var pantalla := get_viewport_rect().size
-	# en la franja de abajo, con la barra de vida pegada abajo (las balas se pintan por encima de ella)
-	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - ALTO / 2.0 - fila.size.y / 2.0))
+	# en la franja de abajo, con la barra de vida pegada abajo (las balas se pintan por encima de ella); las medidas
+	# de dentro, agrandadas (ESCALA)
+	fila.position = Vector2(14, roundf(pantalla.y - ABAJO - (ALTO + fila.size.y) / 2.0 * ESCALA))
 	# las casillas, en la esquina de abajo a la derecha, con su borde de abajo a la altura del de la barra (sus
 	# dibujos dejan 2 de aire debajo); en el móvil, al lado de la barra
-	var x := fila.position.x + fila.size.x + 14 if Tactil.activo else pantalla.x - 14 - derecha.size.x
-	derecha.position = Vector2(x, pantalla.y - ABAJO + 2 - derecha.size.y)
+	var x := fila.position.x + (fila.size.x + 14) * ESCALA if Tactil.activo else pantalla.x - 14 - derecha.size.x * ESCALA
+	derecha.position = Vector2(roundf(x), roundf(pantalla.y - ABAJO - (derecha.size.y - 2) * ESCALA))
 	if johnny == null:
 		return
 	mirar_armas(delta)
