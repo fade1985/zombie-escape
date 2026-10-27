@@ -3606,6 +3606,38 @@
   "cost": "40 generaciones (8 objetos de 5; el primero de a distancia B fallo sin cobrar y se repitio)",
   "updated": "2026-10-25"
  },
+ "llave-real": {
+  "nota": "La llave de la jefa, más real (27 oct, lo pidió el dueño con la foto de una llave de cilindro plateada: cabeza redonda con agujero, hoja estriada con dientes en un lado). Sustituye a la llave plateada con etiqueta roja (la del juego JS) en assets/ui/iconos/llave.png (hueco del inventario y minimapa) y en assets/sprites/objeto-llave-puerta.png (la del suelo: ahora 32x32 en vez de 22x22). Misma receta que municion-iconos. Las dos salieron rectas (B se pedía en diagonal y no salió así). A tiene un píxel blanco brillante en el agujero; B (elegida) no. Fuentes: assets/sources/suelo/llave-real-A.png y llave-real-B.png.",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 32,
+   "height": 32,
+   "n_directions": 1,
+   "view": "low top-down",
+   "style_image": "assets/sprites/baul.png (usage: copy the 3/4 view, outline, shading, detail and worn look, not its colors or shape)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "intentos": {
+   "llave": {
+    "seeds": [
+     24001,
+     24002
+    ],
+    "ids": [
+     "7cfcbcbd-f687-418f-9663-e4b479e9c825",
+     "6524b871-eaab-49ec-8c91-638ccffe0c61"
+    ],
+    "description": "A: a single realistic nickel-silver metal door key standing upright: a flat round head with a round hole near the top, a small shoulder where the head meets the blade, and a long straight blade with grooved ridges and saw-tooth cuts along the right edge. Brushed steel, slightly worn. No key ring, no tag, no chain. B (elegida): lo mismo, pero tumbada en diagonal con la cabeza arriba a la izquierda (salió recta igualmente)."
+   }
+  },
+  "cost": "10 generaciones (2 dibujos de 5)",
+  "updated": "2026-10-27"
+ },
  "molotov-icono": {
   "nota": "El icono del cóctel molotov (26 oct, lo pidió el dueño: el de antes, una botella verde hecha por código, se veía mal y fuera del arte del juego). Misma receta que municion-iconos y piezas-iconos: create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png de imagen de estilo sin copiar sus colores (color_palette false) y 'sin brillos ni destellos blancos' en el texto. Dos intentos (A y B) en assets/sources/molotov/intentos/. ELEGIDO por el dueño: B (botella de cristal claro con líquido naranja, trapo claro y llama) → assets/ui/iconos/molotov.png. La A era una botella de cristal marrón oscuro con líquido ámbar. El icono sirve para el suelo, el inventario, el HUD, la tienda y la botella en vuelo (proyectil.gd, botella(), que antes se dibujaba con código y ahora gira con este dibujo). Prueba: -- --captura --municion-suelo (fotos captura-municion-suelo*.png: el molotov y la granada en el suelo, el molotov en vuelo y el HUD).",
   "herramienta": "create_object_pro_flash",

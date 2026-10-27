@@ -7,7 +7,8 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 # números en la terminal y saca captura-alerta.png (el aviso del principio), captura-alerta-llave.png (en los
 # Apartamentos, el zombi que lleva la llave (con la Alerta 5, con el doble de vida; al caer suelta la llave, y al
 # salir y volver a entrar no la lleva otra vez; al cogerla, el grito ¡¡¡LA LLAVE!!! encima de Johnny, en
-# captura-alerta-llave-cogida.png, y su hueco encendido en el inventario, en captura-alerta-llave-inventario.png);
+# captura-alerta-llave-cogida.png, y su hueco encendido en el inventario, en captura-alerta-llave-inventario.png; la
+# llave en el suelo, en captura-alerta-llave-suelo.png);
 # en el centro comercial, el guardia) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
 func probar_alerta() -> void:
@@ -86,6 +87,13 @@ func probar_alerta() -> void:
 					print("Llave · al volver a entrar: zombis con llave %d, llave en el suelo: %s (esperado: 0 y true)" % [
 						get_tree().get_nodes_in_group("zombis").filter(func(o): return o.has_meta("llave")).size(),
 						mapa.cosas.has_node("Llave")])
+					# la llave en el suelo, con Johnny al lado (captura-alerta-llave-suelo.png)
+					johnny.position = planta.llave.pos + Vector2(0, 90)
+					johnny.get_node("Camara").reset_smoothing()
+					luz.alternar()   # (sin penumbra, para que se vea bien)
+					await get_tree().create_timer(0.3, false).timeout
+					Captura.foto("captura-alerta-llave-suelo.png")
+					luz.alternar()
 					# y Johnny la coge: sale el grito encima de él (captura-alerta-llave-cogida.png)
 					johnny.position = planta.llave.pos
 					johnny.get_node("Camara").reset_smoothing()
