@@ -532,7 +532,10 @@ func probar_cosas() -> void:
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-inventario.png")
 	inventario.cerrar()
-	mapa.banco.usar.emit()   # como al arrimarse
+	if mapa.banco:
+		mapa.banco.usar.emit()   # como al arrimarse
+	else:
+		abrir_cosas("banco")   # (la prueba larga llega aquí desde la sala de un jefe, donde no hay banco: lo mismo que haría)
 	await get_tree().process_frame
 	print("Banco: abre la pantalla «%s» (esperado: banco)" % inventario.abierto)
 	inventario.cerrar()

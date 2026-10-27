@@ -263,6 +263,7 @@ func empezar_prueba() -> void:
 
 
 func nueva_planta(num: int) -> void:
+	guardar_guardia()   # el guardia es de la planta que se deja: se apunta antes de cambiarla (la azotea ni tiene)
 	planta = Planta.generar(num, edificio, jefe_de(num))
 	if planta.mantenimiento >= 0:
 		sala_mantenimiento = planta.sitios[planta.mantenimiento]
