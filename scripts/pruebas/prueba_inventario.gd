@@ -20,7 +20,10 @@ func dar_lanzable(k: String) -> void:
 # (y se vuelven a poner), que la gasolina se guarda desde la munición y se saca de una en una (la marca se queda en
 # «Sacar uno»), que las balas y los cartuchos también se guardan (el hueco entero, y también arrastrando) y salen
 # hasta un hueco de una vez, o lo que quepa (captura-baul-municion.png), y que «Guardar todo» lo mete todo, la
-# munición también. Que al sacar un arma que ya lleva (la fregona Épica, con la Normal de repuesto, y la
+# munición también. Que «Destruir» pide confirmación (la primera pulsación lo deja a medias, elegir otra casilla o esperar
+# 3 s lo cancela) y la segunda quita para siempre la casilla entera: un objeto, un hueco de munición, un arma y un
+# paquete de arrojables del baúl, y un objeto de la mochila; las armas que lleva no tienen botón
+# (captura-baul-destruir.png). Que al sacar un arma que ya lleva (la fregona Épica, con la Normal de repuesto, y la
 # pistola Rara, con la Normal en la mano) se cambian y la suya entra en el baúl, sin dejar nada en el suelo. Y el baúl
 # lleno: con 31 armas y una pieza (cada arma, en su casilla) no deja guardar otra arma, y con más de 32 (al completar el
 # edificio entra todo) las casillas se hacen más pequeñas. Cada línea dice lo esperado. Saca captura-baul-guardar.png
@@ -146,6 +149,82 @@ func probar_baul() -> void:
 	inventario.sacar()
 	await get_tree().process_frame
 	print("Sacados: en el baúl %d, Johnny lleva %d (esperado: 0, 35)" % [Guardado.cargar().baul.get("cartuchos", 0), johnny.cuanta("cartuchos")])
+	# «Destruir» en el baúl: la primera pulsación pide confirmación, otra casilla o 3 s la cancelan, la segunda destruye
+	Guardado.cambiar(func(g2):
+		g2.baul = {"pieza_especial": 3, "cartuchos": 40}
+		g2.baul_equipo = [{"id": "bate", "calidad": 2}, {"id": "molotov", "calidad": 1, "n": 4}])
+	inventario.pintar()
+	inventario.tocar(en_baul.call("pieza_especial"))
+	await get_tree().process_frame
+	print("Elegida la pieza especial del baúl: «Destruir» %s, texto «%s» (esperado: activo, Destruir)" % [
+		boton.call("destruir"), texto_boton.call("destruir")])
+	inventario.destruir()
+	await get_tree().process_frame
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-baul-destruir.png")
+	print("1.ª pulsación: texto «%s» · en el baúl %d · dice «%s» (esperado: ¿Seguro? Pulsa otra vez · 3 · ¿Destruir Pieza especial ×3?...)" % [
+		texto_boton.call("destruir"), Guardado.cargar().baul.get("pieza_especial", 0), dice.call()])
+	inventario.tocar(en_baul.call("cartuchos"))
+	inventario.tocar(en_baul.call("pieza_especial"))
+	await get_tree().process_frame
+	print("Elegir otra casilla y volver: texto «%s» · en el baúl %d (esperado: Destruir, 3: se cancela)" % [
+		texto_boton.call("destruir"), Guardado.cargar().baul.get("pieza_especial", 0)])
+	inventario.destruir()
+	await get_tree().create_timer(3.3).timeout
+	print("Tras 3 s sin pulsar: texto «%s» · en el baúl %d (esperado: Destruir, 3: se cancela solo)" % [
+		texto_boton.call("destruir"), Guardado.cargar().baul.get("pieza_especial", 0)])
+	inventario.destruir()
+	inventario.destruir()
+	await get_tree().process_frame
+	print("Destruida la pieza especial: en el baúl %d · dice «%s» · la marca en «%s» (esperado: 0 · Destruido: Pieza especial ×3. · una casilla, no el botón)" % [
+		Guardado.cargar().baul.get("pieza_especial", 0), dice.call(), marca.call()])
+	inventario.tocar(en_baul.call("cartuchos"))
+	await get_tree().process_frame
+	inventario.destruir()
+	inventario.destruir()
+	await get_tree().process_frame
+	print("Destruidos los cartuchos del baúl: quedan %d (esperado: 0 de 40)" % Guardado.cargar().baul.get("cartuchos", 0))
+	for id in ["bate", "molotov"]:   # un arma y un paquete de arrojables
+		inventario.tocar("b%d" % inventario.cosas_baul(Guardado.cargar()).map(func(o): return o.id if o.equipo >= 0 else "").find(id))
+		await get_tree().process_frame
+		inventario.destruir()
+		await get_tree().process_frame
+		var pide: String = dice.call()
+		inventario.destruir()
+		await get_tree().process_frame
+		print("Destruido «%s» del baúl: pedía «%s» · queda %s (esperado: %s)" % [id, pide, Guardado.cargar().baul_equipo.map(func(e): return e.id),
+			"¿Destruir Bate (Rara)? ... · [molotov]" if id == "bate" else "¿Destruir Molotov (Poco común) ×4? ... · []"])
+	# lo de la mochila (dos piezas de arrojable que se ponen y se quitan) y un hueco de munición
+	mochila.append_array(["pieza_arrojable", "pieza_arrojable"])
+	var en_mochila := mochila.size()
+	inventario.pintar()
+	inventario.tocar("m%d" % Objetos.casillas(mochila).map(func(c): return c[0]).find("pieza_arrojable"))
+	await get_tree().process_frame
+	inventario.destruir()
+	inventario.destruir()
+	await get_tree().process_frame
+	print("Destruidas las piezas de arrojable de la mochila: quedan %d, el resto de la mochila %d de %d (esperado: 0, %d de %d)" % [
+		mochila.count("pieza_arrojable"), mochila.size(), en_mochila, en_mochila - 2, en_mochila])
+	johnny.municion = {"balas": 60}
+	inventario.pintar()
+	inventario.tocar("u0")
+	await get_tree().process_frame
+	inventario.destruir()
+	inventario.destruir()
+	await get_tree().process_frame
+	print("Destruido el 1.er hueco de balas: Johnny lleva %d (esperado: 36: el hueco de 24)" % johnny.cuanta("balas"))
+	inventario.tocar("u%d" % johnny.huecos_municion().map(func(h): return h[0]).find("gasolina"))
+	await get_tree().process_frame
+	inventario.destruir()
+	inventario.destruir()
+	await get_tree().process_frame
+	print("Destruida la gasolina de la munición: quedan %d en la mochila (esperado: 0)" % mochila.count("gasolina"))
+	mochila.append_array(["gasolina", "gasolina"])   # (otra vez, para lo que sigue)
+	# las armas que lleva no se destruyen
+	inventario.pintar()
+	inventario.tocar("p0")
+	await get_tree().process_frame
+	print("Elegida el arma de la mano: botón «Destruir» %s (esperado: no está)" % boton.call("destruir"))
 	# «Guardar todo», con la gasolina sacada otra vez en la munición y 30 balas encima
 	johnny.municion = {"balas": 30}
 	Guardado.cambiar(func(g2): g2.baul = {"pieza_especial": 3, "gasolina": 3})
@@ -842,7 +921,8 @@ func probar_municion() -> void:
 # la de un lanzallamas (depósito), y las otras pruebas que usan el inventario: las vendas (probar_curas)
 # y el botiquín de la farmacéutica (supervivientes.gd). Cada línea dice lo esperado.
 # Fotos: captura-inventario-nuevo.png (al abrir), captura-inventario-escopeta.png (la marca en la escopeta de
-# repuesto), captura-inventario-objeto.png (la pieza a distancia, con su ficha), captura-inventario-municion.png,
+# repuesto), captura-inventario-objeto.png (la pieza a distancia, con su ficha), captura-inventario-destruir.png (con «Destruir»
+# a medias; la 2.ª pulsación la destruye), captura-inventario-municion.png,
 # captura-inventario-arrojable.png, captura-inventario-pistola_electrica.png y captura-inventario-lanzallamas.png
 func probar_inventario() -> void:
 	var lz: Lanzables = lanzables
@@ -895,6 +975,21 @@ func probar_inventario() -> void:
 	await get_tree().create_timer(0.2).timeout
 	print("La pieza a distancia: dice «%s» (esperado: Sirve para mejorar las armas a distancia (la pistola, la MP5 y la escopeta) en el banco de trabajo del taller. Si caes, se pierde (en el baúl queda a salvo).)" % nota.call())
 	Captura.foto("captura-inventario-objeto.png")
+	# «Destruir» la pieza a distancia: la 1.ª pulsación pide confirmación (captura-inventario-destruir.png) y la 2.ª la
+	# destruye; X (Tirar al suelo) y Y no lo hacen (sin atajo). Luego se vuelve a poner donde estaba
+	var boton_destruir: Button = inv.fondo.find_child("destruir", true, false)
+	print("La pieza a distancia: botón «%s» (esperado: Destruir)" % boton_destruir.text)
+	inv.destruir()
+	await get_tree().create_timer(0.2).timeout
+	boton_destruir = inv.fondo.find_child("destruir", true, false)
+	print("1.ª pulsación de «Destruir»: botón «%s» · la pieza sigue (%d) · dice «%s» (esperado: ¿Seguro? Pulsa otra vez · 1 · ¿Destruir Pieza a distancia?...)" % [
+		boton_destruir.text, mochila.count("pieza_distancia"), nota.call()])
+	Captura.foto("captura-inventario-destruir.png")
+	inv.destruir()
+	await get_tree().process_frame
+	print("2.ª pulsación: piezas a distancia %d · dice «%s» (esperado: 0 · Destruido: Pieza a distancia.)" % [mochila.count("pieza_distancia"), nota.call()])
+	mochila.insert(mochila.find("pieza_cuerpo") + 1, "pieza_distancia")   # (otra vez, para lo que sigue)
+	inv.pintar()
 	inv.tocar("m2")
 	await get_tree().process_frame
 	print("Toca el botiquín: marca %s (esperado: usar)" % marca.call())

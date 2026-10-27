@@ -48,7 +48,11 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   El talento Sanitario y la alerta 4 siguen cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.
 - **Inventario «todo a la vista»:** Johnny en medio con sus armas (dos de cada tipo: la de la mano y la de repuesto) y
   sus 3 arrojables; la mochila, la munición y los arrojables de repuesto (8 de cada); a la derecha, la ficha de lo
-  elegido con sus botones (**Ponérmela**, **Usar**, **A la mano**, **Al repuesto**, **Tirar al suelo**).
+  elegido con sus botones (**Ponérmela**, **Usar**, **A la mano**, **Al repuesto**, **Tirar al suelo**, **Destruir**).
+  **Destruir** (botón rojo, también en el baúl) quita para siempre la casilla elegida entera: lo de la mochila y la
+  munición, y en el baúl también sus objetos, armas y paquetes de arrojables (para hacer sitio); no las armas ni los
+  arrojables que lleva Johnny. Pide confirmación: la 1.ª pulsación pone «¿Seguro? Pulsa otra vez» y la 2.ª destruye;
+  elegir otra casilla o esperar 3 s lo cancela. No tiene atajo del mando ni se arrastra.
   - Flechas o mando: la ficha sigue a la marca; Intro o A salta al botón principal; Y lo hace directamente; X o Supr
     tira; B, Esc o Tab cierran.
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el

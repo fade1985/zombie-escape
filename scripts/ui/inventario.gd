@@ -22,6 +22,12 @@
 #   - Banco de trabajo (al arrimarse a él en el taller; la parte 5 de la tienda y las piezas): como el baúl, pero para
 #     subir de calidad las armas y los paquetes de arrojables, los que lleva y los del baúl, gastando piezas de su
 #     familia (ver «Banco de trabajo», abajo). Hasta el 25 oct creaba armas con recetas.
+#   - «Destruir» (el botón rojo de debajo de «Tirar al suelo»; en el baúl, bajo el botón principal): quita para siempre
+#     la casilla elegida, entera: los objetos de la mochila y la munición (el hueco), y en el baúl, además, sus
+#     objetos, armas y paquetes de arrojables (para hacer sitio). No se puede deshacer, así que pide confirmación: la
+#     primera pulsación pone «¿Seguro? Pulsa otra vez» y la ficha dice qué se perdería; la segunda lo destruye. Elegir
+#     otra casilla o esperar 3 s lo cancela. Sin atajo del mando y sin arrastrar. Las armas y los arrojables que
+#     lleva Johnny no se destruyen (para eso, «Tirar al suelo»)
 # Van con el ratón, con flechas + Intro o con el mando (A elige, B cierra). En el inventario y en el baúl, además, las
 # cosas se arrastran con el ratón o el dedo (la parte 5 del inventario nuevo: ver «arrastrar», abajo), y lo que llega a
 # su sitio nuevo da un saltito (también con los botones y el mando).
@@ -45,6 +51,9 @@ var lienzo: Control        # inventario y baúl: donde va todo, cada cosa en su 
 var viva: Control          # inventario y baúl: lo que cambia al moverse la marca (la ficha y la ayuda de abajo)
 var huecos_inv: Array = [] # inventario y baúl: las casillas que se pueden elegir (para marcar la elegida)
 var moviendo_marca := false   # la marca la está poniendo el juego (dar_foco), no el jugador
+const ESPERA_DESTRUIR := 3000   # lo que dura «¿Seguro? Pulsa otra vez» antes de cancelarse (ms)
+var destruir_listo := ""   # la casilla con «Destruir» a medias, esperando la segunda pulsación
+var destruir_hasta := 0    # hasta cuándo (Time.get_ticks_msec)
 var sitios: Array = []     # inventario y baúl: dónde se puede soltar lo que se arrastra, [nombre, Rect2 en el lienzo, casilla]
 var arrastre := {}         # lo que se está arrastrando: {"clave": su casilla} (vacío: nada)
 var capa: Control          # mientras se arrastra: los sitios encendidos (encima del lienzo)
@@ -66,6 +75,7 @@ func abrir(que: String, p: Node) -> void:
 	sel = ""
 	foco = ""
 	aviso = ""
+	destruir_listo = ""
 	salta = []
 	salta_johnny = false
 	pintar(true)
@@ -78,6 +88,7 @@ func cerrar() -> void:
 		get_viewport().gui_cancel_drag()
 	arrastre = {}
 	abierto = ""
+	destruir_listo = ""
 	if fondo:
 		fondo.queue_free()
 		fondo = null
@@ -507,8 +518,8 @@ func pintar_ficha() -> void:
 		"l": d = ficha_lanzable(caja, lz.mano[i], true)
 		_: d = ficha_lanzable(caja, lz.repuesto[i], false)
 	espacio(caja, 8)
-	var nota := renglon(caja, d.que if aviso == "" else aviso, Tema.TINTA if aviso == "" else Tema.AMARILLO,
-		HORIZONTAL_ALIGNMENT_LEFT)
+	var texto := nota_de(d.que)
+	var nota := renglon(caja, texto[0], texto[1], HORIZONTAL_ALIGNMENT_LEFT)
 	nota.name = "nota"   # (las pruebas la leen)
 	aviso = ""
 	# los botones, abajo del todo; el principal, con las letras amarillas
@@ -518,12 +529,13 @@ func pintar_ficha() -> void:
 	viva.add_child(botones)
 	var atajos := {}   # lo que hacen X e Y con lo elegido, para la línea de ayuda
 	for b in d.botones:
-		var pulsar := boton(botones, b[0], b[1], b[2], "BotonRojo" if b[0] == "tirar" else "")
+		var pulsar := boton(botones, b[0], texto_destruir() if b[0] == "destruir" else b[1], b[2],
+			"BotonRojo" if b[0] in ["tirar", "destruir"] else "")
 		pulsar.disabled = b[3]
 		if b[0] in PRINCIPALES:
 			for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
 				pulsar.add_theme_color_override(c, Tema.AMARILLO)
-		if not b[3]:
+		if not b[3] and b[0] != "destruir":   # (sin atajo: no se destruye nada sin querer)
 			atajos["X" if b[0] == "tirar" else "Y"] = "tirar" if b[0] == "tirar" else b[1].to_lower()
 	botones.position = Vector2(666, 578 - botones.get_combined_minimum_size().y) - ORIGEN
 	pintar_ayuda(atajos)
@@ -673,9 +685,10 @@ func ficha_objeto(caja: VBoxContainer, c: Array) -> Dictionary:
 			else "Te cura %d de vida, sin pasar del tercio en el que estás.") % partida.cura_de(id)
 		return {"que": "%s Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)." %
 				[cura, Controles.tecla_de(Objetos.USABLES[id].accion), Objetos.TOPE[id]],
-			"botones": [["usar", "Usar", usar, false], ["tirar", "Tirar al suelo", tirar, false]]}
+			"botones": [["usar", "Usar", usar, false], ["tirar", "Tirar al suelo", tirar, false],
+				["destruir", "Destruir", destruir, false]]}
 	return {"que": que_pieza(id) + "Si caes, se pierde (en el baúl queda a salvo).",
-		"botones": [["tirar", "Tirar al suelo", tirar, false]]}
+		"botones": [["tirar", "Tirar al suelo", tirar, false], ["destruir", "Destruir", destruir, false]]}
 
 
 # Lo que dice la ficha de una pieza (Objetos.PIEZAS): para qué armas es y dónde se gasta. De lo demás, nada ("")
@@ -696,7 +709,7 @@ func ficha_municion(caja: VBoxContainer, h: Array) -> Dictionary:
 		m.para, m.hueco]
 	if tipo in Objetos.NOMBRES:   # la gasolina, el bidón de ácido y la batería
 		que = "Llena %s (caben %d en cada hueco). Se tira de uno en uno." % [m.para, m.hueco]
-	return {"que": que, "botones": [["tirar", "Tirar al suelo", tirar, false]]}
+	return {"que": que, "botones": [["tirar", "Tirar al suelo", tirar, false], ["destruir", "Destruir", destruir, false]]}
 
 
 # La ficha de un arrojable ("a_mano": de los de la mano; si no, de repuesto): cuántos quedan y lo que hace; se pasa de
@@ -775,6 +788,8 @@ func rotulo(padre: Control, s: String, x: float, y: float, color := Tema.TINTA, 
 
 # Elige una casilla del inventario: se marca y la ficha enseña lo suyo
 func elegir(clave: String) -> void:
+	if clave != sel:
+		destruir_listo = ""   # (otra casilla: «Destruir» a medias se cancela)
 	sel = clave
 	asegurar_sel()
 	for b in huecos_inv:
@@ -1044,11 +1059,11 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	marco_ficha(lienzo, Rect2(64, 402, 832, 182))
 	var todo := boton(lienzo, "guardar_todo", "Guardar todo", guardar_todo)
 	todo.disabled = not guardables().any(func(id): return Objetos.cabe_baul(s, id))   # (apagado si no cabe nada)
-	todo.position = Vector2(600, 464) - ORIGEN
-	todo.size = Vector2(280, 38)
+	todo.position = Vector2(600, 490) - ORIGEN
+	todo.size = Vector2(280, 36)
 	var salir := boton(lienzo, "cerrar", "Cerrar", cerrar)
-	salir.position = Vector2(600, 538) - ORIGEN
-	salir.size = Vector2(280, 38)
+	salir.position = Vector2(600, 540) - ORIGEN
+	salir.size = Vector2(280, 36)
 	pintar_ficha()
 	return lienzo.find_child(sel, false, false)
 
@@ -1122,8 +1137,8 @@ func pintar_ficha_baul() -> void:
 	if d.cuanto != "":
 		renglon(caja, d.cuanto, Tema.TINTA, HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	espacio(caja, 6)
-	var nota := renglon(caja, d.que if aviso == "" else aviso, Tema.TINTA if aviso == "" else Tema.AMARILLO,
-		HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
+	var texto := nota_de(d.que)
+	var nota := renglon(caja, texto[0], texto[1], HORIZONTAL_ALIGNMENT_LEFT, ANCHO_NOTA)
 	nota.name = "nota"   # (las pruebas la leen)
 	aviso = ""
 	var atajos := {}
@@ -1132,10 +1147,14 @@ func pintar_ficha_baul() -> void:
 		b.disabled = d.boton[3]
 		for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
 			b.add_theme_color_override(c, Tema.AMARILLO)
-		b.position = Vector2(600, 418) - ORIGEN
-		b.size = Vector2(280, 40)
+		b.position = Vector2(600, 410) - ORIGEN
+		b.size = Vector2(280, 36)
 		if not b.disabled:
 			atajos["Y"] = d.boton[1].to_lower()
+	if que_se_destruye() != "":   # lo de la mochila, la munición y el baúl (no las armas que lleva)
+		var x := boton(viva, "destruir", texto_destruir(), destruir, "BotonRojo")
+		x.position = Vector2(600, 450) - ORIGEN
+		x.size = Vector2(280, 36)
 	pintar_ayuda(atajos)
 
 
@@ -1507,6 +1526,104 @@ func meter_en_baul(id: String, cuantos := 0) -> bool:
 			mochila.remove_at(mochila.rfind(id))
 	Guardado.cambiar(func(s): s.baul[id] = s.baul.get(id, 0) + n)
 	return true
+
+
+# ── Destruir ──
+
+# ¿Está «Destruir» a medias en la casilla elegida? (la primera pulsación ya se ha dado y no ha pasado la espera)
+func destruir_armado() -> bool:
+	return sel != "" and destruir_listo == sel and Time.get_ticks_msec() < destruir_hasta
+
+
+# El texto del botón «Destruir»: con la primera pulsación dada, pide la segunda
+func texto_destruir() -> String:
+	return "¿Seguro? Pulsa otra vez" if destruir_armado() else "Destruir"
+
+
+# El texto de la ficha y su color: lo suyo ("que"), un aviso que se dice una vez o, con «Destruir» a medias, lo que se
+# perdería: [texto, color]
+func nota_de(que: String) -> Array:
+	if aviso != "":
+		return [aviso, Tema.AMARILLO]
+	if destruir_armado():
+		return ["¿Destruir %s? Se pierde para siempre: no se puede deshacer." % que_se_destruye(), Tema.AMARILLO]
+	return [que, Tema.TINTA]
+
+
+# Qué se llevaría «Destruir» con lo elegido, dicho como va en la ficha («Pieza especial ×3», «Fregona (Épica)»), o ""
+# si no se puede destruir: se puede lo de la mochila y la munición (el hueco), y en el baúl, también sus objetos, armas y
+# paquetes de arrojables; no las armas ni los arrojables que lleva Johnny
+func que_se_destruye() -> String:
+	if sel == "" or not existe(sel):
+		return ""
+	var i := sel.substr(1).to_int()
+	var con_numero := func(id: String, n: int) -> String:
+		return "%s ×%d" % [Objetos.nombre(id), n] if n > 1 else Objetos.nombre(id)
+	match sel[0]:
+		"m":
+			var c: Array = Objetos.casillas(partida.mochila)[i]
+			return con_numero.call(c[0], c[1])
+		"u":
+			var h: Array = partida.johnny.huecos_municion()[i]
+			return con_numero.call(h[0], h[1])
+		"b":
+			if abierto == "baul":
+				var o: Dictionary = cosas_baul(Guardado.cargar())[i]
+				if o.equipo < 0:
+					return con_numero.call(o.id, o.n)
+				return "%s ×%d" % [Armas.nombre(o.id, o.calidad), o.n] if o.n > 1 else Armas.nombre(o.id, o.calidad)
+	return ""
+
+
+# El botón «Destruir»: la primera pulsación lo deja a medias (y se cancela solo a los 3 s, o al elegir otra casilla) y
+# la segunda quita para siempre la casilla elegida entera (la de la mochila, el hueco de munición o la del baúl)
+func destruir() -> void:
+	var que := que_se_destruye()
+	if que == "":
+		Sonido.tocar("no")
+		return
+	if not destruir_armado():
+		destruir_listo = sel
+		destruir_hasta = Time.get_ticks_msec() + ESPERA_DESTRUIR
+		var marca := destruir_hasta
+		get_tree().create_timer(ESPERA_DESTRUIR / 1000.0).timeout.connect(func():
+			if destruir_hasta == marca and destruir_listo != "" and abierto != "":
+				destruir_listo = ""
+				repintar())
+		Sonido.tocar("click")
+		foco = "destruir"
+		pintar()
+		return
+	destruir_listo = ""
+	var i := sel.substr(1).to_int()
+	var johnny: Node2D = partida.johnny
+	var mochila: Array = partida.mochila
+	match sel[0]:
+		"m":
+			var id: String = Objetos.casillas(mochila)[i][0]
+			while mochila.has(id):
+				mochila.erase(id)
+		"u":
+			var h: Array = johnny.huecos_municion()[i]
+			if h[0] in Objetos.NOMBRES:   # (la gasolina, el bidón de ácido y la batería van en la mochila)
+				for k in h[1]:
+					mochila.erase(h[0])
+			else:
+				johnny.municion[h[0]] = johnny.cuanta(h[0]) - h[1]
+				if johnny.municion[h[0]] <= 0:
+					johnny.municion.erase(h[0])
+			johnny.avisar_arma()
+		"b":
+			var o: Dictionary = cosas_baul(Guardado.cargar())[i]
+			Guardado.cambiar(func(g):
+				if o.equipo < 0:
+					g.baul.erase(o.id)
+				else:
+					g.baul_equipo.remove_at(o.equipo))
+	Sonido.tocar("crujido")
+	aviso = "Destruido: %s." % que
+	foco = sel   # (la marca vuelve a la casilla, no al botón: nada se destruye pulsando dos veces sin mirar)
+	pintar()
 
 
 # ── Banco de trabajo ──
