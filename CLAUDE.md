@@ -53,8 +53,9 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
   Sprites nuevos: importar antes con `--headless --path . --import`.
 - **Probar solo lo que se ha tocado.** `-- --captura` a secas es la **prueba larga**: recorre medio juego (sala,
   exposición, un apartamento, todos los jefes, menús, ordenador…) y deja decenas de fotos. Para un cambio concreto,
-  lanzar **solo su parte** (`-- --captura --jefe gloton`, `--evento X`, `--skins`, `--sala`…; la lista entera, al
-  principio de `scripts/pruebas/partida_prueba.gd`, con el archivo `prueba_<tema>.gd` donde está cada una). Si lo
+  lanzar **solo su parte** (`-- --captura --jefe bombero --llamas`, `--evento X`, `--skins`, `--sala`…; la lista
+  entera, al principio de `scripts/pruebas/partida_prueba.gd`, con el archivo `prueba_<tema>.gd` donde está cada una;
+  `--jefe X` **solo elige el jefe**: sin otra opción detrás arranca la prueba larga). Si lo
   tocado no tiene parte, añadirle una pequeña en el archivo de su tema y apuntarla en esa lista. **La larga, solo si
   el dueño la pide.** Mirar solo las fotos de lo que se ha tocado.
 - Errores: filtrar la salida por `ERROR` o `SCRIPT ERROR`.

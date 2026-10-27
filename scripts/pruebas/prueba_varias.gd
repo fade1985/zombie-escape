@@ -469,8 +469,11 @@ func probar_gastro() -> void:
 # portero); el daño mínimo de un golpe (Durito 5 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
 # vez cada 3 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
 # cuchillo, la MP5 y la cura de la médica; su propia granada a los pies (como mucho 25); los premios del reto
-# del día y los billetes de los jefes. Al final sube a la planta 2 con el incendio superado: el aviso con su premio
-# (captura-equilibrio-incendio.png). Se cierra
+# del día y los billetes de los jefes. La segunda parte (27 oct, tarde): el tope de curas (2 botiquines y 3 vendas; un
+# armarito abierto con la mochila llena deja el botiquín en el suelo con «Ya llevas 2», captura-equilibrio-tope.png) y
+# qué hay en los armaritos de la planta; Ninja con el guardia o el zombi de la llave (un 25 %); los números de los
+# jefes, las mutaciones y los aliados; el reto «Sin curas» en la farmacia. Al final sube a la planta 2 con el incendio
+# superado: el aviso con su premio (captura-equilibrio-incendio.png). Se cierra
 func probar_equilibrio() -> void:
 	set_process(false)
 	var i := 1   # el apartamento con más habitaciones
@@ -575,6 +578,77 @@ func probar_equilibrio() -> void:
 	await get_tree().create_timer(2.8, false).timeout
 	print("Su propia granada, a sus pies, le quita %d (esperado: 25 o menos, y más de 0; Durito del guardado %d)" % [
 		v0 - johnny.vida, johnny.stats.armadura])
+
+	# ── El tope de curas y los armaritos ──
+	print("Tope: con 1 botiquín cabe otro %s, con 2 %s · con 2 vendas cabe otra %s, con 3 %s (esperado: true, false, true, false)" % [
+		Objetos.cabe(["botiquin"], "botiquin"), Objetos.cabe(["botiquin", "botiquin"], "botiquin"),
+		Objetos.cabe(["vendas", "vendas"], "vendas"), Objetos.cabe(["vendas", "vendas", "vendas"], "vendas")])
+	var dentro := []
+	for sitio in planta.sitios:
+		if not sitio.get("armaritos", []).is_empty():
+			dentro.append(sitio.armaritos.map(func(a): return a.dentro))
+	print("Los armaritos de la planta, piso a piso: %s (esperado: en cada piso, botiquin y luego vendas)" % [dentro])
+	if not mapa.armaritos.is_empty():
+		var armarito: Node2D = mapa.armaritos[0]
+		mochila.assign(["botiquin", "botiquin"])
+		johnny.position = armarito.position + Vector2(0, 70)
+		armarito.datos.dentro = "botiquin"
+		abrir_armarito(armarito)
+		await get_tree().create_timer(1.0, false).timeout
+		var en_el_suelo: Array = mapa.cosas.get_children().filter(func(c): return c.get("al_no_caber") is Callable and c.al_no_caber.is_valid())
+		if not en_el_suelo.is_empty():
+			johnny.position = en_el_suelo[0].position   # lo pisa: no le cabe y lo dice
+		await get_tree().create_timer(0.4, false).timeout
+		Captura.foto("captura-equilibrio-tope.png")
+		print("Armarito con 2 botiquines en la mochila: sigue habiendo %d (esperado: 2) · el botiquín se queda en el suelo %s (esperado: true)" % [
+			mochila.count("botiquin"), not en_el_suelo.is_empty() and is_instance_valid(en_el_suelo[0])])
+		mochila.clear()
+
+	# ── Ninja con el guardia (o el zombi de la llave): un 25 % de su vida por golpe, no de un golpe ──
+	var stats_antes: Dictionary = johnny.stats.duplicate()
+	johnny.invencible = true
+	johnny.stats.ninja = true
+	johnny.stats.velocidad = 0.0
+	johnny.ninja_t = 0.0
+	var guardia_n: Node2D = meter_zombi("normal", johnny.position + Vector2(40, 0))
+	guardia_n.vida_max = 180   # como el zombi de la llave con la Alerta 5 (el guardia, igual: Zombi.importante)
+	guardia_n.vida = 180
+	guardia_n.importante = true
+	await get_tree().process_frame
+	johnny.esquiva_espera = 0.0
+	johnny.esquivar(Vector2.RIGHT)
+	await get_tree().create_timer(0.3, false).timeout
+	print("Ninja al zombi de la llave de 180: le deja %d (esperado: 135)" % (guardia_n.vida if is_instance_valid(guardia_n) else -1))
+	if is_instance_valid(guardia_n):
+		guardia_n.queue_free()
+	johnny.invencible = false
+	johnny.stats = stats_antes
+
+	# ── Los jefes, las mutaciones y los aliados ──
+	var vidas := {}
+	for jefe in ["bombero", "cocinero", "modista", "mascota"]:
+		var uno: Node = ZOMBIS[jefe].instantiate()
+		vidas[jefe] = uno.vida_max
+		uno.free()
+	print("Vidas: %s (esperado: bombero 500, cocinero 500, modista 480, mascota 480)" % vidas)
+	print("Bombero gira cada %s s (esperado: [22, 18]) · ácido del Glotón cada %.1f s (esperado: 1.0) · salto del Gymbro %s s (esperado: [1.1, 0.7]) · aviso del rebote de la mascota %.1f s (esperado: 0.3)" % [
+		load("res://scripts/bombero.gd").ESPERA_GIRO, load("res://scripts/gloton.gd").ACIDO_CADA,
+		load("res://scripts/gymbro.gd").VUELO, load("res://scripts/mascota.gd").AVISO_REBOTE])
+	var mut: Dictionary = Mutaciones.MUT
+	print("Mutaciones: Caníbal %.2f · Insensible %.2f · Endurecimiento %d · Ansiedad +%d %% por zombi · Locura cada %.0f s a %.0f (esperado: 0.02, 0.65, 60, 10, 4 y 200)" % [
+		mut.canibal.cura, mut.insensible.dano, mut.endurecimiento.escudo, roundi(mut.ansiedad.cada_zombi * 100),
+		mut.locura.cada, mut.locura.radio])
+	var poli: Dictionary = Supervivientes.DATOS.policia.habilidad
+	var tec: Dictionary = Supervivientes.DATOS.tecnico.habilidad
+	print("Policía dispara cada %.1f s (esperado: 0.8) · el técnico aturde %.1f s cada %.1f s (esperado: 1.5 cada 3.0)" % [
+		poli.cada, tec.segundos, tec.cada])
+	Reto.activo = true
+	Reto.regla = "curas"
+	var de_farmacia := []
+	for k in 6:
+		de_farmacia.append(Objetos.al_azar("centro", "farmacia"))
+	Reto.activo = false
+	print("Reto «Sin curas» en la farmacia: %s (esperado: objetos, sin vendas ni vacíos)" % [de_farmacia])
 
 	# ── El dinero ──
 	var s := {"retos": {}}

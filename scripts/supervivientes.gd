@@ -7,7 +7,7 @@
 # pantalla y un "!" en el minimapa. Al limpiar el piso se abre la puerta del baño y, al arrimarse, se une al equipo.
 #
 # La horda: al ir a salir del piso con él, la puerta de entrada se cierra de golpe. Él se pone a forzar la
-# cerradura (3 minutos de trabajo) mientras entran zombis por las habitaciones, cada vez más y peores. Si Johnny
+# cerradura (2 minutos de trabajo) mientras entran zombis por las habitaciones, cada vez más y peores. Si Johnny
 # se aleja de él, van a por él; si lo tumban, la cerradura no avanza hasta que Johnny lo levanta (quedarse a su
 # lado). Va diciendo cómo lo lleva y, a mitad, suelta un molotov y una granada. Arriba, la barra y la cuenta atrás.
 #
@@ -40,8 +40,8 @@ const DATOS := {
 	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
 			"shoes": Color("#1d1b2c"), "hat": {"kind": "cap", "color": Color("#22336b")}},
-		"desc": "Dispara con su pistola cada 1,2 s",
-		"habilidad": {"tipo": "disparar", "cada": 1.2, "dano": 5, "rafaga": 1}},
+		"desc": "Dispara con su pistola cada 0,8 s",
+		"habilidad": {"tipo": "disparar", "cada": 0.8, "dano": 5, "rafaga": 1}},   # (hasta el 27 oct, cada 1,2 s)
 	"medico": {"id": "medico", "nombre": "Médica", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
 		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
 			"shoes": Color("#3b3550"), "cross": true},
@@ -79,8 +79,8 @@ const DATOS := {
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
 		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],
 		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",
-		"desc": "Cada 4 s, una descarga deja quieto 1 s al zombi más cercano",
-		"habilidad": {"tipo": "aturdir", "cada": 4.0, "segundos": 1.0, "alcance": 260.0},
+		"desc": "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano",
+		"habilidad": {"tipo": "aturdir", "cada": 3.0, "segundos": 1.5, "alcance": 260.0},   # (hasta el 27 oct, 1 s cada 4)
 		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},
 }
 const MAX_EQUIPO := 4
@@ -99,11 +99,11 @@ const HORDA := {
 	"grupo": [2, 6],   # zombis por grupo, al principio y al final
 	"empieza": 190.0,  # a qué distancia de la puerta de entrada se cierra de golpe
 }
-# Qué zombis entran según el minuto
+# Qué zombis entran según el minuto (había un tercer minuto, con venenosos, que con 2 minutos nunca llegaba: se quitó
+# el 27 oct)
 const TIPOS := [
 	["lento", "normal", "normal"],
 	["normal", "normal", "rapido", "rapido", "explosivo", "lento"],
-	["normal", "rapido", "rapido", "explosivo", "venenoso", "lento"],
 ]
 # Lo que va diciendo según lo que lleva de cerradura (de 0 a 1)
 const FRASES := [
@@ -442,7 +442,7 @@ func actualizar_horda(delta: float) -> void:
 	h.grupo_t -= delta
 	if h.grupo_t <= 0.0 and HORDA.dura - h.hecho > 3.0:
 		h.grupo_t = lerpf(HORDA.cada[0], HORDA.cada[1], k)
-		grupo(roundi(lerpf(HORDA.grupo[0], HORDA.grupo[1], k)), TIPOS[mini(2, int(h.hecho / 60.0))])
+		grupo(roundi(lerpf(HORDA.grupo[0], HORDA.grupo[1], k)), TIPOS[mini(1, int(h.hecho / 60.0))])
 	if h.hecho >= HORDA.dura:
 		acabar_horda()
 

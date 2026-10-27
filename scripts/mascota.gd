@@ -7,12 +7,13 @@
 #     mareada 1,8 s, con estrellitas (¡a por ella!). La carrera es la misma que la carga del antidisturbios.
 #   - Salto: se agacha y salta hacia donde está Johnny. Mientras vuela (0,8 s) se ve en el suelo su sombra,
 #     creciendo, donde va a caer; al caer quita 18 a lo que esté en ese círculo. En el aire no se le puede dar.
-# Enfadada (a media vida): 3 embestidas seguidas con menos aviso; si choca con una pared rebota y sigue, y solo se
-# marea si se estrella en la última.
+# Enfadada (a media vida): 3 embestidas seguidas con menos aviso; si choca con una pared rebota y, tras un aviso corto
+# con su franja (AVISO_REBOTE), sigue; solo se marea si se estrella en la última.
 extends Minijefe
 
 const VELOCIDAD := 140.0
 const AVISO_EMBESTIDA := [0.6, 0.4]    # normal y enfadada
+const AVISO_REBOTE := 0.3              # enfadada, al rebotar en una pared (hasta el 27 oct, sin aviso ni franja)
 const VELOCIDAD_EMBESTIDA := 520.0
 const TIEMPO_EMBESTIDA := 1.1          # lo que corre como mucho
 const DANO_EMBESTIDA := 22
@@ -116,14 +117,15 @@ func apuntar(johnny: Node2D, quedan: int, aviso: float) -> void:
 	cambiar("aviso_embestida", {"quedan": quedan, "aviso": aviso})
 
 
-# Enfadada, al chocar con una pared rebota como una pelota y sigue corriendo
+# Enfadada, al chocar con una pared rebota como una pelota: marca la franja de por dónde sale y sigue corriendo
 func rebotar() -> void:
 	var pared := pared_chocada()
 	mirada = mirada.bounce(pared).normalized()
 	if mirada.dot(pared) < 0.2:   # rozando la pared: mejor que salga hacia fuera
 		mirada = (mirada + pared).normalized()
 	global_position += pared * 4.0
-	cambiar("embestida", {"quedan": datos.quedan - 1})
+	marcha = Vector2.ZERO
+	cambiar("aviso_embestida", {"quedan": datos.quedan, "aviso": AVISO_REBOTE})
 	Sonido.tocar("boing")
 	Temblor.temblar(5.0)
 	gritar("¡BOING!", Color("#ffd23f"), 18)

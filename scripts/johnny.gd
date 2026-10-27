@@ -54,7 +54,8 @@ const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
 const REGENERA_CADA := 5.0 # Lobezno: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
 const NINJA_ESPERA := 3.0  # Ninja: segundos como poco entre golpe y golpe (las esquivas de en medio no pegan)
-const NINJA_JEFE := 0.02   # Ninja: la parte de su vida máxima que le quita a un jefe
+const NINJA_JEFE := 0.02
+const NINJA_IMPORTANTE := 0.25   # al guardia y al zombi de la llave (Zombi.importante), parte de su vida (antes, de un golpe)   # Ninja: la parte de su vida máxima que le quita a un jefe
 # Ningún golpe que recibe baja de esta parte de lo que era, por mucho que lo rebajen Durito y la mutación Insensible
 # (antes, como poco 1: con las dos, un zombi normal le quitaba 1). Con Durito solo no cambia nada (10 → 5)
 const GOLPE_MINIMO := 0.3
@@ -264,7 +265,8 @@ func arma_de(id: String) -> Dictionary:
 	if w.tipo == "fuego":
 		w.velocidad = w.velocidad * stats.velocidad_bala
 	elif stats.ansiedad:
-		w.ritmo = w.ritmo * (1.0 + minf(0.5, 0.05 * a_la_vista))   # Ansiedad: +5 % por zombi a la vista
+		var ansiedad: Dictionary = Mutaciones.MUT.ansiedad   # Ansiedad: +10 % por zombi a la vista, hasta +50 %
+		w.ritmo = w.ritmo * (1.0 + minf(ansiedad.tope, ansiedad.cada_zombi * a_la_vista))
 	return w
 
 
@@ -439,7 +441,9 @@ func golpe_ninja() -> void:
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() > alcance + zombi.radio:
 			continue
-		var dano: int = zombi.vida + 1 if zombi is Zombi else ceili(zombi.vida_max * NINJA_JEFE)
+		var dano: int = ceili(zombi.vida_max * NINJA_JEFE)
+		if zombi is Zombi:
+			dano = ceili(zombi.vida_max * NINJA_IMPORTANTE) if zombi.importante else zombi.vida + 1
 		zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * 1.5)
 	# el barrido se ve aunque no pille a nadie: un aro azul que se abre y se apaga
 	var aro := Line2D.new()
@@ -918,13 +922,13 @@ func terminar_recarga() -> void:
 
 # El arma de fuego para la que es una caja de munición: la que saca con Q o, si se llena con un objeto de la mochila
 # (el lanzallamas, el lanza ácido y el lanza rayos no gastan balas), la de repuesto. "" si ninguna gasta balas o
-# ya no le cabe ninguna de las suyas (la caja se queda en el suelo)
+# ya no le cabe ninguna de las suyas (la caja se queda en el suelo). Con la de la mano llena, la de repuesto
 func arma_de_caja() -> String:
 	var partida := get_tree().current_scene
 	var de_repuesto: String = partida.repuesto("fuego") if partida.has_method("repuesto") else ""
 	for id in [huecos.fuego, de_repuesto]:
-		if id != "" and not Armas.datos(id).has("relleno"):
-			return id if sitio(Armas.municion(id)) > 0 else ""
+		if id != "" and not Armas.datos(id).has("relleno") and sitio(Armas.municion(id)) > 0:
+			return id
 	return ""
 
 

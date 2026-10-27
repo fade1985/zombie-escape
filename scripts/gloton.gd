@@ -13,7 +13,7 @@
 #     en vez de a 210). También se libra esquivando (esquivando no tira), saliendo del cono (o metiéndose en la
 #     porquería) o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
 #   - Sangre ácida: cada golpe o disparo que le das salpica ácido y Johnny pierde un 1 % de su vida (uno cada
-#     0,5 s como mucho, para que las armas rápidas no sumen demasiado). Si le pegan los supervivientes que
+#     segundo como mucho, para que las armas rápidas no sumen demasiado). Si le pegan los supervivientes que
 #     acompañan a Johnny, le hacen daño igual pero el ácido no le cae a nadie.
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
 # Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza (al máximo arrastra
@@ -45,7 +45,7 @@ const ALCANCE_ASPIRAR := 420.0         # hasta dónde aspira donde no hay elipse
 const MEDIO_ASPIRAR := 0.85            # medio ángulo del cono por donde aspira
 const DANO_COMER := 30
 const ACIDO := [0.01, 0.02]            # lo que quita el salpicón de sangre ácida (parte de la vida máxima de Johnny)
-const ACIDO_CADA := 0.5
+const ACIDO_CADA := 1.0                # (hasta el 27 oct, 0,5: con cualquier arma, unos 50-80 de vida por combate)
 const TAMBALEO := 0.6                  # lo que le corta una explosión
 const PIE := 30.0                      # a qué altura dibuja los pies respecto a su centro
 const BOCA := 0.5                      # a qué altura tiene la boca (parte de "arriba"): de ahí salen las lenguas

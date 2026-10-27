@@ -11,7 +11,7 @@ radius = 32.0
 collision_layer = 4
 motion_mode = 1
 script = ExtResource("script")
-vida_max = 420
+vida_max = 480
 radio = 32.0
 arriba = 118.0
 

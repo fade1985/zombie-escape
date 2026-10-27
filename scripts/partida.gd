@@ -777,6 +777,7 @@ func poner_guardia() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var puntas := [Vector2(Planta.MURO + 70, sitio.alto / 2.0), Vector2(sitio.ancho - Planta.MURO - 70, sitio.alto / 2.0)]
 	guardia = meter_zombi("guardia", mapa.punto_libre(johnny.position, 500.0))
+	guardia.importante = true
 	guardia.vida_max = int(guardia.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())   # cada planta, algo más duro
 	guardia.vida = guardia.vida_max if g.vida < 0 else g.vida
 	guardia.puntas = puntas
@@ -825,6 +826,7 @@ func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
 		zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
 		zombi.vida = zombi.vida_max
 	zombi.set_meta("llave", true)
+	zombi.importante = true
 	zombi.murio.connect(func():
 		dato.erase("llave")
 		planta.llave = {"sitio": aqui, "pos": zombi.position}
@@ -963,6 +965,8 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector
 	cosa.tirado = tirado
 	cosa.position = donde
 	cosa.puede = func() -> bool: return johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(mochila, id)
+	if Objetos.TOPE.has(id):   # las curas: si ya lleva su tope, al pisarla lo dice
+		cosa.al_no_caber = func(): numero(cosa.position + Vector2(0, -24), "Ya llevas %d" % Objetos.TOPE[id], Tema.TINTA)
 	cosa.cogido.connect(func():
 		mochila.append(id)
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
@@ -1056,12 +1060,12 @@ func repuesto(tipo: String) -> String:
 	return ""
 
 
-# Delante del armarito de un baño: se abre y suelta un botiquín al suelo, hacia Johnny, que se coge pasando por encima
-# (si la mochila está llena, se queda allí). Se usa luego con la tecla 2 o desde el inventario
+# Delante del armarito de un baño: se abre y suelta lo suyo al suelo (un botiquín o unas vendas, planta.gd armaritos),
+# hacia Johnny, que lo coge pasando por encima (si no le cabe, se queda allí). Se usa luego con su tecla o desde el inventario
 func abrir_armarito(armarito: Node2D) -> void:
 	armarito.vaciar()
 	Sonido.tocar("puerta")
-	soltar_objeto("botiquin", armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
+	soltar_objeto(armarito.datos.get("dentro", "botiquin"), armarito.position + Vector2(0, 8), false, Vector2(randf_range(-40.0, 40.0), randf_range(110.0, 160.0)))
 
 
 # Cura "cura" de vida, con el número verde y las chispas encima de "sobre" (el armarito o Johnny)

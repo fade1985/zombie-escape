@@ -12,7 +12,7 @@
 #     roja en el suelo.
 # Enfadado (a media vida, «¡HORA DE LOS SUPLEMENTOS!»): se toma sus suplementos y le sale una barra de armadura
 # encima de la de vida; mientras le quede armadura, solo le entra a la vida la mitad del daño (la otra mitad se la
-# come la armadura). Además: hasta 2 torbellinos seguidos, el salto dura la mitad y el doble de pesas.
+# come la armadura). Además: hasta 2 torbellinos seguidos, el salto es más corto (0,7 s en el aire en vez de 1,1) y el doble de pesas.
 extends Minijefe
 
 signal armadura_cambiada(armadura: int, maxima: int)   # la barra de armadura de la pantalla (partida.gd)
@@ -26,7 +26,7 @@ const BRAZOS := 56.0                    # hasta dónde llegan sus brazos abierto
 const TORBELLINOS := [1, 2]             # cuántos seguidos
 const MAREADO := 1.6
 const AGACHARSE := 0.45
-const VUELO := [1.1, 0.55]              # lo que está en el aire (enfadado, la mitad)
+const VUELO := [1.1, 0.7]               # lo que está en el aire (enfadado, menos: con 0,55 no se salía andando de donde cae)
 const ALTURA_SALTO := 170.0
 const RADIO_SALTO := 200.0              # la zona donde cae: de lado a lado, el doble (de arriba abajo, el 60 %)
 const DANO_SALTO := 24

@@ -29,11 +29,14 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 - **Vida en tercios:** el tercio que pierdes ya no se cura y, por cada uno, Johnny anda un 15 % más lento (210, 179 y
   147; el zombi rápido va a 165). Solo el botiquín devuelve un tercio perdido.
 - **Curas:** las vendas (25 de vida, sin pasar del tercio en el que estás) y el botiquín (devuelve un tercio perdido y
-  cura 50) van en la mochila y en el baúl como los demás objetos. A la
+  cura 50) van en la mochila y en el baúl como los demás objetos, pero en la mochila caben como mucho 2 botiquines y
+  3 vendas (lo que sobra se queda en el suelo y, al pisarlo, avisa). A la
   derecha de la barra de vida salen sus casillas (solo las que llevas, con cuántas y su tecla); pulsar la tecla lo usa
-  al momento, y si no sirve (vida llena; el botiquín, además, sin tercios perdidos) avisa y no gasta nada.
-- **Dólares:** se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas. El botiquín lo suelta el armarito de cada baño al acercarse
-  (se recoge pasando por encima) y la Farmacéutica te prepara uno cada partida; las vendas salen en el centro comercial.
+  al momento, y si no sirve (vida llena; el botiquín, además, sin tercios perdidos) avisa y no gasta nada. Los
+  armaritos de los baños se abren al acercarse y sueltan lo suyo (se recoge pasando por encima): en cada piso, el
+  primero un botiquín y el siguiente unas vendas. La Farmacéutica te prepara un botiquín cada partida, y las vendas
+  también salen en el centro comercial.
+- **Dólares:** se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas.
   El talento Sanitario y la alerta 4 siguen cambiando lo que curan. En la sala de pruebas el 1 y el 2 sacan zombis.
 - **Inventario «todo a la vista»:** Johnny en medio con sus armas (dos de cada tipo: la de la mano y la de repuesto) y
   sus 3 arrojables; la mochila, la munición y los arrojables de repuesto (8 de cada); a la derecha, la ficha de lo

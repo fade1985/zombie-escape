@@ -17,6 +17,8 @@ var johnny: Node2D
 var icono: Texture2D = ICONO
 var tamano := 0.75
 var puede := func() -> bool: return true
+var al_no_caber := Callable()   # si lo hay, se llama al pisarlo sin que quepa (una vez cada vez que se pisa: el tope de curas)
+var pisado := false
 var tirado := false
 var salida := Vector2.ZERO    # si no es cero, hacia dónde sale despedido (en vez de a un lado al azar)
 var a_oscuras := false
@@ -73,4 +75,9 @@ func _physics_process(delta: float) -> void:
 			cogido.emit()
 			queue_free()
 			return
+	elif johnny and johnny.vivo and al_no_caber.is_valid():
+		var encima: bool = global_position.distance_to(johnny.global_position) < johnny.RADIO + 12.0
+		if encima and not pisado:
+			al_no_caber.call()
+		pisado = encima
 	position += velocidad * delta

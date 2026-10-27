@@ -579,8 +579,9 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 
 
 # Un armarito con un botiquín colgado en la pared de arriba de cada baño (Armarito en src/props.js del JS): al
-# abrirlo suelta el botiquín. Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
-# lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido}
+# abrirlo suelta lo que tiene dentro ("dentro"): en cada piso, el primero un botiquín y el siguiente unas vendas, y así
+# (el dueño, 27 oct: con un botiquín en cada baño salían unos 22 por partida). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
+# lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido, dentro}
 static func armaritos(sitio: Dictionary) -> Array:
 	var apt: Dictionary = sitio.apt
 	var lista := []
@@ -604,6 +605,7 @@ static func armaritos(sitio: Dictionary) -> Array:
 			if mejor.is_empty() or nota < mejor.nota:
 				mejor = {"x": x, "y": float(s.f0 * CASILLA), "alcance": alcance, "cogido": false, "nota": nota}
 		if not mejor.is_empty():
+			mejor.dentro = "botiquin" if lista.size() % 2 == 0 else "vendas"
 			lista.append(mejor)
 	return lista
 

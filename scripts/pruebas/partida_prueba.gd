@@ -15,12 +15,14 @@
 # inventario, las armas de efecto, la historia, las Colecciones... y se cierra. Con algo más, solo una parte:
 #   --edificio centro   en el centro comercial (vale también con las demás; lo lee menu_principal.gd)
 #   --jefe X            el jefe de la 1ª planta (centro: el antidisturbios si no se dice; Apartamentos: la portera, en la
-#                       planta baja)
+#                       planta baja). OJO: solo elige el jefe; a secas, sin otra opción de esta lista, es la prueba larga
 #   --porqueria, --gimnasio, --cubos, --llamas   (con --jefe gloton, gymbro, portera o bombero) la habitación de ese
 #                       jefe; con --llamas, también su giro con el lanzallamas            [prueba_jefes_salas.gd]
 #   --gotas             (con --jefe portera) el abanico de agua sucia y sus salpicaduras    [prueba_jefes_salas.gd]
 #   --vapor             el vapor de la cabeza de cada minijefe al enfadarse                [prueba_jefes_salas.gd]
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
+#   --rebote            (con --edificio centro --jefe mascota) la mascota enfadada rebota en la pared y avisa con su
+#                       franja antes de volver a salir                                     [prueba_jefes_salas.gd]
 #   --golpes            el aviso de los golpes cuerpo a cuerpo de cada jefe                 [prueba_jefes_salas.gd]
 #   --avisos            el resto de los avisos de los jefes (lenguas, rayas, círculos...)  [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
@@ -79,8 +81,9 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F) y en el móvil [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
-#   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno y los
-#                       premios (jefes, reto, apagón e incendio)                           [prueba_varias.gd]
+#   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno, los
+#                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
+#                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --rescate           el superviviente encerrado en su baño (y su horda), los vecinos de las viviendas, la barricada,
@@ -126,6 +129,9 @@ func empezar_prueba() -> void:
 	elif "--franja" in args:
 		set_process(false)   # sin la prueba larga
 		probar_franja()
+	elif "--rebote" in args:
+		set_process(false)   # sin la prueba larga
+		probar_rebote()
 	elif "--golpes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_golpes()

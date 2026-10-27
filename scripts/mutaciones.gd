@@ -16,10 +16,11 @@ extends Node
 const MUT := {
 	"tentacular": {"cada": 4.0, "radio": 90.0, "empuje": 520.0, "aturde": 1.0},
 	"gastro": {"cada": 3.0, "alcance": 420.0},
-	"insensible": {"dano": 0.5},
-	"canibal": {"cura": 0.05},
-	"endurecimiento": {"escudo": 80},
-	"locura": {"cada": 5.0, "radio": 140.0, "lio": 2.0},
+	"insensible": {"dano": 0.65},   # (27 oct: antes 0,5, 5 %, 80 y cada 5 s a 140; Ansiedad, +5 % por zombi)
+	"canibal": {"cura": 0.02},
+	"ansiedad": {"cada_zombi": 0.1, "tope": 0.5},   # ritmo del cuerpo a cuerpo por zombi a la vista, y como mucho
+	"endurecimiento": {"escudo": 60},
+	"locura": {"cada": 4.0, "radio": 200.0, "lio": 2.0},
 	"flatulento": {"cada": 3.0, "radio": 70.0, "dps": 10.0, "paraliza": 2.0},
 }
 const MAXIMO := 4
@@ -30,15 +31,15 @@ const LISTA := [
 	{"id": "gastro", "nombre": "Gastroenteritis", "icono": "molotov",
 		"desc": "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"},
 	{"id": "insensible", "nombre": "Insensible", "icono": "casco",
-		"desc": "Pierdes la sensibilidad del cuerpo: recibes la mitad de daño"},
+		"desc": "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"},
 	{"id": "canibal", "nombre": "Caníbal", "icono": "corazon",
-		"desc": "Cada zombi que matas te cura un 5 % de la vida"},
+		"desc": "Cada zombi que matas te cura un 2 % de la vida"},
 	{"id": "ansiedad", "nombre": "Ansiedad", "icono": "cafe",
-		"desc": "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+5 % cada uno, hasta +50 %)"},
+		"desc": "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"},
 	{"id": "endurecimiento", "nombre": "Endurecimiento", "icono": "fuerza",
-		"desc": "La piel se endurece: escudo de 80 en cada planta que para la mitad de cada golpe hasta gastarse"},
+		"desc": "La piel se endurece: escudo de 60 en cada planta que para la mitad de cada golpe hasta gastarse"},
 	{"id": "locura", "nombre": "Locura", "icono": "jefe",
-		"desc": "Cada 5 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"},
+		"desc": "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"},
 	{"id": "flatulento", "nombre": "Flatulento", "icono": "herramientas",
 		"desc": "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"},
 ]

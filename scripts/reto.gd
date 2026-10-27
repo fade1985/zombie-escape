@@ -87,8 +87,7 @@ static func oscuras() -> bool:
 	return es("oscuras")
 
 
-# curas: los armaritos vacíos, sin el botiquín de la farmacéutica y los zombis no sueltan vendas ni bocadillos
-# (objetos.gd, al_azar)
+# curas: los armaritos vacíos, sin el botiquín de la farmacéutica y los zombis no sueltan vendas (objetos.gd, al_azar)
 static func sin_curas() -> bool:
 	return es("curas")
 

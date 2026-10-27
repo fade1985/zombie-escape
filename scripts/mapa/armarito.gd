@@ -1,6 +1,6 @@
-# El armarito del baño (Armarito en src/props.js del JS): colgado en la pared de arriba, con un botiquín dentro.
-# Se abre plantándose delante (o delante del mueble que tenga debajo, hasta "alcance"): avisa con "usar" y la
-# partida suelta el botiquín al suelo (abrir_armarito), que Johnny recoge pasando por encima y usa luego con la tecla 2.
+# El armarito del baño (Armarito en src/props.js del JS): colgado en la pared de arriba, con un botiquín o unas vendas
+# dentro ("dentro", planta.gd). Se abre plantándose delante (o delante del mueble que tenga debajo, hasta "alcance"):
+# avisa con "usar" y la partida lo suelta al suelo (abrir_armarito), que Johnny recoge pasando por encima y usa luego con su tecla.
 # Ya abierto, se queda abierto y vacío. El nodo va en el pie de la pared, para ordenarse con la cara del muro (como los apliques).
 extends Node2D
 

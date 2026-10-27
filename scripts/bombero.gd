@@ -47,6 +47,7 @@ const ESPERA_MOLOTOV := [4.0, 2.8]
 const SEPARA_MOLOTOV := 110.0          # lo menos que se separan los molotovs de una vez (lo que mide su fuego, de borde
                                        # a borde): así no caen unos encima de otros
 const CONOS := [1, 2]                  # conos de fuego en el giro
+const ESPERA_GIRO := [22.0, 18.0]      # cada cuánto gira, normal y enfadado
 const LARGO_MAX := 1600.0              # el cono llega hasta la pared (esto, por si no la encuentra)
 const ABERTURA := 0.35                 # medio cono, en radianes: 20 grados a cada lado del medio (40 en total)
 const RAYOS := 10                      # en cuántos trozos se parte el cono de borde a borde para medir hasta dónde
@@ -183,7 +184,8 @@ func elegir(johnny: Node2D) -> void:
 	var bolas := espera_bolas <= 0.0 and d > 100.0
 	var molotov := espera_molotov <= 0.0 and d > 140.0 and d < 520.0
 	if gira:
-		espera_giro = 12.0 if enfadado() else 15.0   # (el giro solo ya dura unos 8 s)
+		# (el giro solo ya dura unos 8 s; hasta el 27 oct, cada 15 y 12 s: pasaba la mitad del combate en su burbuja)
+		espera_giro = ESPERA_GIRO[1] if enfadado() else ESPERA_GIRO[0]
 		gritar("¡A ARDER!", Color("#ff9f1c"), 20)
 		var centro := centro_sala()
 		if centro.distance_to(global_position) < 30.0:

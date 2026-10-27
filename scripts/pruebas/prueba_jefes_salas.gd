@@ -1068,6 +1068,47 @@ func probar_franja() -> void:
 	get_tree().quit()
 
 
+# --rebote: la mascota enfadada embiste contra la pared de arriba de su sala; al rebotar, antes de volver a salir,
+# marca su franja AVISO_REBOTE (0,3 s; hasta el 27 oct salía sin aviso): captura-rebote.png, con la franja
+func probar_rebote() -> void:
+	set_process(false)
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			idx = i
+	var sitio: Dictionary = planta.sitios[idx]
+	sitio.limpio = true
+	await montar(idx, 0, false)
+	for s in sitio.apt.salas:
+		mapa.vistas[s.id] = true
+		mapa.niebla[s.id] = 0.0
+	mapa.actualizar_niebla(0.0)
+	luz.alternar()
+	var centro: Vector2 = sitio.apt.salas[0].centro
+	johnny.modo = "quieto"
+	johnny.invulnerable = 999.0
+	johnny.position = centro + Vector2(260, -190)   # a un lado de su carrera, con la pared de arriba a la vista
+	var jefe: Node2D = meter_zombi("mascota", centro)
+	await get_tree().create_timer(0.1, false).timeout
+	jefe.fase = 2
+	jefe.mirada = Vector2.from_angle(-PI / 2.0 - 0.45)   # hacia la pared de arriba, un poco de lado
+	jefe.cambiar("embestida", {"quedan": 2})
+	var aviso := -1.0
+	for i in 240:   # hasta 4 s
+		await get_tree().physics_frame
+		if jefe.estado == "aviso_embestida":
+			aviso = jefe.datos.aviso
+			break
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-rebote.png")
+	var a_media: String = jefe.estado
+	await get_tree().create_timer(0.3, false).timeout
+	print("Rebote de la mascota enfadada: avisa %.2f s (esperado: 0.30) · a mitad del aviso está en «%s» (esperado: aviso_embestida) y luego en «%s» (esperado: embestida u otro)" % [
+		aviso, a_media, jefe.estado])
+	get_tree().quit()
+
+
 # --golpes: el aviso de los golpes cuerpo a cuerpo (aviso.gd) de cada jefe, congelado a medio cargar y casi al final:
 # captura-golpe-<golpe>-<llenado>.png (también los círculos de la portera: el del final de la embestida y el del giro,
 # y los saltos)

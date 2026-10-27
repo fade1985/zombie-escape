@@ -68,7 +68,10 @@ const USABLES := {
 	"vendas": {"cura": 25, "accion": "usar_vendas"},
 	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 50, "accion": "usar_botiquin", "tercio": true},
 }
-const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial
+# Las curas que caben en la mochila, como mucho (el dueño, 27 oct: con dos armaritos por piso salían unos 22
+# botiquines por partida y se amontonaban sin límite); las que sobran se quedan en el suelo o en el baúl
+const TOPE := {"botiquin": 2, "vendas": 3}
+const SOLO_CENTRO := ["vendas"]      # solo en el centro comercial (y en los armaritos de los baños)
 # Lo que suelta cada tienda del centro comercial (sus tipos, en Tienda.TIPOS). Los zombis del pasillo, de cualquiera
 # (y los de una tienda que no está aquí, como la de ropa, sueltan lo de una tienda cualquiera)
 const TIENDAS := {
@@ -114,8 +117,10 @@ static func casillas(mochila: Array, con_municion := false) -> Array:
 
 
 # ¿Cabe uno más? Si ya lleva alguno va a su casilla; si no, hace falta una libre (la gasolina, el bidón de ácido y
-# la batería van con la munición: johnny.sitio)
+# la batería van con la munición: johnny.sitio). Las curas, como mucho su TOPE
 static func cabe(mochila: Array, id: String) -> bool:
+	if mochila.count(id) >= TOPE.get(id, 1000):
+		return false
 	return id in mochila or casillas(mochila).size() < MOCHILA
 
 
@@ -172,6 +177,9 @@ static func al_azar(edificio := "apartamentos", tienda := "") -> String:
 		lista = TIENDAS[tienda]
 	if Reto.sin_curas():
 		lista = lista.filter(func(id): return not id in USABLES)
+		if lista.is_empty():   # la farmacia solo tiene vendas: entonces, lo de una tienda cualquiera
+			for t in TIENDAS:
+				lista += TIENDAS[t].filter(func(id): return not id in USABLES and not id in lista)
 	return lista.pick_random()
 
 
