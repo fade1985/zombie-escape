@@ -375,7 +375,8 @@ func lanzar(donde: Vector2) -> void:
 		p.desde = johnny.global_position
 		p.alto_salida = 20.0
 		p.hasta = donde
-		p.dano_lanzar = johnny.stats.dano_lanzar * Skins.quema(johnny.skin) * calidad.dano   # (la skin del bombero: × 3)
+		# Puntería y la skin del bombero (+50 %) se suman, como en las armas (johnny.gd, arma_de); la calidad multiplica
+		p.dano_lanzar = (johnny.stats.dano_lanzar + Skins.quema(johnny.skin) - 1.0) * calidad.dano
 		p.fabricante = johnny.stats.fabricante
 		p.escala = calidad.radio
 		p.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0

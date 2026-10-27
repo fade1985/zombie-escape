@@ -80,7 +80,7 @@ const MANCHAS := {"explosivo": Color("#2b2633"), "venenoso": Color("#8fd13f"), "
 const SANGRE := Color("#7a1f1a")   # la sangre de los demás: rojo oscuro (antes, verde oliva #5b7d3a)
 const MUNICION_ZOMBI := 0.1        # ...o una caja de munición, si no ha soltado otra cosa (provisional en el JS)
 const ICONO_MP5 := preload("res://assets/ui/iconos/municion-mp5.png")   # la caja de munición con la MP5 en la mano
-const BILLETES_JEFA := 3           # los que suelta la portera al caer
+const BILLETES_JEFA := 8           # los que suelta cada jefe al caer (hasta el 27 oct, 3: lo mismo que 43 zombis)
 const DOLARES_AL_CAER := 0.5       # la parte de los dólares recogidos que te quedas si caes o abandonas
 const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.png"),
 	"granada": preload("res://assets/ui/iconos/granada.png")}
@@ -595,9 +595,11 @@ func subir() -> void:
 		cambiando = true
 		terminar(true)
 		return
+	var premio := eventos.superado()   # el apagón o el incendio de la planta que se deja: sus dólares (eventos.gd)
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_llegada())
-	decir("Azotea · ¡El último combate del edificio!" if planta.get("azotea", false) else planta.nombre, 2.5)
+	var texto: String = "Azotea · ¡El último combate del edificio!" if planta.get("azotea", false) else planta.nombre
+	decir(texto if premio == "" else "%s · %s" % [texto, premio], 2.5 if premio == "" else 3.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
 
@@ -1169,7 +1171,9 @@ func terminar(gano: bool, abandona := false) -> void:
 	var abierta := [0]      # la alerta que se abre al ganar (0: ninguna)
 	var mejor := [false]    # el reto del día: se ha mejorado la marca de hoy
 	var extra := Alerta.dolares_extra(dolares) if gano else 0   # los dólares de más por la alerta
-	var salvados := dolares + extra if gano else roundi(dolares * DOLARES_AL_CAER)   # los que pasan a la cartera
+	# y los del reto del día, la primera vez que se completa hoy en este edificio (reto.gd)
+	var premio_reto := Reto.premio(Guardado.cargar(), edificio) if gano and Reto.activo else 0
+	var salvados := dolares + extra + premio_reto if gano else roundi(dolares * DOLARES_AL_CAER)   # los que pasan a la cartera
 	var nuevo := supervivientes.rescatado_nuevo() if gano else {}
 	var equipo := equipo_encima() if gano else []
 	var s := Guardado.cambiar(func(g):
@@ -1236,6 +1240,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"cartera": s.dolares,
 		"alerta": Alerta.nivel,
 		"extra": extra,
+		"premio_reto": premio_reto,
 		"abierta": abierta[0],
 	})
 

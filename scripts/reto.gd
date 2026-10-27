@@ -5,8 +5,8 @@
 #
 # Se entra por el botón "Reto del día" de cada tarjeta de "Elige edificio" (menu_principal.gd): empezar() pone
 # aquí el reto antes de abrir la partida, y quitar() lo quita para una partida normal. Los dólares cuentan como
-# siempre, pero el reto va sin alerta, no abre niveles de alerta y no cuenta como edificio completado
-# (partida.gd, terminar()).
+# siempre (y, la primera vez que se completa cada día en cada edificio, PREMIO de más), pero el reto va sin alerta,
+# no abre niveles de alerta y no cuenta como edificio completado (partida.gd, terminar()).
 #
 # Para cambiar los números, se cambian las constantes; la partida solo pregunta a estas funciones. Una regla
 # nueva: una entrada en REGLAS y la función a la que le pregunte la partida.
@@ -27,6 +27,9 @@ const MAS_RAPIDOS := 1.35   # rapidos: la velocidad de los zombis (no la de los 
 const VIDA := 0.5           # cristal: la vida máxima de Johnny (partida.gd, aplicar_talentos)
 const MAS_ZOMBIS := 2.0     # llena: el presupuesto de zombis de cada sitio (planta.gd, horda) y las oleadas de la horda
 const OIDO := 3.0           # oido: la distancia a la que los zombis dormidos oyen los disparos (zombi.gd)
+# El premio: estos dólares de más la primera vez que se completa el reto de hoy en cada edificio (premio(); se suman
+# a los recogidos en partida.gd, terminar). Hasta el 27 oct el reto no daba nada más que su marca
+const PREMIO := 10
 # "oscuras" usa lo del apagón (eventos.gd, al_montar) y "cuerpo" y "curas" se miran donde se reparte cada cosa
 
 # El reto que se juega: si es el reto, de qué día ("2026-10-22") y con qué regla (una clave de REGLAS)
@@ -135,6 +138,12 @@ static func ficha(s: Dictionary, edificio: String, dia := fecha) -> Dictionary:
 		s.retos[edificio].fecha = dia
 		s.retos[edificio].regla = regla_de(dia)
 	return s.retos[edificio]
+
+
+# Al ganar la partida del reto (partida.gd, terminar; antes de apuntar()): PREMIO si hoy aún no se había completado
+# en ese edificio, 0 si ya
+static func premio(s: Dictionary, edificio: String) -> int:
+	return 0 if ficha(s, edificio).completado else PREMIO
 
 
 # Al acabar la partida (partida.gd, terminar): apunta la marca si mejora la de hoy (llegar más lejos; con el

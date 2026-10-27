@@ -8,6 +8,8 @@
 #   horda     una horda grande llena el pasillo: salen todos de golpe, repartidos por él y lejos de Johnny (fuera
 #             de pantalla), y van a por él; si Johnny se mete en un piso, los que quedan le esperan en el pasillo.
 #             Al acabar con todos, un premio
+# El apagón y el incendio también dan premio (desde el 27 oct; antes solo ponían las cosas difíciles): al subir a la
+# siguiente planta, los mismos dólares que la horda, directos a la cartera de la partida (superado())
 #
 # Empieza la primera vez que Johnny pisa el pasillo de la planta (en la planta baja, al salir de la sala de
 # mantenimiento), con un cartel grande en la pantalla. Lo que dura, toda la planta.
@@ -46,7 +48,8 @@ const HORDA := {
 	"primera": 4.0,          # segundos desde que Johnny pisa el pasillo hasta que sale la horda
 	"goteo": 0.15,           # salen de uno en uno, con este hueco (así no se apilan)
 	"lejos": 720.0,          # a cuánto de Johnny salen como poco: fuera de pantalla, nadie aparece delante de él
-	"billetes": 3,           # el premio: estos billetes, uno más por planta, y una caja de munición
+	"billetes": 3,           # el premio: estos billetes, uno más por planta, y una caja de munición (el apagón y
+                             # el incendio, los mismos dólares, sin la caja: superado())
 }
 
 var partida: Node
@@ -319,6 +322,17 @@ func premio() -> void:
 	partida.soltar_municion(johnny.position + Vector2(40, 30))
 	partida.decir("¡Horda vencida! Te deja $%d y una caja de munición" % n, 3.5)
 	Sonido.tocar("limpio")
+
+
+# Al subir a la siguiente planta (partida.gd, subir): si en esta ha habido apagón o incendio, sus dólares (los de
+# la horda: HORDA.billetes, uno más por planta) van a la cartera de la partida. Devuelve lo que se dice ("" si nada)
+func superado() -> String:
+	if not empezado or not evento in ["apagon", "incendio"]:
+		return ""
+	var n: int = HORDA.billetes + partida.planta.num - 1
+	partida.dolares += n
+	Sonido.tocar("limpio")
+	return "¡%s superado! +$%d" % ["Apagón" if evento == "apagon" else "Incendio", n]
 
 
 # ═════════════ La prueba (--captura --evento X) ═════════════

@@ -43,7 +43,8 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   - Ratón o dedo: se toca, o se **arrastra** (se encienden los sitios donde vale soltar; encima de Johnny, se pone el
     arma o se usa la cura; en la zona roja de la ficha, se tira la casilla entera; donde no vale, vuelve y tiembla).
 - **Elige edificio:** **<** y **>** cambian el nivel de alerta (completar el edificio abre el siguiente, hasta el 5).
-  El botón **Reto del día**: el edificio igual para todo el mundo ese día, con la regla rara de hoy.
+  El botón **Reto del día**: el edificio igual para todo el mundo ese día, con la regla rara de hoy (completarlo
+  por primera vez cada día, $10 de más en cada edificio).
 
 ## La sala de pruebas
 
@@ -93,9 +94,9 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
   atraedora y congeladora $8) hasta su máximo; todo, para esa partida.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
-  (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona × 4), el glotón (el
-  Glotón; quien te hace daño lo paga), el gymbro (el Gymbro; cuerpo a cuerpo × 3) y el bombero (el jefe de bomberos;
-  lo que quema × 3 y el fuego no le hace nada).
+  (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona +100 %), el glotón (el
+  Glotón; quien te hace daño lo paga: un jefe pierde el 3 % de su vida), el gymbro (el Gymbro; cuerpo a cuerpo +50 %) y
+  el bombero (el jefe de bomberos; lo que quema +50 % y el fuego no le hace nada). Lo que dan se suma a los talentos.
 - **Taller** (derecha): el **banco de trabajo**, que sube de calidad, nivel a nivel, las armas y los
   paquetes de arrojables (los que lleva y los del baúl) con las piezas de su familia que sueltan los zombis y los
   jefes: las armas, 3 para Poco común, 6 para Rara y 10 para Épica; los arrojables, que se gastan, 1, 2 y 4. Valen las

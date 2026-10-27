@@ -9,21 +9,27 @@
 # con su .json y su .tres). hoja() da la de la skin, si la tiene.
 #
 # La primera, el portero (la portera la suelta al caer por primera vez, partida.gd): un viejo de pelo largo blanco
-# con coleta y barba blanca, con el pañuelo rojo de siempre. Con ella puesta, la fregona hace un 300 % más de daño
-# (× 4, "fregona"; solo la fregona de siempre, no las armas creadas a partir de ella).
+# con coleta y barba blanca, con el pañuelo rojo de siempre. Con ella puesta, la fregona hace un 100 % más de daño
+# (+100 %, "fregona"; solo la fregona de siempre, no las armas creadas a partir de ella). Hasta el 27 oct era × 4.
+#
+# Lo que dan de daño las skins se SUMA a lo de los talentos (Ataque, Camorrista, Tirador, Puntería), no se
+# multiplica: con Ataque 5, Camorrista 5 y el gymbro, +50 +50 +50 = +150 % (johnny.gd, arma_de()). Antes se
+# multiplicaba todo y, con una Épica, el jefe final caía en menos de 3 segundos (valoración del equilibrio, 27 oct).
 #
 # La segunda, el glotón (la suelta el Glotón al caer por primera vez, partida.gd): calvo y con la cara convertida en
 # una boca enorme llena de dientes, como la del Glotón. Con ella puesta, quien le hace daño lo paga (johnny.gd,
-# devolver()): un zombi normal muere al momento y un jefe pierde un 10 % de su vida máxima ("mordisco").
+# devolver()): un zombi normal muere al momento y un jefe pierde un 3 % de su vida máxima ("mordisco"). Era un 10 %
+# hasta el 27 oct: con 10 golpes caía cualquier jefe, y bastaba con pegarse a él.
 #
 # La tercera, el gymbro (la suelta el Gymbro al caer por primera vez, partida.gd): calvo, con el pañuelo rojo de
-# siempre y una barba negra. Con ella puesta, las armas cuerpo a cuerpo hacen un 200 % más de daño (× 3, "cuerpo";
-# la fregona, el bate y el cuchillo; el golpe de Ninja y los martillazos del ferretero, no).
+# siempre y una barba negra. Con ella puesta, las armas cuerpo a cuerpo hacen un 50 % más de daño (+50 %, "cuerpo";
+# la fregona, el bate y el cuchillo; el golpe de Ninja y los martillazos del ferretero, no). Hasta el 27 oct era × 3.
 #
 # La cuarta, el bombero (la suelta el jefe de bomberos al caer por primera vez, partida.gd): un casco de bombero
 # ajustado, negro con la raya amarilla reflectante, como el del jefe; tapa el pelo y el pañuelo. Con ella puesta:
-#   - las armas que queman hacen un 200 % más de daño (× 3, "quema"): el lanzallamas y el molotov, y lo que siguen
-#     ardiendo los zombis que prenden (zombi.gd, prender()). Las armas de fuego de siempre (pistola, escopeta, MP5), no: no queman
+#   - las armas que queman hacen un 50 % más de daño (+50 %, "quema"; hasta el 27 oct, × 3): el lanzallamas y el
+#     molotov, y lo que siguen ardiendo los zombis que prenden (zombi.gd, prender(): eso, × 1,5). Las armas de fuego
+#     de siempre (pistola, escopeta, MP5), no: no queman
 #   - Johnny es inmune al fuego ("ignifugo"; johnny.gd, ignifugo()): el cono, las bolas, el aro y los molotovs del jefe
 #     de bomberos, el fuego del suelo y de los charcos, el aceite hirviendo del cocinero y el seguir ardiendo al salir.
 #     El hachazo del jefe y las explosiones, sí le quitan
@@ -31,14 +37,14 @@ class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
 const LISTA := {
-	"portero": {"nombre": "El portero", "efecto": "La fregona hace un 300 % más de daño.",
-		"como": "Mata a la portera por primera vez.", "jefe": "portera", "fregona": 4.0},
-	"gloton": {"nombre": "El glotón", "efecto": "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 10 % de vida.",
-		"como": "Mata al Glotón por primera vez.", "jefe": "gloton", "mordisco": 0.1},
-	"gymbro": {"nombre": "El gymbro", "efecto": "Las armas cuerpo a cuerpo hacen un 200 % más de daño.",
-		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 3.0},
-	"bombero": {"nombre": "El bombero", "efecto": "Las armas que queman hacen un 200 % más de daño y el fuego no te quema.",
-		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 3.0, "ignifugo": true},
+	"portero": {"nombre": "El portero", "efecto": "La fregona hace un 100 % más de daño.",
+		"como": "Mata a la portera por primera vez.", "jefe": "portera", "fregona": 2.0},
+	"gloton": {"nombre": "El glotón", "efecto": "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida.",
+		"como": "Mata al Glotón por primera vez.", "jefe": "gloton", "mordisco": 0.03},
+	"gymbro": {"nombre": "El gymbro", "efecto": "Las armas cuerpo a cuerpo hacen un 50 % más de daño.",
+		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 1.5},
+	"bombero": {"nombre": "El bombero", "efecto": "Las armas que queman hacen un 50 % más de daño y el fuego no te quema.",
+		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 1.5, "ignifugo": true},
 }
 
 

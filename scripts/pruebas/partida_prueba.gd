@@ -79,6 +79,8 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F) y en el móvil [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
+#   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno y los
+#                       premios (jefes, reto, apagón e incendio)                           [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --rescate           el superviviente encerrado en su baño (y su horda), los vecinos de las viviendas, la barricada,
@@ -268,6 +270,9 @@ func empezar_prueba() -> void:
 	elif "--hud" in args:
 		set_process(false)   # sin la prueba larga
 		probar_hud()
+	elif "--equilibrio" in args:
+		set_process(false)   # sin la prueba larga
+		probar_equilibrio()
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)

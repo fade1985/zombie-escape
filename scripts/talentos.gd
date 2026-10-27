@@ -41,7 +41,7 @@ const LISTA := [
 	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "vida",
 		"desc": "+10 % de vida máxima por punto"},
 	{"id": "lobezno", "rama": "superviviente", "nivel": 1, "nombre": "Lobezno", "max": 5, "icono": "corazon",
-		"desc": "Regeneras 1 de vida cada 3 segundos por punto"},
+		"desc": "Regeneras 1 de vida cada 5 segundos por punto"},
 	{"id": "durito", "rama": "superviviente", "nivel": 2, "nombre": "Durito", "max": 5, "icono": "casco", "pide": "corpulento",
 		"desc": "Cada golpe que recibes quita 1 menos por punto"},
 	{"id": "reflejos", "rama": "superviviente", "nivel": 2, "nombre": "Reflejos", "max": 5, "icono": "reflejos", "pide": "corpulento",
@@ -51,7 +51,7 @@ const LISTA := [
 	{"id": "acero", "rama": "superviviente", "nivel": 3, "nombre": "Acero", "max": 1, "icono": "cartucho", "pide": "durito",
 		"desc": "Cada planta, un escudo de 50 que para la mitad de cada golpe"},
 	{"id": "ninja", "rama": "superviviente", "nivel": 3, "nombre": "Ninja", "max": 1, "icono": "dash", "pide": "reflejos",
-		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis"},
+		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 3 s)"},
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "medico", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 ]

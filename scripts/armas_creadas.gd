@@ -12,7 +12,7 @@ class_name ArmasCreadas
 
 const CHORRO := preload("res://scripts/chorro.gd")
 const EMPUJE := 170.0   # empuje base, como el de las balas
-# Los efectos de las armas que queman: el lanzallamas (con la skin del bombero, × 3: johnny.gd, arma())
+# Los efectos de las armas que queman: el lanzallamas (con la skin del bombero, +50 %: johnny.gd, arma_de())
 const QUEMAN := ["llama"]
 
 # Números de los efectos (provisionales, como EFECTOS en el JS)
@@ -84,7 +84,7 @@ static func aturdir(zombi: Node2D, t: float) -> void:
 		zombi.aturdido = maxf(zombi.aturdido, t)
 
 
-# Lo prende como el molotov ("quema": cuánto más arde; la skin del bombero, × 3). Los jefes no arden
+# Lo prende como el molotov ("quema": cuánto más arde; la skin del bombero, × 1,5). Los jefes no arden
 static func prender(zombi: Node2D, quema := 1.0) -> void:
 	if zombi is Zombi and zombi.is_in_group("zombis"):
 		zombi.prender(quema)

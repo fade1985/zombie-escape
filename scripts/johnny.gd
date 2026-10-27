@@ -26,11 +26,11 @@
 # en poco menos de un segundo (como el dash del JS). Los talentos (talentos.gd) le dan, además de números:
 # Lobezno (recupera vida poco a poco), Durito (cada golpe quita menos), Reflejos (de vez en cuando esquiva solo
 # un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 4 disparos), Ninja (golpe
-# en área al acabar la esquiva) y Desfibrilador (resucita una vez por partida).
+# en área al acabar la esquiva, como mucho cada 3 s) y Desfibrilador (resucita una vez por partida).
 #
 # Las skins (skins.gd): vestir() le cambia las hojas por las de esa skin (las de siempre con otra cabeza); al
-# empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 300 % más (arma()), y con el
-# glotón quien le hace daño lo paga (devolver()).
+# empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 100 % más (arma_de()), y con
+# el glotón quien le hace daño lo paga (devolver()).
 extends CharacterBody2D
 
 signal vida_cambiada(vida: int, maxima: int)   # la barra de vida de la pantalla escucha esta señal
@@ -52,7 +52,12 @@ const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (
 const LENTO_TERCIO := 0.15
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
-const REGENERA_CADA := 3.0 # Lobezno: segundos entre cura y cura
+const REGENERA_CADA := 5.0 # Lobezno: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
+const NINJA_ESPERA := 3.0  # Ninja: segundos como poco entre golpe y golpe (las esquivas de en medio no pegan)
+const NINJA_JEFE := 0.02   # Ninja: la parte de su vida máxima que le quita a un jefe
+# Ningún golpe que recibe baja de esta parte de lo que era, por mucho que lo rebajen Durito y la mutación Insensible
+# (antes, como poco 1: con las dos, un zombi normal le quitaba 1). Con Durito solo no cambia nada (10 → 5)
+const GOLPE_MINIMO := 0.3
 const CAIDA := 0.22        # tropezón (caer): lo que tarda en llegar al suelo y en levantarse
 const LEVANTADO := 0.6     # recién levantado, este rato sin volver a tropezar
 const AZUL := Color("#9fe8ff")
@@ -94,6 +99,7 @@ var esquiva_dir := Vector2.DOWN
 var estela_t := 0.0        # para soltar las copias transparentes de la estela
 var sola_t := 0.0          # Reflejos: lo que falta para la siguiente esquiva automática
 var regenera_t := 0.0      # Lobezno
+var ninja_t := 0.0         # Ninja: lo que falta para que el golpe al acabar la esquiva vuelva a estar listo
 var disparos := 0          # Mirilla: los disparos que lleva
 var resucitado := false    # Desfibrilador: solo una vez por partida
 var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
@@ -240,17 +246,19 @@ func arma() -> Dictionary:
 
 
 # Los datos de un arma con los atributos de Johnny ya aplicados (la de la mano o, para la ficha del inventario,
-# cualquiera de las que lleva)
+# cualquiera de las que lleva). Lo que dan de daño los talentos y la skin se SUMA (+50 % y +50 % = +100 %, no × 2,25);
+# la calidad del arma, que ya va en base(), sí multiplica. Hasta el 27 oct se multiplicaba todo
 func arma_de(id: String) -> Dictionary:
 	var w := base(id)
-	w.dano = w.dano * stats.dano * (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego)
+	var extra: float = stats.dano - 1.0 + (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego) - 1.0
 	if id == "fregona":
-		w.dano = w.dano * Skins.fregona(skin)   # el portero: × 4 (solo la fregona de siempre)
+		extra += Skins.fregona(skin) - 1.0   # el portero: +100 % (solo la fregona de siempre)
 	if w.tipo == "cuerpo":
-		w.dano = w.dano * Skins.cuerpo(skin)    # el gymbro: × 3 (la fregona, el bate y el cuchillo)
+		extra += Skins.cuerpo(skin) - 1.0    # el gymbro: +50 % (la fregona, el bate y el cuchillo)
 	if w.get("efecto", "") in ArmasCreadas.QUEMAN:
-		w.quema = Skins.quema(skin)             # el bombero: × 3 la llamarada, y lo que sigue ardiendo el zombi
-		w.dano = w.dano * w.quema
+		w.quema = Skins.quema(skin)          # el bombero: +50 % la llamarada, y lo que sigue ardiendo el zombi (× 1,5)
+		extra += w.quema - 1.0
+	w.dano = w.dano * (1.0 + extra)
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
 	if w.tipo == "fuego":
@@ -279,6 +287,7 @@ func _physics_process(delta: float) -> void:
 	espera -= delta
 	invulnerable -= delta
 	esquiva_espera -= delta
+	ninja_t -= delta
 	sola_t -= delta
 	levantado_t -= delta
 	# Parpadea mientras es invulnerable (medio transparente a ratos)
@@ -334,11 +343,12 @@ func _physics_process(delta: float) -> void:
 		if recargando <= 0.0:
 			terminar_recarga()
 
-	# Lobezno: recupera vida poco a poco
+	# Lobezno: recupera vida poco a poco (con la Alerta 4, como las curas, la mitad: tarda el doble)
 	if stats.regenera > 0 and vida < vida_tope():
 		regenera_t += delta
-		if regenera_t >= REGENERA_CADA:
-			regenera_t -= REGENERA_CADA
+		var cada: float = REGENERA_CADA / Alerta.botiquin()
+		if regenera_t >= cada:
+			regenera_t -= cada
 			curar(stats.regenera)
 
 	# Lo que pide el jugador: un vector de largo 0 a 1 (el stick a medias da menos de 1)
@@ -352,7 +362,8 @@ func _physics_process(delta: float) -> void:
 		if estela_t <= 0.0:
 			estela_t = 0.03
 			soltar_estela()
-		if esquiva_t <= 0.0 and stats.ninja:
+		if esquiva_t <= 0.0 and stats.ninja and ninja_t <= 0.0:
+			ninja_t = NINJA_ESPERA
 			golpe_ninja()
 	else:
 		# Acelera suave hacia la velocidad deseada, como en el juego
@@ -419,7 +430,8 @@ func soltar_estela() -> void:
 
 
 # Ninja: al acabar la esquiva, un barrido en círculo con el arma cuerpo a cuerpo. Los zombis que pilla mueren
-# al momento; a la jefa le quita un 10 % de su vida
+# al momento; a un jefe le quita un 2 % de su vida máxima (NINJA_JEFE). Como mucho uno cada NINJA_ESPERA segundos,
+# aunque esquive más (hasta el 27 oct, uno en cada esquiva y un 10 % a los jefes: 10 esquivas tumbaban a cualquiera)
 func golpe_ninja() -> void:
 	var w: Dictionary = base(huecos.cuerpo)
 	var alcance: float = w.alcance * stats.alcance * stats.alcance_cuerpo + RADIO
@@ -427,7 +439,7 @@ func golpe_ninja() -> void:
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() > alcance + zombi.radio:
 			continue
-		var dano: int = zombi.vida + 1 if zombi is Zombi else ceili(zombi.vida_max * 0.1)
+		var dano: int = zombi.vida + 1 if zombi is Zombi else ceili(zombi.vida_max * NINJA_JEFE)
 		zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * 1.5)
 	# el barrido se ve aunque no pille a nadie: un aro azul que se abre y se apaga
 	var aro := Line2D.new()
@@ -1187,8 +1199,10 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 		Sonido.tocar("esquiva")
 		return
 	invulnerable = INVULNERABLE
-	# Durito quita un poco a cada golpe; el escudo de Acero para la mitad de lo que queda mientras dure
-	var dano := maxi(1, roundi(cantidad * stats.dano_recibido) - stats.armadura)
+	# Durito quita un poco a cada golpe (sin bajar de GOLPE_MINIMO de lo que era); el escudo de Acero para la mitad
+	# de lo que queda mientras dure
+	var minimo := maxi(1, roundi(cantidad * GOLPE_MINIMO))
+	var dano := maxi(minimo, roundi(cantidad * stats.dano_recibido) - stats.armadura)
 	if escudo > 0.0:
 		var parado := minf(escudo, dano / 2.0)
 		escudo -= parado

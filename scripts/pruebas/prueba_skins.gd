@@ -13,15 +13,15 @@ extends "res://scripts/pruebas/prueba_armas.gd"
 #   - la cara en las 8 direcciones (con la fregona) y con las otras cinco armas, mirando al sur, al lado del
 #     conserje de siempre (captura-skins-caras.png, el portero; captura-skins-caras-<id>.png, las demás); y Johnny
 #     andando con la skin, que sigue con su paso
-#   - el daño de la fregona: × 4 con el portero (con el bate, igual), contado y con un golpe de verdad
-#   - el daño cuerpo a cuerpo: × 3 con el gymbro con todas (la fregona, el bate y el cuchillo) y las de fuego, igual;
+#   - el daño de la fregona: × 2 con el portero (con el bate, igual), contado y con un golpe de verdad
+#   - el daño cuerpo a cuerpo: × 1,5 con el gymbro con todas (la fregona, el bate y el cuchillo) y las de fuego, igual;
 #     contado y con un golpe de verdad (con el bate)
-#   - el daño de las armas que queman: × 3 con el bombero (el lanzallamas y el molotov) y las demás, igual; contado y de verdad, con el golpe, el disparo o la llama y lo que
+#   - el daño de las armas que queman: × 1,5 con el bombero (el lanzallamas y el molotov) y las demás, igual; contado y de verdad, con el golpe, el disparo o la llama y lo que
 #     sigue ardiendo el zombi (y un molotov de verdad); con la pistola y el bate, igual
 #   - el bombero, inmune al fuego: el fuego del suelo, un charco de molotov, los molotovs, el cono y las bolas del jefe
 #     de bomberos, de verdad: sin la skin Johnny pierde vida y sigue ardiendo; con ella, nada; el hachazo, sí le quita
 #   - el poder del glotón: un zombi normal que le da un zarpazo de verdad muere; el Gymbro (con su armadura) pierde
-#     un 10 % de su vida con un golpe suyo y con una pesa suya, y la armadura no se lo para; sin la skin, nada; y nada
+#     un 3 % de su vida con un golpe suyo y con una pesa suya, y la armadura no se lo para; sin la skin, nada; y nada
 #     si Johnny es invulnerable o si el daño no es de nadie
 # Cada línea dice lo esperado. Deja el guardado de la prueba sin skins y se cierra
 func probar_skins() -> void:
@@ -226,8 +226,10 @@ func probar_skins() -> void:
 	var bate_portero: float = johnny.arma().dano
 	johnny.vestir("")
 	var bate_siempre: float = johnny.arma().dano
-	print("Daño de la fregona: conserje %.1f · portero %.1f (× %.1f; esperado: × 4) · bate: conserje %.1f, portero %.1f (esperado: igual)" % [
-		de_siempre, con_portero, con_portero / de_siempre, bate_siempre, bate_portero])
+	# (el +100 % del portero se suma a lo de los talentos de daño: × 2 sin ellos, algo menos con ellos)
+	var talentos: float = johnny.stats.dano - 1.0 + johnny.stats.dano_cuerpo - 1.0
+	print("Daño de la fregona: conserje %.1f · portero %.1f (× %.2f; esperado: × %.2f) · bate: conserje %.1f, portero %.1f (esperado: igual)" % [
+		de_siempre, con_portero, con_portero / de_siempre, (2.0 + talentos) / (1.0 + talentos), bate_siempre, bate_portero])
 	# un golpe de verdad, sin críticos, a un zombi delante
 	johnny.coger("fregona")
 	var critico: float = johnny.stats.critico
@@ -244,10 +246,10 @@ func probar_skins() -> void:
 		zombi.queue_free()
 		await get_tree().process_frame
 	johnny.stats.critico = critico
-	print("Un golpe de fregona a un zombi: conserje le quita %d · portero %d (esperado: el cuádruple)" % [
+	print("Un golpe de fregona a un zombi: conserje le quita %d · portero %d (esperado: el doble, algo menos con talentos de daño)" % [
 		quitado[""], quitado["portero"]])
 
-	# ── El daño cuerpo a cuerpo del gymbro: × 3 con todas; las de fuego, igual ──
+	# ── El daño cuerpo a cuerpo del gymbro: × 1,5 con todas; las de fuego, igual ──
 	var cuentas := []
 	for arma in ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]:
 		johnny.coger(arma)
@@ -255,7 +257,7 @@ func probar_skins() -> void:
 		var siempre: float = johnny.arma().dano
 		johnny.vestir("gymbro")
 		cuentas.append("%s × %.1f" % [Objetos.nombre(arma), johnny.arma().dano / siempre])
-	print("Daño con el gymbro: %s (esperado: × 3 las tres primeras, × 1 las de fuego)" % " · ".join(cuentas))
+	print("Daño con el gymbro: %s (esperado: × 1,5 las tres primeras, algo menos con talentos de daño; × 1 las de fuego)" % " · ".join(cuentas))
 	# golpes de verdad, sin críticos, con el bate
 	johnny.stats.critico = 0.0
 	var golpes := []
@@ -321,7 +323,7 @@ func probar_skins() -> void:
 		gymbro.get_parent().add_child(pesa)
 		await get_tree().create_timer(0.5).timeout
 		var v2: int = gymbro.vida
-		var diez := ceili(gymbro.vida_max * 0.1)
+		var diez := ceili(gymbro.vida_max * Skins.mordisco("gloton"))   # (el 3 %; el nombre es de cuando era el 10 %)
 		print("Poder del glotón, con «%s»: el zombi le pega %s y muere %s · el Gymbro (vida %d) pierde %d con su golpe y %d con su pesa, armadura %d de %d (esperado: %s)" % [
 			skin, pego, muerto, gymbro.vida_max, v0 - v1, v1 - v2, gymbro.armadura, gymbro.armadura_max,
 			"true, true · %d y %d, armadura entera" % [diez, diez] if skin == "gloton" else "true, false · 0 y 0, armadura entera"])
@@ -345,7 +347,7 @@ func probar_skins() -> void:
 
 # La skin del bombero (skins.gd), dentro de probar_skins(). Johnny en el despacho, sin pegar ni disparar solo y sin
 # críticos:
-#   - el daño contado: × 3 las armas que queman (el lanzallamas, y lo que quema el molotov) y × 1 las seis de siempre
+#   - el daño contado: × 1,5 las armas que queman (el lanzallamas, y lo que quema el molotov) y × 1 las seis de siempre
 #   - de verdad, a un zombi quieto delante: el disparo o la llama (0,3 s) y lo que sigue ardiendo después, sin
 #     la skin y con ella (con el bate y la pistola, igual y sin arder); y un molotov de verdad
 #   - inmune al fuego, de verdad, sin la skin y con ella: el fuego del suelo (lo que hace cada paso al pisarlo) y lo
@@ -365,7 +367,7 @@ func probar_skin_bombero() -> void:
 		var siempre: float = johnny.arma().dano
 		johnny.vestir("bombero")
 		cuentas.append("%s × %.1f" % [Objetos.nombre(arma), johnny.arma().dano / siempre])
-	print("Daño con el bombero: %s (esperado: × 1 las seis de siempre, × 3 la que quema)" % " · ".join(cuentas))
+	print("Daño con el bombero: %s (esperado: × 1 las seis de siempre, × 1,5 la que quema)" % " · ".join(cuentas))
 	var lanzados := []
 	for tipo in ["molotov"]:
 		var cuanto := {}
@@ -379,7 +381,7 @@ func probar_skin_bombero() -> void:
 			p.queue_free()   # (que no caiga: solo se mira lo que quemará)
 		lanzados.append("%s × %.1f" % [lanzables.nombre(tipo), cuanto.bombero / cuanto[""]])
 	lanzables.tipo = "molotov"
-	print("Lo que quema lo que se lanza, con el bombero: %s (esperado: × 3)" % " · ".join(lanzados))
+	print("Lo que quema lo que se lanza, con el bombero: %s (esperado: × 1,5)" % " · ".join(lanzados))
 
 	# ── de verdad: el golpe o el disparo, y lo que sigue ardiendo el zombi ──
 	var de_verdad := []
@@ -421,7 +423,7 @@ func probar_skin_bombero() -> void:
 		johnny.position = sitio
 		de_verdad.append("%s: golpe %d → %d, ardiendo %d → %d" % [Objetos.nombre(arma), quita[""][0], quita.bombero[0],
 			quita[""][1], quita.bombero[1]])
-	print("De verdad a un zombi, sin la skin → con el bombero: %s (esperado: el triple el que quema, redondeando cada pellizco; el bate y la pistola, igual y sin arder)" % " · ".join(de_verdad))
+	print("De verdad a un zombi, sin la skin → con el bombero: %s (esperado: la mitad más el que quema, redondeando cada pellizco; el bate y la pistola, igual y sin arder)" % " · ".join(de_verdad))
 	var molotov := {}
 	for skin in ["", "bombero"]:
 		johnny.vestir(skin)
@@ -439,7 +441,7 @@ func probar_skin_bombero() -> void:
 		for c in get_tree().get_nodes_in_group("charcos"):
 			c.queue_free()
 		await get_tree().process_frame
-	print("Un molotov de verdad a un zombi quieto: en 3 s le quita %d sin la skin y %d con el bombero (× %.1f; esperado: × 3, más o menos)" % [
+	print("Un molotov de verdad a un zombi quieto: en 3 s le quita %d sin la skin y %d con el bombero (× %.1f; esperado: × 1,5, más o menos)" % [
 		molotov[""], molotov.bombero, molotov.bombero / maxf(1.0, molotov[""])])
 
 	# ── inmune al fuego (que los que le acompañan no le disparen al jefe) ──

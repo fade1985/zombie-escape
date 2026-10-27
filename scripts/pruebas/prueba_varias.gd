@@ -1,5 +1,6 @@
 # Pruebas sueltas: los niveles de alerta (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
-# el vómito de la Gastroenteritis (--gastro) y la llave en el suelo (--llave). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# el vómito de la Gastroenteritis (--gastro), la llave en el suelo (--llave) y los números del equilibrio (--equilibrio).
+# Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_sitios.gd"
 
 
@@ -460,4 +461,114 @@ func probar_gastro() -> void:
 	await get_tree().create_timer(0.6).timeout
 	print("Gastro: el charco cae sobre el zombi a la vista, que lo pisa %s (esperado: true) · el de detrás de la pared %s (esperado: false)" % [
 		lejos.pisando.has("acido"), tras.pisando.has("acido")])
+	get_tree().quit()
+
+
+# Con "--captura --equilibrio": los números del equilibrio del 27 oct, contados en la terminal con lo esperado. En el
+# apartamento más grande, sin zombis: los talentos y la skin se suman (Ataque 5 y Camorrista 5 con el gymbro y con el
+# portero); el daño mínimo de un golpe (Durito 5 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
+# vez cada 3 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); los premios del reto
+# del día y los billetes de los jefes. Al final sube a la planta 2 con el incendio superado: el aviso con su premio
+# (captura-equilibrio-incendio.png). Se cierra
+func probar_equilibrio() -> void:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var grande: Dictionary = planta.sitios[i].apt.salas[0]
+	for s in planta.sitios[i].apt.salas:
+		if s.casillas > grande.casillas:
+			grande = s
+	johnny.position = grande.centro
+	johnny.modo = "quieto"   # que no pegue ni dispare solo
+	var antes: Dictionary = johnny.stats.duplicate()
+	var skin_antes: String = johnny.skin
+
+	# ── Los talentos y la skin se suman ──
+	johnny.stats.dano = 1.5
+	johnny.stats.dano_cuerpo = 1.5
+	johnny.coger("cuchillo")
+	johnny.vestir("gymbro")
+	var cuchillo: float = johnny.arma().dano
+	johnny.coger("fregona")
+	johnny.vestir("portero")
+	var fregona: float = johnny.arma().dano
+	print("Ataque 5 + Camorrista 5: cuchillo con el gymbro %.1f (esperado: 9 × 2,5 = 22,5) · fregona con el portero %.1f (esperado: 8 × 3 = 24)" % [
+		cuchillo, fregona])
+	johnny.vestir(skin_antes)
+
+	# ── El daño mínimo de un golpe ──
+	johnny.stats.esquiva_sola = 0
+	johnny.escudo = 0.0
+	johnny.stats.armadura = 5
+	johnny.stats.dano_recibido = 0.5
+	johnny.invulnerable = 0.0
+	var v0: int = johnny.vida
+	johnny.recibir_dano(10)
+	var con_las_dos: int = v0 - johnny.vida
+	johnny.stats.dano_recibido = 1.0
+	johnny.invulnerable = 0.0
+	v0 = johnny.vida
+	johnny.recibir_dano(10)
+	print("Un golpe de 10 con Durito 5 e Insensible quita %d (esperado: 3) · con Durito 5 solo, %d (esperado: 5)" % [
+		con_las_dos, v0 - johnny.vida])
+
+	# ── Ninja: sin moverse en la esquiva (velocidad 0), un zombi duro pegado a Johnny ──
+	johnny.invencible = true
+	johnny.stats.ninja = true
+	johnny.stats.velocidad = 0.0
+	johnny.ninja_t = 0.0
+	var muere := []
+	for espera in [0.0, 1.2, 2.0]:   # esquivas a 0, ~1,5 y ~3,8 s: la del medio cae dentro de los 3 s
+		await get_tree().create_timer(espera, false).timeout
+		var zombi: Node2D = meter_zombi("normal", johnny.position + Vector2(40, 0))
+		zombi.vida = 500
+		await get_tree().process_frame
+		johnny.esquiva_espera = 0.0
+		johnny.esquivar(Vector2.RIGHT)
+		await get_tree().create_timer(0.3, false).timeout
+		muere.append(not is_instance_valid(zombi) or zombi.estado == "muerto")
+		if is_instance_valid(zombi):
+			zombi.queue_free()
+	print("Ninja: el zombi de al lado muere en cada esquiva %s (esperado: [true, false, true]) · a un jefe de 1500 le quitaría %d (esperado: 30)" % [
+		muere, ceili(1500 * johnny.NINJA_JEFE)])
+	johnny.invencible = false
+
+	# ── Lobezno: 1 punto, por debajo del tope del tercio ──
+	johnny.stats.regenera = 1
+	johnny.vida = johnny.vida_tope() - 10
+	johnny.regenera_t = 0.0
+	v0 = johnny.vida
+	await get_tree().create_timer(5.3, false).timeout
+	var sin_alerta: int = johnny.vida - v0
+	Alerta.nivel = 4
+	johnny.regenera_t = 0.0
+	v0 = johnny.vida
+	await get_tree().create_timer(5.3, false).timeout
+	var a_medias: int = johnny.vida - v0
+	await get_tree().create_timer(5.0, false).timeout
+	print("Lobezno 1: en 5,3 s cura %d (esperado: 1) · con la Alerta 4, en 5,3 s %d y en 10,3 s %d (esperado: 0 y 1)" % [
+		sin_alerta, a_medias, johnny.vida - v0])
+	Alerta.nivel = 0
+	johnny.stats = antes
+
+	# ── El dinero ──
+	var s := {"retos": {}}
+	var primera := Reto.premio(s, "apartamentos")
+	s.retos.apartamentos.completado = true
+	print("Premio del reto: la primera vez de hoy $%d, ya completado $%d (esperado: 10 y 0) · billetes de un jefe %d (esperado: 8)" % [
+		primera, Reto.premio(s, "apartamentos"), BILLETES_JEFA])
+	eventos.evento = "incendio"
+	eventos.empezado = true
+	var d0: int = dolares
+	await subir()
+	print("Subiendo con el incendio superado: dólares %d → %d (esperado: +3) · planta %d (esperado: 2) · dice «%s»" % [
+		d0, dolares, planta.num, aviso.text])
+	await get_tree().create_timer(0.4, false).timeout
+	Captura.foto("captura-equilibrio-incendio.png")
 	get_tree().quit()
