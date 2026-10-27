@@ -74,6 +74,7 @@
 #   --acustica          cómo suena la pistola en cada habitación de la planta baja y en la azotea: seca, con eco o
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
 #   --alerta N          las reglas de esa alerta (1 a 5)                                     [prueba_varias.gd]
+#   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
@@ -255,6 +256,9 @@ func empezar_prueba() -> void:
 	elif "--joyeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_joyeria()
+	elif "--llave" in args:
+		set_process(false)   # sin la prueba larga
+		probar_llave()
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)

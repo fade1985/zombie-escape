@@ -1225,7 +1225,7 @@ func etiqueta(texto: String, pos: Vector2) -> void:
 	add_child(nombre)
 
 
-# La llave del apartamento de la jefa: brilla un poco y sube y baja hasta que Johnny la pisa. En el centro
+# La llave del apartamento de la jefa: tiene una luz blanca alrededor y sube y baja hasta que Johnny la pisa. En el centro
 # comercial, la tarjeta de acceso (la suelta el guardia al caer) y, con "dorada", la tarjeta dorada de la cámara
 # acorazada de la joyería (joyeria.gd; al cogerla avisa con dorada_cogida)
 func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
@@ -1239,6 +1239,18 @@ func poner_llave(pos: Vector2, tarjeta := false, dorada := false) -> void:
 	circulo.radius = 22.0
 	forma.shape = circulo
 	zona.add_child(forma)
+	if not tarjeta:
+		# la llave, con una luz blanca alrededor para distinguirla, como la de las armas de rareza (partida.gd,
+		# soltar_arma), pero blanca. Alumbra todas las capas (luz.gd): si no, en un apartamento, donde cada habitación
+		# tiene la suya, no alumbraría el suelo
+		var resplandor := PointLight2D.new()
+		resplandor.name = "Resplandor"
+		resplandor.texture = load("res://escenas/luces/luz_suave.tres")
+		resplandor.texture_scale = 0.3
+		resplandor.color = Color.WHITE
+		resplandor.range_item_cull_mask = Luz.TODAS
+		resplandor.position = Vector2(0, -16)
+		zona.add_child(resplandor)
 	var dibujo := Sprite2D.new()
 	dibujo.texture = dibujo_tarjeta(dorada) if tarjeta else LLAVE
 	# la llave (32×32), al tamaño de un bidón de ácido en el suelo; la tarjeta (12×8), al doble

@@ -1,5 +1,5 @@
-# Pruebas sueltas: los niveles de alerta (--alerta N), el reto del día (--reto), la caza del acompañante (--caza)
-# y el vómito de la Gastroenteritis (--gastro). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# Pruebas sueltas: los niveles de alerta (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
+# el vómito de la Gastroenteritis (--gastro) y la llave en el suelo (--llave). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_sitios.gd"
 
 
@@ -8,7 +8,8 @@ extends "res://scripts/pruebas/prueba_sitios.gd"
 # Apartamentos, el zombi que lleva la llave (con la Alerta 5, con el doble de vida; al caer suelta la llave, y al
 # salir y volver a entrar no la lleva otra vez; al cogerla, el grito ¡¡¡LA LLAVE!!! encima de Johnny, en
 # captura-alerta-llave-cogida.png, y su hueco encendido en el inventario, en captura-alerta-llave-inventario.png; la
-# llave en el suelo, en captura-alerta-llave-suelo.png);
+# llave en el suelo, con su resplandor, en captura-alerta-llave-suelo.png y, con la penumbra, en
+# captura-alerta-llave-suelo-oscuro.png);
 # en el centro comercial, el guardia) y
 # captura-alerta-fin.png (el cartel del final con los dólares de más y la alerta que se abre). Luego se cierra
 func probar_alerta() -> void:
@@ -87,11 +88,11 @@ func probar_alerta() -> void:
 					print("Llave · al volver a entrar: zombis con llave %d, llave en el suelo: %s (esperado: 0 y true)" % [
 						get_tree().get_nodes_in_group("zombis").filter(func(o): return o.has_meta("llave")).size(),
 						mapa.cosas.has_node("Llave")])
-					# la llave en el suelo, con un bidón de ácido al lado para comparar el tamaño y Johnny cerca
-					# (captura-alerta-llave-suelo.png)
-					soltar_objeto("bidon_acido", planta.llave.pos + Vector2(60, 0))
+					# la llave en el suelo, con Johnny cerca (captura-alerta-llave-suelo.png)
 					johnny.position = planta.llave.pos + Vector2(0, 90)
 					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.3, false).timeout
+					Captura.foto("captura-alerta-llave-suelo-oscuro.png")   # (con la penumbra de siempre: el resplandor)
 					luz.alternar()   # (sin penumbra, para que se vea bien)
 					await get_tree().create_timer(0.3, false).timeout
 					Captura.foto("captura-alerta-llave-suelo.png")
@@ -198,6 +199,51 @@ func probar_reto() -> void:
 		e.completado, e.victorias, e.alerta_max, e.mejor_planta, e.mejor_tiempo,
 		e.completado == antes.completado and e.victorias == antes.victorias and e.alerta_max == antes.alerta_max
 		and e.mejor_planta == antes.mejor_planta and e.mejor_tiempo == antes.mejor_tiempo])
+	get_tree().quit()
+
+
+# Con "--captura --llave": la llave de la jefa en el suelo (mapa.poner_llave), en la habitación más grande de un
+# apartamento sin zombis y con la penumbra de siempre. Tres fotos: con su luz blanca (captura-llave-con.png), sin
+# ella, oculta (captura-llave-sin.png), y con todo iluminado (captura-llave-luz.png). Se cierra
+func probar_llave() -> void:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	var apt: Dictionary = planta.sitios[i].apt
+	for sala in apt.salas:
+		mapa.vistas[sala.id] = true   # todo descubierto: sin niebla
+		mapa.niebla[sala.id] = 0.0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var grande: Dictionary = apt.salas[0]
+	for s in apt.salas:
+		if s.casillas > grande.casillas:
+			grande = s
+	# Johnny en medio de la habitación y la llave a 90 de él (donde siga siendo la misma habitación), con el bidón al lado
+	var llave_en: Vector2 = grande.centro + Vector2(0, -90)
+	for d in [Vector2(0, -90), Vector2(0, 90), Vector2(-90, 0), Vector2(90, 0)]:
+		if mapa.zona_en(grande.centro + d) == grande.id:
+			llave_en = grande.centro + d
+			break
+	johnny.position = grande.centro
+	mapa.poner_llave(llave_en)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.7, false).timeout
+	print("Llave en el suelo: la llave existe %s · su resplandor %s (esperado: true y true)" % [
+		mapa.cosas.has_node("Llave"), mapa.cosas.get_node("Llave").has_node("Resplandor")])
+	Captura.foto("captura-llave-con.png")
+	var resplandor: PointLight2D = mapa.cosas.get_node("Llave/Resplandor")
+	resplandor.visible = false
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-llave-sin.png")
+	resplandor.visible = true
+	luz.alternar()   # (sin penumbra)
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-llave-luz.png")
 	get_tree().quit()
 
 
