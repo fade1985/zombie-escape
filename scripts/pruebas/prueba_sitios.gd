@@ -449,7 +449,7 @@ func probar_sala() -> void:
 # baja en él a la sala de mantenimiento, las guarda en el baúl y vuelve a la 1ª planta, delante del ascensor. En la
 # 2ª planta vuelve a estar averiado, y en la azotea no hay. Cada línea de la terminal dice lo esperado. Saca
 # captura-placas.png (antes de nada, el pasillo de la planta baja con las placas de las puertas y el cartel de la
-# planta, pintado junto al ascensor), captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
+# planta, pintado junto al ascensor), captura-ascensor-averiado.png (el de la 1ª planta antes del jefe, con su cinta), captura-ascensor-arreglado.png (el ascensor ya arreglado, con el aviso de Johnny), captura-ascensor-sala.png (la
 # sala, ya abajo) y captura-ascensor-baul.png (lo de la mochila, ya en el baúl). Deja el baúl como estaba y se cierra
 func probar_ascensor() -> void:
 	var antes := Guardado.cargar()
@@ -471,6 +471,8 @@ func probar_ascensor() -> void:
 	await get_tree().process_frame
 	print("1ª planta, antes del jefe: ascensor abierto %s · al empujarlo, sigue en el sitio %d y dice «%s» (esperado: false, 0, El ascensor está averiado)" % [
 		mapa.puertas[asc].abierta, aqui, aviso.text])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-ascensor-averiado.png")
 	# en la sala del jefe, como si ya hubiera caído: sin zombis y sin que llegue a salir
 	var del_jefe := -1
 	for k in planta.sitios.size():

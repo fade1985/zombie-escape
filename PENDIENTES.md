@@ -25,6 +25,4 @@ _(ninguno por ahora)_
 
 ## Por limar
 
-- **L5.** El ascensor averiado: solo una cinta horizontal (ahora lleva dos en aspa y una horizontal).
-- **L6.** Mutación Flatulento: más alcance.
-- **L7.** En el menú, los dos retos del día no están alineados y queda mal: alinearlos.
+_(nada por ahora)_

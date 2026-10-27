@@ -759,3 +759,47 @@ func probar_tutorial() -> void:
 	print("Tutorial · con la casilla de Ayudas apagada: %s (esperado: no sale)" % ("sale" if ventana.call() else "no sale"))
 	Guardado.cambiar(func(g): g.ajustes.tutoriales = true)
 	get_tree().quit()
+
+
+# Con "--captura --flatulento": el alcance de la mutación Flatulento (mutaciones.gd, MUT; antes 70, ahora 140). En
+# un apartamento con todo descubierto, Johnny en medio de su habitación más grande y tres zombis quietos en fila: a 50
+# (dentro del alcance de antes), a 110 (solo dentro del de ahora) y a 190 (fuera de los dos). Al soltar los gases,
+# los dos primeros se quedan paralizados 2 s y con el estado de gases (queman); el tercero, nada. Foto de la nube con
+# ellos (captura-flatulento.png). Cuenta todo en la terminal, con lo esperado, y se cierra
+func probar_flatulento() -> void:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	var apt: Dictionary = planta.sitios[i].apt
+	for sala in apt.salas:
+		mapa.vistas[sala.id] = true   # todo descubierto: sin niebla
+		mapa.niebla[sala.id] = 0.0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var grande: Dictionary = apt.salas[0]
+	for s in apt.salas:
+		if s.casillas > grande.casillas:
+			grande = s
+	johnny.position = grande.centro
+	johnny.get_node("Camara").reset_smoothing()
+	luz.alternar()   # (sin penumbra, para ver la nube)
+	await get_tree().process_frame
+	var zombis := []
+	for d in [50.0, 110.0, 190.0]:
+		var z := meter_zombi("normal", johnny.position + Vector2(d, 0))
+		z.set_physics_process(false)   # quietos, para la prueba
+		z.vida = 100000
+		zombis.append(z)
+	var lanzo: bool = mutaciones.actuar("flatulento")
+	await get_tree().create_timer(0.25).timeout
+	Captura.foto("captura-flatulento.png")
+	print("Flatulento · alcance %d · ¿suelta los gases? %s (esperado: 140 y true)" % [roundi(Mutaciones.MUT.flatulento.radio), lanzo])
+	for k in zombis.size():
+		print("Flatulento · zombi a %d: paralizado %s, con gases %s (esperado: %s)" % [
+			roundi(johnny.position.distance_to(zombis[k].position)), zombis[k].aturdido > 0.0,
+			zombis[k].estados.has("gases"), "true, true" if k < 2 else "false, false"])
+	get_tree().quit()

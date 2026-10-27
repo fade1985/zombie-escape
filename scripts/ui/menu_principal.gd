@@ -168,6 +168,11 @@ func primera_tarjeta() -> Button:
 	return tarjetas.get_child(0).get_child(0)
 
 
+# El alto de "n" líneas del texto gris de debajo de las tarjetas (la letra y los 3 que deja Label entre línea y línea)
+func alto_lineas(n: int) -> float:
+	return n * (get_theme_default_font().get_height(get_theme_default_font_size()) + 3.0)
+
+
 # Debajo de la tarjeta: "< Alerta 2 >" y lo que trae. Sin ninguna abierta, solo cómo se abre la primera
 func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	var maximo: int = p.alerta_max
@@ -182,6 +187,9 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 		explica.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(explica)
 		return
+	# lo que trae cada alerta ocupa de una a tres líneas: siempre el alto de tres, para que el botón del reto de cada
+	# edificio quede a la misma altura que el de los demás
+	explica.custom_minimum_size.y = alto_lineas(3)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.add_theme_constant_override("separation", 8)

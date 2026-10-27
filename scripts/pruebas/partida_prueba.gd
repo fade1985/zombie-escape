@@ -89,6 +89,7 @@
 #                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
+#   --flatulento        el alcance de la mutación Flatulento (140): quién se paraliza a 50, 110 y 190 [prueba_varias.gd]
 #   --rescate           el superviviente encerrado en su baño (y su horda), los vecinos de las viviendas, la barricada,
 #                       la escolta y la avería: lo mismo que en la prueba larga          [supervivientes.gd, probar()]
 #   --evento X          ese evento sorpresa: apagon, incendio u horda                        [eventos.gd, probar()]
@@ -114,6 +115,9 @@ func empezar_prueba() -> void:
 	elif "--gastro" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gastro()
+	elif "--flatulento" in args:
+		set_process(false)   # sin la prueba larga
+		probar_flatulento()
 	elif "--caza" in args:
 		set_process(false)   # sin la prueba larga
 		probar_caza()

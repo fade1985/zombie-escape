@@ -21,7 +21,7 @@ const MUT := {
 	"ansiedad": {"cada_zombi": 0.1, "tope": 0.5},   # ritmo del cuerpo a cuerpo por zombi a la vista, y como mucho
 	"endurecimiento": {"escudo": 60},
 	"locura": {"cada": 4.0, "radio": 200.0, "lio": 2.0},
-	"flatulento": {"cada": 3.0, "radio": 70.0, "dps": 10.0, "paraliza": 2.0},
+	"flatulento": {"cada": 3.0, "radio": 140.0, "dps": 10.0, "paraliza": 2.0},   # (27 oct: el radio, antes 70)
 }
 const MAXIMO := 4
 const TRAS_PRESENTACION := 1.0   # lo que tardan en actuar cuando acaba la presentación de un jefe
@@ -154,8 +154,8 @@ func actuar(id: String) -> bool:
 				z.aturdido = maxf(z.aturdido, m.paraliza)
 				Estados.poner(z.estados, "gases", m.paraliza, m.dps)   # el daño va como un estado, poco a poco
 			Sonido.tocar("rugido")
-			# la nube de gases
-			for i in 14:
+			# la nube de gases (28 bolitas: con el alcance doble, las de antes se quedaban muy sueltas)
+			for i in 28:
 				var a := randf() * TAU
 				var v: float = randf_range(0.6, 1.1) * m.radio * 1.6
 				Particulas.soltar(johnny, p + Vector2(0, 8), Vector2(cos(a) * v, sin(a) * v * 0.7 - 20.0),
