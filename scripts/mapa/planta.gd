@@ -331,9 +331,9 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			pos = sala.centro
 	if ed.cerrojo == "llave":
 		planta.llave = {"sitio": donde, "pos": pos}
-		# no está en el suelo: la lleva un zombi al azar de los apartamentos normales ({"llave": true} en su dato; la
-		# partida le pone la llave flotando encima) y la suelta al caer. Solo si no hubiera ningún zombi, se queda en el
-		# suelo de la habitación elegida
+		# no está en el suelo: la lleva un zombi al azar de los apartamentos normales ({"llave": true} en su dato; no se
+		# le ve nada: la partida solo le pone la marca "llave") y la suelta al caer. Solo si no hubiera ningún zombi, se
+		# queda en el suelo de la habitación elegida
 		var candidatos: Array = []
 		for i in normales:
 			candidatos.append_array(planta.sitios[i].zombis)

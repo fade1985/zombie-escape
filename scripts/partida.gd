@@ -811,24 +811,15 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 
 
 # En los Apartamentos, el zombi que lleva la llave del apartamento de la jefa (planta.gd lo elige al azar entre los de
-# la planta): lleva la llave flotando encima y, al caer, la suelta donde estaba. Con la Alerta 5 aguanta el doble, como el
-# guardia. "dato" es su apunte en la lista de zombis del sitio: al caer se le quita la llave, para que no vuelva a
-# llevarla si Johnny sale del sitio sin limpiar y vuelve a entrar
+# la planta): es un zombi como los demás (no se le ve nada) y, al caer, suelta la llave donde estaba. Con la Alerta 5
+# aguanta el doble, como el guardia. "dato" es su apunte en la lista de zombis del sitio: al caer se le quita la llave,
+# para que no vuelva a llevarla si Johnny sale del sitio sin limpiar y vuelve a entrar
 func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
 	if Alerta.guardia() > 1.0:
 		zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
 		zombi.vida = zombi.vida_max
 	zombi.set_meta("llave", true)
-	var llave := Sprite2D.new()
-	llave.texture = MAPA.LLAVE
-	llave.scale = Vector2(2, 2)
-	llave.position = Vector2(0, -zombi.altura - 10)
-	zombi.add_child(llave)
-	var vaiven := llave.create_tween().set_loops()
-	vaiven.tween_property(llave, "position:y", -zombi.altura - 16, 0.6).set_trans(Tween.TRANS_SINE)
-	vaiven.tween_property(llave, "position:y", -zombi.altura - 10, 0.6).set_trans(Tween.TRANS_SINE)
 	zombi.murio.connect(func():
-		llave.hide()
 		dato.erase("llave")
 		planta.llave = {"sitio": aqui, "pos": zombi.position}
 		mapa.call_deferred("poner_llave", zombi.position)
