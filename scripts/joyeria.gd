@@ -239,6 +239,7 @@ func poner_premio() -> void:
 	brillo.texture = load("res://escenas/luces/luz_suave.tres")
 	brillo.texture_scale = 0.35
 	brillo.color = BRILLO
+	brillo.range_item_cull_mask = Luz.TODAS   # (cada habitación tiene su capa de luz: si no, no alumbraría el suelo)
 	brillo.position = Vector2(0, -10)
 	cosa.add_child(brillo)
 	cosa.cogido.connect(coger_premio)

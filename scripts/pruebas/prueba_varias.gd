@@ -203,8 +203,9 @@ func probar_reto() -> void:
 
 
 # Con "--captura --llave": la llave de la jefa en el suelo (mapa.poner_llave), en la habitación más grande de un
-# apartamento sin zombis y con la penumbra de siempre. Tres fotos: con su luz blanca (captura-llave-con.png), sin
-# ella, oculta (captura-llave-sin.png), y con todo iluminado (captura-llave-luz.png). Se cierra
+# apartamento sin zombis y con la penumbra de siempre, con un arma épica al lado (soltar_arma: su luz morada también
+# alumbra el suelo). Tres fotos: con la luz blanca de la llave (captura-llave-con.png), sin ella, oculta
+# (captura-llave-sin.png), y con todo iluminado (captura-llave-luz.png). Se cierra
 func probar_llave() -> void:
 	set_process(false)
 	var i := 1   # el apartamento con más habitaciones
@@ -231,6 +232,7 @@ func probar_llave() -> void:
 			break
 	johnny.position = grande.centro
 	mapa.poner_llave(llave_en)
+	soltar_arma("bate", llave_en + Vector2(70, 0), 3)   # y un arma épica al lado: su luz morada, como la de la llave pero de su color
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.7, false).timeout
 	print("Llave en el suelo: la llave existe %s · su resplandor %s (esperado: true y true)" % [

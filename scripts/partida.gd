@@ -982,6 +982,7 @@ func soltar_arma(id: String, donde: Vector2, calidad := 0) -> void:
 		brillo.texture = load("res://escenas/luces/luz_suave.tres")
 		brillo.texture_scale = 0.25
 		brillo.color = Armas.color(calidad)
+		brillo.range_item_cull_mask = Luz.TODAS   # (si no, en un apartamento, con una capa de luz por habitación, no alumbra el suelo)
 		brillo.position = Vector2(0, -10)
 		cosa.add_child(brillo)
 	cosa.cogido.connect(func():
