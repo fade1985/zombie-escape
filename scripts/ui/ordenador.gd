@@ -130,14 +130,14 @@ func montar_monitor() -> void:
 
 	iconos = VBoxContainer.new()
 	iconos.position = Vector2(10, 12)
-	iconos.add_theme_constant_override("separation", 4)
+	iconos.add_theme_constant_override("separation", 1)
 	pantalla.add_child(iconos)
 	var s := Guardado.cargar()   # una sola vez, para los avisos de los iconos
 	for i in ICONOS:
 		var b := Button.new()
 		b.name = "icono_" + i[0]
 		b.flat = true
-		b.custom_minimum_size = Vector2(132, 68)
+		b.custom_minimum_size = Vector2(132, 72)
 		b.add_theme_stylebox_override("normal", caja(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 4, 2))   # sin el margen grande del tema: caben los 7
 		b.add_theme_stylebox_override("hover", caja(Color(1, 1, 1, 0.12), Color(0, 0, 0, 0), 0, 4, 2))
 		b.add_theme_stylebox_override("pressed", caja(Color(1, 1, 1, 0.2), Color(0, 0, 0, 0), 0, 4, 2))
@@ -146,7 +146,7 @@ func montar_monitor() -> void:
 		var dentro := VBoxContainer.new()
 		dentro.set_anchors_preset(Control.PRESET_FULL_RECT)
 		dentro.offset_top = 2
-		dentro.offset_bottom = -2
+		dentro.offset_bottom = -6   # más hueco abajo: el marco de madera del foco es más grueso que el texto
 		dentro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_theme_constant_override("separation", 0)
 		b.add_child(dentro)
