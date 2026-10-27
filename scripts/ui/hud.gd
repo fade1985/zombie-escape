@@ -13,8 +13,8 @@
 #     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
 #   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás que
 #     lleva a mano (F cambia entre ellos; los de repuesto no se ven) en pequeño al lado.
-#   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo) y la mochila (una
-#     cajita por casilla, las llenas encendidas). Los dólares no están aquí: se ven en el inventario.
+#   - A la derecha, sin marco: la llave de la portera (si la lleva, entra con un brillo). Ni la mochila ni los
+#     dólares están aquí: se ven en el inventario.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
 
@@ -49,7 +49,7 @@ var fila := HBoxContainer.new()
 var barra := Control.new()
 var armas := Control.new()      # las dos casillas de las armas
 var lanzar := Control.new()     # el lanzable de ahora y los demás
-var recursos := Control.new()   # la llave y la mochila, pegadas a la derecha
+var recursos := Control.new()   # la llave, pegada a la derecha
 var texturas := {}              # los iconos ya cargados
 
 # Las armas: cuál estaba en la mano y las animaciones al cambiar (de 0 a 1 el intercambio; las demás, de 1 a 0)
@@ -331,7 +331,7 @@ func pintar_lanzar() -> void:
 		x += 26
 
 
-# ── La llave y la mochila ──
+# ── La llave ──
 
 func mirar_recursos(delta: float) -> void:
 	if partida.planta.tiene_llave:
@@ -340,26 +340,15 @@ func mirar_recursos(delta: float) -> void:
 		llave_t = -1.0
 
 
-# De derecha a izquierda: la mochila pegada al borde y la llave
+# La llave, pegada al borde de la derecha (solo se ve si la lleva)
 func pintar_recursos() -> void:
-	var y := roundf(fila.size.y / 2.0)
-	var x := get_viewport_rect().size.x - 28.0
-	# la mochila: una cajita por casilla, en dos filas; las llenas encendidas (si está llena, parpadea)
-	var llenas := Objetos.casillas(partida.mochila).size()
-	var columnas := ceili(Objetos.MOCHILA / 2.0)
-	var llena := llenas >= Objetos.MOCHILA and int(tiempo * 3.0) % 2 == 0
-	x -= columnas * 7
-	for i in Objetos.MOCHILA:
-		var r := Rect2(x + (i % columnas) * 7, y - 7 + (i / columnas) * 7, 5, 5)
-		recursos.draw_rect(r.grow(1), Tema.LINEA)
-		recursos.draw_rect(r, (Tema.AMARILLO if llena else Tema.TINTA) if i < llenas else Tema.METAL)
-	x -= 28
-	recursos.draw_texture_rect(icono("mochila"), Rect2(x, y - 12, 24, 24), false)
 	# la llave: al cogerla, entra grande con un brillo amarillo que se apaga
 	if llave_t < 0.0:
 		return
+	var y := roundf(fila.size.y / 2.0)
+	var x := get_viewport_rect().size.x - 28.0
 	var nombre: String = partida.nombre_jefa()
-	x -= 40 + ancho_texto(nombre, 14)
+	x -= 28 + ancho_texto(nombre, 14)
 	texto(recursos, Vector2(x + 28, y + 5), nombre, 14, Tema.AMARILLO)
 	var r := Rect2(x, y - 12, 24, 24)
 	var k := clampf(1.0 - llave_t / 1.2, 0.0, 1.0)
