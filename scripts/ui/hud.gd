@@ -16,7 +16,8 @@
 #     y con el borde amarillo, y la otra a su lado, apagada (con la tecla de cambiar). Al cambiar dan un saltito
 #     (sin el nombre encima: el arma se ve en su dibujo).
 #   - A su izquierda, los lanzables que lleva a mano (los de repuesto no se ven), cada uno en su casilla con
-#     cuántos le quedan: el que se lanza ahora, encendido y con las esquinas amarillas, que la F pasa al siguiente.
+#     cuántos le quedan: el que se lanza ahora, en una casilla grande como la del arma, encendido y con las esquinas
+#     amarillas, que la F pasa al siguiente.
 #   - En el móvil, las armas y los lanzables van al lado de la barra: la esquina de la derecha es de los botones.
 #   - Ni la llave de la portera, ni la mochila, ni los dólares están aquí: se ven en el inventario.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
@@ -113,7 +114,7 @@ func _ready() -> void:
 	derecha.add_theme_constant_override("separation", 14)
 	derecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(derecha)
-	lanzar.custom_minimum_size = Vector2(MEDIANA, GRANDE + 4)
+	lanzar.custom_minimum_size = Vector2(GRANDE, GRANDE + 4)
 	lanzar.draw.connect(pintar_lanzar)
 	derecha.add_child(lanzar)
 	armas.custom_minimum_size = Vector2(MEDIANA + GRANDE + 12, GRANDE + 4)
@@ -323,29 +324,42 @@ func mirar_lanzar(delta: float) -> void:
 	giro = move_toward(giro, 1.0, delta / 0.22)
 	salto_cuenta = move_toward(salto_cuenta, 0.0, delta * 5.0)
 	destello_lanzar = move_toward(destello_lanzar, 0.0, delta * 4.0)
-	# el ancho depende de cuántos lleve a mano (sin ninguno, una casilla vacía)
-	lanzar.custom_minimum_size.x = maxi(1, lz.tipos().size()) * (MEDIANA + 10) - 4
+	# el ancho depende de cuántos lleve a mano (sin ninguno, una casilla vacía): una grande y las demás medianas
+	lanzar.custom_minimum_size.x = (maxi(1, lz.tipos().size()) - 1) * (MEDIANA + 10) + GRANDE + 6
 
 
-# La casilla del lanzable "i" (en el orden de la F), todas en fila y con el borde de abajo como el de las armas
-func sitio_lanzable(i: int) -> Rect2:
-	return Rect2(2 + i * (MEDIANA + 10), 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
+# Las casillas de los lanzables (en el orden de la F), en fila y con el borde de abajo como el de las armas: la del de
+# ahora, grande como la del arma en la mano, y las demás medianas. Al cambiar con la F, la del de antes encoge mientras
+# la del nuevo crece (con el muelle), así que la fila mide siempre lo mismo
+func sitios_lanzables(lista: Array) -> Array:
+	var ahora := maxi(lista.find(partida.lanzables.tipo), 0)
+	var antes := lista.find(tipo_antes) if giro < 1.0 else -1
+	var k := muelle(giro) if antes >= 0 else 1.0
+	var sitios := []
+	var x := 2.0
+	for i in lista.size():
+		var grande := (k if i == ahora else 0.0) + (1.0 - k if i == antes else 0.0)
+		var lado := roundf(lerpf(MEDIANA, GRANDE, grande))
+		sitios.append(Rect2(x, 2 + GRANDE - lado, lado, lado))
+		x += lado + 10
+	return sitios
 
 
-# Cada lanzable en su casilla, con cuántos quedan en la esquina (en rojo si ninguno); el de ahora, encendido y
-# con las esquinas amarillas. Al cambiar con la F, las esquinas saltan de una casilla a la otra y la nueva da
-# un saltito
+# Cada lanzable en su casilla, con cuántos quedan en la esquina (en rojo si ninguno); el de ahora, en la casilla
+# grande, encendido y con las esquinas amarillas. Al cambiar con la F, las esquinas saltan de una casilla a la otra,
+# las casillas cambian de tamaño y la nueva da un saltito
 func pintar_lanzar() -> void:
 	var lz: Lanzables = partida.lanzables
 	var lista: Array = lz.tipos()
 	if lista.is_empty():
 		lista = [""]   # no lleva nada a mano
 	var k := muelle(giro)
+	var sitios := sitios_lanzables(lista)
 	for i in lista.size():
 		var t: String = lista[i]
 		var n := lz.cuantas(t)
 		var activo := t == lz.tipo
-		var r := sitio_lanzable(i)
+		var r: Rect2 = sitios[i]
 		if activo:
 			con_salto(lanzar, r, 1.0 - giro)
 		casilla(lanzar, r, icono_lanzable(t), (1.0 if activo else 0.6) if n > 0 else 0.35, Vector2.ZERO,
@@ -360,14 +374,14 @@ func pintar_lanzar() -> void:
 		texto(lanzar, donde, s, 16, Color(Tema.TINTA if n > 0 else Tema.ROJO, 1.0 if activo else 0.7))
 		lanzar.draw_set_transform(Vector2.ZERO)
 	# las esquinas, sobre el de ahora (viniendo del de antes al cambiar), y la F encima si hay otros
-	var cursor := sitio_lanzable(maxi(lista.find(lz.tipo), 0))
+	var cursor: Rect2 = sitios[maxi(lista.find(lz.tipo), 0)]
 	var antes := lista.find(tipo_antes)
 	if giro < 1.0 and antes >= 0:
-		cursor = mezclar(sitio_lanzable(antes), cursor, k)
+		cursor = mezclar(sitios[antes], cursor, k)
 	if lz.cuantas(lz.tipo) > 0:
 		esquinas(lanzar, cursor)
 	if lista.size() > 1:
-		tecla(lanzar, cursor.position + Vector2(MEDIANA - 6, -10), "F")
+		tecla(lanzar, cursor.position + Vector2(cursor.size.x - 6, -10), "F")
 
 
 # ── Las curas ──
