@@ -25,4 +25,5 @@ _(ninguno por ahora)_
 
 ## Por limar
 
-_(nada por ahora)_
+- **L8.** En «Elige edificio», lo de dentro de las dos tarjetas (dibujo, nombre, descripción y «4 plantas y azotea…»)
+  no está a la misma altura: la del Centro comercial lleva una línea más de descripción y todo se corre. Alinearlo.
