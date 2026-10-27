@@ -202,6 +202,34 @@ func probar_reto() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --hud": el HUD (hud.gd), con las armas y los lanzables en la esquina de abajo a la derecha. Con
+# tres lanzables a mano, saca el HUD quieto (captura-hud.png), a medio cambiar de arma con la Q
+# (captura-hud-cambio.png), con el nombre del arma nueva (captura-hud-nombre.png), a medio cambiar de lanzable con la
+# F (captura-hud-f.png) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
+func probar_hud() -> void:
+	set_process(false)
+	for t in ["granada", "atraedora"]:
+		lanzables.meter(t, 2)
+		lanzables.a_la_mano(t)
+	await get_tree().create_timer(0.5).timeout
+	print("HUD · lanzables a mano: %s, el de ahora: %s" % [lanzables.tipos(), lanzables.tipo])
+	Captura.foto("captura-hud.png")
+	johnny.cambiar_mano()
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-hud-cambio.png")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-hud-nombre.png")
+	lanzables.cambiar()
+	await get_tree().create_timer(0.08).timeout
+	Captura.foto("captura-hud-f.png")
+	await get_tree().create_timer(0.5).timeout
+	Tactil.activo = true   # (solo el HUD: los botones del móvil no se montan a mitad de partida)
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-hud-movil.png")
+	Tactil.activo = false
+	get_tree().quit()
+
+
 # Con "--captura --llave": la llave de la jefa en el suelo (mapa.poner_llave), en la habitación más grande de un
 # apartamento sin zombis y con la penumbra de siempre, con un arma épica al lado (soltar_arma: su luz morada también
 # alumbra el suelo). Tres fotos: con la luz blanca de la llave (captura-llave-con.png), sin ella, oculta

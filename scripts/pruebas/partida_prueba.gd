@@ -75,6 +75,7 @@
 #                       con un rebote corto (con --edificio centro, en las tiendas)          [prueba_sitios.gd]
 #   --alerta N          las reglas de esa alerta (1 a 5)                                     [prueba_varias.gd]
 #   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
+#   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F) y en el móvil [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
@@ -259,6 +260,9 @@ func empezar_prueba() -> void:
 	elif "--llave" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llave()
+	elif "--hud" in args:
+		set_process(false)   # sin la prueba larga
+		probar_hud()
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)

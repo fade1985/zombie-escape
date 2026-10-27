@@ -9,10 +9,12 @@
 #     Más apagadas si lleva en la mano el arma cuerpo a cuerpo.
 #     Con el lanzallamas, en vez de las balas, el depósito: una barra de gasolina y las gasolinas de la mochila
 #     (con el lanza ácido, la barra en verde y sus bidones de ácido).
-#   - Al lado, las armas: la de la mano en una casilla grande con el borde amarillo y la otra, pequeña y
-#     apagada (con la tecla de cambiar). Al cambiar dan un saltito y el nombre sale encima un momento.
-#   - Luego, los lanzables: el que se lanza ahora en su casilla, con cuántos quedan en la esquina, y los demás que
-#     lleva a mano (F cambia entre ellos; los de repuesto no se ven) en pequeño al lado.
+#   - En la esquina de abajo a la derecha, las armas: la de la mano en la misma esquina, en la casilla más grande
+#     y con el borde amarillo, y la otra a su lado, apagada (con la tecla de cambiar). Al cambiar dan un saltito
+#     y el nombre sale encima un momento.
+#   - A su izquierda, los lanzables que lleva a mano (los de repuesto no se ven), cada uno en su casilla con
+#     cuántos le quedan: el que se lanza ahora, encendido y con las esquinas amarillas, que la F pasa al siguiente.
+#   - En el móvil, las armas y los lanzables van al lado de la barra: la esquina de la derecha es de los botones.
 #   - Ni la llave de la portera, ni la mochila, ni los dólares están aquí: se ven en el inventario.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
@@ -25,14 +27,16 @@ const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
 const FRANJA := 64.0      # el alto de la franja de abajo (el grosor del muro de abajo)
-const GRANDE := 44.0      # la casilla del arma en la mano (casilla-grande.png, de 22 píxeles)
-const PEQUENA := 28.0     # la de la otra arma
-const MEDIANA := 36.0     # la del lanzable de ahora
+const GRANDE := 52.0      # la casilla del arma en la mano (casilla-grande.png, de 22 píxeles, con los lados estirados)
+const MEDIANA := 36.0     # la de la otra arma y la de cada lanzable (casilla-mediana.png, de 18, al doble)
 const MARCOS := {
 	"grande": preload("res://assets/ui/casilla-grande.png"),
 	"mediana": preload("res://assets/ui/casilla-mediana.png"),
-	"pequena": preload("res://assets/ui/casilla-pequena.png"),
 }
+# Por cada marco: lo que mide su esquina en el dibujo (se pinta al doble y no se estira) y su grueso en la
+# pantalla (hasta el hueco de dentro)
+const CORTE := {"grande": 4, "mediana": 4}
+const GRUESO := {"grande": 8.0, "mediana": 7.0}
 const NOMBRE := 1.6       # lo que se ve el nombre del arma al cambiar (segundos)
 # La barra del depósito, del color de lo que lo llena: [el relleno, su brillo de arriba, su sombra de abajo]
 const COLORES_DEPOSITO := {
@@ -45,6 +49,7 @@ var johnny: Node2D
 var partida: Node
 
 var fila := HBoxContainer.new()
+var derecha := HBoxContainer.new()   # los lanzables y las armas, en la esquina de la derecha
 var barra := Control.new()
 var armas := Control.new()      # las dos casillas de las armas
 var lanzar := Control.new()     # el lanzable de ahora y los demás
@@ -57,7 +62,7 @@ var cambio := 1.0
 var salto_arma := 0.0
 var destello_arma := 0.0
 var nombre_arma := 0.0            # el rato que le queda al nombre
-# Los lanzables: el que se ve, el de antes (sale del tambor) y cuántos había
+# Los lanzables: el que se ve, el de antes (de donde vienen las esquinas al cambiar) y cuántos había
 var tipo_visto := ""
 var tipo_antes := ""
 var cuenta_antes := -1
@@ -94,18 +99,25 @@ func _ready() -> void:
 	barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	barra.draw.connect(pintar_barra)
 	fila.add_child(barra)
-	armas.custom_minimum_size = Vector2(GRANDE + PEQUENA + 8, GRANDE + 4)
-	armas.draw.connect(pintar_armas)
-	fila.add_child(armas)
+	derecha.add_theme_constant_override("separation", 14)
+	derecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(derecha)
 	lanzar.custom_minimum_size = Vector2(MEDIANA, GRANDE + 4)
 	lanzar.draw.connect(pintar_lanzar)
-	fila.add_child(lanzar)
+	derecha.add_child(lanzar)
+	armas.custom_minimum_size = Vector2(MEDIANA + GRANDE + 12, GRANDE + 4)
+	armas.draw.connect(pintar_armas)
+	derecha.add_child(armas)
 
 
 func _process(delta: float) -> void:
 	tiempo += delta
+	var pantalla := get_viewport_rect().size
 	# en la franja de abajo (las balas se pintan por encima de la barra de vida; debajo queda la línea de ayuda)
-	fila.position = Vector2(14, roundf(get_viewport_rect().size.y - FRANJA / 2.0 - fila.size.y / 2.0) - 7.0)
+	fila.position = Vector2(14, roundf(pantalla.y - FRANJA / 2.0 - fila.size.y / 2.0) - 7.0)
+	# las casillas, con su borde de abajo justo encima de la línea de ayuda; en el móvil, al lado de la barra
+	var x := fila.position.x + fila.size.x + 14 if Tactil.activo else pantalla.x - 14 - derecha.size.x
+	derecha.position = Vector2(x, pantalla.y - 15 - derecha.size.y)
 	if johnny == null:
 		return
 	mirar_armas(delta)
@@ -133,9 +145,8 @@ func icono_lanzable(k: String) -> String:
 # puede ir corrido ("corrido", para la animación del tambor) y se recorta al hueco de dentro. Lo que no es Normal
 # ("calidad": la del arma o el paquete; Armas.CALIDADES) lleva una raya de su color por dentro del marco
 func casilla(c: Control, r: Rect2, nombre: String, luz := 1.0, corrido := Vector2.ZERO, calidad := 0) -> void:
-	var marco: Texture2D = MARCOS.grande if r.size.x > 38 else (MARCOS.mediana if r.size.x > 31 else MARCOS.pequena)
 	var m := 0.55 + 0.45 * luz
-	c.draw_texture_rect(marco, r, false, Color(m, m, m))
+	marco(c, r, Color(m, m, m))
 	c.draw_rect(hueco_de(r), Color("#5a4e63", 0.55 * luz))   # el hueco, algo encendido si está en uso
 	if calidad > 0:
 		c.draw_rect(hueco_de(r).grow(-1), Color(Armas.color(calidad), 0.5 + 0.5 * luz), false, 2.0)
@@ -143,9 +154,29 @@ func casilla(c: Control, r: Rect2, nombre: String, luz := 1.0, corrido := Vector
 		icono_dentro(c, nombre, r, corrido, Color(luz, luz, luz, 0.4 + 0.6 * luz))
 
 
-# El hueco de dentro de una casilla (el marco tiene 4 píxeles del dibujo de grueso contando el filo, de 22)
+func tipo_marco(r: Rect2) -> String:
+	return "grande" if r.size.x > 44 else "mediana"
+
+
+# El marco de metal, en nueve trozos: las esquinas al doble, como todo el dibujo, y los lados estirados hasta lo
+# que mida la casilla (así la del arma en la mano puede ser más grande sin que las esquinas se deformen)
+func marco(c: Control, r: Rect2, color: Color) -> void:
+	var tipo := tipo_marco(r)
+	var tex: Texture2D = MARCOS[tipo]
+	var e: float = CORTE[tipo]
+	var t := float(tex.get_width())
+	var corte := [0.0, e, t - e, t]   # dónde se corta el dibujo y dónde va cada trozo en la pantalla
+	var xs := [r.position.x, r.position.x + e * 2, r.end.x - e * 2, r.end.x]
+	var ys := [r.position.y, r.position.y + e * 2, r.end.y - e * 2, r.end.y]
+	for i in 3:
+		for j in 3:
+			c.draw_texture_rect_region(tex, Rect2(xs[i], ys[j], xs[i + 1] - xs[i], ys[j + 1] - ys[j]),
+				Rect2(corte[i], corte[j], corte[i + 1] - corte[i], corte[j + 1] - corte[j]), color)
+
+
+# El hueco de dentro de una casilla
 func hueco_de(r: Rect2) -> Rect2:
-	return r.grow(-roundf(r.size.x * 4.0 / 22.0))
+	return r.grow(-GRUESO[tipo_marco(r)])
 
 
 # El icono, centrado en el hueco (corrido si hace falta) y recortado a él para que no se salga
@@ -239,19 +270,20 @@ func mirar_armas(delta: float) -> void:
 
 
 # Al cambiar de arma, la nueva salta de la casilla pequeña a la grande (haciendo un arco por arriba) y la
-# vieja baja a la pequeña; luego las esquinas amarillas se cierran sobre la nueva
+# vieja baja a la pequeña; luego las esquinas amarillas se cierran sobre la nueva. La grande va a la derecha,
+# en la esquina de la pantalla
 func pintar_armas() -> void:
 	var h: Dictionary = johnny.huecos
 	var otra: String = h.fuego if johnny.mano == "cuerpo" else h.cuerpo
-	var grande := Rect2(2, 2, GRANDE, GRANDE)
-	var pequena := Rect2(GRANDE + 8, 2 + GRANDE - PEQUENA, PEQUENA, PEQUENA)
+	var grande := Rect2(MEDIANA + 10, 2, GRANDE, GRANDE)
+	var pequena := Rect2(2, 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
 	var k := muelle(cambio)
 	var arco := Vector2(0, -sin(cambio * PI) * 12.0)
 	var vieja := mezclar(grande, pequena, k)
 	vieja.position -= arco * 0.4
 	casilla(armas, vieja, Objetos.icono(otra), lerpf(1.0, 0.6, cambio), Vector2.ZERO, johnny.calidad(otra))
 	if cambio >= 1.0:
-		tecla(armas, pequena.position + Vector2(PEQUENA - 8, -8), "Q")
+		tecla(armas, pequena.position + Vector2(MEDIANA - 8, -8), "Q")
 	var nueva := mezclar(pequena, grande, k)
 	nueva.position += arco
 	con_salto(armas, nueva, salto_arma)
@@ -260,10 +292,11 @@ func pintar_armas() -> void:
 	if cambio > 0.6:
 		esquinas(armas, nueva, (1.0 - cambio) * 25.0)
 	armas.draw_set_transform(Vector2.ZERO)
-	# el nombre, encima un momento al cambiar (y se apaga al final)
+	# el nombre, encima un momento al cambiar (y se apaga al final), acabando donde la casilla para no salirse
 	if nombre_arma > 0.0:
 		var a := clampf(nombre_arma / 0.4, 0.0, 1.0)
-		texto(armas, Vector2(2, -30), Armas.nombre(en_mano, johnny.calidad(en_mano)), 16, Color(Tema.AMARILLO, a))
+		var s: String = Armas.nombre(en_mano, johnny.calidad(en_mano))
+		texto(armas, Vector2(grande.end.x - ancho_texto(s, 16), -16), s, 16, Color(Tema.AMARILLO, a))
 
 
 # ── Los lanzables ──
@@ -283,43 +316,51 @@ func mirar_lanzar(delta: float) -> void:
 	giro = move_toward(giro, 1.0, delta / 0.22)
 	salto_cuenta = move_toward(salto_cuenta, 0.0, delta * 5.0)
 	destello_lanzar = move_toward(destello_lanzar, 0.0, delta * 4.0)
-	# el ancho depende de cuántos otros haya al lado
-	lanzar.custom_minimum_size.x = MEDIANA + 8 + 26 * maxi(0, lz.tipos().size() - 1)
+	# el ancho depende de cuántos lleve a mano (sin ninguno, una casilla vacía)
+	lanzar.custom_minimum_size.x = maxi(1, lz.tipos().size()) * (MEDIANA + 10) - 4
 
 
-# Al cambiar de lanzable, como el tambor de un revólver: el viejo sale por la izquierda y el nuevo entra por
-# la derecha, dentro del hueco
+# La casilla del lanzable "i" (en el orden de la F), todas en fila y con el borde de abajo como el de las armas
+func sitio_lanzable(i: int) -> Rect2:
+	return Rect2(2 + i * (MEDIANA + 10), 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
+
+
+# Cada lanzable en su casilla, con cuántos quedan en la esquina (en rojo si ninguno); el de ahora, encendido y
+# con las esquinas amarillas. Al cambiar con la F, las esquinas saltan de una casilla a la otra y la nueva da
+# un saltito
 func pintar_lanzar() -> void:
 	var lz: Lanzables = partida.lanzables
-	var n := lz.cuantas(lz.tipo)
-	var r := Rect2(2, 2 + GRANDE - MEDIANA, MEDIANA, MEDIANA)
+	var lista: Array = lz.tipos()
+	if lista.is_empty():
+		lista = [""]   # no lleva nada a mano
 	var k := muelle(giro)
-	casilla(lanzar, r, icono_lanzable(lz.tipo), 1.0 if n > 0 else 0.35, Vector2((1.0 - k) * MEDIANA, 0),
-		Lanzables.calidad_de(lz.tipo))
-	if giro < 1.0 and tipo_antes != "":
-		var m := 1.0 if lz.cuantas(tipo_antes) > 0 else 0.35
-		icono_dentro(lanzar, icono_lanzable(tipo_antes), r, Vector2(-k * MEDIANA, 0), Color(m, m, m, 1.0 - giro))
-	destello(lanzar, r, destello_lanzar)
-	if n > 0:
-		esquinas(lanzar, r, (1.0 - k) * 10.0)
-	# cuántos quedan, en la esquina de abajo a la derecha (en rojo si ninguno), con saltito si cambia
-	var s := "x%d" % n
-	var donde := Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1)
-	con_salto(lanzar, Rect2(donde - Vector2(0, 12), Vector2(ancho_texto(s, 16), 12)), salto_cuenta)
-	texto(lanzar, donde, s, 16, Tema.TINTA if n > 0 else Tema.ROJO)
-	lanzar.draw_set_transform(Vector2.ZERO)
-	var otros: Array = lz.tipos().filter(func(t): return t != lz.tipo)
-	if otros.is_empty():
-		return
-	tecla(lanzar, r.position + Vector2(MEDIANA - 6, -10), "F")
-	# los demás, en pequeño y apagados, con su número debajo
-	var x := r.end.x + 12
-	for t in otros:
-		var m := lz.cuantas(t)
-		var l := 0.85 if m > 0 else 0.3
-		lanzar.draw_texture_rect(icono(icono_lanzable(t)), Rect2(x, r.position.y, 20, 20), false, Color(l, l, l, 0.5 + 0.5 * l))
-		texto(lanzar, Vector2(x + 10, r.end.y), str(m), 12, Color(Tema.GRIS, 0.5 + 0.5 * l), true)
-		x += 26
+	for i in lista.size():
+		var t: String = lista[i]
+		var n := lz.cuantas(t)
+		var activo := t == lz.tipo
+		var r := sitio_lanzable(i)
+		if activo:
+			con_salto(lanzar, r, 1.0 - giro)
+		casilla(lanzar, r, icono_lanzable(t), (1.0 if activo else 0.6) if n > 0 else 0.35, Vector2.ZERO,
+			Lanzables.calidad_de(t))
+		if activo:
+			destello(lanzar, r, destello_lanzar)
+		lanzar.draw_set_transform(Vector2.ZERO)
+		var s := "x%d" % n
+		var donde := Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1)
+		if activo:   # si cambia, el número da un saltito
+			con_salto(lanzar, Rect2(donde - Vector2(0, 12), Vector2(ancho_texto(s, 16), 12)), salto_cuenta)
+		texto(lanzar, donde, s, 16, Color(Tema.TINTA if n > 0 else Tema.ROJO, 1.0 if activo else 0.7))
+		lanzar.draw_set_transform(Vector2.ZERO)
+	# las esquinas, sobre el de ahora (viniendo del de antes al cambiar), y la F encima si hay otros
+	var cursor := sitio_lanzable(maxi(lista.find(lz.tipo), 0))
+	var antes := lista.find(tipo_antes)
+	if giro < 1.0 and antes >= 0:
+		cursor = mezclar(sitio_lanzable(antes), cursor, k)
+	if lz.cuantas(lz.tipo) > 0:
+		esquinas(lanzar, cursor)
+	if lista.size() > 1:
+		tecla(lanzar, cursor.position + Vector2(MEDIANA - 6, -10), "F")
 
 
 func mover_barra(delta: float) -> void:
