@@ -1613,3 +1613,74 @@ func correr_un_rato(centro: Vector2) -> float:
 	await get_tree().create_timer(0.2, false).timeout
 	johnny.position = centro
 	return rapidez
+
+
+# Con "--captura --tentaculos": el zombi de tentáculos con su hoja de PixelLab (zombi_tentaculos.gd). En la sala de
+# pruebas, dos vienen andando hacia Johnny, uno por cada lado (captura-tentaculos-andar.png); luego uno, ya cerca,
+# avisa del latigazo echando los tentáculos atrás (captura-tentaculos-aviso.png) y los lanza al dar el golpe
+# (captura-tentaculos-latigazo.png); se le pega (captura-tentaculos-golpe.png) y se le mata
+# (captura-tentaculos-muerte.png, ya tendido). En la terminal, la animación y el fotograma de cada momento
+func probar_tentaculos() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas, que taparían al de la izquierda
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "s"
+	johnny.get_node("Camara").reset_smoothing()
+	var que_hace := func(z: Node2D) -> String:
+		return "%s %s/%d" % [z.estado, z.sprite.animation, z.sprite.frame]
+
+	# andando: uno desde la izquierda (andar_e) y otro desde la derecha (andar_o, el mismo en espejo)
+	var z: Node2D = meter_zombi("tentaculos", johnny.position + Vector2(-330, -20))
+	var otro: Node2D = meter_zombi("tentaculos", johnny.position + Vector2(330, -20))
+	z.espera = 99.0   # que no ataquen todavía
+	otro.espera = 99.0
+	var visto := []
+	for i in 8:
+		await get_tree().create_timer(0.1).timeout
+		visto.append("%s | %s" % [que_hace.call(z), que_hace.call(otro)])
+	Captura.foto("captura-tentaculos-andar.png")
+	print("Tentáculos andando: %s (esperado: andar andar_e y andar andar_o, con el fotograma cambiando de 0 a 4)" % [visto])
+	otro.remove_from_group("zombis")
+	otro.queue_free()
+
+	# el latigazo: a tiro y sin esperar, avisa (fotogramas 0 a 2 del ataque) y lo da (del 3 en adelante)
+	z.position = johnny.position + Vector2(-180, -20)
+	z.espera = 0.0
+	await get_tree().create_timer(0.5).timeout
+	var en_aviso: String = que_hace.call(z)
+	Captura.foto("captura-tentaculos-aviso.png")
+	while z.estado == "aviso":
+		await get_tree().physics_frame
+	await RenderingServer.frame_post_draw
+	var en_latigazo: String = que_hace.call(z)
+	Captura.foto("captura-tentaculos-latigazo.png")
+	while z.estado == "latigazo":
+		await get_tree().physics_frame
+	await get_tree().physics_frame
+	print("Tentáculos: avisando %s · al dar el latigazo %s · después %s (esperado: aviso ataque_e/1 o 2, latigazo ataque_e/3 y andar o reposo)" % [
+		en_aviso, en_latigazo, que_hace.call(z)])
+
+	# un golpe (se encoge) y luego otro que lo mata (se cae y se queda tendido)
+	z.espera = 99.0
+	z.recibir_golpe(5, Vector2(-60, 0))
+	await get_tree().create_timer(0.12).timeout
+	var en_golpe: String = que_hace.call(z)
+	Captura.foto("captura-tentaculos-golpe.png")
+	await get_tree().create_timer(0.6).timeout
+	var tras_golpe: String = que_hace.call(z)
+	z.recibir_golpe(999, Vector2(-60, 0))
+	await get_tree().create_timer(1.4).timeout
+	Captura.foto("captura-tentaculos-muerte.png")
+	print("Tentáculos: con el golpe %s, luego %s · muerto %s (esperado: golpe golpe_e, andar o reposo, muerto muerte_e/8)" % [
+		en_golpe, tras_golpe, que_hace.call(z)])
+	get_tree().quit()

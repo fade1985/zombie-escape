@@ -83,12 +83,15 @@ def placed(f, ox, oy, d, n, folder):
 
 
 _near = {}
+_pal = set(PALETTE)
 
 
 def nearest(c):
     """El color del zombi más parecido a `c` y lo lejos que queda."""
     if c not in _near:
-        _near[c] = min(((p[0] - c[0]) ** 2 + (p[1] - c[1]) ** 2 + (p[2] - c[2]) ** 2, p) for p in PALETTE)
+        # los que ya son del zombi, sin buscar (el de tentáculos tiene miles de colores y buscar uno a uno es lento)
+        _near[c] = (0, c) if c in _pal else min(((p[0] - c[0]) ** 2 + (p[1] - c[1]) ** 2 + (p[2] - c[2]) ** 2, p)
+                                                for p in PALETTE)
     return _near[c]
 
 

@@ -1962,7 +1962,7 @@
   "kind": "character",
   "character_id": "b710038d-a44d-44e0-bda3-c15632d4b768",
   "name": "Zombi tentáculos (GPT, v3 128)",
-  "nota": "Diseño del dueño hecho con GPT (2026-10-18): 4 vistas (sur, sureste, este, norte) reducidas a sus píxeles reales (unos 6 px por píxel; ~57x97), sin fondo y con los pies en y=116, en lienzo de 128x128 (assets/sources/zombi-tentaculos-gpt/rotations-128/). Oeste y suroeste = espejo de este y sureste. create_character v3 con referencia sur + direction_images: PixelLab solo generó noreste y noroeste. Resultado en assets/sources/zombi-tentaculos-gpt/pixellab/. PENDIENTE del visto bueno del dueño.",
+  "nota": "Diseño del dueño hecho con GPT (2026-10-18): 4 vistas (sur, sureste, este, norte) reducidas a sus píxeles reales (unos 6 px por píxel; ~57x97), sin fondo y con los pies en y=116, en lienzo de 128x128 (assets/sources/zombi-tentaculos-gpt/rotations-128/). Oeste y suroeste = espejo de este y sureste. create_character v3 con referencia sur + direction_images: PixelLab solo generó noreste y noroeste. Resultado en assets/sources/zombi-tentaculos-gpt/rotations/ (antes pixellab/). EN EL JUEGO como sprite zombi-tentaculos-gpt (escala 1).",
   "request": {
    "description": "tall gaunt zombie with pale grey-green skin, bald head, glowing pale yellow eyes, skeletal grinning face, open dark grey vest over an exposed bloody ribcage, torn grey trousers, bare feet, long thin arms with clawed red hands, many thick dark crimson tentacles bursting out of his back and curling over his shoulders and head",
    "mode": "v3",
@@ -1970,7 +1970,38 @@
    "view": "low top-down"
   },
   "cost": "2 generaciones (+0,1 del unzoom de prueba).",
-  "updated": "2026-10-18"
+  "updated": "2026-10-28",
+  "animaciones": {
+   "nota": "2026-10-28, a petición del dueño (se veía demasiado estático: solo tenía un dibujo quieto por dirección y el código lo bamboleaba). Todo con PixMiniMax (animate_character mode pixminimax) sobre b710038d, una dirección por llamada. Andar: 8 fotogramas sin partida. Ataque (latigazo) y golpe: 8 fotogramas, partida y final = dibujo quieto pegado en (16, 28) de un lienzo de 160x160 (partida/<dirección>.png). Muerte: 12 fotogramas, solo partida, en un lienzo de 224x224 con el dibujo en (48, 12) para que quepa tendido (partida-muerte/). Los upload:<id> de partida*/subidas.txt caducan a los 3 días. Bajado con py tools/bajar_zip.py b710038d-a44d-44e0-bda3-c15632d4b768 zombi-tentaculos-gpt; hoja con py tools/zombi.py zombi-tentaculos-gpt zombi-tentaculos-gpt (zombi.json: casilla 176x192, origen 24/12, pies 128) y py tools/hacer_frames.py assets/sprites/zombi-tentaculos-gpt.",
+   "coste": "46 generaciones: andar 8, ataque 8, golpe 8, muerte 16 (a 224 cuesta 2 por dirección) y 6 de repetir el andar de lado (2 + 1 con PixMiniMax y 3 con skeleton-v3). Saldo antes 3615,8 y después 3565,8: en medio corría otro trabajo de la cuenta («creator-image») que no era de esto.",
+   "subject_description": "a tall gaunt bald zombie with pale grey-green skin, glowing yellow eyes, a skeletal grinning face, an open grey vest over a bloody ribcage, torn grey trousers, bare feet, clawed red hands and many thick dark crimson tentacles bursting out of his back (de espaldas: '... with pale grey-green skin, an open grey vest, torn grey trousers, bare feet, clawed red hands and many thick dark crimson tentacles bursting out of his back, seen from behind')",
+   "initial_pose": "'standing slightly hunched, <vista>, tentacles curling over his shoulders' con las vistas del gerente-mutado-128 (facing the camera, facing right, in three-quarter front view facing toward the camera and to the right, in three-quarter back view facing away from the camera and to the right, seen from behind his back to the camera...).",
+   "frases_de_direccion": "Las del gerente-mutado-128 (Strict front view..., Strict three-quarter back view..., east y west nada); en la muerte, de espaldas 'Strict back view the whole time, he never turns to face the camera.' y en ne/no 'He keeps the same three-quarter back view, facing away from the camera, and never turns to face the camera.'",
+   "andar": {
+    "group": "3b9ebc20-2fe4-408a-89eb-d936f155629f",
+    "action_description": "He shambles forward in place in a slow, creepy, seamless looping walk cycle: his long thin legs step alternately with slow dragging steps, his gaunt body sways and rocks from side to side, his long arms with clawed hands swing loosely, and the thick crimson tentacles on his back sway, writhe and curl slowly like an octopus. He keeps exactly the same view and facing as the first frame the whole time: he never turns. The last frame returns to the starting pose so the cycle loops.",
+    "fotogramas": "8 + la vista quieta (0-8), lienzo 148. Ciclo 0 a 7; en east y west, 0 a 4 (zombi.json).",
+    "pegas": "De lado (east y west) se gira hacia la cámara a mitad del paso (se le ven las costillas de frente) en las 4 tomas: andar (fotogramas 6-8 en east, 5-8 en west), andar2 ('Strict side view (profile)...', grupos 627df381 y 843a455d), andar3 (east con partida y final, grupo e95d2521) y andar4 (east, skeleton-v3 con la plantilla scary-walk, grupo 60c23604: no se gira, pero sale encorvado, más bajo y sin las costillas). Se usa la primera toma de east, solo los fotogramas 0-4 (aún de perfil; el 4 enlaza bien con el 0), y west es su espejo (tools/zombi.py no lo hace solo: walk/west-*.png es east volteado; el dibujo quieto de west ya era el espejo del de east). Las otras tomas, en descartes/ (andar2, andar3, andar4 y walk-west-pixellab)."
+   },
+   "ataque": {
+    "grupos": "189e6542 (south), 819f7cc6 (south-east), c274883a (east), 09a45f4e (north-east), 409c0a30 (north), af96e102 (north-west), 804e8212 (west), cc4fe756 (south-west)",
+    "action_description": "He lashes out with his tentacles: the thick crimson tentacles on his back rear up high behind his shoulders and coil back, then whip forward hard over his shoulders in the direction he is facing (south: 'toward the camera'), while he leans forward with his clawed hands raised and his mouth gaping. Then the tentacles pull back and curl over his shoulders again and he settles cleanly into the starting stance. His feet stay in place. No effects, no particles, no motion lines. (De espaldas: '... whip forward hard over his shoulders, away from the camera, while he leans forward with his clawed hands raised.')",
+    "fotogramas": "Se usan del 1 al 7: los echa atrás en 1-3 y los lanza en el 4 (IMPACTO = 3 en zombi_tentaculos.gd, que elige cada fotograma al ritmo del aviso).",
+    "pegas": "Ninguna que se note; en east, un punto rojo vivo en el pecho en 2-3."
+   },
+   "golpe": {
+    "grupos": "d5dab962 (south), d95e97a0 (south-east), 73a7b948 (east), 26d262b5 (north-east), 53e93ca9 (north), 5d316c27 (north-west), 1c3ac53a (west), 87d07c1d (south-west)",
+    "action_description": "He flinches from a hard hit to his body: his head and shoulders jolt backward, away from where he is facing (de espaldas: 'toward the camera'), his thin body bends, his long arms fling out loosely and his tentacles thrash and flail wildly, and he staggers one short step backward, off balance. He stays on his feet. Then he sways forward again and settles cleanly into the starting stance. Nothing spills: no liquid, no splashes, no particles, no effects.",
+    "pegas": "Aunque se pide que no, en 1-2 casi todas las direcciones pintan un chorro de sangre roja con el centro claro (parece una espada). Se usan solo los fotogramas 3 a 7 (zombi.json); la sangre que queda la oscurece tools/zombi.py."
+   },
+   "muerte": {
+    "grupos": "0e85c011 (south), 584c7049 (south-east), 72d2b553 (east), 34aba0e6 (north-east), a80ab1fe (north), 5cb98e2c (north-west), 0e436b74 (west), 53dcf9f0 (south-west)",
+    "action_description": "He dies and collapses, never turning. His knees buckle, his tentacles go limp, and he topples heavily backward, <lado>, crashing flat onto the floor on his back, his long arms, legs and limp tentacles flopping out to the sides, <pies y cabeza>. Then he lies completely still for the last frames. He never gets up. The floor stays completely clean: no puddle, no liquid, no stains, no particles.",
+    "lado_por_direccion": "Como la mascota-72.",
+    "fotogramas": "Se usan del 1 al 9 (desde el 8 ya está tendido; así la hoja tiene 9 columnas y no 12).",
+    "pegas": "De frente, al caer (3-4) se ve aplastado un momento antes de quedar tendido."
+   }
+  }
  },
  "centro-comercial": {
   "kind": "images",

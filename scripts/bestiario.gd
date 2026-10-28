@@ -40,7 +40,7 @@ const LISTA := {
 	"tentaculos": {"nombre": "El de los tentáculos",
 		"frase": "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella.",
 		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-tentaculos-gpt.tres",
-		"recorte": Rect2i(35, 19, 57, 97), "retrato": "reposo_s", "escala": 1, "jefe": false},
+		"recorte": Rect2i(59, 31, 57, 97), "retrato": "quieto_s", "escala": 1, "jefe": false},
 	"venenoso": {"nombre": "El gordo",
 		"frase": "Guarda las distancias y escupe un moco que deja el suelo envenenado.",
 		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-venenoso.tres",

@@ -1,0 +1,13 @@
+{
+  "casilla": [176, 192],
+  "origen": [24, 12],
+  "pies": 128,
+  "cintura": 72,
+  "andar": {
+    "south": [0, 8], "south-east": [0, 8], "east": [0, 5], "north-east": [0, 8],
+    "north": [0, 8], "north-west": [0, 8], "west": [0, 5], "south-west": [0, 8]
+  },
+  "ataque": { "duracion": 0.95, "impacto": 3 },
+  "golpe": { "fotogramas": [3, 4, 5, 6, 7], "duracion": 0.45 },
+  "muerte": { "fotogramas": [1, 2, 3, 4, 5, 6, 7, 8, 9], "duracion": 1.0 }
+}

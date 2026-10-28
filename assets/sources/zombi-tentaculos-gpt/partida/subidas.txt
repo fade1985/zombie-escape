@@ -1,0 +1,8 @@
+south upload:0018e154-2679-4d46-bdfb-f6074ec246e2
+south-east upload:eabd9420-7e7e-4764-8714-795a61811d47
+east upload:ea35db87-e2c6-4f71-8f25-e7f6ee3159b4
+north-east upload:adbe3655-83bc-4745-8729-f25f8e3602f0
+north upload:3582fc16-86a3-46e9-b4ad-21ce7211ab47
+north-west upload:8fc14f6f-deb7-43f6-b0ce-2a2adb3ce7d5
+west upload:18772386-2923-435b-9903-72779c3de769
+south-west upload:c8583d65-7889-401c-be6b-8fc26a05e830

@@ -67,7 +67,8 @@ en una línea.
 **Zombis, jefes y lo que hacen daño**
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
   `meter_prisa`, la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
-  números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd`, `zombi_venenoso.gd`,
+  números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
+  va al ritmo del aviso, `IMPACTO`), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
 - `portera.gd`: la jefa por defecto, por estados.

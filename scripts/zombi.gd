@@ -200,7 +200,7 @@ func _physics_process(delta: float) -> void:
 			# Sale despedido hacia atrás y va frenando; aquí no se usa el agente, se mueve él solo
 			velocity = velocity.move_toward(Vector2.ZERO, FRENADA * delta)
 			move_and_slide()
-			# Si su hoja no tiene animación de encogerse (el de tentáculos), sigue al dejar de deslizarse
+			# Si su hoja no tiene animación de encogerse, sigue al dejar de deslizarse
 			if not sprite.animation.begins_with("golpe") and velocity.length() < 5.0:
 				estado = "andar"
 
