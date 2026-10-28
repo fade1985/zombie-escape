@@ -182,6 +182,71 @@ func probar_piso() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --zombis-sala": cuántos zombis hay en cada habitación de los apartamentos (planta.gd, horda: el reparto
+# del presupuesto y, además, EXTRA_POR_SALA de más en cada una). En doce plantas (de la baja a la 5ª) cuenta los
+# zombis de cada piso y dice qué habitaciones se quedan con menos de 2 (esperado: ninguna, salvo que no quepan), si hay
+# alguno a menos de LEJOS_PUERTA de la puerta de entrada o dos a menos de 60 uno de otro (esperado: 0 y 0), y saca
+# captura-zombis-sala.png con el piso con más zombis, entero. Las tiendas del centro comercial no cuentan. Luego se cierra
+func probar_zombis_sala() -> void:
+	var pisos := 0
+	var total := 0
+	var mas := 0
+	var pocos := {}        # habitaciones con menos de 2 zombis: cuántas veces, por nombre
+	var cerca_puerta := 0
+	var juntos := 0
+	var salas_n := 0
+	for i in 12:
+		Planta.semilla = 1000 + i
+		var num := 1 + i % 5
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		for idx in p.sitios.size():
+			var s: Dictionary = p.sitios[idx]
+			if s.tipo != "apartamento" or s.get("tienda", "") != "":
+				continue
+			pisos += 1
+			total += s.zombis.size()
+			var puerta := Vector2(s.salidas[0].en, Planta.MURO + 52 if s.salidas[0].dir == "arriba" else s.alto - Planta.MURO - 52)
+			var cuenta := {}
+			for z in s.zombis:
+				var c := int(z.pos.x / Planta.CASILLA)
+				var f := int(z.pos.y / Planta.CASILLA)
+				var id: int = s.apt.dueno[f * s.apt.cols + c]
+				cuenta[id] = cuenta.get(id, 0) + 1
+				if z.pos.distance_to(puerta) < Planta.LEJOS_PUERTA:
+					cerca_puerta += 1
+			for a in s.zombis.size():
+				for b in range(a + 1, s.zombis.size()):
+					if s.zombis[a].pos.distance_to(s.zombis[b].pos) < 60.0:
+						juntos += 1
+			var cerrada: int = p.superviviente.sala if p.superviviente.get("sitio", -1) == idx else -1
+			for sala in s.apt.salas:
+				if sala.id == cerrada or sala.uso == "acorazada":
+					continue
+				salas_n += 1
+				if cuenta.get(sala.id, 0) < 2:
+					var clave := "%s %d×%d" % [sala.nombre, sala.ancho, sala.fondo]
+					pocos[clave] = pocos.get(clave, 0) + 1
+	Planta.semilla = 0
+	print("Zombis por habitación: %d pisos, %d habitaciones, %d zombis (%.1f por piso, %.1f por habitación)" % [
+		pisos, salas_n, total, float(total) / maxi(pisos, 1), float(total) / maxi(salas_n, 1)])
+	print("Zombis por habitación: con menos de 2: %s (esperado: ninguna)" % [pocos])
+	print("Zombis por habitación: a menos de %d de la puerta %d, dos a menos de 60: %d (esperado: 0 y 0)" % [
+		int(Planta.LEJOS_PUERTA), cerca_puerta, juntos])
+	# la foto: un piso de la 3ª planta, con todos sus zombis a la vista
+	nueva_planta(3)
+	var mejor := -1
+	for idx in planta.sitios.size():
+		var s: Dictionary = planta.sitios[idx]
+		if s.tipo == "apartamento" and s.get("tienda", "") == "" and (mejor < 0 or s.zombis.size() > planta.sitios[mejor].zombis.size()):
+			mejor = idx
+	var sitio: Dictionary = planta.sitios[mejor]
+	print("Zombis por habitación: foto del piso con %d zombis" % sitio.zombis.size())
+	await montar(mejor, 0, false)
+	await get_tree().create_timer(0.4).timeout
+	await foto_entera(sitio, "captura-zombis-sala.png")
+	get_tree().quit()
+
+
 # Una foto del sitio montado entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
 func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	for s in sitio.apt.salas:

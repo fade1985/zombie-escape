@@ -78,6 +78,9 @@ const COSTE := {"lento": 0.5, "normal": 1.0, "rapido": 1.0, "venenoso": 2.0, "ex
 # orden del apartamento dentro de ella). Son los números del juego JS, equilibrados con partidas simuladas.
 const BASE := 5.0
 const POR_NIVEL := 1.1
+# Zombis de más en cada habitación de un apartamento, aparte del presupuesto (no en las tiendas del centro comercial):
+# los más baratos, para que se sienta una horda. Solo los que caben
+const EXTRA_POR_SALA := 2
 const LEJOS_PUERTA := 340.0       # ningún zombi espera a menos de esto de la puerta de entrada
 
 static var rng := RandomNumberGenerator.new()
@@ -576,6 +579,15 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 			queda -= COSTE[tipo]
 			if tipo == "dependienta":
 				tipos.erase("dependienta")
+		# y los de más de cada habitación (de los que cuestan hasta 1: lentos, normales y rápidos), lejos de la puerta,
+		# de los muebles y de los otros: los que no caben, se quedan sin salir
+		if sitio.get("tienda", "") == "":
+			var baratos := tipos.filter(func(t): return COSTE[t] <= 1.0)
+			for _i in EXTRA_POR_SALA:
+				var pos := sitio_libre(sitio, s, puerta, zombis)
+				if pos == Vector2.INF:
+					break
+				zombis.append({"tipo": baratos[rng.randi() % baratos.size()], "pos": pos})
 	return zombis
 
 
