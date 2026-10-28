@@ -39,6 +39,14 @@ static func crear() -> Theme:
 		f.antialiasing = TextServer.FONT_ANTIALIASING_NONE
 		f.hinting = TextServer.HINTING_NONE
 		f.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+	# A la fuente le faltan · × < > … — y otros signos: los dibujaba con una letra del sistema, que mide más y hacía la
+	# línea 5 px más alta y su texto más bajo. Ahora los saca de Jersey 25, con un píxel menos de bajada para que la
+	# línea mida lo mismo que sin ellos (y que en la web, que no trae letras del sistema, también se vean)
+	var respaldo := FontVariation.new()
+	respaldo.base_font = FUENTE_JEFE
+	respaldo.spacing_bottom = -1
+	var respaldos: Array[Font] = [respaldo]
+	fuente.fallbacks = respaldos
 	t.default_font = fuente
 	t.default_font_size = 16
 

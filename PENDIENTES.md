@@ -19,11 +19,4 @@ _(ninguna por ahora)_
 
 ## Por limar
 
-- **L9.** En «Elige edificio», con el Centro comercial cerrado (candado), la tarjeta de los Apartamentos sale más ancha
-  que la del candado (unos 312 px contra 300), porque lleva debajo el selector de alerta y este la ensancha. Con los
-  dos abiertos miden lo mismo. Que las dos tarjetas midan siempre igual de ancho.
-- **L10.** En «Elige edificio», las líneas con el punto «·» («4 plantas y azotea · 1 intento», «Completado ×1 · mejor
-  tiempo…») salen unos 5 px más bajas que el resto de líneas del mismo tamaño. Parece que la letra del juego no tiene el
-  «·» y lo dibuja con otra tipografía, que hace la línea más alta (la de las plantas mide 23 px en vez de 16). Ver si
-  se puede evitar (otro separador que sí esté en la letra, o añadir el «·» a la letra) y mirar si pasa igual en otras
-  pantallas.
+_(nada por ahora)_

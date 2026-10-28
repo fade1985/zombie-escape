@@ -11,7 +11,7 @@
 extends Control
 
 const LOGO := preload("res://assets/ui/logo.png")
-const ANCHO_TARJETA := 300   # el ancho de una tarjeta de "Elige edificio"
+const ANCHO_TARJETA := 312   # el ancho de una tarjeta de "Elige edificio": que quepa el selector de alerta de debajo (306), si no ensancha la suya
 const ANCHO_TEXTO := ANCHO_TARJETA - 32   # lo que queda para sus textos, con 16 de margen a cada lado
 
 var centro: CenterContainer       # el menú
