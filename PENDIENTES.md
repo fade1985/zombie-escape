@@ -15,8 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M15.** Talentos: revisar las ramas que ya hay (Militar y Superviviente) por si hay que cambiar algo: que el
-  jugador vea que mejora, o que alguna sea demasiado fuerte y el juego sea muy fácil.
 - **M16.** Talentos: subir cada rama dos niveles, hasta llegar al 5 (ahora llegan al 3), creando Claude esas mejoras.
 - **M17.** Logros: meter más, hasta un número que esté bien para que el jugador quiera completarlos todos.
 - **M18.** Arrojables: que se puedan coger en el inventario en montones de 5, hasta que se llene el inventario (lleno,

@@ -623,7 +623,19 @@ func mareo(delta: float) -> void:
 func numero_flotante(cantidad: int) -> void:
 	if diana:
 		return
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), str(cantidad))
+	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-14, 2), -altura), cantidad)
+
+
+# El número de un golpe o una bala (en los zombis y los jefes): blanco o, si es crítico, amarillo, grande y con «!», para
+# que se note (M15). "critico" lo pone quien pega (johnny.golpear y bala.gd) justo antes de recibir_golpe y lo quita después
+static var critico := false
+const CRITICO := Color("#ffd23f")
+
+static func numero_golpe(sala: Node, donde: Vector2, cantidad: int) -> void:
+	if critico:
+		Zombi.texto_flotante(sala, donde + Vector2(-6, -12), "%d!" % cantidad, CRITICO, 32)
+	else:
+		Zombi.texto_flotante(sala, donde, str(cantidad))
 
 
 # Un texto que sube y se desvanece (los números de daño, los gritos de la portera...). Va en la sala, no

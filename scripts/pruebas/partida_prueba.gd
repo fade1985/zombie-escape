@@ -101,6 +101,8 @@
 #   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador [prueba_varias.gd]
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
+#   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Lobezno hasta la mitad, el alcance de
+#                       Puntería, Mirilla (1 de cada 3, en amarillo) y las tarjetas «Ahora / Con otro» [prueba_varias.gd]
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --flatulento        el alcance de la mutación Flatulento (140): quién se paraliza a 50, 110 y 190 [prueba_varias.gd]
@@ -328,6 +330,9 @@ func empezar_prueba() -> void:
 	elif "--quimico" in args:
 		set_process(false)   # sin la prueba larga
 		probar_quimico()
+	elif "--equilibrio-talentos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_equilibrio_talentos()
 	elif eventos.forzado != "":
 		set_process(false)   # sin la prueba larga
 		eventos.probar(eventos.forzado)

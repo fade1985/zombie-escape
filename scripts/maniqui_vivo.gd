@@ -89,7 +89,7 @@ func recibir_golpe(cantidad: int, fuerza: Vector2, _de_lleno := false) -> void:
 		return
 	cantidad = ArmasCreadas.con_acido(self, cantidad)   # (con ácido, le quita más)
 	vida = maxi(vida - cantidad, 0)
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-20, 0), -130), str(cantidad))
+	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -130), cantidad)
 	Sonido.tocar("golpe")
 	# saltan trocitos de plástico
 	for i in 3:

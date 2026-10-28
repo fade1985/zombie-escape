@@ -27,7 +27,7 @@ const LISTA := [
 	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "fuerza",
 		"desc": "+10 % de daño por punto"},
 	{"id": "punteria", "rama": "militar", "nivel": 1, "nombre": "Puntería", "max": 5, "icono": "diana",
-		"desc": "+10 % de daño del molotov y la granada por punto"},
+		"desc": "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"},
 	{"id": "camorrista", "rama": "militar", "nivel": 2, "nombre": "Camorrista", "max": 5, "icono": "bate", "pide": "ataque",
 		"desc": "+10 % de daño cuerpo a cuerpo por punto"},
 	{"id": "tirador", "rama": "militar", "nivel": 2, "nombre": "Tirador", "max": 5, "icono": "pistola", "pide": "ataque",
@@ -37,15 +37,15 @@ const LISTA := [
 	{"id": "larguirucho", "rama": "militar", "nivel": 3, "nombre": "Larguirucho", "max": 1, "icono": "guantes", "pide": "camorrista",
 		"desc": "Duplica el alcance cuerpo a cuerpo"},
 	{"id": "mirilla", "rama": "militar", "nivel": 3, "nombre": "Mirilla", "max": 1, "icono": "escopeta", "pide": "tirador",
-		"desc": "Cada 3 disparos, el siguiente es un crítico seguro"},
+		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
 	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "granada", "pide": "artificiero",
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
 	# ── Superviviente
 	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "vida",
 		"desc": "+10 % de vida máxima por punto"},
 	{"id": "lobezno", "rama": "superviviente", "nivel": 1, "nombre": "Lobezno", "max": 5, "icono": "corazon",
-		"desc": "Regeneras 1 de vida cada 5 segundos por punto"},
-	{"id": "durito", "rama": "superviviente", "nivel": 2, "nombre": "Durito", "max": 5, "icono": "casco", "pide": "corpulento",
+		"desc": "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"},
+	{"id": "durito", "rama": "superviviente", "nivel": 2, "nombre": "Durito", "max": 3, "icono": "casco", "pide": "corpulento",
 		"desc": "Cada golpe que recibes quita 1 menos por punto"},
 	{"id": "reflejos", "rama": "superviviente", "nivel": 2, "nombre": "Reflejos", "max": 5, "icono": "reflejos", "pide": "corpulento",
 		"desc": "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"},
@@ -54,7 +54,7 @@ const LISTA := [
 	{"id": "acero", "rama": "superviviente", "nivel": 3, "nombre": "Acero", "max": 1, "icono": "cartucho", "pide": "durito",
 		"desc": "Cada planta, un escudo de 50 que para la mitad de cada golpe"},
 	{"id": "ninja", "rama": "superviviente", "nivel": 3, "nombre": "Ninja", "max": 1, "icono": "dash", "pide": "reflejos",
-		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 3 s)"},
+		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"},
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "medico", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
 	# ── Químico
@@ -105,7 +105,9 @@ static func motivo(s: Dictionary, id: String) -> String:
 static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 	match id:
 		"ataque": st.dano *= 1.0 + 0.1 * n
-		"punteria": st.dano_lanzar *= 1.0 + 0.1 * n
+		"punteria":
+			st.dano_lanzar *= 1.0 + 0.1 * n
+			st.alcance_lanzar *= 1.0 + 0.1 * n
 		"camorrista": st.dano_cuerpo *= 1.0 + 0.1 * n
 		"tirador": st.dano_fuego *= 1.0 + 0.1 * n
 		"artificiero": st.lanzar_extra += n
@@ -130,6 +132,28 @@ static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 		"reaccion": st.reaccion = true
 		"residuo": st.residuo = true
 		"pararrayos": st.pararrayos = true
+
+
+# Lo que da un talento con n puntos, en pocas palabras, para que en el ordenador se vea lo que se tiene y lo que da el
+# siguiente (M15). "" en los de un solo punto (para esos vale su "desc")
+static func efecto(id: String, n: int) -> String:
+	match id:
+		"ataque": return "+%d %% de daño" % (10 * n)
+		"punteria": return "+%d %% de daño y alcance" % (10 * n)
+		"camorrista": return "+%d %% cuerpo a cuerpo" % (10 * n)
+		"tirador": return "+%d %% a distancia" % (10 * n)
+		"artificiero": return "+%d molotov%s y granada%s" % [n, "s" if n > 1 else "", "s" if n > 1 else ""]
+		"corpulento": return "+%d %% de vida" % (10 * n)
+		"lobezno": return "%d de vida cada 5 s" % n
+		"durito": return "%d menos por golpe" % n
+		"reflejos": return "una esquiva sola cada %d s" % (11 - n)
+		"sanitario": return "+%d de cura" % (10 * n)
+		"catalizador": return "+%d %% de fuego, ácido, rayo y frío" % (10 * n)
+		"guantes_goma": return "%d %% menos de los efectos" % (10 * n)
+		"incendiario": return "+%s s ardiendo" % str(0.5 * n).replace(".", ",")
+		"desatascador": return "+%d %% con ácido" % (10 * n)
+		"criogenia": return "+%d congeladora%s y +%s s" % [n, "s" if n > 1 else "", str(0.5 * n).replace(".", ",")]
+	return ""
 
 
 # Aplica los talentos comprados a unos atributos (al empezar la partida y al comprar uno). Devuelve los mismos

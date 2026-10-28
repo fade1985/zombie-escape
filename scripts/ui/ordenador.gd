@@ -560,11 +560,16 @@ func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 	var n := Talentos.nivel_de(s, t.id)
 	var motivo := Talentos.motivo(s, t.id)
 	var estado: String = {"max": "lleno", "bloqueado": "bloqueada", "sin_puntos": "apagada"}.get(motivo, "")
+	# debajo del nombre: con algún punto puesto, lo que da ahora y lo que daría el siguiente (Talentos.efecto); sin
+	# ninguno, lo que hace cada punto
+	var ahora := Talentos.efecto(t.id, n)
 	var debajo: String = t.desc
 	if motivo == "bloqueado":
 		debajo = "Necesitas %s al máximo" % Talentos.talento(t.pide).nombre
 	elif motivo == "max":
-		debajo = "¡Al máximo!"
+		debajo = "¡Al máximo! " + ahora if ahora != "" else "¡Al máximo!"
+	elif n > 0 and ahora != "":
+		debajo = "Ahora: %s · Con otro: %s" % [ahora, Talentos.efecto(t.id, n + 1)]
 	var etiqueta := "MÁX" if motivo == "max" else ("" if motivo == "bloqueado" else "+1")
 	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, t.nombre, debajo, etiqueta,
 		estado, [n, t.max])

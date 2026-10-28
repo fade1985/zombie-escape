@@ -326,16 +326,21 @@ func _physics_process(delta: float) -> void:
 		lanzar(objetivo())
 
 
+# Lo más lejos que se lanza: lo del molotov, con Puntería más (un 10 % por punto)
+func alcance() -> float:
+	return MOLOTOV.alcance * johnny.stats.alcance_lanzar
+
+
 # Dónde caería (ver arriba), sin pasarse del alcance: como todo en el suelo, el alcance es una elipse
 func objetivo() -> Vector2:
 	var desde: Vector2 = johnny.global_position
 	var hacia := Vector2.ZERO
 	var stick := Input.get_vector("apuntar_izquierda", "apuntar_derecha", "apuntar_arriba", "apuntar_abajo")
-	var solo: Node2D = johnny.buscar_objetivo({"tipo": "fuego", "alcance": MOLOTOV.alcance}) 		if Guardado.ajuste("lanzar_solo") else null
+	var solo: Node2D = johnny.buscar_objetivo({"tipo": "fuego", "alcance": alcance()}) 		if Guardado.ajuste("lanzar_solo") else null
 	if solo:
 		hacia = solo.global_position - desde   # ayuda "Lanzar apuntando solo"
 	elif stick.length() > 0.25:
-		hacia = Vector2(stick.x, stick.y * 0.6) * MOLOTOV.alcance
+		hacia = Vector2(stick.x, stick.y * 0.6) * alcance()
 	elif johnny.con_raton:
 		hacia = get_global_mouse_position() - desde
 	else:
@@ -343,17 +348,17 @@ func objetivo() -> Vector2:
 		if zombi:
 			hacia = zombi.global_position - desde
 		else:
-			hacia = Vector2.from_angle(johnny.DIRS.find(johnny.direccion) * PI / 4) * MOLOTOV.alcance * 0.6
+			hacia = Vector2.from_angle(johnny.DIRS.find(johnny.direccion) * PI / 4) * alcance() * 0.6
 	var d := Vector2(hacia.x, hacia.y / 0.6).length()
-	if d > MOLOTOV.alcance:
-		hacia *= MOLOTOV.alcance / d
+	if d > alcance():
+		hacia *= alcance() / d
 	return desde + hacia
 
 
 # El zombi más cercano a tiro (para lanzar con un toque, sin apuntar)
 func mas_cercano() -> Node2D:
 	var mejor: Node2D = null
-	var cerca: float = MOLOTOV.alcance
+	var cerca: float = alcance()
 	var mapa := get_tree().get_first_node_in_group("mapa")
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if mapa and mapa.oculto(zombi.global_position):
@@ -417,7 +422,7 @@ func _draw() -> void:
 	var tono: Color = color(tipo) if hay else Color(0.67, 0.67, 0.67)
 	var desde: Vector2 = johnny.global_position
 	# el alcance máximo, a puntos (con un borde oscuro debajo, para que se vea en suelos claros y oscuros)
-	elipse_a_trozos(desde, MOLOTOV.alcance, Color(0.11, 0.1, 0.17, 0.45), 4.0, 0.0)
+	elipse_a_trozos(desde, alcance(), Color(0.11, 0.1, 0.17, 0.45), 4.0, 0.0)
 	# la zona que arderá o explotará, latiendo, con su borde a trozos que gira
 	var r := radio_zona()
 	draw_set_transform(apunte, 0.0, Vector2(1.0, 0.6))

@@ -21,6 +21,7 @@ static func base() -> Dictionary:
 		"dano_cuerpo": 1.0,      # x daño cuerpo a cuerpo (Camorrista)
 		"dano_fuego": 1.0,       # x daño con armas de fuego (Tirador)
 		"dano_lanzar": 1.0,      # x daño del molotov y la granada (Puntería)
+		"alcance_lanzar": 1.0,   # x lo lejos que se lanzan (Puntería)
 		"lanzar_extra": 0,       # molotovs y granadas de más (Artificiero)
 		"mirilla": false,        # cada 3 disparos, el siguiente es crítico (Mirilla)
 		"fabricante": false,     # fuego y explosiones más grandes (Fabricante)

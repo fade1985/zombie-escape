@@ -24,9 +24,10 @@
 #
 # Esquiva (Espacio, Mayús o el botón A del mando): un acelerón corto en el que no le hacen daño, y se recarga
 # en poco menos de un segundo (como el dash del JS). Los talentos (talentos.gd) le dan, además de números:
-# Lobezno (recupera vida poco a poco), Durito (cada golpe quita menos), Reflejos (de vez en cuando esquiva solo
-# un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 4 disparos), Ninja (golpe
-# en área al acabar la esquiva, como mucho cada 3 s) y Desfibrilador (resucita una vez por partida).
+# Lobezno (recupera vida poco a poco, hasta la mitad), Durito (cada golpe quita menos), Reflejos (de vez en cuando
+# esquiva solo un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 3 disparos), Ninja
+# (golpe en área al acabar la esquiva, como mucho cada 5 s), Desfibrilador (resucita una vez por partida) y los de
+# Químico (Pararrayos: pararrayos()).
 #
 # Las skins (skins.gd): vestir() le cambia las hojas por las de esa skin (las de siempre con otra cabeza); al
 # empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 100 % más (arma_de()), y con
@@ -53,7 +54,8 @@ const LENTO_TERCIO := 0.15
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
 const REGENERA_CADA := 5.0 # Lobezno: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
-const NINJA_ESPERA := 3.0  # Ninja: segundos como poco entre golpe y golpe (las esquivas de en medio no pegan)
+const REGENERA_TOPE := 0.5 # Lobezno: solo cura hasta esta parte de la vida máxima (M15, 28 oct: antes, hasta llenarla)
+const NINJA_ESPERA := 5.0  # Ninja: segundos como poco entre golpe y golpe (las esquivas de en medio no pegan; hasta el 28 oct, 3)
 const NINJA_JEFE := 0.02
 const NINJA_IMPORTANTE := 0.25   # al guardia y al zombi de la llave (Zombi.importante), parte de su vida (antes, de un golpe)   # Ninja: la parte de su vida máxima que le quita a un jefe
 # Ningún golpe que recibe baja de esta parte de lo que era, por mucho que lo rebajen Durito y la mutación Insensible
@@ -350,13 +352,15 @@ func _physics_process(delta: float) -> void:
 		if recargando <= 0.0:
 			terminar_recarga()
 
-	# Lobezno: recupera vida poco a poco (con la Alerta 4, como las curas, la mitad: tarda el doble)
-	if stats.regenera > 0 and vida < vida_tope():
+	# Lobezno: recupera vida poco a poco, hasta la mitad de la vida (REGENERA_TOPE: lo demás, con botiquines y vendas). Con
+	# la Alerta 4, como las curas, la mitad: tarda el doble
+	var tope_lobezno := mini(vida_tope(), roundi(stats.vida_max * REGENERA_TOPE))
+	if stats.regenera > 0 and vida < tope_lobezno:
 		regenera_t += delta
 		var cada: float = REGENERA_CADA / Alerta.botiquin()
 		if regenera_t >= cada:
 			regenera_t -= cada
-			curar(stats.regenera)
+			curar(mini(stats.regenera, tope_lobezno - vida))
 
 	# Lo que pide el jugador: un vector de largo 0 a 1 (el stick a medias da menos de 1)
 	var pedido := Input.get_vector("izquierda", "derecha", "arriba", "abajo")
@@ -671,7 +675,9 @@ func golpear(angulo: float) -> void:
 		var desvio := absf(angle_difference(angulo, hacia.angle()))
 		if desvio <= mitad + 0.2 or distancia < zombi.radio + 12.0:
 			var dano := con_critico(w.dano, de_gracia)
+			Zombi.critico = dano > roundi(w.dano)   # (su número sale en amarillo)
 			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * w.empuje)
+			Zombi.critico = false
 			tocados += 1
 			if de_gracia:
 				Particulas.anillo(get_parent(), zombi.global_position + Vector2(0, -20), zombi.radio + 10.0, Armas.color(Armas.EPICA), 0.3)
@@ -729,7 +735,7 @@ func disparar(angulo: float) -> void:
 	if not pistola_sin_fin():
 		balas -= 1
 	disparos += 1
-	var seguro: bool = stats.mirilla and disparos % 4 == 0   # Mirilla: tras 3 disparos, uno crítico seguro
+	var seguro: bool = stats.mirilla and disparos % 3 == 0   # Mirilla: uno de cada 3 disparos, crítico seguro
 	var t := tiro(angulo, w, direccion)
 	var salida: Vector2 = t[0]
 	angulo = t[1]

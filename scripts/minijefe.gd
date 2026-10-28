@@ -272,7 +272,7 @@ func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	vida = max(vida - cantidad, 0)
 	# Los jefes apenas se mueven con los golpes
 	marcha += fuerza.normalized() * 8.0
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(randf_range(-20, 0), -arriba), str(cantidad))
+	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -arriba), cantidad)
 	Sonido.tocar("golpe")
 	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre
 		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, fuerza, Color("#7a1f1a"), 5)

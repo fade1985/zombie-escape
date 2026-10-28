@@ -88,6 +88,11 @@ static func cargar_archivo() -> Dictionary:
 		s[clave] = int(s[clave])
 	for t in s.talentos:
 		s.talentos[t] = int(s.talentos[t])
+		# un talento que ahora admite menos puntos (Durito, de 5 a 3 el 28 oct): los que sobran vuelven sin gastar
+		var tope: int = Talentos.talento(t).get("max", s.talentos[t])
+		if s.talentos[t] > tope:
+			s.puntos += s.talentos[t] - tope
+			s.talentos[t] = tope
 	# los objetos que ya no existen desaparecen del baúl y de los encontrados (Colecciones): el mechero, la llave
 	# inglesa, el hacha, las cuchillas, el táser, la cuerda, las mancuernas, la cadena, las perchas, el hielo seco, el
 	# cable, los clavos, el spray de pintura, la lejía, la pistola de agua, la cinta americana, la bombona de gas, la

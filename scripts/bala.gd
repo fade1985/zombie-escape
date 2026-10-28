@@ -49,10 +49,12 @@ func _physics_process(delta: float) -> void:
 			continue
 		if global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
 			var fuerza := velocidad.normalized() * EMPUJE * empuje
+			Zombi.critico = critico   # (su número sale en amarillo)
 			if de_aliado and zombi is Minijefe:
 				zombi.recibir_golpe(dano, fuerza, false, true)
 			else:
 				zombi.recibir_golpe(dano, fuerza)
+			Zombi.critico = false
 			if atraviesa > 0:   # (la Épica: lo atraviesa y sigue)
 				atraviesa -= 1
 				tocados.append(zombi)

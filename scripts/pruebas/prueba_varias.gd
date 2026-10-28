@@ -475,8 +475,8 @@ func probar_gastro() -> void:
 
 # Con "--captura --equilibrio": los números del equilibrio del 27 oct, contados en la terminal con lo esperado. En el
 # apartamento más grande, sin zombis: los talentos y la skin se suman (Ataque 5 y Camorrista 5 con el gymbro y con el
-# portero); el daño mínimo de un golpe (Durito 5 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
-# vez cada 3 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
+# portero); el daño mínimo de un golpe (Durito 3 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
+# vez cada 5 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
 # cuchillo, la MP5 y la cura de la médica; su propia granada a los pies (como mucho 25); los premios del reto
 # del día y los billetes de los jefes. La segunda parte (27 oct, tarde): el tope de curas (2 botiquines y 3 vendas; un
 # armarito abierto con la mochila llena deja el botiquín en el suelo con «Ya llevas 2», captura-equilibrio-tope.png) y
@@ -518,7 +518,7 @@ func probar_equilibrio() -> void:
 	# ── El daño mínimo de un golpe ──
 	johnny.stats.esquiva_sola = 0
 	johnny.escudo = 0.0
-	johnny.stats.armadura = 5
+	johnny.stats.armadura = 3   # (Durito al máximo: 3 desde el 28 oct)
 	johnny.stats.dano_recibido = 0.5
 	johnny.invulnerable = 0.0
 	var v0: int = johnny.vida
@@ -528,7 +528,7 @@ func probar_equilibrio() -> void:
 	johnny.invulnerable = 0.0
 	v0 = johnny.vida
 	johnny.recibir_dano(10)
-	print("Un golpe de 10 con Durito 5 e Insensible quita %d (esperado: 3) · con Durito 5 solo, %d (esperado: 5)" % [
+	print("Un golpe de 10 con Durito 3 e Insensible quita %d (esperado: 3) · con Durito 3 solo, %d (esperado: 7)" % [
 		con_las_dos, v0 - johnny.vida])
 
 	# ── Ninja: sin moverse en la esquiva (velocidad 0), un zombi duro pegado a Johnny ──
@@ -537,7 +537,7 @@ func probar_equilibrio() -> void:
 	johnny.stats.velocidad = 0.0
 	johnny.ninja_t = 0.0
 	var muere := []
-	for espera in [0.0, 1.2, 2.0]:   # esquivas a 0, ~1,5 y ~3,8 s: la del medio cae dentro de los 3 s
+	for espera in [0.0, 1.2, 3.5]:   # esquivas a 0, ~1,5 y ~5,3 s: la del medio cae dentro de los 5 s
 		await get_tree().create_timer(espera, false).timeout
 		var zombi: Node2D = meter_zombi("normal", johnny.position + Vector2(40, 0))
 		zombi.vida = 500
@@ -552,9 +552,9 @@ func probar_equilibrio() -> void:
 		muere, ceili(1500 * johnny.NINJA_JEFE)])
 	johnny.invencible = false
 
-	# ── Lobezno: 1 punto, por debajo del tope del tercio ──
+	# ── Lobezno: 1 punto, por debajo de la mitad de la vida (hasta donde cura) ──
 	johnny.stats.regenera = 1
-	johnny.vida = johnny.vida_tope() - 10
+	johnny.vida = roundi(johnny.stats.vida_max * johnny.REGENERA_TOPE) - 10
 	johnny.regenera_t = 0.0
 	v0 = johnny.vida
 	await get_tree().create_timer(5.3, false).timeout
@@ -900,25 +900,7 @@ func probar_flatulento() -> void:
 # (captura-quimico-arbol-militar.png) y la de Químico, arriba y abajo (captura-quimico-arbol.png y
 # captura-quimico-arbol-abajo.png). Se cierra
 func probar_quimico() -> void:
-	set_process(false)
-	var i := 1   # el apartamento con más habitaciones
-	for j in range(1, planta.sitios.size()):
-		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
-				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
-			i = j
-	await montar(i, 0, false)
-	for z in get_tree().get_nodes_in_group("zombis"):
-		z.queue_free()
-	var grande: Dictionary = planta.sitios[i].apt.salas[0]
-	for s in planta.sitios[i].apt.salas:
-		if s.casillas > grande.casillas:
-			grande = s
-	var centro: Vector2 = grande.centro
-	johnny.position = centro
-	johnny.modo = "quieto"   # que no pegue ni dispare solo
-	johnny.vestir("conserje")
-	for aliado in get_tree().get_nodes_in_group("aliados"):
-		aliado.process_mode = Node.PROCESS_MODE_DISABLED   # el acompañante de la partida de prueba, quieto: que no pegue
+	var centro: Vector2 = await sala_de_talentos()
 	var todos := {"catalizador": 5, "guantes_goma": 5, "incendiario": 5, "desatascador": 5, "criogenia": 3, "reaccion": 1,
 		"residuo": 1, "pararrayos": 1}
 
@@ -1067,4 +1049,122 @@ func probar_quimico() -> void:
 	Guardado.cambiar(func(gu):
 		gu.puntos = guardado_antes.puntos
 		gu.talentos = guardado_antes.talentos)
+	get_tree().quit()
+
+
+# Para las pruebas de talentos: Johnny en la sala más grande del apartamento más grande, sin zombis, quieto (que no pegue
+# ni dispare solo), con la skin de siempre y sin el acompañante de la partida de prueba (quieto: que no pegue).
+# Devuelve el centro de la sala, donde está Johnny
+func sala_de_talentos() -> Vector2:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var grande: Dictionary = planta.sitios[i].apt.salas[0]
+	for s in planta.sitios[i].apt.salas:
+		if s.casillas > grande.casillas:
+			grande = s
+	johnny.position = grande.centro
+	johnny.modo = "quieto"
+	johnny.vestir("conserje")
+	for aliado in get_tree().get_nodes_in_group("aliados"):
+		aliado.process_mode = Node.PROCESS_MODE_DISABLED
+	return grande.centro
+
+
+# Con "--captura --equilibrio-talentos": los cambios de las ramas Militar y Superviviente (M15), con sus números en la
+# terminal y lo esperado al lado: Durito llega a 3 (y a quien tenía más se le devuelven los puntos), Lobezno cura solo
+# hasta la mitad, Puntería lanza más lejos y Mirilla da un crítico de cada 3 disparos, con su número en amarillo
+# (captura-talentos-critico.png). Al final, las tarjetas del ordenador con lo que dan ahora y con otro punto
+# (captura-talentos-militar.png y captura-talentos-superviviente.png). Ninja cada 5 s: en --equilibrio. Se cierra
+func probar_equilibrio_talentos() -> void:
+	var centro: Vector2 = await sala_de_talentos()
+	var guardado_antes := Guardado.cargar()
+
+	# ── Durito: como mucho 3, y los puntos de más vuelven ──
+	Guardado.cambiar(func(g):
+		g.talentos.durito = 5
+		g.puntos = 1)
+	var leido := Guardado.cargar()
+	print("Durito: con 5 puestos en un guardado viejo, al cargar se queda en %d y los puntos pasan de 1 a %d (esperado: 3 y 3)" % [
+		leido.talentos.durito, leido.puntos])
+	aplicar_talentos({"corpulento": 5, "durito": 3})
+	johnny.escudo = 0.0
+	johnny.invulnerable = 0.0
+	var v0: int = johnny.vida
+	johnny.recibir_dano(10)
+	print("Durito 3: un zarpazo de 10 quita %d (esperado: 7; con Durito 5, antes, 5) · vida máxima con Corpulento 5: %d (esperado: 150)" % [
+		v0 - johnny.vida, johnny.stats.vida_max])
+
+	# ── Lobezno: cura hasta la mitad, no más ──
+	aplicar_talentos({"corpulento": 5, "lobezno": 5})
+	johnny.vida = 72
+	johnny.regenera_t = 0.0
+	await get_tree().create_timer(5.3, false).timeout
+	var a_los_5: int = johnny.vida
+	await get_tree().create_timer(5.3, false).timeout
+	print("Lobezno 5 con 150 de vida: de 72, a los 5 s %d y a los 10 s %d (esperado: 75 y 75: la mitad, sin pasarse)" % [
+		a_los_5, johnny.vida])
+	johnny.vida = 100
+	await get_tree().create_timer(5.3, false).timeout
+	print("Lobezno 5: con 100 de 150 (más de la mitad), a los 5 s %d (esperado: 100)" % johnny.vida)
+
+	# ── Puntería: lanza más lejos ──
+	aplicar_talentos({})
+	var sin_punteria: float = lanzables.alcance()
+	aplicar_talentos({"ataque": 5, "punteria": 5})
+	print("Puntería 5: se lanza hasta %.0f (sin ella, %.0f; esperado: 450 y 300) · el molotov quema × %.1f (esperado: 1.5)" % [
+		lanzables.alcance(), sin_punteria, johnny.stats.dano_lanzar])
+
+	# ── Mirilla: uno de cada 3 disparos, crítico (sin críticos al azar) ──
+	aplicar_talentos({})
+	johnny.stats.mirilla = true
+	johnny.stats.critico = 0.0
+	johnny.coger("pistola")
+	johnny.disparos = 0
+	var diana: Node2D = meter_zombi("normal", centro + Vector2(120, 0))
+	await get_tree().process_frame
+	diana.vida = 9999
+	diana.aturdido = 60.0
+	var golpes := []
+	diana.herido.connect(func(n, _golpe): golpes.append(n))
+	for k in 6:
+		johnny.balas = 10
+		johnny.disparar((diana.global_position - johnny.global_position).angle())
+		if k < 5:
+			await get_tree().create_timer(0.35, false).timeout
+	for espera in 30:   # la 6.ª: la foto, con su número recién salido
+		if golpes.size() >= 6:
+			break
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.1, false).timeout
+	Captura.foto("captura-talentos-critico.png")
+	print("Mirilla: lo que quitan 6 balas seguidas %s (esperado: la 3.ª y la 6.ª, el doble; esos números, en amarillo)" % [golpes])
+	diana.queue_free()
+
+	# ── Las tarjetas del ordenador: lo que dan ahora y con otro punto ──
+	Guardado.cambiar(func(g):
+		g.puntos = 4
+		g.talentos = {"ataque": 5, "punteria": 3, "camorrista": 2, "corpulento": 5, "lobezno": 2, "durito": 1})
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.rama_abierta = "militar"
+	ordenador.abrir("puntos", "b_punteria")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-talentos-militar.png")
+	ordenador.ver_rama("superviviente")
+	ordenador.abrir("puntos", "b_lobezno")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-talentos-superviviente.png")
+	print("Tarjetas: Puntería 3 «%s» · Durito 1 «%s» (esperado: Ahora: ... · Con otro: ...)" % [
+		"Ahora: %s · Con otro: %s" % [Talentos.efecto("punteria", 3), Talentos.efecto("punteria", 4)],
+		"Ahora: %s · Con otro: %s" % [Talentos.efecto("durito", 1), Talentos.efecto("durito", 2)]])
+	Guardado.cambiar(func(g):
+		g.puntos = guardado_antes.puntos
+		g.talentos = guardado_antes.talentos)
 	get_tree().quit()
