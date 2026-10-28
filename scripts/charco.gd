@@ -70,6 +70,7 @@ var tipo := "veneno"
 var dueno: Node2D = null   # quien lo ha tirado: a él no le hace nada (el cocinero y su aceite hirviendo)
 var escala := 1.0          # el Fabricante hace el fuego más grande...
 var duracion := 1.0        # ...y más largo
+var extra := 0.0           # segundos de más que dura (Napalm: el fuego del molotov de Johnny)
 var dano_lanzar := 1.0     # Puntería: el fuego quema más a los zombis
 var vida := 0.0
 var vida_max := 0.0
@@ -82,7 +83,7 @@ var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada 
 
 
 func _ready() -> void:
-	vida_max = TIPOS[tipo].vida * duracion
+	vida_max = TIPOS[tipo].vida * duracion + extra
 	vida = vida_max
 	z_index = -1   # en el suelo: por debajo de todos
 	add_to_group("charcos")

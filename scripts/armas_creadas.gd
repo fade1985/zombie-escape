@@ -78,10 +78,12 @@ static func estallido(zombi: Node2D, tipo: String, dano: float, quema := 1.0) ->
 				aturdir(otro, EFECTOS.chispa)
 
 
-# Se queda quieto echando chispitas amarillas (como con la mutación Tentacular). Los jefes, no
+# Se queda quieto echando chispitas amarillas (como con la mutación Tentacular). Los jefes, no. Solo lo usa el rayo,
+# así que de paso le deja la marca del rayo un rato (para Mezcla explosiva: zombi.gd)
 static func aturdir(zombi: Node2D, t: float) -> void:
 	if zombi is Zombi and zombi.is_in_group("zombis"):
 		zombi.aturdido = maxf(zombi.aturdido, t)
+		zombi.electrico = maxf(zombi.electrico, maxf(t, Talentos.MEZCLA.rayo))
 
 
 # Lo prende como el molotov ("quema": cuánto más arde; la skin del bombero, × 1,5). Los jefes no arden

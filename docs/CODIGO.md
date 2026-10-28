@@ -127,7 +127,18 @@ en una línea.
   también lanza más lejos (`alcance_lanzar`, `lanzables.alcance()`) y Mirilla da un crítico de cada 3 disparos. Cada
   tarjeta con puntos dice lo que da ahora y con otro (`Talentos.efecto`), y los críticos salen en amarillo, grandes y con
   «!» (`Zombi.numero_golpe`, con `Zombi.critico`, que ponen `johnny.golpear` y `bala.gd`). Se prueba con
-  `--equilibrio-talentos`),
+  `--equilibrio-talentos`. Niveles 4 y 5 (M16): cada rama llega a 36 puntos, con un talento de 3 puntos debajo de cada
+  uno del nivel 3 y una «corona» de 1 punto que pide los tres del 4 al máximo (`"pide"` admite una lista:
+  `Talentos.requisitos`, `faltan` y `nombres`, que usa la tarjeta bloqueada del ordenador). Militar: Frenesí y Gatillo
+  fácil (`ritmo_cuerpo`, `ritmo_fuego` y `recarga`, en `johnny.arma_de`), Racimo (se suma al racimo de las Épicas en
+  `lanzables.lanzar`) y Veterano (`critico` y `critico_x`, en `johnny.con_critico`). Superviviente: Blindaje (más
+  `escudo`), Sombra (`esquiva_espera`), Segundo aliento (`johnny.quitar_vida`, una vez por planta: `aliento_usado`, que
+  quita `partida.nueva_planta`) y Adrenalina (`johnny.adrenalina()`, con `Talentos.ADRENALINA`: el daño en `arma_de` y
+  `lanzables.adrenalina()`, la velocidad al andar y el aviso en `avisar_adrenalina`). Químico: Napalm (`charco.extra`,
+  desde `proyectil.caer`), Pegajoso (`zombi.ir_hacia`), Alto voltaje (`saltos`: el rayo del lanza rayos y el de
+  Pararrayos) y Mezcla explosiva (`zombi.quimica_al_morir` con `efectos_puestos`; la marca del rayo, `zombi.electrico`,
+  la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
+  `--talentos-altos`),
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en

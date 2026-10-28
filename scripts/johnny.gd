@@ -26,8 +26,9 @@
 # en poco menos de un segundo (como el dash del JS). Los talentos (talentos.gd) le dan, además de números:
 # Lobezno (recupera vida poco a poco, hasta la mitad), Durito (cada golpe quita menos), Reflejos (de vez en cuando
 # esquiva solo un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 3 disparos), Ninja
-# (golpe en área al acabar la esquiva, como mucho cada 5 s), Desfibrilador (resucita una vez por partida) y los de
-# Químico (Pararrayos: pararrayos()).
+# (golpe en área al acabar la esquiva, como mucho cada 5 s), Desfibrilador (resucita una vez por partida), Segundo
+# aliento (se cura una vez por planta al bajar de un tercio: quitar_vida()), Adrenalina (más daño y velocidad por debajo
+# de la mitad: adrenalina()) y los de Químico (Pararrayos: pararrayos()).
 #
 # Las skins (skins.gd): vestir() le cambia las hojas por las de esa skin (las de siempre con otra cabeza); al
 # empezar se pone la que dice el guardado. El portero, además, pega con la fregona un 100 % más (arma_de()), y con
@@ -65,6 +66,8 @@ const CAIDA := 0.22        # tropezón (caer): lo que tarda en llegar al suelo y
 const LEVANTADO := 0.6     # recién levantado, este rato sin volver a tropezar
 const AZUL := Color("#9fe8ff")
 const MORDISCO := Color("#ff5d5d")   # el «¡ÑAM!» del glotón sobre el que le ha hecho daño
+const VERDE := Color("#7be07b")      # el «¡Segundo aliento!»
+const ROJO := Color("#ff8a5c")       # el «¡Adrenalina!»
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
 const EMPUJE := 170.0      # empuje base de un golpe a un zombi normal (el del arma lo multiplica)
@@ -106,6 +109,8 @@ var ninja_t := 0.0         # Ninja: lo que falta para que el golpe al acabar la 
 var pararrayos_t := 0.0    # Pararrayos: lo que falta para que vuelva a saltar el rayo
 var disparos := 0          # Mirilla: los disparos que lleva
 var resucitado := false    # Desfibrilador: solo una vez por partida
+var aliento_usado := false   # Segundo aliento: ya ha curado en esta planta (partida.nueva_planta lo quita)
+var con_adrenalina := false  # Adrenalina: si en el paso de antes estaba por debajo de la mitad (para avisar al entrar)
 var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
 var caido_max := 0.0       # lo que dura ese tropezón
 var caido_lado := 1.0      # hacia dónde ha caído: 1, con la cabeza a la derecha; -1, a la izquierda
@@ -192,14 +197,14 @@ func _input(evento: InputEvent) -> void:
 
 
 # Le pone unos atributos nuevos (al empezar la partida con los talentos, o al comprar uno en el ordenador).
-# La vida de más viene llena (sin curar los tercios perdidos) y, si acaba de tener Acero, su escudo
+# La vida de más viene llena (sin curar los tercios perdidos) y, si acaba de tener Acero (o Blindaje), su escudo de más
 func poner_stats(nuevos: Dictionary) -> void:
 	var antes: Dictionary = stats
 	stats = nuevos
 	if stats.vida_max > antes.vida_max:
 		vida = mini(vida + stats.vida_max - antes.vida_max, vida_tope())
-	if stats.escudo > 0 and antes.escudo == 0:
-		escudo = stats.escudo
+	if stats.escudo > antes.escudo:
+		escudo += stats.escudo - antes.escudo
 	vida_cambiada.emit(vida, stats.vida_max)
 
 
@@ -228,6 +233,15 @@ func curar(cantidad: int) -> void:
 		return
 	vida = mini(vida + cantidad, vida_tope())
 	vida_cambiada.emit(vida, stats.vida_max)
+	avisar_adrenalina()
+
+
+# Adrenalina: al bajar de la mitad de la vida, lo dice encima de Johnny (cada vez que vuelve a bajar)
+func avisar_adrenalina() -> void:
+	var ahora := adrenalina()
+	if ahora and not con_adrenalina:
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), "¡Adrenalina!", ROJO, 18)
+	con_adrenalina = ahora
 
 
 # F1, C o cruceta abajo: pasa al siguiente modo de atacar (y se guarda para la próxima vez)
@@ -264,11 +278,17 @@ func arma_de(id: String) -> Dictionary:
 		# el bombero: +50 % la llamarada, y lo que sigue ardiendo el zombi (× 1,5); el Catalizador, también lo que arde
 		w.quema = Skins.quema(skin) + stats.dano_quimico - 1.0
 		extra += Skins.quema(skin) - 1.0
+	if adrenalina():
+		extra += Talentos.ADRENALINA.dano    # Adrenalina: por debajo de la mitad de la vida
 	w.dano = w.dano * (1.0 + extra)
-	w.ritmo = w.ritmo * stats.ritmo
+	# (Frenesí, los golpes; Gatillo fácil, los disparos)
+	w.ritmo = w.ritmo * stats.ritmo * (stats.ritmo_cuerpo if w.tipo == "cuerpo" else stats.ritmo_fuego)
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
+	if w.get("efecto", "") == "rayo":
+		w.saltos = w.saltos + stats.saltos   # Alto voltaje: salta a más zombis
 	if w.tipo == "fuego":
 		w.velocidad = w.velocidad * stats.velocidad_bala
+		w.recarga = w.recarga * stats.recarga   # Gatillo fácil: recarga antes
 	elif stats.ansiedad:
 		var ansiedad: Dictionary = Mutaciones.MUT.ansiedad   # Ansiedad: +10 % por zombi a la vista, hasta +50 %
 		w.ritmo = w.ritmo * (1.0 + minf(ansiedad.tope, ansiedad.cada_zombi * a_la_vista))
@@ -285,9 +305,15 @@ func base(id: String) -> Dictionary:
 	return Armas.con_calidad(id, calidad(id))
 
 
-# El daño de un golpe o una bala: a veces, crítico (el doble). "seguro": crítico sí o sí (Mirilla)
+# El daño de un golpe o una bala: a veces, crítico (el doble; con Veterano, el triple). "seguro": crítico sí o sí
+# (Mirilla)
 func con_critico(dano: float, seguro := false) -> int:
-	return roundi(dano * (2.0 if seguro or randf() < stats.critico else 1.0))
+	return roundi(dano * (stats.critico_x if seguro or randf() < stats.critico else 1.0))
+
+
+# Adrenalina (talento de Superviviente): por debajo de la mitad de la vida, más daño (arma_de) y más velocidad
+func adrenalina() -> bool:
+	return stats.adrenalina and vivo and vida < stats.vida_max * Talentos.ADRENALINA.vida
 
 
 func _physics_process(delta: float) -> void:
@@ -382,6 +408,8 @@ func _physics_process(delta: float) -> void:
 		var k := 1.0 - exp(-delta * ARRANQUE * maxf(0.08, Estados.agarre(estados)))
 		var rapidez: float = stats.velocidad * (1.0 - LENTO_TERCIO * (3 - tercios_vivos()))   # más lento por cada tercio perdido
 		rapidez *= Estados.frenado(estados)   # el frío de la cámara, el calambrazo del agua
+		if adrenalina():
+			rapidez *= 1.0 + Talentos.ADRENALINA.velocidad
 		velocity += (pedido * rapidez - velocity) * k
 	# move_and_slide mueve el cuerpo y, si choca con una pared, lo hace resbalar a lo largo de ella
 	move_and_slide()
@@ -1231,7 +1259,7 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 
 
 # Pararrayos (talento de Químico): al que te acaba de pegar de cerca le salta un rayo que le quita Talentos.PARARRAYOS.dano
-# (con el Catalizador, más), lo aturde y salta a otro de al lado con medio daño (ArmasCreadas.descarga). Como mucho
+# (con el Catalizador, más), lo aturde y salta a otro de al lado con medio daño (ArmasCreadas.descarga; con Alto voltaje, de ese a otro más por punto). Como mucho
 # cada PARARRAYOS.cada segundos; a los jefes les quita vida, pero no se aturden
 func pararrayos(quien) -> void:
 	var p: Dictionary = Talentos.PARARRAYOS
@@ -1244,7 +1272,7 @@ func pararrayos(quien) -> void:
 	ArmasCreadas.rayo(get_parent(), global_position + Vector2(0, -30), quien.global_position + Vector2(0, -40))
 	Sonido.tocar("chispa")
 	quien.recibir_golpe(dano, (quien.global_position - global_position).normalized() * EMPUJE * 0.5)
-	ArmasCreadas.descarga(quien, dano, p.aturde)
+	ArmasCreadas.descarga(quien, dano, p.aturde, stats.saltos)   # (con Alto voltaje, salta a más)
 
 
 # El glotón (skins.gd): el que le ha hecho daño lo paga. Un zombi normal (o un maniquí de la modista) muere al momento;
@@ -1304,6 +1332,16 @@ func quitar_vida(cantidad: int) -> void:
 		var tercio: float = stats.vida_max / 3.0
 		tercios = mini(tercios, maxi(1, ceili(vida / tercio - 0.000001)))
 	vida_cambiada.emit(vida, stats.vida_max)
+	# Segundo aliento: la primera vez en cada planta que baja de un tercio de la vida (sin caer), se cura un poco. Y
+	# recupera un tercio, como con un botiquín: si no, con un solo tercio la cura no le subiría de ahí
+	if stats.aliento > 0 and not aliento_usado and vida > 0 and vida < stats.vida_max / 3.0:
+		aliento_usado = true
+		devolver_tercio()
+		curar(roundi(stats.aliento * Alerta.botiquin()))
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-70, -70), "¡Segundo aliento!", VERDE, 18)
+		Sonido.tocar("curar")
+	if vida > 0:
+		avisar_adrenalina()
 	if vida == 0 and stats.resucitar and not resucitado:
 		# Desfibrilador: la primera vez que cae, vuelve con toda la vida
 		resucitado = true

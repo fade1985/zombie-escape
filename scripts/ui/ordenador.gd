@@ -525,7 +525,7 @@ func rejilla(c: Container) -> GridContainer:
 	return g
 
 
-# Una rama del árbol (.pc-rama): su título en azul y, debajo, sus niveles (1 arriba, 3 abajo), cada uno con su
+# Una rama del árbol (.pc-rama): su título en azul y, debajo, sus niveles (1 arriba, 5 abajo), cada uno con su
 # número a la izquierda y sus talentos en dos columnas
 func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 	var columna := VBoxContainer.new()
@@ -535,7 +535,7 @@ func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 	titulo.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 4))
 	columna.add_child(titulo)
 	titulo.add_child(Tema.icono_y_texto(rama.icono, rama.nombre, 24))
-	for nivel in [1, 2, 3]:
+	for nivel in range(1, 6):
 		var fila := HBoxContainer.new()
 		fila.add_theme_constant_override("separation", 6)
 		columna.add_child(fila)
@@ -564,8 +564,9 @@ func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 	# ninguno, lo que hace cada punto
 	var ahora := Talentos.efecto(t.id, n)
 	var debajo: String = t.desc
+	var faltan := Talentos.nombres(Talentos.faltan(s, t.id))   # (los del nivel 5 piden tres: solo salen los que faltan)
 	if motivo == "bloqueado":
-		debajo = "Necesitas %s al máximo" % Talentos.talento(t.pide).nombre
+		debajo = "Necesitas %s al máximo" % faltan
 	elif motivo == "max":
 		debajo = "¡Al máximo! " + ahora if ahora != "" else "¡Al máximo!"
 	elif n > 0 and ahora != "":
@@ -575,7 +576,7 @@ func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 		estado, [n, t.max])
 	var texto: String = t.desc
 	match motivo:
-		"bloqueado": texto = "Necesitas %s al máximo. %s" % [Talentos.talento(t.pide).nombre, texto]
+		"bloqueado": texto = "Necesitas %s al máximo. %s" % [faltan, texto]
 		"max": texto = "¡Al máximo! " + texto
 		"sin_puntos": texto += ". Te hace falta 1 punto."
 		"": texto += ". Pulsa para subirlo (1 punto)."

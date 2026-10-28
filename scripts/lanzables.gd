@@ -331,6 +331,11 @@ func alcance() -> float:
 	return MOLOTOV.alcance * johnny.stats.alcance_lanzar
 
 
+# Lo que suma la Adrenalina al daño de lo que se lanza (por debajo de la mitad de la vida), como en las armas
+func adrenalina() -> float:
+	return Talentos.ADRENALINA.dano if johnny.adrenalina() else 0.0
+
+
 # Dónde caería (ver arriba), sin pasarse del alcance: como todo en el suelo, el alcance es una elipse
 func objetivo() -> Vector2:
 	var desde: Vector2 = johnny.global_position
@@ -390,10 +395,12 @@ func lanzar(donde: Vector2) -> void:
 		p.hasta = donde
 		# Puntería, la skin del bombero (+50 %) y el Catalizador se suman, como en las armas (johnny.gd, arma_de); la
 		# calidad multiplica
-		p.dano_lanzar = (johnny.stats.dano_lanzar + Skins.quema(johnny.skin) + johnny.stats.dano_quimico - 2.0) * calidad.dano
+		p.dano_lanzar = (johnny.stats.dano_lanzar + Skins.quema(johnny.skin) + johnny.stats.dano_quimico - 2.0
+			+ adrenalina()) * calidad.dano
 		p.fabricante = johnny.stats.fabricante
 		p.escala = calidad.radio
-		p.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
+		# (las Épicas sueltan 2 más pequeños; el talento Racimo, 1 más por punto)
+		p.racimo = (Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0) + johnny.stats.racimo
 		sala.add_child(p)
 	else:
 		# la granada, o la atraedora o la congeladora (la misma granada, con su mecha, su radio y su efecto)
@@ -404,11 +411,13 @@ func lanzar(donde: Vector2) -> void:
 		g.radio = radio_zona()
 		# (a la congeladora, el Catalizador también se le suma; y Criogenia la deja congelados más tiempo)
 		var quimico: float = johnny.stats.dano_quimico - 1.0 if t == "congeladora" else 0.0
-		g.dano_zombis = roundi(DATOS[t].dano * (johnny.stats.dano_lanzar + quimico) * calidad.dano)
+		g.dano_zombis = roundi(DATOS[t].dano * (johnny.stats.dano_lanzar + quimico + adrenalina()) * calidad.dano)
 		if ARROJADIZAS.has(t):
 			g.fabricante = johnny.stats.fabricante
 			g.congela_extra = johnny.stats.congela_extra
 		g.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
+		if t == "granada":
+			g.racimo += johnny.stats.racimo   # (Racimo: la granada, 1 granadita más por punto)
 		sala.add_child(g)
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)
 

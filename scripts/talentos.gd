@@ -1,5 +1,7 @@
 # El árbol de talentos (src/talentos.js del JS): tres ramas, Militar, Superviviente y Químico (M14, 28 oct: el
-# conserje sabe de productos de limpieza; mejora el fuego, el ácido, el rayo y el frío), con tres niveles cada una.
+# conserje sabe de productos de limpieza; mejora el fuego, el ácido, el rayo y el frío), con cinco niveles cada una
+# (M16, 28 oct: el 4, con un talento debajo de cada uno del 3, y el 5, la «corona» de la rama, que pide los tres del 4
+# al máximo).
 #
 # Los puntos de talento se compran con los dólares ahorrados en el ordenador de la sala de mantenimiento
 # (ui/ordenador.gd) y se gastan aquí, de uno en uno: cada punto sube un nivel del talento. Lo comprado es para
@@ -7,7 +9,7 @@
 # acaba (todos si completas el edificio; la mitad si caes).
 #
 # Para tocar un talento basta con cambiar su línea en LISTA: "max" es cuántos puntos admite, "pide" el talento
-# que hay que tener al máximo antes; lo que hace con n puntos está en aplicar_uno(). Lo que no es un número
+# que hay que tener al máximo antes (o una lista, si son varios); lo que hace con n puntos está en aplicar_uno(). Lo que no es un número
 # (esquivar solo, el escudo, el golpe de Ninja, resucitar...) lo lee Johnny de sus atributos (johnny.gd).
 class_name Talentos
 
@@ -21,6 +23,12 @@ const RAMAS := [
 # El rayo de Pararrayos (johnny.gd, pararrayos): su daño (con el Catalizador, más), lo que aturde, cada cuánto como
 # mucho y lo cerca que tiene que estar el que te ha pegado (los que disparan de lejos, no)
 const PARARRAYOS := {"dano": 20, "aturde": 1.0, "cada": 3.0, "alcance": 200.0}
+# Adrenalina (johnny.gd): por debajo de "vida" de la vida máxima, + "dano" de daño (se suma, como los demás) y
+# + "velocidad" de velocidad
+const ADRENALINA := {"vida": 0.5, "dano": 0.3, "velocidad": 0.2}
+# Mezcla explosiva (zombi.gd, quimica_al_morir): la explosión del que muere con dos efectos (su radio y su daño, que el
+# Catalizador sube), y lo que le dura al zombi la marca del rayo después del calambre ("rayo", en segundos)
+const MEZCLA := {"radio": 90.0, "dano": 30, "rayo": 1.5}
 
 const LISTA := [
 	# ── Militar
@@ -40,6 +48,15 @@ const LISTA := [
 		"desc": "Uno de cada 3 disparos es un crítico seguro (doble daño)"},
 	{"id": "fabricante", "rama": "militar", "nivel": 3, "nombre": "Fabricante", "max": 1, "icono": "granada", "pide": "artificiero",
 		"desc": "Fuego y explosiones más grandes, y el fuego dura más"},
+	{"id": "frenesi", "rama": "militar", "nivel": 4, "nombre": "Frenesí", "max": 3, "icono": "cuchillo", "pide": "larguirucho",
+		"desc": "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"},
+	{"id": "gatillo", "rama": "militar", "nivel": 4, "nombre": "Gatillo fácil", "max": 3, "icono": "mp5", "pide": "mirilla",
+		"desc": "Disparas un 10 % más rápido y recargas un 10 % antes por punto"},
+	{"id": "racimo", "rama": "militar", "nivel": 4, "nombre": "Racimo", "max": 3, "icono": "obj-pieza_arrojable", "pide": "fabricante",
+		"desc": "El molotov y la granada sueltan 1 más pequeño alrededor por punto"},
+	{"id": "veterano", "rama": "militar", "nivel": 5, "nombre": "Veterano", "max": 1, "icono": "trofeo",
+		"pide": ["frenesi", "gatillo", "racimo"],
+		"desc": "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"},
 	# ── Superviviente
 	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "vida",
 		"desc": "+10 % de vida máxima por punto"},
@@ -57,6 +74,15 @@ const LISTA := [
 		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"},
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "medico", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
+	{"id": "blindaje", "rama": "superviviente", "nivel": 4, "nombre": "Blindaje", "max": 3, "icono": "herramientas", "pide": "acero",
+		"desc": "El escudo de Acero tiene 25 más por punto"},
+	{"id": "sombra", "rama": "superviviente", "nivel": 4, "nombre": "Sombra", "max": 3, "icono": "reflejos", "pide": "ninja",
+		"desc": "La esquiva se recarga un 15 % antes por punto"},
+	{"id": "aliento", "rama": "superviviente", "nivel": 4, "nombre": "Segundo aliento", "max": 3, "icono": "cafe", "pide": "desfibrilador",
+		"desc": "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"},
+	{"id": "adrenalina", "rama": "superviviente", "nivel": 5, "nombre": "Adrenalina", "max": 1, "icono": "alerta",
+		"pide": ["blindaje", "sombra", "aliento"],
+		"desc": "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"},
 	# ── Químico
 	{"id": "catalizador", "rama": "quimico", "nivel": 1, "nombre": "Catalizador", "max": 5, "icono": "obj-gasolina",
 		"desc": "+10 % de daño de fuego, ácido, rayo y frío por punto"},
@@ -74,6 +100,15 @@ const LISTA := [
 		"desc": "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"},
 	{"id": "pararrayos", "rama": "quimico", "nivel": 3, "nombre": "Pararrayos", "max": 1, "icono": "obj-bateria", "pide": "criogenia",
 		"desc": "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"},
+	{"id": "napalm", "rama": "quimico", "nivel": 4, "nombre": "Napalm", "max": 3, "icono": "obj-gasolina", "pide": "reaccion",
+		"desc": "El fuego del molotov dura 1 s más por punto"},
+	{"id": "pegajoso", "rama": "quimico", "nivel": 4, "nombre": "Pegajoso", "max": 3, "icono": "desintegrador", "pide": "residuo",
+		"desc": "Los zombis con ácido van un 10 % más lentos por punto"},
+	{"id": "voltaje", "rama": "quimico", "nivel": 4, "nombre": "Alto voltaje", "max": 3, "icono": "pistola_electrica", "pide": "pararrayos",
+		"desc": "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"},
+	{"id": "mezcla", "rama": "quimico", "nivel": 5, "nombre": "Mezcla explosiva", "max": 1, "icono": "obj-pieza_especial",
+		"pide": ["napalm", "pegajoso", "voltaje"],
+		"desc": "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"},
 ]
 
 
@@ -94,11 +129,30 @@ static func motivo(s: Dictionary, id: String) -> String:
 	var t := talento(id)
 	if nivel_de(s, id) >= t.max:
 		return "max"
-	if t.has("pide") and nivel_de(s, t.pide) < talento(t.pide).max:
+	if not faltan(s, id).is_empty():
 		return "bloqueado"
 	if s.puntos < 1:
 		return "sin_puntos"
 	return ""
+
+
+# Los talentos que pide ("pide": uno o, en los del nivel 5, una lista)
+static func requisitos(id: String) -> Array:
+	var pide = talento(id).get("pide", [])
+	return pide if pide is Array else [pide]
+
+
+# Los que pide y aún no están al máximo
+static func faltan(s: Dictionary, id: String) -> Array:
+	return requisitos(id).filter(func(p): return nivel_de(s, p) < talento(p).max)
+
+
+# Unos talentos en una frase: "Frenesí", "Frenesí y Racimo", "Frenesí, Gatillo fácil y Racimo"
+static func nombres(ids: Array) -> String:
+	var lista: Array = ids.map(func(p): return talento(p).nombre)
+	if lista.size() < 2:
+		return "".join(lista)
+	return ", ".join(lista.slice(0, -1)) + " y " + lista[-1]
 
 
 # Lo que hace cada talento con n puntos sobre los atributos de Johnny (mejoras.gd)
@@ -132,6 +186,22 @@ static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 		"reaccion": st.reaccion = true
 		"residuo": st.residuo = true
 		"pararrayos": st.pararrayos = true
+		"frenesi": st.ritmo_cuerpo *= 1.0 + 0.1 * n
+		"gatillo":
+			st.ritmo_fuego *= 1.0 + 0.1 * n
+			st.recarga *= 1.0 - 0.1 * n
+		"racimo": st.racimo += n
+		"veterano":
+			st.critico += 0.1
+			st.critico_x = 3.0
+		"blindaje": st.escudo += 25 * n
+		"sombra": st.esquiva_espera *= 1.0 - 0.15 * n
+		"aliento": st.aliento += 15 * n
+		"adrenalina": st.adrenalina = true
+		"napalm": st.napalm += n
+		"pegajoso": st.pegajoso += 0.1 * n
+		"voltaje": st.saltos += n
+		"mezcla": st.mezcla = true
 
 
 # Lo que da un talento con n puntos, en pocas palabras, para que en el ordenador se vea lo que se tiene y lo que da el
@@ -153,6 +223,15 @@ static func efecto(id: String, n: int) -> String:
 		"incendiario": return "+%s s ardiendo" % str(0.5 * n).replace(".", ",")
 		"desatascador": return "+%d %% con ácido" % (10 * n)
 		"criogenia": return "+%d congeladora%s y +%s s" % [n, "s" if n > 1 else "", str(0.5 * n).replace(".", ",")]
+		"frenesi": return "+%d %% de rapidez cuerpo a cuerpo" % (10 * n)
+		"gatillo": return "+%d %% de rapidez y recarga" % (10 * n)
+		"racimo": return "suelta %d más" % n
+		"blindaje": return "escudo de %d" % (50 + 25 * n)
+		"sombra": return "esquiva un %d %% antes" % (15 * n)
+		"aliento": return "+%d de vida por planta" % (15 * n)
+		"napalm": return "+%d s de fuego" % n
+		"pegajoso": return "%d %% más lentos con ácido" % (10 * n)
+		"voltaje": return "salta a %d más" % n
 	return ""
 
 

@@ -74,6 +74,7 @@ func caer(datos: Dictionary) -> void:
 	if tipo == "molotov":
 		charco.escala = (Lanzables.FABRICANTE.radio if fabricante else 1.0) * escala
 		charco.duracion = Lanzables.FABRICANTE.duracion if fabricante else 1.0
+		charco.extra = Mejoras.de_johnny(get_tree(), "napalm")   # (Napalm: 1 s más por punto)
 		charco.dano_lanzar = dano_lanzar
 	elif tipo == "molotov_jefe":
 		charco.escala = datos.escala

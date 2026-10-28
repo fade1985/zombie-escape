@@ -13,6 +13,7 @@ static func base() -> Dictionary:
 		"alcance_cuerpo": 1.0,   # x alcance extra de las armas cuerpo a cuerpo
 		"velocidad_bala": 1.0,   # x velocidad de las balas
 		"critico": 0.05,         # probabilidad de que un golpe o una bala haga el doble de daño
+		"critico_x": 2.0,        # lo que multiplica un crítico (Veterano: el triple)
 		"dano_recibido": 1.0,    # x daño que recibes (menos es mejor)
 		"velocidad": 210.0,      # unidades por segundo
 		"iman": 120.0,           # radio en el que los billetes vienen hacia ti
@@ -41,6 +42,17 @@ static func base() -> Dictionary:
 		"reaccion": false,       # los que mueren ardiendo revientan y prenden (Reacción en cadena)
 		"residuo": false,        # los que mueren con ácido dejan un charco (Residuo tóxico)
 		"pararrayos": false,     # rayo al que te golpea (Pararrayos)
+		# Los niveles 4 y 5 del árbol (M16)
+		"ritmo_cuerpo": 1.0,     # x velocidad de los golpes cuerpo a cuerpo (Frenesí)
+		"ritmo_fuego": 1.0,      # x velocidad de los disparos (Gatillo fácil)
+		"recarga": 1.0,          # x lo que se tarda en recargar (Gatillo fácil; menos es mejor)
+		"racimo": 0,             # molotovs y granadas pequeños de más al romperse o explotar (Racimo)
+		"aliento": 0,            # vida que cura una vez por planta al bajar de un tercio (Segundo aliento)
+		"adrenalina": false,     # más daño y velocidad por debajo de la mitad de la vida (Adrenalina)
+		"napalm": 0,             # segundos de más que dura el fuego del molotov (Napalm)
+		"pegajoso": 0.0,         # parte de velocidad que pierden los zombis con ácido (Pegajoso)
+		"saltos": 0,             # zombis de más a los que salta el rayo (Alto voltaje)
+		"mezcla": false,         # los que mueren con dos efectos explotan (Mezcla explosiva)
 		# De las mutaciones: solo duran la partida
 		"canibal": 0.0,          # parte de la vida que cura cada zombi que matas (Caníbal)
 		"ansiedad": false,       # golpes más rápidos cuantos más zombis a la vista (Ansiedad)

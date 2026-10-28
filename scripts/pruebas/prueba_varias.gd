@@ -1168,3 +1168,242 @@ func probar_equilibrio_talentos() -> void:
 		g.puntos = guardado_antes.puntos
 		g.talentos = guardado_antes.talentos)
 	get_tree().quit()
+
+
+# Con "--captura --talentos-altos": los niveles 4 y 5 de las tres ramas (M16), con sus números en la terminal y lo
+# esperado al lado. Militar: Frenesí y Gatillo fácil (rapidez y recarga), Racimo (lo que sueltan el molotov y la
+# granada, con la foto de las granaditas: captura-altos-racimo.png) y Veterano. Superviviente: Blindaje, Sombra, Segundo
+# aliento (una vez por planta: captura-altos-aliento.png) y Adrenalina (daño y velocidad: captura-altos-adrenalina.png).
+# Químico: Napalm, Pegajoso, Alto voltaje (el rayo de Pararrayos salta a 4 más: captura-altos-voltaje.png) y Mezcla
+# explosiva (captura-altos-mezcla.png). Al final, en el ordenador, la corona de Militar bloqueada y la de Superviviente
+# comprada (captura-altos-arbol-militar.png y captura-altos-arbol-superviviente.png). Se cierra
+func probar_talentos_altos() -> void:
+	var centro: Vector2 = await sala_de_talentos()
+	var guardado_antes := Guardado.cargar()
+	var sala: Node = johnny.get_parent()
+
+	# ── Frenesí y Gatillo fácil ──
+	aplicar_talentos({})
+	var fregona: Dictionary = johnny.arma_de("fregona")
+	var pistola: Dictionary = johnny.arma_de("pistola")
+	aplicar_talentos({"frenesi": 3, "gatillo": 3})
+	print("Frenesí 3: la fregona da %.2f golpes por segundo (sin él, %.2f; esperado: × 1,3) · Gatillo fácil 3: la pistola dispara %.2f por segundo (sin él, %.2f; esperado: × 1,3) y recarga en %.2f s (sin él, %.2f; esperado: × 0,7)" % [
+		johnny.arma_de("fregona").ritmo, fregona.ritmo, johnny.arma_de("pistola").ritmo, pistola.ritmo,
+		johnny.arma_de("pistola").recarga, pistola.recarga])
+
+	# ── Racimo: el molotov y la granada, 3 pequeños más (lanzados lejos de Johnny) ──
+	aplicar_talentos({"racimo": 3})
+	lanzables.reiniciar(johnny.stats)
+	lanzables.tipo = "molotov"
+	lanzables.lanzar(centro + Vector2(-220, 0))
+	var botella: Node = sala.get_child(-1)
+	lanzables.tipo = "granada"
+	lanzables.lanzar(centro + Vector2(220, 0))
+	var granada: Node = sala.get_child(-1)
+	print("Racimo 3: el molotov soltará %d botellitas y la granada %d granaditas (esperado: 3 y 3; sin el talento, 0 si no son Épicas)" % [
+		botella.racimo, granada.racimo])
+	var hijas := []
+	for espera in 200:   # hasta que la granada explota y salen sus granaditas
+		hijas = sala.get_children().filter(func(n): return n.get("hija") == true)
+		if not hijas.is_empty():
+			break
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.8, false).timeout   # (las granaditas explotan a los 0,7 s)
+	Captura.foto("captura-altos-racimo.png")
+	print("Racimo 3: al explotar la granada salen %d granaditas (esperado: 3)" % hijas.size())
+	await get_tree().create_timer(0.7, false).timeout
+	for ch in get_tree().get_nodes_in_group("charcos"):
+		ch.queue_free()
+
+	# ── Veterano ──
+	aplicar_talentos({"veterano": 1})
+	print("Veterano: críticos el %d %% de las veces (esperado: 15) y un crítico de un golpe de 10 quita %d (esperado: 30; sin él, 20)" % [
+		roundi(johnny.stats.critico * 100.0), johnny.con_critico(10, true)])
+
+	# ── Blindaje y Sombra ──
+	aplicar_talentos({})
+	johnny.escudo = 0.0
+	aplicar_talentos({"acero": 1, "blindaje": 3, "sombra": 3})
+	print("Blindaje 3: escudo de %d al comprarlo (esperado: 50 + 75 = 125) · Sombra 3: la esquiva se recarga en %.2f s (esperado: 0,9 × 0,55 = 0,50)" % [
+		roundi(johnny.escudo), johnny.stats.esquiva_espera])
+
+	# ── Segundo aliento: de 40, un golpe de 15; y otra vez en la misma planta ──
+	aplicar_talentos({"aliento": 3})
+	johnny.escudo = 0.0
+	johnny.vida = 40
+	johnny.tercios = 3
+	johnny.aliento_usado = false
+	johnny.invulnerable = 0.0
+	johnny.recibir_dano(15)
+	var tras_aliento: int = johnny.vida
+	await get_tree().create_timer(0.25, false).timeout
+	Captura.foto("captura-altos-aliento.png")
+	johnny.vida = 40
+	johnny.tercios = 3
+	johnny.invulnerable = 0.0
+	johnny.recibir_dano(15)
+	print("Segundo aliento 3: de 40, un golpe de 15 lo deja en 25 y se cura hasta %d (esperado: 67: +45, sin pasar de los dos tercios, que recupera uno) · otra vez en la misma planta: %d (esperado: 25)" % [
+		tras_aliento, johnny.vida])
+
+	# ── Adrenalina: por debajo de la mitad, más daño y más velocidad ──
+	aplicar_talentos({"adrenalina": 1})
+	johnny.vida = 100
+	johnny.tercios = 3
+	johnny.con_adrenalina = false
+	var golpe_lleno: float = johnny.arma_de("fregona").dano
+	var corre_lleno: float = await correr_un_rato(centro)
+	johnny.invulnerable = 0.0
+	johnny.vida = 55
+	johnny.recibir_dano(15)
+	johnny.tercios = 3   # (para medir solo la Adrenalina: sin el tercio perdido, que le hace ir más lento)
+	await get_tree().create_timer(0.25, false).timeout
+	Captura.foto("captura-altos-adrenalina.png")
+	var corre_bajo: float = await correr_un_rato(centro)
+	print("Adrenalina: con 100 de vida la fregona quita %.1f y con 40, %.1f (esperado: × 1,3) · corre a %.0f y a %.0f (esperado: 210 y 252)" % [
+		golpe_lleno, johnny.arma_de("fregona").dano, corre_lleno, corre_bajo])
+	johnny.vida = 100
+
+	# ── Napalm: el fuego del molotov dura 3 s más ──
+	aplicar_talentos({"napalm": 3})
+	lanzables.reiniciar(johnny.stats)
+	lanzables.tipo = "molotov"
+	lanzables.lanzar(centro + Vector2(-220, 0))
+	var fuego: Node = null
+	for espera in 200:
+		var fuegos := get_tree().get_nodes_in_group("charcos").filter(func(ch): return ch.tipo == "fuego")
+		if not fuegos.is_empty():
+			fuego = fuegos[0]
+			break
+		await get_tree().physics_frame
+	print("Napalm 3: el fuego del molotov dura %.1f s (esperado: 4 + 3 = 7)" % (fuego.vida_max if fuego else -1.0))
+	for ch in get_tree().get_nodes_in_group("charcos"):
+		ch.queue_free()
+
+	# ── Pegajoso: lo rápido que anda un zombi, sin ácido y con ácido ──
+	aplicar_talentos({"pegajoso": 3})
+	var lento: Node2D = meter_zombi("normal", centro + Vector2(-300, 0))
+	await get_tree().process_frame
+	lento.vida = 9999
+	await get_tree().create_timer(0.3, false).timeout   # (que eche a andar)
+	var sin_acido: float = await rapidez_media(lento)
+	ArmasCreadas.herir(lento, "acido", 1)
+	var con_acido: float = await rapidez_media(lento)
+	print("Pegajoso 3: el zombi anda a %.0f sin ácido y a %.0f con ácido (esperado: el 70 %%, unos %.0f; lleva ácido: %s)" % [
+		sin_acido, con_acido, sin_acido * 0.7, lento.con_acido()])
+	lento.queue_free()
+
+	# ── Alto voltaje: el rayo de Pararrayos, del que pega a 4 más en fila (a 70 uno de otro) ──
+	aplicar_talentos({"pararrayos": 1, "voltaje": 3})
+	var fila := []
+	for k in 6:
+		var z: Node2D = meter_zombi("normal", centro + Vector2(40 + 70 * k, 0))
+		fila.append(z)
+	await get_tree().process_frame
+	for k in fila.size():
+		fila[k].vida = 500
+		fila[k].aturdido = 30.0
+		fila[k].position = centro + Vector2(40 + 70 * k, 0)
+		fila[k].set_physics_process(false)
+	johnny.invulnerable = 0.0
+	johnny.pararrayos_t = 0.0
+	johnny.recibir_dano(10, fila[0])
+	await get_tree().process_frame
+	Captura.foto("captura-altos-voltaje.png")
+	print("Alto voltaje 3: lo que quita el rayo a los 6 de la fila %s (esperado: 20 al que pega, 10 a los 4 siguientes y 0 al último)" % [
+		fila.map(func(z): return 500 - z.vida)])
+	for z in fila:
+		z.queue_free()
+	await get_tree().create_timer(0.3, false).timeout
+
+	# ── Mezcla explosiva: uno con un solo efecto (nada) y otro con dos (explota, y a Johnny no le hace nada) ──
+	aplicar_talentos({"mezcla": 1})
+	johnny.vida = 100
+	johnny.invulnerable = 0.0
+	var m: Node2D = meter_zombi("normal", centro + Vector2(60, 0))
+	var vecinos := [meter_zombi("normal", centro + Vector2(120, 0)), meter_zombi("normal", centro + Vector2(60, 60))]
+	await get_tree().process_frame
+	for z in [m] + vecinos:
+		z.vida = 500
+		z.aturdido = 30.0
+		z.set_physics_process(false)
+	m.position = centro + Vector2(60, 0)
+	vecinos[0].position = centro + Vector2(120, 0)
+	vecinos[1].position = centro + Vector2(60, 60)
+	ArmasCreadas.aturdir(m, 0.5)   # solo el rayo
+	m.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.1, false).timeout
+	print("Mezcla explosiva: el que muere solo con el rayo no explota: a los de al lado les quita %s (esperado: [0, 0])" % [
+		vecinos.map(func(z): return 500 - z.vida)])
+	var m2: Node2D = meter_zombi("normal", centro + Vector2(60, 0))
+	await get_tree().process_frame
+	m2.vida = 500
+	m2.set_physics_process(false)
+	m2.position = centro + Vector2(60, 0)
+	m2.prender()
+	ArmasCreadas.herir(m2, "acido", 1)   # fuego y ácido
+	print("Mezcla explosiva: lleva %d efectos (esperado: 2)" % m2.efectos_puestos())
+	m2.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.15, false).timeout
+	Captura.foto("captura-altos-mezcla.png")
+	print("Mezcla explosiva: el que muere con fuego y ácido explota: a los de al lado les quita %s (esperado: [30, 30]) y a Johnny, a 60, %d (esperado: 0)" % [
+		vecinos.map(func(z): return 500 - z.vida), 100 - johnny.vida])
+	for z in [m, m2] + vecinos:
+		z.queue_free()
+
+	# ── El ordenador: 36 puntos por rama, la corona de Militar bloqueada y la de Superviviente comprada ──
+	var por_rama := {}
+	for t in Talentos.LISTA:
+		por_rama[t.rama] = por_rama.get(t.rama, 0) + t.max
+	var casi := {"ataque": 5, "punteria": 5, "camorrista": 5, "tirador": 5, "artificiero": 3, "larguirucho": 1,
+		"mirilla": 1, "fabricante": 1, "frenesi": 3, "gatillo": 3, "racimo": 1}
+	var prueba := {"puntos": 4, "talentos": casi}
+	print("Árbol: puntos por rama %s (esperado: 36 cada una) · Veterano con Racimo a 1: %s, falta %s (esperado: bloqueado y Racimo); con Racimo a 3: «%s» (esperado: «»)" % [
+		por_rama, Talentos.motivo(prueba, "veterano"), Talentos.nombres(Talentos.faltan(prueba, "veterano")),
+		Talentos.motivo({"puntos": 4, "talentos": casi.merged({"racimo": 3}, true)}, "veterano")])
+	Guardado.cambiar(func(g):
+		g.puntos = 4
+		g.talentos = casi.merged({"corpulento": 5, "lobezno": 5, "durito": 3, "reflejos": 5, "sanitario": 5, "acero": 1,
+			"ninja": 1, "desfibrilador": 1, "blindaje": 3, "sombra": 3, "aliento": 3, "adrenalina": 1}))
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.rama_abierta = "militar"
+	ordenador.abrir("puntos", "b_veterano")
+	await get_tree().create_timer(0.3).timeout
+	for desliza: ScrollContainer in ordenador.find_children("*", "ScrollContainer", true, false):
+		desliza.scroll_vertical = 99999
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-altos-arbol-militar.png")
+	ordenador.ver_rama("superviviente")
+	ordenador.abrir("puntos", "b_adrenalina")
+	await get_tree().create_timer(0.3).timeout
+	for desliza: ScrollContainer in ordenador.find_children("*", "ScrollContainer", true, false):
+		desliza.scroll_vertical = 99999
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-altos-arbol-superviviente.png")
+	Guardado.cambiar(func(g):
+		g.puntos = guardado_antes.puntos
+		g.talentos = guardado_antes.talentos)
+	get_tree().quit()
+
+
+# Para Pegajoso: lo rápido que va un zombi, de media, durante un segundo
+func rapidez_media(z: Node2D) -> float:
+	var suma := 0.0
+	for k in 60:
+		await get_tree().physics_frame
+		suma += z.velocity.length()
+	return suma / 60.0
+
+
+# Para Adrenalina: Johnny corre hacia la derecha medio segundo (como con la flecha) y devuelve lo rápido que iba. Vuelve
+# a dejarlo en "centro"
+func correr_un_rato(centro: Vector2) -> float:
+	johnny.position = centro + Vector2(-120, 0)
+	johnny.velocity = Vector2.ZERO
+	Input.action_press("derecha")
+	await get_tree().create_timer(0.5, false).timeout
+	var rapidez: float = johnny.velocity.length()
+	Input.action_release("derecha")
+	await get_tree().create_timer(0.2, false).timeout
+	johnny.position = centro
+	return rapidez

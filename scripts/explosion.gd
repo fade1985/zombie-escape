@@ -9,6 +9,7 @@ var radio := 90.0
 var dano := 30
 var dano_zombis := -1     # si es distinto (la granada con Puntería les hace más a ellos): -1 = el mismo
 var origen: Node = null       # quien ha reventado (no se hace daño a sí mismo)
+var a_johnny := true          # si le hace daño a Johnny (la de Mezcla explosiva, no: zombi.gd)
 var tiempo := 0.0
 
 
@@ -16,7 +17,7 @@ func _ready() -> void:
 	Sonido.tocar("explosion")
 	Temblor.temblar(14.0)
 	var johnny := get_tree().get_first_node_in_group("jugador")
-	if johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO:
+	if a_johnny and johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO:
 		johnny.recibir_dano(dano)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == origen:

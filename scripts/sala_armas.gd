@@ -437,7 +437,7 @@ func escribir() -> void:
 		l.append("Daño %s por golpe · %s %s/s" % [decimal(w.dano, 1), decimal(w.ritmo, 1), "golpe" if is_equal_approx(w.ritmo, 1.0) else "golpes"])
 		l.append("Alcance %d (%s casillas) · abanico %d°" % [roundi(w.alcance), decimal(w.alcance / Planta.CASILLA, 1), roundi(w.arco)])
 		l.append("Empuje %s" % decimal(w.empuje, 1))
-	l.append("Crítico: el %d %% de las veces (×2)" % roundi(johnny.stats.critico * 100.0))
+	l.append("Crítico: el %d %% de las veces (×%d)" % [roundi(johnny.stats.critico * 100.0), roundi(johnny.stats.critico_x)])
 	var dps: float = w.dano if deposito else w.dano * perdigones * w.ritmo
 	var con_recargas := ""
 	if deposito:

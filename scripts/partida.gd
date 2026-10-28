@@ -280,6 +280,7 @@ func nueva_planta(num: int) -> void:
 	logros.planta_nueva()
 	eventos.nueva_planta()
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
+	johnny.aliento_usado = false   # (y el Segundo aliento vuelve a estar listo)
 
 
 # El minijefe de la planta "num": el que le tocó en el sorteo, si ya está hecho (tiene su
