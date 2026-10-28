@@ -5,9 +5,10 @@
 #   apagon    toda la planta a oscuras y con las lámparas apagadas: solo se ve con la linterna (Luz.evento)
 #   incendio  la alarma de incendios: llueve de los aspersores, el suelo se llena de charcos que resbalan (charco.gd,
 #             "agua") y en algunos cae un cable pelado que da calambrazos a Johnny y a los zombis (Cable, abajo)
-#   horda     una horda grande llena el pasillo: salen todos de golpe, repartidos por él y lejos de Johnny (fuera
-#             de pantalla), y van a por él; si Johnny se mete en un piso, los que quedan le esperan en el pasillo.
-#             Al acabar con todos, un premio
+#   horda     una horda grande llena el pasillo: no empieza hasta que Johnny llega al medio del pasillo (el dueño, 28
+#             oct); entonces salen todos de golpe, por los dos extremos, justo fuera de pantalla (a su izquierda y a su
+#             derecha, alternando: lo cogen entre dos), y van a por él; si Johnny se mete en un piso, los que quedan le
+#             esperan en el pasillo. Al acabar con todos, un premio
 # El apagón y el incendio también dan premio (desde el 27 oct; antes solo ponían las cosas difíciles): al subir a la
 # siguiente planta, los mismos dólares que la horda, directos a la cartera de la partida (superado())
 #
@@ -42,12 +43,15 @@ const INCENDIO := {
 	"sirena": 12.0,          # cada cuánto vuelve a sonar la sirena
 }
 const HORDA := {
-	"zombis": 26,            # los zombis de la horda en la planta baja (hasta el 28 oct, 18: el dueño quería más peligro)...
+	"zombis": 22,            # los zombis de la horda en la planta baja (hasta el 28 oct, 18; el dueño quería más peligro)...
 	"por_planta": 0.15,      # ...y un 15 % más por cada planta (y con la Alerta 1, más: Alerta.mas_zombis)
 	"nivel": 1,              # lo peor que sale: el nivel de cada planta (num) más este (tipos_horda)
-	"primera": 4.0,          # segundos desde que Johnny pisa el pasillo hasta que sale la horda
+	"medio": 200.0,          # a cuánto del medio del pasillo tiene que llegar Johnny para que empiece la horda
+	"primera": 4.0,          # segundos desde que empieza (el cartel, al llegar al medio) hasta que sale la horda
 	"goteo": 0.15,           # salen de uno en uno, con este hueco (así no se apilan)
-	"lejos": 720.0,          # a cuánto de Johnny salen como poco: fuera de pantalla, nadie aparece delante de él
+	"fuera": 520.0,          # a cuánto de Johnny, a lo largo del pasillo, salen como poco (la pantalla mide 960: nadie
+                             # aparece delante de él) y hasta 180 más lejos; si por un lado no hay pasillo, por el otro
+	"lejos": 720.0,          # (si no hubiera sitio por ninguno de los dos lados, a cuánto de él sale como poco)
 	"billetes": 3,           # el premio: estos billetes, uno más por planta, y una caja de munición (el apagón y
                              # el incendio, los mismos dólares, sin la caja: superado())
 }
@@ -61,6 +65,7 @@ var empezado := false      # si ya ha empezado (Johnny ha pisado el pasillo)
 var activo := false        # si Johnny está en un sitio con el evento (no en la sala del jefe ni en mantenimiento)
 var charcos := {}          # incendio: sitio -> [{pos, cable, avisado}]
 var horda := {}            # {salio, t, goteo, cola, vivos, quedan, hecha}
+var lado_horda := 0        # por qué lado de Johnny sale el siguiente zombi de la horda (0 izquierda, 1 derecha)
 var sirena_t := 0.0
 var cartel: VBoxContainer
 var cartel_titulo: Label
@@ -139,8 +144,8 @@ func recoger() -> void:
 # El sitio nuevo ya está montado (aún sin sus zombis): si es el pasillo por primera vez, empieza; y si el evento
 # vale aquí, se pone lo suyo
 func al_montar(idx: int, sitio: Dictionary) -> void:
-	if evento != "" and not empezado and sitio.tipo == "pasillo":
-		empezar()
+	if evento != "" and evento != "horda" and not empezado and sitio.tipo == "pasillo":
+		empezar()   # (la horda, no: espera a que Johnny llegue al medio del pasillo, en _physics_process)
 	activo = empezado and sitio.tipo in ["pasillo", "apartamento"]   # (las tiendas también son "apartamento")
 	# A oscuras y con las luces apagadas: con el apagón o, con el reto del día "Todo a oscuras" (reto.gd), en
 	# todos los sitios menos la sala de mantenimiento y las viviendas de los rescatados
@@ -195,7 +200,19 @@ func etiqueta() -> String:
 	return " · " + DATOS[evento].nombre
 
 
+# ¿Está Johnny en el medio del pasillo (a HORDA.medio como mucho)? Lo que hace falta para que empiece la horda
+func en_el_medio() -> bool:
+	if partida.aqui != 0 or partida.cambiando or partida.mapa == null or partida.terminada:
+		return false
+	var sitio: Dictionary = partida.mapa.sitio
+	return sitio.tipo == "pasillo" and absf(partida.johnny.position.x - sitio.ancho / 2.0) <= HORDA.medio
+
+
 func _physics_process(delta: float) -> void:
+	if evento == "horda" and not empezado and en_el_medio():
+		empezar()   # Johnny ha llegado al medio del pasillo: ahora sí
+		activo = true
+		partida.poner_lugar()   # (arriba a la derecha pone «· Horda»)
 	if not activo or partida.cambiando or partida.mapa == null or partida.terminada:
 		return
 	if evento == "incendio":
@@ -305,11 +322,25 @@ func tipos_horda(num: int) -> Array:
 	return tipos
 
 
-# Un zombi de la horda: sale en algún sitio del pasillo lejos de Johnny, fuera de pantalla (también los que esperaban
-# cuando Johnny se fue a un piso y ha vuelto), y va a por él. No salen por ninguna puerta
+# Un zombi de la horda: sale por un extremo del pasillo, justo fuera de pantalla, a un lado de Johnny y luego al otro
+# (también los que esperaban cuando Johnny se fue a un piso y ha vuelto), y va a por él. Como la horda empieza con Johnny
+# en el medio, suele haber pasillo por los dos lados y lo cogen entre dos; si por un lado no hay, salen por el otro.
+# No salen por ninguna puerta
 func soltar(tipo: String) -> void:
 	var mapa: Node = partida.mapa
-	var donde: Vector2 = mapa.punto_libre(partida.johnny.position, HORDA.lejos)
+	var johnny_x: float = partida.johnny.position.x
+	var donde := Vector2.INF
+	for i in 2:   # el lado que toca y, si por ahí no cabe, el otro
+		var signo := -1.0 if (lado_horda + i) % 2 == 0 else 1.0
+		var x := clampf(johnny_x + signo * randf_range(HORDA.fuera, HORDA.fuera + 180.0), Planta.MURO + 30.0,
+			mapa.sitio.ancho - Planta.MURO - 30.0)
+		if absf(x - johnny_x) >= HORDA.fuera - 20.0:   # (con el borde del pasillo recortando, aún fuera de pantalla)
+			donde = mapa.punto_libre_en_x(x)
+			if donde != Vector2.INF:
+				break
+	lado_horda = 1 - lado_horda
+	if donde == Vector2.INF:
+		donde = mapa.punto_libre(partida.johnny.position, HORDA.lejos)
 	var z: Node2D = partida.meter_zombi(tipo, donde)
 	z.set_meta("tipo", tipo)
 	z.zona = mapa.zona_en(donde)
@@ -451,13 +482,30 @@ func probar_incendio(foto: Callable, esperar: Callable) -> void:
 func probar_horda(foto: Callable, esperar: Callable) -> void:
 	var johnny: Node2D = partida.johnny
 	johnny.set_physics_process(false)   # quieto, que no le muevan los empujones
-	johnny.position = Vector2(partida.planta.sitios[0].ancho - 520, partida.planta.sitios[0].alto / 2.0)
+	var ancho: float = partida.planta.sitios[0].ancho
+	var alto: float = partida.planta.sitios[0].alto
+	# lejos del medio (como al llegar) no pasa nada, ni pasado de sobra el tiempo del cartel: espera a que llegue al medio
+	johnny.position = Vector2(ancho - 520, alto / 2.0)
 	johnny.get_node("Camara").reset_smoothing()
-	await esperar.call(HORDA.primera + 5.0)
+	await esperar.call(HORDA.primera + 2.0)
+	print("Horda · lejos del medio (a %d de él): empezada %s, salió %s (esperado: false, false)" % [
+		absf(johnny.position.x - ancho / 2.0), empezado, horda.get("salio", false)])
+	# en el medio: empieza (cartel) y, pasado el tiempo, salen todos, por los dos lados
+	johnny.position = Vector2(ancho / 2.0 + 60.0, alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
+	await esperar.call(0.3)
+	print("Horda · en el medio: empezada %s, salió %s (esperado: true, false) · arriba pone «%s»" % [empezado,
+		horda.get("salio", false), partida.lugar.text])
+	var t := 0.0
+	while not (horda.get("salio", false) and horda.cola.is_empty()) and t < HORDA.primera + 8.0:
+		await esperar.call(0.1)
+		t += 0.1
 	var z := get_tree().get_nodes_in_group("zombis")
+	var a_la_izquierda := z.filter(func(zz): return zz.global_position.x < johnny.global_position.x).size()
 	var cerca := z.filter(func(zz): return zz.global_position.distance_to(johnny.global_position) < HORDA.lejos).size()
-	print("Horda · salió %s · en el pasillo %d (esperado %d) · en cola %d · ya cerca de Johnny %d" % [horda.salio, z.size(),
-		roundi(HORDA.zombis * Alerta.mas_zombis() * Reto.mas_zombis()), horda.cola.size(), cerca])
+	print("Horda · salió %s · en el pasillo %d (esperado %d) · en cola %d · a la izquierda de Johnny %d y a la derecha %d (esperado: mitad y mitad) · ya cerca de Johnny %d" % [
+		horda.salio, z.size(), roundi(HORDA.zombis * Alerta.mas_zombis() * Reto.mas_zombis()), horda.cola.size(),
+		a_la_izquierda, z.size() - a_la_izquierda, cerca])
 	foto.call("horda")
 	# Johnny se mete en un piso: los que quedan le esperarán en el pasillo
 	await partida.montar(piso(false), 0, false)

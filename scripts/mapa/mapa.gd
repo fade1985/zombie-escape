@@ -1326,13 +1326,26 @@ func punto_libre(lejos_de: Vector2, distancia: float) -> Vector2:
 		var pos := Vector2(randf_range(MURO + 30, sitio.ancho - MURO - 30), randf_range(MURO + 30, sitio.alto - MURO - 30))
 		if pos.distance_to(lejos_de) < distancia:
 			continue
-		var bien := true
-		for d in [Vector2.ZERO, Vector2(-26, -26), Vector2(26, -26), Vector2(-26, 26), Vector2(26, 26)]:
-			if zona_en(pos + d) < 0:
-				bien = false
-		if bien:
+		if hay_sitio(pos):
 			return pos
 	return Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+
+
+# ¿Hay suelo alrededor de ese punto para que quepa alguien? (él y cuatro puntos a su alrededor)
+func hay_sitio(pos: Vector2) -> bool:
+	for d in [Vector2.ZERO, Vector2(-26, -26), Vector2(26, -26), Vector2(-26, 26), Vector2(26, 26)]:
+		if zona_en(pos + d) < 0:
+			return false
+	return true
+
+
+# Un punto de suelo con sitio alrededor en esa columna "x", a la altura que toque (Vector2.INF si no hay ninguno)
+func punto_libre_en_x(x: float) -> Vector2:
+	for i in 40:
+		var pos := Vector2(x, randf_range(MURO + 30, sitio.alto - MURO - 30))
+		if hay_sitio(pos):
+			return pos
+	return Vector2.INF
 
 
 # El medio del sitio donde se puede estar: en un apartamento o una tienda, el centro de su sala principal (la del
