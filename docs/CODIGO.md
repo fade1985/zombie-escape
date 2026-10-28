@@ -68,7 +68,9 @@ en una línea.
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
   `meter_prisa`, la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
-  va al ritmo del aviso, `IMPACTO`), `zombi_venenoso.gd`,
+  va al ritmo del aviso, `IMPACTO`; el tentáculo que pega, pintado con código, le sale del hombro (`HOMBRO`,
+  medido en su hoja en cada dirección; de espaldas va por delante del dibujo, en el nodo `delante`) y su sombra en
+  el suelo avisa de por dónde va a caer), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
 - `portera.gd`: la jefa por defecto, por estados.

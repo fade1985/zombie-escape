@@ -1620,7 +1620,9 @@ func correr_un_rato(centro: Vector2) -> float:
 # avisa del latigazo echando los tentáculos atrás (captura-tentaculos-aviso.png) y los lanza al dar el golpe
 # (captura-tentaculos-latigazo.png); luego se queda parado a su distancia, con el reposo que mueve los tentáculos
 # (captura-tentaculos-reposo.png); se le pega (captura-tentaculos-golpe.png) y se le mata
-# (captura-tentaculos-muerte.png, ya tendido). En la terminal, la animación y el fotograma de cada momento
+# (captura-tentaculos-muerte.png, ya tendido). Luego, el tentáculo que pega (pintado con código) con Johnny abajo,
+# arriba, de lado y en diagonal: avisando (captura-tentaculos-aviso-abajo.png, -arriba, -lado, -diagonal) y dando el
+# latigazo (captura-tentaculos-latigazo-abajo.png...). En la terminal, la animación y el fotograma de cada momento
 func probar_tentaculos() -> void:
 	await pulsar_y_esperar(KEY_F11)
 	var sala: SalaArmas = null
@@ -1695,4 +1697,31 @@ func probar_tentaculos() -> void:
 	Captura.foto("captura-tentaculos-muerte.png")
 	print("Tentáculos: con el golpe %s, luego %s · muerto %s (esperado: golpe golpe_e, andar o reposo, muerto muerte_e/8)" % [
 		en_golpe, tras_golpe, que_hace.call(z)])
+
+	# el tentáculo de código en otras direcciones, para ver que sale del hombro: con Johnny abajo (le pega mirando
+	# al sur, de frente), arriba (al norte, de espaldas), de lado (al este) y en diagonal (al suroeste). Johnny,
+	# invencible y lejos de la diana
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(260, 60)
+	johnny.get_node("Camara").reset_smoothing()
+	for caso in [["abajo", Vector2(0, -170)], ["arriba", Vector2(0, 170)], ["lado", Vector2(-170, -10)],
+			["diagonal", Vector2(130, -120)]]:
+		var t: Node2D = meter_zombi("tentaculos", johnny.position + caso[1])
+		t.espera = 0.0
+		var esperado := 0
+		while not (t.estado == "aviso" and t.t_ataque >= 0.5) and esperado < 300:
+			await get_tree().physics_frame
+			esperado += 1
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-tentaculos-aviso-%s.png" % caso[0])
+		var avisando: String = que_hace.call(t)
+		while not (t.estado == "latigazo" and t.t_ataque >= 0.08) and esperado < 400:
+			await get_tree().physics_frame
+			esperado += 1
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-tentaculos-latigazo-%s.png" % caso[0])
+		print("Tentáculo con Johnny %s: avisando %s · latigazo %s (esperado: ataque_%s, sin pasarse de los 400 pasos: %d)" % [
+			caso[0], avisando, que_hace.call(t), {"abajo": "s", "arriba": "n", "lado": "e", "diagonal": "so"}[caso[0]], esperado])
+		t.remove_from_group("zombis")
+		t.queue_free()
 	get_tree().quit()
