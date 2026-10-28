@@ -17,16 +17,27 @@ const DANO_LATIGAZO := 15
 const PARARSE := 140.0      # a esta distancia ya no se acerca más: ataca desde ahí
 const IMPACTO := 3          # el fotograma del ataque en que lanza los tentáculos (antes, los echa atrás)
 
-# El tentáculo pintado con código. Sus colores son los de los tentáculos de su espalda (sacados de su reposo y
-# su andar), también el borde, casi negro
-const CONTORNO := Color("#0c0906")
-const OSCURO := Color("#2d191b")
-const GRANATE := Color("#5b3230")
-const CLARO := Color("#7d4042")
-const BRILLO := Color("#a26161")
-const VENTOSA := Color("#915153")
-const VENTOSA_HUECO := Color("#3d2526")
-const LUZ := Vector2(-0.4, -0.9)   # de dónde le da la luz (arriba a la izquierda): por ahí, el brillo
+# El tentáculo pintado con código, igual que los de su espalda cuando ataca (colores sacados píxel a píxel de su
+# latigazo de PixelLab; al pintarlos se oscurecen como su dibujo en el juego, _en_juego): borde casi negro y
+# granate oscuro, algo más claro hacia el lado de la luz. CAPAS va de la
+# más oscura (todo el ancho) a la más clara: color y lo que ocupa (en partes del ancho, contando desde el borde de
+# la luz). Las ventosas, también como las suyas: un aro rosa con el centro casi negro, un poco de sombra rosa
+# oscura y un punto de brillo
+const CONTORNO := Color("#0e0403")
+const CAPAS := [
+	[Color("#2a1918"), 1.0],
+	[Color("#3c2224"), 0.85],
+	[Color("#422224"), 0.7],
+	[Color("#4a292a"), 0.5],
+	[Color("#5b3232"), 0.35],
+	[Color("#693a39"), 0.18],
+	[Color("#824a48"), 0.08],
+]
+const VENTOSA := Color("#ee8e9c")
+const VENTOSA_SOMBRA := Color("#d07279")
+const VENTOSA_BRILLO := Color("#ffc2d4")
+const VENTOSA_HUECO := Color("#0e0403")
+const LUZ := Vector2(-0.4, -0.9)   # de dónde le da la luz (arriba a la izquierda), como a su dibujo
 const PUNTOS := 20          # en cuántos trozos se pinta, de la base a la punta
 const GRUESO := 7.5         # medio grueso en la base...
 const FINO := 2.0           # ...y en la punta
@@ -224,9 +235,9 @@ func _estirado(hombro: Vector2, hacia: Vector2, cae: float) -> PackedVector2Arra
 	return puntos
 
 
-# Pinta los trozos del tentáculo de "desde" a "hasta" (por sus puntos): el contorno, el granate oscuro, el granate
-# hacia la luz, un brillo y las ventosas por el lado de la sombra. Grueso en la base y fino en la punta; al salir
-# y al recogerse, más fino
+# Pinta los trozos del tentáculo de "desde" a "hasta" (por sus puntos), igual que los de su espalda: el contorno y
+# encima las capas de CAPAS, cada una más clara y más pequeña y arrimada al lado de la luz; y las ventosas, por el
+# lado de la sombra. Grueso en la base y fino en la punta; al salir y al recogerse, más fino
 func _pintar_tentaculo(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: int) -> void:
 	var grueso := 1.0
 	if estado == "aviso":
@@ -234,29 +245,49 @@ func _pintar_tentaculo(lienzo: CanvasItem, puntos: PackedVector2Array, desde: in
 	else:
 		grueso = 1.0 - 0.7 * smoothstep(0.13, LATIGAZO, t_ataque)
 	var r := PackedFloat32Array()
-	var luz := PackedVector2Array()   # de lado al tentáculo, hacia donde le da la luz
+	var luz := PackedVector2Array()     # hacia dónde se arriman las capas claras (de lado al tentáculo)
+	var sombra := PackedVector2Array()  # el lado contrario, el de las ventosas
 	for i in PUNTOS + 1:
 		r.append((FINO + (GRUESO - FINO) * pow(1.0 - float(i) / PUNTOS, 0.8)) * grueso)
 		var n := (puntos[mini(i + 1, PUNTOS)] - puntos[maxi(i - 1, 0)]).orthogonal().normalized()
-		luz.append(n if n.dot(LUZ) >= 0.0 else -n)
+		# Del todo al borde de la luz, salvo cuando el tentáculo va justo hacia la luz: ahí pasa poco a poco
+		# por el medio, para que el brillo no salte de un borde al otro
+		var cuanto := clampf(n.dot(LUZ.normalized()) * 2.5, -1.0, 1.0)
+		luz.append(n * cuanto)
+		sombra.append(-n if cuanto >= 0.0 else n)
 	# La parte de delante empieza cortada en recto, sin redondel: así no se nota la juntura con la de detrás
 	var primero := desde + 1 if desde > 0 else 0
-	for capa in [[CONTORNO, 0.0, 1.0, 1.0], [OSCURO, 0.0, 1.0, 0.0], [GRANATE, 0.3, 0.7, 0.0]]:
-		for i in range(primero, hasta + 1):
-			lienzo.draw_circle(puntos[i] + luz[i] * r[i] * capa[1], r[i] * capa[2] + capa[3], capa[0])
-		for i in range(desde, hasta):
-			lienzo.draw_line(puntos[i] + luz[i] * r[i] * capa[1], puntos[i + 1] + luz[i + 1] * r[i + 1] * capa[1],
-				capa[0], (r[i] + r[i + 1]) * capa[2] + capa[3] * 2.0)
+	for i in range(primero, hasta + 1):
+		lienzo.draw_circle(puntos[i], r[i] + 1.0, _en_juego(CONTORNO))
 	for i in range(desde, hasta):
-		lienzo.draw_line(puntos[i] + luz[i] * r[i] * 0.55, puntos[i + 1] + luz[i + 1] * r[i + 1] * 0.55, CLARO,
-			maxf(1.0, r[i] * 0.35))
-		if r[i] > 3.5:
-			lienzo.draw_line(puntos[i] + luz[i] * r[i] * 0.6, puntos[i + 1] + luz[i + 1] * r[i + 1] * 0.6, BRILLO, 1.0)
-	# Las ventosas, una sí y otra no
-	for i in range(maxi(desde, 2), hasta - 1, 2):
-		var v := puntos[i] - luz[i] * r[i] * 0.45
-		lienzo.draw_circle(v, maxf(1.0, r[i] * 0.3), VENTOSA)
-		lienzo.draw_circle(v, maxf(0.5, r[i] * 0.12), VENTOSA_HUECO)
+		lienzo.draw_line(puntos[i], puntos[i + 1], _en_juego(CONTORNO), r[i] + r[i + 1] + 2.0)
+	for capa in CAPAS:
+		var arrima: float = 1.0 - capa[1]
+		var color := _en_juego(capa[0])
+		for i in range(primero, hasta + 1):
+			lienzo.draw_circle(puntos[i] + luz[i] * r[i] * arrima, maxf(0.5, r[i] * capa[1]), color)
+		for i in range(desde, hasta):
+			lienzo.draw_line(puntos[i] + luz[i] * r[i] * arrima, puntos[i + 1] + luz[i + 1] * r[i + 1] * arrima,
+				color, maxf(1.0, (r[i] + r[i + 1]) * capa[1]))
+	# Las ventosas, en fila por el lado de la sombra (hasta cerca de la punta), como las de su dibujo: el aro rosa
+	# con su sombra hacia fuera, el hueco oscuro y un punto de brillo hacia la luz
+	for i in range(maxi(desde, 2), hasta):
+		if r[i] < 2.5:
+			continue
+		var v := puntos[i] + sombra[i] * r[i] * 0.4
+		var tam := maxf(1.5, r[i] * 0.38)
+		lienzo.draw_circle(v, tam + 0.5, _en_juego(CONTORNO))
+		lienzo.draw_circle(v + sombra[i] * 0.5, tam, _en_juego(VENTOSA_SOMBRA))
+		lienzo.draw_circle(v - sombra[i] * 0.3, tam - 0.5, _en_juego(VENTOSA))
+		lienzo.draw_circle(v, maxf(0.5, tam * 0.45), _en_juego(VENTOSA_HUECO))
+		lienzo.draw_rect(Rect2((v - sombra[i] * tam * 0.7).floor(), Vector2.ONE), _en_juego(VENTOSA_BRILLO))
+
+
+# Los colores de la hoja tal como salen en el juego: el shader de los zombis (destello.gdshader) multiplica el
+# dibujo por sí mismo (su COLOR ya trae el color del dibujo), y cada color sale más oscuro, el canal por sí mismo.
+# Al tentáculo se le hace lo mismo para que quede igual que los de su espalda
+static func _en_juego(c: Color) -> Color:
+	return Color(c.r * c.r, c.g * c.g, c.b * c.b, c.a)
 
 
 # La sombra del tentáculo en el suelo, por donde va a caer: en el aviso crece por la línea del golpe y se oscurece,
