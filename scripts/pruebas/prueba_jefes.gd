@@ -133,18 +133,37 @@ func probar_modista(jefa: Node2D) -> void:
 # Con "--captura --jefe gloton --aspirar": solo lo del Glotón de probar_gloton (la sangre ácida y el aspirado, con lo que
 # tira a 3, 5, 8 y 12 casillas, normal y enfadado), sin la prueba larga. Deja la foto captura-gloton-aspira.png
 func probar_aspirar() -> void:
+	if await ir_a_la_sala_del_jefe("gloton"):
+		await probar_gloton()
+
+
+# Va a la habitación del jefe de la 1ª planta (el de --jefe X) y espera a que salga, sin la prueba larga. Dice si está
+func ir_a_la_sala_del_jefe(tipo: String) -> bool:
 	set_process(false)
-	nueva_planta(2)   # la 1ª planta: con --jefe gloton, la suya
+	nueva_planta(2)   # la 1ª planta: con --jefe X, la suya
 	planta.tiene_llave = true
 	for i in planta.sitios.size():
 		if planta.sitios[i].tipo == "jefe":
 			await montar(i, 0, false)
 			break
 	await get_tree().create_timer(0.5).timeout
-	if jefa == null or planta.jefe != "gloton":
-		print("Aspirar: no hay Glotón (¿falta --jefe gloton?)")
+	if jefa == null or planta.jefe != tipo:
+		print("No está el jefe «%s» (¿falta --jefe %s?)" % [tipo, tipo])
+		return false
+	return true
+
+
+# Con "--captura --jefe gymbro --pesas": solo lo del Gymbro de probar_gymbro (suplementos, salto y pesas), sin la prueba
+# larga, con dos fotos de las pesas que lanza (el dibujo de PixelLab, como el de las del suelo): en el aire
+# (captura-gymbro-pesas-aire.png) y ya caídas en el suelo (captura-gymbro-pesas-suelo.png)
+func probar_pesas() -> void:
+	if not await ir_a_la_sala_del_jefe("gymbro"):
 		return
-	await probar_gloton()
+	await probar_gymbro()
+	await get_tree().create_timer(0.4, false).timeout
+	Captura.foto("captura-gymbro-pesas-aire.png")
+	await get_tree().create_timer(1.4, false).timeout
+	Captura.foto("captura-gymbro-pesas-suelo.png")
 
 
 # El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y a Johnny no le salpica; luego

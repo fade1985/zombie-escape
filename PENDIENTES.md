@@ -26,8 +26,6 @@ _(ninguno por ahora)_
   sobren al pasarte la partida van al baúl, como cualquier objeto.
 - **M19.** Apartamentos: dos zombis más en cada habitación de cada apartamento, para que se sienta más agobiante y dé
   más sensación de horda.
-- **M20.** Evento de la horda del pasillo: más zombis, para que se sienta que estás en peligro.
-- **M21.** Habitación del Gymbro: las pesas del suelo con las que tropieza Johnny, hechas con PixelLab.
 - **M22.** Los escudos que se pone Johnny (Acero, Endurecimiento): que se vean en el HUD como una barra aparte, como la
   de los jefes.
 - **M23.** Escudos de Johnny, cómo funcionan: mientras tengas escudo, la vida roja no se toca; los golpes bajan el

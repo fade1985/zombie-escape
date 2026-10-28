@@ -6,6 +6,7 @@
 class_name Pesa
 extends Node2D
 
+const DIBUJO := preload("res://assets/sprites/mancuerna.png")   # 14 × 9 píxeles
 const RADIO := 30.0       # el tamaño de la marca: si Johnny está dentro cuando cae, le da
 const ALTURA := 150.0     # lo alto que sube en la curva
 const TIRADA := 3.0       # lo que se queda en el suelo
@@ -81,15 +82,9 @@ func _draw() -> void:
 	dibujar(self, Vector2(0, -alto - 6.0), giro)
 
 
-# La mancuerna, a cuadraditos (2 unidades por píxel del dibujo): dos discos negros con la barra de acero en medio
+# La mancuerna: un dibujo de PixelLab (tools/mancuernas.py; hasta el 28 oct, a cuadraditos con código), centrado en
+# "donde" y girado "angulo". Lo usan las que lanza el Gymbro y las del suelo de su gimnasio (peligros/tropiezos.gd)
 static func dibujar(lienzo: CanvasItem, donde: Vector2, angulo: float) -> void:
 	lienzo.draw_set_transform(donde, angulo)
-	var px := func(x: float, y: float, w: float, h: float, c: String) -> void:
-		lienzo.draw_rect(Rect2(x * 2.0, y * 2.0, w * 2.0, h * 2.0), Color(c))
-	px.call(-4, -1, 8, 2, "#1d1b2c")    # el contorno de la barra
-	px.call(-3, -0.5, 6, 1, "#aeb6c2")
-	for lado in [-1, 1]:
-		var x: float = -7.0 if lado < 0 else 3.0
-		px.call(x, -4, 4, 8, "#1d1b2c")   # el contorno del disco
-		px.call(x + 1, -3, 2, 6, "#3b4252")
-		px.call(x + 1, -3, 2, 1, "#6b7385")   # el brillo de arriba
+	var tam := DIBUJO.get_size() * 2.0   # (2 unidades por píxel del dibujo)
+	lienzo.draw_texture_rect(DIBUJO, Rect2(-tam / 2.0, tam), false)

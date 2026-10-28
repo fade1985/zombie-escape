@@ -4193,5 +4193,38 @@
    }
   },
   "coste": "60 generaciones (12 dibujos x 5)"
+ },
+ "mancuernas-suelo": {
+  "nota": "La mancuerna del suelo del gimnasio del Gymbro, y de las pesas que lanza él (M21 de PENDIENTES.md): antes eran dos discos y una barra pintados con rectángulos en pesa.gd y el dueño pidió que fueran de PixelLab. Con create_object_pro_flash, 1 dirección, view low top-down, 4 dibujos (5 generaciones cada uno, 20 en total), todos en una tanda, con la receta de la tanda 3 de los cubos (16x16, paleta cerrada de grises azulados sin blancos, la mancuerna de antes como imagen de estilo y como pista: no white shine or glint). Elegida la D (discos redondeados con el sombreado de arriba a abajo y barra fina clara; la C era demasiado parecida a la de antes y la A y la B salieron sucias). Recortada al borde con py tools/mancuernas.py: assets/sprites/mancuerna.png (14x9, 6 colores). La dibuja Pesa.dibujar (pesa.gd) para las del suelo (peligros/tropiezos.gd) y las que lanza el Gymbro. Fuentes: assets/sources/mancuernas/ (la de antes y los 4 intentos).",
+  "herramienta": "create_object_pro_flash",
+  "parametros": {
+   "width": 16,
+   "height": 16,
+   "n_directions": 1,
+   "view": "low top-down",
+   "palette": [
+    "#1d1b2c",
+    "#3b4252",
+    "#4a5874",
+    "#6b7385",
+    "#9aa6bc",
+    "#aeb6c2"
+   ],
+   "style_image": "assets/sources/mancuernas/mancuerna-de-antes.png (la mancuerna de pesa.gd, 14x8 en un lienzo de 16x16)",
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "descripcion": "A tiny pixel art gym dumbbell lying flat on the floor, horizontal: a short steel bar in the middle and a heavy dark iron weight disc at each end. Clean and sharp, instantly readable as a dumbbell, thick dark outline, a lighter bar and lit top edge on the discs, only a few flat colors, strong contrast, no noise, no dithering, no blur, no texture. Seen slightly from above in 3/4 top-down RPG perspective. Single game floor prop, centered, filling most of the canvas. Same crisp style as the reference. No white shine or glint.",
+  "intentos": {
+   "A (seed 41001)": "4ad586a5-abee-4e7e-ba15-507925100213",
+   "B (41002)": "fc232a4a-542a-4019-9e71-b0179327cbc8",
+   "C (41003)": "8266c79a-8942-49c7-8343-d19478fa0373",
+   "D (41004, ELEGIDO)": "86564a0f-995a-4425-8851-9586ef76de2d"
+  },
+  "coste": "20 generaciones (4 dibujos x 5)"
  }
 }

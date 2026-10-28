@@ -4,8 +4,8 @@
 # se cae y tarda en levantarse (johnny.gd, caer), y la cosa sale rodando hacia donde iba él hasta que se para o
 # choca con una pared o un mueble (el cubo, además, vuelca y salpica agua sucia). Dónde se queda se apunta en el
 # sitio: al volver, sigue ahí. A los zombis y al jefe no les pasa nada.
-# Cada cosa tiene su forma ("mancuerna": el mismo dibujo que las pesas que lanza el Gymbro, pesa.gd; "cubo": un cubo
-# de fregar, un dibujo de PixelLab). Para otra, basta con darle su tamaño en caja(), su dibujo en _draw() y su
+# Cada cosa tiene su forma ("mancuerna": el mismo dibujo, de PixelLab, que las pesas que lanza el Gymbro, pesa.gd; "cubo":
+# un cubo de fregar, también de PixelLab). Para otra, basta con darle su tamaño en caja(), su dibujo en _draw() y su
 # aviso en AVISOS.
 extends Node2D
 
@@ -60,10 +60,10 @@ func _physics_process(delta: float) -> void:
 		break
 
 
-# Lo que ocupa una cosa en el suelo (la mancuerna: 14 × 8 píxeles del dibujo, tumbada a lo ancho o a lo largo; el
+# Lo que ocupa una cosa en el suelo (la mancuerna: 14 × 9 píxeles del dibujo, tumbada a lo ancho o a lo largo; el
 # cubo: 12 × 9 de pie y 14 × 8 volcado)
 func caja(c: Dictionary) -> Rect2:
-	var tam := Vector2(28, 16)
+	var tam := Vector2(28, 18)
 	if c.forma == "cubo":
 		tam = Vector2(24, 18) if int(c.get("volcado", 0)) == 0 else Vector2(28, 16)
 	elif absf(c.giro) > 0.1:

@@ -42,7 +42,7 @@ const INCENDIO := {
 	"sirena": 12.0,          # cada cuánto vuelve a sonar la sirena
 }
 const HORDA := {
-	"zombis": 18,            # los zombis de la horda en la planta baja...
+	"zombis": 26,            # los zombis de la horda en la planta baja (hasta el 28 oct, 18: el dueño quería más peligro)...
 	"por_planta": 0.15,      # ...y un 15 % más por cada planta (y con la Alerta 1, más: Alerta.mas_zombis)
 	"nivel": 1,              # lo peor que sale: el nivel de cada planta (num) más este (tipos_horda)
 	"primera": 4.0,          # segundos desde que Johnny pisa el pasillo hasta que sale la horda
