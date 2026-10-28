@@ -130,6 +130,23 @@ func probar_modista(jefa: Node2D) -> void:
 		).call_deferred())
 
 
+# Con "--captura --jefe gloton --aspirar": solo lo del Glotón de probar_gloton (la sangre ácida y el aspirado, con lo que
+# tira a 3, 5, 8 y 12 casillas, normal y enfadado), sin la prueba larga. Deja la foto captura-gloton-aspira.png
+func probar_aspirar() -> void:
+	set_process(false)
+	nueva_planta(2)   # la 1ª planta: con --jefe gloton, la suya
+	planta.tiene_llave = true
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			await montar(i, 0, false)
+			break
+	await get_tree().create_timer(0.5).timeout
+	if jefa == null or planta.jefe != "gloton":
+		print("Aspirar: no hay Glotón (¿falta --jefe gloton?)")
+		return
+	await probar_gloton()
+
+
 # El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y a Johnny no le salpica; luego
 # dos golpes de Johnny seguidos: solo el primero salpica, un 1 % de su vida) y el aspirado (hasta dónde llega: al
 # borde de la elipse limpia de su habitación, mire a donde mire; y Johnny puesto a 220 de él: 0,15 s al abrir la boca
@@ -187,7 +204,11 @@ func probar_gloton() -> void:
 	await get_tree().create_timer(0.15, false).timeout
 	print("Aspirar (0,15 s, Johnny quieto): al empezar de %d a %d; con toda su fuerza de %d a %d (le ve: %s)" % [
 		d0, d1, d0, johnny.position.distance_to(jefa.position), jefa.se_ve(johnny)])
-	print("Aspirar, tirón a 3/5/8/12 casillas (Johnny anda a 210): al empezar %s; con toda su fuerza %s (esperado: [327, 211, 84, 70])" % [flojo, fuerte])
+	print("Aspirar, tirón a 3/5/8/12 casillas (Johnny anda a 210): al empezar %s (esperado: el 30 %%: [98, 63, 40, 32]); con toda su fuerza %s (esperado: [327, 211, 132, 105]: de cerca igual, de lejos más)" % [flojo, fuerte])
+	jefa.fase = 2   # y enfadado
+	var enfadado := [3, 5, 8, 12].map(func(c): return roundi(jefa.tiron_aspirado(c * 32.0)))
+	jefa.fase = 1
+	print("Aspirar enfadado, con toda su fuerza: %s (esperado: [655, 422, 203, 170])" % [enfadado])
 	# y la foto del cono, aspirando con toda su fuerza: hasta el borde de la elipse
 	print("Aspirar: foto en captura-gloton-aspira.png (aspirando: %s)" % (jefa.estado == "aspirar"))
 	Captura.foto("captura-gloton-aspira.png")

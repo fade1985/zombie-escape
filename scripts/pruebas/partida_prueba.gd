@@ -20,6 +20,8 @@
 #                       planta baja). OJO: solo elige el jefe; a secas, sin otra opción de esta lista, es la prueba larga
 #   --porqueria, --gimnasio, --cubos, --llamas   (con --jefe gloton, gymbro, portera o bombero) la habitación de ese
 #                       jefe; con --llamas, también su giro con el lanzallamas            [prueba_jefes_salas.gd]
+#   --aspirar           (con --jefe gloton) su sangre ácida y lo que tira al aspirar a 3, 5, 8 y 12 casillas, normal y
+#                       enfadado                                                           [prueba_jefes.gd]
 #   --gotas             (con --jefe portera) el abanico de agua sucia y sus salpicaduras    [prueba_jefes_salas.gd]
 #   --vapor             el vapor de la cabeza de cada minijefe al enfadarse                [prueba_jefes_salas.gd]
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
@@ -130,6 +132,10 @@ func empezar_prueba() -> void:
 	elif "--porqueria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_porqueria()
+	elif "--aspirar" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_aspirar()
+		get_tree().quit()
 	elif "--gimnasio" in args:
 		set_process(false)   # sin la prueba larga
 		probar_gimnasio()

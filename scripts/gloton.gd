@@ -7,17 +7,17 @@
 #     empujón si te alcanza una.
 #   - Aspirar: abre la boca (0,8 s de aviso, con el cono marcado en el suelo) y durante 5 s tira de Johnny hacia
 #     ella si está en el cono y le ve. El cono llega hasta el borde de la elipse limpia de su habitación (el ring),
-#     esté donde esté él: lo que está en la porquería no lo aspira. Va de menos a más: empieza flojo y a los 3,5 s
+#     esté donde esté él: lo que está en la porquería no lo aspira. Va de menos a más: empieza al 30 % y a los 3 s
 #     tira con toda su fuerza; y cuanto más cerca, mucho más fuerte. Al máximo, a menos de 5 casillas arrastra a
-#     Johnny aunque ande hacia atrás; más lejos, andando hacia atrás le gana, pero hasta el borde le frena (va a 140
-#     en vez de a 210). También se libra esquivando (esquivando no tira), saliendo del cono (o metiéndose en la
+#     Johnny aunque ande hacia atrás; más lejos, andando hacia atrás le gana, pero se nota mucho: a 8 casillas va a
+#     unos 80 y de lejos a 105 (en vez de a 210; hasta el 28 oct, a 126 y a 140). También se libra esquivando (esquivando no tira), saliendo del cono (o metiéndose en la
 #     porquería) o poniendo una pared en medio. Si Johnny llega a la boca, se lo come: 30 de daño y lo escupe lejos.
 #   - Sangre ácida: cada golpe o disparo que le das salpica ácido y Johnny pierde un 1 % de su vida (uno cada
 #     segundo como mucho, para que las armas rápidas no sumen demasiado). Si le pegan los supervivientes que
 #     acompañan a Johnny, le hacen daño igual pero el ácido no le cae a nadie.
 #   - Una explosión (granada) le corta lo que esté haciendo (se tambalea): la manera de parar el aspirado.
 # Enfadado (a media vida, «¡TENGO HAMBRE!»): el doble de lenguas, aspira con el doble de fuerza (al máximo arrastra
-# desde 7 casillas, y de lejos Johnny va a 70) y el ácido quita un 2 %.
+# desde 7 casillas, y de lejos Johnny va a 40) y el ácido quita un 2 %.
 extends Minijefe
 
 const VELOCIDAD := 55.0
@@ -32,15 +32,20 @@ const DANO_LATIGAZO := 16
 const GOLPE_LATIGAZO := 5              # fotograma del latigazo en el que las lenguas salen disparadas (en su animación de PixelLab)
 const AVISO_ASPIRAR := 0.8
 const DURA_ASPIRAR := 5.0
-const CRECE_ASPIRAR := 3.5             # lo que tarda en tirar con toda su fuerza (empieza al 20 %)
+const CRECE_ASPIRAR := 3.0             # lo que tarda en tirar con toda su fuerza (hasta el 28 oct, 3,5 s)
+const FUERZA_INICIAL := 0.3            # lo que tira nada más abrir la boca, de su fuerza (hasta el 28 oct, 0,2)
 # A cuánto tira de Johnny con toda su fuerza y pegado a la boca (unidades por segundo que le suma hacia ella; normal
 # y enfadado). Se apaga deprisa con la distancia (tiron_aspirado(), con APAGA_TIRON): Johnny anda a 210, así que al
-# máximo le arrastra a menos de unas 5 casillas (7 enfadado) y más lejos le gana andando hacia atrás. De unas 8
-# casillas para allá y hasta el borde del cono tira siempre TIRON_LEJOS: andando hacia atrás, Johnny va a 140 (a 70
-# enfadado), y quieto se le acerca poco a poco
+# máximo le arrastra a menos de unas 5 casillas (7 enfadado) y más lejos le gana andando hacia atrás. Pero de lejos
+# no se apaga del todo, que era lo que no se notaba (el dueño, 28 oct): a media distancia (TIRON_MEDIO) cae en línea
+# recta hasta ALCANCE_MEDIO (de 8 casillas, 132 normal: Johnny anda hacia atrás a 78) y de unas 12 casillas para allá y
+# hasta el borde del cono tira siempre TIRON_LEJOS (hasta el 28 oct, 70 y 140): andando hacia atrás, Johnny va a 105
+# (a 40 enfadado), y quieto se le acerca poco a poco
 const TIRON := [550.0, 1100.0]
-const TIRON_LEJOS := [70.0, 140.0]
+const TIRON_MEDIO := [260.0, 400.0]
+const TIRON_LEJOS := [105.0, 170.0]
 const APAGA_TIRON := 420.0             # a qué distancia se apagaría del todo el tirón de cerca
+const ALCANCE_MEDIO := 520.0           # y a cuál el de media distancia
 const ALCANCE_ASPIRAR := 420.0         # hasta dónde aspira donde no hay elipse (la exposición, la tecla 7 en otro sitio)
 const MEDIO_ASPIRAR := 0.85            # medio ángulo del cono por donde aspira
 const DANO_COMER := 30
@@ -184,16 +189,18 @@ func aspirar(delta: float, johnny: Node2D, hacia: Vector2, d: float) -> void:
 		comer(johnny, hacia)
 
 
-# Lo fuerte que aspira: del 20 % al abrir la boca al 100 % a los CRECE_ASPIRAR s, y así hasta que la cierra
+# Lo fuerte que aspira: del 30 % al abrir la boca al 100 % a los CRECE_ASPIRAR s, y así hasta que la cierra
 func fuerza_aspirado() -> float:
-	return lerpf(0.2, 1.0, minf(1.0, t / CRECE_ASPIRAR))
+	return lerpf(FUERZA_INICIAL, 1.0, minf(1.0, t / CRECE_ASPIRAR))
 
 
 # A cuánto tira de Johnny a esa distancia: cada vez más fuerte, y mucho más cuanto más cerca (va con el cuadrado de
-# lo cerca que está: a 210, la cuarta parte que pegado a la boca); y de lejos, como poco TIRON_LEJOS
+# lo cerca que está: a 210, la cuarta parte que pegado a la boca); a media distancia, una recta que baja hasta
+# ALCANCE_MEDIO; y de lejos, como poco TIRON_LEJOS. Gana el que más tire de los tres
 func tiron_aspirado(d: float) -> float:
 	var cerca := maxf(0.0, 1.0 - d / APAGA_TIRON)
-	return maxf(TIRON[fase - 1] * cerca * cerca, TIRON_LEJOS[fase - 1]) * fuerza_aspirado()
+	var medio: float = TIRON_MEDIO[fase - 1] * maxf(0.0, 1.0 - d / ALCANCE_MEDIO)
+	return maxf(maxf(TIRON[fase - 1] * cerca * cerca, medio), TIRON_LEJOS[fase - 1]) * fuerza_aspirado()
 
 
 # Hasta dónde llega el aspirado desde "desde" hacia "angulo": hasta el borde de la elipse limpia de su habitación (el
