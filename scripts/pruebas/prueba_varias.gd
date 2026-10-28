@@ -1618,7 +1618,8 @@ func correr_un_rato(centro: Vector2) -> float:
 # Con "--captura --tentaculos": el zombi de tentáculos con su hoja de PixelLab (zombi_tentaculos.gd). En la sala de
 # pruebas, dos vienen andando hacia Johnny, uno por cada lado (captura-tentaculos-andar.png); luego uno, ya cerca,
 # avisa del latigazo echando los tentáculos atrás (captura-tentaculos-aviso.png) y los lanza al dar el golpe
-# (captura-tentaculos-latigazo.png); se le pega (captura-tentaculos-golpe.png) y se le mata
+# (captura-tentaculos-latigazo.png); luego se queda parado a su distancia, con el reposo que mueve los tentáculos
+# (captura-tentaculos-reposo.png); se le pega (captura-tentaculos-golpe.png) y se le mata
 # (captura-tentaculos-muerte.png, ya tendido). En la terminal, la animación y el fotograma de cada momento
 func probar_tentaculos() -> void:
 	await pulsar_y_esperar(KEY_F11)
@@ -1670,8 +1671,19 @@ func probar_tentaculos() -> void:
 	print("Tentáculos: avisando %s · al dar el latigazo %s · después %s (esperado: aviso ataque_e/1 o 2, latigazo ataque_e/3 y andar o reposo)" % [
 		en_aviso, en_latigazo, que_hace.call(z)])
 
-	# un golpe (se encoge) y luego otro que lo mata (se cae y se queda tendido)
+	# parado a su distancia (más cerca que PARARSE), esperando: el reposo va cambiando de fotograma
 	z.espera = 99.0
+	var reposo := []
+	for i in 40:
+		await get_tree().create_timer(0.1).timeout
+		if z.sprite.animation.begins_with("reposo"):
+			reposo.append(z.sprite.frame)
+		if reposo.size() >= 10:
+			break
+	Captura.foto("captura-tentaculos-reposo.png")
+	print("Tentáculos parados: fotogramas del reposo %s (esperado: diez, cambiando entre el 0 y el 7)" % [reposo])
+
+	# un golpe (se encoge) y luego otro que lo mata (se cae y se queda tendido)
 	z.recibir_golpe(5, Vector2(-60, 0))
 	await get_tree().create_timer(0.12).timeout
 	var en_golpe: String = que_hace.call(z)

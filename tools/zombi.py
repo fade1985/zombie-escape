@@ -4,12 +4,13 @@ Lo saca todo de assets/sources/<fuente>/:
   rotations/<dirección>.png     las 8 posturas quietas (48×48), ya con la piel corregida por tools/piel.py
   walk/<dirección>-<n>.png      andar (PixMiniMax; el lienzo cambia de tamaño según la dirección)
   ataque/, golpe/, muerte/      atacar, recibir un golpe y morir (lienzo de 96×96 con el dibujo quieto en 24, 32)
+  reposo/ (opcional)            reposo de PixMiniMax, con partida y final en el dibujo quieto (el de tentáculos)
   zombi.json (opcional)         qué fotogramas se usan, cuánto dura cada animación, "cintura", "pies", "sangre", "casilla" y "origen"
 En todas las animaciones el fotograma 0 es el dibujo quieto: así se sabe dónde colocar los demás.
 
 Y escribe assets/sprites/<sprite>.png y .json con seis animaciones:
   still   las 8 posturas quietas
-  idle    reposo hecho a mano: el tronco baja y sube un píxel, despacio
+  idle    reposo hecho a mano: el tronco baja y sube un píxel, despacio (o el de reposo/, si lo hay)
   walk    andar: solo el tramo que hace ciclo, con los colores igualados a los del dibujo quieto
   attack  el zarpazo ("hit" dice en qué punto llega)
   hurt    recibir un golpe
@@ -191,8 +192,16 @@ def specks(im, sueltos=False):
 still = {d: cell(rot[d]) for d in DIRS}
 
 # ═════════════ Reposo: el tronco baja un píxel y vuelve ═════════════
+# Si hay carpeta reposo/, el de PixelLab: del 0 al penúltimo en bucle (el último vuelve a ser el 0); "reposo": {"fps"}
+# en zombi.json, a qué ritmo
+REPOSO = os.path.isdir(f'{SRC}/reposo')
 idle = {}
 for d in DIRS:
+    if REPOSO:
+        fs = load('reposo', d)
+        ox, oy = offset(fs, d, 'reposo')
+        idle[d] = [placed(specks(same_colors(f)), ox, oy, d, n, 'reposo') for n, f in enumerate(fs[:-1])]
+        continue
     r = rot[d]
     low = Image.new('RGBA', r.size, (0, 0, 0, 0))
     low.paste(r.crop((0, 0, r.width, WAIST)), (0, 1))            # de la cintura para arriba, un píxel más abajo
@@ -276,7 +285,7 @@ for name, b in blocks:
     for r, d in enumerate(DIRS):
         for i, f in enumerate(b[d]):
             sheet.alpha_composite(f, (i * CW, (row + r) * CH))
-    fps = {'idle': 1.5, 'walk': 10}.get(name) or round(len(b['south']) / DUR[name], 1)
+    fps = {'idle': cfg.get('reposo', {}).get('fps', 1.5), 'walk': 10}.get(name) or round(len(b['south']) / DUR[name], 1)
     anims[name] = {'fps': fps, 'loop': name in ('idle', 'walk'),
                    'dirs': {d: {'row': row + r, 'frames': len(b[d])} for r, d in enumerate(DIRS)}}
     row += len(DIRS)

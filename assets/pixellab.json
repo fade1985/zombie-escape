@@ -1972,7 +1972,7 @@
   "cost": "2 generaciones (+0,1 del unzoom de prueba).",
   "updated": "2026-10-28",
   "animaciones": {
-   "nota": "2026-10-28, a petición del dueño (se veía demasiado estático: solo tenía un dibujo quieto por dirección y el código lo bamboleaba). Todo con PixMiniMax (animate_character mode pixminimax) sobre b710038d, una dirección por llamada. Andar: 8 fotogramas sin partida. Ataque (latigazo) y golpe: 8 fotogramas, partida y final = dibujo quieto pegado en (16, 28) de un lienzo de 160x160 (partida/<dirección>.png). Muerte: 12 fotogramas, solo partida, en un lienzo de 224x224 con el dibujo en (48, 12) para que quepa tendido (partida-muerte/). Los upload:<id> de partida*/subidas.txt caducan a los 3 días. Bajado con py tools/bajar_zip.py b710038d-a44d-44e0-bda3-c15632d4b768 zombi-tentaculos-gpt; hoja con py tools/zombi.py zombi-tentaculos-gpt zombi-tentaculos-gpt (zombi.json: casilla 176x192, origen 24/12, pies 128) y py tools/hacer_frames.py assets/sprites/zombi-tentaculos-gpt.",
+   "nota": "2026-10-28, a petición del dueño (se veía demasiado estático: solo tenía un dibujo quieto por dirección y el código lo bamboleaba). Todo con PixMiniMax (animate_character mode pixminimax) sobre b710038d, una dirección por llamada. Andar: 8 fotogramas sin partida. Reposo: 8, con partida y final en el dibujo quieto. Ataque (latigazo) y golpe: 8 fotogramas, partida y final = dibujo quieto pegado en (16, 28) de un lienzo de 160x160 (partida/<dirección>.png). Muerte: 12 fotogramas, solo partida, en un lienzo de 224x224 con el dibujo en (48, 12) para que quepa tendido (partida-muerte/). Los upload:<id> de partida*/subidas.txt caducan a los 3 días. Bajado con py tools/bajar_zip.py b710038d-a44d-44e0-bda3-c15632d4b768 zombi-tentaculos-gpt; hoja con py tools/zombi.py zombi-tentaculos-gpt zombi-tentaculos-gpt (zombi.json: casilla 176x192, origen 24/12, pies 128) y py tools/hacer_frames.py assets/sprites/zombi-tentaculos-gpt.",
    "coste": "46 generaciones: andar 8, ataque 8, golpe 8, muerte 16 (a 224 cuesta 2 por dirección) y 6 de repetir el andar de lado (2 + 1 con PixMiniMax y 3 con skeleton-v3). Saldo antes 3615,8 y después 3565,8: en medio corría otro trabajo de la cuenta («creator-image») que no era de esto.",
    "subject_description": "a tall gaunt bald zombie with pale grey-green skin, glowing yellow eyes, a skeletal grinning face, an open grey vest over a bloody ribcage, torn grey trousers, bare feet, clawed red hands and many thick dark crimson tentacles bursting out of his back (de espaldas: '... with pale grey-green skin, an open grey vest, torn grey trousers, bare feet, clawed red hands and many thick dark crimson tentacles bursting out of his back, seen from behind')",
    "initial_pose": "'standing slightly hunched, <vista>, tentacles curling over his shoulders' con las vistas del gerente-mutado-128 (facing the camera, facing right, in three-quarter front view facing toward the camera and to the right, in three-quarter back view facing away from the camera and to the right, seen from behind his back to the camera...).",
@@ -2000,6 +2000,13 @@
     "lado_por_direccion": "Como la mascota-72.",
     "fotogramas": "Se usan del 1 al 9 (desde el 8 ya está tendido; así la hoja tiene 9 columnas y no 12).",
     "pegas": "De frente, al caer (3-4) se ve aplastado un momento antes de quedar tendido."
+   },
+   "reposo": {
+    "grupos": "d545654b (south), 9a9c20ea (south-east), ea13fbf1 (east), d57f177b (north-east), fc6d979a (north), e7400b68 (north-west), 65999535 (west), 9aba8914 (south-west)",
+    "action_description": "He stands in place in a slow, creepy, seamless looping idle: he breathes slowly, his shoulders rise and fall, his clawed fingers twitch, and the thick crimson tentacles on his back sway, writhe and curl slowly like an octopus, never staying still. His feet stay in place. The cycle ends back in the starting pose. No effects, no particles. (Delante, las frases de dirección; en east y west, 'Side view facing right / left the whole time, exactly like the first frame: he never turns toward the camera.')",
+    "fotogramas": "8 + el de partida, con partida y final = dibujo quieto en el lienzo de 160 (partida/). Se usan del 0 al 7 en bucle, a 6 por segundo (zombi.json: \"reposo\": {\"fps\": 6}; tools/zombi.py usa reposo/ en vez del reposo hecho a mano si existe esa carpeta).",
+    "coste": "8 generaciones (2026-10-28, pedido por el dueño después de ver las demás: parado casi no se movía).",
+    "pegas": "Ninguna: no se gira en ninguna dirección."
    }
   }
  },

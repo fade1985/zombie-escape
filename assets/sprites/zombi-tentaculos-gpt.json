@@ -55,40 +55,40 @@
       }
     },
     "idle": {
-      "fps": 1.5,
+      "fps": 6,
       "loop": true,
       "dirs": {
         "south": {
           "row": 1,
-          "frames": 2
+          "frames": 8
         },
         "south-east": {
           "row": 2,
-          "frames": 2
+          "frames": 8
         },
         "east": {
           "row": 3,
-          "frames": 2
+          "frames": 8
         },
         "north-east": {
           "row": 4,
-          "frames": 2
+          "frames": 8
         },
         "north": {
           "row": 5,
-          "frames": 2
+          "frames": 8
         },
         "north-west": {
           "row": 6,
-          "frames": 2
+          "frames": 8
         },
         "west": {
           "row": 7,
-          "frames": 2
+          "frames": 8
         },
         "south-west": {
           "row": 8,
-          "frames": 2
+          "frames": 8
         }
       }
     },
