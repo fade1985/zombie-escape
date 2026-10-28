@@ -22,7 +22,7 @@ class_name Bestiario
 
 const LISTA := {
 	"normal": {"nombre": "El vecino",
-		"frase": "El vecino de toda la vida. Ya no saluda en la escalera: ahora muerde.",
+		"frase": "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde.",
 		"edificios": ["apartamentos", "centro"], "hoja": "res://assets/sprites/zombi-normal.tres",
 		"recorte": Rect2i(35, 33, 23, 46), "retrato": "reposo_s", "escala": 2, "jefe": false},
 	"lento": {"nombre": "El arrastrado",
