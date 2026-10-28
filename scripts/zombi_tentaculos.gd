@@ -1,15 +1,16 @@
 # El zombi de tentáculos: muy lento, pero ataca desde lejos. Cuando ve a Johnny a tiro, apunta hacia donde está
-# AHORA y, al rato, lanza un latigazo en esa línea: si Johnny se ha movido, falla. Números de src/zombies.js
-# (TENTACLE).
+# AHORA y, al rato, lanza un latigazo en esa línea: si Johnny se ha movido, falla. El latigazo se para en las paredes
+# y los muebles. Números de src/zombies.js (TENTACLE).
 # Su hoja (zombi-tentaculos-gpt, hecha con tools/zombi.py) tiene andar, latigazo, golpe y muerte de PixelLab. El
 # latigazo va al ritmo del aviso: mientras avisa echa los tentáculos atrás y, al dar el golpe, los lanza hacia
 # delante. El tentáculo largo que pega se pinta con código: durante el aviso le sale del hombro, se levanta por
-# encima de la cabeza, se enrosca y tiembla, y su sombra crece en el suelo por donde va a caer (es lo que avisa a
-# Johnny de por dónde no pasar); con el golpe se estira como un látigo, cae sobre la sombra y se recoge.
+# encima de la cabeza, se enrosca y tiembla, mientras en el suelo sale el mismo aviso que en las cargas de los jefes
+# (Aviso.franja: flechas que se encienden hacia donde va y, al final, una X, o una estrella si da con una pared);
+# con el golpe se estira como un látigo, cae sobre el aviso y se recoge.
 extends Zombi
 
-const LARGO := 220.0        # hasta dónde llega el latigazo
-const ANCHO := 16.0         # medio ancho de la línea del golpe (y de la sombra que la avisa)
+const LARGO := 220.0        # hasta dónde llega el latigazo (si no da antes con una pared)
+const ANCHO := 16.0         # medio ancho de la línea del golpe (y de su aviso)
 const AVISO := 0.7          # segundos de aviso antes del golpe
 const LATIGAZO := 0.25      # lo que dura el golpe
 const ESPERA := 2.5         # entre un latigazo y el siguiente
@@ -19,10 +20,9 @@ const IMPACTO := 3          # el fotograma del ataque en que lanza los tentácul
 
 # El tentáculo pintado con código, igual que los de su espalda cuando ataca (colores sacados píxel a píxel de su
 # latigazo de PixelLab; al pintarlos se oscurecen como su dibujo en el juego, _en_juego): borde casi negro y
-# granate oscuro, algo más claro hacia el lado de la luz. CAPAS va de la
-# más oscura (todo el ancho) a la más clara: color y lo que ocupa (en partes del ancho, contando desde el borde de
-# la luz). Las ventosas, también como las suyas: un aro rosa con el centro casi negro, un poco de sombra rosa
-# oscura y un punto de brillo
+# granate oscuro, algo más claro hacia el lado de la luz. CAPAS va de la más oscura (todo el ancho) a la más
+# clara: color y lo que ocupa (en partes del ancho, contando desde el borde de la luz). Las ventosas, también como
+# las suyas: un aro rosa con el centro casi negro, un poco de sombra rosa oscura y un punto de brillo
 const CONTORNO := Color("#0e0403")
 const CAPAS := [
 	[Color("#2a1918"), 1.0],
@@ -42,7 +42,7 @@ const PUNTOS := 20          # en cuántos trozos se pinta, de la base a la punta
 const GRUESO := 7.5         # medio grueso en la base...
 const FINO := 2.0           # ...y en la punta
 const ENROSCADO := 110.0    # lo largo que es levantado durante el aviso
-const SUELO := 16.0         # la sombra va 16 por debajo de la línea del golpe: a la altura de los pies de Johnny
+const DESDE := Vector2(0, 6)   # de dónde sale el aviso en el suelo, como en los jefes (minijefe.gd, franja)
 # De dónde sale: su hombro en cada dirección, medido en su hoja (con los fotogramas 0, 2 y 3 del ataque, que
 # se encoge al echar los tentáculos atrás y se agacha al lanzarlos). De espaldas sale de la espalda, por delante
 # del cuerpo; si no, por detrás del hombro: los primeros trozos (DETRAS) van detrás del dibujo
@@ -62,20 +62,16 @@ const DETRAS := 3
 var espera := 0.0
 var angulo := 0.0           # hacia dónde va el latigazo (se fija al empezar el aviso)
 var t_ataque := 0.0
+var llega := LARGO          # hasta dónde llega este latigazo: se mide al empezar el aviso (_medir_alcance)
+var choca := false          # si se para en una pared o un mueble (el aviso acaba en estrella)
 var delante: Node2D         # pinta la parte del tentáculo que va por delante del cuerpo
-var en_suelo: Node2D        # pinta su sombra en el suelo
 
 
 func _ready() -> void:
 	super()
 	espera = randf_range(1.0, 2.2)
-	# El tentáculo se pinta en tres capas: la sombra, en el suelo (por debajo de todos, como los charcos); la base,
-	# en el propio zombi (que pinta siempre por detrás de su dibujo); y el resto en "delante", que va después del
-	# dibujo y por eso queda encima
-	en_suelo = Node2D.new()
-	en_suelo.z_index = -1
-	en_suelo.draw.connect(_pintar_sombra)
-	add_child(en_suelo)
+	# El tentáculo se pinta en dos capas: la base, en el propio zombi (que pinta siempre por detrás de su dibujo), y el
+	# resto en "delante", que va después del dibujo y por eso queda encima
 	delante = Node2D.new()
 	delante.draw.connect(_pintar_delante)
 	add_child(delante)
@@ -86,7 +82,6 @@ func _physics_process(delta: float) -> void:
 	super(delta)
 	queue_redraw()
 	delante.queue_redraw()
-	en_suelo.queue_redraw()
 
 
 func andar(delta: float, johnny: Node2D) -> void:
@@ -97,6 +92,7 @@ func andar(delta: float, johnny: Node2D) -> void:
 		estado = "aviso"
 		t_ataque = 0.0
 		angulo = (johnny.global_position - global_position).angle()
+		_medir_alcance()
 		mirar_hacia(Vector2.from_angle(angulo))
 		# El ataque no corre solo: cada fotograma lo elige estado_propio, al ritmo del aviso
 		poner_animacion("ataque", true)
@@ -114,7 +110,7 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 	pedir_velocidad(Vector2.ZERO)
 	t_ataque += delta
 	if estado == "aviso":
-		# Mientras se pinta la franja, echa los tentáculos atrás (los fotogramas de antes del impacto) y tiembla
+		# Mientras se enciende el aviso, echa los tentáculos atrás (los fotogramas de antes del impacto) y tiembla
 		sprite.frame = mini(int(t_ataque / AVISO * IMPACTO), IMPACTO - 1)
 		sprite.position.x = randf_range(-1.0, 1.0)
 		if t_ataque >= AVISO:
@@ -132,13 +128,28 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 			espera = ESPERA
 
 
-# ¿Está Johnny dentro de la franja? Se mira lo lejos que queda de la línea del latigazo
+# Hasta dónde llega el latigazo antes de dar con una pared o un mueble, como las cargas de los jefes
+# (Aviso.franja): por dónde pasaría un círculo del ancho del golpe. Si choca, llega hasta tocar la pared
+func _medir_alcance() -> void:
+	var circulo := CircleShape2D.new()
+	circulo.radius = ANCHO
+	var consulta := PhysicsShapeQueryParameters2D.new()
+	consulta.shape = circulo
+	consulta.transform = Transform2D(0.0, global_position)
+	consulta.motion = Vector2.from_angle(angulo) * LARGO
+	consulta.collision_mask = 1   # paredes y muebles
+	var hasta := get_world_2d().direct_space_state.cast_motion(consulta)
+	choca = hasta[1] < 1.0 and LARGO * hasta[0] + ANCHO < LARGO
+	llega = LARGO * hasta[0] + ANCHO if choca else LARGO
+
+
+# ¿Está Johnny dentro de la franja? Se mira lo lejos que queda de la línea del latigazo, hasta donde llega
 func golpear(johnny: Node2D) -> void:
 	if johnny == null or not johnny.vivo:
 		return
 	var linea := Vector2.from_angle(angulo)
 	var hacia: Vector2 = johnny.global_position - global_position
-	var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO)
+	var a_lo_largo := clampf(hacia.dot(linea), 0.0, llega)
 	var separado := hacia.distance_to(linea * a_lo_largo)
 	if separado <= ANCHO + johnny.RADIO:
 		johnny.recibir_dano(DANO_LATIGAZO, self)
@@ -149,9 +160,16 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	super(cantidad, fuerza)
 
 
-# La base del tentáculo, por detrás del dibujo: así parece que sale de detrás del hombro (de espaldas no, que le
-# sale de la espalda, de cara a nosotros)
+# El aviso en el suelo, el de las cargas de los jefes: flechas que se encienden una tras otra hacia Johnny, los
+# puntos que marcan el ancho y, al final, una X (o una estrella si se para en una pared). Va por detrás de todo
+# el zombi. Y la base del tentáculo, por detrás del dibujo: así parece que sale de detrás del hombro (de espaldas
+# no, que le sale de la espalda, de cara a nosotros)
 func _draw() -> void:
+	if estado == "aviso":
+		var aviso := Aviso.pedir(self, 0, DESDE, angulo, t_ataque / AVISO, tiempo)
+		aviso.largo = llega
+		aviso.medio = ANCHO
+		aviso.choca = choca
 	var puntos := _tentaculo()
 	if not puntos.is_empty() and direccion not in DE_ESPALDAS:
 		_pintar_tentaculo(self, puntos, 0, DETRAS)
@@ -172,7 +190,7 @@ func _tentaculo() -> PackedVector2Array:
 	var hacia := Vector2.from_angle(angulo)
 	if estado == "aviso":
 		return _enroscado(hombro, hacia, t_ataque / AVISO)
-	# El latigazo: sale disparado desde lo alto, cae sobre la sombra y se recoge hacia el hombro
+	# El latigazo: sale disparado desde lo alto, cae sobre el aviso y se recoge hacia el hombro
 	var sale := smoothstep(0.0, 0.05, t_ataque)
 	var recoge := smoothstep(0.13, LATIGAZO, t_ataque)
 	var antes := _enroscado(hombro, hacia, 1.0, 0.0)
@@ -197,8 +215,8 @@ func _hombro() -> Vector2:
 
 
 # Levantado por encima de la cabeza, como un gancho: sube recto del hombro, echado un poco hacia atrás, arriba se
-# curva hasta apuntar a Johnny y la punta se enrosca. "k" va de 0 a 1 durante el aviso: primero sale y sube, y luego se enrosca cada vez más
-# y tiembla (con "tiembla" a 0, quieto)
+# curva hasta apuntar a Johnny y la punta se enrosca. "k" va de 0 a 1 durante el aviso: primero sale y sube, y
+# luego se enrosca cada vez más y tiembla (con "tiembla" a 0, quieto)
 func _enroscado(hombro: Vector2, hacia: Vector2, k: float, tiembla := 1.0) -> PackedVector2Array:
 	var tramo := ENROSCADO / PUNTOS * ease(minf(1.0, k / 0.35), 0.5)
 	var sube := -PI / 2 - 0.3 * hacia.x
@@ -218,13 +236,14 @@ func _enroscado(hombro: Vector2, hacia: Vector2, k: float, tiembla := 1.0) -> Pa
 	return puntos
 
 
-# Estirado como un látigo hasta el final de la sombra: sale del hombro hacia arriba (por encima del hombro) y
-# baja hasta la punta, primero en arco por lo alto y luego ("cae" de 0 a 1) tendido sobre la sombra. Una onda lo
-# recorre de la base a la punta
+# Estirado como un látigo hasta el final del aviso (donde llega: si hay pared, hasta ella): sale del hombro hacia
+# arriba (por encima del hombro) y baja hasta la punta, primero en arco por lo alto y luego ("cae" de 0 a 1) tendido
+# sobre el aviso. Una onda lo recorre de la base a la punta
 func _estirado(hombro: Vector2, hacia: Vector2, cae: float) -> PackedVector2Array:
-	var punta := Vector2(0, SUELO - 6.0) + hacia * LARGO
+	var punta := DESDE + Vector2(0, -6) + hacia * llega
 	var arriba := hombro + Vector2(0, -36)
-	var codo := (hombro + Vector2(0, -70) + hacia * 90.0).lerp(Vector2(0, SUELO - 10.0) + hacia * 70.0, cae)
+	var en_alto := hombro + Vector2(0, -70) + hacia * llega * 0.4
+	var codo := en_alto.lerp(DESDE + Vector2(0, -10) + hacia * llega * 0.32, cae)
 	var lado := (punta - hombro).orthogonal().normalized()
 	var puntos := PackedVector2Array()
 	for i in PUNTOS + 1:
@@ -288,40 +307,3 @@ func _pintar_tentaculo(lienzo: CanvasItem, puntos: PackedVector2Array, desde: in
 # Al tentáculo se le hace lo mismo para que quede igual que los de su espalda
 static func _en_juego(c: Color) -> Color:
 	return Color(c.r * c.r, c.g * c.g, c.b * c.b, c.a)
-
-
-# La sombra del tentáculo en el suelo, por donde va a caer: en el aviso crece por la línea del golpe y se oscurece,
-# y en el latigazo se recoge con él. Es lo que avisa a Johnny de por dónde no pasar. Como la de los pies
-# (sombra.gd): tres capas, más oscura hacia el centro
-func _pintar_sombra() -> void:
-	var largo := LARGO
-	var fuerza := 1.0
-	if estado == "aviso":
-		var k := t_ataque / AVISO
-		largo *= ease(minf(1.0, k / 0.6), 0.4)
-		fuerza = 0.6 + 0.4 * k
-	elif estado == "latigazo":
-		largo *= 1.0 - smoothstep(0.13, LATIGAZO, t_ataque)
-	else:
-		return
-	if largo < 4.0:
-		return
-	var hacia := Vector2.from_angle(angulo)
-	for capa in [[1.0, 0.2], [0.76, 0.22], [0.5, 0.24]]:
-		en_suelo.draw_colored_polygon(_mancha(hacia, largo, ANCHO * capa[0]), Color(Sombra.COLOR, capa[1] * fuerza))
-
-
-# La forma de la sombra: alargada desde los pies hacia "hacia", de "largo" de larga y "ancho" de medio ancho (algo
-# más estrecha en la punta), con los dos extremos redondos
-func _mancha(hacia: Vector2, largo: float, ancho: float) -> PackedVector2Array:
-	var base := Vector2(0, SUELO)
-	var fin := base + hacia * largo
-	var punta := ancho * 0.8
-	var a := hacia.angle()
-	var puntos := PackedVector2Array()
-	for i in 7:   # media vuelta por la punta...
-		puntos.append(fin + Vector2.from_angle(a - PI / 2 + PI * i / 6.0) * punta)
-	for i in 7:   # ...y otra por la base
-		puntos.append(base + Vector2.from_angle(a + PI / 2 + PI * i / 6.0) * ancho)
-	return puntos
-

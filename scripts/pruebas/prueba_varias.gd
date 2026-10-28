@@ -1621,8 +1621,9 @@ func correr_un_rato(centro: Vector2) -> float:
 # (captura-tentaculos-latigazo.png); luego se queda parado a su distancia, con el reposo que mueve los tentáculos
 # (captura-tentaculos-reposo.png); se le pega (captura-tentaculos-golpe.png) y se le mata
 # (captura-tentaculos-muerte.png, ya tendido). Luego, el tentáculo que pega (pintado con código) con Johnny abajo,
-# arriba, de lado y en diagonal: avisando (captura-tentaculos-aviso-abajo.png, -arriba, -lado, -diagonal) y dando el
-# latigazo (captura-tentaculos-latigazo-abajo.png...). En la terminal, la animación y el fotograma de cada momento
+# arriba, de lado, en diagonal y junto a una pared (que lo corta): avisando, con el aviso de las cargas de los jefes
+# (captura-tentaculos-aviso-abajo.png, -arriba, -lado, -diagonal, -pared) y dando el latigazo
+# (captura-tentaculos-latigazo-abajo.png...). En la terminal, la animación y el fotograma de cada momento
 func probar_tentaculos() -> void:
 	await pulsar_y_esperar(KEY_F11)
 	var sala: SalaArmas = null
@@ -1699,14 +1700,16 @@ func probar_tentaculos() -> void:
 		en_golpe, tras_golpe, que_hace.call(z)])
 
 	# el tentáculo de código en otras direcciones, para ver que sale del hombro: con Johnny abajo (le pega mirando
-	# al sur, de frente), arriba (al norte, de espaldas), de lado (al este) y en diagonal (al suroeste). Johnny,
-	# invencible y lejos de la diana
+	# al sur, de frente), arriba (al norte, de espaldas), de lado (al este) y en diagonal (al suroeste). Y con Johnny
+	# a 40 de la pared de la derecha: el latigazo se para en ella (con la estrella en el aviso). Johnny, invencible y
+	# lejos de la diana. Cada caso: nombre, dónde está Johnny (desde la diana) y dónde el zombi (desde Johnny)
 	johnny.invencible = true
-	johnny.global_position = sala.diana.global_position + Vector2(260, 60)
-	johnny.get_node("Camara").reset_smoothing()
-	for caso in [["abajo", Vector2(0, -170)], ["arriba", Vector2(0, 170)], ["lado", Vector2(-170, -10)],
-			["diagonal", Vector2(130, -120)]]:
-		var t: Node2D = meter_zombi("tentaculos", johnny.position + caso[1])
+	for caso in [["abajo", Vector2(260, 60), Vector2(0, -170)], ["arriba", Vector2(260, 60), Vector2(0, 170)],
+			["lado", Vector2(260, 60), Vector2(-170, -10)], ["diagonal", Vector2(260, 60), Vector2(130, -120)],
+			["pared", Vector2(440, 60), Vector2(-150, 0)]]:
+		johnny.global_position = sala.diana.global_position + caso[1]
+		johnny.get_node("Camara").reset_smoothing()
+		var t: Node2D = meter_zombi("tentaculos", johnny.position + caso[2])
 		t.espera = 0.0
 		var esperado := 0
 		while not (t.estado == "aviso" and t.t_ataque >= 0.5) and esperado < 300:
@@ -1720,8 +1723,10 @@ func probar_tentaculos() -> void:
 			esperado += 1
 		await RenderingServer.frame_post_draw
 		Captura.foto("captura-tentaculos-latigazo-%s.png" % caso[0])
-		print("Tentáculo con Johnny %s: avisando %s · latigazo %s (esperado: ataque_%s, sin pasarse de los 400 pasos: %d)" % [
-			caso[0], avisando, que_hace.call(t), {"abajo": "s", "arriba": "n", "lado": "e", "diagonal": "so"}[caso[0]], esperado])
+		print("Tentáculo con Johnny %s: avisando %s · latigazo %s · llega a %d%s (esperado: ataque_%s y %s; sin pasarse de los 400 pasos: %d)" % [
+			caso[0], avisando, que_hace.call(t), t.llega, ", choca" if t.choca else "",
+			{"abajo": "s", "arriba": "n", "lado": "e", "diagonal": "so", "pared": "e"}[caso[0]],
+			"choca antes de 220" if caso[0] == "pared" else "220 sin chocar", esperado])
 		t.remove_from_group("zombis")
 		t.queue_free()
 	get_tree().quit()

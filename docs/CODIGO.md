@@ -69,8 +69,9 @@ en una línea.
   `meter_prisa`, la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega, pintado con código, le sale del hombro (`HOMBRO`,
-  medido en su hoja en cada dirección; de espaldas va por delante del dibujo, en el nodo `delante`) y su sombra en
-  el suelo avisa de por dónde va a caer. Lleva los colores de su dibujo pasados por `_en_juego`: el shader de los
+  medido en su hoja en cada dirección; de espaldas va por delante del dibujo, en el nodo `delante`); avisa con lo
+  mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes y los
+  muebles (`_medir_alcance`). Lleva los colores de su dibujo pasados por `_en_juego`: el shader de los
   zombis multiplica el dibujo por sí mismo y en el juego salen más oscuros que en la hoja), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.

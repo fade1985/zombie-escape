@@ -99,7 +99,7 @@
 #                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
-#                       con Johnny abajo, arriba, de lado y en diagonal                    [prueba_varias.gd]
+#                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno, los
 #                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
