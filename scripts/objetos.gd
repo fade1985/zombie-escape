@@ -23,6 +23,7 @@ class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
 const BAUL := 32             # casillas del baúl: una por cada objeto distinto, y una por cada arma y cada paquete de arrojables
+const MONTON := 99           # lo máximo de un mismo objeto en una casilla del baúl (sobre todo las balas, que se amontonan): lo que pasa va a otra casilla
 const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)
 const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
@@ -126,13 +127,14 @@ static func cabe(mochila: Array, id: String) -> bool:
 	return id in mochila or casillas(mochila).size() < MOCHILA
 
 
-# Casillas ocupadas del baúl: una por cada objeto distinto, y una por cada arma y cada paquete de arrojables
+# Casillas ocupadas del baúl: una por cada MONTON de cada objeto (99 como mucho en cada una: el baúl guarda cuántos hay y
+# se reparten en casillas llenas y una última con lo que sobra), y una por cada arma y cada paquete de arrojables
 # ("baul_equipo" del guardado)
 static func casillas_baul(s: Dictionary) -> int:
 	var n: int = s.get("baul_equipo", []).size()
 	for id in s.baul:
 		if s.baul[id] > 0:
-			n += 1
+			n += ceili(s.baul[id] / float(MONTON))
 	return n
 
 
@@ -161,9 +163,17 @@ static func tanda(id: String) -> int:
 	return 1 if id in NOMBRES or not id in Armas.MUNICION else int(Armas.MUNICION[id].hueco)
 
 
-# ¿Cabe en el baúl? Si ya tiene alguno va a su casilla; si no, hace falta una libre
+# Cuántos más de ese objeto caben en el baúl: lo que falta para llenar su última casilla (hasta MONTON) y MONTON por cada
+# casilla libre
+static func caben_baul(s: Dictionary, id: String) -> int:
+	var hay: int = s.baul.get(id, 0)
+	var en_la_ultima := (MONTON - hay % MONTON) % MONTON
+	return en_la_ultima + maxi(0, BAUL - casillas_baul(s)) * MONTON
+
+
+# ¿Cabe al menos uno en el baúl? Si su última casilla no está llena va a ella; si no, hace falta una libre
 static func cabe_baul(s: Dictionary, id: String) -> bool:
-	return s.baul.get(id, 0) > 0 or casillas_baul(s) < BAUL
+	return caben_baul(s, id) > 0
 
 
 # Qué objeto suelta un zombi al morir ("" = nada): el gordo, solo lo suyo (DE_UN_ZOMBI: el bidón de ácido), 1 de

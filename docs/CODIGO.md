@@ -107,7 +107,8 @@ en una línea.
   la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3; se usan con la tecla 1 y la 2,
   `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
   vendas los sueltan los armaritos de los baños, uno y uno por piso, `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
-  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32. Y las **piezas**
+  cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (un mismo objeto, 99 como mucho en cada una: `MONTON`; el baúl guarda cuántos hay
+  y `objetos_baul` los reparte, y `caben_baul` dice cuántos más entran). Y las **piezas**
   de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta
   cualquier zombi (`pieza_de_zombi()`, 6 %) y cada jefe (`piezas_de_jefe()`, 4), en `partida.meter_zombi`, y con la
   alerta salen más (`Alerta.mas_piezas()`). Su ficha dice para qué armas son (`PIEZA_PARA`); se gastan en el banco

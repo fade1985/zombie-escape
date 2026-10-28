@@ -257,6 +257,47 @@ func probar_baul() -> void:
 		johnny.huecos, armas_guardadas, johnny.calidades,
 		Guardado.cargar().baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad]),
 		mapa.cosas.get_child_count() - en_suelo])
+	# los montones de 99: 250 balas ocupan tres casillas (99, 99 y 52); al guardar el hueco de 24 de las 30 que lleva, 274
+	# (99, 99 y 76); «Destruir» quita solo la casilla elegida (la última: quedan 198); y con el baúl casi lleno solo entra lo
+	# que cabe en la última casilla
+	Guardado.cambiar(func(g2):
+		g2.baul = {"balas": 250, "pieza_especial": 1}
+		g2.baul_equipo = [])
+	mochila.clear()
+	johnny.municion = {"balas": 30}
+	inventario.pintar()
+	var montones := func() -> String:
+		return str(inventario.objetos_baul(Guardado.cargar()).map(func(o): return "%s %d" % [o[0], o[1]]))
+	inventario.tocar("b%d" % (inventario.objetos_baul(Guardado.cargar()).size() - 1))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-baul-montones.png")
+	print("Montones de 99: %s (esperado: pieza_especial 1, balas 99, balas 99, balas 52) · ocupa %d de %d (esperado: 4) · la última dice «%s» (esperado: Hay 52 en esta casilla · 250 en el baúl)" % [
+		montones.call(), Objetos.casillas_baul(Guardado.cargar()), Objetos.BAUL, inventario.ficha_baul().cuanto])
+	inventario.tocar("u0")
+	inventario.guardar()
+	await get_tree().process_frame
+	print("Guardado el hueco de 24 balas: %s (esperado: pieza_especial 1, balas 99, balas 99, balas 76) · le quedan %d (esperado: 6)" % [
+		montones.call(), johnny.cuanta("balas")])
+	inventario.tocar("b%d" % (inventario.objetos_baul(Guardado.cargar()).size() - 1))
+	inventario.destruir()
+	inventario.destruir()
+	await get_tree().process_frame
+	print("Destruida la última casilla de balas: %s (esperado: pieza_especial 1, balas 99, balas 99)" % montones.call())
+	Guardado.cambiar(func(g2):
+		g2.baul = {"balas": 60}
+		g2.baul_equipo = []
+		for i in Objetos.BAUL - 1:
+			g2.baul_equipo.append({"id": "bate", "calidad": 1}))
+	johnny.municion = {"balas": 60}
+	inventario.pintar()
+	print("Baúl con 31 armas y 60 balas: caben %d balas más (esperado: 39: hasta 99 en su casilla)" % Objetos.caben_baul(Guardado.cargar(), "balas"))
+	inventario.guardar_todo()
+	await get_tree().process_frame
+	print("«Guardar todo»: en el baúl %d balas, contigo %d (esperado: 99, 21) · dice «%s» (esperado: el baúl está lleno: contigo se quedan balas)" % [
+		Guardado.cargar().baul.get("balas", 0), johnny.cuanta("balas"), dice.call()])
+	print("Con la casilla de balas ya en 99 y el baúl lleno: caben %d (esperado: 0) · «Guardar todo» %s (esperado: apagado)" % [
+		Objetos.caben_baul(Guardado.cargar(), "balas"), boton.call("guardar_todo")])
+	johnny.municion.clear()
 	# el baúl lleno: una pieza y 31 armas, cada una en su casilla (de las cuatro calidades)
 	Guardado.cambiar(func(g2):
 		g2.baul = {"pieza_especial": 1}
