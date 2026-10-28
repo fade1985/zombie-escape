@@ -17,15 +17,15 @@ const DANO_LATIGAZO := 15
 const PARARSE := 140.0      # a esta distancia ya no se acerca más: ataca desde ahí
 const IMPACTO := 3          # el fotograma del ataque en que lanza los tentáculos (antes, los echa atrás)
 
-# El tentáculo pintado con código. Sus colores, sacados de los tentáculos de su latigazo (los de PixelLab), y el
-# contorno de siempre
-const CONTORNO := Color("#1d1b2c")
-const OSCURO := Color("#372224")
-const GRANATE := Color("#4d292a")
-const CLARO := Color("#703336")
-const BRILLO := Color("#c56769")
-const VENTOSA := Color("#ee8e9c")
-const VENTOSA_HUECO := Color("#9c3143")
+# El tentáculo pintado con código. Sus colores son los de los tentáculos de su espalda (sacados de su reposo y
+# su andar), también el borde, casi negro
+const CONTORNO := Color("#0c0906")
+const OSCURO := Color("#2d191b")
+const GRANATE := Color("#5b3230")
+const CLARO := Color("#7d4042")
+const BRILLO := Color("#a26161")
+const VENTOSA := Color("#915153")
+const VENTOSA_HUECO := Color("#3d2526")
 const LUZ := Vector2(-0.4, -0.9)   # de dónde le da la luz (arriba a la izquierda): por ahí, el brillo
 const PUNTOS := 20          # en cuántos trozos se pinta, de la base a la punta
 const GRUESO := 7.5         # medio grueso en la base...
