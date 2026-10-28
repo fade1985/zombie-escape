@@ -438,6 +438,66 @@ func probar_colecciones() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --ordenador-arriba": cada programa del ordenador recién abierto empieza arriba (todos sus
+# desplazamientos, también los de dentro de Dosier, Noticias y Colecciones, a 0; en Noticias, la lista deja a la vista la
+# emisión marcada). Al subir un talento desde abajo la ventana se queda donde estaba, con el talento a la vista, y con
+# el teclado el desplazamiento sigue al foco. Fotos: captura-arriba-<programa>.png
+func probar_ordenador_arriba() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.dolares = 60
+		g.puntos = 3)
+	ahorrados = 60
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	var cuenta := func(programa: String) -> void:
+		var foco := get_viewport().gui_get_focus_owner()
+		var desplazamientos := []
+		for d: ScrollContainer in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
+			desplazamientos.append("%d/%d" % [d.scroll_vertical, int(d.get_v_scroll_bar().max_value - d.get_v_scroll_bar().page)])
+		print("%s: desplazada %s · marcado %s · info «%s»" % [programa, desplazamientos, foco.name if foco else "nada",
+			ordenador.info.text.left(40)])
+	for programa in ["puntos", "armas", "logros", "dosier", "noticias", "colecciones"]:
+		ordenador.abrir(programa)
+		await get_tree().create_timer(0.6).timeout
+		cuenta.call(programa)
+		Captura.foto("captura-arriba-%s.png" % programa)
+	# comprar un punto y subir un talento desde abajo: no salta arriba
+	ordenador.abrir("puntos")
+	await get_tree().create_timer(0.4).timeout
+	ordenador.comprar(1)
+	await get_tree().create_timer(0.6).timeout
+	cuenta.call("puntos tras comprar 1 punto (esperado: arriba, info «¡Hecho!...»)")
+	var desliza: ScrollContainer = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
+	desliza.scroll_vertical = 120
+	await get_tree().create_timer(0.3).timeout
+	ordenador.subir("ataque")
+	await get_tree().create_timer(0.6).timeout
+	cuenta.call("puntos tras subir Ataque desde 120 (esperado: sigue sobre 120 y Ataque a la vista, info «¡Ataque sube...»)")
+	Captura.foto("captura-arriba-subir.png")
+	# el teclado: bajar por las tarjetas arrastra el desplazamiento
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.6).timeout
+	for i in 3:
+		var evento := InputEventAction.new()
+		evento.action = "ui_down"
+		evento.pressed = true
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.1).timeout
+		evento.pressed = false
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.05).timeout
+	cuenta.call("logros tras bajar 3 veces con el teclado (esperado: marcada una tarjeta de más abajo y la ventana ya no está arriba)")
+	ordenador.abrir("")
+	ordenador.apagar()
+	Guardado.cambiar(func(g):
+		g.dolares = antes.dolares
+		g.puntos = antes.puntos
+		g.talentos = antes.talentos)
+	ahorrados = antes.dolares
+
+
 # Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
 # centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
 # programa, deja hablar a la reportera un poco y hace la foto; luego otra con todo lo que dice

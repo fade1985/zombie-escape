@@ -245,7 +245,11 @@ func abrir(programa: String, foco := "") -> void:
 	abierta = programa
 	if programa != antes:
 		Sonido.tocar("click")
+	# Al volver a abrir el mismo programa (tras comprar o subir algo), cada desplazamiento se queda donde estaba
+	var desplazados := []
 	if ventana:
+		if programa == antes:
+			desplazados = ventana.find_children("*", "ScrollContainer", true, false).map(func(d): return d.scroll_vertical)
 		ventana.queue_free()
 		ventana = null
 	tarea.text = TAREAS.get(programa, "")
@@ -270,7 +274,29 @@ func abrir(programa: String, foco := "") -> void:
 	if marcado == null:
 		marcado = primer_boton(contenido)
 	if marcado:
-		marcado.grab_focus.call_deferred()
+		marcar(marcado, foco != "", desplazados)
+
+
+# Marca el botón (en el mismo instante de siempre: así el aviso que pone después, como «¡Compra hecha!», le gana a la
+# explicación del botón) y deja los desplazamientos de la ventana en su sitio. Si se marca nada más montarla, los
+# desplazamientos siguen al foco con la ventana a medio colocar y se abren bajados (Puntos a medias; Armas y Logros, hasta
+# el fondo): por eso no siguen al foco hasta pasado un fotograma, cuando ya está todo en su sitio. Entonces cada uno
+# vuelve a donde estaba (arriba, la primera vez) y, solo si se pidió un botón concreto, se asegura de que se vea
+func marcar(boton: Control, concreto: bool, desplazados: Array) -> void:
+	var esta := ventana
+	var deslizas: Array = esta.find_children("*", "ScrollContainer", true, false)
+	for d: ScrollContainer in deslizas:
+		d.follow_focus = false
+	boton.grab_focus.call_deferred()
+	await get_tree().process_frame
+	if not is_instance_valid(esta) or ventana != esta:
+		return   # (se ha cerrado o abierto otro programa mientras tanto)
+	for i in range(deslizas.size() - 1, -1, -1):   # del de más dentro al de más fuera
+		var d: ScrollContainer = deslizas[i]
+		d.scroll_vertical = desplazados[i] if i < desplazados.size() else 0
+		if concreto and d.is_ancestor_of(boton):
+			d.ensure_control_visible(boton)
+		d.follow_focus = true   # (con el teclado o el mando, bajar por las tarjetas sí lo sigue)
 
 
 func primer_boton(nodo: Node) -> Button:

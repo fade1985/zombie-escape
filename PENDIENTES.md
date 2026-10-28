@@ -11,9 +11,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-- **F4.** Ordenador, «Puntos e intercambio»: al entrar, la pantalla baja sola hasta las ramas de talentos. Que salga
-  primero lo de cambiar puntos; si no, el jugador siempre tiene que subir para cambiarlos y no queda bien.
-- **F5.** Ordenador: lo mismo de F4 pasa en todas las opciones. Que todas empiecen arriba.
+_(ninguno por ahora)_
 
 ## Mejoras
 
@@ -41,8 +39,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L11.** Los avisos de sucesos (como «Hay noticias nuevas en el ordenador») no se aprecian. Que sean como el
   «¡¡¡LA LLAVE!!!» para que la gente se dé cuenta, o un signo de exclamación encima de las cosas nuevas o que hayan
   cambiado, o las dos cosas (el dueño quiere la opinión de Claude).
-- **L12.** Banco de trabajo: quitar la frase que está encima de las piezas especiales y arrojables («Valen las de la
-  mochila (se gastan primero) y las del baúl»).
 - **L13.** Glotón: que su aspiración se note más en las zonas media y lejana.
 - **L14.** Baúl: los montones de balas, como máximo de 99.
 - **L15.** Azotea: la entrada tiene que estar a la derecha, como la salida de incendios, para que no quede raro entrar

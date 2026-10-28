@@ -89,6 +89,7 @@ func _ready() -> void:
 
 	jugar.grab_focus.call_deferred()
 	if Captura.activa():
+		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-menu.png")
 		elegir_edificio()
@@ -268,7 +269,7 @@ func jugar_reto(id: String) -> void:
 	Reto.empezar(id)
 	if Captura.activa() and Captura.dato("--reto") in Reto.REGLAS:
 		Reto.regla = Captura.dato("--reto")
-	get_tree().change_scene_to_file("res://escenas/partida_prueba.tscn" if Captura.activa() else "res://escenas/partida.tscn")
+	Captura.ir_a_la_partida()
 
 
 # Con el primer edificio completado (ya hay alguna alerta abierta), la primera vez: el tutorial de la alerta y el reto
@@ -381,5 +382,5 @@ func jugar_partida(id := "apartamentos") -> void:
 	Alerta.nivel = alertas.get(id, 0)
 	Reto.quitar()   # (por si la partida anterior fue el reto del día)
 	# con --captura, la partida de prueba: la misma, con las fotos (pruebas/partida_prueba.gd)
-	get_tree().change_scene_to_file("res://escenas/partida_prueba.tscn" if Captura.activa() else "res://escenas/partida.tscn")
+	Captura.ir_a_la_partida()
 

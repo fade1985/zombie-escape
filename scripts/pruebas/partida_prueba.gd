@@ -53,6 +53,7 @@
 #                       quitados                                                       [prueba_inventario.gd]
 #   --objetos           qué objetos salen al azar en cada sitio de los dos edificios, y el baúl con las piezas [prueba_larga.gd]
 #   --noticias          el programa de Noticias del ordenador: la tele con la reportera hablando [prueba_larga.gd]
+#   --ordenador-arriba  cada programa del ordenador recién abierto: tiene que empezar arriba      [prueba_larga.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
 #                       tele, para ver si caben                                        [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
@@ -199,6 +200,10 @@ func empezar_prueba() -> void:
 	elif "--noticias" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_noticias()
+		get_tree().quit()
+	elif "--ordenador-arriba" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_ordenador_arriba()
 		get_tree().quit()
 	elif "--historia" in args:
 		set_process(false)   # sin la prueba larga

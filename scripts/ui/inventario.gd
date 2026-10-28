@@ -1652,8 +1652,6 @@ func pintar_banco(columna: VBoxContainer) -> Control:
 	rotulo(lienzo, "Banco de trabajo", 480, 26, Color("#e6dec8"), HORIZONTAL_ALIGNMENT_CENTER).theme_type_variation = "Titulo"
 	# arriba, las piezas que tiene (las pinta la ficha, que enciende las que gasta lo elegido)
 	rotulo(lienzo, "Tus piezas", 64, 66, Color("#e6dec8"))
-	rotulo(lienzo, "Valen las de la mochila (se gastan primero) y las del baúl", 896, 66, Tema.GRIS,
-		HORIZONTAL_ALIGNMENT_RIGHT, 560)
 	raya(Rect2(64, 146, 832, 2))
 	# a la izquierda, lo que lleva: sus armas (de cada tipo, la de la mano y la de repuesto) y sus arrojables
 	rotulo(lienzo, "Lo que llevas", 64, 156, Color("#e6dec8"))
