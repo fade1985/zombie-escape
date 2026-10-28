@@ -165,14 +165,15 @@ en una línea.
   habitaciones de sus jefes y su azotea, y la galería del centro comercial, sus tiendas, las de sus minijefes y su azotea. La azotea, al aire libre, sin tabique que suba (`mapa.al_aire`): su murete, del mismo gris muy oscuro que
   los tabiques (`TABIQUE.COLOR`) y plano, y arriba la ciudad en su cara, con el cielo encima. Con "cajas", solo hay cara de pared donde el tabique de arriba sigue a los lados
   (`mapa.cara_de_caja`): encima de una puerta de lado entre dos estancias no sale cara, el tabique se ve plano.
-  Por dónde se llega: solo la planta baja (el portal del edificio) y la azotea tienen una puerta de llegada a la izquierda;
-  en las demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo
-  no tiene puerta a la izquierda (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
-  La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda: `plataforma()`,
+  Por dónde se llega: solo la planta baja (el portal del edificio) tiene una puerta de llegada a la izquierda; en las
+  demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo no
+  tiene puerta a la izquierda; y la azotea (desde el 28 oct) tiene su puerta de llegada a la derecha, como la salida de
+  incendios (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
+  La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda, al otro lado de la puerta: `plataforma()`,
   `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
   (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).
   Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Sus aparatos van siempre en el
-  mismo sitio (`APARATOS`, uno por edificio). No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
+  mismo sitio (`APARATOS`, uno por edificio; ninguno cerca de la puerta, de la rampa ni del helipuerto: lo mira `--azotea`). No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
   puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;

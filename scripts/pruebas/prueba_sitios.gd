@@ -50,9 +50,9 @@ func probar_salida() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --llegada": por dónde se llega a cada planta. La planta baja (el portal del edificio) y la azotea (la
-# escalera por la que se sube) tienen su puerta de llegada a la izquierda; las demás plantas, ninguna: se llega por las
-# escaleras de la derecha, las mismas por las que se sale. De cada una dice cuántas puertas tiene a la izquierda, por
+# Con "--captura --llegada": por dónde se llega a cada planta. La planta baja (el portal del edificio) tiene su puerta de
+# llegada a la izquierda; las demás plantas, ninguna: se llega por las escaleras de la derecha, las mismas por las que se
+# sale, y la azotea, por la escalera de su derecha (como la salida de incendios). De cada una dice cuántas puertas tiene a la izquierda, por
 # cuál se llega y a cuánto de ella aparece Johnny; y subiendo de verdad (subir, de la 1ª a la 2ª y de la 3ª a la azotea) dónde
 # aparece. Fotos: captura-llegada-<planta>.png (la 1ª y la 2ª, con Johnny recién llegado) y captura-llegada-izquierda.png (el otro extremo del
 # pasillo de la 1ª, sin puerta). Luego se cierra
@@ -83,9 +83,9 @@ func probar_llegada() -> void:
 func avisar_llegada(texto: String) -> void:
 	var izquierda: int = planta.sitios[0].salidas.filter(func(s): return s.dir == "izquierda").size()
 	var llega: Node2D = mapa.puertas[puerta_de_llegada()]
-	var baja_o_azotea: bool = planta.num == 1 or planta.get("azotea", false)
+	var baja: bool = planta.num == 1   # (solo el portal tiene la puerta a la izquierda; la azotea, como las demás, a la derecha)
 	print("%s: planta %d, puertas a la izquierda %d (esperado %d), llega por la %s (esperado %s), Johnny a %d de ella (esperado 60)" % [
-		texto, planta.num, izquierda, 1 if baja_o_azotea else 0, llega.salida.dir, "izquierda" if baja_o_azotea else "derecha",
+		texto, planta.num, izquierda, 1 if baja else 0, llega.salida.dir, "izquierda" if baja else "derecha",
 		roundi(johnny.position.distance_to(llega.position))])
 
 

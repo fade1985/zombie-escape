@@ -40,5 +40,3 @@ _(ninguno por ahora)_
   «¡¡¡LA LLAVE!!!» para que la gente se dé cuenta, o un signo de exclamación encima de las cosas nuevas o que hayan
   cambiado, o las dos cosas (el dueño quiere la opinión de Claude).
 - **L13.** Glotón: que su aspiración se note más en las zonas media y lejana.
-- **L15.** Azotea: la entrada tiene que estar a la derecha, como la salida de incendios, para que no quede raro entrar
-  por un lado y salir por el contrario.

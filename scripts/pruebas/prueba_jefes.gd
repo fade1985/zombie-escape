@@ -349,7 +349,7 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 	var cerca_puerta := 0
 	var sin_pasillo := 0
 	var suelo := Rect2(Planta.MURO, Planta.MURO, s.ancho - 2.0 * Planta.MURO, s.alto - 2.0 * Planta.MURO)
-	var puerta := Vector2(Planta.MURO, s.alto / 2.0)
+	var puerta := Vector2(s.ancho - Planta.MURO, s.alto / 2.0)   # (la de llegada, a la derecha)
 	for i in s.muebles.size():
 		var r := Muebles.hueco(s.muebles[i])
 		if not suelo.encloses(r):
@@ -410,7 +410,7 @@ func probar_azotea(acabar := false) -> void:
 		tipos[m.tipo] = tipos.get(m.tipo, 0) + 1
 	print("Azotea: %d x %d | aparatos %s | manchas %d | restos %d | jefe: %s (%s)" % [s.ancho, s.alto, tipos,
 		s.manchas.size(), mapa.restos.size(), planta.jefe, planta.el_jefe])
-	johnny.position = mapa.puertas[0].llegada() + Vector2(200, 0)   # se aleja de la escalera: se cierra detrás
+	johnny.position = mapa.puertas[0].llegada() - Vector2(200, 0)   # se aleja de la escalera (a la derecha): se cierra detrás
 	await get_tree().create_timer(1.4).timeout
 	Captura.foto("captura-azotea.png")
 	print("  ha salido el jefe: %s | escalera de llegada %s | puertas %d (esperado: 1, sin escalera de incendios) | aviso: '%s'" % [

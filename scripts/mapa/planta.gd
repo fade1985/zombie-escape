@@ -36,7 +36,8 @@ const ARMAS_CASILLAS := 34       # la sala de pruebas (cuadrada): del centro a l
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 # El helipuerto (helipuerto.png, de tools/azotea.py): una plataforma un poco más alta que el suelo, siempre en el
-# centro de la azotea, con la rampa a la izquierda (de cara a la escalera por la que se llega). Es el ring del jefe
+# centro de la azotea, con la rampa a la izquierda (se llega por la derecha, como en el pasillo se sale por la salida de
+# incendios: hay que cruzar la azotea y rodear la plataforma hasta ella). Es el ring del jefe
 # final: espera arriba y, en cuanto sube Johnny, una valla cierra la rampa hasta que cae (mapa.gd y partida.gd)
 const PLATAFORMA := Vector2(768, 576)   # lo de arriba, 24 × 18 casillas (con su borde, que no se pisa)
 const PLATAFORMA_ALTO := 24.0           # lo que se eleva: la cara de delante, que se ve por debajo
@@ -49,17 +50,17 @@ const PLATAFORMA_LIBRE := 48.0          # lo que queda libre alrededor de la pla
 const CAPA_BORDE := 8
 # Los aparatos de la azotea de cada edificio (catalogo.gd), siempre en el mismo sitio: [tipo, x del centro, y de
 # arriba de lo que ocupa], en unidades de la azotea (44 × 30 casillas). Van por los lados y las esquinas, fuera del
-# helipuerto y de su pasillo libre (PLATAFORMA_LIBRE), y lejos de la puerta de llegada (a la izquierda, en medio)
+# helipuerto y de su pasillo libre (PLATAFORMA_LIBRE), y lejos de la puerta de llegada (a la derecha, en medio)
 const APARATOS := {
 	"centro": [
-		["acunit", 150, 150], ["acunit", 1240, 150], ["acunit", 1240, 650],
-		["airhandler", 704, 84], ["airhandler", 168, 700],
-		["vent", 420, 90], ["vent", 990, 90], ["vent", 480, 840], ["vent", 930, 840],
+		["acunit", 1258, 150], ["acunit", 168, 150], ["acunit", 168, 650],
+		["airhandler", 704, 84], ["airhandler", 1240, 700],
+		["vent", 988, 90], ["vent", 418, 90], ["vent", 928, 840], ["vent", 478, 840],
 	],
 	"apartamentos": [
-		["watertank", 1240, 200], ["watertank", 1240, 640],
-		["antennas", 130, 190], ["antennas", 130, 700], ["antennas", 1200, 400],
-		["vent", 900, 90], ["vent", 500, 840],
+		["watertank", 120, 200], ["watertank", 120, 640],
+		["antennas", 1278, 190], ["antennas", 1278, 700], ["antennas", 1180, 800],
+		["vent", 508, 90], ["vent", 908, 840],
 	],
 }
 
@@ -364,7 +365,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 # y abierto, sin pasillo ni tiendas, con el jefe final. Suelo de hormigón, el murete alrededor (mapa.gd, "azotea"), el
 # helipuerto elevado en el centro (PLATAFORMA) y los aparatos sueltos alrededor (en el centro, aire acondicionado,
 # climatizadoras y extractores; en los Apartamentos, depósitos de agua, antenas y extractores; la chimenea
-# de ladrillo y el tendedero ya no salen). Se llega por la izquierda, por la escalera, que se cierra detrás para siempre;
+# de ladrillo y el tendedero ya no salen). Se llega por la derecha, por la escalera, que se cierra detrás para siempre;
 # no tiene más puerta: al caer el jefe llega el helicóptero de Velaria y suelta una escalera de cuerda sobre el
 # helipuerto (helicoptero.gd); al llegar Johnny a ella se acaba el edificio (partida.gd, subir_al_helicoptero). Es un
 # sitio "jefe": el jefe aparece al llegar, encima del helipuerto, y espera ahí a Johnny.
@@ -382,7 +383,7 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	# como los pisos ("cajas"), con el murete (del gris oscuro de los tabiques) y plano alrededor y oscuro por fuera (mapa.gd: al_aire)
 	sitio.cajas = true
 	sitio.salidas = [   # (la única: de aquí se sale en el helicóptero, que suelta su escalera al caer el jefe)
-		{"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
+		{"dir": "derecha", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
 			"aviso": "Ya no hay vuelta atrás"},
 	]
 	sitio.muebles = aparatos(sitio, edificio)
