@@ -27,6 +27,7 @@ const FUERA := Color(0.05, 0.04, 0.06)   # con "cajas", el muro que sobra alrede
 const PUERTA := preload("res://scripts/mapa/puerta.gd")
 const MUEBLE := preload("res://scripts/mapa/mueble.gd")
 const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
+const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» de encima de la taquilla con una skin sin ver
 # Lo que se usa de la sala de mantenimiento, en la pared de arriba de sus estancias (planta.gd; lo demás son muebles
 # del catálogo): la mesa del ordenador, en medio de la del despacho, con el corcho colgado a su izquierda; el banco de
 # trabajo y el baúl, en el taller, a la derecha de la estantería; y la taquilla de las skins de Johnny
@@ -796,6 +797,11 @@ func poner_muebles() -> void:
 		taquilla = ARRIMABLE.new()   # la de las skins de Johnny (tools/taquilla.py): al arrimarse, partida.abrir_taquilla
 		taquilla.montar("Taquilla", "res://assets/sprites/taquilla.png", TAQUILLA_X, MURO, 56.0, 36.0)
 		cosas.add_child(taquilla)
+		var marca_skin := EXCLAMACION.new()   # (hasta que se abra la taquilla con una skin nueva: Skins.desbloquear)
+		marca_skin.name = "Exclamacion"
+		marca_skin.condicion = func() -> bool: return Guardado.cargar().skins_nuevo
+		marca_skin.position = Vector2(0, -load("res://assets/sprites/taquilla.png").get_height() * 2.0 - 30.0)
+		taquilla.add_child(marca_skin)
 		# el corcho del despacho, colgado en la cara del muro de arriba (en su pie, como los escaparates de la galería,
 		# para ordenarse con ella), con su borde de abajo a media pared
 		var corcho := Node2D.new()

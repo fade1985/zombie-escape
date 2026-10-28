@@ -769,7 +769,16 @@ func leer_pagina(p: Dictionary) -> void:
 # Hay alguna emisión de Canal 8 sin ver en el programa Noticias del ordenador (historia.gd)
 func avisar_noticias() -> void:
 	if not terminada:
+		gran_aviso("¡NOTICIAS NUEVAS!")
 		decir("Hay noticias nuevas en el ordenador", 3.5)
+
+
+# Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,
+# un logro, una skin): letra de 32, amarilla, que sube y se apaga en 1,4 s. Va además del aviso de abajo, que se lee peor
+func gran_aviso(texto: String, color := Tema.AMARILLO) -> void:
+	if johnny == null or not johnny.is_inside_tree():
+		return
+	Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -110), texto, color, 32, true, 1.4)
 
 
 func _al_coger_llave() -> void:
@@ -780,9 +789,7 @@ func _al_coger_llave() -> void:
 		decir("Has cogido la tarjeta de acceso: abre " + tienda, 3.0)
 	else:
 		decir("Has cogido la llave del " + nombre_jefa(), 3.0)
-		# un grito grande encima de Johnny, para que se vea que la ha cogido
-		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(0, -110), "¡¡¡LA LLAVE!!!", Tema.AMARILLO,
-			32, true, 1.4)
+		gran_aviso("¡¡¡LA LLAVE!!!")   # un grito grande encima de Johnny, para que se vea que la ha cogido
 
 
 # ── El guardia de seguridad (centro comercial): lleva la tarjeta y ronda el pasillo ──
@@ -1411,7 +1418,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var skin := Skins.de_jefe(tipo)
 		if skin != "" and Skins.desbloquear(skin):
 			Sonido.tocar("compra")
-			numero(zombi.position + Vector2(0, -40), "¡Skin nueva!", Tema.TINTA)
+			gran_aviso("¡SKIN NUEVA!")
 			decir("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento" % Skins.nombre(skin), 4.0)
 		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
 		if tipo in JEFES and not final_de(tipo).is_empty():

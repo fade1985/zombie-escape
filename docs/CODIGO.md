@@ -140,7 +140,11 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
   `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
-  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`). Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`.
+  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`). Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
+  llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`). Y los avisos de sucesos, además de la
+  línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`: noticias
+  nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.
+  Se prueba con `--novedades`.
 - `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
@@ -223,7 +227,9 @@ en una línea.
   queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
   vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
   no dibuja). Se prueba con `--salida`.
-- `cara_pared.gd`, `neon.gd`; `ordenador.gd` (la mesa), `arrimable.gd`
+- `cara_pared.gd`, `neon.gd`; `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`,
+  `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo; se
+  pone con una `condicion` y se mira cada segundo)
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página),
   `valla.gd` (la del helipuerto de la azotea).
 

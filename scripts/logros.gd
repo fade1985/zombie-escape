@@ -114,8 +114,7 @@ func cumplir(id: String) -> void:
 	Guardado.cambiar(func(g): g.logros[id] = "conseguido")
 	Sonido.tocar("limpio")
 	var l := datos(id)
-	var johnny: Node2D = partida.johnny
-	Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-70, -90), "¡LOGRO!", Color("#e8b923"), 22)
+	partida.gran_aviso("¡LOGRO CONSEGUIDO!")
 	partida.decir("¡Logro conseguido: %s! Cobra el premio en el ordenador" % l.nombre, 4.0)
 
 

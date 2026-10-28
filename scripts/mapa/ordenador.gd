@@ -7,6 +7,7 @@ extends StaticBody2D
 
 signal usar
 
+const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» de encima cuando hay novedades
 const ANCHO := 92.0   # lo que ocupa en el suelo: de la pared a las patas de delante (como en el JS)
 const HONDO := 44.0
 
@@ -27,6 +28,12 @@ func montar(x: float, arriba: float) -> void:
 	var tam := sprite.texture.get_size()
 	sprite.offset = Vector2(-floorf(tam.x / 2.0), -tam.y)
 	add_child(sprite)
+	# un «!» que bota encima mientras haya algo nuevo en ConserjeOS (L11)
+	var marca := EXCLAMACION.new()
+	marca.name = "Exclamacion"
+	marca.condicion = func() -> bool: return not novedades(Guardado.cargar()).is_empty()
+	marca.position = Vector2(0, -tam.y * 2.0 - 30.0)
+	add_child(marca)
 
 	var forma := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
@@ -64,3 +71,17 @@ func montar(x: float, arriba: float) -> void:
 func _process(delta: float) -> void:
 	t += delta
 	brillo.energy = 0.7 + sin(t * 2.5) * 0.2
+
+
+# Qué programas de ConserjeOS tienen algo nuevo para el jugador, de un guardado: «noticias» (emisiones sin ver),
+# «colecciones» (un objeto o enemigo nuevo) y «logros» (alguno conseguido y sin cobrar). Lo usan el «!» de la mesa y los
+# iconos del escritorio (ui/ordenador.gd)
+static func novedades(s: Dictionary) -> Array:
+	var lista := []
+	if not Historia.noticias_nuevas(s).is_empty():
+		lista.append("noticias")
+	if s.colecciones_nuevo:
+		lista.append("colecciones")
+	if Logros.LISTA.any(func(l): return Logros.estado(s, l.id) == "conseguido"):
+		lista.append("logros")
+	return lista

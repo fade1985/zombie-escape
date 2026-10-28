@@ -498,6 +498,72 @@ func probar_ordenador_arriba() -> void:
 	ahorrados = antes.dolares
 
 
+# Con "--captura --novedades": los avisos de lo nuevo (L11). En la sala de mantenimiento, con noticias sin ver, un logro
+# por cobrar, algo nuevo en Colecciones y una skin sin ver, sale un «!» que bota encima de la mesa del ordenador y de la
+# taquilla (captura-novedades.png); en el escritorio de ConserjeOS, el «!» y el rótulo de Noticias, Colecciones y Logros
+# (captura-novedades-escritorio.png); y el grito grande encima de Johnny de las noticias, el logro y la skin
+# (captura-novedades-noticias.png, -logro.png y -skin.png). Luego, sin nada nuevo, los «!» se esconden. Deja el guardado
+# como estaba y se cierra
+func probar_novedades() -> void:
+	set_process(false)
+	var antes := Guardado.cargar()
+	var emisiones: Array = Historia.NOTICIAS.map(func(n): return n.id)
+	Guardado.cambiar(func(g):
+		g.paginas = ["vd7_protocolo", "vd7_correo"]
+		g.noticias_vistas = ["n_cierre"]
+		g.logros = {"manitas": "conseguido"}
+		g.colecciones_nuevo = true
+		g.skins_nuevo = true)
+	johnny.position = Vector2((mapa.TAQUILLA_X + mapa.ORDENADOR_X) / 2.0, Planta.MURO + 150.0)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(1.4).timeout
+	var marca := func(mueble: Node2D) -> bool: return mueble.get_node("Exclamacion").visible
+	print("Con novedades %s: «!» de la mesa %s, de la taquilla %s (esperado: [noticias, colecciones, logros], true, true)" % [
+		mapa.ORDENADOR.novedades(Guardado.cargar()), marca.call(mapa.ordenador), marca.call(mapa.taquilla)])
+	Captura.foto("captura-novedades.png")
+	# el escritorio: el rótulo y el «!» de los tres iconos (y de ninguno más)
+	abrir_ordenador()
+	await get_tree().create_timer(0.5).timeout
+	var con_marca := []
+	for icono in ordenador.iconos.get_children():
+		if icono.get_children().any(func(c): return c is Label and c.text == "!"):
+			con_marca.append(icono.name)
+	print("Escritorio: iconos con «!» %s (esperado: icono_logros, icono_noticias, icono_colecciones)" % [con_marca])
+	Captura.foto("captura-novedades-escritorio.png")
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().create_timer(0.3).timeout
+	# el grito grande de cada cosa (el logro, sin las ayudas que lleva la partida de prueba: con ayudas no se consiguen)
+	Guardado.cambiar(func(g):
+		g.logros = {}
+		for ayuda in Logros.AYUDAS:
+			g.ajustes[ayuda] = false)
+	logros.con_ayudas = false
+	avisar_noticias()
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-novedades-noticias.png")
+	await get_tree().create_timer(1.3).timeout   # (que se apague el grito de las noticias)
+	logros.cumplir("manitas")
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-novedades-logro.png")
+	await get_tree().create_timer(1.3).timeout
+	gran_aviso("¡SKIN NUEVA!")
+	await get_tree().create_timer(0.35).timeout
+	Captura.foto("captura-novedades-skin.png")
+	# sin nada nuevo, los «!» se esconden (la taquilla al abrirla; la mesa, con lo visto y lo cobrado)
+	Guardado.cambiar(func(g):
+		g.noticias_vistas = emisiones
+		g.logros = {"manitas": "cobrado"}
+		g.colecciones_nuevo = false
+		g.skins_nuevo = false)
+	await get_tree().create_timer(1.4).timeout
+	print("Sin novedades %s: «!» de la mesa %s, de la taquilla %s (esperado: [], false, false)" % [
+		mapa.ORDENADOR.novedades(Guardado.cargar()), marca.call(mapa.ordenador), marca.call(mapa.taquilla)])
+	Guardado.cambiar(func(g):
+		for clave in ["paginas", "noticias_vistas", "logros", "colecciones_nuevo", "skins_nuevo", "ajustes"]:
+			g[clave] = antes[clave])
+
+
 # Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
 # centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
 # programa, deja hablar a la reportera un poco y hace la foto; luego otra con todo lo que dice

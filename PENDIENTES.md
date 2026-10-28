@@ -36,6 +36,4 @@ _(ninguno por ahora)_
 
 ## Por limar
 
-- **L11.** Los avisos de sucesos (como «Hay noticias nuevas en el ordenador») no se aprecian. Que sean como el
-  «¡¡¡LA LLAVE!!!» para que la gente se dé cuenta, o un signo de exclamación encima de las cosas nuevas o que hayan
-  cambiado, o las dos cosas (el dueño quiere la opinión de Claude).
+_(nada por ahora)_

@@ -81,7 +81,9 @@ static func de_jefe(tipo: String) -> String:
 static func desbloquear(id: String) -> bool:
 	if not id in LISTA or id in tenidas():
 		return false
-	Guardado.cambiar(func(g): g.skins.append(id))
+	Guardado.cambiar(func(g):
+		g.skins.append(id)
+		g.skins_nuevo = true)   # (la taquilla lo enseña con un «!» hasta que se abra)
 	return true
 
 

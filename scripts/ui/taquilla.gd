@@ -43,6 +43,7 @@ func abrir(p: Node) -> void:
 	partida = p
 	quitar()
 	tenidos = Skins.tenidas()
+	Guardado.cambiar(func(g): g.skins_nuevo = false)   # ya las has visto: se quita el «!» de la taquilla
 	fondo = ColorRect.new()
 	fondo.color = Color(0.04, 0.03, 0.06, 0.72)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)

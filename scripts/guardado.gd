@@ -34,6 +34,7 @@ const NUEVO := {
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)
 	"skins": [],          # las skins desbloqueadas (ids de Skins.LISTA): se quedan para siempre
+	"skins_nuevo": false, # hay una skin sin ver en la taquilla desde la última vez que se abrió (el «!» de la taquilla)
 	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite

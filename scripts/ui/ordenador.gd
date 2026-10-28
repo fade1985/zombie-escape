@@ -47,6 +47,9 @@ const SECCIONES := [
 	["especial", "Especiales · llenas; van en el hueco de las de A distancia"],
 ]
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")   # lo que hace cada arrojable (QUE_HACE)
+const MESA := preload("res://scripts/mapa/ordenador.gd")   # qué tiene algo nuevo (novedades)
+# El rótulo de un icono con algo nuevo (y, en su esquina, un «!» que bota: marca_nuevo)
+const AVISO_ICONO := {"noticias": "Noticias\n¡NUEVAS!", "colecciones": "Colecciones\n¡NUEVO!", "logros": "Logros\n¡COBRAR!"}
 # Los colores de las ventanas, los de Windows 95 del JS (.pc-win en style.css)
 const BEIS := Color("#c3bba5")         # el fondo de la ventana
 const TARJETA := Color("#d8d1bb")
@@ -93,6 +96,24 @@ func encender(p: Node) -> void:
 	abrir("")
 
 
+# El «!» amarillo que bota en la esquina de arriba a la derecha de un icono del escritorio con algo nuevo
+func marca_nuevo() -> Label:
+	var marca := Label.new()
+	marca.text = "!"
+	marca.size = Vector2(24, 24)
+	marca.position = Vector2(102, 2)
+	marca.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	marca.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	marca.add_theme_color_override("font_color", TINTA)
+	marca.add_theme_constant_override("outline_size", 0)
+	marca.add_theme_stylebox_override("normal", caja(Tema.AMARILLO, TINTA, 2, 12, 0))
+	var bote := marca.create_tween().set_loops()
+	bote.tween_property(marca, "position:y", -3.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	bote.tween_property(marca, "position:y", 3.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	return marca
+
+
 func apagar() -> void:
 	if fondo:
 		fondo.queue_free()
@@ -130,7 +151,7 @@ func montar_monitor() -> void:
 	iconos.position = Vector2(10, 12)
 	iconos.add_theme_constant_override("separation", 1)
 	pantalla.add_child(iconos)
-	var s := Guardado.cargar()   # una sola vez, para los avisos de los iconos
+	var nuevos: Array = MESA.novedades(Guardado.cargar())   # una sola vez, para los avisos de los iconos
 	for i in ICONOS:
 		var b := Button.new()
 		b.name = "icono_" + i[0]
@@ -164,12 +185,10 @@ func montar_monitor() -> void:
 		rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_child(rotulo)
 		var programa: String = i[0]
-		if programa == "noticias" and not Historia.noticias_nuevas(s).is_empty():
-			rotulo.text = "Noticias\n¡NUEVAS!"
+		if programa in nuevos:
+			rotulo.text = AVISO_ICONO[programa]
 			rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
-		elif programa == "colecciones" and s.colecciones_nuevo:
-			rotulo.text = "Colecciones\n¡NUEVO!"
-			rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
+			b.add_child(marca_nuevo())
 		b.pressed.connect(func():
 			if programa == "apagar":
 				apagar()
