@@ -92,7 +92,7 @@ const CADA := [2.2, 3.4]
 # La horda (números provisionales, los del JS)
 const HORDA := {
 	"dura": 120.0,     # segundos de trabajo para abrir la puerta (no cuentan mientras está caído)
-	"tope": 40,        # zombis a la vez, como mucho
+	"tope": 55,        # zombis a la vez, como mucho (cuentan también los dormidos del piso: unos 27, desde M19)
 	"levantar": 2.0,   # segundos al lado del superviviente caído para levantarlo
 	"lejos": 300.0,    # si Johnny está más lejos que esto de él, los zombis van a por él
 	"cada": [6.0, 3.0],  # segundos entre grupo y grupo, al principio y al final
