@@ -477,6 +477,46 @@ func probar_noticias() -> void:
 	ordenador.apagar()
 
 
+# Con "--captura --historia": todos los textos de historia.gd, para ver si caben. Cada página del dosier de cada
+# edificio en su hoja, como al cogerla (captura-hoja-<id>.png), y cada noticia en la tele con todo lo que dice la
+# reportera (captura-tele-<id>.png). Al acabar, el guardado de prueba vuelve a tener sus páginas y sus noticias
+func probar_historia_entera() -> void:
+	var antes := Guardado.cargar().duplicate(true)
+	for e in Historia.DOSIERES:
+		var paginas: Array = Historia.DOSIERES[e].paginas
+		for i in paginas.size():
+			menus.pagina(paginas[i], i + 1, paginas.size(), func(): pass)
+			await get_tree().create_timer(0.3).timeout
+			Captura.foto("captura-hoja-%s.png" % paginas[i].id)
+			menus.leida()
+	# todas las noticias emitidas: todas las páginas encontradas y los dos edificios completados
+	Guardado.cambiar(func(g):
+		for e in Historia.DOSIERES:
+			for p in Historia.DOSIERES[e].paginas:
+				if not p.id in g.paginas:
+					g.paginas.append(p.id)
+		for e in Historia.DOSIERES:
+			Guardado.edificio(g, e).completado = true)
+	print("Noticias emitidas: %d de %d" % [Historia.noticias_emitidas(Guardado.cargar()).size(), Historia.NOTICIAS.size()])
+	abrir_ordenador()
+	await get_tree().create_timer(0.3).timeout
+	for n in Historia.NOTICIAS:
+		ordenador.abrir("noticias", "b_" + n.id)
+		await get_tree().create_timer(0.3).timeout
+		for t in ordenador.find_children("*", "", true, false):
+			if t is Tele:
+				t.saltar()
+		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
+		Captura.foto("captura-tele-%s.png" % n.id)
+	ordenador.abrir("")
+	ordenador.apagar()
+	Guardado.cambiar(func(g):
+		g.paginas = antes.paginas
+		g.noticias_vistas = antes.noticias_vistas
+		for e in Historia.DOSIERES:
+			Guardado.edificio(g, e).completado = antes.edificios.get(e, {}).get("completado", false))
+
+
 # Con "--captura --banco": lo de las recetas en un guardado viejo (las armas creadas del baúl, "baul_armas"; las
 # recetas aprendidas, "recetas", y las armas creadas alguna vez, "creadas", de Colecciones), que se quitó el 25 oct, y
 # los objetos quitados ese día (los de las armas de cuerpo a cuerpo y los clavos, el spray, la lejía, la pistola de
