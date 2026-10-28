@@ -108,10 +108,10 @@ static func herir(zombi: Node2D, tipo: String, dano: float) -> void:
 
 # El ácido le come la armadura: mientras lo lleva (el que le sigue royendo o el de un charco: se le ven las manchas),
 # todo lo que le hace daño le quita "corroe" veces más, también el propio ácido. Lo miran los que reciben los golpes
-# (zombi.gd, minijefe.gd, portera.gd y maniqui_vivo.gd). A Johnny, no
+# (zombi.gd, minijefe.gd, portera.gd y maniqui_vivo.gd). A Johnny, no. El talento Desatascador le suma "corroe_extra"
 static func con_acido(nodo: Node, cantidad: int) -> int:
 	if nodo.has_node("herida_acido") or (nodo is Zombi and nodo.estados.has("acido")):
-		return roundi(cantidad * EFECTOS.acido.corroe)
+		return roundi(cantidad * (EFECTOS.acido.corroe + Mejoras.de_johnny(nodo.get_tree(), "corroe_extra")))
 	return cantidad
 
 

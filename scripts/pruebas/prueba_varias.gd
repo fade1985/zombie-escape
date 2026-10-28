@@ -1,5 +1,6 @@
 # Pruebas sueltas: los niveles de alerta (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
-# el vómito de la Gastroenteritis (--gastro), la llave en el suelo (--llave) y los números del equilibrio (--equilibrio).
+# el vómito de la Gastroenteritis (--gastro), la llave en el suelo (--llave), los números del equilibrio (--equilibrio) y
+# la rama Químico de los talentos (--quimico).
 # Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_sitios.gd"
 
@@ -887,4 +888,183 @@ func probar_flatulento() -> void:
 		print("Flatulento · zombi a %d: paralizado %s, con gases %s (esperado: %s)" % [
 			roundi(johnny.position.distance_to(zombis[k].position)), zombis[k].aturdido > 0.0,
 			zombis[k].estados.has("gases"), "true, true" if k < 2 else "false, false"])
+	get_tree().quit()
+
+
+# Con "--captura --quimico": la rama Químico del árbol de talentos (M14), con sus números en la terminal y lo esperado
+# al lado. En la sala más grande del apartamento más grande, sin zombis y con todos los de Químico al máximo: Catalizador
+# (el lanzallamas y la congeladora), Guantes de goma (lo que quita un segundo de fuego), Incendiario, Desatascador,
+# Criogenia (las congeladoras del principio, las que caben y lo que dejan quietos) y los tres del nivel 3 con su foto:
+# Reacción en cadena (captura-quimico-reaccion.png), Residuo tóxico (captura-quimico-residuo.png) y Pararrayos
+# (captura-quimico-pararrayos.png). Al final, el árbol en el ordenador, con una pestaña por rama: la de Militar
+# (captura-quimico-arbol-militar.png) y la de Químico, arriba y abajo (captura-quimico-arbol.png y
+# captura-quimico-arbol-abajo.png). Se cierra
+func probar_quimico() -> void:
+	set_process(false)
+	var i := 1   # el apartamento con más habitaciones
+	for j in range(1, planta.sitios.size()):
+		if planta.sitios[j].has("apt") and planta.sitios[j].tipo != "viviendas" and (not planta.sitios[i].has("apt")
+				or planta.sitios[j].apt.salas.size() > planta.sitios[i].apt.salas.size()):
+			i = j
+	await montar(i, 0, false)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	var grande: Dictionary = planta.sitios[i].apt.salas[0]
+	for s in planta.sitios[i].apt.salas:
+		if s.casillas > grande.casillas:
+			grande = s
+	var centro: Vector2 = grande.centro
+	johnny.position = centro
+	johnny.modo = "quieto"   # que no pegue ni dispare solo
+	johnny.vestir("conserje")
+	for aliado in get_tree().get_nodes_in_group("aliados"):
+		aliado.process_mode = Node.PROCESS_MODE_DISABLED   # el acompañante de la partida de prueba, quieto: que no pegue
+	var todos := {"catalizador": 5, "guantes_goma": 5, "incendiario": 5, "desatascador": 5, "criogenia": 3, "reaccion": 1,
+		"residuo": 1, "pararrayos": 1}
+
+	# ── Catalizador: el lanzallamas, sin y con ──
+	aplicar_talentos({})
+	johnny.coger("lanzallamas")
+	var sin: float = johnny.arma().dano
+	aplicar_talentos(todos)
+	print("Catalizador 5: el lanzallamas quita %.0f (sin él, %.0f; esperado: 30 y 45) y lo que arde el prendido × %.1f (esperado: 1.5)" % [
+		johnny.arma().dano, sin, johnny.arma().get("quema", 1.0)])
+
+	# ── Criogenia: las congeladoras del principio y las que caben ──
+	lanzables.reiniciar(johnny.stats)
+	print("Criogenia 3: empieza con %d congeladoras (esperado: 3), a mano %s (esperado: con la congeladora) y caben %d (esperado: 6)" % [
+		lanzables.cuantas("congeladora"), lanzables.mano, lanzables.maximo("congeladora")])
+
+	# ── Guantes de goma: un segundo dentro del fuego (y los 2 s que sigue quemando al salir) ──
+	johnny.vida = johnny.stats.vida_max
+	var v0: int = johnny.vida
+	for k in 60:
+		johnny.pisar({"fuego": {"dps": 12.0}})
+		await get_tree().physics_frame
+	await get_tree().create_timer(2.3, false).timeout
+	print("Guantes de goma 5: un segundo de fuego (12 por segundo, y 2 s más al salir) quita %d (esperado: unos 18; sin guantes, 36)" % [
+		v0 - johnny.vida])
+
+	# ── Incendiario y Desatascador ──
+	var z1: Node2D = meter_zombi("normal", centro + Vector2(-200, 0))
+	await get_tree().process_frame
+	z1.vida = 9999
+	z1.aturdido = 30.0
+	z1.prender()
+	ArmasCreadas.herir(z1, "acido", 10)
+	print("Incendiario 5: el zombi prendido arde %.1f s (esperado: 2 + 2,5 = 4,5) · Desatascador 5: con ácido, un golpe de 100 le quita %d (esperado: 200; sin el talento, 150)" % [
+		z1.arder_t, ArmasCreadas.con_acido(z1, 100)])
+	z1.queue_free()
+
+	# ── Criogenia y Catalizador en la congeladora: lanzada a un zombi duro, lejos de Johnny ──
+	var z2: Node2D = meter_zombi("normal", centro + Vector2(170, 0))
+	await get_tree().process_frame
+	z2.vida = 500
+	z2.aturdido = 30.0   # quieto hasta justo antes de que explote (a los 2 s), y entonces se suelta para medir lo suyo
+	lanzables.tipo = "congeladora"
+	lanzables.lanzar(z2.position)
+	await get_tree().create_timer(1.95, false).timeout
+	z2.aturdido = 0.0
+	var vida_antes: int = z2.vida
+	await get_tree().create_timer(0.15, false).timeout
+	print("Criogenia 3 y Catalizador 5: la congeladora le quita %d (esperado: 50 × 1,5 = 75; antes de explotar había perdido %d, esperado: 0) y lo deja quieto %.1f s (esperado: unos 4,5)" % [
+		vida_antes - z2.vida, 500 - vida_antes, z2.aturdido])
+	z2.queue_free()
+	await get_tree().create_timer(0.8, false).timeout   # (que se apague la explosión antes de la foto siguiente)
+
+	# ── Reacción en cadena: muere ardiendo; uno a 40 y otro a 70 (el estallido llega a 80; muere antes de contagiar) ──
+	var a: Node2D = meter_zombi("normal", centro + Vector2(110, 0))
+	var b: Node2D = meter_zombi("normal", centro + Vector2(150, 0))
+	var c: Node2D = meter_zombi("normal", centro + Vector2(180, 0))
+	await get_tree().process_frame
+	for z in [a, b, c]:
+		z.vida = 500
+		z.aturdido = 30.0
+	# los otros, desde donde ha quedado el primero (puede haber chocado con la pared) y sin moverse ni empujarse entre ellos
+	for k in 2:
+		var otro: Node2D = [b, c][k]
+		otro.position = a.position + Vector2([40, 70][k], 0)
+		otro.set_physics_process(false)
+	a.prender()
+	await get_tree().create_timer(0.1, false).timeout
+	print("Reacción en cadena: antes de morir, los de al lado arden %s y %s (esperado: false y false)" % [b.arder_t > 0.0, c.arder_t > 0.0])
+	a.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.12, false).timeout
+	print("Reacción en cadena: al morir ardiendo, los de al lado arden %s y %s (esperado: true y true)" % [b.arder_t > 0.0, c.arder_t > 0.0])
+	for z in [b, c]:
+		z.set_physics_process(true)   # (para que se les pinten las llamas)
+	await get_tree().create_timer(0.1, false).timeout
+	Captura.foto("captura-quimico-reaccion.png")
+	for z in [a, b, c]:
+		z.queue_free()
+
+	# ── Residuo tóxico: muere con ácido; uno encima del charco y Johnny encima ──
+	var d: Node2D = meter_zombi("normal", centro + Vector2(150, 0))
+	await get_tree().process_frame
+	d.aturdido = 30.0
+	ArmasCreadas.herir(d, "acido", 10)
+	d.recibir_golpe(9999, Vector2.ZERO)
+	await get_tree().create_timer(0.4, false).timeout
+	var residuos := get_tree().get_nodes_in_group("charcos").filter(func(ch): return ch.tipo == "residuo")
+	var e: Node2D = meter_zombi("normal", d.position + Vector2(8, 0))
+	await get_tree().process_frame
+	e.vida = 500
+	e.aturdido = 30.0
+	johnny.position = d.position + Vector2(-8, 0)
+	for k in 6:
+		await get_tree().physics_frame
+	print("Residuo tóxico: deja %d charco (esperado: 1); el zombi de encima lleva ácido %s (esperado: true) y Johnny encima %s (esperado: false)" % [
+		residuos.size(), e.estados.has("acido"), johnny.estados.has("acido")])
+	johnny.position = centro
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-quimico-residuo.png")
+	e.queue_free()
+	for ch in residuos:
+		ch.queue_free()
+
+	# ── Pararrayos: el que pega, pegado a Johnny, y otro a 70 de él ──
+	var f: Node2D = meter_zombi("normal", centro + Vector2(40, 0))
+	var g: Node2D = meter_zombi("normal", centro + Vector2(110, 0))
+	await get_tree().process_frame
+	for z in [f, g]:
+		z.vida = 500
+		z.aturdido = 0.0
+	johnny.invulnerable = 0.0
+	johnny.pararrayos_t = 0.0
+	johnny.recibir_dano(10, f)
+	await get_tree().process_frame
+	Captura.foto("captura-quimico-pararrayos.png")
+	print("Pararrayos: al que pega le quita %d (esperado: 20 × 1,5 = 30) y lo aturde %s (esperado: true); al de al lado le quita %d (esperado: 15)" % [
+		500 - f.vida, f.aturdido > 0.0, 500 - g.vida])
+	var antes: int = f.vida
+	johnny.invulnerable = 0.0
+	johnny.recibir_dano(10, f)
+	print("Pararrayos: otra vez al momento le quita %d (esperado: 0: como mucho cada 3 s)" % [antes - f.vida])
+	f.queue_free()
+	g.queue_free()
+
+	# ── El árbol con las tres ramas en el ordenador ──
+	var guardado_antes := Guardado.cargar()
+	Guardado.cambiar(func(gu):
+		gu.puntos = 4
+		gu.talentos = {"ataque": 5, "punteria": 2, "corpulento": 5, "durito": 3, "catalizador": 5, "guantes_goma": 2,
+			"incendiario": 3})
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.rama_abierta = "militar"
+	ordenador.abrir("puntos")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-quimico-arbol-militar.png")
+	ordenador.ver_rama("quimico")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-quimico-arbol.png")
+	for desliza: ScrollContainer in ordenador.find_children("*", "ScrollContainer", true, false):
+		desliza.scroll_vertical = 99999
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-quimico-arbol-abajo.png")
+	print("Árbol: pestañas %s (esperado: las tres) · se ve la rama %s (esperado: quimico)" % [
+		ordenador.find_children("b_rama_*", "", true, false).map(func(b): return b.name), ordenador.rama_abierta])
+	Guardado.cambiar(func(gu):
+		gu.puntos = guardado_antes.puntos
+		gu.talentos = guardado_antes.talentos)
 	get_tree().quit()

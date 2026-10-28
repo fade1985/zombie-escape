@@ -15,8 +15,6 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M14.** Talentos: una rama más, «Químico», enfocada sobre todo a mejoras de fuego, ácido, eléctrico y frío.
-  Equilibrada y que el jugador sienta que crece en el juego.
 - **M15.** Talentos: revisar las ramas que ya hay (Militar y Superviviente) por si hay que cambiar algo: que el
   jugador vea que mejora, o que alguna sea demasiado fuerte y el juego sea muy fácil.
 - **M16.** Talentos: subir cada rama dos niveles, hasta llegar al 5 (ahora llegan al 3), creando Claude esas mejoras.

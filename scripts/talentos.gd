@@ -1,4 +1,5 @@
-# El árbol de talentos (src/talentos.js del JS): dos ramas, Militar y Superviviente, con tres niveles cada una.
+# El árbol de talentos (src/talentos.js del JS): tres ramas, Militar, Superviviente y Químico (M14, 28 oct: el
+# conserje sabe de productos de limpieza; mejora el fuego, el ácido, el rayo y el frío), con tres niveles cada una.
 #
 # Los puntos de talento se compran con los dólares ahorrados en el ordenador de la sala de mantenimiento
 # (ui/ordenador.gd) y se gastan aquí, de uno en uno: cada punto sube un nivel del talento. Lo comprado es para
@@ -15,7 +16,11 @@ const PRECIO_PUNTO := 10   # dólares que cuesta cada punto de talento (provisio
 const RAMAS := [
 	{"id": "militar", "nombre": "Militar", "icono": "militar"},
 	{"id": "superviviente", "nombre": "Superviviente", "icono": "medico"},
+	{"id": "quimico", "nombre": "Químico", "icono": "obj-bidon_acido"},
 ]
+# El rayo de Pararrayos (johnny.gd, pararrayos): su daño (con el Catalizador, más), lo que aturde, cada cuánto como
+# mucho y lo cerca que tiene que estar el que te ha pegado (los que disparan de lejos, no)
+const PARARRAYOS := {"dano": 20, "aturde": 1.0, "cada": 3.0, "alcance": 200.0}
 
 const LISTA := [
 	# ── Militar
@@ -52,6 +57,23 @@ const LISTA := [
 		"desc": "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 3 s)"},
 	{"id": "desfibrilador", "rama": "superviviente", "nivel": 3, "nombre": "Desfibrilador", "max": 1, "icono": "medico", "pide": "sanitario",
 		"desc": "Una vez por edificio, si caes, resucitas con toda la vida"},
+	# ── Químico
+	{"id": "catalizador", "rama": "quimico", "nivel": 1, "nombre": "Catalizador", "max": 5, "icono": "obj-gasolina",
+		"desc": "+10 % de daño de fuego, ácido, rayo y frío por punto"},
+	{"id": "guantes_goma", "rama": "quimico", "nivel": 1, "nombre": "Guantes de goma", "max": 5, "icono": "guantes",
+		"desc": "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"},
+	{"id": "incendiario", "rama": "quimico", "nivel": 2, "nombre": "Incendiario", "max": 5, "icono": "lanzallamas", "pide": "catalizador",
+		"desc": "Los zombis que prendes arden 0,5 s más por punto"},
+	{"id": "desatascador", "rama": "quimico", "nivel": 2, "nombre": "Desatascador", "max": 5, "icono": "desintegrador", "pide": "catalizador",
+		"desc": "Con ácido encima, todo les quita un 10 % más por punto"},
+	{"id": "criogenia", "rama": "quimico", "nivel": 2, "nombre": "Criogenia", "max": 3, "icono": "congeladora", "pide": "guantes_goma",
+		"desc": "+1 congeladora por punto, y congelan 0,5 s más por punto"},
+	{"id": "reaccion", "rama": "quimico", "nivel": 3, "nombre": "Reacción en cadena", "max": 1, "icono": "molotov", "pide": "incendiario",
+		"desc": "Los zombis que mueren ardiendo revientan y prenden a los de al lado"},
+	{"id": "residuo", "rama": "quimico", "nivel": 3, "nombre": "Residuo tóxico", "max": 1, "icono": "obj-bidon_acido", "pide": "desatascador",
+		"desc": "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"},
+	{"id": "pararrayos", "rama": "quimico", "nivel": 3, "nombre": "Pararrayos", "max": 1, "icono": "obj-bateria", "pide": "criogenia",
+		"desc": "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"},
 ]
 
 
@@ -98,6 +120,16 @@ static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 		"acero": st.escudo = 50
 		"ninja": st.ninja = true
 		"desfibrilador": st.resucitar = true
+		"catalizador": st.dano_quimico *= 1.0 + 0.1 * n
+		"guantes_goma": st.resiste_quimico += 0.1 * n
+		"incendiario": st.arde_extra += 0.5 * n
+		"desatascador": st.corroe_extra += 0.1 * n
+		"criogenia":
+			st.congeladoras += n
+			st.congela_extra += 0.5 * n
+		"reaccion": st.reaccion = true
+		"residuo": st.residuo = true
+		"pararrayos": st.pararrayos = true
 
 
 # Aplica los talentos comprados a unos atributos (al empezar la partida y al comprar uno). Devuelve los mismos

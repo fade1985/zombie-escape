@@ -75,6 +75,7 @@ var info: Label             # la línea de abajo de la ventana: explica lo que e
 var tarea: Label
 var reloj: Label
 var abierta := ""           # el programa abierto ("" = solo el escritorio)
+var rama_abierta := "militar"   # en Puntos, la pestaña de la rama del árbol que se ve
 
 
 func _ready() -> void:
@@ -428,13 +429,31 @@ func programa_puntos(c: VBoxContainer) -> void:
 		"Cambiar", "" if alcanzables >= 1 else "bloqueada")
 	enlazar(todo, "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)" % Talentos.PRECIO_PUNTO,
 		func(): comprar(maxi(1, Guardado.cargar().dolares / Talentos.PRECIO_PUNTO)))
-	var arbol_grupo := grupo(c, "Árbol de talentos · cada punto sube un nivel")
-	var arbol := HBoxContainer.new()
-	arbol.add_theme_constant_override("separation", 10)
-	arbol_grupo.add_child(arbol)
+	var arbol := grupo(c, "Árbol de talentos · cada punto sube un nivel")
+	# Una pestaña por rama (con tres, una al lado de otra no cabían): la abierta, hundida y en verde, y debajo su árbol
+	var pestanas := HBoxContainer.new()
+	pestanas.add_theme_constant_override("separation", 6)
+	arbol.add_child(pestanas)
 	for rama in Talentos.RAMAS:
-		arbol.add_child(montar_rama(s, rama))
+		var puestos := 0
+		var total := 0
+		for t in Talentos.LISTA:
+			if t.rama == rama.id:
+				puestos += Talentos.nivel_de(s, t.id)
+				total += t.max
+		var b := tarjeta(pestanas, "b_rama_" + rama.id, rama.icono, rama.nombre, "%d de %d" % [puestos, total], "",
+			"puesta" if rama.id == rama_abierta else "")
+		enlazar(b, "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol." % [rama.nombre, puestos, total],
+			ver_rama.bind(rama.id))
+	for rama in Talentos.RAMAS:
+		if rama.id == rama_abierta:
+			arbol.add_child(montar_rama(s, rama))
 	info.text = "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+
+
+func ver_rama(id: String) -> void:
+	rama_abierta = id
+	abrir("puntos", "b_rama_" + id)
 
 
 # Lo ahorrado (y, en la de puntos, los puntos): cajas azules hundidas, como .pc-saldo del JS
@@ -507,7 +526,7 @@ func rejilla(c: Container) -> GridContainer:
 
 
 # Una rama del árbol (.pc-rama): su título en azul y, debajo, sus niveles (1 arriba, 3 abajo), cada uno con su
-# número a la izquierda y sus talentos uno debajo de otro
+# número a la izquierda y sus talentos en dos columnas
 func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 	var columna := VBoxContainer.new()
 	columna.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -529,17 +548,15 @@ func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 		numero.add_theme_constant_override("outline_size", 0)
 		numero.add_theme_stylebox_override("normal", caja(TINTA_SUAVE, TINTA_SUAVE, 0, 0, 0))
 		fila.add_child(numero)
-		var lista := VBoxContainer.new()
+		var lista := rejilla(fila)
 		lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		lista.add_theme_constant_override("separation", 4)
-		fila.add_child(lista)
 		for t in Talentos.LISTA:
 			if t.rama == rama.id and t.nivel == nivel:
 				nodo_talento(lista, s, t)
 	return columna
 
 
-func nodo_talento(lista: VBoxContainer, s: Dictionary, t: Dictionary) -> void:
+func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 	var n := Talentos.nivel_de(s, t.id)
 	var motivo := Talentos.motivo(s, t.id)
 	var estado: String = {"max": "lleno", "bloqueado": "bloqueada", "sin_puntos": "apagada"}.get(motivo, "")
@@ -580,6 +597,7 @@ func subir(id: String) -> void:
 	Sonido.tocar("compra")
 	var s := Talentos.subir(id)
 	partida.aplicar_talentos(s.talentos)
+	rama_abierta = Talentos.talento(id).rama   # (si se sube desde fuera, como en las pruebas, que se vea)
 	abrir("puntos", "b_" + id)
 	info.set_deferred("text", "¡%s sube a %d/%d!" % [Talentos.talento(id).nombre, Talentos.nivel_de(s, id), Talentos.talento(id).max])   # después de marcar el botón (que pone su explicación)
 

@@ -28,6 +28,9 @@ const TIPOS := {
 	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
 	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
 	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
+	# el que deja un zombi que muere con ácido si Johnny tiene el talento Residuo tóxico (zombi.gd, quimica_al_morir):
+	# como el de la portera pero más pequeño, y solo a los zombis
+	"residuo": {"burbujas": "acido", "radio": 40.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
 	"fuego": {"radio": 64.0, "vida": 4.0, "estados": {"fuego": {"dps": 12.0}}},
 	"aceite": {"dibujo": LEJIA, "radio": 54.0, "vida": 2.0, "estados": {"resbaladizo": {}}, "tinte": Color(1.0, 0.8, 0.25)},
 	"hirviendo": {"radio": 60.0, "vida": 6.0, "estados": {"fuego": {"dps": 12.0}}, "prende": true},   # el del cocinero
@@ -131,8 +134,8 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if not datos.get("solo_zombis", false) and johnny and johnny.vivo and arde_en(johnny.global_position, johnny.RADIO * 0.3):
 		johnny.pisar(datos.estados)
-	# el vómito de Gastroenteritis no cruza las paredes: un zombi al otro lado de un tabique no lo pisa
-	var mapa := get_tree().get_first_node_in_group("mapa") if tipo == "vomito" else null
+	# el vómito de Gastroenteritis y el residuo no cruzan las paredes: un zombi al otro lado de un tabique no lo pisa
+	var mapa := get_tree().get_first_node_in_group("mapa") if tipo in ["vomito", "residuo"] else null
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi != dueno and zombi.has_method("pisar") and arde_en(zombi.global_position, zombi.radio * 0.3):
 			if mapa and not mapa.muro_entre(global_position, zombi.global_position).is_empty():

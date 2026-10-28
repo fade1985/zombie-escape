@@ -85,6 +85,7 @@ var rastro := 0.0          # lo que ha avanzado desde la última marca del rastr
 # El destello blanco al recibir un golpe: un shader que mezcla el dibujo con blanco
 const DESTELLO := preload("res://escenas/personajes/destello.gdshader")
 const BARRA := preload("res://scripts/barra_zombi.gd")
+const CHARCO := preload("res://escenas/armas/charco.tscn")
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -414,7 +415,24 @@ func morir() -> void:
 	$Choque.set_deferred("disabled", true)
 	agente.avoidance_enabled = false
 	z_index = -1
+	quimica_al_morir()
 	murio.emit()
+
+
+# Los talentos de Químico al morir: Reacción en cadena (si muere ardiendo, revienta y prende a los de al lado, como el
+# truco de las Épicas) y Residuo tóxico (si lleva ácido, deja un charco de ácido que solo daña a los zombis). Los que
+# prende o mancha pueden morir igual y seguir la cadena
+func quimica_al_morir() -> void:
+	var johnny := get_tree().get_first_node_in_group("jugador")
+	if johnny == null:
+		return
+	if johnny.stats.reaccion and arder_t > 0.0:
+		ArmasCreadas.estallido(self, "llama", 0.0, arder_dano)
+	if johnny.stats.residuo and (estados.has("acido") or has_node("herida_acido")):
+		var charco: Node2D = CHARCO.instantiate()
+		charco.tipo = "residuo"
+		charco.position = (position / 2.0).round() * 2.0   # (en píxel entero del dibujo, como los demás charcos)
+		get_parent().add_child.call_deferred(charco)
 
 
 # ── Estados, fuego y mareo ──
@@ -430,7 +448,7 @@ func prender(dano_lanzar := 1.0) -> void:
 	if arder_t <= 0.0 and estado != "muerto":
 		prendido.emit()
 		contagio_t = 0.0
-	arder_t = Lanzables.MOLOTOV.sigue
+	arder_t = Lanzables.MOLOTOV.sigue + Mejoras.de_johnny(get_tree(), "arde_extra")   # (Incendiario: más)
 	arder_dano = dano_lanzar
 	if llamas == null:
 		llamas = Llamas.new()
@@ -571,7 +589,7 @@ func contagiar() -> void:
 		if global_position.distance_to(o.global_position) > radio + o.radio + m.pegado:
 			continue
 		o.prender(arder_dano)
-		o.arder_t = m.contagio
+		o.arder_t = m.contagio + Mejoras.de_johnny(get_tree(), "arde_extra")   # (Incendiario: más)
 		var hacia: Vector2 = desde.direction_to(o.global_position + Vector2(0, -o.altura * 0.5))
 		for i in 4:
 			Particulas.soltar(self, desde + Vector2(randf_range(-4, 4), randf_range(-6, 6)),

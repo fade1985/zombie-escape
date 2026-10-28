@@ -116,12 +116,15 @@ static func calidad_de(k: String) -> int:
 	return k.get_slice(":", 1).to_int() if ":" in k else 0
 
 
-# Al empezar la partida: las de siempre, más las del Artificiero, a mano (todas Normales)
+# Al empezar la partida: las de siempre, más las del Artificiero, a mano (todas Normales). Con Criogenia, también sus
+# congeladoras, a mano
 func reiniciar(stats: Dictionary) -> void:
 	cantidades = {}
 	for k in DATOS:
-		cantidades[k] = DATOS[k].inicio + (stats.lanzar_extra if k in ARTIFICIERO else 0)
+		cantidades[k] = DATOS[k].inicio + extra_talentos(k, stats)
 	mano = ["molotov", "granada"]
+	if cantidades.congeladora > 0:
+		mano.append("congeladora")
 	repuesto = []
 	tipo = "molotov"
 
@@ -214,11 +217,17 @@ func color(k: String) -> Color:
 	return COLORES.get(tipo_de(k), Color(0.67, 0.67, 0.67))   # ("": sin nada a mano, en gris)
 
 
-# Los que caben en un paquete: los de su tipo, más los del Artificiero y los de su calidad
+# Los que caben en un paquete: los de su tipo, más los del Artificiero (o Criogenia) y los de su calidad
 func maximo(k: String) -> int:
 	var t := tipo_de(k)
-	var extra: int = johnny.stats.lanzar_extra if t in ARTIFICIERO else 0
-	return DATOS[t].maximo + extra + Armas.CALIDADES[calidad_de(k)].unidades
+	return DATOS[t].maximo + extra_talentos(t, johnny.stats) + Armas.CALIDADES[calidad_de(k)].unidades
+
+
+# Las unidades de más de un tipo por los talentos: el Artificiero, molotovs y granadas; Criogenia, congeladoras
+static func extra_talentos(t: String, stats: Dictionary) -> int:
+	if t in ARTIFICIERO:
+		return stats.lanzar_extra
+	return stats.congeladoras if t == "congeladora" else 0
 
 
 # Coger uno del suelo: solo si no llega a su máximo y tiene hueco para él
@@ -374,8 +383,9 @@ func lanzar(donde: Vector2) -> void:
 		p.desde = johnny.global_position
 		p.alto_salida = 20.0
 		p.hasta = donde
-		# Puntería y la skin del bombero (+50 %) se suman, como en las armas (johnny.gd, arma_de); la calidad multiplica
-		p.dano_lanzar = (johnny.stats.dano_lanzar + Skins.quema(johnny.skin) - 1.0) * calidad.dano
+		# Puntería, la skin del bombero (+50 %) y el Catalizador se suman, como en las armas (johnny.gd, arma_de); la
+		# calidad multiplica
+		p.dano_lanzar = (johnny.stats.dano_lanzar + Skins.quema(johnny.skin) + johnny.stats.dano_quimico - 2.0) * calidad.dano
 		p.fabricante = johnny.stats.fabricante
 		p.escala = calidad.radio
 		p.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
@@ -387,9 +397,12 @@ func lanzar(donde: Vector2) -> void:
 		g.desde = johnny.global_position
 		g.hasta = donde
 		g.radio = radio_zona()
-		g.dano_zombis = roundi(DATOS[t].dano * johnny.stats.dano_lanzar * calidad.dano)
+		# (a la congeladora, el Catalizador también se le suma; y Criogenia la deja congelados más tiempo)
+		var quimico: float = johnny.stats.dano_quimico - 1.0 if t == "congeladora" else 0.0
+		g.dano_zombis = roundi(DATOS[t].dano * (johnny.stats.dano_lanzar + quimico) * calidad.dano)
 		if ARROJADIZAS.has(t):
 			g.fabricante = johnny.stats.fabricante
+			g.congela_extra = johnny.stats.congela_extra
 		g.racimo = Armas.TRUCO.racimo if calidad_de(tipo) >= Armas.EPICA else 0
 		sala.add_child(g)
 	repasar()   # (si era el último, su hueco lo ocupa el primero de repuesto)

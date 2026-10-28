@@ -101,6 +101,7 @@ var estela_t := 0.0        # para soltar las copias transparentes de la estela
 var sola_t := 0.0          # Reflejos: lo que falta para la siguiente esquiva automática
 var regenera_t := 0.0      # Lobezno
 var ninja_t := 0.0         # Ninja: lo que falta para que el golpe al acabar la esquiva vuelva a estar listo
+var pararrayos_t := 0.0    # Pararrayos: lo que falta para que vuelva a saltar el rayo
 var disparos := 0          # Mirilla: los disparos que lleva
 var resucitado := false    # Desfibrilador: solo una vez por partida
 var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
@@ -255,9 +256,12 @@ func arma_de(id: String) -> Dictionary:
 		extra += Skins.fregona(skin) - 1.0   # el portero: +100 % (solo la fregona de siempre)
 	if w.tipo == "cuerpo":
 		extra += Skins.cuerpo(skin) - 1.0    # el gymbro: +50 % (la fregona, el bate y el cuchillo)
+	if w.has("efecto"):
+		extra += stats.dano_quimico - 1.0    # Catalizador: el chorro de fuego, el de ácido y el rayo
 	if w.get("efecto", "") in ArmasCreadas.QUEMAN:
-		w.quema = Skins.quema(skin)          # el bombero: +50 % la llamarada, y lo que sigue ardiendo el zombi (× 1,5)
-		extra += w.quema - 1.0
+		# el bombero: +50 % la llamarada, y lo que sigue ardiendo el zombi (× 1,5); el Catalizador, también lo que arde
+		w.quema = Skins.quema(skin) + stats.dano_quimico - 1.0
+		extra += Skins.quema(skin) - 1.0
 	w.dano = w.dano * (1.0 + extra)
 	w.ritmo = w.ritmo * stats.ritmo
 	w.alcance = w.alcance * stats.alcance * (stats.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)
@@ -289,6 +293,7 @@ func _physics_process(delta: float) -> void:
 	invulnerable -= delta
 	esquiva_espera -= delta
 	ninja_t -= delta
+	pararrayos_t -= delta
 	sola_t -= delta
 	levantado_t -= delta
 	# Parpadea mientras es invulnerable (medio transparente a ratos)
@@ -309,7 +314,8 @@ func _physics_process(delta: float) -> void:
 	for nombre in Aliado.CHARCOS:
 		if pisando.has(nombre):
 			pisando[nombre] = pisando[nombre].merged({"dps": pisando[nombre].get("dps", 0.0) * Aliado.charcos_a_medias(get_tree())}, true)
-	estado_dano += Estados.actualizar(estados, pisando, delta)
+	# (los Guantes de goma quitan una parte: un 10 % por punto)
+	estado_dano += Estados.actualizar(estados, pisando, delta) * (1.0 - stats.resiste_quimico)
 	pisando = {}
 	if estado_dano >= 1.0:
 		var entero := int(estado_dano)
@@ -1215,6 +1221,24 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 	Tactil.vibracion()
 	quitar_vida(dano)
 	devolver(quien)
+	pararrayos(quien)
+
+
+# Pararrayos (talento de Químico): al que te acaba de pegar de cerca le salta un rayo que le quita Talentos.PARARRAYOS.dano
+# (con el Catalizador, más), lo aturde y salta a otro de al lado con medio daño (ArmasCreadas.descarga). Como mucho
+# cada PARARRAYOS.cada segundos; a los jefes les quita vida, pero no se aturden
+func pararrayos(quien) -> void:
+	var p: Dictionary = Talentos.PARARRAYOS
+	if not stats.pararrayos or pararrayos_t > 0.0 or not vivo or not is_instance_valid(quien) \
+			or not quien.has_method("recibir_golpe") or quien.get("estado") == "muerto" \
+			or global_position.distance_to(quien.global_position) > p.alcance:
+		return
+	pararrayos_t = p.cada
+	var dano := roundi(p.dano * stats.dano_quimico)
+	ArmasCreadas.rayo(get_parent(), global_position + Vector2(0, -30), quien.global_position + Vector2(0, -40))
+	Sonido.tocar("chispa")
+	quien.recibir_golpe(dano, (quien.global_position - global_position).normalized() * EMPUJE * 0.5)
+	ArmasCreadas.descarga(quien, dano, p.aturde)
 
 
 # El glotón (skins.gd): el que le ha hecho daño lo paga. Un zombi normal (o un maniquí de la modista) muere al momento;

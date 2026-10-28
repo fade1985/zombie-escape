@@ -25,6 +25,7 @@ var radio := 110.0
 var dano_zombis := 80
 var tipo := "granada"
 var fabricante := false
+var congela_extra := 0.0   # la congeladora: segundos de más que los deja quietos (talento Criogenia)
 var z := 20.0          # altura sobre el suelo
 var v := Vector2.ZERO  # velocidad en el suelo
 var vz := 0.0          # velocidad hacia arriba
@@ -122,6 +123,7 @@ func soltar_racimo() -> void:
 		g.radio = radio * Armas.TRUCO.racimo_tamano
 		g.dano_zombis = roundi(dano_zombis * Armas.TRUCO.racimo_tamano)
 		g.fabricante = fabricante
+		g.congela_extra = congela_extra
 		g.hija = true
 		get_parent().add_child.call_deferred(g)
 
@@ -129,11 +131,12 @@ func soltar_racimo() -> void:
 # Lo suyo de cada arrojadiza creada al explotar, y dos anillos de su color para que se note cuál ha sido
 func efecto_creada(c: Dictionary) -> void:
 	if c.has("congela"):
+		var congela: float = c.congela + congela_extra
 		for zombi in get_tree().get_nodes_in_group("zombis"):
 			if zombi is Zombi and zombi.global_position.distance_to(global_position) <= radio + zombi.radio:
-				zombi.aturdido = maxf(zombi.aturdido, c.congela)
+				zombi.aturdido = maxf(zombi.aturdido, congela)
 				zombi.modulate = Color(0.55, 0.8, 1.0)
-				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(c.congela - 0.4)
+				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(congela - 0.4)
 	for i in 2:
 		Particulas.anillo(self, global_position, radio * (0.6 + i * 0.4), c.color, 0.4 + i * 0.15)
 

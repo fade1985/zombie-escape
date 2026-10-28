@@ -31,8 +31,23 @@ static func base() -> Dictionary:
 		"escudo": 0,             # escudo al empezar cada planta (Acero)
 		"ninja": false,          # golpe en área al acabar la esquiva (Ninja)
 		"resucitar": false,      # resucitar una vez por edificio (Desfibrilador)
+		"dano_quimico": 1.0,     # x daño de fuego, ácido, rayo y frío (Catalizador; se suma como los demás)
+		"resiste_quimico": 0.0,  # parte que se quita al daño de los charcos y los estados (Guantes de goma)
+		"arde_extra": 0.0,       # segundos de más que arden los zombis que prendes (Incendiario)
+		"corroe_extra": 0.0,     # lo que el ácido les come de más la armadura (Desatascador)
+		"congeladoras": 0,       # congeladoras de más al empezar y en la mochila (Criogenia)
+		"congela_extra": 0.0,    # segundos de más que dejan quietos (Criogenia)
+		"reaccion": false,       # los que mueren ardiendo revientan y prenden (Reacción en cadena)
+		"residuo": false,        # los que mueren con ácido dejan un charco (Residuo tóxico)
+		"pararrayos": false,     # rayo al que te golpea (Pararrayos)
 		# De las mutaciones: solo duran la partida
 		"canibal": 0.0,          # parte de la vida que cura cada zombi que matas (Caníbal)
 		"ansiedad": false,       # golpes más rápidos cuantos más zombis a la vista (Ansiedad)
 		"escudo_mut": 0,         # escudo de más en cada planta (Endurecimiento)
 	}
+
+
+# Un atributo de Johnny, para quien no lo lleva a mano (los zombis, el ácido): el de base si no hay Johnny
+static func de_johnny(arbol: SceneTree, clave: String) -> Variant:
+	var johnny := arbol.get_first_node_in_group("jugador")
+	return johnny.stats[clave] if johnny and johnny.get("stats") else base()[clave]
