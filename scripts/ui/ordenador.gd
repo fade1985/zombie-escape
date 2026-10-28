@@ -8,7 +8,8 @@
 #     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho). Desde el
 #     25 oct también vende el lanzallamas, el lanza ácido y el lanza rayos, que antes se creaban en el banco.
 #     Cuatro secciones, las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
-#     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, para esta partida, hasta su máximo.
+#     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, mientras quepan (van a sus montones de
+#     5); los que sobren al completar el edificio van al baúl.
 #   - "Logros": los retos del juego (logros.gd), por apartados (Logros.TEMAS), para elegir cuál intentar en esta
 #     partida. Los conseguidos se cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
@@ -629,14 +630,15 @@ func programa_armas(c: VBoxContainer) -> void:
 			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
 			var b := tarjeta(lista, "b_" + id, id, w.nombre, resumen_corto(w), etiqueta, estado)
 			enlazar(b, resumen(w), comprar_arma.bind(id))
-	# los arrojables, de uno en uno: «AL MÁXIMO» (en verde) si ya lleva todos los que caben
+	# los arrojables, de uno en uno: «AL MÁXIMO» (en verde) si ya no le cabe ninguno más (sus montones llenos y sin hueco
+	# para otro: lanzables.cabe)
 	var lz: Lanzables = partida.lanzables
 	var lista := rejilla(grupo(c, "Arrojables · de uno en uno, hasta los que caben"))
 	for k in Lanzables.PRECIOS:
 		var precio: int = Lanzables.PRECIOS[k]
-		var lleno := lz.cuantas(k) >= lz.maximo(k)
+		var lleno := not lz.cabe(k)
 		var estado := "lleno" if lleno else ("" if s.dolares >= precio and not Reto.sin_municion() else "bloqueada")
-		var b := tarjeta(lista, "b_" + k, k, Lanzables.UNO[k], "Llevas %d de %d" % [lz.cuantas(k), lz.maximo(k)],
+		var b := tarjeta(lista, "b_" + k, k, Lanzables.UNO[k], "Llevas %d" % lz.total(k),
 			"AL MÁXIMO" if lleno else "$%d" % precio, estado)
 		var que: String = INVENTARIO.QUE_HACE[k]
 		enlazar(b, "%s: %s%s Cada uno, $%d." % [Lanzables.UNO[k], que[0].to_lower(), que.substr(1), precio],
@@ -707,10 +709,8 @@ func comprar_lanzable(k: String) -> void:
 	var no := ""
 	if Reto.sin_municion():
 		no = "En el reto «%s» no se lleva nada que lanzar." % Reto.REGLAS.cuerpo.nombre
-	elif lz.cuantas(k) >= lz.maximo(k):
-		no = "Ya llevas el máximo de %s (%d)." % [Lanzables.NOMBRES[k], lz.maximo(k)]
-	elif not lz.hay_hueco(k):
-		no = "No te queda hueco para otro arrojable: deja alguno desde el inventario."
+	elif not lz.cabe(k):
+		no = "No te caben más %s: tus montones están llenos y no te queda hueco para otro." % Lanzables.NOMBRES[k]
 	var s := Guardado.cargar()
 	var precio: int = Lanzables.PRECIOS[k]
 	if no == "" and s.dolares < precio:
@@ -725,7 +725,8 @@ func comprar_lanzable(k: String) -> void:
 	partida.ahorrados = s.dolares
 	lz.sumar(k)
 	abrir("armas", "b_" + k)
-	info.set_deferred("text", "¡Compra hecha! Ya llevas %d/%d %s." % [lz.cuantas(k), lz.maximo(k), Lanzables.NOMBRES[k]])
+	var n := lz.total(k)
+	info.set_deferred("text", "¡Compra hecha! Ya llevas %d %s." % [n, Lanzables.NOMBRES[k] if n != 1 else Lanzables.UNO[k].to_lower()])
 
 
 # ── Logros ──

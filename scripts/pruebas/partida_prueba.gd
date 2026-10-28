@@ -67,6 +67,8 @@
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
 #                       gastando piezas                                                [prueba_inventario.gd]
 #   --municion          la munición por tipos y los arrojables (3 a mano y 8 de repuesto)    [prueba_inventario.gd]
+#   --montones          los arrojables en montones de 5: varios del mismo tipo, el inventario lleno, otros 5 a la
+#                       mano al acabarse, el baúl (juntos, de 5 en 5) y completar el edificio  [prueba_inventario.gd]
 #   --municion-suelo    la munición, un molotov y una granada en el suelo (con luz y a oscuras), la caja según el arma y un
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
@@ -240,6 +242,9 @@ func empezar_prueba() -> void:
 	elif "--municion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion()
+	elif "--montones" in args:
+		set_process(false)   # sin la prueba larga
+		probar_montones()
 	elif "--municion-suelo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_municion_suelo()

@@ -22,8 +22,8 @@
 class_name Objetos
 
 const MOCHILA := 8           # casillas de la mochila
-const BAUL := 32             # casillas del baúl: una por cada objeto distinto, y una por cada arma y cada paquete de arrojables
-const MONTON := 99           # lo máximo de un mismo objeto en una casilla del baúl (sobre todo las balas, que se amontonan): lo que pasa va a otra casilla
+const BAUL := 32             # casillas del baúl: una por cada objeto distinto, una por cada arma y una por cada clase de arrojables
+const MONTON := 99           # lo máximo de un mismo objeto (o de una clase de arrojables) en una casilla del baúl (sobre todo las balas, que se amontonan): lo que pasa va a otra casilla
 const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)
 const SUELTA_PROPIO := 0.25  # probabilidad de que un zombi de DE_UN_ZOMBI suelte lo suyo (y nada más)
 # Lo que solo suelta un tipo de zombi, y nunca sale al azar: el bidón de ácido, que llena el lanza ácido, el gordo
@@ -128,8 +128,8 @@ static func cabe(mochila: Array, id: String) -> bool:
 
 
 # Casillas ocupadas del baúl: una por cada MONTON de cada objeto (99 como mucho en cada una: el baúl guarda cuántos hay y
-# se reparten en casillas llenas y una última con lo que sobra), y una por cada arma y cada paquete de arrojables
-# ("baul_equipo" del guardado)
+# se reparten en casillas llenas y una última con lo que sobra), y una por cada arma y cada casilla de arrojables
+# ("baul_equipo" del guardado; los arrojables, también hasta 99 en cada una: arrojables_al_baul)
 static func casillas_baul(s: Dictionary) -> int:
 	var n: int = s.get("baul_equipo", []).size()
 	for id in s.baul:
@@ -138,9 +138,42 @@ static func casillas_baul(s: Dictionary) -> int:
 	return n
 
 
-# ¿Queda alguna casilla libre en el baúl? (para un arma o un paquete de arrojables, que siempre van en una nueva)
+# ¿Queda alguna casilla libre en el baúl? (para un arma, que siempre va en una nueva; los arrojables: caben_arrojables)
 static func hueco_baul(s: Dictionary) -> bool:
 	return casillas_baul(s) < BAUL
+
+
+# ── Los arrojables en el baúl ──
+# Van en su "baul_equipo" ({"id": el tipo, "calidad", "n"}) y, como los objetos, los del mismo tipo y calidad se juntan
+# en una casilla hasta MONTON; lo que pasa, a otra (el M18 del dueño; lanzables.gd)
+
+# ¿Esa casilla del baúl es de arrojables de ese tipo y esa calidad?
+static func es_arrojable(e: Dictionary, id: String, calidad: int) -> bool:
+	return e.has("n") and e.id == id and int(e.get("calidad", 0)) == calidad
+
+
+# Cuántos de esos arrojables caben en el baúl: lo que falta para llenar sus casillas y MONTON por cada casilla libre
+static func caben_arrojables(s: Dictionary, id: String, calidad: int) -> int:
+	var n := maxi(0, BAUL - casillas_baul(s)) * MONTON
+	for e in s.baul_equipo:
+		if es_arrojable(e, id, calidad):
+			n += maxi(0, MONTON - int(e.n))
+	return n
+
+
+# Mete "n" de esos arrojables en el baúl del guardado "g": en sus casillas que no estén llenas y luego en otras nuevas
+# (al final), aunque no quede sitio (al completar el edificio entra todo; al guardar a mano, se mira antes con
+# caben_arrojables)
+static func arrojables_al_baul(g: Dictionary, id: String, calidad: int, n: int) -> void:
+	for e in g.baul_equipo:
+		if n > 0 and es_arrojable(e, id, calidad) and int(e.n) < MONTON:
+			var entran := mini(n, MONTON - int(e.n))
+			e.n = int(e.n) + entran
+			n -= entran
+	while n > 0:
+		var entran := mini(n, MONTON)
+		g.baul_equipo.append({"id": id, "calidad": calidad, "n": entran})
+		n -= entran
 
 
 # Todo lo que puede ir en el baúl como objeto, en el orden de NOMBRES y, al final, el botiquín (que no es de NOMBRES:

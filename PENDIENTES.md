@@ -15,9 +15,7 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M18.** Arrojables: que se puedan coger en el inventario en montones de 5, hasta que se llene el inventario (lleno,
-  no se pueden llevar más). Cuando se acaban los que tienes en la mano, coges otros cinco del inventario. Los que
-  sobren al pasarte la partida van al baúl, como cualquier objeto.
+_(ninguna por ahora)_
 
 ## Por limar
 

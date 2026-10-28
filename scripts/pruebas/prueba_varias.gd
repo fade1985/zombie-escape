@@ -248,7 +248,7 @@ func probar_hud() -> void:
 	set_process(false)
 	for t in ["granada", "atraedora"]:
 		lanzables.meter(t, 2)
-		lanzables.a_la_mano(t)
+		lanzables.a_la_mano(lanzables.repuesto.find(t))
 	await get_tree().create_timer(0.5).timeout
 	print("HUD · lanzables a mano: %s, el de ahora: %s" % [lanzables.tipos(), lanzables.tipo])
 	Captura.foto("captura-hud.png")

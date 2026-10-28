@@ -35,7 +35,9 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
   en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12
   cartuchos; la gasolina, el ácido y las baterías, de una en una) o lo que quepa.
-- **Lanzables:** 3 a mano y 8 de repuesto; al acabarse uno de la mano, entra el primero de repuesto.
+- **Lanzables:** en montones de 5 (más con la calidad y los talentos): 3 a mano y 8 de repuesto, con varios del mismo
+  tipo, hasta llenarlos (sin tope por tipo). Al acabarse el de la mano entran otros 5 de repuesto (de los suyos o, si
+  no quedan, el primero).
 - **Vida en tercios:** el tercio que pierdes ya no se cura y, por cada uno, Johnny anda un 15 % más lento (210, 179 y
   147; el zombi rápido va a 165). Solo el botiquín devuelve un tercio perdido.
 - **Curas:** las vendas (25 de vida, sin pasar del tercio en el que estás) y el botiquín (devuelve un tercio perdido y
@@ -109,7 +111,7 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
-  atraedora y congeladora $8) hasta su máximo; todo, para esa partida.
+  atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona +100 %), el glotón (el
   Glotón; quien te hace daño lo paga: un jefe pierde el 3 % de su vida), el gymbro (el Gymbro; cuerpo a cuerpo +50 %) y
@@ -122,10 +124,10 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   las balas atraviesan a un zombi (estela morada); especiales, el zombi que matan revienta y prende, echa ácido o da
   calambre a los de al lado; arrojables, al romperse o explotar sueltan 2 más pequeños. Y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
-  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (menos la fregona y la pistola Normales) y paquetes de arrojables mejorados, cada arma
-  y cada paquete en su casilla con el borde del color de su **calidad** (gris Normal, verde Poco común, azul Rara,
-  morado Épica). Lo que lleva encima se pierde si cae; al completar el edificio, sus armas y sus arrojables mejorados
-  pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a
+  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (menos la fregona y la pistola Normales) y arrojables (los del mismo
+  tipo y calidad juntos, hasta 99, y salen de 5 en 5), cada arma en su casilla y todo con el borde del color de su
+  **calidad** (gris Normal, verde Poco común, azul Rara, morado Épica). Lo que lleva encima se pierde si cae; al
+  completar el edificio, sus armas y todos sus arrojables pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a
   la vez).
 
 Al caer el jefe de una planta (de la 1ª en adelante), Johnny arregla el **ascensor** del pasillo: baja a esta sala y

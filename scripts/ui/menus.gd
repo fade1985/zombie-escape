@@ -128,8 +128,8 @@ func pausa(partida: Node) -> void:
 		var resumen := "%s · daño %d · %.1f/s" % [a.nombre, a.dano * (a.get("perdigones", 1)), a.ritmo]
 		derecha.add_child(Tema.icono_y_texto(Objetos.icono(id), resumen, 20))
 	var lz: Lanzables = partida.lanzables
-	derecha.add_child(Tema.icono_y_texto("molotov", "Molotovs: %d / %d" % [lz.total("molotov"), lz.maximo("molotov")], 20))
-	derecha.add_child(Tema.icono_y_texto("granada", "Granadas: %d / %d" % [lz.total("granada"), lz.maximo("granada")], 20))
+	derecha.add_child(Tema.icono_y_texto("molotov", "Molotovs: %d" % lz.total("molotov"), 20))
+	derecha.add_child(Tema.icono_y_texto("granada", "Granadas: %d" % lz.total("granada"), 20))
 	if not partida.mutaciones.tengo.is_empty():
 		var muts := Label.new()
 		muts.text = "Mutaciones"

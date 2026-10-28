@@ -47,10 +47,18 @@ en una línea.
   cada 0,25 s, empuje, luz; `variante`: "llama", "acido" o "rayo". El rayo se dibuja a código —zigzag, ramitas y
   arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
   `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
-- `lanzables.gd`: molotov, granada, atraedora y congeladora: 3 a mano (`mano`, F cambia) y 8 de repuesto (`repuesto`);
-  lo que cuesta uno en la tienda (`PRECIOS`). Cada paquete tiene su calidad y va en su hueco: su clave es el tipo y,
-  si no es Normal, la calidad detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con
-  `mejorar`).
+- `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
+  de una clave de hasta `MONTON` (5; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
+  de cada clave, F cambia; sus cuentas en `cantidades`) y 8 de repuesto (`repuesto` y sus cuentas en `en_repuesto`,
+  con varios de la misma clave). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
+  sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su
+  clave, uno de su tipo o el primero). Un montón se señala por su sitio, el nombre de su casilla en el inventario
+  (`"l1"`, `"e3"`: `clave_en`, `cuantos_en`, `sitio_de`, `quitar`, `mejorar`); `a_la_mano` y `al_repuesto`, por su
+  número. Lo que cuesta uno en la tienda (`PRECIOS`). La clave de un montón es el tipo y, si no es Normal, la calidad
+  detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al completar el edificio
+  van todos al baúl (`partida.equipo_encima`, `montones`), también los Normales; allí se juntan los del mismo tipo y
+  calidad hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
+  («Sacar 5»). Se prueba con `--montones`.
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
 - `sala_armas.gd`: la sala de pruebas (F11 desde cualquier sitio; F11 otra vez, de vuelta): la diana, todas las armas,
   las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
@@ -141,7 +149,7 @@ en una línea.
   `--talentos-altos`),
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
-  `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (40 desde el M17, 28 oct; uno =
+  `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla), `logros.gd` (40 desde el M17, 28 oct; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
   —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
   `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el
@@ -179,7 +187,7 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
   `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
-  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`). Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
+  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`, mientras quepan). Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
   llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`). Y los avisos de sucesos, además de la
   línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`: noticias
   nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.

@@ -8,8 +8,7 @@ var en_el_aire := {}         # arrastrar: lo que se veía justo antes de soltar
 
 # Le da a Johnny tres atraedoras o congeladoras (lanzables.gd): a mano si hay sitio y si no, de repuesto
 func dar_lanzable(k: String) -> void:
-	lanzables.cantidades[k] = 3
-	lanzables.colocar(k)
+	lanzables.meter(k, 3)
 
 
 # Con "--captura --baul": la pantalla del baúl (ui/inventario.gd). En la sala de
@@ -413,11 +412,12 @@ func probar_calidades() -> void:
 	await get_tree().process_frame
 	inventario.guardar()
 	await get_tree().process_frame
-	print("Los molotovs Raros, guardados: equipo %s · a mano %s (esperado: termina en molotov 2 ×4 · [molotov, granada])" % [
+	print("Los molotovs Raros, guardados: equipo %s · a mano %s (esperado: molotov 2 ×8, juntos con los 4 que ya había · [molotov, granada])" % [
 		equipo.call(), lanzables.mano])
 	inventario.tocar("l0")
 	await get_tree().process_frame
-	print("Los molotovs Normales: «Guardar en el baúl» %s (esperado: no está) · dice «%s»" % [boton.call("guardar"), dice.call()])
+	print("Los molotovs Normales: «Guardar en el baúl» %s (esperado: activo: desde el M18 también van al baúl) · dice «%s»" % [
+		boton.call("guardar"), dice.call()])
 	# sacar: el bate a la mano (la fregona, al repuesto); la escopeta Rara a la mano (la pistola Épica al repuesto) y
 	# la pistola Rara, que se cambia por la Épica de repuesto (la Épica entra en el baúl en su lugar)
 	inventario.tocar(en_baul.call("bate", 1))
@@ -434,7 +434,7 @@ func probar_calidades() -> void:
 	inventario.tocar(en_baul.call("molotov", 2))
 	inventario.sacar()
 	await get_tree().process_frame
-	print("Sacados los molotovs Raros: a mano %s, quedan %d (esperado: [molotov, granada, molotov:2], 4)" % [lanzables.mano,
+	print("Sacados los molotovs Raros: a mano %s, quedan %d (esperado: [molotov, granada, molotov:2], 7: un montón Raro; 1 se queda en el baúl)" % [lanzables.mano,
 		lanzables.cuantas("molotov:2")])
 	inventario.tocar(en_baul.call("lanzallamas", 3))
 	await get_tree().create_timer(0.3).timeout
@@ -461,9 +461,9 @@ func probar_calidades() -> void:
 	get_tree().paused = false
 	terminar(true)
 	await get_tree().create_timer(0.3).timeout
-	print("Completa el edificio: lo que lleva %s · el baúl tiene %d de equipo (esperado: bate 1, escopeta 2, pistola 2 y molotov 2 ×4, sin la fregona · %d)" % [
+	print("Completa el edificio: lo que lleva %s · el baúl tiene %d de equipo (esperado: bate 1, escopeta 2, pistola 2, molotov 0 ×2, granada 0 ×2 y molotov 2 ×7, sin la fregona · %d: los molotovs Raros, con el que quedaba)" % [
 		encima.map(func(e): return "%s %d%s" % [e.id, e.calidad, " ×%d" % e.n if e.has("n") else ""]),
-		Guardado.cargar().baul_equipo.size(), cuantos + encima.size()])
+		Guardado.cargar().baul_equipo.size(), cuantos + encima.size() - 1])
 	Guardado.escribir(antes)
 	get_tree().quit()
 
@@ -523,7 +523,7 @@ func probar_banco_mejorar() -> void:
 		lanzables.mano, lanzables.cuantas("granada:1"), inventario.sel, piezas.call("pieza_arrojable")])
 	inventario.tocar("l0")
 	await get_tree().process_frame
-	print("Los 2 molotovs Normales, con 5 Poco comunes: botón %s · «%s» (esperado: apagado · Ya llevas otro paquete Poco común y juntos no caben (como mucho, 6)...)" % [
+	print("Los 2 molotovs Normales, con 5 Poco comunes: botón %s · «%s» (esperado: apagado · Ya llevas a mano otro montón Poco común y juntos no caben (como mucho, 6)...)" % [
 		boton.call(), dice.call("coste")])
 	lanzables.cantidades["molotov"] = 1
 	inventario.repintar()
@@ -779,16 +779,18 @@ func probar_repuesto() -> void:
 # Con "--captura --tienda": la tienda de armas del ordenador con sus cuatro secciones (Cuerpo a cuerpo, A distancia,
 # Especiales y Arrojables) y los arrojables, que se compran de uno en uno (Lanzables.PRECIOS; ordenador.gd,
 # comprar_lanzable). Con $40: la atraedora va a la mano y la congeladora, con la mano llena, al repuesto; tres molotovs
-# llegan al máximo y el cuarto no se cobra; sin hueco (la mano y el repuesto llenos a la fuerza) no se compra; y sin
-# dinero tampoco. Cada línea dice lo esperado. Fotos: captura-tienda.png (arriba: las armas) y
-# captura-tienda-arrojables.png (abajo: los arrojables, con el molotov «AL MÁXIMO»). Deja los dólares como estaban
+# llenan su montón de la mano y el cuarto empieza otro montón de repuesto (no hay tope por tipo: M18); sin hueco (la
+# mano y el repuesto llenos a la fuerza) no se compra; y sin dinero tampoco. Cada línea dice lo esperado. Fotos:
+# captura-tienda.png (arriba: las armas) y captura-tienda-arrojables.png (abajo: los arrojables, «Llevas N»). Deja los
+# dólares como estaban
 func probar_tienda() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g): g.dolares = 40)
 	ahorrados = 40
 	var lz: Lanzables = lanzables
 	var cuenta := func() -> String:
-		return "%s · mano %s · repuesto %s · $%d" % [lz.cantidades, lz.mano, lz.repuesto, Guardado.cargar().dolares]
+		return "%s · mano %s · repuesto %s %s · $%d" % [lz.cantidades, lz.mano, lz.repuesto, lz.en_repuesto,
+			Guardado.cargar().dolares]
 	await get_tree().create_timer(0.5).timeout
 	abrir_ordenador()
 	await get_tree().create_timer(0.4).timeout
@@ -810,27 +812,29 @@ func probar_tienda() -> void:
 	# sin hueco: la mano y el repuesto llenos a la fuerza (con solo cuatro tipos no pasa jugando), y se deja como estaba
 	var mano: Array = lz.mano.duplicate()
 	var repuesto: Array = lz.repuesto.duplicate()
+	var en_repuesto: Array = lz.en_repuesto.duplicate()
 	lz.repuesto.assign(["molotov", "molotov", "molotov", "molotov", "molotov", "molotov", "molotov", "molotov"])
+	lz.en_repuesto.assign([5, 5, 5, 5, 5, 5, 5, 5])
 	ordenador.comprar_lanzable("congeladora")
-	print("Sin hueco, una congeladora: congeladora %d · $%d · dice «%s» (esperado: 0 · $32 · no te queda hueco)" % [
-		lz.cuantas("congeladora"), Guardado.cargar().dolares, ordenador.info.text])
+	print("Sin hueco, una congeladora: congeladora %d · $%d · dice «%s» (esperado: 0 · $32 · no te caben más)" % [
+		lz.total("congeladora"), Guardado.cargar().dolares, ordenador.info.text])
 	lz.mano.assign(mano)
 	lz.repuesto.assign(repuesto)
+	lz.en_repuesto.assign(en_repuesto)
 	ordenador.comprar_lanzable("congeladora")
 	await get_tree().process_frame
 	print("Compra una congeladora: %s (esperado: congeladora 1, de repuesto · $24)" % cuenta.call())
 	for i in 3:
 		ordenador.comprar_lanzable("molotov")
 		await get_tree().process_frame
-	print("Compra tres molotovs: %s · dice «%s» (esperado: molotov 5 · $9 · ya llevas 5/5)" % [cuenta.call(), ordenador.info.text])
+	print("Compra tres molotovs: %s · dice «%s» (esperado: molotov 5 · $9 · ya llevas 5 molotovs)" % [cuenta.call(), ordenador.info.text])
 	ordenador.comprar_lanzable("molotov")
 	await get_tree().process_frame
-	print("Otro molotov: %s · dice «%s» (esperado: igual, sin pagar: ya llevas el máximo)" % [cuenta.call(), ordenador.info.text])
+	print("Otro molotov, con su montón lleno: %s · dice «%s» (esperado: molotov 5 · repuesto [congeladora, molotov] [1, 1] · $4 · ya llevas 6 molotovs)" % [
+		cuenta.call(), ordenador.info.text])
 	ordenador.comprar_lanzable("granada")
 	await get_tree().process_frame
-	ordenador.comprar_lanzable("granada")
-	await get_tree().process_frame
-	print("Dos granadas con $9: %s · dice «%s» (esperado: granada 3 · $4 · la segunda no: te faltan $1)" % [cuenta.call(), ordenador.info.text])
+	print("Una granada con $4: %s · dice «%s» (esperado: granada 2 · $4 · te faltan $1)" % [cuenta.call(), ordenador.info.text])
 	ordenador.abrir("armas", "b_atraedora")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tienda-arrojables.png")
@@ -847,7 +851,7 @@ func probar_tienda() -> void:
 # la caja es para la de repuesto; con su hueco lleno, la caja ya no va; las balas tiradas desde el inventario quedan en
 # una caja que las devuelve; y el lanzallamas se llena con una gasolina de la munición. Los arrojables: al empezar, el molotov y la granada a mano; la atraedora y
 # la congeladora van a la mano y, con la mano llena, al repuesto; al acabarse uno, su hueco lo ocupa el primero de repuesto; F cambia entre los de la mano;
-# «A la mano» y «Al repuesto»; con el máximo, el molotov del suelo no se coge. Cada línea dice lo esperado. Fotos:
+# «A la mano» y «Al repuesto»; con su montón lleno, el molotov del suelo va a otro montón. Cada línea dice lo esperado. Fotos:
 # captura-municion.png (el inventario con un hueco de balas elegido), captura-municion-arrojables.png (con un arrojable de
 # repuesto elegido) y captura-municion-hud.png (el HUD con la MP5 y las balas que comparte con la pistola)
 func probar_municion() -> void:
@@ -903,7 +907,7 @@ func probar_municion() -> void:
 	print("Vuelve a cogerla: balas %d (esperado: 54)" % johnny.cuanta("balas"))
 	# los arrojables
 	var arrojables := func() -> String:
-		return "a mano %s (lanza %s) · repuesto %s" % [lz.mano, lz.tipo, lz.repuesto]
+		return "a mano %s (lanza %s) · repuesto %s" % [lz.mano, lz.tipo, lz.repuesto]   # (las claves)
 	print("Arrojables al empezar: %s (esperado: a mano [\"molotov\", \"granada\"] (lanza molotov) · repuesto [])" % arrojables.call())
 	for k in ["atraedora", "congeladora"]:
 		dar_lanzable(k)
@@ -919,11 +923,11 @@ func probar_municion() -> void:
 		lz.cambiar()
 		vistos.append(lz.tipo)
 	print("F tres veces: %s (esperado: congeladora → atraedora → molotov → congeladora)" % " → ".join(vistos))
-	lz.al_repuesto("atraedora")
+	lz.al_repuesto(lz.mano.find("atraedora"))
 	print("Guarda la atraedora: %s (esperado: a mano [molotov, congeladora] (lanza congeladora) · repuesto [atraedora])" % arrojables.call())
 	lz.cantidades.molotov = lz.maximo("molotov")
-	print("Un molotov del suelo con %d de %d: ¿lo coge? %s (esperado: false, ya tiene el máximo)" % [lz.cuantas("molotov"),
-		lz.maximo("molotov"), lz.cabe("molotov")])
+	print("Un molotov del suelo con su montón de la mano lleno (%d de %d): ¿lo coge? %s (esperado: true, a un montón nuevo de repuesto)" % [
+		lz.cuantas("molotov"), lz.maximo("molotov"), lz.cabe("molotov")])
 	await get_tree().create_timer(0.3).timeout
 	abrir_cosas("inventario")
 	inventario.tocar("u0")
@@ -949,6 +953,90 @@ func probar_municion() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Con la MP5 en la mano: cargador %d · reserva %d (esperado: 30 · 54)" % [johnny.balas, johnny.reserva()])
 	Captura.foto("captura-municion-hud.png")
+	get_tree().quit()
+
+
+# Con "--captura --montones": los arrojables en montones (el M18 del dueño; lanzables.gd), en la sala de mantenimiento y
+# con el baúl vacío. Cada línea dice lo esperado: los molotovs que coge llenan su montón de la mano y luego van al
+# repuesto en montones de 5, varios del mismo tipo; con el inventario lleno (la mano y las 8 casillas de repuesto) ya no
+# coge más; al acabarse el montón de la mano entran otros 5 del repuesto; en el baúl, los montones de la misma clase se
+# juntan en una casilla y salen de 5 en 5 («Sacar 5»); y al completar el edificio, lo que sobra (también lo Normal) va
+# al baúl, junto. Fotos: captura-montones.png (el inventario con el repuesto lleno de montones) y
+# captura-montones-baul.png (el baúl con las granadas juntas). Deja el guardado como estaba y se cierra
+func probar_montones() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {}
+		g2.baul_equipo = [])
+	var lz: Lanzables = lanzables
+	var como := func() -> String:   # la mano y el repuesto, con cuántos hay en cada montón
+		return "a mano %s · repuesto %s" % [lz.mano.map(func(k): return "%s %d" % [k, lz.cuantas(k)]),
+			range(lz.repuesto.size()).map(func(j): return "%s %d" % [lz.repuesto[j], lz.en_repuesto[j]])]
+	var baul := func() -> Array:   # los arrojables del baúl, corto: ["molotov 0 ×10"...]
+		return Guardado.cargar().baul_equipo.filter(func(e): return e.has("n")).map(
+			func(e): return "%s %d ×%d" % [e.id, e.calidad, e.n])
+	await get_tree().create_timer(0.5).timeout
+	print("Al empezar: %s · caben en un montón %d (esperado: a mano [molotov 2, granada 2] · repuesto [] · 5)" % [como.call(),
+		lz.maximo("molotov")])
+	for i in 13:
+		lz.sumar("molotov")
+	print("Coge 13 molotovs: %s · molotovs %d (esperado: a mano [molotov 5, granada 2] · repuesto [molotov 5, molotov 5] · 15)" % [
+		como.call(), lz.total("molotov")])
+	var entran := lz.meter("granada", 100)
+	print("Mete 100 granadas: entran %d · %s (esperado: 33: llenan su montón de la mano y 6 montones de 5 en el repuesto, que queda lleno)" % [
+		entran, como.call()])
+	print("¿Coge otra granada? %s · ¿una atraedora? %s (esperado: false, sus montones y el repuesto, llenos · true, a la mano, que tiene un hueco)" % [
+		lz.cabe("granada"), lz.cabe("atraedora")])
+	entran = lz.meter("atraedora", 8)
+	print("Mete 8 atraedoras: entran %d · ¿coge un molotov? %s (esperado: 5 · false: lleno, no se pueden llevar más)" % [entran,
+		lz.cabe("molotov")])
+	# se acaba el montón de la mano: entran otros cinco del repuesto
+	lz.tipo = "molotov"
+	johnny.invulnerable = 2.6   # (por si alguno le cae cerca)
+	for i in 5:
+		lz.lanzar(johnny.global_position + Vector2(-280, 60))
+	print("Lanza 5 molotovs: %s · lanza %s (esperado: a mano molotov 5 otra vez, el primer montón de repuesto ha pasado a la mano · molotov)" % [
+		como.call(), lz.tipo])
+	await get_tree().create_timer(4.5).timeout   # (que se apague el fuego antes de las fotos)
+	abrir_cosas("inventario")
+	inventario.tocar("e0")
+	await get_tree().create_timer(0.4).timeout
+	Captura.foto("captura-montones.png")
+	print("El montón de molotovs de repuesto: dice «%s»" % inventario.fondo.find_child("nota", true, false).text)
+	inventario.cerrar()
+	await get_tree().process_frame
+	# el baúl: se guardan dos montones de granadas y se juntan; salen de 5 en 5
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	if inventario.abierto != "baul":
+		print("Baúl: no se ha abierto (esperado: abierto)")
+		Guardado.escribir(antes)
+		get_tree().quit()
+		return
+	for i in 2:
+		inventario.tocar("e%d" % lz.repuesto.find("granada"))
+		inventario.guardar()
+	await get_tree().process_frame
+	print("Guarda dos montones de granadas: baúl %s · %s (esperado: [granada 0 ×10], juntas en una casilla)" % [baul.call(), como.call()])
+	inventario.tocar("b0")
+	await get_tree().process_frame
+	var b: Button = inventario.fondo.find_child("sacar", true, false)
+	print("Las granadas del baúl: botón «%s» (esperado: Sacar 5)" % (b.text if b else "no está"))
+	inventario.sacar()
+	await get_tree().process_frame
+	print("Saca un montón: baúl %s · granadas %d (esperado: [granada 0 ×5] · 30)" % [baul.call(), lz.total("granada")])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-montones-baul.png")
+	inventario.cerrar()
+	await get_tree().process_frame
+	# al completar el edificio, todo lo que sobra va al baúl, también lo Normal, junto
+	terminar(true)
+	await get_tree().create_timer(0.3).timeout
+	print("Completa el edificio: baúl %s (esperado: [granada 0 ×35, molotov 0 ×10, atraedora 0 ×5]: los de la misma clase, juntos)" % [
+		baul.call()])
+	Guardado.escribir(antes)
 	get_tree().quit()
 
 
@@ -982,6 +1070,7 @@ func probar_inventario() -> void:
 	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "pieza_distancia", "botiquin", "gasolina", "gasolina"])
 	lz.mano = ["molotov", "granada"]
 	lz.repuesto = []
+	lz.en_repuesto = []
 	lz.tipo = "molotov"
 	dar_lanzable("atraedora")
 	dar_lanzable("congeladora")
@@ -1101,6 +1190,7 @@ func probar_arrastrar() -> void:
 	mochila.append_array(["pieza_cuerpo", "pieza_cuerpo", "botiquin", "gasolina", "gasolina"])
 	lz.mano = ["molotov", "granada"]
 	lz.repuesto = []
+	lz.en_repuesto = []
 	lz.tipo = "molotov"
 	dar_lanzable("atraedora")     # a la mano (la tercera)
 	dar_lanzable("congeladora")   # al repuesto
@@ -1325,7 +1415,7 @@ func probar_atraedora() -> void:
 	lanzables.meter("congeladora", 3)
 	await get_tree().create_timer(0.3).timeout
 	for t in ["atraedora", "congeladora"]:
-		lanzables.a_la_mano(t)   # (la congeladora, del repuesto: sin efecto si ya está a mano)
+		lanzables.a_la_mano(lanzables.repuesto.find(t))   # (la congeladora, del repuesto: sin efecto si ya está a mano)
 		lanzables.tipo = t
 		lanzables.lanzar(johnny.position + Vector2(220, 20))   # (hacia un lado: hacia arriba lo tapa la pared)
 		await get_tree().create_timer(0.27).timeout

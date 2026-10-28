@@ -1066,16 +1066,16 @@ func llevar_arma(id: String, calidad := 0, a_la_mano := true, al_suelo := true) 
 
 
 # Lo que lleva encima que va al baúl al completar el edificio (Armas.al_baul), como en el guardado ("baul_equipo"):
-# sus armas, menos la fregona y la pistola Normales, y los paquetes de arrojables mejorados
+# sus armas, menos la fregona y la pistola Normales, y todos sus montones de arrojables (también los Normales: M18),
+# cada uno con cuántos hay en "n" (en el baúl se juntan los del mismo tipo y calidad: Objetos.arrojables_al_baul)
 func equipo_encima() -> Array:
 	var lista := []
 	for id in johnny.huecos.values() + armas_guardadas:
 		if Armas.al_baul(id, johnny.calidad(id)):
 			lista.append({"id": id, "calidad": johnny.calidad(id)})
-	for k in lanzables.mano + lanzables.repuesto:
-		var calidad := Lanzables.calidad_de(k)
-		if calidad > 0 and lanzables.cuantas(k) > 0:
-			lista.append({"id": Lanzables.tipo_de(k), "calidad": calidad, "n": lanzables.cuantas(k)})
+	for m in lanzables.montones():
+		if m[1] > 0:
+			lista.append({"id": Lanzables.tipo_de(m[0]), "calidad": Lanzables.calidad_de(m[0]), "n": m[1]})
 	return lista
 
 
@@ -1276,10 +1276,14 @@ func terminar(gano: bool, abandona := false) -> void:
 			e.mejor_planta = maxi(e.mejor_planta, planta.num)
 		if gano:
 			# los objetos de la mochila pasan al baúl (si caes, se pierden), también las vendas y el botiquín. Y las armas
-			# que lleva y los paquetes de arrojables mejorados (equipo_encima), aunque no quepan
+			# que lleva y los arrojables (equipo_encima), aunque no quepan
 			for id in mochila:
 				g.baul[id] = g.baul.get(id, 0) + 1
-			g.baul_equipo.append_array(equipo)
+			for cosa in equipo:
+				if cosa.has("n"):
+					Objetos.arrojables_al_baul(g, cosa.id, cosa.calidad, cosa.n)
+				else:
+					g.baul_equipo.append(cosa)
 			g.victorias += 1
 		g.dolares += salvados
 		g.dolares_total += salvados

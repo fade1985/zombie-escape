@@ -27,9 +27,10 @@ const NUEVO := {
 	"muertos": 0,         # zombis matados en total
 	"muertos_con_ayudas": 0, # los de "muertos" que se mataron en partidas con ayudas: no cuentan para el logro Exterminador (logros.gd)
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...}
-	"baul_equipo": [],    # las armas y los paquetes de arrojables del baúl, cada uno en su casilla y con su calidad
+	"baul_equipo": [],    # las armas y los arrojables del baúl, cada uno en su casilla y con su calidad
 	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},
-	                      # {"id": "molotov", "calidad": 1, "n": 3}, ...]
+	                      # {"id": "molotov", "calidad": 1, "n": 3}, ...]. Los arrojables de la misma clase y calidad,
+	                      # juntos hasta 99 por casilla, como los objetos (Objetos.arrojables_al_baul)
 	"rescatados": [],     # supervivientes rescatados (ids de Supervivientes.DATOS): viven en las viviendas (viviendas.gd)
 	"acompanante": "",    # el que te acompaña en cada partida (uno de los rescatados), o "" para ir solo
 	"skin": "",           # la skin que lleva Johnny (skins.gd; "" = el conserje de siempre)

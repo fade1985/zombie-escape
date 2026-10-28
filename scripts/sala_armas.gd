@@ -135,6 +135,7 @@ func _exit_tree() -> void:
 	lz.cantidades = entrada.lz.cantidades
 	lz.mano = entrada.lz.mano
 	lz.repuesto = entrada.lz.repuesto
+	lz.en_repuesto = entrada.lz.en_repuesto
 	lz.tipo = entrada.lz.tipo
 
 
@@ -177,7 +178,7 @@ func _physics_process(delta: float) -> void:
 			"calidades": johnny.calidades.duplicate(), "sin_fin": johnny.municion_sin_fin,
 			"mochila": partida.mochila.duplicate(), "guardadas": partida.armas_guardadas.duplicate(),
 			"lz": {"cantidades": lz.cantidades.duplicate(), "mano": lz.mano.duplicate(), "repuesto": lz.repuesto.duplicate(),
-				"tipo": lz.tipo}}
+				"en_repuesto": lz.en_repuesto.duplicate(), "tipo": lz.tipo}}
 		johnny.calidades = {}   # (aquí se prueban como son, en Normal)
 		johnny.municion_sin_fin = sin_fin   # munición sin fin, pero recargando: la reserva no se acaba nunca
 		johnny.coger(lista[indice])
