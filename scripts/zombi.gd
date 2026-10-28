@@ -70,6 +70,7 @@ var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
 var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (peligros.gd): a los 4, se congela
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
+var electrico := 0.0       # le ha dado un rayo hace poco (ArmasCreadas.aturdir): para Mezcla explosiva
 var lio_angulo := 0.0
 var prisa := 0.0           # segundos que le quedan con prisa (el grito de la dependienta, zombi_dependienta.gd)
 # La diana de la sala de pruebas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
@@ -86,6 +87,7 @@ var rastro := 0.0          # lo que ha avanzado desde la última marca del rastr
 const DESTELLO := preload("res://escenas/personajes/destello.gdshader")
 const BARRA := preload("res://scripts/barra_zombi.gd")
 const CHARCO := preload("res://escenas/armas/charco.tscn")
+const BOOM := preload("res://escenas/armas/explosion.tscn")   # la de Mezcla explosiva
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -271,6 +273,8 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	if a_tirones:
 		rapidez *= 0.55 + 0.45 * absf(sin(tiempo * 2.0))
 	rapidez *= Estados.frenado(estados)   # el frío de la cámara
+	if con_acido():
+		rapidez *= 1.0 - Mejoras.de_johnny(get_tree(), "pegajoso")   # (Pegajoso: el ácido los frena)
 	if prisa > 0.0:
 		rapidez *= PRISA
 	pedir_velocidad(paso.normalized() * rapidez)
@@ -419,16 +423,34 @@ func morir() -> void:
 	murio.emit()
 
 
+# Si lleva ácido encima: el de un charco o el que le sigue royendo (la herida del lanza ácido)
+func con_acido() -> bool:
+	return estados.has("acido") or has_node("herida_acido")
+
+
+# Cuántos efectos lleva a la vez, de los cuatro de Químico: fuego, ácido, rayo (el calambre de hace poco) y frío
+func efectos_puestos() -> int:
+	return [arder_t > 0.0, con_acido(), electrico > 0.0, congelado > 0.0].count(true)
+
+
 # Los talentos de Químico al morir: Reacción en cadena (si muere ardiendo, revienta y prende a los de al lado, como el
-# truco de las Épicas) y Residuo tóxico (si lleva ácido, deja un charco de ácido que solo daña a los zombis). Los que
-# prende o mancha pueden morir igual y seguir la cadena
+# truco de las Épicas), Residuo tóxico (si lleva ácido, deja un charco de ácido que solo daña a los zombis) y Mezcla
+# explosiva (si lleva dos efectos a la vez, explota; a Johnny no le hace nada). Los que prende, mancha o revienta pueden
+# morir igual y seguir la cadena
 func quimica_al_morir() -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny == null:
 		return
+	if johnny.stats.mezcla and efectos_puestos() >= 2:
+		var boom := BOOM.instantiate()
+		boom.radio = Talentos.MEZCLA.radio
+		boom.dano_zombis = roundi(Talentos.MEZCLA.dano * johnny.stats.dano_quimico)   # (con el Catalizador, más)
+		boom.a_johnny = false
+		boom.position = position
+		get_parent().add_child.call_deferred(boom)
 	if johnny.stats.reaccion and arder_t > 0.0:
 		ArmasCreadas.estallido(self, "llama", 0.0, arder_dano)
-	if johnny.stats.residuo and (estados.has("acido") or has_node("herida_acido")):
+	if johnny.stats.residuo and con_acido():
 		var charco: Node2D = CHARCO.instantiate()
 		charco.tipo = "residuo"
 		charco.position = (position / 2.0).round() * 2.0   # (en píxel entero del dibujo, como los demás charcos)
@@ -506,8 +528,9 @@ func sufrir(delta: float) -> void:
 	# arder y el ácido (el de los charcos o el que le sigue royendo del lanza ácido: armas_creadas.gd, la herida) se
 	# los pinta su shader, con su luz; los demás estados, con su tinte suave
 	var arde := arder_t > 0.0
-	var acido := estados.has("acido") or has_node("herida_acido")
+	var acido := con_acido()
 	acido_t = acido_t + delta if acido else 0.0
+	electrico = maxf(electrico - delta, 0.0)
 	sprite.self_modulate = Color.WHITE if arde or acido else Estados.tinte(estados, tiempo)
 	Zombi.quemaduras(sprite, 1.0 if arde else 0.0, Zombi.cuanto_acido(acido_t), tiempo)
 	if acido or has_node("LuzAcido"):
