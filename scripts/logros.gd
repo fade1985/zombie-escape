@@ -5,6 +5,8 @@
 # (partida.gd llama a cumplir("id") o a las funciones de abajo).
 # En el guardado (Guardado: "logros") solo se apunta el estado de cada uno: {"id": "conseguido" | "cobrado"}.
 # Lo que no está, sigue pendiente.
+# Con alguna de las ayudas de Opciones → Ayudas encendida (AYUDAS) no se consigue ningún logro, y vale para toda la
+# partida: si se enciende y se apaga, esa partida ya no da logros. Los que ya se tenían se conservan y se cobran igual.
 class_name Logros
 extends Node
 
@@ -36,9 +38,12 @@ const LISTA := [
 ]
 
 const AL_PRENDER := 5.0   # segundos tras lanzar un molotov en los que sus llamas cuentan para "Pirómano"
+# Los ajustes de las ayudas que quitan los logros (los Tutoriales no: no ayudan a jugar)
+const AYUDAS := ["vida_entera", "pistola_sin_fin", "lanzar_solo"]
 
 var partida: Node
-var muertos_antes := 0    # zombis matados en otras partidas (para "Exterminador")
+var con_ayudas := false   # si en esta partida ha estado encendida alguna ayuda (aunque ya se haya apagado)
+var muertos_antes := 0    # zombis matados en otras partidas sin ayudas (para "Exterminador")
 var fregonazos := 0       # zombis matados con la fregona en esta partida
 var prendidos := 0        # zombis prendidos por el último molotov
 var molotov_t := 0.0      # segundos que le quedan al último molotov para contar
@@ -48,7 +53,9 @@ var vida_antes := 0
 
 func preparar(p: Node) -> void:
 	partida = p
-	muertos_antes = Guardado.cargar().muertos
+	var s := Guardado.cargar()
+	muertos_antes = s.muertos - s.muertos_con_ayudas
+	con_ayudas = ayudas_encendidas()
 	p.johnny.vida_cambiada.connect(func(vida, _maxima):
 		if vida < vida_antes:
 			tocado = true
@@ -57,6 +64,23 @@ func preparar(p: Node) -> void:
 
 func _process(delta: float) -> void:
 	molotov_t = maxf(0.0, molotov_t - delta)
+	# una ayuda encendida a media partida (desde la pausa): se avisa y esta partida ya no da logros
+	if not con_ayudas and ayudas_encendidas():
+		con_ayudas = true
+		partida.decir("Con ayudas encendidas, en esta partida ya no se consiguen logros", 4.0)
+
+
+# Si hay alguna ayuda de Opciones encendida ahora mismo
+static func ayudas_encendidas() -> bool:
+	for a in AYUDAS:
+		if Guardado.ajuste(a):
+			return true
+	return false
+
+
+# Si en esta partida no se pueden conseguir logros (hay una ayuda encendida o la hubo)
+func sin_logros() -> bool:
+	return con_ayudas or ayudas_encendidas()
 
 
 static func datos(id: String) -> Dictionary:
@@ -76,13 +100,13 @@ func progreso(id: String) -> int:
 	match id:
 		"fregona_oro": return fregonazos
 		"piromano": return prendidos
-		"exterminador": return muertos_antes + (partida.muertos if partida else 0)
+		"exterminador": return muertos_antes + (partida.muertos if partida and not sin_logros() else 0)
 	return 0
 
 
-# Cumplido: se apunta en el guardado y sale el aviso (si ya estaba, no pasa nada)
+# Cumplido: se apunta en el guardado y sale el aviso (si ya estaba, no pasa nada). Con ayudas, no se apunta
 func cumplir(id: String) -> void:
-	if partida == null:
+	if partida == null or sin_logros():
 		return
 	var s := Guardado.cargar()
 	if estado(s, id) != "pendiente":

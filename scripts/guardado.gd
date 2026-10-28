@@ -25,6 +25,7 @@ const NUEVO := {
 	"partidas": 0,
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
+	"muertos_con_ayudas": 0, # los de "muertos" que se mataron en partidas con ayudas: no cuentan para el logro Exterminador (logros.gd)
 	"baul": {},           # objetos guardados en el baúl de la sala de mantenimiento: {"gasolina": 2, ...}
 	"baul_equipo": [],    # las armas y los paquetes de arrojables del baúl, cada uno en su casilla y con su calidad
 	                      # (Armas.CALIDADES; parte 4 de la tienda y las piezas): [{"id": "bate", "calidad": 2},
@@ -82,7 +83,7 @@ static func cargar_archivo() -> Dictionary:
 			s[clave] = leido[clave]
 	s.ajustes = NUEVO.ajustes.duplicate(true).merged(s.ajustes, true)   # copia: las constantes no se pueden cambiar
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
-	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos"]:
+	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
 		s[clave] = int(s[clave])
 	for t in s.talentos:
 		s.talentos[t] = int(s.talentos[t])

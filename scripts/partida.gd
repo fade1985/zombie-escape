@@ -1253,6 +1253,8 @@ func terminar(gano: bool, abandona := false) -> void:
 		if not nuevo.is_empty() and not nuevo.id in g.rescatados:
 			g.rescatados.append(nuevo.id)
 		g.muertos += muertos
+		if logros.sin_logros():
+			g.muertos_con_ayudas += muertos   # con ayudas no suman para el logro Exterminador
 		var e := Guardado.edificio(g, edificio)
 		# el reto del día (reto.gd) lleva su marca aparte: no toca las plantas ni los tiempos del edificio
 		if Reto.activo:

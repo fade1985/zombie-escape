@@ -761,6 +761,91 @@ func probar_tutorial() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --logros": las ayudas de Opciones apagan los logros (logros.gd, AYUDAS). Sin ayudas, se consigue Manitas;
+# con cada una de las tres encendida, no. Si se enciende a media partida sale el aviso y, aunque se apague luego, esa
+# partida ya no da logros (la siguiente, sí). Con ayudas, los logros que ya se tenían se siguen cobrando, el ordenador lo
+# avisa y los zombis matados no suman para Exterminador (ni en el guardado). Fotos: el aviso en pantalla
+# (captura-logros-aviso.png), Opciones → Ayudas (captura-logros-opciones.png) y el programa Logros del ordenador
+# (captura-logros-ordenador.png). Cuenta todo en la terminal, con lo esperado, y se cierra
+func probar_logros() -> void:
+	set_process(false)
+	await get_tree().create_timer(0.3).timeout
+	var limpiar := func() -> void:
+		Guardado.cambiar(func(g):
+			for a in Logros.AYUDAS:
+				g.ajustes[a] = false
+			g.logros = {}
+			g.dolares = 100
+			g.muertos = 0
+			g.muertos_con_ayudas = 0)
+		logros.con_ayudas = false
+	var poner := func(ayuda: String, valor: bool) -> void:
+		Guardado.cambiar(func(g): g.ajustes[ayuda] = valor)
+	var estado := func(id: String) -> String:
+		return Logros.estado(Guardado.cargar(), id)
+	limpiar.call()
+	# 1) sin ayudas se consigue
+	logros.cumplir("manitas")
+	print("Logros · sin ayudas, Manitas: %s · sin_logros: %s (esperado: conseguido, false)" % [estado.call("manitas"), logros.sin_logros()])
+	# 2) con cada ayuda por separado, no
+	for a in Logros.AYUDAS:
+		limpiar.call()
+		poner.call(a, true)
+		logros.cumplir("manitas")
+		print("Logros · con %s, Manitas: %s · sin_logros: %s (esperado: pendiente, true)" % [a, estado.call("manitas"), logros.sin_logros()])
+	# 3) encendida a media partida: avisa, y apagada otra vez la partida sigue sin logros
+	limpiar.call()
+	await get_tree().process_frame
+	poner.call("vida_entera", true)
+	await get_tree().create_timer(0.3).timeout
+	print("Logros · encendida a media partida: con_ayudas %s · aviso «%s» (esperado: true, «Con ayudas encendidas, en esta partida ya no se consiguen logros»)" % [
+		logros.con_ayudas, aviso.text])
+	Captura.foto("captura-logros-aviso.png")
+	poner.call("vida_entera", false)
+	logros.cumplir("manitas")
+	print("Logros · apagada otra vez, Manitas: %s · sin_logros: %s (esperado: pendiente, true: toda la partida)" % [estado.call("manitas"), logros.sin_logros()])
+	# 4) los conseguidos antes se cobran igual, y el ordenador avisa
+	Guardado.cambiar(func(g): g.logros = {"desahucio": "conseguido"})
+	var antes: int = Guardado.cargar().dolares
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.3).timeout
+	for sc in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
+		sc.scroll_vertical = 0   # la lista arriba del todo, para que se vea la nota
+	await get_tree().process_frame
+	Captura.foto("captura-logros-ordenador.png")
+	ordenador.cobrar_logro("desahucio")
+	print("Logros · con ayudas, cobrar Desahucio: %s · dólares +%d (esperado: cobrado, +20)" % [
+		estado.call("desahucio"), Guardado.cargar().dolares - antes])
+	await get_tree().create_timer(0.3).timeout   # (cobrar abre la ventana otra vez: que se pinte antes de cerrarla)
+	ordenador.abrir("")
+	ordenador.apagar()
+	# 5) Exterminador: los zombis de una partida con ayudas no suman
+	logros.muertos_antes = 10
+	muertos = 5
+	var con: int = logros.progreso("exterminador")
+	logros.con_ayudas = false
+	var sin: int = logros.progreso("exterminador")
+	print("Logros · Exterminador, 10 de otras partidas y 5 de esta: con ayudas %d, sin ellas %d (esperado: 10, 15)" % [con, sin])
+	# 6) las partidas siguientes: a quien jugó con ayudas no se le cuentan en el guardado
+	Guardado.cambiar(func(g): g.muertos = 20)
+	logros.con_ayudas = true
+	terminar(false)
+	var fin := Guardado.cargar()
+	print("Logros · al acabar con ayudas, 5 zombis: muertos %d, de ellos con ayudas %d · al empezar otra partida contarían %d (esperado: 25, 5, 20)" % [
+		fin.muertos, fin.muertos_con_ayudas, fin.muertos - fin.muertos_con_ayudas])
+	await get_tree().create_timer(0.5).timeout
+	# 7) la advertencia, en Opciones → Ayudas
+	var o := Opciones.abrir(self, null, johnny)
+	o.ver("ayudas")
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-logros-opciones.png")
+	o.cerrar()
+	limpiar.call()
+	get_tree().quit()
+
+
 # Con "--captura --flatulento": el alcance de la mutación Flatulento (mutaciones.gd, MUT; antes 70, ahora 140). En
 # un apartamento con todo descubierto, Johnny en medio de su habitación más grande y tres zombis quietos en fila: a 50
 # (dentro del alcance de antes), a 110 (solo dentro del de ahora) y a 190 (fuera de los dos). Al soltar los gases,

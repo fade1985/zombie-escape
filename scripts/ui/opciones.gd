@@ -226,6 +226,8 @@ func general() -> void:
 
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo
 func ayudas() -> void:
+	var aviso := explicar("Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan.")
+	aviso.add_theme_color_override("font_color", Tema.AMARILLO)
 	rotar("Vida entera", "vida_entera", SI_NO)
 	explicar("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento.")
 	rotar("Pistola sin fin", "pistola_sin_fin", SI_NO)
@@ -242,7 +244,7 @@ func ayudas() -> void:
 		otra_vez.disabled = true)
 
 
-func explicar(texto: String) -> void:
+func explicar(texto: String) -> Label:
 	var l := Label.new()
 	l.theme_type_variation = "Sub"
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -250,6 +252,7 @@ func explicar(texto: String) -> void:
 	l.custom_minimum_size.x = 560
 	l.text = texto
 	contenido.add_child(l)
+	return l
 
 
 # Un botón que, a cada pulsación, pasa al siguiente valor de la lista, lo guarda en los ajustes y se lo

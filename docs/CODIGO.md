@@ -115,7 +115,9 @@ en una línea.
   `talentos.gd`, `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en
-  `LISTA`), `historia.gd` (dosier y noticias; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
+  `LISTA`; con una de las ayudas de `AYUDAS` encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta
+  nada; los zombis de esas partidas van aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
+  `historia.gd` (dosier y noticias; se edita sin tocar los `id`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos

@@ -678,6 +678,8 @@ func programa_logros(c: VBoxContainer) -> void:
 	cajita(fila, "Premios por cobrar", "billete", "$%d" % por_cobrar)
 	cajita(fila, "Dólares ahorrados", "billete", "$%d" % s.dolares)
 	nota(c, "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio.")
+	if partida.logros.sin_logros():
+		nota(c, "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos.")
 	var lista := rejilla(grupo(c, "Retos"))
 	for l in Logros.LISTA:
 		var e := Logros.estado(s, l.id)
