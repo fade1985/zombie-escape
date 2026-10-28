@@ -14,6 +14,8 @@
 # Sin nada más, la prueba larga (_process, en prueba_larga.gd): un apartamento, el jefe, los menús, el ordenador, el
 # inventario, las armas de efecto, la historia, las Colecciones... y se cierra. Con algo más, solo una parte:
 #   --edificio centro   en el centro comercial (vale también con las demás; lo lee menu_principal.gd)
+#   --edificios         solo la pantalla «Elige edificio»: las dos tarjetas como están en el guardado y con el centro
+#                       comercial cerrado (se cierra sin entrar en la partida; lo lee menu_principal.gd)
 #   --jefe X            el jefe de la 1ª planta (centro: el antidisturbios si no se dice; Apartamentos: la portera, en la
 #                       planta baja). OJO: solo elige el jefe; a secas, sin otra opción de esta lista, es la prueba larga
 #   --porqueria, --gimnasio, --cubos, --llamas   (con --jefe gloton, gymbro, portera o bombero) la habitación de ese

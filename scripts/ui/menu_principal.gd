@@ -6,15 +6,19 @@
 # que estén abiertos, y se apunta en el guardado para la próxima vez.
 # Con "-- --captura" saca fotos (captura-menu.png y captura-edificios.png) y pasa sola a la partida, para seguir
 # con su prueba; con "--edificio centro" además, entra en el centro comercial aunque esté cerrado. Con
-# "--alerta 3", la foto de "Elige edificio" sale con todas las alertas abiertas y la 3 elegida (sin guardarlo).
+# "--alerta 3", la foto de "Elige edificio" sale con todas las alertas abiertas y la 3 elegida (sin guardarlo). Con
+# "--edificios", solo esa pantalla (como está en el guardado de prueba y con el centro comercial cerrado) y se cierra.
 extends Control
 
 const LOGO := preload("res://assets/ui/logo.png")
+const ANCHO_TARJETA := 300   # el ancho de una tarjeta de "Elige edificio"
+const ANCHO_TEXTO := ANCHO_TARJETA - 32   # lo que queda para sus textos, con 16 de margen a cada lado
 
 var centro: CenterContainer       # el menú
 var edificios: CenterContainer    # la pantalla "Elige edificio" (se crea al pulsar JUGAR)
 var tarjetas: HBoxContainer
 var alertas := {}                  # la alerta elegida en cada edificio (alerta.gd)
+var centro_cerrado := false        # solo para la foto de "--edificios": los Apartamentos sin completar, el centro con candado
 
 
 func _ready() -> void:
@@ -95,6 +99,13 @@ func _ready() -> void:
 			jugar_reto(edificio)
 		else:
 			Captura.foto("captura-edificios.png")
+			if "--edificios" in OS.get_cmdline_user_args():   # solo esta pantalla: otra foto con el centro cerrado, y se cierra
+				centro_cerrado = true
+				poner_tarjetas()
+				await get_tree().create_timer(0.3).timeout
+				Captura.foto("captura-edificios-cerrado.png")
+				get_tree().quit()
+				return
 			jugar_partida(edificio)
 
 
@@ -145,6 +156,8 @@ func poner_tarjetas() -> void:
 	for caja in tarjetas.get_children():
 		caja.free()
 	var s := Guardado.cargar()
+	if centro_cerrado:
+		Guardado.edificio(s, "apartamentos").completado = false   # para la foto (no se guarda)
 	if Captura.activa() and Captura.dato("--alerta") != "":
 		for id in Edificios.LISTA:   # para la foto: todas abiertas y la pedida, elegida (no se guarda)
 			Guardado.edificio(s, id).alerta_max = Alerta.MAX
@@ -297,7 +310,8 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	var abierto := Edificios.abierto(s, id)
 	var p: Dictionary = s.edificios.get(id, Guardado.EDIFICIO)
 	var b := Button.new()
-	b.custom_minimum_size = Vector2(300, 250)
+	var lineas := lineas_descripcion()
+	b.custom_minimum_size = Vector2(ANCHO_TARJETA, 250 + alto_lineas(maxi(lineas - 3, 0)))   # 250 da para tres líneas de descripción
 	b.disabled = not abierto
 	b.focus_mode = Control.FOCUS_ALL if abierto else Control.FOCUS_NONE
 	b.pressed.connect(jugar_partida.bind(id))
@@ -307,7 +321,7 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	caja.offset_right = -16
 	caja.offset_top = 14
 	caja.offset_bottom = -14
-	caja.alignment = BoxContainer.ALIGNMENT_CENTER
+	caja.alignment = BoxContainer.ALIGNMENT_BEGIN   # desde arriba: si no, la tarjeta con menos líneas se corre
 	caja.add_theme_constant_override("separation", 8)
 	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(caja)
@@ -332,7 +346,8 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 		textos.append([progreso, ""])
 	else:
 		textos.append(["Completa %s para abrirlo" % Edificios.LISTA[datos.abre].el_nombre, ""])
-	for t in textos:
+	for i in textos.size():
+		var t: Array = textos[i]
 		var l := Label.new()
 		l.text = t[0]
 		l.theme_type_variation = t[1]
@@ -340,10 +355,25 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size.x = 260
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if i == 1:   # la descripción
+			l.custom_minimum_size.y = alto_lineas(lineas)   # el hueco de la más larga: lo de debajo no se corre
 		if not abierto:
 			l.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(l)
 	return b
+
+
+# Cuántas líneas ocupa la descripción más larga de los edificios, medidas con la letra del texto gris (no hace falta que
+# esté ya colocada). Todas las tarjetas dejan ese hueco, así lo de debajo queda a la misma altura en todas
+func lineas_descripcion() -> int:
+	var fuente := get_theme_font("font", "Sub")
+	var tam := get_theme_font_size("font_size", "Sub")
+	var cortes := TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE   # los de AUTOWRAP_WORD_SMART
+	var lineas := 1
+	for id in Edificios.LISTA:
+		var alto := fuente.get_multiline_string_size(Edificios.LISTA[id].desc, HORIZONTAL_ALIGNMENT_CENTER, ANCHO_TEXTO, tam, -1, cortes).y
+		lineas = maxi(lineas, roundi(alto / fuente.get_height(tam)))
+	return lineas
 
 
 func jugar_partida(id := "apartamentos") -> void:
