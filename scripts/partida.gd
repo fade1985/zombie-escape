@@ -455,6 +455,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			Sonido.tocar("jefe")
 			# en medio de la sala (la pelea empieza en el centro, nunca junto a una pared); en la azotea, en el helipuerto
 			jefa = meter_zombi(planta.jefe, sitio.helipuerto if sitio.has("helipuerto") else mapa.centro_libre())
+			logros.jefe_sale(jefa)   # (empieza su pelea: Sin un rasguño y Visto y no visto)
 			# (en la azotea, espera arriba a que suba Johnny: mirar_ring)
 			if sitio.has("helipuerto") and jefa is Minijefe:
 				jefa.esperando = true
@@ -611,12 +612,15 @@ func subir() -> void:
 		terminar(true)
 		return
 	var premio := eventos.superado()   # el apagón o el incendio de la planta que se deja: sus dólares (eventos.gd)
+	var superado := eventos.evento if premio != "" else ""
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_llegada())
 	var texto: String = "Azotea · ¡El último combate del edificio!" if planta.get("azotea", false) else planta.nombre
 	decir(texto if premio == "" else "%s · %s" % [texto, premio], 2.5 if premio == "" else 3.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
+	if superado != "":
+		logros.cumplir({"apagon": "se_fue_la_luz", "incendio": "simulacro"}[superado])
 
 
 func _physics_process(delta: float) -> void:
@@ -656,7 +660,6 @@ func _physics_process(delta: float) -> void:
 				"" if sitio.get("azotea", false) else " Las escaleras ya están abiertas"], 4.0)
 			if sitio.get("azotea", false) and final_de(planta.jefe).is_empty():
 				fin_del_edificio()   # (el jefe de relleno de una azotea sin su final: el de verdad lo llama al caer)
-			logros.cumplir("desahucio")
 		else:
 			decir("¡Piso limpio! La puerta se ha abierto")
 			logros.cumplir("primer_turno")
@@ -1114,6 +1117,7 @@ func usar_objeto(id: String) -> String:
 	if Objetos.USABLES[id].get("tercio", false):
 		johnny.devolver_tercio()
 	curar_con(cura_de(id), johnny)
+	logros.curado = true   # (ya no vale para Sin tiritas)
 	return ""
 
 
@@ -1242,7 +1246,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		return
 	terminada = true
 	if gano:
-		logros.cumplir("fin_jornada")
+		logros.partida_ganada()
 	if abandona:
 		Sonido.musica("")
 	else:
@@ -1289,6 +1293,7 @@ func terminar(gano: bool, abandona := false) -> void:
 			if e.mejor_tiempo == 0.0 or duracion < e.mejor_tiempo:
 				e.mejor_tiempo = duracion
 				record[0] = true)
+	logros.revisar()   # (lo que acaba de guardarse: el superviviente rescatado, el edificio completado...)
 	if abandona:
 		ir_al_menu()
 		return
@@ -1376,7 +1381,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			return
 		muertos += 1
 		var ardia: bool = zombi.get("arder_t") != null and zombi.arder_t > 0.0
-		logros.zombi_muerto(johnny.huecos[johnny.mano] == "fregona" and not ardia)
+		logros.zombi_muerto(johnny.huecos[johnny.mano], ardia)
+		if tipo in JEFES:
+			logros.jefe_muerto(tipo, zombi)
 		sangre(tipo, zombi)
 		if tipo == "guardia":
 			_al_caer_guardia(zombi)

@@ -1879,6 +1879,8 @@ func mejorar() -> void:
 	foco = "mejorar"
 	pintar()
 	partida.logros.cumplir("manitas")
+	if calidad >= Armas.EPICA:
+		partida.logros.cumplir("joya_corona")
 
 
 # ── Inventario y baúl: arrastrar ──

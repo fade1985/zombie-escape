@@ -9,8 +9,8 @@
 #     25 oct también vende el lanzallamas, el lanza ácido y el lanza rayos, que antes se creaban en el banco.
 #     Cuatro secciones, las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
 #     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, para esta partida, hasta su máximo.
-#   - "Logros": los retos del juego (logros.gd), para elegir cuál intentar en esta partida. Los conseguidos se
-#     cobran aquí (su premio va a los dólares ahorrados).
+#   - "Logros": los retos del juego (logros.gd), por apartados (Logros.TEMAS), para elegir cuál intentar en esta
+#     partida. Los conseguidos se cobran aquí (su premio va a los dólares ahorrados).
 #   - "Dosier": las páginas del dosier VD-7 encontradas junto a los científicos muertos (historia.gd), de todos
 #     los edificios, para releerlas. Las que faltan salen como páginas arrancadas.
 #   - "Noticias": las emisiones de Canal 8 ya salidas (historia.gd), en una tele vieja (ui/tele.gd). Las que no se
@@ -731,6 +731,7 @@ func comprar_lanzable(k: String) -> void:
 # ── Logros ──
 
 func programa_logros(c: VBoxContainer) -> void:
+	partida.logros.revisar()   # (lo que ya llegue por el guardado, como un talento recién comprado, sale conseguido)
 	var s := Guardado.cargar()
 	var hechos := 0
 	var por_cobrar := 0
@@ -749,22 +750,25 @@ func programa_logros(c: VBoxContainer) -> void:
 	nota(c, "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio.")
 	if partida.logros.sin_logros():
 		nota(c, "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos.")
-	var lista := rejilla(grupo(c, "Retos"))
-	for l in Logros.LISTA:
-		var e := Logros.estado(s, l.id)
-		var etiqueta: String = {"pendiente": "$%d" % l.premio, "conseguido": "COBRAR $%d" % l.premio, "cobrado": "HECHO"}[e]
-		var hecho: int = l.meta if e != "pendiente" else mini(partida.logros.progreso(l.id), l.meta)
-		var barra: Array = [hecho, l.meta] if l.meta > 1 else []
-		var b := tarjeta(lista, "b_" + l.id, l.icono, l.nombre, l.desc, etiqueta,
-			{"pendiente": "apagada", "conseguido": "", "cobrado": "lleno"}[e], [], barra)
-		var cuenta: String = {"partida": " (en una partida)", "total": " (sumando partidas)"}.get(l.cuenta, "")
-		var explica: String = {
-			"pendiente": ("Premio: $%d. Llevas %d de %d%s." % [l.premio, hecho, l.meta, cuenta]) if l.meta > 1
-				else "Premio: $%d. Aún no lo has conseguido." % l.premio,
-			"conseguido": "¡Conseguido! Pulsa para cobrar $%d." % l.premio,
-			"cobrado": "Conseguido y cobrado.",
-		}[e]
-		enlazar(b, "%s: %s %s" % [l.nombre, l.desc, explica], cobrar_logro.bind(l.id))
+	# por apartados (Logros.TEMAS), cada uno con sus tarjetas en dos columnas
+	for tema in Logros.TEMAS:
+		var lista := rejilla(grupo(c, Logros.TEMAS[tema]))
+		for l in Logros.LISTA.filter(func(x): return x.tema == tema):
+			var e := Logros.estado(s, l.id)
+			var etiqueta: String = {"pendiente": "$%d" % l.premio, "conseguido": "COBRAR $%d" % l.premio, "cobrado": "HECHO"}[e]
+			var meta := Logros.meta(l)
+			var hecho: int = meta if e != "pendiente" else mini(partida.logros.progreso(l.id, s), meta)
+			var barra: Array = [hecho, meta] if meta > 1 else []
+			var b := tarjeta(lista, "b_" + l.id, l.icono, l.nombre, l.desc, etiqueta,
+				{"pendiente": "apagada", "conseguido": "", "cobrado": "lleno"}[e], [], barra)
+			var cuenta: String = {"partida": " (en una partida)", "total": " (sumando partidas)"}.get(l.cuenta, "")
+			var explica: String = {
+				"pendiente": ("Premio: $%d. Llevas %d de %d%s." % [l.premio, hecho, meta, cuenta]) if meta > 1
+					else "Premio: $%d. Aún no lo has conseguido." % l.premio,
+				"conseguido": "¡Conseguido! Pulsa para cobrar $%d." % l.premio,
+				"cobrado": "Conseguido y cobrado.",
+			}[e]
+			enlazar(b, "%s: %s %s" % [l.nombre, l.desc, explica], cobrar_logro.bind(l.id))
 	info.text = "Pasa por encima de un logro para ver cómo vas."
 
 

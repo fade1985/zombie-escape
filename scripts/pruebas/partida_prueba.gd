@@ -100,7 +100,9 @@
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno, los
 #                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
 #                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]
-#   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador [prueba_varias.gd]
+#   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador; y los
+#                       40 logros (M17): el repaso del guardado, los de jefes, racha, arsenal, ganar, reto y horda, y
+#                       el ordenador por apartados                                          [prueba_varias.gd]
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
 #   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Lobezno hasta la mitad, el alcance de

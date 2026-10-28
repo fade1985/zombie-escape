@@ -36,6 +36,9 @@ const NUEVO := {
 	"skins": [],          # las skins desbloqueadas (ids de Skins.LISTA): se quedan para siempre
 	"skins_nuevo": false, # hay una skin sin ver en la taquilla desde la última vez que se abrió (el «!» de la taquilla)
 	"logros": {},         # estado de cada logro (logros.gd): {"desahucio": "conseguido" | "cobrado"}
+	"logros_cuentas": {}, # lo que se cuenta solo para los logros (logros.gd), sin las partidas con ayudas: jefes
+	                      # derrotados, partidas ganadas, armas con las que se ha matado y reglas del reto completadas:
+	                      # {"jefes": 3, "victorias": 1, "armas": ["fregona"], "reglas": ["cuerpo"]}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador

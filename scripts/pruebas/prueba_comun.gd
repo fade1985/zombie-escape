@@ -11,6 +11,9 @@ func _ready() -> void:
 func preparar_prueba() -> void:
 	Guardado.archivo = "user://guardado-prueba.json"   # la prueba no toca el guardado de verdad
 	SalaArmas.escondido = false   # la sala de pruebas, con sus líneas y su panel de daño a la vista (en el juego empieza sin ellos)
+	# sin el repaso de los logros que salen del guardado (logros.gd, revisar): sus avisos saldrían en las fotos de
+	# cualquier prueba; la de --logros lo hace a mano
+	logros.repasar = false
 	# con "--alerta 5", la prueba se juega con esa alerta (alerta.gd); sin él, sin alerta
 	Alerta.nivel = int(Captura.dato("--alerta", "0"))
 	# con "--evento apagon" (incendio, horda), la prueba de ese evento sorpresa (eventos.gd)

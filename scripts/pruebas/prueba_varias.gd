@@ -865,6 +865,7 @@ func probar_logros() -> void:
 	logros.con_ayudas = false
 	var sin: int = logros.progreso("exterminador")
 	print("Logros · Exterminador, 10 de otras partidas y 5 de esta: con ayudas %d, sin ellas %d (esperado: 10, 15)" % [con, sin])
+	await probar_logros_nuevos(limpiar)
 	# 6) las partidas siguientes: a quien jugó con ayudas no se le cuentan en el guardado
 	Guardado.cambiar(func(g): g.muertos = 20)
 	logros.con_ayudas = true
@@ -881,6 +882,175 @@ func probar_logros() -> void:
 	o.cerrar()
 	limpiar.call()
 	get_tree().quit()
+
+
+# Parte de --logros: los logros del M17 (28 oct). Lo que piden los que salen del guardado (meta) y el repaso que los da
+# por conseguidos (revisar), con un solo aviso para todos (captura-logros-varios.png); los de los jefes (Desahucio solo
+# con la portera, Sin un rasguño, Por los pelos, Visto y no visto y Cazajefes); Racha imparable (y que un golpe la
+# corta); Arsenal completo; los de ganar (Jornada exprés, Sin tiritas, las alertas, Buena compañía, Empleado del mes y,
+# en el reto del día, Reto aceptado y Ninguna regla me para); Contra la marea, y el programa Logros del ordenador por
+# apartados (captura-logros-temas.png, arriba, y captura-logros-temas-abajo.png). Deja el guardado como estaba
+func probar_logros_nuevos(limpiar: Callable) -> void:
+	var copia := Guardado.cargar()
+	var claves := ["skins", "skin", "bestiario", "paginas", "encontrados", "rescatados", "talentos", "edificios",
+		"logros_cuentas", "dolares"]
+	limpiar.call()
+	logros.repasar = true
+	var estados := func(ids: Array) -> String:
+		var s := Guardado.cargar()
+		return ", ".join(ids.map(func(id): return "%s %s" % [id, Logros.estado(s, id)]))
+	var conseguidos := func() -> Array:
+		var s := Guardado.cargar()
+		return Logros.LISTA.filter(func(l): return Logros.estado(s, l.id) != "pendiente").map(func(l): return l.id)
+	# 1) lo que piden los que salen del guardado
+	var metas := {}
+	for l in Logros.LISTA:
+		if l.has("mira"):
+			metas[l.id] = Logros.meta(l)
+	print("Logros nuevos · %d en total · metas %s (esperado: 40; comunidad 3, plantilla 3, vestuario 4, naturalista 22, investigador 10, chatarrero 8, especialista 36, conserje_total 108, arsenal 9, todas_reglas 7, cazajefes 25, empleado_mes 10, liquidacion 1, cambio_look 1)" % [
+		Logros.LISTA.size(), metas])
+	# 2) el repaso: con todo eso en el guardado, conseguidos de golpe y en un solo aviso
+	Guardado.cambiar(func(g):
+		g.skins = Skins.LISTA.keys()
+		g.skin = "gymbro"
+		g.bestiario = Bestiario.LISTA.keys()
+		g.paginas = []
+		for id in Historia.DOSIERES:
+			g.paginas.append_array(Historia.DOSIERES[id].paginas.map(func(p): return p.id))
+		g.encontrados = Objetos.NOMBRES.keys()
+		g.rescatados = supervivientes.de_edificio("apartamentos")
+		g.talentos = {}
+		for t in Talentos.LISTA:
+			if t.rama == "militar":
+				g.talentos[t.id] = t.max
+		Guardado.edificio(g, "centro").completado = true
+		g.logros_cuentas = {})
+	logros.revisar()
+	print("Logros nuevos · repaso: %s (esperado: liquidacion, especialista, comunidad, cambio_look, vestuario, naturalista, investigador, chatarrero)" % [
+		conseguidos.call()])
+	await get_tree().create_timer(0.3).timeout
+	print("Logros nuevos · el aviso: «%s» (esperado: ¡8 logros conseguidos! Míralos y cobra los premios en el ordenador)" % aviso.text)
+	Captura.foto("captura-logros-varios.png")
+	# 3) los jefes
+	Guardado.cambiar(func(g): g.logros = {})
+	var jefes := ["desahucio", "sin_rasguno", "por_los_pelos", "visto_y_no_visto"]
+	var z1 := Node2D.new()
+	johnny.vida = johnny.stats.vida_max
+	logros.jefe_sale(z1)
+	logros.pelea_t = 40.0
+	logros.tocado_jefe = true
+	logros.jefe_muerto("gloton", z1)
+	print("Logros nuevos · el Glotón, 40 s de pelea, tocado y con toda la vida: %s (esperado: los cuatro pendientes)" % estados.call(jefes))
+	var z2 := Node2D.new()
+	johnny.vida = int(johnny.stats.vida_max * 0.05)
+	logros.jefe_sale(z2)
+	logros.pelea_t = 10.0
+	logros.jefe_muerto("portera", z2)
+	johnny.vida = johnny.stats.vida_max
+	print("Logros nuevos · la portera, 10 s de pelea, sin tocar y con el 5 %% de vida: %s (esperado: los cuatro conseguidos)" % estados.call(jefes))
+	z1.free()
+	z2.free()
+	var jefes_contados := int(Guardado.cargar().logros_cuentas.get("jefes", 0))
+	Guardado.cambiar(func(g): g.logros_cuentas.jefes = 24)
+	logros.jefe_muerto("gymbro", null)
+	logros.revisar()
+	print("Logros nuevos · jefes contados %d; con 24 y uno más: %s (esperado: 2, cazajefes conseguido)" % [
+		jefes_contados, estados.call(["cazajefes"])])
+	# 4) la racha: 29 seguidos no, 30 sí; un golpe la corta
+	logros.racha = 0
+	logros.mejor_racha = 0
+	for i in 29:
+		logros.zombi_muerto("pistola", false)
+	var con_29 := estados.call(["racha"]) as String
+	logros.zombi_muerto("pistola", false)
+	logros.vida_antes = 100
+	johnny.vida_cambiada.emit(90, 100)
+	print("Logros nuevos · racha: con 29 %s, con 30 %s · tras un golpe racha %d, la mejor %d (esperado: pendiente, conseguido, 0, 30)" % [
+		con_29, estados.call(["racha"]), logros.racha, logros.mejor_racha])
+	# 5) el arsenal: con todas menos el MP5, el rifle no cuenta y el MP5 lo completa
+	var sin_mp5: Array = Logros.arsenal().filter(func(id): return id != "mp5")
+	Guardado.cambiar(func(g): g.logros_cuentas.armas = sin_mp5)
+	logros.armas_usadas = sin_mp5.duplicate()
+	logros.zombi_muerto("rifle", false)
+	logros.revisar()
+	var con_rifle := estados.call(["arsenal"]) as String
+	logros.zombi_muerto("mp5", false)
+	logros.revisar()
+	print("Logros nuevos · arsenal: tras el rifle %s, tras el MP5 %s (esperado: pendiente, conseguido)" % [con_rifle, estados.call(["arsenal"])])
+	# 6) ganar: con la Alerta 5, en 100 s, sin curarse, con un vecino y con 9 ganadas antes
+	var ganar := ["fin_jornada", "jornada_expres", "sin_tiritas", "alerta_naranja", "alerta_maxima", "buena_compania",
+		"empleado_mes", "reto_aceptado", "todas_reglas"]
+	Guardado.cambiar(func(g):
+		g.logros = {}
+		g.logros_cuentas.victorias = 9)
+	var vecino: Aliado = supervivientes.crear(Supervivientes.DATOS.policia, "equipo")
+	vecino.es_vecino = true
+	supervivientes.equipo.append(vecino)
+	var duracion_antes := duracion
+	Alerta.nivel = 5
+	duracion = 100.0
+	logros.curado = false
+	logros.partida_ganada()
+	logros.revisar()
+	print("Logros nuevos · ganar con la Alerta 5: %s (esperado: los 7 primeros conseguidos, reto_aceptado y todas_reglas pendientes)" % estados.call(ganar))
+	supervivientes.equipo.erase(vecino)
+	vecino.free()
+	# y el reto del día: en 2000 s, curándose y sin vecino; con las 7 reglas, Ninguna regla me para
+	Guardado.cambiar(func(g):
+		g.logros = {}
+		g.logros_cuentas.victorias = 0)
+	Alerta.nivel = 0
+	duracion = 2000.0
+	logros.curado = true
+	Reto.activo = true
+	Reto.regla = "cuerpo"
+	logros.partida_ganada()
+	var reglas: Array = Guardado.cargar().logros_cuentas.get("reglas", [])
+	Guardado.cambiar(func(g): g.logros_cuentas.reglas = Reto.REGLAS.keys())
+	logros.revisar()
+	print("Logros nuevos · ganar el reto «cuerpo»: reglas %s · %s (esperado: [cuerpo]; fin_jornada y reto_aceptado conseguidos y, con las 7 reglas, todas_reglas; los demás pendientes, salvo buena_compania si la prueba lleva acompañante)" % [
+		reglas, estados.call(ganar)])
+	Reto.activo = false
+	Reto.regla = ""
+	duracion = duracion_antes
+	logros.curado = false
+	# 7) la horda del pasillo: el logro, cuando ya se ha leído lo del premio
+	Guardado.cambiar(func(g): g.logros = {})
+	eventos.premio()
+	var al_momento := estados.call(["contra_marea"]) as String
+	await get_tree().create_timer(3.8, false).timeout
+	print("Logros nuevos · horda vencida: al momento %s, a los 3,8 s %s (esperado: pendiente, conseguido)" % [al_momento, estados.call(["contra_marea"])])
+	# 8) el ordenador, por apartados (con unos cuantos conseguidos, cobrados y a medias)
+	Guardado.cambiar(func(g):
+		g.logros = {"primer_turno": "cobrado", "fin_jornada": "cobrado", "desahucio": "conseguido", "vestuario": "conseguido"}
+		g.logros_cuentas = {"jefes": 7, "victorias": 3, "armas": ["fregona", "pistola", "bate"]}
+		g.skins = ["portero", "gloton"]
+		g.skin = ""
+		g.rescatados = ["policia"]
+		g.talentos = {}
+		g.edificios.erase("centro"))
+	logros.repasar = false   # (para que se vea a medias lo que ya tiene en el guardado)
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.3).timeout
+	for sc in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
+		sc.scroll_vertical = 0
+	await get_tree().process_frame
+	Captura.foto("captura-logros-temas.png")
+	print("Logros nuevos · ordenador: apartados %s (esperado: Edificios, Jefes, Combate, Armas y talentos, Supervivientes, Sorpresas y retos, Colecciones)" % [
+		ordenador.ventana.find_children("*", "Label", true, false).map(func(l): return l.text).filter(func(t): return t in Logros.TEMAS.values())])
+	for sc in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
+		sc.scroll_vertical = 100000
+	await get_tree().process_frame
+	Captura.foto("captura-logros-temas-abajo.png")
+	ordenador.abrir("")
+	ordenador.apagar()
+	# el guardado, como estaba
+	Guardado.cambiar(func(g):
+		for k in claves:
+			g[k] = copia[k])
+	limpiar.call()
 
 
 # Con "--captura --flatulento": el alcance de la mutación Flatulento (mutaciones.gd, MUT; antes 70, ahora 140). En

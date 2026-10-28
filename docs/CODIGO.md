@@ -141,9 +141,16 @@ en una línea.
   `--talentos-altos`),
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
-  `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (uno = una línea en
-  `LISTA`; con una de las ayudas de `AYUDAS` encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta
-  nada; los zombis de esas partidas van aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
+  `baul_equipo`, las armas y los paquetes de arrojables con su calidad), `logros.gd` (40 desde el M17, 28 oct; uno =
+  una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
+  —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
+  `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el
+  programa Logros; `meta()` y `hecho()` dicen cuánto piden y cuánto llevan. Lo que solo cuentan los logros —jefes,
+  victorias, armas con las que se ha matado, reglas del reto— va en `logros_cuentas` del guardado. Los de jefes, en
+  `jefe_sale` y `jefe_muerto`; los de ganar, en `partida_ganada`; varios a la vez salen en un solo aviso, `avisar`. En
+  la partida de prueba el repaso va apagado, `repasar`, salvo en `--logros`. Con una de las ayudas de `AYUDAS`
+  encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta nada; los zombis de esas partidas van
+  aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
   `historia.gd` (dosier y noticias, con la historia resumida arriba; se edita sin tocar los `id` y todos los textos
   se ven con `--historia`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).

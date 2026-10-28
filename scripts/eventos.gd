@@ -349,6 +349,8 @@ func premio() -> void:
 	partida.soltar_municion(johnny.position + Vector2(40, 30))
 	partida.decir("¡Horda vencida! Te deja $%d y una caja de munición" % n, 3.5)
 	Sonido.tocar("limpio")
+	# el logro Contra la marea, cuando ya se ha leído lo del premio (su aviso lo taparía)
+	get_tree().create_timer(3.5, false).timeout.connect(partida.logros.cumplir.bind("contra_marea"))
 
 
 # Al subir a la siguiente planta (partida.gd, subir): si en esta ha habido apagón o incendio, sus dólares (los de
