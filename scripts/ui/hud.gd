@@ -30,6 +30,11 @@ const ANCHO := 236.0      # la barra a tamaño 1 (el dibujo mide 236×26)
 const ALTO := 26.0
 # El hueco de dentro del marco, por donde se ve la sangre (en partes de la barra, como en style.css)
 const HUECO := Rect2(0.046 * ANCHO, 0.28 * ALTO, 0.908 * ANCHO, 0.44 * ALTO)
+# La barra del escudo (M22): el marco de la de vida a media altura (barra-escudo.png, 236×13: sus filas de arriba, las
+# del medio y las de abajo, sin deformar los remaches, y con el filo de dentro en azul), y su hueco
+const MARCO_ESCUDO := preload("res://assets/ui/barra-escudo.png")
+const ALTO_ESCUDO := 13.0
+const HUECO_ESCUDO := Rect2(0.046 * ANCHO, 3.0, 0.908 * ANCHO, 7.0)
 const ABAJO := 8.0        # lo que queda entre el borde de abajo de la pantalla y la barra o las casillas
 # Todo el HUD, una vez y media más grande que sus medidas (cada píxel del dibujo, 3 de pantalla en vez de 2: se sigue
 # viendo nítido). Más no cabe: al doble, la parte de la izquierda y la de la derecha se pisarían en una pantalla de 960
@@ -89,6 +94,11 @@ var perdida := -1.0       # hasta dónde llega el trozo claro de lo perdido
 var espera := 0.0
 var temblor := 0.0        # el temblor de la barra al recibir un golpe (se apaga solo)
 var tiempo := 0.0
+# Lo mismo para la barra del escudo
+var escudo_vista := -1.0
+var escudo_perdida := -1.0
+var escudo_espera := 0.0
+var escudo_temblor := 0.0
 
 # Las balas que salen volando del cargador al disparar (se pintan cayendo y apagándose) y las que entran al
 # recargar (aparecen con un saltito)
@@ -143,6 +153,7 @@ func _process(delta: float) -> void:
 	mirar_lanzar(delta)
 	mirar_curas(delta)
 	mover_barra(delta)
+	mover_escudo(delta)
 	mirar_balas(delta)
 	barra.queue_redraw()
 	curas.queue_redraw()
@@ -463,6 +474,33 @@ func mover_barra(delta: float) -> void:
 	barra.position.y = fila.size.y - ALTO + roundf(cos(tiempo * 55.0) * 2.0 * temblor)   # (abajo en la fila, como las curas)
 
 
+# Como mover_barra, con el escudo: lo lleno es lo que le queda de lo que le dan en cada planta (Acero, Blindaje y
+# Endurecimiento). Un golpe al escudo hace temblar solo su barra, porque la vida no se toca
+func mover_escudo(delta: float) -> void:
+	var tope: float = maxf(johnny.stats.escudo + johnny.stats.escudo_mut, johnny.escudo)
+	var parte := clampf(johnny.escudo / tope, 0.0, 1.0) if tope > 0.0 else 0.0
+	if escudo_vista < 0.0:
+		escudo_vista = parte
+		escudo_perdida = parte
+	if parte < escudo_vista:
+		escudo_perdida = maxf(escudo_perdida, escudo_vista)
+		escudo_vista = parte
+		escudo_espera = ESPERA
+		escudo_temblor = 1.0
+	elif parte > escudo_vista:
+		escudo_vista = move_toward(escudo_vista, parte, delta * BAJADA * 0.6)   # el escudo nuevo de cada planta: sube poco a poco
+	escudo_espera -= delta
+	if escudo_espera <= 0.0:
+		escudo_perdida = move_toward(escudo_perdida, escudo_vista, delta * BAJADA * 0.5)
+	escudo_perdida = maxf(escudo_perdida, escudo_vista)
+	escudo_temblor = move_toward(escudo_temblor, 0.0, delta * 3.0)
+
+
+# Si se ve la barra del escudo: mientras le quede y, al romperse, hasta que acaba de bajar el trozo perdido
+func con_escudo() -> bool:
+	return johnny.escudo > 0.0 or escudo_perdida > 0.0
+
+
 # Compara las balas con las del fotograma anterior: las que faltan salen volando, las que sobran entran
 func mirar_balas(delta: float) -> void:
 	for g in gastadas:
@@ -533,13 +571,38 @@ func pintar_barra() -> void:
 	barra.draw_texture_rect(MARCO, Rect2(0, 0, ANCHO, ALTO), false)
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(vida), roundi(maxima)]
-	if johnny.escudo > 0.0:
-		texto += "  escudo %d" % ceili(johnny.escudo)   # Acero
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
 	var donde := Vector2((ANCHO - ancho) / 2.0, ALTO / 2.0 + 5)
 	barra.draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)
 	barra.draw_string(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#f0e8d4"))
+	if con_escudo():
+		pintar_escudo()
 	pintar_balas()
+
+
+# La barra del escudo, pegada encima de la de vida, borde con borde (y las balas, encima de ella): dentro, el acero
+# azul con su brillo, como la armadura del Gymbro (barra_jefe.gd), y lo perdido en claro, como en la de vida; encima,
+# lo que le queda en números
+func pintar_escudo() -> void:
+	var temblor_escudo := Vector2(sin(tiempo * 70.0) * 3.0, cos(tiempo * 55.0) * 2.0) * escudo_temblor
+	barra.draw_set_transform(Vector2(0, -ALTO_ESCUDO) + temblor_escudo.round())
+	barra.draw_rect(HUECO_ESCUDO, Color("#1a1620"))
+	var claro := HUECO_ESCUDO
+	claro.size.x *= escudo_perdida
+	barra.draw_rect(claro, Color("#f4faff") if escudo_espera > ESPERA - 0.08 else Color("#b8cde4"))
+	var lleno := HUECO_ESCUDO
+	lleno.size.x *= escudo_vista
+	barra.draw_rect(lleno, Color("#7f9fc2"))
+	barra.draw_rect(Rect2(lleno.position, Vector2(lleno.size.x, 2)), Color("#d8ecff"))
+	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y - 2), Vector2(lleno.size.x, 2)), Color("#55708f"))
+	barra.draw_texture_rect(MARCO_ESCUDO, Rect2(0, 0, ANCHO, ALTO_ESCUDO), false)
+	var fuente := Tema.FUENTE
+	var texto := "escudo %d" % ceili(johnny.escudo)
+	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+	var donde := Vector2(roundf((ANCHO - ancho) / 2.0), ALTO_ESCUDO / 2.0 + 5)
+	barra.draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)
+	barra.draw_string(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#f0e8d4"))
+	barra.draw_set_transform(Vector2.ZERO)
 
 
 # Las balas del cargador, en fila encima de la barra (el lanzallamas y el lanza ácido, su depósito)
@@ -556,7 +619,7 @@ func pintar_balas() -> void:
 		tam = Vector2(3, 8)
 		hueco = 1.0
 	var x := HUECO.position.x
-	var abajo := -4.0
+	var abajo := -4.0 - (ALTO_ESCUDO if con_escudo() else 0.0)   # (con escudo, encima de su barra)
 	var dibujo: Texture2D = CARTUCHO if w.cartucho else BALA
 	var sitios := []   # dónde va cada bala, para las que salen volando
 	for i in w.cargador:
@@ -604,7 +667,7 @@ func pintar_balas() -> void:
 func pintar_deposito(w: Dictionary, lejos: bool) -> void:
 	var colores: Array = COLORES_DEPOSITO[w.relleno]
 	var a := 0.5 if lejos else 1.0
-	var r := Rect2(HUECO.position.x, -18.0, 120.0, 14.0)
+	var r := Rect2(HUECO.position.x, -18.0 - (ALTO_ESCUDO if con_escudo() else 0.0), 120.0, 14.0)
 	var parte: float = johnny.deposito / w.deposito
 	if johnny.recargando > 0.0:
 		parte = 1.0 - johnny.recargando / w.recarga

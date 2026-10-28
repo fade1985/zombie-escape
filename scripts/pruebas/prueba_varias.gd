@@ -204,6 +204,42 @@ func probar_reto() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --escudo": el escudo de Acero (M23) y su barra en el HUD (M22). Mientras le queda, lo que le quitan
+# sale del escudo y la vida no se toca: un golpe de 20, otro de 20 con Durito 3 (al escudo, lo rebajado), el daño poco a
+# poco de un charco (quitar_vida) y el golpe que lo rompe (lo que sobra, a la vida). Fotos de la barra, pegada encima
+# de la de vida y con las balas encima: llena (captura-escudo.png), recién golpeada, con lo perdido en claro
+# (captura-escudo-golpe.png), y ya rota, sin barra y con las balas en su sitio (captura-escudo-roto.png). Se cierra
+func probar_escudo() -> void:
+	set_process(false)
+	var hud: Control = $Pantalla/HUD
+	johnny.escudo = 0.0
+	aplicar_talentos({"acero": 1})
+	johnny.vida = johnny.stats.vida_max
+	await get_tree().create_timer(1.5).timeout   # (la barra se llena poco a poco)
+	print("Escudo · con Acero: %d (esperado: 50), barra a la vista %s (esperado: true)" % [roundi(johnny.escudo), hud.con_escudo()])
+	Captura.foto("captura-escudo.png")
+	var vida: int = johnny.vida
+	var golpe := func(n: int) -> void:
+		johnny.invulnerable = 0.0
+		johnny.recibir_dano(n)
+	golpe.call(20)
+	print("Escudo · golpe de 20: escudo %d, vida -%d (esperado: 30 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-escudo-golpe.png")
+	aplicar_talentos({"acero": 1, "durito": 3})
+	golpe.call(20)
+	print("Escudo · golpe de 20 con Durito 3: escudo %d, vida -%d (esperado: 13 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
+	johnny.quitar_vida(4)
+	print("Escudo · 4 de un charco: escudo %d, vida -%d (esperado: 9 y 0)" % [roundi(johnny.escudo), vida - johnny.vida])
+	aplicar_talentos({"acero": 1})
+	golpe.call(24)
+	print("Escudo · golpe de 24 con 9 de escudo: escudo %d, vida -%d (esperado: 0 y 15)" % [roundi(johnny.escudo), vida - johnny.vida])
+	await get_tree().create_timer(3.0).timeout   # (lo perdido, en claro, tarda en bajar como en la de vida)
+	print("Escudo · roto: barra a la vista %s (esperado: false)" % hud.con_escudo())
+	Captura.foto("captura-escudo-roto.png")
+	get_tree().quit()
+
+
 # Con "--captura --hud": el HUD (hud.gd), con las armas y los lanzables en la esquina de abajo a la derecha. Con
 # tres lanzables a mano, saca el HUD quieto (captura-hud.png), a medio cambiar de arma con la Q
 # (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la

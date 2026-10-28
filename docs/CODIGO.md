@@ -159,7 +159,13 @@ en una línea.
 - `sonido.gd` (autoload: efectos sintetizados y música), `controles.gd` (las teclas cambiadas en Opciones).
 
 **ui/**
-- `hud.gd`, `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
+- `hud.gd` (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
+  sacado de `barra-vida.png` cogiendo solo algunas de sus filas para que no se deformen los remaches; mientras se ve,
+  las balas y el depósito suben encima de ella; `mover_escudo`, `pintar_escudo`, `con_escudo`; se prueba con
+  `--escudo`). El escudo (Acero, Blindaje, Endurecimiento: `johnny.escudo`, M23) se gasta antes que la vida: en
+  `johnny.quitar_vida`, todo lo que le quitan (golpes, charcos, el ácido del Glotón) sale del escudo, ya rebajado por
+  Durito, y lo que sobra del golpe que lo rompe, de la vida.
+- `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
   jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»), `opciones.gd`, `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`

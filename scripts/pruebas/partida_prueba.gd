@@ -95,6 +95,7 @@
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
 #                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
+#   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno, los
 #                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
@@ -325,6 +326,9 @@ func empezar_prueba() -> void:
 	elif "--hud" in args:
 		set_process(false)   # sin la prueba larga
 		probar_hud()
+	elif "--escudo" in args:
+		set_process(false)   # sin la prueba larga
+		probar_escudo()
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()

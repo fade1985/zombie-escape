@@ -37,7 +37,7 @@ const LISTA := [
 	{"id": "ansiedad", "nombre": "Ansiedad", "icono": "cafe",
 		"desc": "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"},
 	{"id": "endurecimiento", "nombre": "Endurecimiento", "icono": "fuerza",
-		"desc": "La piel se endurece: escudo de 60 en cada planta que para la mitad de cada golpe hasta gastarse"},
+		"desc": "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"},
 	{"id": "locura", "nombre": "Locura", "icono": "jefe",
 		"desc": "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"},
 	{"id": "flatulento", "nombre": "Flatulento", "icono": "herramientas",

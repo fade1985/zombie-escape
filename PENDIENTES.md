@@ -19,11 +19,6 @@ _(ninguno por ahora)_
 - **M18.** Arrojables: que se puedan coger en el inventario en montones de 5, hasta que se llene el inventario (lleno,
   no se pueden llevar más). Cuando se acaban los que tienes en la mano, coges otros cinco del inventario. Los que
   sobren al pasarte la partida van al baúl, como cualquier objeto.
-- **M22.** Los escudos que se pone Johnny (Acero, Endurecimiento): que se vean en el HUD como una barra aparte, como la
-  de los jefes.
-- **M23.** Escudos de Johnny, cómo funcionan: mientras tengas escudo, la vida roja no se toca; los golpes bajan el
-  escudo como bajaría la vida, con el modificador de resistencia que tenga. Cuando se acaba el escudo, la vida vuelve
-  a bajar como siempre.
 
 ## Por limar
 

@@ -98,7 +98,7 @@ var pisando := {}          # los estados de los charcos que pisa en este paso
 var estado_dano := 0.0     # el daño de los estados que se va sumando hasta llegar a un punto entero
 var llamas: Llamas         # las llamas que le salen si arde
 var a_la_vista := 0        # Ansiedad: los zombis despiertos que se ven en pantalla
-var escudo := 0.0          # Acero: lo que le queda de escudo en esta planta
+var escudo := 0.0          # Acero y Endurecimiento: lo que le queda de escudo en esta planta (se gasta antes que la vida)
 var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
 var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
 var esquiva_dir := Vector2.DOWN
@@ -1242,14 +1242,10 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 		Sonido.tocar("esquiva")
 		return
 	invulnerable = INVULNERABLE
-	# Durito quita un poco a cada golpe (sin bajar de GOLPE_MINIMO de lo que era); el escudo de Acero para la mitad
-	# de lo que queda mientras dure
+	# Durito quita un poco a cada golpe (sin bajar de GOLPE_MINIMO de lo que era); lo que queda se lo lleva el escudo,
+	# si le queda (quitar_vida())
 	var minimo := maxi(1, roundi(cantidad * GOLPE_MINIMO))
 	var dano := maxi(minimo, roundi(cantidad * stats.dano_recibido) - stats.armadura)
-	if escudo > 0.0:
-		var parado := minf(escudo, dano / 2.0)
-		escudo -= parado
-		dano = maxi(1, roundi(dano - parado))
 	Sonido.tocar("dano")
 	Temblor.temblar(9.0)
 	Tactil.vibracion()
@@ -1326,6 +1322,14 @@ func empujar(fuerza: Vector2) -> void:
 func quitar_vida(cantidad: int) -> void:
 	if invencible:
 		return
+	# El escudo (Acero, Blindaje, Endurecimiento): mientras le quede, todo lo que le quitan (golpes, charcos, el ácido
+	# del Glotón) sale del escudo y la vida no se toca; lo que sobra del golpe que lo rompe, de la vida
+	if escudo > 0.0:
+		var parado := minf(escudo, cantidad)
+		escudo -= parado
+		cantidad = roundi(cantidad - parado)
+		if cantidad <= 0:
+			return
 	vida = max(vida - cantidad, 0)
 	# Al bajar de un tercio, ese tercio se pierde (vidaTope en el JS); con la ayuda "Vida entera", no
 	if not Guardado.ajuste("vida_entera"):
