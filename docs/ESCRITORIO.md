@@ -19,6 +19,19 @@ las de Godot (`%APPDATA%\Godot\export_templates\4.7.2.stable`). Tarda un par de 
 - Si se han añadido dibujos nuevos, antes `--headless --path . --import`.
 - El robot de GitHub (`.github/workflows/web.yml`) solo publica la web: la de Windows se exporta a mano.
 
+## El icono y los datos del `.exe`
+
+El `.exe` lleva el icono de Johnny (`assets/icono.ico`, hecho de `assets/icono.png`, que también es el icono del
+proyecto: ventana, barra de tareas y pestaña de la web) y su nombre, descripción y versión (`application/*` del preset).
+Para meterlos Godot usa **`rcedit`** (`rcedit-x64.exe`, versión 2.0.0 de https://github.com/electron/rcedit/releases,
+unos 1,3 MB). Es una configuración **de cada equipo**, no va en git: bajarlo a una carpeta (aquí,
+`C:\Users\angel\Tools\rcedit\`) y apuntar su ruta en Godot → Editor → Editor Settings → Export → Windows → Rcedit (o en
+`%APPDATA%\Godot\editor_settings-4.7.tres`, la línea `export/windows/rcedit = "C:/.../rcedit-x64.exe"`, con el editor
+cerrado). Sin él, el preset (`application/modify_resources=true`) falla al exportar: si falla, es esto. Para cambiar el
+icono: nuevo PNG cuadrado → `.ico` con los tamaños 16–256 (Pillow: `Image.save("icono.ico", sizes=[...])`) y exportar
+otra vez. Quedan vacíos la empresa y el copyright (`company_name`, `copyright`): rellenarlos si se quiere. Se comprueba
+con `(Get-Item ZombieEscape.exe).VersionInfo` y extrayendo el icono con `ExtractAssociatedIcon`.
+
 ## Probar el `.exe`
 
 - Las pruebas corren dentro del exportado igual que en el editor, pasando el `--` de siempre; con `--log-file` se ve lo
@@ -41,8 +54,7 @@ las de Godot (`%APPDATA%\Godot\export_templates\4.7.2.stable`). Tarda un par de 
 
 ## Lo que falta
 
-- **El icono y los datos del `.exe`** (nombre de la empresa, copyright, versión): hace falta `rcedit` (Godot → Editor
-  Settings → Export → Windows) y un `.ico`; hoy `application/modify_resources=false`.
+- **La empresa y el copyright** de las propiedades del `.exe` (vacíos hoy).
 - **Probar el mando** desde el primer menú con un mando físico, y el juego en 1280×800 (Steam Deck).
 - **Linux** (solo para el sello de Steam Deck, que ya ejecuta el `.exe` con Proton), **firmar el ejecutable** (evita el
   aviso de Windows si se reparte fuera de Steam) y **Steam** en sí (cuenta, `steamworks`, logros): ver `LANZAMIENTO.md`.
