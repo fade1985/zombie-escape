@@ -39,6 +39,8 @@
 #                       lado, en diagonal, por detrás y junto a una pared                  [prueba_varias.gd]
 #   --lenguas           las lenguas del Glotón (también enfadado) y de la criatura del científico, en la sala de
 #                       pruebas: avisando y dando el golpe en varias direcciones y junto a una pared [prueba_varias.gd]
+#   --disparos          las barras de aviso de los disparos de los jefes (contratos, alfileres, cuchillos y bolas de
+#                       fuego) en la sala de pruebas: junto a la pared (que las corta) y en campo abierto [prueba_varias.gd]
 #   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
 #                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
@@ -348,6 +350,9 @@ func empezar_prueba() -> void:
 	elif "--lenguas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lenguas()
+	elif "--disparos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_disparos()
 	elif "--tentaculos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tentaculos()

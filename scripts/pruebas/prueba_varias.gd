@@ -1894,3 +1894,91 @@ func probar_lenguas() -> void:
 			await get_tree().physics_frame
 	Temblor.desplazamiento = Vector2.ZERO
 	get_tree().quit()
+
+
+# --disparos: las barras de aviso de los disparos de los jefes (aviso.gd, barra) en la sala de pruebas (F11): los
+# contratos del gerente, los alfileres de la modista, los cuchillos del cocinero y las bolas de fuego de la criatura del
+# científico, junto a la pared de la derecha (que las corta, como corta a los disparos) y en campo abierto
+# (captura-disparos-<quién>-<caso>.png). Cada jefe, quieto y con el aviso casi lleno. En la terminal, hasta dónde llega
+# cada barra, a cuánto queda la pared de verdad (un rayo de la capa 1) y lo largas que serían sin pared
+func probar_disparos() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.85, 0.85)
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	print("Sala de pruebas: %d x %d" % [mapa.sitio.ancho, mapa.sitio.alto])
+	# Cada caso: quién, nombre, dónde está Johnny (desde la diana) y dónde el jefe (desde Johnny)
+	for caso in [["gerente", "pared", Vector2(430, 40), Vector2(-200, 0)],
+			["gerente", "libre", Vector2(200, 160), Vector2(0, -220)],
+			["modista", "pared", Vector2(430, 40), Vector2(-200, 0)],
+			["modista", "libre", Vector2(200, 160), Vector2(0, -220)],
+			["cocinero", "pared", Vector2(430, 40), Vector2(-200, 0)],
+			["cocinero", "libre", Vector2(200, 160), Vector2(0, -220)],
+			["cientifico_jefe", "pared", Vector2(430, 40), Vector2(-200, 0)],
+			["cientifico_jefe", "libre", Vector2(200, 160), Vector2(0, -220)]]:
+		johnny.global_position = sala.diana.global_position + caso[2]
+		var jefe: Node2D = meter_zombi(caso[0], johnny.global_position + caso[3])
+		await get_tree().create_timer(0.2).timeout
+		if caso[0] == "cientifico_jefe":
+			jefe.mutar()
+			await get_tree().create_timer(1.6).timeout
+		jefe.global_position = johnny.global_position + caso[3]
+		jefe.velocity = Vector2.ZERO
+		jefe.marcha = Vector2.ZERO
+		var angulo: float = (johnny.global_position - jefe.global_position).angle()
+		Temblor.desplazamiento = caso[3] - caso[3].normalized() * 150.0 + Vector2(0, -60)
+		camara.reset_smoothing()
+		var dura := 0.5
+		var entero := 0.0   # lo larga que sería la barra sin pared
+		match caso[0]:
+			"gerente":
+				dura = jefe.AVISO_CONTRATOS[0]
+				entero = jefe.radio + jefe.LARGO_RAYAS
+				jefe.empezar("aviso_contratos", angulo)
+			"modista":
+				dura = jefe.AVISO_ALFILERES[0]
+				entero = jefe.radio + jefe.ALCANCE_ALFILERES
+				jefe.apuntar_alfileres(Vector2.from_angle(angulo))
+			"cocinero":
+				dura = jefe.AVISO_ABANICO
+				entero = jefe.radio + jefe.LARGO_RAYAS
+				jefe.empezar("aviso_abanico", angulo)
+			"cientifico_jefe":
+				dura = jefe.AVISO_FUEGO
+				entero = jefe.radio + 320.0
+				jefe.empezar("aviso_fuego", angulo)
+		jefe.set_physics_process(false)   # quieto, con el aviso a mano
+		jefe.t = dura * 0.9
+		for i in 6:   # (sin pensar, el jefe no se repinta solo)
+			jefe.queue_redraw()
+			await RenderingServer.frame_post_draw
+		Captura.foto("captura-disparos-%s-%s.png" % [caso[0], caso[1]])
+		var barras := []
+		for hijo in jefe.get_children():
+			if hijo is Aviso and hijo.forma == 2 and hijo.visible:
+				var origen: Vector2 = jefe.to_global(hijo.desde)
+				var rayo := PhysicsRayQueryParameters2D.create(origen, origen + Vector2.from_angle(hijo.angulo) * 3000.0, 1)
+				var choque := jefe.get_world_2d().direct_space_state.intersect_ray(rayo)
+				barras.append("%d (pared a %s)" % [roundi(hijo.largo),
+					str(roundi(origen.distance_to(choque.position))) if not choque.is_empty() else "ninguna"])
+		print("Disparos del %s, caso %s: %d barras, llegan a %s · sin pared serían de %d (esperado: a 1 o 2 de la pared si queda antes; si no, enteras)" % [
+			caso[0], caso[1], barras.size(), ", ".join(barras), roundi(entero)])
+		jefe.queue_free()
+		await get_tree().create_timer(0.2).timeout
+	Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()

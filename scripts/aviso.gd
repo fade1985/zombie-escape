@@ -8,7 +8,8 @@
 #   - abanico(): el trozo que barre un golpe cuerpo a cuerpo (porrazo, fregonazo, hachazo...), o un círculo entero
 #     (medio ángulo PI). Se va llenando del jefe hacia fuera, como una barra de carga, sin bordes. Puede llegar hasta
 #     las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas).
-#   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos).
+#   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
+#     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()).
 #   - flechas_giro(): los dos anillos de flechas del giro del bombero.
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Cada aviso va en un nodo
 # hijo del jefe, por detrás de él, que se crea solo la primera vez y se esconde cuando deja de pedirse. Un jefe puede
@@ -70,15 +71,30 @@ static func abanico(jefe: Node2D, desde_: Vector2, angulo_: float, medio_: float
 	return aviso
 
 
-# Una barra recta: desde "desde", hacia "angulo", de "inicio_" a "largo_" y "medio_" de ancho a cada lado. "cual": si
-# el jefe tiene varias a la vez, cuál
+# Una barra recta: desde "desde", hacia "angulo", de "inicio_" a "largo_" y "medio_" de ancho a cada lado. Se corta
+# donde se pararía el disparo que marca (alcance()). "cual": si el jefe tiene varias a la vez, cuál
 static func barra(jefe: Node2D, desde_: Vector2, angulo_: float, inicio_: float, largo_: float, medio_: float, k: float,
 		tiempo: float, cual := 0) -> Aviso:
 	var aviso := pedir(jefe, 2, desde_, angulo_, k, tiempo, cual)
 	aviso.inicio = inicio_
-	aviso.largo = largo_
+	aviso.largo = alcance(jefe, desde_, angulo_, largo_, medio_)
 	aviso.medio = medio_
 	return aviso
+
+
+# Hasta dónde llega un disparo que sale de "desde_" (en el jefe) hacia "angulo_", de "largo_" como mucho: por dónde
+# pasaría un círculo de "ancho" (el de su barra) antes de dar con una pared o un mueble, donde se paran los disparos
+# (contratos, cuchillos, alfileres y bolas de fuego, con un rayo de la capa 1). Si choca, llega hasta tocar la pared
+static func alcance(jefe: Node2D, desde_: Vector2, angulo_: float, largo_: float, ancho: float) -> float:
+	var circulo := CircleShape2D.new()
+	circulo.radius = ancho
+	var consulta := PhysicsShapeQueryParameters2D.new()
+	consulta.shape = circulo
+	consulta.transform = Transform2D(0.0, jefe.to_global(desde_))
+	consulta.motion = Vector2.from_angle(angulo_) * largo_
+	consulta.collision_mask = 1   # paredes y muebles
+	var hasta := jefe.get_world_2d().direct_space_state.cast_motion(consulta)
+	return minf(largo_, largo_ * hasta[0] + ancho) if hasta[1] < 1.0 else largo_
 
 
 # Las flechas del giro del bombero alrededor de "desde": corren hacia "sentido_" (1, como las agujas del reloj). "k",
