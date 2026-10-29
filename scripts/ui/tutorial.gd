@@ -183,6 +183,10 @@ static func ficha(cual: String) -> VBoxContainer:
 	(cabeza.get_child(cabeza.get_child_count() - 1) as Label).theme_type_variation = "Titulo"
 	caja.add_child(cabeza)
 	var ruta := "res://assets/ui/tutorial/%s.png" % cual
+	# la foto lleva texto del juego dibujado: en otro idioma, la suya (assets/ui/tutorial/en/<id>.png; tools/fotos_tutorial.py)
+	var ruta_idioma := "res://assets/ui/tutorial/%s/%s.png" % [Idioma.actual, cual]
+	if Idioma.actual != Idioma.ORIGEN and ResourceLoader.exists(ruta_idioma):
+		ruta = ruta_idioma
 	if ResourceLoader.exists(ruta):
 		var marco := PanelContainer.new()
 		var borde := StyleBoxFlat.new()

@@ -53,12 +53,14 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	dueno.fill(-1)
 	# (el pasillo se llama como el sitio, para que arriba ponga solo «Viviendas»; "tipo" elige sus muebles en el catálogo)
 	# ("linea", la "y" de la línea amarilla pintada a lo largo del suelo, mapa.gd: en medio de lo que se ve de él)
-	var pasillo := {"id": 0, "uso": "pasillo", "tipo": "viviendas", "nombre": "Viviendas", "c0": BORDE, "f0": PASILLO_F,
+	# (los nombres, en español, como los de la planta: se traducen al enseñarlos, Planta.nombre_de_sitio)
+	var pasillo := {"id": 0, "uso": "pasillo", "tipo": "viviendas", "nombre": "Viviendas", "c0": BORDE, "f0": PASILLO_F,   # [traducir]
 		"ancho": COLS - BORDE * 2, "fondo": PASILLO, "puertas": [], "linea": (PASILLO_F + (PASILLO - TAPADAS) / 2.0) * CASILLA}
 	var salas := [pasillo]
 	var puertas := []
 	for id: String in Supervivientes.DATOS:
 		var r := habitacion(id)
+		# (cada habitación se llama como el suyo, en español; se enseña con Supervivientes.nombre_de: Planta.nombre_de_sitio)
 		var sala := {"id": salas.size(), "uso": "habitacion", "tipo": id, "vecino": id, "nombre": Supervivientes.DATOS[id].nombre,
 			"c0": r.position.x, "f0": r.position.y, "ancho": r.size.x, "fondo": r.size.y, "puertas": []}
 		# la puerta, en medio de la pared que da al pasillo (el tabique de debajo o el de encima)
@@ -80,7 +82,7 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	# ("entrada", para Muebles.de_apartamento: la de la izquierda; en las paredes de los lados, "c" cuenta filas)
 	var apt := {"cols": COLS, "filas": FILAS, "dueno": dueno, "salas": salas, "puertas": puertas, "jefe": false,
 		"entrada": {"c": LLEGADA, "lado": "izquierda"}, "tipo": "viviendas"}
-	var sitio := {"tipo": "viviendas", "nombre": "Viviendas", "apt": apt, "ancho": COLS * CASILLA, "alto": FILAS * CASILLA,
+	var sitio := {"tipo": "viviendas", "nombre": "Viviendas", "apt": apt, "ancho": COLS * CASILLA, "alto": FILAS * CASILLA,   # [traducir]
 		"cajas": true, "arriba_extra": 68,   # (la cámara deja ver el tabique de arriba, que sube más que la moldura de siempre)
 		"zombis": [], "limpio": true, "visitado": false, "surtido": semilla,
 		"salidas": [{"dir": "izquierda", "en": (LLEGADA + 1) * CASILLA, "tipo": "puerta", "a": mant, "vuelta": vuelta,

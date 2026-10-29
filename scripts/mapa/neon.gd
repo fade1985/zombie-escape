@@ -1,6 +1,6 @@
 # El letrero de neón de una tienda del centro comercial, encima de su puerta en la pared de arriba del pasillo
-# (lo pone mapa.gd; el texto y el color, Tienda.TIPOS). Está roto, como todo: alguna letra está fundida (se ve el
-# tubo apagado) y el resto parpadea y falla a trompicones, con la misma cuenta que los apliques (lampara.gd).
+# (lo pone mapa.gd; el texto, ya traducido, de Tienda.neon, y el color, de Tienda.TIPOS). Está roto, como todo: alguna
+# letra está fundida (se ve el tubo apagado) y el resto parpadea y falla a trompicones, con la misma cuenta que los apliques (lampara.gd).
 # Lleva su luz de color, que tiembla con él, y se ve aunque el pasillo esté a oscuras (no le afecta la penumbra).
 extends Node2D
 
@@ -9,7 +9,7 @@ const TAMANO := 32           # la fuente pixel art a 32: cada píxel de la letra
 const ALTO := 104.0          # a qué altura va, por encima del pie del muro (justo encima de la puerta)
 const TUBO := Color(0.3, 0.28, 0.33)   # una letra fundida: el tubo de cristal apagado
 
-var texto := "TIENDA"
+var texto := "TIENDA"   # no-tr (lo cambia siempre mapa.gd, ya traducido: Tienda.neon)
 var color := Color("#ff4fa0")
 var semilla := 0.5
 var fundidas := {}           # las letras que no se encienden (su posición en el texto)
@@ -43,7 +43,7 @@ func _ready() -> void:
 	luz.fuerza = 0.8
 	add_child(luz)
 	luz.get_node("Bombilla").visible = false
-	for nombre in ["LuzSuelo", "LuzCosas"]:
+	for nombre in ["LuzSuelo", "LuzCosas"]:   # no-tr (nombres de nodo)
 		luz.get_node(nombre).color = color
 	luz.get_node("Polvo").visible = false
 

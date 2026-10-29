@@ -919,7 +919,7 @@ msgstr "OUT OF SUPPS!"
 
 #: scripts/historia.gd
 msgid "azotea"
-msgstr "roof"
+msgstr "rooftop"
 
 #: scripts/historia.gd
 msgid "Página arrancada"
@@ -1901,6 +1901,226 @@ msgstr "Surprises and Challenges"
 msgid "Colecciones"
 msgstr "Collections"
 
+#: scripts/mapa/apartamento.gd
+msgid "Salón"
+msgstr "Living room"
+
+#: scripts/mapa/apartamento.gd scripts/mapa/tienda.gd
+msgid "Cocina"
+msgstr "Kitchen"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño"
+msgstr "Bathroom"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio"
+msgstr "Bedroom"
+
+#: scripts/mapa/apartamento.gd
+msgid "Apartamento destrozado"
+msgstr "Wrecked apartment"
+
+#: scripts/mapa/apartamento.gd
+msgid "Pasillo"
+msgstr "Hallway"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio de matrimonio"
+msgstr "Master bedroom"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño principal"
+msgstr "Main bathroom"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio individual"
+msgstr "Single bedroom"
+
+#: scripts/mapa/cartel_trasteros.gd
+msgid "TRASTEROS"
+msgstr "STORAGE"
+
+#: scripts/mapa/planta.gd
+msgid "Planta baja"
+msgstr "Ground floor"
+
+#: scripts/mapa/planta.gd
+msgid "%dª planta"
+msgstr "Floor %d"
+
+#: scripts/mapa/planta.gd
+msgid "Azotea"
+msgstr "Rooftop"
+
+#: scripts/mapa/planta.gd
+msgid "Bajo %s"
+msgstr "G%s"
+
+#: scripts/mapa/planta.gd
+msgid "%dº%s"
+msgstr "%d%s"
+
+#: scripts/mapa/planta.gd
+msgid "Vestuario"
+msgstr "Locker room"
+
+#: scripts/mapa/planta.gd
+msgid "Despacho"
+msgstr "Office"
+
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
+msgid "Taller"
+msgstr "Workshop"
+
+#: scripts/mapa/planta.gd
+msgid "1ª planta"
+msgstr "1st floor"
+
+#: scripts/mapa/planta.gd
+msgid "2ª planta"
+msgstr "2nd floor"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "3rd floor"
+
+#: scripts/mapa/planta.gd
+msgid "Gimnasio"
+msgstr "Gym"
+
+#: scripts/mapa/planta.gd
+msgid "Cuarto de la limpieza"
+msgstr "Janitor's closet"
+
+#: scripts/mapa/planta.gd
+msgid "Apartamento en llamas"
+msgstr "Burning apartment"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta una tarjeta de acceso"
+msgstr "Locked: you need an access card"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada con llave"
+msgstr "Locked: you need the key"
+
+#: scripts/mapa/planta.gd
+msgid "El ascensor está averiado"
+msgstr "The elevator is out of order"
+
+#: scripts/mapa/planta.gd
+msgid "El edificio sigue infestado: aún no puedes irte"
+msgstr "The building's still infested: you can't leave yet"
+
+#: scripts/mapa/planta.gd
+msgid "Bloqueadas: acaba antes con %s"
+msgstr "Blocked: take out %s first"
+
+#: scripts/mapa/planta.gd
+msgid "Ya no hay vuelta atrás"
+msgstr "There's no going back"
+
+#: scripts/mapa/planta.gd
+msgid "Mantenimiento"
+msgstr "Maintenance"
+
+#: scripts/mapa/tienda.gd
+msgid "Supermercado"
+msgstr "Supermarket"
+
+#: scripts/mapa/tienda.gd
+msgid "SUPER"
+msgstr "SUPER"
+
+#: scripts/mapa/tienda.gd
+msgid "Ferretería"
+msgstr "Hardware Store"
+
+#: scripts/mapa/tienda.gd
+msgid "FERRETERIA"
+msgstr "HARDWARE"
+
+#: scripts/mapa/tienda.gd
+msgid "Electrónica"
+msgstr "Electronics"
+
+#: scripts/mapa/tienda.gd
+msgid "ELECTRO"
+msgstr "ELECTRO"
+
+#: scripts/mapa/tienda.gd
+msgid "Restaurante"
+msgstr "Restaurant"
+
+#: scripts/mapa/tienda.gd
+msgid "BURGER"
+msgstr "BURGER"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda de ropa"
+msgstr "Clothing Store"
+
+#: scripts/mapa/tienda.gd
+msgid "MODA"
+msgstr "FASHION"
+
+#: scripts/mapa/tienda.gd
+msgid "Farmacia"
+msgstr "Pharmacy"
+
+#: scripts/mapa/tienda.gd
+msgid "FARMACIA"
+msgstr "PHARMACY"
+
+#: scripts/mapa/tienda.gd
+msgid "Joyería"
+msgstr "Jewelry Store"
+
+#: scripts/mapa/tienda.gd
+msgid "JOYAS"
+msgstr "JEWELS"
+
+#: scripts/mapa/tienda.gd
+msgid "Almacén"
+msgstr "Storeroom"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara frigorífica"
+msgstr "Freezer"
+
+#: scripts/mapa/tienda.gd
+msgid "Taquillas"
+msgstr "Lockers"
+
+#: scripts/mapa/tienda.gd
+msgid "Probadores"
+msgstr "Fitting rooms"
+
+#: scripts/mapa/tienda.gd
+msgid "Rebotica"
+msgstr "Back room"
+
+#: scripts/mapa/tienda.gd
+msgid "Aseo"
+msgstr "Restroom"
+
+#: scripts/mapa/tienda.gd
+msgid "Trastienda"
+msgstr "Stockroom"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara acorazada"
+msgstr "Vault"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda destrozada"
+msgstr "Wrecked store"
+
+#: scripts/mapa/viviendas.gd
+msgid "Viviendas"
+msgstr "Living quarters"
+
 #: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "FREE HUGS!"
@@ -2095,7 +2315,7 @@ msgstr "Johnny: \"I got the elevator working! Now I can go down to the ground fl
 
 #: scripts/partida.gd
 msgid "Azotea · ¡El último combate del edificio!"
-msgstr "Roof · The building's final fight!"
+msgstr "Rooftop · The building's final fight!"
 
 #: scripts/partida.gd
 msgid "¡La puerta se ha cerrado detrás de ti!"
@@ -2143,7 +2363,7 @@ msgstr "You got the access card: it opens %s"
 
 #: scripts/partida.gd
 msgid "Has cogido la llave del %s"
-msgstr "You got the key to %s"
+msgstr "You got the key to apt. %s"
 
 #: scripts/partida.gd
 msgid "¡¡¡LA LLAVE!!!"
@@ -2163,7 +2383,7 @@ msgstr "The guard is down! He dropped the access card"
 
 #: scripts/partida.gd
 msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
-msgstr "The key zombie is down! It dropped the key to %s"
+msgstr "The key zombie is down! It dropped the key to apt. %s"
 
 #: scripts/partida.gd
 msgid "Te han pillado"
@@ -2232,6 +2452,42 @@ msgstr "NEW SKIN!"
 #: scripts/partida.gd
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "New skin: %s. Put it on in the maintenance room locker"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ha vuelto la corriente!"
+msgstr "The power's back!"
+
+#: scripts/peligros/agua.gd
+msgid "¡Clac! Se ha ido la luz de la tienda"
+msgstr "Clunk! The store's lights just went out"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ojo! El agua tiene corriente"
+msgstr "Watch out! The water is live"
+
+#: scripts/peligros/cerco.gd
+msgid "¡La habitación está en llamas! Lejos de las paredes"
+msgstr "The room is on fire! Stay away from the walls"
+
+#: scripts/peligros/frio.gd
+msgid "¡Brrr! Qué frío hace en la cámara"
+msgstr "Brrr! It's freezing in here"
+
+#: scripts/peligros/fuego.gd
+msgid "¡La cocina está ardiendo!"
+msgstr "The kitchen's on fire!"
+
+#: scripts/peligros/porqueria.gd
+msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
+msgstr "What a stench! The floor's covered in acid crap: don't step in it"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con las mancuernas del suelo: si piso una, me la pego"
+msgstr "Careful with the dumbbells on the floor: if I step on one, I'm going down"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
+msgstr "Careful with the buckets on the floor: if I trip on one, I'm going down"
 
 #: scripts/portera.gd
 msgid "¡VECINOS!"

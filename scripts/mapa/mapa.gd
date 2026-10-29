@@ -336,10 +336,11 @@ func acustica_en(pos: Vector2) -> String:
 	return "duro"
 
 
+# El nombre de la habitación "zona", ya traducido (para enseñarlo: Planta.nombre_de_sitio)
 func nombre_zona(zona: int) -> String:
 	if not sitio.has("apt") or zona < 0:
 		return ""
-	return sitio.apt.salas[zona].nombre
+	return Planta.nombre_de_sitio(sitio.apt.salas[zona])
 
 
 # Las tapas de los muros, aparte del suelo: se quedan en la capa 1, que en un apartamento alumbran las lámparas
@@ -751,9 +752,8 @@ func poner_puertas() -> void:
 			if salida.has("neon"):
 				# la fachada de una tienda del centro comercial: su letrero de neón encima de la puerta
 				var neon := NEON.new()
-				var tipo: Dictionary = Tienda.TIPOS[salida.neon]
-				neon.texto = tipo.neon
-				neon.color = tipo.color
+				neon.texto = Tienda.neon(salida.neon)   # (ya traducido)
+				neon.color = Tienda.TIPOS[salida.neon].color
 				neon.semilla = fposmod(sin(salida.en * 12.9898) * 43758.5453, 1.0)
 				neon.position = puerta.position
 				cosas.add_child(neon)

@@ -11,9 +11,11 @@ extends Node2D
 
 const RUEDA_T := 0.5      # lo que tarda en pararse la cosa que sale rodando
 const PIES := 14.0        # los pies de Johnny, por debajo de su centro (donde apoya: su sombra)
-# Lo que dice Johnny la primera vez que entra en la habitación
+# Lo que dice Johnny la primera vez que entra en la habitación (en español: se dice con Idioma.t)
+# [traducir]
 const AVISOS := {"mancuerna": "Cuidado con las mancuernas del suelo: si piso una, me la pego",
 	"cubo": "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"}
+# [/traducir]
 # El cubo: dos dibujos de PixelLab (tools/cubos.py), de pie (con el agua sucia dentro) y tumbado (volcado, con la boca
 # hacia la derecha y el agua derramada; hacia la izquierda, en espejo). Todos del mismo gris azulado
 const CUBO_DE_PIE := preload("res://assets/sprites/cubo-de-pie.png")
@@ -29,10 +31,10 @@ var aviso := ""
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "Tropiezos"
+	name = "Tropiezos"   # no-tr (nombre de nodo)
 	z_index = -1   # en el suelo, como los charcos: los personajes pasan por encima
 	light_mask = Luz.CAPA_SUELO   # la alumbra la linterna de Johnny, como al suelo
-	aviso = AVISOS[datos.cosas[0].forma if not datos.cosas.is_empty() else "mancuerna"]
+	aviso = Idioma.t(AVISOS[datos.cosas[0].forma if not datos.cosas.is_empty() else "mancuerna"])
 
 
 func _physics_process(delta: float) -> void:

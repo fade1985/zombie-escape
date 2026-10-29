@@ -812,6 +812,12 @@ func probar_mutaciones() -> void:
 	print("Mutaciones: %s | daño recibido x%.2f | pausa %s" % [mutaciones.tengo, johnny.stats.dano_recibido, get_tree().paused])
 
 
+# Con --mutaciones: solo el recuadro de las mutaciones (captura-mutacion.png, la foto de la ficha del tutorial)
+func probar_mutaciones_solo() -> void:
+	await probar_mutaciones()
+	get_tree().quit()
+
+
 # Fotos de la pausa y del cartel de victoria (con el juego parado solo cuentan los temporizadores)
 func probar_menus() -> void:
 	set_process(false)

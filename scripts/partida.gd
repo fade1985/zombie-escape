@@ -246,7 +246,7 @@ func _ready() -> void:
 	if captura:
 		empezar_prueba()
 	else:
-		decir("%s: %s%s" % [planta.nombre, Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla()]
+		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla()]
 			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
 			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
@@ -505,10 +505,12 @@ func actualizar_puertas() -> void:
 func poner_lugar() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	# (la sala de mantenimiento y las viviendas siempre están en la planta baja, aunque se haya bajado en el ascensor)
-	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else planta.nombre
-	var texto: String = de_planta if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [de_planta, sitio.nombre]
+	# (los nombres, ya traducidos: Planta.nombre_de y Planta.nombre_de_sitio, y lo mismo mapa.nombre_zona)
+	var de_planta: String = Planta.nombre_planta(1) if sitio.tipo in ["mantenimiento", "viviendas"] else Planta.nombre_de(planta)
+	var nombre := Planta.nombre_de_sitio(sitio)
+	var texto: String = de_planta if sitio.tipo == "pasillo" or sitio.get("azotea", false) else "%s · %s" % [de_planta, nombre]
 	var zona: String = mapa.nombre_zona(mapa.zona_en(johnny.position))
-	if zona != "" and zona != sitio.nombre:   # (la tienda de un minijefe y su sala se llaman igual)
+	if zona != "" and zona != nombre:   # (la tienda de un minijefe y su sala se llaman igual)
 		texto += " · " + zona
 	lugar.text = texto + eventos.etiqueta() + Reto.etiqueta()
 
@@ -538,12 +540,12 @@ func cruzar(i: int) -> void:
 		return
 	match salida.cerrojo:
 		"nunca":
-			decir(salida.aviso)
+			decir(Planta.aviso_de(salida))   # (ya traducido)
 			Sonido.tocar("no")
 			return
 		"llave":
 			if not planta.tiene_llave:
-				decir(salida.aviso)
+				decir(Planta.aviso_de(salida))
 				Sonido.tocar("no")
 				return
 			# La llave se gasta al abrir: la puerta queda abierta para siempre
@@ -554,7 +556,7 @@ func cruzar(i: int) -> void:
 			Sonido.tocar("compra")
 		"jefa":
 			if not planta.jefa_muerta:
-				decir(salida.aviso)
+				decir(Planta.aviso_de(salida))
 				Sonido.tocar("no")
 				return
 	Sonido.tocar("puerta")
@@ -566,7 +568,7 @@ func cruzar(i: int) -> void:
 		return
 	tutorial("centro" if ed.cerrojo == "tarjeta" else "apartamentos")
 	if salida.tipo == "ascensor":
-		decir(planta.nombre, 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
+		decir(Planta.nombre_de(planta), 2.5)   # de vuelta de la sala de mantenimiento: en qué planta se está
 	elif planta.get("ascensor_nuevo", false):
 		# al salir al pasillo tras acabar con el jefe (con el ascensor ya a la vista), Johnny cuenta que lo ha arreglado
 		planta.erase("ascensor_nuevo")
@@ -613,7 +615,7 @@ func subir() -> void:
 	var superado := eventos.evento if premio != "" else ""
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_llegada())
-	var texto: String = Idioma.t("Azotea · ¡El último combate del edificio!") if planta.get("azotea", false) else planta.nombre
+	var texto: String = Idioma.t("Azotea · ¡El último combate del edificio!") if planta.get("azotea", false) else Planta.nombre_de(planta)
 	decir(texto if premio == "" else "%s · %s" % [texto, premio], 2.5 if premio == "" else 3.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
@@ -862,11 +864,11 @@ func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
 		decir(Idioma.t("¡Ha caído el zombi de la llave! Ha soltado la llave del %s") % nombre_jefa(), 3.0))
 
 
-# El nombre del apartamento de la jefa ("2ºC"...)
+# El nombre del apartamento de la jefa ("2ºC"...), ya traducido ("2C")
 func nombre_jefa() -> String:
 	for s in planta.sitios:
 		if s.tipo == "jefe":
-			return s.nombre
+			return Planta.nombre_de_sitio(s)
 	return ""
 
 
@@ -1324,7 +1326,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"sub": ((Idioma.t("Has limpiado %s de arriba abajo") % Idioma.t(ed.el_nombre)) if nuevo.is_empty()
 			else (Idioma.t("Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento")
 				% [Idioma.t(ed.el_nombre), Supervivientes.nombre_de(nuevo)])) if gano
-			else (Idioma.t("Caíste en la %s de %s") % [planta.nombre.to_lower(), Idioma.t(ed.el_nombre)]),
+			else (Idioma.t("Caíste en la %s de %s") % [Planta.nombre_de(planta).to_lower(), Idioma.t(ed.el_nombre)]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],

@@ -35,7 +35,7 @@ var pinta := 0.0
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "Cerco"
+	name = "Cerco"   # no-tr (nombre de nodo)
 	z_index = -1   # en el suelo, como el fuego de la cocina
 	var propio := CanvasItemMaterial.new()
 	propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # el fuego luce por sí mismo
@@ -80,7 +80,7 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo:
 		if mapa.zona_en(johnny.global_position) == datos.sala:
-			Peligros.avisar(self, datos, "¡La habitación está en llamas! Lejos de las paredes")
+			Peligros.avisar(self, datos, Idioma.t("¡La habitación está en llamas! Lejos de las paredes"))
 		if datos.casillas.has(Peligros.casilla(johnny.global_position)):
 			johnny.pisar({"fuego": {"dps": Peligros.CERCO.dps}})
 	# cada poco, prende a los zombis despiertos que estén dentro (como el charco de fuego del molotov)

@@ -28,30 +28,46 @@ const DELANTE := 10        # fondo mínimo de sala de venta delante de las habit
 # (la profundidad sale de sus habitaciones). El peligro y los objetos de cada una llegan en las partes 3 y 6.
 # "neon" es lo que pone el letrero de neón de encima de su puerta (neon.gd), con su color; su escaparate, el sprite
 # escaparate-<tipo>.
+# Los textos (el nombre y el neón, y los de NOMBRES) están en español, en líneas con la marca de traducir al final
+# (docs/IDIOMAS.md): son datos (se guardan así en la planta) y se enseñan ya traducidos con nombre(), neon() y
+# Planta.nombre_de_sitio
 const TIPOS := {
-	"supermercado": {"nombre": "Supermercado", "salas": ["almacen", "camara", "bano"], "cols": [40, 46],
-		"neon": "SUPER", "color": Color("#5dff8a")},
-	"ferreteria": {"nombre": "Ferretería", "salas": ["almacen", "taller"], "cols": [34, 40],
-		"neon": "FERRETERIA", "color": Color("#ff9a3c")},
-	"electronica": {"nombre": "Electrónica", "salas": ["almacen", "taquillas"], "cols": [34, 40],
-		"neon": "ELECTRO", "color": Color("#4fe3ff")},
-	"restaurante": {"nombre": "Restaurante", "salas": ["cocina", "camara", "bano"], "cols": [40, 46],
-		"neon": "BURGER", "color": Color("#ff4f5e")},
-	"ropa": {"nombre": "Tienda de ropa", "salas": ["probadores", "almacen"], "cols": [34, 40],
-		"neon": "MODA", "color": Color("#ff5fd0")},
-	"farmacia": {"nombre": "Farmacia", "salas": ["rebotica", "bano"], "cols": [30, 34],
-		"neon": "FARMACIA", "color": Color("#3dff6e")},
+	"supermercado": {"nombre": "Supermercado", "neon": "SUPER", "salas": ["almacen", "camara", "bano"], "cols": [40, 46],   # [traducir]
+		"color": Color("#5dff8a")},
+	"ferreteria": {"nombre": "Ferretería", "neon": "FERRETERIA", "salas": ["almacen", "taller"], "cols": [34, 40],   # [traducir]
+		"color": Color("#ff9a3c")},
+	"electronica": {"nombre": "Electrónica", "neon": "ELECTRO", "salas": ["almacen", "taquillas"], "cols": [34, 40],   # [traducir]
+		"color": Color("#4fe3ff")},
+	"restaurante": {"nombre": "Restaurante", "neon": "BURGER", "salas": ["cocina", "camara", "bano"], "cols": [40, 46],   # [traducir]
+		"color": Color("#ff4f5e")},
+	"ropa": {"nombre": "Tienda de ropa", "neon": "MODA", "salas": ["probadores", "almacen"], "cols": [34, 40],   # [traducir]
+		"color": Color("#ff5fd0")},
+	"farmacia": {"nombre": "Farmacia", "neon": "FARMACIA", "salas": ["rebotica", "bano"], "cols": [30, 34],   # [traducir]
+		"color": Color("#3dff6e")},
 	# la joyería (parte 9): no entra en el sorteo de cada planta, sale una por partida (Planta.joyeria_planta).
 	# Al fondo, la cámara acorazada: la sala opcional con riesgo (su puerta y su premio, en los trozos 2 y 3)
-	"joyeria": {"nombre": "Joyería", "salas": ["trastienda", "acorazada"], "cols": [30, 34],
-		"neon": "JOYAS", "color": Color("#ffd23f")},
+	"joyeria": {"nombre": "Joyería", "neon": "JOYAS", "salas": ["trastienda", "acorazada"], "cols": [30, 34],   # [traducir]
+		"color": Color("#ffd23f")},
 }
 const ASEO_EN := ["almacen", "cocina", "rebotica", "taller", "taquillas", "probadores"]   # nunca en la cámara
+# [traducir]
 const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "taller": "Taller", "taquillas": "Taquillas",
 	"cocina": "Cocina", "probadores": "Probadores", "rebotica": "Rebotica", "bano": "Aseo",
 	"trastienda": "Trastienda", "acorazada": "Cámara acorazada"}
+# [/traducir]
 
 static var rng := RandomNumberGenerator.new()
+
+
+# El nombre de una tienda ("supermercado"...), ya traducido: para enseñarlo
+static func nombre(tipo: String) -> String:
+	return Idioma.t(TIPOS[tipo].nombre)
+
+
+# Lo que pone su letrero de neón, ya traducido (corto y en mayúsculas: se pinta con la fuente del juego encima de la
+# puerta, neon.gd)
+static func neon(tipo: String) -> String:
+	return Idioma.t(TIPOS[tipo].neon)
 
 
 # Genera una tienda del tipo "tipo". "jefe": la del jefe de la planta (de momento, el mismo local diáfano y
@@ -59,7 +75,7 @@ static var rng := RandomNumberGenerator.new()
 static func generar(semilla: int, tipo: String, jefe := false, lado := "abajo") -> Dictionary:
 	if jefe:
 		var local := Apartamento.generar(true, lado)
-		local.salas[0].nombre = "Tienda destrozada"
+		local.salas[0].nombre = "Tienda destrozada"   # [traducir]
 		local.tipo = "tienda"   # sus muebles, los de "jefe-tienda" del catálogo (no los del salón de un piso)
 		return local
 	for intento in 500:

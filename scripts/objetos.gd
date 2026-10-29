@@ -289,7 +289,7 @@ static func donde(id: String, edificio: String) -> String:
 	var tiendas := []
 	for tipo in TIENDAS:
 		if id in TIENDAS[tipo]:
-			var n: String = Idioma.t(Tienda.TIPOS[tipo].nombre)
+			var n := Tienda.nombre(tipo)   # (ya traducido)
 			# (en español, solo la primera con mayúscula; en inglés, los nombres de tienda se quedan como vienen)
 			tiendas.append(n if tiendas.is_empty() or Idioma.actual != Idioma.ORIGEN else n.to_lower())
 	if tiendas.is_empty():

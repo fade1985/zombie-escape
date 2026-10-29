@@ -3,6 +3,9 @@
 # assets/ui/tutorial/<id>.png. Se rehacen cuando cambia lo que se ve: primero las capturas (la prueba que dice cada
 # línea, con "-- --captura ..."; ver CLAUDE.md) y luego:  py tools/fotos_tutorial.py
 # Para mover un recorte, se cambian su x e y (la esquina de arriba a la izquierda en la captura, de 1239 x 640).
+# Las fotos llevan texto del juego dibujado: las del inglés van aparte, en assets/ui/tutorial/en/<id>.png (ui/tutorial.gd
+# las elige según Idioma.actual y, si falta alguna, usa la de español). Se hacen igual pero con las capturas sacadas con
+# "--ingles" y el parámetro en:  py tools/fotos_tutorial.py en  (o  py tools/fotos_tutorial.py en jugar curas)
 import os
 import sys
 from PIL import Image
@@ -40,9 +43,26 @@ FOTOS = {
 	"alerta": ("captura-reto-tarjeta.png", 330, 330),              # --reto si
 }
 
+# En inglés, las que salen de otra captura (la prueba larga, que no hace falta repetir para una sola foto)
+FOTOS_EN = {
+	"ordenador": ("captura-arriba-puntos.png", 170, 30),           # --ordenador-arriba
+	"mutaciones": ("captura-mutacion.png", 360, 150),              # --mutaciones
+	"centro": ("captura-guardia.png", 40, 220),                    # --edificio centro (el guardia y su grito, a la izquierda)
+	"supervivientes": ("captura-escolta.png", 180, 290),           # --rescate --edificio centro
+}
+# Las fotos sin ningún texto dibujado (la oscuridad, la horda, un molotov...) valen en todos los idiomas: no se rehacen.
+SIN_TEXTO = ["apagon", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros"]
+
 if __name__ == "__main__":
+	args = sys.argv[1:]
+	ingles = "en" in args
+	solo = [a for a in args if a != "en"]   # (se pueden pedir solo unas: py tools/fotos_tutorial.py jugar curas)
+	if ingles:
+		SALIDA = os.path.join(SALIDA, "en")
+		FOTOS.update(FOTOS_EN)
+		for id in SIN_TEXTO:
+			FOTOS.pop(id, None)
 	os.makedirs(SALIDA, exist_ok=True)
-	solo = sys.argv[1:]   # (se pueden pedir solo unas: py tools/fotos_tutorial.py jugar curas)
 	for id, (captura, x, y) in FOTOS.items():
 		if solo and id not in solo:
 			continue

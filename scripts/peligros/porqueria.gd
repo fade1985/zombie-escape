@@ -44,7 +44,7 @@ var pinta := 0.0
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "Porqueria"
+	name = "Porqueria"   # no-tr (nombre de nodo)
 	z_index = -2   # en el suelo, por debajo de los charcos (que se le echen encima), como las manchas
 	light_mask = Luz.CAPA_SUELO   # la alumbra la linterna de Johnny, como al suelo (y sus propias luces)
 	suelo = Node2D.new()
@@ -88,7 +88,7 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo:
 		if mapa.zona_en(johnny.global_position) == datos.sala:
-			Peligros.avisar(self, datos, "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises")
+			Peligros.avisar(self, datos, Idioma.t("¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"))
 		if datos.casillas.has(Peligros.casilla(johnny.global_position)):
 			johnny.pisar({"porqueria": {"dps": Peligros.PORQUERIA.dps, "despues": Peligros.PORQUERIA.despues}})
 	# lo de fuera solo si la habitación ya se ha descubierto: de vez en cuando, el chisporroteo de una burbuja de ácido

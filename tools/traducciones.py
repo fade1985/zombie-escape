@@ -91,6 +91,24 @@ PASADOS = [
     "scripts/zombi_dependienta.gd",
     "scripts/zombi_guardia.gd",
     "scripts/johnny.gd",
+    # fase 5: el mundo
+    "scripts/mapa/tienda.gd",
+    "scripts/mapa/planta.gd",
+    "scripts/mapa/apartamento.gd",
+    "scripts/mapa/cartel_trasteros.gd",
+    "scripts/mapa/neon.gd",
+    "scripts/mapa/viviendas.gd",
+    "scripts/mapa/puerta.gd",
+    "scripts/mapa/mapa.gd",
+    "scripts/minimapa.gd",
+    "scripts/peligros/agua.gd",
+    "scripts/peligros/cerco.gd",
+    "scripts/peligros/cuadro.gd",
+    "scripts/peligros/frio.gd",
+    "scripts/peligros/fuego.gd",
+    "scripts/peligros/luz_jefe.gd",
+    "scripts/peligros/porqueria.gd",
+    "scripts/peligros/tropiezos.gd",
 ]
 
 # Palabras sueltas con mayúscula que no son texto (nombres de nodos, variaciones del tema...)
@@ -195,6 +213,8 @@ def parece_texto(s):
         return False
     if not LETRAS.search(s):
         return False
+    if re.fullmatch(r"X+", s):   # una fila de una letra dibujada con X (puerta.gd)
+        return False
     if re.fullmatch(r"[a-z0-9_.:\-]+", s):   # un id, una clave
         return False
     if ACENTOS.search(s):
@@ -269,7 +289,7 @@ def recoger(rel, textos, sueltos):
                 continue
             if re.search(r"\b(print|printerr|push_error|push_warning|assert|preload|load|theme_type_variation|"
                          r"get_node|has_node|find_child|add_to_group|is_in_group|call_group|get_nodes_in_group|"
-                         r"set_name|\.name|add_theme_[a-z_]+)\b", linea[:linea.find(c[2]) if c[2] in linea else len(linea)]):
+                         r"set_name|\.name|montar|add_theme_[a-z_]+)\b", linea[:c[0] - (texto.rfind("\n", 0, c[0]) + 1)]):
                 continue
             despues = masc[c[1]:c[1] + 8].lstrip()
             if despues.startswith(":"):

@@ -21,8 +21,12 @@ const BORDE := 2          # grosor del muro de fuera, en casillas
 const PUERTA := 2         # ancho de las puertas, en casillas (64 unidades)
 const COLS_JEFE := 44     # la habitación de un jefe, en casillas (con su muro de fuera)
 const FILAS_JEFE := 30
+# Cómo se llama cada habitación. Los nombres (aquí y en DORMITORIOS) se guardan en español en cada habitación ("nombre")
+# y se enseñan ya traducidos con Planta.nombre_de_sitio (docs/IDIOMAS.md)
+# [traducir]
 const NOMBRES := {"salon": "Salón", "cocina": "Cocina", "bano": "Baño", "dormitorio": "Dormitorio",
 	"jefe": "Apartamento destrozado", "pasillo": "Pasillo"}
+# [/traducir]
 # El piso, dibujado casilla a casilla con la puerta de entrada abajo (lo lee pasillo_del_plano):
 #   #  muro             (espacio)  hueco de una puerta          E  la puerta de entrada, en el muro de fuera
 #   S  salón            C  cocina       M  dormitorio de matrimonio       I  dormitorio individual
@@ -40,8 +44,8 @@ const PLANO_PASILLO := [
 	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
 	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
 	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
-	"##BBBBBBB IIIIIIIIIIII#MMMMMMMMMMMMM BBBBBBB##",
-	"##BBBBBBB IIIIIIIIIIII#MMMMMMMMMMMMM BBBBBBB##",
+	"##BBBBBBB IIIIIIIIIIII#MMMMMMMMMMMMM BBBBBBB##",   # no-tr (el plano, no es un texto)
+	"##BBBBBBB IIIIIIIIIIII#MMMMMMMMMMMMM BBBBBBB##",   # no-tr
 	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
 	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
 	"##BBBBBBB#IIIIIIIIIIII#MMMMMMMMMMMMM#BBBBBBB##",
@@ -72,10 +76,12 @@ const PLANO_PASILLO := [
 const LETRAS := {"S": {"uso": "salon"}, "C": {"uso": "cocina"}, "M": {"uso": "dormitorio", "tipo": "matrimonio"},
 	"I": {"uso": "dormitorio", "tipo": "individual"}, "B": {"uso": "bano"}, ".": {"uso": "pasillo", "tipo": "piso"}}
 # Cómo se llaman los dos dormitorios del piso (por su "tipo") y su baño
+# [traducir]
 const DORMITORIOS := {
 	"matrimonio": {"nombre": "Dormitorio de matrimonio", "bano": "Baño principal"},
 	"individual": {"nombre": "Dormitorio individual", "bano": "Baño"},
 }
+# [/traducir]
 
 
 # Un apartamento: el piso de siempre o, con "jefe", la habitación de un jefe. "lado" es dónde está la puerta de entrada,
@@ -275,19 +281,19 @@ static func fallos(apt: Dictionary) -> Array:
 			suelo += 1
 	var entrada: int = (apt.filas - BORDE - 1) * cols + apt.entrada.c
 	if alcanzables(dueno, cols, entrada, func(v): return v != -1) != suelo:
-		malos.append("hay suelo al que no se puede llegar")
+		malos.append("hay suelo al que no se puede llegar")   # no-tr (los fallos son para depurar: van a la consola)
 	for s in apt.salas:
 		if not apt.jefe and s.puertas.is_empty():
-			malos.append(s.uso + " sin puerta")
+			malos.append(s.uso + " sin puerta")   # no-tr
 		if s.casillas < 20:
-			malos.append(s.uso + " demasiado pequeño")
+			malos.append(s.uso + " demasiado pequeño")   # no-tr
 	if not apt.jefe:
 		var unidas := func(a: Dictionary, b: Dictionary) -> bool:
 			return a.puertas.any(func(p): return (p.a == a.id and p.b == b.id) or (p.a == b.id and p.b == a.id))
 		var piso: bool = apt.get("forma", "") == "pasillo"   # (en el piso, todas dan al pasillo; en las tiendas, a la sala de venta)
 		for s in apt.salas:
 			if not piso and (s.uso == "cocina" or s.uso == "dormitorio") and not unidas.call(s, apt.salas[0]):
-				malos.append(s.uso + " sin puerta al salón")
+				malos.append(s.uso + " sin puerta al salón")   # no-tr
 			if s.uso == "bano" and (s.puertas.size() != 1 or not unidas.call(s, apt.salas[s.dueno_bano])):
-				malos.append("el baño no tiene una sola puerta, la de su dormitorio")
+				malos.append("el baño no tiene una sola puerta, la de su dormitorio")   # no-tr
 	return malos

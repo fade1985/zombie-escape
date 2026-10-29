@@ -19,9 +19,9 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio», Opciones y la interfaz
       (partida, pausa, HUD, inventario, baúl, tienda, ordenador) y los datos (armas, objetos, talentos, logros, mutaciones,
       trajes, eventos) y la voz del juego (historia, noticias, tutoriales, bestiario, supervivientes, gritos de los jefes).
-      Falta pasar los nombres de planta, de sitio y de tienda y los carteles del mundo; los dibujados en imágenes son
-      `cartel-planta-N.png` («PLANTA») y quizá las fotos de `assets/ui/tutorial/`. Falta también la revisión del inglés
-      por una persona nativa antes de salir. Otros idiomas, más adelante.
+      También el mundo (nombres de planta, sitio y tienda, neones y carteles) y lo dibujado en imágenes (cartel de
+      planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado**; falta la revisión del
+      inglés por una persona nativa antes de salir, y la prueba larga entera en inglés. Otros idiomas, más adelante.
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
       ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,
       dominios y redes, y hacer logo.

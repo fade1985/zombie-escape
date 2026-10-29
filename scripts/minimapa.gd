@@ -134,7 +134,7 @@ func _draw() -> void:
 		return
 	draw_style_box(marco, Rect2(Vector2.ZERO, size))
 	var letra := get_theme_default_font()
-	var titulo: String = Planta.nombre_planta(1) if abajo() else partida.planta.nombre
+	var titulo: String = Planta.nombre_planta(1) if abajo() else Planta.nombre_de(partida.planta)   # (ya traducido)
 	draw_string_outline(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, 4, BORDE)
 	draw_string(letra, Vector2(0, 22), titulo, HORIZONTAL_ALIGNMENT_CENTER, ANCHO, 16, Color("#e6c34a"))
 	# el fondo: papel oscuro cuadriculado, como el plano de una mazmorra

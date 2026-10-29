@@ -32,7 +32,7 @@ var luces: Array = []               # una en cada foco y otra que va con el rest
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "Fuego"
+	name = "Fuego"   # no-tr (nombre de nodo)
 	z_index = -1   # en el suelo, como los charcos
 	var propio := CanvasItemMaterial.new()
 	propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # el fuego luce por sí mismo
@@ -167,7 +167,7 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo:
 		if mapa.zona_en(johnny.global_position) == datos.sala:
-			Peligros.avisar(self, datos, "¡La cocina está ardiendo!")
+			Peligros.avisar(self, datos, Idioma.t("¡La cocina está ardiendo!"))
 		if arde_en(johnny.global_position):
 			johnny.pisar({"fuego": {"dps": Peligros.FUEGO.dps}})
 	# cada poco, prende a los zombis despiertos que estén dentro (como el charco de fuego del molotov)

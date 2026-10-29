@@ -349,6 +349,8 @@ en una línea.
 ## tools/
 
 - **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
+- **Lo dibujado en otro idioma:** `cartel_planta_en.py` hace los carteles de planta con «FLOOR» (`cartel-planta-N-en.png`) y
+  `fotos_tutorial.py en` recorta las fotos de los tutoriales de las capturas sacadas con `--ingles` (`assets/ui/tutorial/en/`).
 - **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día `locale/en.po` y avisa de lo que falta
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →

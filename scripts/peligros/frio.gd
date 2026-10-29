@@ -18,7 +18,7 @@ var t := 0.0
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "Frio"
+	name = "Frio"   # no-tr (nombre de nodo)
 	var sala: Dictionary = m.sitio.apt.salas[d.sala]
 	zona = Rect2(sala.c0 * CASILLA, sala.f0 * CASILLA, sala.ancho * CASILLA, sala.fondo * CASILLA)
 	z_index = 4                          # los copos caen por delante de los personajes
@@ -42,7 +42,7 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny and johnny.vivo and dentro(johnny.global_position):
 		johnny.pisar(frio)
-		Peligros.avisar(self, datos, "¡Brrr! Qué frío hace en la cámara")
+		Peligros.avisar(self, datos, Idioma.t("¡Brrr! Qué frío hace en la cámara"))
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi.has_method("pisar") and not zombi.get("dormido") and dentro(zombi.global_position):
 			zombi.pisar(frio)

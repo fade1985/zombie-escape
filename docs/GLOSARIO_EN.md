@@ -123,3 +123,20 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 
 Pendiente de igualar con la fase 5: los nombres de planta y de puerta (`1A`, `apt. 1D`, `apt. GC`) y la numeración de plantas. El euro de
 las noticias se queda (€300, €3.99), aunque el resto del juego usa dólares.
+
+## Elegidos en la fase 5 (por confirmar)
+
+El mundo. Las plantas se nombran así para que valgan detrás de «the» y en minúscula («You fell on the 1st floor of the Apartments»).
+
+| Español | Inglés |
+|---|---|
+| Planta baja · 1ª, 2ª, 3ª planta · Azotea | Ground floor · 1st, 2nd, 3rd floor · Rooftop (cartel dibujado: *FLOOR 0, 1, 2, 3*) |
+| Puertas de los pisos: Bajo C · 1ºD | GC · 1D (en las frases: *apt. GC*, *the key to apt. 1D*) |
+| Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza · Mantenimiento | Locker room · Office · Workshop · Gym · Janitor's closet · Maintenance |
+| Salón · Cocina · Baño (principal) · Dormitorio (de matrimonio, individual) · Pasillo | Living room · Kitchen · Bathroom (Main bathroom) · Bedroom (Master, Single) · Hallway |
+| Apartamento / tienda destrozado/a · Apartamento en llamas | Wrecked apartment / store · Burning apartment |
+| Tiendas: Supermercado · Ferretería · Electrónica · Restaurante · Tienda de ropa · Farmacia · Joyería | Supermarket · Hardware Store · Electronics · Restaurant · Clothing Store · Pharmacy · Jewelry Store |
+| Neones: SUPER · FERRETERIA · ELECTRO · BURGER · MODA · FARMACIA · JOYAS | SUPER · HARDWARE · ELECTRO · BURGER · FASHION · PHARMACY · JEWELS |
+| Salas: Almacén · Cámara frigorífica · Taquillas · Probadores · Rebotica · Aseo · Trastienda · Cámara acorazada | Storeroom · Freezer · Lockers · Fitting rooms · Back room · Restroom · Stockroom · Vault |
+| TRASTEROS (cartel) | STORAGE |
+| Cerrada con llave · Cerrada: hace falta una tarjeta de acceso | Locked: you need the key · Locked: you need an access card |

@@ -18,6 +18,9 @@ const DIBUJO := {"piso": preload("res://assets/sprites/puerta-piso.png"),
 # Planta baja (0) a 3ª (la azotea no tiene ascensor)
 const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
 	preload("res://assets/sprites/cartel-planta-2.png"), preload("res://assets/sprites/cartel-planta-3.png")]
+# Los mismos con «FLOOR» en vez de «PLANTA» (tools/cartel_planta_en.py): los del inglés
+const CARTELES_EN := [preload("res://assets/sprites/cartel-planta-0-en.png"), preload("res://assets/sprites/cartel-planta-1-en.png"),
+	preload("res://assets/sprites/cartel-planta-2-en.png"), preload("res://assets/sprites/cartel-planta-3-en.png")]
 # La salida de incendios del fondo del pasillo (las escaleras, en el muro de la derecha): una hoja de chapa roja metida en el
 # hueco, vista de canto desde arriba, con su barra antipánico larga sobresaliendo hacia el pasillo y las escaleras detrás.
 # 36 × 36 píxeles (72 × 72 unidades): los 4 primeros píxeles son del suelo del pasillo, por donde sobresale la barra
@@ -171,12 +174,13 @@ func placa_de_piso(donde: Vector2) -> void:
 
 
 # El cartel de la planta, junto al ascensor, a su izquierda (a 10 unidades del marco): el número pintado con plantilla
-# en la pared, con «PLANTA» pequeño encima, de suelo a moldura (la planta baja, el 0, como en los botones de los
-# ascensores). Las pinturas son de PixelLab (tools/guias_cartel.py)
+# en la pared, con «PLANTA» pequeño encima (en inglés, «FLOOR»: CARTELES_EN), de suelo a moldura (la planta baja, el 0,
+# como en los botones de los ascensores). Las pinturas son de PixelLab (tools/guias_cartel.py)
 func cartel_planta() -> void:
 	var planta: int = salida.planta
-	if planta >= 0 and planta < CARTELES.size():
-		draw_texture_rect(CARTELES[planta], Rect2(-114, -84, 56, 84), false)
+	var carteles: Array = CARTELES_EN if Idioma.actual == "en" else CARTELES
+	if planta >= 0 and planta < carteles.size():
+		draw_texture_rect(carteles[planta], Rect2(-114, -84, 56, 84), false)
 
 
 # Una placa: el borde oscuro y el metal, con su brillo arriba y a la izquierda y su sombra abajo y a la derecha

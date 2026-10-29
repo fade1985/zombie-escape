@@ -17,7 +17,7 @@ var luces: Array = []
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "LuzJefe"
+	name = "LuzJefe"   # no-tr (nombre de nodo)
 	for donde in datos.luces:
 		var l := PointLight2D.new()
 		l.texture = TEXTURA

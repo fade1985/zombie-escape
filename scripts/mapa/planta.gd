@@ -26,10 +26,13 @@ const SALA_ESTANCIA := 10
 const SALA_COLS := 2 + SALA_ESTANCIA * 3 + 2 + 2
 const SALA_FILAS := 2 + SALA_ESTANCIA + 2
 const SALA_PUERTA := 6            # la fila de arriba de las dos puertas de dentro (a media altura, como la de las viviendas)
-# Cada estancia, de izquierda a derecha: su uso (el estilo de su suelo y su pared, en mapa.gd) y su nombre. La del
-# medio va primero (la habitación 0): ahí está la entrada y ahí empieza la partida
+# Cada estancia, de izquierda a derecha: su uso (el estilo de su suelo y su pared, en mapa.gd) y su nombre (en español,
+# como todos los nombres de la planta: se traduce al enseñarlo, nombre_de_sitio). La del medio va primero (la
+# habitación 0): ahí está la entrada y ahí empieza la partida
+# [traducir]
 const SALA_ESTANCIAS := [{"uso": "vestuario", "nombre": "Vestuario"}, {"uso": "despacho", "nombre": "Despacho"},
 	{"uso": "taller", "nombre": "Taller"}]
+# [/traducir]
 const EXPO_COLS := 46            # la sala de exposición del modo pruebas
 const EXPO_FILAS := 153           # (alargada para los zombis, los minijefes, el gerente, el Glotón, el Gymbro, el bombero y el científico jefe, y para los muebles de la sala de mantenimiento)
 const ARMAS_CASILLAS := 34       # la sala de pruebas (cuadrada): del centro a la pared caben 15 casillas
@@ -88,16 +91,77 @@ static var rng := RandomNumberGenerator.new()
 static var semilla := 0
 
 
+# ── Los nombres ──
+# Los nombres de la planta, de sus sitios y de sus habitaciones (y los avisos de sus salidas) se guardan en español al
+# generarla (son datos: «4ºB» se compara) y se traducen al enseñarlos, con nombre_planta, nombre_de, nombre_de_sitio y
+# aviso_de. Quien los enseñe usa estas funciones, sin volver a envolverlas en Idioma.t (docs/IDIOMAS.md)
+
+# Las plantas con número que cada idioma dice a su manera («1ª planta», "1st floor"); de ahí para arriba, «%dª planta»
+# ("Floor %d")
+# [traducir]
+const PISOS := ["1ª planta", "2ª planta", "3ª planta"]
+# [/traducir]
+# Las puertas de los pisos tal como las nombra nombre_puerta («Bajo C», «1ºD»), para traducirlas al enseñarlas
+static var _puerta := RegEx.create_from_string("^(?:Bajo ([A-Z])|(\\d+)º([A-Z]))$")   # no-tr
+
+
+# Cómo se llama la planta "num" (1 = la baja), ya traducido: para enseñarlo. Las frases lo ponen en minúscula detrás de
+# su artículo («Caíste en la %s de %s»: "You fell on the %s of %s"), así que en inglés son "ground floor", "1st floor"...
 static func nombre_planta(num: int) -> String:
-	return "Planta baja" if num == 1 else "%dª planta" % (num - 1)
+	if num == 1:
+		return Idioma.t("Planta baja")
+	if num >= 2 and num - 2 < PISOS.size():
+		return Idioma.t(PISOS[num - 2])
+	return Idioma.t("%dª planta") % (num - 1)
 
 
+# Lo mismo en español, tal como se guarda en la planta al generarla ("nombre"; para enseñarlo, nombre_de)
+static func nombre_planta_es(num: int) -> String:
+	return "Planta baja" if num == 1 else "%dª planta" % (num - 1)   # no-tr (el dato: se traduce al enseñarlo)
+
+
+# El nombre de la planta de la partida (la que devuelve generar o azotea), ya traducido: la azotea o su número
+static func nombre_de(planta: Dictionary) -> String:
+	return Idioma.t("Azotea") if planta.get("azotea", false) else nombre_planta(planta.num)
+
+
+# Cómo se llama la puerta "letra" de la planta "num" («Bajo C», «1ºD»), en español: el nombre que se guarda en su sitio (y
+# lo que se compara: la jefa vive en el 4ºB). Para enseñarlo, nombre_de_sitio, que lo traduce ("GC", "1D")
 static func nombre_puerta(num: int, letra: String) -> String:
 	return "Bajo " + letra if num == 1 else "%dº%s" % [num - 1, letra]
 
 
+# El nombre de un sitio o de una habitación (su "nombre", en español), ya traducido: para enseñarlo (el letrero de
+# arriba, los avisos). Las puertas de los pisos se traducen con su número y su letra («1ºD» → "1D", «Bajo C» → "GC"); la
+# habitación de cada superviviente en las viviendas se llama como él (Supervivientes.nombre_de, sin artículo); y la
+# exposición y la sala de pruebas, que son herramientas, se quedan en español
+static func nombre_de_sitio(cosa: Dictionary) -> String:
+	var nombre: String = cosa.get("nombre", "")
+	if Supervivientes.DATOS.has(cosa.get("vecino", "")):
+		return Supervivientes.nombre_de(Supervivientes.DATOS[cosa.vecino])
+	if cosa.get("tipo", "") in ["expo", "armas"]:
+		return nombre
+	var m := _puerta.search(nombre)
+	if m == null:
+		return Idioma.t(nombre)
+	if m.get_string(1) != "":
+		return Idioma.t("Bajo %s") % m.get_string(1)
+	return Idioma.t("%dº%s") % [m.get_string(2).to_int(), m.get_string(3)]
+
+
+# Lo que se dice al empujar una salida que no se abre (su "aviso", en español en el dato), ya traducido. El de las
+# escaleras dice a quién hay que vencer antes ("aviso_jefe": el jefe de la planta con su artículo, en español; se
+# traduce aquí, una sola vez)
+static func aviso_de(salida: Dictionary) -> String:
+	var texto := Idioma.t(salida.get("aviso", ""))
+	if salida.has("aviso_jefe"):
+		return texto % Idioma.t(salida.aviso_jefe)
+	return texto
+
+
 # Genera la planta número "num". Devuelve:
-#   num, nombre      número (1 = baja) y nombre de la planta
+#   num, nombre      número (1 = baja) y nombre de la planta (en español, como todos los nombres y avisos de aquí:
+#                    se enseñan con nombre_de, nombre_de_sitio y aviso_de, ver «Los nombres»)
 #   sitios           [pasillo, lo de detrás de A, B, C y D]. Cada sitio: {tipo ("pasillo", "apartamento",
 #                    "jefe", "mantenimiento", "viviendas", "expo" o "armas"), nombre, ancho, alto, apt (el apartamento, si lo es),
 #                    dueno (el plano de las salas rectangulares), muebles (muebles.gd), surtido (qué variante
@@ -119,7 +183,7 @@ static func nombre_puerta(num: int, letra: String) -> String:
 #                    no lleva zombis: si no, nadie podría limpiar el piso
 # Cada salida: {dir ("arriba", "abajo", "izquierda", "derecha"), en (posición a lo largo de su muro), tipo
 # ("puerta", "ascensor", "llegada", "escaleras"), a (sitio al que lleva), vuelta (salida por la que se
-# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso}; las puertas de tienda de la pared de arriba
+# aparece allí), cerrojo ("", "llave", "jefa", "nunca"), aviso (y, en las escaleras, aviso_jefe)}; las puertas de tienda de la pared de arriba
 # llevan "neon" (el tipo de tienda): su letrero de neón encima (neon.gd). Las puertas de los pisos llevan "placa" (su
 # letra, o "llave" la de la sala de mantenimiento): una placa junto a la puerta; y el ascensor, "planta" (0 = la
 # baja): el número grande que se ve a su lado (puerta.gd)
@@ -135,7 +199,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		return azotea(num, edificio, su_jefe)
 	var tiendas: bool = ed.generador == "tienda"
 	var mini: Dictionary = Edificios.MINIJEFES.get(su_jefe, {})
-	var planta := {"num": num, "nombre": nombre_planta(num), "sitios": [], "llave": {}, "tiene_llave": false,
+	var planta := {"num": num, "nombre": nombre_planta_es(num), "sitios": [], "llave": {}, "tiene_llave": false,
 		"jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio,
 		"jefe": su_jefe if su_jefe != "" else ed.jefe, "el_jefe": mini.get("el", ed.el_jefe)}
 	var ancho := PASILLO_COLS * CASILLA
@@ -218,15 +282,15 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 			sitio.peligros = Peligros.del_gloton(sitio)
 		if jefe and su_jefe == "gymbro":
 			# el gimnasio del Gymbro (lleno de máquinas, ver arriba): mancuernas por el suelo, que hacen caer a Johnny
-			apt.salas[0].nombre = "Gimnasio"
+			apt.salas[0].nombre = "Gimnasio"   # [traducir]
 			sitio.peligros = Peligros.del_gymbro(sitio)
 		if jefe and planta.jefe == "portera":
 			# el cuarto de la limpieza de la portera (ver arriba): cubos por el suelo, que hacen caer a Johnny
-			apt.salas[0].nombre = "Cuarto de la limpieza"
+			apt.salas[0].nombre = "Cuarto de la limpieza"   # [traducir]
 			sitio.peligros = Peligros.de_la_portera(sitio)
 		if jefe and planta.jefe == "bombero":
 			# la habitación del jefe de bomberos (sin muebles, ver arriba): en llamas por todo el borde menos la puerta
-			apt.salas[0].nombre = "Apartamento en llamas"
+			apt.salas[0].nombre = "Apartamento en llamas"   # [traducir]
 			sitio.peligros = Peligros.del_bombero(sitio)
 		if jefe and planta.jefe in Peligros.LUZ_JEFE.jefes:
 			# y a las cuatro habitaciones de los jefes de los Apartamentos, la misma luz blanca fija (la del gimnasio)
@@ -255,19 +319,20 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 				pasillo.escaparates.append({"x": h.en + lado_x * ESCAPARATE_A, "tienda": tipo_tienda})
 		if jefe:
 			puerta.cerrojo = "llave"   # la llave o la tarjeta: se abren igual (ver partida.gd)
-			puerta.aviso = "Cerrada: hace falta una tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Cerrada con llave"
+			puerta.aviso = "Cerrada: hace falta una tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Cerrada con llave"   # [traducir]
 		pasillo.salidas.append(puerta)
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
-		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": num - 1})
+		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": num - 1})   # [traducir]
 	# por donde se ha llegado: solo en la planta baja, el portal del edificio, a la izquierda. En las demás plantas no hay otra
 	# puerta: se llega por las escaleras de la derecha, las mismas por las que se salió de la planta de abajo (como en un
 	# edificio de verdad, que no hay que rodear); y por ellas se sigue subiendo
 	if baja:
 		pasillo.salidas.append({"dir": "izquierda", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1,
-			"cerrojo": "nunca", "aviso": "El edificio sigue infestado: aún no puedes irte"})
+			"cerrojo": "nunca", "aviso": "El edificio sigue infestado: aún no puedes irte"})   # [traducir]
+	# (el jefe va aparte, en español: aviso_de arma la frase al enseñarla)
 	pasillo.salidas.append({"dir": "derecha", "en": alto / 2, "tipo": "escaleras", "a": -1, "vuelta": -1,
-		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con " + planta.el_jefe})
+		"cerrojo": "jefa", "aviso": "Bloqueadas: acaba antes con %s", "aviso_jefe": planta.el_jefe})   # [traducir]
 	# los apliques de la pared de arriba, cada 230 unidades y sin tapar puertas: son las luces del pasillo
 	# (algunos fallan de vez en cuando), como en src/rooms.js
 	pasillo.apliques = []
@@ -375,19 +440,19 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
-	var planta := {"num": num, "nombre": "Azotea", "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},
+	var planta := {"num": num, "nombre": "Azotea", "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},   # [traducir]
 		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio, "jefe": jefe,
 		"el_jefe": ed.el_final if jefe == ed.get("final", "") else ed.el_jefe, "superviviente": {}, "cientifico": {}}
 	var ancho := AZOTEA_COLS * CASILLA
 	var alto := AZOTEA_FILAS * CASILLA
-	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",
+	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Azotea", "ancho": ancho, "alto": alto, "estilo": "azotea",   # [traducir]
 		"dueno": Muebles.plano_rectangular(AZOTEA_COLS, AZOTEA_FILAS), "zombis": [], "limpio": false, "visitado": true,
 		"surtido": rng.randi(), "manchas": [], "helipuerto": Vector2(ancho / 2.0, alto / 2.0)}   # (el centro de lo de arriba)
 	# como los pisos ("cajas"), con el murete (del gris oscuro de los tabiques) y plano alrededor y oscuro por fuera (mapa.gd: al_aire)
 	sitio.cajas = true
 	sitio.salidas = [   # (la única: de aquí se sale en el helicóptero, que suelta su escalera al caer el jefe)
 		{"dir": "derecha", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
-			"aviso": "Ya no hay vuelta atrás"},
+			"aviso": "Ya no hay vuelta atrás"},   # [traducir]
 	]
 	sitio.muebles = aparatos(sitio, edificio)
 	# manchas de sangre sueltas (las de manchas-suelo.png), fuera del helipuerto
@@ -469,7 +534,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 	var apt := {"cols": SALA_COLS, "filas": SALA_FILAS, "dueno": dueno, "salas": salas, "puertas": puertas, "jefe": false,
 		"tipo": "mantenimiento"}
 	# ("cajas": cada estancia, cerrada por sus tabiques, con oscuro alrededor, como las viviendas: mapa.poner_tabiques)
-	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "apt": apt, "ancho": ancho, "alto": alto,
+	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "apt": apt, "ancho": ancho, "alto": alto,   # [traducir]
 		"zombis": [], "limpio": true, "visitado": false, "surtido": rng.randi(), "manchas": [],
 		"vistas": {0: true, 1: true, 2: true}, "cajas": true, "arriba_extra": 68}
 	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
@@ -506,7 +571,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 static func exposicion(pruebas: int) -> Dictionary:
 	var ancho := EXPO_COLS * CASILLA
 	var alto := EXPO_FILAS * CASILLA
-	return {"tipo": "expo", "nombre": "Exposición", "ancho": ancho, "alto": alto, "muebles": [],
+	return {"tipo": "expo", "nombre": "Exposición", "ancho": ancho, "alto": alto, "muebles": [],   # no-tr (herramienta interna)
 		"dueno": Muebles.plano_rectangular(EXPO_COLS, EXPO_FILAS), "zombis": [], "limpio": true, "visitado": true,
 		"surtido": 0, "salidas": [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": pruebas, "vuelta": 0,
 		"cerrojo": "", "aviso": ""}]}
@@ -517,7 +582,7 @@ static func exposicion(pruebas: int) -> Dictionary:
 # "mant" solo sirve de relleno: en las plantas de arriba es -1).
 static func sala_armas(mant: int) -> Dictionary:
 	var lado := ARMAS_CASILLAS * CASILLA
-	return {"tipo": "armas", "nombre": "Sala de pruebas", "ancho": lado, "alto": lado, "muebles": [],
+	return {"tipo": "armas", "nombre": "Sala de pruebas", "ancho": lado, "alto": lado, "muebles": [],   # no-tr (herramienta interna)
 		"dueno": Muebles.plano_rectangular(ARMAS_CASILLAS, ARMAS_CASILLAS), "zombis": [], "limpio": true,
 		"visitado": true, "surtido": 0, "salidas": [{"dir": "abajo", "en": lado / 2, "tipo": "puerta", "a": mant,
 		"vuelta": 0, "cerrojo": "", "aviso": ""}]}

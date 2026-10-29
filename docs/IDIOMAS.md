@@ -122,7 +122,24 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
   `escolta.gd` y los gritos de los jefes, de los zombis y de Johnny (`gerente.gd`, `portera.gd`, `gymbro.gd`, `johnny.gd`...).
   Los gritos se adaptan con ingenio, no se traducen literalmente.
 
-**Lo que aún sale en español:** los nombres de planta, de sitio y de tienda (`mapa/planta.gd`, `mapa/tienda.gd`; fase 5, con los carteles del mundo y los dibujados en imágenes:
-`cartel-planta-N.png` lleva «PLANTA», y las fotos de `assets/ui/tutorial/` pueden llevar texto del juego dibujado). Cómo se dice cada cosa en inglés: `docs/GLOSARIO_EN.md`.
+- **Fase 5 (el mundo):** `mapa/planta.gd`, `mapa/tienda.gd`, `mapa/apartamento.gd`, `mapa/viviendas.gd`, `mapa/neon.gd`,
+  `mapa/cartel_trasteros.gd`, `mapa/puerta.gd`, `minimapa.gd` y los avisos de `peligros/`. Los nombres de planta, de sitio y de tienda se
+  **guardan en español al generar la planta** (también sirven de clave: `nombre_puerta`) y se traducen solo al enseñarlos, con
+  `Planta.nombre_planta(num)`, `Planta.nombre_de(planta)`, `Planta.nombre_de_sitio(sitio)`, `Planta.aviso_de(salida)`,
+  `Tienda.nombre(tipo)` y `Tienda.neon(tipo)`.
+
+**Lo dibujado en imágenes** (no sale en `locale/en.po`; hay una versión por idioma y el código elige según `Idioma.actual`):
+- `assets/sprites/cartel-planta-N.png` lleva «PLANTA»: `py tools/cartel_planta_en.py` hace `cartel-planta-N-en.png` («FLOOR»),
+  que `mapa/puerta.gd` (`CARTELES_EN`) usa en inglés.
+- `assets/ui/tutorial/<id>.png` son recortes de capturas con el texto del juego dibujado: las de inglés van en
+  `assets/ui/tutorial/en/<id>.png` (`ui/tutorial.gd` las prefiere y, si no hay, usa la de español). Se rehacen con las
+  capturas sacadas con `--ingles` y `py tools/fotos_tutorial.py en`; las ocho que no llevan ningún texto (apagón, curas, horda,
+  incendio, jugar, lanzables, munición, peligros) valen para todos los idiomas y no se rehacen. Cuando cambie lo que se ve en el
+  juego, hay que repetir las fotos en cada idioma (la lista de pruebas que las sacan está en `tools/fotos_tutorial.py`).
+- Sin texto dibujado: `EXIT` de la salida de incendios (ya es inglés), la «H» del helipuerto y los escaparates (garabatos). El logo
+  (`assets/ui/logo.png`) lleva el nombre del juego, que aún no está decidido (`docs/LANZAMIENTO.md`).
+
+**Lo que falta:** la revisión del inglés por una persona nativa (sobre todo el humor y los gritos) y la prueba larga entera en
+inglés. Cómo se dice cada cosa: `docs/GLOSARIO_EN.md`.
 
 **Decimales:** `Talentos.decimal(x)` da la coma en español y el punto en inglés (de momento solo lo usa `talentos.gd`).

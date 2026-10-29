@@ -44,7 +44,7 @@ var destello := 0.0
 func montar(d: Dictionary, m: Node) -> void:
 	datos = d
 	mapa = m
-	name = "Agua"
+	name = "Agua"   # no-tr (nombre de nodo)
 	z_index = -1
 	light_mask = Luz.CAPA_SUELO   # lo alumbran las luces del suelo (la linterna, las teles)
 	for c in d.casillas:
@@ -109,7 +109,7 @@ func poner_teles() -> void:
 		luz.mapa = mapa
 		luz.zona = 0
 		luz.get_node("Bombilla").visible = false
-		for nombre in ["LuzSuelo", "LuzCosas"]:
+		for nombre in ["LuzSuelo", "LuzCosas"]:   # no-tr (nombres de nodo)
 			luz.get_node(nombre).color = TELE
 		luz.get_node("LuzCosas").range_item_cull_mask = Luz.CAPA_COSAS | Luz.capa_sala(0)
 		mueble.add_child(luz)
@@ -129,7 +129,7 @@ func encender(si: bool, avisar := true) -> void:
 		Sonido.tocar("encendido" if si else "apagon")
 		var partida := get_tree().current_scene
 		if partida and partida.has_method("decir"):
-			partida.decir("¡Ha vuelto la corriente!" if si else "¡Clac! Se ha ido la luz de la tienda")
+			partida.decir(Idioma.t("¡Ha vuelto la corriente!") if si else Idioma.t("¡Clac! Se ha ido la luz de la tienda"))
 
 
 func cambiar_corriente() -> void:
@@ -155,7 +155,7 @@ func _physics_process(delta: float) -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if datos.corriente and not datos.get("arreglado", false):
 		if johnny and johnny.vivo and cerca(johnny.global_position, 90.0):
-			Peligros.avisar(self, datos, "¡Ojo! El agua tiene corriente")
+			Peligros.avisar(self, datos, Idioma.t("¡Ojo! El agua tiene corriente"))
 		pulso += delta
 		if pulso >= Peligros.AGUA.pulso:
 			pulso -= Peligros.AGUA.pulso

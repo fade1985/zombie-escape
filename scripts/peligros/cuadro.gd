@@ -21,7 +21,7 @@ func montar(d: Dictionary, charco: Node, m: Node) -> void:
 	datos = d
 	agua = charco
 	mapa = m
-	name = "Cuadro"
+	name = "Cuadro"   # no-tr (nombre de nodo)
 	position = Vector2(d.x, d.y + 1)
 	# un brillo rojo mientras hay corriente, para que se vea en la penumbra
 	brillo = PointLight2D.new()

@@ -4,7 +4,8 @@
 # verdad. Lo pone mapa.gd (poner_viviendas). El origen es el pie de la cara del muro (para ordenarse con ella).
 extends Node2D
 
-const TEXTO := "TRASTEROS"
+# Lo que pone, en español: se pinta ya traducido y la placa se ensancha con lo que mida
+const TEXTO := "TRASTEROS"   # [traducir]
 const LETRA := 16          # el tamaño de la letra (la fuente pixel art solo se ve nítida a 16 o 32)
 const ALTO := 64.0         # a qué altura va el centro del cartel, por encima del pie del muro
 const ALTO_PLACA := 30.0   # lo que mide de alto la placa
@@ -16,7 +17,8 @@ const TORNILLO := [Color("dee2e8"), Color("70768a")]   # su brillo y su sombra
 
 
 func _draw() -> void:
-	var letras := ceilf(Tema.FUENTE.get_string_size(TEXTO, HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA).x / 2.0) * 2.0
+	var texto := Idioma.t(TEXTO)
+	var letras := ceilf(Tema.FUENTE.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA).x / 2.0) * 2.0
 	var ancho := letras + 36.0
 	var r := Rect2(-roundf(ancho / 4.0) * 2.0, -ALTO - ALTO_PLACA / 2.0, ancho, ALTO_PLACA)
 	# su sombra en la chapa de la pared, abajo y a la derecha
@@ -35,4 +37,4 @@ func _draw() -> void:
 	for x in [r.position.x + 8.0, r.end.x - 12.0]:
 		draw_rect(Rect2(x, r.position.y + 12, 4, 4), TORNILLO[1])
 		draw_rect(Rect2(x, r.position.y + 12, 2, 2), TORNILLO[0])
-	draw_string(Tema.FUENTE, Vector2(r.position.x + 18, r.position.y + 21), TEXTO, HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA, BLANCO)
+	draw_string(Tema.FUENTE, Vector2(r.position.x + 18, r.position.y + 21), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, LETRA, BLANCO)
