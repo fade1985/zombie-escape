@@ -342,7 +342,8 @@ en una línea.
 - `sprites/`: las hojas (`.png` + `.json`) y sus animaciones (`.tres`). Hoja nueva →
   `py tools/hacer_frames.py assets/sprites/<nombre>`.
 - `musica/`: `el-ultimo-inquilino.ogg` (menús y explorar) y `turno-de-noche.ogg` (peleas); se eligen en `CANCIONES`
-  de `sonido.gd`.
+  de `sonido.gd`. En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio (ver
+  `docs/WEB.md`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
 - `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab.

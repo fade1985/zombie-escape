@@ -33,3 +33,13 @@
 - Ajustes en `export_presets.cfg` (sin hilos: vale en Vercel sin cabeceras especiales) y `vercel.json` (sirve `web/`).
 - Para probar un cambio sin pisar `web/` (por ejemplo, las letras de otro idioma), exportar a una carpeta temporal y servirla sin caché: ver
   «Probar en la web» en `docs/IDIOMAS.md`. Lo que se ve bien en el ordenador puede fallar en la web, que no trae letras del sistema.
+
+## Lo que suena distinto en la web
+
+- En la web, Godot hace sonar cada sonido directamente en el navegador. Al llegar al final de una canción en bucle,
+  no vuelve al principio sino al punto donde se empezó a tocar. Por eso, en la web la música empieza siempre al
+  principio (`poner_cancion` de `sonido.gd`); en el ordenador, en un compás al azar. Antes, en la web se repetía
+  sin parar solo el último trozo de la canción (el 29 oct, 9 segundos de la del menú).
+- Para ver qué suena en una exportación de prueba sin oírla: un script en el `<head>` de su `index.html` que envuelva
+  `AudioBufferSourceNode.prototype.start` y `stop` (cada canción que empieza y para, con su punto de inicio) y conecte
+  un `AnalyserNode` a la salida (cuánto suena). Así se encontró esto.

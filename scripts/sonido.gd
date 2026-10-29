@@ -216,13 +216,14 @@ func musica(nuevo: String) -> void:
 
 
 # Pone la canción del momento en bucle, empezando al principio de un compás al azar para que no suene siempre
-# igual, y la funde con la que sonaba
+# igual, y la funde con la que sonaba. En la web, siempre desde el principio: allí Godot, al acabar la canción, no
+# vuelve al principio sino adonde empezó, y se repetía sin parar solo el último trozo (a veces, 9 segundos)
 func poner_cancion() -> void:
 	var c: Dictionary = CANCIONES[momento]
 	var cancion: AudioStreamOggVorbis = load("res://assets/musica/%s.ogg" % c.nombre)
 	cancion.loop = true   # el final empalma con el principio
 	var compases: int = c.compases
-	var desde := randi_range(0, compases - 1) * cancion.get_length() / compases
+	var desde := 0.0 if OS.has_feature("web") else randi_range(0, compases - 1) * cancion.get_length() / compases
 	fundir(sonando, 0.0, FUNDIDO)
 	var r := otro
 	otro = sonando
