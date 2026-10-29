@@ -1,0 +1,5710 @@
+# Traducción al ruso de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
+# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
+msgid ""
+msgstr ""
+"Project-Id-Version: Zombie Escape\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+
+#: scripts/alerta.gd
+msgid "Alerta %d"
+msgstr "Тревога %d"
+
+#: scripts/alerta.gd
+msgid "Sin alerta"
+msgstr "Без тревоги"
+
+#: scripts/alerta.gd
+msgid "Como siempre"
+msgstr "Как обычно"
+
+#: scripts/alerta.gd
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de piezas"
+msgstr ""
+"%s%s\n"
+"+%d %% к долларам и деталям"
+
+#: scripts/alerta.gd
+msgid " (y lo de antes)"
+msgstr " (плюс предыдущие)"
+
+#: scripts/alerta.gd
+msgid "+25 % de zombis"
+msgstr "+25 % зомби"
+
+#: scripts/alerta.gd
+msgid "Zombis un 10 % más rápidos"
+msgstr "Зомби быстрее на 10 %"
+
+#: scripts/alerta.gd
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "У боссов +25 % здоровья, и они раньше звереют"
+
+#: scripts/alerta.gd
+msgid "Botiquines, vendas y Lobezno curan la mitad"
+msgstr "Аптечки, бинты и Росомаха лечат вдвое слабее"
+
+#: scripts/alerta.gd
+msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
+msgstr "Охранник (или зомби с ключом) вдвое живучее, а зомби слышат тебя издалека"
+
+#: scripts/aliado.gd
+msgid "Quédate a su lado para levantarlo"
+msgstr "Постой рядом, чтобы помочь подняться"
+
+#: scripts/aliado.gd scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "Помогите!"
+
+#: scripts/aliado.gd
+msgid "¡Llévame contigo!"
+msgstr "Возьми меня с собой!"
+
+#: scripts/aliado.gd
+msgid "¿Te acompaño?"
+msgstr "Можно с тобой?"
+
+#: scripts/antidisturbios.gd
+msgid "¡PRIIIII!"
+msgstr "ФЬЮЮЮЮТЬ!"
+
+#: scripts/antidisturbios.gd
+msgid "¡ATRÁS!"
+msgstr "НАЗАД!"
+
+#: scripts/antidisturbios.gd
+msgid "¡QUEDAS DETENIDO!"
+msgstr "ЛИЦОМ В ПОЛ!"
+
+#: scripts/antidisturbios.gd
+msgid "¡CLONC!"
+msgstr "ДЗЫНЬ!"
+
+#: scripts/armas.gd
+msgid "golpe un %d %% más largo y ancho"
+msgstr "удар на %d %% длиннее и шире"
+
+#: scripts/armas.gd
+msgid "cargador un %d %% más grande y recarga un %d %% más rápida"
+msgstr "магазин больше на %d %%, перезарядка быстрее на %d %%"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande y la descarga salta a %d zombi más"
+msgid_plural "depósito un %d %% más grande y la descarga salta a %d zombis más"
+msgstr[0] "бак больше на %d %%, а разряд перескакивает еще на %d зомби"
+msgstr[1] "бак больше на %d %%, а разряд перескакивает еще на %d зомби"
+msgstr[2] "бак больше на %d %%, а разряд перескакивает еще на %d зомби"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande"
+msgstr "бак больше на %d %%"
+
+#: scripts/armas.gd
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "радиус больше на %d %%, а в стопку влезает на %d больше"
+
+#: scripts/armas.gd
+msgid "%s: daño +%d %%, %s."
+msgstr "%s: урон +%d %%, %s."
+
+#: scripts/armas.gd
+msgid "Truco: cada %d golpes que dan, uno es crítico (doble daño)."
+msgstr "Фишка: каждый %d-й удар — критический (двойной урон)."
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a un zombi y siguen."
+msgstr "Фишка: пули прошивают одного зомби и летят дальше."
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a %d zombis y siguen."
+msgstr "Фишка: пули прошивают %d зомби и летят дальше."
+
+#: scripts/armas.gd
+msgid "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
+msgstr "Фишка: убитые им зомби лопаются и передают свой эффект соседям."
+
+#: scripts/armas.gd
+msgid "Truco: al romperse suelta %d más pequeños alrededor."
+msgstr "Фишка: разбившись, раскидывает вокруг мелкие копии: %d шт."
+
+#: scripts/armas.gd
+msgid "Truco: al explotar suelta %d más pequeños alrededor."
+msgstr "Фишка: взорвавшись, раскидывает вокруг мелкие копии: %d шт."
+
+#: scripts/armas.gd scripts/ui/opciones.gd
+msgid "Normal"
+msgstr "Обычное"
+
+#: scripts/armas.gd
+msgid "Poco común"
+msgstr "Необычное"
+
+#: scripts/armas.gd
+msgid "Rara"
+msgstr "Редкое"
+
+#: scripts/armas.gd
+msgid "Épica"
+msgstr "Эпическое"
+
+#: scripts/armas.gd
+msgid "Fregona"
+msgstr "Швабра"
+
+#: scripts/armas.gd
+msgid "Bate"
+msgstr "Бита"
+
+#: scripts/armas.gd
+msgid "Cuchillo"
+msgstr "Нож"
+
+#: scripts/armas.gd
+msgid "Pistola"
+msgstr "Пистолет"
+
+#: scripts/armas.gd
+msgid "Escopeta"
+msgstr "Дробовик"
+
+#: scripts/armas.gd
+msgid "MP5"
+msgstr "MP5"
+
+#: scripts/armas.gd
+msgid "Lanzallamas"
+msgstr "Огнемет"
+
+#: scripts/armas.gd
+msgid "Lanza ácido"
+msgstr "Кислотомет"
+
+#: scripts/armas.gd
+msgid "Lanza rayos"
+msgstr "Молниемет"
+
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cuerpo a cuerpo"
+msgstr "Ближний бой"
+
+#: scripts/armas.gd scripts/ui/inventario.gd
+msgid "A distancia"
+msgstr "Дальний бой"
+
+#: scripts/armas.gd
+msgid "una gasolina"
+msgstr "канистрой бензина"
+
+#: scripts/armas.gd
+msgid "un bidón de ácido"
+msgstr "бочкой кислоты"
+
+#: scripts/armas.gd
+msgid "una batería"
+msgstr "батареей"
+
+#: scripts/armas.gd
+msgid "Balas de pistola"
+msgstr "Пистолетные пули"
+
+#: scripts/armas.gd
+msgid "¡Sin balas!"
+msgstr "Нет пуль!"
+
+#: scripts/armas.gd
+msgid "la pistola y la MP5"
+msgstr "пистолет и MP5"
+
+#: scripts/armas.gd
+msgid "Cartuchos"
+msgstr "Дробь"
+
+#: scripts/armas.gd
+msgid "¡Sin cartuchos!"
+msgstr "Нет дроби!"
+
+#: scripts/armas.gd
+msgid "la escopeta"
+msgstr "дробовик"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Gasolina"
+msgstr "Бензин"
+
+#: scripts/armas.gd
+msgid "¡Sin gasolina!"
+msgstr "Нет бензина!"
+
+#: scripts/armas.gd
+msgid "el lanzallamas"
+msgstr "огнемет"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bidón de ácido"
+msgstr "Бочка кислоты"
+
+#: scripts/armas.gd
+msgid "¡Sin ácido!"
+msgstr "Нет кислоты!"
+
+#: scripts/armas.gd
+msgid "el lanza ácido"
+msgstr "кислотомет"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Batería"
+msgstr "Батарея"
+
+#: scripts/armas.gd
+msgid "¡Sin batería!"
+msgstr "Батарея села!"
+
+#: scripts/armas.gd
+msgid "el lanza rayos"
+msgstr "молниемет"
+
+#: scripts/averia.gd
+msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
+msgstr "Под током не могу. Опусти рубильник на щитке!"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico para que el %s arregle el cable"
+msgstr "Опусти рубильник на электрощитке, чтобы %s починил провод"
+
+#: scripts/averia.gd
+msgid "¡Gracias! Sigo con el cable"
+msgstr "Спасибо! Возвращаюсь к проводу"
+
+#: scripts/averia.gd
+msgid "¡Se ha cerrado la puerta! Aguanta a oscuras mientras el %s arregla el cable"
+msgstr "Дверь захлопнулась! Продержись в темноте, пока %s чинит провод"
+
+#: scripts/averia.gd
+msgid "¡Arreglado! Ya puedes dar la luz"
+msgstr "Готово! Можешь включать свет"
+
+#: scripts/averia.gd
+msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
+msgstr "%s починил провод! Вода больше не бьет током"
+
+#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
+msgid "¡Ayúdame, no puedo levantarme!"
+msgstr "Помоги, не могу встать!"
+
+#: scripts/averia.gd
+msgid "El %s no se va sin arreglar el cable: baja la palanca del cuadro"
+msgstr "%s не уйдет, пока не починит провод: опусти рубильник на щитке"
+
+#: scripts/averia.gd
+msgid "Aguanta: el %s está arreglando el cable"
+msgstr "Держись: %s чинит провод"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico"
+msgstr "Опусти рубильник на электрощитке"
+
+#: scripts/averia.gd
+msgid "¡El %s ha caído!"
+msgstr "%s ранен!"
+
+#: scripts/averia.gd
+msgid "¡Hay corriente! Baja la palanca"
+msgstr "Тут ток! Опусти рубильник"
+
+#: scripts/averia.gd
+msgid "El %s arregla el cable · %d:%02d"
+msgstr "%s чинит провод · %d:%02d"
+
+#: scripts/averia.gd
+msgid "¡Bien, sin corriente! Cúbreme mientras lo arreglo"
+msgstr "Отлично, тока нет! Прикрой, пока чиню"
+
+#: scripts/averia.gd
+msgid "Este empalme está hecho polvo…"
+msgstr "Скрутка совсем никакая…"
+
+#: scripts/averia.gd
+msgid "No veo nada… ¡no dejes que se me acerquen!"
+msgstr "Ничего не вижу… не подпускай их ко мне!"
+
+#: scripts/averia.gd
+msgid "¡Toma, esto estaba en el almacén!"
+msgstr "Держи, нашел на складе!"
+
+#: scripts/averia.gd
+msgid "Pelo el cable, lo uno… vale"
+msgstr "Зачищаю, скручиваю… готово"
+
+#: scripts/averia.gd
+msgid "Ya solo falta la cinta aislante…"
+msgstr "Осталось только заизолировать…"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Un poco más!"
+msgstr "Еще чуть-чуть!"
+
+#: scripts/averia.gd
+msgid "¡Eh, que hay corriente! ¡Baja la palanca!"
+msgstr "Эй, тут ток! Опусти рубильник!"
+
+#: scripts/averia.gd
+msgid "¡Así no puedo! ¡Quita la corriente!"
+msgstr "Так я не могу! Вырубай ток!"
+
+#: scripts/averia.gd
+msgid "¡Que me electrocuto! ¡La palanca!"
+msgstr "Меня же шибанет! Рубильник!"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Johnny, vuelve!"
+msgstr "Джонни, вернись!"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡No me dejes aquí!"
+msgstr "Не бросай меня тут!"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Que me comen!"
+msgstr "Меня же съедят!"
+
+#: scripts/barricada.gd
+msgid "¡Espera, que quito la barricada!"
+msgstr "Погоди, разбираю баррикаду!"
+
+#: scripts/barricada.gd
+msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
+msgstr "Вход захлопнулся! Защищай дверь, пока %s разбирает баррикаду"
+
+#: scripts/barricada.gd
+msgid "la entrada"
+msgstr "вход"
+
+#: scripts/barricada.gd scripts/supervivientes.gd
+msgid "¡Vienen por %s!"
+msgstr "Лезут через %s!"
+
+#: scripts/barricada.gd
+msgid "¡Barricada fuera! La entrada se ha abierto"
+msgstr "Баррикады нет! Вход открыт"
+
+#: scripts/barricada.gd
+msgid "¡Están empujando la puerta! Quítaselos"
+msgstr "Они ломятся в дверь! Отгони их"
+
+#: scripts/barricada.gd
+msgid "%s quita la barricada · %d:%02d"
+msgstr "%s разбирает баррикаду · %d:%02d"
+
+#: scripts/barricada.gd
+msgid "¡Cuántos clavos le metí!"
+msgstr "Ну я и гвоздей тут набил!"
+
+#: scripts/barricada.gd
+msgid "¡Una tabla menos!"
+msgstr "Минус доска!"
+
+#: scripts/barricada.gd
+msgid "Esta tabla no sale…"
+msgstr "Эта доска не поддается…"
+
+#: scripts/barricada.gd
+msgid "¡Toma, te lo paso por debajo!"
+msgstr "Держи, просуну под дверью!"
+
+#: scripts/barricada.gd
+msgid "¡Otra fuera!"
+msgstr "Еще одна!"
+
+#: scripts/barricada.gd
+msgid "Ya casi está…"
+msgstr "Почти готово…"
+
+#: scripts/barricada.gd
+msgid "¡La última tabla!"
+msgstr "Последняя доска!"
+
+#: scripts/barricada.gd
+msgid "¡Me están empujando la puerta!"
+msgstr "Они ломятся в дверь!"
+
+#: scripts/barricada.gd
+msgid "¡Quítamelos de la puerta!"
+msgstr "Убери их от двери!"
+
+#: scripts/barricada.gd
+msgid "¡Así no puedo, Johnny!"
+msgstr "Так я не могу, Джонни!"
+
+#: scripts/bestiario.gd
+msgid "El vecino"
+msgstr "Сосед"
+
+#: scripts/bestiario.gd
+msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde."
+msgstr "Приехал на рассвете в грузовике Velaria в обмен на бесплатную квартиру. Теперь он спящий: не здоровается на лестнице, а кусается."
+
+#: scripts/bestiario.gd
+msgid "El arrastrado"
+msgstr "Ползун"
+
+#: scripts/bestiario.gd
+msgid "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido."
+msgstr "Нижней половины у него нет, но он этого не заметил. Ползет на руках и пачкает все вокруг."
+
+#: scripts/bestiario.gd
+msgid "El crío"
+msgstr "Пацан"
+
+#: scripts/bestiario.gd
+msgid "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo."
+msgstr "Пацан в кепке и спортивном костюме, носится как бешеный. Тормозит ужасно: отойди в сторону — и он пролетит мимо."
+
+#: scripts/bestiario.gd
+msgid "El dinamitero"
+msgstr "Подрывник"
+
+#: scripts/bestiario.gd
+msgid "Un hombretón con gabardina. Cuando la abre no es para enseñarte nada bueno: corre."
+msgstr "Здоровяк в плаще. Если он его распахнул, то не для того, чтобы показать что-то хорошее: беги."
+
+#: scripts/bestiario.gd
+msgid "El de los tentáculos"
+msgstr "Спрут"
+
+#: scripts/bestiario.gd
+msgid "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella."
+msgstr "Почти не двигается, но если провел красную линию — не стой на ней."
+
+#: scripts/bestiario.gd
+msgid "El gordo"
+msgstr "Толстяк"
+
+#: scripts/bestiario.gd
+msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
+msgstr "Держится на расстоянии и плюется соплей, от которой пол становится ядовитым."
+
+#: scripts/bestiario.gd
+msgid "La portera"
+msgstr "Вахтерша"
+
+#: scripts/bestiario.gd
+msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
+msgstr "У нее все было под контролем: ключи, квитанции, а теперь и жильцы. Швабра — не для уборки."
+
+#: scripts/bestiario.gd
+msgid "La dependienta"
+msgstr "Продавщица"
+
+#: scripts/bestiario.gd
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta."
+msgstr "31 час на ногах — и все еще улыбается. Когда она кричит «СКИДКИ!», просыпается весь магазин."
+
+#: scripts/bestiario.gd
+msgid "El vigilante"
+msgstr "Охранник"
+
+#: scripts/bestiario.gd
+msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
+msgstr "Все еще делает обход. Услышит свисток — прибежит с дубинкой наперевес."
+
+#: scripts/bestiario.gd
+msgid "El guardia de la tarjeta"
+msgstr "Охранник с картой"
+
+#: scripts/bestiario.gd
+msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "У него ключ-карта от этажа, и он это знает. Свистит, убегает и выдыхается: вот твой шанс."
+
+#: scripts/bestiario.gd
+msgid "El antidisturbios"
+msgstr "Омоновец"
+
+#: scripts/bestiario.gd
+msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
+msgstr "Пока щит впереди, его ничем не пробить. Обойди его: в спину больнее вдвое."
+
+#: scripts/bestiario.gd
+msgid "El cocinero"
+msgstr "Повар"
+
+#: scripts/bestiario.gd
+msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
+msgstr "Все еще на своей кухне, а в меню — ножи и кипящее масло. Не стой под метками."
+
+#: scripts/bestiario.gd
+msgid "La modista"
+msgstr "Швея"
+
+#: scripts/bestiario.gd
+msgid "Se esconde entre los maniquíes y te cose a alfileres. Fíjate en cuál le brillan los ojos."
+msgstr "Прячется среди манекенов и утыкивает тебя булавками. Смотри, у кого из них горят глаза."
+
+#: scripts/bestiario.gd
+msgid "El maniquí"
+msgstr "Манекен"
+
+#: scripts/bestiario.gd
+msgid "Quieto mientras lo miras. No le des la espalda."
+msgstr "Замирает, пока ты на него смотришь. Не поворачивайся к нему спиной."
+
+#: scripts/bestiario.gd
+msgid "La mascota"
+msgstr "Талисман"
+
+#: scripts/bestiario.gd
+msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
+msgstr "Гигантский плюшевый медведь, а внутри кто-то есть. Таранит, прыгает, а если врежется — видит звездочки."
+
+#: scripts/bestiario.gd
+msgid "El gerente"
+msgstr "Управляющий"
+
+#: scripts/bestiario.gd
+msgid "Arturo Salcedo, director del centro. Sus contratos cortan y su jeringuilla lleva VD-7."
+msgstr "Артуро Сальседо, директор торгового центра. Его контракты режут, а в его шприце — VD-7."
+
+#: scripts/bestiario.gd
+msgid "El gerente mutado"
+msgstr "Управляющий-мутант"
+
+#: scripts/bestiario.gd
+msgid "Ya no le hace falta dormir. Ni el traje. Cuatro tentáculos y el helicóptero esperando en la azotea."
+msgstr "Сон ему больше не нужен. И костюм тоже. Четыре щупальца, а на крыше ждет вертолет."
+
+#: scripts/bestiario.gd
+msgid "El Glotón"
+msgstr "Обжора"
+
+#: scripts/bestiario.gd
+msgid "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe tuyo te salpica."
+msgstr "Ползает на четвереньках и хочет тебя сожрать: когда разинет пасть, уйди из конуса. Кровь у него кислотная: каждый твой удар — брызги на тебя."
+
+#: scripts/bestiario.gd
+msgid "El Gymbro"
+msgstr "Качок"
+
+#: scripts/bestiario.gd
+msgid "Gira con los brazos abiertos, salta encima de ti y te tira pesas. Con sus suplementos, la armadura se come la mitad del daño."
+msgstr "Крутится, раскинув руки, прыгает на тебя и швыряет гантели. На своих добавках его броня съедает половину урона."
+
+#: scripts/bestiario.gd
+msgid "El jefe de bomberos"
+msgstr "Брандмейстер"
+
+#: scripts/bestiario.gd
+msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
+msgstr "Огонь ему нипочем: смени оружие. Когда начнет крутиться, беги впереди огненного конуса, куда указывают стрелки. Вблизи берегись топора."
+
+#: scripts/bestiario.gd
+msgid "El doctor Salas"
+msgstr "Доктор Салас"
+
+#: scripts/bestiario.gd
+msgid "Héctor Salas, director del estudio del VD-7. Tira probetas, mejora a sus sujetos y se esconde en una cúpula de cristal: rómpela."
+msgstr "Эктор Салас, руководитель исследования VD-7. Кидается пробирками, усиливает подопытных и прячется под стеклянным куполом: разбей его."
+
+#: scripts/bestiario.gd
+msgid "La criatura"
+msgstr "Тварь"
+
+#: scripts/bestiario.gd
+msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
+msgstr "Что осталось от доктора после собственной дозы: пасть Обжоры, руки Качка и огонь брандмейстера. Уходи с ее полос и от ударной волны."
+
+#: scripts/bombero.gd
+msgid "¡A ARDER!"
+msgstr "ГОРИ ЯСНО!"
+
+#: scripts/bombero.gd scripts/minijefe.gd
+msgid "¡INMUNE!"
+msgstr "НЕ БЕРЕТ!"
+
+#: scripts/bombero.gd
+msgid "¡TODO ARDE!"
+msgstr "ГОРИ ОНО ВСЕ!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MÁS SUJETOS!"
+msgstr "ЕЩЕ КРОЛИКИ!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡DOSIS DOBLE!"
+msgstr "ДВОЙНАЯ ДОЗА!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡SUERO!"
+msgstr "УКОЛЬЧИК!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡NO ME TOCARÁS!"
+msgstr "РУКИ ПРОЧЬ!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MI CÚPULA!"
+msgstr "МОЙ КУПОЛ!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡AÚN NO HE TERMINADO!"
+msgstr "Я ЕЩЕ НЕ ЗАКОНЧИЛ!"
+
+#: scripts/cientifico_jefe.gd scripts/gerente.gd
+msgid "¡GRAAAAH!"
+msgstr "ГРААААХ!"
+
+#: scripts/cocinero.gd
+msgid "¡CALENTITO!"
+msgstr "ГОРЯЧЕНЬКОЕ!"
+
+#: scripts/cocinero.gd
+msgid "¡A LA OLLA!"
+msgstr "В СУП!"
+
+#: scripts/edificios.gd
+msgid "Apartamentos"
+msgstr "Жилой дом"
+
+#: scripts/edificios.gd
+msgid "los Apartamentos"
+msgstr "жилой дом"
+
+#: scripts/edificios.gd
+msgid "Vecinos zombi, pisos a oscuras y una portera con muy mal genio"
+msgstr "Соседи-зомби, темные квартиры и вахтерша с очень скверным характером"
+
+#: scripts/edificios.gd
+msgid "la portera"
+msgstr "вахтерша"
+
+#: scripts/edificios.gd
+msgid "el doctor Salas"
+msgstr "доктор Салас"
+
+#: scripts/edificios.gd
+msgid "limpia los apartamentos y caza al zombi que lleva la llave de la portera"
+msgstr "зачисти квартиры и выследи зомби с ключом вахтерши"
+
+#: scripts/edificios.gd
+msgid "Centro comercial"
+msgstr "Торговый центр"
+
+#: scripts/edificios.gd
+msgid "el Centro comercial"
+msgstr "торговый центр"
+
+#: scripts/edificios.gd
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
+msgstr "Разграбленные магазины, темные склады и охранник, который не выпускает из рук свою карту"
+
+#: scripts/edificios.gd
+msgid "el gerente"
+msgstr "управляющий"
+
+#: scripts/edificios.gd
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
+msgstr "зачисти магазины и выследи охранника: у него ключ-карта"
+
+#: scripts/edificios.gd
+msgid "el Glotón"
+msgstr "Обжора"
+
+#: scripts/edificios.gd
+msgid "el Gymbro"
+msgstr "Качок"
+
+#: scripts/edificios.gd
+msgid "el jefe de bomberos"
+msgstr "брандмейстер"
+
+#: scripts/edificios.gd
+msgid "el antidisturbios"
+msgstr "омоновец"
+
+#: scripts/edificios.gd
+msgid "Oficina de seguridad"
+msgstr "Пост охраны"
+
+#: scripts/edificios.gd
+msgid "la Oficina de seguridad"
+msgstr "пост охраны"
+
+#: scripts/edificios.gd
+msgid "el cocinero"
+msgstr "повар"
+
+#: scripts/edificios.gd
+msgid "Cocina central"
+msgstr "Главная кухня"
+
+#: scripts/edificios.gd
+msgid "la Cocina central"
+msgstr "главную кухню"
+
+#: scripts/edificios.gd
+msgid "la modista"
+msgstr "швея"
+
+#: scripts/edificios.gd
+msgid "Taller de costura"
+msgstr "Ателье"
+
+#: scripts/edificios.gd
+msgid "el Taller de costura"
+msgstr "ателье"
+
+#: scripts/edificios.gd
+msgid "la mascota"
+msgstr "талисман"
+
+#: scripts/edificios.gd
+msgid "Juguetería"
+msgstr "Магазин игрушек"
+
+#: scripts/edificios.gd
+msgid "la Juguetería"
+msgstr "магазин игрушек"
+
+#: scripts/escolta.gd
+msgid "Vámonos. Despacio, por favor"
+msgstr "Пошли. Только медленно, пожалуйста"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s hasta las escaleras: va herida"
+msgstr "%s ранена: доведи ее до лестницы"
+
+#: scripts/escolta.gd
+msgid "Gracias… sigamos"
+msgstr "Спасибо… идем дальше"
+
+#: scripts/escolta.gd
+msgid "¡La %s está en el suelo! Quédate a su lado para levantarla"
+msgstr "%s на полу! Побудь рядом, чтобы ее поднять"
+
+#: scripts/escolta.gd
+msgid "Espera a la %s: va herida"
+msgstr "Подожди: %s ранена"
+
+#: scripts/escolta.gd
+msgid "Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo"
+msgstr "Тут мы в безопасности. Перевяжу ногу и пойду с тобой"
+
+#: scripts/escolta.gd
+msgid "¡La %s está a salvo!"
+msgstr "%s в безопасности!"
+
+#: scripts/escolta.gd
+msgid "¡La %s ha caído! Quédate a su lado"
+msgstr "%s упала! Побудь рядом"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s a las escaleras"
+msgstr "Отведи к лестнице: %s"
+
+#: scripts/escolta.gd
+msgid "Me duele mucho la pierna…"
+msgstr "Нога ужасно болит…"
+
+#: scripts/escolta.gd
+msgid "¡No vayas tan deprisa!"
+msgstr "Не так быстро!"
+
+#: scripts/escolta.gd
+msgid "¡No me dejes atrás!"
+msgstr "Не бросай меня!"
+
+#: scripts/escolta.gd
+msgid "¿Falta mucho?"
+msgstr "Долго еще?"
+
+#: scripts/escolta.gd
+msgid "Tengo que vendarme esto…"
+msgstr "Надо это перевязать…"
+
+#: scripts/eventos.gd
+msgid "¡Ahí viene la horda!"
+msgstr "Орда идет!"
+
+#: scripts/eventos.gd
+msgid "¡Horda vencida! Te deja $%d y una caja de munición"
+msgstr "Орда разбита! Тебе $%d и ящик патронов"
+
+#: scripts/eventos.gd
+msgid "¡Apagón superado! +$%d"
+msgstr "Блэкаут пережит! +$%d"
+
+#: scripts/eventos.gd
+msgid "¡Incendio superado! +$%d"
+msgstr "Пожар пережит! +$%d"
+
+#: scripts/eventos.gd
+msgid "¡Ojo! Ese charco tiene corriente"
+msgstr "Осторожно! Лужа под током"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Apagón"
+msgstr "Блэкаут"
+
+#: scripts/eventos.gd
+msgid "¡APAGÓN!"
+msgstr "БЛЭКАУТ!"
+
+#: scripts/eventos.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"
+msgstr "Свет вырубило на всем этаже: видно только то, что освещает фонарик"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Alarma de incendios"
+msgstr "Пожарная тревога"
+
+#: scripts/eventos.gd
+msgid "¡ALARMA DE INCENDIOS!"
+msgstr "ПОЖАРНАЯ ТРЕВОГА!"
+
+#: scripts/eventos.gd
+msgid "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"
+msgstr "Спринклеры заливают пол: скользко, а где падают провода — бьет током!"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Horda"
+msgstr "Орда"
+
+#: scripts/eventos.gd
+msgid "¡HORDA EN EL PASILLO!"
+msgstr "ОРДА В КОРИДОРЕ!"
+
+#: scripts/eventos.gd
+msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
+msgstr "По коридору идет огромная орда... готовься!"
+
+#: scripts/gerente.gd
+msgid "¡A TRABAJAR!"
+msgstr "ЗА РАБОТУ!"
+
+#: scripts/gerente.gd
+msgid "¡AQUÍ NO PARA NADIE!"
+msgstr "ПЕРЕКУРА НЕ БУДЕТ!"
+
+#: scripts/gloton.gd
+msgid "¡HAMBRE!"
+msgstr "ЖРАТЬ!"
+
+#: scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "ЧАВК!"
+
+#: scripts/gloton.gd
+msgid "¡TENGO HAMBRE!"
+msgstr "ХОЧУ ЖРАТЬ!"
+
+#: scripts/gloton.gd
+msgid "-%d ácido"
+msgstr "-%d кислота"
+
+#: scripts/gymbro.gd
+msgid "¡NO PAIN, NO GAIN!"
+msgstr "NO PAIN, NO GAIN!"
+
+#: scripts/gymbro.gd
+msgid "¡HORA DE LOS SUPLEMENTOS!"
+msgstr "ВРЕМЯ ПРОТЕИНА, БРО!"
+
+#: scripts/gymbro.gd
+msgid "¡SIN SUPLEMENTOS!"
+msgstr "ПРОТЕИН КОНЧИЛСЯ!"
+
+#: scripts/historia.gd
+msgid "azotea"
+msgstr "крыша"
+
+#: scripts/historia.gd
+msgid "Página arrancada"
+msgstr "Вырванная страница"
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Apartamentos"
+msgstr "Досье VD-7 · Жилой дом"
+
+#: scripts/historia.gd
+msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
+msgstr "У каждого мертвого сотрудника Velaria в доме есть страница, а последняя — у руководителя исследования. Все найденное остается здесь навсегда."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"Этой страницы нет. Она у мертвого сотрудника Velaria. Где: %s.\n"
+"\n"
+"Найди его в забеге."
+
+#: scripts/historia.gd
+msgid "Dra. Inés Lozano, coordinadora del estudio"
+msgstr "Д-р Инес Лосано, координатор исследования"
+
+#: scripts/historia.gd
+msgid "PLAN DE CAMPO · CONFIDENCIAL"
+msgstr "ПОЛЕВОЙ ПЛАН · СЕКРЕТНО"
+
+#: scripts/historia.gd
+msgid "Estudio de descanso"
+msgstr "Исследование сна"
+
+#: scripts/historia.gd
+msgid ""
+"Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
+"\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"\n"
+"Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
+"\n"
+"Personal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros."
+msgstr ""
+"Здание: дом 14. Velaria Corp. выкупила его целиком: никто не сунет нос.\n"
+"\n"
+"Объекты: 120, привезены ночью в грузовиках через задний гараж, где их никто не видит. Бездомные, должники, больные. Даем им квартиру и 300 € в месяц.\n"
+"\n"
+"Доза: одна таблетка VD-7 каждую ночь, в 23:00.\n"
+"\n"
+"Персонал: врач — следить за объектами; полицейский в форме — чтобы доверяли; и военный конвой — на случай, если что-то пойдет не так. Вахтерша работает на нас."
+
+#: scripts/historia.gd
+msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
+msgstr "Салас говорит, что по этим людям никто не будет скучать. Потому он их и выбрал."
+
+#: scripts/historia.gd
+msgid "Tomás Vidal, enfermero de noche"
+msgstr "Томас Видаль, ночной медбрат"
+
+#: scripts/historia.gd
+msgid "DIARIO DE TURNO"
+msgstr "ЖУРНАЛ СМЕНЫ"
+
+#: scripts/historia.gd
+msgid "Noches 6 a 13"
+msgstr "Ночи с 6-й по 13-ю"
+
+#: scripts/historia.gd
+msgid ""
+"Noche 6. Funciona. El del 1ºA, que no pegaba ojo desde hacía años, ronca a las 23:10.\n"
+"\n"
+"Noche 9. Siguen dormidos, pero se levantan. Andan, abren la nevera, vuelven a la cama. Con los ojos cerrados.\n"
+"\n"
+"Noche 12. Ya no vuelven a la cama. La piel se les cae a tiras. Se han comido todo lo de los pisos, y al perro del 2ºC. De la escolta solo queda uno.\n"
+"\n"
+"Noche 13. El del 3ºB me ha mordido. Salas los llama «durmientes». Tengo mucho sueño."
+msgstr ""
+"Ночь 6. Работает. Жилец из 1A, который годами не смыкал глаз, храпит уже в 23:10.\n"
+"\n"
+"Ночь 9. Все еще спят, но встают. Ходят, открывают холодильник, возвращаются в постель. С закрытыми глазами.\n"
+"\n"
+"Ночь 12. В постель уже не возвращаются. Кожа слезает лоскутами. Съели все в квартирах, и собаку из 2C. От конвоя остался один.\n"
+"\n"
+"Ночь 13. Меня укусил жилец из 3B. Салас называет их «спящими». Мне ужасно хочется спать."
+
+#: scripts/historia.gd
+msgid "Andrés Peña, técnico de muestras"
+msgstr "Андрес Пенья, лаборант по образцам"
+
+#: scripts/historia.gd
+msgid "CORREO INTERNO IMPRESO"
+msgstr "РАСПЕЧАТКА ВНУТРЕННЕЙ ПОЧТЫ"
+
+#: scripts/historia.gd
+msgid "Asunto: RE: ¿virus?"
+msgstr "Тема: RE: вирус?"
+
+#: scripts/historia.gd
+msgid ""
+"De: Dirección de Velaria Corp.\n"
+"Para: Equipo de campo\n"
+"\n"
+"No hay ningún virus, lo sabemos. Pero «virus» lo entiende todo el mundo y nadie pregunta por las pastillas.\n"
+"\n"
+"Esta noche nuestra seguridad precinta el edificio: nadie entra ni sale, tampoco vosotros ni la escolta. El edificio es nuestro y la policía de fuera no puede pasar.\n"
+"\n"
+"El mordisco cambia el ADN del mordido: un durmiente más. No estaba previsto. Ahora forma parte del estudio.\n"
+"\n"
+"Borrad este correo."
+msgstr ""
+"От: Дирекция Velaria Corp.\n"
+"Кому: Полевая группа\n"
+"\n"
+"Никакого вируса нет, мы это знаем. Но слово «вирус» понятно всем, и никто не спрашивает про таблетки.\n"
+"\n"
+"Сегодня ночью наша служба безопасности опечатывает здание: никто не войдет и не выйдет, в том числе вы и конвой. Здание наше, и полиция снаружи пройти не может.\n"
+"\n"
+"Укус меняет ДНК укушенного: еще один спящий. Это не планировалось. Теперь это часть исследования.\n"
+"\n"
+"Удалите это письмо."
+
+#: scripts/historia.gd
+msgid "No pienso borrarlo. Que lo lea alguien."
+msgstr "Не стану я его удалять. Пусть кто-нибудь прочтет."
+
+#: scripts/historia.gd
+msgid "Dr. Ramón Gil, investigador de Velaria"
+msgstr "Д-р Рамон Хиль, исследователь Velaria"
+
+#: scripts/historia.gd
+msgid "INFORME · DOSIS ALTA"
+msgstr "ОТЧЕТ · ВЫСОКАЯ ДОЗА"
+
+#: scripts/historia.gd
+msgid "Los sonámbulos"
+msgstr "Лунатики"
+
+#: scripts/historia.gd
+msgid ""
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"\n"
+"S-1. La portera. Dosis triple. Sigue fregando.\n"
+"S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
+"S-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\n"
+"S-4. Bombero jubilado, 2ºA. El fuego no le quema.\n"
+"\n"
+"Salas les saca sangre cada noche y se la sube a la azotea."
+msgstr ""
+"Четыре объекта с высокой дозой не остались спящими. Они мутировали дальше: охотятся, немного соображают и говорят фразами. Салас называет их «лунатиками».\n"
+"\n"
+"S-1. Вахтерша. Тройная доза. Все еще моет полы.\n"
+"S-2. Бездомный, кв. 0C. Ест без остановки. Орет «Хочу жрать!».\n"
+"S-3. Должник, кв. 1D. Подмешивал в свои коктейли. Одежда уже не налезает.\n"
+"S-4. Пожарный на пенсии, кв. 2A. Огонь его не берет.\n"
+"\n"
+"Салас каждую ночь берет у них кровь и уносит на крышу."
+
+#: scripts/historia.gd
+msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
+msgstr "S-1 назвала меня по имени. Уведите персонал с верхних этажей. СРОЧНО."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"Этой страницы нет. Она у руководителя исследования, на самом верху, на крыше.\n"
+"\n"
+"Придется ее отнять."
+
+#: scripts/historia.gd
+msgid "Dr. Héctor Salas, director del estudio"
+msgstr "Д-р Эктор Салас, руководитель исследования"
+
+#: scripts/historia.gd
+msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
+msgstr "СПИСОК ОБЪЕКТОВ · ТОЛЬКО ДЛЯ ДИРЕКЦИИ"
+
+#: scripts/historia.gd
+msgid "Sujeto 0"
+msgstr "Объект 0"
+
+#: scripts/historia.gd
+msgid ""
+"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"\n"
+"Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
+"\n"
+"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+msgstr ""
+"Спящих: 131, считая персонал. Лунатиков: 4.\n"
+"\n"
+"Объект 0: дворник. Он остался в здании по моей просьбе. Его кусали больше 30 раз, а он не обращается. Когда он добивает лунатика, VD-7 на несколько часов меняет его тело, но не разум. Его кровь разрушает препарат.\n"
+"\n"
+"Он — лекарство. Или оружие. Пусть вертолет доставит его в штаб-квартиру живым.\n"
+"\n"
+"Я ждать не стану. Лунатики — это путь: чистый VD-7, все сразу, и я стану выше человека."
+
+#: scripts/historia.gd
+msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
+msgstr "Если ты это читаешь, дворник: не верь людям в халатах. И тем, кто придет тебя спасать, — тоже."
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Centro comercial"
+msgstr "Досье VD-7 · Торговый центр"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
+msgstr "На каждом этаже лежит тело со страницей, а последняя — у управляющего. Все найденное остается здесь навсегда."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. Está junto a un cuerpo, en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"Этой страницы нет. Она рядом с телом. Где: %s.\n"
+"\n"
+"Найди ее в забеге."
+
+#: scripts/historia.gd
+msgid "Julián Mora, farmacéutico de Velaria"
+msgstr "Хулиан Мора, фармацевт Velaria"
+
+#: scripts/historia.gd
+msgid "ALBARÁN DE ENTREGA"
+msgstr "НАКЛАДНАЯ"
+
+#: scripts/historia.gd
+msgid "Pedido para la farmacia"
+msgstr "Заказ для аптеки"
+
+#: scripts/historia.gd
+msgid ""
+"Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
+"\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"\n"
+"Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
+"\n"
+"Si un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp."
+msgstr ""
+"Товар: «Velaria Ночь», от бессонницы. 10 000 упаковок по 20 таблеток.\n"
+"\n"
+"Каждая таблетка: четверть дозы VD-7. Свободная продажа, без рецепта. Цена: 3,99 €.\n"
+"\n"
+"Выложить у касс, на уровне глаз. Плакат: «Спи как младенец».\n"
+"\n"
+"Если покупатель спросит про дом 14, вывести его из магазина и сообщить в службу безопасности Velaria Corp."
+
+#: scripts/historia.gd
+msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
+msgstr "Без рецепта? Я такое продавать не буду. Девушка из провизорской — тоже."
+
+#: scripts/historia.gd
+msgid "Dra. Elena Ruiz, técnica de Velaria"
+msgstr "Д-р Елена Руис, техник Velaria"
+
+#: scripts/historia.gd
+msgid "CONTRATO · CONFIDENCIAL"
+msgstr "ДОГОВОР · СЕКРЕТНО"
+
+#: scripts/historia.gd
+msgid "Programa «Turno infinito»"
+msgstr "Программа «Бесконечная смена»"
+
+#: scripts/historia.gd
+msgid ""
+"Entre Velaria Corp. y la gerencia del centro comercial.\n"
+"\n"
+"Velaria entrega el VD-7 gratis. El centro lo echa en la cafetera de la sala de descanso de los empleados, a dosis completa. Ellos no lo saben.\n"
+"\n"
+"Objetivo: turnos de 20 horas, sin cansancio y sin quejas. Velaria se queda con los datos de 312 empleados.\n"
+"\n"
+"Si sale bien, Velaria Corp. lo venderá a fábricas, almacenes y hospitales: un turno infinito para todo el país."
+msgstr ""
+"Между Velaria Corp. и руководством торгового центра.\n"
+"\n"
+"Velaria поставляет VD-7 бесплатно. Центр добавляет его в кофемашину в комнате отдыха сотрудников, в полной дозе. Сотрудники не знают.\n"
+"\n"
+"Цель: смены по 20 часов, без усталости и без жалоб. Velaria получает данные 312 сотрудников.\n"
+"\n"
+"Если все получится, Velaria Corp. будет продавать его заводам, складам и больницам: бесконечная смена для всей страны."
+
+#: scripts/historia.gd
+msgid "Marta, si te llega esto: no vengas al centro. Por favor."
+msgstr "Марта, если это до тебя дойдет: не приезжай в центр. Пожалуйста."
+
+#: scripts/historia.gd
+msgid "Manuel Ortega, jefe de seguridad del centro"
+msgstr "Мануэль Ортега, начальник охраны центра"
+
+#: scripts/historia.gd
+msgid "PARTE DE INCIDENCIAS"
+msgstr "ЖУРНАЛ ПРОИСШЕСТВИЙ"
+
+#: scripts/historia.gd
+msgid "Turno de noche"
+msgstr "Ночная смена"
+
+#: scripts/historia.gd
+msgid ""
+"02:10. Cerrado desde las 22:00. Los cajeros siguen cobrando a nadie.\n"
+"\n"
+"03:40. El cocinero fríe sin aceite. La del taller de costura viste maniquíes. El del oso de la juguetería saluda al pasillo vacío.\n"
+"\n"
+"04:15. Tienen los ojos cerrados. Siguen trabajando. Si te acercas, muerden.\n"
+"\n"
+"05:00. El gerente dice que no es una incidencia: «Rinden más que nunca».\n"
+"\n"
+"05:30. Pido ayuda. Velaria Corp. manda un antidisturbios. Entra en la oficina de seguridad. No sale."
+msgstr ""
+"02:10. Закрыто с 22:00. Кассиры все еще пробивают чеки в пустоту.\n"
+"\n"
+"03:40. Повар жарит без масла. Швея из ателье одевает манекены. Тот, что в костюме медведя из магазина игрушек, машет пустому коридору.\n"
+"\n"
+"04:15. Глаза у них закрыты. Продолжают работать. Подойдешь — кусаются.\n"
+"\n"
+"05:00. Управляющий говорит, что это не происшествие: «Производительность как никогда».\n"
+"\n"
+"05:30. Прошу помощи. Velaria Corp. присылает омоновца. Он заходит в пост охраны. И не выходит."
+
+#: scripts/historia.gd
+msgid "Esta noche no me tomo el café."
+msgstr "Сегодня ночью кофе не пью."
+
+#: scripts/historia.gd
+msgid "Lucía Benet, secretaria del gerente"
+msgstr "Лусия Бенет, секретарь управляющего"
+
+#: scripts/historia.gd
+msgid "CORREO IMPRESO · GERENCIA"
+msgstr "РАСПЕЧАТКА ПИСЬМА · РУКОВОДСТВО"
+
+#: scripts/historia.gd
+msgid "Asunto: El conserje"
+msgstr "Тема: Дворник"
+
+#: scripts/historia.gd
+msgid ""
+"De: Gerencia del centro comercial\n"
+"Para: Velaria Corp., Dirección\n"
+"\n"
+"El conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n"
+"\n"
+"No voy a llamar a la policía. Lo retengo hasta que llegue vuestro helicóptero. He cerrado las salidas, y mis empleados no se cansan.\n"
+"\n"
+"A cambio, quiero la dosis buena. La de verdad."
+msgstr ""
+"От: Руководство торгового центра\n"
+"Кому: Velaria Corp., Дирекция\n"
+"\n"
+"Дворник из дома 14 в центре. Вижу его на камерах: поднимается этаж за этажом, будто что-то ищет.\n"
+"\n"
+"Полицию вызывать не буду. Задержу его тут до прилета вашего вертолета. Я закрыл выходы, а мои сотрудники не устают.\n"
+"\n"
+"Взамен я хочу хорошую дозу. Настоящую."
+
+#: scripts/historia.gd
+msgid "Lleva cuatro días sin dormir. Dice que ya no le hace falta."
+msgstr "Четвертый день не спит. Говорит, ему больше не нужно."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"Этой страницы нет. Она у управляющего центром, на самом верху, на крыше.\n"
+"\n"
+"Придется ее отнять."
+
+#: scripts/historia.gd
+msgid "Arturo Salcedo, gerente del centro"
+msgstr "Артуро Сальседо, управляющий центром"
+
+#: scripts/historia.gd
+msgid "ORDEN DE RECOGIDA · URGENTE"
+msgstr "ЗАЯВКА НА ВЫВОЗ · СРОЧНО"
+
+#: scripts/historia.gd
+msgid "Recogida del Sujeto 0"
+msgstr "Вывоз Объекта 0"
+
+#: scripts/historia.gd
+msgid ""
+"Lugar: helipuerto de la azotea del centro comercial. Hora: en cuanto avise el gerente.\n"
+"\n"
+"Carga: el Sujeto 0, el conserje del 14. Vivo. No gastéis VD-7 con él: no le hace nada.\n"
+"\n"
+"Destino: Torre Velaria, nuestra sede. Directo al laboratorio de la planta 40. Él ya lo conoce, aunque no se acuerde.\n"
+"\n"
+"El gerente no viaja. Lo que pidió no se le entrega. Mandadle una jeringa para que aguante hasta que lleguemos."
+msgstr ""
+"Место: вертолетная площадка на крыше торгового центра. Время: как только даст знак управляющий.\n"
+"\n"
+"Груз: Объект 0, дворник из дома 14. Живым. Не тратьте на него VD-7: на него не действует.\n"
+"\n"
+"Пункт назначения: Башня Velaria, наша штаб-квартира. Прямо в лабораторию на 40-м этаже. Он там уже бывал, хоть и не помнит.\n"
+"\n"
+"Управляющий не летит. Что он просил, не выдавать. Пришлите ему шприц, чтобы продержался до нашего прибытия."
+
+#: scripts/historia.gd
+msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
+msgstr "Мне обещали хорошую дозу. Прислали шприц и эту бумажку."
+
+#: scripts/historia.gd
+msgid "Canal 8"
+msgstr "Канал 8"
+
+#: scripts/historia.gd
+msgid "Cierran un edificio por un virus"
+msgstr "Дом закрыли из-за вируса"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta del número 14. Desde esta mañana, la seguridad privada de Velaria Corp., la dueña del edificio, no deja entrar ni salir a nadie. Según la empresa, dentro hay un virus muy contagioso. «La situación está controlada», nos dicen. Y piden que nadie se acerque."
+msgstr "Добрый вечер. Я веду репортаж от дома номер 14. С самого утра частная охрана Velaria Corp., владельца здания, никого не впускает и не выпускает. По словам компании, внутри очень заразный вирус. «Ситуация под контролем», — говорят нам. И просят никого не подходить."
+
+#: scripts/historia.gd
+msgid "Camiones de noche en el 14"
+msgstr "Ночные грузовики у дома 14"
+
+#: scripts/historia.gd
+msgid "Alguien desde dentro del 14 nos ha mandado un documento. Según él, Velaria compró el edificio y lo llenó de gente sin casa, con deudas o enferma, traída de noche en camiones, para probar unas pastillas para dormir. Velaria lo niega: «Era un programa social de vivienda»."
+msgstr "Кто-то изнутри дома 14 прислал нам документ. По его словам, Velaria купила здание и заселила его бездомными, должниками и больными, которых привозили ночью в грузовиках, чтобы испытать снотворное. Velaria все отрицает: «Это была социальная жилищная программа»."
+
+#: scripts/historia.gd
+msgid "Un correo dice: no hay virus"
+msgstr "Письмо: вируса нет"
+
+#: scripts/historia.gd
+msgid "Nuestra fuente del 14 nos manda un correo interno de Velaria: «No hay ningún virus, lo sabemos». La empresa dice que es falso. Y añade que, si alguien está enfermo, será por «unas pastillas para dormir en mal estado, de otra marca». Sigue sin decir qué marca."
+msgstr "Наш источник в доме 14 прислал внутреннее письмо Velaria: «Никакого вируса нет, мы это знаем». Компания называет его фальшивкой. И добавляет: если кто-то и болен, то из-за «испорченного снотворного другой марки». Какой марки — по-прежнему не говорит."
+
+#: scripts/historia.gd
+msgid "¿Dónde está la portera?"
+msgstr "Где вахтерша?"
+
+#: scripts/historia.gd
+msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "Источник теперь говорит о четырех «лунатиках»: жильцах, которые приняли большую дозу и все еще разговаривают. Одна из них — якобы вахтерша дома 14, которую никто не видел с момента закрытия. Velaria называет ее «проблемной женщиной, которая никогда у нас не работала». По ночам наверху слышны крики."
+
+#: scripts/historia.gd
+msgid "Velaria busca a un conserje"
+msgstr "Velaria ищет дворника"
+
+#: scripts/historia.gd
+msgid "Última hora: anoche, un helicóptero de Velaria se posó en la azotea del 14. Al despegar, alguien colgaba de su escalera... y se soltó sobre los árboles de la avenida. Hoy Velaria busca a un empleado de mantenimiento «que se ha llevado documentos de la empresa». ¿Es nuestra fuente?"
+msgstr "Срочно: прошлой ночью вертолет Velaria сел на крышу дома 14. При взлете на его лестнице кто-то висел... и сорвался над деревьями проспекта. Сегодня Velaria разыскивает работника техслужбы, «который унес документы компании». Это наш источник?"
+
+#: scripts/historia.gd
+msgid "El centro cierra «por reformas»"
+msgstr "Центр закрывается «на ремонт»"
+
+#: scripts/historia.gd
+msgid "Buenas noches. El centro comercial de la avenida cierra de noche «por reformas». Pero las luces siguen encendidas hasta el amanecer, la alarma de incendios suena de madrugada y dentro se ve gente moviéndose. Velaria, que tiene allí una farmacia, dice: «Nosotros solo alquilamos un local»."
+msgstr "Добрый вечер. Торговый центр на проспекте по ночам закрыт «на ремонт». Но свет горит до рассвета, под утро срабатывает пожарная тревога, а внутри видно, как ходят люди. Velaria, у которой там аптека, заявляет: «Мы просто арендуем помещение»."
+
+#: scripts/historia.gd
+msgid "Velaria vende su somnífero"
+msgstr "Velaria продает свое снотворное"
+
+#: scripts/historia.gd
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "В продаже «Velaria Ночь» от бессонницы. Без рецепта, за 3,99 €. Упаковки разлетаются за часы. Наш источник утверждает, что это то же самое, что испытывали в доме 14, только разбавленное. Velaria отрицает: «Это новая формула, натуральная и безопасная. Мы сами принимаем ее каждую ночь»."
+
+#: scripts/historia.gd
+msgid "Empleados que no vuelven a casa"
+msgstr "Сотрудники не возвращаются домой"
+
+#: scripts/historia.gd
+msgid "Decenas de familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Y les cuento algo mío: mi hermana Elena trabaja allí para Velaria. Desde el lunes no me coge el teléfono."
+msgstr "Десятки семей заявляют, что их родные, сотрудники торгового центра, не возвращаются домой. Центр говорит, что они работают сверхурочно, «добровольно и за хорошие деньги». А теперь о личном: моя сестра Елена работает там на Velaria. С понедельника она не берет трубку."
+
+#: scripts/historia.gd
+msgid "Se filtra un audio del gerente"
+msgstr "Утекла запись управляющего"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio del gerente del centro comercial, al teléfono: «Sí, el conserje está aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."
+msgstr "К нам попала запись телефонного разговора управляющего торговым центром: «Да, дворник здесь. Никуда он не денется. Мои сотрудники не спят, а ему когда-нибудь придется уснуть». Velaria заявляет, что не знает этого человека и что если он принял что-то из ее продукции, то, «видимо, не читал инструкцию»."
+
+#: scripts/historia.gd
+msgid "Un helicóptero en la azotea"
+msgstr "Вертолет на крыше"
+
+#: scripts/historia.gd
+msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."
+msgstr "Срочно: вертолет Velaria вернулся, на этот раз на крышу торгового центра. Он взлетел с кем-то на борту и взял курс на Башню Velaria. Velaria больше не ищет своего дворника: «Он с нами, в безопасности». Завтра в своей башне компания представит «будущее труда». О моей сестре — ничего."
+
+#: scripts/historia.gd
+msgid "Esta página falta (%s)."
+msgstr "Этой страницы нет (%s)."
+
+#: scripts/johnny.gd
+msgid "¡Adrenalina!"
+msgstr "Адреналин!"
+
+#: scripts/johnny.gd
+msgid "recargando…"
+msgstr "перезарядка…"
+
+#: scripts/johnny.gd
+msgid "¡Esquivado!"
+msgstr "Увернулся!"
+
+#: scripts/johnny.gd
+msgid "¡Segundo aliento!"
+msgstr "Второе дыхание!"
+
+#: scripts/johnny.gd
+msgid "Asistido"
+msgstr "Автоприцел"
+
+#: scripts/johnny.gd
+msgid "Apuntar libre"
+msgstr "Ручной прицел"
+
+#: scripts/joyeria.gd
+msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
+msgstr "Ты взял золотую карту: она открывает хранилище ювелирного"
+
+#: scripts/joyeria.gd
+msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
+msgstr "Щелк! Время вышло: хранилище открыто"
+
+#: scripts/joyeria.gd
+msgid "Abres la cámara acorazada con la tarjeta dorada"
+msgstr "Ты открываешь хранилище золотой картой"
+
+#: scripts/joyeria.gd
+msgid "Aguanta: la cámara se abre en %d segundo"
+msgid_plural "Aguanta: la cámara se abre en %d segundos"
+msgstr[0] "Держись: хранилище откроется через %d секунду"
+msgstr[1] "Держись: хранилище откроется через %d секунды"
+msgstr[2] "Держись: хранилище откроется через %d секунд"
+
+#: scripts/joyeria.gd
+msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "Считыватель карт. Без золотой карты охранника остается только аварийное открытие: подойди еще раз, чтобы включить тревогу"
+
+#: scripts/joyeria.gd
+msgid "¡ALARMA!"
+msgstr "ТРЕВОГА!"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!"
+msgstr "Аварийное открытие: хранилище откроется через %d с. Держись!"
+
+#: scripts/joyeria.gd
+msgid "¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería"
+msgstr "Ты включил тревогу! За тобой идут: продержись %d с, не выходя из ювелирного"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d"
+msgstr "%s! Уже у тебя в руках. А еще пачка денег: +$%d"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano; %s se queda en el suelo. Y un fajo de billetes: +$%d"
+msgstr "%s! Уже у тебя в руках; %s остается на полу. А еще пачка денег: +$%d"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia · %d:%02d"
+msgstr "Аварийное открытие · %d:%02d"
+
+#: scripts/lanzables.gd
+msgid "molotovs"
+msgstr "молотовы"
+
+#: scripts/lanzables.gd
+msgid "granadas"
+msgstr "гранаты"
+
+#: scripts/lanzables.gd
+msgid "atraedoras"
+msgstr "приманки"
+
+#: scripts/lanzables.gd
+msgid "congeladoras"
+msgstr "криобомбы"
+
+#: scripts/lanzables.gd
+msgid "¡Sin %s!"
+msgstr "Кончились %s!"
+
+#: scripts/lanzables.gd
+msgid "¡Nada que lanzar!"
+msgstr "Нечего бросать!"
+
+#: scripts/lanzables.gd
+msgid "Molotov"
+msgstr "Молотов"
+
+#: scripts/lanzables.gd
+msgid "Granada"
+msgstr "Граната"
+
+#: scripts/lanzables.gd
+msgid "Atraedora"
+msgstr "Приманка"
+
+#: scripts/lanzables.gd
+msgid "Congeladora"
+msgstr "Криобомба"
+
+#: scripts/logros.gd
+msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
+msgstr "С упрощениями достижения в этом забеге больше не выдаются"
+
+#: scripts/logros.gd
+msgid "¡LOGRO CONSEGUIDO!"
+msgstr "ДОСТИЖЕНИЕ ПОЛУЧЕНО!"
+
+#: scripts/logros.gd
+msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
+msgstr "Достижение получено: %s! Забери награду на компьютере"
+
+#: scripts/logros.gd
+msgid "¡%d LOGROS CONSEGUIDOS!"
+msgstr "ДОСТИЖЕНИЙ ПОЛУЧЕНО: %d!"
+
+#: scripts/logros.gd
+msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
+msgstr "Достижения получены: %s и %s! Забери награды на компьютере"
+
+#: scripts/logros.gd
+msgid "¡%d logros conseguidos! Míralos y cobra los premios en el ordenador"
+msgstr "Достижений получено: %d! Загляни на компьютер и забери награды"
+
+#: scripts/logros.gd
+msgid "Primer turno"
+msgstr "Первая смена"
+
+#: scripts/logros.gd
+msgid "Limpia tu primer apartamento."
+msgstr "Зачисти свою первую квартиру."
+
+#: scripts/logros.gd
+msgid "Sube, conserje"
+msgstr "Вверх, дворник"
+
+#: scripts/logros.gd
+msgid "Llega a la planta 3."
+msgstr "Доберись до уровня 3."
+
+#: scripts/logros.gd
+msgid "Fin de la jornada"
+msgstr "Конец смены"
+
+#: scripts/logros.gd
+msgid "Gana una partida: limpia el edificio de arriba abajo."
+msgstr "Выиграй забег: зачисти здание сверху донизу."
+
+#: scripts/logros.gd
+msgid "Liquidación total"
+msgstr "Полная ликвидация"
+
+#: scripts/logros.gd
+msgid "Completa el Centro comercial: derrota al gerente."
+msgstr "Пройди торговый центр: победи управляющего."
+
+#: scripts/logros.gd
+msgid "Alerta naranja"
+msgstr "Оранжевая тревога"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "Пройди здание на Тревоге 3 или выше."
+
+#: scripts/logros.gd
+msgid "Alerta máxima"
+msgstr "Красная тревога"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 5."
+msgstr "Пройди здание на Тревоге 5."
+
+#: scripts/logros.gd
+msgid "Jornada exprés"
+msgstr "Экспресс-смена"
+
+#: scripts/logros.gd
+msgid "Gana una partida en menos de 15 minutos."
+msgstr "Выиграй забег быстрее чем за 15 минут."
+
+#: scripts/logros.gd
+msgid "Empleado del mes"
+msgstr "Работник месяца"
+
+#: scripts/logros.gd
+msgid "Gana 10 partidas, sumando todas."
+msgstr "Выиграй 10 забегов (всего)."
+
+#: scripts/logros.gd
+msgid "Desahucio"
+msgstr "Выселение"
+
+#: scripts/logros.gd
+msgid "Derrota a la portera."
+msgstr "Победи вахтершу."
+
+#: scripts/logros.gd
+msgid "Sin un rasguño"
+msgstr "Ни царапины"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe sin perder vida en toda la pelea."
+msgstr "Победи босса, не потеряв ни капли здоровья за весь бой."
+
+#: scripts/logros.gd
+msgid "Por los pelos"
+msgstr "На волоске"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe con menos del 10 % de tu vida."
+msgstr "Победи босса, когда у тебя меньше 10 % здоровья."
+
+#: scripts/logros.gd
+msgid "Visto y no visto"
+msgstr "В мгновение ока"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe en menos de 30 segundos de pelea."
+msgstr "Победи босса меньше чем за 30 секунд боя."
+
+#: scripts/logros.gd
+msgid "Cazajefes"
+msgstr "Гроза боссов"
+
+#: scripts/logros.gd
+msgid "Derrota a 25 jefes, sumando todas tus partidas."
+msgstr "Победи 25 боссов за все забеги."
+
+#: scripts/logros.gd
+msgid "Fregona de oro"
+msgstr "Золотая швабра"
+
+#: scripts/logros.gd
+msgid "Mata 10 zombis a fregonazos en una misma partida."
+msgstr "Убей шваброй 10 зомби за один забег."
+
+#: scripts/logros.gd
+msgid "Exterminador"
+msgstr "Дезинсектор"
+
+#: scripts/logros.gd
+msgid "Mata 100 zombis, sumando todas tus partidas."
+msgstr "Убей 100 зомби за все забеги."
+
+#: scripts/logros.gd
+msgid "Limpieza general"
+msgstr "Генеральная уборка"
+
+#: scripts/logros.gd
+msgid "Mata 1.000 zombis, sumando todas tus partidas."
+msgstr "Убей 1000 зомби за все забеги."
+
+#: scripts/logros.gd
+msgid "Pirómano"
+msgstr "Пироман"
+
+#: scripts/logros.gd
+msgid "Prende fuego a 5 zombis con un mismo molotov."
+msgstr "Подожги 5 зомби одним коктейлем Молотова."
+
+#: scripts/logros.gd
+msgid "Racha imparable"
+msgstr "Неудержимый"
+
+#: scripts/logros.gd
+msgid "Mata 30 zombis seguidos sin perder vida."
+msgstr "Убей 30 зомби подряд, не потеряв здоровья."
+
+#: scripts/logros.gd
+msgid "Intocable"
+msgstr "Неприкасаемый"
+
+#: scripts/logros.gd
+msgid "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."
+msgstr "Пройди целый этаж, от прибытия до лестницы, не потеряв здоровья."
+
+#: scripts/logros.gd
+msgid "Sin tiritas"
+msgstr "Без пластырей"
+
+#: scripts/logros.gd
+msgid "Gana una partida sin curarte con vendas ni botiquín."
+msgstr "Выиграй забег, ни разу не полечившись бинтами или аптечкой."
+
+#: scripts/logros.gd
+msgid "Manitas"
+msgstr "Рукастый"
+
+#: scripts/logros.gd
+msgid "Mejora un arma en el banco de trabajo."
+msgstr "Улучши оружие на верстаке."
+
+#: scripts/logros.gd
+msgid "Joya de la corona"
+msgstr "Венец творения"
+
+#: scripts/logros.gd
+msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgstr "Улучши оружие или метательное до Эпического на верстаке."
+
+#: scripts/logros.gd
+msgid "Arsenal completo"
+msgstr "Полный арсенал"
+
+#: scripts/logros.gd
+msgid "Mata un zombi con cada arma: la fregona y todas las de la tienda."
+msgstr "Убей зомби каждым оружием: шваброй и всем, что есть в магазине."
+
+#: scripts/logros.gd
+msgid "Especialista"
+msgstr "Специалист"
+
+#: scripts/logros.gd
+msgid "Llena una rama entera del árbol de talentos."
+msgstr "Заполни целую ветку в дереве талантов."
+
+#: scripts/logros.gd
+msgid "Conserje total"
+msgstr "Дворник от бога"
+
+#: scripts/logros.gd
+msgid "Llena el árbol de talentos entero."
+msgstr "Заполни все дерево талантов."
+
+#: scripts/logros.gd
+msgid "Buen vecino"
+msgstr "Добрый сосед"
+
+#: scripts/logros.gd
+msgid "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."
+msgstr "Спаси выжившего: сдерживай орду, пока выживший взламывает замок."
+
+#: scripts/logros.gd
+msgid "Comunidad de vecinos"
+msgstr "Домком"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de los Apartamentos."
+msgstr "Спаси всех 3 выживших в жилом доме."
+
+#: scripts/logros.gd
+msgid "Plantilla completa"
+msgstr "Полный штат"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes del Centro comercial."
+msgstr "Спаси всех 3 выживших в торговом центре."
+
+#: scripts/logros.gd
+msgid "Buena compañía"
+msgstr "Хорошая компания"
+
+#: scripts/logros.gd
+msgid "Gana una partida con un vecino de las viviendas acompañándote."
+msgstr "Выиграй забег вместе с соседом из общежития."
+
+#: scripts/logros.gd
+msgid "Caja fuerte"
+msgstr "Медвежатник"
+
+#: scripts/logros.gd
+msgid "Abre la cámara acorazada de la Joyería del centro comercial."
+msgstr "Открой хранилище ювелирного в торговом центре."
+
+#: scripts/logros.gd
+msgid "Se fue la luz"
+msgstr "Свет вырубили"
+
+#: scripts/logros.gd
+msgid "Supera un apagón: llega a la planta siguiente."
+msgstr "Переживи блэкаут: доберись до следующего этажа."
+
+#: scripts/logros.gd
+msgid "Simulacro"
+msgstr "Учения"
+
+#: scripts/logros.gd
+msgid "Supera un incendio: llega a la planta siguiente."
+msgstr "Переживи пожар: доберись до следующего этажа."
+
+#: scripts/logros.gd
+msgid "Contra la marea"
+msgstr "Против течения"
+
+#: scripts/logros.gd
+msgid "Vence a una horda del pasillo."
+msgstr "Отбей орду в коридоре."
+
+#: scripts/logros.gd
+msgid "Reto aceptado"
+msgstr "Вызов принят"
+
+#: scripts/logros.gd
+msgid "Completa un reto del día."
+msgstr "Пройди испытание дня."
+
+#: scripts/logros.gd
+msgid "Ninguna regla me para"
+msgstr "Мне закон не писан"
+
+#: scripts/logros.gd
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "Пройди испытание дня с каждым из 7 его правил."
+
+#: scripts/logros.gd
+msgid "Cambio de look"
+msgstr "Новый образ"
+
+#: scripts/logros.gd
+msgid "Ponte una skin en la taquilla del vestuario."
+msgstr "Надень скин в шкафчике в раздевалке."
+
+#: scripts/logros.gd
+msgid "Vestuario completo"
+msgstr "Полный гардероб"
+
+#: scripts/logros.gd
+msgid "Consigue todas las skins de Johnny."
+msgstr "Собери все скины Джонни."
+
+#: scripts/logros.gd
+msgid "Naturalista"
+msgstr "Натуралист"
+
+#: scripts/logros.gd
+msgid "Completa el bestiario: ve a todos los enemigos."
+msgstr "Заполни бестиарий: встреть всех врагов."
+
+#: scripts/logros.gd
+msgid "Investigador"
+msgstr "Следователь"
+
+#: scripts/logros.gd
+msgid "Encuentra todas las páginas del dosier VD-7."
+msgstr "Найди все страницы досье VD-7."
+
+#: scripts/logros.gd
+msgid "Chatarrero"
+msgstr "Барахольщик"
+
+#: scripts/logros.gd
+msgid "Coge al menos una vez cada objeto de las Colecciones."
+msgstr "Хотя бы раз подбери каждый предмет из «Коллекций»."
+
+#: scripts/logros.gd
+msgid "Edificios"
+msgstr "Здания"
+
+#: scripts/logros.gd scripts/tutoriales.gd
+msgid "Jefes"
+msgstr "Боссы"
+
+#: scripts/logros.gd
+msgid "Combate"
+msgstr "Бой"
+
+#: scripts/logros.gd
+msgid "Armas y talentos"
+msgstr "Оружие и таланты"
+
+#: scripts/logros.gd scripts/tutoriales.gd
+msgid "Supervivientes"
+msgstr "Выжившие"
+
+#: scripts/logros.gd
+msgid "Sorpresas y retos"
+msgstr "Сюрпризы и испытания"
+
+#: scripts/logros.gd scripts/ui/ordenador.gd
+msgid "Colecciones"
+msgstr "Коллекции"
+
+#: scripts/mapa/apartamento.gd
+msgid "Salón"
+msgstr "Гостиная"
+
+#: scripts/mapa/apartamento.gd scripts/mapa/tienda.gd
+msgid "Cocina"
+msgstr "Кухня"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño"
+msgstr "Ванная"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio"
+msgstr "Спальня"
+
+#: scripts/mapa/apartamento.gd
+msgid "Apartamento destrozado"
+msgstr "Разгромленная квартира"
+
+#: scripts/mapa/apartamento.gd
+msgid "Pasillo"
+msgstr "Коридор"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio de matrimonio"
+msgstr "Главная спальня"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño principal"
+msgstr "Главная ванная"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio individual"
+msgstr "Маленькая спальня"
+
+#: scripts/mapa/cartel_trasteros.gd
+msgid "TRASTEROS"
+msgstr "КЛАДОВКИ"
+
+#: scripts/mapa/planta.gd
+msgid "Planta baja"
+msgstr "Этаж 0"
+
+#: scripts/mapa/planta.gd
+msgid "%dª planta"
+msgstr "Этаж %d"
+
+#: scripts/mapa/planta.gd
+msgid "Azotea"
+msgstr "Крыша"
+
+#: scripts/mapa/planta.gd
+msgid "Bajo %s"
+msgstr "0%s"
+
+#: scripts/mapa/planta.gd
+msgid "%dº%s"
+msgstr "%d%s"
+
+#: scripts/mapa/planta.gd
+msgid "Vestuario"
+msgstr "Раздевалка"
+
+#: scripts/mapa/planta.gd
+msgid "Despacho"
+msgstr "Кабинет"
+
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
+msgid "Taller"
+msgstr "Мастерская"
+
+#: scripts/mapa/planta.gd
+msgid "1ª planta"
+msgstr "Этаж 1"
+
+#: scripts/mapa/planta.gd
+msgid "2ª planta"
+msgstr "Этаж 2"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "Этаж 3"
+
+#: scripts/mapa/planta.gd
+msgid "Gimnasio"
+msgstr "Спортзал"
+
+#: scripts/mapa/planta.gd
+msgid "Cuarto de la limpieza"
+msgstr "Подсобка"
+
+#: scripts/mapa/planta.gd
+msgid "Apartamento en llamas"
+msgstr "Квартира в огне"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta una tarjeta de acceso"
+msgstr "Заперто: нужна ключ-карта"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada con llave"
+msgstr "Заперто: нужен ключ"
+
+#: scripts/mapa/planta.gd
+msgid "El ascensor está averiado"
+msgstr "Лифт сломан"
+
+#: scripts/mapa/planta.gd
+msgid "El edificio sigue infestado: aún no puedes irte"
+msgstr "Здание все еще кишит зомби: уходить рано"
+
+#: scripts/mapa/planta.gd
+msgid "Bloqueadas: acaba antes con %s"
+msgstr "Лестница перекрыта. Сначала одолей: %s"
+
+#: scripts/mapa/planta.gd
+msgid "Ya no hay vuelta atrás"
+msgstr "Пути назад нет"
+
+#: scripts/mapa/planta.gd
+msgid "Mantenimiento"
+msgstr "Дворницкая"
+
+#: scripts/mapa/tienda.gd
+msgid "Supermercado"
+msgstr "Супермаркет"
+
+#: scripts/mapa/tienda.gd
+msgid "SUPER"
+msgstr "СУПЕР"
+
+#: scripts/mapa/tienda.gd
+msgid "Ferretería"
+msgstr "Хозтовары"
+
+#: scripts/mapa/tienda.gd
+msgid "FERRETERIA"
+msgstr "ХОЗТОВАРЫ"
+
+#: scripts/mapa/tienda.gd
+msgid "Electrónica"
+msgstr "Электроника"
+
+#: scripts/mapa/tienda.gd
+msgid "ELECTRO"
+msgstr "ЭЛЕКТРО"
+
+#: scripts/mapa/tienda.gd
+msgid "Restaurante"
+msgstr "Ресторан"
+
+#: scripts/mapa/tienda.gd
+msgid "BURGER"
+msgstr "БУРГЕР"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda de ropa"
+msgstr "Магазин одежды"
+
+#: scripts/mapa/tienda.gd
+msgid "MODA"
+msgstr "МОДА"
+
+#: scripts/mapa/tienda.gd
+msgid "Farmacia"
+msgstr "Аптека"
+
+#: scripts/mapa/tienda.gd
+msgid "FARMACIA"
+msgstr "АПТЕКА"
+
+#: scripts/mapa/tienda.gd
+msgid "Joyería"
+msgstr "Ювелирный"
+
+#: scripts/mapa/tienda.gd
+msgid "JOYAS"
+msgstr "ЗОЛОТО"
+
+#: scripts/mapa/tienda.gd
+msgid "Almacén"
+msgstr "Склад"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara frigorífica"
+msgstr "Холодильная камера"
+
+#: scripts/mapa/tienda.gd
+msgid "Taquillas"
+msgstr "Шкафчики"
+
+#: scripts/mapa/tienda.gd
+msgid "Probadores"
+msgstr "Примерочные"
+
+#: scripts/mapa/tienda.gd
+msgid "Rebotica"
+msgstr "Провизорская"
+
+#: scripts/mapa/tienda.gd
+msgid "Aseo"
+msgstr "Туалет"
+
+#: scripts/mapa/tienda.gd
+msgid "Trastienda"
+msgstr "Кладовая"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara acorazada"
+msgstr "Хранилище"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda destrozada"
+msgstr "Разгромленный магазин"
+
+#: scripts/mapa/viviendas.gd
+msgid "Viviendas"
+msgstr "Общежитие"
+
+#: scripts/mascota.gd
+msgid "¡ABRAZOS GRATIS!"
+msgstr "ОБНИМАШКИ!"
+
+#: scripts/mascota.gd
+msgid "¡BOING!"
+msgstr "ПРЫГ!"
+
+#: scripts/mascota.gd
+msgid "¡HORA DE JUGAR!"
+msgstr "ДАВАЙ ИГРАТЬ!"
+
+#: scripts/minijefe.gd
+msgid "¡GRRR!"
+msgstr "ГРРР!"
+
+#: scripts/minijefe.gd
+msgid "¡PUMBA!"
+msgstr "БАЦ!"
+
+#: scripts/modista.gd
+msgid "¡SSSS!"
+msgstr "ШШШШ!"
+
+#: scripts/modista.gd
+msgid "¡TE TOMO MEDIDAS!"
+msgstr "СНИМУ МЕРКУ!"
+
+#: scripts/mutaciones.gd
+msgid "¡AAAAAH!"
+msgstr "АААААА!"
+
+#: scripts/mutaciones.gd
+msgid "Tentacular"
+msgstr "Щупальца"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"
+msgstr "Каждые 4 с из груди вылезает щупальце, отбрасывает зомби вокруг и оглушает их на 1 с"
+
+#: scripts/mutaciones.gd
+msgid "Gastroenteritis"
+msgstr "Гастроэнтерит"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"
+msgstr "Каждые 3 с ты блюешь кислотой в ближайшего зомби: остается лужа, которая жжет наступивших в нее зомби"
+
+#: scripts/mutaciones.gd
+msgid "Insensible"
+msgstr "Онемение"
+
+#: scripts/mutaciones.gd
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
+msgstr "Тело теряет чувствительность: получаешь на 35 % меньше урона"
+
+#: scripts/mutaciones.gd
+msgid "Caníbal"
+msgstr "Каннибал"
+
+#: scripts/mutaciones.gd
+msgid "Cada zombi que matas te cura un 2 % de la vida"
+msgstr "Каждый убитый зомби лечит тебя на 2 % здоровья"
+
+#: scripts/mutaciones.gd
+msgid "Ansiedad"
+msgstr "Мандраж"
+
+#: scripts/mutaciones.gd
+msgid "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"
+msgstr "Чем больше зомби в поле зрения, тем быстрее бьешь в ближнем бою (+10 % за каждого, до +50 %)"
+
+#: scripts/mutaciones.gd
+msgid "Endurecimiento"
+msgstr "Огрубение"
+
+#: scripts/mutaciones.gd
+msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
+msgstr "Кожа грубеет: на каждом этаже щит на 60, который тратится раньше здоровья"
+
+#: scripts/mutaciones.gd
+msgid "Locura"
+msgstr "Безумие"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"
+msgstr "Каждые 4 с ты орешь так громко, что зомби вокруг теряют ориентацию на 2 с"
+
+#: scripts/mutaciones.gd
+msgid "Flatulento"
+msgstr "Метеоризм"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"
+msgstr "Каждые 3 с ты выпускаешь едкие газы, которые жгут и парализуют ближайших зомби на 2 с"
+
+#: scripts/objetos.gd
+msgid "la suelta algún zombi, y los jefes seguro"
+msgstr "выпадает из некоторых зомби, а из боссов — всегда"
+
+#: scripts/objetos.gd
+msgid "lo suelta el gordo"
+msgstr "выпадает из толстяка"
+
+#: scripts/objetos.gd
+msgid "lo suelta cualquier zombi"
+msgstr "выпадает из любого зомби"
+
+#: scripts/objetos.gd scripts/talentos.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "%s y %s"
+msgstr "%s и %s"
+
+#: scripts/objetos.gd
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)"
+msgstr "оружие ближнего боя (швабра, нож и бита)"
+
+#: scripts/objetos.gd
+msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
+msgstr "оружие дальнего боя (пистолет, MP5 и дробовик)"
+
+#: scripts/objetos.gd
+msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
+msgstr "особое оружие (огнемет, кислотомет и молниемет)"
+
+#: scripts/objetos.gd
+msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgstr "метательное оружие (молотов, граната, приманка и криобомба)"
+
+#: scripts/objetos.gd
+msgid "Vendas"
+msgstr "Бинты"
+
+#: scripts/objetos.gd
+msgid "Pieza cuerpo a cuerpo"
+msgstr "Деталь ближнего боя"
+
+#: scripts/objetos.gd
+msgid "Pieza a distancia"
+msgstr "Деталь дальнего боя"
+
+#: scripts/objetos.gd
+msgid "Pieza especial"
+msgstr "Особая деталь"
+
+#: scripts/objetos.gd
+msgid "Pieza arrojable"
+msgstr "Метательная деталь"
+
+#: scripts/objetos.gd
+msgid "Botiquín"
+msgstr "Аптечка"
+
+#: scripts/partida.gd scripts/ui/opciones.gd
+msgid "Modo de atacar: %s"
+msgstr "Режим атаки: %s"
+
+#: scripts/partida.gd
+msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
+msgstr "Дефибриллятор! Ты снова с полным здоровьем (только раз за здание)"
+
+#: scripts/partida.gd
+msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
+msgstr "Фармацевт собрала тебе аптечку: она в рюкзаке"
+
+#: scripts/partida.gd
+msgid "¡%s!  %s"
+msgstr "%s!  %s"
+
+#: scripts/partida.gd
+msgid "Te espera arriba, en el helipuerto: sube por la rampa"
+msgstr "Ждет тебя наверху, на вертолетной площадке: поднимайся по пандусу"
+
+#: scripts/partida.gd
+msgid "Aguanta: aún está forzando la cerradura"
+msgstr "Держись: замок еще не взломан"
+
+#: scripts/partida.gd
+msgid "La puerta no se abre mientras quede algún zombi"
+msgstr "Дверь не откроется, пока здесь есть зомби"
+
+#: scripts/partida.gd
+msgid "Abres con la tarjeta de acceso"
+msgstr "Открываешь ключ-картой"
+
+#: scripts/partida.gd
+msgid "Abres con la llave"
+msgstr "Открываешь ключом"
+
+#: scripts/partida.gd
+msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»"
+msgstr "Джонни: «Я починил лифт! Теперь можно спуститься на этаж 0, в дворницкую»"
+
+#: scripts/partida.gd
+msgid "Azotea · ¡El último combate del edificio!"
+msgstr "Крыша · Последний бой в этом здании!"
+
+#: scripts/partida.gd
+msgid "¡La puerta se ha cerrado detrás de ti!"
+msgstr "Дверь за тобой захлопнулась!"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído!"
+msgstr "Босс повержен: %s!"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído! Las escaleras ya están abiertas"
+msgstr "Босс повержен: %s! Лестница открыта"
+
+#: scripts/partida.gd
+msgid "¡Piso limpio! La puerta se ha abierto"
+msgstr "Чисто! Дверь открылась"
+
+#: scripts/partida.gd
+msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
+msgstr "Ограда закрылась! Вниз не уйти, пока не одолеешь: %s"
+
+#: scripts/partida.gd
+msgid "¡Acércate a la escalera para subir al helicóptero!"
+msgstr "Подойди к лестнице, чтобы залезть в вертолет!"
+
+#: scripts/partida.gd
+msgid "¡Un helicóptero de Velaria viene a por ti!"
+msgstr "За тобой летит вертолет Velaria!"
+
+#: scripts/partida.gd
+msgid "¡NOTICIAS NUEVAS!"
+msgstr "ЭКСТРЕННЫЙ ВЫПУСК!"
+
+#: scripts/partida.gd
+msgid "Hay noticias nuevas en el ordenador"
+msgstr "На компьютере новые выпуски новостей"
+
+#: scripts/partida.gd
+msgid "la tienda de %s"
+msgstr "магазин босса (%s)"
+
+#: scripts/partida.gd
+msgid "Has cogido la tarjeta de acceso: abre %s"
+msgstr "Ты взял ключ-карту: она открывает %s"
+
+#: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "Ты взял ключ от кв. %s"
+
+#: scripts/partida.gd
+msgid "¡¡¡LA LLAVE!!!"
+msgstr "КЛЮЧ!!!"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
+msgstr "Охранник засвистел: идет подкрепление!"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
+msgstr "Охранник повержен! Он выронил ключ-карту и золотую карту ювелирного"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
+msgstr "Охранник повержен! Он выронил ключ-карту"
+
+#: scripts/partida.gd
+msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
+msgstr "Зомби с ключом повержен! Он выронил ключ от кв. %s"
+
+#: scripts/partida.gd
+msgid "Te han pillado"
+msgstr "Тебя сцапали"
+
+#: scripts/partida.gd
+msgid "+1 molotov"
+msgstr "+1 молотов"
+
+#: scripts/partida.gd
+msgid "+1 granada"
+msgstr "+1 граната"
+
+#: scripts/partida.gd
+msgid "+munición"
+msgstr "+патроны"
+
+#: scripts/partida.gd
+msgid "Ya llevas %d"
+msgstr "Максимум: %d"
+
+#: scripts/partida.gd
+msgid "No se puede usar"
+msgstr "Нельзя использовать"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo: guárdalo para luego"
+msgstr "Здоровье и так полное: прибереги на потом"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo"
+msgstr "Здоровье и так полное"
+
+#: scripts/partida.gd
+msgid "%d:%02d · ¡récord!"
+msgstr "%d:%02d · рекорд!"
+
+#: scripts/partida.gd
+msgid "¡Reto completado!"
+msgstr "Испытание пройдено!"
+
+#: scripts/partida.gd
+msgid "¡Edificio completado!"
+msgstr "Здание пройдено!"
+
+#: scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "Поражение!"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo"
+msgstr "Ты зачистил %s сверху донизу"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento"
+msgstr "Ты зачистил %s сверху донизу. %s переезжает в свою комнату рядом с дворницкой"
+
+#: scripts/partida.gd
+msgid "Caíste en la %s de %s"
+msgstr "Ты пал: %s, %s"
+
+#: scripts/partida.gd
+msgid "¡SKIN NUEVA!"
+msgstr "НОВЫЙ СКИН!"
+
+#: scripts/partida.gd
+msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
+msgstr "Новый скин: %s. Надень его в шкафчике в дворницкой"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ha vuelto la corriente!"
+msgstr "Ток снова есть!"
+
+#: scripts/peligros/agua.gd
+msgid "¡Clac! Se ha ido la luz de la tienda"
+msgstr "Щелк! В магазине вырубился свет"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ojo! El agua tiene corriente"
+msgstr "Осторожно! Вода под током"
+
+#: scripts/peligros/cerco.gd
+msgid "¡La habitación está en llamas! Lejos de las paredes"
+msgstr "Комната в огне! Держись подальше от стен"
+
+#: scripts/peligros/frio.gd
+msgid "¡Brrr! Qué frío hace en la cámara"
+msgstr "Бррр! Ну и холодина в этой камере"
+
+#: scripts/peligros/fuego.gd
+msgid "¡La cocina está ardiendo!"
+msgstr "Кухня горит!"
+
+#: scripts/peligros/porqueria.gd
+msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
+msgstr "Ну и вонь! Пол в кислотном дерьме: не наступай"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con las mancuernas del suelo: si piso una, me la pego"
+msgstr "Осторожно, гантели на полу: наступлю — и растянусь"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
+msgstr "Осторожно, ведра на полу: споткнусь — и растянусь"
+
+#: scripts/portera.gd
+msgid "¡VECINOS!"
+msgstr "ЖИЛЬЦЫ!"
+
+#: scripts/portera.gd
+msgid "¡LEJÍA!"
+msgstr "ХЛОРКА!"
+
+#: scripts/portera.gd
+msgid "¡ÁCIDO!"
+msgstr "КИСЛОТА!"
+
+#: scripts/portera.gd
+msgid "¡A BARRER!"
+msgstr "ПОД МЕТЕЛКУ!"
+
+#: scripts/portera.gd
+msgid "¡QUE ACABO DE FREGAR!"
+msgstr "КУДА ПО ПОМЫТОМУ?!"
+
+#: scripts/reto.gd
+msgid "Reto del día · %s: %s"
+msgstr "Испытание дня · %s: %s"
+
+#: scripts/reto.gd
+msgid "Reto: %s"
+msgstr "Испытание: %s"
+
+#: scripts/reto.gd
+msgid "Completado en %d:%02d"
+msgstr "Пройдено за %d:%02d"
+
+#: scripts/reto.gd
+msgid "sin marca"
+msgstr "без рекорда"
+
+#: scripts/reto.gd
+msgid "Sin marca"
+msgstr "Без рекорда"
+
+#: scripts/reto.gd
+msgid "planta %d"
+msgstr "уровень %d"
+
+#: scripts/reto.gd
+msgid "Has llegado a la planta %d"
+msgstr "Ты дошел до уровня %d"
+
+#: scripts/reto.gd
+msgid "Hoy: %s"
+msgstr "Сегодня: %s"
+
+#: scripts/reto.gd
+msgid "Aún no lo has intentado"
+msgstr "Ты еще не пробовал"
+
+#: scripts/reto.gd scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "%d попытка"
+msgstr[1] "%d попытки"
+msgstr[2] "%d попыток"
+
+#: scripts/reto.gd
+msgid "Solo cuerpo a cuerpo"
+msgstr "Только ближний бой"
+
+#: scripts/reto.gd
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "пистолет пуст, и не выпадают ни патроны, ни молотовы, ни гранаты"
+
+#: scripts/reto.gd
+msgid "Todo a oscuras"
+msgstr "Кромешная тьма"
+
+#: scripts/reto.gd
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "на всех этажах как при блэкауте: видно только с фонариком"
+
+#: scripts/reto.gd
+msgid "Sin curas"
+msgstr "Без лечения"
+
+#: scripts/reto.gd
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "аптечки в шкафчиках пусты, и ничего лечащего не выпадает, не продается и не готовится для тебя"
+
+#: scripts/reto.gd
+msgid "Zombis rápidos"
+msgstr "Быстрые зомби"
+
+#: scripts/reto.gd
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "все на 35 % быстрее (кроме боссов)"
+
+#: scripts/reto.gd
+msgid "De cristal"
+msgstr "Стеклянный"
+
+#: scripts/reto.gd
+msgid "Johnny con la mitad de vida"
+msgstr "у Джонни половина здоровья"
+
+#: scripts/reto.gd
+msgid "Casa llena"
+msgstr "Аншлаг"
+
+#: scripts/reto.gd
+msgid "el doble de zombis en cada sitio"
+msgstr "вдвое больше зомби везде"
+
+#: scripts/reto.gd
+msgid "Oído fino"
+msgstr "Чуткий слух"
+
+#: scripts/reto.gd
+msgid "los zombis dormidos te oyen desde el triple de lejos"
+msgstr "спящие зомби слышат тебя втрое дальше"
+
+#: scripts/skins.gd
+msgid "Conserje"
+msgstr "Дворник"
+
+#: scripts/skins.gd
+msgid "El portero"
+msgstr "Вахтер"
+
+#: scripts/skins.gd
+msgid "La fregona hace un 100 % más de daño."
+msgstr "Швабра наносит на 100 % больше урона."
+
+#: scripts/skins.gd
+msgid "Mata a la portera por primera vez."
+msgstr "Убей вахтершу в первый раз."
+
+#: scripts/skins.gd
+msgid "El glotón"
+msgstr "Обжора"
+
+#: scripts/skins.gd
+msgid "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida."
+msgstr "Кто тебя ранит, тот поплатится: зомби умирает, а босс теряет 3 % здоровья."
+
+#: scripts/skins.gd
+msgid "Mata al Glotón por primera vez."
+msgstr "Убей Обжору в первый раз."
+
+#: scripts/skins.gd
+msgid "El gymbro"
+msgstr "Качок"
+
+#: scripts/skins.gd
+msgid "Las armas cuerpo a cuerpo hacen un 50 % más de daño."
+msgstr "Оружие ближнего боя наносит на 50 % больше урона."
+
+#: scripts/skins.gd
+msgid "Mata al Gymbro por primera vez."
+msgstr "Убей Качка в первый раз."
+
+#: scripts/skins.gd
+msgid "El bombero"
+msgstr "Пожарный"
+
+#: scripts/skins.gd
+msgid "Las armas que queman hacen un 50 % más de daño y el fuego no te quema."
+msgstr "Жгучее оружие наносит на 50 % больше урона, а огонь тебя не жжет."
+
+#: scripts/skins.gd
+msgid "Mata al jefe de bomberos por primera vez."
+msgstr "Убей брандмейстера в первый раз."
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "Militar"
+msgstr "Военный"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! ¡Sácame de aquí!"
+msgstr "Спасибо! Вытащи меня отсюда!"
+
+#: scripts/supervivientes.gd
+msgid "¡%s se une al equipo! %s"
+msgstr "%s в команде! %s"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "Спасибо! Возвращаюсь к замку"
+
+#: scripts/supervivientes.gd
+msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
+msgstr "Дверь захлопнулась! Продержись, пока %s взламывает замок"
+
+#: scripts/supervivientes.gd
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "ГОТОВО! БЕГИ!"
+
+#: scripts/supervivientes.gd
+msgid "¡Puerta abierta! Salid de aquí"
+msgstr "Дверь открыта! Уходите отсюда"
+
+#: scripts/supervivientes.gd
+msgid "%s te acompaña · %s"
+msgstr "%s с тобой · %s"
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "¡%s ha caído!"
+msgstr "%s на полу!"
+
+#: scripts/supervivientes.gd
+msgid "%s fuerza la cerradura · %d:%02d"
+msgstr "%s взламывает замок · %d:%02d"
+
+#: scripts/supervivientes.gd
+msgid "Policía"
+msgstr "Полицейский"
+
+#: scripts/supervivientes.gd
+msgid "Dispara con su pistola cada 0,8 s"
+msgstr "Стреляет из пистолета раз в 0,8 с"
+
+#: scripts/supervivientes.gd
+msgid "Médica"
+msgstr "Врач"
+
+#: scripts/supervivientes.gd
+msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
+msgstr "Лечит тебя на 5 каждые 6 с и на 10 за каждую зачищенную квартиру"
+
+#: scripts/supervivientes.gd
+msgid "Lanza ráfagas de 3 balas cada 2,5 s"
+msgstr "Стреляет очередями по 3 пули каждые 2,5 с"
+
+#: scripts/supervivientes.gd
+msgid "Ferretero"
+msgstr "Мастер"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el almacén!"
+msgstr "Я на складе!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro!"
+msgstr "Я здесь!"
+
+#: scripts/supervivientes.gd
+msgid "¡He atrancado la puerta!"
+msgstr "Дверь забаррикадирована!"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me oiga!"
+msgstr "Кто-нибудь, услышьте меня!"
+
+#: scripts/supervivientes.gd
+msgid "¡Fuera tablas! Gracias, chaval. Vámonos de aquí"
+msgstr "Доски долой! Спасибо, парень. Уходим отсюда"
+
+#: scripts/supervivientes.gd
+msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
+msgstr "Бежит к замеченным зомби и лупит их молотком (8 урона)"
+
+#: scripts/supervivientes.gd
+msgid "Farmacéutica"
+msgstr "Фармацевт"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la rebotica!"
+msgstr "Я в провизорской!"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy herida!"
+msgstr "Я ранена!"
+
+#: scripts/supervivientes.gd
+msgid "¡Ayuda, por favor!"
+msgstr "Помогите, пожалуйста!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí detrás!"
+msgstr "Я тут, сзади!"
+
+#: scripts/supervivientes.gd
+msgid "¡Me han mordido la pierna! No puedo correr"
+msgstr "Мне прокусили ногу! Не могу бежать"
+
+#: scripts/supervivientes.gd
+msgid "Los charcos de veneno y ácido te hacen la mitad"
+msgstr "Лужи яда и кислоты наносят тебе вдвое меньше урона"
+
+#: scripts/supervivientes.gd
+msgid "Cada partida empiezas con un botiquín en la mochila"
+msgstr "В начале каждого забега у тебя в рюкзаке аптечка"
+
+#: scripts/supervivientes.gd
+msgid "Técnico"
+msgstr "Техник"
+
+#: scripts/supervivientes.gd
+msgid "¡No toquéis el agua!"
+msgstr "Не трогайте воду!"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me saque!"
+msgstr "Вытащите меня отсюда!"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado"
+msgstr "Спасибо! Перед уходом надо починить этот оголенный провод"
+
+#: scripts/supervivientes.gd
+msgid "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano"
+msgstr "Каждые 3 с разряд обездвиживает ближайшего зомби на 1,5 с"
+
+#: scripts/supervivientes.gd
+msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
+msgstr "Чинит камеры наблюдения: на миникарте видны зомби"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el baño!"
+msgstr "Я в ванной!"
+
+#: scripts/supervivientes.gd
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "Заело! Прикрой меня!"
+
+#: scripts/supervivientes.gd
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "Замок весь ржавый… дай мне время"
+
+#: scripts/supervivientes.gd
+msgid "Vale… creo que ya noto el muelle"
+msgstr "Так… кажется, пружина поддается"
+
+#: scripts/supervivientes.gd
+msgid "¡Toma, he encontrado esto!"
+msgstr "Держи, вот что тут было!"
+
+#: scripts/supervivientes.gd
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "Шпилька выпала!… так, есть"
+
+#: scripts/supervivientes.gd
+msgid "Ya casi lo tengo…"
+msgstr "Почти получилось…"
+
+#: scripts/supervivientes.gd
+msgid "el salón"
+msgstr "гостиную"
+
+#: scripts/supervivientes.gd
+msgid "la cocina"
+msgstr "кухню"
+
+#: scripts/supervivientes.gd
+msgid "el dormitorio"
+msgstr "спальню"
+
+#: scripts/supervivientes.gd
+msgid "el baño"
+msgstr "ванную"
+
+#: scripts/supervivientes.gd
+msgid "el pasillo"
+msgstr "коридор"
+
+#: scripts/supervivientes.gd
+msgid "la tienda"
+msgstr "магазин"
+
+#: scripts/supervivientes.gd
+msgid "el almacén"
+msgstr "склад"
+
+#: scripts/supervivientes.gd
+msgid "la cámara"
+msgstr "холодильную камеру"
+
+#: scripts/supervivientes.gd
+msgid "el taller"
+msgstr "мастерскую"
+
+#: scripts/supervivientes.gd
+msgid "las taquillas"
+msgstr "раздевалку"
+
+#: scripts/supervivientes.gd
+msgid "los probadores"
+msgstr "примерочные"
+
+#: scripts/supervivientes.gd
+msgid "la rebotica"
+msgstr "провизорскую"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño"
+msgstr "+%d %% урона"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño y alcance"
+msgstr "+%d %% урона и дальности"
+
+#: scripts/talentos.gd
+msgid "+%d %% cuerpo a cuerpo"
+msgstr "+%d %% в ближнем бою"
+
+#: scripts/talentos.gd
+msgid "+%d %% a distancia"
+msgstr "+%d %% в дальнем бою"
+
+#: scripts/talentos.gd
+msgid "+%d molotov y granada"
+msgid_plural "+%d molotovs y granadas"
+msgstr[0] "+%d молотов и граната"
+msgstr[1] "+%d молотова и гранаты"
+msgstr[2] "+%d молотовов и гранат"
+
+#: scripts/talentos.gd
+msgid "+%d %% de vida"
+msgstr "+%d %% здоровья"
+
+#: scripts/talentos.gd
+msgid "%d de vida cada 5 s"
+msgstr "%d здоровья каждые 5 с"
+
+#: scripts/talentos.gd
+msgid "%d menos por golpe"
+msgstr "на %d меньше за удар"
+
+#: scripts/talentos.gd
+msgid "una esquiva sola cada %d s"
+msgstr "автоуклонение каждые %d с"
+
+#: scripts/talentos.gd
+msgid "+%d de cura"
+msgstr "+%d к лечению"
+
+#: scripts/talentos.gd
+msgid "+%d %% de fuego, ácido, rayo y frío"
+msgstr "+%d %% огня, кислоты, молний и холода"
+
+#: scripts/talentos.gd
+msgid "%d %% menos de los efectos"
+msgstr "на %d %% меньше от эффектов"
+
+#: scripts/talentos.gd
+msgid "+%s s ardiendo"
+msgstr "+%s с горения"
+
+#: scripts/talentos.gd
+msgid "+%d %% con ácido"
+msgstr "+%d %% урона с кислотой"
+
+#: scripts/talentos.gd
+msgid "+%d congeladora y +%s s"
+msgid_plural "+%d congeladoras y +%s s"
+msgstr[0] "+%d криобомба и +%s с"
+msgstr[1] "+%d криобомбы и +%s с"
+msgstr[2] "+%d криобомб и +%s с"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez cuerpo a cuerpo"
+msgstr "+%d %% к скорости ближнего боя"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez y recarga"
+msgstr "+%d %% к скорострельности и перезарядке"
+
+#: scripts/talentos.gd
+msgid "suelta %d más"
+msgstr "мелких копий: +%d"
+
+#: scripts/talentos.gd
+msgid "escudo de %d"
+msgstr "щит на %d"
+
+#: scripts/talentos.gd
+msgid "esquiva un %d %% antes"
+msgstr "уклонение на %d %% быстрее"
+
+#: scripts/talentos.gd
+msgid "+%d de vida por planta"
+msgstr "+%d здоровья за этаж"
+
+#: scripts/talentos.gd
+msgid "+%d s de fuego"
+msgstr "+%d с огня"
+
+#: scripts/talentos.gd
+msgid "%d %% más lentos con ácido"
+msgstr "на %d %% медленнее с кислотой"
+
+#: scripts/talentos.gd
+msgid "salta a %d más"
+msgstr "перескакивает еще на %d"
+
+#: scripts/talentos.gd
+msgid "Militar"
+msgstr "Военный"
+
+#: scripts/talentos.gd
+msgid "Superviviente"
+msgstr "Выживальщик"
+
+#: scripts/talentos.gd
+msgid "Químico"
+msgstr "Химик"
+
+#: scripts/talentos.gd
+msgid "Ataque"
+msgstr "Атака"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño por punto"
+msgstr "+10 % урона за очко"
+
+#: scripts/talentos.gd
+msgid "Puntería"
+msgstr "Меткость"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "+10 % урона и дальности броска молотова и гранаты за очко"
+
+#: scripts/talentos.gd
+msgid "Camorrista"
+msgstr "Драчун"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño cuerpo a cuerpo por punto"
+msgstr "+10 % урона в ближнем бою за очко"
+
+#: scripts/talentos.gd
+msgid "Tirador"
+msgstr "Стрелок"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño con armas a distancia por punto"
+msgstr "+10 % урона оружием дальнего боя за очко"
+
+#: scripts/talentos.gd
+msgid "Artificiero"
+msgstr "Сапер"
+
+#: scripts/talentos.gd
+msgid "+1 molotov y +1 granada por punto"
+msgstr "+1 молотов и +1 граната за очко"
+
+#: scripts/talentos.gd
+msgid "Larguirucho"
+msgstr "Дылда"
+
+#: scripts/talentos.gd
+msgid "Duplica el alcance cuerpo a cuerpo"
+msgstr "Удваивает дальность ближнего боя"
+
+#: scripts/talentos.gd
+msgid "Mirilla"
+msgstr "Прицел"
+
+#: scripts/talentos.gd
+msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
+msgstr "Каждый 3-й выстрел — гарантированный крит (двойной урон)"
+
+#: scripts/talentos.gd
+msgid "Fabricante"
+msgstr "Самоделкин"
+
+#: scripts/talentos.gd
+msgid "Fuego y explosiones más grandes, y el fuego dura más"
+msgstr "Огонь и взрывы больше, а огонь горит дольше"
+
+#: scripts/talentos.gd
+msgid "Frenesí"
+msgstr "Раж"
+
+#: scripts/talentos.gd
+msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
+msgstr "Бьешь в ближнем бою на 10 % быстрее за очко"
+
+#: scripts/talentos.gd
+msgid "Gatillo fácil"
+msgstr "Скорострел"
+
+#: scripts/talentos.gd
+msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
+msgstr "Стреляешь на 10 % быстрее и перезаряжаешь на 10 % быстрее за очко"
+
+#: scripts/talentos.gd
+msgid "Racimo"
+msgstr "Гроздь"
+
+#: scripts/talentos.gd
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
+msgstr "Молотов и граната разбрасывают вокруг на 1 мелкую копию больше за очко"
+
+#: scripts/talentos.gd
+msgid "Veterano"
+msgstr "Ветеран"
+
+#: scripts/talentos.gd
+msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
+msgstr "Криты не в 5 %, а в 15 % случаев, и каждый наносит тройной урон"
+
+#: scripts/talentos.gd
+msgid "Corpulento"
+msgstr "Здоровяк"
+
+#: scripts/talentos.gd
+msgid "+10 % de vida máxima por punto"
+msgstr "+10 % к максимуму здоровья за очко"
+
+#: scripts/talentos.gd
+msgid "Lobezno"
+msgstr "Росомаха"
+
+#: scripts/talentos.gd
+msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
+msgstr "Восстанавливаешь 1 здоровья каждые 5 секунд за очко, до половины здоровья"
+
+#: scripts/talentos.gd
+msgid "Durito"
+msgstr "Крепыш"
+
+#: scripts/talentos.gd
+msgid "Cada golpe que recibes quita 1 menos por punto"
+msgstr "Каждый полученный удар отнимает на 1 меньше за очко"
+
+#: scripts/talentos.gd
+msgid "Reflejos"
+msgstr "Рефлексы"
+
+#: scripts/talentos.gd
+msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
+msgstr "Сам уклоняешься от одного удара каждые 10 с (на 1 с меньше за каждое следующее очко)"
+
+#: scripts/talentos.gd
+msgid "Sanitario"
+msgstr "Санитар"
+
+#: scripts/talentos.gd
+msgid "Los botiquines y las vendas curan 10 más por punto"
+msgstr "Аптечки и бинты лечат на 10 больше за очко"
+
+#: scripts/talentos.gd
+msgid "Acero"
+msgstr "Сталь"
+
+#: scripts/talentos.gd
+msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
+msgstr "На каждом этаже щит на 50, который тратится раньше здоровья"
+
+#: scripts/talentos.gd
+msgid "Ninja"
+msgstr "Ниндзя"
+
+#: scripts/talentos.gd
+msgid "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"
+msgstr "После уклонения — удар по площади, убивающий зомби (не чаще раза в 5 с)"
+
+#: scripts/talentos.gd
+msgid "Desfibrilador"
+msgstr "Дефибриллятор"
+
+#: scripts/talentos.gd
+msgid "Una vez por edificio, si caes, resucitas con toda la vida"
+msgstr "Раз за здание, если падешь, воскресаешь с полным здоровьем"
+
+#: scripts/talentos.gd
+msgid "Blindaje"
+msgstr "Броня"
+
+#: scripts/talentos.gd
+msgid "El escudo de Acero tiene 25 más por punto"
+msgstr "Щит Стали больше на 25 за очко"
+
+#: scripts/talentos.gd
+msgid "Sombra"
+msgstr "Тень"
+
+#: scripts/talentos.gd
+msgid "La esquiva se recarga un 15 % antes por punto"
+msgstr "Уклонение перезаряжается на 15 % быстрее за очко"
+
+#: scripts/talentos.gd
+msgid "Segundo aliento"
+msgstr "Второе дыхание"
+
+#: scripts/talentos.gd
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
+msgstr "Раз за этаж, когда здоровье падает ниже трети, лечишься на 15 за очко"
+
+#: scripts/talentos.gd
+msgid "Adrenalina"
+msgstr "Адреналин"
+
+#: scripts/talentos.gd
+msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
+msgstr "Ниже половины здоровья: +30 % урона и +20 % скорости"
+
+#: scripts/talentos.gd
+msgid "Catalizador"
+msgstr "Катализатор"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "+10 % урона огнем, кислотой, молнией и холодом за очко"
+
+#: scripts/talentos.gd
+msgid "Guantes de goma"
+msgstr "Перчатки"
+
+#: scripts/talentos.gd
+msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
+msgstr "Огонь, кислота, яды и холод ранят тебя на 10 % меньше за очко"
+
+#: scripts/talentos.gd
+msgid "Incendiario"
+msgstr "Поджигатель"
+
+#: scripts/talentos.gd
+msgid "Los zombis que prendes arden 0,5 s más por punto"
+msgstr "Подожженные тобой зомби горят на 0,5 с дольше за очко"
+
+#: scripts/talentos.gd
+msgid "Desatascador"
+msgstr "Вантуз"
+
+#: scripts/talentos.gd
+msgid "Con ácido encima, todo les quita un 10 % más por punto"
+msgstr "Облитые кислотой зомби получают от всего на 10 % больше урона за очко"
+
+#: scripts/talentos.gd
+msgid "Criogenia"
+msgstr "Криогеника"
+
+#: scripts/talentos.gd
+msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
+msgstr "+1 криобомба за очко, и заморозка длится на 0,5 с дольше за очко"
+
+#: scripts/talentos.gd
+msgid "Reacción en cadena"
+msgstr "Цепная реакция"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren ardiendo revientan y prenden a los de al lado"
+msgstr "Зомби, умершие в огне, лопаются и поджигают соседей"
+
+#: scripts/talentos.gd
+msgid "Residuo tóxico"
+msgstr "Токсичные отходы"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
+msgstr "Зомби, умершие в кислоте, оставляют кислотную лужу (тебе она не вредит)"
+
+#: scripts/talentos.gd
+msgid "Pararrayos"
+msgstr "Громоотвод"
+
+#: scripts/talentos.gd
+msgid "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
+msgstr "В зомби, который тебя ударил, бьет молния: оглушает его и перескакивает на другого (не чаще раза в 3 с)"
+
+#: scripts/talentos.gd
+msgid "Napalm"
+msgstr "Напалм"
+
+#: scripts/talentos.gd
+msgid "El fuego del molotov dura 1 s más por punto"
+msgstr "Огонь молотова горит на 1 с дольше за очко"
+
+#: scripts/talentos.gd
+msgid "Pegajoso"
+msgstr "Липучка"
+
+#: scripts/talentos.gd
+msgid "Los zombis con ácido van un 10 % más lentos por punto"
+msgstr "Облитые кислотой зомби медленнее на 10 % за очко"
+
+#: scripts/talentos.gd
+msgid "Alto voltaje"
+msgstr "Киловольты"
+
+#: scripts/talentos.gd
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
+msgstr "Молния молниемета и Громоотвода перескакивает еще на 1 зомби за очко"
+
+#: scripts/talentos.gd
+msgid "Mezcla explosiva"
+msgstr "Гремучая смесь"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
+msgstr "Зомби, умершие сразу с двумя эффектами (огонь, кислота, молния или холод), взрываются (тебе это не вредит)"
+
+#: scripts/tutoriales.gd
+msgid "Apunta y ataca con {apuntar}."
+msgstr "Прицел и атака: {apuntar}."
+
+#: scripts/tutoriales.gd
+msgid "Apunta con {apuntar} y ataca con {atacar}."
+msgstr "Прицел: {apuntar}, атака: {atacar}."
+
+#: scripts/tutoriales.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
+msgstr "Джонни сам целится и бьет ближайшего зомби: твое дело — двигаться."
+
+#: scripts/tutoriales.gd
+msgid "el joystick (toca y arrastra en la mitad izquierda)"
+msgstr "джойстик (коснись и тяни в левой половине)"
+
+#: scripts/tutoriales.gd
+msgid "el stick izquierdo"
+msgstr "левый стик"
+
+#: scripts/tutoriales.gd
+msgid "el joystick de abajo a la derecha"
+msgstr "джойстик справа внизу"
+
+#: scripts/tutoriales.gd
+msgid "el stick derecho"
+msgstr "правый стик"
+
+#: scripts/tutoriales.gd
+msgid "el ratón"
+msgstr "мышь"
+
+#: scripts/tutoriales.gd
+msgid "%s o %s"
+msgstr "%s или %s"
+
+#: scripts/tutoriales.gd
+msgid "Lo básico"
+msgstr "Основы"
+
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Armas"
+msgstr "Оружие"
+
+#: scripts/tutoriales.gd
+msgid "Plantas y jefes"
+msgstr "Этажи и боссы"
+
+#: scripts/tutoriales.gd
+msgid "Eventos sorpresa"
+msgstr "Внезапные события"
+
+#: scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "Дворницкая"
+
+#: scripts/tutoriales.gd
+msgid "Más edificios"
+msgstr "Другие здания"
+
+#: scripts/tutoriales.gd
+msgid "Cómo se juega"
+msgstr "Как играть"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar"
+msgstr "В начале"
+
+#: scripts/tutoriales.gd
+msgid "Muévete con {moverse}."
+msgstr "Движение: {moverse}."
+
+#: scripts/tutoriales.gd
+msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
+msgstr "{atacar_modo} Сменить режим атаки: {cambiar_modo}."
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
+msgstr "Уклонение: {esquivar} — короткий рывок, во время которого тебя не ранить."
+
+#: scripts/tutoriales.gd
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "Сменить швабру на пистолет и обратно: {cambiar_arma}; пауза: {pausa}."
+
+#: scripts/tutoriales.gd
+msgid "Limpia los apartamentos"
+msgstr "Зачисти квартиры"
+
+#: scripts/tutoriales.gd
+msgid "Al salir al pasillo"
+msgstr "Когда выходишь в коридор"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi."
+msgstr "Когда входишь в квартиру, дверь за тобой захлопывается и не откроется, пока не останется ни одного зомби."
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe de la planta está cerrada con llave: la lleva un zombi de otro apartamento y la suelta al caer."
+msgstr "Комната босса этажа заперта: ключ у зомби из другой квартиры, он выронит его, когда упадет."
+
+#: scripts/tutoriales.gd
+msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
+msgstr "Победи босса — и откроется лестница на следующий этаж."
+
+#: scripts/tutoriales.gd
+msgid "La vida en tercios"
+msgstr "Здоровье по третям"
+
+#: scripts/tutoriales.gd
+msgid "Al perder un tercio de vida"
+msgstr "Когда теряешь треть здоровья"
+
+#: scripts/tutoriales.gd
+msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
+msgstr "Твое здоровье разделено на три трети. Потерянную треть бинтами не вылечить, и с каждой потерянной ты ходишь медленнее."
+
+#: scripts/tutoriales.gd
+msgid "Solo el botiquín devuelve un tercio perdido."
+msgstr "Потерянную треть возвращает только аптечка."
+
+#: scripts/tutoriales.gd
+msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
+msgstr "Если тяжело, в «Настройки → Упрощения» есть «Здоровье целиком»."
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Бинты и аптечка"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera cura"
+msgstr "Когда подбираешь первое лечение"
+
+#: scripts/tutoriales.gd
+msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgstr "Бинты: {usar_vendas}. Лечат на 25, но не выше текущей трети."
+
+#: scripts/tutoriales.gd
+msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
+msgstr "Аптечка: {usar_botiquin}. Возвращает потерянную треть и лечит на 50."
+
+#: scripts/tutoriales.gd
+msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "Влезает 3 бинта и 2 аптечки. Шкафчики в ванных открываются, когда подходишь, и вываливают содержимое."
+
+#: scripts/tutoriales.gd
+msgid "Inventario y mochila"
+msgstr "Инвентарь и рюкзак"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer objeto"
+msgstr "Когда подбираешь первый предмет"
+
+#: scripts/tutoriales.gd
+msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "Все подобранное идет в рюкзак. Инвентарь открывается так: {inventario}. Там твое оружие, патроны, метательное и рюкзак."
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
+msgstr "Выбери ячейку, чтобы увидеть ее карточку и кнопки (применить, взять, выбросить...)."
+
+#: scripts/tutoriales.gd
+msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
+msgstr "Если падешь, все, что при тебе, пропадет; если пройдешь здание, все отправится в сундук."
+
+#: scripts/tutoriales.gd
+msgid "Dólares"
+msgstr "Доллары"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer billete"
+msgstr "Когда подбираешь первую купюру"
+
+#: scripts/tutoriales.gd
+msgid "Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Зомби иногда роняют купюры, а боссы — много: пройди по ним, чтобы подобрать."
+
+#: scripts/tutoriales.gd
+msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
+msgstr "Они сохраняются в конце забега: все, если пройдешь здание, и половина, если падешь или сдашься."
+
+#: scripts/tutoriales.gd
+msgid "Se gastan en el ordenador de la sala de mantenimiento."
+msgstr "Тратятся на компьютере в дворницкой."
+
+#: scripts/tutoriales.gd
+msgid "Armas nuevas"
+msgstr "Новое оружие"
+
+#: scripts/tutoriales.gd
+msgid "Al llevar otra arma"
+msgstr "Когда берешь другое оружие"
+
+#: scripts/tutoriales.gd
+msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
+msgstr "В руках у тебя два оружия: ближнего боя и дальнего. Переключение: {cambiar_arma}."
+
+#: scripts/tutoriales.gd
+msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
+msgstr "Остальное — запасное, по одному каждого типа, его меняют в инвентаре ({inventario})."
+
+#: scripts/tutoriales.gd
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
+msgstr "Цвет рамки — это качество: серый — Обычное, зеленый — Необычное, синий — Редкое, фиолетовый — Эпическое."
+
+#: scripts/tutoriales.gd
+msgid "Munición y recarga"
+msgstr "Патроны и перезарядка"
+
+#: scripts/tutoriales.gd
+msgid "Al recargar"
+msgstr "При перезарядке"
+
+#: scripts/tutoriales.gd
+msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
+msgstr "Перезарядка: {recargar}; пустой магазин перезаряжается сам."
+
+#: scripts/tutoriales.gd
+msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
+msgstr "Каждое оружие тратит свои патроны (пули, дробь...). Ящик патронов на полу дает один магазин."
+
+#: scripts/tutoriales.gd
+msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
+msgstr "Без патронов Джонни достает оружие ближнего боя."
+
+#: scripts/tutoriales.gd
+msgid "Lanzables"
+msgstr "Метательное"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "В первой драке"
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "Бросок: {lanzar} — держи, чтобы прицелиться, и отпусти, чтобы бросить."
+
+#: scripts/tutoriales.gd
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
+msgstr "Что бросать, меняется так: {cambiar_lanzable}. Молотов поджигает, граната взрывается. В руке 3, и до 8 в запасе."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! La explosión también te hace daño a ti."
+msgstr "Осторожно! Взрыв ранит и тебя."
+
+#: scripts/tutoriales.gd
+msgid "Piezas de mejora"
+msgstr "Детали для улучшения"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pieza"
+msgstr "Когда подбираешь первую деталь"
+
+#: scripts/tutoriales.gd
+msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "Детали повышают качество оружия и метательного на верстаке в дворницкой."
+
+#: scripts/tutoriales.gd
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgstr "Их четыре вида: ближний бой, дальний бой, особые и метательные. Их иногда роняют зомби и всегда — боссы."
+
+#: scripts/tutoriales.gd
+msgid "Van en la mochila: si completas el edificio, pasan al baúl."
+msgstr "Лежат в рюкзаке: если пройдешь здание, отправятся в сундук."
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al primer jefe"
+msgstr "Когда доходишь до первого босса"
+
+#: scripts/tutoriales.gd
+msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
+msgstr "На каждом этаже свой босс, его полоска здоровья — вверху. На половине здоровья он звереет и становится опаснее."
+
+#: scripts/tutoriales.gd
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
+msgstr "Перед каждой атакой он размечает пол: уйди с метки или уклонись!"
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
+msgstr "Падая, он роняет доллары, патроны и детали, и открывается лестница."
+
+#: scripts/tutoriales.gd scripts/ui/menus.gd
+msgid "Mutaciones"
+msgstr "Мутации"
+
+#: scripts/tutoriales.gd
+msgid "Antes de la primera mutación"
+msgstr "Перед первой мутацией"
+
+#: scripts/tutoriales.gd
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
+msgstr "Когда побеждаешь босса, вирус меняет тебя: выбери одну из двух карт (можно и клавишами 1 и 2)."
+
+#: scripts/tutoriales.gd
+msgid "Cada mutación te da algo bueno y, a veces, algo malo."
+msgstr "Каждая мутация дает что-то хорошее, а иногда и что-то плохое."
+
+#: scripts/tutoriales.gd
+msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
+msgstr "Они действуют до конца забега, и их может быть не больше 4."
+
+#: scripts/tutoriales.gd
+msgid "El ascensor"
+msgstr "Лифт"
+
+#: scripts/tutoriales.gd
+msgid "Al arreglar el ascensor"
+msgstr "Когда чинишь лифт"
+
+#: scripts/tutoriales.gd
+msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
+msgstr "Джонни починил лифт в коридоре: он спускается в дворницкую и возвращается на этот же этаж."
+
+#: scripts/tutoriales.gd
+msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
+msgstr "На нем можно посреди забега съездить к компьютеру, верстаку или сундуку."
+
+#: scripts/tutoriales.gd
+msgid "Al rescatar al primero"
+msgstr "Когда спасаешь первого"
+
+#: scripts/tutoriales.gd
+msgid "Se une al equipo: te acompaña y te ayuda a su manera."
+msgstr "Выживший вступает в команду: идет с тобой и помогает по-своему."
+
+#: scripts/tutoriales.gd
+msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
+msgstr "У каждого свое спасение. Не отходи от него далеко, а если упадет — побудь рядом, чтобы поднять."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
+msgstr "Если пройдешь здание вместе с ним, он переедет в общежитие (правая дверь в дворницкой) и сможет ходить с тобой."
+
+#: scripts/tutoriales.gd
+msgid "En el primer apagón"
+msgstr "При первом блэкауте"
+
+#: scripts/tutoriales.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna, hacia donde miras."
+msgstr "Свет вырубило на всем этаже: видно только то, что освещает фонарик, — туда, куда ты смотришь."
+
+#: scripts/tutoriales.gd
+msgid "En la sala del jefe todo sigue como siempre."
+msgstr "В комнате босса все как обычно."
+
+#: scripts/tutoriales.gd
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
+msgstr "Поднимешься на следующий этаж — получишь премию в долларах."
+
+#: scripts/tutoriales.gd
+msgid "En la primera alarma de incendios"
+msgstr "При первой пожарной тревоге"
+
+#: scripts/tutoriales.gd
+msgid "Los aspersores llenan el suelo de charcos que resbalan."
+msgstr "Спринклеры покрывают пол скользкими лужами."
+
+#: scripts/tutoriales.gd
+msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los zombis: ¡llévalos hasta él! Esquivando cruzas sin daño."
+msgstr "В некоторые падает оголенный провод, который бьет током Джонни и зомби: заманивай их туда! В уклонении проскочишь без урона."
+
+#: scripts/tutoriales.gd
+msgid "En la primera horda"
+msgstr "При первой орде"
+
+#: scripts/tutoriales.gd
+msgid "Una horda enorme llena el pasillo y va a por ti."
+msgstr "Огромная орда заполняет коридор и идет за тобой."
+
+#: scripts/tutoriales.gd
+msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzables vienen de perlas."
+msgstr "Если спрячешься в квартире, оставшиеся будут ждать снаружи. Тут метательное как нельзя кстати."
+
+#: scripts/tutoriales.gd
+msgid "Al acabar con todos, te deja dólares y una caja de munición."
+msgstr "Когда перебьешь всех, получишь доллары и ящик патронов."
+
+#: scripts/tutoriales.gd
+msgid "El ordenador"
+msgstr "Компьютер"
+
+#: scripts/tutoriales.gd
+msgid "Al encender el ordenador"
+msgstr "Когда включаешь компьютер"
+
+#: scripts/tutoriales.gd
+msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida."
+msgstr "Трать накопленные доллары: очки талантов (улучшения навсегда), а также оружие и метательное на забег."
+
+#: scripts/tutoriales.gd
+msgid "También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."
+msgstr "Еще там достижения, которые дают награду, Досье, Новости и Коллекции."
+
+#: scripts/tutoriales.gd
+msgid "La taquilla"
+msgstr "Шкафчик"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la taquilla"
+msgstr "Когда открываешь шкафчик"
+
+#: scripts/tutoriales.gd
+msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
+msgstr "Здесь ты выбираешь одежду Джонни. У каждой свое преимущество."
+
+#: scripts/tutoriales.gd
+msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
+msgstr "Ее получают за победу над определенными боссами: недостающая показана как «???» вместе с тем, как ее получить."
+
+#: scripts/tutoriales.gd
+msgid "El banco de trabajo"
+msgstr "Верстак"
+
+#: scripts/tutoriales.gd
+msgid "Al usar el banco de trabajo"
+msgstr "Когда пользуешься верстаком"
+
+#: scripts/tutoriales.gd
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
+msgstr "Повышай качество оружия и метательного, уровень за уровнем, деталями того же вида (из рюкзака и из сундука)."
+
+#: scripts/tutoriales.gd
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
+msgstr "Обычное, Необычное, Редкое и Эпическое: Эпическое еще и дает фишку."
+
+#: scripts/tutoriales.gd
+msgid "Elige la casilla y pulsa «Mejorar»."
+msgstr "Выбери ячейку и нажми «Улучшить»."
+
+#: scripts/tutoriales.gd
+msgid "El baúl"
+msgstr "Сундук"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el baúl"
+msgstr "Когда открываешь сундук"
+
+#: scripts/tutoriales.gd
+msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
+msgstr "Что хранится здесь, не пропадет, даже если падешь: предметы, улучшенное оружие и метательное."
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
+msgstr "Выбери ячейку или перетащи ее, чтобы переложить между тем, что при тебе, и сундуком."
+
+#: scripts/tutoriales.gd
+msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
+msgstr "Когда проходишь здание, все, что при тебе, само отправляется в сундук."
+
+#: scripts/tutoriales.gd
+msgid "El centro comercial"
+msgstr "Торговый центр"
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al centro comercial"
+msgstr "Когда попадаешь в торговый центр"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
+msgstr "Комната босса открывается ключ-картой: она у охранника, который делает обход."
+
+#: scripts/tutoriales.gd
+msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
+msgstr "Если он тебя заметит, засвистит, придет подкрепление, а он сбежит: не упусти его!"
+
+#: scripts/tutoriales.gd
+msgid "Peligros de las tiendas"
+msgstr "Опасности магазинов"
+
+#: scripts/tutoriales.gd
+msgid "En la primera tienda con peligro"
+msgstr "В первом опасном магазине"
+
+#: scripts/tutoriales.gd
+msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
+msgstr "Холодильная камера замораживает, кухня обжигает, а вода в магазине электроники бьет током (рубильник на ее щитке отключает ток)."
+
+#: scripts/tutoriales.gd
+msgid "También hacen daño a los zombis despiertos: ¡llévalos hasta ellos!"
+msgstr "Они ранят и проснувшихся зомби: заманивай их туда!"
+
+#: scripts/tutoriales.gd
+msgid "Esquivando los cruzas sin daño."
+msgstr "В уклонении проскочишь без урона."
+
+#: scripts/tutoriales.gd
+msgid "Alerta y Reto del día"
+msgstr "Тревога и Испытание дня"
+
+#: scripts/tutoriales.gd
+msgid "Al completar el primer edificio"
+msgstr "Когда проходишь первое здание"
+
+#: scripts/tutoriales.gd
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
+msgstr "Под каждым пройденным зданием выбирай тревогу кнопками < и >: сложнее — больше долларов. Пройди на самой высокой — откроется следующая."
+
+#: scripts/tutoriales.gd
+msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
+msgstr "Испытание дня — одно и то же здание для всех в этот день, со странным правилом. Первое прохождение за день дает $10."
+
+#: scripts/tutoriales.gd
+msgid "el botón de esquivar"
+msgstr "кнопка уклонения"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la otra arma"
+msgstr "кнопка другого оружия"
+
+#: scripts/tutoriales.gd
+msgid "el botón del arma a distancia, con ella en la mano"
+msgstr "кнопка оружия дальнего боя, когда оно в руке"
+
+#: scripts/tutoriales.gd
+msgid "el botón de lanzar"
+msgstr "кнопка броска"
+
+#: scripts/tutoriales.gd
+msgid "el botoncito de al lado de lanzar"
+msgstr "маленькая кнопка рядом с броском"
+
+#: scripts/tutoriales.gd
+msgid "el botón de las vendas, bajo el minimapa"
+msgstr "кнопка бинтов под миникартой"
+
+#: scripts/tutoriales.gd
+msgid "el botón del botiquín, bajo el minimapa"
+msgstr "кнопка аптечки под миникартой"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la mochila, bajo el minimapa"
+msgstr "кнопка рюкзака под миникартой"
+
+#: scripts/tutoriales.gd
+msgid "el botón de pausa, bajo el minimapa"
+msgstr "кнопка паузы под миникартой"
+
+#: scripts/tutoriales.gd
+msgid "el botón del modo, bajo el minimapa"
+msgstr "кнопка режима под миникартой"
+
+#: scripts/ui/hud.gd
+msgid "escudo %d"
+msgstr "щит %d"
+
+#: scripts/ui/inventario.gd scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Инвентарь"
+
+#: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "В руках"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "Запас"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables"
+msgstr "Метательное"
+
+#: scripts/ui/inventario.gd
+msgid "F cambia"
+msgstr "F — смена"
+
+#: scripts/ui/inventario.gd
+msgid "Dinero"
+msgstr "Деньги"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "Предметы  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "Патроны  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables  %d / %d"
+msgstr "Метательное  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgctxt "inventario"
+msgid "Seguir"
+msgstr "В игру"
+
+#: scripts/ui/inventario.gd
+msgid "Tarjeta"
+msgstr "Карта"
+
+#: scripts/ui/inventario.gd
+msgid "Llave"
+msgstr "Ключ"
+
+#: scripts/ui/inventario.gd
+msgid "tirar"
+msgstr "выбросить"
+
+#: scripts/ui/inventario.gd
+msgid "elegir"
+msgstr "выбрать"
+
+#: scripts/ui/inventario.gd
+msgid "cerrar"
+msgstr "закрыть"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar"
+msgstr "Мышь или палец: нажми"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar o arrastrar"
+msgstr "Мышь или палец: нажми или перетащи"
+
+#: scripts/ui/inventario.gd
+msgid "Depósito: %d de %d s"
+msgstr "Бак: %d из %d с"
+
+#: scripts/ui/inventario.gd
+msgid "Cargador %d de %d"
+msgstr "Магазин %d из %d"
+
+#: scripts/ui/inventario.gd
+msgid "Reserva: %s"
+msgstr "Запас: %s"
+
+#: scripts/ui/inventario.gd
+msgid "Ponérmela"
+msgstr "Взять"
+
+#: scripts/ui/inventario.gd
+msgid "Tirar al suelo"
+msgstr "Выбросить"
+
+#: scripts/ui/inventario.gd
+msgid "Si la tiras, la de repuesto pasa a la mano."
+msgstr "Если выбросишь, в руку перейдет запасное."
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Daño"
+msgstr "Урон"
+
+#: scripts/ui/inventario.gd
+msgid "Ritmo"
+msgstr "Темп"
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Alcance"
+msgstr "Дальность"
+
+#: scripts/ui/inventario.gd
+msgid "Barrido"
+msgstr "Размах"
+
+#: scripts/ui/inventario.gd
+msgid "Recarga"
+msgstr "Перезарядка"
+
+#: scripts/ui/inventario.gd
+msgid "Para curar"
+msgstr "Лечение"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza · Mejora armas"
+msgstr "Деталь · Улучшает оружие"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto · Común"
+msgstr "Предмет · Обычный"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Llevas %d"
+msgstr "С собой: %d"
+
+#: scripts/ui/inventario.gd
+msgid "Te devuelve un tercio de vida perdido y te cura %d."
+msgstr "Возвращает потерянную треть здоровья и лечит на %d."
+
+#: scripts/ui/inventario.gd
+msgid "Te cura %d de vida, sin pasar del tercio en el que estás."
+msgstr "Лечит на %d, но не выше текущей трети."
+
+#: scripts/ui/inventario.gd
+msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "Без инвентаря используется клавишей %s. Можно носить не больше %d. Если падешь, пропадет (в сундуке — в сохранности)."
+
+#: scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Применить"
+
+#: scripts/ui/inventario.gd
+msgid "Destruir"
+msgstr "Уничтожить"
+
+#: scripts/ui/inventario.gd
+msgid "Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "Если падешь, пропадет (в сундуке — в сохранности)."
+
+#: scripts/ui/inventario.gd
+msgid "Sirve para mejorar %s en el banco de trabajo del taller."
+msgstr "Нужна, чтобы улучшать %s на верстаке в мастерской."
+
+#: scripts/ui/inventario.gd
+msgid "Munición"
+msgstr "Патроны"
+
+#: scripts/ui/inventario.gd
+msgid "%d en este hueco · llevas %d"
+msgstr "%d в этой ячейке · всего %d"
+
+#: scripts/ui/inventario.gd
+msgid "La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja."
+msgstr "Для оружия: %s (по %d в ячейке). Если выбросить, вся ячейка останется на полу в ящике."
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
+msgstr "Заправляет: %s (по %d в ячейке). Выбрасывается по одному."
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s"
+msgstr "Метательное · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "В руке"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d · %d en total"
+msgstr "Осталось %d из %d · всего %d"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d"
+msgstr "Осталось %d из %d"
+
+#: scripts/ui/inventario.gd
+msgid "Es lo que lanzas ahora."
+msgstr "Это ты сейчас бросаешь."
+
+#: scripts/ui/inventario.gd
+msgid "Con F lo eliges para lanzarlo."
+msgstr "Клавишей F выбираешь его для броска."
+
+#: scripts/ui/inventario.gd
+msgid "Cuando se acabe, entra otro montón de los de repuesto."
+msgstr "Когда закончится, в дело пойдет стопка из запаса."
+
+#: scripts/ui/inventario.gd
+msgid "Al repuesto"
+msgstr "В запас"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano un montón lleno de estos: entrará cuando se acabe."
+msgstr "В руке уже полная стопка таких: эта пойдет в дело, когда та закончится."
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» llena con estos el montón que llevas a mano."
+msgstr "«В руку» пополняет этими стопку в руке."
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» lo cambia por %s, que pasa aquí."
+msgstr "«В руку» поменяет его местами с тем, что сейчас в руке: %s."
+
+#: scripts/ui/inventario.gd
+msgid "A la mano"
+msgstr "В руку"
+
+#: scripts/ui/inventario.gd
+msgid "Te has curado %d de vida."
+msgstr "Восстановлено здоровья: %d."
+
+#: scripts/ui/inventario.gd
+msgid "Baúl"
+msgstr "Сундук"
+
+#: scripts/ui/inventario.gd
+msgid "Lo que llevas"
+msgstr "При тебе"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "Запасное метательное  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Baúl  %d / %d"
+msgstr "Сундук  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos, armas y arrojables"
+msgstr "Предметы, оружие и метательное"
+
+#: scripts/ui/inventario.gd
+msgid "Aquí no se pierde nada aunque caigas."
+msgstr "Здесь ничего не пропадет, даже если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "Guardar todo"
+msgstr "Убрать все"
+
+#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+msgid "Cerrar"
+msgstr "Закрыть"
+
+#: scripts/ui/inventario.gd
+msgid "Guardar en el baúl"
+msgstr "В сундук"
+
+#: scripts/ui/inventario.gd
+msgid "La %s Normal no va al baúl: la tienes siempre."
+msgstr "Обычное оружие (%s) не кладется в сундук: оно всегда при тебе."
+
+#: scripts/ui/inventario.gd
+msgid "Depósito %d de %d s"
+msgstr "Бак %d из %d с"
+
+#: scripts/ui/inventario.gd
+msgid "%s · reserva %d"
+msgstr "%s · запас %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · %s"
+msgstr "Метательное · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio sacando algo."
+msgstr "Сундук полон: освободи место, достав что-нибудь."
+
+#: scripts/ui/inventario.gd
+msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo."
+msgstr "В сундук влезет еще только %d (по %d в ячейке): остальное останется у тебя."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
+msgstr "Убирается вся стопка вместе с такими же, что уже там, и в сундуке она в сохранности, даже если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "%s · En la mochila"
+msgstr "%s · В рюкзаке"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza"
+msgstr "Деталь"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto"
+msgstr "Предмет"
+
+#: scripts/ui/inventario.gd
+msgid "Munición · La llevas"
+msgstr "Патроны · При тебе"
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s."
+msgstr "Заправляет: %s."
+
+#: scripts/ui/inventario.gd
+msgid "Es para %s."
+msgstr "Для оружия: %s."
+
+#: scripts/ui/inventario.gd
+msgid "%s · En el baúl"
+msgstr "%s · В сундуке"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl"
+msgstr "В сундуке: %d"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en esta casilla · %d en el baúl"
+msgstr "%d в этой ячейке · %d в сундуке"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar uno"
+msgstr "Достать 1"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar %d"
+msgstr "Достать %d"
+
+#: scripts/ui/inventario.gd
+msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
+msgstr "За раз выходит до %d в твои патроны; вне сундука пропадут, если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
+msgstr "Выходит по одному в твои патроны; вне сундука пропадет, если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
+msgstr "Выходит по одному в рюкзак; вне сундука пропадет, если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes llenos los huecos de munición."
+msgstr "Не влезает: ячейки для патронов заполнены."
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes la mochila llena."
+msgstr "Не влезает: рюкзак полон."
+
+#: scripts/ui/inventario.gd
+msgid "Sacar"
+msgstr "Достать"
+
+#: scripts/ui/inventario.gd
+msgid "%s · %s · En el baúl"
+msgstr "%s · %s · В сундуке"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas una: se cambian, esta ocupa su sitio y la tuya entra en el baúl en su lugar."
+msgstr "Такое уже при тебе: они поменяются — это займет его место, а твое уйдет в сундук."
+
+#: scripts/ui/inventario.gd
+msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de la mano entra en el baúl en su lugar)."
+msgstr "Пойдет в руку; то, что в руке, станет запасным (если у тебя уже два, то, что в руке, уйдет в сундук)."
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · En el baúl"
+msgstr "Метательное · %s · В сундуке"
+
+#: scripts/ui/inventario.gd
+msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
+msgstr "Выходят стопками, по %d за раз (сколько влезет); вне сундука пропадут, если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
+msgstr "Не влезают: твои стопки таких полны, и места для новой нет."
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
+msgstr "В сундуке будет в сохранности, даже если падешь; взамен в руке — то, что всегда при тебе: %s."
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "В сундуке будет в сохранности, даже если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
+msgstr "Убирается все из этой ячейки (%d), и в сундуке оно в сохранности, даже если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque caigas."
+msgstr "Убирается все из этой ячейки (%d), и в сундуке оно в сохранности, даже если падешь."
+
+#: scripts/ui/inventario.gd
+msgid "%s al repuesto; %s entra en el baúl en su lugar."
+msgstr "%s — в запас, а %s уходит в сундук."
+
+#: scripts/ui/inventario.gd
+msgid "%s a la mano; %s entra en el baúl en su lugar."
+msgstr "%s — в руку, а %s уходит в сундук."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl no admite más: contigo se quedan %d de %s."
+msgstr "Сундук больше не вмещает: у тебя остается %d (%s)."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: contigo se quedan %s."
+msgstr "Сундук полон. Остается у тебя: %s."
+
+#: scripts/ui/inventario.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Точно? Нажми еще раз"
+
+#: scripts/ui/inventario.gd
+msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
+msgstr "Уничтожить: %s? Пропадет навсегда, это не отменить."
+
+#: scripts/ui/inventario.gd
+msgid "Destruido: %s."
+msgstr "Уничтожено: %s."
+
+#: scripts/ui/inventario.gd
+msgid "Banco de trabajo"
+msgstr "Верстак"
+
+#: scripts/ui/inventario.gd
+msgid "Tus piezas"
+msgstr "Твои детали"
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl"
+msgstr "В сундуке"
+
+#: scripts/ui/inventario.gd
+msgid "Armas y arrojables"
+msgstr "Оружие и метательное"
+
+#: scripts/ui/inventario.gd
+msgid "No tienes armas ni arrojables guardados."
+msgstr "У тебя нет сохраненного оружия и метательного."
+
+#: scripts/ui/inventario.gd
+msgid "Tienes %d"
+msgstr "У тебя: %d"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "В сундуке %d: улучшается одна стопка, %d"
+
+#: scripts/ui/inventario.gd
+msgid "Sube a %s"
+msgstr "После улучшения — %s"
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s (tienes %d)."
+msgstr "Цена: %s (у тебя %d)."
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica"
+msgstr "Уже Эпическое"
+
+#: scripts/ui/inventario.gd
+msgid "Mejorar a %s"
+msgstr "Улучшить: %s"
+
+#: scripts/ui/inventario.gd
+msgid "mejorar"
+msgstr "улучшить"
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica: no se puede mejorar más."
+msgstr "Уже Эпическое: улучшать больше некуда."
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s y tienes %d: te faltan %d."
+msgstr "Цена: %s, у тебя %d: не хватает %d."
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
+msgstr "В руке уже другая стопка (%s), и вместе они не влезут (максимум %d): сначала переложи одну в запас."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "Сундук полон: освободи место для улучшенной стопки."
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza cuerpo a cuerpo"
+msgid_plural "%d piezas cuerpo a cuerpo"
+msgstr[0] "%d деталь ближнего боя"
+msgstr[1] "%d детали ближнего боя"
+msgstr[2] "%d деталей ближнего боя"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza a distancia"
+msgid_plural "%d piezas a distancia"
+msgstr[0] "%d деталь дальнего боя"
+msgstr[1] "%d детали дальнего боя"
+msgstr[2] "%d деталей дальнего боя"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza especial"
+msgid_plural "%d piezas especiales"
+msgstr[0] "%d особая деталь"
+msgstr[1] "%d особые детали"
+msgstr[2] "%d особых деталей"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza arrojable"
+msgid_plural "%d piezas arrojables"
+msgstr[0] "%d метательная деталь"
+msgstr[1] "%d метательные детали"
+msgstr[2] "%d метательных деталей"
+
+#: scripts/ui/inventario.gd
+msgid "%d balas"
+msgid_plural "%d balas"
+msgstr[0] "%d пуля"
+msgstr[1] "%d пули"
+msgstr[2] "%d пуль"
+
+#: scripts/ui/inventario.gd
+msgid "%d cartuchos"
+msgid_plural "%d cartuchos"
+msgstr[0] "%d заряд дроби"
+msgstr[1] "%d заряда дроби"
+msgstr[2] "%d зарядов дроби"
+
+#: scripts/ui/inventario.gd
+msgid "%d gasolinas"
+msgid_plural "%d gasolinas"
+msgstr[0] "%d канистра бензина"
+msgstr[1] "%d канистры бензина"
+msgstr[2] "%d канистр бензина"
+
+#: scripts/ui/inventario.gd
+msgid "%d bidones de ácido"
+msgid_plural "%d bidones de ácido"
+msgstr[0] "%d бочка кислоты"
+msgstr[1] "%d бочки кислоты"
+msgstr[2] "%d бочек кислоты"
+
+#: scripts/ui/inventario.gd
+msgid "%d baterías"
+msgid_plural "%d baterías"
+msgstr[0] "%d батарея"
+msgstr[1] "%d батареи"
+msgstr[2] "%d батарей"
+
+#: scripts/ui/inventario.gd
+msgid "¡Mejorado! Ahora es %s."
+msgstr "Улучшено! Теперь: %s."
+
+#: scripts/ui/inventario.gd
+msgid "Suelta aquí"
+msgstr "Отпусти здесь"
+
+#: scripts/ui/inventario.gd
+msgid "para guardarlo en el baúl"
+msgstr "чтобы убрать в сундук"
+
+#: scripts/ui/inventario.gd
+msgid "para sacar uno"
+msgstr "чтобы взять одну штуку"
+
+#: scripts/ui/inventario.gd
+msgid "para sacarla"
+msgstr "чтобы достать"
+
+#: scripts/ui/inventario.gd
+msgid "para tirarlo al suelo"
+msgstr "чтобы выбросить на пол"
+
+#: scripts/ui/inventario.gd
+msgid "se queda a tus pies"
+msgstr "останется у твоих ног"
+
+#: scripts/ui/inventario.gd
+msgid "y la de repuesto pasa a la mano"
+msgstr "а запасное перейдет в руку"
+
+#: scripts/ui/inventario.gd
+msgid "Barre un abanico muy ancho y echa lejos a los zombis."
+msgstr "Метет очень широким веером и отбрасывает зомби далеко."
+
+#: scripts/ui/inventario.gd
+msgid "Un golpe fuerte que empuja a los zombis."
+msgstr "Мощный удар, отталкивающий зомби."
+
+#: scripts/ui/inventario.gd
+msgid "Muy rápido, pero hay que arrimarse."
+msgstr "Очень быстрый, но надо подойти вплотную."
+
+#: scripts/ui/inventario.gd
+msgid "Dispara de una en una, recto y lejos."
+msgstr "Стреляет по одной пуле, прямо и далеко."
+
+#: scripts/ui/inventario.gd
+msgid "Cinco perdigones en abanico. Se recarga de cartucho en cartucho."
+msgstr "Пять дробин веером. Заряжается по одному патрону."
+
+#: scripts/ui/inventario.gd
+msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
+msgstr "Очень быстрые очереди. Тратит те же пули, что и пистолет."
+
+#: scripts/ui/inventario.gd
+msgid "Llamarada continua que quema a todos. Se llena con gasolina."
+msgstr "Непрерывное пламя, которое жжет всех. Заправляется бензином."
+
+#: scripts/ui/inventario.gd
+msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
+msgstr "Непрерывная струя кислоты, разъедающая всех. Заправляется бочками кислоты."
+
+#: scripts/ui/inventario.gd
+msgid "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías."
+msgstr "Непрерывный луч оглушает и перескакивает на соседнего зомби. Заряжается батареями."
+
+#: scripts/ui/inventario.gd
+msgid "Se rompe y deja un charco de fuego que quema a los zombis."
+msgstr "Разбивается и оставляет лужу огня, которая жжет зомби."
+
+#: scripts/ui/inventario.gd
+msgid "Bota, rueda y explota a los 2 segundos."
+msgstr "Отскакивает, катится и взрывается через 2 секунды."
+
+#: scripts/ui/inventario.gd
+msgid "Suena, atrae a los zombis 3 s y explota."
+msgstr "Шумит, 3 с приманивает зомби и взрывается."
+
+#: scripts/ui/inventario.gd
+msgid "Explota y deja a los zombis congelados 3 s."
+msgstr "Взрывается и замораживает зомби на 3 с."
+
+#: scripts/ui/inventario.gd
+msgid "Especiales"
+msgstr "Особое"
+
+#: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "Особое"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable"
+msgstr "Метательное"
+
+#: scripts/ui/menu_principal.gd
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "Зачисти здание от зомби, этаж за этажом"
+
+#: scripts/ui/menu_principal.gd
+msgid "JUGAR"
+msgstr "ИГРАТЬ"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
+msgid "Tutorial"
+msgstr "Обучение"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Opciones"
+msgstr "Настройки"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "Полный экран"
+
+#: scripts/ui/menu_principal.gd
+msgid "Salir"
+msgstr "Выход"
+
+#: scripts/ui/menu_principal.gd
+msgid ""
+"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
+"Los controles y el modo de atacar están en Opciones"
+msgstr ""
+"Зачисти каждую квартиру, чтобы открыть ее дверь, и выследи зомби с ключом вахтерши\n"
+"Управление и режим атаки — в настройках"
+
+#: scripts/ui/menu_principal.gd
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "Лучший уровень: %d   ·   Накоплено: $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Elige edificio"
+msgstr "Выбери здание"
+
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "Назад"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "Пройди его, чтобы открыть Тревогу 1"
+
+#: scripts/ui/menu_principal.gd
+msgid "%s (de %d)"
+msgstr "%s (из %d)"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "Испытание дня"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y azotea"
+msgstr "Этажей: %d + крыша"
+
+#: scripts/ui/menu_principal.gd
+msgid "¡Sin explorar!"
+msgstr "Не исследовано!"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completado ×%d"
+msgstr "Пройдено ×%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "mejor tiempo %d:%02d"
+msgstr "лучшее время %d:%02d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Has llegado a la planta %d de %d"
+msgstr "Ты дошел до уровня %d из %d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completa %s para abrirlo"
+msgstr "Пройди %s, чтобы открыть его"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pausa"
+msgstr "Пауза"
+
+#: scripts/ui/menus.gd
+msgid "Vida"
+msgstr "Здоровье"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad de ataque"
+msgstr "Скорость атаки"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad"
+msgstr "Скорость"
+
+#: scripts/ui/menus.gd
+msgid "Daño recibido"
+msgstr "Получаемый урон"
+
+#: scripts/ui/menus.gd
+msgid "Crítico"
+msgstr "Шанс крита"
+
+#: scripts/ui/menus.gd
+msgid "%s · daño %d · %.1f/s"
+msgstr "%s · урон %d · %.1f/с"
+
+#: scripts/ui/menus.gd
+msgid "Molotovs: %d"
+msgstr "Молотовы: %d"
+
+#: scripts/ui/menus.gd
+msgid "Granadas: %d"
+msgstr "Гранаты: %d"
+
+#: scripts/ui/menus.gd
+msgid "Continuar"
+msgstr "Продолжить"
+
+#: scripts/ui/menus.gd
+msgid "Abandonar partida"
+msgstr "Бросить забег"
+
+#: scripts/ui/menus.gd
+msgid "Plantas superadas"
+msgstr "Пройдено этажей"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "Убито врагов"
+
+#: scripts/ui/menus.gd
+msgid "Apartamentos visitados (última planta)"
+msgstr "Квартир посещено (последний этаж)"
+
+#: scripts/ui/menus.gd
+msgid "Tiempo"
+msgstr "Время"
+
+#: scripts/ui/menus.gd
+msgid "Reto del día · %s"
+msgstr "Испытание дня · %s"
+
+#: scripts/ui/menus.gd
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · лучший результат дня!"
+
+#: scripts/ui/menus.gd
+msgid "Tu mejor marca de hoy: %s"
+msgstr "Твой лучший результат сегодня: %s"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "Заработано долларов"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  (всего $%d)"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por la %s"
+msgstr "Из них бонус (%s)"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por completar el reto de hoy"
+msgstr "Из них за испытание дня"
+
+#: scripts/ui/menus.gd
+msgid "¡Nivel nuevo!"
+msgstr "Новый уровень!"
+
+#: scripts/ui/menus.gd
+msgid "%s abierta"
+msgstr "Открыта: %s"
+
+#: scripts/ui/menus.gd
+msgid "Dólares salvados (la mitad)"
+msgstr "Сохранено долларов (половина)"
+
+#: scripts/ui/menus.gd
+msgid "Dólares perdidos"
+msgstr "Потеряно долларов"
+
+#: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Сыграть еще"
+
+#: scripts/ui/menus.gd
+msgid "Reintentar edificio"
+msgstr "Заново это здание"
+
+#: scripts/ui/menus.gd
+msgid "Menú principal"
+msgstr "Главное меню"
+
+#: scripts/ui/menus.gd
+msgid "La exposición prolongada al virus hace que te sientas..."
+msgstr "Долгое воздействие вируса заставляет тебя чувствовать себя..."
+
+#: scripts/ui/menus.gd
+msgid "¡¡¡DIFERENTE!!!"
+msgstr "ДРУГИМ!!!"
+
+#: scripts/ui/menus.gd
+msgid "Mutación %d de %d · dura hasta que acabe la partida"
+msgstr "Мутация %d из %d · действует до конца забега"
+
+#: scripts/ui/menus.gd
+msgid "Página %d de %d"
+msgstr "Страница %d из %d"
+
+#: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "Рядом с телом: %s"
+
+#: scripts/ui/menus.gd
+msgid "Se guarda en el Dosier del ordenador de mantenimiento"
+msgstr "Сохраняется в Досье на компьютере в дворницкой"
+
+#: scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "Дальше"
+
+#: scripts/ui/opciones.gd
+msgid "Móvil"
+msgstr "Телефон"
+
+#: scripts/ui/opciones.gd
+msgid "Tamaño de los botones"
+msgstr "Размер кнопок"
+
+#: scripts/ui/opciones.gd
+msgid "Transparencia"
+msgstr "Прозрачность"
+
+#: scripts/ui/opciones.gd
+msgid "Vibración"
+msgstr "Вибрация"
+
+#: scripts/ui/opciones.gd
+msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "Если включено хоть одно из этих трех упрощений, достижения в этом забеге не выдаются (даже если потом выключить). Уже полученные остаются."
+
+#: scripts/ui/opciones.gd
+msgid "Vida entera"
+msgstr "Здоровье целиком"
+
+#: scripts/ui/opciones.gd
+msgid "La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."
+msgstr "Здоровье не делится на трети: лечение всегда доводит до максимума, и ты не замедляешься."
+
+#: scripts/ui/opciones.gd
+msgid "Pistola sin fin"
+msgstr "Бесконечный пистолет"
+
+#: scripts/ui/opciones.gd
+msgid "La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."
+msgstr "Пистолет не тратит пули и не требует перезарядки. Остальное оружие — как обычно."
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar apuntando solo"
+msgstr "Броски с автонаводкой"
+
+#: scripts/ui/opciones.gd
+msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
+msgstr "Молотов, граната и прочее метательное само летит в ближайшего видимого зомби. Если никого не видно, бросок как обычно."
+
+#: scripts/ui/opciones.gd
+msgid "Tutoriales"
+msgstr "Обучение"
+
+#: scripts/ui/opciones.gd
+msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
+msgstr "Когда впервые встречаешь что-то новое, окно объясняет, что происходит и что делать. Уже просмотренные есть в «Обучении»."
+
+#: scripts/ui/opciones.gd
+msgid "Que vuelvan a salir todos"
+msgstr "Показать все снова"
+
+#: scripts/ui/opciones.gd
+msgid "Volverán a salir desde el principio"
+msgstr "Снова будут появляться с самого начала"
+
+#: scripts/ui/opciones.gd
+msgid "Teclado y ratón"
+msgstr "Клавиатура и мышь"
+
+#: scripts/ui/opciones.gd
+msgid "Mando"
+msgstr "Геймпад"
+
+#: scripts/ui/opciones.gd
+msgid "Ratón"
+msgstr "Мышь"
+
+#: scripts/ui/opciones.gd
+msgid "Stick dcho."
+msgstr "Прав. стик"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Нажми на ячейку, чтобы сменить эту клавишу или кнопку"
+
+#: scripts/ui/opciones.gd
+msgid "Restablecer controles"
+msgstr "Сбросить управление"
+
+#: scripts/ui/opciones.gd
+msgid "Vuelven a estar los controles de serie"
+msgstr "Управление по умолчанию восстановлено"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa un botón del mando..."
+msgstr "Нажми кнопку геймпада..."
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una tecla o un clic..."
+msgstr "Нажми клавишу или кнопку мыши..."
+
+#: scripts/ui/opciones.gd
+msgid "Esc para dejarlo como estaba"
+msgstr "Esc — оставить как было"
+
+#: scripts/ui/opciones.gd
+msgid "Botón %d"
+msgstr "Кнопка %d"
+
+#: scripts/ui/opciones.gd
+msgid "Eje %d"
+msgstr "Ось %d"
+
+#: scripts/ui/opciones.gd
+msgid "Sonido: %s"
+msgstr "Звук: %s"
+
+#: scripts/ui/opciones.gd
+msgid "No"
+msgstr "Нет"
+
+#: scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "Да"
+
+#: scripts/ui/opciones.gd
+msgid "Música: %s"
+msgstr "Музыка: %s"
+
+#: scripts/ui/opciones.gd
+msgid "Sin cambios"
+msgstr "Без изменений"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiado a %s"
+msgstr "Изменено: %s"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Джонни сам целится и атакует ближайшего зомби. Тебе нужно только двигаться."
+
+#: scripts/ui/opciones.gd
+msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
+msgstr "Целишься ты: мышью, правым стиком геймпада или правым джойстиком на телефоне."
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: arriba"
+msgstr "Движение: вверх"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: izquierda"
+msgstr "Движение: влево"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: abajo"
+msgstr "Движение: вниз"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: derecha"
+msgstr "Движение: вправо"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar (modo libre)"
+msgstr "Прицел (ручной режим)"
+
+#: scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "Атака"
+
+#: scripts/ui/opciones.gd
+msgid "Esquivar"
+msgstr "Уклонение"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "Сменить оружие"
+
+#: scripts/ui/opciones.gd
+msgid "Recargar"
+msgstr "Перезарядка"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar (mantener y soltar)"
+msgstr "Бросок (зажми и отпусти)"
+
+#: scripts/ui/opciones.gd
+msgid "Molotov o granada"
+msgstr "Молотов или граната"
+
+#: scripts/ui/opciones.gd
+msgid "Usar vendas"
+msgstr "Применить бинты"
+
+#: scripts/ui/opciones.gd
+msgid "Usar botiquín"
+msgstr "Применить аптечку"
+
+#: scripts/ui/opciones.gd
+msgid "Modo de atacar"
+msgstr "Режим атаки"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse"
+msgstr "Движение"
+
+#: scripts/ui/opciones.gd
+msgid "Joystick: toca y arrastra en la mitad izquierda"
+msgstr "Джойстик: коснись и тяни в левой половине"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar"
+msgstr "Прицел"
+
+#: scripts/ui/opciones.gd
+msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
+msgstr "Только в режиме «Ручной прицел»: джойстик справа внизу"
+
+#: scripts/ui/opciones.gd
+msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
+msgstr "С автоприцелом — тот, что в правом нижнем углу; иначе — тот, что на дуге"
+
+#: scripts/ui/opciones.gd
+msgid "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"
+msgstr "Коснись другого оружия, чтобы достать его; коснись оружия дальнего боя в руке, чтобы перезарядить"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar"
+msgstr "Бросок"
+
+#: scripts/ui/opciones.gd
+msgid "Arrastra desde el botón para apuntar y suelta para tirar"
+msgstr "Потяни от кнопки, чтобы прицелиться, и отпусти, чтобы бросить"
+
+#: scripts/ui/opciones.gd
+msgid "El botoncito de al lado de lanzar"
+msgstr "Маленькая кнопка рядом с броском"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa (solo salen si llevas)"
+msgstr "Кнопки под миникартой (появляются, только если есть что применить)"
+
+#: scripts/ui/opciones.gd
+msgid "Modo, inventario y pausa"
+msgstr "Режим, инвентарь и пауза"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa"
+msgstr "Кнопки под миникартой"
+
+#: scripts/ui/opciones.gd
+msgid "Pequeño"
+msgstr "Маленький"
+
+#: scripts/ui/opciones.gd
+msgid "Grande"
+msgstr "Большой"
+
+#: scripts/ui/opciones.gd
+msgid "Muy grande"
+msgstr "Огромный"
+
+#: scripts/ui/opciones.gd
+msgid "Select"
+msgstr "Select"
+
+#: scripts/ui/opciones.gd
+msgid "Guía"
+msgstr "Guide"
+
+#: scripts/ui/opciones.gd
+msgid "Start"
+msgstr "Start"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick izq."
+msgstr "Нажатие лев. стика"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick dcho."
+msgstr "Нажатие прав. стика"
+
+#: scripts/ui/opciones.gd
+msgid "LB"
+msgstr "LB"
+
+#: scripts/ui/opciones.gd
+msgid "RB"
+msgstr "RB"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta arriba"
+msgstr "Крестовина вверх"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta abajo"
+msgstr "Крестовина вниз"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta izq."
+msgstr "Крестовина влево"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta dcha."
+msgstr "Крестовина вправо"
+
+#: scripts/ui/opciones.gd
+msgid "Stick izq."
+msgstr "Лев. стик"
+
+#: scripts/ui/opciones.gd
+msgid "LT"
+msgstr "LT"
+
+#: scripts/ui/opciones.gd
+msgid "RT"
+msgstr "RT"
+
+#: scripts/ui/opciones.gd
+msgid " izq."
+msgstr " влево"
+
+#: scripts/ui/opciones.gd
+msgid " dcha."
+msgstr " вправо"
+
+#: scripts/ui/opciones.gd
+msgid " arriba"
+msgstr " вверх"
+
+#: scripts/ui/opciones.gd
+msgid " abajo"
+msgstr " вниз"
+
+#: scripts/ui/opciones.gd
+msgid "Espacio"
+msgstr "Пробел"
+
+#: scripts/ui/opciones.gd
+msgid "Mayús"
+msgstr "Shift"
+
+#: scripts/ui/opciones.gd
+msgid "Esc"
+msgstr "Esc"
+
+#: scripts/ui/opciones.gd
+msgid "Tab"
+msgstr "Tab"
+
+#: scripts/ui/opciones.gd
+msgid "Intro"
+msgstr "Enter"
+
+#: scripts/ui/opciones.gd
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: scripts/ui/opciones.gd
+msgid "Alt"
+msgstr "Alt"
+
+#: scripts/ui/opciones.gd
+msgid "Borrar"
+msgstr "Backspace"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha izq."
+msgstr "Стрелка влево"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha dcha."
+msgstr "Стрелка вправо"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha arriba"
+msgstr "Стрелка вверх"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha abajo"
+msgstr "Стрелка вниз"
+
+#: scripts/ui/opciones.gd
+msgid "Clic izq."
+msgstr "ЛКМ"
+
+#: scripts/ui/opciones.gd
+msgid "Clic dcho."
+msgstr "ПКМ"
+
+#: scripts/ui/opciones.gd
+msgid "Clic rueda"
+msgstr "СКМ"
+
+#: scripts/ui/opciones.gd
+msgid "Rueda"
+msgstr "Колесико"
+
+#: scripts/ui/opciones.gd
+msgid "General"
+msgstr "Общие"
+
+#: scripts/ui/opciones.gd
+msgid "Controles"
+msgstr "Управление"
+
+#: scripts/ui/opciones.gd
+msgid "Ayudas"
+msgstr "Упрощения"
+
+#: scripts/ui/ordenador.gd
+msgid "ConserjeOS"
+msgstr "ДворникOS"
+
+#: scripts/ui/ordenador.gd
+msgid "CONSERJE  OS 95"
+msgstr "ДВОРНИК  OS 95"
+
+#: scripts/ui/ordenador.gd
+msgid "C:\\MANTENIMIENTO\\%s"
+msgstr "C:\\ДВОРНИЦКАЯ\\%s"
+
+#: scripts/ui/ordenador.gd
+msgid "Intercambio · $%d = 1 punto"
+msgstr "Обмен · $%d = 1 очко"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar 1 punto"
+msgstr "Купить 1 очко"
+
+#: scripts/ui/ordenador.gd
+msgid "Cuesta $%d"
+msgstr "Цена $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambiar"
+msgstr "Обменять"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia $%d por 1 punto de talento"
+msgstr "Обменяй $%d на 1 очко таланта"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar %d puntos (todo)"
+msgstr "Купить очки: %d (все)"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar todo lo posible"
+msgstr "Купить сколько можно"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas $%d"
+msgstr "Нужно $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
+msgstr "Обменяй все доллары, какие можешь, на очки ($%d = 1 очко)"
+
+#: scripts/ui/ordenador.gd
+msgid "Árbol de talentos · cada punto sube un nivel"
+msgstr "Дерево талантов · каждое очко — новый уровень"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d"
+msgstr "%d из %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
+msgstr "Ветка «%s»: очков вложено %d из %d. Нажми, чтобы увидеть ее дерево."
+
+#: scripts/ui/ordenador.gd
+msgid "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Каждое очко — новый уровень. Чтобы перейти на следующий ярус, сначала прокачай до максимума нужный талант."
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Накопленные доллары"
+
+#: scripts/ui/ordenador.gd
+msgid "Puntos de talento"
+msgstr "Очки талантов"
+
+#: scripts/ui/ordenador.gd
+msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
+msgstr "$%d этого забега сохранятся в конце: все, если пройдешь здание, половина — если падешь."
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo"
+msgstr "Нужно прокачать до максимума: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "Максимум! %s"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo!"
+msgstr "Максимум!"
+
+#: scripts/ui/ordenador.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "Сейчас: %s · С еще одним: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "MÁX"
+msgstr "МАКС"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo. %s"
+msgstr "Нужно прокачать до максимума: %s. %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Te hace falta 1 punto."
+msgstr "%s. Нужно 1 очко."
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Pulsa para subirlo (1 punto)."
+msgstr "%s. Нажми, чтобы прокачать (1 очко)."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
+msgstr "Не хватает: каждое очко стоит $%d из накоплений."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
+msgstr[0] "Готово! Можно потратить %d очко."
+msgstr[1] "Готово! Можно потратить %d очка."
+msgstr[2] "Готово! Можно потратить %d очков."
+
+#: scripts/ui/ordenador.gd
+msgid "¡%s sube a %d/%d!"
+msgstr "%s: теперь %d/%d!"
+
+#: scripts/ui/ordenador.gd
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
+msgstr "Продается в Обычном качестве. Все, что при тебе, пропадет, если падешь: убери в сундук в мастерской (после прохождения здания все попадет туда само). Носишь по два каждого типа: то, что было в руке, станет запасным, а если запасное уже есть, оно останется на полу."
+
+#: scripts/ui/ordenador.gd
+msgid "LA LLEVAS"
+msgstr "ПРИ ТЕБЕ"
+
+#: scripts/ui/ordenador.gd
+msgid "GRATIS"
+msgstr "ДАРОМ"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrojables · de uno en uno, hasta los que caben"
+msgstr "Метательное · по одному, сколько влезет"
+
+#: scripts/ui/ordenador.gd
+msgid "AL MÁXIMO"
+msgstr "ПОЛНО"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %s Cada uno, $%d."
+msgstr "%s: %s Цена за штуку: $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Выбери оружие: платишь накопленными долларами."
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %d/s · Depósito %d s"
+msgstr "Урон %d/с · Бак %d с"
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %s"
+msgstr "Урон %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s ataques/s"
+msgstr "%s атак/с"
+
+#: scripts/ui/ordenador.gd
+msgid "Cargador %d"
+msgstr "Магазин %d"
+
+#: scripts/ui/ordenador.gd
+msgid "rayo continuo"
+msgstr "непрерывный луч"
+
+#: scripts/ui/ordenador.gd
+msgid "chorro continuo"
+msgstr "непрерывная струя"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s que se llena con %s."
+msgstr "%s: урон %d в секунду, %s, бак на %d с, заправляется %s."
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s."
+msgstr "%s: урон %d в секунду, %s, бак на %d с."
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d x%d perdigones"
+msgstr "урон %d, дробин: %d"
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d"
+msgstr "урон %d"
+
+#: scripts/ui/ordenador.gd
+msgid "%.1f ataques por segundo"
+msgstr "атак в секунду: %.1f"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d que se llena con %s"
+msgstr "магазин на %d, заряжается %s"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d"
+msgstr "магазин на %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s."
+msgstr "Это уже при тебе: %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "%s уже у тебя в запасе: возьми в руку через инвентарь."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: te faltan $%d."
+msgstr "Не хватает: нужно еще $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "Куплено! %s — в руку, а %s уходит в запас."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "Куплено! %s — в руку, а %s остается на полу: у тебя уже было два."
+
+#: scripts/ui/ordenador.gd
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "В испытании «%s» ничего метательного не положено."
+
+#: scripts/ui/ordenador.gd
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "%s больше не влезают: стопки полны, и места для новой нет."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "Куплено! В запасе: %d (%s)."
+
+#: scripts/ui/ordenador.gd
+msgid "Logros conseguidos"
+msgstr "Полученные достижения"
+
+#: scripts/ui/ordenador.gd
+msgid "Premios por cobrar"
+msgstr "Награды к получению"
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Выбери испытание на этот забег. Когда выполнишь — появится уведомление; возвращайся сюда за наградой."
+
+#: scripts/ui/ordenador.gd
+msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
+msgstr "В этом забеге включены упрощения («Настройки → Упрощения»): достижения не выдаются. Полученные остаются, их можно забрать."
+
+#: scripts/ui/ordenador.gd
+msgid "COBRAR $%d"
+msgstr "ЗАБРАТЬ $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "HECHO"
+msgstr "ГОТОВО"
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por encima de un logro para ver cómo vas."
+msgstr "Наведи на достижение, чтобы увидеть прогресс."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Conseguido! Pulsa para cobrar $%d."
+msgstr "Получено! Нажми, чтобы забрать $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Conseguido y cobrado."
+msgstr "Получено и забрано."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Aún no lo has conseguido."
+msgstr "Награда: $%d. Еще не получено."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (en una partida)."
+msgstr "Награда: $%d. Прогресс: %d из %d (за один забег)."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (sumando partidas)."
+msgstr "Награда: $%d. Прогресс: %d из %d (за все забеги)."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d."
+msgstr "Награда: $%d. Прогресс: %d из %d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
+msgstr "Получено $%d! Теперь их можно потратить на очки или оружие."
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Досье VD-7"
+
+#: scripts/ui/ordenador.gd
+msgid "%d / %d páginas"
+msgstr "Страниц: %d / %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
+msgstr "Каждая найденная страница — в любом здании и на любом этаже — остается здесь навсегда."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d"
+msgstr "Страница %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrancada"
+msgstr "Вырвана"
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: %s. La llevaba %s."
+msgstr "%s, страница %d: %s. Владелец: %s."
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: aún no la has encontrado (%s)."
+msgstr "%s, страница %d: еще не найдена (%s)."
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por las páginas para leerlas."
+msgstr "Наведи на страницы, чтобы прочитать."
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d"
+msgstr "Выпуск %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin emitir"
+msgstr "Не вышел"
+
+#: scripts/ui/ordenador.gd
+msgid "¡NUEVA!"
+msgstr "НОВЫЙ!"
+
+#: scripts/ui/ordenador.gd
+msgid "Completa %s."
+msgstr "Пройди %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Sigue buscando páginas del dosier VD-7."
+msgstr "Ищи дальше страницы досье VD-7."
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: aún no ha salido. %s"
+msgstr "Выпуск %d: еще не вышел. %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
+msgstr "Выпуск %d: «%s». Нажми, чтобы перейти к нему или повторить."
+
+#: scripts/ui/ordenador.gd
+msgid "%s, con %s. Pasa por las emisiones para verlas."
+msgstr "%s, ведущая — %s. Наведи на выпуски, чтобы посмотреть."
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos"
+msgstr "Предметы"
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario"
+msgstr "Бестиарий"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s: найдено предметов — %d из %d."
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier"
+msgstr "Досье"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s: страниц досье — %d из %d."
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario · %d / %d"
+msgstr "Бестиарий · %d / %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin ver"
+msgstr "Не встречен"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: sale en %s."
+msgstr "%s — где встречается: %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
+msgstr "Враг, которого ты еще не встречал. Те, кого увидишь в забеге, записываются сюда."
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "Все, что находишь и встречаешь, остается здесь навсегда. Наведи на карточки, чтобы посмотреть."
+
+#: scripts/ui/ordenador.gd
+msgid "Apartamentos y centro"
+msgstr "Жилой дом и ТЦ"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "Страниц: %d из %d — %s. Читай их в ДОСЬЕ.TXT."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d · %s"
+msgstr "Страница %d · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos · %s"
+msgstr "Предметы · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s (sin encontrar) · %s"
+msgstr "%s (не найдено) · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Sale en: %s"
+msgstr "Где встречается: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "Ты его еще не встречал."
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Puntos e\n"
+"intercambio"
+msgstr ""
+"Очки и\n"
+"обмен"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"de armas"
+msgstr ""
+"Магазин\n"
+"оружия"
+
+#: scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "Достижения"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Dosier\n"
+"VD-7"
+msgstr ""
+"Досье\n"
+"VD-7"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias"
+msgstr "Новости"
+
+#: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Выключить"
+
+#: scripts/ui/ordenador.gd
+msgid "PUNTOS.EXE"
+msgstr "ОЧКИ.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "ARMAS.EXE"
+msgstr "ОРУЖИЕ.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "LOGROS.EXE"
+msgstr "АЧИВКИ.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "DOSIER.TXT"
+msgstr "ДОСЬЕ.TXT"
+
+#: scripts/ui/ordenador.gd
+msgid "CANAL8.TV"
+msgstr "КАНАЛ8.TV"
+
+#: scripts/ui/ordenador.gd
+msgid "COLECCION.EXE"
+msgstr "КОЛЛЕКЦИЯ.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "Compra de puntos e intercambio"
+msgstr "Покупка очков и обмен"
+
+#: scripts/ui/ordenador.gd
+msgid "Tienda de armas"
+msgstr "Магазин оружия"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias de Canal 8"
+msgstr "Новости Канала 8"
+
+#: scripts/ui/ordenador.gd
+msgid "Colecciones y bestiario"
+msgstr "Коллекции и бестиарий"
+
+#: scripts/ui/ordenador.gd
+msgid "A distancia · llenas, y con munición de reserva"
+msgstr "Дальний бой · заряжено, с запасом патронов"
+
+#: scripts/ui/ordenador.gd
+msgid "Especiales · llenas; van en el hueco de las de A distancia"
+msgstr "Особое · заряжено; занимает ячейку дальнего боя"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Noticias\n"
+"¡NUEVAS!"
+msgstr ""
+"Новости\n"
+"НОВЫЕ!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Colecciones\n"
+"¡NUEVO!"
+msgstr ""
+"Коллекции\n"
+"НОВОЕ!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Logros\n"
+"¡COBRAR!"
+msgstr ""
+"Достижения\n"
+"ЗАБРАТЬ!"
+
+#: scripts/ui/tactil.gd
+msgid "Gira el móvil para jugar mejor"
+msgstr "Поверни телефон — так удобнее"
+
+#: scripts/ui/taquilla.gd
+msgid "Taquilla de Johnny"
+msgstr "Шкафчик Джонни"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes: %s"
+msgstr "Еще не получен: %s"
+
+#: scripts/ui/taquilla.gd
+msgid "Sin efecto especial."
+msgstr "Без особого эффекта."
+
+#: scripts/ui/taquilla.gd
+msgid "Puesta"
+msgstr "Надет"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes. %s"
+msgstr "Еще не получен. %s"
+
+#: scripts/ui/taquilla.gd
+msgid "Ya la llevas puesta."
+msgstr "Уже надет."
+
+#: scripts/ui/taquilla.gd
+msgid "Vuelves a ser el conserje de siempre."
+msgstr "Ты снова старый добрый дворник."
+
+#: scripts/ui/taquilla.gd
+msgid "Te pones: %s. Se queda puesta."
+msgstr "Надето: %s. Так и останется."
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "ПРЯМОЙ ЭФИР"
+
+#: scripts/ui/tele.gd
+msgid "CANAL 8"
+msgstr "КАНАЛ 8"
+
+#: scripts/ui/tele.gd
+msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
+msgstr "СРОЧНО  ·  %s: «СИТУАЦИЯ ПОД КОНТРОЛЕМ»  ·  НЕ ПОДХОДИТЕ К ЗДАНИЮ  ·  "
+
+#: scripts/ui/tutorial.gd
+msgid "¡Nuevo!"
+msgstr "Новое!"
+
+#: scripts/ui/tutorial.gd
+msgid "Puedes volver a verlo en Tutorial, en el menú principal y en la pausa"
+msgstr "Это можно снова посмотреть в «Обучении» — в главном меню и в паузе"
+
+#: scripts/ui/tutorial.gd
+msgid "Entendido"
+msgstr "Понятно"
+
+#: scripts/zombi_dependienta.gd
+msgid "¡OFERTAS!"
+msgstr "СКИДКИ!"
+
+#: scripts/zombi_guardia.gd
+msgid "uf"
+msgstr "уф"
+
+#: scripts/zombi_guardia.gd
+msgid "¡PRIIII!"
+msgstr "ФЬЮЮЮТЬ!"

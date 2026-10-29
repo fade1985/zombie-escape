@@ -157,7 +157,7 @@ apuntar_abajo={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://locale/en.po", "res://locale/pt_BR.po", "res://locale/de.po", "res://locale/fr.po")
+locale/translations=PackedStringArray("res://locale/en.po", "res://locale/pt_BR.po", "res://locale/de.po", "res://locale/fr.po", "res://locale/ru.po", "res://locale/zh_CN.po")
 locale/fallback="es"
 
 [layer_names]

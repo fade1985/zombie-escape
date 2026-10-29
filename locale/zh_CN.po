@@ -1,0 +1,5680 @@
+# Traducción al chino simplificado de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
+# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
+msgid ""
+msgstr ""
+"Project-Id-Version: Zombie Escape\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+
+#: scripts/alerta.gd
+msgid "Alerta %d"
+msgstr "警戒 %d"
+
+#: scripts/alerta.gd
+msgid "Sin alerta"
+msgstr "无警戒"
+
+#: scripts/alerta.gd
+msgid "Como siempre"
+msgstr "一切照旧"
+
+#: scripts/alerta.gd
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de piezas"
+msgstr ""
+"%s%s\n"
+"美元和零件 +%d%%"
+
+#: scripts/alerta.gd
+msgid " (y lo de antes)"
+msgstr " （外加之前的）"
+
+#: scripts/alerta.gd
+msgid "+25 % de zombis"
+msgstr "僵尸数量 +25%"
+
+#: scripts/alerta.gd
+msgid "Zombis un 10 % más rápidos"
+msgstr "僵尸速度加快10%"
+
+#: scripts/alerta.gd
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "首领生命 +25%，而且更快暴怒"
+
+#: scripts/alerta.gd
+msgid "Botiquines, vendas y Lobezno curan la mitad"
+msgstr "急救包、绷带和金刚狼的治疗量减半"
+
+#: scripts/alerta.gd
+msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
+msgstr "保安（或拿钥匙的僵尸）血量翻倍，僵尸也能从更远处听见你"
+
+#: scripts/aliado.gd
+msgid "Quédate a su lado para levantarlo"
+msgstr "待在旁边把人扶起来"
+
+#: scripts/aliado.gd scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "救命！"
+
+#: scripts/aliado.gd
+msgid "¡Llévame contigo!"
+msgstr "带上我！"
+
+#: scripts/aliado.gd
+msgid "¿Te acompaño?"
+msgstr "我跟你一起走？"
+
+#: scripts/antidisturbios.gd
+msgid "¡PRIIIII!"
+msgstr "嘘——！"
+
+#: scripts/antidisturbios.gd
+msgid "¡ATRÁS!"
+msgstr "退后！"
+
+#: scripts/antidisturbios.gd
+msgid "¡QUEDAS DETENIDO!"
+msgstr "你被捕了！"
+
+#: scripts/antidisturbios.gd
+msgid "¡CLONC!"
+msgstr "当！"
+
+#: scripts/armas.gd
+msgid "golpe un %d %% más largo y ancho"
+msgstr "挥击范围加长加宽 %d%%"
+
+#: scripts/armas.gd
+msgid "cargador un %d %% más grande y recarga un %d %% más rápida"
+msgstr "弹匣扩容 %d%%，换弹加快 %d%%"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande y la descarga salta a %d zombi más"
+msgid_plural "depósito un %d %% más grande y la descarga salta a %d zombis más"
+msgstr[0] "储罐扩容 %d%%，电弧多跳 %d 个僵尸"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande"
+msgstr "储罐扩容 %d%%"
+
+#: scripts/armas.gd
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "范围扩大 %d%%，每组可多带 %d 个"
+
+#: scripts/armas.gd
+msgid "%s: daño +%d %%, %s."
+msgstr "%s：伤害 +%d%%，%s。"
+
+#: scripts/armas.gd
+msgid "Truco: cada %d golpes que dan, uno es crítico (doble daño)."
+msgstr "绝活：每命中 %d 次，必有一次暴击（双倍伤害）。"
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a un zombi y siguen."
+msgstr "绝活：子弹能穿透一个僵尸继续飞。"
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a %d zombis y siguen."
+msgstr "绝活：子弹能穿透 %d 个僵尸继续飞。"
+
+#: scripts/armas.gd
+msgid "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
+msgstr "绝活：被它杀死的僵尸会爆开，把效果传给旁边的僵尸。"
+
+#: scripts/armas.gd
+msgid "Truco: al romperse suelta %d más pequeños alrededor."
+msgstr "绝活：摔碎时向周围散落 %d 个迷你版。"
+
+#: scripts/armas.gd
+msgid "Truco: al explotar suelta %d más pequeños alrededor."
+msgstr "绝活：爆炸时向周围散落 %d 个迷你版。"
+
+#: scripts/armas.gd scripts/ui/opciones.gd
+msgid "Normal"
+msgstr "普通"
+
+#: scripts/armas.gd
+msgid "Poco común"
+msgstr "优秀"
+
+#: scripts/armas.gd
+msgid "Rara"
+msgstr "稀有"
+
+#: scripts/armas.gd
+msgid "Épica"
+msgstr "史诗"
+
+#: scripts/armas.gd
+msgid "Fregona"
+msgstr "拖把"
+
+#: scripts/armas.gd
+msgid "Bate"
+msgstr "球棒"
+
+#: scripts/armas.gd
+msgid "Cuchillo"
+msgstr "小刀"
+
+#: scripts/armas.gd
+msgid "Pistola"
+msgstr "手枪"
+
+#: scripts/armas.gd
+msgid "Escopeta"
+msgstr "散弹枪"
+
+#: scripts/armas.gd
+msgid "MP5"
+msgstr "MP5"
+
+#: scripts/armas.gd
+msgid "Lanzallamas"
+msgstr "火焰喷射器"
+
+#: scripts/armas.gd
+msgid "Lanza ácido"
+msgstr "酸液枪"
+
+#: scripts/armas.gd
+msgid "Lanza rayos"
+msgstr "闪电枪"
+
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cuerpo a cuerpo"
+msgstr "近战"
+
+#: scripts/armas.gd scripts/ui/inventario.gd
+msgid "A distancia"
+msgstr "远程"
+
+#: scripts/armas.gd
+msgid "una gasolina"
+msgstr "一桶汽油"
+
+#: scripts/armas.gd
+msgid "un bidón de ácido"
+msgstr "一桶酸液"
+
+#: scripts/armas.gd
+msgid "una batería"
+msgstr "一块电池"
+
+#: scripts/armas.gd
+msgid "Balas de pistola"
+msgstr "手枪子弹"
+
+#: scripts/armas.gd
+msgid "¡Sin balas!"
+msgstr "没子弹了！"
+
+#: scripts/armas.gd
+msgid "la pistola y la MP5"
+msgstr "手枪和MP5"
+
+#: scripts/armas.gd
+msgid "Cartuchos"
+msgstr "散弹"
+
+#: scripts/armas.gd
+msgid "¡Sin cartuchos!"
+msgstr "没散弹了！"
+
+#: scripts/armas.gd
+msgid "la escopeta"
+msgstr "散弹枪"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Gasolina"
+msgstr "汽油"
+
+#: scripts/armas.gd
+msgid "¡Sin gasolina!"
+msgstr "没汽油了！"
+
+#: scripts/armas.gd
+msgid "el lanzallamas"
+msgstr "火焰喷射器"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bidón de ácido"
+msgstr "酸液桶"
+
+#: scripts/armas.gd
+msgid "¡Sin ácido!"
+msgstr "没酸液了！"
+
+#: scripts/armas.gd
+msgid "el lanza ácido"
+msgstr "酸液枪"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Batería"
+msgstr "电池"
+
+#: scripts/armas.gd
+msgid "¡Sin batería!"
+msgstr "没电了！"
+
+#: scripts/armas.gd
+msgid "el lanza rayos"
+msgstr "闪电枪"
+
+#: scripts/averia.gd
+msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
+msgstr "通着电我可不敢碰。快去把电闸拉下来！"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico para que el %s arregle el cable"
+msgstr "拉下配电箱的电闸，好让%s修电线"
+
+#: scripts/averia.gd
+msgid "¡Gracias! Sigo con el cable"
+msgstr "谢了！我接着修电线"
+
+#: scripts/averia.gd
+msgid "¡Se ha cerrado la puerta! Aguanta a oscuras mientras el %s arregla el cable"
+msgstr "门关上了！%s修电线的时候，你得在黑暗里撑住"
+
+#: scripts/averia.gd
+msgid "¡Arreglado! Ya puedes dar la luz"
+msgstr "修好了！可以合闸送电了"
+
+#: scripts/averia.gd
+msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
+msgstr "%s修好了电线！水里不会再电人了"
+
+#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
+msgid "¡Ayúdame, no puedo levantarme!"
+msgstr "帮帮我，我起不来了！"
+
+#: scripts/averia.gd
+msgid "El %s no se va sin arreglar el cable: baja la palanca del cuadro"
+msgstr "电线不修好，%s是不会走的：去拉下电闸"
+
+#: scripts/averia.gd
+msgid "Aguanta: el %s está arreglando el cable"
+msgstr "撑住：%s正在修电线"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico"
+msgstr "拉下配电箱的电闸"
+
+#: scripts/averia.gd
+msgid "¡El %s ha caído!"
+msgstr "%s倒下了！"
+
+#: scripts/averia.gd
+msgid "¡Hay corriente! Baja la palanca"
+msgstr "还通着电！快拉电闸"
+
+#: scripts/averia.gd
+msgid "El %s arregla el cable · %d:%02d"
+msgstr "%s正在修电线 · %d:%02d"
+
+#: scripts/averia.gd
+msgid "¡Bien, sin corriente! Cúbreme mientras lo arreglo"
+msgstr "好，断电了！我修的时候你掩护我"
+
+#: scripts/averia.gd
+msgid "Este empalme está hecho polvo…"
+msgstr "这接头烂透了……"
+
+#: scripts/averia.gd
+msgid "No veo nada… ¡no dejes que se me acerquen!"
+msgstr "什么都看不见……别让它们靠近我！"
+
+#: scripts/averia.gd
+msgid "¡Toma, esto estaba en el almacén!"
+msgstr "拿着，这是从仓库里翻出来的！"
+
+#: scripts/averia.gd
+msgid "Pelo el cable, lo uno… vale"
+msgstr "剥线，接上……行了"
+
+#: scripts/averia.gd
+msgid "Ya solo falta la cinta aislante…"
+msgstr "就差缠绝缘胶带了……"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Un poco más!"
+msgstr "再坚持一下！"
+
+#: scripts/averia.gd
+msgid "¡Eh, que hay corriente! ¡Baja la palanca!"
+msgstr "喂，还有电呢！快拉电闸！"
+
+#: scripts/averia.gd
+msgid "¡Así no puedo! ¡Quita la corriente!"
+msgstr "这样我没法干！快断电！"
+
+#: scripts/averia.gd
+msgid "¡Que me electrocuto! ¡La palanca!"
+msgstr "我要触电了！电闸！"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Johnny, vuelve!"
+msgstr "Johnny，回来！"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡No me dejes aquí!"
+msgstr "别把我丢在这儿！"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Que me comen!"
+msgstr "我要被吃掉了！"
+
+#: scripts/barricada.gd
+msgid "¡Espera, que quito la barricada!"
+msgstr "等等，我这就拆路障！"
+
+#: scripts/barricada.gd
+msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
+msgstr "入口关上了！%s拆路障的时候，守住门口"
+
+#: scripts/barricada.gd
+msgid "la entrada"
+msgstr "入口"
+
+#: scripts/barricada.gd scripts/supervivientes.gd
+msgid "¡Vienen por %s!"
+msgstr "它们从%s过来了！"
+
+#: scripts/barricada.gd
+msgid "¡Barricada fuera! La entrada se ha abierto"
+msgstr "路障拆了！入口打开了"
+
+#: scripts/barricada.gd
+msgid "¡Están empujando la puerta! Quítaselos"
+msgstr "它们在推门！把它们赶走"
+
+#: scripts/barricada.gd
+msgid "%s quita la barricada · %d:%02d"
+msgstr "%s正在拆路障 · %d:%02d"
+
+#: scripts/barricada.gd
+msgid "¡Cuántos clavos le metí!"
+msgstr "我当初到底钉了多少钉子啊！"
+
+#: scripts/barricada.gd
+msgid "¡Una tabla menos!"
+msgstr "又拆掉一块板！"
+
+#: scripts/barricada.gd
+msgid "Esta tabla no sale…"
+msgstr "这块板死活拔不下来……"
+
+#: scripts/barricada.gd
+msgid "¡Toma, te lo paso por debajo!"
+msgstr "拿着，我从门缝底下递给你！"
+
+#: scripts/barricada.gd
+msgid "¡Otra fuera!"
+msgstr "又拆一块！"
+
+#: scripts/barricada.gd
+msgid "Ya casi está…"
+msgstr "快好了……"
+
+#: scripts/barricada.gd
+msgid "¡La última tabla!"
+msgstr "最后一块板！"
+
+#: scripts/barricada.gd
+msgid "¡Me están empujando la puerta!"
+msgstr "它们在推我的门！"
+
+#: scripts/barricada.gd
+msgid "¡Quítamelos de la puerta!"
+msgstr "帮我把门口那些赶走！"
+
+#: scripts/barricada.gd
+msgid "¡Así no puedo, Johnny!"
+msgstr "Johnny，这样我没法干活！"
+
+#: scripts/bestiario.gd
+msgid "El vecino"
+msgstr "邻居"
+
+#: scripts/bestiario.gd
+msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde."
+msgstr "凌晨坐着Velaria的卡车搬来的，换来一套免费公寓。现在他是个沉睡者：在楼梯上碰见不打招呼，直接咬。"
+
+#: scripts/bestiario.gd
+msgid "El arrastrado"
+msgstr "爬行者"
+
+#: scripts/bestiario.gd
+msgid "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido."
+msgstr "下半身没了，他自己还没发现。用两只手在地上爬，弄得到处一塌糊涂。"
+
+#: scripts/bestiario.gd
+msgid "El crío"
+msgstr "熊孩子"
+
+#: scripts/bestiario.gd
+msgid "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo."
+msgstr "戴鸭舌帽、穿运动服的熊孩子，跑起来跟疯了一样。刹车奇差：闪到一边，他就冲过头了。"
+
+#: scripts/bestiario.gd
+msgid "El dinamitero"
+msgstr "自爆客"
+
+#: scripts/bestiario.gd
+msgid "Un hombretón con gabardina. Cuando la abre no es para enseñarte nada bueno: corre."
+msgstr "穿风衣的大块头。他敞开风衣可不是要给你看什么好东西：快跑。"
+
+#: scripts/bestiario.gd
+msgid "El de los tentáculos"
+msgstr "触手怪"
+
+#: scripts/bestiario.gd
+msgid "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella."
+msgstr "他几乎不动，但他划出红线的时候，别站在线上。"
+
+#: scripts/bestiario.gd
+msgid "El gordo"
+msgstr "胖子"
+
+#: scripts/bestiario.gd
+msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
+msgstr "跟你保持距离，吐一口浓痰，把地面变成毒区。"
+
+#: scripts/bestiario.gd
+msgid "La portera"
+msgstr "楼管大妈"
+
+#: scripts/bestiario.gd
+msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
+msgstr "整栋楼都在她掌控之中：钥匙、物业费，现在还有住户。她的拖把可不是用来拖地的。"
+
+#: scripts/bestiario.gd
+msgid "La dependienta"
+msgstr "店员"
+
+#: scripts/bestiario.gd
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta."
+msgstr "已经站了31个小时，还在微笑。她一喊“大促销！”，整个店都醒了。"
+
+#: scripts/bestiario.gd
+msgid "El vigilante"
+msgstr "巡逻保安"
+
+#: scripts/bestiario.gd
+msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
+msgstr "还在照常巡逻。一听到哨声，就举着警棍冲过来。"
+
+#: scripts/bestiario.gd
+msgid "El guardia de la tarjeta"
+msgstr "持卡保安"
+
+#: scripts/bestiario.gd
+msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "他拿着这层楼的门禁卡，而且心里有数。吹哨、逃跑、跑到喘不上气：这就是你的机会。"
+
+#: scripts/bestiario.gd
+msgid "El antidisturbios"
+msgstr "防暴警察"
+
+#: scripts/bestiario.gd
+msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
+msgstr "盾牌挡在前面，什么都打不进去。绕到他身后：背后挨打疼两倍。"
+
+#: scripts/bestiario.gd
+msgid "El cocinero"
+msgstr "厨师"
+
+#: scripts/bestiario.gd
+msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
+msgstr "他还守在厨房里，今日菜单：飞刀和滚油。别站在标记下面。"
+
+#: scripts/bestiario.gd
+msgid "La modista"
+msgstr "裁缝"
+
+#: scripts/bestiario.gd
+msgid "Se esconde entre los maniquíes y te cose a alfileres. Fíjate en cuál le brillan los ojos."
+msgstr "她藏在假人模特中间，用大头针把你扎成筛子。留意哪个的眼睛在发光。"
+
+#: scripts/bestiario.gd
+msgid "El maniquí"
+msgstr "假人模特"
+
+#: scripts/bestiario.gd
+msgid "Quieto mientras lo miras. No le des la espalda."
+msgstr "你盯着它，它就不动。千万别背对它。"
+
+#: scripts/bestiario.gd
+msgid "La mascota"
+msgstr "吉祥物"
+
+#: scripts/bestiario.gd
+msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
+msgstr "一只巨型泰迪熊玩偶，里面还装着个人。会冲撞、会跳，要是一头撞上东西，就会眼冒金星。"
+
+#: scripts/bestiario.gd
+msgid "El gerente"
+msgstr "经理"
+
+#: scripts/bestiario.gd
+msgid "Arturo Salcedo, director del centro. Sus contratos cortan y su jeringuilla lleva VD-7."
+msgstr "阿图罗·萨尔塞多，商场总经理。他的合同能割人，他的针筒里装着VD-7。"
+
+#: scripts/bestiario.gd
+msgid "El gerente mutado"
+msgstr "变异经理"
+
+#: scripts/bestiario.gd
+msgid "Ya no le hace falta dormir. Ni el traje. Cuatro tentáculos y el helicóptero esperando en la azotea."
+msgstr "他不再需要睡觉了，也不需要西装了。四条触手，外加天台上等着的直升机。"
+
+#: scripts/bestiario.gd
+msgid "El Glotón"
+msgstr "大胃王"
+
+#: scripts/bestiario.gd
+msgid "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe tuyo te salpica."
+msgstr "他四肢着地爬行，想把你吃掉：他张大嘴时，快离开锥形范围。他的血是酸的：你每打他一下，都会溅到自己身上。"
+
+#: scripts/bestiario.gd
+msgid "El Gymbro"
+msgstr "健身哥"
+
+#: scripts/bestiario.gd
+msgid "Gira con los brazos abiertos, salta encima de ti y te tira pesas. Con sus suplementos, la armadura se come la mitad del daño."
+msgstr "他张开双臂转圈，跳起来砸你，还朝你扔哑铃。吃了补剂后，他的护甲能吸收一半伤害。"
+
+#: scripts/bestiario.gd
+msgid "El jefe de bomberos"
+msgstr "消防队长"
+
+#: scripts/bestiario.gd
+msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
+msgstr "火对他毫无作用：换把武器。他转身喷火时，顺着箭头方向跑在火焰前面。近身时，小心他的斧头。"
+
+#: scripts/bestiario.gd
+msgid "El doctor Salas"
+msgstr "萨拉斯博士"
+
+#: scripts/bestiario.gd
+msgid "Héctor Salas, director del estudio del VD-7. Tira probetas, mejora a sus sujetos y se esconde en una cúpula de cristal: rómpela."
+msgstr "埃克托·萨拉斯，VD-7研究的负责人。他会扔试管、强化他的实验体，还躲在玻璃罩里：把它打碎。"
+
+#: scripts/bestiario.gd
+msgid "La criatura"
+msgstr "怪物"
+
+#: scripts/bestiario.gd
+msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
+msgstr "博士给自己打了一针之后剩下的东西：大胃王的嘴、健身哥的胳膊、消防队长的火。避开它的冲锋路线和冲击波。"
+
+#: scripts/bombero.gd
+msgid "¡A ARDER!"
+msgstr "消防演习！"
+
+#: scripts/bombero.gd scripts/minijefe.gd
+msgid "¡INMUNE!"
+msgstr "免疫！"
+
+#: scripts/bombero.gd
+msgid "¡TODO ARDE!"
+msgstr "一片火海！"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MÁS SUJETOS!"
+msgstr "再来点实验品！"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡DOSIS DOBLE!"
+msgstr "双倍剂量！"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡SUERO!"
+msgstr "血清！"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡NO ME TOCARÁS!"
+msgstr "扫地的，别碰我！"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MI CÚPULA!"
+msgstr "我的玻璃罩！"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡AÚN NO HE TERMINADO!"
+msgstr "我还没完呢！"
+
+#: scripts/cientifico_jefe.gd scripts/gerente.gd
+msgid "¡GRAAAAH!"
+msgstr "吼啊啊啊！"
+
+#: scripts/cocinero.gd
+msgid "¡CALENTITO!"
+msgstr "趁热吃！"
+
+#: scripts/cocinero.gd
+msgid "¡A LA OLLA!"
+msgstr "下锅！"
+
+#: scripts/edificios.gd
+msgid "Apartamentos"
+msgstr "公寓楼"
+
+#: scripts/edificios.gd
+msgid "los Apartamentos"
+msgstr "公寓楼"
+
+#: scripts/edificios.gd
+msgid "Vecinos zombi, pisos a oscuras y una portera con muy mal genio"
+msgstr "僵尸邻居、漆黑的房间，还有一个脾气超差的楼管大妈"
+
+#: scripts/edificios.gd
+msgid "la portera"
+msgstr "楼管大妈"
+
+#: scripts/edificios.gd
+msgid "el doctor Salas"
+msgstr "萨拉斯博士"
+
+#: scripts/edificios.gd
+msgid "limpia los apartamentos y caza al zombi que lleva la llave de la portera"
+msgstr "清理各户公寓，干掉拿着楼管大妈钥匙的僵尸"
+
+#: scripts/edificios.gd
+msgid "Centro comercial"
+msgstr "购物中心"
+
+#: scripts/edificios.gd
+msgid "el Centro comercial"
+msgstr "购物中心"
+
+#: scripts/edificios.gd
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
+msgstr "被洗劫的商店、漆黑的仓库，还有一个死抓着门禁卡不放的保安"
+
+#: scripts/edificios.gd
+msgid "el gerente"
+msgstr "经理"
+
+#: scripts/edificios.gd
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
+msgstr "清理各家商店，干掉保安：门禁卡在他身上"
+
+#: scripts/edificios.gd
+msgid "el Glotón"
+msgstr "大胃王"
+
+#: scripts/edificios.gd
+msgid "el Gymbro"
+msgstr "健身哥"
+
+#: scripts/edificios.gd
+msgid "el jefe de bomberos"
+msgstr "消防队长"
+
+#: scripts/edificios.gd
+msgid "el antidisturbios"
+msgstr "防暴警察"
+
+#: scripts/edificios.gd
+msgid "Oficina de seguridad"
+msgstr "保安室"
+
+#: scripts/edificios.gd
+msgid "la Oficina de seguridad"
+msgstr "保安室"
+
+#: scripts/edificios.gd
+msgid "el cocinero"
+msgstr "厨师"
+
+#: scripts/edificios.gd
+msgid "Cocina central"
+msgstr "中央厨房"
+
+#: scripts/edificios.gd
+msgid "la Cocina central"
+msgstr "中央厨房"
+
+#: scripts/edificios.gd
+msgid "la modista"
+msgstr "裁缝"
+
+#: scripts/edificios.gd
+msgid "Taller de costura"
+msgstr "裁缝铺"
+
+#: scripts/edificios.gd
+msgid "el Taller de costura"
+msgstr "裁缝铺"
+
+#: scripts/edificios.gd
+msgid "la mascota"
+msgstr "吉祥物"
+
+#: scripts/edificios.gd
+msgid "Juguetería"
+msgstr "玩具店"
+
+#: scripts/edificios.gd
+msgid "la Juguetería"
+msgstr "玩具店"
+
+#: scripts/escolta.gd
+msgid "Vámonos. Despacio, por favor"
+msgstr "走吧。麻烦慢一点"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s hasta las escaleras: va herida"
+msgstr "把%s护送到楼梯口：她受伤了"
+
+#: scripts/escolta.gd
+msgid "Gracias… sigamos"
+msgstr "谢谢……继续走吧"
+
+#: scripts/escolta.gd
+msgid "¡La %s está en el suelo! Quédate a su lado para levantarla"
+msgstr "%s倒在地上了！待在她身边把她扶起来"
+
+#: scripts/escolta.gd
+msgid "Espera a la %s: va herida"
+msgstr "等等%s：她受伤了"
+
+#: scripts/escolta.gd
+msgid "Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo"
+msgstr "到这儿就安全了。我包扎一下腿，接着跟你走"
+
+#: scripts/escolta.gd
+msgid "¡La %s está a salvo!"
+msgstr "%s安全了！"
+
+#: scripts/escolta.gd
+msgid "¡La %s ha caído! Quédate a su lado"
+msgstr "%s倒下了！待在她身边"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s a las escaleras"
+msgstr "把%s带到楼梯口"
+
+#: scripts/escolta.gd
+msgid "Me duele mucho la pierna…"
+msgstr "我的腿好疼……"
+
+#: scripts/escolta.gd
+msgid "¡No vayas tan deprisa!"
+msgstr "别走那么快！"
+
+#: scripts/escolta.gd
+msgid "¡No me dejes atrás!"
+msgstr "别丢下我！"
+
+#: scripts/escolta.gd
+msgid "¿Falta mucho?"
+msgstr "还有多远啊？"
+
+#: scripts/escolta.gd
+msgid "Tengo que vendarme esto…"
+msgstr "我得把伤口包一下……"
+
+#: scripts/eventos.gd
+msgid "¡Ahí viene la horda!"
+msgstr "尸潮来了！"
+
+#: scripts/eventos.gd
+msgid "¡Horda vencida! Te deja $%d y una caja de munición"
+msgstr "尸潮被击退！掉落了$%d和一箱弹药"
+
+#: scripts/eventos.gd
+msgid "¡Apagón superado! +$%d"
+msgstr "挺过停电！+$%d"
+
+#: scripts/eventos.gd
+msgid "¡Incendio superado! +$%d"
+msgstr "挺过火警！+$%d"
+
+#: scripts/eventos.gd
+msgid "¡Ojo! Ese charco tiene corriente"
+msgstr "小心！那滩水带电"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Apagón"
+msgstr "停电"
+
+#: scripts/eventos.gd
+msgid "¡APAGÓN!"
+msgstr "停电了！"
+
+#: scripts/eventos.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"
+msgstr "整层楼都停电了：你只能看见手电筒照到的地方"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Alarma de incendios"
+msgstr "火警"
+
+#: scripts/eventos.gd
+msgid "¡ALARMA DE INCENDIOS!"
+msgstr "火警警报！"
+
+#: scripts/eventos.gd
+msgid "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"
+msgstr "喷淋头把地面浇湿了：地很滑，电线掉落的地方还会电人！"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Horda"
+msgstr "尸潮"
+
+#: scripts/eventos.gd
+msgid "¡HORDA EN EL PASILLO!"
+msgstr "走廊里有尸潮！"
+
+#: scripts/eventos.gd
+msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
+msgstr "一大波僵尸正沿着走廊涌来……做好准备！"
+
+#: scripts/gerente.gd
+msgid "¡A TRABAJAR!"
+msgstr "都给我干活！"
+
+#: scripts/gerente.gd
+msgid "¡AQUÍ NO PARA NADIE!"
+msgstr "谁也不准下班！"
+
+#: scripts/gloton.gd
+msgid "¡HAMBRE!"
+msgstr "好饿！"
+
+#: scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "啊呜！"
+
+#: scripts/gloton.gd
+msgid "¡TENGO HAMBRE!"
+msgstr "饿死我了！"
+
+#: scripts/gloton.gd
+msgid "-%d ácido"
+msgstr "-%d 酸蚀"
+
+#: scripts/gymbro.gd
+msgid "¡NO PAIN, NO GAIN!"
+msgstr "NO PAIN, NO GAIN!"
+
+#: scripts/gymbro.gd
+msgid "¡HORA DE LOS SUPLEMENTOS!"
+msgstr "该吃补剂了！"
+
+#: scripts/gymbro.gd
+msgid "¡SIN SUPLEMENTOS!"
+msgstr "补剂没了！"
+
+#: scripts/historia.gd
+msgid "azotea"
+msgstr "天台"
+
+#: scripts/historia.gd
+msgid "Página arrancada"
+msgstr "撕下的一页"
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Apartamentos"
+msgstr "VD-7档案 · 公寓楼"
+
+#: scripts/historia.gd
+msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
+msgstr "楼里每个死掉的Velaria员工身上都带着一页，最后一页在研究负责人身上。你找到的内容会永久保存在这里。"
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"这一页缺失。它在一个倒在%s的Velaria员工身上。\n"
+"\n"
+"开一局去找吧。"
+
+#: scripts/historia.gd
+msgid "Dra. Inés Lozano, coordinadora del estudio"
+msgstr "伊内斯·洛萨诺博士，研究协调员"
+
+#: scripts/historia.gd
+msgid "PLAN DE CAMPO · CONFIDENCIAL"
+msgstr "现场计划 · 机密"
+
+#: scripts/historia.gd
+msgid "Estudio de descanso"
+msgstr "睡眠研究"
+
+#: scripts/historia.gd
+msgid ""
+"Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
+"\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"\n"
+"Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
+"\n"
+"Personal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros."
+msgstr ""
+"楼栋：14号楼。Velaria公司已经把整栋楼买下：谁也别想来打探。\n"
+"\n"
+"受试者：120人，夜里用卡车从后面的车库运进来，没人看得见。无家可归的、欠债的、生病的。我们给他们一套房子，每月300欧元。\n"
+"\n"
+"剂量：每晚23:00服一片VD-7。\n"
+"\n"
+"人员：一名医生，负责观察受试者；一名穿制服的警察，让他们放心；一支军队护卫，以防万一。楼管大妈是我们的人。"
+
+#: scripts/historia.gd
+msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
+msgstr "萨拉斯说，这些人就算消失了也没人会想念。所以他才选了他们。"
+
+#: scripts/historia.gd
+msgid "Tomás Vidal, enfermero de noche"
+msgstr "托马斯·比达尔，夜班护士"
+
+#: scripts/historia.gd
+msgid "DIARIO DE TURNO"
+msgstr "值班日志"
+
+#: scripts/historia.gd
+msgid "Noches 6 a 13"
+msgstr "第6至13夜"
+
+#: scripts/historia.gd
+msgid ""
+"Noche 6. Funciona. El del 1ºA, que no pegaba ojo desde hacía años, ronca a las 23:10.\n"
+"\n"
+"Noche 9. Siguen dormidos, pero se levantan. Andan, abren la nevera, vuelven a la cama. Con los ojos cerrados.\n"
+"\n"
+"Noche 12. Ya no vuelven a la cama. La piel se les cae a tiras. Se han comido todo lo de los pisos, y al perro del 2ºC. De la escolta solo queda uno.\n"
+"\n"
+"Noche 13. El del 3ºB me ha mordido. Salas los llama «durmientes». Tengo mucho sueño."
+msgstr ""
+"第6夜。有效果了。1A那位好几年没合过眼的，23:10就呼呼大睡了。\n"
+"\n"
+"第9夜。他们还在睡，但会起身。走来走去，打开冰箱，再回到床上。眼睛一直闭着。\n"
+"\n"
+"第12夜。他们不再回床上了。皮肤一条一条地往下掉。屋里能吃的全被吃光了，连2C的狗也没放过。护卫只剩一个了。\n"
+"\n"
+"第13夜。3B那个人咬了我。萨拉斯管他们叫“沉睡者”。我好困。"
+
+#: scripts/historia.gd
+msgid "Andrés Peña, técnico de muestras"
+msgstr "安德烈斯·佩尼亚，样本技术员"
+
+#: scripts/historia.gd
+msgid "CORREO INTERNO IMPRESO"
+msgstr "内部邮件打印件"
+
+#: scripts/historia.gd
+msgid "Asunto: RE: ¿virus?"
+msgstr "主题：RE：病毒？"
+
+#: scripts/historia.gd
+msgid ""
+"De: Dirección de Velaria Corp.\n"
+"Para: Equipo de campo\n"
+"\n"
+"No hay ningún virus, lo sabemos. Pero «virus» lo entiende todo el mundo y nadie pregunta por las pastillas.\n"
+"\n"
+"Esta noche nuestra seguridad precinta el edificio: nadie entra ni sale, tampoco vosotros ni la escolta. El edificio es nuestro y la policía de fuera no puede pasar.\n"
+"\n"
+"El mordisco cambia el ADN del mordido: un durmiente más. No estaba previsto. Ahora forma parte del estudio.\n"
+"\n"
+"Borrad este correo."
+msgstr ""
+"发件人：Velaria公司总部\n"
+"收件人：现场小组\n"
+"\n"
+"根本没有什么病毒，这我们清楚。但“病毒”谁都听得懂，也就没人追问药片的事。\n"
+"\n"
+"今晚我们的安保会封锁大楼：谁都不许进出，你们和护卫也一样。大楼是我们的，外面的警察进不来。\n"
+"\n"
+"被咬会改变被咬者的DNA：又多一个沉睡者。这不在计划之内。现在它成了研究的一部分。\n"
+"\n"
+"阅后删除此邮件。"
+
+#: scripts/historia.gd
+msgid "No pienso borrarlo. Que lo lea alguien."
+msgstr "我才不删。总得有人看到。"
+
+#: scripts/historia.gd
+msgid "Dr. Ramón Gil, investigador de Velaria"
+msgstr "拉蒙·希尔博士，Velaria研究员"
+
+#: scripts/historia.gd
+msgid "INFORME · DOSIS ALTA"
+msgstr "报告 · 高剂量"
+
+#: scripts/historia.gd
+msgid "Los sonámbulos"
+msgstr "梦游者"
+
+#: scripts/historia.gd
+msgid ""
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"\n"
+"S-1. La portera. Dosis triple. Sigue fregando.\n"
+"S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
+"S-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\n"
+"S-4. Bombero jubilado, 2ºA. El fuego no le quema.\n"
+"\n"
+"Salas les saca sangre cada noche y se la sube a la azotea."
+msgstr ""
+"四名高剂量受试者没有停留在沉睡者阶段。他们变异得更深：会捕猎，会一点思考，还会说话。萨拉斯管他们叫“梦游者”。\n"
+"\n"
+"S-1。楼管大妈。三倍剂量。还在拖地。\n"
+"S-2。无家可归，住底层C。吃个不停。大喊“饿死我了！”\n"
+"S-3。欠债，住1D。把药混进了他的蛋白奶昔。衣服已经穿不下了。\n"
+"S-4。退休消防员，住2A。火烧不着他。\n"
+"\n"
+"萨拉斯每晚抽他们的血，送上天台。"
+
+#: scripts/historia.gd
+msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
+msgstr "S-1叫出了我的名字。把楼上的人员都撤出来。马上。"
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"这一页缺失。它在研究负责人身上，就在最高处的天台。\n"
+"\n"
+"你得从他手里抢过来。"
+
+#: scripts/historia.gd
+msgid "Dr. Héctor Salas, director del estudio"
+msgstr "埃克托·萨拉斯博士，研究负责人"
+
+#: scripts/historia.gd
+msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
+msgstr "受试者名单 · 仅限高层"
+
+#: scripts/historia.gd
+msgid "Sujeto 0"
+msgstr "0号受试者"
+
+#: scripts/historia.gd
+msgid ""
+"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"\n"
+"Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
+"\n"
+"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+msgstr ""
+"沉睡者：131人，含工作人员。梦游者：4人。\n"
+"\n"
+"0号受试者：清洁工。他是应我的要求留在楼里的。他被咬了30多次，却没有变异。每当他解决掉一个梦游者，VD-7会改变他的身体几个小时，但改变不了他的头脑。他的血能分解VD-7。\n"
+"\n"
+"他就是解药。或者说，武器。让直升机把他活着送到总部。\n"
+"\n"
+"我不等了。梦游者就是捷径：纯VD-7，一次全部注射，我将超越人类。"
+
+#: scripts/historia.gd
+msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
+msgstr "清洁工，如果你看到这段话：别相信穿白大褂的人。也别相信那些来救你的人。"
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Centro comercial"
+msgstr "VD-7档案 · 购物中心"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
+msgstr "每层楼都有一具尸体带着一页，最后一页在经理身上。你找到的内容会永久保存在这里。"
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. Está junto a un cuerpo, en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"这一页缺失。它在%s的一具尸体旁边。\n"
+"\n"
+"开一局去找吧。"
+
+#: scripts/historia.gd
+msgid "Julián Mora, farmacéutico de Velaria"
+msgstr "胡利安·莫拉，Velaria药剂师"
+
+#: scripts/historia.gd
+msgid "ALBARÁN DE ENTREGA"
+msgstr "送货单"
+
+#: scripts/historia.gd
+msgid "Pedido para la farmacia"
+msgstr "药店订单"
+
+#: scripts/historia.gd
+msgid ""
+"Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
+"\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"\n"
+"Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
+"\n"
+"Si un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp."
+msgstr ""
+"产品：“Velaria安睡”，治疗失眠。10000盒，每盒20片。\n"
+"\n"
+"每片含四分之一剂VD-7。非处方药，随便买。售价：3.99欧元。\n"
+"\n"
+"摆在收银台旁边，与视线齐平。广告牌：“睡得像婴儿一样香”。\n"
+"\n"
+"如有顾客打听14号楼，请带到店外接待，并通知Velaria公司安保部门。"
+
+#: scripts/historia.gd
+msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
+msgstr "不用处方？这东西我不卖。配药间那个姑娘也不卖。"
+
+#: scripts/historia.gd
+msgid "Dra. Elena Ruiz, técnica de Velaria"
+msgstr "Elena Ruiz博士，Velaria技术员"
+
+#: scripts/historia.gd
+msgid "CONTRATO · CONFIDENCIAL"
+msgstr "合同 · 机密"
+
+#: scripts/historia.gd
+msgid "Programa «Turno infinito»"
+msgstr "“无限加班”计划"
+
+#: scripts/historia.gd
+msgid ""
+"Entre Velaria Corp. y la gerencia del centro comercial.\n"
+"\n"
+"Velaria entrega el VD-7 gratis. El centro lo echa en la cafetera de la sala de descanso de los empleados, a dosis completa. Ellos no lo saben.\n"
+"\n"
+"Objetivo: turnos de 20 horas, sin cansancio y sin quejas. Velaria se queda con los datos de 312 empleados.\n"
+"\n"
+"Si sale bien, Velaria Corp. lo venderá a fábricas, almacenes y hospitales: un turno infinito para todo el país."
+msgstr ""
+"甲方：Velaria公司；乙方：购物中心管理层。\n"
+"\n"
+"Velaria免费提供VD-7。商场把它按全剂量倒进员工休息室的咖啡机。员工本人并不知情。\n"
+"\n"
+"目标：20小时轮班，不累，不抱怨。Velaria获得312名员工的数据。\n"
+"\n"
+"如果成功，Velaria公司将把它卖给工厂、仓库和医院：让全国都无限加班。"
+
+#: scripts/historia.gd
+msgid "Marta, si te llega esto: no vengas al centro. Por favor."
+msgstr "Marta，如果你收到这个：别来商场。求你了。"
+
+#: scripts/historia.gd
+msgid "Manuel Ortega, jefe de seguridad del centro"
+msgstr "曼努埃尔·奥尔特加，商场保安主管"
+
+#: scripts/historia.gd
+msgid "PARTE DE INCIDENCIAS"
+msgstr "事件报告"
+
+#: scripts/historia.gd
+msgid "Turno de noche"
+msgstr "夜班"
+
+#: scripts/historia.gd
+msgid ""
+"02:10. Cerrado desde las 22:00. Los cajeros siguen cobrando a nadie.\n"
+"\n"
+"03:40. El cocinero fríe sin aceite. La del taller de costura viste maniquíes. El del oso de la juguetería saluda al pasillo vacío.\n"
+"\n"
+"04:15. Tienen los ojos cerrados. Siguen trabajando. Si te acercas, muerden.\n"
+"\n"
+"05:00. El gerente dice que no es una incidencia: «Rinden más que nunca».\n"
+"\n"
+"05:30. Pido ayuda. Velaria Corp. manda un antidisturbios. Entra en la oficina de seguridad. No sale."
+msgstr ""
+"02:10。22:00就关门了。收银员还在给空气结账。\n"
+"\n"
+"03:40。厨师在干锅里炸东西。裁缝铺那位在给假人模特穿衣服。玩具店穿熊套装的那位在向空荡荡的走廊挥手。\n"
+"\n"
+"04:15。他们都闭着眼睛。还在继续干活。靠近就咬。\n"
+"\n"
+"05:00。经理说这不算事故：“效率从没这么高过。”\n"
+"\n"
+"05:30。我请求支援。Velaria公司派来一名防暴警察。他进了保安室。再没出来。"
+
+#: scripts/historia.gd
+msgid "Esta noche no me tomo el café."
+msgstr "今晚这咖啡我不喝了。"
+
+#: scripts/historia.gd
+msgid "Lucía Benet, secretaria del gerente"
+msgstr "露西亚·贝内特，经理秘书"
+
+#: scripts/historia.gd
+msgid "CORREO IMPRESO · GERENCIA"
+msgstr "邮件打印件 · 管理层"
+
+#: scripts/historia.gd
+msgid "Asunto: El conserje"
+msgstr "主题：清洁工"
+
+#: scripts/historia.gd
+msgid ""
+"De: Gerencia del centro comercial\n"
+"Para: Velaria Corp., Dirección\n"
+"\n"
+"El conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n"
+"\n"
+"No voy a llamar a la policía. Lo retengo hasta que llegue vuestro helicóptero. He cerrado las salidas, y mis empleados no se cansan.\n"
+"\n"
+"A cambio, quiero la dosis buena. La de verdad."
+msgstr ""
+"发件人：购物中心管理层\n"
+"收件人：Velaria公司总部\n"
+"\n"
+"14号楼的清洁工在商场里。我在监控里看见他了：一层一层往上爬，好像在找什么。\n"
+"\n"
+"我不会报警。我会把他拖住，直到你们的直升机到达。出口我都锁了，而且我的员工不知道累。\n"
+"\n"
+"作为交换，我要好的那种剂量。真货。"
+
+#: scripts/historia.gd
+msgid "Lleva cuatro días sin dormir. Dice que ya no le hace falta."
+msgstr "他已经四天没睡了。说是不需要了。"
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"这一页缺失。它在商场经理身上，就在最高处的天台。\n"
+"\n"
+"你得从他手里抢过来。"
+
+#: scripts/historia.gd
+msgid "Arturo Salcedo, gerente del centro"
+msgstr "阿图罗·萨尔塞多，商场经理"
+
+#: scripts/historia.gd
+msgid "ORDEN DE RECOGIDA · URGENTE"
+msgstr "接收指令 · 紧急"
+
+#: scripts/historia.gd
+msgid "Recogida del Sujeto 0"
+msgstr "接收0号受试者"
+
+#: scripts/historia.gd
+msgid ""
+"Lugar: helipuerto de la azotea del centro comercial. Hora: en cuanto avise el gerente.\n"
+"\n"
+"Carga: el Sujeto 0, el conserje del 14. Vivo. No gastéis VD-7 con él: no le hace nada.\n"
+"\n"
+"Destino: Torre Velaria, nuestra sede. Directo al laboratorio de la planta 40. Él ya lo conoce, aunque no se acuerde.\n"
+"\n"
+"El gerente no viaja. Lo que pidió no se le entrega. Mandadle una jeringa para que aguante hasta que lleguemos."
+msgstr ""
+"地点：购物中心天台的直升机停机坪。时间：经理一通知就出发。\n"
+"\n"
+"货物：0号受试者，14号楼的清洁工。要活的。别在他身上浪费VD-7：对他没用。\n"
+"\n"
+"目的地：我们的总部Velaria大厦。直接送到40楼的实验室。他以前去过，虽然他不记得了。\n"
+"\n"
+"经理不随行。他要的东西不给。给他送一支针剂，让他撑到我们赶到。"
+
+#: scripts/historia.gd
+msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
+msgstr "他们答应给我好的剂量。结果寄来一支针剂和这张纸。"
+
+#: scripts/historia.gd
+msgid "Canal 8"
+msgstr "8频道"
+
+#: scripts/historia.gd
+msgid "Cierran un edificio por un virus"
+msgstr "一栋大楼因病毒被封"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta del número 14. Desde esta mañana, la seguridad privada de Velaria Corp., la dueña del edificio, no deja entrar ni salir a nadie. Según la empresa, dentro hay un virus muy contagioso. «La situación está controlada», nos dicen. Y piden que nadie se acerque."
+msgstr "晚上好。我现在在14号楼门口为您报道。从今天早上起，大楼的业主Velaria公司的私人保安就不让任何人进出。据该公司称，楼里有一种传染性极强的病毒。“情况已经得到控制。”他们对我们说。并请大家不要靠近。"
+
+#: scripts/historia.gd
+msgid "Camiones de noche en el 14"
+msgstr "深夜卡车驶入14号楼"
+
+#: scripts/historia.gd
+msgid "Alguien desde dentro del 14 nos ha mandado un documento. Según él, Velaria compró el edificio y lo llenó de gente sin casa, con deudas o enferma, traída de noche en camiones, para probar unas pastillas para dormir. Velaria lo niega: «Era un programa social de vivienda»."
+msgstr "14号楼里有人给我们发来一份文件。据他说，Velaria买下这栋楼，在夜里用卡车运来无家可归、负债或生病的人住进去，为的是测试一种安眠药。Velaria予以否认：“那是一个社会住房项目。”"
+
+#: scripts/historia.gd
+msgid "Un correo dice: no hay virus"
+msgstr "邮件曝光：根本没有病毒"
+
+#: scripts/historia.gd
+msgid "Nuestra fuente del 14 nos manda un correo interno de Velaria: «No hay ningún virus, lo sabemos». La empresa dice que es falso. Y añade que, si alguien está enfermo, será por «unas pastillas para dormir en mal estado, de otra marca». Sigue sin decir qué marca."
+msgstr "我们在14号楼的线人发来一封Velaria内部邮件：“根本没有什么病毒，这我们清楚。”公司称邮件是伪造的。还补充说，如果有人生病，那是因为“别的牌子的变质安眠药”。至于是哪个牌子，至今没说。"
+
+#: scripts/historia.gd
+msgid "¿Dónde está la portera?"
+msgstr "楼管大妈去哪儿了？"
+
+#: scripts/historia.gd
+msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "线人现在又提到四名“梦游者”：服用了更高剂量、至今还能说话的住户。其中一人据称是14号楼的楼管大妈，自封楼以来就没人见过她。Velaria称她是“一位有问题的女士，从没为我们工作过”。每到夜里，楼上就传来尖叫声。"
+
+#: scripts/historia.gd
+msgid "Velaria busca a un conserje"
+msgstr "Velaria寻找一名清洁工"
+
+#: scripts/historia.gd
+msgid "Última hora: anoche, un helicóptero de Velaria se posó en la azotea del 14. Al despegar, alguien colgaba de su escalera... y se soltó sobre los árboles de la avenida. Hoy Velaria busca a un empleado de mantenimiento «que se ha llevado documentos de la empresa». ¿Es nuestra fuente?"
+msgstr "最新消息：昨晚，一架Velaria的直升机降落在14号楼的天台上。起飞时，有人吊在它的绳梯上……然后松手掉进了大街边的树丛里。今天Velaria正在寻找一名“带走了公司文件”的维修工。他就是我们的线人吗？"
+
+#: scripts/historia.gd
+msgid "El centro cierra «por reformas»"
+msgstr "商场“因装修”闭店"
+
+#: scripts/historia.gd
+msgid "Buenas noches. El centro comercial de la avenida cierra de noche «por reformas». Pero las luces siguen encendidas hasta el amanecer, la alarma de incendios suena de madrugada y dentro se ve gente moviéndose. Velaria, que tiene allí una farmacia, dice: «Nosotros solo alquilamos un local»."
+msgstr "晚上好。大街上的那家购物中心晚上“因装修”闭店。可灯一直亮到天亮，火警凌晨响起，里面还能看到有人走动。在那里开着一家药店的Velaria表示：“我们只是租了个铺面。”"
+
+#: scripts/historia.gd
+msgid "Velaria vende su somnífero"
+msgstr "Velaria安眠药上市"
+
+#: scripts/historia.gd
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "“Velaria安睡”现已上市，治疗失眠。无需处方，售价3.99欧元。几个小时就卖断货。我们的线人说，这就是在14号楼测试过的那种药，只是稀释了。Velaria予以否认：“这是一种全新配方，天然、安全。我们自己每晚都吃。”"
+
+#: scripts/historia.gd
+msgid "Empleados que no vuelven a casa"
+msgstr "商场员工迟迟不回家"
+
+#: scripts/historia.gd
+msgid "Decenas de familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Y les cuento algo mío: mi hermana Elena trabaja allí para Velaria. Desde el lunes no me coge el teléfono."
+msgstr "数十个家庭报案称，他们在购物中心工作的亲人一直没有回家。商场说他们在加班，“自愿的，而且报酬丰厚”。再说一件我自己的事：我妹妹Elena在那里为Velaria工作。从周一起，她就不接我电话了。"
+
+#: scripts/historia.gd
+msgid "Se filtra un audio del gerente"
+msgstr "商场经理录音泄露"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio del gerente del centro comercial, al teléfono: «Sí, el conserje está aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."
+msgstr "我们拿到一段购物中心经理打电话的录音：“对，那个清洁工就在这儿。他走不了。我的员工不睡觉，而他总有要睡的时候。”Velaria称不认识此人，还说如果他吃了他们的什么产品，“那他肯定没看说明书”。"
+
+#: scripts/historia.gd
+msgid "Un helicóptero en la azotea"
+msgstr "天台上的直升机"
+
+#: scripts/historia.gd
+msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."
+msgstr "最新消息：Velaria的直升机又来了，这次落在购物中心的天台上。它载着一个人起飞，飞往Velaria大厦。Velaria不再寻找他们的清洁工：“他和我们在一起，很安全。”明天，Velaria将在大厦发布“工作的未来”。至于我妹妹，还是没有消息。"
+
+#: scripts/historia.gd
+msgid "Esta página falta (%s)."
+msgstr "这一页缺失（%s）。"
+
+#: scripts/johnny.gd
+msgid "¡Adrenalina!"
+msgstr "肾上腺素！"
+
+#: scripts/johnny.gd
+msgid "recargando…"
+msgstr "换弹中……"
+
+#: scripts/johnny.gd
+msgid "¡Esquivado!"
+msgstr "闪避！"
+
+#: scripts/johnny.gd
+msgid "¡Segundo aliento!"
+msgstr "绝处逢生！"
+
+#: scripts/johnny.gd
+msgid "Asistido"
+msgstr "辅助瞄准"
+
+#: scripts/johnny.gd
+msgid "Apuntar libre"
+msgstr "自由瞄准"
+
+#: scripts/joyeria.gd
+msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
+msgstr "你拿到了金卡：可以打开珠宝店的金库"
+
+#: scripts/joyeria.gd
+msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
+msgstr "叮！倒计时结束：金库打开了"
+
+#: scripts/joyeria.gd
+msgid "Abres la cámara acorazada con la tarjeta dorada"
+msgstr "你用金卡打开了金库"
+
+#: scripts/joyeria.gd
+msgid "Aguanta: la cámara se abre en %d segundo"
+msgid_plural "Aguanta: la cámara se abre en %d segundos"
+msgstr[0] "撑住：金库将在 %d 秒后打开"
+
+#: scripts/joyeria.gd
+msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "读卡器。没有保安的金卡，就只能紧急开启：再靠近一次就会触发警报"
+
+#: scripts/joyeria.gd
+msgid "¡ALARMA!"
+msgstr "警报！"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!"
+msgstr "紧急开启：金库将在 %d 秒后打开。撑住！"
+
+#: scripts/joyeria.gd
+msgid "¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería"
+msgstr "你触发了警报！它们冲你来了：待在珠宝店里撑住 %d 秒"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d"
+msgstr "%s！已经拿在手上了。还有一叠钞票：+$%d"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano; %s se queda en el suelo. Y un fajo de billetes: +$%d"
+msgstr "%s！已经拿在手上了；%s留在地上。还有一叠钞票：+$%d"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia · %d:%02d"
+msgstr "紧急开启 · %d:%02d"
+
+#: scripts/lanzables.gd
+msgid "molotovs"
+msgstr "燃烧瓶"
+
+#: scripts/lanzables.gd
+msgid "granadas"
+msgstr "手雷"
+
+#: scripts/lanzables.gd
+msgid "atraedoras"
+msgstr "诱饵弹"
+
+#: scripts/lanzables.gd
+msgid "congeladoras"
+msgstr "冰冻弹"
+
+#: scripts/lanzables.gd
+msgid "¡Sin %s!"
+msgstr "没%s了！"
+
+#: scripts/lanzables.gd
+msgid "¡Nada que lanzar!"
+msgstr "没东西可扔了！"
+
+#: scripts/lanzables.gd
+msgid "Molotov"
+msgstr "燃烧瓶"
+
+#: scripts/lanzables.gd
+msgid "Granada"
+msgstr "手雷"
+
+#: scripts/lanzables.gd
+msgid "Atraedora"
+msgstr "诱饵弹"
+
+#: scripts/lanzables.gd
+msgid "Congeladora"
+msgstr "冰冻弹"
+
+#: scripts/logros.gd
+msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
+msgstr "开启了辅助功能，本局无法再获得成就"
+
+#: scripts/logros.gd
+msgid "¡LOGRO CONSEGUIDO!"
+msgstr "成就达成！"
+
+#: scripts/logros.gd
+msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
+msgstr "达成成就：%s！去电脑上领取奖励"
+
+#: scripts/logros.gd
+msgid "¡%d LOGROS CONSEGUIDOS!"
+msgstr "达成 %d 项成就！"
+
+#: scripts/logros.gd
+msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
+msgstr "达成成就：%s和%s！去电脑上领取奖励"
+
+#: scripts/logros.gd
+msgid "¡%d logros conseguidos! Míralos y cobra los premios en el ordenador"
+msgstr "达成了 %d 项成就！去电脑上查看并领取奖励"
+
+#: scripts/logros.gd
+msgid "Primer turno"
+msgstr "首次上岗"
+
+#: scripts/logros.gd
+msgid "Limpia tu primer apartamento."
+msgstr "清理你的第一套公寓。"
+
+#: scripts/logros.gd
+msgid "Sube, conserje"
+msgstr "步步高升"
+
+#: scripts/logros.gd
+msgid "Llega a la planta 3."
+msgstr "到达第3层。"
+
+#: scripts/logros.gd
+msgid "Fin de la jornada"
+msgstr "下班时间"
+
+#: scripts/logros.gd
+msgid "Gana una partida: limpia el edificio de arriba abajo."
+msgstr "赢下一局：把整栋楼彻底清理干净。"
+
+#: scripts/logros.gd
+msgid "Liquidación total"
+msgstr "清仓大甩卖"
+
+#: scripts/logros.gd
+msgid "Completa el Centro comercial: derrota al gerente."
+msgstr "通关购物中心：打败经理。"
+
+#: scripts/logros.gd
+msgid "Alerta naranja"
+msgstr "橙色警戒"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "在警戒3或以上通关一栋楼。"
+
+#: scripts/logros.gd
+msgid "Alerta máxima"
+msgstr "红色警戒"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 5."
+msgstr "在警戒5下通关一栋楼。"
+
+#: scripts/logros.gd
+msgid "Jornada exprés"
+msgstr "光速下班"
+
+#: scripts/logros.gd
+msgid "Gana una partida en menos de 15 minutos."
+msgstr "在15分钟内赢下一局。"
+
+#: scripts/logros.gd
+msgid "Empleado del mes"
+msgstr "本月最佳员工"
+
+#: scripts/logros.gd
+msgid "Gana 10 partidas, sumando todas."
+msgstr "累计赢下10局。"
+
+#: scripts/logros.gd
+msgid "Desahucio"
+msgstr "扫地出门"
+
+#: scripts/logros.gd
+msgid "Derrota a la portera."
+msgstr "打败楼管大妈。"
+
+#: scripts/logros.gd
+msgid "Sin un rasguño"
+msgstr "毫发无伤"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe sin perder vida en toda la pelea."
+msgstr "打败一个首领，整场战斗不掉一滴血。"
+
+#: scripts/logros.gd
+msgid "Por los pelos"
+msgstr "千钧一发"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe con menos del 10 % de tu vida."
+msgstr "在生命低于10%时打败一个首领。"
+
+#: scripts/logros.gd
+msgid "Visto y no visto"
+msgstr "速战速决"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe en menos de 30 segundos de pelea."
+msgstr "在30秒内打败一个首领。"
+
+#: scripts/logros.gd
+msgid "Cazajefes"
+msgstr "首领猎人"
+
+#: scripts/logros.gd
+msgid "Derrota a 25 jefes, sumando todas tus partidas."
+msgstr "累计打败25个首领。"
+
+#: scripts/logros.gd
+msgid "Fregona de oro"
+msgstr "金拖把"
+
+#: scripts/logros.gd
+msgid "Mata 10 zombis a fregonazos en una misma partida."
+msgstr "在一局中用拖把打死10个僵尸。"
+
+#: scripts/logros.gd
+msgid "Exterminador"
+msgstr "除害专家"
+
+#: scripts/logros.gd
+msgid "Mata 100 zombis, sumando todas tus partidas."
+msgstr "累计杀死100个僵尸。"
+
+#: scripts/logros.gd
+msgid "Limpieza general"
+msgstr "大扫除"
+
+#: scripts/logros.gd
+msgid "Mata 1.000 zombis, sumando todas tus partidas."
+msgstr "累计杀死1000个僵尸。"
+
+#: scripts/logros.gd
+msgid "Pirómano"
+msgstr "纵火狂"
+
+#: scripts/logros.gd
+msgid "Prende fuego a 5 zombis con un mismo molotov."
+msgstr "用一个燃烧瓶点燃5个僵尸。"
+
+#: scripts/logros.gd
+msgid "Racha imparable"
+msgstr "势不可挡"
+
+#: scripts/logros.gd
+msgid "Mata 30 zombis seguidos sin perder vida."
+msgstr "连续杀死30个僵尸，不掉血。"
+
+#: scripts/logros.gd
+msgid "Intocable"
+msgstr "无懈可击"
+
+#: scripts/logros.gd
+msgid "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."
+msgstr "从进入到抵达楼梯，整层楼不掉一滴血。"
+
+#: scripts/logros.gd
+msgid "Sin tiritas"
+msgstr "不用创可贴"
+
+#: scripts/logros.gd
+msgid "Gana una partida sin curarte con vendas ni botiquín."
+msgstr "不用绷带和急救包治疗，赢下一局。"
+
+#: scripts/logros.gd
+msgid "Manitas"
+msgstr "能工巧匠"
+
+#: scripts/logros.gd
+msgid "Mejora un arma en el banco de trabajo."
+msgstr "在工作台升级一件武器。"
+
+#: scripts/logros.gd
+msgid "Joya de la corona"
+msgstr "镇店之宝"
+
+#: scripts/logros.gd
+msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgstr "在工作台把一件武器或投掷物升到史诗。"
+
+#: scripts/logros.gd
+msgid "Arsenal completo"
+msgstr "全副武装"
+
+#: scripts/logros.gd
+msgid "Mata un zombi con cada arma: la fregona y todas las de la tienda."
+msgstr "用每种武器各杀一个僵尸：拖把和商店里的所有武器。"
+
+#: scripts/logros.gd
+msgid "Especialista"
+msgstr "专家"
+
+#: scripts/logros.gd
+msgid "Llena una rama entera del árbol de talentos."
+msgstr "点满天赋树的一整个分支。"
+
+#: scripts/logros.gd
+msgid "Conserje total"
+msgstr "全能清洁工"
+
+#: scripts/logros.gd
+msgid "Llena el árbol de talentos entero."
+msgstr "点满整棵天赋树。"
+
+#: scripts/logros.gd
+msgid "Buen vecino"
+msgstr "好邻居"
+
+#: scripts/logros.gd
+msgid "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."
+msgstr "救出一名幸存者：在对方撬锁时挡住尸潮。"
+
+#: scripts/logros.gd
+msgid "Comunidad de vecinos"
+msgstr "业主委员会"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de los Apartamentos."
+msgstr "救出公寓楼的全部3名幸存者。"
+
+#: scripts/logros.gd
+msgid "Plantilla completa"
+msgstr "全员到齐"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes del Centro comercial."
+msgstr "救出购物中心的全部3名幸存者。"
+
+#: scripts/logros.gd
+msgid "Buena compañía"
+msgstr "结伴同行"
+
+#: scripts/logros.gd
+msgid "Gana una partida con un vecino de las viviendas acompañándote."
+msgstr "带着一位生活区的邻居赢下一局。"
+
+#: scripts/logros.gd
+msgid "Caja fuerte"
+msgstr "金库大盗"
+
+#: scripts/logros.gd
+msgid "Abre la cámara acorazada de la Joyería del centro comercial."
+msgstr "打开购物中心珠宝店的金库。"
+
+#: scripts/logros.gd
+msgid "Se fue la luz"
+msgstr "黑灯瞎火"
+
+#: scripts/logros.gd
+msgid "Supera un apagón: llega a la planta siguiente."
+msgstr "挺过一次停电：到达下一层。"
+
+#: scripts/logros.gd
+msgid "Simulacro"
+msgstr "消防演习"
+
+#: scripts/logros.gd
+msgid "Supera un incendio: llega a la planta siguiente."
+msgstr "挺过一次火警：到达下一层。"
+
+#: scripts/logros.gd
+msgid "Contra la marea"
+msgstr "逆流而上"
+
+#: scripts/logros.gd
+msgid "Vence a una horda del pasillo."
+msgstr "击退一次走廊尸潮。"
+
+#: scripts/logros.gd
+msgid "Reto aceptado"
+msgstr "接受挑战"
+
+#: scripts/logros.gd
+msgid "Completa un reto del día."
+msgstr "完成一次每日挑战。"
+
+#: scripts/logros.gd
+msgid "Ninguna regla me para"
+msgstr "规则拦不住我"
+
+#: scripts/logros.gd
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "在全部7种规则下各完成一次每日挑战。"
+
+#: scripts/logros.gd
+msgid "Cambio de look"
+msgstr "改头换面"
+
+#: scripts/logros.gd
+msgid "Ponte una skin en la taquilla del vestuario."
+msgstr "在更衣室的储物柜换上一套皮肤。"
+
+#: scripts/logros.gd
+msgid "Vestuario completo"
+msgstr "衣柜齐全"
+
+#: scripts/logros.gd
+msgid "Consigue todas las skins de Johnny."
+msgstr "收集Johnny的全部皮肤。"
+
+#: scripts/logros.gd
+msgid "Naturalista"
+msgstr "博物学家"
+
+#: scripts/logros.gd
+msgid "Completa el bestiario: ve a todos los enemigos."
+msgstr "完成图鉴：见过所有敌人。"
+
+#: scripts/logros.gd
+msgid "Investigador"
+msgstr "调查员"
+
+#: scripts/logros.gd
+msgid "Encuentra todas las páginas del dosier VD-7."
+msgstr "找到VD-7档案的所有页。"
+
+#: scripts/logros.gd
+msgid "Chatarrero"
+msgstr "破烂王"
+
+#: scripts/logros.gd
+msgid "Coge al menos una vez cada objeto de las Colecciones."
+msgstr "收藏品中的每件物品都至少捡过一次。"
+
+#: scripts/logros.gd
+msgid "Edificios"
+msgstr "大楼"
+
+#: scripts/logros.gd scripts/tutoriales.gd
+msgid "Jefes"
+msgstr "首领"
+
+#: scripts/logros.gd
+msgid "Combate"
+msgstr "战斗"
+
+#: scripts/logros.gd
+msgid "Armas y talentos"
+msgstr "武器与天赋"
+
+#: scripts/logros.gd scripts/tutoriales.gd
+msgid "Supervivientes"
+msgstr "幸存者"
+
+#: scripts/logros.gd
+msgid "Sorpresas y retos"
+msgstr "意外与挑战"
+
+#: scripts/logros.gd scripts/ui/ordenador.gd
+msgid "Colecciones"
+msgstr "收藏品"
+
+#: scripts/mapa/apartamento.gd
+msgid "Salón"
+msgstr "客厅"
+
+#: scripts/mapa/apartamento.gd scripts/mapa/tienda.gd
+msgid "Cocina"
+msgstr "厨房"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño"
+msgstr "浴室"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio"
+msgstr "卧室"
+
+#: scripts/mapa/apartamento.gd
+msgid "Apartamento destrozado"
+msgstr "被砸烂的公寓"
+
+#: scripts/mapa/apartamento.gd
+msgid "Pasillo"
+msgstr "走廊"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio de matrimonio"
+msgstr "主卧"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño principal"
+msgstr "主卫"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio individual"
+msgstr "次卧"
+
+#: scripts/mapa/cartel_trasteros.gd
+msgid "TRASTEROS"
+msgstr "储藏室"
+
+#: scripts/mapa/planta.gd
+msgid "Planta baja"
+msgstr "底层"
+
+#: scripts/mapa/planta.gd
+msgid "%dª planta"
+msgstr "%d楼"
+
+#: scripts/mapa/planta.gd
+msgid "Azotea"
+msgstr "天台"
+
+#: scripts/mapa/planta.gd
+msgid "Bajo %s"
+msgstr "底层%s"
+
+#: scripts/mapa/planta.gd
+msgid "%dº%s"
+msgstr "%d%s"
+
+#: scripts/mapa/planta.gd
+msgid "Vestuario"
+msgstr "更衣室"
+
+#: scripts/mapa/planta.gd
+msgid "Despacho"
+msgstr "办公室"
+
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
+msgid "Taller"
+msgstr "工作间"
+
+#: scripts/mapa/planta.gd
+msgid "1ª planta"
+msgstr "1楼"
+
+#: scripts/mapa/planta.gd
+msgid "2ª planta"
+msgstr "2楼"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "3楼"
+
+#: scripts/mapa/planta.gd
+msgid "Gimnasio"
+msgstr "健身房"
+
+#: scripts/mapa/planta.gd
+msgid "Cuarto de la limpieza"
+msgstr "保洁间"
+
+#: scripts/mapa/planta.gd
+msgid "Apartamento en llamas"
+msgstr "着火的公寓"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta una tarjeta de acceso"
+msgstr "锁着：需要门禁卡"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada con llave"
+msgstr "锁着：需要钥匙"
+
+#: scripts/mapa/planta.gd
+msgid "El ascensor está averiado"
+msgstr "电梯坏了"
+
+#: scripts/mapa/planta.gd
+msgid "El edificio sigue infestado: aún no puedes irte"
+msgstr "大楼里还满是僵尸：你现在还不能走"
+
+#: scripts/mapa/planta.gd
+msgid "Bloqueadas: acaba antes con %s"
+msgstr "被封住了：先解决%s"
+
+#: scripts/mapa/planta.gd
+msgid "Ya no hay vuelta atrás"
+msgstr "已经没有回头路了"
+
+#: scripts/mapa/planta.gd
+msgid "Mantenimiento"
+msgstr "维修间"
+
+#: scripts/mapa/tienda.gd
+msgid "Supermercado"
+msgstr "超市"
+
+#: scripts/mapa/tienda.gd
+msgid "SUPER"
+msgstr "超市"
+
+#: scripts/mapa/tienda.gd
+msgid "Ferretería"
+msgstr "五金店"
+
+#: scripts/mapa/tienda.gd
+msgid "FERRETERIA"
+msgstr "五金"
+
+#: scripts/mapa/tienda.gd
+msgid "Electrónica"
+msgstr "电器店"
+
+#: scripts/mapa/tienda.gd
+msgid "ELECTRO"
+msgstr "电器"
+
+#: scripts/mapa/tienda.gd
+msgid "Restaurante"
+msgstr "餐厅"
+
+#: scripts/mapa/tienda.gd
+msgid "BURGER"
+msgstr "汉堡"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda de ropa"
+msgstr "服装店"
+
+#: scripts/mapa/tienda.gd
+msgid "MODA"
+msgstr "时装"
+
+#: scripts/mapa/tienda.gd
+msgid "Farmacia"
+msgstr "药店"
+
+#: scripts/mapa/tienda.gd
+msgid "FARMACIA"
+msgstr "大药房"
+
+#: scripts/mapa/tienda.gd
+msgid "Joyería"
+msgstr "珠宝店"
+
+#: scripts/mapa/tienda.gd
+msgid "JOYAS"
+msgstr "珠宝"
+
+#: scripts/mapa/tienda.gd
+msgid "Almacén"
+msgstr "仓库"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara frigorífica"
+msgstr "冷库"
+
+#: scripts/mapa/tienda.gd
+msgid "Taquillas"
+msgstr "储物间"
+
+#: scripts/mapa/tienda.gd
+msgid "Probadores"
+msgstr "试衣间"
+
+#: scripts/mapa/tienda.gd
+msgid "Rebotica"
+msgstr "配药间"
+
+#: scripts/mapa/tienda.gd
+msgid "Aseo"
+msgstr "厕所"
+
+#: scripts/mapa/tienda.gd
+msgid "Trastienda"
+msgstr "库房"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara acorazada"
+msgstr "金库"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda destrozada"
+msgstr "被砸烂的商店"
+
+#: scripts/mapa/viviendas.gd
+msgid "Viviendas"
+msgstr "生活区"
+
+#: scripts/mascota.gd
+msgid "¡ABRAZOS GRATIS!"
+msgstr "免费抱抱！"
+
+#: scripts/mascota.gd
+msgid "¡BOING!"
+msgstr "蹦！"
+
+#: scripts/mascota.gd
+msgid "¡HORA DE JUGAR!"
+msgstr "游戏时间！"
+
+#: scripts/minijefe.gd
+msgid "¡GRRR!"
+msgstr "吼——！"
+
+#: scripts/minijefe.gd
+msgid "¡PUMBA!"
+msgstr "砰！"
+
+#: scripts/modista.gd
+msgid "¡SSSS!"
+msgstr "嘶——！"
+
+#: scripts/modista.gd
+msgid "¡TE TOMO MEDIDAS!"
+msgstr "给你量尺寸！"
+
+#: scripts/mutaciones.gd
+msgid "¡AAAAAH!"
+msgstr "啊啊啊！"
+
+#: scripts/mutaciones.gd
+msgid "Tentacular"
+msgstr "触手缠身"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"
+msgstr "每4秒从你胸口冒出一条触手，把周围的僵尸推开并击晕1秒"
+
+#: scripts/mutaciones.gd
+msgid "Gastroenteritis"
+msgstr "肠胃炎"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"
+msgstr "每3秒朝最近的僵尸吐一口酸液：留下一滩酸水，灼伤踩到的僵尸"
+
+#: scripts/mutaciones.gd
+msgid "Insensible"
+msgstr "麻木"
+
+#: scripts/mutaciones.gd
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
+msgstr "身体失去知觉：受到的伤害减少35%"
+
+#: scripts/mutaciones.gd
+msgid "Caníbal"
+msgstr "食人魔"
+
+#: scripts/mutaciones.gd
+msgid "Cada zombi que matas te cura un 2 % de la vida"
+msgstr "每杀死一个僵尸，恢复2%的生命"
+
+#: scripts/mutaciones.gd
+msgid "Ansiedad"
+msgstr "焦虑"
+
+#: scripts/mutaciones.gd
+msgid "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"
+msgstr "视野里的僵尸越多，近战攻击越快（每个+10%，最多+50%）"
+
+#: scripts/mutaciones.gd
+msgid "Endurecimiento"
+msgstr "皮糙肉厚"
+
+#: scripts/mutaciones.gd
+msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
+msgstr "皮肤变硬：每层楼获得60点护盾，先于生命消耗"
+
+#: scripts/mutaciones.gd
+msgid "Locura"
+msgstr "疯狂"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"
+msgstr "每4秒发出一声狂吼，让周围的僵尸晕头转向2秒"
+
+#: scripts/mutaciones.gd
+msgid "Flatulento"
+msgstr "屁王"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"
+msgstr "每3秒放出腐蚀性气体，灼伤附近的僵尸并使其麻痹2秒"
+
+#: scripts/objetos.gd
+msgid "la suelta algún zombi, y los jefes seguro"
+msgstr "部分僵尸会掉落，首领必掉"
+
+#: scripts/objetos.gd
+msgid "lo suelta el gordo"
+msgstr "胖子会掉落"
+
+#: scripts/objetos.gd
+msgid "lo suelta cualquier zombi"
+msgstr "任何僵尸都可能掉落"
+
+#: scripts/objetos.gd scripts/talentos.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "%s y %s"
+msgstr "%s和%s"
+
+#: scripts/objetos.gd
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)"
+msgstr "近战武器（拖把、小刀和球棒）"
+
+#: scripts/objetos.gd
+msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
+msgstr "远程武器（手枪、MP5和散弹枪）"
+
+#: scripts/objetos.gd
+msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
+msgstr "特殊武器（火焰喷射器、酸液枪和闪电枪）"
+
+#: scripts/objetos.gd
+msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgstr "投掷物（燃烧瓶、手雷、诱饵弹和冰冻弹）"
+
+#: scripts/objetos.gd
+msgid "Vendas"
+msgstr "绷带"
+
+#: scripts/objetos.gd
+msgid "Pieza cuerpo a cuerpo"
+msgstr "近战零件"
+
+#: scripts/objetos.gd
+msgid "Pieza a distancia"
+msgstr "远程零件"
+
+#: scripts/objetos.gd
+msgid "Pieza especial"
+msgstr "特殊零件"
+
+#: scripts/objetos.gd
+msgid "Pieza arrojable"
+msgstr "投掷零件"
+
+#: scripts/objetos.gd
+msgid "Botiquín"
+msgstr "急救包"
+
+#: scripts/partida.gd scripts/ui/opciones.gd
+msgid "Modo de atacar: %s"
+msgstr "攻击模式：%s"
+
+#: scripts/partida.gd
+msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
+msgstr "除颤器！你满血复活（每栋楼仅限一次）"
+
+#: scripts/partida.gd
+msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
+msgstr "药剂师给你配了一个急救包：在背包里"
+
+#: scripts/partida.gd
+msgid "¡%s!  %s"
+msgstr "%s！  %s"
+
+#: scripts/partida.gd
+msgid "Te espera arriba, en el helipuerto: sube por la rampa"
+msgstr "首领在楼顶停机坪等着你：走坡道上去"
+
+#: scripts/partida.gd
+msgid "Aguanta: aún está forzando la cerradura"
+msgstr "撑住：还在撬锁"
+
+#: scripts/partida.gd
+msgid "La puerta no se abre mientras quede algún zombi"
+msgstr "只要还有僵尸，门就打不开"
+
+#: scripts/partida.gd
+msgid "Abres con la tarjeta de acceso"
+msgstr "你用门禁卡打开了门"
+
+#: scripts/partida.gd
+msgid "Abres con la llave"
+msgstr "你用钥匙打开了门"
+
+#: scripts/partida.gd
+msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»"
+msgstr "Johnny：“电梯被我修好了！现在可以下到底层的维修间了”"
+
+#: scripts/partida.gd
+msgid "Azotea · ¡El último combate del edificio!"
+msgstr "天台 · 这栋楼的最终决战！"
+
+#: scripts/partida.gd
+msgid "¡La puerta se ha cerrado detrás de ti!"
+msgstr "门在你身后关上了！"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído!"
+msgstr "%s倒下了！"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído! Las escaleras ya están abiertas"
+msgstr "%s倒下了！楼梯已经打开"
+
+#: scripts/partida.gd
+msgid "¡Piso limpio! La puerta se ha abierto"
+msgstr "清理完毕！门打开了"
+
+#: scripts/partida.gd
+msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
+msgstr "围栏关上了！不解决掉%s，谁也别想下去"
+
+#: scripts/partida.gd
+msgid "¡Acércate a la escalera para subir al helicóptero!"
+msgstr "靠近绳梯，登上直升机！"
+
+#: scripts/partida.gd
+msgid "¡Un helicóptero de Velaria viene a por ti!"
+msgstr "一架Velaria的直升机冲你来了！"
+
+#: scripts/partida.gd
+msgid "¡NOTICIAS NUEVAS!"
+msgstr "突发新闻！"
+
+#: scripts/partida.gd
+msgid "Hay noticias nuevas en el ordenador"
+msgstr "电脑上有新的新闻播报"
+
+#: scripts/partida.gd
+msgid "la tienda de %s"
+msgstr "%s的店"
+
+#: scripts/partida.gd
+msgid "Has cogido la tarjeta de acceso: abre %s"
+msgstr "你拿到了门禁卡：可以打开%s"
+
+#: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "你拿到了%s的钥匙"
+
+#: scripts/partida.gd
+msgid "¡¡¡LA LLAVE!!!"
+msgstr "钥匙！！！"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
+msgstr "保安吹响了哨子：援兵来了！"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
+msgstr "保安倒下了！他掉落了门禁卡和珠宝店的金卡"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
+msgstr "保安倒下了！他掉落了门禁卡"
+
+#: scripts/partida.gd
+msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
+msgstr "拿钥匙的僵尸倒下了！它掉落了%s的钥匙"
+
+#: scripts/partida.gd
+msgid "Te han pillado"
+msgstr "你被逮住了"
+
+#: scripts/partida.gd
+msgid "+1 molotov"
+msgstr "+1 燃烧瓶"
+
+#: scripts/partida.gd
+msgid "+1 granada"
+msgstr "+1 手雷"
+
+#: scripts/partida.gd
+msgid "+munición"
+msgstr "+弹药"
+
+#: scripts/partida.gd
+msgid "Ya llevas %d"
+msgstr "已经带了 %d 个"
+
+#: scripts/partida.gd
+msgid "No se puede usar"
+msgstr "无法使用"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo: guárdalo para luego"
+msgstr "生命已满：留着以后用吧"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo"
+msgstr "生命已满"
+
+#: scripts/partida.gd
+msgid "%d:%02d · ¡récord!"
+msgstr "%d:%02d · 新纪录！"
+
+#: scripts/partida.gd
+msgid "¡Reto completado!"
+msgstr "挑战完成！"
+
+#: scripts/partida.gd
+msgid "¡Edificio completado!"
+msgstr "大楼通关！"
+
+#: scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "失败！"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo"
+msgstr "你把%s彻底清理干净了"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento"
+msgstr "你把%s彻底清理干净了。%s搬进了维修间旁边自己的房间"
+
+#: scripts/partida.gd
+msgid "Caíste en la %s de %s"
+msgstr "你倒在了%s（%s）"
+
+#: scripts/partida.gd
+msgid "¡SKIN NUEVA!"
+msgstr "新皮肤！"
+
+#: scripts/partida.gd
+msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
+msgstr "新皮肤：%s。去维修间的储物柜换上吧"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ha vuelto la corriente!"
+msgstr "来电了！"
+
+#: scripts/peligros/agua.gd
+msgid "¡Clac! Se ha ido la luz de la tienda"
+msgstr "啪！店里的灯灭了"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ojo! El agua tiene corriente"
+msgstr "小心！水里带电"
+
+#: scripts/peligros/cerco.gd
+msgid "¡La habitación está en llamas! Lejos de las paredes"
+msgstr "房间着火了！离墙远点"
+
+#: scripts/peligros/frio.gd
+msgid "¡Brrr! Qué frío hace en la cámara"
+msgstr "嘶——！这冷库冻死人了"
+
+#: scripts/peligros/fuego.gd
+msgid "¡La cocina está ardiendo!"
+msgstr "厨房着火了！"
+
+#: scripts/peligros/porqueria.gd
+msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
+msgstr "臭死了！地上全是带酸的屎：别踩"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con las mancuernas del suelo: si piso una, me la pego"
+msgstr "小心地上的哑铃：踩到一个我就得摔个狗啃泥"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
+msgstr "小心地上的水桶：绊到一个我就得摔个狗啃泥"
+
+#: scripts/portera.gd
+msgid "¡VECINOS!"
+msgstr "街坊们！"
+
+#: scripts/portera.gd
+msgid "¡LEJÍA!"
+msgstr "消毒液！"
+
+#: scripts/portera.gd
+msgid "¡ÁCIDO!"
+msgstr "酸液！"
+
+#: scripts/portera.gd
+msgid "¡A BARRER!"
+msgstr "统统扫走！"
+
+#: scripts/portera.gd
+msgid "¡QUE ACABO DE FREGAR!"
+msgstr "我刚拖的地！"
+
+#: scripts/reto.gd
+msgid "Reto del día · %s: %s"
+msgstr "每日挑战 · %s：%s"
+
+#: scripts/reto.gd
+msgid "Reto: %s"
+msgstr "挑战：%s"
+
+#: scripts/reto.gd
+msgid "Completado en %d:%02d"
+msgstr "用时 %d:%02d 完成"
+
+#: scripts/reto.gd
+msgid "sin marca"
+msgstr "无纪录"
+
+#: scripts/reto.gd
+msgid "Sin marca"
+msgstr "无纪录"
+
+#: scripts/reto.gd
+msgid "planta %d"
+msgstr "第%d层"
+
+#: scripts/reto.gd
+msgid "Has llegado a la planta %d"
+msgstr "到达了第%d层"
+
+#: scripts/reto.gd
+msgid "Hoy: %s"
+msgstr "今日：%s"
+
+#: scripts/reto.gd
+msgid "Aún no lo has intentado"
+msgstr "还没尝试过"
+
+#: scripts/reto.gd scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "已尝试 %d 次"
+
+#: scripts/reto.gd
+msgid "Solo cuerpo a cuerpo"
+msgstr "只许近战"
+
+#: scripts/reto.gd
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "手枪是空的，也不会掉落弹药、燃烧瓶和手雷"
+
+#: scripts/reto.gd
+msgid "Todo a oscuras"
+msgstr "一片漆黑"
+
+#: scripts/reto.gd
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "每层楼都像停电一样：只能靠手电筒看路"
+
+#: scripts/reto.gd
+msgid "Sin curas"
+msgstr "不许治疗"
+
+#: scripts/reto.gd
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "小柜子都是空的，治疗物品不会掉落、不卖，也没人给你配"
+
+#: scripts/reto.gd
+msgid "Zombis rápidos"
+msgstr "快速僵尸"
+
+#: scripts/reto.gd
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "全部加快35%（首领除外）"
+
+#: scripts/reto.gd
+msgid "De cristal"
+msgstr "玻璃人"
+
+#: scripts/reto.gd
+msgid "Johnny con la mitad de vida"
+msgstr "Johnny只有一半生命"
+
+#: scripts/reto.gd
+msgid "Casa llena"
+msgstr "人满为患"
+
+#: scripts/reto.gd
+msgid "el doble de zombis en cada sitio"
+msgstr "每个地方的僵尸数量翻倍"
+
+#: scripts/reto.gd
+msgid "Oído fino"
+msgstr "顺风耳"
+
+#: scripts/reto.gd
+msgid "los zombis dormidos te oyen desde el triple de lejos"
+msgstr "睡着的僵尸能在三倍距离外听见你"
+
+#: scripts/skins.gd
+msgid "Conserje"
+msgstr "清洁工"
+
+#: scripts/skins.gd
+msgid "El portero"
+msgstr "楼管大爷"
+
+#: scripts/skins.gd
+msgid "La fregona hace un 100 % más de daño."
+msgstr "拖把伤害提高100%。"
+
+#: scripts/skins.gd
+msgid "Mata a la portera por primera vez."
+msgstr "首次杀死楼管大妈。"
+
+#: scripts/skins.gd
+msgid "El glotón"
+msgstr "大胃王"
+
+#: scripts/skins.gd
+msgid "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida."
+msgstr "谁伤你谁买单：僵尸直接死亡，首领损失3%的生命。"
+
+#: scripts/skins.gd
+msgid "Mata al Glotón por primera vez."
+msgstr "首次杀死大胃王。"
+
+#: scripts/skins.gd
+msgid "El gymbro"
+msgstr "健身哥"
+
+#: scripts/skins.gd
+msgid "Las armas cuerpo a cuerpo hacen un 50 % más de daño."
+msgstr "近战武器伤害提高50%。"
+
+#: scripts/skins.gd
+msgid "Mata al Gymbro por primera vez."
+msgstr "首次杀死健身哥。"
+
+#: scripts/skins.gd
+msgid "El bombero"
+msgstr "消防员"
+
+#: scripts/skins.gd
+msgid "Las armas que queman hacen un 50 % más de daño y el fuego no te quema."
+msgstr "灼烧类武器伤害提高50%，而且火烧不着你。"
+
+#: scripts/skins.gd
+msgid "Mata al jefe de bomberos por primera vez."
+msgstr "首次杀死消防队长。"
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "Militar"
+msgstr "士兵"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! ¡Sácame de aquí!"
+msgstr "谢谢！快带我离开这儿！"
+
+#: scripts/supervivientes.gd
+msgid "¡%s se une al equipo! %s"
+msgstr "%s加入了队伍！%s"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "谢了！我接着撬锁"
+
+#: scripts/supervivientes.gd
+msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
+msgstr "门关上了！%s撬锁的时候，你要撑住"
+
+#: scripts/supervivientes.gd
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "开了！快跑！"
+
+#: scripts/supervivientes.gd
+msgid "¡Puerta abierta! Salid de aquí"
+msgstr "门开了！快离开这儿"
+
+#: scripts/supervivientes.gd
+msgid "%s te acompaña · %s"
+msgstr "%s跟着你 · %s"
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "¡%s ha caído!"
+msgstr "%s倒下了！"
+
+#: scripts/supervivientes.gd
+msgid "%s fuerza la cerradura · %d:%02d"
+msgstr "%s正在撬锁 · %d:%02d"
+
+#: scripts/supervivientes.gd
+msgid "Policía"
+msgstr "警察"
+
+#: scripts/supervivientes.gd
+msgid "Dispara con su pistola cada 0,8 s"
+msgstr "每0.8秒用手枪开一枪"
+
+#: scripts/supervivientes.gd
+msgid "Médica"
+msgstr "医生"
+
+#: scripts/supervivientes.gd
+msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
+msgstr "每6秒为你恢复5点生命，每清理一套公寓恢复10点"
+
+#: scripts/supervivientes.gd
+msgid "Lanza ráfagas de 3 balas cada 2,5 s"
+msgstr "每2.5秒打出一轮3发点射"
+
+#: scripts/supervivientes.gd
+msgid "Ferretero"
+msgstr "五金店老板"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el almacén!"
+msgstr "我在仓库里！"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro!"
+msgstr "我在里面！"
+
+#: scripts/supervivientes.gd
+msgid "¡He atrancado la puerta!"
+msgstr "我把门堵死了！"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me oiga!"
+msgstr "有人听得见吗？！"
+
+#: scripts/supervivientes.gd
+msgid "¡Fuera tablas! Gracias, chaval. Vámonos de aquí"
+msgstr "木板拆完了！谢了，小伙子。咱们走"
+
+#: scripts/supervivientes.gd
+msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
+msgstr "看见僵尸就冲上去抡锤子（8点伤害）"
+
+#: scripts/supervivientes.gd
+msgid "Farmacéutica"
+msgstr "药剂师"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la rebotica!"
+msgstr "我在配药间！"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy herida!"
+msgstr "我受伤了！"
+
+#: scripts/supervivientes.gd
+msgid "¡Ayuda, por favor!"
+msgstr "救命啊，求你了！"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí detrás!"
+msgstr "在后面这儿！"
+
+#: scripts/supervivientes.gd
+msgid "¡Me han mordido la pierna! No puedo correr"
+msgstr "我的腿被咬了！跑不动"
+
+#: scripts/supervivientes.gd
+msgid "Los charcos de veneno y ácido te hacen la mitad"
+msgstr "毒液和酸液水洼对你只造成一半伤害"
+
+#: scripts/supervivientes.gd
+msgid "Cada partida empiezas con un botiquín en la mochila"
+msgstr "每局开始时背包里自带一个急救包"
+
+#: scripts/supervivientes.gd
+msgid "Técnico"
+msgstr "电工"
+
+#: scripts/supervivientes.gd
+msgid "¡No toquéis el agua!"
+msgstr "别碰水！"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me saque!"
+msgstr "谁来把我弄出去！"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado"
+msgstr "谢谢！走之前我得把那根裸露的电线修好"
+
+#: scripts/supervivientes.gd
+msgid "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano"
+msgstr "每3秒放一次电，让最近的僵尸定住1.5秒"
+
+#: scripts/supervivientes.gd
+msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
+msgstr "修好监控摄像头：小地图上会显示僵尸"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el baño!"
+msgstr "我在浴室！"
+
+#: scripts/supervivientes.gd
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "卡住了！掩护我！"
+
+#: scripts/supervivientes.gd
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "这锁锈住了……给我点时间"
+
+#: scripts/supervivientes.gd
+msgid "Vale… creo que ya noto el muelle"
+msgstr "好……我好像摸到弹簧了"
+
+#: scripts/supervivientes.gd
+msgid "¡Toma, he encontrado esto!"
+msgstr "拿着，我找到了这些！"
+
+#: scripts/supervivientes.gd
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "发卡掉了！……好，捡到了"
+
+#: scripts/supervivientes.gd
+msgid "Ya casi lo tengo…"
+msgstr "马上就好……"
+
+#: scripts/supervivientes.gd
+msgid "el salón"
+msgstr "客厅"
+
+#: scripts/supervivientes.gd
+msgid "la cocina"
+msgstr "厨房"
+
+#: scripts/supervivientes.gd
+msgid "el dormitorio"
+msgstr "卧室"
+
+#: scripts/supervivientes.gd
+msgid "el baño"
+msgstr "浴室"
+
+#: scripts/supervivientes.gd
+msgid "el pasillo"
+msgstr "走廊"
+
+#: scripts/supervivientes.gd
+msgid "la tienda"
+msgstr "商店"
+
+#: scripts/supervivientes.gd
+msgid "el almacén"
+msgstr "仓库"
+
+#: scripts/supervivientes.gd
+msgid "la cámara"
+msgstr "冷库"
+
+#: scripts/supervivientes.gd
+msgid "el taller"
+msgstr "工作间"
+
+#: scripts/supervivientes.gd
+msgid "las taquillas"
+msgstr "储物间"
+
+#: scripts/supervivientes.gd
+msgid "los probadores"
+msgstr "试衣间"
+
+#: scripts/supervivientes.gd
+msgid "la rebotica"
+msgstr "配药间"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño"
+msgstr "伤害 +%d%%"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño y alcance"
+msgstr "伤害和范围 +%d%%"
+
+#: scripts/talentos.gd
+msgid "+%d %% cuerpo a cuerpo"
+msgstr "近战 +%d%%"
+
+#: scripts/talentos.gd
+msgid "+%d %% a distancia"
+msgstr "远程 +%d%%"
+
+#: scripts/talentos.gd
+msgid "+%d molotov y granada"
+msgid_plural "+%d molotovs y granadas"
+msgstr[0] "燃烧瓶和手雷 +%d"
+
+#: scripts/talentos.gd
+msgid "+%d %% de vida"
+msgstr "生命 +%d%%"
+
+#: scripts/talentos.gd
+msgid "%d de vida cada 5 s"
+msgstr "每5秒恢复 %d 生命"
+
+#: scripts/talentos.gd
+msgid "%d menos por golpe"
+msgstr "每次受击减伤 %d"
+
+#: scripts/talentos.gd
+msgid "una esquiva sola cada %d s"
+msgstr "每 %d 秒自动闪避一次"
+
+#: scripts/talentos.gd
+msgid "+%d de cura"
+msgstr "治疗 +%d"
+
+#: scripts/talentos.gd
+msgid "+%d %% de fuego, ácido, rayo y frío"
+msgstr "火焰、酸液、闪电和冰冻 +%d%%"
+
+#: scripts/talentos.gd
+msgid "%d %% menos de los efectos"
+msgstr "受到的效果减少 %d%%"
+
+#: scripts/talentos.gd
+msgid "+%s s ardiendo"
+msgstr "燃烧 +%s 秒"
+
+#: scripts/talentos.gd
+msgid "+%d %% con ácido"
+msgstr "酸液 +%d%%"
+
+#: scripts/talentos.gd
+msgid "+%d congeladora y +%s s"
+msgid_plural "+%d congeladoras y +%s s"
+msgstr[0] "冰冻弹 +%d，时长 +%s 秒"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez cuerpo a cuerpo"
+msgstr "近战速度 +%d%%"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez y recarga"
+msgstr "射速和换弹 +%d%%"
+
+#: scripts/talentos.gd
+msgid "suelta %d más"
+msgstr "多散落 %d 个"
+
+#: scripts/talentos.gd
+msgid "escudo de %d"
+msgstr "%d 点护盾"
+
+#: scripts/talentos.gd
+msgid "esquiva un %d %% antes"
+msgstr "闪避冷却缩短 %d%%"
+
+#: scripts/talentos.gd
+msgid "+%d de vida por planta"
+msgstr "每层楼生命 +%d"
+
+#: scripts/talentos.gd
+msgid "+%d s de fuego"
+msgstr "火焰 +%d 秒"
+
+#: scripts/talentos.gd
+msgid "%d %% más lentos con ácido"
+msgstr "沾酸减速 %d%%"
+
+#: scripts/talentos.gd
+msgid "salta a %d más"
+msgstr "多跳 %d 个"
+
+#: scripts/talentos.gd
+msgid "Militar"
+msgstr "军人"
+
+#: scripts/talentos.gd
+msgid "Superviviente"
+msgstr "幸存者"
+
+#: scripts/talentos.gd
+msgid "Químico"
+msgstr "化学家"
+
+#: scripts/talentos.gd
+msgid "Ataque"
+msgstr "攻击"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño por punto"
+msgstr "每点伤害 +10%"
+
+#: scripts/talentos.gd
+msgid "Puntería"
+msgstr "准头"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "每点使燃烧瓶和手雷的伤害和投掷距离 +10%"
+
+#: scripts/talentos.gd
+msgid "Camorrista"
+msgstr "打架王"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño cuerpo a cuerpo por punto"
+msgstr "每点近战伤害 +10%"
+
+#: scripts/talentos.gd
+msgid "Tirador"
+msgstr "神枪手"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño con armas a distancia por punto"
+msgstr "每点远程武器伤害 +10%"
+
+#: scripts/talentos.gd
+msgid "Artificiero"
+msgstr "爆破专家"
+
+#: scripts/talentos.gd
+msgid "+1 molotov y +1 granada por punto"
+msgstr "每点燃烧瓶 +1、手雷 +1"
+
+#: scripts/talentos.gd
+msgid "Larguirucho"
+msgstr "长臂猿"
+
+#: scripts/talentos.gd
+msgid "Duplica el alcance cuerpo a cuerpo"
+msgstr "近战攻击距离翻倍"
+
+#: scripts/talentos.gd
+msgid "Mirilla"
+msgstr "瞄准镜"
+
+#: scripts/talentos.gd
+msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
+msgstr "每3发子弹必有1发暴击（双倍伤害）"
+
+#: scripts/talentos.gd
+msgid "Fabricante"
+msgstr "炸弹匠"
+
+#: scripts/talentos.gd
+msgid "Fuego y explosiones más grandes, y el fuego dura más"
+msgstr "火焰和爆炸范围更大，火焰持续更久"
+
+#: scripts/talentos.gd
+msgid "Frenesí"
+msgstr "狂暴"
+
+#: scripts/talentos.gd
+msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
+msgstr "每点近战攻击速度 +10%"
+
+#: scripts/talentos.gd
+msgid "Gatillo fácil"
+msgstr "扳机狂"
+
+#: scripts/talentos.gd
+msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
+msgstr "每点射速 +10%，换弹速度 +10%"
+
+#: scripts/talentos.gd
+msgid "Racimo"
+msgstr "集束"
+
+#: scripts/talentos.gd
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
+msgstr "每点使燃烧瓶和手雷向周围多散落1个迷你版"
+
+#: scripts/talentos.gd
+msgid "Veterano"
+msgstr "老兵"
+
+#: scripts/talentos.gd
+msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
+msgstr "暴击率从5%提高到15%，每次暴击造成三倍伤害"
+
+#: scripts/talentos.gd
+msgid "Corpulento"
+msgstr "壮汉"
+
+#: scripts/talentos.gd
+msgid "+10 % de vida máxima por punto"
+msgstr "每点生命上限 +10%"
+
+#: scripts/talentos.gd
+msgid "Lobezno"
+msgstr "金刚狼"
+
+#: scripts/talentos.gd
+msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
+msgstr "每点每5秒恢复1点生命，最多恢复到一半生命"
+
+#: scripts/talentos.gd
+msgid "Durito"
+msgstr "硬骨头"
+
+#: scripts/talentos.gd
+msgid "Cada golpe que recibes quita 1 menos por punto"
+msgstr "每点使每次受到的伤害 -1"
+
+#: scripts/talentos.gd
+msgid "Reflejos"
+msgstr "反射神经"
+
+#: scripts/talentos.gd
+msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
+msgstr "每10秒自动闪避一次攻击（每多1点，缩短1秒）"
+
+#: scripts/talentos.gd
+msgid "Sanitario"
+msgstr "医护兵"
+
+#: scripts/talentos.gd
+msgid "Los botiquines y las vendas curan 10 más por punto"
+msgstr "每点使急救包和绷带多恢复10点"
+
+#: scripts/talentos.gd
+msgid "Acero"
+msgstr "钢铁"
+
+#: scripts/talentos.gd
+msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
+msgstr "每层楼获得50点护盾，先于生命消耗"
+
+#: scripts/talentos.gd
+msgid "Ninja"
+msgstr "忍者"
+
+#: scripts/talentos.gd
+msgid "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"
+msgstr "闪避结束时发动范围攻击，秒杀周围僵尸（最多每5秒一次）"
+
+#: scripts/talentos.gd
+msgid "Desfibrilador"
+msgstr "除颤器"
+
+#: scripts/talentos.gd
+msgid "Una vez por edificio, si caes, resucitas con toda la vida"
+msgstr "每栋楼一次，倒下后满血复活"
+
+#: scripts/talentos.gd
+msgid "Blindaje"
+msgstr "装甲板"
+
+#: scripts/talentos.gd
+msgid "El escudo de Acero tiene 25 más por punto"
+msgstr "每点使“钢铁”护盾 +25"
+
+#: scripts/talentos.gd
+msgid "Sombra"
+msgstr "暗影"
+
+#: scripts/talentos.gd
+msgid "La esquiva se recarga un 15 % antes por punto"
+msgstr "每点使闪避冷却缩短15%"
+
+#: scripts/talentos.gd
+msgid "Segundo aliento"
+msgstr "绝处逢生"
+
+#: scripts/talentos.gd
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
+msgstr "每层楼一次，生命低于三分之一时，每点恢复15点生命"
+
+#: scripts/talentos.gd
+msgid "Adrenalina"
+msgstr "肾上腺素"
+
+#: scripts/talentos.gd
+msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
+msgstr "生命低于一半时，伤害 +30%，速度 +20%"
+
+#: scripts/talentos.gd
+msgid "Catalizador"
+msgstr "催化剂"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "每点火焰、酸液、闪电和冰冻伤害 +10%"
+
+#: scripts/talentos.gd
+msgid "Guantes de goma"
+msgstr "橡胶手套"
+
+#: scripts/talentos.gd
+msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
+msgstr "每点使你受到的火焰、酸液、毒素和冰冻伤害 -10%"
+
+#: scripts/talentos.gd
+msgid "Incendiario"
+msgstr "火上浇油"
+
+#: scripts/talentos.gd
+msgid "Los zombis que prendes arden 0,5 s más por punto"
+msgstr "每点使被你点燃的僵尸多烧0.5秒"
+
+#: scripts/talentos.gd
+msgid "Desatascador"
+msgstr "疏通剂"
+
+#: scripts/talentos.gd
+msgid "Con ácido encima, todo les quita un 10 % más por punto"
+msgstr "每点使沾了酸液的僵尸受到的所有伤害 +10%"
+
+#: scripts/talentos.gd
+msgid "Criogenia"
+msgstr "极寒"
+
+#: scripts/talentos.gd
+msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
+msgstr "每点冰冻弹 +1，冰冻时间 +0.5秒"
+
+#: scripts/talentos.gd
+msgid "Reacción en cadena"
+msgstr "连锁反应"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren ardiendo revientan y prenden a los de al lado"
+msgstr "烧死的僵尸会爆开，点燃旁边的僵尸"
+
+#: scripts/talentos.gd
+msgid "Residuo tóxico"
+msgstr "有毒废料"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
+msgstr "沾着酸液死去的僵尸会留下一滩酸液（对你无害）"
+
+#: scripts/talentos.gd
+msgid "Pararrayos"
+msgstr "避雷针"
+
+#: scripts/talentos.gd
+msgid "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
+msgstr "打你的僵尸会挨一道闪电，被击晕，闪电还会跳到另一个僵尸身上（最多每3秒一次）"
+
+#: scripts/talentos.gd
+msgid "Napalm"
+msgstr "凝固汽油"
+
+#: scripts/talentos.gd
+msgid "El fuego del molotov dura 1 s más por punto"
+msgstr "每点使燃烧瓶的火焰多持续1秒"
+
+#: scripts/talentos.gd
+msgid "Pegajoso"
+msgstr "粘糊糊"
+
+#: scripts/talentos.gd
+msgid "Los zombis con ácido van un 10 % más lentos por punto"
+msgstr "每点使沾了酸液的僵尸移速 -10%"
+
+#: scripts/talentos.gd
+msgid "Alto voltaje"
+msgstr "高压电"
+
+#: scripts/talentos.gd
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
+msgstr "每点使闪电枪和“避雷针”的闪电多跳1个僵尸"
+
+#: scripts/talentos.gd
+msgid "Mezcla explosiva"
+msgstr "爆炸配方"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
+msgstr "同时带有两种效果（火焰、酸液、闪电或冰冻）死去的僵尸会爆炸（对你无害）"
+
+#: scripts/tutoriales.gd
+msgid "Apunta y ataca con {apuntar}."
+msgstr "用{apuntar}瞄准并攻击。"
+
+#: scripts/tutoriales.gd
+msgid "Apunta con {apuntar} y ataca con {atacar}."
+msgstr "用{apuntar}瞄准，用{atacar}攻击。"
+
+#: scripts/tutoriales.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
+msgstr "Johnny会自动瞄准并攻击最近的僵尸：你只管走位。"
+
+#: scripts/tutoriales.gd
+msgid "el joystick (toca y arrastra en la mitad izquierda)"
+msgstr "摇杆（在屏幕左半边按住拖动）"
+
+#: scripts/tutoriales.gd
+msgid "el stick izquierdo"
+msgstr "左摇杆"
+
+#: scripts/tutoriales.gd
+msgid "el joystick de abajo a la derecha"
+msgstr "右下角的摇杆"
+
+#: scripts/tutoriales.gd
+msgid "el stick derecho"
+msgstr "右摇杆"
+
+#: scripts/tutoriales.gd
+msgid "el ratón"
+msgstr "鼠标"
+
+#: scripts/tutoriales.gd
+msgid "%s o %s"
+msgstr "%s或%s"
+
+#: scripts/tutoriales.gd
+msgid "Lo básico"
+msgstr "基础"
+
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Armas"
+msgstr "武器"
+
+#: scripts/tutoriales.gd
+msgid "Plantas y jefes"
+msgstr "楼层与首领"
+
+#: scripts/tutoriales.gd
+msgid "Eventos sorpresa"
+msgstr "突发事件"
+
+#: scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "维修间"
+
+#: scripts/tutoriales.gd
+msgid "Más edificios"
+msgstr "更多大楼"
+
+#: scripts/tutoriales.gd
+msgid "Cómo se juega"
+msgstr "玩法"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar"
+msgstr "开始时"
+
+#: scripts/tutoriales.gd
+msgid "Muévete con {moverse}."
+msgstr "用{moverse}移动。"
+
+#: scripts/tutoriales.gd
+msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
+msgstr "{atacar_modo}攻击模式可以用{cambiar_modo}切换。"
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
+msgstr "用{esquivar}闪避：短距离冲刺，期间不会受到伤害。"
+
+#: scripts/tutoriales.gd
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "用{cambiar_arma}在拖把和手枪之间切换，用{pausa}暂停游戏。"
+
+#: scripts/tutoriales.gd
+msgid "Limpia los apartamentos"
+msgstr "清理公寓"
+
+#: scripts/tutoriales.gd
+msgid "Al salir al pasillo"
+msgstr "走进走廊时"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi."
+msgstr "一进公寓，门就会在你身后关上，直到一个僵尸都不剩才会打开。"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe de la planta está cerrada con llave: la lleva un zombi de otro apartamento y la suelta al caer."
+msgstr "这层楼首领的房间锁着：钥匙在另一套公寓的某个僵尸身上，它倒下时会掉落。"
+
+#: scripts/tutoriales.gd
+msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
+msgstr "打败首领，通往下一层的楼梯就会打开。"
+
+#: scripts/tutoriales.gd
+msgid "La vida en tercios"
+msgstr "三段生命"
+
+#: scripts/tutoriales.gd
+msgid "Al perder un tercio de vida"
+msgstr "失去三分之一生命时"
+
+#: scripts/tutoriales.gd
+msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
+msgstr "你的生命分成三段。失去的那一段无法用绷带恢复，而且每失去一段，你都会走得更慢。"
+
+#: scripts/tutoriales.gd
+msgid "Solo el botiquín devuelve un tercio perdido."
+msgstr "只有急救包能恢复失去的一段。"
+
+#: scripts/tutoriales.gd
+msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
+msgstr "如果觉得太难，可以在“选项 → 辅助”里开启“完整生命”。"
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "绷带和急救包"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera cura"
+msgstr "第一次捡到治疗品时"
+
+#: scripts/tutoriales.gd
+msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgstr "用{usar_vendas}使用绷带：恢复25点，但不会超过当前这一段。"
+
+#: scripts/tutoriales.gd
+msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
+msgstr "用{usar_botiquin}使用急救包：恢复失去的一段，并恢复50点。"
+
+#: scripts/tutoriales.gd
+msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "最多带3卷绷带和2个急救包。浴室的小柜子在你靠近时会自动打开，掉出里面的东西。"
+
+#: scripts/tutoriales.gd
+msgid "Inventario y mochila"
+msgstr "物品栏和背包"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer objeto"
+msgstr "第一次捡到物品时"
+
+#: scripts/tutoriales.gd
+msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "捡到的东西会放进背包。用{inventario}打开物品栏：里面有你的武器、弹药、投掷物和背包。"
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
+msgstr "选中一个格子，查看它的说明和按钮（使用、装备、丢弃……）。"
+
+#: scripts/tutoriales.gd
+msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
+msgstr "如果你倒下，身上的东西会全部丢失；如果通关大楼，它们会存进储物箱。"
+
+#: scripts/tutoriales.gd
+msgid "Dólares"
+msgstr "美元"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer billete"
+msgstr "第一次捡到钞票时"
+
+#: scripts/tutoriales.gd
+msgid "Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "僵尸有时会掉钞票，首领会掉很多：走过去就能捡起来。"
+
+#: scripts/tutoriales.gd
+msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
+msgstr "钱在一局结束时存下：通关大楼全部保留，倒下或放弃则保留一半。"
+
+#: scripts/tutoriales.gd
+msgid "Se gastan en el ordenador de la sala de mantenimiento."
+msgstr "可以在维修间的电脑上花掉。"
+
+#: scripts/tutoriales.gd
+msgid "Armas nuevas"
+msgstr "新武器"
+
+#: scripts/tutoriales.gd
+msgid "Al llevar otra arma"
+msgstr "拿到另一件武器时"
+
+#: scripts/tutoriales.gd
+msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
+msgstr "你手上拿着两件武器：一件近战，一件远程。用{cambiar_arma}切换。"
+
+#: scripts/tutoriales.gd
+msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
+msgstr "其余的作为备用，每种一件，可以在物品栏（{inventario}）里更换。"
+
+#: scripts/tutoriales.gd
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
+msgstr "边框颜色代表品质：灰色普通，绿色优秀，蓝色稀有，紫色史诗。"
+
+#: scripts/tutoriales.gd
+msgid "Munición y recarga"
+msgstr "弹药与换弹"
+
+#: scripts/tutoriales.gd
+msgid "Al recargar"
+msgstr "换弹时"
+
+#: scripts/tutoriales.gd
+msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
+msgstr "用{recargar}换弹；弹匣打空后会自动换弹。"
+
+#: scripts/tutoriales.gd
+msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
+msgstr "每种武器用各自的弹药（子弹、散弹……）。地上的弹药箱能补充一个弹匣。"
+
+#: scripts/tutoriales.gd
+msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
+msgstr "没有弹药时，Johnny会换上近战武器。"
+
+#: scripts/tutoriales.gd
+msgid "Lanzables"
+msgstr "投掷物"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "第一次战斗时"
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "用{lanzar}投掷：按住瞄准，松开扔出。"
+
+#: scripts/tutoriales.gd
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
+msgstr "用{cambiar_lanzable}切换投掷物：燃烧瓶会引燃，手雷会爆炸。手边能带3个，备用最多8个。"
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! La explosión también te hace daño a ti."
+msgstr "小心！爆炸也会伤到你自己。"
+
+#: scripts/tutoriales.gd
+msgid "Piezas de mejora"
+msgstr "升级零件"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pieza"
+msgstr "第一次捡到零件时"
+
+#: scripts/tutoriales.gd
+msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "在维修间的工作台用零件提升武器和投掷物的品质。"
+
+#: scripts/tutoriales.gd
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgstr "零件分为四类：近战、远程、特殊和投掷。僵尸偶尔会掉落，首领也会掉。"
+
+#: scripts/tutoriales.gd
+msgid "Van en la mochila: si completas el edificio, pasan al baúl."
+msgstr "零件放在背包里：通关大楼后会存进储物箱。"
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al primer jefe"
+msgstr "遇到第一个首领时"
+
+#: scripts/tutoriales.gd
+msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
+msgstr "每层楼都有一个首领，生命条显示在上方。生命掉到一半时它会暴怒，变得更加危险。"
+
+#: scripts/tutoriales.gd
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
+msgstr "每次攻击前它会在地上做标记：离开标记或者闪避开！"
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
+msgstr "它倒下时会掉落美元、弹药和零件，楼梯也会打开。"
+
+#: scripts/tutoriales.gd scripts/ui/menus.gd
+msgid "Mutaciones"
+msgstr "变异"
+
+#: scripts/tutoriales.gd
+msgid "Antes de la primera mutación"
+msgstr "第一次变异前"
+
+#: scripts/tutoriales.gd
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
+msgstr "打败首领后，病毒会改变你：从两张卡中选一张（也可以按1和2）。"
+
+#: scripts/tutoriales.gd
+msgid "Cada mutación te da algo bueno y, a veces, algo malo."
+msgstr "每种变异都会带来好处，有时也会带来坏处。"
+
+#: scripts/tutoriales.gd
+msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
+msgstr "变异会持续到本局结束，最多同时拥有4种。"
+
+#: scripts/tutoriales.gd
+msgid "El ascensor"
+msgstr "电梯"
+
+#: scripts/tutoriales.gd
+msgid "Al arreglar el ascensor"
+msgstr "修好电梯时"
+
+#: scripts/tutoriales.gd
+msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
+msgstr "Johnny修好了走廊里的电梯：它能下到维修间，再回到这一层。"
+
+#: scripts/tutoriales.gd
+msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
+msgstr "用它可以在一局中途去电脑、工作台或储物箱。"
+
+#: scripts/tutoriales.gd
+msgid "Al rescatar al primero"
+msgstr "救出第一位幸存者时"
+
+#: scripts/tutoriales.gd
+msgid "Se une al equipo: te acompaña y te ayuda a su manera."
+msgstr "幸存者会加入队伍：跟着你，用自己的方式帮你。"
+
+#: scripts/tutoriales.gd
+msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
+msgstr "每个人的救援方式都不一样。别离他太远；如果他倒下了，待在他身边把他扶起来。"
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
+msgstr "如果你带着他通关大楼，他会搬进生活区（维修间右边那扇门），之后可以陪你一起出发。"
+
+#: scripts/tutoriales.gd
+msgid "En el primer apagón"
+msgstr "第一次停电时"
+
+#: scripts/tutoriales.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna, hacia donde miras."
+msgstr "整层楼都停电了：你只能看见手电筒照到的地方，也就是你面朝的方向。"
+
+#: scripts/tutoriales.gd
+msgid "En la sala del jefe todo sigue como siempre."
+msgstr "首领房间里一切照旧。"
+
+#: scripts/tutoriales.gd
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
+msgstr "上到下一层时，你会拿到一笔美元奖励。"
+
+#: scripts/tutoriales.gd
+msgid "En la primera alarma de incendios"
+msgstr "第一次火警时"
+
+#: scripts/tutoriales.gd
+msgid "Los aspersores llenan el suelo de charcos que resbalan."
+msgstr "喷淋头会让地面积满水洼，非常滑。"
+
+#: scripts/tutoriales.gd
+msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los zombis: ¡llévalos hasta él! Esquivando cruzas sin daño."
+msgstr "有些水洼里会掉进裸露的电线，Johnny和僵尸碰到都会触电：把它们引过去！闪避着就能毫发无伤地穿过。"
+
+#: scripts/tutoriales.gd
+msgid "En la primera horda"
+msgstr "第一次尸潮时"
+
+#: scripts/tutoriales.gd
+msgid "Una horda enorme llena el pasillo y va a por ti."
+msgstr "一大波尸潮挤满走廊，冲你而来。"
+
+#: scripts/tutoriales.gd
+msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzables vienen de perlas."
+msgstr "如果你躲进一套公寓，剩下的会在外面等你。这时候投掷物就派上大用场了。"
+
+#: scripts/tutoriales.gd
+msgid "Al acabar con todos, te deja dólares y una caja de munición."
+msgstr "全部消灭后，会掉落美元和一箱弹药。"
+
+#: scripts/tutoriales.gd
+msgid "El ordenador"
+msgstr "电脑"
+
+#: scripts/tutoriales.gd
+msgid "Al encender el ordenador"
+msgstr "打开电脑时"
+
+#: scripts/tutoriales.gd
+msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida."
+msgstr "花掉存下的美元：买天赋点（永久强化），以及本局用的武器和投掷物。"
+
+#: scripts/tutoriales.gd
+msgid "También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."
+msgstr "这里还有能领奖励的成就，以及档案、新闻和收藏品。"
+
+#: scripts/tutoriales.gd
+msgid "La taquilla"
+msgstr "储物柜"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la taquilla"
+msgstr "打开储物柜时"
+
+#: scripts/tutoriales.gd
+msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
+msgstr "在这里为Johnny挑选衣服。每套都有自己的优势。"
+
+#: scripts/tutoriales.gd
+msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
+msgstr "打败特定首领就能获得：还没拿到的显示为“???”，并写明获得方法。"
+
+#: scripts/tutoriales.gd
+msgid "El banco de trabajo"
+msgstr "工作台"
+
+#: scripts/tutoriales.gd
+msgid "Al usar el banco de trabajo"
+msgstr "使用工作台时"
+
+#: scripts/tutoriales.gd
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
+msgstr "用同类零件（背包里的和储物箱里的）一级一级提升武器和投掷物的品质。"
+
+#: scripts/tutoriales.gd
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
+msgstr "普通、优秀、稀有和史诗：史诗还会附带一项绝活。"
+
+#: scripts/tutoriales.gd
+msgid "Elige la casilla y pulsa «Mejorar»."
+msgstr "选中格子，然后点击“升级”。"
+
+#: scripts/tutoriales.gd
+msgid "El baúl"
+msgstr "储物箱"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el baúl"
+msgstr "打开储物箱时"
+
+#: scripts/tutoriales.gd
+msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
+msgstr "放在这里的东西，就算你倒下也不会丢：物品，以及升级过的武器和投掷物。"
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
+msgstr "选中一个格子或拖动它，在身上和储物箱之间转移。"
+
+#: scripts/tutoriales.gd
+msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
+msgstr "通关大楼后，身上的东西会自动存进储物箱。"
+
+#: scripts/tutoriales.gd
+msgid "El centro comercial"
+msgstr "购物中心"
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al centro comercial"
+msgstr "来到购物中心时"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
+msgstr "首领房间要用门禁卡打开：门禁卡在巡逻的保安身上。"
+
+#: scripts/tutoriales.gd
+msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
+msgstr "他一看见你就会吹哨，援兵赶来，他自己开溜：别让他跑了！"
+
+#: scripts/tutoriales.gd
+msgid "Peligros de las tiendas"
+msgstr "商店里的危险"
+
+#: scripts/tutoriales.gd
+msgid "En la primera tienda con peligro"
+msgstr "第一次进入有危险的商店时"
+
+#: scripts/tutoriales.gd
+msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
+msgstr "冷库会冻人，厨房会烧人，电器店的水会电人（店里的配电箱可以断电）。"
+
+#: scripts/tutoriales.gd
+msgid "También hacen daño a los zombis despiertos: ¡llévalos hasta ellos!"
+msgstr "它们对醒着的僵尸也有伤害：把僵尸引过去！"
+
+#: scripts/tutoriales.gd
+msgid "Esquivando los cruzas sin daño."
+msgstr "闪避着就能毫发无伤地穿过。"
+
+#: scripts/tutoriales.gd
+msgid "Alerta y Reto del día"
+msgstr "警戒与每日挑战"
+
+#: scripts/tutoriales.gd
+msgid "Al completar el primer edificio"
+msgstr "第一次通关大楼时"
+
+#: scripts/tutoriales.gd
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
+msgstr "在每栋已通关的大楼下方，可以用 < 和 > 选择警戒等级：越难，美元越多。在最高等级通关就会解锁下一级。"
+
+#: scripts/tutoriales.gd
+msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
+msgstr "每日挑战当天对所有人都是同一栋楼，外加一条奇怪的规则。每天第一次完成可得$10。"
+
+#: scripts/tutoriales.gd
+msgid "el botón de esquivar"
+msgstr "闪避按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la otra arma"
+msgstr "另一件武器的按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón del arma a distancia, con ella en la mano"
+msgstr "远程武器按钮（拿在手上时）"
+
+#: scripts/tutoriales.gd
+msgid "el botón de lanzar"
+msgstr "投掷按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botoncito de al lado de lanzar"
+msgstr "投掷旁边的小按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón de las vendas, bajo el minimapa"
+msgstr "小地图下方的绷带按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón del botiquín, bajo el minimapa"
+msgstr "小地图下方的急救包按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la mochila, bajo el minimapa"
+msgstr "小地图下方的背包按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón de pausa, bajo el minimapa"
+msgstr "小地图下方的暂停按钮"
+
+#: scripts/tutoriales.gd
+msgid "el botón del modo, bajo el minimapa"
+msgstr "小地图下方的模式按钮"
+
+#: scripts/ui/hud.gd
+msgid "escudo %d"
+msgstr "护盾 %d"
+
+#: scripts/ui/inventario.gd scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "物品栏"
+
+#: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "手上"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "备用"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables"
+msgstr "投掷物"
+
+#: scripts/ui/inventario.gd
+msgid "F cambia"
+msgstr "F 切换"
+
+#: scripts/ui/inventario.gd
+msgid "Dinero"
+msgstr "现金"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "物品  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "弹药  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables  %d / %d"
+msgstr "投掷物  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgctxt "inventario"
+msgid "Seguir"
+msgstr "继续"
+
+#: scripts/ui/inventario.gd
+msgid "Tarjeta"
+msgstr "门禁卡"
+
+#: scripts/ui/inventario.gd
+msgid "Llave"
+msgstr "钥匙"
+
+#: scripts/ui/inventario.gd
+msgid "tirar"
+msgstr "丢弃"
+
+#: scripts/ui/inventario.gd
+msgid "elegir"
+msgstr "选择"
+
+#: scripts/ui/inventario.gd
+msgid "cerrar"
+msgstr "关闭"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar"
+msgstr "鼠标或手指：点击"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar o arrastrar"
+msgstr "鼠标或手指：点击或拖动"
+
+#: scripts/ui/inventario.gd
+msgid "Depósito: %d de %d s"
+msgstr "储罐：%d / %d 秒"
+
+#: scripts/ui/inventario.gd
+msgid "Cargador %d de %d"
+msgstr "弹匣 %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Reserva: %s"
+msgstr "备弹：%s"
+
+#: scripts/ui/inventario.gd
+msgid "Ponérmela"
+msgstr "装备"
+
+#: scripts/ui/inventario.gd
+msgid "Tirar al suelo"
+msgstr "丢在地上"
+
+#: scripts/ui/inventario.gd
+msgid "Si la tiras, la de repuesto pasa a la mano."
+msgstr "丢掉后，备用武器会换到手上。"
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Daño"
+msgstr "伤害"
+
+#: scripts/ui/inventario.gd
+msgid "Ritmo"
+msgstr "攻速"
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Alcance"
+msgstr "距离"
+
+#: scripts/ui/inventario.gd
+msgid "Barrido"
+msgstr "横扫"
+
+#: scripts/ui/inventario.gd
+msgid "Recarga"
+msgstr "换弹"
+
+#: scripts/ui/inventario.gd
+msgid "Para curar"
+msgstr "治疗"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza · Mejora armas"
+msgstr "零件 · 升级武器"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto · Común"
+msgstr "物品 · 普通"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Llevas %d"
+msgstr "携带 %d"
+
+#: scripts/ui/inventario.gd
+msgid "Te devuelve un tercio de vida perdido y te cura %d."
+msgstr "恢复失去的一段生命，并治疗 %d 点。"
+
+#: scripts/ui/inventario.gd
+msgid "Te cura %d de vida, sin pasar del tercio en el que estás."
+msgstr "恢复 %d 点生命，但不会超过当前这一段。"
+
+#: scripts/ui/inventario.gd
+msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "不打开物品栏也能用%s键使用。最多携带 %d 个。倒下就会丢失（放在储物箱里则很安全）。"
+
+#: scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "使用"
+
+#: scripts/ui/inventario.gd
+msgid "Destruir"
+msgstr "销毁"
+
+#: scripts/ui/inventario.gd
+msgid "Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "倒下就会丢失（放在储物箱里则很安全）。"
+
+#: scripts/ui/inventario.gd
+msgid "Sirve para mejorar %s en el banco de trabajo del taller."
+msgstr "用于在工作间的工作台升级%s。"
+
+#: scripts/ui/inventario.gd
+msgid "Munición"
+msgstr "弹药"
+
+#: scripts/ui/inventario.gd
+msgid "%d en este hueco · llevas %d"
+msgstr "此格 %d · 共携带 %d"
+
+#: scripts/ui/inventario.gd
+msgid "La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja."
+msgstr "供%s使用（每格可放 %d）。丢弃时，整格会装成一箱留在地上。"
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
+msgstr "用于加满%s（每格可放 %d）。一次丢一个。"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s"
+msgstr "投掷物 · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "手上"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d · %d en total"
+msgstr "剩余 %d / %d · 共 %d"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d"
+msgstr "剩余 %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Es lo que lanzas ahora."
+msgstr "这是你当前投掷的东西。"
+
+#: scripts/ui/inventario.gd
+msgid "Con F lo eliges para lanzarlo."
+msgstr "按F选它来投掷。"
+
+#: scripts/ui/inventario.gd
+msgid "Cuando se acabe, entra otro montón de los de repuesto."
+msgstr "用完后，会从备用里补上一组。"
+
+#: scripts/ui/inventario.gd
+msgid "Al repuesto"
+msgstr "放入备用"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano un montón lleno de estos: entrará cuando se acabe."
+msgstr "手上已经有满满一组这个了：用完后会补上。"
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» llena con estos el montón que llevas a mano."
+msgstr "“放到手上”会用这些补满手上的那一组。"
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» lo cambia por %s, que pasa aquí."
+msgstr "“放到手上”会把它换成%s，后者移到这里。"
+
+#: scripts/ui/inventario.gd
+msgid "A la mano"
+msgstr "放到手上"
+
+#: scripts/ui/inventario.gd
+msgid "Te has curado %d de vida."
+msgstr "你恢复了 %d 点生命。"
+
+#: scripts/ui/inventario.gd
+msgid "Baúl"
+msgstr "储物箱"
+
+#: scripts/ui/inventario.gd
+msgid "Lo que llevas"
+msgstr "随身物品"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "备用投掷物  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Baúl  %d / %d"
+msgstr "储物箱  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos, armas y arrojables"
+msgstr "物品、武器和投掷物"
+
+#: scripts/ui/inventario.gd
+msgid "Aquí no se pierde nada aunque caigas."
+msgstr "就算你倒下，这里的东西也不会丢。"
+
+#: scripts/ui/inventario.gd
+msgid "Guardar todo"
+msgstr "全部存入"
+
+#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+msgid "Cerrar"
+msgstr "关闭"
+
+#: scripts/ui/inventario.gd
+msgid "Guardar en el baúl"
+msgstr "存进储物箱"
+
+#: scripts/ui/inventario.gd
+msgid "La %s Normal no va al baúl: la tienes siempre."
+msgstr "普通品质的%s不用存进储物箱：你一直都有。"
+
+#: scripts/ui/inventario.gd
+msgid "Depósito %d de %d s"
+msgstr "储罐 %d / %d 秒"
+
+#: scripts/ui/inventario.gd
+msgid "%s · reserva %d"
+msgstr "%s · 备弹 %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · %s"
+msgstr "投掷物 · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio sacando algo."
+msgstr "储物箱满了：拿出点东西腾地方。"
+
+#: scripts/ui/inventario.gd
+msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo."
+msgstr "储物箱只能再放 %d 个（每格 %d 个）：剩下的留在你身上。"
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
+msgstr "整组存入，和箱里已有的同类合并；放在储物箱里，就算你倒下也很安全。"
+
+#: scripts/ui/inventario.gd
+msgid "%s · En la mochila"
+msgstr "%s · 在背包里"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza"
+msgstr "零件"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto"
+msgstr "物品"
+
+#: scripts/ui/inventario.gd
+msgid "Munición · La llevas"
+msgstr "弹药 · 随身携带"
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s."
+msgstr "加满%s。"
+
+#: scripts/ui/inventario.gd
+msgid "Es para %s."
+msgstr "供%s使用。"
+
+#: scripts/ui/inventario.gd
+msgid "%s · En el baúl"
+msgstr "%s · 在储物箱里"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl"
+msgstr "储物箱里有 %d 个"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en esta casilla · %d en el baúl"
+msgstr "此格 %d 个 · 储物箱里 %d 个"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar uno"
+msgstr "取出一个"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar %d"
+msgstr "取出 %d"
+
+#: scripts/ui/inventario.gd
+msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
+msgstr "一次最多取出 %d 个到你的弹药里；离开储物箱后，倒下就会丢失。"
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
+msgstr "一次取出一个到你的弹药里；离开储物箱后，倒下就会丢失。"
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
+msgstr "一次取出一个到你的背包里；离开储物箱后，倒下就会丢失。"
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes llenos los huecos de munición."
+msgstr "放不下了：你的弹药格已经满了。"
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes la mochila llena."
+msgstr "放不下了：你的背包满了。"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar"
+msgstr "取出"
+
+#: scripts/ui/inventario.gd
+msgid "%s · %s · En el baúl"
+msgstr "%s · %s · 在储物箱里"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas una: se cambian, esta ocupa su sitio y la tuya entra en el baúl en su lugar."
+msgstr "你已经带着一件了：两者对调，这件换上，你那件放进储物箱。"
+
+#: scripts/ui/inventario.gd
+msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de la mano entra en el baúl en su lugar)."
+msgstr "它会到你手上；你手上那件换到备用（如果已经带了两件，手上那件放进储物箱）。"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · En el baúl"
+msgstr "投掷物 · %s · 在储物箱里"
+
+#: scripts/ui/inventario.gd
+msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
+msgstr "一组一组取出，每次 %d 个（能放多少放多少）；离开储物箱后，倒下就会丢失。"
+
+#: scripts/ui/inventario.gd
+msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
+msgstr "放不下了：你这种投掷物的几组都满了，也没有空位再放一组。"
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
+msgstr "放在储物箱里，就算倒下也很安全；你手上会换回那把老%s。"
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "放在储物箱里，就算倒下也很安全。"
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
+msgstr "存入此格的全部 %d 个；放在储物箱里，就算倒下也很安全。"
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque caigas."
+msgstr "存入此格的全部 %d 个；放在储物箱里，就算倒下也很安全。"
+
+#: scripts/ui/inventario.gd
+msgid "%s al repuesto; %s entra en el baúl en su lugar."
+msgstr "%s换到备用；%s放进储物箱。"
+
+#: scripts/ui/inventario.gd
+msgid "%s a la mano; %s entra en el baúl en su lugar."
+msgstr "%s换到手上；%s放进储物箱。"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl no admite más: contigo se quedan %d de %s."
+msgstr "储物箱放不下了：你身上留下 %d 个%s。"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: contigo se quedan %s."
+msgstr "储物箱满了：%s留在你身上。"
+
+#: scripts/ui/inventario.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "确定吗？再按一次"
+
+#: scripts/ui/inventario.gd
+msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
+msgstr "销毁%s？会永久消失：无法撤销。"
+
+#: scripts/ui/inventario.gd
+msgid "Destruido: %s."
+msgstr "已销毁：%s。"
+
+#: scripts/ui/inventario.gd
+msgid "Banco de trabajo"
+msgstr "工作台"
+
+#: scripts/ui/inventario.gd
+msgid "Tus piezas"
+msgstr "你的零件"
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl"
+msgstr "储物箱里"
+
+#: scripts/ui/inventario.gd
+msgid "Armas y arrojables"
+msgstr "武器和投掷物"
+
+#: scripts/ui/inventario.gd
+msgid "No tienes armas ni arrojables guardados."
+msgstr "你没有存放任何武器或投掷物。"
+
+#: scripts/ui/inventario.gd
+msgid "Tienes %d"
+msgstr "你有 %d 个"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "储物箱里有 %d 个：升级其中一组，共 %d 个"
+
+#: scripts/ui/inventario.gd
+msgid "Sube a %s"
+msgstr "升至%s"
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s (tienes %d)."
+msgstr "需要%s（你有 %d）。"
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica"
+msgstr "已是史诗"
+
+#: scripts/ui/inventario.gd
+msgid "Mejorar a %s"
+msgstr "升级到%s"
+
+#: scripts/ui/inventario.gd
+msgid "mejorar"
+msgstr "升级"
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica: no se puede mejorar más."
+msgstr "已是史诗：无法再升级。"
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s y tienes %d: te faltan %d."
+msgstr "需要%s，你有 %d：还差 %d。"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
+msgstr "你手上已经有另一组%s，合在一起放不下（最多 %d 个）：先把一组移到备用。"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "储物箱满了：给升级后的那组腾个地方。"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza cuerpo a cuerpo"
+msgid_plural "%d piezas cuerpo a cuerpo"
+msgstr[0] "%d 个近战零件"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza a distancia"
+msgid_plural "%d piezas a distancia"
+msgstr[0] "%d 个远程零件"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza especial"
+msgid_plural "%d piezas especiales"
+msgstr[0] "%d 个特殊零件"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza arrojable"
+msgid_plural "%d piezas arrojables"
+msgstr[0] "%d 个投掷零件"
+
+#: scripts/ui/inventario.gd
+msgid "%d balas"
+msgid_plural "%d balas"
+msgstr[0] "%d 发子弹"
+
+#: scripts/ui/inventario.gd
+msgid "%d cartuchos"
+msgid_plural "%d cartuchos"
+msgstr[0] "%d 发散弹"
+
+#: scripts/ui/inventario.gd
+msgid "%d gasolinas"
+msgid_plural "%d gasolinas"
+msgstr[0] "%d 桶汽油"
+
+#: scripts/ui/inventario.gd
+msgid "%d bidones de ácido"
+msgid_plural "%d bidones de ácido"
+msgstr[0] "%d 桶酸液"
+
+#: scripts/ui/inventario.gd
+msgid "%d baterías"
+msgid_plural "%d baterías"
+msgstr[0] "%d 块电池"
+
+#: scripts/ui/inventario.gd
+msgid "¡Mejorado! Ahora es %s."
+msgstr "升级成功！现在是%s。"
+
+#: scripts/ui/inventario.gd
+msgid "Suelta aquí"
+msgstr "放到这里"
+
+#: scripts/ui/inventario.gd
+msgid "para guardarlo en el baúl"
+msgstr "存进储物箱"
+
+#: scripts/ui/inventario.gd
+msgid "para sacar uno"
+msgstr "取出一个"
+
+#: scripts/ui/inventario.gd
+msgid "para sacarla"
+msgstr "取出来"
+
+#: scripts/ui/inventario.gd
+msgid "para tirarlo al suelo"
+msgstr "丢在地上"
+
+#: scripts/ui/inventario.gd
+msgid "se queda a tus pies"
+msgstr "会落在你脚边"
+
+#: scripts/ui/inventario.gd
+msgid "y la de repuesto pasa a la mano"
+msgstr "备用的会换到手上"
+
+#: scripts/ui/inventario.gd
+msgid "Barre un abanico muy ancho y echa lejos a los zombis."
+msgstr "扇形横扫范围很大，能把僵尸击飞。"
+
+#: scripts/ui/inventario.gd
+msgid "Un golpe fuerte que empuja a los zombis."
+msgstr "重重一击，能把僵尸击退。"
+
+#: scripts/ui/inventario.gd
+msgid "Muy rápido, pero hay que arrimarse."
+msgstr "出手很快，但得贴近才行。"
+
+#: scripts/ui/inventario.gd
+msgid "Dispara de una en una, recto y lejos."
+msgstr "单发射击，弹道笔直，射程远。"
+
+#: scripts/ui/inventario.gd
+msgid "Cinco perdigones en abanico. Se recarga de cartucho en cartucho."
+msgstr "一次打出扇形五颗弹丸。一发一发地装弹。"
+
+#: scripts/ui/inventario.gd
+msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
+msgstr "射速极快的连射。和手枪用同一种子弹。"
+
+#: scripts/ui/inventario.gd
+msgid "Llamarada continua que quema a todos. Se llena con gasolina."
+msgstr "持续喷火，烧遍一切。用汽油加满。"
+
+#: scripts/ui/inventario.gd
+msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
+msgstr "持续喷射酸液，腐蚀一切。用酸液桶加满。"
+
+#: scripts/ui/inventario.gd
+msgid "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías."
+msgstr "持续放电，能击晕僵尸并跳到旁边的僵尸身上。用电池充满。"
+
+#: scripts/ui/inventario.gd
+msgid "Se rompe y deja un charco de fuego que quema a los zombis."
+msgstr "摔碎后留下一滩火，灼烧僵尸。"
+
+#: scripts/ui/inventario.gd
+msgid "Bota, rueda y explota a los 2 segundos."
+msgstr "弹跳、滚动，2秒后爆炸。"
+
+#: scripts/ui/inventario.gd
+msgid "Suena, atrae a los zombis 3 s y explota."
+msgstr "发出响声，吸引僵尸3秒后爆炸。"
+
+#: scripts/ui/inventario.gd
+msgid "Explota y deja a los zombis congelados 3 s."
+msgstr "爆炸后将僵尸冰冻3秒。"
+
+#: scripts/ui/inventario.gd
+msgid "Especiales"
+msgstr "特殊"
+
+#: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "特殊"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable"
+msgstr "投掷物"
+
+#: scripts/ui/menu_principal.gd
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "一层一层，把大楼里的僵尸清理干净"
+
+#: scripts/ui/menu_principal.gd
+msgid "JUGAR"
+msgstr "开始"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
+msgid "Tutorial"
+msgstr "教程"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Opciones"
+msgstr "选项"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "全屏"
+
+#: scripts/ui/menu_principal.gd
+msgid "Salir"
+msgstr "退出"
+
+#: scripts/ui/menu_principal.gd
+msgid ""
+"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
+"Los controles y el modo de atacar están en Opciones"
+msgstr ""
+"清理每套公寓才能打开它的门，还要干掉拿着楼管大妈钥匙的僵尸\n"
+"操作和攻击模式在“选项”里"
+
+#: scripts/ui/menu_principal.gd
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "最高到达：第%d层   ·   存下的美元：$%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Elige edificio"
+msgstr "选择大楼"
+
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "返回"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "通关后解锁警戒1"
+
+#: scripts/ui/menu_principal.gd
+msgid "%s (de %d)"
+msgstr "%s（共 %d）"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "每日挑战"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y azotea"
+msgstr "%d 层楼外加天台"
+
+#: scripts/ui/menu_principal.gd
+msgid "¡Sin explorar!"
+msgstr "尚未探索！"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completado ×%d"
+msgstr "已通关 ×%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "mejor tiempo %d:%02d"
+msgstr "最佳用时 %d:%02d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Has llegado a la planta %d de %d"
+msgstr "到达了第%d层（共%d层）"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completa %s para abrirlo"
+msgstr "通关%s后解锁"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pausa"
+msgstr "暂停"
+
+#: scripts/ui/menus.gd
+msgid "Vida"
+msgstr "生命"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad de ataque"
+msgstr "攻击速度"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad"
+msgstr "移动速度"
+
+#: scripts/ui/menus.gd
+msgid "Daño recibido"
+msgstr "受到伤害"
+
+#: scripts/ui/menus.gd
+msgid "Crítico"
+msgstr "暴击率"
+
+#: scripts/ui/menus.gd
+msgid "%s · daño %d · %.1f/s"
+msgstr "%s · 伤害 %d · %.1f/秒"
+
+#: scripts/ui/menus.gd
+msgid "Molotovs: %d"
+msgstr "燃烧瓶：%d"
+
+#: scripts/ui/menus.gd
+msgid "Granadas: %d"
+msgstr "手雷：%d"
+
+#: scripts/ui/menus.gd
+msgid "Continuar"
+msgstr "继续"
+
+#: scripts/ui/menus.gd
+msgid "Abandonar partida"
+msgstr "放弃本局"
+
+#: scripts/ui/menus.gd
+msgid "Plantas superadas"
+msgstr "通过楼层"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "击败敌人"
+
+#: scripts/ui/menus.gd
+msgid "Apartamentos visitados (última planta)"
+msgstr "探索公寓（最后一层）"
+
+#: scripts/ui/menus.gd
+msgid "Tiempo"
+msgstr "用时"
+
+#: scripts/ui/menus.gd
+msgid "Reto del día · %s"
+msgstr "每日挑战 · %s"
+
+#: scripts/ui/menus.gd
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · 今日最佳！"
+
+#: scripts/ui/menus.gd
+msgid "Tu mejor marca de hoy: %s"
+msgstr "你今天的最佳成绩：%s"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "获得美元"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  （共有 $%d）"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por la %s"
+msgstr "其中，来自%s"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por completar el reto de hoy"
+msgstr "其中，来自完成今日挑战"
+
+#: scripts/ui/menus.gd
+msgid "¡Nivel nuevo!"
+msgstr "新等级！"
+
+#: scripts/ui/menus.gd
+msgid "%s abierta"
+msgstr "%s已解锁"
+
+#: scripts/ui/menus.gd
+msgid "Dólares salvados (la mitad)"
+msgstr "保住的美元（一半）"
+
+#: scripts/ui/menus.gd
+msgid "Dólares perdidos"
+msgstr "损失的美元"
+
+#: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "再玩一局"
+
+#: scripts/ui/menus.gd
+msgid "Reintentar edificio"
+msgstr "重新挑战大楼"
+
+#: scripts/ui/menus.gd
+msgid "Menú principal"
+msgstr "主菜单"
+
+#: scripts/ui/menus.gd
+msgid "La exposición prolongada al virus hace que te sientas..."
+msgstr "长时间接触病毒，让你感觉……"
+
+#: scripts/ui/menus.gd
+msgid "¡¡¡DIFERENTE!!!"
+msgstr "不一样了！！！"
+
+#: scripts/ui/menus.gd
+msgid "Mutación %d de %d · dura hasta que acabe la partida"
+msgstr "变异 %d / %d · 持续到本局结束"
+
+#: scripts/ui/menus.gd
+msgid "Página %d de %d"
+msgstr "第 %d / %d 页"
+
+#: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "发现于尸体旁：%s"
+
+#: scripts/ui/menus.gd
+msgid "Se guarda en el Dosier del ordenador de mantenimiento"
+msgstr "已保存到维修间电脑的“档案”里"
+
+#: scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "继续"
+
+#: scripts/ui/opciones.gd
+msgid "Móvil"
+msgstr "手机"
+
+#: scripts/ui/opciones.gd
+msgid "Tamaño de los botones"
+msgstr "按钮大小"
+
+#: scripts/ui/opciones.gd
+msgid "Transparencia"
+msgstr "透明度"
+
+#: scripts/ui/opciones.gd
+msgid "Vibración"
+msgstr "振动"
+
+#: scripts/ui/opciones.gd
+msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "开启这三项辅助中的任意一项后，该局无法获得成就（即使之后关闭也一样）。已经获得的成就不受影响。"
+
+#: scripts/ui/opciones.gd
+msgid "Vida entera"
+msgstr "完整生命"
+
+#: scripts/ui/opciones.gd
+msgid "La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."
+msgstr "生命不再分成三段：治疗总能恢复到生命上限，也不会走得更慢。"
+
+#: scripts/ui/opciones.gd
+msgid "Pistola sin fin"
+msgstr "无限手枪"
+
+#: scripts/ui/opciones.gd
+msgid "La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."
+msgstr "手枪不消耗子弹，也不用换弹。其他武器照常。"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar apuntando solo"
+msgstr "自动瞄准投掷"
+
+#: scripts/ui/opciones.gd
+msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
+msgstr "燃烧瓶、手雷和其他投掷物会自动飞向你看到的最近的僵尸。如果一个都看不到，就照常投掷。"
+
+#: scripts/ui/opciones.gd
+msgid "Tutoriales"
+msgstr "教程提示"
+
+#: scripts/ui/opciones.gd
+msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
+msgstr "第一次遇到新东西时，会弹出窗口说明发生了什么、该怎么做。看过的都在“教程”里。"
+
+#: scripts/ui/opciones.gd
+msgid "Que vuelvan a salir todos"
+msgstr "重新显示全部"
+
+#: scripts/ui/opciones.gd
+msgid "Volverán a salir desde el principio"
+msgstr "会从头重新显示"
+
+#: scripts/ui/opciones.gd
+msgid "Teclado y ratón"
+msgstr "键盘和鼠标"
+
+#: scripts/ui/opciones.gd
+msgid "Mando"
+msgstr "手柄"
+
+#: scripts/ui/opciones.gd
+msgid "Ratón"
+msgstr "鼠标"
+
+#: scripts/ui/opciones.gd
+msgid "Stick dcho."
+msgstr "右摇杆"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "点击一个格子来更改对应的按键或按钮"
+
+#: scripts/ui/opciones.gd
+msgid "Restablecer controles"
+msgstr "恢复默认操作"
+
+#: scripts/ui/opciones.gd
+msgid "Vuelven a estar los controles de serie"
+msgstr "已恢复默认操作"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa un botón del mando..."
+msgstr "按下手柄上的一个按钮……"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una tecla o un clic..."
+msgstr "按下一个键或点击鼠标……"
+
+#: scripts/ui/opciones.gd
+msgid "Esc para dejarlo como estaba"
+msgstr "按Esc保持不变"
+
+#: scripts/ui/opciones.gd
+msgid "Botón %d"
+msgstr "按钮 %d"
+
+#: scripts/ui/opciones.gd
+msgid "Eje %d"
+msgstr "轴 %d"
+
+#: scripts/ui/opciones.gd
+msgid "Sonido: %s"
+msgstr "音效：%s"
+
+#: scripts/ui/opciones.gd
+msgid "No"
+msgstr "关"
+
+#: scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "开"
+
+#: scripts/ui/opciones.gd
+msgid "Música: %s"
+msgstr "音乐：%s"
+
+#: scripts/ui/opciones.gd
+msgid "Sin cambios"
+msgstr "未更改"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiado a %s"
+msgstr "已改为%s"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny会自动瞄准并攻击最近的僵尸。你只需要专心走位。"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
+msgstr "由你瞄准：用鼠标、手柄右摇杆或手机右侧的摇杆。"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: arriba"
+msgstr "移动：上"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: izquierda"
+msgstr "移动：左"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: abajo"
+msgstr "移动：下"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: derecha"
+msgstr "移动：右"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar (modo libre)"
+msgstr "瞄准（自由瞄准）"
+
+#: scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "攻击"
+
+#: scripts/ui/opciones.gd
+msgid "Esquivar"
+msgstr "闪避"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "切换武器"
+
+#: scripts/ui/opciones.gd
+msgid "Recargar"
+msgstr "换弹"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar (mantener y soltar)"
+msgstr "投掷（按住后松开）"
+
+#: scripts/ui/opciones.gd
+msgid "Molotov o granada"
+msgstr "燃烧瓶或手雷"
+
+#: scripts/ui/opciones.gd
+msgid "Usar vendas"
+msgstr "使用绷带"
+
+#: scripts/ui/opciones.gd
+msgid "Usar botiquín"
+msgstr "使用急救包"
+
+#: scripts/ui/opciones.gd
+msgid "Modo de atacar"
+msgstr "攻击模式"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse"
+msgstr "移动"
+
+#: scripts/ui/opciones.gd
+msgid "Joystick: toca y arrastra en la mitad izquierda"
+msgstr "摇杆：在屏幕左半边按住拖动"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar"
+msgstr "瞄准"
+
+#: scripts/ui/opciones.gd
+msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
+msgstr "仅限“自由瞄准”：右下角的摇杆"
+
+#: scripts/ui/opciones.gd
+msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
+msgstr "辅助瞄准时，用右下角的那个；否则用弧线上的那个"
+
+#: scripts/ui/opciones.gd
+msgid "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"
+msgstr "点击另一件武器来切换；点击手上的远程武器来换弹"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar"
+msgstr "投掷"
+
+#: scripts/ui/opciones.gd
+msgid "Arrastra desde el botón para apuntar y suelta para tirar"
+msgstr "从按钮上拖动来瞄准，松开投掷"
+
+#: scripts/ui/opciones.gd
+msgid "El botoncito de al lado de lanzar"
+msgstr "投掷旁边的小按钮"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa (solo salen si llevas)"
+msgstr "小地图下方的按钮（身上有才会出现）"
+
+#: scripts/ui/opciones.gd
+msgid "Modo, inventario y pausa"
+msgstr "模式、物品栏和暂停"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa"
+msgstr "小地图下方的按钮"
+
+#: scripts/ui/opciones.gd
+msgid "Pequeño"
+msgstr "小"
+
+#: scripts/ui/opciones.gd
+msgid "Grande"
+msgstr "大"
+
+#: scripts/ui/opciones.gd
+msgid "Muy grande"
+msgstr "特大"
+
+#: scripts/ui/opciones.gd
+msgid "Select"
+msgstr "Select"
+
+#: scripts/ui/opciones.gd
+msgid "Guía"
+msgstr "指南"
+
+#: scripts/ui/opciones.gd
+msgid "Start"
+msgstr "Start"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick izq."
+msgstr "按下左摇杆"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick dcho."
+msgstr "按下右摇杆"
+
+#: scripts/ui/opciones.gd
+msgid "LB"
+msgstr "LB"
+
+#: scripts/ui/opciones.gd
+msgid "RB"
+msgstr "RB"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta arriba"
+msgstr "十字键上"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta abajo"
+msgstr "十字键下"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta izq."
+msgstr "十字键左"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta dcha."
+msgstr "十字键右"
+
+#: scripts/ui/opciones.gd
+msgid "Stick izq."
+msgstr "左摇杆"
+
+#: scripts/ui/opciones.gd
+msgid "LT"
+msgstr "LT"
+
+#: scripts/ui/opciones.gd
+msgid "RT"
+msgstr "RT"
+
+#: scripts/ui/opciones.gd
+msgid " izq."
+msgstr " 左"
+
+#: scripts/ui/opciones.gd
+msgid " dcha."
+msgstr " 右"
+
+#: scripts/ui/opciones.gd
+msgid " arriba"
+msgstr " 上"
+
+#: scripts/ui/opciones.gd
+msgid " abajo"
+msgstr " 下"
+
+#: scripts/ui/opciones.gd
+msgid "Espacio"
+msgstr "空格"
+
+#: scripts/ui/opciones.gd
+msgid "Mayús"
+msgstr "Shift"
+
+#: scripts/ui/opciones.gd
+msgid "Esc"
+msgstr "Esc"
+
+#: scripts/ui/opciones.gd
+msgid "Tab"
+msgstr "Tab"
+
+#: scripts/ui/opciones.gd
+msgid "Intro"
+msgstr "回车"
+
+#: scripts/ui/opciones.gd
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: scripts/ui/opciones.gd
+msgid "Alt"
+msgstr "Alt"
+
+#: scripts/ui/opciones.gd
+msgid "Borrar"
+msgstr "退格"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha izq."
+msgstr "左方向键"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha dcha."
+msgstr "右方向键"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha arriba"
+msgstr "上方向键"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha abajo"
+msgstr "下方向键"
+
+#: scripts/ui/opciones.gd
+msgid "Clic izq."
+msgstr "鼠标左键"
+
+#: scripts/ui/opciones.gd
+msgid "Clic dcho."
+msgstr "鼠标右键"
+
+#: scripts/ui/opciones.gd
+msgid "Clic rueda"
+msgstr "鼠标中键"
+
+#: scripts/ui/opciones.gd
+msgid "Rueda"
+msgstr "滚轮"
+
+#: scripts/ui/opciones.gd
+msgid "General"
+msgstr "常规"
+
+#: scripts/ui/opciones.gd
+msgid "Controles"
+msgstr "操作"
+
+#: scripts/ui/opciones.gd
+msgid "Ayudas"
+msgstr "辅助"
+
+#: scripts/ui/ordenador.gd
+msgid "ConserjeOS"
+msgstr "保洁OS"
+
+#: scripts/ui/ordenador.gd
+msgid "CONSERJE  OS 95"
+msgstr "保洁  OS 95"
+
+#: scripts/ui/ordenador.gd
+msgid "C:\\MANTENIMIENTO\\%s"
+msgstr "C:\\维修间\\%s"
+
+#: scripts/ui/ordenador.gd
+msgid "Intercambio · $%d = 1 punto"
+msgstr "兑换 · $%d = 1点"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar 1 punto"
+msgstr "购买1点"
+
+#: scripts/ui/ordenador.gd
+msgid "Cuesta $%d"
+msgstr "花费 $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambiar"
+msgstr "兑换"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia $%d por 1 punto de talento"
+msgstr "用 $%d 兑换1个天赋点"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar %d puntos (todo)"
+msgstr "购买 %d 点（全部）"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar todo lo posible"
+msgstr "能买多少买多少"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas $%d"
+msgstr "需要 $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
+msgstr "把能换的美元都换成天赋点（$%d = 1点）"
+
+#: scripts/ui/ordenador.gd
+msgid "Árbol de talentos · cada punto sube un nivel"
+msgstr "天赋树 · 每点提升一级"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d"
+msgstr "%d / %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
+msgstr "%s分支：已投入 %d / %d 点。点击查看天赋树。"
+
+#: scripts/ui/ordenador.gd
+msgid "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "每投入一点提升一级。想进入下一层级，先把它要求的天赋点满。"
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "存下的美元"
+
+#: scripts/ui/ordenador.gd
+msgid "Puntos de talento"
+msgstr "天赋点"
+
+#: scripts/ui/ordenador.gd
+msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
+msgstr "本局的 $%d 会在结束时存下：通关大楼全部保留，倒下则保留一半。"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo"
+msgstr "需要先点满%s"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "已满级！%s"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo!"
+msgstr "已满级！"
+
+#: scripts/ui/ordenador.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "当前：%s · 再加一点：%s"
+
+#: scripts/ui/ordenador.gd
+msgid "MÁX"
+msgstr "满级"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo. %s"
+msgstr "需要先点满%s。%s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Te hace falta 1 punto."
+msgstr "%s。需要1点天赋点。"
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Pulsa para subirlo (1 punto)."
+msgstr "%s。点击升级（1点）。"
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
+msgstr "钱不够：每点天赋点要花掉存款 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
+msgstr[0] "完成！现在你有 %d 点可以分配。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡%s sube a %d/%d!"
+msgstr "%s升到 %d/%d！"
+
+#: scripts/ui/ordenador.gd
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
+msgstr "出售的都是普通品质。身上带的东西倒下就会丢失：存进工作间的储物箱（通关大楼后会自动存入）。每种最多带两件：你手上那件会换到备用；如果已经有备用的，它会留在地上。"
+
+#: scripts/ui/ordenador.gd
+msgid "LA LLEVAS"
+msgstr "已持有"
+
+#: scripts/ui/ordenador.gd
+msgid "GRATIS"
+msgstr "免费"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrojables · de uno en uno, hasta los que caben"
+msgstr "投掷物 · 一个一个买，能装多少买多少"
+
+#: scripts/ui/ordenador.gd
+msgid "AL MÁXIMO"
+msgstr "已满"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %s Cada uno, $%d."
+msgstr "%s：%s每个 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "选一件武器：用存下的美元支付。"
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %d/s · Depósito %d s"
+msgstr "伤害 %d/秒 · 储罐 %d 秒"
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %s"
+msgstr "伤害 %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s ataques/s"
+msgstr "%s 次攻击/秒"
+
+#: scripts/ui/ordenador.gd
+msgid "Cargador %d"
+msgstr "弹匣 %d"
+
+#: scripts/ui/ordenador.gd
+msgid "rayo continuo"
+msgstr "持续放电"
+
+#: scripts/ui/ordenador.gd
+msgid "chorro continuo"
+msgstr "持续喷射"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s que se llena con %s."
+msgstr "%s：每秒伤害 %d，%s，储罐可用 %d 秒，用%s加满。"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s."
+msgstr "%s：每秒伤害 %d，%s，储罐可用 %d 秒。"
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d x%d perdigones"
+msgstr "伤害 %d × %d 颗弹丸"
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d"
+msgstr "伤害 %d"
+
+#: scripts/ui/ordenador.gd
+msgid "%.1f ataques por segundo"
+msgstr "每秒攻击 %.1f 次"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d que se llena con %s"
+msgstr "弹匣 %d 发，用%s补充"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d"
+msgstr "弹匣 %d 发"
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s."
+msgstr "你已经有%s了。"
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "你的备用里已经有%s了：去物品栏装备它吧。"
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: te faltan $%d."
+msgstr "钱不够：还差 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "购买成功！%s拿到手上；%s换到备用。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "购买成功！%s拿到手上；%s留在地上：你已经带了两件。"
+
+#: scripts/ui/ordenador.gd
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "“%s”挑战中不能携带投掷物。"
+
+#: scripts/ui/ordenador.gd
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "%s放不下了：你的几组都满了，也没有空位再放一组。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "购买成功！你现在带着 %d 个%s。"
+
+#: scripts/ui/ordenador.gd
+msgid "Logros conseguidos"
+msgstr "已达成成就"
+
+#: scripts/ui/ordenador.gd
+msgid "Premios por cobrar"
+msgstr "待领取奖励"
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "为本局选一个挑战。完成时会弹出提示；回到这里领取奖励。"
+
+#: scripts/ui/ordenador.gd
+msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
+msgstr "本局开启了辅助（选项 → 辅助）：无法获得成就。已经获得的成就会保留，奖励也能领取。"
+
+#: scripts/ui/ordenador.gd
+msgid "COBRAR $%d"
+msgstr "领取 $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "HECHO"
+msgstr "已完成"
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por encima de un logro para ver cómo vas."
+msgstr "移到成就上可查看进度。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Conseguido! Pulsa para cobrar $%d."
+msgstr "已达成！点击领取 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "Conseguido y cobrado."
+msgstr "已达成并领取。"
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Aún no lo has conseguido."
+msgstr "奖励：$%d。尚未达成。"
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (en una partida)."
+msgstr "奖励：$%d。进度 %d / %d（单局）。"
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (sumando partidas)."
+msgstr "奖励：$%d。进度 %d / %d（累计）。"
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d."
+msgstr "奖励：$%d。进度 %d / %d。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
+msgstr "已领取 $%d！现在可以用来买天赋点或武器了。"
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "VD-7档案"
+
+#: scripts/ui/ordenador.gd
+msgid "%d / %d páginas"
+msgstr "%d / %d 页"
+
+#: scripts/ui/ordenador.gd
+msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
+msgstr "你找到的每一页，不管在哪栋楼哪一层，都会永久保存在这里。"
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d"
+msgstr "第 %d 页"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrancada"
+msgstr "缺失"
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: %s. La llevaba %s."
+msgstr "%s，第 %d 页：%s。持有者：%s。"
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: aún no la has encontrado (%s)."
+msgstr "%s，第 %d 页：尚未找到（%s）。"
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por las páginas para leerlas."
+msgstr "移到各页上即可阅读。"
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d"
+msgstr "第 %d 期"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin emitir"
+msgstr "未播出"
+
+#: scripts/ui/ordenador.gd
+msgid "¡NUEVA!"
+msgstr "新！"
+
+#: scripts/ui/ordenador.gd
+msgid "Completa %s."
+msgstr "通关%s。"
+
+#: scripts/ui/ordenador.gd
+msgid "Sigue buscando páginas del dosier VD-7."
+msgstr "继续寻找VD-7档案的页面。"
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: aún no ha salido. %s"
+msgstr "第 %d 期：尚未播出。%s"
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
+msgstr "第 %d 期：“%s”。点击跳过或重播。"
+
+#: scripts/ui/ordenador.gd
+msgid "%s, con %s. Pasa por las emisiones para verlas."
+msgstr "%s，主播%s。移到各期上即可观看。"
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos"
+msgstr "物品"
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario"
+msgstr "图鉴"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s：已找到 %d / %d 件物品。"
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier"
+msgstr "档案"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s：档案 %d / %d 页。"
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario · %d / %d"
+msgstr "图鉴 · %d / %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin ver"
+msgstr "未遇见"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: sale en %s."
+msgstr "%s：出现在%s。"
+
+#: scripts/ui/ordenador.gd
+msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
+msgstr "一个你还没遇到过的敌人。在游戏中见到的敌人都会记录在这里。"
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "你找到的或遇到的都会永久记录在这里。移到卡片上即可查看。"
+
+#: scripts/ui/ordenador.gd
+msgid "Apartamentos y centro"
+msgstr "公寓楼和购物中心"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d / %d 页，来自%s。去“档案.TXT”里阅读。"
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d · %s"
+msgstr "第 %d 页 · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos · %s"
+msgstr "物品 · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s (sin encontrar) · %s"
+msgstr "%s（未找到）· %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Sale en: %s"
+msgstr "出现在：%s"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "你还没遇到过它。"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Puntos e\n"
+"intercambio"
+msgstr ""
+"天赋点\n"
+"兑换"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"de armas"
+msgstr ""
+"武器\n"
+"商店"
+
+#: scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "成就"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Dosier\n"
+"VD-7"
+msgstr ""
+"VD-7\n"
+"档案"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias"
+msgstr "新闻"
+
+#: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "关机"
+
+#: scripts/ui/ordenador.gd
+msgid "PUNTOS.EXE"
+msgstr "天赋点.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "ARMAS.EXE"
+msgstr "武器.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "LOGROS.EXE"
+msgstr "成就.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "DOSIER.TXT"
+msgstr "档案.TXT"
+
+#: scripts/ui/ordenador.gd
+msgid "CANAL8.TV"
+msgstr "8频道.TV"
+
+#: scripts/ui/ordenador.gd
+msgid "COLECCION.EXE"
+msgstr "收藏.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "Compra de puntos e intercambio"
+msgstr "天赋点购买与兑换"
+
+#: scripts/ui/ordenador.gd
+msgid "Tienda de armas"
+msgstr "武器商店"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias de Canal 8"
+msgstr "8频道新闻"
+
+#: scripts/ui/ordenador.gd
+msgid "Colecciones y bestiario"
+msgstr "收藏品和图鉴"
+
+#: scripts/ui/ordenador.gd
+msgid "A distancia · llenas, y con munición de reserva"
+msgstr "远程 · 满弹，并附带备用弹药"
+
+#: scripts/ui/ordenador.gd
+msgid "Especiales · llenas; van en el hueco de las de A distancia"
+msgstr "特殊 · 满装；占用远程武器的格子"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Noticias\n"
+"¡NUEVAS!"
+msgstr ""
+"新闻\n"
+"有更新！"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Colecciones\n"
+"¡NUEVO!"
+msgstr ""
+"收藏品\n"
+"有新的！"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Logros\n"
+"¡COBRAR!"
+msgstr ""
+"成就\n"
+"可领取！"
+
+#: scripts/ui/tactil.gd
+msgid "Gira el móvil para jugar mejor"
+msgstr "把手机横过来玩更顺手"
+
+#: scripts/ui/taquilla.gd
+msgid "Taquilla de Johnny"
+msgstr "Johnny的储物柜"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes: %s"
+msgstr "还没获得：%s"
+
+#: scripts/ui/taquilla.gd
+msgid "Sin efecto especial."
+msgstr "没有特殊效果。"
+
+#: scripts/ui/taquilla.gd
+msgid "Puesta"
+msgstr "已穿上"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes. %s"
+msgstr "还没获得。%s"
+
+#: scripts/ui/taquilla.gd
+msgid "Ya la llevas puesta."
+msgstr "你已经穿着了。"
+
+#: scripts/ui/taquilla.gd
+msgid "Vuelves a ser el conserje de siempre."
+msgstr "你又变回了那个普普通通的清洁工。"
+
+#: scripts/ui/taquilla.gd
+msgid "Te pones: %s. Se queda puesta."
+msgstr "你换上了：%s。会一直穿着。"
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "直播"
+
+#: scripts/ui/tele.gd
+msgid "CANAL 8"
+msgstr "8频道"
+
+#: scripts/ui/tele.gd
+msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
+msgstr "最新消息  ·  %s：“情况已经得到控制”  ·  请勿靠近大楼  ·  "
+
+#: scripts/ui/tutorial.gd
+msgid "¡Nuevo!"
+msgstr "新！"
+
+#: scripts/ui/tutorial.gd
+msgid "Puedes volver a verlo en Tutorial, en el menú principal y en la pausa"
+msgstr "可以在主菜单和暂停菜单的“教程”里重新查看"
+
+#: scripts/ui/tutorial.gd
+msgid "Entendido"
+msgstr "知道了"
+
+#: scripts/zombi_dependienta.gd
+msgid "¡OFERTAS!"
+msgstr "大促销！"
+
+#: scripts/zombi_guardia.gd
+msgid "uf"
+msgstr "呼"
+
+#: scripts/zombi_guardia.gd
+msgid "¡PRIIII!"
+msgstr "嘘——！"

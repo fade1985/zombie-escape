@@ -97,6 +97,14 @@ func _ready() -> void:
 		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-menu.png")
+		if "--letras" in OS.get_cmdline_user_args():   # qué letras de las traducciones no tiene ninguna fuente (pruebas/prueba_letras.gd)
+			PruebaLetras.probar()
+			get_tree().quit()
+			return
+		if "--medidas" in OS.get_cmdline_user_args():   # los textos cortos que se pasan de ancho en cada idioma (pruebas/prueba_letras.gd)
+			PruebaLetras.medidas()
+			get_tree().quit()
+			return
 		if "--idioma" in OS.get_cmdline_user_args():   # solo las pantallas del menú en el idioma de la prueba (pruebas/prueba_idioma.gd)
 			await PruebaIdioma.probar(self)
 			get_tree().quit()

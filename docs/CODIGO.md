@@ -8,7 +8,7 @@ en una línea.
 
 - `project.godot`: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque.
 - `default_bus_layout.tres`: buses de audio. `export_presets.cfg` y `vercel.json`: ver `WEB.md`.
-- `locale/<idioma>.po` (`en`, `pt_BR`, `de`, `fr`): las traducciones (el español es el idioma de origen: cada texto del código es su clave). La
+- `locale/<idioma>.po` (`en`, `pt_BR`, `de`, `fr`, `ru`, `zh_CN`): las traducciones (el español es el idioma de origen: cada texto del código es su clave). La
   carga `project.godot` (`[internationalization]`) y la pone al día `tools/traducciones.py`. Todo en `docs/IDIOMAS.md`.
 
 ## escenas/

@@ -142,10 +142,11 @@ static func nombre_rama(id: String) -> String:
 	return ""
 
 
-# Un número con un decimal como se escribe en el idioma del jugador: 0,5 en español, portugués, alemán y francés y 0.5 en inglés
+# Un número con un decimal como se escribe en el idioma del jugador: 0,5 en español, portugués, alemán, francés y ruso y 0.5
+# en inglés y chino
 static func decimal(x: float) -> String:
 	var texto := str(x)
-	return texto if Idioma.actual == "en" else texto.replace(".", ",")
+	return texto if Idioma.actual in ["en", "zh_CN"] else texto.replace(".", ",")
 
 
 # Puntos puestos en un talento

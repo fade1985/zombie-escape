@@ -19,9 +19,10 @@ signal cambiado
 
 const ORIGEN := "es"
 # Los idiomas del juego: [código, cómo se escribe en su propio idioma]
-const IDIOMAS := [["es", "Español"], ["en", "English"], ["pt_BR", "Português (BR)"], ["de", "Deutsch"], ["fr", "Français"]]   # no-tr
+const IDIOMAS := [["es", "Español"], ["en", "English"], ["pt_BR", "Português (BR)"], ["de", "Deutsch"], ["fr", "Français"],   # no-tr
+	["ru", "Русский"], ["zh_CN", "简体中文"]]   # no-tr
 # El idioma del sistema (OS.get_locale_language) → el del juego; los que no están, inglés
-const DEL_SISTEMA := {"es": "es", "pt": "pt_BR", "de": "de", "fr": "fr"}
+const DEL_SISTEMA := {"es": "es", "pt": "pt_BR", "de": "de", "fr": "fr", "ru": "ru", "zh": "zh_CN"}
 
 var actual := ORIGEN
 # Solo en las pruebas con otro idioma: los textos que se han pedido y no están traducidos (se cuentan al cerrar)
@@ -65,6 +66,7 @@ func poner(codigo: String, guardar := true) -> void:
 	var antes := actual
 	actual = codigo
 	TranslationServer.set_locale(codigo)
+	Tema.poner_fuentes()   # las letras de reserva (cirílico, chino) según el idioma
 	if guardar and not Captura.activa():
 		Guardado.cambiar(func(g): g.ajustes.idioma = codigo)
 	if codigo != antes:

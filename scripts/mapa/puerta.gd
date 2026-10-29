@@ -29,6 +29,10 @@ const CARTELES_POR_IDIOMA := {
 		preload("res://assets/sprites/cartel-planta-2-de.png"), preload("res://assets/sprites/cartel-planta-3-de.png")],
 	"fr": [preload("res://assets/sprites/cartel-planta-0-fr.png"), preload("res://assets/sprites/cartel-planta-1-fr.png"),
 		preload("res://assets/sprites/cartel-planta-2-fr.png"), preload("res://assets/sprites/cartel-planta-3-fr.png")],
+	"ru": [preload("res://assets/sprites/cartel-planta-0-ru.png"), preload("res://assets/sprites/cartel-planta-1-ru.png"),
+		preload("res://assets/sprites/cartel-planta-2-ru.png"), preload("res://assets/sprites/cartel-planta-3-ru.png")],
+	"zh_CN": [preload("res://assets/sprites/cartel-planta-0-zh_CN.png"), preload("res://assets/sprites/cartel-planta-1-zh_CN.png"),
+		preload("res://assets/sprites/cartel-planta-2-zh_CN.png"), preload("res://assets/sprites/cartel-planta-3-zh_CN.png")],
 }
 # La salida de incendios del fondo del pasillo (las escaleras, en el muro de la derecha): una hoja de chapa roja metida en el
 # hueco, vista de canto desde arriba, con su barra antipánico larga sobresaliendo hacia el pasillo y las escaleras detrás.

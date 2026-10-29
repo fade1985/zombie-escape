@@ -16,7 +16,8 @@ from PIL import Image
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPRITES = os.path.join(RAIZ, "assets", "sprites")
 FILAS = range(2, 7)   # las cinco filas de la palabra
-PALABRAS = {"en": "FLOOR", "pt_BR": "ANDAR", "de": "ETAGE", "fr": "ETAGE"}
+# (en chino no hay palabra: el cartel lleva solo el número; en ruso, letras cirílicas, que se dibujan igual)
+PALABRAS = {"en": "FLOOR", "pt_BR": "ANDAR", "de": "ETAGE", "fr": "ETAGE", "ru": "ЭТАЖ", "zh_CN": ""}
 LETRAS = {
     "A": ["###", "#.#", "###", "#.#", "#.#"],
     "D": ["##.", "#.#", "#.#", "#.#", "##."],
@@ -28,7 +29,11 @@ LETRAS = {
     "O": ["###", "#.#", "#.#", "#.#", "###"],
     "R": ["##.", "#.#", "##.", "#.#", "#.#"],
     "T": ["###", ".#.", ".#.", ".#.", ".#."],
+    "Э": ["###", "..#", ".##", "..#", "###"],
+    "Ж": ["#.#", "###", ".#.", "###", "#.#"],
 }
+LETRAS["Т"] = LETRAS["T"]   # (la T y la A del cirílico se dibujan igual que las latinas)
+LETRAS["А"] = LETRAS["A"]
 
 for idioma, palabra in PALABRAS.items():
     for n in range(4):

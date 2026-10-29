@@ -540,6 +540,15 @@ func pintar_ficha() -> void:
 		if not b[3] and b[0] != "destruir":   # (sin atajo: no se destruye nada sin querer)
 			atajos["X" if b[0] == "tirar" else "Y"] = Idioma.t("tirar") if b[0] == "tirar" else Idioma.minusculas(b[1], true)
 	botones.position = Vector2(666, 578 - botones.get_combined_minimum_size().y) - ORIGEN
+	# Si en este idioma lo que hace (más largo que en español: ruso, alemán) llegaría a los botones, se achica la letra
+	# (hasta 12) hasta que quepa
+	var libre := (578.0 - botones.get_combined_minimum_size().y) - (104.0 + caja.get_combined_minimum_size().y - nota.get_combined_minimum_size().y) - 4.0
+	var cortes := TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE   # (los del texto que se parte solo)
+	var tam := 16
+	while tam > 12 and Tema.FUENTE.get_multiline_string_size(texto[0], HORIZONTAL_ALIGNMENT_LEFT, ANCHO_FICHA, tam, -1, cortes).y > libre:
+		tam -= 1
+	if tam < 16:
+		nota.add_theme_font_size_override("font_size", tam)
 	pintar_ayuda(atajos)
 
 
@@ -592,7 +601,14 @@ func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String) 
 	dibujo(grande, icono, Vector2(108, 108), 12.0)
 	espacio(caja, 4)
 	renglon(caja, nombre, Color("#e6dec8")).theme_type_variation = "Titulo"
-	renglon(caja, que_es, Tema.GRIS)
+	# El «qué es» va en una sola línea: si en este idioma no cabe a tamaño 16 (ruso: «Дальний бой · Необычное · В руках»),
+	# se achica la letra (hasta 12) en vez de pasar a dos líneas, que taparían lo de debajo
+	var linea := renglon(caja, que_es, Tema.GRIS)
+	var tam := 16
+	while tam > 12 and Tema.FUENTE.get_string_size(que_es, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x > ANCHO_FICHA:
+		tam -= 1
+	if tam < 16:
+		linea.add_theme_font_size_override("font_size", tam)
 
 
 # La ficha de un arma ("puesta": la de la mano; si no, la de repuesto): si es de fuego, lo que le queda en el cargador

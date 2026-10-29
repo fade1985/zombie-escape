@@ -6,7 +6,7 @@
 # Las fotos llevan texto del juego dibujado: las de cada idioma van aparte, en assets/ui/tutorial/<idioma>/<id>.png
 # (ui/tutorial.gd las elige según Idioma.actual y, si falta alguna, usa la de español). Se hacen igual pero con las capturas
 # sacadas con "--lang <idioma>" (o "--ingles") y el idioma como parámetro:  py tools/fotos_tutorial.py de
-# (o  py tools/fotos_tutorial.py de jugar curas). Idiomas: en, pt_BR, de, fr (los de Idioma.IDIOMAS)
+# (o  py tools/fotos_tutorial.py de jugar curas). Idiomas: en, pt_BR, de, fr, ru, zh_CN (los de Idioma.IDIOMAS)
 import os
 import sys
 from PIL import Image
@@ -56,7 +56,7 @@ SIN_TEXTO = ["apagon", "curas", "horda", "incendio", "jugar", "lanzables", "muni
 
 if __name__ == "__main__":
 	args = sys.argv[1:]
-	idiomas = [a for a in args if a in ("en", "pt_BR", "de", "fr")]
+	idiomas = [a for a in args if a in ("en", "pt_BR", "de", "fr", "ru", "zh_CN")]
 	solo = [a for a in args if a not in idiomas]   # (se pueden pedir solo unas: py tools/fotos_tutorial.py jugar curas)
 	if idiomas:
 		SALIDA = os.path.join(SALIDA, idiomas[0])

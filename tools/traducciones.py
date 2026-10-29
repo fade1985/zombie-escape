@@ -36,7 +36,15 @@ IDIOMAS = {
     "pt_BR": {"nombre": "portugués de Brasil", "plural": "nplurals=2; plural=(n > 1);"},
     "de": {"nombre": "alemán", "plural": "nplurals=2; plural=(n != 1);"},
     "fr": {"nombre": "francés", "plural": "nplurals=2; plural=(n > 1);"},
+    "ru": {"nombre": "ruso", "formas": 3,
+           "plural": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"},
+    "zh_CN": {"nombre": "chino simplificado", "formas": 1, "plural": "nplurals=1; plural=0;"},
 }
+
+
+def formas(codigo):
+    """Cuántas formas de plural tiene un idioma (el ruso, 3; el chino, 1; los demás, 2)."""
+    return IDIOMAS[codigo].get("formas", 2)
 
 
 def ruta_po(codigo):
@@ -394,6 +402,7 @@ def cabecera(codigo):
 
 def escribir_po(codigo, textos, previas, conservar):
     salida = [cabecera(codigo)]
+    n_formas = formas(codigo)
     def entrada(t, prev):
         l = []
         if t.archivos:
@@ -403,9 +412,9 @@ def escribir_po(codigo, textos, previas, conservar):
         l.append(linea_po("msgid", t.uno))
         if t.varios:
             l.append(linea_po("msgid_plural", t.varios))
-            formas = prev["tr"] if prev else {}
-            for i in (0, 1):
-                l.append(linea_po("msgstr[%d]" % i, formas.get(i, "")))
+            formas_tr = prev["tr"] if prev else {}
+            for i in range(n_formas):
+                l.append(linea_po("msgstr[%d]" % i, formas_tr.get(i, "")))
         else:
             l.append(linea_po("msgstr", (prev["tr"].get(0, "") if prev else "")))
         return "\n".join(l)
@@ -427,22 +436,22 @@ def trabajar(codigo, textos, sueltos, args):
         for original, nuevo in datos.items():
             ctx, texto = original.split("@@", 1) if ("@@" in original and (original.split("@@", 1)[0], original.split("@@", 1)[1]) in textos) else ("", original)
             for clave in [k for k in textos if k == (ctx, texto)]:
-                formas = [nuevo] if isinstance(nuevo, str) else list(nuevo)
+                valores = [nuevo] if isinstance(nuevo, str) else list(nuevo)
                 prev = previas.setdefault(clave, {"ctx": clave[0], "uno": clave[1], "varios": textos[clave].varios, "tr": {}})
-                for i, f in enumerate(formas):
+                for i, f in enumerate(valores):
                     if not prev["tr"].get(i) or "--pisar" in args:
                         prev["tr"][i] = f
     sin_usar = {k: v for k, v in previas.items() if k not in textos}
     errores, faltan = [], []
     for t in textos.values():
         prev = previas.get(t.clave)
-        formas = prev["tr"] if prev else {}
-        usadas = (0, 1) if t.varios else (0,)
-        if any(not formas.get(i, "") for i in usadas):
+        formas_tr = prev["tr"] if prev else {}
+        usadas = tuple(range(formas(codigo))) if t.varios else (0,)
+        if any(not formas_tr.get(i, "") for i in usadas):
             faltan.append(t); continue
         for i in usadas:
             orig = t.uno if i == 0 else t.varios
-            tr = formas[i]
+            tr = formas_tr[i]
             fo, ft = FORMATO.findall(orig.replace("%%", "")), FORMATO.findall(tr.replace("%%", ""))
             if sorted(fo) != sorted(ft) and not (t.varios and i == 0 and not ft):   # (el singular a veces dice "un": sin número)
                 errores.append("formato distinto (%s → %s): «%s»" % (" ".join(fo) or "-", " ".join(ft) or "-", orig))

@@ -224,9 +224,11 @@ func general() -> void:
 	rotulo_idioma.text = "Idioma / Language"   # no-tr
 	rotulo_idioma.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	contenido.add_child(rotulo_idioma)
-	var fila_idioma := HBoxContainer.new()
-	fila_idioma.alignment = BoxContainer.ALIGNMENT_CENTER
-	fila_idioma.add_theme_constant_override("separation", 6)
+	var fila_idioma := HFlowContainer.new()   # (los botones pasan a otra fila si no caben en el ancho)
+	fila_idioma.alignment = FlowContainer.ALIGNMENT_CENTER
+	fila_idioma.custom_minimum_size.x = 600
+	fila_idioma.add_theme_constant_override("h_separation", 6)
+	fila_idioma.add_theme_constant_override("v_separation", 4)
 	contenido.add_child(fila_idioma)
 	for i in Idioma.IDIOMAS:
 		var b := Button.new()

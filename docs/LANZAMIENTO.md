@@ -21,10 +21,10 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       trajes, eventos) y la voz del juego (historia, noticias, tutoriales, bestiario, supervivientes, gritos de los jefes).
       También el mundo (nombres de planta, sitio y tienda, neones y carteles) y lo dibujado en imágenes (cartel de
       planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado**; falta la revisión del
-      inglés por una persona nativa antes de salir. Hechos también **portugués de Brasil, alemán y francés** (29 oct 2026; cada
-      uno necesita su revisión nativa). Siguientes por peso en Steam: chino simplificado (~22 %) y ruso (~9 %), que necesitan una
-      fuente nueva (la letra del juego no tiene cirílico ni chino), y después turco, polaco, japonés y coreano (`docs/IDIOMAS.md`,
-      «Añadir un idioma»).
+      inglés por una persona nativa antes de salir. Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; cada uno necesita su
+      revisión nativa, sobre todo el chino y el ruso, que son los que más pesan en Steam: ~22 % y ~9 %). Fuentes nuevas para el
+      cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; hay que citarlas en los créditos). Siguientes:
+      turco, polaco, japonés y coreano («Añadir un idioma»).
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
       ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,
       dominios y redes, y hacer logo.

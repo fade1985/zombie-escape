@@ -1,10 +1,10 @@
 # Idiomas · cómo se traduce el juego
 
-El juego está en **español** (idioma de origen) y en **inglés, portugués de Brasil, alemán y francés** (`locale/<código>.po`:
-`en`, `pt_BR`, `de`, `fr`). Se elige en Opciones → General (una fila de botones «Idioma / Language»), se guarda en
-`ajustes.idioma` y, si nunca se ha elegido, manda el idioma del sistema (español, portugués, alemán o francés si el sistema está en
-uno de ellos y, si no, inglés). Para añadir otro: ver «Añadir un idioma». Glosarios de cada uno: `GLOSARIO_EN.md`,
-`GLOSARIO_PT_BR.md`, `GLOSARIO_DE.md` y `GLOSARIO_FR.md`.
+El juego está en **español** (idioma de origen) y en **inglés, portugués de Brasil, alemán, francés, ruso y chino simplificado**
+(`locale/<código>.po`: `en`, `pt_BR`, `de`, `fr`, `ru`, `zh_CN`). Se elige en Opciones → General (una fila de botones «Idioma /
+Language»), se guarda en `ajustes.idioma` y, si nunca se ha elegido, manda el idioma del sistema (el suyo, si es uno de ellos y, si
+no, inglés). Para añadir otro: ver «Añadir un idioma». Glosarios de cada uno: `GLOSARIO_EN.md`, `GLOSARIO_PT_BR.md`,
+`GLOSARIO_DE.md`, `GLOSARIO_FR.md`, `GLOSARIO_RU.md` y `GLOSARIO_ZH_CN.md`.
 
 Cómo va la migración (qué archivos ya están pasados y cuáles faltan): ver el apartado «Estado» al final.
 
@@ -99,16 +99,32 @@ msgstr "Quit"
 - El idioma se puede cambiar con la pantalla abierta: `Idioma.cambiado` avisa. Opciones y el menú principal ya se rehacen;
   el resto de pantallas (pausa, HUD...) se irán conectando al pasarlas.
 
+## Las letras (fuentes)
+
+La letra de la interfaz (`zombie-scape-ui.ttf`) y la de los jefes (Jersey 25) solo traen el alfabeto latino. Las letras que no tienen
+salen de otras, en cadena (`Tema.poner_fuentes`, que `Idioma.poner` llama al cambiar de idioma): letra del juego → Jersey 25 (los
+signos y las vocales con tilde que faltan) → **Ark Pixel de 16 px** (`ark-pixel-16.woff2`: todo el cirílico, a la medida exacta del
+juego, 70 KB) y **Fusion Pixel de 12 px** (`fusion-pixel-12-zh.woff2`: chino simplificado, 1 MB; no es múltiplo de 16 y 32, pero se ve
+bien). La primera de las dos de reserva es la del idioma que se juega (en chino, Fusion; en los demás, Ark); las dos van siempre para que el
+nombre de cada idioma («Русский», «简体中文») se vea en el selector. Las tres fuentes son OFL 1.1: sus licencias
+(`ark-pixel-OFL.txt`, `fusion-pixel-OFL.txt` y `fusion-pixel-licencias/`) van con el juego y hay que citarlas en los créditos.
+La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus traducciones que no tiene ninguna fuente
+(saldrían como un cuadro; en la web no hay letras del sistema).
+
+**Plurales:** cada idioma lleva en `tools/traducciones.py` (`IDIOMAS`) su regla y cuántas formas tiene: dos (los demás), tres (ruso: 1 /
+2-4 / 5+) o ninguna (chino). Un texto con plural se entrega como lista de tantas formas (o como una cadena en chino).
+
 ## Añadir un idioma
 
-1. En `tools/traducciones.py`, `IDIOMAS`: su código de Godot, su nombre y su regla de plural; `py tools/traducciones.py` crea
+1. En `tools/traducciones.py`, `IDIOMAS`: su código de Godot, su nombre, su regla de plural y cuántas formas («formas», si no son dos); `py tools/traducciones.py` crea
    `locale/<código>.po` vacío y `--exportar` saca la lista para quien traduce (con el encargo y las reglas que se dieron a las
    traducciones de pt_BR, de y fr, que valen de modelo: nombres propios fijos, `%d`/`%s` en el mismo orden, tamaños de las cajas,
    trato al jugador, glosario del idioma).
 2. En `idioma.gd`: `IDIOMAS` (código y cómo se escribe en su idioma) y `DEL_SISTEMA` (el idioma del sistema que le corresponde).
 3. En `project.godot`, `locale/translations`: añadir `res://locale/<código>.po`.
-4. Mirar que la fuente (`tema.gd`) tiene las letras de ese idioma: la letra de la interfaz no tiene todas las vocales con tilde, pero la
-   de los jefes, que le sirve de respaldo, sí; los alfabetos no latinos (ruso, chino...) necesitan otra fuente. Si cambia la
+4. Mirar que alguna fuente tiene las letras de ese idioma (`--letras`): la letra de la interfaz no tiene todas las vocales con tilde, pero la
+   de los jefes, que le sirve de respaldo, sí; el cirílico y el chino, las de reserva (ver «Las letras»); otros alfabetos (japonés, coreano,
+   árabe...) necesitan otra fuente en `Tema`. Si cambia la
    gramática (el género, `de` + artículo, mayúsculas de los nombres), mirar los sitios que arman frases con nombres traducidos:
    `Idioma.minusculas()` ya deja los nombres alemanes con su mayúscula.
 5. Lo dibujado en imágenes: la palabra del cartel de planta en `tools/cartel_planta_idiomas.py` (`PALABRAS`) y su juego de carteles en

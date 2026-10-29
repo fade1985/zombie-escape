@@ -22,10 +22,41 @@ const FUENTE := preload("res://assets/fuentes/zombie-scape-ui.ttf")
 # La letra de los nombres de los jefes (su barra de vida y su presentación): Jersey 25, de Google Fonts, con licencia
 # OFL (jersey-25-OFL.txt, que va con ella). Es pixel art a 25 (un píxel de su dibujo, uno de pantalla) y a 50
 const FUENTE_JEFE := preload("res://assets/fuentes/jersey-25.ttf")
+# Las letras que esas dos no traen salen de otra (poner_fuentes): el cirílico del ruso, de Ark Pixel de 16 px (la misma
+# medida que la letra del juego; OFL, ark-pixel-OFL.txt), y el chino, de Fusion Pixel de 12 px (OFL, fusion-pixel-OFL.txt y
+# fusion-pixel-licencias/). Las dos, sin suavizado (en su .import)
+const FUENTE_CIRILICO := preload("res://assets/fuentes/ark-pixel-16.woff2")
+const FUENTE_CHINO := preload("res://assets/fuentes/fusion-pixel-12-zh.woff2")
 const BOTON := preload("res://assets/ui/boton-oscuro.png")
 const PANEL := preload("res://assets/ui/panel-oscuro.png")
 
 static var _tema: Theme
+
+
+# Las letras de reserva para lo que la letra del juego no tiene: la cadena es letra del juego → Jersey 25 (los signos) → la
+# de ese idioma. Detrás de Jersey 25 van la del cirílico y la del chino; la primera de las dos es la del idioma que se juega
+# (en chino, el chino; en ruso y en los demás, el cirílico), porque las dos traen casi todo y manda la primera. Las dos van
+# siempre (el nombre de cada idioma en el selector de Opciones, «Русский» o «中文», se tiene que ver en cualquier idioma).
+# Se llama al montar el tema y cada vez que cambia el idioma (idioma.gd)
+static func poner_fuentes() -> void:
+	var extra: Array[Font] = []
+	if Idioma.actual == "zh_CN":
+		extra.append(FUENTE_CHINO)
+		extra.append(FUENTE_CIRILICO)
+	else:
+		extra.append(FUENTE_CIRILICO)
+		extra.append(FUENTE_CHINO)
+	var jefe: FontFile = FUENTE_JEFE   # (con la constante directamente no deja asignar)
+	jefe.fallbacks = extra
+
+
+# ¿Tiene alguna de las fuentes del juego esa letra? (la prueba --letras comprueba así todas las traducciones)
+static func tiene_letra(codigo: int) -> bool:
+	var a: FontFile = FUENTE
+	var b: FontFile = FUENTE_JEFE
+	var c: FontFile = FUENTE_CIRILICO
+	var d: FontFile = FUENTE_CHINO
+	return a.has_char(codigo) or b.has_char(codigo) or c.has_char(codigo) or d.has_char(codigo)
 
 
 static func crear() -> Theme:
@@ -47,6 +78,7 @@ static func crear() -> Theme:
 	respaldo.spacing_bottom = -1
 	var respaldos: Array[Font] = [respaldo]
 	fuente.fallbacks = respaldos
+	poner_fuentes()
 	t.default_font = fuente
 	t.default_font_size = 16
 
