@@ -15,8 +15,9 @@
 #     Sonido.musica("menu")       # "menu" (los menús y explorar las plantas), "jefe" o "" (se apaga despacio)
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 #
-# Cuando el juego no se ve (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana sin foco en el
-# ordenador) se quita todo el sonido, y vuelve al volver: si no, en el móvil la música seguía sonando fuera del juego.
+# Cuando el juego no se ve o no se está usando (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana
+# sin foco, en el ordenador y en el navegador) se quita todo el sonido, y vuelve al volver: si no, la música seguía
+# sonando fuera del juego.
 extends Node
 
 const MEZCLA := 22050        # muestras por segundo: de sobra para estos pitidos y gasta la mitad
@@ -155,13 +156,18 @@ func _ready() -> void:
 		silenciar(true)
 	musica_si(Guardado.cargar().ajustes.musica)
 	if OS.has_feature("web"):
-		# en el navegador, lo fiable es su aviso de "la página se ha ocultado" (cambiar de app, bloquear el móvil...)
+		# en el navegador, sus avisos de "la página se ha ocultado" (cambiar de pestaña, bloquear el móvil...) y de
+		# "la página ha perdido el foco": con la ventana detrás de otra o en otra pantalla, la página no está oculta
+		# y la música seguía (como en el JS, que también miraba el foco)
 		al_ocultar = JavaScriptBridge.create_callback(_visibilidad)
 		JavaScriptBridge.get_interface("document").addEventListener("visibilitychange", al_ocultar)
+		var ventana := JavaScriptBridge.get_interface("window")
+		ventana.addEventListener("blur", al_ocultar)
+		ventana.addEventListener("focus", al_ocultar)
 
 
 func _visibilidad(_args: Array) -> void:
-	fuera = bool(JavaScriptBridge.eval("document.hidden", true))
+	fuera = bool(JavaScriptBridge.eval("document.hidden || !document.hasFocus()", true))
 	aplicar_silencio()
 
 

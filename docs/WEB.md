@@ -36,6 +36,10 @@
 
 ## Lo que suena distinto en la web
 
+- Se quita todo el sonido cuando la página se oculta (otra pestaña, móvil bloqueado) **y también cuando pierde el
+  foco** (otra ventana delante, otro programa, el panel del navegador de la app de Claude): con la ventana detrás de
+  otra o en otra pantalla, la página no cuenta como oculta y la música seguía sonando (29 oct). Lo hace `_visibilidad`
+  de `sonido.gd`, con los avisos `visibilitychange`, `blur` y `focus` del navegador.
 - En la web, Godot hace sonar cada sonido directamente en el navegador. Al llegar al final de una canción en bucle,
   no vuelve al principio sino al punto donde se empezó a tocar. Por eso, en la web la música empieza siempre al
   principio (`poner_cancion` de `sonido.gd`); en el ordenador, en un compás al azar. Antes, en la web se repetía
