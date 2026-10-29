@@ -12,6 +12,11 @@
   Lo hace un robot de GitHub, `.github/workflows/web.yml`: descarga Godot, exporta el juego y lo sube a Vercel. Tarda
   unos minutos; se ve en la pestaña **Actions** del repositorio (y ahí está el botón **Run workflow** para publicar a
   mano). Si el push solo cambia notas (`docs/` o archivos `.md`), no publica.
+- **Versión de prueba de una rama:** al subir cualquier otra rama (menos `main`), el mismo robot exporta el juego y lo
+  sube a Vercel como versión de prueba, con su propio enlace, sin tocar la web de siempre. El enlace sale al final del
+  robot en **Actions** (el resumen, «Publicado (preview, rama …)») y en Vercel → el proyecto → **Deployments**. Las
+  versiones de prueba de Vercel piden entrar con la cuenta de Vercel (Settings → Deployment Protection). `main` no
+  publica nada, para no gastar minutos de GitHub con cada commit.
 - **`web/` no va en git** (solo su `.gdignore`): antes cada exportación guardaba otros 20 MB en el historial.
 - El robot necesita tres **secretos** del repositorio (GitHub → Settings → Secrets and variables → Actions):
   - `VERCEL_TOKEN`: una llave de Vercel (Account Settings → Tokens).
