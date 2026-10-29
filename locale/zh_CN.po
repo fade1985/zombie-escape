@@ -4739,6 +4739,38 @@ msgid "Volverán a salir desde el principio"
 msgstr "会从头重新显示"
 
 #: scripts/ui/opciones.gd
+msgid "Hecho con Godot Engine"
+msgstr "使用 Godot Engine 制作"
+
+#: scripts/ui/opciones.gd
+msgid "Tipografías"
+msgstr "字体"
+
+#: scripts/ui/opciones.gd
+msgid "Herramientas"
+msgstr "工具"
+
+#: scripts/ui/opciones.gd
+msgid "Dibujos hechos con PixelLab"
+msgstr "美术使用 PixelLab 制作"
+
+#: scripts/ui/opciones.gd
+msgid "Programado y traducido con ayuda de Claude"
+msgstr "借助 Claude 编程和翻译"
+
+#: scripts/ui/opciones.gd
+msgid "Licencias"
+msgstr "许可证"
+
+#: scripts/ui/opciones.gd
+msgid "Volver a los créditos"
+msgstr "返回制作人员"
+
+#: scripts/ui/opciones.gd
+msgid "Los textos legales, tal como se publicaron (en inglés)"
+msgstr "法律文本原文（英文）"
+
+#: scripts/ui/opciones.gd
 msgid "Teclado y ratón"
 msgstr "键盘和鼠标"
 
@@ -5081,6 +5113,10 @@ msgstr "操作"
 #: scripts/ui/opciones.gd
 msgid "Ayudas"
 msgstr "辅助"
+
+#: scripts/ui/opciones.gd
+msgid "Créditos"
+msgstr "制作人员"
 
 #: scripts/ui/ordenador.gd
 msgid "ConserjeOS"

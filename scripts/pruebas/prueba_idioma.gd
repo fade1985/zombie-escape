@@ -1,8 +1,10 @@
 # La prueba del idioma (-- --captura --idioma, con --ingles para verlo en inglés o --lang pt_BR / de / fr para los demás): las pantallas del menú en el idioma de la
-# prueba (el menú, Opciones con sus tres pestañas y "Elige edificio") y el cambio de idioma en caliente desde Opciones.
+# prueba (el menú, Opciones con sus cuatro pestañas y las licencias de Créditos, y "Elige edificio") y el cambio de idioma en
+# caliente desde Opciones. De las licencias dice cuánto texto son y si a alguna letra le falta fuente.
 # Con --alerta 3 --reto, "Elige edificio" sale con el selector de alerta y la tarjeta del reto. Al acabar, si algún texto
 # no tiene traducción, idioma.gd lo cuenta al cerrar ("TEXTOS SIN TRADUCIR AL IDIOMA ...").
-# Fotos: captura-idioma-opciones.png, -controles.png, -ayudas.png, -cambio.png y captura-idioma-edificios.png.
+# Fotos: captura-idioma-opciones.png, -controles.png, -ayudas.png, -creditos.png, -licencias.png, -cambio.png y
+# captura-idioma-edificios.png.
 class_name PruebaIdioma
 
 
@@ -29,6 +31,23 @@ static func probar(menu: Control) -> void:
 	o.ver("ayudas")
 	await arbol.create_timer(0.3).timeout
 	Captura.foto("captura-idioma-ayudas.png")
+	o.ver("creditos")
+	await arbol.create_timer(0.3).timeout
+	Captura.foto("captura-idioma-creditos.png")
+	# Las licencias: cuánto texto es, cuánto se tarda en ponerlo y si alguna de sus letras no la tiene ninguna fuente
+	var antes_ms := Time.get_ticks_msec()
+	o.ver("licencias")
+	var ms := Time.get_ticks_msec() - antes_ms
+	var licencias := Opciones.texto_de_licencias()
+	var sin_letra := {}
+	for i in licencias.length():
+		if licencias.unicode_at(i) > 32 and not Tema.tiene_letra(licencias.unicode_at(i)):
+			sin_letra[licencias[i]] = true
+	print("Licencias: %d letras, puestas en %d ms · sin letra en las fuentes: %s (esperado: ninguna) · con Jersey 25: %s, con la de Godot: %s" % [
+		licencias.length(), ms, "ninguna" if sin_letra.is_empty() else " ".join(sin_letra.keys()),
+		"Soft Type" in licencias, "Godot Engine contributors" in licencias])
+	await arbol.create_timer(0.3).timeout
+	Captura.foto("captura-idioma-licencias.png")
 	# El cambio de idioma en caliente: la pantalla se monta otra vez, en la misma pestaña, y no queda ninguna vieja
 	o.ver("general")
 	var antes := Idioma.actual

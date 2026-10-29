@@ -90,7 +90,7 @@ msgstr "Quit"
 
 ## Probar
 
-- `-- --captura --idioma` saca el menú, Opciones (sus tres pestañas), el cambio de idioma en caliente y «Elige edificio»
+- `-- --captura --idioma` saca el menú, Opciones (sus cuatro pestañas y las licencias de Créditos), el cambio de idioma en caliente y «Elige edificio»
   (`prueba_idioma.gd`); con `--ingles` (o `--lang pt_BR`, `--lang de`, `--lang fr`), en ese idioma. Con `--alerta 3 --reto`,
   «Elige edificio» sale con la alerta y el reto.
 - **Cualquier otra prueba, con `--ingles` o `--lang X`**, corre en ese idioma. Al cerrar, `idioma.gd` escribe `TEXTOS SIN TRADUCIR AL
@@ -134,7 +134,8 @@ trazos salían irregulares, y su altura de línea (22) rompía las cajas; Ark Pi
 español, inglés, portugués, alemán y francés no hay más reserva que la Jersey 25. El nombre de cada idioma en el selector de
 Opciones («Русский», «简体中文») se escribe con su propia letra (`Tema.fuente_del_idioma`, una `override` del botón), en cualquier
 idioma. Las tres fuentes se usan con la OFL 1.1 (Unifont tiene doble licencia, OFL o GPL con excepción de fuentes): sus licencias
-(`ark-pixel-OFL.txt`, `unifont-OFL.txt` y `jersey-25-OFL.txt`) van con el juego y hay que citarlas en los créditos. Las dos de reserva van
+(`ark-pixel-OFL.txt`, `unifont-OFL.txt` y `jersey-25-OFL.txt`) van con el juego (se exportan: `include_filter` de `export_presets.cfg`) y se citan en Opciones → Créditos, cuyo botón Licencias
+las enseña enteras (`opciones.gd`, `texto_de_licencias`). Las dos de reserva van
 sin suavizado (ajustes de su `.import`: `antialiasing=0`, `hinting=0`, `subpixel_positioning=0`). La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus
 traducciones que no tiene ninguna fuente (saldrían como un cuadro) y cuánto mide una línea con la letra de cada idioma.
 

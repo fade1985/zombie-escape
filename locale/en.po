@@ -4753,6 +4753,38 @@ msgid "Volverán a salir desde el principio"
 msgstr "They will show again from the start"
 
 #: scripts/ui/opciones.gd
+msgid "Hecho con Godot Engine"
+msgstr "Made with Godot Engine"
+
+#: scripts/ui/opciones.gd
+msgid "Tipografías"
+msgstr "Fonts"
+
+#: scripts/ui/opciones.gd
+msgid "Herramientas"
+msgstr "Tools"
+
+#: scripts/ui/opciones.gd
+msgid "Dibujos hechos con PixelLab"
+msgstr "Art made with PixelLab"
+
+#: scripts/ui/opciones.gd
+msgid "Programado y traducido con ayuda de Claude"
+msgstr "Programmed and translated with help from Claude"
+
+#: scripts/ui/opciones.gd
+msgid "Licencias"
+msgstr "Licenses"
+
+#: scripts/ui/opciones.gd
+msgid "Volver a los créditos"
+msgstr "Back to credits"
+
+#: scripts/ui/opciones.gd
+msgid "Los textos legales, tal como se publicaron (en inglés)"
+msgstr "The legal texts, exactly as published"
+
+#: scripts/ui/opciones.gd
 msgid "Teclado y ratón"
 msgstr "Keyboard and mouse"
 
@@ -5095,6 +5127,10 @@ msgstr "Controls"
 #: scripts/ui/opciones.gd
 msgid "Ayudas"
 msgstr "Assists"
+
+#: scripts/ui/opciones.gd
+msgid "Créditos"
+msgstr "Credits"
 
 #: scripts/ui/ordenador.gd
 msgid "ConserjeOS"

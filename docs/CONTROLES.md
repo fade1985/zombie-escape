@@ -23,8 +23,10 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 - **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
   apague luego; los ya conseguidos se conservan y se cobran; y *Tutoriales*, con el botón *Que vuelvan a salir
-  todos*) y la
-  lista de controles (pulsar la casilla y luego la tecla; si ya la usaba otra acción, se intercambian).
+  todos*), la
+  lista de controles (pulsar la casilla y luego la tecla; si ya la usaba otra acción, se intercambian) y la pestaña
+  **Créditos** (con qué se ha hecho el juego y las letras de otros; su botón *Licencias* enseña los textos legales enteros,
+  que se bajan con la rueda, las flechas o la cruceta).
 - **Tutoriales:** la primera vez que se encuentra algo nuevo (empezar, el pasillo, la primera pelea, recargar, perder
   un tercio, la primera cura, objeto, billete, pieza o arma, el primer jefe, la mutación, el ascensor, un
   superviviente, cada evento sorpresa, el ordenador, la taquilla, el banco, el baúl, el centro comercial, sus peligros

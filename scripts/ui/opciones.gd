@@ -1,4 +1,4 @@
-# La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene tres pestañas:
+# La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene cuatro pestañas:
 #   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), el modo de atacar (se guarda), la
 #     música, el sonido y la pantalla completa. En el móvil, además, el tamaño y la transparencia de los botones
 #     táctiles y la vibración (se guardan).
@@ -8,6 +8,8 @@
 #   - Ayudas: para que más gente pueda terminar los edificios (vida entera, pistola sin fin, lanzar apuntando solo). Se guardan y se
 #     notan al momento, también desde la pausa (johnny.gd y hud.gd las miran con Guardado.ajuste). Y los
 #     tutoriales (tutoriales.gd): si salen sus ventanas, y que vuelvan a salir todos.
+#   - Créditos: quién ha hecho el juego (AUTORES), con qué, y las letras que no son nuestras (LETRAS_DE_OTROS). Su botón
+#     Licencias enseña los textos legales enteros: los de esas letras y los de Godot y sus piezas (texto_de_licencias).
 # Se maneja igual que los otros menús: ratón, flechas + Intro o mando (A pulsar, B volver).
 #
 # Se usa así:  Opciones.abrir(self, lo_que_tapa, johnny)  (johnny puede ser null en el menú principal).
@@ -17,6 +19,17 @@ class_name Opciones
 extends CanvasLayer
 
 signal cerrado
+
+# Pestaña Créditos. Quién ha hecho el juego, en una línea («Un juego de …»): vacía, no sale (29 oct 2026: el dueño la
+# rellenará cuando lo tengan claro)
+const AUTORES := ""
+# Las letras que no son nuestras: [nombre, autores, su licencia]. La licencia (SIL OFL 1.1) pide citarlas y que su texto vaya
+# con el juego: los .txt se exportan (export_presets.cfg, include_filter) y el botón Licencias los enseña
+const LETRAS_DE_OTROS := [
+	["Jersey 25", "The Soft Type Project Authors", "res://assets/fuentes/jersey-25-OFL.txt"],   # no-tr
+	["Ark Pixel", "TakWolf", "res://assets/fuentes/ark-pixel-OFL.txt"],   # no-tr
+	["GNU Unifont", "Roman Czyborra, Paul Hardy et al.", "res://assets/fuentes/unifont-OFL.txt"],   # no-tr
+]
 
 # Todos los textos de las tablas de aquí abajo se traducen al enseñarlos (Idioma.t); las marcas son para
 # tools/traducciones.py (docs/IDIOMAS.md)
@@ -159,7 +172,7 @@ func construir(cual := "general") -> void:
 	pestanas.alignment = BoxContainer.ALIGNMENT_CENTER
 	pestanas.add_theme_constant_override("separation", 10)
 	columna.add_child(pestanas)
-	for p in [["general", "General"], ["controles", "Controles"], ["ayudas", "Ayudas"]]:   # [traducir]
+	for p in [["general", "General"], ["controles", "Controles"], ["ayudas", "Ayudas"], ["creditos", "Créditos"]]:   # [traducir]
 		var b := Button.new()
 		b.text = Idioma.t(p[1])
 		b.name = p[0]
@@ -187,8 +200,8 @@ func cerrar() -> void:
 func ver(cual: String) -> void:
 	pestana = cual
 	for b: Button in pestanas.get_children():
-		# La pestaña en la que estás, con las letras amarillas
-		if b.name == cual:
+		# La pestaña en la que estás, con las letras amarillas (las licencias son parte de Créditos)
+		if b.name == cual or (cual == "licencias" and b.name == "creditos"):
 			b.add_theme_color_override("font_color", Tema.AMARILLO)
 			b.add_theme_color_override("font_focus_color", Tema.AMARILLO)
 			b.add_theme_color_override("font_hover_color", Tema.AMARILLO)
@@ -204,6 +217,11 @@ func ver(cual: String) -> void:
 		general()
 	elif cual == "ayudas":
 		ayudas()
+	elif cual == "creditos":
+		creditos()
+	elif cual == "licencias":
+		licencias()
+		return   # (el foco va a su botón de volver a los créditos)
 	else:
 		controles()
 	(pestanas.get_node(cual) as Button).grab_focus.call_deferred()
@@ -302,6 +320,67 @@ func explicar(texto: String) -> Label:
 	l.text = texto
 	contenido.add_child(l)
 	return l
+
+
+func creditos() -> void:
+	if AUTORES != "":
+		var quien := Label.new()
+		quien.text = AUTORES
+		quien.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		contenido.add_child(quien)
+	apartado(Idioma.t("Hecho con Godot Engine"))
+	explicar("godotengine.org")   # no-tr
+	apartado(Idioma.t("Tipografías"))
+	for l in LETRAS_DE_OTROS:
+		explicar("%s · %s" % [l[0], l[1]])
+	apartado(Idioma.t("Herramientas"))
+	explicar(Idioma.t("Dibujos hechos con PixelLab"))
+	explicar(Idioma.t("Programado y traducido con ayuda de Claude"))
+	var boton := opcion(Idioma.t("Licencias"))
+	boton.pressed.connect(func(): ver("licencias"))
+
+
+# El título de un apartado de los créditos, en amarillo
+func apartado(texto: String) -> void:
+	var l := Label.new()
+	l.text = texto
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.add_theme_color_override("font_color", Tema.AMARILLO)
+	contenido.add_child(l)
+
+
+# Las licencias enteras, en una caja con barra: es mucho texto (unas 110.000 letras), y la caja solo dibuja lo que se ve. Con el
+# foco en ella, las flechas y la cruceta del mando la bajan y la suben
+func licencias() -> void:
+	var volver := opcion(Idioma.t("Volver a los créditos"))
+	volver.pressed.connect(func(): ver("creditos"))
+	volver.grab_focus.call_deferred()
+	explicar(Idioma.t("Los textos legales, tal como se publicaron (en inglés)"))
+	var caja := RichTextLabel.new()
+	caja.custom_minimum_size = Vector2(620, 280)
+	caja.focus_mode = Control.FOCUS_ALL
+	caja.add_theme_color_override("default_color", Tema.GRIS)
+	caja.text = texto_de_licencias()
+	contenido.add_child(caja)
+
+
+# Las licencias: las de las letras de otros (sus .txt) y la de Godot, con las de las piezas de otros que lleva dentro (Godot las
+# da: Engine.get_license_text, get_copyright_info y get_license_info). En inglés, como se publicaron
+static func texto_de_licencias() -> String:
+	var partes := PackedStringArray(["Zombie Escape uses these fonts, under the SIL Open Font License 1.1:"])   # no-tr
+	for l in LETRAS_DE_OTROS:
+		partes.append(FileAccess.get_file_as_string(l[2]).strip_edges())
+	partes.append("This game uses Godot Engine (godotengine.org), available under the following license:\n\n"   # no-tr
+		+ Engine.get_license_text().strip_edges())
+	var piezas := PackedStringArray()
+	for c: Dictionary in Engine.get_copyright_info():
+		for p: Dictionary in c.parts:
+			piezas.append("%s\n(c) %s\nLicense: %s" % [c.name, "\n(c) ".join(p.copyright), p.license])   # no-tr
+	partes.append("Godot Engine includes these third-party components:\n\n" + "\n\n".join(piezas))   # no-tr
+	var textos := Engine.get_license_info()
+	for nombre: String in textos:
+		partes.append("License: %s\n\n%s" % [nombre, textos[nombre].strip_edges()])   # no-tr
+	return "\n\n= = = = =\n\n".join(partes)
 
 
 # Un botón que, a cada pulsación, pasa al siguiente valor de la lista, lo guarda en los ajustes y se lo

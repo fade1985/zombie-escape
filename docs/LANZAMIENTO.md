@@ -23,7 +23,7 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado**; falta la revisión del
       inglés por una persona nativa antes de salir. Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; cada uno necesita su
       revisión nativa, sobre todo el chino y el ruso, que son los que más pesan en Steam: ~22 % y ~9 %). Fuentes nuevas para el
-      cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; hay que citarlas en los créditos). Siguientes:
+      cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; citadas en los créditos). Siguientes:
       turco, polaco, japonés y coreano («Añadir un idioma»).
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
       ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,
@@ -67,7 +67,9 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       formulario fiscal de Valve (W-8BEN); el IVA lo gestiona Valve. Revisar licencias de todo lo que no es
       nuestro: términos comerciales de PixelLab, fuentes, sonidos y su origen (la letra de los jefes, Jersey 25,
       es OFL: se puede vender, pero su licencia `assets/fuentes/jersey-25-OFL.txt` va con el juego y sale en los
-      créditos). Clasificación por edades gratis desde Steam (cuestionario IARC). Créditos en el menú.
+      créditos). Clasificación por edades gratis desde Steam (cuestionario IARC). Créditos: hechos (29 oct), en
+      Opciones → Créditos, con las letras, Godot y las herramientas (PixelLab, Claude) y todas las licencias; falta la línea
+      de quién ha hecho el juego (`AUTORES`, en `opciones.gd`).
 - [ ] **Precio y salida.** Con dos edificios, un Early Access honesto es defendible; si se sale completo, mejor
       con tres. Descuento de salida del 10–20 %.
 
