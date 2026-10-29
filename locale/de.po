@@ -4693,6 +4693,10 @@ msgid "Seguir"
 msgstr "Weiter"
 
 #: scripts/ui/opciones.gd
+msgid "Temblor de pantalla"
+msgstr "Bildschirmwackeln"
+
+#: scripts/ui/opciones.gd
 msgid "Móvil"
 msgstr "Handy"
 
@@ -4979,6 +4983,14 @@ msgstr "Groß"
 #: scripts/ui/opciones.gd
 msgid "Muy grande"
 msgstr "Sehr groß"
+
+#: scripts/ui/opciones.gd
+msgid "Suave"
+msgstr "Sanft"
+
+#: scripts/ui/opciones.gd
+msgid "Sin temblor"
+msgstr "Kein Wackeln"
 
 #: scripts/ui/opciones.gd
 msgid "Select"

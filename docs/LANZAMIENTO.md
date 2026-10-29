@@ -48,8 +48,9 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       has muerto y qué has desbloqueado, con "Otra vez" a un clic; menú con algo de vida.
 - [ ] **La música procedural a largo plazo.** Comprobar que no cansa tras diez horas; si cansa, temas fijos para
       menú, jefes y final.
-- [ ] **Accesibilidad.** Sacudida de pantalla y parpadeos ajustables (aviso de fotosensibilidad), texto legible a
-      1280×800 (Steam Deck), charcos verdes y rojos distinguibles sin color, opción de ralentizar el juego.
+- [ ] **Accesibilidad.** ~~Sacudida de pantalla~~ (hecha el 29 oct: «Temblor de pantalla» en Opciones → General,
+      `temblor.gd`; quita también el parón de los golpes) y parpadeos ajustables (aviso de fotosensibilidad), texto
+      legible a 1280×800 (Steam Deck), charcos verdes y rojos distinguibles sin color, opción de ralentizar el juego.
 - [ ] **Robustez.** Guardar al cambiar de planta para no perder la partida si se cierra; rendimiento con hordas
       grandes en un portátil flojo; cero errores en consola en una partida entera; archivo de registro que el
       jugador pueda mandar cuando algo falle; pruebas automáticas (`--captura`) antes de cada versión.

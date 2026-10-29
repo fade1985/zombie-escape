@@ -4707,6 +4707,10 @@ msgid "Seguir"
 msgstr "Дальше"
 
 #: scripts/ui/opciones.gd
+msgid "Temblor de pantalla"
+msgstr "Дрожание экрана"
+
+#: scripts/ui/opciones.gd
 msgid "Móvil"
 msgstr "Телефон"
 
@@ -4993,6 +4997,14 @@ msgstr "Большой"
 #: scripts/ui/opciones.gd
 msgid "Muy grande"
 msgstr "Огромный"
+
+#: scripts/ui/opciones.gd
+msgid "Suave"
+msgstr "Слабое"
+
+#: scripts/ui/opciones.gd
+msgid "Sin temblor"
+msgstr "Без дрожания"
 
 #: scripts/ui/opciones.gd
 msgid "Select"

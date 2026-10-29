@@ -122,8 +122,9 @@ en una línea.
   (lo que luce a oscuras), `particulas.gd`, `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
   cuerpo a cuerpo dura la `parada` de cada arma en `armas.gd`, más si mata o es crítico y más aún el golpe de gracia; hay
   también al matar a un jefe, en las explosiones que pillan a alguien y cuando le hacen daño a Johnny. No se suman, tras
-  uno hay un respiro sin otro corto y la pausa lo corta; la música y el fundido a negro no se frenan. Se prueba con
-  `--sensacion`).
+  uno hay un respiro sin otro corto y la pausa lo corta; la música y el fundido a negro no se frenan. El ajuste
+  «Temblor de pantalla» de Opciones (`ajustes.temblor`: 1, 0,5 o 0; `intensidad()`) multiplica el temblor y lo que dura
+  cada parón: con 0 no hay ninguno de los dos. Se prueba con `--sensacion` y `--temblor`).
 - `persona.gd`: una persona dibujada con formas, para quien no tenga hoja de PixelLab.
 
 **Partida y progreso**
@@ -221,7 +222,8 @@ en una línea.
   Durito, y lo que sobra del golpe que lo rompe, de la vida.
 - `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
   jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»; si se cambia el idioma en Opciones, se
-  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; la pestaña Créditos, con `AUTORES` y
+  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el temblor de
+  pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`

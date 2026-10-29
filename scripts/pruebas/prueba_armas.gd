@@ -1,7 +1,7 @@
 # Pruebas de las armas: la sala de pruebas (--armas), el lanzallamas, el lanza ácido y la pistola
 # eléctrica (--lanzallamas, --desintegrador, --pistola-electrica) y el fuego y el ácido en los enemigos (--tintes,
-# --fuego-acido), los trucos de las Épicas (--epicas) y que golpear se note (--sensacion). Parte de la cadena de la partida
-# de prueba (ver partida_prueba.gd).
+# --fuego-acido), los trucos de las Épicas (--epicas), que golpear se note (--sensacion) y el ajuste del temblor
+# (--temblor). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_jefes.gd"
 
 
@@ -1554,6 +1554,56 @@ func probar_sensacion() -> void:
 		Sonido.ultimo.erase("pistola_seca")
 		Sonido.tocar("pistola_seca")
 	print("Versiones grabadas: pistola %d, golpe %d (esperado: 3, 1)" % [Sonido.grabados.pistola_seca.size(), Sonido.grabados.golpe.size()])
+	get_tree().quit()
+
+
+# Con "--captura --temblor": el ajuste «Temblor de pantalla» de Opciones (pestaña General). Cuenta: que el botón pasa de
+# Normal a Suave, a Sin temblor y vuelve a Normal, y que cada paso se guarda (1, 0,5 y 0); y, con cada valor, cuánto
+# tiembla la cámara con un temblor de 10 y cuánto dura el parón de un golpe de 0,1 s (Temblor.temblar y Temblor.parar:
+# 10 y 100 ms, 5 y 50 ms, 0 y ninguno). Foto: captura-temblor-opciones.png (con «Sin temblor»). Se cierra
+func probar_temblor() -> void:
+	var o := Opciones.abrir(self, null, johnny)
+	await get_tree().process_frame
+	var boton: Button = null
+	for b in o.contenido.get_children():
+		if b is Button and b.text.begins_with(Idioma.t("Temblor de pantalla")):
+			boton = b
+	if boton == null:
+		print("ERROR: en Opciones no está el botón del temblor de pantalla")
+		get_tree().quit()
+		return
+	var pasos := []
+	for i in 4:   # Normal -> Suave -> Sin temblor -> Normal
+		if i > 0:
+			boton.pressed.emit()
+		pasos.append([boton.text, Guardado.cargar().ajustes.temblor])
+		if i == 2:
+			await get_tree().process_frame
+			Captura.foto("captura-temblor-opciones.png")
+	print("El botón al pulsarlo: %s (esperado: Normal 1, Suave 0.5, Sin temblor 0, Normal 1)" % [pasos])
+	o.cerrar()
+	# en el móvil, General lleva cuatro filas más: que la pantalla de Opciones siga cabiendo en los 640 de alto
+	Tactil.activo = true
+	var movil := Opciones.abrir(self, null, johnny)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var alto: float = movil.fondo.get_child(0).get_child(0).size.y
+	Captura.foto("captura-temblor-movil.png")
+	print("En el móvil el panel de Opciones mide %d de alto (esperado: 640 como mucho)" % roundi(alto))
+	movil.cerrar()
+	Tactil.activo = false
+	for escala in [1.0, 0.5, 0.0]:
+		Guardado.cambiar(func(g): g.ajustes.temblor = escala)
+		Temblor.cantidad = 0.0
+		Temblor.terminar_paron()
+		Temblor.acabo = -Temblor.RESPIRO   # (sin el respiro de un parón anterior)
+		Temblor.temblar(10.0)
+		Temblor.parar(0.1)
+		print("Con el temblor a %s: la cámara tiembla %s (esperado: %s) · el parón dura %d ms (esperado: %d)" % [
+			escala, Temblor.cantidad, 10.0 * escala, Temblor.hasta - Temblor.empezo if Temblor.hasta > 0 else 0, roundi(100.0 * escala)])
+	Temblor.cantidad = 0.0
+	Temblor.terminar_paron()
+	Guardado.cambiar(func(g): g.ajustes.temblor = 1.0)
 	get_tree().quit()
 
 

@@ -4693,6 +4693,10 @@ msgid "Seguir"
 msgstr "Continue"
 
 #: scripts/ui/opciones.gd
+msgid "Temblor de pantalla"
+msgstr "Screen shake"
+
+#: scripts/ui/opciones.gd
 msgid "Móvil"
 msgstr "Mobile"
 
@@ -4979,6 +4983,14 @@ msgstr "Large"
 #: scripts/ui/opciones.gd
 msgid "Muy grande"
 msgstr "Extra large"
+
+#: scripts/ui/opciones.gd
+msgid "Suave"
+msgstr "Reduced"
+
+#: scripts/ui/opciones.gd
+msgid "Sin temblor"
+msgstr "Off"
 
 #: scripts/ui/opciones.gd
 msgid "Select"

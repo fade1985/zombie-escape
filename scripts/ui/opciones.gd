@@ -1,6 +1,7 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene cuatro pestañas:
 #   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), el modo de atacar (se guarda), la
-#     música, el sonido y la pantalla completa. En el móvil, además, el tamaño y la transparencia de los botones
+#     música, el sonido, la pantalla completa y el temblor de pantalla (Normal, Suave o Sin temblor: lo que tiembla la
+#     cámara y lo que se frena el juego al golpear, temblor.gd; se guarda). En el móvil, además, el tamaño y la transparencia de los botones
 #     táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
@@ -78,6 +79,8 @@ const TACTIL := [
 const TAMANOS := [[0.8, "Pequeño"], [1.0, "Normal"], [1.2, "Grande"], [1.4, "Muy grande"]]
 const OPACIDADES := [[1.0, "100 %"], [0.75, "75 %"], [0.5, "50 %"], [0.3, "30 %"]]
 const SI_NO := [[true, "Sí"], [false, "No"]]
+# El temblor de pantalla (temblor.gd): por cuánto se multiplica el temblor de la cámara y el parón de los golpes
+const TEMBLORES := [[1.0, "Normal"], [0.5, "Suave"], [0.0, "Sin temblor"]]
 
 const BOTONES_MANDO := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -228,6 +231,17 @@ func ver(cual: String) -> void:
 
 
 func general() -> void:
+	var fuera := contenido
+	if Tactil.activo:   # en el móvil hay más filas de las que caben en la pantalla: todo va en una caja con barra, como Controles
+		var caja := ScrollContainer.new()
+		caja.custom_minimum_size = Vector2(620, 330)
+		caja.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		caja.follow_focus = true
+		fuera.add_child(caja)
+		contenido = VBoxContainer.new()
+		contenido.add_theme_constant_override("separation", 8)
+		contenido.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		caja.add_child(contenido)
 	var modo: String = Guardado.cargar().ajustes.modo
 	var ayuda := Label.new()
 	ayuda.theme_type_variation = "Sub"
@@ -280,6 +294,7 @@ func general() -> void:
 		sonido.text = texto_sonido())
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		opcion(Idioma.t("Pantalla completa")).pressed.connect(Tactil.pantalla_completa)
+	rotar(Idioma.t("Temblor de pantalla"), "temblor", TEMBLORES)
 	if Tactil.activo:
 		var titulo := Label.new()
 		titulo.theme_type_variation = "Sub"
@@ -289,6 +304,7 @@ func general() -> void:
 		rotar(Idioma.t("Tamaño de los botones"), "tactil_tamano", TAMANOS)
 		rotar(Idioma.t("Transparencia"), "tactil_opacidad", OPACIDADES)
 		rotar(Idioma.t("Vibración"), "vibracion", SI_NO)
+	contenido = fuera
 
 
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo

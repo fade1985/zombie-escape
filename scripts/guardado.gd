@@ -53,8 +53,9 @@ const NUEVO := {
 	# vida_entera, pistola_sin_fin y lanzar_solo: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
 	# lanzables.gd las miran) · tutoriales: si salen las ventanas de los tutoriales (tutoriales.gd)
 	# idioma: "es" o "en", el elegido en Opciones (idioma.gd); "" = nunca se ha elegido: el del sistema
+	# temblor: cuánto tiembla la pantalla y cuánto se frena el juego al golpear (temblor.gd): 1 normal, 0,5 suave, 0 nada
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
-		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true,
+		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true, "temblor": 1.0,
 		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": ""},
 }
 

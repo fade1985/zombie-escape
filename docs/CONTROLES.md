@@ -20,7 +20,8 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
-- **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, la pestaña **Ayudas** (*Vida entera*, *Pistola sin
+- **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
+  tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
   apague luego; los ya conseguidos se conservan y se cobran; y *Tutoriales*, con el botón *Que vuelvan a salir
   todos*), la
@@ -144,7 +145,8 @@ soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventari
 de ratón. En táctil la pantalla se agranda sin redondear.
 
 En Opciones → General, apartado **Móvil** (solo en táctil): tamaño de los botones (0,8 a 1,4), transparencia (100 a
-30 %) y vibración (35 ms al recibir un golpe y al esquivar; en iPhone no hay).
+30 %) y vibración (35 ms al recibir un golpe y al esquivar; en iPhone no hay). En el móvil, esa pestaña va dentro de
+una caja con barra (no cabe entera en los 640 de alto).
 
 Probarlo en el navegador integrado: menos de 768 de ancho (p. ej. 740×360) y toques con `TouchEvent` desde
 JavaScript (los clics llegan como ratón).

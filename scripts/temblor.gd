@@ -7,6 +7,8 @@
 #     canción, el fundido a negro de las puertas) va con set_ignore_time_scale
 #   - Temblor.desplazamiento: lo que la cámara se aparta de Johnny aparte del temblor (la presentación del jefe la
 #     lleva hasta él, ui/presentacion.gd); se suma siempre, en unidades pares para que el pixel art no se emborrone
+#   - El ajuste «Temblor de pantalla» de Opciones (Guardado, ajustes.temblor: 1, 0,5 o 0) multiplica la fuerza de
+#     temblar y lo que dura cada parón; con 0 no hay ni temblor ni parón. Se nota al momento, también desde la pausa
 # Es un autoload: vale desde cualquier sitio y mueve la cámara que esté en uso (la de Johnny).
 # Los números son los del JS: golpe 3 + zombis tocados, matar 3, que te peguen 9, escopeta 4, explosión 14...
 extends Node
@@ -29,19 +31,25 @@ func _ready() -> void:
 
 
 func temblar(fuerza: float) -> void:
-	cantidad = maxf(cantidad, fuerza)
+	cantidad = maxf(cantidad, fuerza * intensidad())
 
 
 func parar(segundos: float) -> void:
 	var ahora := Time.get_ticks_msec()
-	if get_tree().paused:
+	var escala := intensidad()
+	if get_tree().paused or escala <= 0.0:
 		return
 	if hasta == 0:
-		if segundos <= CORTO and ahora - acabo < RESPIRO:
+		if segundos <= CORTO and ahora - acabo < RESPIRO:   # (lo corto o largo que es, sin contar el ajuste)
 			return
 		empezo = ahora
-	hasta = maxi(hasta, empezo + roundi(segundos * 1000.0))
+	hasta = maxi(hasta, empezo + roundi(segundos * escala * 1000.0))
 	Engine.time_scale = LENTO
+
+
+# Lo que se deja temblar y frenar, el ajuste de Opciones: de 1 (normal) a 0 (nada)
+func intensidad() -> float:
+	return clampf(float(Guardado.ajuste("temblor")), 0.0, 1.0)
 
 
 func terminar_paron() -> void:
