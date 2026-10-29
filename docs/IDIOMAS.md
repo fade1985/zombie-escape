@@ -98,6 +98,15 @@ msgstr "Quit"
   español, aunque el guardado esté en otro idioma.
 - El idioma se puede cambiar con la pantalla abierta: `Idioma.cambiado` avisa. Opciones y el menú principal ya se rehacen;
   el resto de pantallas (pausa, HUD...) se irán conectando al pasarlas.
+- **Que el idioma elegido se recuerda** (probado el 29 oct 2026, bien): sin `--captura`, `Idioma.poner` escribe `ajustes.idioma` y manda
+  al volver a abrir el juego (también con siete idiomas seguidos); sin elección manda el del sistema (`DEL_SISTEMA`; uno que no está en
+  la lista, inglés), y un código guardado que no existe se ignora. Para repetirlo sin tocar el guardado del dueño: un `override.cfg` en
+  la raíz con `[application]` → `config/use_custom_user_dir=true` y `config/custom_user_dir_name="ZombieEscape_TestIdioma"` (así
+  `user://` es otra carpeta) y, en el mismo archivo, un autoload provisional (`[autoload]` → `Prueba="*res://_tmp.gd"`) que espere un
+  segundo, abra `Opciones.abrir(menu, menu.centro)`, pulse el botón del idioma (`b.pressed.emit()`) y cierre; luego se abre otra vez
+  y se mira `Idioma.actual`. Se arranca con `--headless --path .` (sin `--captura`) y, **al acabar, se borran `override.cfg`, el
+  script y la carpeta `%APPDATA%\ZombieEscape_TestIdioma`**. No sirven `-s` (no carga los autoloads a tiempo) ni `--language` (cambia
+  el idioma de Godot, no el que lee `OS.get_locale_language()`).
 
 ## Las letras (fuentes)
 
