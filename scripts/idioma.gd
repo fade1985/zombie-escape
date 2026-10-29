@@ -99,6 +99,13 @@ func minusculas(texto: String, solo_inicial := false) -> String:
 	return texto.left(1).to_lower() + texto.substr(1) if solo_inicial else texto
 
 
+# Pone el punto decimal de un número ya escrito como se hace en el idioma: coma en español, portugués, alemán, francés y ruso, y punto en
+# inglés y chino. Para los decimales que salen de un `%.1f` (se formatea el número y después se pasa por aquí; el texto de la frase
+# lleva `%s`, nunca `%.1f`: si no, el punto se escaparía)
+func puntuar(numero: String) -> String:
+	return numero if actual in ["en", "zh_CN"] else numero.replace(".", ",")
+
+
 # Traduce un texto que cambia con la cantidad: el singular y el plural en español, y cuántos hay
 func n(uno: String, varios: String, cantidad: int, contexto := "") -> String:
 	if actual == ORIGEN:

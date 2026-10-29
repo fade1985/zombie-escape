@@ -4555,8 +4555,8 @@ msgid "Crítico"
 msgstr "暴击率"
 
 #: scripts/ui/menus.gd
-msgid "%s · daño %d · %.1f/s"
-msgstr "%s · 伤害 %d · %.1f/秒"
+msgid "%s · daño %d · %s/s"
+msgstr "%s · 伤害 %d · %s/秒"
 
 #: scripts/ui/menus.gd
 msgid "Molotovs: %d"
@@ -5268,8 +5268,8 @@ msgid "daño %d"
 msgstr "伤害 %d"
 
 #: scripts/ui/ordenador.gd
-msgid "%.1f ataques por segundo"
-msgstr "每秒攻击 %.1f 次"
+msgid "%s ataques por segundo"
+msgstr "每秒攻击 %s 次"
 
 #: scripts/ui/ordenador.gd
 msgid "cargador de %d que se llena con %s"

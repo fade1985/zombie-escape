@@ -111,11 +111,11 @@ func pausa(partida: Node, foco := "") -> void:
 	lado.add_child(izquierda)
 	var w: Dictionary = johnny.arma()
 	dato(izquierda, "corazon", Idioma.t("Vida"), "%d / %d" % [johnny.vida, s.vida_max])
-	dato(izquierda, "fuerza", Idioma.t("Daño"), "x%.2f" % s.dano)
-	dato(izquierda, "cafe", Idioma.t("Velocidad de ataque"), "x%.2f" % s.ritmo)
-	dato(izquierda, "guantes", Idioma.t("Alcance"), "x%.2f" % (s.alcance * (s.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)))
+	dato(izquierda, "fuerza", Idioma.t("Daño"), "x" + Idioma.puntuar("%.2f" % s.dano))
+	dato(izquierda, "cafe", Idioma.t("Velocidad de ataque"), "x" + Idioma.puntuar("%.2f" % s.ritmo))
+	dato(izquierda, "guantes", Idioma.t("Alcance"), "x" + Idioma.puntuar("%.2f" % (s.alcance * (s.alcance_cuerpo if w.tipo == "cuerpo" else 1.0))))
 	dato(izquierda, "dash", Idioma.t("Velocidad"), str(roundi(s.velocidad)))
-	dato(izquierda, "casco", Idioma.t("Daño recibido"), "x%.2f" % s.dano_recibido)
+	dato(izquierda, "casco", Idioma.t("Daño recibido"), "x" + Idioma.puntuar("%.2f" % s.dano_recibido))
 	dato(izquierda, "diana", Idioma.t("Crítico"), "%d%%" % roundi(s.critico * 100))
 	var derecha := VBoxContainer.new()
 	lado.add_child(derecha)
@@ -126,7 +126,7 @@ func pausa(partida: Node, foco := "") -> void:
 	for hueco in ["cuerpo", "fuego"]:
 		var id: String = johnny.huecos[hueco]
 		var a: Dictionary = Armas.datos(id)
-		var resumen := Idioma.t("%s · daño %d · %.1f/s") % [Objetos.nombre(id), a.dano * (a.get("perdigones", 1)), a.ritmo]
+		var resumen := Idioma.t("%s · daño %d · %s/s") % [Objetos.nombre(id), a.dano * (a.get("perdigones", 1)), Idioma.puntuar("%.1f" % a.ritmo)]
 		derecha.add_child(Tema.icono_y_texto(Objetos.icono(id), resumen, 20))
 	var lz: Lanzables = partida.lanzables
 	derecha.add_child(Tema.icono_y_texto("molotov", Idioma.t("Molotovs: %d") % lz.total("molotov"), 20))

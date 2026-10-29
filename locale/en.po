@@ -4569,8 +4569,8 @@ msgid "Crítico"
 msgstr "Crit chance"
 
 #: scripts/ui/menus.gd
-msgid "%s · daño %d · %.1f/s"
-msgstr "%s · damage %d · %.1f/s"
+msgid "%s · daño %d · %s/s"
+msgstr "%s · damage %d · %s/s"
 
 #: scripts/ui/menus.gd
 msgid "Molotovs: %d"
@@ -5283,8 +5283,8 @@ msgid "daño %d"
 msgstr "damage %d"
 
 #: scripts/ui/ordenador.gd
-msgid "%.1f ataques por segundo"
-msgstr "%.1f attacks per second"
+msgid "%s ataques por segundo"
+msgstr "%s attacks per second"
 
 #: scripts/ui/ordenador.gd
 msgid "cargador de %d que se llena con %s"

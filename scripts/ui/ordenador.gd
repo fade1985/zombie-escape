@@ -661,7 +661,7 @@ func resumen_corto(w: Dictionary) -> String:
 		return Idioma.t("Daño %d/s · Depósito %d s") % [w.dano, roundi(w.deposito)]
 	var dano := "%d × %d" % [w.dano, w.perdigones] if w.get("perdigones", 1) > 1 else str(w.dano)
 	# (cada dato es un texto entero y se unen con « · »: así cada idioma ordena y escribe el suyo)
-	var partes := [Idioma.t("Daño %s") % dano, Idioma.t("%s ataques/s") % str(w.ritmo).trim_suffix(".0")]
+	var partes := [Idioma.t("Daño %s") % dano, Idioma.t("%s ataques/s") % Idioma.puntuar(str(w.ritmo).trim_suffix(".0"))]
 	if w.tipo == "fuego":
 		partes.append(Idioma.t("Cargador %d") % w.cargador)
 	return " · ".join(PackedStringArray(partes))
@@ -682,7 +682,7 @@ func resumen(w: Dictionary) -> String:
 		partes.append(Idioma.t("daño %d x%d perdigones") % [w.dano, w.perdigones])
 	else:
 		partes.append(Idioma.t("daño %d") % w.dano)
-	partes.append(Idioma.t("%.1f ataques por segundo") % w.ritmo)
+	partes.append(Idioma.t("%s ataques por segundo") % Idioma.puntuar("%.1f" % w.ritmo))
 	if w.tipo == "fuego":
 		if con != "":
 			partes.append(Idioma.t("cargador de %d que se llena con %s") % [w.cargador, con])

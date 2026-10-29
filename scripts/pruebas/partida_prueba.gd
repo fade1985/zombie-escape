@@ -115,6 +115,7 @@
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
 #                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una y ver lo que cambia [prueba_larga.gd]
+#   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
@@ -359,6 +360,9 @@ func empezar_prueba() -> void:
 	elif "--mutaciones" in args:
 		set_process(false)   # sin la prueba larga
 		probar_mutaciones_solo()
+	elif "--pausa" in args:
+		set_process(false)   # sin la prueba larga
+		probar_pausa_y_fin()
 	elif "--latigazos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_latigazos()

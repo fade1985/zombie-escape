@@ -35,8 +35,8 @@ Reglas:
 2. **Plurales y géneros con `Idioma.n`**, no con `"s" if n > 1 else ""`.
 3. **No se traduce lo que no es texto del jugador:** ids, claves, nombres de nodos, rutas, mensajes de `print` (van a la
    consola) y las herramientas internas (el panel F11, `sala_armas.gd` y `scripts/pruebas/`).
-4. **Números con decimales:** el español usa coma y el inglés punto (`0,5` / `0.5`). Si un texto lleva uno, se pone con
-   `%s` y se formatea según `Idioma.actual` (hoy no hay ninguno pasado; se resuelve al llegar al primero).
+4. **Números con decimales:** el español usa coma y el inglés punto (`0,5` / `0.5`). El texto de la frase lleva `%s` (nunca `%.1f`) y
+   el número se escribe aparte con `Idioma.puntuar("%.1f" % x)`: `Idioma.t("%s ataques por segundo") % Idioma.puntuar("%.1f" % x)`.
 5. **Comillas y apóstrofos en inglés: rectos (`"` y `'`)**: a la letra normal le faltan los rizados (`tema.gd`).
 6. **Un texto que cabe justo en español** (botones, tarjetas): el inglés suele salir más corto, pero se mira en una
    captura (`--ingles`) antes de darlo por bueno.
@@ -198,5 +198,8 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
 **Lo que falta:** la revisión de cada idioma por una persona nativa (sobre todo el humor y los gritos). Cómo se dice cada cosa:
 `docs/GLOSARIO_EN.md`, `GLOSARIO_PT_BR.md`, `GLOSARIO_DE.md` y `GLOSARIO_FR.md`.
 
-**Decimales:** `Talentos.decimal(x)` da la coma en español, portugués, alemán y francés y el punto en inglés (de momento solo lo
-usa `talentos.gd`; los `%.1f` de otras pantallas salen con punto en todos los idiomas, como en español).
+**Decimales:** `Idioma.puntuar(texto)` cambia el punto de un número ya escrito: coma en español, portugués, alemán, francés y ruso, y
+punto en inglés y chino. Lo usan los talentos (`Talentos.decimal`), el ordenador (los ataques por segundo de las armas) y la pausa
+(`menus.gd`: «x1,50» y los ataques por segundo). Hasta el 29 oct 2026 estos últimos salían con punto en todos los idiomas, también en
+español («1.6 ataques/s»); ahora el español también escribe «1,6». Las frases que llevaban `%.1f` (`"%.1f ataques por segundo"`,
+`"%s · daño %d · %.1f/s"`) llevan `%s` en el .po de cada idioma. Al escribir un texto con un decimal, usar siempre `puntuar`.
