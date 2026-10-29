@@ -5,11 +5,13 @@
 #   - chispas que caen y rebotan en el suelo, trocitos de pared, polvo y una voluta de humo que sube
 #   - un destello de luz (Luz.destello) en vez del "buffer de luz" del original
 # Todo en cuadraditos de pixel art (2 unidades) y los fundidos con tramado (Bayer 4×4), como el original.
-# De momento es una PRUEBA (--impacto, prueba_armas.gd): solo se usa con Impacto.activo, que el juego deja apagado.
+# Lo sueltan las balas de Johnny y de los supervivientes al dar en una pared (bala.gd, chocar): más pequeño que el
+# original (TALLA) y con los colores de la estela de la bala (morado la Épica, rojizo el crítico...). Se prueba con
+# --impacto (prueba_armas.gd), que lo compara con el de antes (Impacto.activo = false).
 class_name Impacto
 extends Node2D
 
-static var activo := false   # con true, las balas que dan en una pared sueltan este impacto (bala.gd, chocar)
+static var activo := true    # con false, las balas vuelven al impacto de antes (solo para compararlos en la prueba)
 
 const PX := 2.0              # unidades por píxel del dibujo
 const GRAVEDAD := 1900.0
@@ -17,6 +19,8 @@ const RAMPA := [Color("#ffffff"), Color("#fff3a6"), Color("#ffe26b"), Color("#ff
 const HUMO := Color("#6a6278")
 const RAMPA_HUMO := [Color("#7b6f72"), Color("#5d5660"), Color("#433d48"), Color("#2b2630"), Color("#1a171e")]
 const BAYER := [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
+const TALLA := 0.6           # el de una bala (el original es 1: en una pared llena de balas tapaba demasiado)
+const TALLA_PERDIGON := 0.4  # el de un perdigón de la escopeta
 enum { CHISPA, TROZO, POLVO, VOLUTA }
 
 var talla := 1.0             # 0,6 es un toque flojo (perdigón); 1, una bala normal
@@ -31,20 +35,22 @@ var cosas := []              # las chispas, los trozos, el polvo y el humo
 
 
 # Suelta un impacto en "donde" (lo que se ve de la bala), de una bala que iba hacia "angulo" y ha dado en una pared que
-# mira hacia "normal". "altura": lo alto que va la bala sobre el suelo (ahí caen las chispas y los trozos)
+# mira hacia "normal". "altura": lo alto que va la bala sobre el suelo (ahí caen las chispas y los trozos). "rampa_":
+# los colores, de blanco a oscuro (6; sin ella, los naranjas del original)
 static func soltar(desde: Node, donde: Vector2, angulo: float, normal_pared: float, altura: float, superficie: Color,
-		talla_ := 1.0) -> void:
+		talla_ := 1.0, rampa_: Array = RAMPA) -> void:
 	if not desde.is_inside_tree():
 		return
 	var fx := Impacto.new()
 	fx.talla = talla_
+	fx.rampa = rampa_
 	fx.normal = normal_pared
 	fx.suelo = altura
 	fx.z_index = 20   # por encima de los personajes, como las otras partículas
 	fx.position = (donde / PX).round() * PX   # encajado en la cuadrícula del dibujo
 	fx.preparar(angulo, superficie)
 	desde.get_tree().current_scene.add_child(fx)
-	Luz.destello(desde, donde, (22.0 * talla_ + 6.0) * PX, 0.15, 0.9, RAMPA[3])
+	Luz.destello(desde, donde, (22.0 * talla_ + 6.0) * PX, 0.15, 0.9, rampa_[3])
 
 
 func preparar(angulo: float, superficie: Color) -> void:

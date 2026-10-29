@@ -69,14 +69,15 @@ func _physics_process(delta: float) -> void:
 
 
 # Al chocar (bulletImpact del JS): un destello cuadrado y unas chispas del color de la bala que rebotan hacia
-# atrás; contra un muro salta además algo de polvo. Salen a la altura a la que se ve la bala. Si lo atraviesa
-# ("sigue"), las chispas salen pero la bala no se acaba
+# atrás. Contra un muro, en vez de eso, el impacto de Sprite Fusion (impacto.gd). Salen a la altura a la que se ve
+# la bala. Si lo atraviesa ("sigue"), las chispas salen pero la bala no se acaba
 func chocar(pared := false, sigue := false) -> void:
 	var donde := global_position + Vector2(0, -altura)
 	var atras := (-velocidad).angle()
 	var colores := estela()
-	if pared and Impacto.activo:   # (PRUEBA: el impacto de Sprite Fusion, impacto.gd)
-		Impacto.soltar(self, donde, velocidad.angle(), normal_pared.angle(), altura, PARED, 1.0 if radio >= 4.0 else 0.6)
+	if pared and Impacto.activo:   # contra la pared, el impacto de Sprite Fusion (impacto.gd), del color de la estela
+		Impacto.soltar(self, donde, velocidad.angle(), normal_pared.angle(), altura, PARED,
+			Impacto.TALLA if radio >= 4.0 else Impacto.TALLA_PERDIGON, [Color.WHITE] + colores)
 		if not sigue:
 			queue_free()
 		return

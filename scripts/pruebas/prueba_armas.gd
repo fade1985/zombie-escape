@@ -777,7 +777,8 @@ func probar_tintes() -> void:
 # Con "--captura --impacto": el impacto de Sprite Fusion (impacto.gd) junto al de siempre (bala.gd, chocar). En la
 # sala de pruebas, a media luz, una bala de pistola contra la pared de la izquierda: fotos del de siempre y del nuevo en
 # los mismos momentos (captura-impacto-viejo-N.png y captura-impacto-nuevo-N.png: 1 la estrella, 2 las medias lunas y
-# el anillo, 3 las chispas cayendo y 4 el polvo y el humo) y, al final, una ráfaga de perdigones (captura-impacto-rafaga.png)
+# el anillo, 3 las chispas cayendo y 4 el polvo y el humo), una ráfaga de balas y perdigones (captura-impacto-rafaga.png)
+# y los colores de la estela: una crítica (captura-impacto-critico.png) y una de la Épica (captura-impacto-epica.png)
 func probar_impacto() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout
@@ -797,18 +798,18 @@ func probar_impacto() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	Luz.evento = 0.5
 	await get_tree().create_timer(0.8).timeout
-	var ventana := get_viewport().get_screen_transform() * get_viewport().get_canvas_transform()
-	print("Impacto · el choque, en la foto: %s" % (ventana * (pared.position + Vector2(0, -22))).round())
-	var disparar := func(angulo: float, radio := 4.0) -> void:
+	var disparar := func(angulo: float, radio := 4.0, critico := false, epica := false) -> void:
 		var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
 		bala.velocidad = Vector2.from_angle(PI + angulo) * 1400.0
 		bala.radio = radio
+		bala.critico = critico
+		bala.atraviesa = 1 if epica else 0
 		bala.altura = 22.0
 		bala.vida = 1.0
 		johnny.get_parent().add_child(bala)
 		bala.global_position = pared.position + Vector2(30, 0)   # justo delante: da en la pared en el siguiente paso
 	for nuevo in [false, true]:
-		Impacto.activo = nuevo
+		Impacto.activo = nuevo   # (el de antes, solo para compararlos)
 		var nombre := "nuevo" if nuevo else "viejo"
 		disparar.call(0.15)
 		await get_tree().physics_frame
@@ -826,7 +827,12 @@ func probar_impacto() -> void:
 		disparar.call(randf_range(-0.5, 0.5), 3.0 if i % 3 else 4.0)
 		await get_tree().create_timer(0.05).timeout
 	Captura.foto("captura-impacto-rafaga.png")
-	Impacto.activo = false
+	for cual in ["critico", "epica"]:
+		await get_tree().create_timer(1.5).timeout
+		disparar.call(0.15, 4.0, cual == "critico", cual == "epica")
+		await get_tree().create_timer(0.06).timeout
+		Captura.foto("captura-impacto-%s.png" % cual)
+	Impacto.activo = true
 	Luz.evento = 0.0
 	get_tree().quit()
 
