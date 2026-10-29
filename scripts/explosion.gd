@@ -4,6 +4,7 @@
 extends Node2D
 
 const EMPUJE := 170.0 * 2.2   # las explosiones lanzan a los zombis más lejos que un golpe
+const PARADA := 0.06          # segundos que el juego se queda casi parado si pilla a alguien
 
 var radio := 90.0
 var dano := 30
@@ -17,18 +18,23 @@ func _ready() -> void:
 	Sonido.tocar("explosion")
 	Temblor.temblar(14.0)
 	var johnny := get_tree().get_first_node_in_group("jugador")
+	var pilla := false   # si pilla a alguien, el juego se para un instante (Temblor.parar)
 	if a_johnny and johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO:
 		johnny.recibir_dano(dano)
+		pilla = true
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == origen:
 			continue
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() <= radio + zombi.radio:
+			pilla = true
 			var cuanto := dano if dano_zombis < 0 else dano_zombis
 			if zombi is Minijefe:   # la explosión les da de lleno (el escudo del antidisturbios no la para)
 				zombi.recibir_golpe(cuanto, hacia.normalized() * EMPUJE, true)
 			else:
 				zombi.recibir_golpe(cuanto, hacia.normalized() * EMPUJE)
+	if pilla:
+		Temblor.parar(PARADA)
 	# La explosión ilumina toda la zona, y el resplandor del fuego tarda en apagarse
 	Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.4)
 	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)

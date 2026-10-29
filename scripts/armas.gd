@@ -6,6 +6,7 @@
 #   alcance   cuerpo a cuerpo: hasta dónde llega el golpe · de fuego: hasta dónde llega la bala
 #   arco      cuerpo a cuerpo: grados del abanico que barre
 #   empuje    cuánto echa para atrás al zombi (1 = normal)
+#   parada    cuerpo a cuerpo: segundos que el juego se queda casi parado al acertar (Temblor.parar), que el golpe pese
 #   hoja      las animaciones de Johnny con esa arma en la mano
 #   pies      dónde caen los pies de Johnny en su hoja (en píxeles del dibujo): la escopeta es más alta
 #   momento   en qué punto de la animación de golpe llega el arma (lo dice la hoja del juego)
@@ -184,14 +185,14 @@ const DATOS := {
 	# lleva mejor; valoración del equilibrio)
 	"fregona": {
 		"nombre": "Fregona", "tipo": "cuerpo", "dano": 10, "ritmo": 1.8, "alcance": 62.0, "arco": 140.0,   # [traducir]
-		"empuje": 2.0, "momento": 0.333, "pies": Vector2(48, 72),
+		"empuje": 2.0, "parada": 0.05, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-guardia.tres"),
 		"punta": {"s": Vector2(21, -38), "se": Vector2(-18, -36), "e": Vector2(-18, -39), "ne": Vector2(-19, -38),
 			"n": Vector2(-21, -38), "no": Vector2(18, -40), "o": Vector2(18, -39), "so": Vector2(20, -38)},
 	},
 	"bate": {
 		"nombre": "Bate", "tipo": "cuerpo", "dano": 16, "ritmo": 1.6, "alcance": 66.0, "arco": 110.0,   # [traducir]
-		"empuje": 1.5, "momento": 0.333, "pies": Vector2(48, 72),
+		"empuje": 1.5, "parada": 0.07, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-bate.tres"),
 		"punta": {"s": Vector2(-19, -47), "se": Vector2(-17, -46), "e": Vector2(-18, -45), "ne": Vector2(-17, -45),
 			"n": Vector2(17, -48), "no": Vector2(18, -45), "o": Vector2(18, -46), "so": Vector2(19, -46)},
@@ -200,7 +201,7 @@ const DATOS := {
 	# barato a la vez; con 3, 27, algo más que el bate)
 	"cuchillo": {
 		"nombre": "Cuchillo", "tipo": "cuerpo", "dano": 9, "ritmo": 3.0, "alcance": 46.0, "arco": 60.0,   # [traducir]
-		"empuje": 0.5, "momento": 0.333, "pies": Vector2(48, 72),
+		"empuje": 0.5, "parada": 0.03, "momento": 0.333, "pies": Vector2(48, 72),
 		"hoja": preload("res://assets/sprites/conserje-48-cuchillo.tres"),
 		"punta": {"s": Vector2(-10, -14), "se": Vector2(19, -27), "e": Vector2(16, -24), "ne": Vector2(18, -27),
 			"n": Vector2(15, -30), "no": Vector2(-18, -27), "o": Vector2(-16, -28), "so": Vector2(-19, -27)},

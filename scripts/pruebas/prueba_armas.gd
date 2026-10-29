@@ -1,6 +1,7 @@
 # Pruebas de las armas: la sala de pruebas (--armas), el lanzallamas, el lanza ácido y la pistola
 # eléctrica (--lanzallamas, --desintegrador, --pistola-electrica) y el fuego y el ácido en los enemigos (--tintes,
-# --fuego-acido) y los trucos de las Épicas (--epicas). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# --fuego-acido), los trucos de las Épicas (--epicas) y que golpear se note (--sensacion). Parte de la cadena de la partida
+# de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_jefes.gd"
 
 
@@ -1426,3 +1427,147 @@ func pulsar_en_panel(texto: String) -> void:
 			b.pressed.emit()
 			return
 	print("ERROR: en el panel no está el botón «%s»" % texto)
+
+
+# Con "--captura --sensacion": que golpear se note (el parón de Temblor.parar y los sonidos que cambian de Sonido.tocar),
+# en la sala de pruebas con zombis lentos. Cada línea dice lo esperado. Cuenta: lo que dura el parón de un golpe que
+# acierta con cada arma de cuerpo a cuerpo (su "parada"), uno que mata, el golpe de gracia, uno que no acierta (ninguno),
+# que dos golpes seguidos no se suman, el respiro tras un parón, que la pausa lo corta, el de una explosión que pilla a
+# alguien (y el de una que no, ninguno) y el de cuando le hacen daño a Johnny; y, como va sin sonido, el tono y el
+# volumen de cada efecto al sonar varias veces: los que cambian (golpe, porrazo, la voz de la reportera, que más),
+# los fijos (el clic y comprar) y las versiones grabadas (3 de la pistola, que lleva ruido; 1 del golpe). Foto:
+# captura-sensacion.png (el golpe del bate en pleno parón). Se cierra
+func probar_sensacion() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en la foto)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.stats.critico = 0.0   # (sin críticos al azar)
+	johnny.invulnerable = 1000.0   # (que los zombis no le peguen: su parón se mezclaría con el de los golpes)
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	# lo que dura el parón que hay ahora, en milisegundos (0: ninguno)
+	var paron := func() -> int: return Temblor.hasta - Temblor.empezo if Temblor.hasta > 0 else 0
+
+	# 1) un golpe que acierta con cada arma, uno que mata (el bate) y el golpe de gracia (el bate Épico)
+	var duran := []
+	for prueba in ["cuchillo", "fregona", "bate", "mata", "gracia"]:
+		await sin_paron()
+		en_la_mano("bate" if prueba in ["mata", "gracia"] else prueba, 3 if prueba == "gracia" else 0)
+		johnny.gracia = Armas.TRUCO.gracia - 1   # (el siguiente golpe de un arma Épica es el de gracia)
+		var z: Array = zombis_de_prueba([Vector2(0, -50)])
+		if prueba == "mata":
+			z[0].vida = 1
+		await get_tree().create_timer(0.1).timeout
+		if prueba == "bate":
+			johnny.invulnerable = 0.0   # (sin parpadear en la foto; con el juego parado, nadie le pega)
+		johnny.golpear(-PI / 2)
+		duran.append(paron.call())
+		if prueba == "bate":
+			await get_tree().process_frame
+			await get_tree().process_frame
+			Captura.foto("captura-sensacion.png")
+			johnny.invulnerable = 1000.0
+	print("Parón al acertar: cuchillo, fregona, bate, bate que mata y golpe de gracia %s ms (esperado: [30, 50, 70, 100, 120])" % [duran])
+
+	# 2) uno que no acierta (de espaldas al zombi), dos seguidos, el respiro y la pausa
+	await sin_paron()
+	en_la_mano("fregona")
+	var zombi: Node2D = zombis_de_prueba([Vector2(0, -50)])[0]
+	var acertar := func() -> void:   # (el golpe anterior lo ha echado para atrás: vuelta a su sitio y a pegarle)
+		zombi.position = johnny.position + Vector2(0, -50)
+		johnny.golpear(-PI / 2)
+	await get_tree().create_timer(0.1).timeout
+	johnny.golpear(PI / 2)
+	var falla: int = paron.call()
+	acertar.call()
+	var lento := Engine.time_scale
+	acertar.call()
+	print("Sin acertar: parón %d ms (esperado: 0) · al acertar, el juego va a x%s (esperado: x0.03) · dos golpes seguidos: %d ms (esperado: 50, no se suman)" % [
+		falla, lento, paron.call()])
+	await sin_paron(false)
+	acertar.call()
+	var en_respiro: int = paron.call()
+	await get_tree().create_timer(0.2).timeout
+	acertar.call()
+	print("Justo al acabar el parón, otro golpe: %d ms (esperado: 0, es el respiro) · un rato después: %d ms (esperado: 50)" % [
+		en_respiro, paron.call()])
+	get_tree().paused = true
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var cortado := Temblor.hasta == 0 and Engine.time_scale == 1.0
+	await get_tree().create_timer(0.3).timeout
+	Temblor.parar(0.05)
+	print("Con la pausa: el parón se corta %s (esperado: true) · en pausa no empieza otro: %s (esperado: true)" % [
+		cortado, Temblor.hasta == 0 and Engine.time_scale == 1.0])
+	get_tree().paused = false
+
+	# 3) una explosión junto a un zombi y otra sin nadie, lejos de Johnny; y cuando le hacen daño a él
+	var explota := []
+	for junto in [true, false]:
+		await sin_paron()
+		zombis_de_prueba([Vector2(300, -150)])
+		var explosion: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+		explosion.position = johnny.position + (Vector2(330, -150) if junto else Vector2(-400, -150))
+		mapa.add_child(explosion)
+		explota.append(paron.call())
+	await sin_paron()
+	zombis_de_prueba([])
+	johnny.invulnerable = 0.0
+	johnny.recibir_dano(1)
+	var herido: int = paron.call()
+	johnny.invulnerable = 1000.0
+	print("Explosión que pilla a un zombi, y sin nadie: %s ms (esperado: [60, 0]) · le hacen daño a Johnny: %d ms (esperado: 60)" % [
+		explota, herido])
+
+	# 4) los sonidos: el tono (pitch_scale) y el volumen de la voz por la que suena cada vez (sin el "hueco")
+	var tonos := func(nombre: String) -> Array:
+		var lista := []
+		for i in 6:
+			Sonido.ultimo.erase(nombre)
+			Sonido.tocar(nombre)
+			var v: AudioStreamPlayer = Sonido.voces[(Sonido.siguiente + Sonido.VOCES - 1) % Sonido.VOCES]
+			lista.append([snappedf(v.pitch_scale, 0.001), snappedf(v.volume_db, 0.1)])
+		return lista
+	var dentro := func(lista: Array, tono: float) -> bool:
+		return lista.all(func(t): return absf(t[0] - 1.0) <= tono + 0.0001 and absf(t[1]) <= Sonido.VOLUMEN + 0.01) \
+			and lista.any(func(t): return t[0] != lista[0][0])
+	for nombre in ["golpe", "porrazo"]:
+		var lista: Array = tonos.call(nombre)
+		print("Tono y volumen de «%s»: %s · cambian, entre 0.94 y 1.06 y ±1.5 dB: %s (esperado: true)" % [nombre, lista, dentro.call(lista, Sonido.TONO)])
+	var voz: Array = tonos.call("voz")
+	print("Tono de la voz de la reportera: %s · cambia, entre 0.88 y 1.12: %s (esperado: true)" % [voz.map(func(t): return t[0]), dentro.call(voz, 0.12)])
+	for nombre in ["click", "compra"]:
+		var lista: Array = tonos.call(nombre)
+		print("Tono y volumen de «%s»: %s · siempre igual: %s (esperado: true)" % [nombre, lista[0],
+			lista.all(func(t): return t == [1.0, 0.0])])
+	for i in 5:
+		Sonido.ultimo.erase("pistola_seca")
+		Sonido.tocar("pistola_seca")
+	print("Versiones grabadas: pistola %d, golpe %d (esperado: 3, 1)" % [Sonido.grabados.pistola_seca.size(), Sonido.grabados.golpe.size()])
+	get_tree().quit()
+
+
+# Le pone a Johnny en la mano esa arma de cuerpo a cuerpo (llevar_arma solo la deja de repuesto si ya la llevaba)
+func en_la_mano(id: String, calidad := 0) -> void:
+	llevar_arma(id, calidad)
+	johnny.coger(id)
+	if johnny.arma().nombre != Armas.datos(id).nombre:
+		print("ERROR: Johnny no lleva en la mano %s sino %s" % [id, johnny.arma().nombre])
+
+
+# Espera a que no haya parón y, si "respiro", a que pase también su respiro (Temblor.RESPIRO), para empezar limpio
+func sin_paron(respiro := true) -> void:
+	while Temblor.hasta > 0:
+		await get_tree().process_frame
+	if respiro:
+		await get_tree().create_timer(Temblor.RESPIRO / 1000.0 + 0.05).timeout

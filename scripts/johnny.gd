@@ -71,6 +71,9 @@ const ROJO := Color("#ff8a5c")       # el «¡Adrenalina!»
 
 const MIRAR_CERCA := 360.0 # con un arma de cuerpo a cuerpo, a qué distancia empieza a mirar a un zombi
 const EMPUJE := 170.0      # empuje base de un golpe a un zombi normal (el del arma lo multiplica)
+const PARADA_FUERTE := 0.03   # lo que dura de más el parón de un golpe crítico o que mata (el de cada arma, "parada")
+const PARADA_GRACIA := 0.12   # el parón del golpe de gracia (Épica)
+const PARADA_DANO := 0.06     # el parón cuando le hacen daño a Johnny
 const PATADA := 6.0        # disparando andando: lo que el disparo empuja a Johnny hacia atrás (KICK del JS)...
 const PATADA_T := 0.12     # ...y lo que tarda en volver (la escopeta empuja 1,6 veces más)
 const CAMBIO := 0.15       # lo que tarda en cambiar de arma antes de poder atacar
@@ -692,6 +695,7 @@ func golpear(angulo: float) -> void:
 	var w := arma()
 	var mitad := deg_to_rad(w.arco) / 2.0
 	var tocados := 0
+	var fuerte := false   # algún golpe crítico o que mata (el parón dura más)
 	var de_gracia: bool = w.calidad >= Armas.EPICA and gracia >= Armas.TRUCO.gracia - 1
 	Tajo.lanzar(self, angulo, w)   # (el golpe de un arma mejorada deja su estela del color de la calidad)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
@@ -705,6 +709,9 @@ func golpear(angulo: float) -> void:
 			var dano := con_critico(w.dano, de_gracia)
 			Zombi.critico = dano > roundi(w.dano)   # (su número sale en amarillo)
 			zombi.recibir_golpe(dano, hacia.normalized() * EMPUJE * w.empuje)
+			var vida = zombi.get("vida")
+			if Zombi.critico or (vida != null and vida <= 0):
+				fuerte = true
 			Zombi.critico = false
 			tocados += 1
 			if de_gracia:
@@ -715,8 +722,9 @@ func golpear(angulo: float) -> void:
 			Temblor.temblar(4.0)
 	if tocados > 0:
 		Sonido.tocar("porrazo")
-		# el parón y el temblor del golpe (como en el JS): más fuerte cuantos más pilla
-		Temblor.parar(0.05)
+		# el parón del golpe: más largo cuanto más pesa el arma ("parada" en armas.gd), si es crítico o mata, y mucho más
+		# el golpe de gracia; y el temblor (como en el JS): más fuerte cuantos más pilla
+		Temblor.parar(PARADA_GRACIA if de_gracia else w.get("parada", 0.05) + (PARADA_FUERTE if fuerte else 0.0))
 		Temblor.temblar(3.0 + tocados)
 
 
@@ -1248,6 +1256,7 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 	var dano := maxi(minimo, roundi(cantidad * stats.dano_recibido) - stats.armadura)
 	Sonido.tocar("dano")
 	Temblor.temblar(9.0)
+	Temblor.parar(PARADA_DANO)   # (un instante congelado: que se note que te han dado)
 	Tactil.vibracion()
 	quitar_vida(dano)
 	devolver(quien)

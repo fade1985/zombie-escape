@@ -119,7 +119,11 @@ en una línea.
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
   `luz_jefe.gd` (la luz fija de esas habitaciones).
 - `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo), `brillo.gd`
-  (lo que luce a oscuras), `particulas.gd`, `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes).
+  (lo que luce a oscuras), `particulas.gd`, `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
+  cuerpo a cuerpo dura la `parada` de cada arma en `armas.gd`, más si mata o es crítico y más aún el golpe de gracia; hay
+  también al matar a un jefe, en las explosiones que pillan a alguien y cuando le hacen daño a Johnny. No se suman, tras
+  uno hay un respiro sin otro corto y la pausa lo corta; la música y el fundido a negro no se frenan. Se prueba con
+  `--sensacion`).
 - `persona.gd`: una persona dibujada con formas, para quien no tenga hoja de PixelLab.
 
 **Partida y progreso**
@@ -204,7 +208,9 @@ en una línea.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).
-- `sonido.gd` (autoload: efectos sintetizados y música), `controles.gd` (las teclas cambiadas en Opciones).
+- `sonido.gd` (autoload: efectos sintetizados y música; cada efecto cambia un poco al azar de tono y de volumen cada
+  vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
+  prueba con `--sensacion`), `controles.gd` (las teclas cambiadas en Opciones).
 
 **ui/**
 - `hud.gd` (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,

@@ -1,6 +1,10 @@
 # El temblor de la pantalla y el parón de los golpes, como en el juego JS (shake y hitStop en src/game.js):
 #   - Temblor.temblar(fuerza): la cámara se mueve al azar unas unidades (fuerza) y se calma enseguida
-#   - Temblor.parar(segundos): el juego casi se congela un instante, para que el golpe "pese"
+#   - Temblor.parar(segundos): el juego casi se congela un instante, para que el golpe "pese". No se acumulan: si
+#     llega otro mientras dura, cuenta solo el más largo (desde que empezó el primero), y tras uno corto hay un respiro
+#     en el que no empieza otro corto (si no, el cuchillo rápido o una cadena de explosiones irían a saltos). Con la
+#     pausa (menús, inventario, tarjetas...) se corta en el acto. Lo que no debe frenarse (la música al cambiar de
+#     canción, el fundido a negro de las puertas) va con set_ignore_time_scale
 #   - Temblor.desplazamiento: lo que la cámara se aparta de Johnny aparte del temblor (la presentación del jefe la
 #     lleva hasta él, ui/presentacion.gd); se suma siempre, en unidades pares para que el pixel art no se emborrone
 # Es un autoload: vale desde cualquier sitio y mueve la cámara que esté en uso (la de Johnny).
@@ -9,10 +13,14 @@ extends Node
 
 const CALMA := 10.0      # lo rápido que se calma (como shakeAmt *= exp(-dt * 10) del JS)
 const LENTO := 0.03      # lo lento que va el juego durante el parón (casi parado)
+const CORTO := 0.15      # hasta cuántos segundos es un parón "corto" (los largos, como matar a un jefe, entran siempre)
+const RESPIRO := 150     # milisegundos tras un parón en los que no empieza otro corto
 
 var cantidad := 0.0      # lo fuerte que tiembla ahora, en unidades del mundo
 var desplazamiento := Vector2.ZERO   # lo que la cámara se aparta aparte del temblor (ver arriba)
-var hasta := 0           # hasta cuándo dura el parón (en milisegundos desde que arrancó el juego)
+var hasta := 0           # hasta cuándo dura el parón (en milisegundos desde que arrancó el juego); 0: no hay
+var empezo := 0          # cuándo empezó el parón que dura
+var acabo := -RESPIRO    # cuándo acabó el último
 var camara: Camera2D
 
 
@@ -25,16 +33,28 @@ func temblar(fuerza: float) -> void:
 
 
 func parar(segundos: float) -> void:
-	hasta = maxi(hasta, Time.get_ticks_msec() + roundi(segundos * 1000.0))
+	var ahora := Time.get_ticks_msec()
+	if get_tree().paused:
+		return
+	if hasta == 0:
+		if segundos <= CORTO and ahora - acabo < RESPIRO:
+			return
+		empezo = ahora
+	hasta = maxi(hasta, empezo + roundi(segundos * 1000.0))
 	Engine.time_scale = LENTO
+
+
+func terminar_paron() -> void:
+	hasta = 0
+	acabo = Time.get_ticks_msec()
+	Engine.time_scale = 1.0
 
 
 func _process(_delta: float) -> void:
 	# el tiempo de verdad (el delta va a cámara lenta durante el parón)
 	var real := 1.0 / maxf(Engine.get_frames_per_second(), 1.0)
-	if hasta > 0 and Time.get_ticks_msec() >= hasta:
-		hasta = 0
-		Engine.time_scale = 1.0
+	if hasta > 0 and (Time.get_ticks_msec() >= hasta or get_tree().paused):
+		terminar_paron()
 	var c := get_viewport().get_camera_2d()
 	if c != camara:
 		if is_instance_valid(camara):

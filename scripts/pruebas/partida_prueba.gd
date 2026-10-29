@@ -56,6 +56,8 @@
 #                       racimo                                                             [prueba_armas.gd]
 #   --aura              lo que se ve de la calidad del arma en la mano: la luz, las chispas y la estela del golpe y de la
 #                       bala, con luz y a oscuras                                           [prueba_armas.gd]
+#   --sensacion         que golpear se note: el parón de cada golpe (cada arma, al matar, el de gracia, explosiones,
+#                       daño a Johnny; sin sumarse, el respiro y la pausa) y el tono de los sonidos [prueba_armas.gd]
 #   --skins             las skins: desbloqueo, taquilla, caras y lo que hace cada una        [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
@@ -303,6 +305,9 @@ func empezar_prueba() -> void:
 	elif "--aura" in args:
 		set_process(false)   # sin la prueba larga
 		probar_aura()
+	elif "--sensacion" in args:
+		set_process(false)   # sin la prueba larga
+		probar_sensacion()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()

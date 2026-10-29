@@ -22,22 +22,30 @@ extends Node
 
 const MEZCLA := 22050        # muestras por segundo: de sobra para estos pitidos y gasta la mitad
 const VOCES := 16            # cuántos efectos pueden sonar a la vez
+# Para que el mismo efecto no suene siempre idéntico (doscientos porrazos seguidos parecerían una máquina), cada vez
+# que suena cambia un poco al azar el tono (un 6 % más agudo o más grave como mucho) y el volumen. Los que llevan
+# ruido (los disparos de pistola, el chorro de ácido...) se graban además varias veces: el siseo sale distinto en cada una
+const TONO := 0.06
+const VOLUMEN := 1.5         # decibelios, más alto o más bajo
+const VERSIONES := 3
 
 # Cada efecto: sus notas [frecuencia, duración, onda, volumen, deslizar (Hz al final), retraso] y,
 # si no debe repetirse muy seguido, "hueco" (milisegundos mínimos entre dos). Los números, los del JS.
+# "fijo": suena siempre igual (los de los menús y los avisos y melodías: el jefe, la alarma, el latido...).
+# "varia": cuánto cambia el tono, si no es lo de siempre (TONO): la voz de la reportera, más, para que parezca que habla
 const EFECTOS := {
 	"disparo": {"hueco": 60, "notas": [[620, 0.05, "cuadrada", 0.012, -250]]},        # shoot
 	"golpe": {"hueco": 40, "notas": [[240, 0.06, "cuadrada", 0.025, -120]]},          # hit (zombi herido)
 	"muerte": {"hueco": 50, "notas": [[300, 0.12, "triangulo", 0.07, 400]]},          # kill
 	"moneda": {"hueco": 45, "notas": [[988, 0.05, "cuadrada", 0.025], [1319, 0.08, "cuadrada", 0.025, 0, 0.05]]},
-	"gema": {"notas": [[1200, 0.08, "seno", 0.06], [1800, 0.15, "seno", 0.05, 0, 0.07]]},
+	"gema": {"fijo": true, "notas": [[1200, 0.08, "seno", 0.06], [1800, 0.15, "seno", 0.05, 0, 0.07]]},
 	"dano": {"notas": [[180, 0.25, "sierra", 0.06, -90]]},                             # hurt
 	"esquiva": {"notas": [[260, 0.12, "seno", 0.05, 420]]},                            # dash
 	"puerta": {"notas": [[400, 0.1, "triangulo", 0.06, 200], [600, 0.15, "triangulo", 0.05, 300, 0.08]]},
-	"limpio": {"notas": [[523, 0.14, "cuadrada", 0.035, 0, 0.0], [659, 0.14, "cuadrada", 0.035, 0, 0.09],
+	"limpio": {"fijo": true, "notas": [[523, 0.14, "cuadrada", 0.035, 0, 0.0], [659, 0.14, "cuadrada", 0.035, 0, 0.09],
 		[784, 0.14, "cuadrada", 0.035, 0, 0.18], [1047, 0.14, "cuadrada", 0.035, 0, 0.27]]},   # clear
-	"compra": {"notas": [[880, 0.07, "cuadrada", 0.03], [1175, 0.1, "cuadrada", 0.03, 0, 0.07]]},   # buy
-	"no": {"notas": [[150, 0.15, "cuadrada", 0.04, -40]]},                             # nope
+	"compra": {"fijo": true, "notas": [[880, 0.07, "cuadrada", 0.03], [1175, 0.1, "cuadrada", 0.03, 0, 0.07]]},   # buy
+	"no": {"fijo": true, "notas": [[150, 0.15, "cuadrada", 0.04, -40]]},                             # nope
 	"barrido": {"hueco": 40, "notas": [[520, 0.1, "triangulo", 0.035, -380]]},        # swing (cuerpo a cuerpo)
 	"porrazo": {"hueco": 40, "notas": [[150, 0.09, "cuadrada", 0.05, -70], [90, 0.12, "triangulo", 0.06, -30]]},
 	# la pistola suena distinta según dónde dispares (acustica_en, en mapa.gd): un chasquido de ruido, un golpe grave y lo
@@ -50,7 +58,7 @@ const EFECTOS := {
 	"pistola_duro": {"hueco": 50, "notas": [[3000, 0.06, "ruido", 0.045, -2400], [140, 0.1, "seno", 0.07, -90],
 		[2500, 0.04, "ruido", 0.022, -1800, 0.035], [1000, 0.12, "ruido", 0.01, -600, 0.05]]},
 	"escopeta": {"notas": [[120, 0.2, "sierra", 0.07, -60], [700, 0.1, "cuadrada", 0.035, -600]]},
-	"pitido": {"notas": [[1200, 0.06, "cuadrada", 0.03]]},                             # beep (mecha)
+	"pitido": {"fijo": true, "notas": [[1200, 0.06, "cuadrada", 0.03]]},                             # beep (mecha)
 	"explosion": {"notas": [[90, 0.45, "sierra", 0.09, -60], [50, 0.5, "triangulo", 0.1, -20, 0.02],
 		[400, 0.15, "cuadrada", 0.04, -350]]},
 	"latigazo": {"notas": [[300, 0.12, "sierra", 0.05, 500]]},                         # whip
@@ -70,9 +78,9 @@ const EFECTOS := {
 	"curar": {"notas": [[660, 0.1, "seno", 0.05, 200], [990, 0.16, "seno", 0.045, 300, 0.08]]},
 	"disparo_aliado": {"hueco": 70, "notas": [[760, 0.05, "cuadrada", 0.018, -550]]},
 	# el superviviente encerrado: tres golpes en la puerta y un grito (de cerca y, desde el pasillo, flojito)
-	"socorro": {"notas": [[170, 0.07, "cuadrada", 0.06, -60, 0.0], [170, 0.07, "cuadrada", 0.06, -60, 0.15],
+	"socorro": {"fijo": true, "notas": [[170, 0.07, "cuadrada", 0.06, -60, 0.0], [170, 0.07, "cuadrada", 0.06, -60, 0.15],
 		[170, 0.07, "cuadrada", 0.06, -60, 0.3], [760, 0.4, "seno", 0.025, -260, 0.45]]},
-	"socorro_lejos": {"notas": [[150, 0.06, "cuadrada", 0.02, -50, 0.0], [150, 0.06, "cuadrada", 0.02, -50, 0.15],
+	"socorro_lejos": {"fijo": true, "notas": [[150, 0.06, "cuadrada", 0.02, -50, 0.0], [150, 0.06, "cuadrada", 0.02, -50, 0.15],
 		[150, 0.06, "cuadrada", 0.02, -50, 0.3], [700, 0.35, "seno", 0.01, -240, 0.45]]},
 	# una puerta de dentro que se abre (mapa/puerta_bano.gd): el chirrido de las bisagras y el golpecito contra el tope
 	"crujido": {"hueco": 120, "notas": [[190, 0.2, "sierra", 0.016, 130], [300, 0.1, "sierra", 0.01, -110, 0.15],
@@ -83,13 +91,13 @@ const EFECTOS := {
 	"pisoton": {"notas": [[75, 0.3, "triangulo", 0.12, -40], [150, 0.14, "cuadrada", 0.05, -90]]},   # la mascota cae del salto
 	"cuchillos": {"hueco": 80, "notas": [[1300, 0.1, "sierra", 0.016, -800], [900, 0.08, "sierra", 0.012, -500, 0.05]]},   # el cocinero los lanza
 	"clavado": {"hueco": 60, "notas": [[1100, 0.03, "cuadrada", 0.02, -600], [200, 0.08, "triangulo", 0.05, -70, 0.01]]},    # y se clavan
-	"silbato": {"notas": [[2700, 0.1, "seno", 0.045, 150], [2900, 0.4, "seno", 0.05, -200, 0.13]]},   # el guardia
+	"silbato": {"fijo": true, "notas": [[2700, 0.1, "seno", 0.045, 150], [2900, 0.4, "seno", 0.05, -200, 0.13]]},   # el guardia
 	"tijeras": {"hueco": 60, "notas": [[2400, 0.03, "cuadrada", 0.03, -800], [1900, 0.05, "cuadrada", 0.03, -600, 0.07]]},   # la modista
 	"alfiler": {"hueco": 40, "notas": [[2600, 0.03, "triangulo", 0.012, 900]]},
 	"chillido": {"notas": [[1150, 0.3, "sierra", 0.035, -450], [980, 0.45, "cuadrada", 0.022, -380, 0.1]]},   # ¡OFERTAS!
-	"jefe": {"notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},
+	"jefe": {"fijo": true, "notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},
 	"rugido": {"notas": [[160, 0.5, "sierra", 0.07, -90], [120, 0.6, "cuadrada", 0.04, -60, 0.05]]},
-	"rotor": {"hueco": 200, "notas": [[64, 0.07, "cuadrada", 0.03, -15], [60, 0.07, "cuadrada", 0.025, -15, 0.2]]},   # el helicóptero de Velaria
+	"rotor": {"fijo": true, "hueco": 200, "notas": [[64, 0.07, "cuadrada", 0.03, -15], [60, 0.07, "cuadrada", 0.025, -15, 0.2]]},   # el helicóptero de Velaria
 	# la escalera de cuerda del helicóptero se desenrolla: una fila de chasquidos, cada vez más seguidos y graves
 	"cuerda": {"notas": [[1100, 0.03, "cuadrada", 0.02, -500, 0.0], [980, 0.03, "cuadrada", 0.02, -500, 0.2],
 		[1100, 0.03, "cuadrada", 0.02, -500, 0.4], [900, 0.03, "cuadrada", 0.022, -450, 0.58], [1000, 0.03, "cuadrada", 0.022, -450, 0.74],
@@ -99,18 +107,18 @@ const EFECTOS := {
 	"mordisco": {"hueco": 60, "notas": [[520, 0.04, "cuadrada", 0.04, -300], [170, 0.09, "cuadrada", 0.05, -90, 0.06]]},   # el ¡ÑAM! del glotón (skin)
 	"escobazo": {"hueco": 90, "notas": [[900, 0.12, "sierra", 0.018, -700]]},          # broom (la portera)
 	"cristal": {"hueco": 60, "notas": [[2200, 0.08, "cuadrada", 0.025, -800], [1500, 0.12, "triangulo", 0.03, 600, 0.03]]},
-	"latido": {"notas": [[70, 0.12, "seno", 0.18, -20], [60, 0.14, "seno", 0.14, -15, 0.16]]},   # heartbeat
+	"latido": {"fijo": true, "notas": [[70, 0.12, "seno", 0.18, -20], [60, 0.14, "seno", 0.14, -15, 0.16]]},   # heartbeat
 	"disparo_zombi": {"hueco": 80, "notas": [[330, 0.08, "seno", 0.025, -150]]},       # enemyShot
 	# armas de fuego: sin balas, sacar el cargador, meterlo, meter un cartucho y cambiar de arma
-	"click": {"hueco": 200, "notas": [[1600, 0.03, "cuadrada", 0.025]]},
-	"voz": {"hueco": 70, "notas": [[480, 0.035, "triangulo", 0.012, -60]]},              # la reportera de las noticias
+	"click": {"fijo": true, "hueco": 200, "notas": [[1600, 0.03, "cuadrada", 0.025]]},
+	"voz": {"varia": 0.12, "hueco": 70, "notas": [[480, 0.035, "triangulo", 0.012, -60]]},              # la reportera de las noticias
 	"recargar": {"notas": [[520, 0.05, "cuadrada", 0.025, -200], [260, 0.06, "triangulo", 0.04, -80, 0.06]]},
 	"recargado": {"notas": [[300, 0.05, "cuadrada", 0.035, 200], [1400, 0.04, "cuadrada", 0.025, 0, 0.07]]},
 	"cartucho": {"notas": [[700, 0.04, "cuadrada", 0.025, -300], [1200, 0.03, "cuadrada", 0.02, 0, 0.05]]},
-	"cambiar": {"notas": [[420, 0.07, "triangulo", 0.035, 260]]},                      # swap
+	"cambiar": {"fijo": true, "notas": [[420, 0.07, "triangulo", 0.035, 260]]},                      # swap
 	# el inventario y el baúl, arrastrando con el ratón o el dedo: un «pop» al levantar algo y un «toc» al dejarlo
-	"coger": {"hueco": 60, "notas": [[600, 0.06, "seno", 0.05, 500]]},
-	"soltar": {"hueco": 60, "notas": [[260, 0.07, "triangulo", 0.07, -120], [1300, 0.02, "cuadrada", 0.01, -500]]},
+	"coger": {"fijo": true, "hueco": 60, "notas": [[600, 0.06, "seno", 0.05, 500]]},
+	"soltar": {"fijo": true, "hueco": 60, "notas": [[260, 0.07, "triangulo", 0.07, -120], [1300, 0.02, "cuadrada", 0.01, -500]]},
 	# los peligros del centro comercial: el calambrazo del agua, la chispa del cable pelado y el cuadro eléctrico
 	"calambre": {"hueco": 300, "notas": [[95, 0.2, "cuadrada", 0.045, 25], [1500, 0.12, "sierra", 0.018, -1000, 0.01],
 		[2600, 0.06, "cuadrada", 0.01, -1800, 0.08]]},
@@ -119,11 +127,11 @@ const EFECTOS := {
 	"apagon": {"notas": [[180, 0.7, "sierra", 0.03, -150, 0.05]]},                      # se va la corriente
 	"encendido": {"notas": [[60, 0.45, "sierra", 0.03, 180, 0.05], [1400, 0.05, "cuadrada", 0.012, 0, 0.4]]},
 	# los eventos sorpresa (eventos.gd): la sirena de la alarma de incendios
-	"alarma": {"hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],
+	"alarma": {"fijo": true, "hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],
 		[720, 0.4, "triangulo", 0.03, 380, 0.8], [1100, 0.4, "triangulo", 0.03, -380, 1.2]]},
 }
 
-var grabados := {}       # nombre → AudioStreamWAV ya sintetizado
+var grabados := {}       # nombre → sus versiones ya sintetizadas (AudioStreamWAV): una, o VERSIONES si lleva ruido
 var ultimo := {}         # nombre → cuándo sonó (ms), para el "hueco"
 var voces: Array[AudioStreamPlayer] = []
 var siguiente := 0
@@ -183,7 +191,7 @@ func _notification(que: int) -> void:
 		aplicar_silencio()
 
 
-# Suena un efecto (si no sonó hace nada y lleva "hueco")
+# Suena un efecto (si no sonó hace nada y lleva "hueco"), con su tono y su volumen un poco cambiados (si no es "fijo")
 func tocar(nombre: String) -> void:
 	var e: Dictionary = EFECTOS.get(nombre, {})
 	if e.is_empty():
@@ -193,12 +201,24 @@ func tocar(nombre: String) -> void:
 	if e.has("hueco") and ultimo.has(nombre) and ahora - int(ultimo[nombre]) < int(e.hueco):
 		return
 	ultimo[nombre] = ahora
-	if not grabados.has(nombre):
-		grabados[nombre] = sintetizar(e.notas)
+	var versiones: Array = grabados.get_or_add(nombre, [])
+	var grabado: AudioStreamWAV
+	if versiones.size() < (VERSIONES if con_ruido(e.notas) else 1):
+		grabado = sintetizar(e.notas)   # (las primeras veces que suena, se va grabando cada versión)
+		versiones.append(grabado)
+	else:
+		grabado = versiones.pick_random()
+	var varia: float = 0.0 if e.get("fijo", false) else e.get("varia", TONO)
 	var v := voces[siguiente]
 	siguiente = (siguiente + 1) % VOCES
-	v.stream = grabados[nombre]
+	v.stream = grabado
+	v.pitch_scale = 1.0 + randf_range(-varia, varia)
+	v.volume_db = randf_range(-VOLUMEN, VOLUMEN) if varia > 0.0 else 0.0
 	v.play()
+
+
+func con_ruido(notas: Array) -> bool:
+	return notas.any(func(n: Array): return n[2] == "ruido")
 
 
 # ── Música ──
@@ -247,7 +267,7 @@ func fundir(r: AudioStreamPlayer, hasta: float, segundos: float) -> void:
 		return
 	if r.has_meta("fundido"):
 		(r.get_meta("fundido") as Tween).kill()
-	var t := r.create_tween()
+	var t := r.create_tween().set_ignore_time_scale()   # (no se frena en los parones de los golpes, Temblor.parar)
 	r.set_meta("fundido", t)
 	t.tween_method(func(v: float): r.volume_db = linear_to_db(v), db_to_linear(r.volume_db), hasta, segundos)
 	if hasta == 0.0:

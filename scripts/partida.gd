@@ -362,7 +362,8 @@ func puerta_de_llegada() -> int:
 func montar(idx: int, por: int, fundir := true) -> void:
 	cambiando = true
 	if fundir:
-		await create_tween().tween_property(negro, "modulate:a", 1.0, FUNDIDO).finished
+		# (el fundido no se frena en los parones de los golpes, Temblor.parar)
+		await create_tween().set_ignore_time_scale().tween_property(negro, "modulate:a", 1.0, FUNDIDO).finished
 	# Johnny pasa de un mapa a otro; el viejo se quita del todo antes de montar el nuevo (si no, su
 	# navegación y sus muros se mezclarían con los del nuevo). Y con él, los de su equipo
 	supervivientes.recoger()
@@ -438,7 +439,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	if sitio.get("peligros", []).any(func(p): return p.tipo in ["frio", "fuego", "agua"]):
 		tutorial("peligros")   # (la cámara frigorífica, la cocina o el agua de las tiendas del centro comercial)
 	if fundir:
-		await create_tween().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
+		await create_tween().set_ignore_time_scale().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
 	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "menu")   # la de los menús también suena al explorar
 	# En el apartamento de la jefa, aparece ella (si aún no ha caído)
