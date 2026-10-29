@@ -2450,6 +2450,48 @@ msgid "Caíste en la %s de %s"
 msgstr "Você caiu no %s limpando %s"
 
 #: scripts/partida.gd
+msgid "Logro: %s"
+msgstr "Conquista: %s"
+
+#: scripts/partida.gd
+msgid "cóbralo en el ordenador"
+msgstr "resgate no computador"
+
+#: scripts/partida.gd
+msgid "%d logro nuevo"
+msgid_plural "%d logros nuevos"
+msgstr[0] "%d conquista nova"
+msgstr[1] "%d conquistas novas"
+
+#: scripts/partida.gd
+msgid "cóbralos en el ordenador"
+msgstr "resgate no computador"
+
+#: scripts/partida.gd
+msgid "Skin nueva"
+msgid_plural "Skins nuevas"
+msgstr[0] "Skin nova"
+msgstr[1] "Skins novas"
+
+#: scripts/partida.gd
+msgid "Páginas del dosier"
+msgstr "Páginas do dossiê"
+
+#: scripts/partida.gd
+msgid "Nuevo en el bestiario"
+msgid_plural "Nuevos en el bestiario"
+msgstr[0] "Novo no bestiário"
+msgstr[1] "Novos no bestiário"
+
+#: scripts/partida.gd
+msgid "Objetos nuevos en Colecciones"
+msgstr "Objetos novos nas Coleções"
+
+#: scripts/partida.gd
+msgid "¡Nueva mejor marca!"
+msgstr "Novo recorde!"
+
+#: scripts/partida.gd
 msgid "¡SKIN NUEVA!"
 msgstr "SKIN NOVA!"
 
@@ -4653,16 +4695,24 @@ msgid "Dólares perdidos"
 msgstr "Dólares perdidos"
 
 #: scripts/ui/menus.gd
+msgid "Conseguido en esta partida"
+msgstr "Conquistado nesta partida"
+
+#: scripts/ui/menus.gd
 msgid "Jugar otra vez"
 msgstr "Jogar de novo"
 
 #: scripts/ui/menus.gd
-msgid "Reintentar edificio"
-msgstr "Tentar o prédio de novo"
+msgid "Otra vez"
+msgstr "Tentar de novo"
 
 #: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Menu principal"
+
+#: scripts/ui/menus.gd
+msgid "Te ha pillado"
+msgstr "Quem te pegou"
 
 #: scripts/ui/menus.gd
 msgid "La exposición prolongada al virus hace que te sientas..."
@@ -4691,6 +4741,62 @@ msgstr "Fica guardada no Dossiê do computador da manutenção"
 #: scripts/ui/menus.gd
 msgid "Seguir"
 msgstr "Continuar"
+
+#: scripts/ui/menus.gd
+msgid "El fuego"
+msgstr "O fogo"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar el fuego del suelo: así no te quemas."
+msgstr "Desvie para atravessar o fogo do chão: assim você não se queima."
+
+#: scripts/ui/menus.gd
+msgid "El veneno"
+msgstr "O veneno"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar los charcos: así no te hacen nada."
+msgstr "Desvie para atravessar as poças: assim elas não te fazem nada."
+
+#: scripts/ui/menus.gd
+msgid "La lejía"
+msgstr "O cloro"
+
+#: scripts/ui/menus.gd
+msgid "El ácido"
+msgstr "O ácido"
+
+#: scripts/ui/menus.gd
+msgid "El frío"
+msgstr "O frio"
+
+#: scripts/ui/menus.gd
+msgid "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena."
+msgstr "Não fique muito tempo na câmara fria: o frio tira sua vida e te deixa lento."
+
+#: scripts/ui/menus.gd
+msgid "El agua con corriente"
+msgstr "A água eletrificada"
+
+#: scripts/ui/menus.gd
+msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
+msgstr "Abaixe a alavanca do quadro elétrico e a água vai parar de dar choque."
+
+#: scripts/ui/menus.gd
+msgid "El cable pelado"
+msgstr "O fio desencapado"
+
+#: scripts/ui/menus.gd
+msgid "No pises el charco donde ha caído el cable: da calambres a todo el charco."
+msgstr "Não pise na poça onde o fio caiu: ele dá choque na poça inteira."
+
+#: scripts/ui/menus.gd
+msgid "Tu propia granada"
+msgstr "Sua própria granada"
+
+#: scripts/ui/menus.gd
+msgid "Lánzala lejos: su explosión también te hace daño a ti."
+msgstr "Jogue longe: a explosão também te machuca."
 
 #: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"

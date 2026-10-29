@@ -67,7 +67,7 @@ Salieron al pasar la interfaz; las fases siguientes tienen que igualarlos (nombr
 | gasolina · bidón de ácido · baterías | gas can · acid drum · batteries | tipos de munición de depósito |
 | piezas (cuerpo a cuerpo, a distancia, especial, arrojable) | parts (melee, ranged, special, throwable) | |
 | Tienda de armas · Cambiar (en la tienda) | Weapon Shop · Trade | |
-| partida | run | «Abandonar partida» → *Abandon run*; «Jugar otra vez» → *Play again* |
+| partida | run | «Abandonar partida» → *Abandon run*; «Jugar otra vez» → *Play again*; «Otra vez» (cartel de derrota) → *Try again* |
 | ConserjeOS · CONSERJE OS 95 | JanitorOS · JANITOR OS 95 | los nombres de archivo de las ventanas (PUNTOS.EXE...) también se traducen |
 | Canal 8 | Channel 8 | `Historia.CANAL` (fase 4) |
 | ¡NOTICIAS NUEVAS! | BREAKING NEWS! | |

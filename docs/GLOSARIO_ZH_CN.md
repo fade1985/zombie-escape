@@ -111,7 +111,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | En la mano · De repuesto · A la mano · Al repuesto | 手上 · 备用 · 放到手上 · 放入备用 |
 | Ponérmela · Tirar al suelo · Destruir · Usar · Sacar · Guardar | 装备 · 丢在地上 · 销毁 · 使用 · 取出 · 存入 |
 | Seguir (inventario) · Continuar (pausa) · Seguir (dosier) | 继续 |
-| Pausa · Abandonar partida · Jugar otra vez · Menú principal | 暂停 · 放弃本局 · 再玩一局 · 主菜单 |
+| Pausa · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) · Menú principal | 暂停 · 放弃本局 · 再玩一局 · 再来一次 · 主菜单 |
 | Vida · Velocidad · Daño recibido · Crítico | 生命 · 移动速度 · 受到伤害 · 暴击率 |
 | partida | 一局 / 本局 («Búscalo en una partida» = 开一局去找吧) |
 | Alerta %d · Sin alerta · Reto del día | 警戒 %d · 无警戒 · 每日挑战 |

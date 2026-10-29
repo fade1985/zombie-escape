@@ -131,6 +131,8 @@ var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
 var duracion := 0.0        # segundos jugados (sin contar la pausa)
 var terminada := false
+var al_empezar := {}       # lo que ya se tenía al empezar (logros, skins, páginas...): el cartel del final enseña lo
+                           # nuevo (conseguido())
 var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial()); el primero, el que sale o va a salir
 var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
 
@@ -221,6 +223,9 @@ func _ready() -> void:
 		if Reto.activo:
 			Reto.ficha(g, edificio).intentos += 1)
 	ahorrados = s.dolares
+	al_empezar = {"logros": s.logros.keys(), "skins": s.skins.duplicate(), "paginas": s.paginas.duplicate(),
+		"bestiario": s.bestiario.duplicate(), "encontrados": s.encontrados.duplicate(),
+		"mejor_planta": Guardado.edificio(s, edificio).mejor_planta}
 	# los talentos comprados, y empieza con la vida llena y el escudo de Acero
 	aplicar_talentos(s.talentos)
 	johnny.vida = johnny.stats.vida_max
@@ -893,7 +898,7 @@ func _al_morir_johnny() -> void:
 	$Pantalla/Aviso.text = Idioma.t("Te han pillado")   # (el de la escena está en español)
 	$Pantalla/Aviso.show()
 	# Un momento para verlo caer, y el cartel de derrota
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.0).timeout
 	terminar(false)
 
 
@@ -1339,7 +1344,47 @@ func terminar(gano: bool, abandona := false) -> void:
 		"extra": extra,
 		"premio_reto": premio_reto,
 		"abierta": abierta[0],
+		"asesino": "" if gano else johnny.golpe_de,
+		"conseguido": conseguido(Guardado.cargar()),   # (con los logros que acaba de dar el repaso)
 	})
+
+
+# Lo conseguido en esta partida, para el cartel del final: lo que hay en el guardado "s" y no había al empezar
+# (al_empezar). Cada fila, [icono, nombre, valor], ya traducida; si no hay nada nuevo, ninguna
+func conseguido(s: Dictionary) -> Array:
+	var filas: Array = []
+	if al_empezar.is_empty():
+		return filas
+	var nuevos := func(lista: Array, antes: Array) -> Array: return lista.filter(func(id): return not id in antes)
+	# los logros (se cobran en el ordenador: si ya se han cobrado todos, no se dice)
+	var logros_nuevos: Array = nuevos.call(s.logros.keys(), al_empezar.logros)
+	var sin_cobrar := logros_nuevos.any(func(id): return s.logros[id] == "conseguido")
+	if logros_nuevos.size() == 1:
+		filas.append(["trofeo", Idioma.t("Logro: %s") % Logros.nombre_de(logros_nuevos[0]),
+			Idioma.t("cóbralo en el ordenador") if sin_cobrar else ""])
+	elif logros_nuevos.size() > 1:
+		filas.append(["trofeo", Idioma.n("%d logro nuevo", "%d logros nuevos", logros_nuevos.size()) % logros_nuevos.size(),
+			Idioma.t("cóbralos en el ordenador") if sin_cobrar else ""])
+	# las skins (con la cara de la primera), las páginas del dosier y lo nuevo de Colecciones
+	var skins: Array = nuevos.call(s.skins, al_empezar.skins)
+	if not skins.is_empty():
+		var cara := "res://assets/ui/iconos/skin-%s.png" % skins[0]
+		filas.append(["skin-" + skins[0] if ResourceLoader.exists(cara) else "skin-conserje",
+			Idioma.n("Skin nueva", "Skins nuevas", skins.size()), ", ".join(skins.map(func(id): return Skins.nombre(id)))])
+	var paginas: Array = nuevos.call(s.paginas, al_empezar.paginas)
+	if not paginas.is_empty():
+		filas.append(["dosier", Idioma.t("Páginas del dosier"), "+%d" % paginas.size()])
+	var vistos: Array = nuevos.call(s.bestiario, al_empezar.bestiario)
+	if not vistos.is_empty():
+		filas.append(["zombi", Idioma.n("Nuevo en el bestiario", "Nuevos en el bestiario", vistos.size()),
+			", ".join(vistos.map(func(id): return Bestiario.nombre(id))) if vistos.size() <= 2 else "+%d" % vistos.size()])
+	var objetos: Array = nuevos.call(s.encontrados, al_empezar.encontrados)
+	if not objetos.is_empty():
+		filas.append(["colecciones", Idioma.t("Objetos nuevos en Colecciones"), "+%d" % objetos.size()])
+	# la planta más alta a la que se ha llegado en este edificio (el reto del día lleva su marca aparte)
+	if not Reto.activo and planta.num > maxi(al_empezar.mejor_planta, 1):
+		filas.append(["escalera", Idioma.t("¡Nueva mejor marca!"), Planta.nombre_de(planta)])
+	return filas
 
 
 func ir_al_menu() -> void:
@@ -1374,6 +1419,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	if mapa.valla and mapa.valla.cerrada:
 		donde = mapa.a_la_plataforma(donde, 30.0)
 	var zombi: Node2D = ZOMBIS[tipo].instantiate()
+	zombi.set_meta("tipo", tipo)   # quién es (Bestiario.de): el cartel de derrota dice quién te ha pillado
 	var de_mentira := en_pruebas()   # en la sala de pruebas no cuentan: ni se apuntan, ni sueltan nada
 	if not de_mentira:
 		Bestiario.apuntar(tipo)   # visto: al bestiario de las Colecciones del ordenador

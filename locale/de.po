@@ -2450,6 +2450,48 @@ msgid "Caíste en la %s de %s"
 msgstr "Endstation %s, auf dem Weg durch %s"
 
 #: scripts/partida.gd
+msgid "Logro: %s"
+msgstr "Erfolg: %s"
+
+#: scripts/partida.gd
+msgid "cóbralo en el ordenador"
+msgstr "hol dir die Belohnung am Computer"
+
+#: scripts/partida.gd
+msgid "%d logro nuevo"
+msgid_plural "%d logros nuevos"
+msgstr[0] "%d neuer Erfolg"
+msgstr[1] "%d neue Erfolge"
+
+#: scripts/partida.gd
+msgid "cóbralos en el ordenador"
+msgstr "hol dir die Belohnungen am Computer"
+
+#: scripts/partida.gd
+msgid "Skin nueva"
+msgid_plural "Skins nuevas"
+msgstr[0] "Neuer Skin"
+msgstr[1] "Neue Skins"
+
+#: scripts/partida.gd
+msgid "Páginas del dosier"
+msgstr "Seiten der Akte"
+
+#: scripts/partida.gd
+msgid "Nuevo en el bestiario"
+msgid_plural "Nuevos en el bestiario"
+msgstr[0] "Neu im Bestiarium"
+msgstr[1] "Neu im Bestiarium"
+
+#: scripts/partida.gd
+msgid "Objetos nuevos en Colecciones"
+msgstr "Neue Gegenstände in den Sammlungen"
+
+#: scripts/partida.gd
+msgid "¡Nueva mejor marca!"
+msgstr "Neue Bestmarke!"
+
+#: scripts/partida.gd
 msgid "¡SKIN NUEVA!"
 msgstr "NEUER SKIN!"
 
@@ -4653,16 +4695,24 @@ msgid "Dólares perdidos"
 msgstr "Verlorene Dollar"
 
 #: scripts/ui/menus.gd
+msgid "Conseguido en esta partida"
+msgstr "In dieser Runde erhalten"
+
+#: scripts/ui/menus.gd
 msgid "Jugar otra vez"
 msgstr "Nochmal spielen"
 
 #: scripts/ui/menus.gd
-msgid "Reintentar edificio"
+msgid "Otra vez"
 msgstr "Nochmal versuchen"
 
 #: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Hauptmenü"
+
+#: scripts/ui/menus.gd
+msgid "Te ha pillado"
+msgstr "Erwischt von"
 
 #: scripts/ui/menus.gd
 msgid "La exposición prolongada al virus hace que te sientas..."
@@ -4691,6 +4741,62 @@ msgstr "Wird in der Akte auf dem Computer im Wartungsraum gespeichert"
 #: scripts/ui/menus.gd
 msgid "Seguir"
 msgstr "Weiter"
+
+#: scripts/ui/menus.gd
+msgid "El fuego"
+msgstr "Das Feuer"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar el fuego del suelo: así no te quemas."
+msgstr "Weiche aus, um durch das Feuer am Boden zu kommen: So verbrennst du dich nicht."
+
+#: scripts/ui/menus.gd
+msgid "El veneno"
+msgstr "Das Gift"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar los charcos: así no te hacen nada."
+msgstr "Weiche aus, um durch Pfützen zu kommen: So tun sie dir nichts."
+
+#: scripts/ui/menus.gd
+msgid "La lejía"
+msgstr "Das Chlor"
+
+#: scripts/ui/menus.gd
+msgid "El ácido"
+msgstr "Die Säure"
+
+#: scripts/ui/menus.gd
+msgid "El frío"
+msgstr "Die Kälte"
+
+#: scripts/ui/menus.gd
+msgid "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena."
+msgstr "Bleib nicht zu lange im Kühlraum: Die Kälte kostet dich Leben und bremst dich."
+
+#: scripts/ui/menus.gd
+msgid "El agua con corriente"
+msgstr "Das Wasser unter Strom"
+
+#: scripts/ui/menus.gd
+msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
+msgstr "Leg den Hebel am Sicherungskasten um, dann steht das Wasser nicht mehr unter Strom."
+
+#: scripts/ui/menus.gd
+msgid "El cable pelado"
+msgstr "Das blanke Kabel"
+
+#: scripts/ui/menus.gd
+msgid "No pises el charco donde ha caído el cable: da calambres a todo el charco."
+msgstr "Tritt nicht in die Pfütze, in die das Kabel gefallen ist: Die ganze Pfütze steht unter Strom."
+
+#: scripts/ui/menus.gd
+msgid "Tu propia granada"
+msgstr "Deine eigene Granate"
+
+#: scripts/ui/menus.gd
+msgid "Lánzala lejos: su explosión también te hace daño a ti."
+msgstr "Wirf sie weit weg: Ihre Explosion trifft auch dich."
 
 #: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"

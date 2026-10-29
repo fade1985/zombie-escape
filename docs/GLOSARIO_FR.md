@@ -99,7 +99,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 
 | Español | Francés |
 |---|---|
-| partida · Abandonar partida · Jugar otra vez · Reintentar edificio | partie · Abandonner · Rejouer · Réessayer ce bâtiment |
+| partida · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) | partie · Abandonner · Rejouer · Réessayer |
 | Restablecer controles · controles | Commandes par défaut · commandes |
 | Mochila · Baúl · Banco de trabajo · Taquilla (de Johnny) · Tienda de armas | Sac à dos · Coffre · Établi · Casier (de Johnny) · Boutique d'armes |
 | En la mano / A mano · De repuesto · A la mano · Al repuesto | En main · De rechange · En main · En rechange |

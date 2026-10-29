@@ -437,6 +437,7 @@ func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 func mutar() -> void:
 	mutado = true
 	Bestiario.apuntar("criatura")   # visto: al bestiario de las Colecciones del ordenador
+	set_meta("tipo", "criatura")    # (y quién es ahora: Bestiario.de)
 	cambiar("mutar")
 	if ResourceLoader.exists(CRIATURA):
 		sprite.sprite_frames = load(CRIATURA)

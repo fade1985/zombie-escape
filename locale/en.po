@@ -2450,6 +2450,48 @@ msgid "Caíste en la %s de %s"
 msgstr "You fell on the %s of %s"
 
 #: scripts/partida.gd
+msgid "Logro: %s"
+msgstr "Achievement: %s"
+
+#: scripts/partida.gd
+msgid "cóbralo en el ordenador"
+msgstr "claim it at the computer"
+
+#: scripts/partida.gd
+msgid "%d logro nuevo"
+msgid_plural "%d logros nuevos"
+msgstr[0] "%d new achievement"
+msgstr[1] "%d new achievements"
+
+#: scripts/partida.gd
+msgid "cóbralos en el ordenador"
+msgstr "claim them at the computer"
+
+#: scripts/partida.gd
+msgid "Skin nueva"
+msgid_plural "Skins nuevas"
+msgstr[0] "New skin"
+msgstr[1] "New skins"
+
+#: scripts/partida.gd
+msgid "Páginas del dosier"
+msgstr "Dossier pages"
+
+#: scripts/partida.gd
+msgid "Nuevo en el bestiario"
+msgid_plural "Nuevos en el bestiario"
+msgstr[0] "New in the bestiary"
+msgstr[1] "New in the bestiary"
+
+#: scripts/partida.gd
+msgid "Objetos nuevos en Colecciones"
+msgstr "New items in Collections"
+
+#: scripts/partida.gd
+msgid "¡Nueva mejor marca!"
+msgstr "New personal best!"
+
+#: scripts/partida.gd
 msgid "¡SKIN NUEVA!"
 msgstr "NEW SKIN!"
 
@@ -4653,16 +4695,24 @@ msgid "Dólares perdidos"
 msgstr "Dollars lost"
 
 #: scripts/ui/menus.gd
+msgid "Conseguido en esta partida"
+msgstr "Unlocked this run"
+
+#: scripts/ui/menus.gd
 msgid "Jugar otra vez"
 msgstr "Play again"
 
 #: scripts/ui/menus.gd
-msgid "Reintentar edificio"
-msgstr "Retry building"
+msgid "Otra vez"
+msgstr "Try again"
 
 #: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Main menu"
+
+#: scripts/ui/menus.gd
+msgid "Te ha pillado"
+msgstr "Taken down by"
 
 #: scripts/ui/menus.gd
 msgid "La exposición prolongada al virus hace que te sientas..."
@@ -4691,6 +4741,62 @@ msgstr "Saved in the Dossier on the maintenance computer"
 #: scripts/ui/menus.gd
 msgid "Seguir"
 msgstr "Continue"
+
+#: scripts/ui/menus.gd
+msgid "El fuego"
+msgstr "Fire"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar el fuego del suelo: así no te quemas."
+msgstr "Dodge to cross fire on the floor: that way it won't burn you."
+
+#: scripts/ui/menus.gd
+msgid "El veneno"
+msgstr "Poison"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar los charcos: así no te hacen nada."
+msgstr "Dodge to cross puddles: that way they can't hurt you."
+
+#: scripts/ui/menus.gd
+msgid "La lejía"
+msgstr "Bleach"
+
+#: scripts/ui/menus.gd
+msgid "El ácido"
+msgstr "Acid"
+
+#: scripts/ui/menus.gd
+msgid "El frío"
+msgstr "The cold"
+
+#: scripts/ui/menus.gd
+msgid "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena."
+msgstr "Don't stay in the freezer too long: the cold drains your health and slows you down."
+
+#: scripts/ui/menus.gd
+msgid "El agua con corriente"
+msgstr "Electrified water"
+
+#: scripts/ui/menus.gd
+msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
+msgstr "Pull the lever on the electrical panel and the water will stop shocking you."
+
+#: scripts/ui/menus.gd
+msgid "El cable pelado"
+msgstr "The bare wire"
+
+#: scripts/ui/menus.gd
+msgid "No pises el charco donde ha caído el cable: da calambres a todo el charco."
+msgstr "Don't step in the puddle the wire fell into: the whole puddle is live."
+
+#: scripts/ui/menus.gd
+msgid "Tu propia granada"
+msgstr "Your own grenade"
+
+#: scripts/ui/menus.gd
+msgid "Lánzala lejos: su explosión también te hace daño a ti."
+msgstr "Throw it far: its blast hurts you too."
 
 #: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"

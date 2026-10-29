@@ -123,6 +123,8 @@
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
+#   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en
+#                       la partida, «Otra vez» y la R; y por el fuego, por un jefe y ganando    [prueba_varias.gd]
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Ajolote, los
@@ -309,6 +311,9 @@ func empezar_prueba() -> void:
 		probar_aura()
 	elif "--sensacion" in args:
 		set_process(false)   # sin la prueba larga
+	elif "--derrota" in args:
+		set_process(false)   # sin la prueba larga
+		probar_derrota()
 		probar_sensacion()
 	elif "--temblor" in args:
 		set_process(false)   # sin la prueba larga

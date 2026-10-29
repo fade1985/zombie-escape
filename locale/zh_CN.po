@@ -2448,6 +2448,45 @@ msgid "Caíste en la %s de %s"
 msgstr "你倒在了%s（%s）"
 
 #: scripts/partida.gd
+msgid "Logro: %s"
+msgstr "成就：%s"
+
+#: scripts/partida.gd
+msgid "cóbralo en el ordenador"
+msgstr "去电脑上领取奖励"
+
+#: scripts/partida.gd
+msgid "%d logro nuevo"
+msgid_plural "%d logros nuevos"
+msgstr[0] "%d 个新成就"
+
+#: scripts/partida.gd
+msgid "cóbralos en el ordenador"
+msgstr "去电脑上领取奖励"
+
+#: scripts/partida.gd
+msgid "Skin nueva"
+msgid_plural "Skins nuevas"
+msgstr[0] "新皮肤"
+
+#: scripts/partida.gd
+msgid "Páginas del dosier"
+msgstr "档案页"
+
+#: scripts/partida.gd
+msgid "Nuevo en el bestiario"
+msgid_plural "Nuevos en el bestiario"
+msgstr[0] "图鉴新增"
+
+#: scripts/partida.gd
+msgid "Objetos nuevos en Colecciones"
+msgstr "收藏品新增物品"
+
+#: scripts/partida.gd
+msgid "¡Nueva mejor marca!"
+msgstr "新纪录！"
+
+#: scripts/partida.gd
 msgid "¡SKIN NUEVA!"
 msgstr "新皮肤！"
 
@@ -4639,16 +4678,24 @@ msgid "Dólares perdidos"
 msgstr "损失的美元"
 
 #: scripts/ui/menus.gd
+msgid "Conseguido en esta partida"
+msgstr "本局收获"
+
+#: scripts/ui/menus.gd
 msgid "Jugar otra vez"
 msgstr "再玩一局"
 
 #: scripts/ui/menus.gd
-msgid "Reintentar edificio"
-msgstr "重新挑战大楼"
+msgid "Otra vez"
+msgstr "再来一次"
 
 #: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "主菜单"
+
+#: scripts/ui/menus.gd
+msgid "Te ha pillado"
+msgstr "你被它逮住了"
 
 #: scripts/ui/menus.gd
 msgid "La exposición prolongada al virus hace que te sientas..."
@@ -4677,6 +4724,62 @@ msgstr "已保存到维修间电脑的“档案”里"
 #: scripts/ui/menus.gd
 msgid "Seguir"
 msgstr "继续"
+
+#: scripts/ui/menus.gd
+msgid "El fuego"
+msgstr "火"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar el fuego del suelo: así no te quemas."
+msgstr "用闪避穿过地上的火：这样就不会被烧到。"
+
+#: scripts/ui/menus.gd
+msgid "El veneno"
+msgstr "毒液"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar los charcos: así no te hacen nada."
+msgstr "用闪避穿过水洼：这样它们就伤不到你。"
+
+#: scripts/ui/menus.gd
+msgid "La lejía"
+msgstr "消毒液"
+
+#: scripts/ui/menus.gd
+msgid "El ácido"
+msgstr "酸液"
+
+#: scripts/ui/menus.gd
+msgid "El frío"
+msgstr "寒冷"
+
+#: scripts/ui/menus.gd
+msgid "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena."
+msgstr "别在冷库里待太久：寒冷会扣生命，还会让你变慢。"
+
+#: scripts/ui/menus.gd
+msgid "El agua con corriente"
+msgstr "带电的水"
+
+#: scripts/ui/menus.gd
+msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
+msgstr "拉下配电箱的电闸，水就不会再电人了。"
+
+#: scripts/ui/menus.gd
+msgid "El cable pelado"
+msgstr "裸露的电线"
+
+#: scripts/ui/menus.gd
+msgid "No pises el charco donde ha caído el cable: da calambres a todo el charco."
+msgstr "别踩电线掉进去的那滩水：整滩水都带电。"
+
+#: scripts/ui/menus.gd
+msgid "Tu propia granada"
+msgstr "你自己的手雷"
+
+#: scripts/ui/menus.gd
+msgid "Lánzala lejos: su explosión también te hace daño a ti."
+msgstr "扔远一点：爆炸也会伤到你自己。"
 
 #: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"

@@ -2,8 +2,9 @@
 #   - Pausa (Esc o Start): el sitio en el que estás, los atributos de Johnny y sus armas, y los botones
 #     Continuar, Opciones (opciones.gd), Tutorial (tutorial.gd) y Abandonar partida. El juego se para mientras está
 #     abierta.
-#   - El cartel del final: "¡Edificio completado!" o "¡Derrota!", con lo que has hecho en la partida y los
-#     botones de volver a jugar o ir al menú principal.
+#   - El cartel del final: "¡Edificio completado!" o "¡Derrota!", con lo que has hecho en la partida, lo conseguido
+#     en ella (logros, skins, páginas... lo nuevo) y los botones de volver a jugar («Otra vez», también con la R) o ir
+#     al menú principal. Al caer, a la izquierda, quién te ha pillado (quien_te_pilla).
 #   - Las mutaciones (showMutacion del JS): tras caer la portera, dos cartas para elegir una (también con 1 y 2).
 #   - La página del dosier recién encontrada junto a un científico muerto (historia.gd).
 # Se manejan con el ratón, con el teclado (flechas e Intro) o con el mando (cruceta o stick, A para pulsar y
@@ -15,11 +16,30 @@ signal abandonar
 signal reintentar
 signal menu_principal
 
+const ESPERA_FIN := 500   # milisegundos que el cartel del final no hace caso a sus botones: por si venías pegando
+const DIBUJO_FICHA := 150.0   # lo más grande que sale el dibujo de quién te ha pillado (a escala entera)
+
+# Lo que te puede pillar sin ser un enemigo (johnny.gd, golpe_de): cómo se llama, un consejo para la próxima vez y su
+# icono, para el cartel de derrota. Los enemigos salen del bestiario (su dibujo, su nombre y su frase)
+# [traducir]
+const PELIGROS := {
+	"fuego": {"nombre": "El fuego", "consejo": "Esquiva para cruzar el fuego del suelo: así no te quemas.", "icono": "molotov"},
+	"veneno": {"nombre": "El veneno", "consejo": "Esquiva para cruzar los charcos: así no te hacen nada.", "icono": "obj-bidon_acido"},
+	"toxico": {"nombre": "La lejía", "consejo": "Esquiva para cruzar los charcos: así no te hacen nada.", "icono": "obj-bidon_acido"},
+	"acido": {"nombre": "El ácido", "consejo": "Esquiva para cruzar los charcos: así no te hacen nada.", "icono": "obj-bidon_acido"},
+	"frio": {"nombre": "El frío", "consejo": "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena.", "icono": "congeladora"},
+	"agua": {"nombre": "El agua con corriente", "consejo": "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres.", "icono": "obj-bateria"},
+	"cable": {"nombre": "El cable pelado", "consejo": "No pises el charco donde ha caído el cable: da calambres a todo el charco.", "icono": "obj-bateria"},
+	"granada": {"nombre": "Tu propia granada", "consejo": "Lánzala lejos: su explosión también te hace daño a ti.", "icono": "granada"},
+}
+# [/traducir]
+
 var fondo: ColorRect
 var abierto := ""         # "pausa", "fin", "mutacion", "pagina", "opciones", "tutorial" o "" (nada)
 var elegir_mutacion := Callable()   # a quién avisar con la mutación elegida
 var cartas: Array = []    # las dos mutaciones que se ofrecen
 var al_leer := Callable()  # a quién avisar al cerrar la página del dosier
+var fin_desde := 0         # cuándo se abrió el cartel del final (Time.get_ticks_msec), para ESPERA_FIN
 
 
 func _ready() -> void:
@@ -173,13 +193,24 @@ func pausa(partida: Node, foco := "") -> void:
 # r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, salvados, cartera y, con los niveles de alerta
 # (alerta.gd), alerta (la de la partida), extra (los dólares de más por ella) y abierta (la que se abre, o 0);
 # con el reto del día (reto.gd), reto (el nombre de su regla), marca (la mejor de hoy), mejor (si se acaba de mejorar)
-# y premio_reto (sus dólares de más, la primera vez que se completa hoy; si no, 0)
+# y premio_reto (sus dólares de más, la primera vez que se completa hoy; si no, 0); asesino (al caer, quién te ha
+# pillado: johnny.gd, golpe_de) y conseguido (lo nuevo de esta partida: partida.gd, conseguido)
 func fin(r: Dictionary) -> void:
 	var columna := abrir("fin")
+	fin_desde = Time.get_ticks_msec()
 	titulo(columna, r.titulo, r.sub)
 	var lista := VBoxContainer.new()
 	lista.custom_minimum_size.x = 440
-	columna.add_child(lista)
+	var ficha := quien_te_pilla(r.get("asesino", ""))
+	if ficha:
+		# al caer: a la izquierda quién te ha pillado y a la derecha lo de la partida
+		var fila := HBoxContainer.new()
+		fila.add_theme_constant_override("separation", 16)
+		fila.add_child(ficha)
+		fila.add_child(lista)
+		columna.add_child(fila)
+	else:
+		columna.add_child(lista)
 	dato(lista, "apartamentos", Idioma.t("Plantas superadas"), r.plantas)
 	dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
 	dato(lista, "puerta", Idioma.t("Apartamentos visitados (última planta)"), r.visitados)
@@ -201,14 +232,97 @@ func fin(r: Dictionary) -> void:
 		# si caes, te quedas la mitad de lo recogido (partida.gd, DOLARES_AL_CAER) y la otra mitad se pierde
 		dato(lista, "billete", Idioma.t("Dólares salvados (la mitad)"), Idioma.t("+$%d  (tienes $%d)") % [r.salvados, r.cartera], Tema.VERDE)
 		dato(lista, "billete", Idioma.t("Dólares perdidos"), "$%d" % (r.dolares - r.salvados), Tema.ROJO)
+	# lo conseguido en esta partida, solo si hay algo nuevo
+	var conseguido: Array = r.get("conseguido", [])
+	if not conseguido.is_empty():
+		var cabeza := Label.new()
+		cabeza.theme_type_variation = "Sub"
+		cabeza.text = Idioma.t("Conseguido en esta partida")
+		cabeza.custom_minimum_size.y = 30   # (un poco de aire con lo de arriba)
+		cabeza.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		lista.add_child(cabeza)
+		for fila in conseguido:
+			dato(lista, fila[0], fila[1], fila[2], Color("#f7c440"))
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
-	var otra := boton(botones, Idioma.t("Jugar otra vez") if r.gano else Idioma.t("Reintentar edificio"), func(): reintentar.emit(), "BotonGrande")
-	boton(botones, Idioma.t("Menú principal"), func(): menu_principal.emit())
+	# «Otra vez» vuelve a empezar el edificio; con teclado, también la R (en el móvil y con mando no se dice)
+	var con_r := not Tactil.activo and Input.get_connected_joypads().is_empty()
+	var otra_vez := Idioma.t("Jugar otra vez") if r.gano else Idioma.t("Otra vez")
+	var otra := boton(botones, "%s (R)" % otra_vez if con_r else otra_vez, al_final.bind(reintentar), "BotonGrande")   # no-tr
+	boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))
 	for b in botones.get_children():
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	otra.grab_focus.call_deferred()
+
+
+# Los botones del cartel del final (y la R): no hacen caso hasta pasado ESPERA_FIN desde que se abrió
+func al_final(senal: Signal) -> void:
+	if abierto == "fin" and Time.get_ticks_msec() - fin_desde >= ESPERA_FIN:
+		senal.emit()
+
+
+# La ficha de quién te ha pillado, en el cartel de derrota: su dibujo, su nombre y su frase del bestiario (que suele
+# ser una pista de cómo ganarle) o, si es un peligro (PELIGROS), su icono, su nombre y un consejo. null si no se sabe
+func quien_te_pilla(id: String) -> Control:
+	var dibujo: Texture2D
+	var escala_max := 99
+	var nombre := ""
+	var frase := ""
+	if id in Bestiario.LISTA:
+		dibujo = Bestiario.retrato(id)
+		escala_max = Bestiario.LISTA[id].escala + 1   # (uno más que en el juego; los tentáculos ya van a 1)
+		nombre = Bestiario.nombre(id)
+		frase = Bestiario.frase(id)
+	elif id in PELIGROS:
+		dibujo = load("res://assets/ui/iconos/%s.png" % PELIGROS[id].icono)
+		nombre = Idioma.t(PELIGROS[id].nombre)
+		frase = Idioma.t(PELIGROS[id].consejo)
+	else:
+		return null
+	var ficha := PanelContainer.new()
+	var marco := StyleBoxFlat.new()   # metal oscuro con el borde rojo
+	marco.bg_color = Color(0.13, 0.06, 0.08, 0.9)
+	marco.set_border_width_all(2)
+	marco.border_color = Tema.ROJO
+	marco.shadow_color = Tema.LINEA
+	marco.shadow_size = 2
+	marco.set_content_margin_all(10)
+	ficha.add_theme_stylebox_override("panel", marco)
+	var dentro := VBoxContainer.new()
+	dentro.add_theme_constant_override("separation", 8)
+	ficha.add_child(dentro)
+	var arriba := Label.new()
+	arriba.theme_type_variation = "Sub"
+	arriba.text = Idioma.t("Te ha pillado")
+	arriba.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	dentro.add_child(arriba)
+	# el dibujo, a escala entera (nítido) y lo más grande que quepa en DIBUJO_FICHA
+	var imagen := TextureRect.new()
+	imagen.texture = dibujo
+	var tam := dibujo.get_size()
+	var escala := clampi(floori(minf(DIBUJO_FICHA / tam.x, DIBUJO_FICHA / tam.y)), 1, escala_max)
+	imagen.custom_minimum_size = tam * escala
+	imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	imagen.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	dentro.add_child(imagen)
+	var quien := Label.new()
+	quien.text = nombre
+	quien.add_theme_color_override("font_color", Tema.ROJO)
+	quien.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	quien.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	quien.custom_minimum_size.x = 190
+	dentro.add_child(quien)
+	var pista := Label.new()
+	pista.theme_type_variation = "Sub"
+	pista.text = frase
+	pista.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pista.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pista.custom_minimum_size.x = 190
+	dentro.add_child(pista)
+	return ficha
 
 
 # El recuadro de las mutaciones: dos cartas (icono, nombre y lo que hace). "llevas": las que ya tiene
@@ -306,6 +420,10 @@ func _unhandled_input(evento: InputEvent) -> void:
 		if n >= 0 and n < cartas.size():
 			get_viewport().set_input_as_handled()
 			elegir(cartas[n].id)
+		return
+	if abierto == "fin" and evento is InputEventKey and evento.pressed and not evento.echo and evento.physical_keycode == KEY_R:
+		get_viewport().set_input_as_handled()
+		al_final(reintentar)
 		return
 	if abierto == "pagina" and evento.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()

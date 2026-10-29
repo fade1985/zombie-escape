@@ -109,7 +109,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Modo de atacar: Asistido / Apuntar libre | Modo de ataque: Assistido / Mira livre |
 | Espacio · Mayús · Intro · Borrar · Flecha arriba · Clic izq. · Clic rueda · Rueda | Espaço · Shift · Enter · Backspace · Seta p/ cima · Clique esq. · Botão do meio · Rodinha |
 | stick · cruceta · pulsar stick | analógico (*Analóg. esq./dir.*) · direcional · clicar analóg. |
-| Pausa · Continuar · Seguir (inventario y dosier) · Abandonar partida · Jugar otra vez | Pausa · Continuar · Continuar · Abandonar partida · Jogar de novo |
+| Pausa · Continuar · Seguir (inventario y dosier) · Abandonar partida · Jugar otra vez · Otra vez (cartel de derrota) | Pausa · Continuar · Continuar · Abandonar partida · Jogar de novo · Tentar de novo |
 | partida · planta · edificio · apartamento | partida · andar · prédio · apartamento |
 | Inventario · mochila · baúl · banco de trabajo · taquilla | Inventário · mochila · baú · bancada · armário (*Armário do Johnny*) |
 | En la mano · De repuesto · A la mano · Al repuesto | Na mão · Reserva · Para a mão · Para a reserva |

@@ -2452,6 +2452,51 @@ msgid "Caíste en la %s de %s"
 msgstr "Ты пал: %s, %s"
 
 #: scripts/partida.gd
+msgid "Logro: %s"
+msgstr "Достижение: %s"
+
+#: scripts/partida.gd
+msgid "cóbralo en el ordenador"
+msgstr "забери награду на компьютере"
+
+#: scripts/partida.gd
+msgid "%d logro nuevo"
+msgid_plural "%d logros nuevos"
+msgstr[0] "%d новое достижение"
+msgstr[1] "%d новых достижения"
+msgstr[2] "%d новых достижений"
+
+#: scripts/partida.gd
+msgid "cóbralos en el ordenador"
+msgstr "забери награды на компьютере"
+
+#: scripts/partida.gd
+msgid "Skin nueva"
+msgid_plural "Skins nuevas"
+msgstr[0] "Новый скин"
+msgstr[1] "Новые скины"
+msgstr[2] "Новые скины"
+
+#: scripts/partida.gd
+msgid "Páginas del dosier"
+msgstr "Страницы досье"
+
+#: scripts/partida.gd
+msgid "Nuevo en el bestiario"
+msgid_plural "Nuevos en el bestiario"
+msgstr[0] "Новое в бестиарии"
+msgstr[1] "Новое в бестиарии"
+msgstr[2] "Новое в бестиарии"
+
+#: scripts/partida.gd
+msgid "Objetos nuevos en Colecciones"
+msgstr "Новые предметы в «Коллекциях»"
+
+#: scripts/partida.gd
+msgid "¡Nueva mejor marca!"
+msgstr "Новый рекорд!"
+
+#: scripts/partida.gd
 msgid "¡SKIN NUEVA!"
 msgstr "НОВЫЙ СКИН!"
 
@@ -4667,16 +4712,24 @@ msgid "Dólares perdidos"
 msgstr "Потеряно долларов"
 
 #: scripts/ui/menus.gd
+msgid "Conseguido en esta partida"
+msgstr "Получено за забег"
+
+#: scripts/ui/menus.gd
 msgid "Jugar otra vez"
 msgstr "Сыграть еще"
 
 #: scripts/ui/menus.gd
-msgid "Reintentar edificio"
-msgstr "Заново это здание"
+msgid "Otra vez"
+msgstr "Еще раз"
 
 #: scripts/ui/menus.gd
 msgid "Menú principal"
 msgstr "Главное меню"
+
+#: scripts/ui/menus.gd
+msgid "Te ha pillado"
+msgstr "Тебя сцапали"
 
 #: scripts/ui/menus.gd
 msgid "La exposición prolongada al virus hace que te sientas..."
@@ -4705,6 +4758,62 @@ msgstr "Сохраняется в Досье на компьютере в дво
 #: scripts/ui/menus.gd
 msgid "Seguir"
 msgstr "Дальше"
+
+#: scripts/ui/menus.gd
+msgid "El fuego"
+msgstr "Огонь"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar el fuego del suelo: así no te quemas."
+msgstr "Пересекай огонь на полу рывком уклонения: так он тебя не обожжет."
+
+#: scripts/ui/menus.gd
+msgid "El veneno"
+msgstr "Яд"
+
+#: scripts/ui/menus.gd
+msgid "Esquiva para cruzar los charcos: así no te hacen nada."
+msgstr "Пересекай лужи рывком уклонения: так они тебе ничего не сделают."
+
+#: scripts/ui/menus.gd
+msgid "La lejía"
+msgstr "Хлорка"
+
+#: scripts/ui/menus.gd
+msgid "El ácido"
+msgstr "Кислота"
+
+#: scripts/ui/menus.gd
+msgid "El frío"
+msgstr "Холод"
+
+#: scripts/ui/menus.gd
+msgid "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena."
+msgstr "Не задерживайся в холодильной камере: холод отнимает здоровье и замедляет тебя."
+
+#: scripts/ui/menus.gd
+msgid "El agua con corriente"
+msgstr "Вода под током"
+
+#: scripts/ui/menus.gd
+msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
+msgstr "Опусти рубильник на электрощитке, и вода перестанет бить током."
+
+#: scripts/ui/menus.gd
+msgid "El cable pelado"
+msgstr "Оголенный провод"
+
+#: scripts/ui/menus.gd
+msgid "No pises el charco donde ha caído el cable: da calambres a todo el charco."
+msgstr "Не наступай в лужу, куда упал провод: током бьет по всей луже."
+
+#: scripts/ui/menus.gd
+msgid "Tu propia granada"
+msgstr "Твоя же граната"
+
+#: scripts/ui/menus.gd
+msgid "Lánzala lejos: su explosión también te hace daño a ti."
+msgstr "Бросай подальше: взрыв ранит и тебя."
 
 #: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"

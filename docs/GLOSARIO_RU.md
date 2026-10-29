@@ -148,7 +148,7 @@ Desatascador = Вантуз, Criogenia = Криогеника, Reacción en cade
 | Español | Ruso |
 |---|---|
 | JUGAR · Tutorial · Opciones · Salir · Volver · Continuar · Seguir (dosier) · Seguir (inventario) · Entendido | ИГРАТЬ · Обучение · Настройки · Выход · Назад · Продолжить · Дальше · В игру · Понятно |
-| Jugar otra vez · Reintentar edificio · Menú principal · Abandonar partida | Сыграть еще · Заново это здание · Главное меню · Бросить забег |
+| Jugar otra vez · Otra vez (cartel de derrota) · Menú principal · Abandonar partida | Сыграть еще · Еще раз · Главное меню · Бросить забег |
 | Elige edificio · Pantalla completa · General · Controles · Ayudas | Выбери здание · Полный экран · Общие · Управление · Упрощения |
 | Ayudas: Vida entera · Pistola sin fin · Lanzar apuntando solo | Здоровье целиком · Бесконечный пистолет · Броски с автонаводкой |
 | inventario: En la mano · De repuesto · A la mano · Al repuesto · A mano | В руках · Запасное · В руку · В запас · В руке |

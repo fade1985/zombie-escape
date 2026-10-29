@@ -604,7 +604,7 @@ class Cable extends Node2D:
 		var dio := false
 		if johnny and johnny.vivo and johnny.esquiva_t <= 0.0 and charco.dentro(johnny.global_position, 0.0):
 			johnny.pisar({"calambre": {"despues": a.tieso}})
-			johnny.recibir_dano(a.dano)
+			johnny.recibir_dano(a.dano, null, "cable")
 			dio = true
 		for zombi in get_tree().get_nodes_in_group("zombis"):
 			if zombi.get("dormido") or zombi.get("estado") == "muerto" or not charco.dentro(zombi.global_position, 0.0):

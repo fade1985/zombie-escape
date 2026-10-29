@@ -53,7 +53,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | Reto del día · regla | Tagesaufgabe · Regel |
 | Ayudas: Vida entera · Pistola sin fin · Lanzar apuntando solo | Hilfen: Ganzes Leben · Endlose Pistole · Auto-Zielen beim Werfen |
 | JUGAR · Opciones · Salir · Volver · Continuar · Entendido | SPIELEN · Optionen · Beenden · Zurück · Weiter · Verstanden |
-| Jugar otra vez · Reintentar edificio · Menú principal | Nochmal spielen · Nochmal versuchen · Hauptmenü |
+| Jugar otra vez · Otra vez (cartel de derrota) · Menú principal | Nochmal spielen · Nochmal versuchen · Hauptmenü |
 | logro · bestiario · dosier · colecciones · noticias | Erfolg · Bestiarium · Akte · Sammlungen · Nachrichten |
 | talento · rama · árbol de talentos · punto | Talent · Zweig · Talentbaum · Punkt |
 | mutación | Mutation |

@@ -95,6 +95,8 @@ var stats := Mejoras.base()   # sus atributos (mejoras.gd)
 var vida := 100
 var tercios := 3          # los tercios de vida que le quedan (el que se pierde ya no se cura)
 var vivo := true
+var golpe_de := ""         # quién o qué le ha quitado vida la última vez: un enemigo (su clave del Bestiario) o un
+                           # peligro (Menus.PELIGROS); "" si no se sabe. El cartel de derrota dice quién le ha pillado
 var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
 var estados := {}          # lo que le han puesto los charcos (estados.gd): fuego, veneno, lejía...
 var pisando := {}          # los estados de los charcos que pisa en este paso
@@ -352,7 +354,7 @@ func _physics_process(delta: float) -> void:
 		var entero := int(estado_dano)
 		estado_dano -= entero
 		Sonido.tocar("chisporroteo")
-		quitar_vida(entero)
+		quitar_vida(entero, charco_que_quema())
 		if not vivo:
 			return
 	sprite.modulate = Color(Estados.tinte(estados, Time.get_ticks_msec() / 1000.0), sprite.modulate.a)
@@ -1237,9 +1239,10 @@ func vestir(id: String) -> void:
 
 
 # Lo llaman los zombis al darle un zarpazo. "quien": el que se lo hace (el zombi o el jefe; en lo que se lanza, el que
-# lo lanzó), para el glotón (devolver()); nada si no es de nadie (charcos, agua con corriente, explosiones). Sin tipo:
-# lo que se lanza puede llegar cuando su dueño ya no está
-func recibir_dano(cantidad: int, quien = null) -> void:
+# lo lanzó), para el glotón (devolver()) y el cartel de derrota (golpe_de); nada si no es de nadie (charcos, agua con
+# corriente, explosiones). Sin tipo: lo que se lanza puede llegar cuando su dueño ya no está. "peligro": lo que no es
+# de nadie, para el cartel de derrota (Menus.PELIGROS: "agua", "cable", "granada"; la explosión del dinamitero, el suyo)
+func recibir_dano(cantidad: int, quien = null, peligro := "") -> void:
 	if not vivo or invulnerable > 0.0:
 		return
 	# Reflejos: cada pocos segundos, un golpe se esquiva solo
@@ -1258,6 +1261,7 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 	Temblor.temblar(9.0)
 	Temblor.parar(PARADA_DANO)   # (un instante congelado: que se note que te han dado)
 	Tactil.vibracion()
+	golpe_de = peligro if peligro != "" else Bestiario.de(quien)
 	quitar_vida(dano)
 	devolver(quien)
 	pararrayos(quien)
@@ -1328,9 +1332,13 @@ func empujar(fuerza: Vector2) -> void:
 		velocity += fuerza
 
 
-func quitar_vida(cantidad: int) -> void:
+# "de": quién o qué se la quita, para el cartel de derrota (golpe_de); sin nada, se queda el de antes (recibir_dano ya
+# lo ha apuntado)
+func quitar_vida(cantidad: int, de := "") -> void:
 	if invencible:
 		return
+	if de != "":
+		golpe_de = de
 	# El escudo (Acero, Blindaje, Endurecimiento): mientras le quede, todo lo que le quitan (golpes, charcos, el ácido
 	# del Glotón) sale del escudo y la vida no se toca; lo que sobra del golpe que lo rompe, de la vida
 	if escudo > 0.0:
@@ -1377,6 +1385,16 @@ func quitar_vida(cantidad: int) -> void:
 		cambiar_animacion("reposo_" + direccion)
 		sprite.modulate = Color(1, 0.35, 0.35)
 		murio.emit()
+
+
+# El charco que le está quitando vida (de los que lleva encima, el que más quita): fuego, veneno, ácido, lejía...
+# Para el cartel de derrota (golpe_de)
+func charco_que_quema() -> String:
+	var peor := ""
+	for nombre in estados:
+		if estados[nombre].get("dps", 0.0) > estados.get(peor, {}).get("dps", 0.0):
+			peor = nombre
+	return peor
 
 
 # Una de las 8 direcciones según un vector: angle() da el ángulo en radianes y lo pasamos a uno de los

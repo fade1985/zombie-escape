@@ -11,6 +11,8 @@ var dano := 30
 var dano_zombis := -1     # si es distinto (la granada con Puntería les hace más a ellos): -1 = el mismo
 var origen: Node = null       # quien ha reventado (no se hace daño a sí mismo)
 var a_johnny := true          # si le hace daño a Johnny (la de Mezcla explosiva, no: zombi.gd)
+var de := "granada"           # de quién es, para el cartel de derrota (johnny.gd, golpe_de): la del dinamitero lleva
+                              # "explosivo"; las demás que le dan a Johnny son de su granada
 var tiempo := 0.0
 
 
@@ -20,7 +22,7 @@ func _ready() -> void:
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	var pilla := false   # si pilla a alguien, el juego se para un instante (Temblor.parar)
 	if a_johnny and johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO:
-		johnny.recibir_dano(dano)
+		johnny.recibir_dano(dano, null, de)
 		pilla = true
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == origen:

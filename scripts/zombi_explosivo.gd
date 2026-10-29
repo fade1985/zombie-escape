@@ -69,6 +69,7 @@ func morir() -> void:
 	bum.radio = RADIO_EXPLOSION
 	bum.dano = DANO_EXPLOSION
 	bum.origen = self
+	bum.de = "explosivo"   # (para el cartel de derrota: le ha pillado el dinamitero)
 	bum.position = position
 	get_parent().add_child.call_deferred(bum)
 

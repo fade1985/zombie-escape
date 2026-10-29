@@ -2105,3 +2105,98 @@ func probar_golpes_pared() -> void:
 		await get_tree().create_timer(0.1).timeout
 	Temblor.desplazamiento = Vector2.ZERO
 	get_tree().quit()
+
+
+# Con "--captura --derrota": el cartel de derrota (menus.gd, fin). Primero, quién le pega a Johnny (johnny.gd,
+# golpe_de): un zombi, la explosión del dinamitero, su propia granada y el fuego del suelo. Luego cae de verdad por
+# un crío, con un logro, una skin, una página, un enemigo y un objeto nuevos y su mejor marca (captura-derrota.png);
+# «Otra vez» y la R no hacen caso el primer medio segundo y luego sí. Y el cartel otra vez: por el fuego y sin nada
+# nuevo (captura-derrota-fuego.png), por un jefe grande (captura-derrota-jefe.png) y ganando (captura-derrota-gana.png)
+func probar_derrota() -> void:
+	await get_tree().create_timer(0.5).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no se meta)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	johnny.resucitado = true   # (sin el Desfibrilador, por si lo tiene el guardado de prueba)
+	johnny.vida = 99999        # (que los golpes de prueba no lo tiren)
+	# 1) quién le pega: cada golpe apunta quién ha sido
+	var quien: Array = []
+	for de in ["explosivo", "granada"]:
+		johnny.invulnerable = 0.0
+		var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+		bum.de = de
+		bum.position = johnny.global_position - mapa.cosas.global_position
+		mapa.cosas.add_child(bum)
+		await get_tree().process_frame
+		quien.append(johnny.golpe_de)
+	var paso := 0.0
+	while paso < 0.5:   # el fuego del suelo, medio segundo
+		johnny.pisar({"fuego": {}})
+		await get_tree().physics_frame
+		paso += get_physics_process_delta_time()
+	quien.append(johnny.golpe_de)
+	johnny.estados.clear()
+	var crio: Node2D = meter_zombi("rapido", johnny.position + Vector2(120, 0))
+	johnny.invulnerable = 0.0
+	johnny.recibir_dano(1, crio)
+	quien.append(johnny.golpe_de)
+	print("Quién le pega: %s (esperado: [\"explosivo\", \"granada\", \"fuego\", \"rapido\"])" % [quien])
+	# 2) lo conseguido: que al empezar le faltasen un logro, una skin, una página, un enemigo y un objeto, y que esta
+	# sea su planta más alta
+	Guardado.cambiar(func(g):
+		g.logros["primer_turno"] = "conseguido"
+		for par in [["skins", "portero"], ["paginas", "vd7_protocolo"], ["bestiario", "rapido"], ["encontrados", "vendas"]]:
+			if not par[1] in g[par[0]]:
+				g[par[0]].append(par[1]))
+	al_empezar.logros.erase("primer_turno")
+	for par in [["skins", "portero"], ["paginas", "vd7_protocolo"], ["bestiario", "rapido"], ["encontrados", "vendas"]]:
+		al_empezar[par[0]].erase(par[1])
+	al_empezar.mejor_planta = 2
+	var empezo := al_empezar.duplicate(true)
+	planta.num = 3
+	planta.nombre = Planta.nombre_planta_es(3)
+	# 3) cae por el crío: el cartel sale solo, al segundo
+	johnny.invulnerable = 0.0
+	johnny.vida = 10
+	johnny.recibir_dano(9999, crio)
+	while menus.abierto != "fin":
+		await get_tree().process_frame
+	# «Otra vez» y la R: sin volver a empezar de verdad, se cuenta cuántas veces piden volver a empezar
+	for c in menus.reintentar.get_connections():
+		menus.reintentar.disconnect(c.callable)
+	var otra_vez := [0]
+	menus.reintentar.connect(func(): otra_vez[0] += 1)
+	var boton: Button = menus.fondo.find_children("*", "Button", true, false)[0]
+	boton.pressed.emit()
+	pulsar_r()
+	await get_tree().create_timer(0.1).timeout
+	var antes: int = otra_vez[0]
+	await get_tree().create_timer(0.6).timeout
+	print("Cae por «%s» · «%s» · conseguido: %d filas · al abrirse, «Otra vez» y la R: %d veces (esperado: 0)" % [
+		johnny.golpe_de, boton.text, conseguido(Guardado.cargar()).size(), antes])
+	Captura.foto("captura-derrota.png")
+	boton.pressed.emit()
+	pulsar_r()
+	await get_tree().create_timer(0.1).timeout
+	print("Pasado medio segundo, «Otra vez» y la R: %d veces (esperado: 2)" % otra_vez[0])
+	# 4) por el fuego y sin nada nuevo; por un jefe grande (con todo lo nuevo); y ganando (con todo lo nuevo)
+	for caso in [["fuego", false, false], ["gloton", true, false], ["", true, true]]:
+		terminada = false
+		al_empezar = empezo.duplicate(true) if caso[1] else {}
+		johnny.golpe_de = caso[0]
+		if caso[2]:
+			planta.num = Planta.PLANTAS
+			planta.nombre = Planta.nombre_planta_es(Planta.PLANTAS)
+		terminar(caso[2])
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-derrota-%s.png" % ("gana" if caso[2] else "jefe" if caso[1] else caso[0]))
+	get_tree().quit()
+
+
+# Pulsa y suelta la R (la del cartel del final)
+func pulsar_r() -> void:
+	for pulsada in [true, false]:
+		var evento := InputEventKey.new()
+		evento.keycode = KEY_R
+		evento.physical_keycode = KEY_R
+		evento.pressed = pulsada
+		Input.parse_input_event(evento)

@@ -26,7 +26,10 @@ en una línea.
 
 **Johnny y sus armas**
 - `johnny.gd`: moverse, vida, apuntar y atacar (`tiro`, `blanco_en_linea`), recibir daño (`recibir_dano(cantidad,
-  quien)`), tropezar (`caer`), las skins (`vestir`, y sus ventajas en `arma()`, `ignifugo()`, `devolver()`), la
+  quien, peligro)`; quién le ha quitado vida la última vez queda en `golpe_de`: un enemigo, por su meta `"tipo"`, que
+  lee `Bestiario.de` y le ponen al nacer `partida.meter_zombi`, la modista a sus maniquíes y los jefes al mutar; o un
+  peligro de `Menus.PELIGROS`: el charco que más quema, `charco_que_quema`, el agua con corriente, el cable pelado o su
+  granada, `explosion.de`), tropezar (`caer`), las skins (`vestir`, y sus ventajas en `arma()`, `ignifugo()`, `devolver()`), la
   munición (`municion`, `reserva()`, `meter_municion()`, `arma_de_caja()`) y el depósito del lanzallamas y el lanza
   ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
 - `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
@@ -221,7 +224,10 @@ en una línea.
   `johnny.quitar_vida`, todo lo que le quitan (golpes, charcos, el ácido del Glotón) sale del escudo, ya rebajado por
   Durito, y lo que sobra del golpe que lo rompe, de la vida.
 - `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
-  jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»; si se cambia el idioma en Opciones, se
+  jefe), `menus.gd` (pausa y fin; el cartel del final dice al caer
+  quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
+  peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; y «Otra vez»,
+  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; si se cambia el idioma en Opciones, se
   monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el temblor de
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`

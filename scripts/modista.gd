@@ -314,6 +314,7 @@ func despertar_maniquies(johnny: Node2D) -> void:
 	Bestiario.apuntar("maniqui")   # visto: al bestiario de las Colecciones del ordenador
 	for p in donde:
 		var vivo := VIVO.new()
+		vivo.set_meta("tipo", "maniqui")   # (quién es: Bestiario.de)
 		get_parent().add_child(vivo)
 		vivo.global_position = p - Vector2(0, VIVO.PIE)
 		vivos.append(vivo)

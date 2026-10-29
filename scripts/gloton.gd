@@ -324,7 +324,7 @@ func salpicar_acido() -> void:
 		return
 	acido_t = ACIDO_CADA
 	var dano := maxi(1, roundi(johnny.stats.vida_max * ACIDO[fase - 1]))
-	johnny.quitar_vida(dano)
+	johnny.quitar_vida(dano, "gloton")
 	Sonido.tocar("chisporroteo")
 	Zombi.texto_flotante(get_parent(), johnny.global_position + Vector2(-24, -72), Idioma.t("-%d ácido") % dano, VERDE, 16)
 	# gotas verdes que saltan de él hacia Johnny, y el chisporroteo al caerle encima

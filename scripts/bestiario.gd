@@ -128,6 +128,15 @@ static func frase(id: String) -> String:
 	return Idioma.t(LISTA[id].frase) if id in LISTA else ""
 
 
+# Qué enemigo es un nodo (su clave de LISTA), o "" si no es ninguno o ya no está. Cada uno la lleva desde que nace
+# (la meta "tipo": partida.gd, meter_zombi; el maniquí, modista.gd; los mutados, al mutar): el cartel de derrota dice
+# quién te ha pillado (johnny.gd, golpe_de)
+static func de(nodo) -> String:
+	if not is_instance_valid(nodo) or not nodo is Node:
+		return ""
+	return nodo.get_meta("tipo", "")
+
+
 # Los que salen en un edificio, en el orden de LISTA
 static func de_edificio(edificio: String) -> Array:
 	return LISTA.keys().filter(func(id): return edificio in LISTA[id].edificios)
