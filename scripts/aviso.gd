@@ -7,7 +7,8 @@
 #     tentáculos y lenguas (tentaculo.gd), cortada donde se paran.
 #   - abanico(): el trozo que barre un golpe cuerpo a cuerpo (porrazo, fregonazo, hachazo...), o un círculo entero
 #     (medio ángulo PI). Se va llenando del jefe hacia fuera, como una barra de carga, sin bordes. Puede llegar hasta
-#     las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas).
+#     las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas). El de los golpes
+#     cuerpo a cuerpo es golpe(): cortado donde el golpe chocaría con una pared o un mueble (que no atraviesa, tapado()).
 #   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
 #     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()) y ahí acaba en la
 #     estrella de las cargas.
@@ -70,6 +71,32 @@ static func abanico(jefe: Node2D, desde_: Vector2, angulo_: float, medio_: float
 	aviso.aplasta = aplasta_
 	aviso.sombra = sombra_
 	return aviso
+
+
+# El abanico de un golpe cuerpo a cuerpo (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo, hachazo): como
+# abanico(), pero cortado donde el golpe chocaría con una pared o un mueble, porque no los atraviesa (tapado()): cada
+# rayo, hasta donde da con ellos. "aplasta_": lo aplastado que se ve (el hachazo)
+static func golpe(jefe: Node2D, desde_: Vector2, angulo_: float, medio_: float, alcance_: float, k: float,
+		tiempo: float, aplasta_ := 1.0) -> Aviso:
+	var aviso := abanico(jefe, desde_, angulo_, medio_, alcance_, k, tiempo, aplasta_)
+	var origen := jefe.to_global(desde_)
+	var espacio := jefe.get_world_2d().direct_space_state
+	var puntas := []
+	for i in MAX_RAYOS:
+		var a := angulo_ + medio_ * (2.0 * i / (MAX_RAYOS - 1) - 1.0)
+		var fin := origen + Vector2(cos(a), sin(a) * aplasta_) * alcance_   # (en el suelo se ve aplastado, como el aviso)
+		var choque := espacio.intersect_ray(PhysicsRayQueryParameters2D.create(origen, fin, 1))   # paredes y muebles
+		puntas.append(alcance_ * origen.distance_to(choque.position) / origen.distance_to(fin) if not choque.is_empty()
+			else alcance_)
+	aviso.rayos(puntas)
+	return aviso
+
+
+# ¿Hay una pared o un mueble entre el jefe y "donde"? Los golpes cuerpo a cuerpo no los atraviesan: solo le dan a
+# Johnny si no está tapado (y su aviso se corta ahí, golpe())
+static func tapado(jefe: Node2D, donde: Vector2) -> bool:
+	var rayo := PhysicsRayQueryParameters2D.create(jefe.global_position, donde, 1)
+	return not jefe.get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
 
 
 # Una barra recta: desde "desde", hacia "angulo", de "inicio_" a "largo_" y "medio_" de ancho a cada lado. Se corta

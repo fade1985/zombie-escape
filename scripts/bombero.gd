@@ -223,12 +223,12 @@ func levantar_hacha(johnny: Node2D) -> void:
 	cambiar("aviso_hacha")
 
 
-# Baja el hacha: si Johnny sigue delante (y no está esquivando), le da y le empuja
+# Baja el hacha: si Johnny sigue delante (y no está esquivando ni hay una pared o un mueble en medio), le da y le empuja
 func dar_hachazo(johnny: Node2D) -> void:
 	Temblor.temblar(5.0)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < ALCANCE_HACHA + johnny.RADIO + 8.0 and absf(angle_difference(mirada.angle(), hacia.angle())) < 1.1 \
-			and johnny.esquiva_t <= 0.0:
+			and johnny.esquiva_t <= 0.0 and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_HACHA, self)
 		johnny.empujar(mirada * 650.0)
 		Sonido.tocar("porrazo")
@@ -551,7 +551,7 @@ func _draw() -> void:
 		draw_set_transform(Vector2.ZERO)
 	match estado:
 		"aviso_hacha":
-			Aviso.abanico(self, Vector2(0, 6), mirada.angle(), 1.1, ALCANCE_HACHA + 10.0, minf(1.0, t / AVISO_HACHA),
+			Aviso.golpe(self, Vector2(0, 6), mirada.angle(), 1.1, ALCANCE_HACHA + 10.0, minf(1.0, t / AVISO_HACHA),
 				tiempo, 0.6)
 		"aviso_giro", "giro":
 			var k := minf(1.0, t / AVISO_GIRO) if estado == "aviso_giro" else 1.0

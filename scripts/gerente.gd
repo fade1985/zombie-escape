@@ -265,12 +265,13 @@ func lanzar_contratos() -> void:
 	Sonido.tocar("barrido")
 
 
-# El maletinazo: daña y aparta a Johnny si está dentro del trozo marcado
+# El maletinazo: daña y aparta a Johnny si está dentro del trozo marcado (y no hay una pared o un mueble en medio)
 func maletinazo(johnny: Node2D) -> void:
 	Sonido.tocar("porrazo")
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
-	if hacia.length() - johnny.RADIO <= ALCANCE_MALETINAZO and desvio <= MEDIO_MALETINAZO + 0.15:
+	if hacia.length() - johnny.RADIO <= ALCANCE_MALETINAZO and desvio <= MEDIO_MALETINAZO + 0.15 \
+			and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_MALETINAZO, self)
 		johnny.empujar(hacia.normalized() * EMPUJE_MALETINAZO)
 		Temblor.temblar(6.0)
@@ -540,7 +541,7 @@ func _draw() -> void:
 				var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
 				Aviso.barra(self, Vector2(0, 6), a, radio, radio + LARGO_RAYAS, 3.0, k, tiempo, i)
 		"aviso_maletinazo":
-			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_MALETINAZO, ALCANCE_MALETINAZO,
+			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_MALETINAZO, ALCANCE_MALETINAZO,
 				minf(1.0, t / AVISO_MALETINAZO), tiempo)
 		"aviso_latigazo":
 			# los tres latigazos avisan como las cargas de los jefes: flechas que se encienden hacia fuera y, al

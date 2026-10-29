@@ -41,6 +41,9 @@
 #                       pruebas: avisando y dando el golpe en varias direcciones y junto a una pared [prueba_varias.gd]
 #   --disparos          las barras de aviso de los disparos de los jefes (contratos, alfileres, cuchillos y bolas de
 #                       fuego) en la sala de pruebas: junto a la pared (que las corta) y en campo abierto [prueba_varias.gd]
+#   --golpes-pared      ¿los golpes cuerpo a cuerpo de los jefes atraviesan las paredes? Cada uno pegando con Johnny
+#                       justo al otro lado de la pared y, de control, en campo abierto; y su aviso, cortado en la
+#                       pared                                                             [prueba_varias.gd]
 #   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
 #                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
@@ -350,6 +353,9 @@ func empezar_prueba() -> void:
 	elif "--lenguas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_lenguas()
+	elif "--golpes-pared" in args:
+		set_process(false)   # sin la prueba larga
+		probar_golpes_pared()
 	elif "--disparos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_disparos()

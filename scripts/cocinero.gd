@@ -135,12 +135,13 @@ func empezar(nuevo: String, angulo: float) -> void:
 	mirada = Vector2.from_angle(angulo)
 
 
-# El cuchillazo: daña y empuja a Johnny si está dentro del trozo marcado
+# El cuchillazo: daña y empuja a Johnny si está dentro del trozo marcado (y no hay una pared o un mueble en medio)
 func cuchillazo(johnny: Node2D) -> void:
 	Sonido.tocar("barrido")
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
-	if hacia.length() - johnny.RADIO <= ALCANCE_CUCHILLAZO and desvio <= MEDIO_CUCHILLAZO + 0.15:
+	if hacia.length() - johnny.RADIO <= ALCANCE_CUCHILLAZO and desvio <= MEDIO_CUCHILLAZO + 0.15 \
+			and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_CUCHILLAZO, self)
 		johnny.empujar(hacia.normalized() * 500.0)
 
@@ -269,7 +270,7 @@ func _draw() -> void:
 				var a: float = datos.angulo + (i - (n - 1) / 2.0) * ABRE[fase - 1]
 				Aviso.barra(self, Vector2(0, 6), a, radio, radio + LARGO_RAYAS, 3.0, k, tiempo, i)
 		"aviso_cuchillazo":
-			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_CUCHILLAZO, ALCANCE_CUCHILLAZO,
+			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_CUCHILLAZO, ALCANCE_CUCHILLAZO,
 				minf(1.0, t / AVISO_CUCHILLAZO), tiempo)
 
 

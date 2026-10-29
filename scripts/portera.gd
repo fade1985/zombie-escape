@@ -283,12 +283,13 @@ func abanico(delta: float, hacia: Vector2, apunta: float) -> void:
 		andar(0.5 if enfadada() else 0.9)
 
 
-# El golpe de fregona: daña y empuja a Johnny si está dentro del trozo marcado
+# El golpe de fregona: daña y empuja a Johnny si está dentro del trozo marcado (y no hay una pared o un mueble en medio)
 func fregonazo(johnny: Node2D) -> void:
 	Sonido.tocar("escobazo")
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
-	if hacia.length() - johnny.RADIO <= ALCANCE_FREGONAZO and desvio <= MEDIO_FREGONAZO + 0.15:
+	if hacia.length() - johnny.RADIO <= ALCANCE_FREGONAZO and desvio <= MEDIO_FREGONAZO + 0.15 \
+			and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_FREGONAZO, self)
 		johnny.empujar(hacia.normalized() * 650.0)
 
@@ -576,7 +577,7 @@ func bajar(k: float, dir: String) -> int:
 func _draw() -> void:
 	match estado:
 		"aviso_fregonazo":
-			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_FREGONAZO, ALCANCE_FREGONAZO,
+			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_FREGONAZO, ALCANCE_FREGONAZO,
 				minf(1.0, t / AVISO_FREGONAZO), tiempo)
 		"aviso_embestida":
 			# el camino por donde va a embestir (aviso.gd)

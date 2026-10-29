@@ -1982,3 +1982,105 @@ func probar_disparos() -> void:
 		await get_tree().create_timer(0.2).timeout
 	Temblor.desplazamiento = Vector2.ZERO
 	get_tree().quit()
+
+
+# --golpes-pared: ¿los golpes cuerpo a cuerpo de los jefes (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo y
+# hachazo) atraviesan las paredes? En la sala de pruebas (F11), cada jefe pegando (se llama a su golpe) con Johnny justo
+# al otro lado de la pared de la derecha, a su alcance, y, de control, con Johnny a la misma distancia en campo abierto.
+# En la terminal, si el golpe le quita vida y si hay pared entre los dos (un rayo de la capa 1); y, con fotos, el aviso
+# de cada golpe a 45 de la pared (captura-golpes-pared-<jefe>.png): cortado donde el golpe se pararía
+func probar_golpes_pared() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = false   # (que se le quite vida de verdad)
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(2, 2)
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	# dónde está la pared de la derecha, de un borde al otro (un rayo desde cada lado)
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var y := sala.diana.global_position.y + 40.0
+	var x0 := sala.diana.global_position.x
+	var izq: Dictionary = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 900, y), 1))
+	var der: Dictionary = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 900, y), Vector2(x0 + 300, y), 1))
+	var borde_izq: float = izq.position.x
+	var borde_der: float = der.position.x
+	print("Pared de la derecha: de %d a %d (grosor %d)" % [borde_izq, borde_der, borde_der - borde_izq])
+	for tipo in ["antidisturbios", "portera", "modista", "cocinero", "gerente", "bombero"]:
+		for caso in ["pared", "abierto"]:
+			var sitio_jefe := Vector2(borde_izq - 4.0, y)
+			var sitio_johnny := Vector2(borde_der + 6.0, y)
+			if caso == "abierto":
+				sitio_johnny.x = sitio_jefe.x - (sitio_johnny.x - sitio_jefe.x)
+			var jefe: Node2D = meter_zombi(tipo, sitio_jefe)
+			await get_tree().create_timer(0.2).timeout
+			jefe.set_physics_process(false)   # quieto: el golpe se le pide a mano
+			jefe.global_position = sitio_jefe
+			johnny.global_position = sitio_johnny
+			johnny.velocity = Vector2.ZERO
+			johnny.vida = 100
+			johnny.escudo = 0.0
+			johnny.invulnerable = 0.0
+			johnny.esquiva_t = 0.0
+			var angulo: float = (sitio_johnny - sitio_jefe).angle()
+			jefe.mirada = Vector2.from_angle(angulo)
+			jefe.datos = {"angulo": angulo}
+			camara.reset_smoothing()
+			match tipo:
+				"antidisturbios":
+					jefe.porrazo(johnny)
+				"portera":
+					jefe.fregonazo(johnny)
+				"modista":
+					jefe.tijeretazo(johnny)
+				"cocinero":
+					jefe.cuchillazo(johnny)
+				"gerente":
+					jefe.maletinazo(johnny)
+				"bombero":
+					jefe.dar_hachazo(johnny)
+			var tapado: bool = not espacio.intersect_ray(PhysicsRayQueryParameters2D.create(sitio_jefe, sitio_johnny, 1)).is_empty()
+			print("Golpe del %s, caso %s: a %d de Johnny, con pared en medio %s · le quita %d de vida (esperado: con pared, 0; en abierto, más de 0)" % [
+				tipo, caso, sitio_jefe.distance_to(sitio_johnny), "sí" if tapado else "no", 100 - johnny.vida])
+			jefe.queue_free()
+			await get_tree().create_timer(0.1).timeout
+	# Y el aviso de cada golpe, a 45 de la pared de la derecha y mirando hacia ella: cortado donde el golpe se pararía
+	# (captura-golpes-pared-<jefe>.png)
+	camara.zoom = Vector2(2, 2)
+	for g in [["antidisturbios", "aviso_porrazo", "AVISO_PORRAZO"], ["portera", "aviso_fregonazo", "AVISO_FREGONAZO"],
+			["modista", "aviso_tijeretazo", "AVISO_TIJERETAZO"], ["cocinero", "aviso_cuchillazo", "AVISO_CUCHILLAZO"],
+			["gerente", "aviso_maletinazo", "AVISO_MALETINAZO"], ["bombero", "aviso_hacha", "AVISO_HACHA"]]:
+		var sitio_jefe := Vector2(borde_izq - 45.0, y)
+		var jefe: Node2D = meter_zombi(g[0], sitio_jefe)
+		await get_tree().create_timer(0.2).timeout
+		jefe.set_physics_process(false)   # quieto, con el aviso a mano
+		jefe.global_position = sitio_jefe
+		johnny.global_position = sitio_jefe + Vector2(-120, 0)
+		var dura = jefe.get_script().get_script_constant_map()[g[2]]
+		if dura is Array:
+			dura = dura[0]
+		jefe.mirada = Vector2.RIGHT
+		jefe.cambiar(g[1], {"angulo": 0.0})
+		jefe.t = dura * 0.9
+		Temblor.desplazamiento = Vector2(150, -20)
+		camara.reset_smoothing()
+		for i in 6:   # (sin pensar, el jefe no se repinta solo)
+			jefe.queue_redraw()
+			await RenderingServer.frame_post_draw
+		Captura.foto("captura-golpes-pared-%s.png" % g[0])
+		jefe.queue_free()
+		await get_tree().create_timer(0.1).timeout
+	Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()

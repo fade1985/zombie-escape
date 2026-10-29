@@ -182,12 +182,13 @@ func apuntar_alfileres(hacia: Vector2) -> void:
 	cambiar("aviso_alfileres", {"angulo": hacia.angle(), "aviso": AVISO_ALFILERES[fase - 1]})
 
 
-# El tijeretazo: daña y empuja a Johnny si está dentro del trozo marcado
+# El tijeretazo: daña y empuja a Johnny si está dentro del trozo marcado (y no hay una pared o un mueble en medio)
 func tijeretazo(johnny: Node2D) -> void:
 	Sonido.tocar("tijeras")
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
-	if hacia.length() - johnny.RADIO <= ALCANCE_TIJERETAZO and desvio <= MEDIO_TIJERETAZO + 0.15:
+	if hacia.length() - johnny.RADIO <= ALCANCE_TIJERETAZO and desvio <= MEDIO_TIJERETAZO + 0.15 \
+			and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_TIJERETAZO, self)
 		johnny.empujar(hacia.normalized() * 650.0)
 
@@ -371,7 +372,7 @@ func _draw() -> void:
 		return
 	match estado:
 		"aviso_tijeretazo":
-			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
+			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_TIJERETAZO, ALCANCE_TIJERETAZO,
 				minf(1.0, t / AVISO_TIJERETAZO), tiempo)
 		"aviso_alfileres":
 			# una barra fina por donde irán los alfileres, que se llena hacia fuera (aviso.gd)

@@ -90,11 +90,13 @@ en una línea.
   pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
   encienden hasta la pared; también los latigazos de tentáculos y lenguas), los golpes, saltos y círculos (se
   llenan hacia fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas, como el aspirado del
-  glotón), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
+  glotón; los golpes cuerpo a cuerpo, `Aviso.golpe`, se cortan donde el golpe chocaría con una pared o un mueble,
+  porque no los atraviesa: solo dan a Johnny si no está `Aviso.tapado`, un rayo de la capa 1), las barras rectas (alfileres, rayas de los disparos: contratos, cuchillos y bolas de fuego de la
   criatura; se cortan donde el disparo se pararía en una pared o un mueble y ahí acaban en la estrella de las
   cargas; `Aviso.alcance`, medido en cada fotograma con un círculo del ancho de la barra y la capa 1) y las
   flechas del giro del bombero. Se prueban con
-  `--golpes`, `--franja`, `--avisos` y `--disparos` (las barras junto a la pared y en campo abierto). Heredan:
+  `--golpes`, `--franja`, `--avisos`, `--disparos` (las barras junto a la pared y en campo abierto) y
+  `--golpes-pared` (cada golpe con Johnny tras la pared, y su aviso cortado). Heredan:
   - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.

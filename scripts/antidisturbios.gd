@@ -120,12 +120,13 @@ func elegir(johnny: Node2D, d: float, desvio: float) -> void:
 	andar(0.3)
 
 
-# El porrazo: daña y empuja a Johnny si está dentro del trozo marcado
+# El porrazo: daña y empuja a Johnny si está dentro del trozo marcado (y no hay una pared o un mueble en medio)
 func porrazo(johnny: Node2D) -> void:
 	Sonido.tocar("porrazo")
 	var hacia: Vector2 = johnny.global_position - global_position
 	var desvio := absf(angle_difference(hacia.angle(), datos.angulo))
-	if hacia.length() - johnny.RADIO <= ALCANCE_PORRAZO and desvio <= MEDIO_PORRAZO + 0.15:
+	if hacia.length() - johnny.RADIO <= ALCANCE_PORRAZO and desvio <= MEDIO_PORRAZO + 0.15 \
+			and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_PORRAZO, self)
 		johnny.empujar(hacia.normalized() * 650.0)
 
@@ -228,7 +229,7 @@ func _draw() -> void:
 	draw_arc(Vector2.ZERO, radio + 14.0, a - FRENTE, a + FRENTE, 16, Color("#bfe9ff", 0.35), 3.0)
 	match estado:
 		"aviso_porrazo":
-			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_PORRAZO, ALCANCE_PORRAZO,
+			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_PORRAZO, ALCANCE_PORRAZO,
 				minf(1.0, t / AVISO_PORRAZO), tiempo)
 		"aviso_carga":
 			franja(VELOCIDAD_CARGA * TIEMPO_CARGA, minf(1.0, t / datos.aviso))
