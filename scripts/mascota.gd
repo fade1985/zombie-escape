@@ -156,7 +156,8 @@ func aterrizar(johnny: Node2D) -> void:
 		Particulas.soltar(self, global_position + Vector2(cos(a) * 30.0, PIE + sin(a) * 14.0),
 			Vector2(cos(a) * 160.0, sin(a) * 70.0), Color("#8a7a66"), 4, 0.5)
 	var hacia: Vector2 = johnny.global_position - global_position
-	if hacia.length() < RADIO_SALTO + johnny.RADIO and johnny.esquiva_t <= 0.0:
+	if hacia.length() < RADIO_SALTO + johnny.RADIO and johnny.esquiva_t <= 0.0 \
+			and not Aviso.tapado(self, johnny.global_position + Vector2(0, 16), Vector2(0, PIE - 6)):
 		johnny.recibir_dano(DANO_SALTO, self)
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 600.0)
 
@@ -228,5 +229,5 @@ func _draw() -> void:
 		"salto":
 			# donde cae: el círculo se llena hacia fuera y su sombra crece en el medio (aviso.gd)
 			var k := minf(1.0, t / VUELO)
-			Aviso.abanico(self, datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, PI, RADIO_SALTO, k, tiempo,
+			Aviso.golpe(self, datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, PI, RADIO_SALTO, k, tiempo,
 				0.6, 0.3 + 0.4 * k)

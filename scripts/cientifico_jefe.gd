@@ -569,13 +569,13 @@ func punetazo() -> void:
 
 
 # La onda pilla a Johnny cuando pasa por donde está (una sola vez). Si en ese momento está esquivando, le pasa por
-# debajo y ya no le pilla (la onda es un frente que avanza, no un disco)
+# debajo y ya no le pilla (la onda es un frente que avanza, no un disco). No pasa por una pared ni un mueble
 func onda(johnny: Node2D) -> void:
 	if datos.get("hecho", false) or t > DURA_ONDA:
 		return
 	var r := RADIO_ONDA * t / DURA_ONDA
 	var hacia: Vector2 = johnny.global_position - global_position
-	if Vector2(hacia.x, hacia.y / 0.7).length() <= r + johnny.RADIO:
+	if Vector2(hacia.x, hacia.y / 0.7).length() <= r + johnny.RADIO and not Aviso.tapado(self, johnny.global_position):
 		datos.hecho = true
 		if johnny.esquiva_t <= 0.0:
 			johnny.recibir_dano(DANO_PUNETAZO, self)
@@ -731,7 +731,7 @@ func _draw() -> void:
 				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LENGUAS), tiempo, i)
 		"aviso_punetazo":
 			# el círculo de la onda, que se llena de él hacia fuera (aviso.gd)
-			Aviso.abanico(self, Vector2(0, 6), 0.0, PI, RADIO_ONDA, minf(1.0, t / AVISO_PUNETAZO), tiempo, 0.7)
+			Aviso.golpe(self, Vector2(0, 6), 0.0, PI, RADIO_ONDA, minf(1.0, t / AVISO_PUNETAZO), tiempo, 0.7)
 		"punetazo":
 			# la onda: un anillo que crece desde los puños y se apaga
 			var k := minf(1.0, t / DURA_ONDA)

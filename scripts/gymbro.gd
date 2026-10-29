@@ -201,7 +201,8 @@ func aterrizar(johnny: Node2D) -> void:
 			Vector2(cos(a), sin(a) * 0.6) * RADIO_SALTO * 2.0, Color("#8a7a66"), 4, 0.5)
 	Particulas.anillo(self, global_position + Vector2(0, PIE - 6), RADIO_SALTO, Color("#b3a58c"), 0.35)
 	var hacia: Vector2 = johnny.global_position - global_position
-	if en_la_zona(johnny.global_position + Vector2(0, 16), johnny.RADIO * 0.6) and johnny.esquiva_t <= 0.0:
+	if en_la_zona(johnny.global_position + Vector2(0, 16), johnny.RADIO * 0.6) and johnny.esquiva_t <= 0.0 \
+			and not Aviso.tapado(self, johnny.global_position + Vector2(0, 16), Vector2(0, PIE - 6)):
 		johnny.recibir_dano(DANO_SALTO, self)
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 700.0)
 		johnny.pisar({"tirado": {}})
@@ -337,7 +338,7 @@ func _draw() -> void:
 		"salto":
 			# donde cae: el círculo se llena hacia fuera y su sombra crece en el medio (aviso.gd)
 			var k := minf(1.0, t / datos.vuelo)
-			Aviso.abanico(self, datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, PI, RADIO_SALTO, k, tiempo,
+			Aviso.golpe(self, datos.hasta - global_position + Vector2(0, PIE - 6), 0.0, PI, RADIO_SALTO, k, tiempo,
 				0.6, 0.15 + 0.3 * k)
 	draw_set_transform(Vector2.ZERO)
 

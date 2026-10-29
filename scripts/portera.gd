@@ -348,7 +348,7 @@ func embestir(delta: float, d: float) -> void:
 		cambiar("aviso_circulo", {"quedan": datos.quedan})
 
 
-# Fregonazo en círculo: golpea todo lo que tiene alrededor y lo echa hacia atrás
+# Fregonazo en círculo: golpea todo lo que tiene alrededor (menos lo que tapa una pared o un mueble) y lo echa hacia atrás
 func fregonazo_circulo(johnny: Node2D) -> void:
 	Sonido.tocar("escobazo")
 	for i in 14:
@@ -357,7 +357,7 @@ func fregonazo_circulo(johnny: Node2D) -> void:
 		Particulas.soltar(self, global_position + Vector2(cos(a) * r, sin(a) * r * 0.8), Vector2(cos(a), sin(a)) * 60.0,
 			Color("#cbb994"), 4, 0.5)
 	var hacia: Vector2 = johnny.global_position - global_position
-	if hacia.length() - johnny.RADIO <= RADIO_CIRCULO:
+	if hacia.length() - johnny.RADIO <= RADIO_CIRCULO and not Aviso.tapado(self, johnny.global_position):
 		johnny.recibir_dano(DANO_CIRCULO, self)
 		johnny.empujar(hacia.normalized() * 700.0)
 
@@ -585,7 +585,7 @@ func _draw() -> void:
 				minf(1.0, t / datos.aviso), tiempo)
 		"aviso_circulo":
 			# el círculo entero, que se llena de ella hacia fuera (aviso.gd)
-			Aviso.abanico(self, Vector2(0, 6), 0.0, PI, RADIO_CIRCULO, minf(1.0, t / AVISO_CIRCULO), tiempo, 0.8)
+			Aviso.golpe(self, Vector2(0, 6), 0.0, PI, RADIO_CIRCULO, minf(1.0, t / AVISO_CIRCULO), tiempo, 0.8)
 		"circulo":
 			# el anillo de polvo del golpe, que se abre y se desvanece
 			var k := minf(1.0, t / 0.35)

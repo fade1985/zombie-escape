@@ -1984,11 +1984,12 @@ func probar_disparos() -> void:
 	get_tree().quit()
 
 
-# --golpes-pared: ¿los golpes cuerpo a cuerpo de los jefes (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo y
-# hachazo) atraviesan las paredes? En la sala de pruebas (F11), cada jefe pegando (se llama a su golpe) con Johnny justo
-# al otro lado de la pared de la derecha, a su alcance, y, de control, con Johnny a la misma distancia en campo abierto.
-# En la terminal, si el golpe le quita vida y si hay pared entre los dos (un rayo de la capa 1); y, con fotos, el aviso
-# de cada golpe a 45 de la pared (captura-golpes-pared-<jefe>.png): cortado donde el golpe se pararía
+# --golpes-pared: ¿los golpes de los jefes (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo y hachazo, y los de
+# área: el círculo de la portera, los saltos de la mascota y del Gymbro y la onda de la criatura) atraviesan las
+# paredes? En la sala de pruebas (F11), cada jefe pegando (se llama a su golpe) con Johnny justo al otro lado de la
+# pared de la derecha, a su alcance, y, de control, con Johnny a la misma distancia en campo abierto. En la terminal,
+# si el golpe le quita vida y si hay pared entre los dos (un rayo de la capa 1); y, con fotos, el aviso de cada uno a
+# 45 de la pared (captura-golpes-pared-<nombre>.png): cortado donde el golpe se pararía
 func probar_golpes_pared() -> void:
 	await pulsar_y_esperar(KEY_F11)
 	var sala: SalaArmas = null
@@ -2018,14 +2019,20 @@ func probar_golpes_pared() -> void:
 	var borde_izq: float = izq.position.x
 	var borde_der: float = der.position.x
 	print("Pared de la derecha: de %d a %d (grosor %d)" % [borde_izq, borde_der, borde_der - borde_izq])
-	for tipo in ["antidisturbios", "portera", "modista", "cocinero", "gerente", "bombero"]:
+	for tipo in ["antidisturbios", "portera", "modista", "cocinero", "gerente", "bombero", "portera_circulo", "mascota_salto",
+			"gymbro_salto", "criatura_onda"]:
 		for caso in ["pared", "abierto"]:
 			var sitio_jefe := Vector2(borde_izq - 4.0, y)
 			var sitio_johnny := Vector2(borde_der + 6.0, y)
 			if caso == "abierto":
 				sitio_johnny.x = sitio_jefe.x - (sitio_johnny.x - sitio_jefe.x)
-			var jefe: Node2D = meter_zombi(tipo, sitio_jefe)
+			var clase: String = {"portera_circulo": "portera", "mascota_salto": "mascota", "gymbro_salto": "gymbro",
+					"criatura_onda": "cientifico_jefe"}.get(tipo, tipo)
+			var jefe: Node2D = meter_zombi(clase, sitio_jefe)
 			await get_tree().create_timer(0.2).timeout
+			if tipo == "criatura_onda":
+				jefe.mutar()
+				await get_tree().create_timer(1.6).timeout
 			jefe.set_physics_process(false)   # quieto: el golpe se le pide a mano
 			jefe.global_position = sitio_jefe
 			johnny.global_position = sitio_johnny
@@ -2036,7 +2043,7 @@ func probar_golpes_pared() -> void:
 			johnny.esquiva_t = 0.0
 			var angulo: float = (sitio_johnny - sitio_jefe).angle()
 			jefe.mirada = Vector2.from_angle(angulo)
-			jefe.datos = {"angulo": angulo}
+			jefe.datos = {"angulo": angulo, "hasta": sitio_jefe}
 			camara.reset_smoothing()
 			match tipo:
 				"antidisturbios":
@@ -2051,30 +2058,44 @@ func probar_golpes_pared() -> void:
 					jefe.maletinazo(johnny)
 				"bombero":
 					jefe.dar_hachazo(johnny)
+				"portera_circulo":
+					jefe.fregonazo_circulo(johnny)
+				"mascota_salto", "gymbro_salto":
+					jefe.aterrizar(johnny)
+				"criatura_onda":
+					jefe.t = jefe.DURA_ONDA
+					jefe.onda(johnny)
 			var tapado: bool = not espacio.intersect_ray(PhysicsRayQueryParameters2D.create(sitio_jefe, sitio_johnny, 1)).is_empty()
-			print("Golpe del %s, caso %s: a %d de Johnny, con pared en medio %s · le quita %d de vida (esperado: con pared, 0; en abierto, más de 0)" % [
+			print("Ataque «%s», caso %s: a %d de Johnny, con pared en medio %s · le quita %d de vida (si no atraviesa: con pared, 0; en abierto, más de 0)" % [
 				tipo, caso, sitio_jefe.distance_to(sitio_johnny), "sí" if tapado else "no", 100 - johnny.vida])
 			jefe.queue_free()
 			await get_tree().create_timer(0.1).timeout
 	# Y el aviso de cada golpe, a 45 de la pared de la derecha y mirando hacia ella: cortado donde el golpe se pararía
-	# (captura-golpes-pared-<jefe>.png)
-	camara.zoom = Vector2(2, 2)
-	for g in [["antidisturbios", "aviso_porrazo", "AVISO_PORRAZO"], ["portera", "aviso_fregonazo", "AVISO_FREGONAZO"],
-			["modista", "aviso_tijeretazo", "AVISO_TIJERETAZO"], ["cocinero", "aviso_cuchillazo", "AVISO_CUCHILLAZO"],
-			["gerente", "aviso_maletinazo", "AVISO_MALETINAZO"], ["bombero", "aviso_hacha", "AVISO_HACHA"]]:
+	# (captura-golpes-pared-<nombre>.png). Cada caso: nombre, jefe, estado del aviso, constante de lo que dura y zoom
+	for g in [["antidisturbios", "antidisturbios", "aviso_porrazo", "AVISO_PORRAZO", 2.0],
+			["portera", "portera", "aviso_fregonazo", "AVISO_FREGONAZO", 2.0],
+			["modista", "modista", "aviso_tijeretazo", "AVISO_TIJERETAZO", 2.0],
+			["cocinero", "cocinero", "aviso_cuchillazo", "AVISO_CUCHILLAZO", 2.0],
+			["gerente", "gerente", "aviso_maletinazo", "AVISO_MALETINAZO", 2.0],
+			["bombero", "bombero", "aviso_hacha", "AVISO_HACHA", 2.0],
+			["portera-circulo", "portera", "aviso_circulo", "AVISO_CIRCULO", 1.2],
+			["mascota-salto", "mascota", "salto", "VUELO", 1.2],
+			["gymbro-salto", "gymbro", "salto", "VUELO", 1.2],
+			["criatura-onda", "cientifico_jefe", "aviso_punetazo", "AVISO_PUNETAZO", 1.2]]:
 		var sitio_jefe := Vector2(borde_izq - 45.0, y)
-		var jefe: Node2D = meter_zombi(g[0], sitio_jefe)
+		var jefe: Node2D = meter_zombi(g[1], sitio_jefe)
 		await get_tree().create_timer(0.2).timeout
 		jefe.set_physics_process(false)   # quieto, con el aviso a mano
 		jefe.global_position = sitio_jefe
 		johnny.global_position = sitio_jefe + Vector2(-120, 0)
-		var dura = jefe.get_script().get_script_constant_map()[g[2]]
+		var dura = jefe.get_script().get_script_constant_map()[g[3]]
 		if dura is Array:
 			dura = dura[0]
 		jefe.mirada = Vector2.RIGHT
-		jefe.cambiar(g[1], {"angulo": 0.0})
+		jefe.cambiar(g[2], {"angulo": 0.0, "desde": sitio_jefe, "hasta": sitio_jefe, "vuelo": dura, "quedan": 0})
 		jefe.t = dura * 0.9
-		Temblor.desplazamiento = Vector2(150, -20)
+		camara.zoom = Vector2(g[4], g[4])
+		Temblor.desplazamiento = Vector2(150, -20) if g[4] > 1.5 else Vector2(120, 0)
 		camara.reset_smoothing()
 		for i in 6:   # (sin pensar, el jefe no se repinta solo)
 			jefe.queue_redraw()

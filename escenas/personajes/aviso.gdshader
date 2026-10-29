@@ -27,7 +27,7 @@ uniform bool choca = false;     // la franja acaba en una pared
 uniform float sombra = 0.0;     // el abanico de un salto: la sombra de quien cae, en el medio (lo que ocupa, 0 a 1)
 uniform vec3 tinte = vec3(1.0, 0.24, 0.35);   // el abanico y la barra: su color (rojo; el aspirado, verde)
 uniform float ondas = 0.0;      // el abanico: lo deprisa que van las ondas hacia el jefe (0, sin ondas)
-uniform float rayos[21];        // el abanico: hasta dónde llega cada rayo, de un borde al otro (si n_rayos > 1)
+uniform float rayos[37];        // el abanico: hasta dónde llega cada rayo, de un borde al otro (si n_rayos > 1)
 uniform int n_rayos = 0;
 uniform bool destella = true;   // el destello del final (no, en lo que ya está pasando: aspirando, girando)
 uniform float sentido = 1.0;    // las flechas del giro: 1, como las agujas del reloj; -1, al revés
