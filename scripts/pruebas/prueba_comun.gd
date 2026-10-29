@@ -26,7 +26,8 @@ func preparar_prueba() -> void:
 		tutoriales_prueba = true   # (con las ventanas encendidas: así se ve que no sale ninguna)
 		Tutoriales.olvidar()
 		Guardado.cambiar(func(g):
-			g.partidas = 0
+			g.partidas = 4   # (no es la primera: sale por «Que vuelvan a salir todos», guia_otra_vez)
+			g.guia_otra_vez = true
 			g.ajustes.tutoriales = true)
 
 

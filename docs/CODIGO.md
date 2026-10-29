@@ -216,7 +216,8 @@ en una línea.
   encendidos): en vez de las ventanas de `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: moverse,
   esquivar, atacar, sacar la pistola, recargar, curarse, lanzar y el jefe), la casilla del HUD que late (`hud.latido`),
   una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la llave y un primer apartamento
-  fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto. Se prueba con `--guiado`.
+  fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto. Sale en la partida 1 o si se
+  pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar` apunta `guia_otra_vez`). Se prueba con `--guiado`.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).

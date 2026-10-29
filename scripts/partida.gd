@@ -242,8 +242,10 @@ func _ready() -> void:
 			Reto.ficha(g, edificio).intentos += 1)
 	ahorrados = s.dolares
 	# la primera partida enseña a jugar en la planta baja de los Apartamentos (guia.gd)
-	guia.activa = s.partidas == 1 and edificio == "apartamentos" and not Reto.activo and Guardado.ajuste("tutoriales") \
-		and (not captura or guiado_prueba)
+	guia.activa = (s.partidas == 1 or s.guia_otra_vez) and edificio == "apartamentos" and not Reto.activo \
+		and Guardado.ajuste("tutoriales") and (not captura or guiado_prueba)
+	if guia.activa and s.guia_otra_vez:
+		Guardado.cambiar(func(g): g.guia_otra_vez = false)   # (repetida una vez: vale solo para esta partida)
 	al_empezar = {"logros": s.logros.keys(), "skins": s.skins.duplicate(), "paginas": s.paginas.duplicate(),
 		"bestiario": s.bestiario.duplicate(), "encontrados": s.encontrados.duplicate(),
 		"mejor_planta": Guardado.edificio(s, edificio).mejor_planta}

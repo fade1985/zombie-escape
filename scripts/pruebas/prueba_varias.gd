@@ -2260,7 +2260,8 @@ func probar_guiado() -> void:
 		print("Guía · pista «%s» (esperado: %s) · latido «%s»" % [guia.pista, id, get_node("Pantalla/HUD").latido])
 		Captura.foto(foto)
 	await get_tree().create_timer(0.5).timeout
-	print("Guía · activa: %s (esperado: true)" % guia.activa)
+	print("Guía · activa (no es la primera partida, pero se pidió repetirla): %s · pedida aún: %s (esperado: true, false)" % [
+		guia.activa, Guardado.cargar().guia_otra_vez])
 	await esperar.call("moverse", "captura-guiado-moverse.png")
 	johnny.position += Vector2(120, 0)
 	await get_tree().create_timer(1.6).timeout
@@ -2335,6 +2336,8 @@ func probar_guiado() -> void:
 	# al subir a la planta siguiente, se apaga
 	nueva_planta(2)
 	print("Guía · en la 1ª planta: activa %s (esperado: false)" % guia.activa)
+	Tutoriales.olvidar()
+	print("Guía · tras «Que vuelvan a salir todos»: pedida %s (esperado: true)" % Guardado.cargar().guia_otra_vez)
 	get_tree().quit()
 
 
