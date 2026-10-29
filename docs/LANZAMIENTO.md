@@ -37,8 +37,8 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 
 - [ ] **Principio y final.** Una historia mínima: quién es Johnny, por qué el edificio está así, un final que
       cierre. Si se quiere, un final verdadero al desbloquear algo.
-- [ ] **Tutorial disimulado.** La primera partida guía al jugador por el primer piso con las ayudas del HUD que ya
-      existen, sin pantallas de texto.
+- [x] **Tutorial disimulado.** La primera partida guía al jugador por el primer piso con las ayudas del HUD que ya
+      existen, sin pantallas de texto. (Hecho el 29 oct: `guia.gd`, prueba `--guiado`.)
 - [ ] **Horas de juego.** Un roguelike de precio bajo se espera que dé 8–15 horas hasta verlo todo. Lo barato es
       multiplicar lo que ya hay: niveles de ascensión (modificadores de dificultad acumulables, como Slay the
       Spire), los supervivientes rescatados como personajes jugables con su arma inicial, desbloqueos a largo plazo.

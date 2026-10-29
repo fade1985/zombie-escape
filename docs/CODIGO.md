@@ -212,6 +212,11 @@ en una línea.
   pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
   mutación sacan el suyo antes de abrirse), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba
   con `--tutorial`.
+- `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
+  encendidos): en vez de las ventanas de `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: moverse,
+  esquivar, atacar, sacar la pistola, recargar, curarse, lanzar y el jefe), la casilla del HUD que late (`hud.latido`),
+  una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la llave y un primer apartamento
+  fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto. Se prueba con `--guiado`.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).

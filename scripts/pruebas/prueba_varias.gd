@@ -2242,3 +2242,97 @@ func probar_continuar() -> void:
 	PartidaGuardada.borrar()
 	print("Continuar · borrada al acabar: %s (esperado: true)" % PartidaGuardada.guardada().is_empty())
 	get_tree().quit()
+
+
+# --guiado: el tutorial disimulado de la primera partida (guia.gd): las pistas encima de Johnny en orden, el latido del
+# HUD, la flecha del suelo, el apartamento fácil, la llavecita del zombi de la llave y que no sale ninguna ventana
+func probar_guiado() -> void:
+	johnny.invencible = true
+	var ventanas := func() -> int:
+		return get_children().filter(func(h): return h is Tutorial).size()
+	# espera a que salga la pista "id" (o se canse) y saca su foto
+	var esperar := func(id: String, foto: String) -> void:
+		for _i in 40:
+			if guia.pista == id:
+				break
+			await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.4).timeout
+		print("Guía · pista «%s» (esperado: %s) · latido «%s»" % [guia.pista, id, get_node("Pantalla/HUD").latido])
+		Captura.foto(foto)
+	await get_tree().create_timer(0.5).timeout
+	print("Guía · activa: %s (esperado: true)" % guia.activa)
+	await esperar.call("moverse", "captura-guiado-moverse.png")
+	johnny.position += Vector2(120, 0)
+	await get_tree().create_timer(1.6).timeout
+	await esperar.call("esquivar", "captura-guiado-esquivar.png")
+	johnny.esquivar(Vector2.LEFT)
+	await get_tree().create_timer(1.8).timeout
+	print("Guía · flecha a la vista en la sala de mantenimiento: %s (esperado: true)" % guia.flecha.visible)
+	Captura.foto("captura-guiado-flecha.png")
+	# el pasillo: el aviso y la flecha hacia el apartamento fácil
+	await montar(0, planta.sitios[aqui].salidas[0].vuelta)
+	await get_tree().create_timer(0.8).timeout
+	var facil: Dictionary = planta.sitios[guia.facil]
+	var puerta_facil := -1
+	for i in planta.sitios[0].salidas.size():
+		if planta.sitios[0].salidas[i].get("a", -1) == guia.facil:
+			puerta_facil = i
+	print("Guía · en el pasillo la flecha lleva al fácil: %s · visto «apartamentos»: %s (esperado: true, true)" % [
+		guia.destino() == mapa.puertas[puerta_facil], Tutoriales.visto("apartamentos")])
+	Captura.foto("captura-guiado-pasillo.png")
+	print("Guía · el fácil: %d zombis, con la llave %s, armarito %s (esperado: ≤%d, false, vendas)" % [facil.zombis.size(),
+		facil.zombis.any(func(z): return z.get("llave", false)),
+		facil.armaritos[0].dentro if not facil.get("armaritos", []).is_empty() else "sin baño", Guia.FACIL])
+	# el apartamento fácil: los zombis, despiertos y quietos, a la vista
+	await montar(guia.facil, 0)
+	await get_tree().create_timer(0.3).timeout
+	var zombis := get_tree().get_nodes_in_group("zombis")
+	for i in zombis.size():
+		zombis[i].dormido = false
+		zombis[i].set_physics_process(false)
+		zombis[i].position = johnny.position + Vector2(-200 + 200 * i, -330)   # (más lejos que Guia.CERCA)
+	johnny.set_physics_process(false)   # (quieto: que no los mate ni gaste las balas él solo en el modo asistido)
+	await esperar.call("atacar", "captura-guiado-atacar.png")
+	await get_tree().create_timer(4.2).timeout   # (en el modo asistido se va sola a los 4 s)
+	await esperar.call("pistola", "captura-guiado-pistola.png")
+	johnny.cambiar_mano()
+	await get_tree().create_timer(1.7).timeout
+	johnny.balas = 2
+	await esperar.call("recargar", "captura-guiado-recargar.png")
+	johnny.empezar_recarga()
+	await get_tree().create_timer(1.7).timeout
+	mochila.append("vendas")
+	johnny.vida = johnny.stats.vida_max - 30
+	await esperar.call("vendas", "captura-guiado-vendas.png")
+	usar_cura("vendas")
+	await get_tree().create_timer(1.7).timeout
+	for i in zombis.size():
+		zombis[i].position = johnny.position + Vector2(-120 + 120 * i, -150)
+	await esperar.call("lanzar", "captura-guiado-lanzar.png")
+	lanzables.cantidades[lanzables.tipo] -= 1
+	await get_tree().create_timer(1.7).timeout
+	print("Guía · vistos jugar %s, municion %s, curas %s, lanzables %s · ventanas abiertas: %d (esperado: true ×4, 0)" % [
+		Tutoriales.visto("jugar"), Tutoriales.visto("municion"), Tutoriales.visto("curas"), Tutoriales.visto("lanzables"),
+		ventanas.call()])
+	# el zombi de la llave, en otro apartamento: su llavecita y el aviso al despertar
+	for z in zombis:
+		z.queue_free()
+	johnny.set_physics_process(true)
+	var con_llave := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and planta.sitios[i].zombis.any(func(z): return z.get("llave", false)):
+			con_llave = i
+	await montar(con_llave, 0)
+	await get_tree().create_timer(0.3).timeout
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.has_meta("llave"):
+			z.dormido = false
+			z.set_physics_process(false)
+			z.position = johnny.position + Vector2(0, -170)
+			print("Guía · el zombi de la llave lleva su llavecita: %s (esperado: true)" % (z.get_node_or_null("MarcaLlave") != null))
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-guiado-llave.png")
+	# al subir a la planta siguiente, se apaga
+	nueva_planta(2)
+	print("Guía · en la 1ª planta: activa %s (esperado: false)" % guia.activa)
+	get_tree().quit()

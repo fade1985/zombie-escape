@@ -124,6 +124,7 @@ var supervivientes := Supervivientes.new()   # el superviviente de la partida, l
 var logros := Logros.new()         # los retos del ordenador (logros.gd)
 var eventos := Eventos.new()       # los eventos sorpresa de algunas plantas (eventos.gd)
 var joyeria := Joyeria.new()       # la cámara acorazada de la joyería del centro comercial (joyeria.gd)
+var guia := Guia.new()             # el tutorial disimulado de la primera partida (guia.gd)
 var mochila: Array = []    # los objetos recogidos en esta partida (objetos.gd), uno por cada: al baúl si ganas
 var armas_guardadas: Array = []   # las de repuesto: como mucho una de cuerpo a cuerpo y una a distancia (llevar_arma)
 var ahorrados := 0         # los dólares guardados de otras partidas
@@ -135,6 +136,7 @@ var al_empezar := {}       # lo que ya se tenía al empezar (logros, skins, pág
                            # nuevo (conseguido())
 var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial()); el primero, el que sale o va a salir
 var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
+var guiado_prueba := false        # ni la guía de la primera partida, salvo en la suya (--guiado)
 var guarda_partida := true        # si se apunta la partida a medias al empezar cada planta (partida_guardada.gd; la de
                                   # prueba, no, salvo en la suya: --continuar)
 var semilla_propia := false       # si la semilla de las plantas (Planta.semilla) la ha puesto esta partida: se quita al salir
@@ -207,6 +209,8 @@ func _ready() -> void:
 	eventos.preparar(self)
 	add_child(joyeria)
 	joyeria.preparar(self)
+	add_child(guia)
+	guia.preparar(self)
 	# Los controles del móvil (solo salen en pantallas táctiles)
 	var tactil := Tactil.new()
 	tactil.partida = self
@@ -237,6 +241,9 @@ func _ready() -> void:
 		if Reto.activo:
 			Reto.ficha(g, edificio).intentos += 1)
 	ahorrados = s.dolares
+	# la primera partida enseña a jugar en la planta baja de los Apartamentos (guia.gd)
+	guia.activa = s.partidas == 1 and edificio == "apartamentos" and not Reto.activo and Guardado.ajuste("tutoriales") \
+		and (not captura or guiado_prueba)
 	al_empezar = {"logros": s.logros.keys(), "skins": s.skins.duplicate(), "paginas": s.paginas.duplicate(),
 		"bestiario": s.bestiario.duplicate(), "encontrados": s.encontrados.duplicate(),
 		"mejor_planta": Guardado.edificio(s, edificio).mejor_planta}
@@ -328,6 +335,7 @@ func nueva_planta(num: int) -> void:
 	supervivientes.nueva_planta()
 	logros.planta_nueva()
 	eventos.nueva_planta()
+	guia.nueva_planta()   # (después de los eventos: en la planta baja de la guía no hay)
 	johnny.escudo = johnny.stats.escudo + johnny.stats.escudo_mut   # Acero y Endurecimiento: escudo nuevo en cada planta
 	johnny.aliento_usado = false   # (y el Segundo aliento vuelve a estar listo)
 
@@ -420,6 +428,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	supervivientes.recoger()
 	eventos.recoger()
 	joyeria.recoger()
+	guia.recoger()
 	johnny.get_parent().remove_child(johnny)
 	if mapa:
 		remove_child(mapa)
@@ -487,6 +496,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	cerrada = false
 	actualizar_puertas()
 	poner_lugar()
+	guia.al_montar()
 	if sitio.get("peligros", []).any(func(p): return p.tipo in ["frio", "fuego", "agua"]):
 		tutorial("peligros")   # (la cámara frigorífica, la cocina o el agua de las tiendas del centro comercial)
 	if fundir:
@@ -513,6 +523,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 				tutorial("jefes")
+				guia.jefe_presentado()
 			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
 				decir(Idioma.t("Te espera arriba, en el helipuerto: sube por la rampa"), 3.0)
 
@@ -910,6 +921,7 @@ func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
 		zombi.vida_max = int(zombi.vida_max * (1.0 + 0.2 * (planta.num - 1)) * Alerta.guardia())
 		zombi.vida = zombi.vida_max
 	zombi.set_meta("llave", true)
+	guia.marcar_llave(zombi)   # (en la primera partida, con su llavecita encima)
 	zombi.importante = true
 	zombi.murio.connect(func():
 		dato.erase("llave")
@@ -1226,7 +1238,7 @@ func abrir_taquilla() -> void:
 # La ventana del tutorial de algo nuevo (tutoriales.gd), si aún no se ha visto: en cuanto no haya otra pantalla abierta,
 # ni la presentación de un jefe, ni se esté cambiando de sitio. Si llegan varios, salen uno detrás de otro
 func tutorial(id: String) -> void:
-	if not puede_tutorial(id) or id in cola_tutoriales:
+	if not puede_tutorial(id) or id in cola_tutoriales or (guia.activa and id in Guia.CUBRE):   # (esos, la guía a su manera)
 		return
 	cola_tutoriales.append(id)
 	if cola_tutoriales.size() > 1:

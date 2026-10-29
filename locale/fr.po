@@ -905,6 +905,46 @@ msgstr "J'AI FAIM !"
 msgid "-%d ácido"
 msgstr "-%d acide"
 
+#: scripts/guia.gd
+msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
+msgstr "Nettoie les appartements : quand tu entres, la porte se ferme tant qu'il reste un seul zombie"
+
+#: scripts/guia.gd
+msgid "¡Ese zombi lleva la llave del %s!"
+msgstr "Ce zombie a la clé de l'appart %s !"
+
+#: scripts/guia.gd
+msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
+msgstr "Tu as perdu un tiers de ta vie : les bandages ne le soignent plus, seul un médikit le rend"
+
+#: scripts/guia.gd
+msgid "Muévete con {moverse}"
+msgstr "Déplace-toi avec {moverse}"
+
+#: scripts/guia.gd
+msgid "Esquiva con {esquivar}: no te hacen daño"
+msgstr "Esquive avec {esquivar} : rien ne te blesse"
+
+#: scripts/guia.gd
+msgid "Saca la pistola con {cambiar_arma}"
+msgstr "Sors le pistolet avec {cambiar_arma}"
+
+#: scripts/guia.gd
+msgid "Recarga con {recargar}"
+msgstr "Recharge avec {recargar}"
+
+#: scripts/guia.gd
+msgid "Cúrate con {usar_vendas}"
+msgstr "Soigne-toi avec {usar_vendas}"
+
+#: scripts/guia.gd
+msgid "Mantén {lanzar} para apuntar y suelta para lanzar"
+msgstr "Maintiens {lanzar} pour viser et relâche pour lancer"
+
+#: scripts/guia.gd
+msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
+msgstr "Sors de la marque au sol ou esquive avec {esquivar} !"
+
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN !"

@@ -904,6 +904,46 @@ msgstr "饿死我了！"
 msgid "-%d ácido"
 msgstr "-%d 酸蚀"
 
+#: scripts/guia.gd
+msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
+msgstr "清理公寓：一进去门就会关上，直到一个僵尸都不剩"
+
+#: scripts/guia.gd
+msgid "¡Ese zombi lleva la llave del %s!"
+msgstr "那个僵尸拿着%s的钥匙！"
+
+#: scripts/guia.gd
+msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
+msgstr "你失去了一段生命：这一段绷带治不好，只有急救包能恢复"
+
+#: scripts/guia.gd
+msgid "Muévete con {moverse}"
+msgstr "用{moverse}移动"
+
+#: scripts/guia.gd
+msgid "Esquiva con {esquivar}: no te hacen daño"
+msgstr "用{esquivar}闪避：期间不会受到伤害"
+
+#: scripts/guia.gd
+msgid "Saca la pistola con {cambiar_arma}"
+msgstr "用{cambiar_arma}掏出手枪"
+
+#: scripts/guia.gd
+msgid "Recarga con {recargar}"
+msgstr "用{recargar}换弹"
+
+#: scripts/guia.gd
+msgid "Cúrate con {usar_vendas}"
+msgstr "用{usar_vendas}治疗"
+
+#: scripts/guia.gd
+msgid "Mantén {lanzar} para apuntar y suelta para lanzar"
+msgstr "按住{lanzar}瞄准，松开扔出"
+
+#: scripts/guia.gd
+msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
+msgstr "离开地上的标记，或者用{esquivar}闪避！"
+
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN!"

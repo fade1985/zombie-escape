@@ -111,6 +111,8 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --guiado            el tutorial disimulado de la primera partida: las pistas sobre Johnny, el latido del HUD, la
+#                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
 #   --idioma            solo el menú, Opciones (4 pestañas y las licencias), el cambio de idioma en caliente y «Elige edificio»; con
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]
 #   --ingles            (con cualquier prueba) el juego en inglés; al cerrar, cuenta los textos sin traducir [idioma.gd]
@@ -407,6 +409,9 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--guiado" in args:
+		set_process(false)   # sin la prueba larga
+		probar_guiado()
 	elif "--equilibrio" in args:
 		set_process(false)   # sin la prueba larga
 		probar_equilibrio()
