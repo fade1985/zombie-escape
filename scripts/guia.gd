@@ -160,6 +160,7 @@ func marcar_llave(zombi: Node2D) -> void:
 	marca.z_index = 5
 	marca.name = "MarcaLlave"
 	zombi.add_child(marca)
+	zombi.murio.connect(marca.queue_free)   # (el cuerpo se queda en el suelo: la llavecita, no)
 	var tween := marca.create_tween().set_loops()
 	tween.tween_property(marca, "position:y", -108.0, 0.5).set_trans(Tween.TRANS_SINE)
 	tween.tween_property(marca, "position:y", -100.0, 0.5).set_trans(Tween.TRANS_SINE)

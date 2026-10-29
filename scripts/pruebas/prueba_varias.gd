@@ -2331,6 +2331,10 @@ func probar_guiado() -> void:
 			z.set_physics_process(false)
 			z.position = johnny.position + Vector2(0, -170)
 			print("Guía · el zombi de la llave lleva su llavecita: %s (esperado: true)" % (z.get_node_or_null("MarcaLlave") != null))
+			z.morir()
+			await get_tree().process_frame
+			await get_tree().process_frame
+			print("Guía · al caer el zombi, la llavecita se va: %s (esperado: true)" % (z.get_node_or_null("MarcaLlave") == null))
 	await get_tree().create_timer(0.6).timeout
 	Captura.foto("captura-guiado-llave.png")
 	# al subir a la planta siguiente, se apaga
@@ -2368,4 +2372,60 @@ func probar_pantalla() -> void:
 	await pulsar.call(KEY_F11)
 	await pulsar.call(KEY_F11)
 	print("Pantalla · F11 dos veces: %s (esperado: ventana)" % estado.call())
+	get_tree().quit()
+
+
+# --rendimiento: cuánto tarda cada fotograma durante el latigazo del Glotón (normal y enfadado, con 3 y 6 lenguas), contra
+# el fotograma de siempre. Se corre también en la web (en "args" de GODOT_CONFIG del index.html; ver docs/WEB.md):
+# imprime el peor fotograma y la media en milisegundos. Vale 16 ms a 60 fps; con más de 50 ms, el juego se nota parado
+func probar_rendimiento() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	var gloton: Node2D = meter_zombi("gloton", sala.diana.global_position + Vector2(200, -60))
+	johnny.global_position = sala.diana.global_position + Vector2(200, 160)
+	gloton.global_position = johnny.global_position + Vector2(-150, -160)
+	gloton.velocity = Vector2.ZERO
+	gloton.marcha = Vector2.ZERO
+	gloton.espera_latigazo = 99.0
+	gloton.espera_aspirar = 99.0
+	await get_tree().create_timer(1.0).timeout
+	# lo que mide cada fotograma, hasta que "acaba" devuelve cierto
+	var medir := func(nombre: String, acaba: Callable) -> void:
+		var tiempos: Array[float] = []
+		var antes := Time.get_ticks_usec()
+		var lento := 1.0
+		while not acaba.call():
+			await get_tree().process_frame
+			var ahora := Time.get_ticks_usec()
+			tiempos.append((ahora - antes) / 1000.0)
+			antes = ahora
+			lento = minf(lento, Engine.time_scale)
+		var peor := 0.0
+		var suma := 0.0
+		for ms in tiempos:
+			peor = maxf(peor, ms)
+			suma += ms
+		print("Rendimiento · %s: %d fotogramas · media %.1f ms · peor %.1f ms · velocidad mínima del juego %.2f" % [
+			nombre, tiempos.size(), suma / maxf(1.0, tiempos.size()), peor, lento])
+	var hasta := Time.get_ticks_msec() + 2000
+	await medir.call("de siempre (2 s)", func(): return Time.get_ticks_msec() >= hasta)
+	for fase in [1, 2, 2]:
+		gloton.fase = fase
+		gloton.espera_latigazo = 99.0
+		var angulo: float = (johnny.global_position - gloton.global_position).angle()
+		gloton.mirada = Vector2.from_angle(angulo)
+		gloton.cambiar("aviso_latigazo", {"angulo": angulo})
+		var como := "%d lenguas" % (3 if fase == 1 else 6)
+		await medir.call("aviso del latigazo (%s)" % como, func(): return gloton.estado != "aviso_latigazo")
+		await medir.call("latigazo (%s)" % como, func(): return gloton.estado != "latigazo")
+		await get_tree().create_timer(0.5).timeout
 	get_tree().quit()

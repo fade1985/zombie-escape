@@ -77,7 +77,7 @@ en una línea.
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
-  `tentaculo.gd` (`Tentaculo`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
+  `tentaculo.gd` (`Tentaculo`; se pinta con `trozos` y `disco`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
   latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
   con lo mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes
   y los muebles (`apuntar`). Cada uno le da sus colores, sacados de su hoja (`PALETA`: contorno, capas y
