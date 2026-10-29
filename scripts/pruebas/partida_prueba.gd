@@ -35,6 +35,8 @@
 #   --presentacion      (con --jefe X, si se quiere) la entrada del jefe al aparecer         [prueba_jefes.gd]
 #   --azotea            la azotea y su helipuerto elevado: la rampa, el jefe esperando, la valla y el jefe final
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
+#   --latigazos         el gerente mutado en la sala de pruebas: sus tres latigazos con Johnny abajo, arriba, de
+#                       lado, en diagonal, por detrás y junto a una pared                  [prueba_varias.gd]
 #   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
 #                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
@@ -338,6 +340,9 @@ func empezar_prueba() -> void:
 	elif "--escudo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_escudo()
+	elif "--latigazos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_latigazos()
 	elif "--tentaculos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tentaculos()

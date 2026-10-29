@@ -14,8 +14,10 @@
 # que se le pueda hacer daño) y, con un fogonazo, se convierte en el MUTADO: más grande y más rápido, con cuatro
 # tentáculos en la espalda. La barra sigue con la vida que tenía. El mutado ya no lanza contratos ni llama a
 # nadie (ya no piensa: solo ataca) y hace dos cosas, también con aviso:
-#   - Latigazos: tres franjas rojas en abanico hacia Johnny y, al rato, tres tentáculos por ellas (como el zombi
-#     de tentáculos, pero más largos).
+#   - Latigazos: le salen tres tentáculos de la espalda, se levantan por encima de la cabeza y se enroscan,
+#     mientras en el suelo sale en abanico hacia Johnny el aviso de las cargas (flechas y una X al final); al rato
+#     se estiran como látigos por ahí. Se paran en las paredes y los aparatos (el aviso acaba en estrella). Son los
+#     del zombi de tentáculos (tentaculo.gd), pero más largos y gruesos, y morados como los suyos.
 #   - Embestida: si Johnny está lejos, una franja roja y sale corriendo en línea recta. Si atropella a Johnny le
 #     tira; si se estrella contra un aparato o el murete, se queda atontado un rato (el momento de pegarle).
 # Antes de mutar no puede caer (aunque le den mucho de golpe, se queda con 1): la mutación siempre llega. Al caer
@@ -75,13 +77,95 @@ const ATONTADO := 2.2
 const ESPERAS_MUTADO := {"latigazo": 1.5, "embestida": 3.4}
 # El fotograma del latigazo en el que los tentáculos llegan abajo (cuando salen los de código)
 const LATIGAZO := {"s": 3, "se": 3, "e": 3, "ne": 5, "n": 4, "no": 5, "o": 4, "so": 4}
-const MORADO := Color("#8d4f9e")         # los tentáculos (como los de su dibujo)
-const MORADO_LUZ := Color("#c98ad6")
-const CONTORNO := Color("#1d1b2c")
+const MORADO := Color("#8d4f9e")         # los tentáculos (para las chispas al mutar)
+# Los tentáculos de los latigazos, pintados con código (tentaculo.gd), iguales que los de su espalda (colores
+# sacados píxel a píxel de su hoja): morados por arriba, más claros hacia el lado de la luz, y granates por debajo,
+# con una raya oscura entre los dos colores y las ventosas como puntitos claros. Las capas, de la más oscura (todo
+# el ancho) a la más clara: color y lo que ocupa (en partes del ancho, contando desde el borde de la luz)
+const PALETA := {
+	"contorno": Color("#1e1514"),
+	"capas": [
+		[Color("#4e2e29"), 1.0],
+		[Color("#653030"), 0.93],
+		[Color("#6b3947"), 0.76],
+		[Color("#37252d"), 0.6],
+		[Color("#45313f"), 0.55],
+		[Color("#523c4d"), 0.48],
+		[Color("#5c455b"), 0.4],
+		[Color("#6a516c"), 0.3],
+		[Color("#7a5f7c"), 0.2],
+		[Color("#8a6f91"), 0.08],
+	],
+	"ventosas": {"punto": Color("#79636a")},
+}
+const RECOGE := 0.38                     # cuándo acaban de recogerse después del golpe
+# De dónde salen: tres puntos de su espalda en cada dirección, medidos en el fotograma 0 de su latigazo (a cada
+# latigazo le toca el del lado hacia el que va, así no se cruzan). De espaldas salen por delante del cuerpo; si no,
+# por detrás: los primeros trozos (DETRAS) van detrás del dibujo
+const RAICES := {
+	"s": [Vector2(-36, -188), Vector2(4, -200), Vector2(44, -188)],
+	"se": [Vector2(-36, -188), Vector2(8, -200), Vector2(40, -192)],
+	"e": [Vector2(-16, -188), Vector2(-4, -200), Vector2(4, -184)],
+	"ne": [Vector2(-32, -180), Vector2(-12, -184), Vector2(-20, -164)],
+	"n": [Vector2(-28, -172), Vector2(0, -180), Vector2(28, -172)],
+	"no": [Vector2(-12, -176), Vector2(12, -184), Vector2(32, -168)],
+	"o": [Vector2(0, -188), Vector2(12, -196), Vector2(8, -176)],
+	"so": [Vector2(-4, -196), Vector2(20, -200), Vector2(40, -188)],
+}
+# Y lo que se mueve el cuerpo en cada fotograma del latigazo (se agacha y se echa hacia delante al lanzarlos), en
+# píxeles de su dibujo: medido en su hoja, buscando dónde encaja mejor el cuerpo sin los tentáculos
+const MUEVE := {
+	"s": [[0, 0], [0, 0], [1, 10], [2, 18], [2, 18], [1, 14], [1, 6], [0, 0], [0, 0]],
+	"se": [[0, 0], [-1, -1], [3, 3], [11, 8], [10, 8], [8, 7], [5, 5], [3, 3], [0, 0]],
+	"e": [[0, 0], [-2, -1], [-5, -3], [15, 11], [12, 3], [12, 5], [9, 6], [4, 3], [0, 0]],
+	"ne": [[0, 0], [0, 0], [1, 1], [3, 3], [6, 5], [6, 5], [3, 3], [1, 1], [0, 0]],
+	"n": [[0, 0], [0, 0], [3, 1], [9, 4], [10, 5], [10, 5], [7, 3], [3, 0], [0, 0]],
+	"no": [[0, 0], [0, 0], [-4, 3], [-6, 6], [-7, 5], [-8, 6], [-3, 2], [-2, 1], [0, 0]],
+	"o": [[0, 0], [0, 0], [0, 0], [-9, 2], [-7, 6], [-9, 2], [-7, 1], [-3, 0], [0, 0]],
+	"so": [[0, 0], [0, 0], [0, 0], [-3, 2], [-12, 8], [-11, 8], [-7, 5], [-3, 2], [0, 0]],
+}
+const DE_ESPALDAS := ["n", "ne", "no"]
+const DETRAS := 3
 
 var espera := {"contratos": 1.2, "maletinazo": 0.8, "a_trabajar": 6.0}
 var mutado := false
 var espera_mutado := {"latigazo": 0.6, "embestida": 1.8}
+var tentaculos := []                     # los de los latigazos (Tentaculo), uno por franja
+var delante: Node2D                      # pinta la parte de los tentáculos que va por delante del cuerpo
+
+
+func _ready() -> void:
+	super()
+	for i in LATIGAZOS:
+		var tentaculo := Tentaculo.new(PALETA)
+		tentaculo.grueso = 10.5
+		tentaculo.fino = 3.0
+		tentaculo.enroscado = 150.0
+		tentaculo.alto = 1.6
+		tentaculo.largo = LARGO_LATIGAZO
+		tentaculo.ancho = ANCHO_LATIGAZO
+		tentaculo.desfase = i * 0.37
+		tentaculos.append(tentaculo)
+	# Los tentáculos se pintan en dos capas: la base, en el propio gerente (que pinta siempre por detrás de su
+	# dibujo), y el resto en "delante", que va después del dibujo y por eso queda encima
+	delante = Node2D.new()
+	delante.draw.connect(pintar_tentaculos.bind(false))
+	add_child(delante)
+
+
+func _physics_process(delta: float) -> void:
+	super(delta)
+	delante.queue_redraw()
+
+
+# Al empezar los latigazos, cada tentáculo apunta a su franja y mide hasta dónde llega (por si hay una pared o un
+# aparato por medio)
+func cambiar(nuevo: String, nuevos_datos := {}) -> void:
+	super(nuevo, nuevos_datos)
+	if nuevo == "aviso_latigazo":
+		var angulos := angulos_latigazo()
+		for i in LATIGAZOS:
+			tentaculos[i].apuntar(self, angulos[i])
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -345,14 +429,11 @@ func angulos_latigazo() -> Array:
 	return lista
 
 
-# ¿Está Johnny dentro de alguna franja? (como golpear() del zombi de tentáculos)
+# ¿Está Johnny dentro de alguna franja, hasta donde llega? (como el zombi de tentáculos)
 func latigazos(johnny: Node2D) -> void:
 	Temblor.temblar(5.0)
-	for a in angulos_latigazo():
-		var linea := Vector2.from_angle(a)
-		var hacia: Vector2 = johnny.global_position - global_position
-		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LATIGAZO)
-		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LATIGAZO + johnny.RADIO:
+	for tentaculo in tentaculos:
+		if tentaculo.golpea(self, johnny):
 			johnny.recibir_dano(DANO_LATIGAZO, self)
 			return
 
@@ -446,7 +527,8 @@ func morir() -> void:
 		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
 
 
-# Los avisos, en el suelo (por debajo de él): las rayas de los contratos y el trozo del maletinazo
+# Los avisos, en el suelo (por debajo de él): las rayas de los contratos, el trozo del maletinazo y, del mutado,
+# los latigazos y la embestida. Y la base de sus tentáculos, por detrás del dibujo
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -462,25 +544,47 @@ func _draw() -> void:
 			Aviso.abanico(self, Vector2(0, 6), datos.angulo, MEDIO_MALETINAZO, ALCANCE_MALETINAZO,
 				minf(1.0, t / AVISO_MALETINAZO), tiempo)
 		"aviso_latigazo":
-			# las tres barras de los latigazos, que se llenan hacia fuera (aviso.gd)
-			var k := minf(1.0, t / AVISO_LATIGAZO)
-			var latigos := angulos_latigazo()
-			for i in latigos.size():
-				Aviso.barra(self, Vector2(0, 6), latigos[i], radio * 0.5, LARGO_LATIGAZO, ANCHO_LATIGAZO, k, tiempo, i)
-		"latigazo":
-			# los tentáculos salen disparados por las franjas, culebrean y se recogen
-			var largo := LARGO_LATIGAZO * minf(1.0, t / 0.08) * clampf((DESPUES - t) / 0.2, 0.0, 1.0)
-			for a in angulos_latigazo():
-				draw_set_transform(Vector2(0, -6), a)
-				var puntos := PackedVector2Array()
-				for i in 15:
-					var f := i / 14.0
-					puntos.append(Vector2(largo * f, sin(f * 10.0 + t * 30.0 + a * 5.0) * 7.0 * (1.0 - f)))
-				draw_polyline(puntos, CONTORNO, 22.0)
-				draw_polyline(puntos, MORADO, 15.0)
-				draw_polyline(puntos.slice(0, 10), MORADO_LUZ, 4.0)
-				for i in range(2, 13, 3):
-					draw_circle(puntos[i], 3.0, Color("#f2b5d4"))
+			# los tres latigazos avisan como las cargas de los jefes: flechas que se encienden hacia fuera y, al
+			# final, una X (o una estrella, si se paran en una pared o un aparato)
+			for i in LATIGAZOS:
+				tentaculos[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LATIGAZO), tiempo, i)
 		"aviso_embestida":
 			franja(VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA, minf(1.0, t / AVISO_EMBESTIDA))
+	pintar_tentaculos(true)
+
+
+# Los tentáculos de los latigazos: por detrás del dibujo, la base (así parece que salen de detrás de los hombros; de
+# espaldas, nada) y por delante, el resto (de espaldas, todos enteros: le salen de la espalda, de cara a nosotros)
+func pintar_tentaculos(detras: bool) -> void:
+	if not mutado:
+		return
+	var espaldas := direccion() in DE_ESPALDAS
+	if detras and espaldas:
+		return
+	for i in LATIGAZOS:
+		var puntos := puntos_tentaculo(i)
+		if puntos.is_empty():
+			continue
+		if detras:
+			tentaculos[i].pintar(self, puntos, 0, DETRAS)
+		else:
+			tentaculos[i].pintar(delante, puntos, 0 if espaldas else DETRAS, Tentaculo.PUNTOS)
+
+
+# Los puntos del tentáculo "i" en este momento, de la base a la punta (ninguno si no está dando latigazos). Sale del
+# punto de su espalda del lado hacia el que va (si va justo abajo o justo arriba, se enrosca hacia ese lado, por
+# fuera del cuerpo), y se mueve con el cuerpo en cada fotograma
+func puntos_tentaculo(i: int) -> PackedVector2Array:
+	if estado != "aviso_latigazo" and (estado != "latigazo" or t >= RECOGE):
+		return PackedVector2Array()
+	var dir := direccion()
+	var abre := Vector2.from_angle(datos.angulo - PI / 2)   # hacia donde se abre el primero
+	var raices: Array = RAICES[dir].duplicate()
+	raices.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.dot(abre) > b.dot(abre))
+	var lado := -1.0 if raices[i].x < 0.0 else 1.0
+	var mueve: Array = MUEVE[dir][mini(sprite.frame, 8)] if sprite.animation.begins_with("latigazo") else [0, 0]
+	var raiz: Vector2 = raices[i] + Vector2(mueve[0], mueve[1]) * 2.0 + Vector2(sprite.position.x, 0)
+	if estado == "aviso_latigazo":
+		return tentaculos[i].levantado(raiz, minf(1.0, t / AVISO_LATIGAZO), t, lado)
+	return tentaculos[i].latigo(raiz, Vector2(0, 6), t, RECOGE, lado)
 	draw_set_transform(Vector2.ZERO)

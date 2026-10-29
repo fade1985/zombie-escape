@@ -1724,9 +1724,75 @@ func probar_tentaculos() -> void:
 		await RenderingServer.frame_post_draw
 		Captura.foto("captura-tentaculos-latigazo-%s.png" % caso[0])
 		print("Tentáculo con Johnny %s: avisando %s · latigazo %s · llega a %d%s (esperado: ataque_%s y %s; sin pasarse de los 400 pasos: %d)" % [
-			caso[0], avisando, que_hace.call(t), t.llega, ", choca" if t.choca else "",
+			caso[0], avisando, que_hace.call(t), t.tentaculo.llega, ", choca" if t.tentaculo.choca else "",
 			{"abajo": "s", "arriba": "n", "lado": "e", "diagonal": "so", "pared": "e"}[caso[0]],
 			"choca antes de 220" if caso[0] == "pared" else "220 sin chocar", esperado])
 		t.remove_from_group("zombis")
 		t.queue_free()
+	get_tree().quit()
+
+
+# --latigazos: los tres latigazos del gerente mutado (tentaculo.gd), en la sala de pruebas (F11), con Johnny abajo,
+# arriba, de lado, en diagonal, en diagonal por detrás (de espaldas) y junto a la pared de la derecha (que los corta):
+# avisando (captura-latigazos-aviso-abajo.png, -arriba, -lado, -diagonal, -espalda, -pared) y dando el latigazo
+# (captura-latigazos-latigazo-abajo.png...). La cámara, algo más lejos, sin los límites de la sala y centrada en el
+# gerente y sus latigazos. En la terminal, la animación y hasta dónde llega cada tentáculo (y si choca)
+func probar_latigazos() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.85, 0.85)   # (de los tentáculos levantados a las puntas no cabe a tamaño normal)
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	print("Latigazos: la sala mide %d x %d" % [mapa.sitio.ancho, mapa.sitio.alto])
+	var gerente: Node2D = meter_zombi("gerente", sala.diana.global_position + Vector2(200, -60))
+	await get_tree().create_timer(0.2).timeout
+	gerente.mutar()
+	await get_tree().create_timer(1.5).timeout
+	# Cada caso: nombre, dónde está Johnny (desde la diana), dónde el gerente (desde Johnny) y hacia dónde mira
+	for caso in [["abajo", Vector2(200, 160), Vector2(0, -220), "s"],
+			["arriba", Vector2(200, -160), Vector2(0, 220), "n"], ["lado", Vector2(300, 40), Vector2(-240, 0), "e"],
+			["diagonal", Vector2(120, 140), Vector2(170, -170), "so"],
+			["espalda", Vector2(100, -160), Vector2(160, 170), "no"],
+			["pared", Vector2(430, 40), Vector2(-200, 0), "e"]]:
+		johnny.global_position = sala.diana.global_position + caso[1]
+		gerente.global_position = johnny.global_position + caso[2]
+		gerente.velocity = Vector2.ZERO
+		gerente.marcha = Vector2.ZERO
+		gerente.espera_mutado.embestida = 99.0   # (que solo dé latigazos, y cuando se le dice)
+		gerente.espera_mutado.latigazo = 99.0
+		Temblor.desplazamiento = caso[2] + (-caso[2].normalized() * 340.0 + Vector2(0, -350)) / 2.0
+		camara.reset_smoothing()
+		gerente.empezar("aviso_latigazo", (johnny.global_position - gerente.global_position).angle())
+		while not (gerente.estado == "aviso_latigazo" and gerente.t >= 0.55):
+			await get_tree().physics_frame
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-latigazos-aviso-%s.png" % caso[0])
+		var avisando := "%s/%d" % [gerente.sprite.animation, gerente.sprite.frame]
+		while not (gerente.estado == "latigazo" and gerente.t >= 0.08):
+			await get_tree().physics_frame
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-latigazos-latigazo-%s.png" % caso[0])
+		var llegan := []
+		for tentaculo in gerente.tentaculos:
+			llegan.append("%d%s" % [tentaculo.llega, " (choca)" if tentaculo.choca else ""])
+		print("Latigazos con Johnny %s: avisando %s · latigazo %s/%d · llegan a %s (esperado: latigazo_%s; %s)" % [
+			caso[0], avisando, gerente.sprite.animation, gerente.sprite.frame, ", ".join(llegan), caso[3],
+			"chocan antes de 340" if caso[0] == "pared" else "340 sin chocar"])
+		while gerente.estado == "latigazo":
+			await get_tree().physics_frame
+	Temblor.desplazamiento = Vector2.ZERO
 	get_tree().quit()

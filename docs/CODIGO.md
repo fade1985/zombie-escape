@@ -68,26 +68,32 @@ en una línea.
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
   `meter_prisa`, la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
-  va al ritmo del aviso, `IMPACTO`; el tentáculo que pega, pintado con código, le sale del hombro (`HOMBRO`,
-  medido en su hoja en cada dirección; de espaldas va por delante del dibujo, en el nodo `delante`); avisa con lo
-  mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes y los
-  muebles (`_medir_alcance`). Lleva los colores de su dibujo pasados por `_en_juego`: el shader de los
-  zombis multiplica el dibujo por sí mismo y en el juego salen más oscuros que en la hoja), `zombi_venenoso.gd`,
+  va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
+  dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
+  `tentaculo.gd` (`Tentaculo`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
+  latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
+  con lo mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes
+  y los muebles (`apuntar`). Cada uno le da sus colores, sacados de su hoja (`PALETA`: contorno, capas y
+  ventosas, de aro o de puntitos), y sus medidas; los del zombi, oscurecidos como su dibujo en el juego (el
+  shader de los zombis multiplica el dibujo por sí mismo y salen más oscuros que en la hoja).
 - `portera.gd`: la jefa por defecto, por estados.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
   `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
   (también el de la portera) es `vapor_rabia.gd`; todos los avisos en el suelo de los jefes son `aviso.gd` (los
   pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
-  encienden hasta la pared), los golpes, saltos y círculos (se llenan hacia fuera; pueden llegar hasta las paredes,
-  cambiar de color y llevar ondas, como el aspirado del glotón), las barras rectas (lenguas, latigazos, alfileres,
-  rayas de los disparos) y las flechas del giro del bombero. Se prueban con `--golpes`, `--franja` y `--avisos`. Heredan:
+  encienden hasta la pared; también los latigazos de tentáculo), los golpes, saltos y círculos (se llenan hacia
+  fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas, como el aspirado del glotón), las barras
+  rectas (lenguas, alfileres, rayas de los disparos) y las flechas del giro del bombero. Se prueban con
+  `--golpes`, `--franja` y `--avisos`. Heredan:
   - Apartamentos: `gloton.gd`, `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
-    `gerente.gd` (+ `contrato.gd`) y `cientifico_jefe.gd` (el doctor Salas). `helicoptero.gd`: el que llega al final (su cuerpo,
+    `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
+    espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`
+    (el doctor Salas). `helicoptero.gd`: el que llega al final (su cuerpo,
     `helicoptero.png` de PixelLab; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
     el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
