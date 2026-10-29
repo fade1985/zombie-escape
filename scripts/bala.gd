@@ -11,6 +11,7 @@ const EMPUJE := 170.0         # empuje base de un zombi normal (el del arma lo m
 const TRAZA := [Color("#fffbe0"), Color("#ffe066"), Color("#ffb020"), Color("#f0701a"), Color("#b8400e")]
 const TRAZA_CRITICA := [Color("#ffffff"), Color("#ffe9a8"), Color("#ff9a3c"), Color("#ff4d2e"), Color("#b3122a")]
 const LINEA := Color("#1d1b2c")
+const PARED := Color("#8f8a96")   # el color de los trocitos de pared (Impacto)
 
 var velocidad := Vector2.ZERO
 var dano := 0
@@ -21,6 +22,7 @@ var calidad := 0            # la calidad del arma de Johnny que la dispara (Arma
 var atraviesa := 0          # a cuántos zombis más puede dar (la Épica a distancia): al darle a uno, sigue
 var tocados: Array = []     # los que ya ha atravesado (no les vuelve a dar)
 var vida := 1.0             # segundos que le quedan (alcance ÷ velocidad)
+var normal_pared := Vector2.UP   # hacia dónde mira la pared en la que ha dado (para Impacto)
 var altura := 50.0          # a qué altura sobre la bala de verdad se dibuja
 var de_aliado := false      # la ha disparado un superviviente, no Johnny (se lo dice a los jefes: el Glotón no salpica)
 
@@ -39,6 +41,7 @@ func _physics_process(delta: float) -> void:
 	var pared := get_world_2d().direct_space_state.intersect_ray(rayo)
 	if pared:
 		global_position = pared.position
+		normal_pared = pared.normal
 		chocar(true)
 		return
 	global_position = despues
@@ -72,6 +75,11 @@ func chocar(pared := false, sigue := false) -> void:
 	var donde := global_position + Vector2(0, -altura)
 	var atras := (-velocidad).angle()
 	var colores := estela()
+	if pared and Impacto.activo:   # (PRUEBA: el impacto de Sprite Fusion, impacto.gd)
+		Impacto.soltar(self, donde, velocidad.angle(), normal_pared.angle(), altura, PARED, 1.0 if radio >= 4.0 else 0.6)
+		if not sigue:
+			queue_free()
+		return
 	Particulas.soltar(self, donde, Vector2.ZERO, colores[0], 10.0 if critico else 8.0, 0.07)
 	var n := (7 if critico else 5) - (2 if radio < 4.0 else 0)   # los perdigones sueltan menos chispas
 	for i in n:

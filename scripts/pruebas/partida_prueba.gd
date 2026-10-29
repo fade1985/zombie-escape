@@ -51,6 +51,8 @@
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #   --relieve           el relieve con la luz (mapas de normales): Johnny y dos zombis con y sin relieve, con una
 #                       lámpara a cada lado                                                [prueba_varias.gd]
+#   --impacto           el impacto de bala de Sprite Fusion (impacto.gd) junto al de siempre, contra la pared
+#                                                                                          [prueba_armas.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
@@ -306,6 +308,9 @@ func empezar_prueba() -> void:
 	elif "--relieve" in args:
 		set_process(false)   # sin la prueba larga
 		probar_relieve()
+	elif "--impacto" in args:
+		set_process(false)   # sin la prueba larga
+		probar_impacto()
 	elif "--tintes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tintes()

@@ -774,6 +774,63 @@ func probar_tintes() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --impacto": el impacto de Sprite Fusion (impacto.gd) junto al de siempre (bala.gd, chocar). En la
+# sala de pruebas, a media luz, una bala de pistola contra la pared de la izquierda: fotos del de siempre y del nuevo en
+# los mismos momentos (captura-impacto-viejo-N.png y captura-impacto-nuevo-N.png: 1 la estrella, 2 las medias lunas y
+# el anillo, 3 las chispas cayendo y 4 el polvo y el humo) y, al final, una ráfaga de perdigones (captura-impacto-rafaga.png)
+func probar_impacto() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.direccion = "o"
+	# la pared de la izquierda: Johnny a 120 unidades de ella
+	var rayo := PhysicsRayQueryParameters2D.create(johnny.global_position, johnny.global_position + Vector2(-2000, 0), 1)
+	var pared := get_world_2d().direct_space_state.intersect_ray(rayo)
+	if not pared:
+		print("Impacto · no hay pared a la izquierda")
+		get_tree().quit()
+		return
+	johnny.global_position = pared.position + Vector2(260, 0)
+	johnny.get_node("Camara").reset_smoothing()
+	Luz.evento = 0.5
+	await get_tree().create_timer(0.8).timeout
+	var ventana := get_viewport().get_screen_transform() * get_viewport().get_canvas_transform()
+	print("Impacto · el choque, en la foto: %s" % (ventana * (pared.position + Vector2(0, -22))).round())
+	var disparar := func(angulo: float, radio := 4.0) -> void:
+		var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
+		bala.velocidad = Vector2.from_angle(PI + angulo) * 1400.0
+		bala.radio = radio
+		bala.altura = 22.0
+		bala.vida = 1.0
+		johnny.get_parent().add_child(bala)
+		bala.global_position = pared.position + Vector2(30, 0)   # justo delante: da en la pared en el siguiente paso
+	for nuevo in [false, true]:
+		Impacto.activo = nuevo
+		var nombre := "nuevo" if nuevo else "viejo"
+		disparar.call(0.15)
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		await get_tree().process_frame
+		Captura.foto("captura-impacto-%s-1.png" % nombre)
+		var esperas := [0.06, 0.08, 0.25]
+		for i in esperas.size():
+			await get_tree().create_timer(esperas[i]).timeout
+			Captura.foto("captura-impacto-%s-%d.png" % [nombre, i + 2])
+		await get_tree().create_timer(1.5).timeout
+	print("Impacto · quedan impactos sueltos: %d (esperado: 0)" % get_tree().current_scene.get_children().filter(func(n): return n is Impacto).size())
+	# una ráfaga de perdigones (más pequeños) y dos balas, una detrás de otra
+	for i in 6:
+		disparar.call(randf_range(-0.5, 0.5), 3.0 if i % 3 else 4.0)
+		await get_tree().create_timer(0.05).timeout
+	Captura.foto("captura-impacto-rafaga.png")
+	Impacto.activo = false
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --charcos": los charcos que burbujean (charco.gd: veneno, ácido y vómito) junto a uno de fuego, para
 # compararlos. En la sala de pruebas, en fila delante de Johnny: fotos al caer (se extienden), con sus
 # burbujas, cuando empiezan a secarse a trozos y con la mancha que dejan. Cuenta si se pisan y se cierra
