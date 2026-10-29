@@ -15,7 +15,10 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-_(ninguna por ahora)_
+- **M24** Salir y volver a entrar en una habitación no la reinicia: los zombis (vivos o muertos) y todo lo demás
+  siguen como se dejaron, en vez de borrarse.
+- **M25** Quitar el borde negro alrededor de la pantalla de juego: la imagen se agranda hasta llenar toda la
+  pantalla.
 
 ## Por limar
 
