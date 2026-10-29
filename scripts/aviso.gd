@@ -3,15 +3,16 @@
 # cuánto falta y, con lo último, pega; justo antes, un destello suave.
 #   - franja(): el camino de una carga o embestida. Flechas grandes que se encienden una tras otra hacia donde va,
 #     raíles de puntos que marcan el ancho y, al final, una estrella si se va a estrellar contra la pared o una X si no.
-#     Se corta donde se estrellaría el cuerpo del jefe (contra una pared o un mueble).
+#     Se corta donde se estrellaría el cuerpo del jefe (contra una pared o un mueble). También la de los latigazos de
+#     tentáculos y lenguas (tentaculo.gd), cortada donde se paran.
 #   - abanico(): el trozo que barre un golpe cuerpo a cuerpo (porrazo, fregonazo, hachazo...), o un círculo entero
 #     (medio ángulo PI). Se va llenando del jefe hacia fuera, como una barra de carga, sin bordes. Puede llegar hasta
 #     las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas).
-#   - barra(): una franja recta que se llena hacia fuera (lenguas, latigazos, alfileres, por donde irán los disparos).
+#   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos).
 #   - flechas_giro(): los dos anillos de flechas del giro del bombero.
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Cada aviso va en un nodo
 # hijo del jefe, por detrás de él, que se crea solo la primera vez y se esconde cuando deja de pedirse. Un jefe puede
-# tener varios a la vez ("cual": 0, 1, 2...), como las tres lenguas del glotón.
+# tener varios a la vez ("cual": 0, 1, 2...), como las lenguas del glotón (tres, o seis enfadado).
 class_name Aviso
 extends Node2D
 

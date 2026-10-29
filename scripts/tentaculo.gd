@@ -5,7 +5,8 @@
 # Se pinta como los de su dibujo: el contorno y encima capas, cada una más clara, más estrecha y arrimada al lado de
 # la luz, y las ventosas por el lado de la sombra. Cada uno trae sus colores y sus medidas.
 # Quien lo usa elige de dónde sale (la raíz, que se mueve con su dibujo) y qué parte va por detrás del dibujo y qué
-# parte por delante (pintar, de un trozo a otro).
+# parte por delante (pintar, de un trozo a otro). Las lenguas del Glotón y de la criatura son lo mismo, sin ventosas
+# y con otra forma (lengua.gd).
 class_name Tentaculo
 extends RefCounted
 
@@ -14,13 +15,14 @@ const LUZ := Vector2(-0.4, -0.9)   # de dónde le da la luz (arriba a la izquier
 
 # Sus colores: el contorno; las capas, de la más oscura (todo el ancho) a la más clara, con lo que ocupa cada una
 # (en partes del ancho, contando desde el borde de la luz); y las ventosas: aros (con "aro", "sombra", "hueco" y
-# "brillo") o puntitos ("punto")
+# "brillo"), puntitos ("punto") o ninguna (vacío, las lenguas)
 var contorno: Color
 var capas := []
 var ventosas := {}
 # Sus medidas
 var grueso := 7.5          # medio grueso en la base...
 var fino := 2.0            # ...y en la punta
+var borde := 1.0           # lo que asoma el contorno por cada lado (2, un píxel de los dibujos)
 var enroscado := 110.0     # lo largo que es levantado durante el aviso
 var alto := 1.0            # lo alto que pasa al estirarse (y lo que culebrea): 1, el del zombi
 var largo := 220.0         # hasta dónde llega el latigazo (si no da antes con una pared)
@@ -40,8 +42,9 @@ func _init(paleta: Dictionary, oscurecer := false) -> void:
 	contorno = _color(paleta.contorno, oscurecer)
 	for capa in paleta.capas:
 		capas.append([_color(capa[0], oscurecer), capa[1]])
-	for k in paleta.ventosas:
-		ventosas[k] = _color(paleta.ventosas[k], oscurecer)
+	var de_la_paleta: Dictionary = paleta.get("ventosas", {})
+	for k in de_la_paleta:
+		ventosas[k] = _color(de_la_paleta[k], oscurecer)
 
 
 static func _color(c: Color, oscurecer: bool) -> Color:
@@ -159,9 +162,9 @@ func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: i
 	# La parte de delante empieza cortada en recto, sin redondel: así no se nota la juntura con la de detrás
 	var primero := desde + 1 if desde > 0 else 0
 	for i in range(primero, hasta + 1):
-		lienzo.draw_circle(puntos[i], r[i] + 1.0, contorno)
+		lienzo.draw_circle(puntos[i], r[i] + borde, contorno)
 	for i in range(desde, hasta):
-		lienzo.draw_line(puntos[i], puntos[i + 1], contorno, r[i] + r[i + 1] + 2.0)
+		lienzo.draw_line(puntos[i], puntos[i + 1], contorno, r[i] + r[i + 1] + borde * 2.0)
 	for capa in capas:
 		var arrima: float = 1.0 - capa[1]
 		for i in range(primero, hasta + 1):
@@ -170,6 +173,8 @@ func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: i
 			lienzo.draw_line(puntos[i] + luz[i] * r[i] * arrima, puntos[i + 1] + luz[i + 1] * r[i + 1] * arrima,
 				capa[0], maxf(1.0, (r[i] + r[i + 1]) * capa[1]))
 	# Las ventosas, en fila por el lado de la sombra (hasta cerca de la punta)
+	if ventosas.is_empty():
+		return
 	for i in range(maxi(desde, 2), hasta):
 		if r[i] < 2.5:
 			continue

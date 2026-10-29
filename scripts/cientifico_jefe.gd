@@ -22,7 +22,8 @@
 # FASE 2, la criatura: una masa enorme hecha con trozos de los otros jefes, como si los hubiera creado él: la boca
 # del Glotón, los brazos del Gymbro y el fuego del bombero. Más lenta de cabeza (ya no piensa: solo ataca), con
 # tres ataques que los recuerdan, también con aviso:
-#   - Lenguas-látigo: tres franjas rojas en abanico y, al rato, tres lenguas por ellas (como el Glotón, más largas).
+#   - Lenguas-látigo: el aviso de las cargas de los jefes en abanico y, al rato, tres lenguas por él (como el Glotón,
+#     más largas). Se paran en las paredes y los muebles (el aviso acaba en estrella).
 #   - Puñetazo al suelo: si Johnny está cerca, marca un círculo rojo y da con los dos puños: una onda expansiva que
 #     crece desde él; si te pilla (esquivando, no) te quita 24 y te tira al suelo.
 #   - Escupitajos de fuego: si Johnny está lejos y a la vista, tres bolas de fuego en abanico (bola_fuego.gd).
@@ -61,7 +62,6 @@ const PIE := 34.0                        # a qué altura dibuja los pies respect
 const SUELTA := {"s": 4, "se": 5, "e": 4, "ne": 4, "n": 4, "no": 4, "o": 4, "so": 5}
 const VERDE := Color("#b6ff6a")          # el VD-7
 const CRISTAL := Color("#9fd8ff")
-const CONTORNO := Color("#1d1b2c")
 
 # La jeringa y la criatura
 const CRIATURA := "res://assets/sprites/jefe-criatura.tres"
@@ -78,7 +78,7 @@ const LARGO_LENGUA := 330.0
 const ANCHO_LENGUA := 14.0               # medio ancho de cada franja
 const AVISO_LENGUAS := 0.65
 const DANO_LENGUA := 18
-const BOCA := 0.5                        # a qué altura tiene la boca (parte de "arriba"): de ahí salen las lenguas
+const BOCA := 0.5                        # a qué altura tiene la boca (parte de "arriba"): de ahí sale el fuego
 const AVISO_PUNETAZO := 0.75
 const DISTANCIA_PUNETAZO := 240.0        # si Johnny está más cerca que esto, prefiere el puñetazo
 const RADIO_ONDA := 210.0
@@ -94,8 +94,28 @@ const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}
 const ESPERAS_CRIATURA := {"lenguas": 2.2, "punetazo": 3.2, "fuego": 3.6}
 # El fotograma de cada ataque de la criatura en el que llega el golpe (cuando salen las lenguas, la onda y las bolas)
 const GOLPE := {"lenguas": 3, "punetazo": 4, "escupir": 4}
-const LENGUA := Color("#b8352f")
-const LENGUA_LUZ := Color("#e8766e")
+# Las lenguas, pintadas con código (lengua.gd), iguales que las de su dibujo (colores sacados píxel a píxel de su
+# hoja): granate por el lado de la sombra, rojo anaranjado por el medio (el fuego de la boca) y una raya de brillo
+# rosa hacia el lado de la luz. Las capas, de la más oscura (todo el ancho) a la más clara: color y lo que ocupa (en
+# partes del ancho, contando desde el borde de la luz)
+const PALETA_LENGUA := {
+	"contorno": Color("#191311"),
+	"capas": [
+		[Color("#773333"), 1.0],
+		[Color("#8e301a"), 0.85],
+		[Color("#924445"), 0.7],
+		[Color("#ae3814"), 0.56],
+		[Color("#f6c18d"), 0.42],
+		[Color("#ae3814"), 0.3],
+		[Color("#924445"), 0.14],
+	],
+}
+# De dónde salen: su boca en cada dirección, medida en el fotograma del golpe de sus lenguas (de espaldas, por encima
+# de la cabeza, por donde asoman las de su dibujo). Van enteras por delante de su dibujo
+const BOCAS := {
+	"s": Vector2(0, -100), "se": Vector2(36, -110), "e": Vector2(52, -120), "ne": Vector2(-18, -176),
+	"n": Vector2(0, -164), "no": Vector2(16, -176), "o": Vector2(-64, -110), "so": Vector2(-70, -104),
+}
 const FUEGO := [Color("#ff9f1c"), Color("#ffd23f"), Color("#ff5a1f"), Color("#fff1a8")]
 
 var espera := {"probetas": 1.5, "suero": 4.0, "sujetos": 2.0, "cupula": 8.0}
@@ -103,6 +123,31 @@ var cupula := 0                          # lo que le queda a la cúpula (0 = no 
 var dentro := 0.0                        # lo que lleva dentro de la cúpula
 var mutado := false
 var espera_criatura := {"lenguas": 0.8, "punetazo": 1.5, "fuego": 2.0}
+var lenguas: Array[Lengua] = []          # las de la criatura
+
+
+func _ready() -> void:
+	super()
+	for i in LENGUAS:
+		var lengua := Lengua.new(PALETA_LENGUA)
+		lengua.grueso = 7.0
+		lengua.fino = 2.5
+		lengua.borde = 2.0
+		lengua.culebrea = 9.0
+		lengua.largo = LARGO_LENGUA
+		lengua.ancho = ANCHO_LENGUA
+		lengua.desfase = i * 0.37
+		lenguas.append(lengua)
+
+
+# Al empezar las lenguas de la criatura, cada una apunta a su franja y mide hasta dónde llega (por si hay una pared o
+# un mueble por medio)
+func cambiar(nuevo: String, nuevos_datos := {}) -> void:
+	super(nuevo, nuevos_datos)
+	if nuevo == "aviso_lenguas":
+		var angulos := angulos_lenguas()
+		for i in LENGUAS:
+			lenguas[i].apuntar(self, angulos[i])
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -446,7 +491,7 @@ func pensar_criatura(delta: float, johnny: Node2D) -> void:
 			if t >= AVISO_LENGUAS:
 				cambiar("lenguas", {"angulo": datos.angulo})
 				Sonido.tocar("latigazo")
-				lenguas(johnny)
+				latigazo_lenguas(johnny)
 		"lenguas":
 			frenar(delta)
 			if t >= DESPUES:
@@ -503,16 +548,13 @@ func angulos_lenguas() -> Array:
 	return lista
 
 
-# ¿Está Johnny dentro de alguna franja? (como el latigazo del Glotón)
-func lenguas(johnny: Node2D) -> void:
+# ¿Está Johnny dentro de alguna franja, hasta donde llega? (como el latigazo del Glotón)
+func latigazo_lenguas(johnny: Node2D) -> void:
 	Temblor.temblar(5.0)
-	for a in angulos_lenguas():
-		var linea := Vector2.from_angle(a)
-		var hacia: Vector2 = johnny.global_position - global_position
-		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LENGUA)
-		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LENGUA + johnny.RADIO:
+	for lengua in lenguas:
+		if lengua.golpea(self, johnny):
 			johnny.recibir_dano(DANO_LENGUA, self)
-			johnny.empujar(linea * 500.0)
+			johnny.empujar(Vector2.from_angle(lengua.angulo) * 500.0)
 			return
 
 
@@ -683,11 +725,10 @@ func _draw() -> void:
 			draw_circle(Vector2.ZERO, CUPULA_RADIO * k, Color(CRISTAL, 0.12))
 			draw_arc(Vector2.ZERO, CUPULA_RADIO * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
 		"aviso_lenguas":
-			# las tres barras de las lenguas, que se llenan hacia fuera (aviso.gd)
-			var k := minf(1.0, t / AVISO_LENGUAS)
-			var lenguas := angulos_lenguas()
-			for i in lenguas.size():
-				Aviso.barra(self, Vector2(0, 6), lenguas[i], radio * 0.5, LARGO_LENGUA, ANCHO_LENGUA, k, tiempo, i)
+			# las tres lenguas avisan como las cargas de los jefes: flechas que se encienden hacia fuera y, al final,
+			# una X (o una estrella, si se paran en una pared o un mueble)
+			for i in LENGUAS:
+				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LENGUAS), tiempo, i)
 		"aviso_punetazo":
 			# el círculo de la onda, que se llena de él hacia fuera (aviso.gd)
 			Aviso.abanico(self, Vector2(0, 6), 0.0, PI, RADIO_ONDA, minf(1.0, t / AVISO_PUNETAZO), tiempo, 0.7)
@@ -740,18 +781,11 @@ func pintar_encima(lienzo: Node2D) -> void:
 				lienzo.draw_line(punta, hasta, Color(VERDE, brillo * 0.5), 9.0)
 				lienzo.draw_line(punta, hasta, Color(Color.WHITE, brillo), 3.0)
 		"lenguas":
-			# salen disparadas de la boca, culebrean y se recogen
-			var largo := LARGO_LENGUA * minf(1.0, t / 0.08) * clampf((DESPUES - t) / 0.18, 0.0, 1.0)
-			for a in angulos_lenguas():
-				lienzo.draw_set_transform(Vector2(0, -arriba * BOCA), a)
-				var puntos := PackedVector2Array()
-				for i in 15:
-					var f := i / 14.0
-					puntos.append(Vector2(largo * f, sin(f * 9.0 + t * 35.0 + a * 5.0) * 7.0 * (1.0 - f)))
-				lienzo.draw_polyline(puntos, CONTORNO, 13.0)
-				lienzo.draw_polyline(puntos, LENGUA, 8.0)
-				lienzo.draw_polyline(puntos.slice(0, 9), LENGUA_LUZ, 3.0)
-			lienzo.draw_set_transform(Vector2.ZERO)
+			# salen disparadas de la boca, caen sobre el aviso culebreando y se recogen (lengua.gd), enteras por
+			# delante de su dibujo
+			for lengua in lenguas:
+				var puntos := lengua.lanzada(BOCAS[direccion()], Vector2(0, 6), t, DESPUES)
+				lengua.pintar(lienzo, puntos, 0, Tentaculo.PUNTOS)
 		"escupir":
 			# el fogonazo en la boca
 			if t < 0.25:

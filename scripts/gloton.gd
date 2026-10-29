@@ -3,8 +3,9 @@
 # con varias filas de dientes de la que salen lenguas como látigos. Lo común de los minijefes, en minijefe.gd.
 #
 #   - Lento: la cabeza le pesa más que el cuerpo.
-#   - Latigazo: marca en rojo por dónde irán las lenguas (0,6 s) y las dispara en abanico: 16 de daño y un
-#     empujón si te alcanza una.
+#   - Latigazo: echa la cabeza atrás enroscando las lenguas, con el aviso de las cargas de los jefes por donde irán
+#     (0,6 s), y las dispara en abanico: 16 de daño y un empujón si te alcanza una. Se paran en las paredes y los
+#     muebles (el aviso acaba en estrella).
 #   - Aspirar: abre la boca (0,8 s de aviso, con el cono marcado en el suelo) y durante 5 s tira de Johnny hacia
 #     ella si está en el cono y le ve. El cono llega hasta el borde de la elipse limpia de su habitación (el ring),
 #     esté donde esté él: lo que está en la porquería no lo aspira. Va de menos a más: empieza al 30 % y a los 3 s
@@ -53,16 +54,61 @@ const ACIDO := [0.01, 0.02]            # lo que quita el salpicón de sangre ác
 const ACIDO_CADA := 1.0                # (hasta el 27 oct, 0,5: con cualquier arma, unos 50-80 de vida por combate)
 const TAMBALEO := 0.6                  # lo que le corta una explosión
 const PIE := 30.0                      # a qué altura dibuja los pies respecto a su centro
-const BOCA := 0.5                      # a qué altura tiene la boca (parte de "arriba"): de ahí salen las lenguas
+const BOCA := 0.5                      # a qué altura tiene la boca (parte de "arriba"): adonde va el aire que aspira
 const VERDE := Color("#c7e04a")
-const LENGUA := Color("#b8352f")
-const LENGUA_LUZ := Color("#e8655a")
-const CONTORNO := Color("#2a1416")
+# Las lenguas del latigazo, pintadas con código (lengua.gd), iguales que las de su dibujo (colores sacados píxel a
+# píxel de su hoja): contorno casi negro y capas de granate a rojo, cada una más clara, más estrecha y más arrimada al
+# lado de la luz, con un brillo rosado cerca del borde. Las capas, de la más oscura (todo el ancho) a la más clara:
+# color y lo que ocupa (en partes del ancho, contando desde el borde de la luz)
+const PALETA := {
+	"contorno": Color("#25100e"),
+	"capas": [
+		[Color("#64211e"), 1.0],
+		[Color("#7f2b26"), 0.8],
+		[Color("#a03830"), 0.6],
+		[Color("#b7463a"), 0.4],
+		[Color("#d36352"), 0.24],
+		[Color("#b7463a"), 0.1],
+	],
+}
+# De dónde salen: su boca en cada dirección, medida en el fotograma del golpe de su latigazo (de espaldas, por
+# donde asoman las de su dibujo: por encima de la cabeza o por un lado). Van enteras por delante de su dibujo
+const BOCAS := {
+	"s": Vector2(0, -28), "se": Vector2(36, -16), "e": Vector2(58, -32), "ne": Vector2(54, -20),
+	"n": Vector2(0, -86), "no": Vector2(-60, -38), "o": Vector2(-62, -36), "so": Vector2(-46, -14),
+}
 
 var espera_latigazo := 1.5
 var espera_aspirar := 6.0
 var acido_t := 0.0                     # para no salpicar ácido con cada perdigón
 var elipse = null                      # la elipse limpia de su habitación, en unidades (la_elipse(); null, sin buscar)
+var lenguas: Array[Lengua] = []        # las del latigazo (enfadado, todas; si no, las primeras)
+var apuntadas := 0                     # cuántas lleva este latigazo
+
+
+func _ready() -> void:
+	super()
+	for i in LENGUAS[1]:
+		var lengua := Lengua.new(PALETA)
+		lengua.grueso = 5.0
+		lengua.fino = 2.0
+		lengua.borde = 2.0
+		lengua.culebrea = 7.0
+		lengua.largo = LARGO_LENGUA
+		lengua.ancho = ANCHO_LENGUA
+		lengua.desfase = i * 0.37
+		lenguas.append(lengua)
+
+
+# Al empezar el latigazo, cada lengua apunta a su franja y mide hasta dónde llega (por si hay una pared o un mueble
+# por medio)
+func cambiar(nuevo: String, nuevos_datos := {}) -> void:
+	super(nuevo, nuevos_datos)
+	if nuevo == "aviso_latigazo":
+		var angulos := angulos_lenguas()
+		apuntadas = angulos.size()
+		for i in apuntadas:
+			lenguas[i].apuntar(self, angulos[i])
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -79,7 +125,7 @@ func pensar(delta: float, johnny: Node2D) -> void:
 			if t >= dur:
 				elegir(johnny, d)
 		"aviso_latigazo":
-			# echa la cabeza atrás; las franjas rojas marcan por dónde irán las lenguas (ya no cambia de idea)
+			# echa la cabeza atrás; el aviso marca por dónde irán las lenguas (ya no cambia de idea)
 			frenar(delta)
 			if t >= AVISO_LATIGAZO:
 				cambiar("latigazo", {"angulo": datos.angulo, "dado": false})
@@ -152,16 +198,13 @@ func angulos_lenguas() -> Array:
 	return lista
 
 
-# ¿Está Johnny dentro de alguna lengua? (como los latigazos del gerente mutado)
+# ¿Está Johnny dentro de alguna lengua, hasta donde llega? (como los latigazos del gerente mutado)
 func latigazos(johnny: Node2D) -> void:
 	Temblor.temblar(4.0)
-	var hacia: Vector2 = johnny.global_position - global_position
-	for a in angulos_lenguas():
-		var linea := Vector2.from_angle(a)
-		var a_lo_largo := clampf(hacia.dot(linea), 0.0, LARGO_LENGUA)
-		if hacia.distance_to(linea * a_lo_largo) <= ANCHO_LENGUA + johnny.RADIO:
+	for i in apuntadas:
+		if lenguas[i].golpea(self, johnny):
 			johnny.recibir_dano(DANO_LATIGAZO, self)
-			johnny.empujar(linea * 500.0)
+			johnny.empujar(Vector2.from_angle(lenguas[i].angulo) * 500.0)
 			return
 
 
@@ -336,11 +379,10 @@ func _draw() -> void:
 		return
 	match estado:
 		"aviso_latigazo":
-			# una barra por cada lengua, que se llena hacia fuera (aviso.gd)
-			var k := minf(1.0, t / AVISO_LATIGAZO)
-			var lenguas := angulos_lenguas()
-			for i in lenguas.size():
-				Aviso.barra(self, Vector2(0, 6), lenguas[i], radio * 0.5, LARGO_LENGUA, ANCHO_LENGUA, k, tiempo, i)
+			# las lenguas avisan como las cargas de los jefes: flechas que se encienden hacia fuera y, al final, una X
+			# (o una estrella, si se paran en una pared o un mueble)
+			for i in apuntadas:
+				lenguas[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LATIGAZO), tiempo, i)
 		"aviso_aspirar", "aspirar":
 			# el cono por donde aspira (verde, hasta las paredes), que se llena en el aviso; aspirando, lleno y con
 			# ondas que se le meten en la boca, más deprisa cuanto más fuerte aspira (aviso.gd)
@@ -358,18 +400,11 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Las lenguas del latigazo, por encima de él (en el nodo "Vapor"): salen disparadas de la boca, culebrean y se recogen
+# Las lenguas del latigazo, enteras por encima de él (en el nodo "Vapor"): salen disparadas de la boca, caen sobre el
+# aviso culebreando y se recogen (lengua.gd)
 func pintar_encima(lienzo: Node2D) -> void:
 	if estado != "latigazo":
 		return
-	var largo := LARGO_LENGUA * minf(1.0, t / 0.08) * clampf((DURA_LATIGAZO - t) / 0.18, 0.0, 1.0)
-	for a in angulos_lenguas():
-		lienzo.draw_set_transform(Vector2(0, -arriba * BOCA), a)
-		var puntos := PackedVector2Array()
-		for i in 15:
-			var f := i / 14.0
-			puntos.append(Vector2(largo * f, sin(f * 9.0 + t * 35.0 + a * 5.0) * 6.0 * (1.0 - f)))
-		lienzo.draw_polyline(puntos, CONTORNO, 11.0)
-		lienzo.draw_polyline(puntos, LENGUA, 7.0)
-		lienzo.draw_polyline(puntos.slice(0, 9), LENGUA_LUZ, 2.5)
-	lienzo.draw_set_transform(Vector2.ZERO)
+	for i in apuntadas:
+		var puntos := lenguas[i].lanzada(BOCAS[direccion()], Vector2(0, 6), t, DURA_LATIGAZO)
+		lenguas[i].pintar(lienzo, puntos, 0, Tentaculo.PUNTOS)

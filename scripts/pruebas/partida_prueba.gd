@@ -37,6 +37,8 @@
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
 #   --latigazos         el gerente mutado en la sala de pruebas: sus tres latigazos con Johnny abajo, arriba, de
 #                       lado, en diagonal, por detrás y junto a una pared                  [prueba_varias.gd]
+#   --lenguas           las lenguas del Glotón (también enfadado) y de la criatura del científico, en la sala de
+#                       pruebas: avisando y dando el golpe en varias direcciones y junto a una pared [prueba_varias.gd]
 #   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
 #                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
@@ -343,6 +345,9 @@ func empezar_prueba() -> void:
 	elif "--latigazos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_latigazos()
+	elif "--lenguas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_lenguas()
 	elif "--tentaculos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tentaculos()

@@ -1796,3 +1796,101 @@ func probar_latigazos() -> void:
 			await get_tree().physics_frame
 	Temblor.desplazamiento = Vector2.ZERO
 	get_tree().quit()
+
+
+# --lenguas: las lenguas del Glotón y de la criatura del científico mutado (lengua.gd), en la sala de pruebas (F11):
+# avisando (captura-lenguas-<quién>-aviso-<caso>.png) y dando el golpe (captura-lenguas-<quién>-golpe-<caso>.png), con
+# Johnny abajo, arriba, de lado, en diagonal y junto a la pared de la derecha (que las corta: el aviso acaba en
+# estrella); el Glotón, también enfadado (seis lenguas). La cámara, algo más lejos, sin los límites de la sala y
+# centrada entre el jefe y sus lenguas; y, de cerca (a 2, -cerca), la boca y el principio de las lenguas abajo y de
+# lado. En la terminal, la animación y hasta dónde llega cada lengua (y si choca)
+func probar_lenguas() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.85, 0.85)
+	camara.limit_left = -100000
+	camara.limit_top = -100000
+	camara.limit_right = 100000
+	camara.limit_bottom = 100000
+	var gloton: Node2D = meter_zombi("gloton", sala.diana.global_position + Vector2(200, -60))
+	var criatura: Node2D = meter_zombi("cientifico_jefe", sala.diana.global_position + Vector2(-200, -300))
+	await get_tree().create_timer(0.2).timeout
+	criatura.mutar()
+	await get_tree().create_timer(1.6).timeout
+	criatura.global_position = sala.diana.global_position + Vector2(-2000, 0)   # (fuera y quieta, mientras va el Glotón)
+	criatura.process_mode = Node.PROCESS_MODE_DISABLED
+	# Cada caso: quién, nombre, dónde está Johnny (desde la diana), dónde el jefe (desde Johnny) y hacia dónde mira
+	for caso in [["gloton", "abajo", Vector2(200, 160), Vector2(0, -220), "s"],
+			["gloton", "arriba", Vector2(200, -160), Vector2(0, 220), "n"],
+			["gloton", "lado", Vector2(300, 40), Vector2(-220, 0), "e"],
+			["gloton", "diagonal", Vector2(120, 140), Vector2(160, -160), "so"],
+			["gloton", "enfadado", Vector2(200, 160), Vector2(-150, -160), "se"],
+			["gloton", "pared", Vector2(430, 40), Vector2(-180, 0), "e"],
+			["gloton", "abajo-cerca", Vector2(200, 160), Vector2(0, -220), "s"],
+			["gloton", "lado-cerca", Vector2(300, 40), Vector2(-220, 0), "e"],
+			["criatura", "abajo", Vector2(200, 160), Vector2(0, -240), "s"],
+			["criatura", "arriba", Vector2(200, -160), Vector2(0, 240), "n"],
+			["criatura", "lado", Vector2(300, 40), Vector2(-240, 0), "e"],
+			["criatura", "espalda", Vector2(100, -160), Vector2(170, 170), "no"],
+			["criatura", "pared", Vector2(430, 40), Vector2(-200, 0), "e"],
+			["criatura", "abajo-cerca", Vector2(200, 160), Vector2(0, -240), "s"],
+			["criatura", "lado-cerca", Vector2(300, 40), Vector2(-240, 0), "e"]]:
+		var jefe: Node2D = gloton if caso[0] == "gloton" else criatura
+		if caso[0] == "criatura" and gloton != null:
+			gloton.global_position = sala.diana.global_position + Vector2(-2000, 400)
+			gloton.process_mode = Node.PROCESS_MODE_DISABLED
+			gloton = null
+			criatura.process_mode = Node.PROCESS_MODE_INHERIT
+		johnny.global_position = sala.diana.global_position + caso[2]
+		jefe.global_position = johnny.global_position + caso[3]
+		jefe.velocity = Vector2.ZERO
+		jefe.marcha = Vector2.ZERO
+		var angulo: float = (johnny.global_position - jefe.global_position).angle()
+		var cerca: bool = caso[1].ends_with("cerca")
+		camara.zoom = Vector2(2, 2) if cerca else Vector2(0.85, 0.85)
+		Temblor.desplazamiento = caso[3] - caso[3].normalized() * (70.0 if cerca else 150.0) + Vector2(0,
+			-60 if caso[0] == "gloton" else -110)
+		camara.reset_smoothing()
+		var aviso := "aviso_latigazo" if caso[0] == "gloton" else "aviso_lenguas"
+		var golpe := "latigazo" if caso[0] == "gloton" else "lenguas"
+		if caso[0] == "gloton":
+			jefe.fase = 2 if caso[1] == "enfadado" else 1
+			jefe.espera_latigazo = 99.0   # (que solo dé latigazos, y cuando se le dice)
+			jefe.espera_aspirar = 99.0
+			jefe.mirada = Vector2.from_angle(angulo)
+			jefe.cambiar(aviso, {"angulo": angulo})
+		else:
+			for k in jefe.espera_criatura:
+				jefe.espera_criatura[k] = 99.0
+			jefe.empezar(aviso, angulo)
+		while not (jefe.estado == aviso and jefe.t >= 0.55):
+			await get_tree().physics_frame
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-lenguas-%s-aviso-%s.png" % [caso[0], caso[1]])
+		var avisando := "%s/%d" % [jefe.sprite.animation, jefe.sprite.frame]
+		while not (jefe.estado == golpe and jefe.t >= 0.12):
+			await get_tree().physics_frame
+		await RenderingServer.frame_post_draw
+		Captura.foto("captura-lenguas-%s-golpe-%s.png" % [caso[0], caso[1]])
+		var llegan := []
+		for lengua in jefe.lenguas.slice(0, jefe.angulos_lenguas().size()):
+			llegan.append("%d%s" % [lengua.llega, " (choca)" if lengua.choca else ""])
+		print("Lenguas del %s con Johnny %s: avisando %s · golpe %s/%d · llegan a %s (esperado: mirando al %s; %s)" % [
+			caso[0], caso[1], avisando, jefe.sprite.animation, jefe.sprite.frame, ", ".join(llegan), caso[4],
+			"chocan antes de su largo" if caso[1] == "pared" else "todas a su largo, sin chocar"])
+		while jefe.estado == golpe:
+			await get_tree().physics_frame
+	Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()

@@ -78,22 +78,27 @@ en una línea.
   y los muebles (`apuntar`). Cada uno le da sus colores, sacados de su hoja (`PALETA`: contorno, capas y
   ventosas, de aro o de puntitos), y sus medidas; los del zombi, oscurecidos como su dibujo en el juego (el
   shader de los zombis multiplica el dibujo por sí mismo y salen más oscuros que en la hoja).
+  `lengua.gd` (`Lengua`, hereda de `Tentaculo`): las lenguas del latigazo del Glotón y de la criatura del
+  científico. Lo mismo (franja de aviso, se paran en las paredes, capas con los colores de su hoja, sin ventosas
+  y con el contorno de un píxel, `borde`), pero con otra forma: en el aviso no se pintan (las enrosca su dibujo) y
+  en el golpe salen disparadas de la boca (`BOCAS`, medida en el fotograma del golpe en cada dirección), caen
+  sobre el aviso culebreando y se recogen por el mismo camino (`lanzada`). Se prueban con `--lenguas`.
 - `portera.gd`: la jefa por defecto, por estados.
 - `minijefe.gd`: lo común de los jefes (vida y barra, enfadarse a media vida, llamar zombis, `danar()`,
   `quitar_vida()`, `morder()`, la embestida con su `franja()` y el atontado). El vapor de la cabeza al enfadarse
   (también el de la portera) es `vapor_rabia.gd`; todos los avisos en el suelo de los jefes son `aviso.gd` (los
   pinta el shader `escenas/personajes/aviso.gdshader`, en cuadraditos de pixel art): las cargas (flechas que se
-  encienden hasta la pared; también los latigazos de tentáculo), los golpes, saltos y círculos (se llenan hacia
-  fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas, como el aspirado del glotón), las barras
-  rectas (lenguas, alfileres, rayas de los disparos) y las flechas del giro del bombero. Se prueban con
+  encienden hasta la pared; también los latigazos de tentáculos y lenguas), los golpes, saltos y círculos (se
+  llenan hacia fuera; pueden llegar hasta las paredes, cambiar de color y llevar ondas, como el aspirado del
+  glotón), las barras rectas (alfileres, rayas de los disparos) y las flechas del giro del bombero. Se prueban con
   `--golpes`, `--franja` y `--avisos`. Heredan:
-  - Apartamentos: `gloton.gd`, `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
+  - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`
-    (el doctor Salas). `helicoptero.gd`: el que llega al final (su cuerpo,
+    (el doctor Salas; las lenguas de la criatura, `lengua.gd`). `helicoptero.gd`: el que llega al final (su cuerpo,
     `helicoptero.png` de PixelLab; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
     el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
