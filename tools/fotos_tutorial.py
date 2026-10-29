@@ -37,7 +37,7 @@ FOTOS = {
 	"horda": ("captura-evento-horda.png", 360, 230),               # --evento horda
 	"ordenador": ("captura-ordenador.png", 170, 30),               # prueba larga
 	"taquilla": ("captura-skins-taquilla.png", 330, 50),           # --skins
-	"banco": ("captura-banco.png", 300, 20),                       # --banco
+	"banco": ("captura-banco.png", 300, 20),                       # --banco-mejorar (con --banco no sale)
 	"baul": ("captura-baul.png", 300, 20),                         # --baul
 	"centro": ("captura-guardia.png", 360, 230),                   # --edificio centro
 	"peligros": ("captura-peligro-agua.png", 380, 130),            # --fotos-tiendas --edificio centro
