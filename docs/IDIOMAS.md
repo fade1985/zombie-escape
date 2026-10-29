@@ -116,9 +116,13 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
   `Logros.nombre_de(id)` / `desc_de(id)` / `nombre_tema(tema)`, `Skins.nombre(id)` / `como(id)` / `efecto(id)`,
   `Mutaciones.mutacion(id)`..., no la tabla directa (y sin volver a envolverlo en `Idioma.t`).
 
-**Lo que aún sale en español** son datos que se traducen dentro de su propia función cuando se pasen: la historia (dosier y
-noticias), el bestiario, los tutoriales y los supervivientes (fase 4, con los gritos de los jefes), y los nombres de planta, de
-sitio y de tienda (`mapa/planta.gd`, `mapa/tienda.gd`; fase 5, con los carteles del mundo y los dibujados en imágenes:
-`cartel-planta-N.png` lleva «PLANTA»). Cómo se dice cada cosa en inglés: `docs/GLOSARIO_EN.md`.
+- **Fase 4 (la voz del juego):** `historia.gd` (dosier y noticias: `titulo_de`, `cuerpo_de`, `titular_de`, `texto_de`, `hoja`...),
+  `tutoriales.gd` (`titulo_de`, `texto`, `nombre_grupo`; las `{teclas}` se sustituyen DESPUÉS de traducir), `bestiario.gd`
+  (`nombre`, `frase`), `supervivientes.gd` (`nombre_de`, `desc_de`; los nombres van **sin artículo**: las frases ponen el suyo),
+  `escolta.gd` y los gritos de los jefes, de los zombis y de Johnny (`gerente.gd`, `portera.gd`, `gymbro.gd`, `johnny.gd`...).
+  Los gritos se adaptan con ingenio, no se traducen literalmente.
+
+**Lo que aún sale en español:** los nombres de planta, de sitio y de tienda (`mapa/planta.gd`, `mapa/tienda.gd`; fase 5, con los carteles del mundo y los dibujados en imágenes:
+`cartel-planta-N.png` lleva «PLANTA», y las fotos de `assets/ui/tutorial/` pueden llevar texto del juego dibujado). Cómo se dice cada cosa en inglés: `docs/GLOSARIO_EN.md`.
 
 **Decimales:** `Talentos.decimal(x)` da la coma en español y el punto en inglés (de momento solo lo usa `talentos.gd`).

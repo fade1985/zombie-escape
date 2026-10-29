@@ -17,9 +17,11 @@
 #   jefe       true en los jefes de planta y en el jefe final
 #
 # PARA CAMBIAR los nombres o las frases, aquí. Lo único que no hay que tocar es la clave de una entrada ya
-# publicada: el guardado apunta los vistos por su clave.
+# publicada: el guardado apunta los vistos por su clave. Los nombres y las frases están en español entre las marcas
+# de traducir (docs/IDIOMAS.md): quien los enseñe usa nombre(id) y frase(id), que los devuelven ya traducidos.
 class_name Bestiario
 
+# [traducir]
 const LISTA := {
 	"normal": {"nombre": "El vecino",
 		"frase": "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde.",
@@ -114,6 +116,16 @@ const LISTA := {
 		"edificios": ["apartamentos"], "hoja": "res://assets/sprites/jefe-criatura.tres",
 		"recorte": Rect2i(22, 47, 116, 115), "retrato": "quieto_s", "escala": 2, "jefe": true},
 }
+# [/traducir]
+
+
+# El nombre y la frase de uno, ya traducidos
+static func nombre(id: String) -> String:
+	return Idioma.t(LISTA[id].nombre) if id in LISTA else ""
+
+
+static func frase(id: String) -> String:
+	return Idioma.t(LISTA[id].frase) if id in LISTA else ""
 
 
 # Los que salen en un edificio, en el orden de LISTA

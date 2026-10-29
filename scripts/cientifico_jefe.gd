@@ -261,13 +261,13 @@ func elegir(johnny: Node2D, d: float) -> void:
 	if espera.sujetos <= 0.0 and secuaces() <= POCOS:
 		espera.sujetos = ESPERAS.sujetos
 		cambiar("sujetos")
-		gritar("¡MÁS SUJETOS!", VERDE, 24)
+		gritar(Idioma.t("¡MÁS SUJETOS!"), VERDE, 24)
 		Sonido.tocar("rugido")
 		return
 	if espera.suero <= 0.0 and not sin_suero().is_empty():
 		espera.suero = ESPERAS.suero
 		cambiar("suero")
-		gritar("¡DOSIS DOBLE!", VERDE, 24)
+		gritar(Idioma.t("¡DOSIS DOBLE!"), VERDE, 24)
 		return
 	if espera.probetas <= 0.0 and d < ALCANCE_PROBETAS:
 		espera.probetas = ESPERAS.probetas
@@ -348,7 +348,7 @@ func inyectar() -> void:
 			z.get_node("Sprite").modulate = Color(0.72, 1.25, 0.72)
 		datos.rayos.append(z.global_position)
 		var alto: float = z.altura if "altura" in z else 80.0
-		Zombi.texto_flotante(get_parent(), z.global_position + Vector2(-30, -alto), "¡SUERO!", VERDE, 18)
+		Zombi.texto_flotante(get_parent(), z.global_position + Vector2(-30, -alto), Idioma.t("¡SUERO!"), VERDE, 18)
 		for i in 8:
 			Particulas.soltar(self, z.global_position + Vector2(randf_range(-14, 14), randf_range(-60, 0)),
 				Vector2(randf_range(-30, 30), randf_range(-70, -20)), VERDE, 3, 0.5)
@@ -365,7 +365,7 @@ func subir_cupula() -> void:
 	dentro = 0.0
 	armadura_cambiada.emit(cupula, CUPULA_VIDA)
 	Sonido.tocar("cristal")
-	gritar("¡NO ME TOCARÁS!", CRISTAL, 22)
+	gritar(Idioma.t("¡NO ME TOCARÁS!"), CRISTAL, 22)
 	cambiar("cupula_sube")
 
 
@@ -382,7 +382,7 @@ func romper_cupula() -> void:
 	Sonido.tocar("cristal")
 	Sonido.tocar("explosion")
 	Temblor.temblar(6.0)
-	gritar("¡MI CÚPULA!", CRISTAL, 22)
+	gritar(Idioma.t("¡MI CÚPULA!"), CRISTAL, 22)
 	for i in 22:
 		var a := randf() * TAU
 		Particulas.soltar(self, global_position + Vector2(cos(a) * 48.0, -arriba * 0.45 + sin(a) * 64.0),
@@ -424,7 +424,7 @@ func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 	if cupula > 0:
 		cupula = 0
 		armadura_cambiada.emit(0, CUPULA_VIDA)
-	gritar("¡AÚN NO HE TERMINADO!", VERDE, 24)
+	gritar(Idioma.t("¡AÚN NO HE TERMINADO!"), VERDE, 24)
 	Sonido.tocar("rugido")
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < 240.0:
@@ -458,7 +458,7 @@ func mutar() -> void:
 	Temblor.temblar(14.0)
 	Sonido.tocar("rugido")
 	Sonido.tocar("explosion")
-	gritar("¡GRAAAAH!", VERDE, 30)
+	gritar(Idioma.t("¡GRAAAAH!"), VERDE, 30)
 	for i in 30:
 		# los trozos de la bata (blancos), el VD-7 (verde) y las primeras llamas
 		Particulas.soltar(self, global_position + Vector2(randf_range(-40, 40), randf_range(-150, 0)),

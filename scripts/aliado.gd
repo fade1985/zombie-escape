@@ -683,7 +683,7 @@ func dibujar_encima() -> void:
 			encima.draw_arc(Vector2.ZERO, 60.0, 0.0, TAU, 48, Color(Tema.AMARILLO, 0.35 + sin(tiempo * 8.0) * 0.2), 3.0)
 			if levantar > 0.0:
 				encima.draw_arc(Vector2.ZERO, 60.0, -PI / 2.0, -PI / 2.0 + levantar * TAU, 48, Tema.AMARILLO, 6.0)
-			texto(letra, "Quédate a su lado para levantarlo", Vector2(0, 86), 16, Tema.AMARILLO)
+			texto(letra, Idioma.t("Quédate a su lado para levantarlo"), Vector2(0, 86), 16, Tema.AMARILLO)
 	# el bocadillo: lo que acaba de decir o, si está esperando, su frase de siempre
 	var frase := ""
 	var alfa := 1.0
@@ -692,10 +692,10 @@ func dibujar_encima() -> void:
 		frase = dicho
 		alfa = clampf((3.2 - dicho_t) / 0.4, 0.0, 1.0)
 	elif modo == "encerrado":
-		frase = "¡Socorro!" if asustado else "¡Llévame contigo!"
+		frase = Idioma.t("¡Socorro!") if asustado else Idioma.t("¡Llévame contigo!")
 		color_frase = Tema.ROJO if asustado else Color("#2f9e44")
 	elif modo == "vecino" and partida.supervivientes.vecino_cerca() == self:
-		frase = "¿Te acompaño?"   # solo el que está más cerca de Johnny (si no, se pisan los bocadillos)
+		frase = Idioma.t("¿Te acompaño?")   # solo el que está más cerca de Johnny (si no, se pisan los bocadillos)
 		color_frase = Color("#2f9e44")
 	if frase != "":
 		var y := alto - absf(sin(tiempo * 3.0)) * 4.0 * float(modo != "equipo")
@@ -708,7 +708,7 @@ func dibujar_encima() -> void:
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))
 	if modo != "equipo":
-		texto(letra, def.nombre, Vector2(0, 42), 16, Color.WHITE)
+		texto(letra, Supervivientes.nombre_de(def), Vector2(0, 42), 16, Color.WHITE)   # (el nombre, ya traducido)
 
 
 func texto(letra: Font, cual: String, donde: Vector2, tamano: int, color: Color) -> void:

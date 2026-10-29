@@ -143,7 +143,7 @@ func dejar_rastro(delta: float) -> void:
 	for s in [-1.0, 0.0, 1.0]:
 		if randf() < 0.85:
 			Mancha.gota(suelo(), global_position + Vector2(0, 4) + lado * s + Vector2(randf_range(-2, 2), randf_range(-2, 2)),
-				Color(color_sangre, randf_range(0.3, 0.5)), Vector2(4, 4), "Rastro", 1400)
+				Color(color_sangre, randf_range(0.3, 0.5)), Vector2(4, 4), "Rastro", 1400)   # no-tr (nombre de nodo)
 
 
 func _physics_process(delta: float) -> void:

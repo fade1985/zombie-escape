@@ -49,7 +49,7 @@ func _init() -> void:
 	add_child(pantalla)
 	directo = rotulo(Idioma.t("EN DIRECTO"), Color.WHITE, Vector2(24, 4))
 	canal = rotulo(Idioma.t("CANAL 8"), AZUL, Vector2(PANTALLA.size.x - 76, 6))
-	nombre = rotulo("%s · %s" % [Historia.REPORTERA.to_upper(), Historia.CANAL.to_upper()], Color("#e8e8d0"),
+	nombre = rotulo("%s · %s" % [Historia.REPORTERA.to_upper(), Historia.canal().to_upper()], Color("#e8e8d0"),
 		Vector2(6, 105))
 	titular = rotulo("", Color.WHITE, Vector2(6, 126))
 	cinta = rotulo("", Color("#1b1712"), Vector2(PANTALLA.size.x, 146))
@@ -86,10 +86,10 @@ func rotulo(t: String, color: Color, donde: Vector2) -> Label:
 # Pone una noticia: la pantalla hace "nieve" un momento y la reportera empieza a hablar desde el principio
 func poner(n: Dictionary) -> void:
 	noticia = n
-	titular.text = n.titular
+	titular.text = Historia.titular_de(n)
 	cinta.text = Idioma.t("ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  ") % Historia.EMPRESA.to_upper()
 	cinta.position.x = PANTALLA.size.x
-	texto.text = n.texto
+	texto.text = Historia.texto_de(n)
 	texto.visible_characters = 0
 	letras = 0.0
 	en_antena = 0.0

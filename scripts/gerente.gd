@@ -234,7 +234,7 @@ func elegir(johnny: Node2D, d: float) -> void:
 	if espera.a_trabajar <= 0.0 and secuaces() <= POCOS:
 		espera.a_trabajar = ESPERAS.a_trabajar[f]
 		cambiar("a_trabajar")
-		gritar("¡A TRABAJAR!", Color("#ffd23f"), 26)
+		gritar(Idioma.t("¡A TRABAJAR!"), Color("#ffd23f"), 26)
 		Sonido.tocar("rugido")
 		return
 	if espera.contratos <= 0.0 and a_la_vista(johnny):
@@ -303,7 +303,7 @@ func libre(p: Vector2) -> bool:
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 	for bala in get_tree().get_nodes_in_group("balas_zombi"):
 		bala.queue_free()
-	gritar("¡AQUÍ NO PARA NADIE!", Color("#ffd23f"), 24)
+	gritar(Idioma.t("¡AQUÍ NO PARA NADIE!"), Color("#ffd23f"), 24)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < 240.0:
 		johnny.empujar(hacia.normalized() * 800.0)
@@ -346,7 +346,7 @@ func mutar() -> void:
 	Temblor.temblar(14.0)
 	Sonido.tocar("rugido")
 	Sonido.tocar("explosion")
-	gritar("¡GRAAAAH!", VERDE, 30)
+	gritar(Idioma.t("¡GRAAAAH!"), VERDE, 30)
 	for i in 24:
 		Particulas.soltar(self, global_position + Vector2(randf_range(-40, 40), randf_range(-150, 0)),
 			Vector2.from_angle(randf() * TAU) * randf_range(60, 160), [VERDE, MORADO, Color("#7a1f1a")].pick_random(), 4, 0.8)

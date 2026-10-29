@@ -55,6 +55,38 @@ msgstr "Medkits, bandages and Wolverine heal half as much"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "The guard (or the key zombie) takes twice the damage and zombies hear you from farther away"
 
+#: scripts/aliado.gd
+msgid "Quédate a su lado para levantarlo"
+msgstr "Stay close to help them up"
+
+#: scripts/aliado.gd scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "Help!"
+
+#: scripts/aliado.gd
+msgid "¡Llévame contigo!"
+msgstr "Take me with you!"
+
+#: scripts/aliado.gd
+msgid "¿Te acompaño?"
+msgstr "Can I tag along?"
+
+#: scripts/antidisturbios.gd
+msgid "¡PRIIIII!"
+msgstr "FWEEEET!"
+
+#: scripts/antidisturbios.gd
+msgid "¡ATRÁS!"
+msgstr "GET BACK!"
+
+#: scripts/antidisturbios.gd
+msgid "¡QUEDAS DETENIDO!"
+msgstr "YOU'RE UNDER ARREST!"
+
+#: scripts/antidisturbios.gd
+msgid "¡CLONC!"
+msgstr "CLANK!"
+
 #: scripts/armas.gd
 msgid "golpe un %d %% más largo y ancho"
 msgstr "swing %d %% longer and wider"
@@ -261,7 +293,7 @@ msgstr "Fixed! You can switch the power back on now"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "The %s fixed the wire! The water doesn't shock anymore"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Help me, I can't get up!"
 
@@ -313,7 +345,7 @@ msgstr "Strip the wire, join it… okay"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Just the electrical tape left…"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/supervivientes.gd
 msgid "¡Un poco más!"
 msgstr "Just a bit more!"
 
@@ -329,15 +361,15 @@ msgstr "I can't work like this! Cut the power!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "I'm gonna get electrocuted! The lever!"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/supervivientes.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, come back!"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/supervivientes.gd
 msgid "¡No me dejes aquí!"
 msgstr "Don't leave me here!"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/supervivientes.gd
 msgid "¡Que me comen!"
 msgstr "They're eating me!"
 
@@ -353,7 +385,7 @@ msgstr "The entrance has shut! Defend the door while the %s takes down the barri
 msgid "la entrada"
 msgstr "the entrance"
 
-#: scripts/barricada.gd
+#: scripts/barricada.gd scripts/supervivientes.gd
 msgid "¡Vienen por %s!"
 msgstr "They're coming through %s!"
 
@@ -367,7 +399,7 @@ msgstr "They're pushing on the door! Get them off"
 
 #: scripts/barricada.gd
 msgid "%s quita la barricada · %d:%02d"
-msgstr "The %s is taking down the barricade · %d:%02d"
+msgstr "The %s is pulling the boards · %d:%02d"
 
 #: scripts/barricada.gd
 msgid "¡Cuántos clavos le metí!"
@@ -408,6 +440,230 @@ msgstr "Get them off the door!"
 #: scripts/barricada.gd
 msgid "¡Así no puedo, Johnny!"
 msgstr "I can't work like this, Johnny!"
+
+#: scripts/bestiario.gd
+msgid "El vecino"
+msgstr "The Neighbor"
+
+#: scripts/bestiario.gd
+msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde."
+msgstr "He came in at dawn on a Velaria truck, in exchange for a free apartment. Now he's a sleeper: he doesn't say hi on the stairs, he bites."
+
+#: scripts/bestiario.gd
+msgid "El arrastrado"
+msgstr "The Crawler"
+
+#: scripts/bestiario.gd
+msgid "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido."
+msgstr "He's missing his bottom half and hasn't noticed. He drags himself along by his hands and leaves a mess everywhere."
+
+#: scripts/bestiario.gd
+msgid "El crío"
+msgstr "The Kid"
+
+#: scripts/bestiario.gd
+msgid "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo."
+msgstr "A kid in a cap and tracksuit who runs like a demon. His brakes are awful: step aside and he shoots right past."
+
+#: scripts/bestiario.gd
+msgid "El dinamitero"
+msgstr "The Bomber"
+
+#: scripts/bestiario.gd
+msgid "Un hombretón con gabardina. Cuando la abre no es para enseñarte nada bueno: corre."
+msgstr "A big guy in a trench coat. When he opens it, it's not to show you anything nice: run."
+
+#: scripts/bestiario.gd
+msgid "El de los tentáculos"
+msgstr "The Tentacle Guy"
+
+#: scripts/bestiario.gd
+msgid "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella."
+msgstr "He barely moves, but when he marks a red line, don't stand on it."
+
+#: scripts/bestiario.gd
+msgid "El gordo"
+msgstr "The Fat Man"
+
+#: scripts/bestiario.gd
+msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
+msgstr "He keeps his distance and spits a loogie that leaves the floor poisoned."
+
+#: scripts/bestiario.gd
+msgid "La portera"
+msgstr "The Super"
+
+#: scripts/bestiario.gd
+msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
+msgstr "She had it all under control: the keys, the rent, and now the tenants. That mop isn't for cleaning."
+
+#: scripts/bestiario.gd
+msgid "La dependienta"
+msgstr "The Sales Clerk"
+
+#: scripts/bestiario.gd
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta."
+msgstr "She's been on her feet for 31 hours and she's still smiling. When she yells \"SALE!\", the whole store wakes up."
+
+#: scripts/bestiario.gd
+msgid "El vigilante"
+msgstr "The Security Guard"
+
+#: scripts/bestiario.gd
+msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
+msgstr "Still making his rounds. If he hears a whistle, he comes running, baton first."
+
+#: scripts/bestiario.gd
+msgid "El guardia de la tarjeta"
+msgstr "The Keycard Guard"
+
+#: scripts/bestiario.gd
+msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "He's got the floor's keycard and he knows it. He whistles, runs off and gets winded: that's your moment."
+
+#: scripts/bestiario.gd
+msgid "El antidisturbios"
+msgstr "The Riot Cop"
+
+#: scripts/bestiario.gd
+msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
+msgstr "With that shield up front, nothing gets through. Circle around him: from behind, it hurts twice as much."
+
+#: scripts/bestiario.gd
+msgid "El cocinero"
+msgstr "The Cook"
+
+#: scripts/bestiario.gd
+msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
+msgstr "Still in his kitchen, and on the menu: knives and boiling oil. Don't stand under the marks."
+
+#: scripts/bestiario.gd
+msgid "La modista"
+msgstr "The Seamstress"
+
+#: scripts/bestiario.gd
+msgid "Se esconde entre los maniquíes y te cose a alfileres. Fíjate en cuál le brillan los ojos."
+msgstr "She hides among the mannequins and turns you into a pincushion. Look for the one with glowing eyes."
+
+#: scripts/bestiario.gd
+msgid "El maniquí"
+msgstr "The Mannequin"
+
+#: scripts/bestiario.gd
+msgid "Quieto mientras lo miras. No le des la espalda."
+msgstr "Frozen while you're looking at it. Don't turn your back on it."
+
+#: scripts/bestiario.gd
+msgid "La mascota"
+msgstr "The Mascot"
+
+#: scripts/bestiario.gd
+msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
+msgstr "A giant teddy bear with someone inside. It charges, it jumps, and if it crashes, it sees stars."
+
+#: scripts/bestiario.gd
+msgid "El gerente"
+msgstr "The Manager"
+
+#: scripts/bestiario.gd
+msgid "Arturo Salcedo, director del centro. Sus contratos cortan y su jeringuilla lleva VD-7."
+msgstr "Arturo Salcedo, head of the mall. His contracts cut, and his syringe is loaded with VD-7."
+
+#: scripts/bestiario.gd
+msgid "El gerente mutado"
+msgstr "The Mutated Manager"
+
+#: scripts/bestiario.gd
+msgid "Ya no le hace falta dormir. Ni el traje. Cuatro tentáculos y el helicóptero esperando en la azotea."
+msgstr "He doesn't need sleep anymore. Or the suit. Four tentacles, and the helicopter waiting on the roof."
+
+#: scripts/bestiario.gd
+msgid "El Glotón"
+msgstr "The Glutton"
+
+#: scripts/bestiario.gd
+msgid "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe tuyo te salpica."
+msgstr "He crawls on all fours and wants to eat you: when he opens wide, get out of the cone. His blood is acid: every hit you land splashes you."
+
+#: scripts/bestiario.gd
+msgid "El Gymbro"
+msgstr "The Gymbro"
+
+#: scripts/bestiario.gd
+msgid "Gira con los brazos abiertos, salta encima de ti y te tira pesas. Con sus suplementos, la armadura se come la mitad del daño."
+msgstr "He spins with his arms out, jumps on you and throws weights at you. Thanks to his supplements, his armor soaks up half the damage."
+
+#: scripts/bestiario.gd
+msgid "El jefe de bomberos"
+msgstr "The Fire Chief"
+
+#: scripts/bestiario.gd
+msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
+msgstr "Fire does nothing to him: switch weapons. When he spins, run ahead of the cone of fire, the way the arrows point. Up close, watch out for the axe."
+
+#: scripts/bestiario.gd
+msgid "El doctor Salas"
+msgstr "Dr. Salas"
+
+#: scripts/bestiario.gd
+msgid "Héctor Salas, director del estudio del VD-7. Tira probetas, mejora a sus sujetos y se esconde en una cúpula de cristal: rómpela."
+msgstr "Héctor Salas, head of the VD-7 study. He throws test tubes, upgrades his subjects and hides in a glass dome: smash it."
+
+#: scripts/bestiario.gd
+msgid "La criatura"
+msgstr "The Creature"
+
+#: scripts/bestiario.gd
+msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
+msgstr "What's left of the doctor after his own dose: the Glutton's mouth, the Gymbro's arms and the fire chief's flames. Stay out of its charge lanes and its shockwave."
+
+#: scripts/bombero.gd
+msgid "¡A ARDER!"
+msgstr "FIRE DRILL!"
+
+#: scripts/bombero.gd scripts/minijefe.gd
+msgid "¡INMUNE!"
+msgstr "IMMUNE!"
+
+#: scripts/bombero.gd
+msgid "¡TODO ARDE!"
+msgstr "FIVE-ALARM FIRE!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MÁS SUJETOS!"
+msgstr "MORE TEST SUBJECTS!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡DOSIS DOBLE!"
+msgstr "DOUBLE DOSE!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡SUERO!"
+msgstr "SERUM!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡NO ME TOCARÁS!"
+msgstr "HANDS OFF, JANITOR!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MI CÚPULA!"
+msgstr "MY DOME!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡AÚN NO HE TERMINADO!"
+msgstr "I'M NOT DONE YET!"
+
+#: scripts/cientifico_jefe.gd scripts/gerente.gd
+msgid "¡GRAAAAH!"
+msgstr "GRAAAAH!"
+
+#: scripts/cocinero.gd
+msgid "¡CALENTITO!"
+msgstr "PIPING HOT!"
+
+#: scripts/cocinero.gd
+msgid "¡A LA OLLA!"
+msgstr "INTO THE POT!"
 
 #: scripts/edificios.gd
 msgid "Apartamentos"
@@ -513,6 +769,62 @@ msgstr "Toy Store"
 msgid "la Juguetería"
 msgstr "the Toy Store"
 
+#: scripts/escolta.gd
+msgid "Vámonos. Despacio, por favor"
+msgstr "Let's go. Slowly, please"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s hasta las escaleras: va herida"
+msgstr "Get the %s to the stairs: she's hurt"
+
+#: scripts/escolta.gd
+msgid "Gracias… sigamos"
+msgstr "Thanks… let's keep going"
+
+#: scripts/escolta.gd
+msgid "¡La %s está en el suelo! Quédate a su lado para levantarla"
+msgstr "The %s is down! Stay by her side to help her up"
+
+#: scripts/escolta.gd
+msgid "Espera a la %s: va herida"
+msgstr "Wait for the %s: she's hurt"
+
+#: scripts/escolta.gd
+msgid "Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo"
+msgstr "We're safe here. Let me wrap this leg and I'll stick with you"
+
+#: scripts/escolta.gd
+msgid "¡La %s está a salvo!"
+msgstr "The %s is safe!"
+
+#: scripts/escolta.gd
+msgid "¡La %s ha caído! Quédate a su lado"
+msgstr "The %s is down! Stay by her side"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s a las escaleras"
+msgstr "Get the %s to the stairs"
+
+#: scripts/escolta.gd
+msgid "Me duele mucho la pierna…"
+msgstr "My leg really hurts…"
+
+#: scripts/escolta.gd
+msgid "¡No vayas tan deprisa!"
+msgstr "Not so fast!"
+
+#: scripts/escolta.gd
+msgid "¡No me dejes atrás!"
+msgstr "Don't leave me behind!"
+
+#: scripts/escolta.gd
+msgid "¿Falta mucho?"
+msgstr "Are we there yet?"
+
+#: scripts/escolta.gd
+msgid "Tengo que vendarme esto…"
+msgstr "I need to bandage this…"
+
 #: scripts/eventos.gd
 msgid "¡Ahí viene la horda!"
 msgstr "Here comes the horde!"
@@ -533,7 +845,7 @@ msgstr "Fire alarm survived! +$%d"
 msgid "¡Ojo! Ese charco tiene corriente"
 msgstr "Watch out! That puddle is live"
 
-#: scripts/eventos.gd
+#: scripts/eventos.gd scripts/tutoriales.gd
 msgid "Apagón"
 msgstr "Blackout"
 
@@ -545,7 +857,7 @@ msgstr "BLACKOUT!"
 msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"
 msgstr "The power is out on the whole floor: you can only see what your flashlight lights up"
 
-#: scripts/eventos.gd
+#: scripts/eventos.gd scripts/tutoriales.gd
 msgid "Alarma de incendios"
 msgstr "Fire alarm"
 
@@ -557,7 +869,7 @@ msgstr "FIRE ALARM!"
 msgid "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"
 msgstr "The sprinklers soak the floor: it's slippery, and where wires fall, you get zapped!"
 
-#: scripts/eventos.gd
+#: scripts/eventos.gd scripts/tutoriales.gd
 msgid "Horda"
 msgstr "Horde"
 
@@ -568,6 +880,560 @@ msgstr "HORDE IN THE HALLWAY!"
 #: scripts/eventos.gd
 msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
 msgstr "A huge horde is coming down the hallway... get ready!"
+
+#: scripts/gerente.gd
+msgid "¡A TRABAJAR!"
+msgstr "BACK TO WORK!"
+
+#: scripts/gerente.gd
+msgid "¡AQUÍ NO PARA NADIE!"
+msgstr "NOBODY CLOCKS OUT!"
+
+#: scripts/gloton.gd
+msgid "¡HAMBRE!"
+msgstr "HUNGRY!"
+
+#: scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "CHOMP!"
+
+#: scripts/gloton.gd
+msgid "¡TENGO HAMBRE!"
+msgstr "I'M STARVING!"
+
+#: scripts/gloton.gd
+msgid "-%d ácido"
+msgstr "-%d acid"
+
+#: scripts/gymbro.gd
+msgid "¡NO PAIN, NO GAIN!"
+msgstr "NO PAIN, NO GAIN!"
+
+#: scripts/gymbro.gd
+msgid "¡HORA DE LOS SUPLEMENTOS!"
+msgstr "SUPPLEMENT TIME, BRO!"
+
+#: scripts/gymbro.gd
+msgid "¡SIN SUPLEMENTOS!"
+msgstr "OUT OF SUPPS!"
+
+#: scripts/historia.gd
+msgid "azotea"
+msgstr "roof"
+
+#: scripts/historia.gd
+msgid "Página arrancada"
+msgstr "Torn-out page"
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Apartamentos"
+msgstr "Dossier VD-7 · Apartments"
+
+#: scripts/historia.gd
+msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
+msgstr "Every dead Velaria employee in the building carries a page, and the study director carries the last one. Whatever you find stays here forever."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"This page is missing. Someone from Velaria has it, lying dead on the %s.\n"
+"\n"
+"Find them in a run."
+
+#: scripts/historia.gd
+msgid "Dra. Inés Lozano, coordinadora del estudio"
+msgstr "Dr. Inés Lozano, study coordinator"
+
+#: scripts/historia.gd
+msgid "PLAN DE CAMPO · CONFIDENCIAL"
+msgstr "FIELD PLAN · CONFIDENTIAL"
+
+#: scripts/historia.gd
+msgid "Estudio de descanso"
+msgstr "Sleep Study"
+
+#: scripts/historia.gd
+msgid ""
+"Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
+"\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"\n"
+"Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
+"\n"
+"Personal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros."
+msgstr ""
+"Building: No. 14. Velaria Corp. has bought the whole thing: nobody gets to snoop.\n"
+"\n"
+"Subjects: 120, trucked in at night through the back garage, where nobody sees them. Homeless, in debt or sick. We give them an apartment and €300 a month.\n"
+"\n"
+"Dose: one VD-7 pill every night, at 23:00.\n"
+"\n"
+"Staff: a doctor, to monitor the subjects; a uniformed cop, so they trust us; and a military escort, in case anything goes wrong. The super works for us."
+
+#: scripts/historia.gd
+msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
+msgstr "Salas says nobody's going to miss these people. That's why he picked them."
+
+#: scripts/historia.gd
+msgid "Tomás Vidal, enfermero de noche"
+msgstr "Tomás Vidal, night nurse"
+
+#: scripts/historia.gd
+msgid "DIARIO DE TURNO"
+msgstr "SHIFT LOG"
+
+#: scripts/historia.gd
+msgid "Noches 6 a 13"
+msgstr "Nights 6 to 13"
+
+#: scripts/historia.gd
+msgid ""
+"Noche 6. Funciona. El del 1ºA, que no pegaba ojo desde hacía años, ronca a las 23:10.\n"
+"\n"
+"Noche 9. Siguen dormidos, pero se levantan. Andan, abren la nevera, vuelven a la cama. Con los ojos cerrados.\n"
+"\n"
+"Noche 12. Ya no vuelven a la cama. La piel se les cae a tiras. Se han comido todo lo de los pisos, y al perro del 2ºC. De la escolta solo queda uno.\n"
+"\n"
+"Noche 13. El del 3ºB me ha mordido. Salas los llama «durmientes». Tengo mucho sueño."
+msgstr ""
+"Night 6. It works. The guy in 1A, who hadn't slept a wink in years, is snoring by 23:10.\n"
+"\n"
+"Night 9. Still asleep, but they get up. They walk around, open the fridge, go back to bed. With their eyes closed.\n"
+"\n"
+"Night 12. They don't go back to bed anymore. Their skin is coming off in strips. They've eaten everything in the apartments, and the dog in 2C. Only one of the escort is left.\n"
+"\n"
+"Night 13. The one in 3B bit me. Salas calls them \"sleepers.\" I'm so sleepy."
+
+#: scripts/historia.gd
+msgid "Andrés Peña, técnico de muestras"
+msgstr "Andrés Peña, sample technician"
+
+#: scripts/historia.gd
+msgid "CORREO INTERNO IMPRESO"
+msgstr "INTERNAL EMAIL PRINTOUT"
+
+#: scripts/historia.gd
+msgid "Asunto: RE: ¿virus?"
+msgstr "Subject: RE: virus?"
+
+#: scripts/historia.gd
+msgid ""
+"De: Dirección de Velaria Corp.\n"
+"Para: Equipo de campo\n"
+"\n"
+"No hay ningún virus, lo sabemos. Pero «virus» lo entiende todo el mundo y nadie pregunta por las pastillas.\n"
+"\n"
+"Esta noche nuestra seguridad precinta el edificio: nadie entra ni sale, tampoco vosotros ni la escolta. El edificio es nuestro y la policía de fuera no puede pasar.\n"
+"\n"
+"El mordisco cambia el ADN del mordido: un durmiente más. No estaba previsto. Ahora forma parte del estudio.\n"
+"\n"
+"Borrad este correo."
+msgstr ""
+"From: Velaria Corp. Head Office\n"
+"To: Field team\n"
+"\n"
+"There is no virus, we know that. But everybody understands \"virus,\" and nobody asks about the pills.\n"
+"\n"
+"Tonight our security seals the building: nobody in or out, and that includes you and the escort. The building is ours, and the police outside can't get in.\n"
+"\n"
+"A bite alters the victim's DNA: one more sleeper. This was not planned. It is now part of the study.\n"
+"\n"
+"Delete this email."
+
+#: scripts/historia.gd
+msgid "No pienso borrarlo. Que lo lea alguien."
+msgstr "I won't delete it. Somebody should read it."
+
+#: scripts/historia.gd
+msgid "Dr. Ramón Gil, investigador de Velaria"
+msgstr "Dr. Ramón Gil, Velaria researcher"
+
+#: scripts/historia.gd
+msgid "INFORME · DOSIS ALTA"
+msgstr "REPORT · HIGH DOSE"
+
+#: scripts/historia.gd
+msgid "Los sonámbulos"
+msgstr "The Sleepwalkers"
+
+#: scripts/historia.gd
+msgid ""
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"\n"
+"S-1. La portera. Dosis triple. Sigue fregando.\n"
+"S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
+"S-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\n"
+"S-4. Bombero jubilado, 2ºA. El fuego no le quema.\n"
+"\n"
+"Salas les saca sangre cada noche y se la sube a la azotea."
+msgstr ""
+"Four high-dose subjects didn't stay sleepers. They've mutated further: they hunt, think a little and talk. Salas calls them \"sleepwalkers.\"\n"
+"\n"
+"S-1. The super. Triple dose. Still mopping.\n"
+"S-2. Homeless, apt. GC. Eats nonstop. Screams \"I'M STARVING!\"\n"
+"S-3. In debt, apt. 1D. Mixed it into his protein shakes. His clothes don't fit anymore.\n"
+"S-4. Retired firefighter, apt. 2A. Fire doesn't burn him.\n"
+"\n"
+"Salas draws their blood every night and takes it up to the roof."
+
+#: scripts/historia.gd
+msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
+msgstr "S-1 called me by my name. Get the staff off the upper floors. NOW."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"This page is missing. The study director has it, all the way up on the roof.\n"
+"\n"
+"You'll have to take it from him."
+
+#: scripts/historia.gd
+msgid "Dr. Héctor Salas, director del estudio"
+msgstr "Dr. Héctor Salas, study director"
+
+#: scripts/historia.gd
+msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
+msgstr "SUBJECT LIST · DIRECTOR ONLY"
+
+#: scripts/historia.gd
+msgid "Sujeto 0"
+msgstr "Subject 0"
+
+#: scripts/historia.gd
+msgid ""
+"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"\n"
+"Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
+"\n"
+"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+msgstr ""
+"Sleepers: 131, counting staff. Sleepwalkers: 4.\n"
+"\n"
+"Subject 0: the janitor. He stayed in the building at my request. He's been bitten more than 30 times and doesn't turn. When he finishes off a sleepwalker, the VD-7 changes his body for a few hours, but not his mind. His blood breaks it down.\n"
+"\n"
+"He is the cure. Or the weapon. Have the helicopter take him to headquarters alive.\n"
+"\n"
+"I'm not waiting. The sleepwalkers are the way: pure VD-7, all at once, and I will be beyond human."
+
+#: scripts/historia.gd
+msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
+msgstr "If you're reading this, janitor: don't trust anyone in a lab coat. Or anyone who comes to rescue you."
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Centro comercial"
+msgstr "Dossier VD-7 · Shopping Mall"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
+msgstr "There's a body with a page on every floor, and the manager carries the last one. Whatever you find stays here forever."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. Está junto a un cuerpo, en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"This page is missing. It's next to a body, on the %s.\n"
+"\n"
+"Find it in a run."
+
+#: scripts/historia.gd
+msgid "Julián Mora, farmacéutico de Velaria"
+msgstr "Julián Mora, Velaria pharmacist"
+
+#: scripts/historia.gd
+msgid "ALBARÁN DE ENTREGA"
+msgstr "DELIVERY NOTE"
+
+#: scripts/historia.gd
+msgid "Pedido para la farmacia"
+msgstr "Pharmacy Order"
+
+#: scripts/historia.gd
+msgid ""
+"Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
+"\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"\n"
+"Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
+"\n"
+"Si un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp."
+msgstr ""
+"Product: \"Velaria Night,\" for insomnia. 10,000 boxes of 20 pills.\n"
+"\n"
+"Each pill: a quarter dose of VD-7. Over the counter, no prescription. Price: €3.99.\n"
+"\n"
+"Display by the registers, at eye level. Sign: \"Sleep like a baby.\"\n"
+"\n"
+"If a customer asks about building 14, take them outside the store and alert Velaria Corp. security."
+
+#: scripts/historia.gd
+msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
+msgstr "No prescription? I'm not selling this. Neither is the girl in the back room."
+
+#: scripts/historia.gd
+msgid "Dra. Elena Ruiz, técnica de Velaria"
+msgstr "Dr. Elena Ruiz, Velaria technician"
+
+#: scripts/historia.gd
+msgid "CONTRATO · CONFIDENCIAL"
+msgstr "CONTRACT · CONFIDENTIAL"
+
+#: scripts/historia.gd
+msgid "Programa «Turno infinito»"
+msgstr "\"Endless Shift\" Program"
+
+#: scripts/historia.gd
+msgid ""
+"Entre Velaria Corp. y la gerencia del centro comercial.\n"
+"\n"
+"Velaria entrega el VD-7 gratis. El centro lo echa en la cafetera de la sala de descanso de los empleados, a dosis completa. Ellos no lo saben.\n"
+"\n"
+"Objetivo: turnos de 20 horas, sin cansancio y sin quejas. Velaria se queda con los datos de 312 empleados.\n"
+"\n"
+"Si sale bien, Velaria Corp. lo venderá a fábricas, almacenes y hospitales: un turno infinito para todo el país."
+msgstr ""
+"Between Velaria Corp. and the shopping mall management.\n"
+"\n"
+"Velaria supplies the VD-7 free of charge. The mall puts it in the coffee maker in the employee break room, at full dose. The employees don't know.\n"
+"\n"
+"Goal: 20-hour shifts, no fatigue, no complaints. Velaria keeps the data on 312 employees.\n"
+"\n"
+"If it works, Velaria Corp. will sell it to factories, warehouses and hospitals: an endless shift for the whole country."
+
+#: scripts/historia.gd
+msgid "Marta, si te llega esto: no vengas al centro. Por favor."
+msgstr "Marta, if this reaches you: don't come to the mall. Please."
+
+#: scripts/historia.gd
+msgid "Manuel Ortega, jefe de seguridad del centro"
+msgstr "Manuel Ortega, mall head of security"
+
+#: scripts/historia.gd
+msgid "PARTE DE INCIDENCIAS"
+msgstr "INCIDENT REPORT"
+
+#: scripts/historia.gd
+msgid "Turno de noche"
+msgstr "Night Shift"
+
+#: scripts/historia.gd
+msgid ""
+"02:10. Cerrado desde las 22:00. Los cajeros siguen cobrando a nadie.\n"
+"\n"
+"03:40. El cocinero fríe sin aceite. La del taller de costura viste maniquíes. El del oso de la juguetería saluda al pasillo vacío.\n"
+"\n"
+"04:15. Tienen los ojos cerrados. Siguen trabajando. Si te acercas, muerden.\n"
+"\n"
+"05:00. El gerente dice que no es una incidencia: «Rinden más que nunca».\n"
+"\n"
+"05:30. Pido ayuda. Velaria Corp. manda un antidisturbios. Entra en la oficina de seguridad. No sale."
+msgstr ""
+"02:10. Closed since 22:00. The cashiers are still ringing up nobody.\n"
+"\n"
+"03:40. The cook fries with no oil. The sewing shop lady dresses mannequins. The guy in the toy store's bear suit waves at the empty hallway.\n"
+"\n"
+"04:15. Their eyes are closed. They keep working. Get close and they bite.\n"
+"\n"
+"05:00. The manager says it's not an incident: \"They've never been more productive.\"\n"
+"\n"
+"05:30. I call for help. Velaria Corp. sends a riot cop. He goes into the security office. He doesn't come out."
+
+#: scripts/historia.gd
+msgid "Esta noche no me tomo el café."
+msgstr "I'm skipping the coffee tonight."
+
+#: scripts/historia.gd
+msgid "Lucía Benet, secretaria del gerente"
+msgstr "Lucía Benet, the manager's secretary"
+
+#: scripts/historia.gd
+msgid "CORREO IMPRESO · GERENCIA"
+msgstr "EMAIL PRINTOUT · MANAGEMENT"
+
+#: scripts/historia.gd
+msgid "Asunto: El conserje"
+msgstr "Subject: The janitor"
+
+#: scripts/historia.gd
+msgid ""
+"De: Gerencia del centro comercial\n"
+"Para: Velaria Corp., Dirección\n"
+"\n"
+"El conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n"
+"\n"
+"No voy a llamar a la policía. Lo retengo hasta que llegue vuestro helicóptero. He cerrado las salidas, y mis empleados no se cansan.\n"
+"\n"
+"A cambio, quiero la dosis buena. La de verdad."
+msgstr ""
+"From: Shopping Mall Management\n"
+"To: Velaria Corp., Head Office\n"
+"\n"
+"The janitor from No. 14 is in the mall. I can see him on the cameras: he's going up floor by floor, like he's looking for something.\n"
+"\n"
+"I'm not calling the police. I'll keep him here until your helicopter arrives. I've locked the exits, and my employees don't get tired.\n"
+"\n"
+"In return, I want the good dose. The real thing."
+
+#: scripts/historia.gd
+msgid "Lleva cuatro días sin dormir. Dice que ya no le hace falta."
+msgstr "He hasn't slept in four days. Says he doesn't need to anymore."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"This page is missing. The mall manager has it, all the way up on the roof.\n"
+"\n"
+"You'll have to take it from him."
+
+#: scripts/historia.gd
+msgid "Arturo Salcedo, gerente del centro"
+msgstr "Arturo Salcedo, mall manager"
+
+#: scripts/historia.gd
+msgid "ORDEN DE RECOGIDA · URGENTE"
+msgstr "PICKUP ORDER · URGENT"
+
+#: scripts/historia.gd
+msgid "Recogida del Sujeto 0"
+msgstr "Subject 0 Pickup"
+
+#: scripts/historia.gd
+msgid ""
+"Lugar: helipuerto de la azotea del centro comercial. Hora: en cuanto avise el gerente.\n"
+"\n"
+"Carga: el Sujeto 0, el conserje del 14. Vivo. No gastéis VD-7 con él: no le hace nada.\n"
+"\n"
+"Destino: Torre Velaria, nuestra sede. Directo al laboratorio de la planta 40. Él ya lo conoce, aunque no se acuerde.\n"
+"\n"
+"El gerente no viaja. Lo que pidió no se le entrega. Mandadle una jeringa para que aguante hasta que lleguemos."
+msgstr ""
+"Location: the shopping mall's rooftop helipad. Time: as soon as the manager gives the word.\n"
+"\n"
+"Cargo: Subject 0, the janitor from No. 14. Alive. Don't waste VD-7 on him: it does nothing to him.\n"
+"\n"
+"Destination: Velaria Tower, our headquarters. Straight to the lab on floor 40. He's been there before, even if he doesn't remember.\n"
+"\n"
+"The manager does not fly. What he asked for will not be delivered. Send him a syringe to keep him going until we arrive."
+
+#: scripts/historia.gd
+msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
+msgstr "They promised me the good dose. They sent me a syringe and this memo."
+
+#: scripts/historia.gd
+msgid "Canal 8"
+msgstr "Channel 8"
+
+#: scripts/historia.gd
+msgid "Cierran un edificio por un virus"
+msgstr "Building sealed over a virus"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta del número 14. Desde esta mañana, la seguridad privada de Velaria Corp., la dueña del edificio, no deja entrar ni salir a nadie. Según la empresa, dentro hay un virus muy contagioso. «La situación está controlada», nos dicen. Y piden que nadie se acerque."
+msgstr "Good evening. I'm reporting from outside number 14. Since this morning, private security from Velaria Corp., the building's owner, has let no one in or out. The company says there's a highly contagious virus inside. \"The situation is under control,\" they tell us. And they're asking everyone to stay away."
+
+#: scripts/historia.gd
+msgid "Camiones de noche en el 14"
+msgstr "Late-night trucks at No. 14"
+
+#: scripts/historia.gd
+msgid "Alguien desde dentro del 14 nos ha mandado un documento. Según él, Velaria compró el edificio y lo llenó de gente sin casa, con deudas o enferma, traída de noche en camiones, para probar unas pastillas para dormir. Velaria lo niega: «Era un programa social de vivienda»."
+msgstr "Someone inside number 14 has sent us a document. It claims Velaria bought the building and filled it with people who were homeless, in debt or sick, trucked in at night, to test some sleeping pills. Velaria denies it: \"It was a social housing program.\""
+
+#: scripts/historia.gd
+msgid "Un correo dice: no hay virus"
+msgstr "Email says: there is no virus"
+
+#: scripts/historia.gd
+msgid "Nuestra fuente del 14 nos manda un correo interno de Velaria: «No hay ningún virus, lo sabemos». La empresa dice que es falso. Y añade que, si alguien está enfermo, será por «unas pastillas para dormir en mal estado, de otra marca». Sigue sin decir qué marca."
+msgstr "Our source inside number 14 sends us an internal Velaria email: \"There is no virus, we know that.\" The company says it's fake. And it adds that if anyone is sick, it's because of \"some bad sleeping pills from another brand.\" It still won't say which brand."
+
+#: scripts/historia.gd
+msgid "¿Dónde está la portera?"
+msgstr "Where is the super?"
+
+#: scripts/historia.gd
+msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "The source now tells of four \"sleepwalkers\": residents who took higher doses and can still talk. One of them is said to be the super at number 14, who hasn't been seen since the lockdown. Velaria calls her \"a troubled woman who never worked for us.\" At night, screams can be heard upstairs."
+
+#: scripts/historia.gd
+msgid "Velaria busca a un conserje"
+msgstr "Velaria hunts for a janitor"
+
+#: scripts/historia.gd
+msgid "Última hora: anoche, un helicóptero de Velaria se posó en la azotea del 14. Al despegar, alguien colgaba de su escalera... y se soltó sobre los árboles de la avenida. Hoy Velaria busca a un empleado de mantenimiento «que se ha llevado documentos de la empresa». ¿Es nuestra fuente?"
+msgstr "Breaking news: last night, a Velaria helicopter landed on the roof of number 14. As it took off, someone was hanging from its ladder... and let go over the trees on the avenue. Today Velaria is looking for a maintenance worker \"who took company documents.\" Is this our source?"
+
+#: scripts/historia.gd
+msgid "El centro cierra «por reformas»"
+msgstr "Mall closes 'for renovations'"
+
+#: scripts/historia.gd
+msgid "Buenas noches. El centro comercial de la avenida cierra de noche «por reformas». Pero las luces siguen encendidas hasta el amanecer, la alarma de incendios suena de madrugada y dentro se ve gente moviéndose. Velaria, que tiene allí una farmacia, dice: «Nosotros solo alquilamos un local»."
+msgstr "Good evening. The shopping mall on the avenue is closing at night \"for renovations.\" But the lights stay on until dawn, the fire alarm goes off in the small hours and people can be seen moving inside. Velaria, which has a pharmacy there, says: \"We only rent a storefront.\""
+
+#: scripts/historia.gd
+msgid "Velaria vende su somnífero"
+msgstr "Velaria sells its sleeping pill"
+
+#: scripts/historia.gd
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "\"Velaria Night,\" for insomnia, is now on sale. No prescription, €3.99. Boxes are selling out in hours. Our source says it's the same thing they tested at number 14, watered down. Velaria denies it: \"It's a new formula, natural and safe. We take it ourselves every night.\""
+
+#: scripts/historia.gd
+msgid "Empleados que no vuelven a casa"
+msgstr "Mall workers not coming home"
+
+#: scripts/historia.gd
+msgid "Decenas de familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Y les cuento algo mío: mi hermana Elena trabaja allí para Velaria. Desde el lunes no me coge el teléfono."
+msgstr "Dozens of families report that their relatives, employees at the shopping mall, haven't come home. The mall says they're working overtime, \"voluntary and well paid.\" And now something personal: my sister Elena works there, for Velaria. She hasn't picked up her phone since Monday."
+
+#: scripts/historia.gd
+msgid "Se filtra un audio del gerente"
+msgstr "Leaked audio from the manager"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio del gerente del centro comercial, al teléfono: «Sí, el conserje está aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."
+msgstr "We've obtained audio of the shopping mall's manager on the phone: \"Yes, the janitor is here. He's not going anywhere. My employees don't sleep, and he'll have to sleep sometime.\" Velaria says it doesn't know the man and that, if he took one of its products, \"he must not have read the label.\""
+
+#: scripts/historia.gd
+msgid "Un helicóptero en la azotea"
+msgstr "A helicopter on the roof"
+
+#: scripts/historia.gd
+msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."
+msgstr "Breaking news: Velaria's helicopter is back, this time on the roof of the shopping mall. It took off with someone inside, headed for Velaria Tower. Velaria is no longer looking for its janitor: \"He's with us, safe.\" Tomorrow, at its tower, it unveils \"the future of work.\" Still no word from my sister."
+
+#: scripts/historia.gd
+msgid "Esta página falta (%s)."
+msgstr "This page is missing (%s)."
+
+#: scripts/johnny.gd
+msgid "¡Adrenalina!"
+msgstr "Adrenaline!"
+
+#: scripts/johnny.gd
+msgid "recargando…"
+msgstr "reloading…"
+
+#: scripts/johnny.gd
+msgid "¡Esquivado!"
+msgstr "Dodged!"
+
+#: scripts/johnny.gd
+msgid "¡Segundo aliento!"
+msgstr "Second Wind!"
 
 #: scripts/johnny.gd
 msgid "Asistido"
@@ -1011,7 +1877,7 @@ msgstr "Pick up every item in the Collections at least once."
 msgid "Edificios"
 msgstr "Buildings"
 
-#: scripts/logros.gd
+#: scripts/logros.gd scripts/tutoriales.gd
 msgid "Jefes"
 msgstr "Bosses"
 
@@ -1023,7 +1889,7 @@ msgstr "Combat"
 msgid "Armas y talentos"
 msgstr "Weapons and Talents"
 
-#: scripts/logros.gd
+#: scripts/logros.gd scripts/tutoriales.gd
 msgid "Supervivientes"
 msgstr "Survivors"
 
@@ -1034,6 +1900,34 @@ msgstr "Surprises and Challenges"
 #: scripts/logros.gd scripts/ui/ordenador.gd
 msgid "Colecciones"
 msgstr "Collections"
+
+#: scripts/mascota.gd
+msgid "¡ABRAZOS GRATIS!"
+msgstr "FREE HUGS!"
+
+#: scripts/mascota.gd
+msgid "¡BOING!"
+msgstr "BOING!"
+
+#: scripts/mascota.gd
+msgid "¡HORA DE JUGAR!"
+msgstr "PLAYTIME!"
+
+#: scripts/minijefe.gd
+msgid "¡GRRR!"
+msgstr "GRRR!"
+
+#: scripts/minijefe.gd
+msgid "¡PUMBA!"
+msgstr "BONK!"
+
+#: scripts/modista.gd
+msgid "¡SSSS!"
+msgstr "HSSSS!"
+
+#: scripts/modista.gd
+msgid "¡TE TOMO MEDIDAS!"
+msgstr "TIME FOR A FITTING!"
 
 #: scripts/mutaciones.gd
 msgid "¡AAAAAH!"
@@ -1339,6 +2233,26 @@ msgstr "NEW SKIN!"
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "New skin: %s. Put it on in the maintenance room locker"
 
+#: scripts/portera.gd
+msgid "¡VECINOS!"
+msgstr "TENANTS!"
+
+#: scripts/portera.gd
+msgid "¡LEJÍA!"
+msgstr "BLEACH!"
+
+#: scripts/portera.gd
+msgid "¡ÁCIDO!"
+msgstr "ACID!"
+
+#: scripts/portera.gd
+msgid "¡A BARRER!"
+msgstr "CLEAN SWEEP!"
+
+#: scripts/portera.gd
+msgid "¡QUE ACABO DE FREGAR!"
+msgstr "I JUST MOPPED!"
+
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"
 msgstr "Daily Challenge · %s: %s"
@@ -1488,6 +2402,228 @@ msgstr "Weapons that burn do 50 % more damage and fire can't burn you."
 #: scripts/skins.gd
 msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Kill the fire chief for the first time."
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "Militar"
+msgstr "Soldier"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! ¡Sácame de aquí!"
+msgstr "Thank you! Get me out of here!"
+
+#: scripts/supervivientes.gd
+msgid "¡%s se une al equipo! %s"
+msgstr "The %s joins the team! %s"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "Thanks! Back to the lock"
+
+#: scripts/supervivientes.gd
+msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
+msgstr "The door slammed shut! Hold out while the %s picks the lock"
+
+#: scripts/supervivientes.gd
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "GOT IT! RUN!"
+
+#: scripts/supervivientes.gd
+msgid "¡Puerta abierta! Salid de aquí"
+msgstr "Door's open! Get out of here"
+
+#: scripts/supervivientes.gd
+msgid "%s te acompaña · %s"
+msgstr "The %s is coming with you · %s"
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "¡%s ha caído!"
+msgstr "The %s is down!"
+
+#: scripts/supervivientes.gd
+msgid "%s fuerza la cerradura · %d:%02d"
+msgstr "The %s is picking the lock · %d:%02d"
+
+#: scripts/supervivientes.gd
+msgid "Policía"
+msgstr "Cop"
+
+#: scripts/supervivientes.gd
+msgid "Dispara con su pistola cada 0,8 s"
+msgstr "Fires a pistol every 0.8 s"
+
+#: scripts/supervivientes.gd
+msgid "Médica"
+msgstr "Doctor"
+
+#: scripts/supervivientes.gd
+msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
+msgstr "Heals you 5 every 6 s, and 10 for each apartment you clear"
+
+#: scripts/supervivientes.gd
+msgid "Lanza ráfagas de 3 balas cada 2,5 s"
+msgstr "Fires 3-round bursts every 2.5 s"
+
+#: scripts/supervivientes.gd
+msgid "Ferretero"
+msgstr "Hardware Guy"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el almacén!"
+msgstr "I'm in the storeroom!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro!"
+msgstr "In here!"
+
+#: scripts/supervivientes.gd
+msgid "¡He atrancado la puerta!"
+msgstr "I barricaded the door!"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me oiga!"
+msgstr "Can anybody hear me?!"
+
+#: scripts/supervivientes.gd
+msgid "¡Fuera tablas! Gracias, chaval. Vámonos de aquí"
+msgstr "Boards off! Thanks, kid. Let's get out of here"
+
+#: scripts/supervivientes.gd
+msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
+msgstr "Goes after any zombie he sees and hammers it (8 damage)"
+
+#: scripts/supervivientes.gd
+msgid "Farmacéutica"
+msgstr "Pharmacist"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la rebotica!"
+msgstr "I'm in the back room!"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy herida!"
+msgstr "I'm hurt!"
+
+#: scripts/supervivientes.gd
+msgid "¡Ayuda, por favor!"
+msgstr "Help, please!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí detrás!"
+msgstr "Back here!"
+
+#: scripts/supervivientes.gd
+msgid "¡Me han mordido la pierna! No puedo correr"
+msgstr "They bit my leg! I can't run"
+
+#: scripts/supervivientes.gd
+msgid "Los charcos de veneno y ácido te hacen la mitad"
+msgstr "Poison and acid puddles only do half damage to you"
+
+#: scripts/supervivientes.gd
+msgid "Cada partida empiezas con un botiquín en la mochila"
+msgstr "You start every run with a medkit in your backpack"
+
+#: scripts/supervivientes.gd
+msgid "Técnico"
+msgstr "Technician"
+
+#: scripts/supervivientes.gd
+msgid "¡No toquéis el agua!"
+msgstr "Don't touch the water!"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me saque!"
+msgstr "Somebody get me out!"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado"
+msgstr "Thanks! Before we go, I have to fix that bare wire"
+
+#: scripts/supervivientes.gd
+msgid "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano"
+msgstr "Every 3 s, a shock stuns the nearest zombie for 1.5 s"
+
+#: scripts/supervivientes.gd
+msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
+msgstr "Fixes the security cameras: the minimap shows the zombies"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el baño!"
+msgstr "I'm in the bathroom!"
+
+#: scripts/supervivientes.gd
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "It's jammed! Cover me!"
+
+#: scripts/supervivientes.gd
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "This lock is all rusted… give me a minute"
+
+#: scripts/supervivientes.gd
+msgid "Vale… creo que ya noto el muelle"
+msgstr "Okay… I think I can feel the spring"
+
+#: scripts/supervivientes.gd
+msgid "¡Toma, he encontrado esto!"
+msgstr "Here, I found these!"
+
+#: scripts/supervivientes.gd
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "Dropped the bobby pin!… okay, got it"
+
+#: scripts/supervivientes.gd
+msgid "Ya casi lo tengo…"
+msgstr "Almost got it…"
+
+#: scripts/supervivientes.gd
+msgid "el salón"
+msgstr "the living room"
+
+#: scripts/supervivientes.gd
+msgid "la cocina"
+msgstr "the kitchen"
+
+#: scripts/supervivientes.gd
+msgid "el dormitorio"
+msgstr "the bedroom"
+
+#: scripts/supervivientes.gd
+msgid "el baño"
+msgstr "the bathroom"
+
+#: scripts/supervivientes.gd
+msgid "el pasillo"
+msgstr "the hallway"
+
+#: scripts/supervivientes.gd
+msgid "la tienda"
+msgstr "the store"
+
+#: scripts/supervivientes.gd
+msgid "el almacén"
+msgstr "the storeroom"
+
+#: scripts/supervivientes.gd
+msgid "la cámara"
+msgstr "the freezer"
+
+#: scripts/supervivientes.gd
+msgid "el taller"
+msgstr "the workshop"
+
+#: scripts/supervivientes.gd
+msgid "las taquillas"
+msgstr "the lockers"
+
+#: scripts/supervivientes.gd
+msgid "los probadores"
+msgstr "the fitting rooms"
+
+#: scripts/supervivientes.gd
+msgid "la rebotica"
+msgstr "the back room"
 
 #: scripts/talentos.gd
 msgid "+%d %% de daño"
@@ -1889,6 +3025,546 @@ msgstr "Explosive Mix"
 msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
 msgstr "Zombies that die with two effects at once (fire, acid, lightning or cold) explode (it doesn't hurt you)"
 
+#: scripts/tutoriales.gd
+msgid "Apunta y ataca con {apuntar}."
+msgstr "Aim and attack with {apuntar}."
+
+#: scripts/tutoriales.gd
+msgid "Apunta con {apuntar} y ataca con {atacar}."
+msgstr "Aim with {apuntar} and attack with {atacar}."
+
+#: scripts/tutoriales.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
+msgstr "Johnny aims and attacks the nearest zombie on his own: you just worry about moving."
+
+#: scripts/tutoriales.gd
+msgid "el joystick (toca y arrastra en la mitad izquierda)"
+msgstr "the joystick (touch and drag on the left half)"
+
+#: scripts/tutoriales.gd
+msgid "el stick izquierdo"
+msgstr "the left stick"
+
+#: scripts/tutoriales.gd
+msgid "el joystick de abajo a la derecha"
+msgstr "the joystick at the bottom right"
+
+#: scripts/tutoriales.gd
+msgid "el stick derecho"
+msgstr "the right stick"
+
+#: scripts/tutoriales.gd
+msgid "el ratón"
+msgstr "the mouse"
+
+#: scripts/tutoriales.gd
+msgid "%s o %s"
+msgstr "%s or %s"
+
+#: scripts/tutoriales.gd
+msgid "Lo básico"
+msgstr "The basics"
+
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Armas"
+msgstr "Weapons"
+
+#: scripts/tutoriales.gd
+msgid "Plantas y jefes"
+msgstr "Floors and bosses"
+
+#: scripts/tutoriales.gd
+msgid "Eventos sorpresa"
+msgstr "Surprise events"
+
+#: scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "Maintenance room"
+
+#: scripts/tutoriales.gd
+msgid "Más edificios"
+msgstr "More buildings"
+
+#: scripts/tutoriales.gd
+msgid "Cómo se juega"
+msgstr "How to play"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar"
+msgstr "At the start"
+
+#: scripts/tutoriales.gd
+msgid "Muévete con {moverse}."
+msgstr "Move with {moverse}."
+
+#: scripts/tutoriales.gd
+msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
+msgstr "{atacar_modo} Change the attack mode with {cambiar_modo}."
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
+msgstr "Dodge with {esquivar}: a short dash where nothing can hurt you."
+
+#: scripts/tutoriales.gd
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "Swap between the mop and the pistol with {cambiar_arma}, and pause the game with {pausa}."
+
+#: scripts/tutoriales.gd
+msgid "Limpia los apartamentos"
+msgstr "Clear the apartments"
+
+#: scripts/tutoriales.gd
+msgid "Al salir al pasillo"
+msgstr "On stepping into the hallway"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi."
+msgstr "Walk into an apartment and the door shuts behind you. It stays shut until not a single zombie is left."
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe de la planta está cerrada con llave: la lleva un zombi de otro apartamento y la suelta al caer."
+msgstr "The floor boss's room is locked. A zombie in another apartment carries the key and drops it when it dies."
+
+#: scripts/tutoriales.gd
+msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
+msgstr "Beat the boss and the stairs to the next floor open up."
+
+#: scripts/tutoriales.gd
+msgid "La vida en tercios"
+msgstr "Health in thirds"
+
+#: scripts/tutoriales.gd
+msgid "Al perder un tercio de vida"
+msgstr "On losing a third of your health"
+
+#: scripts/tutoriales.gd
+msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
+msgstr "Your health is split into thirds. Bandages can't heal a third you've lost, and each lost third slows you down."
+
+#: scripts/tutoriales.gd
+msgid "Solo el botiquín devuelve un tercio perdido."
+msgstr "Only a medkit brings back a lost third."
+
+#: scripts/tutoriales.gd
+msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
+msgstr "If it gets too hard, Options → Assists has \"Whole health\"."
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Bandages and medkit"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera cura"
+msgstr "On picking up your first heal"
+
+#: scripts/tutoriales.gd
+msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgstr "Use bandages with {usar_vendas}: they heal 25, without going past the third you're in."
+
+#: scripts/tutoriales.gd
+msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
+msgstr "Use the medkit with {usar_botiquin}: it restores a lost third and heals 50."
+
+#: scripts/tutoriales.gd
+msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "You can carry 3 bandages and 2 medkits. Bathroom cabinets pop open as you get close and spill what's inside."
+
+#: scripts/tutoriales.gd
+msgid "Inventario y mochila"
+msgstr "Inventory and backpack"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer objeto"
+msgstr "On picking up your first item"
+
+#: scripts/tutoriales.gd
+msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "Whatever you pick up goes in the backpack. Open the inventory with {inventario}: your weapons, ammo, throwables and backpack."
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
+msgstr "Pick a slot to see its card and buttons (use, equip, drop...)."
+
+#: scripts/tutoriales.gd
+msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
+msgstr "If you die, you lose what you're carrying; complete the building and it goes to the stash."
+
+#: scripts/tutoriales.gd
+msgid "Dólares"
+msgstr "Dollars"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer billete"
+msgstr "On picking up your first bill"
+
+#: scripts/tutoriales.gd
+msgid "Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Zombies sometimes drop bills, and bosses drop plenty: walk over them to pick them up."
+
+#: scripts/tutoriales.gd
+msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
+msgstr "They're saved when the run ends: all of them if you complete the building, half if you die or abandon."
+
+#: scripts/tutoriales.gd
+msgid "Se gastan en el ordenador de la sala de mantenimiento."
+msgstr "You spend them on the computer in the maintenance room."
+
+#: scripts/tutoriales.gd
+msgid "Armas nuevas"
+msgstr "New weapons"
+
+#: scripts/tutoriales.gd
+msgid "Al llevar otra arma"
+msgstr "On carrying another weapon"
+
+#: scripts/tutoriales.gd
+msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
+msgstr "You hold two weapons: one melee and one ranged. Swap between them with {cambiar_arma}."
+
+#: scripts/tutoriales.gd
+msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
+msgstr "The rest are spares, one of each type, and you swap them in the inventory ({inventario})."
+
+#: scripts/tutoriales.gd
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
+msgstr "The border color shows its quality: gray Normal, green Uncommon, blue Rare and purple Epic."
+
+#: scripts/tutoriales.gd
+msgid "Munición y recarga"
+msgstr "Ammo and reloading"
+
+#: scripts/tutoriales.gd
+msgid "Al recargar"
+msgstr "On reloading"
+
+#: scripts/tutoriales.gd
+msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
+msgstr "Reload with {recargar}; an empty magazine reloads by itself."
+
+#: scripts/tutoriales.gd
+msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
+msgstr "Each weapon uses its own (bullets, shells...). An ammo box on the floor gives you one magazine."
+
+#: scripts/tutoriales.gd
+msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
+msgstr "Out of ammo, Johnny pulls out his melee weapon."
+
+#: scripts/tutoriales.gd
+msgid "Lanzables"
+msgstr "Throwables"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "In the first fight"
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "Throw with {lanzar}: hold to aim, release to throw."
+
+#: scripts/tutoriales.gd
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
+msgstr "Switch what you throw with {cambiar_lanzable}: the Molotov starts a fire and the grenade explodes. You carry 3 in hand and up to 8 spare."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! La explosión también te hace daño a ti."
+msgstr "Careful! The blast hurts you too."
+
+#: scripts/tutoriales.gd
+msgid "Piezas de mejora"
+msgstr "Upgrade parts"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pieza"
+msgstr "On picking up your first part"
+
+#: scripts/tutoriales.gd
+msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "Parts raise the quality of your weapons and throwables at the workbench in the maintenance room."
+
+#: scripts/tutoriales.gd
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgstr "They come in four kinds: melee, ranged, special and throwable. Zombies drop them now and then, and bosses do too."
+
+#: scripts/tutoriales.gd
+msgid "Van en la mochila: si completas el edificio, pasan al baúl."
+msgstr "Backpack first; complete the building and they go to the stash."
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al primer jefe"
+msgstr "On reaching the first boss"
+
+#: scripts/tutoriales.gd
+msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
+msgstr "Every floor has its boss, with a health bar at the top. At half health it gets angry and more dangerous."
+
+#: scripts/tutoriales.gd
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
+msgstr "It marks the floor before every attack: step out or dodge it!"
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
+msgstr "When it goes down it drops dollars, ammo and parts, and the stairs open."
+
+#: scripts/tutoriales.gd scripts/ui/menus.gd
+msgid "Mutaciones"
+msgstr "Mutations"
+
+#: scripts/tutoriales.gd
+msgid "Antes de la primera mutación"
+msgstr "Before your first mutation"
+
+#: scripts/tutoriales.gd
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
+msgstr "Beat a boss and the virus changes you: pick one of the two cards (1 and 2 work too)."
+
+#: scripts/tutoriales.gd
+msgid "Cada mutación te da algo bueno y, a veces, algo malo."
+msgstr "Every mutation has an upside and, sometimes, a downside."
+
+#: scripts/tutoriales.gd
+msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
+msgstr "They last until the run ends, and you can have 4 at most."
+
+#: scripts/tutoriales.gd
+msgid "El ascensor"
+msgstr "The elevator"
+
+#: scripts/tutoriales.gd
+msgid "Al arreglar el ascensor"
+msgstr "On fixing the elevator"
+
+#: scripts/tutoriales.gd
+msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
+msgstr "Johnny fixed the elevator in the hallway: it goes down to the maintenance room and back to this same floor."
+
+#: scripts/tutoriales.gd
+msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
+msgstr "Use it to get to the computer, the workbench or the stash in the middle of a run."
+
+#: scripts/tutoriales.gd
+msgid "Al rescatar al primero"
+msgstr "On rescuing the first one"
+
+#: scripts/tutoriales.gd
+msgid "Se une al equipo: te acompaña y te ayuda a su manera."
+msgstr "A survivor joins the team and helps in their own way."
+
+#: scripts/tutoriales.gd
+msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
+msgstr "Each one is rescued differently. Don't wander off, and if they go down, stay by their side to get them back up."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
+msgstr "Complete the building with them and they move into the living quarters (right door in the maintenance room) and can join you."
+
+#: scripts/tutoriales.gd
+msgid "En el primer apagón"
+msgstr "In the first blackout"
+
+#: scripts/tutoriales.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna, hacia donde miras."
+msgstr "The power is out on the whole floor: you only see what your flashlight lights up, where you're looking."
+
+#: scripts/tutoriales.gd
+msgid "En la sala del jefe todo sigue como siempre."
+msgstr "The boss room is business as usual."
+
+#: scripts/tutoriales.gd
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
+msgstr "Go up to the next floor and you get a dollar bonus."
+
+#: scripts/tutoriales.gd
+msgid "En la primera alarma de incendios"
+msgstr "In the first fire alarm"
+
+#: scripts/tutoriales.gd
+msgid "Los aspersores llenan el suelo de charcos que resbalan."
+msgstr "The sprinklers cover the floor with slippery puddles."
+
+#: scripts/tutoriales.gd
+msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los zombis: ¡llévalos hasta él! Esquivando cruzas sin daño."
+msgstr "In some, a bare wire falls and zaps Johnny and the zombies: lead them to it! Dodging lets you cross unharmed."
+
+#: scripts/tutoriales.gd
+msgid "En la primera horda"
+msgstr "In the first horde"
+
+#: scripts/tutoriales.gd
+msgid "Una horda enorme llena el pasillo y va a por ti."
+msgstr "A huge horde fills the hallway and comes for you."
+
+#: scripts/tutoriales.gd
+msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzables vienen de perlas."
+msgstr "If you duck into an apartment, the ones left behind wait outside. Throwables are a godsend here."
+
+#: scripts/tutoriales.gd
+msgid "Al acabar con todos, te deja dólares y una caja de munición."
+msgstr "Kill them all and it pays out dollars and a box of ammo."
+
+#: scripts/tutoriales.gd
+msgid "El ordenador"
+msgstr "The computer"
+
+#: scripts/tutoriales.gd
+msgid "Al encender el ordenador"
+msgstr "On turning on the computer"
+
+#: scripts/tutoriales.gd
+msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida."
+msgstr "Spend your saved dollars on talent points (permanent upgrades) and on weapons and throwables for the run."
+
+#: scripts/tutoriales.gd
+msgid "También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."
+msgstr "There are also achievements, which pay out, plus the Dossier, the News and the Collections."
+
+#: scripts/tutoriales.gd
+msgid "La taquilla"
+msgstr "The locker"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la taquilla"
+msgstr "On opening the locker"
+
+#: scripts/tutoriales.gd
+msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
+msgstr "Pick Johnny's outfit here. Each one has its own advantage."
+
+#: scripts/tutoriales.gd
+msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
+msgstr "You earn them by beating certain bosses: the ones you're missing show \"???\" and how to get them."
+
+#: scripts/tutoriales.gd
+msgid "El banco de trabajo"
+msgstr "The workbench"
+
+#: scripts/tutoriales.gd
+msgid "Al usar el banco de trabajo"
+msgstr "On using the workbench"
+
+#: scripts/tutoriales.gd
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
+msgstr "Raise the quality of your weapons and throwables, level by level, with parts of their kind (backpack and stash)."
+
+#: scripts/tutoriales.gd
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
+msgstr "Normal, Uncommon, Rare and Epic: Epic also comes with a perk."
+
+#: scripts/tutoriales.gd
+msgid "Elige la casilla y pulsa «Mejorar»."
+msgstr "Pick the slot and hit \"Upgrade\"."
+
+#: scripts/tutoriales.gd
+msgid "El baúl"
+msgstr "The stash"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el baúl"
+msgstr "On opening the stash"
+
+#: scripts/tutoriales.gd
+msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
+msgstr "What you keep here isn't lost even if you die: items, and upgraded weapons and throwables."
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
+msgstr "Pick a slot or drag it to move it between what you carry and the stash."
+
+#: scripts/tutoriales.gd
+msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
+msgstr "Complete the building and what you carry goes to the stash."
+
+#: scripts/tutoriales.gd
+msgid "El centro comercial"
+msgstr "The Shopping Mall"
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al centro comercial"
+msgstr "On reaching the shopping mall"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
+msgstr "The boss room opens with an access card, carried by the security guard on patrol."
+
+#: scripts/tutoriales.gd
+msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
+msgstr "If he spots you, he blows his whistle, reinforcements arrive and he runs: don't let him get away!"
+
+#: scripts/tutoriales.gd
+msgid "Peligros de las tiendas"
+msgstr "Store hazards"
+
+#: scripts/tutoriales.gd
+msgid "En la primera tienda con peligro"
+msgstr "In the first store with a hazard"
+
+#: scripts/tutoriales.gd
+msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
+msgstr "The walk-in freezer freezes, the kitchen burns and the water in the electronics store shocks (its electrical panel cuts the power)."
+
+#: scripts/tutoriales.gd
+msgid "También hacen daño a los zombis despiertos: ¡llévalos hasta ellos!"
+msgstr "They hurt awake zombies too: lead them in!"
+
+#: scripts/tutoriales.gd
+msgid "Esquivando los cruzas sin daño."
+msgstr "Dodge through them and you take no damage."
+
+#: scripts/tutoriales.gd
+msgid "Alerta y Reto del día"
+msgstr "Alert and Daily Challenge"
+
+#: scripts/tutoriales.gd
+msgid "Al completar el primer edificio"
+msgstr "On completing your first building"
+
+#: scripts/tutoriales.gd
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
+msgstr "Under each completed building, pick the Alert level with < and >: harder, more dollars. Complete the top one to unlock the next."
+
+#: scripts/tutoriales.gd
+msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
+msgstr "The Daily Challenge is the same building for everyone that day, with a weird rule. Completing it the first time each day pays $10."
+
+#: scripts/tutoriales.gd
+msgid "el botón de esquivar"
+msgstr "the dodge button"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la otra arma"
+msgstr "the other weapon button"
+
+#: scripts/tutoriales.gd
+msgid "el botón del arma a distancia, con ella en la mano"
+msgstr "the ranged weapon button, with it in hand"
+
+#: scripts/tutoriales.gd
+msgid "el botón de lanzar"
+msgstr "the throw button"
+
+#: scripts/tutoriales.gd
+msgid "el botoncito de al lado de lanzar"
+msgstr "the little button next to throw"
+
+#: scripts/tutoriales.gd
+msgid "el botón de las vendas, bajo el minimapa"
+msgstr "the bandages button, below the minimap"
+
+#: scripts/tutoriales.gd
+msgid "el botón del botiquín, bajo el minimapa"
+msgstr "the medkit button, below the minimap"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la mochila, bajo el minimapa"
+msgstr "the backpack button, below the minimap"
+
+#: scripts/tutoriales.gd
+msgid "el botón de pausa, bajo el minimapa"
+msgstr "the pause button, below the minimap"
+
+#: scripts/tutoriales.gd
+msgid "el botón del modo, bajo el minimapa"
+msgstr "the mode button, below the minimap"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "shield %d"
@@ -2125,10 +3801,6 @@ msgstr "Stash"
 #: scripts/ui/inventario.gd
 msgid "Lo que llevas"
 msgstr "What you carry"
-
-#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/opciones.gd
-msgid "Armas"
-msgstr "Weapons"
 
 #: scripts/ui/inventario.gd
 msgid "Arrojables de repuesto  %d / %d"
@@ -2653,10 +4325,6 @@ msgid "Granadas: %d"
 msgstr "Grenades: %d"
 
 #: scripts/ui/menus.gd
-msgid "Mutaciones"
-msgstr "Mutations"
-
-#: scripts/ui/menus.gd
 msgid "Continuar"
 msgstr "Resume"
 
@@ -2995,10 +4663,6 @@ msgstr "Drag from the button to aim and release to throw"
 #: scripts/ui/opciones.gd
 msgid "El botoncito de al lado de lanzar"
 msgstr "The small button next to throw"
-
-#: scripts/ui/opciones.gd
-msgid "Vendas y botiquín"
-msgstr "Bandages and medkit"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa (solo salen si llevas)"
@@ -3483,10 +5147,6 @@ msgid "Arrancada"
 msgstr "Torn out"
 
 #: scripts/ui/ordenador.gd
-msgid "Página arrancada"
-msgstr "Torn-out page"
-
-#: scripts/ui/ordenador.gd
 msgid "%s, página %d: %s. La llevaba %s."
 msgstr "%s, page %d: %s. Carried by %s."
 
@@ -3765,3 +5425,15 @@ msgstr "See it again in Tutorial, from the main menu or the pause menu"
 #: scripts/ui/tutorial.gd
 msgid "Entendido"
 msgstr "Got it"
+
+#: scripts/zombi_dependienta.gd
+msgid "¡OFERTAS!"
+msgstr "BIG SALE!"
+
+#: scripts/zombi_guardia.gd
+msgid "uf"
+msgstr "phew"
+
+#: scripts/zombi_guardia.gd
+msgid "¡PRIIII!"
+msgstr "FWEEET!"

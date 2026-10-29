@@ -12,10 +12,15 @@
 #
 # Quién los llama: partida.gd (tutorial(id), y la mayoría en mirar_tutoriales), eventos.gd, supervivientes.gd y
 # menu_principal.gd (el de la alerta).
+#
+# Idiomas: los textos de las tablas están en español, entre # [traducir] y # [/traducir], y salen ya traducidos por
+# nombre_grupo(), titulo_de(), cuando_de() y texto() (que traduce cada línea ANTES de poner las teclas): la
+# traducción conserva los {nombres} tal cual. Quien los enseñe no tiene que traducirlos otra vez.
 class_name Tutoriales
 
-const GRUPOS := ["Lo básico", "Armas", "Plantas y jefes", "Eventos sorpresa", "Sala de mantenimiento", "Más edificios"]
+const GRUPOS := ["Lo básico", "Armas", "Plantas y jefes", "Eventos sorpresa", "Sala de mantenimiento", "Más edificios"]  # [traducir]
 
+# [traducir]
 const LISTA := {
 	"jugar": {"grupo": "Lo básico", "titulo": "Cómo se juega", "icono": "skin-conserje", "cuando": "Al empezar",
 		"lineas": ["Muévete con {moverse}.",
@@ -125,8 +130,10 @@ const LISTA := {
 		"lineas": ["Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente.",
 			"El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."]},
 }
+# [/traducir]
 
 # En el móvil, con qué se hace cada acción (ui/tactil.gd)
+# [traducir]
 const TACTIL := {
 	"esquivar": "el botón de esquivar", "cambiar_arma": "el botón de la otra arma",
 	"recargar": "el botón del arma a distancia, con ella en la mano", "lanzar": "el botón de lanzar",
@@ -134,6 +141,7 @@ const TACTIL := {
 	"usar_botiquin": "el botón del botiquín, bajo el minimapa", "inventario": "el botón de la mochila, bajo el minimapa",
 	"pausa": "el botón de pausa, bajo el minimapa", "cambiar_modo": "el botón del modo, bajo el minimapa",
 }
+# [/traducir]
 
 static var vistos: Array = []   # los ya vistos: copia de Guardado "tutoriales", que se mira a menudo (mirar_tutoriales)
 static var vistos_de := ""      # de qué archivo son (la prueba con --captura usa otro)
@@ -170,11 +178,26 @@ static func se_ve(id: String) -> bool:
 	return id == "jugar" or visto(id)
 
 
+# El nombre de un grupo (de GRUPOS), ya traducido
+static func nombre_grupo(grupo: String) -> String:
+	return Idioma.t(grupo)
+
+
+# El título de un tutorial, ya traducido
+static func titulo_de(id: String) -> String:
+	return Idioma.t(LISTA[id].titulo)
+
+
+# Cuándo sale un tutorial, ya traducido (hoy no lo enseña ninguna pantalla)
+static func cuando_de(id: String) -> String:
+	return Idioma.t(LISTA[id].cuando)
+
+
 # Las líneas de la ficha, cada una con su punto y las teclas en amarillo (BBCode, para un RichTextLabel)
 static func texto(id: String) -> String:
 	var lineas: Array = []
 	for l: String in LISTA[id].lineas:
-		var t := l.replace("{atacar_modo}", atacar_modo())
+		var t := Idioma.t(l).replace("{atacar_modo}", atacar_modo())
 		while t.contains("{"):
 			var a := t.find("{")
 			var b := t.find("}", a)
@@ -190,8 +213,8 @@ static func texto(id: String) -> String:
 # Cómo se ataca, según el modo elegido (johnny.gd, MODOS)
 static func atacar_modo() -> String:
 	if Guardado.ajuste("modo") == "libre":
-		return "Apunta y ataca con {apuntar}." if Tactil.activo else "Apunta con {apuntar} y ataca con {atacar}."
-	return "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
+		return Idioma.t("Apunta y ataca con {apuntar}.") if Tactil.activo else Idioma.t("Apunta con {apuntar} y ataca con {atacar}.")
+	return Idioma.t("Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte.")
 
 
 # El nombre de lo que se pulsa para una acción: en el móvil, el botón de la pantalla; con un mando enchufado, sus
@@ -201,21 +224,28 @@ static func tecla(accion: String) -> String:
 	match accion:
 		"moverse":
 			if Tactil.activo:
-				return "el joystick (toca y arrastra en la mitad izquierda)"
+				return Idioma.t("el joystick (toca y arrastra en la mitad izquierda)")
 			if mando:
-				return "el stick izquierdo"
+				return Idioma.t("el stick izquierdo")
 			var letras: Array[String] = []
 			for a in ["arriba", "izquierda", "abajo", "derecha"]:
 				letras.append(Controles.tecla_de(a))
 			# WASD, todas juntas; si alguna es más larga (Flecha arriba...), separadas
 			return "".join(letras) if letras.all(func(l): return l.length() == 1) else ", ".join(letras)
 		"apuntar":
-			return "el joystick de abajo a la derecha" if Tactil.activo else "el stick derecho" if mando else "el ratón"
+			if Tactil.activo:
+				return Idioma.t("el joystick de abajo a la derecha")
+			return Idioma.t("el stick derecho") if mando else Idioma.t("el ratón")
 	if Tactil.activo:
-		return TACTIL.get(accion, accion)
+		return Idioma.t(TACTIL[accion]) if TACTIL.has(accion) else accion
 	var nombres: Array[String] = []
 	for ev in Controles.eventos(accion, mando):
 		var n := Opciones.nombre_evento(ev)
 		if n != "" and not n in nombres:
 			nombres.append(n)
-	return " o ".join(nombres) if not nombres.is_empty() else "-"
+	if nombres.is_empty():
+		return "-"
+	var todos := nombres[0]
+	for i in range(1, nombres.size()):
+		todos = Idioma.t("%s o %s") % [todos, nombres[i]]   # (frase entera: «A o B»; con tres, «A o B o C»)
+	return todos

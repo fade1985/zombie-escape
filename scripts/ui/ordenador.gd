@@ -858,14 +858,12 @@ func programa_dosier(c: VBoxContainer) -> void:
 			var p: Dictionary = d.paginas[i]
 			var tiene := Historia.encontrada(s, p.id)
 			var b := tarjeta(del_edificio, "b_" + p.id, "dosier" if tiene else "candado", Idioma.t("Página %d") % (i + 1),
-				p.titulo if tiene else Idioma.t("Arrancada"), "", "" if tiene else "bloqueada")
-			var hoja := p if tiene else {"tipo": "???", "titulo": Idioma.t("Página arrancada"), "nota": "",
-				"texto": Historia.falta(edificio, p)}
+				Historia.titulo_de(p) if tiene else Idioma.t("Arrancada"), "", "" if tiene else "bloqueada")
 			var ver := func():
 				for h in lado.get_children():
 					h.queue_free()
-				lado.add_child(Historia.hoja(hoja, 410.0))
-			enlazar(b, (Idioma.t("%s, página %d: %s. La llevaba %s.") % [nombre, i + 1, p.titulo, p.cuerpo]) if tiene
+				lado.add_child(Historia.hoja(p, 410.0) if tiene else Historia.hoja_arrancada(edificio, p, 410.0))
+			enlazar(b, (Idioma.t("%s, página %d: %s. La llevaba %s.") % [nombre, i + 1, Historia.titulo_de(p), Historia.cuerpo_de(p)]) if tiene
 				else Idioma.t("%s, página %d: aún no la has encontrado (%s).") % [nombre, i + 1, Historia.donde(p)], ver)
 			b.focus_entered.connect(ver)
 			b.mouse_entered.connect(ver)
@@ -902,7 +900,7 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 		var sale := Historia.emitida(s, n)
 		var nueva := n in nuevas
 		var b := tarjeta(lista, "b_" + n.id, "noticias" if sale else "candado", Idioma.t("Emisión %d") % (i + 1),
-			n.titular if sale else Idioma.t("Sin emitir"), Idioma.t("¡NUEVA!") if nueva else "", "" if sale else "bloqueada")
+			Historia.titular_de(n) if sale else Idioma.t("Sin emitir"), Idioma.t("¡NUEVA!") if nueva else "", "" if sale else "bloqueada")
 		if not sale:
 			var pista := (Idioma.t("Completa %s.") % Idioma.t(Edificios.datos(n.victoria).el_nombre)) if n.victoria != "" else Idioma.t("Sigue buscando páginas del dosier VD-7.")
 			enlazar(b, Idioma.t("Emisión %d: aún no ha salido. %s") % [i + 1, pista], Sonido.tocar.bind("no"))
@@ -914,10 +912,10 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 			if tele.noticia != n:
 				tele.poner(n)
 				Historia.ver_noticia(n.id)
-		enlazar(b, Idioma.t("Emisión %d: «%s». Pulsa para saltar o repetir.") % [i + 1, n.titular], tele.saltar)
+		enlazar(b, Idioma.t("Emisión %d: «%s». Pulsa para saltar o repetir.") % [i + 1, Historia.titular_de(n)], tele.saltar)
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
-	info.text = Idioma.t("%s, con %s. Pasa por las emisiones para verlas.") % [Historia.CANAL, Historia.REPORTERA]
+	info.text = Idioma.t("%s, con %s. Pasa por las emisiones para verlas.") % [Historia.canal(), Historia.REPORTERA]
 	if foco != "":
 		return foco
 	return primera_nueva if primera_nueva != "" else ultima
@@ -998,11 +996,11 @@ func programa_colecciones(c: VBoxContainer) -> void:
 		var d: Dictionary = Bestiario.LISTA[id]
 		var visto := Bestiario.visto(s, id)
 		var clave := "z_" + id
-		var b := tarjeta(del_bestiario, clave, "jefe" if d.get("jefe", false) else "zombi", d.nombre if visto else "???",
+		var b := tarjeta(del_bestiario, clave, "jefe" if d.get("jefe", false) else "zombi", Bestiario.nombre(id) if visto else "???",
 			sale_en(d) if visto else Idioma.t("Sin ver"), "", "" if visto else "bloqueada")
 		var hacer := ficha_bestiario.bind(id, visto)
 		var ver := func(): mostrar(lado, clave, hacer)
-		enlazar(b, (Idioma.t("%s: sale en %s.") % [d.nombre, sale_en(d, true)]) if visto
+		enlazar(b, (Idioma.t("%s: sale en %s.") % [Bestiario.nombre(id), sale_en(d, true)]) if visto
 			else Idioma.t("Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."), ver)
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
@@ -1064,7 +1062,7 @@ func ficha_edificio(s: Dictionary, ed: String, cual: String) -> Control:
 		columna.add_child(l)
 		for i in paginas.size():
 			if Historia.encontrada(s, paginas[i].id):
-				columna.add_child(texto_tarjeta(Idioma.t("Página %d · %s") % [i + 1, paginas[i].titulo], TINTA_SUAVE))
+				columna.add_child(texto_tarjeta(Idioma.t("Página %d · %s") % [i + 1, Historia.titulo_de(paginas[i])], TINTA_SUAVE))
 		return columna
 	columna.add_child(texto_tarjeta(Idioma.t("Objetos · %s") % nombre, TINTA))
 	var casillas := GridContainer.new()
@@ -1128,14 +1126,14 @@ func ficha_bestiario(id: String, visto: bool) -> Control:
 	if not visto:
 		retrato.modulate = Color(0, 0, 0, 0.85)   # la silueta
 	columna.add_child(retrato)
-	var nombre := texto_tarjeta(d.nombre if visto else "???", TINTA)
+	var nombre := texto_tarjeta(Bestiario.nombre(id) if visto else "???", TINTA)
 	nombre.add_theme_font_size_override("font_size", 32)
 	nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(nombre)
 	var donde := texto_tarjeta(Idioma.t("Sale en: %s") % (sale_en(d) if visto else "???"), TINTA_SUAVE)
 	donde.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(donde)
-	var frase := texto_tarjeta(d.frase if visto else Idioma.t("Aún no te lo has cruzado."), TINTA)
+	var frase := texto_tarjeta(Bestiario.frase(id) if visto else Idioma.t("Aún no te lo has cruzado."), TINTA)
 	frase.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	frase.custom_minimum_size.x = 420
 	frase.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

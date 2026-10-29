@@ -1323,7 +1323,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"marca": Reto.marca(Reto.ficha(s, edificio), true) if Reto.activo else "",
 		"sub": ((Idioma.t("Has limpiado %s de arriba abajo") % Idioma.t(ed.el_nombre)) if nuevo.is_empty()
 			else (Idioma.t("Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento")
-				% [Idioma.t(ed.el_nombre), nuevo.nombre])) if gano
+				% [Idioma.t(ed.el_nombre), Supervivientes.nombre_de(nuevo)])) if gano
 			else (Idioma.t("Caíste en la %s de %s") % [planta.nombre.to_lower(), Idioma.t(ed.el_nombre)]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,

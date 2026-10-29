@@ -181,7 +181,7 @@ func elegir(johnny: Node2D, d: float) -> void:
 		espera_aspirar = 7.0 if enfadado() else 10.0
 		mirada = Vector2.from_angle(angulo)
 		cambiar("aviso_aspirar")
-		gritar("¡HAMBRE!", VERDE)
+		gritar(Idioma.t("¡HAMBRE!"), VERDE)
 		return
 	# nada a mano: sigue andando un poco y vuelve a mirar
 	andar(0.4)
@@ -286,13 +286,13 @@ func comer(johnny: Node2D, hacia: Vector2) -> void:
 	johnny.pisar({"tirado": {}})
 	Sonido.tocar("chof")
 	Temblor.temblar(10.0)
-	gritar("¡ÑAM!", Color("#ffd23f"), 26)
+	gritar(Idioma.t("¡ÑAM!"), Color("#ffd23f"), 26)
 	Particulas.salpicar(self, get_parent(), johnny.global_position, 20.0, hacia, Color("#7a1f1a"), 8)
 	andar(1.0)
 
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡TENGO HAMBRE!")
+	super(johnny, Idioma.t("¡TENGO HAMBRE!"))
 
 
 # En la foto de la prueba (--captura): soltando el latigazo
@@ -326,7 +326,7 @@ func salpicar_acido() -> void:
 	var dano := maxi(1, roundi(johnny.stats.vida_max * ACIDO[fase - 1]))
 	johnny.quitar_vida(dano)
 	Sonido.tocar("chisporroteo")
-	Zombi.texto_flotante(get_parent(), johnny.global_position + Vector2(-24, -72), "-%d ácido" % dano, VERDE, 16)
+	Zombi.texto_flotante(get_parent(), johnny.global_position + Vector2(-24, -72), Idioma.t("-%d ácido") % dano, VERDE, 16)
 	# gotas verdes que saltan de él hacia Johnny, y el chisporroteo al caerle encima
 	var hacia: Vector2 = (johnny.global_position - global_position).normalized()
 	for i in 6:

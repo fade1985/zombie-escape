@@ -121,7 +121,7 @@ func elegir(johnny: Node2D) -> void:
 	if gira and (not (salta or lanza) or randf() < 0.45):
 		espera_torbellino = 2.8 if enfadado() else 3.6
 		apuntar(johnny, TORBELLINOS[fase - 1], AVISO_TORBELLINO[fase - 1])
-		gritar("¡NO PAIN, NO GAIN!", Color("#ff5d73"), 20)
+		gritar(Idioma.t("¡NO PAIN, NO GAIN!"), Color("#ff5d73"), 20)
 		return
 	if salta and (not lanza or randf() < 0.5):
 		espera_salto = 3.5 if enfadado() else 5.0
@@ -241,7 +241,7 @@ func lanzar_pesas(johnny: Node2D) -> void:
 # ── Los suplementos (la armadura) ──
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡HORA DE LOS SUPLEMENTOS!")
+	super(johnny, Idioma.t("¡HORA DE LOS SUPLEMENTOS!"))
 	armadura_max = int(vida_max * ARMADURA)
 	armadura = armadura_max
 	armadura_cambiada.emit(armadura, armadura_max)
@@ -258,7 +258,7 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	armadura -= a_la_armadura
 	armadura_cambiada.emit(armadura, armadura_max)
 	if armadura <= 0:
-		gritar("¡SIN SUPLEMENTOS!", ACERO, 18)
+		gritar(Idioma.t("¡SIN SUPLEMENTOS!"), ACERO, 18)
 		Sonido.tocar("cristal")
 	return cantidad - a_la_armadura
 

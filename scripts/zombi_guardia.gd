@@ -55,7 +55,7 @@ func andar(delta: float, johnny: Node2D) -> void:
 	aliento -= delta
 	if aliento <= 0.0:
 		cansado = RESPIRO
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-10, -altura), "uf", Color("#9fc4ff"), 18)
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-10, -altura), Idioma.t("uf"), Color("#9fc4ff"), 18)
 		return
 	ir_hacia(delta, camino_hacia(huida(johnny)), HUIDA)
 
@@ -83,7 +83,7 @@ func huida(johnny: Node2D) -> Vector2:
 func tocar_silbato() -> void:
 	silbidos += 1
 	Sonido.tocar("silbato")
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(-34, -altura), "¡PRIIII!", Color("#ffd23f"), 22)
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(-34, -altura), Idioma.t("¡PRIIII!"), Color("#ffd23f"), 22)
 	silbato.emit()
 
 

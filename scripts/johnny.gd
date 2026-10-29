@@ -240,7 +240,7 @@ func curar(cantidad: int) -> void:
 func avisar_adrenalina() -> void:
 	var ahora := adrenalina()
 	if ahora and not con_adrenalina:
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), "¡Adrenalina!", ROJO, 18)
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), Idioma.t("¡Adrenalina!"), ROJO, 18)
 	con_adrenalina = ahora
 
 
@@ -815,7 +815,7 @@ func soltar_casquillo(angulo: float, cartucho: bool) -> void:
 	var color := Color("#c0392b") if cartucho else Color("#e8b84a")
 	var marca := Color("#8e2a20") if cartucho else Color("#b8892e")
 	Particulas.volar(self, global_position + Vector2(0, 14), 40.0, Vector2(v.x, v.y * 0.6), randf_range(110.0, 160.0),
-		color, 4.0, suelo, marca, Vector2(6, 4) if cartucho else Vector2(4, 2), false, false, 2, "Casquillos")
+		color, 4.0, suelo, marca, Vector2(6, 4) if cartucho else Vector2(4, 2), false, false, 2, "Casquillos")   # no-tr (nombre de nodo)
 
 
 # El disparo se oye: despierta a los zombis dormidos que haya cerca
@@ -1056,7 +1056,7 @@ func avisar_arma() -> void:
 		if w.has("relleno"):   # el lanza rayos: cuántas baterías le quedan
 			texto += " · %s x%d" % [Objetos.nombre(w.relleno).to_lower(), reserva()]
 		if recargando > 0.0:
-			texto += "   recargando…"
+			texto += "   " + Idioma.t("recargando…")
 	var otra: String = huecos["fuego" if mano == "cuerpo" else "cuerpo"]
 	texto += "\n[Q] " + Objetos.nombre(otra)
 	arma_cambiada.emit(texto)
@@ -1238,7 +1238,7 @@ func recibir_dano(cantidad: int, quien = null) -> void:
 	if stats.esquiva_sola > 0 and sola_t <= 0.0:
 		sola_t = stats.esquiva_sola
 		invulnerable = 0.5
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-40, -70), "¡Esquivado!", AZUL, 18)
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-40, -70), Idioma.t("¡Esquivado!"), AZUL, 18)
 		Sonido.tocar("esquiva")
 		return
 	invulnerable = INVULNERABLE
@@ -1282,7 +1282,7 @@ func devolver(quien) -> void:
 	else:
 		var dano: int = quien.vida + 1
 		quien.recibir_golpe(dano, (quien.global_position - global_position).normalized() * EMPUJE)
-	Zombi.texto_flotante(get_parent(), quien.global_position + Vector2(-30, -60), "¡ÑAM!", MORDISCO, 18)
+	Zombi.texto_flotante(get_parent(), quien.global_position + Vector2(-30, -60), Idioma.t("¡ÑAM!"), MORDISCO, 18)
 	Sonido.tocar("mordisco")
 
 
@@ -1342,7 +1342,7 @@ func quitar_vida(cantidad: int) -> void:
 		aliento_usado = true
 		devolver_tercio()
 		curar(roundi(stats.aliento * Alerta.botiquin()))
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-70, -70), "¡Segundo aliento!", VERDE, 18)
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-70, -70), Idioma.t("¡Segundo aliento!"), VERDE, 18)
 		Sonido.tocar("curar")
 	if vida > 0:
 		avisar_adrenalina()

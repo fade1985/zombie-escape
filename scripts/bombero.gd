@@ -186,7 +186,7 @@ func elegir(johnny: Node2D) -> void:
 	if gira:
 		# (el giro solo ya dura unos 8 s; hasta el 27 oct, cada 15 y 12 s: pasaba la mitad del combate en su burbuja)
 		espera_giro = ESPERA_GIRO[1] if enfadado() else ESPERA_GIRO[0]
-		gritar("¡A ARDER!", Color("#ff9f1c"), 20)
+		gritar(Idioma.t("¡A ARDER!"), Color("#ff9f1c"), 20)
 		var centro := centro_sala()
 		if centro.distance_to(global_position) < 30.0:
 			avisar_giro(johnny)
@@ -403,7 +403,7 @@ func prender(_dano_lanzar := 1.0) -> void:
 func decir_inmune() -> void:
 	if aviso_inmune <= 0.0 and estado != "muerto":
 		aviso_inmune = 1.5
-		gritar("¡INMUNE!", Llamas.FUEGO[1], 18)
+		gritar(Idioma.t("¡INMUNE!"), Llamas.FUEGO[1], 18)
 
 
 # El fuego de los charcos tampoco le quema por dentro
@@ -449,7 +449,7 @@ func angulo_burbuja(dir: Vector2) -> float:
 # ── Enfadado: todo arde ──
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡TODO ARDE!")
+	super(johnny, Idioma.t("¡TODO ARDE!"))
 	espera_giro = minf(espera_giro, 2.0)
 	llamas = Llamas.new()
 	llamas.alto = arriba * 0.8

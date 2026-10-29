@@ -95,3 +95,31 @@ son **adaptaciones**, no traducciones literales.
 | pasillo · cámara acorazada · tarjeta dorada | hallway · vault · gold card |
 | apertura de emergencia · cuadro eléctrico · palanca · cable (pelado) · horda | emergency override · electrical panel · lever · wire · horde |
 | las viviendas | living quarters |
+
+## Elegidos en la fase 4 (por confirmar)
+
+La voz del juego. Los gritos y los chistes se **adaptaron** (no se tradujeron palabra por palabra). Siguen sin traducir, a propósito:
+Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego (*NO PAIN, NO GAIN!*).
+
+| Español | Inglés |
+|---|---|
+| Supervivientes (sin artículo, con mayúscula): Policía · Militar · Médica · Farmacéutica · Ferretero · Técnico | Cop · Soldier · Doctor · Pharmacist · Hardware Guy · Technician |
+| Zombis: el vecino · el reptante · el niño · el dinamitero · el de los tentáculos · el gordo · la dependienta · el vigilante · el guardia · el maniquí | the Neighbor · the Crawler · the Kid · the Bomber · the Tentacle Guy · the Fat Man · the Sales Clerk · the Security Guard · the Keycard Guard · the Mannequin |
+| Jefes: la criatura · el gerente mutado | the Creature · the Mutated Manager |
+| Gritos de la portera: ¡QUE ACABO DE FREGAR! · ¡VECINOS! · ¡LEJÍA! · ¡ÁCIDO! · ¡A BARRER! | I JUST MOPPED! · TENANTS! · BLEACH! · ACID! · CLEAN SWEEP! |
+| Gerente: ¡A TRABAJAR! · ¡AQUÍ NO PARA NADIE! | BACK TO WORK! · NOBODY CLOCKS OUT! |
+| Gymbro: ¡HORA DE LOS SUPLEMENTOS! · ¡SIN SUPLEMENTOS! | SUPPLEMENT TIME, BRO! · OUT OF SUPPS! |
+| Bombero · mascota · cocinero · modista | FIRE DRILL! / FIVE-ALARM FIRE! · FREE HUGS! / PLAYTIME! · PIPING HOT! / INTO THE POT! · HSSSS! / TIME FOR A FITTING! |
+| Antidisturbios: ¡ATRÁS! · ¡QUEDAS DETENIDO! | GET BACK! · YOU'RE UNDER ARREST! |
+| Glotón: ¡HAMBRE! · ¡ÑAM! | HUNGRY! · CHOMP! |
+| Dr. Salas: ¡MÁS SUJETOS! · ¡NO ME TOCARÁS! | MORE TEST SUBJECTS! · HANDS OFF, JANITOR! |
+| Zombis: ¡OFERTAS! (dependienta) | BIG SALE! (en el bestiario: *SALE!*; igualar) |
+| durmiente · sonámbulo | sleeper · sleepwalker |
+| Sujeto 0 · «Asunto:» | Subject 0 · «Subject:» |
+| Torre Velaria · Turno infinito · Dirección · SOLO DIRECCIÓN · Velaria Noche | Velaria Tower · Endless Shift · Head Office · DIRECTOR ONLY · Velaria Night |
+| Canal 8 | Channel 8 |
+| almacén · cámara (frigorífica) · rebotica · probadores · taquillas | storeroom · freezer · back room · fitting rooms · lockers |
+| Tutoriales: lanzables · truco · piezas de mejora · peligros de las tiendas · vida en tercios | throwables · perk · upgrade parts · store hazards · health in thirds |
+
+Pendiente de igualar con la fase 5: los nombres de planta y de puerta (`1A`, `apt. 1D`, `apt. GC`) y la numeración de plantas. El euro de
+las noticias se queda (€300, €3.99), aunque el resto del juego usa dólares.

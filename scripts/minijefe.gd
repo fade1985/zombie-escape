@@ -131,10 +131,11 @@ func animar() -> void:
 
 
 # Al enfadarse: borra las balas que hay volando, grita, aparta a Johnny y se pone rojo. Cada jefe pone su grito
-func al_enfadarse(johnny: Node2D, grito := "¡GRRR!") -> void:
+# (ya traducido); si no pone ninguno, «¡GRRR!»
+func al_enfadarse(johnny: Node2D, grito := "") -> void:
 	for bala in get_tree().get_nodes_in_group("balas_zombi"):
 		bala.queue_free()
-	gritar(grito, Color("#ffd23f"), 26)
+	gritar(grito if grito != "" else Idioma.t("¡GRRR!"), Color("#ffd23f"), 26)
 	Sonido.tocar("rugido")
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < 240.0:
@@ -224,7 +225,7 @@ func estrellarse() -> void:
 	cambiar("atontado")
 	Sonido.tocar("portazo")
 	Temblor.temblar(9.0)
-	gritar("¡PUMBA!", Color("#ffd23f"))
+	gritar(Idioma.t("¡PUMBA!"), Color("#ffd23f"))
 	for i in 10:
 		Particulas.soltar(self, global_position + mirada * radio + Vector2(randf_range(-20, 20), randf_range(-60, 10)),
 			Vector2.from_angle(randf() * TAU) * 70.0, Color("#b9b2a6"), 4, 0.6)
@@ -251,7 +252,7 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, _de_aliado := false) -> void:
 	if esperando and aviso_espera <= 0.0 and estado != "muerto":
 		aviso_espera = 1.2
-		gritar("¡INMUNE!", Color("#ffd23f"), 18)
+		gritar(Idioma.t("¡INMUNE!"), Color("#ffd23f"), 18)
 	if estado == "muerto" or invulnerable:
 		return
 	quitar_vida(ArmasCreadas.con_acido(self, danar(cantidad, fuerza, de_lleno)), fuerza)

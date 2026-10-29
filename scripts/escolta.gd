@@ -19,8 +19,11 @@ const CADA := [6.0, 3.0]   # segundos entre grupo y grupo en el pasillo: al prin
 const GRUPO := [1, 3]      # zombis por grupo, igual
 const TOPE := 14           # zombis a la vez, como mucho
 const TIPOS := [["lento", "normal", "normal"], ["normal", "normal", "rapido", "venenoso"]]
+# Lo que se queja de vez en cuando (en español: sale con Idioma.t)
+# [traducir]
 const QUEJAS := ["Me duele mucho la pierna…", "¡No vayas tan deprisa!", "¡No me dejes atrás!", "¿Falta mucho?",
 	"Tengo que vendarme esto…"]
+# [/traducir]
 
 var sup: Supervivientes
 var ella: Aliado = null    # la farmacéutica mientras dura la escolta (null: no hay escolta)
@@ -49,9 +52,9 @@ func empezar(a: Aliado) -> void:
 	a.vida = Aliado.VIDA
 	a.caido = false
 	a.add_to_group("presa")
-	a.decir("Vámonos. Despacio, por favor")
+	a.decir(Idioma.t("Vámonos. Despacio, por favor"))
 	Sonido.musica("jefe")   # la música más tensa, como en la horda
-	sup.partida.decir("Lleva a la %s hasta las escaleras: va herida" % a.def.nombre, 4.0)
+	sup.partida.decir(Idioma.t("Lleva a la %s hasta las escaleras: va herida") % Supervivientes.nombre_de(a.def), 4.0)
 
 
 func _physics_process(delta: float) -> void:
@@ -76,14 +79,14 @@ func _physics_process(delta: float) -> void:
 		if levantando >= Supervivientes.HORDA.levantar:
 			levantando = 0.0
 			ella.levantarse()
-			ella.decir("Gracias… sigamos")
+			ella.decir(Idioma.t("Gracias… sigamos"))
 			Particulas.anillo(ella, ella.global_position, 50.0, Tema.VERDE, 0.4)
 	# de vez en cuando se queja
 	queja_t -= delta
 	if queja_t <= 0.0:
 		queja_t = randf_range(8.0, 12.0)
 		if not ella.caido and ella.dicho_t > 3.0:
-			ella.decir(QUEJAS.pick_random())
+			ella.decir(Idioma.t(QUEJAS.pick_random()))
 	# el primer grupo entra por la puerta de la farmacia
 	if not primero and t >= 2.0:
 		primero = true
@@ -121,10 +124,10 @@ func salir_zombis(puertas: Array, n: int, tipos: Array) -> void:
 func al_herir(cae: bool) -> void:
 	if cae:
 		levantando = 0.0
-		ella.decir("¡Ayúdame, no puedo levantarme!")
+		ella.decir(Idioma.t("¡Ayúdame, no puedo levantarme!"))
 	elif sup.johnny.position.distance_to(ella.position) > Supervivientes.HORDA.lejos and queja_t > 6.0:
 		queja_t = 6.0
-		ella.decir(["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"].pick_random())
+		ella.decir(Idioma.t(Supervivientes.LLAMADAS.pick_random()))
 
 
 # Antes de cruzar una puerta: lo que dice si no se puede (en el suelo o lejos), o "" si sí
@@ -132,9 +135,9 @@ func no_cruzar() -> String:
 	if ella == null:
 		return ""
 	if ella.caido:
-		return "¡La %s está en el suelo! Quédate a su lado para levantarla" % ella.def.nombre
+		return Idioma.t("¡La %s está en el suelo! Quédate a su lado para levantarla") % Supervivientes.nombre_de(ella.def)
 	if sup.johnny.position.distance_to(ella.position) > LEJOS:
-		return "Espera a la %s: va herida" % ella.def.nombre
+		return Idioma.t("Espera a la %s: va herida") % Supervivientes.nombre_de(ella.def)
 	return ""
 
 
@@ -153,8 +156,8 @@ func acabar(llego: bool) -> void:
 	Sonido.musica("menu")
 	if not llego:
 		return
-	a.decir("Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo")
-	sup.partida.decir("¡La %s está a salvo!" % a.def.nombre, 3.0)
+	a.decir(Idioma.t("Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo"))
+	sup.partida.decir(Idioma.t("¡La %s está a salvo!") % Supervivientes.nombre_de(a.def), 3.0)
 	Sonido.tocar("limpio")
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
 
@@ -167,7 +170,8 @@ func dibujar(capa: Control) -> void:
 	var partida: Node = sup.partida
 	var letra := Tema.FUENTE
 	var tam := capa.size
-	var texto := ("¡La %s ha caído! Quédate a su lado" if ella.caido else "Lleva a la %s a las escaleras") % ella.def.nombre
+	var texto := (Idioma.t("¡La %s ha caído! Quédate a su lado") if ella.caido else Idioma.t("Lleva a la %s a las escaleras")) \
+		% Supervivientes.nombre_de(ella.def)
 	var ancho := letra.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 40.0
 	var caja := Rect2((tam.x - ancho) / 2.0, 12, ancho, 30)
 	capa.draw_rect(caja.grow(2), Tema.LINEA)

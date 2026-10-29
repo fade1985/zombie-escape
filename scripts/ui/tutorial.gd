@@ -124,7 +124,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 	for grupo in Tutoriales.GRUPOS:
 		var g := Label.new()
 		g.theme_type_variation = "Sub"
-		g.text = grupo
+		g.text = Tutoriales.nombre_grupo(grupo)
 		temas.add_child(g)
 		for cual in Tutoriales.LISTA:
 			if Tutoriales.LISTA[cual].grupo != grupo:
@@ -133,7 +133,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 			b.theme_type_variation = "Celda"
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			if Tutoriales.se_ve(cual):
-				b.text = Tutoriales.LISTA[cual].titulo
+				b.text = Tutoriales.titulo_de(cual)
 				b.focus_entered.connect(ver.bind(cual))
 				b.pressed.connect(ver.bind(cual))
 			else:
@@ -178,7 +178,7 @@ static func ficha(cual: String) -> VBoxContainer:
 	var d: Dictionary = Tutoriales.LISTA[cual]
 	var caja := VBoxContainer.new()
 	caja.add_theme_constant_override("separation", 10)
-	var cabeza := Tema.icono_y_texto(d.icono, d.titulo, 32)
+	var cabeza := Tema.icono_y_texto(d.icono, Tutoriales.titulo_de(cual), 32)
 	cabeza.alignment = BoxContainer.ALIGNMENT_CENTER
 	(cabeza.get_child(cabeza.get_child_count() - 1) as Label).theme_type_variation = "Titulo"
 	caja.add_child(cabeza)

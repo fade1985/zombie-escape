@@ -109,12 +109,12 @@ func elegir(johnny: Node2D, d: float, desvio: float) -> void:
 		espera_silbato = 13.0
 		cambiar("silbato")
 		Sonido.tocar("silbato")
-		gritar("¡PRIIIII!", Color("#bfe9ff"))
+		gritar(Idioma.t("¡PRIIIII!"), Color("#bfe9ff"))
 		return
 	if d > 170.0 and desvio < 0.7 and espera_carga <= 0.0:
 		espera_carga = 2.5 if enfadado() else 3.5
 		cambiar("aviso_carga", {"quedan": CARGAS[fase - 1], "aviso": AVISO_CARGA[0]})
-		gritar("¡ATRÁS!", Color("#ff5d73"))
+		gritar(Idioma.t("¡ATRÁS!"), Color("#ff5d73"))
 		return
 	# nada a mano: sigue andando un poco y vuelve a mirar
 	andar(0.3)
@@ -145,7 +145,7 @@ func cargar(delta: float, johnny: Node2D) -> void:
 
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡QUEDAS DETENIDO!")
+	super(johnny, Idioma.t("¡QUEDAS DETENIDO!"))
 
 
 # En la foto de la prueba (--captura): preparando la carga
@@ -176,7 +176,7 @@ func clonc(fuerza: Vector2) -> void:
 		Particulas.soltar(self, donde, v, Color("#fff3a8") if i % 2 else Color("#ffffff"), 3, 0.25)
 	if clonc_t <= 0.0:
 		clonc_t = 0.25
-		Zombi.texto_flotante(get_parent(), donde + Vector2(-34, -30), "¡CLONC!", Color("#bfe9ff"), 18)
+		Zombi.texto_flotante(get_parent(), donde + Vector2(-34, -30), Idioma.t("¡CLONC!"), Color("#bfe9ff"), 18)
 		Sonido.tocar("clonc")
 
 

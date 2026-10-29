@@ -239,7 +239,7 @@ func elegir(d: float) -> void:
 	if espera_llamar <= 0.0 and secuaces() <= VECINOS[fase - 1]:
 		espera_llamar = 12.0
 		cambiar("llamar")
-		gritar("¡VECINOS!", Color("#ffd23f"), 26)
+		gritar(Idioma.t("¡VECINOS!"), Color("#ffd23f"), 26)
 		Sonido.tocar("rugido")
 		return
 	var opciones := ["abanico", "lejia", "giro", "acido", "embestida"] if enfadada() else ["abanico", "lejia", "acido", "embestida"]
@@ -250,17 +250,17 @@ func elegir(d: float) -> void:
 			cambiar("aviso_abanico")
 		"lejia":
 			cambiar("lejia", {"lanzadas": 0})
-			gritar("¡LEJÍA!", Color("#bfe9ff"))
+			gritar(Idioma.t("¡LEJÍA!"), Color("#bfe9ff"))
 		"acido":
 			cambiar("aviso_acido")
-			gritar("¡ÁCIDO!", Color("#9be33b"))
+			gritar(Idioma.t("¡ÁCIDO!"), Color("#9be33b"))
 		"embestida":
 			var johnny := get_tree().get_first_node_in_group("jugador")
 			cambiar("aviso_embestida", {"quedan": EMBESTIDAS[fase - 1], "aviso": AVISO_EMBESTIDA,
 				"angulo": (johnny.global_position - global_position).angle()})
 		"giro":
 			cambiar("aviso_giro")
-			gritar("¡A BARRER!", Color("#ffd23f"))
+			gritar(Idioma.t("¡A BARRER!"), Color("#ffd23f"))
 
 
 # Abanico de agua sucia: dos tandas (tres enfadada), una sí y otra no desplazada medio hueco
@@ -380,7 +380,7 @@ func girar(delta: float, johnny: Node2D) -> void:
 func enfadarse(johnny: Node2D) -> void:
 	for bala in get_tree().get_nodes_in_group("balas_zombi"):
 		bala.queue_free()
-	gritar("¡QUE ACABO DE FREGAR!", Color("#ffd23f"), 26)
+	gritar(Idioma.t("¡QUE ACABO DE FREGAR!"), Color("#ffd23f"), 26)
 	vapor.chorro()
 	Sonido.tocar("rugido")
 	var hacia: Vector2 = johnny.global_position - global_position

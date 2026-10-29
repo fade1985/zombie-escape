@@ -168,7 +168,7 @@ func ropa(cuerpo: PackedVector2Array, by: float, de_espaldas: bool, lw: float) -
 
 # El moño (encima de la cabeza, detrás). "encima": de espaldas, se dibuja por encima de la cabeza
 func peinado(cabeza_c: Vector2, lx: float, encima: bool, lw: float) -> void:
-	if look.get("peinado", "") != "moño" or blanco:
+	if look.get("peinado", "") != "moño" or blanco:   # no-tr (un id)
 		return
 	var c := cabeza_c + (Vector2(0, -11 * s) if encima else Vector2(-lx * 5 * s, -14 * s))
 	forma(elipse(c, 6 * s, 5.5 * s), look.get("hair", Color("#6b3e26")), lw * 0.7)

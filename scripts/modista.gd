@@ -274,7 +274,7 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 func pillada(_johnny: Node2D, _hacia: Vector2, _d: float) -> void:
 	espera_cambio = CAMBIOS[fase - 1]
 	cambiar("pillada")
-	gritar("¡SSSS!", Color("#ff5d73"), 20)
+	gritar(Idioma.t("¡SSSS!"), Color("#ff5d73"), 20)
 
 
 # El mapa vuelve a mirar por dónde se puede andar (los maniquíes han cambiado de sitio)
@@ -294,7 +294,7 @@ func soplo(donde: Vector2) -> void:
 
 # Enfadada: tres maniquíes cobran vida (los de la tienda; si no hay bastantes, aparecen a su alrededor)
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡TE TOMO MEDIDAS!")
+	super(johnny, Idioma.t("¡TE TOMO MEDIDAS!"))
 	despertar_maniquies(johnny)
 
 

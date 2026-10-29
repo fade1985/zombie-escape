@@ -35,59 +35,68 @@ const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")
 # colores de su dibujo (persona.gd); "arma": la que lleva en la mano. Los del centro comercial llevan además "tienda"
 # y "sala" (dónde se esconde), "gritos" (los suyos) y "mejora" (lo que hace ya rescatado; el ferretero no tiene: el
 # dueño quitó su puesto, porque todo sale ya de los zombis). "rescate": si no es la horda de siempre, cuál
-# ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo que dice al abrirse su puerta
+# ("escolta": escolta.gd; "averia": averia.gd; "barricada": barricada.gd); "al_abrir": lo que dice al abrirse su puerta.
+# Los textos (nombre, desc, gritos, al_abrir y mejora) están en español, en líneas con la marca de traducir al final
+# (docs/IDIOMAS.md): el nombre se enseña con nombre_de() y la desc con desc_de(), que los devuelven ya traducidos; el
+# nombre, sin artículo («Técnico»; las frases ponen «el %s», y en inglés "the %s")
 const DATOS := {
-	"policia": {"id": "policia", "nombre": "Policía", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
+	"policia": {"id": "policia", "edificio": "apartamentos", "color": Color("#6fa8ff"), "arma": "pistola",
 		"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b"), "shirt": Color("#3d63c9"), "pants": Color("#22336b"),
 			"shoes": Color("#1d1b2c"), "hat": {"kind": "cap", "color": Color("#22336b")}},
-		"desc": "Dispara con su pistola cada 0,8 s",
+		"nombre": "Policía", "desc": "Dispara con su pistola cada 0,8 s",   # [traducir]
 		"habilidad": {"tipo": "disparar", "cada": 0.8, "dano": 5, "rafaga": 1}},   # (hasta el 27 oct, cada 1,2 s)
-	"medico": {"id": "medico", "nombre": "Médica", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
+	"medico": {"id": "medico", "edificio": "apartamentos", "color": Color("#80ed99"), "arma": "",
 		"look": {"skin": Color("#ffd2a8"), "hair": Color("#c0392b"), "shirt": Color("#ffffff"), "pants": Color("#7fd1c7"),
 			"shoes": Color("#3b3550"), "cross": true},
-		"desc": "Te cura 5 cada 6 s y 10 al limpiar cada piso",
+		"nombre": "Médica", "desc": "Te cura 5 cada 6 s y 10 al limpiar cada piso",   # [traducir]
 		# (hasta el 27 oct, 3 cada 8 s: 22 de vida por minuto, casi lo mismo que Lobezno con un punto; ahora, 50)
 		"habilidad": {"tipo": "curar", "cada": 6.0, "cura": 5, "al_limpiar": 10}},
-	"militar": {"id": "militar", "nombre": "Militar", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
+	"militar": {"id": "militar", "edificio": "apartamentos", "color": Color("#c9e265"), "arma": "rifle",
 		"look": {"skin": Color("#c68642"), "hair": Color("#3b2a1a"), "shirt": Color("#6b8e23"), "pants": Color("#4b5320"),
 			"shoes": Color("#2e2a1f"), "hat": {"kind": "helmet", "color": Color("#556b2f")}},
-		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",
+		"nombre": "Militar",   # no-tr: lo traduce nombre_de() con contexto (sin él, «Militar» es la rama de talentos)
+		"desc": "Lanza ráfagas de 3 balas cada 2,5 s",   # [traducir]
 		"habilidad": {"tipo": "disparar", "cada": 2.5, "dano": 6, "rafaga": 3, "hueco": 0.1}},
 	# los del centro comercial (parte 5 del plan; tres por edificio: el dueño quitó a la camarera)
-	"ferretero": {"id": "ferretero", "nombre": "Ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
+	"ferretero": {"id": "ferretero", "edificio": "centro", "color": Color("#ff9a3c"), "arma": "martillo",
 		"tienda": "ferreteria", "sala": "almacen",
 		"look": {"skin": Color("#d39b6a"), "hair": Color("#6e6e6e"), "shirt": Color("#4a6fa5"), "pants": Color("#3e4a5c"),
 			"shoes": Color("#4a3426"), "chaleco": Color("#ff8a1f"), "bigote": true,
 			"hat": {"kind": "cap", "color": Color("#3c5a3c"), "chapa": false}},
-		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],
-		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",
-		"desc": "Va a por los zombis que ve y les da martillazos (8 de daño)",
+		"nombre": "Ferretero",   # [traducir]
+		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡Aquí dentro!", "¡He atrancado la puerta!", "¡Que alguien me oiga!"],   # [traducir]
+		"rescate": "barricada", "al_abrir": "¡Fuera tablas! Gracias, chaval. Vámonos de aquí",   # [traducir]
+		"desc": "Va a por los zombis que ve y les da martillazos (8 de daño)",   # [traducir]
 		"habilidad": {"tipo": "golpear", "cada": 0.9, "dano": 8, "alcance": 80.0}},   # (alcance: lo cerca que tiene que estar para pegar)
-	"farmaceutica": {"id": "farmaceutica", "nombre": "Farmacéutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
+	"farmaceutica": {"id": "farmaceutica", "edificio": "centro", "color": Color("#3ddc84"), "arma": "",
 		"tienda": "farmacia", "sala": "rebotica",
 		"look": {"skin": Color("#f1c9a5"), "hair": Color("#2b1d14"), "shirt": Color("#f4f6f8"), "pants": Color("#55606e"),
 			"shoes": Color("#3b3550"), "bata": Color("#8fd3e8"), "cross": true, "cross_color": Color("#2fbf5b"),
-			"peinado": "moño"},
-		"gritos": ["¡Socorro!", "¡Estoy en la rebotica!", "¡Estoy herida!", "¡Ayuda, por favor!", "¡Aquí detrás!"],
-		"rescate": "escolta", "al_abrir": "¡Me han mordido la pierna! No puedo correr",
-		"desc": "Los charcos de veneno y ácido te hacen la mitad",
+			"peinado": "moño"},   # no-tr (un id: el peinado, persona.gd)
+		"nombre": "Farmacéutica",   # [traducir]
+		"gritos": ["¡Socorro!", "¡Estoy en la rebotica!", "¡Estoy herida!", "¡Ayuda, por favor!", "¡Aquí detrás!"],   # [traducir]
+		"rescate": "escolta", "al_abrir": "¡Me han mordido la pierna! No puedo correr",   # [traducir]
+		"desc": "Los charcos de veneno y ácido te hacen la mitad",   # [traducir]
 		"habilidad": {"tipo": "charcos", "cada": 1.0, "parte": 0.5},
-		"mejora": "Cada partida empiezas con un botiquín en la mochila"},
-	"tecnico": {"id": "tecnico", "nombre": "Técnico", "edificio": "centro", "color": Color("#4fe3ff"), "arma": "",
+		"mejora": "Cada partida empiezas con un botiquín en la mochila"},   # [traducir]
+	"tecnico": {"id": "tecnico", "edificio": "centro", "color": Color("#4fe3ff"), "arma": "",
 		"tienda": "electronica", "sala": "almacen",
 		"look": {"skin": Color("#8d5524"), "hair": Color("#1a1a1a"), "shirt": Color("#2a3f6b"), "pants": Color("#3a3f4b"),
 			"shoes": Color("#22222a"), "cascos": Color("#e04848"), "tarjeta": true, "aparato": true},
-		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],
-		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",
-		"desc": "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano",
+		"nombre": "Técnico",   # [traducir]
+		"gritos": ["¡Socorro!", "¡Estoy en el almacén!", "¡No toquéis el agua!", "¡Aquí dentro!", "¡Que alguien me saque!"],   # [traducir]
+		"rescate": "averia", "al_abrir": "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado",   # [traducir]
+		"desc": "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano",   # [traducir]
 		"habilidad": {"tipo": "aturdir", "cada": 3.0, "segundos": 1.5, "alcance": 260.0},   # (hasta el 27 oct, 1 s cada 4)
-		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},
+		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},   # [traducir]
 }
 const MAX_EQUIPO := 4
 
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
-const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que alguien me saque!", "¡Estoy en el baño!"]
+const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que alguien me saque!", "¡Estoy en el baño!"]   # [traducir]
 const CADA := [2.2, 3.4]
+# Lo que dice si le dan con Johnny lejos (en la horda y en la escolta de la farmacéutica)
+const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # [traducir]
 
 # La horda (números provisionales, los del JS)
 const HORDA := {
@@ -105,7 +114,8 @@ const TIPOS := [
 	["lento", "normal", "normal"],
 	["normal", "normal", "rapido", "rapido", "explosivo", "lento"],
 ]
-# Lo que va diciendo según lo que lleva de cerradura (de 0 a 1)
+# Lo que va diciendo según lo que lleva de cerradura (de 0 a 1; en español: sale con Idioma.t)
+# [traducir]
 const FRASES := [
 	[0.02, "¡Está atascada! ¡Cúbreme!"],
 	[0.15, "Esta cerradura está oxidada… dame tiempo"],
@@ -115,10 +125,26 @@ const FRASES := [
 	[0.8, "Ya casi lo tengo…"],
 	[0.92, "¡Un poco más!"],
 ]
-# Por dónde entra cada grupo (en las tiendas, también por sus habitaciones)
+# Por dónde entra cada grupo (en las tiendas, también por sus habitaciones; en español: sale con Idioma.t, también
+# en barricada.gd)
 const POR := {"salon": "el salón", "cocina": "la cocina", "dormitorio": "el dormitorio", "bano": "el baño", "pasillo": "el pasillo",
 	"tienda": "la tienda", "almacen": "el almacén", "camara": "la cámara", "taller": "el taller",
 	"taquillas": "las taquillas", "probadores": "los probadores", "rebotica": "la rebotica"}
+# [/traducir]
+
+
+# El nombre de un superviviente (sus datos, los de DATOS), ya traducido: sin artículo y con mayúscula («Técnico» →
+# "Technician"; las frases ponen «el %s» / "the %s"). El del militar lleva contexto: sin él, «Militar» es la rama de
+# talentos (talentos.gd), que en inglés se dice de otra manera
+static func nombre_de(def: Dictionary) -> String:
+	if def.get("id", "") == "militar":
+		return Idioma.t("Militar", "superviviente")
+	return Idioma.t(def.get("nombre", ""))
+
+
+# Lo que hace en el equipo, ya traducido
+static func desc_de(def: Dictionary) -> String:
+	return Idioma.t(def.get("desc", ""))
 
 var partida: Node
 var johnny: Node2D
@@ -314,7 +340,7 @@ func actualizar_socorro(delta: float) -> void:
 		return
 	grito_t = tiempo
 	var gritos: Array = rescate.def.get("gritos", GRITOS)
-	texto_flotante(donde + Vector2(randf_range(-14, 14), 0), gritos[randi() % gritos.size()], Color("#ff8a8a"), tamano)
+	texto_flotante(donde + Vector2(randf_range(-14, 14), 0), Idioma.t(gritos[randi() % gritos.size()]), Color("#ff8a8a"), tamano)
 
 
 # En el pasillo, la puerta del apartamento del superviviente
@@ -371,7 +397,8 @@ func abrir_escondite(idx: int) -> void:
 			partida.mapa.rehornear()
 	await get_tree().create_timer(0.4, false).timeout
 	if npc and partida.aqui == idx:
-		npc.decir(rescate.def.get("al_abrir", "¡Gracias! ¡Sácame de aquí!"))
+		var dice: String = rescate.def.get("al_abrir", "")
+		npc.decir(Idioma.t(dice) if dice != "" else Idioma.t("¡Gracias! ¡Sácame de aquí!"))
 
 
 # Johnny se le arrima con la puerta abierta: se une al equipo
@@ -385,7 +412,7 @@ func unir(a: Aliado) -> void:
 	rescate.amigo = a
 	rescate.sitio = partida.aqui
 	npc = null
-	partida.decir("¡%s se une al equipo! %s" % [a.def.nombre, a.def.desc], 3.5)
+	partida.decir(Idioma.t("¡%s se une al equipo! %s") % [nombre_de(a.def), desc_de(a.def)], 3.5)
 	partida.tutorial("supervivientes")
 	Sonido.tocar("limpio")
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
@@ -422,7 +449,7 @@ func actualizar_horda(delta: float) -> void:
 		if h.levantando >= HORDA.levantar:
 			h.levantando = 0.0
 			a.levantarse()
-			a.decir("¡Gracias! Sigo con la cerradura")
+			a.decir(Idioma.t("¡Gracias! Sigo con la cerradura"))
 			Particulas.anillo(a, a.global_position, 50.0, Tema.VERDE, 0.4)
 	elif a.en_su_sitio():
 		# la cerradura avanza mientras él esté de pie delante de la puerta
@@ -431,7 +458,7 @@ func actualizar_horda(delta: float) -> void:
 	while h.frase_i < FRASES.size() and k >= FRASES[h.frase_i][0]:
 		var frase: Array = FRASES[h.frase_i]
 		h.frase_i += 1
-		a.decir(frase[1])
+		a.decir(Idioma.t(frase[1]))
 		if frase[0] == 0.5:
 			soltar_provisiones(a)
 	# los últimos 10 segundos: aviso
@@ -465,7 +492,7 @@ func empezar_horda() -> void:
 	horda = {"t": 0.0, "hecho": 0.0, "grupo_t": 3.0, "frase_i": 0, "levantando": 0.0, "queja_t": -9.0}
 	partida.cerrada = true
 	partida.actualizar_puertas()
-	partida.decir("¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura" % a.def.nombre, 4.0)
+	partida.decir(Idioma.t("¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura") % nombre_de(a.def), 4.0)
 
 
 # Tres minutos después: la puerta se abre. Los zombis que queden siguen ahí, pero ya se puede salir
@@ -480,8 +507,8 @@ func acabar_horda() -> void:
 	a.remove_from_group("presa")
 	partida.cerrada = false
 	partida.actualizar_puertas()
-	a.decir("¡YA ESTÁ! ¡CORRE!")
-	partida.decir("¡Puerta abierta! Salid de aquí", 3.0)
+	a.decir(Idioma.t("¡YA ESTÁ! ¡CORRE!"))
+	partida.decir(Idioma.t("¡Puerta abierta! Salid de aquí"), 3.0)
 	Sonido.tocar("limpio")
 	get_tree().create_timer(0.25, false).timeout.connect(Sonido.tocar.bind("puerta"))
 
@@ -498,10 +525,10 @@ func al_herir(cae: bool, a: Aliado) -> void:
 		return
 	if cae:
 		horda.levantando = 0.0
-		a.decir("¡Ayúdame, no puedo levantarme!")
+		a.decir(Idioma.t("¡Ayúdame, no puedo levantarme!"))
 	elif johnny.position.distance_to(a.position) > HORDA.lejos and horda.t - horda.queja_t > 6.0:
 		horda.queja_t = horda.t
-		a.decir(["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"][randi() % 3])
+		a.decir(Idioma.t(LLAMADAS[randi() % LLAMADAS.size()]))
 
 
 # A mitad: tira un molotov, una granada y dos cajas de munición a sus pies
@@ -535,7 +562,7 @@ func grupo(n: int, tipos: Array) -> void:
 		puestos += 1
 	var a: Aliado = rescate.amigo
 	if puestos > 0 and POR.has(sala.uso) and randf() < 0.5 and a.dicho_t > 2.5:
-		a.decir("¡Vienen por %s!" % POR[sala.uso])
+		a.decir(Idioma.t("¡Vienen por %s!") % Idioma.t(POR[sala.uso]))
 
 
 # ═════════════ Los vecinos, en las viviendas ═════════════
@@ -595,7 +622,7 @@ func llevar_vecino(v: Aliado) -> void:
 	for i in equipo.size():
 		equipo[i].idx = i
 	Guardado.cambiar(func(g): g.acompanante = v.def.id)
-	partida.decir("%s te acompaña · %s" % [v.def.nombre, v.def.desc], 3.0)
+	partida.decir(Idioma.t("%s te acompaña · %s") % [nombre_de(v.def), desc_de(v.def)], 3.0)
 	Sonido.tocar("limpio")
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
@@ -647,8 +674,9 @@ func dibujar_capa() -> void:
 	var relleno := (Color("#ff2d4b") if int(tiempo * 6.0) % 2 else Color("#7a2030")) if a.caido else Color("#e0b030")
 	capa.draw_rect(Rect2(x, y + 16, ancho * horda.hecho / HORDA.dura, 10), relleno)
 	capa.draw_rect(Rect2(x, y + 16, ancho, 10), Tema.LINEA, false, 2.0)
-	var texto: String = ("¡%s ha caído!" % a.def.nombre) if a.caido \
-		else "%s fuerza la cerradura · %d:%02d" % [a.def.nombre, falta / 60, falta % 60]
+	# (con contexto: el «¡%s ha caído!» de partida.gd es el de los jefes, que en inglés no lleva "the")
+	var texto: String = (Idioma.t("¡%s ha caído!", "superviviente") % nombre_de(a.def)) if a.caido \
+		else Idioma.t("%s fuerza la cerradura · %d:%02d") % [nombre_de(a.def), falta / 60, falta % 60]
 	capa.draw_string_outline(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, 4, Tema.LINEA)
 	capa.draw_string(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16,
 		Color("#ff8a8a") if a.caido else Color("#f2e6c0"))
@@ -685,10 +713,10 @@ func flecha(hacia: Vector2, color: Color, grande: bool) -> void:
 func probar_aqui(fundir := true, quien := "") -> void:
 	var sup: Dictionary = partida.planta.get("superviviente", {})
 	if partida.cerrada or sup.is_empty():
-		partida.decir("Ahora no se puede")
+		partida.decir("Ahora no se puede")   # no-tr (panel de pruebas: no se traduce)
 		return
 	if rescate.get("rescatado", false):
-		partida.decir("Ya lo has rescatado en esta partida")
+		partida.decir("Ya lo has rescatado en esta partida")   # no-tr
 		return
 	var propios := de_edificio(partida.edificio)
 	var num: int = partida.planta.num
@@ -700,9 +728,9 @@ func probar_aqui(fundir := true, quien := "") -> void:
 		partida.nueva_planta(num)   # la misma planta otra vez, ya con su tienda
 		sup = partida.planta.superviviente
 		if sup.is_empty():
-			partida.decir("Ahora no se puede")
+			partida.decir("Ahora no se puede")   # no-tr
 			return
-		partida.decir("Superviviente de prueba: %s (pulsa H otra vez para el siguiente)" % rescate.def.nombre, 3.0)
+		partida.decir("Superviviente de prueba: %s (pulsa H otra vez para el siguiente)" % rescate.def.nombre, 3.0)   # no-tr
 	elif rescate.is_empty():
 		poner_rescate(DATOS[propios.pick_random()], num)
 	rescate.planta = num
@@ -964,7 +992,7 @@ func probar_acompanantes() -> void:
 	await get_tree().create_timer(1.6, false).timeout
 	var como := []
 	for z in zombis:
-		como.append("vida %d aturdido %.1f" % [z.vida, z.aturdido] if is_instance_valid(z) else "muerto")
+		como.append("vida %d aturdido %.1f" % [z.vida, z.aturdido] if is_instance_valid(z) else "muerto")   # no-tr (prueba)
 	print("Acompañantes: zombis %s | charcos x%.1f" % [como, Aliado.charcos_a_medias(get_tree())])
 	for z in zombis:
 		if is_instance_valid(z):

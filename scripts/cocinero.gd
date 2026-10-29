@@ -115,7 +115,7 @@ func elegir(johnny: Node2D, d: float) -> void:
 	if espera.sarten <= 0.0 and d > 120.0 and d < 480.0:
 		espera.sarten = ESPERAS.sarten[f]
 		empezar("aviso_sarten", angulo)
-		gritar("¡CALENTITO!", Color("#ffb347"))
+		gritar(Idioma.t("¡CALENTITO!"), Color("#ffb347"))
 		return
 	if espera.lluvia <= 0.0:
 		espera.lluvia = ESPERAS.lluvia[f]
@@ -211,7 +211,7 @@ func libre(p: Vector2) -> bool:
 
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡A LA OLLA!")
+	super(johnny, Idioma.t("¡A LA OLLA!"))
 
 
 # ── Dibujo ──

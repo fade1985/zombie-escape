@@ -98,7 +98,7 @@ func elegir(johnny: Node2D) -> void:
 	if embiste and (not salta or randf() < 0.55):
 		espera_embestida = 2.5 if enfadado() else 3.2
 		apuntar(johnny, EMBESTIDAS[fase - 1], AVISO_EMBESTIDA[fase - 1])
-		gritar("¡ABRAZOS GRATIS!", Color("#ff5d73"), 20)
+		gritar(Idioma.t("¡ABRAZOS GRATIS!"), Color("#ff5d73"), 20)
 		return
 	if salta:
 		espera_salto = 3.0 if enfadado() else 4.0
@@ -128,7 +128,7 @@ func rebotar() -> void:
 	cambiar("aviso_embestida", {"quedan": datos.quedan, "aviso": AVISO_REBOTE})
 	Sonido.tocar("boing")
 	Temblor.temblar(5.0)
-	gritar("¡BOING!", Color("#ffd23f"), 18)
+	gritar(Idioma.t("¡BOING!"), Color("#ffd23f"), 18)
 
 
 # Salta hacia donde está Johnny (lo más cerca que se pueda andar: no cae dentro de un mueble)
@@ -171,7 +171,7 @@ func morir() -> void:
 
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
-	super(johnny, "¡HORA DE JUGAR!")
+	super(johnny, Idioma.t("¡HORA DE JUGAR!"))
 
 
 # En la foto de la prueba (--captura): saltando, con su sombra en el suelo donde va a caer
