@@ -2242,3 +2242,66 @@ func probar_continuar() -> void:
 	PartidaGuardada.borrar()
 	print("Continuar · borrada al acabar: %s (esperado: true)" % PartidaGuardada.guardada().is_empty())
 	get_tree().quit()
+
+
+# Con "--captura --relieve": el relieve con la luz (relieve.gd, los mapas de normales de Sprite Fusion). En la sala de
+# pruebas, a media luz, Johnny con la fregona entre dos zombis normales quietos y una lámpara de prueba a un lado.
+# Fotos sin relieve (captura-relieve-sin.png), con relieve y la luz a la izquierda (captura-relieve-izquierda.png) y
+# a la derecha (captura-relieve-derecha.png), y con la luz más alta (captura-relieve-alta.png)
+func probar_relieve() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "s"
+	johnny.get_node("Camara").reset_smoothing()
+	var z := [meter_zombi("normal", johnny.position + Vector2(-70, 0)), meter_zombi("normal", johnny.position + Vector2(70, 0))]
+	await get_tree().process_frame
+	var normal: SpriteFrames = load("res://assets/sprites/zombi-normal.tres")
+	for zombi in z:
+		zombi.diana = true   # quietos en su sitio y sin perder vida
+		zombi.casa = zombi.position
+		zombi.sprite.sprite_frames = normal   # (la ropa de siempre: las otras no tienen mapa)
+	# Johnny con la hoja de la fregona (la única suya con mapa), lleve lo que lleve
+	var fregona: Dictionary = Armas.DATOS.fregona
+	for s in [johnny.sprite, johnny.efectos, johnny.piernas]:
+		s.sprite_frames = fregona.hoja
+		s.offset = -fregona.pies
+	johnny.sprite.play("reposo_s")
+	var lampara := PointLight2D.new()
+	lampara.texture = Luz.TEXTURA
+	lampara.texture_scale = 1.2
+	lampara.energy = 1.3
+	lampara.color = Color(1.0, 0.85, 0.6)
+	lampara.range_item_cull_mask = Luz.TODAS
+	lampara.height = 24.0
+	add_child(lampara)
+	lampara.global_position = johnny.global_position + Vector2(-110, -30)
+	Luz.evento = 0.6
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-relieve-sin.png")
+	# el relieve: Johnny (el cuerpo, las piernas y los efectos van en la misma hoja) y los zombis
+	for s in [johnny.sprite, johnny.efectos, johnny.piernas]:
+		s.sprite_frames = Relieve.poner(s.sprite_frames)
+	for zombi in z:
+		zombi.sprite.sprite_frames = Relieve.poner(zombi.sprite.sprite_frames)
+	print("Relieve · con mapa: Johnny %s, zombi %s (esperado: true y true)" % [
+		johnny.sprite.sprite_frames.get_frame_texture(johnny.sprite.animation, 0).atlas is CanvasTexture,
+		z[0].sprite.sprite_frames.get_frame_texture(z[0].sprite.animation, 0).atlas is CanvasTexture])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-relieve-izquierda.png")
+	lampara.global_position = johnny.global_position + Vector2(110, -30)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-relieve-derecha.png")
+	lampara.height = 80.0
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-relieve-alta.png")
+	Luz.evento = 0.0
+	get_tree().quit()

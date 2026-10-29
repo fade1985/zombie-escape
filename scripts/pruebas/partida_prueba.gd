@@ -49,6 +49,8 @@
 #                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
+#   --relieve           el relieve con la luz (mapas de normales): Johnny y dos zombis con y sin relieve, con una
+#                       lámpara a cada lado                                                [prueba_varias.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
@@ -298,6 +300,9 @@ func empezar_prueba() -> void:
 	elif "--pistola-electrica" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pistola_electrica()
+	elif "--relieve" in args:
+		set_process(false)   # sin la prueba larga
+		probar_relieve()
 	elif "--tintes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tintes()
