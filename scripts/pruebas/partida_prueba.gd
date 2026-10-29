@@ -115,6 +115,8 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --rendimiento       cuánto tarda cada fotograma durante el latigazo del Glotón (3 y 6 lenguas); en la web, el atasco
+#                       de los draw_circle (docs/WEB.md)                                       [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, y se guarda [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: las pistas sobre Johnny, el latido del HUD, la
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
@@ -420,6 +422,9 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--rendimiento" in args:
+		set_process(false)   # sin la prueba larga
+		probar_rendimiento()
 	elif "--pantalla" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pantalla()

@@ -34,6 +34,21 @@
 - Para probar un cambio sin pisar `web/` (por ejemplo, las letras de otro idioma), exportar a una carpeta temporal y servirla sin caché: ver
   «Probar en la web» en `docs/IDIOMAS.md`. Lo que se ve bien en el ordenador puede fallar en la web, que no trae letras del sistema.
 
+## Lo que se atasca en la web
+
+- **`draw_circle` (y los polígonos) en cantidad.** En la web cada `draw_circle` es un polígono con sus propios buffers
+  de dibujo, y unos cientos por fotograma la ahogan: el latigazo del Glotón (6 lenguas × unos 290 dibujos) tardaba más
+  de **un segundo por fotograma** (5 fotogramas seguidos: el juego «se ralentizaba y se paraba»; en el ordenador, 7 ms).
+  Las líneas, los rectángulos y `draw_primitive` (que son «primitivas») aguantan miles. Por eso `Tentaculo.pintar`
+  (lenguas y tentáculos) pinta cada trozo con un solo `draw_primitive` (`Tentaculo.trozos`) y las ventosas con
+  `Tentaculo.disco` (dos cuadrados). Si algo se atasca solo en la web, mirar primero cuántos `draw_circle` o
+  `draw_colored_polygon` hace por fotograma.
+- **Medirlo:** `-- --captura --rendimiento` (`prueba_varias.gd`, `probar_rendimiento`) imprime cuánto tarda cada
+  fotograma durante el latigazo del Glotón (media y peor, en ms; vale 16 ms a 60 fps, y con más de 50 el juego se
+  nota parado). En la web se pone en `"args"` de `GODOT_CONFIG` del `index.html` exportado (`["--", "--captura",
+  "--rendimiento"]`) y se lee en la consola del navegador. Ojo: el `index.html` se pisa al exportar; y el navegador de
+  la app de Claude no tiene el foco de la ventana pero sí sirve para medir.
+
 ## Lo que suena distinto en la web
 
 - Se quita todo el sonido cuando la página se oculta (otra pestaña, móvil bloqueado) **y también cuando pierde el

@@ -147,31 +147,57 @@ func latigo(raiz: Vector2, suelo: Vector2, t: float, dura: float, lado: float) -
 # Pinta los trozos del tentáculo de "desde" a "hasta" (por sus puntos), igual que los de su dibujo: el contorno y
 # encima las capas, cada una más clara y más pequeña y arrimada al lado de la luz; y las ventosas, por el lado de la
 # sombra. Grueso en la base y fino en la punta
+# Un disco, hecho con dos cuadrados (uno recto y otro girado 45°): un octógono que a este tamaño no se distingue de un
+# círculo. Se pinta así y no con draw_circle porque en la web cada draw_circle es un polígono con sus propios buffers
+# (--rendimiento: unos cientos por fotograma tardaban más de un segundo)
+static func disco(lienzo: CanvasItem, centro: Vector2, radio: float, color: Color) -> void:
+	var a := radio * 0.96
+	lienzo.draw_rect(Rect2(centro - Vector2(a, a), Vector2(a, a) * 2.0), color)
+	var u := Vector2(0.70710678, 0.70710678) * a
+	lienzo.draw_line(centro - u, centro + u, color, a * 2.0)
+
+
+# Un trozo de cada vez: un cuadrilátero que va de un punto al siguiente, con su ancho en cada punta ("mitades": medio
+# ancho en cada punto), y un solo dibujo por trozo. Con círculos y líneas eran unos 290 dibujos por lengua y la web se
+# atascaba con cuatro o seis a la vez (--rendimiento). "normales": hacia el lado de cada punto
+static func trozos(lienzo: CanvasItem, centros: PackedVector2Array, normales: PackedVector2Array,
+		mitades: PackedFloat32Array, desde: int, hasta: int, color: Color) -> void:
+	var colores := PackedColorArray([color])
+	var sin_uv := PackedVector2Array()
+	for i in range(desde, hasta):
+		var na := normales[i] * mitades[i]
+		var nb := normales[i + 1] * mitades[i + 1]
+		lienzo.draw_primitive(PackedVector2Array([centros[i] + na, centros[i + 1] + nb, centros[i + 1] - nb, centros[i] - na]),
+			colores, sin_uv)
+
+
 func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: int) -> void:
 	var r := PackedFloat32Array()
+	var normales := PackedVector2Array()
 	var luz := PackedVector2Array()     # hacia dónde se arriman las capas claras (de lado al tentáculo)
 	var sombra := PackedVector2Array()  # el lado contrario, el de las ventosas
 	for i in PUNTOS + 1:
 		r.append((fino + (grueso - fino) * pow(1.0 - float(i) / PUNTOS, 0.8)) * gordo)
 		var n := (puntos[mini(i + 1, PUNTOS)] - puntos[maxi(i - 1, 0)]).orthogonal().normalized()
+		normales.append(n)
 		# Del todo al borde de la luz, salvo cuando el tentáculo va justo hacia la luz: ahí pasa poco a poco por el
 		# medio, para que el brillo no salte de un borde al otro
 		var cuanto := clampf(n.dot(LUZ.normalized()) * 2.5, -1.0, 1.0)
 		luz.append(n * cuanto)
 		sombra.append(-n if cuanto >= 0.0 else n)
-	# La parte de delante empieza cortada en recto, sin redondel: así no se nota la juntura con la de detrás
-	var primero := desde + 1 if desde > 0 else 0
-	for i in range(primero, hasta + 1):
-		lienzo.draw_circle(puntos[i], r[i] + borde, contorno)
-	for i in range(desde, hasta):
-		lienzo.draw_line(puntos[i], puntos[i + 1], contorno, r[i] + r[i + 1] + borde * 2.0)
+	# El contorno y, encima, las capas (cada una, más estrecha y más arrimada a la luz). La parte de delante (desde > 0)
+	# empieza cortada en recto: así no se nota la juntura con la de detrás
+	var mitades := PackedFloat32Array()
+	for i in PUNTOS + 1:
+		mitades.append(r[i] + borde)
+	trozos(lienzo, puntos, normales, mitades, desde, hasta, contorno)
 	for capa in capas:
 		var arrima: float = 1.0 - capa[1]
-		for i in range(primero, hasta + 1):
-			lienzo.draw_circle(puntos[i] + luz[i] * r[i] * arrima, maxf(0.5, r[i] * capa[1]), capa[0])
-		for i in range(desde, hasta):
-			lienzo.draw_line(puntos[i] + luz[i] * r[i] * arrima, puntos[i + 1] + luz[i + 1] * r[i + 1] * arrima,
-				capa[0], maxf(1.0, (r[i] + r[i + 1]) * capa[1]))
+		var centros := PackedVector2Array()
+		for i in PUNTOS + 1:
+			centros.append(puntos[i] + luz[i] * r[i] * arrima)
+			mitades[i] = maxf(0.5, r[i] * capa[1])
+		trozos(lienzo, centros, normales, mitades, desde, hasta, capa[0])
 	# Las ventosas, en fila por el lado de la sombra (hasta cerca de la punta)
 	if ventosas.is_empty():
 		return
@@ -187,8 +213,8 @@ func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: i
 		# aros: el aro con su sombra hacia fuera, el hueco oscuro y un punto de brillo hacia la luz
 		var v := puntos[i] + sombra[i] * r[i] * 0.4
 		var tam := maxf(1.5, r[i] * 0.38)
-		lienzo.draw_circle(v, tam + 0.5, contorno)
-		lienzo.draw_circle(v + sombra[i] * 0.5, tam, ventosas.sombra)
-		lienzo.draw_circle(v - sombra[i] * 0.3, tam - 0.5, ventosas.aro)
-		lienzo.draw_circle(v, maxf(0.5, tam * 0.45), ventosas.hueco)
+		disco(lienzo, v, tam + 0.5, contorno)
+		disco(lienzo, v + sombra[i] * 0.5, tam, ventosas.sombra)
+		disco(lienzo, v - sombra[i] * 0.3, tam - 0.5, ventosas.aro)
+		disco(lienzo, v, maxf(0.5, tam * 0.45), ventosas.hueco)
 		lienzo.draw_rect(Rect2((v - sombra[i] * tam * 0.7).floor(), Vector2.ONE), ventosas.brillo)
