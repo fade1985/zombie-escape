@@ -166,11 +166,13 @@ static func apuntar(id: String) -> void:
 	Guardado.cambiar(func(s): if not id in s.tutoriales: s.tutoriales.append(id))
 
 
-# Que vuelvan a salir todos (el botón de Opciones → Ayudas)
+# Que vuelvan a salir todos (el botón de Opciones → Ayudas), también la guía de la primera partida (guia.gd)
 static func olvidar() -> void:
 	vistos = []
 	vistos_de = Guardado.archivo
-	Guardado.cambiar(func(s): s.tutoriales = [])
+	Guardado.cambiar(func(s):
+		s.tutoriales = []
+		s.guia_otra_vez = true)
 
 
 # Si sale en la lista del apartado Tutorial (los demás, con «???»)
@@ -197,17 +199,23 @@ static func cuando_de(id: String) -> String:
 static func texto(id: String) -> String:
 	var lineas: Array = []
 	for l: String in LISTA[id].lineas:
-		var t := Idioma.t(l).replace("{atacar_modo}", atacar_modo())
-		while t.contains("{"):
-			var a := t.find("{")
-			var b := t.find("}", a)
-			var accion := t.substr(a + 1, b - a - 1)
-			var nombre := tecla(accion)
-			if a == 0:   # al principio de la frase, con mayúscula
-				nombre = nombre.left(1).to_upper() + nombre.substr(1)
-			t = t.left(a) + "[color=#%s]%s[/color]" % [Tema.AMARILLO.to_html(false), nombre] + t.substr(b + 1)
-		lineas.append("• " + t)
+		lineas.append("• " + con_teclas(Idioma.t(l)))
 	return "\n".join(lineas)
+
+
+# Una frase ya traducida con sus {acciones} cambiadas por las teclas, en amarillo (también la usan las pistas de la
+# primera partida, guia.gd)
+static func con_teclas(texto_traducido: String) -> String:
+	var t := texto_traducido.replace("{atacar_modo}", atacar_modo())
+	while t.contains("{"):
+		var a := t.find("{")
+		var b := t.find("}", a)
+		var accion := t.substr(a + 1, b - a - 1)
+		var nombre := tecla(accion)
+		if a == 0:   # al principio de la frase, con mayúscula
+			nombre = nombre.left(1).to_upper() + nombre.substr(1)
+		t = t.left(a) + "[color=#%s]%s[/color]" % [Tema.AMARILLO.to_html(false), nombre] + t.substr(b + 1)
+	return t
 
 
 # Cómo se ataca, según el modo elegido (johnny.gd, MODOS)

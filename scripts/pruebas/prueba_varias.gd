@@ -1625,7 +1625,7 @@ func correr_un_rato(centro: Vector2) -> float:
 # (captura-tentaculos-aviso-abajo.png, -arriba, -lado, -diagonal, -pared) y dando el latigazo
 # (captura-tentaculos-latigazo-abajo.png...). En la terminal, la animación y el fotograma de cada momento
 func probar_tentaculos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1732,13 +1732,13 @@ func probar_tentaculos() -> void:
 	get_tree().quit()
 
 
-# --latigazos: los tres latigazos del gerente mutado (tentaculo.gd), en la sala de pruebas (F11), con Johnny abajo,
+# --latigazos: los tres latigazos del gerente mutado (tentaculo.gd), en la sala de pruebas (F9), con Johnny abajo,
 # arriba, de lado, en diagonal, en diagonal por detrás (de espaldas) y junto a la pared de la derecha (que los corta):
 # avisando (captura-latigazos-aviso-abajo.png, -arriba, -lado, -diagonal, -espalda, -pared) y dando el latigazo
 # (captura-latigazos-latigazo-abajo.png...). La cámara, algo más lejos, sin los límites de la sala y centrada en el
 # gerente y sus latigazos. En la terminal, la animación y hasta dónde llega cada tentáculo (y si choca)
 func probar_latigazos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1798,14 +1798,14 @@ func probar_latigazos() -> void:
 	get_tree().quit()
 
 
-# --lenguas: las lenguas del Glotón y de la criatura del científico mutado (lengua.gd), en la sala de pruebas (F11):
+# --lenguas: las lenguas del Glotón y de la criatura del científico mutado (lengua.gd), en la sala de pruebas (F9):
 # avisando (captura-lenguas-<quién>-aviso-<caso>.png) y dando el golpe (captura-lenguas-<quién>-golpe-<caso>.png), con
 # Johnny abajo, arriba, de lado, en diagonal y junto a la pared de la derecha (que las corta: el aviso acaba en
 # estrella); el Glotón, también enfadado (seis lenguas). La cámara, algo más lejos, sin los límites de la sala y
 # centrada entre el jefe y sus lenguas; y, de cerca (a 2, -cerca), la boca y el principio de las lenguas abajo y de
 # lado. En la terminal, la animación y hasta dónde llega cada lengua (y si choca)
 func probar_lenguas() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1896,13 +1896,13 @@ func probar_lenguas() -> void:
 	get_tree().quit()
 
 
-# --disparos: las barras de aviso de los disparos de los jefes (aviso.gd, barra) en la sala de pruebas (F11): los
+# --disparos: las barras de aviso de los disparos de los jefes (aviso.gd, barra) en la sala de pruebas (F9): los
 # contratos del gerente, los alfileres de la modista, los cuchillos del cocinero y las bolas de fuego de la criatura del
 # científico, junto a la pared de la derecha (que las corta, como corta a los disparos) y en campo abierto
 # (captura-disparos-<quién>-<caso>.png). Cada jefe, quieto y con el aviso casi lleno. En la terminal, hasta dónde llega
 # cada barra, a cuánto queda la pared de verdad (un rayo de la capa 1) y lo largas que serían sin pared
 func probar_disparos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1986,12 +1986,12 @@ func probar_disparos() -> void:
 
 # --golpes-pared: ¿los golpes de los jefes (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo y hachazo, y los de
 # área: el círculo de la portera, los saltos de la mascota y del Gymbro y la onda de la criatura) atraviesan las
-# paredes? En la sala de pruebas (F11), cada jefe pegando (se llama a su golpe) con Johnny justo al otro lado de la
+# paredes? En la sala de pruebas (F9), cada jefe pegando (se llama a su golpe) con Johnny justo al otro lado de la
 # pared de la derecha, a su alcance, y, de control, con Johnny a la misma distancia en campo abierto. En la terminal,
 # si el golpe le quita vida y si hay pared entre los dos (un rayo de la capa 1); y, con fotos, el aviso de cada uno a
 # 45 de la pared (captura-golpes-pared-<nombre>.png): cortado donde el golpe se pararía
 func probar_golpes_pared() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -2249,7 +2249,7 @@ func probar_continuar() -> void:
 # Fotos sin relieve (captura-relieve-sin.png), con relieve y la luz a la izquierda (captura-relieve-izquierda.png) y
 # a la derecha (captura-relieve-derecha.png), y con la luz más alta (captura-relieve-alta.png)
 func probar_relieve() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -2304,4 +2304,131 @@ func probar_relieve() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-relieve-alta.png")
 	Luz.evento = 0.0
+	get_tree().quit()
+
+
+# --guiado: el tutorial disimulado de la primera partida (guia.gd): las pistas encima de Johnny en orden, el latido del
+# HUD, la flecha del suelo, el apartamento fácil, la llavecita del zombi de la llave y que no sale ninguna ventana
+func probar_guiado() -> void:
+	johnny.invencible = true
+	var ventanas := func() -> int:
+		return get_children().filter(func(h): return h is Tutorial).size()
+	# espera a que salga la pista "id" (o se canse) y saca su foto
+	var esperar := func(id: String, foto: String) -> void:
+		for _i in 40:
+			if guia.pista == id:
+				break
+			await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.4).timeout
+		print("Guía · pista «%s» (esperado: %s) · latido «%s»" % [guia.pista, id, get_node("Pantalla/HUD").latido])
+		Captura.foto(foto)
+	await get_tree().create_timer(0.5).timeout
+	print("Guía · activa (no es la primera partida, pero se pidió repetirla): %s · pedida aún: %s (esperado: true, false)" % [
+		guia.activa, Guardado.cargar().guia_otra_vez])
+	await esperar.call("moverse", "captura-guiado-moverse.png")
+	johnny.position += Vector2(120, 0)
+	await get_tree().create_timer(1.6).timeout
+	await esperar.call("esquivar", "captura-guiado-esquivar.png")
+	johnny.esquivar(Vector2.LEFT)
+	await get_tree().create_timer(1.8).timeout
+	print("Guía · flecha a la vista en la sala de mantenimiento: %s (esperado: true)" % guia.flecha.visible)
+	Captura.foto("captura-guiado-flecha.png")
+	# el pasillo: el aviso y la flecha hacia el apartamento fácil
+	await montar(0, planta.sitios[aqui].salidas[0].vuelta)
+	await get_tree().create_timer(0.8).timeout
+	var facil: Dictionary = planta.sitios[guia.facil]
+	var puerta_facil := -1
+	for i in planta.sitios[0].salidas.size():
+		if planta.sitios[0].salidas[i].get("a", -1) == guia.facil:
+			puerta_facil = i
+	print("Guía · en el pasillo la flecha lleva al fácil: %s · visto «apartamentos»: %s (esperado: true, true)" % [
+		guia.destino() == mapa.puertas[puerta_facil], Tutoriales.visto("apartamentos")])
+	Captura.foto("captura-guiado-pasillo.png")
+	print("Guía · el fácil: %d zombis, con la llave %s, armarito %s (esperado: ≤%d, false, vendas)" % [facil.zombis.size(),
+		facil.zombis.any(func(z): return z.get("llave", false)),
+		facil.armaritos[0].dentro if not facil.get("armaritos", []).is_empty() else "sin baño", Guia.FACIL])
+	# el apartamento fácil: los zombis, despiertos y quietos, a la vista
+	await montar(guia.facil, 0)
+	await get_tree().create_timer(0.3).timeout
+	var zombis := get_tree().get_nodes_in_group("zombis")
+	for i in zombis.size():
+		zombis[i].dormido = false
+		zombis[i].set_physics_process(false)
+		zombis[i].position = johnny.position + Vector2(-200 + 200 * i, -330)   # (más lejos que Guia.CERCA)
+	johnny.set_physics_process(false)   # (quieto: que no los mate ni gaste las balas él solo en el modo asistido)
+	await esperar.call("atacar", "captura-guiado-atacar.png")
+	await get_tree().create_timer(4.2).timeout   # (en el modo asistido se va sola a los 4 s)
+	await esperar.call("pistola", "captura-guiado-pistola.png")
+	johnny.cambiar_mano()
+	await get_tree().create_timer(1.7).timeout
+	johnny.balas = 2
+	await esperar.call("recargar", "captura-guiado-recargar.png")
+	johnny.empezar_recarga()
+	await get_tree().create_timer(1.7).timeout
+	mochila.append("vendas")
+	johnny.vida = johnny.stats.vida_max - 30
+	await esperar.call("vendas", "captura-guiado-vendas.png")
+	usar_cura("vendas")
+	await get_tree().create_timer(1.7).timeout
+	for i in zombis.size():
+		zombis[i].position = johnny.position + Vector2(-120 + 120 * i, -150)
+	await esperar.call("lanzar", "captura-guiado-lanzar.png")
+	lanzables.cantidades[lanzables.tipo] -= 1
+	await get_tree().create_timer(1.7).timeout
+	print("Guía · vistos jugar %s, municion %s, curas %s, lanzables %s · ventanas abiertas: %d (esperado: true ×4, 0)" % [
+		Tutoriales.visto("jugar"), Tutoriales.visto("municion"), Tutoriales.visto("curas"), Tutoriales.visto("lanzables"),
+		ventanas.call()])
+	# el zombi de la llave, en otro apartamento: su llavecita y el aviso al despertar
+	for z in zombis:
+		z.queue_free()
+	johnny.set_physics_process(true)
+	var con_llave := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and planta.sitios[i].zombis.any(func(z): return z.get("llave", false)):
+			con_llave = i
+	await montar(con_llave, 0)
+	await get_tree().create_timer(0.3).timeout
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.has_meta("llave"):
+			z.dormido = false
+			z.set_physics_process(false)
+			z.position = johnny.position + Vector2(0, -170)
+			print("Guía · el zombi de la llave lleva su llavecita: %s (esperado: true)" % (z.get_node_or_null("MarcaLlave") != null))
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-guiado-llave.png")
+	# al subir a la planta siguiente, se apaga
+	nueva_planta(2)
+	print("Guía · en la 1ª planta: activa %s (esperado: false)" % guia.activa)
+	Tutoriales.olvidar()
+	print("Guía · tras «Que vuelvan a salir todos»: pedida %s (esperado: true)" % Guardado.cargar().guia_otra_vez)
+	get_tree().quit()
+
+
+# --pantalla: la pantalla completa del ordenador (pantalla.gd): F11 y Alt+Intro la ponen y la quitan, el ajuste se guarda
+# y F9 (la sala de pruebas) sigue yendo aparte
+func probar_pantalla() -> void:
+	var pulsar := func(tecla: Key, alt := false) -> void:
+		for pulsada in [true, false]:
+			var evento := InputEventKey.new()
+			evento.keycode = tecla
+			evento.alt_pressed = alt
+			evento.pressed = pulsada
+			Input.parse_input_event(evento)
+		await get_tree().create_timer(0.6).timeout
+	var estado := func() -> String:
+		return "completa" if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN else "ventana"
+	await get_tree().create_timer(0.5).timeout
+	Guardado.cambiar(func(g): g.ajustes.pantalla_completa = false)
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	await get_tree().create_timer(0.3).timeout
+	print("Pantalla · al empezar: %s (esperado: ventana)" % estado.call())
+	await pulsar.call(KEY_F11)
+	print("Pantalla · tras F11: %s · guardado %s (esperado: completa, true)" % [estado.call(), Guardado.ajuste("pantalla_completa")])
+	await pulsar.call(KEY_ENTER, true)
+	print("Pantalla · tras Alt+Intro: %s · guardado %s (esperado: ventana, false)" % [estado.call(), Guardado.ajuste("pantalla_completa")])
+	await pulsar.call(KEY_ENTER)
+	print("Pantalla · Intro sin Alt: %s (esperado: ventana)" % estado.call())
+	await pulsar.call(KEY_F11)
+	await pulsar.call(KEY_F11)
+	print("Pantalla · F11 dos veces: %s (esperado: ventana)" % estado.call())
 	get_tree().quit()

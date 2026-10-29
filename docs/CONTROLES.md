@@ -34,6 +34,10 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   y la alerta) sale una ventana con el juego parado: foto, qué pasa y con qué teclas (las del jugador, las del mando si
   hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la cierran. El botón **Tutorial** del menú
   principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega*).
+  En la **primera partida**, la planta baja no saca las ventanas de lo básico: lo enseña jugando (`guia.gd`), con
+  pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo. El botón
+  *Que vuelvan a salir todos* de Opciones → Ayudas también la reactiva: sale en la próxima partida de los Apartamentos
+  aunque no sea la primera (`guia_otra_vez` en el guardado; se apaga sola al empezarla).
 - **Munición:** va por tipos (balas de pistola, que también gasta la MP5; cartuchos; gasolina, ácido y baterías) en 8
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
   en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12
@@ -70,9 +74,10 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 
 ## La sala de pruebas
 
-Todo lo de probar está en un solo sitio. **F11**, desde cualquier sitio de cualquier planta, lleva a la **sala de
-pruebas**; **F11** otra vez (o su puerta) vuelve justo adonde estabas. Con la puerta de un apartamento cerrada, no se
-puede ir. En el navegador, F11 también pone la pantalla completa. Lo que pasa allí no cuenta: los zombis no sueltan
+Todo lo de probar está en un solo sitio. **F9**, desde cualquier sitio de cualquier planta, lleva a la **sala de
+pruebas**; **F9** otra vez (o su puerta) vuelve justo adonde estabas. Con la puerta de un apartamento cerrada, no se
+puede ir. Solo funciona al jugar desde el editor (y en las pruebas `--captura`): en el juego exportado, F9 no hace
+nada. Lo que pasa allí no cuenta: los zombis no sueltan
 nada, no se apuntan en las Colecciones y, al salir, Johnny vuelve a llevar lo que llevaba (armas, balas, mochila y
 arrojables).
 
@@ -98,7 +103,7 @@ arrojables).
 | Zombis | un botón por tipo (atajo: **1…8**: normal, lento, rápido, explosivo, tentáculos, venenoso, vigilante, dependienta), **Cuántos** (1, 3, 5 o 10) y **Borrar todos** |
 | Ayudas | se encienden y se apagan: cada línea de ayuda, el panel de daño, los avisos de los jefes en el suelo, la penumbra y **Esconder todo** (como el guion) |
 | Johnny | **Invencible**, **Munición sin fin**, la **Diana** (ponerla o quitarla) y **Siguiente skin** (no se guarda) |
-| Ir a | la **Exposición** (todos los muebles y zombis; F11 vuelve), la **Azotea**, el **Superviviente** (su apartamento ya sin zombis; en el centro comercial, cada vez el siguiente) y la sala de cada minijefe del edificio, en la planta que le tocó |
+| Ir a | la **Exposición** (todos los muebles y zombis; F9 vuelve), la **Azotea**, el **Superviviente** (su apartamento ya sin zombis; en el centro comercial, cada vez el siguiente) y la sala de cada minijefe del edificio, en la planta que le tocó |
 | Varios | **Mutaciones**, **Soltar un objeto**, **Piezas al baúl** (10 de cada familia y unas armas y arrojables mejorados, al baúl de verdad, para probar el banco), **Colecciones completas** y **Científico muerto** (la página siguiente; no se guarda) |
 
 En **Elige edificio**, la **N** abre todos los edificios hasta cerrar el juego.
@@ -154,7 +159,8 @@ JavaScript (los clics llegan como ratón).
 ## Guardado
 
 `%APPDATA%\Godot\app_userdata\Zombie Escape\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
-usa `guardado-prueba.json`. En la web va en el navegador (IndexedDB).
+usa `guardado-prueba.json`. En la web va en el navegador (IndexedDB). En la versión de Windows (`docs/ESCRITORIO.md`)
+es el mismo archivo. **Pantalla completa:** F11 o Alt+Intro (o su botón en Opciones y en el menú); se recuerda.
 
 La partida a medias se guarda al llegar a cada planta: si se cierra el juego, el menú enseña **Continuar partida**
 (con el edificio y la planta) y se vuelve al principio de esa planta, igual y con lo que se llevaba al llegar. Lo

@@ -13,6 +13,7 @@ config_version=5
 config/name="Zombie Escape"
 run/main_scene="res://escenas/menu_principal.tscn"
 config/features=PackedStringArray("4.7")
+config/icon="res://assets/icono.png"
 
 [audio]
 
@@ -24,6 +25,7 @@ Sonido="*res://scripts/sonido.gd"
 Botones="*res://scripts/ui/botones.gd"
 Temblor="*res://scripts/temblor.gd"
 Idioma="*res://scripts/idioma.gd"
+Pantalla="*res://scripts/pantalla.gd"
 
 [display]
 

@@ -20,6 +20,8 @@
 #     amarillas, que la F pasa al siguiente.
 #   - En el móvil, las armas y los lanzables van al lado de la barra: la esquina de la derecha es de los botones.
 #   - Ni la llave de la portera, ni la mochila, ni los dólares están aquí: se ven en el inventario.
+#   - En la primera partida, la guía (guia.gd) puede pedir que una parte lata ("latido": "balas", "curas", "lanzar" o
+#     "armas"): un marco amarillo alrededor que se abre y se cierra, para que se vea qué hay que usar.
 # Cada fotograma mira cómo está Johnny ("johnny") y lo que lleva la partida ("partida").
 extends Control
 
@@ -65,6 +67,8 @@ var barra := Control.new()
 var curas := Control.new()      # las vendas y el botiquín, al lado de la barra
 var armas := Control.new()      # las dos casillas de las armas
 var lanzar := Control.new()     # el lanzable de ahora y los demás
+var encima := Control.new()     # el marco del latido, por encima de todo
+var latido := ""                # la parte que late (la pide guia.gd; "" ninguna)
 var texturas := {}              # los iconos ya cargados
 
 # Las armas: cuál estaba en la mano y las animaciones al cambiar (de 0 a 1 el intercambio; las demás, de 1 a 0)
@@ -135,6 +139,9 @@ func _ready() -> void:
 	armas.custom_minimum_size = Vector2(MEDIANA + GRANDE + 12, GRANDE + 4)
 	armas.draw.connect(pintar_armas)
 	derecha.add_child(armas)
+	encima.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	encima.draw.connect(pintar_latido)
+	add_child(encima)
 
 
 func _process(delta: float) -> void:
@@ -159,6 +166,19 @@ func _process(delta: float) -> void:
 	curas.queue_redraw()
 	armas.queue_redraw()
 	lanzar.queue_redraw()
+	encima.queue_redraw()
+
+
+# El marco amarillo del latido, alrededor de la parte que pide la guía (las balas, encima de la barra de vida)
+func pintar_latido() -> void:
+	var cual: Control = {"curas": curas, "lanzar": lanzar, "armas": armas, "balas": barra}.get(latido)
+	if cual == null or not cual.visible:
+		return
+	var r := Rect2(cual.global_position - encima.global_position, cual.size * ESCALA)
+	if latido == "balas":
+		r = Rect2(r.position + Vector2(HUECO.position.x, -28) * ESCALA, Vector2(ANCHO * 0.55, 24) * ESCALA)
+	var k := 0.5 + 0.5 * sin(tiempo * 7.0)
+	encima.draw_rect(r.grow(4.0 + 4.0 * k), Color(Tema.AMARILLO, 0.5 + 0.5 * k), false, 3.0)
 
 
 func icono(nombre: String) -> Texture2D:

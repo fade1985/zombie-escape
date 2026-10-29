@@ -587,7 +587,7 @@ static func exposicion(pruebas: int) -> Dictionary:
 		"cerrojo": "", "aviso": ""}]}
 
 
-# La sala de pruebas (tecla F11): una habitación vacía y con luz, con un zombi que no se muere en el centro y el baúl
+# La sala de pruebas (tecla F9): una habitación vacía y con luz, con un zombi que no se muere en el centro y el baúl
 # de pruebas. Lo que tiene dentro lo pone sala_armas.gd. Su puerta vuelve al sitio del que se vino (partida.gd, cruzar;
 # "mant" solo sirve de relleno: en las plantas de arriba es -1).
 static func sala_armas(mant: int) -> Dictionary:

@@ -34,7 +34,7 @@ Reglas:
    mismo orden en los dos idiomas (GDScript no admite otro): si el inglés pide otro orden, se rehace la frase.
 2. **Plurales y géneros con `Idioma.n`**, no con `"s" if n > 1 else ""`.
 3. **No se traduce lo que no es texto del jugador:** ids, claves, nombres de nodos, rutas, mensajes de `print` (van a la
-   consola) y las herramientas internas (el panel F11, `sala_armas.gd` y `scripts/pruebas/`).
+   consola) y las herramientas internas (el panel F9, `sala_armas.gd` y `scripts/pruebas/`).
 4. **Números con decimales:** el español usa coma y el inglés punto (`0,5` / `0.5`). El texto de la frase lleva `%s` (nunca `%.1f`) y
    el número se escribe aparte con `Idioma.puntuar("%.1f" % x)`: `Idioma.t("%s ataques por segundo") % Idioma.puntuar("%.1f" % x)`.
 5. **Comillas y apóstrofos en inglés: rectos (`"` y `'`)**: a la letra normal le faltan los rizados (`tema.gd`).

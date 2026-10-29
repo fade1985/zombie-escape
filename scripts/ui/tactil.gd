@@ -74,9 +74,13 @@ static func vibracion() -> void:
 		Input.vibrate_handheld(35)
 
 
+# Pantalla completa o ventana. En el ordenador se guarda (ajuste «pantalla_completa») para arrancar igual la próxima vez
+# (pantalla.gd); en la web no, porque el navegador solo la deja poner tras un clic
 static func pantalla_completa() -> void:
 	var completa := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED if completa else DisplayServer.WINDOW_MODE_FULLSCREEN)
+	if not OS.has_feature("web"):
+		Guardado.cambiar(func(g): g.ajustes.pantalla_completa = not completa)
 
 
 func _ready() -> void:

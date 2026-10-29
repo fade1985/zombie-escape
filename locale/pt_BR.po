@@ -905,6 +905,46 @@ msgstr "TÔ COM FOME!"
 msgid "-%d ácido"
 msgstr "-%d ácido"
 
+#: scripts/guia.gd
+msgid "Limpia los apartamentos: al entrar, la puerta se cierra hasta que no quede ni un zombi"
+msgstr "Limpe os apartamentos: ao entrar, a porta se fecha até não sobrar nenhum zumbi"
+
+#: scripts/guia.gd
+msgid "¡Ese zombi lleva la llave del %s!"
+msgstr "Esse zumbi está com a chave do apto. %s!"
+
+#: scripts/guia.gd
+msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
+msgstr "Você perdeu um terço da vida: esse não se cura com bandagens, só com um kit médico"
+
+#: scripts/guia.gd
+msgid "Muévete con {moverse}"
+msgstr "Mova-se com {moverse}"
+
+#: scripts/guia.gd
+msgid "Esquiva con {esquivar}: no te hacen daño"
+msgstr "Desvie com {esquivar}: nada te machuca"
+
+#: scripts/guia.gd
+msgid "Saca la pistola con {cambiar_arma}"
+msgstr "Saque a pistola com {cambiar_arma}"
+
+#: scripts/guia.gd
+msgid "Recarga con {recargar}"
+msgstr "Recarregue com {recargar}"
+
+#: scripts/guia.gd
+msgid "Cúrate con {usar_vendas}"
+msgstr "Cure-se com {usar_vendas}"
+
+#: scripts/guia.gd
+msgid "Mantén {lanzar} para apuntar y suelta para lanzar"
+msgstr "Segure {lanzar} para mirar e solte para arremessar"
+
+#: scripts/guia.gd
+msgid "¡Sal de la marca del suelo o esquiva con {esquivar}!"
+msgstr "Saia da marca no chão ou desvie com {esquivar}!"
+
 #: scripts/gymbro.gd
 msgid "¡NO PAIN, NO GAIN!"
 msgstr "NO PAIN, NO GAIN!"

@@ -20,6 +20,15 @@ func preparar_prueba() -> void:
 	eventos.forzado = Captura.dato("--evento")
 	# con "--continuar", la partida a medias sí se guarda (partida_guardada.gd; prueba_varias.gd, probar_continuar)
 	guarda_partida = "--continuar" in OS.get_cmdline_user_args()
+	# con "--guiado", la guía de la primera partida (guia.gd; prueba_varias.gd, probar_guiado): como si fuera la primera
+	if "--guiado" in OS.get_cmdline_user_args():
+		guiado_prueba = true
+		tutoriales_prueba = true   # (con las ventanas encendidas: así se ve que no sale ninguna)
+		Tutoriales.olvidar()
+		Guardado.cambiar(func(g):
+			g.partidas = 4   # (no es la primera: sale por «Que vuelvan a salir todos», guia_otra_vez)
+			g.guia_otra_vez = true
+			g.ajustes.tutoriales = true)
 
 
 # En la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios, u otro con

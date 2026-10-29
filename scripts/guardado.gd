@@ -23,6 +23,8 @@ const NUEVO := {
 	"talentos": {},       # puntos puestos en cada talento: {"ataque": 3, ...}
 	"armas": [],          # armas desbloqueadas (encontradas o compradas). La fregona siempre está
 	"partidas": 0,
+	"guia_otra_vez": false, # «Que vuelvan a salir todos» (Opciones → Ayudas): la guía de la primera partida (guia.gd) sale en la próxima
+	                        # de los Apartamentos aunque no sea la primera, y se apaga sola al empezarla
 	"victorias": 0,
 	"muertos": 0,         # zombis matados en total
 	"muertos_con_ayudas": 0, # los de "muertos" que se mataron en partidas con ayudas: no cuentan para el logro Exterminador (logros.gd)
@@ -57,7 +59,7 @@ const NUEVO := {
 	# temblor: cuánto tiembla la pantalla y cuánto se frena el juego al golpear (temblor.gd): 1 normal, 0,5 suave, 0 nada
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true, "temblor": 1.0,
-		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": ""},
+		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": "", "pantalla_completa": false},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"

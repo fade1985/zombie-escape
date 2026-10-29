@@ -1,4 +1,4 @@
-# La sala de pruebas (F11 desde cualquier sitio de cualquier planta, y F11 otra vez para volver; el sitio lo hace
+# La sala de pruebas (F9 desde cualquier sitio de cualquier planta, y F9 otra vez para volver; el sitio lo hace
 # planta.gd en la planta baja y partida.gd, sitio_pruebas, en las demás): una habitación vacía y con luz para probar
 # armas, jefes y zombis. La monta mapa.gd al entrar y se va con él al salir. Tiene:
 #   - el panel de pruebas (tecla P, ui/panel_pruebas.gd): sacar jefes y zombis, encender y apagar las ayudas, Johnny
@@ -409,7 +409,7 @@ func escribir() -> void:
 	var w: Dictionary = johnny.arma()
 	var fuego: bool = w.tipo == "fuego"
 	var l: Array[String] = []
-	l.append("SALA DE PRUEBAS  ·  P: panel  ·  F11: salir")
+	l.append("SALA DE PRUEBAS  ·  P: panel  ·  F9: salir")
 	l.append("%s (%d de %d) · coma y punto: otra" % [w.nombre, indice + 1, lista.size()])
 	var perdigones: int = w.get("perdigones", 1)
 	var deposito: bool = w.has("deposito")

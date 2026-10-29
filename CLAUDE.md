@@ -5,8 +5,9 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 | Archivo | Cuándo leerlo |
 |---|---|
 | `docs/CODIGO.md` | Qué hace cada escena, script, asset y herramienta |
-| `docs/CONTROLES.md` | Teclas, mando, móvil, la sala de pruebas (F11 y su panel), sala de mantenimiento, guardado |
+| `docs/CONTROLES.md` | Teclas, mando, móvil, la sala de pruebas (F9 y su panel), sala de mantenimiento, guardado |
 | `docs/IDIOMAS.md`, `docs/GLOSARIO_EN.md` (y `_PT_BR`, `_DE`, `_FR`, `_RU`, `_ZH_CN`) | Cómo se escribe un texto para que se traduzca (`Idioma.t`), la herramienta `py tools/traducciones.py` y cómo se dice cada cosa en cada idioma: se leen al escribir o cambiar cualquier texto del juego |
+| `docs/ESCRITORIO.md` | La versión de Windows: exportar el `.exe`, probarlo, la pantalla completa (F11) y lo que falta |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica al subir main a la rama `production`) |
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |

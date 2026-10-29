@@ -65,7 +65,7 @@ en una línea.
   calidad hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
   («Sacar 5»). Se prueba con `--montones`.
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
-- `sala_armas.gd`: la sala de pruebas (F11 desde cualquier sitio; F11 otra vez, de vuelta): la diana, todas las armas,
+- `sala_armas.gd`: la sala de pruebas (F9 desde cualquier sitio; F9 otra vez, de vuelta): la diana, todas las armas,
   las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
   salir, Johnny vuelve a llevar lo que llevaba. Su panel de pruebas (tecla P) es `ui/panel_pruebas.gd`.
 
@@ -212,9 +212,17 @@ en una línea.
   pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
   mutación sacan el suyo antes de abrirse), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba
   con `--tutorial`.
+- `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
+  encendidos): en vez de las ventanas de `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: moverse,
+  esquivar, atacar, sacar la pistola, recargar, curarse, lanzar y el jefe), la casilla del HUD que late (`hud.latido`),
+  una flecha en el suelo hacia la puerta que toca, una llavecita sobre el zombi de la llave y un primer apartamento
+  fácil (3 zombis, sin la llave, vendas en el armarito). Lo enseñado se apunta como visto. Sale en la partida 1 o si se
+  pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar` apunta `guia_otra_vez`). Se prueba con `--guiado`.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).
+- `pantalla.gd` (autoload): la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
+  (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`.
 - `sonido.gd` (autoload: efectos sintetizados y música; cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que

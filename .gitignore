@@ -1,7 +1,8 @@
 # Lo que Godot vuelve a crear solo (caché de importación)
 .godot/
 # Lo que crea Godot al exportar
-/exportar/
+/exportar/*
+!/exportar/.gdignore
 # Fotos de prueba sacadas con --captura (scripts/pruebas/captura.gd): van a capturas/. Solo va en git su .gdignore,
 # para que Godot no las importe como si fueran dibujos del juego
 capturas/*

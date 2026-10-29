@@ -153,7 +153,7 @@ func elegir(nombre: String) -> void:
 			for tipo in partida.orden_jefes:
 				if partida.ZOMBIS.has(tipo):
 					boton("Sala: " + JEFES.get(tipo, tipo), cerrar_y.bind(partida.ir_al_jefe.bind(tipo)))
-			pie.text = "F11 vuelve de la exposición. Lejos de esta planta, F11 lleva a su sala de pruebas  ·  P: cerrar"
+			pie.text = "F9 vuelve de la exposición. Lejos de esta planta, F9 lleva a su sala de pruebas  ·  P: cerrar"
 		"Varios":
 			boton("Mutaciones", cerrar_y.bind(partida.abrir_mutacion))
 			boton("Soltar un objeto", cerrar_y.bind(func():

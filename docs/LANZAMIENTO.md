@@ -11,9 +11,10 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 
 ## 1. Lo que impide venderlo hoy
 
-- [ ] **Versión de escritorio.** Solo existe el preset de exportación "Web". Para Steam hace falta Windows, y
-      Linux si se quiere el sello de Steam Deck. Probar en esa versión: pantalla completa y ventana, resoluciones,
-      vsync, guardado en disco (no en el navegador), mando desde el primer menú.
+- [ ] **Versión de escritorio.** Hecho el 29 oct: el preset «Windows Desktop» (un solo `.exe`), la pantalla completa
+      con F11 / Alt+Intro que se recuerda y la sala de pruebas fuera del juego exportado (`docs/ESCRITORIO.md`). Falta:
+      probar el mando desde el primer menú y el juego en 1280×800, Linux (sello de Steam Deck) y Steam en sí. El `.exe` ya
+      lleva el icono de Johnny (rcedit, `docs/ESCRITORIO.md`).
 - [ ] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
       origen y el inglés el segundo (`locale/en.po`, `Idioma.t`, selector en Opciones; cómo funciona y qué falta,
       en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio», Opciones y la interfaz
@@ -37,8 +38,8 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 
 - [ ] **Principio y final.** Una historia mínima: quién es Johnny, por qué el edificio está así, un final que
       cierre. Si se quiere, un final verdadero al desbloquear algo.
-- [ ] **Tutorial disimulado.** La primera partida guía al jugador por el primer piso con las ayudas del HUD que ya
-      existen, sin pantallas de texto.
+- [x] **Tutorial disimulado.** La primera partida guía al jugador por el primer piso con las ayudas del HUD que ya
+      existen, sin pantallas de texto. (Hecho el 29 oct: `guia.gd`, prueba `--guiado`.)
 - [ ] **Horas de juego.** Un roguelike de precio bajo se espera que dé 8–15 horas hasta verlo todo. Lo barato es
       multiplicar lo que ya hay: niveles de ascensión (modificadores de dificultad acumulables, como Slay the
       Spire), los supervivientes rescatados como personajes jugables con su arma inicial, desbloqueos a largo plazo.
