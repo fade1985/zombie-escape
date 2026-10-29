@@ -44,9 +44,9 @@
 #   --golpes-pared      ¿los golpes de los jefes (cuerpo a cuerpo, saltos, círculo y onda) atraviesan las paredes?
 #                       Cada uno con Johnny justo al otro lado de la pared y, de control, en campo abierto; y su
 #                       aviso, cortado en la pared                                        [prueba_varias.gd]
-#   --armas             la sala de pruebas (F11): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
+#   --armas             la sala de pruebas (F9): la diana, las armas y las líneas de ayuda   [prueba_armas.gd]
 #   --sala-pruebas      la sala de pruebas: el baúl de pruebas, el panel (P), un jefe quieto,
-#                       apagar y encender ayudas y volver con F11                          [prueba_armas.gd]
+#                       apagar y encender ayudas y volver con F9                          [prueba_armas.gd]
 #   --lanzallamas, --desintegrador, --pistola-electrica   cada arma de efecto: comprarla, su daño, su depósito o su
 #                       batería, las 8 direcciones y las 4 skins                           [prueba_armas.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
@@ -111,6 +111,7 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, y se guarda [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: las pistas sobre Johnny, el latido del HUD, la
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
 #   --idioma            solo el menú, Opciones (4 pestañas y las licencias), el cambio de idioma en caliente y «Elige edificio»; con
@@ -409,6 +410,9 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--pantalla" in args:
+		set_process(false)   # sin la prueba larga
+		probar_pantalla()
 	elif "--guiado" in args:
 		set_process(false)   # sin la prueba larga
 		probar_guiado()

@@ -21,7 +21,7 @@
 # talentos (talentos.gd) se aplican a Johnny al empezar la partida y al comprarlos. La taquilla (ui/taquilla.gd),
 # igual: al arrimarse sale la ventanita para elegir la skin de Johnny (skins.gd).
 #
-# Para probar: F11, desde cualquier sitio, lleva a la sala de pruebas (sala_armas.gd) y, otra vez, de vuelta adonde
+# Para probar: F9, desde cualquier sitio, lleva a la sala de pruebas (sala_armas.gd) y, otra vez, de vuelta adonde
 # se estaba. Allí, 1 a 8 sacan un zombi y Mayús + 1 a 0, un jefe, y la P abre el panel de pruebas (ui/panel_pruebas.gd): sacar jefes y zombis, encender y apagar las
 # ayudas, ir a la exposición o a la sala de un jefe... Lo que pasa en la sala no cuenta (en_pruebas).
 #
@@ -113,7 +113,7 @@ var menus := MENUS.new()   # la pausa y el cartel del final
 var ordenador := ORDENADOR.new()   # la pantalla de ConserjeOS
 var taquilla := TAQUILLA.new()     # la ventanita de la taquilla de las skins de Johnny (skins.gd)
 var panel_pruebas := PANEL_PRUEBAS.new()   # el panel de la sala de pruebas (tecla P allí dentro)
-var de_pruebas := {}       # de dónde se vino a la sala de pruebas (F11): {planta, sitio, pos}, para volver allí
+var de_pruebas := {}       # de dónde se vino a la sala de pruebas (F9): {planta, sitio, pos}, para volver allí
 var presentacion := PRESENTACION.new()   # la presentación de cada jefe al aparecer (ui/presentacion.gd)
 var presentar_en_prueba := false   # en la partida de prueba la presentación se salta, salvo en la suya (--presentacion)
 const JEFE_TARDA := 0.6            # lo que tarda el jefe en salir al entrar en su sala
@@ -1632,7 +1632,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 			return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando or presentacion.activa:
 		return
-	if evento.keycode == KEY_F11:
+	if evento.keycode == KEY_F9 and (OS.is_debug_build() or captura):   # (la sala de pruebas, solo en el editor: no en el juego exportado)
 		pruebas()
 	elif evento.keycode == KEY_P and aqui == planta.armas:
 		abrir_panel_pruebas()
@@ -1642,7 +1642,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 
 # ═════════════ La sala de pruebas ═════════════
 
-# F11: a la sala de pruebas (sala_armas.gd) desde donde se esté y, desde ella (o desde la exposición, a la que se va
+# F9: a la sala de pruebas (sala_armas.gd) desde donde se esté y, desde ella (o desde la exposición, a la que se va
 # con su panel), de vuelta al mismo sitio y al mismo punto. Con la puerta del apartamento cerrada, no se puede
 func pruebas() -> void:
 	if cambiando or terminada or not johnny.vivo:
@@ -1659,13 +1659,13 @@ func pruebas() -> void:
 		johnny.get_node("Camara").reset_smoothing()
 		return
 	if cerrada:
-		decir("Con la puerta cerrada no se puede ir a la sala de pruebas")   # no-tr (herramienta interna: F11)
+		decir("Con la puerta cerrada no se puede ir a la sala de pruebas")   # no-tr (herramienta interna: F9)
 		Sonido.tocar("no")
 		return
 	sitio_pruebas()
 	de_pruebas = {"planta": planta, "sitio": aqui, "pos": johnny.position}
 	await montar(planta.armas, 0)
-	decir("Sala de pruebas · P: panel de pruebas · guion: líneas y daño · F11: volver", 3.5)   # no-tr
+	decir("Sala de pruebas · P: panel de pruebas · guion: líneas y daño · F9: volver", 3.5)   # no-tr
 
 
 # La sala de pruebas y la exposición, como dos sitios más de la planta (la planta baja ya las trae: planta.gd)

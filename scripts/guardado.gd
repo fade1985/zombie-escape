@@ -57,7 +57,7 @@ const NUEVO := {
 	# temblor: cuánto tiembla la pantalla y cuánto se frena el juego al golpear (temblor.gd): 1 normal, 0,5 suave, 0 nada
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true, "temblor": 1.0,
-		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": ""},
+		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": "", "pantalla_completa": false},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"

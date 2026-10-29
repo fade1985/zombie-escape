@@ -50,7 +50,7 @@ def formas(codigo):
 def ruta_po(codigo):
     return os.path.join(RAIZ, "locale", codigo + ".po")
 
-# Archivos que no se traducen: herramientas internas (el panel F11 y la sala de pruebas) y las pruebas
+# Archivos que no se traducen: herramientas internas (el panel F9 y la sala de pruebas) y las pruebas
 EXCLUIDOS = ["scripts/pruebas/", "scripts/ui/panel_pruebas.gd", "scripts/sala_armas.gd"]
 
 # Archivos ya pasados al inglés: aquí no puede quedar ningún texto en español sin traducir. Cada fase añade los suyos

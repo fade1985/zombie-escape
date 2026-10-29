@@ -24,6 +24,7 @@ Sonido="*res://scripts/sonido.gd"
 Botones="*res://scripts/ui/botones.gd"
 Temblor="*res://scripts/temblor.gd"
 Idioma="*res://scripts/idioma.gd"
+Pantalla="*res://scripts/pantalla.gd"
 
 [display]
 

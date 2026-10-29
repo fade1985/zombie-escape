@@ -5,21 +5,21 @@
 extends "res://scripts/pruebas/prueba_jefes.gd"
 
 
-# Con "--captura --armas": la sala de pruebas (sala_armas.gd). Desde la sala de mantenimiento, F11 lleva a
+# Con "--captura --armas": la sala de pruebas (sala_armas.gd). Desde la sala de mantenimiento, F9 lleva a
 # ella: cuenta en la terminal su tamaño, que la diana está en el centro, que hay luz y que se entra con la pistola. La
 # pistola, en el modo asistido y a 200 de la diana, desde 72 ángulos (cada 5°; 0° = disparando hacia la derecha, 90° =
 # hacia abajo): si la primera bala le da, pasa por el lado (y a cuánto) o choca, y los ángulos desde los que falla
 # (desde el 24 oct la bala va de la boca al zombi: ninguno); y a quemarropa, a 40, desde 8 direcciones.
 # Luego, que la diana no se ha muerto ni ha perdido vida (y cuántos zombis normales habría matado), que la reserva sigue llena y que ha recargado; que el punto pasa
 # a la escopeta y la coma vuelve (con el recuento a cero) y llega a la última de la tienda (el lanza rayos), que el guion esconde las líneas y
-# saca el panel; y que F11 vuelve a la sala
+# saca el panel; y que F9 vuelve a la sala
 # de mantenimiento con las armas y las balas de antes. Fotos: captura-armas.png (la sala con las líneas de ayuda y el
 # panel, tras un fallo por el lado), captura-armas-pistola-<e, se, n, o>.png (Johnny disparando con la Beretta hacia cada
 # lado, con el fogonazo) y captura-armas-escopeta.png (los perdigones). Cada línea dice lo esperado
 func probar_armas() -> void:
 	johnny.coger("fregona")   # (entra con la de cuerpo a cuerpo en la mano, para ver que le pone la pistola)
 	var antes := [johnny.huecos.duplicate(), johnny.mano, johnny.balas, johnny.reserva()]
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -124,9 +124,9 @@ func probar_armas() -> void:
 		await pulsar_y_esperar(KEY_COMMA)
 	print("Con la coma: %s (esperado: Pistola) · cuatro más atrás: %s (esperado: la última de la tienda, %s)" % [
 		vuelta, johnny.arma().nombre, Armas.DATOS[sala.lista.back()].nombre])
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout
-	print("De vuelta con F11: en «%s» (esperado: mantenimiento) · armas %s (esperado: true) · balas %d y %d (esperado: %d y %d)" % [
+	print("De vuelta con F9: en «%s» (esperado: mantenimiento) · armas %s (esperado: true) · balas %d y %d (esperado: %d y %d)" % [
 		planta.sitios[aqui].tipo, [johnny.huecos, johnny.mano] == [antes[0], antes[1]], johnny.balas, johnny.reserva(),
 		antes[2], antes[3]])
 	get_tree().quit()
@@ -152,7 +152,7 @@ func pulsar_y_esperar(tecla: Key) -> void:
 # hoja de ahora, conserje-48-lanzallamas, en la postura de apuntar). Primero, en la sala de mantenimiento, Johnny lo
 # compra en la tienda de armas del ordenador (captura-lanzallamas-tienda.png, con él marcado) y cuenta su hoja, su daño
 # por segundo, su alcance (10 casillas), su depósito, su recarga, su empuje, sus pies, su boca hacia el este, que no le
-# salen chispitas y que las cajas de munición no le valen. Luego, en la sala de pruebas (F11: cabe la llama
+# salen chispitas y que las cajas de munición no le valen. Luego, en la sala de pruebas (F9: cabe la llama
 # entera), con el lanzallamas comprado y gastando gasolina de verdad:
 #   - la llamarada: 1 s echando fuego hacia la derecha (a la izquierda está el panel de la sala) con tres zombis en la
 #     misma línea, a 120 y a 250 (los dos dentro: pierden vida, arden y el primero se va hacia atrás) y a 430 (más allá de las 10 casillas: ni se entera).
@@ -189,7 +189,7 @@ func probar_lanzallamas() -> void:
 		w.deposito, johnny.deposito, w.recarga, w.empuje, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
 	# a la sala de pruebas (allí le ponen la pistola y la gasolina sin fin: se le vuelve a dar este, gastando)
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -436,7 +436,7 @@ func chorro_torcido(arma: String) -> void:
 # (tools/hoja_lanza_acido.py; casilla de 96x96 con los pies en 48,72) y su chorro, el de la llamarada con "acido"
 # (llamarada.gd y chorro_acido.gdshader). Como el lanzallamas, en la sala de mantenimiento, Johnny lo compra en la
 # tienda de armas del ordenador (captura-desintegrador-tienda.png, con él marcado) y cuenta sus números, su boca y que
-# las balas no le valen. Luego, en la sala de pruebas (F11), gastando bidones de ácido de verdad:
+# las balas no le valen. Luego, en la sala de pruebas (F9), gastando bidones de ácido de verdad:
 #   - quieto, sin echar el chorro, la gota de ácido de la boquilla (goteo.gd): se hincha, cuelga entera
 #     (captura-desintegrador-gota.png) y se suelta y cae (captura-desintegrador-cae.png)
 #   - el chorro: 1 s hacia la derecha con tres zombis en la misma línea, a 120 y a 250 (los dos dentro: pierden vida,
@@ -478,7 +478,7 @@ func probar_desintegrador() -> void:
 		w.deposito, w.recarga, w.empuje, w.dano, w.pies, w.boca.e, w.has("detalle"), Objetos.icono(id), johnny.arma_de_caja()])
 
 	# a la sala de pruebas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -682,7 +682,7 @@ func texto_del_arma() -> String:
 # ácido, una verde); luego el jefe con su ácido y su luz verde, que se van al acabarse, y uno que muere ardiendo
 # (cae en llamas, se apagan y se vuelve carbón)
 func probar_tintes() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -778,7 +778,7 @@ func probar_tintes() -> void:
 # compararlos. En la sala de pruebas, en fila delante de Johnny: fotos al caer (se extienden), con sus
 # burbujas, cuando empiezan a secarse a trozos y con la mancha que dejan. Cuenta si se pisan y se cierra
 func probar_charcos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout
 	for a in get_tree().get_nodes_in_group("aliados"):
 		a.process_mode = Node.PROCESS_MODE_DISABLED
@@ -845,7 +845,7 @@ func probar_charcos() -> void:
 #      su número (captura-fuego-acido-jefe.png).
 # Cada línea dice lo esperado. Se cierra sola
 func probar_fuego_acido() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -962,7 +962,7 @@ func probar_fuego_acido() -> void:
 # Con "--captura --pistola-electrica": el lanza rayos (Armas.DATOS.pistola_electrica; llamarada.gd, con su efecto "rayo": un
 # rayo continuo como el chorro del lanza ácido, que aturde y salta de un zombi a otro). Como el lanza ácido, en la sala de
 # mantenimiento, Johnny lo compra en la tienda de armas del ordenador (captura-pistola-electrica-tienda.png, con él
-# marcado) y cuenta su hoja, sus números y su boca. Luego, en la sala de pruebas (F11), gastando baterías de verdad:
+# marcado) y cuenta su hoja, sus números y su boca. Luego, en la sala de pruebas (F9), gastando baterías de verdad:
 #   - el rayo: 1 s hacia la derecha con zombis a 120 y a 230 en la misma línea (los dos pierden vida y se quedan aturdidos,
 #     sin empujón), otro cerca del primero pero fuera del rayo (la descarga salta a él: medio daño, aturdido), y otro a
 #     430 (más allá de las 8 casillas: ni se entera). Johnny no pierde vida, no queda ningún charco y el rayo alumbra;
@@ -994,7 +994,7 @@ func probar_pistola_electrica() -> void:
 		w.deposito, w.recarga, w.dano, w.saltos, w.pies, w.boca.e, Objetos.icono(id), johnny.arma_de_caja()])
 
 	# a la sala de pruebas (allí le ponen la pistola y el depósito sin fin: se le vuelve a dar este)
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1163,7 +1163,7 @@ func zombis_de_prueba(donde: Array) -> Array:
 # pequeños; captura-epica-racimo.png y
 # captura-epica-molotov.png). Se cierra
 func probar_epicas() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1274,7 +1274,7 @@ func probar_epicas() -> void:
 # recortada de Johnny quieto con luz y otra a oscuras (captura-aura-<arma>-<calidad>-luz.png y -oscuro.png) y, con luz, la
 # del golpe del bate o del disparo de la pistola en pleno vuelo (-golpe.png). Cada línea dice lo esperado. Se cierra
 func probar_aura() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1327,12 +1327,12 @@ func recorte(archivo: String) -> void:
 
 
 # Con "--captura --sala-pruebas": la sala de pruebas con su panel (sala_armas.gd y ui/panel_pruebas.gd). Desde la sala
-# de mantenimiento, F11 lleva a ella: cuenta en la terminal que hay baúl y que el baúl que se ve es el de pruebas (todas
+# de mantenimiento, F9 lleva a ella: cuenta en la terminal que hay baúl y que el baúl que se ve es el de pruebas (todas
 # las armas y los arrojables en cada calidad), y que Mayús + 1 saca a la portera sin haber abierto antes el panel. La
 # P abre el panel; con sus botones, Johnny invencible y, con «Quieto», el
 # antidisturbios: que ha salido y que, tras 3 s, sigue en su sitio. Luego apaga los avisos de los jefes y el alcance
 # del arma, y los vuelve a encender; y con los atajos (2 y Mayús + 7), un zombi lento y el Glotón
-# (captura-sala-pruebas-atajos.png). Al final, F11 vuelve al mismo sitio de la sala de mantenimiento, con el baúl de
+# (captura-sala-pruebas-atajos.png). Al final, F9 vuelve al mismo sitio de la sala de mantenimiento, con el baúl de
 # verdad sin tocar. Fotos: captura-sala-pruebas-panel.png (el panel, en Jefes), captura-sala-pruebas-jefe.png (el
 # antidisturbios quieto, con sus avisos) y captura-sala-pruebas-sin-ayudas.png (lo mismo, sin avisos ni alcance)
 func probar_sala_pruebas() -> void:
@@ -1340,7 +1340,7 @@ func probar_sala_pruebas() -> void:
 	johnny.position += Vector2(60, -40)
 	var desde: Vector2 = johnny.position
 	var de: int = aqui
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout
 	var esperado := (Armas.DATOS.size() + Lanzables.DATOS.size()) * Armas.CALIDADES.size()
 	print("Sala de pruebas: en «%s» (esperado: armas) · baúl %s (esperado: true) · en el baúl %d cosas (esperado: %d)" % [
@@ -1413,7 +1413,7 @@ func probar_sala_pruebas() -> void:
 		"zombi_lento" in nuevos, "gloton" in nuevos, 1 + PANEL_PRUEBAS.cuantos])
 	await get_tree().create_timer(0.5).timeout
 	Captura.foto("captura-sala-pruebas-atajos.png")
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout
 	print("De vuelta: al mismo sitio %s, al mismo punto %s · el baúl de verdad, %d cosas (esperado: true, true, %d)" % [
 		aqui == de, johnny.position.distance_to(desde) < 2.0, Guardado.cargar().baul_equipo.size(), real])
@@ -1438,7 +1438,7 @@ func pulsar_en_panel(texto: String) -> void:
 # los fijos (el clic y comprar) y las versiones grabadas (3 de la pistola, que lleva ruido; 1 del golpe). Foto:
 # captura-sensacion.png (el golpe del bate en pleno parón). Se cierra
 func probar_sensacion() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1630,7 +1630,7 @@ func sin_paron(respiro := true) -> void:
 # (la misma canción sigue por donde iba), antes y después de salir el jefe; que las capas van a la par, y que al
 # apagarla se para todo. Tarda medio minuto. Se cierra
 func probar_musica() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	for n in mapa.get_children():
 		if n is SalaArmas:
 			n.diana.remove_from_group("zombis")   # (la diana no es un zombi que cuente)

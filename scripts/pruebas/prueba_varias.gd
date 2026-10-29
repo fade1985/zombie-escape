@@ -1625,7 +1625,7 @@ func correr_un_rato(centro: Vector2) -> float:
 # (captura-tentaculos-aviso-abajo.png, -arriba, -lado, -diagonal, -pared) y dando el latigazo
 # (captura-tentaculos-latigazo-abajo.png...). En la terminal, la animación y el fotograma de cada momento
 func probar_tentaculos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1732,13 +1732,13 @@ func probar_tentaculos() -> void:
 	get_tree().quit()
 
 
-# --latigazos: los tres latigazos del gerente mutado (tentaculo.gd), en la sala de pruebas (F11), con Johnny abajo,
+# --latigazos: los tres latigazos del gerente mutado (tentaculo.gd), en la sala de pruebas (F9), con Johnny abajo,
 # arriba, de lado, en diagonal, en diagonal por detrás (de espaldas) y junto a la pared de la derecha (que los corta):
 # avisando (captura-latigazos-aviso-abajo.png, -arriba, -lado, -diagonal, -espalda, -pared) y dando el latigazo
 # (captura-latigazos-latigazo-abajo.png...). La cámara, algo más lejos, sin los límites de la sala y centrada en el
 # gerente y sus latigazos. En la terminal, la animación y hasta dónde llega cada tentáculo (y si choca)
 func probar_latigazos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1798,14 +1798,14 @@ func probar_latigazos() -> void:
 	get_tree().quit()
 
 
-# --lenguas: las lenguas del Glotón y de la criatura del científico mutado (lengua.gd), en la sala de pruebas (F11):
+# --lenguas: las lenguas del Glotón y de la criatura del científico mutado (lengua.gd), en la sala de pruebas (F9):
 # avisando (captura-lenguas-<quién>-aviso-<caso>.png) y dando el golpe (captura-lenguas-<quién>-golpe-<caso>.png), con
 # Johnny abajo, arriba, de lado, en diagonal y junto a la pared de la derecha (que las corta: el aviso acaba en
 # estrella); el Glotón, también enfadado (seis lenguas). La cámara, algo más lejos, sin los límites de la sala y
 # centrada entre el jefe y sus lenguas; y, de cerca (a 2, -cerca), la boca y el principio de las lenguas abajo y de
 # lado. En la terminal, la animación y hasta dónde llega cada lengua (y si choca)
 func probar_lenguas() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1896,13 +1896,13 @@ func probar_lenguas() -> void:
 	get_tree().quit()
 
 
-# --disparos: las barras de aviso de los disparos de los jefes (aviso.gd, barra) en la sala de pruebas (F11): los
+# --disparos: las barras de aviso de los disparos de los jefes (aviso.gd, barra) en la sala de pruebas (F9): los
 # contratos del gerente, los alfileres de la modista, los cuchillos del cocinero y las bolas de fuego de la criatura del
 # científico, junto a la pared de la derecha (que las corta, como corta a los disparos) y en campo abierto
 # (captura-disparos-<quién>-<caso>.png). Cada jefe, quieto y con el aviso casi lleno. En la terminal, hasta dónde llega
 # cada barra, a cuánto queda la pared de verdad (un rayo de la capa 1) y lo largas que serían sin pared
 func probar_disparos() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -1986,12 +1986,12 @@ func probar_disparos() -> void:
 
 # --golpes-pared: ¿los golpes de los jefes (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo y hachazo, y los de
 # área: el círculo de la portera, los saltos de la mascota y del Gymbro y la onda de la criatura) atraviesan las
-# paredes? En la sala de pruebas (F11), cada jefe pegando (se llama a su golpe) con Johnny justo al otro lado de la
+# paredes? En la sala de pruebas (F9), cada jefe pegando (se llama a su golpe) con Johnny justo al otro lado de la
 # pared de la derecha, a su alcance, y, de control, con Johnny a la misma distancia en campo abierto. En la terminal,
 # si el golpe le quita vida y si hay pared entre los dos (un rayo de la capa 1); y, con fotos, el aviso de cada uno a
 # 45 de la pared (captura-golpes-pared-<nombre>.png): cortado donde el golpe se pararía
 func probar_golpes_pared() -> void:
-	await pulsar_y_esperar(KEY_F11)
+	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():
 		if n is SalaArmas:
@@ -2335,4 +2335,34 @@ func probar_guiado() -> void:
 	# al subir a la planta siguiente, se apaga
 	nueva_planta(2)
 	print("Guía · en la 1ª planta: activa %s (esperado: false)" % guia.activa)
+	get_tree().quit()
+
+
+# --pantalla: la pantalla completa del ordenador (pantalla.gd): F11 y Alt+Intro la ponen y la quitan, el ajuste se guarda
+# y F9 (la sala de pruebas) sigue yendo aparte
+func probar_pantalla() -> void:
+	var pulsar := func(tecla: Key, alt := false) -> void:
+		for pulsada in [true, false]:
+			var evento := InputEventKey.new()
+			evento.keycode = tecla
+			evento.alt_pressed = alt
+			evento.pressed = pulsada
+			Input.parse_input_event(evento)
+		await get_tree().create_timer(0.6).timeout
+	var estado := func() -> String:
+		return "completa" if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN else "ventana"
+	await get_tree().create_timer(0.5).timeout
+	Guardado.cambiar(func(g): g.ajustes.pantalla_completa = false)
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	await get_tree().create_timer(0.3).timeout
+	print("Pantalla · al empezar: %s (esperado: ventana)" % estado.call())
+	await pulsar.call(KEY_F11)
+	print("Pantalla · tras F11: %s · guardado %s (esperado: completa, true)" % [estado.call(), Guardado.ajuste("pantalla_completa")])
+	await pulsar.call(KEY_ENTER, true)
+	print("Pantalla · tras Alt+Intro: %s · guardado %s (esperado: ventana, false)" % [estado.call(), Guardado.ajuste("pantalla_completa")])
+	await pulsar.call(KEY_ENTER)
+	print("Pantalla · Intro sin Alt: %s (esperado: ventana)" % estado.call())
+	await pulsar.call(KEY_F11)
+	await pulsar.call(KEY_F11)
+	print("Pantalla · F11 dos veces: %s (esperado: ventana)" % estado.call())
 	get_tree().quit()
