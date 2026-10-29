@@ -78,8 +78,11 @@ const CONGELADORA := {"inicio": 0, "dano": 50, "mecha": 2.0, "radio": 120.0, "co
 const ARROJADIZAS := {"atraedora": ATRAEDORA, "congeladora": CONGELADORA}
 const DANO_JOHNNY := 25   # lo más que le hace a Johnny la explosión de una granada, una atraedora o una congeladora
 const DATOS := {"molotov": MOLOTOV, "granada": GRANADA, "atraedora": ATRAEDORA, "congeladora": CONGELADORA}
-const NOMBRES := {"molotov": "molotovs", "granada": "granadas", "atraedora": "atraedoras", "congeladora": "congeladoras"}
+# Cómo se dice uno («Molotov»); para enseñarlo, uno(), que lo traduce. El plural, en minúscula, para dentro de una frase
+# («¡Sin molotovs!»), está en varios()
+# [traducir]
 const UNO := {"molotov": "Molotov", "granada": "Granada", "atraedora": "Atraedora", "congeladora": "Congeladora"}
+# [/traducir]
 # Lo que cuesta uno en la tienda de armas del ordenador (el dueño, 25 oct): se compran de uno en uno, para esa partida
 const PRECIOS := {"molotov": 5, "granada": 5, "atraedora": 8, "congeladora": 8}
 const COLORES := {"molotov": Color("#ff9f1c"), "granada": Color("#9bbd5a"), "atraedora": Color("#ffd23f"),
@@ -314,8 +317,26 @@ func cuantas(k: String) -> int:
 	return cantidades.get(k, 0)
 
 
+# El nombre de un paquete («molotovs»), en plural y en minúscula, para dentro de una frase, en el idioma del jugador
 func nombre(k: String) -> String:
-	return NOMBRES[tipo_de(k)]
+	return varios(tipo_de(k))
+
+
+# Cómo se dice uno de un tipo («Molotov») y cómo se dicen varios («molotovs»), en el idioma del jugador. Los plurales, uno por
+# uno en su Idioma.t: en una tabla marcada, una palabra suelta en minúscula no la recogería la herramienta de traducciones
+static func uno(cual: String) -> String:
+	return Idioma.t(UNO[cual])
+
+
+static func varios(cual: String) -> String:
+	match cual:
+		"molotov":
+			return Idioma.t("molotovs")
+		"granada":
+			return Idioma.t("granadas")
+		"atraedora":
+			return Idioma.t("atraedoras")
+	return Idioma.t("congeladoras")
 
 
 # El color de su tipo (el de los textos y el apunte; el de la calidad, en el borde de la casilla: Armas.color)
@@ -483,7 +504,7 @@ func mas_cercano() -> Node2D:
 
 func lanzar(donde: Vector2) -> void:
 	if tipo == "" or cuantas(tipo) <= 0:
-		var aviso := "¡Sin %s!" % nombre(tipo) if tipo != "" else "¡Nada que lanzar!"
+		var aviso := Idioma.t("¡Sin %s!") % nombre(tipo) if tipo != "" else Idioma.t("¡Nada que lanzar!")
 		Zombi.texto_flotante(johnny.get_parent(), johnny.global_position + Vector2(-50, -80), aviso, color(tipo), 18)
 		Sonido.tocar("no")
 		return

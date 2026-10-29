@@ -53,6 +53,21 @@ PASADOS = [
     "scripts/ui/ordenador.gd",
     "scripts/ui/tele.gd",
     "scripts/mapa/ordenador.gd",
+    # fase 3: los datos
+    "scripts/armas.gd",
+    "scripts/objetos.gd",
+    "scripts/lanzables.gd",
+    "scripts/mejoras.gd",
+    "scripts/armas_creadas.gd",
+    "scripts/talentos.gd",
+    "scripts/logros.gd",
+    "scripts/mutaciones.gd",
+    "scripts/skins.gd",
+    "scripts/eventos.gd",
+    "scripts/averia.gd",
+    "scripts/joyeria.gd",
+    "scripts/barricada.gd",
+    "scripts/controles.gd",
 ]
 
 # Palabras sueltas con mayúscula que no son texto (nombres de nodos, variaciones del tema...)

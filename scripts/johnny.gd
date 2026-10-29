@@ -894,7 +894,7 @@ func meter_municion(tipo: String, cuanto: int) -> int:
 
 # El aviso de que no le queda con qué disparar («¡Sin balas!», «¡Sin cartuchos!», «¡Sin gasolina!»...)
 func sin_municion_aviso() -> void:
-	var texto: String = Armas.MUNICION[Armas.municion(huecos.fuego)].sin
+	var texto: String = Armas.municion_sin(Armas.municion(huecos.fuego))
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), texto, Color("#ff9f1c"), 18)
 	Sonido.tocar("click")
 
@@ -1048,7 +1048,7 @@ func sostener(hueco: String) -> void:
 # Le cuenta a la pantalla qué arma lleva, cuántas balas le quedan y cuál es la otra
 func avisar_arma() -> void:
 	var w := arma()
-	var texto: String = w.nombre
+	var texto: String = Objetos.nombre(huecos[mano])
 	if w.has("deposito"):
 		texto += "   %d s · %s x%d" % [ceili(deposito), Objetos.nombre(w.relleno).to_lower(), reserva()]
 	elif w.tipo == "fuego":
@@ -1058,7 +1058,7 @@ func avisar_arma() -> void:
 		if recargando > 0.0:
 			texto += "   recargando…"
 	var otra: String = huecos["fuego" if mano == "cuerpo" else "cuerpo"]
-	texto += "\n[Q] " + Armas.datos(otra).nombre
+	texto += "\n[Q] " + Objetos.nombre(otra)
 	arma_cambiada.emit(texto)
 
 

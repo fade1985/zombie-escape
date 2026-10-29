@@ -25,6 +25,8 @@ const MUT := {
 }
 const MAXIMO := 4
 const TRAS_PRESENTACION := 1.0   # lo que tardan en actuar cuando acaba la presentación de un jefe
+# Nombre y descripción en español; para enseñarlos, mutacion() y sortear() los dan ya traducidos
+# [traducir]
 const LISTA := [
 	{"id": "tentacular", "nombre": "Tentacular", "icono": "dash",
 		"desc": "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"},
@@ -43,6 +45,7 @@ const LISTA := [
 	{"id": "flatulento", "nombre": "Flatulento", "icono": "herramientas",
 		"desc": "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"},
 ]
+# [/traducir]
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 
 var johnny: Node2D
@@ -54,15 +57,23 @@ var espera := {}           # lo que le falta a cada una para actuar otra vez
 static func mutacion(id: String) -> Dictionary:
 	for m in LISTA:
 		if m.id == id:
-			return m
+			return traducida(m)
 	return {}
 
 
-# Dos al azar entre las que aún no tienes
+# Una mutación de LISTA con su nombre y su descripción ya en el idioma del jugador (lo demás, igual)
+static func traducida(m: Dictionary) -> Dictionary:
+	var t: Dictionary = m.duplicate()
+	t.nombre = Idioma.t(m.nombre)
+	t.desc = Idioma.t(m.desc)
+	return t
+
+
+# Dos al azar entre las que aún no tienes (ya traducidas)
 func sortear(n := 2) -> Array:
 	var quedan := LISTA.filter(func(m): return not m.id in tengo)
 	quedan.shuffle()
-	return quedan.slice(0, n)
+	return quedan.slice(0, n).map(func(m): return traducida(m))
 
 
 # Lo que cambian en los atributos (después de los talentos)
@@ -144,7 +155,7 @@ func actuar(id: String) -> bool:
 				z.liado = maxf(z.liado, m.lio)
 				z.lio_angulo = randf() * TAU
 			Particulas.anillo(johnny, p, m.radio, Color("#ffd23f"))
-			Zombi.texto_flotante(johnny.get_parent(), p + Vector2(-50, -100), "¡AAAAAH!", Color("#ffd23f"), 22)
+			Zombi.texto_flotante(johnny.get_parent(), p + Vector2(-50, -100), Idioma.t("¡AAAAAH!"), Color("#ffd23f"), 22)
 			Sonido.tocar("rugido")
 		"flatulento":
 			var zs := cerca(m.radio)

@@ -109,8 +109,16 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
   `ui/hud.gd`, `ui/tactil.gd`, `ui/tutorial.gd` (la ventana, no el texto de cada tutorial), `ui/inventario.gd` (mochila,
   baúl, tienda y banco), `ui/taquilla.gd`, `ui/ordenador.gd` y `ui/tele.gd`.
 
-**Lo que enseñan esas pantallas y aún sale en español** son datos de otros archivos, que se traducen dentro de su propia
-función cuando se pasen (fases 3 y 4): nombres y descripciones de armas, objetos, arrojables, calidades, talentos, logros,
-mutaciones y trajes; la historia (dosier y noticias), el bestiario y los tutoriales; los nombres de planta y de sitio
-(`mapa/planta.gd`) y los de los supervivientes. Faltan además los gritos de los jefes, los carteles del mundo y los
-dibujados en imágenes (`cartel-planta-N.png` lleva «PLANTA»). Cómo se dice cada cosa en inglés: `docs/GLOSARIO_EN.md`.
+- **Fase 3 (los datos):** `armas.gd` (armas, calidades, munición), `objetos.gd`, `lanzables.gd`, `talentos.gd`, `logros.gd`,
+  `mutaciones.gd`, `skins.gd`, `eventos.gd`, `averia.gd`, `joyeria.gd`, `barricada.gd`. Sus textos están en tablas
+  `# [traducir]` y **sus funciones devuelven el texto ya traducido**: quien lo enseñe usa `Armas.nombre(id)`,
+  `Objetos.nombre(id)`, `Lanzables.uno(tipo)`, `Talentos.nombre_de(id)` / `desc_de(id)` / `nombre_rama(id)`,
+  `Logros.nombre_de(id)` / `desc_de(id)` / `nombre_tema(tema)`, `Skins.nombre(id)` / `como(id)` / `efecto(id)`,
+  `Mutaciones.mutacion(id)`..., no la tabla directa (y sin volver a envolverlo en `Idioma.t`).
+
+**Lo que aún sale en español** son datos que se traducen dentro de su propia función cuando se pasen: la historia (dosier y
+noticias), el bestiario, los tutoriales y los supervivientes (fase 4, con los gritos de los jefes), y los nombres de planta, de
+sitio y de tienda (`mapa/planta.gd`, `mapa/tienda.gd`; fase 5, con los carteles del mundo y los dibujados en imágenes:
+`cartel-planta-N.png` lleva «PLANTA»). Cómo se dice cada cosa en inglés: `docs/GLOSARIO_EN.md`.
+
+**Decimales:** `Talentos.decimal(x)` da la coma en español y el punto en inglés (de momento solo lo usa `talentos.gd`).

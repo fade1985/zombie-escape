@@ -153,11 +153,11 @@ func abrir(p: Node) -> void:
 		# debajo, lo que hace llevarla puesta (las que faltan, cómo se consiguen); parte las líneas y la carta crece
 		var frase: String
 		if not tiene(id):
-			frase = Idioma.t("Aún no la tienes: %s") % Skins.LISTA[id].como.to_lower()
+			frase = Idioma.t("Aún no la tienes: %s") % Skins.como(id).to_lower()
 		elif id == "":
 			frase = Idioma.t("Sin efecto especial.")
 		else:
-			frase = Skins.LISTA[id].efecto
+			frase = Skins.efecto(id)
 		var efecto := etiqueta(textos, frase, 15)
 		efecto.theme_type_variation = "Sub"
 		efecto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -227,7 +227,7 @@ func elegir(id: String) -> bool:
 	if fondo == null or not id in ids():
 		return false
 	if not tiene(id):
-		info.text = Idioma.t("Aún no la tienes. %s") % Skins.LISTA[id].como
+		info.text = Idioma.t("Aún no la tienes. %s") % Skins.como(id)
 		info.add_theme_color_override("font_color", Tema.ROJO)
 		Sonido.tocar("no")
 		return false

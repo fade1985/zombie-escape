@@ -25,14 +25,18 @@ const CHARCO := preload("res://escenas/armas/charco.tscn")
 const LAMPARA := "res://escenas/luces/lampara.tscn"
 const RAYO := Color("#9fe8ff")
 
-# El cartel de cada uno (el texto de la horda depende del edificio: textos())
+# El cartel de cada uno: "nombre" (arriba a la derecha), "titulo" y "texto" (el cartel grande). Los textos, en español
+# (las líneas marcadas); para enseñarlos, pasan por Idioma.t (empezar() y etiqueta())
 const DATOS := {
-	"apagon": {"nombre": "Apagón", "titulo": "¡APAGÓN!", "color": Color("#9fb4ff"), "sonido": "apagon",
-		"texto": "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"},
-	"incendio": {"nombre": "Alarma de incendios", "titulo": "¡ALARMA DE INCENDIOS!", "color": Color("#ff5d4a"),
-		"sonido": "alarma", "texto": "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"},
-	"horda": {"nombre": "Horda", "titulo": "¡HORDA EN EL PASILLO!", "color": Color("#ff9f1c"), "sonido": "rugido",
-		"texto": "Una horda enorme avanza por el pasillo... ¡prepárate!"},
+	"apagon": {"color": Color("#9fb4ff"), "sonido": "apagon",
+		"nombre": "Apagón", "titulo": "¡APAGÓN!",   # [traducir]
+		"texto": "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"},   # [traducir]
+	"incendio": {"color": Color("#ff5d4a"), "sonido": "alarma",
+		"nombre": "Alarma de incendios", "titulo": "¡ALARMA DE INCENDIOS!",   # [traducir]
+		"texto": "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"},   # [traducir]
+	"horda": {"color": Color("#ff9f1c"), "sonido": "rugido",
+		"nombre": "Horda", "titulo": "¡HORDA EN EL PASILLO!",   # [traducir]
+		"texto": "Una horda enorme avanza por el pasillo... ¡prepárate!"},   # [traducir]
 }
 # Números provisionales
 const APAGON := 0.4          # oscuridad de más (con la del pasillo, casi negro: el tope de luz.gd es 0,97)
@@ -73,7 +77,7 @@ var cartel_texto: Label
 
 func preparar(p: Node) -> void:
 	partida = p
-	name = "Eventos"
+	name = "Eventos"   # no-tr (nombre de nodo)
 	rng.randomize()
 	Luz.evento = 0.0   # (es de la clase: podría venir de la partida anterior)
 	# el cartel grande, arriba en el centro de la pantalla
@@ -167,11 +171,11 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 func empezar() -> void:
 	empezado = true
 	var d: Dictionary = DATOS[evento]
-	var texto: String = d.texto
+	var texto: String = Idioma.t(d.texto)
 	if evento == "horda":
 		horda = {"salio": false, "t": HORDA.primera, "vivos": [], "quedan": [], "hecha": false}
 	sirena_t = INCENDIO.sirena
-	mostrar_cartel(d.titulo, texto, d.color)
+	mostrar_cartel(Idioma.t(d.titulo), texto, d.color)
 	get_tree().create_timer(0.3, false).timeout.connect(Sonido.tocar.bind(d.sonido))
 	get_tree().create_timer(2.5, false).timeout.connect(partida.tutorial.bind(evento))   # (tras el cartel, la primera vez)
 
@@ -196,7 +200,7 @@ func mostrar_cartel(titulo: String, texto: String, color: Color) -> void:
 func etiqueta() -> String:
 	if not activo or (evento == "horda" and horda.get("hecha", false)):
 		return ""
-	return " · " + DATOS[evento].nombre
+	return " · " + Idioma.t(DATOS[evento].nombre)
 
 
 # ¿Está Johnny en el medio del pasillo (a HORDA.medio como mucho)? Lo que hace falta para que empiece la horda
@@ -230,7 +234,7 @@ func apagar_luces() -> void:
 	for n in partida.mapa.find_children("*", "", true, false):
 		if n.scene_file_path == LAMPARA:
 			n.fuerza = 0.0
-			for hijo in ["Bombilla", "Polvo"]:
+			for hijo in ["Bombilla", "Polvo"]:   # no-tr (nombres de nodo)
 				if n.has_node(hijo):
 					n.get_node(hijo).hide()
 
@@ -296,7 +300,7 @@ func avanzar_horda(delta: float) -> void:
 		for i in n:
 			soltar(tipos.pick_random())   # todos de golpe (el dueño, 28 oct; antes, de uno en uno)
 		Sonido.tocar("rugido")
-		partida.decir("¡Ahí viene la horda!", 2.5)
+		partida.decir(Idioma.t("¡Ahí viene la horda!"), 2.5)
 	if h.salio and h.vivos.is_empty() and h.quedan.is_empty():
 		h.hecha = true
 		premio()
@@ -347,7 +351,7 @@ func premio() -> void:
 	var n: int = HORDA.billetes + partida.planta.num - 1
 	partida.soltar_billetes(n, johnny.position + Vector2(0, 40))
 	partida.soltar_municion(johnny.position + Vector2(40, 30))
-	partida.decir("¡Horda vencida! Te deja $%d y una caja de munición" % n, 3.5)
+	partida.decir(Idioma.t("¡Horda vencida! Te deja $%d y una caja de munición") % n, 3.5)
 	Sonido.tocar("limpio")
 	# el logro Contra la marea, cuando ya se ha leído lo del premio (su aviso lo taparía)
 	get_tree().create_timer(3.5, false).timeout.connect(partida.logros.cumplir.bind("contra_marea"))
@@ -361,7 +365,9 @@ func superado() -> String:
 	var n: int = HORDA.billetes + partida.planta.num - 1
 	partida.dolares += n
 	Sonido.tocar("limpio")
-	return "¡%s superado! +$%d" % ["Apagón" if evento == "apagon" else "Incendio", n]
+	if evento == "apagon":
+		return Idioma.t("¡Apagón superado! +$%d") % n
+	return Idioma.t("¡Incendio superado! +$%d") % n
 
 
 # ═════════════ La prueba (--captura --evento X) ═════════════
@@ -549,7 +555,7 @@ class Cable extends Node2D:
 	var luz: PointLight2D
 
 	func _ready() -> void:
-		name = "Cable"
+		name = "Cable"   # no-tr (nombre de nodo)
 		z_index = -1
 		pulso = randf() * INCENDIO.pulso   # que no den todos a la vez
 		chispas = Node2D.new()
@@ -571,7 +577,7 @@ class Cable extends Node2D:
 		destello = maxf(0.0, destello - delta)
 		var johnny := get_tree().get_first_node_in_group("jugador")
 		if johnny and johnny.vivo and charco.dentro(johnny.global_position, 80.0):
-			Peligros.avisar(self, datos, "¡Ojo! Ese charco tiene corriente")
+			Peligros.avisar(self, datos, Idioma.t("¡Ojo! Ese charco tiene corriente"))
 		pulso += delta
 		if pulso >= INCENDIO.pulso:
 			pulso -= INCENDIO.pulso
@@ -641,7 +647,7 @@ class Lluvia extends Node2D:
 	var t := 0.0
 
 	func _ready() -> void:
-		name = "Lluvia"
+		name = "Lluvia"   # no-tr (nombre de nodo)
 		z_index = 40
 		var propio := CanvasItemMaterial.new()
 		propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED

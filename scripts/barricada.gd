@@ -23,7 +23,9 @@ const GRUPO := [2, 5]      # zombis por grupo, igual
 const TOPE := 30           # zombis a la vez, como mucho
 const TIPOS := [["lento", "normal", "normal"], ["normal", "normal", "rapido", "rapido", "explosivo", "lento"]]
 const COLOR := Color("#ffc58a")   # lo que dice, encima de la puerta
-# Lo que va diciendo según lo que lleva (de 0 a 1); con 0.5 pasa las provisiones por debajo de la puerta
+# Lo que va diciendo según lo que lleva (de 0 a 1); con 0.5 pasa las provisiones por debajo de la puerta. En español;
+# sale con Idioma.t
+# [traducir]
 const FRASES := [
 	[0.1, "¡Cuántos clavos le metí!"],
 	[0.25, "¡Una tabla menos!"],
@@ -34,6 +36,7 @@ const FRASES := [
 	[0.92, "¡La última tabla!"],
 ]
 const EMPUJAN := ["¡Me están empujando la puerta!", "¡Quítamelos de la puerta!", "¡Así no puedo, Johnny!"]
+# [/traducir]
 
 
 # Lo que aporrean los zombis: un punto invisible delante de la puerta, por fuera. Para ellos es como el
@@ -94,7 +97,7 @@ func _physics_process(delta: float) -> void:
 	if empujan:
 		if queja_t <= 0.0 and tiempo - dicho_t > 2.6:
 			queja_t = 5.0
-			decir(EMPUJAN.pick_random())
+			decir(Idioma.t(EMPUJAN.pick_random()))
 	elif sup.johnny.vivo:
 		hecho = minf(DURA, hecho + delta)
 		# se le oye trabajar: un golpe de martillo o un tirón de vez en cuando
@@ -114,7 +117,7 @@ func _physics_process(delta: float) -> void:
 				Vector2(randf_range(-90, 90), randf_range(-140, -40)), Color("#a0703f"), 4.0, 0.6)
 	var frase := ""   # (si avanza de golpe, solo la última)
 	while frase_i < FRASES.size() and k >= FRASES[frase_i][0]:
-		frase = FRASES[frase_i][1]
+		frase = Idioma.t(FRASES[frase_i][1])
 		if FRASES[frase_i][0] == 0.5:
 			soltar_provisiones()
 		frase_i += 1
@@ -147,7 +150,7 @@ func esperar(delta: float) -> void:
 	espera += delta
 	if not avisado and espera >= 0.3:
 		avisado = true
-		decir("¡Espera, que quito la barricada!")
+		decir(Idioma.t("¡Espera, que quito la barricada!"))
 	if espera >= ESPERA:
 		empezar()
 
@@ -172,8 +175,8 @@ func empezar() -> void:
 	Sonido.tocar("portazo")
 	partida.cerrada = true
 	partida.actualizar_puertas()
-	partida.decir("¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada" %
-		sup.rescate.def.nombre, 4.0)
+	partida.decir(Idioma.t("¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada") %
+		Idioma.t(sup.rescate.def.nombre), 4.0)
 
 
 # Por fuera de la puerta del almacén, a un paso: donde aporrean los zombis y donde caen las provisiones
@@ -232,7 +235,7 @@ func grupo(n: int, tipos: Array) -> void:
 		for i in n:
 			partida.meter_zombi(tipos.pick_random(), entrada.llegada() + Vector2(randf_range(-24, 24), randf_range(-24, 24)))
 		puestos = n
-		por = "la entrada"
+		por = Idioma.t("la entrada")
 	elif not salas.is_empty():
 		var sala: Dictionary = salas.pick_random()
 		for i in 120:
@@ -245,9 +248,9 @@ func grupo(n: int, tipos: Array) -> void:
 				continue
 			partida.meter_zombi(tipos.pick_random(), pos)
 			puestos += 1
-		por = Supervivientes.POR.get(sala.uso, "")
+		por = Idioma.t(Supervivientes.POR.get(sala.uso, ""))
 	if puestos > 0 and por != "" and randf() < 0.4 and tiempo - dicho_t > 2.6:
-		decir("¡Vienen por %s!" % por)
+		decir(Idioma.t("¡Vienen por %s!") % por)
 
 
 # Barricada fuera: se abren su puerta y la entrada. Él se une al arrimarse, como siempre (supervivientes.gd)
@@ -259,7 +262,7 @@ func acabar() -> void:
 	Sonido.musica("menu")
 	partida.cerrada = false
 	partida.actualizar_puertas()
-	partida.decir("¡Barricada fuera! La entrada se ha abierto", 3.0)
+	partida.decir(Idioma.t("¡Barricada fuera! La entrada se ha abierto"), 3.0)
 	Sonido.tocar("limpio")
 	sup.abrir_escondite(partida.aqui)
 
@@ -293,8 +296,8 @@ func dibujar(capa: Control) -> void:
 	capa.draw_rect(Rect2(x, y + 16, ancho * hecho / DURA, 10), relleno)
 	capa.draw_rect(Rect2(x, y + 16, ancho, 10), Tema.LINEA, false, 2.0)
 	var nombre: String = sup.rescate.def.nombre
-	var texto := "¡Están empujando la puerta! Quítaselos" if empujan \
-		else "%s quita la barricada · %d:%02d" % [nombre, falta / 60, falta % 60]
+	var texto := Idioma.t("¡Están empujando la puerta! Quítaselos") if empujan \
+		else Idioma.t("%s quita la barricada · %d:%02d") % [Idioma.t(nombre), falta / 60, falta % 60]
 	capa.draw_string_outline(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, 4, Tema.LINEA)
 	capa.draw_string(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16,
 		Color("#ff8a8a") if empujan else Color("#f2e6c0"))

@@ -15,11 +15,15 @@ class_name Talentos
 
 const PRECIO_PUNTO := 10   # dólares que cuesta cada punto de talento (provisional, como en el JS)
 
+# Los textos de RAMAS y de LISTA (nombre y desc) se traducen al enseñarlos, con nombre_rama(), nombre_de() y desc_de().
+# Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares
+# [traducir]
 const RAMAS := [
 	{"id": "militar", "nombre": "Militar", "icono": "militar"},
 	{"id": "superviviente", "nombre": "Superviviente", "icono": "medico"},
 	{"id": "quimico", "nombre": "Químico", "icono": "obj-bidon_acido"},
 ]
+# [/traducir]
 # El rayo de Pararrayos (johnny.gd, pararrayos): su daño (con el Catalizador, más), lo que aturde, cada cuánto como
 # mucho y lo cerca que tiene que estar el que te ha pegado (los que disparan de lejos, no)
 const PARARRAYOS := {"dano": 20, "aturde": 1.0, "cada": 3.0, "alcance": 200.0}
@@ -30,6 +34,7 @@ const ADRENALINA := {"vida": 0.5, "dano": 0.3, "velocidad": 0.2}
 # Catalizador sube), y lo que le dura al zombi la marca del rayo después del calambre ("rayo", en segundos)
 const MEZCLA := {"radio": 90.0, "dano": 30, "rayo": 1.5}
 
+# [traducir]
 const LISTA := [
 	# ── Militar
 	{"id": "ataque", "rama": "militar", "nivel": 1, "nombre": "Ataque", "max": 5, "icono": "fuerza",
@@ -110,6 +115,7 @@ const LISTA := [
 		"pide": ["napalm", "pegajoso", "voltaje"],
 		"desc": "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"},
 ]
+# [/traducir]
 
 
 static func talento(id: String) -> Dictionary:
@@ -117,6 +123,29 @@ static func talento(id: String) -> Dictionary:
 		if t.id == id:
 			return t
 	return {}
+
+
+# El nombre y la descripción de un talento, ya en el idioma del jugador
+static func nombre_de(id: String) -> String:
+	return Idioma.t(talento(id).get("nombre", ""))
+
+
+static func desc_de(id: String) -> String:
+	return Idioma.t(talento(id).get("desc", ""))
+
+
+# El nombre de una rama ("militar"), ya en el idioma del jugador
+static func nombre_rama(id: String) -> String:
+	for r in RAMAS:
+		if r.id == id:
+			return Idioma.t(r.nombre)
+	return ""
+
+
+# Un número con un decimal como se escribe en el idioma del jugador: 0,5 en español y 0.5 en inglés
+static func decimal(x: float) -> String:
+	var texto := str(x)
+	return texto.replace(".", ",") if Idioma.actual == Idioma.ORIGEN else texto
 
 
 # Puntos puestos en un talento
@@ -149,10 +178,10 @@ static func faltan(s: Dictionary, id: String) -> Array:
 
 # Unos talentos en una frase: "Frenesí", "Frenesí y Racimo", "Frenesí, Gatillo fácil y Racimo"
 static func nombres(ids: Array) -> String:
-	var lista: Array = ids.map(func(p): return talento(p).nombre)
+	var lista: Array = ids.map(func(p): return nombre_de(p))
 	if lista.size() < 2:
 		return "".join(lista)
-	return ", ".join(lista.slice(0, -1)) + " y " + lista[-1]
+	return Idioma.t("%s y %s") % [", ".join(lista.slice(0, -1)), lista[-1]]
 
 
 # Lo que hace cada talento con n puntos sobre los atributos de Johnny (mejoras.gd)
@@ -208,30 +237,30 @@ static func aplicar_uno(st: Dictionary, id: String, n: int) -> void:
 # siguiente (M15). "" en los de un solo punto (para esos vale su "desc")
 static func efecto(id: String, n: int) -> String:
 	match id:
-		"ataque": return "+%d %% de daño" % (10 * n)
-		"punteria": return "+%d %% de daño y alcance" % (10 * n)
-		"camorrista": return "+%d %% cuerpo a cuerpo" % (10 * n)
-		"tirador": return "+%d %% a distancia" % (10 * n)
-		"artificiero": return "+%d molotov%s y granada%s" % [n, "s" if n > 1 else "", "s" if n > 1 else ""]
-		"corpulento": return "+%d %% de vida" % (10 * n)
-		"lobezno": return "%d de vida cada 5 s" % n
-		"durito": return "%d menos por golpe" % n
-		"reflejos": return "una esquiva sola cada %d s" % (11 - n)
-		"sanitario": return "+%d de cura" % (10 * n)
-		"catalizador": return "+%d %% de fuego, ácido, rayo y frío" % (10 * n)
-		"guantes_goma": return "%d %% menos de los efectos" % (10 * n)
-		"incendiario": return "+%s s ardiendo" % str(0.5 * n).replace(".", ",")
-		"desatascador": return "+%d %% con ácido" % (10 * n)
-		"criogenia": return "+%d congeladora%s y +%s s" % [n, "s" if n > 1 else "", str(0.5 * n).replace(".", ",")]
-		"frenesi": return "+%d %% de rapidez cuerpo a cuerpo" % (10 * n)
-		"gatillo": return "+%d %% de rapidez y recarga" % (10 * n)
-		"racimo": return "suelta %d más" % n
-		"blindaje": return "escudo de %d" % (50 + 25 * n)
-		"sombra": return "esquiva un %d %% antes" % (15 * n)
-		"aliento": return "+%d de vida por planta" % (15 * n)
-		"napalm": return "+%d s de fuego" % n
-		"pegajoso": return "%d %% más lentos con ácido" % (10 * n)
-		"voltaje": return "salta a %d más" % n
+		"ataque": return Idioma.t("+%d %% de daño") % (10 * n)
+		"punteria": return Idioma.t("+%d %% de daño y alcance") % (10 * n)
+		"camorrista": return Idioma.t("+%d %% cuerpo a cuerpo") % (10 * n)
+		"tirador": return Idioma.t("+%d %% a distancia") % (10 * n)
+		"artificiero": return Idioma.n("+%d molotov y granada", "+%d molotovs y granadas", n) % n
+		"corpulento": return Idioma.t("+%d %% de vida") % (10 * n)
+		"lobezno": return Idioma.t("%d de vida cada 5 s") % n
+		"durito": return Idioma.t("%d menos por golpe") % n
+		"reflejos": return Idioma.t("una esquiva sola cada %d s") % (11 - n)
+		"sanitario": return Idioma.t("+%d de cura") % (10 * n)
+		"catalizador": return Idioma.t("+%d %% de fuego, ácido, rayo y frío") % (10 * n)
+		"guantes_goma": return Idioma.t("%d %% menos de los efectos") % (10 * n)
+		"incendiario": return Idioma.t("+%s s ardiendo") % decimal(0.5 * n)
+		"desatascador": return Idioma.t("+%d %% con ácido") % (10 * n)
+		"criogenia": return Idioma.n("+%d congeladora y +%s s", "+%d congeladoras y +%s s", n) % [n, decimal(0.5 * n)]
+		"frenesi": return Idioma.t("+%d %% de rapidez cuerpo a cuerpo") % (10 * n)
+		"gatillo": return Idioma.t("+%d %% de rapidez y recarga") % (10 * n)
+		"racimo": return Idioma.t("suelta %d más") % n
+		"blindaje": return Idioma.t("escudo de %d") % (50 + 25 * n)
+		"sombra": return Idioma.t("esquiva un %d %% antes") % (15 * n)
+		"aliento": return Idioma.t("+%d de vida por planta") % (15 * n)
+		"napalm": return Idioma.t("+%d s de fuego") % n
+		"pegajoso": return Idioma.t("%d %% más lentos con ácido") % (10 * n)
+		"voltaje": return Idioma.t("salta a %d más") % n
 	return ""
 
 

@@ -34,16 +34,21 @@ const DE_UN_ZOMBI := {"bidon_acido": "venenoso"}
 const PIEZAS := {
 	"pieza_cuerpo": "cuerpo", "pieza_distancia": "distancia", "pieza_especial": "especial", "pieza_arrojable": "arrojable",
 }
-# Para qué armas sirve cada familia de piezas, para la ficha (ui/inventario.gd, que_pieza)
+# Para qué armas sirve cada familia de piezas, para la ficha (ui/inventario.gd, que_pieza; pieza_para() lo traduce). Cada
+# una es una frase entera, con sus artículos y los nombres de las armas: así cada idioma las escribe como quiere
+# [traducir]
 const PIEZA_PARA := {
 	"cuerpo": "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)",
 	"distancia": "las armas a distancia (la pistola, la MP5 y la escopeta)",
 	"especial": "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)",
 	"arrojable": "los arrojables (el molotov, la granada, la atraedora y la congeladora)",
 }
+# [/traducir]
 const PIEZA_ZOMBI := 0.06    # probabilidad de que cualquier zombi suelte una pieza (una de las cuatro, al azar)
 const PIEZAS_JEFE := 4       # las que suelta cada jefe al caer, seguras (cada una, de una familia al azar)
 
+# Los nombres de los objetos que son chatarra, las vendas y las piezas; para enseñarlos, nombre(), que los traduce
+# [traducir]
 const NOMBRES := {
 	"gasolina": "Gasolina",
 	# el bidón de ácido, en los dos edificios: solo lo suelta el gordo (DE_UN_ZOMBI)
@@ -56,6 +61,7 @@ const NOMBRES := {
 	"pieza_cuerpo": "Pieza cuerpo a cuerpo", "pieza_distancia": "Pieza a distancia", "pieza_especial": "Pieza especial",
 	"pieza_arrojable": "Pieza arrojable",
 }
+# [/traducir]
 # Los de curar: no son chatarra, se usan (partida.usar_objeto) desde el inventario («Usar») o con su tecla sin abrirlo
 # ("accion": 1 las vendas y 2 el botiquín; sus casillas junto a la barra de vida, ui/hud.gd), y van al baúl como los
 # demás. Las vendas (de las tiendas del centro comercial) curan 25 y el botiquín, 50 (el que suelta el armarito de los
@@ -63,10 +69,12 @@ const NOMBRES := {
 # talento Sanitario, y con la Alerta 4, la mitad ("cura"). Las vendas solo curan dentro del tercio de vida en el que
 # estás; el botiquín, además, devuelve un tercio perdido ("tercio"; johnny.gd, devolver_tercio). Las vendas cuentan en
 # Colecciones como los demás (están en NOMBRES y en TIENDAS); el botiquín, no. El orden es el de sus casillas en el HUD
+# [traducir]
 const USABLES := {
 	"vendas": {"cura": 25, "accion": "usar_vendas"},
 	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 50, "accion": "usar_botiquin", "tercio": true},
 }
+# [/traducir]
 # Las curas que caben en la mochila, como mucho (el dueño, 27 oct: con dos armaritos por piso salían unos 22
 # botiquines por partida y se amontonaban sin límite); las que sobran se quedan en el suelo o en el baúl
 const TOPE := {"botiquin": 2, "vendas": 3}
@@ -83,15 +91,20 @@ const TIENDAS := {
 }
 
 
-# El nombre de un objeto o de un arma
+# El nombre de un objeto o de un arma, en el idioma del jugador
 static func nombre(id: String) -> String:
 	if id in NOMBRES:
-		return NOMBRES[id]
+		return Idioma.t(NOMBRES[id])
 	if id in USABLES:
-		return USABLES[id].nombre
+		return Idioma.t(USABLES[id].nombre)
 	if id in Armas.MUNICION:   # las balas y los cartuchos (en el baúl)
-		return Armas.MUNICION[id].nombre
-	return Armas.DATOS[id].nombre if id in Armas.DATOS else id
+		return Armas.municion_nombre(id)
+	return Idioma.t(Armas.DATOS[id].nombre) if id in Armas.DATOS else id
+
+
+# Para qué armas sirve una familia de piezas (PIEZA_PARA: «las armas cuerpo a cuerpo (...)»), en el idioma del jugador
+static func pieza_para(familia: String) -> String:
+	return Idioma.t(PIEZA_PARA[familia])
 
 
 # El icono para Tema.icono_y_texto: los objetos, "obj-<id>"; las armas, el suyo
@@ -268,21 +281,22 @@ static func de_edificio(edificio: String) -> Array:
 # tiendas que lo sueltan ("Ferretería, electrónica y supermercado")
 static func donde(id: String, edificio: String) -> String:
 	if id in PIEZAS:
-		return "la suelta algún zombi, y los jefes seguro"
+		return Idioma.t("la suelta algún zombi, y los jefes seguro")
 	if id == "bidon_acido":
-		return "lo suelta el gordo"
+		return Idioma.t("lo suelta el gordo")
 	if edificio != "centro":
-		return "lo suelta cualquier zombi"
+		return Idioma.t("lo suelta cualquier zombi")
 	var tiendas := []
 	for tipo in TIENDAS:
 		if id in TIENDAS[tipo]:
-			var n: String = Tienda.TIPOS[tipo].nombre
-			tiendas.append(n if tiendas.is_empty() else n.to_lower())   # solo la primera con mayúscula
+			var n: String = Idioma.t(Tienda.TIPOS[tipo].nombre)
+			# (en español, solo la primera con mayúscula; en inglés, los nombres de tienda se quedan como vienen)
+			tiendas.append(n if tiendas.is_empty() or Idioma.actual != Idioma.ORIGEN else n.to_lower())
 	if tiendas.is_empty():
 		return ""
 	if tiendas.size() == 1:
 		return tiendas[0]
-	return ", ".join(tiendas.slice(0, -1)) + " y " + tiendas[-1]
+	return Idioma.t("%s y %s") % [", ".join(tiendas.slice(0, -1)), tiendas[-1]]
 
 
 # Apunta un objeto como encontrado alguna vez (al cogerlo del suelo). El botiquín de la

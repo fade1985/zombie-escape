@@ -176,6 +176,11 @@ en una línea.
   también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con
   `--captura` es español salvo con `--ingles`, y al cerrar cuenta los textos sin traducir. Cómo se escribe un texto,
   las tablas `# [traducir]` y la herramienta: `docs/IDIOMAS.md`; nombres fijos del inglés: `docs/GLOSARIO_EN.md`).
+- Los datos con texto (`armas.gd`, `objetos.gd`, `lanzables.gd`, `talentos.gd`, `logros.gd`, `mutaciones.gd`, `skins.gd`,
+  `eventos.gd`, `averia.gd`, `joyeria.gd`, `barricada.gd`) guardan los textos en español en tablas `# [traducir]` y
+  **sus funciones los devuelven ya traducidos** (`Armas.nombre`, `Objetos.nombre`, `Lanzables.uno/varios`,
+  `Talentos.nombre_de/desc_de/nombre_rama`, `Logros.nombre_de/desc_de/nombre_tema`, `Skins.nombre/como/efecto`...): quien
+  los enseña usa esas funciones, no la tabla directa (`docs/IDIOMAS.md`).
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla), `logros.gd` (40 desde el M17, 28 oct; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`

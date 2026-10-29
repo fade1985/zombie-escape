@@ -20,6 +20,8 @@ extends Node
 #   completado (el edificio "edificio" completado), rescatados (los de "edificio" que viven en las viviendas), skin
 #   (una puesta), skins, bestiario, paginas (del dosier), objetos (de las Colecciones), rama (la más llena del árbol de
 #   talentos), arbol (el árbol entero) y las cuentas de los logros (jefes, victorias, armas, reglas)
+# Los textos de LISTA (nombre y desc) y de TEMAS se traducen al enseñarlos, con nombre_de(), desc_de() y nombre_tema()
+# [traducir]
 const LISTA := [
 	# ── Edificios
 	{"id": "primer_turno", "tema": "edificios", "nombre": "Primer turno", "icono": "apartamentos", "premio": 5, "meta": 1, "cuenta": "",
@@ -109,9 +111,12 @@ const LISTA := [
 	{"id": "chatarrero", "tema": "colecciones", "nombre": "Chatarrero", "icono": "mochila", "premio": 5, "cuenta": "",
 		"mira": "objetos", "desc": "Coge al menos una vez cada objeto de las Colecciones."},
 ]
+# [/traducir]
 # Los apartados del programa Logros del ordenador, en orden
+# [traducir]
 const TEMAS := {"edificios": "Edificios", "jefes": "Jefes", "combate": "Combate", "armas": "Armas y talentos",
 	"supervivientes": "Supervivientes", "sorpresas": "Sorpresas y retos", "colecciones": "Colecciones"}
+# [/traducir]
 
 const AL_PRENDER := 5.0   # segundos tras lanzar un molotov en los que sus llamas cuentan para "Pirómano"
 const JEFE_RAPIDO := 30.0     # Visto y no visto: los segundos de pelea con el jefe, como mucho
@@ -161,7 +166,7 @@ func _process(delta: float) -> void:
 	# una ayuda encendida a media partida (desde la pausa): se avisa y esta partida ya no da logros
 	if not con_ayudas and ayudas_encendidas():
 		con_ayudas = true
-		partida.decir("Con ayudas encendidas, en esta partida ya no se consiguen logros", 4.0)
+		partida.decir(Idioma.t("Con ayudas encendidas, en esta partida ya no se consiguen logros"), 4.0)
 	# la pelea con el jefe: no cuenta mientras se presenta ni mientras espera arriba, en el helipuerto
 	if is_instance_valid(jefe):
 		if jefe.get("esperando") or partida.presentacion.activa:
@@ -193,6 +198,19 @@ static func datos(id: String) -> Dictionary:
 		if l.id == id:
 			return l
 	return {}
+
+
+# El nombre y la descripción de un logro, y el nombre de un apartado (TEMAS), ya en el idioma del jugador
+static func nombre_de(id: String) -> String:
+	return Idioma.t(datos(id).get("nombre", ""))
+
+
+static func desc_de(id: String) -> String:
+	return Idioma.t(datos(id).get("desc", ""))
+
+
+static func nombre_tema(tema: String) -> String:
+	return Idioma.t(TEMAS.get(tema, ""))
 
 
 # "pendiente", "conseguido" (falta cobrarlo) o "cobrado"
@@ -296,7 +314,7 @@ func cumplir(id: String) -> void:
 	Guardado.cambiar(func(g): g.logros[id] = "conseguido")
 	if por_avisar.is_empty():
 		avisar.call_deferred()
-	por_avisar.append(datos(id).nombre)
+	por_avisar.append(nombre_de(id))
 
 
 func avisar() -> void:
@@ -304,14 +322,14 @@ func avisar() -> void:
 		return
 	Sonido.tocar("limpio")
 	if por_avisar.size() == 1:
-		partida.gran_aviso("¡LOGRO CONSEGUIDO!")
-		partida.decir("¡Logro conseguido: %s! Cobra el premio en el ordenador" % por_avisar[0], 4.0)
+		partida.gran_aviso(Idioma.t("¡LOGRO CONSEGUIDO!"))
+		partida.decir(Idioma.t("¡Logro conseguido: %s! Cobra el premio en el ordenador") % por_avisar[0], 4.0)
 	else:
-		partida.gran_aviso("¡%d LOGROS CONSEGUIDOS!" % por_avisar.size())
+		partida.gran_aviso(Idioma.t("¡%d LOGROS CONSEGUIDOS!") % por_avisar.size())
 		if por_avisar.size() == 2:
-			partida.decir("¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador" % por_avisar, 5.0)
+			partida.decir(Idioma.t("¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador") % por_avisar, 5.0)
 		else:   # (con más, los nombres no caben en la pantalla)
-			partida.decir("¡%d logros conseguidos! Míralos y cobra los premios en el ordenador" % por_avisar.size(), 5.0)
+			partida.decir(Idioma.t("¡%d logros conseguidos! Míralos y cobra los premios en el ordenador") % por_avisar.size(), 5.0)
 	por_avisar.clear()
 
 

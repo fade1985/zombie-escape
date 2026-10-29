@@ -601,7 +601,7 @@ func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String) 
 func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 	var johnny: Node2D = partida.johnny
 	var w: Dictionary = johnny.arma_de(id)
-	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s · %s" % [Armas.HUECOS[w.tipo],
+	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s · %s" % [Armas.tipo_nombre(w.tipo),
 		Armas.calidad_nombre(johnny.calidad(id)), Idioma.t("En la mano") if puesta else Idioma.t("De repuesto")])
 	if w.tipo == "fuego":
 		var tipo := Armas.municion(id)
@@ -698,7 +698,7 @@ func ficha_objeto(caja: VBoxContainer, c: Array) -> Dictionary:
 func que_pieza(id: String) -> String:
 	if not id in Objetos.PIEZAS:
 		return ""
-	return Idioma.t("Sirve para mejorar %s en el banco de trabajo del taller.") % Objetos.PIEZA_PARA[Objetos.PIEZAS[id]] + " "
+	return Idioma.t("Sirve para mejorar %s en el banco de trabajo del taller.") % Objetos.pieza_para(Objetos.PIEZAS[id]) + " "
 
 
 # La ficha de un hueco de munición ([tipo, cuánta]): cuánta lleva y quién la gasta. La gasolina, el ácido y las
@@ -706,12 +706,12 @@ func que_pieza(id: String) -> String:
 func ficha_municion(caja: VBoxContainer, h: Array) -> Dictionary:
 	var tipo: String = h[0]
 	var m: Dictionary = Armas.MUNICION[tipo]
-	cabeza(caja, m.icono, m.nombre, Idioma.t("Munición"))
+	cabeza(caja, m.icono, Armas.municion_nombre(tipo), Idioma.t("Munición"))
 	renglon(caja, Idioma.t("%d en este hueco · llevas %d") % [h[1], partida.johnny.cuanta(tipo)], Tema.TINTA)
 	var que := Idioma.t("La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja.") % [
-		m.para, m.hueco]
+		Armas.municion_para(tipo), m.hueco]
 	if tipo in Objetos.NOMBRES:   # la gasolina, el bidón de ácido y la batería
-		que = Idioma.t("Llena %s (caben %d en cada hueco). Se tira de uno en uno.") % [m.para, m.hueco]
+		que = Idioma.t("Llena %s (caben %d en cada hueco). Se tira de uno en uno.") % [Armas.municion_para(tipo), m.hueco]
 	return {"que": que, "botones": [["tirar", Idioma.t("Tirar al suelo"), tirar, false],
 		["destruir", Idioma.t("Destruir"), destruir, false]]}
 
@@ -1202,7 +1202,7 @@ func ficha_baul() -> Dictionary:
 			var w: Dictionary = johnny.arma_de(id)
 			var calidad: int = johnny.calidad(id)
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
-				"que_es": "%s · %s · %s" % [Armas.HUECOS[w.tipo], Armas.calidad_nombre(calidad),
+				"que_es": "%s · %s · %s" % [Armas.tipo_nombre(w.tipo), Armas.calidad_nombre(calidad),
 					Idioma.t("En la mano") if sel[0] == "p" else Idioma.t("De repuesto")],
 				"que": que_hace(id) + " "}, true)
 			if Armas.al_baul(id, calidad):
@@ -1242,10 +1242,10 @@ func ficha_baul() -> Dictionary:
 		"u":
 			var h: Array = johnny.huecos_municion()[i]
 			var m: Dictionary = Armas.MUNICION[h[0]]
-			d.merge({"icono": m.icono, "nombre": m.nombre, "que_es": Idioma.t("Munición · La llevas"),
+			d.merge({"icono": m.icono, "nombre": Armas.municion_nombre(h[0]), "que_es": Idioma.t("Munición · La llevas"),
 				"cuanto": Idioma.t("%d en este hueco · llevas %d") % [h[1], johnny.cuanta(h[0])]}, true)
 			# (la gasolina, el bidón de ácido y la batería llenan un arma; las balas y los cartuchos, se gastan al disparar)
-			d.que = "%s %s" % [(Idioma.t("Llena %s.") if h[0] in Objetos.NOMBRES else Idioma.t("Es para %s.")) % m.para,
+			d.que = "%s %s" % [(Idioma.t("Llena %s.") if h[0] in Objetos.NOMBRES else Idioma.t("Es para %s.")) % Armas.municion_para(h[0]),
 				que_guardar(s, h[0], h[1], "hueco")]
 			d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, not Objetos.cabe_baul(s, h[0])]
 		"b":
@@ -1263,7 +1263,7 @@ func ficha_baul() -> Dictionary:
 				"cuanto": (Idioma.t("Hay %d en el baúl") % o.n) if s.baul.get(id, 0) <= o.n
 					else Idioma.t("Hay %d en esta casilla · %d en el baúl") % [o.n, s.baul[id]],
 				"boton": ["sacar", Idioma.t("Sacar uno") if tanda == 1 else Idioma.t("Sacar %d") % tanda, sacar, not cabe]}, true)
-			d.que = (Idioma.t("Llena %s.") if id in Objetos.NOMBRES else Idioma.t("Es para %s.")) % Armas.MUNICION[id].para + " " \
+			d.que = (Idioma.t("Llena %s.") if id in Objetos.NOMBRES else Idioma.t("Es para %s.")) % Armas.municion_para(id) + " " \
 				if municion else que_pieza(id)
 			if cabe and tanda > 1:
 				d.que += Idioma.t("Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes.") % tanda
@@ -1285,7 +1285,7 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 		"boton": ["sacar", Idioma.t("Sacar"), sacar, not cabe]}
 	if arma:
 		var tipo: String = Armas.datos(o.id).tipo
-		d.que_es = Idioma.t("%s · %s · En el baúl") % [Armas.HUECOS[tipo], Armas.calidad_nombre(o.calidad)]
+		d.que_es = Idioma.t("%s · %s · En el baúl") % [Armas.tipo_nombre(tipo), Armas.calidad_nombre(o.calidad)]
 		if o.id == partida.johnny.huecos[tipo] or o.id in partida.armas_guardadas:
 			d.que = que_hace(o.id, o.calidad) + " " + Idioma.t("Ya llevas una: se cambian, esta ocupa su sitio y la tuya entra en " +
 				"el baúl en su lugar.")
@@ -2175,7 +2175,7 @@ func que_se_tira(clave: String) -> String:
 			return Objetos.nombre(c[0]) + (" ×%d" % c[1] if c[1] > 1 else "")
 		"u":
 			var h: Array = partida.johnny.huecos_municion()[i]
-			return cuenta_municion(h[0], h[1]) if h[1] > 1 else Armas.MUNICION[h[0]].nombre
+			return cuenta_municion(h[0], h[1]) if h[1] > 1 else Armas.municion_nombre(h[0])
 	return ""
 
 

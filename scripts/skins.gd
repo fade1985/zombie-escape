@@ -36,6 +36,8 @@
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
+# Los textos están en español; para enseñarlos, nombre(), como() y efecto() los dan ya traducidos
+# [traducir]
 const LISTA := {
 	"portero": {"nombre": "El portero", "efecto": "La fregona hace un 100 % más de daño.",
 		"como": "Mata a la portera por primera vez.", "jefe": "portera", "fregona": 2.0},
@@ -46,11 +48,22 @@ const LISTA := {
 	"bombero": {"nombre": "El bombero", "efecto": "Las armas que queman hacen un 50 % más de daño y el fuego no te quema.",
 		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 1.5, "ignifugo": true},
 }
+# [/traducir]
 
 
-# El nombre de una skin ("" = el conserje de siempre)
+# El nombre de una skin ("" = el conserje de siempre), en el idioma del jugador
 static func nombre(id: String) -> String:
-	return LISTA[id].nombre if id in LISTA else "Conserje"
+	return Idioma.t(LISTA[id].nombre) if id in LISTA else Idioma.t("Conserje")
+
+
+# Cómo se consigue una skin, en el idioma del jugador (la frase acaba en punto)
+static func como(id: String) -> String:
+	return Idioma.t(LISTA[id].como) if id in LISTA else ""
+
+
+# Lo que hace llevarla puesta, en el idioma del jugador
+static func efecto(id: String) -> String:
+	return Idioma.t(LISTA[id].efecto) if id in LISTA else ""
 
 
 # La que lleva puesta, según el guardado (si no es ninguna conocida o no la tiene, la de siempre)

@@ -20,6 +20,8 @@ const CADA := [6.0, 3.5]    # segundos entre grupo y grupo, al principio y al fi
 const GRUPO := [2, 5]       # zombis por grupo, igual
 const TIPOS := [["lento", "normal", "normal", "dependienta"],
 	["normal", "rapido", "rapido", "vigilante", "dependienta", "explosivo"]]   # el primer minuto y luego
+# Lo que dice el técnico (en español; sale con Idioma.t)
+# [traducir]
 const FRASES := [
 	[0.02, "¡Bien, sin corriente! Cúbreme mientras lo arreglo"],
 	[0.15, "Este empalme está hecho polvo…"],
@@ -31,6 +33,8 @@ const FRASES := [
 ]
 const QUEJAS := ["¡Eh, que hay corriente! ¡Baja la palanca!", "¡Así no puedo! ¡Quita la corriente!",
 	"¡Que me electrocuto! ¡La palanca!"]
+const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # cuando le dan y Johnny anda lejos
+# [/traducir]
 
 var sup: Supervivientes
 var el: Aliado = null       # el técnico mientras dura su rescate (null: no hay)
@@ -68,8 +72,8 @@ func empezar(a: Aliado) -> bool:
 	queja_t = 0.0
 	cuenta = false
 	if datos.corriente:
-		a.decir("Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!")
-		partida.decir("Baja la palanca del cuadro eléctrico para que el %s arregle el cable" % a.def.nombre, 4.0)
+		a.decir(Idioma.t("Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"))
+		partida.decir(Idioma.t("Baja la palanca del cuadro eléctrico para que el %s arregle el cable") % Idioma.t(a.def.nombre), 4.0)
 	return true
 
 
@@ -97,14 +101,14 @@ func _physics_process(delta: float) -> void:
 		if levantando >= Supervivientes.HORDA.levantar:
 			levantando = 0.0
 			a.levantarse()
-			a.decir("¡Gracias! Sigo con el cable")
+			a.decir(Idioma.t("¡Gracias! Sigo con el cable"))
 			Particulas.anillo(a, a.global_position, 50.0, Tema.VERDE, 0.4)
 	elif datos.corriente:
 		# han vuelto a subir la palanca: así no puede trabajar
 		queja_t -= delta
 		if queja_t <= 0.0:
 			queja_t = 6.0
-			a.decir(QUEJAS.pick_random())
+			a.decir(Idioma.t(QUEJAS.pick_random()))
 	elif a.en_su_sitio():
 		hecho = minf(DURA, hecho + delta)
 		queja_t = 0.0
@@ -120,7 +124,7 @@ func _physics_process(delta: float) -> void:
 	while frase_i < FRASES.size() and k >= FRASES[frase_i][0]:
 		var frase: Array = FRASES[frase_i]
 		frase_i += 1
-		a.decir(frase[1])
+		a.decir(Idioma.t(frase[1]))
 		if frase[0] == 0.5:
 			sup.soltar_provisiones(a)
 	if not a.caido and DURA - hecho <= 10.0 and not cuenta:
@@ -163,7 +167,7 @@ func empezar_arreglo() -> void:
 	partida.cerrada = true
 	partida.actualizar_puertas()
 	Sonido.tocar("portazo")
-	partida.decir("¡Se ha cerrado la puerta! Aguanta a oscuras mientras el %s arregla el cable" % a.def.nombre, 4.0)
+	partida.decir(Idioma.t("¡Se ha cerrado la puerta! Aguanta a oscuras mientras el %s arregla el cable") % Idioma.t(a.def.nombre), 4.0)
 
 
 # Cable arreglado: el agua ya no da calambres, se abre la puerta y él sigue en el equipo como los demás
@@ -187,8 +191,8 @@ func acabar() -> void:
 	partida.cerrada = false
 	partida.actualizar_puertas()
 	Sonido.musica("menu")
-	a.decir("¡Arreglado! Ya puedes dar la luz")
-	partida.decir("¡El %s ha arreglado el cable! El agua ya no da calambres" % a.def.nombre, 3.5)
+	a.decir(Idioma.t("¡Arreglado! Ya puedes dar la luz"))
+	partida.decir(Idioma.t("¡El %s ha arreglado el cable! El agua ya no da calambres") % Idioma.t(a.def.nombre), 3.5)
 	Sonido.tocar("limpio")
 	get_tree().create_timer(0.25, false).timeout.connect(Sonido.tocar.bind("puerta"))
 	Particulas.anillo(a, a.global_position, 50.0, a.def.color, 0.5)
@@ -200,9 +204,9 @@ func al_herir(cae: bool) -> void:
 		return
 	if cae:
 		levantando = 0.0
-		el.decir("¡Ayúdame, no puedo levantarme!")
+		el.decir(Idioma.t("¡Ayúdame, no puedo levantarme!"))
 	elif sup.johnny.position.distance_to(el.position) > Supervivientes.HORDA.lejos and el.dicho_t > 6.0:
-		el.decir(["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"].pick_random())
+		el.decir(Idioma.t(LLAMADAS.pick_random()))
 
 
 # Antes de cruzar una puerta: lo que dice si no se puede, o "" si sí
@@ -210,8 +214,8 @@ func no_cruzar() -> String:
 	if el == null:
 		return ""
 	if fase == "palanca":
-		return "El %s no se va sin arreglar el cable: baja la palanca del cuadro" % el.def.nombre
-	return "Aguanta: el %s está arreglando el cable" % el.def.nombre
+		return Idioma.t("El %s no se va sin arreglar el cable: baja la palanca del cuadro") % Idioma.t(el.def.nombre)
+	return Idioma.t("Aguanta: el %s está arreglando el cable") % Idioma.t(el.def.nombre)
 
 
 # El cuadro eléctrico de la tienda (su nodo), o null
@@ -234,7 +238,7 @@ func dibujar(capa: Control) -> void:
 	var texto := ""
 	var color := Color("#f2e6c0")
 	if fase == "palanca":
-		texto = "Baja la palanca del cuadro eléctrico"
+		texto = Idioma.t("Baja la palanca del cuadro eléctrico")
 		var ancho := letra.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 40.0
 		var caja := Rect2((tam.x - ancho) / 2.0, 12, ancho, 30)
 		capa.draw_rect(caja.grow(2), Tema.LINEA)
@@ -252,14 +256,14 @@ func dibujar(capa: Control) -> void:
 		var relleno := Color("#4fe3ff")
 		if a.caido:
 			relleno = Color("#ff2d4b") if parpadeo else Color("#7a2030")
-			texto = "¡El %s ha caído!" % a.def.nombre
+			texto = Idioma.t("¡El %s ha caído!") % Idioma.t(a.def.nombre)
 			color = Color("#ff8a8a")
 		elif datos.corriente:
 			relleno = Color("#ffd23f") if parpadeo else Color("#7a6420")
-			texto = "¡Hay corriente! Baja la palanca"
+			texto = Idioma.t("¡Hay corriente! Baja la palanca")
 			color = Color("#ffd23f")
 		else:
-			texto = "El %s arregla el cable · %d:%02d" % [a.def.nombre, falta / 60, falta % 60]
+			texto = Idioma.t("El %s arregla el cable · %d:%02d") % [Idioma.t(a.def.nombre), falta / 60, falta % 60]
 		capa.draw_rect(Rect2(x, y + 16, ancho * hecho / DURA, 10), relleno)
 		capa.draw_rect(Rect2(x, y + 16, ancho, 10), Tema.LINEA, false, 2.0)
 		capa.draw_string_outline(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, 4, Tema.LINEA)
@@ -369,7 +373,7 @@ func probar() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(2.6, false).timeout
 	print("Técnico: con luz otra vez %s | calambrazos del agua: %s" % [datos.corriente,
-		"no" if c.agua.pulso == 0.0 else "sí"])
+		"no" if c.agua.pulso == 0.0 else "sí"])   # no-tr (print de la prueba)
 	Captura.foto("captura-tecnico-fin.png")
 	sup.escolta.matar_zombis()
 	sup.equipo.erase(a)

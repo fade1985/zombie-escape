@@ -55,6 +55,360 @@ msgstr "Medkits, bandages and Wolverine heal half as much"
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
 msgstr "The guard (or the key zombie) takes twice the damage and zombies hear you from farther away"
 
+#: scripts/armas.gd
+msgid "golpe un %d %% más largo y ancho"
+msgstr "swing %d %% longer and wider"
+
+#: scripts/armas.gd
+msgid "cargador un %d %% más grande y recarga un %d %% más rápida"
+msgstr "magazine %d %% bigger and reload %d %% faster"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande y la descarga salta a %d zombi más"
+msgid_plural "depósito un %d %% más grande y la descarga salta a %d zombis más"
+msgstr[0] "tank %d %% bigger and the discharge jumps to %d more zombie"
+msgstr[1] "tank %d %% bigger and the discharge jumps to %d more zombies"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande"
+msgstr "tank %d %% bigger"
+
+#: scripts/armas.gd
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "radius %d %% bigger and %d more fit per stack"
+
+#: scripts/armas.gd
+msgid "%s: daño +%d %%, %s."
+msgstr "%s: damage +%d %%, %s."
+
+#: scripts/armas.gd
+msgid "Truco: cada %d golpes que dan, uno es crítico (doble daño)."
+msgstr "Perk: every %d hits they land, one is a crit (double damage)."
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a un zombi y siguen."
+msgstr "Perk: its bullets pierce a zombie and keep going."
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a %d zombis y siguen."
+msgstr "Perk: its bullets pierce %d zombies and keep going."
+
+#: scripts/armas.gd
+msgid "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
+msgstr "Perk: zombies it kills burst and pass their effect to the ones next to them."
+
+#: scripts/armas.gd
+msgid "Truco: al romperse suelta %d más pequeños alrededor."
+msgstr "Perk: when it breaks, it drops %d smaller ones around it."
+
+#: scripts/armas.gd
+msgid "Truco: al explotar suelta %d más pequeños alrededor."
+msgstr "Perk: when it explodes, it drops %d smaller ones around it."
+
+#: scripts/armas.gd scripts/ui/opciones.gd
+msgid "Normal"
+msgstr "Normal"
+
+#: scripts/armas.gd
+msgid "Poco común"
+msgstr "Uncommon"
+
+#: scripts/armas.gd
+msgid "Rara"
+msgstr "Rare"
+
+#: scripts/armas.gd
+msgid "Épica"
+msgstr "Epic"
+
+#: scripts/armas.gd
+msgid "Fregona"
+msgstr "Mop"
+
+#: scripts/armas.gd
+msgid "Bate"
+msgstr "Bat"
+
+#: scripts/armas.gd
+msgid "Cuchillo"
+msgstr "Knife"
+
+#: scripts/armas.gd
+msgid "Pistola"
+msgstr "Pistol"
+
+#: scripts/armas.gd
+msgid "Escopeta"
+msgstr "Shotgun"
+
+#: scripts/armas.gd
+msgid "MP5"
+msgstr "MP5"
+
+#: scripts/armas.gd
+msgid "Lanzallamas"
+msgstr "Flamethrower"
+
+#: scripts/armas.gd
+msgid "Lanza ácido"
+msgstr "Acid launcher"
+
+#: scripts/armas.gd
+msgid "Lanza rayos"
+msgstr "Lightning gun"
+
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cuerpo a cuerpo"
+msgstr "Melee"
+
+#: scripts/armas.gd scripts/ui/inventario.gd
+msgid "A distancia"
+msgstr "Ranged"
+
+#: scripts/armas.gd
+msgid "una gasolina"
+msgstr "a gas can"
+
+#: scripts/armas.gd
+msgid "un bidón de ácido"
+msgstr "an acid drum"
+
+#: scripts/armas.gd
+msgid "una batería"
+msgstr "a battery"
+
+#: scripts/armas.gd
+msgid "Balas de pistola"
+msgstr "Pistol bullets"
+
+#: scripts/armas.gd
+msgid "¡Sin balas!"
+msgstr "Out of bullets!"
+
+#: scripts/armas.gd
+msgid "la pistola y la MP5"
+msgstr "the pistol and the MP5"
+
+#: scripts/armas.gd
+msgid "Cartuchos"
+msgstr "Shells"
+
+#: scripts/armas.gd
+msgid "¡Sin cartuchos!"
+msgstr "Out of shells!"
+
+#: scripts/armas.gd
+msgid "la escopeta"
+msgstr "the shotgun"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Gasolina"
+msgstr "Gas can"
+
+#: scripts/armas.gd
+msgid "¡Sin gasolina!"
+msgstr "Out of gas!"
+
+#: scripts/armas.gd
+msgid "el lanzallamas"
+msgstr "the flamethrower"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bidón de ácido"
+msgstr "Acid drum"
+
+#: scripts/armas.gd
+msgid "¡Sin ácido!"
+msgstr "Out of acid!"
+
+#: scripts/armas.gd
+msgid "el lanza ácido"
+msgstr "the acid launcher"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Batería"
+msgstr "Battery"
+
+#: scripts/armas.gd
+msgid "¡Sin batería!"
+msgstr "Out of batteries!"
+
+#: scripts/armas.gd
+msgid "el lanza rayos"
+msgstr "the lightning gun"
+
+#: scripts/averia.gd
+msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
+msgstr "I can't touch it with the power on. Pull the panel lever!"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico para que el %s arregle el cable"
+msgstr "Pull the lever on the electrical panel so the %s can fix the wire"
+
+#: scripts/averia.gd
+msgid "¡Gracias! Sigo con el cable"
+msgstr "Thanks! Back to the wire"
+
+#: scripts/averia.gd
+msgid "¡Se ha cerrado la puerta! Aguanta a oscuras mientras el %s arregla el cable"
+msgstr "The door has shut! Hold out in the dark while the %s fixes the wire"
+
+#: scripts/averia.gd
+msgid "¡Arreglado! Ya puedes dar la luz"
+msgstr "Fixed! You can switch the power back on now"
+
+#: scripts/averia.gd
+msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
+msgstr "The %s fixed the wire! The water doesn't shock anymore"
+
+#: scripts/averia.gd
+msgid "¡Ayúdame, no puedo levantarme!"
+msgstr "Help me, I can't get up!"
+
+#: scripts/averia.gd
+msgid "El %s no se va sin arreglar el cable: baja la palanca del cuadro"
+msgstr "The %s won't leave without fixing the wire: pull the panel lever"
+
+#: scripts/averia.gd
+msgid "Aguanta: el %s está arreglando el cable"
+msgstr "Hold on: the %s is fixing the wire"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico"
+msgstr "Pull the lever on the electrical panel"
+
+#: scripts/averia.gd
+msgid "¡El %s ha caído!"
+msgstr "The %s is down!"
+
+#: scripts/averia.gd
+msgid "¡Hay corriente! Baja la palanca"
+msgstr "The power's on! Pull the lever"
+
+#: scripts/averia.gd
+msgid "El %s arregla el cable · %d:%02d"
+msgstr "The %s is fixing the wire · %d:%02d"
+
+#: scripts/averia.gd
+msgid "¡Bien, sin corriente! Cúbreme mientras lo arreglo"
+msgstr "Good, the power's off! Cover me while I fix it"
+
+#: scripts/averia.gd
+msgid "Este empalme está hecho polvo…"
+msgstr "This splice is shot…"
+
+#: scripts/averia.gd
+msgid "No veo nada… ¡no dejes que se me acerquen!"
+msgstr "I can't see a thing… don't let them get near me!"
+
+#: scripts/averia.gd
+msgid "¡Toma, esto estaba en el almacén!"
+msgstr "Here, this was in the storeroom!"
+
+#: scripts/averia.gd
+msgid "Pelo el cable, lo uno… vale"
+msgstr "Strip the wire, join it… okay"
+
+#: scripts/averia.gd
+msgid "Ya solo falta la cinta aislante…"
+msgstr "Just the electrical tape left…"
+
+#: scripts/averia.gd
+msgid "¡Un poco más!"
+msgstr "Just a bit more!"
+
+#: scripts/averia.gd
+msgid "¡Eh, que hay corriente! ¡Baja la palanca!"
+msgstr "Hey, the power's on! Pull the lever!"
+
+#: scripts/averia.gd
+msgid "¡Así no puedo! ¡Quita la corriente!"
+msgstr "I can't work like this! Cut the power!"
+
+#: scripts/averia.gd
+msgid "¡Que me electrocuto! ¡La palanca!"
+msgstr "I'm gonna get electrocuted! The lever!"
+
+#: scripts/averia.gd
+msgid "¡Johnny, vuelve!"
+msgstr "Johnny, come back!"
+
+#: scripts/averia.gd
+msgid "¡No me dejes aquí!"
+msgstr "Don't leave me here!"
+
+#: scripts/averia.gd
+msgid "¡Que me comen!"
+msgstr "They're eating me!"
+
+#: scripts/barricada.gd
+msgid "¡Espera, que quito la barricada!"
+msgstr "Hold on, I'm taking down the barricade!"
+
+#: scripts/barricada.gd
+msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
+msgstr "The entrance has shut! Defend the door while the %s takes down the barricade"
+
+#: scripts/barricada.gd
+msgid "la entrada"
+msgstr "the entrance"
+
+#: scripts/barricada.gd
+msgid "¡Vienen por %s!"
+msgstr "They're coming through %s!"
+
+#: scripts/barricada.gd
+msgid "¡Barricada fuera! La entrada se ha abierto"
+msgstr "Barricade down! The entrance is open"
+
+#: scripts/barricada.gd
+msgid "¡Están empujando la puerta! Quítaselos"
+msgstr "They're pushing on the door! Get them off"
+
+#: scripts/barricada.gd
+msgid "%s quita la barricada · %d:%02d"
+msgstr "The %s is taking down the barricade · %d:%02d"
+
+#: scripts/barricada.gd
+msgid "¡Cuántos clavos le metí!"
+msgstr "I sure used a lot of nails!"
+
+#: scripts/barricada.gd
+msgid "¡Una tabla menos!"
+msgstr "One board down!"
+
+#: scripts/barricada.gd
+msgid "Esta tabla no sale…"
+msgstr "This board won't budge…"
+
+#: scripts/barricada.gd
+msgid "¡Toma, te lo paso por debajo!"
+msgstr "Here, sliding this under the door!"
+
+#: scripts/barricada.gd
+msgid "¡Otra fuera!"
+msgstr "Another one gone!"
+
+#: scripts/barricada.gd
+msgid "Ya casi está…"
+msgstr "Almost there…"
+
+#: scripts/barricada.gd
+msgid "¡La última tabla!"
+msgstr "The last board!"
+
+#: scripts/barricada.gd
+msgid "¡Me están empujando la puerta!"
+msgstr "They're pushing on the door!"
+
+#: scripts/barricada.gd
+msgid "¡Quítamelos de la puerta!"
+msgstr "Get them off the door!"
+
+#: scripts/barricada.gd
+msgid "¡Así no puedo, Johnny!"
+msgstr "I can't work like this, Johnny!"
+
 #: scripts/edificios.gd
 msgid "Apartamentos"
 msgstr "Apartments"
@@ -159,6 +513,62 @@ msgstr "Toy Store"
 msgid "la Juguetería"
 msgstr "the Toy Store"
 
+#: scripts/eventos.gd
+msgid "¡Ahí viene la horda!"
+msgstr "Here comes the horde!"
+
+#: scripts/eventos.gd
+msgid "¡Horda vencida! Te deja $%d y una caja de munición"
+msgstr "Horde defeated! It leaves you $%d and a box of ammo"
+
+#: scripts/eventos.gd
+msgid "¡Apagón superado! +$%d"
+msgstr "Blackout survived! +$%d"
+
+#: scripts/eventos.gd
+msgid "¡Incendio superado! +$%d"
+msgstr "Fire alarm survived! +$%d"
+
+#: scripts/eventos.gd
+msgid "¡Ojo! Ese charco tiene corriente"
+msgstr "Watch out! That puddle is live"
+
+#: scripts/eventos.gd
+msgid "Apagón"
+msgstr "Blackout"
+
+#: scripts/eventos.gd
+msgid "¡APAGÓN!"
+msgstr "BLACKOUT!"
+
+#: scripts/eventos.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"
+msgstr "The power is out on the whole floor: you can only see what your flashlight lights up"
+
+#: scripts/eventos.gd
+msgid "Alarma de incendios"
+msgstr "Fire alarm"
+
+#: scripts/eventos.gd
+msgid "¡ALARMA DE INCENDIOS!"
+msgstr "FIRE ALARM!"
+
+#: scripts/eventos.gd
+msgid "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"
+msgstr "The sprinklers soak the floor: it's slippery, and where wires fall, you get zapped!"
+
+#: scripts/eventos.gd
+msgid "Horda"
+msgstr "Horde"
+
+#: scripts/eventos.gd
+msgid "¡HORDA EN EL PASILLO!"
+msgstr "HORDE IN THE HALLWAY!"
+
+#: scripts/eventos.gd
+msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
+msgstr "A huge horde is coming down the hallway... get ready!"
+
 #: scripts/johnny.gd
 msgid "Asistido"
 msgstr "Assisted"
@@ -166,6 +576,588 @@ msgstr "Assisted"
 #: scripts/johnny.gd
 msgid "Apuntar libre"
 msgstr "Free aim"
+
+#: scripts/joyeria.gd
+msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
+msgstr "You got the gold card: it opens the Jewelry Store's vault"
+
+#: scripts/joyeria.gd
+msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
+msgstr "Clunk! Time's up: the vault is open"
+
+#: scripts/joyeria.gd
+msgid "Abres la cámara acorazada con la tarjeta dorada"
+msgstr "You open the vault with the gold card"
+
+#: scripts/joyeria.gd
+msgid "Aguanta: la cámara se abre en %d segundo"
+msgid_plural "Aguanta: la cámara se abre en %d segundos"
+msgstr[0] "Hold out: the vault opens in %d second"
+msgstr[1] "Hold out: the vault opens in %d seconds"
+
+#: scripts/joyeria.gd
+msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "Card reader. Without the guard's gold card, the only option left is the emergency override: step up again to set off the alarm"
+
+#: scripts/joyeria.gd
+msgid "¡ALARMA!"
+msgstr "ALARM!"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!"
+msgstr "Emergency override: the vault opens in %d seconds. Hold out!"
+
+#: scripts/joyeria.gd
+msgid "¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería"
+msgstr "You set off the alarm! They're coming for you: hold out for %d seconds without leaving the jewelry store"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d"
+msgstr "%s! It's in your hand now. Plus a wad of cash: +$%d"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano; %s se queda en el suelo. Y un fajo de billetes: +$%d"
+msgstr "%s! It's in your hand now; %s stays on the floor. Plus a wad of cash: +$%d"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia · %d:%02d"
+msgstr "Emergency override · %d:%02d"
+
+#: scripts/lanzables.gd
+msgid "molotovs"
+msgstr "molotovs"
+
+#: scripts/lanzables.gd
+msgid "granadas"
+msgstr "grenades"
+
+#: scripts/lanzables.gd
+msgid "atraedoras"
+msgstr "decoys"
+
+#: scripts/lanzables.gd
+msgid "congeladoras"
+msgstr "freeze bombs"
+
+#: scripts/lanzables.gd
+msgid "¡Sin %s!"
+msgstr "Out of %s!"
+
+#: scripts/lanzables.gd
+msgid "¡Nada que lanzar!"
+msgstr "Nothing to throw!"
+
+#: scripts/lanzables.gd
+msgid "Molotov"
+msgstr "Molotov"
+
+#: scripts/lanzables.gd
+msgid "Granada"
+msgstr "Grenade"
+
+#: scripts/lanzables.gd
+msgid "Atraedora"
+msgstr "Decoy"
+
+#: scripts/lanzables.gd
+msgid "Congeladora"
+msgstr "Freeze bomb"
+
+#: scripts/logros.gd
+msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
+msgstr "With assists on, this run can no longer earn achievements"
+
+#: scripts/logros.gd
+msgid "¡LOGRO CONSEGUIDO!"
+msgstr "ACHIEVEMENT UNLOCKED!"
+
+#: scripts/logros.gd
+msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
+msgstr "Achievement unlocked: %s! Claim the reward at the computer"
+
+#: scripts/logros.gd
+msgid "¡%d LOGROS CONSEGUIDOS!"
+msgstr "%d ACHIEVEMENTS UNLOCKED!"
+
+#: scripts/logros.gd
+msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
+msgstr "Achievements unlocked: %s and %s! Claim the rewards at the computer"
+
+#: scripts/logros.gd
+msgid "¡%d logros conseguidos! Míralos y cobra los premios en el ordenador"
+msgstr "%d achievements unlocked! Check them out and claim the rewards at the computer"
+
+#: scripts/logros.gd
+msgid "Primer turno"
+msgstr "First Shift"
+
+#: scripts/logros.gd
+msgid "Limpia tu primer apartamento."
+msgstr "Clear your first apartment."
+
+#: scripts/logros.gd
+msgid "Sube, conserje"
+msgstr "Going Up"
+
+#: scripts/logros.gd
+msgid "Llega a la planta 3."
+msgstr "Reach floor 3."
+
+#: scripts/logros.gd
+msgid "Fin de la jornada"
+msgstr "End of Shift"
+
+#: scripts/logros.gd
+msgid "Gana una partida: limpia el edificio de arriba abajo."
+msgstr "Win a run: clear the building from top to bottom."
+
+#: scripts/logros.gd
+msgid "Liquidación total"
+msgstr "Everything Must Go"
+
+#: scripts/logros.gd
+msgid "Completa el Centro comercial: derrota al gerente."
+msgstr "Complete the Shopping Mall: defeat the manager."
+
+#: scripts/logros.gd
+msgid "Alerta naranja"
+msgstr "Orange Alert"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "Complete a building on Alert 3 or higher."
+
+#: scripts/logros.gd
+msgid "Alerta máxima"
+msgstr "Red Alert"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 5."
+msgstr "Complete a building on Alert 5."
+
+#: scripts/logros.gd
+msgid "Jornada exprés"
+msgstr "Express Shift"
+
+#: scripts/logros.gd
+msgid "Gana una partida en menos de 15 minutos."
+msgstr "Win a run in under 15 minutes."
+
+#: scripts/logros.gd
+msgid "Empleado del mes"
+msgstr "Employee of the Month"
+
+#: scripts/logros.gd
+msgid "Gana 10 partidas, sumando todas."
+msgstr "Win 10 runs in total."
+
+#: scripts/logros.gd
+msgid "Desahucio"
+msgstr "Eviction"
+
+#: scripts/logros.gd
+msgid "Derrota a la portera."
+msgstr "Defeat the super."
+
+#: scripts/logros.gd
+msgid "Sin un rasguño"
+msgstr "Not a Scratch"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe sin perder vida en toda la pelea."
+msgstr "Defeat a boss without losing any health in the whole fight."
+
+#: scripts/logros.gd
+msgid "Por los pelos"
+msgstr "By a Hair"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe con menos del 10 % de tu vida."
+msgstr "Defeat a boss with less than 10% of your health left."
+
+#: scripts/logros.gd
+msgid "Visto y no visto"
+msgstr "In a Flash"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe en menos de 30 segundos de pelea."
+msgstr "Defeat a boss in under 30 seconds of fighting."
+
+#: scripts/logros.gd
+msgid "Cazajefes"
+msgstr "Boss Hunter"
+
+#: scripts/logros.gd
+msgid "Derrota a 25 jefes, sumando todas tus partidas."
+msgstr "Defeat 25 bosses, across all your runs."
+
+#: scripts/logros.gd
+msgid "Fregona de oro"
+msgstr "Golden Mop"
+
+#: scripts/logros.gd
+msgid "Mata 10 zombis a fregonazos en una misma partida."
+msgstr "Kill 10 zombies with the mop in a single run."
+
+#: scripts/logros.gd
+msgid "Exterminador"
+msgstr "Exterminator"
+
+#: scripts/logros.gd
+msgid "Mata 100 zombis, sumando todas tus partidas."
+msgstr "Kill 100 zombies, across all your runs."
+
+#: scripts/logros.gd
+msgid "Limpieza general"
+msgstr "Spring Cleaning"
+
+#: scripts/logros.gd
+msgid "Mata 1.000 zombis, sumando todas tus partidas."
+msgstr "Kill 1,000 zombies, across all your runs."
+
+#: scripts/logros.gd
+msgid "Pirómano"
+msgstr "Pyromaniac"
+
+#: scripts/logros.gd
+msgid "Prende fuego a 5 zombis con un mismo molotov."
+msgstr "Set 5 zombies on fire with a single molotov."
+
+#: scripts/logros.gd
+msgid "Racha imparable"
+msgstr "Unstoppable Streak"
+
+#: scripts/logros.gd
+msgid "Mata 30 zombis seguidos sin perder vida."
+msgstr "Kill 30 zombies in a row without losing health."
+
+#: scripts/logros.gd
+msgid "Intocable"
+msgstr "Untouchable"
+
+#: scripts/logros.gd
+msgid "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."
+msgstr "Get through a whole floor, from arrival to the stairs, without losing health."
+
+#: scripts/logros.gd
+msgid "Sin tiritas"
+msgstr "No Band-Aids"
+
+#: scripts/logros.gd
+msgid "Gana una partida sin curarte con vendas ni botiquín."
+msgstr "Win a run without healing with bandages or a medkit."
+
+#: scripts/logros.gd
+msgid "Manitas"
+msgstr "Handyman"
+
+#: scripts/logros.gd
+msgid "Mejora un arma en el banco de trabajo."
+msgstr "Upgrade a weapon at the workbench."
+
+#: scripts/logros.gd
+msgid "Joya de la corona"
+msgstr "Crown Jewel"
+
+#: scripts/logros.gd
+msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgstr "Upgrade a weapon or a throwable to Epic at the workbench."
+
+#: scripts/logros.gd
+msgid "Arsenal completo"
+msgstr "Full Arsenal"
+
+#: scripts/logros.gd
+msgid "Mata un zombi con cada arma: la fregona y todas las de la tienda."
+msgstr "Kill a zombie with every weapon: the mop and all the ones in the shop."
+
+#: scripts/logros.gd
+msgid "Especialista"
+msgstr "Specialist"
+
+#: scripts/logros.gd
+msgid "Llena una rama entera del árbol de talentos."
+msgstr "Fill an entire branch of the talent tree."
+
+#: scripts/logros.gd
+msgid "Conserje total"
+msgstr "Total Janitor"
+
+#: scripts/logros.gd
+msgid "Llena el árbol de talentos entero."
+msgstr "Fill the entire talent tree."
+
+#: scripts/logros.gd
+msgid "Buen vecino"
+msgstr "Good Neighbor"
+
+#: scripts/logros.gd
+msgid "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."
+msgstr "Rescue a survivor: hold off the horde while they force the lock."
+
+#: scripts/logros.gd
+msgid "Comunidad de vecinos"
+msgstr "Tenants' Association"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de los Apartamentos."
+msgstr "Rescue the 3 survivors in the Apartments."
+
+#: scripts/logros.gd
+msgid "Plantilla completa"
+msgstr "Full Staff"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes del Centro comercial."
+msgstr "Rescue the 3 survivors in the Shopping Mall."
+
+#: scripts/logros.gd
+msgid "Buena compañía"
+msgstr "Good Company"
+
+#: scripts/logros.gd
+msgid "Gana una partida con un vecino de las viviendas acompañándote."
+msgstr "Win a run with a neighbor from the living quarters tagging along."
+
+#: scripts/logros.gd
+msgid "Caja fuerte"
+msgstr "Safecracker"
+
+#: scripts/logros.gd
+msgid "Abre la cámara acorazada de la Joyería del centro comercial."
+msgstr "Open the vault of the Jewelry Store in the Shopping Mall."
+
+#: scripts/logros.gd
+msgid "Se fue la luz"
+msgstr "Lights Out"
+
+#: scripts/logros.gd
+msgid "Supera un apagón: llega a la planta siguiente."
+msgstr "Survive a blackout: reach the next floor."
+
+#: scripts/logros.gd
+msgid "Simulacro"
+msgstr "Fire Drill"
+
+#: scripts/logros.gd
+msgid "Supera un incendio: llega a la planta siguiente."
+msgstr "Survive a fire: reach the next floor."
+
+#: scripts/logros.gd
+msgid "Contra la marea"
+msgstr "Against the Tide"
+
+#: scripts/logros.gd
+msgid "Vence a una horda del pasillo."
+msgstr "Beat a hallway horde."
+
+#: scripts/logros.gd
+msgid "Reto aceptado"
+msgstr "Challenge Accepted"
+
+#: scripts/logros.gd
+msgid "Completa un reto del día."
+msgstr "Complete a Daily Challenge."
+
+#: scripts/logros.gd
+msgid "Ninguna regla me para"
+msgstr "No Rule Stops Me"
+
+#: scripts/logros.gd
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "Complete the Daily Challenge with each of its 7 rules."
+
+#: scripts/logros.gd
+msgid "Cambio de look"
+msgstr "Makeover"
+
+#: scripts/logros.gd
+msgid "Ponte una skin en la taquilla del vestuario."
+msgstr "Put on a skin at the locker in the changing room."
+
+#: scripts/logros.gd
+msgid "Vestuario completo"
+msgstr "Full Wardrobe"
+
+#: scripts/logros.gd
+msgid "Consigue todas las skins de Johnny."
+msgstr "Get all of Johnny's skins."
+
+#: scripts/logros.gd
+msgid "Naturalista"
+msgstr "Naturalist"
+
+#: scripts/logros.gd
+msgid "Completa el bestiario: ve a todos los enemigos."
+msgstr "Complete the bestiary: see every enemy."
+
+#: scripts/logros.gd
+msgid "Investigador"
+msgstr "Investigator"
+
+#: scripts/logros.gd
+msgid "Encuentra todas las páginas del dosier VD-7."
+msgstr "Find all the pages of the VD-7 dossier."
+
+#: scripts/logros.gd
+msgid "Chatarrero"
+msgstr "Packrat"
+
+#: scripts/logros.gd
+msgid "Coge al menos una vez cada objeto de las Colecciones."
+msgstr "Pick up every item in the Collections at least once."
+
+#: scripts/logros.gd
+msgid "Edificios"
+msgstr "Buildings"
+
+#: scripts/logros.gd
+msgid "Jefes"
+msgstr "Bosses"
+
+#: scripts/logros.gd
+msgid "Combate"
+msgstr "Combat"
+
+#: scripts/logros.gd
+msgid "Armas y talentos"
+msgstr "Weapons and Talents"
+
+#: scripts/logros.gd
+msgid "Supervivientes"
+msgstr "Survivors"
+
+#: scripts/logros.gd
+msgid "Sorpresas y retos"
+msgstr "Surprises and Challenges"
+
+#: scripts/logros.gd scripts/ui/ordenador.gd
+msgid "Colecciones"
+msgstr "Collections"
+
+#: scripts/mutaciones.gd
+msgid "¡AAAAAH!"
+msgstr "AAAAAGH!"
+
+#: scripts/mutaciones.gd
+msgid "Tentacular"
+msgstr "Tentacular"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"
+msgstr "Every 4 s a tentacle bursts out of your chest, shoves nearby zombies away and stuns them for 1 s"
+
+#: scripts/mutaciones.gd
+msgid "Gastroenteritis"
+msgstr "Gastroenteritis"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"
+msgstr "Every 3 s you spew acid vomit at the nearest zombie: it leaves a puddle that burns any zombie that steps in it"
+
+#: scripts/mutaciones.gd
+msgid "Insensible"
+msgstr "Numb"
+
+#: scripts/mutaciones.gd
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
+msgstr "You lose all feeling in your body: you take 35 % less damage"
+
+#: scripts/mutaciones.gd
+msgid "Caníbal"
+msgstr "Cannibal"
+
+#: scripts/mutaciones.gd
+msgid "Cada zombi que matas te cura un 2 % de la vida"
+msgstr "Every zombie you kill heals 2 % of your health"
+
+#: scripts/mutaciones.gd
+msgid "Ansiedad"
+msgstr "Anxiety"
+
+#: scripts/mutaciones.gd
+msgid "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"
+msgstr "You hit faster in melee the more zombies you can see (+10 % each, up to +50 %)"
+
+#: scripts/mutaciones.gd
+msgid "Endurecimiento"
+msgstr "Thick Skin"
+
+#: scripts/mutaciones.gd
+msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
+msgstr "Your skin hardens: a 60-point shield on every floor that gets used up before your health"
+
+#: scripts/mutaciones.gd
+msgid "Locura"
+msgstr "Madness"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"
+msgstr "Every 4 s you scream so loud that nearby zombies get disoriented for 2 s"
+
+#: scripts/mutaciones.gd
+msgid "Flatulento"
+msgstr "Flatulent"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"
+msgstr "Every 3 s you let out corrosive gas that burns nearby zombies and paralyzes them for 2 s"
+
+#: scripts/objetos.gd
+msgid "la suelta algún zombi, y los jefes seguro"
+msgstr "dropped by some zombies, and always by bosses"
+
+#: scripts/objetos.gd
+msgid "lo suelta el gordo"
+msgstr "dropped by the fat zombie"
+
+#: scripts/objetos.gd
+msgid "lo suelta cualquier zombi"
+msgstr "dropped by any zombie"
+
+#: scripts/objetos.gd scripts/talentos.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "%s y %s"
+msgstr "%s and %s"
+
+#: scripts/objetos.gd
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)"
+msgstr "melee weapons (the mop, the knife and the bat)"
+
+#: scripts/objetos.gd
+msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
+msgstr "ranged weapons (the pistol, the MP5 and the shotgun)"
+
+#: scripts/objetos.gd
+msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
+msgstr "special weapons (the flamethrower, the acid launcher and the lightning gun)"
+
+#: scripts/objetos.gd
+msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgstr "throwables (the Molotov, the grenade, the decoy and the freeze bomb)"
+
+#: scripts/objetos.gd
+msgid "Vendas"
+msgstr "Bandages"
+
+#: scripts/objetos.gd
+msgid "Pieza cuerpo a cuerpo"
+msgstr "Melee part"
+
+#: scripts/objetos.gd
+msgid "Pieza a distancia"
+msgstr "Ranged part"
+
+#: scripts/objetos.gd
+msgid "Pieza especial"
+msgstr "Special part"
+
+#: scripts/objetos.gd
+msgid "Pieza arrojable"
+msgstr "Throwable part"
+
+#: scripts/objetos.gd
+msgid "Botiquín"
+msgstr "Medkit"
 
 #: scripts/partida.gd scripts/ui/opciones.gd
 msgid "Modo de atacar: %s"
@@ -445,6 +1437,458 @@ msgstr "Sharp ears"
 msgid "los zombis dormidos te oyen desde el triple de lejos"
 msgstr "sleeping zombies hear you from three times as far"
 
+#: scripts/skins.gd
+msgid "Conserje"
+msgstr "Janitor"
+
+#: scripts/skins.gd
+msgid "El portero"
+msgstr "The Super"
+
+#: scripts/skins.gd
+msgid "La fregona hace un 100 % más de daño."
+msgstr "The mop does 100 % more damage."
+
+#: scripts/skins.gd
+msgid "Mata a la portera por primera vez."
+msgstr "Kill the super for the first time."
+
+#: scripts/skins.gd
+msgid "El glotón"
+msgstr "The Glutton"
+
+#: scripts/skins.gd
+msgid "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida."
+msgstr "Whoever hurts you pays for it: a zombie dies and a boss loses 3 % of its health."
+
+#: scripts/skins.gd
+msgid "Mata al Glotón por primera vez."
+msgstr "Kill the Glutton for the first time."
+
+#: scripts/skins.gd
+msgid "El gymbro"
+msgstr "The Gymbro"
+
+#: scripts/skins.gd
+msgid "Las armas cuerpo a cuerpo hacen un 50 % más de daño."
+msgstr "Melee weapons do 50 % more damage."
+
+#: scripts/skins.gd
+msgid "Mata al Gymbro por primera vez."
+msgstr "Kill the Gymbro for the first time."
+
+#: scripts/skins.gd
+msgid "El bombero"
+msgstr "The Fireman"
+
+#: scripts/skins.gd
+msgid "Las armas que queman hacen un 50 % más de daño y el fuego no te quema."
+msgstr "Weapons that burn do 50 % more damage and fire can't burn you."
+
+#: scripts/skins.gd
+msgid "Mata al jefe de bomberos por primera vez."
+msgstr "Kill the fire chief for the first time."
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño"
+msgstr "+%d%% damage"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño y alcance"
+msgstr "+%d%% damage and range"
+
+#: scripts/talentos.gd
+msgid "+%d %% cuerpo a cuerpo"
+msgstr "+%d%% melee"
+
+#: scripts/talentos.gd
+msgid "+%d %% a distancia"
+msgstr "+%d%% ranged"
+
+#: scripts/talentos.gd
+msgid "+%d molotov y granada"
+msgid_plural "+%d molotovs y granadas"
+msgstr[0] "+%d molotov and grenade"
+msgstr[1] "+%d molotovs and grenades"
+
+#: scripts/talentos.gd
+msgid "+%d %% de vida"
+msgstr "+%d%% health"
+
+#: scripts/talentos.gd
+msgid "%d de vida cada 5 s"
+msgstr "%d health every 5 s"
+
+#: scripts/talentos.gd
+msgid "%d menos por golpe"
+msgstr "%d less per hit"
+
+#: scripts/talentos.gd
+msgid "una esquiva sola cada %d s"
+msgstr "an auto-dodge every %d s"
+
+#: scripts/talentos.gd
+msgid "+%d de cura"
+msgstr "+%d healing"
+
+#: scripts/talentos.gd
+msgid "+%d %% de fuego, ácido, rayo y frío"
+msgstr "+%d%% fire, acid, lightning and cold"
+
+#: scripts/talentos.gd
+msgid "%d %% menos de los efectos"
+msgstr "%d%% less from effects"
+
+#: scripts/talentos.gd
+msgid "+%s s ardiendo"
+msgstr "+%s s burning"
+
+#: scripts/talentos.gd
+msgid "+%d %% con ácido"
+msgstr "+%d%% with acid"
+
+#: scripts/talentos.gd
+msgid "+%d congeladora y +%s s"
+msgid_plural "+%d congeladoras y +%s s"
+msgstr[0] "+%d freeze bomb and +%s s"
+msgstr[1] "+%d freeze bombs and +%s s"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez cuerpo a cuerpo"
+msgstr "+%d%% melee speed"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez y recarga"
+msgstr "+%d%% fire and reload speed"
+
+#: scripts/talentos.gd
+msgid "suelta %d más"
+msgstr "drops %d more"
+
+#: scripts/talentos.gd
+msgid "escudo de %d"
+msgstr "%d shield"
+
+#: scripts/talentos.gd
+msgid "esquiva un %d %% antes"
+msgstr "dodge %d%% faster"
+
+#: scripts/talentos.gd
+msgid "+%d de vida por planta"
+msgstr "+%d health per floor"
+
+#: scripts/talentos.gd
+msgid "+%d s de fuego"
+msgstr "+%d s of fire"
+
+#: scripts/talentos.gd
+msgid "%d %% más lentos con ácido"
+msgstr "%d%% slower with acid"
+
+#: scripts/talentos.gd
+msgid "salta a %d más"
+msgstr "jumps to %d more"
+
+#: scripts/talentos.gd
+msgid "Militar"
+msgstr "Military"
+
+#: scripts/talentos.gd
+msgid "Superviviente"
+msgstr "Survivor"
+
+#: scripts/talentos.gd
+msgid "Químico"
+msgstr "Chemist"
+
+#: scripts/talentos.gd
+msgid "Ataque"
+msgstr "Attack"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño por punto"
+msgstr "+10% damage per point"
+
+#: scripts/talentos.gd
+msgid "Puntería"
+msgstr "Aim"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "+10% damage and range when throwing molotovs and grenades, per point"
+
+#: scripts/talentos.gd
+msgid "Camorrista"
+msgstr "Brawler"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño cuerpo a cuerpo por punto"
+msgstr "+10% melee damage per point"
+
+#: scripts/talentos.gd
+msgid "Tirador"
+msgstr "Gunner"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño con armas a distancia por punto"
+msgstr "+10% damage with ranged weapons per point"
+
+#: scripts/talentos.gd
+msgid "Artificiero"
+msgstr "Demolitions"
+
+#: scripts/talentos.gd
+msgid "+1 molotov y +1 granada por punto"
+msgstr "+1 molotov and +1 grenade per point"
+
+#: scripts/talentos.gd
+msgid "Larguirucho"
+msgstr "Lanky"
+
+#: scripts/talentos.gd
+msgid "Duplica el alcance cuerpo a cuerpo"
+msgstr "Doubles your melee range"
+
+#: scripts/talentos.gd
+msgid "Mirilla"
+msgstr "Scope"
+
+#: scripts/talentos.gd
+msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
+msgstr "Every 3rd shot is a guaranteed crit (double damage)"
+
+#: scripts/talentos.gd
+msgid "Fabricante"
+msgstr "Bomb Maker"
+
+#: scripts/talentos.gd
+msgid "Fuego y explosiones más grandes, y el fuego dura más"
+msgstr "Bigger fire and explosions, and the fire lasts longer"
+
+#: scripts/talentos.gd
+msgid "Frenesí"
+msgstr "Frenzy"
+
+#: scripts/talentos.gd
+msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
+msgstr "You attack 10% faster in melee per point"
+
+#: scripts/talentos.gd
+msgid "Gatillo fácil"
+msgstr "Trigger Happy"
+
+#: scripts/talentos.gd
+msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
+msgstr "You shoot 10% faster and reload 10% faster per point"
+
+#: scripts/talentos.gd
+msgid "Racimo"
+msgstr "Cluster"
+
+#: scripts/talentos.gd
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
+msgstr "Molotovs and grenades drop 1 extra mini one around them per point"
+
+#: scripts/talentos.gd
+msgid "Veterano"
+msgstr "Veteran"
+
+#: scripts/talentos.gd
+msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
+msgstr "Crit chance goes from 5% to 15%, and each crit does triple damage"
+
+#: scripts/talentos.gd
+msgid "Corpulento"
+msgstr "Burly"
+
+#: scripts/talentos.gd
+msgid "+10 % de vida máxima por punto"
+msgstr "+10% max health per point"
+
+#: scripts/talentos.gd
+msgid "Lobezno"
+msgstr "Wolverine"
+
+#: scripts/talentos.gd
+msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
+msgstr "Regenerate 1 health every 5 seconds per point, up to half your max health"
+
+#: scripts/talentos.gd
+msgid "Durito"
+msgstr "Tough Cookie"
+
+#: scripts/talentos.gd
+msgid "Cada golpe que recibes quita 1 menos por punto"
+msgstr "Each hit you take does 1 less damage per point"
+
+#: scripts/talentos.gd
+msgid "Reflejos"
+msgstr "Reflexes"
+
+#: scripts/talentos.gd
+msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
+msgstr "You automatically dodge one hit every 10 s (1 s less per extra point)"
+
+#: scripts/talentos.gd
+msgid "Sanitario"
+msgstr "Medic"
+
+#: scripts/talentos.gd
+msgid "Los botiquines y las vendas curan 10 más por punto"
+msgstr "Medkits and bandages heal 10 more per point"
+
+#: scripts/talentos.gd
+msgid "Acero"
+msgstr "Steel"
+
+#: scripts/talentos.gd
+msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
+msgstr "Each floor, a 50-point shield that's used up before your health"
+
+#: scripts/talentos.gd
+msgid "Ninja"
+msgstr "Ninja"
+
+#: scripts/talentos.gd
+msgid "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"
+msgstr "After a dodge, an area strike kills zombies (at most every 5 s)"
+
+#: scripts/talentos.gd
+msgid "Desfibrilador"
+msgstr "Defibrillator"
+
+#: scripts/talentos.gd
+msgid "Una vez por edificio, si caes, resucitas con toda la vida"
+msgstr "Once per building, if you go down, you come back with full health"
+
+#: scripts/talentos.gd
+msgid "Blindaje"
+msgstr "Armor Plating"
+
+#: scripts/talentos.gd
+msgid "El escudo de Acero tiene 25 más por punto"
+msgstr "The Steel shield has 25 more per point"
+
+#: scripts/talentos.gd
+msgid "Sombra"
+msgstr "Shadow"
+
+#: scripts/talentos.gd
+msgid "La esquiva se recarga un 15 % antes por punto"
+msgstr "Your dodge recharges 15% faster per point"
+
+#: scripts/talentos.gd
+msgid "Segundo aliento"
+msgstr "Second Wind"
+
+#: scripts/talentos.gd
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
+msgstr "Once per floor, when you drop below a third of your health, you heal 15 per point"
+
+#: scripts/talentos.gd
+msgid "Adrenalina"
+msgstr "Adrenaline"
+
+#: scripts/talentos.gd
+msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
+msgstr "Below half health, +30% damage and +20% speed"
+
+#: scripts/talentos.gd
+msgid "Catalizador"
+msgstr "Catalyst"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "+10% fire, acid, lightning and cold damage per point"
+
+#: scripts/talentos.gd
+msgid "Guantes de goma"
+msgstr "Rubber Gloves"
+
+#: scripts/talentos.gd
+msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
+msgstr "Fire, acid, poisons and cold do 10% less to you per point"
+
+#: scripts/talentos.gd
+msgid "Incendiario"
+msgstr "Incendiary"
+
+#: scripts/talentos.gd
+msgid "Los zombis que prendes arden 0,5 s más por punto"
+msgstr "Zombies you ignite burn 0.5 s longer per point"
+
+#: scripts/talentos.gd
+msgid "Desatascador"
+msgstr "Drain Cleaner"
+
+#: scripts/talentos.gd
+msgid "Con ácido encima, todo les quita un 10 % más por punto"
+msgstr "Zombies with acid on them take 10% more damage from everything per point"
+
+#: scripts/talentos.gd
+msgid "Criogenia"
+msgstr "Cryogenics"
+
+#: scripts/talentos.gd
+msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
+msgstr "+1 freeze bomb per point, and they freeze 0.5 s longer per point"
+
+#: scripts/talentos.gd
+msgid "Reacción en cadena"
+msgstr "Chain Reaction"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren ardiendo revientan y prenden a los de al lado"
+msgstr "Zombies that die burning burst and set the ones next to them on fire"
+
+#: scripts/talentos.gd
+msgid "Residuo tóxico"
+msgstr "Toxic Waste"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
+msgstr "Zombies that die with acid on them leave an acid puddle (it doesn't hurt you)"
+
+#: scripts/talentos.gd
+msgid "Pararrayos"
+msgstr "Lightning Rod"
+
+#: scripts/talentos.gd
+msgid "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
+msgstr "The zombie that hits you gets zapped by lightning that stuns it and jumps to another (at most every 3 s)"
+
+#: scripts/talentos.gd
+msgid "Napalm"
+msgstr "Napalm"
+
+#: scripts/talentos.gd
+msgid "El fuego del molotov dura 1 s más por punto"
+msgstr "Molotov fire lasts 1 s longer per point"
+
+#: scripts/talentos.gd
+msgid "Pegajoso"
+msgstr "Sticky"
+
+#: scripts/talentos.gd
+msgid "Los zombis con ácido van un 10 % más lentos por punto"
+msgstr "Zombies with acid on them move 10% slower per point"
+
+#: scripts/talentos.gd
+msgid "Alto voltaje"
+msgstr "High Voltage"
+
+#: scripts/talentos.gd
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
+msgstr "The lightning gun's bolt and the Lightning Rod's bolt jump to 1 more zombie per point"
+
+#: scripts/talentos.gd
+msgid "Mezcla explosiva"
+msgstr "Explosive Mix"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
+msgstr "Zombies that die with two effects at once (fire, acid, lightning or cold) explode (it doesn't hurt you)"
+
 #: scripts/ui/hud.gd
 msgid "escudo %d"
 msgstr "shield %d"
@@ -452,14 +1896,6 @@ msgstr "shield %d"
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Inventory"
-
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
-msgid "Cuerpo a cuerpo"
-msgstr "Melee"
-
-#: scripts/ui/inventario.gd
-msgid "A distancia"
-msgstr "Ranged"
 
 #: scripts/ui/inventario.gd
 msgid "En la mano"
@@ -873,10 +2309,6 @@ msgstr "The stash can't take more: you keep %d of %s."
 #: scripts/ui/inventario.gd
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "The stash is full: you keep %s."
-
-#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
-msgid "%s y %s"
-msgstr "%s and %s"
 
 #: scripts/ui/inventario.gd
 msgid "¿Seguro? Pulsa otra vez"
@@ -1585,10 +3017,6 @@ msgid "Pequeño"
 msgstr "Small"
 
 #: scripts/ui/opciones.gd
-msgid "Normal"
-msgstr "Normal"
-
-#: scripts/ui/opciones.gd
 msgid "Grande"
 msgstr "Large"
 
@@ -2101,10 +3529,6 @@ msgstr "Broadcast %d: \"%s\". Press to skip ahead or replay."
 #: scripts/ui/ordenador.gd
 msgid "%s, con %s. Pasa por las emisiones para verlas."
 msgstr "%s, with %s. Move over the broadcasts to watch them."
-
-#: scripts/ui/ordenador.gd
-msgid "Colecciones"
-msgstr "Collections"
 
 #: scripts/ui/ordenador.gd
 msgid "Objetos"

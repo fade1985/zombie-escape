@@ -115,7 +115,7 @@ func coger_dorada() -> void:
 	d.dorada = "tengo"
 	d.suelo = {}
 	Sonido.tocar("compra")
-	partida.decir("Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería", 3.0)
+	partida.decir(Idioma.t("Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"), 3.0)
 
 
 func _physics_process(delta: float) -> void:
@@ -145,7 +145,7 @@ func _physics_process(delta: float) -> void:
 		var extra: int = (partida.planta.num - 1) / 2
 		grupo(roundi(lerpf(GRUPO[0], GRUPO[1], k)) + extra, TIPOS[0] if k < 0.5 else TIPOS[1])
 	if d.alarma <= 0.0:
-		abrir("¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto")
+		abrir(Idioma.t("¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"))
 
 
 # El lector de tarjetas: arrimarse a la puerta blindada por el lado de la tienda. Con la tarjeta dorada, abre; sin
@@ -163,13 +163,13 @@ func mirar_lector() -> void:
 	if d.dorada == "tengo":
 		d.dorada = "usada"
 		Sonido.tocar("compra")
-		abrir("Abres la cámara acorazada con la tarjeta dorada")
+		abrir(Idioma.t("Abres la cámara acorazada con la tarjeta dorada"))
 	elif alarma():
-		partida.decir("Aguanta: la cámara se abre en %d segundos" % ceili(d.alarma))
+		partida.decir(Idioma.n("Aguanta: la cámara se abre en %d segundo", "Aguanta: la cámara se abre en %d segundos", ceili(d.alarma)) % ceili(d.alarma))
 	elif not avisado:
 		avisado = true
 		Sonido.tocar("no")
-		partida.decir("Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma", 4.5)
+		partida.decir(Idioma.t("Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"), 4.5)
 	else:
 		empezar_alarma()
 
@@ -181,8 +181,8 @@ func empezar_alarma() -> void:
 	sirena_t = 0.0
 	cuenta = false
 	Sonido.musica("jefe")
-	partida.eventos.mostrar_cartel("¡ALARMA!", "Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!" % roundi(CUENTA), ROJO)
-	partida.decir("¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería" % roundi(CUENTA), 4.0)
+	partida.eventos.mostrar_cartel(Idioma.t("¡ALARMA!"), Idioma.t("Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!") % roundi(CUENTA), ROJO)
+	partida.decir(Idioma.t("¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería") % roundi(CUENTA), 4.0)
 
 
 # La puerta blindada se abre (con la tarjeta o al acabar la cuenta): deja de chocar, los zombis ya pueden pasar,
@@ -254,11 +254,17 @@ func coger_premio() -> void:
 	var id: String = d.premio.arma
 	var johnny: Node2D = partida.johnny
 	var suelo: Dictionary = partida.llevar_arma(id, d.premio.calidad)
-	var como := "Ya la llevas en la mano" if suelo.is_empty() else "Ya la llevas en la mano; %s se queda en el suelo" % 		Armas.nombre(suelo.id, suelo.calidad)
+	var arma: String = Armas.nombre(id, d.premio.calidad)
+	var texto: String
+	if suelo.is_empty():
+		texto = Idioma.t("¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d") % [arma, d.premio.fajo]
+	else:
+		texto = Idioma.t("¡%s! Ya la llevas en la mano; %s se queda en el suelo. Y un fajo de billetes: +$%d") % [
+			arma, Armas.nombre(suelo.id, suelo.calidad), d.premio.fajo]
 	partida.dolares += d.premio.fajo
 	Sonido.tocar("compra")
 	partida.numero(johnny.position + Vector2(0, -60), "+$%d" % d.premio.fajo, Tema.VERDE)
-	partida.decir("¡%s! %s. Y un fajo de billetes: +$%d" % [Armas.nombre(id, d.premio.calidad), como, d.premio.fajo], 4.5)
+	partida.decir(texto, 4.5)
 
 
 # Un grupo de zombis entra por la entrada de la tienda o por una habitación donde no esté Johnny (nunca la cámara)
@@ -310,7 +316,7 @@ func dibujar() -> void:
 	var relleno := Color("#ff2d4b") if int(tiempo * 4.0) % 2 else Color("#c0203a")
 	capa.draw_rect(Rect2(x, y + 16, ancho * (1.0 - d.alarma / CUENTA), 10), relleno)
 	capa.draw_rect(Rect2(x, y + 16, ancho, 10), Tema.LINEA, false, 2.0)
-	var texto := "Apertura de emergencia · %d:%02d" % [falta / 60, falta % 60]
+	var texto := Idioma.t("Apertura de emergencia · %d:%02d") % [falta / 60, falta % 60]
 	capa.draw_string_outline(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, 4, Tema.LINEA)
 	capa.draw_string(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, Color("#ffb3b3"))
 	if falta <= 10:

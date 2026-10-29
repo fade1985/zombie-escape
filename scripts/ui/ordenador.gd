@@ -449,9 +449,9 @@ func programa_puntos(c: VBoxContainer) -> void:
 			if t.rama == rama.id:
 				puestos += Talentos.nivel_de(s, t.id)
 				total += t.max
-		var b := tarjeta(pestanas, "b_rama_" + rama.id, rama.icono, rama.nombre, Idioma.t("%d de %d") % [puestos, total], "",
+		var b := tarjeta(pestanas, "b_rama_" + rama.id, rama.icono, Talentos.nombre_rama(rama.id), Idioma.t("%d de %d") % [puestos, total], "",
 			"puesta" if rama.id == rama_abierta else "")
-		enlazar(b, Idioma.t("Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol.") % [rama.nombre, puestos, total],
+		enlazar(b, Idioma.t("Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol.") % [Talentos.nombre_rama(rama.id), puestos, total],
 			ver_rama.bind(rama.id))
 	for rama in Talentos.RAMAS:
 		if rama.id == rama_abierta:
@@ -542,7 +542,7 @@ func montar_rama(s: Dictionary, rama: Dictionary) -> VBoxContainer:
 	var titulo := PanelContainer.new()
 	titulo.add_theme_stylebox_override("panel", caja(AZUL, AZUL, 0, 0, 4))
 	columna.add_child(titulo)
-	titulo.add_child(Tema.icono_y_texto(rama.icono, rama.nombre, 24))
+	titulo.add_child(Tema.icono_y_texto(rama.icono, Talentos.nombre_rama(rama.id), 24))
 	for nivel in range(1, 6):
 		var fila := HBoxContainer.new()
 		fila.add_theme_constant_override("separation", 6)
@@ -571,7 +571,7 @@ func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 	# debajo del nombre: con algún punto puesto, lo que da ahora y lo que daría el siguiente (Talentos.efecto); sin
 	# ninguno, lo que hace cada punto
 	var ahora := Talentos.efecto(t.id, n)
-	var debajo: String = t.desc
+	var debajo: String = Talentos.desc_de(t.id)
 	var faltan := Talentos.nombres(Talentos.faltan(s, t.id))   # (los del nivel 5 piden tres: solo salen los que faltan)
 	if motivo == "bloqueado":
 		debajo = Idioma.t("Necesitas %s al máximo") % faltan
@@ -580,9 +580,9 @@ func nodo_talento(lista: Container, s: Dictionary, t: Dictionary) -> void:
 	elif n > 0 and ahora != "":
 		debajo = Idioma.t("Ahora: %s · Con otro: %s") % [ahora, Talentos.efecto(t.id, n + 1)]
 	var etiqueta := Idioma.t("MÁX") if motivo == "max" else ("" if motivo == "bloqueado" else "+1")
-	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, t.nombre, debajo, etiqueta,
+	var b := tarjeta(lista, "b_" + t.id, "candado" if motivo == "bloqueado" else t.icono, Talentos.nombre_de(t.id), debajo, etiqueta,
 		estado, [n, t.max])
-	var texto: String = t.desc
+	var texto: String = Talentos.desc_de(t.id)
 	match motivo:
 		"bloqueado": texto = Idioma.t("Necesitas %s al máximo. %s") % [faltan, texto]
 		"max": texto = Idioma.t("¡Al máximo! %s") % texto
@@ -614,7 +614,7 @@ func subir(id: String) -> void:
 	partida.aplicar_talentos(s.talentos)
 	rama_abierta = Talentos.talento(id).rama   # (si se sube desde fuera, como en las pruebas, que se vea)
 	abrir("puntos", "b_" + id)
-	info.set_deferred("text", Idioma.t("¡%s sube a %d/%d!") % [Talentos.talento(id).nombre, Talentos.nivel_de(s, id), Talentos.talento(id).max])   # después de marcar el botón (que pone su explicación)
+	info.set_deferred("text", Idioma.t("¡%s sube a %d/%d!") % [Talentos.nombre_de(id), Talentos.nivel_de(s, id), Talentos.talento(id).max])   # después de marcar el botón (que pone su explicación)
 
 
 # ── Tienda de armas ──
@@ -636,7 +636,7 @@ func programa_armas(c: VBoxContainer) -> void:
 			var lleva: bool = partida.johnny.huecos[w.tipo] == id
 			var etiqueta := Idioma.t("LA LLEVAS") if lleva else (Idioma.t("GRATIS") if precio == 0 else "$%d" % precio)
 			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
-			var b := tarjeta(lista, "b_" + id, id, w.nombre, resumen_corto(w), etiqueta, estado)
+			var b := tarjeta(lista, "b_" + id, id, Armas.nombre(id), resumen_corto(w), etiqueta, estado)
 			enlazar(b, resumen(w), comprar_arma.bind(id))
 	# los arrojables, de uno en uno: «AL MÁXIMO» (en verde) si ya no le cabe ninguno más (sus montones llenos y sin hueco
 	# para otro: lanzables.cabe)
@@ -646,10 +646,10 @@ func programa_armas(c: VBoxContainer) -> void:
 		var precio: int = Lanzables.PRECIOS[k]
 		var lleno := not lz.cabe(k)
 		var estado := "lleno" if lleno else ("" if s.dolares >= precio and not Reto.sin_municion() else "bloqueada")
-		var b := tarjeta(lista, "b_" + k, k, Lanzables.UNO[k], Idioma.t("Llevas %d") % lz.total(k),
+		var b := tarjeta(lista, "b_" + k, k, Lanzables.uno(k), Idioma.t("Llevas %d") % lz.total(k),
 			Idioma.t("AL MÁXIMO") if lleno else "$%d" % precio, estado)
 		var que: String = Idioma.t(INVENTARIO.QUE_HACE[k])
-		enlazar(b, Idioma.t("%s: %s Cada uno, $%d.") % [Lanzables.UNO[k], que[0].to_lower() + que.substr(1), precio],
+		enlazar(b, Idioma.t("%s: %s Cada uno, $%d.") % [Lanzables.uno(k), que[0].to_lower() + que.substr(1), precio],
 			comprar_lanzable.bind(k))
 	info.text = Idioma.t("Elige un arma: se paga con los dólares ahorrados.")
 
@@ -669,12 +669,13 @@ func resumen_corto(w: Dictionary) -> String:
 
 # La línea de abajo: sus números y, las que se llenan con un objeto de la mochila, con cuál
 func resumen(w: Dictionary) -> String:
-	var con: String = Armas.RELLENOS[w.relleno].uno if w.has("relleno") else ""   # con qué se llena (un objeto de la mochila)
+	var nombre := Idioma.t(w.nombre)
+	var con: String = Armas.relleno_uno(w.relleno) if w.has("relleno") else ""   # con qué se llena (un objeto de la mochila)
 	if w.has("deposito"):
 		var chorro := Idioma.t("rayo continuo") if w.get("efecto", "") == "rayo" else Idioma.t("chorro continuo")
 		if con != "":
-			return Idioma.t("%s: daño %d por segundo, %s, depósito de %d s que se llena con %s.") % [w.nombre, w.dano, chorro, roundi(w.deposito), con]
-		return Idioma.t("%s: daño %d por segundo, %s, depósito de %d s.") % [w.nombre, w.dano, chorro, roundi(w.deposito)]
+			return Idioma.t("%s: daño %d por segundo, %s, depósito de %d s que se llena con %s.") % [nombre, w.dano, chorro, roundi(w.deposito), con]
+		return Idioma.t("%s: daño %d por segundo, %s, depósito de %d s.") % [nombre, w.dano, chorro, roundi(w.deposito)]
 	# lo demás, una lista de datos separados por comas
 	var partes := []
 	if w.get("perdigones", 1) > 1:
@@ -687,7 +688,7 @@ func resumen(w: Dictionary) -> String:
 			partes.append(Idioma.t("cargador de %d que se llena con %s") % [w.cargador, con])
 		else:
 			partes.append(Idioma.t("cargador de %d") % w.cargador)
-	return "%s: %s." % [w.nombre, ", ".join(PackedStringArray(partes))]
+	return "%s: %s." % [nombre, ", ".join(PackedStringArray(partes))]
 
 
 # El nombre de un arma o arrojable dentro de una frase: en español va en minúscula; en inglés se queda como viene
@@ -700,11 +701,11 @@ func comprar_arma(id: String) -> void:
 	var w: Dictionary = Armas.DATOS[id]
 	var johnny: Node = partida.johnny
 	if johnny.huecos[w.tipo] == id:
-		info.text = Idioma.t("Ya llevas %s.") % en_frase(w.nombre)
+		info.text = Idioma.t("Ya llevas %s.") % en_frase(Armas.nombre(id))
 		Sonido.tocar("no")
 		return
 	if partida.repuesto(w.tipo) == id:
-		info.text = Idioma.t("Ya llevas %s de repuesto: póntela desde el inventario.") % en_frase(w.nombre)
+		info.text = Idioma.t("Ya llevas %s de repuesto: póntela desde el inventario.") % en_frase(Armas.nombre(id))
 		Sonido.tocar("no")
 		return
 	var s := Guardado.cargar()
@@ -723,7 +724,7 @@ func comprar_arma(id: String) -> void:
 	var suelo: Dictionary = partida.llevar_arma(id)   # (en Normal: las mejoradas salen del banco y de la joyería)
 	abrir("armas", "b_" + id)
 	info.set_deferred("text", (Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto.") if suelo.is_empty() else
-		Idioma.t("¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.")) % [w.nombre, vieja])   # después de marcar el botón (que pone su explicación)
+		Idioma.t("¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.")) % [Armas.nombre(id), vieja])   # después de marcar el botón (que pone su explicación)
 
 
 # Un arrojable más para esta partida (como cogerlo del suelo: lanzables.sumar), si cabe y le llega
@@ -733,7 +734,7 @@ func comprar_lanzable(k: String) -> void:
 	if Reto.sin_municion():
 		no = Idioma.t("En el reto «%s» no se lleva nada que lanzar.") % Reto.nombre("cuerpo")
 	elif not lz.cabe(k):
-		no = Idioma.t("No te caben más %s: tus montones están llenos y no te queda hueco para otro.") % Lanzables.NOMBRES[k]
+		no = Idioma.t("No te caben más %s: tus montones están llenos y no te queda hueco para otro.") % Lanzables.varios(k)
 	var s := Guardado.cargar()
 	var precio: int = Lanzables.PRECIOS[k]
 	if no == "" and s.dolares < precio:
@@ -749,7 +750,7 @@ func comprar_lanzable(k: String) -> void:
 	lz.sumar(k)
 	abrir("armas", "b_" + k)
 	var n := lz.total(k)
-	info.set_deferred("text", Idioma.t("¡Compra hecha! Ya llevas %d %s.") % [n, Lanzables.NOMBRES[k] if n != 1 else en_frase(Lanzables.UNO[k])])
+	info.set_deferred("text", Idioma.t("¡Compra hecha! Ya llevas %d %s.") % [n, Lanzables.varios(k) if n != 1 else en_frase(Lanzables.uno(k))])
 
 
 # ── Logros ──
@@ -776,16 +777,16 @@ func programa_logros(c: VBoxContainer) -> void:
 		nota(c, Idioma.t("Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."))
 	# por apartados (Logros.TEMAS), cada uno con sus tarjetas en dos columnas
 	for tema in Logros.TEMAS:
-		var lista := rejilla(grupo(c, Logros.TEMAS[tema]))
+		var lista := rejilla(grupo(c, Logros.nombre_tema(tema)))
 		for l in Logros.LISTA.filter(func(x): return x.tema == tema):
 			var e := Logros.estado(s, l.id)
 			var etiqueta: String = {"pendiente": "$%d" % l.premio, "conseguido": Idioma.t("COBRAR $%d") % l.premio, "cobrado": Idioma.t("HECHO")}[e]
 			var meta := Logros.meta(l)
 			var hecho: int = meta if e != "pendiente" else mini(partida.logros.progreso(l.id, s), meta)
 			var barra: Array = [hecho, meta] if meta > 1 else []
-			var b := tarjeta(lista, "b_" + l.id, l.icono, l.nombre, l.desc, etiqueta,
+			var b := tarjeta(lista, "b_" + l.id, l.icono, Logros.nombre_de(l.id), Logros.desc_de(l.id), etiqueta,
 				{"pendiente": "apagada", "conseguido": "", "cobrado": "lleno"}[e], [], barra)
-			enlazar(b, "%s: %s %s" % [l.nombre, l.desc, explica_logro(l, e, hecho, meta)], cobrar_logro.bind(l.id))
+			enlazar(b, "%s: %s %s" % [Logros.nombre_de(l.id), Logros.desc_de(l.id), explica_logro(l, e, hecho, meta)], cobrar_logro.bind(l.id))
 	info.text = Idioma.t("Pasa por encima de un logro para ver cómo vas.")
 
 
@@ -1074,7 +1075,7 @@ func ficha_edificio(s: Dictionary, ed: String, cual: String) -> Control:
 	for id in Objetos.de_edificio(ed):
 		var tiene: bool = id in s.encontrados
 		var b := casilla(casillas, "o_" + id, "obj-" + id, tiene)
-		enlazar(b, ("%s · %s" if tiene else Idioma.t("%s (sin encontrar) · %s")) % [Objetos.NOMBRES[id], Objetos.donde(id, ed)], func(): pass)
+		enlazar(b, ("%s · %s" if tiene else Idioma.t("%s (sin encontrar) · %s")) % [Objetos.nombre(id), Objetos.donde(id, ed)], func(): pass)
 	return columna
 
 

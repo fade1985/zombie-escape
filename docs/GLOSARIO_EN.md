@@ -73,3 +73,25 @@ Salieron al pasar la interfaz; las fases siguientes tienen que igualarlos (nombr
 | ¡Piso limpio! | All clear! | también vale en las tiendas |
 | Joyería · Farmacéutica | Jewelry Store · Pharmacist | los supervivientes van **sin artículo** («The %s moves into their room») |
 | Vida · Crítico | Health · Crit chance | las filas de la pausa |
+
+## Elegidos en la fase 3 (por confirmar)
+
+Los datos. Los nombres de armas, munición, piezas y arrojables se fijaron antes de escribir (están en cada ficha); los de talentos y logros
+son **adaptaciones**, no traducciones literales.
+
+| Español | Inglés |
+|---|---|
+| Fregona · Bate · Cuchillo · Pistola · Escopeta · MP5 | Mop · Bat · Knife · Pistol · Shotgun · MP5 |
+| Lanzallamas · Lanza ácido · Lanza rayos | Flamethrower · Acid launcher · Lightning gun |
+| Balas de pistola · Cartuchos · Gasolina · Bidón de ácido · Batería | Pistol bullets · Shells · Gas can · Acid drum · Battery |
+| Molotov · Granada · Atraedora · Congeladora | Molotov · Grenade · Decoy · Freeze bomb |
+| Truco (de la Épica) | Perk |
+| Ramas: Militar · Superviviente · Químico | Military · Survivor · Chemist |
+| Talentos: Durito · Larguirucho · Desatascador · Fabricante · Artificiero · Tirador · Mirilla · Lobezno | Tough Cookie · Lanky · Drain Cleaner · Bomb Maker · Demolitions · Gunner · Scope · Wolverine |
+| Logros: Alerta naranja / máxima · Sube, conserje · Liquidación total · Visto y no visto · Sin tiritas | Orange Alert / Red Alert · Going Up · Everything Must Go · In a Flash · No Band-Aids |
+| Logros: Comunidad de vecinos · Chatarrero · Caja fuerte · Ninguna regla me para | Tenants' Association · Packrat · Safecracker · No Rule Stops Me |
+| Mutaciones: Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentacular · Gastroenteritis · Numb · Cannibal · Anxiety · Thick Skin · Madness · Flatulent |
+| Trajes: Conserje · El portero · El glotón · El gymbro · El bombero | Janitor · The Super · The Glutton · The Gymbro · The Fireman |
+| pasillo · cámara acorazada · tarjeta dorada | hallway · vault · gold card |
+| apertura de emergencia · cuadro eléctrico · palanca · cable (pelado) · horda | emergency override · electrical panel · lever · wire · horde |
+| las viviendas | living quarters |

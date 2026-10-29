@@ -743,7 +743,7 @@ func probar_efectos() -> void:
 	print("Lanza rayos: balas %d | zombi 1 aturdido %.1f vida %d | zombi 2 aturdido %.1f vida %d" % [johnny.balas,
 		z1.aturdido, z1.vida, z2.aturdido, z2.vida])
 	abrir_cosas("inventario")
-	inventario.tocar("g%d" % armas_guardadas.find(armas_guardadas.filter(func(id): return Objetos.nombre(id) == "Lanza ácido")[0]))
+	inventario.tocar("g%d" % armas_guardadas.find(armas_guardadas.filter(func(id): return Armas.DATOS[id].nombre == "Lanza ácido")[0]))   # (el nombre de la tabla, en español: Objetos.nombre sale traducido)
 	inventario.poner_guardada()
 	inventario.cerrar()
 	for i in 6:
