@@ -1,0 +1,5695 @@
+# Traducción al portugués de Brasil de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
+# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
+msgid ""
+msgstr ""
+"Project-Id-Version: Zombie Escape\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+
+#: scripts/alerta.gd
+msgid "Alerta %d"
+msgstr "Alerta %d"
+
+#: scripts/alerta.gd
+msgid "Sin alerta"
+msgstr "Sem alerta"
+
+#: scripts/alerta.gd
+msgid "Como siempre"
+msgstr "Como sempre"
+
+#: scripts/alerta.gd
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de piezas"
+msgstr ""
+"%s%s\n"
+"+%d %% de dólares e peças"
+
+#: scripts/alerta.gd
+msgid " (y lo de antes)"
+msgstr " (e os anteriores)"
+
+#: scripts/alerta.gd
+msgid "+25 % de zombis"
+msgstr "+25 % de zumbis"
+
+#: scripts/alerta.gd
+msgid "Zombis un 10 % más rápidos"
+msgstr "Zumbis 10 % mais rápidos"
+
+#: scripts/alerta.gd
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "Chefes com +25 % de vida, e se irritam mais cedo"
+
+#: scripts/alerta.gd
+msgid "Botiquines, vendas y Lobezno curan la mitad"
+msgstr "Kits médicos, bandagens e Wolverine curam a metade"
+
+#: scripts/alerta.gd
+msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
+msgstr "O guarda (ou o zumbi da chave) aguenta o dobro e os zumbis te ouvem de mais longe"
+
+#: scripts/aliado.gd
+msgid "Quédate a su lado para levantarlo"
+msgstr "Fique por perto para ajudar a levantar"
+
+#: scripts/aliado.gd scripts/supervivientes.gd
+msgid "¡Socorro!"
+msgstr "Socorro!"
+
+#: scripts/aliado.gd
+msgid "¡Llévame contigo!"
+msgstr "Me leva com você!"
+
+#: scripts/aliado.gd
+msgid "¿Te acompaño?"
+msgstr "Posso ir junto?"
+
+#: scripts/antidisturbios.gd
+msgid "¡PRIIIII!"
+msgstr "PRIIIII!"
+
+#: scripts/antidisturbios.gd
+msgid "¡ATRÁS!"
+msgstr "PRA TRÁS!"
+
+#: scripts/antidisturbios.gd
+msgid "¡QUEDAS DETENIDO!"
+msgstr "VOCÊ TÁ PRESO!"
+
+#: scripts/antidisturbios.gd
+msgid "¡CLONC!"
+msgstr "CLONC!"
+
+#: scripts/armas.gd
+msgid "golpe un %d %% más largo y ancho"
+msgstr "golpe %d %% mais comprido e largo"
+
+#: scripts/armas.gd
+msgid "cargador un %d %% más grande y recarga un %d %% más rápida"
+msgstr "pente %d %% maior e recarga %d %% mais rápida"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande y la descarga salta a %d zombi más"
+msgid_plural "depósito un %d %% más grande y la descarga salta a %d zombis más"
+msgstr[0] "tanque %d %% maior e a descarga pula para mais %d zumbi"
+msgstr[1] "tanque %d %% maior e a descarga pula para mais %d zumbis"
+
+#: scripts/armas.gd
+msgid "depósito un %d %% más grande"
+msgstr "tanque %d %% maior"
+
+#: scripts/armas.gd
+msgid "radio un %d %% más grande y caben %d más"
+msgstr "raio %d %% maior e cabem mais %d"
+
+#: scripts/armas.gd
+msgid "%s: daño +%d %%, %s."
+msgstr "%s: dano +%d %%, %s."
+
+#: scripts/armas.gd
+msgid "Truco: cada %d golpes que dan, uno es crítico (doble daño)."
+msgstr "Truque: a cada %d golpes que acerta, um é crítico (dano em dobro)."
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a un zombi y siguen."
+msgstr "Truque: as balas atravessam um zumbi e seguem em frente."
+
+#: scripts/armas.gd
+msgid "Truco: sus balas atraviesan a %d zombis y siguen."
+msgstr "Truque: as balas atravessam %d zumbis e seguem em frente."
+
+#: scripts/armas.gd
+msgid "Truco: los zombis que mata revientan y pasan su efecto a los de al lado."
+msgstr "Truque: os zumbis que ela mata explodem e passam o efeito para os do lado."
+
+#: scripts/armas.gd
+msgid "Truco: al romperse suelta %d más pequeños alrededor."
+msgstr "Truque: ao quebrar, solta %d menores ao redor."
+
+#: scripts/armas.gd
+msgid "Truco: al explotar suelta %d más pequeños alrededor."
+msgstr "Truque: ao explodir, solta %d menores ao redor."
+
+#: scripts/armas.gd scripts/ui/opciones.gd
+msgid "Normal"
+msgstr "Normal"
+
+#: scripts/armas.gd
+msgid "Poco común"
+msgstr "Incomum"
+
+#: scripts/armas.gd
+msgid "Rara"
+msgstr "Rara"
+
+#: scripts/armas.gd
+msgid "Épica"
+msgstr "Épica"
+
+#: scripts/armas.gd
+msgid "Fregona"
+msgstr "Esfregão"
+
+#: scripts/armas.gd
+msgid "Bate"
+msgstr "Taco"
+
+#: scripts/armas.gd
+msgid "Cuchillo"
+msgstr "Faca"
+
+#: scripts/armas.gd
+msgid "Pistola"
+msgstr "Pistola"
+
+#: scripts/armas.gd
+msgid "Escopeta"
+msgstr "Escopeta"
+
+#: scripts/armas.gd
+msgid "MP5"
+msgstr "MP5"
+
+#: scripts/armas.gd
+msgid "Lanzallamas"
+msgstr "Lança-chamas"
+
+#: scripts/armas.gd
+msgid "Lanza ácido"
+msgstr "Lança-ácido"
+
+#: scripts/armas.gd
+msgid "Lanza rayos"
+msgstr "Lança-raios"
+
+#: scripts/armas.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cuerpo a cuerpo"
+msgstr "Corpo a corpo"
+
+#: scripts/armas.gd scripts/ui/inventario.gd
+msgid "A distancia"
+msgstr "À distância"
+
+#: scripts/armas.gd
+msgid "una gasolina"
+msgstr "um galão de gasolina"
+
+#: scripts/armas.gd
+msgid "un bidón de ácido"
+msgstr "um galão de ácido"
+
+#: scripts/armas.gd
+msgid "una batería"
+msgstr "uma bateria"
+
+#: scripts/armas.gd
+msgid "Balas de pistola"
+msgstr "Balas de pistola"
+
+#: scripts/armas.gd
+msgid "¡Sin balas!"
+msgstr "Sem balas!"
+
+#: scripts/armas.gd
+msgid "la pistola y la MP5"
+msgstr "a pistola e a MP5"
+
+#: scripts/armas.gd
+msgid "Cartuchos"
+msgstr "Cartuchos"
+
+#: scripts/armas.gd
+msgid "¡Sin cartuchos!"
+msgstr "Sem cartuchos!"
+
+#: scripts/armas.gd
+msgid "la escopeta"
+msgstr "a escopeta"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Gasolina"
+msgstr "Gasolina"
+
+#: scripts/armas.gd
+msgid "¡Sin gasolina!"
+msgstr "Sem gasolina!"
+
+#: scripts/armas.gd
+msgid "el lanzallamas"
+msgstr "o lança-chamas"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Bidón de ácido"
+msgstr "Galão de ácido"
+
+#: scripts/armas.gd
+msgid "¡Sin ácido!"
+msgstr "Sem ácido!"
+
+#: scripts/armas.gd
+msgid "el lanza ácido"
+msgstr "o lança-ácido"
+
+#: scripts/armas.gd scripts/objetos.gd
+msgid "Batería"
+msgstr "Bateria"
+
+#: scripts/armas.gd
+msgid "¡Sin batería!"
+msgstr "Sem bateria!"
+
+#: scripts/armas.gd
+msgid "el lanza rayos"
+msgstr "o lança-raios"
+
+#: scripts/averia.gd
+msgid "Con corriente no puedo tocarlo. ¡Baja la palanca del cuadro!"
+msgstr "Com a energia ligada eu não encosto nisso. Abaixa a alavanca do quadro!"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico para que el %s arregle el cable"
+msgstr "Abaixe a alavanca do quadro elétrico para o %s consertar o fio"
+
+#: scripts/averia.gd
+msgid "¡Gracias! Sigo con el cable"
+msgstr "Valeu! Voltando pro fio"
+
+#: scripts/averia.gd
+msgid "¡Se ha cerrado la puerta! Aguanta a oscuras mientras el %s arregla el cable"
+msgstr "A porta se fechou! Aguente no escuro enquanto o %s conserta o fio"
+
+#: scripts/averia.gd
+msgid "¡Arreglado! Ya puedes dar la luz"
+msgstr "Pronto! Já pode religar a luz"
+
+#: scripts/averia.gd
+msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
+msgstr "O %s consertou o fio! A água não dá mais choque"
+
+#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
+msgid "¡Ayúdame, no puedo levantarme!"
+msgstr "Me ajuda, não consigo levantar!"
+
+#: scripts/averia.gd
+msgid "El %s no se va sin arreglar el cable: baja la palanca del cuadro"
+msgstr "O %s não sai sem consertar o fio: abaixe a alavanca do quadro"
+
+#: scripts/averia.gd
+msgid "Aguanta: el %s está arreglando el cable"
+msgstr "Aguente: o %s está consertando o fio"
+
+#: scripts/averia.gd
+msgid "Baja la palanca del cuadro eléctrico"
+msgstr "Abaixe a alavanca do quadro elétrico"
+
+#: scripts/averia.gd
+msgid "¡El %s ha caído!"
+msgstr "O %s caiu!"
+
+#: scripts/averia.gd
+msgid "¡Hay corriente! Baja la palanca"
+msgstr "A energia está ligada! Abaixe a alavanca"
+
+#: scripts/averia.gd
+msgid "El %s arregla el cable · %d:%02d"
+msgstr "O %s está consertando o fio · %d:%02d"
+
+#: scripts/averia.gd
+msgid "¡Bien, sin corriente! Cúbreme mientras lo arreglo"
+msgstr "Boa, sem energia! Me cobre enquanto eu conserto"
+
+#: scripts/averia.gd
+msgid "Este empalme está hecho polvo…"
+msgstr "Essa emenda tá um lixo…"
+
+#: scripts/averia.gd
+msgid "No veo nada… ¡no dejes que se me acerquen!"
+msgstr "Não enxergo nada… não deixa eles chegarem perto!"
+
+#: scripts/averia.gd
+msgid "¡Toma, esto estaba en el almacén!"
+msgstr "Toma, isso tava no estoque!"
+
+#: scripts/averia.gd
+msgid "Pelo el cable, lo uno… vale"
+msgstr "Descasca o fio, junta… beleza"
+
+#: scripts/averia.gd
+msgid "Ya solo falta la cinta aislante…"
+msgstr "Só falta a fita isolante…"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Un poco más!"
+msgstr "Só mais um pouco!"
+
+#: scripts/averia.gd
+msgid "¡Eh, que hay corriente! ¡Baja la palanca!"
+msgstr "Ei, a energia tá ligada! Abaixa a alavanca!"
+
+#: scripts/averia.gd
+msgid "¡Así no puedo! ¡Quita la corriente!"
+msgstr "Assim não dá! Corta a energia!"
+
+#: scripts/averia.gd
+msgid "¡Que me electrocuto! ¡La palanca!"
+msgstr "Vou tomar choque! A alavanca!"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Johnny, vuelve!"
+msgstr "Johnny, volta aqui!"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡No me dejes aquí!"
+msgstr "Não me deixa aqui!"
+
+#: scripts/averia.gd scripts/supervivientes.gd
+msgid "¡Que me comen!"
+msgstr "Tão me comendo!"
+
+#: scripts/barricada.gd
+msgid "¡Espera, que quito la barricada!"
+msgstr "Espera, que eu vou tirar a barricada!"
+
+#: scripts/barricada.gd
+msgid "¡La entrada se ha cerrado! Defiende la puerta mientras el %s quita la barricada"
+msgstr "A entrada se fechou! Defenda a porta enquanto o %s tira a barricada"
+
+#: scripts/barricada.gd
+msgid "la entrada"
+msgstr "a entrada"
+
+#: scripts/barricada.gd scripts/supervivientes.gd
+msgid "¡Vienen por %s!"
+msgstr "Lá vêm eles! Olha %s!"
+
+#: scripts/barricada.gd
+msgid "¡Barricada fuera! La entrada se ha abierto"
+msgstr "Barricada fora! A entrada está aberta"
+
+#: scripts/barricada.gd
+msgid "¡Están empujando la puerta! Quítaselos"
+msgstr "Estão empurrando a porta! Tire eles de lá"
+
+#: scripts/barricada.gd
+msgid "%s quita la barricada · %d:%02d"
+msgstr "O %s está tirando a barricada · %d:%02d"
+
+#: scripts/barricada.gd
+msgid "¡Cuántos clavos le metí!"
+msgstr "Eu meti prego demais nisso!"
+
+#: scripts/barricada.gd
+msgid "¡Una tabla menos!"
+msgstr "Uma tábua a menos!"
+
+#: scripts/barricada.gd
+msgid "Esta tabla no sale…"
+msgstr "Essa tábua não sai…"
+
+#: scripts/barricada.gd
+msgid "¡Toma, te lo paso por debajo!"
+msgstr "Toma, vou passar por baixo da porta!"
+
+#: scripts/barricada.gd
+msgid "¡Otra fuera!"
+msgstr "Mais uma fora!"
+
+#: scripts/barricada.gd
+msgid "Ya casi está…"
+msgstr "Tá quase…"
+
+#: scripts/barricada.gd
+msgid "¡La última tabla!"
+msgstr "A última tábua!"
+
+#: scripts/barricada.gd
+msgid "¡Me están empujando la puerta!"
+msgstr "Tão empurrando a porta!"
+
+#: scripts/barricada.gd
+msgid "¡Quítamelos de la puerta!"
+msgstr "Tira eles da porta!"
+
+#: scripts/barricada.gd
+msgid "¡Así no puedo, Johnny!"
+msgstr "Assim não dá, Johnny!"
+
+#: scripts/bestiario.gd
+msgid "El vecino"
+msgstr "O vizinho"
+
+#: scripts/bestiario.gd
+msgid "Llegó de madrugada en un camión de Velaria, a cambio de un piso gratis. Ahora es un durmiente: no saluda en la escalera, muerde."
+msgstr "Chegou de madrugada num caminhão da Velaria, em troca de um apartamento de graça. Agora é um adormecido: não dá bom-dia na escada, morde."
+
+#: scripts/bestiario.gd
+msgid "El arrastrado"
+msgstr "O rastejante"
+
+#: scripts/bestiario.gd
+msgid "Le falta la mitad de abajo y no se ha enterado. Se arrastra con las manos y lo deja todo perdido."
+msgstr "Falta a metade de baixo e ele nem percebeu. Se arrasta com as mãos e deixa tudo imundo."
+
+#: scripts/bestiario.gd
+msgid "El crío"
+msgstr "O moleque"
+
+#: scripts/bestiario.gd
+msgid "Un crío con gorra y chándal que corre como un demonio. Frena fatal: apártate y se pasa de largo."
+msgstr "Um moleque de boné e agasalho que corre feito o capeta. Freia muito mal: saia da frente e ele passa direto."
+
+#: scripts/bestiario.gd
+msgid "El dinamitero"
+msgstr "O dinamiteiro"
+
+#: scripts/bestiario.gd
+msgid "Un hombretón con gabardina. Cuando la abre no es para enseñarte nada bueno: corre."
+msgstr "Um grandalhão de sobretudo. Quando ele abre o casaco, não é pra mostrar nada de bom: corra."
+
+#: scripts/bestiario.gd
+msgid "El de los tentáculos"
+msgstr "O dos tentáculos"
+
+#: scripts/bestiario.gd
+msgid "Apenas se mueve, pero cuando marca la raya roja, no te quedes en ella."
+msgstr "Quase não se mexe, mas quando marca a linha vermelha, não fique em cima dela."
+
+#: scripts/bestiario.gd
+msgid "El gordo"
+msgstr "O gordo"
+
+#: scripts/bestiario.gd
+msgid "Guarda las distancias y escupe un moco que deja el suelo envenenado."
+msgstr "Mantém distância e cospe uma meleca que deixa o chão envenenado."
+
+#: scripts/bestiario.gd
+msgid "La portera"
+msgstr "A síndica"
+
+#: scripts/bestiario.gd
+msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
+msgstr "Tinha tudo sob controle: as chaves, os boletos e agora os moradores. O esfregão não é pra limpar."
+
+#: scripts/bestiario.gd
+msgid "La dependienta"
+msgstr "A vendedora"
+
+#: scripts/bestiario.gd
+msgid "Lleva 31 horas de pie y sigue sonriendo. Cuando grita «¡OFERTAS!», la tienda entera se despierta."
+msgstr "Está há 31 horas em pé e continua sorrindo. Quando ela grita \"PROMOÇÃO!\", a loja inteira acorda."
+
+#: scripts/bestiario.gd
+msgid "El vigilante"
+msgstr "O segurança"
+
+#: scripts/bestiario.gd
+msgid "Sigue haciendo la ronda. Si oye un silbato, viene corriendo con la porra por delante."
+msgstr "Continua fazendo a ronda. Se ouve um apito, vem correndo com o cassetete na frente."
+
+#: scripts/bestiario.gd
+msgid "El guardia de la tarjeta"
+msgstr "O guarda do cartão"
+
+#: scripts/bestiario.gd
+msgid "Lleva la tarjeta de la planta y lo sabe. Pita, huye y se cansa: ese es tu momento."
+msgstr "Leva o cartão do andar e sabe disso. Apita, foge e se cansa: essa é a sua chance."
+
+#: scripts/bestiario.gd
+msgid "El antidisturbios"
+msgstr "O policial de choque"
+
+#: scripts/bestiario.gd
+msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
+msgstr "Com o escudo na frente, nada passa. Dê a volta: pelas costas dói o dobro."
+
+#: scripts/bestiario.gd
+msgid "El cocinero"
+msgstr "O cozinheiro"
+
+#: scripts/bestiario.gd
+msgid "Sigue en su cocina, y la carta es cuchillos y aceite hirviendo. No te quedes bajo las marcas."
+msgstr "Continua na cozinha dele, e o cardápio é faca e óleo fervendo. Não fique embaixo das marcas."
+
+#: scripts/bestiario.gd
+msgid "La modista"
+msgstr "A costureira"
+
+#: scripts/bestiario.gd
+msgid "Se esconde entre los maniquíes y te cose a alfileres. Fíjate en cuál le brillan los ojos."
+msgstr "Se esconde entre os manequins e te enche de alfinetes. Repare em qual deles os olhos brilham."
+
+#: scripts/bestiario.gd
+msgid "El maniquí"
+msgstr "O manequim"
+
+#: scripts/bestiario.gd
+msgid "Quieto mientras lo miras. No le des la espalda."
+msgstr "Fica parado enquanto você olha. Não dê as costas pra ele."
+
+#: scripts/bestiario.gd
+msgid "La mascota"
+msgstr "O mascote"
+
+#: scripts/bestiario.gd
+msgid "Un oso de peluche gigante con alguien dentro. Embiste, salta y, si se estrella, ve estrellitas."
+msgstr "Um urso de pelúcia gigante com alguém dentro. Avança, pula e, se der de cara na parede, vê estrelinhas."
+
+#: scripts/bestiario.gd
+msgid "El gerente"
+msgstr "O gerente"
+
+#: scripts/bestiario.gd
+msgid "Arturo Salcedo, director del centro. Sus contratos cortan y su jeringuilla lleva VD-7."
+msgstr "Arturo Salcedo, diretor do shopping. Os contratos dele cortam e a seringa dele leva VD-7."
+
+#: scripts/bestiario.gd
+msgid "El gerente mutado"
+msgstr "O gerente mutante"
+
+#: scripts/bestiario.gd
+msgid "Ya no le hace falta dormir. Ni el traje. Cuatro tentáculos y el helicóptero esperando en la azotea."
+msgstr "Já não precisa dormir. Nem do terno. Quatro tentáculos e o helicóptero esperando no terraço."
+
+#: scripts/bestiario.gd
+msgid "El Glotón"
+msgstr "O Glutão"
+
+#: scripts/bestiario.gd
+msgid "Va a gatas y quiere comerte: cuando abra la boca, sal del cono. Su sangre es ácida: cada golpe tuyo te salpica."
+msgstr "Anda de quatro e quer te comer: quando ele abrir a boca, saia do cone. O sangue dele é ácido: cada golpe seu respinga em você."
+
+#: scripts/bestiario.gd
+msgid "El Gymbro"
+msgstr "O Maromba"
+
+#: scripts/bestiario.gd
+msgid "Gira con los brazos abiertos, salta encima de ti y te tira pesas. Con sus suplementos, la armadura se come la mitad del daño."
+msgstr "Gira de braços abertos, pula em cima de você e joga halteres. Com os suplementos dele, a armadura absorve metade do dano."
+
+#: scripts/bestiario.gd
+msgid "El jefe de bomberos"
+msgstr "O chefe dos bombeiros"
+
+#: scripts/bestiario.gd
+msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
+msgstr "O fogo não faz nada com ele: troque de arma. Quando ele girar, corra na frente do cone de fogo, para onde as setas apontam. De perto, cuidado com o machado."
+
+#: scripts/bestiario.gd
+msgid "El doctor Salas"
+msgstr "O doutor Salas"
+
+#: scripts/bestiario.gd
+msgid "Héctor Salas, director del estudio del VD-7. Tira probetas, mejora a sus sujetos y se esconde en una cúpula de cristal: rómpela."
+msgstr "Héctor Salas, diretor do estudo do VD-7. Joga tubos de ensaio, turbina as cobaias e se esconde numa cúpula de vidro: quebre-a."
+
+#: scripts/bestiario.gd
+msgid "La criatura"
+msgstr "A criatura"
+
+#: scripts/bestiario.gd
+msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
+msgstr "O que sobrou do doutor depois da própria dose: a boca do Glutão, os braços do Maromba e o fogo do bombeiro. Saia das faixas e da onda de choque."
+
+#: scripts/bombero.gd
+msgid "¡A ARDER!"
+msgstr "VAI ARDER!"
+
+#: scripts/bombero.gd scripts/minijefe.gd
+msgid "¡INMUNE!"
+msgstr "IMUNE!"
+
+#: scripts/bombero.gd
+msgid "¡TODO ARDE!"
+msgstr "TUDO QUEIMA!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MÁS SUJETOS!"
+msgstr "MAIS COBAIAS!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡DOSIS DOBLE!"
+msgstr "DOSE DUPLA!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡SUERO!"
+msgstr "SORO!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡NO ME TOCARÁS!"
+msgstr "NEM ENCOSTA!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡MI CÚPULA!"
+msgstr "MINHA CÚPULA!"
+
+#: scripts/cientifico_jefe.gd
+msgid "¡AÚN NO HE TERMINADO!"
+msgstr "AINDA NÃO ACABEI!"
+
+#: scripts/cientifico_jefe.gd scripts/gerente.gd
+msgid "¡GRAAAAH!"
+msgstr "GRAAAAH!"
+
+#: scripts/cocinero.gd
+msgid "¡CALENTITO!"
+msgstr "QUENTINHO!"
+
+#: scripts/cocinero.gd
+msgid "¡A LA OLLA!"
+msgstr "PRA PANELA!"
+
+#: scripts/edificios.gd
+msgid "Apartamentos"
+msgstr "Apartamentos"
+
+#: scripts/edificios.gd
+msgid "los Apartamentos"
+msgstr "os Apartamentos"
+
+#: scripts/edificios.gd
+msgid "Vecinos zombi, pisos a oscuras y una portera con muy mal genio"
+msgstr "Vizinhos zumbis, apartamentos no escuro e uma síndica muito mal-humorada"
+
+#: scripts/edificios.gd
+msgid "la portera"
+msgstr "a síndica"
+
+#: scripts/edificios.gd
+msgid "el doctor Salas"
+msgstr "o doutor Salas"
+
+#: scripts/edificios.gd
+msgid "limpia los apartamentos y caza al zombi que lleva la llave de la portera"
+msgstr "limpe os apartamentos e cace o zumbi que leva a chave da síndica"
+
+#: scripts/edificios.gd
+msgid "Centro comercial"
+msgstr "Shopping"
+
+#: scripts/edificios.gd
+msgid "el Centro comercial"
+msgstr "o Shopping"
+
+#: scripts/edificios.gd
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
+msgstr "Lojas saqueadas, estoques no escuro e um guarda que não larga o cartão"
+
+#: scripts/edificios.gd
+msgid "el gerente"
+msgstr "o gerente"
+
+#: scripts/edificios.gd
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
+msgstr "limpe as lojas e cace o guarda de segurança: ele leva o cartão de acesso"
+
+#: scripts/edificios.gd
+msgid "el Glotón"
+msgstr "o Glutão"
+
+#: scripts/edificios.gd
+msgid "el Gymbro"
+msgstr "o Maromba"
+
+#: scripts/edificios.gd
+msgid "el jefe de bomberos"
+msgstr "o chefe dos bombeiros"
+
+#: scripts/edificios.gd
+msgid "el antidisturbios"
+msgstr "o policial de choque"
+
+#: scripts/edificios.gd
+msgid "Oficina de seguridad"
+msgstr "Sala de segurança"
+
+#: scripts/edificios.gd
+msgid "la Oficina de seguridad"
+msgstr "a Sala de segurança"
+
+#: scripts/edificios.gd
+msgid "el cocinero"
+msgstr "o cozinheiro"
+
+#: scripts/edificios.gd
+msgid "Cocina central"
+msgstr "Cozinha central"
+
+#: scripts/edificios.gd
+msgid "la Cocina central"
+msgstr "a Cozinha central"
+
+#: scripts/edificios.gd
+msgid "la modista"
+msgstr "a costureira"
+
+#: scripts/edificios.gd
+msgid "Taller de costura"
+msgstr "Ateliê de costura"
+
+#: scripts/edificios.gd
+msgid "el Taller de costura"
+msgstr "o Ateliê de costura"
+
+#: scripts/edificios.gd
+msgid "la mascota"
+msgstr "o mascote"
+
+#: scripts/edificios.gd
+msgid "Juguetería"
+msgstr "Loja de brinquedos"
+
+#: scripts/edificios.gd
+msgid "la Juguetería"
+msgstr "a Loja de brinquedos"
+
+#: scripts/escolta.gd
+msgid "Vámonos. Despacio, por favor"
+msgstr "Vamos. Devagar, por favor"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s hasta las escaleras: va herida"
+msgstr "Leve a %s até as escadas: ela está ferida"
+
+#: scripts/escolta.gd
+msgid "Gracias… sigamos"
+msgstr "Obrigada… vamos continuar"
+
+#: scripts/escolta.gd
+msgid "¡La %s está en el suelo! Quédate a su lado para levantarla"
+msgstr "A %s está no chão! Fique ao lado dela para levantá-la"
+
+#: scripts/escolta.gd
+msgid "Espera a la %s: va herida"
+msgstr "Espere a %s: ela está ferida"
+
+#: scripts/escolta.gd
+msgid "Aquí ya estamos a salvo. Me vendo la pierna y sigo contigo"
+msgstr "Aqui estamos seguros. Vou enfaixar a perna e continuo com você"
+
+#: scripts/escolta.gd
+msgid "¡La %s está a salvo!"
+msgstr "A %s está a salvo!"
+
+#: scripts/escolta.gd
+msgid "¡La %s ha caído! Quédate a su lado"
+msgstr "A %s caiu! Fique ao lado dela"
+
+#: scripts/escolta.gd
+msgid "Lleva a la %s a las escaleras"
+msgstr "Leve a %s até as escadas"
+
+#: scripts/escolta.gd
+msgid "Me duele mucho la pierna…"
+msgstr "Minha perna dói muito…"
+
+#: scripts/escolta.gd
+msgid "¡No vayas tan deprisa!"
+msgstr "Não vai tão rápido!"
+
+#: scripts/escolta.gd
+msgid "¡No me dejes atrás!"
+msgstr "Não me deixa pra trás!"
+
+#: scripts/escolta.gd
+msgid "¿Falta mucho?"
+msgstr "Falta muito?"
+
+#: scripts/escolta.gd
+msgid "Tengo que vendarme esto…"
+msgstr "Preciso enfaixar isso…"
+
+#: scripts/eventos.gd
+msgid "¡Ahí viene la horda!"
+msgstr "Lá vem a horda!"
+
+#: scripts/eventos.gd
+msgid "¡Horda vencida! Te deja $%d y una caja de munición"
+msgstr "Horda vencida! Ela deixa $%d e uma caixa de munição"
+
+#: scripts/eventos.gd
+msgid "¡Apagón superado! +$%d"
+msgstr "Apagão superado! +$%d"
+
+#: scripts/eventos.gd
+msgid "¡Incendio superado! +$%d"
+msgstr "Incêndio superado! +$%d"
+
+#: scripts/eventos.gd
+msgid "¡Ojo! Ese charco tiene corriente"
+msgstr "Cuidado! Essa poça está dando choque"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Apagón"
+msgstr "Apagão"
+
+#: scripts/eventos.gd
+msgid "¡APAGÓN!"
+msgstr "APAGÃO!"
+
+#: scripts/eventos.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna"
+msgstr "A luz acabou no andar inteiro: você só vê o que a lanterna ilumina"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Alarma de incendios"
+msgstr "Alarme de incêndio"
+
+#: scripts/eventos.gd
+msgid "¡ALARMA DE INCENDIOS!"
+msgstr "ALARME DE INCÊNDIO!"
+
+#: scripts/eventos.gd
+msgid "Los aspersores mojan el suelo: resbala, y donde caen cables, ¡calambrazos!"
+msgstr "Os sprinklers molham o chão: ele escorrega e, onde caem fios, é choque na certa!"
+
+#: scripts/eventos.gd scripts/tutoriales.gd
+msgid "Horda"
+msgstr "Horda"
+
+#: scripts/eventos.gd
+msgid "¡HORDA EN EL PASILLO!"
+msgstr "HORDA NO CORREDOR!"
+
+#: scripts/eventos.gd
+msgid "Una horda enorme avanza por el pasillo... ¡prepárate!"
+msgstr "Uma horda enorme avança pelo corredor... prepare-se!"
+
+#: scripts/gerente.gd
+msgid "¡A TRABAJAR!"
+msgstr "BORA TRABALHAR!"
+
+#: scripts/gerente.gd
+msgid "¡AQUÍ NO PARA NADIE!"
+msgstr "AQUI NINGUÉM PARA!"
+
+#: scripts/gloton.gd
+msgid "¡HAMBRE!"
+msgstr "FOME!"
+
+#: scripts/gloton.gd scripts/johnny.gd
+msgid "¡ÑAM!"
+msgstr "NHAC!"
+
+#: scripts/gloton.gd
+msgid "¡TENGO HAMBRE!"
+msgstr "TÔ COM FOME!"
+
+#: scripts/gloton.gd
+msgid "-%d ácido"
+msgstr "-%d ácido"
+
+#: scripts/gymbro.gd
+msgid "¡NO PAIN, NO GAIN!"
+msgstr "NO PAIN, NO GAIN!"
+
+#: scripts/gymbro.gd
+msgid "¡HORA DE LOS SUPLEMENTOS!"
+msgstr "HORA DO WHEY, MANO!"
+
+#: scripts/gymbro.gd
+msgid "¡SIN SUPLEMENTOS!"
+msgstr "ACABOU O WHEY!"
+
+#: scripts/historia.gd
+msgid "azotea"
+msgstr "terraço"
+
+#: scripts/historia.gd
+msgid "Página arrancada"
+msgstr "Página arrancada"
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Apartamentos"
+msgstr "Dossiê VD-7 · Apartamentos"
+
+#: scripts/historia.gd
+msgid "Cada muerto de Velaria en el edificio lleva una página, y la última la lleva el director del estudio. Lo que encuentres queda aquí para siempre."
+msgstr "Cada morto da Velaria no prédio leva uma página, e a última está com o diretor do estudo. O que você encontrar fica aqui para sempre."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva alguien de Velaria caído en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"Falta esta página. Está com alguém da Velaria, morto no %s.\n"
+"\n"
+"Procure numa partida."
+
+#: scripts/historia.gd
+msgid "Dra. Inés Lozano, coordinadora del estudio"
+msgstr "Dra. Inés Lozano, coordenadora do estudo"
+
+#: scripts/historia.gd
+msgid "PLAN DE CAMPO · CONFIDENCIAL"
+msgstr "PLANO DE CAMPO · CONFIDENCIAL"
+
+#: scripts/historia.gd
+msgid "Estudio de descanso"
+msgstr "Estudo do sono"
+
+#: scripts/historia.gd
+msgid ""
+"Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
+"\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"\n"
+"Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
+"\n"
+"Personal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros."
+msgstr ""
+"Prédio: o número 14. A Velaria Corp. comprou o prédio inteiro: ninguém pode bisbilhotar.\n"
+"\n"
+"Sujeitos: 120, trazidos de noite em caminhões pela garagem dos fundos, onde ninguém vê. Gente sem casa, endividada ou doente. Damos a eles um apartamento e € 300 por mês.\n"
+"\n"
+"Dose: um comprimido de VD-7 toda noite, às 23:00.\n"
+"\n"
+"Equipe: uma médica, para vigiar os sujeitos; um policial fardado, para que eles confiem; e uma escolta militar, caso algo dê errado. A síndica trabalha para nós."
+
+#: scripts/historia.gd
+msgid "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."
+msgstr "Salas diz que ninguém vai sentir falta dessa gente. Foi por isso que ele escolheu essas pessoas."
+
+#: scripts/historia.gd
+msgid "Tomás Vidal, enfermero de noche"
+msgstr "Tomás Vidal, enfermeiro do turno da noite"
+
+#: scripts/historia.gd
+msgid "DIARIO DE TURNO"
+msgstr "DIÁRIO DE PLANTÃO"
+
+#: scripts/historia.gd
+msgid "Noches 6 a 13"
+msgstr "Noites 6 a 13"
+
+#: scripts/historia.gd
+msgid ""
+"Noche 6. Funciona. El del 1ºA, que no pegaba ojo desde hacía años, ronca a las 23:10.\n"
+"\n"
+"Noche 9. Siguen dormidos, pero se levantan. Andan, abren la nevera, vuelven a la cama. Con los ojos cerrados.\n"
+"\n"
+"Noche 12. Ya no vuelven a la cama. La piel se les cae a tiras. Se han comido todo lo de los pisos, y al perro del 2ºC. De la escolta solo queda uno.\n"
+"\n"
+"Noche 13. El del 3ºB me ha mordido. Salas los llama «durmientes». Tengo mucho sueño."
+msgstr ""
+"Noite 6. Funciona. O do 1A, que não pregava o olho havia anos, ronca às 23:10.\n"
+"\n"
+"Noite 9. Continuam dormindo, mas se levantam. Andam, abrem a geladeira, voltam para a cama. De olhos fechados.\n"
+"\n"
+"Noite 12. Já não voltam para a cama. A pele cai em tiras. Comeram tudo o que tinha nos apartamentos, e o cachorro do 2C. Da escolta, só sobrou um.\n"
+"\n"
+"Noite 13. O do 3B me mordeu. Salas chama eles de \"adormecidos\". Estou com muito sono."
+
+#: scripts/historia.gd
+msgid "Andrés Peña, técnico de muestras"
+msgstr "Andrés Peña, técnico de amostras"
+
+#: scripts/historia.gd
+msgid "CORREO INTERNO IMPRESO"
+msgstr "E-MAIL INTERNO IMPRESSO"
+
+#: scripts/historia.gd
+msgid "Asunto: RE: ¿virus?"
+msgstr "Assunto: RE: vírus?"
+
+#: scripts/historia.gd
+msgid ""
+"De: Dirección de Velaria Corp.\n"
+"Para: Equipo de campo\n"
+"\n"
+"No hay ningún virus, lo sabemos. Pero «virus» lo entiende todo el mundo y nadie pregunta por las pastillas.\n"
+"\n"
+"Esta noche nuestra seguridad precinta el edificio: nadie entra ni sale, tampoco vosotros ni la escolta. El edificio es nuestro y la policía de fuera no puede pasar.\n"
+"\n"
+"El mordisco cambia el ADN del mordido: un durmiente más. No estaba previsto. Ahora forma parte del estudio.\n"
+"\n"
+"Borrad este correo."
+msgstr ""
+"De: Diretoria da Velaria Corp.\n"
+"Para: Equipe de campo\n"
+"\n"
+"Não existe vírus nenhum, nós sabemos. Mas \"vírus\" todo mundo entende, e ninguém pergunta pelos comprimidos.\n"
+"\n"
+"Hoje à noite a nossa segurança lacra o prédio: ninguém entra nem sai, nem vocês nem a escolta. O prédio é nosso e a polícia de fora não pode entrar.\n"
+"\n"
+"A mordida altera o DNA de quem é mordido: mais um adormecido. Não estava previsto. Agora faz parte do estudo.\n"
+"\n"
+"Apaguem este e-mail."
+
+#: scripts/historia.gd
+msgid "No pienso borrarlo. Que lo lea alguien."
+msgstr "Não vou apagar. Alguém tem que ler isso."
+
+#: scripts/historia.gd
+msgid "Dr. Ramón Gil, investigador de Velaria"
+msgstr "Dr. Ramón Gil, pesquisador da Velaria"
+
+#: scripts/historia.gd
+msgid "INFORME · DOSIS ALTA"
+msgstr "RELATÓRIO · DOSE ALTA"
+
+#: scripts/historia.gd
+msgid "Los sonámbulos"
+msgstr "Os sonâmbulos"
+
+#: scripts/historia.gd
+msgid ""
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"\n"
+"S-1. La portera. Dosis triple. Sigue fregando.\n"
+"S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
+"S-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\n"
+"S-4. Bombero jubilado, 2ºA. El fuego no le quema.\n"
+"\n"
+"Salas les saca sangre cada noche y se la sube a la azotea."
+msgstr ""
+"Quatro sujeitos com dose alta não ficaram só como adormecidos. Mutaram mais: caçam, pensam um pouco e dizem frases. Salas chama eles de \"sonâmbulos\".\n"
+"\n"
+"S-1. A síndica. Dose tripla. Continua passando pano.\n"
+"S-2. Sem-teto, apto. TC. Come sem parar. Grita \"TÔ COM FOME!\".\n"
+"S-3. Endividado, apto. 1D. Misturou no whey. As roupas já não servem.\n"
+"S-4. Bombeiro aposentado, apto. 2A. O fogo não queima ele.\n"
+"\n"
+"Salas tira sangue deles toda noite e leva para o terraço."
+
+#: scripts/historia.gd
+msgid "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."
+msgstr "S-1 me chamou pelo nome. Tirem o pessoal dos andares de cima. JÁ."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el director del estudio, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"Falta esta página. Está com o diretor do estudo, lá no alto, no terraço.\n"
+"\n"
+"Você vai ter que tirar dele."
+
+#: scripts/historia.gd
+msgid "Dr. Héctor Salas, director del estudio"
+msgstr "Dr. Héctor Salas, diretor do estudo"
+
+#: scripts/historia.gd
+msgid "LISTA DE SUJETOS · SOLO DIRECCIÓN"
+msgstr "LISTA DE SUJEITOS · SÓ DIRETORIA"
+
+#: scripts/historia.gd
+msgid "Sujeto 0"
+msgstr "Sujeito 0"
+
+#: scripts/historia.gd
+msgid ""
+"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"\n"
+"Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
+"\n"
+"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+msgstr ""
+"Adormecidos: 131, contando a equipe. Sonâmbulos: 4.\n"
+"\n"
+"Sujeito 0: o zelador. Ficou no prédio porque eu pedi. Foi mordido mais de 30 vezes e não se transforma. Quando acaba com um sonâmbulo, o VD-7 muda o corpo dele por algumas horas, mas não a cabeça. O sangue dele desfaz o VD-7.\n"
+"\n"
+"Ele é a cura. Ou a arma. Que o helicóptero o leve vivo para a sede.\n"
+"\n"
+"Eu não vou esperar. Os sonâmbulos são o caminho: VD-7 puro, tudo de uma vez, e estarei acima do ser humano."
+
+#: scripts/historia.gd
+msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
+msgstr "Se você está lendo isto, zelador: não confie no pessoal de jaleco. Nem em quem vier te resgatar."
+
+#: scripts/historia.gd
+msgid "Dosier VD-7 · Centro comercial"
+msgstr "Dossiê VD-7 · Shopping"
+
+#: scripts/historia.gd
+msgid "En cada planta hay un cuerpo con una página, y la última la lleva el gerente. Lo que encuentres queda aquí para siempre."
+msgstr "Em cada andar há um corpo com uma página, e a última está com o gerente. O que você encontrar fica aqui para sempre."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. Está junto a un cuerpo, en la %s.\n"
+"\n"
+"Búscalo en una partida."
+msgstr ""
+"Falta esta página. Está junto a um corpo, no %s.\n"
+"\n"
+"Procure numa partida."
+
+#: scripts/historia.gd
+msgid "Julián Mora, farmacéutico de Velaria"
+msgstr "Julián Mora, farmacêutico da Velaria"
+
+#: scripts/historia.gd
+msgid "ALBARÁN DE ENTREGA"
+msgstr "NOTA DE ENTREGA"
+
+#: scripts/historia.gd
+msgid "Pedido para la farmacia"
+msgstr "Pedido para a farmácia"
+
+#: scripts/historia.gd
+msgid ""
+"Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
+"\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"\n"
+"Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
+"\n"
+"Si un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp."
+msgstr ""
+"Produto: \"Velaria Noite\", contra a insônia. 10.000 caixas de 20 comprimidos.\n"
+"\n"
+"Cada comprimido: um quarto de dose de VD-7. Venda livre, sem receita. Preço: € 3,99.\n"
+"\n"
+"Colocar junto aos caixas, na altura dos olhos. Cartaz: \"Durma como um bebê\".\n"
+"\n"
+"Se um cliente perguntar pelo prédio 14, atender fora da loja e avisar a segurança da Velaria Corp."
+
+#: scripts/historia.gd
+msgid "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."
+msgstr "Sem receita? Isso eu não vendo. A moça lá dos fundos também não."
+
+#: scripts/historia.gd
+msgid "Dra. Elena Ruiz, técnica de Velaria"
+msgstr "Dra. Elena Ruiz, técnica da Velaria"
+
+#: scripts/historia.gd
+msgid "CONTRATO · CONFIDENCIAL"
+msgstr "CONTRATO · CONFIDENCIAL"
+
+#: scripts/historia.gd
+msgid "Programa «Turno infinito»"
+msgstr "Programa \"Turno Infinito\""
+
+#: scripts/historia.gd
+msgid ""
+"Entre Velaria Corp. y la gerencia del centro comercial.\n"
+"\n"
+"Velaria entrega el VD-7 gratis. El centro lo echa en la cafetera de la sala de descanso de los empleados, a dosis completa. Ellos no lo saben.\n"
+"\n"
+"Objetivo: turnos de 20 horas, sin cansancio y sin quejas. Velaria se queda con los datos de 312 empleados.\n"
+"\n"
+"Si sale bien, Velaria Corp. lo venderá a fábricas, almacenes y hospitales: un turno infinito para todo el país."
+msgstr ""
+"Entre a Velaria Corp. e a gerência do shopping.\n"
+"\n"
+"A Velaria fornece o VD-7 de graça. O shopping coloca na cafeteira da sala de descanso dos funcionários, em dose completa. Eles não sabem.\n"
+"\n"
+"Objetivo: turnos de 20 horas, sem cansaço e sem reclamações. A Velaria fica com os dados de 312 funcionários.\n"
+"\n"
+"Se der certo, a Velaria Corp. vai vender para fábricas, armazéns e hospitais: um turno infinito para o país inteiro."
+
+#: scripts/historia.gd
+msgid "Marta, si te llega esto: no vengas al centro. Por favor."
+msgstr "Marta, se isto chegar até você: não venha ao shopping. Por favor."
+
+#: scripts/historia.gd
+msgid "Manuel Ortega, jefe de seguridad del centro"
+msgstr "Manuel Ortega, chefe de segurança do shopping"
+
+#: scripts/historia.gd
+msgid "PARTE DE INCIDENCIAS"
+msgstr "RELATÓRIO DE OCORRÊNCIAS"
+
+#: scripts/historia.gd
+msgid "Turno de noche"
+msgstr "Turno da noite"
+
+#: scripts/historia.gd
+msgid ""
+"02:10. Cerrado desde las 22:00. Los cajeros siguen cobrando a nadie.\n"
+"\n"
+"03:40. El cocinero fríe sin aceite. La del taller de costura viste maniquíes. El del oso de la juguetería saluda al pasillo vacío.\n"
+"\n"
+"04:15. Tienen los ojos cerrados. Siguen trabajando. Si te acercas, muerden.\n"
+"\n"
+"05:00. El gerente dice que no es una incidencia: «Rinden más que nunca».\n"
+"\n"
+"05:30. Pido ayuda. Velaria Corp. manda un antidisturbios. Entra en la oficina de seguridad. No sale."
+msgstr ""
+"02:10. Fechado desde as 22:00. Os caixas continuam cobrando de ninguém.\n"
+"\n"
+"03:40. O cozinheiro frita sem óleo. A do ateliê de costura veste manequins. O do urso da loja de brinquedos acena para o corredor vazio.\n"
+"\n"
+"04:15. Estão de olhos fechados. Continuam trabalhando. Se você chegar perto, mordem.\n"
+"\n"
+"05:00. O gerente diz que não é uma ocorrência: \"Nunca renderam tanto\".\n"
+"\n"
+"05:30. Peço ajuda. A Velaria Corp. manda um policial de choque. Ele entra na sala de segurança. Não sai."
+
+#: scripts/historia.gd
+msgid "Esta noche no me tomo el café."
+msgstr "Hoje à noite eu não tomo o café."
+
+#: scripts/historia.gd
+msgid "Lucía Benet, secretaria del gerente"
+msgstr "Lucía Benet, secretária do gerente"
+
+#: scripts/historia.gd
+msgid "CORREO IMPRESO · GERENCIA"
+msgstr "E-MAIL IMPRESSO · GERÊNCIA"
+
+#: scripts/historia.gd
+msgid "Asunto: El conserje"
+msgstr "Assunto: O zelador"
+
+#: scripts/historia.gd
+msgid ""
+"De: Gerencia del centro comercial\n"
+"Para: Velaria Corp., Dirección\n"
+"\n"
+"El conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n"
+"\n"
+"No voy a llamar a la policía. Lo retengo hasta que llegue vuestro helicóptero. He cerrado las salidas, y mis empleados no se cansan.\n"
+"\n"
+"A cambio, quiero la dosis buena. La de verdad."
+msgstr ""
+"De: Gerência do shopping\n"
+"Para: Velaria Corp., Diretoria\n"
+"\n"
+"O zelador do 14 está no shopping. Vejo ele nas câmeras: sobe andar por andar, como se procurasse alguma coisa.\n"
+"\n"
+"Não vou chamar a polícia. Seguro ele aqui até o helicóptero de vocês chegar. Fechei as saídas, e meus funcionários não se cansam.\n"
+"\n"
+"Em troca, quero a dose boa. A de verdade."
+
+#: scripts/historia.gd
+msgid "Lleva cuatro días sin dormir. Dice que ya no le hace falta."
+msgstr "Está há quatro dias sem dormir. Diz que já não precisa."
+
+#: scripts/historia.gd
+msgid ""
+"Esta página falta. La lleva el gerente del centro, arriba del todo, en la azotea.\n"
+"\n"
+"Tendrás que quitársela."
+msgstr ""
+"Falta esta página. Está com o gerente do shopping, lá no alto, no terraço.\n"
+"\n"
+"Você vai ter que tirar dele."
+
+#: scripts/historia.gd
+msgid "Arturo Salcedo, gerente del centro"
+msgstr "Arturo Salcedo, gerente do shopping"
+
+#: scripts/historia.gd
+msgid "ORDEN DE RECOGIDA · URGENTE"
+msgstr "ORDEM DE COLETA · URGENTE"
+
+#: scripts/historia.gd
+msgid "Recogida del Sujeto 0"
+msgstr "Coleta do Sujeito 0"
+
+#: scripts/historia.gd
+msgid ""
+"Lugar: helipuerto de la azotea del centro comercial. Hora: en cuanto avise el gerente.\n"
+"\n"
+"Carga: el Sujeto 0, el conserje del 14. Vivo. No gastéis VD-7 con él: no le hace nada.\n"
+"\n"
+"Destino: Torre Velaria, nuestra sede. Directo al laboratorio de la planta 40. Él ya lo conoce, aunque no se acuerde.\n"
+"\n"
+"El gerente no viaja. Lo que pidió no se le entrega. Mandadle una jeringa para que aguante hasta que lleguemos."
+msgstr ""
+"Local: heliponto do terraço do shopping. Hora: assim que o gerente avisar.\n"
+"\n"
+"Carga: o Sujeito 0, o zelador do 14. Vivo. Não gastem VD-7 com ele: nele não faz nada.\n"
+"\n"
+"Destino: Torre Velaria, nossa sede. Direto para o laboratório do andar 40. Ele já conhece, mesmo que não se lembre.\n"
+"\n"
+"O gerente não viaja. O que ele pediu não vai ser entregue. Mandem uma seringa para ele aguentar até a gente chegar."
+
+#: scripts/historia.gd
+msgid "Me prometieron la dosis buena. Me mandaron una jeringa y esta hoja."
+msgstr "Me prometeram a dose boa. Me mandaram uma seringa e esta folha."
+
+#: scripts/historia.gd
+msgid "Canal 8"
+msgstr "Canal 8"
+
+#: scripts/historia.gd
+msgid "Cierran un edificio por un virus"
+msgstr "Prédio é interditado por vírus"
+
+#: scripts/historia.gd
+msgid "Buenas noches. Les hablo desde la puerta del número 14. Desde esta mañana, la seguridad privada de Velaria Corp., la dueña del edificio, no deja entrar ni salir a nadie. Según la empresa, dentro hay un virus muy contagioso. «La situación está controlada», nos dicen. Y piden que nadie se acerque."
+msgstr "Boa noite. Falo da porta do número 14. Desde hoje de manhã, a segurança particular da Velaria Corp., dona do prédio, não deixa ninguém entrar nem sair. Segundo a empresa, há lá dentro um vírus muito contagioso. \"A situação está sob controle\", nos dizem. E pedem que ninguém se aproxime."
+
+#: scripts/historia.gd
+msgid "Camiones de noche en el 14"
+msgstr "Caminhões de madrugada no 14"
+
+#: scripts/historia.gd
+msgid "Alguien desde dentro del 14 nos ha mandado un documento. Según él, Velaria compró el edificio y lo llenó de gente sin casa, con deudas o enferma, traída de noche en camiones, para probar unas pastillas para dormir. Velaria lo niega: «Era un programa social de vivienda»."
+msgstr "Alguém de dentro do 14 nos mandou um documento. Segundo ele, a Velaria comprou o prédio e o encheu de gente sem casa, endividada ou doente, trazida de noite em caminhões, para testar uns remédios para dormir. A Velaria nega: \"Era um programa social de moradia\"."
+
+#: scripts/historia.gd
+msgid "Un correo dice: no hay virus"
+msgstr "E-mail diz: não existe vírus"
+
+#: scripts/historia.gd
+msgid "Nuestra fuente del 14 nos manda un correo interno de Velaria: «No hay ningún virus, lo sabemos». La empresa dice que es falso. Y añade que, si alguien está enfermo, será por «unas pastillas para dormir en mal estado, de otra marca». Sigue sin decir qué marca."
+msgstr "Nossa fonte no 14 nos manda um e-mail interno da Velaria: \"Não existe vírus nenhum, nós sabemos\". A empresa diz que é falso. E acrescenta que, se alguém está doente, deve ser por \"remédios para dormir estragados, de outra marca\". Continua sem dizer qual marca."
+
+#: scripts/historia.gd
+msgid "¿Dónde está la portera?"
+msgstr "Onde está a síndica?"
+
+#: scripts/historia.gd
+msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "A fonte agora fala de quatro \"sonâmbulos\": moradores que tomaram doses maiores e que ainda falam. Uma seria a síndica do 14, que ninguém vê desde o fechamento. A Velaria diz que era \"uma senhora com problemas que nunca trabalhou para nós\". À noite se ouvem gritos lá em cima."
+
+#: scripts/historia.gd
+msgid "Velaria busca a un conserje"
+msgstr "Velaria procura um zelador"
+
+#: scripts/historia.gd
+msgid "Última hora: anoche, un helicóptero de Velaria se posó en la azotea del 14. Al despegar, alguien colgaba de su escalera... y se soltó sobre los árboles de la avenida. Hoy Velaria busca a un empleado de mantenimiento «que se ha llevado documentos de la empresa». ¿Es nuestra fuente?"
+msgstr "Plantão: ontem à noite, um helicóptero da Velaria pousou no terraço do 14. Na decolagem, alguém estava pendurado na escada... e se soltou sobre as árvores da avenida. Hoje a Velaria procura um funcionário da manutenção \"que levou documentos da empresa\". Será a nossa fonte?"
+
+#: scripts/historia.gd
+msgid "El centro cierra «por reformas»"
+msgstr "Shopping fecha \"para reformas\""
+
+#: scripts/historia.gd
+msgid "Buenas noches. El centro comercial de la avenida cierra de noche «por reformas». Pero las luces siguen encendidas hasta el amanecer, la alarma de incendios suena de madrugada y dentro se ve gente moviéndose. Velaria, que tiene allí una farmacia, dice: «Nosotros solo alquilamos un local»."
+msgstr "Boa noite. O shopping da avenida fecha à noite \"para reformas\". Mas as luzes ficam acesas até o amanhecer, o alarme de incêndio toca de madrugada e dá para ver gente se mexendo lá dentro. A Velaria, que tem uma farmácia ali, diz: \"Nós só alugamos uma loja\"."
+
+#: scripts/historia.gd
+msgid "Velaria vende su somnífero"
+msgstr "Velaria vende seu sonífero"
+
+#: scripts/historia.gd
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "Já está à venda o \"Velaria Noite\", contra a insônia. Sem receita e por € 3,99. As caixas se esgotam em horas. Nossa fonte diz que é o mesmo que testaram no 14, diluído. A Velaria nega: \"É uma fórmula nova, natural e segura. Nós mesmos tomamos todas as noites\"."
+
+#: scripts/historia.gd
+msgid "Empleados que no vuelven a casa"
+msgstr "Funcionários que não voltam para casa"
+
+#: scripts/historia.gd
+msgid "Decenas de familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Y les cuento algo mío: mi hermana Elena trabaja allí para Velaria. Desde el lunes no me coge el teléfono."
+msgstr "Dezenas de famílias denunciam que seus parentes, funcionários do shopping, não voltam para casa. O shopping diz que estão fazendo hora extra, \"voluntária e bem paga\". E conto uma coisa pessoal: minha irmã Elena trabalha lá para a Velaria. Desde segunda ela não atende o telefone."
+
+#: scripts/historia.gd
+msgid "Se filtra un audio del gerente"
+msgstr "Vaza um áudio do gerente"
+
+#: scripts/historia.gd
+msgid "Nos llega un audio del gerente del centro comercial, al teléfono: «Sí, el conserje está aquí. No se irá. Mis empleados no duermen, y él tendrá que dormir alguna vez». Velaria dice que no conoce a ese señor y que, si ha tomado algo suyo, «no habrá leído el prospecto»."
+msgstr "Recebemos um áudio do gerente do shopping, ao telefone: \"Sim, o zelador está aqui. Ele não vai embora. Meus funcionários não dormem, e ele vai ter que dormir uma hora\". A Velaria diz que não conhece esse senhor e que, se ele tomou algum produto dela, \"não deve ter lido a bula\"."
+
+#: scripts/historia.gd
+msgid "Un helicóptero en la azotea"
+msgstr "Um helicóptero no terraço"
+
+#: scripts/historia.gd
+msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."
+msgstr "Plantão: o helicóptero da Velaria voltou, desta vez ao terraço do shopping. Decolou com alguém dentro, rumo à Torre Velaria. A Velaria já não procura seu zelador: \"Ele está conosco, em segurança\". Amanhã, em sua torre, ela apresenta \"o futuro do trabalho\". Da minha irmã, nada."
+
+#: scripts/historia.gd
+msgid "Esta página falta (%s)."
+msgstr "Falta esta página (%s)."
+
+#: scripts/johnny.gd
+msgid "¡Adrenalina!"
+msgstr "Adrenalina!"
+
+#: scripts/johnny.gd
+msgid "recargando…"
+msgstr "recarregando…"
+
+#: scripts/johnny.gd
+msgid "¡Esquivado!"
+msgstr "Desviou!"
+
+#: scripts/johnny.gd
+msgid "¡Segundo aliento!"
+msgstr "Segundo fôlego!"
+
+#: scripts/johnny.gd
+msgid "Asistido"
+msgstr "Assistido"
+
+#: scripts/johnny.gd
+msgid "Apuntar libre"
+msgstr "Mira livre"
+
+#: scripts/joyeria.gd
+msgid "Has cogido la tarjeta dorada: abre la cámara acorazada de la Joyería"
+msgstr "Você pegou o cartão dourado: ele abre o cofre da Joalheria"
+
+#: scripts/joyeria.gd
+msgid "¡Clac! Se acabó la cuenta: la cámara acorazada se ha abierto"
+msgstr "Clac! A contagem acabou: o cofre se abriu"
+
+#: scripts/joyeria.gd
+msgid "Abres la cámara acorazada con la tarjeta dorada"
+msgstr "Você abre o cofre com o cartão dourado"
+
+#: scripts/joyeria.gd
+msgid "Aguanta: la cámara se abre en %d segundo"
+msgid_plural "Aguanta: la cámara se abre en %d segundos"
+msgstr[0] "Aguente: o cofre abre em %d segundo"
+msgstr[1] "Aguente: o cofre abre em %d segundos"
+
+#: scripts/joyeria.gd
+msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
+msgstr "Leitor de cartão. Sem o cartão dourado do guarda, só resta a abertura de emergência: chegue perto de novo para disparar o alarme"
+
+#: scripts/joyeria.gd
+msgid "¡ALARMA!"
+msgstr "ALARME!"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!"
+msgstr "Abertura de emergência: o cofre abre em %d segundos. Aguente!"
+
+#: scripts/joyeria.gd
+msgid "¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería"
+msgstr "Você disparou o alarme! Estão vindo atrás de você: aguente %d segundos sem sair da joalheria"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano. Y un fajo de billetes: +$%d"
+msgstr "%s! Já está na sua mão. E um maço de dinheiro: +$%d"
+
+#: scripts/joyeria.gd
+msgid "¡%s! Ya la llevas en la mano; %s se queda en el suelo. Y un fajo de billetes: +$%d"
+msgstr "%s! Já está na sua mão; %s fica no chão. E um maço de dinheiro: +$%d"
+
+#: scripts/joyeria.gd
+msgid "Apertura de emergencia · %d:%02d"
+msgstr "Abertura de emergência · %d:%02d"
+
+#: scripts/lanzables.gd
+msgid "molotovs"
+msgstr "molotovs"
+
+#: scripts/lanzables.gd
+msgid "granadas"
+msgstr "granadas"
+
+#: scripts/lanzables.gd
+msgid "atraedoras"
+msgstr "iscas"
+
+#: scripts/lanzables.gd
+msgid "congeladoras"
+msgstr "bombas de gelo"
+
+#: scripts/lanzables.gd
+msgid "¡Sin %s!"
+msgstr "Sem %s!"
+
+#: scripts/lanzables.gd
+msgid "¡Nada que lanzar!"
+msgstr "Nada para arremessar!"
+
+#: scripts/lanzables.gd
+msgid "Molotov"
+msgstr "Molotov"
+
+#: scripts/lanzables.gd
+msgid "Granada"
+msgstr "Granada"
+
+#: scripts/lanzables.gd
+msgid "Atraedora"
+msgstr "Isca"
+
+#: scripts/lanzables.gd
+msgid "Congeladora"
+msgstr "Bomba de gelo"
+
+#: scripts/logros.gd
+msgid "Con ayudas encendidas, en esta partida ya no se consiguen logros"
+msgstr "Com ajudas ligadas, esta partida já não libera conquistas"
+
+#: scripts/logros.gd
+msgid "¡LOGRO CONSEGUIDO!"
+msgstr "CONQUISTA DESBLOQUEADA!"
+
+#: scripts/logros.gd
+msgid "¡Logro conseguido: %s! Cobra el premio en el ordenador"
+msgstr "Conquista desbloqueada: %s! Resgate o prêmio no computador"
+
+#: scripts/logros.gd
+msgid "¡%d LOGROS CONSEGUIDOS!"
+msgstr "%d CONQUISTAS DESBLOQUEADAS!"
+
+#: scripts/logros.gd
+msgid "¡Logros conseguidos: %s y %s! Cobra los premios en el ordenador"
+msgstr "Conquistas desbloqueadas: %s e %s! Resgate os prêmios no computador"
+
+#: scripts/logros.gd
+msgid "¡%d logros conseguidos! Míralos y cobra los premios en el ordenador"
+msgstr "%d conquistas desbloqueadas! Veja e resgate os prêmios no computador"
+
+#: scripts/logros.gd
+msgid "Primer turno"
+msgstr "Primeiro turno"
+
+#: scripts/logros.gd
+msgid "Limpia tu primer apartamento."
+msgstr "Limpe seu primeiro apartamento."
+
+#: scripts/logros.gd
+msgid "Sube, conserje"
+msgstr "Sobe, zelador"
+
+#: scripts/logros.gd
+msgid "Llega a la planta 3."
+msgstr "Chegue ao andar 3."
+
+#: scripts/logros.gd
+msgid "Fin de la jornada"
+msgstr "Fim do expediente"
+
+#: scripts/logros.gd
+msgid "Gana una partida: limpia el edificio de arriba abajo."
+msgstr "Vença uma partida: limpe o prédio de cima a baixo."
+
+#: scripts/logros.gd
+msgid "Liquidación total"
+msgstr "Queima total"
+
+#: scripts/logros.gd
+msgid "Completa el Centro comercial: derrota al gerente."
+msgstr "Complete o Shopping: derrote o gerente."
+
+#: scripts/logros.gd
+msgid "Alerta naranja"
+msgstr "Alerta laranja"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 3 o más."
+msgstr "Complete um prédio com Alerta 3 ou mais."
+
+#: scripts/logros.gd
+msgid "Alerta máxima"
+msgstr "Alerta máximo"
+
+#: scripts/logros.gd
+msgid "Completa un edificio con la Alerta 5."
+msgstr "Complete um prédio com Alerta 5."
+
+#: scripts/logros.gd
+msgid "Jornada exprés"
+msgstr "Expediente expresso"
+
+#: scripts/logros.gd
+msgid "Gana una partida en menos de 15 minutos."
+msgstr "Vença uma partida em menos de 15 minutos."
+
+#: scripts/logros.gd
+msgid "Empleado del mes"
+msgstr "Funcionário do mês"
+
+#: scripts/logros.gd
+msgid "Gana 10 partidas, sumando todas."
+msgstr "Vença 10 partidas, somando todas."
+
+#: scripts/logros.gd
+msgid "Desahucio"
+msgstr "Despejo"
+
+#: scripts/logros.gd
+msgid "Derrota a la portera."
+msgstr "Derrote a síndica."
+
+#: scripts/logros.gd
+msgid "Sin un rasguño"
+msgstr "Sem um arranhão"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe sin perder vida en toda la pelea."
+msgstr "Derrote um chefe sem perder vida na luta inteira."
+
+#: scripts/logros.gd
+msgid "Por los pelos"
+msgstr "Por um fio"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe con menos del 10 % de tu vida."
+msgstr "Derrote um chefe com menos de 10 % da sua vida."
+
+#: scripts/logros.gd
+msgid "Visto y no visto"
+msgstr "Vapt-vupt"
+
+#: scripts/logros.gd
+msgid "Derrota a un jefe en menos de 30 segundos de pelea."
+msgstr "Derrote um chefe em menos de 30 segundos de luta."
+
+#: scripts/logros.gd
+msgid "Cazajefes"
+msgstr "Caça-chefes"
+
+#: scripts/logros.gd
+msgid "Derrota a 25 jefes, sumando todas tus partidas."
+msgstr "Derrote 25 chefes, somando todas as suas partidas."
+
+#: scripts/logros.gd
+msgid "Fregona de oro"
+msgstr "Esfregão de ouro"
+
+#: scripts/logros.gd
+msgid "Mata 10 zombis a fregonazos en una misma partida."
+msgstr "Mate 10 zumbis com o esfregão numa mesma partida."
+
+#: scripts/logros.gd
+msgid "Exterminador"
+msgstr "Exterminador"
+
+#: scripts/logros.gd
+msgid "Mata 100 zombis, sumando todas tus partidas."
+msgstr "Mate 100 zumbis, somando todas as suas partidas."
+
+#: scripts/logros.gd
+msgid "Limpieza general"
+msgstr "Faxina geral"
+
+#: scripts/logros.gd
+msgid "Mata 1.000 zombis, sumando todas tus partidas."
+msgstr "Mate 1.000 zumbis, somando todas as suas partidas."
+
+#: scripts/logros.gd
+msgid "Pirómano"
+msgstr "Piromaníaco"
+
+#: scripts/logros.gd
+msgid "Prende fuego a 5 zombis con un mismo molotov."
+msgstr "Bote fogo em 5 zumbis com um mesmo molotov."
+
+#: scripts/logros.gd
+msgid "Racha imparable"
+msgstr "Imparável"
+
+#: scripts/logros.gd
+msgid "Mata 30 zombis seguidos sin perder vida."
+msgstr "Mate 30 zumbis seguidos sem perder vida."
+
+#: scripts/logros.gd
+msgid "Intocable"
+msgstr "Intocável"
+
+#: scripts/logros.gd
+msgid "Pasa una planta entera, de la llegada a las escaleras, sin perder vida."
+msgstr "Passe por um andar inteiro, da chegada às escadas, sem perder vida."
+
+#: scripts/logros.gd
+msgid "Sin tiritas"
+msgstr "Sem curativo"
+
+#: scripts/logros.gd
+msgid "Gana una partida sin curarte con vendas ni botiquín."
+msgstr "Vença uma partida sem se curar com bandagens nem kit médico."
+
+#: scripts/logros.gd
+msgid "Manitas"
+msgstr "Faz-tudo"
+
+#: scripts/logros.gd
+msgid "Mejora un arma en el banco de trabajo."
+msgstr "Melhore uma arma na bancada."
+
+#: scripts/logros.gd
+msgid "Joya de la corona"
+msgstr "Joia da coroa"
+
+#: scripts/logros.gd
+msgid "Sube un arma o un arrojable a Épica en el banco de trabajo."
+msgstr "Suba uma arma ou um arremessável para Épica na bancada."
+
+#: scripts/logros.gd
+msgid "Arsenal completo"
+msgstr "Arsenal completo"
+
+#: scripts/logros.gd
+msgid "Mata un zombi con cada arma: la fregona y todas las de la tienda."
+msgstr "Mate um zumbi com cada arma: o esfregão e todas as da loja."
+
+#: scripts/logros.gd
+msgid "Especialista"
+msgstr "Especialista"
+
+#: scripts/logros.gd
+msgid "Llena una rama entera del árbol de talentos."
+msgstr "Complete um ramo inteiro da árvore de talentos."
+
+#: scripts/logros.gd
+msgid "Conserje total"
+msgstr "Zelador total"
+
+#: scripts/logros.gd
+msgid "Llena el árbol de talentos entero."
+msgstr "Complete a árvore de talentos inteira."
+
+#: scripts/logros.gd
+msgid "Buen vecino"
+msgstr "Bom vizinho"
+
+#: scripts/logros.gd
+msgid "Rescata a un superviviente: aguanta la horda mientras fuerza la cerradura."
+msgstr "Resgate um sobrevivente: segure a horda enquanto ele força a fechadura."
+
+#: scripts/logros.gd
+msgid "Comunidad de vecinos"
+msgstr "Reunião de condomínio"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes de los Apartamentos."
+msgstr "Resgate os 3 sobreviventes dos Apartamentos."
+
+#: scripts/logros.gd
+msgid "Plantilla completa"
+msgstr "Equipe completa"
+
+#: scripts/logros.gd
+msgid "Rescata a los 3 supervivientes del Centro comercial."
+msgstr "Resgate os 3 sobreviventes do Shopping."
+
+#: scripts/logros.gd
+msgid "Buena compañía"
+msgstr "Boa companhia"
+
+#: scripts/logros.gd
+msgid "Gana una partida con un vecino de las viviendas acompañándote."
+msgstr "Vença uma partida com um vizinho das moradias te acompanhando."
+
+#: scripts/logros.gd
+msgid "Caja fuerte"
+msgstr "Caixa-forte"
+
+#: scripts/logros.gd
+msgid "Abre la cámara acorazada de la Joyería del centro comercial."
+msgstr "Abra o cofre da Joalheria do shopping."
+
+#: scripts/logros.gd
+msgid "Se fue la luz"
+msgstr "Acabou a luz"
+
+#: scripts/logros.gd
+msgid "Supera un apagón: llega a la planta siguiente."
+msgstr "Supere um apagão: chegue ao andar seguinte."
+
+#: scripts/logros.gd
+msgid "Simulacro"
+msgstr "Simulado"
+
+#: scripts/logros.gd
+msgid "Supera un incendio: llega a la planta siguiente."
+msgstr "Supere um incêndio: chegue ao andar seguinte."
+
+#: scripts/logros.gd
+msgid "Contra la marea"
+msgstr "Contra a maré"
+
+#: scripts/logros.gd
+msgid "Vence a una horda del pasillo."
+msgstr "Vença uma horda do corredor."
+
+#: scripts/logros.gd
+msgid "Reto aceptado"
+msgstr "Desafio aceito"
+
+#: scripts/logros.gd
+msgid "Completa un reto del día."
+msgstr "Complete um desafio do dia."
+
+#: scripts/logros.gd
+msgid "Ninguna regla me para"
+msgstr "Nenhuma regra me para"
+
+#: scripts/logros.gd
+msgid "Completa el reto del día con cada una de sus 7 reglas."
+msgstr "Complete o desafio do dia com cada uma das 7 regras."
+
+#: scripts/logros.gd
+msgid "Cambio de look"
+msgstr "Repaginada"
+
+#: scripts/logros.gd
+msgid "Ponte una skin en la taquilla del vestuario."
+msgstr "Vista uma skin no armário do vestiário."
+
+#: scripts/logros.gd
+msgid "Vestuario completo"
+msgstr "Closet completo"
+
+#: scripts/logros.gd
+msgid "Consigue todas las skins de Johnny."
+msgstr "Consiga todas as skins do Johnny."
+
+#: scripts/logros.gd
+msgid "Naturalista"
+msgstr "Naturalista"
+
+#: scripts/logros.gd
+msgid "Completa el bestiario: ve a todos los enemigos."
+msgstr "Complete o bestiário: veja todos os inimigos."
+
+#: scripts/logros.gd
+msgid "Investigador"
+msgstr "Investigador"
+
+#: scripts/logros.gd
+msgid "Encuentra todas las páginas del dosier VD-7."
+msgstr "Encontre todas as páginas do dossiê VD-7."
+
+#: scripts/logros.gd
+msgid "Chatarrero"
+msgstr "Sucateiro"
+
+#: scripts/logros.gd
+msgid "Coge al menos una vez cada objeto de las Colecciones."
+msgstr "Pegue pelo menos uma vez cada objeto das Coleções."
+
+#: scripts/logros.gd
+msgid "Edificios"
+msgstr "Prédios"
+
+#: scripts/logros.gd scripts/tutoriales.gd
+msgid "Jefes"
+msgstr "Chefes"
+
+#: scripts/logros.gd
+msgid "Combate"
+msgstr "Combate"
+
+#: scripts/logros.gd
+msgid "Armas y talentos"
+msgstr "Armas e talentos"
+
+#: scripts/logros.gd scripts/tutoriales.gd
+msgid "Supervivientes"
+msgstr "Sobreviventes"
+
+#: scripts/logros.gd
+msgid "Sorpresas y retos"
+msgstr "Surpresas e desafios"
+
+#: scripts/logros.gd scripts/ui/ordenador.gd
+msgid "Colecciones"
+msgstr "Coleções"
+
+#: scripts/mapa/apartamento.gd
+msgid "Salón"
+msgstr "Sala"
+
+#: scripts/mapa/apartamento.gd scripts/mapa/tienda.gd
+msgid "Cocina"
+msgstr "Cozinha"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño"
+msgstr "Banheiro"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio"
+msgstr "Quarto"
+
+#: scripts/mapa/apartamento.gd
+msgid "Apartamento destrozado"
+msgstr "Apartamento destruído"
+
+#: scripts/mapa/apartamento.gd
+msgid "Pasillo"
+msgstr "Corredor"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio de matrimonio"
+msgstr "Quarto de casal"
+
+#: scripts/mapa/apartamento.gd
+msgid "Baño principal"
+msgstr "Banheiro principal"
+
+#: scripts/mapa/apartamento.gd
+msgid "Dormitorio individual"
+msgstr "Quarto de solteiro"
+
+#: scripts/mapa/cartel_trasteros.gd
+msgid "TRASTEROS"
+msgstr "DEPÓSITOS"
+
+#: scripts/mapa/planta.gd
+msgid "Planta baja"
+msgstr "Térreo"
+
+#: scripts/mapa/planta.gd
+msgid "%dª planta"
+msgstr "%dº andar"
+
+#: scripts/mapa/planta.gd
+msgid "Azotea"
+msgstr "Terraço"
+
+#: scripts/mapa/planta.gd
+msgid "Bajo %s"
+msgstr "T%s"
+
+#: scripts/mapa/planta.gd
+msgid "%dº%s"
+msgstr "%d%s"
+
+#: scripts/mapa/planta.gd
+msgid "Vestuario"
+msgstr "Vestiário"
+
+#: scripts/mapa/planta.gd
+msgid "Despacho"
+msgstr "Escritório"
+
+#: scripts/mapa/planta.gd scripts/mapa/tienda.gd
+msgid "Taller"
+msgstr "Oficina"
+
+#: scripts/mapa/planta.gd
+msgid "1ª planta"
+msgstr "1º andar"
+
+#: scripts/mapa/planta.gd
+msgid "2ª planta"
+msgstr "2º andar"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "3º andar"
+
+#: scripts/mapa/planta.gd
+msgid "Gimnasio"
+msgstr "Academia"
+
+#: scripts/mapa/planta.gd
+msgid "Cuarto de la limpieza"
+msgstr "Quartinho da limpeza"
+
+#: scripts/mapa/planta.gd
+msgid "Apartamento en llamas"
+msgstr "Apartamento em chamas"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada: hace falta una tarjeta de acceso"
+msgstr "Trancada: precisa de um cartão de acesso"
+
+#: scripts/mapa/planta.gd
+msgid "Cerrada con llave"
+msgstr "Trancada: precisa da chave"
+
+#: scripts/mapa/planta.gd
+msgid "El ascensor está averiado"
+msgstr "O elevador está quebrado"
+
+#: scripts/mapa/planta.gd
+msgid "El edificio sigue infestado: aún no puedes irte"
+msgstr "O prédio continua infestado: você ainda não pode sair"
+
+#: scripts/mapa/planta.gd
+msgid "Bloqueadas: acaba antes con %s"
+msgstr "Bloqueadas: primeiro acabe com %s"
+
+#: scripts/mapa/planta.gd
+msgid "Ya no hay vuelta atrás"
+msgstr "Não tem mais volta"
+
+#: scripts/mapa/planta.gd
+msgid "Mantenimiento"
+msgstr "Manutenção"
+
+#: scripts/mapa/tienda.gd
+msgid "Supermercado"
+msgstr "Supermercado"
+
+#: scripts/mapa/tienda.gd
+msgid "SUPER"
+msgstr "SUPER"
+
+#: scripts/mapa/tienda.gd
+msgid "Ferretería"
+msgstr "Loja de ferragens"
+
+#: scripts/mapa/tienda.gd
+msgid "FERRETERIA"
+msgstr "FERRAGENS"
+
+#: scripts/mapa/tienda.gd
+msgid "Electrónica"
+msgstr "Eletrônicos"
+
+#: scripts/mapa/tienda.gd
+msgid "ELECTRO"
+msgstr "ELETRO"
+
+#: scripts/mapa/tienda.gd
+msgid "Restaurante"
+msgstr "Restaurante"
+
+#: scripts/mapa/tienda.gd
+msgid "BURGER"
+msgstr "BURGER"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda de ropa"
+msgstr "Loja de roupas"
+
+#: scripts/mapa/tienda.gd
+msgid "MODA"
+msgstr "MODA"
+
+#: scripts/mapa/tienda.gd
+msgid "Farmacia"
+msgstr "Farmácia"
+
+#: scripts/mapa/tienda.gd
+msgid "FARMACIA"
+msgstr "FARMACIA"
+
+#: scripts/mapa/tienda.gd
+msgid "Joyería"
+msgstr "Joalheria"
+
+#: scripts/mapa/tienda.gd
+msgid "JOYAS"
+msgstr "JOIAS"
+
+#: scripts/mapa/tienda.gd
+msgid "Almacén"
+msgstr "Estoque"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara frigorífica"
+msgstr "Câmara fria"
+
+#: scripts/mapa/tienda.gd
+msgid "Taquillas"
+msgstr "Armários"
+
+#: scripts/mapa/tienda.gd
+msgid "Probadores"
+msgstr "Provadores"
+
+#: scripts/mapa/tienda.gd
+msgid "Rebotica"
+msgstr "Sala dos fundos"
+
+#: scripts/mapa/tienda.gd
+msgid "Aseo"
+msgstr "Banheiro"
+
+#: scripts/mapa/tienda.gd
+msgid "Trastienda"
+msgstr "Depósito"
+
+#: scripts/mapa/tienda.gd
+msgid "Cámara acorazada"
+msgstr "Cofre"
+
+#: scripts/mapa/tienda.gd
+msgid "Tienda destrozada"
+msgstr "Loja destruída"
+
+#: scripts/mapa/viviendas.gd
+msgid "Viviendas"
+msgstr "Moradias"
+
+#: scripts/mascota.gd
+msgid "¡ABRAZOS GRATIS!"
+msgstr "ABRAÇO GRÁTIS!"
+
+#: scripts/mascota.gd
+msgid "¡BOING!"
+msgstr "BOING!"
+
+#: scripts/mascota.gd
+msgid "¡HORA DE JUGAR!"
+msgstr "HORA DE BRINCAR!"
+
+#: scripts/minijefe.gd
+msgid "¡GRRR!"
+msgstr "GRRR!"
+
+#: scripts/minijefe.gd
+msgid "¡PUMBA!"
+msgstr "PUMBA!"
+
+#: scripts/modista.gd
+msgid "¡SSSS!"
+msgstr "SSSS!"
+
+#: scripts/modista.gd
+msgid "¡TE TOMO MEDIDAS!"
+msgstr "DEIXA EU TE MEDIR!"
+
+#: scripts/mutaciones.gd
+msgid "¡AAAAAH!"
+msgstr "AAAAAH!"
+
+#: scripts/mutaciones.gd
+msgid "Tentacular"
+msgstr "Tentacular"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s te sale un tentáculo del pecho que aparta a los zombis de alrededor y los aturde 1 s"
+msgstr "A cada 4 s sai um tentáculo do seu peito que afasta os zumbis em volta e os atordoa por 1 s"
+
+#: scripts/mutaciones.gd
+msgid "Gastroenteritis"
+msgstr "Gastroenterite"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s le lanzas un vómito de ácido al zombi más cercano: deja un charco que quema a los zombis que lo pisan"
+msgstr "A cada 3 s você lança um vômito de ácido no zumbi mais próximo: deixa uma poça que queima os zumbis que pisam nela"
+
+#: scripts/mutaciones.gd
+msgid "Insensible"
+msgstr "Insensível"
+
+#: scripts/mutaciones.gd
+msgid "Pierdes la sensibilidad del cuerpo: recibes un 35 % menos de daño"
+msgstr "Você perde a sensibilidade do corpo: recebe 35 % menos dano"
+
+#: scripts/mutaciones.gd
+msgid "Caníbal"
+msgstr "Canibal"
+
+#: scripts/mutaciones.gd
+msgid "Cada zombi que matas te cura un 2 % de la vida"
+msgstr "Cada zumbi que você mata te cura 2 % da vida"
+
+#: scripts/mutaciones.gd
+msgid "Ansiedad"
+msgstr "Ansiedade"
+
+#: scripts/mutaciones.gd
+msgid "Golpeas más rápido cuerpo a cuerpo cuantos más zombis tengas a la vista (+10 % cada uno, hasta +50 %)"
+msgstr "Você bate mais rápido no corpo a corpo quanto mais zumbis tiver à vista (+10 % cada um, até +50 %)"
+
+#: scripts/mutaciones.gd
+msgid "Endurecimiento"
+msgstr "Pele grossa"
+
+#: scripts/mutaciones.gd
+msgid "La piel se endurece: escudo de 60 en cada planta que se gasta antes que la vida"
+msgstr "A pele endurece: escudo de 60 em cada andar, que se gasta antes da vida"
+
+#: scripts/mutaciones.gd
+msgid "Locura"
+msgstr "Loucura"
+
+#: scripts/mutaciones.gd
+msgid "Cada 4 s gritas tan fuerte que los zombis de alrededor se desorientan 2 s"
+msgstr "A cada 4 s você grita tão alto que os zumbis em volta ficam desorientados por 2 s"
+
+#: scripts/mutaciones.gd
+msgid "Flatulento"
+msgstr "Flatulento"
+
+#: scripts/mutaciones.gd
+msgid "Cada 3 s sueltas gases corrosivos que queman y paralizan 2 s a los zombis cercanos"
+msgstr "A cada 3 s você solta gases corrosivos que queimam e paralisam por 2 s os zumbis próximos"
+
+#: scripts/objetos.gd
+msgid "la suelta algún zombi, y los jefes seguro"
+msgstr "alguns zumbis deixam cair, e os chefes sempre"
+
+#: scripts/objetos.gd
+msgid "lo suelta el gordo"
+msgstr "o gordo deixa cair"
+
+#: scripts/objetos.gd
+msgid "lo suelta cualquier zombi"
+msgstr "qualquer zumbi deixa cair"
+
+#: scripts/objetos.gd scripts/talentos.gd scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "%s y %s"
+msgstr "%s e %s"
+
+#: scripts/objetos.gd
+msgid "las armas cuerpo a cuerpo (la fregona, el cuchillo y el bate)"
+msgstr "as armas corpo a corpo (o esfregão, a faca e o taco)"
+
+#: scripts/objetos.gd
+msgid "las armas a distancia (la pistola, la MP5 y la escopeta)"
+msgstr "as armas à distância (a pistola, a MP5 e a escopeta)"
+
+#: scripts/objetos.gd
+msgid "las armas especiales (el lanzallamas, el lanza ácido y el lanza rayos)"
+msgstr "as armas especiais (o lança-chamas, o lança-ácido e o lança-raios)"
+
+#: scripts/objetos.gd
+msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
+msgstr "os arremessáveis (o molotov, a granada, a isca e a bomba de gelo)"
+
+#: scripts/objetos.gd
+msgid "Vendas"
+msgstr "Bandagens"
+
+#: scripts/objetos.gd
+msgid "Pieza cuerpo a cuerpo"
+msgstr "Peça corpo a corpo"
+
+#: scripts/objetos.gd
+msgid "Pieza a distancia"
+msgstr "Peça à distância"
+
+#: scripts/objetos.gd
+msgid "Pieza especial"
+msgstr "Peça especial"
+
+#: scripts/objetos.gd
+msgid "Pieza arrojable"
+msgstr "Peça arremessável"
+
+#: scripts/objetos.gd
+msgid "Botiquín"
+msgstr "Kit médico"
+
+#: scripts/partida.gd scripts/ui/opciones.gd
+msgid "Modo de atacar: %s"
+msgstr "Modo de ataque: %s"
+
+#: scripts/partida.gd
+msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
+msgstr "Desfibrilador! Você volta com a vida cheia (só uma vez por prédio)"
+
+#: scripts/partida.gd
+msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
+msgstr "A Farmacêutica preparou um kit médico para você: está na mochila"
+
+#: scripts/partida.gd
+msgid "¡%s!  %s"
+msgstr "%s!  %s"
+
+#: scripts/partida.gd
+msgid "Te espera arriba, en el helipuerto: sube por la rampa"
+msgstr "Estão te esperando lá em cima, no heliponto: suba pela rampa"
+
+#: scripts/partida.gd
+msgid "Aguanta: aún está forzando la cerradura"
+msgstr "Aguente: ainda estão forçando a fechadura"
+
+#: scripts/partida.gd
+msgid "La puerta no se abre mientras quede algún zombi"
+msgstr "A porta não abre enquanto houver algum zumbi"
+
+#: scripts/partida.gd
+msgid "Abres con la tarjeta de acceso"
+msgstr "Você abre com o cartão de acesso"
+
+#: scripts/partida.gd
+msgid "Abres con la llave"
+msgstr "Você abre com a chave"
+
+#: scripts/partida.gd
+msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»"
+msgstr "Johnny: \"Consegui consertar o elevador! Agora posso descer até o térreo, na sala de manutenção\""
+
+#: scripts/partida.gd
+msgid "Azotea · ¡El último combate del edificio!"
+msgstr "Terraço · A última luta do prédio!"
+
+#: scripts/partida.gd
+msgid "¡La puerta se ha cerrado detrás de ti!"
+msgstr "A porta se fechou atrás de você!"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído!"
+msgstr "%s caiu!"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído! Las escaleras ya están abiertas"
+msgstr "%s caiu! As escadas já estão abertas"
+
+#: scripts/partida.gd
+msgid "¡Piso limpio! La puerta se ha abierto"
+msgstr "Tudo limpo! A porta se abriu"
+
+#: scripts/partida.gd
+msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
+msgstr "A grade se fechou! Daqui ninguém desce até acabar com %s"
+
+#: scripts/partida.gd
+msgid "¡Acércate a la escalera para subir al helicóptero!"
+msgstr "Chegue perto da escada para subir no helicóptero!"
+
+#: scripts/partida.gd
+msgid "¡Un helicóptero de Velaria viene a por ti!"
+msgstr "Um helicóptero da Velaria está vindo te buscar!"
+
+#: scripts/partida.gd
+msgid "¡NOTICIAS NUEVAS!"
+msgstr "PLANTÃO!"
+
+#: scripts/partida.gd
+msgid "Hay noticias nuevas en el ordenador"
+msgstr "Tem notícias novas no computador"
+
+#: scripts/partida.gd
+msgid "la tienda de %s"
+msgstr "a loja onde está %s"
+
+#: scripts/partida.gd
+msgid "Has cogido la tarjeta de acceso: abre %s"
+msgstr "Você pegou o cartão de acesso: ele abre %s"
+
+#: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "Você pegou a chave do apto. %s"
+
+#: scripts/partida.gd
+msgid "¡¡¡LA LLAVE!!!"
+msgstr "A CHAVE!!!"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
+msgstr "O guarda tocou o apito: vem reforço!"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
+msgstr "O guarda caiu! Ele soltou o cartão de acesso e o cartão dourado da Joalheria"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
+msgstr "O guarda caiu! Ele soltou o cartão de acesso"
+
+#: scripts/partida.gd
+msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
+msgstr "O zumbi da chave caiu! Ele soltou a chave do apto. %s"
+
+#: scripts/partida.gd
+msgid "Te han pillado"
+msgstr "Te pegaram"
+
+#: scripts/partida.gd
+msgid "+1 molotov"
+msgstr "+1 molotov"
+
+#: scripts/partida.gd
+msgid "+1 granada"
+msgstr "+1 granada"
+
+#: scripts/partida.gd
+msgid "+munición"
+msgstr "+munição"
+
+#: scripts/partida.gd
+msgid "Ya llevas %d"
+msgstr "Você já tem %d"
+
+#: scripts/partida.gd
+msgid "No se puede usar"
+msgstr "Não dá para usar"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo: guárdalo para luego"
+msgstr "Sua vida está cheia: guarde para depois"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo"
+msgstr "Sua vida está cheia"
+
+#: scripts/partida.gd
+msgid "%d:%02d · ¡récord!"
+msgstr "%d:%02d · recorde!"
+
+#: scripts/partida.gd
+msgid "¡Reto completado!"
+msgstr "Desafio concluído!"
+
+#: scripts/partida.gd
+msgid "¡Edificio completado!"
+msgstr "Prédio concluído!"
+
+#: scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "Derrota!"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo"
+msgstr "Você limpou %s de cima a baixo"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento"
+msgstr "Você limpou %s de cima a baixo. %s vem morar num quarto ao lado da sala de manutenção"
+
+#: scripts/partida.gd
+msgid "Caíste en la %s de %s"
+msgstr "Você caiu no %s limpando %s"
+
+#: scripts/partida.gd
+msgid "¡SKIN NUEVA!"
+msgstr "SKIN NOVA!"
+
+#: scripts/partida.gd
+msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
+msgstr "Skin nova: %s. Vista no armário da sala de manutenção"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ha vuelto la corriente!"
+msgstr "A energia voltou!"
+
+#: scripts/peligros/agua.gd
+msgid "¡Clac! Se ha ido la luz de la tienda"
+msgstr "Clac! A luz da loja apagou"
+
+#: scripts/peligros/agua.gd
+msgid "¡Ojo! El agua tiene corriente"
+msgstr "Cuidado! A água está dando choque"
+
+#: scripts/peligros/cerco.gd
+msgid "¡La habitación está en llamas! Lejos de las paredes"
+msgstr "O cômodo está em chamas! Longe das paredes"
+
+#: scripts/peligros/frio.gd
+msgid "¡Brrr! Qué frío hace en la cámara"
+msgstr "Brrr! Que frio nessa câmara"
+
+#: scripts/peligros/fuego.gd
+msgid "¡La cocina está ardiendo!"
+msgstr "A cozinha está pegando fogo!"
+
+#: scripts/peligros/porqueria.gd
+msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
+msgstr "Que fedor! O chão está cheio de merda com ácido: não pise"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con las mancuernas del suelo: si piso una, me la pego"
+msgstr "Cuidado com os halteres no chão: se eu pisar num, me estabaco"
+
+#: scripts/peligros/tropiezos.gd
+msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
+msgstr "Cuidado com os baldes no chão: se eu tropeçar num, me estabaco"
+
+#: scripts/portera.gd
+msgid "¡VECINOS!"
+msgstr "CONDÔMINOS!"
+
+#: scripts/portera.gd
+msgid "¡LEJÍA!"
+msgstr "CLORO!"
+
+#: scripts/portera.gd
+msgid "¡ÁCIDO!"
+msgstr "ÁCIDO!"
+
+#: scripts/portera.gd
+msgid "¡A BARRER!"
+msgstr "FAXINA!"
+
+#: scripts/portera.gd
+msgid "¡QUE ACABO DE FREGAR!"
+msgstr "ACABEI DE PASSAR PANO!"
+
+#: scripts/reto.gd
+msgid "Reto del día · %s: %s"
+msgstr "Desafio do dia · %s: %s"
+
+#: scripts/reto.gd
+msgid "Reto: %s"
+msgstr "Desafio: %s"
+
+#: scripts/reto.gd
+msgid "Completado en %d:%02d"
+msgstr "Concluído em %d:%02d"
+
+#: scripts/reto.gd
+msgid "sin marca"
+msgstr "sem recorde"
+
+#: scripts/reto.gd
+msgid "Sin marca"
+msgstr "Sem recorde"
+
+#: scripts/reto.gd
+msgid "planta %d"
+msgstr "andar %d"
+
+#: scripts/reto.gd
+msgid "Has llegado a la planta %d"
+msgstr "Você chegou ao andar %d"
+
+#: scripts/reto.gd
+msgid "Hoy: %s"
+msgstr "Hoje: %s"
+
+#: scripts/reto.gd
+msgid "Aún no lo has intentado"
+msgstr "Você ainda não tentou"
+
+#: scripts/reto.gd scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "%d tentativa"
+msgstr[1] "%d tentativas"
+
+#: scripts/reto.gd
+msgid "Solo cuerpo a cuerpo"
+msgstr "Só corpo a corpo"
+
+#: scripts/reto.gd
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "a pistola começa vazia e não cai munição, nem molotovs nem granadas"
+
+#: scripts/reto.gd
+msgid "Todo a oscuras"
+msgstr "Tudo no escuro"
+
+#: scripts/reto.gd
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "todos os andares como num apagão: só se vê com a lanterna"
+
+#: scripts/reto.gd
+msgid "Sin curas"
+msgstr "Sem curas"
+
+#: scripts/reto.gd
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "os armarinhos estão vazios e nada que cure cai, é vendido ou preparado para você"
+
+#: scripts/reto.gd
+msgid "Zombis rápidos"
+msgstr "Zumbis rápidos"
+
+#: scripts/reto.gd
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "todos 35 % mais rápidos (os chefes, não)"
+
+#: scripts/reto.gd
+msgid "De cristal"
+msgstr "De vidro"
+
+#: scripts/reto.gd
+msgid "Johnny con la mitad de vida"
+msgstr "Johnny com metade da vida"
+
+#: scripts/reto.gd
+msgid "Casa llena"
+msgstr "Casa cheia"
+
+#: scripts/reto.gd
+msgid "el doble de zombis en cada sitio"
+msgstr "o dobro de zumbis em cada lugar"
+
+#: scripts/reto.gd
+msgid "Oído fino"
+msgstr "Ouvido fino"
+
+#: scripts/reto.gd
+msgid "los zombis dormidos te oyen desde el triple de lejos"
+msgstr "os zumbis dormindo te ouvem de três vezes mais longe"
+
+#: scripts/skins.gd
+msgid "Conserje"
+msgstr "Zelador"
+
+#: scripts/skins.gd
+msgid "El portero"
+msgstr "O síndico"
+
+#: scripts/skins.gd
+msgid "La fregona hace un 100 % más de daño."
+msgstr "O esfregão causa 100 % mais dano."
+
+#: scripts/skins.gd
+msgid "Mata a la portera por primera vez."
+msgstr "Mate a síndica pela primeira vez."
+
+#: scripts/skins.gd
+msgid "El glotón"
+msgstr "O glutão"
+
+#: scripts/skins.gd
+msgid "Quien te hace daño lo paga: un zombi muere y un jefe pierde un 3 % de vida."
+msgstr "Quem te machuca paga caro: um zumbi morre e um chefe perde 3 % da vida."
+
+#: scripts/skins.gd
+msgid "Mata al Glotón por primera vez."
+msgstr "Mate o Glutão pela primeira vez."
+
+#: scripts/skins.gd
+msgid "El gymbro"
+msgstr "O maromba"
+
+#: scripts/skins.gd
+msgid "Las armas cuerpo a cuerpo hacen un 50 % más de daño."
+msgstr "As armas corpo a corpo causam 50 % mais dano."
+
+#: scripts/skins.gd
+msgid "Mata al Gymbro por primera vez."
+msgstr "Mate o Maromba pela primeira vez."
+
+#: scripts/skins.gd
+msgid "El bombero"
+msgstr "O bombeiro"
+
+#: scripts/skins.gd
+msgid "Las armas que queman hacen un 50 % más de daño y el fuego no te quema."
+msgstr "As armas que queimam causam 50 % mais dano e o fogo não te queima."
+
+#: scripts/skins.gd
+msgid "Mata al jefe de bomberos por primera vez."
+msgstr "Mate o chefe dos bombeiros pela primeira vez."
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "Militar"
+msgstr "Soldado"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! ¡Sácame de aquí!"
+msgstr "Valeu! Me tira daqui!"
+
+#: scripts/supervivientes.gd
+msgid "¡%s se une al equipo! %s"
+msgstr "Reforço na equipe: %s! %s"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Sigo con la cerradura"
+msgstr "Valeu! Voltando pra fechadura"
+
+#: scripts/supervivientes.gd
+msgid "¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura"
+msgstr "A porta se fechou! Aguente enquanto %s força a fechadura"
+
+#: scripts/supervivientes.gd
+msgid "¡YA ESTÁ! ¡CORRE!"
+msgstr "PRONTO! CORRE!"
+
+#: scripts/supervivientes.gd
+msgid "¡Puerta abierta! Salid de aquí"
+msgstr "Porta aberta! Vamos embora daqui"
+
+#: scripts/supervivientes.gd
+msgid "%s te acompaña · %s"
+msgstr "Com você: %s · %s"
+
+#: scripts/supervivientes.gd
+msgctxt "superviviente"
+msgid "¡%s ha caído!"
+msgstr "%s caiu!"
+
+#: scripts/supervivientes.gd
+msgid "%s fuerza la cerradura · %d:%02d"
+msgstr "%s forçando a fechadura · %d:%02d"
+
+#: scripts/supervivientes.gd
+msgid "Policía"
+msgstr "Policial"
+
+#: scripts/supervivientes.gd
+msgid "Dispara con su pistola cada 0,8 s"
+msgstr "Atira com a pistola a cada 0,8 s"
+
+#: scripts/supervivientes.gd
+msgid "Médica"
+msgstr "Médica"
+
+#: scripts/supervivientes.gd
+msgid "Te cura 5 cada 6 s y 10 al limpiar cada piso"
+msgstr "Te cura 5 a cada 6 s e 10 ao limpar cada apartamento"
+
+#: scripts/supervivientes.gd
+msgid "Lanza ráfagas de 3 balas cada 2,5 s"
+msgstr "Dispara rajadas de 3 balas a cada 2,5 s"
+
+#: scripts/supervivientes.gd
+msgid "Ferretero"
+msgstr "Ferragista"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el almacén!"
+msgstr "Estou no estoque!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro!"
+msgstr "Aqui dentro!"
+
+#: scripts/supervivientes.gd
+msgid "¡He atrancado la puerta!"
+msgstr "Eu bloqueei a porta!"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me oiga!"
+msgstr "Alguém me escuta!"
+
+#: scripts/supervivientes.gd
+msgid "¡Fuera tablas! Gracias, chaval. Vámonos de aquí"
+msgstr "Tábuas fora! Valeu, parceiro. Vamos sair daqui"
+
+#: scripts/supervivientes.gd
+msgid "Va a por los zombis que ve y les da martillazos (8 de daño)"
+msgstr "Vai atrás dos zumbis que vê e dá marteladas (8 de dano)"
+
+#: scripts/supervivientes.gd
+msgid "Farmacéutica"
+msgstr "Farmacêutica"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la rebotica!"
+msgstr "Estou na sala dos fundos!"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy herida!"
+msgstr "Estou ferida!"
+
+#: scripts/supervivientes.gd
+msgid "¡Ayuda, por favor!"
+msgstr "Ajuda, por favor!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí detrás!"
+msgstr "Aqui atrás!"
+
+#: scripts/supervivientes.gd
+msgid "¡Me han mordido la pierna! No puedo correr"
+msgstr "Morderam minha perna! Não consigo correr"
+
+#: scripts/supervivientes.gd
+msgid "Los charcos de veneno y ácido te hacen la mitad"
+msgstr "As poças de veneno e de ácido te causam metade do dano"
+
+#: scripts/supervivientes.gd
+msgid "Cada partida empiezas con un botiquín en la mochila"
+msgstr "Em cada partida você começa com um kit médico na mochila"
+
+#: scripts/supervivientes.gd
+msgid "Técnico"
+msgstr "Técnico"
+
+#: scripts/supervivientes.gd
+msgid "¡No toquéis el agua!"
+msgstr "Não toquem na água!"
+
+#: scripts/supervivientes.gd
+msgid "¡Que alguien me saque!"
+msgstr "Alguém me tira daqui!"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Antes de irnos tengo que arreglar ese cable pelado"
+msgstr "Valeu! Antes de ir, preciso consertar aquele fio desencapado"
+
+#: scripts/supervivientes.gd
+msgid "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano"
+msgstr "A cada 3 s, uma descarga deixa o zumbi mais próximo parado por 1,5 s"
+
+#: scripts/supervivientes.gd
+msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
+msgstr "Conserta as câmeras de segurança: o minimapa mostra os zumbis"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en el baño!"
+msgstr "Estou no banheiro!"
+
+#: scripts/supervivientes.gd
+msgid "¡Está atascada! ¡Cúbreme!"
+msgstr "Tá emperrada! Me cobre!"
+
+#: scripts/supervivientes.gd
+msgid "Esta cerradura está oxidada… dame tiempo"
+msgstr "Essa fechadura tá enferrujada… me dá um tempo"
+
+#: scripts/supervivientes.gd
+msgid "Vale… creo que ya noto el muelle"
+msgstr "Beleza… acho que já sinto a mola"
+
+#: scripts/supervivientes.gd
+msgid "¡Toma, he encontrado esto!"
+msgstr "Toma, achei isso!"
+
+#: scripts/supervivientes.gd
+msgid "¡Se me ha caído la horquilla!… vale, ya la tengo"
+msgstr "Deixei cair o grampo!… pronto, já peguei"
+
+#: scripts/supervivientes.gd
+msgid "Ya casi lo tengo…"
+msgstr "Tô quase conseguindo…"
+
+#: scripts/supervivientes.gd
+msgid "el salón"
+msgstr "a sala"
+
+#: scripts/supervivientes.gd
+msgid "la cocina"
+msgstr "a cozinha"
+
+#: scripts/supervivientes.gd
+msgid "el dormitorio"
+msgstr "o quarto"
+
+#: scripts/supervivientes.gd
+msgid "el baño"
+msgstr "o banheiro"
+
+#: scripts/supervivientes.gd
+msgid "el pasillo"
+msgstr "o corredor"
+
+#: scripts/supervivientes.gd
+msgid "la tienda"
+msgstr "a loja"
+
+#: scripts/supervivientes.gd
+msgid "el almacén"
+msgstr "o estoque"
+
+#: scripts/supervivientes.gd
+msgid "la cámara"
+msgstr "a câmara fria"
+
+#: scripts/supervivientes.gd
+msgid "el taller"
+msgstr "a oficina"
+
+#: scripts/supervivientes.gd
+msgid "las taquillas"
+msgstr "os armários"
+
+#: scripts/supervivientes.gd
+msgid "los probadores"
+msgstr "os provadores"
+
+#: scripts/supervivientes.gd
+msgid "la rebotica"
+msgstr "a sala dos fundos"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño"
+msgstr "+%d %% de dano"
+
+#: scripts/talentos.gd
+msgid "+%d %% de daño y alcance"
+msgstr "+%d %% de dano e alcance"
+
+#: scripts/talentos.gd
+msgid "+%d %% cuerpo a cuerpo"
+msgstr "+%d %% corpo a corpo"
+
+#: scripts/talentos.gd
+msgid "+%d %% a distancia"
+msgstr "+%d %% à distância"
+
+#: scripts/talentos.gd
+msgid "+%d molotov y granada"
+msgid_plural "+%d molotovs y granadas"
+msgstr[0] "+%d molotov e granada"
+msgstr[1] "+%d molotovs e granadas"
+
+#: scripts/talentos.gd
+msgid "+%d %% de vida"
+msgstr "+%d %% de vida"
+
+#: scripts/talentos.gd
+msgid "%d de vida cada 5 s"
+msgstr "%d de vida a cada 5 s"
+
+#: scripts/talentos.gd
+msgid "%d menos por golpe"
+msgstr "%d a menos por golpe"
+
+#: scripts/talentos.gd
+msgid "una esquiva sola cada %d s"
+msgstr "uma esquiva automática a cada %d s"
+
+#: scripts/talentos.gd
+msgid "+%d de cura"
+msgstr "+%d de cura"
+
+#: scripts/talentos.gd
+msgid "+%d %% de fuego, ácido, rayo y frío"
+msgstr "+%d %% de fogo, ácido, raio e frio"
+
+#: scripts/talentos.gd
+msgid "%d %% menos de los efectos"
+msgstr "%d %% menos dos efeitos"
+
+#: scripts/talentos.gd
+msgid "+%s s ardiendo"
+msgstr "+%s s queimando"
+
+#: scripts/talentos.gd
+msgid "+%d %% con ácido"
+msgstr "+%d %% com ácido"
+
+#: scripts/talentos.gd
+msgid "+%d congeladora y +%s s"
+msgid_plural "+%d congeladoras y +%s s"
+msgstr[0] "+%d bomba de gelo e +%s s"
+msgstr[1] "+%d bombas de gelo e +%s s"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez cuerpo a cuerpo"
+msgstr "+%d %% de rapidez corpo a corpo"
+
+#: scripts/talentos.gd
+msgid "+%d %% de rapidez y recarga"
+msgstr "+%d %% de rapidez e recarga"
+
+#: scripts/talentos.gd
+msgid "suelta %d más"
+msgstr "solta mais %d"
+
+#: scripts/talentos.gd
+msgid "escudo de %d"
+msgstr "escudo de %d"
+
+#: scripts/talentos.gd
+msgid "esquiva un %d %% antes"
+msgstr "esquiva %d %% antes"
+
+#: scripts/talentos.gd
+msgid "+%d de vida por planta"
+msgstr "+%d de vida por andar"
+
+#: scripts/talentos.gd
+msgid "+%d s de fuego"
+msgstr "+%d s de fogo"
+
+#: scripts/talentos.gd
+msgid "%d %% más lentos con ácido"
+msgstr "%d %% mais lentos com ácido"
+
+#: scripts/talentos.gd
+msgid "salta a %d más"
+msgstr "pula para mais %d"
+
+#: scripts/talentos.gd
+msgid "Militar"
+msgstr "Militar"
+
+#: scripts/talentos.gd
+msgid "Superviviente"
+msgstr "Sobrevivente"
+
+#: scripts/talentos.gd
+msgid "Químico"
+msgstr "Químico"
+
+#: scripts/talentos.gd
+msgid "Ataque"
+msgstr "Ataque"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño por punto"
+msgstr "+10 % de dano por ponto"
+
+#: scripts/talentos.gd
+msgid "Puntería"
+msgstr "Pontaria"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño y de alcance al lanzar el molotov y la granada por punto"
+msgstr "+10 % de dano e de alcance ao arremessar o molotov e a granada, por ponto"
+
+#: scripts/talentos.gd
+msgid "Camorrista"
+msgstr "Brigão"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño cuerpo a cuerpo por punto"
+msgstr "+10 % de dano corpo a corpo por ponto"
+
+#: scripts/talentos.gd
+msgid "Tirador"
+msgstr "Atirador"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño con armas a distancia por punto"
+msgstr "+10 % de dano com armas à distância por ponto"
+
+#: scripts/talentos.gd
+msgid "Artificiero"
+msgstr "Artificeiro"
+
+#: scripts/talentos.gd
+msgid "+1 molotov y +1 granada por punto"
+msgstr "+1 molotov e +1 granada por ponto"
+
+#: scripts/talentos.gd
+msgid "Larguirucho"
+msgstr "Varapau"
+
+#: scripts/talentos.gd
+msgid "Duplica el alcance cuerpo a cuerpo"
+msgstr "Dobra o alcance corpo a corpo"
+
+#: scripts/talentos.gd
+msgid "Mirilla"
+msgstr "Luneta"
+
+#: scripts/talentos.gd
+msgid "Uno de cada 3 disparos es un crítico seguro (doble daño)"
+msgstr "Um de cada 3 tiros é crítico garantido (dano em dobro)"
+
+#: scripts/talentos.gd
+msgid "Fabricante"
+msgstr "Fabricante"
+
+#: scripts/talentos.gd
+msgid "Fuego y explosiones más grandes, y el fuego dura más"
+msgstr "Fogo e explosões maiores, e o fogo dura mais"
+
+#: scripts/talentos.gd
+msgid "Frenesí"
+msgstr "Frenesi"
+
+#: scripts/talentos.gd
+msgid "Golpeas cuerpo a cuerpo un 10 % más rápido por punto"
+msgstr "Você bate 10 % mais rápido no corpo a corpo por ponto"
+
+#: scripts/talentos.gd
+msgid "Gatillo fácil"
+msgstr "Dedo nervoso"
+
+#: scripts/talentos.gd
+msgid "Disparas un 10 % más rápido y recargas un 10 % antes por punto"
+msgstr "Você atira 10 % mais rápido e recarrega 10 % antes por ponto"
+
+#: scripts/talentos.gd
+msgid "Racimo"
+msgstr "Estilhaço"
+
+#: scripts/talentos.gd
+msgid "El molotov y la granada sueltan 1 más pequeño alrededor por punto"
+msgstr "O molotov e a granada soltam 1 menor ao redor por ponto"
+
+#: scripts/talentos.gd
+msgid "Veterano"
+msgstr "Veterano"
+
+#: scripts/talentos.gd
+msgid "Críticos del 5 % al 15 % de las veces, y cada uno hace el triple de daño"
+msgstr "Críticos de 5 % para 15 % das vezes, e cada um causa o triplo de dano"
+
+#: scripts/talentos.gd
+msgid "Corpulento"
+msgstr "Parrudo"
+
+#: scripts/talentos.gd
+msgid "+10 % de vida máxima por punto"
+msgstr "+10 % de vida máxima por ponto"
+
+#: scripts/talentos.gd
+msgid "Lobezno"
+msgstr "Wolverine"
+
+#: scripts/talentos.gd
+msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
+msgstr "Regenera 1 de vida a cada 5 segundos por ponto, até a metade da sua vida"
+
+#: scripts/talentos.gd
+msgid "Durito"
+msgstr "Durão"
+
+#: scripts/talentos.gd
+msgid "Cada golpe que recibes quita 1 menos por punto"
+msgstr "Cada golpe que você recebe tira 1 a menos por ponto"
+
+#: scripts/talentos.gd
+msgid "Reflejos"
+msgstr "Reflexos"
+
+#: scripts/talentos.gd
+msgid "Esquivas solo un golpe cada 10 s (1 s menos por cada punto más)"
+msgstr "Você desvia sozinho de um golpe a cada 10 s (1 s a menos por ponto extra)"
+
+#: scripts/talentos.gd
+msgid "Sanitario"
+msgstr "Socorrista"
+
+#: scripts/talentos.gd
+msgid "Los botiquines y las vendas curan 10 más por punto"
+msgstr "Os kits médicos e as bandagens curam 10 a mais por ponto"
+
+#: scripts/talentos.gd
+msgid "Acero"
+msgstr "Aço"
+
+#: scripts/talentos.gd
+msgid "Cada planta, un escudo de 50 que se gasta antes que la vida"
+msgstr "A cada andar, um escudo de 50 que se gasta antes da vida"
+
+#: scripts/talentos.gd
+msgid "Ninja"
+msgstr "Ninja"
+
+#: scripts/talentos.gd
+msgid "Al acabar una esquiva, golpe en área que mata a los zombis (como mucho cada 5 s)"
+msgstr "Ao terminar uma esquiva, golpe em área que mata os zumbis (no máximo a cada 5 s)"
+
+#: scripts/talentos.gd
+msgid "Desfibrilador"
+msgstr "Desfibrilador"
+
+#: scripts/talentos.gd
+msgid "Una vez por edificio, si caes, resucitas con toda la vida"
+msgstr "Uma vez por prédio, se você cair, ressuscita com a vida cheia"
+
+#: scripts/talentos.gd
+msgid "Blindaje"
+msgstr "Blindagem"
+
+#: scripts/talentos.gd
+msgid "El escudo de Acero tiene 25 más por punto"
+msgstr "O escudo de Aço tem 25 a mais por ponto"
+
+#: scripts/talentos.gd
+msgid "Sombra"
+msgstr "Sombra"
+
+#: scripts/talentos.gd
+msgid "La esquiva se recarga un 15 % antes por punto"
+msgstr "A esquiva recarrega 15 % antes por ponto"
+
+#: scripts/talentos.gd
+msgid "Segundo aliento"
+msgstr "Segundo fôlego"
+
+#: scripts/talentos.gd
+msgid "Una vez por planta, al bajar de un tercio de la vida, te curas 15 por punto"
+msgstr "Uma vez por andar, ao cair abaixo de um terço da vida, você se cura 15 por ponto"
+
+#: scripts/talentos.gd
+msgid "Adrenalina"
+msgstr "Adrenalina"
+
+#: scripts/talentos.gd
+msgid "Por debajo de la mitad de la vida, +30 % de daño y +20 % de velocidad"
+msgstr "Abaixo da metade da vida, +30 % de dano e +20 % de velocidade"
+
+#: scripts/talentos.gd
+msgid "Catalizador"
+msgstr "Catalisador"
+
+#: scripts/talentos.gd
+msgid "+10 % de daño de fuego, ácido, rayo y frío por punto"
+msgstr "+10 % de dano de fogo, ácido, raio e frio por ponto"
+
+#: scripts/talentos.gd
+msgid "Guantes de goma"
+msgstr "Luvas de borracha"
+
+#: scripts/talentos.gd
+msgid "Fuego, ácido, venenos y frío te hacen un 10 % menos por punto"
+msgstr "Fogo, ácido, venenos e frio te causam 10 % menos por ponto"
+
+#: scripts/talentos.gd
+msgid "Incendiario"
+msgstr "Incendiário"
+
+#: scripts/talentos.gd
+msgid "Los zombis que prendes arden 0,5 s más por punto"
+msgstr "Os zumbis em que você bota fogo queimam 0,5 s a mais por ponto"
+
+#: scripts/talentos.gd
+msgid "Desatascador"
+msgstr "Desentupidor"
+
+#: scripts/talentos.gd
+msgid "Con ácido encima, todo les quita un 10 % más por punto"
+msgstr "Com ácido em cima, tudo tira 10 % a mais deles por ponto"
+
+#: scripts/talentos.gd
+msgid "Criogenia"
+msgstr "Criogenia"
+
+#: scripts/talentos.gd
+msgid "+1 congeladora por punto, y congelan 0,5 s más por punto"
+msgstr "+1 bomba de gelo por ponto, e elas congelam 0,5 s a mais por ponto"
+
+#: scripts/talentos.gd
+msgid "Reacción en cadena"
+msgstr "Reação em cadeia"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren ardiendo revientan y prenden a los de al lado"
+msgstr "Os zumbis que morrem queimando explodem e botam fogo nos do lado"
+
+#: scripts/talentos.gd
+msgid "Residuo tóxico"
+msgstr "Resíduo tóxico"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con ácido dejan un charco de ácido (a ti no te hace nada)"
+msgstr "Os zumbis que morrem com ácido deixam uma poça de ácido (em você não faz nada)"
+
+#: scripts/talentos.gd
+msgid "Pararrayos"
+msgstr "Para-raios"
+
+#: scripts/talentos.gd
+msgid "Al zombi que te golpea le salta un rayo que lo aturde y pasa a otro (como mucho cada 3 s)"
+msgstr "O zumbi que te bate leva um raio que o atordoa e pula para outro (no máximo a cada 3 s)"
+
+#: scripts/talentos.gd
+msgid "Napalm"
+msgstr "Napalm"
+
+#: scripts/talentos.gd
+msgid "El fuego del molotov dura 1 s más por punto"
+msgstr "O fogo do molotov dura 1 s a mais por ponto"
+
+#: scripts/talentos.gd
+msgid "Pegajoso"
+msgstr "Pegajoso"
+
+#: scripts/talentos.gd
+msgid "Los zombis con ácido van un 10 % más lentos por punto"
+msgstr "Os zumbis com ácido ficam 10 % mais lentos por ponto"
+
+#: scripts/talentos.gd
+msgid "Alto voltaje"
+msgstr "Alta tensão"
+
+#: scripts/talentos.gd
+msgid "El rayo del lanza rayos y el de Pararrayos saltan a 1 zombi más por punto"
+msgstr "O raio do lança-raios e o do Para-raios pulam para mais 1 zumbi por ponto"
+
+#: scripts/talentos.gd
+msgid "Mezcla explosiva"
+msgstr "Mistura explosiva"
+
+#: scripts/talentos.gd
+msgid "Los zombis que mueren con dos efectos a la vez (fuego, ácido, rayo o frío) explotan (a ti no te hace nada)"
+msgstr "Os zumbis que morrem com dois efeitos ao mesmo tempo (fogo, ácido, raio ou frio) explodem (em você não faz nada)"
+
+#: scripts/tutoriales.gd
+msgid "Apunta y ataca con {apuntar}."
+msgstr "Mire e ataque com {apuntar}."
+
+#: scripts/tutoriales.gd
+msgid "Apunta con {apuntar} y ataca con {atacar}."
+msgstr "Mire com {apuntar} e ataque com {atacar}."
+
+#: scripts/tutoriales.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte."
+msgstr "Johnny mira e ataca sozinho o zumbi mais próximo: você só se preocupa em se mexer."
+
+#: scripts/tutoriales.gd
+msgid "el joystick (toca y arrastra en la mitad izquierda)"
+msgstr "o joystick (toque e arraste na metade esquerda)"
+
+#: scripts/tutoriales.gd
+msgid "el stick izquierdo"
+msgstr "o analógico esquerdo"
+
+#: scripts/tutoriales.gd
+msgid "el joystick de abajo a la derecha"
+msgstr "o joystick do canto inferior direito"
+
+#: scripts/tutoriales.gd
+msgid "el stick derecho"
+msgstr "o analógico direito"
+
+#: scripts/tutoriales.gd
+msgid "el ratón"
+msgstr "o mouse"
+
+#: scripts/tutoriales.gd
+msgid "%s o %s"
+msgstr "%s ou %s"
+
+#: scripts/tutoriales.gd
+msgid "Lo básico"
+msgstr "O básico"
+
+#: scripts/tutoriales.gd scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Armas"
+msgstr "Armas"
+
+#: scripts/tutoriales.gd
+msgid "Plantas y jefes"
+msgstr "Andares e chefes"
+
+#: scripts/tutoriales.gd
+msgid "Eventos sorpresa"
+msgstr "Eventos surpresa"
+
+#: scripts/tutoriales.gd
+msgid "Sala de mantenimiento"
+msgstr "Sala de manutenção"
+
+#: scripts/tutoriales.gd
+msgid "Más edificios"
+msgstr "Mais prédios"
+
+#: scripts/tutoriales.gd
+msgid "Cómo se juega"
+msgstr "Como jogar"
+
+#: scripts/tutoriales.gd
+msgid "Al empezar"
+msgstr "Ao começar"
+
+#: scripts/tutoriales.gd
+msgid "Muévete con {moverse}."
+msgstr "Mova-se com {moverse}."
+
+#: scripts/tutoriales.gd
+msgid "{atacar_modo} El modo de atacar se cambia con {cambiar_modo}."
+msgstr "{atacar_modo} Troque o modo de ataque com {cambiar_modo}."
+
+#: scripts/tutoriales.gd
+msgid "Esquiva con {esquivar}: un acelerón corto en el que no te hacen daño."
+msgstr "Desvie com {esquivar}: uma arrancada curta em que nada te machuca."
+
+#: scripts/tutoriales.gd
+msgid "Cambia entre la fregona y la pistola con {cambiar_arma}, y pausa el juego con {pausa}."
+msgstr "Troque entre o esfregão e a pistola com {cambiar_arma}, e pause o jogo com {pausa}."
+
+#: scripts/tutoriales.gd
+msgid "Limpia los apartamentos"
+msgstr "Limpe os apartamentos"
+
+#: scripts/tutoriales.gd
+msgid "Al salir al pasillo"
+msgstr "Ao sair no corredor"
+
+#: scripts/tutoriales.gd
+msgid "Al entrar en un apartamento, la puerta se cierra detrás de ti y no se abre hasta que no queda ni un zombi."
+msgstr "Ao entrar num apartamento, a porta se fecha atrás de você e só abre quando não sobrar nenhum zumbi."
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe de la planta está cerrada con llave: la lleva un zombi de otro apartamento y la suelta al caer."
+msgstr "A sala do chefe do andar está trancada: a chave está com um zumbi de outro apartamento, que a solta ao cair."
+
+#: scripts/tutoriales.gd
+msgid "Vence al jefe y se abren las escaleras a la planta siguiente."
+msgstr "Vença o chefe e as escadas para o andar seguinte se abrem."
+
+#: scripts/tutoriales.gd
+msgid "La vida en tercios"
+msgstr "A vida em terços"
+
+#: scripts/tutoriales.gd
+msgid "Al perder un tercio de vida"
+msgstr "Ao perder um terço da vida"
+
+#: scripts/tutoriales.gd
+msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
+msgstr "Sua vida é dividida em três terços. O que você perde já não se cura com bandagens, e a cada um você anda mais devagar."
+
+#: scripts/tutoriales.gd
+msgid "Solo el botiquín devuelve un tercio perdido."
+msgstr "Só o kit médico devolve um terço perdido."
+
+#: scripts/tutoriales.gd
+msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
+msgstr "Se ficar difícil demais, em Opções → Ajudas tem \"Vida inteira\"."
+
+#: scripts/tutoriales.gd scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Bandagens e kit médico"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera cura"
+msgstr "Ao pegar a primeira cura"
+
+#: scripts/tutoriales.gd
+msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
+msgstr "As bandagens se usam com {usar_vendas}: curam 25, sem passar do terço em que você está."
+
+#: scripts/tutoriales.gd
+msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
+msgstr "O kit médico, com {usar_botiquin}: devolve um terço perdido e cura 50."
+
+#: scripts/tutoriales.gd
+msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "Cabem 3 bandagens e 2 kits médicos. Os armarinhos dos banheiros se abrem quando você chega perto e soltam o que têm."
+
+#: scripts/tutoriales.gd
+msgid "Inventario y mochila"
+msgstr "Inventário e mochila"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer objeto"
+msgstr "Ao pegar o primeiro objeto"
+
+#: scripts/tutoriales.gd
+msgid "Lo que recoges va a la mochila. El inventario se abre con {inventario}: tus armas, la munición, los lanzables y la mochila."
+msgstr "O que você pega vai para a mochila. O inventário se abre com {inventario}: suas armas, a munição, os arremessáveis e a mochila."
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla para ver su ficha y sus botones (usar, ponérmela, tirar...)."
+msgstr "Escolha um espaço para ver a ficha e os botões (usar, equipar, largar...)."
+
+#: scripts/tutoriales.gd
+msgid "Si caes, lo que llevas se pierde; si completas el edificio, pasa al baúl."
+msgstr "Se você cair, perde o que leva; se completar o prédio, vai para o baú."
+
+#: scripts/tutoriales.gd
+msgid "Dólares"
+msgstr "Dólares"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer billete"
+msgstr "Ao pegar a primeira nota"
+
+#: scripts/tutoriales.gd
+msgid "Los zombis a veces sueltan billetes, y los jefes muchos: pasa por encima para cogerlos."
+msgstr "Os zumbis às vezes soltam notas, e os chefes, muitas: passe por cima para pegar."
+
+#: scripts/tutoriales.gd
+msgid "Se guardan al acabar la partida: todos si completas el edificio y la mitad si caes o abandonas."
+msgstr "São guardados ao fim da partida: todos se você completar o prédio, e a metade se cair ou abandonar."
+
+#: scripts/tutoriales.gd
+msgid "Se gastan en el ordenador de la sala de mantenimiento."
+msgstr "Você gasta no computador da sala de manutenção."
+
+#: scripts/tutoriales.gd
+msgid "Armas nuevas"
+msgstr "Armas novas"
+
+#: scripts/tutoriales.gd
+msgid "Al llevar otra arma"
+msgstr "Ao levar outra arma"
+
+#: scripts/tutoriales.gd
+msgid "Llevas dos armas en la mano: una de cuerpo a cuerpo y otra a distancia. Cambias de una a otra con {cambiar_arma}."
+msgstr "Você leva duas armas na mão: uma de corpo a corpo e outra à distância. Troque de uma para a outra com {cambiar_arma}."
+
+#: scripts/tutoriales.gd
+msgid "Las demás van de repuesto, una de cada tipo, y se cambian en el inventario ({inventario})."
+msgstr "As outras ficam de reserva, uma de cada tipo, e se trocam no inventário ({inventario})."
+
+#: scripts/tutoriales.gd
+msgid "El color del borde es su calidad: gris Normal, verde Poco común, azul Rara y morado Épica."
+msgstr "A cor da borda é a qualidade: cinza Normal, verde Incomum, azul Rara e roxo Épica."
+
+#: scripts/tutoriales.gd
+msgid "Munición y recarga"
+msgstr "Munição e recarga"
+
+#: scripts/tutoriales.gd
+msgid "Al recargar"
+msgstr "Ao recarregar"
+
+#: scripts/tutoriales.gd
+msgid "Recarga con {recargar}; al vaciarse el cargador, recarga solo."
+msgstr "Recarregue com {recargar}; quando o pente esvazia, recarrega sozinho."
+
+#: scripts/tutoriales.gd
+msgid "Cada arma gasta la suya (balas, cartuchos...). Una caja de munición del suelo te da un cargador."
+msgstr "Cada arma gasta a sua (balas, cartuchos...). Uma caixa de munição do chão te dá um pente."
+
+#: scripts/tutoriales.gd
+msgid "Sin munición, Johnny saca el arma de cuerpo a cuerpo."
+msgstr "Sem munição, Johnny saca a arma de corpo a corpo."
+
+#: scripts/tutoriales.gd
+msgid "Lanzables"
+msgstr "Arremessáveis"
+
+#: scripts/tutoriales.gd
+msgid "En la primera pelea"
+msgstr "Na primeira luta"
+
+#: scripts/tutoriales.gd
+msgid "Lanza con {lanzar}: mantén para apuntar y suelta para lanzar."
+msgstr "Arremesse com {lanzar}: segure para mirar e solte para arremessar."
+
+#: scripts/tutoriales.gd
+msgid "Lo que lanzas se cambia con {cambiar_lanzable}: el molotov prende fuego y la granada explota. Llevas 3 a mano y hasta 8 de repuesto."
+msgstr "O que você arremessa se troca com {cambiar_lanzable}: o molotov bota fogo e a granada explode. Você leva 3 à mão e até 8 de reserva."
+
+#: scripts/tutoriales.gd
+msgid "¡Ojo! La explosión también te hace daño a ti."
+msgstr "Cuidado! A explosão também machuca você."
+
+#: scripts/tutoriales.gd
+msgid "Piezas de mejora"
+msgstr "Peças de melhoria"
+
+#: scripts/tutoriales.gd
+msgid "Al coger la primera pieza"
+msgstr "Ao pegar a primeira peça"
+
+#: scripts/tutoriales.gd
+msgid "Con las piezas se sube la calidad de las armas y los lanzables, en el banco de trabajo de la sala de mantenimiento."
+msgstr "Com as peças você sobe a qualidade das armas e dos arremessáveis, na bancada da sala de manutenção."
+
+#: scripts/tutoriales.gd
+msgid "Hay de cuatro familias: cuerpo a cuerpo, a distancia, especiales y arrojables. Las sueltan los zombis de vez en cuando y los jefes."
+msgstr "São de quatro famílias: corpo a corpo, à distância, especiais e arremessáveis. Os zumbis soltam de vez em quando, e os chefes também."
+
+#: scripts/tutoriales.gd
+msgid "Van en la mochila: si completas el edificio, pasan al baúl."
+msgstr "Vão para a mochila: se você completar o prédio, passam para o baú."
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al primer jefe"
+msgstr "Ao chegar ao primeiro chefe"
+
+#: scripts/tutoriales.gd
+msgid "Cada planta tiene su jefe, con su barra de vida arriba. A media vida se enfada y se vuelve más peligroso."
+msgstr "Cada andar tem seu chefe, com a barra de vida lá em cima. Com metade da vida ele se irrita e fica mais perigoso."
+
+#: scripts/tutoriales.gd
+msgid "Antes de cada ataque marca el suelo: ¡sal de la marca o esquívala!"
+msgstr "Antes de cada ataque ele marca o chão: saia da marca ou desvie!"
+
+#: scripts/tutoriales.gd
+msgid "Al caer suelta dólares, munición y piezas, y se abren las escaleras."
+msgstr "Ao cair, solta dólares, munição e peças, e as escadas se abrem."
+
+#: scripts/tutoriales.gd scripts/ui/menus.gd
+msgid "Mutaciones"
+msgstr "Mutações"
+
+#: scripts/tutoriales.gd
+msgid "Antes de la primera mutación"
+msgstr "Antes da primeira mutação"
+
+#: scripts/tutoriales.gd
+msgid "Al vencer a un jefe, el virus te cambia: elige una de las dos cartas (también con 1 y 2)."
+msgstr "Ao vencer um chefe, o vírus muda você: escolha uma das duas cartas (também com 1 e 2)."
+
+#: scripts/tutoriales.gd
+msgid "Cada mutación te da algo bueno y, a veces, algo malo."
+msgstr "Cada mutação te dá algo bom e, às vezes, algo ruim."
+
+#: scripts/tutoriales.gd
+msgid "Duran hasta que acaba la partida, y llevas como mucho 4."
+msgstr "Duram até o fim da partida, e você leva no máximo 4."
+
+#: scripts/tutoriales.gd
+msgid "El ascensor"
+msgstr "O elevador"
+
+#: scripts/tutoriales.gd
+msgid "Al arreglar el ascensor"
+msgstr "Ao consertar o elevador"
+
+#: scripts/tutoriales.gd
+msgid "Johnny ha arreglado el ascensor del pasillo: baja a la sala de mantenimiento y vuelve a esta misma planta."
+msgstr "Johnny consertou o elevador do corredor: ele desce até a sala de manutenção e volta para este mesmo andar."
+
+#: scripts/tutoriales.gd
+msgid "Úsalo para ir al ordenador, al banco de trabajo o al baúl en mitad de la partida."
+msgstr "Use para ir ao computador, à bancada ou ao baú no meio da partida."
+
+#: scripts/tutoriales.gd
+msgid "Al rescatar al primero"
+msgstr "Ao resgatar o primeiro"
+
+#: scripts/tutoriales.gd
+msgid "Se une al equipo: te acompaña y te ayuda a su manera."
+msgstr "Entra para a equipe: te acompanha e te ajuda do seu jeito."
+
+#: scripts/tutoriales.gd
+msgid "Cada uno tiene su rescate. No te alejes de él y, si cae, quédate a su lado para levantarlo."
+msgstr "Cada um tem seu resgate. Não se afaste e, se ele cair, fique ao lado para ajudar a levantar."
+
+#: scripts/tutoriales.gd
+msgid "Si completas el edificio con él, se muda a las viviendas (la puerta de la derecha de la sala de mantenimiento) y podrá acompañarte."
+msgstr "Se você completar o prédio com ele, ele se muda para as moradias (a porta da direita da sala de manutenção) e poderá te acompanhar."
+
+#: scripts/tutoriales.gd
+msgid "En el primer apagón"
+msgstr "No primeiro apagão"
+
+#: scripts/tutoriales.gd
+msgid "Se ha ido la luz en toda la planta: solo ves lo que alumbra tu linterna, hacia donde miras."
+msgstr "A luz acabou no andar inteiro: você só vê o que a lanterna ilumina, para onde você olha."
+
+#: scripts/tutoriales.gd
+msgid "En la sala del jefe todo sigue como siempre."
+msgstr "Na sala do chefe tudo continua como sempre."
+
+#: scripts/tutoriales.gd
+msgid "Al subir a la planta siguiente, te llevas un premio en dólares."
+msgstr "Ao subir para o andar seguinte, você ganha um prêmio em dólares."
+
+#: scripts/tutoriales.gd
+msgid "En la primera alarma de incendios"
+msgstr "No primeiro alarme de incêndio"
+
+#: scripts/tutoriales.gd
+msgid "Los aspersores llenan el suelo de charcos que resbalan."
+msgstr "Os sprinklers enchem o chão de poças escorregadias."
+
+#: scripts/tutoriales.gd
+msgid "En algunos cae un cable pelado que da calambrazos a Johnny y a los zombis: ¡llévalos hasta él! Esquivando cruzas sin daño."
+msgstr "Em algumas cai um fio desencapado que dá choque no Johnny e nos zumbis: leve eles até lá! Desviando, você passa sem dano."
+
+#: scripts/tutoriales.gd
+msgid "En la primera horda"
+msgstr "Na primeira horda"
+
+#: scripts/tutoriales.gd
+msgid "Una horda enorme llena el pasillo y va a por ti."
+msgstr "Uma horda enorme enche o corredor e vem atrás de você."
+
+#: scripts/tutoriales.gd
+msgid "Si te metes en un piso, los que queden te esperan fuera. Aquí los lanzables vienen de perlas."
+msgstr "Se você entrar num apartamento, os que sobrarem esperam lá fora. Aqui os arremessáveis caem como uma luva."
+
+#: scripts/tutoriales.gd
+msgid "Al acabar con todos, te deja dólares y una caja de munición."
+msgstr "Ao acabar com todos, ela deixa dólares e uma caixa de munição."
+
+#: scripts/tutoriales.gd
+msgid "El ordenador"
+msgstr "O computador"
+
+#: scripts/tutoriales.gd
+msgid "Al encender el ordenador"
+msgstr "Ao ligar o computador"
+
+#: scripts/tutoriales.gd
+msgid "Gasta los dólares ahorrados: puntos de talento (mejoras para siempre) y armas y lanzables para la partida."
+msgstr "Gaste os dólares guardados: pontos de talento (melhorias para sempre) e armas e arremessáveis para a partida."
+
+#: scripts/tutoriales.gd
+msgid "También están los logros, que dan premio, el Dosier, las Noticias y las Colecciones."
+msgstr "Também tem as conquistas, que dão prêmio, o Dossiê, as Notícias e as Coleções."
+
+#: scripts/tutoriales.gd
+msgid "La taquilla"
+msgstr "O armário"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir la taquilla"
+msgstr "Ao abrir o armário"
+
+#: scripts/tutoriales.gd
+msgid "Aquí eliges la ropa de Johnny. Cada una tiene su ventaja."
+msgstr "Aqui você escolhe a roupa do Johnny. Cada uma tem sua vantagem."
+
+#: scripts/tutoriales.gd
+msgid "Se consiguen venciendo a ciertos jefes: las que te faltan salen con «???» y cómo conseguirlas."
+msgstr "Você ganha vencendo certos chefes: as que faltam aparecem com \"???\" e como conseguir."
+
+#: scripts/tutoriales.gd
+msgid "El banco de trabajo"
+msgstr "A bancada"
+
+#: scripts/tutoriales.gd
+msgid "Al usar el banco de trabajo"
+msgstr "Ao usar a bancada"
+
+#: scripts/tutoriales.gd
+msgid "Sube la calidad de tus armas y lanzables, nivel a nivel, con las piezas de su familia (las de la mochila y las del baúl)."
+msgstr "Suba a qualidade das suas armas e arremessáveis, nível por nível, com as peças da família deles (as da mochila e as do baú)."
+
+#: scripts/tutoriales.gd
+msgid "Normal, Poco común, Rara y Épica: la Épica trae además un truco."
+msgstr "Normal, Incomum, Rara e Épica: a Épica ainda traz um truque."
+
+#: scripts/tutoriales.gd
+msgid "Elige la casilla y pulsa «Mejorar»."
+msgstr "Escolha o espaço e aperte \"Melhorar\"."
+
+#: scripts/tutoriales.gd
+msgid "El baúl"
+msgstr "O baú"
+
+#: scripts/tutoriales.gd
+msgid "Al abrir el baúl"
+msgstr "Ao abrir o baú"
+
+#: scripts/tutoriales.gd
+msgid "Lo que guardas aquí no se pierde aunque caigas: objetos, armas y lanzables mejorados."
+msgstr "O que você guarda aqui não se perde mesmo se você cair: objetos, armas e arremessáveis melhorados."
+
+#: scripts/tutoriales.gd
+msgid "Elige una casilla o arrástrala para pasarla entre lo que llevas y el baúl."
+msgstr "Escolha um espaço ou arraste para passar entre o que você leva e o baú."
+
+#: scripts/tutoriales.gd
+msgid "Al completar el edificio, lo que llevas pasa solo al baúl."
+msgstr "Ao completar o prédio, o que você leva vai sozinho para o baú."
+
+#: scripts/tutoriales.gd
+msgid "El centro comercial"
+msgstr "O shopping"
+
+#: scripts/tutoriales.gd
+msgid "Al llegar al centro comercial"
+msgstr "Ao chegar ao shopping"
+
+#: scripts/tutoriales.gd
+msgid "La sala del jefe se abre con una tarjeta de acceso: la lleva el guardia de seguridad que hace la ronda."
+msgstr "A sala do chefe se abre com um cartão de acesso: ele está com o guarda de segurança que faz a ronda."
+
+#: scripts/tutoriales.gd
+msgid "Si te ve, toca el silbato, llegan refuerzos y él huye: ¡que no se escape!"
+msgstr "Se ele te vir, toca o apito, chegam reforços e ele foge: não deixe ele escapar!"
+
+#: scripts/tutoriales.gd
+msgid "Peligros de las tiendas"
+msgstr "Perigos das lojas"
+
+#: scripts/tutoriales.gd
+msgid "En la primera tienda con peligro"
+msgstr "Na primeira loja com perigo"
+
+#: scripts/tutoriales.gd
+msgid "La cámara frigorífica congela, la cocina quema y el agua de la tienda de electrónica da calambres (su cuadro eléctrico corta la corriente)."
+msgstr "A câmara fria congela, a cozinha queima e a água da loja de eletrônicos dá choque (o quadro elétrico dela corta a energia)."
+
+#: scripts/tutoriales.gd
+msgid "También hacen daño a los zombis despiertos: ¡llévalos hasta ellos!"
+msgstr "Também machucam os zumbis acordados: leve eles até lá!"
+
+#: scripts/tutoriales.gd
+msgid "Esquivando los cruzas sin daño."
+msgstr "Desviando, você passa por eles sem dano."
+
+#: scripts/tutoriales.gd
+msgid "Alerta y Reto del día"
+msgstr "Alerta e Desafio do dia"
+
+#: scripts/tutoriales.gd
+msgid "Al completar el primer edificio"
+msgstr "Ao completar o primeiro prédio"
+
+#: scripts/tutoriales.gd
+msgid "Debajo de cada edificio completado eliges la alerta con < y >: más difícil, más dólares. Completarlo con la más alta abre la siguiente."
+msgstr "Embaixo de cada prédio completado você escolhe o alerta com < e >: mais difícil, mais dólares. Completar com o mais alto libera o seguinte."
+
+#: scripts/tutoriales.gd
+msgid "El Reto del día es el mismo edificio para todo el mundo ese día, con una regla rara. Completarlo la primera vez cada día da $10."
+msgstr "O Desafio do dia é o mesmo prédio para todo mundo naquele dia, com uma regra estranha. Completar pela primeira vez a cada dia dá $10."
+
+#: scripts/tutoriales.gd
+msgid "el botón de esquivar"
+msgstr "o botão de desviar"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la otra arma"
+msgstr "o botão da outra arma"
+
+#: scripts/tutoriales.gd
+msgid "el botón del arma a distancia, con ella en la mano"
+msgstr "o botão da arma à distância, com ela na mão"
+
+#: scripts/tutoriales.gd
+msgid "el botón de lanzar"
+msgstr "o botão de arremessar"
+
+#: scripts/tutoriales.gd
+msgid "el botoncito de al lado de lanzar"
+msgstr "o botãozinho ao lado de arremessar"
+
+#: scripts/tutoriales.gd
+msgid "el botón de las vendas, bajo el minimapa"
+msgstr "o botão das bandagens, embaixo do minimapa"
+
+#: scripts/tutoriales.gd
+msgid "el botón del botiquín, bajo el minimapa"
+msgstr "o botão do kit médico, embaixo do minimapa"
+
+#: scripts/tutoriales.gd
+msgid "el botón de la mochila, bajo el minimapa"
+msgstr "o botão da mochila, embaixo do minimapa"
+
+#: scripts/tutoriales.gd
+msgid "el botón de pausa, bajo el minimapa"
+msgstr "o botão de pausa, embaixo do minimapa"
+
+#: scripts/tutoriales.gd
+msgid "el botón del modo, bajo el minimapa"
+msgstr "o botão do modo, embaixo do minimapa"
+
+#: scripts/ui/hud.gd
+msgid "escudo %d"
+msgstr "escudo %d"
+
+#: scripts/ui/inventario.gd scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventário"
+
+#: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "Na mão"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "Reserva"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables"
+msgstr "Arremessáveis"
+
+#: scripts/ui/inventario.gd
+msgid "F cambia"
+msgstr "F troca"
+
+#: scripts/ui/inventario.gd
+msgid "Dinero"
+msgstr "Dinheiro"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "Objetos  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "Munição  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables  %d / %d"
+msgstr "Arremessáveis  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgctxt "inventario"
+msgid "Seguir"
+msgstr "Continuar"
+
+#: scripts/ui/inventario.gd
+msgid "Tarjeta"
+msgstr "Cartão"
+
+#: scripts/ui/inventario.gd
+msgid "Llave"
+msgstr "Chave"
+
+#: scripts/ui/inventario.gd
+msgid "tirar"
+msgstr "largar"
+
+#: scripts/ui/inventario.gd
+msgid "elegir"
+msgstr "escolher"
+
+#: scripts/ui/inventario.gd
+msgid "cerrar"
+msgstr "fechar"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar"
+msgstr "Mouse ou dedo: tocar"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar o arrastrar"
+msgstr "Mouse ou dedo: tocar ou arrastar"
+
+#: scripts/ui/inventario.gd
+msgid "Depósito: %d de %d s"
+msgstr "Tanque: %d de %d s"
+
+#: scripts/ui/inventario.gd
+msgid "Cargador %d de %d"
+msgstr "Pente %d de %d"
+
+#: scripts/ui/inventario.gd
+msgid "Reserva: %s"
+msgstr "Reserva: %s"
+
+#: scripts/ui/inventario.gd
+msgid "Ponérmela"
+msgstr "Equipar"
+
+#: scripts/ui/inventario.gd
+msgid "Tirar al suelo"
+msgstr "Largar no chão"
+
+#: scripts/ui/inventario.gd
+msgid "Si la tiras, la de repuesto pasa a la mano."
+msgstr "Se você largar, a de reserva vai para a mão."
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Daño"
+msgstr "Dano"
+
+#: scripts/ui/inventario.gd
+msgid "Ritmo"
+msgstr "Ritmo"
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Alcance"
+msgstr "Alcance"
+
+#: scripts/ui/inventario.gd
+msgid "Barrido"
+msgstr "Varredura"
+
+#: scripts/ui/inventario.gd
+msgid "Recarga"
+msgstr "Recarga"
+
+#: scripts/ui/inventario.gd
+msgid "Para curar"
+msgstr "Para curar"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza · Mejora armas"
+msgstr "Peça · Melhora armas"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto · Común"
+msgstr "Objeto · Comum"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Llevas %d"
+msgstr "Você tem %d"
+
+#: scripts/ui/inventario.gd
+msgid "Te devuelve un tercio de vida perdido y te cura %d."
+msgstr "Devolve um terço de vida perdido e te cura %d."
+
+#: scripts/ui/inventario.gd
+msgid "Te cura %d de vida, sin pasar del tercio en el que estás."
+msgstr "Te cura %d de vida, sem passar do terço em que você está."
+
+#: scripts/ui/inventario.gd
+msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "Sem abrir o inventário, use com a tecla %s. Dá para levar no máximo %d. Se você cair, perde (no baú fica a salvo)."
+
+#: scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Usar"
+
+#: scripts/ui/inventario.gd
+msgid "Destruir"
+msgstr "Destruir"
+
+#: scripts/ui/inventario.gd
+msgid "Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "Se você cair, perde (no baú fica a salvo)."
+
+#: scripts/ui/inventario.gd
+msgid "Sirve para mejorar %s en el banco de trabajo del taller."
+msgstr "Serve para melhorar %s na bancada da oficina."
+
+#: scripts/ui/inventario.gd
+msgid "Munición"
+msgstr "Munição"
+
+#: scripts/ui/inventario.gd
+msgid "%d en este hueco · llevas %d"
+msgstr "%d neste espaço · você tem %d"
+
+#: scripts/ui/inventario.gd
+msgid "La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja."
+msgstr "Quem usa: %s (cabem %d em cada espaço). Ao largar, o espaço inteiro fica no chão numa caixa."
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
+msgstr "Abastece %s (cabem %d em cada espaço). Ao largar, sai um por vez."
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s"
+msgstr "Arremessável · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "Na mão"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d · %d en total"
+msgstr "Restam %d de %d · %d no total"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d"
+msgstr "Restam %d de %d"
+
+#: scripts/ui/inventario.gd
+msgid "Es lo que lanzas ahora."
+msgstr "É o que você arremessa agora."
+
+#: scripts/ui/inventario.gd
+msgid "Con F lo eliges para lanzarlo."
+msgstr "Com F você escolhe para arremessar."
+
+#: scripts/ui/inventario.gd
+msgid "Cuando se acabe, entra otro montón de los de repuesto."
+msgstr "Quando acabar, entra outra pilha da reserva."
+
+#: scripts/ui/inventario.gd
+msgid "Al repuesto"
+msgstr "Para a reserva"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano un montón lleno de estos: entrará cuando se acabe."
+msgstr "Você já tem na mão uma pilha cheia destes: esta entra quando aquela acabar."
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» llena con estos el montón que llevas a mano."
+msgstr "\"Para a mão\" completa com estes a pilha que você tem na mão."
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» lo cambia por %s, que pasa aquí."
+msgstr "\"Para a mão\" troca de lugar com %s, que vem para cá."
+
+#: scripts/ui/inventario.gd
+msgid "A la mano"
+msgstr "Para a mão"
+
+#: scripts/ui/inventario.gd
+msgid "Te has curado %d de vida."
+msgstr "Você recuperou %d de vida."
+
+#: scripts/ui/inventario.gd
+msgid "Baúl"
+msgstr "Baú"
+
+#: scripts/ui/inventario.gd
+msgid "Lo que llevas"
+msgstr "O que você leva"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "Arremessáveis de reserva  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Baúl  %d / %d"
+msgstr "Baú  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos, armas y arrojables"
+msgstr "Objetos, armas e arremessáveis"
+
+#: scripts/ui/inventario.gd
+msgid "Aquí no se pierde nada aunque caigas."
+msgstr "Aqui nada se perde, mesmo se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "Guardar todo"
+msgstr "Guardar tudo"
+
+#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+msgid "Cerrar"
+msgstr "Fechar"
+
+#: scripts/ui/inventario.gd
+msgid "Guardar en el baúl"
+msgstr "Guardar no baú"
+
+#: scripts/ui/inventario.gd
+msgid "La %s Normal no va al baúl: la tienes siempre."
+msgstr "Não vai para o baú: a arma Normal (%s) você tem sempre."
+
+#: scripts/ui/inventario.gd
+msgid "Depósito %d de %d s"
+msgstr "Tanque %d de %d s"
+
+#: scripts/ui/inventario.gd
+msgid "%s · reserva %d"
+msgstr "%s · reserva %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · %s"
+msgstr "Arremessável · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio sacando algo."
+msgstr "O baú está cheio: abra espaço tirando algo."
+
+#: scripts/ui/inventario.gd
+msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo."
+msgstr "Só cabem mais %d no baú (%d por espaço): o resto fica com você."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
+msgstr "A pilha inteira é guardada, junto com os que já houver destes, e no baú fica a salvo mesmo se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "%s · En la mochila"
+msgstr "%s · Na mochila"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza"
+msgstr "Peça"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto"
+msgstr "Objeto"
+
+#: scripts/ui/inventario.gd
+msgid "Munición · La llevas"
+msgstr "Munição · Com você"
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s."
+msgstr "Abastece %s."
+
+#: scripts/ui/inventario.gd
+msgid "Es para %s."
+msgstr "É para %s."
+
+#: scripts/ui/inventario.gd
+msgid "%s · En el baúl"
+msgstr "%s · No baú"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl"
+msgstr "Tem %d no baú"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en esta casilla · %d en el baúl"
+msgstr "Tem %d neste espaço · %d no baú"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar uno"
+msgstr "Retirar um"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar %d"
+msgstr "Retirar %d"
+
+#: scripts/ui/inventario.gd
+msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
+msgstr "Saem até %d de uma vez para a sua munição; fora do baú, se perdem se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
+msgstr "Sai de um em um para a sua munição; fora do baú, se perde se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
+msgstr "Sai de um em um para a sua mochila; fora do baú, se perde se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes llenos los huecos de munición."
+msgstr "Não cabe: seus espaços de munição estão cheios."
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes la mochila llena."
+msgstr "Não cabe: sua mochila está cheia."
+
+#: scripts/ui/inventario.gd
+msgid "Sacar"
+msgstr "Retirar"
+
+#: scripts/ui/inventario.gd
+msgid "%s · %s · En el baúl"
+msgstr "%s · %s · No baú"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas una: se cambian, esta ocupa su sitio y la tuya entra en el baúl en su lugar."
+msgstr "Você já leva uma: elas trocam, esta ocupa o lugar e a sua entra no baú."
+
+#: scripts/ui/inventario.gd
+msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de la mano entra en el baúl en su lugar)."
+msgstr "Vai para a mão; a que você leva passa para a reserva (se já levar duas, a da mão entra no baú no lugar dela)."
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · En el baúl"
+msgstr "Arremessável · %s · No baú"
+
+#: scripts/ui/inventario.gd
+msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
+msgstr "Saem de pilha em pilha, %d de cada vez (os que couberem); fora do baú, se perdem se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
+msgstr "Não cabem: suas pilhas destes estão cheias e não sobra espaço para outra."
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
+msgstr "No baú fica a salvo mesmo se você cair; na mão, no lugar dela, volta a de sempre: %s."
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "No baú fica a salvo mesmo se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
+msgstr "Os %d deste espaço são guardados, e no baú ficam a salvo mesmo se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque caigas."
+msgstr "Os %d deste espaço são guardados, e no baú ficam a salvo mesmo se você cair."
+
+#: scripts/ui/inventario.gd
+msgid "%s al repuesto; %s entra en el baúl en su lugar."
+msgstr "%s vai para a reserva; %s entra no baú no lugar."
+
+#: scripts/ui/inventario.gd
+msgid "%s a la mano; %s entra en el baúl en su lugar."
+msgstr "%s vai para a mão; %s entra no baú no lugar."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl no admite más: contigo se quedan %d de %s."
+msgstr "O baú não aceita mais: ficam com você %d de %s."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: contigo se quedan %s."
+msgstr "O baú está cheio: ficam com você %s."
+
+#: scripts/ui/inventario.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Certeza? Aperte de novo"
+
+#: scripts/ui/inventario.gd
+msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
+msgstr "Destruir %s? Some para sempre: não dá para desfazer."
+
+#: scripts/ui/inventario.gd
+msgid "Destruido: %s."
+msgstr "Você destruiu: %s."
+
+#: scripts/ui/inventario.gd
+msgid "Banco de trabajo"
+msgstr "Bancada"
+
+#: scripts/ui/inventario.gd
+msgid "Tus piezas"
+msgstr "Suas peças"
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl"
+msgstr "No baú"
+
+#: scripts/ui/inventario.gd
+msgid "Armas y arrojables"
+msgstr "Armas e arremessáveis"
+
+#: scripts/ui/inventario.gd
+msgid "No tienes armas ni arrojables guardados."
+msgstr "Você não tem armas nem arremessáveis guardados."
+
+#: scripts/ui/inventario.gd
+msgid "Tienes %d"
+msgstr "Você tem %d"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "Tem %d no baú: melhora uma pilha de %d"
+
+#: scripts/ui/inventario.gd
+msgid "Sube a %s"
+msgstr "Sobe para %s"
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s (tienes %d)."
+msgstr "Custa %s (você tem %d)."
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica"
+msgstr "Já é Épica"
+
+#: scripts/ui/inventario.gd
+msgid "Mejorar a %s"
+msgstr "Melhorar para %s"
+
+#: scripts/ui/inventario.gd
+msgid "mejorar"
+msgstr "melhorar"
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica: no se puede mejorar más."
+msgstr "Já é Épica: não dá para melhorar mais."
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s y tienes %d: te faltan %d."
+msgstr "Custa %s e você tem %d: faltam %d."
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
+msgstr "Você já tem na mão outra pilha %s e juntas não cabem (no máximo, %d): passe uma para a reserva antes."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "O baú está cheio: abra espaço para a pilha melhorada."
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza cuerpo a cuerpo"
+msgid_plural "%d piezas cuerpo a cuerpo"
+msgstr[0] "%d peça corpo a corpo"
+msgstr[1] "%d peças corpo a corpo"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza a distancia"
+msgid_plural "%d piezas a distancia"
+msgstr[0] "%d peça à distância"
+msgstr[1] "%d peças à distância"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza especial"
+msgid_plural "%d piezas especiales"
+msgstr[0] "%d peça especial"
+msgstr[1] "%d peças especiais"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza arrojable"
+msgid_plural "%d piezas arrojables"
+msgstr[0] "%d peça arremessável"
+msgstr[1] "%d peças arremessáveis"
+
+#: scripts/ui/inventario.gd
+msgid "%d balas"
+msgid_plural "%d balas"
+msgstr[0] "%d bala"
+msgstr[1] "%d balas"
+
+#: scripts/ui/inventario.gd
+msgid "%d cartuchos"
+msgid_plural "%d cartuchos"
+msgstr[0] "%d cartucho"
+msgstr[1] "%d cartuchos"
+
+#: scripts/ui/inventario.gd
+msgid "%d gasolinas"
+msgid_plural "%d gasolinas"
+msgstr[0] "%d galão de gasolina"
+msgstr[1] "%d galões de gasolina"
+
+#: scripts/ui/inventario.gd
+msgid "%d bidones de ácido"
+msgid_plural "%d bidones de ácido"
+msgstr[0] "%d galão de ácido"
+msgstr[1] "%d galões de ácido"
+
+#: scripts/ui/inventario.gd
+msgid "%d baterías"
+msgid_plural "%d baterías"
+msgstr[0] "%d bateria"
+msgstr[1] "%d baterias"
+
+#: scripts/ui/inventario.gd
+msgid "¡Mejorado! Ahora es %s."
+msgstr "Melhorado! Agora é %s."
+
+#: scripts/ui/inventario.gd
+msgid "Suelta aquí"
+msgstr "Solte aqui"
+
+#: scripts/ui/inventario.gd
+msgid "para guardarlo en el baúl"
+msgstr "para guardar no baú"
+
+#: scripts/ui/inventario.gd
+msgid "para sacar uno"
+msgstr "para retirar um"
+
+#: scripts/ui/inventario.gd
+msgid "para sacarla"
+msgstr "para retirar"
+
+#: scripts/ui/inventario.gd
+msgid "para tirarlo al suelo"
+msgstr "para largar no chão"
+
+#: scripts/ui/inventario.gd
+msgid "se queda a tus pies"
+msgstr "fica aos seus pés"
+
+#: scripts/ui/inventario.gd
+msgid "y la de repuesto pasa a la mano"
+msgstr "e a de reserva vai para a mão"
+
+#: scripts/ui/inventario.gd
+msgid "Barre un abanico muy ancho y echa lejos a los zombis."
+msgstr "Varre um leque bem largo e joga os zumbis longe."
+
+#: scripts/ui/inventario.gd
+msgid "Un golpe fuerte que empuja a los zombis."
+msgstr "Um golpe forte que empurra os zumbis."
+
+#: scripts/ui/inventario.gd
+msgid "Muy rápido, pero hay que arrimarse."
+msgstr "Muito rápida, mas tem que chegar perto."
+
+#: scripts/ui/inventario.gd
+msgid "Dispara de una en una, recto y lejos."
+msgstr "Dá um tiro por vez, reto e longe."
+
+#: scripts/ui/inventario.gd
+msgid "Cinco perdigones en abanico. Se recarga de cartucho en cartucho."
+msgstr "Cinco chumbinhos em leque. Recarrega de cartucho em cartucho."
+
+#: scripts/ui/inventario.gd
+msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
+msgstr "Rajadas muito rápidas. Gasta as mesmas balas que a pistola."
+
+#: scripts/ui/inventario.gd
+msgid "Llamarada continua que quema a todos. Se llena con gasolina."
+msgstr "Labareda contínua que queima todos. Abastece com gasolina."
+
+#: scripts/ui/inventario.gd
+msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
+msgstr "Jato de ácido contínuo que corrói todos. Abastece com galões de ácido."
+
+#: scripts/ui/inventario.gd
+msgid "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías."
+msgstr "Raio contínuo que atordoa e pula para o zumbi do lado. Abastece com baterias."
+
+#: scripts/ui/inventario.gd
+msgid "Se rompe y deja un charco de fuego que quema a los zombis."
+msgstr "Quebra e deixa uma poça de fogo que queima os zumbis."
+
+#: scripts/ui/inventario.gd
+msgid "Bota, rueda y explota a los 2 segundos."
+msgstr "Quica, rola e explode em 2 segundos."
+
+#: scripts/ui/inventario.gd
+msgid "Suena, atrae a los zombis 3 s y explota."
+msgstr "Faz barulho, atrai os zumbis por 3 s e explode."
+
+#: scripts/ui/inventario.gd
+msgid "Explota y deja a los zombis congelados 3 s."
+msgstr "Explode e deixa os zumbis congelados por 3 s."
+
+#: scripts/ui/inventario.gd
+msgid "Especiales"
+msgstr "Especiais"
+
+#: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "Especial"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable"
+msgstr "Arremessável"
+
+#: scripts/ui/menu_principal.gd
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "Limpe o prédio de zumbis, andar por andar"
+
+#: scripts/ui/menu_principal.gd
+msgid "JUGAR"
+msgstr "JOGAR"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
+msgid "Tutorial"
+msgstr "Tutorial"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Opciones"
+msgstr "Opções"
+
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "Tela cheia"
+
+#: scripts/ui/menu_principal.gd
+msgid "Salir"
+msgstr "Sair"
+
+#: scripts/ui/menu_principal.gd
+msgid ""
+"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
+"Los controles y el modo de atacar están en Opciones"
+msgstr ""
+"Limpe cada apartamento para abrir a porta e cace o zumbi que leva a chave da síndica\n"
+"Os controles e o modo de ataque estão em Opções"
+
+#: scripts/ui/menu_principal.gd
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "Melhor andar alcançado: %d   ·   Dólares guardados: $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Elige edificio"
+msgstr "Escolha o prédio"
+
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "Voltar"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "Complete para liberar o Alerta 1"
+
+#: scripts/ui/menu_principal.gd
+msgid "%s (de %d)"
+msgstr "%s (de %d)"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "Desafio do dia"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y azotea"
+msgstr "%d andares e terraço"
+
+#: scripts/ui/menu_principal.gd
+msgid "¡Sin explorar!"
+msgstr "Inexplorado!"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completado ×%d"
+msgstr "Concluído ×%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "mejor tiempo %d:%02d"
+msgstr "melhor tempo %d:%02d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Has llegado a la planta %d de %d"
+msgstr "Você chegou ao andar %d de %d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completa %s para abrirlo"
+msgstr "Complete %s para liberar"
+
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pausa"
+msgstr "Pausa"
+
+#: scripts/ui/menus.gd
+msgid "Vida"
+msgstr "Vida"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad de ataque"
+msgstr "Velocidade de ataque"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad"
+msgstr "Velocidade"
+
+#: scripts/ui/menus.gd
+msgid "Daño recibido"
+msgstr "Dano recebido"
+
+#: scripts/ui/menus.gd
+msgid "Crítico"
+msgstr "Crítico"
+
+#: scripts/ui/menus.gd
+msgid "%s · daño %d · %.1f/s"
+msgstr "%s · dano %d · %.1f/s"
+
+#: scripts/ui/menus.gd
+msgid "Molotovs: %d"
+msgstr "Molotovs: %d"
+
+#: scripts/ui/menus.gd
+msgid "Granadas: %d"
+msgstr "Granadas: %d"
+
+#: scripts/ui/menus.gd
+msgid "Continuar"
+msgstr "Continuar"
+
+#: scripts/ui/menus.gd
+msgid "Abandonar partida"
+msgstr "Abandonar partida"
+
+#: scripts/ui/menus.gd
+msgid "Plantas superadas"
+msgstr "Andares superados"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "Inimigos derrotados"
+
+#: scripts/ui/menus.gd
+msgid "Apartamentos visitados (última planta)"
+msgstr "Apartamentos visitados (último andar)"
+
+#: scripts/ui/menus.gd
+msgid "Tiempo"
+msgstr "Tempo"
+
+#: scripts/ui/menus.gd
+msgid "Reto del día · %s"
+msgstr "Desafio do dia · %s"
+
+#: scripts/ui/menus.gd
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · recorde de hoje!"
+
+#: scripts/ui/menus.gd
+msgid "Tu mejor marca de hoy: %s"
+msgstr "Seu recorde de hoje: %s"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "Dólares ganhos"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  (você tem $%d)"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por la %s"
+msgstr "Destes, pelo %s"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por completar el reto de hoy"
+msgstr "Destes, por completar o desafio de hoje"
+
+#: scripts/ui/menus.gd
+msgid "¡Nivel nuevo!"
+msgstr "Nível novo!"
+
+#: scripts/ui/menus.gd
+msgid "%s abierta"
+msgstr "%s liberado"
+
+#: scripts/ui/menus.gd
+msgid "Dólares salvados (la mitad)"
+msgstr "Dólares salvos (a metade)"
+
+#: scripts/ui/menus.gd
+msgid "Dólares perdidos"
+msgstr "Dólares perdidos"
+
+#: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Jogar de novo"
+
+#: scripts/ui/menus.gd
+msgid "Reintentar edificio"
+msgstr "Tentar o prédio de novo"
+
+#: scripts/ui/menus.gd
+msgid "Menú principal"
+msgstr "Menu principal"
+
+#: scripts/ui/menus.gd
+msgid "La exposición prolongada al virus hace que te sientas..."
+msgstr "A exposição prolongada ao vírus faz você se sentir..."
+
+#: scripts/ui/menus.gd
+msgid "¡¡¡DIFERENTE!!!"
+msgstr "DIFERENTE!!!"
+
+#: scripts/ui/menus.gd
+msgid "Mutación %d de %d · dura hasta que acabe la partida"
+msgstr "Mutação %d de %d · dura até o fim da partida"
+
+#: scripts/ui/menus.gd
+msgid "Página %d de %d"
+msgstr "Página %d de %d"
+
+#: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "Junto ao corpo: %s"
+
+#: scripts/ui/menus.gd
+msgid "Se guarda en el Dosier del ordenador de mantenimiento"
+msgstr "Fica guardada no Dossiê do computador da manutenção"
+
+#: scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "Continuar"
+
+#: scripts/ui/opciones.gd
+msgid "Móvil"
+msgstr "Celular"
+
+#: scripts/ui/opciones.gd
+msgid "Tamaño de los botones"
+msgstr "Tamanho dos botões"
+
+#: scripts/ui/opciones.gd
+msgid "Transparencia"
+msgstr "Transparência"
+
+#: scripts/ui/opciones.gd
+msgid "Vibración"
+msgstr "Vibração"
+
+#: scripts/ui/opciones.gd
+msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "Com alguma destas três ajudas ligada, não dá para conseguir conquistas nessa partida (mesmo se você desligar depois). As que você já tem continuam."
+
+#: scripts/ui/opciones.gd
+msgid "Vida entera"
+msgstr "Vida inteira"
+
+#: scripts/ui/opciones.gd
+msgid "La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."
+msgstr "A vida não se divide em terços: ao se curar, você sempre chega à vida máxima e não anda mais devagar."
+
+#: scripts/ui/opciones.gd
+msgid "Pistola sin fin"
+msgstr "Pistola infinita"
+
+#: scripts/ui/opciones.gd
+msgid "La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."
+msgstr "A pistola não gasta balas nem precisa recarregar. As outras armas, como sempre."
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar apuntando solo"
+msgstr "Arremesso automático"
+
+#: scripts/ui/opciones.gd
+msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
+msgstr "O molotov, a granada e os outros arremessáveis vão sozinhos até o zumbi mais próximo que você vê. Se não vir nenhum, são arremessados como sempre."
+
+#: scripts/ui/opciones.gd
+msgid "Tutoriales"
+msgstr "Tutoriais"
+
+#: scripts/ui/opciones.gd
+msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
+msgstr "Na primeira vez que você encontra algo novo, uma janela explica o que acontece e como se faz. Os que você já viu estão em Tutorial."
+
+#: scripts/ui/opciones.gd
+msgid "Que vuelvan a salir todos"
+msgstr "Mostrar todos de novo"
+
+#: scripts/ui/opciones.gd
+msgid "Volverán a salir desde el principio"
+msgstr "Vão aparecer de novo desde o começo"
+
+#: scripts/ui/opciones.gd
+msgid "Teclado y ratón"
+msgstr "Teclado e mouse"
+
+#: scripts/ui/opciones.gd
+msgid "Mando"
+msgstr "Controle"
+
+#: scripts/ui/opciones.gd
+msgid "Ratón"
+msgstr "Mouse"
+
+#: scripts/ui/opciones.gd
+msgid "Stick dcho."
+msgstr "Analóg. dir."
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Clique num quadro para trocar essa tecla ou esse botão"
+
+#: scripts/ui/opciones.gd
+msgid "Restablecer controles"
+msgstr "Restaurar controles"
+
+#: scripts/ui/opciones.gd
+msgid "Vuelven a estar los controles de serie"
+msgstr "Os controles padrão estão de volta"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa un botón del mando..."
+msgstr "Aperte um botão do controle..."
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una tecla o un clic..."
+msgstr "Aperte uma tecla ou clique..."
+
+#: scripts/ui/opciones.gd
+msgid "Esc para dejarlo como estaba"
+msgstr "Esc para deixar como estava"
+
+#: scripts/ui/opciones.gd
+msgid "Botón %d"
+msgstr "Botão %d"
+
+#: scripts/ui/opciones.gd
+msgid "Eje %d"
+msgstr "Eixo %d"
+
+#: scripts/ui/opciones.gd
+msgid "Sonido: %s"
+msgstr "Som: %s"
+
+#: scripts/ui/opciones.gd
+msgid "No"
+msgstr "Não"
+
+#: scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "Sim"
+
+#: scripts/ui/opciones.gd
+msgid "Música: %s"
+msgstr "Música: %s"
+
+#: scripts/ui/opciones.gd
+msgid "Sin cambios"
+msgstr "Sem mudanças"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiado a %s"
+msgstr "Mudado para %s"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny mira e ataca sozinho o zumbi mais próximo. Você só se preocupa em se mexer."
+
+#: scripts/ui/opciones.gd
+msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
+msgstr "Você mira: com o mouse, com o analógico direito do controle ou com o joystick direito do celular."
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: arriba"
+msgstr "Mover: cima"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: izquierda"
+msgstr "Mover: esquerda"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: abajo"
+msgstr "Mover: baixo"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: derecha"
+msgstr "Mover: direita"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar (modo libre)"
+msgstr "Mirar (modo livre)"
+
+#: scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "Atacar"
+
+#: scripts/ui/opciones.gd
+msgid "Esquivar"
+msgstr "Desviar"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "Trocar de arma"
+
+#: scripts/ui/opciones.gd
+msgid "Recargar"
+msgstr "Recarregar"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar (mantener y soltar)"
+msgstr "Arremessar (segurar e soltar)"
+
+#: scripts/ui/opciones.gd
+msgid "Molotov o granada"
+msgstr "Molotov ou granada"
+
+#: scripts/ui/opciones.gd
+msgid "Usar vendas"
+msgstr "Usar bandagens"
+
+#: scripts/ui/opciones.gd
+msgid "Usar botiquín"
+msgstr "Usar kit médico"
+
+#: scripts/ui/opciones.gd
+msgid "Modo de atacar"
+msgstr "Modo de ataque"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse"
+msgstr "Mover"
+
+#: scripts/ui/opciones.gd
+msgid "Joystick: toca y arrastra en la mitad izquierda"
+msgstr "Joystick: toque e arraste na metade esquerda"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar"
+msgstr "Mirar"
+
+#: scripts/ui/opciones.gd
+msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
+msgstr "Só em \"mira livre\": o joystick do canto inferior direito"
+
+#: scripts/ui/opciones.gd
+msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
+msgstr "No assistido, o do canto inferior direito; se não, o do arco"
+
+#: scripts/ui/opciones.gd
+msgid "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"
+msgstr "Toque na outra arma para sacá-la; toque na de distância, na mão, para recarregar"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar"
+msgstr "Arremessar"
+
+#: scripts/ui/opciones.gd
+msgid "Arrastra desde el botón para apuntar y suelta para tirar"
+msgstr "Arraste a partir do botão para mirar e solte para arremessar"
+
+#: scripts/ui/opciones.gd
+msgid "El botoncito de al lado de lanzar"
+msgstr "O botãozinho ao lado de arremessar"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa (solo salen si llevas)"
+msgstr "Os botões embaixo do minimapa (só aparecem se você tiver)"
+
+#: scripts/ui/opciones.gd
+msgid "Modo, inventario y pausa"
+msgstr "Modo, inventário e pausa"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa"
+msgstr "Os botões embaixo do minimapa"
+
+#: scripts/ui/opciones.gd
+msgid "Pequeño"
+msgstr "Pequeno"
+
+#: scripts/ui/opciones.gd
+msgid "Grande"
+msgstr "Grande"
+
+#: scripts/ui/opciones.gd
+msgid "Muy grande"
+msgstr "Muito grande"
+
+#: scripts/ui/opciones.gd
+msgid "Select"
+msgstr "Select"
+
+#: scripts/ui/opciones.gd
+msgid "Guía"
+msgstr "Guia"
+
+#: scripts/ui/opciones.gd
+msgid "Start"
+msgstr "Start"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick izq."
+msgstr "Clicar analóg. esq."
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick dcho."
+msgstr "Clicar analóg. dir."
+
+#: scripts/ui/opciones.gd
+msgid "LB"
+msgstr "LB"
+
+#: scripts/ui/opciones.gd
+msgid "RB"
+msgstr "RB"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta arriba"
+msgstr "Direcional cima"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta abajo"
+msgstr "Direcional baixo"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta izq."
+msgstr "Direcional esq."
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta dcha."
+msgstr "Direcional dir."
+
+#: scripts/ui/opciones.gd
+msgid "Stick izq."
+msgstr "Analóg. esq."
+
+#: scripts/ui/opciones.gd
+msgid "LT"
+msgstr "LT"
+
+#: scripts/ui/opciones.gd
+msgid "RT"
+msgstr "RT"
+
+#: scripts/ui/opciones.gd
+msgid " izq."
+msgstr " esq."
+
+#: scripts/ui/opciones.gd
+msgid " dcha."
+msgstr " dir."
+
+#: scripts/ui/opciones.gd
+msgid " arriba"
+msgstr " cima"
+
+#: scripts/ui/opciones.gd
+msgid " abajo"
+msgstr " baixo"
+
+#: scripts/ui/opciones.gd
+msgid "Espacio"
+msgstr "Espaço"
+
+#: scripts/ui/opciones.gd
+msgid "Mayús"
+msgstr "Shift"
+
+#: scripts/ui/opciones.gd
+msgid "Esc"
+msgstr "Esc"
+
+#: scripts/ui/opciones.gd
+msgid "Tab"
+msgstr "Tab"
+
+#: scripts/ui/opciones.gd
+msgid "Intro"
+msgstr "Enter"
+
+#: scripts/ui/opciones.gd
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: scripts/ui/opciones.gd
+msgid "Alt"
+msgstr "Alt"
+
+#: scripts/ui/opciones.gd
+msgid "Borrar"
+msgstr "Backspace"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha izq."
+msgstr "Seta esq."
+
+#: scripts/ui/opciones.gd
+msgid "Flecha dcha."
+msgstr "Seta dir."
+
+#: scripts/ui/opciones.gd
+msgid "Flecha arriba"
+msgstr "Seta p/ cima"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha abajo"
+msgstr "Seta p/ baixo"
+
+#: scripts/ui/opciones.gd
+msgid "Clic izq."
+msgstr "Clique esq."
+
+#: scripts/ui/opciones.gd
+msgid "Clic dcho."
+msgstr "Clique dir."
+
+#: scripts/ui/opciones.gd
+msgid "Clic rueda"
+msgstr "Botão do meio"
+
+#: scripts/ui/opciones.gd
+msgid "Rueda"
+msgstr "Rodinha"
+
+#: scripts/ui/opciones.gd
+msgid "General"
+msgstr "Geral"
+
+#: scripts/ui/opciones.gd
+msgid "Controles"
+msgstr "Controles"
+
+#: scripts/ui/opciones.gd
+msgid "Ayudas"
+msgstr "Ajudas"
+
+#: scripts/ui/ordenador.gd
+msgid "ConserjeOS"
+msgstr "ZeladorOS"
+
+#: scripts/ui/ordenador.gd
+msgid "CONSERJE  OS 95"
+msgstr "ZELADOR  OS 95"
+
+#: scripts/ui/ordenador.gd
+msgid "C:\\MANTENIMIENTO\\%s"
+msgstr "C:\\MANUTENCAO\\%s"
+
+#: scripts/ui/ordenador.gd
+msgid "Intercambio · $%d = 1 punto"
+msgstr "Troca · $%d = 1 ponto"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar 1 punto"
+msgstr "Comprar 1 ponto"
+
+#: scripts/ui/ordenador.gd
+msgid "Cuesta $%d"
+msgstr "Custa $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambiar"
+msgstr "Trocar"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia $%d por 1 punto de talento"
+msgstr "Troca $%d por 1 ponto de talento"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar %d puntos (todo)"
+msgstr "Comprar %d pontos (tudo)"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar todo lo posible"
+msgstr "Comprar tudo o que der"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas $%d"
+msgstr "Precisa de $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
+msgstr "Troca todos os dólares que der por pontos ($%d = 1 ponto)"
+
+#: scripts/ui/ordenador.gd
+msgid "Árbol de talentos · cada punto sube un nivel"
+msgstr "Árvore de talentos · cada ponto sobe um nível"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d"
+msgstr "%d de %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
+msgstr "Ramo %s: %d de seus %d pontos colocados. Aperte para ver a árvore."
+
+#: scripts/ui/ordenador.gd
+msgid "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Cada ponto sobe um nível. Para passar ao nível seguinte, complete antes o talento que ele pede."
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Dólares guardados"
+
+#: scripts/ui/ordenador.gd
+msgid "Puntos de talento"
+msgstr "Pontos de talento"
+
+#: scripts/ui/ordenador.gd
+msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
+msgstr "Os $%d desta partida são guardados quando ela acaba: todos se você completar o prédio, a metade se cair."
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo"
+msgstr "Requer %s no máximo"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "No máximo! %s"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo!"
+msgstr "No máximo!"
+
+#: scripts/ui/ordenador.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "Agora: %s · Com mais um: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "MÁX"
+msgstr "MÁX"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo. %s"
+msgstr "Requer %s no máximo. %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Te hace falta 1 punto."
+msgstr "%s. Você precisa de 1 ponto."
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Pulsa para subirlo (1 punto)."
+msgstr "%s. Aperte para subir (1 ponto)."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
+msgstr "Não dá: cada ponto custa $%d do que você guardou."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
+msgstr[0] "Pronto! Agora você tem %d ponto para gastar."
+msgstr[1] "Pronto! Agora você tem %d pontos para gastar."
+
+#: scripts/ui/ordenador.gd
+msgid "¡%s sube a %d/%d!"
+msgstr "%s sobe para %d/%d!"
+
+#: scripts/ui/ordenador.gd
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
+msgstr "São vendidas em qualidade Normal. O que você leva se perde se você cair: guarde no baú da oficina (ao completar o prédio, vai sozinho). Você leva duas de cada tipo: a que estava na mão vai para a reserva e, se você já tiver uma de reserva, ela fica no chão."
+
+#: scripts/ui/ordenador.gd
+msgid "LA LLEVAS"
+msgstr "NA MÃO"
+
+#: scripts/ui/ordenador.gd
+msgid "GRATIS"
+msgstr "GRÁTIS"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrojables · de uno en uno, hasta los que caben"
+msgstr "Arremessáveis · de um em um, até onde couber"
+
+#: scripts/ui/ordenador.gd
+msgid "AL MÁXIMO"
+msgstr "NO MÁXIMO"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %s Cada uno, $%d."
+msgstr "%s: %s Custa $%d cada."
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Escolha uma arma: você paga com os dólares guardados."
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %d/s · Depósito %d s"
+msgstr "Dano %d/s · Tanque %d s"
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %s"
+msgstr "Dano %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s ataques/s"
+msgstr "%s ataques/s"
+
+#: scripts/ui/ordenador.gd
+msgid "Cargador %d"
+msgstr "Pente %d"
+
+#: scripts/ui/ordenador.gd
+msgid "rayo continuo"
+msgstr "raio contínuo"
+
+#: scripts/ui/ordenador.gd
+msgid "chorro continuo"
+msgstr "jato contínuo"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s que se llena con %s."
+msgstr "%s: dano %d por segundo, %s, tanque de %d s que se enche com %s."
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s."
+msgstr "%s: dano %d por segundo, %s, tanque de %d s."
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d x%d perdigones"
+msgstr "dano %d x%d chumbinhos"
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d"
+msgstr "dano %d"
+
+#: scripts/ui/ordenador.gd
+msgid "%.1f ataques por segundo"
+msgstr "%.1f ataques por segundo"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d que se llena con %s"
+msgstr "pente de %d que se enche com %s"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d"
+msgstr "pente de %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s."
+msgstr "Você já tem: %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "Já está na sua reserva: %s. Equipe pelo inventário."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: te faltan $%d."
+msgstr "Não dá: faltam $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "Comprado! %s na mão; %s vai para a reserva."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "Comprado! %s na mão; %s fica no chão: você já levava duas."
+
+#: scripts/ui/ordenador.gd
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "No desafio \"%s\" você não leva nada para arremessar."
+
+#: scripts/ui/ordenador.gd
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "Não cabem mais %s: suas pilhas estão cheias e não sobra espaço para outra."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "Comprado! Agora você tem %d %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Logros conseguidos"
+msgstr "Conquistas desbloqueadas"
+
+#: scripts/ui/ordenador.gd
+msgid "Premios por cobrar"
+msgstr "Prêmios para resgatar"
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Escolha um desafio para esta partida. Ao cumprir, aparece um aviso; volte aqui para resgatar o prêmio."
+
+#: scripts/ui/ordenador.gd
+msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
+msgstr "Esta partida está com ajudas (Opções → Ajudas): não dá para conseguir conquistas. As que você já tem continuam e você pode resgatá-las."
+
+#: scripts/ui/ordenador.gd
+msgid "COBRAR $%d"
+msgstr "RESGATAR $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "HECHO"
+msgstr "FEITO"
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por encima de un logro para ver cómo vas."
+msgstr "Passe por cima de uma conquista para ver seu progresso."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Conseguido! Pulsa para cobrar $%d."
+msgstr "Conseguida! Aperte para resgatar $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Conseguido y cobrado."
+msgstr "Conseguida e resgatada."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Aún no lo has conseguido."
+msgstr "Prêmio: $%d. Você ainda não conseguiu."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (en una partida)."
+msgstr "Prêmio: $%d. Você tem %d de %d (numa partida)."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (sumando partidas)."
+msgstr "Prêmio: $%d. Você tem %d de %d (somando partidas)."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d."
+msgstr "Prêmio: $%d. Você tem %d de %d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
+msgstr "Resgatados $%d! Já pode gastar em pontos ou armas."
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Dossiê VD-7"
+
+#: scripts/ui/ordenador.gd
+msgid "%d / %d páginas"
+msgstr "%d / %d páginas"
+
+#: scripts/ui/ordenador.gd
+msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
+msgstr "Cada página que você encontrar, em qualquer prédio e em qualquer andar, fica aqui para sempre."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d"
+msgstr "Página %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrancada"
+msgstr "Arrancada"
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: %s. La llevaba %s."
+msgstr "%s, página %d: %s. Estava com %s."
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: aún no la has encontrado (%s)."
+msgstr "%s, página %d: ainda não encontrada (%s)."
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por las páginas para leerlas."
+msgstr "Passe pelas páginas para ler."
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d"
+msgstr "Transmissão %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin emitir"
+msgstr "Não exibida"
+
+#: scripts/ui/ordenador.gd
+msgid "¡NUEVA!"
+msgstr "NOVA!"
+
+#: scripts/ui/ordenador.gd
+msgid "Completa %s."
+msgstr "Complete %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Sigue buscando páginas del dosier VD-7."
+msgstr "Continue procurando páginas do dossiê VD-7."
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: aún no ha salido. %s"
+msgstr "Transmissão %d: ainda não foi ao ar. %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
+msgstr "Transmissão %d: \"%s\". Aperte para pular ou repetir."
+
+#: scripts/ui/ordenador.gd
+msgid "%s, con %s. Pasa por las emisiones para verlas."
+msgstr "%s, com %s. Passe pelas transmissões para ver."
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos"
+msgstr "Objetos"
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario"
+msgstr "Bestiário"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s: %d de %d objetos encontrados."
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier"
+msgstr "Dossiê"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s: %d de %d páginas do dossiê."
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario · %d / %d"
+msgstr "Bestiário · %d / %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin ver"
+msgstr "Não visto"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: sale en %s."
+msgstr "%s · Onde aparece: %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
+msgstr "Um inimigo que você ainda não encontrou. Os que você vir numa partida ficam registrados aqui."
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "O que você encontra fica aqui para sempre. Passe pelas fichas para ver."
+
+#: scripts/ui/ordenador.gd
+msgid "Apartamentos y centro"
+msgstr "Apartamentos e shopping"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d de %d páginas · %s. Leia em DOSSIE.TXT."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d · %s"
+msgstr "Página %d · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos · %s"
+msgstr "Objetos · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s (sin encontrar) · %s"
+msgstr "%s (não encontrado) · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Sale en: %s"
+msgstr "Aparece em: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "Você ainda não cruzou com ele."
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Puntos e\n"
+"intercambio"
+msgstr ""
+"Pontos e\n"
+"troca"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"de armas"
+msgstr ""
+"Loja\n"
+"de armas"
+
+#: scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "Conquistas"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Dosier\n"
+"VD-7"
+msgstr ""
+"Dossiê\n"
+"VD-7"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias"
+msgstr "Notícias"
+
+#: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Desligar"
+
+#: scripts/ui/ordenador.gd
+msgid "PUNTOS.EXE"
+msgstr "PONTOS.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "ARMAS.EXE"
+msgstr "ARMAS.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "LOGROS.EXE"
+msgstr "CONQUISTAS.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "DOSIER.TXT"
+msgstr "DOSSIE.TXT"
+
+#: scripts/ui/ordenador.gd
+msgid "CANAL8.TV"
+msgstr "CANAL8.TV"
+
+#: scripts/ui/ordenador.gd
+msgid "COLECCION.EXE"
+msgstr "COLECAO.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "Compra de puntos e intercambio"
+msgstr "Compra de pontos e troca"
+
+#: scripts/ui/ordenador.gd
+msgid "Tienda de armas"
+msgstr "Loja de armas"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias de Canal 8"
+msgstr "Notícias do Canal 8"
+
+#: scripts/ui/ordenador.gd
+msgid "Colecciones y bestiario"
+msgstr "Coleções e bestiário"
+
+#: scripts/ui/ordenador.gd
+msgid "A distancia · llenas, y con munición de reserva"
+msgstr "À distância · cheias, e com munição de reserva"
+
+#: scripts/ui/ordenador.gd
+msgid "Especiales · llenas; van en el hueco de las de A distancia"
+msgstr "Especiais · cheias; vão no espaço das À distância"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Noticias\n"
+"¡NUEVAS!"
+msgstr ""
+"Notícias\n"
+"NOVAS!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Colecciones\n"
+"¡NUEVO!"
+msgstr ""
+"Coleções\n"
+"NOVO!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Logros\n"
+"¡COBRAR!"
+msgstr ""
+"Conquistas\n"
+"RESGATAR!"
+
+#: scripts/ui/tactil.gd
+msgid "Gira el móvil para jugar mejor"
+msgstr "Gire o celular para jogar melhor"
+
+#: scripts/ui/taquilla.gd
+msgid "Taquilla de Johnny"
+msgstr "Armário do Johnny"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes: %s"
+msgstr "Você ainda não tem: %s"
+
+#: scripts/ui/taquilla.gd
+msgid "Sin efecto especial."
+msgstr "Sem efeito especial."
+
+#: scripts/ui/taquilla.gd
+msgid "Puesta"
+msgstr "Em uso"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes. %s"
+msgstr "Você ainda não tem. %s"
+
+#: scripts/ui/taquilla.gd
+msgid "Ya la llevas puesta."
+msgstr "Você já está usando."
+
+#: scripts/ui/taquilla.gd
+msgid "Vuelves a ser el conserje de siempre."
+msgstr "Você volta a ser o zelador de sempre."
+
+#: scripts/ui/taquilla.gd
+msgid "Te pones: %s. Se queda puesta."
+msgstr "Você vestiu: %s. Fica vestida."
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "AO VIVO"
+
+#: scripts/ui/tele.gd
+msgid "CANAL 8"
+msgstr "CANAL 8"
+
+#: scripts/ui/tele.gd
+msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
+msgstr "PLANTÃO  ·  %s: \"A SITUAÇÃO ESTÁ SOB CONTROLE\"  ·  NÃO SE APROXIMEM DO PRÉDIO  ·  "
+
+#: scripts/ui/tutorial.gd
+msgid "¡Nuevo!"
+msgstr "Novo!"
+
+#: scripts/ui/tutorial.gd
+msgid "Puedes volver a verlo en Tutorial, en el menú principal y en la pausa"
+msgstr "Você pode ver de novo em Tutorial, no menu principal e na pausa"
+
+#: scripts/ui/tutorial.gd
+msgid "Entendido"
+msgstr "Entendi"
+
+#: scripts/zombi_dependienta.gd
+msgid "¡OFERTAS!"
+msgstr "PROMOÇÃO!"
+
+#: scripts/zombi_guardia.gd
+msgid "uf"
+msgstr "ufa"
+
+#: scripts/zombi_guardia.gd
+msgid "¡PRIIII!"
+msgstr "PRIIII!"

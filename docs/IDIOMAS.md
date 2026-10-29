@@ -1,8 +1,10 @@
 # Idiomas · cómo se traduce el juego
 
-El juego está en **español** (idioma de origen) y en **inglés** (segundo idioma, `locale/en.po`). Se elige en
-Opciones → General (botón «Idioma / Language»), se guarda en `ajustes.idioma` y, si nunca se ha elegido, manda el
-idioma del sistema (español si está en español, inglés si no). Otros idiomas, más adelante: ver «Añadir un idioma».
+El juego está en **español** (idioma de origen) y en **inglés, portugués de Brasil, alemán y francés** (`locale/<código>.po`:
+`en`, `pt_BR`, `de`, `fr`). Se elige en Opciones → General (una fila de botones «Idioma / Language»), se guarda en
+`ajustes.idioma` y, si nunca se ha elegido, manda el idioma del sistema (español, portugués, alemán o francés si el sistema está en
+uno de ellos y, si no, inglés). Para añadir otro: ver «Añadir un idioma». Glosarios de cada uno: `GLOSARIO_EN.md`,
+`GLOSARIO_PT_BR.md`, `GLOSARIO_DE.md` y `GLOSARIO_FR.md`.
 
 Cómo va la migración (qué archivos ya están pasados y cuáles faltan): ver el apartado «Estado» al final.
 
@@ -63,11 +65,15 @@ Recoge los textos del código (los de `Idioma.t`/`Idioma.n` y los de las tablas 
 (añade los nuevos con la traducción vacía) y avisa de lo que está mal:
 
 ```
-py tools/traducciones.py              pone al día el .po y cuenta
+py tools/traducciones.py              pone al día los .po de todos los idiomas (añade los nuevos, sin traducción) y cuenta
 py tools/traducciones.py --comprobar  lo mismo sin escribir (antes de subir)
 py tools/traducciones.py --faltan     enseña todos los textos sin traducir
-py tools/traducciones.py --limpiar    quita del .po los textos que ya no están en el código
-py tools/traducciones.py --rellenar archivo.json   rellena los vacíos con {"español": "inglés"} (plural: [uno, varios])
+py tools/traducciones.py --limpiar    quita de los .po los textos que ya no están en el código
+py tools/traducciones.py --idioma de  solo con ese idioma (en, pt_BR, de, fr); con --rellenar y --exportar es obligatorio
+py tools/traducciones.py --idioma de --rellenar archivo.json   rellena los vacíos con {"español": "alemán"} (plural: [uno, varios];
+                                      un texto con contexto: «contexto@@español»)
+py tools/traducciones.py --idioma de --exportar lista.json     saca lo que falta por traducir, para quien traduce: la clave con la
+                                      que contestar, el español, el inglés de referencia y dónde sale
 ```
 
 Acaba con el código 1 si hay textos **sin traducir**, traducciones con **otros `%d`/`%s`**, otros saltos de línea u otros
@@ -85,20 +91,29 @@ msgstr "Quit"
 ## Probar
 
 - `-- --captura --idioma` saca el menú, Opciones (sus tres pestañas), el cambio de idioma en caliente y «Elige edificio»
-  (`prueba_idioma.gd`); con `--ingles`, en inglés. Con `--alerta 3 --reto`, «Elige edificio» sale con la alerta y el reto.
-- **Cualquier otra prueba, con `--ingles`**, corre en inglés. Al cerrar, `idioma.gd` escribe `TEXTOS SIN TRADUCIR AL IDIOMA
-  «en» (N): …` con los textos que se han pedido en esa prueba y no están en el `.po`. Sin `--ingles`, las pruebas van siempre en
-  español, aunque el guardado esté en inglés.
+  (`prueba_idioma.gd`); con `--ingles` (o `--lang pt_BR`, `--lang de`, `--lang fr`), en ese idioma. Con `--alerta 3 --reto`,
+  «Elige edificio» sale con la alerta y el reto.
+- **Cualquier otra prueba, con `--ingles` o `--lang X`**, corre en ese idioma. Al cerrar, `idioma.gd` escribe `TEXTOS SIN TRADUCIR AL
+  IDIOMA «en» (N): …` con los textos que se han pedido en esa prueba y no están en el `.po`. Sin ellos, las pruebas van siempre en
+  español, aunque el guardado esté en otro idioma.
 - El idioma se puede cambiar con la pantalla abierta: `Idioma.cambiado` avisa. Opciones y el menú principal ya se rehacen;
   el resto de pantallas (pausa, HUD...) se irán conectando al pasarlas.
 
 ## Añadir un idioma
 
-1. En `idioma.gd`, `IDIOMAS`: `["fr", "Français"]`.
-2. Copiar `locale/en.po` a `locale/fr.po`, cambiar `"Language: en"` y vaciar los `msgstr`. (`tools/traducciones.py`
-   trabaja hoy solo con `locale/en.po`, constante `PO`: con el segundo idioma habrá que hacerla multiidioma.)
-3. En `project.godot`, `locale/translations`: añadir `res://locale/fr.po`.
-4. Mirar que la fuente (`tema.gd`) tiene las letras de ese idioma (los alfabetos no latinos necesitan otra fuente).
+1. En `tools/traducciones.py`, `IDIOMAS`: su código de Godot, su nombre y su regla de plural; `py tools/traducciones.py` crea
+   `locale/<código>.po` vacío y `--exportar` saca la lista para quien traduce (con el encargo y las reglas que se dieron a las
+   traducciones de pt_BR, de y fr, que valen de modelo: nombres propios fijos, `%d`/`%s` en el mismo orden, tamaños de las cajas,
+   trato al jugador, glosario del idioma).
+2. En `idioma.gd`: `IDIOMAS` (código y cómo se escribe en su idioma) y `DEL_SISTEMA` (el idioma del sistema que le corresponde).
+3. En `project.godot`, `locale/translations`: añadir `res://locale/<código>.po`.
+4. Mirar que la fuente (`tema.gd`) tiene las letras de ese idioma: la letra de la interfaz no tiene todas las vocales con tilde, pero la
+   de los jefes, que le sirve de respaldo, sí; los alfabetos no latinos (ruso, chino...) necesitan otra fuente. Si cambia la
+   gramática (el género, `de` + artículo, mayúsculas de los nombres), mirar los sitios que arman frases con nombres traducidos:
+   `Idioma.minusculas()` ya deja los nombres alemanes con su mayúscula.
+5. Lo dibujado en imágenes: la palabra del cartel de planta en `tools/cartel_planta_idiomas.py` (`PALABRAS`) y su juego de carteles en
+   `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`); las fotos de los tutoriales, con `--lang <código>` y `py tools/fotos_tutorial.py <código>`.
+6. Probar el idioma con la prueba larga y con las pantallas más llenas (inventario, ordenador, tutorial, tiendas) mirando que cabe.
 
 ## Estado
 
@@ -128,18 +143,19 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
   `Planta.nombre_planta(num)`, `Planta.nombre_de(planta)`, `Planta.nombre_de_sitio(sitio)`, `Planta.aviso_de(salida)`,
   `Tienda.nombre(tipo)` y `Tienda.neon(tipo)`.
 
-**Lo dibujado en imágenes** (no sale en `locale/en.po`; hay una versión por idioma y el código elige según `Idioma.actual`):
-- `assets/sprites/cartel-planta-N.png` lleva «PLANTA»: `py tools/cartel_planta_en.py` hace `cartel-planta-N-en.png` («FLOOR»),
-  que `mapa/puerta.gd` (`CARTELES_EN`) usa en inglés.
-- `assets/ui/tutorial/<id>.png` son recortes de capturas con el texto del juego dibujado: las de inglés van en
-  `assets/ui/tutorial/en/<id>.png` (`ui/tutorial.gd` las prefiere y, si no hay, usa la de español). Se rehacen con las
-  capturas sacadas con `--ingles` y `py tools/fotos_tutorial.py en`; las ocho que no llevan ningún texto (apagón, curas, horda,
-  incendio, jugar, lanzables, munición, peligros) valen para todos los idiomas y no se rehacen. Cuando cambie lo que se ve en el
+**Lo dibujado en imágenes** (no sale en `locale/*.po`; hay una versión por idioma y el código elige según `Idioma.actual`):
+- `assets/sprites/cartel-planta-N.png` lleva «PLANTA»: `py tools/cartel_planta_idiomas.py` hace `cartel-planta-N-<idioma>.png` («FLOOR»,
+  «ANDAR», «ETAGE»), que `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`) usa según el idioma.
+- `assets/ui/tutorial/<id>.png` son recortes de capturas con el texto del juego dibujado: las de cada idioma van en
+  `assets/ui/tutorial/<idioma>/<id>.png` (`ui/tutorial.gd` las prefiere y, si no hay, usa la de español). Se rehacen con las
+  capturas sacadas con `--lang <idioma>` y `py tools/fotos_tutorial.py <idioma>`; las ocho que no llevan ningún texto (apagón, curas,
+  horda, incendio, jugar, lanzables, munición, peligros) valen para todos los idiomas y no se rehacen. Cuando cambie lo que se ve en el
   juego, hay que repetir las fotos en cada idioma (la lista de pruebas que las sacan está en `tools/fotos_tutorial.py`).
 - Sin texto dibujado: `EXIT` de la salida de incendios (ya es inglés), la «H» del helipuerto y los escaparates (garabatos). El logo
   (`assets/ui/logo.png`) lleva el nombre del juego, que aún no está decidido (`docs/LANZAMIENTO.md`).
 
-**Lo que falta:** la revisión del inglés por una persona nativa (sobre todo el humor y los gritos) y la prueba larga entera en
-inglés. Cómo se dice cada cosa: `docs/GLOSARIO_EN.md`.
+**Lo que falta:** la revisión de cada idioma por una persona nativa (sobre todo el humor y los gritos). Cómo se dice cada cosa:
+`docs/GLOSARIO_EN.md`, `GLOSARIO_PT_BR.md`, `GLOSARIO_DE.md` y `GLOSARIO_FR.md`.
 
-**Decimales:** `Talentos.decimal(x)` da la coma en español y el punto en inglés (de momento solo lo usa `talentos.gd`).
+**Decimales:** `Talentos.decimal(x)` da la coma en español, portugués, alemán y francés y el punto en inglés (de momento solo lo
+usa `talentos.gd`; los `%.1f` de otras pantallas salen con punto en todos los idiomas, como en español).

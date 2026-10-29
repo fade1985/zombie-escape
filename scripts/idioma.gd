@@ -1,7 +1,7 @@
 # El idioma del juego (cómo se traduce y cómo se escribe un texto: docs/IDIOMAS.md).
-# El español es el idioma de origen: los textos del código están en español y cada uno es su propia clave. El inglés es
-# el segundo idioma (locale/en.po); otros idiomas, más adelante. Si a un texto le falta su traducción, se ve en español
-# y no se rompe nada.
+# El español es el idioma de origen: los textos del código están en español y cada uno es su propia clave. Los demás
+# (locale/<código>.po: inglés, portugués de Brasil, alemán y francés) son traducciones. Si a un texto le falta su
+# traducción, se ve en español y no se rompe nada.
 #
 # Es un autoload: se llama desde cualquier script, también desde los static:
 #   Idioma.t("Salir")                              →  "Quit" en inglés, "Salir" en español
@@ -9,8 +9,9 @@
 #   Idioma.n("%d intento", "%d intentos", n) % n   (singular y plural: cada idioma sabe cuándo usar cuál)
 #   Idioma.t("Seguir", "pausa")                    (el mismo texto español que en otro idioma se dice distinto según
 #                                                   el sitio: un contexto, que es parte de la clave)
-# Se elige en Opciones y se guarda en ajustes.idioma. Si nunca se ha elegido, el del sistema: español si el sistema está
-# en español y inglés si no. Con "-- --captura" siempre es español, salvo con "--ingles".
+# Se elige en Opciones y se guarda en ajustes.idioma. Si nunca se ha elegido, el del sistema (español, portugués, alemán o
+# francés si el sistema está en uno de ellos y, si no, inglés). Con "-- --captura" siempre es español, salvo con
+# "--ingles" o con "--lang <código>" (por ejemplo "--lang de").
 # La señal "cambiado" avisa a las pantallas abiertas para que se vuelvan a escribir.
 extends Node
 
@@ -18,7 +19,9 @@ signal cambiado
 
 const ORIGEN := "es"
 # Los idiomas del juego: [código, cómo se escribe en su propio idioma]
-const IDIOMAS := [["es", "Español"], ["en", "English"]]   # no-tr
+const IDIOMAS := [["es", "Español"], ["en", "English"], ["pt_BR", "Português (BR)"], ["de", "Deutsch"], ["fr", "Français"]]   # no-tr
+# El idioma del sistema (OS.get_locale_language) → el del juego; los que no están, inglés
+const DEL_SISTEMA := {"es": "es", "pt": "pt_BR", "de": "de", "fr": "fr"}
 
 var actual := ORIGEN
 # Solo en las pruebas con otro idioma: los textos que se han pedido y no están traducidos (se cuentan al cerrar)
@@ -33,11 +36,14 @@ func _ready() -> void:
 # El idioma con el que se arranca: el de la línea de órdenes (pruebas), el elegido en Opciones o el del sistema
 func elegido() -> String:
 	if Captura.activa():
-		return "en" if "--ingles" in OS.get_cmdline_user_args() else ORIGEN
+		var args := OS.get_cmdline_user_args()
+		if "--lang" in args and args.find("--lang") + 1 < args.size():
+			return args[args.find("--lang") + 1]
+		return "en" if "--ingles" in args else ORIGEN
 	var guardado: String = Guardado.ajuste("idioma")
 	if codigos().has(guardado):
 		return guardado
-	return "es" if OS.get_locale_language() == "es" else "en"
+	return DEL_SISTEMA.get(OS.get_locale_language(), "en")
 
 
 func codigos() -> Array:
@@ -80,6 +86,15 @@ func t(texto: String, contexto := "") -> String:
 		if tabla == null or tabla.get_message(texto, contexto) == "":
 			faltan[texto] = true
 	return TranslationServer.translate(texto, contexto)
+
+
+# Un nombre (de un objeto, de una planta...) para meterlo en medio de una frase, en minúsculas. En alemán los nombres llevan
+# siempre mayúscula: se dejan como están (con solo_inicial, solo se baja la primera letra: el texto de un botón en una línea
+# de ayuda, «In die Truhe» → «in die Truhe»)
+func minusculas(texto: String, solo_inicial := false) -> String:
+	if actual != "de":
+		return texto.to_lower()
+	return texto.left(1).to_lower() + texto.substr(1) if solo_inicial else texto
 
 
 # Traduce un texto que cambia con la cantidad: el singular y el plural en español, y cuántos hay

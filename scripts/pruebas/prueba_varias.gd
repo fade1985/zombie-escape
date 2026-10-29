@@ -759,7 +759,7 @@ func probar_tutorial() -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tutorial-pausa.png")
 	for b: Button in menus.fondo.find_children("*", "Button", true, false):
-		if b.text == "Tutorial":
+		if b.text == Idioma.t("Tutorial"):   # (en francés es «Tutoriel»)
 			b.pressed.emit()
 	await get_tree().create_timer(0.4).timeout
 	var lista: Tutorial = null

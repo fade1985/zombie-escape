@@ -8,7 +8,7 @@ en una línea.
 
 - `project.godot`: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque.
 - `default_bus_layout.tres`: buses de audio. `export_presets.cfg` y `vercel.json`: ver `WEB.md`.
-- `locale/en.po`: la traducción al inglés (el español es el idioma de origen: cada texto del código es su clave). La
+- `locale/<idioma>.po` (`en`, `pt_BR`, `de`, `fr`): las traducciones (el español es el idioma de origen: cada texto del código es su clave). La
   carga `project.godot` (`[internationalization]`) y la pone al día `tools/traducciones.py`. Todo en `docs/IDIOMAS.md`.
 
 ## escenas/
@@ -349,9 +349,10 @@ en una línea.
 ## tools/
 
 - **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
-- **Lo dibujado en otro idioma:** `cartel_planta_en.py` hace los carteles de planta con «FLOOR» (`cartel-planta-N-en.png`) y
-  `fotos_tutorial.py en` recorta las fotos de los tutoriales de las capturas sacadas con `--ingles` (`assets/ui/tutorial/en/`).
-- **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día `locale/en.po` y avisa de lo que falta
+- **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
+  «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`) y `fotos_tutorial.py <idioma>` recorta las fotos de los tutoriales de las
+  capturas sacadas con `--lang <idioma>` (`assets/ui/tutorial/<idioma>/`).
+- **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
   animaciones), `jefe_hoja.py` (jefes: `py tools/jefe_hoja.py gloton-72 jefe-gloton`; cada jefe en su ficha `JEFES`),

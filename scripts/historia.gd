@@ -255,7 +255,7 @@ static func cuerpo_de(p: Dictionary) -> String:
 static func donde(p: Dictionary) -> String:
 	if p.get("donde", "") == "azotea":
 		return Idioma.t("azotea")
-	return p.get("donde", Planta.nombre_planta(p.planta).to_lower())
+	return p.get("donde", Idioma.minusculas(Planta.nombre_planta(p.planta)))
 
 
 # Lo que dice el ordenador en el sitio de una página aún sin encontrar, en el idioma del jugador

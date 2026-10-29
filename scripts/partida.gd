@@ -1326,7 +1326,7 @@ func terminar(gano: bool, abandona := false) -> void:
 		"sub": ((Idioma.t("Has limpiado %s de arriba abajo") % Idioma.t(ed.el_nombre)) if nuevo.is_empty()
 			else (Idioma.t("Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento")
 				% [Idioma.t(ed.el_nombre), Supervivientes.nombre_de(nuevo)])) if gano
-			else (Idioma.t("Caíste en la %s de %s") % [Planta.nombre_de(planta).to_lower(), Idioma.t(ed.el_nombre)]),
+			else (Idioma.t("Caíste en la %s de %s") % [Idioma.minusculas(Planta.nombre_de(planta)), Idioma.t(ed.el_nombre)]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],

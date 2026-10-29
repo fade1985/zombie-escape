@@ -1,4 +1,4 @@
-# La prueba del idioma (-- --captura --idioma, con --ingles para verlo en inglés): las pantallas del menú en el idioma de la
+# La prueba del idioma (-- --captura --idioma, con --ingles para verlo en inglés o --lang pt_BR / de / fr para los demás): las pantallas del menú en el idioma de la
 # prueba (el menú, Opciones con sus tres pestañas y "Elige edificio") y el cambio de idioma en caliente desde Opciones.
 # Con --alerta 3 --reto, "Elige edificio" sale con el selector de alerta y la tarjeta del reto. Al acabar, si algún texto
 # no tiene traducción, idioma.gd lo cuenta al cerrar ("TEXTOS SIN TRADUCIR AL IDIOMA ...").
@@ -17,7 +17,8 @@ static func probar(menu: Control) -> void:
 	print("  Salir → «%s» | 1 → «%s» | 3 → «%s» | con formato → «%s»" % [
 		salir, uno, tres, Idioma.t("Has llegado a la planta %d de %d") % [3, 5]])
 	var esperado := ["Quit", "1 attempt", "3 attempts"] if ingles else ["Salir", "1 intento", "3 intentos"]
-	print("  %s" % ("BIEN: lo traducido es lo esperado" if [salir, uno, tres] == esperado else "MAL: se esperaba %s" % [esperado]))
+	if Idioma.actual in ["es", "en"]:   # (de los demás idiomas no se sabe de antemano lo que dirá: se ve en las fotos)
+		print("  %s" % ("BIEN: lo traducido es lo esperado" if [salir, uno, tres] == esperado else "MAL: se esperaba %s" % [esperado]))
 	# Opciones: las tres pestañas
 	var o := Opciones.abrir(menu, menu.centro)
 	await arbol.create_timer(0.4).timeout

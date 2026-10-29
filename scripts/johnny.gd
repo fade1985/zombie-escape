@@ -1050,11 +1050,11 @@ func avisar_arma() -> void:
 	var w := arma()
 	var texto: String = Objetos.nombre(huecos[mano])
 	if w.has("deposito"):
-		texto += "   %d s · %s x%d" % [ceili(deposito), Objetos.nombre(w.relleno).to_lower(), reserva()]
+		texto += "   %d s · %s x%d" % [ceili(deposito), Idioma.minusculas(Objetos.nombre(w.relleno)), reserva()]
 	elif w.tipo == "fuego":
 		texto += "   %d/%d" % [balas, w.cargador]
 		if w.has("relleno"):   # el lanza rayos: cuántas baterías le quedan
-			texto += " · %s x%d" % [Objetos.nombre(w.relleno).to_lower(), reserva()]
+			texto += " · %s x%d" % [Idioma.minusculas(Objetos.nombre(w.relleno)), reserva()]
 		if recargando > 0.0:
 			texto += "   " + Idioma.t("recargando…")
 	var otra: String = huecos["fuego" if mano == "cuerpo" else "cuerpo"]

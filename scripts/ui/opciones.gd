@@ -217,9 +217,26 @@ func general() -> void:
 	ayuda.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ayuda.custom_minimum_size.x = 560
 	ayuda.text = Idioma.t(MODOS_AYUDA[modo])
-	# El idioma se escribe siempre con su nombre en los dos idiomas, para encontrarlo aunque el juego esté en el otro
-	boton_idioma = opcion("Idioma / Language: %s" % Idioma.nombre())   # no-tr
-	boton_idioma.pressed.connect(Idioma.siguiente)
+	# El idioma: un botón por idioma, cada uno con su nombre en su idioma (y el rótulo, en dos), para encontrarlo aunque
+	# el juego esté en otro. El de ahora, con las letras amarillas como la pestaña en la que estás
+	var rotulo_idioma := Label.new()
+	rotulo_idioma.theme_type_variation = "Sub"
+	rotulo_idioma.text = "Idioma / Language"   # no-tr
+	rotulo_idioma.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	contenido.add_child(rotulo_idioma)
+	var fila_idioma := HBoxContainer.new()
+	fila_idioma.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila_idioma.add_theme_constant_override("separation", 6)
+	contenido.add_child(fila_idioma)
+	for i in Idioma.IDIOMAS:
+		var b := Button.new()
+		b.text = i[1]
+		b.pressed.connect(func(): Idioma.poner(i[0]))
+		if i[0] == Idioma.actual:
+			boton_idioma = b
+			for c in ["font_color", "font_focus_color", "font_hover_color"]:
+				b.add_theme_color_override(c, Tema.AMARILLO)
+		fila_idioma.add_child(b)
 	var boton_modo := opcion(Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[modo]))
 	boton_modo.pressed.connect(func():
 		var orden: Array = modos().keys()

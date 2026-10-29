@@ -153,7 +153,7 @@ func abrir(p: Node) -> void:
 		# debajo, lo que hace llevarla puesta (las que faltan, cómo se consiguen); parte las líneas y la carta crece
 		var frase: String
 		if not tiene(id):
-			frase = Idioma.t("Aún no la tienes: %s") % Skins.como(id).to_lower()
+			frase = Idioma.t("Aún no la tienes: %s") % Idioma.minusculas(Skins.como(id))
 		elif id == "":
 			frase = Idioma.t("Sin efecto especial.")
 		else:

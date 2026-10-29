@@ -538,7 +538,7 @@ func pintar_ficha() -> void:
 			for c in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color"]:
 				pulsar.add_theme_color_override(c, Tema.AMARILLO)
 		if not b[3] and b[0] != "destruir":   # (sin atajo: no se destruye nada sin querer)
-			atajos["X" if b[0] == "tirar" else "Y"] = Idioma.t("tirar") if b[0] == "tirar" else b[1].to_lower()
+			atajos["X" if b[0] == "tirar" else "Y"] = Idioma.t("tirar") if b[0] == "tirar" else Idioma.minusculas(b[1], true)
 	botones.position = Vector2(666, 578 - botones.get_combined_minimum_size().y) - ORIGEN
 	pintar_ayuda(atajos)
 
@@ -744,7 +744,7 @@ func ficha_lanzable(caja: VBoxContainer, sitio: String) -> Dictionary:
 	elif k in lz.mano:
 		que += " " + Idioma.t("«A la mano» llena con estos el montón que llevas a mano.")
 	elif lz.mano.size() >= Lanzables.MANO:
-		que += " " + Idioma.t("«A la mano» lo cambia por %s, que pasa aquí.") % nombre_lanzable(lz.tipo).to_lower()
+		que += " " + Idioma.t("«A la mano» lo cambia por %s, que pasa aquí.") % Idioma.minusculas(nombre_lanzable(lz.tipo))
 	return {"que": que, "botones": [["a_la_mano", Idioma.t("A la mano"), mover_lanzable, lz.mano_llena_de(j)]]}
 
 
@@ -1177,7 +1177,7 @@ func pintar_ficha_baul() -> void:
 		b.position = Vector2(600, 410) - ORIGEN
 		b.size = Vector2(280, 36)
 		if not b.disabled:
-			atajos["Y"] = d.boton[1].to_lower()
+			atajos["Y"] = Idioma.minusculas(d.boton[1], true)
 	if que_se_destruye() != "":   # lo de la mochila, la munición y el baúl (no las armas que lleva)
 		var x := boton(viva, "destruir", texto_destruir(), destruir, "BotonRojo")   # no-tr
 		x.position = Vector2(600, 450) - ORIGEN
@@ -1209,7 +1209,7 @@ func ficha_baul() -> Dictionary:
 				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo)
 				d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, not Objetos.hueco_baul(s)]
 			else:
-				d.que += Idioma.t("La %s Normal no va al baúl: la tienes siempre.") % Objetos.nombre(id).to_lower()
+				d.que += Idioma.t("La %s Normal no va al baúl: la tienes siempre.") % Idioma.minusculas(Objetos.nombre(id))
 			if w.tipo == "fuego":
 				var carga_txt: String = Idioma.t("Depósito %d de %d s") % [ceili(carga(id)), roundi(w.deposito)] \
 					if w.has("deposito") else Idioma.t("Cargador %d de %d") % [roundi(carga(id)), w.cargador]
@@ -1312,7 +1312,7 @@ func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String) -> String:
 		return Idioma.t("El baúl está lleno: haz sitio sacando algo.")
 	if sin_otra:
 		return Idioma.t("En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre.") % \
-			Objetos.nombre(Armas.SIEMPRE[tipo]).to_lower()
+			Idioma.minusculas(Objetos.nombre(Armas.SIEMPRE[tipo]))
 	return Idioma.t("En el baúl queda a salvo aunque caigas.")
 
 
@@ -1464,7 +1464,7 @@ func guardar() -> void:
 		return
 	var sobran := n - (llevaba - lleva(id))
 	if sobran > 0:   # (no ha cabido todo: la casilla del baúl llega a 99 o no queda sitio)
-		aviso = Idioma.t("El baúl no admite más: contigo se quedan %d de %s.") % [sobran, Objetos.nombre(id).to_lower()]
+		aviso = Idioma.t("El baúl no admite más: contigo se quedan %d de %s.") % [sobran, Idioma.minusculas(Objetos.nombre(id))]
 	partida.johnny.avisar_arma()
 	Sonido.tocar("soltar" if con_dedo else "cambiar")
 	salta = ["b%d" % objetos_baul(Guardado.cargar()).map(func(o): return o[0]).find(id)]   # (los objetos van primero)
@@ -1553,9 +1553,9 @@ func guardar_todo() -> void:
 		if meter_en_baul(id):
 			guardados += 1
 			if lleva(id) > 0:   # (algo ha entrado, pero no todo: casilla de 99 llena)
-				no_caben.append(Objetos.nombre(id).to_lower())
+				no_caben.append(Idioma.minusculas(Objetos.nombre(id)))
 		else:
-			no_caben.append(Objetos.nombre(id).to_lower())
+			no_caben.append(Idioma.minusculas(Objetos.nombre(id)))
 	Sonido.tocar("cambiar" if guardados > 0 else "no")
 	if not no_caben.is_empty():
 		aviso = Idioma.t("El baúl está lleno: contigo se quedan %s.") % (Idioma.t("%s y %s") % [", ".join(no_caben.slice(0, -1)),

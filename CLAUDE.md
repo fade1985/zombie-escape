@@ -6,7 +6,7 @@ Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se le
 |---|---|
 | `docs/CODIGO.md` | Qué hace cada escena, script, asset y herramienta |
 | `docs/CONTROLES.md` | Teclas, mando, móvil, la sala de pruebas (F11 y su panel), sala de mantenimiento, guardado |
-| `docs/IDIOMAS.md`, `docs/GLOSARIO_EN.md` | Cómo se escribe un texto para que se traduzca (`Idioma.t`), la herramienta `py tools/traducciones.py` y cómo se dice cada cosa en inglés: se leen al escribir o cambiar cualquier texto del juego |
+| `docs/IDIOMAS.md`, `docs/GLOSARIO_EN.md` (y `_PT_BR`, `_DE`, `_FR`) | Cómo se escribe un texto para que se traduzca (`Idioma.t`), la herramienta `py tools/traducciones.py` y cómo se dice cada cosa en cada idioma: se leen al escribir o cambiar cualquier texto del juego |
 | `docs/WEB.md` | Exportar a web y publicar en Vercel (se publica al subir main a la rama `production`) |
 | `docs/historial/` | Planes ya terminados (centro comercial, jefes de los Apartamentos): solo para saber por qué se decidió algo |
 | `docs/LANZAMIENTO.md` | Lo que le falta al juego para venderlo (versión de Windows, inglés, nombre, pruebas, Steam, legal): se lee cuando el juego esté pulido y toque pensar en sacarlo |
@@ -32,9 +32,9 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
 - **`PENDIENTES.md`** (en la raíz) es la lista del dueño de fallos, mejoras y cosas por limar: él dicta los
   puntos y Claude solo los apunta. **No se trabaja en ningún punto hasta que él lo pida**; al terminar uno con
   visto bueno, se borra de la lista en el mismo commit.
-- **Textos del juego:** el juego está en español e inglés. Todo texto nuevo que vea el jugador se escribe con
-  `Idioma.t("...")` (nunca trozos pegados) y, antes de subir, se pasa `py tools/traducciones.py` y se rellena el inglés
-  (`locale/en.po`, con `docs/GLOSARIO_EN.md`). Cómo, en `docs/IDIOMAS.md`.
+- **Textos del juego:** el juego está en español, inglés, portugués de Brasil, alemán y francés. Todo texto nuevo que vea el
+  jugador se escribe con `Idioma.t("...")` (nunca trozos pegados) y, antes de subir, se pasa `py tools/traducciones.py` y se
+  rellenan las traducciones (`locale/<idioma>.po`, con los glosarios; sin ellas se ve en español). Cómo, en `docs/IDIOMAS.md`.
 - Si hay varias sesiones a la vez, en el commit solo los archivos propios (nada de `git add -A`).
 - **Borrar en PixelLab no se puede deshacer:** solo con confirmación expresa del dueño.
 - **Ahorrar cuota:** sesiones cortas (si pasa de ~80 pasos, proponer seguir en otra con un resumen); **Sonnet**

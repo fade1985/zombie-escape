@@ -107,6 +107,7 @@
 #   --idioma            solo el menú, Opciones (3 pestañas), el cambio de idioma en caliente y «Elige edificio»; con
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]
 #   --ingles            (con cualquier prueba) el juego en inglés; al cerrar, cuenta los textos sin traducir [idioma.gd]
+#   --lang X            lo mismo con otro idioma: pt_BR, de o fr (--ingles es --lang en)                  [idioma.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
 #                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una y ver lo que cambia [prueba_larga.gd]

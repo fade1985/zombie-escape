@@ -1,15 +1,19 @@
 """Las traducciones del juego (cómo funcionan: docs/IDIOMAS.md).
 
-El español es el idioma de origen: cada texto del código es su propia clave y la traducción al inglés vive en
-locale/en.po. Esta herramienta recoge los textos del código, pone al día el .po y avisa de lo que está mal:
+El español es el idioma de origen: cada texto del código es su propia clave y las traducciones viven en locale/<idioma>.po
+(en, pt_BR, de, fr: la lista IDIOMAS de abajo). Esta herramienta recoge los textos del código, pone al día los .po y avisa de
+lo que está mal. Sin --idioma trabaja con todos los idiomas; con  --idioma de  (o  en,  pt_BR,  fr) solo con ese:
 
-  py tools/traducciones.py              pone al día locale/en.po (añade los textos nuevos, sin traducción) y cuenta
+  py tools/traducciones.py              pone al día los .po (añade los textos nuevos, sin traducción) y cuenta
   py tools/traducciones.py --comprobar  lo mismo sin escribir nada (para mirar antes de subir)
   py tools/traducciones.py --limpiar    además quita del .po los textos que ya no están en el código
   py tools/traducciones.py --faltan     enseña todos los textos sin traducir (por defecto, solo los 15 primeros)
-  py tools/traducciones.py --rellenar archivo.json   rellena los que están sin traducir con lo que diga el archivo
-                                        ({"texto en español": "texto en inglés"}; en los plurales, una lista [uno, varios]).
+  py tools/traducciones.py --idioma de --rellenar archivo.json   rellena los que están sin traducir con lo que diga el archivo
+                                        ({"texto en español": "texto en alemán"}; en los plurales, una lista [uno, varios]).
                                         No toca lo que ya está traducido (con --pisar, sí)
+  py tools/traducciones.py --idioma de --exportar lista.json    saca la lista de lo que falta por traducir a ese idioma, para
+                                        quien traduce: la clave con la que contestar (los que llevan contexto, «contexto@@texto»),
+                                        el texto en español, dónde sale y cómo está en inglés
 
 Qué textos recoge:
   1. Los que van dentro de  Idioma.t("...")  e  Idioma.n("uno", "varios", n)  (con contexto opcional como último
@@ -26,8 +30,17 @@ Si algo está mal, acaba con el código 1.
 import json, os, re, sys
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PO = os.path.join(RAIZ, "locale", "en.po")
-IDIOMA = "en"
+# Los idiomas: código de Godot (el de locale/<código>.po y el de idioma.gd) → su nombre y cómo se forma el plural
+IDIOMAS = {
+    "en": {"nombre": "inglés", "plural": "nplurals=2; plural=(n != 1);"},
+    "pt_BR": {"nombre": "portugués de Brasil", "plural": "nplurals=2; plural=(n > 1);"},
+    "de": {"nombre": "alemán", "plural": "nplurals=2; plural=(n != 1);"},
+    "fr": {"nombre": "francés", "plural": "nplurals=2; plural=(n > 1);"},
+}
+
+
+def ruta_po(codigo):
+    return os.path.join(RAIZ, "locale", codigo + ".po")
 
 # Archivos que no se traducen: herramientas internas (el panel F11 y la sala de pruebas) y las pruebas
 EXCLUIDOS = ["scripts/pruebas/", "scripts/ui/panel_pruebas.gd", "scripts/sala_armas.gd"]
@@ -321,15 +334,15 @@ def linea_po(clave, s):
     return '%s "%s"' % (clave, escapar(s))
 
 
-def leer_po():
-    """Las traducciones del .po: {(contexto, original): {"varios": ..., "tr": [formas]}}"""
+def leer_po(codigo="en"):
+    """Las traducciones del .po de un idioma: {(contexto, original): {"varios": ..., "tr": [formas]}}"""
     res, actual, campo = {}, None, None
-    if not os.path.exists(PO):
+    if not os.path.exists(ruta_po(codigo)):
         return res
     def cerrar():
         if actual is not None and actual["uno"] != "":
             res[(actual["ctx"], actual["uno"])] = actual
-    for l in open(PO, encoding="utf-8").read().split("\n"):
+    for l in open(ruta_po(codigo), encoding="utf-8").read().split("\n"):
         l = l.rstrip()
         if l.startswith("#") or l == "":
             if l == "":
@@ -365,22 +378,22 @@ def leer_po():
     return res
 
 
-CABECERA = '''# Traducción al inglés de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
-# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
-# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
-msgid ""
-msgstr ""
-"Project-Id-Version: Zombie Escape\\n"
-"Language: en\\n"
-"MIME-Version: 1.0\\n"
-"Content-Type: text/plain; charset=UTF-8\\n"
-"Content-Transfer-Encoding: 8bit\\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\\n"
-'''
+def cabecera(codigo):
+    i = IDIOMAS[codigo]
+    return ('# Traducción al %s de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el\n'
+            '# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se\n'
+            '# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).\n'
+            'msgid ""\nmsgstr ""\n'
+            '"Project-Id-Version: Zombie Escape\\n"\n'
+            '"Language: %s\\n"\n'
+            '"MIME-Version: 1.0\\n"\n'
+            '"Content-Type: text/plain; charset=UTF-8\\n"\n'
+            '"Content-Transfer-Encoding: 8bit\\n"\n'
+            '"Plural-Forms: %s\\n"\n') % (i["nombre"], codigo, i["plural"])
 
 
-def escribir_po(textos, previas, conservar):
-    salida = [CABECERA]
+def escribir_po(codigo, textos, previas, conservar):
+    salida = [cabecera(codigo)]
     def entrada(t, prev):
         l = []
         if t.archivos:
@@ -404,26 +417,23 @@ def escribir_po(textos, previas, conservar):
     return "\n\n".join(salida) + "\n"
 
 
-def main():
-    sys.stdout.reconfigure(encoding="utf-8")
-    args = sys.argv[1:]
+def trabajar(codigo, textos, sueltos, args):
+    """Pone al día y comprueba el .po de un idioma. Devuelve si hay algo mal (textos sin traducir o errores)."""
     solo_mirar, limpiar, todas = "--comprobar" in args, "--limpiar" in args, "--faltan" in args
-    textos, sueltos = {}, []
-    for rel in archivos_de_codigo():   # el orden de lectura de cada archivo se respeta (dict conserva el orden)
-        recoger(rel, textos, sueltos)
-    previas = leer_po()
+    po = ruta_po(codigo)
+    previas = leer_po(codigo)
     if "--rellenar" in args:
         datos = json.load(open(args[args.index("--rellenar") + 1], encoding="utf-8"))
         for original, nuevo in datos.items():
-            for clave in [k for k in textos if k[1] == original]:
+            ctx, texto = original.split("@@", 1) if ("@@" in original and (original.split("@@", 1)[0], original.split("@@", 1)[1]) in textos) else ("", original)
+            for clave in [k for k in textos if k == (ctx, texto)]:
                 formas = [nuevo] if isinstance(nuevo, str) else list(nuevo)
                 prev = previas.setdefault(clave, {"ctx": clave[0], "uno": clave[1], "varios": textos[clave].varios, "tr": {}})
                 for i, f in enumerate(formas):
                     if not prev["tr"].get(i) or "--pisar" in args:
                         prev["tr"][i] = f
     sin_usar = {k: v for k, v in previas.items() if k not in textos}
-    errores = []
-    faltan = []
+    errores, faltan = [], []
     for t in textos.values():
         prev = previas.get(t.clave)
         formas = prev["tr"] if prev else {}
@@ -442,34 +452,71 @@ def main():
                 errores.append("saltos de línea distintos: «%s»" % orig)
             if (len(orig) - len(orig.lstrip())) != (len(tr) - len(tr.lstrip())) or (len(orig) - len(orig.rstrip())) != (len(tr) - len(tr.rstrip())):
                 errores.append("espacios distintos al principio o al final: «%s»" % orig)
+    if "--exportar" in args:
+        en = leer_po("en") if codigo != "en" else {}
+        lista = []
+        for t in faltan:
+            ref = en.get(t.clave, {"tr": {}})["tr"]
+            e = {"clave": (t.contexto + "@@" + t.uno) if t.contexto else t.uno, "es": t.uno}
+            if t.varios:
+                e["es_plural"] = t.varios
+            if t.contexto:
+                e["contexto"] = t.contexto
+            e["en"] = ref.get(0, "")
+            if t.varios:
+                e["en_plural"] = ref.get(1, "")
+            e["donde"] = os.path.basename(t.archivos[0])
+            lista.append(e)
+        json.dump(lista, open(args[args.index("--exportar") + 1], "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+        print("%s: %d textos por traducir exportados" % (codigo, len(lista)))
     if not solo_mirar:
         conservar = {} if limpiar else sin_usar
-        nuevo = escribir_po(textos, previas, conservar)
-        antes = open(PO, encoding="utf-8").read() if os.path.exists(PO) else ""
+        nuevo = escribir_po(codigo, textos, previas, conservar)
+        antes = open(po, encoding="utf-8").read() if os.path.exists(po) else ""
         if nuevo != antes:
-            os.makedirs(os.path.dirname(PO), exist_ok=True)
-            open(PO, "w", encoding="utf-8", newline="\n").write(nuevo)
-            print("locale/en.po puesto al día")
+            os.makedirs(os.path.dirname(po), exist_ok=True)
+            open(po, "w", encoding="utf-8", newline="\n").write(nuevo)
+            print("locale/%s.po puesto al día" % codigo)
     nuevos = [t for t in textos.values() if t.clave not in previas]
-    print("Textos: %d · traducidos: %d · sin traducir: %d · nuevos desde la última vez: %d · sin usar en el código: %d"
-          % (len(textos), len(textos) - len(faltan), len(faltan), len(nuevos), len(sin_usar)))
+    print("[%s] Textos: %d · traducidos: %d · sin traducir: %d · nuevos desde la última vez: %d · sin usar en el código: %d"
+          % (codigo, len(textos), len(textos) - len(faltan), len(faltan), len(nuevos), len(sin_usar)))
     if faltan:
-        print("\nSIN TRADUCIR:")
+        print("\nSIN TRADUCIR AL %s:" % IDIOMAS[codigo]["nombre"].upper())
         for t in faltan if todas else faltan[:15]:
             print("  ·", t.uno.replace("\n", "\\n"), "  (%s)" % t.archivos[0])
         if not todas and len(faltan) > 15:
             print("  … y %d más (--faltan los enseña todos)" % (len(faltan) - 15))
     if errores:
-        print("\nERRORES EN LAS TRADUCCIONES:")
+        print("\nERRORES EN LAS TRADUCCIONES (%s):" % codigo)
         for e in errores:
             print("  ·", e)
-    if sueltos:
-        print("\nTEXTOS EN ESPAÑOL SUELTOS en archivos ya pasados (ponerlos en Idioma.t(), en una tabla # [traducir] o, si de verdad no se traducen, # no-tr):")
-        for rel, linea, s in sueltos:
-            print("  · %s:%d  «%s»" % (rel, linea, s.replace("\n", "\\n")))
     if sin_usar and not limpiar:
         print("\nSin usar (--limpiar los quita): %s" % ", ".join("«%s»" % k[1].replace("\n", "\\n") for k in list(sin_usar)[:8]))
-    sys.exit(1 if (faltan or errores or sueltos) else 0)
+    return bool(faltan or errores)
+
+
+def main():
+    sys.stdout.reconfigure(encoding="utf-8")
+    args = sys.argv[1:]
+    codigos = list(IDIOMAS)
+    if "--idioma" in args:
+        codigos = [args[args.index("--idioma") + 1]]
+        if codigos[0] not in IDIOMAS:
+            sys.exit("idioma desconocido: %s (los hay: %s)" % (codigos[0], ", ".join(IDIOMAS)))
+    elif "--rellenar" in args or "--exportar" in args:
+        sys.exit("--rellenar y --exportar necesitan --idioma <código>")
+    textos, sueltos = {}, []
+    for rel in archivos_de_codigo():   # el orden de lectura de cada archivo se respeta (dict conserva el orden)
+        recoger(rel, textos, sueltos)
+    mal = False
+    for codigo in codigos:
+        mal = trabajar(codigo, textos, sueltos, args) or mal
+        print()
+    if sueltos:
+        print("TEXTOS EN ESPAÑOL SUELTOS en archivos ya pasados (ponerlos en Idioma.t(), en una tabla # [traducir] o, si de verdad no se traducen, # no-tr):")
+        for rel, linea, s in sueltos:
+            print("  · %s:%d  «%s»" % (rel, linea, s.replace("\n", "\\n")))
+    sys.exit(1 if (mal or sueltos) else 0)
 
 
 if __name__ == "__main__":
