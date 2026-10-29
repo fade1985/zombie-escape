@@ -23,10 +23,10 @@ const FUENTE := preload("res://assets/fuentes/zombie-scape-ui.ttf")
 # OFL (jersey-25-OFL.txt, que va con ella). Es pixel art a 25 (un píxel de su dibujo, uno de pantalla) y a 50
 const FUENTE_JEFE := preload("res://assets/fuentes/jersey-25.ttf")
 # Las letras que esas dos no traen salen de otra (poner_fuentes): el cirílico del ruso, de Ark Pixel de 16 px (la misma
-# medida que la letra del juego; OFL, ark-pixel-OFL.txt), y el chino, de Fusion Pixel de 12 px (OFL, fusion-pixel-OFL.txt y
-# fusion-pixel-licencias/). Las dos, sin suavizado (en su .import)
+# medida que la letra del juego; OFL, ark-pixel-OFL.txt), y el chino, de Unifont (16x16 píxeles; doble licencia, aquí con la OFL,
+# unifont-OFL.txt; recortada a los hanzi comunes de GB2312). Las dos, sin suavizado (en su .import)
 const FUENTE_CIRILICO := preload("res://assets/fuentes/ark-pixel-16.woff2")
-const FUENTE_CHINO := preload("res://assets/fuentes/fusion-pixel-12-zh.woff2")
+const FUENTE_CHINO := preload("res://assets/fuentes/unifont-16-zh.woff2")
 const BOTON := preload("res://assets/ui/boton-oscuro.png")
 const PANEL := preload("res://assets/ui/panel-oscuro.png")
 
@@ -38,8 +38,8 @@ static var _tema: Theme
 # Jersey 25. La cadena va PLANA, las tres detrás de la letra del juego: si una letra de reserva cuelga de la Jersey 25 (que
 # también lleva reservas), solo se alcanza a la Jersey 25 y las demás no salen. En el ordenador parecía que sí (Windows pone una
 # letra del sistema para lo que falta), pero en la web, que no trae letras del sistema, salían cuadros (29 oct 2026).
-# Las de reserva miden más de alto que la del juego (a 16: 22 contra 17): con un ajuste negativo por arriba y por abajo, la línea
-# queda igual de alta. Se llama al montar el tema y cada vez que cambia el idioma (idioma.gd)
+# La del cirílico mide más de alto que la del juego (a 16: 22 contra 17): con un ajuste negativo por arriba y por abajo, la línea
+# queda igual de alta (la del chino, 16, no necesita tanto). Se llama al montar el tema y cada vez que cambia el idioma (idioma.gd)
 static var _jersey_de_respaldo: FontVariation
 
 
@@ -63,15 +63,16 @@ static func poner_fuentes() -> void:
 	juego.fallbacks = cadena
 
 
-# La letra de un idioma que no escribe la del juego (null si la del juego basta): el cirílico, de Ark Pixel, y el chino, de Fusion Pixel,
-# con el ajuste de altura (sube/baja, en píxeles) que las deja de la misma altura de línea que la del juego. También es la letra
-# con la que el selector de Opciones escribe «Русский» y «简体中文», en cualquier idioma
+# La letra de un idioma que no escribe la del juego (null si la del juego basta): el cirílico, de Ark Pixel, y el chino, de Unifont,
+# con el ajuste de altura (sube/baja, en píxeles) que las deja de la misma altura de línea que la del juego (13 por encima y 4 por
+# debajo a 16 px: Ark Pixel mide 17 y 5, y Unifont 14 y 2). También es la letra con la que el selector de Opciones escribe
+# «Русский» y «简体中文», en cualquier idioma
 static func fuente_del_idioma(codigo: String) -> Font:
 	match codigo:
 		"ru":
 			return _con_altura(FUENTE_CIRILICO, -4, -1)
 		"zh_CN":
-			return _con_altura(FUENTE_CHINO, -5, 0)
+			return _con_altura(FUENTE_CHINO, -1, 2)
 	return null
 
 

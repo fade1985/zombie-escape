@@ -661,6 +661,8 @@ func barras(w: Dictionary) -> Array:
 func barra(caja: VBoxContainer, nombre: String, valor: int) -> void:
 	var hilera := HBoxContainer.new()
 	hilera.add_theme_constant_override("separation", 0)
+	if Idioma.actual == "zh_CN":
+		hilera.custom_minimum_size.y = 20   # (los hanzi llenan la línea entera: sin esto, las filas se tocan)
 	caja.add_child(hilera)
 	var t := Label.new()
 	t.text = nombre

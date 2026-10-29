@@ -1,11 +1,16 @@
-Fusion Pixel Font
-https://github.com/TakWolf/fusion-pixel-font
+Unifont
+https://unifoundry.com/unifont/
 
-Copyright (c) 2022, TakWolf (https://takwolf.com).
+Copyright (c) 1998-2026 Roman Czyborra, Paul Hardy, Qianqian Fang, Andrew Miller, Johnnie Weaver, David Corbett,
+Aella Chiana Moskopp, Rebecca Bettencourt, Ho-Seok Ee, et al.
 
-This Font Software is licensed under the SIL Open Font License, Version 1.1.
-This license is copied below, and is also available with a FAQ at:
+Unifont tiene doble licencia: SIL Open Font License 1.1 o GNU GPL 2 o posterior con la excepcion de incrustar fuentes
+(https://gnu.org/licenses/gpl.html). Zombie Escape la usa con la SIL OFL 1.1, que se copia abajo y tambien esta en
 https://openfontlicense.org
+
+El archivo del juego (unifont-16-zh.woff2) es un subconjunto de unifont-18.0.01.otf (ftp.gnu.org/gnu/unifont/unifont-18.0.01/):
+solo los 7447 caracteres de los hanzi comunes de GB2312, sus signos y los que usa la traduccion al chino. No se ha tocado
+ningun dibujo.
 
 
 -----------------------------------------------------------

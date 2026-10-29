@@ -126,12 +126,16 @@ msgstr "Quit"
 La letra de la interfaz (`zombie-scape-ui.ttf`) y la de los jefes (Jersey 25) solo traen el alfabeto latino. Las letras que no tienen
 salen de otras, en una cadena que `Tema.poner_fuentes` pone al arrancar y cada vez que cambia el idioma (`Idioma.poner`): letra del
 juego → Jersey 25 (los signos y las vocales con tilde que faltan) → la del idioma que se juega: en ruso, **Ark Pixel de 16 px**
-(`ark-pixel-16.woff2`: todo el cirílico, a la medida exacta del juego, 70 KB) y en chino, **Fusion Pixel de 12 px**
-(`fusion-pixel-12-zh.woff2`: chino simplificado, 1 MB; no es múltiplo de 16 y 32, así que los trazos salen algo irregulares). En
+(`ark-pixel-16.woff2`: todo el cirílico, a la medida exacta del juego, 70 KB) y en chino, **Unifont**
+(`unifont-16-zh.woff2`: glifos de 16×16 píxeles, justo la cuadrícula del juego; 175 KB, recortada a los 7447 caracteres de los hanzi
+comunes de GB2312, sus signos y los de la traducción: para añadir otros, volver a recortar `unifont-18.0.01.otf` de
+`ftp.gnu.org/gnu/unifont/` con `fontTools.subset`). Antes se usó Fusion Pixel de 12 px, pero a 16 px no es una cuadrícula entera y los
+trazos salían irregulares, y su altura de línea (22) rompía las cajas; Ark Pixel de 16 px no sirve para el chino (solo trae 97 hanzi). En
 español, inglés, portugués, alemán y francés no hay más reserva que la Jersey 25. El nombre de cada idioma en el selector de
 Opciones («Русский», «简体中文») se escribe con su propia letra (`Tema.fuente_del_idioma`, una `override` del botón), en cualquier
-idioma. Las tres fuentes son OFL 1.1: sus licencias (`ark-pixel-OFL.txt`, `fusion-pixel-OFL.txt` y `fusion-pixel-licencias/`) van con el
-juego y hay que citarlas en los créditos. La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus
+idioma. Las tres fuentes se usan con la OFL 1.1 (Unifont tiene doble licencia, OFL o GPL con excepción de fuentes): sus licencias
+(`ark-pixel-OFL.txt`, `unifont-OFL.txt` y `jersey-25-OFL.txt`) van con el juego y hay que citarlas en los créditos. Las dos de reserva van
+sin suavizado (ajustes de su `.import`: `antialiasing=0`, `hinting=0`, `subpixel_positioning=0`). La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus
 traducciones que no tiene ninguna fuente (saldrían como un cuadro) y cuánto mide una línea con la letra de cada idioma.
 
 **La cadena va plana, y esto costó un día de errores (29 oct 2026).** Hasta entonces la cadena era letra del juego → Jersey 25 → (las
@@ -143,10 +147,11 @@ su código dentro**. Ahora las reservas van todas directamente en `FUENTE.fallba
 nueva o un idioma nuevo, mirarlo siempre en la web** (ver «Probar en la web» abajo): en el ordenador no se nota si falla.
 
 **La altura de las líneas.** Las letras de reserva miden más de alto que la del juego (a 16 px, por encima y por debajo de la línea: la
-del juego, 13 y 4; Ark Pixel, 17 y 5; Fusion Pixel, 18 y 4). Se les resta con un `FontVariation` (`spacing_top`/`spacing_bottom`
-negativos, en `Tema.fuente_del_idioma`), y así una línea escrita mide lo mismo que con la del juego (17). Pero `Font.get_height()` de la
-letra del juego, que usan los botones y las etiquetas, pasa a ser 22 en ruso y chino (con una cadena plana, el máximo de las reservas
-sin ajuste): sus líneas de varias líneas ocupan 25 px cada una en vez de 20 y una caja de tamaño fijo hecha para el español se queda corta.
+del juego, 13 y 4; Ark Pixel, 17 y 5; Unifont, 14 y 2). Se les ajusta con un `FontVariation` (`spacing_top`/`spacing_bottom`, en
+`Tema.fuente_del_idioma`), y así una línea escrita mide lo mismo que con la del juego (17). Pero `Font.get_height()` de la letra del
+juego, que usan los botones y las etiquetas, es el máximo de las reservas sin ajuste: **22 en ruso** (Ark Pixel) y 17 en chino (Unifont,
+que no pasa de la del juego) y en los demás. En ruso, las líneas de varias líneas ocupan 25 px cada una en vez de 20 y una caja de tamaño
+fijo hecha para el español se queda corta.
 Solo hay una, las tarjetas de «Elige edificio» (`menu_principal.gd`: `medir_tarjetas` cuenta las líneas de cada texto con una etiqueta
 de verdad y la tarjeta crece lo que haga falta; en español, alemán y francés queda como estaba). Las barras de la ficha de un arma
 (`barra()` de `inventario.gd`) ensanchan su nombre si no cabe en 96 px («Перезарядка»). No se puede igualar `get_height()`: se probó con

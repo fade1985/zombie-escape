@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dsotkxa77b2er"
-path="res://.godot/imported/fusion-pixel-12-zh.woff2-dd310fed26116d160cd95d0e90b55e81.fontdata"
+uid="uid://uwcxl6ne1eb0"
+path="res://.godot/imported/unifont-16-zh.woff2-3bd206708a06659b02436526bebe9fa2.fontdata"
 
 [deps]
 
-source_file="res://assets/fuentes/fusion-pixel-12-zh.woff2"
-dest_files=["res://.godot/imported/fusion-pixel-12-zh.woff2-dd310fed26116d160cd95d0e90b55e81.fontdata"]
+source_file="res://assets/fuentes/unifont-16-zh.woff2"
+dest_files=["res://.godot/imported/unifont-16-zh.woff2-3bd206708a06659b02436526bebe9fa2.fontdata"]
 
 [params]
 
