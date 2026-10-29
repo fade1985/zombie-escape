@@ -100,8 +100,9 @@ const PALETA := {
 }
 const RECOGE := 0.38                     # cuándo acaban de recogerse después del golpe
 # De dónde salen: tres puntos de su espalda en cada dirección, medidos en el fotograma 0 de su latigazo (a cada
-# latigazo le toca el del lado hacia el que va, así no se cruzan). De espaldas salen por delante del cuerpo; si no,
-# por detrás: los primeros trozos (DETRAS) van detrás del dibujo
+# latigazo le toca el del lado hacia el que va, así no se cruzan). Van enteros por delante de su dibujo, también
+# de frente: salen justo de donde salen los tentáculos de su dibujo, y si la base fuera por detrás, esos la
+# cruzarían por encima y el tentáculo parecería partido
 const RAICES := {
 	"s": [Vector2(-36, -188), Vector2(4, -200), Vector2(44, -188)],
 	"se": [Vector2(-36, -188), Vector2(8, -200), Vector2(40, -192)],
@@ -124,14 +125,12 @@ const MUEVE := {
 	"o": [[0, 0], [0, 0], [0, 0], [-9, 2], [-7, 6], [-9, 2], [-7, 1], [-3, 0], [0, 0]],
 	"so": [[0, 0], [0, 0], [0, 0], [-3, 2], [-12, 8], [-11, 8], [-7, 5], [-3, 2], [0, 0]],
 }
-const DE_ESPALDAS := ["n", "ne", "no"]
-const DETRAS := 3
 
 var espera := {"contratos": 1.2, "maletinazo": 0.8, "a_trabajar": 6.0}
 var mutado := false
 var espera_mutado := {"latigazo": 0.6, "embestida": 1.8}
 var tentaculos := []                     # los de los latigazos (Tentaculo), uno por franja
-var delante: Node2D                      # pinta la parte de los tentáculos que va por delante del cuerpo
+var delante: Node2D                      # pinta los tentáculos, por delante del cuerpo
 
 
 func _ready() -> void:
@@ -146,10 +145,10 @@ func _ready() -> void:
 		tentaculo.ancho = ANCHO_LATIGAZO
 		tentaculo.desfase = i * 0.37
 		tentaculos.append(tentaculo)
-	# Los tentáculos se pintan en dos capas: la base, en el propio gerente (que pinta siempre por detrás de su
-	# dibujo), y el resto en "delante", que va después del dibujo y por eso queda encima
+	# Los tentáculos se pintan en "delante", que va después del dibujo y por eso queda encima (el propio gerente
+	# pinta siempre por detrás)
 	delante = Node2D.new()
-	delante.draw.connect(pintar_tentaculos.bind(false))
+	delante.draw.connect(pintar_tentaculos)
 	add_child(delante)
 
 
@@ -528,7 +527,7 @@ func morir() -> void:
 
 
 # Los avisos, en el suelo (por debajo de él): las rayas de los contratos, el trozo del maletinazo y, del mutado,
-# los latigazos y la embestida. Y la base de sus tentáculos, por detrás del dibujo
+# los latigazos y la embestida
 func _draw() -> void:
 	if estado == "muerto":
 		return
@@ -550,25 +549,16 @@ func _draw() -> void:
 				tentaculos[i].avisar(self, Vector2(0, 6), minf(1.0, t / AVISO_LATIGAZO), tiempo, i)
 		"aviso_embestida":
 			franja(VELOCIDAD_EMBESTIDA * TIEMPO_EMBESTIDA, minf(1.0, t / AVISO_EMBESTIDA))
-	pintar_tentaculos(true)
 
 
-# Los tentáculos de los latigazos: por detrás del dibujo, la base (así parece que salen de detrás de los hombros; de
-# espaldas, nada) y por delante, el resto (de espaldas, todos enteros: le salen de la espalda, de cara a nosotros)
-func pintar_tentaculos(detras: bool) -> void:
+# Los tentáculos de los latigazos, enteros por delante del dibujo (ver RAICES)
+func pintar_tentaculos() -> void:
 	if not mutado:
-		return
-	var espaldas := direccion() in DE_ESPALDAS
-	if detras and espaldas:
 		return
 	for i in LATIGAZOS:
 		var puntos := puntos_tentaculo(i)
-		if puntos.is_empty():
-			continue
-		if detras:
-			tentaculos[i].pintar(self, puntos, 0, DETRAS)
-		else:
-			tentaculos[i].pintar(delante, puntos, 0 if espaldas else DETRAS, Tentaculo.PUNTOS)
+		if not puntos.is_empty():
+			tentaculos[i].pintar(delante, puntos, 0, Tentaculo.PUNTOS)
 
 
 # Los puntos del tentáculo "i" en este momento, de la base a la punta (ninguno si no está dando latigazos). Sale del
