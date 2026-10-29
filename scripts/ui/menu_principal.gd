@@ -1,5 +1,6 @@
 # El menú principal (showMenu de src/ui.js): el logo, JUGAR, Tutorial (tutorial.gd), Opciones (opciones.gd), pantalla
-# completa y salir, y el récord. Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
+# completa y salir, y el récord. Con una partida a medias (partida_guardada.gd), encima de JUGAR sale «Continuar
+# partida» con su edificio y su planta, y JUGAR pide pulsarlo otra vez (la partida nueva pisa la guardada). Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
 # de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
 # (escenas/partida.tscn).
 # Debajo de cada tarjeta, el nivel de alerta con el que se juega (alerta.gd): se cambia con las flechas, entre los
@@ -52,7 +53,27 @@ func _ready() -> void:
 	lema.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(lema)
 
+	var foto := PartidaGuardada.guardada()
+	var seguir: Button = null
+	var donde := Label.new()
+	if not foto.is_empty():
+		seguir = boton(columna, Idioma.t("Continuar partida"), PartidaGuardada.seguir.bind(foto), "BotonGrande")
+		var azotea: bool = Edificios.datos(foto.edificio).get("azotea", false) and foto.planta == Planta.PLANTAS
+		donde.theme_type_variation = "Sub"
+		donde.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		donde.text = "%s · %s" % [Idioma.t(Edificios.datos(foto.edificio).nombre),
+			Planta.nombre_de({"num": foto.planta, "azotea": azotea})] + (" · " + Idioma.t("Reto del día") if foto.reto.activo else "")
+		columna.add_child(donde)
 	var jugar := boton(columna, Idioma.t("JUGAR"), elegir_edificio, "BotonGrande")
+	if seguir:
+		# con una partida guardada, la primera pulsación avisa de que se pierde y la segunda abre «Elige edificio»
+		jugar.pressed.disconnect(elegir_edificio)
+		jugar.pressed.connect(func():
+			if jugar.text == Idioma.t("JUGAR"):
+				jugar.text = Idioma.t("¿Seguro? Pulsa otra vez")
+				donde.text = Idioma.t("Si empiezas otra, la guardada se pierde")
+			else:
+				elegir_edificio())
 	# Tutorial y Opciones, uno al lado del otro (uno debajo del otro, el menú ya no cabe en la pantalla)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -78,6 +99,7 @@ func _ready() -> void:
 
 	var ayuda := PanelContainer.new()
 	ayuda.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	ayuda.visible = seguir == null   # con «Continuar partida» no cabe (y quien la lleva a medias ya sabe jugar)
 	columna.add_child(ayuda)
 	var texto := Label.new()
 	texto.theme_type_variation = "Sub"
@@ -92,7 +114,7 @@ func _ready() -> void:
 		record.alignment = BoxContainer.ALIGNMENT_CENTER
 		columna.add_child(record)
 
-	jugar.grab_focus.call_deferred()
+	(seguir if seguir else jugar).grab_focus.call_deferred()
 	if Captura.activa():
 		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
@@ -108,6 +130,9 @@ func _ready() -> void:
 		if "--idioma" in OS.get_cmdline_user_args():   # solo las pantallas del menú en el idioma de la prueba (pruebas/prueba_idioma.gd)
 			await PruebaIdioma.probar(self)
 			get_tree().quit()
+			return
+		if seguir and "--continuar" in OS.get_cmdline_user_args():   # la vuelta de la prueba de la partida a medias
+			PartidaGuardada.seguir(foto)
 			return
 		elegir_edificio()
 		await get_tree().create_timer(0.3).timeout

@@ -2292,6 +2292,10 @@ msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
 msgstr "Фармацевт собрала тебе аптечку: она в рюкзаке"
 
 #: scripts/partida.gd
+msgid "Partida recuperada"
+msgstr "Забег восстановлен"
+
+#: scripts/partida.gd
 msgid "¡%s!  %s"
 msgstr "%s!  %s"
 
@@ -4292,7 +4296,7 @@ msgstr "Сундук больше не вмещает: у тебя остает�
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "Сундук полон. Остается у тебя: %s."
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
 msgid "¿Seguro? Pulsa otra vez"
 msgstr "Точно? Нажми еще раз"
 
@@ -4532,8 +4536,20 @@ msgid "Limpia el edificio de zombis, planta a planta"
 msgstr "Зачисти здание от зомби, этаж за этажом"
 
 #: scripts/ui/menu_principal.gd
+msgid "Continuar partida"
+msgstr "Продолжить забег"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "Испытание дня"
+
+#: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "ИГРАТЬ"
+
+#: scripts/ui/menu_principal.gd
+msgid "Si empiezas otra, la guardada se pierde"
+msgstr "Начнёшь новый — сохранённый пропадёт"
 
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
 msgid "Tutorial"
@@ -4578,10 +4594,6 @@ msgstr "Пройди его, чтобы открыть Тревогу 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (из %d)"
-
-#: scripts/ui/menu_principal.gd
-msgid "Reto del día"
-msgstr "Испытание дня"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

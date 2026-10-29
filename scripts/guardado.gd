@@ -3,7 +3,7 @@
 #
 # Se guarda: dólares, puntos y talentos, armas encontradas, el baúl (objetos, armas y arrojables), los supervivientes rescatados, récords, el
 # progreso de cada edificio y las colecciones (lo encontrado y visto alguna vez).
-# Las partidas a medias NO se guardan: si cierras, empiezas el edificio de nuevo.
+# La partida a medias, solo como estaba al empezar su planta: "en_curso" (partida_guardada.gd).
 #
 # Se usa así:  var s := Guardado.cargar()  ·  s.dolares += 5  ·  Guardado.escribir(s)
 # o, en un paso:  Guardado.cambiar(func(s): s.dolares += 5)
@@ -47,6 +47,7 @@ const NUEVO := {
 	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)
 	"tutoriales": [],     # tutoriales ya vistos (ids de Tutoriales.LISTA): cada uno sale una sola vez
 	"edificios": {},      # progreso de cada edificio: {"apartamentos": {...}} (ver EDIFICIO)
+	"en_curso": "",       # la partida a medias, al empezar la planta en la que va (partida_guardada.gd; "" = ninguna)
 	"retos": {},          # el reto del día (reto.gd): la marca de hoy en cada edificio: {"apartamentos": {...}} (ver RETO)
 	# modo: cómo se ataca (johnny.gd, MODOS) · teclas: los controles cambiados en Opciones (controles.gd)
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)

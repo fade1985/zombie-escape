@@ -2290,6 +2290,10 @@ msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
 msgstr "A Farmacêutica preparou um kit médico para você: está na mochila"
 
 #: scripts/partida.gd
+msgid "Partida recuperada"
+msgstr "Partida recuperada"
+
+#: scripts/partida.gd
 msgid "¡%s!  %s"
 msgstr "%s!  %s"
 
@@ -4284,7 +4288,7 @@ msgstr "O baú não aceita mais: ficam com você %d de %s."
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "O baú está cheio: ficam com você %s."
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
 msgid "¿Seguro? Pulsa otra vez"
 msgstr "Certeza? Aperte de novo"
 
@@ -4515,8 +4519,20 @@ msgid "Limpia el edificio de zombis, planta a planta"
 msgstr "Limpe o prédio de zumbis, andar por andar"
 
 #: scripts/ui/menu_principal.gd
+msgid "Continuar partida"
+msgstr "Continuar partida"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "Desafio do dia"
+
+#: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "JOGAR"
+
+#: scripts/ui/menu_principal.gd
+msgid "Si empiezas otra, la guardada se pierde"
+msgstr "Se começar outra, a salva se perde"
 
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
 msgid "Tutorial"
@@ -4561,10 +4577,6 @@ msgstr "Complete para liberar o Alerta 1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s (de %d)"
-
-#: scripts/ui/menu_principal.gd
-msgid "Reto del día"
-msgstr "Desafio do dia"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

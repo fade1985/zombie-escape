@@ -135,6 +135,9 @@ var al_empezar := {}       # lo que ya se tenía al empezar (logros, skins, pág
                            # nuevo (conseguido())
 var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial()); el primero, el que sale o va a salir
 var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
+var guarda_partida := true        # si se apunta la partida a medias al empezar cada planta (partida_guardada.gd; la de
+                                  # prueba, no, salvo en la suya: --continuar)
+var semilla_propia := false       # si la semilla de las plantas (Planta.semilla) la ha puesto esta partida: se quita al salir
 
 @onready var johnny := $Johnny
 @onready var lugar: Label = $Pantalla/Lugar
@@ -210,8 +213,19 @@ func _ready() -> void:
 	tactil.johnny = johnny
 	add_child(tactil)
 
+	guarda_partida = not captura
 	if captura:
 		preparar_prueba()   # el guardado de prueba, la alerta y el evento que se piden
+	# «Continuar partida» del menú: la partida a medias, al principio de la planta en la que iba (partida_guardada.gd)
+	var foto := PartidaGuardada.continuar
+	PartidaGuardada.continuar = {}
+	if not foto.is_empty():
+		continuar_partida(foto)
+		return
+	if guarda_partida and Planta.semilla == 0:
+		# una partida normal también lleva su semilla: así su planta sale igual si se cierra el juego y se continúa
+		Planta.semilla = randi_range(1, 2000000000)
+		semilla_propia = true
 	if Reto.activo:
 		# el reto del día (reto.gd): también el dado de siempre con la semilla de hoy, para que el orden de los
 		# minijefes, la planta del superviviente y los eventos sorpresa salgan iguales para todo el mundo
@@ -243,6 +257,8 @@ func _ready() -> void:
 	orden_jefes.shuffle()
 	if captura:
 		ordenar_jefes_prueba()   # el jefe que se quiere ver, en la 1ª planta
+	if guarda_partida:
+		PartidaGuardada.apuntar(self, 1)
 	nueva_planta(1)
 	# en la sala de mantenimiento, en medio (en medio del despacho)
 	montar(planta.mantenimiento, 0, false)
@@ -257,6 +273,36 @@ func _ready() -> void:
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
+
+
+# Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar
+# la partida ni el intento del reto, y Johnny entra por las escaleras (en la planta baja, en la sala de mantenimiento)
+func continuar_partida(foto: Dictionary) -> void:
+	PartidaGuardada.poner(self, foto)
+	ahorrados = Guardado.cargar().dolares
+	var num: int = foto.planta
+	if num > 1:
+		# la sala de mantenimiento y las viviendas son las de la planta baja (nueva_planta(1) las apunta): se sacan de ella
+		var baja := Planta.generar(1, edificio, jefe_de(1))
+		sala_mantenimiento = baja.sitios[baja.mantenimiento]
+		if baja.viviendas >= 0:
+			sala_viviendas = baja.sitios[baja.viviendas]
+	nueva_planta(num)
+	if num == 1:
+		montar(planta.mantenimiento, 0, false)
+		johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
+	else:
+		montar(0, puerta_de_llegada(), false)
+	johnny.get_node("Camara").reset_smoothing()
+	if captura:
+		empezar_prueba()
+	else:
+		decir("%s · %s" % [Idioma.t("Partida recuperada"), Planta.nombre_de(planta)], 3.0)
+
+
+func _exit_tree() -> void:
+	if semilla_propia:
+		Planta.semilla = 0   # (la siguiente partida, o «Otra vez», sortea la suya)
 
 
 # Lo que hace la partida de prueba al empezar (pruebas/partida_prueba.gd). En la partida de verdad, nada
@@ -619,6 +665,8 @@ func subir() -> void:
 		return
 	var premio := eventos.superado()   # el apagón o el incendio de la planta que se deja: sus dólares (eventos.gd)
 	var superado := eventos.evento if premio != "" else ""
+	if guarda_partida:
+		PartidaGuardada.apuntar(self, planta.num + 1)   # lo que se lleva al llegar a ella, por si se cierra el juego
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_llegada())
 	var texto: String = Idioma.t("Azotea · ¡El último combate del edificio!") if planta.get("azotea", false) else Planta.nombre_de(planta)
@@ -895,6 +943,8 @@ func decir(texto: String, segundos := 2.2) -> void:
 
 
 func _al_morir_johnny() -> void:
+	if guarda_partida:
+		PartidaGuardada.borrar()   # ya, por si se cierra el juego antes del cartel de derrota
 	$Pantalla/Aviso.text = Idioma.t("Te han pillado")   # (el de la escena está en español)
 	$Pantalla/Aviso.show()
 	# Un momento para verlo caer, y el cartel de derrota
@@ -1255,6 +1305,8 @@ func terminar(gano: bool, abandona := false) -> void:
 	if terminada:
 		return
 	terminada = true
+	if guarda_partida:
+		PartidaGuardada.borrar()
 	if gano:
 		logros.partida_ganada()
 	if abandona:

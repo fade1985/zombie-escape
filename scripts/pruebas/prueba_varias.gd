@@ -2200,3 +2200,45 @@ func pulsar_r() -> void:
 		evento.physical_keycode = KEY_R
 		evento.pressed = pulsada
 		Input.parse_input_event(evento)
+
+
+# Con "--captura --continuar": la partida a medias (partida_guardada.gd). Primero, con Johnny cambiado (menos vida, un
+# bate Raro, vendas, una mutación, dólares y molotov), sube a la 1ª planta: se guarda. Luego, como si se cerrara el
+# juego, al menú (captura-menu.png, con «Continuar partida») y de él a la partida guardada, que tiene que salir en la
+# misma planta, igual, y con lo mismo encima (captura-continuar.png). Se borra la guardada y se cierra
+static var continuar_antes := {}   # lo de la primera vuelta, para compararlo en la segunda
+
+func probar_continuar() -> void:
+	var firma := func() -> String:
+		return str(planta.sitios.map(func(x): return [x.get("nombre", ""), x.get("ancho", 0), x.get("alto", 0)]))
+	var lleva := func() -> Dictionary:
+		return {"planta": planta.num, "firma": firma.call(), "vida": johnny.vida, "huecos": johnny.huecos.duplicate(),
+			"calidades": johnny.calidades.duplicate(), "mochila": mochila.duplicate(), "dolares": dolares,
+			"mutaciones": mutaciones.tengo.duplicate(), "molotov": lanzables.cantidades.molotov,
+			"jefes": orden_jefes.duplicate(), "partidas": Guardado.cargar().partidas}
+	await get_tree().create_timer(0.5).timeout
+	if continuar_antes.is_empty():
+		johnny.vida = 40
+		llevar_arma("bate", 2, true, false)
+		mochila.append("vendas")
+		elegir_mutacion(Mutaciones.LISTA[0].id)
+		dolares = 12
+		lanzables.cantidades.molotov = 5
+		await subir()
+		await get_tree().create_timer(0.5).timeout
+		continuar_antes = lleva.call()
+		var foto := PartidaGuardada.guardada()
+		print("Continuar · guardada al subir: %s, en la planta %d (esperado: true y 2)" % [not foto.is_empty(), foto.get("planta", 0)])
+		# como si se cerrara el juego: de vuelta al menú, que la abre él solo (menu_principal.gd)
+		get_tree().change_scene_to_file("res://escenas/menu_principal.tscn")
+		return
+	var ahora: Dictionary = lleva.call()
+	for clave in continuar_antes:
+		if clave != "vida":
+			print("Continuar · %s igual: %s (esperado: true)" % [clave, ahora[clave] == continuar_antes[clave]])
+	# (la vida es la de la foto, tomada antes de subir: subir no cura)
+	print("Continuar · vida %d (esperado: %d)" % [ahora.vida, continuar_antes.vida])
+	Captura.foto("captura-continuar.png")
+	PartidaGuardada.borrar()
+	print("Continuar · borrada al acabar: %s (esperado: true)" % PartidaGuardada.guardada().is_empty())
+	get_tree().quit()

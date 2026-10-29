@@ -2288,6 +2288,10 @@ msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
 msgstr "药剂师给你配了一个急救包：在背包里"
 
 #: scripts/partida.gd
+msgid "Partida recuperada"
+msgstr "本局已恢复"
+
+#: scripts/partida.gd
 msgid "¡%s!  %s"
 msgstr "%s！  %s"
 
@@ -4276,7 +4280,7 @@ msgstr "储物箱放不下了：你身上留下 %d 个%s。"
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "储物箱满了：%s留在你身上。"
 
-#: scripts/ui/inventario.gd
+#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
 msgid "¿Seguro? Pulsa otra vez"
 msgstr "确定吗？再按一次"
 
@@ -4498,8 +4502,20 @@ msgid "Limpia el edificio de zombis, planta a planta"
 msgstr "一层一层，把大楼里的僵尸清理干净"
 
 #: scripts/ui/menu_principal.gd
+msgid "Continuar partida"
+msgstr "继续本局"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "每日挑战"
+
+#: scripts/ui/menu_principal.gd
 msgid "JUGAR"
 msgstr "开始"
+
+#: scripts/ui/menu_principal.gd
+msgid "Si empiezas otra, la guardada se pierde"
+msgstr "开始新的一局会丢失已保存的进度"
 
 #: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
 msgid "Tutorial"
@@ -4544,10 +4560,6 @@ msgstr "通关后解锁警戒1"
 #: scripts/ui/menu_principal.gd
 msgid "%s (de %d)"
 msgstr "%s（共 %d）"
-
-#: scripts/ui/menu_principal.gd
-msgid "Reto del día"
-msgstr "每日挑战"
 
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"

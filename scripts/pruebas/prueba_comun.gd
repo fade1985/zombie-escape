@@ -18,6 +18,8 @@ func preparar_prueba() -> void:
 	Alerta.nivel = int(Captura.dato("--alerta", "0"))
 	# con "--evento apagon" (incendio, horda), la prueba de ese evento sorpresa (eventos.gd)
 	eventos.forzado = Captura.dato("--evento")
+	# con "--continuar", la partida a medias sí se guarda (partida_guardada.gd; prueba_varias.gd, probar_continuar)
+	guarda_partida = "--continuar" in OS.get_cmdline_user_args()
 
 
 # En la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios, u otro con

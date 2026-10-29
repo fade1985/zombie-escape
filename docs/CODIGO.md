@@ -189,6 +189,9 @@ en una línea.
   **sus funciones los devuelven ya traducidos** (`Armas.nombre`, `Objetos.nombre`, `Lanzables.uno/varios`,
   `Talentos.nombre_de/desc_de/nombre_rama`, `Logros.nombre_de/desc_de/nombre_tema`, `Skins.nombre/como/efecto`...): quien
   los enseña usa esas funciones, no la tabla directa (`docs/IDIOMAS.md`).
+- `partida_guardada.gd` (la partida a medias: al empezar cada planta, una foto de lo que lleva la partida en `en_curso`
+  del guardado; «Continuar partida» del menú vuelve al principio de esa planta, que sale igual porque la semilla de
+  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida)
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla), `logros.gd` (40 desde el M17, 28 oct; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`

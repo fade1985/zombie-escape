@@ -155,3 +155,8 @@ JavaScript (los clics llegan como ratón).
 
 `%APPDATA%\Godot\app_userdata\Zombie Escape\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
 usa `guardado-prueba.json`. En la web va en el navegador (IndexedDB).
+
+La partida a medias se guarda al llegar a cada planta: si se cierra el juego, el menú enseña **Continuar partida**
+(con el edificio y la planta) y se vuelve al principio de esa planta, igual y con lo que se llevaba al llegar. Lo
+hecho dentro de la planta se pierde. JUGAR, con una partida guardada, pide pulsarlo dos veces: la nueva la pisa.
+Vale también en el reto del día, con sus mismas reglas.

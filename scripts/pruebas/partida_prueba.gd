@@ -125,6 +125,8 @@
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en
 #                       la partida, «Otra vez» y la R; y por el fuego, por un jefe y ganando    [prueba_varias.gd]
+#   --continuar         la partida a medias: se guarda al subir a la 1ª planta, el menú enseña «Continuar partida» y,
+#                       al continuarla, la planta y lo que se llevaba son iguales             [prueba_varias.gd]
 #   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
@@ -378,6 +380,9 @@ func empezar_prueba() -> void:
 	elif "--escudo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_escudo()
+	elif "--continuar" in args:
+		set_process(false)   # sin la prueba larga
+		probar_continuar()
 	elif "--mutaciones" in args:
 		set_process(false)   # sin la prueba larga
 		probar_mutaciones_solo()
