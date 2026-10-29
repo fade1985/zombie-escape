@@ -5,6 +5,12 @@ class_name PruebaLetras
 
 
 static func probar() -> void:
+	# Cuánto mide una línea con letras de cada fuente de reserva (a 16): en ruso y en chino es más alta que en latín (23 y 19 en vez de 16),
+	# y una caja de tamaño fijo hecha para el español se queda corta; las que hay (las tarjetas de «Elige edificio») se miden con el
+	# texto de verdad
+	var latin := Tema.FUENTE.get_string_size("Vecinos", HORIZONTAL_ALIGNMENT_LEFT, -1, 16).y
+	for muestra in ["Соседи, зомби", "你好，僵尸", "Dégâts à è ü"]:
+		print("Altura de línea [%s]: %.0f (en latín, %.0f)" % [muestra, Tema.FUENTE.get_string_size(muestra, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).y, latin])
 	for i in Idioma.IDIOMAS:
 		var codigo: String = i[0]
 		if codigo == Idioma.ORIGEN:
@@ -28,7 +34,8 @@ static func probar() -> void:
 
 
 # La prueba de las medidas (-- --captura --medidas): los textos cortos que en un idioma salen bastante más anchos que en español
-# (con la letra del juego a tamaño 16), que son los que se pasan de su caja. Dice, de cada idioma, los 25 que más se pasan:
+# (con la letra del juego a tamaño 16), que son los que se pasan de su caja. Dice, de cada idioma, los 25 que más se pasan
+# (con --todo, todos):
 # «+ancho en píxeles · ancho en español → ancho en el idioma: español → traducción». Mira solo los de una línea (hasta 340 px en español)
 static func medidas() -> void:
 	var tabla_es := TranslationServer.get_translation_object("en")   # (la lista de textos en español: los msgid de cualquiera)
@@ -57,6 +64,6 @@ static func medidas() -> void:
 				pasados.append([b - a, a, b, es, tr])
 		pasados.sort_custom(func(x, y): return x[0] > y[0])
 		print("Medidas [%s]: %d textos cortos más anchos que en español (+18 px y +15 %%)" % [codigo, pasados.size()])
-		for k in mini(25, pasados.size()):
+		for k in mini(1000 if "--todo" in OS.get_cmdline_user_args() else 25, pasados.size()):   # con --todo, todos
 			var p: Array = pasados[k]
 			print("   +%d · %d → %d: %s → %s" % [p[0], p[1], p[2], p[3], p[4]])

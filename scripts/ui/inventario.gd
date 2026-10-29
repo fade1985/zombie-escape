@@ -664,8 +664,8 @@ func barra(caja: VBoxContainer, nombre: String, valor: int) -> void:
 	caja.add_child(hilera)
 	var t := Label.new()
 	t.text = nombre
-	t.custom_minimum_size.x = 96
 	hilera.add_child(t)
+	t.custom_minimum_size.x = maxf(96.0, t.get_minimum_size().x + 6.0)   # (el nombre más largo, «Перезарядка», no se pega a los cuadros)
 	var cuadros := Control.new()
 	cuadros.custom_minimum_size = Vector2(109, 9)
 	cuadros.size_flags_vertical = Control.SIZE_SHRINK_CENTER

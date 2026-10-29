@@ -108,6 +108,13 @@ msgstr "Quit"
   script y la carpeta `%APPDATA%\ZombieEscape_TestIdioma`**. No sirven `-s` (no carga los autoloads a tiempo) ni `--language` (cambia
   el idioma de Godot, no el que lee `OS.get_locale_language()`).
 
+- **Pasada de tamaños** (29 oct 2026): se miraron en ruso, alemán, francés y portugués las pantallas más llenas (inventario y fichas de
+  armas, ordenador entero, tienda, baúl, banco, skins, tutorial, mutaciones, HUD, eventos, tiendas y «Elige edificio») con
+  `-- --captura <prueba> --lang X`. Solo fallaron dos cosas, las dos en ruso: «Перезарядка» pegada a sus cuadritos en la ficha de un arma y
+  las tarjetas de «Elige edificio» (el último texto se salía de la tarjeta y, al crecer, el botón «Назад» no cabía en pantalla; en chino,
+  parecido). `-- --captura --medidas --todo` da la lista de textos cortos que más crecen, por si hay que acortar alguno. Cuando se
+  añada una caja de tamaño fijo, mirarla en ruso y chino.
+
 ## Las letras (fuentes)
 
 La letra de la interfaz (`zombie-scape-ui.ttf`) y la de los jefes (Jersey 25) solo traen el alfabeto latino. Las letras que no tienen
@@ -119,6 +126,15 @@ nombre de cada idioma («Русский», «简体中文») se vea en el select
 (`ark-pixel-OFL.txt`, `fusion-pixel-OFL.txt` y `fusion-pixel-licencias/`) van con el juego y hay que citarlas en los créditos.
 La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus traducciones que no tiene ninguna fuente
 (saldrían como un cuadro; en la web no hay letras del sistema).
+
+**La altura de las líneas:** una línea con letras de las fuentes de reserva es más alta que con la del juego (a 16 px: 16 en latín, 23 en
+ruso y 19 en chino; `--letras` lo dice), así que un texto en ruso o chino de varias líneas ocupa más que en español y una caja de
+tamaño fijo hecha para el español se queda corta. Hoy solo la hay en las tarjetas de «Elige edificio» (`menu_principal.gd`: se miden
+los textos con una etiqueta de verdad y la tarjeta crece lo que cada idioma ocupa **de más que en español**, así el español no
+cambia). **No se arregla igualando las alturas de las fuentes**: se probó (`FontVariation` con `spacing_top`/`spacing_bottom` negativos y
+la cadena de reservas plana) y las líneas salen a 17, pero `Font.get_height()` de la letra del juego pasa de 17 a 22 y todos los botones
+crecen 5 px, también en español. Las barras de la ficha de un arma (`barra()` de `inventario.gd`) ensanchan su nombre si no cabe en 96 px
+(«Перезарядка»).
 
 **Plurales:** cada idioma lleva en `tools/traducciones.py` (`IDIOMAS`) su regla y cuántas formas tiene: dos (los demás), tres (ruso: 1 /
 2-4 / 5+) o ninguna (chino). Un texto con plural se entrega como lista de tantas formas (o como una cadena en chino).
