@@ -48,8 +48,8 @@ msgid "Jefes con +25 % de vida, y se enfadan antes"
 msgstr "Bosses with +25 % health, and they get angry sooner"
 
 #: scripts/alerta.gd
-msgid "Botiquines, vendas y Lobezno curan la mitad"
-msgstr "Medkits, bandages and Wolverine heal half as much"
+msgid "Botiquines, vendas y Ajolote curan la mitad"
+msgstr "Medkits, bandages and Axolotl heal half as much"
 
 #: scripts/alerta.gd
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
@@ -959,7 +959,7 @@ msgstr "Sleep Study"
 msgid ""
 "Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
 "\n"
-"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y $300 al mes.\n"
 "\n"
 "Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
 "\n"
@@ -967,7 +967,7 @@ msgid ""
 msgstr ""
 "Building: No. 14. Velaria Corp. has bought the whole thing: nobody gets to snoop.\n"
 "\n"
-"Subjects: 120, trucked in at night through the back garage, where nobody sees them. Homeless, in debt or sick. We give them an apartment and €300 a month.\n"
+"Subjects: 120, trucked in at night through the back garage, where nobody sees them. Homeless, in debt or sick. We give them an apartment and $300 a month.\n"
 "\n"
 "Dose: one VD-7 pill every night, at 23:00.\n"
 "\n"
@@ -1161,7 +1161,7 @@ msgstr "Pharmacy Order"
 msgid ""
 "Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
 "\n"
-"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: $3,99.\n"
 "\n"
 "Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
 "\n"
@@ -1169,7 +1169,7 @@ msgid ""
 msgstr ""
 "Product: \"Velaria Night,\" for insomnia. 10,000 boxes of 20 pills.\n"
 "\n"
-"Each pill: a quarter dose of VD-7. Over the counter, no prescription. Price: €3.99.\n"
+"Each pill: a quarter dose of VD-7. Over the counter, no prescription. Price: $3.99.\n"
 "\n"
 "Display by the registers, at eye level. Sign: \"Sleep like a baby.\"\n"
 "\n"
@@ -1388,8 +1388,8 @@ msgid "Velaria vende su somnífero"
 msgstr "Velaria sells its sleeping pill"
 
 #: scripts/historia.gd
-msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
-msgstr "\"Velaria Night,\" for insomnia, is now on sale. No prescription, €3.99. Boxes are selling out in hours. Our source says it's the same thing they tested at number 14, watered down. Velaria denies it: \"It's a new formula, natural and safe. We take it ourselves every night.\""
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a $3,99. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "\"Velaria Night,\" for insomnia, is now on sale. No prescription, $3.99. Boxes are selling out in hours. Our source says it's the same thing they tested at number 14, watered down. Velaria denies it: \"It's a new formula, natural and safe. We take it ourselves every night.\""
 
 #: scripts/historia.gd
 msgid "Empleados que no vuelven a casa"
@@ -1943,7 +1943,7 @@ msgstr "STORAGE"
 
 #: scripts/mapa/planta.gd
 msgid "Planta baja"
-msgstr "Ground floor"
+msgstr "1st floor"
 
 #: scripts/mapa/planta.gd
 msgid "%dª planta"
@@ -1955,7 +1955,7 @@ msgstr "Rooftop"
 
 #: scripts/mapa/planta.gd
 msgid "Bajo %s"
-msgstr "G%s"
+msgstr "1%s"
 
 #: scripts/mapa/planta.gd
 msgid "%dº%s"
@@ -1975,15 +1975,19 @@ msgstr "Workshop"
 
 #: scripts/mapa/planta.gd
 msgid "1ª planta"
-msgstr "1st floor"
-
-#: scripts/mapa/planta.gd
-msgid "2ª planta"
 msgstr "2nd floor"
 
 #: scripts/mapa/planta.gd
-msgid "3ª planta"
+msgid "2ª planta"
 msgstr "3rd floor"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "4th floor"
+
+#: scripts/mapa/planta.gd
+msgid "4ª planta"
+msgstr "5th floor"
 
 #: scripts/mapa/planta.gd
 msgid "Gimnasio"
@@ -3098,8 +3102,8 @@ msgid "+10 % de vida máxima por punto"
 msgstr "+10% max health per point"
 
 #: scripts/talentos.gd
-msgid "Lobezno"
-msgstr "Wolverine"
+msgid "Ajolote"
+msgstr "Axolotl"
 
 #: scripts/talentos.gd
 msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
@@ -4339,31 +4343,31 @@ msgstr[0] "%d throwable part"
 msgstr[1] "%d throwable parts"
 
 #: scripts/ui/inventario.gd
-msgid "%d balas"
+msgid "%d bala"
 msgid_plural "%d balas"
 msgstr[0] "%d bullet"
 msgstr[1] "%d bullets"
 
 #: scripts/ui/inventario.gd
-msgid "%d cartuchos"
+msgid "%d cartucho"
 msgid_plural "%d cartuchos"
 msgstr[0] "%d shell"
 msgstr[1] "%d shells"
 
 #: scripts/ui/inventario.gd
-msgid "%d gasolinas"
+msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d gas can"
 msgstr[1] "%d gas cans"
 
 #: scripts/ui/inventario.gd
-msgid "%d bidones de ácido"
+msgid "%d bidón de ácido"
 msgid_plural "%d bidones de ácido"
 msgstr[0] "%d acid drum"
 msgstr[1] "%d acid drums"
 
 #: scripts/ui/inventario.gd
-msgid "%d baterías"
+msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d battery"
 msgstr[1] "%d batteries"
@@ -5205,7 +5209,7 @@ msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
 msgstr "Not enough: each point costs $%d of your savings."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid "¡Hecho! Ahora tienes %d punto para gastar."
 msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
 msgstr[0] "Done! You now have %d point to spend."
 msgstr[1] "Done! You now have %d points to spend."

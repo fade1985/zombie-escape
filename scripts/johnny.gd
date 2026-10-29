@@ -24,7 +24,7 @@
 #
 # Esquiva (Espacio, Mayús o el botón A del mando): un acelerón corto en el que no le hacen daño, y se recarga
 # en poco menos de un segundo (como el dash del JS). Los talentos (talentos.gd) le dan, además de números:
-# Lobezno (recupera vida poco a poco, hasta la mitad), Durito (cada golpe quita menos), Reflejos (de vez en cuando
+# Ajolote (recupera vida poco a poco, hasta la mitad), Durito (cada golpe quita menos), Reflejos (de vez en cuando
 # esquiva solo un golpe), Acero (un escudo al empezar cada planta), Mirilla (crítico seguro cada 3 disparos), Ninja
 # (golpe en área al acabar la esquiva, como mucho cada 5 s), Desfibrilador (resucita una vez por partida), Segundo
 # aliento (se cura una vez por planta al bajar de un tercio: quitar_vida()), Adrenalina (más daño y velocidad por debajo
@@ -54,8 +54,8 @@ const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (
 const LENTO_TERCIO := 0.15
 const ESQUIVA := 0.16      # lo que dura el acelerón de la esquiva
 const ESQUIVA_RAPIDEZ := 3.3   # x su velocidad durante la esquiva
-const REGENERA_CADA := 5.0 # Lobezno: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
-const REGENERA_TOPE := 0.5 # Lobezno: solo cura hasta esta parte de la vida máxima (M15, 28 oct: antes, hasta llenarla)
+const REGENERA_CADA := 5.0 # Ajolote: segundos entre cura y cura (hasta el 27 oct, 3: con 5 puntos, 100 de vida por minuto)
+const REGENERA_TOPE := 0.5 # Ajolote: solo cura hasta esta parte de la vida máxima (M15, 28 oct: antes, hasta llenarla)
 const NINJA_ESPERA := 5.0  # Ninja: segundos como poco entre golpe y golpe (las esquivas de en medio no pegan; hasta el 28 oct, 3)
 const NINJA_JEFE := 0.02
 const NINJA_IMPORTANTE := 0.25   # al guardia y al zombi de la llave (Zombi.importante), parte de su vida (antes, de un golpe)   # Ninja: la parte de su vida máxima que le quita a un jefe
@@ -104,7 +104,7 @@ var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
 var esquiva_dir := Vector2.DOWN
 var estela_t := 0.0        # para soltar las copias transparentes de la estela
 var sola_t := 0.0          # Reflejos: lo que falta para la siguiente esquiva automática
-var regenera_t := 0.0      # Lobezno
+var regenera_t := 0.0      # Ajolote
 var ninja_t := 0.0         # Ninja: lo que falta para que el golpe al acabar la esquiva vuelva a estar listo
 var pararrayos_t := 0.0    # Pararrayos: lo que falta para que vuelva a saltar el rayo
 var disparos := 0          # Mirilla: los disparos que lleva
@@ -378,7 +378,7 @@ func _physics_process(delta: float) -> void:
 		if recargando <= 0.0:
 			terminar_recarga()
 
-	# Lobezno: recupera vida poco a poco, hasta la mitad de la vida (REGENERA_TOPE: lo demás, con botiquines y vendas). Con
+	# Ajolote: recupera vida poco a poco, hasta la mitad de la vida (REGENERA_TOPE: lo demás, con botiquines y vendas). Con
 	# la Alerta 4, como las curas, la mitad: tarda el doble
 	var tope_lobezno := mini(vida_tope(), roundi(stats.vida_max * REGENERA_TOPE))
 	if stats.regenera > 0 and vida < tope_lobezno:

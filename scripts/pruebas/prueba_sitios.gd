@@ -6,7 +6,9 @@ extends "res://scripts/pruebas/prueba_fotos.gd"
 
 # Con "--captura --pasillo": el pasillo de las cuatro plantas con ascensor (la baja y la 1ª a la 3ª), con su cartel
 # pintado junto al ascensor (el número de la planta, de suelo a moldura) y, de momento, sin muebles. De cada una dice
-# cuántos muebles tiene (esperado: 0) y saca captura-pasillo-<planta>.png, con Johnny delante del ascensor. Luego se cierra
+# cuántos muebles tiene (esperado: 0) y cómo se llaman la planta y dos de sus puertas en el idioma de la prueba (en inglés,
+# ruso y chino, un número más que en español: Planta.CALLE_ES_LA_PRIMERA), y saca captura-pasillo-<planta>.png, con Johnny
+# delante del ascensor. Luego se cierra
 func probar_pasillo() -> void:
 	for num in [1, 2, 3, 4]:
 		nueva_planta(num)
@@ -16,6 +18,10 @@ func probar_pasillo() -> void:
 		await get_tree().create_timer(0.8).timeout
 		print("Pasillo de la planta %d: muebles %d (esperado: 0, de momento va vacío)" % [num - 1,
 			get_tree().get_nodes_in_group("muebles").size()])
+		print("  [%s] «%s» · puertas «%s» y «%s» (en español: «%s», «%s» y «%s»)" % [Idioma.actual, Planta.nombre_de(planta),
+			Planta.nombre_de_sitio({"nombre": Planta.nombre_puerta(num, "A")}),
+			Planta.nombre_de_sitio({"nombre": Planta.nombre_puerta(num, "D")}), planta.nombre,
+			Planta.nombre_puerta(num, "A"), Planta.nombre_puerta(num, "D")])
 		Captura.foto("captura-pasillo-%d.png" % (num - 1))
 	get_tree().quit()
 

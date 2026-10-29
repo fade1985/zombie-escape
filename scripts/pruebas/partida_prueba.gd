@@ -86,7 +86,8 @@
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles           [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
-#   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel y sin muebles    [prueba_sitios.gd]
+#   --pasillo           el pasillo de las 4 plantas con ascensor: su cartel, sin muebles, y el nombre de la planta y de sus
+#                       puertas en el idioma de la prueba (con --lang en, un número más que en español)   [prueba_sitios.gd]
 #   --llegada           por dónde se llega a cada planta: el portal a la izquierda, las demás (y la azotea) por la derecha [prueba_sitios.gd]
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
@@ -120,7 +121,7 @@
 #   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
-#   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Lobezno, los
+#   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Ajolote, los
 #                       premios (jefes, reto, apagón e incendio), el tope de curas y los armaritos, y los
 #                       números de jefes, mutaciones y aliados                             [prueba_varias.gd]
 #   --logros            las ayudas de Opciones apagan los logros: el aviso, el ordenador, cobrar y Exterminador; y los
@@ -128,7 +129,7 @@
 #                       el ordenador por apartados                                          [prueba_varias.gd]
 #   --quimico           la rama Químico de los talentos: cada talento con sus números, las fotos del nivel 3 y el
 #                       árbol con las tres ramas en el ordenador                            [prueba_varias.gd]
-#   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Lobezno hasta la mitad, el alcance de
+#   --equilibrio-talentos  Durito hasta 3 (y los puntos de más, devueltos), Ajolote hasta la mitad, el alcance de
 #                       Puntería, Mirilla (1 de cada 3, en amarillo) y las tarjetas «Ahora / Con otro» [prueba_varias.gd]
 #   --talentos-altos    los niveles 4 y 5 de las tres ramas: cada talento con sus números, fotos del racimo, el
 #                       Segundo aliento, la Adrenalina, el rayo de Alto voltaje y la Mezcla explosiva, y las coronas

@@ -48,8 +48,8 @@ msgid "Jefes con +25 % de vida, y se enfadan antes"
 msgstr "首领生命 +25%，而且更快暴怒"
 
 #: scripts/alerta.gd
-msgid "Botiquines, vendas y Lobezno curan la mitad"
-msgstr "急救包、绷带和金刚狼的治疗量减半"
+msgid "Botiquines, vendas y Ajolote curan la mitad"
+msgstr "急救包、绷带和美西螈的治疗量减半"
 
 #: scripts/alerta.gd
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
@@ -958,7 +958,7 @@ msgstr "睡眠研究"
 msgid ""
 "Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
 "\n"
-"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y $300 al mes.\n"
 "\n"
 "Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
 "\n"
@@ -966,7 +966,7 @@ msgid ""
 msgstr ""
 "楼栋：14号楼。Velaria公司已经把整栋楼买下：谁也别想来打探。\n"
 "\n"
-"受试者：120人，夜里用卡车从后面的车库运进来，没人看得见。无家可归的、欠债的、生病的。我们给他们一套房子，每月300欧元。\n"
+"受试者：120人，夜里用卡车从后面的车库运进来，没人看得见。无家可归的、欠债的、生病的。我们给他们一套房子，每月300美元。\n"
 "\n"
 "剂量：每晚23:00服一片VD-7。\n"
 "\n"
@@ -1160,7 +1160,7 @@ msgstr "药店订单"
 msgid ""
 "Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
 "\n"
-"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: $3,99.\n"
 "\n"
 "Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
 "\n"
@@ -1168,7 +1168,7 @@ msgid ""
 msgstr ""
 "产品：“Velaria安睡”，治疗失眠。10000盒，每盒20片。\n"
 "\n"
-"每片含四分之一剂VD-7。非处方药，随便买。售价：3.99欧元。\n"
+"每片含四分之一剂VD-7。非处方药，随便买。售价：3.99美元。\n"
 "\n"
 "摆在收银台旁边，与视线齐平。广告牌：“睡得像婴儿一样香”。\n"
 "\n"
@@ -1387,8 +1387,8 @@ msgid "Velaria vende su somnífero"
 msgstr "Velaria安眠药上市"
 
 #: scripts/historia.gd
-msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
-msgstr "“Velaria安睡”现已上市，治疗失眠。无需处方，售价3.99欧元。几个小时就卖断货。我们的线人说，这就是在14号楼测试过的那种药，只是稀释了。Velaria予以否认：“这是一种全新配方，天然、安全。我们自己每晚都吃。”"
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a $3,99. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "“Velaria安睡”现已上市，治疗失眠。无需处方，售价3.99美元。几个小时就卖断货。我们的线人说，这就是在14号楼测试过的那种药，只是稀释了。Velaria予以否认：“这是一种全新配方，天然、安全。我们自己每晚都吃。”"
 
 #: scripts/historia.gd
 msgid "Empleados que no vuelven a casa"
@@ -1941,7 +1941,7 @@ msgstr "储藏室"
 
 #: scripts/mapa/planta.gd
 msgid "Planta baja"
-msgstr "底层"
+msgstr "1楼"
 
 #: scripts/mapa/planta.gd
 msgid "%dª planta"
@@ -1953,7 +1953,7 @@ msgstr "天台"
 
 #: scripts/mapa/planta.gd
 msgid "Bajo %s"
-msgstr "底层%s"
+msgstr "1%s"
 
 #: scripts/mapa/planta.gd
 msgid "%dº%s"
@@ -1973,15 +1973,19 @@ msgstr "工作间"
 
 #: scripts/mapa/planta.gd
 msgid "1ª planta"
-msgstr "1楼"
-
-#: scripts/mapa/planta.gd
-msgid "2ª planta"
 msgstr "2楼"
 
 #: scripts/mapa/planta.gd
-msgid "3ª planta"
+msgid "2ª planta"
 msgstr "3楼"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "4楼"
+
+#: scripts/mapa/planta.gd
+msgid "4ª planta"
+msgstr "5楼"
 
 #: scripts/mapa/planta.gd
 msgid "Gimnasio"
@@ -3093,8 +3097,8 @@ msgid "+10 % de vida máxima por punto"
 msgstr "每点生命上限 +10%"
 
 #: scripts/talentos.gd
-msgid "Lobezno"
-msgstr "金刚狼"
+msgid "Ajolote"
+msgstr "美西螈"
 
 #: scripts/talentos.gd
 msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
@@ -4330,27 +4334,27 @@ msgid_plural "%d piezas arrojables"
 msgstr[0] "%d 个投掷零件"
 
 #: scripts/ui/inventario.gd
-msgid "%d balas"
+msgid "%d bala"
 msgid_plural "%d balas"
 msgstr[0] "%d 发子弹"
 
 #: scripts/ui/inventario.gd
-msgid "%d cartuchos"
+msgid "%d cartucho"
 msgid_plural "%d cartuchos"
 msgstr[0] "%d 发散弹"
 
 #: scripts/ui/inventario.gd
-msgid "%d gasolinas"
+msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d 桶汽油"
 
 #: scripts/ui/inventario.gd
-msgid "%d bidones de ácido"
+msgid "%d bidón de ácido"
 msgid_plural "%d bidones de ácido"
 msgstr[0] "%d 桶酸液"
 
 #: scripts/ui/inventario.gd
-msgid "%d baterías"
+msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d 块电池"
 
@@ -5191,7 +5195,7 @@ msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
 msgstr "钱不够：每点天赋点要花掉存款 $%d。"
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid "¡Hecho! Ahora tienes %d punto para gastar."
 msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
 msgstr[0] "完成！现在你有 %d 点可以分配。"
 

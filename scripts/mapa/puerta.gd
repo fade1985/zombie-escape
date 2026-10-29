@@ -19,7 +19,7 @@ const DIBUJO := {"piso": preload("res://assets/sprites/puerta-piso.png"),
 const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
 	preload("res://assets/sprites/cartel-planta-2.png"), preload("res://assets/sprites/cartel-planta-3.png")]
 # Los mismos con la palabra de cada idioma en vez de «PLANTA» (FLOOR, ANDAR, ETAGE: tools/cartel_planta_idiomas.py); en español,
-# CARTELES
+# CARTELES. En inglés, ruso y chino la planta de la calle ya es la 1ª (Planta.CALLE_ES_LA_PRIMERA): sus carteles van del 1 al 4
 const CARTELES_POR_IDIOMA := {
 	"en": [preload("res://assets/sprites/cartel-planta-0-en.png"), preload("res://assets/sprites/cartel-planta-1-en.png"),
 		preload("res://assets/sprites/cartel-planta-2-en.png"), preload("res://assets/sprites/cartel-planta-3-en.png")],

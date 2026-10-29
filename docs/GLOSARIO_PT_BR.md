@@ -12,7 +12,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
   (*Abaixa a alavanca!*, *Me ajuda!*, *Não me deixa aqui!*) y contracciones de la calle (*tô*, *tá*, *pra*, *tão*).
 - Mayúsculas como en el español (frases normales; los títulos con mayúscula solo al principio, salvo nombres propios).
 - Avisos en pantalla sin punto final, como el español. Comillas rectas `"`; nunca «», “”, ¡ ni ¿.
-- Decimales con coma (`0,5`), miles con punto (`10.000`). El euro de los documentos va delante: `€ 300`, `€ 3,99`.
+- Decimales con coma (`0,5`), miles con punto (`10.000`). El dólar de los documentos va delante y junto: `$300`, `$3,99`.
 - **Contracciones con `%s`:** en portugués «de/em/por + o/a» se funden (*do, no, pelo, da, na, pela*). Cuando un `%s`
   ya trae artículo (*o Glutão*, *os Apartamentos*), la frase se escribe sin preposición delante del `%s` (con dos puntos,
   *com*, o dándole la vuelta) para que nunca salga *em os* / *de a*.
@@ -131,7 +131,7 @@ referencia de la intención. Por confirmar con el dueño (y, a ser posible, con 
 | Ramas: Militar · Superviviente · Químico | Militar · Sobrevivente · Químico (*ramo*) |
 | Ataque · Puntería · Camorrista · Tirador · Artificiero · Larguirucho · Mirilla · Fabricante | Ataque · Pontaria · Brigão · Atirador · Artificeiro · Varapau · Luneta · Fabricante |
 | Frenesí · Gatillo fácil · Racimo · Veterano | Frenesi · Dedo nervoso · Estilhaço · Veterano |
-| Corpulento · Lobezno · Durito · Reflejos · Sanitario · Acero · Ninja · Desfibrilador | Parrudo · Wolverine · Durão · Reflexos · Socorrista · Aço · Ninja · Desfibrilador |
+| Corpulento · Ajolote · Durito · Reflejos · Sanitario · Acero · Ninja · Desfibrilador | Parrudo · Axolote · Durão · Reflexos · Socorrista · Aço · Ninja · Desfibrilador |
 | Blindaje · Sombra · Segundo aliento · Adrenalina | Blindagem · Sombra · Segundo fôlego · Adrenalina |
 | Catalizador · Guantes de goma · Incendiario · Desatascador · Criogenia | Catalisador · Luvas de borracha · Incendiário · Desentupidor · Criogenia |
 | Reacción en cadena · Residuo tóxico · Pararrayos · Napalm · Pegajoso · Alto voltaje · Mezcla explosiva | Reação em cadeia · Resíduo tóxico · Para-raios · Napalm · Pegajoso · Alta tensão · Mistura explosiva |

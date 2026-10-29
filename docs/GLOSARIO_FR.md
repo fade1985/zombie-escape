@@ -8,7 +8,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 - **Tipografía francesa:** espacio normal antes de `!` `?` `:` `;` y dentro de las comillas (`« texte »`). Comillas rectas `"` y
   apóstrofo recto `'` donde el español lleva comillas rectas.
 - Títulos y nombres: solo la primera palabra en mayúscula (uso francés: *Défi du jour*, *Arbre de talents*), salvo nombres propios.
-- Números: coma decimal (`0,8 s`, `3,99 €`), miles con espacio (`10 000`, `1 000`). Las horas del dosier se quedan como en el
+- Números: coma decimal (`0,8 s`, `$3,99`), miles con espacio (`10 000`, `1 000`). Las horas del dosier se quedan como en el
   original (`23:00`, `02:10`). Los dólares, como el juego: `$%d`.
 - Los gritos de los jefes, en mayúsculas cortas (≤ 25 % más que el español); botones, nombres y neones, ≤ 10 % cuando se ha podido.
 - **Los supervivientes llegan sin artículo** (`Flic`, `Soldat`, `Médecin`, `Pharmacienne`, `Quincaillier`, `Technicien`) y en
@@ -131,7 +131,7 @@ Sufijos sueltos: « gauche», « droite», « haut», « bas».
 |---|---|
 | Ramas: Militar · Superviviente · Químico | Militaire · Survivant · Chimiste |
 | Ataque · Puntería · Camorrista · Tirador · Artificiero · Larguirucho · Mirilla · Fabricante | Attaque · Visée · Bagarreur · Tireur · Artificier · Échalas · Lunette · Fabricant |
-| Frenesí · Gatillo fácil · Racimo · Veterano · Corpulento · Lobezno · Durito · Reflejos | Frénésie · Gâchette facile · Grappe · Vétéran · Costaud · Wolverine · Dur à cuire · Réflexes |
+| Frenesí · Gatillo fácil · Racimo · Veterano · Corpulento · Ajolote · Durito · Reflejos | Frénésie · Gâchette facile · Grappe · Vétéran · Costaud · Axolotl · Dur à cuire · Réflexes |
 | Sanitario · Acero · Ninja · Desfibrilador · Blindaje · Sombra · Segundo aliento · Adrenalina | Secouriste · Acier · Ninja · Défibrillateur · Blindage · Ombre · Second souffle · Adrénaline |
 | Catalizador · Guantes de goma · Incendiario · Desatascador · Criogenia · Reacción en cadena | Catalyseur · Gants de ménage · Incendiaire · Déboucheur · Cryogénie · Réaction en chaîne |
 | Residuo tóxico · Pararrayos · Napalm · Pegajoso · Alto voltaje · Mezcla explosiva | Déchet toxique · Paratonnerre · Napalm · Poisseux · Haute tension · Mélange explosif |

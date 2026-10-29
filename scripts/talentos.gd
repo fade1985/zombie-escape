@@ -65,7 +65,8 @@ const LISTA := [
 	# ── Superviviente
 	{"id": "corpulento", "rama": "superviviente", "nivel": 1, "nombre": "Corpulento", "max": 5, "icono": "vida",
 		"desc": "+10 % de vida máxima por punto"},
-	{"id": "lobezno", "rama": "superviviente", "nivel": 1, "nombre": "Lobezno", "max": 5, "icono": "corazon",
+	# (hasta el 29 oct se llamaba Lobezno, pero Wolverine es marca de Marvel; el id se queda, que va en las partidas guardadas)
+	{"id": "lobezno", "rama": "superviviente", "nivel": 1, "nombre": "Ajolote", "max": 5, "icono": "corazon",
 		"desc": "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"},
 	{"id": "durito", "rama": "superviviente", "nivel": 2, "nombre": "Durito", "max": 3, "icono": "casco", "pide": "corpulento",
 		"desc": "Cada golpe que recibes quita 1 menos por punto"},

@@ -111,7 +111,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 
 Ver la lista completa en `de-traducido-2.json` (logros, mutaciones, trajes) y `de-traducido-3.json` (talentos). Los más
 adaptados: Durito = Dickfell, Larguirucho = Lulatsch, Desatascador = Rohrreiniger, Artificiero = Feuerwerker, Mirilla = Visier,
-Segundo aliento = Zweite Luft, Lobezno = Wolverine; Fin de la jornada = Feierabend, Liquidación total = Räumungsverkauf, Desahucio =
+Segundo aliento = Zweite Luft, Ajolote = Axolotl; Fin de la jornada = Feierabend, Liquidación total = Räumungsverkauf, Desahucio =
 Zwangsräumung, Exterminador = Kammerjäger, Comunidad de vecinos = Hausgemeinschaft, Caja fuerte = Panzerknacker, Chatarrero =
 Sammelwut, Reto aceptado = Her damit!, Ninguna regla me para = Regeln? Egal!; tema «Sorpresas y retos» = Chaos und Aufgaben;
 Endurecimiento = Verhornung.

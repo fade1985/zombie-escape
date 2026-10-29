@@ -175,7 +175,12 @@ variaciones y con el espaciado del propio `FontFile` y no se mueve.
    `Idioma.minusculas()` ya deja los nombres alemanes con su mayúscula.
 5. Lo dibujado en imágenes: la palabra del cartel de planta en `tools/cartel_planta_idiomas.py` (`PALABRAS`) y su juego de carteles en
    `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`); las fotos de los tutoriales, con `--lang <código>` y `py tools/fotos_tutorial.py <código>`.
-6. Probar el idioma con la prueba larga y con las pantallas más llenas (inventario, ordenador, tutorial, tiendas) mirando que cabe.
+6. **Cómo cuenta las plantas:** en España (y en Alemania, Francia o Brasil) la de la calle es la «planta baja» y la de encima, la 1ª; en
+   Estados Unidos, Rusia o China la de la calle ya es la 1ª. Si cuenta como estos, su código va en `Planta.CALLE_ES_LA_PRIMERA` (y en la
+   lista igual de `tools/cartel_planta_idiomas.py`): sus plantas y sus puertas suben un número («1ª planta» es *2nd floor*, «1ºD» es
+   *2D*), los carteles pintados van del 1 al 4 y las traducciones de «Planta baja», «1ª planta»… se escriben ya con un número más.
+7. Probar el idioma con la prueba larga y con las pantallas más llenas (inventario, ordenador, tutorial, tiendas) mirando que cabe.
+   `--pasillo --lang <código>` escribe cómo se llaman las plantas y sus puertas, y saca el cartel de cada una.
 
 ## Estado
 
@@ -207,7 +212,8 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
 
 **Lo dibujado en imágenes** (no sale en `locale/*.po`; hay una versión por idioma y el código elige según `Idioma.actual`):
 - `assets/sprites/cartel-planta-N.png` lleva «PLANTA»: `py tools/cartel_planta_idiomas.py` hace `cartel-planta-N-<idioma>.png` («FLOOR»,
-  «ANDAR», «ETAGE»), que `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`) usa según el idioma.
+  «ANDAR», «ETAGE»), que `mapa/puerta.gd` (`CARTELES_POR_IDIOMA`) usa según el idioma. En inglés, ruso y chino, donde la planta de la
+  calle ya es la 1ª, el cartel de la planta N lleva el número N + 1 (el 4, `cartel-planta-4.png`, solo lo usan ellos).
 - `assets/ui/tutorial/<id>.png` son recortes de capturas con el texto del juego dibujado: las de cada idioma van en
   `assets/ui/tutorial/<idioma>/<id>.png` (`ui/tutorial.gd` las prefiere y, si no hay, usa la de español). Se rehacen con las
   capturas sacadas con `--lang <idioma>` y `py tools/fotos_tutorial.py <idioma>`; las ocho que no llevan ningún texto (apagón, curas,

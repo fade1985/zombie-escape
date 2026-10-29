@@ -512,7 +512,7 @@ func probar_gastro() -> void:
 # Con "--captura --equilibrio": los números del equilibrio del 27 oct, contados en la terminal con lo esperado. En el
 # apartamento más grande, sin zombis: los talentos y la skin se suman (Ataque 5 y Camorrista 5 con el gymbro y con el
 # portero); el daño mínimo de un golpe (Durito 3 con Insensible); Ninja (mata al zombi de al lado, pero como mucho una
-# vez cada 5 s; lo que le quitaría a un jefe); Lobezno (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
+# vez cada 5 s; lo que le quitaría a un jefe); Ajolote (1 cada 5 s; con la Alerta 4, cada 10); la fregona, el
 # cuchillo, la MP5 y la cura de la médica; su propia granada a los pies (como mucho 25); los premios del reto
 # del día y los billetes de los jefes. La segunda parte (27 oct, tarde): el tope de curas (2 botiquines y 3 vendas; un
 # armarito abierto con la mochila llena deja el botiquín en el suelo con «Ya llevas 2», captura-equilibrio-tope.png) y
@@ -588,7 +588,7 @@ func probar_equilibrio() -> void:
 		muere, ceili(1500 * johnny.NINJA_JEFE)])
 	johnny.invencible = false
 
-	# ── Lobezno: 1 punto, por debajo de la mitad de la vida (hasta donde cura) ──
+	# ── Ajolote: 1 punto, por debajo de la mitad de la vida (hasta donde cura) ──
 	johnny.stats.regenera = 1
 	johnny.vida = roundi(johnny.stats.vida_max * johnny.REGENERA_TOPE) - 10
 	johnny.regenera_t = 0.0
@@ -601,7 +601,7 @@ func probar_equilibrio() -> void:
 	await get_tree().create_timer(5.3, false).timeout
 	var a_medias: int = johnny.vida - v0
 	await get_tree().create_timer(5.0, false).timeout
-	print("Lobezno 1: en 5,3 s cura %d (esperado: 1) · con la Alerta 4, en 5,3 s %d y en 10,3 s %d (esperado: 0 y 1)" % [
+	print("Ajolote 1: en 5,3 s cura %d (esperado: 1) · con la Alerta 4, en 5,3 s %d y en 10,3 s %d (esperado: 0 y 1)" % [
 		sin_alerta, a_medias, johnny.vida - v0])
 	Alerta.nivel = 0
 	johnny.stats = antes
@@ -1284,7 +1284,7 @@ func sala_de_talentos() -> Vector2:
 
 
 # Con "--captura --equilibrio-talentos": los cambios de las ramas Militar y Superviviente (M15), con sus números en la
-# terminal y lo esperado al lado: Durito llega a 3 (y a quien tenía más se le devuelven los puntos), Lobezno cura solo
+# terminal y lo esperado al lado: Durito llega a 3 (y a quien tenía más se le devuelven los puntos), Ajolote cura solo
 # hasta la mitad, Puntería lanza más lejos y Mirilla da un crítico de cada 3 disparos, con su número en amarillo
 # (captura-talentos-critico.png). Al final, las tarjetas del ordenador con lo que dan ahora y con otro punto
 # (captura-talentos-militar.png y captura-talentos-superviviente.png). Ninja cada 5 s: en --equilibrio. Se cierra
@@ -1307,18 +1307,18 @@ func probar_equilibrio_talentos() -> void:
 	print("Durito 3: un zarpazo de 10 quita %d (esperado: 7; con Durito 5, antes, 5) · vida máxima con Corpulento 5: %d (esperado: 150)" % [
 		v0 - johnny.vida, johnny.stats.vida_max])
 
-	# ── Lobezno: cura hasta la mitad, no más ──
+	# ── Ajolote: cura hasta la mitad, no más ──
 	aplicar_talentos({"corpulento": 5, "lobezno": 5})
 	johnny.vida = 72
 	johnny.regenera_t = 0.0
 	await get_tree().create_timer(5.3, false).timeout
 	var a_los_5: int = johnny.vida
 	await get_tree().create_timer(5.3, false).timeout
-	print("Lobezno 5 con 150 de vida: de 72, a los 5 s %d y a los 10 s %d (esperado: 75 y 75: la mitad, sin pasarse)" % [
+	print("Ajolote 5 con 150 de vida: de 72, a los 5 s %d y a los 10 s %d (esperado: 75 y 75: la mitad, sin pasarse)" % [
 		a_los_5, johnny.vida])
 	johnny.vida = 100
 	await get_tree().create_timer(5.3, false).timeout
-	print("Lobezno 5: con 100 de 150 (más de la mitad), a los 5 s %d (esperado: 100)" % johnny.vida)
+	print("Ajolote 5: con 100 de 150 (más de la mitad), a los 5 s %d (esperado: 100)" % johnny.vida)
 
 	# ── Puntería: lanza más lejos ──
 	aplicar_talentos({})

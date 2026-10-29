@@ -26,7 +26,7 @@ static func base() -> Dictionary:
 		"lanzar_extra": 0,       # molotovs y granadas de más (Artificiero)
 		"mirilla": false,        # cada 3 disparos, el siguiente es crítico (Mirilla)
 		"fabricante": false,     # fuego y explosiones más grandes (Fabricante)
-		"regenera": 0,           # vida que recuperas cada 5 s (Lobezno)
+		"regenera": 0,           # vida que recuperas cada 5 s (Ajolote)
 		"armadura": 0,           # daño que se le quita a cada golpe (Durito)
 		"esquiva_sola": 0,       # cada cuántos segundos esquivas solo un golpe; 0 = nunca (Reflejos)
 		"botiquin_extra": 0,     # vida de más que curan los botiquines (Sanitario)

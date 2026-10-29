@@ -53,7 +53,7 @@ const DOSIERES := {
 			{"id": "vd7_protocolo", "planta": 1, "cuerpo": "Dra. Inés Lozano, coordinadora del estudio",   # [traducir]
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#2b2b2b")},
 				"tipo": "PLAN DE CAMPO · CONFIDENCIAL", "titulo": "Estudio de descanso",   # [traducir]
-				"texto": "Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n\nSujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n\nDosis: una pastilla de VD-7 cada noche, a las 23:00.\n\nPersonal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros.",   # [traducir]
+				"texto": "Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n\nSujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y $300 al mes.\n\nDosis: una pastilla de VD-7 cada noche, a las 23:00.\n\nPersonal: una médica, para vigilar a los sujetos; un policía de uniforme, para que se fíen; y una escolta militar, por si algo sale mal. La portera trabaja para nosotros.",   # [traducir]
 				"nota": "Salas dice que a esta gente no la va a echar de menos nadie. Por eso la ha elegido."},   # [traducir]
 			{"id": "vd7_diario", "planta": 2, "cuerpo": "Tomás Vidal, enfermero de noche",   # [traducir]
 				"look": {"skin": Color("#c68642"), "hair": Color("#1d1b2c")},
@@ -91,7 +91,7 @@ const DOSIERES := {
 			{"id": "cc_albaran", "planta": 1, "cuerpo": "Julián Mora, farmacéutico de Velaria",   # [traducir]
 				"look": {"skin": Color("#e0ac69"), "hair": Color("#4a3426")},
 				"tipo": "ALBARÁN DE ENTREGA", "titulo": "Pedido para la farmacia",   # [traducir]
-				"texto": "Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n\nCada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n\nColocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n\nSi un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp.",   # [traducir]
+				"texto": "Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n\nCada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: $3,99.\n\nColocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n\nSi un cliente pregunta por el edificio 14, se le atiende fuera de la tienda y se avisa a la seguridad de Velaria Corp.",   # [traducir]
 				"nota": "¿Sin receta? Yo esto no lo vendo. La chica de la rebotica, tampoco."},   # [traducir]
 			{"id": "cc_turno", "planta": 2, "cuerpo": "Dra. Elena Ruiz, técnica de Velaria",   # [traducir]
 				"look": {"skin": Color("#ffd2a8"), "hair": Color("#b5651d")},
@@ -161,7 +161,7 @@ const NOTICIAS := [
 		"texto": "Buenas noches. El centro comercial de la avenida cierra de noche «por reformas». Pero las luces siguen encendidas hasta el amanecer, la alarma de incendios suena de madrugada y dentro se ve gente moviéndose. Velaria, que tiene allí una farmacia, dice: «Nosotros solo alquilamos un local»."},
 	{"id": "n_velaria_noche", "sitio": "centro", "pagina": "cc_albaran", "victoria": "",
 		"titular": "Velaria vende su somnífero",
-		"texto": "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."},
+		"texto": "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a $3,99. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."},
 	{"id": "n_turnos", "sitio": "centro", "pagina": "cc_turno", "victoria": "",
 		"titular": "Empleados que no vuelven a casa",
 		"texto": "Decenas de familias denuncian que sus parientes, empleados del centro comercial, no vuelven a casa. El centro dice que hacen horas extra, «voluntarias y bien pagadas». Y les cuento algo mío: mi hermana Elena trabaja allí para Velaria. Desde el lunes no me coge el teléfono."},

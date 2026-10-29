@@ -11,8 +11,9 @@ armas, objetos, talentos, logros...). Si cambia un nombre, se cambia aquí y en 
 - Títulos y nombres propios en **Title Case** (*Daily Challenge*, *Choose a building*); los botones de acción, solo la
   primera en mayúscula (*Reset controls*). Los avisos en pantalla, sin punto final, como en español.
 - Comillas y apóstrofos **rectos** (`"` `'`): a la letra del juego le faltan los rizados.
-- Numeración de plantas: el juego cuenta «planta baja, 1ª planta…» y los textos con número («planta %d») conservan la
-  cuenta del juego. Por decidir: *Ground floor / Floor 1* (como el cartel del ascensor) o contar desde 1.
+- Numeración de plantas: como en Estados Unidos, la de la calle ya es la 1ª (*1st floor*): las plantas y las puertas van un
+  número por encima del español (`Planta.CALLE_ES_LA_PRIMERA`), y así cuadran con los textos que cuentan la de la calle como
+  la 1 («planta %d»: *floor %d*).
 - Un texto en inglés **no puede llevar otros `%d`/`%s`** que el español (lo comprueba `tools/traducciones.py`).
 
 ## Nombres
@@ -34,7 +35,7 @@ armas, objetos, talentos, logros...). Si cambia un nombre, se cambia aquí y en 
 | el Reto del día | the Daily Challenge | |
 | Alerta (nivel) | Alert (level) | «Alerta 3» → *Alert 3* |
 | Ayudas (opciones de accesibilidad) | Assists | |
-| Lobezno (talento) | Wolverine | marca de Marvel: valorar cambiarlo en los dos idiomas |
+| Ajolote (talento) | Axolotl | antes Lobezno / Wolverine: se cambió el 29 oct porque Wolverine es marca de Marvel |
 | arrojables | throwables | molotov, granadas, atraedora, congeladora |
 | baúl · mochila | stash · backpack | por confirmar |
 | dólares · puntos · piezas | dollars · points · parts | |
@@ -87,7 +88,7 @@ son **adaptaciones**, no traducciones literales.
 | Molotov · Granada · Atraedora · Congeladora | Molotov · Grenade · Decoy · Freeze bomb |
 | Truco (de la Épica) | Perk |
 | Ramas: Militar · Superviviente · Químico | Military · Survivor · Chemist |
-| Talentos: Durito · Larguirucho · Desatascador · Fabricante · Artificiero · Tirador · Mirilla · Lobezno | Tough Cookie · Lanky · Drain Cleaner · Bomb Maker · Demolitions · Gunner · Scope · Wolverine |
+| Talentos: Durito · Larguirucho · Desatascador · Fabricante · Artificiero · Tirador · Mirilla · Ajolote | Tough Cookie · Lanky · Drain Cleaner · Bomb Maker · Demolitions · Gunner · Scope · Axolotl |
 | Logros: Alerta naranja / máxima · Sube, conserje · Liquidación total · Visto y no visto · Sin tiritas | Orange Alert / Red Alert · Going Up · Everything Must Go · In a Flash · No Band-Aids |
 | Logros: Comunidad de vecinos · Chatarrero · Caja fuerte · Ninguna regla me para | Tenants' Association · Packrat · Safecracker · No Rule Stops Me |
 | Mutaciones: Tentacular · Gastroenteritis · Insensible · Caníbal · Ansiedad · Endurecimiento · Locura · Flatulento | Tentacular · Gastroenteritis · Numb · Cannibal · Anxiety · Thick Skin · Madness · Flatulent |
@@ -121,8 +122,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | almacén · cámara (frigorífica) · rebotica · probadores · taquillas | storeroom · freezer · back room · fitting rooms · lockers |
 | Tutoriales: lanzables · truco · piezas de mejora · peligros de las tiendas · vida en tercios | throwables · perk · upgrade parts · store hazards · health in thirds |
 
-Pendiente de igualar con la fase 5: los nombres de planta y de puerta (`1A`, `apt. 1D`, `apt. GC`) y la numeración de plantas. El euro de
-las noticias se queda (€300, €3.99), aunque el resto del juego usa dólares.
+Las noticias y los documentos hablan en dólares, como el resto del juego (*$300*, *$3.99*; hasta el 29 oct, en euros).
 
 ## Elegidos en la fase 5 (por confirmar)
 
@@ -130,8 +130,8 @@ El mundo. Las plantas se nombran así para que valgan detrás de «the» y en mi
 
 | Español | Inglés |
 |---|---|
-| Planta baja · 1ª, 2ª, 3ª planta · Azotea | Ground floor · 1st, 2nd, 3rd floor · Rooftop (cartel dibujado: *FLOOR 0, 1, 2, 3*) |
-| Puertas de los pisos: Bajo C · 1ºD | GC · 1D (en las frases: *apt. GC*, *the key to apt. 1D*) |
+| Planta baja · 1ª, 2ª, 3ª, 4ª planta · Azotea | 1st floor · 2nd, 3rd, 4th, 5th floor · Rooftop (cartel dibujado: *FLOOR 1, 2, 3, 4*) |
+| Puertas de los pisos: Bajo C · 1ºD | 1C · 2D (en las frases: *apt. 1C*, *the key to apt. 2D*) |
 | Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza · Mantenimiento | Locker room · Office · Workshop · Gym · Janitor's closet · Maintenance |
 | Salón · Cocina · Baño (principal) · Dormitorio (de matrimonio, individual) · Pasillo | Living room · Kitchen · Bathroom (Main bathroom) · Bedroom (Master, Single) · Hallway |
 | Apartamento / tienda destrozado/a · Apartamento en llamas | Wrecked apartment / store · Burning apartment |

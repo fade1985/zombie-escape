@@ -18,7 +18,7 @@ const REGLAS := [
 	"+25 % de zombis",
 	"Zombis un 10 % más rápidos",
 	"Jefes con +25 % de vida, y se enfadan antes",
-	"Botiquines, vendas y Lobezno curan la mitad",
+	"Botiquines, vendas y Ajolote curan la mitad",
 	"El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos",
 ]
 # [/traducir]
@@ -26,7 +26,7 @@ const MAS_ZOMBIS := 1.25     # A1: el presupuesto de zombis de cada sitio (plant
 const MAS_RAPIDOS := 1.1     # A2: la velocidad de los zombis (no la de los jefes)
 const JEFE_VIDA := 1.25      # A3: la vida de los jefes de planta...
 const JEFE_ENFADO := 0.7     # ...y a qué parte de su vida se enfadan (sin alerta, a la mitad: 0,5)
-const BOTIQUIN := 0.5        # A4: lo que curan los botiquines (y Lobezno: tarda el doble; johnny.gd)
+const BOTIQUIN := 0.5        # A4: lo que curan los botiquines (y Ajolote: tarda el doble; johnny.gd)
 const GUARDIA_VIDA := 2.0    # A5: la vida del guardia de la tarjeta (o del zombi que lleva la llave)...
 const OIDO := 1.5            # ...y la distancia a la que se oyen los disparos
 const DOLARES := 0.2         # recompensa: dólares de más por cada nivel (al completar el edificio)

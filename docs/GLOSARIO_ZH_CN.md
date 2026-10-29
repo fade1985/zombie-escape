@@ -68,9 +68,9 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 |---|---|
 | los Apartamentos · el Centro comercial | 公寓楼 · 购物中心 (en la charla, 商场) |
 | Oficina de seguridad · Cocina central · Taller de costura · Juguetería | 保安室 · 中央厨房 · 裁缝铺 · 玩具店 |
-| Planta baja · 1ª/2ª/3ª planta · %dª planta · Azotea | 底层 · 1楼/2楼/3楼 · %d楼 · 天台 (como el cartel: 0, 1, 2, 3) |
+| Planta baja · 1ª/2ª/3ª/4ª planta · %dª planta · Azotea | 1楼 · 2楼/3楼/4楼/5楼 · %d楼 · 天台 (en China la de la calle ya es la 1ª: un número más que en español, también en el cartel: 1, 2, 3, 4) |
 | «planta %d» como cuenta del juego (récord, reto, logro «Llega a la planta 3») | 第%d层 |
-| Puertas: Bajo C · 1ºD | 底层C · 1D |
+| Puertas: Bajo C · 1ºD | 1C · 2D |
 | Salón · Cocina · Baño · Dormitorio · Pasillo | 客厅 · 厨房 · 浴室 · 卧室 · 走廊 |
 | Dormitorio de matrimonio · Baño principal · Dormitorio individual | 主卧 · 主卫 · 次卧 |
 | Vestuario · Despacho · Taller · Gimnasio · Cuarto de la limpieza | 更衣室 · 办公室 · 工作间 · 健身房 · 保洁间 |
@@ -131,7 +131,7 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Ramas: Militar · Superviviente · Químico | 军人 · 幸存者 · 化学家 |
 | Ataque · Puntería · Camorrista · Tirador · Artificiero · Larguirucho · Mirilla · Fabricante | 攻击 · 准头 · 打架王 · 神枪手 · 爆破专家 · 长臂猿 · 瞄准镜 · 炸弹匠 |
 | Frenesí · Gatillo fácil · Racimo · Veterano | 狂暴 · 扳机狂 · 集束 · 老兵 |
-| Corpulento · Lobezno · Durito · Reflejos · Sanitario · Acero · Ninja · Desfibrilador | 壮汉 · 金刚狼 · 硬骨头 · 反射神经 · 医护兵 · 钢铁 · 忍者 · 除颤器 |
+| Corpulento · Ajolote · Durito · Reflejos · Sanitario · Acero · Ninja · Desfibrilador | 壮汉 · 美西螈 · 硬骨头 · 反射神经 · 医护兵 · 钢铁 · 忍者 · 除颤器 |
 | Blindaje · Sombra · Segundo aliento · Adrenalina | 装甲板 · 暗影 · 绝处逢生 (también el grito «¡Segundo aliento!») · 肾上腺素 |
 | Catalizador · Guantes de goma · Incendiario · Desatascador · Criogenia | 催化剂 · 橡胶手套 · 火上浇油 · 疏通剂 · 极寒 |
 | Reacción en cadena · Residuo tóxico · Pararrayos · Napalm · Pegajoso · Alto voltaje · Mezcla explosiva | 连锁反应 · 有毒废料 · 避雷针 · 凝固汽油 · 粘糊糊 · 高压电 · 爆炸配方 |

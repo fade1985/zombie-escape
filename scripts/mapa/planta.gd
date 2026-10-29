@@ -96,23 +96,33 @@ static var semilla := 0
 # generarla (son datos: «4ºB» se compara) y se traducen al enseñarlos, con nombre_planta, nombre_de, nombre_de_sitio y
 # aviso_de. Quien los enseñe usa estas funciones, sin volver a envolverlas en Idioma.t (docs/IDIOMAS.md)
 
-# Las plantas con número que cada idioma dice a su manera («1ª planta», "1st floor"); de ahí para arriba, «%dª planta»
+# Las plantas con número que cada idioma dice a su manera («1ª planta», "2nd floor"); de ahí para arriba, «%dª planta»
 # ("Floor %d")
 # [traducir]
-const PISOS := ["1ª planta", "2ª planta", "3ª planta"]
+const PISOS := ["1ª planta", "2ª planta", "3ª planta", "4ª planta"]
 # [/traducir]
+# Los idiomas en los que la planta de la calle ya es la 1ª: en Estados Unidos, Rusia y China no hay «planta baja». En
+# ellos las plantas y las puertas suben un número: la «1ª planta» es el "2nd floor" y el «1ºD», el "2D" (29 oct 2026)
+const CALLE_ES_LA_PRIMERA := ["en", "ru", "zh_CN"]
+
+
+# El número con el que se enseña la planta "num" (1 = la de la calle) en el idioma que se juega: en español, la 1ª es
+# la de encima de la baja
+static func numero_visible(num: int) -> int:
+	return num if Idioma.actual in CALLE_ES_LA_PRIMERA else num - 1
 # Las puertas de los pisos tal como las nombra nombre_puerta («Bajo C», «1ºD»), para traducirlas al enseñarlas
 static var _puerta := RegEx.create_from_string("^(?:Bajo ([A-Z])|(\\d+)º([A-Z]))$")   # no-tr
 
 
 # Cómo se llama la planta "num" (1 = la baja), ya traducido: para enseñarlo. Las frases lo ponen en minúscula detrás de
-# su artículo («Caíste en la %s de %s»: "You fell on the %s of %s"), así que en inglés son "ground floor", "1st floor"...
+# su artículo («Caíste en la %s de %s»: "You fell on the %s of %s"), así que en inglés son "1st floor", "2nd floor"...
+# (en inglés, ruso y chino la baja ya es la 1ª: CALLE_ES_LA_PRIMERA)
 static func nombre_planta(num: int) -> String:
 	if num == 1:
 		return Idioma.t("Planta baja")
 	if num >= 2 and num - 2 < PISOS.size():
 		return Idioma.t(PISOS[num - 2])
-	return Idioma.t("%dª planta") % (num - 1)
+	return Idioma.t("%dª planta") % numero_visible(num)
 
 
 # Lo mismo en español, tal como se guarda en la planta al generarla ("nombre"; para enseñarlo, nombre_de)
@@ -126,13 +136,13 @@ static func nombre_de(planta: Dictionary) -> String:
 
 
 # Cómo se llama la puerta "letra" de la planta "num" («Bajo C», «1ºD»), en español: el nombre que se guarda en su sitio (y
-# lo que se compara: la jefa vive en el 4ºB). Para enseñarlo, nombre_de_sitio, que lo traduce ("GC", "1D")
+# lo que se compara: la jefa vive en el 4ºB). Para enseñarlo, nombre_de_sitio, que lo traduce ("1C", "2D")
 static func nombre_puerta(num: int, letra: String) -> String:
 	return "Bajo " + letra if num == 1 else "%dº%s" % [num - 1, letra]
 
 
 # El nombre de un sitio o de una habitación (su "nombre", en español), ya traducido: para enseñarlo (el letrero de
-# arriba, los avisos). Las puertas de los pisos se traducen con su número y su letra («1ºD» → "1D", «Bajo C» → "GC"); la
+# arriba, los avisos). Las puertas de los pisos se traducen con su número y su letra («1ºD» → "2D", «Bajo C» → "1C"); la
 # habitación de cada superviviente en las viviendas se llama como él (Supervivientes.nombre_de, sin artículo); y la
 # exposición y la sala de pruebas, que son herramientas, se quedan en español
 static func nombre_de_sitio(cosa: Dictionary) -> String:
@@ -146,7 +156,7 @@ static func nombre_de_sitio(cosa: Dictionary) -> String:
 		return Idioma.t(nombre)
 	if m.get_string(1) != "":
 		return Idioma.t("Bajo %s") % m.get_string(1)
-	return Idioma.t("%dº%s") % [m.get_string(2).to_int(), m.get_string(3)]
+	return Idioma.t("%dº%s") % [numero_visible(m.get_string(2).to_int() + 1), m.get_string(3)]
 
 
 # Lo que se dice al empujar una salida que no se abre (su "aviso", en español en el dato), ya traducido. El de las

@@ -601,7 +601,7 @@ func comprar(n: int) -> void:
 	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
 	abrir("puntos", "b_comprar_1" if s.dolares >= Talentos.PRECIO_PUNTO else "")
 	# (el español pone «puntos» también con 1, como siempre; el inglés sí distingue)
-	info.set_deferred("text", Idioma.n("¡Hecho! Ahora tienes %d puntos para gastar.", "¡Hecho! Ahora tienes %d puntos para gastar.", s.puntos) % s.puntos)   # después de marcar el botón (que pone su explicación)
+	info.set_deferred("text", Idioma.n("¡Hecho! Ahora tienes %d punto para gastar.", "¡Hecho! Ahora tienes %d puntos para gastar.", s.puntos) % s.puntos)   # después de marcar el botón (que pone su explicación)
 
 
 func subir(id: String) -> void:

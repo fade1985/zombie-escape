@@ -54,9 +54,9 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | Español | Ruso |
 |---|---|
 | partida | забег |
-| planta: Planta baja, 1ª, 2ª, 3ª planta, Azotea | Этаж 0, Этаж 1, Этаж 2, Этаж 3, Крыша (igual que el cartel dibujado ЭТАЖ 0…3) |
-| «planta %d» con el número del código (planta 1 = planta baja) | `уровень %d` (cuenta neutra, para no chocar con el cartel) |
-| puertas «Bajo C», «1ºD» | `0C`, `1D` (en frase: `кв. 1D`) |
+| planta: Planta baja, 1ª, 2ª, 3ª, 4ª planta, Azotea | Этаж 1, Этаж 2, Этаж 3, Этаж 4, Этаж 5, Крыша (en Rusia la de la calle ya es la 1ª: un número más que en español, también en el cartel dibujado, ЭТАЖ 1…4) |
+| «planta %d» con el número del código (planta 1 = planta baja) | `этаж %d` (cuadra con el nombre de la planta) |
+| puertas «Bajo C», «1ºD» | `1C`, `2D` (en frase: `кв. 2D`) |
 | apartamento / piso · tienda | квартира · магазин |
 | jefe · minijefe | босс |
 | Alerta 3 · Sin alerta · Alerta naranja / máxima | Тревога 3 · Без тревоги · Оранжевая / Красная тревога |
@@ -137,7 +137,7 @@ Trajes: Conserje · El portero · El glotón · El gymbro · El bombero = Дво
 Ramas: Militar · Superviviente · Químico = Военный · Выживальщик · Химик. «punto» = очко («за очко»).
 Ataque = Атака, Puntería = Меткость, Camorrista = Драчун, Tirador = Стрелок, Artificiero = Сапер, Larguirucho = Дылда, Mirilla =
 Прицел, Fabricante = Самоделкин (el manitas de los dibujos soviéticos), Frenesí = Раж, Gatillo fácil = Скорострел, Racimo = Гроздь,
-Veterano = Ветеран, Corpulento = Здоровяк, Lobezno = Росомаха (así se llama Wolverine en ruso), Durito = Крепыш, Reflejos = Рефлексы,
+Veterano = Ветеран, Corpulento = Здоровяк, Ajolote = Аксолотль, Durito = Крепыш, Reflejos = Рефлексы,
 Sanitario = Санитар, Acero = Сталь, Ninja = Ниндзя, Desfibrilador = Дефибриллятор, Blindaje = Броня, Sombra = Тень, Segundo aliento =
 Второе дыхание, Adrenalina = Адреналин, Catalizador = Катализатор, Guantes de goma = Перчатки, Incendiario = Поджигатель,
 Desatascador = Вантуз, Criogenia = Криогеника, Reacción en cadena = Цепная реакция, Residuo tóxico = Токсичные отходы, Pararrayos =

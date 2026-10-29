@@ -48,8 +48,8 @@ msgid "Jefes con +25 % de vida, y se enfadan antes"
 msgstr "У боссов +25 % здоровья, и они раньше звереют"
 
 #: scripts/alerta.gd
-msgid "Botiquines, vendas y Lobezno curan la mitad"
-msgstr "Аптечки, бинты и Росомаха лечат вдвое слабее"
+msgid "Botiquines, vendas y Ajolote curan la mitad"
+msgstr "Аптечки, бинты и Аксолотль лечат вдвое слабее"
 
 #: scripts/alerta.gd
 msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
@@ -960,7 +960,7 @@ msgstr "Исследование сна"
 msgid ""
 "Edificio: el número 14. Velaria Corp. lo ha comprado entero: nadie puede husmear.\n"
 "\n"
-"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y 300 € al mes.\n"
+"Sujetos: 120, traídos de noche en camiones por el garaje de atrás, donde no los ve nadie. Gente sin casa, con deudas o enferma. Les damos piso y $300 al mes.\n"
 "\n"
 "Dosis: una pastilla de VD-7 cada noche, a las 23:00.\n"
 "\n"
@@ -968,7 +968,7 @@ msgid ""
 msgstr ""
 "Здание: дом 14. Velaria Corp. выкупила его целиком: никто не сунет нос.\n"
 "\n"
-"Объекты: 120, привезены ночью в грузовиках через задний гараж, где их никто не видит. Бездомные, должники, больные. Даем им квартиру и 300 € в месяц.\n"
+"Объекты: 120, привезены ночью в грузовиках через задний гараж, где их никто не видит. Бездомные, должники, больные. Даем им квартиру и $300 в месяц.\n"
 "\n"
 "Доза: одна таблетка VD-7 каждую ночь, в 23:00.\n"
 "\n"
@@ -1162,7 +1162,7 @@ msgstr "Заказ для аптеки"
 msgid ""
 "Producto: «Velaria Noche», contra el insomnio. 10.000 cajas de 20 pastillas.\n"
 "\n"
-"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: 3,99 €.\n"
+"Cada pastilla: un cuarto de dosis de VD-7. Venta libre, sin receta. Precio: $3,99.\n"
 "\n"
 "Colocar junto a las cajas, a la altura de los ojos. Cartel: «Duerme como un bebé».\n"
 "\n"
@@ -1170,7 +1170,7 @@ msgid ""
 msgstr ""
 "Товар: «Velaria Ночь», от бессонницы. 10 000 упаковок по 20 таблеток.\n"
 "\n"
-"Каждая таблетка: четверть дозы VD-7. Свободная продажа, без рецепта. Цена: 3,99 €.\n"
+"Каждая таблетка: четверть дозы VD-7. Свободная продажа, без рецепта. Цена: $3,99.\n"
 "\n"
 "Выложить у касс, на уровне глаз. Плакат: «Спи как младенец».\n"
 "\n"
@@ -1389,8 +1389,8 @@ msgid "Velaria vende su somnífero"
 msgstr "Velaria продает свое снотворное"
 
 #: scripts/historia.gd
-msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a 3,99 €. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
-msgstr "В продаже «Velaria Ночь» от бессонницы. Без рецепта, за 3,99 €. Упаковки разлетаются за часы. Наш источник утверждает, что это то же самое, что испытывали в доме 14, только разбавленное. Velaria отрицает: «Это новая формула, натуральная и безопасная. Мы сами принимаем ее каждую ночь»."
+msgid "Ya está a la venta «Velaria Noche», contra el insomnio. Sin receta y a $3,99. Las cajas se agotan en horas. Nuestra fuente dice que es lo mismo que se probó en el 14, rebajado. Velaria lo niega: «Es una fórmula nueva, natural y segura. La tomamos nosotros todas las noches»."
+msgstr "В продаже «Velaria Ночь» от бессонницы. Без рецепта, за $3,99. Упаковки разлетаются за часы. Наш источник утверждает, что это то же самое, что испытывали в доме 14, только разбавленное. Velaria отрицает: «Это новая формула, натуральная и безопасная. Мы сами принимаем ее каждую ночь»."
 
 #: scripts/historia.gd
 msgid "Empleados que no vuelven a casa"
@@ -1569,7 +1569,7 @@ msgstr "Вверх, дворник"
 
 #: scripts/logros.gd
 msgid "Llega a la planta 3."
-msgstr "Доберись до уровня 3."
+msgstr "Доберись до этажа 3."
 
 #: scripts/logros.gd
 msgid "Fin de la jornada"
@@ -1945,7 +1945,7 @@ msgstr "КЛАДОВКИ"
 
 #: scripts/mapa/planta.gd
 msgid "Planta baja"
-msgstr "Этаж 0"
+msgstr "Этаж 1"
 
 #: scripts/mapa/planta.gd
 msgid "%dª planta"
@@ -1957,7 +1957,7 @@ msgstr "Крыша"
 
 #: scripts/mapa/planta.gd
 msgid "Bajo %s"
-msgstr "0%s"
+msgstr "1%s"
 
 #: scripts/mapa/planta.gd
 msgid "%dº%s"
@@ -1977,15 +1977,19 @@ msgstr "Мастерская"
 
 #: scripts/mapa/planta.gd
 msgid "1ª planta"
-msgstr "Этаж 1"
-
-#: scripts/mapa/planta.gd
-msgid "2ª planta"
 msgstr "Этаж 2"
 
 #: scripts/mapa/planta.gd
-msgid "3ª planta"
+msgid "2ª planta"
 msgstr "Этаж 3"
+
+#: scripts/mapa/planta.gd
+msgid "3ª planta"
+msgstr "Этаж 4"
+
+#: scripts/mapa/planta.gd
+msgid "4ª planta"
+msgstr "Этаж 5"
 
 #: scripts/mapa/planta.gd
 msgid "Gimnasio"
@@ -2313,7 +2317,7 @@ msgstr "Открываешь ключом"
 
 #: scripts/partida.gd
 msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»"
-msgstr "Джонни: «Я починил лифт! Теперь можно спуститься на этаж 0, в дворницкую»"
+msgstr "Джонни: «Я починил лифт! Теперь можно спуститься на первый этаж, в дворницкую»"
 
 #: scripts/partida.gd
 msgid "Azotea · ¡El último combate del edificio!"
@@ -2533,11 +2537,11 @@ msgstr "Без рекорда"
 
 #: scripts/reto.gd
 msgid "planta %d"
-msgstr "уровень %d"
+msgstr "этаж %d"
 
 #: scripts/reto.gd
 msgid "Has llegado a la planta %d"
-msgstr "Ты дошел до уровня %d"
+msgstr "Ты дошел до этажа %d"
 
 #: scripts/reto.gd
 msgid "Hoy: %s"
@@ -3103,8 +3107,8 @@ msgid "+10 % de vida máxima por punto"
 msgstr "+10 % к максимуму здоровья за очко"
 
 #: scripts/talentos.gd
-msgid "Lobezno"
-msgstr "Росомаха"
+msgid "Ajolote"
+msgstr "Аксолотль"
 
 #: scripts/talentos.gd
 msgid "Regeneras 1 de vida cada 5 segundos por punto, hasta la mitad de tu vida"
@@ -4348,35 +4352,35 @@ msgstr[1] "%d метательные детали"
 msgstr[2] "%d метательных деталей"
 
 #: scripts/ui/inventario.gd
-msgid "%d balas"
+msgid "%d bala"
 msgid_plural "%d balas"
 msgstr[0] "%d пуля"
 msgstr[1] "%d пули"
 msgstr[2] "%d пуль"
 
 #: scripts/ui/inventario.gd
-msgid "%d cartuchos"
+msgid "%d cartucho"
 msgid_plural "%d cartuchos"
 msgstr[0] "%d заряд дроби"
 msgstr[1] "%d заряда дроби"
 msgstr[2] "%d зарядов дроби"
 
 #: scripts/ui/inventario.gd
-msgid "%d gasolinas"
+msgid "%d gasolina"
 msgid_plural "%d gasolinas"
 msgstr[0] "%d канистра бензина"
 msgstr[1] "%d канистры бензина"
 msgstr[2] "%d канистр бензина"
 
 #: scripts/ui/inventario.gd
-msgid "%d bidones de ácido"
+msgid "%d bidón de ácido"
 msgid_plural "%d bidones de ácido"
 msgstr[0] "%d бочка кислоты"
 msgstr[1] "%d бочки кислоты"
 msgstr[2] "%d бочек кислоты"
 
 #: scripts/ui/inventario.gd
-msgid "%d baterías"
+msgid "%d batería"
 msgid_plural "%d baterías"
 msgstr[0] "%d батарея"
 msgstr[1] "%d батареи"
@@ -4512,7 +4516,7 @@ msgstr ""
 
 #: scripts/ui/menu_principal.gd
 msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
-msgstr "Лучший уровень: %d   ·   Накоплено: $%d"
+msgstr "Лучший этаж: %d   ·   Накоплено: $%d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
@@ -4552,7 +4556,7 @@ msgstr "лучшее время %d:%02d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Has llegado a la planta %d de %d"
-msgstr "Ты дошел до уровня %d из %d"
+msgstr "Ты дошел до этажа %d из %d"
 
 #: scripts/ui/menu_principal.gd
 msgid "Completa %s para abrirlo"
@@ -5219,7 +5223,7 @@ msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
 msgstr "Не хватает: каждое очко стоит $%d из накоплений."
 
 #: scripts/ui/ordenador.gd
-msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid "¡Hecho! Ahora tienes %d punto para gastar."
 msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
 msgstr[0] "Готово! Можно потратить %d очко."
 msgstr[1] "Готово! Можно потратить %d очка."

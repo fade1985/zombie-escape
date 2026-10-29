@@ -1924,15 +1924,15 @@ func cuantas_piezas(n: int, pieza: String) -> String:
 	return Idioma.n("%d pieza arrojable", "%d piezas arrojables", n) % n
 
 
-# Cuántas balas, cartuchos, gasolinas... («2 gasolinas»): una frase entera por tipo. En español los dos son iguales
-# (hoy dice «1 balas»); el inglés sí distingue «1 bullet» de «2 bullets»
+# Cuántas balas, cartuchos, gasolinas... («1 gasolina», «2 gasolinas»): una frase entera por tipo, con su singular y su
+# plural (cada idioma, los suyos: el ruso tiene tres)
 func cuenta_municion(tipo: String, n: int) -> String:
 	match tipo:
-		"balas": return Idioma.n("%d balas", "%d balas", n) % n
-		"cartuchos": return Idioma.n("%d cartuchos", "%d cartuchos", n) % n
-		"gasolina": return Idioma.n("%d gasolinas", "%d gasolinas", n) % n
-		"bidon_acido": return Idioma.n("%d bidones de ácido", "%d bidones de ácido", n) % n
-	return Idioma.n("%d baterías", "%d baterías", n) % n
+		"balas": return Idioma.n("%d bala", "%d balas", n) % n
+		"cartuchos": return Idioma.n("%d cartucho", "%d cartuchos", n) % n
+		"gasolina": return Idioma.n("%d gasolina", "%d gasolinas", n) % n
+		"bidon_acido": return Idioma.n("%d bidón de ácido", "%d bidones de ácido", n) % n
+	return Idioma.n("%d batería", "%d baterías", n) % n
 
 
 # Mejora lo elegido: gasta sus piezas (primero las de la mochila) y sube su calidad un nivel. Un arma que lleva cambia
