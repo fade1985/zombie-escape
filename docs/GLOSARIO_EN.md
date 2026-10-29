@@ -50,3 +50,26 @@ armas, objetos, talentos, logros...). Si cambia un nombre, se cambia aquí y en 
 | Modo de atacar: Asistido / Apuntar libre | Attack mode: Assisted / Free aim |
 | Intro · Mayús · Borrar | Enter · Shift · Backspace |
 | Sí / No | Yes / No |
+
+## Elegidos en la fase 2 (por confirmar)
+
+Salieron al pasar la interfaz; las fases siguientes tienen que igualarlos (nombres de armas, objetos, supervivientes...).
+
+| Español | Inglés | Notas |
+|---|---|---|
+| Objetos · Munición · Arrojables | Items · Ammo · Throwables | los tres apartados de la mochila |
+| Cuerpo a cuerpo · A distancia · En la mano · De repuesto | Melee · Ranged · In hand · Spare | |
+| Seguir (cerrar el inventario) · Continuar (pausa) · Seguir (página del dosier) | Resume · Resume · Continue | «Seguir» lleva contexto `inventario` |
+| Ponérmela · Tirar al suelo · Destruir | Equip · Drop · Destroy | |
+| Baúl (del taller) · Banco de trabajo · Taquilla | Stash · Workbench · Locker (*Johnny's Locker*) | |
+| Calidades: Normal, Poco común, Rara, Épica | Normal, Uncommon, Rare, Epic | |
+| gasolina · bidón de ácido · baterías | gas can · acid drum · batteries | tipos de munición de depósito |
+| piezas (cuerpo a cuerpo, a distancia, especial, arrojable) | parts (melee, ranged, special, throwable) | |
+| Tienda de armas · Cambiar (en la tienda) | Weapon Shop · Trade | |
+| partida | run | «Abandonar partida» → *Abandon run*; «Jugar otra vez» → *Play again* |
+| ConserjeOS · CONSERJE OS 95 | JanitorOS · JANITOR OS 95 | los nombres de archivo de las ventanas (PUNTOS.EXE...) también se traducen |
+| Canal 8 | Channel 8 | `Historia.CANAL` (fase 4) |
+| ¡NOTICIAS NUEVAS! | BREAKING NEWS! | |
+| ¡Piso limpio! | All clear! | también vale en las tiendas |
+| Joyería · Farmacéutica | Jewelry Store · Pharmacist | los supervivientes van **sin artículo** («The %s moves into their room») |
+| Vida · Crítico | Health · Crit chance | las filas de la pausa |

@@ -37,7 +37,7 @@ var pendiente: Array = []    # lo que Johnny se calla mientras tanto ([texto] o 
 
 
 func preparar(partida: Node) -> void:
-	name = "Presentacion"
+	name = "Presentacion"   # no-tr (nombre de nodo)
 	theme = Tema.crear()
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE

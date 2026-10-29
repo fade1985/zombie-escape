@@ -60,7 +60,7 @@ func abrir(p: Node) -> void:
 
 	var titulo := Label.new()
 	titulo.theme_type_variation = "Titulo"
-	titulo.text = "Taquilla de Johnny"
+	titulo.text = Idioma.t("Taquilla de Johnny")
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.add_theme_color_override("font_color", COLOR)
 	columna.add_child(titulo)
@@ -153,9 +153,9 @@ func abrir(p: Node) -> void:
 		# debajo, lo que hace llevarla puesta (las que faltan, cómo se consiguen); parte las líneas y la carta crece
 		var frase: String
 		if not tiene(id):
-			frase = "Aún no la tienes: " + Skins.LISTA[id].como.to_lower()
+			frase = Idioma.t("Aún no la tienes: %s") % Skins.LISTA[id].como.to_lower()
 		elif id == "":
-			frase = "Sin efecto especial."
+			frase = Idioma.t("Sin efecto especial.")
 		else:
 			frase = Skins.LISTA[id].efecto
 		var efecto := etiqueta(textos, frase, 15)
@@ -170,7 +170,7 @@ func abrir(p: Node) -> void:
 	pie.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(pie)
 	var cerrar_b := Button.new()
-	cerrar_b.text = "Cerrar"
+	cerrar_b.text = Idioma.t("Cerrar")
 	cerrar_b.pressed.connect(cerrar)
 	pie.add_child(cerrar_b)
 	refrescar()
@@ -208,7 +208,7 @@ func etiqueta(padre: Container, texto: String, tamano: int) -> Label:
 func refrescar() -> void:
 	var puesto := Skins.puesta()
 	for id in puestos:
-		puestos[id].text = "Puesta" if id == puesto else ""
+		puestos[id].text = Idioma.t("Puesta") if id == puesto else ""
 
 
 # La vista enseña esa skin (al pasar por su carta): si aún no se tiene, en silueta y «???»
@@ -227,18 +227,19 @@ func elegir(id: String) -> bool:
 	if fondo == null or not id in ids():
 		return false
 	if not tiene(id):
-		info.text = "Aún no la tienes. " + Skins.LISTA[id].como
+		info.text = Idioma.t("Aún no la tienes. %s") % Skins.LISTA[id].como
 		info.add_theme_color_override("font_color", Tema.ROJO)
 		Sonido.tocar("no")
 		return false
 	if id == Skins.puesta():
-		info.text = "Ya la llevas puesta."
+		info.text = Idioma.t("Ya la llevas puesta.")
 		info.add_theme_color_override("font_color", Tema.TINTA)
 		return false
 	Skins.poner(id)
 	partida.johnny.vestir(id)
 	Sonido.tocar("cambiar")
-	info.text = "Vuelves a ser el conserje de siempre." if id == "" else "Te pones: %s. Se queda puesta." % Skins.nombre(id)
+	info.text = Idioma.t("Vuelves a ser el conserje de siempre.") if id == "" \
+		else Idioma.t("Te pones: %s. Se queda puesta.") % Skins.nombre(id)
 	info.add_theme_color_override("font_color", Tema.VERDE)
 	refrescar()
 	marcar(id)

@@ -97,11 +97,12 @@ func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "")
 	return b
 
 
-func pausa(partida: Node) -> void:
+# "foco": qué botón empieza marcado ("" = Continuar; "opciones" = al volver de Opciones habiendo cambiado de idioma)
+func pausa(partida: Node, foco := "") -> void:
 	var columna := abrir("pausa")
 	var johnny: Node2D = partida.johnny
 	var s: Dictionary = johnny.stats
-	titulo(columna, "Pausa", partida.lugar.text.replace("\n", " · "))
+	titulo(columna, Idioma.t("Pausa"), partida.lugar.text.replace("\n", " · "))
 	var lado := HBoxContainer.new()
 	lado.add_theme_constant_override("separation", 28)
 	columna.add_child(lado)
@@ -109,30 +110,30 @@ func pausa(partida: Node) -> void:
 	izquierda.custom_minimum_size.x = 300
 	lado.add_child(izquierda)
 	var w: Dictionary = johnny.arma()
-	dato(izquierda, "corazon", "Vida", "%d / %d" % [johnny.vida, s.vida_max])
-	dato(izquierda, "fuerza", "Daño", "x%.2f" % s.dano)
-	dato(izquierda, "cafe", "Velocidad de ataque", "x%.2f" % s.ritmo)
-	dato(izquierda, "guantes", "Alcance", "x%.2f" % (s.alcance * (s.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)))
-	dato(izquierda, "dash", "Velocidad", str(roundi(s.velocidad)))
-	dato(izquierda, "casco", "Daño recibido", "x%.2f" % s.dano_recibido)
-	dato(izquierda, "diana", "Crítico", "%d%%" % roundi(s.critico * 100))
+	dato(izquierda, "corazon", Idioma.t("Vida"), "%d / %d" % [johnny.vida, s.vida_max])
+	dato(izquierda, "fuerza", Idioma.t("Daño"), "x%.2f" % s.dano)
+	dato(izquierda, "cafe", Idioma.t("Velocidad de ataque"), "x%.2f" % s.ritmo)
+	dato(izquierda, "guantes", Idioma.t("Alcance"), "x%.2f" % (s.alcance * (s.alcance_cuerpo if w.tipo == "cuerpo" else 1.0)))
+	dato(izquierda, "dash", Idioma.t("Velocidad"), str(roundi(s.velocidad)))
+	dato(izquierda, "casco", Idioma.t("Daño recibido"), "x%.2f" % s.dano_recibido)
+	dato(izquierda, "diana", Idioma.t("Crítico"), "%d%%" % roundi(s.critico * 100))
 	var derecha := VBoxContainer.new()
 	lado.add_child(derecha)
 	var armas := Label.new()
-	armas.text = "Armas"
+	armas.text = Idioma.t("Armas")
 	armas.theme_type_variation = "Sub"
 	derecha.add_child(armas)
 	for hueco in ["cuerpo", "fuego"]:
 		var id: String = johnny.huecos[hueco]
 		var a: Dictionary = Armas.datos(id)
-		var resumen := "%s · daño %d · %.1f/s" % [a.nombre, a.dano * (a.get("perdigones", 1)), a.ritmo]
+		var resumen := Idioma.t("%s · daño %d · %.1f/s") % [a.nombre, a.dano * (a.get("perdigones", 1)), a.ritmo]
 		derecha.add_child(Tema.icono_y_texto(Objetos.icono(id), resumen, 20))
 	var lz: Lanzables = partida.lanzables
-	derecha.add_child(Tema.icono_y_texto("molotov", "Molotovs: %d" % lz.total("molotov"), 20))
-	derecha.add_child(Tema.icono_y_texto("granada", "Granadas: %d" % lz.total("granada"), 20))
+	derecha.add_child(Tema.icono_y_texto("molotov", Idioma.t("Molotovs: %d") % lz.total("molotov"), 20))
+	derecha.add_child(Tema.icono_y_texto("granada", Idioma.t("Granadas: %d") % lz.total("granada"), 20))
 	if not partida.mutaciones.tengo.is_empty():
 		var muts := Label.new()
-		muts.text = "Mutaciones"
+		muts.text = Idioma.t("Mutaciones")
 		muts.theme_type_variation = "Sub"
 		derecha.add_child(muts)
 		for id in partida.mutaciones.tengo:
@@ -142,16 +143,21 @@ func pausa(partida: Node) -> void:
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	botones.add_theme_constant_override("separation", 10)
 	columna.add_child(botones)
-	var seguir := boton(botones, "Continuar", func(): continuar.emit())
+	var seguir := boton(botones, Idioma.t("Continuar"), func(): continuar.emit())
 	# Opciones (scripts/ui/opciones.gd): modo de atacar, música, sonido y controles
-	var opciones := boton(botones, "Opciones", func(): pass)
+	var opciones := boton(botones, Idioma.t("Opciones"), func(): pass)
 	opciones.pressed.connect(func():
 		abierto = "opciones"
+		var idioma_antes := Idioma.actual
 		Opciones.abrir(self, fondo, johnny).cerrado.connect(func():
 			abierto = "pausa"
-			opciones.grab_focus()))
+			if Idioma.actual != idioma_antes:   # se ha cambiado de idioma: la pausa se monta otra vez con sus textos
+				partida.poner_lugar()   # (el sitio de arriba, que se reescribe con el juego en marcha)
+				pausa(partida, "opciones")
+			else:
+				opciones.grab_focus()))
 	# El apartado Tutorial (ui/tutorial.gd): las fichas de los tutoriales vistos, para volver a leerlas
-	var tutorial := boton(botones, "Tutorial", func(): pass)
+	var tutorial := boton(botones, Idioma.t("Tutorial"), func(): pass)
 	tutorial.pressed.connect(func():
 		abierto = "tutorial"
 		Tutorial.lista(self, fondo).cerrado.connect(func():
@@ -159,9 +165,9 @@ func pausa(partida: Node) -> void:
 			tutorial.grab_focus()))
 	# En el móvil, también aquí la pantalla completa (si el navegador la deja)
 	if Tactil.activo and Tactil.puede_pantalla_completa():
-		boton(botones, "Pantalla completa", Tactil.pantalla_completa)
-	boton(botones, "Abandonar partida", func(): abandonar.emit(), "BotonRojo")
-	seguir.grab_focus.call_deferred()
+		boton(botones, Idioma.t("Pantalla completa"), Tactil.pantalla_completa)
+	boton(botones, Idioma.t("Abandonar partida"), func(): abandonar.emit(), "BotonRojo")   # no-tr (variación del tema)
+	(opciones if foco == "opciones" else seguir).grab_focus.call_deferred()
 
 
 # r: gano, titulo, sub, plantas, muertos, visitados, tiempo, dolares, salvados, cartera y, con los niveles de alerta
@@ -174,32 +180,32 @@ func fin(r: Dictionary) -> void:
 	var lista := VBoxContainer.new()
 	lista.custom_minimum_size.x = 440
 	columna.add_child(lista)
-	dato(lista, "apartamentos", "Plantas superadas", r.plantas)
-	dato(lista, "zombi", "Enemigos derrotados", str(r.muertos))
-	dato(lista, "puerta", "Apartamentos visitados (última planta)", r.visitados)
+	dato(lista, "apartamentos", Idioma.t("Plantas superadas"), r.plantas)
+	dato(lista, "zombi", Idioma.t("Enemigos derrotados"), str(r.muertos))
+	dato(lista, "puerta", Idioma.t("Apartamentos visitados (última planta)"), r.visitados)
 	if r.tiempo != "":
-		dato(lista, "trofeo", "Tiempo", r.tiempo)
+		dato(lista, "trofeo", Idioma.t("Tiempo"), r.tiempo)
 	if r.get("reto", "") != "":
-		dato(lista, "trofeo", "Reto del día · " + r.reto, "%s · ¡mejor marca de hoy!" % r.marca if r.mejor
-			else "Tu mejor marca de hoy: " + r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
+		dato(lista, "trofeo", Idioma.t("Reto del día · %s") % r.reto, Idioma.t("%s · ¡mejor marca de hoy!") % r.marca if r.mejor
+			else Idioma.t("Tu mejor marca de hoy: %s") % r.marca, Color("#f7c440") if r.mejor else Tema.TINTA)
 	if r.gano:
 		var premio: int = r.get("premio_reto", 0)
-		dato(lista, "billete", "Dólares conseguidos", "+$%d  (tienes $%d)" % [r.dolares + r.extra + premio, r.cartera], Tema.VERDE)
+		dato(lista, "billete", Idioma.t("Dólares conseguidos"), Idioma.t("+$%d  (tienes $%d)") % [r.dolares + r.extra + premio, r.cartera], Tema.VERDE)
 		if r.get("alerta", 0) > 0:
-			dato(lista, "alerta", "De ellos, por la %s" % Alerta.nombre(r.alerta), "+$%d" % r.extra, Tema.VERDE)
+			dato(lista, "alerta", Idioma.t("De ellos, por la %s") % Alerta.nombre(r.alerta), "+$%d" % r.extra, Tema.VERDE)
 		if premio > 0:
-			dato(lista, "trofeo", "De ellos, por completar el reto de hoy", "+$%d" % premio, Tema.VERDE)
+			dato(lista, "trofeo", Idioma.t("De ellos, por completar el reto de hoy"), "+$%d" % premio, Tema.VERDE)
 		if r.get("abierta", 0) > 0:
-			dato(lista, "alerta", "¡Nivel nuevo!", Alerta.nombre(r.abierta) + " abierta", Color("#f7c440"))
+			dato(lista, "alerta", Idioma.t("¡Nivel nuevo!"), Idioma.t("%s abierta") % Alerta.nombre(r.abierta), Color("#f7c440"))
 	else:
 		# si caes, te quedas la mitad de lo recogido (partida.gd, DOLARES_AL_CAER) y la otra mitad se pierde
-		dato(lista, "billete", "Dólares salvados (la mitad)", "+$%d  (tienes $%d)" % [r.salvados, r.cartera], Tema.VERDE)
-		dato(lista, "billete", "Dólares perdidos", "$%d" % (r.dolares - r.salvados), Tema.ROJO)
+		dato(lista, "billete", Idioma.t("Dólares salvados (la mitad)"), Idioma.t("+$%d  (tienes $%d)") % [r.salvados, r.cartera], Tema.VERDE)
+		dato(lista, "billete", Idioma.t("Dólares perdidos"), "$%d" % (r.dolares - r.salvados), Tema.ROJO)
 	var botones := VBoxContainer.new()
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
-	var otra := boton(botones, "Jugar otra vez" if r.gano else "Reintentar edificio", func(): reintentar.emit(), "BotonGrande")
-	boton(botones, "Menú principal", func(): menu_principal.emit())
+	var otra := boton(botones, Idioma.t("Jugar otra vez") if r.gano else Idioma.t("Reintentar edificio"), func(): reintentar.emit(), "BotonGrande")
+	boton(botones, Idioma.t("Menú principal"), func(): menu_principal.emit())
 	for b in botones.get_children():
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	otra.grab_focus.call_deferred()
@@ -211,13 +217,13 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 	elegir_mutacion = al_elegir
 	cartas = opciones
 	var virus := Label.new()
-	virus.text = "La exposición prolongada al virus hace que te sientas..."
+	virus.text = Idioma.t("La exposición prolongada al virus hace que te sientas...")
 	virus.theme_type_variation = "Sub"
 	virus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(virus)
 	var t := Label.new()
 	t.theme_type_variation = "Titulo"
-	t.text = "¡¡¡DIFERENTE!!!"
+	t.text = Idioma.t("¡¡¡DIFERENTE!!!")
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_color_override("font_color", Color("#e05ce0"))
 	columna.add_child(t)
@@ -253,7 +259,7 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 		if primera == null:
 			primera = carta
 	var pie := Label.new()
-	pie.text = "Mutación %d de %d · dura hasta que acabe la partida" % [llevas + 1, Mutaciones.MAXIMO]
+	pie.text = Idioma.t("Mutación %d de %d · dura hasta que acabe la partida") % [llevas + 1, Mutaciones.MAXIMO]
 	pie.theme_type_variation = "Sub"
 	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(pie)
@@ -264,19 +270,19 @@ func mutacion(opciones: Array, llevas: int, al_elegir: Callable) -> void:
 func pagina(p: Dictionary, n: int, total: int, al_cerrar: Callable) -> void:
 	var columna := abrir("pagina", 0.85)
 	al_leer = al_cerrar
-	titulo(columna, "Página %d de %d" % [n, total], "Junto al cuerpo de %s" % p.cuerpo)
+	titulo(columna, Idioma.t("Página %d de %d") % [n, total], Idioma.t("Junto al cuerpo de %s") % p.cuerpo)
 	var centro := CenterContainer.new()
 	columna.add_child(centro)
 	centro.add_child(Historia.hoja(p, 600.0))
 	var pie := Label.new()
-	pie.text = "Se guarda en el Dosier del ordenador de mantenimiento"
+	pie.text = Idioma.t("Se guarda en el Dosier del ordenador de mantenimiento")
 	pie.theme_type_variation = "Sub"
 	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(pie)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(fila)
-	boton(fila, "Seguir", leida).grab_focus.call_deferred()
+	boton(fila, Idioma.t("Seguir"), leida).grab_focus.call_deferred()
 
 
 func leida() -> void:

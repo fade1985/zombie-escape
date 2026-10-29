@@ -71,18 +71,18 @@ func _ready() -> void:
 func montar_ventana(columna: VBoxContainer) -> void:
 	Sonido.tocar("click")
 	var nuevo := Label.new()
-	nuevo.text = "¡Nuevo!"
+	nuevo.text = Idioma.t("¡Nuevo!")
 	nuevo.add_theme_color_override("font_color", Tema.AMARILLO)
 	nuevo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(nuevo)
 	columna.add_child(ficha(id))
 	var pie := Label.new()
 	pie.theme_type_variation = "Sub"
-	pie.text = "Puedes volver a verlo en Tutorial, en el menú principal y en la pausa"
+	pie.text = Idioma.t("Puedes volver a verlo en Tutorial, en el menú principal y en la pausa")
 	pie.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(pie)
 	var vale := Button.new()
-	vale.text = "Entendido"
+	vale.text = Idioma.t("Entendido")
 	vale.custom_minimum_size.x = 200
 	vale.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	vale.disabled = true
@@ -100,7 +100,7 @@ func montar_ventana(columna: VBoxContainer) -> void:
 func montar_lista(columna: VBoxContainer) -> void:
 	var titulo := Label.new()
 	titulo.theme_type_variation = "Titulo"
-	titulo.text = "Tutorial"
+	titulo.text = Idioma.t("Tutorial")
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(titulo)
 	var lado := HBoxContainer.new()
@@ -148,7 +148,7 @@ func montar_lista(columna: VBoxContainer) -> void:
 	derecha.custom_minimum_size = Vector2(ANCHO, ALTO_LISTA)
 	lado.add_child(derecha)
 	var volver := Button.new()
-	volver.text = "Volver"
+	volver.text = Idioma.t("Volver")
 	volver.custom_minimum_size.x = 180
 	volver.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	volver.pressed.connect(cerrar)

@@ -102,9 +102,15 @@ msgstr "Quit"
 
 ## Estado
 
-Pasados: `idioma.gd`, `ui/menu_principal.gd`, `ui/opciones.gd`, `alerta.gd`, `edificios.gd`, `reto.gd` y el nombre de los
-modos de atacar (`johnny.gd`, `MODOS`); todo lo que sale en «Elige edificio» y en Opciones. Faltan, por fases: la interfaz
-(`ui/inventario.gd`, `ui/ordenador.gd`, `ui/menus.gd`, `partida.gd`, `taquilla`...), los datos (armas, objetos, talentos,
-logros, mutaciones, trajes...), los textos largos (historia, tutoriales, bestiario, supervivientes), los gritos de los jefes,
-los carteles del mundo y los dibujados en imágenes (`cartel-planta-N.png` lleva «PLANTA»). El glosario para escribir el
-inglés, en `docs/GLOSARIO_EN.md`.
+Pasados (lista `PASADOS` de `tools/traducciones.py`):
+- **Fase 1:** `idioma.gd`, `ui/menu_principal.gd`, `ui/opciones.gd`, `alerta.gd`, `edificios.gd`, `reto.gd` y el nombre de
+  los modos de atacar (`johnny.gd`, `MODOS`).
+- **Fase 2 (la interfaz):** `partida.gd` (avisos, carteles y fin de partida), `ui/menus.gd` (pausa y resumen),
+  `ui/hud.gd`, `ui/tactil.gd`, `ui/tutorial.gd` (la ventana, no el texto de cada tutorial), `ui/inventario.gd` (mochila,
+  baúl, tienda y banco), `ui/taquilla.gd`, `ui/ordenador.gd` y `ui/tele.gd`.
+
+**Lo que enseñan esas pantallas y aún sale en español** son datos de otros archivos, que se traducen dentro de su propia
+función cuando se pasen (fases 3 y 4): nombres y descripciones de armas, objetos, arrojables, calidades, talentos, logros,
+mutaciones y trajes; la historia (dosier y noticias), el bestiario y los tutoriales; los nombres de planta y de sitio
+(`mapa/planta.gd`) y los de los supervivientes. Faltan además los gritos de los jefes, los carteles del mundo y los
+dibujados en imágenes (`cartel-planta-N.png` lleva «PLANTA»). Cómo se dice cada cosa en inglés: `docs/GLOSARIO_EN.md`.

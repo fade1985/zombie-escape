@@ -597,7 +597,7 @@ func pintar_escudo() -> void:
 	barra.draw_rect(Rect2(lleno.position + Vector2(0, lleno.size.y - 2), Vector2(lleno.size.x, 2)), Color("#55708f"))
 	barra.draw_texture_rect(MARCO_ESCUDO, Rect2(0, 0, ANCHO, ALTO_ESCUDO), false)
 	var fuente := Tema.FUENTE
-	var texto := "escudo %d" % ceili(johnny.escudo)
+	var texto := Idioma.t("escudo %d") % ceili(johnny.escudo)
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
 	var donde := Vector2(roundf((ANCHO - ancho) / 2.0), ALTO_ESCUDO / 2.0 + 5)
 	barra.draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)

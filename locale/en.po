@@ -167,6 +167,186 @@ msgstr "Assisted"
 msgid "Apuntar libre"
 msgstr "Free aim"
 
+#: scripts/partida.gd scripts/ui/opciones.gd
+msgid "Modo de atacar: %s"
+msgstr "Attack mode: %s"
+
+#: scripts/partida.gd
+msgid "¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"
+msgstr "Defibrillator! You're back at full health (only once per building)"
+
+#: scripts/partida.gd
+msgid "La Farmacéutica te ha preparado un botiquín: está en la mochila"
+msgstr "The Pharmacist made you a medkit: it's in your backpack"
+
+#: scripts/partida.gd
+msgid "¡%s!  %s"
+msgstr "%s!  %s"
+
+#: scripts/partida.gd
+msgid "Te espera arriba, en el helipuerto: sube por la rampa"
+msgstr "They're waiting up on the helipad: take the ramp"
+
+#: scripts/partida.gd
+msgid "Aguanta: aún está forzando la cerradura"
+msgstr "Hold on: they're still working on the lock"
+
+#: scripts/partida.gd
+msgid "La puerta no se abre mientras quede algún zombi"
+msgstr "The door stays shut while any zombie is left"
+
+#: scripts/partida.gd
+msgid "Abres con la tarjeta de acceso"
+msgstr "You open it with the access card"
+
+#: scripts/partida.gd
+msgid "Abres con la llave"
+msgstr "You open it with the key"
+
+#: scripts/partida.gd
+msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»"
+msgstr "Johnny: \"I got the elevator working! Now I can go down to the ground floor, to the maintenance room\""
+
+#: scripts/partida.gd
+msgid "Azotea · ¡El último combate del edificio!"
+msgstr "Roof · The building's final fight!"
+
+#: scripts/partida.gd
+msgid "¡La puerta se ha cerrado detrás de ti!"
+msgstr "The door slammed shut behind you!"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído!"
+msgstr "%s is down!"
+
+#: scripts/partida.gd
+msgid "¡%s ha caído! Las escaleras ya están abiertas"
+msgstr "%s is down! The stairs are open"
+
+#: scripts/partida.gd
+msgid "¡Piso limpio! La puerta se ha abierto"
+msgstr "All clear! The door is open"
+
+#: scripts/partida.gd
+msgid "¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s"
+msgstr "The fence is shut! No way down until you finish off %s"
+
+#: scripts/partida.gd
+msgid "¡Acércate a la escalera para subir al helicóptero!"
+msgstr "Reach the ladder to board the helicopter!"
+
+#: scripts/partida.gd
+msgid "¡Un helicóptero de Velaria viene a por ti!"
+msgstr "A Velaria helicopter is coming for you!"
+
+#: scripts/partida.gd
+msgid "¡NOTICIAS NUEVAS!"
+msgstr "BREAKING NEWS!"
+
+#: scripts/partida.gd
+msgid "Hay noticias nuevas en el ordenador"
+msgstr "There are new broadcasts on the computer"
+
+#: scripts/partida.gd
+msgid "la tienda de %s"
+msgstr "%s's store"
+
+#: scripts/partida.gd
+msgid "Has cogido la tarjeta de acceso: abre %s"
+msgstr "You got the access card: it opens %s"
+
+#: scripts/partida.gd
+msgid "Has cogido la llave del %s"
+msgstr "You got the key to %s"
+
+#: scripts/partida.gd
+msgid "¡¡¡LA LLAVE!!!"
+msgstr "THE KEY!!!"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha tocado el silbato: vienen refuerzos!"
+msgstr "The guard blew his whistle: reinforcements are coming!"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería"
+msgstr "The guard is down! He dropped the access card and the Jewelry Store's gold card"
+
+#: scripts/partida.gd
+msgid "¡El guardia ha caído! Ha soltado la tarjeta de acceso"
+msgstr "The guard is down! He dropped the access card"
+
+#: scripts/partida.gd
+msgid "¡Ha caído el zombi de la llave! Ha soltado la llave del %s"
+msgstr "The key zombie is down! It dropped the key to %s"
+
+#: scripts/partida.gd
+msgid "Te han pillado"
+msgstr "They got you"
+
+#: scripts/partida.gd
+msgid "+1 molotov"
+msgstr "+1 Molotov"
+
+#: scripts/partida.gd
+msgid "+1 granada"
+msgstr "+1 grenade"
+
+#: scripts/partida.gd
+msgid "+munición"
+msgstr "+ammo"
+
+#: scripts/partida.gd
+msgid "Ya llevas %d"
+msgstr "Already carrying %d"
+
+#: scripts/partida.gd
+msgid "No se puede usar"
+msgstr "Can't use that"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo: guárdalo para luego"
+msgstr "You're at full health: save it for later"
+
+#: scripts/partida.gd
+msgid "Tienes la vida al máximo"
+msgstr "You're at full health"
+
+#: scripts/partida.gd
+msgid "%d:%02d · ¡récord!"
+msgstr "%d:%02d · new record!"
+
+#: scripts/partida.gd
+msgid "¡Reto completado!"
+msgstr "Challenge complete!"
+
+#: scripts/partida.gd
+msgid "¡Edificio completado!"
+msgstr "Building complete!"
+
+#: scripts/partida.gd
+msgid "¡Derrota!"
+msgstr "Defeat!"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo"
+msgstr "You cleaned %s from top to bottom"
+
+#: scripts/partida.gd
+msgid "Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento"
+msgstr "You cleaned %s from top to bottom. The %s moves into their room, next to the maintenance room"
+
+#: scripts/partida.gd
+msgid "Caíste en la %s de %s"
+msgstr "You fell on the %s of %s"
+
+#: scripts/partida.gd
+msgid "¡SKIN NUEVA!"
+msgstr "NEW SKIN!"
+
+#: scripts/partida.gd
+msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
+msgstr "New skin: %s. Put it on in the maintenance room locker"
+
 #: scripts/reto.gd
 msgid "Reto del día · %s: %s"
 msgstr "Daily Challenge · %s: %s"
@@ -265,6 +445,665 @@ msgstr "Sharp ears"
 msgid "los zombis dormidos te oyen desde el triple de lejos"
 msgstr "sleeping zombies hear you from three times as far"
 
+#: scripts/ui/hud.gd
+msgid "escudo %d"
+msgstr "shield %d"
+
+#: scripts/ui/inventario.gd scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventory"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Cuerpo a cuerpo"
+msgstr "Melee"
+
+#: scripts/ui/inventario.gd
+msgid "A distancia"
+msgstr "Ranged"
+
+#: scripts/ui/inventario.gd
+msgid "En la mano"
+msgstr "In hand"
+
+#: scripts/ui/inventario.gd
+msgid "De repuesto"
+msgstr "Spare"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables"
+msgstr "Throwables"
+
+#: scripts/ui/inventario.gd
+msgid "F cambia"
+msgstr "F to switch"
+
+#: scripts/ui/inventario.gd
+msgid "Dinero"
+msgstr "Money"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos  %d / %d"
+msgstr "Items  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Munición  %d / %d"
+msgstr "Ammo  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables  %d / %d"
+msgstr "Throwables  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgctxt "inventario"
+msgid "Seguir"
+msgstr "Resume"
+
+#: scripts/ui/inventario.gd
+msgid "Tarjeta"
+msgstr "Keycard"
+
+#: scripts/ui/inventario.gd
+msgid "Llave"
+msgstr "Key"
+
+#: scripts/ui/inventario.gd
+msgid "tirar"
+msgstr "drop"
+
+#: scripts/ui/inventario.gd
+msgid "elegir"
+msgstr "select"
+
+#: scripts/ui/inventario.gd
+msgid "cerrar"
+msgstr "close"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar"
+msgstr "Mouse or finger: tap"
+
+#: scripts/ui/inventario.gd
+msgid "Ratón o dedo: tocar o arrastrar"
+msgstr "Mouse or finger: tap or drag"
+
+#: scripts/ui/inventario.gd
+msgid "Depósito: %d de %d s"
+msgstr "Tank: %d of %d s"
+
+#: scripts/ui/inventario.gd
+msgid "Cargador %d de %d"
+msgstr "Magazine %d of %d"
+
+#: scripts/ui/inventario.gd
+msgid "Reserva: %s"
+msgstr "Reserve: %s"
+
+#: scripts/ui/inventario.gd
+msgid "Ponérmela"
+msgstr "Equip"
+
+#: scripts/ui/inventario.gd
+msgid "Tirar al suelo"
+msgstr "Drop"
+
+#: scripts/ui/inventario.gd
+msgid "Si la tiras, la de repuesto pasa a la mano."
+msgstr "If you drop it, your spare moves to hand."
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Daño"
+msgstr "Damage"
+
+#: scripts/ui/inventario.gd
+msgid "Ritmo"
+msgstr "Speed"
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd
+msgid "Alcance"
+msgstr "Range"
+
+#: scripts/ui/inventario.gd
+msgid "Barrido"
+msgstr "Sweep"
+
+#: scripts/ui/inventario.gd
+msgid "Recarga"
+msgstr "Reload"
+
+#: scripts/ui/inventario.gd
+msgid "Para curar"
+msgstr "Healing"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza · Mejora armas"
+msgstr "Part · Upgrades weapons"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto · Común"
+msgstr "Item · Common"
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "Llevas %d"
+msgstr "Carrying %d"
+
+#: scripts/ui/inventario.gd
+msgid "Te devuelve un tercio de vida perdido y te cura %d."
+msgstr "Restores a lost third of your health and heals %d."
+
+#: scripts/ui/inventario.gd
+msgid "Te cura %d de vida, sin pasar del tercio en el que estás."
+msgstr "Heals %d health, without going past the third you're in."
+
+#: scripts/ui/inventario.gd
+msgid "Sin abrir el inventario, se usa con la tecla %s. Se llevan como mucho %d. Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "Use it without opening the inventory with the %s key. You can carry %d at most. If you die, it's lost (safe in the stash)."
+
+#: scripts/ui/inventario.gd
+msgid "Usar"
+msgstr "Use"
+
+#: scripts/ui/inventario.gd
+msgid "Destruir"
+msgstr "Destroy"
+
+#: scripts/ui/inventario.gd
+msgid "Si caes, se pierde (en el baúl queda a salvo)."
+msgstr "If you die, it's lost (safe in the stash)."
+
+#: scripts/ui/inventario.gd
+msgid "Sirve para mejorar %s en el banco de trabajo del taller."
+msgstr "Used to upgrade %s at the workbench in the workshop."
+
+#: scripts/ui/inventario.gd
+msgid "Munición"
+msgstr "Ammo"
+
+#: scripts/ui/inventario.gd
+msgid "%d en este hueco · llevas %d"
+msgstr "%d in this slot · carrying %d"
+
+#: scripts/ui/inventario.gd
+msgid "La gastan %s (caben %d en cada hueco). Al tirarlo, el hueco entero se queda en el suelo en una caja."
+msgstr "Used by %s (%d fit in each slot). If dropped, the whole slot stays on the floor in a box."
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s (caben %d en cada hueco). Se tira de uno en uno."
+msgstr "Fills %s (%d fit in each slot). Dropped one at a time."
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s"
+msgstr "Throwable · %s"
+
+#: scripts/ui/inventario.gd
+msgid "A mano"
+msgstr "In hand"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d · %d en total"
+msgstr "%d of %d left · %d in total"
+
+#: scripts/ui/inventario.gd
+msgid "Te quedan %d de %d"
+msgstr "%d of %d left"
+
+#: scripts/ui/inventario.gd
+msgid "Es lo que lanzas ahora."
+msgstr "It's what you throw now."
+
+#: scripts/ui/inventario.gd
+msgid "Con F lo eliges para lanzarlo."
+msgstr "Press F to pick it for throwing."
+
+#: scripts/ui/inventario.gd
+msgid "Cuando se acabe, entra otro montón de los de repuesto."
+msgstr "When it runs out, a spare stack steps in."
+
+#: scripts/ui/inventario.gd
+msgid "Al repuesto"
+msgstr "Move to spare"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano un montón lleno de estos: entrará cuando se acabe."
+msgstr "You already carry a full stack of these in hand: it will step in when that one runs out."
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» llena con estos el montón que llevas a mano."
+msgstr "\"Move to hand\" tops up the stack you carry in hand with these."
+
+#: scripts/ui/inventario.gd
+msgid "«A la mano» lo cambia por %s, que pasa aquí."
+msgstr "\"Move to hand\" swaps it for %s, which comes here."
+
+#: scripts/ui/inventario.gd
+msgid "A la mano"
+msgstr "Move to hand"
+
+#: scripts/ui/inventario.gd
+msgid "Te has curado %d de vida."
+msgstr "You healed %d health."
+
+#: scripts/ui/inventario.gd
+msgid "Baúl"
+msgstr "Stash"
+
+#: scripts/ui/inventario.gd
+msgid "Lo que llevas"
+msgstr "What you carry"
+
+#: scripts/ui/inventario.gd scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Armas"
+msgstr "Weapons"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "Spare throwables  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Baúl  %d / %d"
+msgstr "Stash  %d / %d"
+
+#: scripts/ui/inventario.gd
+msgid "Objetos, armas y arrojables"
+msgstr "Items, weapons and throwables"
+
+#: scripts/ui/inventario.gd
+msgid "Aquí no se pierde nada aunque caigas."
+msgstr "Nothing here is lost if you die."
+
+#: scripts/ui/inventario.gd
+msgid "Guardar todo"
+msgstr "Stash all"
+
+#: scripts/ui/inventario.gd scripts/ui/taquilla.gd
+msgid "Cerrar"
+msgstr "Close"
+
+#: scripts/ui/inventario.gd
+msgid "Guardar en el baúl"
+msgstr "Put in stash"
+
+#: scripts/ui/inventario.gd
+msgid "La %s Normal no va al baúl: la tienes siempre."
+msgstr "The Normal %s doesn't go in the stash: you always have it."
+
+#: scripts/ui/inventario.gd
+msgid "Depósito %d de %d s"
+msgstr "Tank %d of %d s"
+
+#: scripts/ui/inventario.gd
+msgid "%s · reserva %d"
+msgstr "%s · reserve %d"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · %s"
+msgstr "Throwable · %s · %s"
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio sacando algo."
+msgstr "The stash is full: make room by taking something out."
+
+#: scripts/ui/inventario.gd
+msgid "Solo caben %d más en el baúl (%d por casilla): el resto se queda contigo."
+msgstr "Only %d more fit in the stash (%d per slot): the rest stays with you."
+
+#: scripts/ui/inventario.gd
+msgid "Se guarda el montón entero, con los que ya haya de estos, y en el baúl queda a salvo aunque caigas."
+msgstr "The whole stack goes in, merged with any of these already there, and it's safe in the stash even if you die."
+
+#: scripts/ui/inventario.gd
+msgid "%s · En la mochila"
+msgstr "%s · In backpack"
+
+#: scripts/ui/inventario.gd
+msgid "Pieza"
+msgstr "Part"
+
+#: scripts/ui/inventario.gd
+msgid "Objeto"
+msgstr "Item"
+
+#: scripts/ui/inventario.gd
+msgid "Munición · La llevas"
+msgstr "Ammo · Carried"
+
+#: scripts/ui/inventario.gd
+msgid "Llena %s."
+msgstr "Fills %s."
+
+#: scripts/ui/inventario.gd
+msgid "Es para %s."
+msgstr "For %s."
+
+#: scripts/ui/inventario.gd
+msgid "%s · En el baúl"
+msgstr "%s · In stash"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl"
+msgstr "%d in the stash"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en esta casilla · %d en el baúl"
+msgstr "%d in this slot · %d in the stash"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar uno"
+msgstr "Take one"
+
+#: scripts/ui/inventario.gd
+msgid "Sacar %d"
+msgstr "Take %d"
+
+#: scripts/ui/inventario.gd
+msgid "Salen hasta %d de una vez a tu munición; fuera del baúl, se pierden si caes."
+msgstr "Up to %d come out at once into your ammo; outside the stash, they are lost if you die."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu munición; fuera del baúl, se pierde si caes."
+msgstr "Comes out one at a time into your ammo; outside the stash, it is lost if you die."
+
+#: scripts/ui/inventario.gd
+msgid "Sale de uno en uno a tu mochila; fuera del baúl, se pierde si caes."
+msgstr "Comes out one at a time into your backpack; outside the stash, it is lost if you die."
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes llenos los huecos de munición."
+msgstr "It doesn't fit: your ammo slots are full."
+
+#: scripts/ui/inventario.gd
+msgid "No te cabe: tienes la mochila llena."
+msgstr "It doesn't fit: your backpack is full."
+
+#: scripts/ui/inventario.gd
+msgid "Sacar"
+msgstr "Take"
+
+#: scripts/ui/inventario.gd
+msgid "%s · %s · En el baúl"
+msgstr "%s · %s · In stash"
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas una: se cambian, esta ocupa su sitio y la tuya entra en el baúl en su lugar."
+msgstr "You already carry one: they swap. This one takes its place and yours goes into the stash."
+
+#: scripts/ui/inventario.gd
+msgid "Sale a la mano; la que llevas pasa al repuesto (si ya llevas dos, la de la mano entra en el baúl en su lugar)."
+msgstr "It goes to your hand; the one you carry moves to spare (if you carry two, the one in hand goes into the stash instead)."
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable · %s · En el baúl"
+msgstr "Throwable · %s · In stash"
+
+#: scripts/ui/inventario.gd
+msgid "Salen de montón en montón, %d cada vez (los que te quepan); fuera del baúl, se pierden si caes."
+msgstr "They come out stack by stack, %d at a time (as many as fit); outside the stash, they are lost if you die."
+
+#: scripts/ui/inventario.gd
+msgid "No te caben: tus montones de estos están llenos y no te queda hueco para otro."
+msgstr "They don't fit: your stacks of these are full and you have no room for another."
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
+msgstr "Safe in the stash even if you die; in its place, in hand, the usual %s."
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas."
+msgstr "Safe in the stash even if you die."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de este hueco, y en el baúl quedan a salvo aunque caigas."
+msgstr "All %d in this slot go in, and they're safe in the stash even if you die."
+
+#: scripts/ui/inventario.gd
+msgid "Se guardan los %d de esta casilla, y en el baúl quedan a salvo aunque caigas."
+msgstr "All %d in this slot go in, and they're safe in the stash even if you die."
+
+#: scripts/ui/inventario.gd
+msgid "%s al repuesto; %s entra en el baúl en su lugar."
+msgstr "%s goes to spare; %s goes into the stash instead."
+
+#: scripts/ui/inventario.gd
+msgid "%s a la mano; %s entra en el baúl en su lugar."
+msgstr "%s goes to hand; %s goes into the stash instead."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl no admite más: contigo se quedan %d de %s."
+msgstr "The stash can't take more: you keep %d of %s."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: contigo se quedan %s."
+msgstr "The stash is full: you keep %s."
+
+#: scripts/ui/inventario.gd scripts/ui/ordenador.gd
+msgid "%s y %s"
+msgstr "%s and %s"
+
+#: scripts/ui/inventario.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Sure? Press again"
+
+#: scripts/ui/inventario.gd
+msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
+msgstr "Destroy %s? Gone for good: this can't be undone."
+
+#: scripts/ui/inventario.gd
+msgid "Destruido: %s."
+msgstr "Destroyed: %s."
+
+#: scripts/ui/inventario.gd
+msgid "Banco de trabajo"
+msgstr "Workbench"
+
+#: scripts/ui/inventario.gd
+msgid "Tus piezas"
+msgstr "Your parts"
+
+#: scripts/ui/inventario.gd
+msgid "En el baúl"
+msgstr "In the stash"
+
+#: scripts/ui/inventario.gd
+msgid "Armas y arrojables"
+msgstr "Weapons and throwables"
+
+#: scripts/ui/inventario.gd
+msgid "No tienes armas ni arrojables guardados."
+msgstr "You have no weapons or throwables stored."
+
+#: scripts/ui/inventario.gd
+msgid "Tienes %d"
+msgstr "You have %d"
+
+#: scripts/ui/inventario.gd
+msgid "Hay %d en el baúl: se mejora un montón, %d"
+msgstr "%d in the stash: upgrading one stack of %d"
+
+#: scripts/ui/inventario.gd
+msgid "Sube a %s"
+msgstr "Upgrades to %s"
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s (tienes %d)."
+msgstr "Costs %s (you have %d)."
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica"
+msgstr "Already Epic"
+
+#: scripts/ui/inventario.gd
+msgid "Mejorar a %s"
+msgstr "Upgrade to %s"
+
+#: scripts/ui/inventario.gd
+msgid "mejorar"
+msgstr "upgrade"
+
+#: scripts/ui/inventario.gd
+msgid "Ya es Épica: no se puede mejorar más."
+msgstr "Already Epic: it can't be upgraded further."
+
+#: scripts/ui/inventario.gd
+msgid "Cuesta %s y tienes %d: te faltan %d."
+msgstr "Costs %s and you have %d: you're short %d."
+
+#: scripts/ui/inventario.gd
+msgid "Ya llevas a mano otro montón %s y juntos no caben (como mucho, %d): pasa uno al repuesto antes."
+msgstr "You already carry another %s stack in hand and together they won't fit (max %d): move one to spare first."
+
+#: scripts/ui/inventario.gd
+msgid "El baúl está lleno: haz sitio para el montón mejorado."
+msgstr "The stash is full: make room for the upgraded stack."
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza cuerpo a cuerpo"
+msgid_plural "%d piezas cuerpo a cuerpo"
+msgstr[0] "%d melee part"
+msgstr[1] "%d melee parts"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza a distancia"
+msgid_plural "%d piezas a distancia"
+msgstr[0] "%d ranged part"
+msgstr[1] "%d ranged parts"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza especial"
+msgid_plural "%d piezas especiales"
+msgstr[0] "%d special part"
+msgstr[1] "%d special parts"
+
+#: scripts/ui/inventario.gd
+msgid "%d pieza arrojable"
+msgid_plural "%d piezas arrojables"
+msgstr[0] "%d throwable part"
+msgstr[1] "%d throwable parts"
+
+#: scripts/ui/inventario.gd
+msgid "%d balas"
+msgid_plural "%d balas"
+msgstr[0] "%d bullet"
+msgstr[1] "%d bullets"
+
+#: scripts/ui/inventario.gd
+msgid "%d cartuchos"
+msgid_plural "%d cartuchos"
+msgstr[0] "%d shell"
+msgstr[1] "%d shells"
+
+#: scripts/ui/inventario.gd
+msgid "%d gasolinas"
+msgid_plural "%d gasolinas"
+msgstr[0] "%d gas can"
+msgstr[1] "%d gas cans"
+
+#: scripts/ui/inventario.gd
+msgid "%d bidones de ácido"
+msgid_plural "%d bidones de ácido"
+msgstr[0] "%d acid drum"
+msgstr[1] "%d acid drums"
+
+#: scripts/ui/inventario.gd
+msgid "%d baterías"
+msgid_plural "%d baterías"
+msgstr[0] "%d battery"
+msgstr[1] "%d batteries"
+
+#: scripts/ui/inventario.gd
+msgid "¡Mejorado! Ahora es %s."
+msgstr "Upgraded! Now it's %s."
+
+#: scripts/ui/inventario.gd
+msgid "Suelta aquí"
+msgstr "Drop here"
+
+#: scripts/ui/inventario.gd
+msgid "para guardarlo en el baúl"
+msgstr "to put it in the stash"
+
+#: scripts/ui/inventario.gd
+msgid "para sacar uno"
+msgstr "to take one"
+
+#: scripts/ui/inventario.gd
+msgid "para sacarla"
+msgstr "to take it"
+
+#: scripts/ui/inventario.gd
+msgid "para tirarlo al suelo"
+msgstr "to drop it on the floor"
+
+#: scripts/ui/inventario.gd
+msgid "se queda a tus pies"
+msgstr "stays at your feet"
+
+#: scripts/ui/inventario.gd
+msgid "y la de repuesto pasa a la mano"
+msgstr "and your spare moves to hand"
+
+#: scripts/ui/inventario.gd
+msgid "Barre un abanico muy ancho y echa lejos a los zombis."
+msgstr "Sweeps a very wide arc and sends zombies flying."
+
+#: scripts/ui/inventario.gd
+msgid "Un golpe fuerte que empuja a los zombis."
+msgstr "One heavy hit that shoves zombies back."
+
+#: scripts/ui/inventario.gd
+msgid "Muy rápido, pero hay que arrimarse."
+msgstr "Very fast, but you have to get close."
+
+#: scripts/ui/inventario.gd
+msgid "Dispara de una en una, recto y lejos."
+msgstr "Fires one shot at a time, straight and far."
+
+#: scripts/ui/inventario.gd
+msgid "Cinco perdigones en abanico. Se recarga de cartucho en cartucho."
+msgstr "Five pellets in a spread. Reloads one shell at a time."
+
+#: scripts/ui/inventario.gd
+msgid "Ráfagas muy rápidas. Gasta las mismas balas que la pistola."
+msgstr "Very fast bursts. Uses the same bullets as the pistol."
+
+#: scripts/ui/inventario.gd
+msgid "Llamarada continua que quema a todos. Se llena con gasolina."
+msgstr "Continuous flame that burns everything. Refills with gas cans."
+
+#: scripts/ui/inventario.gd
+msgid "Chorro de ácido continuo que corroe a todos. Se llena con bidones de ácido."
+msgstr "Continuous acid stream that corrodes everything. Refills with acid drums."
+
+#: scripts/ui/inventario.gd
+msgid "Rayo continuo que aturde y salta al zombi de al lado. Se llena con baterías."
+msgstr "Continuous beam that stuns and jumps to the next zombie. Refills with batteries."
+
+#: scripts/ui/inventario.gd
+msgid "Se rompe y deja un charco de fuego que quema a los zombis."
+msgstr "Shatters and leaves a pool of fire that burns zombies."
+
+#: scripts/ui/inventario.gd
+msgid "Bota, rueda y explota a los 2 segundos."
+msgstr "Bounces, rolls and explodes after 2 seconds."
+
+#: scripts/ui/inventario.gd
+msgid "Suena, atrae a los zombis 3 s y explota."
+msgstr "Makes noise, lures zombies for 3 s, then explodes."
+
+#: scripts/ui/inventario.gd
+msgid "Explota y deja a los zombis congelados 3 s."
+msgstr "Explodes and freezes zombies for 3 s."
+
+#: scripts/ui/inventario.gd
+msgid "Especiales"
+msgstr "Special"
+
+#: scripts/ui/inventario.gd
+msgid "Especial"
+msgstr "Special"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojable"
+msgstr "Throwable"
+
 #: scripts/ui/menu_principal.gd
 msgid "Limpia el edificio de zombis, planta a planta"
 msgstr "Clear the building of zombies, floor by floor"
@@ -273,15 +1112,15 @@ msgstr "Clear the building of zombies, floor by floor"
 msgid "JUGAR"
 msgstr "PLAY"
 
-#: scripts/ui/menu_principal.gd
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/tutorial.gd
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Opciones"
 msgstr "Options"
 
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd
+#: scripts/ui/menu_principal.gd scripts/ui/menus.gd scripts/ui/opciones.gd
 msgid "Pantalla completa"
 msgstr "Fullscreen"
 
@@ -305,7 +1144,7 @@ msgstr "Best floor reached: %d   ·   Dollars saved: $%d"
 msgid "Elige edificio"
 msgstr "Choose a building"
 
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
 msgid "Volver"
 msgstr "Back"
 
@@ -345,9 +1184,153 @@ msgstr "You reached floor %d of %d"
 msgid "Completa %s para abrirlo"
 msgstr "Complete %s to unlock it"
 
-#: scripts/ui/opciones.gd
-msgid "Modo de atacar: %s"
-msgstr "Attack mode: %s"
+#: scripts/ui/menus.gd scripts/ui/opciones.gd
+msgid "Pausa"
+msgstr "Pause"
+
+#: scripts/ui/menus.gd
+msgid "Vida"
+msgstr "Health"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad de ataque"
+msgstr "Attack speed"
+
+#: scripts/ui/menus.gd
+msgid "Velocidad"
+msgstr "Speed"
+
+#: scripts/ui/menus.gd
+msgid "Daño recibido"
+msgstr "Damage taken"
+
+#: scripts/ui/menus.gd
+msgid "Crítico"
+msgstr "Crit chance"
+
+#: scripts/ui/menus.gd
+msgid "%s · daño %d · %.1f/s"
+msgstr "%s · damage %d · %.1f/s"
+
+#: scripts/ui/menus.gd
+msgid "Molotovs: %d"
+msgstr "Molotovs: %d"
+
+#: scripts/ui/menus.gd
+msgid "Granadas: %d"
+msgstr "Grenades: %d"
+
+#: scripts/ui/menus.gd
+msgid "Mutaciones"
+msgstr "Mutations"
+
+#: scripts/ui/menus.gd
+msgid "Continuar"
+msgstr "Resume"
+
+#: scripts/ui/menus.gd
+msgid "Abandonar partida"
+msgstr "Abandon run"
+
+#: scripts/ui/menus.gd
+msgid "Plantas superadas"
+msgstr "Floors cleared"
+
+#: scripts/ui/menus.gd
+msgid "Enemigos derrotados"
+msgstr "Enemies defeated"
+
+#: scripts/ui/menus.gd
+msgid "Apartamentos visitados (última planta)"
+msgstr "Apartments visited (last floor)"
+
+#: scripts/ui/menus.gd
+msgid "Tiempo"
+msgstr "Time"
+
+#: scripts/ui/menus.gd
+msgid "Reto del día · %s"
+msgstr "Daily Challenge · %s"
+
+#: scripts/ui/menus.gd
+msgid "%s · ¡mejor marca de hoy!"
+msgstr "%s · today's best!"
+
+#: scripts/ui/menus.gd
+msgid "Tu mejor marca de hoy: %s"
+msgstr "Your best today: %s"
+
+#: scripts/ui/menus.gd
+msgid "Dólares conseguidos"
+msgstr "Dollars earned"
+
+#: scripts/ui/menus.gd
+msgid "+$%d  (tienes $%d)"
+msgstr "+$%d  (you have $%d)"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por la %s"
+msgstr "Of that, from %s"
+
+#: scripts/ui/menus.gd
+msgid "De ellos, por completar el reto de hoy"
+msgstr "Of that, for today's challenge"
+
+#: scripts/ui/menus.gd
+msgid "¡Nivel nuevo!"
+msgstr "New level!"
+
+#: scripts/ui/menus.gd
+msgid "%s abierta"
+msgstr "%s unlocked"
+
+#: scripts/ui/menus.gd
+msgid "Dólares salvados (la mitad)"
+msgstr "Dollars saved (half)"
+
+#: scripts/ui/menus.gd
+msgid "Dólares perdidos"
+msgstr "Dollars lost"
+
+#: scripts/ui/menus.gd
+msgid "Jugar otra vez"
+msgstr "Play again"
+
+#: scripts/ui/menus.gd
+msgid "Reintentar edificio"
+msgstr "Retry building"
+
+#: scripts/ui/menus.gd
+msgid "Menú principal"
+msgstr "Main menu"
+
+#: scripts/ui/menus.gd
+msgid "La exposición prolongada al virus hace que te sientas..."
+msgstr "Prolonged exposure to the virus makes you feel..."
+
+#: scripts/ui/menus.gd
+msgid "¡¡¡DIFERENTE!!!"
+msgstr "DIFFERENT!!!"
+
+#: scripts/ui/menus.gd
+msgid "Mutación %d de %d · dura hasta que acabe la partida"
+msgstr "Mutation %d of %d · lasts until the run ends"
+
+#: scripts/ui/menus.gd
+msgid "Página %d de %d"
+msgstr "Page %d of %d"
+
+#: scripts/ui/menus.gd
+msgid "Junto al cuerpo de %s"
+msgstr "Next to the body of %s"
+
+#: scripts/ui/menus.gd
+msgid "Se guarda en el Dosier del ordenador de mantenimiento"
+msgstr "Saved in the Dossier on the maintenance computer"
+
+#: scripts/ui/menus.gd
+msgid "Seguir"
+msgstr "Continue"
 
 #: scripts/ui/opciones.gd
 msgid "Móvil"
@@ -542,14 +1525,6 @@ msgid "Usar botiquín"
 msgstr "Use medkit"
 
 #: scripts/ui/opciones.gd
-msgid "Inventario"
-msgstr "Inventory"
-
-#: scripts/ui/opciones.gd
-msgid "Pausa"
-msgstr "Pause"
-
-#: scripts/ui/opciones.gd
 msgid "Modo de atacar"
 msgstr "Attack mode"
 
@@ -572,10 +1547,6 @@ msgstr "Only in \"free aim\": the joystick at the bottom right"
 #: scripts/ui/opciones.gd
 msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
 msgstr "In assisted mode, the one in the bottom-right corner; otherwise, the one on the arc"
-
-#: scripts/ui/opciones.gd
-msgid "Armas"
-msgstr "Weapons"
 
 #: scripts/ui/opciones.gd
 msgid "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"
@@ -772,3 +1743,601 @@ msgstr "Controls"
 #: scripts/ui/opciones.gd
 msgid "Ayudas"
 msgstr "Assists"
+
+#: scripts/ui/ordenador.gd
+msgid "ConserjeOS"
+msgstr "JanitorOS"
+
+#: scripts/ui/ordenador.gd
+msgid "CONSERJE  OS 95"
+msgstr "JANITOR  OS 95"
+
+#: scripts/ui/ordenador.gd
+msgid "C:\\MANTENIMIENTO\\%s"
+msgstr "C:\\MAINTENANCE\\%s"
+
+#: scripts/ui/ordenador.gd
+msgid "Intercambio · $%d = 1 punto"
+msgstr "Exchange · $%d = 1 point"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar 1 punto"
+msgstr "Buy 1 point"
+
+#: scripts/ui/ordenador.gd
+msgid "Cuesta $%d"
+msgstr "Costs $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambiar"
+msgstr "Trade"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia $%d por 1 punto de talento"
+msgstr "Trade $%d for 1 talent point"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar %d puntos (todo)"
+msgstr "Buy %d points (all)"
+
+#: scripts/ui/ordenador.gd
+msgid "Comprar todo lo posible"
+msgstr "Buy as many as you can"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas $%d"
+msgstr "You need $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
+msgstr "Trade as many dollars as you can for points ($%d = 1 point)"
+
+#: scripts/ui/ordenador.gd
+msgid "Árbol de talentos · cada punto sube un nivel"
+msgstr "Talent tree · each point adds a level"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d"
+msgstr "%d of %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Rama %s: %d de sus %d puntos puestos. Pulsa para ver su árbol."
+msgstr "%s branch: %d of its %d points spent. Press to see its tree."
+
+#: scripts/ui/ordenador.gd
+msgid "Cada punto sube un nivel. Para pasar al nivel siguiente, llena antes el talento que pide."
+msgstr "Each point adds a level. To reach the next tier, max out the talent it asks for first."
+
+#: scripts/ui/ordenador.gd
+msgid "Dólares ahorrados"
+msgstr "Saved dollars"
+
+#: scripts/ui/ordenador.gd
+msgid "Puntos de talento"
+msgstr "Talent points"
+
+#: scripts/ui/ordenador.gd
+msgid "Los $%d de esta partida se guardan al acabarla: todos si completas el edificio, la mitad si caes."
+msgstr "The $%d from this run get saved when it ends: all of it if you clear the building, half if you die."
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo"
+msgstr "Needs %s maxed out"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo! %s"
+msgstr "Maxed out! %s"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Al máximo!"
+msgstr "Maxed out!"
+
+#: scripts/ui/ordenador.gd
+msgid "Ahora: %s · Con otro: %s"
+msgstr "Now: %s · With one more: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "MÁX"
+msgstr "MAX"
+
+#: scripts/ui/ordenador.gd
+msgid "Necesitas %s al máximo. %s"
+msgstr "Needs %s maxed out. %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Te hace falta 1 punto."
+msgstr "%s. You need 1 point."
+
+#: scripts/ui/ordenador.gd
+msgid "%s. Pulsa para subirlo (1 punto)."
+msgstr "%s. Press to level it up (1 point)."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: cada punto cuesta $%d de lo ahorrado."
+msgstr "Not enough: each point costs $%d of your savings."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Ahora tienes %d puntos para gastar."
+msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
+msgstr[0] "Done! You now have %d point to spend."
+msgstr[1] "Done! You now have %d points to spend."
+
+#: scripts/ui/ordenador.gd
+msgid "¡%s sube a %d/%d!"
+msgstr "%s goes up to %d/%d!"
+
+#: scripts/ui/ordenador.gd
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
+msgstr "Sold in Normal quality. Anything you carry is lost if you die: put it in the workshop stash (it goes in on its own when you clear the building). You carry two of each type: the one in your hand moves to spare and, if you already have a spare, it stays on the floor."
+
+#: scripts/ui/ordenador.gd
+msgid "LA LLEVAS"
+msgstr "IN HAND"
+
+#: scripts/ui/ordenador.gd
+msgid "GRATIS"
+msgstr "FREE"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrojables · de uno en uno, hasta los que caben"
+msgstr "Throwables · one at a time, as many as fit"
+
+#: scripts/ui/ordenador.gd
+msgid "AL MÁXIMO"
+msgstr "FULL"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %s Cada uno, $%d."
+msgstr "%s: %s Each, $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un arma: se paga con los dólares ahorrados."
+msgstr "Pick a weapon: you pay with your saved dollars."
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %d/s · Depósito %d s"
+msgstr "Damage %d/s · Tank %d s"
+
+#: scripts/ui/ordenador.gd
+msgid "Daño %s"
+msgstr "Damage %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s ataques/s"
+msgstr "%s attacks/s"
+
+#: scripts/ui/ordenador.gd
+msgid "Cargador %d"
+msgstr "Magazine %d"
+
+#: scripts/ui/ordenador.gd
+msgid "rayo continuo"
+msgstr "continuous beam"
+
+#: scripts/ui/ordenador.gd
+msgid "chorro continuo"
+msgstr "continuous stream"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s que se llena con %s."
+msgstr "%s: %d damage per second, %s, %d s tank refilled with %s."
+
+#: scripts/ui/ordenador.gd
+msgid "%s: daño %d por segundo, %s, depósito de %d s."
+msgstr "%s: %d damage per second, %s, %d s tank."
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d x%d perdigones"
+msgstr "damage %d x%d pellets"
+
+#: scripts/ui/ordenador.gd
+msgid "daño %d"
+msgstr "damage %d"
+
+#: scripts/ui/ordenador.gd
+msgid "%.1f ataques por segundo"
+msgstr "%.1f attacks per second"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d que se llena con %s"
+msgstr "%d-round magazine refilled with %s"
+
+#: scripts/ui/ordenador.gd
+msgid "cargador de %d"
+msgstr "%d-round magazine"
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s."
+msgstr "You already have the %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Ya llevas %s de repuesto: póntela desde el inventario."
+msgstr "You already have the %s as a spare: equip it from the inventory."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: te faltan $%d."
+msgstr "Not enough: you're $%d short."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
+msgstr "Bought! %s in hand; %s goes to spare."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos."
+msgstr "Bought! %s in hand; %s stays on the floor: you already had two."
+
+#: scripts/ui/ordenador.gd
+msgid "En el reto «%s» no se lleva nada que lanzar."
+msgstr "In the \"%s\" challenge you don't carry anything to throw."
+
+#: scripts/ui/ordenador.gd
+msgid "No te caben más %s: tus montones están llenos y no te queda hueco para otro."
+msgstr "You can't fit any more %s: your stacks are full and you have no slot left for another."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! Ya llevas %d %s."
+msgstr "Bought! You now carry %d %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Logros conseguidos"
+msgstr "Achievements unlocked"
+
+#: scripts/ui/ordenador.gd
+msgid "Premios por cobrar"
+msgstr "Rewards to claim"
+
+#: scripts/ui/ordenador.gd
+msgid "Elige un reto para esta partida. Al cumplirlo sale un aviso; vuelve aquí a cobrar el premio."
+msgstr "Pick a challenge for this run. When you complete it, a notice pops up; come back here to claim the reward."
+
+#: scripts/ui/ordenador.gd
+msgid "Esta partida va con ayudas (Opciones → Ayudas): no se consiguen logros. Los que ya tienes se quedan y puedes cobrarlos."
+msgstr "This run has assists on (Options → Assists): no achievements can be earned. The ones you already have stay, and you can claim them."
+
+#: scripts/ui/ordenador.gd
+msgid "COBRAR $%d"
+msgstr "CLAIM $%d"
+
+#: scripts/ui/ordenador.gd
+msgid "HECHO"
+msgstr "DONE"
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por encima de un logro para ver cómo vas."
+msgstr "Move onto an achievement to see your progress."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Conseguido! Pulsa para cobrar $%d."
+msgstr "Unlocked! Press to claim $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "Conseguido y cobrado."
+msgstr "Unlocked and claimed."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Aún no lo has conseguido."
+msgstr "Reward: $%d. Not unlocked yet."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (en una partida)."
+msgstr "Reward: $%d. You have %d of %d (in a single run)."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d (sumando partidas)."
+msgstr "Reward: $%d. You have %d of %d (across runs)."
+
+#: scripts/ui/ordenador.gd
+msgid "Premio: $%d. Llevas %d de %d."
+msgstr "Reward: $%d. You have %d of %d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Cobrados $%d! Ya puedes gastarlos en puntos o armas."
+msgstr "Claimed $%d! You can now spend it on points or weapons."
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier VD-7"
+msgstr "Dossier VD-7"
+
+#: scripts/ui/ordenador.gd
+msgid "%d / %d páginas"
+msgstr "%d / %d pages"
+
+#: scripts/ui/ordenador.gd
+msgid "Cada página que encuentres, en cualquier edificio y en cualquier planta, queda aquí para siempre."
+msgstr "Every page you find, in any building and on any floor, stays here for good."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d"
+msgstr "Page %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Arrancada"
+msgstr "Torn out"
+
+#: scripts/ui/ordenador.gd
+msgid "Página arrancada"
+msgstr "Torn-out page"
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: %s. La llevaba %s."
+msgstr "%s, page %d: %s. Carried by %s."
+
+#: scripts/ui/ordenador.gd
+msgid "%s, página %d: aún no la has encontrado (%s)."
+msgstr "%s, page %d: not found yet (%s)."
+
+#: scripts/ui/ordenador.gd
+msgid "Pasa por las páginas para leerlas."
+msgstr "Move over the pages to read them."
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d"
+msgstr "Broadcast %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin emitir"
+msgstr "Not aired"
+
+#: scripts/ui/ordenador.gd
+msgid "¡NUEVA!"
+msgstr "NEW!"
+
+#: scripts/ui/ordenador.gd
+msgid "Completa %s."
+msgstr "Complete %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Sigue buscando páginas del dosier VD-7."
+msgstr "Keep looking for pages of the VD-7 dossier."
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: aún no ha salido. %s"
+msgstr "Broadcast %d: not aired yet. %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Emisión %d: «%s». Pulsa para saltar o repetir."
+msgstr "Broadcast %d: \"%s\". Press to skip ahead or replay."
+
+#: scripts/ui/ordenador.gd
+msgid "%s, con %s. Pasa por las emisiones para verlas."
+msgstr "%s, with %s. Move over the broadcasts to watch them."
+
+#: scripts/ui/ordenador.gd
+msgid "Colecciones"
+msgstr "Collections"
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos"
+msgstr "Items"
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario"
+msgstr "Bestiary"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d objetos encontrados."
+msgstr "%s: %d of %d items found."
+
+#: scripts/ui/ordenador.gd
+msgid "Dosier"
+msgstr "Dossier"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: %d de %d páginas del dosier."
+msgstr "%s: %d of %d dossier pages."
+
+#: scripts/ui/ordenador.gd
+msgid "Bestiario · %d / %d"
+msgstr "Bestiary · %d / %d"
+
+#: scripts/ui/ordenador.gd
+msgid "Sin ver"
+msgstr "Unseen"
+
+#: scripts/ui/ordenador.gd
+msgid "%s: sale en %s."
+msgstr "%s: appears in %s."
+
+#: scripts/ui/ordenador.gd
+msgid "Un enemigo que aún no te has cruzado. Los que veas en una partida se apuntan aquí."
+msgstr "An enemy you haven't run into yet. The ones you see in a run get logged here."
+
+#: scripts/ui/ordenador.gd
+msgid "Lo que encuentras o te cruzas queda aquí para siempre. Pasa por las fichas para verlo."
+msgstr "What you find or run into stays here for good. Move over the cards to see it."
+
+#: scripts/ui/ordenador.gd
+msgid "Apartamentos y centro"
+msgstr "Apartments and mall"
+
+#: scripts/ui/ordenador.gd
+msgid "%d de %d páginas de %s. Léelas en DOSIER.TXT."
+msgstr "%d of %d pages from %s. Read them in DOSSIER.TXT."
+
+#: scripts/ui/ordenador.gd
+msgid "Página %d · %s"
+msgstr "Page %d · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Objetos · %s"
+msgstr "Items · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "%s (sin encontrar) · %s"
+msgstr "%s (not found yet) · %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Sale en: %s"
+msgstr "Appears in: %s"
+
+#: scripts/ui/ordenador.gd
+msgid "Aún no te lo has cruzado."
+msgstr "You haven't run into this one yet."
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Puntos e\n"
+"intercambio"
+msgstr ""
+"Points\n"
+"Exchange"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Tienda\n"
+"de armas"
+msgstr ""
+"Weapon\n"
+"Shop"
+
+#: scripts/ui/ordenador.gd
+msgid "Logros"
+msgstr "Achievements"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Dosier\n"
+"VD-7"
+msgstr ""
+"Dossier\n"
+"VD-7"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias"
+msgstr "News"
+
+#: scripts/ui/ordenador.gd
+msgid "Apagar"
+msgstr "Shut down"
+
+#: scripts/ui/ordenador.gd
+msgid "PUNTOS.EXE"
+msgstr "POINTS.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "ARMAS.EXE"
+msgstr "WEAPONS.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "LOGROS.EXE"
+msgstr "ACHIEVEMENTS.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "DOSIER.TXT"
+msgstr "DOSSIER.TXT"
+
+#: scripts/ui/ordenador.gd
+msgid "CANAL8.TV"
+msgstr "CHANNEL8.TV"
+
+#: scripts/ui/ordenador.gd
+msgid "COLECCION.EXE"
+msgstr "COLLECTION.EXE"
+
+#: scripts/ui/ordenador.gd
+msgid "Compra de puntos e intercambio"
+msgstr "Points Exchange"
+
+#: scripts/ui/ordenador.gd
+msgid "Tienda de armas"
+msgstr "Weapon Shop"
+
+#: scripts/ui/ordenador.gd
+msgid "Noticias de Canal 8"
+msgstr "Channel 8 News"
+
+#: scripts/ui/ordenador.gd
+msgid "Colecciones y bestiario"
+msgstr "Collections and Bestiary"
+
+#: scripts/ui/ordenador.gd
+msgid "A distancia · llenas, y con munición de reserva"
+msgstr "Ranged · fully loaded, with spare ammo"
+
+#: scripts/ui/ordenador.gd
+msgid "Especiales · llenas; van en el hueco de las de A distancia"
+msgstr "Special · fully loaded; they take the Ranged slot"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Noticias\n"
+"¡NUEVAS!"
+msgstr ""
+"News\n"
+"NEW!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Colecciones\n"
+"¡NUEVO!"
+msgstr ""
+"Collections\n"
+"NEW!"
+
+#: scripts/ui/ordenador.gd
+msgid ""
+"Logros\n"
+"¡COBRAR!"
+msgstr ""
+"Achievements\n"
+"CLAIM!"
+
+#: scripts/ui/tactil.gd
+msgid "Gira el móvil para jugar mejor"
+msgstr "Rotate your phone to play better"
+
+#: scripts/ui/taquilla.gd
+msgid "Taquilla de Johnny"
+msgstr "Johnny's Locker"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes: %s"
+msgstr "You don't have it yet: %s"
+
+#: scripts/ui/taquilla.gd
+msgid "Sin efecto especial."
+msgstr "No special effect."
+
+#: scripts/ui/taquilla.gd
+msgid "Puesta"
+msgstr "Equipped"
+
+#: scripts/ui/taquilla.gd
+msgid "Aún no la tienes. %s"
+msgstr "You don't have it yet. %s"
+
+#: scripts/ui/taquilla.gd
+msgid "Ya la llevas puesta."
+msgstr "You're already wearing it."
+
+#: scripts/ui/taquilla.gd
+msgid "Vuelves a ser el conserje de siempre."
+msgstr "You're the same old janitor again."
+
+#: scripts/ui/taquilla.gd
+msgid "Te pones: %s. Se queda puesta."
+msgstr "You put on: %s. It stays on."
+
+#: scripts/ui/tele.gd
+msgid "EN DIRECTO"
+msgstr "LIVE"
+
+#: scripts/ui/tele.gd
+msgid "CANAL 8"
+msgstr "CHANNEL 8"
+
+#: scripts/ui/tele.gd
+msgid "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  "
+msgstr "BREAKING NEWS  ·  %s: \"THE SITUATION IS UNDER CONTROL\"  ·  STAY AWAY FROM THE BUILDING  ·  "
+
+#: scripts/ui/tutorial.gd
+msgid "¡Nuevo!"
+msgstr "New!"
+
+#: scripts/ui/tutorial.gd
+msgid "Puedes volver a verlo en Tutorial, en el menú principal y en la pausa"
+msgstr "See it again in Tutorial, from the main menu or the pause menu"
+
+#: scripts/ui/tutorial.gd
+msgid "Entendido"
+msgstr "Got it"

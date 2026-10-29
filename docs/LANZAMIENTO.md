@@ -16,8 +16,8 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       vsync, guardado en disco (no en el navegador), mando desde el primer menú.
 - [ ] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
       origen y el inglés el segundo (`locale/en.po`, `Idioma.t`, selector en Opciones; cómo funciona y qué falta,
-      en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio» y Opciones. Falta pasar,
-      por fases: la interfaz (inventario, ordenador, pausa, HUD), los datos (armas, objetos, talentos, logros),
+      en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio», Opciones y la interfaz
+      (partida, pausa, HUD, inventario, baúl, tienda, ordenador). Falta pasar, por fases: los datos (armas, objetos, talentos, logros),
       los textos largos (historia, tutoriales, bestiario, supervivientes), los gritos de los jefes y los carteles del
       mundo; los dibujados en imágenes son solo `cartel-planta-N.png` («PLANTA»). Falta también la revisión del inglés
       por una persona nativa antes de salir. Otros idiomas, más adelante.

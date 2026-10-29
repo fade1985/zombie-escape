@@ -148,11 +148,11 @@ func _ready() -> void:
 	# los textos de la pantalla, con la fuente pixel art de los menús
 	for etiqueta in [lugar, aviso]:
 		etiqueta.theme = Tema.crear()
-	johnny.modo_cambiado.connect(func(nombre): decir("Modo de atacar: %s" % nombre, 1.6))
+	johnny.modo_cambiado.connect(func(nombre): decir(Idioma.t("Modo de atacar: %s") % Idioma.t(nombre), 1.6))
 	johnny.murio.connect(_al_morir_johnny)
 	johnny.resucito.connect(func():
 		Sonido.tocar("limpio")
-		decir("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)", 3.5))
+		decir(Idioma.t("¡Desfibrilador! Vuelves con toda la vida (solo una vez por edificio)"), 3.5))
 	johnny.avisar_arma()
 	add_child(luz)
 	luz.seguir_a(johnny)
@@ -246,11 +246,9 @@ func _ready() -> void:
 	if captura:
 		empezar_prueba()
 	else:
-		decir("%s: %s%s" % [planta.nombre, ed.objetivo, "
-%s: %s" % [Alerta.nombre(), Alerta.regla()]
-			if Alerta.nivel > 0 else ""] + ("
-" + Reto.aviso() if Reto.activo else "") + ("
-La Farmacéutica te ha preparado un botiquín: está en la mochila" if botiquin else ""), 4.0)
+		decir("%s: %s%s" % [planta.nombre, Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla()]
+			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
+			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
 		if not Historia.noticias_nuevas(s).is_empty():
 			get_tree().create_timer(4.8, false).timeout.connect(avisar_noticias)
 		get_tree().create_timer(0.8, false).timeout.connect(tutorial.bind("jugar"))
@@ -332,7 +330,7 @@ func elegir_mutacion(id: String) -> void:
 	get_tree().paused = false
 	Particulas.anillo(johnny, johnny.global_position, 70.0, Color("#b5179e"), 0.5)
 	var m := Mutaciones.mutacion(id)
-	decir("¡%s!  %s" % [m.nombre, m.desc], 4.0)
+	decir(Idioma.t("¡%s!  %s") % [m.nombre, m.desc], 4.0)
 
 
 # Johnny se ha arrimado a la mesa del ordenador: se pausa el juego y se enciende
@@ -464,7 +462,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
 				tutorial("jefes")
 			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
-				decir("Te espera arriba, en el helipuerto: sube por la rampa", 3.0)
+				decir(Idioma.t("Te espera arriba, en el helipuerto: sube por la rampa"), 3.0)
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,
@@ -530,7 +528,7 @@ func cruzar(i: int) -> void:
 		Sonido.tocar("no")
 		return
 	if sitio.tipo != "pasillo" and cerrada:
-		decir("Aguanta: aún está forzando la cerradura" if supervivientes.en_horda() else "La puerta no se abre mientras quede algún zombi")
+		decir(Idioma.t("Aguanta: aún está forzando la cerradura") if supervivientes.en_horda() else Idioma.t("La puerta no se abre mientras quede algún zombi"))
 		Sonido.tocar("no")
 		return
 	var espera := supervivientes.escolta.no_cruzar()   # la farmacéutica herida, lejos o en el suelo
@@ -552,7 +550,7 @@ func cruzar(i: int) -> void:
 			planta.tiene_llave = false
 			planta.llave_usada = true
 			salida.cerrojo = ""
-			decir("Abres con la tarjeta de acceso" if ed.cerrojo == "tarjeta" else "Abres con la llave")
+			decir(Idioma.t("Abres con la tarjeta de acceso") if ed.cerrojo == "tarjeta" else Idioma.t("Abres con la llave"))
 			Sonido.tocar("compra")
 		"jefa":
 			if not planta.jefa_muerta:
@@ -572,7 +570,7 @@ func cruzar(i: int) -> void:
 	elif planta.get("ascensor_nuevo", false):
 		# al salir al pasillo tras acabar con el jefe (con el ascensor ya a la vista), Johnny cuenta que lo ha arreglado
 		planta.erase("ascensor_nuevo")
-		decir("Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»", 5.0)
+		decir(Idioma.t("Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta baja, a la sala de mantenimiento»"), 5.0)
 		tutorial("ascensor")
 
 
@@ -615,7 +613,7 @@ func subir() -> void:
 	var superado := eventos.evento if premio != "" else ""
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_llegada())
-	var texto: String = "Azotea · ¡El último combate del edificio!" if planta.get("azotea", false) else planta.nombre
+	var texto: String = Idioma.t("Azotea · ¡El último combate del edificio!") if planta.get("azotea", false) else planta.nombre
 	decir(texto if premio == "" else "%s · %s" % [texto, premio], 2.5 if premio == "" else 3.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
@@ -644,7 +642,7 @@ func _physics_process(delta: float) -> void:
 	if not cerrada and quedan and johnny.position.distance_to(mapa.puertas[0].llegada()) > CIERRE:
 		cerrada = true
 		actualizar_puertas()
-		decir("¡La puerta se ha cerrado detrás de ti!")
+		decir(Idioma.t("¡La puerta se ha cerrado detrás de ti!"))
 		Sonido.tocar("portazo")
 		tutorial("lanzables")   # (la primera pelea)
 	elif not quedan:
@@ -656,12 +654,13 @@ func _physics_process(delta: float) -> void:
 			planta.jefa_muerta = true
 			arreglar_ascensor()
 			Sonido.musica("menu")
-			decir("¡%s ha caído!%s" % [planta.el_jefe.left(1).to_upper() + planta.el_jefe.substr(1),
-				"" if sitio.get("azotea", false) else " Las escaleras ya están abiertas"], 4.0)
+			var quien := Idioma.t(planta.el_jefe)   # («la portera», «the super»): con la primera letra en mayúscula
+			quien = quien.left(1).to_upper() + quien.substr(1)
+			decir((Idioma.t("¡%s ha caído!") if sitio.get("azotea", false) else Idioma.t("¡%s ha caído! Las escaleras ya están abiertas")) % quien, 4.0)
 			if sitio.get("azotea", false) and final_de(planta.jefe).is_empty():
 				fin_del_edificio()   # (el jefe de relleno de una azotea sin su final: el de verdad lo llama al caer)
 		else:
-			decir("¡Piso limpio! La puerta se ha abierto")
+			decir(Idioma.t("¡Piso limpio! La puerta se ha abierto"))
 			logros.cumplir("primer_turno")
 		actualizar_puertas()
 		Sonido.tocar("limpio")
@@ -691,7 +690,7 @@ func mirar_ring(sitio: Dictionary) -> void:
 		if not mapa.en_plataforma(a.global_position, 16.0):
 			a.global_position = mapa.a_la_plataforma(johnny.global_position + Vector2(36.0, 40.0 * lado), 24.0)
 			lado = -lado
-	decir("¡Se ha cerrado la valla! De aquí no se baja hasta acabar con " + planta.el_jefe, 3.0)
+	decir(Idioma.t("¡Se ha cerrado la valla! De aquí no se baja hasta acabar con %s") % Idioma.t(planta.el_jefe), 3.0)
 
 
 # El científico muerto de esta planta, si está en este sitio y su página falta por encontrar (historia.gd). Si
@@ -745,10 +744,10 @@ func fin_del_edificio() -> void:
 	var heli := Helicoptero.new()
 	heli.destino = planta.sitios[aqui].get("helipuerto", johnny.position)
 	heli.johnny = johnny
-	heli.escalera_lista.connect(func(): decir("¡Acércate a la escalera para subir al helicóptero!", 4.0))
+	heli.escalera_lista.connect(func(): decir(Idioma.t("¡Acércate a la escalera para subir al helicóptero!"), 4.0))
 	heli.agarrada.connect(subir_al_helicoptero)
 	mapa.cosas.add_child(heli)
-	decir("¡Un helicóptero de Velaria viene a por ti!", 4.0)
+	decir(Idioma.t("¡Un helicóptero de Velaria viene a por ti!"), 4.0)
 
 
 # Johnny ha llegado a la escalera de cuerda del helicóptero: se acaba el edificio, como al subir las últimas escaleras
@@ -773,8 +772,8 @@ func leer_pagina(p: Dictionary) -> void:
 # Hay alguna emisión de Canal 8 sin ver en el programa Noticias del ordenador (historia.gd)
 func avisar_noticias() -> void:
 	if not terminada:
-		gran_aviso("¡NOTICIAS NUEVAS!")
-		decir("Hay noticias nuevas en el ordenador", 3.5)
+		gran_aviso(Idioma.t("¡NOTICIAS NUEVAS!"))
+		decir(Idioma.t("Hay noticias nuevas en el ordenador"), 3.5)
 
 
 # Un grito grande encima de Johnny, como el de «¡¡¡LA LLAVE!!!», para lo que no hay que perderse (lo nuevo en el ordenador,
@@ -789,11 +788,12 @@ func _al_coger_llave() -> void:
 	planta.tiene_llave = true
 	Sonido.tocar("compra")
 	if ed.cerrojo == "tarjeta":
-		var tienda: String = Edificios.MINIJEFES.get(planta.jefe, {}).get("la_tienda", "la tienda de " + planta.el_jefe)
-		decir("Has cogido la tarjeta de acceso: abre " + tienda, 3.0)
+		var tienda: String = Edificios.MINIJEFES.get(planta.jefe, {}).get("la_tienda", "")
+		tienda = Idioma.t(tienda) if tienda != "" else Idioma.t("la tienda de %s") % Idioma.t(planta.el_jefe)
+		decir(Idioma.t("Has cogido la tarjeta de acceso: abre %s") % tienda, 3.0)
 	else:
-		decir("Has cogido la llave del " + nombre_jefa(), 3.0)
-		gran_aviso("¡¡¡LA LLAVE!!!")   # un grito grande encima de Johnny, para que se vea que la ha cogido
+		decir(Idioma.t("Has cogido la llave del %s") % nombre_jefa(), 3.0)
+		gran_aviso(Idioma.t("¡¡¡LA LLAVE!!!"))   # un grito grande encima de Johnny, para que se vea que la ha cogido
 
 
 # ── El guardia de seguridad (centro comercial): lleva la tarjeta y ronda el pasillo ──
@@ -824,7 +824,7 @@ func guardar_guardia() -> void:
 
 # El silbato: llegan refuerzos corriendo por las dos puntas del pasillo
 func _al_silbar() -> void:
-	decir("¡El guardia ha tocado el silbato: vienen refuerzos!", 2.5)
+	decir(Idioma.t("¡El guardia ha tocado el silbato: vienen refuerzos!"), 2.5)
 	var sitio: Dictionary = planta.sitios[aqui]
 	for i in REFUERZOS + planta.num / 2:
 		var x: float = Planta.MURO + 50 if i % 2 == 0 else sitio.ancho - Planta.MURO - 50
@@ -841,7 +841,8 @@ func _al_caer_guardia(zombi: Node2D) -> void:
 	mapa.call_deferred("poner_llave", zombi.position, true)
 	# en la planta de la joyería lleva también la tarjeta dorada de su cámara acorazada (joyeria.gd)
 	var dorada := joyeria.soltar_dorada(zombi.position + Vector2(44, 0))
-	decir("¡El guardia ha caído! Ha soltado la tarjeta de acceso" + (" y la tarjeta dorada de la Joyería" if dorada else ""), 3.0)
+	decir(Idioma.t("¡El guardia ha caído! Ha soltado la tarjeta de acceso y la tarjeta dorada de la Joyería") if dorada
+		else Idioma.t("¡El guardia ha caído! Ha soltado la tarjeta de acceso"), 3.0)
 
 
 # En los Apartamentos, el zombi que lleva la llave del apartamento de la jefa (planta.gd lo elige al azar entre los de
@@ -858,7 +859,7 @@ func zombi_de_la_llave(zombi: Node2D, dato: Dictionary) -> void:
 		dato.erase("llave")
 		planta.llave = {"sitio": aqui, "pos": zombi.position}
 		mapa.call_deferred("poner_llave", zombi.position)
-		decir("¡Ha caído el zombi de la llave! Ha soltado la llave del " + nombre_jefa(), 3.0))
+		decir(Idioma.t("¡Ha caído el zombi de la llave! Ha soltado la llave del %s") % nombre_jefa(), 3.0))
 
 
 # El nombre del apartamento de la jefa ("2ºC"...)
@@ -886,6 +887,7 @@ func decir(texto: String, segundos := 2.2) -> void:
 
 
 func _al_morir_johnny() -> void:
+	$Pantalla/Aviso.text = Idioma.t("Te han pillado")   # (el de la escena está en español)
 	$Pantalla/Aviso.show()
 	# Un momento para verlo caer, y el cartel de derrota
 	await get_tree().create_timer(1.5).timeout
@@ -924,7 +926,7 @@ func soltar_lanzable(k: String, donde: Vector2) -> void:
 	cosa.cogido.connect(func():
 		lanzables.sumar(k)
 		Sonido.tocar("compra")
-		numero(cosa.position, "+1 " + k, Lanzables.COLORES[k]))
+		numero(cosa.position, Idioma.t("+1 molotov") if k == "molotov" else Idioma.t("+1 granada"), Lanzables.COLORES[k]))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
@@ -957,7 +959,7 @@ func soltar_municion(donde: Vector2, tipo := "", cuanta := 0) -> void:
 			johnny.meter_municion(tipo, cuanta)
 			johnny.coger_municion(tipo)
 		Sonido.tocar("recargado")
-		numero(cosa.position, "+munición", Color("#ffd23f")))
+		numero(cosa.position, Idioma.t("+munición"), Color("#ffd23f")))
 	mapa.cosas.add_child.call_deferred(cosa)
 
 
@@ -993,7 +995,7 @@ func soltar_objeto(id: String, donde: Vector2, tirado := false, salida := Vector
 	cosa.position = donde
 	cosa.puede = func() -> bool: return johnny.sitio(id) > 0 if id in Armas.MUNICION else Objetos.cabe(mochila, id)
 	if Objetos.TOPE.has(id):   # las curas: si ya lleva su tope, al pisarla lo dice
-		cosa.al_no_caber = func(): numero(cosa.position + Vector2(0, -24), "Ya llevas %d" % Objetos.TOPE[id], Tema.TINTA)
+		cosa.al_no_caber = func(): numero(cosa.position + Vector2(0, -24), Idioma.t("Ya llevas %d") % Objetos.TOPE[id], Tema.TINTA)
 	cosa.cogido.connect(func():
 		mochila.append(id)
 		Objetos.apuntar_encontrado(id)   # para las Colecciones del ordenador
@@ -1110,9 +1112,9 @@ func curar_con(cura: int, sobre: Node2D) -> void:
 # perdido). Si no se puede (con la vida llena), no se gasta y devuelve por qué
 func usar_objeto(id: String) -> String:
 	if not id in mochila or not id in Objetos.USABLES:
-		return "No se puede usar"
+		return Idioma.t("No se puede usar")
 	if not puede_curar(id):
-		return "Tienes la vida al máximo: guárdalo para luego"
+		return Idioma.t("Tienes la vida al máximo: guárdalo para luego")
 	mochila.remove_at(mochila.rfind(id))
 	if Objetos.USABLES[id].get("tercio", false):
 		johnny.devolver_tercio()
@@ -1134,7 +1136,7 @@ func usar_cura(id: String) -> void:
 		return
 	if usar_objeto(id) != "":
 		Sonido.tocar("no")
-		numero(johnny.position + Vector2(0, -50), "Tienes la vida al máximo", Tema.TINTA)
+		numero(johnny.position + Vector2(0, -50), Idioma.t("Tienes la vida al máximo"), Tema.TINTA)
 
 
 # Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 50), más el talento Sanitario y, con la
@@ -1312,16 +1314,17 @@ func terminar(gano: bool, abandona := false) -> void:
 				visitados += 1
 	var tiempo := ""
 	if gano:
-		tiempo = "%d:%02d%s" % [int(duracion) / 60, int(duracion) % 60, " · ¡récord!" if record[0] else ""]
+		tiempo = (Idioma.t("%d:%02d · ¡récord!") if record[0] else "%d:%02d") % [int(duracion) / 60, int(duracion) % 60]
 	menus.fin({
 		"gano": gano,
-		"titulo": ("¡Reto completado!" if Reto.activo else "¡Edificio completado!") if gano else "¡Derrota!",
+		"titulo": (Idioma.t("¡Reto completado!") if Reto.activo else Idioma.t("¡Edificio completado!")) if gano else Idioma.t("¡Derrota!"),
 		"reto": Reto.nombre() if Reto.activo else "",
 		"mejor": mejor[0],
 		"marca": Reto.marca(Reto.ficha(s, edificio), true) if Reto.activo else "",
-		"sub": ("Has limpiado %s de arriba abajo%s" % [ed.el_nombre, "" if nuevo.is_empty()
-			else ". %s se viene a vivir a su habitación, junto a la sala de mantenimiento" % nuevo.nombre]) if gano
-			else ("Caíste en la %s de %s" % [planta.nombre.to_lower(), ed.el_nombre]),
+		"sub": ((Idioma.t("Has limpiado %s de arriba abajo") % Idioma.t(ed.el_nombre)) if nuevo.is_empty()
+			else (Idioma.t("Has limpiado %s de arriba abajo. %s se viene a vivir a su habitación, junto a la sala de mantenimiento")
+				% [Idioma.t(ed.el_nombre), nuevo.nombre])) if gano
+			else (Idioma.t("Caíste en la %s de %s") % [planta.nombre.to_lower(), Idioma.t(ed.el_nombre)]),
 		"plantas": "%d / %d" % [Planta.PLANTAS if gano else planta.num - 1, Planta.PLANTAS],
 		"muertos": muertos,
 		"visitados": "%d / %d" % [visitados, apartamentos],
@@ -1430,8 +1433,8 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		var skin := Skins.de_jefe(tipo)
 		if skin != "" and Skins.desbloquear(skin):
 			Sonido.tocar("compra")
-			gran_aviso("¡SKIN NUEVA!")
-			decir("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento" % Skins.nombre(skin), 4.0)
+			gran_aviso(Idioma.t("¡SKIN NUEVA!"))
+			decir(Idioma.t("Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento") % Skins.nombre(skin), 4.0)
 		# el jefe final (el gerente mutado): su página del dosier y el helicóptero de Velaria
 		if tipo in JEFES and not final_de(tipo).is_empty():
 			fin_del_edificio()
@@ -1448,7 +1451,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		zombi.enfado = Alerta.jefe_enfado()
 		# Su barra de vida grande, arriba (ui/barra_jefe.gd), y los vecinos que llama
 		var barra_jefa: BarraJefe = $Pantalla/Jefa
-		var el: String = de_final.get("el_final", Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera"))
+		var el: String = Idioma.t(de_final.get("el_final", Edificios.MINIJEFES.get(tipo, {}).get("el", "la portera")))
 		$Pantalla/Jefa/Nombre.text = el.left(1).to_upper() + el.substr(1)
 		barra_jefa.jefe = zombi
 		zombi.vida_cambiada.connect(func(vida, maxima):
@@ -1475,7 +1478,7 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 # barra de vida grande, del ancho de su hueco y más fina, de color acero (la pinta la barra del jefe, con el mismo
 # estilo: ui/barra_jefe.gd, pintar_armadura)
 func armadura_jefe() -> ProgressBar:
-	var barra: ProgressBar = $Pantalla/Jefa.get_node_or_null("Armadura")
+	var barra: ProgressBar = $Pantalla/Jefa.get_node_or_null("Armadura")   # no-tr (nombre de nodo)
 	if barra:
 		return barra
 	barra = ProgressBar.new()
@@ -1543,13 +1546,13 @@ func pruebas() -> void:
 		johnny.get_node("Camara").reset_smoothing()
 		return
 	if cerrada:
-		decir("Con la puerta cerrada no se puede ir a la sala de pruebas")
+		decir("Con la puerta cerrada no se puede ir a la sala de pruebas")   # no-tr (herramienta interna: F11)
 		Sonido.tocar("no")
 		return
 	sitio_pruebas()
 	de_pruebas = {"planta": planta, "sitio": aqui, "pos": johnny.position}
 	await montar(planta.armas, 0)
-	decir("Sala de pruebas · P: panel de pruebas · guion: líneas y daño · F11: volver", 3.5)
+	decir("Sala de pruebas · P: panel de pruebas · guion: líneas y daño · F11: volver", 3.5)   # no-tr
 
 
 # La sala de pruebas y la exposición, como dos sitios más de la planta (la planta baja ya las trae: planta.gd)
@@ -1587,14 +1590,14 @@ func probar_cientifico() -> void:
 	cuerpo.montar(p, johnny.position + Vector2(0, 70))
 	cuerpo.johnny = johnny
 	mapa.cosas.add_child(cuerpo)
-	decir("Científico de prueba: " + p.cuerpo)
+	decir("Científico de prueba: " + p.cuerpo)   # no-tr
 
 
 # El panel de pruebas: derecho a la azotea, sin subir planta a planta
 func ir_a_azotea() -> void:
 	nueva_planta(Planta.PLANTAS)
 	await montar(0, puerta_de_llegada())
-	decir("Azotea · ¡El último combate del edificio!", 2.5)
+	decir("Azotea · ¡El último combate del edificio!", 2.5)   # no-tr (panel de pruebas)
 
 
 # El panel de pruebas (los de los Apartamentos: el Glotón, el Gymbro, el jefe de bomberos y la portera): derecho a su
@@ -1603,7 +1606,7 @@ func ir_a_azotea() -> void:
 func ir_al_jefe(tipo: String) -> void:
 	var num := orden_jefes.find(tipo) + 1
 	if num <= 0 or jefe_de(num) != tipo:
-		decir("Ese jefe no está en este edificio")
+		decir("Ese jefe no está en este edificio")   # no-tr
 		return
 	nueva_planta(num)
 	for i in planta.sitios.size():
@@ -1622,4 +1625,4 @@ func dar_objetos() -> void:
 		for id in Objetos.PIEZAS:
 			g.baul[id] = g.baul.get(id, 0) + 10
 		g.baul_equipo.append_array(PRUEBA_EQUIPO.duplicate(true)))
-	decir("10 piezas de cada familia y unas armas y arrojables mejorados al baúl")
+	decir("10 piezas de cada familia y unas armas y arrojables mejorados al baúl")   # no-tr

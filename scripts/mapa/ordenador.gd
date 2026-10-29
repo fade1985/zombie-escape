@@ -18,7 +18,7 @@ var t := 0.0
 
 # "x": su centro; "arriba": donde acaba el muro de arriba
 func montar(x: float, arriba: float) -> void:
-	name = "Ordenador"
+	name = "Ordenador"   # no-tr
 	add_to_group("obstaculos")
 	position = Vector2(x, arriba + HONDO)   # el pie de la mesa, para ordenarse con los personajes
 	var sprite := Sprite2D.new()

@@ -317,7 +317,7 @@ func soltar_todo() -> void:
 func dibujar_aviso() -> void:
 	var s := tamano()
 	if s.y > s.x:
-		texto(aviso, Vector2(s.x / 2, s.y / 2), "Gira el móvil para jugar mejor", 24, Tema.TINTA)
+		texto(aviso, Vector2(s.x / 2, s.y / 2), Idioma.t("Gira el móvil para jugar mejor"), 24, Tema.TINTA)
 
 
 func dibujar() -> void:

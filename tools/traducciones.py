@@ -40,6 +40,19 @@ PASADOS = [
     "scripts/alerta.gd",
     "scripts/edificios.gd",
     "scripts/reto.gd",
+    # fase 2: la interfaz
+    "scripts/partida.gd",
+    "scripts/ui/menus.gd",
+    "scripts/ui/hud.gd",
+    "scripts/ui/barra_jefe.gd",
+    "scripts/ui/presentacion.gd",
+    "scripts/ui/tactil.gd",
+    "scripts/ui/tutorial.gd",
+    "scripts/ui/inventario.gd",
+    "scripts/ui/taquilla.gd",
+    "scripts/ui/ordenador.gd",
+    "scripts/ui/tele.gd",
+    "scripts/mapa/ordenador.gd",
 ]
 
 # Palabras sueltas con mayúscula que no son texto (nombres de nodos, variaciones del tema...)

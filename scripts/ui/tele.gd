@@ -47,8 +47,8 @@ func _init() -> void:
 	pantalla.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pantalla.draw.connect(pintar_pantalla)
 	add_child(pantalla)
-	directo = rotulo("EN DIRECTO", Color.WHITE, Vector2(24, 4))
-	canal = rotulo("CANAL 8", AZUL, Vector2(PANTALLA.size.x - 76, 6))
+	directo = rotulo(Idioma.t("EN DIRECTO"), Color.WHITE, Vector2(24, 4))
+	canal = rotulo(Idioma.t("CANAL 8"), AZUL, Vector2(PANTALLA.size.x - 76, 6))
 	nombre = rotulo("%s · %s" % [Historia.REPORTERA.to_upper(), Historia.CANAL.to_upper()], Color("#e8e8d0"),
 		Vector2(6, 105))
 	titular = rotulo("", Color.WHITE, Vector2(6, 126))
@@ -87,7 +87,7 @@ func rotulo(t: String, color: Color, donde: Vector2) -> Label:
 func poner(n: Dictionary) -> void:
 	noticia = n
 	titular.text = n.titular
-	cinta.text = "ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  " % Historia.EMPRESA.to_upper()
+	cinta.text = Idioma.t("ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  ") % Historia.EMPRESA.to_upper()
 	cinta.position.x = PANTALLA.size.x
 	texto.text = n.texto
 	texto.visible_characters = 0
