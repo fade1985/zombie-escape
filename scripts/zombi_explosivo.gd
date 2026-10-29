@@ -80,5 +80,5 @@ func _draw() -> void:
 		return
 	var k := 1.0 - mecha / MECHA
 	var centro := Vector2(0, 4)
-	draw_circle(centro, RADIO_EXPLOSION, Color(1, 0.31, 0.24, 0.12 + k * 0.25))
-	draw_arc(centro, RADIO_EXPLOSION, 0, TAU, 48, Color(1, 0.36, 0.24), 3.0)
+	Formas.disco(self, centro, RADIO_EXPLOSION, Color(1, 0.31, 0.24, 0.12 + k * 0.25))
+	Formas.arco(self, centro, RADIO_EXPLOSION, 0, TAU, 48, Color(1, 0.36, 0.24), 3.0)

@@ -563,8 +563,8 @@ func _draw() -> void:
 	var r := radio_zona()
 	draw_set_transform(apunte, 0.0, Vector2(1.0, 0.6))
 	var molotov := tipo_de(tipo) == "molotov"
-	draw_circle(Vector2.ZERO, r, Color(tono, (0.35 if molotov else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
-	draw_arc(Vector2.ZERO, r, 0.0, TAU, 64, Color(0.11, 0.1, 0.17, 0.6), 6.0)
+	Formas.disco(self, Vector2.ZERO, r, Color(tono, (0.35 if molotov else 0.3) * (0.85 + 0.15 * sin(t * 8.0))))
+	Formas.arco(self, Vector2.ZERO, r, 0.0, TAU, 64, Color(0.11, 0.1, 0.17, 0.6), 6.0)
 	draw_set_transform(Vector2.ZERO)
 	elipse_a_trozos(apunte, r, tono, 2.0, t * 0.6)
 	if molotov:

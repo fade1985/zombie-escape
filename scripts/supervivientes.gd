@@ -697,10 +697,10 @@ func flecha(hacia: Vector2, color: Color, grande: bool) -> void:
 	var punto := en.clamp(borde.position, borde.end)
 	var radio := 16.0 if grande else 13.0
 	var dir := (en - punto).normalized()
-	capa.draw_colored_polygon(PackedVector2Array([punto + dir * (radio + 10), punto + dir.orthogonal() * 8 + dir * radio * 0.6,
+	Formas.poligono(capa, PackedVector2Array([punto + dir * (radio + 10), punto + dir.orthogonal() * 8 + dir * radio * 0.6,
 		punto - dir.orthogonal() * 8 + dir * radio * 0.6]), color)
-	capa.draw_circle(punto, radio + 2, Tema.LINEA)
-	capa.draw_circle(punto, radio, color)
+	Formas.disco(capa, punto, radio + 2, Tema.LINEA)
+	Formas.disco(capa, punto, radio, color)
 	capa.draw_string(Tema.FUENTE, punto + Vector2(-20, 6), "!", HORIZONTAL_ALIGNMENT_CENTER, 40, 16, Tema.LINEA)
 
 

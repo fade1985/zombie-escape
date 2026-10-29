@@ -2414,8 +2414,8 @@ func probar_rendimiento() -> void:
 		for ms in tiempos:
 			peor = maxf(peor, ms)
 			suma += ms
-		print("Rendimiento · %s: %d fotogramas · media %.1f ms · peor %.1f ms · velocidad mínima del juego %.2f" % [
-			nombre, tiempos.size(), suma / maxf(1.0, tiempos.size()), peor, lento])
+		print("Rendimiento · %s: %d fotogramas · media %.1f ms · peor %.1f ms · velocidad mínima del juego %.2f · página %s" % [
+			nombre, tiempos.size(), suma / maxf(1.0, tiempos.size()), peor, lento, Lentos.visibilidad()])
 	var hasta := Time.get_ticks_msec() + 2000
 	await medir.call("de siempre (2 s)", func(): return Time.get_ticks_msec() >= hasta)
 	for fase in [1, 2, 2]:
@@ -2428,4 +2428,67 @@ func probar_rendimiento() -> void:
 		await medir.call("aviso del latigazo (%s)" % como, func(): return gloton.estado != "aviso_latigazo")
 		await medir.call("latigazo (%s)" % como, func(): return gloton.estado != "latigazo")
 		await get_tree().create_timer(0.5).timeout
+	get_tree().quit()
+
+
+# --dibujos: lo que cuesta cada tipo de dibujo (pruebas/dibujos.gd) con distintas cantidades por fotograma: imprime la
+# media y el peor fotograma en milisegundos, las llamadas y los triángulos, y si la página estaba a la vista (en la web).
+# Se corre en la web (docs/WEB.md): ahí 200 círculos tardan un segundo y 12 800 rectángulos, 17 ms
+func probar_dibujos() -> void:
+	await get_tree().create_timer(1.0).timeout
+	var lienzo := preload("res://scripts/pruebas/dibujos.gd").new()
+	$Pantalla.add_child(lienzo)
+	for tipo in ["rect", "circulo", "abanico", "anillo"]:
+		var fila := []
+		for n in ([100, 128, 200, 400] if tipo == "circulo" else [800, 3200, 12800] if tipo == "rect" else [200, 400, 800]):
+			lienzo.tipo = tipo
+			lienzo.n = n
+			await get_tree().process_frame
+			await get_tree().process_frame
+			var tiempos: Array[float] = []
+			var antes := Time.get_ticks_usec()
+			var hasta := Time.get_ticks_msec() + 1200
+			while Time.get_ticks_msec() < hasta:
+				await get_tree().process_frame
+				var ahora := Time.get_ticks_usec()
+				tiempos.append((ahora - antes) / 1000.0)
+				antes = ahora
+			var suma := 0.0
+			var peor := 0.0
+			for ms in tiempos:
+				suma += ms
+				peor = maxf(peor, ms)
+			fila.append("%d: %.1f ms (peor %.0f; %d llamadas, %d triángulos)" % [n, suma / maxf(1.0, tiempos.size()), peor,
+				RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
+				RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)])
+		print("Dibujos · %s · %s · página %s" % [tipo, " · ".join(fila), Lentos.visibilidad()])
+	lienzo.queue_free()
+	get_tree().quit()
+
+
+# --formas: las formas de formas.gd contra las de CanvasItem: pinta las mismas con cada una, saca las dos fotos
+# (captura-formas-antes.png y captura-formas-ahora.png) y cuenta los píxeles que cambian (más de 40 de 255 en algún canal)
+func probar_formas() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var lienzo := preload("res://scripts/pruebas/dibujos.gd").new()
+	lienzo.tipo = "comparar"
+	lienzo.position = Vector2(100, 100)
+	$Pantalla.add_child(lienzo)
+	var fotos := []
+	for nuevo in [false, true]:
+		lienzo.nuevo = nuevo
+		lienzo.queue_redraw()
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var imagen := get_viewport().get_texture().get_image().get_region(Rect2i(100, 100, 640, 400))
+		imagen.save_png("res://capturas/captura-formas-%s.png" % ("ahora" if nuevo else "antes"))
+		fotos.append(imagen)
+	var distintos := 0
+	for y in 400:
+		for x in 640:
+			var a: Color = fotos[0].get_pixel(x, y)
+			var b: Color = fotos[1].get_pixel(x, y)
+			if maxf(maxf(absf(a.r - b.r), absf(a.g - b.g)), absf(a.b - b.b)) > 40.0 / 255.0:
+				distintos += 1
+	print("Formas · píxeles distintos: %d de %d (%.2f %%)" % [distintos, 640 * 400, distintos * 100.0 / (640 * 400)])
 	get_tree().quit()

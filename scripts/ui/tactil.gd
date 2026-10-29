@@ -329,16 +329,16 @@ func dibujar() -> void:
 	var rj := radio_joy()
 	# El joystick izquierdo, donde se tocó
 	if "joy" in dedos.values():
-		lienzo.draw_circle(joy_origen, rj, OSCURO)
-		lienzo.draw_arc(joy_origen, rj, 0, TAU, 48, BORDE, 2.0)
-		lienzo.draw_circle(joy_origen + joy * rj, 28.0 * esc, Color(0.85, 0.82, 0.74, 0.6))
+		Formas.disco(lienzo, joy_origen, rj, OSCURO)
+		Formas.arco(lienzo, joy_origen, rj, 0, TAU, 48, BORDE, 2.0)
+		Formas.disco(lienzo, joy_origen + joy * rj, 28.0 * esc, Color(0.85, 0.82, 0.74, 0.6))
 	# El joystick derecho (modo libre), siempre a la vista
 	if johnny.modo == "libre":
 		var c := centro()
-		lienzo.draw_circle(c, rj, OSCURO)
-		lienzo.draw_arc(c, rj, 0, TAU, 48, Color(Tema.ROJO, 0.6), 2.0)
+		Formas.disco(lienzo, c, rj, OSCURO)
+		Formas.arco(lienzo, c, rj, 0, TAU, 48, Color(Tema.ROJO, 0.6), 2.0)
 		var mover := apunte if "apunte" in dedos.values() else Vector2.ZERO
-		lienzo.draw_circle(c + mover * rj, 28.0 * esc, Color(Tema.ROJO, 0.55))
+		Formas.disco(lienzo, c + mover * rj, 28.0 * esc, Color(Tema.ROJO, 0.55))
 		icono(c + mover * rj, "diana", 32 * esc)
 	var b := botones()
 	var lz: Lanzables = partida.lanzables
@@ -352,8 +352,8 @@ func dibujar() -> void:
 			borde = Color(Tema.AMARILLO, 0.9)
 		elif nombre == "atacar":
 			borde = Color(Tema.ROJO, 0.7)
-		lienzo.draw_circle(donde, r, OSCURO)
-		lienzo.draw_arc(donde, r, 0, TAU, 40, borde, 2.5 if nombre == johnny.mano else 2.0)
+		Formas.disco(lienzo, donde, r, OSCURO)
+		Formas.arco(lienzo, donde, r, 0, TAU, 40, borde, 2.5 if nombre == johnny.mano else 2.0)
 		# lo que no es Normal (Armas.CALIDADES), un aro de su color por dentro
 		var calidad := 0
 		if nombre in ["cuerpo", "fuego"]:
@@ -361,19 +361,19 @@ func dibujar() -> void:
 		elif nombre == "lanzar":
 			calidad = Lanzables.calidad_de(lz.tipo)
 		if calidad > 0:
-			lienzo.draw_arc(donde, r - 4.0 * esc, 0, TAU, 40, Color(Armas.color(calidad), 0.85), 2.0)
+			Formas.arco(lienzo, donde, r - 4.0 * esc, 0, TAU, 40, Color(Armas.color(calidad), 0.85), 2.0)
 		match nombre:
 			"esquivar":
 				icono(donde, "dash", 52 * esc)
 				if johnny.esquiva_espera > 0.0:
-					lienzo.draw_circle(donde, r, Color(0, 0, 0, 0.45))
+					Formas.disco(lienzo, donde, r, Color(0, 0, 0, 0.45))
 			"cuerpo", "fuego":
 				icono(donde, Objetos.icono(johnny.huecos[nombre]), 40 * esc)
 				# recargando: un aro blanco que se va llenando (como en el JS)
 				if nombre == "fuego" and johnny.recargando > 0.0:
 					var w: Dictionary = johnny.base(johnny.huecos.fuego)
 					var hecho: float = 1.0 - johnny.recargando / maxf(0.01, w.get("recarga", 1.0))
-					lienzo.draw_arc(donde, r + 4 * esc, -PI / 2, -PI / 2 + TAU * clampf(hecho, 0, 1), 32, Color.WHITE, 3.0)
+					Formas.arco(lienzo, donde, r + 4 * esc, -PI / 2, -PI / 2 + TAU * clampf(hecho, 0, 1), 32, Color.WHITE, 3.0)
 			"lanzar":
 				var k: String = lz.tipo
 				if k != "":   # (sin nada a mano, el botón vacío)
@@ -400,7 +400,7 @@ func dibujar() -> void:
 	if "lanzar" in dedos.values():
 		var desde: Vector2 = b.lanzar[0]
 		lienzo.draw_line(desde, desde + apunte * ARRASTRE_LANZAR, Color(lz.color(lz.tipo), 0.8), 3.0)
-		lienzo.draw_circle(desde + apunte * ARRASTRE_LANZAR, 8.0, Color(lz.color(lz.tipo), 0.8))
+		Formas.disco(lienzo, desde + apunte * ARRASTRE_LANZAR, 8.0, Color(lz.color(lz.tipo), 0.8))
 
 
 func icono(donde: Vector2, nombre: String, lado: float) -> void:

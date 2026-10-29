@@ -111,6 +111,13 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --formas            que las formas de formas.gd (disco, arco, polígono, polilínea) salgan como las de CanvasItem: dos
+#                       fotos y su diferencia píxel a píxel                                  [prueba_varias.gd]
+#   --dibujos           lo que cuesta cada tipo de dibujo (rectángulos, círculos, abanicos y anillos de primitivas) según cuántos por
+#                       fotograma, con las llamadas, los triángulos y si la página estaba a la vista; en la web, 200
+#                       círculos tardan 1 s y 12 800 rectángulos, 17 ms (docs/WEB.md)        [prueba_varias.gd, pruebas/dibujos.gd]
+#   --lentos            (con cualquier otra) avisa de cada fotograma que tarda más de 60 ms, con cuántos dibujos llevaba, y da
+#                       un resumen al acabar: para cazar en la web lo que la atasca (docs/WEB.md) [pruebas/lentos.gd]
 #   --rendimiento       cuánto tarda cada fotograma durante el latigazo del Glotón (3 y 6 lenguas); en la web, el atasco
 #                       de los draw_circle (docs/WEB.md)                                       [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, y se guarda [prueba_varias.gd]
@@ -412,6 +419,12 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--formas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_formas()
+	elif "--dibujos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_dibujos()
 	elif "--rendimiento" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rendimiento()

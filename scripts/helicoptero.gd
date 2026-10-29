@@ -117,15 +117,15 @@ func _draw() -> void:
 	# la sombra en el suelo, más pequeña y clara cuanto más alto
 	var s := clampf(1.0 - (altura - ALTURA) / 400.0, 0.55, 1.0)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.26))
-	draw_circle(Vector2.ZERO, 160.0 * s, Color(0, 0, 0, 0.3 * s))
+	Formas.disco(self, Vector2.ZERO, 160.0 * s, Color(0, 0, 0, 0.3 * s))
 	draw_set_transform(Vector2.ZERO)
 	# el haz del foco: de la lámpara de debajo del morro al círculo del suelo
 	var lampara := Vector2(-54, -altura + 33).rotated(inclinado)
 	var lado := Vector2(70, 0)
-	draw_colored_polygon(PackedVector2Array([lampara + Vector2(-6, 0), lampara + Vector2(6, 0), foco_en + lado,
+	Formas.poligono(self, PackedVector2Array([lampara + Vector2(-6, 0), lampara + Vector2(6, 0), foco_en + lado,
 		foco_en - lado]), Color(1, 0.96, 0.8, 0.16))
 	draw_set_transform(foco_en, 0.0, Vector2(1.0, 0.4))
-	draw_circle(Vector2.ZERO, 70.0, Color(1, 0.96, 0.8, 0.22))
+	Formas.disco(self, Vector2.ZERO, 70.0, Color(1, 0.96, 0.8, 0.22))
 	draw_set_transform(Vector2.ZERO)
 	dibujar_escalera()
 	cuerpo(Vector2(0, -roundf(altura / 2.0) * 2.0))   # (de 2 en 2, como sus píxeles)
@@ -153,7 +153,7 @@ func dibujar_escalera() -> void:
 	if escalera >= 1.0:
 		# el aro del suelo, que late un poco: ahí hay que ponerse
 		draw_set_transform(Vector2(ESCALERA_X, 0.0), 0.0, Vector2(1.0, 0.5))
-		draw_arc(Vector2.ZERO, ALCANCE, 0.0, TAU, 40, Color(1.0, 0.85, 0.3, 0.5 + 0.25 * sin(t * 5.0)), 4.0)
+		Formas.arco(self, Vector2.ZERO, ALCANCE, 0.0, TAU, 40, Color(1.0, 0.85, 0.3, 0.5 + 0.25 * sin(t * 5.0)), 4.0)
 		draw_set_transform(Vector2.ZERO)
 
 
@@ -168,12 +168,12 @@ func cuerpo(donde: Vector2) -> void:
 	# el rotor de la cola: un disco borroso y una pala que gira
 	var cola: Vector2 = en.call(COLA)
 	var palita := Vector2.from_angle(giro * 1.6) * 21.0
-	draw_circle(cola, 22.0, Color(0.7, 0.72, 0.76, 0.12))
+	Formas.disco(self, cola, 22.0, Color(0.7, 0.72, 0.76, 0.12))
 	draw_line(cola - palita, cola + palita, Color(CONTORNO), 4.0)
 	# el rotor grande: un disco borroso y dos palas que giran (visto un poco desde arriba)
 	var buje: Vector2 = en.call(BUJE)
 	draw_set_transform(buje, inclinado, Vector2(1.0, 0.22))
-	draw_circle(Vector2.ZERO, ROTOR, Color(0.72, 0.75, 0.8, 0.16))
+	Formas.disco(self, Vector2.ZERO, ROTOR, Color(0.72, 0.75, 0.8, 0.16))
 	draw_set_transform(Vector2.ZERO)
 	for i in 2:
 		var a := giro + i * PI
@@ -184,4 +184,4 @@ func cuerpo(donde: Vector2) -> void:
 	if fmod(t, 1.0) < 0.18:
 		var luz: Vector2 = en.call(LUZ_ROJA)
 		draw_rect(Rect2(luz - Vector2(2, 2), Vector2(4, 4)), Color("#ff3b3b"))
-		draw_circle(luz, 9.0, Color(1, 0.2, 0.2, 0.3))
+		Formas.disco(self, luz, 9.0, Color(1, 0.2, 0.2, 0.3))

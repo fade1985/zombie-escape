@@ -274,8 +274,8 @@ func acero_de_frente(hoja: Rect2) -> void:
 			draw_rect(Rect2(px, py, 4, 4), Color("#23272b"))   # los remaches
 	var cy := hoja.get_center().y
 	var cx := hoja.position.x + hoja.size.x * 0.4
-	draw_circle(Vector2(cx, cy), 10.0, Color("#23272b"))   # la rueda de la combinación
-	draw_circle(Vector2(cx, cy), 6.0, Color("#8a949c"))
+	Formas.disco(self, Vector2(cx, cy), 10.0, Color("#23272b"))   # la rueda de la combinación
+	Formas.disco(self, Vector2(cx, cy), 6.0, Color("#8a949c"))
 	draw_rect(Rect2(cx - 1, cy - 6, 2, 6), Color("#23272b"))
 	var tirador := Rect2(hoja.position.x + hoja.size.x * 0.68, cy - 12, 5, 24)
 	draw_rect(tirador, Color("#9aa3aa"))
@@ -286,10 +286,10 @@ func acero_de_frente(hoja: Rect2) -> void:
 func tabla(desde: Vector2, hasta: Vector2) -> void:
 	var grueso := Vector2(0, 5)
 	var forma := PackedVector2Array([desde - grueso, hasta - grueso, hasta + grueso, desde + grueso])
-	draw_colored_polygon(forma, Color("#a0703f"))
+	Formas.poligono(self, forma, Color("#a0703f"))
 	draw_line(desde - grueso + Vector2(0, 2), hasta - grueso + Vector2(0, 2), Color("#c4945c"), 2.0)   # el canto con luz
 	forma.append(forma[0])
-	draw_polyline(forma, LINEA, 2.0)
+	Formas.polilinea(self, forma, LINEA, 2.0)
 	for punta in [desde.lerp(hasta, 0.08), desde.lerp(hasta, 0.92)]:
 		draw_rect(Rect2(punta - Vector2(2, 2), Vector2(4, 4)), Color("#c0c4d0"))
 		draw_rect(Rect2(punta - Vector2(2, 2), Vector2(4, 4)), LINEA, false, 1.0)

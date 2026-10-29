@@ -77,7 +77,7 @@ func _draw() -> void:
 	if t < 0.2:
 		var k := t / 0.2
 		draw_set_transform(Vector2(0, -ALTO), 0.0, Vector2(1.0, 0.7))
-		draw_arc(Vector2.ZERO, 5.0 + k * 14.0, 0.0, TAU, 16, Color(colores.claro, 1.0 - k), PIXEL * 1.5)
+		Formas.arco(self, Vector2.ZERO, 5.0 + k * 14.0, 0.0, TAU, 16, Color(colores.claro, 1.0 - k), PIXEL * 1.5)
 		draw_set_transform(Vector2.ZERO)
 	for g in gotitas:
 		if g[2] > 0.0:

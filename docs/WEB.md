@@ -36,18 +36,26 @@
 
 ## Lo que se atasca en la web
 
-- **`draw_circle` (y los polígonos) en cantidad.** En la web cada `draw_circle` es un polígono con sus propios buffers
-  de dibujo, y unos cientos por fotograma la ahogan: el latigazo del Glotón (6 lenguas × unos 290 dibujos) tardaba más
-  de **un segundo por fotograma** (5 fotogramas seguidos: el juego «se ralentizaba y se paraba»; en el ordenador, 7 ms).
-  Las líneas, los rectángulos y `draw_primitive` (que son «primitivas») aguantan miles. Por eso `Tentaculo.pintar`
-  (lenguas y tentáculos) pinta cada trozo con un solo `draw_primitive` (`Tentaculo.trozos`) y las ventosas con
-  `Tentaculo.disco` (dos cuadrados). Si algo se atasca solo en la web, mirar primero cuántos `draw_circle` o
-  `draw_colored_polygon` hace por fotograma.
-- **Medirlo:** `-- --captura --rendimiento` (`prueba_varias.gd`, `probar_rendimiento`) imprime cuánto tarda cada
-  fotograma durante el latigazo del Glotón (media y peor, en ms; vale 16 ms a 60 fps, y con más de 50 el juego se
-  nota parado). En la web se pone en `"args"` de `GODOT_CONFIG` del `index.html` exportado (`["--", "--captura",
-  "--rendimiento"]`) y se lee en la consola del navegador. Ojo: el `index.html` se pisa al exportar; y el navegador de
-  la app de Claude no tiene el foco de la ventana pero sí sirve para medir.
+- **Polígonos en cantidad (`draw_circle`, `draw_arc`, `draw_colored_polygon`, `draw_polyline`).** En la web cada uno es un
+  polígono con sus propios buffers: unos 100-130 por fotograma cuestan 23 ms, pero con **200 o más cada fotograma tarda
+  más de un segundo**. Así pasaba con el latigazo del Glotón (6 lenguas × unos 290 dibujos, casi todo círculos): el juego
+  «se ralentizaba y se paraba» (5 fotogramas seguidos de 1 s; en el ordenador, 7 ms). Los rectángulos, las líneas y
+  `draw_primitive` aguantan muchísimo más (12 800 rectángulos: 17 ms; un anillo o un abanico de triángulos, hasta
+  unos 10 000 trozos). Por eso `scripts/formas.gd` (`Formas.disco`, `arco`, `poligono`, `polilinea`) pinta esas
+  cuatro formas con primitivas, y `Tentaculo.pintar` (lenguas y tentáculos) pinta cada trozo con un solo
+  `draw_primitive` (`Tentaculo.trozos`). **Con una forma nueva, usar `Formas`, no las funciones de CanvasItem.**
+  Pintan igual que antes: `-- --captura --formas` compara los dos modos píxel a píxel (0,13 % de píxeles distintos, todos
+  de borde).
+- **Medirlo:** `-- --captura --dibujos` (cuánto cuesta cada tipo de dibujo según cuántos), `-- --captura --rendimiento`
+  (el latigazo del Glotón, fotograma a fotograma) y `--lentos`, que se añade a cualquier prueba y avisa de cada
+  fotograma de más de 60 ms (con sus llamadas de dibujo y triángulos) y da un resumen al acabar. Se corren en la web
+  poniendo los argumentos en `"args"` de `GODOT_CONFIG` del `index.html` exportado (`["--", "--captura", "--dibujos",
+  "--lentos"]`; el `index.html` se pisa al exportar) y se leen en la consola del navegador.
+- **¡Cuidado con medir con la página oculta!** Una página oculta (otra pestaña, o el panel del navegador de la app de
+  Claude escondido) va a **un fotograma por segundo**: sale un «atasco» de 1 s en cualquier escena y las medidas no
+  valen. Pasó el 29 oct: el Bombero con llamas parecía atascado y no lo estaba. Las líneas de `--lentos`, `--dibujos` y
+  `--rendimiento` dicen «página visible» u «oculta»: si pone `hidden`, repetir. Hay que dejar el panel a la vista
+  mientras se mide.
 
 ## Lo que suena distinto en la web
 

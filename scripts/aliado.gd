@@ -669,8 +669,8 @@ func dibujar_encima() -> void:
 		for i in range(1, 6):
 			pts.append(desde.lerp(hasta, i / 6.0) + lado * randf_range(-9.0, 9.0))
 		pts.append(hasta)
-		encima.draw_polyline(pts, LINEA, 6.0)
-		encima.draw_polyline(pts, Color("#bff4ff"), 3.0)
+		Formas.polilinea(encima, pts, LINEA, 6.0)
+		Formas.polilinea(encima, pts, Color("#bff4ff"), 3.0)
 	# con hoja mide lo que Johnny (el doble que el dibujo con formas): la vida y el bocadillo van más arriba
 	var alto := -64.0 if persona else -104.0
 	if forzando or herida:
@@ -680,9 +680,9 @@ func dibujar_encima() -> void:
 		var color := Color.WHITE if golpe_t > 0.0 else Tema.VERDE if vida > VIDA * 0.35 else Tema.ROJO
 		encima.draw_rect(Rect2(barra.position, Vector2(barra.size.x * vida / VIDA, barra.size.y)), color)
 		if caido:
-			encima.draw_arc(Vector2.ZERO, 60.0, 0.0, TAU, 48, Color(Tema.AMARILLO, 0.35 + sin(tiempo * 8.0) * 0.2), 3.0)
+			Formas.arco(encima, Vector2.ZERO, 60.0, 0.0, TAU, 48, Color(Tema.AMARILLO, 0.35 + sin(tiempo * 8.0) * 0.2), 3.0)
 			if levantar > 0.0:
-				encima.draw_arc(Vector2.ZERO, 60.0, -PI / 2.0, -PI / 2.0 + levantar * TAU, 48, Tema.AMARILLO, 6.0)
+				Formas.arco(encima, Vector2.ZERO, 60.0, -PI / 2.0, -PI / 2.0 + levantar * TAU, 48, Tema.AMARILLO, 6.0)
 			texto(letra, Idioma.t("Quédate a su lado para levantarlo"), Vector2(0, 86), 16, Tema.AMARILLO)
 	# el bocadillo: lo que acaba de decir o, si está esperando, su frase de siempre
 	var frase := ""
@@ -703,7 +703,7 @@ func dibujar_encima() -> void:
 		var caja := Rect2(-ancho / 2.0, y - 14, ancho, 28)
 		encima.draw_rect(caja.grow(3), Color(LINEA, alfa))
 		encima.draw_rect(caja, Color(PAPEL, alfa))
-		encima.draw_colored_polygon(PackedVector2Array([Vector2(-6, y + 14), Vector2(0, y + 22), Vector2(6, y + 14)]),
+		Formas.poligono(encima, PackedVector2Array([Vector2(-6, y + 14), Vector2(0, y + 22), Vector2(6, y + 14)]),
 			Color(PAPEL, alfa))
 		encima.draw_string(letra, Vector2(-ancho / 2.0, y + 6), frase, HORIZONTAL_ALIGNMENT_CENTER, ancho, 16,
 			Color(color_frase, alfa))

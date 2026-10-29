@@ -392,7 +392,7 @@ func _pintar_ojos() -> void:
 		return
 	var dir := direccion()
 	var cabeza: Vector2 = CABEZA if OJOS_EN[dir].is_empty() else (OJOS_EN[dir][0] + OJOS_EN[dir][-1]) / 2.0
-	ojos.draw_circle(cabeza, 16.0, Color(1.0, 0.36, 0.45, 0.18 * k))
+	Formas.disco(ojos, cabeza, 16.0, Color(1.0, 0.36, 0.45, 0.18 * k))
 	for p in OJOS_EN[dir]:
-		ojos.draw_circle(p, 4.5, Color(1.0, 0.42, 0.5, 0.45 * k))
+		Formas.disco(ojos, p, 4.5, Color(1.0, 0.42, 0.5, 0.45 * k))
 		ojos.draw_rect(Rect2(p - Vector2(2, 1), Vector2(4, 2)), Color(1.0, 0.95, 0.7, k))

@@ -397,10 +397,10 @@ func pintar_hirviendo() -> void:
 		var k: float = fmod(t + b[1], b[2]) / b[2]
 		var p: Vector2 = b[0] + Vector2(2, 2)
 		if k < 0.8:
-			draw_circle(p, 1.0 + k * 4.0, Color("#f0c060"))
-			draw_circle(p + Vector2(-1, -1), 1.0, Color("#fff1c4"))
+			Formas.disco(self, p, 1.0 + k * 4.0, Color("#f0c060"))
+			Formas.disco(self, p + Vector2(-1, -1), 1.0, Color("#fff1c4"))
 		else:
-			draw_arc(p, 6.0, 0.0, TAU, 10, Color("#fff1c4", 0.8), 1.5)
+			Formas.arco(self, p, 6.0, 0.0, TAU, 10, Color("#fff1c4", 0.8), 1.5)
 
 
 func _draw() -> void:

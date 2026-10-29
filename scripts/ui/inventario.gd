@@ -360,7 +360,7 @@ func muneco(johnny: Node2D) -> void:
 	sombra.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sombra.draw.connect(func():
 		sombra.draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.24))
-		sombra.draw_circle(Vector2.ZERO, 34.0, Color(0, 0, 0, 0.43)))
+		Formas.disco(sombra, Vector2.ZERO, 34.0, Color(0, 0, 0, 0.43)))
 	lienzo.add_child(sombra)
 	sombra.position = pies
 	var w: Dictionary = Armas.datos(johnny.huecos[johnny.mano])
@@ -2161,7 +2161,7 @@ func zona_roja(p: Panel, clave: String) -> void:
 	var flecha := Control.new()
 	flecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	flecha.draw.connect(func():
-		flecha.draw_colored_polygon(PackedVector2Array([Vector2(-14, 0), Vector2(14, 0), Vector2(14, 32), Vector2(30, 32),
+		Formas.poligono(flecha, PackedVector2Array([Vector2(-14, 0), Vector2(14, 0), Vector2(14, 32), Vector2(30, 32),
 			Vector2(0, 62), Vector2(-30, 32), Vector2(-14, 32)]), rojo)
 		flecha.draw_rect(Rect2(-46, 74, 92, 4), rojo))
 	p.add_child(flecha)

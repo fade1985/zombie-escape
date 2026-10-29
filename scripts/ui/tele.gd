@@ -172,7 +172,7 @@ func pintar_pantalla() -> void:
 	pantalla.draw_texture_rect_region(REPORTERA, Rect2(30, 128 - h * 2, w * 2, h * 2), Rect2(dibujo * w, 0, w, h))
 	# EN DIRECTO y el logo
 	if directo.visible:
-		pantalla.draw_circle(Vector2(14, 14), 5, ROJO)
+		Formas.disco(pantalla, Vector2(14, 14), 5, ROJO)
 	pantalla.draw_rect(Rect2(canal.position.x - 6, 6, canal.size.x + 12, 22), Color("#f4efe0"))
 	# los rótulos de abajo: el nombre (al empezar), el titular y la cinta que corre
 	if nombre.visible:

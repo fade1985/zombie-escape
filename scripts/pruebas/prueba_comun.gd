@@ -20,6 +20,11 @@ func preparar_prueba() -> void:
 	eventos.forzado = Captura.dato("--evento")
 	# con "--continuar", la partida a medias sí se guarda (partida_guardada.gd; prueba_varias.gd, probar_continuar)
 	guarda_partida = "--continuar" in OS.get_cmdline_user_args()
+		# con "--lentos", avisa de cada fotograma lento (pruebas/lentos.gd), con cualquier prueba
+	if "--lentos" in OS.get_cmdline_user_args():
+		var lentos := preload("res://scripts/pruebas/lentos.gd").new()
+		lentos.partida = self
+		add_child(lentos)
 	# con "--guiado", la guía de la primera partida (guia.gd; prueba_varias.gd, probar_guiado): como si fuera la primera
 	if "--guiado" in OS.get_cmdline_user_args():
 		guiado_prueba = true

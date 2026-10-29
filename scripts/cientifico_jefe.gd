@@ -723,8 +723,8 @@ func _draw() -> void:
 			elif estado == "cupula_baja":
 				k = 1.0 - k
 			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.55))
-			draw_circle(Vector2.ZERO, CUPULA_RADIO * k, Color(CRISTAL, 0.12))
-			draw_arc(Vector2.ZERO, CUPULA_RADIO * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
+			Formas.disco(self, Vector2.ZERO, CUPULA_RADIO * k, Color(CRISTAL, 0.12))
+			Formas.arco(self, Vector2.ZERO, CUPULA_RADIO * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
 		"aviso_lenguas":
 			# las tres lenguas avisan como las cargas de los jefes: flechas que se encienden hacia fuera y, al final,
 			# una X (o una estrella, si se paran en una pared o un mueble)
@@ -737,8 +737,8 @@ func _draw() -> void:
 			# la onda: un anillo que crece desde los puños y se apaga
 			var k := minf(1.0, t / DURA_ONDA)
 			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.7))
-			draw_arc(Vector2.ZERO, RADIO_ONDA * k, 0.0, TAU, 48, Color(1, 0.9, 0.7, 0.9 * (1.0 - k)), 10.0 * (1.0 - k) + 3.0)
-			draw_arc(Vector2.ZERO, RADIO_ONDA * k * 0.85, 0.0, TAU, 48, Color(1, 0.6, 0.3, 0.5 * (1.0 - k)), 4.0)
+			Formas.arco(self, Vector2.ZERO, RADIO_ONDA * k, 0.0, TAU, 48, Color(1, 0.9, 0.7, 0.9 * (1.0 - k)), 10.0 * (1.0 - k) + 3.0)
+			Formas.arco(self, Vector2.ZERO, RADIO_ONDA * k * 0.85, 0.0, TAU, 48, Color(1, 0.6, 0.3, 0.5 * (1.0 - k)), 4.0)
 		"aviso_fuego":
 			# una barra fina por donde irá cada bola, que se llena hacia fuera (aviso.gd)
 			var k := minf(1.0, t / AVISO_FUEGO)
@@ -760,9 +760,9 @@ func pintar_encima(lienzo: Node2D) -> void:
 				k = 1.0 - k
 			var centro := Vector2(0, -arriba * 0.42)
 			lienzo.draw_set_transform(centro, 0.0, Vector2(1, 1.25) * k)
-			lienzo.draw_circle(Vector2.ZERO, CUPULA_RADIO, Color(CRISTAL, 0.22))
-			lienzo.draw_arc(Vector2.ZERO, CUPULA_RADIO, 0.0, TAU, 48, Color(CRISTAL, 0.85), 3.0)
-			lienzo.draw_arc(Vector2(-11, -11), 43.0, PI * 1.05, PI * 1.55, 16, Color(1, 1, 1, 0.55), 4.0)   # el brillo
+			Formas.disco(lienzo, Vector2.ZERO, CUPULA_RADIO, Color(CRISTAL, 0.22))
+			Formas.arco(lienzo, Vector2.ZERO, CUPULA_RADIO, 0.0, TAU, 48, Color(CRISTAL, 0.85), 3.0)
+			Formas.arco(lienzo, Vector2(-11, -11), 43.0, PI * 1.05, PI * 1.55, 16, Color(1, 1, 1, 0.55), 4.0)   # el brillo
 			# las grietas, según lo que le han dado
 			var dano := 1.0 - float(cupula) / CUPULA_VIDA if cupula > 0 else 0.0
 			for i in int(dano * 8.0):
@@ -791,5 +791,5 @@ func pintar_encima(lienzo: Node2D) -> void:
 			# el fogonazo en la boca
 			if t < 0.25:
 				var boca := Vector2(0, -arriba * BOCA) + mirada * 30.0
-				lienzo.draw_circle(boca, 26.0 * (1.0 - t / 0.25), Color(FUEGO[0], 0.7))
-				lienzo.draw_circle(boca, 14.0 * (1.0 - t / 0.25), Color(FUEGO[3], 0.9))
+				Formas.disco(lienzo, boca, 26.0 * (1.0 - t / 0.25), Color(FUEGO[0], 0.7))
+				Formas.disco(lienzo, boca, 14.0 * (1.0 - t / 0.25), Color(FUEGO[3], 0.9))

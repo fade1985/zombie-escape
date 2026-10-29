@@ -70,7 +70,7 @@ func parar() -> void:
 func _draw() -> void:
 	# su sombra en el suelo y la hoja, encima (aplastada según gira, como si diera vueltas de canto)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))
-	draw_circle(Vector2.ZERO, 7.0, Color(0, 0, 0, 0.25))
+	Formas.disco(self, Vector2.ZERO, 7.0, Color(0, 0, 0, 0.25))
 	dibujar(self, Vector2(0, -alto), giro, 1.0 if caido >= 0.0 else 0.55 + 0.45 * absf(cos(t * 9.0)))
 
 

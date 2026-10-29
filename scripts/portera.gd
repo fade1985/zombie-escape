@@ -590,7 +590,7 @@ func _draw() -> void:
 			# el anillo de polvo del golpe, que se abre y se desvanece
 			var k := minf(1.0, t / 0.35)
 			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.8))
-			draw_arc(Vector2.ZERO, RADIO_CIRCULO * (0.6 + k * 0.4), 0, TAU, 48, Color("#cbb994", 1.0 - k), 6.0)
+			Formas.arco(self, Vector2.ZERO, RADIO_CIRCULO * (0.6 + k * 0.4), 0, TAU, 48, Color("#cbb994", 1.0 - k), 6.0)
 		"aviso_giro":
 			Aviso.abanico(self, Vector2(0, 10), 0.0, PI, 70.0, minf(1.0, t / 0.6), tiempo, 0.75)
 
