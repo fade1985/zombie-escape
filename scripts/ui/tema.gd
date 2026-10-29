@@ -33,21 +33,54 @@ const PANEL := preload("res://assets/ui/panel-oscuro.png")
 static var _tema: Theme
 
 
-# Las letras de reserva para lo que la letra del juego no tiene: la cadena es letra del juego → Jersey 25 (los signos) → la
-# de ese idioma. Detrás de Jersey 25 van la del cirílico y la del chino; la primera de las dos es la del idioma que se juega
-# (en chino, el chino; en ruso y en los demás, el cirílico), porque las dos traen casi todo y manda la primera. Las dos van
-# siempre (el nombre de cada idioma en el selector de Opciones, «Русский» o «中文», se tiene que ver en cualquier idioma).
-# Se llama al montar el tema y cada vez que cambia el idioma (idioma.gd)
+# Las letras de reserva para lo que la letra del juego no tiene: la cadena es letra del juego → Jersey 25 (los signos y las vocales
+# con tilde que faltan) → la del idioma que se juega (en ruso, el cirílico; en chino, el chino). Los demás idiomas solo llevan la
+# Jersey 25. La cadena va PLANA, las tres detrás de la letra del juego: si una letra de reserva cuelga de la Jersey 25 (que
+# también lleva reservas), solo se alcanza a la Jersey 25 y las demás no salen. En el ordenador parecía que sí (Windows pone una
+# letra del sistema para lo que falta), pero en la web, que no trae letras del sistema, salían cuadros (29 oct 2026).
+# Las de reserva miden más de alto que la del juego (a 16: 22 contra 17): con un ajuste negativo por arriba y por abajo, la línea
+# queda igual de alta. Se llama al montar el tema y cada vez que cambia el idioma (idioma.gd)
+static var _jersey_de_respaldo: FontVariation
+
+
 static func poner_fuentes() -> void:
-	var extra: Array[Font] = []
-	if Idioma.actual == "zh_CN":
-		extra.append(FUENTE_CHINO)
-		extra.append(FUENTE_CIRILICO)
-	else:
-		extra.append(FUENTE_CIRILICO)
-		extra.append(FUENTE_CHINO)
+	if _jersey_de_respaldo == null:
+		# A la fuente le faltan · × < > … — y otros signos: los dibujaba con una letra del sistema, que mide más y hacía la
+		# línea 5 px más alta y su texto más bajo. Ahora los saca de Jersey 25, con un píxel menos de bajada para que la
+		# línea mida lo mismo que sin ellos (y que en la web, que no trae letras del sistema, también se vean)
+		_jersey_de_respaldo = FontVariation.new()
+		_jersey_de_respaldo.base_font = FUENTE_JEFE
+		_jersey_de_respaldo.spacing_bottom = -1
+	var cadena: Array[Font] = [_jersey_de_respaldo]
+	var de_los_jefes: Array[Font] = []   # (los nombres de los jefes se escriben con la Jersey 25 sola: necesita su reserva)
+	var propia := fuente_del_idioma(Idioma.actual)
+	if propia != null:
+		cadena.append(propia)
+		de_los_jefes.append(fuente_del_idioma(Idioma.actual))
 	var jefe: FontFile = FUENTE_JEFE   # (con la constante directamente no deja asignar)
-	jefe.fallbacks = extra
+	jefe.fallbacks = de_los_jefes
+	var juego: FontFile = FUENTE
+	juego.fallbacks = cadena
+
+
+# La letra de un idioma que no escribe la del juego (null si la del juego basta): el cirílico, de Ark Pixel, y el chino, de Fusion Pixel,
+# con el ajuste de altura (sube/baja, en píxeles) que las deja de la misma altura de línea que la del juego. También es la letra
+# con la que el selector de Opciones escribe «Русский» y «简体中文», en cualquier idioma
+static func fuente_del_idioma(codigo: String) -> Font:
+	match codigo:
+		"ru":
+			return _con_altura(FUENTE_CIRILICO, -4, -1)
+		"zh_CN":
+			return _con_altura(FUENTE_CHINO, -5, 0)
+	return null
+
+
+static func _con_altura(base: Font, sube: int, baja: int) -> FontVariation:
+	var v := FontVariation.new()
+	v.base_font = base
+	v.spacing_top = sube
+	v.spacing_bottom = baja
+	return v
 
 
 # ¿Tiene alguna de las fuentes del juego esa letra? (la prueba --letras comprueba así todas las traducciones)
@@ -70,15 +103,7 @@ static func crear() -> Theme:
 		f.antialiasing = TextServer.FONT_ANTIALIASING_NONE
 		f.hinting = TextServer.HINTING_NONE
 		f.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
-	# A la fuente le faltan · × < > … — y otros signos: los dibujaba con una letra del sistema, que mide más y hacía la
-	# línea 5 px más alta y su texto más bajo. Ahora los saca de Jersey 25, con un píxel menos de bajada para que la
-	# línea mida lo mismo que sin ellos (y que en la web, que no trae letras del sistema, también se vean)
-	var respaldo := FontVariation.new()
-	respaldo.base_font = FUENTE_JEFE
-	respaldo.spacing_bottom = -1
-	var respaldos: Array[Font] = [respaldo]
-	fuente.fallbacks = respaldos
-	poner_fuentes()
+	poner_fuentes()   # (las letras de reserva: los signos y las de cada idioma)
 	t.default_font = fuente
 	t.default_font_size = 16
 

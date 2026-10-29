@@ -327,8 +327,9 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	var abierto := Edificios.abierto(s, id)
 	var b := Button.new()
 	var lineas := lineas_descripcion()
-	var de_mas := de_mas_que_en_espanol(s)   # lo que crece la tarjeta en este idioma (0 en español)
-	b.custom_minimum_size = Vector2(ANCHO_TARJETA, 250 + alto_lineas(maxi(lineas - 3, 0)) + de_mas.y)   # 250 da para tres líneas de descripción
+	var medida := medir_tarjetas(s)
+	# 250 da para tres líneas de descripción en español; en otro idioma la tarjeta crece hasta lo que ocupan sus textos
+	b.custom_minimum_size = Vector2(ANCHO_TARJETA, maxf(250 + alto_lineas(maxi(lineas - 3, 0)), medida.y))
 	b.disabled = not abierto
 	b.focus_mode = Control.FOCUS_ALL if abierto else Control.FOCUS_NONE
 	b.pressed.connect(jugar_partida.bind(id))
@@ -361,7 +362,7 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 		l.custom_minimum_size.x = 260
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if i == 1:   # la descripción
-			l.custom_minimum_size.y = alto_lineas(lineas) + de_mas.x   # el hueco de la más larga: lo de debajo no se corre
+			l.custom_minimum_size.y = maxf(alto_lineas(lineas), medida.x)   # el hueco de la más larga: lo de debajo no se corre
 		if not abierto:
 			l.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(l)
@@ -392,8 +393,10 @@ func textos_tarjeta(id: String, s: Dictionary) -> Array:
 	return textos
 
 
-# Lo que ocupa un texto en una etiqueta con ese estilo, partido en líneas del ancho de la tarjeta: se mide con una etiqueta de
-# verdad (que parte las líneas y las separa como las de la tarjeta), puesta un momento para que use la letra del tema
+# Lo que ocupa un texto en una etiqueta con ese estilo, partido en líneas del ancho de la tarjeta: las líneas que saca una etiqueta de
+# verdad (puesta un momento para que use la letra del tema) por lo que mide cada una, la altura de la letra más lo que Label deja entre
+# línea y línea. (No vale su get_minimum_size: en ruso y chino da la altura de la letra del juego y el texto se dibuja con la de la
+# letra de reserva, 5 px más alta por línea)
 func alto_texto(texto: String, estilo: String) -> float:
 	var l := Label.new()
 	l.theme_type_variation = estilo
@@ -402,43 +405,27 @@ func alto_texto(texto: String, estilo: String) -> float:
 	l.text = texto
 	add_child(l)
 	l.size = Vector2(ANCHO_TEXTO, 0)
-	var alto := l.get_minimum_size().y
+	var alto := l.get_line_count() * (l.get_theme_font("font").get_height(l.get_theme_font_size("font_size")) + l.get_theme_constant("line_spacing"))
 	remove_child(l)
 	l.free()
 	return alto
 
 
-# Lo que ocupan los textos de las tarjetas en el idioma de ahora: x, la descripción más alta; y, la tarjeta que más ocupa
+# Lo que ocupan los textos de las tarjetas en el idioma de ahora: x, la descripción más alta (todas dejan ese hueco); y, el alto
+# de la tarjeta que más ocupa, con sus 14 de margen arriba y abajo, el dibujo (64), 8 entre un texto y otro y 12 de sobra para que
+# el último no quede pegado al borde. En ruso y chino las líneas son más altas que en español (la letra de reserva mide 22 en vez de 17)
 func medir_tarjetas(s: Dictionary) -> Vector2:
-	var desc := 0.0
+	var desc := alto_lineas(lineas_descripcion())   # (lo que dejaba ya, en español)
+	for id in Edificios.LISTA:
+		desc = maxf(desc, alto_texto(textos_tarjeta(id, s)[1][0], "Sub"))
 	var total := 0.0
 	for id in Edificios.LISTA:
 		var textos := textos_tarjeta(id, s)
-		var suma := 0.0
+		var suma := 28.0 + 64.0 + textos.size() * 8.0 + 6.0
 		for i in textos.size():
-			var alto := alto_texto(textos[i][0], textos[i][1])
-			if i == 1:
-				desc = maxf(desc, alto)
-			suma += alto
+			suma += desc if i == 1 else alto_texto(textos[i][0], textos[i][1])
 		total = maxf(total, suma)
 	return Vector2(desc, total)
-
-
-# Lo que ocupan de más los textos de las tarjetas en este idioma que en español (x: la descripción; y: la tarjeta entera), que es
-# para lo que se hizo la caja: las líneas pueden ser más altas (ruso, chino) o ser más (alemán). Se miden los dos con lo mismo, así
-# el español no cambia
-func de_mas_que_en_espanol(s: Dictionary) -> Vector2:
-	if Idioma.actual == Idioma.ORIGEN:
-		return Vector2.ZERO
-	var ahora: String = Idioma.actual
-	var aqui := medir_tarjetas(s)
-	Idioma.actual = Idioma.ORIGEN   # (solo para medir los textos en español: no avisa a nadie ni se guarda)
-	var espanol := medir_tarjetas(s)
-	Idioma.actual = ahora
-	var de_mas := Vector2(maxf(aqui.x - espanol.x, 0.0), maxf(aqui.y - espanol.y, 0.0))
-	if de_mas.y > 0.0:
-		de_mas.y += 10.0   # (que el último texto no quede pegado al borde de la tarjeta)
-	return de_mas
 
 
 # Cuántas líneas ocupa la descripción más larga de los edificios, medidas con la letra del texto gris (no hace falta que

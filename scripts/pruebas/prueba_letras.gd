@@ -5,12 +5,13 @@ class_name PruebaLetras
 
 
 static func probar() -> void:
-	# Cuánto mide una línea con letras de cada fuente de reserva (a 16): en ruso y en chino es más alta que en latín (23 y 19 en vez de 16),
-	# y una caja de tamaño fijo hecha para el español se queda corta; las que hay (las tarjetas de «Elige edificio») se miden con el
-	# texto de verdad
-	var latin := Tema.FUENTE.get_string_size("Vecinos", HORIZONTAL_ALIGNMENT_LEFT, -1, 16).y
-	for muestra in ["Соседи, зомби", "你好，僵尸", "Dégâts à è ü"]:
-		print("Altura de línea [%s]: %.0f (en latín, %.0f)" % [muestra, Tema.FUENTE.get_string_size(muestra, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).y, latin])
+	# Cuánto mide una línea en cada idioma con la cadena de letras de verdad (a 16): get_height es lo que usan los botones y las etiquetas
+	# (22 en ruso y chino, 17 en los demás: la de reserva de esos idiomas es más alta) y texto, lo que mide una línea ya escrita
+	for codigo in ["es", "ru", "zh_CN"]:
+		Idioma.poner(codigo, false)
+		var muestra: String = {"es": "Vecinos zombi", "ru": "Соседи-зомби", "zh_CN": "僵尸邻居"}[codigo]
+		print("Altura de línea [%s]: get_height %.0f, «%s» %.0f" % [codigo, Tema.FUENTE.get_height(16), muestra, Tema.FUENTE.get_string_size(muestra, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).y])
+	Idioma.poner(Idioma.ORIGEN, false)
 	for i in Idioma.IDIOMAS:
 		var codigo: String = i[0]
 		if codigo == Idioma.ORIGEN:

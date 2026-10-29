@@ -108,6 +108,12 @@ msgstr "Quit"
   script y la carpeta `%APPDATA%\ZombieEscape_TestIdioma`**. No sirven `-s` (no carga los autoloads a tiempo) ni `--language` (cambia
   el idioma de Godot, no el que lee `OS.get_locale_language()`).
 
+- **Probar en la web** (sin tocar `web/`): exportar a una carpeta temporal con `--headless --path . --export-release "Web"
+  <carpeta>/index.html`, servirla con un servidor que no guarde nada en caché (el navegador se queda con el `index.pck` viejo y no se
+  entera de lo nuevo: un `py -m http.server` normal no sirve; basta un `SimpleHTTPRequestHandler` que ponga `Cache-Control: no-store`) y
+  abrirla en el navegador. El primer clic solo da el foco al lienzo; el segundo funciona. Se cambia de idioma en Opciones. Con los
+  `print` del juego se ve algo en la consola del navegador. Hecho el 29 oct 2026: el español, el ruso y el chino se ven con sus letras y el
+  chino parte bien las líneas (`AUTOWRAP_ARBITRARY` no hace falta: el servidor de texto de la web lleva ICU).
 - **Pasada de tamaños** (29 oct 2026): se miraron en ruso, alemán, francés y portugués las pantallas más llenas (inventario y fichas de
   armas, ordenador entero, tienda, baúl, banco, skins, tutorial, mutaciones, HUD, eventos, tiendas y «Elige edificio») con
   `-- --captura <prueba> --lang X`. Solo fallaron dos cosas, las dos en ruso: «Перезарядка» pegada a sus cuadritos en la ficha de un arma y
@@ -118,23 +124,33 @@ msgstr "Quit"
 ## Las letras (fuentes)
 
 La letra de la interfaz (`zombie-scape-ui.ttf`) y la de los jefes (Jersey 25) solo traen el alfabeto latino. Las letras que no tienen
-salen de otras, en cadena (`Tema.poner_fuentes`, que `Idioma.poner` llama al cambiar de idioma): letra del juego → Jersey 25 (los
-signos y las vocales con tilde que faltan) → **Ark Pixel de 16 px** (`ark-pixel-16.woff2`: todo el cirílico, a la medida exacta del
-juego, 70 KB) y **Fusion Pixel de 12 px** (`fusion-pixel-12-zh.woff2`: chino simplificado, 1 MB; no es múltiplo de 16 y 32, pero se ve
-bien). La primera de las dos de reserva es la del idioma que se juega (en chino, Fusion; en los demás, Ark); las dos van siempre para que el
-nombre de cada idioma («Русский», «简体中文») se vea en el selector. Las tres fuentes son OFL 1.1: sus licencias
-(`ark-pixel-OFL.txt`, `fusion-pixel-OFL.txt` y `fusion-pixel-licencias/`) van con el juego y hay que citarlas en los créditos.
-La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus traducciones que no tiene ninguna fuente
-(saldrían como un cuadro; en la web no hay letras del sistema).
+salen de otras, en una cadena que `Tema.poner_fuentes` pone al arrancar y cada vez que cambia el idioma (`Idioma.poner`): letra del
+juego → Jersey 25 (los signos y las vocales con tilde que faltan) → la del idioma que se juega: en ruso, **Ark Pixel de 16 px**
+(`ark-pixel-16.woff2`: todo el cirílico, a la medida exacta del juego, 70 KB) y en chino, **Fusion Pixel de 12 px**
+(`fusion-pixel-12-zh.woff2`: chino simplificado, 1 MB; no es múltiplo de 16 y 32, así que los trazos salen algo irregulares). En
+español, inglés, portugués, alemán y francés no hay más reserva que la Jersey 25. El nombre de cada idioma en el selector de
+Opciones («Русский», «简体中文») se escribe con su propia letra (`Tema.fuente_del_idioma`, una `override` del botón), en cualquier
+idioma. Las tres fuentes son OFL 1.1: sus licencias (`ark-pixel-OFL.txt`, `fusion-pixel-OFL.txt` y `fusion-pixel-licencias/`) van con el
+juego y hay que citarlas en los créditos. La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus
+traducciones que no tiene ninguna fuente (saldrían como un cuadro) y cuánto mide una línea con la letra de cada idioma.
 
-**La altura de las líneas:** una línea con letras de las fuentes de reserva es más alta que con la del juego (a 16 px: 16 en latín, 23 en
-ruso y 19 en chino; `--letras` lo dice), así que un texto en ruso o chino de varias líneas ocupa más que en español y una caja de
-tamaño fijo hecha para el español se queda corta. Hoy solo la hay en las tarjetas de «Elige edificio» (`menu_principal.gd`: se miden
-los textos con una etiqueta de verdad y la tarjeta crece lo que cada idioma ocupa **de más que en español**, así el español no
-cambia). **No se arregla igualando las alturas de las fuentes**: se probó (`FontVariation` con `spacing_top`/`spacing_bottom` negativos y
-la cadena de reservas plana) y las líneas salen a 17, pero `Font.get_height()` de la letra del juego pasa de 17 a 22 y todos los botones
-crecen 5 px, también en español. Las barras de la ficha de un arma (`barra()` de `inventario.gd`) ensanchan su nombre si no cabe en 96 px
-(«Перезарядка»).
+**La cadena va plana, y esto costó un día de errores (29 oct 2026).** Hasta entonces la cadena era letra del juego → Jersey 25 → (las
+reservas colgando de la Jersey 25). Una reserva que cuelga de otra reserva **no se alcanza**: la Jersey 25 como reserva solo aporta su
+propia letra. En el ordenador parecía que sí, porque Windows pone una letra del sistema para lo que falta (el ruso y el chino se veían
+con la del sistema, lisa, no la pixelada), pero **en la web, que no trae letras del sistema, el ruso y el chino salían como cuadros con
+su código dentro**. Ahora las reservas van todas directamente en `FUENTE.fallbacks` (y la de los nombres de jefes, en
+`FUENTE_JEFE.fallbacks`). Un `FontVariation` como reserva solo aporta su letra, nunca las reservas de su base. **Para probar una letra
+nueva o un idioma nuevo, mirarlo siempre en la web** (ver «Probar en la web» abajo): en el ordenador no se nota si falla.
+
+**La altura de las líneas.** Las letras de reserva miden más de alto que la del juego (a 16 px, por encima y por debajo de la línea: la
+del juego, 13 y 4; Ark Pixel, 17 y 5; Fusion Pixel, 18 y 4). Se les resta con un `FontVariation` (`spacing_top`/`spacing_bottom`
+negativos, en `Tema.fuente_del_idioma`), y así una línea escrita mide lo mismo que con la del juego (17). Pero `Font.get_height()` de la
+letra del juego, que usan los botones y las etiquetas, pasa a ser 22 en ruso y chino (con una cadena plana, el máximo de las reservas
+sin ajuste): sus líneas de varias líneas ocupan 25 px cada una en vez de 20 y una caja de tamaño fijo hecha para el español se queda corta.
+Solo hay una, las tarjetas de «Elige edificio» (`menu_principal.gd`: `medir_tarjetas` cuenta las líneas de cada texto con una etiqueta
+de verdad y la tarjeta crece lo que haga falta; en español, alemán y francés queda como estaba). Las barras de la ficha de un arma
+(`barra()` de `inventario.gd`) ensanchan su nombre si no cabe en 96 px («Перезарядка»). No se puede igualar `get_height()`: se probó con
+variaciones y con el espaciado del propio `FontFile` y no se mueve.
 
 **Plurales:** cada idioma lleva en `tools/traducciones.py` (`IDIOMAS`) su regla y cuántas formas tiene: dos (los demás), tres (ruso: 1 /
 2-4 / 5+) o ninguna (chino). Un texto con plural se entrega como lista de tantas formas (o como una cadena en chino).

@@ -233,6 +233,9 @@ func general() -> void:
 	for i in Idioma.IDIOMAS:
 		var b := Button.new()
 		b.text = i[1]
+		var letra := Tema.fuente_del_idioma(i[0])   # (el ruso y el chino se escriben con su letra, en cualquier idioma)
+		if letra != null:
+			b.add_theme_font_override("font", letra)
 		b.pressed.connect(func(): Idioma.poner(i[0]))
 		if i[0] == Idioma.actual:
 			boton_idioma = b
