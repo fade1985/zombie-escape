@@ -48,42 +48,47 @@ func _ready() -> void:
 	logo.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	columna.add_child(logo)
 	var lema := Label.new()
-	lema.text = "Limpia el edificio de zombis, planta a planta"
+	lema.text = Idioma.t("Limpia el edificio de zombis, planta a planta")
 	lema.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(lema)
 
-	var jugar := boton(columna, "JUGAR", elegir_edificio, "BotonGrande")
+	var jugar := boton(columna, Idioma.t("JUGAR"), elegir_edificio, "BotonGrande")
 	# Tutorial y Opciones, uno al lado del otro (uno debajo del otro, el menú ya no cabe en la pantalla)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.add_theme_constant_override("separation", 6)
 	columna.add_child(fila)
-	var tutorial := boton(fila, "Tutorial", func(): pass)
+	var tutorial := boton(fila, Idioma.t("Tutorial"), func(): pass)
 	tutorial.custom_minimum_size.x = 127
 	tutorial.pressed.connect(func():
 		Tutorial.lista(self, centro).cerrado.connect(tutorial.grab_focus))
-	var opciones := boton(fila, "Opciones", func(): pass)
+	var opciones := boton(fila, Idioma.t("Opciones"), func(): pass)
 	opciones.custom_minimum_size.x = 127
 	opciones.pressed.connect(func():
-		Opciones.abrir(self, centro).cerrado.connect(opciones.grab_focus))
+		var idioma_antes := Idioma.actual
+		Opciones.abrir(self, centro).cerrado.connect(func():
+			if Idioma.actual != idioma_antes:   # el menú escribió sus textos al montarse: se monta otra vez
+				get_tree().reload_current_scene()
+			else:
+				opciones.grab_focus()))
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
-		boton(columna, "Pantalla completa", Tactil.pantalla_completa)
+		boton(columna, Idioma.t("Pantalla completa"), Tactil.pantalla_completa)
 	if not OS.has_feature("web"):
-		boton(columna, "Salir", get_tree().quit)
+		boton(columna, Idioma.t("Salir"), get_tree().quit)
 
 	var ayuda := PanelContainer.new()
 	ayuda.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	columna.add_child(ayuda)
 	var texto := Label.new()
 	texto.theme_type_variation = "Sub"
-	texto.text = ("Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
+	texto.text = Idioma.t("Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
 		+ "Los controles y el modo de atacar están en Opciones")
 	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ayuda.add_child(texto)
 
 	var s := Guardado.cargar()
 	if s.mejor_planta > 0 or s.dolares > 0:
-		var record := Tema.icono_y_texto("trofeo", "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d" % [s.mejor_planta, s.dolares])
+		var record := Tema.icono_y_texto("trofeo", Idioma.t("Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d") % [s.mejor_planta, s.dolares])
 		record.alignment = BoxContainer.ALIGNMENT_CENTER
 		columna.add_child(record)
 
@@ -92,6 +97,10 @@ func _ready() -> void:
 		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-menu.png")
+		if "--idioma" in OS.get_cmdline_user_args():   # solo las pantallas del menú en el idioma de la prueba (pruebas/prueba_idioma.gd)
+			await PruebaIdioma.probar(self)
+			get_tree().quit()
+			return
 		elegir_edificio()
 		await get_tree().create_timer(0.3).timeout
 		var edificio := Captura.dato("--edificio", "apartamentos")
@@ -139,7 +148,7 @@ func elegir_edificio() -> void:
 	edificios.add_child(columna)
 	var titulo := Label.new()
 	titulo.theme_type_variation = "Titulo"
-	titulo.text = "Elige edificio"
+	titulo.text = Idioma.t("Elige edificio")
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(titulo)
 	tarjetas = HBoxContainer.new()
@@ -147,7 +156,7 @@ func elegir_edificio() -> void:
 	tarjetas.add_theme_constant_override("separation", 20)
 	columna.add_child(tarjetas)
 	poner_tarjetas()
-	var volver := boton(columna, "Volver", volver_al_menu)
+	var volver := boton(columna, Idioma.t("Volver"), volver_al_menu)
 	volver.custom_minimum_size.x = 180
 	primera_tarjeta().grab_focus.call_deferred()
 
@@ -197,7 +206,7 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	explica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explica.custom_minimum_size = Vector2(300, 0)
 	if maximo == 0:
-		explica.text = "Complétalo para abrir la Alerta 1"
+		explica.text = Idioma.t("Complétalo para abrir la Alerta 1")
 		explica.modulate = Color(1, 1, 1, 0.6)
 		caja.add_child(explica)
 		return
@@ -224,7 +233,7 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	var texto: Label = nombre.get_child(nombre.get_child_count() - 1)
 	var poner := func():
 		var n: int = alertas[id]
-		texto.text = "%s (de %d)" % [Alerta.nombre(n), maximo]
+		texto.text = Idioma.t("%s (de %d)") % [Alerta.nombre(n), maximo]
 		nombre.get_child(0).modulate = Color.WHITE if n > 0 else Color(1, 1, 1, 0.35)
 		explica.text = Alerta.resumen(n)
 		menos.disabled = n <= 0
@@ -244,7 +253,7 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 # Debajo del selector de alerta: el botón del reto del día (reto.gd) y, debajo, la regla de hoy y tu marca
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	var b := Button.new()
-	b.text = "Reto del día"
+	b.text = Idioma.t("Reto del día")
 	b.icon = load("res://assets/ui/iconos/trofeo.png")
 	b.expand_icon = true
 	b.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -334,19 +343,22 @@ func tarjeta(id: String, s: Dictionary) -> Button:
 	dibujo.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	dibujo.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	caja.add_child(dibujo)
-	var textos := [[datos.nombre, ""], [datos.desc, "Sub"]]
+	var textos := [[Idioma.t(datos.nombre), ""], [Idioma.t(datos.desc), "Sub"]]
 	if abierto:
 		var veces: int = p.partidas
-		textos.append(["%d plantas y azotea · %d intento%s" % [Planta.PLANTAS - 1, veces, "" if veces == 1 else "s"], "Sub"])
-		var progreso := "¡Sin explorar!"
+		textos.append([Idioma.t("%d plantas y azotea") % (Planta.PLANTAS - 1) + " · "
+			+ Idioma.n("%d intento", "%d intentos", veces) % veces, "Sub"])
+		var progreso := Idioma.t("¡Sin explorar!")
 		if p.completado:
 			var t: float = p.mejor_tiempo
-			progreso = "Completado ×%d%s" % [p.victorias, " · mejor tiempo %d:%02d" % [int(t) / 60, int(t) % 60] if t > 0.0 else ""]
+			progreso = Idioma.t("Completado ×%d") % p.victorias
+			if t > 0.0:
+				progreso += " · " + Idioma.t("mejor tiempo %d:%02d") % [int(t) / 60, int(t) % 60]
 		elif veces > 0:
-			progreso = "Has llegado a la planta %d de %d" % [p.mejor_planta, Planta.PLANTAS]
+			progreso = Idioma.t("Has llegado a la planta %d de %d") % [p.mejor_planta, Planta.PLANTAS]
 		textos.append([progreso, ""])
 	else:
-		textos.append(["Completa %s para abrirlo" % Edificios.LISTA[datos.abre].el_nombre, ""])
+		textos.append([Idioma.t("Completa %s para abrirlo") % Idioma.t(Edificios.LISTA[datos.abre].el_nombre), ""])
 	for i in textos.size():
 		var t: Array = textos[i]
 		var l := Label.new()

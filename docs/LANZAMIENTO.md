@@ -14,10 +14,13 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 - [ ] **Versión de escritorio.** Solo existe el preset de exportación "Web". Para Steam hace falta Windows, y
       Linux si se quiere el sello de Steam Deck. Probar en esa versión: pantalla completa y ventana, resoluciones,
       vsync, guardado en disco (no en el navegador), mando desde el primer menú.
-- [ ] **Inglés.** El juego está solo en español; sin inglés se pierde casi todo el mercado de Steam. Godot traduce
-      con una tabla CSV (`tr()`), pero hoy solo cuatro scripts la usan. Pasar menús, HUD, logros, talentos,
-      armas y objetos, frases de supervivientes y noticias; decidir qué hacer con los carteles dibujados en sprites.
-      Dejar el español como idioma de origen y el inglés como segundo; otros idiomas, más adelante.
+- [ ] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
+      origen y el inglés el segundo (`locale/en.po`, `Idioma.t`, selector en Opciones; cómo funciona y qué falta,
+      en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio» y Opciones. Falta pasar,
+      por fases: la interfaz (inventario, ordenador, pausa, HUD), los datos (armas, objetos, talentos, logros),
+      los textos largos (historia, tutoriales, bestiario, supervivientes), los gritos de los jefes y los carteles del
+      mundo; los dibujados en imágenes son solo `cartel-planta-N.png` («PLANTA»). Falta también la revisión del inglés
+      por una persona nativa antes de salir. Otros idiomas, más adelante.
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
       ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,
       dominios y redes, y hacer logo.

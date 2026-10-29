@@ -8,6 +8,8 @@ en una línea.
 
 - `project.godot`: escena de inicio, pantalla, pixel art nítido, teclas de cada acción, capas de choque.
 - `default_bus_layout.tres`: buses de audio. `export_presets.cfg` y `vercel.json`: ver `WEB.md`.
+- `locale/en.po`: la traducción al inglés (el español es el idioma de origen: cada texto del código es su clave). La
+  carga `project.godot` (`[internationalization]`) y la pone al día `tools/traducciones.py`. Todo en `docs/IDIOMAS.md`.
 
 ## escenas/
 
@@ -170,6 +172,10 @@ en una línea.
   la pone `ArmasCreadas.aturdir`; la explosión lleva `a_johnny = false`, `explosion.gd`). Se prueba con
   `--talentos-altos`),
   `billete.gd` (lo que hay en el suelo: billetes, objetos, cajas), `minimapa.gd`.
+- `idioma.gd` (autoload `Idioma`: el idioma del juego y `Idioma.t("texto")` / `Idioma.n("uno", "varios", n)` para traducir,
+  también desde los `static`; se elige en Opciones, se guarda en `ajustes.idioma` y avisa con la señal `cambiado`; con
+  `--captura` es español salvo con `--ingles`, y al cerrar cuenta los textos sin traducir. Cómo se escribe un texto,
+  las tablas `# [traducir]` y la herramienta: `docs/IDIOMAS.md`; nombres fijos del inglés: `docs/GLOSARIO_EN.md`).
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla), `logros.gd` (40 desde el M17, 28 oct; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
@@ -203,7 +209,8 @@ en una línea.
   `johnny.quitar_vida`, todo lo que le quitan (golpes, charcos, el ácido del Glotón) sale del escudo, ya rebajado por
   Durito, y lo que sobra del golpe que lo rompe, de la vida.
 - `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
-  jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»), `opciones.gd`, `tactil.gd`
+  jefe), `menus.gd` (pausa y fin), `menu_principal.gd` (menú y «Elige edificio»; si se cambia el idioma en Opciones, se
+  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
@@ -321,6 +328,8 @@ en una línea.
   `prueba_inventario.gd` → `prueba_fotos.gd` → `prueba_sitios.gd` → `prueba_reglas.gd` → `prueba_larga.gd` →
   `partida_prueba.gd`, el último, que los tiene todos. Al principio de `partida_prueba.gd` está la lista de opciones
   (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
+- `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
+  edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
 
 ## assets/
 
@@ -335,6 +344,8 @@ en una línea.
 ## tools/
 
 - **El trailer:** `trailer.py` lo graba con el Movie Maker de Godot y lo monta con ffmpeg (ver `docs/TRAILER.md`).
+- **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día `locale/en.po` y avisa de lo que falta
+  o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
   animaciones), `jefe_hoja.py` (jefes: `py tools/jefe_hoja.py gloton-72 jefe-gloton`; cada jefe en su ficha `JEFES`),
   `superviviente.py`, `zombi.py` + `png.py`, `piel.py`, `espejo_oeste.py`, `hoja.py` (hoja de revisión).
@@ -367,5 +378,6 @@ en una línea.
 
 - `historial/`: los planes ya terminados (`CENTRO_COMERCIAL.md`, `JEFES_APARTAMENTOS.md`). Solo para saber por qué se
   decidió algo; lo que vale es el código.
+- `IDIOMAS.md` (cómo se traduce el juego y cómo se escribe un texto nuevo) y `GLOSARIO_EN.md` (cómo se dice cada nombre en inglés).
 - `PIXEL_ART.md`, `PIXELLAB.md`, `ZOMBIS.md`, `FONDOS.md`, `MAPA.md`: del juego JS y de lo dibujado después; valen
   para las ideas y los números.

@@ -52,9 +52,10 @@ const NUEVO := {
 	# tactil_tamano, tactil_opacidad y vibracion: los ajustes del móvil (tactil.gd)
 	# vida_entera, pistola_sin_fin y lanzar_solo: las ayudas de la pestaña Ayudas de Opciones (johnny.gd y
 	# lanzables.gd las miran) · tutoriales: si salen las ventanas de los tutoriales (tutoriales.gd)
+	# idioma: "es" o "en", el elegido en Opciones (idioma.gd); "" = nunca se ha elegido: el del sistema
 	"ajustes": {"musica": true, "modo": "asistido", "teclas": {},
 		"tactil_tamano": 1.0, "tactil_opacidad": 1.0, "vibracion": true,
-		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true},
+		"vida_entera": false, "pistola_sin_fin": false, "lanzar_solo": false, "tutoriales": true, "idioma": ""},
 }
 
 # alerta_max: la Alerta más alta abierta (alerta.gd; 0 = ninguna) · alerta: la elegida la última vez en "Elige edificio"

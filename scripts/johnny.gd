@@ -80,7 +80,7 @@ const BALA := preload("res://escenas/armas/bala.tscn")
 const RESERVA_INICIO := 2
 const RESERVA_CAJA := 1
 
-const MODOS := {"asistido": "Asistido", "libre": "Apuntar libre"}
+const MODOS := {"asistido": "Asistido", "libre": "Apuntar libre"}   # [traducir]
 const AYUDA_ANGULO := 0.2  # modo libre: radianes (unos 11°) de margen para que el apunte se tuerza hacia un zombi
 
 # Nombre corto de cada dirección, empezando por el este y girando hacia abajo (sentido de las agujas

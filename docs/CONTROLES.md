@@ -20,7 +20,7 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
-- **Opciones** (menú y pausa): modo de atacar, música, sonido, la pestaña **Ayudas** (*Vida entera*, *Pistola sin
+- **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
   apague luego; los ya conseguidos se conservan y se cobran; y *Tutoriales*, con el botón *Que vuelvan a salir
   todos*) y la

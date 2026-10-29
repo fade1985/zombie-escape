@@ -14,6 +14,7 @@ class_name Reto
 
 # Las reglas raras: cada día toca una (regla_de). "nombre" sale en la tarjeta, en el HUD y en el cartel del
 # final; "desc", en el aviso del principio
+# [traducir]
 const REGLAS := {
 	"cuerpo": {"nombre": "Solo cuerpo a cuerpo", "desc": "la pistola va vacía y no cae munición, ni molotovs ni granadas"},
 	"oscuras": {"nombre": "Todo a oscuras", "desc": "todas las plantas como en un apagón: solo se ve con la linterna"},
@@ -23,6 +24,7 @@ const REGLAS := {
 	"llena": {"nombre": "Casa llena", "desc": "el doble de zombis en cada sitio"},
 	"oido": {"nombre": "Oído fino", "desc": "los zombis dormidos te oyen desde el triple de lejos"},
 }
+# [/traducir]
 const MAS_RAPIDOS := 1.35   # rapidos: la velocidad de los zombis (no la de los jefes; partida.gd, meter_zombi)
 const VIDA := 0.5           # cristal: la vida máxima de Johnny (partida.gd, aplicar_talentos)
 const MAS_ZOMBIS := 2.0     # llena: el presupuesto de zombis de cada sitio (planta.gd, horda) y las oleadas de la horda
@@ -111,21 +113,21 @@ static func oido() -> float:
 # ── Los textos ──
 
 static func nombre(r := regla) -> String:
-	return REGLAS[r].nombre if r in REGLAS else ""
+	return Idioma.t(REGLAS[r].nombre) if r in REGLAS else ""
 
 
 static func desc(r := regla) -> String:
-	return REGLAS[r].desc if r in REGLAS else ""
+	return Idioma.t(REGLAS[r].desc) if r in REGLAS else ""
 
 
 # El aviso del principio de la partida
 static func aviso() -> String:
-	return "Reto del día · %s: %s" % [nombre(), desc()]
+	return Idioma.t("Reto del día · %s: %s") % [nombre(), desc()]
 
 
 # Lo que se añade al nombre del sitio, arriba a la derecha (partida.gd, poner_lugar)
 static func etiqueta() -> String:
-	return " · Reto: " + nombre() if activo else ""
+	return " · " + Idioma.t("Reto: %s") % nombre() if activo else ""
 
 
 # ── La marca de hoy, en el guardado ──
@@ -166,15 +168,15 @@ static func apuntar(s: Dictionary, edificio: String, planta_num: int, gano: bool
 static func marca(f: Dictionary, corta := false) -> String:
 	if f.completado:
 		var t := int(f.tiempo)
-		return ("%d:%02d" if corta else "Completado en %d:%02d") % [t / 60, t % 60]
+		return ("%d:%02d" if corta else Idioma.t("Completado en %d:%02d")) % [t / 60, t % 60]
 	if f.planta == 0:
-		return "sin marca" if corta else "Sin marca"
-	return ("planta %d" if corta else "Has llegado a la planta %d") % f.planta
+		return Idioma.t("sin marca") if corta else Idioma.t("Sin marca")
+	return (Idioma.t("planta %d") if corta else Idioma.t("Has llegado a la planta %d")) % f.planta
 
 
 # Lo de debajo del botón de la tarjeta: la regla de hoy y tu marca, con los intentos
 static func texto_tarjeta(f: Dictionary) -> String:
-	var linea := "Hoy: " + nombre(f.regla)
+	var linea: String = Idioma.t("Hoy: %s") % nombre(f.regla)
 	if f.intentos == 0:
-		return linea + "\nAún no lo has intentado"
-	return "%s\n%s (%d intento%s)" % [linea, marca(f), f.intentos, "" if f.intentos == 1 else "s"]
+		return linea + "\n" + Idioma.t("Aún no lo has intentado")
+	return "%s\n%s (%s)" % [linea, marca(f), Idioma.n("%d intento", "%d intentos", int(f.intentos)) % int(f.intentos)]

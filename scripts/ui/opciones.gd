@@ -1,6 +1,7 @@
 # La pantalla de Opciones: se abre desde el menú principal y desde la pausa. Tiene tres pestañas:
-#   - General: el modo de atacar (se guarda), la música, el sonido y la pantalla completa. En el móvil,
-#     además, el tamaño y la transparencia de los botones táctiles y la vibración (se guardan).
+#   - General: el idioma (idioma.gd; la pantalla se vuelve a montar al cambiarlo), el modo de atacar (se guarda), la
+#     música, el sonido y la pantalla completa. En el móvil, además, el tamaño y la transparencia de los botones
+#     táctiles y la vibración (se guardan).
 #   - Controles: qué hace cada tecla y cada botón del mando (leído del mapa de controles de Godot). Se pueden
 #     cambiar: se pulsa la casilla y luego la tecla o el botón nuevo (controles.gd lo pone y lo guarda).
 #     En el móvil, qué hace cada botón táctil.
@@ -17,6 +18,9 @@ extends CanvasLayer
 
 signal cerrado
 
+# Todos los textos de las tablas de aquí abajo se traducen al enseñarlos (Idioma.t); las marcas son para
+# tools/traducciones.py (docs/IDIOMAS.md)
+# [traducir]
 # Lo que se explica de cada modo de atacar
 const MODOS_AYUDA := {
 	"asistido": "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte.",
@@ -85,6 +89,9 @@ const TECLAS := {
 	KEY_CTRL: "Ctrl", KEY_ALT: "Alt", KEY_BACKSPACE: "Borrar",
 	KEY_LEFT: "Flecha izq.", KEY_RIGHT: "Flecha dcha.", KEY_UP: "Flecha arriba", KEY_DOWN: "Flecha abajo",
 }
+const RATON := {MOUSE_BUTTON_LEFT: "Clic izq.", MOUSE_BUTTON_RIGHT: "Clic dcho.", MOUSE_BUTTON_MIDDLE: "Clic rueda",
+	MOUSE_BUTTON_WHEEL_UP: "Rueda", MOUSE_BUTTON_WHEEL_DOWN: "Rueda"}
+# [/traducir]
 
 var tapado: CanvasItem     # el menú de detrás, escondido mientras esto está abierto
 var johnny: Node2D         # para cambiarle el modo de atacar en plena partida (null en el menú principal)
@@ -98,6 +105,7 @@ var esperando: Button = null   # la casilla que espera una tecla nueva (o null)
 var esperando_accion := ""
 var esperando_mando := false
 var esperando_desde := 0   # cuándo empezó a esperar (ms): lo que llegue justo después es el mismo pulsar
+var boton_idioma: Button   # el botón de Idioma de la pestaña General (si está), para devolverle el foco al cambiarlo
 
 
 static func abrir(dueno: Node, tapar: CanvasItem, jugador: Node2D = null) -> Opciones:
@@ -113,6 +121,21 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if tapado:
 		tapado.hide()
+	Idioma.cambiado.connect(reconstruir)
+	construir()
+
+
+# Al cambiar de idioma: la pantalla se monta otra vez, en la misma pestaña y con el foco en el botón del idioma
+func reconstruir() -> void:
+	var cual := pestana
+	fondo.hide()
+	fondo.queue_free()   # (el cambio viene de un botón de dentro: se libera al acabar el fotograma)
+	construir(cual)
+	if boton_idioma:
+		boton_idioma.grab_focus.call_deferred()
+
+
+func construir(cual := "general") -> void:
 	fondo = ColorRect.new()
 	fondo.color = Color(0.04, 0.03, 0.06, 0.85)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -129,16 +152,16 @@ func _ready() -> void:
 	panel.add_child(columna)
 	var t := Label.new()
 	t.theme_type_variation = "Titulo"
-	t.text = "Opciones"
+	t.text = Idioma.t("Opciones")
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	columna.add_child(t)
 	pestanas = HBoxContainer.new()
 	pestanas.alignment = BoxContainer.ALIGNMENT_CENTER
 	pestanas.add_theme_constant_override("separation", 10)
 	columna.add_child(pestanas)
-	for p in [["general", "General"], ["controles", "Controles"], ["ayudas", "Ayudas"]]:
+	for p in [["general", "General"], ["controles", "Controles"], ["ayudas", "Ayudas"]]:   # [traducir]
 		var b := Button.new()
-		b.text = p[1]
+		b.text = Idioma.t(p[1])
 		b.name = p[0]
 		b.pressed.connect(func(): ver(p[0]))
 		pestanas.add_child(b)
@@ -146,11 +169,11 @@ func _ready() -> void:
 	contenido.add_theme_constant_override("separation", 8)
 	columna.add_child(contenido)
 	var volver := Button.new()
-	volver.text = "Volver"
+	volver.text = Idioma.t("Volver")
 	volver.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	volver.pressed.connect(cerrar)
 	columna.add_child(volver)
-	ver("general")
+	ver(cual)
 
 
 func cerrar() -> void:
@@ -176,6 +199,7 @@ func ver(cual: String) -> void:
 		hijo.queue_free()
 	casillas.clear()
 	esperando = null
+	boton_idioma = null
 	if cual == "general":
 		general()
 	elif cual == "ayudas":
@@ -192,14 +216,17 @@ func general() -> void:
 	ayuda.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ayuda.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ayuda.custom_minimum_size.x = 560
-	ayuda.text = MODOS_AYUDA[modo]
-	var boton_modo := opcion("Modo de atacar: %s" % modos()[modo])
+	ayuda.text = Idioma.t(MODOS_AYUDA[modo])
+	# El idioma se escribe siempre con su nombre en los dos idiomas, para encontrarlo aunque el juego esté en el otro
+	boton_idioma = opcion("Idioma / Language: %s" % Idioma.nombre())   # no-tr
+	boton_idioma.pressed.connect(Idioma.siguiente)
+	var boton_modo := opcion(Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[modo]))
 	boton_modo.pressed.connect(func():
 		var orden: Array = modos().keys()
 		var nuevo: String = orden[(orden.find(Guardado.cargar().ajustes.modo) + 1) % orden.size()]
 		poner_modo(nuevo)
-		boton_modo.text = "Modo de atacar: %s" % modos()[nuevo]
-		ayuda.text = MODOS_AYUDA[nuevo])
+		boton_modo.text = Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[nuevo])
+		ayuda.text = Idioma.t(MODOS_AYUDA[nuevo]))
 	contenido.add_child(ayuda)
 	var musica := opcion(texto_musica())
 	musica.pressed.connect(func():
@@ -212,35 +239,35 @@ func general() -> void:
 		Sonido.silenciar(not Sonido.silenciado())
 		sonido.text = texto_sonido())
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
-		opcion("Pantalla completa").pressed.connect(Tactil.pantalla_completa)
+		opcion(Idioma.t("Pantalla completa")).pressed.connect(Tactil.pantalla_completa)
 	if Tactil.activo:
 		var titulo := Label.new()
 		titulo.theme_type_variation = "Sub"
-		titulo.text = "Móvil"
+		titulo.text = Idioma.t("Móvil")
 		titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		contenido.add_child(titulo)
-		rotar("Tamaño de los botones", "tactil_tamano", TAMANOS)
-		rotar("Transparencia", "tactil_opacidad", OPACIDADES)
-		rotar("Vibración", "vibracion", SI_NO)
+		rotar(Idioma.t("Tamaño de los botones"), "tactil_tamano", TAMANOS)
+		rotar(Idioma.t("Transparencia"), "tactil_opacidad", OPACIDADES)
+		rotar(Idioma.t("Vibración"), "vibracion", SI_NO)
 
 
 # Las ayudas: cada una, un botón de Sí/No con lo que hace debajo
 func ayudas() -> void:
-	var aviso := explicar("Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan.")
+	var aviso := explicar(Idioma.t("Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."))
 	aviso.add_theme_color_override("font_color", Tema.AMARILLO)
-	rotar("Vida entera", "vida_entera", SI_NO)
-	explicar("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento.")
-	rotar("Pistola sin fin", "pistola_sin_fin", SI_NO)
-	explicar("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre.")
-	rotar("Lanzar apuntando solo", "lanzar_solo", SI_NO)
-	explicar("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre.")
-	rotar("Tutoriales", "tutoriales", SI_NO)
-	explicar("La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial.")
-	var otra_vez := opcion("Que vuelvan a salir todos")
+	rotar(Idioma.t("Vida entera"), "vida_entera", SI_NO)
+	explicar(Idioma.t("La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."))
+	rotar(Idioma.t("Pistola sin fin"), "pistola_sin_fin", SI_NO)
+	explicar(Idioma.t("La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."))
+	rotar(Idioma.t("Lanzar apuntando solo"), "lanzar_solo", SI_NO)
+	explicar(Idioma.t("El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."))
+	rotar(Idioma.t("Tutoriales"), "tutoriales", SI_NO)
+	explicar(Idioma.t("La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."))
+	var otra_vez := opcion(Idioma.t("Que vuelvan a salir todos"))
 	otra_vez.pressed.connect(func():
 		Tutoriales.olvidar()
 		Sonido.tocar("click")
-		otra_vez.text = "Volverán a salir desde el principio"
+		otra_vez.text = Idioma.t("Volverán a salir desde el principio")
 		otra_vez.disabled = true)
 
 
@@ -264,12 +291,12 @@ func rotar(nombre: String, clave: String, valores: Array) -> void:
 			if str(valores[i][0]) == str(actual):   # con str: el guardado trae los números con decimales
 				return i
 		return 0
-	var b := opcion("%s: %s" % [nombre, valores[cual.call()][1]])
+	var b := opcion("%s: %s" % [nombre, Idioma.t(valores[cual.call()][1])])
 	b.pressed.connect(func():
 		var nuevo: Array = valores[(cual.call() + 1) % valores.size()]
 		Guardado.cambiar(func(g): g.ajustes[clave] = nuevo[0])
 		Tactil.ajustar()
-		b.text = "%s: %s" % [nombre, nuevo[1]])
+		b.text = "%s: %s" % [nombre, Idioma.t(nuevo[1])])
 
 
 # Los nombres de los modos están en johnny.gd (MODOS)
@@ -300,8 +327,8 @@ func controles() -> void:
 		contenido.add_child(tabla)
 		tabla.columns = 2
 		for f in TACTIL:
-			celda(tabla, f[0])
-			celda(tabla, f[1], "Sub")
+			celda(tabla, Idioma.t(f[0]))
+			celda(tabla, Idioma.t(f[1]), "Sub")
 		return
 	# La tabla va en una caja con barra, por si no cabe (con el mando, la barra sigue a la casilla elegida)
 	var caja := ScrollContainer.new()
@@ -313,25 +340,25 @@ func controles() -> void:
 	tabla.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	caja.add_child(tabla)
 	celda(tabla, "", "Sub")
-	celda(tabla, "Teclado y ratón", "Sub")
-	celda(tabla, "Mando", "Sub")
+	celda(tabla, Idioma.t("Teclado y ratón"), "Sub")
+	celda(tabla, Idioma.t("Mando"), "Sub")
 	for f in FILAS:
-		celda(tabla, f[0])
+		celda(tabla, Idioma.t(f[0]))
 		if f[1].is_empty():   # apuntar
-			celda(tabla, "Ratón", "Sub")
-			celda(tabla, "Stick dcho.", "Sub")
+			celda(tabla, Idioma.t("Ratón"), "Sub")
+			celda(tabla, Idioma.t("Stick dcho."), "Sub")
 			continue
 		casilla(tabla, f[1][0], false)
 		casilla(tabla, f[1][0], true)
 	aviso = Label.new()
 	aviso.theme_type_variation = "Sub"
 	aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	aviso.text = "Pulsa una casilla para cambiar esa tecla o ese botón"
+	aviso.text = Idioma.t("Pulsa una casilla para cambiar esa tecla o ese botón")
 	contenido.add_child(aviso)
-	opcion("Restablecer controles").pressed.connect(func():
+	opcion(Idioma.t("Restablecer controles")).pressed.connect(func():
 		Controles.restablecer()
 		refrescar()
-		aviso.text = "Vuelven a estar los controles de serie")
+		aviso.text = Idioma.t("Vuelven a estar los controles de serie"))
 
 
 func celda(tabla: GridContainer, texto: String, variacion := "") -> void:
@@ -360,8 +387,8 @@ func esperar(b: Button, accion: String, mando: bool) -> void:
 	esperando_accion = accion
 	esperando_mando = mando
 	esperando_desde = Time.get_ticks_msec()
-	b.text = "Pulsa un botón del mando..." if mando else "Pulsa una tecla o un clic..."
-	aviso.text = "Esc para dejarlo como estaba"
+	b.text = Idioma.t("Pulsa un botón del mando...") if mando else Idioma.t("Pulsa una tecla o un clic...")
+	aviso.text = Idioma.t("Esc para dejarlo como estaba")
 
 
 # Vuelve a escribir lo que pone cada casilla (tras cambiar una, que puede haber cambiado otra al intercambiarse)
@@ -385,7 +412,7 @@ func nombres(acciones: Array, mando: bool) -> String:
 
 static func nombre_tecla(c: Key) -> String:
 	if c in TECLAS:
-		return TECLAS[c]
+		return Idioma.t(TECLAS[c])
 	# La letra que hay en esa posición del teclado del jugador (en un teclado francés, la A está donde la Q)
 	return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical(c))
 
@@ -395,22 +422,21 @@ static func nombre_evento(ev: InputEvent) -> String:
 	if ev is InputEventKey:
 		return nombre_tecla(Controles.codigo(ev))
 	if ev is InputEventMouseButton:
-		return {MOUSE_BUTTON_LEFT: "Clic izq.", MOUSE_BUTTON_RIGHT: "Clic dcho.", MOUSE_BUTTON_MIDDLE: "Clic rueda",
-			MOUSE_BUTTON_WHEEL_UP: "Rueda", MOUSE_BUTTON_WHEEL_DOWN: "Rueda"}.get(ev.button_index, "Ratón")
+		return Idioma.t(RATON.get(ev.button_index, "Ratón"))
 	if ev is InputEventJoypadButton:
-		return BOTONES_MANDO.get(ev.button_index, "Botón %d" % ev.button_index)
+		return Idioma.t(BOTONES_MANDO[ev.button_index]) if ev.button_index in BOTONES_MANDO else Idioma.t("Botón %d") % ev.button_index
 	if ev is InputEventJoypadMotion:
-		var sentido: String = SENTIDOS[ev.axis][1 if ev.axis_value > 0 else 0] if ev.axis in SENTIDOS else ""
-		return EJES_MANDO.get(ev.axis, "Eje %d" % ev.axis) + sentido
+		var sentido: String = Idioma.t(SENTIDOS[ev.axis][1 if ev.axis_value > 0 else 0]) if ev.axis in SENTIDOS else ""
+		return (Idioma.t(EJES_MANDO[ev.axis]) if ev.axis in EJES_MANDO else Idioma.t("Eje %d") % ev.axis) + sentido
 	return ""
 
 
 func texto_sonido() -> String:
-	return "Sonido: %s" % ("No" if Sonido.silenciado() else "Sí")
+	return Idioma.t("Sonido: %s") % (Idioma.t("No") if Sonido.silenciado() else Idioma.t("Sí"))
 
 
 func texto_musica() -> String:
-	return "Música: %s" % ("Sí" if Guardado.cargar().ajustes.musica else "No")
+	return Idioma.t("Música: %s") % (Idioma.t("Sí") if Guardado.cargar().ajustes.musica else Idioma.t("No"))
 
 
 # B del mando o Esc: volver. Si una casilla espera tecla, lo que se pulse es para ella (Esc la deja como estaba)
@@ -436,7 +462,7 @@ func esperar_tecla(evento: InputEvent) -> void:
 	var casilla_elegida := esperando
 	if cancelar:
 		refrescar()
-		aviso.text = "Sin cambios"
+		aviso.text = Idioma.t("Sin cambios")
 		casilla_elegida.grab_focus()
 		return
 	var nuevo := Controles.capturar(evento, esperando_mando)
@@ -444,5 +470,5 @@ func esperar_tecla(evento: InputEvent) -> void:
 		return
 	Controles.cambiar(esperando_accion, nuevo)
 	refrescar()
-	aviso.text = "Cambiado a %s" % nombre_evento(nuevo)
+	aviso.text = Idioma.t("Cambiado a %s") % nombre_evento(nuevo)
 	casilla_elegida.grab_focus()

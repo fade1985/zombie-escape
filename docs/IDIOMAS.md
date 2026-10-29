@@ -1,0 +1,110 @@
+# Idiomas · cómo se traduce el juego
+
+El juego está en **español** (idioma de origen) y en **inglés** (segundo idioma, `locale/en.po`). Se elige en
+Opciones → General (botón «Idioma / Language»), se guarda en `ajustes.idioma` y, si nunca se ha elegido, manda el
+idioma del sistema (español si está en español, inglés si no). Otros idiomas, más adelante: ver «Añadir un idioma».
+
+Cómo va la migración (qué archivos ya están pasados y cuáles faltan): ver el apartado «Estado» al final.
+
+## La idea
+
+- Cada texto del código **es su propia clave**: `Idioma.t("Salir")` devuelve «Salir» en español y «Quit» en inglés,
+  que es lo que pone `locale/en.po`. Si a un texto le falta su traducción, se ve en español y no se rompe nada.
+- El español nunca pasa por la tabla (`Idioma.t` lo devuelve tal cual), así que **no puede cambiar** al traducir.
+- `Idioma` es un autoload (`scripts/idioma.gd`): se llama desde cualquier script, también desde los `static`.
+
+## Cómo se escribe un texto (al hacer código nuevo)
+
+Todo texto que vea el jugador pasa por `Idioma`:
+
+```gdscript
+label.text = Idioma.t("Opciones")
+label.text = Idioma.t("Llevas %d") % cantidad            # primero se traduce y DESPUÉS se pone el número o el nombre
+label.text = Idioma.n("%d intento", "%d intentos", n) % n  # singular y plural; el inglés sabe cuál toca
+label.text = Idioma.t("Seguir", "pausa")                   # contexto (segundo parámetro): el mismo texto español
+                                                           # que se dice distinto según el sitio
+```
+
+Reglas:
+
+1. **Una frase entera por texto, nunca trozos pegados.** Mal: `"Has matado " + str(n) + " zombis"`; bien:
+   `Idioma.t("Has matado %d zombis") % n`. Cada idioma ordena las palabras como quiere. Los `%s` y `%d` van en el
+   mismo orden en los dos idiomas (GDScript no admite otro): si el inglés pide otro orden, se rehace la frase.
+2. **Plurales y géneros con `Idioma.n`**, no con `"s" if n > 1 else ""`.
+3. **No se traduce lo que no es texto del jugador:** ids, claves, nombres de nodos, rutas, mensajes de `print` (van a la
+   consola) y las herramientas internas (el panel F11, `sala_armas.gd` y `scripts/pruebas/`).
+4. **Números con decimales:** el español usa coma y el inglés punto (`0,5` / `0.5`). Si un texto lleva uno, se pone con
+   `%s` y se formatea según `Idioma.actual` (hoy no hay ninguno pasado; se resuelve al llegar al primero).
+5. **Comillas y apóstrofos en inglés: rectos (`"` y `'`)**: a la letra normal le faltan los rizados (`tema.gd`).
+6. **Un texto que cabe justo en español** (botones, tarjetas): el inglés suele salir más corto, pero se mira en una
+   captura (`--ingles`) antes de darlo por bueno.
+
+### Tablas de datos (`const`)
+
+En una `const` no se puede llamar a `Idioma.t`. Los textos se dejan en español en la tabla, se **marcan** con
+comentarios y se traducen al enseñarlos (`Idioma.t(ficha.nombre)`):
+
+```gdscript
+# [traducir]
+const LISTA := {"bate": {"nombre": "Bate", "desc": "Para dar golpes"}}
+# [/traducir]
+```
+
+Todo lo que tenga letras entre las dos marcas es un texto (se saltan los ids en minúsculas, las rutas y las claves de
+diccionario). Una sola línea se marca con `# [traducir]` al final de la línea. Lo que se vaya a enseñar tiene que pasar
+por `Idioma.t(...)` en el sitio donde se muestra (o en una función que lo devuelva ya traducido, como `Alerta.regla()`).
+
+Un texto en español que de verdad no se traduce (el botón «Idioma / Language», los nombres de los idiomas) lleva
+`# no-tr` al final de su línea.
+
+## La herramienta: `py tools/traducciones.py`
+
+Recoge los textos del código (los de `Idioma.t`/`Idioma.n` y los de las tablas marcadas), pone al día `locale/en.po`
+(añade los nuevos con la traducción vacía) y avisa de lo que está mal:
+
+```
+py tools/traducciones.py              pone al día el .po y cuenta
+py tools/traducciones.py --comprobar  lo mismo sin escribir (antes de subir)
+py tools/traducciones.py --faltan     enseña todos los textos sin traducir
+py tools/traducciones.py --limpiar    quita del .po los textos que ya no están en el código
+py tools/traducciones.py --rellenar archivo.json   rellena los vacíos con {"español": "inglés"} (plural: [uno, varios])
+```
+
+Acaba con el código 1 si hay textos **sin traducir**, traducciones con **otros `%d`/`%s`**, otros saltos de línea u otros
+espacios al principio o al final, o **textos en español sueltos** en un archivo ya pasado (lista `PASADOS` de la herramienta). Hay que
+pasarla **antes de cada commit** que toque textos.
+
+Cada entrada del `.po` es así (a mano solo se escribe el `msgstr`):
+
+```
+#: scripts/ui/menu_principal.gd
+msgid "Salir"
+msgstr "Quit"
+```
+
+## Probar
+
+- `-- --captura --idioma` saca el menú, Opciones (sus tres pestañas), el cambio de idioma en caliente y «Elige edificio»
+  (`prueba_idioma.gd`); con `--ingles`, en inglés. Con `--alerta 3 --reto`, «Elige edificio» sale con la alerta y el reto.
+- **Cualquier otra prueba, con `--ingles`**, corre en inglés. Al cerrar, `idioma.gd` escribe `TEXTOS SIN TRADUCIR AL IDIOMA
+  «en» (N): …` con los textos que se han pedido en esa prueba y no están en el `.po`. Sin `--ingles`, las pruebas van siempre en
+  español, aunque el guardado esté en inglés.
+- El idioma se puede cambiar con la pantalla abierta: `Idioma.cambiado` avisa. Opciones y el menú principal ya se rehacen;
+  el resto de pantallas (pausa, HUD...) se irán conectando al pasarlas.
+
+## Añadir un idioma
+
+1. En `idioma.gd`, `IDIOMAS`: `["fr", "Français"]`.
+2. Copiar `locale/en.po` a `locale/fr.po`, cambiar `"Language: en"` y vaciar los `msgstr`. (`tools/traducciones.py`
+   trabaja hoy solo con `locale/en.po`, constante `PO`: con el segundo idioma habrá que hacerla multiidioma.)
+3. En `project.godot`, `locale/translations`: añadir `res://locale/fr.po`.
+4. Mirar que la fuente (`tema.gd`) tiene las letras de ese idioma (los alfabetos no latinos necesitan otra fuente).
+
+## Estado
+
+Pasados: `idioma.gd`, `ui/menu_principal.gd`, `ui/opciones.gd`, `alerta.gd`, `edificios.gd`, `reto.gd` y el nombre de los
+modos de atacar (`johnny.gd`, `MODOS`); todo lo que sale en «Elige edificio» y en Opciones. Faltan, por fases: la interfaz
+(`ui/inventario.gd`, `ui/ordenador.gd`, `ui/menus.gd`, `partida.gd`, `taquilla`...), los datos (armas, objetos, talentos,
+logros, mutaciones, trajes...), los textos largos (historia, tutoriales, bestiario, supervivientes), los gritos de los jefes,
+los carteles del mundo y los dibujados en imágenes (`cartel-planta-N.png` lleva «PLANTA»). El glosario para escribir el
+inglés, en `docs/GLOSARIO_EN.md`.

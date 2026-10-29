@@ -1,0 +1,774 @@
+# Traducción al inglés de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
+# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
+msgid ""
+msgstr ""
+"Project-Id-Version: Zombie Escape\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#: scripts/alerta.gd
+msgid "Alerta %d"
+msgstr "Alert %d"
+
+#: scripts/alerta.gd
+msgid "Sin alerta"
+msgstr "No alert"
+
+#: scripts/alerta.gd
+msgid "Como siempre"
+msgstr "As usual"
+
+#: scripts/alerta.gd
+msgid ""
+"%s%s\n"
+"+%d %% de dólares y de piezas"
+msgstr ""
+"%s%s\n"
+"+%d %% dollars and parts"
+
+#: scripts/alerta.gd
+msgid " (y lo de antes)"
+msgstr " (and the previous ones)"
+
+#: scripts/alerta.gd
+msgid "+25 % de zombis"
+msgstr "+25 % zombies"
+
+#: scripts/alerta.gd
+msgid "Zombis un 10 % más rápidos"
+msgstr "Zombies 10 % faster"
+
+#: scripts/alerta.gd
+msgid "Jefes con +25 % de vida, y se enfadan antes"
+msgstr "Bosses with +25 % health, and they get angry sooner"
+
+#: scripts/alerta.gd
+msgid "Botiquines, vendas y Lobezno curan la mitad"
+msgstr "Medkits, bandages and Wolverine heal half as much"
+
+#: scripts/alerta.gd
+msgid "El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos"
+msgstr "The guard (or the key zombie) takes twice the damage and zombies hear you from farther away"
+
+#: scripts/edificios.gd
+msgid "Apartamentos"
+msgstr "Apartments"
+
+#: scripts/edificios.gd
+msgid "los Apartamentos"
+msgstr "the Apartments"
+
+#: scripts/edificios.gd
+msgid "Vecinos zombi, pisos a oscuras y una portera con muy mal genio"
+msgstr "Zombie neighbors, dark apartments and a super with a terrible temper"
+
+#: scripts/edificios.gd
+msgid "la portera"
+msgstr "the super"
+
+#: scripts/edificios.gd
+msgid "el doctor Salas"
+msgstr "Dr. Salas"
+
+#: scripts/edificios.gd
+msgid "limpia los apartamentos y caza al zombi que lleva la llave de la portera"
+msgstr "clear the apartments and hunt down the zombie carrying the super's key"
+
+#: scripts/edificios.gd
+msgid "Centro comercial"
+msgstr "Shopping Mall"
+
+#: scripts/edificios.gd
+msgid "el Centro comercial"
+msgstr "the Shopping Mall"
+
+#: scripts/edificios.gd
+msgid "Tiendas saqueadas, almacenes a oscuras y un guardia que no suelta su tarjeta"
+msgstr "Looted stores, dark storerooms and a guard who won't let go of his keycard"
+
+#: scripts/edificios.gd
+msgid "el gerente"
+msgstr "the manager"
+
+#: scripts/edificios.gd
+msgid "limpia las tiendas y caza al guardia de seguridad: lleva la tarjeta de acceso"
+msgstr "clear the stores and hunt down the security guard: he carries the access card"
+
+#: scripts/edificios.gd
+msgid "el Glotón"
+msgstr "the Glutton"
+
+#: scripts/edificios.gd
+msgid "el Gymbro"
+msgstr "the Gymbro"
+
+#: scripts/edificios.gd
+msgid "el jefe de bomberos"
+msgstr "the fire chief"
+
+#: scripts/edificios.gd
+msgid "el antidisturbios"
+msgstr "the riot cop"
+
+#: scripts/edificios.gd
+msgid "Oficina de seguridad"
+msgstr "Security Office"
+
+#: scripts/edificios.gd
+msgid "la Oficina de seguridad"
+msgstr "the Security Office"
+
+#: scripts/edificios.gd
+msgid "el cocinero"
+msgstr "the cook"
+
+#: scripts/edificios.gd
+msgid "Cocina central"
+msgstr "Main Kitchen"
+
+#: scripts/edificios.gd
+msgid "la Cocina central"
+msgstr "the Main Kitchen"
+
+#: scripts/edificios.gd
+msgid "la modista"
+msgstr "the seamstress"
+
+#: scripts/edificios.gd
+msgid "Taller de costura"
+msgstr "Sewing Shop"
+
+#: scripts/edificios.gd
+msgid "el Taller de costura"
+msgstr "the Sewing Shop"
+
+#: scripts/edificios.gd
+msgid "la mascota"
+msgstr "the mascot"
+
+#: scripts/edificios.gd
+msgid "Juguetería"
+msgstr "Toy Store"
+
+#: scripts/edificios.gd
+msgid "la Juguetería"
+msgstr "the Toy Store"
+
+#: scripts/johnny.gd
+msgid "Asistido"
+msgstr "Assisted"
+
+#: scripts/johnny.gd
+msgid "Apuntar libre"
+msgstr "Free aim"
+
+#: scripts/reto.gd
+msgid "Reto del día · %s: %s"
+msgstr "Daily Challenge · %s: %s"
+
+#: scripts/reto.gd
+msgid "Reto: %s"
+msgstr "Challenge: %s"
+
+#: scripts/reto.gd
+msgid "Completado en %d:%02d"
+msgstr "Completed in %d:%02d"
+
+#: scripts/reto.gd
+msgid "sin marca"
+msgstr "no record"
+
+#: scripts/reto.gd
+msgid "Sin marca"
+msgstr "No record"
+
+#: scripts/reto.gd
+msgid "planta %d"
+msgstr "floor %d"
+
+#: scripts/reto.gd
+msgid "Has llegado a la planta %d"
+msgstr "You reached floor %d"
+
+#: scripts/reto.gd
+msgid "Hoy: %s"
+msgstr "Today: %s"
+
+#: scripts/reto.gd
+msgid "Aún no lo has intentado"
+msgstr "You haven't tried it yet"
+
+#: scripts/reto.gd scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "%d attempt"
+msgstr[1] "%d attempts"
+
+#: scripts/reto.gd
+msgid "Solo cuerpo a cuerpo"
+msgstr "Melee only"
+
+#: scripts/reto.gd
+msgid "la pistola va vacía y no cae munición, ni molotovs ni granadas"
+msgstr "the pistol starts empty and no ammo, Molotovs or grenades drop"
+
+#: scripts/reto.gd
+msgid "Todo a oscuras"
+msgstr "Lights out"
+
+#: scripts/reto.gd
+msgid "todas las plantas como en un apagón: solo se ve con la linterna"
+msgstr "every floor as in a blackout: you can only see with the flashlight"
+
+#: scripts/reto.gd
+msgid "Sin curas"
+msgstr "No healing"
+
+#: scripts/reto.gd
+msgid "los armaritos están vacíos y no cae, ni se vende, ni te preparan nada que cure"
+msgstr "the cabinets are empty and nothing that heals drops, is sold or gets prepared for you"
+
+#: scripts/reto.gd
+msgid "Zombis rápidos"
+msgstr "Fast zombies"
+
+#: scripts/reto.gd
+msgid "todos un 35 % más rápidos (los jefes, no)"
+msgstr "all 35 % faster (bosses excluded)"
+
+#: scripts/reto.gd
+msgid "De cristal"
+msgstr "Fragile"
+
+#: scripts/reto.gd
+msgid "Johnny con la mitad de vida"
+msgstr "Johnny with half his health"
+
+#: scripts/reto.gd
+msgid "Casa llena"
+msgstr "Packed house"
+
+#: scripts/reto.gd
+msgid "el doble de zombis en cada sitio"
+msgstr "twice as many zombies in every place"
+
+#: scripts/reto.gd
+msgid "Oído fino"
+msgstr "Sharp ears"
+
+#: scripts/reto.gd
+msgid "los zombis dormidos te oyen desde el triple de lejos"
+msgstr "sleeping zombies hear you from three times as far"
+
+#: scripts/ui/menu_principal.gd
+msgid "Limpia el edificio de zombis, planta a planta"
+msgstr "Clear the building of zombies, floor by floor"
+
+#: scripts/ui/menu_principal.gd
+msgid "JUGAR"
+msgstr "PLAY"
+
+#: scripts/ui/menu_principal.gd
+msgid "Tutorial"
+msgstr "Tutorial"
+
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd
+msgid "Opciones"
+msgstr "Options"
+
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd
+msgid "Pantalla completa"
+msgstr "Fullscreen"
+
+#: scripts/ui/menu_principal.gd
+msgid "Salir"
+msgstr "Quit"
+
+#: scripts/ui/menu_principal.gd
+msgid ""
+"Limpia cada apartamento para abrir su puerta y caza al zombi que lleva la llave de la portera\n"
+"Los controles y el modo de atacar están en Opciones"
+msgstr ""
+"Clear every apartment to open its door and hunt down the zombie carrying the super's key\n"
+"Controls and attack mode are in Options"
+
+#: scripts/ui/menu_principal.gd
+msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
+msgstr "Best floor reached: %d   ·   Dollars saved: $%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Elige edificio"
+msgstr "Choose a building"
+
+#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd
+msgid "Volver"
+msgstr "Back"
+
+#: scripts/ui/menu_principal.gd
+msgid "Complétalo para abrir la Alerta 1"
+msgstr "Complete it to unlock Alert 1"
+
+#: scripts/ui/menu_principal.gd
+msgid "%s (de %d)"
+msgstr "%s (of %d)"
+
+#: scripts/ui/menu_principal.gd
+msgid "Reto del día"
+msgstr "Daily Challenge"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d plantas y azotea"
+msgstr "%d floors and a rooftop"
+
+#: scripts/ui/menu_principal.gd
+msgid "¡Sin explorar!"
+msgstr "Unexplored!"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completado ×%d"
+msgstr "Completed ×%d"
+
+#: scripts/ui/menu_principal.gd
+msgid "mejor tiempo %d:%02d"
+msgstr "best time %d:%02d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Has llegado a la planta %d de %d"
+msgstr "You reached floor %d of %d"
+
+#: scripts/ui/menu_principal.gd
+msgid "Completa %s para abrirlo"
+msgstr "Complete %s to unlock it"
+
+#: scripts/ui/opciones.gd
+msgid "Modo de atacar: %s"
+msgstr "Attack mode: %s"
+
+#: scripts/ui/opciones.gd
+msgid "Móvil"
+msgstr "Mobile"
+
+#: scripts/ui/opciones.gd
+msgid "Tamaño de los botones"
+msgstr "Button size"
+
+#: scripts/ui/opciones.gd
+msgid "Transparencia"
+msgstr "Transparency"
+
+#: scripts/ui/opciones.gd
+msgid "Vibración"
+msgstr "Vibration"
+
+#: scripts/ui/opciones.gd
+msgid "Con alguna de estas tres ayudas encendida no se consiguen logros en esa partida (aunque la apagues luego). Los que ya tienes se quedan."
+msgstr "With any of these three aids on, you can't earn achievements in that run (even if you turn it off later). The ones you already have stay."
+
+#: scripts/ui/opciones.gd
+msgid "Vida entera"
+msgstr "Whole health"
+
+#: scripts/ui/opciones.gd
+msgid "La vida no se parte en tercios: curándote llegas siempre a la vida máxima y no andas más lento."
+msgstr "Health isn't split into thirds: healing always takes you to max health and you never move slower."
+
+#: scripts/ui/opciones.gd
+msgid "Pistola sin fin"
+msgstr "Endless pistol"
+
+#: scripts/ui/opciones.gd
+msgid "La pistola no gasta balas ni hay que recargarla. Las demás armas, igual que siempre."
+msgstr "The pistol uses no bullets and never needs reloading. Other weapons work as usual."
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar apuntando solo"
+msgstr "Auto-aimed throws"
+
+#: scripts/ui/opciones.gd
+msgid "El molotov, la granada y las arrojadizas van solos al zombi más cercano que veas. Si no ves ninguno, se lanzan como siempre."
+msgstr "Molotovs, grenades and throwables go straight to the nearest zombie you can see. If you can't see any, they're thrown as usual."
+
+#: scripts/ui/opciones.gd
+msgid "Tutoriales"
+msgstr "Tutorials"
+
+#: scripts/ui/opciones.gd
+msgid "La primera vez que te encuentras algo nuevo, una ventana explica qué pasa y cómo se hace. Las ya vistas están en Tutorial."
+msgstr "The first time you run into something new, a window explains what's going on and how to do it. The ones you've seen are in Tutorial."
+
+#: scripts/ui/opciones.gd
+msgid "Que vuelvan a salir todos"
+msgstr "Show them all again"
+
+#: scripts/ui/opciones.gd
+msgid "Volverán a salir desde el principio"
+msgstr "They will show again from the start"
+
+#: scripts/ui/opciones.gd
+msgid "Teclado y ratón"
+msgstr "Keyboard and mouse"
+
+#: scripts/ui/opciones.gd
+msgid "Mando"
+msgstr "Gamepad"
+
+#: scripts/ui/opciones.gd
+msgid "Ratón"
+msgstr "Mouse"
+
+#: scripts/ui/opciones.gd
+msgid "Stick dcho."
+msgstr "Right stick"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una casilla para cambiar esa tecla o ese botón"
+msgstr "Press a box to change that key or button"
+
+#: scripts/ui/opciones.gd
+msgid "Restablecer controles"
+msgstr "Reset controls"
+
+#: scripts/ui/opciones.gd
+msgid "Vuelven a estar los controles de serie"
+msgstr "Default controls restored"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa un botón del mando..."
+msgstr "Press a gamepad button..."
+
+#: scripts/ui/opciones.gd
+msgid "Pulsa una tecla o un clic..."
+msgstr "Press a key or click..."
+
+#: scripts/ui/opciones.gd
+msgid "Esc para dejarlo como estaba"
+msgstr "Esc to leave it as it was"
+
+#: scripts/ui/opciones.gd
+msgid "Botón %d"
+msgstr "Button %d"
+
+#: scripts/ui/opciones.gd
+msgid "Eje %d"
+msgstr "Axis %d"
+
+#: scripts/ui/opciones.gd
+msgid "Sonido: %s"
+msgstr "Sound: %s"
+
+#: scripts/ui/opciones.gd
+msgid "No"
+msgstr "No"
+
+#: scripts/ui/opciones.gd
+msgid "Sí"
+msgstr "Yes"
+
+#: scripts/ui/opciones.gd
+msgid "Música: %s"
+msgstr "Music: %s"
+
+#: scripts/ui/opciones.gd
+msgid "Sin cambios"
+msgstr "No changes"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiado a %s"
+msgstr "Changed to %s"
+
+#: scripts/ui/opciones.gd
+msgid "Johnny apunta y ataca solo al zombi más cercano. Tú solo te preocupas de moverte."
+msgstr "Johnny aims at and attacks the nearest zombie by himself. You only worry about moving."
+
+#: scripts/ui/opciones.gd
+msgid "Apuntas tú: con el ratón, con el stick derecho del mando o con el joystick derecho del móvil."
+msgstr "You aim: with the mouse, the gamepad's right stick or the phone's right joystick."
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: arriba"
+msgstr "Move: up"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: izquierda"
+msgstr "Move: left"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: abajo"
+msgstr "Move: down"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse: derecha"
+msgstr "Move: right"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar (modo libre)"
+msgstr "Aim (free aim)"
+
+#: scripts/ui/opciones.gd
+msgid "Atacar"
+msgstr "Attack"
+
+#: scripts/ui/opciones.gd
+msgid "Esquivar"
+msgstr "Dodge"
+
+#: scripts/ui/opciones.gd
+msgid "Cambiar de arma"
+msgstr "Switch weapon"
+
+#: scripts/ui/opciones.gd
+msgid "Recargar"
+msgstr "Reload"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar (mantener y soltar)"
+msgstr "Throw (hold and release)"
+
+#: scripts/ui/opciones.gd
+msgid "Molotov o granada"
+msgstr "Molotov or grenade"
+
+#: scripts/ui/opciones.gd
+msgid "Usar vendas"
+msgstr "Use bandages"
+
+#: scripts/ui/opciones.gd
+msgid "Usar botiquín"
+msgstr "Use medkit"
+
+#: scripts/ui/opciones.gd
+msgid "Inventario"
+msgstr "Inventory"
+
+#: scripts/ui/opciones.gd
+msgid "Pausa"
+msgstr "Pause"
+
+#: scripts/ui/opciones.gd
+msgid "Modo de atacar"
+msgstr "Attack mode"
+
+#: scripts/ui/opciones.gd
+msgid "Moverse"
+msgstr "Move"
+
+#: scripts/ui/opciones.gd
+msgid "Joystick: toca y arrastra en la mitad izquierda"
+msgstr "Joystick: touch and drag on the left half"
+
+#: scripts/ui/opciones.gd
+msgid "Apuntar"
+msgstr "Aim"
+
+#: scripts/ui/opciones.gd
+msgid "Solo en \"apuntar libre\": el joystick de abajo a la derecha"
+msgstr "Only in \"free aim\": the joystick at the bottom right"
+
+#: scripts/ui/opciones.gd
+msgid "En asistido, el de la esquina de abajo a la derecha; si no, el del arco"
+msgstr "In assisted mode, the one in the bottom-right corner; otherwise, the one on the arc"
+
+#: scripts/ui/opciones.gd
+msgid "Armas"
+msgstr "Weapons"
+
+#: scripts/ui/opciones.gd
+msgid "Toca la otra arma para sacarla; toca la de a distancia en la mano para recargar"
+msgstr "Tap the other weapon to draw it; tap the ranged one in your hand to reload"
+
+#: scripts/ui/opciones.gd
+msgid "Lanzar"
+msgstr "Throw"
+
+#: scripts/ui/opciones.gd
+msgid "Arrastra desde el botón para apuntar y suelta para tirar"
+msgstr "Drag from the button to aim and release to throw"
+
+#: scripts/ui/opciones.gd
+msgid "El botoncito de al lado de lanzar"
+msgstr "The small button next to throw"
+
+#: scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Bandages and medkit"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa (solo salen si llevas)"
+msgstr "The buttons below the minimap (they only show if you're carrying any)"
+
+#: scripts/ui/opciones.gd
+msgid "Modo, inventario y pausa"
+msgstr "Mode, inventory and pause"
+
+#: scripts/ui/opciones.gd
+msgid "Los botones de debajo del minimapa"
+msgstr "The buttons below the minimap"
+
+#: scripts/ui/opciones.gd
+msgid "Pequeño"
+msgstr "Small"
+
+#: scripts/ui/opciones.gd
+msgid "Normal"
+msgstr "Normal"
+
+#: scripts/ui/opciones.gd
+msgid "Grande"
+msgstr "Large"
+
+#: scripts/ui/opciones.gd
+msgid "Muy grande"
+msgstr "Extra large"
+
+#: scripts/ui/opciones.gd
+msgid "Select"
+msgstr "Select"
+
+#: scripts/ui/opciones.gd
+msgid "Guía"
+msgstr "Guide"
+
+#: scripts/ui/opciones.gd
+msgid "Start"
+msgstr "Start"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick izq."
+msgstr "Left stick click"
+
+#: scripts/ui/opciones.gd
+msgid "Pulsar stick dcho."
+msgstr "Right stick click"
+
+#: scripts/ui/opciones.gd
+msgid "LB"
+msgstr "LB"
+
+#: scripts/ui/opciones.gd
+msgid "RB"
+msgstr "RB"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta arriba"
+msgstr "D-pad up"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta abajo"
+msgstr "D-pad down"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta izq."
+msgstr "D-pad left"
+
+#: scripts/ui/opciones.gd
+msgid "Cruceta dcha."
+msgstr "D-pad right"
+
+#: scripts/ui/opciones.gd
+msgid "Stick izq."
+msgstr "Left stick"
+
+#: scripts/ui/opciones.gd
+msgid "LT"
+msgstr "LT"
+
+#: scripts/ui/opciones.gd
+msgid "RT"
+msgstr "RT"
+
+#: scripts/ui/opciones.gd
+msgid " izq."
+msgstr " left"
+
+#: scripts/ui/opciones.gd
+msgid " dcha."
+msgstr " right"
+
+#: scripts/ui/opciones.gd
+msgid " arriba"
+msgstr " up"
+
+#: scripts/ui/opciones.gd
+msgid " abajo"
+msgstr " down"
+
+#: scripts/ui/opciones.gd
+msgid "Espacio"
+msgstr "Space"
+
+#: scripts/ui/opciones.gd
+msgid "Mayús"
+msgstr "Shift"
+
+#: scripts/ui/opciones.gd
+msgid "Esc"
+msgstr "Esc"
+
+#: scripts/ui/opciones.gd
+msgid "Tab"
+msgstr "Tab"
+
+#: scripts/ui/opciones.gd
+msgid "Intro"
+msgstr "Enter"
+
+#: scripts/ui/opciones.gd
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: scripts/ui/opciones.gd
+msgid "Alt"
+msgstr "Alt"
+
+#: scripts/ui/opciones.gd
+msgid "Borrar"
+msgstr "Backspace"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha izq."
+msgstr "Left arrow"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha dcha."
+msgstr "Right arrow"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha arriba"
+msgstr "Up arrow"
+
+#: scripts/ui/opciones.gd
+msgid "Flecha abajo"
+msgstr "Down arrow"
+
+#: scripts/ui/opciones.gd
+msgid "Clic izq."
+msgstr "Left click"
+
+#: scripts/ui/opciones.gd
+msgid "Clic dcho."
+msgstr "Right click"
+
+#: scripts/ui/opciones.gd
+msgid "Clic rueda"
+msgstr "Middle click"
+
+#: scripts/ui/opciones.gd
+msgid "Rueda"
+msgstr "Wheel"
+
+#: scripts/ui/opciones.gd
+msgid "General"
+msgstr "General"
+
+#: scripts/ui/opciones.gd
+msgid "Controles"
+msgstr "Controls"
+
+#: scripts/ui/opciones.gd
+msgid "Ayudas"
+msgstr "Assists"

@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.7")
 Sonido="*res://scripts/sonido.gd"
 Botones="*res://scripts/ui/botones.gd"
 Temblor="*res://scripts/temblor.gd"
+Idioma="*res://scripts/idioma.gd"
 
 [display]
 
@@ -153,6 +154,11 @@ apuntar_abajo={
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locale/en.po")
+locale/fallback="es"
 
 [layer_names]
 

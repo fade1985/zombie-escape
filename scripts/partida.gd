@@ -247,7 +247,7 @@ func _ready() -> void:
 		empezar_prueba()
 	else:
 		decir("%s: %s%s" % [planta.nombre, ed.objetivo, "
-%s: %s" % [Alerta.nombre(), Alerta.REGLAS[Alerta.nivel]]
+%s: %s" % [Alerta.nombre(), Alerta.regla()]
 			if Alerta.nivel > 0 else ""] + ("
 " + Reto.aviso() if Reto.activo else "") + ("
 La Farmacéutica te ha preparado un botiquín: está en la mochila" if botiquin else ""), 4.0)

@@ -11,7 +11,8 @@
 class_name Alerta
 
 const MAX := 5
-# Lo que añade cada nivel (sale en "Elige edificio" y al empezar la partida)
+# Lo que añade cada nivel (sale en "Elige edificio" y al empezar la partida); para enseñarlo, regla(n), que lo traduce
+# [traducir]
 const REGLAS := [
 	"",
 	"+25 % de zombis",
@@ -20,6 +21,7 @@ const REGLAS := [
 	"Botiquines, vendas y Lobezno curan la mitad",
 	"El guardia (o el zombi de la llave) aguanta el doble y los zombis te oyen más lejos",
 ]
+# [/traducir]
 const MAS_ZOMBIS := 1.25     # A1: el presupuesto de zombis de cada sitio (planta.gd, horda)
 const MAS_RAPIDOS := 1.1     # A2: la velocidad de los zombis (no la de los jefes)
 const JEFE_VIDA := 1.25      # A3: la vida de los jefes de planta...
@@ -75,11 +77,16 @@ static func mas_piezas() -> float:
 
 # El nombre corto ("Alerta 3") y lo que trae ese nivel, para los textos
 static func nombre(n := nivel) -> String:
-	return "Alerta %d" % n if n > 0 else "Sin alerta"
+	return Idioma.t("Alerta %d") % n if n > 0 else Idioma.t("Sin alerta")
+
+
+# Lo que añade un nivel (REGLAS), en el idioma del jugador
+static func regla(n := nivel) -> String:
+	return Idioma.t(REGLAS[n])
 
 
 static func resumen(n := nivel) -> String:
 	if n <= 0:
-		return "Como siempre"
-	return "%s%s\n+%d %% de dólares y de piezas" % [REGLAS[n], " (y lo de antes)" if n > 1 else "",
+		return Idioma.t("Como siempre")
+	return Idioma.t("%s%s\n+%d %% de dólares y de piezas") % [regla(n), Idioma.t(" (y lo de antes)") if n > 1 else "",
 		roundi(DOLARES * n * 100)]

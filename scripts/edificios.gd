@@ -19,8 +19,11 @@
 #   pasillo           el aspecto del pasillo de cada planta: su suelo, pared y tapa (mapa.gd, PASILLOS) y sus muebles
 #                     (catalogo.gd, SALAS)
 #   El dosier de cada edificio va por su id en historia.gd (DOSIERES) y el progreso, en el guardado (Guardado.edificio).
+# Los textos (nombre, el_nombre, desc, el_jefe, el_final, objetivo, "el", "tienda", "la_tienda") se traducen al enseñarlos
+# con Idioma.t(): están entre las marcas [traducir] (docs/IDIOMAS.md)
 class_name Edificios
 
+# [traducir]
 const LISTA := {
 	"apartamentos": {
 		"nombre": "Apartamentos",
@@ -71,6 +74,7 @@ const MINIJEFES := {
 	"modista": {"el": "la modista", "tienda": "Taller de costura", "la_tienda": "el Taller de costura"},
 	"mascota": {"el": "la mascota", "tienda": "Juguetería", "la_tienda": "la Juguetería"},
 }
+# [/traducir]
 
 # El edificio elegido en el menú: la partida lo lee al empezar
 static var elegido := "apartamentos"
