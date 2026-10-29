@@ -9,7 +9,8 @@
 #     (medio ángulo PI). Se va llenando del jefe hacia fuera, como una barra de carga, sin bordes. Puede llegar hasta
 #     las paredes (rayos()), ser de otro color (tinte) y llevar ondas que van hacia el jefe (ondas).
 #   - barra(): una franja recta que se llena hacia fuera (alfileres, por donde irán los disparos: contratos, cuchillos,
-#     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()).
+#     bolas de fuego). Se corta donde el disparo se pararía contra una pared o un mueble (alcance()) y ahí acaba en la
+#     estrella de las cargas.
 #   - flechas_giro(): los dos anillos de flechas del giro del bombero.
 # Lo pinta un shader (aviso.gdshader): así no cuesta nada aunque tenga miles de cuadraditos. Cada aviso va en un nodo
 # hijo del jefe, por detrás de él, que se crea solo la primera vez y se esconde cuando deja de pedirse. Un jefe puede
@@ -72,12 +73,14 @@ static func abanico(jefe: Node2D, desde_: Vector2, angulo_: float, medio_: float
 
 
 # Una barra recta: desde "desde", hacia "angulo", de "inicio_" a "largo_" y "medio_" de ancho a cada lado. Se corta
-# donde se pararía el disparo que marca (alcance()). "cual": si el jefe tiene varias a la vez, cuál
+# donde se pararía el disparo que marca (alcance()) y ahí acaba en la estrella de las cargas. "cual": si el jefe tiene
+# varias a la vez, cuál
 static func barra(jefe: Node2D, desde_: Vector2, angulo_: float, inicio_: float, largo_: float, medio_: float, k: float,
 		tiempo: float, cual := 0) -> Aviso:
 	var aviso := pedir(jefe, 2, desde_, angulo_, k, tiempo, cual)
 	aviso.inicio = inicio_
 	aviso.largo = alcance(jefe, desde_, angulo_, largo_, medio_)
+	aviso.choca = aviso.largo < largo_ and aviso.largo > inicio_   # (si ya empieza en la pared, no hay nada que marcar)
 	aviso.medio = medio_
 	return aviso
 

@@ -1974,9 +1974,9 @@ func probar_disparos() -> void:
 				var origen: Vector2 = jefe.to_global(hijo.desde)
 				var rayo := PhysicsRayQueryParameters2D.create(origen, origen + Vector2.from_angle(hijo.angulo) * 3000.0, 1)
 				var choque := jefe.get_world_2d().direct_space_state.intersect_ray(rayo)
-				barras.append("%d (pared a %s)" % [roundi(hijo.largo),
+				barras.append("%d%s (pared a %s)" % [roundi(hijo.largo), " con estrella" if hijo.choca else "",
 					str(roundi(origen.distance_to(choque.position))) if not choque.is_empty() else "ninguna"])
-		print("Disparos del %s, caso %s: %d barras, llegan a %s · sin pared serían de %d (esperado: a 1 o 2 de la pared si queda antes; si no, enteras)" % [
+		print("Disparos del %s, caso %s: %d barras, llegan a %s · sin pared serían de %d (esperado: a 1 o 2 de la pared y con estrella si queda antes; si no, enteras y sin ella)" % [
 			caso[0], caso[1], barras.size(), ", ".join(barras), roundi(entero)])
 		jefe.queue_free()
 		await get_tree().create_timer(0.2).timeout

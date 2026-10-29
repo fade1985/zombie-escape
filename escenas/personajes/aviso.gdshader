@@ -9,7 +9,8 @@
 //     además, la sombra de quien cae en el medio. Puede llegar hasta las paredes (cada rayo, hasta donde choca: el
 //     giro del bombero, el aspirado del glotón), ser de otro color y llevar ondas que van hacia el jefe (aspirando).
 //   - la barra: una franja recta que se llena hacia fuera como el abanico (las lenguas, los latigazos, los alfileres
-//     y las rayas por donde irán los disparos). Si es fina, lo que falta va liso en vez de a cuadros.
+//     y las rayas por donde irán los disparos). Si es fina, lo que falta va liso en vez de a cuadros. Si el disparo se
+//     para en una pared (choca), acaba en la estrella de las cargas.
 //   - las flechas del giro del bombero: dos anillos de flechas alrededor de él que corren hacia el lado al que girará.
 shader_type canvas_item;
 
@@ -94,6 +95,19 @@ float marca(vec2 q, float tam) {
 	return brazo < 3.0 && lejos <= tam * 0.7 ? 1.0 : (brazo < 3.0 + CELDA * 1.5 ? 0.5 : 0.0);
 }
 
+// "color", con la marca del final encima (en "q", respecto a su centro, de "tam" cuando ya se ve entera; "aparece", de
+// 0 a 1, lo que se ve)
+vec4 con_marca(vec4 color, vec2 q, float tam, float aparece) {
+	float m = marca(q, tam * (0.5 + 0.5 * aparece));
+	if (m == 1.0) {
+		color = choca ? vec4(mix(AMARILLO, vec3(1.0), length(q) < 5.0 ? 0.8 : 0.0), 0.95) : vec4(ROJO, 0.9);
+		color.a *= aparece;
+	} else if (m == 0.5) {
+		color = vec4(OSCURO.rgb, OSCURO.a * aparece);
+	}
+	return color;
+}
+
 vec4 franja(vec2 p) {
 	vec2 lado = vec2(-hacia.y, hacia.x);
 	float u = dot(p, hacia);       // a lo largo
@@ -111,14 +125,7 @@ vec4 franja(vec2 p) {
 	// la marca del final: aparece a partir de la mitad y va creciendo
 	float aparece = clamp((k - 0.25) / 0.35, 0.0, 1.0);
 	if (aparece > 0.0) {
-		vec2 centro = hacia * (largo - (choca ? 10.0 : FINAL * 0.5));
-		float m = marca(p - centro, (choca ? 16.0 : 12.0) * (0.5 + 0.5 * aparece));
-		if (m == 1.0) {
-			color = choca ? vec4(mix(AMARILLO, vec3(1.0), length(p - centro) < 5.0 ? 0.8 : 0.0), 0.95) : vec4(ROJO, 0.9);
-			color.a *= aparece;
-		} else if (m == 0.5) {
-			color = vec4(OSCURO.rgb, OSCURO.a * aparece);
-		}
+		color = con_marca(color, p - hacia * (largo - (choca ? 10.0 : FINAL * 0.5)), choca ? 16.0 : 12.0, aparece);
 	}
 	return color;
 }
@@ -174,10 +181,16 @@ vec4 abanico(vec2 p) {
 vec4 barra(vec2 p) {
 	float u = dot(p, hacia);
 	float a = abs(dot(p, vec2(-hacia.y, hacia.x)));
-	if (u < inicio || u > largo || a > medio) {
-		return vec4(0.0);
+	vec4 color = vec4(0.0);
+	if (u >= inicio && u <= largo && a <= medio) {
+		color = relleno(p, u - inicio, largo - inicio, medio < 6.0);
 	}
-	return relleno(p, u - inicio, largo - inicio, medio < 6.0);
+	// si el disparo se para en una pared (choca), la estrella de las cargas al final, que sale a partir de la mitad
+	float aparece = clamp((k - 0.25) / 0.35, 0.0, 1.0);
+	if (choca && aparece > 0.0) {
+		color = con_marca(color, p - hacia * (largo - 8.0), 12.0, aparece);
+	}
+	return color;
 }
 
 // Las flechas del giro: dos anillos (de 110 y de 200, con 6 y 10 flechas) que corren hacia el lado al que girará.
