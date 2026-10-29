@@ -214,7 +214,11 @@ en una línea.
   `barricada.gd` (ferretero).
 - `sonido.gd` (autoload: efectos sintetizados y música; cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
-  prueba con `--sensacion`), `controles.gd` (las teclas cambiadas en Opciones).
+  prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
+  sube y baja, y `MOMENTOS` dice cuáles se oyen según el momento (`Sonido.musica("menu" | "horda" | "jefe" | "")`) y
+  los zombis despiertos, que cuenta cada medio segundo: explorando, la batería entra con uno; en la horda, la melodía,
+  con `MUCHOS` (6); con el jefe, la melodía, cuando sale. Suben en 1 s y bajan tras 5 s sin hacer falta; se prueba con
+  `--musica`), `controles.gd` (las teclas cambiadas en Opciones).
 
 **ui/**
 - `hud.gd` (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
@@ -355,9 +359,10 @@ en una línea.
 
 - `sprites/`: las hojas (`.png` + `.json`) y sus animaciones (`.tres`). Hoja nueva →
   `py tools/hacer_frames.py assets/sprites/<nombre>`.
-- `musica/`: `el-ultimo-inquilino.ogg` (menús y explorar) y `turno-de-noche.ogg` (peleas); se eligen en `CANCIONES`
-  de `sonido.gd`. En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio (ver
-  `docs/WEB.md`).
+- `musica/`: «El último inquilino» (menús y explorar: `el-ultimo-inquilino-base.ogg` y `-bateria.ogg`) y «Turno de
+  noche» (hordas y jefes: `turno-de-noche-base.ogg` y `-melodia.ogg`), las capas que suenan a la vez (`CANCIONES` y
+  `MOMENTOS` de `sonido.gd`). En el ordenador cada canción empieza en un compás al azar; en la web, siempre al principio
+  (ver `docs/WEB.md`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
 - `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab.
@@ -397,6 +402,9 @@ en una línea.
   `tools/efectos/*.wav`, que no van a git).
 - **Música de 8 bits:** `motor-8bit.mjs` y las canciones (`el-ultimo-inquilino.mjs`, `turno-de-noche.mjs`,
   `villancico-8bit.mjs`, de prueba). `node tools/<canción>.mjs` saca el `.wav` y el `.ogg`; con `--veces 4`, en bucle.
+  Por capas: cada instrumento dice su `capa` (y la percusión y demás, la suya en `capas` de `crearMotor`), `guardar()`
+  saca un `.wav` por capa, a la misma ganancia, que sumados suenan como la canción entera, y la partitura pasa cada uno
+  a su `.ogg`. El trailer suma las capas al montar.
 
 ## docs/
 

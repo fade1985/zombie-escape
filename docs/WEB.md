@@ -44,6 +44,17 @@
   no vuelve al principio sino al punto donde se empezó a tocar. Por eso, en la web la música empieza siempre al
   principio (`poner_cancion` de `sonido.gd`); en el ordenador, en un compás al azar. Antes, en la web se repetía
   sin parar solo el último trozo de la canción (el 29 oct, 9 segundos de la del menú).
+- La música va por capas (dos `.ogg` por canción que suenan a la vez, ver `sonido.gd`). En la web, Godot guarda cada
+  sonido descomprimido y hace otra copia entera cada vez que empieza a sonar: con tres capas por canción se llegaba a
+  unos 420 MB solo de música. Por eso son dos capas y no tres, y el sonido de la web va a 32 000 muestras por segundo
+  (`audio/driver/mix_rate.web` en `project.godot`; sin él, el navegador pone 48 000), sin perder nada: los `.ogg` ya van
+  a 32 000 y los efectos se hacen a 22 050. Cada capa ocupa 23 MB en vez de 35: unos 140 MB de música con las dos
+  canciones cargadas y unos 185 MB mientras una entra y la otra se va (antes de las capas, unos 105 y 140).
+  Medido el 29 oct: las dos capas empiezan en el mismo instante y desde el principio, y `--musica` sale bien también
+  en la web.
 - Para ver qué suena en una exportación de prueba sin oírla: un script en el `<head>` de su `index.html` que envuelva
   `AudioBufferSourceNode.prototype.start` y `stop` (cada canción que empieza y para, con su punto de inicio) y conecte
-  un `AnalyserNode` a la salida (cuánto suena). Así se encontró esto.
+  un `AnalyserNode` a la salida (cuánto suena). Así se encontró esto. Para la memoria, envolver también
+  `AudioContext.prototype.createBuffer` (canales × muestras × 4 bytes cada sonido). Una prueba (`-- --captura --musica`)
+  también corre en la web poniéndola en `"args"` de `GODOT_CONFIG` en el `index.html`, con el panel del navegador a la
+  vista (escondido, el juego no avanza).

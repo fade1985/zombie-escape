@@ -3,9 +3,11 @@
 //  (no es arreglo de nada). Johnny limpiando el edificio de madrugada: un arpegio que no para,
 //  un bajo que empuja y una melodía en modo frigio (el fa natural sobre mi le da el aire de miedo).
 //
-//  En el juego es la música de las peleas (assets/musica/turno-de-noche.ogg, ver scripts/sonido.gd).
+//  En el juego es la música de las hordas y los jefes, partida en dos capas que suenan a la vez (scripts/sonido.gd):
+//  la base (arpegio, bajo, batería, sirena y gruñidos), que suena siempre, y la melodía, que entra cuando aprieta.
 //
-//  node tools/turno-de-noche.mjs   → tools/efectos/turno-de-noche.wav y assets/musica/turno-de-noche.ogg (necesita ffmpeg)
+//  node tools/turno-de-noche.mjs   → tools/efectos/turno-de-noche.wav (entera, para oírla), un .wav por capa y
+//  assets/musica/turno-de-noche-<capa>.ogg (base y melodia; necesita ffmpeg)
 //  Sale en bucle perfecto. El sonido lo hace tools/motor-8bit.mjs; aquí solo van los instrumentos
 //  y la PARTITURA (más abajo): para cambiar la canción, tocar eso.
 // ─────────────────────────────────────────────
@@ -15,14 +17,14 @@ import { crearMotor, pasarAOgg, sube, pulso, ruido, paso, SR } from './motor-8bi
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SALIDA = path.join(ROOT, 'tools', 'efectos', 'turno-de-noche.wav');
-const OGG = path.join(ROOT, 'assets', 'musica', 'turno-de-noche.ogg');
-const VOLUMEN = -9.3;   // decibelios: así queda a -25 LUFS, como la música de peleas que se grabó del juego JS
+const OGG = (capa) => path.join(ROOT, 'assets', 'musica', `turno-de-noche-${capa}.ogg`);
+const VOLUMEN = -9.3;   // decibelios: así, con las dos capas, queda a -25 LUFS, como la música de peleas que se grabó del juego JS
 
 // ── Instrumentos ────────────────────────────────
 const INS = {
   arpe:    { onda: 'pulso', duty: 0.125, vol: 0.11, ataque: 0.002, caida: 0.09, sosten: 0.3, gate: 0.7, suelta: 0.03, eco: 0.35, pan: -0.3 },
-  voz:     { onda: 'pulso', duty: 0.35, pwm: 0.12, vol: 0.16, ataque: 0.01, caida: 0.6, sosten: 0.7, gate: 0.95, suelta: 0.1, eco: 0.3, pan: 0.15, vibrato: true, glide: 0.05 },
-  voz2:    { onda: 'pulso', duty: 0.25, vol: 0.08, ataque: 0.01, caida: 0.6, sosten: 0.7, gate: 0.95, suelta: 0.1, eco: 0.2, pan: -0.4, vibrato: true, cents: -10, glide: 0.05 },
+  voz:     { onda: 'pulso', duty: 0.35, pwm: 0.12, vol: 0.16, ataque: 0.01, caida: 0.6, sosten: 0.7, gate: 0.95, suelta: 0.1, eco: 0.3, pan: 0.15, vibrato: true, glide: 0.05, capa: 'melodia' },
+  voz2:    { onda: 'pulso', duty: 0.25, vol: 0.08, ataque: 0.01, caida: 0.6, sosten: 0.7, gate: 0.95, suelta: 0.1, eco: 0.2, pan: -0.4, vibrato: true, cents: -10, glide: 0.05, capa: 'melodia' },
   bajo:    { onda: 'triangulo', vol: 0.38, ataque: 0.002, caida: 0.15, sosten: 0.8, gate: 0.85, suelta: 0.02, eco: 0, pan: 0 },
   mordida: { onda: 'pulso', duty: 0.25, vol: 0.07, ataque: 0.002, caida: 0.05, sosten: 0.15, gate: 0.8, suelta: 0.02, eco: 0, pan: 0.1 },
   sirena:  { onda: 'pulso', duty: 0.25, vol: 0.09, ataque: 0.05, caida: 1, sosten: 1, gate: 1, suelta: 0.15, eco: 0.5, pan: 0.4, glide: 0.35 },
@@ -31,7 +33,7 @@ const INS = {
 
 // En 4/4, a 136 pulsos por minuto
 const { B, nota, subida, sonido, bombo, tambor, platillo, platazo, guardar } =
-  crearMotor({ bpm: 136, compas: 4, compases: 52, instrumentos: INS });
+  crearMotor({ bpm: 136, compas: 4, compases: 52, instrumentos: INS, capas: { subida: 'melodia' } });
 
 // Gruñido de zombi a lo lejos: tono grave que cae y tiembla, con algo de ruido
 function grunido(t, pan, vol = 1) {
@@ -177,5 +179,5 @@ bombo(B(48));
   nota('bajo', B(48 + k), 4, ACORDE[a].raiz, 0.6 - k * 0.12);
 });
 
-guardar(SALIDA, [['entrada', 0, 4], ['arranque', 4, 8], ['A', 8, 16], ['A+', 16, 24], ['B', 24, 32], ['ruptura', 32, 40], ['A final', 40, 48], ['final', 48, 52]]);
-pasarAOgg(SALIDA, OGG, VOLUMEN);
+const capas = guardar(SALIDA, [['entrada', 0, 4], ['arranque', 4, 8], ['A', 8, 16], ['A+', 16, 24], ['B', 24, 32], ['ruptura', 32, 40], ['A final', 40, 48], ['final', 48, 52]]);
+for (const [capa, wav] of Object.entries(capas)) pasarAOgg(wav, OGG(capa), VOLUMEN);

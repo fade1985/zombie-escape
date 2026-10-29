@@ -9,10 +9,12 @@
 # la vez no saturen), Efectos y Musica.
 # Con --captura (la prueba sin jugar) arranca sin sonido, como el modo ?pruebas del JS.
 #
-# La música de fondo: una canción de 8 bits para cada momento, hecha aquí (cada una tiene su partitura en
-# tools/<canción>.mjs, que saca assets/musica/<canción>.ogg ya con su volumen). Suena en bucle sin cortes (el
-# final empalma con el principio) y, al cambiar de momento, la nueva entra mientras la vieja se apaga:
-#     Sonido.musica("menu")       # "menu" (los menús y explorar las plantas), "jefe" o "" (se apaga despacio)
+# La música de fondo: dos canciones de 8 bits hechas aquí, partidas en capas (la base y la batería o la melodía) que
+# suenan a la vez y siempre juntas, cada una en su .ogg (cada canción tiene su partitura en tools/<canción>.mjs, que saca
+# assets/musica/<canción>-<capa>.ogg ya con su volumen). Suena en bucle sin cortes (el final empalma con el principio)
+# y lo que cambia es qué capas se oyen: según el momento y cuántos zombis hay despiertos (MOMENTOS). Al cambiar a un
+# momento con otra canción, la nueva entra mientras la vieja se apaga:
+#     Sonido.musica("menu")       # "menu" (los menús y explorar las plantas), "horda", "jefe" o "" (se apaga despacio)
 #     Sonido.jingle(true)         # la melodía corta de victoria (false: la de derrota)
 #
 # Cuando el juego no se ve o no se está usando (otra app u otra pestaña, la pantalla del móvil bloqueada, la ventana
@@ -136,16 +138,34 @@ var ultimo := {}         # nombre → cuándo sonó (ms), para el "hueco"
 var voces: Array[AudioStreamPlayer] = []
 var siguiente := 0
 
-# La canción de cada momento (assets/musica/<nombre>.ogg) y cuántos compases tiene (los de su partitura), para
-# que empiece siempre al principio de uno
+# Cada canción: sus capas (assets/musica/<canción>-<capa>.ogg) y cuántos compases tiene (los de su partitura), para
+# que empiece siempre al principio de uno. Dos capas por canción: la base, que suena siempre, y la que sube y baja
+# (con tres, la web gastaba demasiada memoria: cada capa se guarda allí descomprimida, y otra vez cada vez que empieza)
 const CANCIONES := {
-	"menu": {"nombre": "el-ultimo-inquilino", "compases": 32},   # «El último inquilino»: los menús y explorar
-	"jefe": {"nombre": "turno-de-noche", "compases": 52},         # «Turno de noche»: jefes, hordas y rescates
+	"el-ultimo-inquilino": {"compases": 32, "capas": ["base", "bateria"]},   # los menús y explorar
+	"turno-de-noche": {"compases": 52, "capas": ["base", "melodia"]},        # las hordas y los jefes
+}
+# Cada momento: su canción y qué capas se oyen según cuántos zombis hay despiertos (filas [desde cuántos, capas], de
+# menos a más). Explorando, la batería entra en cuanto se despierta uno; en la horda, la melodía, cuando son MUCHOS; en
+# la sala del jefe, la melodía entra cuando sale él (el jefe también está en el grupo "zombis")
+const MUCHOS := 6
+const MOMENTOS := {
+	"menu": {"cancion": "el-ultimo-inquilino", "capas": [[0, ["base"]], [1, ["base", "bateria"]]]},
+	"horda": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [MUCHOS, ["base", "melodia"]]]},
+	"jefe": {"cancion": "turno-de-noche", "capas": [[0, ["base"]], [1, ["base", "melodia"]]]},
 }
 const FUNDIDO := 3.0     # segundos que tarda en pasar de una canción a otra
+const SUBE := 1.0        # segundos que tarda una capa en entrar...
+const BAJA := 3.0        # ...y en irse,
+const ESPERA := 5.0      # cuando lleva estos sin hacer falta (si no, con cada zombi que muere iría a saltos)
+const MIRAR := 0.5       # cada cuánto se cuentan los zombis despiertos
 var momento := ""        # lo que suena ahora
-var sonando: AudioStreamPlayer = null   # de los dos reproductores de música, el que está sonando
-var otro: AudioStreamPlayer = null
+var cancion := ""        # y su canción
+var capas := {}          # canción → sus reproductores, uno por capa ({capa: AudioStreamPlayer})
+var fila := 0            # la fila de capas que suena (la de MOMENTOS[momento].capas)
+var calma := 0.0         # segundos que lleva haciendo falta una fila más baja
+var mirar := 0.0         # lo que falta para volver a contar los zombis
+var final: AudioStreamPlayer   # el de la melodía corta del final (jingle)
 var quieto := false      # sin sonido a propósito (el ajuste de Opciones, o la prueba con --captura)
 var fuera := false       # el juego no se ve: sin sonido hasta que vuelva
 var al_ocultar: JavaScriptObject   # (web) el aviso del navegador cuando la página se oculta o vuelve a verse
@@ -158,8 +178,7 @@ func _ready() -> void:
 		v.bus = &"Efectos"
 		add_child(v)
 		voces.append(v)
-	sonando = reproductor_musica()
-	otro = reproductor_musica()
+	final = reproductor_musica()
 	if Captura.activa() and not "--trailer" in OS.get_cmdline_user_args():   # (el trailer se graba con sus sonidos)
 		silenciar(true)
 	musica_si(Guardado.cargar().ajustes.musica)
@@ -230,47 +249,111 @@ func reproductor_musica() -> AudioStreamPlayer:
 	return r
 
 
-# Cambia de momento: la canción nueva entra mientras la vieja se apaga
+# Cambia de momento. Si es otra canción, la nueva entra mientras la vieja se apaga; si es la misma (de la horda al
+# jefe, o volver enseguida a la que se estaba apagando), sigue por donde iba y solo cambian sus capas
 func musica(nuevo: String) -> void:
 	if nuevo == momento:
 		return
 	momento = nuevo
-	if nuevo == "":
-		fundir(sonando, 0.0, 1.5)
+	var antes := cancion
+	cancion = MOMENTOS[nuevo].cancion if nuevo != "" else ""
+	if cancion != antes:
+		for r in capas.get(antes, {}).values():
+			fundir(r, 0.0, FUNDIDO if cancion != "" else 1.5, true)
+	if cancion == "":
 		return
-	poner_cancion()
+	var arranca: bool = not capas.has(cancion) or not capas[cancion].values()[0].playing
+	if arranca:
+		poner_cancion()
+	calma = 0.0
+	mirar = MIRAR
+	poner_fila(fila_de(despiertos()), FUNDIDO if cancion != antes else SUBE)
 
 
-# Pone la canción del momento en bucle, empezando al principio de un compás al azar para que no suene siempre
-# igual, y la funde con la que sonaba. En la web, siempre desde el principio: allí Godot, al acabar la canción, no
-# vuelve al principio sino adonde empezó, y se repetía sin parar solo el último trozo (a veces, 9 segundos)
+# Pone las capas de la canción a sonar en bucle, todas calladas (las sube poner_fila) y empezando a la vez al principio
+# de un compás al azar, para que no suene siempre igual. En la web, siempre desde el principio: allí Godot, al acabar
+# la canción, no vuelve al principio sino adonde empezó, y se repetía sin parar solo el último trozo (a veces, 9 segundos)
 func poner_cancion() -> void:
-	var c: Dictionary = CANCIONES[momento]
-	var cancion: AudioStreamOggVorbis = load("res://assets/musica/%s.ogg" % c.nombre)
-	cancion.loop = true   # el final empalma con el principio
-	var compases: int = c.compases
-	var desde := 0.0 if OS.has_feature("web") else randi_range(0, compases - 1) * cancion.get_length() / compases
-	fundir(sonando, 0.0, FUNDIDO)
-	var r := otro
-	otro = sonando
-	sonando = r
-	r.stream = cancion
-	r.volume_db = -60.0
-	r.play(desde)
-	fundir(r, 1.0, FUNDIDO)
+	var c: Dictionary = CANCIONES[cancion]
+	var r: Dictionary = capas.get_or_add(cancion, {})
+	for capa in c.capas:
+		if not r.has(capa):
+			var ogg: AudioStreamOggVorbis = load("res://assets/musica/%s-%s.ogg" % [cancion, capa])
+			ogg.loop = true   # el final empalma con el principio
+			r[capa] = reproductor_musica()
+			r[capa].stream = ogg
+	var largo: float = r[c.capas[0]].stream.get_length()
+	var desde: float = 0.0 if OS.has_feature("web") else randi_range(0, c.compases - 1) * largo / c.compases
+	# Todas en el mismo instante: con el candado, el ordenador no se pone a mezclar el sonido entre una y otra (si lo
+	# hiciera, alguna capa empezaría un poquito tarde y se oiría la batería descompasada del bajo)
+	AudioServer.lock()
+	for capa in c.capas:
+		r[capa].volume_db = -80.0
+		r[capa].play(desde)
+	AudioServer.unlock()
 
 
-# Sube o baja el volumen de un reproductor poco a poco (a 0: además se para). Si aún iba por la mitad de otro
-# fundido, ese se corta: si no, al cambiar dos veces de momento muy seguido, el viejo pararía la canción nueva
-func fundir(r: AudioStreamPlayer, hasta: float, segundos: float) -> void:
+# Cada medio segundo cuenta los zombis despiertos y sube o baja las capas: suben en cuanto hacen falta y bajan cuando
+# llevan ESPERA segundos sin hacer falta
+func _process(delta: float) -> void:
+	if cancion == "":
+		return
+	mirar -= delta
+	if mirar > 0.0:
+		return
+	mirar = MIRAR
+	var quiere := fila_de(despiertos())
+	calma = calma + MIRAR if quiere < fila else 0.0
+	if quiere > fila or calma >= ESPERA:
+		poner_fila(quiere, SUBE if quiere > fila else BAJA)
+		calma = 0.0
+
+
+# Cuántos zombis hay despiertos: los dormidos de los apartamentos no cuentan, ni los que se están muriendo
+func despiertos() -> int:
+	var n := 0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if not z.get("dormido") and z.get("estado") != "muerto":
+			n += 1
+	return n
+
+
+# La fila de capas del momento que toca con tantos zombis despiertos
+func fila_de(zombis: int) -> int:
+	var filas: Array = MOMENTOS[momento].capas
+	var f := 0
+	for i in filas.size():
+		if zombis >= filas[i][0]:
+			f = i
+	return f
+
+
+# Sube las capas de la fila y baja las demás, sin pararlas: siguen sonando calladas, al compás de las otras
+func poner_fila(f: int, segundos: float) -> void:
+	fila = f
+	var suenan: Array = MOMENTOS[momento].capas[f][1]
+	var r: Dictionary = capas[cancion]
+	for capa in r:
+		fundir(r[capa], 1.0 if capa in suenan else 0.0, segundos)
+
+
+# Las capas que se oyen ahora (para la prueba --musica)
+func capas_sonando() -> Array:
+	var r: Dictionary = capas.get(cancion, {})
+	return r.keys().filter(func(capa): return r[capa].playing and r[capa].volume_db > -40.0)
+
+
+# Sube o baja el volumen de un reproductor poco a poco (con «parar», al llegar a 0 además se para). Si aún iba por la
+# mitad de otro fundido, ese se corta: si no, al cambiar dos veces de momento muy seguido, el viejo pararía la canción nueva
+func fundir(r: AudioStreamPlayer, hasta: float, segundos: float, parar := false) -> void:
 	if not r.playing:
 		return
 	if r.has_meta("fundido"):
 		(r.get_meta("fundido") as Tween).kill()
 	var t := r.create_tween().set_ignore_time_scale()   # (no se frena en los parones de los golpes, Temblor.parar)
 	r.set_meta("fundido", t)
-	t.tween_method(func(v: float): r.volume_db = linear_to_db(v), db_to_linear(r.volume_db), hasta, segundos)
-	if hasta == 0.0:
+	t.tween_method(func(v: float): r.volume_db = maxf(linear_to_db(v), -80.0), db_to_linear(r.volume_db), hasta, segundos)
+	if parar:
 		t.tween_callback(r.stop)
 
 
@@ -285,10 +368,9 @@ func jingle(gana: bool) -> void:
 		var largo := dur * (4.0 if i == notas.size() - 1 else 1.4)
 		# el volumen del JS (0,05) por el de su música (0,55): las canciones ya están a ese nivel
 		lista.append([raiz * pow(2.0, notas[i] / 12.0), largo, "cuadrada", 0.05 * 0.55, 0, 0.05 + i * dur])
-	var r := otro if not otro.playing else reproductor_musica()
-	r.stream = sintetizar(lista)
-	r.volume_db = 0.0
-	r.play()
+	final.stream = sintetizar(lista)
+	final.volume_db = 0.0
+	final.play()
 
 
 # Quita o pone todo el sonido (efectos y música)

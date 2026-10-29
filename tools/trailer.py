@@ -19,7 +19,8 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SALIDA = os.path.join(RAIZ, "exportar", "trailer")
 FOTOGRAMAS = os.path.join(SALIDA, "fotogramas")
 FPS = 60
-MUSICA = os.path.join(RAIZ, "assets", "musica", "turno-de-noche.ogg")
+# «Turno de noche» entera: sus dos capas (scripts/sonido.gd), que se suman al montar
+MUSICA = [os.path.join(RAIZ, "assets", "musica", f"turno-de-noche-{capa}.ogg") for capa in ("base", "melodia")]
 GODOTS = [r"C:\Godot\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe",
 	r"C:\Program Files\Godot\Godot_v4.7.2-stable_win64_console.exe"]
 OVERRIDE = """[display]
@@ -64,12 +65,14 @@ def montar(empieza: int) -> None:
 	video = os.path.join(SALIDA, "trailer.mp4")
 	sonido = os.path.join(FOTOGRAMAS, "f.wav")
 	salto = empieza / FPS
-	# los efectos del juego, un poco más bajos; la música, entrando en 1 s y saliendo en los 3 últimos
+	# los efectos del juego, un poco más bajos; la música (sus capas sumadas), entrando en 1 s y saliendo en los 3 últimos
 	mezcla = (f"[1:a]atrim=start={salto:.3f},asetpts=PTS-STARTPTS,volume=0.8[efectos];"
-		f"[2:a]atrim=0:{dura:.3f},afade=t=in:d=1,afade=t=out:st={max(0.0, dura - 3):.3f}:d=3,volume=0.9[musica];"
+		"[2:a][3:a]amix=inputs=2:normalize=0,"
+		f"atrim=0:{dura:.3f},afade=t=in:d=1,afade=t=out:st={max(0.0, dura - 3):.3f}:d=3,volume=0.9[musica];"
 		"[efectos][musica]amix=inputs=2:duration=first:normalize=0[a]")
+	capas = [x for m in MUSICA for x in ("-i", m)]
 	subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(FPS), "-start_number", str(empieza),
-		"-i", os.path.join(FOTOGRAMAS, "f%08d.png"), "-i", sonido, "-i", MUSICA, "-filter_complex", mezcla,
+		"-i", os.path.join(FOTOGRAMAS, "f%08d.png"), "-i", sonido, *capas, "-filter_complex", mezcla,
 		"-map", "0:v", "-map", "[a]", "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-pix_fmt", "yuv420p",
 		"-c:a", "aac", "-b:a", "192k", "-t", f"{dura:.3f}", video], check=True)
 	# el gif: 6 s de la pelea de la escopeta, a 480 de ancho y 20 fps (para redes y la página de Steam)

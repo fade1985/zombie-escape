@@ -60,6 +60,8 @@
 #                       daño a Johnny; sin sumarse, el respiro y la pausa) y el tono de los sonidos [prueba_armas.gd]
 #   --temblor           el ajuste «Temblor de pantalla» de Opciones: el botón (Normal, Suave, Sin temblor), que
 #                       se guarda y que multiplica el temblor y el parón de los golpes          [prueba_armas.gd]
+#   --musica            la música por capas: qué capas se oyen explorando, con zombis, en la horda y con el jefe, y
+#                       que van a la par (va sin sonido: lo dice en la terminal)              [prueba_armas.gd]
 #   --skins             las skins: desbloqueo, taquilla, caras y lo que hace cada una        [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
@@ -121,10 +123,10 @@
 #                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una y ver lo que cambia [prueba_larga.gd]
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
-#   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
-#   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en
 #                       la partida, «Otra vez» y la R; y por el fuego, por un jefe y ganando    [prueba_varias.gd]
+#   --escudo            el escudo de Acero: se gasta antes que la vida, y su barra encima de la de vida [prueba_varias.gd]
+#   --tentaculos        el zombi de tentáculos: andar, avisar y dar el latigazo, el golpe y la muerte, y su tentáculo
 #                       con Johnny abajo, arriba, de lado, en diagonal y junto a una pared [prueba_varias.gd]
 #   --reto si           el reto del día (--reto <regla> fuerza esa regla)                    [prueba_varias.gd]
 #   --equilibrio        los números del equilibrio: talentos y skin sumados, daño mínimo, Ninja, Ajolote, los
@@ -309,15 +311,18 @@ func empezar_prueba() -> void:
 	elif "--aura" in args:
 		set_process(false)   # sin la prueba larga
 		probar_aura()
-	elif "--sensacion" in args:
-		set_process(false)   # sin la prueba larga
 	elif "--derrota" in args:
 		set_process(false)   # sin la prueba larga
 		probar_derrota()
+	elif "--sensacion" in args:
+		set_process(false)   # sin la prueba larga
 		probar_sensacion()
 	elif "--temblor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_temblor()
+	elif "--musica" in args:
+		set_process(false)   # sin la prueba larga
+		probar_musica()
 	elif "--ascensor" in args:
 		set_process(false)   # sin la prueba larga
 		probar_ascensor()

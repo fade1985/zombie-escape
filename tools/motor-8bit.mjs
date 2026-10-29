@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────
 //  Motor de música de 8 bits: ondas y ruido como los de la NES, percusión, eco y el .wav en bucle.
-//  Lo usan las canciones de tools/ (villancico-8bit.mjs, turno-de-noche.mjs). Cada una crea su motor,
+//  Lo usan las canciones de tools/ (villancico-8bit.mjs, turno-de-noche.mjs, el-ultimo-inquilino.mjs). Cada una crea su motor,
 //  escribe su partitura en pulsos y al final llama a guardar():
 //
 //    const m = crearMotor({ bpm: 160, compas: 3, compases: 68, instrumentos: INS });
@@ -9,6 +9,10 @@
 //
 //  Sale en bucle perfecto: lo que suena después del final (ecos, campanas) se suma al principio.
 //  Sin azar: cada vez sale igual.
+//
+//  Por capas: si los instrumentos dicen su «capa» (base, ritmo, melodía...), guardar() saca además un .wav por
+//  capa, todos igual de largos y al mismo volumen, que sumados suenan como la canción entera. El juego los toca a
+//  la vez y sube o baja cada uno según lo que pasa (scripts/sonido.gd).
 // ─────────────────────────────────────────────
 import fs from 'node:fs';
 import path from 'node:path';
@@ -55,23 +59,30 @@ function lado(p) {                                    // -1 izquierda, 0 centro,
 // «instrumentos»: { nombre: { onda: 'pulso' | 'triangulo', duty, vol, ataque, caida, sosten, gate o suena,
 //   suelta, eco, pan, y si quiere vibrato, cents (desafinar), pwm (el duty se mueve), glide (segundos al deslizar) } }
 // La envolvente: ataque → cae hasta «sosten» (en «caida» segundos); al soltar la nota se apaga en «suelta».
-export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
+// Cada instrumento puede decir su «capa»; la de lo demás va en «capas»: { percusion, campana, arpegio, subida, viento,
+// sonido }. Lo que no diga ninguna, a la capa «base».
+export function crearMotor({ bpm, compas, compases, instrumentos: INS, capas = {} }) {
   const NEGRA = 60 / bpm;            // segundos de un pulso
   const LARGO = Math.round(compases * compas * NEGRA * SR);
   const COLA = 6 * SR;               // lo que sigue sonando tras el final; se suma al principio
   const N = LARGO + COLA;
-  const L = new Float32Array(N), R = new Float32Array(N), ECO = new Float32Array(N);
+  const CAPAS = new Map();           // nombre → lo que suena en esa capa (izquierda, derecha y lo que va al eco)
+  function capa(nombre = 'base') {
+    if (!CAPAS.has(nombre)) CAPAS.set(nombre, { L: new Float32Array(N), R: new Float32Array(N), ECO: new Float32Array(N) });
+    return CAPAS.get(nombre);
+  }
 
   const B = (c, p = 0) => c * compas + p;               // compás y pulso → pulsos desde el principio
   const muestra = (t) => Math.round(t * NEGRA * SR);    // de pulsos a muestras
-  function suma(k, v, gL, gR, eco) {
+  function suma(c, k, v, gL, gR, eco) {
     if (k >= N) return;
-    L[k] += v * gL; R[k] += v * gR; ECO[k] += v * eco;
+    c.L[k] += v * gL; c.R[k] += v * gR; c.ECO[k] += v * eco;
   }
 
   // Una nota: t y d en pulsos; con «de», empieza en esa nota y se desliza hasta la suya
   function nota(ins, t, d, nombre, vol = 1, de = null) {
     const I = INS[ins];
+    const c = capa(I.capa);
     const f0 = hz(nombre) * 2 ** ((I.cents ?? 0) / 1200);
     const fDe = de && hz(de) * 2 ** ((I.cents ?? 0) / 1200);
     const abierta = I.suena ?? d * NEGRA * I.gate;   // segundos con la nota pulsada
@@ -90,7 +101,7 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
       fase = (fase + dt) % 1;
       const duty = I.pwm ? I.duty + I.pwm * Math.sin(2 * Math.PI * 0.7 * (t * NEGRA + s)) : I.duty;
       const onda = I.onda === 'triangulo' ? triangulo(fase) : pulso(fase, dt, duty);
-      suma(ini + i, onda * paso(env) * I.vol * vol, gL, gR, I.eco);
+      suma(c, ini + i, onda * paso(env) * I.vol * vol, gL, gR, I.eco);
     }
   }
 
@@ -100,6 +111,7 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
     const n = Math.round(d * NEGRA * SR);
     const [gL, gR] = lado(-0.4);
     const ini = muestra(t);
+    const c = capa(capas.arpegio);
     let fase = 0;
     for (let i = 0; i < n; i++) {
       const s = i / SR;
@@ -108,7 +120,7 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
       const env = (0.55 + 0.45 * Math.exp(-enPulso * NEGRA / 0.12)) * Math.min(1, (n - i) / (0.02 * SR));
       const dt = f / SR;
       fase = (fase + dt) % 1;
-      suma(ini + i, pulso(fase, dt, 0.125) * paso(env) * 0.08 * vol, gL, gR, 0.2);
+      suma(c, ini + i, pulso(fase, dt, 0.125) * paso(env) * 0.08 * vol, gL, gR, 0.2);
     }
   }
 
@@ -118,12 +130,13 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
     const n = Math.round(d * NEGRA * SR);
     const [gL, gR] = lado(0.2);
     const ini = muestra(t);
+    const c = capa(capas.subida);
     let fase = 0;
     for (let i = 0; i < n; i++) {
       const x = i / n;
       const dt = f1 * (f2 / f1) ** x / SR;
       fase = (fase + dt) % 1;
-      suma(ini + i, pulso(fase, dt, 0.125) * paso(0.15 + 0.85 * x) * 0.13 * vol, gL, gR, 0.3);
+      suma(c, ini + i, pulso(fase, dt, 0.125) * paso(0.15 + 0.85 * x) * 0.13 * vol, gL, gR, 0.3);
     }
   }
 
@@ -132,6 +145,7 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
     const f = hz(nombre);
     const n = 6 * SR;
     const ini = muestra(t);
+    const c = capa(capas.campana);
     const fases = [0, 0, 0, 0];
     const pasos = [f, f * 2 * 1.003, f * 0.5, f * 2.76].map((x) => x / SR);
     for (let i = 0; i < n; i++) {
@@ -142,7 +156,7 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
         + triangulo(fases[2]) * 0.5
         + pulso(fases[3], pasos[3], 0.5) * 0.18 * Math.exp(-s / 0.15);
       const env = paso(Math.exp(-s / 1.8)) * Math.min(1, s / 0.003);
-      suma(ini + i, v * env * 0.3 * vol, 1, 1, 0.35);
+      suma(c, ini + i, v * env * 0.3 * vol, 1, 1, 0.35);
     }
   }
 
@@ -151,13 +165,14 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
     const r = ruido();
     const n = Math.round(d * NEGRA * SR);
     const ini = muestra(t);
+    const c = capa(capas.viento);
     let v = 0, y = 0;
     for (let i = 0; i < n; i++) {
       if (i % 20 === 0) v = r();
       const x = i / n;
       y += (v - y) * (0.02 + 0.04 * Math.sin(x * Math.PI * 3) ** 2);
       const [gL, gR] = lado(Math.sin(x * Math.PI * 2) * 0.6);
-      suma(ini + i, y * Math.sin(Math.PI * x) ** 2 * 0.3 * vol, gL, gR, 0);
+      suma(c, ini + i, y * Math.sin(Math.PI * x) ** 2 * 0.3 * vol, gL, gR, 0);
     }
   }
 
@@ -166,56 +181,122 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
     const n = Math.round(segundos * SR);
     const [gL, gR] = lado(pan);
     const ini = muestra(t);
-    for (let i = 0; i < n; i++) suma(ini + i, fn(i / SR, i), gL, gR, eco);
+    const c = capa(capas.sonido);
+    for (let i = 0; i < n; i++) suma(c, ini + i, fn(i / SR, i), gL, gR, eco);
   }
 
   // ── Percusión ─────────────────────────────────
   function bombo(t, vol = 1, grave = false) {   // «grave» = latido de corazón
     const n = Math.round(0.4 * SR);
     const ini = muestra(t);
+    const c = capa(capas.percusion);
     let fase = 0;
     for (let i = 0; i < n; i++) {
       const s = i / SR;
       const f = grave ? 38 + 60 * Math.exp(-s / 0.06) : 48 + 130 * Math.exp(-s / 0.035);
       fase = (fase + f / SR) % 1;
-      suma(ini + i, (1 - 4 * Math.abs(fase - 0.5)) * Math.exp(-s / (grave ? 0.2 : 0.14)) * 0.75 * vol, 1, 1, 0);
+      suma(c, ini + i, (1 - 4 * Math.abs(fase - 0.5)) * Math.exp(-s / (grave ? 0.2 : 0.14)) * 0.75 * vol, 1, 1, 0);
     }
   }
   function tambor(t, vol = 1) {
     const r = ruido();
     const n = Math.round(0.3 * SR);
     const ini = muestra(t);
+    const c = capa(capas.percusion);
     let fase = 0, ru = 0;
     for (let i = 0; i < n; i++) {
       const s = i / SR;
       if (i % 2 === 0) ru = r();
       fase = (fase + 200 * (1 + 0.5 * Math.exp(-s / 0.01)) / SR) % 1;
       const v = ru * paso(Math.exp(-s / 0.075)) * 0.5 + (1 - 4 * Math.abs(fase - 0.5)) * Math.exp(-s / 0.035) * 0.45;
-      suma(ini + i, v * 0.45 * vol, 1, 1, 0.1);
+      suma(c, ini + i, v * 0.45 * vol, 1, 1, 0.1);
     }
   }
   function platillo(t, vol = 1, abierto = false) {
     const r = ruido();
     const n = Math.round((abierto ? 0.4 : 0.08) * SR);
     const ini = muestra(t);
+    const c = capa(capas.percusion);
     const [gL, gR] = lado(0.25);
-    for (let i = 0; i < n; i++) suma(ini + i, r() * paso(Math.exp(-i / SR / (abierto ? 0.1 : 0.022))) * 0.1 * vol, gL, gR, 0);
+    for (let i = 0; i < n; i++) suma(c, ini + i, r() * paso(Math.exp(-i / SR / (abierto ? 0.1 : 0.022))) * 0.1 * vol, gL, gR, 0);
   }
   function platazo(t, vol = 1) {
     const r = ruido(), m = ruido(true);
     const n = 3 * SR;
     const ini = muestra(t);
+    const c = capa(capas.percusion);
     let me = 0;
     for (let i = 0; i < n; i++) {
       const s = i / SR;
       if (i % 3 === 0) me = m();
-      suma(ini + i, (r() * paso(Math.exp(-s / 0.8)) * 0.2 + me * Math.exp(-s / 0.3) * 0.08) * vol, 1, 1, 0.2);
+      suma(c, ini + i, (r() * paso(Math.exp(-s / 0.8)) * 0.2 + me * Math.exp(-s / 0.3) * 0.08) * vol, 1, 1, 0.2);
     }
   }
 
   // ── Mezcla y .wav ─────────────────────────────
-  // «partes»: [nombre, compás de inicio, compás de fin] para decir el volumen de cada una
+  // «partes»: [nombre, compás de inicio, compás de fin] para decir el volumen de cada una.
+  // Devuelve { capa: su .wav } si la canción va por capas (si no, nada)
   function guardar(salida, partes) {
+    // Cada capa se mezcla por separado (eco, bucle y filtro hacen lo mismo con la suma que con cada parte): así,
+    // las capas sumadas suenan igual que la canción entera
+    const mezcladas = new Map([...CAPAS].map(([nombre, c]) => [nombre, mezclar(c)]));
+    const sL = new Float32Array(LARGO), sR = new Float32Array(LARGO);
+    for (const [cL, cR] of mezcladas.values()) {
+      for (let i = 0; i < LARGO; i++) { sL[i] += cL[i]; sR[i] += cR[i]; }
+    }
+
+    // Todas a la misma ganancia: la que deja la canción entera con el pico a -1 dB
+    let pico = 0;
+    for (let i = 0; i < LARGO; i++) pico = Math.max(pico, Math.abs(sL[i]), Math.abs(sR[i]));
+    const ganancia = 0.89 / pico;
+
+    const wav = escribir(salida, sL, sR, ganancia);
+
+    // Volumen de cada parte, para ver que crece y baja donde toca
+    const db = (x) => (20 * Math.log10(x)).toFixed(1);
+    const volumen = (xL, xR, c0, c1) => {
+      let e = 0;
+      const i0 = muestra(B(c0)), i1 = muestra(B(c1));
+      for (let i = i0; i < i1; i++) e += (xL[i] * ganancia) ** 2 + (xR[i] * ganancia) ** 2;
+      return db(Math.sqrt(e / (2 * (i1 - i0))));
+    };
+    console.log(`${salida}\n${(LARGO / SR).toFixed(1)} s, pico normalizado a -1 dB`);
+    for (const [nombre, c0, c1] of partes) {
+      console.log(`  ${nombre.padEnd(8)} compases ${String(c0).padStart(2)}-${c1 - 1}  ${volumen(sL, sR, c0, c1)} dB`);
+    }
+    // El empalme no da chasquido si el salto del final al principio es como los de una muestra a la siguiente
+    const salto = Math.abs(sL[LARGO - 1] - sL[0]) * ganancia;
+    let normal = 0;
+    for (let i = LARGO - SR; i < LARGO - 1; i++) normal = Math.max(normal, Math.abs(sL[i + 1] - sL[i]) * ganancia);
+    console.log(`  empalme del bucle: salto de ${salto.toFixed(3)} (en el último segundo llega a ${normal.toFixed(3)})`);
+
+    // Con «--veces 4» guarda además la canción repetida, para oír si aguanta en bucle (…-x4.wav)
+    const veces = +(process.argv[process.argv.indexOf('--veces') + 1] ?? 0);
+    if (process.argv.includes('--veces') && veces > 1) {
+      const datos = wav.subarray(44);
+      const largo = Buffer.concat([wav.subarray(0, 44), ...Array(veces).fill(datos)]);
+      largo.writeUInt32LE(36 + datos.length * veces, 4);
+      largo.writeUInt32LE(datos.length * veces, 40);
+      const otra = salida.replace(/\.wav$/, `-x${veces}.wav`);
+      fs.writeFileSync(otra, largo);
+      console.log(`${otra}  (${veces} veces, ${(veces * LARGO / SR / 60).toFixed(1)} min)`);
+    }
+
+    // Las capas, cada una en su .wav (…-base.wav, …-ritmo.wav...), con el volumen de cada parte
+    const archivos = {};
+    if (mezcladas.size < 2) return archivos;
+    console.log(`capas (dB en cada parte: ${partes.map((p) => p[0]).join(', ')})`);
+    for (const [nombre, [cL, cR]] of mezcladas) {
+      archivos[nombre] = salida.replace(/\.wav$/, `-${nombre}.wav`);
+      escribir(archivos[nombre], cL, cR, ganancia);
+      const vols = partes.map(([, c0, c1]) => volumen(cL, cR, c0, c1).padStart(6));
+      console.log(`  ${nombre.padEnd(8)} ${vols.join(' ')}`);
+    }
+    return archivos;
+  }
+
+  // Lo que suena en una capa, ya con su eco, en bucle y filtrado: [izquierda, derecha]
+  function mezclar({ L, R, ECO }) {
     // Eco de ida y vuelta (izquierda, derecha...) a pulso y medio, más oscuro que el sonido
     const D = muestra(1.5);
     const FB = 0.45;
@@ -248,12 +329,11 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
       }
       return y;
     }
-    const sL = filtrar(L), sR = filtrar(R);
+    return [filtrar(L), filtrar(R)];
+  }
 
-    let pico = 0;
-    for (let i = 0; i < LARGO; i++) pico = Math.max(pico, Math.abs(sL[i]), Math.abs(sR[i]));
-    const ganancia = 0.89 / pico;
-
+  // Guarda un .wav de 16 bits en estéreo
+  function escribir(salida, sL, sR, ganancia) {
     const wav = Buffer.alloc(44 + LARGO * 4);
     wav.write('RIFF', 0); wav.writeUInt32LE(36 + LARGO * 4, 4); wav.write('WAVE', 8);
     wav.write('fmt ', 12); wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(2, 22);
@@ -269,33 +349,7 @@ export function crearMotor({ bpm, compas, compases, instrumentos: INS }) {
     const ignorar = path.join(path.dirname(salida), '.gdignore');
     if (!fs.existsSync(ignorar)) fs.writeFileSync(ignorar, '');
     fs.writeFileSync(salida, wav);
-
-    // Volumen de cada parte, para ver que crece y baja donde toca
-    const db = (x) => (20 * Math.log10(x)).toFixed(1);
-    console.log(`${salida}\n${(LARGO / SR).toFixed(1)} s, pico normalizado a -1 dB`);
-    for (const [nombre, c0, c1] of partes) {
-      let e = 0;
-      const i0 = muestra(B(c0)), i1 = muestra(B(c1));
-      for (let i = i0; i < i1; i++) e += (sL[i] * ganancia) ** 2 + (sR[i] * ganancia) ** 2;
-      console.log(`  ${nombre.padEnd(8)} compases ${String(c0).padStart(2)}-${c1 - 1}  ${db(Math.sqrt(e / (2 * (i1 - i0))))} dB`);
-    }
-    // El empalme no da chasquido si el salto del final al principio es como los de una muestra a la siguiente
-    const salto = Math.abs(sL[LARGO - 1] - sL[0]) * ganancia;
-    let normal = 0;
-    for (let i = LARGO - SR; i < LARGO - 1; i++) normal = Math.max(normal, Math.abs(sL[i + 1] - sL[i]) * ganancia);
-    console.log(`  empalme del bucle: salto de ${salto.toFixed(3)} (en el último segundo llega a ${normal.toFixed(3)})`);
-
-    // Con «--veces 4» guarda además la canción repetida, para oír si aguanta en bucle (…-x4.wav)
-    const veces = +(process.argv[process.argv.indexOf('--veces') + 1] ?? 0);
-    if (process.argv.includes('--veces') && veces > 1) {
-      const datos = wav.subarray(44);
-      const largo = Buffer.concat([wav.subarray(0, 44), ...Array(veces).fill(datos)]);
-      largo.writeUInt32LE(36 + datos.length * veces, 4);
-      largo.writeUInt32LE(datos.length * veces, 40);
-      const otra = salida.replace(/\.wav$/, `-x${veces}.wav`);
-      fs.writeFileSync(otra, largo);
-      console.log(`${otra}  (${veces} veces, ${(veces * LARGO / SR / 60).toFixed(1)} min)`);
-    }
+    return wav;
   }
 
   return { B, NEGRA, nota, arpegio, subida, campana, viento, sonido, bombo, tambor, platillo, platazo, guardar };

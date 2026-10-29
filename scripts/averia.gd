@@ -163,7 +163,7 @@ func empezar_arreglo() -> void:
 	lampara.position = Vector2(0, -30)
 	lampara.range_item_cull_mask = Luz.CAPA_SUELO | Luz.CAPA_COSAS | Luz.capa_sala(0)
 	a.add_child(lampara)
-	Sonido.musica("jefe")   # la música más tensa, como en la horda
+	Sonido.musica("horda")   # la música de pelea, como en la horda
 	partida.cerrada = true
 	partida.actualizar_puertas()
 	Sonido.tocar("portazo")

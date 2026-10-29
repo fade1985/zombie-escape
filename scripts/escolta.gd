@@ -53,7 +53,7 @@ func empezar(a: Aliado) -> void:
 	a.caido = false
 	a.add_to_group("presa")
 	a.decir(Idioma.t("Vámonos. Despacio, por favor"))
-	Sonido.musica("jefe")   # la música más tensa, como en la horda
+	Sonido.musica("horda")   # la música de pelea, como en la horda
 	sup.partida.decir(Idioma.t("Lleva a la %s hasta las escaleras: va herida") % Supervivientes.nombre_de(a.def), 4.0)
 
 

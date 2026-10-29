@@ -8,10 +8,12 @@
 //  que se repite en escalón: sobre re menor, sobre sol menor y sobre si bemol. Antes de volver,
 //  siempre pasa por mi bemol mayor, el acorde «raro» que da el escalofrío.
 //
-//  En el juego es la música de los menús y de explorar las plantas (assets/musica/el-ultimo-inquilino.ogg, ver
-//  scripts/sonido.gd).
+//  En el juego es la música de los menús y de explorar las plantas, partida en dos capas que suenan a la vez
+//  (scripts/sonido.gd): la base (cajita, bajo, reloj, campana y melodía), que suena siempre, y la batería, que solo se
+//  sube con zombis despiertos (y por eso lleva, solo en su capa, un latido y un pulso donde la canción no tenía batería).
 //
-//  node tools/el-ultimo-inquilino.mjs   → tools/efectos/el-ultimo-inquilino.wav y assets/musica/el-ultimo-inquilino.ogg (necesita ffmpeg)
+//  node tools/el-ultimo-inquilino.mjs   → tools/efectos/el-ultimo-inquilino.wav (entera, para oírla), un .wav por
+//  capa y assets/musica/el-ultimo-inquilino-<capa>.ogg (base y bateria; necesita ffmpeg)
 //  Sale en bucle perfecto. El sonido lo hace tools/motor-8bit.mjs; aquí solo van los instrumentos
 //  y la PARTITURA (más abajo): para cambiar la canción, tocar eso.
 // ─────────────────────────────────────────────
@@ -21,8 +23,8 @@ import { crearMotor, pasarAOgg, sube, pulso, ruido, paso, SR } from './motor-8bi
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SALIDA = path.join(ROOT, 'tools', 'efectos', 'el-ultimo-inquilino.wav');
-const OGG = path.join(ROOT, 'assets', 'musica', 'el-ultimo-inquilino.ogg');
-const VOLUMEN = -13.9;   // decibelios: así queda a -29,7 LUFS, como la música del menú que se grabó del juego JS
+const OGG = (capa) => path.join(ROOT, 'assets', 'musica', `el-ultimo-inquilino-${capa}.ogg`);
+const VOLUMEN = -13.9;   // decibelios: así, con las dos capas, queda a -29,7 LUFS, como la música del menú que se grabó del juego JS
 
 // ── Instrumentos ────────────────────────────────
 const INS = {
@@ -36,7 +38,7 @@ const INS = {
 
 // En 4/4, a 80 pulsos por minuto: 32 compases, 96 segundos
 const { B, nota, sonido, campana, bombo, tambor, platillo, platazo, guardar } =
-  crearMotor({ bpm: 80, compas: 4, compases: 32, instrumentos: INS });
+  crearMotor({ bpm: 80, compas: 4, compases: 32, instrumentos: INS, capas: { percusion: 'bateria' } });
 
 // El reloj de la portería: «tic» agudo y «tac» un poco más grave, uno a cada lado
 function tic(t, alto, vol = 1) {
@@ -162,5 +164,20 @@ campana(B(28), 'D3', 0.5);
 melodia('brillo', 28, [MELODIA_A[0]], 1, 1);
 melodia('brillo', 30, [MELODIA_A[6]], 0.8);
 
-guardar(SALIDA, [['entrada', 0, 4], ['A', 4, 12], ['B', 12, 20], ["A'", 20, 28], ['final', 28, 32]]);
-pasarAOgg(SALIDA, OGG, VOLUMEN);
+// 6. La batería de pelea, solo en su capa (el juego la sube con zombis despiertos): donde la canción no lleva
+//    batería se le pone una para que la capa no se quede callada. Un latido en la entrada y el final, y un pulso suave en A
+const latido = (c, vol) => {
+  for (const p of [0, 2]) { bombo(B(c, p), vol, true); bombo(B(c, p + 1 / 3), vol * 0.6, true); }
+  platillo(B(c, 1), vol * 0.4); platillo(B(c, 3), vol * 0.4);
+};
+for (let k = 0; k < 4; k++) latido(k, 0.4 + k * 0.05);
+for (let c = 4; c < 12; c++) {
+  bombo(B(c), 0.4); bombo(B(c, 8 / 3), 0.25);
+  tambor(B(c, 2), 0.2);
+  for (let j = 0; j < 12; j++) platillo(B(c, j / 3), j % 3 === 0 ? 0.35 : 0.12);
+}
+for (let k = 0; k < 3; k++) tambor(B(11, 3 + k / 3), 0.15 + k * 0.1);
+for (let k = 0; k < 4; k++) latido(28 + k, 0.55 - k * 0.05);
+
+const capas = guardar(SALIDA, [['entrada', 0, 4], ['A', 4, 12], ['B', 12, 20], ["A'", 20, 28], ['final', 28, 32]]);
+for (const [capa, wav] of Object.entries(capas)) pasarAOgg(wav, OGG(capa), VOLUMEN);

@@ -171,7 +171,7 @@ func empezar() -> void:
 	diana.add_to_group("presa")
 	partida.mapa.cosas.add_child(diana)
 	sup.puerta.tablas = TABLAS
-	Sonido.musica("jefe")   # la música más tensa, como en la horda
+	Sonido.musica("horda")   # la música de pelea, como en la horda
 	Sonido.tocar("portazo")
 	partida.cerrada = true
 	partida.actualizar_puertas()

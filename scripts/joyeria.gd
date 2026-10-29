@@ -180,7 +180,7 @@ func empezar_alarma() -> void:
 	grupo_t = 3.0
 	sirena_t = 0.0
 	cuenta = false
-	Sonido.musica("jefe")
+	Sonido.musica("horda")
 	partida.eventos.mostrar_cartel(Idioma.t("¡ALARMA!"), Idioma.t("Apertura de emergencia: la cámara se abre en %d segundos. ¡Aguanta!") % roundi(CUENTA), ROJO)
 	partida.decir(Idioma.t("¡Has disparado la alarma! Vienen a por ti: aguanta %d segundos sin salir de la joyería") % roundi(CUENTA), 4.0)
 

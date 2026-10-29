@@ -44,7 +44,7 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       Spire), los supervivientes rescatados como personajes jugables con su arma inicial, desbloqueos a largo plazo.
       Lo caro es un tercer edificio.
 - [ ] **Sensación al jugar.** ~~Parada de un fotograma al golpear; sonidos con variaciones (que no suene el mismo
-      archivo doscientas veces)~~ (hechas el 29 oct: `temblor.gd` y `sonido.gd`, prueba `--sensacion`); música por capas que suba en hordas y jefes; ~~pantalla de muerte que diga por qué
+      archivo doscientas veces)~~ (hechas el 29 oct: `temblor.gd` y `sonido.gd`, prueba `--sensacion`); ~~música por capas que suba en hordas y jefes~~ (hecha el 29 oct: `sonido.gd`, prueba `--musica`); ~~pantalla de muerte que diga por qué
       has muerto y qué has desbloqueado, con "Otra vez" a un clic~~ (hecha el 29 oct: `menus.gd`, prueba `--derrota`); menú con algo de vida.
 - [ ] **La música procedural a largo plazo.** Comprobar que no cansa tras diez horas; si cansa, temas fijos para
       menú, jefes y final.

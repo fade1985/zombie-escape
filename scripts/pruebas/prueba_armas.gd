@@ -1,7 +1,7 @@
 # Pruebas de las armas: la sala de pruebas (--armas), el lanzallamas, el lanza ácido y la pistola
 # eléctrica (--lanzallamas, --desintegrador, --pistola-electrica) y el fuego y el ácido en los enemigos (--tintes,
-# --fuego-acido), los trucos de las Épicas (--epicas), que golpear se note (--sensacion) y el ajuste del temblor
-# (--temblor). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
+# --fuego-acido), los trucos de las Épicas (--epicas), que golpear se note (--sensacion), el ajuste del temblor
+# (--temblor) y la música por capas (--musica). Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_jefes.gd"
 
 
@@ -1621,3 +1621,83 @@ func sin_paron(respiro := true) -> void:
 		await get_tree().process_frame
 	if respiro:
 		await get_tree().create_timer(Temblor.RESPIRO / 1000.0 + 0.05).timeout
+
+
+# Con "--captura --musica": la música por capas (Sonido.musica y sus MOMENTOS), en la sala de pruebas con zombis lentos
+# que no le hacen nada a Johnny. Como va sin sonido, cada línea dice qué canción suena y qué capas se oyen, con lo
+# esperado: explorando sin zombis despiertos, con uno (entra la batería), recién quitado (la batería aguanta) y al rato
+# (se va); la horda con pocos y con MUCHOS (entra la melodía), y que la canción de antes se ha parado; de la horda al jefe
+# (la misma canción sigue por donde iba), antes y después de salir el jefe; que las capas van a la par, y que al
+# apagarla se para todo. Tarda medio minuto. Se cierra
+func probar_musica() -> void:
+	await pulsar_y_esperar(KEY_F11)
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			n.diana.remove_from_group("zombis")   # (la diana no es un zombi que cuente)
+	for a in get_tree().get_nodes_in_group("aliados"):   # (el que le acompaña, quieto)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+	johnny.modo = "quieto"
+	johnny.invulnerable = 1000.0
+	var dice := func(que: String, esperado: String) -> void:
+		print("Música, %s: %s %s (esperado: %s)" % [que, Sonido.cancion, Sonido.capas_sonando(), esperado])
+	var poner := func(cuantos: int) -> void:   # (deja tantos zombis despiertos alrededor de Johnny; 0, ninguno)
+		var donde := []
+		for i in cuantos:
+			donde.append(Vector2.from_angle(TAU * i / cuantos) * 120.0)
+		zombis_de_prueba(donde)
+	# dónde va cada capa de la canción, leídas todas a la vez (con el candado, el sonido no avanza entre una y otra)
+	var donde_va := func(cancion: String) -> Array:
+		AudioServer.lock()
+		var pos: Array = Sonido.capas[cancion].values().map(func(r: AudioStreamPlayer): return r.get_playback_position())
+		AudioServer.unlock()
+		return pos
+	var sube := Sonido.MIRAR + Sonido.SUBE + 0.3   # lo que tarda como mucho en entrar una capa
+
+	poner.call(0)
+	Sonido.musica("")
+	await get_tree().create_timer(2.0).timeout
+	Sonido.musica("menu")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	dice.call("explorando sin zombis despiertos", "el-ultimo-inquilino [base]")
+	poner.call(1)
+	await get_tree().create_timer(sube).timeout
+	dice.call("con un zombi despierto", "el-ultimo-inquilino [base, bateria]")
+	poner.call(0)
+	await get_tree().create_timer(2.0).timeout
+	dice.call("recién quitado el zombi", "la batería aguanta: el-ultimo-inquilino [base, bateria]")
+	await get_tree().create_timer(Sonido.ESPERA + Sonido.BAJA).timeout
+	dice.call("al rato", "el-ultimo-inquilino [base]")
+
+	poner.call(2)
+	Sonido.musica("horda")
+	await get_tree().create_timer(Sonido.FUNDIDO + 0.5).timeout
+	dice.call("horda con 2 zombis", "turno-de-noche [base]")
+	var parada: bool = Sonido.capas["el-ultimo-inquilino"].values().all(func(r: AudioStreamPlayer): return not r.playing)
+	print("Música, la canción de antes se ha parado: %s (esperado: true)" % parada)
+	poner.call(Sonido.MUCHOS)
+	await get_tree().create_timer(sube).timeout
+	dice.call("horda con %d zombis" % Sonido.MUCHOS, "turno-de-noche [base, melodia]")
+
+	poner.call(0)
+	var iba: float = donde_va.call("turno-de-noche")[0]
+	Sonido.musica("jefe")
+	await get_tree().create_timer(Sonido.SUBE + 0.3).timeout
+	var largo: float = Sonido.capas["turno-de-noche"]["base"].stream.get_length()
+	print("Música, de la horda al jefe sigue por donde iba: ha avanzado %.1f s (esperado: 1.3)" % fposmod(
+		donde_va.call("turno-de-noche")[0] - iba, largo))
+	dice.call("en la sala del jefe, antes de que salga", "turno-de-noche [base]")
+	poner.call(1)
+	await get_tree().create_timer(sube).timeout
+	dice.call("ha salido el jefe", "turno-de-noche [base, melodia]")
+	var pos: Array = donde_va.call("turno-de-noche")
+	print("Música, las capas van a la par: se llevan %d ms (esperado: 0)" % roundi((pos.max() - pos.min()) * 1000.0))
+
+	Sonido.musica("")
+	await get_tree().create_timer(2.0).timeout
+	var suena := []
+	for cancion in Sonido.capas:
+		for capa in Sonido.capas[cancion]:
+			if Sonido.capas[cancion][capa].playing:
+				suena.append("%s-%s" % [cancion, capa])
+	print("Música, apagada: siguen sonando %s (esperado: [])" % [suena])
+	get_tree().quit()
