@@ -47,6 +47,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   aparecer al abrir un menú y se oculte otra vez al cerrarlo.
 - **M34** Cambiar la flecha del ratón por una mirilla mientras se está en el juego.
 - **M35** Tutorial: explicar el sistema de vida de Johnny por tercios y lo que le pasa cuando baja.
+- **M36** Skin de Johnny del doctor Salas (cuando se cree): su efecto es que los zombis tengan un 50 % de probabilidad
+  de dar dos objetos aleatorios en lugar de uno.
 
 ## Por limar
 
