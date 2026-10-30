@@ -15,6 +15,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   pasillo de un apartamento, en la web).
 - **F13** Menús del ordenador: al moverse por ellos se va solo al final de la página; al entrar en cualquier menú tiene
   que empezar arriba del todo.
+- **F14** Talentos: al poner un punto, la página se va sola hasta abajo del todo; tiene que quedarse donde estaba
+  (parecido al F13).
 
 ## Mejoras
 
