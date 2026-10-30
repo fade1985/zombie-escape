@@ -13,6 +13,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 - **F12** Cuando un enemigo muere cerca de una pared, su cuerpo se mete dentro de la pared y se ve mal (visto en el
   pasillo de un apartamento, en la web).
+- **F13** Menús del ordenador: al moverse por ellos se va solo al final de la página; al entrar en cualquier menú tiene
+  que empezar arriba del todo.
 
 ## Mejoras
 
