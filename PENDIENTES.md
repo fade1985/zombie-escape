@@ -79,7 +79,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
 - **L24** Textos del juego: muchas tildes salen al revés.
 - **L25** Jefe de bomberos: la lengua de fuego no pega con la estética del juego.
-- **L26** El campo de invulnerabilidad (el del jefe de bomberos, parece) no pega con la estética del juego.
 - **L27** Pasillo de los apartamentos: cambiar las puertas de la pared de abajo para que encajen más con el diseño del
   juego.
 - **L28** Pasillo de los apartamentos, pared de abajo: las placas con la letra del piso, en vez de estar en el tabique,
