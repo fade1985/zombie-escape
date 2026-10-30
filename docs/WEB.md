@@ -46,9 +46,22 @@
   `draw_primitive` (`Tentaculo.trozos`). **Con una forma nueva, usar `Formas`, no las funciones de CanvasItem.**
   Pintan igual que antes: `-- --captura --formas` compara los dos modos píxel a píxel (0,13 % de píxeles distintos, todos
   de borde).
-- **Medirlo:** `-- --captura --dibujos` (cuánto cuesta cada tipo de dibujo según cuántos), `-- --captura --rendimiento`
-  (el latigazo del Glotón, fotograma a fotograma) y `--lentos`, que se añade a cualquier prueba y avisa de cada
-  fotograma de más de 60 ms (con sus llamadas de dibujo y triángulos) y da un resumen al acabar. Se corren en la web
+- **Shaders que se montan a mitad de partida.** La primera vez que se dibuja con un shader, la tarjeta lo monta y el juego se
+  para hasta que acaba. En el ordenador casi ni se nota, pero en la web (Windows, con ANGLE) cada uno de los grandes tarda de
+  100 a 300 ms, y cada forma de dibujarlo (con luz, sin luz) se monta aparte. Así, el primer zombi que ardía dejaba el juego
+  parado casi 2 s (F17). Por eso `scripts/calentador.gd` los monta al abrir el menú. **Con un shader grande nuevo, añadirlo a
+  su lista.** `py tools/medir_web.py` dice qué shaders tardan y cuándo.
+- **Leer una imagen de la tarjeta gráfica (`get_image`).** En la web, unos 18 ms cada lectura, y en un `AtlasTexture` lee la hoja
+  entera. Con varios zombis muriendo ardiendo a la vez, el juego se paraba en cada molotov (F17). `quemado.gd` lee cada hoja una
+  sola vez: **nada de `get_image` repetido durante la partida.**
+- **Medirlo:** `py tools/medir_web.py 45 --captura --molotov-carga --zombis 12` abre Edge sin ventana, con la tarjeta gráfica y un
+  perfil nuevo (como quien entra por primera vez), saca la consola del juego y un espía de WebGL con los fotogramas lentos y
+  los shaders que tardan. Es lo más fiable: **en el panel del navegador de la app no se mide**, porque a ratos va a un
+  fotograma por segundo aunque diga «visible» (30 oct: parecía que el molotov dejaba fotogramas de 1 s y era el panel; seguía
+  a 1 fps con el juego ya cerrado). También valen `-- --captura --dibujos` (cuánto cuesta cada tipo de dibujo según cuántos), `-- --captura --rendimiento`
+  (el latigazo del Glotón, fotograma a fotograma), `--molotov-carga` (un molotov entre muchos zombis) y `--lentos`, que se añade
+  a cualquier prueba y avisa de cada fotograma de más de 60 ms (con sus llamadas de dibujo y triángulos) y da un resumen al
+  acabar. Se corren en la web
   poniendo los argumentos en `"args"` de `GODOT_CONFIG` del `index.html` exportado (`["--", "--captura", "--dibujos",
   "--lentos"]`; el `index.html` se pisa al exportar) y se leen en la consola del navegador.
 - **¡Cuidado con medir con la página oculta!** Una página oculta (otra pestaña, o el panel del navegador de la app de

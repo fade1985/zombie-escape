@@ -27,6 +27,7 @@ func _ready() -> void:
 	Controles.aplicar()   # las teclas cambiadas en Opciones
 	theme = Tema.crear()
 	Sonido.musica("menu")
+	Calentador.empezar(self)   # los shaders grandes, antes de jugar
 	RenderingServer.set_default_clear_color(Color(0.05, 0.04, 0.06))
 	var fondo := ColorRect.new()
 	fondo.color = Color(0.05, 0.04, 0.06)

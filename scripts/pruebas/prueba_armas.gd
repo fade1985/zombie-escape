@@ -1701,3 +1701,70 @@ func probar_musica() -> void:
 				suena.append("%s-%s" % [cancion, capa])
 	print("Música, apagada: siguen sonando %s (esperado: [])" % [suena])
 	get_tree().quit()
+
+
+# Con "--captura --molotov-carga" (y "--zombis N": 12 si no se dice): lo que tarda cada fotograma cuando cae un molotov en
+# medio de N zombis (F17), dos veces, para separar lo que cuesta la primera (lo que se prepara al usarlo por primera vez)
+# de lo que cuesta siempre. Dice el peor fotograma, los que pasan de 25 ms y, de esos, cuánto se va en scripts y física; lo
+# que falte hasta el total es dibujar. Se puede correr en la web (docs/WEB.md). Se cierra sola
+func probar_molotov_carga() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	var cuantos := int(Captura.dato("--zombis", "12"))
+	for ronda in 2:
+		var centro: Vector2 = johnny.global_position + Vector2(0, -200)
+		var lado := ceili(sqrt(cuantos))
+		for i in cuantos:
+			var z: Node2D = meter_zombi("normal", centro + Vector2((i % lado - lado / 2.0) * 36.0, (floori(float(i) / lado) - lado / 2.0) * 26.0))
+			z.dormido = false
+			z.espabilando = 0.0
+		await get_tree().create_timer(0.8).timeout
+		var base := []
+		for _i in 30:
+			var a := Time.get_ticks_usec()
+			await get_tree().process_frame
+			base.append((Time.get_ticks_usec() - a) / 1000.0)
+		base.sort()
+		var p: Node2D = Lanzables.PROYECTIL.instantiate()
+		p.tipo = "molotov"
+		p.desde = johnny.global_position
+		p.alto_salida = 20.0
+		p.hasta = centro
+		johnny.get_parent().add_child(p)
+		var peor := 0.0
+		var total := 0.0
+		var lentos := []
+		var empezo := Time.get_ticks_usec()
+		while Time.get_ticks_usec() - empezo < 3000000:
+			var a := Time.get_ticks_usec()
+			await get_tree().process_frame
+			var ms := (Time.get_ticks_usec() - a) / 1000.0
+			peor = maxf(peor, ms)
+			if ms >= 25.0:
+				total += ms
+				lentos.append("%.0f@%.2fs(sc%.0f fis%.0f dib%d)" % [ms, (Time.get_ticks_usec() - empezo) / 1000000.0,
+					Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0,
+					Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
+					RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
+		print("Molotov carga · ronda %d · %d zombis · normal %.1f ms · peor %.0f ms · %d lentos, %.2f s en total · página %s" % [
+			ronda + 1, cuantos, base[15], peor, lentos.size(), total / 1000.0, Lentos.visibilidad()])
+		print("Molotov carga · lentos: ", " ".join(lentos.slice(0, 24)))
+		print("Molotov carga · hojas leídas de la tarjeta gráfica: %d · dibujos tendidos: %d (cada uno se mira una vez)" % [
+			Quemado.hojas.size(), Quemado.tendidos.size()])
+		Captura.foto("captura-molotov-carga-%d.png" % (ronda + 1))
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z.get("diana") != true:
+				z.queue_free()
+		await get_tree().create_timer(0.5).timeout
+	get_tree().quit()

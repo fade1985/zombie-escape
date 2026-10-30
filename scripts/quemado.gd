@@ -2,6 +2,9 @@
 # desde que toca el suelo: cae ardiendo (con sus llamas), se apaga mientras se vuelve carbón, le quedan brasas que parpadean y
 # columnas de humo, y al final se deshace en ceniza. Quedan una quemadura en el suelo y unos huesos (que ya no
 # se van). Las brasas, el humo y los restos salen de los píxeles de verdad de su dibujo tendido.
+# Leer una imagen de la tarjeta gráfica (get_image) es lo más lento de todo esto: en la web, unos 18 ms cada vez, y con
+# varios zombis muriendo a la vez el juego se paraba (F17). Por eso cada hoja se lee una sola vez y cada dibujo tendido
+# se mira una sola vez (solidos_de).
 class_name Quemado
 extends Node2D
 
@@ -15,6 +18,9 @@ const CENIZAS := [Color("#3a3330"), Color("#76706a")]
 const RESTOS := preload("res://assets/sprites/objeto-restos.png")
 const CELDA_RESTOS := 20   # cada pieza de la hoja de restos mide 20×20; filas: calavera y hueso de cada talla
 const FILAS := {"grande": 0, "mediano": 2, "pequeno": 4}
+
+static var hojas := {}      # la imagen de cada hoja ya leída
+static var tendidos := {}   # los píxeles sólidos de cada dibujo tendido ya mirado
 
 var zombi: Node2D
 var sprite: AnimatedSprite2D
@@ -40,14 +46,9 @@ static func empezar(z: Node2D, s: AnimatedSprite2D, talla_restos: String) -> voi
 func _ready() -> void:
 	# los píxeles del último fotograma de caer (el cuerpo tendido), pasados al sitio del zombi
 	var anim := sprite.animation
-	var imagen := sprite.sprite_frames.get_frame_texture(anim, sprite.sprite_frames.get_frame_count(anim) - 1).get_image()
-	var solidos: Array = []
-	for y in imagen.get_height():
-		for x in imagen.get_width():
-			if imagen.get_pixel(x, y).a > 0.78:
-				solidos.append(sprite.position + (sprite.offset + Vector2(x, y)) * sprite.scale)
+	var solidos := Quemado.solidos_de(sprite.sprite_frames.get_frame_texture(anim, sprite.sprite_frames.get_frame_count(anim) - 1))
 	for i in mini(80, solidos.size()):
-		puntos.append([solidos.pick_random(), randf() * 10.0])
+		puntos.append([sprite.position + (sprite.offset + solidos.pick_random()) * sprite.scale, randf() * 10.0])
 	restos = Node2D.new()
 	restos.z_index = -1   # por debajo del cuerpo
 	restos.modulate.a = 0.0
@@ -89,6 +90,26 @@ func _process(delta: float) -> void:
 		restos.modulate.a = 1.0
 		set_process(false)
 	queue_redraw()
+
+
+# Los píxeles que se ven de un dibujo (ver arriba: cada hoja se lee una vez)
+static func solidos_de(dibujo: Texture2D) -> Array:
+	if tendidos.has(dibujo):
+		return tendidos[dibujo]
+	var imagen: Image
+	if dibujo is AtlasTexture:
+		if not hojas.has(dibujo.atlas):
+			hojas[dibujo.atlas] = dibujo.atlas.get_image()
+		imagen = hojas[dibujo.atlas].get_region(Rect2i(dibujo.region))
+	else:
+		imagen = dibujo.get_image()
+	var solidos: Array = []
+	for y in imagen.get_height():
+		for x in imagen.get_width():
+			if imagen.get_pixel(x, y).a > 0.78:
+				solidos.append(Vector2(x, y))
+	tendidos[dibujo] = solidos
+	return solidos
 
 
 # Las llamas de su shader, las mismas que en vida (Zombi.quemaduras), con "k" de fuerza (0 = apagadas)

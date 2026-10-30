@@ -121,7 +121,10 @@ en una línea.
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
   `luz_jefe.gd` (la luz fija de esas habitaciones).
-- `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo), `brillo.gd`
+- `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
+  primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
+- `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la
+  tarjeta gráfica una sola vez, `solidos_de`), `brillo.gd`
   (lo que luce a oscuras), `particulas.gd`, `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
   cuerpo a cuerpo dura la `parada` de cada arma en `armas.gd`, más si mata o es crítico y más aún el golpe de gracia; hay
   también al matar a un jefe, en las explosiones que pillan a alguien y cuando le hacen daño a Johnny. No se suman, tras

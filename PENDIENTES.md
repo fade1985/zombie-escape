@@ -20,9 +20,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **F15** A veces los zombis se quedan atascados en una puerta al intentar salir todos a la vez.
 - **F16** Pantalla completa: al pulsar Esc (para la pausa) también se sale de la pantalla completa, y no debería. En la
   web es el propio navegador; mirar si se puede evitar (por ejemplo con el bloqueo de teclado de Chrome).
-- **F17** El molotov: al lanzarlo con varios enemigos delante, el juego se congela (el dueño lo llama «crasheo»). Medido
-  en Windows con 12 zombis: unos 10 fotogramas de 30 a 50 ms y 0,4 s parados en total tras caer la botella; en la web,
-  con muchos zombis, puede ser peor. Mirar con `--lentos`, sobre todo la web (`docs/WEB.md`).
 - **F19** Apagón: cuando te llama un superviviente no se ve nada.
 - **F20** Las granadas atraviesan las paredes; tienen que chocar con ellas.
 
