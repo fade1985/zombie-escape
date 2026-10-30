@@ -19,4 +19,4 @@ _(ninguno por ahora)_
 
 ## Por limar
 
-_(ninguno por ahora)_
+- **L17** Helipuerto: cambiar el lado por el que se accede a la plataforma para que case con la entrada a la derecha.
