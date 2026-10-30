@@ -11,7 +11,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-_(ninguno por ahora)_
+- **F12** Cuando un enemigo muere cerca de una pared, su cuerpo se mete dentro de la pared y se ve mal (visto en el
+  pasillo de un apartamento, en la web).
 
 ## Mejoras
 
