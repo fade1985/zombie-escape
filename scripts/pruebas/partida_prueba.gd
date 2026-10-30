@@ -87,6 +87,7 @@
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
+#   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
 #                       tele, para ver si caben                                        [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
@@ -310,6 +311,10 @@ func empezar_prueba() -> void:
 	elif "--ordenador-arriba" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ordenador_arriba()
+		get_tree().quit()
+	elif "--ordenador-teclado" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_ordenador_teclado()
 		get_tree().quit()
 	elif "--historia" in args:
 		set_process(false)   # sin la prueba larga

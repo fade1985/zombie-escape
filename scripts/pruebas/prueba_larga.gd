@@ -553,6 +553,61 @@ func clic_en(b: Control) -> void:
 		await get_tree().process_frame
 
 
+# Con "--captura --ordenador-teclado": con el teclado o el mando se llega a todo en cada programa del ordenador: sube hasta
+# arriba, baja hasta abajo y vuelve, y dice por cuántas tarjetas ha pasado y dónde acaba. Deja el guardado como estaba
+func probar_ordenador_teclado() -> void:
+	var antes := Guardado.cargar()
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	var donde := func() -> String:
+		var foco := get_viewport().gui_get_focus_owner()
+		var barras := []
+		for d: ScrollContainer in ordenador.ventana.find_children("*", "ScrollContainer", true, false):
+			barras.append("%d/%d" % [d.scroll_vertical, int(d.get_v_scroll_bar().max_value - d.get_v_scroll_bar().page)])
+		return "%s %s" % [foco.name if foco else "nada", barras]
+	for programa in ["puntos", "armas", "logros", "dosier", "noticias", "colecciones"]:
+		ordenador.abrir(programa)
+		await get_tree().create_timer(0.5).timeout
+		await andar_con_teclado("ui_up")
+		var bajadas: int = await andar_con_teclado("ui_down")
+		var abajo: String = donde.call()
+		var subidas: int = await andar_con_teclado("ui_up")
+		print("%s con el teclado: baja %d y acaba en %s (esperado: abajo del todo) · sube %d y acaba en %s (esperado: arriba del todo)" % [
+			programa, bajadas, abajo, subidas, donde.call()])
+	# con el ratón, en cambio, pulsar la primera tarjeta no mueve la ventana (tiene que quedarse donde estaba)
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.5).timeout
+	var ventana_logros: ScrollContainer = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
+	ventana_logros.scroll_vertical = 60
+	await get_tree().create_timer(0.2).timeout
+	await clic_en(ordenador.ventana.find_child("b_primer_turno", true, false))
+	await get_tree().create_timer(0.3).timeout
+	print("Clic en la primera tarjeta con la ventana bajada 60: %s (esperado: sigue en 60)" % donde.call())
+	ordenador.abrir("")
+	ordenador.apagar()
+	Guardado.cambiar(func(g): g.merge(antes, true))
+
+
+# Para probar_ordenador_teclado: pulsa esa acción hasta que la marca deje de moverse; devuelve las veces que se ha movido
+func andar_con_teclado(accion: String) -> int:
+	var pasos := 0
+	for i in 200:
+		var estaba := get_viewport().gui_get_focus_owner()
+		var evento := InputEventAction.new()
+		evento.action = accion
+		evento.pressed = true
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.05).timeout
+		evento.pressed = false
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.03).timeout
+		if get_viewport().gui_get_focus_owner() == estaba:
+			break
+		pasos += 1
+	return pasos
+
+
 # Con "--captura --novedades": los avisos de lo nuevo (L11). En la sala de mantenimiento, con noticias sin ver, un logro
 # por cobrar, algo nuevo en Colecciones y una skin sin ver, sale un «!» que bota encima de la mesa del ordenador y de la
 # taquilla (captura-novedades.png); en el escritorio de ConserjeOS, el «!» y el rótulo de Noticias, Colecciones y Logros

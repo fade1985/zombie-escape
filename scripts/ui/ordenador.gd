@@ -360,6 +360,7 @@ func marcar(boton: Control, concreto: bool, desplazados: Array) -> void:
 	colocando = false
 	if not is_instance_valid(esta) or ventana != esta:
 		return   # (se ha cerrado o abierto otro programa mientras tanto)
+	var encadenados := []
 	for i in range(deslizas.size() - 1, -1, -1):   # del de más dentro al de más fuera
 		var d: ScrollContainer = deslizas[i]
 		d.get_v_scroll_bar().changed.disconnect(a_su_sitio[i])
@@ -367,6 +368,55 @@ func marcar(boton: Control, concreto: bool, desplazados: Array) -> void:
 		if concreto and d.is_ancestor_of(boton):
 			d.ensure_control_visible(boton)
 		d.follow_focus = true   # (con el teclado o el mando, bajar por las tarjetas sí lo sigue)
+		encadenar(d, encadenados)
+
+
+# Con el teclado o el mando, Godot solo pasa a un botón que se vea: en una lista con desplazamiento, la marca se atascaba
+# al llegar abajo de lo visible y, arriba del todo, se iba a los iconos del escritorio. Por eso cada botón de la lista sabe
+# cuál tiene encima y debajo; el primero y el último, él mismo, y no salen de ella (izquierda y derecha, como siempre).
+# Las listas sin nada oculto no lo necesitan (y en Colecciones, los botones del visor cambian). "encadenados": los que ya
+# van con un desplazamiento de más dentro
+func encadenar(desliza: ScrollContainer, encadenados: Array) -> void:
+	var botones: Array = desliza.find_children("*", "Button", true, false).filter(func(b):   # no-tr
+		return b.focus_mode != Control.FOCUS_NONE and b.is_visible_in_tree() and not b in encadenados)
+	encadenados.append_array(botones)
+	var barra := desliza.get_v_scroll_bar()
+	if barra.max_value <= barra.page:
+		return
+	for b: Button in botones:
+		var encima := vecino(b, botones, -1.0)
+		b.focus_neighbor_top = b.get_path_to(encima)
+		b.focus_neighbor_bottom = b.get_path_to(vecino(b, botones, 1.0))
+		if encima == b:
+			b.focus_entered.connect(al_principio.bind(b))
+
+
+# Al llegar arriba de una lista con el teclado o el mando, que se vea también lo que hay encima de ella (el saldo, los
+# títulos): sin ratón no habría otra forma de verlo. Con el ratón, la ventana no se mueve
+func al_principio(b: Button) -> void:
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		return
+	var d: Node = b.get_parent()
+	while d != ventana:
+		if d is ScrollContainer:
+			d.scroll_vertical = 0
+		d = d.get_parent()
+
+
+# El botón de "botones" más cercano a "b" hacia arriba (-1) o hacia abajo (1), de los que caen en su columna (el que más
+# coincida con ella, si hay varios a la misma altura); si no hay ninguno, él mismo
+func vecino(b: Button, botones: Array, hacia: float) -> Button:
+	var mejor := b
+	var menor := INF
+	var caja := b.get_global_rect()
+	for o: Button in botones:
+		var otra := o.get_global_rect()
+		var lejos := (otra.get_center().y - caja.get_center().y) * hacia
+		var coinciden := minf(otra.end.x, caja.end.x) - maxf(otra.position.x, caja.position.x)
+		if lejos > 1.0 and coinciden > 0.0 and lejos - coinciden * 0.001 < menor:
+			menor = lejos - coinciden * 0.001
+			mejor = o
+	return mejor
 
 
 func primer_boton(nodo: Node) -> Button:
