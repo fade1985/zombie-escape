@@ -225,7 +225,8 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
 
 **Revisión:** no hay nadie nativo que revise ningún idioma (decisión del dueño, 30 oct 2026): se sale con lo traducido y se corrige con los avisos
 de los jugadores (sobre todo el humor y los gritos). Opciones → General tiene el botón «Avisar de un texto mal traducido» (no sale en español); abre
-`Opciones.enlace_avisos`, que está **vacío** hasta que haya dónde recibir los avisos: rellenarlo es una línea en `opciones.gd`. Cómo se dice cada cosa:
+`Opciones.enlace_avisos`: un formulario de Google del dueño (30 oct 2026) con idioma, texto que está mal, cómo debería decir y dónde sale; las
+respuestas le llegan al correo. Si algún día hay Discord, se cambia ese enlace (una línea en `opciones.gd`). Cómo se dice cada cosa:
 `docs/GLOSARIO_EN.md`, `GLOSARIO_PT_BR.md`, `GLOSARIO_DE.md` y `GLOSARIO_FR.md`.
 
 **Decimales:** `Idioma.puntuar(texto)` cambia el punto de un número ya escrito: coma en español, portugués, alemán, francés y ruso, y

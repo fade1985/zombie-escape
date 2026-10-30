@@ -23,8 +23,8 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       También el mundo (nombres de planta, sitio y tienda, neones y carteles) y lo dibujado en imágenes (cartel de
       planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado.** No hay nadie nativo que
       lo revise (decisión del dueño, 30 oct 2026): se sale con la traducción hecha y se corrige con los avisos de los
-      jugadores. El botón «Avisar de un texto mal traducido» ya está en Opciones → General; **falta poner el enlace** (`Opciones.enlace_avisos`,
-      un Discord o un formulario: ver «Dónde contar el juego») y no sale hasta entonces.
+      jugadores. El botón «Avisar de un texto mal traducido» ya está en Opciones → General, con un formulario de Google del dueño
+      (`Opciones.enlace_avisos`; si algún día hay Discord, se cambia el enlace).
       Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; mismo plan, sin revisión
       nativa: el chino y el ruso, que son los que más pesan en Steam, ~22 % y ~9 %, son los primeros que vigilar). Fuentes nuevas para el
       cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; citadas en los créditos). Siguientes:

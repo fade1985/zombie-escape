@@ -25,10 +25,10 @@ signal cerrado
 # rellenará cuando lo tengan claro)
 const AUTORES := ""
 # El botón de General «Avisar de un texto mal traducido» (30 oct 2026: no hay nadie nativo que revise los idiomas y se corrige con
-# lo que avisen los jugadores, docs/LANZAMIENTO.md): abre este enlace (un formulario, un Discord...). Vacío, no sale: el dueño lo
-# rellenará cuando tenga dónde recibir los avisos. Tampoco sale en español, el idioma original. (Es una variable para que la
-# prueba --idioma le ponga uno)
-static var enlace_avisos := ""
+# lo que avisen los jugadores, docs/LANZAMIENTO.md): abre este enlace, un formulario de Google del dueño (idioma, texto que está mal,
+# cómo debería decir y dónde sale; las respuestas le llegan al correo). Vacío, no sale. Tampoco sale en español, el idioma
+# original. (Es una variable para que la prueba --idioma la pueda vaciar)
+static var enlace_avisos := "https://docs.google.com/forms/d/e/1FAIpQLSepY4FoOSeVYz_cpaGj4DJg-pTGPMNbCZSU8FQ_ixWT6ktq1Q/viewform"
 # Las letras que no son nuestras: [nombre, autores, su licencia]. La licencia (SIL OFL 1.1) pide citarlas y que su texto vaya
 # con el juego: los .txt se exportan (export_presets.cfg, include_filter) y el botón Licencias los enseña
 const LETRAS_DE_OTROS := [
