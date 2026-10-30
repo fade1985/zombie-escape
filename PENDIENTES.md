@@ -46,6 +46,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M33** Modo de disparo asistido: mientras se juega, que se oculte el ratón porque molesta para ver; que vuelva a
   aparecer al abrir un menú y se oculte otra vez al cerrarlo.
 - **M34** Cambiar la flecha del ratón por una mirilla mientras se está en el juego.
+- **M35** Tutorial: explicar el sistema de vida de Johnny por tercios y lo que le pasa cuando baja.
 
 ## Por limar
 
@@ -56,3 +57,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L20** Sala de mantenimiento: no debe haber sangre en ninguna de sus habitaciones (taquilla, despacho, taller).
 - **L21** El número de cada planta se ve demasiado perfecto comparado con lo destrozado que está el edificio; que se vea
   desgastado, sucio o roto.
+- **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.
