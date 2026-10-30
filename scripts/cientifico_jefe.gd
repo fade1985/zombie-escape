@@ -721,9 +721,9 @@ func escudo_toca(p: Vector2) -> bool:
 	return cupula > 0 and cupula_k > 0.5 and p.distance_to(centro_burbuja()) < radio_burbuja()
 
 
-# Los colores del rebote de las balas (el impacto va en cristal)
+# Los colores del rebote de las balas (el impacto va en cristal), de blanco a oscuro como pide impacto.gd
 func colores_escudo() -> Array:
-	return [Color.WHITE, CRISTAL, Color("#4aa8ee"), Color("#d0efff")]
+	return [Color.WHITE, Color("#d0efff"), CRISTAL, Color("#4aa8ee"), Color("#2a6fb8")]
 
 
 # Una bala ha rebotado en "p" (en su borde, tal como se ve): ahí sale una onda que corre por la cúpula

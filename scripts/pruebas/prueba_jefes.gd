@@ -368,6 +368,80 @@ func probar_azotea_sola() -> void:
 	get_tree().quit()
 
 
+# --cupula: la cúpula de cristal del científico jefe con balas de verdad, desde ocho lados y desde dentro: rebotan en su
+# borde con su onda y el daño se lo lleva ella (captura-cupula-sube.png, captura-cupula.png y, con las grietas y el
+# fogonazo, captura-cupula-rebote-1.png y -2); rota, ya le dan a él (captura-cupula-rota.png). Lo que comprueba lo
+# escribe en la terminal
+func probar_cupula() -> void:
+	await get_tree().create_timer(0.3).timeout
+	nueva_planta(Planta.PLANTAS)
+	await montar(0, puerta_de_llegada(), false)
+	johnny.position = mapa.puertas[0].llegada() - Vector2(60, 200)
+	await get_tree().create_timer(1.4).timeout
+	var s: Dictionary = planta.sitios[0]
+	johnny.position = Vector2(Planta.plataforma(s).end.x - 60.0, s.helipuerto.y)   # sube al ring: deja de esperar
+	await get_tree().create_timer(0.5).timeout
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(1.25, 1.25)
+	camara.reset_smoothing()
+	var encuadre := func() -> void:   # las fotos, con él en medio
+		Temblor.desplazamiento = jefa.position + Vector2(0, -50) - johnny.position
+	encuadre.call()
+	jefa.subir_cupula()
+	await get_tree().create_timer(0.2).timeout
+	Captura.foto("captura-cupula-sube.png")
+	await get_tree().create_timer(0.4).timeout
+	encuadre.call()
+	await get_tree().process_frame
+	Captura.foto("captura-cupula.png")
+	var vida_antes: int = jefa.vida
+	var bordes := []
+	for i in 8:
+		await bala_al_jefe(TAU * i / 8.0, 140.0, 10)
+		bordes.append(int(jefa.ondas[-1].donde.length()))
+	print("Cúpula: 8 balas de 10: a ella le quedan %d de %d (esperado: %d) | a él le quitan %d (esperado: 0) | ondas a %s del centro (esperado: su borde, %d) | barra azul %s" % [
+		jefa.cupula, jefa.CUPULA_VIDA, jefa.CUPULA_VIDA - 80, vida_antes - jefa.vida, bordes, int(jefa.CUPULA_RADIO),
+		armadura_jefe().visible])
+	await bala_al_jefe(PI, 30.0, 1)
+	print("  desde dentro, disparando hacia la derecha: la onda sale en %s (izquierda = el borde que queda detrás de quien dispara)" % jefa.ondas[-1].donde.round())
+	encuadre.call()
+	await bala_al_jefe(0.0, 140.0, 10)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	Captura.foto("captura-cupula-rebote-1.png")
+	await get_tree().create_timer(0.06).timeout
+	Captura.foto("captura-cupula-rebote-2.png")
+	vida_antes = jefa.vida
+	await bala_al_jefe(PI, 140.0, 500)
+	print("  una bala de 500: cúpula %d | estado %s | a él le quita %d (esperado: 0, lo que sobra se pierde)" % [jefa.cupula,
+		jefa.estado, vida_antes - jefa.vida])
+	await get_tree().create_timer(0.45).timeout
+	encuadre.call()
+	await get_tree().process_frame
+	Captura.foto("captura-cupula-rota.png")
+	vida_antes = jefa.vida
+	var ondas: int = jefa.ondas.size()
+	await bala_al_jefe(0.0, 140.0, 10)
+	print("  rota: otra bala le quita %d a él (esperado: 10) | ondas nuevas %d (esperado: 0)" % [vida_antes - jefa.vida,
+		jefa.ondas.size() - ondas])
+	Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()
+
+
+# Una bala de verdad hacia el jefe, desde "lejos" por el lado "angulo"; espera a que choque
+func bala_al_jefe(angulo: float, lejos: float, dano: int) -> void:
+	var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
+	bala.velocidad = Vector2.from_angle(angulo + PI) * 900.0
+	bala.dano = dano
+	bala.vida = 1.0
+	jefa.get_parent().add_child(bala)
+	bala.global_position = jefa.global_position + Vector2.from_angle(angulo) * lejos
+	var espera := 0.0
+	while is_instance_valid(bala) and espera < 1.0:
+		await get_tree().physics_frame
+		espera += get_physics_process_delta_time()
+
+
 # El helipuerto elevado de la azotea (planta.gd, mapa.gd y partida.gd, mirar_ring): que está en el centro, que ni la
 # base ni el dibujo de ningún aparato lo tocan, que de abajo solo se sube por la rampa, que el jefe espera arriba sin
 # recibir daño y que, al subir Johnny, la valla cierra la rampa (captura-azotea-valla.png) y ya no se baja
