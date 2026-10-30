@@ -165,7 +165,7 @@
 #   --tildes            una foto ampliada por idioma (captura-tildes-<idioma>.png) con las tildes, ñ, ü, ¿ y ¡: que ninguna
 #                       salga al revés ni cambiada                                             [prueba_letras.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
-#                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
+#                       atacar (F1), en el móvil y las cifras de la vida                     [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una y ver lo que cambia [prueba_larga.gd]
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en

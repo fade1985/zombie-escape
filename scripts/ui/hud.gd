@@ -38,6 +38,13 @@ const MARCO_ESCUDO := preload("res://assets/ui/barra-escudo.png")
 const ALTO_ESCUDO := 13.0
 const HUECO_ESCUDO := Rect2(0.046 * ANCHO, 3.0, 0.908 * ANCHO, 7.0)
 const ABAJO := 8.0        # lo que queda entre el borde de abajo de la pantalla y la barra o las casillas
+# Las cifras de la vida: la letra del juego solo se ve bien a 16 o 32 (más pequeña se deforma), así que estas van dibujadas
+# aquí, cada una de 4 × 6 píxeles (fila a fila), con píxeles de 2 de pantalla (1,33 × ESCALA)
+const CIFRAS := {"0": "0110 1001 1001 1001 1001 0110", "1": "0010 0110 0010 0010 0010 0111", "2": "0110 1001 0001 0010 0100 1111",
+	"3": "1110 0001 0110 0001 0001 1110", "4": "1001 1001 1001 1111 0001 0001", "5": "1111 1000 1110 0001 0001 1110",
+	"6": "0110 1000 1110 1001 1001 0110", "7": "1111 0001 0010 0010 0100 0100", "8": "0110 1001 0110 1001 1001 0110",
+	"9": "0110 1001 1001 0111 0001 0110", "/": "0001 0010 0010 0100 0100 1000"}
+const PIXEL_CIFRA := 4.0 / 3.0
 # Todo el HUD, una vez y media más grande que sus medidas (cada píxel del dibujo, 3 de pantalla en vez de 2: se sigue
 # viendo nítido). Más no cabe: al doble, la parte de la izquierda y la de la derecha se pisarían en una pantalla de 960
 const ESCALA := 1.5
@@ -587,17 +594,29 @@ func pintar_barra() -> void:
 			if b.x > a.x:
 				barra.draw_line(a, b, Color("#121016"), 2.0)
 			x += 6.0
-	# El marco por encima, y la vida que le queda (solo esa, para que quepa entre las dos rayas; la máxima, en la pausa)
+	# El marco por encima, y la vida en números, pequeños para que quepan entre las dos rayas
 	barra.draw_texture_rect(MARCO, Rect2(0, 0, ANCHO, ALTO), false)
-	var fuente := Tema.FUENTE
-	var texto := str(ceili(vida))
-	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
-	var donde := Vector2(roundf((ANCHO - ancho) / 2.0), ALTO / 2.0 + 5)
-	barra.draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)
-	barra.draw_string(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#f0e8d4"))
+	pintar_cifras("%d/%d" % [ceili(vida), roundi(maxima)])
 	if con_escudo():
 		pintar_escudo()
 	pintar_balas()
+
+
+# La vida, en el centro de la barra, píxel a píxel (CIFRAS): primero el borde oscuro y encima las cifras
+func pintar_cifras(texto: String) -> void:
+	var inicio := Vector2(ANCHO / 2.0 - (texto.length() * 5 - 1) * PIXEL_CIFRA / 2.0, ALTO / 2.0 - 3 * PIXEL_CIFRA).round()
+	for borde in [true, false]:
+		for i in texto.length():
+			var filas: PackedStringArray = CIFRAS[texto[i]].split(" ")
+			for y in filas.size():
+				for x in filas[y].length():
+					if filas[y][x] == "0":
+						continue
+					var punto := inicio + Vector2(i * 5 + x, y) * PIXEL_CIFRA
+					if borde:
+						barra.draw_rect(Rect2(punto - Vector2.ONE * PIXEL_CIFRA, Vector2.ONE * PIXEL_CIFRA * 3), Tema.LINEA)
+					else:
+						barra.draw_rect(Rect2(punto, Vector2.ONE * PIXEL_CIFRA), Color("#f0e8d4"))
 
 
 # La barra del escudo, pegada encima de la de vida, borde con borde (y las balas, encima de ella): dentro, el acero

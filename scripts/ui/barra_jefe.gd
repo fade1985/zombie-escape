@@ -111,7 +111,7 @@ func _draw() -> void:
 		draw_texture_rect_region(MARCO, Rect2(x, 0, trozo, ALTO), Rect2(PUNTA, 0, trozo, ALTO))
 		x += trozo
 	draw_texture_rect_region(MARCO, Rect2(ANCHO - PUNTA, 0, PUNTA, ALTO), Rect2(MARCO.get_width() - PUNTA, 0, PUNTA, ALTO))
-	# La vida en números, como en la de Johnny
+	# La vida en números
 	var fuente := Tema.FUENTE
 	var texto := "%d / %d" % [ceili(value), roundi(max_value)]
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x

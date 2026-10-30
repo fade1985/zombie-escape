@@ -241,8 +241,8 @@ func probar_escudo() -> void:
 
 
 # Con "--captura --hud": el HUD (hud.gd), con las armas y los lanzables en la esquina de abajo a la derecha. Con
-# tres lanzables a mano, saca el HUD quieto (captura-hud.png), a medio cambiar de arma con la Q
-# (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la
+# tres lanzables a mano, saca el HUD quieto (captura-hud.png), la barra con todas las cifras de la vida
+# (captura-hud-vida-123.png, -456 y -789), a medio cambiar de arma con la Q (captura-hud-cambio.png), ya cambiada, sin el nombre encima (captura-hud-q.png), a medio cambiar de lanzable con la
 # F (captura-hud-f.png), el aviso del modo de atacar (captura-hud-modo.png) y como va en el móvil, al lado de la barra (captura-hud-movil.png). Se cierra
 func probar_hud() -> void:
 	set_process(false)
@@ -252,6 +252,13 @@ func probar_hud() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("HUD · lanzables a mano: %s, el de ahora: %s" % [lanzables.tipos(), lanzables.tipo])
 	Captura.foto("captura-hud.png")
+	# las cifras de la vida, todas (hud.gd, CIFRAS)
+	var vida_antes: int = johnny.vida
+	for v in [123, 456, 789]:
+		johnny.vida = v
+		await get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-hud-vida-%d.png" % v)
+	johnny.vida = vida_antes
 	johnny.cambiar_mano()
 	await get_tree().create_timer(0.1).timeout
 	Captura.foto("captura-hud-cambio.png")
