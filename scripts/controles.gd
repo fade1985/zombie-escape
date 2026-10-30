@@ -30,14 +30,14 @@ static func letra_web(c: Key) -> String:
 	var letra := OS.get_keycode_string(c)
 	if c < KEY_A or c > KEY_Z:
 		return letra
-	var suya := str(JavaScriptBridge.eval("window.teclado_jugador?.get('Key%s') ?? ''" % letra, true))
+	var suya := str(JavaScriptBridge.eval("window.teclado_jugador?.get('Key%s') ?? ''" % letra, true))   # no-tr (JavaScript)
 	return suya.to_upper() if suya != "" else letra
 
 
 # Al arrancar (menú principal y partida): pone los controles guardados encima de los de serie
 static func aplicar() -> void:
 	if OS.has_feature("web"):
-		JavaScriptBridge.eval("navigator.keyboard?.getLayoutMap().then(m => window.teclado_jugador = m).catch(() => {})", true)
+		JavaScriptBridge.eval("navigator.keyboard?.getLayoutMap().then(m => window.teclado_jugador = m).catch(() => {})", true)   # no-tr (JavaScript)
 	var teclas: Dictionary = Guardado.cargar().ajustes.teclas
 	for accion in teclas:
 		if not InputMap.has_action(accion):
