@@ -23,6 +23,13 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   Johnny, o lo que se le ocurra a Claude.
 - **M30** Tropiezo de Johnny en las salas de la portera y del gymbro: ahora la caída es una imagen fija ladeada; que
   quede más natural, cambiando de postura y quedándose tumbado en el suelo, o con la animación de morir si la tiene.
+- **M31** Cuando la vida de Johnny llega a cero: que no sea solo la frase «Te han pillado», sino algo que explique que
+  vuelve a la sala de mantenimiento y se levanta allí diciendo «vaya, me he quedado dormido» o «vaya pesadilla». Ideas:
+  - Sonámbulo (la del dueño): se desmaya por los mordiscos y vuelve solo, andando como un autómata.
+  - Medio zombi: la infección lo lleva arrastrando los pies entre los zombis, que no le hacen caso porque lo huelen como uno más.
+  - Rescatado: un superviviente lo saca a rastras y lo deja en mantenimiento.
+  - Cámara de seguridad: el regreso se ve en blanco y negro por las cámaras del edificio y acaba en el monitor del ordenador.
+  - Pesadilla: fundido a negro y se despierta de golpe; cada intento es otro sueño, lo que explicaría que el edificio vuelva a estar lleno.
 
 ## Por limar
 
