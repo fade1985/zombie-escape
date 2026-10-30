@@ -426,6 +426,8 @@ en una línea.
   `pixelfx/exportar.mjs` saca un efecto en tres hojas para Godot (detrás del personaje, delante y el brillo, que se suma)
   y `pixelfx/escudo-fuego.js` es la burbuja de fuego del jefe de bomberos (`escudo-fuego-*.png`, en `bombero.gd`):
   `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/escudo-fuego.js assets/sprites`.
+  `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
+  en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
   `pixelfx/bocanadas.mjs` hace `bocanadas-fuego.png`, las bocanadas de fuego y de humo de "fire-breath" en 10 tamaños y
   10 edades, para el chorro del lanzallamas del bombero (`node tools/pixelfx/bocanadas.mjs <pixelfx> assets/sprites`).
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
