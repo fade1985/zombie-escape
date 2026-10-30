@@ -2525,6 +2525,38 @@ func probar_guiado() -> void:
 	get_tree().quit()
 
 
+# --guiado --sin-hacer: un jugador que no hace nada de lo que le piden las pistas y muere: en la partida siguiente (ya sin
+# guía) no se le vuelve a explicar con ventanas lo que ya salió en las pistas; lo que nunca salió, sí
+func probar_guia_sin_hacer() -> void:
+	johnny.invencible = true
+	var ventanas := func() -> int:
+		return get_children().filter(func(h): return h is Tutorial).size()
+	var pasar := func(id: String) -> void:   # espera a que salga "id" y la deja agotar sin hacerla
+		for _i in 40:
+			if guia.pista == id:
+				break
+			await get_tree().create_timer(0.1).timeout
+		print("Guía sin hacer · pista «%s» (esperado: %s)" % [guia.pista, id])
+		guia.desde = Guia.DURA
+		await get_tree().create_timer(0.2).timeout
+	await pasar.call("moverse")
+	await pasar.call("esquivar")
+	guia.jefe_presentado()
+	await pasar.call("jefe")
+	print("Guía sin hacer · vistos jugar %s, jefes %s · sin salir aún: lanzables %s (esperado: true, true, false)" % [
+		Tutoriales.visto("jugar"), Tutoriales.visto("jefes"), Tutoriales.visto("lanzables")])
+	# la partida siguiente, ya sin guía
+	guia.apagar()
+	tutorial("jugar")
+	tutorial("jefes")
+	await get_tree().create_timer(0.5).timeout
+	print("Guía sin hacer · ventanas de lo ya enseñado: %d (esperado: 0)" % ventanas.call())
+	tutorial("lanzables")
+	await get_tree().create_timer(0.5).timeout
+	print("Guía sin hacer · ventanas de lo que nunca salió: %d (esperado: 1)" % ventanas.call())
+	get_tree().quit()
+
+
 # --pantalla: la pantalla completa del ordenador (pantalla.gd): F11 y Alt+Intro la ponen y la quitan, el ajuste se guarda
 # y F9 (la sala de pruebas) sigue yendo aparte
 # La imagen llena la ventana (Pantalla): la escala de cada tamaño de pantalla, que no quedan bordes y que al cambiar de

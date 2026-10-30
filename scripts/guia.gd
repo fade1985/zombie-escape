@@ -1,7 +1,7 @@
 # El tutorial disimulado (docs/LANZAMIENTO.md, apartado 2): en la primera partida, la planta baja de los Apartamentos
 # enseña a jugar sin parar el juego. En vez de las ventanas de los tutoriales (tutoriales.gd) salen:
 #   - pistas: un letrero pequeño encima de Johnny con la tecla en amarillo («Esquiva con Espacio»), justo cuando hace
-#     falta; se va solo en cuanto se hace (o a los DURA segundos, y entonces su ventana podrá salir otro día);
+#     falta; se va solo en cuanto se hace (o a los DURA segundos);
 #   - el HUD que late: la casilla de lo que toca usar (hud.gd, "latido");
 #   - una flecha en el suelo, delante de Johnny, hacia donde hay que ir: en la sala de mantenimiento, la puerta del
 #     pasillo; en el pasillo, el apartamento sin limpiar más cercano (el fácil, primero), la sala del jefe con la llave
@@ -13,8 +13,10 @@
 # Las pistas, en orden (PISTAS): moverse y esquivar al empezar; al ver un zombi despierto, atacar; luego sacar la
 # pistola, recargar con medio cargador, curarse con vendas al estar herido y lanzar con tres zombis cerca. Los tercios
 # y el jefe se cuentan con la línea de avisos (partida.decir) o con una pista con tiempo.
-# Lo que se enseña así se apunta como visto (Tutoriales.apuntar) y queda en el apartado Tutorial del menú. Las
-# ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial).
+# Lo que se enseña así se apunta como visto (Tutoriales.apuntar) nada más salir, se haga o no: si no, al morir en la
+# primera partida, la siguiente (ya sin guía) lo volvería a explicar con su ventana. Queda en el apartado Tutorial del
+# menú. Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial); después, solo las de lo que
+# la guía no llegó a enseñar.
 #
 # Se enciende en partida.gd (_ready) si es la primera partida, en los Apartamentos y con los tutoriales encendidos
 # (Opciones → Ayudas); se apaga al subir a la planta siguiente. Lo engancha partida.gd: nueva_planta(), al_montar(),
@@ -32,7 +34,7 @@ const LEJOS_FLECHA := 150.0 # más cerca de la puerta que esto, la flecha se va
 # Las ventanas que la guía enseña a su manera (no salen mientras está activa)
 const CUBRE := ["jugar", "apartamentos", "lanzables", "municion", "curas", "tercios", "jefes"]
 
-# Cada pista: su frase (con las teclas entre llaves, como en tutoriales.gd), la ventana que cuenta como vista al hacerla
+# Cada pista: su frase (con las teclas entre llaves, como en tutoriales.gd), la ventana que cuenta como vista al salir
 # y la casilla del HUD que late mientras sale. "atacar" usa la frase del modo de atacar (Tutoriales.atacar_modo)
 # [traducir]
 const PISTAS := {
@@ -187,10 +189,6 @@ func _process(delta: float) -> void:
 		desde += delta
 		cumplida = cumplida or hecha(pista)   # (lo hecho cuenta aunque pase enseguida, como la esquiva)
 		if (cumplida and desde >= MINIMO) or desde >= DURA:
-			if cumplida:
-				var t: String = PISTAS[pista].tutorial
-				if t != "":
-					Tutoriales.apuntar(t)
 			pista = ""
 			letrero.visible = false
 			poner_latido("")
@@ -229,6 +227,8 @@ func poner(id: String) -> void:
 	cumplida = false
 	if not id in hechas:
 		hechas.append(id)
+	if PISTAS[id].tutorial != "":
+		Tutoriales.apuntar(PISTAS[id].tutorial)
 	inicio = johnny.global_position
 	lanzables_antes = lanzables_a_mano()
 	vendas_antes = partida.mochila.count("vendas")

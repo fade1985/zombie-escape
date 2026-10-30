@@ -140,6 +140,8 @@
 #   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: las pistas sobre Johnny, el latido del HUD, la
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
+#   --guiado --sin-hacer  la guía con un jugador que no hace lo que le piden: lo enseñado cuenta igual como visto y su
+#                       ventana no se repite en la partida siguiente, tras morir (F18)         [prueba_varias.gd]
 #   --idioma            solo el menú, Opciones (4 pestañas y las licencias, y el botón de avisar de un texto mal traducido, con
 #                       y sin enlace), el cambio de idioma en caliente y «Elige edificio»; con
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]
@@ -469,6 +471,9 @@ func empezar_prueba() -> void:
 	elif "--escala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_escala()
+	elif "--sin-hacer" in args:
+		set_process(false)   # sin la prueba larga
+		probar_guia_sin_hacer()
 	elif "--guiado" in args:
 		set_process(false)   # sin la prueba larga
 		probar_guiado()
