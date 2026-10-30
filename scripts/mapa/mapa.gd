@@ -30,14 +30,14 @@ const ORDENADOR := preload("res://scripts/mapa/ordenador.gd")
 const EXCLAMACION := preload("res://scripts/mapa/exclamacion.gd")   # el «!» de encima de la taquilla con una skin sin ver
 # Lo que se usa de la sala de mantenimiento, en la pared de arriba de sus estancias (planta.gd; lo demás son muebles
 # del catálogo): la mesa del ordenador, en medio de la del despacho, con el corcho colgado a su izquierda; el banco de
-# trabajo y el baúl, en el taller, a la derecha de la estantería; y la taquilla de las skins de Johnny
-# (skins.gd), en el vestuario, en medio de lo que deja libre el plato de ducha
+# trabajo y el baúl, en el taller, con la estantería en medio para no usar uno queriendo usar el otro; y la taquilla de
+# las skins de Johnny (skins.gd), en el vestuario, en medio de lo que deja libre el plato de ducha
 const ORDENADOR_X := 576.0
 const CORCHO_X := 480.0
 const CORCHO := preload("res://assets/sprites/corcho.png")   # (tools/guias_mantenimiento.py)
 const ARMARITO := preload("res://scripts/mapa/armarito.gd")
 const ARRIMABLE := preload("res://scripts/mapa/arrimable.gd")
-const BANCO_X := 918.0
+const BANCO_X := 820.0
 const BAUL_X := 1010.0
 const TAQUILLA_X := 260.0
 # Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, con los de siempre (cemento y la pared

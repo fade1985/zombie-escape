@@ -660,8 +660,9 @@ func probar_viviendas() -> void:
 # estancias, sus puertas y en cuál ha quedado cada mueble, y si desde donde se empieza se llega a todo (por donde andan
 # los zombis): a la puerta del pasillo, a la de las viviendas y delante de cada mueble que se usa. Fotos: la sala entera
 # (captura-sala.png) y, recortada de la pantalla, cada estancia con Johnny dentro y lo que pone arriba
-# (captura-sala-vestuario.png, captura-sala-despacho.png y captura-sala-taller.png). Luego cruza la puerta de las
-# viviendas, vuelve y sale al pasillo, y cuenta adónde ha llegado cada vez. Luego se cierra
+# (captura-sala-vestuario.png, captura-sala-despacho.png y captura-sala-taller.png). Luego se pone delante del banco, de
+# la estantería y del baúl y cuenta cuál se usaría; cruza la puerta de las viviendas, vuelve y sale al pasillo, y cuenta
+# adónde ha llegado cada vez. Luego se cierra
 func probar_sala() -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var apt: Dictionary = sitio.apt
@@ -711,6 +712,15 @@ func probar_sala() -> void:
 		var trozo := Rect2i(Vector2i(a), Vector2i(b - a)).intersection(Rect2i(Vector2i.ZERO, pantalla.get_size()))
 		pantalla.get_region(trozo).save_png("res://captura-sala-%s.png" % s.uso)
 	$Pantalla.show()
+	# el banco y el baúl, con la estantería en medio: delante de cada sitio, qué se usaría (sin abrir sus pantallas)
+	mapa.banco.lista = false
+	mapa.baul.lista = false
+	var en_zona := func(m: Node) -> bool:
+		return not m.get_children().filter(func(h): return h is Area2D)[0].get_overlapping_bodies().is_empty()
+	for n in [["banco", mapa.banco.position.x], ["estantería", 918.0], ["baúl", mapa.baul.position.x]]:
+		johnny.position = Vector2(n[1], mapa.MURO + 36.0 + 22.0)
+		await get_tree().create_timer(0.1).timeout
+		print("Delante de: %s · se usaría: banco %s, baúl %s" % [n[0], en_zona.call(mapa.banco), en_zona.call(mapa.baul)])
 	# las dos puertas de fuera: a las viviendas (y vuelta, por la misma) y al pasillo
 	await cruzar(1)
 	print("Por la puerta de la derecha: en «%s» (esperado: viviendas)" % planta.sitios[aqui].tipo)

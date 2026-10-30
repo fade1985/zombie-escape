@@ -509,7 +509,7 @@ static func huella_helipuerto(sitio: Dictionary) -> Array:
 #     izquierda y el banco largo suelto, abajo a la derecha, sin tapar la puerta
 #   - el despacho, en medio: la puerta del pasillo abajo y la mesa del ordenador en medio de la pared de arriba (fases 6
 #     y 7), con el corcho colgado a su izquierda (mapa.gd) y la papelera a su derecha
-#   - el taller, a la derecha: la estantería con botes, el banco de trabajo y el baúl (los dos, mapa.gd) en la
+#   - el taller, a la derecha: el banco de trabajo, la estantería con botes y el baúl (el banco y el baúl, mapa.gd) en la
 #     pared de arriba, el carrito del conserje en la de la derecha y, en esa misma pared, la puerta de las viviendas de
 #     los supervivientes rescatados (viviendas.gd; adónde lleva lo pone generar)
 # Entre estancia y estancia, una puerta de madera, como las de dentro de los pisos (la pone mapa.gd). Sin sangre: es el sitio seguro.
@@ -558,7 +558,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		Muebles.nuevo("stafftoilet", izquierda, 332, 1),
 		Muebles.nuevo("lockerbench", {"lado": "arriba", "base": 302}, 270, 1),
 		Muebles.nuevo("wastebasket", arriba, 650, 0),
-		Muebles.nuevo("canshelf", arriba, 820, 2),
+		Muebles.nuevo("canshelf", arriba, 918, 2),
 		Muebles.nuevo("janitorcart", {"lado": "derecha", "base": ancho - MURO}, 330, 2),
 	]
 	return sitio
