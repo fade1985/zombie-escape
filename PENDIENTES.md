@@ -56,6 +56,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M40** Rescate del superviviente: que dure un minuto, pero con muchos más zombis y en menos tiempo.
 - **M41** Jefe doctor Salas: es demasiado fácil; aumentar la dificultad de algún modo.
 - **M42** Bajar el número de granadas y cócteles molotov: con diez lanzables se mata a los jefes muy fácil.
+- **M43** Supervivientes: que los zombis también oigan sus disparos, como pasa con los de Johnny.
 
 ## Por limar
 
