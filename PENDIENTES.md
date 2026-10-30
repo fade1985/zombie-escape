@@ -57,6 +57,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M41** Jefe doctor Salas: es demasiado fácil; aumentar la dificultad de algún modo.
 - **M42** Bajar el número de granadas y cócteles molotov: con diez lanzables se mata a los jefes muy fácil.
 - **M43** Supervivientes: que los zombis también oigan sus disparos, como pasa con los de Johnny.
+- **M44** Controles en pantalla: cuando se juega con mando, que los dibujos de los controles sean los del mando (botones
+  y gatillos) y no las letras del teclado.
 
 ## Por limar
 
