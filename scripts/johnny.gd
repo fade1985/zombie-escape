@@ -193,9 +193,11 @@ func _ready() -> void:
 		modo = guardado.ajustes.modo
 
 
-# Si se mueve el ratón, se apunta con él; si se empuja el stick derecho, con el mando
+# Si se mueve el ratón (o se hace clic), se apunta con él; si se empuja el stick derecho, con el mando. Con los botones
+# del móvil a la vista, no: ahí manda el dedo (tactil.gd)
 func _input(evento: InputEvent) -> void:
-	if evento is InputEventMouseMotion:
+	if (evento is InputEventMouseMotion or evento is InputEventMouseButton) \
+			and evento.device != InputEvent.DEVICE_ID_EMULATION and not (Tactil.activo and Tactil.con_dedo):
 		con_raton = true
 	elif evento is InputEventJoypadMotion and absf(evento.axis_value) > 0.4 and evento.axis in [JOY_AXIS_RIGHT_X, JOY_AXIS_RIGHT_Y]:
 		con_raton = false

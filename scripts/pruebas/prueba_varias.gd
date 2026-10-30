@@ -2896,3 +2896,52 @@ func probar_mando() -> void:
 	await pulsar_a.call()
 	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Otra vez, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
 	get_tree().quit()
+
+
+# Ratón en el móvil (Android con ratón y teclado): con la pantalla táctil, al mover el ratón se esconden los botones y
+# se apunta con él (y sigue apuntando con el ratón quieto: antes se olvidaba en cada fotograma y el clic no atacaba);
+# al tocar la pantalla vuelven los botones. El ratón que el navegador manda justo después de un toque no cuenta.
+# Fotos: captura-raton-movil-{dedo,raton}.png
+func probar_raton_movil() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var tactil: Tactil = null
+	for hijo in get_children():
+		if hijo is Tactil:
+			tactil = hijo
+	Tactil.activo = true
+	Tactil.con_dedo = true
+	johnny.modo = "libre"
+	var tocar := func(donde: Vector2) -> void:
+		for pulsado in [true, false]:
+			var t := InputEventScreenTouch.new()
+			t.position = donde
+			t.pressed = pulsado
+			Input.parse_input_event(t)
+	var mover := func() -> void:
+		var m := InputEventMouseMotion.new()
+		m.position = Vector2(700, 300)
+		m.relative = Vector2(5, 0)
+		Input.parse_input_event(m)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var al_empezar := tactil.visible
+	Captura.foto("captura-raton-movil-dedo.png")
+	tocar.call(Vector2(800, 200))
+	await get_tree().process_frame
+	mover.call()   # justo tras el toque: es del navegador, no cuenta
+	await get_tree().process_frame
+	var tras_toque := tactil.visible
+	await get_tree().create_timer(0.6).timeout
+	mover.call()
+	for i in 10:   # unos fotogramas con el ratón quieto
+		await get_tree().process_frame
+	var con_raton := [tactil.visible, johnny.con_raton]
+	Captura.foto("captura-raton-movil-raton.png")
+	tocar.call(Vector2(800, 200))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Ratón en el móvil · botones al empezar %s, tras un toque y su ratón %s · con ratón: botones %s, apunta con él %s · tras tocar: botones %s, apunta con él %s (esperado: true, true · false, true · true, false)" % [
+		al_empezar, tras_toque, con_raton[0], con_raton[1], tactil.visible, johnny.con_raton])
+	Tactil.activo = false
+	Tactil.con_dedo = true
+	get_tree().quit()

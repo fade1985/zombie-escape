@@ -53,6 +53,8 @@
 #                       lámpara a cada lado                                                [prueba_varias.gd]
 #   --impacto           el impacto de bala de Sprite Fusion (impacto.gd) junto al de siempre, contra la pared
 #                                                                                          [prueba_armas.gd]
+#   --raton-movil       en una pantalla táctil, el ratón esconde los botones del móvil y apunta (el clic ataca con
+#                       el ratón quieto); tocar la pantalla los vuelve a sacar                [prueba_varias.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
@@ -342,6 +344,9 @@ func empezar_prueba() -> void:
 	elif "--impacto" in args:
 		set_process(false)   # sin la prueba larga
 		probar_impacto()
+	elif "--raton-movil" in args:
+		set_process(false)   # sin la prueba larga
+		probar_raton_movil()
 	elif "--tintes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tintes()

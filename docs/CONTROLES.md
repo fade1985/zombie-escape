@@ -162,6 +162,8 @@ derecha, según el modo: esquivar grande (asistido) o joystick derecho (libre).
 En arco: esquivar, las dos armas (tocar la otra la saca; tocar la de a distancia en la mano recarga) y lanzar (arrastrar y
 soltar), con el botoncito de cambiar lanzable. Bajo el minimapa: modo, inventario y pausa, y a su izquierda las vendas y el botiquín (solo salen si llevas; tocar uno lo usa). En los menús el dedo hace
 de ratón. En táctil la pantalla se agranda sin redondear.
+Con un ratón (un móvil Android con ratón y teclado, o un ordenador con pantalla táctil), al moverlo o hacer clic se
+esconden los botones y se apunta con él como en el ordenador; al tocar la pantalla vuelven (`Tactil.con_dedo`).
 
 En Opciones → General, apartado **Móvil** (solo en táctil): tamaño de los botones (0,8 a 1,4), transparencia (100 a
 30 %) y vibración (35 ms al recibir un golpe y al esquivar; en iPhone no hay). En el móvil, esa pestaña va dentro de

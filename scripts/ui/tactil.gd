@@ -24,6 +24,10 @@ const OSCURO := Color(0.06, 0.05, 0.09, 0.55)
 const BORDE := Color(0.85, 0.82, 0.74, 0.5)
 
 static var activo := false     # si la pantalla es táctil (se decide una vez y vale para todas las escenas)
+# Si se está jugando con el dedo: con un ratón en un móvil o en un ordenador táctil, al moverlo o hacer clic se esconden
+# los botones y se apunta con él; vuelven al tocar la pantalla
+static var con_dedo := true
+static var toque_t := -10.0    # cuándo fue el último toque (en s): el ratón que lo sigue enseguida es del navegador
 # Los ajustes de Opciones (se leen del guardado con ajustar(), al arrancar y cada vez que se cambian)
 static var escala := 1.0       # tamaño de los botones: 1 = normal
 static var opacidad := 1.0     # 1 = como siempre, 0,3 = casi transparentes
@@ -101,9 +105,9 @@ func _exit_tree() -> void:
 	Input.emulate_mouse_from_touch = true
 
 
-# Si se ve ahora: táctil, jugando, sin pausa ni pantallas encima
+# Si se ve ahora: táctil, con el dedo, jugando, sin pausa ni pantallas encima
 func jugando() -> bool:
-	return activo and johnny != null and johnny.vivo and not get_tree().paused and not partida.terminada
+	return activo and con_dedo and johnny != null and johnny.vivo and not get_tree().paused and not partida.terminada
 
 
 func _process(_delta: float) -> void:
@@ -183,9 +187,20 @@ func botones() -> Dictionary:
 # ── Los dedos ──
 
 func _input(evento: InputEvent) -> void:
-	if evento is InputEventScreenTouch and evento.pressed and not activo:
-		activo = true   # un ordenador con pantalla táctil: sale al primer toque
-		preparar()
+	if evento is InputEventScreenTouch and evento.pressed:
+		toque_t = Time.get_ticks_msec() / 1000.0
+		if not con_dedo:
+			con_dedo = true   # vuelve el dedo: los botones salen otra vez y el ratón deja de apuntar
+			if johnny:
+				johnny.con_raton = false
+		if not activo:
+			activo = true   # un ordenador con pantalla táctil: sale al primer toque
+			preparar()
+	elif (evento is InputEventMouseMotion or evento is InputEventMouseButton) and con_dedo \
+			and evento.device != InputEvent.DEVICE_ID_EMULATION and Time.get_ticks_msec() / 1000.0 - toque_t > 0.5:
+		con_dedo = false   # un ratón de verdad (no el que hace el dedo): fuera botones, y se apunta con él
+		if johnny:
+			johnny.con_raton = true
 	if not visible:
 		return
 	if evento is InputEventScreenTouch:
