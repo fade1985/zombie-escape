@@ -63,7 +63,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   siete idiomas.
 - **L21** El número de cada planta se ve demasiado perfecto comparado con lo destrozado que está el edificio; que se vea
   desgastado, sucio o roto.
-- **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
 - **L27** Pasillo de los apartamentos: cambiar las puertas de la pared de abajo para que encajen más con el diseño del
   juego.
