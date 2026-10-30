@@ -55,6 +55,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M39** Baúl: que también se pueda dejar la pistola (hoy la pistola Normal no se puede guardar a mano).
 - **M40** Rescate del superviviente: que dure un minuto, pero con muchos más zombis y en menos tiempo.
 - **M41** Jefe doctor Salas: es demasiado fácil; aumentar la dificultad de algún modo.
+- **M42** Bajar el número de granadas y cócteles molotov: con diez lanzables se mata a los jefes muy fácil.
 
 ## Por limar
 
