@@ -25,6 +25,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   con muchos zombis, puede ser peor. Mirar con `--lentos`, sobre todo la web (`docs/WEB.md`).
 - **F18** Tutorial: cuando matan a Johnny por primera vez se vuelve a explicar el tutorial, y no debería (le pasó a un
   jugador nuevo probando la web).
+- **F19** Apagón: cuando te llama un superviviente no se ve nada.
 
 ## Mejoras
 
