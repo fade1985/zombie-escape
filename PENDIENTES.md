@@ -26,6 +26,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **F18** Tutorial: cuando matan a Johnny por primera vez se vuelve a explicar el tutorial, y no debería (le pasó a un
   jugador nuevo probando la web).
 - **F19** Apagón: cuando te llama un superviviente no se ve nada.
+- **F20** Las granadas atraviesan las paredes; tienen que chocar con ellas.
 
 ## Mejoras
 
