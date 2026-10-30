@@ -35,11 +35,16 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       mirarlo (30 oct): ningún juego de Steam ni de itch.io se llama así, pero «It's a Wrap!» (Chanko Studios / AMC
       Games, 2023) tiene un protagonista llamado Johnny Rush; `johnnyrush.com` está registrado desde 2008 y los
       perfiles `JohnnyRush` de YouTube y GitHub existen; `.net`, `.io`, `.games` y `.gg` parecían libres e
-      `johnnyrush.itch.io` también. Marcas (30 oct): las búsquedas por web no dan ninguna «JOHNNY RUSH» en las
-      clases 9 y 41, pero eso no vale como comprobación: TMview rechaza las consultas automáticas y la del USPTO
-      solo funciona a mano. Falta hacerla a mano en TMview (EUIPO, EE. UU., Reino Unido y WIPO), con «johnny rush» y
-      «rush», en las clases 9 (juegos descargables) y 41 (juegos en línea), y reservar dominio e itch.io. Si no encaja
-      el personaje homónimo de Steam, replantearlo.
+      `johnnyrush.itch.io` también. **Marcas (30 oct, mirado en el USPTO y en TMview, que reúne la UE, EE. UU.,
+      Reino Unido, la OMPI y decenas de oficinas más): no hay ninguna marca «JOHNNY RUSH»**, ni viva ni caducada,
+      ni nada parecido en las clases 9 (juegos descargables) y 41 (juegos en línea). «RUSH» sí abunda en juegos, casi
+      siempre con otra palabra delante (TOWER RUSH, WHALE RUSH!, KARTRIDER RUSH+...), y hay marcas «RUSH» vivas en la
+      clase 41 de juegos y apuestas (en EE. UU., «RUSH» de Betting Games Network Ltd. para salones de videojuegos y
+      «RUSH GAMES» de RSI IP Holding; en Japón, «Rush!» de ファンギルド, clases 9 y 41; en Reino Unido hay una
+      solicitud pendiente, «RUSH: Xtreme», de SAYGAMES LTD, clase 9). Por eso conviene usar siempre el nombre entero,
+      «Johnny Rush», y no «Rush» a secas. Ojo: es una consulta informal (TMview y el USPTO no son registros
+      oficiales); antes de gastar en la página de Steam, que la mire alguien que sepa de marcas. Falta reservar dominio
+      e itch.io y, si no encaja el personaje homónimo de Steam, replantearlo.
 - [ ] **Pruebas con gente de fuera.** Hasta ahora lo han jugado los dos del equipo y el bot. Conseguir 10–20
       personas que no sepan nada del juego (itch.io con un formulario corto, Discord, amigos de amigos) y mirar:
       dónde mueren, dónde se aburren, cuánto dura una partida, si entienden el banco, el baúl y las mutaciones sin
