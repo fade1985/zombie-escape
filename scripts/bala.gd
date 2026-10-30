@@ -50,7 +50,9 @@ func _physics_process(delta: float) -> void:
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi in tocados:
 			continue
-		if global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
+		# (la burbuja del jefe de bomberos para la bala en su borde, tal como se ve: bombero.gd, escudo_toca)
+		var escudo: bool = zombi.has_method("escudo_toca") and zombi.escudo_toca(global_position + Vector2(0, -altura))
+		if escudo or global_position.distance_to(zombi.global_position) < zombi.radio + radio + 3.0:
 			var fuerza := velocidad.normalized() * EMPUJE * empuje
 			Zombi.critico = critico   # (su número sale en amarillo)
 			if de_aliado and zombi is Minijefe:
@@ -58,6 +60,9 @@ func _physics_process(delta: float) -> void:
 			else:
 				zombi.recibir_golpe(dano, fuerza)
 			Zombi.critico = false
+			if escudo:
+				rebotar(zombi)
+				return
 			if atraviesa > 0:   # (la Épica: lo atraviesa y sigue)
 				atraviesa -= 1
 				tocados.append(zombi)
@@ -92,6 +97,19 @@ func chocar(pared := false, sigue := false) -> void:
 			Particulas.soltar(self, donde, v, Color("#b9bec9") if i else Color("#e3e6ec"), 4.0, randf_range(0.25, 0.4))
 	if not sigue:
 		queue_free()
+
+
+# Ha dado en la burbuja de fuego del jefe de bomberos: se queda en su borde y rebota con el impacto de las paredes
+# (impacto.gd), en colores de fuego y el doble de grande, con las chispas hacia fuera de la burbuja
+func rebotar(zombi: Node2D) -> void:
+	var centro: Vector2 = zombi.centro_burbuja()
+	var normal := (global_position + Vector2(0, -altura) - centro).normalized()
+	global_position = centro + normal * zombi.radio_burbuja() + Vector2(0, altura)
+	normal_pared = normal
+	zombi.onda_en(global_position + Vector2(0, -altura))
+	Impacto.soltar(self, global_position + Vector2(0, -altura), velocidad.angle(), normal.angle(), altura,
+		Llamas.FUEGO[2], Impacto.TALLA * 2.0 if radio >= 4.0 else Impacto.TALLA_PERDIGON * 2.0, [Color.WHITE] + Llamas.FUEGO.slice(0, 4))
+	queue_free()
 
 
 # Los colores de la trazadora y de sus chispas: la de la Épica, morada; la crítica, rojiza; las de un arma mejorada,

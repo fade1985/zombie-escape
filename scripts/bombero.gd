@@ -67,6 +67,8 @@ const ESCUDO := [preload("res://assets/sprites/escudo-fuego-detras.png"),
 	preload("res://assets/sprites/escudo-fuego-delante.png"), preload("res://assets/sprites/escudo-fuego-brillo.png")]
 const ESCUDO_CENTRO := Vector2(56, 58)   # el centro de la esfera en cada fotograma (en píxeles del dibujo)
 const ESCUDO_FPS := 20.0
+const ONDA_DURA := 0.4                 # lo que dura la onda de una bala que rebota en la burbuja
+const ONDA_RADIO := 80.0               # lo que se abre
 const TAMBALEO := 0.7
 const RASTRO_CADA := 44.0              # enfadado: cada cuántas unidades andadas deja fuego
 const RASTRO_ESCALA := 0.35            # el fuego del rastro, respecto al del molotov...
@@ -96,6 +98,7 @@ var destello := 0.0          # lo que brilla la burbuja porque le acaban de dar 
 var destello_por := Vector2.ZERO   # hacia dónde le han dado (desde él); Vector2.ZERO, por todos lados (una explosión)
 var escudo: Array[Sprite2D] = []   # las tres capas de la burbuja (detrás, delante y brillo)
 var chorros: Array[ChorroFuego] = [ChorroFuego.new(), ChorroFuego.new()]   # el fuego de cada cono del giro
+var ondas: Array[Dictionary] = []   # donde rebotan las balas en la burbuja: su onda ("donde", desde su centro; "t")
 
 
 func _ready() -> void:
@@ -468,6 +471,27 @@ func rebote(fuerza: Vector2, de_lleno: bool) -> void:
 	decir_inmune()
 
 
+# La burbuja, tal como se ve (bala.gd la mira para que la bala rebote en su borde y no en él): su centro, lo que mide
+# ahora y si "p" (un punto de la pantalla, a la altura a la que se ve la bala) cae dentro
+func centro_burbuja() -> Vector2:
+	return global_position + Vector2(0, -arriba * BURBUJA_ALTO)
+
+
+func radio_burbuja() -> float:
+	return BURBUJA_RADIO * burbuja
+
+
+func escudo_toca(p: Vector2) -> bool:
+	return estado == "giro" and burbuja > 0.5 and p.distance_to(centro_burbuja()) < radio_burbuja()
+
+
+# Una bala ha rebotado en "p" (en su borde, tal como se ve): ahí sale un fogonazo y una onda que corre por la burbuja
+func onda_en(p: Vector2) -> void:
+	ondas.append({"donde": p - centro_burbuja(), "t": 0.0})
+	if ondas.size() > 6:
+		ondas.pop_front()
+
+
 # ── Enfadado: todo arde ──
 
 func al_enfadarse(johnny: Node2D, _grito := "") -> void:
@@ -534,6 +558,9 @@ func animar() -> void:
 	# donde le acaban de dar, brilla: más brillo y la burbuja más clara
 	escudo[1].modulate = Color.WHITE.lerp(Color(1.6, 1.4, 1.2), destello)
 	escudo[2].modulate = Color.WHITE * (1.0 + 2.0 * destello)
+	for o in ondas:
+		o.t += paso
+	ondas = ondas.filter(func(o): return o.t < ONDA_DURA and burbuja > 0.0)
 	# el fuego de los conos: sale mientras gira; al parar, lo que ya ha salido llega a la pared y se apaga
 	var n: int = CONOS[fase - 1]
 	for i in chorros.size():
@@ -609,5 +636,41 @@ func _draw() -> void:
 
 # Por encima de él (y de la burbuja de fuego: salen de dentro): el fuego de los conos del giro (chorro_fuego.gd)
 func pintar_encima(lienzo: Node2D) -> void:
+	pintar_ondas(lienzo)
 	for c in chorros:
 		c.pintar(lienzo)
+
+
+# Donde rebota una bala: primero un fogonazo, una estrella de cuatro puntas blanca con el borde rojo; luego, una onda
+# (un anillo gordo de píxeles, blanco y luego amarillo, con su borde rojo) que se abre desde ahí y solo se ve dentro
+# de la burbuja
+func pintar_ondas(lienzo: Node2D) -> void:
+	var centro := Vector2(0, -arriba * BURBUJA_ALTO)
+	var r_burbuja := radio_burbuja()
+	for o in ondas:
+		var k: float = o.t / ONDA_DURA
+		var p: Vector2 = centro + o.donde
+		if o.t < 0.1:
+			var largo := 14 if o.t < 0.05 else 9   # (en píxeles del dibujo)
+			for capa in 3:   # de fuera adentro: el borde rojo, el amarillo y el corazón blanco
+				var color: Color = [Llamas.FUEGO[4], Llamas.FUEGO[1], Color.WHITE][capa]
+				for i in range(-largo, largo + 1):
+					var ancho := maxi(0, int((1.0 - absf(i) / float(largo)) * 3.0) + 1 - capa)
+					for j in range(-ancho, ancho + 1):
+						pixel(lienzo, p + Vector2(i, j) * 2.0, color)
+						pixel(lienzo, p + Vector2(j, i) * 2.0, color)
+		var r := 6.0 + ONDA_RADIO * sqrt(k)
+		var pasos := int(r * 1.2) + 10
+		for i in pasos:
+			var a := i * TAU / pasos
+			for capa in 3:   # (por dentro y por fuera, el borde rojo; en medio, el anillo)
+				var q := p + Vector2.from_angle(a) * (r + (capa - 1) * 2.0)
+				if q.distance_to(centro) > r_burbuja - 2.0:
+					continue
+				var color: Color = Llamas.FUEGO[4] if capa != 1 else (Color.WHITE if k < 0.35 else Llamas.FUEGO[0])
+				pixel(lienzo, q, Color(color, 1.0 - k * k))
+
+
+# Un píxel del dibujo (2 × 2), en su cuadrícula
+func pixel(lienzo: Node2D, p: Vector2, color: Color) -> void:
+	lienzo.draw_rect(Rect2((p / 2.0).floor() * 2.0, Vector2(2, 2)), color)

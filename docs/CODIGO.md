@@ -103,7 +103,7 @@ en una línea.
   flechas del giro del bombero. Se prueban con
   `--golpes`, `--franja`, `--avisos`, `--disparos` (las barras junto a la pared y en campo abierto) y
   `--golpes-pared` (cada golpe, salto y onda con Johnny tras la pared, y su aviso cortado). Heredan:
-  - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo).
+  - Apartamentos: `gloton.gd` (+ `lengua.gd`), `gymbro.gd` (+ `pesa.gd`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo; las balas rebotan en el borde de su burbuja, `bala.rebotar`, con un fogonazo y una onda, `bombero.onda_en`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:

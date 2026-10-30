@@ -786,7 +786,7 @@ func vuelta_de_giro(jefe: Node2D, centro: Vector2, como: String, sentido: float,
 # La burbuja de fuego del bombero ("jefe", puesto en "centro"; bombero.gd), con Johnny cerca y el cono empezando
 # lejos de él. En el aviso del giro aún no la tiene: un golpe de 10 le quita 10. Girando, la tiene: ni un golpe de 10,
 # ni una explosión de 40 (que tampoco le corta el giro), ni una bala de 10 le quitan vida, y la burbuja brilla donde
-# le da la bala (captura-llamas-burbuja.png, de cerca). Acabado el giro, un golpe de 10 vuelve a quitarle 10 y la
+# le da la bala (captura-llamas-burbuja.png, de cerca; la bala rebota en su borde, captura-llamas-rebote-1 y 2). Acabado el giro, un golpe de 10 vuelve a quitarle 10 y la
 # burbuja baja
 func burbuja_de_fuego(jefe: Node2D, centro: Vector2) -> void:
 	await get_tree().create_timer(0.5).timeout   # (que acabe de bajar la burbuja de la vuelta de antes)
@@ -839,6 +839,9 @@ func burbuja_de_fuego(jefe: Node2D, centro: Vector2) -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	Captura.foto("captura-llamas-burbuja.png")
+	for i in 2:   # el rebote de la bala en la burbuja (bala.gd, rebotar), un poco después
+		await get_tree().create_timer(0.06).timeout
+		Captura.foto("captura-llamas-rebote-%d.png" % (i + 1))
 	Temblor.desplazamiento = Vector2.ZERO
 	var girando_quita: int = antes - jefe.vida
 	jefe.andar(5.0)   # se acaba el giro
