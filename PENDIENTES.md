@@ -23,8 +23,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **F17** El molotov: al lanzarlo con varios enemigos delante, el juego se congela (el dueño lo llama «crasheo»). Medido
   en Windows con 12 zombis: unos 10 fotogramas de 30 a 50 ms y 0,4 s parados en total tras caer la botella; en la web,
   con muchos zombis, puede ser peor. Mirar con `--lentos`, sobre todo la web (`docs/WEB.md`).
-- **F18** Tutorial: cuando matan a Johnny por primera vez se vuelve a explicar el tutorial, y no debería (le pasó a un
-  jugador nuevo probando la web).
 - **F19** Apagón: cuando te llama un superviviente no se ve nada.
 - **F20** Las granadas atraviesan las paredes; tienen que chocar con ellas.
 
@@ -60,6 +58,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M43** Supervivientes: que los zombis también oigan sus disparos, como pasa con los de Johnny.
 - **M44** Controles en pantalla: cuando se juega con mando, que los dibujos de los controles sean los del mando (botones
   y gatillos) y no las letras del teclado.
+- **M45** Menú de inicio: tres huecos de guardado, para que el jugador pueda empezar el juego de cero si quiere.
 
 ## Por limar
 
