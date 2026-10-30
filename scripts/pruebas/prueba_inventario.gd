@@ -1242,9 +1242,9 @@ func probar_arrastrar() -> void:
 	var soltar := func(clave: String, a_donde: String) -> void:   # suelta donde caería, sin mover el ratón
 		inv.soltar_en(clave, a_donde)
 		await get_tree().process_frame
-	# la escopeta (de repuesto) a la mano, de verdad: se encienden la mano, Johnny y la zona roja, y la mano crece
+	# la escopeta (de repuesto) a la mano, de verdad: se encienden la mano y la zona roja (Johnny, sin óvalo: L29), y la mano crece
 	await arrastrar(guardada.call("escopeta"), Vector2(346, 160), "captura-arrastrar-escopeta.png")
-	print("Arrastrando la escopeta: el ratón empezó en su casilla %s · se arrastraba %s · encendidos %s · bajo el ratón «%s» (esperado: true · true · [\"luz_johnny\", \"luz_p1\", \"luz_tirar\"] · p1)" % [
+	print("Arrastrando la escopeta: el ratón empezó en su casilla %s · se arrastraba %s · encendidos %s · bajo el ratón «%s» (esperado: true · true · [\"luz_p1\", \"luz_tirar\"] · p1)" % [
 		en_el_aire.casilla, en_el_aire.arrastrando, en_el_aire.luces, en_el_aire.encima])
 	await get_tree().create_timer(0.06).timeout
 	Captura.foto("captura-arrastrar-salto.png")

@@ -1980,7 +1980,7 @@ func mejorar() -> void:
 # Con el ratón o el dedo: se aprieta en una casilla y, al mover un poco, lo de dentro
 # se levanta y sigue al dedo, y su casilla se queda apagada (levantar; va con el arrastrar de Godot, así que el botón ya
 # no cuenta como tocado). Se encienden los sitios donde se puede soltar (destinos): en el inventario, la mano o el
-# repuesto de su tipo (las armas se cambian), Johnny (se pone el arma o usa la cura), los arrojables de la mano al
+# repuesto de su tipo (las armas se cambian), Johnny (se pone el arma, sin marca, o usa la cura, con un óvalo), los arrojables de la mano al
 # repuesto y al revés (encima de otro, se cambian esos dos) y la ficha, que se vuelve la zona roja de tirar (la casilla
 # entera); en el baúl, la otra mitad (guardar o sacar). El sitio que hay bajo el dedo crece un poco (mirar). Al soltar,
 # se hace lo mismo que con los botones de la ficha (soltar_en) y lo que llega da un saltito; si no se puede soltar ahí,
@@ -2118,10 +2118,12 @@ func encender(clave: String) -> void:
 	encima = ""
 
 
-# Un sitio encendido, encima de lo suyo: una casilla, con un marco amarillo; Johnny, con un óvalo y lo que pasa
-# («Ponérmela» o «Usar»); la ficha, la zona roja de tirar; y una mitad del baúl, con lo que pasa. Lleva dos estilos, el
-# de siempre y el de cuando el dedo está encima (crecer)
+# Un sitio encendido, encima de lo suyo: una casilla, con un marco amarillo; Johnny, con un óvalo y «Usar» (con un arma de
+# repuesto no se enciende nada: se le puede soltar encima y se la pone, pero sin óvalo, L29); la ficha, la zona roja de
+# tirar; y una mitad del baúl, con lo que pasa. Lleva dos estilos, el de siempre y el de cuando el dedo está encima (crecer)
 func luz(nombre: String, r: Rect2, que: String, clave: String) -> void:
+	if nombre == "johnny" and que == "poner":
+		return
 	var rojo := que == "tirar"
 	var es_casilla := nombre.length() == 2
 	if es_casilla:
@@ -2147,9 +2149,6 @@ func luz(nombre: String, r: Rect2, que: String, clave: String) -> void:
 	match que:
 		"tirar": zona_roja(p, clave)
 		"usar": cartel(p, [Idioma.t("Usar")], 0.0)
-		"poner":
-			if nombre == "johnny":
-				cartel(p, [Idioma.t("Ponérmela")], 0.0)
 		"guardar": cartel(p, [Idioma.t("Suelta aquí"), Idioma.t("para guardarlo en el baúl")], r.size.y / 2.0 - 28.0)
 		"sacar": cartel(p, [Idioma.t("Suelta aquí"), Idioma.t("para sacar uno") if clave[0] == "b" else Idioma.t("para sacarla")],
 			r.size.y / 2.0 - 28.0)
