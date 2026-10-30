@@ -70,7 +70,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
 - **L24** Textos del juego: muchas tildes salen al revés.
-- **L25** Jefe de bomberos: la lengua de fuego no pega con la estética del juego.
 - **L27** Pasillo de los apartamentos: cambiar las puertas de la pared de abajo para que encajen más con el diseño del
   juego.
 - **L28** Pasillo de los apartamentos, pared de abajo: las placas con la letra del piso, en vez de estar en el tabique,
@@ -84,4 +83,3 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L33** Cambiar la palabra «sonámbulos» por «noctámbulos» (así se llamarán los jefes de planta a partir de ahora): en
   `scripts/historia.gd`, en las traducciones (`locale/`) y en los glosarios (`docs/GLOSARIO_*`). Aparte queda M31, donde
   «sonámbulo» describe a Johnny y no es este nombre.
-- **L34** Cuando el fuego choca contra la pared queda mal visualmente (si es la lengua del bombero, mirarlo con L25).
