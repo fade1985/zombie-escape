@@ -59,3 +59,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   desgastado, sucio o roto.
 - **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
+- **L24** Textos del juego: muchas tildes salen al revés.
