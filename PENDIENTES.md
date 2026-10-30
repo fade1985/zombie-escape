@@ -18,6 +18,8 @@ _(ninguno por ahora)_
 - **M27** Mutación Gastroenteritis: los zombis alcanzados quedan bañados en vómito un par de segundos, con un efecto en
   todo el cuerpo como el del ácido.
 - **M28** Johnny ardiendo: que se vea con el mismo efecto de fuego que los zombis, que queda mejor.
+- **M29** Mutación del tentáculo (Tentacular): un efecto visual mejor, por ejemplo que se vea el tentáculo alrededor de
+  Johnny, o lo que se le ocurra a Claude.
 
 ## Por limar
 
