@@ -65,6 +65,9 @@ en una línea.
   calidad hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
   («Sacar 5»). Se prueba con `--montones`.
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
+  Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
+  por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. El molotov vuela por encima de todo.
+  Se prueba con `--granada-pared`.
 - `sala_armas.gd`: la sala de pruebas (F9 desde cualquier sitio; F9 otra vez, de vuelta): la diana, todas las armas,
   las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
   salir, Johnny vuelve a llevar lo que llevaba. Su panel de pruebas (tecla P) es `ui/panel_pruebas.gd`.

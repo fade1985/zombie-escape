@@ -487,16 +487,18 @@ func objetivo() -> Vector2:
 	return desde + hacia
 
 
-# El zombi más cercano a tiro (para lanzar con un toque, sin apuntar)
+# El zombi más cercano a tiro (para lanzar con un toque, sin apuntar). Las granadas chocan con las paredes: a uno tras
+# una pared solo se le apunta con el molotov, que vuela por encima de todo
 func mas_cercano() -> Node2D:
 	var mejor: Node2D = null
 	var cerca: float = alcance()
 	var mapa := get_tree().get_first_node_in_group("mapa")
+	var molotov := tipo_de(tipo) == "molotov"
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if mapa and mapa.oculto(zombi.global_position):
 			continue
 		var d: float = johnny.global_position.distance_to(zombi.global_position)
-		if d < cerca:
+		if d < cerca and (molotov or mapa == null or mapa.muro_entre(johnny.global_position, zombi.global_position).is_empty()):
 			cerca = d
 			mejor = zombi
 	return mejor

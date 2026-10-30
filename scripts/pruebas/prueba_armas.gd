@@ -1768,3 +1768,124 @@ func probar_molotov_carga() -> void:
 				z.queue_free()
 		await get_tree().create_timer(0.5).timeout
 	get_tree().quit()
+
+
+# Con "--captura --granada-pared": las granadas chocan con las paredes (F20). En la sala de pruebas, contra su pared de la
+# derecha: la granada, la atraedora y la congeladora explotan de este lado y no le dan al zombi de lejos del otro, y las
+# granaditas de la Épica tampoco pasan. De control, lo mismo en campo abierto y por encima de un mueble: caen en el mismo
+# sitio. Y lanzar de un toque: la granada no apunta a un zombi tras la pared, el molotov sí. Dice también qué le pasa a un
+# zombi pegado a la pared (captura-granada-pared.png: la granada parada de este lado). Cada línea dice lo esperado. Se cierra
+func probar_granada_pared() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	# dónde está la pared de la derecha, de un borde al otro (como en --golpes-pared)
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var y: float = sala.diana.global_position.y + 40.0
+	var x0: float = sala.diana.global_position.x
+	var pared_izq: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 900, y), 1)).position.x
+	var pared_der: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 900, y), Vector2(x0 + 300, y), 1)).position.x
+	var sitio := Vector2(pared_izq - 60.0, y)
+	var tras_pared := Vector2(pared_der + 100.0, y)
+	var abierto := sitio - Vector2(tras_pared.x - sitio.x, 0.0)   # la misma distancia, hacia el otro lado
+	print("Pared de %d a %d · Johnny en %d · se lanza a %d de distancia" % [pared_izq, pared_der, sitio.x, tras_pared.x - sitio.x])
+
+	for clave in ["granada", "atraedora", "congeladora"]:
+		var detras := zombi_quieto(tras_pared)
+		var en: Vector2 = await lanzar_y_esperar(clave, sitio, tras_pared, "captura-granada-pared.png" if clave == "granada" else "")
+		print("«%s» contra la pared: explota en x %d, de este lado %s (esperado: true) · al zombi de donde se apuntaba le quita %d (esperado: 0)" % [
+			clave, en.x, en.x < pared_izq, 500 - detras.vida])
+		zombis_de_prueba([])
+		var delante := zombi_quieto(abierto)
+		var libre: Vector2 = await lanzar_y_esperar(clave, sitio, abierto)
+		print("«%s» en campo abierto: explota en (%.2f, %.2f), %d más allá de donde se apuntaba · al zombi de allí le quita %d (esperado: más de 0)" % [
+			clave, libre.x, libre.y, abierto.x - libre.x, 500 - delante.vida])
+		zombis_de_prueba([])
+
+	# la explosión no mira las paredes (explosion.gd solo mide la distancia): si estalla junto a una, alcanza al de detrás
+	var pegado := zombi_quieto(Vector2(pared_der + 16.0, y))
+	var junto: Vector2 = await lanzar_y_esperar("granada", sitio + Vector2(-200, 0), Vector2(pared_izq - 30.0, y))
+	print("Granada que rueda hasta la pared: explota en x %d · al zombi pegado al otro lado le quita %d (más de 0: la explosión la atraviesa, como la del zombi explosivo)" % [
+		junto.x, 500 - pegado.vida])
+	zombis_de_prueba([])
+
+	# un mueble en medio: se vuela por encima, así que la granada cae igual que en campo abierto
+	var mueble := StaticBody2D.new()
+	mueble.add_to_group("muebles")
+	var forma := CollisionShape2D.new()
+	forma.shape = RectangleShape2D.new()
+	forma.shape.size = Vector2(40, 40)
+	mueble.add_child(forma)
+	mueble.position = sitio + Vector2(-90, 0)
+	mapa.add_child(mueble)
+	var por_encima: Vector2 = await lanzar_y_esperar("granada", sitio, abierto)
+	print("Por encima de un mueble: explota en (%.2f, %.2f) (esperado: lo mismo que en campo abierto)" % [por_encima.x, por_encima.y])
+	mueble.queue_free()
+
+	# las granaditas de la Épica (8, para que salgan hacia todos lados)
+	var grande: Vector2 = await lanzar_y_esperar("granada:3", sitio, tras_pared, "", 8)
+	var mas_lejos := -INF
+	for _i in 90:
+		await get_tree().physics_frame
+		for n in johnny.get_parent().get_children():
+			if n.get_script() == Lanzables.BOMBA and n.hija:
+				mas_lejos = maxf(mas_lejos, n.global_position.x)
+	print("Épica contra la pared: la grande explota en x %d, la granadita que más lejos llega en x %d (esperado: las dos, menos de %d)" % [
+		grande.x, mas_lejos, pared_izq])
+
+	# lanzar de un toque, sin apuntar (mas_cercano): a un zombi tras la pared solo se le apunta con lo que vuela por encima
+	johnny.global_position = sitio
+	var detras := zombi_quieto(Vector2(pared_der + 40.0, y))
+	var nombre := func(z: Node2D) -> String:
+		return "nadie" if z == null else ("el de detrás" if z == detras else "el de este lado")
+	var apunta := {}
+	for clave in ["granada", "atraedora", "congeladora", "molotov"]:
+		lanzables.tipo = clave
+		apunta[clave] = nombre.call(lanzables.mas_cercano())
+	print("De un toque, con un zombi tras la pared: %s (esperado: nadie, salvo el molotov)" % apunta)
+	zombi_quieto(sitio + Vector2(-200, 0))
+	lanzables.tipo = "granada"
+	print("De un toque, y con otro más lejos pero a este lado: la granada, a %s (esperado: el de este lado)" % nombre.call(lanzables.mas_cercano()))
+	get_tree().quit()
+
+
+# Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio
+func zombi_quieto(donde: Vector2) -> Node2D:
+	var zombi := meter_zombi("lento", donde)
+	zombi.vida = 500
+	zombi.set_physics_process(false)
+	return zombi
+
+
+# Para probar_granada_pared: Johnny lanza desde "sitio" hacia "donde" y se espera a que explote; devuelve dónde ha sido.
+# "foto": la que hacer poco antes de explotar. "racimo": cuántas granaditas soltará, si no son las de su calidad
+func lanzar_y_esperar(clave: String, sitio: Vector2, donde: Vector2, foto := "", racimo := 0) -> Vector2:
+	await get_tree().create_timer(0.4).timeout   # (que se pase el parón y la bola de fuego de la anterior)
+	johnny.global_position = sitio
+	johnny.velocity = Vector2.ZERO
+	johnny.get_node("Camara").reset_smoothing()
+	lanzables.cantidades[clave] = 2
+	lanzables.tipo = clave
+	lanzables.lanzar(donde)
+	var g: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() == Lanzables.BOMBA).back()
+	g.racimo = maxi(g.racimo, racimo)
+	var en := g.global_position
+	while is_instance_valid(g):
+		en = g.global_position
+		if foto != "" and g.mecha < 0.6:
+			Captura.foto(foto)
+			foto = ""
+		await get_tree().physics_frame
+	return en
