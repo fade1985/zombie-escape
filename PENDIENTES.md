@@ -60,3 +60,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
 - **L24** Textos del juego: muchas tildes salen al revés.
+- **L25** Jefe de bomberos: la lengua de fuego no pega con la estética del juego.
+- **L26** El campo de invulnerabilidad (el del jefe de bomberos, parece) no pega con la estética del juego.
