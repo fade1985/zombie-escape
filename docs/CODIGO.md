@@ -278,7 +278,8 @@ en una línea.
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
   y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.
 - `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
-  uno una sola vez (`relatos` en el guardado; no salen en el reto ni en una partida continuada). Las líneas salen solas,
+  uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción
+  pero sí saca el final). Las líneas salen solas,
   cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
   introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final.
 - `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos), zombis, las ayudas

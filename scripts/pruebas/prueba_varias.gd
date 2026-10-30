@@ -716,8 +716,8 @@ func probar_equilibrio() -> void:
 # La introducción, por su camino de verdad (el _ready de partida.gd, con la sala en negro desde el primer fotograma), y
 # con todas las formas de pasar de línea; el final de los Apartamentos, agarrando la escalera, y que después sale el
 # cartel (captura-relato-cartel-<idioma>.png); el del centro comercial, y saltarlo con B. Una foto de cada uno
-# (captura-relato-<id>-<idioma>.png). Que quedan apuntados, que no se repiten, que no salen en el reto ni en una partida
-# continuada y que el guardado de verdad sigue igual. Lo que comprueba lo escribe en la terminal
+# (captura-relato-<id>-<idioma>.png). Que quedan apuntados, que no se repiten, que no salen en el reto y que el guardado
+# de verdad sigue igual. Lo que comprueba lo escribe en la terminal
 func probar_relato() -> void:
 	var abierto := func() -> Relato:
 		for h in get_children():
@@ -818,15 +818,12 @@ func probar_relato() -> void:
 	Reto.activo = true
 	var en_el_reto := puede_relato("centro")
 	Reto.activo = false
-	continuada = true
-	var al_continuar := puede_relato("centro")
-	continuada = false
 	ver_relato("centro")
 	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
 	await pulsar.call(mando.call(JOY_BUTTON_B))
 	await get_tree().create_timer(Relato.FUNDIDO).timeout
-	print("Relato · ya salido, otra vez: %s · en el reto: %s · en una partida continuada: %s · saltado con B: abierta %s (esperado: false, false, false, false)" % [
-		repetir, en_el_reto, al_continuar, abierto.call() != null])
+	print("Relato · ya salido, otra vez: %s · en el reto: %s · saltado con B: abierta %s (esperado: false, false, false)" % [
+		repetir, en_el_reto, abierto.call() != null])
 	print("Relato · apuntados: %s · guardado de prueba: %s · el de verdad sin tocar: %s" % [Guardado.cargar().relatos, Guardado.archivo,
 		FileAccess.get_modified_time("user://guardado.json") == guardado_real])
 	get_tree().quit()

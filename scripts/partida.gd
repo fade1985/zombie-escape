@@ -143,7 +143,6 @@ var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial
 var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
 var guiado_prueba := false        # ni la guía de la primera partida, salvo en la suya (--guiado)
 var relatos_prueba := false       # ni los textos de la historia, salvo en la suya (--relato)
-var continuada := false           # viene de «Continuar partida»: tampoco salen esos textos
 var guarda_partida := true        # si se apunta la partida a medias al empezar cada planta (partida_guardada.gd; la de
                                   # prueba, no, salvo en la suya: --continuar)
 var semilla_propia := false       # si la semilla de las plantas (Planta.semilla) la ha puesto esta partida: se quita al salir
@@ -300,7 +299,6 @@ func _ready() -> void:
 # Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar
 # la partida ni el intento del reto, y Johnny entra por las escaleras (en la planta baja, en la sala de mantenimiento)
 func continuar_partida(foto: Dictionary) -> void:
-	continuada = true
 	PartidaGuardada.poner(self, foto)
 	ahorrados = Guardado.cargar().dolares
 	var num: int = foto.planta
@@ -1384,11 +1382,11 @@ func ver_tutorial(id: String) -> void:
 	get_tree().paused = parado
 
 
-# Un texto de la historia (historia.gd, RELATOS), una sola vez: no sale en el reto del día, ni en una partida continuada,
-# ni en la sala de pruebas, ni en la partida de prueba (salvo en la suya, --relato)
+# Un texto de la historia (historia.gd, RELATOS), una sola vez: no sale en el reto del día, ni en la sala de pruebas, ni
+# en la partida de prueba (salvo en la suya, --relato). Una partida continuada no pasa por la introducción, pero el final
+# del edificio sí le sale
 func puede_relato(id: String) -> bool:
-	return not id in Guardado.cargar().relatos and not Reto.activo and not continuada and not en_pruebas() \
-		and (not captura or relatos_prueba)
+	return not id in Guardado.cargar().relatos and not Reto.activo and not en_pruebas() and (not captura or relatos_prueba)
 
 
 # Lo enseña, si toca, con el juego parado, y espera a que se cierre. Se apunta al cerrarlo: si se cierra el juego a
