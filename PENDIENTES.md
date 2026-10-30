@@ -15,7 +15,8 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-_(ninguno por ahora)_
+- **M27** Mutación Gastroenteritis: los zombis alcanzados quedan bañados en vómito un par de segundos, con un efecto en
+  todo el cuerpo como el del ácido.
 
 ## Por limar
 
