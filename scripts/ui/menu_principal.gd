@@ -40,7 +40,7 @@ func _ready() -> void:
 	columna.add_theme_constant_override("separation", 12)
 	centro.add_child(columna)
 
-	# El logo es pixel art pequeño (119×75): se amplía ×3 sin suavizar
+	# El logo es pixel art pequeño (201×62, de tools/logo.py): se amplía ×3 sin suavizar
 	var logo := TextureRect.new()
 	logo.texture = LOGO
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

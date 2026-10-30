@@ -221,7 +221,7 @@ Pasados (lista `PASADOS` de `tools/traducciones.py`):
   horda, incendio, jugar, lanzables, munición, peligros) valen para todos los idiomas y no se rehacen. Cuando cambie lo que se ve en el
   juego, hay que repetir las fotos en cada idioma (la lista de pruebas que las sacan está en `tools/fotos_tutorial.py`).
 - Sin texto dibujado: `EXIT` de la salida de incendios (ya es inglés), la «H» del helipuerto y los escaparates (garabatos). El logo
-  (`assets/ui/logo.png`) lleva el nombre del juego, que aún no está decidido (`docs/LANZAMIENTO.md`).
+  (`assets/ui/logo.png`, «Johnny Rush: Zombie Escape») es el mismo en todos los idiomas: el nombre del juego no se traduce.
 
 **Revisión:** no hay nadie nativo que revise ningún idioma (decisión del dueño, 30 oct 2026): se sale con lo traducido y se corrige con los avisos
 de los jugadores (sobre todo el humor y los gritos). Opciones → General tiene el botón «Avisar de un texto mal traducido» (no sale en español); abre

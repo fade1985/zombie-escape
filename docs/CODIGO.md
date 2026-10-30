@@ -430,6 +430,11 @@ en una línea.
   `FONDOS.md`).
 - **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
   `hacer_casillas.py`, `recortes_bestiario.py`.
+- **El logo** (`assets/ui/logo.png`, «JOHNNY RUSH» grande y «ZOMBIE ESCAPE» pequeño debajo; lo ponen `menu_principal.gd` y el final de
+  `pruebas/trailer.gd`): no está dibujado a mano, lo genera `py tools/logo.py` (el programa de `src/titulo.js` del juego JS, pasado a
+  Python: cada letra es una cuadrícula de 5×7 con relieve, babas y un filo crema). Las letras están en `LETRAS` (J, H, N, Y, R y U son
+  las añadidas al pasar al nombre nuevo), los colores en `REPARTOS` (`py tools/logo.py todas` los enseña todos juntos; el elegido es
+  `VARIANTE`) y `py tools/logo.py viejo` rehace el logo de antes, idéntico, para comprobar que el programa no ha cambiado.
 - **Fotos de los tutoriales:** `fotos_tutorial.py` recorta de las capturas de la prueba (520 × 180, a tamaño real) la
   foto de cada ficha; al lado de cada una, la prueba que saca su captura: `py tools/fotos_tutorial.py [id...]`.
 - **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en
