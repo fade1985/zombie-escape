@@ -54,6 +54,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M38** Zombi gordo de ácido: al morir, que deje un charco grande de ácido que actúe como el que suelta en vida.
 - **M39** Baúl: que también se pueda dejar la pistola (hoy la pistola Normal no se puede guardar a mano).
 - **M40** Rescate del superviviente: que dure un minuto, pero con muchos más zombis y en menos tiempo.
+- **M41** Jefe doctor Salas: es demasiado fácil; aumentar la dificultad de algún modo.
 
 ## Por limar
 
