@@ -67,6 +67,7 @@ PASADOS = [
     "scripts/ui/hud.gd",
     "scripts/ui/barra_jefe.gd",
     "scripts/ui/presentacion.gd",
+    "scripts/ui/relato.gd",
     "scripts/ui/tactil.gd",
     "scripts/ui/tutorial.gd",
     "scripts/ui/inventario.gd",

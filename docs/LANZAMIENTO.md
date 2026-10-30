@@ -39,8 +39,10 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 
 ## 2. Lo que lo haría comprarse y recomendarse
 
-- [ ] **Principio y final.** Una historia mínima: quién es Johnny, por qué el edificio está así, un final que
-      cierre. Si se quiere, un final verdadero al desbloquear algo.
+- [x] **Principio y final.** Una historia mínima: quién es Johnny, por qué el edificio está así, un final que
+      cierre. (Hecho el 30 oct: una introducción y un final por edificio, texto sobre negro y saltable; `ui/relato.gd`,
+      prueba `--relato`. De momento no se pueden volver a ver.)
+- [ ] **Final verdadero.** Si se quiere, un final verdadero al desbloquear algo.
 - [x] **Tutorial disimulado.** La primera partida guía al jugador por el primer piso con las ayudas del HUD que ya
       existen, sin pantallas de texto. (Hecho el 29 oct: `guia.gd`, prueba `--guiado`.)
 - [ ] **Horas de juego.** Un roguelike de precio bajo se espera que dé 8–15 horas hasta verlo todo. Lo barato es

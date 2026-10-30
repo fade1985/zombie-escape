@@ -142,6 +142,8 @@ var al_empezar := {}       # lo que ya se tenía al empezar (logros, skins, pág
 var cola_tutoriales: Array = []   # los tutoriales que esperan a salir (tutorial()); el primero, el que sale o va a salir
 var tutoriales_prueba := false    # en la partida de prueba no salen, salvo en la suya (--tutorial)
 var guiado_prueba := false        # ni la guía de la primera partida, salvo en la suya (--guiado)
+var relatos_prueba := false       # ni los textos de la historia, salvo en la suya (--relato)
+var continuada := false           # viene de «Continuar partida»: tampoco salen esos textos
 var guarda_partida := true        # si se apunta la partida a medias al empezar cada planta (partida_guardada.gd; la de
                                   # prueba, no, salvo en la suya: --continuar)
 var semilla_propia := false       # si la semilla de las plantas (Planta.semilla) la ha puesto esta partida: se quita al salir
@@ -280,6 +282,10 @@ func _ready() -> void:
 	montar(planta.mantenimiento, 0, false)
 	johnny.position = Vector2(planta.sitios[aqui].ancho / 2.0, planta.sitios[aqui].alto / 2.0)
 	johnny.get_node("Camara").reset_smoothing()
+	# la historia empieza con la introducción: sale ya, en negro desde el primer fotograma. Con el juego parado no corre
+	# nada; la guía, el aviso de abajo y las ventanas empiezan al cerrarla
+	if edificio == "apartamentos":
+		await ver_relato("intro")
 	if captura:
 		empezar_prueba()
 	else:
@@ -294,6 +300,7 @@ func _ready() -> void:
 # Empieza con una partida guardada (partida_guardada.gd): todo como estaba al llegar a su planta, sin volver a contar
 # la partida ni el intento del reto, y Johnny entra por las escaleras (en la planta baja, en la sala de mantenimiento)
 func continuar_partida(foto: Dictionary) -> void:
+	continuada = true
 	PartidaGuardada.poner(self, foto)
 	ahorrados = Guardado.cargar().dolares
 	var num: int = foto.planta
@@ -892,6 +899,8 @@ func fin_del_edificio() -> void:
 func subir_al_helicoptero() -> void:
 	if cambiando or terminada or not johnny.vivo:
 		return
+	cambiando = true   # (que no pase nada detrás del final del edificio)
+	await ver_relato(edificio)
 	subir()
 
 
@@ -1373,6 +1382,24 @@ func ver_tutorial(id: String) -> void:
 	get_tree().paused = true
 	await Tutorial.ventana(self, id).cerrado
 	get_tree().paused = parado
+
+
+# Un texto de la historia (historia.gd, RELATOS), una sola vez: no sale en el reto del día, ni en una partida continuada,
+# ni en la sala de pruebas, ni en la partida de prueba (salvo en la suya, --relato)
+func puede_relato(id: String) -> bool:
+	return not id in Guardado.cargar().relatos and not Reto.activo and not continuada and not en_pruebas() \
+		and (not captura or relatos_prueba)
+
+
+# Lo enseña, si toca, con el juego parado, y espera a que se cierre. Se apunta al cerrarlo: si se cierra el juego a
+# medias, sale otra vez
+func ver_relato(id: String) -> void:
+	if not puede_relato(id):
+		return
+	get_tree().paused = true
+	await Relato.abrir(self, id).cerrado
+	Historia.apuntar_relato(id)
+	get_tree().paused = false
 
 
 # Un texto que sube y se desvanece (al coger un billete)

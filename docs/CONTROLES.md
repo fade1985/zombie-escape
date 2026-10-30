@@ -38,6 +38,9 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo. El botón
   *Que vuelvan a salir todos* de Opciones → Ayudas también la reactiva: sale en la próxima partida de los Apartamentos
   aunque no sea la primera (`guia_otra_vez` en el guardado; se apaga sola al empezarla).
+- **Textos de la historia:** la introducción (la primera partida) y el final de cada edificio (la primera vez que se
+  completa) salen sobre negro, línea a línea. Cualquier tecla, clic, toque o botón del mando saca la siguiente y, con
+  todas a la vista, cierra; Esc o B lo saltan entero. Salen una sola vez (`relatos` en el guardado).
 - **Munición:** va por tipos (balas de pistola, que también gasta la MP5; cartuchos; gasolina, ácido y baterías) en 8
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
   en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12

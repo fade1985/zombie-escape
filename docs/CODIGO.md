@@ -210,8 +210,8 @@ en una línea.
   la partida de prueba el repaso va apagado, `repasar`, salvo en `--logros`. Con una de las ayudas de `AYUDAS`
   encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta nada; los zombis de esas partidas van
   aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
-  `historia.gd` (dosier y noticias, con la historia resumida arriba; se edita sin tocar los `id` y todos los textos
-  se ven con `--historia`) y `bestiario.gd` (sus fichas;
+  `historia.gd` (dosier, noticias y relatos, con la historia resumida arriba; se edita sin tocar los `id` y todos los
+  textos se ven con `--historia`, y los relatos con `--relato`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
@@ -277,6 +277,10 @@ en una línea.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
   y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.
+- `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
+  uno una sola vez (`relatos` en el guardado; no salen en el reto ni en una partida continuada). Las líneas salen solas,
+  cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
+  introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final.
 - `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos), zombis, las ayudas
   que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
   antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).

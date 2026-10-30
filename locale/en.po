@@ -1456,6 +1456,78 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "Breaking news: Velaria's helicopter is back, this time on the roof of the shopping mall. It took off with someone inside, headed for Velaria Tower. Velaria is no longer looking for its janitor: \"He's with us, safe.\" Tomorrow, at its tower, it unveils \"the future of work.\" Still no word from my sister."
 
 #: scripts/historia.gd
+msgid "Número 14. Turno de noche."
+msgstr "Number 14. Night shift."
+
+#: scripts/historia.gd
+msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
+msgstr "Johnny is the janitor. He's been here longer than he can remember."
+
+#: scripts/historia.gd
+msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
+msgstr "The new tenants arrived in trucks, at night. They were no trouble at all."
+
+#: scripts/historia.gd
+msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
+msgstr "Last night the building was sealed from the outside. The tenants are still asleep. They walk. And they bite."
+
+#: scripts/historia.gd
+msgid "Nada de esto viene en su contrato."
+msgstr "None of this is in his contract."
+
+#: scripts/historia.gd
+msgid "Pero alguien tendrá que limpiarlo."
+msgstr "But someone will have to clean it up."
+
+#: scripts/historia.gd
+msgid "Johnny se agarra a la escalera. El helicóptero despega."
+msgstr "Johnny grabs the ladder. The helicopter lifts off."
+
+#: scripts/historia.gd
+msgid "«No te fíes de los que vengan a rescatarte», decía la hoja."
+msgstr "\"Don't trust anyone who comes to rescue you,\" the page said."
+
+#: scripts/historia.gd
+msgid "Johnny se suelta."
+msgstr "Johnny lets go."
+
+#: scripts/historia.gd
+msgid "Los árboles de la avenida amortiguan la caída. Más o menos."
+msgstr "The trees on the avenue break his fall. More or less."
+
+#: scripts/historia.gd
+msgid "Al otro lado, el centro comercial sigue con las luces encendidas."
+msgstr "Across the way, the shopping mall still has its lights on."
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo."
+msgstr "Someone will have to clean it up."
+
+#: scripts/historia.gd
+msgid "Esta vez Johnny no se suelta."
+msgstr "This time Johnny doesn't let go."
+
+#: scripts/historia.gd
+msgid "Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no."
+msgstr "He climbs in, sits down and props the mop between his knees. The pilot offers him a coffee. He says no."
+
+#: scripts/historia.gd
+msgid "Abajo, los cajeros siguen cobrando a nadie."
+msgstr "Below, the cashiers are still ringing up nobody."
+
+#: scripts/historia.gd
+msgid "Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»"
+msgstr "Ahead, Velaria Tower is getting closer. \"Floor 40,\" says the radio. \"You know the way.\""
+
+#: scripts/historia.gd
+msgid "Johnny no recuerda haber estado allí."
+msgstr "Johnny doesn't remember ever being there."
+
+#: scripts/historia.gd
+msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
+msgstr "Forty floors of carpet. Someone will have to clean them up."
+
+#: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "This page is missing (%s)."
 
@@ -5839,6 +5911,18 @@ msgid ""
 msgstr ""
 "Achievements\n"
 "CLAIM!"
+
+#: scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Tap the screen to continue"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier botón para continuar · B para saltar"
+msgstr "Press any button to continue · B to skip"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
+msgstr "Press any key to continue · Esc to skip"
 
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"

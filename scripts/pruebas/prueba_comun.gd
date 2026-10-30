@@ -36,6 +36,11 @@ func preparar_prueba() -> void:
 			g.partidas = 4   # (no es la primera: sale por «Que vuelvan a salir todos», guia_otra_vez)
 			g.guia_otra_vez = true
 			g.ajustes.tutoriales = true)
+	# con "--relato", los textos de la historia, también la introducción, que sale antes de empezar_prueba (prueba_varias.gd)
+	if "--relato" in OS.get_cmdline_user_args():
+		relatos_prueba = true
+		Guardado.cambiar(func(g): g.relatos = [])
+		call_deferred("probar_relato")
 
 
 # En la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios, u otro con

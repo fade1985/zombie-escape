@@ -44,6 +44,7 @@ const NUEVO := {
 	                      # {"jefes": 3, "victorias": 1, "armas": ["fregona"], "reglas": ["cuerpo"]}
 	"paginas": [],        # páginas del dosier encontradas (ids de Historia.DOSIERES): no se vuelven a encontrar
 	"noticias_vistas": [], # noticias del ordenador ya vistas (ids de Historia.NOTICIAS): el aviso no se repite
+	"relatos": [],        # los textos de la historia ya salidos (claves de Historia.RELATOS): cada uno sale una sola vez
 	"encontrados": [],    # objetos cogidos alguna vez (ids de Objetos.NOMBRES): Colecciones del ordenador
 	"bestiario": [],      # enemigos vistos alguna vez (ids de Bestiario.LISTA): el bestiario de Colecciones
 	"colecciones_nuevo": false, # hay algo nuevo en Colecciones desde la última vez que se abrió (el icono avisa)

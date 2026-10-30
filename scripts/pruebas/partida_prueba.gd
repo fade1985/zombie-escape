@@ -116,6 +116,9 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
+#                       saltan, el cartel del final y que quedan apuntados (mirarlos también con --lang ru y
+#                       --lang zh_CN, por si se sale alguna línea)                           [prueba_varias.gd]
 #   --formas            que las formas de formas.gd (disco, arco, polígono, polilínea) salgan como las de CanvasItem: dos
 #                       fotos y su diferencia píxel a píxel                                  [prueba_varias.gd]
 #   --dibujos           lo que cuesta cada tipo de dibujo (rectángulos, círculos, abanicos y anillos de primitivas) según cuántos por
@@ -432,6 +435,8 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--relato" in args:
+		set_process(false)   # sin la prueba larga (la suya ya va: empieza en prueba_comun.gd, antes que esta)
 	elif "--formas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_formas()

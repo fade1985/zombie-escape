@@ -712,6 +712,126 @@ func probar_equilibrio() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --relato": los textos de la historia (historia.gd, RELATOS; ui/relato.gd), en el idioma de la prueba.
+# La introducción, por su camino de verdad (el _ready de partida.gd, con la sala en negro desde el primer fotograma), y
+# con todas las formas de pasar de línea; el final de los Apartamentos, agarrando la escalera, y que después sale el
+# cartel (captura-relato-cartel-<idioma>.png); el del centro comercial, y saltarlo con B. Una foto de cada uno
+# (captura-relato-<id>-<idioma>.png). Que quedan apuntados, que no se repiten, que no salen en el reto ni en una partida
+# continuada y que el guardado de verdad sigue igual. Lo que comprueba lo escribe en la terminal
+func probar_relato() -> void:
+	var abierto := func() -> Relato:
+		for h in get_children():
+			if h is Relato and h.is_processing_input():
+				return h
+		return null
+	var pulsar := func(evento: InputEvent) -> void:
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.25).timeout
+	var tecla := func(codigo: Key) -> InputEventKey:
+		var e := InputEventKey.new()
+		e.keycode = codigo
+		e.pressed = true
+		return e
+	var clic := func(boton: MouseButton) -> InputEventMouseButton:
+		var e := InputEventMouseButton.new()
+		e.button_index = boton
+		e.pressed = true
+		return e
+	var mando := func(boton: JoyButton) -> InputEventJoypadButton:
+		var e := InputEventJoypadButton.new()
+		e.button_index = boton
+		e.pressed = true
+		return e
+	var toque := InputEventScreenTouch.new()
+	toque.pressed = true
+	var guardado_real := FileAccess.get_modified_time("user://guardado.json")
+	# la introducción: ya está abierta desde el _ready, y lo primero que se dibuja es negro (el pie, abajo, aparte)
+	await RenderingServer.frame_post_draw
+	var foto := get_viewport().get_texture().get_image()
+	var encendidos := 0
+	for x in range(0, foto.get_width(), 4):
+		for y in range(0, foto.get_height() - 60, 4):
+			if foto.get_pixel(x, y).v > 0.02:
+				encendidos += 1
+	var r: Relato = abierto.call()
+	print("Relato · intro: abierta %s · juego parado %s · cambiando %s · píxeles encendidos en el primer fotograma %d (esperado: true, true, false, 0)" % [
+		r != null, get_tree().paused, cambiando, encendidos])
+	var pista_antes := guia.pista
+	# sola: la primera línea al cabo de ESPERA y la segunda cuando toca
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	var sola := r.vistas
+	await get_tree().create_timer(Relato.POR_LINEA + r.lineas[0].text.length() * Relato.POR_LETRA + 0.1).timeout
+	print("Relato · sin tocar nada: %d línea y luego %d (esperado: 1, 2)" % [sola, r.vistas])
+	# lo que no pasa de línea
+	var antes := r.vistas
+	for evento: InputEvent in [InputEventMouseMotion.new(), clic.call(MOUSE_BUTTON_WHEEL_UP), tecla.call(KEY_ALT), tecla.call(KEY_F11)]:
+		await pulsar.call(evento)
+	print("Relato · ratón movido, rueda, Alt y F11: %d líneas (esperado: %d)" % [r.vistas, antes])
+	await pulsar.call(tecla.call(KEY_SPACE))
+	var con_tecla := r.vistas
+	await pulsar.call(clic.call(MOUSE_BUTTON_LEFT))
+	var con_clic := r.vistas
+	await pulsar.call(toque)
+	print("Relato · tecla %d, clic %d, toque %d (esperado: %d, %d, %d; el toque, una sola)" % [con_tecla, con_clic, r.vistas, antes + 1, antes + 2, antes + 3])
+	await pulsar.call(mando.call(JOY_BUTTON_A))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · botón del mando: %d de %d líneas · alto del texto %d de %d · sigue abierta %s (esperado: todas, true)" % [
+		r.vistas, r.lineas.size(), r.columna.size.y, get_viewport().get_visible_rect().size.y, abierto.call() != null])
+	Captura.foto("captura-relato-intro-%s.png" % Idioma.actual)
+	await pulsar.call(mando.call(JOY_BUTTON_A))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · otra pulsación la cierra: abierta %s · juego parado %s · apuntada %s (esperado: false, false, true)" % [
+		abierto.call() != null, get_tree().paused, "intro" in Guardado.cargar().relatos])
+	# (con --guiado, la guía de la primera partida espera a que se cierre y entonces empieza)
+	print("Relato · guía activa %s: pista durante la intro «%s», al cerrarla «%s» (con --guiado: «», moverse)" % [guia.activa, pista_antes, guia.pista])
+	Captura.foto("captura-relato-sala.png")   # (la sala de siempre)
+	# el final de los Apartamentos, agarrando la escalera. Lo que se pulsa al salir no cuenta (ESPERA)
+	planta.num = Planta.PLANTAS
+	subir_al_helicoptero()
+	await pulsar.call(tecla.call(KEY_SPACE))
+	r = abierto.call()
+	print("Relato · al agarrar la escalera: abierta %s · cambiando %s · juego parado %s · acabada %s · líneas con un Espacio al salir %d (esperado: true, true, true, false, 0)" % [
+		r != null, cambiando, get_tree().paused, terminada, r.vistas])
+	await get_tree().create_timer(Relato.ESPERA).timeout
+	while r.vistas < r.lineas.size():
+		await pulsar.call(tecla.call(KEY_SPACE))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · apartamentos: alto del texto %d" % r.columna.size.y)
+	Captura.foto("captura-relato-apartamentos-%s.png" % Idioma.actual)
+	await pulsar.call(tecla.call(KEY_SPACE))
+	await get_tree().create_timer(Relato.FUNDIDO + 0.5).timeout
+	print("Relato · al cerrarlo, el cartel: acabada %s · abierto «%s» · apuntado %s (esperado: true, fin, true)" % [
+		terminada, menus.abierto, "apartamentos" in Guardado.cargar().relatos])
+	Captura.foto("captura-relato-cartel-%s.png" % Idioma.actual)
+	# el del centro comercial; luego, otra vez, saltándolo con B a la primera
+	ver_relato("centro")
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	r = abierto.call()
+	while r.vistas < r.lineas.size():
+		await pulsar.call(tecla.call(KEY_ENTER))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · centro: alto del texto %d" % r.columna.size.y)
+	Captura.foto("captura-relato-centro-%s.png" % Idioma.actual)
+	await pulsar.call(tecla.call(KEY_ENTER))
+	var repetir := puede_relato("centro")
+	Guardado.cambiar(func(g): g.relatos.erase("centro"))
+	Reto.activo = true
+	var en_el_reto := puede_relato("centro")
+	Reto.activo = false
+	continuada = true
+	var al_continuar := puede_relato("centro")
+	continuada = false
+	ver_relato("centro")
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	await pulsar.call(mando.call(JOY_BUTTON_B))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · ya salido, otra vez: %s · en el reto: %s · en una partida continuada: %s · saltado con B: abierta %s (esperado: false, false, false, false)" % [
+		repetir, en_el_reto, al_continuar, abierto.call() != null])
+	print("Relato · apuntados: %s · guardado de prueba: %s · el de verdad sin tocar: %s" % [Guardado.cargar().relatos, Guardado.archivo,
+		FileAccess.get_modified_time("user://guardado.json") == guardado_real])
+	get_tree().quit()
+
+
 # Con "--captura --tutorial": los tutoriales (tutoriales.gd, ui/tutorial.gd). Empieza con todos sin ver: la ventana de
 # «Cómo se juega» con el juego parado (captura-tutorial-ventana.png); otro pedido mientras está abierta sale detrás
 # (captura-tutorial-cola.png); al cerrarlos, el juego sigue y no se repiten. La lista del apartado Tutorial desde la

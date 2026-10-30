@@ -1457,6 +1457,78 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "Срочно: вертолет Velaria вернулся, на этот раз на крышу торгового центра. Он взлетел с кем-то на борту и взял курс на Башню Velaria. Velaria больше не ищет своего дворника: «Он с нами, в безопасности». Завтра в своей башне компания представит «будущее труда». О моей сестре — ничего."
 
 #: scripts/historia.gd
+msgid "Número 14. Turno de noche."
+msgstr "Дом 14. Ночная смена."
+
+#: scripts/historia.gd
+msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
+msgstr "Джонни — дворник. Он здесь дольше, чем может вспомнить."
+
+#: scripts/historia.gd
+msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
+msgstr "Новые жильцы приехали ночью, в грузовиках. Хлопот с ними не было."
+
+#: scripts/historia.gd
+msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
+msgstr "Прошлой ночью дом опечатали снаружи. Жильцы все еще спят. Ходят. И кусаются."
+
+#: scripts/historia.gd
+msgid "Nada de esto viene en su contrato."
+msgstr "Ничего такого в его договоре нет."
+
+#: scripts/historia.gd
+msgid "Pero alguien tendrá que limpiarlo."
+msgstr "Но кому-то придется это убирать."
+
+#: scripts/historia.gd
+msgid "Johnny se agarra a la escalera. El helicóptero despega."
+msgstr "Джонни хватается за лестницу. Вертолет взлетает."
+
+#: scripts/historia.gd
+msgid "«No te fíes de los que vengan a rescatarte», decía la hoja."
+msgstr "«Не верь тем, кто придет тебя спасать», — говорилось на листке."
+
+#: scripts/historia.gd
+msgid "Johnny se suelta."
+msgstr "Джонни разжимает руки."
+
+#: scripts/historia.gd
+msgid "Los árboles de la avenida amortiguan la caída. Más o menos."
+msgstr "Деревья проспекта смягчают падение. Более или менее."
+
+#: scripts/historia.gd
+msgid "Al otro lado, el centro comercial sigue con las luces encendidas."
+msgstr "На той стороне торговый центр все так же горит огнями."
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo."
+msgstr "Кому-то придется это убирать."
+
+#: scripts/historia.gd
+msgid "Esta vez Johnny no se suelta."
+msgstr "На этот раз Джонни не разжимает рук."
+
+#: scripts/historia.gd
+msgid "Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no."
+msgstr "Он забирается внутрь, садится и ставит швабру между колен. Пилот предлагает ему кофе. Джонни отказывается."
+
+#: scripts/historia.gd
+msgid "Abajo, los cajeros siguen cobrando a nadie."
+msgstr "Внизу кассиры все еще пробивают чеки в пустоту."
+
+#: scripts/historia.gd
+msgid "Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»"
+msgstr "Впереди приближается Башня Velaria. «Этаж 40, — говорит рация. — Дорогу вы уже знаете»."
+
+#: scripts/historia.gd
+msgid "Johnny no recuerda haber estado allí."
+msgstr "Джонни не помнит, чтобы бывал там."
+
+#: scripts/historia.gd
+msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
+msgstr "Сорок этажей ковролина. Кому-то придется их убирать."
+
+#: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "Этой страницы нет (%s)."
 
@@ -5857,6 +5929,18 @@ msgid ""
 msgstr ""
 "Достижения\n"
 "ЗАБРАТЬ!"
+
+#: scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Коснись экрана, чтобы продолжить"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier botón para continuar · B para saltar"
+msgstr "Нажми любую кнопку, чтобы продолжить · B — пропустить"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
+msgstr "Нажми любую клавишу, чтобы продолжить · Esc — пропустить"
 
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"

@@ -1456,6 +1456,78 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "Dernière minute : l'hélicoptère de Velaria est revenu, cette fois sur le toit du centre commercial. Il est reparti avec quelqu'un à bord, direction la Tour Velaria. Velaria ne cherche plus son concierge : « Il est avec nous, en sécurité ». Demain, elle présente dans sa tour « l'avenir du travail ». De ma sœur, toujours rien."
 
 #: scripts/historia.gd
+msgid "Número 14. Turno de noche."
+msgstr "Numéro 14. Service de nuit."
+
+#: scripts/historia.gd
+msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
+msgstr "Johnny est le concierge. Il est là depuis plus d'années qu'il ne s'en souvient."
+
+#: scripts/historia.gd
+msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
+msgstr "Les nouveaux voisins sont arrivés en camions, de nuit. Ils ne posaient aucun problème."
+
+#: scripts/historia.gd
+msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
+msgstr "Hier soir, on a scellé l'immeuble de l'extérieur. Les voisins dorment toujours. Ils marchent. Et ils mordent."
+
+#: scripts/historia.gd
+msgid "Nada de esto viene en su contrato."
+msgstr "Rien de tout ça ne figure dans son contrat."
+
+#: scripts/historia.gd
+msgid "Pero alguien tendrá que limpiarlo."
+msgstr "Mais il faudra bien que quelqu'un nettoie."
+
+#: scripts/historia.gd
+msgid "Johnny se agarra a la escalera. El helicóptero despega."
+msgstr "Johnny s'agrippe à l'échelle. L'hélicoptère décolle."
+
+#: scripts/historia.gd
+msgid "«No te fíes de los que vengan a rescatarte», decía la hoja."
+msgstr "« Ne fais pas confiance à ceux qui viendront te sauver », disait la feuille."
+
+#: scripts/historia.gd
+msgid "Johnny se suelta."
+msgstr "Johnny lâche prise."
+
+#: scripts/historia.gd
+msgid "Los árboles de la avenida amortiguan la caída. Más o menos."
+msgstr "Les arbres de l'avenue amortissent la chute. Plus ou moins."
+
+#: scripts/historia.gd
+msgid "Al otro lado, el centro comercial sigue con las luces encendidas."
+msgstr "De l'autre côté, le centre commercial a toujours les lumières allumées."
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo."
+msgstr "Il faudra bien que quelqu'un nettoie."
+
+#: scripts/historia.gd
+msgid "Esta vez Johnny no se suelta."
+msgstr "Cette fois, Johnny ne lâche pas prise."
+
+#: scripts/historia.gd
+msgid "Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no."
+msgstr "Il monte, s'assoit et cale sa serpillière entre ses genoux. Le pilote lui propose un café. Il dit non."
+
+#: scripts/historia.gd
+msgid "Abajo, los cajeros siguen cobrando a nadie."
+msgstr "En bas, les caissiers continuent d'encaisser dans le vide."
+
+#: scripts/historia.gd
+msgid "Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»"
+msgstr "Devant, la Tour Velaria se rapproche. « 40e étage », dit la radio. « Vous connaissez le chemin. »"
+
+#: scripts/historia.gd
+msgid "Johnny no recuerda haber estado allí."
+msgstr "Johnny ne se souvient pas d'y être déjà allé."
+
+#: scripts/historia.gd
+msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
+msgstr "Quarante étages de moquette. Il faudra bien que quelqu'un les nettoie."
+
+#: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "Cette page manque (%s)."
 
@@ -5839,6 +5911,18 @@ msgid ""
 msgstr ""
 "Succès\n"
 "À ENCAISSER !"
+
+#: scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Touche l'écran pour continuer"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier botón para continuar · B para saltar"
+msgstr "Appuie sur un bouton pour continuer · B pour passer"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
+msgstr "Appuie sur une touche pour continuer · Échap pour passer"
 
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"

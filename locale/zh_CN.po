@@ -1455,6 +1455,78 @@ msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea 
 msgstr "最新消息：Velaria的直升机又来了，这次落在购物中心的天台上。它载着一个人起飞，飞往Velaria大厦。Velaria不再寻找他们的清洁工：“他和我们在一起，很安全。”明天，Velaria将在大厦发布“工作的未来”。至于我妹妹，还是没有消息。"
 
 #: scripts/historia.gd
+msgid "Número 14. Turno de noche."
+msgstr "14号楼。夜班。"
+
+#: scripts/historia.gd
+msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
+msgstr "Johnny是这里的清洁工。他在这里待了多少年，自己也记不清了。"
+
+#: scripts/historia.gd
+msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
+msgstr "新邻居是夜里坐卡车来的。他们从不惹麻烦。"
+
+#: scripts/historia.gd
+msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
+msgstr "昨晚，大楼被人从外面封锁了。邻居们还在睡。他们会走。还会咬人。"
+
+#: scripts/historia.gd
+msgid "Nada de esto viene en su contrato."
+msgstr "这些事，合同里一个字也没提。"
+
+#: scripts/historia.gd
+msgid "Pero alguien tendrá que limpiarlo."
+msgstr "但总得有人来打扫。"
+
+#: scripts/historia.gd
+msgid "Johnny se agarra a la escalera. El helicóptero despega."
+msgstr "Johnny抓住绳梯。直升机起飞了。"
+
+#: scripts/historia.gd
+msgid "«No te fíes de los que vengan a rescatarte», decía la hoja."
+msgstr "“别相信那些来救你的人。”那张纸上这样写着。"
+
+#: scripts/historia.gd
+msgid "Johnny se suelta."
+msgstr "Johnny松开了手。"
+
+#: scripts/historia.gd
+msgid "Los árboles de la avenida amortiguan la caída. Más o menos."
+msgstr "大街边的树丛接住了他。算是吧。"
+
+#: scripts/historia.gd
+msgid "Al otro lado, el centro comercial sigue con las luces encendidas."
+msgstr "街对面，购物中心的灯还亮着。"
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo."
+msgstr "总得有人来打扫。"
+
+#: scripts/historia.gd
+msgid "Esta vez Johnny no se suelta."
+msgstr "这一次，Johnny没有松手。"
+
+#: scripts/historia.gd
+msgid "Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no."
+msgstr "他爬上去，坐好，把拖把夹在两膝之间。飞行员递来一杯咖啡。他说不用了。"
+
+#: scripts/historia.gd
+msgid "Abajo, los cajeros siguen cobrando a nadie."
+msgstr "下面，收银员还在给空气结账。"
+
+#: scripts/historia.gd
+msgid "Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»"
+msgstr "前方，Velaria大厦近了。“40楼，”无线电说，“路您认得。”"
+
+#: scripts/historia.gd
+msgid "Johnny no recuerda haber estado allí."
+msgstr "Johnny不记得自己去过那里。"
+
+#: scripts/historia.gd
+msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
+msgstr "四十层的地毯。总得有人来打扫。"
+
+#: scripts/historia.gd
 msgid "Esta página falta (%s)."
 msgstr "这一页缺失（%s）。"
 
@@ -5821,6 +5893,18 @@ msgid ""
 msgstr ""
 "成就\n"
 "可领取！"
+
+#: scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "点击屏幕继续"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier botón para continuar · B para saltar"
+msgstr "按任意按钮继续 · 按 B 跳过"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
+msgstr "按任意键继续 · 按 Esc 跳过"
 
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"
