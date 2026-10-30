@@ -23,7 +23,7 @@ var centro_cerrado := false        # solo para la foto de "--edificios": los Apa
 
 
 func _ready() -> void:
-	Tactil.preparar(get_tree())   # en el móvil, la pantalla sin redondear
+	Tactil.preparar()   # en el móvil, la pantalla sin redondear
 	Controles.aplicar()   # las teclas cambiadas en Opciones
 	theme = Tema.crear()
 	Sonido.musica("menu")

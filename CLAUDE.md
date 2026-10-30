@@ -70,7 +70,9 @@ vale para web). La migración desde el juego JS está terminada (20 oct); lo hec
 ## Medidas
 
 2 unidades por píxel del dibujo (sprites y cuadrículas con escala 2), casillas de 16 px (32 unidades), personajes
-de 48 px. Pantalla base **960×640**, agrandada por **números enteros** con filtro *nearest*.
+de 48 px. Pantalla base **960×640** (siempre se ve por lo menos eso). La imagen **llena la ventana, sin bordes**, con filtro
+*nearest*: a escala de medio en medio (×1, ×1,5, ×2…) para que cada píxel del dibujo sea exacto y, si no encaja, lo justo
+(`pantalla.gd`). Las pruebas `--captura` siguen a números enteros y sin llenar, para que sus fotos no cambien.
 
 ## Referencias
 

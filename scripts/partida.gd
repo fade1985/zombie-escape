@@ -216,6 +216,7 @@ func _ready() -> void:
 	tactil.partida = self
 	tactil.johnny = johnny
 	add_child(tactil)
+	get_viewport().size_changed.connect(reencuadrar)
 
 	guarda_partida = not captura
 	if captura:
@@ -528,6 +529,12 @@ func montar(idx: int, por: int, fundir := true) -> void:
 				guia.jefe_presentado()
 			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
 				decir(Idioma.t("Te espera arriba, en el helipuerto: sube por la rampa"), 3.0)
+
+
+# Si cambia lo que se ve (F11, agrandar la ventana del navegador), la cámara se vuelve a encuadrar en el mismo sitio
+func reencuadrar() -> void:
+	if not planta.is_empty():
+		encuadrar(planta.sitios[aqui])
 
 
 # Los límites de la cámara: el mapa entero (y un poco por arriba). Si el mapa es más pequeño que la pantalla,

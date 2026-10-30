@@ -2347,6 +2347,40 @@ func probar_guiado() -> void:
 
 # --pantalla: la pantalla completa del ordenador (pantalla.gd): F11 y Alt+Intro la ponen y la quitan, el ajuste se guarda
 # y F9 (la sala de pruebas) sigue yendo aparte
+# La imagen llena la ventana (Pantalla): la escala de cada tamaño de pantalla, que no quedan bordes y que al cambiar de
+# tamaño la ventana se ajustan la escala y la cámara
+func probar_escala() -> void:
+	for caso: Array in [[1920, 1080, 1.5], [1920, 991, 1.5], [1280, 720, 1.0], [1280, 800, 1.0], [1366, 768, 1.0],
+			[2560, 1440, 2.0], [3840, 2160, 3.0], [2560, 1080, 1.5], [1920, 914, 1.428], [1600, 900, 1.406], [800, 500, 0.781]]:
+		var escala := Pantalla.escala_para(Vector2(caso[0], caso[1]))
+		print("Escala · %d×%d → ×%.3f, se ve %d×%d (esperado: ×%.3f)" % [caso[0], caso[1], escala, caso[0] / escala,
+			caso[1] / escala, caso[2]])
+	var ventana := get_window()
+	var camara: Camera2D = johnny.get_node("Camara")
+	get_viewport().size_changed.connect(Pantalla.ajustar_escala)
+	var ver := func(cuando: String) -> void:
+		await get_tree().create_timer(0.6).timeout
+		var se_ve := get_viewport_rect().size
+		print("Escala · %s: ventana %s, ×%.3f, se ve %s, pintado %s (ha de ser la ventana), cámara %d a %d" % [cuando, ventana.size,
+			ventana.content_scale_factor, se_ve, ventana.get_texture().get_image().get_size(), camara.limit_left, camara.limit_right])
+	await get_tree().create_timer(0.5).timeout
+	Pantalla.ajustar_escala()
+	await ver.call("al empezar")
+	Captura.foto("captura-escala.png")
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	DisplayServer.window_set_size(Vector2i(1500, 960))
+	await ver.call("a 1500×960")
+	DisplayServer.window_set_size(Vector2i(1200, 860))
+	await ver.call("a 1200×860")
+	Captura.foto("captura-escala-justa.png")
+	Tactil.activo = true
+	Tactil.preparar()
+	print("Escala · móvil: base %s, ×%.3f, sin redondear %s (esperado: (960, 640), ×1.000, true)" % [ventana.content_scale_size,
+		ventana.content_scale_factor, ventana.content_scale_stretch == Window.CONTENT_SCALE_STRETCH_FRACTIONAL])
+	Tactil.activo = false
+	get_tree().quit()
+
+
 func probar_pantalla() -> void:
 	var pulsar := func(tecla: Key, alt := false) -> void:
 		for pulsada in [true, false]:

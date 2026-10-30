@@ -121,6 +121,7 @@
 #   --rendimiento       cuánto tarda cada fotograma durante el latigazo del Glotón (3 y 6 lenguas); en la web, el atasco
 #                       de los draw_circle (docs/WEB.md)                                       [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, y se guarda [prueba_varias.gd]
+#   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: las pistas sobre Johnny, el latido del HUD, la
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
 #   --idioma            solo el menú, Opciones (4 pestañas y las licencias), el cambio de idioma en caliente y «Elige edificio»; con
@@ -431,6 +432,9 @@ func empezar_prueba() -> void:
 	elif "--pantalla" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pantalla()
+	elif "--escala" in args:
+		set_process(false)   # sin la prueba larga
+		probar_escala()
 	elif "--guiado" in args:
 		set_process(false)   # sin la prueba larga
 		probar_guiado()

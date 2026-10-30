@@ -45,11 +45,11 @@ var iconos := {}               # nombre → su imagen (assets/ui/iconos)
 # ¿Es táctil la pantalla? Se mira al arrancar (el menú principal y la partida); si luego llega un toque de
 # verdad, también. En el móvil la pantalla se agranda sin redondear: con tantos píxeles por punto, por
 # números enteros se quedaría en 1 y se vería medio edificio con los muñecos diminutos
-static func preparar(arbol: SceneTree) -> void:
+static func preparar() -> void:
 	if DisplayServer.is_touchscreen_available():
 		activo = true
 	if activo:
-		arbol.root.content_scale_stretch = Window.CONTENT_SCALE_STRETCH_FRACTIONAL
+		Pantalla.ajustar_escala()
 
 
 # En la web, si el navegador deja poner la pantalla completa (en iPhone no se puede)
@@ -86,7 +86,7 @@ static func pantalla_completa() -> void:
 func _ready() -> void:
 	layer = 5   # por encima del HUD, por debajo de los menús
 	process_mode = Node.PROCESS_MODE_ALWAYS   # también en la pausa, para esconderse
-	preparar(get_tree())
+	preparar()
 	ajustar()
 	for c in [lienzo, aviso]:
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -185,7 +185,7 @@ func botones() -> Dictionary:
 func _input(evento: InputEvent) -> void:
 	if evento is InputEventScreenTouch and evento.pressed and not activo:
 		activo = true   # un ordenador con pantalla táctil: sale al primer toque
-		preparar(get_tree())
+		preparar()
 	if not visible:
 		return
 	if evento is InputEventScreenTouch:
