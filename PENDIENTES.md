@@ -46,3 +46,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   ser «(al completar el edificio, va solo)», lo de guardar lo que llevas en el baúl). Reescribirlo más claro, en los
   siete idiomas.
 - **L20** Sala de mantenimiento: no debe haber sangre en ninguna de sus habitaciones (taquilla, despacho, taller).
+- **L21** El número de cada planta se ve demasiado perfecto comparado con lo destrozado que está el edificio; que se vea
+  desgastado, sucio o roto.
