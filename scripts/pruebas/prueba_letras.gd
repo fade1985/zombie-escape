@@ -68,3 +68,47 @@ static func medidas() -> void:
 		for k in mini(1000 if "--todo" in OS.get_cmdline_user_args() else 25, pasados.size()):   # con --todo, todos
 			var p: Array = pasados[k]
 			print("   +%d · %d → %d: %s → %s" % [p[0], p[1], p[2], p[3], p[4]])
+
+
+# La prueba de las tildes (-- --captura --tildes): una foto ampliada (letra a 48, tres veces su tamaño) con las letras con tilde y los
+# signos de abrir ¿ y ¡ en cada idioma, para ver a ojo que ninguna sale al revés ni cambiada. Fotos: captura-tildes-<idioma>.png.
+# Las dos primeras líneas son las del español (la letra del juego); la tercera, las del idioma que se juega (las que la letra del
+# juego no trae salen de las de reserva: Jersey 25, Ark Pixel o Unifont)
+static func tildes(menu: Control) -> void:
+	var muestras := {
+		"es": "áéíóú ÁÉÍÓÚ ñÑ üÜ",
+		"en": "à è ï ô ü ç é ñ",
+		"pt_BR": "ãõç áéíóú âêô àü",
+		"de": "äöüß ÄÖÜ",
+		"fr": "àâçéèêëîïôùûüÿ",
+		"ru": "Привет, зомби!",
+		"zh_CN": "你好, 僵尸!",
+	}
+	var fondo := ColorRect.new()
+	fondo.color = Color("#17141f")
+	fondo.theme = Tema.crear()
+	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.z_index = 100
+	menu.add_child(fondo)
+	var caja := VBoxContainer.new()
+	caja.set_anchors_preset(Control.PRESET_FULL_RECT)
+	caja.offset_left = 24.0
+	caja.offset_top = 16.0
+	fondo.add_child(caja)
+	var lineas: Array[Label] = []
+	for i in 4:
+		var l := Label.new()
+		l.add_theme_font_size_override("font_size", 48)
+		l.add_theme_constant_override("outline_size", 0)
+		caja.add_child(l)
+		lineas.append(l)
+	for i in Idioma.IDIOMAS:
+		var codigo: String = i[0]
+		Idioma.poner(codigo, false)
+		lineas[0].text = "áéíóú ÁÉÍÓÚ ñÑ üÜ"   # no-tr
+		lineas[1].text = "¿Qué? ¡Sí! ¿Cómo?"   # no-tr
+		lineas[2].text = muestras[codigo]   # no-tr
+		lineas[3].text = "[%s] AEIOU aeiou" % codigo   # no-tr
+		await menu.get_tree().create_timer(0.3).timeout
+		Captura.foto("captura-tildes-%s.png" % codigo)
+	fondo.queue_free()

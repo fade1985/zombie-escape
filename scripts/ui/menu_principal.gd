@@ -126,6 +126,10 @@ func _ready() -> void:
 			PruebaLetras.probar()
 			get_tree().quit()
 			return
+		if "--tildes" in OS.get_cmdline_user_args():   # una foto ampliada de las tildes y los ¿ ¡ en cada idioma (pruebas/prueba_letras.gd)
+			await PruebaLetras.tildes(self)
+			get_tree().quit()
+			return
 		if "--medidas" in OS.get_cmdline_user_args():   # los textos cortos que se pasan de ancho en cada idioma (pruebas/prueba_letras.gd)
 			PruebaLetras.medidas()
 			get_tree().quit()

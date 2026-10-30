@@ -66,15 +66,12 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   desgastado, sucio o roto.
 - **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
-- **L24** Textos del juego: muchas tildes salen al revés.
 - **L27** Pasillo de los apartamentos: cambiar las puertas de la pared de abajo para que encajen más con el diseño del
   juego.
 - **L28** Pasillo de los apartamentos, pared de abajo: las placas con la letra del piso, en vez de estar en el tabique,
   tiradas por el suelo cerca de la puerta, como si las hubiesen arrancado.
 - **L29** Al cambiar el arma equipada por la de repuesto sale un círculo alrededor de Johnny: quitarlo, no queda bien.
 - **L30** Gymbro: cambiar su aura por hacer que su cuerpo se vuelva de metal, que queda mejor visualmente.
-- **L31** Textos del juego: el signo de interrogación del principio de la frase sale al revés (mirarlo junto con L24, las
-  tildes).
 - **L32** Sala de mantenimiento: separar el baúl y el banco de trabajo; están tan juntos que sin querer se usa el que no
   quieres. Hay que reubicarlos.
 - **L33** Cambiar la palabra «sonámbulos» por «noctámbulos» (así se llamarán los jefes de planta a partir de ahora): en

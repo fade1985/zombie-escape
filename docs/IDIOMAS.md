@@ -137,7 +137,16 @@ idioma. Las tres fuentes se usan con la OFL 1.1 (Unifont tiene doble licencia, O
 (`ark-pixel-OFL.txt`, `unifont-OFL.txt` y `jersey-25-OFL.txt`) van con el juego (se exportan: `include_filter` de `export_presets.cfg`) y se citan en Opciones → Créditos, cuyo botón Licencias
 las enseña enteras (`opciones.gd`, `texto_de_licencias`). Las dos de reserva van
 sin suavizado (ajustes de su `.import`: `antialiasing=0`, `hinting=0`, `subpixel_positioning=0`). La prueba `-- --captura --letras` (`prueba_letras.gd`) dice, de cada idioma, las letras de sus
-traducciones que no tiene ninguna fuente (saldrían como un cuadro) y cuánto mide una línea con la letra de cada idioma.
+traducciones que no tiene ninguna fuente (saldrían como un cuadro) y cuánto mide una línea con la letra de cada idioma. La prueba
+`-- --captura --tildes` saca, por idioma, una foto ampliada (letra a 48) con las tildes, la ñ, la ü y los ¿ ¡: es la que hay que mirar al
+tocar la letra del juego.
+
+**Las tildes de la letra del juego (30 oct 2026).** Las vocales con tilde, la ñ, la ü, el ¿ y el ¡ no vienen de PixelLab: las añadió
+`tools/fuente-tildes.py` del juego JS, que dibujaba la tilde de á é í ó ú al revés («`» en vez de «´»), dejaba el punto en la í y
+hacía el ¿ y el ¡ volteando el ? y el ! de arriba abajo (con el gancho en el lado contrario) en vez de girarlos media vuelta.
+`py tools/arreglar_tildes_fuente.py` lo corrige en `zombie-scape-ui.ttf` (se puede lanzar otra vez sin miedo: si ya está bien, no toca
+nada). Si algún día se regenera la letra con `fuente-tildes.py`, hay que pasarlo después. Las vocales con otras tildes (à è ã ä ç ß…)
+no están en esta letra: salen de Jersey 25, que las dibuja bien.
 
 **La cadena va plana, y esto costó un día de errores (29 oct 2026).** Hasta entonces la cadena era letra del juego → Jersey 25 → (las
 reservas colgando de la Jersey 25). Una reserva que cuelga de otra reserva **no se alcanza**: la Jersey 25 como reserva solo aporta su

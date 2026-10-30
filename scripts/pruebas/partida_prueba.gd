@@ -162,6 +162,8 @@
 #                       una línea con cada una                                                [prueba_letras.gd]
 #   --medidas           los textos cortos que en cada idioma salen más anchos que en español (se pasan de su caja); con
 #                       --todo, todos y no solo los 25 peores                                  [prueba_letras.gd]
+#   --tildes            una foto ampliada por idioma (captura-tildes-<idioma>.png) con las tildes, ñ, ü, ¿ y ¡: que ninguna
+#                       salga al revés ni cambiada                                             [prueba_letras.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
 #                       atacar (F1) y en el móvil                                            [prueba_varias.gd]
 #   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una y ver lo que cambia [prueba_larga.gd]
