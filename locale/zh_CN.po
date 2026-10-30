@@ -1095,12 +1095,12 @@ msgid "INFORME · DOSIS ALTA"
 msgstr "报告 · 高剂量"
 
 #: scripts/historia.gd
-msgid "Los sonámbulos"
-msgstr "梦游者"
+msgid "Los noctámbulos"
+msgstr "夜行者"
 
 #: scripts/historia.gd
 msgid ""
-"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n"
 "\n"
 "S-1. La portera. Dosis triple. Sigue fregando.\n"
 "S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
@@ -1109,7 +1109,7 @@ msgid ""
 "\n"
 "Salas les saca sangre cada noche y se la sube a la azotea."
 msgstr ""
-"四名高剂量受试者没有停留在沉睡者阶段。他们变异得更深：会捕猎，会一点思考，还会说话。萨拉斯管他们叫“梦游者”。\n"
+"四名高剂量受试者没有停留在沉睡者阶段。他们变异得更深：会捕猎，会一点思考，还会说话。萨拉斯管他们叫“夜行者”。\n"
 "\n"
 "S-1。楼管大妈。三倍剂量。还在拖地。\n"
 "S-2。无家可归，住底层C。吃个不停。大喊“饿死我了！”\n"
@@ -1146,21 +1146,21 @@ msgstr "0号受试者"
 
 #: scripts/historia.gd
 msgid ""
-"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"Durmientes: 131, contando al personal. Noctámbulos: 4.\n"
 "\n"
-"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
 "\n"
 "Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
 "\n"
-"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+"Yo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
 msgstr ""
-"沉睡者：131人，含工作人员。梦游者：4人。\n"
+"沉睡者：131人，含工作人员。夜行者：4人。\n"
 "\n"
-"0号受试者：清洁工。他是应我的要求留在楼里的。他被咬了30多次，却没有变异。每当他解决掉一个梦游者，VD-7会改变他的身体几个小时，但改变不了他的头脑。他的血能分解VD-7。\n"
+"0号受试者：清洁工。他是应我的要求留在楼里的。他被咬了30多次，却没有变异。每当他解决掉一个夜行者，VD-7会改变他的身体几个小时，但改变不了他的头脑。他的血能分解VD-7。\n"
 "\n"
 "他就是解药。或者说，武器。让直升机把他活着送到总部。\n"
 "\n"
-"我不等了。梦游者就是捷径：纯VD-7，一次全部注射，我将超越人类。"
+"我不等了。夜行者就是捷径：纯VD-7，一次全部注射，我将超越人类。"
 
 #: scripts/historia.gd
 msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
@@ -1403,8 +1403,8 @@ msgid "¿Dónde está la portera?"
 msgstr "楼管大妈去哪儿了？"
 
 #: scripts/historia.gd
-msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
-msgstr "线人现在又提到四名“梦游者”：服用了更高剂量、至今还能说话的住户。其中一人据称是14号楼的楼管大妈，自封楼以来就没人见过她。Velaria称她是“一位有问题的女士，从没为我们工作过”。每到夜里，楼上就传来尖叫声。"
+msgid "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "线人现在又提到四名“夜行者”：服用了更高剂量、至今还能说话的住户。其中一人据称是14号楼的楼管大妈，自封楼以来就没人见过她。Velaria称她是“一位有问题的女士，从没为我们工作过”。每到夜里，楼上就传来尖叫声。"
 
 #: scripts/historia.gd
 msgid "Velaria busca a un conserje"

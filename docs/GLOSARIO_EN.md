@@ -115,7 +115,7 @@ Johnny, Velaria, Marta Ruiz, VD-7, los nombres en inglés que ya tenía el juego
 | Glotón: ¡HAMBRE! · ¡ÑAM! | HUNGRY! · CHOMP! |
 | Dr. Salas: ¡MÁS SUJETOS! · ¡NO ME TOCARÁS! | MORE TEST SUBJECTS! · HANDS OFF, JANITOR! |
 | Zombis: ¡OFERTAS! (dependienta) | BIG SALE! (en el bestiario: *SALE!*; igualar) |
-| durmiente · sonámbulo | sleeper · sleepwalker |
+| durmiente · noctámbulo | sleeper · nightwalker |
 | Sujeto 0 · «Asunto:» | Subject 0 · «Subject:» |
 | Torre Velaria · Turno infinito · Dirección · SOLO DIRECCIÓN · Velaria Noche | Velaria Tower · Endless Shift · Head Office · DIRECTOR ONLY · Velaria Night |
 | Canal 8 | Channel 8 |

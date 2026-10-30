@@ -1096,12 +1096,12 @@ msgid "INFORME · DOSIS ALTA"
 msgstr "REPORT · HIGH DOSE"
 
 #: scripts/historia.gd
-msgid "Los sonámbulos"
-msgstr "The Sleepwalkers"
+msgid "Los noctámbulos"
+msgstr "The Nightwalkers"
 
 #: scripts/historia.gd
 msgid ""
-"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n"
 "\n"
 "S-1. La portera. Dosis triple. Sigue fregando.\n"
 "S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
@@ -1110,7 +1110,7 @@ msgid ""
 "\n"
 "Salas les saca sangre cada noche y se la sube a la azotea."
 msgstr ""
-"Four high-dose subjects didn't stay sleepers. They've mutated further: they hunt, think a little and talk. Salas calls them \"sleepwalkers.\"\n"
+"Four high-dose subjects didn't stay sleepers. They've mutated further: they hunt, think a little and talk. Salas calls them \"nightwalkers.\"\n"
 "\n"
 "S-1. The super. Triple dose. Still mopping.\n"
 "S-2. Homeless, apt. GC. Eats nonstop. Screams \"I'M STARVING!\"\n"
@@ -1147,21 +1147,21 @@ msgstr "Subject 0"
 
 #: scripts/historia.gd
 msgid ""
-"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"Durmientes: 131, contando al personal. Noctámbulos: 4.\n"
 "\n"
-"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
 "\n"
 "Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
 "\n"
-"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+"Yo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
 msgstr ""
-"Sleepers: 131, counting staff. Sleepwalkers: 4.\n"
+"Sleepers: 131, counting staff. Nightwalkers: 4.\n"
 "\n"
-"Subject 0: the janitor. He stayed in the building at my request. He's been bitten more than 30 times and doesn't turn. When he finishes off a sleepwalker, the VD-7 changes his body for a few hours, but not his mind. His blood breaks it down.\n"
+"Subject 0: the janitor. He stayed in the building at my request. He's been bitten more than 30 times and doesn't turn. When he finishes off a nightwalker, the VD-7 changes his body for a few hours, but not his mind. His blood breaks it down.\n"
 "\n"
 "He is the cure. Or the weapon. Have the helicopter take him to headquarters alive.\n"
 "\n"
-"I'm not waiting. The sleepwalkers are the way: pure VD-7, all at once, and I will be beyond human."
+"I'm not waiting. The nightwalkers are the way: pure VD-7, all at once, and I will be beyond human."
 
 #: scripts/historia.gd
 msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
@@ -1404,8 +1404,8 @@ msgid "¿Dónde está la portera?"
 msgstr "Where is the super?"
 
 #: scripts/historia.gd
-msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
-msgstr "The source now tells of four \"sleepwalkers\": residents who took higher doses and can still talk. One of them is said to be the super at number 14, who hasn't been seen since the lockdown. Velaria calls her \"a troubled woman who never worked for us.\" At night, screams can be heard upstairs."
+msgid "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "The source now tells of four \"nightwalkers\": residents who took higher doses and can still talk. One of them is said to be the super at number 14, who hasn't been seen since the lockdown. Velaria calls her \"a troubled woman who never worked for us.\" At night, screams can be heard upstairs."
 
 #: scripts/historia.gd
 msgid "Velaria busca a un conserje"

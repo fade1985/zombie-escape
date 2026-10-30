@@ -45,7 +45,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | Dirección (de Velaria) · gerencia (del centro) | Дирекция · руководство | |
 | Zombis: vecino, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Сосед, Ползун, Пацан, Подрывник, Спрут, Толстяк | |
 | dependienta · vigilante · guardia de la tarjeta · maniquí | Продавщица · Охранник · Охранник с картой · Манекен | |
-| durmiente · sonámbulo · Sujeto 0 · sujetos | спящий · лунатик · Объект 0 · объекты / подопытные | |
+| durmiente · noctámbulo · Sujeto 0 · sujetos | спящий · полуночник · Объект 0 · объекты / подопытные | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Полицейский · Военный · Врач · Мастер · Фармацевт · Техник | |
 | escolta (militar) | конвой | |
 

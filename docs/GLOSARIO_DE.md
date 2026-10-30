@@ -32,7 +32,7 @@ español). Tras dos puntos, mayúscula si sigue una frase entera («Halte durch:
 | los Apartamentos · el Centro comercial | das Mietshaus · das Einkaufszentrum | |
 | Zombis: vecino, arrastrado, crío, dinamitero, el de los tentáculos, gordo | Nachbar, Kriecher, Bengel, Sprengmeister, Tentakeltyp, Dicke | |
 | dependienta · vigilante · guardia (de la tarjeta) · maniquí | Verkäuferin · Wachmann · Wächter (Kartenwächter) · Schaufensterpuppe | |
-| durmiente · sonámbulo · Sujeto 0 | Schläfer · Schlafwandler · Proband 0 | |
+| durmiente · noctámbulo · Sujeto 0 | Schläfer · Nachtschwärmer · Proband 0 | |
 | Supervivientes: Policía · Militar · Médica · Ferretero · Farmacéutica · Técnico | Polizist · Soldat · Ärztin · Handwerker · Apothekerin · Techniker | |
 | Velaria Corp. · Torre Velaria · Velaria Noche · Turno infinito | Velaria Corp. · Velaria-Turm · Velaria Nacht · Endlosschicht | |
 | Canal 8 · CANAL8.TV | Kanal 8 · KANAL8.TV | |

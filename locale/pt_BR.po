@@ -1096,12 +1096,12 @@ msgid "INFORME · DOSIS ALTA"
 msgstr "RELATÓRIO · DOSE ALTA"
 
 #: scripts/historia.gd
-msgid "Los sonámbulos"
-msgstr "Os sonâmbulos"
+msgid "Los noctámbulos"
+msgstr "Os noctâmbulos"
 
 #: scripts/historia.gd
 msgid ""
-"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n"
 "\n"
 "S-1. La portera. Dosis triple. Sigue fregando.\n"
 "S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
@@ -1110,7 +1110,7 @@ msgid ""
 "\n"
 "Salas les saca sangre cada noche y se la sube a la azotea."
 msgstr ""
-"Quatro sujeitos com dose alta não ficaram só como adormecidos. Mutaram mais: caçam, pensam um pouco e dizem frases. Salas chama eles de \"sonâmbulos\".\n"
+"Quatro sujeitos com dose alta não ficaram só como adormecidos. Mutaram mais: caçam, pensam um pouco e dizem frases. Salas chama eles de \"noctâmbulos\".\n"
 "\n"
 "S-1. A síndica. Dose tripla. Continua passando pano.\n"
 "S-2. Sem-teto, apto. TC. Come sem parar. Grita \"TÔ COM FOME!\".\n"
@@ -1147,21 +1147,21 @@ msgstr "Sujeito 0"
 
 #: scripts/historia.gd
 msgid ""
-"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"Durmientes: 131, contando al personal. Noctámbulos: 4.\n"
 "\n"
-"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
 "\n"
 "Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
 "\n"
-"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+"Yo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
 msgstr ""
-"Adormecidos: 131, contando a equipe. Sonâmbulos: 4.\n"
+"Adormecidos: 131, contando a equipe. Noctâmbulos: 4.\n"
 "\n"
-"Sujeito 0: o zelador. Ficou no prédio porque eu pedi. Foi mordido mais de 30 vezes e não se transforma. Quando acaba com um sonâmbulo, o VD-7 muda o corpo dele por algumas horas, mas não a cabeça. O sangue dele desfaz o VD-7.\n"
+"Sujeito 0: o zelador. Ficou no prédio porque eu pedi. Foi mordido mais de 30 vezes e não se transforma. Quando acaba com um noctâmbulo, o VD-7 muda o corpo dele por algumas horas, mas não a cabeça. O sangue dele desfaz o VD-7.\n"
 "\n"
 "Ele é a cura. Ou a arma. Que o helicóptero o leve vivo para a sede.\n"
 "\n"
-"Eu não vou esperar. Os sonâmbulos são o caminho: VD-7 puro, tudo de uma vez, e estarei acima do ser humano."
+"Eu não vou esperar. Os noctâmbulos são o caminho: VD-7 puro, tudo de uma vez, e estarei acima do ser humano."
 
 #: scripts/historia.gd
 msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
@@ -1404,8 +1404,8 @@ msgid "¿Dónde está la portera?"
 msgstr "Onde está a síndica?"
 
 #: scripts/historia.gd
-msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
-msgstr "A fonte agora fala de quatro \"sonâmbulos\": moradores que tomaram doses maiores e que ainda falam. Uma seria a síndica do 14, que ninguém vê desde o fechamento. A Velaria diz que era \"uma senhora com problemas que nunca trabalhou para nós\". À noite se ouvem gritos lá em cima."
+msgid "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "A fonte agora fala de quatro \"noctâmbulos\": moradores que tomaram doses maiores e que ainda falam. Uma seria a síndica do 14, que ninguém vê desde o fechamento. A Velaria diz que era \"uma senhora com problemas que nunca trabalhou para nós\". À noite se ouvem gritos lá em cima."
 
 #: scripts/historia.gd
 msgid "Velaria busca a un conserje"

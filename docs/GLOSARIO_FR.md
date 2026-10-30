@@ -39,7 +39,7 @@ Johnny es hombre (participios en masculino: «Tu es tombé»).
 | Canal 8 · CANAL8.TV | Canal 8 · CANAL8.TV | |
 | Turno infinito (programa) | Jour sans fin | guiño a *Un jour sans fin* (*Groundhog Day*) |
 | Dirección (de Velaria) · Gerencia (del centro) | Direction · Gérance | SOLO DIRECCIÓN = *RÉSERVÉ À LA DIRECTION* |
-| Sujeto 0 · durmientes · sonámbulos | Sujet 0 · dormeurs · somnambules | |
+| Sujeto 0 · durmientes · noctámbulos | Sujet 0 · dormeurs · noctambules | |
 | Asunto: · De: · Para: | Objet : · De : · À : | correo = *e-mail* |
 | Marta Ruiz, VD-7, Johnny, Velaria | sin cambios | |
 

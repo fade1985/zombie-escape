@@ -18,7 +18,7 @@
 #
 # La historia, en corto (la decidió el dueño el 28 oct): el VD-7 de Velaria Corp. se vende para dormir, pero deja
 # a la gente dormida y moviéndose, con el cuerpo pudriéndose y un hambre que muerde; el mordisco cambia el ADN del
-# mordido. Los científicos llaman «durmientes» a los zombis y «sonámbulos» a los jefes de planta (sujetos con más
+# mordido. Los científicos llaman «durmientes» a los zombis y «noctámbulos» a los jefes de planta (sujetos con más
 # dosis, que mutan más y dicen frases). El 14 es de Velaria: lo llenó de sujetos traídos en camiones y su propia
 # seguridad lo precintó. Los tres supervivientes de los Apartamentos vinieron con los científicos (la médica, el
 # policía y lo que queda de la escolta militar). Johnny es el Sujeto 0: no se convierte. Salas se pincha VD-7 puro
@@ -70,8 +70,8 @@ const DOSIERES := {
 				"nota": "No pienso borrarlo. Que lo lea alguien."},   # [traducir]
 			{"id": "vd7_anexo", "planta": 4, "cuerpo": "Dr. Ramón Gil, investigador de Velaria",   # [traducir]
 				"look": {"skin": Color("#e0ac69"), "hair": Color("#9b93a0")},
-				"tipo": "INFORME · DOSIS ALTA", "titulo": "Los sonámbulos",   # [traducir]
-				"texto": "Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n\nS-1. La portera. Dosis triple. Sigue fregando.\nS-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\nS-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\nS-4. Bombero jubilado, 2ºA. El fuego no le quema.\n\nSalas les saca sangre cada noche y se la sube a la azotea.",   # [traducir]
+				"tipo": "INFORME · DOSIS ALTA", "titulo": "Los noctámbulos",   # [traducir]
+				"texto": "Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n\nS-1. La portera. Dosis triple. Sigue fregando.\nS-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\nS-3. Deudas, 1ºD. Lo mezcló con sus batidos. Ya no le cabe la ropa.\nS-4. Bombero jubilado, 2ºA. El fuego no le quema.\n\nSalas les saca sangre cada noche y se la sube a la azotea.",   # [traducir]
 				"nota": "S-1 me ha llamado por mi nombre. Sacad al personal de las plantas de arriba. YA."},   # [traducir]
 			# La última no la lleva un muerto: la suelta el científico jefe (el director del estudio) al caer en la
 			# azotea (del_jefe)
@@ -80,7 +80,7 @@ const DOSIERES := {
 				"cuerpo": "Dr. Héctor Salas, director del estudio",   # [traducir]
 				"look": {"skin": Color("#f1c27d"), "hair": Color("#d9d1bd")},
 				"tipo": "LISTA DE SUJETOS · SOLO DIRECCIÓN", "titulo": "Sujeto 0",   # [traducir]
-				"texto": "Durmientes: 131, contando al personal. Sonámbulos: 4.\n\nSujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n\nEs la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n\nYo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano.",   # [traducir]
+				"texto": "Durmientes: 131, contando al personal. Noctámbulos: 4.\n\nSujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n\nEs la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n\nYo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano.",   # [traducir]
 				"nota": "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."},   # [traducir]
 		],
 	},
@@ -154,7 +154,7 @@ const NOTICIAS := [
 		"texto": "Nuestra fuente del 14 nos manda un correo interno de Velaria: «No hay ningún virus, lo sabemos». La empresa dice que es falso. Y añade que, si alguien está enfermo, será por «unas pastillas para dormir en mal estado, de otra marca». Sigue sin decir qué marca."},
 	{"id": "n_portera", "pagina": "vd7_anexo", "victoria": "",
 		"titular": "¿Dónde está la portera?",
-		"texto": "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."},
+		"texto": "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."},
 	{"id": "n_buscado", "pagina": "", "victoria": "apartamentos",
 		"titular": "Velaria busca a un conserje",
 		"texto": "Última hora: anoche, un helicóptero de Velaria se posó en la azotea del 14. Al despegar, alguien colgaba de su escalera... y se soltó sobre los árboles de la avenida. Hoy Velaria busca a un empleado de mantenimiento «que se ha llevado documentos de la empresa». ¿Es nuestra fuente?"},

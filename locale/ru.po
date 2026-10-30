@@ -1097,12 +1097,12 @@ msgid "INFORME · DOSIS ALTA"
 msgstr "ОТЧЕТ · ВЫСОКАЯ ДОЗА"
 
 #: scripts/historia.gd
-msgid "Los sonámbulos"
-msgstr "Лунатики"
+msgid "Los noctámbulos"
+msgstr "Полуночники"
 
 #: scripts/historia.gd
 msgid ""
-"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n"
 "\n"
 "S-1. La portera. Dosis triple. Sigue fregando.\n"
 "S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
@@ -1111,7 +1111,7 @@ msgid ""
 "\n"
 "Salas les saca sangre cada noche y se la sube a la azotea."
 msgstr ""
-"Четыре объекта с высокой дозой не остались спящими. Они мутировали дальше: охотятся, немного соображают и говорят фразами. Салас называет их «лунатиками».\n"
+"Четыре объекта с высокой дозой не остались спящими. Они мутировали дальше: охотятся, немного соображают и говорят фразами. Салас называет их «полуночниками».\n"
 "\n"
 "S-1. Вахтерша. Тройная доза. Все еще моет полы.\n"
 "S-2. Бездомный, кв. 0C. Ест без остановки. Орет «Хочу жрать!».\n"
@@ -1148,21 +1148,21 @@ msgstr "Объект 0"
 
 #: scripts/historia.gd
 msgid ""
-"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"Durmientes: 131, contando al personal. Noctámbulos: 4.\n"
 "\n"
-"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
 "\n"
 "Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
 "\n"
-"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+"Yo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
 msgstr ""
-"Спящих: 131, считая персонал. Лунатиков: 4.\n"
+"Спящих: 131, считая персонал. Полуночников: 4.\n"
 "\n"
-"Объект 0: дворник. Он остался в здании по моей просьбе. Его кусали больше 30 раз, а он не обращается. Когда он добивает лунатика, VD-7 на несколько часов меняет его тело, но не разум. Его кровь разрушает препарат.\n"
+"Объект 0: дворник. Он остался в здании по моей просьбе. Его кусали больше 30 раз, а он не обращается. Когда он добивает полуночника, VD-7 на несколько часов меняет его тело, но не разум. Его кровь разрушает препарат.\n"
 "\n"
 "Он — лекарство. Или оружие. Пусть вертолет доставит его в штаб-квартиру живым.\n"
 "\n"
-"Я ждать не стану. Лунатики — это путь: чистый VD-7, все сразу, и я стану выше человека."
+"Я ждать не стану. Полуночники — это путь: чистый VD-7, все сразу, и я стану выше человека."
 
 #: scripts/historia.gd
 msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
@@ -1405,8 +1405,8 @@ msgid "¿Dónde está la portera?"
 msgstr "Где вахтерша?"
 
 #: scripts/historia.gd
-msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
-msgstr "Источник теперь говорит о четырех «лунатиках»: жильцах, которые приняли большую дозу и все еще разговаривают. Одна из них — якобы вахтерша дома 14, которую никто не видел с момента закрытия. Velaria называет ее «проблемной женщиной, которая никогда у нас не работала». По ночам наверху слышны крики."
+msgid "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "Источник теперь говорит о четырех «полуночниках»: жильцах, которые приняли большую дозу и все еще разговаривают. Одна из них — якобы вахтерша дома 14, которую никто не видел с момента закрытия. Velaria называет ее «проблемной женщиной, которая никогда у нас не работала». По ночам наверху слышны крики."
 
 #: scripts/historia.gd
 msgid "Velaria busca a un conserje"

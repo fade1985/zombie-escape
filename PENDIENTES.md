@@ -74,6 +74,3 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L30** Gymbro: cambiar su aura por hacer que su cuerpo se vuelva de metal, que queda mejor visualmente.
 - **L32** Sala de mantenimiento: separar el baúl y el banco de trabajo; están tan juntos que sin querer se usa el que no
   quieres. Hay que reubicarlos.
-- **L33** Cambiar la palabra «sonámbulos» por «noctámbulos» (así se llamarán los jefes de planta a partir de ahora): en
-  `scripts/historia.gd`, en las traducciones (`locale/`) y en los glosarios (`docs/GLOSARIO_*`). Aparte queda M31, donde
-  «sonámbulo» describe a Johnny y no es este nombre.

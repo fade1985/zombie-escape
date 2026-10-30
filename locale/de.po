@@ -1096,12 +1096,12 @@ msgid "INFORME · DOSIS ALTA"
 msgstr "BERICHT · HOHE DOSIS"
 
 #: scripts/historia.gd
-msgid "Los sonámbulos"
-msgstr "Die Schlafwandler"
+msgid "Los noctámbulos"
+msgstr "Die Nachtschwärmer"
 
 #: scripts/historia.gd
 msgid ""
-"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «sonámbulos».\n"
+"Cuatro sujetos con dosis alta no se han quedado en durmientes. Han mutado más: cazan, piensan un poco y dicen frases. Salas los llama «noctámbulos».\n"
 "\n"
 "S-1. La portera. Dosis triple. Sigue fregando.\n"
 "S-2. Sin casa, Bajo C. Come sin parar. Grita «¡Tengo hambre!».\n"
@@ -1110,7 +1110,7 @@ msgid ""
 "\n"
 "Salas les saca sangre cada noche y se la sube a la azotea."
 msgstr ""
-"Vier Probanden mit hoher Dosis sind keine Schläfer geblieben. Sie sind weiter mutiert: Sie jagen, denken ein bisschen und sprechen Sätze. Salas nennt sie \"Schlafwandler\".\n"
+"Vier Probanden mit hoher Dosis sind keine Schläfer geblieben. Sie sind weiter mutiert: Sie jagen, denken ein bisschen und sprechen Sätze. Salas nennt sie \"Nachtschwärmer\".\n"
 "\n"
 "S-1. Die Portierin. Dreifache Dosis. Wischt immer noch.\n"
 "S-2. Obdachlos, Whg. EG C. Frisst ohne Pause. Schreit \"ICH HAB HUNGER!\".\n"
@@ -1147,21 +1147,21 @@ msgstr "Proband 0"
 
 #: scripts/historia.gd
 msgid ""
-"Durmientes: 131, contando al personal. Sonámbulos: 4.\n"
+"Durmientes: 131, contando al personal. Noctámbulos: 4.\n"
 "\n"
-"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un sonámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
+"Sujeto 0: el conserje. Se quedó en el edificio porque yo lo pedí. Le han mordido más de 30 veces y no se convierte. Cuando acaba con un noctámbulo, el VD-7 le cambia el cuerpo unas horas, pero no la cabeza. Su sangre lo deshace.\n"
 "\n"
 "Es la cura. O el arma. Que el helicóptero lo lleve vivo a la sede.\n"
 "\n"
-"Yo no espero. Los sonámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
+"Yo no espero. Los noctámbulos son el camino: VD-7 puro, todo de golpe, y estaré por encima del ser humano."
 msgstr ""
-"Schläfer: 131, das Personal mitgezählt. Schlafwandler: 4.\n"
+"Schläfer: 131, das Personal mitgezählt. Nachtschwärmer: 4.\n"
 "\n"
-"Proband 0: der Hausmeister. Er ist auf meine Bitte im Gebäude geblieben. Er wurde über 30-mal gebissen und verwandelt sich nicht. Wenn er einen Schlafwandler erledigt, verändert das VD-7 ein paar Stunden lang seinen Körper, aber nicht seinen Kopf. Sein Blut baut es ab.\n"
+"Proband 0: der Hausmeister. Er ist auf meine Bitte im Gebäude geblieben. Er wurde über 30-mal gebissen und verwandelt sich nicht. Wenn er einen Nachtschwärmer erledigt, verändert das VD-7 ein paar Stunden lang seinen Körper, aber nicht seinen Kopf. Sein Blut baut es ab.\n"
 "\n"
 "Er ist das Heilmittel. Oder die Waffe. Der Hubschrauber soll ihn lebend in die Zentrale bringen.\n"
 "\n"
-"Ich warte nicht. Die Schlafwandler sind der Weg: reines VD-7, alles auf einmal, und ich werde über dem Menschen stehen."
+"Ich warte nicht. Die Nachtschwärmer sind der Weg: reines VD-7, alles auf einmal, und ich werde über dem Menschen stehen."
 
 #: scripts/historia.gd
 msgid "Si lees esto, conserje: no te fíes de la gente con bata. Tampoco de los que vengan a rescatarte."
@@ -1404,8 +1404,8 @@ msgid "¿Dónde está la portera?"
 msgstr "Wo ist die Portierin?"
 
 #: scripts/historia.gd
-msgid "La fuente habla ahora de cuatro «sonámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
-msgstr "Die Quelle spricht jetzt von vier \"Schlafwandlern\": Bewohner, die eine höhere Dosis bekamen und noch sprechen. Eine davon soll die Portierin von Nummer 14 sein, die seit der Abriegelung niemand gesehen hat. Velaria nennt sie \"eine Frau mit Problemen, die nie für uns gearbeitet hat\". Nachts hört man oben Schreie."
+msgid "La fuente habla ahora de cuatro «noctámbulos»: residentes que tomaron más dosis y que todavía hablan. Una sería la portera del 14, a la que nadie ha visto desde el cierre. Velaria dice que era «una señora con problemas que nunca trabajó para nosotros». De noche se oyen gritos arriba."
+msgstr "Die Quelle spricht jetzt von vier \"Nachtschwärmern\": Bewohner, die eine höhere Dosis bekamen und noch sprechen. Eine davon soll die Portierin von Nummer 14 sein, die seit der Abriegelung niemand gesehen hat. Velaria nennt sie \"eine Frau mit Problemen, die nie für uns gearbeitet hat\". Nachts hört man oben Schreie."
 
 #: scripts/historia.gd
 msgid "Velaria busca a un conserje"
