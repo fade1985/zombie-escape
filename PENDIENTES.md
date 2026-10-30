@@ -69,3 +69,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   juego.
 - **L28** Pasillo de los apartamentos, pared de abajo: las placas con la letra del piso, en vez de estar en el tabique,
   tiradas por el suelo cerca de la puerta, como si las hubiesen arrancado.
+- **L29** Al cambiar el arma equipada por la de repuesto sale un círculo alrededor de Johnny: quitarlo, no queda bien.
