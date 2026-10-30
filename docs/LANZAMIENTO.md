@@ -35,8 +35,11 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       mirarlo (30 oct): ningún juego de Steam ni de itch.io se llama así, pero «It's a Wrap!» (Chanko Studios / AMC
       Games, 2023) tiene un protagonista llamado Johnny Rush; `johnnyrush.com` está registrado desde 2008 y los
       perfiles `JohnnyRush` de YouTube y GitHub existen; `.net`, `.io`, `.games` y `.gg` parecían libres e
-      `johnnyrush.itch.io` también. Falta: buscarlo en una base de marcas (TMview o USPTO), reservar dominio e
-      itch.io y, si no encaja el personaje homónimo de Steam, replantearlo.
+      `johnnyrush.itch.io` también. Marcas (30 oct): las búsquedas por web no dan ninguna «JOHNNY RUSH» en las
+      clases 9 y 41, pero eso no vale como comprobación: TMview rechaza las consultas automáticas y la del USPTO
+      solo funciona a mano. Falta hacerla a mano en TMview (EUIPO, EE. UU., Reino Unido y WIPO), con «johnny rush» y
+      «rush», en las clases 9 (juegos descargables) y 41 (juegos en línea), y reservar dominio e itch.io. Si no encaja
+      el personaje homónimo de Steam, replantearlo.
 - [ ] **Pruebas con gente de fuera.** Hasta ahora lo han jugado los dos del equipo y el bot. Conseguir 10–20
       personas que no sepan nada del juego (itch.io con un formulario corto, Discord, amigos de amigos) y mirar:
       dónde mueren, dónde se aburren, cuánto dura una partida, si entienden el banco, el baúl y las mutaciones sin
