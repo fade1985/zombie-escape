@@ -7,7 +7,7 @@
   techo-azotea.png     la moldura de encima de la cara (6 píxeles): en la azotea, cielo
   tapa-azotea.png      el murete visto desde arriba (los de los lados y el de abajo): bloques de remate de 32
   helipuerto.png       el helipuerto: la plataforma elevada (losas claras, el círculo amarillo y la H gastados, un
-                       borde de franjas y la cara de delante) y, a su izquierda, la rampa de chapa con sus
+                       borde de franjas y la cara de delante) y, a su derecha, la rampa de chapa con sus
                        barandillas (448 × 303; las medidas, las de planta.gd: PLATAFORMA, RAMPA...)
 
   py tools/azotea.py   → assets/sprites/
@@ -283,6 +283,9 @@ def helipuerto():
         for i in range(SOMBRA if x > 2 else 0):
             if px[x, ry1 + alto + i][3] == 0:
                 px[x, ry1 + alto + i] = (0, 0, 0, [90, 55, 25][i])
+    # (todo se ha dibujado con la rampa a la izquierda; se da la vuelta para que quede a la derecha, del lado de la puerta
+    # de llegada de la azotea)
+    im = im.transpose(Image.FLIP_LEFT_RIGHT)
     im.save(f'{OUT}/helipuerto.png')
 
 

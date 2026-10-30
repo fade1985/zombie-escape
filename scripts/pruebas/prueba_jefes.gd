@@ -421,11 +421,11 @@ func probar_helipuerto(s: Dictionary, camara: Camera2D) -> void:
 		print("  el jefe espera: %s | estado %s | en el helipuerto %s | un golpe le quita %d (esperado: 0)" % [jefa.esperando,
 			jefa.estado, mapa.en_plataforma(jefa.position), vida_antes - jefa.vida])
 	# Johnny sube por la rampa: la valla se cierra detrás
-	johnny.position = Vector2(Planta.rampa(s).position.x + 30.0, s.helipuerto.y)
+	johnny.position = Vector2(Planta.rampa(s).end.x - 30.0, s.helipuerto.y)
 	camara.reset_smoothing()
 	await get_tree().create_timer(0.3).timeout
 	print("  en la rampa: valla %s" % ("cerrada" if mapa.valla.cerrada else "abierta"))
-	johnny.position = Vector2(p.position.x + 60.0, s.helipuerto.y)
+	johnny.position = Vector2(p.end.x - 60.0, s.helipuerto.y)
 	await get_tree().create_timer(0.5).timeout
 	camara.zoom = Vector2(0.8, 0.8)
 	camara.reset_smoothing()
@@ -450,7 +450,7 @@ func probar_azotea(acabar := false) -> void:
 		tipos[m.tipo] = tipos.get(m.tipo, 0) + 1
 	print("Azotea: %d x %d | aparatos %s | manchas %d | restos %d | jefe: %s (%s)" % [s.ancho, s.alto, tipos,
 		s.manchas.size(), mapa.restos.size(), planta.jefe, planta.el_jefe])
-	johnny.position = mapa.puertas[0].llegada() - Vector2(200, 0)   # se aleja de la escalera (a la derecha): se cierra detrás
+	johnny.position = mapa.puertas[0].llegada() - Vector2(60, 200)   # se aleja de la escalera (a la derecha, sin pisar la rampa): se cierra detrás
 	await get_tree().create_timer(1.4).timeout
 	Captura.foto("captura-azotea.png")
 	print("  ha salido el jefe: %s | escalera de llegada %s | puertas %d (esperado: 1, sin escalera de incendios) | aviso: '%s'" % [
