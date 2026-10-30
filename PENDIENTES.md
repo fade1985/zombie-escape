@@ -41,6 +41,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   - Cámara de seguridad: el regreso se ve en blanco y negro por las cámaras del edificio y acaba en el monitor del ordenador.
   - Pesadilla: fundido a negro y se despierta de golpe; cada intento es otro sueño, lo que explicaría que el edificio vuelva a estar lleno.
 - **M32** Talentos: una opción para resetearlos.
+- **M33** Modo de disparo asistido: mientras se juega, que se oculte el ratón porque molesta para ver; que vuelva a
+  aparecer al abrir un menú y se oculte otra vez al cerrarlo.
+- **M34** Cambiar la flecha del ratón por una mirilla mientras se está en el juego.
 
 ## Por limar
 
