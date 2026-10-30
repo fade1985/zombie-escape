@@ -4851,6 +4851,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Throw it far: its blast hurts you too."
 
 #: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Report a bad translation"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"
 msgstr "Screen shake"
 

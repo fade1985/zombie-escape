@@ -4851,6 +4851,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Wirf sie weit weg: Ihre Explosion trifft auch dich."
 
 #: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Fehlerhafte Übersetzung melden"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"
 msgstr "Bildschirmwackeln"
 

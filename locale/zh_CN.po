@@ -4834,6 +4834,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "扔远一点：爆炸也会伤到你自己。"
 
 #: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "反馈翻译错误"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"
 msgstr "屏幕抖动"
 

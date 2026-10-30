@@ -4868,6 +4868,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Бросай подальше: взрыв ранит и тебя."
 
 #: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Сообщить о плохом переводе"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"
 msgstr "Дрожание экрана"
 

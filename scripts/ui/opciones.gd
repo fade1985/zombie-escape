@@ -24,6 +24,11 @@ signal cerrado
 # Pestaña Créditos. Quién ha hecho el juego, en una línea («Un juego de …»): vacía, no sale (29 oct 2026: el dueño la
 # rellenará cuando lo tengan claro)
 const AUTORES := ""
+# El botón de General «Avisar de un texto mal traducido» (30 oct 2026: no hay nadie nativo que revise los idiomas y se corrige con
+# lo que avisen los jugadores, docs/LANZAMIENTO.md): abre este enlace (un formulario, un Discord...). Vacío, no sale: el dueño lo
+# rellenará cuando tenga dónde recibir los avisos. Tampoco sale en español, el idioma original. (Es una variable para que la
+# prueba --idioma le ponga uno)
+static var enlace_avisos := ""
 # Las letras que no son nuestras: [nombre, autores, su licencia]. La licencia (SIL OFL 1.1) pide citarlas y que su texto vaya
 # con el juego: los .txt se exportan (export_presets.cfg, include_filter) y el botón Licencias los enseña
 const LETRAS_DE_OTROS := [
@@ -274,6 +279,14 @@ func general() -> void:
 			for c in ["font_color", "font_focus_color", "font_hover_color"]:
 				b.add_theme_color_override(c, Tema.AMARILLO)
 		fila_idioma.add_child(b)
+	# El botón de avisar de un texto mal traducido (enlace_avisos), a continuación de los idiomas: así cabe en la segunda fila y no
+	# alarga la pantalla (en ruso, una fila más y «Atrás» se sale de los 640 de alto)
+	if enlace_avisos != "" and Idioma.actual != Idioma.ORIGEN:
+		var avisar := Button.new()
+		avisar.name = "avisar_traduccion"   # no-tr
+		avisar.text = Idioma.t("Avisar de un texto mal traducido")
+		avisar.pressed.connect(func(): OS.shell_open(enlace_avisos))
+		fila_idioma.add_child(avisar)
 	var boton_modo := opcion(Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[modo]))
 	boton_modo.pressed.connect(func():
 		var orden: Array = modos().keys()

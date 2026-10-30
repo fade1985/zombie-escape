@@ -1,6 +1,7 @@
 # La prueba del idioma (-- --captura --idioma, con --ingles para verlo en inglés o --lang pt_BR / de / fr para los demás): las pantallas del menú en el idioma de la
 # prueba (el menú, Opciones con sus cuatro pestañas y las licencias de Créditos, y "Elige edificio") y el cambio de idioma en
-# caliente desde Opciones. De las licencias dice cuánto texto son y si a alguna letra le falta fuente.
+# caliente desde Opciones. De las licencias dice cuánto texto son y si a alguna letra le falta fuente. Y si sale el botón de
+# avisar de un texto mal traducido (con un enlace de prueba: sin enlace y en español no sale; sale en la foto de Opciones).
 # Con --alerta 3 --reto, "Elige edificio" sale con el selector de alerta y la tarjeta del reto. Al acabar, si algún texto
 # no tiene traducción, idioma.gd lo cuenta al cerrar ("TEXTOS SIN TRADUCIR AL IDIOMA ...").
 # Fotos: captura-idioma-opciones.png, -controles.png, -ayudas.png, -creditos.png, -licencias.png, -cambio.png y
@@ -24,6 +25,14 @@ static func probar(menu: Control) -> void:
 	# Opciones: las tres pestañas
 	var o := Opciones.abrir(menu, menu.centro)
 	await arbol.create_timer(0.4).timeout
+	# El botón de avisar de un texto mal traducido (Opciones.enlace_avisos): sin enlace no sale; con enlace, en todos los idiomas menos el español
+	var hay_aviso := func() -> bool: return o.contenido.find_child("avisar_traduccion", true, false) != null
+	var sin_enlace: bool = hay_aviso.call()
+	Opciones.enlace_avisos = "https://example.com/avisos"   # (el de verdad lo pondrá el dueño)
+	o.ver("general")
+	await arbol.create_timer(0.3).timeout
+	print("Botón «Avisar de un texto mal traducido»: sin enlace %s, con enlace %s (esperado: false, %s)" % [
+		sin_enlace, hay_aviso.call(), "false en español" if Idioma.actual == Idioma.ORIGEN else "true"])
 	Captura.foto("captura-idioma-opciones.png")
 	o.ver("controles")
 	await arbol.create_timer(0.3).timeout
@@ -60,6 +69,7 @@ static func probar(menu: Control) -> void:
 	Captura.foto("captura-idioma-cambio.png")
 	Idioma.poner(antes, false)
 	await arbol.create_timer(0.3).timeout
+	Opciones.enlace_avisos = ""
 	o.cerrar()
 	# Elige edificio
 	menu.elegir_edificio()
