@@ -5425,8 +5425,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s sobe para %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
-msgstr "São vendidas em qualidade Normal. O que você leva se perde se você cair: guarde no baú da oficina (ao completar o prédio, vai sozinho). Você leva duas de cada tipo: a que estava na mão vai para a reserva e, se você já tiver uma de reserva, ela fica no chão."
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "São vendidas em qualidade Normal. O que você leva se perde se você cair: guarde no baú da oficina (ao completar o prédio, vai sozinho). Você leva duas de cada tipo: a que estava na mão vai para a reserva e a da reserva vai para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"
@@ -5515,6 +5515,10 @@ msgstr "Já está na sua reserva: %s. Equipe pelo inventário."
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Não dá: faltam $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Comprado! %s na mão; %s vai para a reserva e %s vai para o baú."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

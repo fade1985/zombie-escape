@@ -5425,8 +5425,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s passe à %d/%d !"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
-msgstr "Vendues en qualité Normale. Ce que tu portes est perdu si tu tombes : range-le au coffre de l'atelier (en terminant le bâtiment, il y va tout seul). Tu portes deux armes de chaque type : celle que tu avais en main passe en rechange et, si tu en as déjà une de rechange, elle reste par terre."
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Vendues en qualité Normale. Ce que tu portes est perdu si tu tombes : range-le au coffre de l'atelier (en terminant le bâtiment, il y va tout seul). Tu portes deux armes de chaque type : celle que tu avais en main passe en rechange et celle de rechange va au coffre ; si elle n'y tient pas ou ne peut pas y aller, celle de ta main reste par terre."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"
@@ -5515,6 +5515,10 @@ msgstr "Déjà en rechange : %s. Équipe-la depuis l'inventaire."
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Pas assez : il te manque $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Acheté ! En main : %s ; en rechange : %s ; au coffre : %s."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

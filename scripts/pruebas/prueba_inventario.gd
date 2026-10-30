@@ -703,8 +703,9 @@ func probar_piezas() -> void:
 # llevaba dos de fuego: el lanza ácido se queda en el suelo), el bate y el cuchillo (el cuchillo deja el bate en el
 # suelo) y no le deja comprar la pistola que lleva de repuesto, tira la fregona de repuesto desde el
 # inventario y vuelve a coger el bate del suelo (va al repuesto, sin cambiarle la de la mano). Saca
-# captura-repuesto.png (el inventario con las dos de repuesto). Cada línea dice lo esperado. Deja los dólares y las
-# armas compradas como estaban
+# captura-repuesto.png (el inventario con las dos de repuesto). Luego, M26: con dos de fuego, la de repuesto (si se
+# puede guardar) va al baúl al comprar la tercera, con el baúl lleno no, y sale captura-repuesto-baul.png (el aviso).
+# Cada línea dice lo esperado. Deja los dólares, las armas compradas y el baúl como estaban
 func probar_repuesto() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
@@ -719,7 +720,7 @@ func probar_repuesto() -> void:
 			armas_guardadas.map(Objetos.nombre)]
 	var es_arma := func(c: Node) -> bool:   # una de las armas de la prueba tirada en el suelo (por su icono)
 		return "icono" in c and c.icono != null and c.icono.resource_path.get_file().get_basename() in [
-			"desintegrador", "pistola_electrica", "pistola", "fregona", "bate", "cuchillo"]
+			"desintegrador", "pistola_electrica", "pistola", "fregona", "bate", "cuchillo", "mp5", "escopeta", "lanzallamas"]
 	var suelo := func() -> Array:
 		return mapa.cosas.get_children().filter(es_arma).map(func(c): return c.icono.resource_path.get_file().get_basename())
 	await get_tree().create_timer(0.5).timeout
@@ -770,9 +771,47 @@ func probar_repuesto() -> void:
 	await get_tree().create_timer(0.4).timeout
 	Captura.foto("captura-repuesto.png")
 	inventario.cerrar()
+	await get_tree().process_frame
+	# M26: con los dos huecos llenos, la de repuesto va al baúl (si cabe y se puede guardar) y la de la mano baja al
+	# repuesto. Sin la pistola de repuesto (que no se guarda), el lanza rayos mejorado hace de repuesto: al comprar el MP5
+	# va al baúl con su calidad, aunque Johnny no complete el edificio (se lee del guardado). Con el baúl lleno, todo
+	# como siempre: la de la mano al suelo y la de repuesto no se mueve
+	Guardado.cambiar(func(g):
+		g.dolares = 300
+		g.baul_equipo = [])
+	ahorrados = 300
+	armas_guardadas.erase("pistola")
+	var baul := func() -> Array:
+		return Guardado.cargar().baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad])
+	abrir_ordenador()
+	await get_tree().create_timer(0.4).timeout
+	ordenador.abrir("armas")
+	ordenador.comprar_arma("escopeta")
+	await get_tree().process_frame
+	johnny.calidades["pistola_electrica"] = 2   # el lanza rayos de repuesto, mejorado
+	print("Compra la escopeta: %s · baúl %s (esperado: mano Cuchillo y Escopeta · repuesto [\"Bate\", \"Lanza rayos\"] · baúl []: había hueco)" % [armas.call(), baul.call()])
+	ordenador.comprar_arma("mp5")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Compra el MP5 con dos de fuego: %s · baúl %s · calidad en Johnny %d · en el suelo %s · dice «%s» (esperado: mano Cuchillo y MP5 · repuesto [\"Bate\", \"Escopeta\"] · baúl [\"pistola_electrica 2\"] · 0 · lo de antes, sin armas nuevas)" % [
+		armas.call(), baul.call(), johnny.calidad("pistola_electrica"), suelo.call(), ordenador.info.text])
+	Captura.foto("captura-repuesto-baul.png")
+	Guardado.cambiar(func(g):
+		g.baul_equipo = []
+		for i in Objetos.BAUL:
+			g.baul_equipo.append({"id": "bate", "calidad": 1}))
+	ordenador.comprar_arma("lanzallamas")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Compra el lanzallamas con el baúl lleno: %s · baúl %d casillas · en el suelo %s · dice «%s» (esperado: mano Cuchillo y Lanzallamas · repuesto [\"Bate\", \"Escopeta\"] · 32 · el MP5 se queda en el suelo)" % [
+		armas.call(), Guardado.cargar().baul_equipo.size(), suelo.call(), ordenador.info.text])
+	ordenador.abrir("")
+	ordenador.apagar()
+	await get_tree().process_frame
 	Guardado.cambiar(func(g):
 		g.dolares = antes.dolares
-		g.armas = antes.armas)
+		g.armas = antes.armas
+		g.baul_equipo = antes.baul_equipo)
 	get_tree().quit()
 
 

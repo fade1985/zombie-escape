@@ -66,7 +66,8 @@
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
-#   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto               [prueba_inventario.gd]
+#   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto; y al comprar una tercera, la de repuesto
+#                       va al baúl (M26)                                                  [prueba_inventario.gd]
 #   --tienda            la tienda de armas: sus secciones y comprar arrojables de uno en uno [prueba_inventario.gd]
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]

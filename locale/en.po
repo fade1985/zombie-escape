@@ -5425,8 +5425,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s goes up to %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
-msgstr "Sold in Normal quality. Anything you carry is lost if you die: put it in the workshop stash (it goes in on its own when you clear the building). You carry two of each type: the one in your hand moves to spare and, if you already have a spare, it stays on the floor."
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Sold in Normal quality. Anything you carry is lost if you die: put it in the workshop stash (it goes in on its own when you clear the building). You carry two of each type: the one in your hand moves to spare and your spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand stays on the floor."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"
@@ -5515,6 +5515,10 @@ msgstr "You already have the %s as a spare: equip it from the inventory."
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Not enough: you're $%d short."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Bought! %s in hand; %s goes to spare and %s goes into the stash."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

@@ -119,7 +119,9 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
-  atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl.
+  atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl. Si
+  compras un arma y ya llevas dos de ese tipo, la de la mano baja al repuesto y la de repuesto va al baúl en ese momento;
+  si el baúl está lleno o es la fregona o la pistola Normales, la de la mano se queda en el suelo.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona +100 %), el glotón (el
   Glotón; quien te hace daño lo paga: un jefe pierde el 3 % de su vida), el gymbro (el Gymbro; cuerpo a cuerpo +50 %) y

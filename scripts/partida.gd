@@ -1173,7 +1173,8 @@ func soltar_arma(id: String, donde: Vector2, calidad := 0) -> void:
 # Johnny lleva como mucho dos armas de cada tipo (cuerpo a cuerpo y a distancia): la de la mano y la de repuesto
 # (armas_guardadas), y una de cada arma, cada una con su calidad (johnny.calidades). Al llevarse otra (comprarla,
 # sacarla del baúl o de la vitrina de la joyería), va a la mano y la que llevaba pasa al repuesto; si ya tenía una de
-# repuesto, la de la mano se queda en el suelo, a sus pies. Si ya llevaba esa misma arma, se cambian: la nueva ocupa
+# repuesto, la de la mano se queda en el suelo, a sus pies (la tienda, antes, manda la de repuesto al baúl:
+# repuesto_al_baul). Si ya llevaba esa misma arma, se cambian: la nueva ocupa
 # su sitio (llena) y la vieja se queda en el suelo. La que coge del suelo ("a_la_mano" falso) va al repuesto si está
 # libre, para no cambiarle el arma en plena pelea. Con "al_suelo" falso (al sacarla del baúl), la que sobra no se deja
 # en el suelo: solo se devuelve, para guardarla en su lugar. Devuelve la que sobra ({"id", "calidad"}; vacío si ninguna)
@@ -1206,6 +1207,26 @@ func llevar_arma(id: String, calidad := 0, a_la_mano := true, al_suelo := true) 
 	if not fuera.is_empty() and al_suelo:
 		soltar_arma(fuera.id, johnny.position + Vector2(0, 34), fuera.calidad)
 	return fuera
+
+
+# Con los dos huecos de ese tipo llenos, saca el arma de repuesto y la guarda en el baúl, para que al llevarse otra (la
+# tienda del ordenador, M26) la de la mano baje al repuesto en vez de quedarse en el suelo. Se guarda en el momento, como
+# «Guardar en el baúl» del inventario: ya no se pierde si Johnny cae. Devuelve la guardada ({"id", "calidad"}) o vacío
+# si no hace falta o no se puede (no lleva repuesto, el baúl está lleno o es la fregona o la pistola Normales, que no se
+# guardan: Armas.al_baul): entonces no cambia nada y llevar_arma deja la de la mano en el suelo, como siempre
+func repuesto_al_baul(tipo: String) -> Dictionary:
+	var id := repuesto(tipo)
+	if id == "":
+		return {}
+	var calidad: int = johnny.calidad(id)
+	if not Armas.al_baul(id, calidad) or not Objetos.hueco_baul(Guardado.cargar()):
+		return {}
+	armas_guardadas.erase(id)
+	johnny.calidades.erase(id)
+	johnny.cargadores.erase(id)
+	var guardada := {"id": id, "calidad": calidad}
+	Guardado.cambiar(func(g): g.baul_equipo.append(guardada))
+	return guardada
 
 
 # Lo que lleva encima que va al baúl al completar el edificio (Armas.al_baul), como en el guardado ("baul_equipo"):
