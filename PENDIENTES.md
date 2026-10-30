@@ -15,7 +15,8 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-_(ninguna por ahora)_
+- **M26** Tienda de armas: al comprar un arma sin espacio para llevarla, la que está en el hueco de abajo va
+  directamente al baúl.
 
 ## Por limar
 
