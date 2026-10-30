@@ -17,6 +17,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   que empezar arriba del todo.
 - **F14** Talentos: al poner un punto, la página se va sola hasta abajo del todo; tiene que quedarse donde estaba
   (parecido al F13).
+- **F15** A veces los zombis se quedan atascados en una puerta al intentar salir todos a la vez.
 
 ## Mejoras
 
