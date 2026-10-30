@@ -15,8 +15,7 @@ _(ninguno por ahora)_
 
 ## Mejoras
 
-- **M24** Salir y volver a entrar en una habitación no la reinicia: los zombis (vivos o muertos) y todo lo demás
-  siguen como se dejaron, en vez de borrarse.
+_(ninguna por ahora)_
 
 ## Por limar
 
