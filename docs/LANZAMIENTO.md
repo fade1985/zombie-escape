@@ -15,15 +15,17 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       con F11 / Alt+Intro que se recuerda y la sala de pruebas fuera del juego exportado (`docs/ESCRITORIO.md`). Falta:
       probar el mando desde el primer menú y el juego en 1280×800, Linux (sello de Steam Deck) y Steam en sí. El `.exe` ya
       lleva el icono de Johnny (rcedit, `docs/ESCRITORIO.md`).
-- [ ] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
+- [x] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
       origen y el inglés el segundo (`locale/en.po`, `Idioma.t`, selector en Opciones; cómo funciona y qué falta,
       en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio», Opciones y la interfaz
       (partida, pausa, HUD, inventario, baúl, tienda, ordenador) y los datos (armas, objetos, talentos, logros, mutaciones,
       trajes, eventos) y la voz del juego (historia, noticias, tutoriales, bestiario, supervivientes, gritos de los jefes).
       También el mundo (nombres de planta, sitio y tienda, neones y carteles) y lo dibujado en imágenes (cartel de
-      planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado**; falta la revisión del
-      inglés por una persona nativa antes de salir. Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; cada uno necesita su
-      revisión nativa, sobre todo el chino y el ruso, que son los que más pesan en Steam: ~22 % y ~9 %). Fuentes nuevas para el
+      planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado.** No hay nadie nativo que
+      lo revise (decisión del dueño, 30 oct 2026): se sale con la traducción hecha y se corrige con los avisos de los
+      jugadores, así que hay que dejarles un sitio fácil donde decir qué texto está mal (ver «Dónde contar el juego»).
+      Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; mismo plan, sin revisión
+      nativa: el chino y el ruso, que son los que más pesan en Steam, ~22 % y ~9 %, son los primeros que vigilar). Fuentes nuevas para el
       cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; citadas en los créditos). Siguientes:
       turco, polaco, japonés y coreano («Añadir un idioma»).
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
