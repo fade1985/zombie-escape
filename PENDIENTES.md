@@ -20,4 +20,4 @@ _(ninguno por ahora)_
 
 ## Por limar
 
-_(ninguno por ahora)_
+- **L18** Jefe de bomberos: la lengua de llamas da un tirón al empezar y se queda parada un momento, y se nota.
