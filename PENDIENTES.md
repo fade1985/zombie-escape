@@ -18,6 +18,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **F14** Talentos: al poner un punto, la página se va sola hasta abajo del todo; tiene que quedarse donde estaba
   (parecido al F13).
 - **F15** A veces los zombis se quedan atascados en una puerta al intentar salir todos a la vez.
+- **F16** Pantalla completa: al pulsar Esc (para la pausa) también se sale de la pantalla completa, y no debería. En la
+  web es el propio navegador; mirar si se puede evitar (por ejemplo con el bloqueo de teclado de Chrome).
 
 ## Mejoras
 
