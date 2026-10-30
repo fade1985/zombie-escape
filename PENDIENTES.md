@@ -21,6 +21,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M28** Johnny ardiendo: que se vea con el mismo efecto de fuego que los zombis, que queda mejor.
 - **M29** Mutación del tentáculo (Tentacular): un efecto visual mejor, por ejemplo que se vea el tentáculo alrededor de
   Johnny, o lo que se le ocurra a Claude.
+- **M30** Tropiezo de Johnny en las salas de la portera y del gymbro: ahora la caída es una imagen fija ladeada; que
+  quede más natural, cambiando de postura y quedándose tumbado en el suelo, o con la animación de morir si la tiene.
 
 ## Por limar
 
