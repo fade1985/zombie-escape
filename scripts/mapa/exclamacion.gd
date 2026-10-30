@@ -44,9 +44,9 @@ func _process(delta: float) -> void:
 # El globo: un círculo amarillo con borde, su rabito hacia abajo (hacia lo que avisa) y el «!» (en múltiplos de 2
 # unidades, como un píxel del dibujo)
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, 18.0, TINTA)
-	draw_colored_polygon(PackedVector2Array([Vector2(-8, 12), Vector2(8, 12), Vector2(0, 26)]), TINTA)
-	draw_circle(Vector2.ZERO, 14.0, AMARILLO)
-	draw_colored_polygon(PackedVector2Array([Vector2(-5, 12), Vector2(5, 12), Vector2(0, 21)]), AMARILLO)
+	Formas.disco(self, Vector2.ZERO, 18.0, TINTA)
+	Formas.poligono(self, PackedVector2Array([Vector2(-8, 12), Vector2(8, 12), Vector2(0, 26)]), TINTA)
+	Formas.disco(self, Vector2.ZERO, 14.0, AMARILLO)
+	Formas.poligono(self, PackedVector2Array([Vector2(-5, 12), Vector2(5, 12), Vector2(0, 21)]), AMARILLO)
 	draw_rect(Rect2(-3, -10, 6, 12), TINTA)
 	draw_rect(Rect2(-3, 5, 6, 5), TINTA)

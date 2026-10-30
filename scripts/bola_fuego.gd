@@ -72,7 +72,7 @@ func apagarse() -> void:
 # pequeños y más rojos), todo encajado en píxeles de 2 unidades
 func _draw() -> void:
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.6))
-	draw_circle(Vector2.ZERO, 7.0, Color(0, 0, 0, 0.25))   # la sombra
+	Formas.disco(self, Vector2.ZERO, 7.0, Color(0, 0, 0, 0.25))   # la sombra
 	draw_set_transform(Vector2.ZERO)
 	var d := -velocidad.normalized()
 	var late := 1.0 + 0.12 * sin(t * 25.0)
@@ -80,10 +80,10 @@ func _draw() -> void:
 		var i: int = 3 - j   # de atrás adelante, para que los de delante tapen a los de detrás
 		var p := (Vector2(0, -ALTO) + d * (i * 9.0) + d.orthogonal() * sin(t * 18.0 + i) * 3.0).snapped(Vector2(2, 2))
 		var r := (RADIO - i * 2.5) * late
-		draw_circle(p, r + 2.0, Llamas.FUEGO[4])
-		draw_circle(p, r, Llamas.FUEGO[3] if i > 1 else Llamas.FUEGO[2])
+		Formas.disco(self, p, r + 2.0, Llamas.FUEGO[4])
+		Formas.disco(self, p, r, Llamas.FUEGO[3] if i > 1 else Llamas.FUEGO[2])
 	var c := Vector2(0, -ALTO).snapped(Vector2(2, 2))
-	draw_circle(c, RADIO * late + 2.0, Llamas.FUEGO[4])
-	draw_circle(c, RADIO * late, Llamas.FUEGO[2])
-	draw_circle(c, RADIO * 0.65 * late, Llamas.FUEGO[1])
-	draw_circle(c + Vector2(-2, -2), RADIO * 0.3, Llamas.FUEGO[0])
+	Formas.disco(self, c, RADIO * late + 2.0, Llamas.FUEGO[4])
+	Formas.disco(self, c, RADIO * late, Llamas.FUEGO[2])
+	Formas.disco(self, c, RADIO * 0.65 * late, Llamas.FUEGO[1])
+	Formas.disco(self, c + Vector2(-2, -2), RADIO * 0.3, Llamas.FUEGO[0])

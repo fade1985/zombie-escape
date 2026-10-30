@@ -13,6 +13,9 @@
 # llegan a la reportera como de «una fuente de dentro», y en cada una Velaria cambia un poco su versión para tapar
 # el experimento. Las vistas quedan en el guardado ("noticias_vistas").
 #
+# Los RELATOS: los textos que salen una sola vez sobre negro (ui/relato.gd): la introducción y un final por edificio.
+# Los ya salidos quedan en el guardado ("relatos").
+#
 # La historia, en corto (la decidió el dueño el 28 oct): el VD-7 de Velaria Corp. se vende para dormir, pero deja
 # a la gente dormida y moviéndose, con el cuerpo pudriéndose y un hambre que muerde; el mordisco cambia el ADN del
 # mordido. Los científicos llaman «durmientes» a los zombis y «sonámbulos» a los jefes de planta (sujetos con más
@@ -22,9 +25,9 @@
 # para estar «por encima del ser humano». Marta Ruiz, la reportera, es hermana de Elena Ruiz (cc_turno).
 #
 # IDIOMAS: los textos están aquí en español (en los dosieres, cada línea con texto lleva al final la marca de traducir;
-# las noticias van entre las dos marcas) y el inglés, en locale/en.po (docs/IDIOMAS.md). Para enseñarlos, titulo_de(),
-# cuerpo_de(), titular_de(), texto_de(), canal(), donde(), falta() y hoja() los dan ya traducidos. En los dosieres no
-# se marca el bloque entero porque las líneas de los colores (look) no son texto.
+# las noticias y los relatos van entre las dos marcas) y el inglés, en locale/en.po (docs/IDIOMAS.md). Para enseñarlos,
+# titulo_de(), cuerpo_de(), titular_de(), texto_de(), canal(), donde(), falta(), lineas_de() y hoja() los dan ya
+# traducidos. En los dosieres no se marca el bloque entero porque las líneas de los colores (look) no son texto.
 class_name Historia
 extends RefCounted
 
@@ -173,6 +176,52 @@ const NOTICIAS := [
 		"texto": "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."},
 ]
 # [/traducir]
+
+
+# ── Los relatos ──
+# Cada línea, una línea en pantalla. La clave es "intro" (al empezar la primera partida) o el id del edificio (al
+# completarlo por primera vez). Los tres acaban en el mismo estribillo a propósito: al traducirlos, que suene igual en
+# los tres. No cambiar una clave ya publicada: el guardado apunta los salidos por ella
+# [traducir]
+const RELATOS := {
+	"intro": [
+		"Número 14. Turno de noche.",
+		"Johnny es el conserje. Lleva aquí más años de los que recuerda.",
+		"Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema.",
+		"Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden.",
+		"Nada de esto viene en su contrato.",
+		"Pero alguien tendrá que limpiarlo.",
+	],
+	"apartamentos": [
+		"Johnny se agarra a la escalera. El helicóptero despega.",
+		"«No te fíes de los que vengan a rescatarte», decía la hoja.",
+		"Johnny se suelta.",
+		"Los árboles de la avenida amortiguan la caída. Más o menos.",
+		"Al otro lado, el centro comercial sigue con las luces encendidas.",
+		"Alguien tendrá que limpiarlo.",
+	],
+	"centro": [
+		"Esta vez Johnny no se suelta.",
+		"Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no.",
+		"Abajo, los cajeros siguen cobrando a nadie.",
+		"Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»",
+		"Johnny no recuerda haber estado allí.",
+		"Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas.",
+	],
+}
+# [/traducir]
+
+
+# Las líneas de un relato, en el idioma del jugador
+static func lineas_de(id: String) -> Array:
+	return RELATOS[id].map(func(l): return Idioma.t(l))
+
+
+# Apunta un relato como salido
+static func apuntar_relato(id: String) -> void:
+	Guardado.cambiar(func(g):
+		if not id in g.relatos:
+			g.relatos.append(id))
 
 
 # Las noticias ya emitidas (las que se pueden ver en el ordenador), en su orden

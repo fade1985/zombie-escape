@@ -157,7 +157,7 @@ func _draw() -> void:
 	var datos: Dictionary = TIPOS[tipo]
 	var k: float = minf(t / datos.vuelo, 1.0)
 	# La sombra, en el suelo, y el proyectil, que sube y baja (la curva de una pelota: sin(k·π))
-	draw_circle(Vector2.ZERO, 7.0, Color(0, 0, 0, 0.25))
+	Formas.disco(self, Vector2.ZERO, 7.0, Color(0, 0, 0, 0.25))
 	var alto: float = alto_salida * (1.0 - k) + sin(k * PI) * datos.altura
 	var donde := Vector2(0, -alto)
 	match tipo:
@@ -185,10 +185,10 @@ static func sarten(lienzo: CanvasItem, donde: Vector2, giro: float) -> void:
 	lienzo.draw_set_transform(donde, giro)
 	lienzo.draw_rect(Rect2(10, -4, 20, 8), Color("#1d1b2c"))   # el mango
 	lienzo.draw_rect(Rect2(12, -2, 16, 4), Color("#5a3a22"))
-	lienzo.draw_circle(Vector2.ZERO, 15.0, Color("#1d1b2c"))
-	lienzo.draw_circle(Vector2.ZERO, 12.0, Color("#3a3a46"))   # el hierro
-	lienzo.draw_circle(Vector2.ZERO, 9.0, Color("#c98a2a"))    # el aceite
-	lienzo.draw_circle(Vector2(-3, -3), 3.0, Color("#f0c060"))
+	Formas.disco(lienzo, Vector2.ZERO, 15.0, Color("#1d1b2c"))
+	Formas.disco(lienzo, Vector2.ZERO, 12.0, Color("#3a3a46"))   # el hierro
+	Formas.disco(lienzo, Vector2.ZERO, 9.0, Color("#c98a2a"))    # el aceite
+	Formas.disco(lienzo, Vector2(-3, -3), 3.0, Color("#f0c060"))
 
 
 # Una probeta de cristal con su tapón de corcho y el líquido dentro, dando vueltas (las del científico jefe)
@@ -210,8 +210,8 @@ func pintar_marca() -> void:
 	var r: float = TIPOS[tipo].marca
 	var rojo := Color(1, 0.24, 0.35)
 	marca.draw_set_transform(hasta - global_position, 0.0, Vector2(1, 0.6))
-	marca.draw_circle(Vector2.ZERO, r * k, Color(rojo, 0.12 + 0.15 * k))
-	marca.draw_arc(Vector2.ZERO, r, 0.0, TAU, 32, Color(rojo, 0.5 + 0.4 * k), 3.0)
+	Formas.disco(marca, Vector2.ZERO, r * k, Color(rojo, 0.12 + 0.15 * k))
+	Formas.arco(marca, Vector2.ZERO, r, 0.0, TAU, 32, Color(rojo, 0.5 + 0.4 * k), 3.0)
 
 
 # La botella del molotov, con el dibujo del icono (botella de cristal, líquido naranja y trapo ardiendo), dando vueltas

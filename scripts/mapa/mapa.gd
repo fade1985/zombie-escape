@@ -144,6 +144,10 @@ var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro,
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
 var valla: Node2D = null          # la valla de la rampa del helipuerto (solo en la azotea; valla.gd)
+# Lo que la partida apunta al salir de un mapa guardado (partida.gd, dejar_mapa)
+var quedan := 0                   # los zombis vivos que se quedan dentro (para el minimapa)
+var jefe: Node2D = null           # el jefe, si se ha salido con él dentro
+var jefe_salio := false           # y si ya había aparecido
 
 
 func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
@@ -278,13 +282,17 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		add_child(SalaArmas.new())   # la sala de pruebas: la diana, las líneas de ayuda, su panel de daño y el baúl de pruebas (sala_armas.gd)
 	if sitio.has("apt"):
 		preparar_niebla()
-	# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
-	# la de su habitación)
+	al_entrar()
+	set_process(sitio.has("apt") or sitio.tipo == "expo")
+
+
+# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
+# la de su habitación)
+func al_entrar() -> void:
 	Luz.capa_johnny = Luz.CAPA_COSAS
 	for quien in get_tree().get_nodes_in_group("jugador") + get_tree().get_nodes_in_group("presa"):
 		quien.remove_meta("sala")
 		Luz.poner_capa(quien, Luz.CAPA_COSAS)
-	set_process(sitio.has("apt") or sitio.tipo == "expo")
 
 
 func textura(estilo: String, suelo: String, pared := "") -> Dictionary:
@@ -463,9 +471,9 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 		if s.has("linea"):
 			var linea := Rect2(s.c0 * 16, s.linea / 2.0 - 1, s.ancho * 16, LINEA_TRASTERO.get_height())
 			lienzo.draw_texture_rect_region(LINEA_TRASTERO, linea, Rect2(linea.position.x, 0, linea.size.x, linea.size.y))
-	# el helipuerto de la azotea: la plataforma, con su cara y su rampa a la izquierda (sus choques, poner_helipuerto)
+	# el helipuerto de la azotea: la plataforma, con su cara y su rampa a la derecha (sus choques, poner_helipuerto)
 	if sitio.has("helipuerto"):
-		lienzo.draw_texture(HELIPUERTO, Vector2(Planta.rampa(sitio).position.x, Planta.plataforma(sitio).position.y) / 2.0)
+		lienzo.draw_texture(HELIPUERTO, Planta.plataforma(sitio).position / 2.0)
 	# las manchas de sangre de la sala de mantenimiento (y la azotea): cada una gira de 90 en 90 grados y se voltea al azar
 	for m in sitio.get("manchas", []):
 		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
@@ -497,10 +505,10 @@ func poner_helipuerto() -> void:
 	cuerpo.add_to_group("obstaculos")
 	add_child(cuerpo)
 	for caja in [Rect2(p.position.x, p.position.y, p.size.x, b),            # el borde de arriba
-			Rect2(p.end.x - b, p.position.y, b, p.size.y),                    # el de la derecha
+			Rect2(p.position.x, p.position.y, b, p.size.y),                   # el de la izquierda
 			Rect2(p.position.x, p.end.y - b, p.size.x, b + alto),             # el de abajo, con la cara de delante
-			Rect2(p.position.x, p.position.y, b, r.position.y + bar - p.position.y),   # el de la izquierda, encima
-			Rect2(p.position.x, r.end.y - bar, b, p.end.y - r.end.y + bar),            # y debajo de la rampa
+			Rect2(p.end.x - b, p.position.y, b, r.position.y + bar - p.position.y),    # el de la derecha, encima
+			Rect2(p.end.x - b, r.end.y - bar, b, p.end.y - r.end.y + bar),             # y debajo de la rampa
 			Rect2(r.position.x, r.position.y, r.size.x, bar),                 # las barandillas de la rampa
 			Rect2(r.position.x, r.end.y - bar, r.size.x, bar)]:
 		var forma := CollisionShape2D.new()
@@ -511,11 +519,11 @@ func poner_helipuerto() -> void:
 		cuerpo.add_child(forma)
 	var cara := CollisionShape2D.new()
 	var triangulo := ConvexPolygonShape2D.new()
-	triangulo.points = PackedVector2Array([Vector2(r.position.x, r.end.y), Vector2(r.end.x, r.end.y), Vector2(r.end.x, r.end.y + alto)])
+	triangulo.points = PackedVector2Array([Vector2(r.position.x, r.end.y), Vector2(r.end.x, r.end.y), Vector2(r.position.x, r.end.y + alto)])
 	cara.shape = triangulo
 	cuerpo.add_child(cara)
 	valla = VALLA.new()
-	valla.montar(Rect2(p.position.x, r.position.y, b, r.size.y), self)
+	valla.montar(Rect2(p.end.x - b, r.position.y, b, r.size.y), self)
 	cosas.add_child(valla)
 
 

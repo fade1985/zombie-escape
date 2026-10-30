@@ -334,7 +334,7 @@ func _draw() -> void:
 			draw_set_transform(Vector2(0, PIE - 6), 0.0, Vector2(1, 0.6))
 			for i in 3:
 				var a := tiempo * 14.0 + i * TAU / 3.0
-				draw_arc(Vector2.ZERO, BRAZOS, a, a + 1.4, 12, Color(1, 1, 1, 0.5), 4.0)
+				Formas.arco(self, Vector2.ZERO, BRAZOS, a, a + 1.4, 12, Color(1, 1, 1, 0.5), 4.0)
 		"salto":
 			# donde cae: el círculo se llena hacia fuera y su sombra crece en el medio (aviso.gd)
 			var k := minf(1.0, t / datos.vuelo)
@@ -349,6 +349,6 @@ func pintar_encima(lienzo: Node2D) -> void:
 		return
 	var brillo := 0.5 + 0.2 * sin(tiempo * 6.0)
 	lienzo.draw_set_transform(Vector2(0, -arriba * 0.45), 0.0, Vector2(1, 1.3))
-	lienzo.draw_arc(Vector2.ZERO, 52.0, 0.0, TAU, 32, Color(ACERO, brillo), 4.0)
-	lienzo.draw_arc(Vector2.ZERO, 46.0, 0.0, TAU, 32, Color(ACERO, brillo * 0.4), 2.0)
+	Formas.arco(lienzo, Vector2.ZERO, 52.0, 0.0, TAU, 32, Color(ACERO, brillo), 4.0)
+	Formas.arco(lienzo, Vector2.ZERO, 46.0, 0.0, TAU, 32, Color(ACERO, brillo * 0.4), 2.0)
 	lienzo.draw_set_transform(Vector2.ZERO)

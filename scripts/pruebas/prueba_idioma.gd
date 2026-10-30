@@ -1,6 +1,7 @@
 # La prueba del idioma (-- --captura --idioma, con --ingles para verlo en inglés o --lang pt_BR / de / fr para los demás): las pantallas del menú en el idioma de la
 # prueba (el menú, Opciones con sus cuatro pestañas y las licencias de Créditos, y "Elige edificio") y el cambio de idioma en
-# caliente desde Opciones. De las licencias dice cuánto texto son y si a alguna letra le falta fuente.
+# caliente desde Opciones. De las licencias dice cuánto texto son y si a alguna letra le falta fuente. Y si sale el botón de
+# avisar de un texto mal traducido (sin enlace y en español no sale; con el enlace de verdad sale en la foto de Opciones).
 # Con --alerta 3 --reto, "Elige edificio" sale con el selector de alerta y la tarjeta del reto. Al acabar, si algún texto
 # no tiene traducción, idioma.gd lo cuenta al cerrar ("TEXTOS SIN TRADUCIR AL IDIOMA ...").
 # Fotos: captura-idioma-opciones.png, -controles.png, -ayudas.png, -creditos.png, -licencias.png, -cambio.png y
@@ -22,8 +23,18 @@ static func probar(menu: Control) -> void:
 	if Idioma.actual in ["es", "en"]:   # (de los demás idiomas no se sabe de antemano lo que dirá: se ve en las fotos)
 		print("  %s" % ("BIEN: lo traducido es lo esperado" if [salir, uno, tres] == esperado else "MAL: se esperaba %s" % [esperado]))
 	# Opciones: las tres pestañas
+	var enlace := Opciones.enlace_avisos   # (el de verdad: se vacía para mirar el caso sin enlace y se devuelve al acabar)
+	Opciones.enlace_avisos = ""
 	var o := Opciones.abrir(menu, menu.centro)
 	await arbol.create_timer(0.4).timeout
+	# El botón de avisar de un texto mal traducido (Opciones.enlace_avisos): sin enlace no sale; con enlace, en todos los idiomas menos el español
+	var hay_aviso := func() -> bool: return o.contenido.find_child("avisar_traduccion", true, false) != null
+	var sin_enlace: bool = hay_aviso.call()
+	Opciones.enlace_avisos = enlace
+	o.ver("general")
+	await arbol.create_timer(0.3).timeout
+	print("Botón «Avisar de un texto mal traducido»: sin enlace %s, con enlace %s (esperado: false, %s)" % [
+		sin_enlace, hay_aviso.call(), "false en español" if Idioma.actual == Idioma.ORIGEN else "true"])
 	Captura.foto("captura-idioma-opciones.png")
 	o.ver("controles")
 	await arbol.create_timer(0.3).timeout

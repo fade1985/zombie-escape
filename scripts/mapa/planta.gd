@@ -39,8 +39,8 @@ const ARMAS_CASILLAS := 34       # la sala de pruebas (cuadrada): del centro a l
 const AZOTEA_COLS := 44           # la azotea del centro comercial, como la del juego JS (rooms.js, ROOF_COLS)
 const AZOTEA_FILAS := 30
 # El helipuerto (helipuerto.png, de tools/azotea.py): una plataforma un poco más alta que el suelo, siempre en el
-# centro de la azotea, con la rampa a la izquierda (se llega por la derecha, como en el pasillo se sale por la salida de
-# incendios: hay que cruzar la azotea y rodear la plataforma hasta ella). Es el ring del jefe
+# centro de la azotea, con la rampa a la derecha, del lado de la puerta de llegada (L17: se sube de frente, en cuanto
+# se llega por la escalera). Es el ring del jefe
 # final: espera arriba y, en cuanto sube Johnny, una valla cierra la rampa hasta que cae (mapa.gd y partida.gd)
 const PLATAFORMA := Vector2(768, 576)   # lo de arriba, 24 × 18 casillas (con su borde, que no se pisa)
 const PLATAFORMA_ALTO := 24.0           # lo que se eleva: la cara de delante, que se ve por debajo
@@ -490,10 +490,10 @@ static func plataforma(sitio: Dictionary) -> Rect2:
 	return Rect2(sitio.helipuerto - PLATAFORMA / 2.0, PLATAFORMA)
 
 
-# La rampa, pegada a la izquierda de la plataforma y en medio de ese lado (con sus barandillas)
+# La rampa, pegada a la derecha de la plataforma y en medio de ese lado (con sus barandillas), frente a la puerta de llegada
 static func rampa(sitio: Dictionary) -> Rect2:
 	var p := plataforma(sitio)
-	return Rect2(p.position.x - RAMPA.x, sitio.helipuerto.y - RAMPA.y / 2.0, RAMPA.x, RAMPA.y)
+	return Rect2(p.end.x, sitio.helipuerto.y - RAMPA.y / 2.0, RAMPA.x, RAMPA.y)
 
 
 # Lo que ocupa el helipuerto en el suelo: la plataforma y la rampa, cada una con su cara de delante

@@ -5,7 +5,8 @@
 #     gasta en el árbol de talentos. Lo comprado se nota al momento.
 #   - "Tienda de armas": compra con los dólares ahorrados un arma (Armas.PRECIOS), en calidad Normal (parte 4 de la
 #     tienda y las piezas: Armas.CALIDADES), y queda desbloqueada en el guardado. Va a la mano, y la que llevaras de ese tipo pasa al repuesto o, si ya
-#     tienes una de repuesto, se queda en el suelo (partida.llevar_arma: dos de cada tipo como mucho). Desde el
+#     tienes una de repuesto, esa va al baúl en el momento (partida.repuesto_al_baul; si no cabe o no se puede
+#     guardar, la de la mano se queda en el suelo: partida.llevar_arma, dos de cada tipo como mucho). Desde el
 #     25 oct también vende el lanzallamas, el lanza ácido y el lanza rayos, que antes se creaban en el banco.
 #     Cuatro secciones, las familias de las piezas (Armas.familia): Cuerpo a cuerpo, A distancia, Especiales y
 #     Arrojables. Los arrojables (Lanzables.PRECIOS) se compran de uno en uno, mientras quepan (van a sus montones de
@@ -108,6 +109,7 @@ func encender(p: Node) -> void:
 # El «!» amarillo que bota en la esquina de arriba a la derecha de un icono del escritorio con algo nuevo
 func marca_nuevo() -> Label:
 	var marca := Label.new()
+	marca.name = "marca_nuevo"   # no-tr
 	marca.text = "!"
 	marca.size = Vector2(24, 24)
 	marca.position = Vector2(102, 2)
@@ -123,11 +125,43 @@ func marca_nuevo() -> Label:
 	return marca
 
 
+# Pone o quita el aviso de un icono del escritorio ("icono": su fila de ICONOS): el rótulo en amarillo y el «!» que bota
+func poner_aviso(b: Button, icono: Array, nuevo: bool) -> void:
+	var programa: String = icono[0]
+	var rotulo: Label = b.find_child("rotulo_" + programa, true, false)
+	var marca := b.get_node_or_null("marca_nuevo")
+	if nuevo:
+		rotulo.text = Idioma.t(AVISO_ICONO[programa])
+		rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
+		if marca == null:
+			b.add_child(marca_nuevo())
+	else:
+		rotulo.text = Idioma.t(icono[2])
+		rotulo.remove_theme_color_override("font_color")
+		if marca:
+			b.remove_child(marca)
+			marca.queue_free()
+
+
+# Pone al día los avisos de los iconos con lo que dice el guardado ahora: así se quitan en cuanto se mira o se cobra lo
+# nuevo, sin tener que apagar el ordenador
+func refrescar_avisos() -> void:
+	var nuevos: Array = MESA.novedades(Guardado.cargar())
+	for i in ICONOS:
+		var b := iconos.get_node_or_null("icono_" + i[0]) as Button
+		if b:
+			poner_aviso(b, i, i[0] in nuevos)
+
+
 func apagar() -> void:
 	if fondo:
 		fondo.queue_free()
 		fondo = null
 	abierta = ""
+	# el «!» de encima de la mesa lo mira el juego cada segundo, y parado no lo hace: se pone al día al salir
+	var mesa: Node2D = partida.mapa.ordenador if partida and partida.mapa else null
+	if mesa:
+		mesa.get_node("Exclamacion").refrescar()
 	apagado.emit()
 
 
@@ -160,7 +194,7 @@ func montar_monitor() -> void:
 	iconos.position = Vector2(10, 12)
 	iconos.add_theme_constant_override("separation", 1)
 	pantalla.add_child(iconos)
-	var nuevos: Array = MESA.novedades(Guardado.cargar())   # una sola vez, para los avisos de los iconos
+	var nuevos: Array = MESA.novedades(Guardado.cargar())   # al encender; luego los avisos se ponen al día con refrescar_avisos
 	for i in ICONOS:
 		var b := Button.new()
 		b.name = "icono_" + i[0]
@@ -194,10 +228,7 @@ func montar_monitor() -> void:
 		rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		dentro.add_child(rotulo)
 		var programa: String = i[0]
-		if programa in nuevos:
-			rotulo.text = Idioma.t(AVISO_ICONO[programa])
-			rotulo.add_theme_color_override("font_color", Tema.AMARILLO)
-			b.add_child(marca_nuevo())
+		poner_aviso(b, i, programa in nuevos)
 		b.pressed.connect(func():
 			if programa == "apagar":
 				apagar()
@@ -622,7 +653,7 @@ func subir(id: String) -> void:
 func programa_armas(c: VBoxContainer) -> void:
 	var s := Guardado.cargar()
 	saldo(c, s)
-	nota(c, Idioma.t("Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."))
+	nota(c, Idioma.t("Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."))
 	nota_partida(c)
 	var ids := Armas.PRECIOS.keys()
 	ids.sort_custom(func(a, b): return Armas.PRECIOS[a] < Armas.PRECIOS[b])
@@ -721,10 +752,18 @@ func comprar_arma(id: String) -> void:
 	Guardado.escribir(s)
 	partida.ahorrados = s.dolares
 	var vieja: String = Armas.nombre(johnny.huecos[w.tipo], johnny.calidad(johnny.huecos[w.tipo]))
+	var al_baul: Dictionary = partida.repuesto_al_baul(w.tipo)   # (con los dos huecos llenos, la de repuesto va al baúl: M26)
 	var suelo: Dictionary = partida.llevar_arma(id)   # (en Normal: las mejoradas salen del banco y de la joyería)
 	abrir("armas", "b_" + id)
-	info.set_deferred("text", (Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto.") if suelo.is_empty() else
-		Idioma.t("¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.")) % [Armas.nombre(id), vieja])   # después de marcar el botón (que pone su explicación)
+	var texto: String
+	if not al_baul.is_empty():
+		texto = Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl.") % [
+			Armas.nombre(id), vieja, Armas.nombre(al_baul.id, al_baul.calidad)]
+	elif suelo.is_empty():
+		texto = Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto.") % [Armas.nombre(id), vieja]
+	else:
+		texto = Idioma.t("¡Compra hecha! %s a la mano; %s se queda en el suelo: ya llevabas dos.") % [Armas.nombre(id), vieja]
+	info.set_deferred("text", texto)   # después de marcar el botón (que pone su explicación)
 
 
 # Un arrojable más para esta partida (como cogerlo del suelo: lanzables.sumar), si cabe y le llega
@@ -811,6 +850,7 @@ func cobrar_logro(id: String) -> void:
 		return
 	Sonido.tocar("compra")
 	partida.ahorrados = Guardado.cargar().dolares
+	refrescar_avisos()   # (con el último premio cobrado, se quita el aviso de Logros)
 	abrir("logros", "b_" + id)
 	info.set_deferred("text", Idioma.t("¡Cobrados $%d! Ya puedes gastarlos en puntos o armas.") % dinero)
 
@@ -912,6 +952,7 @@ func programa_noticias(c: VBoxContainer, foco: String) -> String:
 			if tele.noticia != n:
 				tele.poner(n)
 				Historia.ver_noticia(n.id)
+				refrescar_avisos()   # (con la última nueva vista, se quita el aviso de Noticias)
 		enlazar(b, Idioma.t("Emisión %d: «%s». Pulsa para saltar o repetir.") % [i + 1, Historia.titular_de(n)], tele.saltar)
 		b.focus_entered.connect(ver)
 		b.mouse_entered.connect(ver)
@@ -932,10 +973,7 @@ func programa_colecciones(c: VBoxContainer) -> void:
 	if s.colecciones_nuevo:
 		# ya está visto: el aviso del icono se quita hasta que haya algo nuevo
 		s = Guardado.cambiar(func(g): g.colecciones_nuevo = false)
-		var rotulo: Label = iconos.find_child("rotulo_colecciones", true, false)
-		if rotulo:
-			rotulo.text = Idioma.t("Colecciones")
-			rotulo.remove_theme_color_override("font_color")
+		refrescar_avisos()
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 8)
 	c.add_child(fila)

@@ -343,7 +343,7 @@ func _pintar_encima() -> void:
 			var estrella := PackedVector2Array()
 			for j in 10:
 				estrella.append(p + Vector2.from_angle(j * TAU / 10.0 - PI / 2.0) * (6.0 if j % 2 == 0 else 2.5))
-			$Vapor.draw_colored_polygon(estrella, Color("#ffd23f"))
+			Formas.poligono($Vapor, estrella, Color("#ffd23f"))
 	pintar_encima($Vapor)
 
 

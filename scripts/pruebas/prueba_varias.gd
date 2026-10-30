@@ -712,6 +712,123 @@ func probar_equilibrio() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --relato": los textos de la historia (historia.gd, RELATOS; ui/relato.gd), en el idioma de la prueba.
+# La introducción, por su camino de verdad (el _ready de partida.gd, con la sala en negro desde el primer fotograma), y
+# con todas las formas de pasar de línea; el final de los Apartamentos, agarrando la escalera, y que después sale el
+# cartel (captura-relato-cartel-<idioma>.png); el del centro comercial, y saltarlo con B. Una foto de cada uno
+# (captura-relato-<id>-<idioma>.png). Que quedan apuntados, que no se repiten, que no salen en el reto y que el guardado
+# de verdad sigue igual. Lo que comprueba lo escribe en la terminal
+func probar_relato() -> void:
+	var abierto := func() -> Relato:
+		for h in get_children():
+			if h is Relato and h.is_processing_input():
+				return h
+		return null
+	var pulsar := func(evento: InputEvent) -> void:
+		Input.parse_input_event(evento)
+		await get_tree().create_timer(0.25).timeout
+	var tecla := func(codigo: Key) -> InputEventKey:
+		var e := InputEventKey.new()
+		e.keycode = codigo
+		e.pressed = true
+		return e
+	var clic := func(boton: MouseButton) -> InputEventMouseButton:
+		var e := InputEventMouseButton.new()
+		e.button_index = boton
+		e.pressed = true
+		return e
+	var mando := func(boton: JoyButton) -> InputEventJoypadButton:
+		var e := InputEventJoypadButton.new()
+		e.button_index = boton
+		e.pressed = true
+		return e
+	var toque := InputEventScreenTouch.new()
+	toque.pressed = true
+	var guardado_real := FileAccess.get_modified_time("user://guardado.json")
+	# la introducción: ya está abierta desde el _ready, y lo primero que se dibuja es negro (el pie, abajo, aparte)
+	await RenderingServer.frame_post_draw
+	var foto := get_viewport().get_texture().get_image()
+	var encendidos := 0
+	for x in range(0, foto.get_width(), 4):
+		for y in range(0, foto.get_height() - 60, 4):
+			if foto.get_pixel(x, y).v > 0.02:
+				encendidos += 1
+	var r: Relato = abierto.call()
+	print("Relato · intro: abierta %s · juego parado %s · cambiando %s · píxeles encendidos en el primer fotograma %d (esperado: true, true, false, 0)" % [
+		r != null, get_tree().paused, cambiando, encendidos])
+	var pista_antes := guia.pista
+	# sola: la primera línea al cabo de ESPERA y la segunda cuando toca
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	var sola := r.vistas
+	await get_tree().create_timer(Relato.POR_LINEA + r.lineas[0].text.length() * Relato.POR_LETRA + 0.1).timeout
+	print("Relato · sin tocar nada: %d línea y luego %d (esperado: 1, 2)" % [sola, r.vistas])
+	# lo que no pasa de línea
+	var antes := r.vistas
+	for evento: InputEvent in [InputEventMouseMotion.new(), clic.call(MOUSE_BUTTON_WHEEL_UP), tecla.call(KEY_ALT), tecla.call(KEY_F11)]:
+		await pulsar.call(evento)
+	print("Relato · ratón movido, rueda, Alt y F11: %d líneas (esperado: %d)" % [r.vistas, antes])
+	await pulsar.call(tecla.call(KEY_SPACE))
+	var con_tecla := r.vistas
+	await pulsar.call(clic.call(MOUSE_BUTTON_LEFT))
+	var con_clic := r.vistas
+	await pulsar.call(toque)
+	print("Relato · tecla %d, clic %d, toque %d (esperado: %d, %d, %d; el toque, una sola)" % [con_tecla, con_clic, r.vistas, antes + 1, antes + 2, antes + 3])
+	await pulsar.call(mando.call(JOY_BUTTON_A))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · botón del mando: %d de %d líneas · alto del texto %d de %d · sigue abierta %s (esperado: todas, true)" % [
+		r.vistas, r.lineas.size(), r.columna.size.y, get_viewport().get_visible_rect().size.y, abierto.call() != null])
+	Captura.foto("captura-relato-intro-%s.png" % Idioma.actual)
+	await pulsar.call(mando.call(JOY_BUTTON_A))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · otra pulsación la cierra: abierta %s · juego parado %s · apuntada %s (esperado: false, false, true)" % [
+		abierto.call() != null, get_tree().paused, "intro" in Guardado.cargar().relatos])
+	# (con --guiado, la guía de la primera partida espera a que se cierre y entonces empieza)
+	print("Relato · guía activa %s: pista durante la intro «%s», al cerrarla «%s» (con --guiado: «», moverse)" % [guia.activa, pista_antes, guia.pista])
+	Captura.foto("captura-relato-sala.png")   # (la sala de siempre)
+	# el final de los Apartamentos, agarrando la escalera. Lo que se pulsa al salir no cuenta (ESPERA)
+	planta.num = Planta.PLANTAS
+	subir_al_helicoptero()
+	await pulsar.call(tecla.call(KEY_SPACE))
+	r = abierto.call()
+	print("Relato · al agarrar la escalera: abierta %s · cambiando %s · juego parado %s · acabada %s · líneas con un Espacio al salir %d (esperado: true, true, true, false, 0)" % [
+		r != null, cambiando, get_tree().paused, terminada, r.vistas])
+	await get_tree().create_timer(Relato.ESPERA).timeout
+	while r.vistas < r.lineas.size():
+		await pulsar.call(tecla.call(KEY_SPACE))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · apartamentos: alto del texto %d" % r.columna.size.y)
+	Captura.foto("captura-relato-apartamentos-%s.png" % Idioma.actual)
+	await pulsar.call(tecla.call(KEY_SPACE))
+	await get_tree().create_timer(Relato.FUNDIDO + 0.5).timeout
+	print("Relato · al cerrarlo, el cartel: acabada %s · abierto «%s» · apuntado %s (esperado: true, fin, true)" % [
+		terminada, menus.abierto, "apartamentos" in Guardado.cargar().relatos])
+	Captura.foto("captura-relato-cartel-%s.png" % Idioma.actual)
+	# el del centro comercial; luego, otra vez, saltándolo con B a la primera
+	ver_relato("centro")
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	r = abierto.call()
+	while r.vistas < r.lineas.size():
+		await pulsar.call(tecla.call(KEY_ENTER))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · centro: alto del texto %d" % r.columna.size.y)
+	Captura.foto("captura-relato-centro-%s.png" % Idioma.actual)
+	await pulsar.call(tecla.call(KEY_ENTER))
+	var repetir := puede_relato("centro")
+	Guardado.cambiar(func(g): g.relatos.erase("centro"))
+	Reto.activo = true
+	var en_el_reto := puede_relato("centro")
+	Reto.activo = false
+	ver_relato("centro")
+	await get_tree().create_timer(Relato.ESPERA + 0.1).timeout
+	await pulsar.call(mando.call(JOY_BUTTON_B))
+	await get_tree().create_timer(Relato.FUNDIDO).timeout
+	print("Relato · ya salido, otra vez: %s · en el reto: %s · saltado con B: abierta %s (esperado: false, false, false)" % [
+		repetir, en_el_reto, abierto.call() != null])
+	print("Relato · apuntados: %s · guardado de prueba: %s · el de verdad sin tocar: %s" % [Guardado.cargar().relatos, Guardado.archivo,
+		FileAccess.get_modified_time("user://guardado.json") == guardado_real])
+	get_tree().quit()
+
+
 # Con "--captura --tutorial": los tutoriales (tutoriales.gd, ui/tutorial.gd). Empieza con todos sin ver: la ventana de
 # «Cómo se juega» con el juego parado (captura-tutorial-ventana.png); otro pedido mientras está abierta sale detrás
 # (captura-tutorial-cola.png); al cerrarlos, el juego sigue y no se repiten. La lista del apartado Tutorial desde la
@@ -2410,6 +2527,40 @@ func probar_guiado() -> void:
 
 # --pantalla: la pantalla completa del ordenador (pantalla.gd): F11 y Alt+Intro la ponen y la quitan, el ajuste se guarda
 # y F9 (la sala de pruebas) sigue yendo aparte
+# La imagen llena la ventana (Pantalla): la escala de cada tamaño de pantalla, que no quedan bordes y que al cambiar de
+# tamaño la ventana se ajustan la escala y la cámara
+func probar_escala() -> void:
+	for caso: Array in [[1920, 1080, 1.5], [1920, 991, 1.5], [1280, 720, 1.0], [1280, 800, 1.0], [1366, 768, 1.0],
+			[2560, 1440, 2.0], [3840, 2160, 3.0], [2560, 1080, 1.5], [1920, 914, 1.428], [1600, 900, 1.406], [800, 500, 0.781]]:
+		var escala := Pantalla.escala_para(Vector2(caso[0], caso[1]))
+		print("Escala · %d×%d → ×%.3f, se ve %d×%d (esperado: ×%.3f)" % [caso[0], caso[1], escala, caso[0] / escala,
+			caso[1] / escala, caso[2]])
+	var ventana := get_window()
+	var camara: Camera2D = johnny.get_node("Camara")
+	get_viewport().size_changed.connect(Pantalla.ajustar_escala)
+	var ver := func(cuando: String) -> void:
+		await get_tree().create_timer(0.6).timeout
+		var se_ve := get_viewport_rect().size
+		print("Escala · %s: ventana %s, ×%.3f, se ve %s, pintado %s (ha de ser la ventana), cámara %d a %d" % [cuando, ventana.size,
+			ventana.content_scale_factor, se_ve, ventana.get_texture().get_image().get_size(), camara.limit_left, camara.limit_right])
+	await get_tree().create_timer(0.5).timeout
+	Pantalla.ajustar_escala()
+	await ver.call("al empezar")
+	Captura.foto("captura-escala.png")
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	DisplayServer.window_set_size(Vector2i(1500, 960))
+	await ver.call("a 1500×960")
+	DisplayServer.window_set_size(Vector2i(1200, 860))
+	await ver.call("a 1200×860")
+	Captura.foto("captura-escala-justa.png")
+	Tactil.activo = true
+	Tactil.preparar()
+	print("Escala · móvil: base %s, ×%.3f, sin redondear %s (esperado: (960, 640), ×1.000, true)" % [ventana.content_scale_size,
+		ventana.content_scale_factor, ventana.content_scale_stretch == Window.CONTENT_SCALE_STRETCH_FRACTIONAL])
+	Tactil.activo = false
+	get_tree().quit()
+
+
 func probar_pantalla() -> void:
 	var pulsar := func(tecla: Key, alt := false) -> void:
 		for pulsada in [true, false]:
@@ -2477,8 +2628,8 @@ func probar_rendimiento() -> void:
 		for ms in tiempos:
 			peor = maxf(peor, ms)
 			suma += ms
-		print("Rendimiento · %s: %d fotogramas · media %.1f ms · peor %.1f ms · velocidad mínima del juego %.2f" % [
-			nombre, tiempos.size(), suma / maxf(1.0, tiempos.size()), peor, lento])
+		print("Rendimiento · %s: %d fotogramas · media %.1f ms · peor %.1f ms · velocidad mínima del juego %.2f · página %s" % [
+			nombre, tiempos.size(), suma / maxf(1.0, tiempos.size()), peor, lento, Lentos.visibilidad()])
 	var hasta := Time.get_ticks_msec() + 2000
 	await medir.call("de siempre (2 s)", func(): return Time.get_ticks_msec() >= hasta)
 	for fase in [1, 2, 2]:
@@ -2491,4 +2642,225 @@ func probar_rendimiento() -> void:
 		await medir.call("aviso del latigazo (%s)" % como, func(): return gloton.estado != "aviso_latigazo")
 		await medir.call("latigazo (%s)" % como, func(): return gloton.estado != "latigazo")
 		await get_tree().create_timer(0.5).timeout
+	get_tree().quit()
+
+
+# --dibujos: lo que cuesta cada tipo de dibujo (pruebas/dibujos.gd) con distintas cantidades por fotograma: imprime la
+# media y el peor fotograma en milisegundos, las llamadas y los triángulos, y si la página estaba a la vista (en la web).
+# Se corre en la web (docs/WEB.md): ahí 200 círculos tardan un segundo y 12 800 rectángulos, 17 ms
+func probar_dibujos() -> void:
+	await get_tree().create_timer(1.0).timeout
+	var lienzo := preload("res://scripts/pruebas/dibujos.gd").new()
+	$Pantalla.add_child(lienzo)
+	for tipo in ["rect", "circulo", "abanico", "anillo"]:
+		var fila := []
+		for n in ([100, 128, 200, 400] if tipo == "circulo" else [800, 3200, 12800] if tipo == "rect" else [200, 400, 800]):
+			lienzo.tipo = tipo
+			lienzo.n = n
+			await get_tree().process_frame
+			await get_tree().process_frame
+			var tiempos: Array[float] = []
+			var antes := Time.get_ticks_usec()
+			var hasta := Time.get_ticks_msec() + 1200
+			while Time.get_ticks_msec() < hasta:
+				await get_tree().process_frame
+				var ahora := Time.get_ticks_usec()
+				tiempos.append((ahora - antes) / 1000.0)
+				antes = ahora
+			var suma := 0.0
+			var peor := 0.0
+			for ms in tiempos:
+				suma += ms
+				peor = maxf(peor, ms)
+			fila.append("%d: %.1f ms (peor %.0f; %d llamadas, %d triángulos)" % [n, suma / maxf(1.0, tiempos.size()), peor,
+				RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
+				RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)])
+		print("Dibujos · %s · %s · página %s" % [tipo, " · ".join(fila), Lentos.visibilidad()])
+	lienzo.queue_free()
+	get_tree().quit()
+
+
+# --formas: las formas de formas.gd contra las de CanvasItem: pinta las mismas con cada una, saca las dos fotos
+# (captura-formas-antes.png y captura-formas-ahora.png) y cuenta los píxeles que cambian (más de 40 de 255 en algún canal)
+func probar_formas() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var lienzo := preload("res://scripts/pruebas/dibujos.gd").new()
+	lienzo.tipo = "comparar"
+	lienzo.position = Vector2(100, 100)
+	$Pantalla.add_child(lienzo)
+	var fotos := []
+	for nuevo in [false, true]:
+		lienzo.nuevo = nuevo
+		lienzo.queue_redraw()
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var imagen := get_viewport().get_texture().get_image().get_region(Rect2i(100, 100, 640, 400))
+		imagen.save_png("res://capturas/captura-formas-%s.png" % ("ahora" if nuevo else "antes"))
+		fotos.append(imagen)
+	var distintos := 0
+	for y in 400:
+		for x in 640:
+			var a: Color = fotos[0].get_pixel(x, y)
+			var b: Color = fotos[1].get_pixel(x, y)
+			if maxf(maxf(absf(a.r - b.r), absf(a.g - b.g)), absf(a.b - b.b)) > 40.0 / 255.0:
+				distintos += 1
+	print("Formas · píxeles distintos: %d de %d (%.2f %%)" % [distintos, 640 * 400, distintos * 100.0 / (640 * 400)])
+	get_tree().quit()
+
+
+# Con "--captura --mando": A confirma y B vuelve en los menús (project.godot pone el A en ui_accept y el B en ui_cancel;
+# Godot, de serie, no). Con botones del mando de verdad (pruebas/prueba_mando.gd): la pausa, Opciones (y poner B a una casilla
+# sin que cierre nada), un tutorial (que con prisa no se cierra), el inventario, la taquilla, el ordenador, una página del
+# dosier, el panel de pruebas y, al final, el cartel del final. Que A siga esquivando y que B sin ningún menú no haga nada.
+# El menú principal lo prueba menu_principal.gd antes de llegar aquí. Lo que comprueba lo escribe en la terminal
+func probar_mando() -> void:
+	var pulsar_a := func() -> void: await PruebaMando.pulsar(get_tree(), JOY_BUTTON_A)
+	var pulsar_b := func() -> void: await PruebaMando.pulsar(get_tree(), JOY_BUTTON_B)
+	var marcado := func() -> String: return PruebaMando.marcado(self)
+	var botones := func(accion: String) -> Array:
+		return InputMap.action_get_events(accion).filter(func(e): return e is InputEventJoypadButton).map(func(e): return e.button_index)
+	var estado := func() -> String: return "«%s», juego parado %s" % [menus.abierto, get_tree().paused]
+	var ventana := func() -> Tutorial:
+		for h in get_children():
+			if h is Tutorial and not h.is_queued_for_deletion():
+				return h
+		return null
+	var cuenta := func(b: Button) -> Array:   # cuántas veces se pulsa ese botón
+		var n := [0]
+		b.pressed.connect(func(): n[0] += 1)
+		return n
+	await get_tree().create_timer(1.0).timeout
+	# lo que hay en las dos acciones (también tras «Restablecer controles» de Opciones) y que A siga esquivando
+	Controles.restablecer()
+	print("Mando · botones de ui_accept %s, de ui_cancel %s y de esquivar %s, tras restablecer (esperado: [0], [1], [0, 9])" % [
+		botones.call("ui_accept"), botones.call("ui_cancel"), botones.call("esquivar")])
+	Input.parse_input_event(PruebaMando.boton(JOY_BUTTON_A))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var esquiva := Input.is_action_pressed("esquivar")
+	Input.parse_input_event(PruebaMando.boton(JOY_BUTTON_A, false))
+	await get_tree().process_frame
+	await pulsar_b.call()
+	print("Mando · jugando, A esquiva %s · B sin ningún menú no abre nada: %s (esperado: true, «», false)" % [esquiva, estado.call()])
+	# la pausa: B sigue jugando; A en «Continuar» también
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	print("Mando · pausa abierta: %s · marcado «%s» (esperado: «pausa», true · Continuar)" % [estado.call(), marcado.call()])
+	Captura.foto("captura-mando-pausa.png")
+	await pulsar_b.call()
+	print("Mando · pausa, B: %s (esperado: «», false)" % estado.call())
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	await pulsar_a.call()
+	print("Mando · pausa, A en «Continuar»: %s (esperado: «», false)" % estado.call())
+	# Opciones desde la pausa: A la abre; en Controles, A elige una casilla del mando y B se queda de botón nuevo (no cierra
+	# nada); B la cierra y B sigue jugando
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	PruebaMando.buscar(menus.fondo, Idioma.t("Opciones")).grab_focus()
+	await pulsar_a.call()
+	var o: Opciones = null
+	for h in menus.get_children():
+		if h is Opciones:
+			o = h
+	print("Mando · pausa, A en «Opciones»: %s · abierta %s (esperado: «opciones», true, true)" % [estado.call(), o != null])
+	o.ver("controles")
+	await get_tree().create_timer(0.3).timeout
+	var casilla: Button = o.casillas.filter(func(c): return c[1] == "recargar" and c[2])[0][0]
+	casilla.grab_focus()
+	await pulsar_a.call()
+	await get_tree().create_timer(0.3).timeout
+	var esperaba: bool = o.esperando == casilla
+	await pulsar_b.call()
+	print("Mando · Opciones, A en la casilla de Recargar del mando: esperaba un botón %s · B lo pone: recargar %s, esperando %s, Opciones abierta %s (esperado: true, [1], false, true)" % [
+		esperaba, botones.call("recargar"), o.esperando != null, is_instance_valid(o) and not o.is_queued_for_deletion()])
+	Captura.foto("captura-mando-opciones.png")
+	await pulsar_b.call()
+	print("Mando · Opciones, B: %s (esperado: «pausa», true)" % estado.call())
+	Controles.restablecer()
+	await pulsar_b.call()
+	print("Mando · pausa, B otra vez: %s (esperado: «», false)" % estado.call())
+	# un tutorial: A en «Entendido» o B lo cierran; con prisa (el botón no hace caso las primeras décimas) no se cierra
+	ver_tutorial("jugar")   # (la ficha directa, sin la cola: así no se cuela ningún otro tutorial)
+	await get_tree().create_timer(0.2).timeout
+	await pulsar_a.call()
+	await pulsar_b.call()
+	print("Mando · tutorial, A y B con prisa: sigue abierto %s (esperado: true)" % (ventana.call() != null))
+	await get_tree().create_timer(0.8).timeout
+	print("Mando · tutorial abierto %s · marcado «%s» (esperado: true · Entendido)" % [ventana.call() != null, marcado.call()])
+	await pulsar_a.call()
+	await get_tree().create_timer(0.3).timeout
+	print("Mando · tutorial, A en «Entendido»: abierto %s · juego parado %s (esperado: false, false)" % [ventana.call() != null, get_tree().paused])
+	ver_tutorial("lanzables")
+	await get_tree().create_timer(1.0).timeout
+	await pulsar_b.call()
+	await get_tree().create_timer(0.3).timeout
+	print("Mando · tutorial, B: abierto %s · juego parado %s (esperado: false, false)" % [ventana.call() != null, get_tree().paused])
+	# el inventario: la cruceta baja a otra casilla, A salta al botón de la ficha y B cierra
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	await PruebaMando.pulsar(get_tree(), JOY_BUTTON_DPAD_DOWN)
+	var antes: String = marcado.call()
+	await pulsar_a.call()
+	print("Mando · inventario, cruceta abajo: marca «%s» · A: ahora marca «%s» (esperado: una casilla, el botón principal de la ficha)" % [antes, marcado.call()])
+	Captura.foto("captura-mando-inventario.png")
+	await pulsar_b.call()
+	print("Mando · inventario, B: abierto «%s» · juego parado %s (esperado: «», false)" % [inventario.abierto, get_tree().paused])
+	# la taquilla: A pulsa la carta marcada; B cierra
+	abrir_taquilla()
+	await get_tree().create_timer(0.4).timeout
+	var carta := get_viewport().gui_get_focus_owner() as Button
+	var veces: Array = cuenta.call(carta)
+	await pulsar_a.call()
+	print("Mando · taquilla abierta %s · A en la carta marcada: %d pulsación (esperado: true, 1)" % [taquilla.fondo != null, veces[0]])
+	await pulsar_b.call()
+	print("Mando · taquilla, B: abierta %s · juego parado %s (esperado: false, false)" % [taquilla.fondo != null, get_tree().paused])
+	# el ordenador: A abre el programa marcado; B vuelve al escritorio y B apaga
+	abrir_ordenador()
+	await get_tree().create_timer(0.6).timeout
+	var icono := get_viewport().gui_get_focus_owner() as Button
+	print("Mando · ordenador encendido %s · marcado «%s»" % [ordenador.fondo != null, marcado.call()])
+	await pulsar_a.call()
+	var programa: String = ordenador.abierta
+	await pulsar_b.call()
+	print("Mando · ordenador, A en el icono: programa «%s» · B: vuelve al escritorio %s (esperado: un programa, true)" % [programa, ordenador.abierta == ""])
+	await pulsar_b.call()
+	print("Mando · ordenador, B en el escritorio: encendido %s · juego parado %s (esperado: false, false)" % [ordenador.fondo != null, get_tree().paused])
+	# una página del dosier: A en «Seguir» o B la cierran
+	var pagina: Dictionary = Historia.dosier(edificio).paginas[0]
+	leer_pagina(pagina)
+	await get_tree().create_timer(0.4).timeout
+	print("Mando · página abierta: %s · marcado «%s» (esperado: «pagina», true · Seguir)" % [estado.call(), marcado.call()])
+	await pulsar_a.call()
+	print("Mando · página, A en «Seguir»: %s (esperado: «», false)" % estado.call())
+	leer_pagina(pagina)
+	await get_tree().create_timer(0.4).timeout
+	await pulsar_b.call()
+	print("Mando · página, B: %s (esperado: «», false)" % estado.call())
+	# el panel de pruebas: B lo cierra
+	abrir_panel_pruebas()
+	await get_tree().create_timer(0.3).timeout
+	var abierto := panel_pruebas.abierto()
+	await pulsar_b.call()
+	print("Mando · panel de pruebas abierto %s · B: abierto %s · juego parado %s (esperado: true, false, false)" % [abierto, panel_pruebas.abierto(), get_tree().paused])
+	# el cartel del final: con prisa (medio segundo) no hace caso; luego A pulsa el botón marcado
+	al_empezar = {}
+	johnny.golpe_de = ""
+	terminar(false)
+	var tope := 0
+	while menus.abierto != "fin" and tope < 120:
+		await get_tree().process_frame
+		tope += 1
+	for c in menus.reintentar.get_connections():
+		menus.reintentar.disconnect(c.callable)
+	var otra_vez := [0]
+	menus.reintentar.connect(func(): otra_vez[0] += 1)
+	await get_tree().create_timer(0.05).timeout
+	var rapido := PruebaMando.marcado(self)
+	await pulsar_a.call()
+	var con_prisa: int = otra_vez[0]
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-mando-final.png")
+	await pulsar_a.call()
+	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Otra vez, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
 	get_tree().quit()

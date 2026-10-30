@@ -100,7 +100,7 @@ func volando(q: Dictionary, delta: float) -> void:
 		q.v *= 0.45
 		return
 	q.t = 0.0
-	if is_instance_valid(q.suelo) and q.marca.a > 0.0:
+	if is_instance_valid(q.suelo) and q.suelo.is_inside_tree() and q.marca.a > 0.0:   # (si no, Johnny ya ha salido de ese sitio)
 		Mancha.gota(q.suelo, q.p, q.marca, q.marca_tam, q.mancha, 150 if q.mancha == "Casquillos" else 700)
 
 
@@ -111,7 +111,7 @@ func _draw() -> void:
 		if q.r > 0.0:
 			# el anillo crece y se apaga
 			draw_set_transform(q.p, 0.0, Vector2(1.0, 0.6))
-			draw_arc(Vector2.ZERO, q.r * (1.0 - k * 0.6), 0.0, TAU, 48, Color(c, k), 4.0)
+			Formas.arco(self, Vector2.ZERO, q.r * (1.0 - k * 0.6), 0.0, TAU, 48, Color(c, k), 4.0)
 			draw_set_transform(Vector2.ZERO)
 			continue
 		var s: float = maxf(2.0, round(q.s / 2.0) * 2.0)

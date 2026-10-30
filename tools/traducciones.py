@@ -67,6 +67,7 @@ PASADOS = [
     "scripts/ui/hud.gd",
     "scripts/ui/barra_jefe.gd",
     "scripts/ui/presentacion.gd",
+    "scripts/ui/relato.gd",
     "scripts/ui/tactil.gd",
     "scripts/ui/tutorial.gd",
     "scripts/ui/inventario.gd",
@@ -388,11 +389,11 @@ def leer_po(codigo="en"):
 
 def cabecera(codigo):
     i = IDIOMAS[codigo]
-    return ('# Traducción al %s de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el\n'
+    return ('# Traducción al %s de Johnny Rush: Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el\n'
             '# código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se\n'
             '# escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).\n'
             'msgid ""\nmsgstr ""\n'
-            '"Project-Id-Version: Zombie Escape\\n"\n'
+            '"Project-Id-Version: Johnny Rush: Zombie Escape\\n"\n'
             '"Language: %s\\n"\n'
             '"MIME-Version: 1.0\\n"\n'
             '"Content-Type: text/plain; charset=UTF-8\\n"\n'

@@ -24,6 +24,11 @@ signal cerrado
 # Pestaña Créditos. Quién ha hecho el juego, en una línea («Un juego de …»): vacía, no sale (29 oct 2026: el dueño la
 # rellenará cuando lo tengan claro)
 const AUTORES := ""
+# El botón de General «Avisar de un texto mal traducido» (30 oct 2026: no hay nadie nativo que revise los idiomas y se corrige con
+# lo que avisen los jugadores, docs/LANZAMIENTO.md): abre este enlace, un formulario de Google del dueño (idioma, texto que está mal,
+# cómo debería decir y dónde sale; las respuestas le llegan al correo). Vacío, no sale. Tampoco sale en español, el idioma
+# original. (Es una variable para que la prueba --idioma la pueda vaciar)
+static var enlace_avisos := "https://docs.google.com/forms/d/e/1FAIpQLSepY4FoOSeVYz_cpaGj4DJg-pTGPMNbCZSU8FQ_ixWT6ktq1Q/viewform"
 # Las letras que no son nuestras: [nombre, autores, su licencia]. La licencia (SIL OFL 1.1) pide citarlas y que su texto vaya
 # con el juego: los .txt se exportan (export_presets.cfg, include_filter) y el botón Licencias los enseña
 const LETRAS_DE_OTROS := [
@@ -274,6 +279,14 @@ func general() -> void:
 			for c in ["font_color", "font_focus_color", "font_hover_color"]:
 				b.add_theme_color_override(c, Tema.AMARILLO)
 		fila_idioma.add_child(b)
+	# El botón de avisar de un texto mal traducido (enlace_avisos), a continuación de los idiomas: así cabe en la segunda fila y no
+	# alarga la pantalla (en ruso, una fila más y «Atrás» se sale de los 640 de alto)
+	if enlace_avisos != "" and Idioma.actual != Idioma.ORIGEN:
+		var avisar := Button.new()
+		avisar.name = "avisar_traduccion"   # no-tr
+		avisar.text = Idioma.t("Avisar de un texto mal traducido")
+		avisar.pressed.connect(func(): OS.shell_open(enlace_avisos))
+		fila_idioma.add_child(avisar)
 	var boton_modo := opcion(Idioma.t("Modo de atacar: %s") % Idioma.t(modos()[modo]))
 	boton_modo.pressed.connect(func():
 		var orden: Array = modos().keys()
@@ -383,7 +396,7 @@ func licencias() -> void:
 # Las licencias: las de las letras de otros (sus .txt) y la de Godot, con las de las piezas de otros que lleva dentro (Godot las
 # da: Engine.get_license_text, get_copyright_info y get_license_info). En inglés, como se publicaron
 static func texto_de_licencias() -> String:
-	var partes := PackedStringArray(["Zombie Escape uses these fonts, under the SIL Open Font License 1.1:"])   # no-tr
+	var partes := PackedStringArray(["Johnny Rush: Zombie Escape uses these fonts, under the SIL Open Font License 1.1:"])   # no-tr
 	for l in LETRAS_DE_OTROS:
 		partes.append(FileAccess.get_file_as_string(l[2]).strip_edges())
 	partes.append("This game uses Godot Engine (godotengine.org), available under the following license:\n\n"   # no-tr
@@ -530,6 +543,8 @@ func nombres(acciones: Array, mando: bool) -> String:
 static func nombre_tecla(c: Key) -> String:
 	if c in TECLAS:
 		return Idioma.t(TECLAS[c])
+	if OS.has_feature("web"):
+		return Controles.letra_web(c)
 	# La letra que hay en esa posición del teclado del jugador (en un teclado francés, la A está donde la Q)
 	return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical(c))
 

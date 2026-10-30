@@ -134,9 +134,10 @@ func nueva_planta() -> void:
 			usados.append(evento)
 
 
-# Antes de cambiar de sitio: los zombis de la horda que siguen en pie se apuntan (esperarán en el pasillo)
+# Antes de cambiar de sitio: los zombis de la horda que siguen en pie se apuntan (esperarán en el pasillo). Si el mapa
+# se guarda, ya se quedan en él, donde estaban
 func recoger() -> void:
-	if horda.is_empty():
+	if horda.is_empty() or partida.se_guarda():
 		return
 	for z in horda.vivos:
 		if is_instance_valid(z) and z.estado != "muerto":
@@ -145,8 +146,8 @@ func recoger() -> void:
 
 
 # El sitio nuevo ya está montado (aún sin sus zombis): si es el pasillo por primera vez, empieza; y si el evento
-# vale aquí, se pone lo suyo
-func al_montar(idx: int, sitio: Dictionary) -> void:
+# vale aquí, se pone lo suyo ("nuevo": si no, el mapa guardado ya lo tiene)
+func al_montar(idx: int, sitio: Dictionary, nuevo: bool) -> void:
 	if evento != "" and evento != "horda" and not empezado and sitio.tipo == "pasillo":
 		empezar()   # (la horda, no: espera a que Johnny llegue al medio del pasillo, en _physics_process)
 	activo = empezado and sitio.tipo in ["pasillo", "apartamento"]   # (las tiendas también son "apartamento")
@@ -160,7 +161,8 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		return
 	match evento:
 		"incendio":
-			mojar(idx, sitio)
+			if nuevo:
+				mojar(idx, sitio)
 		"horda":
 			if idx == 0:
 				for tipo in horda.quedan:

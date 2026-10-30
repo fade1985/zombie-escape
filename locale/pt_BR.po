@@ -1,9 +1,9 @@
-# Traducción al portugués de Brasil de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# Traducción al portugués de Brasil de Johnny Rush: Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
 # código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
 # escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
 msgid ""
 msgstr ""
-"Project-Id-Version: Zombie Escape\n"
+"Project-Id-Version: Johnny Rush: Zombie Escape\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1454,6 +1454,78 @@ msgstr "Um helicóptero no terraço"
 #: scripts/historia.gd
 msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."
 msgstr "Plantão: o helicóptero da Velaria voltou, desta vez ao terraço do shopping. Decolou com alguém dentro, rumo à Torre Velaria. A Velaria já não procura seu zelador: \"Ele está conosco, em segurança\". Amanhã, em sua torre, ela apresenta \"o futuro do trabalho\". Da minha irmã, nada."
+
+#: scripts/historia.gd
+msgid "Número 14. Turno de noche."
+msgstr "Número 14. Turno da noite."
+
+#: scripts/historia.gd
+msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
+msgstr "Johnny é o zelador. Está aqui há mais anos do que consegue lembrar."
+
+#: scripts/historia.gd
+msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
+msgstr "Os vizinhos novos chegaram de caminhão, à noite. Não davam problema nenhum."
+
+#: scripts/historia.gd
+msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
+msgstr "Ontem à noite lacraram o prédio por fora. Os vizinhos continuam dormindo. Andam. E mordem."
+
+#: scripts/historia.gd
+msgid "Nada de esto viene en su contrato."
+msgstr "Nada disso está no contrato dele."
+
+#: scripts/historia.gd
+msgid "Pero alguien tendrá que limpiarlo."
+msgstr "Mas alguém vai ter que limpar isso."
+
+#: scripts/historia.gd
+msgid "Johnny se agarra a la escalera. El helicóptero despega."
+msgstr "Johnny se agarra à escada. O helicóptero decola."
+
+#: scripts/historia.gd
+msgid "«No te fíes de los que vengan a rescatarte», decía la hoja."
+msgstr "\"Não confie em quem vier te resgatar\", dizia a folha."
+
+#: scripts/historia.gd
+msgid "Johnny se suelta."
+msgstr "Johnny se solta."
+
+#: scripts/historia.gd
+msgid "Los árboles de la avenida amortiguan la caída. Más o menos."
+msgstr "As árvores da avenida amortecem a queda. Mais ou menos."
+
+#: scripts/historia.gd
+msgid "Al otro lado, el centro comercial sigue con las luces encendidas."
+msgstr "Do outro lado, o shopping continua com as luzes acesas."
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo."
+msgstr "Alguém vai ter que limpar isso."
+
+#: scripts/historia.gd
+msgid "Esta vez Johnny no se suelta."
+msgstr "Desta vez, Johnny não se solta."
+
+#: scripts/historia.gd
+msgid "Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no."
+msgstr "Sobe, senta e põe o esfregão entre os joelhos. O piloto oferece um café. Ele diz que não."
+
+#: scripts/historia.gd
+msgid "Abajo, los cajeros siguen cobrando a nadie."
+msgstr "Lá embaixo, os caixas continuam cobrando de ninguém."
+
+#: scripts/historia.gd
+msgid "Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»"
+msgstr "À frente se aproxima a Torre Velaria. \"Andar 40\", diz o rádio. \"O senhor já conhece o caminho.\""
+
+#: scripts/historia.gd
+msgid "Johnny no recuerda haber estado allí."
+msgstr "Johnny não se lembra de ter estado lá."
+
+#: scripts/historia.gd
+msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
+msgstr "Quarenta andares de carpete. Alguém vai ter que limpar isso."
 
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
@@ -4851,6 +4923,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "Jogue longe: a explosão também te machuca."
 
 #: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "Avisar de uma tradução errada"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"
 msgstr "Tremor da tela"
 
@@ -5425,8 +5501,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s sobe para %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
-msgstr "São vendidas em qualidade Normal. O que você leva se perde se você cair: guarde no baú da oficina (ao completar o prédio, vai sozinho). Você leva duas de cada tipo: a que estava na mão vai para a reserva e, se você já tiver uma de reserva, ela fica no chão."
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "São vendidas em qualidade Normal. O que você leva se perde se você cair: guarde no baú da oficina (ao completar o prédio, vai sozinho). Você leva duas de cada tipo: a que estava na mão vai para a reserva e a da reserva vai para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"
@@ -5515,6 +5591,10 @@ msgstr "Já está na sua reserva: %s. Equipe pelo inventário."
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "Não dá: faltam $%d."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "Comprado! %s na mão; %s vai para a reserva e %s vai para o baú."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
@@ -5831,6 +5911,18 @@ msgid ""
 msgstr ""
 "Conquistas\n"
 "RESGATAR!"
+
+#: scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "Toque na tela para continuar"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier botón para continuar · B para saltar"
+msgstr "Aperte qualquer botão para continuar · B para pular"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
+msgstr "Aperte qualquer tecla para continuar · Esc para pular"
 
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"

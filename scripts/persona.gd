@@ -120,8 +120,8 @@ func dibujar_persona() -> void:
 
 	# los cascos del técnico: la diadema por encima y un auricular a cada lado
 	if look.has("cascos") and not blanco:
-		draw_arc(cabeza_c, r + 1.5 * s, PI * 1.08, PI * 1.92, 14, LINEA, 4.5 * s)
-		draw_arc(cabeza_c, r + 1.5 * s, PI * 1.08, PI * 1.92, 14, Color("#3a3d47"), 2.2 * s)
+		Formas.arco(self, cabeza_c, r + 1.5 * s, PI * 1.08, PI * 1.92, 14, LINEA, 4.5 * s)
+		Formas.arco(self, cabeza_c, r + 1.5 * s, PI * 1.08, PI * 1.92, 14, Color("#3a3d47"), 2.2 * s)
 		for lado: int in [-1, 1]:
 			forma(elipse(cabeza_c + Vector2(lado * (r - 1.5 * s) - lx * 2 * s, 2 * s), 4 * s, 5.5 * s), look.cascos, lw * 0.7)
 
@@ -155,7 +155,7 @@ func ropa(cuerpo: PackedVector2Array, by: float, de_espaldas: bool, lw: float) -
 				recortado(cuerpo, rect(Rect2(x0, by - 1 * s, 8.5 * s, 2.5 * s)), raya)
 	if look.get("tarjeta", false) and not de_espaldas:
 		# el cordón rojo con la tarjeta de la tienda
-		draw_polyline(PackedVector2Array([Vector2(-4.5 * s, by - 9 * s), Vector2(0, by), Vector2(4.5 * s, by - 9 * s)]),
+		Formas.polilinea(self, PackedVector2Array([Vector2(-4.5 * s, by - 9 * s), Vector2(0, by), Vector2(4.5 * s, by - 9 * s)]),
 			Color("#e04848"), 1.5 * s)
 		forma(rect(Rect2(-2.5 * s, by, 5 * s, 6 * s)), Color("#f4f6f8"), lw * 0.5)
 	if look.get("aparato", false):
@@ -254,13 +254,13 @@ func caja_redonda(r: Rect2, radio: float) -> PackedVector2Array:
 
 func rellenar(pts: PackedVector2Array, color: Color) -> void:
 	if pts.size() >= 3:
-		draw_colored_polygon(pts, color)
+		Formas.poligono(self, pts, color)
 
 
 func borde(pts: PackedVector2Array, grueso: float, color := LINEA) -> void:
 	var cerrado := pts.duplicate()
 	cerrado.append(pts[0])
-	draw_polyline(cerrado, color, grueso, true)
+	Formas.polilinea(self, cerrado, color, grueso, true)
 
 
 func forma(pts: PackedVector2Array, color: Color, grueso: float, linea := LINEA) -> void:

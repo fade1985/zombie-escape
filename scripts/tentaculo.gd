@@ -147,16 +147,6 @@ func latigo(raiz: Vector2, suelo: Vector2, t: float, dura: float, lado: float) -
 # Pinta los trozos del tentáculo de "desde" a "hasta" (por sus puntos), igual que los de su dibujo: el contorno y
 # encima las capas, cada una más clara y más pequeña y arrimada al lado de la luz; y las ventosas, por el lado de la
 # sombra. Grueso en la base y fino en la punta
-# Un disco, hecho con dos cuadrados (uno recto y otro girado 45°): un octógono que a este tamaño no se distingue de un
-# círculo. Se pinta así y no con draw_circle porque en la web cada draw_circle es un polígono con sus propios buffers
-# (--rendimiento: unos cientos por fotograma tardaban más de un segundo)
-static func disco(lienzo: CanvasItem, centro: Vector2, radio: float, color: Color) -> void:
-	var a := radio * 0.96
-	lienzo.draw_rect(Rect2(centro - Vector2(a, a), Vector2(a, a) * 2.0), color)
-	var u := Vector2(0.70710678, 0.70710678) * a
-	lienzo.draw_line(centro - u, centro + u, color, a * 2.0)
-
-
 # Un trozo de cada vez: un cuadrilátero que va de un punto al siguiente, con su ancho en cada punta ("mitades": medio
 # ancho en cada punto), y un solo dibujo por trozo. Con círculos y líneas eran unos 290 dibujos por lengua y la web se
 # atascaba con cuatro o seis a la vez (--rendimiento). "normales": hacia el lado de cada punto
@@ -213,8 +203,8 @@ func pintar(lienzo: CanvasItem, puntos: PackedVector2Array, desde: int, hasta: i
 		# aros: el aro con su sombra hacia fuera, el hueco oscuro y un punto de brillo hacia la luz
 		var v := puntos[i] + sombra[i] * r[i] * 0.4
 		var tam := maxf(1.5, r[i] * 0.38)
-		disco(lienzo, v, tam + 0.5, contorno)
-		disco(lienzo, v + sombra[i] * 0.5, tam, ventosas.sombra)
-		disco(lienzo, v - sombra[i] * 0.3, tam - 0.5, ventosas.aro)
-		disco(lienzo, v, maxf(0.5, tam * 0.45), ventosas.hueco)
+		Formas.disco(lienzo, v, tam + 0.5, contorno)
+		Formas.disco(lienzo, v + sombra[i] * 0.5, tam, ventosas.sombra)
+		Formas.disco(lienzo, v - sombra[i] * 0.3, tam - 0.5, ventosas.aro)
+		Formas.disco(lienzo, v, maxf(0.5, tam * 0.45), ventosas.hueco)
 		lienzo.draw_rect(Rect2((v - sombra[i] * tam * 0.7).floor(), Vector2.ONE), ventosas.brillo)

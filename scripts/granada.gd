@@ -145,7 +145,7 @@ func _draw() -> void:
 	# la sombra en el suelo (más pequeña cuanto más alta)
 	var s := 1.0 - minf(0.5, z / 200.0)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.45))
-	draw_circle(Vector2.ZERO, 7.0 * s, Color(0.08, 0.06, 0.16, 0.3))
+	Formas.disco(self, Vector2.ZERO, 7.0 * s, Color(0.08, 0.06, 0.16, 0.3))
 	# el dibujo del dueño (19×27) a 0,8: unas 15×22 unidades. En el aire gira; en el suelo, derecha
 	var rojo := int(parpadeo) % 2 == 1
 	draw_set_transform(Vector2(0, -z - 8.0), giro if z > 0.0 else 0.0, Vector2(0.8, 0.8))

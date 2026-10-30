@@ -114,11 +114,11 @@ func _draw() -> void:
 			"mancuerna":
 				# su sombra en el suelo y la mancuerna tumbada (la misma que lanza el Gymbro)
 				draw_set_transform(p + Vector2(0, 5), 0.0, Vector2(1, 0.45))
-				draw_circle(Vector2.ZERO, 17.0, Color(0, 0, 0, 0.3))
+				Formas.disco(self, Vector2.ZERO, 17.0, Color(0, 0, 0, 0.3))
 				Pesa.dibujar(self, p, c.giro)
 			"cubo":
 				draw_set_transform(p + Vector2(0, 6), 0.0, Vector2(1, 0.45))
-				draw_circle(Vector2.ZERO, 16.0, Color(0, 0, 0, 0.3))
+				Formas.disco(self, Vector2.ZERO, 16.0, Color(0, 0, 0, 0.3))
 				draw_set_transform(Vector2.ZERO)
 				dibujar_cubo(p, c)
 	draw_set_transform(Vector2.ZERO)

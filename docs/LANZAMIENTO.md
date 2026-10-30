@@ -14,21 +14,39 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 - [ ] **Versión de escritorio.** Hecho el 29 oct: el preset «Windows Desktop» (un solo `.exe`), la pantalla completa
       con F11 / Alt+Intro que se recuerda y la sala de pruebas fuera del juego exportado (`docs/ESCRITORIO.md`). Falta:
       probar el mando desde el primer menú y el juego en 1280×800, Linux (sello de Steam Deck) y Steam en sí. El `.exe` ya
-      lleva el icono de Johnny (rcedit, `docs/ESCRITORIO.md`).
-- [ ] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
+      lleva el icono de Johnny (rcedit, `docs/ESCRITORIO.md`). **Y firmar el `.exe`:** el 30 oct Windows (Control
+      Inteligente de Aplicaciones) bloqueó el `.exe` recién exportado por no tener publicador conocido; un jugador con esa
+      protección vería el mismo cartel (detalle en `docs/ESCRITORIO.md`).
+- [x] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
       origen y el inglés el segundo (`locale/en.po`, `Idioma.t`, selector en Opciones; cómo funciona y qué falta,
       en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio», Opciones y la interfaz
       (partida, pausa, HUD, inventario, baúl, tienda, ordenador) y los datos (armas, objetos, talentos, logros, mutaciones,
       trajes, eventos) y la voz del juego (historia, noticias, tutoriales, bestiario, supervivientes, gritos de los jefes).
       También el mundo (nombres de planta, sitio y tienda, neones y carteles) y lo dibujado en imágenes (cartel de
-      planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado**; falta la revisión del
-      inglés por una persona nativa antes de salir. Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; cada uno necesita su
-      revisión nativa, sobre todo el chino y el ruso, que son los que más pesan en Steam: ~22 % y ~9 %). Fuentes nuevas para el
+      planta y fotos de los tutoriales, con versión en inglés). **Todo el juego está ya pasado.** No hay nadie nativo que
+      lo revise (decisión del dueño, 30 oct 2026): se sale con la traducción hecha y se corrige con los avisos de los
+      jugadores. El botón «Avisar de un texto mal traducido» ya está en Opciones → General, con un formulario de Google del dueño
+      (`Opciones.enlace_avisos`; si algún día hay Discord, se cambia el enlace).
+      Hechos también **portugués de Brasil, alemán, francés, ruso y chino simplificado** (29 oct 2026; mismo plan, sin revisión
+      nativa: el chino y el ruso, que son los que más pesan en Steam, ~22 % y ~9 %, son los primeros que vigilar). Fuentes nuevas para el
       cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; citadas en los créditos). Siguientes:
       turco, polaco, japonés y coreano («Añadir un idioma»).
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
-      ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,
-      dominios y redes, y hacer logo.
+      ni se puede registrar. **Decidido el 30 oct: «Johnny Rush: Zombie Escape»** (puesto ya en `project.godot`, en el
+      `.exe`, en los docs y en el logo del menú, `assets/ui/logo.png`, que sale de `tools/logo.py`). Al
+      mirarlo (30 oct): ningún juego de Steam ni de itch.io se llama así, pero «It's a Wrap!» (Chanko Studios / AMC
+      Games, 2023) tiene un protagonista llamado Johnny Rush; `johnnyrush.com` está registrado desde 2008 y los
+      perfiles `JohnnyRush` de YouTube y GitHub existen; `.net`, `.io`, `.games` y `.gg` parecían libres e
+      `johnnyrush.itch.io` también. **Marcas (30 oct, mirado en el USPTO y en TMview, que reúne la UE, EE. UU.,
+      Reino Unido, la OMPI y decenas de oficinas más): no hay ninguna marca «JOHNNY RUSH»**, ni viva ni caducada,
+      ni nada parecido en las clases 9 (juegos descargables) y 41 (juegos en línea). «RUSH» sí abunda en juegos, casi
+      siempre con otra palabra delante (TOWER RUSH, WHALE RUSH!, KARTRIDER RUSH+...), y hay marcas «RUSH» vivas en la
+      clase 41 de juegos y apuestas (en EE. UU., «RUSH» de Betting Games Network Ltd. para salones de videojuegos y
+      «RUSH GAMES» de RSI IP Holding; en Japón, «Rush!» de ファンギルド, clases 9 y 41; en Reino Unido hay una
+      solicitud pendiente, «RUSH: Xtreme», de SAYGAMES LTD, clase 9). Por eso conviene usar siempre el nombre entero,
+      «Johnny Rush», y no «Rush» a secas. Ojo: es una consulta informal (TMview y el USPTO no son registros
+      oficiales); antes de gastar en la página de Steam, que la mire alguien que sepa de marcas. Falta reservar dominio
+      e itch.io y, si no encaja el personaje homónimo de Steam, replantearlo.
 - [ ] **Pruebas con gente de fuera.** Hasta ahora lo han jugado los dos del equipo y el bot. Conseguir 10–20
       personas que no sepan nada del juego (itch.io con un formulario corto, Discord, amigos de amigos) y mirar:
       dónde mueren, dónde se aburren, cuánto dura una partida, si entienden el banco, el baúl y las mutaciones sin
@@ -36,8 +54,10 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 
 ## 2. Lo que lo haría comprarse y recomendarse
 
-- [ ] **Principio y final.** Una historia mínima: quién es Johnny, por qué el edificio está así, un final que
-      cierre. Si se quiere, un final verdadero al desbloquear algo.
+- [x] **Principio y final.** Una historia mínima: quién es Johnny, por qué el edificio está así, un final que
+      cierre. (Hecho el 30 oct: una introducción y un final por edificio, texto sobre negro y saltable; `ui/relato.gd`,
+      prueba `--relato`. De momento no se pueden volver a ver.)
+- [ ] **Final verdadero.** Si se quiere, un final verdadero al desbloquear algo.
 - [x] **Tutorial disimulado.** La primera partida guía al jugador por el primer piso con las ayudas del HUD que ya
       existen, sin pantallas de texto. (Hecho el 29 oct: `guia.gd`, prueba `--guiado`.)
 - [ ] **Horas de juego.** Un roguelike de precio bajo se espera que dé 8–15 horas hasta verlo todo. Lo barato es

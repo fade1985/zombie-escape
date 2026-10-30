@@ -20,6 +20,15 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
+- **El mando en los menús:** **A confirma** (pulsa el botón marcado) y **B vuelve** (cierra lo que esté abierto: la
+  pausa, Opciones, un tutorial, el inventario y el baúl, la taquilla, el ordenador, una página del dosier, el panel de
+  pruebas y «Elige edificio»; los textos de la historia los saltan), igual que Intro y Esc; la cruceta o el stick mueven
+  la marca. Godot, de serie, no trae ni A ni B en esas dos acciones: los pone `project.godot` (`ui_accept` y `ui_cancel`;
+  «Restablecer controles» los conserva) y todos los menús los miran a través de ellas, sin botones a mano. No chocan con
+  el juego: jugando, A esquiva y B no hace nada; y en Opciones, lo que se pulsa mientras una casilla espera botón es
+  para ella (se puede dejar A o B en cualquier acción sin que abra ni cierre nada). El cartel del final y la ficha de un
+  tutorial no hacen caso a A las primeras décimas, para que un esquivar de última hora no los cierre. Se prueba con
+  `-- --captura --mando`.
 - **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
@@ -38,6 +47,9 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
   pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo. El botón
   *Que vuelvan a salir todos* de Opciones → Ayudas también la reactiva: sale en la próxima partida de los Apartamentos
   aunque no sea la primera (`guia_otra_vez` en el guardado; se apaga sola al empezarla).
+- **Textos de la historia:** la introducción (la primera partida) y el final de cada edificio (la primera vez que se
+  completa) salen sobre negro, línea a línea. Cualquier tecla, clic, toque o botón del mando saca la siguiente y, con
+  todas a la vista, cierra; Esc o B lo saltan entero. Salen una sola vez (`relatos` en el guardado).
 - **Munición:** va por tipos (balas de pistola, que también gasta la MP5; cartuchos; gasolina, ácido y baterías) en 8
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
   en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12
@@ -119,7 +131,9 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
 - **Despacho** (en medio): la puerta de abajo sale al pasillo. La mesa del **ordenador** (ConserjeOS: talentos,
   tienda de armas, logros, Dosier, Noticias y Colecciones), un corcho y una papelera. La tienda vende armas cuerpo a
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
-  atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl.
+  atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl. Si
+  compras un arma y ya llevas dos de ese tipo, la de la mano baja al repuesto y la de repuesto va al baúl en ese momento;
+  si el baúl está lleno o es la fregona o la pistola Normales, la de la mano se queda en el suelo.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona +100 %), el glotón (el
   Glotón; quien te hace daño lo paga: un jefe pierde el 3 % de su vida), el gymbro (el Gymbro; cuerpo a cuerpo +50 %) y
@@ -158,7 +172,7 @@ JavaScript (los clics llegan como ratón).
 
 ## Guardado
 
-`%APPDATA%\Godot\app_userdata\Zombie Escape\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
+`%APPDATA%\Johnny Rush\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
 usa `guardado-prueba.json`. En la web va en el navegador (IndexedDB). En la versión de Windows (`docs/ESCRITORIO.md`)
 es el mismo archivo. **Pantalla completa:** F11 o Alt+Intro (o su botón en Opciones y en el menú); se recuerda.
 

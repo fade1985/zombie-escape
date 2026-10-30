@@ -309,7 +309,7 @@ func _draw() -> void:
 	var boca := Vector2(0, -ALTURA)
 	var desde := boca - eje * (ATRAS + 10.0)
 	var hasta := boca + eje * (largo * 1.1 + 12.0)
-	draw_colored_polygon(PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)
+	Formas.poligono(self, PackedVector2Array([desde + lado, hasta + lado, hasta - lado, desde - lado]), Color.WHITE)
 
 
 # ── El rayo del lanza rayos ──
@@ -395,9 +395,9 @@ func zigzag(desde: Vector2, hasta: Vector2, temblor: float, rng: RandomNumberGen
 
 # Una línea con su borde oscuro, su cuerpo celeste y su centro blanco
 func linea_de_rayo(puntos: PackedVector2Array, ancho: float) -> void:
-	draw_polyline(puntos, RAYO_BORDE, ancho)
-	draw_polyline(puntos, RAYO_MEDIO, ancho * 0.6)
-	draw_polyline(puntos, RAYO_CENTRO, 2.0)
+	Formas.polilinea(self, puntos, RAYO_BORDE, ancho)
+	Formas.polilinea(self, puntos, RAYO_MEDIO, ancho * 0.6)
+	Formas.polilinea(self, puntos, RAYO_CENTRO, 2.0)
 
 
 # El rayo: del labio de la boca (si se acaba, se despega y se va: cola) hasta donde llega, con un par de ramitas, un

@@ -56,4 +56,4 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var k := minf(tiempo / 0.3, 1.0)
 	if k < 1.0:
-		draw_circle(Vector2.ZERO, radio * (0.4 + 0.6 * k), Color(1, 0.82, 0.25, 0.45 * (1.0 - k)))
+		Formas.disco(self, Vector2.ZERO, radio * (0.4 + 0.6 * k), Color(1, 0.82, 0.25, 0.45 * (1.0 - k)))

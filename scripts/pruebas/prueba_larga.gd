@@ -564,6 +564,60 @@ func probar_novedades() -> void:
 			g[clave] = antes[clave])
 
 
+# Con "--captura --avisos-ordenador": los «!» de los iconos de ConserjeOS se quitan nada más mirar o cobrar lo nuevo, sin
+# apagar el ordenador (L16). Con noticias sin ver, un logro por cobrar y algo nuevo en Colecciones, se enciende el
+# ordenador (captura-avisos-1.png: los tres iconos con «!»); se abre Colecciones (se quita el suyo), Noticias (se quita
+# cuando se ha visto la última nueva) y Logros, donde se cobra el premio (captura-avisos-2.png: Noticias y Colecciones
+# ya sin «!», Logros todavía con él; captura-avisos-3.png: ya ninguno). Al apagar, el «!» de la mesa también se va
+# al instante. Deja el guardado como estaba y se cierra
+func probar_avisos_ordenador() -> void:
+	set_process(false)
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.paginas = ["vd7_protocolo", "vd7_correo"]
+		g.noticias_vistas = ["n_cierre"]
+		g.logros = {"manitas": "conseguido"}
+		g.colecciones_nuevo = true)
+	var sin_ver: Array = Historia.noticias_nuevas(Guardado.cargar()).map(func(n): return "b_" + n.id)
+	johnny.position = Vector2(mapa.ORDENADOR_X, Planta.MURO + 150.0)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(1.4).timeout
+	var mesa: Node2D = mapa.ordenador
+	var con_marca := func() -> Array:
+		return ordenador.iconos.get_children().filter(func(icono): return icono.get_children().any(
+			func(c): return c is Label and c.text == "!")).map(func(icono): return str(icono.name))
+	print("«!» de la mesa antes: %s (esperado: true) · emisiones sin ver %s" % [mesa.get_node("Exclamacion").visible, sin_ver])
+	abrir_ordenador()
+	await get_tree().create_timer(0.5).timeout
+	print("Al encender: iconos con «!» %s (esperado: icono_logros, icono_noticias, icono_colecciones)" % [con_marca.call()])
+	Captura.foto("captura-avisos-1.png")
+	ordenador.abrir("colecciones")
+	await get_tree().create_timer(0.4).timeout
+	print("Al abrir Colecciones: %s (esperado: icono_logros, icono_noticias)" % [con_marca.call()])
+	# Noticias: la primera sin ver se marca sola; con ella vista aún queda otra
+	ordenador.abrir("noticias")
+	await get_tree().create_timer(0.5).timeout
+	print("Al abrir Noticias (vistas %d de %d): %s (esperado: 1 de %d, icono_logros e icono_noticias)" % [
+		Guardado.cargar().noticias_vistas.size() - 1, sin_ver.size(), con_marca.call(), sin_ver.size()])
+	for id in sin_ver:
+		ordenador.ventana.find_child(id, true, false).grab_focus()
+		await get_tree().create_timer(0.2).timeout
+	print("Con todas las noticias vistas: %s (esperado: icono_logros)" % [con_marca.call()])
+	Captura.foto("captura-avisos-2.png")
+	ordenador.abrir("logros")
+	await get_tree().create_timer(0.4).timeout
+	print("Al abrir Logros, sin cobrar: %s (esperado: icono_logros)" % [con_marca.call()])
+	ordenador.cobrar_logro("manitas")
+	await get_tree().create_timer(0.4).timeout
+	print("Con el premio cobrado: %s (esperado: ninguno)" % [con_marca.call()])
+	Captura.foto("captura-avisos-3.png")
+	ordenador.apagar()   # (sin esperar el segundo en que el juego mira la mesa)
+	print("«!» de la mesa nada más apagar: %s (esperado: false)" % mesa.get_node("Exclamacion").visible)
+	Guardado.cambiar(func(g):
+		for clave in ["paginas", "noticias_vistas", "logros", "colecciones_nuevo", "dolares"]:
+			g[clave] = antes[clave])
+
+
 # Las noticias: en los Apartamentos, con la página del correo encontrada salen tres emisiones (dos sin ver); en el
 # centro comercial, con los Apartamentos completados y sus dos primeras páginas, salen cinco (dos sin ver). Abre el
 # programa, deja hablar a la reportera un poco y hace la foto; luego otra con todo lo que dice

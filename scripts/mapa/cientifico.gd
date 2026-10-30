@@ -95,10 +95,10 @@ func _draw() -> void:
 		return   # los científicos ya son un sprite (montar)
 	# el charco de sangre, con unas salpicaduras
 	draw_set_transform(Vector2(-12, 6), 0.0, Vector2(1.0, 0.42))
-	draw_circle(Vector2.ZERO, 50.0, Color(SANGRE, 0.85))
+	Formas.disco(self, Vector2.ZERO, 50.0, Color(SANGRE, 0.85))
 	draw_set_transform(Vector2.ZERO)
 	for g in [[Vector2(-58, 14), 6.0], [Vector2(30, 22), 5.0], [Vector2(-40, -12), 4.0], [Vector2(44, 2), 3.0]]:
-		draw_circle(g[0], g[1], Color(SANGRE, 0.85))
+		Formas.disco(self, g[0], g[1], Color(SANGRE, 0.85))
 	# piernas y zapatos
 	for y in [-9.0, 2.0]:
 		pieza(Rect2(10, y, 34, 8), look.get("pantalon", PANTALON))
@@ -106,11 +106,11 @@ func _draw() -> void:
 	# brazo estirado hacia arriba (manga y mano) y el otro pegado al cuerpo
 	var ropa: Color = look.get("ropa", BATA)   # los que no son científicos llevan su ropa (historia.gd)
 	pieza(Rect2(-14, -30, 8, 20), ropa)
-	draw_circle(Vector2(-10, -33), 5.0, look.skin)
-	draw_arc(Vector2(-10, -33), 5.0, 0, TAU, 12, LINEA, 2.0)
+	Formas.disco(self, Vector2(-10, -33), 5.0, look.skin)
+	Formas.arco(self, Vector2(-10, -33), 5.0, 0, TAU, 12, LINEA, 2.0)
 	pieza(Rect2(-6, 12, 18, 7), ropa)
-	draw_circle(Vector2(15, 16), 4.5, look.skin)
-	draw_arc(Vector2(15, 16), 4.5, 0, TAU, 12, LINEA, 2.0)
+	Formas.disco(self, Vector2(15, 16), 4.5, look.skin)
+	Formas.arco(self, Vector2(15, 16), 4.5, 0, TAU, 12, LINEA, 2.0)
 	# la bata: el cuerpo, con la solapa, el bolsillo y la tarjeta de Velaria
 	var sombra: Color = BATA_SOMBRA if not look.has("ropa") else ropa.darkened(0.35)
 	pieza(Rect2(-24, -13, 38, 26), ropa)
@@ -118,9 +118,9 @@ func _draw() -> void:
 	draw_rect(Rect2(-4, -10, 8, 6), sombra, false, 1.5)
 	draw_rect(Rect2(-18, 3, 7, 8), look.get("tarjeta", Color("#3d63c9")))
 	# la cabeza, de lado, con el pelo
-	draw_circle(Vector2(-35, 2), 11.0, look.skin)
-	draw_circle(Vector2(-39, 0), 9.0, look.hair)
-	draw_arc(Vector2(-35, 2), 11.0, 0, TAU, 20, LINEA, 2.0)
+	Formas.disco(self, Vector2(-35, 2), 11.0, look.skin)
+	Formas.disco(self, Vector2(-39, 0), 9.0, look.hair)
+	Formas.arco(self, Vector2(-35, 2), 11.0, 0, TAU, 20, LINEA, 2.0)
 	# los ojos cerrados
 	draw_line(Vector2(-30, -1), Vector2(-26, -1), LINEA, 1.5)
 	draw_line(Vector2(-30, 5), Vector2(-26, 5), LINEA, 1.5)

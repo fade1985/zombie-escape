@@ -20,6 +20,13 @@ func preparar_prueba() -> void:
 	eventos.forzado = Captura.dato("--evento")
 	# con "--continuar", la partida a medias sí se guarda (partida_guardada.gd; prueba_varias.gd, probar_continuar)
 	guarda_partida = "--continuar" in OS.get_cmdline_user_args()
+	# con "--volver", los mapas se guardan al salir, como en el juego; en las demás, cada entrada hace uno nuevo (prueba_sitios.gd)
+	guarda_mapas = "--volver" in OS.get_cmdline_user_args()
+		# con "--lentos", avisa de cada fotograma lento (pruebas/lentos.gd), con cualquier prueba
+	if "--lentos" in OS.get_cmdline_user_args():
+		var lentos := preload("res://scripts/pruebas/lentos.gd").new()
+		lentos.partida = self
+		add_child(lentos)
 	# con "--guiado", la guía de la primera partida (guia.gd; prueba_varias.gd, probar_guiado): como si fuera la primera
 	if "--guiado" in OS.get_cmdline_user_args():
 		guiado_prueba = true
@@ -29,6 +36,11 @@ func preparar_prueba() -> void:
 			g.partidas = 4   # (no es la primera: sale por «Que vuelvan a salir todos», guia_otra_vez)
 			g.guia_otra_vez = true
 			g.ajustes.tutoriales = true)
+	# con "--relato", los textos de la historia, también la introducción, que sale antes de empezar_prueba (prueba_varias.gd)
+	if "--relato" in OS.get_cmdline_user_args():
+		relatos_prueba = true
+		Guardado.cambiar(func(g): g.relatos = [])
+		call_deferred("probar_relato")
 
 
 # En la prueba, el jefe que se ve es el de la 1ª planta (la segunda): que sea el antidisturbios, u otro con

@@ -23,7 +23,7 @@ var centro_cerrado := false        # solo para la foto de "--edificios": los Apa
 
 
 func _ready() -> void:
-	Tactil.preparar(get_tree())   # en el móvil, la pantalla sin redondear
+	Tactil.preparar()   # en el móvil, la pantalla sin redondear
 	Controles.aplicar()   # las teclas cambiadas en Opciones
 	theme = Tema.crear()
 	Sonido.musica("menu")
@@ -40,7 +40,7 @@ func _ready() -> void:
 	columna.add_theme_constant_override("separation", 12)
 	centro.add_child(columna)
 
-	# El logo es pixel art pequeño (119×75): se amplía ×3 sin suavizar
+	# El logo es pixel art pequeño (201×62, de tools/logo.py): se amplía ×3 sin suavizar
 	var logo := TextureRect.new()
 	logo.texture = LOGO
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -119,6 +119,8 @@ func _ready() -> void:
 		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-menu.png")
+		if "--mando" in OS.get_cmdline_user_args():   # A y B del mando en este menú; luego sigue a la partida, que hace el resto (pruebas/prueba_mando.gd)
+			await PruebaMando.menu_principal(self)
 		if "--letras" in OS.get_cmdline_user_args():   # qué letras de las traducciones no tiene ninguna fuente (pruebas/prueba_letras.gd)
 			PruebaLetras.probar()
 			get_tree().quit()

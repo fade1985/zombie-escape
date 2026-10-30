@@ -75,10 +75,10 @@ func _draw() -> void:
 		var k := minf(1.0, t / vuelo)
 		var rojo := Color(1, 0.24, 0.35)
 		draw_set_transform(hasta - global_position, 0.0, Vector2(1, 0.6))
-		draw_circle(Vector2.ZERO, RADIO * k, Color(rojo, 0.15 + 0.2 * k))
-		draw_arc(Vector2.ZERO, RADIO, 0.0, TAU, 24, Color(rojo, 0.5 + 0.4 * k), 3.0)
+		Formas.disco(self, Vector2.ZERO, RADIO * k, Color(rojo, 0.15 + 0.2 * k))
+		Formas.arco(self, Vector2.ZERO, RADIO, 0.0, TAU, 24, Color(rojo, 0.5 + 0.4 * k), 3.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.6))
-		draw_circle(Vector2.ZERO, 8.0 + 6.0 * (1.0 - alto / ALTURA), Color(0, 0, 0, 0.3))
+		Formas.disco(self, Vector2.ZERO, 8.0 + 6.0 * (1.0 - alto / ALTURA), Color(0, 0, 0, 0.3))
 	dibujar(self, Vector2(0, -alto - 6.0), giro)
 
 

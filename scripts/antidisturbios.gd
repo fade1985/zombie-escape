@@ -226,7 +226,7 @@ func _draw() -> void:
 	# el escudo: un arco azulado a sus pies, por delante
 	var a := mirada.angle()
 	draw_set_transform(Vector2(0, PIE - 6), 0.0, Vector2(1, 0.7))
-	draw_arc(Vector2.ZERO, radio + 14.0, a - FRENTE, a + FRENTE, 16, Color("#bfe9ff", 0.35), 3.0)
+	Formas.arco(self, Vector2.ZERO, radio + 14.0, a - FRENTE, a + FRENTE, 16, Color("#bfe9ff", 0.35), 3.0)
 	match estado:
 		"aviso_porrazo":
 			Aviso.golpe(self, Vector2(0, 6), datos.angulo, MEDIO_PORRAZO, ALCANCE_PORRAZO,

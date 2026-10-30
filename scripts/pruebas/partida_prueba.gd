@@ -70,7 +70,8 @@
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
-#   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto               [prueba_inventario.gd]
+#   --repuesto          dos armas de cada tipo: la de la mano y la de repuesto; y al comprar una tercera, la de repuesto
+#                       va al baúl (M26)                                                  [prueba_inventario.gd]
 #   --tienda            la tienda de armas: sus secciones y comprar arrojables de uno en uno [prueba_inventario.gd]
 #   --piezas            las piezas de mejora: quién las suelta, la mochila, el baúl, «Piezas al baúl» y los 5 objetos
 #                       quitados                                                       [prueba_inventario.gd]
@@ -78,6 +79,7 @@
 #   --noticias          el programa de Noticias del ordenador: la tele con la reportera hablando [prueba_larga.gd]
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
 #                       grito grande de las noticias, los logros y las skins                [prueba_larga.gd]
+#   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
 #   --ordenador-arriba  cada programa del ordenador recién abierto: tiene que empezar arriba      [prueba_larga.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
 #                       tele, para ver si caben                                        [prueba_larga.gd]
@@ -102,6 +104,9 @@
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
+#   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
+#                       el superviviente, los eventos, la sala de pruebas y lo que ocupa una planta entera; con
+#                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
@@ -115,12 +120,28 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
+#                       saltan, el cartel del final y que quedan apuntados (mirarlos también con --lang ru y
+#                       --lang zh_CN, por si se sale alguna línea)                           [prueba_varias.gd]
+#   --mando             A confirma y B vuelve en los menús, con botones del mando de verdad: el menú principal, la pausa,
+#                       Opciones, un tutorial, el inventario, la taquilla, el ordenador, una página, el panel de pruebas
+#                       y el cartel del final; que A siga esquivando (project.godot pone A en ui_accept y B en ui_cancel)
+#                                                                  [prueba_varias.gd, pruebas/prueba_mando.gd]
+#   --formas            que las formas de formas.gd (disco, arco, polígono, polilínea) salgan como las de CanvasItem: dos
+#                       fotos y su diferencia píxel a píxel                                  [prueba_varias.gd]
+#   --dibujos           lo que cuesta cada tipo de dibujo (rectángulos, círculos, abanicos y anillos de primitivas) según cuántos por
+#                       fotograma, con las llamadas, los triángulos y si la página estaba a la vista; en la web, 200
+#                       círculos tardan 1 s y 12 800 rectángulos, 17 ms (docs/WEB.md)        [prueba_varias.gd, pruebas/dibujos.gd]
+#   --lentos            (con cualquier otra) avisa de cada fotograma que tarda más de 60 ms, con cuántos dibujos llevaba, y da
+#                       un resumen al acabar: para cazar en la web lo que la atasca (docs/WEB.md) [pruebas/lentos.gd]
 #   --rendimiento       cuánto tarda cada fotograma durante el latigazo del Glotón (3 y 6 lenguas); en la web, el atasco
 #                       de los draw_circle (docs/WEB.md)                                       [prueba_varias.gd]
 #   --pantalla          la pantalla completa del ordenador: F11 y Alt+Intro la ponen y la quitan, y se guarda [prueba_varias.gd]
+#   --escala            que la imagen llene la ventana: la escala de cada pantalla y al cambiar de tamaño [prueba_varias.gd]
 #   --guiado            el tutorial disimulado de la primera partida: las pistas sobre Johnny, el latido del HUD, la
 #                       flecha del suelo, el apartamento fácil y la llavecita del zombi de la llave [prueba_varias.gd]
-#   --idioma            solo el menú, Opciones (4 pestañas y las licencias), el cambio de idioma en caliente y «Elige edificio»; con
+#   --idioma            solo el menú, Opciones (4 pestañas y las licencias, y el botón de avisar de un texto mal traducido, con
+#                       y sin enlace), el cambio de idioma en caliente y «Elige edificio»; con
 #                       --alerta 3 --reto, con su alerta y su reto             [prueba_idioma.gd; lo lanza menu_principal.gd]
 #   --ingles            (con cualquier prueba) el juego en inglés; al cerrar, cuenta los textos sin traducir [idioma.gd]
 #   --lang X            lo mismo con otro idioma: pt_BR, de, fr, ru o zh_CN (--ingles es --lang en)       [idioma.gd]
@@ -170,6 +191,9 @@ func empezar_prueba() -> void:
 	var args := OS.get_cmdline_user_args()
 	if "--trailer" in args:
 		grabar_trailer()
+	elif "--volver" in args:
+		set_process(false)   # sin la prueba larga
+		probar_volver()
 	elif "--fotos-tiendas" in args:
 		fotos_tiendas()
 	elif "--fotos-luz" in args:
@@ -271,6 +295,9 @@ func empezar_prueba() -> void:
 		get_tree().quit()
 	elif "--novedades" in args:
 		await probar_novedades()
+		get_tree().quit()
+	elif "--avisos-ordenador" in args:
+		await probar_avisos_ordenador()
 		get_tree().quit()
 	elif "--ordenador-arriba" in args:
 		set_process(false)   # sin la prueba larga
@@ -422,12 +449,26 @@ func empezar_prueba() -> void:
 	elif "--tutorial" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tutorial()
+	elif "--relato" in args:
+		set_process(false)   # sin la prueba larga (la suya ya va: empieza en prueba_comun.gd, antes que esta)
+	elif "--mando" in args:
+		set_process(false)   # sin la prueba larga (el menú principal ya ha hecho su parte: menu_principal.gd)
+		probar_mando()
+	elif "--formas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_formas()
+	elif "--dibujos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_dibujos()
 	elif "--rendimiento" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rendimiento()
 	elif "--pantalla" in args:
 		set_process(false)   # sin la prueba larga
 		probar_pantalla()
+	elif "--escala" in args:
+		set_process(false)   # sin la prueba larga
+		probar_escala()
 	elif "--guiado" in args:
 		set_process(false)   # sin la prueba larga
 		probar_guiado()

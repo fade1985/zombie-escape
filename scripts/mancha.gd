@@ -1,5 +1,5 @@
 # Una mancha que se queda en el suelo: lo chamuscado de una granada o la ceniza de un fuego que se ha apagado.
-# Es una lista de cuadraditos de pixel art (celdas de 2 píxeles del dibujo). Se quedan hasta salir del sitio;
+# Es una lista de cuadraditos de pixel art (celdas de 2 píxeles del dibujo). Se quedan hasta dejar la planta;
 # si hay demasiadas, se borran las más viejas.
 class_name Mancha
 extends Node2D

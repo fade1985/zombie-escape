@@ -75,7 +75,7 @@ func _draw() -> void:
 		var a := Vector2(0, -ALTO)
 		draw_line(a - d * 9.0, a + d * 8.0, Color("#1d1b2c"), 4.0)
 		draw_line(a - d * 8.0, a + d * 7.0, Color("#d8dde6"), 2.0)
-		draw_circle(a - d * 8.0, 3.0, Color("#e0303a"))
+		Formas.disco(self, a - d * 8.0, 3.0, Color("#e0303a"))
 		return
 	# la sombra: un óvalo de píxeles, aplastado como el suelo
 	var r := roundi(radio * 0.8 / PIXEL)

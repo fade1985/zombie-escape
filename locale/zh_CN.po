@@ -1,9 +1,9 @@
-# Traducción al chino simplificado de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# Traducción al chino simplificado de Johnny Rush: Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
 # código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
 # escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
 msgid ""
 msgstr ""
-"Project-Id-Version: Zombie Escape\n"
+"Project-Id-Version: Johnny Rush: Zombie Escape\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1453,6 +1453,78 @@ msgstr "天台上的直升机"
 #: scripts/historia.gd
 msgid "Última hora: el helicóptero de Velaria ha vuelto, esta vez a la azotea del centro comercial. Ha despegado con alguien dentro, rumbo a Torre Velaria. Velaria ya no busca a su conserje: «Está con nosotros, a salvo». Mañana presenta en su torre «el futuro del trabajo». De mi hermana, nada."
 msgstr "最新消息：Velaria的直升机又来了，这次落在购物中心的天台上。它载着一个人起飞，飞往Velaria大厦。Velaria不再寻找他们的清洁工：“他和我们在一起，很安全。”明天，Velaria将在大厦发布“工作的未来”。至于我妹妹，还是没有消息。"
+
+#: scripts/historia.gd
+msgid "Número 14. Turno de noche."
+msgstr "14号楼。夜班。"
+
+#: scripts/historia.gd
+msgid "Johnny es el conserje. Lleva aquí más años de los que recuerda."
+msgstr "Johnny是这里的清洁工。他在这里待了多少年，自己也记不清了。"
+
+#: scripts/historia.gd
+msgid "Los vecinos nuevos llegaron en camiones, de noche. No daban ningún problema."
+msgstr "新邻居是夜里坐卡车来的。他们从不惹麻烦。"
+
+#: scripts/historia.gd
+msgid "Anoche precintaron el edificio desde fuera. Los vecinos siguen durmiendo. Andan. Y muerden."
+msgstr "昨晚，大楼被人从外面封锁了。邻居们还在睡。他们会走。还会咬人。"
+
+#: scripts/historia.gd
+msgid "Nada de esto viene en su contrato."
+msgstr "这些事，合同里一个字也没提。"
+
+#: scripts/historia.gd
+msgid "Pero alguien tendrá que limpiarlo."
+msgstr "但总得有人来打扫。"
+
+#: scripts/historia.gd
+msgid "Johnny se agarra a la escalera. El helicóptero despega."
+msgstr "Johnny抓住绳梯。直升机起飞了。"
+
+#: scripts/historia.gd
+msgid "«No te fíes de los que vengan a rescatarte», decía la hoja."
+msgstr "“别相信那些来救你的人。”那张纸上这样写着。"
+
+#: scripts/historia.gd
+msgid "Johnny se suelta."
+msgstr "Johnny松开了手。"
+
+#: scripts/historia.gd
+msgid "Los árboles de la avenida amortiguan la caída. Más o menos."
+msgstr "大街边的树丛接住了他。算是吧。"
+
+#: scripts/historia.gd
+msgid "Al otro lado, el centro comercial sigue con las luces encendidas."
+msgstr "街对面，购物中心的灯还亮着。"
+
+#: scripts/historia.gd
+msgid "Alguien tendrá que limpiarlo."
+msgstr "总得有人来打扫。"
+
+#: scripts/historia.gd
+msgid "Esta vez Johnny no se suelta."
+msgstr "这一次，Johnny没有松手。"
+
+#: scripts/historia.gd
+msgid "Sube, se sienta y se pone la fregona entre las rodillas. El piloto le ofrece un café. Dice que no."
+msgstr "他爬上去，坐好，把拖把夹在两膝之间。飞行员递来一杯咖啡。他说不用了。"
+
+#: scripts/historia.gd
+msgid "Abajo, los cajeros siguen cobrando a nadie."
+msgstr "下面，收银员还在给空气结账。"
+
+#: scripts/historia.gd
+msgid "Delante se acerca Torre Velaria. «Planta 40», dice la radio. «Ya conoce el camino.»"
+msgstr "前方，Velaria大厦近了。“40楼，”无线电说，“路您认得。”"
+
+#: scripts/historia.gd
+msgid "Johnny no recuerda haber estado allí."
+msgstr "Johnny不记得自己去过那里。"
+
+#: scripts/historia.gd
+msgid "Cuarenta plantas de moqueta. Alguien tendrá que limpiarlas."
+msgstr "四十层的地毯。总得有人来打扫。"
 
 #: scripts/historia.gd
 msgid "Esta página falta (%s)."
@@ -4834,6 +4906,10 @@ msgid "Lánzala lejos: su explosión también te hace daño a ti."
 msgstr "扔远一点：爆炸也会伤到你自己。"
 
 #: scripts/ui/opciones.gd
+msgid "Avisar de un texto mal traducido"
+msgstr "反馈翻译错误"
+
+#: scripts/ui/opciones.gd
 msgid "Temblor de pantalla"
 msgstr "屏幕抖动"
 
@@ -5407,8 +5483,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s升到 %d/%d！"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y, si ya tienes una de repuesto, se queda en el suelo."
-msgstr "出售的都是普通品质。身上带的东西倒下就会丢失：存进工作间的储物箱（通关大楼后会自动存入）。每种最多带两件：你手上那件会换到备用；如果已经有备用的，它会留在地上。"
+msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "出售的都是普通品质。身上带的东西倒下就会丢失：存进工作间的储物箱（通关大楼后会自动存入）。每种最多带两件：你手上那件会换到备用，备用的那件放进储物箱；如果放不下或不能存放，手上那件会留在地上。"
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"
@@ -5497,6 +5573,10 @@ msgstr "你的备用里已经有%s了：去物品栏装备它吧。"
 #: scripts/ui/ordenador.gd
 msgid "No te llega: te faltan $%d."
 msgstr "钱不够：还差 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
+msgstr "购买成功！%s拿到手上；%s换到备用；%s放进储物箱。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
@@ -5813,6 +5893,18 @@ msgid ""
 msgstr ""
 "成就\n"
 "可领取！"
+
+#: scripts/ui/relato.gd
+msgid "Toca la pantalla para continuar"
+msgstr "点击屏幕继续"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier botón para continuar · B para saltar"
+msgstr "按任意按钮继续 · 按 B 跳过"
+
+#: scripts/ui/relato.gd
+msgid "Pulsa cualquier tecla para continuar · Esc para saltar"
+msgstr "按任意键继续 · 按 Esc 跳过"
 
 #: scripts/ui/tactil.gd
 msgid "Gira el móvil para jugar mejor"

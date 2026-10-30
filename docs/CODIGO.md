@@ -77,7 +77,7 @@ en una línea.
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
-  `tentaculo.gd` (`Tentaculo`; se pinta con `trozos` y `disco`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
+  `tentaculo.gd` (`Tentaculo`; se pinta con `trozos`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
   latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
   con lo mismo que las cargas de los jefes (`Aviso`, la franja de flechas) y, como ellas, se para en las paredes
   y los muebles (`apuntar`). Cada uno le da sus colores, sacados de su hoja (`PALETA`: contorno, capas y
@@ -134,7 +134,14 @@ en una línea.
 
 **Partida y progreso**
 - `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o tarjeta y su guardia, jefes, escaleras,
-  ascensor, dinero, soltar objetos y munición, pausa, fin). La llave de los Apartamentos no está en el suelo: la lleva
+  ascensor, dinero, soltar objetos y munición, pausa, fin). Salir de un sitio no lo reinicia: `montar` hace su mapa solo
+  la primera vez (`hacer_mapa`) y al salir lo guarda entero en `mapas`, fuera de la escena, donde nada se mueve; al
+  volver lo saca tal cual (`sacar_mapa`; lo que no hay que repetir va con `nuevo`, y `supervivientes.recoger` y
+  `joyeria.recoger` quitan lo que ellos vuelven a poner). Lo que esté fuera del mapa y apunte a algo de dentro tiene que
+  soltarlo al salir (la caza de los aliados) o mirar `is_inside_tree()` (las gotas de `particulas.gd`), porque los
+  zombis guardados siguen existiendo. Al dejar la planta se tiran (`tirar_mapas`). En la partida de prueba no se guardan
+  (`guarda_mapas`), salvo con `--volver`: las demás pruebas cambian la ficha de un sitio y cuentan con que se rehaga. La
+  sala de pruebas y la exposición empiezan siempre de cero. La llave de los Apartamentos no está en el suelo: la lleva
   un zombi al azar de los apartamentos normales (`planta.gd` lo elige con `llave: true`; `zombi_de_la_llave`) y la
   suelta al caer. Y la entrada a la sala de pruebas (`pruebas`,
   `sitio_pruebas`, `en_pruebas`: allí los zombis no cuentan ni sueltan nada). Avisa a la prueba en
@@ -205,8 +212,8 @@ en una línea.
   la partida de prueba el repaso va apagado, `repasar`, salvo en `--logros`. Con una de las ayudas de `AYUDAS`
   encendida, `sin_logros()` es cierto toda la partida y `cumplir` no apunta nada; los zombis de esas partidas van
   aparte, en `muertos_con_ayudas`, y no suman para Exterminador),
-  `historia.gd` (dosier y noticias, con la historia resumida arriba; se edita sin tocar los `id` y todos los textos
-  se ven con `--historia`) y `bestiario.gd` (sus fichas;
+  `historia.gd` (dosier, noticias y relatos, con la historia resumida arriba; se edita sin tocar los `id` y todos los
+  textos se ven con `--historia`, y los relatos con `--relato`) y `bestiario.gd` (sus fichas;
   `recorte` lo calcula `tools/recortes_bestiario.py`).
 - `tutoriales.gd`: los tutoriales (`LISTA`: grupo, título, icono, cuándo sale y sus líneas, con las teclas entre
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
@@ -223,8 +230,12 @@ en una línea.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
   acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).
-- `pantalla.gd` (autoload): la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
+- `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
+  la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`.
+- `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
+  `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
+  Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
 - `sonido.gd` (autoload: efectos sintetizados y música; cada efecto cambia un poco al azar de tono y de volumen cada
   vez que suena, salvo los `"fijo"` de los menús y los avisos, y los que llevan ruido se graban en 3 versiones; se
   prueba con `--sensacion`. La música va por capas: cada canción son dos `.ogg` que suenan a la vez, la base y la que
@@ -245,7 +256,8 @@ en una línea.
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
   peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; y «Otra vez»,
   también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; si se cambia el idioma en Opciones, se
-  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el temblor de
+  monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el botón «Avisar de un texto mal traducido» a continuación de los idiomas (`enlace_avisos`, el formulario de Google del dueño; vacío no sale,
+  y en español tampoco; se prueba con `--idioma`), el temblor de
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
   `LETRAS_DE_OTROS`, y sus licencias, `texto_de_licencias`: las de esas letras y las de Godot y sus piezas), `tactil.gd`
   (controles del móvil), `tema.gd` (aspecto; a la letra normal le faltan `·` `×` `<` `>` `…` `—`: los saca de Jersey 25, su
@@ -253,11 +265,13 @@ en una línea.
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
   `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano).
 - `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
-  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`, mientras quepan). Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
-  llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`). Y los avisos de sucesos, además de la
+  secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`, mientras quepan). Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
+  llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
+  `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones, ver una noticia o cobrar un logro, sin tener
+  que apagar (y al apagar también se pone al día el «!» de la mesa). Y los avisos de sucesos, además de la
   línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`: noticias
   nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.
-  Se prueba con `--novedades`.
+  Se prueba con `--novedades` y `--avisos-ordenador` (que se quitan al mirar o cobrar).
 - `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
@@ -265,6 +279,11 @@ en una línea.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
   y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.
+- `relato.gd`: los textos de la historia sobre negro (`Historia.RELATOS`): la introducción y un final por edificio, cada
+  uno una sola vez (`relatos` en el guardado; no salen en el reto, y una partida continuada no pasa por la introducción
+  pero sí saca el final). Las líneas salen solas,
+  cualquier pulsación saca la siguiente y cierra al final; Esc o B la saltan. La abre `partida.ver_relato`: la
+  introducción, al final de `_ready`, y los finales, en `subir_al_helicoptero`, antes del cartel del final.
 - `panel_pruebas.gd`: el panel de la sala de pruebas (tecla P allí): jefes (a media vida, quietos), zombis, las ayudas
   que se encienden y se apagan, Johnny invencible, la diana, ir a la exposición o a la sala de un jefe y lo de las
   antiguas teclas de prueba (mutaciones, objeto, piezas al baúl, Colecciones, científico).
@@ -291,7 +310,7 @@ en una línea.
   demás plantas se entra por las escaleras de la derecha, las mismas por las que se sale de la de abajo, y el pasillo no
   tiene puerta a la izquierda; y la azotea (desde el 28 oct) tiene su puerta de llegada a la derecha, como la salida de
   incendios (`puerta_de_llegada()` de `partida.gd` da la que toca; se prueba con `--llegada`).
-  La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la izquierda, al otro lado de la puerta: `plataforma()`,
+  La azotea lleva en el centro el helipuerto elevado (`PLATAFORMA`, con la rampa a la derecha, frente a la puerta de llegada: `plataforma()`,
   `rampa()`, `huella_helipuerto()`), sin aparatos encima ni su dibujo; es el ring del jefe final: espera arriba
   (`esperando` en `minijefe.gd`) y, al subir Johnny, `valla.gd` cierra la rampa hasta que cae (`partida.mirar_ring`).
   Su borde choca en la capa 4 (`CAPA_BORDE`: para a los que andan, no a las balas). Sus aparatos van siempre en el
@@ -367,6 +386,10 @@ en una línea.
   (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
 - `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
   edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
+- `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
+  principal (JUGAR, «Elige edificio», Opciones, Tutorial) y los botones de mando de mentira que usa también
+  `probar_mando()` de `prueba_varias.gd` (la pausa, Opciones, un tutorial, el inventario, la taquilla, el ordenador, una
+  página, el panel de pruebas y el cartel del final).
 
 ## assets/
 
@@ -409,6 +432,11 @@ en una línea.
   `FONDOS.md`).
 - **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
   `hacer_casillas.py`, `recortes_bestiario.py`.
+- **El logo** (`assets/ui/logo.png`, «JOHNNY RUSH» grande y «ZOMBIE ESCAPE» pequeño debajo; lo ponen `menu_principal.gd` y el final de
+  `pruebas/trailer.gd`): no está dibujado a mano, lo genera `py tools/logo.py` (el programa de `src/titulo.js` del juego JS, pasado a
+  Python: cada letra es una cuadrícula de 5×7 con relieve, babas y un filo crema). Las letras están en `LETRAS` (J, H, N, Y, R y U son
+  las añadidas al pasar al nombre nuevo), los colores en `REPARTOS` (`py tools/logo.py todas` los enseña todos juntos; el elegido es
+  `VARIANTE`) y `py tools/logo.py viejo` rehace el logo de antes, idéntico, para comprobar que el programa no ha cambiado.
 - **Fotos de los tutoriales:** `fotos_tutorial.py` recorta de las capturas de la prueba (520 × 180, a tamaño real) la
   foto de cada ficha; al lado de cada una, la prueba que saca su captura: `py tools/fotos_tutorial.py [id...]`.
 - **Ver sin jugar:** `ver_dibujos.tscn` (foto de los dibujos hechos con código) y `probar_sonido.gd` (los efectos en

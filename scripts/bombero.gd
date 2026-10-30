@@ -546,8 +546,8 @@ func _draw() -> void:
 		return
 	if burbuja > 0.0:
 		draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.55))
-		draw_circle(Vector2.ZERO, BURBUJA_RADIO * burbuja, Color(Llamas.FUEGO[2], 0.14))
-		draw_arc(Vector2.ZERO, BURBUJA_RADIO * burbuja, 0.0, TAU, 40, Color(Llamas.FUEGO[3], 0.7), 3.0)
+		Formas.disco(self, Vector2.ZERO, BURBUJA_RADIO * burbuja, Color(Llamas.FUEGO[2], 0.14))
+		Formas.arco(self, Vector2.ZERO, BURBUJA_RADIO * burbuja, 0.0, TAU, 40, Color(Llamas.FUEGO[3], 0.7), 3.0)
 		draw_set_transform(Vector2.ZERO)
 	match estado:
 		"aviso_hacha":
@@ -587,8 +587,8 @@ func pintar_encima(lienzo: Node2D) -> void:
 func pintar_burbuja(lienzo: Node2D) -> void:
 	var r := BURBUJA_RADIO
 	lienzo.draw_set_transform(Vector2(0, -arriba * BURBUJA_ALTO), 0.0, Vector2(1, 1.25) * burbuja)
-	lienzo.draw_circle(Vector2.ZERO, r, Color(Llamas.FUEGO[2], 0.28))
-	lienzo.draw_circle(Vector2.ZERO, r * 0.65, Color(Llamas.FUEGO[1], 0.14))
+	Formas.disco(lienzo, Vector2.ZERO, r, Color(Llamas.FUEGO[2], 0.28))
+	Formas.disco(lienzo, Vector2.ZERO, r * 0.65, Color(Llamas.FUEGO[1], 0.14))
 	# las llamitas del borde: rojas, con el centro amarillo, cada una de un largo que va cambiando
 	for i in 20:
 		var a := i * TAU / 20.0 + tiempo * 0.5
@@ -596,21 +596,21 @@ func pintar_burbuja(lienzo: Node2D) -> void:
 		var lado := dir.orthogonal()
 		var base := dir * (r - 3.0)
 		var largo := 8.0 + (0.5 + 0.5 * sin(tiempo * 11.0 + i * 2.3)) * 12.0
-		lienzo.draw_colored_polygon(PackedVector2Array([base + lado * 7.0, dir * (r + largo), base - lado * 7.0]),
+		Formas.poligono(lienzo, PackedVector2Array([base + lado * 7.0, dir * (r + largo), base - lado * 7.0]),
 			Color(Llamas.FUEGO[3], 0.9))
-		lienzo.draw_colored_polygon(PackedVector2Array([base + lado * 3.0, dir * (r + largo * 0.55), base - lado * 3.0]),
+		Formas.poligono(lienzo, PackedVector2Array([base + lado * 3.0, dir * (r + largo * 0.55), base - lado * 3.0]),
 			Color(Llamas.FUEGO[1], 0.9))
-	lienzo.draw_arc(Vector2.ZERO, r, 0.0, TAU, 48, Color(Llamas.FUEGO[3], 1.0), 4.0)
-	lienzo.draw_arc(Vector2.ZERO, r - 5.0, 0.0, TAU, 48, Color(Llamas.FUEGO[1], 0.65), 3.0)
-	lienzo.draw_arc(Vector2(-14, -14), r * 0.68, PI * 1.05, PI * 1.55, 16, Color(Llamas.FUEGO[0], 0.75), 4.0)   # el brillo
+	Formas.arco(lienzo, Vector2.ZERO, r, 0.0, TAU, 48, Color(Llamas.FUEGO[3], 1.0), 4.0)
+	Formas.arco(lienzo, Vector2.ZERO, r - 5.0, 0.0, TAU, 48, Color(Llamas.FUEGO[1], 0.65), 3.0)
+	Formas.arco(lienzo, Vector2(-14, -14), r * 0.68, PI * 1.05, PI * 1.55, 16, Color(Llamas.FUEGO[0], 0.75), 4.0)   # el brillo
 	if destello > 0.0:
 		if destello_por == Vector2.ZERO:
-			lienzo.draw_circle(Vector2.ZERO, r, Color(Llamas.FUEGO[0], 0.3 * destello))
-			lienzo.draw_arc(Vector2.ZERO, r, 0.0, TAU, 48, Color(1, 1, 1, 0.9 * destello), 6.0)
+			Formas.disco(lienzo, Vector2.ZERO, r, Color(Llamas.FUEGO[0], 0.3 * destello))
+			Formas.arco(lienzo, Vector2.ZERO, r, 0.0, TAU, 48, Color(1, 1, 1, 0.9 * destello), 6.0)
 		else:
 			var a := angulo_burbuja(destello_por)
-			lienzo.draw_arc(Vector2.ZERO, r, a - 0.55, a + 0.55, 12, Color(Llamas.FUEGO[0], 0.8 * destello), 10.0)
-			lienzo.draw_arc(Vector2.ZERO, r, a - 0.35, a + 0.35, 8, Color(1, 1, 1, destello), 5.0)
+			Formas.arco(lienzo, Vector2.ZERO, r, a - 0.55, a + 0.55, 12, Color(Llamas.FUEGO[0], 0.8 * destello), 10.0)
+			Formas.arco(lienzo, Vector2.ZERO, r, a - 0.35, a + 0.35, 8, Color(1, 1, 1, destello), 5.0)
 	lienzo.draw_set_transform(Vector2.ZERO)
 
 

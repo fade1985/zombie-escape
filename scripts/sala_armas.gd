@@ -346,7 +346,7 @@ func _draw() -> void:
 	# El círculo de cada zombi: si el centro de la bala entra en él, le da (cuerpo a cuerpo, le da si el abanico lo pilla)
 	for z in get_tree().get_nodes_in_group("zombis") if ayudas.circulos else []:
 		var c := to_local(z.global_position)
-		draw_arc(c, z.radio + radio_bala + 3.0 if fuego else z.radio, 0.0, TAU, 40, ROJO, 2.0)
+		Formas.arco(self, c, z.radio + radio_bala + 3.0 if fuego else z.radio, 0.0, TAU, 40, ROJO, 2.0)
 		draw_rect(Rect2(c - Vector2(2, 2), Vector2(4, 4)), ROJO)
 	# Hacia dónde apunta, según el modo de atacar
 	var objetivo: Node2D = null
@@ -363,20 +363,20 @@ func _draw() -> void:
 	if not ayudas.alcance:
 		pass
 	elif fuego:
-		draw_arc(p, w.alcance, 0.0, TAU, 128, BLANCO, 2.0)
+		Formas.arco(self, p, w.alcance, 0.0, TAU, 128, BLANCO, 2.0)
 	else:
 		var hacia: float = angulo if angulo != INF else johnny.DIRS.find(johnny.direccion) * PI / 4
 		var mitad := deg_to_rad(w.arco) / 2.0 + 0.2   # (el golpe da un poco de margen: johnny.gd, golpear)
 		if mitad >= PI:
-			draw_arc(p, w.alcance, 0.0, TAU, 96, BLANCO, 2.0)
+			Formas.arco(self, p, w.alcance, 0.0, TAU, 96, BLANCO, 2.0)
 		else:
-			draw_arc(p, w.alcance, hacia - mitad, hacia + mitad, 48, BLANCO, 2.0)
+			Formas.arco(self, p, w.alcance, hacia - mitad, hacia + mitad, 48, BLANCO, 2.0)
 			draw_line(p, p + Vector2.from_angle(hacia - mitad) * w.alcance, BLANCO, 2.0)
 			draw_line(p, p + Vector2.from_angle(hacia + mitad) * w.alcance, BLANCO, 2.0)
 	if objetivo and ayudas.apuntado:
 		var c := to_local(objetivo.global_position)
 		draw_line(p, c, AMARILLO, 2.0)
-		draw_arc(c, 8.0, 0.0, TAU, 16, AMARILLO, 2.0)
+		Formas.arco(self, c, 8.0, 0.0, TAU, 16, AMARILLO, 2.0)
 	# Por dónde irá la bala: sale de la boca del arma y va al zombi que pille la línea de tiro (johnny.gd, tiro)
 	if ayudas.trayectoria and fuego and w.has("boca") and angulo != INF:
 		var t: Array = johnny.tiro(angulo, w, johnny.direccion_de(Vector2.from_angle(angulo)))
