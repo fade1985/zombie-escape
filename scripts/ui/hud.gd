@@ -587,10 +587,10 @@ func pintar_barra() -> void:
 			if b.x > a.x:
 				barra.draw_line(a, b, Color("#121016"), 2.0)
 			x += 6.0
-	# El marco por encima, y la vida en números (sin espacios en la barra: así cabe entre las dos rayas y no las tapa)
+	# El marco por encima, y la vida que le queda (solo esa, para que quepa entre las dos rayas; la máxima, en la pausa)
 	barra.draw_texture_rect(MARCO, Rect2(0, 0, ANCHO, ALTO), false)
 	var fuente := Tema.FUENTE
-	var texto := "%d/%d" % [ceili(vida), roundi(maxima)]
+	var texto := str(ceili(vida))
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
 	var donde := Vector2(roundf((ANCHO - ancho) / 2.0), ALTO / 2.0 + 5)
 	barra.draw_string_outline(fuente, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Tema.LINEA)
