@@ -61,7 +61,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L19** Ordenador, tienda de armas: en el texto de arriba hay algo entre paréntesis que no se entiende bien (puede
   ser «(al completar el edificio, va solo)», lo de guardar lo que llevas en el baúl). Reescribirlo más claro, en los
   siete idiomas.
-- **L20** Sala de mantenimiento: no debe haber sangre en ninguna de sus habitaciones (taquilla, despacho, taller).
 - **L21** El número de cada planta se ve demasiado perfecto comparado con lo destrozado que está el edificio; que se vea
   desgastado, sucio o roto.
 - **L22** Barra de vida de Johnny: el número de la vida tapa los tercios; mirar cómo dejarlos a la vista.

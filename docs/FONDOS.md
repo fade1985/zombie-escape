@@ -53,6 +53,8 @@ scripts de abajo ya sacan lo nuevo así. Lo que de este documento hable de 0,5, 
   Original en `assets/sources/suelos/mantenimiento-suelo.png` (y `-recorte.png`, sin el margen transparente);
   `py tools/textura_suelo.py <recorte> mantenimiento 8`. La versión con sangre (`mantenimiento-suelo-sangre*.png`) es
   el mismo suelo con manchas: restando una de otra salen las manchas sueltas. Lo usan también las salas de exposición de `?pruebas`.
+  **Hoy la sala de mantenimiento no lleva nada de sangre** (L20, 31 oct): es el sitio seguro. Sin manchas sueltas y con copias limpias
+  de las texturas y los muebles (`py tools/sala_sin_sangre.py`); este suelo se queda igual, porque lo suyo es mugre, no sangre.
   **Manchas de sangre sueltas (18 oct, pendiente de visto bueno):** restando las dos imágenes se sacaron 10 manchas
   (salpicones, arrastres, gotas) y se montaron en `assets/sprites/manchas-suelo.png` (10 fotogramas de 120×72, a media
   escala). `makePlainLayout('maintenance')` (`src/rooms.js`) pone 6–10 al azar con el dado de la propia sala, al final,

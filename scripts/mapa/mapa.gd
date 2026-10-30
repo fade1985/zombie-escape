@@ -42,9 +42,10 @@ const BAUL_X := 1010.0
 const TAQUILLA_X := 260.0
 # Los suelos y paredes de las estancias de la sala de mantenimiento: el taller, con los de siempre (cemento y la pared
 # blanca y verde); el vestuario, de azulejo, como los baños de los pisos; y el despacho, con tarima y la pared beis con
-# friso de madera de los salones. [suelo, pared]: sprites suelo-<x>, pared-<x> y techo-<x>
-const ESTILO_MANTENIMIENTO := {"taller": ["mantenimiento", "mantenimiento"], "vestuario": ["bano-b", "bano-b"],
-	"despacho": ["salon-a", "salon-c"]}
+# friso de madera de los salones. Sin sangre: es el sitio seguro del juego, y por eso llevan sus propias copias limpias de
+# esas texturas (tools/sala_sin_sangre.py). [suelo, pared, techo]: sprites suelo-<x>, pared-<x> y techo-<x>
+const ESTILO_MANTENIMIENTO := {"taller": ["mantenimiento", "taller", "mantenimiento"],
+	"vestuario": ["vestuario", "vestuario", "bano-b"], "despacho": ["despacho", "despacho", "salon-c"]}
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
 const CARTEL_SALIDA := preload("res://scripts/mapa/cartel_salida.gd")   # el EXIT de la salida de incendios (encima de la pared de arriba del pasillo)
 const CARTEL_SALIDA_A := 76.0   # a cuánto del fondo del pasillo va su centro
@@ -187,7 +188,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			if sitio.tipo == "mantenimiento":
 				var de: Array = ESTILO_MANTENIMIENTO[s.uso]
 				estilos[s.id] = {"suelo": load("res://assets/sprites/suelo-%s.png" % de[0]),
-					"pared": load("res://assets/sprites/pared-%s.png" % de[1]), "techo": load("res://assets/sprites/techo-%s.png" % de[1])}
+					"pared": load("res://assets/sprites/pared-%s.png" % de[1]), "techo": load("res://assets/sprites/techo-%s.png" % de[2])}
 				continue
 			var h: int = s.c0 * 7 + s.f0 * 13 + s.casillas
 			if s.uso == "pasillo" and s.get("tipo", "") == "piso":
@@ -512,7 +513,7 @@ func dibujar_fondo(lienzo: Node2D) -> void:
 	# el helipuerto de la azotea: la plataforma, con su cara y su rampa a la derecha (sus choques, poner_helipuerto)
 	if sitio.has("helipuerto"):
 		lienzo.draw_texture(HELIPUERTO, Planta.plataforma(sitio).position / 2.0)
-	# las manchas de sangre de la sala de mantenimiento (y la azotea): cada una gira de 90 en 90 grados y se voltea al azar
+	# las manchas de sangre de la azotea: cada una gira de 90 en 90 grados y se voltea al azar
 	for m in sitio.get("manchas", []):
 		lienzo.draw_set_transform(m.pos, m.giro * PI / 2.0, Vector2(-2 if m.espejo else 2, 2))
 		lienzo.draw_texture_rect_region(MANCHAS, Rect2(-30, -18, 60, 36), Rect2(m.dibujo * 60, 0, 60, 36))

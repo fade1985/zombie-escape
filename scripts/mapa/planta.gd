@@ -512,7 +512,7 @@ static func huella_helipuerto(sitio: Dictionary) -> Array:
 #   - el taller, a la derecha: la estantería con botes, el banco de trabajo y el baúl (los dos, mapa.gd) en la
 #     pared de arriba, el carrito del conserje en la de la derecha y, en esa misma pared, la puerta de las viviendas de
 #     los supervivientes rescatados (viviendas.gd; adónde lleva lo pone generar)
-# Entre estancia y estancia, una puerta de madera, como las de dentro de los pisos (la pone mapa.gd). Y manchas de sangre por el suelo.
+# Entre estancia y estancia, una puerta de madera, como las de dentro de los pisos (la pone mapa.gd). Sin sangre: es el sitio seguro.
 # "vuelta" es su puerta en el pasillo.
 static func mantenimiento(vuelta: int) -> Dictionary:
 	var ancho := SALA_COLS * CASILLA
@@ -545,7 +545,7 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		"tipo": "mantenimiento"}
 	# ("cajas": cada estancia, cerrada por sus tabiques, con oscuro alrededor, como las viviendas: mapa.poner_tabiques)
 	var sitio := {"tipo": "mantenimiento", "nombre": "Mantenimiento", "apt": apt, "ancho": ancho, "alto": alto,   # [traducir]
-		"zombis": [], "limpio": true, "visitado": false, "surtido": rng.randi(), "manchas": [],
+		"zombis": [], "limpio": true, "visitado": false, "surtido": rng.randi(),
 		"vistas": {0: true, 1: true, 2: true}, "cajas": true, "arriba_extra": 68}
 	sitio.salidas = [{"dir": "abajo", "en": ancho / 2, "tipo": "puerta", "a": 0, "vuelta": vuelta, "cerrojo": "",
 		"aviso": ""}, {"dir": "derecha", "en": alto / 2, "tipo": "puerta", "a": -1, "vuelta": 0, "cerrojo": "", "aviso": ""}]
@@ -561,18 +561,6 @@ static func mantenimiento(vuelta: int) -> Dictionary:
 		Muebles.nuevo("canshelf", arriba, 820, 2),
 		Muebles.nuevo("janitorcart", {"lado": "derecha", "base": ancho - MURO}, 330, 2),
 	]
-	# manchas de sangre sueltas (10 dibujos en manchas-suelo.png), por el suelo de las tres estancias, lejos de la pared
-	# de arriba y de los muebles (con su propio dado: así no cambian los pisos que salen detrás)
-	var dado := RandomNumberGenerator.new()
-	dado.seed = sitio.surtido
-	for i in dado.randi_range(6, 9):
-		for intento in 30:
-			var pos := Vector2(dado.randf_range(MURO + 40, ancho - MURO - 40), dado.randf_range(MURO + 110, alto - MURO - 40))
-			var aqui := dueno[int(pos.y / CASILLA) * SALA_COLS + int(pos.x / CASILLA)]
-			if aqui < 0 or not despejado(apt, pos, 24.0, aqui) or not lejos_de_muebles(sitio, pos, 30.0):
-				continue
-			sitio.manchas.append({"pos": pos, "dibujo": dado.randi() % 10, "giro": dado.randi() % 4, "espejo": dado.randf() < 0.5})
-			break
 	return sitio
 
 
