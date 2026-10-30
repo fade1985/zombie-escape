@@ -75,3 +75,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L30** Gymbro: cambiar su aura por hacer que su cuerpo se vuelva de metal, que queda mejor visualmente.
 - **L31** Textos del juego: el signo de interrogación del principio de la frase sale al revés (mirarlo junto con L24, las
   tildes).
+- **L32** Sala de mantenimiento: separar el baúl y el banco de trabajo; están tan juntos que sin querer se usa el que no
+  quieres. Hay que reubicarlos.
