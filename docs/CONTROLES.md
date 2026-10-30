@@ -172,7 +172,7 @@ JavaScript (los clics llegan como ratón).
 
 ## Guardado
 
-`%APPDATA%\Godot\app_userdata\Zombie Escape\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
+`%APPDATA%\Johnny Rush\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
 usa `guardado-prueba.json`. En la web va en el navegador (IndexedDB). En la versión de Windows (`docs/ESCRITORIO.md`)
 es el mismo archivo. **Pantalla completa:** F11 o Alt+Intro (o su botón en Opciones y en el menú); se recuerda.
 

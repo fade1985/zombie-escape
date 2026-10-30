@@ -5,7 +5,7 @@ Copyright (c) 1998-2026 Roman Czyborra, Paul Hardy, Qianqian Fang, Andrew Miller
 Aella Chiana Moskopp, Rebecca Bettencourt, Ho-Seok Ee, et al.
 
 Unifont tiene doble licencia: SIL Open Font License 1.1 o GNU GPL 2 o posterior con la excepcion de incrustar fuentes
-(https://gnu.org/licenses/gpl.html). Zombie Escape la usa con la SIL OFL 1.1, que se copia abajo y tambien esta en
+(https://gnu.org/licenses/gpl.html). Johnny Rush: Zombie Escape la usa con la SIL OFL 1.1, que se copia abajo y tambien esta en
 https://openfontlicense.org
 
 El archivo del juego (unifont-16-zh.woff2) es un subconjunto de unifont-18.0.01.otf (ftp.gnu.org/gnu/unifont/unifont-18.0.01/):

@@ -396,7 +396,7 @@ func licencias() -> void:
 # Las licencias: las de las letras de otros (sus .txt) y la de Godot, con las de las piezas de otros que lleva dentro (Godot las
 # da: Engine.get_license_text, get_copyright_info y get_license_info). En inglés, como se publicaron
 static func texto_de_licencias() -> String:
-	var partes := PackedStringArray(["Zombie Escape uses these fonts, under the SIL Open Font License 1.1:"])   # no-tr
+	var partes := PackedStringArray(["Johnny Rush: Zombie Escape uses these fonts, under the SIL Open Font License 1.1:"])   # no-tr
 	for l in LETRAS_DE_OTROS:
 		partes.append(FileAccess.get_file_as_string(l[2]).strip_edges())
 	partes.append("This game uses Godot Engine (godotengine.org), available under the following license:\n\n"   # no-tr

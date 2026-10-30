@@ -1,6 +1,6 @@
 # La versión de Windows
 
-El juego también se exporta como programa de Windows (64 bits): un solo `ZombieEscape.exe` (unos 150 MB) con todo
+El juego también se exporta como programa de Windows (64 bits): un solo `JohnnyRush.exe` (unos 150 MB) con todo
 dentro (`binary_format/embed_pck`), sin instalador. Es el que irá a Steam. Es una **foto del juego en el momento de
 exportar**: no se actualiza sola. Se sigue trabajando en el juego de siempre (en el editor y en `main`) y, cuando haga
 falta una versión nueva, se vuelve a exportar con el mismo comando: no hay que rehacer nada.
@@ -11,7 +11,7 @@ El preset **«Windows Desktop»** está en `export_presets.cfg` (junto al de «W
 las de Godot (`%APPDATA%\Godot\export_templates\4.7.2.stable`). Tarda un par de minutos:
 
 ```
-"<Godot>_console.exe" --headless --path . --export-release "Windows Desktop" exportar/windows/ZombieEscape.exe
+"<Godot>_console.exe" --headless --path . --export-release "Windows Desktop" exportar/windows/JohnnyRush.exe
 ```
 
 - Sale a `exportar/windows/`: la carpeta `exportar/` no va en git (solo su `.gdignore`, para que el editor no importe lo
@@ -30,15 +30,15 @@ unos 1,3 MB). Es una configuración **de cada equipo**, no va en git: bajarlo a 
 cerrado). Sin él, el preset (`application/modify_resources=true`) falla al exportar: si falla, es esto. Para cambiar el
 icono: nuevo PNG cuadrado → `.ico` con los tamaños 16–256 (Pillow: `Image.save("icono.ico", sizes=[...])`) y exportar
 otra vez. Quedan vacíos la empresa y el copyright (`company_name`, `copyright`): rellenarlos si se quiere. Se comprueba
-con `(Get-Item ZombieEscape.exe).VersionInfo` y extrayendo el icono con `ExtractAssociatedIcon`.
+con `(Get-Item JohnnyRush.exe).VersionInfo` y extrayendo el icono con `ExtractAssociatedIcon`.
 
 ## Probar el `.exe`
 
 - Las pruebas corren dentro del exportado igual que en el editor, pasando el `--` de siempre; con `--log-file` se ve lo
   que imprimen (el `.exe` no tiene consola):
-  `ZombieEscape.exe --log-file salida.log -- --captura --guiado`. Las fotos no se guardan (en el exportado `res://` no
+  `JohnnyRush.exe --log-file salida.log -- --captura --guiado`. Las fotos no se guardan (en el exportado `res://` no
   se puede escribir, saldrá «Can't save PNG»: es normal); lo que cuenta es lo que imprimen.
-- El guardado va en `%APPDATA%\Godot\app_userdata\Zombie Escape\guardado.json`, el mismo que usa el editor: probar el
+- El guardado va en `%APPDATA%\Johnny Rush\guardado.json`, el mismo que usa el editor: probar el
   `.exe` toca la partida de verdad (copiarlo antes si importa).
 - `SendKeys` y parecidos no llegan a la ventana desde una sesión de Claude (no tiene el foco): las teclas se prueban con
   `-- --captura --pantalla`.

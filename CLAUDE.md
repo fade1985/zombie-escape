@@ -1,4 +1,4 @@
-# Zombie Escape (Godot) · notas para continuar
+# Johnny Rush: Zombie Escape (Godot) · notas para continuar
 
 Aquí va **solo lo que hace falta siempre**. El detalle está en `docs/` y se lee cuando toca:
 

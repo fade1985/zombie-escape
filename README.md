@@ -1,4 +1,4 @@
-# Zombie Escape
+# Johnny Rush: Zombie Escape
 
 Roguelike de zombis en pixel art: Johnny, un conserje, limpia un edificio infestado apartamento a apartamento.
 Hecho con **Godot 4.7** (empezó como juego de navegador en JavaScript y se pasó entero a Godot).

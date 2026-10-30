@@ -1,9 +1,9 @@
-# Traducción al chino simplificado de Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
+# Traducción al chino simplificado de Johnny Rush: Zombie Escape. El español es el idioma de origen: cada «msgid» es el texto tal como está en el
 # código. Los pone al día  py tools/traducciones.py  (cómo se escribe: docs/IDIOMAS.md y docs/GLOSARIO_EN.md); lo que se
 # escribe a mano es cada «msgstr». Un msgstr vacío = sin traducir (en el juego se ve el español).
 msgid ""
 msgstr ""
-"Project-Id-Version: Zombie Escape\n"
+"Project-Id-Version: Johnny Rush: Zombie Escape\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

@@ -1,5 +1,5 @@
 # El guardado entre partidas (como src/save.js del JS): un archivo de texto en user://guardado.json.
-# En Windows, user:// es %APPDATA%\Godot\app_userdata\Zombie Escape.
+# En Windows, user:// es %APPDATA%\Johnny Rush (config/custom_user_dir_name de project.godot).
 #
 # Se guarda: dólares, puntos y talentos, armas encontradas, el baúl (objetos, armas y arrojables), los supervivientes rescatados, récords, el
 # progreso de cada edificio y las colecciones (lo encontrado y visto alguna vez).

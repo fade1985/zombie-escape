@@ -30,8 +30,13 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
       cirílico y el chino, con licencia OFL (`docs/IDIOMAS.md`, «Las letras»; citadas en los créditos). Siguientes:
       turco, polaco, japonés y coreano («Añadir un idioma»).
 - [ ] **Nombre propio.** "Zombie Escape" lo tienen docenas de juegos de móvil y Steam: no se encuentra buscando
-      ni se puede registrar. Elegir un nombre alrededor de Johnny el conserje, comprobar que está libre en Steam,
-      dominios y redes, y hacer logo.
+      ni se puede registrar. **Decidido el 30 oct: «Johnny Rush: Zombie Escape»** (puesto ya en `project.godot`, en el
+      `.exe` y en los docs; falta el logo del menú, `assets/ui/logo.png`, que sigue diciendo «Zombie Escape»). Al
+      mirarlo (30 oct): ningún juego de Steam ni de itch.io se llama así, pero «It's a Wrap!» (Chanko Studios / AMC
+      Games, 2023) tiene un protagonista llamado Johnny Rush; `johnnyrush.com` está registrado desde 2008 y los
+      perfiles `JohnnyRush` de YouTube y GitHub existen; `.net`, `.io`, `.games` y `.gg` parecían libres e
+      `johnnyrush.itch.io` también. Falta: buscarlo en una base de marcas (TMview o USPTO), reservar dominio e
+      itch.io y, si no encaja el personaje homónimo de Steam, replantearlo.
 - [ ] **Pruebas con gente de fuera.** Hasta ahora lo han jugado los dos del equipo y el bot. Conseguir 10–20
       personas que no sepan nada del juego (itch.io con un formulario corto, Discord, amigos de amigos) y mirar:
       dónde mueren, dónde se aburren, cuánto dura una partida, si entienden el banco, el baúl y las mutaciones sin
