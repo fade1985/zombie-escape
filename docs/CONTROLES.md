@@ -20,6 +20,15 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
+- **El mando en los menús:** **A confirma** (pulsa el botón marcado) y **B vuelve** (cierra lo que esté abierto: la
+  pausa, Opciones, un tutorial, el inventario y el baúl, la taquilla, el ordenador, una página del dosier, el panel de
+  pruebas y «Elige edificio»; los textos de la historia los saltan), igual que Intro y Esc; la cruceta o el stick mueven
+  la marca. Godot, de serie, no trae ni A ni B en esas dos acciones: los pone `project.godot` (`ui_accept` y `ui_cancel`;
+  «Restablecer controles» los conserva) y todos los menús los miran a través de ellas, sin botones a mano. No chocan con
+  el juego: jugando, A esquiva y B no hace nada; y en Opciones, lo que se pulsa mientras una casilla espera botón es
+  para ella (se puede dejar A o B en cualquier acción sin que abra ni cierre nada). El cartel del final y la ficha de un
+  tutorial no hacen caso a A las primeras décimas, para que un esquivar de última hora no los cierre. Se prueba con
+  `-- --captura --mando`.
 - **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se

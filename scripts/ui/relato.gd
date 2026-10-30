@@ -126,9 +126,7 @@ func _input(evento: InputEvent) -> void:
 	if abierta < ESPERA or ahora - ultima < REBOTE:
 		return
 	ultima = ahora
-	# (ui_cancel solo trae Esc: el B del mando se mira aparte)
-	var saltar: bool = evento.is_action_pressed("ui_cancel") or (evento is InputEventJoypadButton and evento.button_index == JOY_BUTTON_B)
-	if saltar or vistas >= lineas.size():
+	if evento.is_action_pressed("ui_cancel") or vistas >= lineas.size():
 		cerrar()
 	else:
 		siguiente()

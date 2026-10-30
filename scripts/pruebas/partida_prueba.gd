@@ -119,6 +119,10 @@
 #   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
 #                       saltan, el cartel del final y que quedan apuntados (mirarlos también con --lang ru y
 #                       --lang zh_CN, por si se sale alguna línea)                           [prueba_varias.gd]
+#   --mando             A confirma y B vuelve en los menús, con botones del mando de verdad: el menú principal, la pausa,
+#                       Opciones, un tutorial, el inventario, la taquilla, el ordenador, una página, el panel de pruebas
+#                       y el cartel del final; que A siga esquivando (project.godot pone A en ui_accept y B en ui_cancel)
+#                                                                  [prueba_varias.gd, pruebas/prueba_mando.gd]
 #   --formas            que las formas de formas.gd (disco, arco, polígono, polilínea) salgan como las de CanvasItem: dos
 #                       fotos y su diferencia píxel a píxel                                  [prueba_varias.gd]
 #   --dibujos           lo que cuesta cada tipo de dibujo (rectángulos, círculos, abanicos y anillos de primitivas) según cuántos por
@@ -437,6 +441,9 @@ func empezar_prueba() -> void:
 		probar_tutorial()
 	elif "--relato" in args:
 		set_process(false)   # sin la prueba larga (la suya ya va: empieza en prueba_comun.gd, antes que esta)
+	elif "--mando" in args:
+		set_process(false)   # sin la prueba larga (el menú principal ya ha hecho su parte: menu_principal.gd)
+		probar_mando()
 	elif "--formas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_formas()

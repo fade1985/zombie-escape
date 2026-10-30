@@ -119,6 +119,8 @@ func _ready() -> void:
 		Captura.vigilar()
 		await get_tree().create_timer(0.4).timeout
 		Captura.foto("captura-menu.png")
+		if "--mando" in OS.get_cmdline_user_args():   # A y B del mando en este menú; luego sigue a la partida, que hace el resto (pruebas/prueba_mando.gd)
+			await PruebaMando.menu_principal(self)
 		if "--letras" in OS.get_cmdline_user_args():   # qué letras de las traducciones no tiene ninguna fuente (pruebas/prueba_letras.gd)
 			PruebaLetras.probar()
 			get_tree().quit()

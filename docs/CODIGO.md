@@ -384,6 +384,10 @@ en una línea.
   (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
 - `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
   edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
+- `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
+  principal (JUGAR, «Elige edificio», Opciones, Tutorial) y los botones de mando de mentira que usa también
+  `probar_mando()` de `prueba_varias.gd` (la pausa, Opciones, un tutorial, el inventario, la taquilla, el ordenador, una
+  página, el panel de pruebas y el cartel del final).
 
 ## assets/
 

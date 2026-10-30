@@ -2643,3 +2643,161 @@ func probar_formas() -> void:
 				distintos += 1
 	print("Formas · píxeles distintos: %d de %d (%.2f %%)" % [distintos, 640 * 400, distintos * 100.0 / (640 * 400)])
 	get_tree().quit()
+
+
+# Con "--captura --mando": A confirma y B vuelve en los menús (project.godot pone el A en ui_accept y el B en ui_cancel;
+# Godot, de serie, no). Con botones del mando de verdad (pruebas/prueba_mando.gd): la pausa, Opciones (y poner B a una casilla
+# sin que cierre nada), un tutorial (que con prisa no se cierra), el inventario, la taquilla, el ordenador, una página del
+# dosier, el panel de pruebas y, al final, el cartel del final. Que A siga esquivando y que B sin ningún menú no haga nada.
+# El menú principal lo prueba menu_principal.gd antes de llegar aquí. Lo que comprueba lo escribe en la terminal
+func probar_mando() -> void:
+	var pulsar_a := func() -> void: await PruebaMando.pulsar(get_tree(), JOY_BUTTON_A)
+	var pulsar_b := func() -> void: await PruebaMando.pulsar(get_tree(), JOY_BUTTON_B)
+	var marcado := func() -> String: return PruebaMando.marcado(self)
+	var botones := func(accion: String) -> Array:
+		return InputMap.action_get_events(accion).filter(func(e): return e is InputEventJoypadButton).map(func(e): return e.button_index)
+	var estado := func() -> String: return "«%s», juego parado %s" % [menus.abierto, get_tree().paused]
+	var ventana := func() -> Tutorial:
+		for h in get_children():
+			if h is Tutorial and not h.is_queued_for_deletion():
+				return h
+		return null
+	var cuenta := func(b: Button) -> Array:   # cuántas veces se pulsa ese botón
+		var n := [0]
+		b.pressed.connect(func(): n[0] += 1)
+		return n
+	await get_tree().create_timer(1.0).timeout
+	# lo que hay en las dos acciones (también tras «Restablecer controles» de Opciones) y que A siga esquivando
+	Controles.restablecer()
+	print("Mando · botones de ui_accept %s, de ui_cancel %s y de esquivar %s, tras restablecer (esperado: [0], [1], [0, 9])" % [
+		botones.call("ui_accept"), botones.call("ui_cancel"), botones.call("esquivar")])
+	Input.parse_input_event(PruebaMando.boton(JOY_BUTTON_A))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var esquiva := Input.is_action_pressed("esquivar")
+	Input.parse_input_event(PruebaMando.boton(JOY_BUTTON_A, false))
+	await get_tree().process_frame
+	await pulsar_b.call()
+	print("Mando · jugando, A esquiva %s · B sin ningún menú no abre nada: %s (esperado: true, «», false)" % [esquiva, estado.call()])
+	# la pausa: B sigue jugando; A en «Continuar» también
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	print("Mando · pausa abierta: %s · marcado «%s» (esperado: «pausa», true · Continuar)" % [estado.call(), marcado.call()])
+	Captura.foto("captura-mando-pausa.png")
+	await pulsar_b.call()
+	print("Mando · pausa, B: %s (esperado: «», false)" % estado.call())
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	await pulsar_a.call()
+	print("Mando · pausa, A en «Continuar»: %s (esperado: «», false)" % estado.call())
+	# Opciones desde la pausa: A la abre; en Controles, A elige una casilla del mando y B se queda de botón nuevo (no cierra
+	# nada); B la cierra y B sigue jugando
+	pausar()
+	await get_tree().create_timer(0.3).timeout
+	PruebaMando.buscar(menus.fondo, Idioma.t("Opciones")).grab_focus()
+	await pulsar_a.call()
+	var o: Opciones = null
+	for h in menus.get_children():
+		if h is Opciones:
+			o = h
+	print("Mando · pausa, A en «Opciones»: %s · abierta %s (esperado: «opciones», true, true)" % [estado.call(), o != null])
+	o.ver("controles")
+	await get_tree().create_timer(0.3).timeout
+	var casilla: Button = o.casillas.filter(func(c): return c[1] == "recargar" and c[2])[0][0]
+	casilla.grab_focus()
+	await pulsar_a.call()
+	await get_tree().create_timer(0.3).timeout
+	var esperaba: bool = o.esperando == casilla
+	await pulsar_b.call()
+	print("Mando · Opciones, A en la casilla de Recargar del mando: esperaba un botón %s · B lo pone: recargar %s, esperando %s, Opciones abierta %s (esperado: true, [1], false, true)" % [
+		esperaba, botones.call("recargar"), o.esperando != null, is_instance_valid(o) and not o.is_queued_for_deletion()])
+	Captura.foto("captura-mando-opciones.png")
+	await pulsar_b.call()
+	print("Mando · Opciones, B: %s (esperado: «pausa», true)" % estado.call())
+	Controles.restablecer()
+	await pulsar_b.call()
+	print("Mando · pausa, B otra vez: %s (esperado: «», false)" % estado.call())
+	# un tutorial: A en «Entendido» o B lo cierran; con prisa (el botón no hace caso las primeras décimas) no se cierra
+	ver_tutorial("jugar")   # (la ficha directa, sin la cola: así no se cuela ningún otro tutorial)
+	await get_tree().create_timer(0.2).timeout
+	await pulsar_a.call()
+	await pulsar_b.call()
+	print("Mando · tutorial, A y B con prisa: sigue abierto %s (esperado: true)" % (ventana.call() != null))
+	await get_tree().create_timer(0.8).timeout
+	print("Mando · tutorial abierto %s · marcado «%s» (esperado: true · Entendido)" % [ventana.call() != null, marcado.call()])
+	await pulsar_a.call()
+	await get_tree().create_timer(0.3).timeout
+	print("Mando · tutorial, A en «Entendido»: abierto %s · juego parado %s (esperado: false, false)" % [ventana.call() != null, get_tree().paused])
+	ver_tutorial("lanzables")
+	await get_tree().create_timer(1.0).timeout
+	await pulsar_b.call()
+	await get_tree().create_timer(0.3).timeout
+	print("Mando · tutorial, B: abierto %s · juego parado %s (esperado: false, false)" % [ventana.call() != null, get_tree().paused])
+	# el inventario: la cruceta baja a otra casilla, A salta al botón de la ficha y B cierra
+	abrir_cosas("inventario")
+	await get_tree().create_timer(0.4).timeout
+	await PruebaMando.pulsar(get_tree(), JOY_BUTTON_DPAD_DOWN)
+	var antes: String = marcado.call()
+	await pulsar_a.call()
+	print("Mando · inventario, cruceta abajo: marca «%s» · A: ahora marca «%s» (esperado: una casilla, el botón principal de la ficha)" % [antes, marcado.call()])
+	Captura.foto("captura-mando-inventario.png")
+	await pulsar_b.call()
+	print("Mando · inventario, B: abierto «%s» · juego parado %s (esperado: «», false)" % [inventario.abierto, get_tree().paused])
+	# la taquilla: A pulsa la carta marcada; B cierra
+	abrir_taquilla()
+	await get_tree().create_timer(0.4).timeout
+	var carta := get_viewport().gui_get_focus_owner() as Button
+	var veces: Array = cuenta.call(carta)
+	await pulsar_a.call()
+	print("Mando · taquilla abierta %s · A en la carta marcada: %d pulsación (esperado: true, 1)" % [taquilla.fondo != null, veces[0]])
+	await pulsar_b.call()
+	print("Mando · taquilla, B: abierta %s · juego parado %s (esperado: false, false)" % [taquilla.fondo != null, get_tree().paused])
+	# el ordenador: A abre el programa marcado; B vuelve al escritorio y B apaga
+	abrir_ordenador()
+	await get_tree().create_timer(0.6).timeout
+	var icono := get_viewport().gui_get_focus_owner() as Button
+	print("Mando · ordenador encendido %s · marcado «%s»" % [ordenador.fondo != null, marcado.call()])
+	await pulsar_a.call()
+	var programa: String = ordenador.abierta
+	await pulsar_b.call()
+	print("Mando · ordenador, A en el icono: programa «%s» · B: vuelve al escritorio %s (esperado: un programa, true)" % [programa, ordenador.abierta == ""])
+	await pulsar_b.call()
+	print("Mando · ordenador, B en el escritorio: encendido %s · juego parado %s (esperado: false, false)" % [ordenador.fondo != null, get_tree().paused])
+	# una página del dosier: A en «Seguir» o B la cierran
+	var pagina: Dictionary = Historia.dosier(edificio).paginas[0]
+	leer_pagina(pagina)
+	await get_tree().create_timer(0.4).timeout
+	print("Mando · página abierta: %s · marcado «%s» (esperado: «pagina», true · Seguir)" % [estado.call(), marcado.call()])
+	await pulsar_a.call()
+	print("Mando · página, A en «Seguir»: %s (esperado: «», false)" % estado.call())
+	leer_pagina(pagina)
+	await get_tree().create_timer(0.4).timeout
+	await pulsar_b.call()
+	print("Mando · página, B: %s (esperado: «», false)" % estado.call())
+	# el panel de pruebas: B lo cierra
+	abrir_panel_pruebas()
+	await get_tree().create_timer(0.3).timeout
+	var abierto := panel_pruebas.abierto()
+	await pulsar_b.call()
+	print("Mando · panel de pruebas abierto %s · B: abierto %s · juego parado %s (esperado: true, false, false)" % [abierto, panel_pruebas.abierto(), get_tree().paused])
+	# el cartel del final: con prisa (medio segundo) no hace caso; luego A pulsa el botón marcado
+	al_empezar = {}
+	johnny.golpe_de = ""
+	terminar(false)
+	var tope := 0
+	while menus.abierto != "fin" and tope < 120:
+		await get_tree().process_frame
+		tope += 1
+	for c in menus.reintentar.get_connections():
+		menus.reintentar.disconnect(c.callable)
+	var otra_vez := [0]
+	menus.reintentar.connect(func(): otra_vez[0] += 1)
+	await get_tree().create_timer(0.05).timeout
+	var rapido := PruebaMando.marcado(self)
+	await pulsar_a.call()
+	var con_prisa: int = otra_vez[0]
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-mando-final.png")
+	await pulsar_a.call()
+	print("Mando · cartel del final: marcado «%s» · A con prisa: %d veces · A pasado medio segundo: %d (esperado: Otra vez, 0, 1)" % [rapido, con_prisa, otra_vez[0]])
+	get_tree().quit()
