@@ -60,7 +60,7 @@
   su lista.** `py tools/medir_web.py` dice qué shaders tardan y cuándo.
 - **Leer una imagen de la tarjeta gráfica (`get_image`).** En la web, unos 18 ms cada lectura, y en un `AtlasTexture` lee la hoja
   entera. Con varios zombis muriendo ardiendo a la vez, el juego se paraba en cada molotov (F17). `quemado.gd` lee cada hoja una
-  sola vez: **nada de `get_image` repetido durante la partida.**
+  sola vez, y `cuerpo.gd` igual, solo si el enemigo muere junto a una pared: **nada de `get_image` repetido durante la partida.**
 - **Medirlo:** `py tools/medir_web.py 45 --captura --molotov-carga --zombis 12` abre Edge sin ventana, con la tarjeta gráfica y un
   perfil nuevo (como quien entra por primera vez), saca la consola del juego y un espía de WebGL con los fotogramas lentos y
   los shaders que tardan. Es lo más fiable: **en el panel del navegador de la app no se mide**, porque a ratos va a un

@@ -419,6 +419,7 @@ func morir() -> void:
 	$Choque.set_deferred("disabled", true)
 	agente.avoidance_enabled = false
 	z_index = -1
+	Cuerpo.caer(self, sprite)   # si tendido se metería en una pared, resbala al caer
 	quimica_al_morir()
 	murio.emit()
 

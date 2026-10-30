@@ -316,6 +316,44 @@ func sala_de(c: int, f: int) -> int:
 	return 0
 
 
+# ¿Pisa esta caja alguna casilla de muro? (lo justo de más en los bordes: una caja arrimada a un muro no lo pisa)
+func pisa_muro(caja: Rect2) -> bool:
+	for f in range(floori(caja.position.y / CASILLA + 0.001), ceili(caja.end.y / CASILLA - 0.001)):
+		for c in range(floori(caja.position.x / CASILLA + 0.001), ceili(caja.end.x / CASILLA - 0.001)):
+			if es_muro(c, f):
+				return true
+	return false
+
+
+# Lo menos que hay que mover una caja para que no pise ningún muro, sin pasar a través de ninguno (lo mira desde "desde",
+# un punto en el suelo). Devuelve Vector2.ZERO si ya está bien o si no cabe cerca. Solo hace falta probar a dejarla con un
+# borde justo en el filo de una casilla: moverla menos no la sacaría del muro
+func fuera_de_muros(caja: Rect2, desde: Vector2) -> Vector2:
+	if not pisa_muro(caja):
+		return Vector2.ZERO
+	var alcance := maxf(caja.size.x, caja.size.y)
+	var mejor := Vector2.ZERO
+	for dy in arrimes(caja.position.y, caja.end.y, alcance):
+		for dx in arrimes(caja.position.x, caja.end.x, alcance):
+			var d := Vector2(dx, dy)
+			if d == Vector2.ZERO or (mejor != Vector2.ZERO and d.length_squared() >= mejor.length_squared()):
+				continue
+			if not pisa_muro(Rect2(caja.position + d, caja.size)) and muro_entre(desde, desde + d).is_empty():
+				mejor = d
+	return mejor
+
+
+# Lo que hay que mover un tramo (de "desde" a "hasta") para que un extremo quede en el filo de una casilla, de menos a más
+func arrimes(desde: float, hasta: float, alcance: float) -> Array:
+	var lista := [0.0]
+	for k in range(floori((desde - alcance) / CASILLA), ceili((hasta + alcance) / CASILLA) + 1):
+		for d in [k * CASILLA - desde, k * CASILLA - hasta]:
+			if absf(d) <= alcance:
+				lista.append(d)
+	lista.sort_custom(func(a, b): return absf(a) < absf(b))
+	return lista
+
+
 # En qué habitación está un punto (-1 si es muro o está fuera)
 func zona_en(pos: Vector2) -> int:
 	var c := int(pos.x / CASILLA)

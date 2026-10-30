@@ -2101,6 +2101,122 @@ func probar_disparos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --cuerpo-pared": el cuerpo de un enemigo que muere pegado a una pared se queda sobre el suelo (F12). En el
+# piso de siempre, zombis cayendo en todas las direcciones contra la pared de arriba del pasillo, las dos de los lados del
+# recibidor, la de abajo de la cocina y la de abajo del pasillo; luego los grandes, algunos jefes y los maniquíes. De cada uno
+# dice cuántos píxeles de su cuerpo tendido quedan sobre el muro y, de control, los que mueren en campo abierto no se mueven
+# del sitio. Fotos: captura-cuerpo-arriba.png, -lados.png, -abajo.png, -pasillo.png, -grandes.png y -abierto.png, y de las
+# cinco primeras también -cayendo.png, a media caída (en la pared de arriba, por delante de su cara). Se cierra
+func probar_cuerpo_pared() -> void:
+	nueva_planta(2)
+	var idx := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "apartamento" and planta.sitios[i].apt.entrada.lado == "abajo":
+			idx = i
+			break
+	planta.sitios[idx].limpio = true   # sin zombis: solo los de la prueba
+	await montar(idx, 0, false)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no tape las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	var c: float = mapa.CASILLA
+	var mal := 0
+	# foto, dónde está Johnny y cada zombi: quién es, de dónde sale, hacia qué pared va y hacia dónde mira al caer
+	var escenas := [
+		["arriba", Vector2(9, 16), [["normal", Vector2(4, 14), Vector2.UP, 6], ["normal", Vector2(6.5, 14), Vector2.UP, 7],
+			["normal", Vector2(9, 14), Vector2.UP, 5], ["rapido", Vector2(11.5, 14), Vector2.UP, 0], ["lento", Vector2(14, 14), Vector2.UP, 2]]],
+		["lados", Vector2(23, 24), [["normal", Vector2(22, 21), Vector2.LEFT, 4], ["normal", Vector2(22, 23.5), Vector2.LEFT, 5],
+			["normal", Vector2(22, 26), Vector2.LEFT, 3], ["normal", Vector2(24, 21), Vector2.RIGHT, 0],
+			["normal", Vector2(24, 23.5), Vector2.RIGHT, 7], ["rapido", Vector2(24, 26), Vector2.RIGHT, 1]]],
+		["abajo", Vector2(10, 23), [["normal", Vector2(5, 25), Vector2.DOWN, 2], ["normal", Vector2(7.5, 25), Vector2.DOWN, 1],
+			["normal", Vector2(10, 25), Vector2.DOWN, 3], ["rapido", Vector2(12.5, 25), Vector2.DOWN, 0], ["lento", Vector2(15, 25), Vector2.DOWN, 4]]],
+		["pasillo", Vector2(9, 14), [["normal", Vector2(5, 17), Vector2.DOWN, 2], ["normal", Vector2(9, 17), Vector2.DOWN, 0],
+			["normal", Vector2(13, 17), Vector2.DOWN, 4]]],
+		["grandes", Vector2(35, 24), [["venenoso", Vector2(29, 24), Vector2.LEFT, 4], ["tentaculos", Vector2(35, 25), Vector2.DOWN, 2],
+			["portera", Vector2(41, 24), Vector2.RIGHT, 0], ["gloton", Vector2(32, 21.5), Vector2.UP, 6], ["gerente", Vector2(39, 21.5), Vector2.UP, 6]]]]
+	for e in escenas:
+		johnny.position = e[1] * c
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.3).timeout
+		var caidos := []
+		for z in e[2]:
+			caidos.append(await matar_pegado(z[0], z[1] * c, z[2], z[3]))
+		await get_tree().create_timer(0.1).timeout
+		Captura.foto("captura-cuerpo-%s-cayendo.png" % e[0])   # (por delante de la cara de la pared, no detrás)
+		await get_tree().create_timer(1.5).timeout
+		for z in caidos:
+			var n := pixeles_en_muro(z[0])
+			mal += 1 if n > 0 else 0
+			print("Cuerpo (%s) %s: %d píxeles sobre el muro, movido %.0f (esperado: 0 píxeles)" % [e[0], z[0].sprite.animation, n,
+				z[0].position.distance_to(z[1])])
+		Captura.foto("captura-cuerpo-%s.png" % e[0])
+	# los maniquíes de la modista caen girando sobre sus pies, a un lado u otro: contra las dos paredes del salón
+	var maniquies := []
+	for x in [27.0, 27.0, 27.0, 43.0, 43.0, 43.0]:
+		var m: Node2D = load("res://scripts/maniqui_vivo.gd").new()
+		m.position = Vector2(x, 21 + maniquies.size()) * c
+		mapa.cosas.add_child(m)
+		await get_tree().physics_frame
+		m.move_and_collide(Vector2(signf(35.0 - x) * -400.0, 0.0))
+		m.morir()
+		maniquies.append(m)
+	await get_tree().create_timer(0.6).timeout
+	var pisan := 0
+	for m in maniquies:
+		var largo: float = m.DIBUJO.get_height() * 2.0
+		var pies: Vector2 = m.global_position + m.sprite.position
+		if mapa.pisa_muro(Rect2(pies + Vector2(minf(signf(m.sprite.rotation), 0.0) * largo, -2.0), Vector2(largo, 4.0))):
+			pisan += 1
+	print("Cuerpo: %d de 6 maniquíes sobre el muro (esperado: 0)" % pisan)
+	# de control: en medio del pasillo, sin pared cerca, cae donde estaba
+	johnny.position = Vector2(30, 15) * c
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+	var control := []
+	for i in 8:
+		control.append(await matar_pegado("normal", Vector2(26 + 2.5 * (i % 4), 14 + 2.0 * (i / 4)) * c, Vector2.ZERO, i))
+	await get_tree().create_timer(1.6).timeout
+	print("Cuerpo en campo abierto: se han movido %d de 8 (esperado: 0)" % control.filter(func(z): return z[0].position != z[1]).size())
+	print("Cuerpo junto a las paredes: %d con píxeles sobre el muro (esperado: 0)" % mal)
+	Captura.foto("captura-cuerpo-abierto.png")
+	get_tree().quit()
+
+
+# Saca un enemigo, lo lleva hasta topar con la pared ("hacia"; sin ella, se queda donde sale) y lo mata mirando al rumbo que
+# se pida (de 0 a 7, en octavos de vuelta desde el este). Devuelve [el enemigo, dónde estaba al morir]
+func matar_pegado(tipo: String, desde: Vector2, hacia: Vector2, rumbo: int) -> Array:
+	var z := meter_zombi(tipo, desde)
+	await get_tree().physics_frame
+	if tipo == "gerente":   # (el que cae es el mutado: sin mutar no tiene animación de morir)
+		z.mutar()
+		await get_tree().create_timer(1.0).timeout
+	if tipo in JEFES:   # (al caer, sus avisos y el final del edificio pararían el juego a mitad de prueba)
+		for c in z.murio.get_connections():
+			z.murio.disconnect(c.callable)
+	if hacia != Vector2.ZERO:
+		z.move_and_collide(hacia * 400.0)
+	var donde := z.position
+	if z is Zombi:
+		z.recibir_golpe(99999, -Vector2.from_angle(rumbo * PI / 4.0) * 300.0)
+	else:
+		z.morir()
+	return [z, donde]
+
+
+# Cuántos píxeles de su cuerpo tendido (el último fotograma de su animación de morir) caen sobre una casilla de muro
+func pixeles_en_muro(z: Node2D) -> int:
+	var s: AnimatedSprite2D = z.sprite
+	var hoja := s.sprite_frames
+	var n := 0
+	for p in Quemado.solidos_de(hoja.get_frame_texture(s.animation, hoja.get_frame_count(s.animation) - 1)):
+		var en: Vector2 = z.global_position + s.position + (s.offset + p) * s.scale
+		if mapa.es_muro(int(en.x / mapa.CASILLA), int(en.y / mapa.CASILLA)):
+			n += 1
+	return n
+
+
 # --golpes-pared: ¿los golpes de los jefes (porrazo, fregonazo, tijeretazo, cuchillazo, maletinazo y hachazo, y los de
 # área: el círculo de la portera, los saltos de la mascota y del Gymbro y la onda de la criatura) atraviesan las
 # paredes? En la sala de pruebas (F9), cada jefe pegando (se llama a su golpe) con Johnny justo al otro lado de la

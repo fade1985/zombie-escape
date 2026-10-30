@@ -297,6 +297,7 @@ func morir() -> void:
 	sprite.modulate = Color.WHITE
 	sprite.speed_scale = 1.0
 	sprite.play("muerte_" + direccion())
+	Cuerpo.caer(self, sprite)
 	$Vapor.queue_redraw()
 	queue_redraw()
 	murio.emit()

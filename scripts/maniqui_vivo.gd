@@ -115,6 +115,11 @@ func morir() -> void:
 	z_index = -1
 	Sonido.tocar("portazo")
 	sprite.position.x = 0.0
-	create_tween().tween_property(sprite, "rotation", PI / 2.0 * (1.0 if randf() < 0.5 else -1.0), 0.35) \
+	var lado := 1.0 if randf() < 0.5 else -1.0
+	create_tween().tween_property(sprite, "rotation", PI / 2.0 * lado, 0.35) \
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	# tendido, su dibujo queda a ese lado de los pies
+	var largo := DIBUJO.get_height() * 2.0
+	var ancho := DIBUJO.get_width() * 2.0
+	Cuerpo.resbalar(self, Rect2(global_position + sprite.position + Vector2(minf(lado, 0.0) * largo, -ancho / 2.0), Vector2(largo, ancho)), 0.35)
 	murio.emit()

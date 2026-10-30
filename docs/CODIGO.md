@@ -128,7 +128,8 @@ en una línea.
 - `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
   primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
 - `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la
-  tarjeta gráfica una sola vez, `solidos_de`), `brillo.gd`
+  tarjeta gráfica una sola vez, `solidos_de`), `cuerpo.gd` (el cuerpo de un enemigo al caer: si tendido se metería en una
+  pared, resbala hasta quedar sobre el suelo; se prueba con `--cuerpo-pared`), `brillo.gd`
   (lo que luce a oscuras), `particulas.gd`, `impacto.gd` (la bala que da en una pared: el efecto Impact de la librería
   de efectos de Sprite Fusion, pasado a GDScript, más pequeño y del color de la estela; se prueba con `--impacto`),
   `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
