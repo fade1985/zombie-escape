@@ -54,7 +54,10 @@ jobs:
           mkdir -p ~/.local/share/godot/export_templates
           ln -s ~/godot/plantillas ~/.local/share/godot/export_templates/$GODOT.stable
           ~/godot/godot --headless --path . --import
-          ~/godot/godot --headless --path . --export-release "Web" web/index.html
+          # production, la versión terminada; las demás ramas, la de desarrollo: con F9 y la sala de pruebas
+          # (partida.gd la abre si OS.is_debug_build()), que en la web de verdad no sale
+          if [ "$GITHUB_REF_NAME" = "production" ]; then tipo=--export-release; else tipo=--export-debug; fi
+          ~/godot/godot --headless --path . $tipo "Web" web/index.html
           test -f web/index.pck   # si la exportación falla, no se publica nada
           ls -la web
 

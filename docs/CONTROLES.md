@@ -88,8 +88,8 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 
 Todo lo de probar está en un solo sitio. **F9**, desde cualquier sitio de cualquier planta, lleva a la **sala de
 pruebas**; **F9** otra vez (o su puerta) vuelve justo adonde estabas. Con la puerta de un apartamento cerrada, no se
-puede ir. Solo funciona al jugar desde el editor (y en las pruebas `--captura`): en el juego exportado, F9 no hace
-nada. Lo que pasa allí no cuenta: los zombis no sueltan
+puede ir. Solo funciona al jugar desde el editor, en las pruebas `--captura` y en las versiones de prueba de las ramas
+en Vercel (se exportan de desarrollo, `docs/WEB.md`): en la web de verdad y en el `.exe`, F9 no hace nada. Lo que pasa allí no cuenta: los zombis no sueltan
 nada, no se apuntan en las Colecciones y, al salir, Johnny vuelve a llevar lo que llevaba (armas, balas, mochila y
 arrojables).
 

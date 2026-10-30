@@ -17,6 +17,8 @@
   robot en **Actions** (el resumen, «Publicado (preview, rama …)») y en Vercel → el proyecto → **Deployments**. Las
   versiones de prueba de Vercel piden entrar con la cuenta de Vercel (Settings → Deployment Protection). `main` no
   publica nada, para no gastar minutos de GitHub con cada commit.
+  Las versiones de prueba se exportan **de desarrollo** (`--export-debug`): tienen **F9** y la sala de pruebas; la de
+  `production`, terminada (`--export-release`), sin ella.
 - **`web/` no va en git** (solo su `.gdignore`): antes cada exportación guardaba otros 20 MB en el historial.
 - El robot necesita tres **secretos** del repositorio (GitHub → Settings → Secrets and variables → Actions):
   - `VERCEL_TOKEN`: una llave de Vercel (Account Settings → Tokens).

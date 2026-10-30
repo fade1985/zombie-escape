@@ -1749,7 +1749,7 @@ func _unhandled_input(evento: InputEvent) -> void:
 			return
 	if not (evento is InputEventKey and evento.pressed and not evento.echo) or cambiando or presentacion.activa:
 		return
-	if evento.keycode == KEY_F9 and (OS.is_debug_build() or captura):   # (la sala de pruebas, solo en el editor: no en el juego exportado)
+	if evento.keycode == KEY_F9 and (OS.is_debug_build() or captura):   # (la sala de pruebas: en el editor y en las versiones de prueba de la web, no en el juego terminado)
 		pruebas()
 	elif evento.keycode == KEY_P and aqui == planta.armas:
 		abrir_panel_pruebas()
