@@ -95,6 +95,7 @@ var burbuja := 0.0           # lo subida que está la burbuja de fuego del giro 
 var destello := 0.0          # lo que brilla la burbuja porque le acaban de dar (de 1 a 0)
 var destello_por := Vector2.ZERO   # hacia dónde le han dado (desde él); Vector2.ZERO, por todos lados (una explosión)
 var escudo: Array[Sprite2D] = []   # las tres capas de la burbuja (detrás, delante y brillo)
+var chorros: Array[ChorroFuego] = [ChorroFuego.new(), ChorroFuego.new()]   # el fuego de cada cono del giro
 
 
 func _ready() -> void:
@@ -533,6 +534,18 @@ func animar() -> void:
 	# donde le acaban de dar, brilla: más brillo y la burbuja más clara
 	escudo[1].modulate = Color.WHITE.lerp(Color(1.6, 1.4, 1.2), destello)
 	escudo[2].modulate = Color.WHITE * (1.0 + 2.0 * destello)
+	# el fuego de los conos: sale mientras gira; al parar, lo que ya ha salido llega a la pared y se apaga
+	var n: int = CONOS[fase - 1]
+	for i in chorros.size():
+		var c := chorros[i]
+		var echa: bool = estado == "giro" and i < n and i < datos.get("puntas", []).size()
+		if echa:
+			c.angulo = datos.angulo + i * TAU / n
+			c.puntas = datos.puntas[i]
+			c.abertura = ABERTURA
+			c.boca = Vector2(0, -arriba * 0.4)
+			c.pies = Vector2(0, PIE - 6)
+		c.avanzar(paso, echa)
 	match estado:
 		"aviso_hacha":
 			# levanta el hacha, a punto de bajarla
@@ -594,65 +607,7 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Por encima de él (y de la burbuja de fuego: salen de dentro): los conos de fuego del giro
+# Por encima de él (y de la burbuja de fuego: salen de dentro): el fuego de los conos del giro (chorro_fuego.gd)
 func pintar_encima(lienzo: Node2D) -> void:
-	if estado != "giro":
-		return
-	var n: int = CONOS[fase - 1]
-	for i in mini(n, datos.puntas.size()):
-		cono(lienzo, datos.angulo + i * TAU / n, datos.puntas[i])
-
-
-# Un cono de fuego a cuadraditos hacia "a" (en el suelo, desde sus pies hasta la pared; "puntas", lo largo de cada
-# rayo): sale en alto de la boca de la manguera, estrecho, y se abre y va bajando hasta tocar el suelo en la pared.
-# Cada trozo de ancho (entre dos rayos) se corta a lo largo en trozos de unas 10 unidades, cada uno de su color
-# (llama): los seguidos del mismo color, de una vez
-func cono(lienzo: Node2D, a: float, puntas: Array) -> void:
-	var largo: float = puntas.max()
-	if largo < 20.0:
-		return
-	var boca := Vector2(0, -arriba * 0.4)
-	var pies := Vector2(0, PIE - 6)
-	var paso := 10.0 / largo
-	var desde := 10.0 / largo   # (empieza un poco por delante de la boca)
-	for j in RAYOS:
-		var lado := absf(2.0 * (j + 0.5) / RAYOS - 1.0)   # 0 en el medio, casi 1 en los bordes
-		var rayos := [Vector2.from_angle(angulo_rayo(a, j)) * float(puntas[j]),
-			Vector2.from_angle(angulo_rayo(a, j + 1)) * float(puntas[j + 1])]
-		var ini := desde
-		var color := llama(desde, lado, j)
-		var f := desde
-		while f < 1.0:
-			var g := minf(1.0, f + paso)
-			var siguiente := llama(g, lado, j) if g < 1.0 else Color.TRANSPARENT
-			if siguiente != color:
-				if color.a > 0.0:
-					# un trozo del cono: de "ini" a "g" de lo largo, entre los dos rayos (en píxeles del dibujo)
-					var puntos := PackedVector2Array()
-					for p in [[0, ini], [0, g], [1, g], [1, ini]]:
-						puntos.append(((boca.lerp(pies, p[1]) + rayos[p[0]] * p[1]) / 2.0).round() * 2.0)
-					lienzo.draw_primitive(puntos, PackedColorArray([color, color, color, color]), PackedVector2Array())
-				ini = g
-				color = siguiente
-			f = g
-
-
-# El color del fuego del cono a "f" de lo largo (0 en la boca, 1 en la pared) y "lado" de lo ancho (0 en el medio, 1
-# en el borde): amarillo claro en el medio junto a la manguera, luego naranja, y rojo en los bordes y en la punta, con
-# olas que corren hacia fuera. Los bordes y la punta, deshilachados: a ratos, nada (Color.TRANSPARENT). "j", el trozo
-# de ancho (para que no vayan todos a una)
-func llama(f: float, lado: float, j: int) -> Color:
-	if f > 0.86 and fmod(j * 7.3 + f * 61.0 + tiempo * 30.0, 10.0) < 3.0:
-		return Color.TRANSPARENT
-	if lado > 0.85 and f > 0.2 and fmod(j * 3.1 + f * 37.0 + tiempo * 23.0, 6.0) < 1.5:
-		return Color.TRANSPARENT
-	var calor := 1.0 - maxf(f * 0.9, lado) - f * lado * 0.3 + sin(tiempo * 17.0 - f * 24.0 + j * 1.9) * 0.1
-	if calor > 0.7:
-		return Llamas.FUEGO[0]
-	if calor > 0.5:
-		return Llamas.FUEGO[1]
-	if calor > 0.32:
-		return Llamas.FUEGO[2]
-	if calor > 0.15:
-		return Llamas.FUEGO[3]
-	return Llamas.FUEGO[4]
+	for c in chorros:
+		c.pintar(lienzo)
