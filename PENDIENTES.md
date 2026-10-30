@@ -20,5 +20,4 @@ _(ninguno por ahora)_
 
 ## Por limar
 
-- **L16** La exclamación del ordenador que avisa de algo nuevo se quita en el momento en que lo miras o lo recoges,
-  sin tener que salir del ordenador.
+_(ninguno por ahora)_
