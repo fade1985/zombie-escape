@@ -13,10 +13,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 - **F12** Cuando un enemigo muere cerca de una pared, su cuerpo se mete dentro de la pared y se ve mal (visto en el
   pasillo de un apartamento, en la web).
-- **F13** Menús del ordenador: al moverse por ellos se va solo al final de la página; al entrar en cualquier menú tiene
-  que empezar arriba del todo.
-- **F14** Talentos: al poner un punto, la página se va sola hasta abajo del todo; tiene que quedarse donde estaba
-  (parecido al F13).
 - **F15** A veces los zombis se quedan atascados en una puerta al intentar salir todos a la vez.
 - **F16** Pantalla completa: al pulsar Esc (para la pausa) también se sale de la pantalla completa, y no debería. En la
   web es el propio navegador; mirar si se puede evitar (por ejemplo con el bloqueo de teclado de Chrome).

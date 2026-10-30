@@ -79,7 +79,8 @@
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
 #                       grito grande de las noticias, los logros y las skins                [prueba_larga.gd]
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
-#   --ordenador-arriba  cada programa del ordenador recién abierto: tiene que empezar arriba      [prueba_larga.gd]
+#   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
+#                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
 #                       tele, para ver si caben                                        [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y

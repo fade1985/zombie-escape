@@ -79,6 +79,7 @@ var partida: Node
 var fondo: ColorRect
 var pantalla: Control
 var iconos: VBoxContainer
+var colocando := false   # marcar: la ventana recién rehecha aún se está colocando, y lo que hay bajo el ratón no es lo que se ve
 var ventana: Control
 var info: Label             # la línea de abajo de la ventana: explica lo que está marcado
 var tarea: Label
@@ -339,20 +340,30 @@ func abrir(programa: String, foco := "") -> void:
 # Marca el botón (en el mismo instante de siempre: así el aviso que pone después, como «¡Compra hecha!», le gana a la
 # explicación del botón) y deja los desplazamientos de la ventana en su sitio. Si se marca nada más montarla, los
 # desplazamientos siguen al foco con la ventana a medio colocar y se abren bajados (Puntos a medias; Armas y Logros, hasta
-# el fondo): por eso no siguen al foco hasta pasado un fotograma, cuando ya está todo en su sitio. Entonces cada uno
-# vuelve a donde estaba (arriba, la primera vez) y, solo si se pidió un botón concreto, se asegura de que se vea
+# el fondo): por eso no siguen al foco hasta pasados dos fotogramas, cuando ya está todo en su sitio. Con uno no basta: al
+# pulsar con el ratón, el aviso del fotograma puede llegar antes de que se marque el botón, si en ese fotograma no toca
+# paso de física (F13 y F14). Cada uno vuelve a donde estaba (arriba, la primera vez) según crece su barra, para que no se
+# vea ni un fotograma arriba del todo, y al final, solo si se pidió un botón concreto, se asegura de que se vea
 func marcar(boton: Control, concreto: bool, desplazados: Array) -> void:
 	var esta := ventana
 	var deslizas: Array = esta.find_children("*", "ScrollContainer", true, false)   # no-tr
-	for d: ScrollContainer in deslizas:
+	var a_su_sitio := []
+	colocando = true
+	for i in deslizas.size():
+		var d: ScrollContainer = deslizas[i]
 		d.follow_focus = false
+		a_su_sitio.append(func(): d.scroll_vertical = desplazados[i] if i < desplazados.size() else 0)
+		d.get_v_scroll_bar().changed.connect(a_su_sitio[i])
 	boton.grab_focus.call_deferred()
 	await get_tree().process_frame
+	await get_tree().process_frame
+	colocando = false
 	if not is_instance_valid(esta) or ventana != esta:
 		return   # (se ha cerrado o abierto otro programa mientras tanto)
 	for i in range(deslizas.size() - 1, -1, -1):   # del de más dentro al de más fuera
 		var d: ScrollContainer = deslizas[i]
-		d.scroll_vertical = desplazados[i] if i < desplazados.size() else 0
+		d.get_v_scroll_bar().changed.disconnect(a_su_sitio[i])
+		a_su_sitio[i].call()
 		if concreto and d.is_ancestor_of(boton):
 			d.ensure_control_visible(boton)
 		d.follow_focus = true   # (con el teclado o el mando, bajar por las tarjetas sí lo sigue)
@@ -1304,7 +1315,9 @@ func relieve(c: Control, hundido: bool, grosor: float) -> void:
 # Al marcarlo (con el ratón encima, el teclado o el mando) explica lo que hace en la línea de info
 func enlazar(b: Button, texto: String, al_pulsar: Callable) -> void:
 	b.focus_entered.connect(func(): info.text = texto)
-	b.mouse_entered.connect(func(): info.text = texto)
+	b.mouse_entered.connect(func():
+		if not colocando:
+			info.text = texto)
 	b.pressed.connect(al_pulsar)
 
 
