@@ -59,5 +59,13 @@ con `(Get-Item JohnnyRush.exe).VersionInfo` y extrayendo el icono con `ExtractAs
 
 - **La empresa y el copyright** de las propiedades del `.exe` (vacíos hoy).
 - **Probar el mando** desde el primer menú con un mando físico, y el juego en 1280×800 (Steam Deck).
-- **Linux** (solo para el sello de Steam Deck, que ya ejecuta el `.exe` con Proton), **firmar el ejecutable** (evita el
-  aviso de Windows si se reparte fuera de Steam) y **Steam** en sí (cuenta, `steamworks`, logros): ver `LANZAMIENTO.md`.
+- **Firmar el ejecutable** (importante, visto el 30 oct): al abrir `JohnnyRush.exe` en el ordenador del dueño, Windows lo
+  bloqueó con «Control Inteligente de Aplicaciones bloqueó una aplicación que podría no ser segura… no pudimos comprobar su
+  publicador» (la protección bloquea los `.exe` sin firma de un publicador conocido, y puede venir activada en los Windows 11
+  nuevos). El `.exe` de la mañana sí arrancó (puede que Microsoft lo revisara; cada exportación es un archivo nuevo y vuelve a
+  empezar). Así que un jugador con esa protección vería el mismo cartel con cada versión nueva. Pendiente: firmarlo con un
+  certificado de firma de código (cuesta dinero y pide verificar la identidad) y comprobar si Steam lo lanza sin aviso. Mientras
+  tanto, para probar: el editor o la web; apagar esa protección de Windows es decisión del dueño (en versiones de Windows 11
+  era de un solo sentido, ver si en la suya se puede volver a encender).
+- **Linux** (solo para el sello de Steam Deck, que ya ejecuta el `.exe` con Proton) y **Steam** en sí (cuenta, `steamworks`,
+  logros): ver `LANZAMIENTO.md`.

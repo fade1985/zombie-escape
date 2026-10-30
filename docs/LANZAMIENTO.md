@@ -14,7 +14,9 @@ pruebas con desconocidos; con lo que salga de ahí, la página de Steam.
 - [ ] **Versión de escritorio.** Hecho el 29 oct: el preset «Windows Desktop» (un solo `.exe`), la pantalla completa
       con F11 / Alt+Intro que se recuerda y la sala de pruebas fuera del juego exportado (`docs/ESCRITORIO.md`). Falta:
       probar el mando desde el primer menú y el juego en 1280×800, Linux (sello de Steam Deck) y Steam en sí. El `.exe` ya
-      lleva el icono de Johnny (rcedit, `docs/ESCRITORIO.md`).
+      lleva el icono de Johnny (rcedit, `docs/ESCRITORIO.md`). **Y firmar el `.exe`:** el 30 oct Windows (Control
+      Inteligente de Aplicaciones) bloqueó el `.exe` recién exportado por no tener publicador conocido; un jugador con esa
+      protección vería el mismo cartel (detalle en `docs/ESCRITORIO.md`).
 - [x] **Inglés.** Sin inglés se pierde casi todo el mercado de Steam. En marcha (29 oct 2026): el español es el idioma de
       origen y el inglés el segundo (`locale/en.po`, `Idioma.t`, selector en Opciones; cómo funciona y qué falta,
       en `docs/IDIOMAS.md`). Hecho: la infraestructura, el menú principal, «Elige edificio», Opciones y la interfaz
