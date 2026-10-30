@@ -32,6 +32,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   - Rescatado: un superviviente lo saca a rastras y lo deja en mantenimiento.
   - Cámara de seguridad: el regreso se ve en blanco y negro por las cámaras del edificio y acaba en el monitor del ordenador.
   - Pesadilla: fundido a negro y se despierta de golpe; cada intento es otro sueño, lo que explicaría que el edificio vuelva a estar lleno.
+- **M32** Talentos: una opción para resetearlos.
 
 ## Por limar
 
