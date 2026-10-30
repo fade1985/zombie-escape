@@ -72,3 +72,5 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   tiradas por el suelo cerca de la puerta, como si las hubiesen arrancado.
 - **L29** Al cambiar el arma equipada por la de repuesto sale un círculo alrededor de Johnny: quitarlo, no queda bien.
 - **L30** Gymbro: cambiar su aura por hacer que su cuerpo se vuelva de metal, que queda mejor visualmente.
+- **L31** Textos del juego: el signo de interrogación del principio de la frase sale al revés (mirarlo junto con L24, las
+  tildes).
