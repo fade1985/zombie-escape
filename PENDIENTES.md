@@ -82,3 +82,4 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **L33** Cambiar la palabra «sonámbulos» por «noctámbulos» (así se llamarán los jefes de planta a partir de ahora): en
   `scripts/historia.gd`, en las traducciones (`locale/`) y en los glosarios (`docs/GLOSARIO_*`). Aparte queda M31, donde
   «sonámbulo» describe a Johnny y no es este nombre.
+- **L34** Cuando el fuego choca contra la pared queda mal visualmente (si es la lengua del bombero, mirarlo con L25).
