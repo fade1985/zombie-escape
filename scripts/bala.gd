@@ -99,16 +99,22 @@ func chocar(pared := false, sigue := false) -> void:
 		queue_free()
 
 
-# Ha dado en la burbuja de fuego del jefe de bomberos: se queda en su borde y rebota con el impacto de las paredes
-# (impacto.gd), en colores de fuego y el doble de grande, con las chispas hacia fuera de la burbuja
+# Ha dado en la burbuja de fuego del jefe de bomberos (o en la cúpula del científico): se queda en su borde y rebota con
+# el impacto de las paredes (impacto.gd), en colores de fuego (o de cristal) y el doble de grande, con las chispas hacia
+# fuera
 func rebotar(zombi: Node2D) -> void:
 	var centro: Vector2 = zombi.centro_burbuja()
 	var normal := (global_position + Vector2(0, -altura) - centro).normalized()
 	global_position = centro + normal * zombi.radio_burbuja() + Vector2(0, altura)
 	normal_pared = normal
 	zombi.onda_en(global_position + Vector2(0, -altura))
+	var colores: Array = [Color.WHITE] + Llamas.FUEGO.slice(0, 4)
+	var base: Color = Llamas.FUEGO[2]
+	if zombi.has_method("colores_escudo"):   # (la cúpula del científico: de cristal)
+		colores = zombi.colores_escudo()
+		base = colores[2]
 	Impacto.soltar(self, global_position + Vector2(0, -altura), velocidad.angle(), normal.angle(), altura,
-		Llamas.FUEGO[2], Impacto.TALLA * 2.0 if radio >= 4.0 else Impacto.TALLA_PERDIGON * 2.0, [Color.WHITE] + Llamas.FUEGO.slice(0, 4))
+		base, Impacto.TALLA * 2.0 if radio >= 4.0 else Impacto.TALLA_PERDIGON * 2.0, colores)
 	queue_free()
 
 

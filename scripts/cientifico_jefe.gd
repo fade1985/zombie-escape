@@ -62,6 +62,15 @@ const PIE := 34.0                        # a qué altura dibuja los pies respect
 const SUELTA := {"s": 4, "se": 5, "e": 4, "ne": 4, "n": 4, "no": 4, "o": 4, "so": 5}
 const VERDE := Color("#b6ff6a")          # el VD-7
 const CRISTAL := Color("#9fd8ff")
+# La cúpula, dibujada: el escudo "divine-shield" de pixelfx en cristal azul (tools/pixelfx/escudo-cristal.js), en
+# tres hojas: lo de detrás de él, lo de delante y el brillo (que se suma). Es el mismo dibujo que la burbuja del bombero
+const ESCUDO := [preload("res://assets/sprites/escudo-cristal-detras.png"),
+	preload("res://assets/sprites/escudo-cristal-delante.png"), preload("res://assets/sprites/escudo-cristal-brillo.png")]
+const ESCUDO_CENTRO := Vector2(40, 38)   # el centro de la esfera en cada fotograma (en píxeles del dibujo)
+const ESCUDO_FPS := 20.0
+const CUPULA_ALTO := 0.42                # a qué altura tiene el centro (de "arriba")
+const ONDA_DURA := 0.4                   # lo que dura la onda de una bala que rebota en la cúpula
+const ONDA_RADIO := 56.0                 # lo que se abre
 
 # La jeringa y la criatura
 const CRIATURA := "res://assets/sprites/jefe-criatura.tres"
@@ -121,6 +130,10 @@ const FUEGO := [Color("#ff9f1c"), Color("#ffd23f"), Color("#ff5a1f"), Color("#ff
 var espera := {"probetas": 1.5, "suero": 4.0, "sujetos": 2.0, "cupula": 8.0}
 var cupula := 0                          # lo que le queda a la cúpula (0 = no hay)
 var dentro := 0.0                        # lo que lleva dentro de la cúpula
+var cupula_k := 0.0                      # lo subida que está la cúpula dibujada (0 = no hay, 1 = entera)
+var destello := 0.0                      # lo que brilla porque le acaban de dar (de 1 a 0)
+var escudo: Array[Sprite2D] = []         # las tres capas de la cúpula (detrás, delante y brillo)
+var ondas: Array[Dictionary] = []        # donde rebotan las balas en la cúpula: su onda ("donde", desde su centro; "t")
 var mutado := false
 var espera_criatura := {"lenguas": 0.8, "punetazo": 1.5, "fuego": 2.0}
 var lenguas: Array[Lengua] = []          # las de la criatura
@@ -128,6 +141,24 @@ var lenguas: Array[Lengua] = []          # las de la criatura
 
 func _ready() -> void:
 	super()
+	# la cúpula: lo de detrás, por debajo de su dibujo; lo de delante y el brillo, encima (y debajo de $Vapor)
+	for i in 3:
+		var capa := Sprite2D.new()
+		capa.texture = ESCUDO[i]
+		capa.hframes = 8
+		capa.vframes = 6
+		capa.offset = Vector2(40, 40) - ESCUDO_CENTRO
+		capa.position = Vector2(0, -arriba * CUPULA_ALTO)
+		capa.visible = false
+		if i > 0:
+			capa.z_index = 1
+		if i == 2:
+			var suma := CanvasItemMaterial.new()
+			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			capa.material = suma
+		add_child(capa)
+		move_child(capa, $Sprite.get_index() + (0 if i == 0 else i))
+		escudo.append(capa)
 	for i in LENGUAS:
 		var lengua := Lengua.new(PALETA_LENGUA)
 		lengua.grueso = 7.0
@@ -395,6 +426,7 @@ func romper_cupula() -> void:
 func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	if cupula > 0:
 		cupula -= cantidad
+		destello = 1.0
 		if cupula <= 0:
 			romper_cupula()
 		else:
@@ -617,6 +649,7 @@ func foto(johnny: Node2D) -> void:
 func animar() -> void:
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
+	animar_cupula()
 	if mutado:
 		animar_criatura(dir)
 		return
@@ -652,6 +685,53 @@ func animar() -> void:
 				poner("andar_" + dir, clampf(paso / VELOCIDAD, 0.4, 1.5))
 			else:
 				poner("reposo_" + dir)
+
+
+# La cúpula sube al meterse y baja al salir (si se rompe o se pincha, desaparece); donde le dan, brilla
+func animar_cupula() -> void:
+	var paso := get_physics_process_delta_time()
+	if cupula <= 0 and estado != "cupula_baja":
+		cupula_k = 0.0
+	else:
+		cupula_k = clampf(cupula_k + paso / CUPULA_SUBE * (-1.0 if estado == "cupula_baja" else 1.0), 0.0, 1.0)
+	destello = maxf(0.0, destello - paso * 4.0)
+	var cuadro := int(tiempo * ESCUDO_FPS) % 48
+	for i in 3:
+		escudo[i].visible = cupula_k > 0.0
+		escudo[i].scale = Vector2.ONE * 2.0 * cupula_k
+		escudo[i].frame = cuadro
+	escudo[1].modulate = Color.WHITE.lerp(Color(1.2, 1.4, 1.6), destello)
+	escudo[2].modulate = Color.WHITE * (1.0 + 2.0 * destello)
+	for o in ondas:
+		o.t += paso
+	ondas = ondas.filter(func(o): return o.t < ONDA_DURA and cupula_k > 0.0)
+
+
+# La cúpula, tal como se ve (bala.gd la mira para que la bala rebote en su borde y no en él): su centro, lo que mide
+# ahora y si "p" (un punto de la pantalla, a la altura a la que se ve la bala) cae dentro
+func centro_burbuja() -> Vector2:
+	return global_position + Vector2(0, -arriba * CUPULA_ALTO)
+
+
+func radio_burbuja() -> float:
+	return CUPULA_RADIO * cupula_k
+
+
+func escudo_toca(p: Vector2) -> bool:
+	return cupula > 0 and cupula_k > 0.5 and p.distance_to(centro_burbuja()) < radio_burbuja()
+
+
+# Los colores del rebote de las balas (el impacto va en cristal)
+func colores_escudo() -> Array:
+	return [Color.WHITE, CRISTAL, Color("#4aa8ee"), Color("#d0efff")]
+
+
+# Una bala ha rebotado en "p" (en su borde, tal como se ve): ahí sale una onda que corre por la cúpula
+func onda_en(p: Vector2) -> void:
+	ondas.append({"donde": p - centro_burbuja(), "t": 0.0})
+	if ondas.size() > 6:
+		ondas.pop_front()
+	destello = 1.0
 
 
 func animar_criatura(dir: String) -> void:
@@ -705,6 +785,55 @@ func morir() -> void:
 		create_tween().tween_property(sprite, "rotation", PI / 2.0 * signf(mirada.x + 0.01), 0.4)
 
 
+# Sobre la cúpula (que son los sprites): las grietas, según lo que le han dado, y las ondas de las balas que rebotan
+func pintar_cupula(lienzo: Node2D) -> void:
+	if cupula_k <= 0.0:
+		return
+	var centro := Vector2(0, -arriba * CUPULA_ALTO)
+	lienzo.draw_set_transform(centro, 0.0, Vector2.ONE * cupula_k)
+	var dano := 1.0 - float(cupula) / CUPULA_VIDA if cupula > 0 else 0.0
+	for i in int(dano * 8.0):
+		var a := i * 2.4 + 0.7
+		var p := Vector2.from_angle(a) * 16.0
+		lienzo.draw_line(p, p + Vector2.from_angle(a + 0.3) * 32.0, Color(1, 1, 1, 0.8), 2.0)
+		lienzo.draw_line(p + Vector2.from_angle(a + 0.3) * 16.0, p + Vector2.from_angle(a - 0.5) * 34.0, Color(1, 1, 1, 0.6), 2.0)
+	lienzo.draw_set_transform(Vector2.ZERO)
+	pintar_ondas(lienzo, centro)
+
+
+# Donde rebota una bala: un fogonazo (una estrella de cuatro puntas blanca con el borde azul) y una onda (un anillo
+# gordo de píxeles, blanco y luego azul claro, con su borde azul oscuro) que se abre desde ahí y solo se ve dentro
+func pintar_ondas(lienzo: Node2D, centro: Vector2) -> void:
+	var r_cupula := radio_burbuja()
+	var colores := [Color("#1a4f86"), CRISTAL, Color.WHITE]
+	for o in ondas:
+		var k: float = o.t / ONDA_DURA
+		var p: Vector2 = centro + o.donde
+		if o.t < 0.1:
+			var largo := 14 if o.t < 0.05 else 9   # (en píxeles del dibujo)
+			for capa in 3:   # de fuera adentro: el borde azul, el azul claro y el corazón blanco
+				for i in range(-largo, largo + 1):
+					var ancho := maxi(0, int((1.0 - absf(i) / float(largo)) * 3.0) + 1 - capa)
+					for j in range(-ancho, ancho + 1):
+						pixel(lienzo, p + Vector2(i, j) * 2.0, colores[capa])
+						pixel(lienzo, p + Vector2(j, i) * 2.0, colores[capa])
+		var r := 6.0 + ONDA_RADIO * sqrt(k)
+		var pasos := int(r * 1.2) + 10
+		for i in pasos:
+			var a := i * TAU / pasos
+			for capa in 3:   # (por dentro y por fuera, el borde; en medio, el anillo)
+				var q := p + Vector2.from_angle(a) * (r + (capa - 1) * 2.0)
+				if q.distance_to(centro) > r_cupula - 2.0:
+					continue
+				var color: Color = colores[0] if capa != 1 else (Color.WHITE if k < 0.35 else CRISTAL)
+				pixel(lienzo, q, Color(color, 1.0 - k * k))
+
+
+# Un píxel del dibujo (2 × 2), en su cuadrícula
+func pixel(lienzo: Node2D, p: Vector2, color: Color) -> void:
+	lienzo.draw_rect(Rect2((p / 2.0).floor() * 2.0, Vector2(2, 2)), color)
+
+
 # Los avisos, en el suelo (por debajo de él)
 func _draw() -> void:
 	if estado == "muerto":
@@ -715,16 +844,6 @@ func _draw() -> void:
 			var k := minf(1.0, t / AVISO_PROBETAS)
 			for i in datos.destinos.size():
 				Aviso.abanico(self, datos.destinos[i] - global_position, 0.0, PI, 50.0, k, tiempo, 0.6, 0.0, i)
-		"cupula_sube", "cupula", "cupula_baja":
-			# el borde de la cúpula en el suelo
-			var k := minf(1.0, t / CUPULA_SUBE)
-			if estado == "cupula":
-				k = 1.0
-			elif estado == "cupula_baja":
-				k = 1.0 - k
-			draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.55))
-			Formas.disco(self, Vector2.ZERO, CUPULA_RADIO * k, Color(CRISTAL, 0.12))
-			Formas.arco(self, Vector2.ZERO, CUPULA_RADIO * k, 0.0, TAU, 40, Color(CRISTAL, 0.7), 3.0)
 		"aviso_lenguas":
 			# las tres lenguas avisan como las cargas de los jefes: flechas que se encienden hacia fuera y, al final,
 			# una X (o una estrella, si se paran en una pared o un mueble)
@@ -748,29 +867,11 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Lo que va por encima de él (en el nodo "Vapor"): la cúpula de cristal, los rayos del suero, las lenguas de la
+# Lo que va por encima de él (en el nodo "Vapor"): las grietas y las ondas de la cúpula, los rayos del suero, las lenguas de la
 # criatura y el fuego de la boca al escupir
 func pintar_encima(lienzo: Node2D) -> void:
+	pintar_cupula(lienzo)
 	match estado:
-		"cupula_sube", "cupula", "cupula_baja":
-			var k := minf(1.0, t / CUPULA_SUBE)
-			if estado == "cupula":
-				k = 1.0
-			elif estado == "cupula_baja":
-				k = 1.0 - k
-			var centro := Vector2(0, -arriba * 0.42)
-			lienzo.draw_set_transform(centro, 0.0, Vector2(1, 1.25) * k)
-			Formas.disco(lienzo, Vector2.ZERO, CUPULA_RADIO, Color(CRISTAL, 0.22))
-			Formas.arco(lienzo, Vector2.ZERO, CUPULA_RADIO, 0.0, TAU, 48, Color(CRISTAL, 0.85), 3.0)
-			Formas.arco(lienzo, Vector2(-11, -11), 43.0, PI * 1.05, PI * 1.55, 16, Color(1, 1, 1, 0.55), 4.0)   # el brillo
-			# las grietas, según lo que le han dado
-			var dano := 1.0 - float(cupula) / CUPULA_VIDA if cupula > 0 else 0.0
-			for i in int(dano * 8.0):
-				var a := i * 2.4 + 0.7
-				var p := Vector2.from_angle(a) * 16.0
-				lienzo.draw_line(p, p + Vector2.from_angle(a + 0.3) * 32.0, Color(1, 1, 1, 0.8), 2.0)
-				lienzo.draw_line(p + Vector2.from_angle(a + 0.3) * 16.0, p + Vector2.from_angle(a - 0.5) * 34.0, Color(1, 1, 1, 0.6), 2.0)
-			lienzo.draw_set_transform(Vector2.ZERO)
 		"suero":
 			# los rayos verdes de la jeringa a cada zombi, mientras dura el grito
 			if not datos.has("rayos") or t > GRITO * 0.9:
