@@ -65,6 +65,10 @@ en una línea.
   calidad hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
   («Sacar 5»). Se prueba con `--montones`.
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
+  Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
+  por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. El molotov vuela por encima de todo.
+  Su explosión (y el congelado de la congeladora) tampoco pasa las paredes: lleva `explosion.paredes`, que la del zombi
+  explosivo y la de Mezcla explosiva no llevan. Se prueba con `--granada-pared`.
 - `sala_armas.gd`: la sala de pruebas (F9 desde cualquier sitio; F9 otra vez, de vuelta): la diana, todas las armas,
   las líneas de ayuda, el panel de daño y el baúl de pruebas (`Guardado.baul_prueba`: el de verdad no se toca). Al
   salir, Johnny vuelve a llevar lo que llevaba. Su panel de pruebas (tecla P) es `ui/panel_pruebas.gd`.
@@ -121,7 +125,10 @@ en una línea.
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
   `luz_jefe.gd` (la luz fija de esas habitaciones).
-- `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo), `brillo.gd`
+- `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
+  primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
+- `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la
+  tarjeta gráfica una sola vez, `solidos_de`), `brillo.gd`
   (lo que luce a oscuras), `particulas.gd`, `impacto.gd` (la bala que da en una pared: el efecto Impact de la librería
   de efectos de Sprite Fusion, pasado a GDScript, más pequeño y del color de la estela; se prueba con `--impacto`),
   `mancha.gd`, `temblor.gd` (temblor de pantalla y parón de los golpes: el de
@@ -266,7 +273,9 @@ en una línea.
   respaldo), `ambiente.gd` (viñeteado, poca vida, escarcha), `botones.gd`
   (autoload: el saltito de los botones), `tele.gd` (la tele de las noticias: el mueble, la calle de detrás y la reportera son dibujos de PixelLab de
   `assets/ui/tele/`; la boca al hablar y el parpadeo, a mano).
-- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). La tienda, en cuatro
+- `ordenador.gd`: ConserjeOS (talentos, tienda de armas, logros, Dosier, Noticias, Colecciones). Al comprar o subir algo
+  el programa se rehace entero: `marcar` deja cada desplazamiento en su sitio sin que se note (arriba, al abrirlo; se
+  prueba con `--ordenador-arriba`, con clics de verdad). La tienda, en cuatro
   secciones (`SECCIONES` y los arrojables, que se compran de uno en uno con `comprar_lanzable`, mientras quepan). Con dos armas de ese tipo, `comprar_arma` manda la de repuesto al baúl (`partida.repuesto_al_baul`) antes de `llevar_arma`, solo en la tienda. Cada programa se abre con sus desplazamientos arriba (`marcar()`: marca el botón y, pasado un fotograma, ya colocado todo, deja cada desplazamiento en su sitio; al volver a abrir el mismo tras comprar o subir algo, donde estaban). Se prueba con `--ordenador-arriba`. Los iconos con algo nuevo (`MESA.novedades`: Noticias, Colecciones y Logros por cobrar)
   llevan el rótulo en amarillo y un «!» que bota en la esquina (`marca_nuevo`); se ponen y se quitan con `poner_aviso`, y
   `refrescar_avisos()` los pone al día con el guardado al abrir Colecciones, ver una noticia o cobrar un logro, sin tener

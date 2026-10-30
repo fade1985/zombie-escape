@@ -1764,3 +1764,239 @@ func probar_musica() -> void:
 				suena.append("%s-%s" % [cancion, capa])
 	print("Música, apagada: siguen sonando %s (esperado: [])" % [suena])
 	get_tree().quit()
+
+
+# Con "--captura --molotov-carga" (y "--zombis N": 12 si no se dice): lo que tarda cada fotograma cuando cae un molotov en
+# medio de N zombis (F17), dos veces, para separar lo que cuesta la primera (lo que se prepara al usarlo por primera vez)
+# de lo que cuesta siempre. Dice el peor fotograma, los que pasan de 25 ms y, de esos, cuánto se va en scripts y física; lo
+# que falte hasta el total es dibujar. Se puede correr en la web (docs/WEB.md). Se cierra sola
+func probar_molotov_carga() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	var cuantos := int(Captura.dato("--zombis", "12"))
+	for ronda in 2:
+		var centro: Vector2 = johnny.global_position + Vector2(0, -200)
+		var lado := ceili(sqrt(cuantos))
+		for i in cuantos:
+			var z: Node2D = meter_zombi("normal", centro + Vector2((i % lado - lado / 2.0) * 36.0, (floori(float(i) / lado) - lado / 2.0) * 26.0))
+			z.dormido = false
+			z.espabilando = 0.0
+		await get_tree().create_timer(0.8).timeout
+		var base := []
+		for _i in 30:
+			var a := Time.get_ticks_usec()
+			await get_tree().process_frame
+			base.append((Time.get_ticks_usec() - a) / 1000.0)
+		base.sort()
+		var p: Node2D = Lanzables.PROYECTIL.instantiate()
+		p.tipo = "molotov"
+		p.desde = johnny.global_position
+		p.alto_salida = 20.0
+		p.hasta = centro
+		johnny.get_parent().add_child(p)
+		var peor := 0.0
+		var total := 0.0
+		var lentos := []
+		var empezo := Time.get_ticks_usec()
+		while Time.get_ticks_usec() - empezo < 3000000:
+			var a := Time.get_ticks_usec()
+			await get_tree().process_frame
+			var ms := (Time.get_ticks_usec() - a) / 1000.0
+			peor = maxf(peor, ms)
+			if ms >= 25.0:
+				total += ms
+				lentos.append("%.0f@%.2fs(sc%.0f fis%.0f dib%d)" % [ms, (Time.get_ticks_usec() - empezo) / 1000000.0,
+					Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0,
+					Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
+					RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
+		print("Molotov carga · ronda %d · %d zombis · normal %.1f ms · peor %.0f ms · %d lentos, %.2f s en total · página %s" % [
+			ronda + 1, cuantos, base[15], peor, lentos.size(), total / 1000.0, Lentos.visibilidad()])
+		print("Molotov carga · lentos: ", " ".join(lentos.slice(0, 24)))
+		print("Molotov carga · hojas leídas de la tarjeta gráfica: %d · dibujos tendidos: %d (cada uno se mira una vez)" % [
+			Quemado.hojas.size(), Quemado.tendidos.size()])
+		Captura.foto("captura-molotov-carga-%d.png" % (ronda + 1))
+		for z in get_tree().get_nodes_in_group("zombis"):
+			if z.get("diana") != true:
+				z.queue_free()
+		await get_tree().create_timer(0.5).timeout
+	get_tree().quit()
+
+
+# Con "--captura --granada-pared": las granadas chocan con las paredes (F20). En la sala de pruebas, contra su pared de la
+# derecha: la granada, la atraedora y la congeladora explotan de este lado y no le dan al zombi de lejos del otro, y las
+# granaditas de la Épica tampoco pasan. De control, lo mismo en campo abierto y por encima de un mueble: caen en el mismo
+# sitio. Y lanzar de un toque: la granada no apunta a un zombi tras la pared, el molotov sí. La explosión tampoco pasa la
+# pared: junto a ella, ni daña ni congela a los zombis ni daña a Johnny al otro lado, pero sí a la misma distancia a este, y
+# los muebles no la paran; la de otros (sin «paredes») sigue pasándola (captura-granada-pared.png: la granada parada de
+# este lado). Cada línea dice lo esperado. Se cierra
+func probar_granada_pared() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	if not SalaArmas.escondido:   # ni el panel de daño ni las líneas
+		await pulsar_y_esperar(KEY_MINUS)
+	johnny.invencible = true
+	johnny.modo = "quieto"
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	# dónde está la pared de la derecha, de un borde al otro (como en --golpes-pared)
+	var espacio: PhysicsDirectSpaceState2D = johnny.get_world_2d().direct_space_state
+	var y: float = sala.diana.global_position.y + 40.0
+	var x0: float = sala.diana.global_position.x
+	var pared_izq: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 300, y), Vector2(x0 + 900, y), 1)).position.x
+	var pared_der: float = espacio.intersect_ray(PhysicsRayQueryParameters2D.create(Vector2(x0 + 900, y), Vector2(x0 + 300, y), 1)).position.x
+	var sitio := Vector2(pared_izq - 60.0, y)
+	var tras_pared := Vector2(pared_der + 100.0, y)
+	var abierto := sitio - Vector2(tras_pared.x - sitio.x, 0.0)   # la misma distancia, hacia el otro lado
+	print("Pared de %d a %d · Johnny en %d · se lanza a %d de distancia" % [pared_izq, pared_der, sitio.x, tras_pared.x - sitio.x])
+
+	for clave in ["granada", "atraedora", "congeladora"]:
+		var detras := zombi_quieto(tras_pared)
+		var en: Vector2 = await lanzar_y_esperar(clave, sitio, tras_pared, "captura-granada-pared.png" if clave == "granada" else "")
+		print("«%s» contra la pared: explota en x %d, de este lado %s (esperado: true) · al zombi de donde se apuntaba le quita %d (esperado: 0)" % [
+			clave, en.x, en.x < pared_izq, 500 - detras.vida])
+		zombis_de_prueba([])
+		var delante := zombi_quieto(abierto)
+		var libre: Vector2 = await lanzar_y_esperar(clave, sitio, abierto)
+		print("«%s» en campo abierto: explota en (%.2f, %.2f), %d más allá de donde se apuntaba · al zombi de allí le quita %d (esperado: más de 0)" % [
+			clave, libre.x, libre.y, abierto.x - libre.x, 500 - delante.vida])
+		zombis_de_prueba([])
+
+	# la explosión estalla a 30 de la pared: a la misma distancia, tras la pared no llega y a este lado sí
+	var junto := Vector2(pared_izq - 30.0, y)
+	var tras_muro := Vector2(pared_der + 16.0, y)
+	var a_este_lado := junto + Vector2(junto.x - tras_muro.x, 0.0)
+	for clave in ["granada", "atraedora", "congeladora"]:
+		var tapado := zombi_quieto(tras_muro)
+		var libre := zombi_quieto(a_este_lado)
+		await explotar_en(clave, junto)
+		print("Explosión de «%s» junto a la pared, a %d de los dos: al zombi tras la pared le quita %d (esperado: 0) y al de este lado %d (esperado: más de 0)" % [
+			clave, junto.distance_to(tras_muro), 500 - tapado.vida, 500 - libre.vida])
+		if clave == "congeladora":
+			print("Congelados: el de tras la pared %.1f s (esperado: 0) y el de este lado %.1f s (esperado: más de 0)" % [tapado.aturdido, libre.aturdido])
+		zombis_de_prueba([])
+	# a Johnny, igual
+	johnny.invencible = false
+	for caso in [[tras_muro, "tras la pared", "0"], [a_este_lado, "a este lado", "más de 0"]]:
+		johnny.global_position = caso[0]
+		johnny.vida = 100
+		johnny.escudo = 0.0
+		johnny.invulnerable = 0.0
+		johnny.esquiva_t = 0.0
+		await explotar_en("granada", junto)
+		print("Johnny %s: pierde %d (esperado: %s)" % [caso[1], 100 - johnny.vida, caso[2]])
+	johnny.invencible = true
+	johnny.vida = johnny.stats.vida_max
+	# la del zombi explosivo sigue pasándola (solo paran las de las granadas)
+	var tras_explosivo := zombi_quieto(tras_muro)
+	var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+	bum.radio = 120.0
+	bum.position = junto
+	johnny.get_parent().add_child(bum)
+	print("Explosión de otro (sin «paredes»), tras la pared: le quita %d (esperado: más de 0)" % (500 - tras_explosivo.vida))
+	zombis_de_prueba([])
+
+	# un mueble en medio: se vuela por encima, así que la granada cae igual que en campo abierto
+	var mueble := StaticBody2D.new()
+	mueble.add_to_group("muebles")
+	var forma := CollisionShape2D.new()
+	forma.shape = RectangleShape2D.new()
+	forma.shape.size = Vector2(40, 40)
+	mueble.add_child(forma)
+	mueble.position = sitio + Vector2(-90, 0)
+	mapa.add_child(mueble)
+	var por_encima: Vector2 = await lanzar_y_esperar("granada", sitio, abierto)
+	print("Por encima de un mueble: explota en (%.2f, %.2f) (esperado: lo mismo que en campo abierto)" % [por_encima.x, por_encima.y])
+	var tras_mueble := zombi_quieto(mueble.position + Vector2(-60, 0))
+	await explotar_en("granada", mueble.position + Vector2(60, 0))
+	print("Explosión con el mueble en medio: al zombi de detrás le quita %d (esperado: más de 0, los muebles no la paran)" % (500 - tras_mueble.vida))
+	zombis_de_prueba([])
+	mueble.queue_free()
+
+	# las granaditas de la Épica (8, para que salgan hacia todos lados)
+	var grande: Vector2 = await lanzar_y_esperar("granada:3", sitio, tras_pared, "", 8)
+	var mas_lejos := -INF
+	for _i in 90:
+		await get_tree().physics_frame
+		for n in johnny.get_parent().get_children():
+			if n.get_script() == Lanzables.BOMBA and n.hija:
+				mas_lejos = maxf(mas_lejos, n.global_position.x)
+	print("Épica contra la pared: la grande explota en x %d, la granadita que más lejos llega en x %d (esperado: las dos, menos de %d)" % [
+		grande.x, mas_lejos, pared_izq])
+
+	# lanzar de un toque, sin apuntar (mas_cercano): a un zombi tras la pared solo se le apunta con lo que vuela por encima
+	johnny.global_position = sitio
+	var detras := zombi_quieto(Vector2(pared_der + 40.0, y))
+	var nombre := func(z: Node2D) -> String:
+		return "nadie" if z == null else ("el de detrás" if z == detras else "el de este lado")
+	var apunta := {}
+	for clave in ["granada", "atraedora", "congeladora", "molotov"]:
+		lanzables.tipo = clave
+		apunta[clave] = nombre.call(lanzables.mas_cercano())
+	print("De un toque, con un zombi tras la pared: %s (esperado: nadie, salvo el molotov)" % apunta)
+	zombi_quieto(sitio + Vector2(-200, 0))
+	lanzables.tipo = "granada"
+	print("De un toque, y con otro más lejos pero a este lado: la granada, a %s (esperado: el de este lado)" % nombre.call(lanzables.mas_cercano()))
+	get_tree().quit()
+
+
+# Para probar_granada_pared: un zombi lento quieto, de 500 de vida, en ese sitio
+func zombi_quieto(donde: Vector2) -> Node2D:
+	var zombi := meter_zombi("lento", donde)
+	zombi.vida = 500
+	zombi.set_physics_process(false)
+	return zombi
+
+
+# Para probar_granada_pared: una granada de "tipo" que estalla justo en "donde", sin lanzarla, y se espera a que explote
+func explotar_en(tipo: String, donde: Vector2) -> void:
+	await get_tree().create_timer(0.4).timeout   # (que se pase el parón de la anterior)
+	var g: Node2D = Lanzables.BOMBA.new()
+	g.tipo = tipo
+	g.desde = donde
+	g.hasta = donde
+	g.radio = Lanzables.DATOS[tipo].radio
+	g.dano_zombis = Lanzables.DATOS[tipo].dano
+	johnny.get_parent().add_child(g)
+	g.mecha = 0.1
+	while is_instance_valid(g):
+		await get_tree().physics_frame
+
+
+# Para probar_granada_pared: Johnny lanza desde "sitio" hacia "donde" y se espera a que explote; devuelve dónde ha sido.
+# "foto": la que hacer poco antes de explotar. "racimo": cuántas granaditas soltará, si no son las de su calidad
+func lanzar_y_esperar(clave: String, sitio: Vector2, donde: Vector2, foto := "", racimo := 0) -> Vector2:
+	await get_tree().create_timer(0.4).timeout   # (que se pase el parón y la bola de fuego de la anterior)
+	johnny.global_position = sitio
+	johnny.velocity = Vector2.ZERO
+	johnny.get_node("Camara").reset_smoothing()
+	lanzables.cantidades[clave] = 2
+	lanzables.tipo = clave
+	lanzables.lanzar(donde)
+	var g: Node2D = johnny.get_parent().get_children().filter(func(n): return n.get_script() == Lanzables.BOMBA).back()
+	g.racimo = maxi(g.racimo, racimo)
+	var en := g.global_position
+	while is_instance_valid(g):
+		en = g.global_position
+		if foto != "" and g.mecha < 0.6:
+			Captura.foto(foto)
+			foto = ""
+		await get_tree().physics_frame
+	return en

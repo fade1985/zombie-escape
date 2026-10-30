@@ -57,6 +57,9 @@
 #                       el ratón quieto); tocar la pantalla los vuelve a sacar                [prueba_varias.gd]
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
+#   --molotov-carga     cuánto tarda cada fotograma al caer un molotov entre muchos zombis; con --zombis N, cuántos (12) [prueba_armas.gd]
+#   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles) y su explosión no las
+#                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
 #   --epicas            el truco de la Épica de cada familia: golpe de gracia, balas que atraviesan, estallido y
 #                       racimo                                                             [prueba_armas.gd]
@@ -82,7 +85,8 @@
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
 #                       grito grande de las noticias, los logros y las skins                [prueba_larga.gd]
 #   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
-#   --ordenador-arriba  cada programa del ordenador recién abierto: tiene que empezar arriba      [prueba_larga.gd]
+#   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
+#                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
 #                       tele, para ver si caben                                        [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
@@ -356,6 +360,12 @@ func empezar_prueba() -> void:
 	elif "--fuego-acido" in args:
 		set_process(false)   # sin la prueba larga
 		probar_fuego_acido()
+	elif "--molotov-carga" in args:
+		set_process(false)   # sin la prueba larga
+		probar_molotov_carga()
+	elif "--granada-pared" in args:
+		set_process(false)   # sin la prueba larga
+		probar_granada_pared()
 	elif "--epicas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_epicas()

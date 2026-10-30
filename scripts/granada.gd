@@ -1,6 +1,7 @@
 # La granada de Johnny (src/granada.js). Vuela en parábola, bota una vez, rueda un poco frenando, rebota en
-# las paredes y los muebles, parpadea en rojo (cada vez más deprisa) y a los 2 s explota: la explosión de
-# siempre (explosion.gd), que también hace daño a Johnny, y una mancha chamuscada en el suelo.
+# las paredes (también en el aire) y en los muebles (en el aire los pasa por encima), parpadea en rojo (cada vez más
+# deprisa) y a los 2 s explota: la explosión de siempre (explosion.gd), que también hace daño a Johnny, y una mancha
+# chamuscada en el suelo.
 # La atraedora y la congeladora (antes, arrojadizas creadas del banco) son esta misma granada con otro "tipo"
 # (Lanzables.ARROJADIZAS): su mecha, su dibujo propio (DIBUJOS_PROPIOS) y lo suyo al explotar. A Johnny le hacen
 # como mucho 25:
@@ -68,11 +69,9 @@ func _physics_process(delta: float) -> void:
 				vz = 0.0
 	else:
 		v *= exp(-delta * G.roce)   # en el suelo rueda y se frena
-	# cerca del suelo choca con paredes y muebles (capa 1) y rebota
 	var paso := v * delta
-	if z < 12.0 and paso.length() > 0.01:
-		var rayo := PhysicsRayQueryParameters2D.create(global_position, global_position + paso * 1.5, 1)
-		var choque := get_world_2d().direct_space_state.intersect_ray(rayo)
+	if paso.length() > 0.01:
+		var choque := choque_hasta(global_position + paso * 1.5)
 		if not choque.is_empty():
 			v = v.bounce(choque.normal) * 0.5
 			paso = Vector2.ZERO
@@ -92,6 +91,16 @@ func _physics_process(delta: float) -> void:
 		explotar()
 
 
+# Con qué choca de aquí a "fin", y entonces rebota. Cerca del suelo, con paredes y muebles (capa 1); más arriba pasa por
+# encima de los muebles, pero las paredes, las puertas cerradas y las barricadas también la paran en el aire (F20)
+func choque_hasta(fin: Vector2) -> Dictionary:
+	if z < 12.0:
+		var rayo := PhysicsRayQueryParameters2D.create(global_position, fin, 1)
+		return get_world_2d().direct_space_state.intersect_ray(rayo)
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	return mapa.muro_entre(global_position, fin) if mapa else {}
+
+
 # ¡Boom! La explosión de siempre (con Puntería, más daño a los zombis). A Johnny, como mucho DANO_JOHNNY (25), como
 # la atraedora y la congeladora: hasta el 27 oct su propia granada le quitaba 80, casi toda la vida y dos tercios
 func explotar() -> void:
@@ -99,6 +108,7 @@ func explotar() -> void:
 	boom.radio = radio
 	boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)
 	boom.dano_zombis = dano_zombis
+	boom.paredes = true
 	boom.position = position
 	if tipo != "granada":
 		efecto_creada(Lanzables.ARROJADIZAS[tipo])
@@ -132,8 +142,11 @@ func soltar_racimo() -> void:
 func efecto_creada(c: Dictionary) -> void:
 	if c.has("congela"):
 		var congela: float = c.congela + congela_extra
+		var mapa := get_tree().get_first_node_in_group("mapa")
 		for zombi in get_tree().get_nodes_in_group("zombis"):
 			if zombi is Zombi and zombi.global_position.distance_to(global_position) <= radio + zombi.radio:
+				if mapa and not mapa.muro_entre(global_position, zombi.global_position).is_empty():
+					continue   # (como la explosión, no pasa las paredes)
 				zombi.aturdido = maxf(zombi.aturdido, congela)
 				zombi.modulate = Color(0.55, 0.8, 1.0)
 				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(congela - 0.4)

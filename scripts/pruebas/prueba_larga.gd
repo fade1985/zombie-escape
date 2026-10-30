@@ -441,7 +441,9 @@ func probar_colecciones() -> void:
 # Con "--captura --ordenador-arriba": cada programa del ordenador recién abierto empieza arriba (todos sus
 # desplazamientos, también los de dentro de Dosier, Noticias y Colecciones, a 0; en Noticias, la lista deja a la vista la
 # emisión marcada). Al subir un talento desde abajo la ventana se queda donde estaba, con el talento a la vista, y con
-# el teclado el desplazamiento sigue al foco. Fotos: captura-arriba-<programa>.png
+# el teclado el desplazamiento sigue al foco. Lo mismo con clics de verdad, con y sin paso de física en cada fotograma
+# (F13 y F14), y sin que llegue a dibujarse la ventana en otro sitio. Fotos: captura-arriba-<programa>.png y
+# captura-arriba-clic.png (tras subir un talento con un clic)
 func probar_ordenador_arriba() -> void:
 	var antes := Guardado.cargar()
 	Guardado.cambiar(func(g):
@@ -479,7 +481,7 @@ func probar_ordenador_arriba() -> void:
 	# el teclado: bajar por las tarjetas arrastra el desplazamiento
 	ordenador.abrir("logros")
 	await get_tree().create_timer(0.6).timeout
-	for i in 3:
+	for i in 10:
 		var evento := InputEventAction.new()
 		evento.action = "ui_down"
 		evento.pressed = true
@@ -488,7 +490,42 @@ func probar_ordenador_arriba() -> void:
 		evento.pressed = false
 		Input.parse_input_event(evento)
 		await get_tree().create_timer(0.05).timeout
-	cuenta.call("logros tras bajar 3 veces con el teclado (esperado: marcada una tarjeta de más abajo y la ventana ya no está arriba)")
+	cuenta.call("logros tras bajar 10 veces con el teclado (esperado: marcada una tarjeta de más abajo y la ventana ya no está arriba)")
+	ordenador.ventana.find_children("*", "Button", true, false).back().grab_focus()
+	await get_tree().create_timer(0.2).timeout
+	cuenta.call("logros tras marcar la última tarjeta (esperado: la ventana la sigue hasta el fondo)")
+	# con clics de verdad, también en fotogramas sin paso de física (en una pantalla de más de 60 Hz, o a ratos en cualquiera):
+	# ahí se hace lo diferido después de avisar del fotograma, y es cuando las páginas se iban solas hasta abajo (F13 y F14)
+	for pasos in [60, 5]:
+		Engine.physics_ticks_per_second = pasos
+		for programa in ["puntos", "armas", "logros", "dosier", "noticias", "colecciones"]:
+			ordenador.abrir("")
+			await get_tree().create_timer(0.3).timeout
+			await clic_en(ordenador.iconos.get_node("icono_" + programa))
+			await get_tree().create_timer(0.4).timeout
+			cuenta.call("%d pasos, %s abierto con un clic (esperado: arriba; Noticias, la de fuera arriba)" % [pasos, programa])
+		Guardado.cambiar(func(g): g.puntos = 5)
+		ordenador.abrir("")
+		await get_tree().create_timer(0.2).timeout
+		ordenador.abrir("puntos")
+		await get_tree().create_timer(0.4).timeout
+		desliza = ordenador.ventana.find_children("*", "ScrollContainer", true, false)[0]
+		desliza.scroll_vertical = 120
+		await get_tree().create_timer(0.3).timeout
+		var boton: Control = ordenador.ventana.find_child("b_ataque", true, false)
+		var dibujados := {}   # lo desplazada que está la ventana en cada fotograma que se dibuja (justo antes de dibujarlo)
+		var midiendo := func() -> void:
+			var ahora: Array = ordenador.ventana.find_children("*", "ScrollContainer", true, false) if ordenador.ventana else []
+			if not ahora.is_empty():
+				dibujados[ahora[0].scroll_vertical] = true
+		RenderingServer.frame_pre_draw.connect(midiendo)
+		await clic_en(boton)
+		await get_tree().create_timer(0.5).timeout
+		RenderingServer.frame_pre_draw.disconnect(midiendo)
+		cuenta.call("%d pasos, tras un clic en Ataque desde 120 (esperado: sigue sobre 120, info «¡Ataque sube...»)" % pasos)
+		print("%d pasos, desplazamientos que han llegado a dibujarse: %s (esperado: solo 120, sin parpadeo)" % [pasos, dibujados.keys()])
+		Captura.foto("captura-arriba-clic.png")
+	Engine.physics_ticks_per_second = 60
 	ordenador.abrir("")
 	ordenador.apagar()
 	Guardado.cambiar(func(g):
@@ -496,6 +533,24 @@ func probar_ordenador_arriba() -> void:
 		g.puntos = antes.puntos
 		g.talentos = antes.talentos)
 	ahorrados = antes.dolares
+
+
+# Hace clic de verdad, con el ratón, en el centro de ese botón (Godot lo recibe como cualquier otro clic)
+func clic_en(b: Control) -> void:
+	var sitio: Vector2 = get_viewport().get_screen_transform() * b.get_global_rect().get_center()
+	Input.warp_mouse(sitio)
+	await get_tree().create_timer(0.1).timeout   # (que el ratón llegue antes de pulsar: al moverse, la línea de info cambia)
+	for pulsado in [true, false]:
+		var e := InputEventMouseButton.new()
+		e.button_index = MOUSE_BUTTON_LEFT
+		e.button_mask = MOUSE_BUTTON_MASK_LEFT if pulsado else 0
+		e.pressed = pulsado
+		e.position = sitio
+		e.global_position = sitio
+		Input.warp_mouse(sitio)   # (en Windows, Godot mira dónde está el cursor de verdad al soltar)
+		Input.parse_input_event(e)
+		await get_tree().process_frame
+		await get_tree().process_frame
 
 
 # Con "--captura --novedades": los avisos de lo nuevo (L11). En la sala de mantenimiento, con noticias sin ver, un logro
