@@ -59,6 +59,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M44** Controles en pantalla: cuando se juega con mando, que los dibujos de los controles sean los del mando (botones
   y gatillos) y no las letras del teclado.
 - **M45** Menú de inicio: tres huecos de guardado, para que el jugador pueda empezar el juego de cero si quiere.
+- **M46** Menú principal: falta el botón de salir del juego. Hoy está en el `.exe` pero se oculta en la web
+  (`scripts/ui/menu_principal.gd`, porque el navegador no deja cerrar la pestaña): decidir qué hace allí.
 
 ## Por limar
 
