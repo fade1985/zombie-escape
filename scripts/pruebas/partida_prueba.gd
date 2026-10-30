@@ -74,6 +74,7 @@
 #   --noticias          el programa de Noticias del ordenador: la tele con la reportera hablando [prueba_larga.gd]
 #   --novedades         los avisos de lo nuevo: el «!» de la mesa del ordenador, de la taquilla y de los iconos, y el
 #                       grito grande de las noticias, los logros y las skins                [prueba_larga.gd]
+#   --avisos-ordenador  los «!» de los iconos de ConserjeOS se quitan al mirar o cobrar lo nuevo, sin apagar [prueba_larga.gd]
 #   --ordenador-arriba  cada programa del ordenador recién abierto: tiene que empezar arriba      [prueba_larga.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
 #                       tele, para ver si caben                                        [prueba_larga.gd]
@@ -281,6 +282,9 @@ func empezar_prueba() -> void:
 		get_tree().quit()
 	elif "--novedades" in args:
 		await probar_novedades()
+		get_tree().quit()
+	elif "--avisos-ordenador" in args:
+		await probar_avisos_ordenador()
 		get_tree().quit()
 	elif "--ordenador-arriba" in args:
 		set_process(false)   # sin la prueba larga
