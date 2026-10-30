@@ -17,7 +17,7 @@
 #     en su mismo sentido y a su paso (rodando no se cruza: es más ancho que la voltereta y quema igual). Mientras
 #     sale el fuego le rodea una burbuja de fuego (como la cúpula del científico jefe, pero
 #     sin vida propia: no se rompe) y NADA LE QUITA VIDA: ni balas, ni golpes, ni explosiones (y la explosión tampoco
-#     le corta el giro); donde le dan, la burbuja brilla. En el aviso todavía no la tiene: ahí sí se le puede pegar, y
+#     le corta el giro); donde le dan, saltan chispas y la burbuja brilla. En el aviso todavía no la tiene: ahí sí se le puede pegar, y
 #     una explosión (granada) se lo corta (se tambalea).
 #   - Molotovs (proyectil.gd, "molotov_jefe"): dos de una vez, uno donde está Johnny y otro donde va a estar; en
 #     curva, con su marca roja donde caen; al caer dejan un charco de fuego (charco.gd): daño al entrar y un rato
@@ -58,9 +58,15 @@ const TIEMPO_GIRO := 6.6               # algo más de una vuelta: pasa por toda 
 const AVISO_GIRO := 1.0                # (le da tiempo a mirar las flechas y echar a correr)
 const DANO_CONO := 10
 const QUEMA_CONO := {"fuego": {"dps": 10.0, "despues": 1.5}}
-const BURBUJA_RADIO := 84.0            # la burbuja de fuego del giro (la cúpula del científico, 78: él es más ancho)
+const BURBUJA_RADIO := 92.0            # la burbuja de fuego del giro (la cúpula del científico, 78: él es más ancho)
 const BURBUJA_ALTO := 0.42             # a qué altura tiene el centro (de "arriba")
 const BURBUJA_SUBE := 0.4              # lo que tarda en subir (y en bajar)
+# La burbuja, dibujada: el escudo "divine-shield" de pixelfx en colores de fuego (tools/pixelfx/escudo-fuego.js), en
+# tres hojas de 8 × 6 fotogramas de 112 px a 20 por segundo: lo de detrás de él, lo de delante y el brillo, que se suma
+const ESCUDO := [preload("res://assets/sprites/escudo-fuego-detras.png"),
+	preload("res://assets/sprites/escudo-fuego-delante.png"), preload("res://assets/sprites/escudo-fuego-brillo.png")]
+const ESCUDO_CENTRO := Vector2(56, 58)   # el centro de la esfera en cada fotograma (en píxeles del dibujo)
+const ESCUDO_FPS := 20.0
 const TAMBALEO := 0.7
 const RASTRO_CADA := 44.0              # enfadado: cada cuántas unidades andadas deja fuego
 const RASTRO_ESCALA := 0.35            # el fuego del rastro, respecto al del molotov...
@@ -88,6 +94,7 @@ var luz_giro: PointLight2D   # la luz del cono de fuego
 var burbuja := 0.0           # lo subida que está la burbuja de fuego del giro (0 = no hay, 1 = entera)
 var destello := 0.0          # lo que brilla la burbuja porque le acaban de dar (de 1 a 0)
 var destello_por := Vector2.ZERO   # hacia dónde le han dado (desde él); Vector2.ZERO, por todos lados (una explosión)
+var escudo: Array[Sprite2D] = []   # las tres capas de la burbuja (detrás, delante y brillo)
 
 
 func _ready() -> void:
@@ -97,6 +104,25 @@ func _ready() -> void:
 	luz_giro.fuerza = 0.85
 	luz_giro.visible = false
 	add_child(luz_giro)
+	# la burbuja: lo de detrás, por debajo de su dibujo; lo de delante y el brillo, encima (y debajo de $Vapor, que
+	# pinta los conos de fuego: salen de dentro)
+	for i in 3:
+		var capa := Sprite2D.new()
+		capa.texture = ESCUDO[i]
+		capa.hframes = 8
+		capa.vframes = 6
+		capa.offset = Vector2(56, 56) - ESCUDO_CENTRO
+		capa.position = Vector2(0, -arriba * BURBUJA_ALTO)
+		capa.visible = false
+		if i > 0:
+			capa.z_index = 1
+		if i == 2:
+			var suma := CanvasItemMaterial.new()
+			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			capa.material = suma
+		add_child(capa)
+		move_child(capa, $Sprite.get_index() + (0 if i == 0 else i))
+		escudo.append(capa)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -426,24 +452,19 @@ func recibir_golpe(cantidad: int, fuerza: Vector2, de_lleno := false, de_aliado 
 		marcha = Vector2.ZERO
 
 
-# Le han dado con la burbuja puesta: brilla por donde viene el golpe (una explosión, entera), saltan chispas de fuego
-# y, de vez en cuando, grita «¡INMUNE!». "fuerza" va hacia donde empuja el golpe
+# Le han dado con la burbuja puesta: la burbuja brilla, saltan chispas de fuego por donde viene el golpe (una
+# explosión, por todos lados) y, de vez en cuando, grita «¡INMUNE!». "fuerza" va hacia donde empuja el golpe
 func rebote(fuerza: Vector2, de_lleno: bool) -> void:
 	destello = 1.0
 	destello_por = Vector2.ZERO if de_lleno else -fuerza.normalized()
 	var centro := global_position + Vector2(0, -arriba * BURBUJA_ALTO)
 	for i in 6:
-		var a := randf() * TAU if destello_por == Vector2.ZERO else angulo_burbuja(destello_por) + randf_range(-0.4, 0.4)
-		var donde := centro + Vector2(cos(a), sin(a) * 1.25) * BURBUJA_RADIO
+		var a := randf() * TAU if destello_por == Vector2.ZERO else destello_por.angle() + randf_range(-0.4, 0.4)
+		var donde := centro + Vector2.from_angle(a) * BURBUJA_RADIO
 		Particulas.soltar(self, donde, Vector2(cos(a), sin(a)) * randf_range(60.0, 150.0) + Vector2(0, -40),
 			Llamas.FUEGO[i % 4], 3, 0.3)
 	Sonido.tocar("chispa")
 	decir_inmune()
-
-
-# El ángulo del círculo de la burbuja (que se dibuja estirada hacia arriba, x 1,25) que cae hacia "dir"
-func angulo_burbuja(dir: Vector2) -> float:
-	return Vector2(dir.x, dir.y / 1.25).angle()
 
 
 # ── Enfadado: todo arde ──
@@ -504,6 +525,14 @@ func animar() -> void:
 	var paso := get_physics_process_delta_time()
 	burbuja = clampf(burbuja + paso / BURBUJA_SUBE * (1.0 if estado == "giro" else -1.0), 0.0, 1.0)
 	destello = maxf(0.0, destello - paso * 4.0)
+	var cuadro := int(tiempo * ESCUDO_FPS) % 48
+	for i in 3:
+		escudo[i].visible = burbuja > 0.0
+		escudo[i].scale = Vector2.ONE * 2.0 * burbuja
+		escudo[i].frame = cuadro
+	# donde le acaban de dar, brilla: más brillo y la burbuja más clara
+	escudo[1].modulate = Color.WHITE.lerp(Color(1.6, 1.4, 1.2), destello)
+	escudo[2].modulate = Color.WHITE * (1.0 + 2.0 * destello)
 	match estado:
 		"aviso_hacha":
 			# levanta el hacha, a punto de bajarla
@@ -540,15 +569,10 @@ func animar() -> void:
 
 # Los avisos, en el suelo (por debajo de él): el arco del hachazo y, en el giro, el cono por donde va cada fuego,
 # desde sus pies hasta la pared (aviso.gd: en el aviso, rojo y llenándose, con las flechas del lado al que va a girar;
-# girando, naranja). Y el borde de la burbuja de fuego
+# girando, naranja)
 func _draw() -> void:
 	if estado == "muerto":
 		return
-	if burbuja > 0.0:
-		draw_set_transform(Vector2(0, 6), 0.0, Vector2(1, 0.55))
-		Formas.disco(self, Vector2.ZERO, BURBUJA_RADIO * burbuja, Color(Llamas.FUEGO[2], 0.14))
-		Formas.arco(self, Vector2.ZERO, BURBUJA_RADIO * burbuja, 0.0, TAU, 40, Color(Llamas.FUEGO[3], 0.7), 3.0)
-		draw_set_transform(Vector2.ZERO)
 	match estado:
 		"aviso_hacha":
 			Aviso.golpe(self, Vector2(0, 6), mirada.angle(), 1.1, ALCANCE_HACHA + 10.0, minf(1.0, t / AVISO_HACHA),
@@ -570,48 +594,13 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Por encima de él: la burbuja de fuego y los conos de fuego del giro (por encima de la burbuja: salen de dentro)
+# Por encima de él (y de la burbuja de fuego: salen de dentro): los conos de fuego del giro
 func pintar_encima(lienzo: Node2D) -> void:
-	if burbuja > 0.0:
-		pintar_burbuja(lienzo)
 	if estado != "giro":
 		return
 	var n: int = CONOS[fase - 1]
 	for i in mini(n, datos.puntas.size()):
 		cono(lienzo, datos.angulo + i * TAU / n, datos.puntas[i])
-
-
-# La burbuja de fuego del giro, como la cúpula de cristal del científico jefe pero en colores de fuego: naranja por
-# dentro y más clara en el medio, el borde rojo con llamitas que se mecen hacia fuera, y su brillo amarillo. Crece
-# desde dentro de él (burbuja, de 0 a 1) y, donde le acaban de dar, brilla en blanco (destello; una explosión, entera)
-func pintar_burbuja(lienzo: Node2D) -> void:
-	var r := BURBUJA_RADIO
-	lienzo.draw_set_transform(Vector2(0, -arriba * BURBUJA_ALTO), 0.0, Vector2(1, 1.25) * burbuja)
-	Formas.disco(lienzo, Vector2.ZERO, r, Color(Llamas.FUEGO[2], 0.28))
-	Formas.disco(lienzo, Vector2.ZERO, r * 0.65, Color(Llamas.FUEGO[1], 0.14))
-	# las llamitas del borde: rojas, con el centro amarillo, cada una de un largo que va cambiando
-	for i in 20:
-		var a := i * TAU / 20.0 + tiempo * 0.5
-		var dir := Vector2.from_angle(a)
-		var lado := dir.orthogonal()
-		var base := dir * (r - 3.0)
-		var largo := 8.0 + (0.5 + 0.5 * sin(tiempo * 11.0 + i * 2.3)) * 12.0
-		Formas.poligono(lienzo, PackedVector2Array([base + lado * 7.0, dir * (r + largo), base - lado * 7.0]),
-			Color(Llamas.FUEGO[3], 0.9))
-		Formas.poligono(lienzo, PackedVector2Array([base + lado * 3.0, dir * (r + largo * 0.55), base - lado * 3.0]),
-			Color(Llamas.FUEGO[1], 0.9))
-	Formas.arco(lienzo, Vector2.ZERO, r, 0.0, TAU, 48, Color(Llamas.FUEGO[3], 1.0), 4.0)
-	Formas.arco(lienzo, Vector2.ZERO, r - 5.0, 0.0, TAU, 48, Color(Llamas.FUEGO[1], 0.65), 3.0)
-	Formas.arco(lienzo, Vector2(-14, -14), r * 0.68, PI * 1.05, PI * 1.55, 16, Color(Llamas.FUEGO[0], 0.75), 4.0)   # el brillo
-	if destello > 0.0:
-		if destello_por == Vector2.ZERO:
-			Formas.disco(lienzo, Vector2.ZERO, r, Color(Llamas.FUEGO[0], 0.3 * destello))
-			Formas.arco(lienzo, Vector2.ZERO, r, 0.0, TAU, 48, Color(1, 1, 1, 0.9 * destello), 6.0)
-		else:
-			var a := angulo_burbuja(destello_por)
-			Formas.arco(lienzo, Vector2.ZERO, r, a - 0.55, a + 0.55, 12, Color(Llamas.FUEGO[0], 0.8 * destello), 10.0)
-			Formas.arco(lienzo, Vector2.ZERO, r, a - 0.35, a + 0.35, 8, Color(1, 1, 1, destello), 5.0)
-	lienzo.draw_set_transform(Vector2.ZERO)
 
 
 # Un cono de fuego a cuadraditos hacia "a" (en el suelo, desde sus pies hasta la pared; "puntas", lo largo de cada
