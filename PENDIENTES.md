@@ -16,7 +16,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **F15** A veces los zombis se quedan atascados en una puerta al intentar salir todos a la vez.
 - **F16** Pantalla completa: al pulsar Esc (para la pausa) también se sale de la pantalla completa, y no debería. En la
   web es el propio navegador; mirar si se puede evitar (por ejemplo con el bloqueo de teclado de Chrome).
-- **F19** Apagón: cuando te llama un superviviente no se ve nada.
 
 ## Mejoras
 

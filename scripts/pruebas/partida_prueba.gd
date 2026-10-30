@@ -190,7 +190,8 @@
 #   --flatulento        el alcance de la mutación Flatulento (140): quién se paraliza a 50, 110 y 190 [prueba_varias.gd]
 #   --rescate           el superviviente encerrado en su baño (y su horda), los vecinos de las viviendas, la barricada,
 #                       la escolta y la avería: lo mismo que en la prueba larga          [supervivientes.gd, probar()]
-#   --evento X          ese evento sorpresa: apagon, incendio u horda                        [eventos.gd, probar()]
+#   --evento X          ese evento sorpresa: apagon (con un superviviente pidiendo ayuda a oscuras: fotos
+#                       apagon-socorro-*), incendio u horda                                  [eventos.gd, probar()]
 #   --banco             lo quitado desaparece del guardado; luego el banco, las armas de efecto y Colecciones
 #                                                                                            [prueba_larga.gd]
 #   --trailer           el trailer: Johnny juega solo unas escenas con textos y el título (docs/TRAILER.md) [trailer.gd]

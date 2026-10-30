@@ -4,7 +4,8 @@
 # trastienda de su tienda (el ferretero en el almacén de la ferretería...). Siempre con la puerta
 # cerrada y sin zombis dentro (lo guarda planta.gd, que pone su tienda en su planta: Planta.tienda_fija). Grita "¡Socorro!" y da golpes de
 # vez en cuando para que se sepa dónde está (más flojo desde el pasillo); hay una flecha en el borde de la
-# pantalla y un "!" en el minimapa. Al limpiar el piso se abre la puerta del baño y, al arrimarse, se une al equipo.
+# pantalla (a oscuras, con el apagón, se queda encima de su puerta) y un "!" en el minimapa. Al limpiar el piso se abre
+# la puerta del baño y, al arrimarse, se une al equipo.
 #
 # La horda: al ir a salir del piso con él, la puerta de entrada se cierra de golpe. Él se pone a forzar la
 # cerradura (2 minutos de trabajo) mientras entran zombis por las habitaciones, cada vez más y peores. Si Johnny
@@ -95,6 +96,7 @@ const MAX_EQUIPO := 4
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
 const GRITOS := ["¡Socorro!", "¡Aquí dentro!", "¡Ayuda, por favor!", "¡Que alguien me saque!", "¡Estoy en el baño!"]   # [traducir]
 const CADA := [2.2, 3.4]
+const OSCURO := 0.9   # de esta oscuridad para arriba (Luz.nivel: el apagón y la tienda de electrónica sin corriente; un piso normal, no) su puerta no se ve
 # Lo que dice si le dan con Johnny lejos (en la horda y en la escolta de la farmacéutica)
 const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # [traducir]
 
@@ -374,6 +376,10 @@ func texto_flotante(donde: Vector2, texto: String, color: Color, tamano := 18, v
 	etiqueta.size = Vector2(400, 30)
 	etiqueta.position = donde - Vector2(200, 15)
 	etiqueta.z_index = 50
+	# sin que le afecte la luz: con el apagón, si no, el grito sale casi negro (F19)
+	var sin_luz := CanvasItemMaterial.new()
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	etiqueta.material = sin_luz
 	partida.mapa.cosas.add_child(etiqueta)
 	var tween := etiqueta.create_tween().set_parallel()
 	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 28.0 * vida, vida)
@@ -661,14 +667,16 @@ func dibujar_capa() -> void:
 	barricada.dibujar(capa)
 	if encerrado():
 		var hacia := Vector2.INF
+		var sube := 0.0
 		if partida.aqui == partida.planta.superviviente.sitio and puerta:
 			hacia = puerta.position + Vector2(0, -40)
 		elif partida.aqui == 0:
 			var p := puerta_del_pasillo()
 			if p:
 				hacia = p.position
+				sube = 106.0 if p.salida.dir == "arriba" else 40.0
 		if hacia != Vector2.INF:
-			flecha(hacia, rescate.def.color, tiempo - grito_t < 0.7)
+			flecha(hacia, rescate.def.color, tiempo - grito_t < 0.7, sube)
 	escolta.dibujar(capa)
 	averia.dibujar(capa)
 	if horda.is_empty():
@@ -697,16 +705,21 @@ func dibujar_capa() -> void:
 		capa.draw_string(letra, Vector2(0, 150), str(falta), HORIZONTAL_ALIGNMENT_CENTER, tam.x, grande, Tema.AMARILLO)
 
 
-# La flecha en el borde de la pantalla hacia "hacia" (si no se ve), con un "!" (más grande si "grande")
-func flecha(hacia: Vector2, color: Color, grande: bool) -> void:
+# La flecha en el borde de la pantalla hacia "hacia" (si no se ve), con un "!" (más grande si "grande"). A oscuras (el
+# apagón, F19) la puerta no se distingue aunque esté en pantalla: la flecha no se va, se queda encima de ella, con la
+# punta hacia abajo. "sube": cuánto por encima de "hacia" queda la puerta (sube según entra, para no dar un salto)
+func flecha(hacia: Vector2, color: Color, grande: bool, sube := 0.0) -> void:
 	var tam := capa.size
 	var en := partida.get_viewport().get_canvas_transform() * hacia
 	var borde := Rect2(Vector2.ZERO, tam).grow(-34)
-	if borde.has_point(en):
+	var a_la_vista := borde.has_point(en)
+	if a_la_vista and Luz.nivel < OSCURO:
 		return
 	var punto := en.clamp(borde.position, borde.end)
+	if a_la_vista:
+		punto.y -= sube * clampf(minf(en.x - borde.position.x, borde.end.x - en.x) / 80.0, 0.0, 1.0)
 	var radio := 16.0 if grande else 13.0
-	var dir := (en - punto).normalized()
+	var dir := Vector2.DOWN if a_la_vista else (en - punto).normalized()
 	Formas.poligono(capa, PackedVector2Array([punto + dir * (radio + 10), punto + dir.orthogonal() * 8 + dir * radio * 0.6,
 		punto - dir.orthogonal() * 8 + dir * radio * 0.6]), color)
 	Formas.disco(capa, punto, radio + 2, Tema.LINEA)

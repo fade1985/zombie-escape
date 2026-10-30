@@ -440,6 +440,7 @@ func piso(jefe: bool) -> int:
 func probar_apagon(foto: Callable, esperar: Callable) -> void:
 	var lamparas: Array = partida.mapa.find_children("*", "", true, false).filter(func(n): return n.scene_file_path == LAMPARA)
 	print("Apagón · luces del pasillo: %d, apagadas: %d" % [lamparas.size(), lamparas.filter(func(n): return n.fuerza == 0.0).size()])
+	await probar_socorro(foto, esperar)
 	await partida.montar(piso(false), 0, false)
 	await esperar.call(1.0)
 	print("Apagón · en '%s': oscuridad %.2f (Luz.evento %.2f)" % [partida.planta.sitios[partida.aqui].nombre, Luz.nivel, Luz.evento])
@@ -450,6 +451,50 @@ func probar_apagon(foto: Callable, esperar: Callable) -> void:
 	await partida.montar(piso(true), 0, false)
 	await esperar.call(1.0)
 	print("Apagón · en la sala del jefe: activo %s, oscuridad %.2f (sin evento, como siempre)" % [activo, Luz.nivel])
+
+
+# Un superviviente que pide ayuda en pleno apagón (F19): desde el pasillo, con su puerta en pantalla y fuera de ella, y
+# dentro de su apartamento, cada foto justo después de un grito
+func probar_socorro(foto: Callable, esperar: Callable) -> void:
+	var sup: Supervivientes = partida.supervivientes
+	sup.poner_rescate(Supervivientes.DATOS.medico, partida.planta.num)
+	partida.planta.superviviente.activo = true
+	partida.planta.superviviente.puerta.cerrada = true
+	var gritar := func(nombre: String) -> void:
+		sup.socorro_t = 0.0
+		await esperar.call(0.25)
+		foto.call(nombre)
+	cartel.hide()   # (que el cartel del apagón no tape las fotos)
+	var johnny: Node2D = partida.johnny
+	var p := sup.puerta_del_pasillo()
+	var pasillo: Dictionary = partida.planta.sitios[0]
+	var sentido := signf(pasillo.ancho / 2.0 - p.position.x)   # hacia dónde queda el resto del pasillo
+	print("Apagón · la puerta del que pide ayuda: %s, salida por '%s'" % [p.position, p.salida.dir])
+	johnny.direccion = "e" if sentido > 0.0 else "o"   # de espaldas a la puerta: la linterna no la alumbra
+	johnny.position = Vector2(p.position.x + sentido * 300.0, pasillo.alto / 2.0)
+	johnny.get_node("Camara").reset_smoothing()
+	# un compañero que le llama desde lejos: su bocadillo, en la misma foto
+	var amigo := sup.crear(Supervivientes.DATOS.policia, "equipo")
+	amigo.set_physics_process(false)
+	partida.mapa.cosas.add_child(amigo)
+	amigo.position = johnny.position + Vector2(-sentido * 150.0, 40.0)
+	amigo.decir(Idioma.t(Supervivientes.LLAMADAS[0]))
+	await esperar.call(0.4)
+	await gritar.call("apagon-socorro-cerca")
+	amigo.queue_free()
+	johnny.position.x = pasillo.ancho / 2.0 + sentido * (pasillo.ancho / 2.0 - 120.0)   # en la otra punta
+	johnny.get_node("Camara").reset_smoothing()
+	await esperar.call(0.4)
+	await gritar.call("apagon-socorro-lejos")
+	await partida.montar(partida.planta.superviviente.sitio, 0, false)
+	await esperar.call(0.6)
+	await gritar.call("apagon-socorro-piso")
+	johnny.position = sup.puerta.position + Vector2(0, 150)   # con la puerta del baño en pantalla
+	johnny.get_node("Camara").reset_smoothing()
+	await esperar.call(0.4)
+	await gritar.call("apagon-socorro-bano")
+	await partida.montar(0, 0, false)
+	await esperar.call(0.2)
 
 
 func probar_incendio(foto: Callable, esperar: Callable) -> void:

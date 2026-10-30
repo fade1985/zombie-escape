@@ -153,6 +153,10 @@ func preparar(datos: Dictionary, en_modo: String) -> void:
 	add_child(cuerpo)
 	encima = Node2D.new()
 	encima.z_index = 40
+	# sin que le afecte la luz: con el apagón, si no, su bocadillo sale casi negro (F19)
+	var sin_luz := CanvasItemMaterial.new()
+	sin_luz.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	encima.material = sin_luz
 	encima.draw.connect(dibujar_encima)
 	add_child(encima)
 	hab_t = randf_range(0.4, def.habilidad.cada)
