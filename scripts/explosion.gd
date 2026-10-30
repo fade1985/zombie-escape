@@ -1,6 +1,7 @@
 # Una explosión (la del zombi explosivo y la granada). Al aparecer hace daño a Johnny y a los
 # zombis que pillen dentro del círculo (¡reacciones en cadena!), enseña la bola de fuego y se va.
-# Como en el juego (explode en src/game-ataques.js).
+# Como en el juego (explode en src/game-ataques.js). La de las granadas de Johnny no pasa las paredes ("paredes"); la del
+# zombi explosivo y la de Mezcla explosiva, sí.
 extends Node2D
 
 const EMPUJE := 170.0 * 2.2   # las explosiones lanzan a los zombis más lejos que un golpe
@@ -13,6 +14,7 @@ var origen: Node = null       # quien ha reventado (no se hace daño a sí mismo
 var a_johnny := true          # si le hace daño a Johnny (la de Mezcla explosiva, no: zombi.gd)
 var de := "granada"           # de quién es, para el cartel de derrota (johnny.gd, golpe_de): la del dinamitero lleva
                               # "explosivo"; las demás que le dan a Johnny son de su granada
+var paredes := false          # si la paran las paredes, las puertas cerradas y las barricadas (los muebles, no)
 var tiempo := 0.0
 
 
@@ -21,14 +23,15 @@ func _ready() -> void:
 	Temblor.temblar(14.0)
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	var pilla := false   # si pilla a alguien, el juego se para un instante (Temblor.parar)
-	if a_johnny and johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO:
+	if a_johnny and johnny and johnny.vivo and global_position.distance_to(johnny.global_position) <= radio + johnny.RADIO \
+			and not tapado(johnny.global_position):
 		johnny.recibir_dano(dano, null, de)
 		pilla = true
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if zombi == origen:
 			continue
 		var hacia: Vector2 = zombi.global_position - global_position
-		if hacia.length() <= radio + zombi.radio:
+		if hacia.length() <= radio + zombi.radio and not tapado(zombi.global_position):
 			pilla = true
 			var cuanto := dano if dano_zombis < 0 else dano_zombis
 			if zombi is Minijefe:   # la explosión les da de lleno (el escudo del antidisturbios no la para)
@@ -42,6 +45,12 @@ func _ready() -> void:
 	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)
 	# La bola de fuego de PixelLab, un poco más grande que su dibujo (como en el juego)
 	$Fuego.play("reposo_s")
+
+
+# Si a esta explosión la para una pared de camino a ese sitio
+func tapado(donde: Vector2) -> bool:
+	var mapa := get_tree().get_first_node_in_group("mapa") if paredes else null
+	return mapa != null and not mapa.muro_entre(global_position, donde).is_empty()
 
 
 func _process(delta: float) -> void:

@@ -1773,8 +1773,10 @@ func probar_molotov_carga() -> void:
 # Con "--captura --granada-pared": las granadas chocan con las paredes (F20). En la sala de pruebas, contra su pared de la
 # derecha: la granada, la atraedora y la congeladora explotan de este lado y no le dan al zombi de lejos del otro, y las
 # granaditas de la Épica tampoco pasan. De control, lo mismo en campo abierto y por encima de un mueble: caen en el mismo
-# sitio. Y lanzar de un toque: la granada no apunta a un zombi tras la pared, el molotov sí. Dice también qué le pasa a un
-# zombi pegado a la pared (captura-granada-pared.png: la granada parada de este lado). Cada línea dice lo esperado. Se cierra
+# sitio. Y lanzar de un toque: la granada no apunta a un zombi tras la pared, el molotov sí. La explosión tampoco pasa la
+# pared: junto a ella, ni daña ni congela a los zombis ni daña a Johnny al otro lado, pero sí a la misma distancia a este, y
+# los muebles no la paran; la de otros (sin «paredes») sigue pasándola (captura-granada-pared.png: la granada parada de
+# este lado). Cada línea dice lo esperado. Se cierra
 func probar_granada_pared() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -1814,11 +1816,38 @@ func probar_granada_pared() -> void:
 			clave, libre.x, libre.y, abierto.x - libre.x, 500 - delante.vida])
 		zombis_de_prueba([])
 
-	# la explosión no mira las paredes (explosion.gd solo mide la distancia): si estalla junto a una, alcanza al de detrás
-	var pegado := zombi_quieto(Vector2(pared_der + 16.0, y))
-	var junto: Vector2 = await lanzar_y_esperar("granada", sitio + Vector2(-200, 0), Vector2(pared_izq - 30.0, y))
-	print("Granada que rueda hasta la pared: explota en x %d · al zombi pegado al otro lado le quita %d (más de 0: la explosión la atraviesa, como la del zombi explosivo)" % [
-		junto.x, 500 - pegado.vida])
+	# la explosión estalla a 30 de la pared: a la misma distancia, tras la pared no llega y a este lado sí
+	var junto := Vector2(pared_izq - 30.0, y)
+	var tras_muro := Vector2(pared_der + 16.0, y)
+	var a_este_lado := junto + Vector2(junto.x - tras_muro.x, 0.0)
+	for clave in ["granada", "atraedora", "congeladora"]:
+		var tapado := zombi_quieto(tras_muro)
+		var libre := zombi_quieto(a_este_lado)
+		await explotar_en(clave, junto)
+		print("Explosión de «%s» junto a la pared, a %d de los dos: al zombi tras la pared le quita %d (esperado: 0) y al de este lado %d (esperado: más de 0)" % [
+			clave, junto.distance_to(tras_muro), 500 - tapado.vida, 500 - libre.vida])
+		if clave == "congeladora":
+			print("Congelados: el de tras la pared %.1f s (esperado: 0) y el de este lado %.1f s (esperado: más de 0)" % [tapado.aturdido, libre.aturdido])
+		zombis_de_prueba([])
+	# a Johnny, igual
+	johnny.invencible = false
+	for caso in [[tras_muro, "tras la pared", "0"], [a_este_lado, "a este lado", "más de 0"]]:
+		johnny.global_position = caso[0]
+		johnny.vida = 100
+		johnny.escudo = 0.0
+		johnny.invulnerable = 0.0
+		johnny.esquiva_t = 0.0
+		await explotar_en("granada", junto)
+		print("Johnny %s: pierde %d (esperado: %s)" % [caso[1], 100 - johnny.vida, caso[2]])
+	johnny.invencible = true
+	johnny.vida = johnny.stats.vida_max
+	# la del zombi explosivo sigue pasándola (solo paran las de las granadas)
+	var tras_explosivo := zombi_quieto(tras_muro)
+	var bum: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+	bum.radio = 120.0
+	bum.position = junto
+	johnny.get_parent().add_child(bum)
+	print("Explosión de otro (sin «paredes»), tras la pared: le quita %d (esperado: más de 0)" % (500 - tras_explosivo.vida))
 	zombis_de_prueba([])
 
 	# un mueble en medio: se vuela por encima, así que la granada cae igual que en campo abierto
@@ -1832,6 +1861,10 @@ func probar_granada_pared() -> void:
 	mapa.add_child(mueble)
 	var por_encima: Vector2 = await lanzar_y_esperar("granada", sitio, abierto)
 	print("Por encima de un mueble: explota en (%.2f, %.2f) (esperado: lo mismo que en campo abierto)" % [por_encima.x, por_encima.y])
+	var tras_mueble := zombi_quieto(mueble.position + Vector2(-60, 0))
+	await explotar_en("granada", mueble.position + Vector2(60, 0))
+	print("Explosión con el mueble en medio: al zombi de detrás le quita %d (esperado: más de 0, los muebles no la paran)" % (500 - tras_mueble.vida))
+	zombis_de_prueba([])
 	mueble.queue_free()
 
 	# las granaditas de la Épica (8, para que salgan hacia todos lados)
@@ -1867,6 +1900,21 @@ func zombi_quieto(donde: Vector2) -> Node2D:
 	zombi.vida = 500
 	zombi.set_physics_process(false)
 	return zombi
+
+
+# Para probar_granada_pared: una granada de "tipo" que estalla justo en "donde", sin lanzarla, y se espera a que explote
+func explotar_en(tipo: String, donde: Vector2) -> void:
+	await get_tree().create_timer(0.4).timeout   # (que se pase el parón de la anterior)
+	var g: Node2D = Lanzables.BOMBA.new()
+	g.tipo = tipo
+	g.desde = donde
+	g.hasta = donde
+	g.radio = Lanzables.DATOS[tipo].radio
+	g.dano_zombis = Lanzables.DATOS[tipo].dano
+	johnny.get_parent().add_child(g)
+	g.mecha = 0.1
+	while is_instance_valid(g):
+		await get_tree().physics_frame
 
 
 # Para probar_granada_pared: Johnny lanza desde "sitio" hacia "donde" y se espera a que explote; devuelve dónde ha sido.

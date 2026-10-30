@@ -52,8 +52,8 @@
 #   --tintes            el fuego y el ácido pintados en los enemigos, con luz y a oscuras    [prueba_armas.gd]
 #   --fuego-acido       el fuego se contagia y el ácido come la armadura                     [prueba_armas.gd]
 #   --molotov-carga     cuánto tarda cada fotograma al caer un molotov entre muchos zombis; con --zombis N, cuántos (12) [prueba_armas.gd]
-#   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles): dónde explotan, a quién
-#                       le dan y a quién apunta lanzar de un toque, con la pared en medio y en abierto [prueba_armas.gd]
+#   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles) y su explosión no las
+#                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
 #   --epicas            el truco de la Épica de cada familia: golpe de gracia, balas que atraviesan, estallido y
 #                       racimo                                                             [prueba_armas.gd]

@@ -108,6 +108,7 @@ func explotar() -> void:
 	boom.radio = radio
 	boom.dano = mini(dano_zombis, Lanzables.DANO_JOHNNY)
 	boom.dano_zombis = dano_zombis
+	boom.paredes = true
 	boom.position = position
 	if tipo != "granada":
 		efecto_creada(Lanzables.ARROJADIZAS[tipo])
@@ -141,8 +142,11 @@ func soltar_racimo() -> void:
 func efecto_creada(c: Dictionary) -> void:
 	if c.has("congela"):
 		var congela: float = c.congela + congela_extra
+		var mapa := get_tree().get_first_node_in_group("mapa")
 		for zombi in get_tree().get_nodes_in_group("zombis"):
 			if zombi is Zombi and zombi.global_position.distance_to(global_position) <= radio + zombi.radio:
+				if mapa and not mapa.muro_entre(global_position, zombi.global_position).is_empty():
+					continue   # (como la explosión, no pasa las paredes)
 				zombi.aturdido = maxf(zombi.aturdido, congela)
 				zombi.modulate = Color(0.55, 0.8, 1.0)
 				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(congela - 0.4)
