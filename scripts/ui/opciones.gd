@@ -530,6 +530,8 @@ func nombres(acciones: Array, mando: bool) -> String:
 static func nombre_tecla(c: Key) -> String:
 	if c in TECLAS:
 		return Idioma.t(TECLAS[c])
+	if OS.has_feature("web"):
+		return Controles.letra_web(c)
 	# La letra que hay en esa posición del teclado del jugador (en un teclado francés, la A está donde la Q)
 	return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical(c))
 

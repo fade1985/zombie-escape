@@ -24,8 +24,20 @@ static func tecla_de(accion: String) -> String:
 	return "-"
 
 
+# La letra que hay en esa posición del teclado del jugador, en la web: ahí Godot no lo sabe y se le pide al
+# navegador (en aplicar). Chrome y Edge lo dicen; Firefox y Safari no, y sale la letra de un teclado normal
+static func letra_web(c: Key) -> String:
+	var letra := OS.get_keycode_string(c)
+	if c < KEY_A or c > KEY_Z:
+		return letra
+	var suya := str(JavaScriptBridge.eval("window.teclado_jugador?.get('Key%s') ?? ''" % letra, true))
+	return suya.to_upper() if suya != "" else letra
+
+
 # Al arrancar (menú principal y partida): pone los controles guardados encima de los de serie
 static func aplicar() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("navigator.keyboard?.getLayoutMap().then(m => window.teclado_jugador = m).catch(() => {})", true)
 	var teclas: Dictionary = Guardado.cargar().ajustes.teclas
 	for accion in teclas:
 		if not InputMap.has_action(accion):
