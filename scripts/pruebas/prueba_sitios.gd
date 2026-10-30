@@ -253,6 +253,214 @@ func probar_zombis_sala() -> void:
 	get_tree().quit()
 
 
+# ── Volver a un sitio ──
+
+# Cómo está el sitio ahora: cada zombi vivo (dónde, con cuánta vida y si duerme), los cuerpos, lo que hay por el suelo,
+# la sangre y cuántos nodos tiene (si al volver se pusiera algo dos veces, aquí se notaría)
+func foto_sitio() -> Dictionary:
+	var vivos := {}
+	for z in get_tree().get_nodes_in_group("zombis"):
+		vivos[z.get_instance_id()] = [z.position, z.vida, z.get("dormido")]
+	var cosas: Array = mapa.cosas.get_children().filter(func(n): return n != johnny and not n in supervivientes.equipo)
+	var sangre := 0
+	for n in cosas:
+		if n is Mancha:
+			sangre += n.celdas.size()
+	return {"vivos": vivos, "cuerpos": cosas.filter(func(n): return n.get("estado") == "muerto").size(),
+		"suelo": cosas.filter(func(n): return n.get_script() == BILLETE).size(), "sangre": sangre,
+		"nodos": cosas.size() + mapa.get_child_count()}
+
+
+# Va al sitio "fuera", espera un poco, vuelve y dice si lo que había sigue igual
+func ida_y_vuelta(que: String, fuera: int) -> void:
+	var idx := aqui
+	var el_mapa := mapa
+	var antes := foto_sitio()
+	await montar(fuera, 0, false)
+	var parado: bool = mapas.get(idx) == el_mapa and not el_mapa.is_inside_tree()
+	var minimapa: int = $Pantalla/Minimapa.zombis_en(idx)
+	await get_tree().create_timer(0.4).timeout
+	await montar(idx, 0, false)
+	var ahora := foto_sitio()
+	var distinto: Array = antes.keys().filter(func(k): return antes[k] != ahora[k])
+	print("Volver · %s: el mismo mapa %s, parado fuera %s, en el minimapa %d · %d vivos, %d cuerpos, %d por el suelo, %d de sangre, %d nodos · distinto: %s (esperado: true, true, nada)" % [
+		que, is_same(mapa, el_mapa), parado, minimapa, ahora.vivos.size(), ahora.cuerpos, ahora.suelo, ahora.sangre, ahora.nodos, distinto])
+
+
+# Cuántos nodos hay, en la escena y fuera de ella, y la memoria
+func nodos_ahora() -> String:
+	return "%d nodos (%d fuera de la escena), %.0f MB" % [Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
+		Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT), Performance.get_monitor(Performance.MEMORY_STATIC) / 1000000.0]
+
+
+# Con "--captura --volver": salir de un sitio y volver lo deja como estaba (mapas de partida.gd). Un piso a medias, el
+# mismo ya limpio cruzando la puerta de verdad, el pasillo, la sala del jefe, la joyería (con --edificio centro --joyeria),
+# el superviviente, el incendio, la horda y la sala de pruebas; y lo que ocupa una planta entera y lo que se tarda en
+# entrar. Fotos: captura-volver-antes.png y captura-volver-despues.png. Luego se cierra
+func probar_volver() -> void:
+	johnny.vida = 9999   # (que nadie lo tumbe a media prueba)
+	var piso := eventos.piso(false)
+	var sitio: Dictionary = planta.sitios[piso]
+	await montar(piso, 0, false)
+	await get_tree().create_timer(0.3).timeout
+	var zombis := get_tree().get_nodes_in_group("zombis")
+	for i in zombis.size():
+		if i % 2 == 0:
+			zombis[i].recibir_golpe(999999, Vector2(200, 0))
+	zombis[1].dormido = false   # este va a por Johnny
+	soltar_billetes(2, zombis[0].position)
+	soltar_objeto("vendas", zombis[0].position + Vector2(30, 0))
+	await get_tree().create_timer(1.8).timeout
+	await foto_entera(sitio, "captura-volver-antes.png")
+	zombis[1].destellar()   # (sale a medio destello: al volver acaba, no se queda blanco)
+	await ida_y_vuelta("Piso a medias", 0)
+	await get_tree().create_timer(0.3).timeout
+	print("Volver · el que estaba a medio destello: %.2f (esperado: 0.00)" % zombis[1].sprite.material.get_shader_parameter("destello"))
+	await foto_entera(sitio, "captura-volver-despues.png")
+	# la puerta se sigue cerrando al alejarse, y se abre al acabar con todos; luego, por la puerta de verdad, con fundido
+	johnny.position = sitio.zombis[0].pos
+	await get_tree().create_timer(0.1).timeout
+	var se_cierra := cerrada
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.recibir_golpe(999999, Vector2.ZERO)
+	await get_tree().create_timer(0.3).timeout
+	print("Volver · puerta: se cierra al alejarse %s, piso limpio %s, abierta otra vez %s (esperado: true, true, true)" % [
+		se_cierra, sitio.limpio, not cerrada])
+	johnny.position = mapa.puertas[0].llegada()
+	await get_tree().create_timer(1.8).timeout
+	var antes := foto_sitio()
+	await cruzar(0)
+	var fuera := aqui
+	await cruzar(sitio.salidas[0].vuelta)
+	var ahora := foto_sitio()
+	print("Volver · piso limpio, por la puerta: pasó por el sitio %d y volvió al %d · %d vivos, %d cuerpos (antes %d), %d por el suelo (antes %d), %d de sangre (antes %d) (esperado: 0 y %d, 0 vivos, lo demás igual)" % [
+		fuera, aqui, ahora.vivos.size(), ahora.cuerpos, antes.cuerpos, ahora.suelo, antes.suelo, ahora.sangre, antes.sangre, piso])
+	# el pasillo: uno vivo y uno muerto (en el centro comercial, también el guardia: no puede salir otro)
+	await montar(0, 0, false)
+	var vivo := meter_zombi("normal", mapa.punto_libre(johnny.position, 500.0))
+	var muerto := meter_zombi("normal", mapa.punto_libre(johnny.position, 500.0))
+	await get_tree().physics_frame
+	muerto.recibir_golpe(999999, Vector2.ZERO)
+	await get_tree().create_timer(1.8).timeout
+	await ida_y_vuelta("Pasillo", piso)
+	vivo.queue_free()
+	# el jefe, herido: el mismo, con su barra, y no sale otro ni se presenta otra vez
+	var sala := -1
+	for i in planta.sitios.size():
+		if planta.sitios[i].tipo == "jefe":
+			sala = i
+	await montar(sala, 0, false)
+	await get_tree().create_timer(0.3).timeout   # (jugando no se puede salir nada más aparecer: la presentación lo para)
+	var jefe := jefa
+	jefe.vida = int(jefe.vida * 0.6)
+	await ida_y_vuelta("Jefe herido", 0)
+	var barra: bool = $Pantalla/Jefa.visible
+	await get_tree().create_timer(JEFE_TARDA + 0.2).timeout
+	print("Volver · jefe: el mismo %s, vida %d de %d, barra a la vista %s, ya había salido %s, zombis en la sala %d (esperado: true, 60 %%, true, true, 1)" % [
+		is_same(jefa, jefe), jefe.vida, jefe.vida_max, barra, jefa_salio, get_tree().get_nodes_in_group("zombis").size()])
+	await probar_volver_joyeria()
+	await probar_volver_superviviente()
+	# la sala de mantenimiento, con un arma en el suelo (la que cae al comprar otra), y las viviendas: un vecino, no dos
+	await montar(planta.mantenimiento, 0, false)
+	soltar_arma("bate", johnny.position + Vector2(0, 120))
+	await get_tree().process_frame
+	await ida_y_vuelta("Sala de mantenimiento", 0)
+	var vecino: String = Supervivientes.DATOS.keys().filter(func(id): return not supervivientes.equipo.any(func(a): return a.def.id == id))[0]
+	Guardado.cambiar(func(g): g.rescatados = [vecino])
+	await montar(planta.viviendas, 0, false)
+	await ida_y_vuelta("Viviendas", planta.mantenimiento)
+	print("Volver · viviendas: %d vecinos, en el mapa %d (esperado: 1, 1)" % [supervivientes.vecinos.size(),
+		mapa.cosas.get_children().filter(func(n): return n is Aliado and n.modo == "vecino").size()])
+	await probar_volver_eventos()
+	# la sala de pruebas siempre empieza de cero, y F9 vuelve al mismo mapa
+	await montar(0, 0, false)
+	var pasillo := mapa
+	await pruebas()
+	var guardada := mapas.has(planta.armas)
+	await pruebas()
+	print("Volver · sala de pruebas: se guarda %s, de vuelta en el mismo mapa %s (esperado: false, true)" % [guardada, is_same(mapa, pasillo)])
+	await probar_volver_planta()
+	get_tree().quit()
+
+
+func probar_volver_joyeria() -> void:
+	var d: Dictionary = joyeria.datos()
+	if d.is_empty():
+		return
+	await montar(d.sitio, 0, false)
+	d.dorada = "guardia"
+	joyeria.soltar_dorada(mapa.punto_libre(johnny.position, 200.0))
+	await get_tree().process_frame
+	await ida_y_vuelta("Joyería, cerrada y con la tarjeta dorada en el suelo", 0)
+	joyeria.abrir("prueba")
+	await get_tree().create_timer(0.6).timeout
+	await ida_y_vuelta("Joyería, abierta y con su vitrina", 0)
+
+
+# El encerrado y su puerta: cerrada (se quitan y se vuelven a poner) y abierta (la puerta se queda en el mapa). Solo en
+# los Apartamentos: en el centro comercial cada uno tiene su rescate y sus pruebas (--rescate)
+func probar_volver_superviviente() -> void:
+	if edificio != "apartamentos":
+		return
+	await supervivientes.probar_aqui(false)
+	var zombi := meter_zombi("normal", mapa.punto_libre(johnny.position, 400.0))
+	await get_tree().process_frame
+	await ida_y_vuelta("Superviviente, puerta cerrada", 0)
+	print("Volver · superviviente: uno encerrado %s, puerta %s (esperado: true, true)" % [
+		is_instance_valid(supervivientes.npc), is_instance_valid(supervivientes.puerta)])
+	zombi.recibir_golpe(999999, Vector2.ZERO)
+	await get_tree().create_timer(1.8).timeout
+	await ida_y_vuelta("Superviviente, puerta abierta", 0)
+
+
+# El incendio no moja dos veces y la horda sigue donde estaba, sin volver a salir por los extremos
+func probar_volver_eventos() -> void:
+	eventos.forzado = "incendio"
+	nueva_planta(2)
+	await montar(0, 0, false)
+	await montar(eventos.piso(false), 0, false)
+	await get_tree().create_timer(0.2).timeout
+	await ida_y_vuelta("Incendio", 0)
+	eventos.forzado = "horda"
+	nueva_planta(2)
+	await montar(0, 0, false)
+	johnny.position.x = planta.sitios[0].ancho / 2.0
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	eventos.horda.t = 0.0
+	await get_tree().create_timer(1.0).timeout
+	await ida_y_vuelta("Horda", eventos.piso(false))
+	print("Volver · horda: esperando a salir otra vez %d (esperado: 0)" % eventos.horda.quedan.size())
+	eventos.forzado = ""
+
+
+# Una planta entera guardada: lo que ocupa, lo que se tarda en entrar la primera vez y al volver, y que al subir se va todo
+func probar_volver_planta() -> void:
+	nueva_planta(3)
+	await montar(0, 0, false)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Volver · planta recién llegada: %s" % nodos_ahora())
+	var pisos: Array = range(1, planta.sitios.size()).filter(func(i): return planta.sitios[i].tipo == "apartamento")
+	var t := Time.get_ticks_usec()
+	for i in pisos:
+		await montar(i, 0, false)
+	var hacer := (Time.get_ticks_usec() - t) / 1000.0 / pisos.size()
+	await montar(0, 0, false)
+	t = Time.get_ticks_usec()
+	for i in pisos:
+		await montar(i, 0, false)
+	var sacar := (Time.get_ticks_usec() - t) / 1000.0 / pisos.size()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Volver · %d pisos guardados: %s · entrar la primera vez %.1f ms, al volver %.1f ms" % [pisos.size(), nodos_ahora(), hacer, sacar])
+	nueva_planta(4)
+	await montar(0, 0, false)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Volver · al subir de planta: %s, mapas guardados %d (esperado: como recién llegada, 1)" % [nodos_ahora(), mapas.size()])
+
+
 # Una foto del sitio montado entero: todo descubierto, sin penumbra y con la cámara alejada para que quepa
 func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	for s in sitio.apt.salas:

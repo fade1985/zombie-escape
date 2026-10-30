@@ -132,7 +132,14 @@ en una línea.
 
 **Partida y progreso**
 - `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o tarjeta y su guardia, jefes, escaleras,
-  ascensor, dinero, soltar objetos y munición, pausa, fin). La llave de los Apartamentos no está en el suelo: la lleva
+  ascensor, dinero, soltar objetos y munición, pausa, fin). Salir de un sitio no lo reinicia: `montar` hace su mapa solo
+  la primera vez (`hacer_mapa`) y al salir lo guarda entero en `mapas`, fuera de la escena, donde nada se mueve; al
+  volver lo saca tal cual (`sacar_mapa`; lo que no hay que repetir va con `nuevo`, y `supervivientes.recoger` y
+  `joyeria.recoger` quitan lo que ellos vuelven a poner). Lo que esté fuera del mapa y apunte a algo de dentro tiene que
+  soltarlo al salir (la caza de los aliados) o mirar `is_inside_tree()` (las gotas de `particulas.gd`), porque los
+  zombis guardados siguen existiendo. Al dejar la planta se tiran (`tirar_mapas`). En la partida de prueba no se guardan
+  (`guarda_mapas`), salvo con `--volver`: las demás pruebas cambian la ficha de un sitio y cuentan con que se rehaga. La
+  sala de pruebas y la exposición empiezan siempre de cero. La llave de los Apartamentos no está en el suelo: la lleva
   un zombi al azar de los apartamentos normales (`planta.gd` lo elige con `llave: true`; `zombi_de_la_llave`) y la
   suelta al caer. Y la entrada a la sala de pruebas (`pruebas`,
   `sitio_pruebas`, `en_pruebas`: allí los zombis no cuentan ni sueltan nada). Avisa a la prueba en

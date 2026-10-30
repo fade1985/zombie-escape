@@ -126,7 +126,7 @@ func destellar() -> void:
 	t.tween_property(sprite.material, "shader_parameter/destello", 0.0, 0.1)
 
 
-# Dónde dejar las manchas: en el mismo sitio que el zombi (se borran al salir de la sala)
+# Dónde dejar las manchas: en el mismo sitio que el zombi
 func suelo() -> Node:
 	return get_parent()
 

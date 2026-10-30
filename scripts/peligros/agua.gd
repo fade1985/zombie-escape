@@ -85,7 +85,7 @@ func montar(d: Dictionary, m: Node) -> void:
 	encender(d.corriente, false)
 
 
-func _ready() -> void:
+func _enter_tree() -> void:   # (también al volver a un mapa guardado)
 	Luz.extra = Peligros.AGUA.oscuro_con if datos.corriente else Peligros.AGUA.oscuro_sin
 
 

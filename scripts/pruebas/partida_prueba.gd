@@ -98,6 +98,9 @@
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
+#   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
+#                       el superviviente, los eventos, la sala de pruebas y lo que ocupa una planta entera; con
+#                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
@@ -174,6 +177,9 @@ func empezar_prueba() -> void:
 	var args := OS.get_cmdline_user_args()
 	if "--trailer" in args:
 		grabar_trailer()
+	elif "--volver" in args:
+		set_process(false)   # sin la prueba larga
+		probar_volver()
 	elif "--fotos-tiendas" in args:
 		fotos_tiendas()
 	elif "--fotos-luz" in args:

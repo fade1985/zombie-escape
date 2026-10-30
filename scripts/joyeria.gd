@@ -77,7 +77,7 @@ func alarma() -> bool:
 
 # Al montar un sitio: en la joyería, la puerta blindada (si sigue cerrada) y, si la tarjeta dorada se quedó en el
 # suelo de este sitio, la tarjeta
-func al_montar(idx: int, _sitio: Dictionary) -> void:
+func al_montar(idx: int, _sitio: Dictionary, nuevo: bool) -> void:
 	var d := datos()
 	if d.is_empty():
 		return
@@ -88,14 +88,19 @@ func al_montar(idx: int, _sitio: Dictionary) -> void:
 		puerta.montar(d.puerta)
 		partida.mapa.cosas.add_child(puerta)
 		partida.mapa.rehornear()   # que los zombis no cuenten con pasar por ahí
+	if not nuevo:
+		return   # (la vitrina y la tarjeta del suelo ya están en el mapa guardado)
 	if idx == d.sitio and d.abierta and d.has("premio") and not d.premio.cogido:
 		poner_premio()   # la vitrina sigue dentro hasta que se coja
 	if d.dorada == "suelo" and d.suelo.sitio == idx:
 		partida.mapa.poner_llave(d.suelo.pos, true, true)
 
 
-# Antes de cambiar de sitio: la puerta se va con el mapa (la cuenta atrás, si sigue, espera a que Johnny vuelva)
+# Antes de cambiar de sitio: la puerta se queda en el mapa si ya está abierta y, si no, se quita, porque la vuelve a
+# poner al_montar (la cuenta atrás, si sigue, espera a que Johnny vuelva)
 func recoger() -> void:
+	if is_instance_valid(puerta) and puerta.abierta == 0.0 and not puerta.abriendo:
+		puerta.queue_free()
 	puerta = null
 
 

@@ -1,6 +1,7 @@
 # La partida: genera la planta (planta.gd), monta el sitio en el que está Johnny (mapa.gd) y, al cruzar una
-# puerta, funde a negro y monta el del otro lado. Lleva también la pantalla (vida, arma, avisos) y las reglas
-# del mapa:
+# puerta, funde a negro y monta el del otro lado. Lo que se deja atrás no se tira: su mapa se guarda entero, con los
+# zombis, los cuerpos, la sangre y lo que haya por el suelo, y al volver sigue todo como estaba (mapas). Lleva también
+# la pantalla (vida, arma, avisos) y las reglas del mapa:
 #   - Al entrar en un apartamento la puerta se cierra, y no se abre hasta que no queda ni un zombi.
 #   - El apartamento de la jefa está cerrado con llave; la lleva un zombi al azar de los otros apartamentos y la suelta
 #     al caer (zombi_de_la_llave).
@@ -95,6 +96,10 @@ const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la 
 var planta: Dictionary
 var aqui := 0              # el sitio de la planta en el que está Johnny
 var mapa: Node2D
+# Los mapas de los sitios de esta planta en los que ya se ha entrado (sitio -> mapa). El que no está en uso se queda
+# fuera de la escena: ahí no se mueve nada hasta que Johnny vuelve. Al dejar la planta se tiran (tirar_mapas)
+var mapas := {}
+var guarda_mapas := true   # si se guardan (la partida de prueba hace uno nuevo cada vez, salvo en la suya: --volver)
 var cambiando := false     # durante el fundido no se puede cruzar otra puerta
 var latido := 0.0         # cuenta atrás hasta el siguiente latido (con poca vida)
 var cerrada := false       # si la puerta del apartamento en el que está se ha cerrado
@@ -219,6 +224,7 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(reencuadrar)
 
 	guarda_partida = not captura
+	guarda_mapas = not captura
 	if captura:
 		preparar_prueba()   # el guardado de prueba, la alerta y el evento que se piden
 	# «Continuar partida» del menú: la partida a medias, al principio de la planta en la que iba (partida_guardada.gd)
@@ -313,6 +319,7 @@ func continuar_partida(foto: Dictionary) -> void:
 func _exit_tree() -> void:
 	if semilla_propia:
 		Planta.semilla = 0   # (la siguiente partida, o «Otra vez», sortea la suya)
+	tirar_mapas()
 
 
 # Lo que hace la partida de prueba al empezar (pruebas/partida_prueba.gd). En la partida de verdad, nada
@@ -330,6 +337,7 @@ func empezar_prueba() -> void:
 
 func nueva_planta(num: int) -> void:
 	guardar_guardia()   # el guardia es de la planta que se deja: se apunta antes de cambiarla (la azotea ni tiene)
+	tirar_mapas()
 	planta = Planta.generar(num, edificio, jefe_de(num))
 	if planta.mantenimiento >= 0:
 		sala_mantenimiento = planta.sitios[planta.mantenimiento]
@@ -420,13 +428,14 @@ func puerta_de_llegada() -> int:
 	return i if planta.sitios[0].salidas[i].tipo == "llegada" else puerta_de_tipo("escaleras")
 
 
-# Monta el sitio "idx" y pone a Johnny delante de su salida "por"
+# Monta el sitio "idx" y pone a Johnny delante de su salida "por". La primera vez se hace su mapa; al volver, se saca
+# el que se guardó al salir, con todo como estaba (lo que no hay que repetir va con "nuevo")
 func montar(idx: int, por: int, fundir := true) -> void:
 	cambiando = true
 	if fundir:
 		# (el fundido no se frena en los parones de los golpes, Temblor.parar)
 		await create_tween().set_ignore_time_scale().tween_property(negro, "modulate:a", 1.0, FUNDIDO).finished
-	# Johnny pasa de un mapa a otro; el viejo se quita del todo antes de montar el nuevo (si no, su
+	# Johnny pasa de un mapa a otro; el viejo se quita de la escena antes de poner el nuevo (si no, su
 	# navegación y sus muros se mezclarían con los del nuevo). Y con él, los de su equipo
 	supervivientes.recoger()
 	eventos.recoger()
@@ -434,8 +443,7 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	guia.recoger()
 	johnny.get_parent().remove_child(johnny)
 	if mapa:
-		remove_child(mapa)
-		mapa.queue_free()
+		dejar_mapa()
 	guardar_guardia()
 	jefa = null
 	jefa_salio = false
@@ -443,58 +451,38 @@ func montar(idx: int, por: int, fundir := true) -> void:
 	aqui = idx
 	var sitio: Dictionary = planta.sitios[idx]
 	sitio.visitado = true
-	mapa = MAPA.new()
-	mapa.name = "Mapa"
-	var llave := Vector2.INF
-	if planta.llave.sitio == idx and not planta.tiene_llave and not planta.get("llave_usada", false):
-		llave = planta.llave.pos
-	# primero en la escena (para hornear su navegación hace falta que esté dentro) y por debajo de la pantalla
-	add_child(mapa)
-	move_child(mapa, 0)
-	mapa.montar(sitio, llave, ed.cerrojo == "tarjeta")
-	mapa.llave_cogida.connect(_al_coger_llave)
-	mapa.dorada_cogida.connect(joyeria.coger_dorada)
-	if mapa.ordenador:
-		mapa.ordenador.usar.connect(abrir_ordenador)
-		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
-		mapa.taquilla.usar.connect(abrir_taquilla)
-		# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
-		if fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
-			avisar_noticias()
-	if mapa.baul:   # (el de la sala de mantenimiento o el de pruebas)
-		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
-	for armarito in mapa.armaritos:
-		armarito.johnny = johnny
-		armarito.usar.connect(abrir_armarito.bind(armarito))
-		if Reto.sin_curas():   # el reto del día "Sin curas": todos vacíos
-			armarito.vaciar()
-	poner_cientifico(idx)
-	for puerta in mapa.puertas:
-		puerta.empujada.connect(cruzar)
+	var nuevo: bool = not mapas.has(idx)
+	if nuevo:
+		hacer_mapa(idx, sitio)
+	else:
+		sacar_mapa(idx)
+	# al volver a la sala de mantenimiento (al empezar ya avisa _ready)
+	if mapa.ordenador and fundir and not captura and not Historia.noticias_nuevas(Guardado.cargar()).is_empty():
+		avisar_noticias()
 	mapa.cosas.add_child(johnny)
 	johnny.position = mapa.puertas[por].llegada()
 	johnny.velocity = Vector2.ZERO
 	# En la sala de un jefe que aún no ha caído, Johnny no se mueve desde que entra hasta que acaba la presentación del
-	# jefe (ni en el fundido ni en lo que tarda en salir; luego le para la presentación)
-	var presentara: bool = sitio.tipo == "jefe" and not sitio.limpio and (not captura or presentar_en_prueba)
+	# jefe (ni en el fundido ni en lo que tarda en salir; luego le para la presentación). Si ya había salido, no se repite
+	var presentara: bool = sitio.tipo == "jefe" and not sitio.limpio and not jefa_salio and (not captura or presentar_en_prueba)
 	if presentara:
 		johnny.set_physics_process(false)
 		johnny.quedarse_quieto()
 	supervivientes.al_montar(idx, sitio)
-	joyeria.al_montar(idx, sitio)   # la puerta blindada de la cámara acorazada, y la tarjeta dorada si está en el suelo
+	joyeria.al_montar(idx, sitio, nuevo)   # la puerta blindada de la cámara acorazada, y la tarjeta dorada si está en el suelo
 	encuadrar(sitio)
 	johnny.get_node("Camara").reset_smoothing()
-	eventos.al_montar(idx, sitio)   # (antes de la luz: el apagón la cambia)
+	eventos.al_montar(idx, sitio, nuevo)   # (antes de la luz: el apagón la cambia)
 	luz.poner_sitio(sitio.tipo)
 
-	# Los zombis que esperan dentro, dormidos (si el piso aún no se ha limpiado)
-	for z in [] if sitio.limpio else sitio.zombis:
+	# Los zombis que esperan dentro, dormidos (la primera vez y si el piso aún no se ha limpiado)
+	for z in [] if sitio.limpio or not nuevo else sitio.zombis:
 		var zombi := meter_zombi(z.tipo, z.pos)
 		zombi.dormido = true
 		zombi.zona = mapa.zona_en(z.pos)
 		if z.get("llave", false):
 			zombi_de_la_llave(zombi, z)
-	if sitio.tipo == "pasillo" and planta.get("guardia", {}).get("vivo", false):
+	if nuevo and sitio.tipo == "pasillo" and planta.get("guardia", {}).get("vivo", false):
 		poner_guardia()
 	cerrada = false
 	actualizar_puertas()
@@ -506,8 +494,8 @@ func montar(idx: int, por: int, fundir := true) -> void:
 		await create_tween().set_ignore_time_scale().tween_property(negro, "modulate:a", 0.0, FUNDIDO).finished
 	cambiando = false
 	Sonido.musica("jefe" if sitio.tipo == "jefe" and not sitio.limpio else "menu")   # la de los menús también suena al explorar
-	# En el apartamento de la jefa, aparece ella (si aún no ha caído)
-	if sitio.tipo == "jefe" and not sitio.limpio:
+	# En el apartamento de la jefa, aparece ella (si aún no ha caído ni está ya ahí)
+	if sitio.tipo == "jefe" and not sitio.limpio and not jefa_salio:
 		await get_tree().create_timer(JEFE_TARDA).timeout
 		# se le suelta justo antes de la presentación, que lo vuelve a parar en el acto (sin un fotograma de por medio)
 		# y lo suelta al acabar
@@ -529,6 +517,80 @@ func montar(idx: int, por: int, fundir := true) -> void:
 				guia.jefe_presentado()
 			if sitio.has("helipuerto") and aqui == idx and not mapa.valla.cerrada:
 				decir(Idioma.t("Te espera arriba, en el helipuerto: sube por la rampa"), 3.0)
+
+
+# Johnny sale del mapa: se quita de la escena y, si no se guarda, se tira. Se apunta lo que hará falta al volver
+func dejar_mapa() -> void:
+	mapa.quedan = get_tree().get_nodes_in_group("zombis").size()
+	mapa.jefe = jefa if is_instance_valid(jefa) else null
+	mapa.jefe_salio = jefa_salio
+	remove_child(mapa)
+	if not se_guarda():
+		mapa.queue_free()
+
+
+# Si el mapa de ahora se guarda al salir: no el de la planta que se deja (nueva_planta ya ha vaciado "mapas"), ni la
+# sala de pruebas ni la exposición (hacer_mapa)
+func se_guarda() -> bool:
+	return mapas.get(aqui) == mapa
+
+
+# La primera vez que se entra en un sitio: se hace su mapa
+func hacer_mapa(idx: int, sitio: Dictionary) -> void:
+	mapa = MAPA.new()
+	mapa.name = "Mapa"
+	if guarda_mapas and sitio.tipo not in ["armas", "expo"]:
+		mapas[idx] = mapa
+	var llave := Vector2.INF
+	if planta.llave.sitio == idx and not planta.tiene_llave and not planta.get("llave_usada", false):
+		llave = planta.llave.pos
+	# primero en la escena (para hornear su navegación hace falta que esté dentro) y por debajo de la pantalla
+	add_child(mapa)
+	move_child(mapa, 0)
+	mapa.montar(sitio, llave, ed.cerrojo == "tarjeta")
+	mapa.llave_cogida.connect(_al_coger_llave)
+	mapa.dorada_cogida.connect(joyeria.coger_dorada)
+	if mapa.ordenador:
+		mapa.ordenador.usar.connect(abrir_ordenador)
+		mapa.banco.usar.connect(abrir_cosas.bind("banco"))
+		mapa.taquilla.usar.connect(abrir_taquilla)
+	if mapa.baul:   # (el de la sala de mantenimiento o el de pruebas)
+		mapa.baul.usar.connect(abrir_cosas.bind("baul"))
+	for armarito in mapa.armaritos:
+		armarito.johnny = johnny
+		armarito.usar.connect(abrir_armarito.bind(armarito))
+		if Reto.sin_curas():   # el reto del día "Sin curas": todos vacíos
+			armarito.vaciar()
+	poner_cientifico(idx)
+	for puerta in mapa.puertas:
+		puerta.empujada.connect(cruzar)
+
+
+# Se vuelve a un sitio: su mapa guardado, otra vez a la escena, y el jefe, si se quedó dentro (con su barra de vida)
+func sacar_mapa(idx: int) -> void:
+	mapa = mapas[idx]
+	add_child(mapa)
+	move_child(mapa, 0)
+	mapa.al_entrar()
+	jefa = mapa.jefe if is_instance_valid(mapa.jefe) else null
+	jefa_salio = mapa.jefe_salio
+	$Pantalla/Jefa.visible = jefa != null and jefa.estado != "muerto"
+
+
+# Se deja la planta o la partida: los mapas guardados, a la basura. Están fuera de la escena, así que no se irían solos
+# (el de ahora se va con montar o con la escena)
+func tirar_mapas() -> void:
+	for m in mapas.values():
+		if m != mapa:
+			m.free()
+	mapas = {}
+
+
+# El panel de pruebas: ese sitio se hace de nuevo la próxima vez que se entre
+func olvidar_mapa(idx: int) -> void:
+	if mapas.has(idx) and mapas[idx] != mapa:
+		mapas[idx].free()
+	mapas.erase(idx)
 
 
 # Si cambia lo que se ve (F11, agrandar la ventana del navegador), la cámara se vuelve a encuadrar en el mismo sitio

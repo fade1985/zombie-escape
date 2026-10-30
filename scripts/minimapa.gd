@@ -212,10 +212,13 @@ func punto(p: Vector2) -> void:
 	draw_rect(Rect2(p, Vector2(2, 2)), BRILLO)
 
 
-# Los zombis que quedan en el sitio "i" (donde no está Johnny: los que esperan dentro, si no está limpio)
+# Los zombis que quedan en el sitio "i" (donde no está Johnny: los que esperan dentro, si no está limpio; si ya se ha
+# entrado, los que se quedaron vivos al salir)
 func zombis_en(i: int) -> int:
 	var sitio: Dictionary = partida.planta.sitios[i]
-	return 0 if sitio.get("limpio", false) else sitio.get("zombis", []).size()
+	if sitio.get("limpio", false):
+		return 0
+	return partida.mapas[i].quedan if partida.mapas.has(i) else sitio.get("zombis", []).size()
 
 
 func vivos() -> Array:

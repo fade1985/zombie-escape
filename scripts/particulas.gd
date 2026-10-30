@@ -100,7 +100,7 @@ func volando(q: Dictionary, delta: float) -> void:
 		q.v *= 0.45
 		return
 	q.t = 0.0
-	if is_instance_valid(q.suelo) and q.marca.a > 0.0:
+	if is_instance_valid(q.suelo) and q.suelo.is_inside_tree() and q.marca.a > 0.0:   # (si no, Johnny ya ha salido de ese sitio)
 		Mancha.gota(q.suelo, q.p, q.marca, q.marca_tam, q.mancha, 150 if q.mancha == "Casquillos" else 700)
 
 

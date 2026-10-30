@@ -251,11 +251,21 @@ func crear(datos: Dictionary, modo: String) -> Aliado:
 	return a
 
 
-# Antes de cambiar de sitio: los del equipo se sacan del mapa viejo (como Johnny) para no perderse con él
+# Antes de cambiar de sitio: los del equipo se sacan del mapa viejo (como Johnny) para no perderse con él, y olvidan a
+# los zombis de aquí. El encerrado, su puerta si sigue cerrada y los vecinos se quitan: los vuelve a poner al_montar
 func recoger() -> void:
 	for a in equipo:
+		a.presa = null
+		a.cazando = false
+		a.accion_zombi = null
 		if a.get_parent():
 			a.get_parent().remove_child(a)
+	if is_instance_valid(npc):
+		npc.queue_free()
+	if is_instance_valid(puerta) and puerta.abierta == 0.0 and not puerta.abriendo:
+		puerta.queue_free()
+	for v in vecinos:
+		v.queue_free()
 	npc = null
 	puerta = null
 	vecinos = []
@@ -739,6 +749,7 @@ func probar_aqui(fundir := true, quien := "") -> void:
 	var sitio: Dictionary = partida.planta.sitios[sup.sitio]
 	sitio.zombis = []
 	sitio.limpio = false
+	partida.olvidar_mapa(sup.sitio)
 	await partida.montar(sup.sitio, 0, fundir)
 
 

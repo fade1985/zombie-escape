@@ -144,6 +144,10 @@ var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro,
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
 var valla: Node2D = null          # la valla de la rampa del helipuerto (solo en la azotea; valla.gd)
+# Lo que la partida apunta al salir de un mapa guardado (partida.gd, dejar_mapa)
+var quedan := 0                   # los zombis vivos que se quedan dentro (para el minimapa)
+var jefe: Node2D = null           # el jefe, si se ha salido con él dentro
+var jefe_salio := false           # y si ya había aparecido
 
 
 func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
@@ -278,13 +282,17 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		add_child(SalaArmas.new())   # la sala de pruebas: la diana, las líneas de ayuda, su panel de daño y el baúl de pruebas (sala_armas.gd)
 	if sitio.has("apt"):
 		preparar_niebla()
-	# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
-	# la de su habitación)
+	al_entrar()
+	set_process(sitio.has("apt") or sitio.tipo == "expo")
+
+
+# Johnny y los suyos vienen de otro sitio: vuelven a la capa 1 (en un apartamento, separar_salas les pone
+# la de su habitación)
+func al_entrar() -> void:
 	Luz.capa_johnny = Luz.CAPA_COSAS
 	for quien in get_tree().get_nodes_in_group("jugador") + get_tree().get_nodes_in_group("presa"):
 		quien.remove_meta("sala")
 		Luz.poner_capa(quien, Luz.CAPA_COSAS)
-	set_process(sitio.has("apt") or sitio.tipo == "expo")
 
 
 func textura(estilo: String, suelo: String, pared := "") -> Dictionary:
