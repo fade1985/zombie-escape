@@ -16,7 +16,8 @@ en una línea.
 - `menu_principal.tscn`: la escena de inicio. `partida.tscn`: Johnny y la pantalla (el mapa lo monta `partida.gd`).
 - `partida_prueba.tscn`: la misma con el script de prueba; el menú la abre en vez de la otra con `--captura`.
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
-  shaders: `cintura` (Johnny partido por la cintura al golpear andando), `destello` + `quemaduras.gdshaderinc` (destello,
+  shaders: `cintura` (Johnny partido por la cintura al golpear andando; incluye `quemaduras.gdshaderinc` para arder
+  como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`), `destello` + `quemaduras.gdshaderinc` (destello,
   hielo, fuego y ácido de los enemigos; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
   con "pelado") y `brillo`.
 - `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas) y
