@@ -58,9 +58,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 ## Por limar
 
 - **L18** Jefe de bomberos: la lengua de llamas da un tirón al empezar y se queda parada un momento, y se nota.
-- **L19** Ordenador, tienda de armas: en el texto de arriba hay algo entre paréntesis que no se entiende bien (puede
-  ser «(al completar el edificio, va solo)», lo de guardar lo que llevas en el baúl). Reescribirlo más claro, en los
-  siete idiomas.
 - **L21** El número de cada planta se ve demasiado perfecto comparado con lo destrozado que está el edificio; que se vea
   desgastado, sucio o roto.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.

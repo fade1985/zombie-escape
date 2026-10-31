@@ -5501,8 +5501,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s sobe para %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "São vendidas em qualidade Normal. O que você leva se perde se você cair: guarde no baú da oficina (ao completar o prédio, vai sozinho). Você leva duas de cada tipo: a que estava na mão vai para a reserva e a da reserva vai para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "São vendidas em qualidade Normal. Se você cair, perde tudo o que está levando, então guarde antes no baú da oficina. Se completar o prédio, tudo vai para o baú sem você fazer nada. Você leva duas de cada tipo: a que estava na mão vai para a reserva e a da reserva vai para o baú; se não couber ou não puder ser guardada, a da mão fica no chão."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"

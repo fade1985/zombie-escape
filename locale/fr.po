@@ -5501,8 +5501,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s passe à %d/%d !"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Vendues en qualité Normale. Ce que tu portes est perdu si tu tombes : range-le au coffre de l'atelier (en terminant le bâtiment, il y va tout seul). Tu portes deux armes de chaque type : celle que tu avais en main passe en rechange et celle de rechange va au coffre ; si elle n'y tient pas ou ne peut pas y aller, celle de ta main reste par terre."
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Vendues en qualité Normale. Si tu tombes, tu perds tout ce que tu portes, alors range-le d'abord au coffre de l'atelier. Si tu termines le bâtiment, tout va au coffre sans que tu aies rien à faire. Tu portes deux armes de chaque type : celle que tu avais en main passe en rechange et celle de rechange va au coffre ; si elle n'y tient pas ou ne peut pas y aller, celle de ta main reste par terre."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"

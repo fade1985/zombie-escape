@@ -5519,8 +5519,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s: теперь %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Продается в Обычном качестве. Все, что при тебе, пропадет, если падешь: убери в сундук в мастерской (после прохождения здания все попадет туда само). Носишь по два каждого типа: то, что было в руке, станет запасным, а запасное уйдет в сундук; если оно не влезет или его нельзя убрать, то, что было в руке, останется на полу."
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Продается в Обычном качестве. Если падешь, потеряешь все, что при тебе, поэтому сначала убери это в сундук в мастерской. Если пройдешь здание, все само попадет в сундук. Носишь по два каждого типа: то, что было в руке, станет запасным, а запасное уйдет в сундук; если оно не влезет или его нельзя убрать, то, что было в руке, останется на полу."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"

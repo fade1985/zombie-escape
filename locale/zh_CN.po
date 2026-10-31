@@ -5483,8 +5483,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s升到 %d/%d！"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "出售的都是普通品质。身上带的东西倒下就会丢失：存进工作间的储物箱（通关大楼后会自动存入）。每种最多带两件：你手上那件会换到备用，备用的那件放进储物箱；如果放不下或不能存放，手上那件会留在地上。"
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "出售的都是普通品质。倒下就会丢失身上带的所有东西，所以要先存进工作间的储物箱。通关大楼后，所有东西都会自动存入储物箱，不用你动手。每种最多带两件：你手上那件会换到备用，备用的那件放进储物箱；如果放不下或不能存放，手上那件会留在地上。"
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"

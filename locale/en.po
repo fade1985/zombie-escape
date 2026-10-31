@@ -5501,8 +5501,8 @@ msgid "¡%s sube a %d/%d!"
 msgstr "%s goes up to %d/%d!"
 
 #: scripts/ui/ordenador.gd
-msgid "Se venden en calidad Normal. Lo que llevas encima se pierde si caes: guárdalo en el baúl del taller (al completar el edificio, va solo). Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
-msgstr "Sold in Normal quality. Anything you carry is lost if you die: put it in the workshop stash (it goes in on its own when you clear the building). You carry two of each type: the one in your hand moves to spare and your spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand stays on the floor."
+msgid "Se venden en calidad Normal. Si caes, pierdes lo que llevas encima, así que guárdalo antes en el baúl del taller. Si completas el edificio, pasa todo al baúl sin que hagas nada. Llevas dos de cada tipo: la que tenías en la mano pasa al repuesto y la de repuesto, al baúl; si no cabe o no se puede guardar, la de la mano se queda en el suelo."
+msgstr "Sold in Normal quality. If you die, you lose everything you're carrying, so put it in the workshop stash first. If you clear the building, it all goes to the stash without you doing anything. You carry two of each type: the one in your hand moves to spare and your spare goes to the stash; if it doesn't fit or can't be stored, the one in your hand stays on the floor."
 
 #: scripts/ui/ordenador.gd
 msgid "LA LLEVAS"
