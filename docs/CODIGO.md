@@ -132,7 +132,10 @@ en una línea.
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
   `efecto_suelo.gd` hace los efectos de pixelfx que salen una vez en el suelo (sus tres hojas y el precalentado para que
-  el primero no pare el juego); el otro tipo es `gases`, la nube del Flatulento (`mutaciones.gd`), del tamaño de su radio.
+  el primero no pare el juego); los otros tipos son `gases`, la nube del Flatulento (`mutaciones.gd`), del tamaño de su radio,
+  y `molotov`, la botella al romperse (`proyectil.llamarada`: el chasquido, la gasolina que prende, llamas, chispas y
+  cristales que saltan y resbalan; un efecto hecho para el juego, `tools/pixelfx/molotov.js`, exportado con
+  `exportar.mjs`; se precalienta al lanzarla). Prueba: `--captura --molotov`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas

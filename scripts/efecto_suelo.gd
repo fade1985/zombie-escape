@@ -5,6 +5,9 @@
 #    El charco grande que queda es aparte (charco.gd, "reventon").
 #  - "gases": la nube del Flatulento (M37), el "poison-cloud" desde arriba (tools/pixelfx/nube-gases.js), del tamaño
 #    del radio del gas (140).
+#  - "molotov": la botella al romperse (M48; proyectil.gd, llamarada), un efecto nuevo hecho para el juego, visto desde
+#    arriba (tools/pixelfx/molotov.js): el chasquido, la gasolina que prende en corro, las llamas, chispas y los cristales
+#    que saltan y resbalan. El charco de fuego que queda es aparte (charco.gd, "fuego").
 class_name EfectoSuelo
 extends Node2D
 
@@ -15,6 +18,9 @@ const TIPOS := {
 	"gases": {"hojas": [preload("res://assets/sprites/nube-gases-detras.png"),
 		preload("res://assets/sprites/nube-gases-delante.png"), preload("res://assets/sprites/nube-gases-brillo.png")],
 		"origen": Vector2(92, 66), "fotogramas": 32},
+	"molotov": {"hojas": [preload("res://assets/sprites/molotov-detras.png"),
+		preload("res://assets/sprites/molotov-delante.png"), preload("res://assets/sprites/molotov-brillo.png")],
+		"origen": Vector2(110, 120), "fotogramas": 26},
 }
 const FPS := 20.0
 

@@ -1486,6 +1486,52 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --molotov": el molotov al romperse (M48: el efecto de pixelfx, efecto_suelo.gd "molotov") en la sala de
+# pruebas, a media luz y sin Johnny en medio: un molotov de verdad (el proyectil) lanzado a 30 por encima de Johnny. Fotos
+# al romperse y luego (captura-molotov-<segundos>.png: 0,03, 0,15, 0,3, 0,6 y 1). Lo que comprueba, en la terminal. Se cierra
+func probar_molotov() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	await get_tree().create_timer(0.3).timeout
+	var botella: Node2D = Mutaciones.PROYECTIL.instantiate()
+	botella.tipo = "molotov"
+	botella.desde = johnny.global_position
+	botella.hasta = johnny.global_position + Vector2(0, -30)
+	johnny.get_parent().add_child(botella)
+	await get_tree().process_frame
+	johnny.visible = false
+	var efectos := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "molotov" and not n.de_calentar)
+	print("Molotov: precalentado al lanzarlo %s (esperado: true)" % EfectoSuelo.calentados.has("molotov"))
+	while efectos.call().is_empty() and is_instance_valid(botella):
+		await get_tree().process_frame
+	await get_tree().process_frame
+	print("  al romperse, efectos %d (esperado: 1) | charco de fuego %s (esperado: true)" % [efectos.call().size(),
+		get_tree().get_nodes_in_group("charcos").any(func(c): return c.get("tipo") == "fuego")])
+	var antes := 0.0
+	for segundos in [0.03, 0.15, 0.3, 0.6, 1.0]:
+		await get_tree().create_timer(segundos - antes).timeout
+		antes = segundos
+		recorte("captura-molotov-%s.png" % str(segundos).replace(".", ","))
+	await get_tree().create_timer(0.5).timeout
+	print("  a los 1,5 s, efectos %d (esperado: 0)" % efectos.call().size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --explosion": la explosión de pixelfx (explosion.gd) en la sala de pruebas, a media luz y sin Johnny
 # en medio. Una normal (radio 90) con fotos a los 0,05, 0,2, 0,5, 1 y 2 s (captura-explosion-<segundos>.png) y una
 # pequeña (radio 45, la del racimo; captura-explosion-pequena.png). Lo que comprueba, en la terminal. Se cierra

@@ -77,6 +77,7 @@
 #   --fogonazos         el fogonazo de pixelfx (fogonazo.gd) de la pistola, la MP5 y la escopeta en las 8 direcciones,
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]
+#   --molotov           el molotov al romperse (el efecto de pixelfx, M48)                     [prueba_armas.gd]
 #   --explosion         la explosión de pixelfx (granada, zombi explosivo): normal y pequeña   [prueba_armas.gd]
 #   --vomito            los zombis bañados en vómito (Gastroenteritis), junto a uno con ácido   [prueba_armas.gd]
 #   --johnny-ardiendo   Johnny ardiendo con el fuego de los zombis (su shader), con luz y a oscuras [prueba_armas.gd]
@@ -423,6 +424,9 @@ func empezar_prueba() -> void:
 	elif "--raton" in args:
 		set_process(false)   # sin la prueba larga
 		probar_raton()
+	elif "--molotov" in args:
+		set_process(false)   # sin la prueba larga
+		probar_molotov()
 	elif "--explosion" in args:
 		set_process(false)   # sin la prueba larga
 		probar_explosion()
