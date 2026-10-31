@@ -12,7 +12,9 @@
 #     roja en el suelo.
 # Enfadado (a media vida, «¡HORA DE LOS SUPLEMENTOS!»): se toma sus suplementos y le sale una barra de armadura
 # encima de la de vida; mientras le quede armadura, solo le entra a la vida la mitad del daño (la otra mitad se la
-# come la armadura). Además: hasta 2 torbellinos seguidos, el salto es más corto (0,7 s en el aire en vez de 1,1) y el doble de pesas.
+# come la armadura). La armadura se ve en su cuerpo: se vuelve de acero desde los pies (el "metal" del shader de los
+# zombis, quemaduras.gdshaderinc), que se va desconchando según la pierde y le revienta en esquirlas al acabarse; los
+# golpes en el metal suenan a acero ("acero") y sacan chispas. Además: hasta 2 torbellinos seguidos, el salto es más corto (0,7 s en el aire en vez de 1,1) y el doble de pesas.
 extends Minijefe
 
 signal armadura_cambiada(armadura: int, maxima: int)   # la barra de armadura de la pantalla (partida.gd)
@@ -36,6 +38,8 @@ const DANO_PESA := 18
 const ARMADURA := 0.3                   # la armadura de los suplementos (parte de su vida máxima)
 const PIE := 30.0                       # a qué altura dibuja los pies respecto a su centro
 const ACERO := Color("#9fc3e8")
+const SUBIDA := 0.7                     # lo que tarda el metal en cubrirle entero
+const ALTO_DIBUJO := 95.0               # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el shader)
 # Los fotogramas de sus animaciones de PixelLab (assets/pixellab.json → apartamentos-jefes → gymbro-72):
 # el torbellino gira de GIRO_DESDE al final (antes levanta los brazos); el salto se agacha hasta DESPEGUE, va por
 # el aire hasta ATERRIZA y luego cae; las pesas salen de la mano en SUELTA
@@ -49,6 +53,17 @@ var espera_salto := 3.5
 var espera_pesas := 2.5
 var armadura := 0
 var armadura_max := 0
+var metal := 0.0          # lo que le cubre el metal (0-1; sube al tomarse los suplementos)
+var brillo_golpe := 0.0   # el destello blanco de un golpe en el metal (se apaga solo)
+
+
+# El shader de los zombis (destello.gdshader), para el metal (y el destello): el mismo que se le pone si le roe el ácido
+func _ready() -> void:
+	super()
+	sprite.material = ShaderMaterial.new()
+	sprite.material.shader = Zombi.DESTELLO
+	sprite.material.set_shader_parameter("semilla", randf() * 100.0)
+	sprite.material.set_shader_parameter("alto", ALTO_DIBUJO)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
@@ -245,6 +260,9 @@ func al_enfadarse(johnny: Node2D, _grito := "") -> void:
 	armadura_max = int(vida_max * ARMADURA)
 	armadura = armadura_max
 	armadura_cambiada.emit(armadura, armadura_max)
+	sprite.modulate = Color.WHITE   # (de metal, sin el rojo de enfadado: vuelve al reventar)
+	sonido_golpe = "acero"
+	Sonido.tocar("metalizar")
 	for i in 12:
 		Particulas.soltar(self, global_position + Vector2(randf_range(-30, 30), -arriba * 0.7),
 			Vector2(randf_range(-80, 80), randf_range(-120, -40)), ACERO, 3, 0.6)
@@ -257,10 +275,32 @@ func danar(cantidad: int, _fuerza: Vector2, _de_lleno: bool) -> int:
 	var a_la_armadura := mini(armadura, cantidad / 2)
 	armadura -= a_la_armadura
 	armadura_cambiada.emit(armadura, armadura_max)
+	# en el metal: un destello y unas chispas donde le da
+	brillo_golpe = 0.6
+	var donde := global_position + Vector2(randf_range(-26, 26), -arriba * randf_range(0.3, 0.8))
+	for i in 5:
+		Particulas.soltar(self, donde, Vector2(randf_range(-140, 140), randf_range(-160, -20)),
+			Color("#fff3b0") if i % 2 == 0 else Color.WHITE, 2, 0.25)
 	if armadura <= 0:
 		gritar(Idioma.t("¡SIN SUPLEMENTOS!"), ACERO, 18)
-		Sonido.tocar("cristal")
+		reventar_metal()
 	return cantidad - a_la_armadura
+
+
+# Se queda sin armadura: el metal que le queda revienta en esquirlas y vuelve a ser de carne (y rojo, enfadado)
+func reventar_metal() -> void:
+	if metal <= 0.0:
+		return
+	metal = 0.0
+	sonido_golpe = "golpe"
+	sprite.modulate = Color(1.0, 0.8, 0.78)
+	Sonido.tocar("chatarra")
+	Temblor.temblar(3.0)
+	var tonos := [Color("#3d5470"), Color("#6a87a8"), Color("#9fc3e8"), Color("#dcefff")]
+	for i in 26:
+		var desde := global_position + Vector2(randf_range(-34, 34), -arriba * randf_range(0.1, 0.85))
+		Particulas.soltar(self, desde, (desde - global_position - Vector2(0, -arriba * 0.5)).normalized()
+			* randf_range(120, 260) + Vector2(0, -80), tonos[i % tonos.size()], randf_range(3, 5), randf_range(0.4, 0.8))
 
 
 # En la foto de la prueba (--captura): girando en el torbellino, hacia Johnny
@@ -271,6 +311,8 @@ func foto(johnny: Node2D) -> void:
 
 # Si cae en mitad de un salto o mareado, que caiga en el suelo y derecho
 func morir() -> void:
+	reventar_metal()   # (si cae con armadura, también le revienta)
+	pintar_metal(0.0)
 	sprite.position = Vector2(0, PIE)
 	sprite.rotation = 0.0
 	$Choque.set_deferred("disabled", false)
@@ -281,6 +323,7 @@ func morir() -> void:
 # ── Dibujo ──
 
 func animar() -> void:
+	pintar_metal(get_physics_process_delta_time())
 	var dir := direccion()
 	sprite.position = Vector2(0, PIE)
 	sprite.rotation = 0.0
@@ -343,12 +386,14 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 
 
-# Con armadura, un brillo azul de acero que le rodea (por encima de él)
-func pintar_encima(lienzo: Node2D) -> void:
-	if armadura <= 0 or estado == "salto":
-		return
-	var brillo := 0.5 + 0.2 * sin(tiempo * 6.0)
-	lienzo.draw_set_transform(Vector2(0, -arriba * 0.45), 0.0, Vector2(1, 1.3))
-	Formas.arco(lienzo, Vector2.ZERO, 52.0, 0.0, TAU, 32, Color(ACERO, brillo), 4.0)
-	Formas.arco(lienzo, Vector2.ZERO, 46.0, 0.0, TAU, 32, Color(ACERO, brillo * 0.4), 2.0)
-	lienzo.draw_set_transform(Vector2.ZERO)
+# El metal, en el shader: lo que le cubre (sube al tomarse los suplementos), lo desconchado (lo que ha perdido de
+# armadura) y el destello de los golpes
+func pintar_metal(delta: float) -> void:
+	if armadura > 0:
+		metal = move_toward(metal, 1.0, delta / SUBIDA)
+	brillo_golpe = move_toward(brillo_golpe, 0.0, delta * 5.0)
+	var m := sprite.material as ShaderMaterial
+	m.set_shader_parameter("metal", metal)
+	m.set_shader_parameter("pelado", 1.0 - armadura / float(maxi(1, armadura_max)) if armadura > 0 else 0.0)
+	m.set_shader_parameter("destello", brillo_golpe)
+	m.set_shader_parameter("t", fmod(tiempo, 100.0))

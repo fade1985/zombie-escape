@@ -51,4 +51,3 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
-- **L30** Gymbro: cambiar su aura por hacer que su cuerpo se vuelva de metal, que queda mejor visualmente.

@@ -48,6 +48,8 @@ var quieto := false            # la sala de pruebas: ataca y avisa como siempre,
 var esperando := false
 var aviso_espera := 0.0
 
+var sonido_golpe := "golpe"   # lo que suena al quitarle vida (el Gymbro de metal: "acero")
+
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
 
@@ -274,7 +276,7 @@ func quitar_vida(cantidad: int, fuerza: Vector2) -> void:
 	# Los jefes apenas se mueven con los golpes
 	marcha += fuerza.normalized() * 8.0
 	Zombi.numero_golpe(get_parent(), global_position + Vector2(randf_range(-20, 0), -arriba), cantidad)
-	Sonido.tocar("golpe")
+	Sonido.tocar(sonido_golpe)
 	if fuerza != Vector2.ZERO:   # un golpe o una bala (no el fuego): salta su sangre
 		Particulas.salpicar(self, get_parent(), global_position + Vector2(0, 6), arriba * 0.5, fuerza, Color("#7a1f1a"), 5)
 	vida_cambiada.emit(vida, vida_max)

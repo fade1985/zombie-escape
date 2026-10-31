@@ -166,6 +166,50 @@ func probar_pesas() -> void:
 	Captura.foto("captura-gymbro-pesas-suelo.png")
 
 
+# Con "--captura --jefe gymbro --metal": el Gymbro de metal (sus suplementos, gymbro.gd), quieto y con Johnny al lado.
+# Fotos: normal (captura-gymbro-metal-0.png), con el metal subiendo (-1-subiendo), de metal entero (-2-entero), a media
+# armadura y casi sin ella (-3-desconchado y -4-casi), y al reventar (-5-revienta, con las esquirlas). Lo que comprueba,
+# en la terminal. Los tres sonidos nuevos van a capturas/ (sonido-acero.wav, sonido-metalizar.wav y sonido-chatarra.wav)
+# para oírlos (la prueba va sin sonido)
+func probar_metal() -> void:
+	if not await ir_a_la_sala_del_jefe("gymbro"):
+		return
+	for nombre in ["acero", "metalizar", "chatarra"]:
+		Sonido.sintetizar(Sonido.EFECTOS[nombre].notas).save_to_wav(Captura.CARPETA + "sonido-%s.wav" % nombre)
+	jefa.quieto = true
+	johnny.position = jefa.position + Vector2(-150, 30)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5, false).timeout
+	Captura.foto("captura-gymbro-metal-0.png")
+	# a media vida se enfada él solo (como en la partida)
+	jefa.vida = int(jefa.vida_max * jefa.enfado) - 1
+	await get_tree().create_timer(0.35, false).timeout
+	print("Gymbro: se enfada %s | metal subiendo %.2f (esperado: entre 0 y 1) | suena «%s» (esperado: acero)" % [
+		jefa.fase == 2, jefa.metal, jefa.sonido_golpe])
+	Captura.foto("captura-gymbro-metal-1-subiendo.png")
+	await get_tree().create_timer(1.3, false).timeout
+	print("  de metal entero: %.2f (esperado: 1)" % jefa.metal)
+	Captura.foto("captura-gymbro-metal-2-entero.png")
+	# a golpes, hasta media armadura y casi sin ella
+	for paso in [[0.5, "3-desconchado"], [0.15, "4-casi"]]:
+		while jefa.armadura > jefa.armadura_max * paso[0]:
+			johnny.vida = johnny.stats.vida_max
+			jefa.recibir_golpe(20, Vector2.RIGHT * 300.0)
+			await get_tree().physics_frame
+		await get_tree().create_timer(0.3, false).timeout
+		var pelado: float = jefa.sprite.material.get_shader_parameter("pelado")
+		print("  armadura %d de %d: desconchado %.2f (esperado: %.2f más o menos)" % [
+			jefa.armadura, jefa.armadura_max, pelado, 1.0 - paso[0]])
+		Captura.foto("captura-gymbro-metal-%s.png" % paso[1])
+	while jefa.armadura > 0:
+		jefa.recibir_golpe(20, Vector2.RIGHT * 300.0)
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.08, false).timeout
+	print("  sin armadura: metal %.2f (esperado: 0) | suena «%s» (esperado: golpe) | rojo de enfadado otra vez %s (esperado: true)" % [
+		jefa.metal, jefa.sonido_golpe, jefa.sprite.modulate != Color.WHITE])
+	Captura.foto("captura-gymbro-metal-5-revienta.png")
+
+
 # El Glotón: la sangre ácida (primero, la bala de un superviviente: le hace daño a él y a Johnny no le salpica; luego
 # dos golpes de Johnny seguidos: solo el primero salpica, un 1 % de su vida) y el aspirado (hasta dónde llega: al
 # borde de la elipse limpia de su habitación, mire a donde mire; y Johnny puesto a 220 de él: 0,15 s al abrir la boca
