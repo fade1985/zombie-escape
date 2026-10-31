@@ -23,6 +23,7 @@ func _ready() -> void:
 	super()
 	espera = randf_range(1.0, 2.2)
 	lado = 1.0 if randf() < 0.5 else -1.0
+	Reventon.precalentar(get_parent())   # (para que el primer reventón no pare el juego un momento)
 
 
 func _physics_process(delta: float) -> void:

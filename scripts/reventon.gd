@@ -13,6 +13,25 @@ const FPS := 20.0
 
 var capas: Array[Sprite2D] = []
 var t := 0.0
+var de_calentar := false   # el de precalentar(): casi transparente, unos fotogramas y fuera
+
+static var calentado := false
+
+
+# La primera vez que se dibuja algo con la mezcla "añadir" del brillo, el motor tiene que preparar cómo pintarlo y el
+# juego se para un momento (sobre todo en la web). Para que no pase al reventar el primer gordo, en cuanto sale uno se
+# pinta un reventón casi transparente en el centro de la pantalla (fuera de ella no se dibujaría y no serviría)
+static func precalentar(sala: Node) -> void:
+	if calentado:
+		return
+	var camara := sala.get_viewport().get_camera_2d()
+	if camara == null:
+		return
+	calentado = true
+	var r := Reventon.new()
+	r.de_calentar = true
+	r.position = camara.get_screen_center_position()
+	sala.add_child.call_deferred(r)
 
 
 static func soltar(sala: Node, donde: Vector2) -> void:
@@ -39,10 +58,18 @@ func _ready() -> void:
 			capa.material = suma
 		add_child(capa)
 		capas.append(capa)
+	if de_calentar:
+		modulate = Color(1, 1, 1, 0.02)   # (del todo transparente, el motor se lo salta y no prepara nada)
+		for capa in capas:
+			capa.frame = 3
 
 
 func _process(delta: float) -> void:
 	t += delta
+	if de_calentar:
+		if t > 0.1:
+			queue_free()
+		return
 	var cuadro := int(t * FPS)
 	if cuadro >= FOTOGRAMAS:
 		queue_free()
