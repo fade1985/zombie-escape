@@ -65,6 +65,8 @@
 #   --granada-pared     las granadas chocan con las paredes (y vuelan por encima de los muebles) y su explosión no las
 #                       pasa: dónde explotan, a quién le dan y a quién apunta lanzar de un toque [prueba_armas.gd]
 #   --charcos           los charcos que burbujean (veneno, ácido, vómito) junto al de fuego  [prueba_armas.gd]
+#   --reventon          el gordo revienta al morir (M38): la corona y las gotas, y el charco grande con sus burbujas
+#                       gordas, hasta que se seca                                          [prueba_armas.gd]
 #   --epicas            el truco de la Épica de cada familia: golpe de gracia, balas que atraviesan, estallido y
 #                       racimo                                                             [prueba_armas.gd]
 #   --aura              lo que se ve de la calidad del arma en la mano: la luz, las chispas y la estela del golpe y de la
@@ -375,6 +377,9 @@ func empezar_prueba() -> void:
 	elif "--charcos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_charcos()
+	elif "--reventon" in args:
+		set_process(false)   # sin la prueba larga
+		probar_reventon()
 	elif "--fuego-acido" in args:
 		set_process(false)   # sin la prueba larga
 		probar_fuego_acido()

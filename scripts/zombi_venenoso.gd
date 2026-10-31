@@ -1,6 +1,6 @@
 # El zombi venenoso (el gordo): no da zarpazos. Guarda las distancias (si Johnny se acerca, se aleja; si se
 # va, le sigue; en medio, le rodea) y cada poco se planta y le escupe un moco en parábola que deja un charco
-# verde. Números de src/zombies.js (POISON y spit).
+# verde. Al morir revienta y deja un charco grande del mismo veneno (M38). Números de src/zombies.js (POISON y spit).
 # Su cuerpo de choque (18, en su .tscn) es menor que su "radio" (30, el de los golpes y las balas): la navegación cuenta
 # con cuerpos de 18 (mapa.gd, hornear) y, con uno de 30, ni llegaba a empujar una puerta ni cabía por el camino de sus marcos
 extends Zombi
@@ -23,6 +23,7 @@ func _ready() -> void:
 	super()
 	espera = randf_range(1.0, 2.2)
 	lado = 1.0 if randf() < 0.5 else -1.0
+	Reventon.precalentar(get_parent())   # (para que el primer reventón no pare el juego un momento)
 
 
 func _physics_process(delta: float) -> void:
@@ -77,3 +78,17 @@ func estado_propio(delta: float, johnny: Node2D) -> void:
 	# Se queda plantado hasta acabar la animación (si se moviera sin mover las piernas, parecería que flota)
 	if escupido and not sprite.is_playing():
 		estado = "andar"
+
+
+# Al morir revienta (M38): una corona de veneno y gotas a todos lados (reventon.gd) y un charco grande del mismo veneno
+# que escupe, que también envenena a Johnny si lo pisa (charco.gd, "reventon")
+func morir() -> void:
+	super()
+	if estado != "muerto":   # (la diana de la sala de pruebas no se muere)
+		return
+	var charco: Node2D = CHARCO.instantiate()
+	charco.tipo = "reventon"
+	charco.position = (position / 2.0).round() * 2.0   # (en píxel entero del dibujo, como los demás charcos)
+	get_parent().add_child.call_deferred(charco)
+	Reventon.soltar(get_parent(), position)
+	Sonido.tocar("escupitajo")
