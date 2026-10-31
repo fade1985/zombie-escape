@@ -1,6 +1,6 @@
 # Pruebas sueltas: los niveles de alerta (--alerta N), el reto del día (--reto), la caza del acompañante (--caza),
 # el vómito de la Gastroenteritis (--gastro), la llave en el suelo (--llave), los números del equilibrio (--equilibrio) y
-# la rama Químico de los talentos (--quimico).
+# la rama Químico de los talentos (--quimico) y el ratón en la partida (--raton).
 # Parte de la cadena de la partida de prueba (ver partida_prueba.gd).
 extends "res://scripts/pruebas/prueba_sitios.gd"
 
@@ -3084,4 +3084,46 @@ func probar_raton_movil() -> void:
 		al_empezar, tras_toque, con_raton[0], con_raton[1], tactil.visible, johnny.con_raton])
 	Tactil.activo = false
 	Tactil.con_dedo = true
+	get_tree().quit()
+
+
+# Con "--captura --raton": el ratón en la partida (ui/raton.gd), en la sala de mantenimiento. Jugando en el modo asistido,
+# escondido (salvo apuntando un lanzable con el ratón: la mirilla); en el libre, la mirilla; con la pausa abierta, la flecha, y al cerrarla vuelve. Lo que comprueba, en la
+# terminal. Como el ratón no sale en las fotos, la mirilla se pinta encima de una (captura-raton-mirilla.png, a la escala de
+# la prueba y en el centro de la pantalla) y sola, en grande (captura-raton-mirilla-grande.png). Se cierra
+func probar_raton() -> void:
+	await get_tree().create_timer(1.0).timeout
+	var estado := func() -> String:
+		var modos := {Input.MOUSE_MODE_HIDDEN: "escondido", Input.MOUSE_MODE_VISIBLE: "visible"}
+		return "%s, %s" % [raton.puesto, modos.get(Input.mouse_mode, "otro")]
+	johnny.modo = "asistido"
+	await get_tree().process_frame
+	print("Ratón: asistido %s (esperado: oculto, escondido)" % estado.call())
+	lanzables.apuntando = true
+	johnny.con_raton = true
+	await get_tree().process_frame
+	print("  asistido, apuntando un lanzable con el ratón %s (esperado: mirilla, visible)" % estado.call())
+	lanzables.apuntando = false
+	await get_tree().process_frame
+	johnny.modo = "libre"
+	await get_tree().process_frame
+	print("  libre %s (esperado: mirilla, visible)" % estado.call())
+	pausar()
+	await get_tree().process_frame
+	print("  con la pausa %s (esperado: flecha, visible)" % estado.call())
+	seguir()
+	await get_tree().process_frame
+	print("  al cerrarla %s (esperado: mirilla, visible)" % estado.call())
+	johnny.modo = "asistido"
+	await get_tree().process_frame
+	print("  otra vez asistido %s (esperado: oculto, escondido)" % estado.call())
+	# las fotos de la mirilla
+	var foto := get_viewport().get_texture().get_image()
+	foto.convert(Image.FORMAT_RGBA8)
+	var px := maxi(1, roundi(2.0 * get_window().content_scale_factor * foto.get_width() / get_viewport().get_visible_rect().size.x))
+	var mirilla := Raton.dibujar(px).get_image()
+	foto.blend_rect(mirilla, Rect2i(Vector2i.ZERO, mirilla.get_size()), foto.get_size() / 2 - mirilla.get_size() / 2)
+	DirAccess.make_dir_recursive_absolute(Captura.CARPETA)
+	foto.save_png(Captura.CARPETA + "captura-raton-mirilla.png")
+	Raton.dibujar(12).get_image().save_png(Captura.CARPETA + "captura-raton-mirilla-grande.png")
 	get_tree().quit()

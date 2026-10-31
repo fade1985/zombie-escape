@@ -314,6 +314,8 @@ en una línea.
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
   y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.
+- `raton.gd`: el ratón durante la partida: escondido jugando en el modo asistido (salvo apuntando un lanzable), la
+  mirilla (dibujada en el código, `MIRILLA`) en el libre y la flecha con un menú abierto. Prueba: `--captura --raton`.
 - `tutorial.gd`: la ventana de un tutorial nuevo (`ventana`, con el juego parado; no hace caso las primeras décimas)
   y el apartado Tutorial del menú principal y de la pausa (`lista`: los temas por grupos, los no vistos con «???»,
   y la ficha del elegido). La ficha (`ficha()`) lleva su foto de `assets/ui/tutorial/`.

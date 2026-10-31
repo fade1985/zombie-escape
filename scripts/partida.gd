@@ -136,6 +136,7 @@ var ahorrados := 0         # los dólares guardados de otras partidas
 var dolares := 0           # los recogidos en esta partida
 var muertos := 0           # zombis matados en esta partida
 var duracion := 0.0        # segundos jugados (sin contar la pausa)
+var raton := Raton.new()
 var terminada := false
 var al_empezar := {}       # lo que ya se tenía al empezar (logros, skins, páginas...): el cartel del final enseña lo
                            # nuevo (conseguido())
@@ -198,6 +199,10 @@ func _ready() -> void:
 	add_child(inventario)
 	inventario.cerrado.connect(func(): get_tree().paused = false)
 	add_child(taquilla)
+	# el ratón: escondido jugando en el modo asistido, la mirilla en el libre y la flecha en los menús (ui/raton.gd)
+	raton.johnny = johnny
+	raton.partida = self
+	add_child(raton)
 	add_child(panel_pruebas)
 	panel_pruebas.partida = self   # (los atajos funcionan sin haber abierto antes el panel)
 	presentacion.preparar(self)
