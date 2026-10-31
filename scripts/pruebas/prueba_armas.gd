@@ -840,6 +840,45 @@ func probar_impacto() -> void:
 # Con "--captura --charcos": los charcos que burbujean (charco.gd: veneno, ácido y vómito) junto a uno de fuego, para
 # compararlos. En la sala de pruebas, en fila delante de Johnny: fotos al caer (se extienden), con sus
 # burbujas, cuando empiezan a secarse a trozos y con la mancha que dejan. Cuenta si se pisan y se cierra
+# El gordo revienta al morir (M38): la corona y las gotas de veneno (captura-reventon-1 y -2), el charco grande con sus
+# burbujas gordas (captura-reventon-charco y -charco-2) y cómo se seca (captura-reventon-seca). Lo que comprueba, en la
+# terminal
+func probar_reventon() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.direccion = "n"
+	var gordo: Node2D = meter_zombi("venenoso", johnny.position + Vector2(0, -170))
+	await get_tree().physics_frame
+	gordo.process_mode = Node.PROCESS_MODE_DISABLED   # (que no escupa ni se mueva antes de tiempo)
+	await get_tree().create_timer(0.3).timeout
+	gordo.process_mode = Node.PROCESS_MODE_INHERIT
+	gordo.recibir_golpe(99999, Vector2.UP * 300.0)
+	await get_tree().create_timer(0.12).timeout
+	Captura.foto("captura-reventon-1.png")
+	await get_tree().create_timer(0.25).timeout
+	Captura.foto("captura-reventon-2.png")
+	var charcos := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "reventon")
+	var reventones := johnny.get_parent().get_children().filter(func(n): return n is Reventon)
+	print("  reventón: charcos grandes %d (esperado: 1) | efecto %d (esperado: 1)" % [charcos.size(), reventones.size()])
+	await get_tree().create_timer(1.3).timeout
+	Captura.foto("captura-reventon-charco.png")
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-reventon-charco-2.png")
+	if not charcos.is_empty():
+		var c: Node2D = charcos[0]
+		print("  charco: radio %d | pisa en el centro %s (esperado: true) | a 90 %s (esperado: true) | a 130 %s (esperado: false) | burbujas gordas %d" % [
+			int(c.radio()), c.arde_en(c.global_position, 0.0), c.arde_en(c.global_position + Vector2(90, 0), 0.0),
+			c.arde_en(c.global_position + Vector2(130, 0), 0.0), c.gordas.size()])
+	print("  el efecto se ha ido: %s (esperado: true)" % johnny.get_parent().get_children().filter(func(n): return n is Reventon).is_empty())
+	await get_tree().create_timer(3.4).timeout
+	Captura.foto("captura-reventon-seca.png")
+	get_tree().quit()
+
+
 func probar_charcos() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	await get_tree().create_timer(0.3).timeout

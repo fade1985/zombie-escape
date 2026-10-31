@@ -24,6 +24,9 @@ const LUZ_FUEGO := preload("res://escenas/luces/fuego.tscn")
 # hace nada. El del molotov tiene sus números en MOLOTOV (lanzables.gd)
 const TIPOS := {
 	"veneno": {"burbujas": "veneno", "radio": 64.0, "vida": 4.0, "estados": {"veneno": {}}},
+	# el que deja el gordo al reventar (M38, zombi_venenoso.gd): el mismo veneno que escupe, pero grande, más largo y con
+	# burbujas gordas (las de "toxic-puddle" de pixelfx, ver pintar_burbujas_gordas)
+	"reventon": {"burbujas": "veneno", "radio": 96.0, "vida": 6.0, "estados": {"veneno": {}}, "gordas": 6},
 	"lejia": {"burbujas": "lejia", "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
 	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
 	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
@@ -80,6 +83,7 @@ var celdas: Array = []     # el fuego: [posición, distancia al centro (0-1), cu
 var llamas: Array = []     # [x, y, ancho, alto, semilla, prende, apaga]
 var ascuas: Array = []
 var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada cuánto revienta]; el veneno, ver hacer_burbujeo
+var gordas: Array = []     # las burbujas gordas del reventón: [su celda, desfase, cada cuánto revienta, lo grande que se hace]
 
 
 func _ready() -> void:
@@ -289,6 +293,12 @@ func hacer_burbujeo() -> void:
 			burbujas.append([c, randf() * 2.0, randf_range(0.9, 1.8), 2 + i % 2])
 		if burbujas.size() >= 11:
 			break
+	for i in 40:
+		var c: Array = celdas.pick_random()
+		if gordas.size() >= TIPOS[tipo].get("gordas", 0):
+			break
+		if c[1] < 0.7:
+			gordas.append([c, randf() * 3.0, randf_range(1.8, 2.6), randf_range(4.0, 6.5)])
 
 
 # Algo de vapor que sube de donde aún hay charco
@@ -333,6 +343,80 @@ func pintar_burbujeo() -> void:
 			var lejos := 4.0 + grande * 2.0
 			for o in [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(-0.7, -0.7), Vector2(0.7, -0.7)]:
 				draw_rect(Rect2((p + o * lejos - Vector2(1, 1)).snapped(Vector2(2, 2)), Vector2(2, 2)), col.luz)
+	pintar_burbujas_gordas(col, e)
+
+
+# Las burbujas gordas del reventón, como las de "toxic-puddle" de pixelfx: se hinchan en una cúpula con la piel oscura
+# y la luz del veneno por dentro, se estiran hacia arriba y, al reventar, sueltan un anillo que corre por el charco,
+# un fogonazo y unas gotitas que saltan. Las medidas, en píxeles del dibujo (cada uno, 2 × 2)
+func pintar_burbujas_gordas(col: Dictionary, e: float) -> void:
+	for b in gordas:
+		var c: Array = b[0]
+		if e < c[2] + 0.3 or e >= c[3] - 0.4:
+			continue
+		var ciclo: float = b[2]
+		var edad := fmod(t + b[1], ciclo)
+		var hincha := ciclo * 0.6
+		var x0: Vector2 = (c[0] / 2.0).floor()   # (su sitio, en píxeles del dibujo)
+		var grande: float = b[3]
+		if edad < hincha:
+			var k := edad / hincha
+			var estira := smoothstep(0.65, 1.0, k)
+			var crece := 1.0 - pow(1.0 - minf(1.0, k * 1.3), 3.0)
+			var rx := grande * crece * (1.0 - 0.18 * estira)
+			var ry := grande * crece * (1.0 + 0.5 * estira)
+			var dentro_k := 0.35 + 0.65 * k
+			for i in range(-int(rx), int(rx) + 1):   # su sombra en el charco, una fila por debajo
+				punto(x0 + Vector2(i, 1), col.borde)
+			for j in range(-ceili(ry) - 1, 1):
+				for i in range(-ceili(rx) - 1, ceili(rx) + 2):
+					var dd := Vector2(i / maxf(0.6, rx), j / maxf(0.6, ry)).length()
+					if dd > 1.1:
+						continue
+					var color: Color
+					if dd > 0.9:
+						color = col.borde
+					elif dd < 0.55 * dentro_k and j > -ry * 0.75:
+						color = col.brillo if dd < 0.3 * dentro_k else col.centro
+					elif dd < 0.8 * dentro_k:
+						color = col.medio
+					else:
+						color = col.oscuro
+					punto(x0 + Vector2(i, j), color)
+			# el brillo: una curva clara arriba a la izquierda y un punto blanco
+			if rx > 1.8:
+				var a := 3.5
+				while a < 4.7:
+					punto(x0 + (Vector2(cos(a) * rx, sin(a) * ry) * 0.68).round(), col.luz if a < 4.3 else col.brillo)
+					a += 0.16
+			if rx > 1.2:
+				punto(x0 + Vector2(-roundf(rx * 0.35), -roundf(ry * 0.62)), Color.WHITE)
+			continue
+		var pasa := edad - hincha
+		# al reventar: un anillo que se abre por el charco (aplastado, como el suelo) y se apaga
+		if pasa < 0.3:
+			var k := pasa / 0.3
+			var r := 2.0 + 14.0 * (1.0 - pow(1.0 - k, 3.0))
+			var color: Color = Color.WHITE if k < 0.4 else col.luz if k < 0.7 else col.brillo
+			var a := 0.0
+			while a < TAU:
+				punto(x0 + Vector2(cos(a) * r, sin(a) * r * 0.6).round(), Color(color, clampf((1.0 - k) * 1.4, 0.0, 1.0)))
+				a += 0.5 / r
+		# y unas gotitas que saltan y caen
+		if pasa < 0.6:
+			for j in 7:
+				var azar := fmod(sin(j * 12.9898 + b[1] * 78.233) * 43758.5453, 1.0)
+				var vx := (absf(azar) - 0.5) * 80.0
+				var vy := -45.0 - absf(fmod(azar * 7.31, 1.0)) * 70.0
+				var dy := vy * pasa + 0.5 * 420.0 * pasa * pasa
+				if dy < 0.0:
+					punto(x0 + Vector2(vx * pasa, dy - 2.0).round(), col.borde)
+					punto(x0 + Vector2(vx * pasa, dy - 3.0).round(), col.luz if j % 2 else col.brillo)
+
+
+# Un píxel del dibujo, en "p" (en píxeles del dibujo, desde el centro del charco)
+func punto(p: Vector2, color: Color) -> void:
+	draw_rect(Rect2(p * 2.0, Vector2(2, 2)), color)
 
 
 # Una burbuja de pixel art: un cuadrado con las esquinas recortadas, de "r" píxeles del dibujo de radio, y su brillo
