@@ -46,10 +46,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M55** pixelfx: el desfibrilador (Johnny revive), un efecto de luz o de descarga.
 - **M56** pixelfx: la curación de la médica, un brillo verde sobre Johnny.
 - **M57** pixelfx: la aparición de los jefes, un efecto de entrada en su presentación.
-- **M59** pixelfx: el lanzallamas y el lanza ácido al dar a un zombi (en cada pellizco de daño, como el chispazo del lanza
-  rayos): el fuego, una bocanada que lame al zombi con chispas y humo; el ácido, un chisporroteo con burbujas y vapor verde.
-- **M60** pixelfx: el lanzallamas y el lanza ácido al chocar con la pared, donde se corta el chorro: el fuego se aplasta y
-  se abre contra ella; el ácido salpica y chorrea.
 
 ## Por limar
 

@@ -31,6 +31,10 @@
 #    (tools/pixelfx/golpe-pared.js).
 #  - "llamada": la atraedora llamando a los zombis (M52; granada.gd): en cada pitido, dos ondas amarillas que se abren por
 #    el suelo y el ring-ring del despertador (tools/pixelfx/llamada.js). Va de hija de la granada, para que la siga.
+#  - "chorro-fuego" y "chorro-acido": el lanzallamas y el lanza ácido al dar a un zombi (M59; llamarada.quemar, en cada
+#    pellizco): una bocanada de llamas que lo lame y sube, o un chisporroteo de gotas, burbujas y vapor verde
+#    (tools/pixelfx/chorro-golpe.js y -acido.js). Y "pared-fuego" y "pared-acido": los mismos contra la pared, donde se
+#    corta el chorro (M60), más anchos y, el ácido, chorreando hasta el suelo (chorro-pared.js y -acido.js).
 class_name EfectoSuelo
 extends Node2D
 
@@ -74,6 +78,18 @@ const TIPOS := {
 	"llamada": {"hojas": [preload("res://assets/sprites/llamada-detras.png"),
 		preload("res://assets/sprites/llamada-delante.png"), preload("res://assets/sprites/llamada-brillo.png")],
 		"origen": Vector2(84, 60), "fotogramas": 12},
+	"chorro-fuego": {"hojas": [preload("res://assets/sprites/chorro-golpe-detras.png"),
+		preload("res://assets/sprites/chorro-golpe-delante.png"), preload("res://assets/sprites/chorro-golpe-brillo.png")],
+		"origen": Vector2(48, 68), "fotogramas": 10},
+	"chorro-acido": {"hojas": [preload("res://assets/sprites/chorro-golpe-acido-detras.png"),
+		preload("res://assets/sprites/chorro-golpe-acido-delante.png"), preload("res://assets/sprites/chorro-golpe-acido-brillo.png")],
+		"origen": Vector2(48, 68), "fotogramas": 10},
+	"pared-fuego": {"hojas": [preload("res://assets/sprites/chorro-pared-detras.png"),
+		preload("res://assets/sprites/chorro-pared-delante.png"), preload("res://assets/sprites/chorro-pared-brillo.png")],
+		"origen": Vector2(64, 76), "fotogramas": 10},
+	"pared-acido": {"hojas": [preload("res://assets/sprites/chorro-pared-acido-detras.png"),
+		preload("res://assets/sprites/chorro-pared-acido-delante.png"), preload("res://assets/sprites/chorro-pared-acido-brillo.png")],
+		"origen": Vector2(72, 82), "fotogramas": 10},
 }
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
