@@ -1489,7 +1489,7 @@ func probar_fogonazos() -> void:
 # Con "--captura --fogonazos-aliados": el fogonazo de pixelfx (fogonazo.gd) de los supervivientes que disparan, en la
 # sala de pruebas y a media luz. Primero el policía (el de la pistola) y luego el militar (el de la MP5, en ráfagas de
 # 3), solos con Johnny y un zombi quieto a la derecha: la foto, en cuanto sale el primer fogonazo
-# (captura-fogonazo-aliado-<id>.png). Lo que comprueba, en la terminal. Se cierra
+# (captura-fogonazo-aliado-<id>.png y, un poco después, -humo). Lo que comprueba, en la terminal. Se cierra
 func probar_fogonazos_aliados() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
@@ -1516,12 +1516,14 @@ func probar_fogonazos_aliados() -> void:
 		aliado.idx = 0
 		supervivientes.equipo.append(aliado)
 		johnny.get_parent().add_child(aliado)
-		aliado.global_position = johnny.global_position + Vector2(-30, 20)
+		aliado.global_position = johnny.global_position + Vector2(-40, 60)   # (por debajo, que Johnny no le tape)
 		Aliado.borrar_huellas()
-		await get_tree().create_timer(0.7).timeout
+		zombis_de_prueba([])   # (sin zombis hasta que esté listo, y sin fogonazos del anterior)
+		await get_tree().create_timer(3.0).timeout
 		var arma: String = Aliado.FOGONAZO_ARMA[datos.arma]
-		print("%s: preparado el fogonazo de %s %s (esperado: true)" % [id, arma, Fogonazo.calentados.has(arma)])
-		zombis_de_prueba([Vector2(220, 20)])
+		print("%s: preparado el fogonazo de %s %s (esperado: true) | fogonazos antes de disparar %d (esperado: 0)" % [
+			id, arma, Fogonazo.calentados.has(arma), fogonazos.call().size()])
+		zombis_de_prueba([Vector2(220, 80)])
 		var visto := false
 		var tiempo := 0.0
 		var llamas := {}
@@ -1529,12 +1531,17 @@ func probar_fogonazos_aliados() -> void:
 			await get_tree().process_frame
 			tiempo += get_process_delta_time()
 			var hay: Array = fogonazos.call()
-			if not visto and not hay.is_empty():
+			if not visto and hay.any(func(f): return f.tipo == arma + "-llama"):
 				visto = true
 				print("  %s: fogonazos al disparar %d (esperado: 2, la llama y el humo, de %s) | tipos: %s" % [
 					id, hay.size(), arma, hay.map(func(f): return f.tipo)])
+				# (lo que se dibuja sale en la foto un par de fotogramas después): la llama y, luego, el humo
+				for i in 3:
+					await get_tree().process_frame
 				recorte("captura-fogonazo-aliado-%s.png" % id)
-			for f in hay:
+				await get_tree().create_timer(0.25).timeout
+				recorte("captura-fogonazo-aliado-%s-humo.png" % id)
+			for f in fogonazos.call():   # (otra vez: tras las fotos, alguno ya no está)
 				if f.tipo == arma + "-llama":
 					llamas[f.get_instance_id()] = true
 		print("  %s: ha salido el fogonazo %s (esperado: true) | llamas en 4 s: %d (esperado: más de 1)" % [id, visto, llamas.size()])
