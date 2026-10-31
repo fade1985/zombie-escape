@@ -1588,7 +1588,7 @@ func probar_escarcha() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	print("  estallidos %d (esperado: 1) · escarchas en zombis %d (esperado: 4) · explosiones de fuego %d (esperado: 0) · congelados %s (esperado: todos)" % [
-		efectos.call("escarcha"), efectos.call("escarcha-zombi"), fuegos.call(), z.map(func(zz): return zz.aturdido > 0.0)])
+		efectos.call("escarcha"), efectos.call("escarcha-zombi"), fuegos.call(), z.map(func(zz): return zz.congelado > 0.0)])
 	var antes := 0.0
 	for segundos in [0.1, 0.3, 0.8]:
 		await get_tree().create_timer(segundos - antes).timeout

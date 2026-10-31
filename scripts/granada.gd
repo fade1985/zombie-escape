@@ -6,7 +6,7 @@
 # (Lanzables.ARROJADIZAS): su mecha, su dibujo propio (DIBUJOS_PROPIOS) y lo suyo al explotar. A Johnny le hacen
 # como mucho 25:
 #   atraedora    mientras suena, los zombis cercanos van hacia ella (grupo "cebos", zombi.gd)
-#   congeladora  los zombis que pilla se quedan quietos y azules 3 s (la portera, no)
+#   congeladora  los zombis que pilla se congelan 3 s (zombi.congelar: quietos, azul hielo, con copos; la portera, no)
 # (La lluvia ácida, la mina despertador, la nube somnífera y la bomba de clavos se quitaron del juego el 25 oct.)
 # La Épica, al explotar, suelta granaditas de su tipo que explotan enseguida alrededor (el racimo: Armas.TRUCO)
 extends Node2D
@@ -152,10 +152,7 @@ func efecto_creada(c: Dictionary) -> void:
 			if zombi is Zombi and zombi.global_position.distance_to(global_position) <= radio + zombi.radio:
 				if mapa and not mapa.muro_entre(global_position, zombi.global_position).is_empty():
 					continue   # (como la explosión, no pasa las paredes)
-				zombi.aturdido = maxf(zombi.aturdido, congela)
-				zombi.modulate = Color(0.55, 0.8, 1.0)
-				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(congela - 0.4)
-				EfectoSuelo.soltar(get_parent(), "escarcha-zombi", zombi.global_position)
+				zombi.congelar(congela)   # (el congelado de verdad, como en la cámara frigorífica, con su escarcha pequeña)
 		return   # (la congeladora no lleva anillos: ya se ve su escarcha)
 	for i in 2:
 		Particulas.anillo(self, global_position, radio * (0.6 + i * 0.4), c.color, 0.4 + i * 0.15)

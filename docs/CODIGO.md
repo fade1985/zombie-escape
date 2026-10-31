@@ -151,7 +151,8 @@ en una línea.
 - Escarcha (M51; `efecto_suelo.gd`, `escarcha` y `escarcha-zombi`): la congeladora ya no explota en fuego. Su explosión
   (`explosion.gd`, `helada`) hace el mismo daño pero suelta el estallido de escarcha de pixelfx (`tools/pixelfx/escarcha.js`,
   a la escala de su radio), con luz fría y sin quemadura en el suelo. Cada zombi que se congela (la congeladora y la cámara
-  frigorífica, `zombi.congelar`) suelta la pequeña (`escarcha-zombi.js`). Prueba: `--captura --escarcha`.
+  frigorífica, `zombi.congelar`) suelta la pequeña (`escarcha-zombi.js`). La congeladora usa el congelado de verdad
+  (`zombi.congelar`: azul hielo con el shader, el dibujo parado, copos; cuenta para Mezcla explosiva). Prueba: `--captura --escarcha`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
