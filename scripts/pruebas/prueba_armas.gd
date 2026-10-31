@@ -1568,6 +1568,52 @@ func probar_chispas() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --trazadora": la trazadora de las balas (bala.gd, _draw: el cuerpo, la cola fina que se enfría y las
+# chispitas) en pleno vuelo, en la sala de pruebas a media luz y sin la diana. Johnny dispara hacia la derecha la
+# pistola de cada calidad (captura-trazadora-pistola-<calidad>.png), una crítica (-critica), la MP5 (-mp5) y la
+# escopeta (-escopeta); y la pistola en diagonal hacia arriba (-diagonal). Lo que comprueba, en la terminal. Se cierra
+func probar_trazadora() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var balas := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n.get_script() == preload("res://scripts/bala.gd"))
+	# [foto, arma, calidad, crítica, ángulo, dirección]
+	var casos := [["pistola-0", "pistola", 0, false, 0.0, "e"], ["pistola-1", "pistola", 1, false, 0.0, "e"],
+		["pistola-2", "pistola", 2, false, 0.0, "e"], ["pistola-3", "pistola", 3, false, 0.0, "e"],
+		["critica", "pistola", 0, true, 0.0, "e"], ["mp5", "mp5", 0, false, 0.0, "e"],
+		["escopeta", "escopeta", 0, false, 0.0, "e"], ["diagonal", "pistola", 0, false, -PI / 4, "ne"]]
+	for caso in casos:
+		llevar_arma(caso[1], caso[2], true, false)
+		johnny.stats.critico = 1.0 if caso[3] else 0.0
+		johnny.direccion = caso[5]
+		johnny.balas = johnny.arma().cargador
+		await get_tree().create_timer(0.4).timeout
+		johnny.disparar(caso[4])
+		await get_tree().create_timer(0.16).timeout
+		recorte("captura-trazadora-%s.png" % caso[0])
+		var hay: Array = balas.call()
+		if not hay.is_empty():
+			var b: Node2D = hay[0]
+			print("  %s: balas %d | lleva volado %.0f | chispitas %d (esperado: alguna)" % [caso[0], hay.size(), b.recorrido, b.chispitas.size()])
+		await get_tree().create_timer(0.8).timeout
+	johnny.stats.critico = 0.0
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Una foto de la pantalla recortada alrededor de Johnny (que está en el centro): 300 × 240 unidades
 func recorte(archivo: String) -> void:
 	var img := get_tree().root.get_texture().get_image()
