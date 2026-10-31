@@ -368,7 +368,8 @@ en una línea.
   la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
   la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
   tablas siguen con la hoja vista desde arriba. Se prueba con `--puertas`.
-- `puerta.gd` (las salidas) y `cartel_salida.gd`: la salida de incendios es la puerta de las escaleras, al fondo del
+- `puerta.gd` (las salidas) y `cartel_salida.gd`: las de la pared de arriba se ven de frente; las de la de abajo, que se ve por detrás,
+  son el hueco en el muro con la hoja vista desde arriba (`puerta-abajo.png`). La salida de incendios es la puerta de las escaleras, al fondo del
   pasillo, en el muro de la derecha. Se abre cuando cae el jefe de la planta (`jefa_muerta` en `partida.gd`, que llama a
   `actualizar_puertas`). Vista desde arriba, es una hoja de chapa roja fina metida en el hueco, con su barra antipánico
   de aluminio sobresaliendo hacia el pasillo y las escaleras detrás (`puerta-salida.png`, 36 × 36). Encima, en la pared de
@@ -425,6 +426,11 @@ en una línea.
 - **El número de la planta, gastado:** los carteles limpios están en `assets/sources/cartel/limpios/` (ahí escriben `guias_cartel.py sprites`
   y `cartel_planta_idiomas.py`) y `cartel_roto.py` saca de ellos los del juego (`assets/sprites/cartel-planta-*.png`), con la pintura
   pelada, un desconchón y grietas. Si se toca un cartel, hay que pasarlo otra vez; la palabra se protege para que se lea.
+- **Las puertas sucias:** `puertas_sucias.py` saca de cada puerta de madera limpia su copia `-sucia.png`, con mugre, arañazos, huellas de
+  manos y sangre (lo que lleva cada una, a mano en `RECETAS`). Las de piso y las de dentro de frente son tres dibujos, para que no sean todas
+  iguales. Las limpias se quedan para las zonas seguras (`ZONAS_SEGURAS` en `mapa.gd`). Si se regenera una puerta, hay que pasarlo otra vez.
+- **La puerta de la pared de abajo:** `puerta_abajo.py` hace `puerta-abajo.png`, el hueco en el muro con su marco y la hoja vista desde arriba
+  (esa pared se ve por detrás), en tres modelos: madera sucia, madera limpia y cristal del centro comercial; la pinta `puerta.gd`.
 - **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
   arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta

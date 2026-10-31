@@ -28,6 +28,7 @@ const CASILLA := 32
 const ALTO := 86.0          # lo alto de la hoja vista de frente (casi lo alto de la cara del muro)
 const LINEA := Color("#1d1b2c")
 const DIBUJO := preload("res://assets/sprites/puerta-bano.png")   # la hoja de frente: 28 × 43 píxeles (56 × 86 unidades)
+const FRENTE := Vector2(28, 43)
 const MARCO := 4.0          # de frente, el grueso del marco (2 píxeles): con la hoja, llena el hueco de lado a lado
 const DINTEL := ALTO + MARCO   # de frente, lo alto del marco; por encima va el dintel (mapa.gd: poner_caras)
 const ABIERTA := preload("res://assets/sprites/puerta-bano-abierta.png")   # la hoja abierta del todo, de frente: 14 × 67 píxeles (64 de hoja y 3 de sombra)
@@ -38,6 +39,12 @@ const GIRO_LADO := 2.6779   # lo que gira de lado al abrirse del todo, 153 grado
 const DIBUJO_TRASTERO := preload("res://assets/sprites/puerta-trastero.png")
 const ABIERTA_TRASTERO := preload("res://assets/sprites/puerta-trastero-abierta.png")
 const CERRADA_LADO := preload("res://assets/sprites/puerta-bano-lado-cerrada.png")   # la de lado, cerrada: un tablón de 16 × 32 (el hueco entero, con el tablón en medio)
+# Los dibujos de madera: limpios, los de arriba (solo en las zonas seguras: mapa.gd), o sucios, con sangre y arañazos (tools/puertas_sucias.py)
+const MADERA_LIMPIA := {"frente": DIBUJO, "abierta": ABIERTA, "lado": ABIERTA_LADO, "cerrada": CERRADA_LADO}
+const MADERA_SUCIA := {"frente": preload("res://assets/sprites/puerta-bano-sucia.png"),
+	"abierta": preload("res://assets/sprites/puerta-bano-abierta-sucia.png"),
+	"lado": preload("res://assets/sprites/puerta-bano-abierta-lado-sucia.png"),
+	"cerrada": preload("res://assets/sprites/puerta-bano-lado-cerrada-sucia.png")}
 const FIN_CERRADA := 0.2    # de lado, lo que tarda en irse el dibujo de la cerrada al empezar a abrirse
 const ARRIMADO := 26.0      # a cuánto del hueco, por delante o por detrás, hay que llegar para abrir una libre
 const EMPUJE := 0.5         # los segundos que tarda un zombi en abrir una libre empujándola
@@ -56,7 +63,8 @@ var tablas := 0:            # las tablas que le quedan clavadas (la barricada de
 		queue_redraw()
 var acero := false          # la puerta blindada de la cámara acorazada de la joyería (joyeria.gd): de acero, sin madera
 var trastero := false       # la de un trastero de las viviendas (mapa.gd): azul lisa (ver arriba)
-var libre := false          # se abre empujando (ver arriba)
+var madera: Dictionary = MADERA_SUCIA
+var libre := false         # se abre empujando (ver arriba)
 var empuje := 0.0           # lo que lleva un zombi empujándola
 var mirar_t := 0.0
 var tiempo := 0.0
@@ -182,7 +190,7 @@ func _draw() -> void:
 		var bisagra := Vector2(r.position.x + MARCO + temblor, r.end.y)
 		if abierta >= 1.0 and not acero:
 			# abierta del todo: su dibujo, con la esquina de arriba a la izquierda en la bisagra (con su canto y su sombra)
-			var dibujo := ABIERTA_TRASTERO if trastero else ABIERTA
+			var dibujo: Texture2D = ABIERTA_TRASTERO if trastero else madera.abierta
 			draw_texture_rect(dibujo, Rect2(bisagra - Vector2(0, ALTO), dibujo.get_size() * 2.0), false)
 		else:
 			draw_set_transform_matrix(Transform2D(Vector2(cos(giro), sin(giro)), Vector2(0, 1), bisagra))
@@ -190,7 +198,7 @@ func _draw() -> void:
 			if acero:
 				acero_de_frente(hoja)
 			else:
-				draw_texture_rect(DIBUJO_TRASTERO if trastero else DIBUJO, hoja, false, Color.WHITE.darkened(0.15 * abierta))
+				pintar_frente(hoja, Color.WHITE.darkened(0.15 * abierta))
 			draw_set_transform_matrix(Transform2D.IDENTITY)
 			if abierta > 0.0:
 				# el canto de fuera, que da a la luz
@@ -247,19 +255,27 @@ func hoja_de_lado(r: Rect2, temblor: float) -> void:
 	if abierta < FIN_CERRADA:
 		var tinte := Color.WHITE
 		tinte.a = 1.0 - abierta / FIN_CERRADA
-		draw_texture_rect(CERRADA_LADO, Rect2(r.position.x + temblor, r.position.y, r.size.x, r.size.y), false, tinte)
+		draw_texture_rect(madera.cerrada, Rect2(r.position.x + temblor, r.position.y, r.size.x, r.size.y), false, tinte)
 	if abierta <= 0.0:
 		return
 	var bisagra := Vector2(lerpf(r.get_center().x, r.end.x - 2.0, abierta) + temblor, r.position.y + 4.0)
 	if abierta >= 1.0:
 		# (la esquina de arriba a la izquierda del dibujo, 4 unidades a la izquierda de la cara: el canto de la bisagra)
-		var tam := ABIERTA_LADO.get_size() * 2.0
-		draw_texture_rect(ABIERTA_LADO, Rect2(bisagra + Vector2(-4.0, -tam.y + SOMBRA_LADO * 2.0), tam), false)
+		var tam: Vector2 = madera.lado.get_size() * 2.0
+		draw_texture_rect(madera.lado, Rect2(bisagra + Vector2(-4.0, -tam.y + SOMBRA_LADO * 2.0), tam), false)
 		return
 	var giro := abierta * GIRO_LADO
 	draw_set_transform_matrix(Transform2D(Vector2(sin(giro), cos(giro)), Vector2(0, 1), bisagra))
-	draw_texture_rect(DIBUJO, Rect2(0, -ALTO, r.size.y - 8.0, ALTO), false, Color.WHITE.darkened(0.15 * abierta))
+	pintar_frente(Rect2(0, -ALTO, r.size.y - 8.0, ALTO), Color.WHITE.darkened(0.15 * abierta))
 	draw_set_transform_matrix(Transform2D.IDENTITY)
+
+
+# La hoja vista de frente: la azul de los trasteros o la de madera. Las sucias son varios dibujos, uno al lado de otro, y cada puerta
+# coge el suyo según dónde esté, para que las de un piso no sean todas iguales
+func pintar_frente(hoja: Rect2, tinte: Color) -> void:
+	var dibujo: Texture2D = DIBUJO_TRASTERO if trastero else madera.frente
+	var modelo := posmod(roundi((caja.position.x + caja.position.y) / CASILLA), roundi(dibujo.get_width() / FRENTE.x))
+	draw_texture_rect_region(dibujo, hoja, Rect2(Vector2(modelo * FRENTE.x, 0), FRENTE), tinte)
 
 
 # La puerta blindada de la cámara acorazada de la joyería, de frente ("hoja" con el pie en 0): una plancha de acero con

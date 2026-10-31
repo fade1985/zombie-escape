@@ -203,3 +203,5 @@ mueble("mueble-stafftoilet-lado", [[11, 20, 21, 25]], lambda c: c[0] - c[1] > 6)
 # solo el armazón y el borde de las baldas: los botes rojos se quedan
 ESTANTE = [[0, 14, 3, 59], [36, 14, 40, 59], [0, 14, 40, 15], [0, 25, 40, 26], [0, 36, 40, 37], [0, 47, 40, 49], [14, 46, 32, 47]]
 mueble("mueble-canshelf", ESTANTE, lambda c: c[0] - c[1] > 6)
+# la mancha del marco de las puertas de dentro (las de los pisos, con su sangre, salen de aquí con tools/puertas_sucias.py)
+mueble("puerta-bano", [[21, 6, 26, 19]], lambda c: c[1] < c[0] * 0.62)

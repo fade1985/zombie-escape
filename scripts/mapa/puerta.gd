@@ -1,8 +1,8 @@
 # Una salida de un mapa: las puertas de los apartamentos, el ascensor averiado, las escaleras (la salida de incendios,
 # roja, con su cartel EXIT: cartel_salida.gd) y por donde se ha llegado. Las puertas vistas de frente (en la pared de
 # arriba) son dibujos de PixelLab (tools/guias_puertas.py): la de madera de los pisos, la de cristal de las tiendas y
-# la de acero de la sala de mantenimiento. Lo demás se dibuja a mano, con rectángulos de colores (en múltiplos de 2
-# unidades, como un píxel del dibujo).
+# la de acero de la sala de mantenimiento. Las de la pared de abajo, de tools/puerta_abajo.py. Lo demás se dibuja a mano, con
+# rectángulos de colores (en múltiplos de 2 unidades, como un píxel del dibujo).
 #
 # Delante tiene una zona invisible: cuando Johnny la pisa, avisa con "empujada" y la partida decide si se
 # pasa al otro lado o se le dice por qué no se abre.
@@ -11,9 +11,16 @@ extends Node2D
 signal empujada(indice: int)
 
 # Las puertas de frente: 36 × 43 píxeles, o sea 72 × 86 unidades
-const DIBUJO := {"piso": preload("res://assets/sprites/puerta-piso.png"),
-	"tienda": preload("res://assets/sprites/puerta-tienda.png"),
+const DIBUJO := {"tienda": preload("res://assets/sprites/puerta-tienda.png"),
 	"servicio": preload("res://assets/sprites/puerta-servicio.png")}
+# La de los pisos, sucia y con sangre (tools/puertas_sucias.py): tres dibujos, uno al lado de otro, para que no sean todas iguales
+const PISO := preload("res://assets/sprites/puerta-piso-sucia.png")
+const PISO_DIBUJO := Vector2(36, 43)
+# Las de la pared de abajo, que se ve por detrás: el hueco en el muro, con su marco, y la hoja desde arriba, un tablón con su pomo
+# (tools/puerta_abajo.py). 36 × 32 píxeles, 72 × 64 unidades. Tres, una al lado de otra: madera sucia, madera limpia (ver "limpia")
+# y cristal y aluminio (el centro comercial)
+const ABAJO := preload("res://assets/sprites/puerta-abajo.png")
+const ABAJO_DIBUJO := Vector2(36, 32)
 # El número de la planta pintado en la pared junto al ascensor (de suelo a moldura): 28 × 42 píxeles, 56 × 84 unidades.
 # Planta baja (0) a 3ª (la azotea no tiene ascensor)
 const CARTELES := [preload("res://assets/sprites/cartel-planta-0.png"), preload("res://assets/sprites/cartel-planta-1.png"),
@@ -74,6 +81,7 @@ const LETRAS := {
 var salida: Dictionary   # la de planta.gd: dir, tipo, cerrojo...
 var indice := 0          # su número en la lista de salidas del sitio
 var centro := false      # si es del centro comercial (lo pone mapa.gd): puertas de cristal en vez de madera
+var limpia := false      # si es de una zona segura (lo pone mapa.gd: ZONAS_SEGURAS): sin sangre
 var cartel: Node2D = null   # las escaleras: su cartel EXIT de la pared de arriba (cartel_salida.gd, lo pone mapa.gd)
 var abierta := true:     # si se puede pasar
 	set(valor):
@@ -120,14 +128,17 @@ func _draw() -> void:
 			# la de la sala de mantenimiento (la de la placa con la llave inglesa), de acero en los dos edificios; las
 			# demás, la del edificio
 			var dibujo: String = "servicio" if salida.get("placa", "") == "llave" else ("tienda" if centro else "piso")
-			draw_texture_rect(DIBUJO[dibujo], Rect2(-36, -86, 72, 86), false)
+			if dibujo == "piso":
+				var modelo: int = {"A": 0, "B": 1}.get(salida.get("placa", ""), 2)
+				draw_texture_rect_region(PISO, Rect2(-36, -86, 72, 86), Rect2(Vector2(modelo * PISO_DIBUJO.x, 0), PISO_DIBUJO))
+			else:
+				draw_texture_rect(DIBUJO[dibujo], Rect2(-36, -86, 72, 86), false)
 			if salida.has("placa"):
 				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
-			draw_rect(Rect2(-36, 0, 72, 64), MARCO)
-			draw_rect(Rect2(-32, 0, 64, 64), HUECO)
-			draw_rect(Rect2(-32, 0, 64, 8), HOJA)
+			var modelo := 2 if centro else (1 if limpia else 0)
+			draw_texture_rect_region(ABAJO, Rect2(-36, 0, 72, 64), Rect2(Vector2(modelo * ABAJO_DIBUJO.x, 0), ABAJO_DIBUJO))
 			if salida.has("placa"):
 				# la de acero, encima del muro, a la derecha del hueco; las de latón, tiradas en el suelo, a un lado de la puerta
 				placa_de_piso(Vector2(42, 6), PLACA_SUELO, Vector2(34, -56) if salida.placa == "C" else Vector2(-88, -60))

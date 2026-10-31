@@ -47,6 +47,7 @@ const TAQUILLA_X := 260.0
 const ESTILO_MANTENIMIENTO := {"taller": ["mantenimiento", "taller", "mantenimiento"],
 	"vestuario": ["vestuario", "vestuario", "bano-b"], "despacho": ["despacho", "despacho", "salon-c"]}
 const PUERTA_BANO := preload("res://scripts/mapa/puerta_bano.gd")   # las puertas de dentro de las casas (y las cerradas de las viviendas)
+const ZONAS_SEGURAS := ["mantenimiento", "viviendas", "armas", "expo"]   # donde las puertas de madera no llevan sangre ni arañazos
 const CARTEL_SALIDA := preload("res://scripts/mapa/cartel_salida.gd")   # el EXIT de la salida de incendios (encima de la pared de arriba del pasillo)
 const CARTEL_SALIDA_A := 76.0   # a cuánto del fondo del pasillo va su centro
 const CARTEL_TRASTEROS := preload("res://scripts/mapa/cartel_trasteros.gd")   # el de la entrada del pasillo de las viviendas
@@ -786,6 +787,7 @@ func poner_puertas() -> void:
 		puerta.salida = salida
 		puerta.indice = i
 		puerta.centro = centro
+		puerta.limpia = sitio.tipo in ZONAS_SEGURAS
 		puerta.name = "Puerta%d" % i
 		match salida.dir:
 			"arriba": puerta.position = Vector2(salida.en, MURO)
@@ -876,6 +878,8 @@ func poner_hojas() -> void:
 			continue
 		var hoja := PUERTA_BANO.new()
 		hoja.libre = true
+		if sitio.tipo in ZONAS_SEGURAS:
+			hoja.madera = PUERTA_BANO.MADERA_LIMPIA
 		hoja.montar(d)
 		cosas.add_child(hoja)
 		hojas.append(hoja)
