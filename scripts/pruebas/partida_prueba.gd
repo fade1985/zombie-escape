@@ -71,6 +71,8 @@
 #                       racimo                                                             [prueba_armas.gd]
 #   --aura              lo que se ve de la calidad del arma en la mano: la luz, las chispas y la estela del golpe y de la
 #                       bala, con luz y a oscuras                                           [prueba_armas.gd]
+#   --fogonazos         el fogonazo de pixelfx (fogonazo.gd) de la pistola, la MP5 y la escopeta en las 8 direcciones,
+#                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --sensacion         que golpear se note: el parón de cada golpe (cada arma, al matar, el de gracia, explosiones,
 #                       daño a Johnny; sin sumarse, el respiro y la pausa) y el tono de los sonidos [prueba_armas.gd]
 #   --temblor           el ajuste «Temblor de pantalla» de Opciones: el botón (Normal, Suave, Sin temblor), que
@@ -395,6 +397,9 @@ func empezar_prueba() -> void:
 	elif "--epicas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_epicas()
+	elif "--fogonazos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_fogonazos()
 	elif "--aura" in args:
 		set_process(false)   # sin la prueba larga
 		probar_aura()

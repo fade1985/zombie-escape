@@ -164,6 +164,8 @@ var con_raton := false     # modo libre: si se está apuntando con el ratón (se
 func _ready() -> void:
 	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	efectos.animation_finished.connect(efectos.hide)
+	# (al empezar todavía no hay cámara: el fogonazo del arma que lleva se prepara un poco después)
+	get_tree().create_timer(0.5).timeout.connect(preparar_fogonazo)
 	llamas = Llamas.new()
 	llamas.alto = 70.0
 	llamas.fuerza = 0.0
@@ -807,6 +809,10 @@ func disparar(angulo: float) -> void:
 	var mapa := get_tree().get_first_node_in_group("mapa")
 	Sonido.tocar("escopeta" if w.perdigones > 1 else "pistola_" + (mapa.acustica_en(global_position) if mapa else "seca"))
 	soltar_casquillo(angulo, w.perdigones > 1)
+	# El fogonazo de pixelfx (fogonazo.gd), donde se ve la boca: se ordena como las balas, pero hacia los lados y hacia
+	# abajo, siempre delante de Johnny
+	var orden := salida.y if sin(angulo) < -0.3 else maxf(salida.y, global_position.y + 2.0)
+	Fogonazo.soltar(get_parent(), huecos[mano], salida - Vector2(0, 50), angulo, orden)
 	if w.perdigones > 1:
 		Temblor.temblar(4.0)   # la escopeta da un buen golpe
 	# El fogonazo alumbra un instante alrededor (más con la escopeta)
@@ -1034,9 +1040,16 @@ func cambiar_mano() -> void:
 	espera = maxf(espera, CAMBIO)   # un instante para cambiar de arma
 
 
+# El fogonazo del arma de fuego que lleva, preparado para que el primer disparo no pare el juego (fogonazo.gd)
+func preparar_fogonazo() -> void:
+	if is_inside_tree():
+		Fogonazo.precalentar(get_parent(), huecos.get("fuego", ""))
+
+
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta
 func sostener(hueco: String) -> void:
 	mano = hueco
+	preparar_fogonazo()
 	sin_balas_sola = false
 	recargando = 0.0
 	ataque_t = -1.0

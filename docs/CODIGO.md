@@ -127,6 +127,11 @@ en una línea.
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
   `efecto_suelo.gd` hace los efectos de pixelfx que salen una vez en el suelo (sus tres hojas y el precalentado para que
   el primero no pare el juego); el otro tipo es `gases`, la nube del Flatulento (`mutaciones.gd`), del tamaño de su radio.
+- `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
+  Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
+  con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
+  y se precalienta al coger el arma (`johnny.preparar_fogonazo`). El fogonazo dibujado en las hojas de Johnny sigue
+  debajo. Prueba: `--captura --fogonazos`.
 - `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
@@ -458,6 +463,9 @@ en una línea.
   `pixelfx/nube-gases.js` es la nube del Flatulento ("poison-cloud" desde arriba, `nube-gases-*.png`), igual.
   `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
   en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
+  `pixelfx/fogonazo.js` son los fogonazos ("muzzle-pistol", "muzzle-smg" y "muzzle-shotgun" partidos en llama y humo,
+  sin casquillo) y `pixelfx/exportar_fogonazo.mjs` los saca girados y recortados (`fogonazo-<arma>-<parte>*.png`) y
+  escribe las medidas para `TIPOS` de `fogonazo.gd`: `node tools/pixelfx/exportar_fogonazo.mjs <pixelfx> assets/sprites`.
   `pixelfx/bocanadas.mjs` hace `bocanadas-fuego.png`, las bocanadas de fuego y de humo de "fire-breath" en 10 tamaños y
   10 edades, para el chorro del lanzallamas del bombero (`node tools/pixelfx/bocanadas.mjs <pixelfx> assets/sprites`).
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
