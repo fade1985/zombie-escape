@@ -1516,7 +1516,7 @@ func probar_fogonazos_aliados() -> void:
 		aliado.idx = 0
 		supervivientes.equipo.append(aliado)
 		johnny.get_parent().add_child(aliado)
-		aliado.global_position = johnny.global_position + Vector2(-40, 60)   # (por debajo, que Johnny no le tape)
+		aliado.global_position = johnny.global_position + Vector2(-40, 60)   # (enseguida vuelve a su sitio en la fila, detrás de Johnny)
 		Aliado.borrar_huellas()
 		zombis_de_prueba([])   # (sin zombis hasta que esté listo, y sin fogonazos del anterior)
 		await get_tree().create_timer(3.0).timeout
