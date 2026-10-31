@@ -51,6 +51,7 @@ func _ready() -> void:
 		if tipo == "congeladora":   # (para que la primera no pare el juego: efecto_suelo.gd)
 			EfectoSuelo.precalentar(get_parent(), "escarcha")
 			EfectoSuelo.precalentar(get_parent(), "escarcha-zombi")
+			EfectoSuelo.precalentar(get_parent(), "deshielo")
 	if hija:
 		mecha = HIJA_MECHA
 
