@@ -1537,6 +1537,69 @@ func probar_reventon_sangre() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --escarcha": el hielo (M51) en la sala de pruebas, a media luz y sin Johnny en medio: una congeladora
+# explota entre tres zombis (el estallido de escarcha en vez de la bola de fuego, EfectoSuelo "escarcha", y la escarcha
+# pequeña en cada uno, "escarcha-zombi"); luego un zombi aparte se congela como en la cámara frigorífica (zombi.congelar).
+# Fotos a los 0,1, 0,3 y 0,8 s (captura-escarcha-<segundos>.png). Lo que comprueba, en la terminal. Se cierra
+func probar_escarcha() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var centro: Vector2 = johnny.position + Vector2(-40, -20)
+	var z := []
+	for i in 3:
+		var uno: Node2D = meter_zombi("normal", centro + Vector2.from_angle(TAU * i / 3.0 + 0.4) * Vector2(70, 42))
+		uno.vida = 9999
+		z.append(uno)
+	var suelto: Node2D = meter_zombi("normal", johnny.position + Vector2(170, -10))
+	suelto.vida = 9999
+	await get_tree().create_timer(0.4).timeout
+	johnny.visible = false
+	var efectos := func(cual: String) -> int:
+		return johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == cual and not n.de_calentar).size()
+	var fuegos := func() -> int:
+		return johnny.get_parent().get_children().filter(func(n): return n.get("helada") != null).size()
+	var g: Node2D = Lanzables.BOMBA.new()
+	g.tipo = "congeladora"
+	g.desde = centro
+	g.hasta = centro
+	g.radio = Lanzables.DATOS.congeladora.radio
+	g.dano_zombis = Lanzables.DATOS.congeladora.dano
+	johnny.get_parent().add_child(g)
+	g.mecha = 0.1
+	await get_tree().process_frame
+	print("Escarcha: precalentadas %s y %s (esperado: true y true)" % [EfectoSuelo.calentados.has("escarcha"), EfectoSuelo.calentados.has("escarcha-zombi")])
+	while is_instance_valid(g):
+		await get_tree().physics_frame
+	suelto.congelar(2.0)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("  estallidos %d (esperado: 1) · escarchas en zombis %d (esperado: 4) · explosiones de fuego %d (esperado: 0) · congelados %s (esperado: todos)" % [
+		efectos.call("escarcha"), efectos.call("escarcha-zombi"), fuegos.call(), z.map(func(zz): return zz.aturdido > 0.0)])
+	var antes := 0.0
+	for segundos in [0.1, 0.3, 0.8]:
+		await get_tree().create_timer(segundos - antes).timeout
+		antes = segundos
+		Captura.foto("captura-escarcha-%s.png" % str(segundos).replace(".", ","))
+	await get_tree().create_timer(1.5).timeout
+	print("  al acabar, efectos %d (esperado: 0)" % (efectos.call("escarcha") + efectos.call("escarcha-zombi")))
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --chispazos": lo eléctrico (M50) en la sala de pruebas, a media luz y sin Johnny en medio: una descarga
 # (ArmasCreadas.descarga, como la del Pararrayos con Alto voltaje) en el primero de cuatro zombis en fila, que salta de uno
 # a otro tres veces: en cada salto un relámpago (relampago.gd) y, donde da, un chispazo de pixelfx (EfectoSuelo,

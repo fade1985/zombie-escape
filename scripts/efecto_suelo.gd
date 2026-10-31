@@ -14,6 +14,12 @@
 #  - "chispazo": la electricidad al dar a un zombi (M50; ArmasCreadas.rayo y el lanza rayos, llamarada.gd), el "zap-hit"
 #    pasado a vista desde arriba (tools/pixelfx/chispazo.js): un nudo de rayitos a la altura del cuerpo, chispas que hacen
 #    eses y caen, y una quemadura en forma de helecho en el suelo. Se suelta en el suelo, debajo del golpe.
+#  - "escarcha": la congeladora al explotar (M51; explosion.gd, "helada": en vez de la bola de fuego), un efecto hecho para
+#    el juego (tools/pixelfx/escarcha.js): el destello y el copo, un anillo de frío que se abre por el suelo dejando escarcha,
+#    cristales de hielo que brotan, brillan y se funden, trozos de hielo y vaho. Hecho para el radio de la congeladora
+#    (120): con otro, se agranda o se achica ("escala").
+#  - "escarcha-zombi": la misma, pequeña (tools/pixelfx/escarcha-zombi.js), en cada zombi que se congela (la congeladora,
+#    granada.gd, y la cámara frigorífica, zombi.congelar).
 class_name EfectoSuelo
 extends Node2D
 
@@ -39,12 +45,19 @@ const TIPOS := {
 	"chispazo": {"hojas": [preload("res://assets/sprites/chispazo-detras.png"),
 		preload("res://assets/sprites/chispazo-delante.png"), preload("res://assets/sprites/chispazo-brillo.png")],
 		"origen": Vector2(48, 56), "fotogramas": 10},
+	"escarcha": {"hojas": [preload("res://assets/sprites/escarcha-detras.png"),
+		preload("res://assets/sprites/escarcha-delante.png"), preload("res://assets/sprites/escarcha-brillo.png")],
+		"origen": Vector2(88, 80), "fotogramas": 32},
+	"escarcha-zombi": {"hojas": [preload("res://assets/sprites/escarcha-zombi-detras.png"),
+		preload("res://assets/sprites/escarcha-zombi-delante.png"), preload("res://assets/sprites/escarcha-zombi-brillo.png")],
+		"origen": Vector2(36, 48), "fotogramas": 24},
 }
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
 const SANGRE := {"venenoso": "sangre-verde", "tentaculos": "sangre-morada"}
 const FPS := 20.0
 
 var tipo := "reventon"
+var escala := 1.0          # más grande o más pequeño que el dibujo (a 2 unidades por píxel)
 var capas: Array[Sprite2D] = []
 var t := 0.0
 var de_calentar := false   # el de precalentar(): casi transparente, unos fotogramas y fuera
@@ -69,9 +82,10 @@ static func precalentar(sala: Node, cual: String) -> void:
 	sala.add_child.call_deferred(e)
 
 
-static func soltar(sala: Node, cual: String, donde: Vector2) -> EfectoSuelo:
+static func soltar(sala: Node, cual: String, donde: Vector2, escala := 1.0) -> EfectoSuelo:
 	var e := EfectoSuelo.new()
 	e.tipo = cual
+	e.escala = escala
 	e.position = (donde / 2.0).round() * 2.0   # (en píxel entero del dibujo, como los charcos)
 	sala.add_child.call_deferred(e)   # (puede salir en mitad de una consulta de física)
 	return e
@@ -88,7 +102,7 @@ func _ready() -> void:
 		capa.vframes = filas
 		capa.centered = false
 		capa.offset = -datos.origen
-		capa.scale = Vector2(2, 2)
+		capa.scale = Vector2(2, 2) * escala
 		capa.z_as_relative = false
 		capa.z_index = -1 if i == 0 else 4
 		if i == 2:

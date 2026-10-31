@@ -612,9 +612,7 @@ func congelar(segundos: float) -> void:
 	aturdido = maxf(aturdido, segundos)
 	sprite.material.set_shader_parameter("hielo", 0.6)   # azul hielo (el mismo shader del destello)
 	Sonido.tocar("cristal")
-	for i in 10:
-		Particulas.soltar(self, global_position + Vector2(randf_range(-radio, radio), -randf_range(0, altura * 0.8)),
-			Vector2(randf_range(-50, 50), randf_range(-60, 10)), Color.WHITE if i % 2 else Color("#9fd8ff"), randf_range(2, 4), 0.4)
+	EfectoSuelo.soltar(get_parent(), "escarcha-zombi", global_position)   # (M51: el estallido de escarcha pequeño)
 
 
 # Ardiendo: la quemadura a pellizcos, y el número cada medio segundo (o si ya le mata). Cada "contagia" segundos

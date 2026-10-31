@@ -48,6 +48,9 @@ func _ready() -> void:
 		mecha = Lanzables.ARROJADIZAS[tipo].mecha
 		if tipo == "atraedora":
 			add_to_group("cebos")
+		if tipo == "congeladora":   # (para que la primera no pare el juego: efecto_suelo.gd)
+			EfectoSuelo.precalentar(get_parent(), "escarcha")
+			EfectoSuelo.precalentar(get_parent(), "escarcha-zombi")
 	if hija:
 		mecha = HIJA_MECHA
 
@@ -110,12 +113,14 @@ func explotar() -> void:
 	boom.dano_zombis = dano_zombis
 	boom.paredes = true
 	boom.position = position
+	boom.helada = tipo == "congeladora"
 	if tipo != "granada":
 		efecto_creada(Lanzables.ARROJADIZAS[tipo])
 	if hija:
 		boom.dano = roundi(boom.dano * Armas.TRUCO.racimo_tamano)
 	get_parent().add_child(boom)
-	Mancha.quemado(get_parent(), position, radio * 0.5)
+	if not boom.helada:
+		Mancha.quemado(get_parent(), position, radio * 0.5)
 	if racimo > 0:
 		soltar_racimo()
 	queue_free()
@@ -150,6 +155,8 @@ func efecto_creada(c: Dictionary) -> void:
 				zombi.aturdido = maxf(zombi.aturdido, congela)
 				zombi.modulate = Color(0.55, 0.8, 1.0)
 				zombi.create_tween().tween_property(zombi, "modulate", Color.WHITE, 0.4).set_delay(congela - 0.4)
+				EfectoSuelo.soltar(get_parent(), "escarcha-zombi", zombi.global_position)
+		return   # (la congeladora no lleva anillos: ya se ve su escarcha)
 	for i in 2:
 		Particulas.anillo(self, global_position, radio * (0.6 + i * 0.4), c.color, 0.4 + i * 0.15)
 
