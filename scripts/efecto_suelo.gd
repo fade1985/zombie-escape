@@ -5,6 +5,12 @@
 #    El charco grande que queda es aparte (charco.gd, "reventon").
 #  - "gases": la nube del Flatulento (M37), el "poison-cloud" desde arriba (tools/pixelfx/nube-gases.js), del tamaño
 #    del radio del gas (140).
+#  - "molotov": la botella al romperse (M48; proyectil.gd, llamarada), un efecto nuevo hecho para el juego, visto desde
+#    arriba (tools/pixelfx/molotov.js): el chasquido, la gasolina que prende en corro, las llamas, chispas y los cristales
+#    que saltan y resbalan. El charco de fuego que queda es aparte (charco.gd, "fuego").
+#  - "sangre", "sangre-verde" y "sangre-morada": el zombi que muere de un golpe fuerte revienta (M49; partida.sangre): un
+#    efecto hecho para el juego (tools/pixelfx/reventon-sangre.js), con la sangre de cada uno (roja, la del venenoso y la
+#    del de tentáculos). La mancha que queda es aparte (mancha.gd).
 class_name EfectoSuelo
 extends Node2D
 
@@ -15,7 +21,21 @@ const TIPOS := {
 	"gases": {"hojas": [preload("res://assets/sprites/nube-gases-detras.png"),
 		preload("res://assets/sprites/nube-gases-delante.png"), preload("res://assets/sprites/nube-gases-brillo.png")],
 		"origen": Vector2(92, 66), "fotogramas": 32},
+	"molotov": {"hojas": [preload("res://assets/sprites/molotov-detras.png"),
+		preload("res://assets/sprites/molotov-delante.png"), preload("res://assets/sprites/molotov-brillo.png")],
+		"origen": Vector2(110, 120), "fotogramas": 26},
+	"sangre": {"hojas": [preload("res://assets/sprites/reventon-sangre-detras.png"),
+		preload("res://assets/sprites/reventon-sangre-delante.png"), preload("res://assets/sprites/reventon-sangre-brillo.png")],
+		"origen": Vector2(100, 100), "fotogramas": 24},
+	"sangre-verde": {"hojas": [preload("res://assets/sprites/reventon-sangre-verde-detras.png"),
+		preload("res://assets/sprites/reventon-sangre-verde-delante.png"), preload("res://assets/sprites/reventon-sangre-verde-brillo.png")],
+		"origen": Vector2(100, 100), "fotogramas": 24},
+	"sangre-morada": {"hojas": [preload("res://assets/sprites/reventon-sangre-morada-detras.png"),
+		preload("res://assets/sprites/reventon-sangre-morada-delante.png"), preload("res://assets/sprites/reventon-sangre-morada-brillo.png")],
+		"origen": Vector2(100, 100), "fotogramas": 24},
 }
+# El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
+const SANGRE := {"venenoso": "sangre-verde", "tentaculos": "sangre-morada"}
 const FPS := 20.0
 
 var tipo := "reventon"

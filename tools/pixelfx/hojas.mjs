@@ -2,12 +2,14 @@
 // fotogramas de todas las variantes de un efecto de pixelfx, recorta a lo justo (lo mismo para todas, con el origen en
 // el mismo sitio) y guarda dos hojas: <nombre>.png, el color, y <nombre>-brillo.png, la luz (para sumarla con mezcla
 // "añadir"). Cada variante ocupa sus filas de hasta 16 columnas, una detrás de otra.
+// "capas": las del efecto que se pintan, una encima de otra (los fogonazos y la chispa solo usan "front"; la explosión
+// también "back", donde va su humo, la marca del suelo y la mitad de atrás de los anillos).
 // Devuelve las medidas para el script de Godot: { origen: [x, y], fotogramas, columnas, filas, w, h, alto }.
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
-export async function exportarVariantes(PFX, mod, variantes, n, fps, salida, nombre) {
+export async function exportarVariantes(PFX, mod, variantes, n, fps, salida, nombre, capas = ["front"]) {
   const { createFrame, clearFrame, createFx, composite } = await import(pathToFileURL(join(PFX, "src/core/index.js")));
   const { encodePNG } = await import(pathToFileURL(join(PFX, "tools/lib/png.mjs")));
   const [W, H] = mod.meta.size, [OX, OY] = mod.meta.origin;
@@ -18,7 +20,7 @@ export async function exportarVariantes(PFX, mod, variantes, n, fps, salida, nom
     for (let i = 0; i < n; i++) {
       if (i > 0) fx.update(1 / fps);
       clearFrame(f);
-      fx.draw(f, "front");
+      for (const capa of capas) fx.draw(f, capa);
       const luz = new Uint8ClampedArray(W * H * 4);
       for (let k = 0; k < W * H; k++) {
         const l = f.light[k] & 0xffffff;

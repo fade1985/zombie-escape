@@ -46,6 +46,8 @@ var marca: Node2D = null     # la sartén: su marca en el suelo, por debajo de t
 
 func _ready() -> void:
 	global_position = desde
+	if tipo == "molotov" or tipo == "molotov_jefe":
+		EfectoSuelo.precalentar(get_parent(), "molotov")   # (mientras vuela: que el primero no pare el juego al romperse)
 	if TIPOS[tipo].has("marca"):
 		marca = Node2D.new()
 		marca.z_index = -6   # este nodo va a 5: la marca, a -1, como los charcos
@@ -132,16 +134,11 @@ func soltar_racimo(r: float) -> void:
 		get_parent().add_child.call_deferred(b)
 
 
-# La botella se rompe: llamarada (chispas y cristales) y daño a los zombis que pilla de lleno, que ya se prenden
+# La botella se rompe: la llamarada (el efecto de pixelfx: el chasquido, la gasolina que prende, llamas, chispas y
+# cristales; efecto_suelo.gd, "molotov") y daño a los zombis que pilla de lleno, que ya se prenden
 func llamarada(r: float) -> void:
 	Luz.destello(get_parent(), hasta, r * 3.0, 0.3, 0.8)
-	for i in 18:
-		var a := randf() * TAU
-		var v := randf_range(60, 240)
-		Particulas.soltar(self, hasta + Vector2(0, -6), Vector2(cos(a) * v, sin(a) * v * 0.6 - 40.0), Llamas.FUEGO[i % 4], randf_range(2, 4), 0.5)
-	for i in 4:
-		var a := randf() * TAU
-		Particulas.soltar(self, hasta, Vector2(cos(a) * 120.0, sin(a) * 70.0), Color("#b9e3d0"), 2, 0.3)   # cristales
+	EfectoSuelo.soltar(get_parent(), "molotov", hasta)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		var d: Vector2 = zombi.global_position - hasta
 		if Vector2(d.x, d.y / 0.6).length() > r * 0.8 + zombi.radio or zombi == dueno:

@@ -1586,6 +1586,9 @@ func sangre(tipo: String, zombi: Node2D) -> void:
 	var color: Color = MANCHAS.get(tipo, SANGRE)
 	Particulas.reventon(zombi, zombi.global_position, trozos, 12, zombi.radio, tipo != "explosivo", color, zombi.get_parent())
 	var jefa := tipo in JEFES
+	# de un golpe fuerte (un crítico, una explosión...), además revienta en sangre (M49; efecto_suelo.gd)
+	if zombi.get("muerte_fuerte") and not jefa and tipo != "explosivo":
+		EfectoSuelo.soltar(zombi.get_parent(), EfectoSuelo.SANGRE.get(tipo, "sangre"), zombi.global_position + Vector2(0, 10))
 	# el temblor al matar (y, a la portera, el golpe final: tiembla mucho y el juego se para un instante)
 	if jefa:
 		Temblor.temblar(20.0)
