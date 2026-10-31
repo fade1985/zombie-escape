@@ -67,6 +67,7 @@ var contagio_t := 0.0      # lo que lleva ardiendo desde que lo pasó a los de a
 var chamuscado := 0.0      # recién apagado: lo que le queda para poder contagiarse otra vez
 var llamas: Llamas
 var acido_t := 0.0         # lo que lleva el ácido royéndole (las manchas crecen)
+var muerte_fuerte := false # si ha caído de un golpe fuerte (MUERTE_FUERTE): revienta en sangre (partida.sangre, M49)
 var talla_restos := "mediano"   # si muere quemado, la talla de su calavera y sus huesos (quemado.gd)
 var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
@@ -98,6 +99,8 @@ const BOOM := preload("res://escenas/armas/explosion.tscn")   # la de Mezcla exp
 func _ready() -> void:
 	collision_mask |= Planta.CAPA_BORDE   # el borde del helipuerto de la azotea (planta.gd): andando, no se cruza
 	vida = vida_max
+	# su reventón de sangre (M49), preparado para que el primero no pare el juego un momento (solo una vez por color)
+	EfectoSuelo.precalentar(get_parent(), EfectoSuelo.SANGRE.get(get_meta("tipo", ""), "sangre"))
 	if not ropas.is_empty():
 		sprite.sprite_frames = ropas.pick_random()
 	poner_animacion("reposo")
@@ -401,6 +404,8 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	# Se gira hacia quien le ha pegado (al revés del empuje)
 	mirar_hacia(-fuerza)
 	if vida <= 0:
+		# de un golpe fuerte: un crítico, uno que empuja tanto como una explosión o uno que le sobra media vida
+		muerte_fuerte = Zombi.critico or fuerza.length() >= MUERTE_FUERTE or -vida >= vida_max / 2
 		morir()
 	else:
 		encogerse()
@@ -687,6 +692,7 @@ func numero_flotante(cantidad: int) -> void:
 # El número de un golpe o una bala (en los zombis y los jefes): blanco o, si es crítico, amarillo, grande y con «!», para
 # que se note (M15). "critico" lo pone quien pega (johnny.golpear y bala.gd) justo antes de recibir_golpe y lo quita después
 static var critico := false
+const MUERTE_FUERTE := 360.0   # el empuje de un golpe que revienta al zombi si lo mata (la explosión empuja 374)
 const CRITICO := Color("#ffd23f")
 
 static func numero_golpe(sala: Node, donde: Vector2, cantidad: int) -> void:

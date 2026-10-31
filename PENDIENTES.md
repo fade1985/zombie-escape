@@ -41,9 +41,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   dibujos más grandes (jefe criatura, gerente mutado…), cargar cada jefe solo cuando sale y una pantalla de carga
   más bonita para que la espera se note menos.
 
-- **M48** pixelfx: el molotov al romperse, un fogonazo de cristal y llamas antes de que salga el charco de fuego.
-- **M49** pixelfx: la muerte de los zombis, un reventón de sangre o una nubecita al caer (sobre todo con golpes fuertes o
-  críticos).
 - **M50** pixelfx: lo eléctrico (pistola eléctrica, lanza rayos, látigo eléctrico), rayos y chispazos en los saltos
   entre zombis.
 - **M51** pixelfx: el hielo (granada congeladora, bate helado), un estallido de escarcha al congelar.

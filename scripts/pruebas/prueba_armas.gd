@@ -1486,6 +1486,57 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --reventon-sangre": los zombis que mueren de un golpe fuerte revientan en sangre (M49; efecto_suelo.gd), en la
+# sala de pruebas a media luz y sin Johnny en medio. Mueren a la vez: un normal, un venenoso y uno de tentáculos de un crítico
+# (sangre roja, verde y morada) y otro normal de un golpe flojo, justo con su vida (ese no revienta). Fotos a los 0,1, 0,3 y
+# 0,6 s (captura-reventon-sangre-<segundos>.png). Lo que comprueba, en la terminal. Se cierra
+func probar_reventon_sangre() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var z := []
+	for i in 4:
+		z.append(meter_zombi(["normal", "venenoso", "tentaculos", "normal"][i], johnny.position + Vector2(-120 + i * 80, -10)))
+	await get_tree().create_timer(0.4).timeout
+	johnny.visible = false
+	var efectos := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo.begins_with("sangre") and not n.de_calentar)
+	print("Reventón de sangre: precalentados rojo %s, verde %s, morado %s (esperado: true)" % [EfectoSuelo.calentados.has("sangre"),
+		EfectoSuelo.calentados.has("sangre-verde"), EfectoSuelo.calentados.has("sangre-morada")])
+	for i in 3:
+		Zombi.critico = true
+		z[i].recibir_golpe(999, Vector2.UP * 170.0)
+		Zombi.critico = false
+	z[3].recibir_golpe(z[3].vida, Vector2.UP * 170.0)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var tipos: Array = efectos.call().map(func(e): return e.tipo)
+	tipos.sort()
+	print("  revientan %s (esperado: [\"sangre\", \"sangre-morada\", \"sangre-verde\"]: el del golpe flojo, no) | fuerte: %s (esperado: [true, true, true, false])" % [
+		tipos, z.map(func(zz): return zz.muerte_fuerte)])
+	var antes := 0.0
+	for segundos in [0.1, 0.3, 0.6]:
+		await get_tree().create_timer(segundos - antes).timeout
+		antes = segundos
+		Captura.foto("captura-reventon-sangre-%s.png" % str(segundos).replace(".", ","))
+	await get_tree().create_timer(1.0).timeout
+	print("  al acabar, efectos %d (esperado: 0)" % efectos.call().size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --molotov": el molotov al romperse (M48: el efecto de pixelfx, efecto_suelo.gd "molotov") en la sala de
 # pruebas, a media luz y sin Johnny en medio: un molotov de verdad (el proyectil) lanzado a 30 por encima de Johnny. Fotos
 # al romperse y luego (captura-molotov-<segundos>.png: 0,03, 0,15, 0,3, 0,6 y 1). Lo que comprueba, en la terminal. Se cierra

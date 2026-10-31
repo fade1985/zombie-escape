@@ -136,6 +136,10 @@ en una línea.
   y `molotov`, la botella al romperse (`proyectil.llamarada`: el chasquido, la gasolina que prende, llamas, chispas y
   cristales que saltan y resbalan; un efecto hecho para el juego, `tools/pixelfx/molotov.js`, exportado con
   `exportar.mjs`; se precalienta al lanzarla). Prueba: `--captura --molotov`.
+  Y `sangre` (roja), `sangre-verde` (el venenoso) y `sangre-morada` (el de tentáculos): el zombi que muere de un golpe fuerte
+  (un crítico, uno que empuja como una explosión, `Zombi.MUERTE_FUERTE`, o uno que le sobra media vida: `zombi.muerte_fuerte`)
+  revienta en sangre (`partida.sangre`): un efecto hecho para el juego, `tools/pixelfx/reventon-sangre.js` y sus colores
+  `-verde.js` y `-morada.js`; se precalienta al aparecer el primer zombi de cada color. Prueba: `--captura --reventon-sangre`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
