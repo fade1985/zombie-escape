@@ -48,6 +48,7 @@ func _ready() -> void:
 		mecha = Lanzables.ARROJADIZAS[tipo].mecha
 		if tipo == "atraedora":
 			add_to_group("cebos")
+			EfectoSuelo.precalentar(get_parent(), "llamada")
 		if tipo == "congeladora":   # (para que la primera no pare el juego: efecto_suelo.gd)
 			EfectoSuelo.precalentar(get_parent(), "escarcha")
 			EfectoSuelo.precalentar(get_parent(), "escarcha-zombi")
@@ -90,6 +91,8 @@ func _physics_process(delta: float) -> void:
 	parpadeo += delta / (0.4 - 0.33 * k * k)
 	if floori(parpadeo) != antes and floori(parpadeo) % 2 == 1:
 		Sonido.tocar("pitido")   # pita cada vez que se enciende en rojo
+		if tipo == "atraedora":
+			EfectoSuelo.soltar(self, "llamada", Vector2.ZERO)   # (M52: y cada pitido llama, con su onda: la sigue)
 	queue_redraw()
 	if mecha <= 0.0:
 		explotar()

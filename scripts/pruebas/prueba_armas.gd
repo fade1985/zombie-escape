@@ -1537,6 +1537,60 @@ func probar_reventon_sangre() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --llamada": la atraedora llamando (M52) en la sala de pruebas, a media luz y sin Johnny en medio: cae
+# entre zombis y en cada pitido suelta su onda amarilla (EfectoSuelo "llamada", hija de la granada). Fotos de una onda a
+# mitad (captura-llamada-<n>.png, al principio y casi al final, cuando pita más deprisa). Lo que comprueba, en la terminal.
+# Se cierra
+func probar_llamada() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.invencible = true
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var centro: Vector2 = johnny.position + Vector2(0, -20)
+	for i in 3:
+		var uno: Node2D = meter_zombi("normal", centro + Vector2.from_angle(TAU * i / 3.0 + 0.5) * Vector2(260, 150))
+		uno.vida = 9999
+	await get_tree().create_timer(0.3).timeout
+	johnny.visible = false
+	var g: Node2D = Lanzables.BOMBA.new()
+	g.tipo = "atraedora"
+	g.desde = centro
+	g.hasta = centro
+	g.radio = Lanzables.DATOS.atraedora.radio
+	g.dano_zombis = 0
+	johnny.get_parent().add_child(g)
+	var ondas := func() -> Array:
+		return g.get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "llamada") if is_instance_valid(g) else []
+	var vistas := 0
+	var fotos := 0
+	var ultima: Node = null
+	while is_instance_valid(g):
+		for o in ondas.call():
+			if o != ultima:
+				ultima = o
+				vistas += 1
+			if fotos < 2 and o.t > 0.15 and o.t < 0.25 and (fotos == 0 or g.mecha < 0.8):
+				fotos += 1
+				Captura.foto("captura-llamada-%d.png" % fotos)
+		await get_tree().process_frame
+	print("Llamada: ondas %d (esperado: una por pitido, unas 10 o más) · fotos %d (esperado: 2) · precalentada %s (esperado: true)" % [
+		vistas, fotos, EfectoSuelo.calentados.has("llamada")])
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --golpes": los golpes de los jefes (M58) en la sala de pruebas, a media luz y sin Johnny en medio: el
 # pisotón del salto del Gymbro (EfectoSuelo "pisoton", a su escala) y, a la derecha, el golpe de una carga contra la pared
 # ("golpe-pared"). Fotos a los 0,1, 0,3 y 0,6 s (captura-golpes-<segundos>.png). Lo que comprueba, en la terminal. Se cierra

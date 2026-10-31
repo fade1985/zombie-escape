@@ -29,6 +29,8 @@
 #    otra, "escala".
 #  - "golpe-pared": una carga que se estrella (M58; minijefe.estrellarse): la nube de yeso y los cascotes que caen
 #    (tools/pixelfx/golpe-pared.js).
+#  - "llamada": la atraedora llamando a los zombis (M52; granada.gd): en cada pitido, dos ondas amarillas que se abren por
+#    el suelo y el ring-ring del despertador (tools/pixelfx/llamada.js). Va de hija de la granada, para que la siga.
 class_name EfectoSuelo
 extends Node2D
 
@@ -69,6 +71,9 @@ const TIPOS := {
 	"golpe-pared": {"hojas": [preload("res://assets/sprites/golpe-pared-detras.png"),
 		preload("res://assets/sprites/golpe-pared-delante.png"), preload("res://assets/sprites/golpe-pared-brillo.png")],
 		"origen": Vector2(60, 74), "fotogramas": 20},
+	"llamada": {"hojas": [preload("res://assets/sprites/llamada-detras.png"),
+		preload("res://assets/sprites/llamada-delante.png"), preload("res://assets/sprites/llamada-brillo.png")],
+		"origen": Vector2(84, 60), "fotogramas": 12},
 }
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)

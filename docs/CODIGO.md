@@ -160,6 +160,9 @@ en una línea.
   la mascota y en el puñetazo del científico, a la escala de su zona (`EfectoSuelo.ONDA_PISOTON`); y el golpe contra la
   pared (`golpe-pared.js`: nube de yeso y cascotes) en `minijefe.estrellarse`. Se precalientan en `minijefe._ready`.
   Prueba: `--captura --golpes`.
+- La llamada de la atraedora (M52; `efecto_suelo.gd`, `llamada`): en cada pitido (`granada.gd`), dos ondas amarillas que
+  se abren por el suelo y el ring-ring del despertador (`tools/pixelfx/llamada.js`); va de hija de la granada. Como pita
+  cada vez más deprisa, las ondas también. Prueba: `--captura --llamada`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
