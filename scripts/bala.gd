@@ -11,6 +11,8 @@ const EMPUJE := 170.0         # empuje base de un zombi normal (el del arma lo m
 const TRAZA := [Color("#fffbe0"), Color("#ffe066"), Color("#ffb020"), Color("#f0701a"), Color("#b8400e")]
 const TRAZA_CRITICA := [Color("#ffffff"), Color("#ffe9a8"), Color("#ff9a3c"), Color("#ff4d2e"), Color("#b3122a")]
 const LINEA := Color("#1d1b2c")
+const COLA := 15.0            # lo largo de la cola fina (píxeles del dibujo, detrás del cuerpo); la de los perdigones, menos
+const COLA_PERDIGON := 9.0
 const PARED := Color("#8f8a96")   # el color de los trocitos de pared (Impacto)
 
 var velocidad := Vector2.ZERO
@@ -25,6 +27,9 @@ var vida := 1.0             # segundos que le quedan (alcance ÷ velocidad)
 var normal_pared := Vector2.UP   # hacia dónde mira la pared en la que ha dado (para Impacto)
 var altura := 50.0          # a qué altura sobre la bala de verdad se dibuja
 var de_aliado := false      # la ha disparado un superviviente, no Johnny (se lo dice a los jefes: el Glotón no salpica)
+var recorrido := 0.0        # lo que lleva volado (la cola no sale por detrás de la boca del arma)
+var chispitas: Array = []   # las que suelta la cola: {p (en el mundo, ya a la altura del dibujo), v, t, max}
+var soltar_en := 0.03       # cuánto falta para la siguiente chispita
 
 
 func _physics_process(delta: float) -> void:
@@ -33,6 +38,8 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 		return
 	altura += (ALTURA_CUERPO - altura) * (1.0 - exp(-delta * BAJADA))
+	recorrido += velocidad.length() * delta
+	mover_chispitas(delta)
 
 	var antes := global_position
 	var despues := antes + velocidad * delta
@@ -134,15 +141,53 @@ func estela() -> Array:
 	return Armas.traza(calidad) if calidad > 0 else TRAZA
 
 
-# La trazadora (drawTracer del JS): cuadraditos de pixel art en fila hacia atrás, encajados en la cuadrícula
-# del dibujo: la punta casi blanca y una estela corta que pasa de amarillo a naranja, con borde oscuro en la
-# parte gorda. Así vale para cualquier ángulo sin verse borrosa. Los perdigones, más finos
+# Las chispitas que va soltando la cola (como las del "bullet-tracer" de pixelfx): salen de la cola hacia atrás, caen
+# y se enfrían. Las de los perdigones, menos
+func mover_chispitas(delta: float) -> void:
+	for c in chispitas:
+		c.t -= delta
+		c.v *= exp(-delta * 3.0)
+		c.v.y += 260.0 * delta
+		c.p += c.v * delta
+	chispitas = chispitas.filter(func(c): return c.t > 0.0)
+	soltar_en -= delta
+	if soltar_en > 0.0 or recorrido < 30.0:
+		return
+	var grande := radio >= 4.0
+	soltar_en = randf_range(0.03, 0.07) * (1.0 if grande else 2.0)
+	var u := velocidad.normalized()
+	var atras := randf_range(4.0, minf(recorrido, (COLA if grande else COLA_PERDIGON) * 2.0))
+	var vida := randf_range(0.1, 0.25)
+	chispitas.append({"p": global_position + Vector2(0, -altura) - u * atras,
+		"v": -u * randf_range(20.0, 120.0) + u.orthogonal() * randf_range(-80.0, 80.0), "t": vida, "max": vida})
+
+
+# La trazadora (drawTracer del JS, con lo del "bullet-tracer" de pixelfx): cuadraditos de pixel art en fila hacia
+# atrás, encajados en la cuadrícula del dibujo. Delante, el cuerpo gordo: la punta casi blanca y una estela corta que
+# pasa de amarillo a naranja, con borde oscuro. Detrás, una cola fina de un píxel que se va enfriando hasta el color más
+# oscuro, parpadea (cada fotograma, un poco distinta) y en la punta fría se rompe a trozos; y las chispitas que suelta.
+# Así vale para cualquier ángulo sin verse borrosa. Los perdigones, más finos y con la cola más corta
 func _draw() -> void:
 	var u := velocidad.normalized()
 	var gordo := 2 if radio >= 4.0 else 1          # lado de la punta, en píxeles del dibujo
 	var colores := estela()
 	var paso := gordo * 2.0                         # los trozos van pegados uno detrás de otro
 	var punta := Vector2(0, -altura)
+	# la cola fina, desde el final del cuerpo (que no salga por detrás de la boca del arma)
+	var cuerpo := paso * 4.0
+	var largo := minf((COLA if gordo == 2 else COLA_PERDIGON) * 2.0, recorrido - cuerpo)
+	var d := 0.0
+	while d < largo:
+		var k := d / largo
+		var calor := 1.0 - k + randf_range(-0.12, 0.12)
+		if k < 0.55 or randf() >= (k - 0.55) * 1.6:   # (la punta fría, a trozos)
+			var c: Color = colores[2] if calor > 0.62 else (colores[3] if calor > 0.3 else colores[4])
+			c.a = 1.0 if k < 0.8 else (1.0 - k) / 0.2
+			cuadradito(punta - u * (cuerpo + d), 1, c)
+		d += 2.0
+	for c in chispitas:
+		var col: Color = colores[1] if c.t > c.max * 0.6 else (colores[2] if c.t > c.max * 0.3 else colores[3])
+		cuadradito(c.p - global_position, 1, col)
 	for k in range(2, -1, -1):
 		cuadradito(punta - u * k * paso, gordo + 2, LINEA)
 	for k in range(colores.size() - 1, -1, -1):

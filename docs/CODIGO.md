@@ -136,6 +136,9 @@ en una línea.
   la estela (normal, crítica, cada calidad; la Épica que atraviesa, morada), más pequeña con los perdigones, en 5
   direcciones (hacia la izquierda, dada la vuelta) y con las chispas cayendo al suelo. Por encima de los personajes.
   Contra las paredes sigue `impacto.gd`. Se precalienta con el fogonazo. Prueba: `--captura --chispas`.
+- La trazadora de las balas (`bala.gd`, `_draw`), en código y no con hojas para que valga para cualquier ángulo y color:
+  el cuerpo gordo de siempre y, como el "bullet-tracer" de pixelfx, una cola fina que se enfría, parpadea y acaba a
+  trozos, y chispitas que suelta y caen (`mover_chispitas`). Prueba: `--captura --trazadora`.
 - `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y

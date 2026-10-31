@@ -75,6 +75,8 @@
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --chispas           la chispa de pixelfx (chispa.gd) de las balas al dar a un zombi: desde 8 lados, cada color
 #                       (normal, crítica, calidades) y la de los perdigones                [prueba_armas.gd]
+#   --trazadora         la trazadora de las balas (bala.gd) en pleno vuelo: pistola de cada calidad, crítica, MP5 y
+#                       escopeta, hacia la derecha y en diagonal                           [prueba_armas.gd]
 #   --sensacion         que golpear se note: el parón de cada golpe (cada arma, al matar, el de gracia, explosiones,
 #                       daño a Johnny; sin sumarse, el respiro y la pausa) y el tono de los sonidos [prueba_armas.gd]
 #   --temblor           el ajuste «Temblor de pantalla» de Opciones: el botón (Normal, Suave, Sin temblor), que
@@ -399,6 +401,9 @@ func empezar_prueba() -> void:
 	elif "--epicas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_epicas()
+	elif "--trazadora" in args:
+		set_process(false)   # sin la prueba larga
+		probar_trazadora()
 	elif "--chispas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_chispas()
