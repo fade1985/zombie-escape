@@ -57,11 +57,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Por limar
 
-- **L21** El número de cada planta se ve demasiado perfecto comparado con lo destrozado que está el edificio; que se vea
-  desgastado, sucio o roto.
 - **L23** Puertas: que se vean más sucias, con sangre y arañazos.
 - **L27** Pasillo de los apartamentos: cambiar las puertas de la pared de abajo para que encajen más con el diseño del
   juego.
-- **L28** Pasillo de los apartamentos, pared de abajo: las placas con la letra del piso, en vez de estar en el tabique,
-  tiradas por el suelo cerca de la puerta, como si las hubiesen arrancado.
 - **L30** Gymbro: cambiar su aura por hacer que su cuerpo se vuelva de metal, que queda mejor visualmente.

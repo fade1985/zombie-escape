@@ -13,7 +13,9 @@ desconchada). Luego se le quita el azul con guias_centro.py quita.
   py tools/guias_cartel.py quita <n>…    de assets/sources/cartel/intentos/<n>-a.png (lo que devolvió PixelLab; el
                                          elegido) quita el fondo azul, también en las lascas de pintura que se han
                                          caído, y lo deja en assets/sources/cartel/<n>.png
-  py tools/guias_cartel.py sprites [<n>…] → assets/sprites/cartel-planta-<n>.png (recortado y a la mitad; sin <n>, todos)
+  py tools/guias_cartel.py sprites [<n>…] → assets/sources/cartel/limpios/cartel-planta-<n>.png (recortado y a la mitad; sin
+                                         <n>, todos). Los del juego salen de ahí: tools/cartel_planta_idiomas.py (la palabra de
+                                         cada idioma) y, al final, tools/cartel_roto.py (lo gastan y lo rompen)
 """
 import colorsys, os, shutil, sys
 from PIL import Image, ImageDraw, ImageFont
@@ -22,7 +24,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from guias_centro import S, M, FONDO, quita
 
 OUT = 'assets/sources/cartel/guias'
-SPRITES = 'assets/sprites'
+SPRITES = 'assets/sources/cartel/limpios'   # (los del juego, rotos, los saca de aquí tools/cartel_roto.py)
 ANCHO, ALTO = 28, 42          # en píxeles del juego
 PINTURA = (206, 176, 52, 255)  # amarillo de pintura vieja
 FUENTES = 'C:/Windows/Fonts/'

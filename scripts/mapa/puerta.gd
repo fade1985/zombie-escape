@@ -48,18 +48,16 @@ const OSCURO := Color("0c0a0e")
 const CINTA := Color("c9a227")
 const CINTA_RAYA := Color("1a1712")
 const CINTA_SOMBRA := Color(0, 0, 0, 0.35)   # la sombrita que deja la cinta pegada, un píxel por debajo
-# Las placas del pasillo, como en un edificio de verdad: la letra de cada piso junto a su puerta (de latón; la de la
-# sala de mantenimiento, de acero y con una llave inglesa) y, a la izquierda del ascensor, el número grande de la planta
-const LATON := {"luz": Color("e8c868"), "medio": Color("b8923a"), "sombra": Color("7a5a20"), "filo": Color("2e2010"),
-	"letra": Color("2b1d10")}
+# Las placas del pasillo, como en un edificio de verdad: la letra de cada piso junto a su puerta, de latón y rota, torcida en
+# su sitio en la pared de arriba y arrancada y tirada en el suelo en la de abajo (tools/placas_rotas.py: A, B, C y D, una al lado de
+# otra; "dibujo", lo que mide cada una); la de la sala de mantenimiento, de acero y entera, con una llave inglesa; y, a la izquierda del
+# ascensor, el número grande de la planta
+const PLACA_PARED := {"hoja": preload("res://assets/sprites/placa-rota-pared.png"), "dibujo": Vector2(16, 17)}
+const PLACA_SUELO := {"hoja": preload("res://assets/sprites/placa-rota-suelo.png"), "dibujo": Vector2(26, 26)}
 const CHAPA := {"luz": Color("aab2ae"), "medio": Color("86908c"), "sombra": Color("565f5d"), "filo": Color("1e2324"),
 	"letra": Color("15191a")}
 # Las letras, dibujadas a mano: 5 × 7 píxeles ("X" = píxel)
 const LETRAS := {
-	"A": [".XXX.", "X...X", "X...X", "XXXXX", "X...X", "X...X", "X...X"],
-	"B": ["XXXX.", "X...X", "X...X", "XXXX.", "X...X", "X...X", "XXXX."],
-	"C": [".XXX.", "X...X", "X....", "X....", "X....", "X...X", ".XXX."],
-	"D": ["XXXX.", "X...X", "X...X", "X...X", "X...X", "X...X", "XXXX."],
 	"0": [".XXX.", "X...X", "X..XX", "X.X.X", "XX..X", "X...X", ".XXX."],
 	"1": ["..X..", ".XX..", "..X..", "..X..", "..X..", "..X..", ".XXX."],
 	"2": [".XXX.", "X...X", "....X", "...X.", "..X..", ".X...", "XXXXX"],
@@ -124,14 +122,15 @@ func _draw() -> void:
 			var dibujo: String = "servicio" if salida.get("placa", "") == "llave" else ("tienda" if centro else "piso")
 			draw_texture_rect(DIBUJO[dibujo], Rect2(-36, -86, 72, 86), false)
 			if salida.has("placa"):
-				placa_de_piso(Vector2(42, -78))   # en la pared, a la derecha del marco y a la altura de los ojos
+				placa_de_piso(Vector2(42, -78), PLACA_PARED, Vector2(38, -80))   # en la pared, a la derecha del marco y a la altura de los ojos
 		"abajo":
 			# Vista desde arriba: el hueco en el muro de abajo, con el marco y la hoja
 			draw_rect(Rect2(-36, 0, 72, 64), MARCO)
 			draw_rect(Rect2(-32, 0, 64, 64), HUECO)
 			draw_rect(Rect2(-32, 0, 64, 8), HOJA)
 			if salida.has("placa"):
-				placa_de_piso(Vector2(42, 6))   # encima del muro, a la derecha del hueco
+				# la de acero, encima del muro, a la derecha del hueco; las de latón, tiradas en el suelo, a un lado de la puerta
+				placa_de_piso(Vector2(42, 6), PLACA_SUELO, Vector2(34, -56) if salida.placa == "C" else Vector2(-88, -60))
 		_:
 			# En los laterales del pasillo: las escaleras (la salida de incendios, en el muro de la derecha) o la puerta
 			# por donde se ha llegado
@@ -177,13 +176,16 @@ func ascensor() -> void:
 		cartel_planta()
 
 
-# La placa de un piso, con su esquina de arriba a la izquierda en "donde": la letra en una placa de latón (22 × 26)
-# o, la de la sala de mantenimiento, una llave inglesa en una de acero (un poco más ancha)
-func placa_de_piso(donde: Vector2) -> void:
-	var metal: Dictionary = CHAPA if salida.placa == "llave" else LATON
-	var filas: Array = LETRAS[salida.placa]
-	placa(Rect2(donde, Vector2(filas[0].length() * 2 + 12, filas.size() * 2 + 12)), metal)
-	letra(filas, donde + Vector2(6, 6), 2, metal.letra)
+# La placa de una puerta. La de la sala de mantenimiento, con su esquina de arriba a la izquierda en "acero": una llave inglesa en
+# una placa de acero. La de un piso, en "laton", la que le toque de la hoja "rota"
+func placa_de_piso(acero: Vector2, rota: Dictionary, laton: Vector2) -> void:
+	if salida.placa == "llave":
+		var filas: Array = LETRAS.llave
+		placa(Rect2(acero, Vector2(filas[0].length() * 2 + 12, filas.size() * 2 + 12)), CHAPA)
+		letra(filas, acero + Vector2(6, 6), 2, CHAPA.letra)
+		return
+	var tam: Vector2 = rota.dibujo
+	draw_texture_rect_region(rota.hoja, Rect2(laton, tam * 2), Rect2("ABCD".find(salida.placa) * tam.x, 0, tam.x, tam.y))
 
 
 # El cartel de la planta, junto al ascensor, a su izquierda (a 10 unidades del marco): el número pintado con plantilla

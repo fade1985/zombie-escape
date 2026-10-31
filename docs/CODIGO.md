@@ -422,6 +422,11 @@ en una línea.
 - **Lo dibujado en otro idioma:** `cartel_planta_idiomas.py` hace los carteles de planta con la palabra de cada idioma («FLOOR»,
   «ANDAR», «ETAGE»: `cartel-planta-N-<idioma>.png`) y `fotos_tutorial.py <idioma>` recorta las fotos de los tutoriales de las
   capturas sacadas con `--lang <idioma>` (`assets/ui/tutorial/<idioma>/`).
+- **El número de la planta, gastado:** los carteles limpios están en `assets/sources/cartel/limpios/` (ahí escriben `guias_cartel.py sprites`
+  y `cartel_planta_idiomas.py`) y `cartel_roto.py` saca de ellos los del juego (`assets/sprites/cartel-planta-*.png`), con la pintura
+  pelada, un desconchón y grietas. Si se toca un cartel, hay que pasarlo otra vez; la palabra se protege para que se lea.
+- **Las placas de los pisos, rotas:** `placas_rotas.py` hace las hojas `placa-rota-pared.png` (torcidas en su sitio, las de la pared de
+  arriba) y `placa-rota-suelo.png` (arrancadas y tiradas, las de la de abajo), con las letras A, B, C y D, píxel a píxel; las pinta `puerta.gd`.
 - **Las traducciones:** `traducciones.py` recoge los textos del código, pone al día los `locale/*.po` y avisa de lo que falta
   o está mal (`py tools/traducciones.py`; antes de cada commit que toque textos). Ver `docs/IDIOMAS.md`.
 - **La letra del juego:** `arreglar_tildes_fuente.py` pone bien las tildes (á é í ó ú y mayúsculas), el punto de la í y los ¿ ¡ de
