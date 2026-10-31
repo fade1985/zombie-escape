@@ -151,10 +151,8 @@ func aterrizar(johnny: Node2D) -> void:
 	cambiar("aterrizar")
 	Sonido.tocar("pisoton")
 	Temblor.temblar(12.0)
-	for i in 14:
-		var a := i * TAU / 14.0
-		Particulas.soltar(self, global_position + Vector2(cos(a) * 30.0, PIE + sin(a) * 14.0),
-			Vector2(cos(a) * 160.0, sin(a) * 70.0), Color("#8a7a66"), 4, 0.5)
+	# el pisotón de pixelfx (M58), del tamaño de la zona donde cae
+	EfectoSuelo.soltar(get_parent(), "pisoton", global_position + Vector2(0, PIE - 6), RADIO_SALTO / EfectoSuelo.ONDA_PISOTON)
 	var hacia: Vector2 = johnny.global_position - global_position
 	if hacia.length() < RADIO_SALTO + johnny.RADIO and johnny.esquiva_t <= 0.0 \
 			and not Aviso.tapado(self, johnny.global_position + Vector2(0, 16), Vector2(0, PIE - 6)):

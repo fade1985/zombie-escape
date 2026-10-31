@@ -47,8 +47,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M55** pixelfx: el desfibrilador (Johnny revive), un efecto de luz o de descarga.
 - **M56** pixelfx: la curación de la médica, un brillo verde sobre Johnny.
 - **M57** pixelfx: la aparición de los jefes, un efecto de entrada en su presentación.
-- **M58** pixelfx: el golpe al final de los ataques de los jefes: polvo, onda y cascotes cuando una carga se estrella
-  contra la pared (donde el aviso pone la estrella) y cuando un salto aterriza (como el `dirt-explosion`, desde arriba).
 
 ## Por limar
 

@@ -155,6 +155,11 @@ en una línea.
   (`zombi.congelar`: azul hielo con el shader, el dibujo parado, copos; cuenta para Mezcla explosiva). Prueba: `--captura --escarcha`.
   Y `deshielo`: cuando se le acaba el congelado, o muere congelado (`zombi.deshelar`), el hielo revienta en trozos
   (`tools/pixelfx/deshielo.js`, la idea del `ice-shatter` de pixelfx), con su sonido (`deshielo`).
+- Golpes de los jefes (M58; `efecto_suelo.gd`, `pisoton` y `golpe-pared`, con la idea del `dirt-explosion` de pixelfx):
+  el pisotón (`tools/pixelfx/golpe-suelo.js`: polvo, grietas, una onda por el suelo y cascotes) al aterrizar el Gymbro y
+  la mascota y en el puñetazo del científico, a la escala de su zona (`EfectoSuelo.ONDA_PISOTON`); y el golpe contra la
+  pared (`golpe-pared.js`: nube de yeso y cascotes) en `minijefe.estrellarse`. Se precalientan en `minijefe._ready`.
+  Prueba: `--captura --golpes`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas

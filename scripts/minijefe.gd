@@ -61,6 +61,11 @@ func _ready() -> void:
 	rabia = VaporRabia.new(coronilla if coronilla > 0.0 else arriba - 20.0, orejas)
 	$Vapor.draw.connect(_pintar_encima)
 	vida_cambiada.emit.call_deferred(vida, vida_max)
+	# (los golpes de pixelfx, M58: preparados antes para que el primero no pare el juego)
+	get_tree().create_timer(0.5).timeout.connect(func():
+		if is_inside_tree():
+			EfectoSuelo.precalentar(get_parent(), "pisoton")
+			EfectoSuelo.precalentar(get_parent(), "golpe-pared"))
 
 
 func enfadado() -> bool:
@@ -228,9 +233,8 @@ func estrellarse() -> void:
 	Sonido.tocar("portazo")
 	Temblor.temblar(9.0)
 	gritar(Idioma.t("¡PUMBA!"), Color("#ffd23f"))
-	for i in 10:
-		Particulas.soltar(self, global_position + mirada * radio + Vector2(randf_range(-20, 20), randf_range(-60, 10)),
-			Vector2.from_angle(randf() * TAU) * 70.0, Color("#b9b2a6"), 4, 0.6)
+	# el golpe contra la pared (M58): la nube de yeso y los cascotes, en el suelo junto a donde ha chocado
+	EfectoSuelo.soltar(get_parent(), "golpe-pared", global_position + mirada * radio + Vector2(0, 20))
 
 
 # El aviso de la embestida, en el suelo: el camino de "largo" por donde va a pasar, con flechas que se encienden en

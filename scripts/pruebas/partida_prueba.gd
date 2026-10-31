@@ -78,6 +78,7 @@
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]
 #   --reventon-sangre   los zombis que mueren de un golpe fuerte revientan en sangre (M49)      [prueba_armas.gd]
+#   --golpes            los golpes de los jefes: el pisotón al aterrizar y el golpe contra la pared (M58) [prueba_armas.gd]
 #   --escarcha          la congeladora explota en escarcha y los zombis congelados también la sueltan (M51) [prueba_armas.gd]
 #   --chispazos         la descarga salta de un zombi a otro: relámpagos y chispazos (M50)      [prueba_armas.gd]
 #   --molotov           el molotov al romperse (el efecto de pixelfx, M48)                     [prueba_armas.gd]
@@ -427,6 +428,9 @@ func empezar_prueba() -> void:
 	elif "--raton" in args:
 		set_process(false)   # sin la prueba larga
 		probar_raton()
+	elif "--golpes" in args:
+		set_process(false)   # sin la prueba larga
+		probar_golpes()
 	elif "--escarcha" in args:
 		set_process(false)   # sin la prueba larga
 		probar_escarcha()
