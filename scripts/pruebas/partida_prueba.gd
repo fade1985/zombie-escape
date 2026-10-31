@@ -32,6 +32,7 @@
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
 #   --rebote            (con --edificio centro --jefe mascota) la mascota enfadada rebota en la pared y avisa con su
 #                       franja antes de volver a salir                                     [prueba_jefes_salas.gd]
+#   --recoger-curar     el destello al recoger billetes (M53) y la curación de la médica (M56) [prueba_armas.gd]
 #   --llamada           la atraedora llama a los zombis: una onda amarilla en cada pitido (M52) [prueba_armas.gd]
 #   --golpes            el aviso de los golpes cuerpo a cuerpo de cada jefe                 [prueba_jefes_salas.gd]
 #   --avisos            el resto de los avisos de los jefes (lenguas, rayas, círculos...)  [prueba_jefes_salas.gd]
@@ -79,6 +80,7 @@
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]
 #   --reventon-sangre   los zombis que mueren de un golpe fuerte revientan en sangre (M49)      [prueba_armas.gd]
+#   --recoger-curar     el destello al recoger billetes (M53) y la curación de la médica (M56) [prueba_armas.gd]
 #   --llamada           la atraedora llama a los zombis: una onda amarilla en cada pitido (M52) [prueba_armas.gd]
 #   --golpes            los golpes de los jefes: el pisotón al aterrizar y el golpe contra la pared (M58) [prueba_armas.gd]
 #   --escarcha          la congeladora explota en escarcha y los zombis congelados también la sueltan (M51) [prueba_armas.gd]
@@ -284,6 +286,9 @@ func empezar_prueba() -> void:
 	elif "--rebote" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rebote()
+	elif "--recoger-curar" in args:
+		set_process(false)   # sin la prueba larga
+		probar_recoger_curar()
 	elif "--llamada" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamada()
@@ -433,6 +438,9 @@ func empezar_prueba() -> void:
 	elif "--raton" in args:
 		set_process(false)   # sin la prueba larga
 		probar_raton()
+	elif "--recoger-curar" in args:
+		set_process(false)   # sin la prueba larga
+		probar_recoger_curar()
 	elif "--llamada" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamada()

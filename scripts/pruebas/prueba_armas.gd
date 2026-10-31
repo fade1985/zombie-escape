@@ -1537,6 +1537,62 @@ func probar_reventon_sangre() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --recoger-curar": en la sala de pruebas, a media luz, unos billetes caen junto a Johnny y los recoge (en
+# cada uno, el destello de pixelfx: EfectoSuelo "recoger", M53); luego la médica le cura (aliado.curar: "curacion", que
+# va de hijo de Johnny, M56). Fotos (captura-recoger.png y captura-curar.png). Lo que comprueba, en la terminal. Se cierra
+func probar_recoger_curar() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
+	var destellos := 0
+	var visto := {}
+	soltar_billetes(6, johnny.global_position + Vector2(50, 10))
+	var foto := false
+	for i in 120:
+		for e in johnny.get_parent().get_children():
+			if e is EfectoSuelo and e.tipo == "recoger" and not e.de_calentar and not visto.has(e):
+				visto[e] = true
+				destellos += 1
+			if not foto and e is EfectoSuelo and e.tipo == "recoger" and e.t > 0.08:
+				foto = true
+				Captura.foto("captura-recoger.png")
+		await get_tree().process_frame
+	print("Recoger: destellos %d (esperado: 6, uno por billete) · precalentado %s (esperado: true)" % [destellos, EfectoSuelo.calentados.has("recoger")])
+	var datos: Dictionary = Supervivientes.DATOS.medico.duplicate()
+	datos.erase("rescate")
+	var medica: Aliado = supervivientes.crear(datos, "equipo")
+	medica.idx = 0
+	supervivientes.equipo.append(medica)
+	johnny.get_parent().add_child(medica)
+	medica.global_position = johnny.global_position + Vector2(-50, 40)
+	await get_tree().create_timer(0.8).timeout
+	johnny.vida = 40
+	medica.curar(5)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var cura: Array = johnny.get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "curacion")
+	print("Curar: vida %d (esperado: 45) · curaciones en Johnny %d (esperado: 1) · precalentada %s (esperado: true)" % [johnny.vida, cura.size(), EfectoSuelo.calentados.has("curacion")])
+	await get_tree().create_timer(0.25).timeout
+	Captura.foto("captura-curar.png")
+	johnny.vida = johnny.vida_tope()   # (que la médica no vuelva a curarle)
+	await get_tree().create_timer(1.0).timeout
+	print("  al acabar, curaciones %d (esperado: 0)" % johnny.get_children().filter(func(n): return n is EfectoSuelo).size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --llamada": la atraedora llamando (M52) en la sala de pruebas, a media luz y sin Johnny en medio: cae
 # entre zombis y en cada pitido suelta su onda amarilla (EfectoSuelo "llamada", hija de la granada). Fotos de una onda a
 # mitad (captura-llamada-<n>.png, al principio y casi al final, cuando pita más deprisa). Lo que comprueba, en la terminal.

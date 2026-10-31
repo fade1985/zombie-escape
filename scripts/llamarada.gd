@@ -122,8 +122,14 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 		material = null if variante == "rayo" else propio
 		propio.shader = SOMBREADO_ACIDO if variante == "acido" else SOMBREADO
 		luz.color = LUZ_RAYO if variante == "rayo" else LUZ
-		if variante == "rayo":
-			EfectoSuelo.precalentar(get_parent().get_parent(), "chispazo")
+	# (los efectos de pixelfx de cada uno, preparados para que el primero no pare el juego; solo la primera vez)
+	var sala: Node = get_parent().get_parent()
+	if variante == "rayo":
+		EfectoSuelo.precalentar(sala, "chispazo")
+	else:
+		var cual := "acido" if variante == "acido" else "fuego"
+		EfectoSuelo.precalentar(sala, "chorro-" + cual)
+		EfectoSuelo.precalentar(sala, "pared-" + cual)
 
 
 func _physics_process(delta: float) -> void:
@@ -183,9 +189,16 @@ func quemar() -> void:
 	if variante == "rayo":
 		electrocutar(johnny)
 		return
+	var sala: Node = johnny.get_parent()
+	var cual := "acido" if variante == "acido" else "fuego"
+	# contra la pared, donde se corta el chorro (M60): el fuego se aplasta y se abre, el ácido salpica y chorrea
+	if tope < alcance - 1.0 and largo >= tope - 1.0:
+		EfectoSuelo.soltar(sala, "pared-" + cual, global_position + u * tope)
 	for zombi in get_tree().get_nodes_in_group("zombis"):
 		if not dentro(zombi, johnny, u):
 			continue
+		# lo que hace el chorro al darle (M59), en el suelo debajo de él (el golpe, a la altura del cuerpo)
+		EfectoSuelo.soltar(sala, "chorro-" + cual, zombi.global_position)
 		if variante == "acido":
 			var da: int = johnny.con_critico(dps * TICK)
 			if empuja or zombi.get("inmune_fuego"):

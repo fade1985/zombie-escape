@@ -163,6 +163,14 @@ en una línea.
 - La llamada de la atraedora (M52; `efecto_suelo.gd`, `llamada`): en cada pitido (`granada.gd`), dos ondas amarillas que
   se abren por el suelo y el ring-ring del despertador (`tools/pixelfx/llamada.js`); va de hija de la granada. Como pita
   cada vez más deprisa, las ondas también. Prueba: `--captura --llamada`.
+- El lanzallamas y el lanza ácido al dar (M59 y M60; `efecto_suelo.gd`): en cada pellizco (`llamarada.quemar`), en cada
+  zombi tocado, `chorro-fuego` (una bocanada que lo lame y sube) o `chorro-acido` (gotas, burbujas y vapor), y, si el chorro
+  se corta en una pared, `pared-fuego` o `pared-acido` (más anchos; el ácido chorrea). Un efecto con cuatro versiones:
+  `tools/pixelfx/chorro-golpe.js`, `-acido.js`, `chorro-pared.js` y `-acido.js`. Se precalientan al sacar el arma.
+  Pruebas: `--captura --lanzallamas` y `--desintegrador`.
+- Recoger y curar (M53 y M56; `efecto_suelo.gd`): `recoger`, el destello dorado al coger algo del suelo (`billete.gd`:
+  billetes, lanzables, objetos, armas y munición; `tools/pixelfx/recoger.js`), y `curacion`, la médica cura a Johnny
+  (`aliado.curar`; `curacion.js`: brillo verde, crucecitas y un anillo, de hijo de Johnny). Prueba: `--captura --recoger-curar`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
