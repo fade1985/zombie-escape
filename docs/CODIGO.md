@@ -132,6 +132,10 @@ en una línea.
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
   y se precalienta al coger el arma (`johnny.preparar_fogonazo`). El fogonazo dibujado en las hojas de Johnny sigue
   debajo. Prueba: `--captura --fogonazos`.
+- `chispa.gd`: la chispa de pixelfx ("hit-spark") de las balas al dar a un zombi (la suelta `bala.chocar`): del color de
+  la estela (normal, crítica, cada calidad; la Épica que atraviesa, morada), más pequeña con los perdigones, en 5
+  direcciones (hacia la izquierda, dada la vuelta) y con las chispas cayendo al suelo. Por encima de los personajes.
+  Contra las paredes sigue `impacto.gd`. Se precalienta con el fogonazo. Prueba: `--captura --chispas`.
 - `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
@@ -466,6 +470,10 @@ en una línea.
   `pixelfx/fogonazo.js` son los fogonazos ("muzzle-pistol", "muzzle-smg" y "muzzle-shotgun" partidos en llama y humo,
   sin casquillo) y `pixelfx/exportar_fogonazo.mjs` los saca girados y recortados (`fogonazo-<arma>-<parte>*.png`) y
   escribe las medidas para `TIPOS` de `fogonazo.gd`: `node tools/pixelfx/exportar_fogonazo.mjs <pixelfx> assets/sprites`.
+  `pixelfx/chispa.js` es la chispa de las balas ("hit-spark" con tallas, colores y apuntando a cualquier lado) y
+  `pixelfx/exportar_chispa.mjs` la saca (`chispa-bala*.png` y `chispa-perdigon*.png`) con las medidas para `chispa.gd`:
+  `node tools/pixelfx/exportar_chispa.mjs <pixelfx> assets/sprites`. Los dos exportadores con variantes comparten
+  `pixelfx/hojas.mjs` (dibujar cada variante, recortar y pegar en las hojas).
   `pixelfx/bocanadas.mjs` hace `bocanadas-fuego.png`, las bocanadas de fuego y de humo de "fire-breath" en 10 tamaños y
   10 edades, para el chorro del lanzallamas del bombero (`node tools/pixelfx/bocanadas.mjs <pixelfx> assets/sprites`).
 - **Hojas de PixelLab:** `bajar_zip.py`, `bajar.py`, `bajar_fotogramas.py` (bajar), `hacer_frames.py` (hoja →
