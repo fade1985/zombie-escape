@@ -131,7 +131,9 @@ en una línea.
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
   y se precalienta al coger el arma (`johnny.preparar_fogonazo`). El fogonazo dibujado en las hojas de Johnny sigue
-  debajo. Prueba: `--captura --fogonazos`.
+  debajo. Prueba: `--captura --fogonazos`. También los supervivientes que disparan (`aliado.disparar`, con
+  `Aliado.FOGONAZO_ARMA`): el policía, el de la pistola, y el militar, el de la MP5; se precalienta al aparecer
+  (`aliado.preparar_fogonazo`). Prueba: `--captura --fogonazos-aliados`.
 - `chispa.gd`: la chispa de pixelfx ("hit-spark") de las balas al dar a un zombi (la suelta `bala.chocar`): del color de
   la estela (normal, crítica, cada calidad; la Épica que atraviesa, morada), más pequeña con los perdigones, en 5
   direcciones (hacia la izquierda, dada la vuelta) y con las chispas cayendo al suelo. Por encima de los personajes.

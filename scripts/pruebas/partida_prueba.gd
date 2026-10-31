@@ -73,6 +73,8 @@
 #                       bala, con luz y a oscuras                                           [prueba_armas.gd]
 #   --fogonazos         el fogonazo de pixelfx (fogonazo.gd) de la pistola, la MP5 y la escopeta en las 8 direcciones,
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
+#   --fogonazos-aliados el fogonazo de pixelfx del policía (pistola) y del militar (MP5) al disparar a un zombi
+#                       [prueba_armas.gd]
 #   --chispas           la chispa de pixelfx (chispa.gd) de las balas al dar a un zombi: desde 8 lados, cada color
 #                       (normal, crítica, calidades) y la de los perdigones                [prueba_armas.gd]
 #   --trazadora         la trazadora de las balas (bala.gd) en pleno vuelo: pistola de cada calidad, crítica, MP5 y
@@ -407,6 +409,9 @@ func empezar_prueba() -> void:
 	elif "--chispas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_chispas()
+	elif "--fogonazos-aliados" in args:
+		set_process(false)   # sin la prueba larga
+		probar_fogonazos_aliados()
 	elif "--fogonazos" in args:
 		set_process(false)   # sin la prueba larga
 		probar_fogonazos()

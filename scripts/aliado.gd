@@ -61,6 +61,9 @@ const HOJAS := {
 	"farmaceutica": {"hoja": preload("res://assets/sprites/superviviente-farmaceutica.tres")},
 	"tecnico": {"hoja": preload("res://assets/sprites/superviviente-tecnico.tres"), "fogonazo": 0.2},
 }
+# El fogonazo de pixelfx (fogonazo.gd) de cada arma de los que disparan: el policía, el de la pistola, y el militar,
+# que dispara en ráfagas, el de la MP5 (sus llamas se van turnando)
+const FOGONAZO_ARMA := {"pistola": "pistola", "rifle": "mp5"}
 
 var def: Dictionary
 var modo := "equipo"
@@ -472,6 +475,22 @@ func disparar(blanco: Node2D) -> void:
 	bala.altura = alt
 	bala.global_position = boca + Vector2(0, alt)
 	Luz.destello(self, boca, 100.0, 0.07)
+	# El fogonazo de pixelfx en la boca, como el de Johnny (johnny.disparar): se ordena como la bala (que va a ras de
+	# suelo), pero hacia los lados y hacia abajo, siempre delante de él
+	var suelo := boca.y + alt
+	var orden := suelo if hacia.y < -0.3 else maxf(suelo, global_position.y + 2.0)
+	Fogonazo.soltar(get_parent(), FOGONAZO_ARMA.get(def.get("arma", ""), ""), boca, hacia.angle(), orden)
+
+
+func _ready() -> void:
+	# su fogonazo, preparado para que el primer disparo no pare el juego (al empezar la partida todavía no hay cámara)
+	if FOGONAZO_ARMA.has(def.get("arma", "")):
+		get_tree().create_timer(0.5).timeout.connect(preparar_fogonazo)
+
+
+func preparar_fogonazo() -> void:
+	if is_inside_tree():
+		Fogonazo.precalentar(get_parent(), FOGONAZO_ARMA.get(def.get("arma", ""), ""))
 
 
 # El ferretero: un martillazo al zombi que tiene encima (con hoja, en el fotograma en que el martillo da abajo; con
