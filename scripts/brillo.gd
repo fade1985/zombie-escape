@@ -8,7 +8,7 @@ class_name Brillo
 extends AnimatedSprite2D
 
 const SHADER := preload("res://escenas/personajes/brillo.gdshader")
-const PARAMETROS := ["destello", "hielo", "fuego", "acido", "t", "semilla", "alto"]
+const PARAMETROS := ["destello", "hielo", "fuego", "acido", "vomito", "t", "semilla", "alto"]
 const COLOR_ACIDO := Color("#7ddc3a")
 
 var dibujo: AnimatedSprite2D

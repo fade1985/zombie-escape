@@ -1486,6 +1486,61 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --vomito": los zombis bañados en vómito (la Gastroenteritis: "vomito" en su shader), en la sala de
+# pruebas, con tres zombis quietos (Johnny, escondido): al de la izquierda le roe el ácido del lanza ácido (para comparar), al del medio le
+# cae un vómito de Johnny (el proyectil de verdad) y al de la derecha, nada. Fotos: recién bañado
+# (captura-vomito.png), al acabarse el charco y escurriéndose (-escurre) y ya limpio (-limpio). Lo que comprueba, en
+# la terminal. Se cierra
+func probar_vomito() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	var z := []
+	for i in 3:
+		z.append(meter_zombi("normal", johnny.position + Vector2(-90 + i * 90, 10)))
+	await get_tree().process_frame
+	for zombi in z:
+		zombi.diana = true   # quietos en su sitio y sin perder vida
+		zombi.casa = zombi.position
+	var valores := func(zombi: Node2D) -> String:
+		var m: ShaderMaterial = zombi.sprite.material
+		return "vómito %.2f, ácido %.2f" % [Brillo.valor(m, "vomito"), Brillo.valor(m, "acido")]
+	ArmasCreadas.herir(z[0], "acido", 4)
+	var vomito: Node2D = Mutaciones.PROYECTIL.instantiate()
+	vomito.tipo = "vomito"
+	vomito.desde = johnny.global_position
+	vomito.alto_salida = 30.0
+	vomito.hasta = z[1].global_position + Vector2(0, z[1].radio * 0.5)
+	johnny.get_parent().add_child(vomito)
+	johnny.visible = false   # (que no tape al del medio en las fotos: el vómito ya ha salido)
+	await get_tree().create_timer(1.3).timeout
+	recorte("captura-vomito.png")
+	print("Vómito: lanza ácido %s · bañado %s · nada %s (esperado: 0 y más de 0.5; 1 y 0; 0 y 0)" % [
+		valores.call(z[0]), valores.call(z[1]), valores.call(z[2])])
+	# al dejar de pisarlo (el charco se seca), el vómito le dura 2 s más y en el último medio se escurre
+	while z[1].estados.has("vomito") and z[1].estados.vomito.t >= Estados.LISTA.vomito.despues:
+		await get_tree().process_frame
+	await get_tree().create_timer(1.75).timeout
+	print("  sin charco: %s (esperado: vómito entre 0 y 1, ácido 0)" % valores.call(z[1]))
+	recorte("captura-vomito-escurre.png")
+	await get_tree().create_timer(0.6).timeout
+	print("  limpio: %s (esperado: 0 y 0)" % valores.call(z[1]))
+	recorte("captura-vomito-limpio.png")
+	get_tree().quit()
+
+
 # Con "--captura --johnny-ardiendo": Johnny ardiendo con el fuego de los zombis (su shader, cintura.gdshader con
 # quemaduras.gdshaderinc), en la sala de pruebas, al lado de un zombi que arde para compararlos. Fotos: con luz mirando
 # hacia abajo, a un lado y hacia arriba (captura-johnny-ardiendo-<s, e, n>.png), a oscuras (-oscuro) y ya apagado

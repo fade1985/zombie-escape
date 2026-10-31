@@ -18,7 +18,8 @@ en una línea.
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
   shaders: `cintura` (Johnny partido por la cintura al golpear andando; incluye `quemaduras.gdshaderinc` para arder
   como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`), `destello` + `quemaduras.gdshaderinc` (destello,
-  hielo, fuego y ácido de los enemigos; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
+  hielo, fuego y ácido de los enemigos; el "vomito" de los bañados por la Gastroenteritis, el estado `vomito` que pone
+  su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
   con "pelado") y `brillo`.
 - `armas/`: `bala`, `bala_zombi`, `proyectil`, `charco` y `explosion`; los shaders `llamarada` (lanzallamas) y
   `chorro_acido` (lanza ácido); el rayo del lanza rayos no tiene: se dibuja a código en `llamarada.gd`.
