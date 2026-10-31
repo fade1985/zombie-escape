@@ -20,6 +20,9 @@ LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
+El ratón, jugando (`ui/raton.gd`): en el modo asistido se esconde (solo sale mientras se apunta un lanzable con él); en
+el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre.
+
 - **El mando en los menús:** **A confirma** (pulsa el botón marcado) y **B vuelve** (cierra lo que esté abierto: la
   pausa, Opciones, un tutorial, el inventario y el baúl, la taquilla, el ordenador, una página del dosier, el panel de
   pruebas y «Elige edificio»; los textos de la historia los saltan), igual que Intro y Esc; la cruceta o el stick mueven
