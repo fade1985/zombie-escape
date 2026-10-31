@@ -13,8 +13,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M27** Mutación Gastroenteritis: los zombis alcanzados quedan bañados en vómito un par de segundos, con un efecto en
-  todo el cuerpo como el del ácido.
 - **M29** Mutación del tentáculo (Tentacular): un efecto visual mejor, por ejemplo que se vea el tentáculo alrededor de
   Johnny, o lo que se le ocurra a Claude.
 - **M30** Tropiezo de Johnny en las salas de la portera y del gymbro: ahora la caída es una imagen fija ladeada; que
