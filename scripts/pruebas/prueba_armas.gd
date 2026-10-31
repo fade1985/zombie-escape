@@ -1420,6 +1420,72 @@ func probar_aura() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --fogonazos": el fogonazo de pixelfx (fogonazo.gd) en la sala de pruebas, a media luz. Con la pistola,
+# la MP5 y la escopeta, un disparo hacia cada una de las 8 direcciones con la foto de la llama recortada alrededor de
+# Johnny (captura-fogonazo-<arma>-<dirección>.png); hacia la derecha, también el humo (-humo-1 y -humo-2). Luego una
+# ráfaga de la MP5 (captura-fogonazo-mp5-rafaga.png). Lo que comprueba, en la terminal. Se cierra
+func probar_fogonazos() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var fogonazos := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n is Fogonazo and not n.de_calentar)
+	var direcciones := {"e": 0.0, "se": PI / 4, "s": PI / 2, "so": 3 * PI / 4, "o": PI, "no": -3 * PI / 4, "n": -PI / 2, "ne": -PI / 4}
+	for id in ["pistola", "mp5", "escopeta"]:
+		llevar_arma(id, 0, true, false)
+		await get_tree().create_timer(0.7).timeout
+		print("%s: preparado %s (esperado: true)" % [id, Fogonazo.calentados.has(id)])
+		for dir in direcciones:
+			johnny.direccion = dir
+			johnny.balas = johnny.arma().cargador
+			johnny.disparar(direcciones[dir])
+			await get_tree().process_frame
+			await get_tree().process_frame
+			recorte("captura-fogonazo-%s-%s.png" % [id, dir])
+			if dir == "e":
+				var hay: Array = fogonazos.call()
+				print("  %s hacia la derecha: %d fogonazos (esperado: 2, la llama y el humo) | la llama del revés: %s (esperado: false)" % [
+					id, hay.size(), hay.any(func(f): return f.tipo.ends_with("-llama") and f.scale.x < 0.0)])
+				await get_tree().create_timer(0.3).timeout
+				recorte("captura-fogonazo-%s-humo-1.png" % id)
+				await get_tree().create_timer(0.6).timeout
+				recorte("captura-fogonazo-%s-humo-2.png" % id)
+			if dir == "o":
+				print("  %s hacia la izquierda: la llama del revés %s (esperado: true)" % [
+					id, fogonazos.call().any(func(f): return f.tipo.ends_with("-llama") and f.scale.x < 0.0)])
+			await get_tree().create_timer(0.35).timeout
+		await get_tree().create_timer(3.0).timeout
+		print("  %s: quedan fogonazos sueltos %d (esperado: 0)" % [id, fogonazos.call().size()])
+	# una ráfaga de la MP5 hacia la derecha: las llamas se turnan
+	llevar_arma("mp5", 0, true, false)
+	johnny.direccion = "e"
+	johnny.balas = johnny.arma().cargador
+	await get_tree().create_timer(0.5).timeout
+	var formas := {}
+	for i in 6:
+		johnny.disparar(0.0)
+		for f in fogonazos.call():
+			if f.tipo == "mp5-llama":
+				formas[floori(f.variante / 9.0)] = true
+		await get_tree().create_timer(0.125).timeout
+	recorte("captura-fogonazo-mp5-rafaga.png")
+	print("  ráfaga de la MP5: formas de llama distintas %d (esperado: 3)" % formas.size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Una foto de la pantalla recortada alrededor de Johnny (que está en el centro): 300 × 240 unidades
 func recorte(archivo: String) -> void:
 	var img := get_tree().root.get_texture().get_image()
