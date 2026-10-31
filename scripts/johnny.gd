@@ -62,7 +62,14 @@ const NINJA_IMPORTANTE := 0.25   # al guardia y al zombi de la llave (Zombi.impo
 # Ningún golpe que recibe baja de esta parte de lo que era, por mucho que lo rebajen Durito y la mutación Insensible
 # (antes, como poco 1: con las dos, un zombi normal le quitaba 1). Con Durito solo no cambia nada (10 → 5)
 const GOLPE_MINIMO := 0.3
-const CAIDA := 0.22        # tropezón (caer): lo que tarda en llegar al suelo y en levantarse
+const CAIDA := 0.22        # tropezón (caer): lo que tarda la sombra en alargarse al caer y en encogerse al levantarse
+# El tropezón con dibujos (tools/caida.py): se cae de espaldas, se queda tumbado y se levanta, sin el arma. Su hoja
+# (y la de cada skin), los pies en esa hoja y dónde le queda la cabeza tumbado en cada dirección (las estrellitas)
+const HOJA_CAIDA := preload("res://assets/sprites/conserje-48-caida.tres")
+const PIES_CAIDA := Vector2(32, 56)
+const LEVANTARSE := 5.0 / 12.0   # lo que dura levantarse (5 fotogramas a 12 por segundo)
+const CABEZA_TUMBADO := {"s": Vector2(-13, -18), "se": Vector2(-31, -8), "e": Vector2(-39, -2), "ne": Vector2(-26, -2),
+	"n": Vector2(5, -3), "no": Vector2(32, -5), "o": Vector2(26, -12), "so": Vector2(27, -28)}
 const LEVANTADO := 0.6     # recién levantado, este rato sin volver a tropezar
 const AZUL := Color("#9fe8ff")
 const MORDISCO := Color("#ff5d5d")   # el «¡ÑAM!» del glotón sobre el que le ha hecho daño
@@ -118,7 +125,6 @@ var aliento_usado := false   # Segundo aliento: ya ha curado en esta planta (par
 var con_adrenalina := false  # Adrenalina: si en el paso de antes estaba por debajo de la mitad (para avisar al entrar)
 var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
 var caido_max := 0.0       # lo que dura ese tropezón
-var caido_lado := 1.0      # hacia dónde ha caído: 1, con la cabeza a la derecha; -1, a la izquierda
 var levantado_t := 0.0     # lo que le queda sin poder volver a tropezar
 var sombra_ancho := 0.0    # lo ancha que es su sombra de pie (tumbado, se alarga)
 var estrellas: Node2D      # las estrellitas que le dan vueltas a la cabeza cuando está en el suelo
@@ -1178,14 +1184,16 @@ func paso() -> Array:
 func caer(segundos: float) -> bool:
 	if not vivo or esquiva_t > 0.0 or caido_t > 0.0 or levantado_t > 0.0:
 		return false
-	# cae hacia donde iba (si iba de arriba abajo, hacia donde mira)
-	var hacia := velocity.x if absf(velocity.x) > 20.0 else Vector2.from_angle(DIRS.find(direccion) * PI / 4).x
-	caido_lado = -1.0 if hacia < -0.01 else 1.0
 	var iba := velocity
 	quedarse_quieto()
-	velocity = iba * 0.6   # resbala un poco al caer
+	velocity = iba * 0.4   # resbala un poco al caer
 	efectos.hide()
-	cambiar_animacion("reposo_s")   # boca arriba: tumbado, se le ve la cara
+	partir_cintura(false)
+	# los dibujos de caerse (sin el arma: la suelta al caer), mirando hacia donde miraba
+	sprite.sprite_frames = Skins.hoja(HOJA_CAIDA, skin)
+	sprite.offset = -PIES_CAIDA
+	sprite.speed_scale = 1.0
+	sprite.play("caer_" + direccion)
 	caido_t = segundos
 	caido_max = segundos
 	Sonido.tocar("golpe")
@@ -1194,27 +1202,34 @@ func caer(segundos: float) -> bool:
 	return true
 
 
-# En el suelo: cae de lado (el dibujo se tumba), le dan vueltas unas estrellitas y, al acabar, se levanta
+# En el suelo: se cae (y se queda en el último dibujo, tumbado), le dan vueltas unas estrellitas y, al final, se
+# levanta (sus dibujos de levantarse) y vuelve a su hoja de siempre
 func seguir_caido(delta: float) -> void:
 	caido_t -= delta
 	velocity *= exp(-delta * 7.0)
 	move_and_slide()
 	tumbar(clampf(minf(caido_max - caido_t, caido_t) / CAIDA, 0.0, 1.0))
+	if caido_t <= LEVANTARSE and sprite.animation != "levantarse_" + direccion:
+		sprite.play("levantarse_" + direccion)
 	estrellas.queue_redraw()
 	if caido_t <= 0.0:
 		caido_t = 0.0
 		levantado_t = LEVANTADO
 		tumbar(0.0)
+		volver_a_su_hoja()
 		estrellas.queue_redraw()
 
 
-# Cuánto está tumbado (0, de pie; 1, en el suelo). El dibujo gira por la mitad del cuerpo, no por los pies, y baja
-# hasta el suelo; la sombra se alarga
+# Tras el tropezón, la hoja del arma que lleva (y su skin), de pie
+func volver_a_su_hoja() -> void:
+	var w := arma()
+	sprite.sprite_frames = Skins.hoja(w.hoja, skin)
+	sprite.offset = -w.pies
+	sprite.play("reposo_" + direccion)
+
+
+# Lo tumbado que está (0, de pie; 1, en el suelo): la sombra se alarga
 func tumbar(k: float) -> void:
-	var giro := caido_lado * PI / 2.0 * k
-	sprite.rotation = giro
-	var medio := Vector2(0, lerpf(-28.0, 4.0, k))      # dónde queda la mitad del cuerpo
-	sprite.position = medio - Vector2(0, -44).rotated(giro)   # (la mitad del cuerpo, 44 unidades por encima de los pies)
 	$Sombra.ancho = lerpf(sombra_ancho, sombra_ancho * 1.9, k)
 	$Sombra.queue_redraw()
 
@@ -1222,9 +1237,9 @@ func tumbar(k: float) -> void:
 # Tres estrellitas que dan vueltas sobre la cabeza mientras está en el suelo: cruces de 5 píxeles del dibujo (de 2
 # unidades), amarillas o blancas, con su borde oscuro
 func pintar_estrellas() -> void:
-	if caido_t <= 0.0 or caido_max - caido_t < CAIDA:
+	if caido_t <= LEVANTARSE or caido_max - caido_t < CAIDA * 2.0:
 		return
-	var cabeza := Vector2(caido_lado * 40.0, -22.0)
+	var cabeza: Vector2 = CABEZA_TUMBADO[direccion] + Vector2(0, -12)
 	var t := Time.get_ticks_msec() / 1000.0
 	for i in 3:
 		var a := t * 5.0 + i * TAU / 3.0
@@ -1421,13 +1436,21 @@ func quitar_vida(cantidad: int, de := "") -> void:
 		vivo = false
 		ataque_t = -1.0
 		velocity = Vector2.ZERO
+		var tumbado := caido_t > 0.0
 		caido_t = 0.0   # (si estaba tirado por un tropezón, se queda en el suelo, pero sin estrellitas)
 		estrellas.queue_redraw()
 		efectos.hide()
 		partir_cintura(false)
-		# No tiene animación de morirse: se queda quieto y rojo
+		# No tiene animación de morirse: se queda quieto y rojo (si estaba en el suelo, tumbado)
 		sprite.speed_scale = 1.0
-		cambiar_animacion("reposo_" + direccion)
+		if tumbado:
+			sprite.sprite_frames = Skins.hoja(HOJA_CAIDA, skin)
+			sprite.offset = -PIES_CAIDA
+			sprite.animation = "caer_" + direccion
+			sprite.frame = sprite.sprite_frames.get_frame_count(sprite.animation) - 1
+			sprite.pause()
+		else:
+			cambiar_animacion("reposo_" + direccion)
 		sprite.modulate = Color(1, 0.35, 0.35)
 		murio.emit()
 

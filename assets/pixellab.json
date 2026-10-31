@@ -88,6 +88,18 @@
     "group": "fbf9eed6-c823-49ca-b1bf-18816944f6f7",
     "frames": 8,
     "nota": "Generada el 2026-10-12, 8 direcciones (8 generaciones). Fotogramas originales en assets/sources/conserje-48/walk/; tools/walk.py los mete en la hoja igualando los colores a los del dibujo quieto. Antes se probaron en la dirección este las plantillas 'walking', 'walk' y 'walking-6-frames' (3 generaciones, descartadas: paso más cortado o manchas negras)."
+   },
+   "caer": {
+    "template": "falling-back-death",
+    "group": "b761ed56-d1c9-4aa3-bbfa-fd855db1e156",
+    "frames": 7,
+    "nota": "Generada el 2026-10-31, 8 direcciones (8 generaciones), para el tropiezo de Johnny (M30). Se cae de espaldas y se queda tumbado. Fotogramas en assets/sources/conserje-48/caer/ (bajados uno a uno con tools/bajar_fotogramas.py: el zip de todo el personaje se cortaba). La monta tools/caida.py en assets/sprites/conserje-48-caida (con levantarse). Salió bien a la primera en las 8 direcciones; PixelLab lo dibuja tumbado más arriba que los pies, y caida.py lo baja al suelo. Las skins no la tienen: tools/cara.py no sabe pegar la cabeza girada."
+   },
+   "levantarse": {
+    "template": "getting-up",
+    "group": "dd19e026-c1ff-4a47-8243-d2c74b8d1c8f",
+    "frames": 5,
+    "nota": "Generada el 2026-10-31, 8 direcciones (8 generaciones), para el tropiezo de Johnny (M30): de sentado en el suelo a de pie. Fotogramas en assets/sources/conserje-48/levantarse/. Empieza más arriba y acaba más arriba que caer (los pies de pie, unos 8 píxeles por encima): tools/caida.py la va moviendo poco a poco para empalmar. Algún fotograma raro (el último del sur: el pañuelo le tapa la cara), que apenas se ve porque enseguida vuelve a su hoja."
    }
   },
   "idle": "La animación de reposo del juego NO es de PixelLab: la hace tools/idle.py a partir de las rotaciones (respiración de 1 píxel y parpadeo, 20 fotogramas a 5 por segundo). Se probaron tres de PixelLab el 2026-10-12 y se descartaron: 'idle' (plantilla breathing-idle, 8 direcciones, grupo 39d7ad63-7fa9-4190-b55f-2d425c3764b2: respira bien pero redibuja la cara en cada fotograma), 'idle-estable' (skeleton-v3, solo sur, grupo 4b4896ea-7b4b-444f-bcdb-b419b58b7d23: cambia el pelo) e 'idle-v3' (a medida, solo sur, grupo b4151f71-018d-47a5-8eaa-c968bbf30f60: cambia la cara y la estatura). Coste: 10 generaciones. Las dos últimas y las tres pruebas de andar se borraron de PixelLab el 2026-10-12; allí quedan solo idle (plantilla) y andar.",

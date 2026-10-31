@@ -1,0 +1,104 @@
+{
+  "cell": [
+    64,
+    64
+  ],
+  "pivot": [
+    32,
+    56
+  ],
+  "anims": {
+    "fall": {
+      "fps": 14,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 0,
+          "col": 0,
+          "frames": 7
+        },
+        "south-east": {
+          "row": 1,
+          "col": 0,
+          "frames": 7
+        },
+        "east": {
+          "row": 2,
+          "col": 0,
+          "frames": 7
+        },
+        "north-east": {
+          "row": 3,
+          "col": 0,
+          "frames": 7
+        },
+        "north": {
+          "row": 4,
+          "col": 0,
+          "frames": 7
+        },
+        "north-west": {
+          "row": 5,
+          "col": 0,
+          "frames": 7
+        },
+        "west": {
+          "row": 6,
+          "col": 0,
+          "frames": 7
+        },
+        "south-west": {
+          "row": 7,
+          "col": 0,
+          "frames": 7
+        }
+      }
+    },
+    "getup": {
+      "fps": 12,
+      "loop": false,
+      "dirs": {
+        "south": {
+          "row": 0,
+          "col": 7,
+          "frames": 5
+        },
+        "south-east": {
+          "row": 1,
+          "col": 7,
+          "frames": 5
+        },
+        "east": {
+          "row": 2,
+          "col": 7,
+          "frames": 5
+        },
+        "north-east": {
+          "row": 3,
+          "col": 7,
+          "frames": 5
+        },
+        "north": {
+          "row": 4,
+          "col": 7,
+          "frames": 5
+        },
+        "north-west": {
+          "row": 5,
+          "col": 7,
+          "frames": 5
+        },
+        "west": {
+          "row": 6,
+          "col": 7,
+          "frames": 5
+        },
+        "south-west": {
+          "row": 7,
+          "col": 7,
+          "frames": 5
+        }
+      }
+    }
+  }
+}
