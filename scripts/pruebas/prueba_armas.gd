@@ -1486,6 +1486,88 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --chispas": la chispa de pixelfx (chispa.gd) de las balas al dar a un zombi, en la sala de pruebas y a
+# media luz, con un zombi quieto (y que no muere) en el centro. Balas que llegan desde los 8 lados (captura-chispa-<lado>.png,
+# en el momento del destello, y -2 un poco después, con las chispas cayendo), una de cada color (captura-chispa-color-<color>.png:
+# normal, crítica, poco común, rara y la que atraviesa de la Épica) y una ráfaga de perdigones (captura-chispa-perdigones.png).
+# Lo que comprueba, en la terminal. Se cierra
+func probar_chispas() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	await get_tree().create_timer(0.5).timeout
+	print("chispa preparada: %s (esperado: true)" % Chispa.calentados.has("chispa"))
+	# el zombi, un poco más arriba que Johnny (que salga en el centro de los recortes, con sitio para las chispas)
+	var zombi: Node2D = meter_zombi("lento", johnny.global_position + Vector2(0, -70))
+	await get_tree().process_frame
+	zombi.aturdido = 999.0
+	zombi.vida = 999999
+	var chispas := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n is Chispa and not n.de_calentar)
+	# una bala que llega desde "lado" (en radianes, hacia donde va) y da al zombi enseguida
+	var disparar := func(angulo: float, radio := 4.0, critico := false, calidad := 0, epica := false) -> void:
+		var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
+		bala.velocidad = Vector2.from_angle(angulo) * 620.0
+		bala.radio = radio
+		bala.critico = critico
+		bala.calidad = calidad
+		bala.atraviesa = 1 if epica else 0
+		bala.altura = 22.0
+		bala.dano = 1
+		bala.vida = 1.0
+		johnny.get_parent().add_child(bala)
+		bala.global_position = zombi.global_position - Vector2.from_angle(angulo) * (zombi.radio + 12.0)
+	var lados := {"e": 0.0, "se": PI / 4, "s": PI / 2, "so": 3 * PI / 4, "o": PI, "no": -3 * PI / 4, "n": -PI / 2, "ne": -PI / 4}
+	for lado in lados:
+		disparar.call(lados[lado])
+		for i in 3:
+			await get_tree().physics_frame
+		await get_tree().process_frame
+		recorte("captura-chispa-%s.png" % lado)
+		if lado == "e" or lado == "o":
+			var hay: Array = chispas.call()
+			print("  bala hacia %s: chispas %d (esperado: 1) | del revés %s (esperado: %s)" % [lado, hay.size(),
+				hay.any(func(c): return c.scale.x < 0.0), lado == "o"])
+		await get_tree().create_timer(0.15).timeout
+		recorte("captura-chispa-%s-2.png" % lado)
+		await get_tree().create_timer(0.4).timeout
+	print("  quedan chispas sueltas: %d (esperado: 0)" % chispas.call().size())
+	# los colores: normal, crítica, poco común, rara y la Épica que atraviesa
+	for caso in [["normal", false, 0, false], ["critica", true, 0, false], ["poco_comun", false, 1, false],
+			["rara", false, 2, false], ["epica", false, 3, true]]:
+		disparar.call(0.0, 4.0, caso[1], caso[2], caso[3])
+		for i in 3:
+			await get_tree().physics_frame
+		await get_tree().process_frame
+		recorte("captura-chispa-color-%s.png" % caso[0])
+		var hay: Array = chispas.call()
+		print("  color %s: fila %d (esperado: %d)" % [caso[0], hay[0].variante if not hay.is_empty() else -1,
+			Chispa.COLORES.find(caso[0]) * 5 + 2])
+		await get_tree().create_timer(0.6).timeout
+	# una ráfaga de perdigones, más pequeños
+	for i in 5:
+		disparar.call(randf_range(-0.4, 0.4), 3.0)
+	for i in 3:
+		await get_tree().physics_frame
+	await get_tree().process_frame
+	recorte("captura-chispa-perdigones.png")
+	print("  perdigones: chispas pequeñas %d (esperado: 5)" % chispas.call().filter(func(c): return c.talla == "perdigon").size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Una foto de la pantalla recortada alrededor de Johnny (que está en el centro): 300 × 240 unidades
 func recorte(archivo: String) -> void:
 	var img := get_tree().root.get_texture().get_image()

@@ -1040,10 +1040,12 @@ func cambiar_mano() -> void:
 	espera = maxf(espera, CAMBIO)   # un instante para cambiar de arma
 
 
-# El fogonazo del arma de fuego que lleva, preparado para que el primer disparo no pare el juego (fogonazo.gd)
+# El fogonazo del arma de fuego que lleva y la chispa de las balas, preparados para que el primer disparo no pare el
+# juego (fogonazo.gd y chispa.gd)
 func preparar_fogonazo() -> void:
 	if is_inside_tree():
 		Fogonazo.precalentar(get_parent(), huecos.get("fuego", ""))
+		Chispa.precalentar(get_parent())
 
 
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta

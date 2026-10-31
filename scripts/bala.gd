@@ -73,9 +73,10 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 
-# Al chocar (bulletImpact del JS): un destello cuadrado y unas chispas del color de la bala que rebotan hacia
-# atrás. Contra un muro, en vez de eso, el impacto de Sprite Fusion (impacto.gd). Salen a la altura a la que se ve
-# la bala. Si lo atraviesa ("sigue"), las chispas salen pero la bala no se acaba
+# Al chocar: contra un zombi, la chispa de pixelfx (chispa.gd), del color de la estela y más pequeña si es un perdigón;
+# contra un muro, el impacto de Sprite Fusion (impacto.gd). Salen a la altura a la que se ve la bala. Si lo atraviesa
+# ("sigue"), la chispa sale pero la bala no se acaba. (El destello cuadrado y las chispas sueltas de antes, bulletImpact
+# del JS, solo quedan contra la pared con el impacto viejo, para compararlos en la prueba --impacto)
 func chocar(pared := false, sigue := false) -> void:
 	var donde := global_position + Vector2(0, -altura)
 	var atras := (-velocidad).angle()
@@ -86,15 +87,20 @@ func chocar(pared := false, sigue := false) -> void:
 		if not sigue:
 			queue_free()
 		return
+	if not pared:
+		Chispa.soltar(get_parent(), global_position, altura, velocidad.angle(),
+			Chispa.color_de(critico, calidad, atraviesa > 0 or not tocados.is_empty()), radio < 4.0)
+		if not sigue:
+			queue_free()
+		return
 	Particulas.soltar(self, donde, Vector2.ZERO, colores[0], 10.0 if critico else 8.0, 0.07)
 	var n := (7 if critico else 5) - (2 if radio < 4.0 else 0)   # los perdigones sueltan menos chispas
 	for i in n:
 		var v := Vector2.from_angle(atras + randf_range(-1.1, 1.1)) * randf_range(110.0, 300.0)
 		Particulas.soltar(self, donde, v, colores[1 + i % 3], 4.0 if i < 2 else 2.0, randf_range(0.14, 0.28))
-	if pared:
-		for i in 3:
-			var v := Vector2.from_angle(atras + randf_range(-0.8, 0.8)) * randf_range(30.0, 90.0) + Vector2(0, -20)
-			Particulas.soltar(self, donde, v, Color("#b9bec9") if i else Color("#e3e6ec"), 4.0, randf_range(0.25, 0.4))
+	for i in 3:   # (y unos trocitos de pared)
+		var v := Vector2.from_angle(atras + randf_range(-0.8, 0.8)) * randf_range(30.0, 90.0) + Vector2(0, -20)
+		Particulas.soltar(self, donde, v, Color("#b9bec9") if i else Color("#e3e6ec"), 4.0, randf_range(0.25, 0.4))
 	if not sigue:
 		queue_free()
 
