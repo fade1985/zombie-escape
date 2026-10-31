@@ -23,7 +23,7 @@ func _ready() -> void:
 	super()
 	espera = randf_range(1.0, 2.2)
 	lado = 1.0 if randf() < 0.5 else -1.0
-	Reventon.precalentar(get_parent())   # (para que el primer reventón no pare el juego un momento)
+	EfectoSuelo.precalentar(get_parent(), "reventon")   # (para que el primer reventón no pare el juego un momento)
 
 
 func _physics_process(delta: float) -> void:
@@ -90,5 +90,5 @@ func morir() -> void:
 	charco.tipo = "reventon"
 	charco.position = (position / 2.0).round() * 2.0   # (en píxel entero del dibujo, como los demás charcos)
 	get_parent().add_child.call_deferred(charco)
-	Reventon.soltar(get_parent(), position)
+	EfectoSuelo.soltar(get_parent(), "reventon", position)
 	Sonido.tocar("escupitajo")

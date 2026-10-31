@@ -1180,8 +1180,9 @@ func probar_logros_nuevos(limpiar: Callable) -> void:
 # Con "--captura --flatulento": el alcance de la mutación Flatulento (mutaciones.gd, MUT; antes 70, ahora 140). En
 # un apartamento con todo descubierto, Johnny en medio de su habitación más grande y tres zombis quietos en fila: a 50
 # (dentro del alcance de antes), a 110 (solo dentro del de ahora) y a 190 (fuera de los dos). Al soltar los gases,
-# los dos primeros se quedan paralizados 2 s y con el estado de gases (queman); el tercero, nada. Foto de la nube con
-# ellos (captura-flatulento.png). Cuenta todo en la terminal, con lo esperado, y se cierra
+# los dos primeros se quedan paralizados 2 s y con el estado de gases (queman); el tercero, nada. Fotos de la nube (M37)
+# saliendo (captura-flatulento-1.png), abierta hasta el radio (captura-flatulento.png) y deshaciéndose (-2); al final,
+# que se ha ido. Cuenta todo en la terminal, con lo esperado, y se cierra
 func probar_flatulento() -> void:
 	set_process(false)
 	var i := 1   # el apartamento con más habitaciones
@@ -1211,8 +1212,17 @@ func probar_flatulento() -> void:
 		z.vida = 100000
 		zombis.append(z)
 	var lanzo: bool = mutaciones.actuar("flatulento")
-	await get_tree().create_timer(0.25).timeout
+	# la nube (M37): saliendo, del todo abierta (hasta el radio: el zombi de 110 dentro, el de 190 fuera) y deshaciéndose
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-flatulento-1.png")
+	await get_tree().create_timer(0.45).timeout
 	Captura.foto("captura-flatulento.png")
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-flatulento-2.png")
+	var nube := func(): return johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "gases" and not n.de_calentar)
+	print("Flatulento · nubes: %d (esperado: 1)" % nube.call().size())
+	await get_tree().create_timer(0.6).timeout
+	print("Flatulento · la nube se ha ido: %s (esperado: true)" % nube.call().is_empty())
 	print("Flatulento · alcance %d · ¿suelta los gases? %s (esperado: 140 y true)" % [roundi(Mutaciones.MUT.flatulento.radio), lanzo])
 	for k in zombis.size():
 		print("Flatulento · zombi a %d: paralizado %s, con gases %s (esperado: %s)" % [
