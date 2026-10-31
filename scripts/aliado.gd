@@ -486,6 +486,10 @@ func _ready() -> void:
 	# su fogonazo, preparado para que el primer disparo no pare el juego (al empezar la partida todavía no hay cámara)
 	if FOGONAZO_ARMA.has(def.get("arma", "")):
 		get_tree().create_timer(0.5).timeout.connect(preparar_fogonazo)
+	if def.get("habilidad", {}).get("tipo", "") == "curar":   # la médica: su curación (M56)
+		get_tree().create_timer(0.5).timeout.connect(func():
+			if is_inside_tree():
+				EfectoSuelo.precalentar(get_parent(), "curacion"))
 
 
 func preparar_fogonazo() -> void:
@@ -534,7 +538,7 @@ func curar(cuanto: int) -> void:
 	Sonido.tocar("curar")
 	cura_t = 0.45
 	partida.numero(johnny.position, "+%d" % cuanto, Tema.VERDE)
-	Particulas.anillo(johnny, johnny.global_position, 40.0, Tema.VERDE, 0.4)
+	EfectoSuelo.soltar(johnny, "curacion", Vector2.ZERO)   # (M56: el brillo verde, las crucecitas y el anillo; le sigue)
 
 
 # El piso se ha quedado limpio (la médica cura un poco más)

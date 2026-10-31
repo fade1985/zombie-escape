@@ -35,6 +35,10 @@
 #    pellizco): una bocanada de llamas que lo lame y sube, o un chisporroteo de gotas, burbujas y vapor verde
 #    (tools/pixelfx/chorro-golpe.js y -acido.js). Y "pared-fuego" y "pared-acido": los mismos contra la pared, donde se
 #    corta el chorro (M60), más anchos y, el ácido, chorreando hasta el suelo (chorro-pared.js y -acido.js).
+#  - "recoger": el destello al coger algo del suelo (M53; billete.gd: billetes, lanzables, objetos, armas y munición): una
+#    estrellita dorada, un anillito y chispitas (tools/pixelfx/recoger.js).
+#  - "curacion": la médica cura a Johnny (M56; aliado.curar): brillo verde, crucecitas que suben y un anillo a sus pies
+#    (tools/pixelfx/curacion.js). Va de hijo de Johnny, para que le siga.
 class_name EfectoSuelo
 extends Node2D
 
@@ -90,6 +94,12 @@ const TIPOS := {
 	"pared-acido": {"hojas": [preload("res://assets/sprites/chorro-pared-acido-detras.png"),
 		preload("res://assets/sprites/chorro-pared-acido-delante.png"), preload("res://assets/sprites/chorro-pared-acido-brillo.png")],
 		"origen": Vector2(72, 82), "fotogramas": 10},
+	"recoger": {"hojas": [preload("res://assets/sprites/recoger-detras.png"),
+		preload("res://assets/sprites/recoger-delante.png"), preload("res://assets/sprites/recoger-brillo.png")],
+		"origen": Vector2(24, 32), "fotogramas": 8},
+	"curacion": {"hojas": [preload("res://assets/sprites/curacion-detras.png"),
+		preload("res://assets/sprites/curacion-delante.png"), preload("res://assets/sprites/curacion-brillo.png")],
+		"origen": Vector2(40, 76), "fotogramas": 18},
 }
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)

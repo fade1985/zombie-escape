@@ -30,6 +30,7 @@ var brillo: Sprite2D   # la copia del dibujo que se ve a oscuras (solo con "a_os
 
 
 func _ready() -> void:
+	EfectoSuelo.precalentar(get_parent(), "recoger")   # (solo el primero: que el primer destello no pare el juego)
 	dibujo = Sprite2D.new()
 	dibujo.texture = icono
 	dibujo.scale = Vector2(tamano, tamano)
@@ -72,6 +73,7 @@ func _physics_process(delta: float) -> void:
 			velocidad += hacia / maxf(d, 1.0) * 2200.0 * delta
 			velocidad = velocidad.limit_length(650.0)
 		if t > 0.25 and d < johnny.RADIO + 12.0:
+			EfectoSuelo.soltar(get_parent(), "recoger", global_position)   # (M53: el destello al cogerlo)
 			cogido.emit()
 			queue_free()
 			return
