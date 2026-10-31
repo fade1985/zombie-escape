@@ -1594,8 +1594,19 @@ func probar_escarcha() -> void:
 		await get_tree().create_timer(segundos - antes).timeout
 		antes = segundos
 		Captura.foto("captura-escarcha-%s.png" % str(segundos).replace(".", ","))
-	await get_tree().create_timer(1.5).timeout
-	print("  al acabar, efectos %d (esperado: 0)" % (efectos.call("escarcha") + efectos.call("escarcha-zombi")))
+	# el deshielo: al suelto se le acaba (2 s) y el hielo revienta; uno de los otros muere congelado y también
+	await get_tree().create_timer(1.25).timeout
+	print("  deshielo: el suelto, congelado %.1f · estallidos de hielo %d (esperado: 0.0 y 1)" % [suelto.congelado, efectos.call("deshielo")])
+	z[0].vida = 1
+	z[0].recibir_golpe(50, Vector2.ZERO)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("  muere congelado: estallidos de hielo %d (esperado: 2)" % efectos.call("deshielo"))
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto("captura-escarcha-deshielo.png")
+	await get_tree().create_timer(2.5).timeout
+	print("  al acabar, efectos %d · congelados %s (esperado: 0 y [false, false])" % [efectos.call("escarcha") + efectos.call("escarcha-zombi") + efectos.call("deshielo"),
+		[z[1].congelado > 0.0, z[2].congelado > 0.0]])
 	Luz.evento = 0.0
 	get_tree().quit()
 

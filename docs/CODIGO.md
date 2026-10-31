@@ -153,6 +153,8 @@ en una línea.
   a la escala de su radio), con luz fría y sin quemadura en el suelo. Cada zombi que se congela (la congeladora y la cámara
   frigorífica, `zombi.congelar`) suelta la pequeña (`escarcha-zombi.js`). La congeladora usa el congelado de verdad
   (`zombi.congelar`: azul hielo con el shader, el dibujo parado, copos; cuenta para Mezcla explosiva). Prueba: `--captura --escarcha`.
+  Y `deshielo`: cuando se le acaba el congelado, o muere congelado (`zombi.deshelar`), el hielo revienta en trozos
+  (`tools/pixelfx/deshielo.js`, la idea del `ice-shatter` de pixelfx), con su sonido (`deshielo`).
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas

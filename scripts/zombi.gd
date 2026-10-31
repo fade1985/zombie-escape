@@ -422,6 +422,8 @@ func morir() -> void:
 		encogerse()
 		return
 	estado = "muerto"
+	if congelado > 0.0:
+		deshelar()   # (muere congelado: el hielo revienta)
 	Sonido.tocar("chof")
 	Sonido.tocar("muerte")
 	$Sombra.apagar()
@@ -579,8 +581,7 @@ func sufrir(delta: float) -> void:
 	if congelado > 0.0:
 		congelado -= delta
 		if congelado <= 0.0:
-			sprite.material.set_shader_parameter("hielo", 0.0)
-			sprite.play()   # se deshiela: vuelve a moverse su dibujo
+			deshelar()
 	Estados.efectos(self, estados, velocity, delta, altura * 0.6, radio)
 
 
@@ -603,6 +604,16 @@ static func quemaduras(s: CanvasItem, fuego: float, acido: float, t: float, vomi
 # Cuánto le han crecido las manchas de ácido tras "puesto" segundos (de un poco a todo en segundo y medio; 0 sin ácido)
 static func cuanto_acido(puesto: float) -> float:
 	return 0.0 if puesto <= 0.0 else clampf(0.3 + puesto / 1.5, 0.0, 1.0)
+
+
+# Se le acaba el congelado (o muere congelado: morir): el hielo revienta (M51: el "deshielo" de pixelfx, EfectoSuelo) y
+# vuelve a moverse su dibujo
+func deshelar() -> void:
+	congelado = 0.0
+	sprite.material.set_shader_parameter("hielo", 0.0)
+	sprite.play()
+	Sonido.tocar("deshielo")
+	EfectoSuelo.soltar(get_parent(), "deshielo", global_position)
 
 
 # Se queda helado: quieto, azul y con el dibujo parado, soltando escarcha

@@ -20,6 +20,9 @@
 #    (120): con otro, se agranda o se achica ("escala").
 #  - "escarcha-zombi": la misma, pequeña (tools/pixelfx/escarcha-zombi.js), en cada zombi que se congela (la congeladora,
 #    granada.gd, y la cámara frigorífica, zombi.congelar).
+#  - "deshielo": el hielo que revienta cuando a un zombi se le acaba el congelado o muere congelado (zombi.deshelar), con la
+#    idea del "ice-shatter" de pixelfx (tools/pixelfx/deshielo.js): grietas y un destello, y trozos de hielo que saltan,
+#    caen, rebotan, resbalan y se funden entre vaho.
 class_name EfectoSuelo
 extends Node2D
 
@@ -51,6 +54,9 @@ const TIPOS := {
 	"escarcha-zombi": {"hojas": [preload("res://assets/sprites/escarcha-zombi-detras.png"),
 		preload("res://assets/sprites/escarcha-zombi-delante.png"), preload("res://assets/sprites/escarcha-zombi-brillo.png")],
 		"origen": Vector2(36, 48), "fotogramas": 24},
+	"deshielo": {"hojas": [preload("res://assets/sprites/deshielo-detras.png"),
+		preload("res://assets/sprites/deshielo-delante.png"), preload("res://assets/sprites/deshielo-brillo.png")],
+		"origen": Vector2(56, 62), "fotogramas": 18},
 }
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
 const SANGRE := {"venenoso": "sangre-verde", "tentaculos": "sangre-morada"}

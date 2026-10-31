@@ -116,6 +116,8 @@ const EFECTOS := {
 		[1397, 0.6, "seno", 0.03, 0, 0.45], [2217, 0.4, "seno", 0.02, 0, 0.45], [3000, 0.1, "ruido", 0.02, -1500, 0.45]]},
 	"chatarra": {"notas": [[2600, 0.25, "ruido", 0.04, -1800], [620, 0.3, "seno", 0.04, -200],
 		[990, 0.25, "seno", 0.03, -300, 0.05], [1450, 0.2, "seno", 0.025, -400, 0.1], [110, 0.2, "cuadrada", 0.04, -40]]},
+	"deshielo": {"hueco": 80, "notas": [[3200, 0.06, "ruido", 0.035, -1500], [2600, 0.07, "triangulo", 0.02, -300, 0.04],
+		[3400, 0.06, "triangulo", 0.016, -400, 0.09], [2900, 0.08, "triangulo", 0.012, -500, 0.15]]},   # el hielo que revienta (zombi.deshelar)
 	"cristal": {"hueco": 60, "notas": [[2200, 0.08, "cuadrada", 0.025, -800], [1500, 0.12, "triangulo", 0.03, 600, 0.03]]},
 	"latido": {"fijo": true, "notas": [[70, 0.12, "seno", 0.18, -20], [60, 0.14, "seno", 0.14, -15, 0.16]]},   # heartbeat
 	"disparo_zombi": {"hueco": 80, "notas": [[330, 0.08, "seno", 0.025, -150]]},       # enemyShot
