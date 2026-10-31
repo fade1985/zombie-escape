@@ -2721,6 +2721,7 @@ func probar_pantalla() -> void:
 		for pulsada in [true, false]:
 			var evento := InputEventKey.new()
 			evento.keycode = tecla
+			evento.physical_keycode = tecla
 			evento.alt_pressed = alt
 			evento.pressed = pulsada
 			Input.parse_input_event(evento)
@@ -2741,6 +2742,12 @@ func probar_pantalla() -> void:
 	await pulsar.call(KEY_F11)
 	await pulsar.call(KEY_F11)
 	print("Pantalla · F11 dos veces: %s (esperado: ventana)" % estado.call())
+	await pulsar.call(KEY_F11)
+	await pulsar.call(KEY_ESCAPE)
+	print("Pantalla · Esc con la pantalla completa: %s, menú «%s» (esperado: completa, pausa)" % [estado.call(), menus.abierto])
+	await pulsar.call(KEY_ESCAPE)
+	print("Pantalla · otro Esc: %s, menú «%s» (esperado: completa y ninguno)" % [estado.call(), menus.abierto])
+	await pulsar.call(KEY_F11)
 	get_tree().quit()
 
 

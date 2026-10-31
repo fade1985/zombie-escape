@@ -9,12 +9,23 @@
 #
 # La pantalla completa arranca como se dejó la última vez (ajuste «pantalla_completa», que guarda
 # Tactil.pantalla_completa al cambiarla) y se cambia con F11 o Alt+Intro desde cualquier sitio, también con un menú abierto.
-# En la web no hace nada: allí F11 es del navegador. Las pruebas no arrancan en pantalla completa (la prueba --pantalla
-# prueba las teclas).
+# En la web las teclas no hacen nada: allí F11 es del navegador. Las pruebas no arrancan en pantalla completa (la prueba
+# --pantalla prueba las teclas).
+#
+# En la web, Esc también es del navegador: quitaría la pantalla completa en vez de abrir la pausa. Por eso, mientras dura la
+# pantalla completa se le pide que lo deje para el juego (QUEDARSE_ESC), y entonces se sale manteniendo Esc pulsado. Solo saben
+# hacerlo Chrome, Edge y Opera, en ordenador y en https o localhost; en los demás navegadores no pasa nada y Esc sigue siendo suyo.
 extends Node
 
 const BASE := Vector2(960, 640)   # la pantalla base: siempre se ve por lo menos esto
 const ALTO_MAXIMO := 800.0        # lo más alto que se deja ver antes de agrandar lo justo
+const QUEDARSE_ESC := """
+document.addEventListener('fullscreenchange', () => {
+	if (!navigator.keyboard?.lock) return;
+	if (document.fullscreenElement) navigator.keyboard.lock(['Escape']).catch(() => {});
+	else navigator.keyboard.unlock();
+});
+"""   # no-tr (JavaScript)
 
 
 func _ready() -> void:
@@ -25,6 +36,7 @@ func _ready() -> void:
 		ajustar_escala()
 	if OS.has_feature("web"):
 		set_process_input(false)
+		JavaScriptBridge.eval(QUEDARSE_ESC, true)
 		return
 	if not captura and Guardado.ajuste("pantalla_completa"):
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)

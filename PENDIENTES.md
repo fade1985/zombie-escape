@@ -11,9 +11,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Fallos
 
-- **F16** Pantalla completa: al pulsar Esc (para la pausa) también se sale de la pantalla completa, y no debería. En la
-  web es el propio navegador; mirar si se puede evitar (por ejemplo con el bloqueo de teclado de Chrome).
-
 ## Mejoras
 
 - **M27** Mutación Gastroenteritis: los zombis alcanzados quedan bañados en vómito un par de segundos, con un efecto en

@@ -48,7 +48,8 @@ con `(Get-Item JohnnyRush.exe).VersionInfo` y extrayendo el icono con `ExtractAs
 - **Pantalla completa:** **F11** o **Alt+Intro**, desde cualquier sitio, y el botón de Opciones y del menú. Se guarda
   (`pantalla_completa` en `ajustes`) y el juego arranca igual la próxima vez (`pantalla.gd`, un autoload;
   `Tactil.pantalla_completa()` cambia y guarda). En la web no se guarda: allí F11 es del navegador. La ventana sale
-  maximizada.
+  maximizada. **Esc no la quita:** en Windows abre la pausa y ya está (comprobado el 31 oct mandando un Esc de verdad a la
+  ventana de `JohnnyRush.exe` y de Godot); lo de salirse con Esc es solo del navegador, ver `docs/WEB.md`.
 - **Sin bordes negros:** la imagen llena la ventana (también en la web; lo hace `pantalla.gd`). En Full HD, 2K y 4K cada píxel
   del dibujo mide 3, 4 y 6 de pantalla justos y se ve 1280×720. En tamaños que no encajan (una ventana de navegador de
   900 de alto) se agranda lo justo para ver 960×640: llena igual, pero algún píxel sale un poco más ancho que otro.

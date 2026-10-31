@@ -41,6 +41,25 @@
 - Para probar un cambio sin pisar `web/` (por ejemplo, las letras de otro idioma), exportar a una carpeta temporal y servirla sin caché: ver
   «Probar en la web» en `docs/IDIOMAS.md`. Lo que se ve bien en el ordenador puede fallar en la web, que no trae letras del sistema.
 
+## Pantalla completa y Esc
+
+- **Esc es del navegador:** con la pantalla completa puesta, la quita en vez de llegar al juego (en el `.exe` no pasa, ver
+  `docs/ESCRITORIO.md`). Por eso, al entrar en pantalla completa, `pantalla.gd` le pide que deje Esc para el juego
+  (`navigator.keyboard.lock(['Escape'])`, en el aviso `fullscreenchange`) y lo suelta al salir.
+- **Cómo se sale con el bloqueo:** manteniendo Esc pulsado un par de segundos (el navegador lo avisa con su cartel al entrar),
+  con F11, o con el botón «Pantalla completa» del menú y de Opciones. Un Esc corto abre la pausa, y mantenerlo la abre una sola
+  vez. En el móvil, el botón también está en la pausa.
+- **Dónde funciona:** en Chrome y Edge de ordenador (probados en la versión 156, el 31 oct, sin que salga ningún permiso:
+  Google anunció uno para Chrome 131 y luego no lo sacó). Opera lleva el mismo motor, pero no se ha probado. Hace falta https o
+  localhost.
+- **Dónde no funciona:** en Firefox y Safari no existe, y Esc sigue quitando la pantalla completa, como antes y sin errores
+  (se probó en Chrome quitándole la función; Firefox y Safari de verdad, no). Dentro de un marco (`iframe`), como el reproductor
+  de itch.io, el navegador lo rechaza (probado) y pasa lo mismo: para vender allí, habría que abrir el juego en su propia pestaña.
+- **Probarlo:** un Esc simulado dentro de Godot no pasa por el navegador, así que no demuestra nada. Vale el protocolo de
+  depuración del navegador (`--remote-debugging-port`, `Page.addScriptToEvaluateOnNewDocument` para espiar y
+  `Input.dispatchKeyEvent` con `rawKeyDown`, que sí llega a la parte del navegador que quita la pantalla completa). Comprobar
+  siempre también sin el bloqueo: si ahí no se sale, la prueba no vale. `-- --captura --pantalla` solo cubre el ordenador.
+
 ## Lo que se atasca en la web
 
 - **Polígonos en cantidad (`draw_circle`, `draw_arc`, `draw_colored_polygon`, `draw_polyline`).** En la web cada uno es un
