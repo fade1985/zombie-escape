@@ -78,6 +78,7 @@
 #                       su humo y una ráfaga de la MP5                                      [prueba_armas.gd]
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]
 #   --reventon-sangre   los zombis que mueren de un golpe fuerte revientan en sangre (M49)      [prueba_armas.gd]
+#   --chispazos         la descarga salta de un zombi a otro: relámpagos y chispazos (M50)      [prueba_armas.gd]
 #   --molotov           el molotov al romperse (el efecto de pixelfx, M48)                     [prueba_armas.gd]
 #   --explosion         la explosión de pixelfx (granada, zombi explosivo): normal y pequeña   [prueba_armas.gd]
 #   --vomito            los zombis bañados en vómito (Gastroenteritis), junto a uno con ácido   [prueba_armas.gd]
@@ -425,6 +426,9 @@ func empezar_prueba() -> void:
 	elif "--raton" in args:
 		set_process(false)   # sin la prueba larga
 		probar_raton()
+	elif "--chispazos" in args:
+		set_process(false)   # sin la prueba larga
+		probar_chispazos()
 	elif "--reventon-sangre" in args:
 		set_process(false)   # sin la prueba larga
 		probar_reventon_sangre()

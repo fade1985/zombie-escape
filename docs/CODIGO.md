@@ -140,6 +140,13 @@ en una línea.
   (un crítico, uno que empuja como una explosión, `Zombi.MUERTE_FUERTE`, o uno que le sobra media vida: `zombi.muerte_fuerte`)
   revienta en sangre (`partida.sangre`): un efecto hecho para el juego, `tools/pixelfx/reventon-sangre.js` y sus colores
   `-verde.js` y `-morada.js`; se precalienta al aparecer el primer zombi de cada color. Prueba: `--captura --reventon-sangre`.
+  Y `chispazo`: la electricidad al dar a un zombi (M50), el `zap-hit` de pixelfx desde arriba (`tools/pixelfx/chispazo.js`):
+  un nudo de rayitos a la altura del cuerpo, chispas que hacen eses y una quemadura de helecho en el suelo. Lo sueltan el
+  lanza rayos en cada zombi que toca (`llamarada.golpe_de_rayo`; se precalienta al sacarlo) y `ArmasCreadas.rayo`.
+- `relampago.gd` (`Relampago`): el rayo que salta de un sitio a otro (la descarga de un zombi a otro, el estallido de las
+  Épicas de rayo y Pararrayos; lo suelta `ArmasCreadas.rayo`, con el chispazo donde da). Dibujado a código como los rayos de
+  pixelfx: zigzag partido por la mitad con ramas, borde, cuerpo celeste y centro blanco, rehecho 20 veces por segundo y fuera
+  en 0,22 s. Prueba: `--captura --chispazos`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas

@@ -1537,6 +1537,51 @@ func probar_reventon_sangre() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --chispazos": lo eléctrico (M50) en la sala de pruebas, a media luz y sin Johnny en medio: una descarga
+# (ArmasCreadas.descarga, como la del Pararrayos con Alto voltaje) en el primero de cuatro zombis en fila, que salta de uno
+# a otro tres veces: en cada salto un relámpago (relampago.gd) y, donde da, un chispazo de pixelfx (EfectoSuelo,
+# "chispazo"). Fotos a los 0,03, 0,1 y 0,3 s (captura-chispazos-<segundos>.png). Lo que comprueba, en la terminal. Se cierra
+func probar_chispazos() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var z := []
+	for i in 4:
+		var uno: Node2D = meter_zombi("normal", johnny.position + Vector2(-150 + i * 95, -20 + (i % 2) * 50))
+		uno.vida = 9999
+		z.append(uno)
+	await get_tree().create_timer(0.4).timeout
+	johnny.visible = false
+	var cuantos := func(clase) -> int:
+		return johnny.get_parent().get_children().filter(func(n): return is_instance_of(n, clase) and not (n is EfectoSuelo and n.de_calentar)).size()
+	ArmasCreadas.descarga(z[0], 10.0, 1.0, 2)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	print("Chispazos: relámpagos %d (esperado: 3) · chispazos %d (esperado: 3) · aturdidos %s (esperado: todos)" % [
+		cuantos.call(Relampago), cuantos.call(EfectoSuelo), z.map(func(zz): return zz.aturdido > 0.0)])
+	var antes := 0.0
+	for segundos in [0.03, 0.1, 0.3]:
+		await get_tree().create_timer(segundos - antes).timeout
+		antes = segundos
+		Captura.foto("captura-chispazos-%s.png" % str(segundos).replace(".", ","))
+	await get_tree().create_timer(1.0).timeout
+	print("  al acabar, relámpagos %d y chispazos %d (esperado: 0 y 0)" % [cuantos.call(Relampago), cuantos.call(EfectoSuelo)])
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --molotov": el molotov al romperse (M48: el efecto de pixelfx, efecto_suelo.gd "molotov") en la sala de
 # pruebas, a media luz y sin Johnny en medio: un molotov de verdad (el proyectil) lanzado a 30 por encima de Johnny. Fotos
 # al romperse y luego (captura-molotov-<segundos>.png: 0,03, 0,15, 0,3, 0,6 y 1). Lo que comprueba, en la terminal. Se cierra

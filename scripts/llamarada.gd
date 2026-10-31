@@ -125,6 +125,8 @@ func mantener(desde: Vector2, a: float, w: Dictionary) -> void:
 		material = null if variante == "rayo" else propio
 		propio.shader = SOMBREADO_ACIDO if variante == "acido" else SOMBREADO
 		luz.color = LUZ_RAYO if variante == "rayo" else LUZ
+		if variante == "rayo":
+			EfectoSuelo.precalentar(get_parent().get_parent(), "chispazo")
 
 
 func _physics_process(delta: float) -> void:
@@ -371,10 +373,9 @@ func golpe_de_rayo(zombi: Node2D, johnny: Node2D, parte: float) -> void:
 	else:
 		zombi.herir(d, CELESTES[0])
 	ArmasCreadas.aturdir(zombi, ATURDE)
-	var donde: Vector2 = zombi.global_position - global_position - Vector2(0, ALTURA_CUERPO)
-	for i in 2:
-		var v := Vector2.from_angle(randf() * TAU) * randf_range(50.0, 120.0)
-		Particulas.soltar(self, donde, v, CELESTES[randi() % 3], 2.0, randf_range(0.15, 0.3))
+	# el chispazo de pixelfx (M50; EfectoSuelo): en el suelo, con el golpe a la altura del cuerpo
+	var pie: Vector2 = zombi.global_position + Vector2(0, ArmasCreadas.ALTURA_CHISPAZO - ALTURA_CUERPO)
+	EfectoSuelo.soltar(zombi.get_parent(), "chispazo", pie)
 	if epica and not zombi.is_in_group("zombis"):
 		ArmasCreadas.estallido(zombi, "chispa", d)
 
