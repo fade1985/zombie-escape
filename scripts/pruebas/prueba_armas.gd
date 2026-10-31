@@ -1486,6 +1486,69 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --fogonazos-aliados": el fogonazo de pixelfx (fogonazo.gd) de los supervivientes que disparan, en la
+# sala de pruebas y a media luz. Primero el policía (el de la pistola) y luego el militar (el de la MP5, en ráfagas de
+# 3), solos con Johnny y un zombi quieto a la derecha: la foto, en cuanto sale el primer fogonazo
+# (captura-fogonazo-aliado-<id>.png y, un poco después, -humo). Lo que comprueba, en la terminal. Se cierra
+func probar_fogonazos_aliados() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(-120, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	var fogonazos := func() -> Array:
+		return johnny.get_parent().get_children().filter(func(n): return n is Fogonazo and not n.de_calentar)
+	for id in ["policia", "militar"]:
+		# solo él en el equipo
+		for a in supervivientes.equipo:
+			a.queue_free()
+		supervivientes.equipo.clear()
+		var datos: Dictionary = Supervivientes.DATOS[id].duplicate()
+		datos.erase("rescate")
+		var aliado: Aliado = supervivientes.crear(datos, "equipo")
+		aliado.idx = 0
+		supervivientes.equipo.append(aliado)
+		johnny.get_parent().add_child(aliado)
+		aliado.global_position = johnny.global_position + Vector2(-40, 60)   # (enseguida vuelve a su sitio en la fila, detrás de Johnny)
+		Aliado.borrar_huellas()
+		zombis_de_prueba([])   # (sin zombis hasta que esté listo, y sin fogonazos del anterior)
+		await get_tree().create_timer(3.0).timeout
+		var arma: String = Aliado.FOGONAZO_ARMA[datos.arma]
+		print("%s: preparado el fogonazo de %s %s (esperado: true) | fogonazos antes de disparar %d (esperado: 0)" % [
+			id, arma, Fogonazo.calentados.has(arma), fogonazos.call().size()])
+		zombis_de_prueba([Vector2(220, 80)])
+		var visto := false
+		var tiempo := 0.0
+		var llamas := {}
+		while tiempo < 4.0:
+			await get_tree().process_frame
+			tiempo += get_process_delta_time()
+			var hay: Array = fogonazos.call()
+			if not visto and hay.any(func(f): return f.tipo == arma + "-llama"):
+				visto = true
+				print("  %s: fogonazos al disparar %d (esperado: 2, la llama y el humo, de %s) | tipos: %s" % [
+					id, hay.size(), arma, hay.map(func(f): return f.tipo)])
+				# (lo que se dibuja sale en la foto un par de fotogramas después): la llama y, luego, el humo
+				for i in 3:
+					await get_tree().process_frame
+				recorte("captura-fogonazo-aliado-%s.png" % id)
+				await get_tree().create_timer(0.25).timeout
+				recorte("captura-fogonazo-aliado-%s-humo.png" % id)
+			for f in fogonazos.call():   # (otra vez: tras las fotos, alguno ya no está)
+				if f.tipo == arma + "-llama":
+					llamas[f.get_instance_id()] = true
+		print("  %s: ha salido el fogonazo %s (esperado: true) | llamas en 4 s: %d (esperado: más de 1)" % [id, visto, llamas.size()])
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --chispas": la chispa de pixelfx (chispa.gd) de las balas al dar a un zombi, en la sala de pruebas y a
 # media luz, con un zombi quieto (y que no muere) en el centro. Balas que llegan desde los 8 lados (captura-chispa-<lado>.png,
 # en el momento del destello, y -2 un poco después, con las chispas cayendo), una de cada color (captura-chispa-color-<color>.png:
