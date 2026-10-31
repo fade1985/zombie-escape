@@ -147,7 +147,7 @@ en una línea.
   trozos, y chispitas que suelta y caen (`mover_chispitas`). Prueba: `--captura --trazadora`.
 - `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
-  `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
+  `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`; al tropezar, Johnny se cae de espaldas, se queda tumbado y se levanta con sus dibujos de PixelLab, sin el arma: `johnny.caer`, hoja `conserje-48-caida`, que monta `tools/caida.py`, y la de cada skin, `tools/caida_skins.py`; se prueba con una skin con `--skin X`), `cerco.gd` (bombero) y
   `luz_jefe.gd` (la luz fija de esas habitaciones).
 - `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
   primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
@@ -478,6 +478,10 @@ en una línea.
   `pixelfx/nube-gases.js` es la nube del Flatulento ("poison-cloud" desde arriba, `nube-gases-*.png`), igual.
   `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
   en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
+  `caida.py` monta la hoja del tropiezo de Johnny (`conserje-48-caida`: caer y levantarse de PixelLab, colocados para que
+  no den saltos y quede tumbado en el suelo): `py tools/caida.py`. Luego `py tools/caida_skins.py` saca la de cada skin:
+  busca en cada dibujo la cabeza de siempre y cuánto está girada, la borra y pega encima la de la skin girada igual
+  (`cara.py` no sirve aquí: busca la cabeza derecha). Con `muestra`, `capturas/captura-caida-<skin>.png` para revisarla.
   `pixelfx/fogonazo.js` son los fogonazos ("muzzle-pistol", "muzzle-smg" y "muzzle-shotgun" partidos en llama y humo,
   sin casquillo) y `pixelfx/exportar_fogonazo.mjs` los saca girados y recortados (`fogonazo-<arma>-<parte>*.png`) y
   escribe las medidas para `TIPOS` de `fogonazo.gd`: `node tools/pixelfx/exportar_fogonazo.mjs <pixelfx> assets/sprites`.

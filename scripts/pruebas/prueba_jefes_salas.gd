@@ -317,8 +317,13 @@ func probar_cubos() -> void:
 # Lo que se prueba igual en el gimnasio y en el cuarto de la limpieza (probar_gimnasio, probar_cubos), con la cosa del
 # suelo que toque ("uno": "una mancuerna" o "un cubo"; "varios", en plural): que al pasar andando por encima de una Johnny se cae, no se mueve ni
 # ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la cosa sale rodando (el cubo, volcado); y que
-# rodando (la esquiva) se pasa por encima de otra sin caer. Saca la foto "foto" (Johnny en el suelo con las estrellitas)
+# rodando (la esquiva) se pasa por encima de otra sin caer. Saca la foto "foto" (Johnny en el suelo con las estrellitas),
+# y otra cayendo y otra levantándose. Con "--skin X" (portero, gloton, gymbro o bombero), Johnny lleva esa skin: se ven sus
+# dibujos de caerse (tools/caida_skins.py)
 func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Dictionary, datos: Dictionary, foto: String) -> void:
+	var args := OS.get_cmdline_user_args()
+	if "--skin" in args:
+		johnny.vestir(args[args.find("--skin") + 1])
 	var sala: Dictionary = sitio.apt.salas[0]
 	var camara: Camera2D = johnny.get_node("Camara")
 	# una cosa con sitio libre a los dos lados para pasar por encima (sin muebles ni otras cosas)
@@ -364,10 +369,15 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 	while johnny.caido_t <= 0.0 and espera < 2.0:
 		await get_tree().physics_frame
 		espera += get_physics_process_delta_time()
-	var t0 := Time.get_ticks_msec()
+	# (el tiempo del juego, en pasos de la física: las fotos tardan en guardarse y el reloj de verdad corre más)
+	var t0 := Engine.get_physics_frames()
 	print("%s: andando hacia %s, se cae %s (esperado: true)" % [titulo, uno, johnny.caido_t > 0.0])
-	await get_tree().create_timer(0.4).timeout
-	var tumbado := absf(rad_to_deg(johnny.sprite.rotation))
+	await get_tree().create_timer(0.15).timeout
+	Captura.foto(foto.replace(".png", "-cayendo.png"))
+	await get_tree().create_timer(0.45).timeout
+	# tumbado: el último dibujo de caerse (tools/caida.py)
+	var tumbado := "%s %d" % [johnny.sprite.animation, johnny.sprite.frame]
+	var ultimo := "%s %d" % [johnny.sprite.animation, johnny.sprite.sprite_frames.get_frame_count(johnny.sprite.animation) - 1]
 	var quieto: Vector2 = johnny.position
 	Input.action_press("atacar")
 	camara.reset_smoothing()
@@ -375,18 +385,23 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 	Captura.foto(foto)
 	await get_tree().create_timer(0.6).timeout
 	var volcado := " · volcado %s (esperado: true)" % (cosa.volcado != 0) if cosa.forma == "cubo" else ""
-	print("%s: en el suelo, tumbado %d° (esperado: 90) · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · ha salido rodando %d (esperado: entre 30 y 120)%s" % [
-		titulo, roundi(tumbado), roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0,
+	print("%s: en el suelo, tumbado «%s» (esperado: «%s») · con la hoja «%s» · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · ha salido rodando %d (esperado: entre 30 y 120)%s" % [
+		titulo, tumbado, ultimo, johnny.sprite.sprite_frames.resource_path.get_file(), roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0,
 		roundi(cosa.pos.distance_to(antes)), volcado])
 	Input.action_release("atacar")
-	while johnny.caido_t > 0.0 and Time.get_ticks_msec() - t0 < 4000:
+	var levantandose := false
+	var por_segundo: int = Engine.physics_ticks_per_second
+	while johnny.caido_t > 0.0 and Engine.get_physics_frames() - t0 < 4 * por_segundo:
 		await get_tree().physics_frame
-	var dura := (Time.get_ticks_msec() - t0) / 1000.0
+		if not levantandose and johnny.caido_t < johnny.LEVANTARSE * 0.5:
+			levantandose = true
+			Captura.foto(foto.replace(".png", "-levantandose.png"))
+	var dura := (Engine.get_physics_frames() - t0) / float(por_segundo)
 	var de_pie: Vector2 = johnny.position
 	await get_tree().create_timer(0.4).timeout
 	Input.action_release(accion[dir])
-	print("%s: se levanta a los %.2f s (esperado: 2,0) · derecho %s (esperado: true) · luego anda %d en 0,4 s (esperado: más de 30) · vida perdida %d (esperado: 0)" % [
-		titulo, dura, is_zero_approx(johnny.sprite.rotation), roundi(johnny.position.distance_to(de_pie)),
+	print("%s: se levanta a los %.2f s (esperado: 2,0) · de pie con su hoja de siempre %s (esperado: true) · luego anda %d en 0,4 s (esperado: más de 30) · vida perdida %d (esperado: 0)" % [
+		titulo, dura, johnny.sprite.sprite_frames == Skins.hoja(johnny.arma().hoja, johnny.skin), roundi(johnny.position.distance_to(de_pie)),
 		johnny.stats.vida_max - johnny.vida])
 	# rodando por encima de otra: no se cae
 	await get_tree().create_timer(0.8).timeout
