@@ -37,6 +37,7 @@ func dentro(p: Vector2) -> bool:
 
 
 func _physics_process(delta: float) -> void:
+	EfectoSuelo.precalentar(get_parent(), "escarcha-zombi")   # (una vez: la escarcha de los que se congelan, M51)
 	t += delta
 	var frio := {"frio": {"dps": Peligros.FRIO.dps, "frena": Peligros.FRIO.frena, "despues": Peligros.FRIO.despues}}
 	var johnny := get_tree().get_first_node_in_group("jugador")

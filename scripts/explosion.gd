@@ -17,6 +17,8 @@ const COLUMNAS := 16
 const FILAS := 5
 const FPS := 30.0
 const APAGA := 0.4                  # los últimos segundos, se apaga (lo que queda es humo que casi no se ve)
+const FRIO := Color(0.55, 0.85, 1.0)  # la luz de la helada
+const RADIO_ESCARCHA := 120.0       # el radio para el que está hecho el estallido de escarcha (el de la congeladora)
 const PEQUENA := 70.0               # con menos radio, la explosión se ve a la mitad de tamaño
 
 var radio := 90.0
@@ -26,6 +28,8 @@ var origen: Node = null       # quien ha reventado (no se hace daño a sí mismo
 var a_johnny := true          # si le hace daño a Johnny (la de Mezcla explosiva, no: zombi.gd)
 var de := "granada"           # de quién es, para el cartel de derrota (johnny.gd, golpe_de): la del dinamitero lleva
                               # "explosivo"; las demás que le dan a Johnny son de su granada
+var helada := false           # la de la congeladora (M51): en vez de la bola de fuego, el estallido de escarcha de pixelfx
+                              # (EfectoSuelo, "escarcha"), con luz fría y sonido de cristal
 var paredes := false          # si la paran las paredes, las puertas cerradas y las barricadas (los muebles, no)
 var tiempo := 0.0
 var capas: Array[Sprite2D] = []
@@ -53,6 +57,12 @@ func _ready() -> void:
 				zombi.recibir_golpe(cuanto, hacia.normalized() * EMPUJE)
 	if pilla:
 		Temblor.parar(PARADA)
+	if helada:
+		Sonido.tocar("cristal")
+		Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.6, 1.0, FRIO)
+		EfectoSuelo.soltar(get_parent(), "escarcha", global_position, radio / RADIO_ESCARCHA)
+		queue_free()
+		return
 	# La explosión ilumina toda la zona, y el resplandor del fuego tarda en apagarse
 	Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.4)
 	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)

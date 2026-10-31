@@ -41,7 +41,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   dibujos más grandes (jefe criatura, gerente mutado…), cargar cada jefe solo cuando sale y una pantalla de carga
   más bonita para que la espera se note menos.
 
-- **M51** pixelfx: el hielo (granada congeladora, bate helado), un estallido de escarcha al congelar.
 - **M52** pixelfx: la granada atraedora, un aura o un pulso que se note que llama a los zombis.
 - **M53** pixelfx: recoger billetes y objetos, un destello pequeño al cogerlos.
 - **M54** pixelfx: elegir una mutación, un aura o un pulso en vez del anillo morado.
