@@ -1486,6 +1486,71 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --johnny-ardiendo": Johnny ardiendo con el fuego de los zombis (su shader, cintura.gdshader con
+# quemaduras.gdshaderinc), en la sala de pruebas, al lado de un zombi que arde para compararlos. Fotos: con luz mirando
+# hacia abajo, a un lado y hacia arriba (captura-johnny-ardiendo-<s, e, n>.png), a oscuras (-oscuro) y ya apagado
+# (-apagado); y partido por la cintura, como al golpear andando (captura-johnny-cintura.png, y -ardiendo). Lo que comprueba, en la terminal. Se cierra
+func probar_johnny_ardiendo() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):   # (que el que le acompaña no le tape en las fotos)
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	var z: Node2D = meter_zombi("normal", johnny.position + Vector2(70, 0))
+	await get_tree().process_frame
+	z.diana = true
+	z.casa = z.position
+	var sigue := [true]
+	var renovar := func() -> void:
+		while sigue[0]:
+			z.prender()
+			Estados.poner(johnny.estados, "fuego", 1.0, 0.0)   # (sin daño)
+			await get_tree().create_timer(0.5).timeout
+	renovar.call()
+	for dir in ["s", "e", "n"]:
+		johnny.direccion = dir
+		await get_tree().create_timer(0.6).timeout
+		recorte("captura-johnny-ardiendo-%s.png" % dir)
+	var m: ShaderMaterial = johnny.sprite.material
+	var b: Node = johnny.sprite.get_node_or_null("Brillo")
+	print("Johnny ardiendo: fuego en el cuerpo %.2f y en las piernas %.2f (esperado: 1 y 1) | brilla a oscuras %s (esperado: true) | luz naranja %s, llamas dibujadas aparte %s (esperado: true, false)" % [
+		Brillo.valor(m, "fuego"), Brillo.valor(johnny.piernas.material, "fuego"), b != null and b.visible,
+		johnny.llamas.luz.visible, johnny.llamas.cuerpo])
+	Luz.evento = 0.85
+	await get_tree().create_timer(0.8).timeout
+	recorte("captura-johnny-ardiendo-oscuro.png")
+	Luz.evento = 0.0
+	sigue[0] = false
+	await get_tree().create_timer(1.6).timeout
+	print("  apagado: fuego %.2f (esperado: 0) | brilla %s (esperado: false)" % [
+		Brillo.valor(m, "fuego"), b != null and b.visible])
+	recorte("captura-johnny-ardiendo-apagado.png")
+	# partido por la cintura (un golpe dado andando): que el shader nuevo corte igual, sin arder y ardiendo
+	z.queue_free()
+	johnny.direccion = "e"
+	for arde in [false, true]:
+		if arde:
+			Estados.poner(johnny.estados, "fuego", 1.0, 0.0)
+		johnny.sprite.play("ataque_e")
+		johnny.sprite.pause()
+		johnny.sprite.frame = 2
+		johnny.piernas.play("andar_e")
+		johnny.piernas.pause()
+		johnny.piernas.frame = 2
+		johnny.partir_cintura(true)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		recorte("captura-johnny-cintura%s.png" % ("-ardiendo" if arde else ""))
+	get_tree().quit()
+
+
 # Con "--captura --fogonazos-aliados": el fogonazo de pixelfx (fogonazo.gd) de los supervivientes que disparan, en la
 # sala de pruebas y a media luz. Primero el policía (el de la pistola) y luego el militar (el de la MP5, en ráfagas de
 # 3), solos con Johnny y un zombi quieto a la derecha: la foto, en cuanto sale el primer fogonazo

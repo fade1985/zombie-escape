@@ -12,6 +12,7 @@
 //     oscuro, el canto del metal) y por debajo se le ve la piel; con 0, nada
 //   - "t": el reloj de las llamas y las burbujas; "semilla", para que cada uno arda distinto; "alto", lo que mide
 //     el cuerpo en píxeles del dibujo, de los pies (y = 0 en el dibujo) a la cabeza
+// Lo usan también Johnny (cintura.gdshader, para arder como los zombis) y el Gymbro de metal.
 // Todo va por píxeles del dibujo (como el pixel art): "lugar" es el sitio del píxel en el dibujo, el mismo en todos
 // los fotogramas (las manchas no saltan al andar)
 
@@ -70,6 +71,9 @@ float mancha(vec2 p) {
 }
 
 void fragment() {
+#ifdef RECORTE
+	RECORTE   // lo que quita quien lo incluye antes de pintar nada (Johnny partido por la cintura: cintura.gdshader)
+#endif
 	vec4 c = texture(TEXTURE, UV) * COLOR;
 	vec3 r = mix(c.rgb, vec3(0.72, 0.9, 1.0), hielo);
 	float claro = dot(r, vec3(0.3, 0.59, 0.11));

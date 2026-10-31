@@ -156,6 +156,8 @@ var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siemp
 var modo := "asistido"     # cómo se ataca (ver arriba)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
 
+const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
+
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var efectos: AnimatedSprite2D = $Efectos   # fogonazo, humo y casquillo al disparar andando
 @onready var piernas: AnimatedSprite2D = $Sprite/Piernas   # las piernas andando debajo de un golpe (cintura.gdshader)
@@ -166,10 +168,17 @@ func _ready() -> void:
 	efectos.animation_finished.connect(efectos.hide)
 	# (al empezar todavía no hay cámara: el fogonazo del arma que lleva se prepara un poco después)
 	get_tree().create_timer(0.5).timeout.connect(preparar_fogonazo)
+	# Arde como los zombis: las llamas se las pinta su shader (cintura.gdshader, con el fuego de quemaduras.gdshaderinc)
+	# en el cuerpo y en las piernas de andar; de Llamas solo queda la luz naranja
 	llamas = Llamas.new()
 	llamas.alto = 70.0
 	llamas.fuerza = 0.0
+	llamas.cuerpo = false
 	add_child(llamas)
+	var semilla := randf() * 100.0
+	for s in [sprite, piernas]:
+		s.material.set_shader_parameter("semilla", semilla)
+		s.material.set_shader_parameter("alto", ALTO_DIBUJO)
 	llamarada = Llamarada.new()
 	add_child(llamarada)
 	goteo = Goteo.new()
@@ -361,8 +370,14 @@ func _physics_process(delta: float) -> void:
 		quitar_vida(entero, charco_que_quema())
 		if not vivo:
 			return
-	sprite.modulate = Color(Estados.tinte(estados, Time.get_ticks_msec() / 1000.0), sprite.modulate.a)
+	# (el tinte de los estados, sin el naranja del fuego: ese ya lo pone el shader con las llamas)
+	var tintes := estados
+	if estados.has("fuego"):
+		tintes = estados.duplicate()
+		tintes.erase("fuego")
+	sprite.modulate = Color(Estados.tinte(tintes, Time.get_ticks_msec() / 1000.0), sprite.modulate.a)
 	llamas.fuerza = 1.0 if estados.has("fuego") else 0.0
+	arder(llamas.fuerza)
 	Estados.efectos(self, estados, velocity, delta, 60.0, RADIO)
 	if stats.ansiedad:
 		contar_a_la_vista()
@@ -467,6 +482,7 @@ func soltar_estela() -> void:
 	# entera (sin partir por la cintura)
 	var material: ShaderMaterial = sprite.material.duplicate()
 	material.set_shader_parameter("parte", 0)
+	material.set_shader_parameter("fuego", 0.0)   # (la estela no arde)
 	copia.material = material
 	copia.modulate = Color(AZUL, 0.5)
 	get_parent().add_child(copia)
@@ -1231,6 +1247,18 @@ func quedarse_quieto() -> void:
 	partir_cintura(false)
 	sprite.speed_scale = 1.0
 	cambiar_animacion("reposo_" + direccion)
+
+
+# El fuego en su dibujo (0 = nada, 1 = ardiendo), como Zombi.quemaduras: en el cuerpo, con la copia que brilla a
+# oscuras (brillo.gd), y en las piernas de andar
+func arder(fuerza: float) -> void:
+	Zombi.quemaduras(sprite, fuerza, 0.0, tiempo_fuego())
+	piernas.material.set_shader_parameter("fuego", fuerza)
+	piernas.material.set_shader_parameter("t", fmod(tiempo_fuego(), 100.0))
+
+
+func tiempo_fuego() -> float:
+	return Time.get_ticks_msec() / 1000.0
 
 
 func partir_cintura(si: bool) -> void:
