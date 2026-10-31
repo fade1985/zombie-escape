@@ -10,8 +10,8 @@
 #   - levantarse: movido poco a poco, para que el primero (aún tumbado) quede donde acabó caer y el último (ya de pie)
 #     con los pies en el pivote. Así no da saltos al pasar de una a otra ni al volver a su hoja de siempre.
 # Saca assets/sprites/conserje-48-caida.png y .json (una fila por dirección: caer y luego levantarse) y, con
-# tools/hacer_frames.py, su .tres (animaciones caer_<dir> y levantarse_<dir>). Las skins no tienen la suya todavía:
-# tools/cara.py pega bien la cabeza nueva en los dibujos de pie, pero no en los de caer y tumbado (la cabeza va girada).
+# tools/hacer_frames.py, su .tres (animaciones caer_<dir> y levantarse_<dir>). Las de las skins, después, con
+# tools/caida_skins.py (tools/cara.py no sirve aquí: busca la cabeza derecha, y al caer va girada).
 #   py tools/caida.py
 import json
 import subprocess

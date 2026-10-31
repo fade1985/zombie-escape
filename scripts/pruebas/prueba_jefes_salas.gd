@@ -317,8 +317,13 @@ func probar_cubos() -> void:
 # Lo que se prueba igual en el gimnasio y en el cuarto de la limpieza (probar_gimnasio, probar_cubos), con la cosa del
 # suelo que toque ("uno": "una mancuerna" o "un cubo"; "varios", en plural): que al pasar andando por encima de una Johnny se cae, no se mueve ni
 # ataca aunque se le pida, no pierde vida y se levanta a los 2 s, y la cosa sale rodando (el cubo, volcado); y que
-# rodando (la esquiva) se pasa por encima de otra sin caer. Saca la foto "foto" (Johnny en el suelo con las estrellitas)
+# rodando (la esquiva) se pasa por encima de otra sin caer. Saca la foto "foto" (Johnny en el suelo con las estrellitas),
+# y otra cayendo y otra levantándose. Con "--skin X" (portero, gloton, gymbro o bombero), Johnny lleva esa skin: se ven sus
+# dibujos de caerse (tools/caida_skins.py)
 func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Dictionary, datos: Dictionary, foto: String) -> void:
+	var args := OS.get_cmdline_user_args()
+	if "--skin" in args:
+		johnny.vestir(args[args.find("--skin") + 1])
 	var sala: Dictionary = sitio.apt.salas[0]
 	var camara: Camera2D = johnny.get_node("Camara")
 	# una cosa con sitio libre a los dos lados para pasar por encima (sin muebles ni otras cosas)
@@ -380,8 +385,8 @@ func probar_tropezar(titulo: String, uno: String, varios: String, sitio: Diction
 	Captura.foto(foto)
 	await get_tree().create_timer(0.6).timeout
 	var volcado := " · volcado %s (esperado: true)" % (cosa.volcado != 0) if cosa.forma == "cubo" else ""
-	print("%s: en el suelo, tumbado «%s» (esperado: «%s») · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · ha salido rodando %d (esperado: entre 30 y 120)%s" % [
-		titulo, tumbado, ultimo, roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0,
+	print("%s: en el suelo, tumbado «%s» (esperado: «%s») · con la hoja «%s» · pidiéndole andar 1 s, se mueve %d (esperado: menos de 5) · atacando %s (esperado: false) · ha salido rodando %d (esperado: entre 30 y 120)%s" % [
+		titulo, tumbado, ultimo, johnny.sprite.sprite_frames.resource_path.get_file(), roundi(johnny.position.distance_to(quieto)), johnny.ataque_t >= 0.0,
 		roundi(cosa.pos.distance_to(antes)), volcado])
 	Input.action_release("atacar")
 	var levantandose := false

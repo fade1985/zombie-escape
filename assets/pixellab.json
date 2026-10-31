@@ -93,7 +93,7 @@
     "template": "falling-back-death",
     "group": "b761ed56-d1c9-4aa3-bbfa-fd855db1e156",
     "frames": 7,
-    "nota": "Generada el 2026-10-31, 8 direcciones (8 generaciones), para el tropiezo de Johnny (M30). Se cae de espaldas y se queda tumbado. Fotogramas en assets/sources/conserje-48/caer/ (bajados uno a uno con tools/bajar_fotogramas.py: el zip de todo el personaje se cortaba). La monta tools/caida.py en assets/sprites/conserje-48-caida (con levantarse). Salió bien a la primera en las 8 direcciones; PixelLab lo dibuja tumbado más arriba que los pies, y caida.py lo baja al suelo. Las skins no la tienen: tools/cara.py no sabe pegar la cabeza girada."
+    "nota": "Generada el 2026-10-31, 8 direcciones (8 generaciones), para el tropiezo de Johnny (M30). Se cae de espaldas y se queda tumbado. Fotogramas en assets/sources/conserje-48/caer/ (bajados uno a uno con tools/bajar_fotogramas.py: el zip de todo el personaje se cortaba). La monta tools/caida.py en assets/sprites/conserje-48-caida (con levantarse). Salió bien a la primera en las 8 direcciones; PixelLab lo dibuja tumbado más arriba que los pies, y caida.py lo baja al suelo. Las skins: tools/caida_skins.py (cara.py no sabe pegar la cabeza girada)."
    },
    "levantarse": {
     "template": "getting-up",
