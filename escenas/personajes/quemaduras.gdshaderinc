@@ -6,6 +6,10 @@
 //     sueltas y el resto del cuerpo se tiñe un poco de naranja. Con menos de 1, las llamas se encogen (quemado.gd)
 //   - "acido" (0-1): le roe el ácido. Manchas verdes que crecen con "acido", con un borde verde oscuro, el centro
 //     oscuro de lo que ya se ha comido, burbujas que se hinchan y revientan, y gotas que resbalan por el cuerpo
+//   - "metal" (0-1): el cuerpo se vuelve de acero (los suplementos del Gymbro, gymbro.gd), subiendo desde los pies: con
+//     1 le cubre entero. Sus colores pasan a 5 tonos de acero según lo claros que eran, con un reflejo que le cruza
+//     en diagonal y, mientras sube, una línea clara en el borde. "pelado" (0-1): se desconcha a trozos (con un borde
+//     oscuro, el canto del metal) y por debajo se le ve la piel; con 0, nada
 //   - "t": el reloj de las llamas y las burbujas; "semilla", para que cada uno arda distinto; "alto", lo que mide
 //     el cuerpo en píxeles del dibujo, de los pies (y = 0 en el dibujo) a la cabeza
 // Todo va por píxeles del dibujo (como el pixel art): "lugar" es el sitio del píxel en el dibujo, el mismo en todos
@@ -18,6 +22,8 @@ uniform float acido = 0.0;
 uniform float t = 0.0;
 uniform float semilla = 0.0;
 uniform float alto = 46.0;
+uniform float metal = 0.0;
+uniform float pelado = 0.0;
 
 const vec3 FUEGO0 = vec3(1.0, 0.953, 0.69);     // #fff3b0, el corazón de la llama (como Llamas.FUEGO)
 const vec3 FUEGO1 = vec3(1.0, 0.824, 0.247);    // #ffd23f
@@ -29,6 +35,11 @@ const vec3 VERDE_CLARO = vec3(0.659, 0.937, 0.29);    // #a8ef4a, burbujas y got
 const vec3 VERDE_PALIDO = vec3(0.847, 1.0, 0.604);    // #d8ff9a, la burbuja a punto de reventar
 const vec3 VERDE_OSCURO = vec3(0.184, 0.431, 0.11);   // #2f6e1c, el borde de la mancha
 const vec3 ROIDO = vec3(0.133, 0.188, 0.102);         // #22301a, lo que ya se ha comido
+const vec3 ACERO0 = vec3(0.118, 0.165, 0.227);   // #1e2a3a, lo más oscuro (y el canto de lo desconchado)
+const vec3 ACERO1 = vec3(0.239, 0.329, 0.439);   // #3d5470
+const vec3 ACERO2 = vec3(0.416, 0.529, 0.659);   // #6a87a8
+const vec3 ACERO3 = vec3(0.624, 0.765, 0.910);   // #9fc3e8 (Gymbro.ACERO)
+const vec3 ACERO4 = vec3(0.863, 0.937, 1.0);     // #dcefff, el reflejo
 const float BRILLO_ACIDO = 0.55;   // lo que luce el ácido a oscuras (el fuego, del todo)
 
 varying vec2 lugar;
@@ -66,6 +77,28 @@ void fragment() {
 	float brilla = 0.0;   // cuánto luce a oscuras (solo lo pinta la copia que brilla)
 	vec2 p = floor(lugar);
 	vec2 px = TEXTURE_PIXEL_SIZE;
+	if (metal > 0.0 && a > 0.5) {
+		float alt = -p.y / alto;   // 0 en los pies, 1 en lo alto de la cabeza
+		float frente = metal * 1.3 - 0.15 + 0.1 * (ruido(vec2(p.x * 0.4, 5.0) + semilla) - 0.5);
+		if (alt < frente) {
+			float n = 0.65 * ruido(p * 0.16 + semilla * 2.3) + 0.35 * ruido(p * 0.45 + semilla);
+			float corte = pelado > 0.0 ? 0.1 + pelado * 0.55 : -1.0;
+			if (n < corte - 0.04) {
+				// desconchado: la piel de debajo, como es
+			} else if (n < corte) {
+				r = ACERO0;   // el canto del metal que queda
+			} else if (metal < 1.0 && alt > frente - 0.04) {
+				r = ACERO4;   // el borde del metal que sube
+			} else {
+				float v = clamp(claro * 1.15 - 0.05, 0.0, 1.0);
+				// el reflejo: una banda que le cruza en diagonal, de vez en cuando
+				if (fract((p.x - p.y * 0.6) / 150.0 - t * 0.4) < 0.06) {
+					v += 0.45;
+				}
+				r = v < 0.18 ? ACERO0 : (v < 0.36 ? ACERO1 : (v < 0.56 ? ACERO2 : (v < 0.8 ? ACERO3 : ACERO4)));
+			}
+		}
+	}
 	if (acido > 0.0 && a > 0.5) {
 		float d = mancha(p);
 		if (d < 0.0) {

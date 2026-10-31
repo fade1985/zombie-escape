@@ -108,6 +108,14 @@ const EFECTOS := {
 	"jeringa": {"notas": [[1800, 0.05, "seno", 0.03, 400], [240, 0.5, "sierra", 0.05, -150, 0.08]]},   # el gerente se pincha
 	"mordisco": {"hueco": 60, "notas": [[520, 0.04, "cuadrada", 0.04, -300], [170, 0.09, "cuadrada", 0.05, -90, 0.06]]},   # el ¡ÑAM! del glotón (skin)
 	"escobazo": {"hueco": 90, "notas": [[900, 0.12, "sierra", 0.018, -700]]},          # broom (la portera)
+	# el Gymbro de metal (sus suplementos, gymbro.gd): un golpe que le da en el acero, el metal que le sube por el cuerpo
+	# y el que le revienta al quedarse sin armadura. Tonos que no casan entre sí (como una campana) y se apagan despacio
+	"acero": {"hueco": 70, "notas": [[3500, 0.03, "ruido", 0.03, -2000], [740, 0.4, "seno", 0.05, -8],
+		[1187, 0.3, "seno", 0.03, -10], [1960, 0.2, "seno", 0.02, -15], [160, 0.07, "cuadrada", 0.03, -50]]},
+	"metalizar": {"notas": [[220, 0.6, "sierra", 0.03, 500], [880, 0.7, "seno", 0.04, 0, 0.45],
+		[1397, 0.6, "seno", 0.03, 0, 0.45], [2217, 0.4, "seno", 0.02, 0, 0.45], [3000, 0.1, "ruido", 0.02, -1500, 0.45]]},
+	"chatarra": {"notas": [[2600, 0.25, "ruido", 0.04, -1800], [620, 0.3, "seno", 0.04, -200],
+		[990, 0.25, "seno", 0.03, -300, 0.05], [1450, 0.2, "seno", 0.025, -400, 0.1], [110, 0.2, "cuadrada", 0.04, -40]]},
 	"cristal": {"hueco": 60, "notas": [[2200, 0.08, "cuadrada", 0.025, -800], [1500, 0.12, "triangulo", 0.03, 600, 0.03]]},
 	"latido": {"fijo": true, "notas": [[70, 0.12, "seno", 0.18, -20], [60, 0.14, "seno", 0.14, -15, 0.16]]},   # heartbeat
 	"disparo_zombi": {"hueco": 80, "notas": [[330, 0.08, "seno", 0.025, -150]]},       # enemyShot
