@@ -120,6 +120,8 @@
 #                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]
 #   --puertas           las puertas de dentro de los pisos (con --edificio centro, de las tiendas) y de la sala de
 #                       mantenimiento: cerradas, Johnny y un zombi las abren, y siguen abiertas [prueba_sitios.gd]
+#   --atasco-puertas    varios zombis de cada tipo (--zombis N, 18) salen a la vez por una misma puerta de un piso, sin
+#                       ver a Johnny y viéndole: que pasen todos y sin parones              [prueba_sitios.gd]
 #   --joyeria           (con --edificio centro) la cámara acorazada de la joyería            [prueba_sitios.gd]
 #   --tiendas           (con --edificio centro) cada tienda de las cuatro primeras plantas, entera, también la del
 #                       minijefe                                                           [prueba_sitios.gd]
@@ -436,6 +438,9 @@ func empezar_prueba() -> void:
 	elif "--puertas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_puertas()
+	elif "--atasco-puertas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_atasco()
 	elif "--tiendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_tiendas()

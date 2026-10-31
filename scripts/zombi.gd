@@ -24,6 +24,7 @@ const CORRILLO := 140.0    # al despertar, despierta también a los que tiene a 
 const ESPABILAR := 0.5     # lo que tarda en echar a andar después de despertar
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
 const PRISA := 1.3         # con el grito de la dependienta, todos van un 30 % más rápido
+const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
 
 @export var vida_max := 30
 @export var velocidad := 80.0    # unidades por segundo
@@ -51,6 +52,7 @@ var momento_zarpazo := 0.429   # en qué punto de la animación de ataque llega 
 var dormido := false
 var zona := -1
 var espabilando := 0.0     # tiempo que le queda quieto después de despertar
+var apretado := false      # pasando por una puerta abierta: ni se aparta de los demás ni choca con ellos (pedir_velocidad)
 
 var estados := {}          # lo que le han puesto los charcos (estados.gd)
 var pisando := {}          # los estados de los charcos que pisa en este paso
@@ -326,13 +328,37 @@ func se_ve(nodo: Node2D) -> bool:
 	return get_world_2d().direct_space_state.intersect_ray(rayo).is_empty()
 
 
+# ¿Está en una puerta abierta de dentro (mapa/puerta_bano.gd), en su "arrimo"? Ahí pasan apretados (pedir_velocidad) y
+# los que atacan de lejos no se plantan: primero salen de ella, o se la taponarían a los de detrás
+func en_puerta() -> bool:
+	var mapa := get_tree().get_first_node_in_group("mapa")
+	if mapa:
+		for hoja in mapa.hojas:
+			if hoja.abriendo and hoja.arrimo.has_point(global_position):
+				return true
+	return false
+
+
 # Con el "avoidance" encendido no se mueve directamente: se le pasa al agente la velocidad que queremos,
-# y él la corrige (si hay otro zombi delante, la tuerce un poco) y nos la devuelve en _al_calcular_velocidad
+# y él la corrige (si hay otro zombi delante, la tuerce un poco) y nos la devuelve en _al_calcular_velocidad.
+# En una puerta abierta, no: el agente no sabe de paredes y le empujaría contra el marco, y si además chocaran entre
+# ellos se trabarían en el hueco. Ahí pasan apretados: con la velocidad tal cual y sin chocar con los otros zombis
 func pedir_velocidad(v: Vector2) -> void:
 	agente.velocity = v
+	var puerta := en_puerta()
+	if puerta != apretado:
+		apretado = puerta
+		set_collision_mask_value(CAPA_ZOMBIS, not puerta)
+	if apretado:
+		mover(v)
 
 
 func _al_calcular_velocidad(segura: Vector2) -> void:
+	if not apretado:
+		mover(segura)
+
+
+func mover(segura: Vector2) -> void:
 	if estado == "golpe" or estado == "muerto" or aturdido > 0.0:
 		return
 	# en la lejía resbala: le cuesta cambiar de velocidad

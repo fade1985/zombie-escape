@@ -512,6 +512,19 @@ func probar_tiendas() -> void:
 	get_tree().quit()
 
 
+# El sitio de esta planta con más puertas de dentro, si tiene al menos dos (las tiendas se sortean: unas tienen dos y otras más), o -1
+func piso_con_mas_puertas() -> int:
+	var idx := -1
+	var mas := 1
+	for i in planta.sitios.size():
+		var s: Dictionary = planta.sitios[i]
+		var cuantas: int = s.apt.puertas.filter(func(d): return not d.get("cerrada", false)).size() if s.tipo == "apartamento" else 0
+		if cuantas > mas:
+			idx = i
+			mas = cuantas
+	return idx
+
+
 # Con "--captura --puertas": las puertas de dentro (mapa/puerta_bano.gd con "libre"), en el sitio de la 1ª planta que
 # más tenga (un piso; con --edificio centro, una tienda), sin zombis: que haya una en cada hueco (menos en los cerrados con llave) y empiecen
 # cerradas; Johnny se arrima a una y se abre; un zombi despierto, encerrado en una habitación de una sola puerta, va a
@@ -523,15 +536,7 @@ func probar_tiendas() -> void:
 func probar_puertas() -> void:
 	nueva_planta(2)
 	johnny.invencible = true
-	# el sitio con más puertas de dentro (las tiendas se sortean: unas tienen dos y otras más)
-	var idx := -1
-	var mas := 1
-	for i in planta.sitios.size():
-		var s: Dictionary = planta.sitios[i]
-		var cuantas: int = s.apt.puertas.filter(func(d): return not d.get("cerrada", false)).size() if s.tipo == "apartamento" else 0
-		if cuantas > mas:
-			idx = i
-			mas = cuantas
+	var idx := piso_con_mas_puertas()
 	if idx < 0:
 		print("Puertas: en la 1ª planta no hay ningún sitio con dos puertas de dentro")
 		get_tree().quit()
@@ -641,6 +646,138 @@ func probar_puertas() -> void:
 	await get_tree().create_timer(0.6).timeout
 	await foto_entera(planta.sitios[sala], "captura-puertas-sala.png")
 	get_tree().quit()
+
+
+# Con "--captura --atasco-puertas": varios zombis de cada tipo (--zombis N, 18 si no se dice) salen a la vez por una misma
+# puerta de un piso, por cada lado de cada puerta con más salas detrás. Dos vueltas: sin ver a Johnny, que está en la
+# sala más lejana (empiezan con la puerta cerrada y la abren ellos; tienen que pasar todos), y viéndole, con la puerta ya
+# abierta y él enfrente (el venenoso y el de tentáculos se quedan a distancia a propósito, pero no en el hueco: tienen
+# que pasar los demás). Cuenta cuántos pasan y el parón mayor: lo más que está la puerta abierta sin que pase nadie. Foto
+# del grupo en la puerta (captura-atasco-puertas.png). Va a toda prisa (ATASCO_RITMO). Luego se cierra
+const ATASCO_TIPOS := ["normal", "venenoso", "tentaculos", "lento", "explosivo", "rapido"]
+const ATASCO_DE_LEJOS := ["venenoso", "tentaculos"]
+const ATASCO_RITMO := 8.0
+const ATASCO_TOPE := 40.0
+
+func probar_atasco() -> void:
+	nueva_planta(2)
+	johnny.invencible = true
+	johnny.invulnerable = 1.0   # (quieto, no se le gasta: que sus golpes no paren el tiempo de la prueba)
+	johnny.set_physics_process(false)   # (quieto: que no los mate ni gaste las balas él solo en el modo asistido)
+	var idx := piso_con_mas_puertas()
+	var sitio: Dictionary = planta.sitios[idx]
+	var apt: Dictionary = sitio.apt
+	sitio.limpio = true   # sin zombis: los pone la prueba
+	var cuantos := int(Captura.dato("--zombis", "18"))
+	Engine.time_scale = ATASCO_RITMO
+	for visto in [false, true]:
+		var cuenta := {"total": 0, "pasan": 0, "paron": 0.0, "foto": not visto}
+		for n in apt.puertas.size():
+			if apt.puertas[n].get("cerrada", false):
+				continue
+			for lado in [1.0, -1.0]:
+				for d in apt.puertas:
+					d.abierta = false
+				apt.puertas[n].abierta = visto
+				await montar(idx, 0, false)
+				await get_tree().create_timer(1.0).timeout   # (a que esté listo el mapa de caminos del sitio nuevo)
+				var hoja: Node2D = mapa.hojas.filter(func(h): return h.hueco == apt.puertas[n])[0]
+				await atasco_en(hoja, lado, cuantos, visto, cuenta)
+		print("Atasco, %s: pasan %d de %d, parón mayor %.1f s (esperado: todos, y menos de 6 s)" % [
+			"viendo a Johnny" if visto else "sin ver a Johnny", cuenta.pasan, cuenta.total, cuenta.paron])
+	Engine.time_scale = 1.0
+	get_tree().quit()
+
+
+# Una tanda de probar_atasco: el grupo, al lado "lado" de la puerta, y los que van pasando al otro se quitan de en medio
+func atasco_en(hoja: Node2D, lado: float, cuantos: int, visto: bool, cuenta: Dictionary) -> void:
+	var hacia := Vector2(0, lado) if hoja.de_frente else Vector2(lado, 0)
+	var a_lo_largo := hacia.orthogonal()
+	var medio: float = absf(hoja.caja.size.dot(hacia)) / 2
+	var centro: Vector2 = hoja.caja.get_center()
+	var red := get_world_2d().navigation_map
+	var salas: Array = planta.sitios[aqui].apt.salas
+	var aca: int = mapa.zona_en(centro + hacia * (medio + 30))
+	var alla: int = mapa.zona_en(centro - hacia * (medio + 30))
+	if salas[alla].puertas.size() < 2:
+		return   # (un baño: sin más salas detrás, Johnny estaría a la vista)
+	var donde: Vector2 = centro - hacia * (medio + 124) if visto else sala_mas_lejana(alla, hoja.hueco, centro)
+	johnny.position = NavigationServer2D.map_get_closest_point(red, donde)
+	johnny.get_node("Camara").reset_smoothing()
+	var puestos := []
+	for fila in 8:
+		for col in 7:
+			var p: Vector2 = centro + hacia * (medio + 44 + fila * 40) + a_lo_largo * ((col - 3) * 40 + (fila % 2) * 12)
+			if mapa.zona_en(p) != aca:
+				continue
+			p = NavigationServer2D.map_get_closest_point(red, p)
+			if puestos.size() < cuantos and puestos.all(func(o): return o.distance_to(p) > 36.0):
+				puestos.append(p)
+	puestos.shuffle()
+	var quedan := []
+	for i in puestos.size():
+		quedan.append(meter_zombi(ATASCO_TIPOS[i % ATASCO_TIPOS.size()], puestos[i]))
+	var todos := quedan.duplicate()
+	var cuentan := func(z: Node2D) -> bool:
+		return not visto or z.get_meta("tipo") not in ATASCO_DE_LEJOS
+	var deben := 0
+	for z in todos:
+		if cuentan.call(z):
+			deben += 1
+	var t := 0.0
+	var ultimo := 0.0   # cuándo ha pasado el último (o cuándo se ha abierto la puerta)
+	while t < ATASCO_TOPE and quedan.any(cuentan):
+		await get_tree().create_timer(0.2, true, true).timeout   # (en pasos de física: a toda prisa, un fotograma lento no les come tiempo)
+		t += 0.2
+		if hoja.abierta == 0.0:
+			ultimo = t
+		cuenta.paron = maxf(cuenta.paron, t - ultimo)
+		if not cuenta.foto and t >= 5.0:
+			cuenta.foto = true
+			for s in salas:
+				mapa.vistas[s.id] = true
+				mapa.niebla[s.id] = 0.0
+			mapa.actualizar_niebla(0.0)
+			Captura.foto("captura-atasco-puertas.png")
+		for z in quedan.duplicate():
+			if z.estado == "muerto":
+				quedan.erase(z)
+				if cuentan.call(z):
+					deben -= 1   # (un explosivo que ha reventado, por ejemplo: ya no tiene que pasar)
+			elif mapa.zona_en(z.global_position) == alla and z.global_position.distance_to(centro) > medio + 44:
+				quedan.erase(z)
+				if cuentan.call(z):
+					cuenta.pasan += 1
+					ultimo = t
+				z.agente.avoidance_enabled = false
+				z.position = Vector2(-9000, -9000)
+				z.process_mode = Node.PROCESS_MODE_DISABLED
+	cuenta.total += deben
+	var se_quedan: Array = quedan.filter(cuentan).map(func(z): return "%s %s %s" % [z.get_meta("tipo"), (z.global_position - centro).round(), z.estado])
+	if not se_quedan.is_empty():
+		print("Atasco: en %s, por el lado %+d, se quedan %s" % [centro, int(lado), se_quedan])
+	await get_tree().create_timer(2.0).timeout   # (a que caigan los escupitajos: el charco lleva quién lo escupió)
+	for z in todos:
+		z.queue_free()
+
+
+# La sala más lejana a la que se llega desde "sala" sin pasar por el hueco "hueco" (donde se pone a Johnny para que nadie le vea)
+func sala_mas_lejana(sala: int, hueco: Dictionary, desde: Vector2) -> Vector2:
+	var salas: Array = planta.sitios[aqui].apt.salas
+	var mejor: Vector2 = salas[sala].centro
+	var pila := [sala]
+	var vistas := [sala]
+	while not pila.is_empty():
+		for d in salas[pila.pop_back()].puertas:
+			if d == hueco or d.get("cerrada", false):
+				continue
+			for otra in [d.a, d.b]:
+				if otra not in vistas:
+					vistas.append(otra)
+					pila.append(otra)
+					if salas[otra].centro.distance_to(desde) > mejor.distance_to(desde):
+						mejor = salas[otra].centro
+	return mejor
 
 
 # Con "--captura --viviendas": las viviendas de los supervivientes rescatados (mapa/viviendas.gd), detrás de la puerta

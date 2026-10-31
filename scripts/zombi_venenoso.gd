@@ -1,6 +1,8 @@
 # El zombi venenoso (el gordo): no da zarpazos. Guarda las distancias (si Johnny se acerca, se aleja; si se
 # va, le sigue; en medio, le rodea) y cada poco se planta y le escupe un moco en parábola que deja un charco
 # verde. Números de src/zombies.js (POISON y spit).
+# Su cuerpo de choque (18, en su .tscn) es menor que su "radio" (30, el de los golpes y las balas): la navegación cuenta
+# con cuerpos de 18 (mapa.gd, hornear) y, con uno de 30, ni llegaba a empujar una puerta ni cabía por el camino de sus marcos
 extends Zombi
 
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
@@ -31,7 +33,7 @@ func _physics_process(delta: float) -> void:
 func andar(delta: float, johnny: Node2D) -> void:
 	var hacia: Vector2 = global_position.direction_to(johnny.global_position)
 	var distancia := distancia_a(johnny)
-	var ve := se_ve(johnny)
+	var ve := se_ve(johnny) and not en_puerta()
 	if ve and espera <= 0.0 and distancia < ALCANCE_ESCUPIR:
 		# Se planta, se echa atrás y escupe
 		estado = "escupir"

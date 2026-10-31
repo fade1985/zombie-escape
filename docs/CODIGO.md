@@ -80,6 +80,8 @@ en una línea.
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
   `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
+  El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
+  no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
   `tentaculo.gd` (`Tentaculo`; se pinta con `trozos`, no con `draw_circle`: en la web se atascaba, ver `docs/WEB.md`): el tentáculo largo que pega, pintado con código, del zombi de tentáculos y de los
   latigazos del gerente mutado: levantado y enroscado durante el aviso, estirado como un látigo en el golpe; avisa
@@ -367,7 +369,9 @@ en una línea.
   puerta de frente: a 5 píxeles de ancho PixelLab no puede dibujar nada); al abrirse gira la puerta de verdad hacia la habitación de
   la derecha y abierta del todo (153 grados, `GIRO_LADO`) es `puerta-bano-abierta-lado.png`: de pie junto a la pared, con
   la bisagra arriba del hueco (`py tools/puerta_abierta.py guia lado`). La blindada de acero y la del almacén con
-  tablas siguen con la hoja vista desde arriba. Se prueba con `--puertas`.
+  tablas siguen con la hoja vista desde arriba. Dentro de una abierta (`zombi.en_puerta`, en su `arrimo`) los zombis pasan
+  apretados: sin esquivarse ni chocar entre ellos (`zombi.pedir_velocidad`), y el venenoso y el de tentáculos no se
+  plantan ahí a atacar, para no taponarla. Se prueba con `--puertas` y, con un grupo de cada tipo, `--atasco-puertas`.
 - `puerta.gd` (las salidas) y `cartel_salida.gd`: las de la pared de arriba se ven de frente; las de la de abajo, que se ve por detrás,
   son el hueco en el muro con la hoja vista desde arriba (`puerta-abajo.png`). La salida de incendios es la puerta de las escaleras, al fondo del
   pasillo, en el muro de la derecha. Se abre cuando cae el jefe de la planta (`jefa_muerta` en `partida.gd`, que llama a

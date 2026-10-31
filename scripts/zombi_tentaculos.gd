@@ -80,7 +80,7 @@ func _physics_process(delta: float) -> void:
 
 
 func andar(delta: float, johnny: Node2D) -> void:
-	var ve := se_ve(johnny)
+	var ve := se_ve(johnny) and not en_puerta()
 	var distancia := distancia_a(johnny)
 	if ve and espera <= 0.0 and distancia < LARGO + johnny.RADIO:
 		# Apunta a donde está Johnny ahora mismo (y mide hasta dónde llegará, por si hay una pared)

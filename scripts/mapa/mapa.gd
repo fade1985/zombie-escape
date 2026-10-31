@@ -1353,7 +1353,8 @@ static func dibujo_tarjeta(dorada := false) -> Texture2D:
 
 
 # "Hornear" la navegación: Godot mira los muros y los muebles (grupo "obstaculos") y recorta del suelo todo
-# lo que choca, dejando el sitio justo para el radio de un zombi (como en la sala de la fase 1)
+# lo que choca, dejando el sitio justo para el radio de un zombi (como en la sala de la fase 1). Por eso ningún zombi
+# lleva un cuerpo de choque mucho mayor que agent_radius: no cabría por donde le manda el camino (zombi_venenoso.gd)
 func hornear(navegacion: NavigationRegion2D) -> void:
 	var poligono := NavigationPolygon.new()
 	poligono.add_outline(PackedVector2Array([Vector2.ZERO, Vector2(sitio.ancho, 0), Vector2(sitio.ancho, sitio.alto),
