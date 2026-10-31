@@ -6,6 +6,9 @@
 //     sueltas y el resto del cuerpo se tiñe un poco de naranja. Con menos de 1, las llamas se encogen (quemado.gd)
 //   - "acido" (0-1): le roe el ácido. Manchas verdes que crecen con "acido", con un borde verde oscuro, el centro
 //     oscuro de lo que ya se ha comido, burbujas que se hinchan y revientan, y gotas que resbalan por el cuerpo
+//   - "vomito" (0-1): bañado en vómito (la Gastroenteritis). Le cae encima: le cubre casi entera la cabeza y los
+//     hombros y, más abajo, a trozos; con su borde oscuro, grumos y chorretones que le escurren hacia abajo. Con
+//     menos de 1 se va quedando en menos
 //   - "metal" (0-1): el cuerpo se vuelve de acero (los suplementos del Gymbro, gymbro.gd), subiendo desde los pies: con
 //     1 le cubre entero. Sus colores pasan a 5 tonos de acero según lo claros que eran, con un reflejo que le cruza
 //     en diagonal y, mientras sube, una línea clara en el borde. "pelado" (0-1): se desconcha a trozos (con un borde
@@ -23,6 +26,7 @@ uniform float acido = 0.0;
 uniform float t = 0.0;
 uniform float semilla = 0.0;
 uniform float alto = 46.0;
+uniform float vomito = 0.0;
 uniform float metal = 0.0;
 uniform float pelado = 0.0;
 
@@ -41,6 +45,10 @@ const vec3 ACERO1 = vec3(0.239, 0.329, 0.439);   // #3d5470
 const vec3 ACERO2 = vec3(0.416, 0.529, 0.659);   // #6a87a8
 const vec3 ACERO3 = vec3(0.624, 0.765, 0.910);   // #9fc3e8 (Gymbro.ACERO)
 const vec3 ACERO4 = vec3(0.863, 0.937, 1.0);     // #dcefff, el reflejo
+const vec3 VOMITO0 = vec3(0.839, 0.737, 0.298);   // #d6bc4c, lo más claro (los colores del charco de vómito)
+const vec3 VOMITO1 = vec3(0.722, 0.604, 0.204);   // #b89a34
+const vec3 VOMITO2 = vec3(0.541, 0.431, 0.133);   // #8a6e22
+const vec3 VOMITO3 = vec3(0.353, 0.259, 0.078);   // #5a4214, el borde
 const float BRILLO_ACIDO = 0.55;   // lo que luce el ácido a oscuras (el fuego, del todo)
 
 varying vec2 lugar;
@@ -68,6 +76,12 @@ float ruido(vec2 p) {
 float mancha(vec2 p) {
 	float umbral = 0.7 - 0.14 * acido - 0.02 * sin(t * 2.0);
 	return 0.7 * ruido(p * 0.22 + vec2(3.1, 7.7) + semilla) + 0.3 * ruido(p * 0.6 + semilla * 1.7) - umbral;
+}
+
+// Lo metido que está un píxel en el vómito (menos de 0: fuera). Más arriba, más: le ha caído encima
+float baba(vec2 p) {
+	float n = 0.6 * ruido(p * 0.25 + semilla * 1.3) + 0.4 * ruido(p * 0.7 + semilla * 2.1);
+	return n + 0.35 * (-p.y / alto) - (1.0 - 0.45 * vomito);
 }
 
 void fragment() {
@@ -100,6 +114,34 @@ void fragment() {
 					v += 0.45;
 				}
 				r = v < 0.18 ? ACERO0 : (v < 0.36 ? ACERO1 : (v < 0.56 ? ACERO2 : (v < 0.8 ? ACERO3 : ACERO4)));
+			}
+		}
+	}
+	if (vomito > 0.0 && a > 0.5) {
+		float d = baba(p);
+		if (d > 0.0) {
+			if (d < 0.04 || claro < 0.15) {
+				r = VOMITO3;   // el borde (y el contorno del dibujo, que se le siga viendo la figura)
+			} else {
+				float v = claro + 0.15 * (ruido(p * 0.5 + semilla) - 0.5);
+				r = v < 0.25 ? VOMITO2 : (v < 0.5 ? VOMITO1 : VOMITO0);
+				// grumos
+				float g = azar(p + semilla * 5.0);
+				if (g < 0.05) {
+					r = VOMITO3;
+				} else if (g > 0.95) {
+					r = VOMITO0 * 1.08;
+				}
+			}
+		}
+		// chorretones: en algunas columnas, una gota baja desde el borde de abajo del vómito y vuelve a salir
+		if (d <= 0.04 && azar(vec2(p.x, 21.0) + semilla) > 0.55) {
+			float o = floor(fract(t * 0.8 + azar(vec2(p.x, 22.0) + semilla)) * 8.0) + 1.0;
+			vec2 q = p - vec2(0.0, o);
+			bool sale = texture(TEXTURE, UV - vec2(0.0, o * px.y)).a > 0.5 && baba(q) > 0.04;
+			bool debajo = texture(TEXTURE, UV - vec2(0.0, (o - 1.0) * px.y)).a > 0.5 && baba(q + vec2(0.0, 1.0)) > 0.04;
+			if (sale && !debajo) {
+				r = VOMITO1;
 			}
 		}
 	}

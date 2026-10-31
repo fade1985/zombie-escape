@@ -558,8 +558,15 @@ func sufrir(delta: float) -> void:
 	var acido := con_acido()
 	acido_t = acido_t + delta if acido else 0.0
 	electrico = maxf(electrico - delta, 0.0)
-	sprite.self_modulate = Color.WHITE if arde or acido else Estados.tinte(estados, tiempo)
-	Zombi.quemaduras(sprite, 1.0 if arde else 0.0, Zombi.cuanto_acido(acido_t), tiempo)
+	# bañado en vómito (Gastroenteritis): se ve el vómito en vez de las manchas verdes de su ácido (salvo si además le
+	# roe el del lanza ácido), y se le va escurriendo en el último medio segundo
+	var vomito := 0.0
+	if estados.has("vomito"):
+		vomito = clampf(estados.vomito.t / 0.5, 0.0, 1.0)
+		if not has_node("herida_acido"):
+			acido_t = 0.0
+	sprite.self_modulate = Color.WHITE if arde or acido or vomito > 0.0 else Estados.tinte(estados, tiempo)
+	Zombi.quemaduras(sprite, 1.0 if arde else 0.0, Zombi.cuanto_acido(acido_t), tiempo, vomito)
 	if acido or has_node("LuzAcido"):
 		var luz := Brillo.luz_acido(self, altura * 0.8)
 		luz.visible = acido
@@ -576,10 +583,11 @@ func sufrir(delta: float) -> void:
 # (0-1, con menos las llamas se encogen) y "acido" (0-1, las manchas crecen), con "t" de reloj. Si hay algo, le pone
 # encima la copia que brilla a oscuras (Brillo). También lo usan quemado.gd y, con el ácido, los jefes
 # (armas_creadas.gd, la herida)
-static func quemaduras(s: CanvasItem, fuego: float, acido: float, t: float) -> void:
+static func quemaduras(s: CanvasItem, fuego: float, acido: float, t: float, vomito := 0.0) -> void:
 	var m := s.material as ShaderMaterial
 	m.set_shader_parameter("fuego", fuego)
 	m.set_shader_parameter("acido", acido)
+	m.set_shader_parameter("vomito", vomito)
 	m.set_shader_parameter("t", fmod(t, 100.0))   # (con números pequeños, el ruido del shader no se estropea)
 	if (fuego > 0.0 or acido > 0.0) and s is AnimatedSprite2D:
 		Brillo.de(s)

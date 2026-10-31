@@ -22,6 +22,9 @@ const LISTA := {
 	"fuego": {"dps": 12.0, "despues": 2.0, "zombis": false, "color": Color("#ff9f1c")},
 	"resbaladizo": {"resbala": 0.8, "despues": 0.4, "zombis": true, "color": Color("#7fd0ff")},
 	"acido": {"dps": 8.0, "despues": 0.0, "zombis": true, "color": Color("#c7e04a")},   # el vómito de Gastroenteritis
+	# y lo que se ve de él: el zombi queda bañado en vómito un par de segundos (solo se ve: el daño es el del "acido";
+	# se lo pinta su shader, "vomito" en quemaduras.gdshaderinc)
+	"vomito": {"despues": 2.0, "zombis": true, "color": Color("#d6bc4c")},
 	"gases": {"dps": 10.0, "despues": 2.0, "zombis": true, "color": Color("#b5c94a")},  # Flatulento: se pone directamente
 	# los peligros del centro comercial (peligros.gd, que pone sus números): el frío de la cámara y el
 	# calambrazo del agua con corriente (a los zombis, el agua los aturde: agua.gd)

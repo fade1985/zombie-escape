@@ -30,7 +30,7 @@ const TIPOS := {
 	"lejia": {"burbujas": "lejia", "radio": 54.0, "vida": 5.0, "estados": {"resbaladizo": {}, "toxico": {"dps": 3.0}}},
 	# el ácido que salpica la portera con la fregona: quema al pisarlo y deja veneno al salir (ACIDO en el JS)
 	"acido": {"burbujas": "acido", "radio": 58.0, "vida": 6.0, "estados": {"acido": {}, "veneno": {}}},
-	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
+	"vomito": {"burbujas": "vomito", "radio": 55.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}, "vomito": {}}, "solo_zombis": true},
 	# el que deja un zombi que muere con ácido si Johnny tiene el talento Residuo tóxico (zombi.gd, quimica_al_morir):
 	# como el de la portera pero más pequeño, y solo a los zombis
 	"residuo": {"burbujas": "acido", "radio": 40.0, "vida": 4.0, "estados": {"acido": {"dps": 8.0}}, "solo_zombis": true},
