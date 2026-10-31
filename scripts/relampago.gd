@@ -2,9 +2,10 @@
 # armas Épicas de rayo y el de Pararrayos (ArmasCreadas.rayo). Se dibuja a código, porque va de cualquier sitio a
 # cualquier otro, pero como los rayos de pixelfx ("chain-lightning", que viene del de Sprite Fusion, licencia MIT, Hugo
 # Duprez): un tronco en zigzag partido por la mitad una y otra vez (cada vez menos), con ramas que se separan y
-# adelgazan, entintado con un borde oscuro, un cuerpo celeste y un centro blanco, en la rejilla de los dibujos (de 2 en
-# 2). Se rehace FORMAS veces por segundo (parpadea), adelgaza y se va en VIDA segundos. Los colores, los del lanza
-# rayos (llamarada.gd). En el sitio donde da, el juego pone además el chispazo (EfectoSuelo, "chispazo")
+# adelgazan, entintado píxel a píxel en la rejilla de los dibujos: un borde oscuro, un cuerpo celeste y un centro blanco
+# de un píxel. Se rehace FORMAS veces por segundo (parpadea), adelgaza y se va en VIDA segundos. Los colores, los del
+# lanza rayos. En el sitio donde da, el juego pone además el chispazo (EfectoSuelo, "chispazo").
+# El rayo continuo del lanza rayos (llamarada.gd) se dibuja con lo mismo: trazar() y pintar()
 class_name Relampago
 extends Node2D
 
@@ -13,6 +14,13 @@ const FORMAS := 20.0        # cuántas veces por segundo cambia de zigzag
 const QUIEBRO := 0.28       # lo que se aparta el primer punto medio, por cada unidad de largo
 const RAMAS := 0.5          # las ramas que le salen (más, más ramas)
 const PASO := 6.0           # hasta qué largo de tramo se sigue partiendo
+# Los colores, de fuera adentro: el borde, el cuerpo y el centro (los del lanza rayos)
+const BORDE := Color("#0aa0a2")
+const CUERPO := Color("#2cf2f0")
+const CENTRO := Color("#ecffff")
+# Lo gordo de cada capa, en píxeles del dibujo (el radio del sello redondo): el tronco con fuerza, el tronco
+# apagándose y las ramas. -1: esa capa no se pinta
+const GORDO := {"fuerte": [1.6, 1.0, 0.0], "flojo": [1.0, 0.0, -1.0], "rama": [1.0, 0.0, -1.0]}
 
 var hasta := Vector2.ZERO   # adonde llega, desde su sitio
 var t := 0.0
@@ -43,13 +51,19 @@ func _process(delta: float) -> void:
 		var rng := RandomNumberGenerator.new()
 		rng.randomize()
 		caminos.clear()
-		zigzag(rng, Vector2.ZERO, hasta, QUIEBRO, 1.0, 0)
+		trazar(caminos, rng, Vector2.ZERO, hasta)
 	queue_redraw()
 
 
-# El zigzag de "a" a "b": se parte por la mitad, apartando el medio hacia un lado, y cada mitad otra vez (cada vez la
-# mitad de apartado), hasta que los tramos son cortos. De algunos puntos sale una rama, más fina, que hace lo mismo
-func zigzag(rng: RandomNumberGenerator, a: Vector2, b: Vector2, quiebro: float, grueso: float, nivel: int) -> void:
+func _draw() -> void:
+	pintar(self, caminos, t / VIDA < 0.55, global_position)
+
+
+# El zigzag de "a" a "b", que se añade a "caminos": se parte por la mitad, apartando el medio hacia un lado, y cada mitad
+# otra vez (cada vez la mitad de apartado), hasta que los tramos son cortos. De algunos puntos sale una rama, más fina,
+# que hace lo mismo. "ramas": cuántas le salen (RAMAS)
+static func trazar(caminos: Array, rng: RandomNumberGenerator, a: Vector2, b: Vector2, quiebro := QUIEBRO, ramas := RAMAS,
+		grueso := 1.0, nivel := 0) -> void:
 	var largo := a.distance_to(b)
 	var puntos := [a, b]
 	var aparta := largo * quiebro
@@ -66,36 +80,41 @@ func zigzag(rng: RandomNumberGenerator, a: Vector2, b: Vector2, quiebro: float, 
 	if nivel >= 2:
 		return
 	for i in range(2, puntos.size() - 3):
-		if rng.randf() < RAMAS / (1 + nivel) / maxf(4.0, puntos.size() / 6.0):
+		if rng.randf() < ramas / (1 + nivel) / maxf(4.0, puntos.size() / 6.0):
 			var desde: Vector2 = puntos[i]
 			var rumbo: float = (puntos[i + 3] - desde).angle() + (1.0 if rng.randf() < 0.5 else -1.0) * rng.randf_range(0.35, 0.9)
 			var l := largo * (1.0 - float(i) / puntos.size()) * rng.randf_range(0.25, 0.5)
-			zigzag(rng, desde, desde + Vector2.from_angle(rumbo) * l, quiebro * 1.1, grueso * 0.55, nivel + 1)
+			trazar(caminos, rng, desde, desde + Vector2.from_angle(rumbo) * l, quiebro * 1.1, ramas, grueso * 0.55, nivel + 1)
 
 
-func _draw() -> void:
-	var k := 1.0 - t / VIDA            # se va apagando
-	var fuerte := k > 0.45             # al principio, con su borde gordo y sus ramas
-	# primero todos los bordes, luego todos los cuerpos y luego los centros: así el borde de una rama no tapa el tronco
-	for capa in 3:
-		for c in caminos:
-			var tronco: bool = c[1] >= 1.0
-			if not tronco and not fuerte:
-				continue
-			var color: Color = [Llamarada.RAYO_BORDE, Llamarada.RAYO_MEDIO, Llamarada.RAYO_CENTRO][capa]
-			var r: float = [2.0 if fuerte else 1.0, 1.0, 0.0][capa] if tronco else [1.0, 0.0, -1.0][capa]
-			if r < 0.0 or (capa == 2 and not tronco):
-				continue
-			pintar(c[0], r, color)
-
-
-# Un sello cuadrado de "r" píxeles del dibujo a cada lado (0: uno solo) en cada píxel del camino
-func pintar(puntos: Array, r: float, color: Color) -> void:
-	var lado := (r * 2.0 + 1.0) * 2.0
-	for i in puntos.size() - 1:
-		var p: Vector2 = puntos[i]
-		var q: Vector2 = puntos[i + 1]
-		var n := maxi(1, ceili(p.distance_to(q) / 2.0))
-		for j in n:
-			var s := (p.lerp(q, float(j) / n) / 2.0).round() * 2.0
-			draw_rect(Rect2(s - Vector2(r * 2.0, r * 2.0), Vector2(lado, lado)), color)
+# Entinta los caminos en "lienzo", píxel a píxel en la rejilla de los dibujos (de 2 en 2 en el mundo: "origen" es dónde
+# está el lienzo, para cuadrar con ella). Cada píxel se queda con la capa más de dentro que le toque (como pixelfx: así el
+# borde de una rama no tapa el tronco) y se pinta una sola vez. "fuerte": al principio, con su borde gordo y sus ramas
+static func pintar(lienzo: CanvasItem, lista: Array, fuerte: bool, origen: Vector2) -> void:
+	var capa := {}   # píxel del dibujo → 0 borde, 1 cuerpo, 2 centro
+	for c in lista:
+		var tronco: bool = c[1] >= 1.0
+		if not tronco and not fuerte:
+			continue
+		var gordo: Array = GORDO["rama" if not tronco else "fuerte" if fuerte else "flojo"]
+		var puntos: Array = c[0]
+		for i in puntos.size() - 1:
+			var p: Vector2 = (puntos[i] + origen) / 2.0
+			var q: Vector2 = (puntos[i + 1] + origen) / 2.0
+			var n := maxi(1, ceili(p.distance_to(q)))
+			for j in n:
+				var s := Vector2i(p.lerp(q, float(j) / n).round())
+				for k in 3:
+					var r: float = gordo[k]
+					if r < 0.0:
+						continue
+					var ri := floori(r)
+					for dx in range(-ri, ri + 1):
+						for dy in range(-ri, ri + 1):
+							if dx * dx + dy * dy <= r * r:
+								var d := s + Vector2i(dx, dy)
+								if capa.get(d, -1) < k:
+									capa[d] = k
+	var colores := [BORDE, CUERPO, CENTRO]
+	for d in capa:
+		lienzo.draw_rect(Rect2(Vector2(d) * 2.0 - origen, Vector2(2, 2)), colores[capa[d]])

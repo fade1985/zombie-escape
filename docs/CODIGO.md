@@ -146,7 +146,8 @@ en una línea.
 - `relampago.gd` (`Relampago`): el rayo que salta de un sitio a otro (la descarga de un zombi a otro, el estallido de las
   Épicas de rayo y Pararrayos; lo suelta `ArmasCreadas.rayo`, con el chispazo donde da). Dibujado a código como los rayos de
   pixelfx: zigzag partido por la mitad con ramas, borde, cuerpo celeste y centro blanco, rehecho 20 veces por segundo y fuera
-  en 0,22 s. Prueba: `--captura --chispazos`.
+  en 0,22 s. Prueba: `--captura --chispazos`. El rayo continuo del lanza rayos (`llamarada.dibujar_rayo`) se traza y
+  se entinta con lo mismo (`Relampago.trazar` y `pintar`).
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas

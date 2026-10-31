@@ -49,13 +49,10 @@ const LUZ := Color(1.0, 0.6, 0.28)
 const ABRE_RAYO := 0.1571   # su cono es más estrecho (9° a cada lado)
 const ATURDE := 0.5         # lo que aturde cada pellizco (y lo que sigue aturdido el zombi al soltar)
 const FORMAS := 18.0        # veces por segundo que cambia el zigzag
-const PASO_RAYO := 14.0     # lo que mide cada tramo del zigzag, en la pantalla
-const TEMBLOR_RAYO := 6.0   # lo que se aparta del eje en cada punto
+const QUIEBRO_RAYO := 0.07  # lo que se aparta del eje (por cada unidad de largo; Relampago.trazar): largo, poco
+const RAMAS_RAYO := 0.9     # las ramitas que le salen
 const CELESTES := [Color("#9fe8ff"), Color("#2cf2f0"), Color("#ecffff")]   # las chispas
 const LUZ_RAYO := Color(0.45, 0.9, 1.0)
-const RAYO_BORDE := Color("#0aa0a2")
-const RAYO_MEDIO := Color("#2cf2f0")
-const RAYO_CENTRO := Color("#ecffff")
 const ATRAS := 2.0          # el dibujo empieza un poquito por detrás de la boca: así sale pegada al tubo
 
 var pedida := false         # se ha pedido fuego en este paso (mantener)
@@ -380,29 +377,10 @@ func golpe_de_rayo(zombi: Node2D, johnny: Node2D, parte: float) -> void:
 		ArmasCreadas.estallido(zombi, "chispa", d)
 
 
-# El zigzag que sale de "desde" y llega a "hasta": un punto cada PASO_RAYO, apartado del eje hasta "temblor", siempre
-# el mismo con el mismo "rng" (que no tiemble a cada fotograma: cambia FORMAS veces por segundo)
-func zigzag(desde: Vector2, hasta: Vector2, temblor: float, rng: RandomNumberGenerator) -> PackedVector2Array:
-	var largo_t := desde.distance_to(hasta)
-	var lado := (hasta - desde).normalized().orthogonal()
-	var n := maxi(2, roundi(largo_t / PASO_RAYO))
-	var puntos := PackedVector2Array([desde])
-	for i in range(1, n):
-		var p := desde.lerp(hasta, float(i) / n) + lado * rng.randf_range(-temblor, temblor)
-		puntos.append((p / 2.0).round() * 2.0)   # (en la rejilla de los dibujos: de 2 en 2)
-	puntos.append(hasta)
-	return puntos
-
-
-# Una línea con su borde oscuro, su cuerpo celeste y su centro blanco
-func linea_de_rayo(puntos: PackedVector2Array, ancho: float) -> void:
-	Formas.polilinea(self, puntos, RAYO_BORDE, ancho)
-	Formas.polilinea(self, puntos, RAYO_MEDIO, ancho * 0.6)
-	Formas.polilinea(self, puntos, RAYO_CENTRO, 2.0)
-
-
-# El rayo: del labio de la boca (si se acaba, se despega y se va: cola) hasta donde llega, con un par de ramitas, un
-# destello donde choca con la pared y los arcos que saltan de un zombi a otro
+# El rayo: del labio de la boca (si se acaba, se despega y se va: cola) hasta donde llega, unos rayitos donde choca con
+# la pared y los arcos que saltan de un zombi a otro. Se traza y se entinta como los relámpagos (Relampago.trazar y
+# pintar: como los rayos de pixelfx, zigzag partido por la mitad con ramas, borde, cuerpo y centro de un píxel), el
+# mismo con el mismo "rng" (que no tiemble a cada fotograma: cambia FORMAS veces por segundo)
 func dibujar_rayo(eje: Vector2, f: float) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = forma * 7919 + 1
@@ -410,25 +388,16 @@ func dibujar_rayo(eje: Vector2, f: float) -> void:
 	var cortada := tope < alcance - 1.0
 	var desde := boca + eje * (cola * f)
 	var hasta := boca + eje * (largo * f + (8.0 if cortada else 0.0))
-	var puntos := zigzag(desde, hasta, TEMBLOR_RAYO, rng)
-	linea_de_rayo(puntos, 10.0)
-	# ramitas: salen de dos puntos al azar, hacia un lado, cortas
-	for i in 2:
-		if puntos.size() < 4:
-			break
-		var k := rng.randi_range(1, puntos.size() - 2)
-		var rumbo := (eje * 0.7 + eje.orthogonal() * (1.0 if rng.randf() < 0.5 else -1.0) * 0.7).normalized()
-		var ramita := zigzag(puntos[k], puntos[k] + rumbo * rng.randf_range(22.0, 42.0), 4.0, rng)
-		linea_de_rayo(ramita, 6.0)
+	var caminos := []
+	Relampago.trazar(caminos, rng, desde, hasta, QUIEBRO_RAYO, RAMAS_RAYO)
 	if cortada and largo > 0.0 and cola <= 0.0:
-		for i in 5:
-			var rayito := Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(8.0, 18.0)
-			draw_line(hasta, hasta + rayito, RAYO_MEDIO, 4.0)
-		draw_rect(Rect2(hasta - Vector2(4, 4), Vector2(8, 8)), RAYO_CENTRO)
+		for i in 4:
+			Relampago.trazar(caminos, rng, hasta, hasta + Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(10.0, 22.0), 0.3, 0.0, 0.55, 2)
 	# los arcos entre zombis
 	for arco in arcos:
 		if not is_instance_valid(arco[0]) or not is_instance_valid(arco[1]):
 			continue
 		var a: Vector2 = to_local(arco[0].global_position) - Vector2(0, ALTURA_CUERPO)
 		var b: Vector2 = to_local(arco[1].global_position) - Vector2(0, ALTURA_CUERPO)
-		linea_de_rayo(zigzag(a, b, 5.0, rng), 6.0)
+		Relampago.trazar(caminos, rng, a, b)
+	Relampago.pintar(self, caminos, cola <= 0.0, global_position)
