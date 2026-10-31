@@ -125,7 +125,9 @@ en una línea.
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
   alfileres de la modista), `salpicadura.gd`
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
-  `explosion.gd`.
+  `explosion.gd` (lo que se ve es la explosión de pixelfx: `tools/pixelfx/explosion.js`, una copia de "small-explosion" más
+  grande y sin las piedras ni la tierra, que caían en raya vista desde arriba; la exporta `exportar_explosion.mjs` en
+  `explosion.png` y `explosion-brillo.png`, con sus dos capas; las pequeñas, a la mitad. Prueba: `--captura --explosion`).
 - `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
   El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
@@ -478,6 +480,9 @@ en una línea.
   `pixelfx/nube-gases.js` es la nube del Flatulento ("poison-cloud" desde arriba, `nube-gases-*.png`), igual.
   `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
   en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
+  `pixelfx/explosion.js` y `exportar_explosion.mjs`: la explosión (`node tools/pixelfx/exportar_explosion.mjs <pixelfx>
+  assets/sprites`, y copiar el origen que escribe en `ORIGEN` de `explosion.gd`). `hojas.mjs` pinta las capas que se le
+  pidan ("front", y "back" para la explosión).
   `caida.py` monta la hoja del tropiezo de Johnny (`conserje-48-caida`: caer y levantarse de PixelLab, colocados para que
   no den saltos y quede tumbado en el suelo): `py tools/caida.py`. Luego `py tools/caida_skins.py` saca la de cada skin:
   busca en cada dibujo la cabeza de siempre y cuánto está girada, la borra y pega encima la de la skin girada igual

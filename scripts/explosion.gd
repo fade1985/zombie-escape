@@ -2,10 +2,22 @@
 # zombis que pillen dentro del círculo (¡reacciones en cadena!), enseña la bola de fuego y se va.
 # Como en el juego (explode en src/game-ataques.js). La de las granadas de Johnny no pasa las paredes ("paredes"); la del
 # zombi explosivo y la de Mezcla explosiva, sí.
+# Lo que se ve es la explosión de pixelfx (tools/pixelfx/explosion.js, exportada con exportar_explosion.mjs): un destello
+# blanco y unos anillos, el fuego que se vuelve humo y sube, chispas, tizones, piedras y la marca del suelo. Dos hojas:
+# el color y el brillo (que se suma, con mezcla "añadir"). Las pequeñas (el racimo de las Épicas), a la mitad de tamaño.
 extends Node2D
 
 const EMPUJE := 170.0 * 2.2   # las explosiones lanzan a los zombis más lejos que un golpe
 const PARADA := 0.06          # segundos que el juego se queda casi parado si pilla a alguien
+# La hoja de pixelfx (las medidas, copiadas de lo que escribe el exportador)
+const HOJAS := [preload("res://assets/sprites/explosion.png"), preload("res://assets/sprites/explosion-brillo.png")]
+const ORIGEN := Vector2(180, 202)   # el punto de la explosión (en el suelo), en cada fotograma
+const FOTOGRAMAS := 75
+const COLUMNAS := 16
+const FILAS := 5
+const FPS := 30.0
+const APAGA := 0.4                  # los últimos segundos, se apaga (lo que queda es humo que casi no se ve)
+const PEQUENA := 70.0               # con menos radio, la explosión se ve a la mitad de tamaño
 
 var radio := 90.0
 var dano := 30
@@ -16,6 +28,7 @@ var de := "granada"           # de quién es, para el cartel de derrota (johnny.
                               # "explosivo"; las demás que le dan a Johnny son de su granada
 var paredes := false          # si la paran las paredes, las puertas cerradas y las barricadas (los muebles, no)
 var tiempo := 0.0
+var capas: Array[Sprite2D] = []
 
 
 func _ready() -> void:
@@ -43,8 +56,22 @@ func _ready() -> void:
 	# La explosión ilumina toda la zona, y el resplandor del fuego tarda en apagarse
 	Luz.destello(self, global_position, maxf(200.0, radio * 2.5), 0.4)
 	Luz.destello(self, global_position, maxf(160.0, radio * 1.8), 1.2, 0.5)
-	# La bola de fuego de PixelLab, un poco más grande que su dibujo (como en el juego)
-	$Fuego.play("reposo_s")
+	# La explosión de pixelfx: el color y, encima, el brillo sumado
+	var escala := 2.0 if radio >= PEQUENA else 1.0
+	for i in 2:
+		var capa := Sprite2D.new()
+		capa.texture = HOJAS[i]
+		capa.hframes = COLUMNAS
+		capa.vframes = FILAS
+		capa.centered = false
+		capa.offset = -ORIGEN
+		capa.scale = Vector2(escala, escala)
+		if i == 1:
+			var suma := CanvasItemMaterial.new()
+			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			capa.material = suma
+		add_child(capa)
+		capas.append(capa)
 
 
 # Si a esta explosión la para una pared de camino a ese sitio
@@ -55,14 +82,10 @@ func tapado(donde: Vector2) -> bool:
 
 func _process(delta: float) -> void:
 	tiempo += delta
-	queue_redraw()
-	# 12 fotogramas a 14 por segundo: algo menos de un segundo
-	if tiempo > 0.85:
+	var cuadro := int(tiempo * FPS)
+	if cuadro >= FOTOGRAMAS:
 		queue_free()
-
-
-# Un destello redondo que se abre y se apaga enseguida, por debajo de la bola de fuego
-func _draw() -> void:
-	var k := minf(tiempo / 0.3, 1.0)
-	if k < 1.0:
-		Formas.disco(self, Vector2.ZERO, radio * (0.4 + 0.6 * k), Color(1, 0.82, 0.25, 0.45 * (1.0 - k)))
+		return
+	for capa in capas:
+		capa.frame = cuadro
+	modulate.a = clampf((FOTOGRAMAS / FPS - tiempo) / APAGA, 0.0, 1.0)

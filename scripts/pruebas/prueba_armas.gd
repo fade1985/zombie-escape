@@ -1486,6 +1486,54 @@ func probar_fogonazos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --explosion": la explosión de pixelfx (explosion.gd) en la sala de pruebas, a media luz y sin Johnny
+# en medio. Una normal (radio 90) con fotos a los 0,05, 0,2, 0,5, 1 y 2 s (captura-explosion-<segundos>.png) y una
+# pequeña (radio 45, la del racimo; captura-explosion-pequena.png). Lo que comprueba, en la terminal. Se cierra
+func probar_explosion() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	for a in get_tree().get_nodes_in_group("aliados"):
+		a.process_mode = Node.PROCESS_MODE_DISABLED
+		a.visible = false
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	await get_tree().create_timer(0.3).timeout
+	johnny.visible = false
+	var escena: PackedScene = load("res://escenas/armas/explosion.tscn")
+	var boom: Node2D = escena.instantiate()
+	boom.a_johnny = false
+	boom.position = johnny.position + Vector2(0, 60)
+	johnny.get_parent().add_child(boom)
+	var antes := 0.0
+	for segundos in [0.05, 0.2, 0.5, 1.0, 2.0]:
+		await get_tree().create_timer(segundos - antes).timeout
+		antes = segundos
+		Captura.foto("captura-explosion-%s.png" % str(segundos).replace(".", ","))
+	await get_tree().create_timer(0.3).timeout
+	print("Explosión: a los 2,3 s sigue %s con sus capas %d (esperado: true, 2) | apagándose %.2f (esperado: menos de 1)" % [
+		is_instance_valid(boom), boom.capas.size() if is_instance_valid(boom) else 0, boom.modulate.a if is_instance_valid(boom) else 0.0])
+	await get_tree().create_timer(0.4).timeout
+	print("  a los 2,7 s: se ha ido %s (esperado: true)" % (not is_instance_valid(boom)))
+	var chica: Node2D = escena.instantiate()
+	chica.a_johnny = false
+	chica.radio = 45.0
+	chica.position = johnny.position + Vector2(0, 60)
+	johnny.get_parent().add_child(chica)
+	await get_tree().create_timer(0.2).timeout
+	print("  la pequeña (radio 45): a escala %.1f (esperado: 1)" % chica.capas[0].scale.x)
+	Captura.foto("captura-explosion-pequena.png")
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --vomito": los zombis bañados en vómito (la Gastroenteritis: "vomito" en su shader), en la sala de
 # pruebas, con tres zombis quietos (Johnny, escondido): al de la izquierda le roe el ácido del lanza ácido (para comparar), al del medio le
 # cae un vómito de Johnny (el proyectil de verdad) y al de la derecha, nada. Fotos: recién bañado

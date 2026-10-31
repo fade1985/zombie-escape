@@ -14,7 +14,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 ## Mejoras
 
 - **M29** Mutación del tentáculo (Tentacular): un efecto visual mejor, por ejemplo que se vea el tentáculo alrededor de
-  Johnny, o lo que se le ocurra a Claude.
+  Johnny, o lo que se le ocurra a Claude (pixelfx tiene efectos de sombra y arcanos que podrían servir).
 - **M31** Cuando la vida de Johnny llega a cero: que no sea solo la frase «Te han pillado», sino algo que explique que
   vuelve a la sala de mantenimiento y se levanta allí diciendo «vaya, me he quedado dormido» o «vaya pesadilla». Ideas:
   - Sonámbulo (la del dueño): se desmaya por los mordiscos y vuelve solo, andando como un autómata.
@@ -40,6 +40,19 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   de golpe (unos 30 MB: 28 de dibujos y 2,4 de música) antes de empezar. Ideas: hacer más pequeñas las hojas de
   dibujos más grandes (jefe criatura, gerente mutado…), cargar cada jefe solo cuando sale y una pantalla de carga
   más bonita para que la espera se note menos.
+
+- **M48** pixelfx: el molotov al romperse, un fogonazo de cristal y llamas antes de que salga el charco de fuego.
+- **M49** pixelfx: la muerte de los zombis, un reventón de sangre o una nubecita al caer (sobre todo con golpes fuertes o
+  críticos).
+- **M50** pixelfx: lo eléctrico (pistola eléctrica, lanza rayos, látigo eléctrico), rayos y chispazos en los saltos
+  entre zombis.
+- **M51** pixelfx: el hielo (granada congeladora, bate helado), un estallido de escarcha al congelar.
+- **M52** pixelfx: la granada atraedora, un aura o un pulso que se note que llama a los zombis.
+- **M53** pixelfx: recoger billetes y objetos, un destello pequeño al cogerlos.
+- **M54** pixelfx: elegir una mutación, un aura o un pulso en vez del anillo morado.
+- **M55** pixelfx: el desfibrilador (Johnny revive), un efecto de luz o de descarga.
+- **M56** pixelfx: la curación de la médica, un brillo verde sobre Johnny.
+- **M57** pixelfx: la aparición de los jefes, un efecto de entrada en su presentación.
 
 ## Por limar
 
