@@ -862,7 +862,7 @@ func probar_reventon() -> void:
 	await get_tree().create_timer(0.25).timeout
 	Captura.foto("captura-reventon-2.png")
 	var charcos := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "reventon")
-	var reventones := johnny.get_parent().get_children().filter(func(n): return n is Reventon)
+	var reventones := johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "reventon")
 	print("  reventón: charcos grandes %d (esperado: 1) | efecto %d (esperado: 1)" % [charcos.size(), reventones.size()])
 	await get_tree().create_timer(1.3).timeout
 	Captura.foto("captura-reventon-charco.png")
@@ -873,7 +873,7 @@ func probar_reventon() -> void:
 		print("  charco: radio %d | pisa en el centro %s (esperado: true) | a 90 %s (esperado: true) | a 130 %s (esperado: false) | burbujas gordas %d" % [
 			int(c.radio()), c.arde_en(c.global_position, 0.0), c.arde_en(c.global_position + Vector2(90, 0), 0.0),
 			c.arde_en(c.global_position + Vector2(130, 0), 0.0), c.gordas.size()])
-	print("  el efecto se ha ido: %s (esperado: true)" % johnny.get_parent().get_children().filter(func(n): return n is Reventon).is_empty())
+	print("  el efecto se ha ido: %s (esperado: true)" % johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "reventon").is_empty())
 	await get_tree().create_timer(3.4).timeout
 	Captura.foto("captura-reventon-seca.png")
 	get_tree().quit()

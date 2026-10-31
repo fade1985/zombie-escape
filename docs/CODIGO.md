@@ -123,8 +123,10 @@ en una línea.
   (lo que salpica una gota al chocar y su manchita, que se seca), `proyectil.gd` (lo que va en parábola: moco, lejía, molotov del bombero, sartén, probetas) y
   `explosion.gd`.
 - `charco.gd` (todos los charcos) y `estados.gd` (lo que hacen: veneno, frío, calambrazo, tirado, `frenado`...).
-  El gordo (`zombi_venenoso.gd`) revienta al morir: `reventon.gd` (la corona y las gotas de veneno, hojas de pixelfx) y
+  El gordo (`zombi_venenoso.gd`) revienta al morir: `efecto_suelo.gd`, tipo `reventon` (la corona y las gotas de veneno, hojas de pixelfx) y
   el charco grande `reventon`, con burbujas gordas como las de "toxic-puddle" (`charco.pintar_burbujas_gordas`).
+  `efecto_suelo.gd` hace los efectos de pixelfx que salen una vez en el suelo (sus tres hojas y el precalentado para que
+  el primero no pare el juego); el otro tipo es `gases`, la nube del Flatulento (`mutaciones.gd`), del tamaño de su radio.
 - `peligros/`: `peligros.gd` (sus números y dónde va cada uno al generar la planta). Del centro comercial: `frio.gd`,
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`), `cerco.gd` (bombero) y
@@ -453,6 +455,7 @@ en una línea.
   `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/escudo-fuego.js assets/sprites`.
   `pixelfx/reventon-veneno.js` es el reventón del gordo ("acid-splash" pasado a vista desde arriba, `reventon-veneno-*.png`):
   `node tools/pixelfx/exportar.mjs <pixelfx> tools/pixelfx/reventon-veneno.js assets/sprites`.
+  `pixelfx/nube-gases.js` es la nube del Flatulento ("poison-cloud" desde arriba, `nube-gases-*.png`), igual.
   `pixelfx/escudo-cristal.js` es lo mismo en azul y más pequeño: la cúpula del científico jefe (`escudo-cristal-*.png`,
   en `cientifico_jefe.gd`; las balas rebotan en su borde igual que en la burbuja del bombero, con `colores_escudo()`).
   `pixelfx/bocanadas.mjs` hace `bocanadas-fuego.png`, las bocanadas de fuego y de humo de "fire-breath" en 10 tamaños y

@@ -94,6 +94,8 @@ func _physics_process(delta: float) -> void:
 	for id in tengo:
 		if not MUT.has(id) or not MUT[id].has("cada"):
 			continue
+		if id == "flatulento":   # (para que la primera nube no pare el juego un momento)
+			EfectoSuelo.precalentar(johnny.get_parent(), "gases")
 		# mientras el jefe se presenta, la cuenta se queda parada en lo que tardará cuando acabe
 		if presentando:
 			espera[id] = TRAS_PRESENTACION
@@ -165,12 +167,9 @@ func actuar(id: String) -> bool:
 				z.aturdido = maxf(z.aturdido, m.paraliza)
 				Estados.poner(z.estados, "gases", m.paraliza, m.dps)   # el daño va como un estado, poco a poco
 			Sonido.tocar("rugido")
-			# la nube de gases (28 bolitas: con el alcance doble, las de antes se quedaban muy sueltas)
-			for i in 28:
-				var a := randf() * TAU
-				var v: float = randf_range(0.6, 1.1) * m.radio * 1.6
-				Particulas.soltar(johnny, p + Vector2(0, 8), Vector2(cos(a) * v, sin(a) * v * 0.7 - 20.0),
-					[Color("#b5c94a"), Color("#8a9a3a"), Color("#d8e07a")][i % 3], randf_range(4, 8), 0.6)
+			# la nube de gases (efecto_suelo.gd, "gases"): se extiende por el suelo justo hasta donde llega el gas
+			# (dibujada para un radio de 140) y se queda donde la soltó, aunque Johnny se vaya
+			EfectoSuelo.soltar(johnny.get_parent(), "gases", p)
 		_:
 			return false
 	return true
