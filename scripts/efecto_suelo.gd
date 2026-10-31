@@ -11,6 +11,9 @@
 #  - "sangre", "sangre-verde" y "sangre-morada": el zombi que muere de un golpe fuerte revienta (M49; partida.sangre): un
 #    efecto hecho para el juego (tools/pixelfx/reventon-sangre.js), con la sangre de cada uno (roja, la del venenoso y la
 #    del de tentáculos). La mancha que queda es aparte (mancha.gd).
+#  - "chispazo": la electricidad al dar a un zombi (M50; ArmasCreadas.rayo y el lanza rayos, llamarada.gd), el "zap-hit"
+#    pasado a vista desde arriba (tools/pixelfx/chispazo.js): un nudo de rayitos a la altura del cuerpo, chispas que hacen
+#    eses y caen, y una quemadura en forma de helecho en el suelo. Se suelta en el suelo, debajo del golpe.
 class_name EfectoSuelo
 extends Node2D
 
@@ -33,6 +36,9 @@ const TIPOS := {
 	"sangre-morada": {"hojas": [preload("res://assets/sprites/reventon-sangre-morada-detras.png"),
 		preload("res://assets/sprites/reventon-sangre-morada-delante.png"), preload("res://assets/sprites/reventon-sangre-morada-brillo.png")],
 		"origen": Vector2(100, 100), "fotogramas": 24},
+	"chispazo": {"hojas": [preload("res://assets/sprites/chispazo-detras.png"),
+		preload("res://assets/sprites/chispazo-delante.png"), preload("res://assets/sprites/chispazo-brillo.png")],
+		"origen": Vector2(48, 56), "fotogramas": 10},
 }
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
 const SANGRE := {"venenoso": "sangre-verde", "tentaculos": "sangre-morada"}

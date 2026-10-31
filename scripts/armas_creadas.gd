@@ -43,7 +43,7 @@ static func descarga(zombi: Node2D, dano: float, aturde: float, saltos := 0) -> 
 				otro = o
 		if otro == null:
 			return
-		rayo(zombi, desde.global_position + Vector2(0, -40), otro.global_position + Vector2(0, -40))
+		rayo(zombi.get_parent(), desde.global_position + Vector2(0, -40), otro.global_position + Vector2(0, -40))
 		var hacia := (otro.global_position - desde.global_position).normalized()
 		otro.recibir_golpe(roundi(dano * EFECTOS.descarga.dano), hacia * EMPUJE * 0.5)
 		aturdir(otro, aturde)
@@ -117,14 +117,14 @@ static func con_acido(nodo: Node, cantidad: int) -> int:
 	return cantidad
 
 
-# El rayo de la descarga: una línea en zigzag de puntitos azules y blancos
-static func rayo(desde: Node, a: Vector2, b: Vector2) -> void:
+# El rayo de la descarga (M50): un relámpago de "a" a "b" (relampago.gd) y, donde da (b, a la altura del cuerpo), el
+# chispazo de pixelfx (EfectoSuelo, en el suelo: ALTURA_CHISPAZO más abajo)
+const ALTURA_CHISPAZO := 40.0
+
+static func rayo(sala: Node, a: Vector2, b: Vector2) -> void:
 	Sonido.tocar("click")
-	var n := maxi(4, roundi(a.distance_to(b) / 8.0))
-	for i in n + 1:
-		var lado := 1.0 if i % 2 else -1.0
-		var p := a.lerp(b, float(i) / n) + Vector2(lado * randf_range(2, 6), lado * randf_range(2, 6))
-		Particulas.soltar(desde, p, Vector2.ZERO, Color("#9fe8ff") if i % 3 else Color.WHITE, 3, 0.2)
+	Relampago.soltar(sala, a, b)
+	EfectoSuelo.soltar(sala, "chispazo", b + Vector2(0, ALTURA_CHISPAZO))
 
 
 # ── A distancia ──
