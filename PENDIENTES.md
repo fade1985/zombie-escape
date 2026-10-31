@@ -15,8 +15,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 - **M29** Mutación del tentáculo (Tentacular): un efecto visual mejor, por ejemplo que se vea el tentáculo alrededor de
   Johnny, o lo que se le ocurra a Claude.
-- **M30** Tropiezo de Johnny en las salas de la portera y del gymbro: ahora la caída es una imagen fija ladeada; que
-  quede más natural, cambiando de postura y quedándose tumbado en el suelo, o con la animación de morir si la tiene.
 - **M31** Cuando la vida de Johnny llega a cero: que no sea solo la frase «Te han pillado», sino algo que explique que
   vuelve a la sala de mantenimiento y se levanta allí diciendo «vaya, me he quedado dormido» o «vaya pesadilla». Ideas:
   - Sonámbulo (la del dueño): se desmaya por los mordiscos y vuelve solo, andando como un autómata.
