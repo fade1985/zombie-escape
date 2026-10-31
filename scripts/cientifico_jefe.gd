@@ -595,10 +595,8 @@ func latigazo_lenguas(johnny: Node2D) -> void:
 func punetazo() -> void:
 	Sonido.tocar("porrazo")
 	Temblor.temblar(12.0)
-	for i in 16:
-		var a := randf() * TAU
-		Particulas.soltar(self, global_position + Vector2(cos(a) * 40.0, PIE_CRIATURA + sin(a) * 12.0),
-			Vector2(cos(a) * randf_range(60, 140), sin(a) * randf_range(30, 70) - 40.0), Color("#8a7a66"), 4, 0.5)
+	# el pisotón de pixelfx (M58): su onda se abre en lo mismo que la del puñetazo (RADIO_ONDA en DURA_ONDA)
+	EfectoSuelo.soltar(get_parent(), "pisoton", global_position + Vector2(0, PIE_CRIATURA), RADIO_ONDA / EfectoSuelo.ONDA_PISOTON)
 
 
 # La onda pilla a Johnny cuando pasa por donde está (una sola vez). Si en ese momento está esquivando, le pasa por

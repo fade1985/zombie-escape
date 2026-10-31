@@ -23,6 +23,14 @@
 #  - "deshielo": el hielo que revienta cuando a un zombi se le acaba el congelado o muere congelado (zombi.deshelar), con la
 #    idea del "ice-shatter" de pixelfx (tools/pixelfx/deshielo.js): grietas y un destello, y trozos de hielo que saltan,
 #    caen, rebotan, resbalan y se funden entre vaho.
+#  - "pisoton": el golpe de un jefe contra el suelo (M58; gymbro.gd y mascota.gd al aterrizar de un salto,
+#    cientifico_jefe.gd en el puñetazo), con la idea del "dirt-explosion" de pixelfx (tools/pixelfx/golpe-suelo.js): polvo,
+#    grietas, una onda que se abre por el suelo y cascotes. Hecho para una onda de 200 (la zona del salto del Gymbro): con
+#    otra, "escala".
+#  - "golpe-pared": una carga que se estrella (M58; minijefe.estrellarse): la nube de yeso y los cascotes que caen
+#    (tools/pixelfx/golpe-pared.js).
+#  - "llamada": la atraedora llamando a los zombis (M52; granada.gd): en cada pitido, dos ondas amarillas que se abren por
+#    el suelo y el ring-ring del despertador (tools/pixelfx/llamada.js). Va de hija de la granada, para que la siga.
 class_name EfectoSuelo
 extends Node2D
 
@@ -57,7 +65,17 @@ const TIPOS := {
 	"deshielo": {"hojas": [preload("res://assets/sprites/deshielo-detras.png"),
 		preload("res://assets/sprites/deshielo-delante.png"), preload("res://assets/sprites/deshielo-brillo.png")],
 		"origen": Vector2(56, 62), "fotogramas": 18},
+	"pisoton": {"hojas": [preload("res://assets/sprites/golpe-suelo-detras.png"),
+		preload("res://assets/sprites/golpe-suelo-delante.png"), preload("res://assets/sprites/golpe-suelo-brillo.png")],
+		"origen": Vector2(120, 80), "fotogramas": 22},
+	"golpe-pared": {"hojas": [preload("res://assets/sprites/golpe-pared-detras.png"),
+		preload("res://assets/sprites/golpe-pared-delante.png"), preload("res://assets/sprites/golpe-pared-brillo.png")],
+		"origen": Vector2(60, 74), "fotogramas": 20},
+	"llamada": {"hojas": [preload("res://assets/sprites/llamada-detras.png"),
+		preload("res://assets/sprites/llamada-delante.png"), preload("res://assets/sprites/llamada-brillo.png")],
+		"origen": Vector2(84, 60), "fotogramas": 12},
 }
+const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
 const SANGRE := {"venenoso": "sangre-verde", "tentaculos": "sangre-morada"}
 const FPS := 20.0
