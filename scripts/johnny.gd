@@ -1068,6 +1068,8 @@ func preparar_fogonazo() -> void:
 	if is_inside_tree():
 		Fogonazo.precalentar(get_parent(), huecos.get("fuego", ""))
 		Chispa.precalentar(get_parent())
+		if stats.resucitar and not resucitado:   # el desfibrilador (M55), para que no pare el juego al caer
+			EfectoSuelo.precalentar(get_parent(), "desfibrilador")
 
 
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta
@@ -1430,6 +1432,7 @@ func quitar_vida(cantidad: int, de := "") -> void:
 		tercios = 3
 		invulnerable = 2.0
 		vida_cambiada.emit(vida, stats.vida_max)
+		EfectoSuelo.soltar(self, "desfibrilador", Vector2.ZERO)   # (M55: las dos descargas y el latido; le sigue)
 		resucito.emit()
 		return
 	if vida == 0:
