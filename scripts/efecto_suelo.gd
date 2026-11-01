@@ -46,6 +46,9 @@
 #    enroscadas, ondas blandas por el suelo y burbujitas (tools/pixelfx/mutar.js). De hijo de Johnny.
 #  - "rugido": el grito de un jefe en su presentación (M57; ui/presentacion.gd): ondas de sonido que salen de la cabeza,
 #    un destello rojizo y una onda de polvo a sus pies que levanta piedrecitas (tools/pixelfx/rugido.js).
+#  - "tentaculos": la mutación Tentacular empuja (M29; mutaciones.actuar): seis tentáculos morados le salen a Johnny de la
+#    cintura, restallan hasta donde llega el empujón, dan en el suelo y se recogen (tools/pixelfx/tentaculos.js). La escala
+#    va con el radio de la mutación (RADIO_TENTACULOS a escala 1). De hijo de Johnny.
 class_name EfectoSuelo
 extends Node2D
 
@@ -116,7 +119,11 @@ const TIPOS := {
 	"rugido": {"hojas": [preload("res://assets/sprites/rugido-detras.png"),
 		preload("res://assets/sprites/rugido-delante.png"), preload("res://assets/sprites/rugido-brillo.png")],
 		"origen": Vector2(104, 112), "fotogramas": 24},
+	"tentaculos": {"hojas": [preload("res://assets/sprites/tentaculos-detras.png"),
+		preload("res://assets/sprites/tentaculos-delante.png"), preload("res://assets/sprites/tentaculos-brillo.png")],
+		"origen": Vector2(64, 70), "fotogramas": 14},
 }
+const RADIO_TENTACULOS := 90.0   # hasta dónde llegan los "tentaculos" a escala 1 (45 píxeles del dibujo)
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
 const SANGRE := {"venenoso": "sangre-verde", "tentaculos": "sangre-morada"}

@@ -182,6 +182,11 @@ en una línea.
   de sonido que salen de la cabeza (con borde oscuro, para que se lean en cualquier suelo), un destello rojizo y una onda
   de polvo a sus pies con piedrecitas (`tools/pixelfx/rugido.js`). Va junto al jefe, no de hijo (hay jefes que crecen);
   los que entran escondidos (la Modista) no lo llevan. Prueba: `--captura --presentacion` (`captura-presentacion-rugido.png`).
+- Los tentáculos de Tentacular (M29; `efecto_suelo.gd`, `tentaculos`, en vez del anillo morado): cuando la mutación
+  empuja (`mutaciones.actuar`), seis tentáculos le salen a Johnny de la cintura, restallan ondulando hasta donde llega el
+  empujón (escala: su radio / `EfectoSuelo.RADIO_TENTACULOS`), dan en el suelo (onda y baba) y se recogen enroscándose; los
+  que van hacia arriba de la pantalla, detrás de él (`tools/pixelfx/tentaculos.js`, de hijo de Johnny). Se precalienta en
+  `mutaciones._physics_process`. Prueba: `--captura --tentacular` (`--tentaculos` es la del zombi de tentáculos).
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas

@@ -1632,6 +1632,48 @@ func probar_desfibrilador() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --tentacular": en la sala de pruebas, a media luz, Johnny con la mutación Tentacular y cinco zombis
+# alrededor: los empuja y le salen los tentáculos (EfectoSuelo "tentaculos", de hijo de Johnny, M29). Foto con los
+# tentáculos fuera (captura-tentaculos.png). Lo que comprueba, en la terminal. Se cierra
+func probar_tentacular() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
+	johnny.vida = 99999   # (que los zombis no lo tiren)
+	for i in 5:
+		var z: Node2D = meter_zombi("normal", johnny.position + Vector2.from_angle(i * TAU / 5.0 + 0.3) * 60.0)
+		z.vida = 9999
+	await get_tree().create_timer(0.3).timeout
+	mutaciones.tengo.append("tentacular")
+	mutaciones.espera["tentacular"] = 0.05
+	var efectos: Array = []
+	for i in 60:
+		await get_tree().process_frame
+		efectos = johnny.get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "tentaculos" and not n.de_calentar)
+		if not efectos.is_empty():
+			break
+	print("Tentáculos: efectos en Johnny %d (esperado: 1) · escala %.2f (esperado: 1.00) · precalentado %s (esperado: true)" % [
+		efectos.size(), efectos[0].escala if efectos else 0.0, EfectoSuelo.calentados.has("tentaculos")])
+	await get_tree().create_timer(0.18).timeout
+	Captura.foto("captura-tentaculos.png")
+	await get_tree().create_timer(0.8).timeout
+	print("  al acabar, efectos %d (esperado: 0)" % johnny.get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "tentaculos").size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
+
 # Con "--captura --llamada": la atraedora llamando (M52) en la sala de pruebas, a media luz y sin Johnny en medio: cae
 # entre zombis y en cada pitido suelta su onda amarilla (EfectoSuelo "llamada", hija de la granada). Fotos de una onda a
 # mitad (captura-llamada-<n>.png, al principio y casi al final, cuando pita más deprisa). Lo que comprueba, en la terminal.
