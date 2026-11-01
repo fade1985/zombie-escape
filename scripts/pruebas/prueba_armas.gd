@@ -1592,6 +1592,45 @@ func probar_recoger_curar() -> void:
 	Luz.evento = 0.0
 	get_tree().quit()
 
+# Con "--captura --desfibrilador": en la sala de pruebas, a media luz, Johnny tiene el talento Desfibrilador y cae: vuelve
+# con toda la vida y le salen las dos descargas y el latido (EfectoSuelo "desfibrilador", de hijo de Johnny, M55). Fotos de
+# una descarga y del latido (captura-desfibrilador-descarga.png y captura-desfibrilador-latido.png). Lo que comprueba, en
+# la terminal. Se cierra
+func probar_desfibrilador() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(0, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	Luz.evento = 0.5
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
+	johnny.stats.resucitar = true
+	johnny.resucitado = false
+	johnny.preparar_fogonazo()
+	await get_tree().create_timer(0.3).timeout
+	johnny.invulnerable = 0.0
+	johnny.recibir_dano(johnny.vida + 10)
+	await get_tree().process_frame
+	var efectos: Array = johnny.get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "desfibrilador")
+	print("Desfibrilador: vivo %s (esperado: true) · vida %d de %d · efectos en Johnny %d (esperado: 1) · precalentado %s (esperado: true)" % [
+		johnny.vivo, johnny.vida, johnny.stats.vida_max, efectos.size(), EfectoSuelo.calentados.has("desfibrilador")])
+	await get_tree().create_timer(0.05).timeout
+	Captura.foto("captura-desfibrilador-descarga.png")
+	await get_tree().create_timer(0.8).timeout
+	Captura.foto("captura-desfibrilador-latido.png")
+	await get_tree().create_timer(0.8).timeout
+	print("  al acabar, efectos %d (esperado: 0)" % johnny.get_children().filter(func(n): return n is EfectoSuelo).size())
+	Luz.evento = 0.0
+	get_tree().quit()
+
 
 # Con "--captura --llamada": la atraedora llamando (M52) en la sala de pruebas, a media luz y sin Johnny en medio: cae
 # entre zombis y en cada pitido suelta su onda amarilla (EfectoSuelo "llamada", hija de la granada). Fotos de una onda a
@@ -1647,10 +1686,10 @@ func probar_llamada() -> void:
 	get_tree().quit()
 
 
-# Con "--captura --golpes": los golpes de los jefes (M58) en la sala de pruebas, a media luz y sin Johnny en medio: el
+# Con "--captura --impactos": los golpes de los jefes (M58) en la sala de pruebas, a media luz y sin Johnny en medio: el
 # pisotón del salto del Gymbro (EfectoSuelo "pisoton", a su escala) y, a la derecha, el golpe de una carga contra la pared
 # ("golpe-pared"). Fotos a los 0,1, 0,3 y 0,6 s (captura-golpes-<segundos>.png). Lo que comprueba, en la terminal. Se cierra
-func probar_golpes() -> void:
+func probar_impactos() -> void:
 	await pulsar_y_esperar(KEY_F9)
 	var sala: SalaArmas = null
 	for n in mapa.get_children():

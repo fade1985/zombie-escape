@@ -39,6 +39,9 @@
 #    estrellita dorada, un anillito y chispitas (tools/pixelfx/recoger.js).
 #  - "curacion": la médica cura a Johnny (M56; aliado.curar): brillo verde, crucecitas que suben y un anillo a sus pies
 #    (tools/pixelfx/curacion.js). Va de hijo de Johnny, para que le siga.
+#  - "desfibrilador": Johnny vuelve con toda la vida por el talento Desfibrilador (M55; johnny.gd, recibir_dano): dos
+#    descargas en el pecho con rayitos, chispas y anillo eléctrico, y luego un latido verde sobre la cabeza
+#    (tools/pixelfx/desfibrilador.js). También va de hijo de Johnny.
 class_name EfectoSuelo
 extends Node2D
 
@@ -100,6 +103,9 @@ const TIPOS := {
 	"curacion": {"hojas": [preload("res://assets/sprites/curacion-detras.png"),
 		preload("res://assets/sprites/curacion-delante.png"), preload("res://assets/sprites/curacion-brillo.png")],
 		"origen": Vector2(40, 76), "fotogramas": 18},
+	"desfibrilador": {"hojas": [preload("res://assets/sprites/desfibrilador-detras.png"),
+		preload("res://assets/sprites/desfibrilador-delante.png"), preload("res://assets/sprites/desfibrilador-brillo.png")],
+		"origen": Vector2(48, 84), "fotogramas": 24},
 }
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)

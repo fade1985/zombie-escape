@@ -32,8 +32,6 @@
 #   --franja            el aviso de las cargas (antidisturbios y mascota), a medio llenar   [prueba_jefes_salas.gd]
 #   --rebote            (con --edificio centro --jefe mascota) la mascota enfadada rebota en la pared y avisa con su
 #                       franja antes de volver a salir                                     [prueba_jefes_salas.gd]
-#   --recoger-curar     el destello al recoger billetes (M53) y la curación de la médica (M56) [prueba_armas.gd]
-#   --llamada           la atraedora llama a los zombis: una onda amarilla en cada pitido (M52) [prueba_armas.gd]
 #   --golpes            el aviso de los golpes cuerpo a cuerpo de cada jefe                 [prueba_jefes_salas.gd]
 #   --avisos            el resto de los avisos de los jefes (lenguas, rayas, círculos...)  [prueba_jefes_salas.gd]
 #   --ir-jefe           derecho a la habitación de cada jefe (Glotón, Gymbro, portera, bombero) [prueba_jefes_salas.gd]
@@ -81,8 +79,9 @@
 #   --raton             el ratón en la partida: escondido (asistido), mirilla (libre), flecha en los menús [prueba_varias.gd]
 #   --reventon-sangre   los zombis que mueren de un golpe fuerte revientan en sangre (M49)      [prueba_armas.gd]
 #   --recoger-curar     el destello al recoger billetes (M53) y la curación de la médica (M56) [prueba_armas.gd]
+#   --desfibrilador     Johnny cae con el talento Desfibrilador: las descargas y el latido (M55) [prueba_armas.gd]
 #   --llamada           la atraedora llama a los zombis: una onda amarilla en cada pitido (M52) [prueba_armas.gd]
-#   --golpes            los golpes de los jefes: el pisotón al aterrizar y el golpe contra la pared (M58) [prueba_armas.gd]
+#   --impactos          los golpes de los jefes: el pisotón al aterrizar y el golpe contra la pared (M58) [prueba_armas.gd]
 #   --escarcha          la congeladora explota en escarcha y los zombis congelados también la sueltan (M51) [prueba_armas.gd]
 #   --chispazos         la descarga salta de un zombi a otro: relámpagos y chispazos (M50)      [prueba_armas.gd]
 #   --molotov           el molotov al romperse (el efecto de pixelfx, M48)                     [prueba_armas.gd]
@@ -286,12 +285,6 @@ func empezar_prueba() -> void:
 	elif "--rebote" in args:
 		set_process(false)   # sin la prueba larga
 		probar_rebote()
-	elif "--recoger-curar" in args:
-		set_process(false)   # sin la prueba larga
-		probar_recoger_curar()
-	elif "--llamada" in args:
-		set_process(false)   # sin la prueba larga
-		probar_llamada()
 	elif "--golpes" in args:
 		set_process(false)   # sin la prueba larga
 		probar_golpes()
@@ -441,12 +434,15 @@ func empezar_prueba() -> void:
 	elif "--recoger-curar" in args:
 		set_process(false)   # sin la prueba larga
 		probar_recoger_curar()
+	elif "--desfibrilador" in args:
+		set_process(false)   # sin la prueba larga
+		probar_desfibrilador()
 	elif "--llamada" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamada()
-	elif "--golpes" in args:
+	elif "--impactos" in args:
 		set_process(false)   # sin la prueba larga
-		probar_golpes()
+		probar_impactos()
 	elif "--escarcha" in args:
 		set_process(false)   # sin la prueba larga
 		probar_escarcha()
