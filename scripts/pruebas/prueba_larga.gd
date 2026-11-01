@@ -988,9 +988,17 @@ func probar_pausa_y_fin() -> void:
 	get_tree().quit()
 
 
-# Con --mutaciones: solo el recuadro de las mutaciones (captura-mutacion.png, la foto de la ficha del tutorial)
+# Con --mutaciones: solo el recuadro de las mutaciones (captura-mutacion.png, la foto de la ficha del tutorial) y el
+# efecto al elegirla (M54, EfectoSuelo "mutar", de hijo de Johnny: captura-mutar.png, con el ADN a medio subir)
 func probar_mutaciones_solo() -> void:
 	await probar_mutaciones()
+	await get_tree().process_frame   # (EfectoSuelo.soltar lo mete en el siguiente paso)
+	var efectos: Array = johnny.get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "mutar")
+	print("Mutar: efectos en Johnny %d (esperado: 2, uno por cada mutación elegida) · precalentado %s (esperado: true)" % [efectos.size(), EfectoSuelo.calentados.has("mutar")])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-mutar.png")
+	await get_tree().create_timer(1.2).timeout
+	print("  al acabar, efectos %d (esperado: 0)" % johnny.get_children().filter(func(n): return n is EfectoSuelo).size())
 	get_tree().quit()
 
 

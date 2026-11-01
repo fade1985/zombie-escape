@@ -41,7 +41,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   dibujos más grandes (jefe criatura, gerente mutado…), cargar cada jefe solo cuando sale y una pantalla de carga
   más bonita para que la espera se note menos.
 
-- **M54** pixelfx: elegir una mutación, un aura o un pulso en vez del anillo morado.
 - **M57** pixelfx: la aparición de los jefes, un efecto de entrada en su presentación.
 
 ## Por limar

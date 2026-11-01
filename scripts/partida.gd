@@ -392,6 +392,7 @@ func abrir_mutacion() -> void:
 		await get_tree().create_timer(0.3, false).timeout
 		abrir_mutacion()
 		return
+	EfectoSuelo.precalentar(johnny.get_parent(), "mutar")   # (que no dé un tirón al elegir)
 	get_tree().paused = true
 	if puede_tutorial("mutaciones"):
 		await ver_tutorial("mutaciones")   # la primera vez, antes de las cartas, qué son
@@ -408,7 +409,7 @@ func elegir_mutacion(id: String) -> void:
 	# Endurecimiento: el escudo ya, sin esperar a la siguiente planta
 	johnny.escudo += johnny.stats.escudo_mut - antes
 	get_tree().paused = false
-	Particulas.anillo(johnny, johnny.global_position, 70.0, Color("#b5179e"), 0.5)
+	EfectoSuelo.soltar(johnny, "mutar", Vector2.ZERO)   # (M54: el ADN que sube, las ondas y las burbujas; le sigue)
 	var m := Mutaciones.mutacion(id)
 	decir(Idioma.t("¡%s!  %s") % [m.nombre, m.desc], 4.0)
 

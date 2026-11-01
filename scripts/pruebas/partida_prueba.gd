@@ -194,7 +194,7 @@
 #                       salga al revés ni cambiada                                             [prueba_letras.gd]
 #   --hud               las armas y los lanzables en la esquina del HUD: quietos, al cambiar (Q y F), el aviso del modo de
 #                       atacar (F1), en el móvil y las cifras de la vida                     [prueba_varias.gd]
-#   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una y ver lo que cambia [prueba_larga.gd]
+#   --mutaciones        solo el recuadro de las mutaciones: foto, elegir una, ver lo que cambia y el efecto (M54) [prueba_larga.gd]
 #   --pausa             solo la pausa (sus números y las armas) y el cartel del final                [prueba_larga.gd]
 #   --derrota           el cartel de derrota: quién te ha pillado (un zombi, explosiones, el fuego), lo conseguido en
 #                       la partida, «Otra vez» y la R; y por el fuego, por un jefe y ganando    [prueba_varias.gd]

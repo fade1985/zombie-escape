@@ -175,6 +175,9 @@ en una línea.
   (`johnny.recibir_dano`), dos descargas en el pecho (rayitos, chispas y un anillo eléctrico) y luego un latido verde de
   electrocardiograma sobre la cabeza (`tools/pixelfx/desfibrilador.js`, de hijo de Johnny). Se precalienta en
   `johnny.preparar_fogonazo` si tiene el talento. Prueba: `--captura --desfibrilador`.
+- Elegir una mutación (M54; `efecto_suelo.gd`, `mutar`, en vez del anillo morado de antes): en `partida.elegir_mutacion`,
+  Johnny se enciende de morado, dos hebras de ADN le suben enroscadas, ondas blandas por el suelo y burbujitas
+  (`tools/pixelfx/mutar.js`, de hijo de Johnny). Se precalienta al abrir el recuadro. Prueba: `--captura --mutaciones`.
 - `fogonazo.gd`: el fogonazo de pixelfx de los disparos de Johnny (pistola, MP5 y escopeta; lo suelta `johnny.disparar`).
   Dos partes con su color y su brillo: la llama, ya girada en 9 ángulos (hacia la izquierda, dada la vuelta; la pistola
   con 2 formas y la MP5 con 3, que se turnan) y el humo, en 5 rumbos y sin girar (siempre sube). Se ordena como las balas
