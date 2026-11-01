@@ -73,7 +73,12 @@ func probar_presentacion() -> void:
 	print("Presentación, al gritar: textos flotando en la sala %d %s (esperado: 0: el grito es la pose y el rugido, sin frase escrita) · Johnny dice algo %s (esperado: false: se calla hasta el final)" % [
 		flotando.size(), flotando, aviso.modulate.a > 0.0 and aviso.text != ""])
 	Captura.foto("captura-presentacion-grito.png")
-	await get_tree().create_timer(0.5).timeout   # a 1,1 s de empezar la presentación
+	await get_tree().create_timer(0.2).timeout
+	var rugidos: int = jefa.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "rugido" and not n.de_calentar).size()
+	print("Presentación, el rugido (M57): efectos %d (esperado: 1; 0 si entra escondido) · precalentado %s (esperado: true; false si escondido)" % [
+		rugidos, EfectoSuelo.calentados.has("rugido")])
+	Captura.foto("captura-presentacion-rugido.png")   # (las ondas del grito, a media salida)
+	await get_tree().create_timer(0.3).timeout   # a 1,1 s de empezar la presentación
 	var camara: Camera2D = johnny.get_node("Camara")
 	print("Presentación (jefe %s), a mitad: zoom %.2f (esperado: %.1f; 1 si entra escondido, como la Modista) · cámara desplazada %d hacia el jefe (esperado: más de 0; 0 si escondido) · a %d del jefe (esperado: menos de 60, que enfoca algo por encima; da igual si escondido) · Johnny quieto %s y sin daño %s (esperado: true, true) · el jefe gritando %s (esperado: true; false si escondido) · nombre «%s» a la vista %s (esperado: true) · barra oculta %s (esperado: true)" % [
 		planta.jefe, camara.zoom.x, presentacion.ZOOM, roundi(camara.offset.length()),

@@ -44,6 +44,8 @@
 #    (tools/pixelfx/desfibrilador.js). También va de hijo de Johnny.
 #  - "mutar": Johnny elige una mutación (M54; partida.elegir_mutacion): se enciende de morado, dos hebras de ADN le suben
 #    enroscadas, ondas blandas por el suelo y burbujitas (tools/pixelfx/mutar.js). De hijo de Johnny.
+#  - "rugido": el grito de un jefe en su presentación (M57; ui/presentacion.gd): ondas de sonido que salen de la cabeza,
+#    un destello rojizo y una onda de polvo a sus pies que levanta piedrecitas (tools/pixelfx/rugido.js).
 class_name EfectoSuelo
 extends Node2D
 
@@ -111,6 +113,9 @@ const TIPOS := {
 	"mutar": {"hojas": [preload("res://assets/sprites/mutar-detras.png"),
 		preload("res://assets/sprites/mutar-delante.png"), preload("res://assets/sprites/mutar-brillo.png")],
 		"origen": Vector2(56, 84), "fotogramas": 22},
+	"rugido": {"hojas": [preload("res://assets/sprites/rugido-detras.png"),
+		preload("res://assets/sprites/rugido-delante.png"), preload("res://assets/sprites/rugido-brillo.png")],
+		"origen": Vector2(104, 112), "fotogramas": 24},
 }
 const ONDA_PISOTON := 200.0   # hasta dónde llega la onda del "pisoton" a escala 1
 # El reventón de sangre de cada tipo de zombi (el que no está, el rojo)
