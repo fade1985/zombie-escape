@@ -8,7 +8,7 @@
 # habitación al entrar, y lo que fuera a decir: partida.decir lo deja en "pendiente") y lo dice al acabar; el jefe se
 # pone en su pose de gritar (su estado "grito", el mismo de cuando se enfada, que también lo deja sin recibir daño) y
 # un foco lo alumbra (menos a los jefes de los Apartamentos: SIN_FOCO, se ven con la luz fija de su sala); al acabar echa
-# a andar como siempre.
+# a andar como siempre. Al gritar, a sus pies salen las ondas del rugido (M57, EfectoSuelo "rugido").
 # Los jefes que entran a su manera (la Modista, escondida
 # entre los maniquíes: no empiezan en "andar") se presentan sin tocarlos ni enfocarlos: solo las franjas, el nombre y
 # el rugido. partida.gd no deja pausar ni abrir el inventario mientras tanto ("activa"), ni las mutaciones actúan
@@ -114,6 +114,8 @@ func presentar(partida: Node, jefa: Node2D, texto_nombre: String) -> void:
 	# los que empiezan andando se ponen a gritar desde ya (sin recibir daño ni hacerlo) y se les enfoca; los que entran
 	# a su manera (la Modista, escondida), ni se tocan ni se enfocan
 	var normal: bool = jefa.get("estado") == "andar"
+	if normal:
+		EfectoSuelo.precalentar(jefa.get_parent(), "rugido")   # (que no dé un tirón al gritar)
 	var foco: PointLight2D = null
 	if normal:
 		if jefa.has_method("cambiar"):
@@ -156,6 +158,8 @@ func presentar(partida: Node, jefa: Node2D, texto_nombre: String) -> void:
 	# final); y el nombre
 	if normal and is_instance_valid(jefa):
 		jefa.set("t", 0.0)
+		# las ondas del grito y el polvo a sus pies (M57; EfectoSuelo "rugido"), junto a él (no de hijo: hay jefes que crecen)
+		EfectoSuelo.soltar(jefa.get_parent(), "rugido", jefa.position)
 	Sonido.tocar("rugido")
 	create_tween().tween_property(nombre, "modulate:a", 1.0, NOMBRE_ENTRA)
 	await get_tree().create_timer(QUIETO - GRITO, false).timeout
