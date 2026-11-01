@@ -96,6 +96,8 @@ func _physics_process(delta: float) -> void:
 			continue
 		if id == "flatulento":   # (para que la primera nube no pare el juego un momento)
 			EfectoSuelo.precalentar(johnny.get_parent(), "gases")
+		if id == "tentacular":   # (lo mismo, los tentáculos: M29)
+			EfectoSuelo.precalentar(johnny.get_parent(), "tentaculos")
 		# mientras el jefe se presenta, la cuenta se queda parada en lo que tardará cuando acabe
 		if presentando:
 			espera[id] = TRAS_PRESENTACION
@@ -124,7 +126,8 @@ func actuar(id: String) -> bool:
 			for z in zs:
 				z.velocity = p.direction_to(z.global_position) * m.empuje * z.empuje
 				z.aturdido = maxf(z.aturdido, m.aturde)
-			Particulas.anillo(johnny, p, m.radio, Color("#b5179e"))
+			# (M29: los tentáculos que restallan alrededor, hasta donde llega el empujón; le siguen)
+			EfectoSuelo.soltar(johnny, "tentaculos", Vector2.ZERO, m.radio / EfectoSuelo.RADIO_TENTACULOS)
 			Sonido.tocar("latigazo")
 		"gastro":
 			# al zombi (o la portera) más cercano que no esté a oscuras ni tras una pared (por encima de los muebles sí)

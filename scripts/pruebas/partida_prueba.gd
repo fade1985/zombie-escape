@@ -80,6 +80,7 @@
 #   --reventon-sangre   los zombis que mueren de un golpe fuerte revientan en sangre (M49)      [prueba_armas.gd]
 #   --recoger-curar     el destello al recoger billetes (M53) y la curación de la médica (M56) [prueba_armas.gd]
 #   --desfibrilador     Johnny cae con el talento Desfibrilador: las descargas y el latido (M55) [prueba_armas.gd]
+#   --tentacular        la mutación Tentacular empuja a los zombis y le salen los tentáculos (M29) [prueba_armas.gd]
 #   --llamada           la atraedora llama a los zombis: una onda amarilla en cada pitido (M52) [prueba_armas.gd]
 #   --impactos          los golpes de los jefes: el pisotón al aterrizar y el golpe contra la pared (M58) [prueba_armas.gd]
 #   --escarcha          la congeladora explota en escarcha y los zombis congelados también la sueltan (M51) [prueba_armas.gd]
@@ -437,6 +438,9 @@ func empezar_prueba() -> void:
 	elif "--desfibrilador" in args:
 		set_process(false)   # sin la prueba larga
 		probar_desfibrilador()
+	elif "--tentacular" in args:
+		set_process(false)   # sin la prueba larga
+		probar_tentacular()
 	elif "--llamada" in args:
 		set_process(false)   # sin la prueba larga
 		probar_llamada()
