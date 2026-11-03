@@ -19,6 +19,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   (ahora solo se queda parado delante de la puerta).
 - **M64** La cuenta atrás tiene un diseño que no pega con la estética del juego: cambiarlo.
   (La del rescate del superviviente; la barricada, la avería y la joyería llevan una parecida: preguntar si son todas.)
+- **M65** Cuando el zombi gordo muere y esparce el ácido, que Johnny se vea con el ácido encima, como los zombis a los
+  que les afecta.
 
 
 ## Por limar
