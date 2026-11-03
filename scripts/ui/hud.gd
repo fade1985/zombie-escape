@@ -284,12 +284,81 @@ func ancho_texto(s: String, tamano: int) -> float:
 	return Tema.FUENTE.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano).x
 
 
-# Una tecla pequeña pegada a una casilla (Q para cambiar de arma, F para cambiar de lanzable)
-func tecla(c: Control, donde: Vector2, letra: String) -> void:
+# Lo que se pulsa para una acción, pequeño y pegado a una casilla (cambiar de arma, cambiar de lanzable, las curas): la
+# tecla que tenga puesta o, jugando con el mando (Controles.con_mando), el dibujo de su botón (boton_mando). "donde" es la
+# esquina de arriba a la izquierda de la tecla (12 × 12); el botón del mando va centrado en el mismo sitio
+func tecla(c: Control, donde: Vector2, accion: String) -> void:
+	var boton := Controles.boton_de(accion) if Controles.con_mando else null
+	if boton:
+		boton_mando(c, donde + Vector2(6, 6), boton)
+		return
 	var r := Rect2(donde, Vector2(12, 12))
 	c.draw_rect(r.grow(1), Tema.LINEA)
 	c.draw_rect(r, Tema.GRIS)
-	c.draw_string(Tema.FUENTE, donde + Vector2(3, 10), letra, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Tema.LINEA)
+	c.draw_string(Tema.FUENTE, donde + Vector2(3, 10), Controles.tecla_de(accion).left(1), HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Tema.LINEA)
+
+
+# Los colores de los botones de la cara del mando (los de un mando de Xbox) y el gris de los demás
+const COLOR_BOTON := {JOY_BUTTON_A: Color("#5fb84a"), JOY_BUTTON_B: Color("#d9483b"), JOY_BUTTON_X: Color("#3f7fd9"),
+	JOY_BUTTON_Y: Color("#e6b91e")}
+const LETRA_BOTON := {JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",   # no-tr (nombres de botones)
+	JOY_BUTTON_LEFT_SHOULDER: "LB", JOY_BUTTON_RIGHT_SHOULDER: "RB", JOY_BUTTON_LEFT_STICK: "L", JOY_BUTTON_RIGHT_STICK: "R",   # no-tr
+	JOY_BUTTON_START: "≡", JOY_BUTTON_BACK: "▪"}   # no-tr
+const GRIS_MANDO := Color("#a49cb0")
+const CRUCETA := Color("#5e566c")   # (más oscura que GRIS_MANDO: clara parecería la cruz de una cura)
+
+
+# El dibujo de un botón del mando, centrado en "centro": los de la cara (A, B, X, Y), redondos y de su color; LB y RB,
+# alargados; LT y RT, gatillos (con la punta redonda); la cruceta, una cruz con el brazo que toca en amarillo; el resto
+# (pulsar los sticks, Start, Select, empujar un stick), un redondo gris con su letra
+func boton_mando(c: Control, centro: Vector2, ev: InputEvent) -> void:
+	if ev is InputEventJoypadMotion:
+		if ev.axis in [JOY_AXIS_TRIGGER_LEFT, JOY_AXIS_TRIGGER_RIGHT]:
+			var r := Rect2(centro - Vector2(9, 3), Vector2(18, 10))
+			c.draw_circle(Vector2(centro.x, r.position.y), 10.0, Tema.LINEA, true, -1.0, false)
+			c.draw_rect(r.grow(1), Tema.LINEA)
+			c.draw_circle(Vector2(centro.x, r.position.y), 9.0, GRIS_MANDO, true, -1.0, false)
+			c.draw_rect(r, GRIS_MANDO)
+			letra_boton(c, centro + Vector2(0, 1), "LT" if ev.axis == JOY_AXIS_TRIGGER_LEFT else "RT", Tema.LINEA)   # no-tr
+		else:
+			redondo(c, centro, GRIS_MANDO)
+			letra_boton(c, centro, "L" if ev.axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y] else "R", Tema.LINEA)   # no-tr (el stick)
+		return
+	var b: int = ev.button_index
+	match b:
+		JOY_BUTTON_A, JOY_BUTTON_B, JOY_BUTTON_X, JOY_BUTTON_Y:
+			redondo(c, centro, COLOR_BOTON[b])
+			letra_boton(c, centro, LETRA_BOTON[b], Color.WHITE)
+		JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER:
+			var r := Rect2(centro - Vector2(10, 6), Vector2(20, 12))
+			c.draw_rect(r.grow(1), Tema.LINEA)
+			c.draw_rect(r, GRIS_MANDO)
+			letra_boton(c, centro, LETRA_BOTON[b], Tema.LINEA)
+		JOY_BUTTON_DPAD_UP, JOY_BUTTON_DPAD_DOWN, JOY_BUTTON_DPAD_LEFT, JOY_BUTTON_DPAD_RIGHT:
+			var brazo: Vector2 = {JOY_BUTTON_DPAD_UP: Vector2(0, -1), JOY_BUTTON_DPAD_DOWN: Vector2(0, 1),
+				JOY_BUTTON_DPAD_LEFT: Vector2(-1, 0), JOY_BUTTON_DPAD_RIGHT: Vector2(1, 0)}[b]
+			var largo := Rect2(centro - Vector2(8, 3), Vector2(16, 6))
+			var alto := Rect2(centro - Vector2(3, 8), Vector2(6, 16))
+			c.draw_rect(largo.grow(1), Tema.LINEA)
+			c.draw_rect(alto.grow(1), Tema.LINEA)
+			c.draw_rect(largo, CRUCETA)
+			c.draw_rect(alto, CRUCETA)
+			c.draw_rect(Rect2(centro + brazo * 5.0 - Vector2(3, 3), Vector2(6, 6)), Tema.AMARILLO)
+		_:
+			redondo(c, centro, GRIS_MANDO)
+			letra_boton(c, centro, LETRA_BOTON.get(b, "·"), Tema.LINEA)   # no-tr
+
+
+# Un botón redondo del mando, con su borde oscuro (draw_circle: Formas.disco, a este tamaño, sale octogonal)
+func redondo(c: Control, centro: Vector2, color: Color) -> void:
+	c.draw_circle(centro, 8.0, Tema.LINEA, true, -1.0, false)
+	c.draw_circle(centro, 7.0, color, true, -1.0, false)
+
+
+# Las letras de un botón del mando, centradas en "centro"
+func letra_boton(c: Control, centro: Vector2, texto: String, color: Color) -> void:
+	var ancho := ancho_texto(texto, 11)
+	c.draw_string(Tema.FUENTE, Vector2(roundf(centro.x - ancho / 2.0), centro.y + 4), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, color)
 
 
 # Dibuja con un saltito: más grande al empezar ("k" de 1 a 0), alrededor del centro de "r"
@@ -339,8 +408,8 @@ func pintar_armas() -> void:
 	var vieja := mezclar(grande, pequena, k)
 	vieja.position -= arco * 0.4
 	casilla(armas, vieja, Objetos.icono(otra), lerpf(1.0, 0.6, cambio), Vector2.ZERO, johnny.calidad(otra))
-	if cambio >= 1.0:
-		tecla(armas, pequena.position + Vector2(MEDIANA - 8, -8), "Q")
+	if cambio >= 1.0 and otra != "":   # (sin arma a distancia no hay a qué cambiar)
+		tecla(armas, pequena.position + Vector2(MEDIANA - 8, -8), "cambiar_arma")
 	var nueva := mezclar(pequena, grande, k)
 	nueva.position += arco
 	con_salto(armas, nueva, salto_arma)
@@ -425,7 +494,7 @@ func pintar_lanzar() -> void:
 	if lz.cuantas(lz.tipo) > 0:
 		esquinas(lanzar, cursor)
 	if lista.size() > 1:
-		tecla(lanzar, cursor.position + Vector2(cursor.size.x - 6, -10), "F")
+		tecla(lanzar, cursor.position + Vector2(cursor.size.x - 6, -10), "cambiar_lanzable")
 
 
 # ── Las curas ──
@@ -476,7 +545,7 @@ func pintar_curas() -> void:
 		var s := "x%d" % lista[i][1]
 		texto(curas, Vector2(r.end.x - ancho_texto(s, 16) + 4, r.end.y - 1), s, 16, Tema.TINTA)
 		if not Tactil.activo:   # (en el móvil, los botones de debajo del minimapa)
-			tecla(curas, r.position + Vector2(MEDIANA - 6, -10), Controles.tecla_de(Objetos.USABLES[id].accion).left(1))
+			tecla(curas, r.position + Vector2(MEDIANA - 6, -10), Objetos.USABLES[id].accion)
 
 
 func mover_barra(delta: float) -> void:

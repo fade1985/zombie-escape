@@ -80,7 +80,7 @@ func _ready() -> void:
 func como_seguir() -> String:
 	if Tactil.activo:
 		return Idioma.t("Toca la pantalla para continuar")
-	if not Input.get_connected_joypads().is_empty():
+	if Controles.con_mando:
 		return Idioma.t("Pulsa cualquier botón para continuar · B para saltar")
 	return Idioma.t("Pulsa cualquier tecla para continuar · Esc para saltar")
 

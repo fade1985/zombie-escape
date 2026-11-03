@@ -16,6 +16,27 @@ const ACCIONES := ["arriba", "izquierda", "abajo", "derecha", "atacar", "esquiva
 	"lanzar", "cambiar_lanzable", "usar_vendas", "usar_botiquin", "inventario", "pausa", "cambiar_modo"]
 
 
+# ¿Se está jugando con el mando? Lo último que ha tocado el jugador (fijarse, desde pantalla.gd): un botón o un stick del
+# mando lo pone; una tecla, un clic o mover el ratón lo quita. Al arrancar, si hay un mando enchufado. Con él, el HUD
+# enseña los botones del mando y los textos (tutoriales, relato...) hablan de botones en vez de teclas (M44)
+static var con_mando := not Input.get_connected_joypads().is_empty()
+
+
+# Mira cada cosa que pulsa el jugador para saber si juega con el mando o con el teclado y el ratón (con_mando)
+static func fijarse(ev: InputEvent) -> void:
+	if (ev is InputEventJoypadButton and ev.pressed) or (ev is InputEventJoypadMotion and absf(ev.axis_value) > 0.5):
+		con_mando = true
+	elif (ev is InputEventKey and ev.pressed) or (ev is InputEventMouseButton and ev.pressed) \
+			or (ev is InputEventMouseMotion and ev.relative.length() > 4.0):
+		con_mando = false
+
+
+# El botón del mando de una acción (el primero que tenga), para dibujarlo en el HUD; null si no tiene
+static func boton_de(accion: String) -> InputEvent:
+	var lista := eventos(accion, true)
+	return lista[0] if not lista.is_empty() else null
+
+
 # La tecla del teclado de una acción, para enseñarla (en el HUD y en las fichas): "-" si no tiene
 static func tecla_de(accion: String) -> String:
 	for ev in eventos(accion, false):

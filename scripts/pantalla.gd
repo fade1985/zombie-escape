@@ -65,6 +65,7 @@ func ajustar_escala() -> void:
 
 
 func _input(evento: InputEvent) -> void:
+	Controles.fijarse(evento)   # (¿juega con el mando o con el teclado? Para lo que se enseña en pantalla)
 	if not (evento is InputEventKey and evento.pressed and not evento.echo):
 		return
 	if evento.keycode == KEY_F11 or (evento.alt_pressed and evento.keycode in [KEY_ENTER, KEY_KP_ENTER]):

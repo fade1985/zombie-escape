@@ -283,6 +283,56 @@ func probar_hud() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --hudmando": las teclas pegadas a las casillas del HUD (cambiar de arma, cambiar de lanzable y las dos
+# curas) según con qué se juegue (Controles.con_mando, M44). Con una tecla pulsada, las del teclado
+# (captura-hudmando-teclado.png); con un botón del mando, los dibujos de sus botones (captura-hudmando-mando.png); con los
+# botones cambiados a LB, LT, A y la cruceta arriba, esos (captura-hudmando-otros.png); y al mover el ratón, otra vez las
+# teclas. Deja los controles de serie y se cierra
+func probar_hud_mando() -> void:
+	var antes := Guardado.cargar()
+	for t in ["granada", "atraedora"]:
+		lanzables.meter(t, 2)
+		lanzables.a_la_mano(lanzables.repuesto.find(t))
+	mochila.clear()
+	mochila.append_array(["vendas", "vendas", "botiquin"])
+	var tecla := InputEventKey.new()
+	tecla.keycode = KEY_CTRL
+	tecla.physical_keycode = KEY_CTRL
+	tecla.pressed = true
+	Input.parse_input_event(tecla)
+	await get_tree().create_timer(0.5).timeout
+	print("HUD mando · tras una tecla: con mando %s (esperado: false) · teclas %s, %s, %s, %s" % [Controles.con_mando,
+		Controles.tecla_de("cambiar_arma"), Controles.tecla_de("cambiar_lanzable"), Controles.tecla_de("usar_vendas"),
+		Controles.tecla_de("usar_botiquin")])
+	Captura.foto("captura-hudmando-teclado.png")
+	Input.parse_input_event(PruebaMando.boton(JOY_BUTTON_GUIDE))
+	Input.parse_input_event(PruebaMando.boton(JOY_BUTTON_GUIDE, false))
+	await get_tree().create_timer(0.3).timeout
+	print("HUD mando · tras un botón del mando: con mando %s (esperado: true) · botones %s, %s, %s, %s (esperado: Y, RB, Cruceta izq., Cruceta dcha.) · el tutorial diría «%s»" % [
+		Controles.con_mando, Opciones.nombre_evento(Controles.boton_de("cambiar_arma")),
+		Opciones.nombre_evento(Controles.boton_de("cambiar_lanzable")), Opciones.nombre_evento(Controles.boton_de("usar_vendas")),
+		Opciones.nombre_evento(Controles.boton_de("usar_botiquin")), Tutoriales.tecla("cambiar_arma")])
+	Captura.foto("captura-hudmando-mando.png")
+	# otros botones: los demás dibujos (alargado, gatillo, redondo de color, cruceta hacia arriba)
+	var gatillo := InputEventJoypadMotion.new()
+	gatillo.axis = JOY_AXIS_TRIGGER_LEFT
+	gatillo.axis_value = 1.0
+	Controles.cambiar("cambiar_arma", Controles.de_texto({"t": "jb", "b": JOY_BUTTON_LEFT_SHOULDER}))
+	Controles.cambiar("cambiar_lanzable", Controles.de_texto({"t": "ja", "e": JOY_AXIS_TRIGGER_LEFT, "v": 1}))
+	Controles.cambiar("usar_vendas", Controles.de_texto({"t": "jb", "b": JOY_BUTTON_A}))
+	Controles.cambiar("usar_botiquin", Controles.de_texto({"t": "jb", "b": JOY_BUTTON_DPAD_UP}))
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-hudmando-otros.png")
+	var raton := InputEventMouseMotion.new()
+	raton.relative = Vector2(20, 0)
+	Input.parse_input_event(raton)
+	await get_tree().process_frame
+	print("HUD mando · tras mover el ratón: con mando %s (esperado: false)" % Controles.con_mando)
+	Controles.restablecer()
+	Guardado.escribir(antes)
+	get_tree().quit()
+
+
 # Con "--captura --llave": la llave de la jefa en el suelo (mapa.poner_llave), en la habitación más grande de un
 # apartamento sin zombis y con la penumbra de siempre, con un arma épica al lado (soltar_arma: su luz morada también
 # alumbra el suelo). Tres fotos: con la luz blanca de la llave (captura-llave-con.png), sin ella, oculta

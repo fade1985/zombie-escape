@@ -249,7 +249,7 @@ func fin(r: Dictionary) -> void:
 	botones.alignment = BoxContainer.ALIGNMENT_CENTER
 	columna.add_child(botones)
 	# «Otra vez» vuelve a empezar el edificio; con teclado, también la R (en el móvil y con mando no se dice)
-	var con_r := not Tactil.activo and Input.get_connected_joypads().is_empty()
+	var con_r := not Tactil.activo and not Controles.con_mando
 	var otra_vez := Idioma.t("Jugar otra vez") if r.gano else Idioma.t("Otra vez")
 	var otra := boton(botones, "%s (R)" % otra_vez if con_r else otra_vez, al_final.bind(reintentar), "BotonGrande")   # no-tr
 	boton(botones, Idioma.t("Menú principal"), al_final.bind(menu_principal))

@@ -5,6 +5,12 @@
 El mando sigue lo habitual en juegos de dos sticks: gatillos para atacar (RT) y lanzar (LT), y esquivar también en
 LB para no soltar el stick derecho al apuntar. Todo se puede cambiar en Opciones.
 
+Lo que se enseña en pantalla sigue a lo último que ha tocado el jugador (`Controles.con_mando`, M44): un botón o un
+stick del mando y el HUD dibuja los botones del mando junto a sus casillas (cambiar de arma, de lanzable, las curas:
+A, B, X, Y redondos y de su color, LB/RB alargados, LT/RT gatillos, la cruceta con su brazo en amarillo); una tecla, un
+clic o mover el ratón y vuelven las teclas, siempre las que tenga puestas en Opciones. Los tutoriales, el relato y el
+cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captura --hudmando`.
+
 | Acción | Teclado y ratón | Mando |
 |---|---|---|
 | Moverse | WASD o flechas | stick izquierdo |

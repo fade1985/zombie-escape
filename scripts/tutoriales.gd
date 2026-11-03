@@ -225,10 +225,10 @@ static func atacar_modo() -> String:
 	return Idioma.t("Johnny apunta y ataca solo al zombi más cercano: tú preocúpate de moverte.")
 
 
-# El nombre de lo que se pulsa para una acción: en el móvil, el botón de la pantalla; con un mando enchufado, sus
+# El nombre de lo que se pulsa para una acción: en el móvil, el botón de la pantalla; jugando con el mando, sus
 # botones; si no, las teclas
 static func tecla(accion: String) -> String:
-	var mando := not Input.get_connected_joypads().is_empty()
+	var mando := Controles.con_mando
 	match accion:
 		"moverse":
 			if Tactil.activo:
