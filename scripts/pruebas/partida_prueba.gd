@@ -237,7 +237,8 @@
 #   --caza              el acompañante va a por los zombis que ve                            [prueba_varias.gd]
 #   --gastro            el vómito de la Gastroenteritis no cruza las paredes                 [prueba_varias.gd]
 #   --flatulento        el alcance de la mutación Flatulento (140): quién se paraliza a 50, 110 y 190, y su nube [prueba_varias.gd]
-#   --rescate           el superviviente encerrado en su baño (y su horda), los vecinos de las viviendas, la barricada,
+#   --rescate           el superviviente encerrado en su baño (y su horda, con él trasteando en la cerradura:
+#                       captura-horda-trastea-*.png y -chispas.png), los vecinos de las viviendas, la barricada,
 #                       la escolta y la avería: lo mismo que en la prueba larga          [supervivientes.gd, probar()]
 #   --evento X          ese evento sorpresa: apagon (con un superviviente pidiendo ayuda a oscuras: fotos
 #                       apagon-socorro-*), incendio u horda                                  [eventos.gd, probar()]

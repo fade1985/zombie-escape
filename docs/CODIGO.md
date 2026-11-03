@@ -332,7 +332,7 @@ en una línea.
   apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La
   ventana de los tercios sí sale con la guía, al perder el primero (M35; `--guiado --tercios`).
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos; la horda dura 1 minuto de cerradura con unos 150 zombis en grupos cada vez más seguidos y por tramos de 20 s, `HORDA` y `TIPOS`, M40) y `aliado.gd` (cada superviviente que te
-  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
+  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`; en la horda, delante de la puerta, trastea en la cerradura: echado hacia ella, a empujones, con chispitas que lucen a oscuras y un clic, `trastear`, M63). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro

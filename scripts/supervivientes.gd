@@ -826,6 +826,25 @@ func probar_horda() -> void:
 		get_tree().get_nodes_in_group("zombis").size(), a.dicho, partida.mapa.cosas.get_children().filter(
 		func(n): return n.get("icono") in iconos_lanzables()).size()])
 	Captura.foto("captura-horda.png")
+	# trasteando en la cerradura (M63): echado hacia la puerta, a empujones y con chispitas de vez en cuando
+	var desvio := []
+	johnny.position = a.position + Vector2(-120, -40)   # (apartado, para que no lo tape en la foto)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(1.5, false).timeout   # (que se vaya el aviso de la puerta, que tapa sus manos)
+	for i in 3:
+		await get_tree().create_timer(0.15, false).timeout
+		desvio.append(a.cuerpo.position.round())
+		Captura.foto("captura-horda-trastea-%d.png" % i)
+	a.ganzua_t = 0.0   # (y una chispita de la cerradura, ya)
+	var chispas := 0
+	for i in 20:   # (en cuanto salten, y un poco después, para que estén ya dibujadas)
+		await get_tree().physics_frame
+		chispas = maxi(chispas, a.chispitas.size())
+		if chispas > 0 and a.chispitas.size() > 0 and a.chispitas[0].t < 0.15:
+			break
+	Captura.foto("captura-horda-chispas.png")
+	print("Trasteando: en su sitio %s · mira a la puerta %s · el dibujo movido %s · chispitas %d (esperado: true · que cambie · más de 0)" % [
+		a.en_su_sitio(), a.mira_forzar, desvio, chispas])
 	a.inv_t = 0.0
 	a.recibir_dano(500)
 	print("A %.0f de su sitio en la puerta" % a.global_position.distance_to(a.sitio_forzar))

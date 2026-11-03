@@ -87,6 +87,8 @@ var rayo_a := Vector2.ZERO
 var forzando := false
 var sitio_forzar := Vector2.ZERO
 var mira_forzar := Vector2.UP
+var ganzua_t := 0.0        # cuánto falta para las próximas chispitas de la cerradura (trastear)
+var chispitas: Array = []  # las que vuelan: {p (junto a él), v, t}; se pintan en "encima", que luce sin luz
 var herida := false        # la farmacéutica, mientras Johnny la lleva a las escaleras (escolta.gd)
 var vida := VIDA
 var caido := false
@@ -170,6 +172,11 @@ func _physics_process(delta: float) -> void:
 	inv_t = maxf(0.0, inv_t - delta)
 	golpe_t = maxf(0.0, golpe_t - delta)
 	cura_t = maxf(0.0, cura_t - delta)
+	for c in chispitas:
+		c.t -= delta
+		c.p += c.v * delta
+		c.v.y += 260.0 * delta   # (caen)
+	chispitas = chispitas.filter(func(c): return c.t > 0.0)
 	rayo_t = maxf(0.0, rayo_t - delta)
 	calma = maxf(0.0, calma - delta)
 	dicho_t += delta
@@ -303,6 +310,27 @@ func forzar() -> void:
 		return
 	ir_a(sitio_forzar, 220.0)
 	animar("andar" if velocity.length() > 20.0 else "reposo", mira_forzar)
+	if en_su_sitio() and velocity.length() <= 20.0:
+		trastear()
+
+
+# Forzando la cerradura (M63): echado hacia la puerta, trastea a golpecitos (un empujón corto y vuelve, con un temblor
+# de las manos) y de vez en cuando salta una chispita de la cerradura con un clic metálico
+func trastear() -> void:
+	var golpe := pow(maxf(0.0, sin(tiempo * 7.0)), 3.0)   # (casi todo el rato 0 y, a ratos, un empujón corto)
+	cuerpo.position = mira_forzar * (2.0 + golpe * 6.0) + Vector2(0, 2.0)   # (inclinado y un poco agachado)
+	cuerpo.rotation = sin(tiempo * 31.0) * 0.05 + mira_forzar.x * 0.1
+	ganzua_t -= get_physics_process_delta_time()
+	if ganzua_t > 0.0:
+		return
+	ganzua_t = randf_range(0.6, 1.4)
+	# (a la altura de las manos: con hoja mide el doble que con formas; en la sala oscura, sin luz, como el bocadillo)
+	# (de espaldas, la cerradura queda tapada: saltan sobre todo a los lados, para que asomen)
+	var cerradura := mira_forzar * Vector2(16.0, 4.0) + Vector2(0, -20 if persona else -40)
+	for i in 4:
+		chispitas.append({"p": cerradura + Vector2(randf_range(-3, 3), randf_range(-3, 3)),
+			"v": Vector2(randf_range(60, 140) * (1 if i % 2 else -1), randf_range(-70, -10)), "t": randf_range(0.2, 0.35)})
+	Sonido.tocar("ganzua")
 
 
 # Herida (escolta.gd): va detrás de Johnny, despacio y cojeando (o tumbada, si ha caído)
@@ -702,6 +730,9 @@ func dibujar_encima() -> void:
 		pts.append(hasta)
 		Formas.polilinea(encima, pts, LINEA, 6.0)
 		Formas.polilinea(encima, pts, Color("#bff4ff"), 3.0)
+	# las chispitas de la cerradura (trastear), blancas y amarillas
+	for i in chispitas.size():
+		encima.draw_rect(Rect2(chispitas[i].p - Vector2(1.5, 1.5), Vector2(3, 3)), Color.WHITE if i % 2 else Tema.AMARILLO)
 	# con hoja mide lo que Johnny (el doble que el dibujo con formas): la vida y el bocadillo van más arriba
 	var alto := -64.0 if persona else -104.0
 	if forzando or herida:
