@@ -17,7 +17,9 @@ en una línea.
 - `partida_prueba.tscn`: la misma con el script de prueba; el menú la abre en vez de la otra con `--captura`.
 - `personajes/`: `johnny.tscn`, un `zombi_<tipo>.tscn` por tipo (sus números en el Inspector) y uno por jefe. Los
   shaders: `cintura` (Johnny partido por la cintura al golpear andando; incluye `quemaduras.gdshaderinc` para arder
-  como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`), `destello` + `quemaduras.gdshaderinc` (destello,
+  como los zombis, `johnny.arder`, y de `Llamas` solo le queda la luz; prueba: `--captura --johnny-ardiendo`; y las manchas de ácido
+  de los zombis cuando lleva algo que corroe, `Johnny.CORROEN`: el veneno del gordo, el ácido de la portera y la porquería del Glotón,
+  M65; prueba: `--captura --reventon`), `destello` + `quemaduras.gdshaderinc` (destello,
   hielo, fuego y ácido de los enemigos; el "vomito" de los bañados por la Gastroenteritis, el estado `vomito` que pone
   su charco, solo para verse, 2 s, prueba `--captura --vomito`; y el "metal" del Gymbro con suplementos, que sube desde los pies y se desconcha
   con "pelado") y `brillo`.

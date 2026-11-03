@@ -108,6 +108,7 @@ var invulnerable := 0.0    # tiempo que le queda sin poder recibir daño
 var estados := {}          # lo que le han puesto los charcos (estados.gd): fuego, veneno, lejía...
 var pisando := {}          # los estados de los charcos que pisa en este paso
 var estado_dano := 0.0     # el daño de los estados que se va sumando hasta llegar a un punto entero
+var acido_t := 0.0         # lo que lleva algo que corroe encima (CORROEN): las manchas de ácido crecen, como en los zombis
 var llamas: Llamas         # las llamas que le salen si arde
 var a_la_vista := 0        # Ansiedad: los zombis despiertos que se ven en pantalla
 var escudo := 0.0          # Acero y Endurecimiento: lo que le queda de escudo en esta planta (se gasta antes que la vida)
@@ -164,6 +165,9 @@ var modo := "asistido"     # cómo se ataca (ver arriba)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
 
 const ALTO_DIBUJO := 44.0   # lo que mide en píxeles del dibujo, de los pies a la cabeza (para el fuego del shader)
+# Los estados de charco que le corroen: con ellos se le ven encima las manchas de ácido, como a los zombis (M65): el
+# veneno del gordo (su moco y el charco que deja al reventar), el ácido de la fregona de la portera y la porquería del Glotón
+const CORROEN := ["veneno", "acido", "porqueria"]
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var efectos: AnimatedSprite2D = $Efectos   # fogonazo, humo y casquillo al disparar andando
@@ -380,14 +384,22 @@ func _physics_process(delta: float) -> void:
 		quitar_vida(entero, charco_que_quema())
 		if not vivo:
 			return
-	# (el tinte de los estados, sin el naranja del fuego: ese ya lo pone el shader con las llamas)
+	# (el tinte de los estados, sin el naranja del fuego ni el verde de lo que corroe: eso ya lo pone el shader, con las
+	# llamas y con las manchas de ácido, M65)
+	var corroe := CORROEN.any(func(nombre: String) -> bool: return estados.has(nombre))
+	acido_t = acido_t + delta if corroe else 0.0
 	var tintes := estados
-	if estados.has("fuego"):
+	if estados.has("fuego") or corroe:
 		tintes = estados.duplicate()
-		tintes.erase("fuego")
+		for nombre in ["fuego"] + CORROEN:
+			tintes.erase(nombre)
 	sprite.modulate = Color(Estados.tinte(tintes, Time.get_ticks_msec() / 1000.0), sprite.modulate.a)
 	llamas.fuerza = 1.0 if estados.has("fuego") else 0.0
-	arder(llamas.fuerza)
+	arder(llamas.fuerza, Zombi.cuanto_acido(acido_t))
+	if corroe or has_node("LuzAcido"):
+		var luz := Brillo.luz_acido(self, 56.0)
+		luz.visible = corroe
+		luz.fuerza = 0.55
 	Estados.efectos(self, estados, velocity, delta, 60.0, RADIO)
 	if stats.ansiedad:
 		contar_a_la_vista()
@@ -1299,11 +1311,12 @@ func quedarse_quieto() -> void:
 	cambiar_animacion("reposo_" + direccion)
 
 
-# El fuego en su dibujo (0 = nada, 1 = ardiendo), como Zombi.quemaduras: en el cuerpo, con la copia que brilla a
-# oscuras (brillo.gd), y en las piernas de andar
-func arder(fuerza: float) -> void:
-	Zombi.quemaduras(sprite, fuerza, 0.0, tiempo_fuego())
+# El fuego en su dibujo (0 = nada, 1 = ardiendo) y las manchas de ácido (0-1, crecen), como Zombi.quemaduras: en el
+# cuerpo, con la copia que brilla a oscuras (brillo.gd), y en las piernas de andar
+func arder(fuerza: float, acido := 0.0) -> void:
+	Zombi.quemaduras(sprite, fuerza, acido, tiempo_fuego())
 	piernas.material.set_shader_parameter("fuego", fuerza)
+	piernas.material.set_shader_parameter("acido", acido)
 	piernas.material.set_shader_parameter("t", fmod(tiempo_fuego(), 100.0))
 
 

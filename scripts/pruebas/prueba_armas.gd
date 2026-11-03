@@ -874,7 +874,19 @@ func probar_reventon() -> void:
 			int(c.radio()), c.arde_en(c.global_position, 0.0), c.arde_en(c.global_position + Vector2(90, 0), 0.0),
 			c.arde_en(c.global_position + Vector2(130, 0), 0.0), c.gordas.size()])
 	print("  el efecto se ha ido: %s (esperado: true)" % johnny.get_parent().get_children().filter(func(n): return n is EfectoSuelo and n.tipo == "reventon").is_empty())
+	# M65: Johnny dentro del charco se ve con las manchas de ácido encima, como los zombis
+	if not charcos.is_empty():
+		var sitio: Vector2 = johnny.global_position
+		johnny.global_position = (charcos[0] as Node2D).global_position + Vector2(0, 30)
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(1.6).timeout
+		Captura.foto("captura-reventon-johnny.png")
+		print("  Johnny en el charco: veneno %s | manchas %.2f (esperado: true | 1.00)" % [johnny.estados.has("veneno"),
+			johnny.sprite.material.get_shader_parameter("acido")])
+		johnny.global_position = sitio
+		johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(3.4).timeout
+	print("  Johnny ya sin manchas: %.2f (esperado: 0.00)" % johnny.sprite.material.get_shader_parameter("acido"))
 	Captura.foto("captura-reventon-seca.png")
 	get_tree().quit()
 
