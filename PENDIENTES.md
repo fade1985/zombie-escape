@@ -25,8 +25,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   de dar dos objetos aleatorios en lugar de uno.
 - **M40** Rescate del superviviente: que dure un minuto, pero con muchos más zombis y en menos tiempo.
 - **M43** Supervivientes: que los zombis también oigan sus disparos, como pasa con los de Johnny.
-- **M46** Menú principal: falta el botón de salir del juego. Hoy está en el `.exe` pero se oculta en la web
-  (`scripts/ui/menu_principal.gd`, porque el navegador no deja cerrar la pestaña): decidir qué hace allí.
 - **M47** Web: el juego tarda mucho en cargar. Se descarga el motor de Godot (unos 10 MB comprimido) y todo el juego
   de golpe (unos 30 MB: 28 de dibujos y 2,4 de música) antes de empezar. Ideas: hacer más pequeñas las hojas de
   dibujos más grandes (jefe criatura, gerente mutado…), cargar cada jefe solo cuando sale y una pantalla de carga
