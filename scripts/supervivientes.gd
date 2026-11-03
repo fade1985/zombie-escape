@@ -8,7 +8,7 @@
 # la puerta del baño y, al arrimarse, se une al equipo.
 #
 # La horda: al ir a salir del piso con él, la puerta de entrada se cierra de golpe. Él se pone a forzar la
-# cerradura (2 minutos de trabajo) mientras entran zombis por las habitaciones, cada vez más y peores. Si Johnny
+# cerradura (1 minuto de trabajo, M40) mientras entran zombis por las habitaciones, cada vez más y peores. Si Johnny
 # se aleja de él, van a por él; si lo tumban, la cerradura no avanza hasta que Johnny lo levanta (quedarse a su
 # lado). Va diciendo cómo lo lleva y, a mitad, suelta un molotov y una granada. Arriba, la barra y la cuenta atrás.
 #
@@ -100,21 +100,22 @@ const OSCURO := 0.9   # de esta oscuridad para arriba (Luz.nivel: el apagón y l
 # Lo que dice si le dan con Johnny lejos (en la horda y en la escolta de la farmacéutica)
 const LLAMADAS := ["¡Johnny, vuelve!", "¡No me dejes aquí!", "¡Que me comen!"]   # [traducir]
 
-# La horda (números provisionales, los del JS)
+# La horda: un minuto corto pero muy lleno (M40, 3 nov: antes eran 2 minutos y unos 107 zombis; ahora unos 150)
 const HORDA := {
-	"dura": 120.0,     # segundos de trabajo para abrir la puerta (no cuentan mientras está caído)
-	"tope": 55,        # zombis a la vez, como mucho (cuentan también los dormidos del piso: unos 27, desde M19)
+	"dura": 60.0,      # segundos de trabajo para abrir la puerta (no cuentan mientras está caído)
+	"tope": 75,        # zombis a la vez, como mucho (cuentan también los dormidos del piso: unos 27, desde M19)
 	"levantar": 2.0,   # segundos al lado del superviviente caído para levantarlo
 	"lejos": 300.0,    # si Johnny está más lejos que esto de él, los zombis van a por él
-	"cada": [6.0, 3.0],  # segundos entre grupo y grupo, al principio y al final
-	"grupo": [2, 6],   # zombis por grupo, al principio y al final
+	"cada": [3.0, 1.5],  # segundos entre grupo y grupo, al principio y al final
+	"grupo": [4, 8],   # zombis por grupo, al principio y al final
 	"empieza": 190.0,  # a qué distancia de la puerta de entrada se cierra de golpe
+	"tramo": 20.0,     # cada cuántos segundos de cerradura cambian los tipos (TIPOS)
 }
-# Qué zombis entran según el minuto (había un tercer minuto, con venenosos, que con 2 minutos nunca llegaba: se quitó
-# el 27 oct)
+# Qué zombis entran en cada tramo de 20 s: normales con algún lento, luego rápidos y al final también explosivos
 const TIPOS := [
-	["lento", "normal", "normal"],
-	["normal", "normal", "rapido", "rapido", "explosivo", "lento"],
+	["lento", "normal", "normal", "normal"],
+	["normal", "normal", "rapido", "rapido"],
+	["normal", "rapido", "rapido", "explosivo", "explosivo", "lento"],
 ]
 # Lo que va diciendo según lo que lleva de cerradura (de 0 a 1; en español: sale con Idioma.t)
 # [traducir]
@@ -486,7 +487,7 @@ func actualizar_horda(delta: float) -> void:
 	h.grupo_t -= delta
 	if h.grupo_t <= 0.0 and HORDA.dura - h.hecho > 3.0:
 		h.grupo_t = lerpf(HORDA.cada[0], HORDA.cada[1], k)
-		grupo(roundi(lerpf(HORDA.grupo[0], HORDA.grupo[1], k)), TIPOS[mini(1, int(h.hecho / 60.0))])
+		grupo(roundi(lerpf(HORDA.grupo[0], HORDA.grupo[1], k)), TIPOS[mini(TIPOS.size() - 1, int(h.hecho / HORDA.tramo))])
 	if h.hecho >= HORDA.dura:
 		acabar_horda()
 
@@ -511,7 +512,7 @@ func empezar_horda() -> void:
 	partida.decir(Idioma.t("¡La puerta se ha cerrado! Aguanta mientras %s fuerza la cerradura") % nombre_de(a.def), 4.0)
 
 
-# Tres minutos después: la puerta se abre. Los zombis que queden siguen ahí, pero ya se puede salir
+# Un minuto de cerradura después: la puerta se abre. Los zombis que queden siguen ahí, pero ya se puede salir
 func acabar_horda() -> void:
 	Sonido.musica("menu")
 	var a: Aliado = rescate.amigo
