@@ -13,7 +13,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M62** Al coger las curas del botiquín, que un tutorial explique cómo funcionan.
 - **M63** Rescate del superviviente en los Apartamentos: mientras fuerza la cerradura, que haga un gesto o movimiento
   (ahora solo se queda parado delante de la puerta).
 - **M64** La cuenta atrás tiene un diseño que no pega con la estética del juego: cambiarlo.
