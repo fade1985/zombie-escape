@@ -1617,7 +1617,7 @@ func probar_curas() -> void:
 # Con "--captura --curas": las vendas y el botiquín como objetos que se usan con su tecla (partida.usar_cura; sus
 # casillas junto a la barra de vida, ui/hud.gd). Sin ninguno, las casillas no salen; con dos vendas y un botiquín y la
 # vida a medias salen (captura-curas-hud.png). La tecla 1 (teclado de verdad) usa las vendas y cura 25, la 2 el
-# botiquín y cura 50; con la vida llena no se gasta nada. Cómo queda en el móvil (captura-curas-movil.png). Con un solo
+# botiquín y cura 40; con la vida llena no se gasta nada. Cómo queda en el móvil (captura-curas-movil.png). Con un solo
 # tercio y lleno, las vendas no sirven y el botiquín sí: devuelve un tercio y cura (captura-curas-tercio.png); y lo que
 # anda Johnny con 3, 2 y 1 tercios. En el baúl se guardan y se sacan como los demás objetos (captura-curas-baul.png). En
 # un baño, el armarito se abre y suelta un botiquín (captura-curas-armarito.png) que Johnny recoge, y no cura al

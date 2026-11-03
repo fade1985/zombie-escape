@@ -6,7 +6,7 @@
 [node name="Zombi" instance=ExtResource("base")]
 vida_max = 45
 velocidad = 85.0
-dano = 12
+dano = 15
 alcance = 26.0
 ropas = Array[SpriteFrames]([ExtResource("ropa")])
 

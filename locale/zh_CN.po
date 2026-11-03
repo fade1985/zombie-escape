@@ -3615,8 +3615,8 @@ msgid "Al coger el primer botiquín"
 msgstr "第一次捡到急救包时"
 
 #: scripts/tutoriales.gd
-msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
-msgstr "用{usar_botiquin}使用：恢复50点，并恢复失去的一段生命。"
+msgid "Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
+msgstr "用{usar_botiquin}使用：恢复40点，并恢复失去的一段生命。"
 
 #: scripts/tutoriales.gd
 msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."

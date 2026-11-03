@@ -7,7 +7,7 @@
 [node name="Zombi" instance=ExtResource("base")]
 script = ExtResource("script")
 vida_max = 90
-dano = 12
+dano = 15
 ropas = Array[SpriteFrames]([ExtResource("ropa")])
 
 [node name="Sprite" parent="." index="2"]

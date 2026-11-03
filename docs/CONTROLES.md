@@ -22,7 +22,7 @@ cartel del final hablan igual de botones o de teclas. Se prueba con `-- --captur
 | Lanzar (mantener para apuntar, soltar para lanzar) | E o clic derecho | LT |
 | Cambiar lo que se lanza (3 a mano) | F | RB |
 | Usar las vendas (curan 25) | 1 | cruceta izquierda |
-| Usar el botiquín (devuelve un tercio y cura 50) | 2 | cruceta derecha |
+| Usar el botiquín (devuelve un tercio y cura 40) | 2 | cruceta derecha |
 | Inventario | Tab o I | Select |
 | Pausa | Esc | Start |
 
@@ -70,7 +70,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
 - **Vida en tercios:** el tercio que pierdes ya no se cura y, por cada uno, Johnny anda un 15 % más lento (210, 179 y
   147; el zombi rápido va a 165). Solo el botiquín devuelve un tercio perdido.
 - **Curas:** las vendas (25 de vida, sin pasar del tercio en el que estás) y el botiquín (devuelve un tercio perdido y
-  cura 50) van en la mochila y en el baúl como los demás objetos, pero en la mochila caben como mucho 2 botiquines y
+  cura 40) van en la mochila y en el baúl como los demás objetos, pero en la mochila caben como mucho 2 botiquines y
   3 vendas (lo que sobra se queda en el suelo y, al pisarlo, avisa). A la
   derecha de la barra de vida salen sus casillas (solo las que llevas, con cuántas y su tecla); pulsar la tecla lo usa
   al momento, y si no sirve (vida llena; el botiquín, además, sin tercios perdidos) avisa y no gasta nada. Los

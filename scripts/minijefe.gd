@@ -3,7 +3,7 @@
 #
 # Funcionan como la portera, por ESTADOS: andan un rato hacia Johnny, eligen un ataque, lo AVISAN (siempre se
 # puede esquivar) y lo hacen. Lo que es igual en todos está aquí:
-#   - la vida y su barra grande (señal vida_cambiada; la partida les sube un 25 % por planta)
+#   - la vida y su barra grande (señal vida_cambiada; la partida les sube un 35 % por planta: partida.gd, JEFE_POR_PLANTA)
 #   - a media vida se enfadan: un grito sin que les hagan daño, se ponen rojos y les sale vapor de la cabeza
 #   - llamar a otros zombis (señal pide_zombi: la partida los saca)
 #   - moverse con el mismo mapa de navegación que los zombis, recibir golpes y morir

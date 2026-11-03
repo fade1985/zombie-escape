@@ -44,7 +44,7 @@ const LISTA := {
 			"Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."]},
 	"botiquin": {"grupo": "Lo básico", "titulo": "El botiquín", "icono": "botiquin",
 		"cuando": "Al coger el primer botiquín",
-		"lineas": ["Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido.",
+		"lineas": ["Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido.",
 			"Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno.",
 			"Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."]},
 	"inventario": {"grupo": "Lo básico", "titulo": "Inventario y mochila", "icono": "mochila",

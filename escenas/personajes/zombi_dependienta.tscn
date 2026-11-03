@@ -8,7 +8,7 @@
 script = ExtResource("script")
 vida_max = 20
 velocidad = 95.0
-dano = 6
+dano = 8
 ropas = Array[SpriteFrames]([ExtResource("ropa")])
 
 [node name="Sprite" parent="." index="2"]

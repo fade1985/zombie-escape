@@ -1083,3 +1083,48 @@ func probar_acustica() -> void:
 	await ir_a_azotea()
 	print("ACUSTICA %-40s %s" % ["azotea", mapa.acustica_en(johnny.global_position)])
 	get_tree().quit()
+
+
+# Con "--captura --dificultad" (M72, el equilibrio): lo que cambia de una planta a otra. Para cada planta (de la baja a
+# la 4ª), la vida y el zarpazo de un zombi normal, de un rápido y del guardia (partida.gd, ZOMBI_POR_PLANTA) y la vida
+# de la portera (JEFE_POR_PLANTA), con lo que eran antes; y, en doce plantas generadas, cuántos armaritos llevan
+# botiquín y cuántos vendas (planta.gd, ARMARITO_CADA). Solo números, sin fotos. Luego se cierra
+func probar_dificultad() -> void:
+	await get_tree().create_timer(0.3).timeout
+	nueva_planta(1)
+	await montar(0, 0, false)
+	var donde: Vector2 = johnny.position + Vector2(0, 300)
+	var antes_zarpazo := {"normal": 10, "rapido": 8, "guardia": 12}
+	for num in range(1, Planta.PLANTAS + 1):
+		planta.num = num
+		var linea := "Dificultad · planta %d:" % (num - 1)
+		for tipo in ["normal", "rapido", "guardia"]:
+			var z := meter_zombi(tipo, donde)
+			linea += " %s vida %d zarpazo %d (antes %d y %d) ·" % [tipo, z.vida_max, z.dano,
+				ZOMBIS[tipo].instantiate().vida_max, antes_zarpazo[tipo]]
+			z.queue_free()
+		var j := meter_zombi("portera", donde)
+		var base: int = ZOMBIS["portera"].instantiate().vida_max
+		linea += " portera vida %d (antes %d)" % [j.vida_max, int(base * pow(1.25, num - 1))]
+		j.queue_free()
+		print(linea)
+		await get_tree().physics_frame
+	var botiquines := 0
+	var vendas := 0
+	var botiquines_antes := 0
+	for i in 12:
+		Planta.semilla = 2000 + i
+		var p: Dictionary = Planta.generar(1 + i % 5, edificio, jefe_de(1 + i % 5))
+		for s in p.sitios:
+			var lista: Array = s.get("armaritos", [])
+			for k in lista.size():
+				if lista[k].dentro == "botiquin":
+					botiquines += 1
+				else:
+					vendas += 1
+				if k % 2 == 0:   # antes: en cada piso, el primero un botiquín y el siguiente unas vendas
+					botiquines_antes += 1
+	Planta.semilla = 0
+	print("Dificultad · armaritos en 12 plantas: %d botiquines y %d vendas (%.1f botiquines por planta; antes %d botiquines, %.1f por planta)" % [
+		botiquines, vendas, botiquines / 12.0, botiquines_antes, botiquines_antes / 12.0])
+	get_tree().quit()

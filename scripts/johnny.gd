@@ -48,7 +48,7 @@ const ARRANQUE := 14.0     # lo rápido que llega a su velocidad (y frena): igua
 const PASO := {"e": 96.0, "o": 96.0, "se": 84.0, "so": 84.0, "ne": 84.0, "no": 84.0, "s": 84.0, "n": 84.0}
 const RADIO := 18.0        # su círculo de choque (los zombis lo usan para saber si está a tiro)
 
-const INVULNERABLE := 0.9  # segundos sin recibir daño después de un zarpazo (parpadea), como en el juego
+const INVULNERABLE := 0.7  # segundos sin recibir daño después de un zarpazo (parpadea; M72: antes 0,9, como en el juego JS)
 # Lo que anda más lento por cada tercio de vida perdido: con 210 (mejoras.gd), 179 y 147. Con un tercio perdido aún
 # huye del zombi rápido (165); con dos, ya no. En el JS era 0,25 (aquí serían 210, 158 y 105)
 const LENTO_TERCIO := 0.15

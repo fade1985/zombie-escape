@@ -226,7 +226,12 @@ en una línea.
 
 **Partida y progreso**
 - `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o tarjeta y su guardia, jefes, escaleras,
-  ascensor, dinero, soltar objetos y munición, pausa, fin). Tras una derrota (M31: `pesadilla` en el guardado), la
+  ascensor, dinero, soltar objetos y munición, pausa, fin). Cada planta, más dura (M72, en `meter_zombi`): los jefes de
+  planta, `JEFE_POR_PLANTA` (×1,35) de vida por planta, y los demás zombis, `ZOMBI_POR_PLANTA` (+10 %) de vida y de
+  zarpazo por planta (el guardia, solo el zarpazo: su vida ya sube en `poner_guardia`); prueba `--dificultad`, que da
+  los números de cada planta y los de antes. Desde la planta baja, además, zarpazos más fuertes (el `dano` de cada
+  escena de zombi: normal y lento 12, rápido 10, dependienta 8, vigilante y guardia 15) y menos respiro tras un golpe
+  (`johnny.INVULNERABLE`, 0,7 s). Tras una derrota (M31: `pesadilla` en el guardado), la
   partida siguiente empieza con `despertar`: sale de negro, Johnny tumbado en la sala de mantenimiento se levanta
   (`johnny.despertar`, con los dibujos del tropezón) y dice una de `FRASES_DESPERTAR`; prueba `--despertar`. Salir de un sitio no lo reinicia: `montar` hace su mapa solo
   la primera vez (`hacer_mapa`) y al salir lo guarda entero en `mapas`, fuera de la escena, donde nada se mueve; al
@@ -248,11 +253,11 @@ en una línea.
   glotón, el gymbro, el bombero y el doctor Salas (M36: `doble()`, un objeto de más la mitad de las veces que un zombi
   suelta uno, en `partida.gd`; se consigue matando al doctor Salas).
 - `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
-  botiquín, 50, que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
+  botiquín, 40 (M72: antes 50), que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
   la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3, pero en su grupo «Curas» (`CURAS`, 4 casillas, M67: `casillas` las
   pone al final y `ocupadas` cuenta solo las de «Objetos»); se usan con la tecla 1 y la 2,
   `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
-  vendas los sueltan los armaritos de los baños, uno y uno por piso, `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
+  vendas los sueltan los armaritos de los baños, contando por toda la planta un botiquín y dos de vendas (`Planta.ARMARITO_CADA`; M72: antes, uno y uno por piso), `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
   cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (un mismo objeto, 99 como mucho en cada una: `MONTON`; el baúl guarda cuántos hay
   y `objetos_baul` los reparte, y `caben_baul` dice cuántos más entran). Y las **piezas**
   de mejora de las armas (`PIEZAS`: cuerpo a cuerpo, a distancia, especial y arrojable): no salen al azar, las suelta

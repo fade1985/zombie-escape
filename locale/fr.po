@@ -3622,8 +3622,8 @@ msgid "Al coger el primer botiquín"
 msgstr "En ramassant ton premier médikit"
 
 #: scripts/tutoriales.gd
-msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
-msgstr "Utilise-le avec {usar_botiquin} : il soigne 50 et te rend un tiers de vie perdu."
+msgid "Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
+msgstr "Utilise-le avec {usar_botiquin} : il soigne 40 et te rend un tiers de vie perdu."
 
 #: scripts/tutoriales.gd
 msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."

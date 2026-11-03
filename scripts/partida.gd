@@ -55,8 +55,8 @@ const ZOMBIS := {
 	"bombero": preload("res://escenas/personajes/bombero.tscn"),
 	"cientifico_jefe": preload("res://escenas/personajes/cientifico_jefe.tscn"),   # el jefe final de los Apartamentos (la azotea)
 }
-# Los jefes de planta: barra de vida grande, un 25 % más duros en cada planta y, al caer, billetes, munición,
-# objetos y la mutación (el jefe final de un edificio, el gerente, sin lo del 25 % ni la mutación: final_de())
+# Los jefes de planta: barra de vida grande, un 35 % más duros en cada planta (JEFE_POR_PLANTA) y, al caer, billetes,
+# munición, objetos y la mutación (el jefe final de un edificio, el gerente, sin lo de la planta ni la mutación: final_de())
 const JEFES := ["portera", "antidisturbios", "cocinero", "modista", "mascota", "gerente", "gloton", "gymbro", "bombero",
 	"cientifico_jefe"]
 const MAPA := preload("res://scripts/mapa/mapa.gd")
@@ -73,6 +73,8 @@ const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
 const REFUERZOS := 2               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas)
 const BILLETES_GUARDIA := 2
+const JEFE_POR_PLANTA := 1.35     # los jefes de planta, su vida por cada planta que se sube (M72: antes 1,25)
+const ZOMBI_POR_PLANTA := 0.1     # los demás zombis, vida y zarpazo de más por cada planta (M72: antes, nada)
 const BILLETE_ZOMBI := 0.07        # probabilidad de que un zombi suelte un billete
 # La sangre de cada tipo de zombi: el color de su piel (los trozos al reventar) y el de su mancha (del JS)
 const PIELES := {"normal": Color("#8fc46a"), "lento": Color("#8fc46a"), "rapido": Color("#9ed36d"),
@@ -1341,7 +1343,7 @@ func usar_cura(id: String) -> void:
 		numero(johnny.position + Vector2(0, -50), Idioma.t("Tienes la vida al máximo"), Tema.TINTA)
 
 
-# Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 50), más el talento Sanitario y, con la
+# Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 40), más el talento Sanitario y, con la
 # Alerta 4, la mitad
 func cura_de(id: String) -> int:
 	return roundi((Objetos.USABLES[id].cura + johnny.stats.botiquin_extra) * Alerta.botiquin())
@@ -1714,10 +1716,10 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			await get_tree().create_timer(2.0, false).timeout
 			abrir_mutacion())
 	if tipo in JEFES:
-		# Cada planta, un 25 % más dura (como el vecino del juego JS), y con la Alerta 3, más aún y se enfada antes.
+		# Cada planta, un 35 % más dura (JEFE_POR_PLANTA), y con la Alerta 3, más aún y se enfada antes.
 		# El jefe final (el gerente), con su vida justa: ya está en la última planta
 		var de_final := final_de(tipo)
-		var por_planta := pow(1.25, planta.num - 1) if de_final.is_empty() else 1.0
+		var por_planta := pow(JEFE_POR_PLANTA, planta.num - 1) if de_final.is_empty() else 1.0
 		zombi.vida_max = int(zombi.vida_max * por_planta * Alerta.jefe_vida())
 		zombi.enfado = Alerta.jefe_enfado()
 		# Su barra de vida grande, arriba (ui/barra_jefe.gd), y los vecinos que llama
@@ -1741,6 +1743,13 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 	elif "velocidad" in zombi:
 		# con la Alerta 2, todos un poco más rápidos; con el reto del día "Zombis rápidos", bastante más
 		zombi.velocidad *= Alerta.velocidad() * Reto.velocidad()
+		# Cada planta, más duros: ZOMBI_POR_PLANTA más de vida y de zarpazo por planta (M72: antes, iguales en todas). El
+		# guardia, solo el zarpazo: su vida ya sube en poner_guardia(). En la sala de pruebas, como en la planta baja
+		var mas: float = 1.0 + ZOMBI_POR_PLANTA * (planta.num - 1) if not de_mentira else 1.0
+		if tipo != "guardia":
+			zombi.vida_max = roundi(zombi.vida_max * mas)
+		if "dano" in zombi:
+			zombi.dano = roundi(zombi.dano * mas)
 	mapa.cosas.add_child(zombi)
 	return zombi
 

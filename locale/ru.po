@@ -3629,8 +3629,8 @@ msgid "Al coger el primer botiquín"
 msgstr "Когда подбираешь первую аптечку"
 
 #: scripts/tutoriales.gd
-msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
-msgstr "Используй её: {usar_botiquin}. Лечит на 50 и возвращает потерянную треть здоровья."
+msgid "Úsalo con {usar_botiquin}: cura 40 y te devuelve un tercio de vida perdido."
+msgstr "Используй её: {usar_botiquin}. Лечит на 40 и возвращает потерянную треть здоровья."
 
 #: scripts/tutoriales.gd
 msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."

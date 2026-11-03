@@ -65,7 +65,7 @@ const NOMBRES := {
 # [/traducir]
 # Los de curar: no son chatarra, se usan (partida.usar_objeto) desde el inventario («Usar») o con su tecla sin abrirlo
 # ("accion": 1 las vendas y 2 el botiquín; sus casillas junto a la barra de vida, ui/hud.gd), y van al baúl como los
-# demás. Las vendas (de las tiendas del centro comercial) curan 25 y el botiquín, 50 (el que suelta el armarito de los
+# demás. Las vendas (de las tiendas del centro comercial) curan 25 y el botiquín, 40 (el que suelta el armarito de los
 # baños, y el que te prepara la farmacéutica, supervivientes.gd; su icono, assets/ui/iconos/botiquin.png); más con el
 # talento Sanitario, y con la Alerta 4, la mitad ("cura"). Las vendas solo curan dentro del tercio de vida en el que
 # estás; el botiquín, además, devuelve un tercio perdido ("tercio"; johnny.gd, devolver_tercio). Las vendas cuentan en
@@ -73,7 +73,8 @@ const NOMBRES := {
 # [traducir]
 const USABLES := {
 	"vendas": {"cura": 25, "accion": "usar_vendas"},
-	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 50, "accion": "usar_botiquin", "tercio": true},
+	"botiquin": {"nombre": "Botiquín", "icono": "botiquin", "cura": 40,   # (M72: antes 50)
+		"accion": "usar_botiquin", "tercio": true},
 }
 # [/traducir]
 # Las curas que caben en la mochila, como mucho (el dueño, 27 oct: con dos armaritos por piso salían unos 22
