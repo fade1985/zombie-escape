@@ -38,7 +38,7 @@ con `(Get-Item JohnnyRush.exe).VersionInfo` y extrayendo el icono con `ExtractAs
   que imprimen (el `.exe` no tiene consola):
   `JohnnyRush.exe --log-file salida.log -- --captura --guiado`. Las fotos no se guardan (en el exportado `res://` no
   se puede escribir, saldrá «Can't save PNG»: es normal); lo que cuenta es lo que imprimen.
-- El guardado va en `%APPDATA%\Johnny Rush\guardado.json`, el mismo que usa el editor: probar el
+- El guardado va en `%APPDATA%\Johnny Rush\guardado.json` (el hueco 1; los otros y los ajustes, a su lado), el mismo que usa el editor: probar el
   `.exe` toca la partida de verdad (copiarlo antes si importa).
 - `SendKeys` y parecidos no llegan a la ventana desde una sesión de Claude (no tiene el foco): las teclas se prueban con
   `-- --captura --pantalla`.

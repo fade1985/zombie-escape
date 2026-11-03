@@ -3991,6 +3991,60 @@ msgstr "the mode button, below the minimap"
 msgid "escudo %d"
 msgstr "shield %d"
 
+#: scripts/ui/huecos.gd
+msgid "Elige partida"
+msgstr "Choose save"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "Back"
+
+#: scripts/ui/huecos.gd
+msgid "Borrar partida"
+msgstr "Delete save"
+
+#: scripts/ui/huecos.gd scripts/ui/inventario.gd scripts/ui/menu_principal.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Sure? Press again"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd
+msgid "Partida %d"
+msgstr "Save %d"
+
+#: scripts/ui/huecos.gd
+msgid "En uso"
+msgstr "In use"
+
+#: scripts/ui/huecos.gd
+msgid "Mejor planta: %d"
+msgstr "Best floor: %d"
+
+#: scripts/ui/huecos.gd
+msgid "Dólares ahorrados: $%d"
+msgstr "Dollars saved: $%d"
+
+#: scripts/ui/huecos.gd
+msgid "Edificios completados: %d de %d"
+msgstr "Buildings completed: %d of %d"
+
+#: scripts/ui/huecos.gd
+msgid "%d partida jugada"
+msgid_plural "%d partidas jugadas"
+msgstr[0] "%d run played"
+msgstr[1] "%d runs played"
+
+#: scripts/ui/huecos.gd
+msgid "A medias: %s"
+msgstr "Run in progress: %s"
+
+#: scripts/ui/huecos.gd
+msgid "Vacía"
+msgstr "Empty"
+
+#: scripts/ui/huecos.gd
+msgid "Empieza de cero"
+msgstr "Start from scratch"
+
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Inventory"
@@ -4412,10 +4466,6 @@ msgstr "The stash can't take more: you keep %d of %s."
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "The stash is full: you keep %s."
 
-#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Sure? Press again"
-
 #: scripts/ui/inventario.gd
 msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
 msgstr "Destroy %s? Gone for good: this can't be undone."
@@ -4693,10 +4743,6 @@ msgstr "Best floor reached: %d   ·   Dollars saved: $%d"
 #: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
 msgstr "Choose a building"
-
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
-msgid "Volver"
-msgstr "Back"
 
 #: scripts/ui/menu_principal.gd
 msgid "Complétalo para abrir la Alerta 1"

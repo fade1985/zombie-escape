@@ -3991,6 +3991,60 @@ msgstr "le bouton du mode, sous la mini-carte"
 msgid "escudo %d"
 msgstr "bouclier %d"
 
+#: scripts/ui/huecos.gd
+msgid "Elige partida"
+msgstr "Choisis une sauvegarde"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "Retour"
+
+#: scripts/ui/huecos.gd
+msgid "Borrar partida"
+msgstr "Effacer la sauvegarde"
+
+#: scripts/ui/huecos.gd scripts/ui/inventario.gd scripts/ui/menu_principal.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Sûr ? Appuie encore"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd
+msgid "Partida %d"
+msgstr "Sauvegarde %d"
+
+#: scripts/ui/huecos.gd
+msgid "En uso"
+msgstr "En cours"
+
+#: scripts/ui/huecos.gd
+msgid "Mejor planta: %d"
+msgstr "Meilleur étage : %d"
+
+#: scripts/ui/huecos.gd
+msgid "Dólares ahorrados: $%d"
+msgstr "Dollars économisés : $%d"
+
+#: scripts/ui/huecos.gd
+msgid "Edificios completados: %d de %d"
+msgstr "Immeubles terminés : %d sur %d"
+
+#: scripts/ui/huecos.gd
+msgid "%d partida jugada"
+msgid_plural "%d partidas jugadas"
+msgstr[0] "%d partie jouée"
+msgstr[1] "%d parties jouées"
+
+#: scripts/ui/huecos.gd
+msgid "A medias: %s"
+msgstr "Partie en cours : %s"
+
+#: scripts/ui/huecos.gd
+msgid "Vacía"
+msgstr "Vide"
+
+#: scripts/ui/huecos.gd
+msgid "Empieza de cero"
+msgstr "Repartir de zéro"
+
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Inventaire"
@@ -4412,10 +4466,6 @@ msgstr "Le coffre ne prend plus rien : tu en gardes %d (%s)."
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "Le coffre est plein : tu gardes %s."
 
-#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Sûr ? Appuie encore"
-
 #: scripts/ui/inventario.gd
 msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
 msgstr "Détruire %s ? Perdu pour toujours : impossible d'annuler."
@@ -4693,10 +4743,6 @@ msgstr "Meilleur étage atteint : %d   ·   Dollars économisés : $%d"
 #: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
 msgstr "Choisis un bâtiment"
-
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
-msgid "Volver"
-msgstr "Retour"
 
 #: scripts/ui/menu_principal.gd
 msgid "Complétalo para abrir la Alerta 1"

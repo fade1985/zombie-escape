@@ -183,8 +183,11 @@ JavaScript (los clics llegan como ratón).
 
 ## Guardado
 
-`%APPDATA%\Johnny Rush\guardado.json` (borrarlo = empezar de cero); la prueba con `--captura`
-usa `guardado-prueba.json`. En la web va en el navegador (IndexedDB). En la versión de Windows (`docs/ESCRITORIO.md`)
+`%APPDATA%\Johnny Rush\guardado.json`. Hay **tres huecos** («Partida 1, 2 y 3», el botón al lado de Opciones en el
+menú principal): cada uno con su progreso (`guardado.json`, `guardado-2.json`, `guardado-3.json`) y los ajustes de
+Opciones, de todos, en `guardado-ajustes.json`. Para empezar de cero, «Borrar partida» en su tarjeta (pide pulsarlo dos
+veces) o usar un hueco vacío. El guardado de antes de los huecos es el hueco 1. La prueba con `--captura` usa
+`guardado-prueba.json` (y `--huecos`, los suyos). En la web va en el navegador (IndexedDB). En la versión de Windows (`docs/ESCRITORIO.md`)
 es el mismo archivo. **Pantalla completa:** F11 o Alt+Intro (o su botón en Opciones y en el menú); se recuerda. En la web,
 Esc abre la pausa sin quitarla en Chrome y Edge, y para salir se mantiene pulsado (ver `docs/WEB.md`).
 

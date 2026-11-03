@@ -3983,6 +3983,59 @@ msgstr "小地图下方的模式按钮"
 msgid "escudo %d"
 msgstr "护盾 %d"
 
+#: scripts/ui/huecos.gd
+msgid "Elige partida"
+msgstr "选择存档"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "返回"
+
+#: scripts/ui/huecos.gd
+msgid "Borrar partida"
+msgstr "删除存档"
+
+#: scripts/ui/huecos.gd scripts/ui/inventario.gd scripts/ui/menu_principal.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "确定吗？再按一次"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd
+msgid "Partida %d"
+msgstr "存档 %d"
+
+#: scripts/ui/huecos.gd
+msgid "En uso"
+msgstr "使用中"
+
+#: scripts/ui/huecos.gd
+msgid "Mejor planta: %d"
+msgstr "最高楼层：第%d层"
+
+#: scripts/ui/huecos.gd
+msgid "Dólares ahorrados: $%d"
+msgstr "存下的美元：$%d"
+
+#: scripts/ui/huecos.gd
+msgid "Edificios completados: %d de %d"
+msgstr "已通关建筑：%d / %d"
+
+#: scripts/ui/huecos.gd
+msgid "%d partida jugada"
+msgid_plural "%d partidas jugadas"
+msgstr[0] "已玩 %d 局"
+
+#: scripts/ui/huecos.gd
+msgid "A medias: %s"
+msgstr "未完成的一局：%s"
+
+#: scripts/ui/huecos.gd
+msgid "Vacía"
+msgstr "空"
+
+#: scripts/ui/huecos.gd
+msgid "Empieza de cero"
+msgstr "从头开始"
+
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "物品栏"
@@ -4404,10 +4457,6 @@ msgstr "储物箱放不下了：你身上留下 %d 个%s。"
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "储物箱满了：%s留在你身上。"
 
-#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "确定吗？再按一次"
-
 #: scripts/ui/inventario.gd
 msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
 msgstr "销毁%s？会永久消失：无法撤销。"
@@ -4676,10 +4725,6 @@ msgstr "最高到达：第%d层   ·   存下的美元：$%d"
 #: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
 msgstr "选择大楼"
-
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
-msgid "Volver"
-msgstr "返回"
 
 #: scripts/ui/menu_principal.gd
 msgid "Complétalo para abrir la Alerta 1"

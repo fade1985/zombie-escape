@@ -1,5 +1,6 @@
 # El menú principal (showMenu de src/ui.js): el logo, JUGAR, Tutorial (tutorial.gd), Opciones (opciones.gd), pantalla
-# completa y salir, y el récord. Con una partida a medias (partida_guardada.gd), encima de JUGAR sale «Continuar
+# completa y salir, y el récord. Al lado de Tutorial y Opciones, el hueco de guardado en uso («Partida 1»), que abre
+# «Elige partida» (huecos.gd): cambiar de hueco, o borrar uno para empezar de cero. Con una partida a medias (partida_guardada.gd), encima de JUGAR sale «Continuar
 # partida» con su edificio y su planta, y JUGAR pide pulsarlo otra vez (la partida nueva pisa la guardada). Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
 # de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
 # (escenas/partida.tscn).
@@ -75,7 +76,7 @@ func _ready() -> void:
 				donde.text = Idioma.t("Si empiezas otra, la guardada se pierde")
 			else:
 				elegir_edificio())
-	# Tutorial y Opciones, uno al lado del otro (uno debajo del otro, el menú ya no cabe en la pantalla)
+	# Tutorial, Opciones y el hueco de guardado, uno al lado del otro (uno debajo del otro, el menú ya no cabe en la pantalla)
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.add_theme_constant_override("separation", 6)
@@ -93,6 +94,8 @@ func _ready() -> void:
 				get_tree().reload_current_scene()
 			else:
 				opciones.grab_focus()))
+	var partidas := boton(fila, Idioma.t("Partida %d") % Guardado.hueco, abrir_huecos)
+	partidas.custom_minimum_size.x = 127
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		boton(columna, Idioma.t("Pantalla completa"), Tactil.pantalla_completa)
 	if not OS.has_feature("web"):
@@ -134,6 +137,10 @@ func _ready() -> void:
 			PruebaLetras.medidas()
 			get_tree().quit()
 			return
+		if "--huecos" in OS.get_cmdline_user_args():   # los tres huecos de guardado (pruebas/prueba_huecos.gd)
+			await PruebaHuecos.probar(self)
+			get_tree().quit()
+			return
 		if "--idioma" in OS.get_cmdline_user_args():   # solo las pantallas del menú en el idioma de la prueba (pruebas/prueba_idioma.gd)
 			await PruebaIdioma.probar(self)
 			get_tree().quit()
@@ -157,6 +164,17 @@ func _ready() -> void:
 				get_tree().quit()
 				return
 			jugar_partida(edificio)
+
+
+# «Elige partida» (huecos.gd), tapando el menú
+func abrir_huecos() -> Huecos:
+	centro.hide()
+	var h := Huecos.new()
+	add_child(h)
+	h.cerrado.connect(func():
+		centro.show()
+		centro.find_children("*", "Button", true, false)[0].grab_focus())
+	return h
 
 
 func boton(caja: Container, texto: String, al_pulsar: Callable, variacion := "") -> Button:

@@ -7,9 +7,18 @@
 #
 # Se usa así:  var s := Guardado.cargar()  ·  s.dolares += 5  ·  Guardado.escribir(s)
 # o, en un paso:  Guardado.cambiar(func(s): s.dolares += 5)
+#
+# Tres huecos de guardado (M45; se eligen en el menú principal, huecos.gd): cada uno con su progreso en su archivo,
+# guardado.json (el 1, el de siempre: el guardado de antes de los huecos es el hueco 1), guardado-2.json y
+# guardado-3.json. Los ajustes de Opciones son de los tres: van en guardado-ajustes.json, con el hueco en uso
+# ({"hueco": 1, "ajustes": {...}}). Mientras ese archivo no existe, valen los ajustes que lleve el hueco (así pasan
+# los de un guardado de antes). Cada hueco lleva también su copia de los ajustes, pero al cargar mandan los comunes
 class_name Guardado
 
-static var archivo := "user://guardado.json"   # la prueba con --captura usa otro
+static var base := "user://guardado"   # el nombre de los archivos, sin ".json" (la prueba con --captura usa otro)
+static var hueco := hueco_guardado()   # el hueco en uso (1, 2 o 3)
+static var archivo := ruta(hueco)      # el archivo del hueco en uso
+const HUECOS := 3
 # El baúl de pruebas (la sala de pruebas, sala_armas.gd): mientras tiene algo, el baúl que se lee y se cambia es este,
 # {baul, baul_equipo}, que solo vive en la memoria; al archivo se sigue escribiendo el baúl de verdad, sin tocarlo
 static var baul_prueba := {}
@@ -82,16 +91,19 @@ static func cargar() -> Dictionary:
 
 
 # Lo que hay de verdad en el archivo (con el baúl de verdad, aunque esté puesto el de pruebas)
-static func cargar_archivo() -> Dictionary:
+# (o en el de otro hueco: el resumen de la pantalla de los huecos)
+static func cargar_archivo(de := archivo) -> Dictionary:
 	var s: Dictionary = NUEVO.duplicate(true)
-	var leido = leer(archivo)
-	if not leido is Dictionary:
-		leido = leer(archivo + ".bak")   # roto o sin terminar de escribir: vale la copia de la vez anterior
-	if not leido is Dictionary:
-		return s   # no hay guardado (o están rotos los dos): se empieza de cero
-	for clave in leido:
-		if clave in s:
-			s[clave] = leido[clave]
+	var leido = leer_entero(de)
+	if leido is Dictionary:
+		for clave in leido:
+			if clave in s:
+				s[clave] = leido[clave]
+	else:
+		leido = {}   # no hay guardado (o están rotos los dos): se empieza de cero
+	var comunes = leer_entero(ruta_ajustes())
+	if comunes is Dictionary and comunes.get("ajustes") is Dictionary:
+		s.ajustes = comunes.ajustes
 	s.ajustes = NUEVO.ajustes.duplicate(true).merged(s.ajustes, true)   # copia: las constantes no se pueden cambiar
 	# JSON guarda todos los números con decimales: los que son de contar, otra vez enteros
 	for clave in ["mejor_planta", "dolares", "dolares_total", "puntos", "partidas", "victorias", "muertos", "muertos_con_ayudas"]:
@@ -146,13 +158,22 @@ static func cargar_archivo() -> Dictionary:
 
 
 # Lo que hay en un archivo de guardado: un Dictionary, o null si no existe o está roto
-static func leer(ruta: String) -> Variant:
-	if not FileAccess.file_exists(ruta):
+static func leer(de: String) -> Variant:
+	if not FileAccess.file_exists(de):
 		return null
-	return JSON.parse_string(FileAccess.get_file_as_string(ruta))
+	return JSON.parse_string(FileAccess.get_file_as_string(de))
+
+
+# Como leer, pero si está roto o sin terminar de escribir, vale la copia de la vez anterior (.bak)
+static func leer_entero(de: String) -> Variant:
+	var leido = leer(de)
+	if not leido is Dictionary:
+		leido = leer(de + ".bak")
+	return leido if leido is Dictionary else null
 
 
 static var escrituras := 0   # cuántas veces se ha escrito: Bestiario mira si el archivo cambió desde que lo leyó
+static var ajustes_comunes := {}   # los últimos ajustes escritos en guardado-ajustes.json
 
 # Guardado seguro: si el juego se cierra a mitad de escribir, no se pierde nada. Se escribe primero en
 # guardado.json.tmp; solo cuando está entero, el guardado de antes pasa a ser la copia (guardado.json.bak) y el
@@ -165,22 +186,31 @@ static func escribir(s: Dictionary) -> void:
 		s = s.duplicate()
 		s.baul = real.baul
 		s.baul_equipo = real.baul_equipo
-	var tmp := archivo + ".tmp"
-	var bak := archivo + ".bak"
-	var f := FileAccess.open(tmp, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(s, "\t"))
-		var bien := f.get_error() == OK
-		f.close()   # cerrar asegura que todo está ya en el disco
-		if bien:
-			if FileAccess.file_exists(archivo):
-				if FileAccess.file_exists(bak):
-					DirAccess.remove_absolute(bak)
-				DirAccess.rename_absolute(archivo, bak)
-			DirAccess.rename_absolute(tmp, archivo)
+	escribir_json(archivo, s)
+	# los ajustes comunes, solo si han cambiado (o aún no está su archivo)
+	if s.ajustes != ajustes_comunes or not FileAccess.file_exists(ruta_ajustes()):
+		escribir_json(ruta_ajustes(), {"hueco": hueco, "ajustes": s.ajustes})
+		ajustes_comunes = s.ajustes.duplicate(true)
 	ajustes_leidos = s.ajustes.duplicate(true)
 	ajustes_de = archivo
 	escrituras += 1
+
+
+# Escribe "datos" en el archivo "a" sin que se pueda quedar a medias (ver escribir)
+static func escribir_json(a: String, datos: Dictionary) -> void:
+	var tmp := a + ".tmp"
+	var bak := a + ".bak"
+	var f := FileAccess.open(tmp, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(datos, "\t"))
+		var bien := f.get_error() == OK
+		f.close()   # cerrar asegura que todo está ya en el disco
+		if bien:
+			if FileAccess.file_exists(a):
+				if FileAccess.file_exists(bak):
+					DirAccess.remove_absolute(bak)
+				DirAccess.rename_absolute(a, bak)
+			DirAccess.rename_absolute(tmp, a)
 
 
 # Un ajuste, para mirarlo en cada fotograma (las ayudas): se lee del archivo una vez y se recuerda; al guardar
@@ -216,3 +246,51 @@ static func edificio(s: Dictionary, id: String) -> Dictionary:
 	if not id in s.edificios:
 		s.edificios[id] = EDIFICIO.duplicate()
 	return s.edificios[id]
+
+
+# ── Los huecos de guardado ──
+
+# El archivo del hueco "n"
+static func ruta(n: int) -> String:
+	return base + (".json" if n == 1 else "-%d.json" % n)
+
+
+static func ruta_ajustes() -> String:
+	return base + "-ajustes.json"
+
+
+# El hueco que se usó la última vez (el de guardado-ajustes.json; 1 si aún no está)
+static func hueco_guardado() -> int:
+	var comunes = leer_entero(ruta_ajustes())
+	return clampi(int(comunes.get("hueco", 1)), 1, HUECOS) if comunes is Dictionary else 1
+
+
+# Otros archivos (la prueba con --captura): su hueco 1 y sus ajustes
+static func usar(nueva_base: String) -> void:
+	base = nueva_base
+	hueco = 1
+	archivo = ruta(1)
+	ajustes_comunes = {}
+
+
+# Pasa al hueco "n" y lo apunta para la próxima vez
+static func elegir_hueco(n: int) -> void:
+	var ajustes: Dictionary = cargar().ajustes
+	hueco = n
+	archivo = ruta(n)
+	escribir_json(ruta_ajustes(), {"hueco": n, "ajustes": ajustes})
+	ajustes_comunes = ajustes.duplicate(true)
+
+
+# Si el hueco "n" tiene algo guardado
+static func hueco_usado(n: int) -> bool:
+	return leer_entero(ruta(n)) != null
+
+
+# Borra el hueco "n" para siempre (con su copia): queda vacío, para empezar de cero
+static func borrar_hueco(n: int) -> void:
+	for a in [ruta(n), ruta(n) + ".bak", ruta(n) + ".tmp"]:
+		if FileAccess.file_exists(a):
+			DirAccess.remove_absolute(a)
+	escrituras += 1          # lo que Bestiario recordaba ya no vale
+	Tutoriales.vistos_de = ""   # ni lo de Tutoriales

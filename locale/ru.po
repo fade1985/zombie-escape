@@ -3999,6 +3999,61 @@ msgstr "кнопка режима под миникартой"
 msgid "escudo %d"
 msgstr "щит %d"
 
+#: scripts/ui/huecos.gd
+msgid "Elige partida"
+msgstr "Выбери сохранение"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
+msgid "Volver"
+msgstr "Назад"
+
+#: scripts/ui/huecos.gd
+msgid "Borrar partida"
+msgstr "Удалить сохранение"
+
+#: scripts/ui/huecos.gd scripts/ui/inventario.gd scripts/ui/menu_principal.gd
+msgid "¿Seguro? Pulsa otra vez"
+msgstr "Точно? Нажми еще раз"
+
+#: scripts/ui/huecos.gd scripts/ui/menu_principal.gd
+msgid "Partida %d"
+msgstr "Сохранение %d"
+
+#: scripts/ui/huecos.gd
+msgid "En uso"
+msgstr "Используется"
+
+#: scripts/ui/huecos.gd
+msgid "Mejor planta: %d"
+msgstr "Лучший этаж: %d"
+
+#: scripts/ui/huecos.gd
+msgid "Dólares ahorrados: $%d"
+msgstr "Накоплено: $%d"
+
+#: scripts/ui/huecos.gd
+msgid "Edificios completados: %d de %d"
+msgstr "Пройдено зданий: %d из %d"
+
+#: scripts/ui/huecos.gd
+msgid "%d partida jugada"
+msgid_plural "%d partidas jugadas"
+msgstr[0] "%d забег"
+msgstr[1] "%d забега"
+msgstr[2] "%d забегов"
+
+#: scripts/ui/huecos.gd
+msgid "A medias: %s"
+msgstr "Незаконченный забег: %s"
+
+#: scripts/ui/huecos.gd
+msgid "Vacía"
+msgstr "Пусто"
+
+#: scripts/ui/huecos.gd
+msgid "Empieza de cero"
+msgstr "Начать с нуля"
+
 #: scripts/ui/inventario.gd scripts/ui/opciones.gd
 msgid "Inventario"
 msgstr "Инвентарь"
@@ -4420,10 +4475,6 @@ msgstr "Сундук больше не вмещает: у тебя остает�
 msgid "El baúl está lleno: contigo se quedan %s."
 msgstr "Сундук полон. Остается у тебя: %s."
 
-#: scripts/ui/inventario.gd scripts/ui/menu_principal.gd
-msgid "¿Seguro? Pulsa otra vez"
-msgstr "Точно? Нажми еще раз"
-
 #: scripts/ui/inventario.gd
 msgid "¿Destruir %s? Se pierde para siempre: no se puede deshacer."
 msgstr "Уничтожить: %s? Пропадет навсегда, это не отменить."
@@ -4710,10 +4761,6 @@ msgstr "Лучший этаж: %d   ·   Накоплено: $%d"
 #: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
 msgstr "Выбери здание"
-
-#: scripts/ui/menu_principal.gd scripts/ui/opciones.gd scripts/ui/tutorial.gd
-msgid "Volver"
-msgstr "Назад"
 
 #: scripts/ui/menu_principal.gd
 msgid "Complétalo para abrir la Alerta 1"

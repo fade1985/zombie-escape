@@ -293,7 +293,12 @@ en una línea.
   del guardado; «Continuar partida» del menú vuelve al principio de esa planta, que sale igual porque la semilla de
   la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida)
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
-  `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla), `logros.gd` (40 desde el M17, 28 oct; uno =
+  `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla. Tres huecos
+  (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
+  ajustes de Opciones, de los tres, en `guardado-ajustes.json` con el hueco en uso. `base` es el nombre sin `.json`
+  (la prueba usa `usar("user://guardado-prueba")`), `elegir_hueco`, `hueco_usado`, `borrar_hueco`), `huecos.gd`
+  (`Huecos`, la pantalla «Elige partida» del menú: una tarjeta por hueco con su resumen o «Vacía», y «Borrar partida»
+  con confirmación; elegir uno monta el menú otra vez; se prueba con `--huecos`), `logros.gd` (40 desde el M17, 28 oct; uno =
   una línea en `LISTA`, con su apartado del ordenador, `tema`, de `TEMAS`. Los que salen de algo guardado llevan `mira`
   —skins, bestiario, páginas, objetos, rescatados, talentos, edificio completado— y los da por conseguidos el repaso,
   `revisar()`: al empezar, cada vez que se escribe el guardado (`Guardado.escrituras`), al acabar y al abrir el
@@ -350,7 +355,7 @@ en una línea.
   jefe), `menus.gd` (pausa y fin; el cartel del final dice al caer
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
   peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; y «Otra vez»,
-  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; si se cambia el idioma en Opciones, se
+  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
   monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el botón «Avisar de un texto mal traducido» a continuación de los idiomas (`enlace_avisos`, el formulario de Google del dueño; vacío no sale,
   y en español tampoco; se prueba con `--idioma`), el temblor de
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y
@@ -489,6 +494,8 @@ en una línea.
   (`--jefe`, `--armas`, `--inventario`...) con el archivo de cada una.
 - `prueba_idioma.gd` (`PruebaIdioma`, fuera de la cadena: la lanza el menú con `--idioma`): el menú, Opciones y «Elige
   edificio» en el idioma de la prueba y el cambio de idioma en caliente. `--ingles` pone cualquier prueba en inglés.
+- `prueba_huecos.gd` (`PruebaHuecos`, fuera de la cadena: la lanza el menú con `--huecos`): con sus propios archivos,
+  el guardado viejo pasa al hueco 1, cambiar de hueco no cambia los ajustes, la pantalla «Elige partida» y borrar un hueco.
 - `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
   principal (JUGAR, «Elige edificio», Opciones, Tutorial) y los botones de mando de mentira que usa también
   `probar_mando()` de `prueba_varias.gd` (la pausa, Opciones, un tutorial, el inventario, la taquilla, el ordenador, una

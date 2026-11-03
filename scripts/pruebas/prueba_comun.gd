@@ -9,7 +9,7 @@ func _ready() -> void:
 
 
 func preparar_prueba() -> void:
-	Guardado.archivo = "user://guardado-prueba.json"   # la prueba no toca el guardado de verdad
+	Guardado.usar("user://guardado-prueba")   # la prueba no toca el guardado de verdad (ni sus ajustes)
 	SalaArmas.escondido = false   # la sala de pruebas, con sus líneas y su panel de daño a la vista (en el juego empieza sin ellos)
 	# sin el repaso de los logros que salen del guardado (logros.gd, revisar): sus avisos saldrían en las fotos de
 	# cualquier prueba; la de --logros lo hace a mano
