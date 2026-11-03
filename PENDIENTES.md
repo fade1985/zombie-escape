@@ -22,6 +22,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M65** Cuando el zombi gordo muere y esparce el ácido, que Johnny se vea con el ácido encima, como los zombis a los
   que les afecta.
 - **M66** El efecto visual de la cura de la médico: cambiarlo por algo que se vea mejor y pegue con el estilo del juego.
+- **M67** Los ocho huecos de los lanzables: partirlos en dos grupos de cuatro, a la izquierda cuatro para los lanzables y a
+  la derecha cuatro para las curas.
 
 
 ## Por limar
