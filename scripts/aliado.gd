@@ -459,6 +459,10 @@ func disparar(blanco: Node2D) -> void:
 	bala.vida = 520.0 / 620.0
 	get_parent().add_child(bala)
 	Sonido.tocar("disparo_aliado")
+	# el disparo se oye, como los de Johnny (johnny.oir_disparo): despierta a los zombis dormidos de alrededor (M43)
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z.has_method("oir_disparo"):
+			z.oir_disparo(global_position)
 	animar("reposo", hacia)
 	var boca: Vector2
 	if persona:

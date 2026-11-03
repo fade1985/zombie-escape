@@ -314,7 +314,8 @@ func meter_prisa(segundos: float) -> void:
 	agente.max_speed = velocidad * PRISA
 
 
-# Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar
+# Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar, y también el policía
+# y el militar (aliado.gd, M43)
 func oir_disparo(donde: Vector2) -> void:
 	# (con la Alerta 5, más lejos; con el reto del día "Oído fino", el triple)
 	if dormido and global_position.distance_to(donde) < OIDO * Alerta.oido() * Reto.oido():

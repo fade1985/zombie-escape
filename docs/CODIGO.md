@@ -326,7 +326,7 @@ en una línea.
   la guía no llegó a enseñar). Sale en la partida 1 o si se pidió con «Que vuelvan a salir todos» (`Tutoriales.olvidar`
   apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`.
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos) y `aliado.gd` (cada superviviente que te
-  acompaña; sus hojas, en `HOJAS`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
+  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
   `barricada.gd` (ferretero).
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro

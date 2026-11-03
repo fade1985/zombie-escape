@@ -2164,6 +2164,57 @@ func probar_fogonazos_aliados() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --oido-aliados": el policía dispara a un zombi y se le oye (M43): despierta a un zombi dormido a 300
+# de él, y no a otro a 900. Johnny está quieto y no dispara. Lo que comprueba, en la terminal (y captura-oido-aliados.png).
+# Se cierra
+func probar_oido_aliados() -> void:
+	await pulsar_y_esperar(KEY_F9)
+	var sala: SalaArmas = null
+	for n in mapa.get_children():
+		if n is SalaArmas:
+			sala = n
+	await get_tree().create_timer(0.3).timeout
+	johnny.modo = "quieto"
+	johnny.global_position = sala.diana.global_position + Vector2(-120, 200)
+	johnny.get_node("Camara").reset_smoothing()
+	sala.diana.visible = false
+	sala.diana.remove_from_group("zombis")
+	for a in supervivientes.equipo:
+		a.queue_free()
+	supervivientes.equipo.clear()
+	var datos: Dictionary = Supervivientes.DATOS["policia"].duplicate()
+	datos.erase("rescate")
+	var aliado: Aliado = supervivientes.crear(datos, "equipo")
+	aliado.idx = 0
+	supervivientes.equipo.append(aliado)
+	johnny.get_parent().add_child(aliado)
+	aliado.global_position = johnny.global_position + Vector2(-40, 60)
+	Aliado.borrar_huellas()
+	zombis_de_prueba([])
+	await get_tree().create_timer(2.0).timeout
+	# el de la diana (despierto, a tiro) y dos dormidos: uno a 300 del policía y otro a 900
+	var zs: Array = zombis_de_prueba([Vector2(220, 80)])
+	var desde: Vector2 = aliado.global_position - johnny.position
+	var cerca: Node2D = meter_zombi("lento", johnny.position + desde + Vector2(-300, 0))
+	var lejos: Node2D = meter_zombi("lento", johnny.position + desde + Vector2(-900, 0))
+	for z in [cerca, lejos]:
+		z.dormido = true
+	await get_tree().physics_frame
+	print("Oído · antes de disparar, dormidos: cerca %s, lejos %s (esperado: true, true)" % [cerca.dormido, lejos.dormido])
+	var tiempo := 0.0
+	var disparo := false
+	while tiempo < 4.0 and not disparo:
+		await get_tree().process_frame
+		tiempo += get_process_delta_time()
+		disparo = johnny.get_parent().get_children().any(func(n): return n.get("de_aliado") == true)
+	await get_tree().create_timer(0.3).timeout
+	recorte("captura-oido-aliados.png")
+	print("Oído · el policía ha disparado: %s · zombi a 300, despierto: %s (esperado: true) · zombi a 900, dormido: %s (esperado: true)" % [
+		disparo, not cerca.dormido, lejos.dormido])
+	print("Oído · %s" % ("BIEN" if disparo and not cerca.dormido and lejos.dormido and zs[0].vida > 0 else "MAL"))
+	get_tree().quit()
+
+
 # Con "--captura --chispas": la chispa de pixelfx (chispa.gd) de las balas al dar a un zombi, en la sala de pruebas y a
 # media luz, con un zombi quieto (y que no muere) en el centro. Balas que llegan desde los 8 lados (captura-chispa-<lado>.png,
 # en el momento del destello, y -2 un poco después, con las chispas cayendo), una de cada color (captura-chispa-color-<color>.png:

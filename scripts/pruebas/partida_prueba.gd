@@ -93,6 +93,8 @@
 #   --explosion         la explosión de pixelfx (granada, zombi explosivo): normal y pequeña   [prueba_armas.gd]
 #   --vomito            los zombis bañados en vómito (Gastroenteritis), junto a uno con ácido   [prueba_armas.gd]
 #   --johnny-ardiendo   Johnny ardiendo con el fuego de los zombis (su shader), con luz y a oscuras [prueba_armas.gd]
+#   --oido-aliados      los disparos del policía despiertan a un zombi dormido cerca de él, y no a uno lejos (M43)
+#                                                                                          [prueba_armas.gd]
 #   --fogonazos-aliados el fogonazo de pixelfx del policía (pistola) y del militar (MP5) al disparar a un zombi
 #                       [prueba_armas.gd]
 #   --chispas           la chispa de pixelfx (chispa.gd) de las balas al dar a un zombi: desde 8 lados, cada color
@@ -480,6 +482,9 @@ func empezar_prueba() -> void:
 	elif "--johnny-ardiendo" in args:
 		set_process(false)   # sin la prueba larga
 		probar_johnny_ardiendo()
+	elif "--oido-aliados" in args:
+		set_process(false)   # sin la prueba larga
+		probar_oido_aliados()
 	elif "--fogonazos-aliados" in args:
 		set_process(false)   # sin la prueba larga
 		probar_fogonazos_aliados()
