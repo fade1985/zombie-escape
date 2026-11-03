@@ -512,7 +512,12 @@ en una línea.
   (ver `docs/WEB.md`).
 - `ui/` (HUD, menús e iconos; `ui/tutorial/`, las fotos de las fichas de los tutoriales), `fuentes/` (la de siempre, nítida a 16 y 32, y `jersey-25.ttf` de los jefes, nítida a
   25 y 50, que va siempre con su licencia `jersey-25-OFL.txt`), `tiles/`, `pruebas/` (montajes para revisar dibujos).
-- `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab.
+- `sources/`: originales (con `.gdignore`). `pixellab.json`: todo lo generado en PixelLab (no va en el juego exportado: solo lo
+  usan las herramientas).
+- Los dibujos se importan **sin relleno en lo transparente** (`fix_alpha_border=false`, también por defecto para los nuevos, en
+  `[importer_defaults]` de `project.godot`) y con la compresión WebP sin pérdida al máximo (`rendering/textures/webp_compression`):
+  se ven idénticos y pesan un tercio menos (M47, ver «Lo que pesa la web» en `docs/WEB.md`).
+- `web/carga.html`: la página de la web, con su pantalla de carga (ver `docs/WEB.md`).
 
 ## tools/
 
@@ -584,7 +589,8 @@ en una línea.
 - **Iconos:** `icono_*.py` (los objetos son todos de PixelLab, 32×32: ya no queda ninguno hecho con código),
   `hacer_casillas.py`, `recortes_bestiario.py`.
 - **El logo** (`assets/ui/logo.png`, «JOHNNY RUSH» grande y «ZOMBIE ESCAPE» pequeño debajo; lo ponen `menu_principal.gd` y el final de
-  `pruebas/trailer.gd`): no está dibujado a mano, lo genera `py tools/logo.py` (el programa de `src/titulo.js` del juego JS, pasado a
+  `pruebas/trailer.gd`): no está dibujado a mano, lo genera `py tools/logo.py`; la pantalla de carga de la web, `assets/web/carga.html`, lleva una copia
+  metida dentro: si cambia el logo, ver «La pantalla de carga» en `docs/WEB.md` (el programa de `src/titulo.js` del juego JS, pasado a
   Python: cada letra es una cuadrícula de 5×7 con relieve, babas y un filo crema). Las letras están en `LETRAS` (J, H, N, Y, R y U son
   las añadidas al pasar al nombre nuevo), los colores en `REPARTOS` (`py tools/logo.py todas` los enseña todos juntos; el elegido es
   `VARIANTE`) y `py tools/logo.py viejo` rehace el logo de antes, idéntico, para comprobar que el programa no ha cambiado.

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>$GODOT_PROJECT_NAME</title>
+		<!-- La página de la web (M47): la plantilla de Godot 4.7.2 con una pantalla de carga del juego (el logo, una barra
+		con el tanto por ciento que ha llegado y frases del conserje en el idioma del navegador). Godot la usa al exportar a
+		web (export_presets.cfg, html/custom_html_shell). Ver docs/WEB.md -->
+		<style>
+html, body, #canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body {
+	color: #d9d1bd;
+	background-color: #0d0a0f;
+	overflow: hidden;
+	touch-action: none;
+}
+
+#canvas {
+	display: block;
+}
+
+#canvas:focus {
+	outline: none;
+}
+
+#status {
+	position: absolute;
+	inset: 0;
+	background-color: #0d0a0f;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 28px;
+	padding: 0 16px;
+	visibility: hidden;
+	font-family: 'Courier New', Consolas, monospace;
+	text-align: center;
+}
+
+/* El logo es pixel art de 201×62: se amplía sin suavizar, ×3 si cabe */
+#logo {
+	width: min(603px, 90vw);
+	image-rendering: pixelated;
+}
+
+#barra {
+	width: min(420px, 80vw);
+	height: 18px;
+	box-sizing: border-box;
+	border: 3px solid #2b2732;
+	background-color: #0f0d17;
+	box-shadow: 0 0 0 3px #0f0d17;
+}
+
+#barra-lleno {
+	height: 100%;
+	width: 0;
+	background-color: #ff5d73;
+	transition: width 0.2s linear;
+}
+
+#barra.esperando #barra-lleno {
+	width: 30%;
+	animation: esperando 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes esperando {
+	from { margin-left: 0; }
+	to { margin-left: 70%; }
+}
+
+#megas {
+	font-size: 15px;
+	color: #9b93a0;
+	min-height: 1.2em;
+	margin-top: -16px;
+}
+
+#frase {
+	font-size: 17px;
+	min-height: 1.3em;
+	max-width: 520px;
+	transition: opacity 0.4s;
+}
+
+#status-notice {
+	display: none;
+	background-color: #5b3943;
+	border: 3px solid #9b3943;
+	color: #e0e0e0;
+	line-height: 1.3;
+	max-width: 520px;
+	padding: 1rem;
+	z-index: 1;
+}
+		</style>
+		$GODOT_HEAD_INCLUDE
+	</head>
+	<body>
+		<canvas id="canvas">
+			Your browser does not support the canvas tag.
+		</canvas>
+
+		<noscript>
+			Your browser does not support JavaScript.
+		</noscript>
+
+		<div id="status">
+			<img id="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAAA+CAYAAACBUT+kAAAIoklEQVR4nO1dvYtdRRSftzzZQARXQWzCw0YWBP8AG1Ol3k7BIiIYKwtBRcgWkuJZpdjCKtgkgcBKQLYRQyrTCCkCAT9YbJZLGhGihQsRxZX7NrPOzs7M+Zy5c9/OD8Ts3vM158zMOfNx7xrT0NDQ0NAgwQQiOPjzpwOW4GdfnZTgt3QWXH3LJMunl+rPHRNpX8GCa9cUI3y2/ibJmG73qyL8Ph2G/jTIioEah5TcWSZ7pTbmsAs1SHrcfXQeRXfh3HdF+GN0GPrTIAvLU0tMNG3Utgs9SDB468MdY8ya4aZOLL9LR5WL1RkqWYaShQGVvqaYHAjLrNx+VB0kWmnT5U2VD5rQ1FnK/nXzhdk1HxThnWVsk6SvaADyBWmQHI4yY7a3NoK/h9JYjM5iIXeLVj5IoamztP3cAeLy1hKTu8S+UtKP6EFy6JynaWjLmFs/fLP4586Xf5vHt+PpDEsXkuunPfsMixR96Jmr0y8BhpSVKkeoPhlDTHYwdgn0UOmzlVtjhmb6l8oauhRpaIPEmSGN2XjvGfP21nlRaSGVBfG7ZUk/+1n6hnwYfSaR7oy4qb3vlKnSIrcst6RN8WuWJacJB8y+ghok7m4G5xALQ8cpK1op0tAh+52kr4CDxN3j17peIL2y4ZciWgva2hAqvTRLLKwfdwqVdLFSMwZbgqb6nUZfGW25tQyDgFt6aZZYkB93CpV0sfam7MIeRkr7CnuQPPzxr6f/WlGhw9D//4yKlKwV0e+1ZEElbUo/9XCP5seVYvEN06Xtih1yavaV0WaSve/TTn759X/NmKB1a5rrR99fkH9riO82cvdQ2lemkuvXQ6FvNFQC9A78dPvrYjaNEa4fXX9h/JsTxw6uI/DtjdFr9JVjmUS6c9WgA83dRC10GfVh2jskphrXr5cJbvlh0zk3I3FkcXYTtRCyF7uLJEGpl664CK5JQmlMswG1OsNN89JyTVNWCcTs3WP0AWp8a+0PFlneTCwlS/NgskHnqvys0kNhSV+ZQrsBobfEDq8x43Y/IFkUuaFditTBZGpXA7N7g93h0ZSVi58qKxa3C175rRVf6tuIJfvKNJV2e8Nj9/oxux9YWVS5JcCxvYSsEkjbu4ako8eX6pdSfWW05yQ177DUvlszdntLY9gTo8qguVtU07nSMtpbElPpoQ4WUlmW/91v9xdXDh7f5uuj2pKi7+8F9VumDz56QSxLk0dL1i1k+/z4YP1B5cfI14zviUFCTbupXQ5JCh/68JJqe2rRN7ZSBmtvN2B8XX+X6CtTziEWlKa5skIySu+hU20/zGrhWU3DDyURs3cvsVOUI76pSSfk79x9pa1JhKCWFWPDw0WnXKtG3xD+jq5JNNOYVJblx6Z1bBkolUWl5fhh6Dg8cDpljD8WH+rbqj1/Sh9Gfo74Tmvf5aGm0lK2x+yJ8XDsqikOMTlQfCC9WH6MfGobsfSjLLeGftehxs2G0xafrqC/R3eYmFool4YfqGU+a+iQnVIrPphSqpS/WUqkf2uDunuWoqfK07ZPU+9QPubyTQQ7oiXsC/EXzSScPX/JOUyIHvOcYqf0TIOqL6S3tI+5fF3AZo2YavOF+IuWW91nF9G0sys3Fv93Z4IUP0SPfY61k2pfjF/CV9rHXL5ZgJ7LVzo21a5JNi9fM2b1DHoWsPSW1p8F/OcpfRT7Yvqw/FRw+SBZlJlWIzYzhZhq8/n8gw6S3oj5b7+YzRdfOfFs/vn7QR53Flg0IsA3T8wC/nPKrELV59K77QnJweiL+QrEpU9IfJCPuXzziK+kMdXkY/s4xyBZGL16xtw891pwtPaN+/16+B2B/vdXd381NxN8/XNfrivPfR7TI9Fn2xeiC8nB6Iv5CpR1+RqoE2uDhG8OxKYGPo6Pi5dbdlY5alwG9HI/Xn/JzN/ZONLT/9yQH1czxbRWZDv1cUc5dSaDYOU+7wwQ+3NDXsyu3MgS05rBziShezXcDFLqOrnNPD5C9mL+dDK0iIzpO1pLERahHFlutuXa0BFjk/Ixly/VlzR9rDpI3Ps0vuO4dXCpQ7xQsEL2Yg/KILqYPlszUw64MLKsDXY9ZcvRGB9m12hCjA00ICh82PWflo/VBonvMJtB7syvm3v7Jz9UHArA/Ud/JHXEnvu/92cZiC9k3xtnV8188yJqTx2yG6OPCqms0EycanOsjR0wK0M+5vBx9WlC7cTdDpDYqM+RKfzdJwgx+/rOcjTAFWvtlD9KyYr5iNPmGaLkhHys3T5NH2c9ccdkEGiA1PbmXq6vFcb4NS7rWVnU92+wclO3GnJDsraQ+li8BZzKINiXcGp89xtjE/clI59fY3FJPQGnynWRI+tiwKlGNHwsHiQ2g0Cn3v6sk+JLnRC7GSu08xKrTzn6fFqXzn9GaV+Kj2p7TBZEi/Fx6dhQO7Omj4scJoJXHwIn2X3jYnzYOpM6u1D1xehP/J7ID/FpyILog9l/wNhYUMsiTR+HUN8rfg0NlUHl7pbFnedWTbf/xFz6ZxL82cfPW9uLrcHYc0gfVp7lk9qH5efq47QZ4uPo5OidAfSx59Q+oNW+qq7K+ws8ys7LMvw1pyEWuNw2DxWbe0If5faxerl1bBG2/yR5ku3Th6D9HrOvz/8Z0gfxuwi1fwhgfGz/o8idKMRG6qMSPta9u+UZ7KbA4Iv9Dr3WN6vsrGLp3dnRtw+j352lMPyuvlAJ4Nun0eYYn99m6newqPo4z6E+kpLn+zhX5SG6u2VhdzCgutDn8+ml36zyO7H/zSZfH6Q/NehT/LEdnZh9OWbpWJux38HCYsKUl/s7XZoosrtVam2hvXjTkmfbn3NxOXZ0Sl/5zIE8L10FDE6N8CEW6Ni/Acjlr+1jdbXZo/EdrVLf4VIRGkp91E+EShroX9m3zqN8ItW/8k4dRFB7U/blgLaPTzOWwmk5Bl3N8hoaGhoaGhrMiPAfRvuGXetwC2kAAAAASUVORK5CYII=" alt="Johnny Rush: Zombie Escape">
+			<div id="barra" class="esperando"><div id="barra-lleno"></div></div>
+			<div id="megas"></div>
+			<div id="frase"></div>
+			<div id="status-notice"></div>
+		</div>
+
+		<script src="$GODOT_URL"></script>
+		<script>
+const GODOT_CONFIG = $GODOT_CONFIG;
+const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
+const engine = new Engine(GODOT_CONFIG);
+
+// Lo que se lee mientras carga, en los idiomas del juego (el del navegador; si no es ninguno de estos, en inglés).
+// No pasa por Idioma.t (el juego aún no ha arrancado): si se cambia una frase, se cambia aquí en todos
+const TEXTOS = {
+	es: {
+		frases: ['Buscando las llaves del cuarto de calderas…', 'Fregando la sangre del pasillo…',
+			'Contando las balas que quedan…', 'Cambiando las bombillas fundidas…', 'Engrasando la fregona…'],
+	},
+	en: {
+		frases: ['Looking for the boiler room keys…', 'Mopping the blood off the hallway…',
+			'Counting the bullets left…', 'Changing the burnt-out bulbs…', 'Oiling the mop…'],
+	},
+	pt: {
+		frases: ['Procurando as chaves da sala das caldeiras…', 'Limpando o sangue do corredor…',
+			'Contando as balas que sobraram…', 'Trocando as lâmpadas queimadas…', 'Lubrificando o esfregão…'],
+	},
+	de: {
+		frases: ['Suche die Schlüssel zum Heizungskeller…', 'Wische das Blut im Flur auf…',
+			'Zähle die restlichen Kugeln…', 'Wechsle die durchgebrannten Glühbirnen…', 'Öle den Wischmopp…'],
+	},
+	fr: {
+		frases: ['Je cherche les clés de la chaufferie…', 'Je nettoie le sang du couloir…',
+			'Je compte les balles qui restent…', 'Je change les ampoules grillées…', 'Je graisse la serpillière…'],
+	},
+	ru: {
+		frases: ['Ищу ключи от котельной…', 'Отмываю кровь в коридоре…',
+			'Считаю оставшиеся патроны…', 'Меняю перегоревшие лампочки…', 'Смазываю швабру…'],
+	},
+	zh: {
+		frases: ['正在找锅炉房的钥匙……', '正在拖走廊上的血……', '正在数剩下的子弹……', '正在换烧坏的灯泡……', '正在给拖把上油……'],
+	},
+};
+
+(function () {
+	const statusOverlay = document.getElementById('status');
+	const statusNotice = document.getElementById('status-notice');
+	const barra = document.getElementById('barra');
+	const barraLleno = document.getElementById('barra-lleno');
+	const megas = document.getElementById('megas');
+	const frase = document.getElementById('frase');
+
+	const lengua = (navigator.languages || [navigator.language || 'en']).map((l) => l.slice(0, 2).toLowerCase())
+		.find((l) => l in TEXTOS) || 'en';
+	const textos = TEXTOS[lengua];
+	document.documentElement.lang = lengua;
+
+	// Las frases van cambiando cada 3 s, empezando por una cualquiera
+	let fraseI = Math.floor(Math.random() * textos.frases.length);
+	frase.textContent = textos.frases[fraseI];
+	const relevo = setInterval(() => {
+		frase.style.opacity = 0;
+		setTimeout(() => {
+			fraseI = (fraseI + 1) % textos.frases.length;
+			frase.textContent = textos.frases[fraseI];
+			frase.style.opacity = 1;
+		}, 400);
+	}, 3000);
+
+	let initializing = true;
+	let statusMode = '';
+
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
+			return;
+		}
+		if (mode === 'hidden') {
+			clearInterval(relevo);
+			statusOverlay.remove();
+			initializing = false;
+			return;
+		}
+		statusOverlay.style.visibility = 'visible';
+		const cargando = mode === 'progress';
+		barra.style.display = cargando ? 'block' : 'none';
+		megas.style.display = cargando ? 'block' : 'none';
+		frase.style.display = cargando ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
+	}
+
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
+		});
+	}
+
+	function displayFailureNotice(err) {
+		console.error(err);
+		if (err instanceof Error) {
+			setStatusNotice(err.message);
+		} else if (typeof err === 'string') {
+			setStatusNotice(err);
+		} else {
+			setStatusNotice('An unknown error occurred.');
+		}
+		clearInterval(relevo);
+		setStatusMode('notice');
+		initializing = false;
+	}
+
+	const missing = Engine.getMissingFeatures({
+		threads: GODOT_THREADS_ENABLED,
+	});
+
+	if (missing.length !== 0) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+			let serviceWorkerRegistrationPromise;
+			try {
+				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
+			} catch (err) {
+				serviceWorkerRegistrationPromise = Promise.reject(new Error('Service worker registration failed.'));
+			}
+			// There's a chance that installing the service worker would fix the issue
+			Promise.race([
+				serviceWorkerRegistrationPromise.then((registration) => {
+					if (registration != null) {
+						return Promise.reject(new Error('Service worker already exists.'));
+					}
+					return registration;
+				}).then(() => engine.installServiceWorker()),
+				// For some reason, `getRegistration()` can stall
+				new Promise((resolve) => {
+					setTimeout(() => resolve(), 2000);
+				}),
+			]).then(() => {
+				// Reload if there was no error.
+				window.location.reload();
+			}).catch((err) => {
+				console.error('Error while registering service worker:', err);
+			});
+		} else {
+			// Display the message as usual
+			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			displayFailureNotice(missingMsg + missing.join('\n'));
+		}
+	} else {
+		setStatusMode('progress');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (current > 0 && total > 0) {
+					// la barra se llena con lo que ha llegado; debajo, el tanto por ciento (en megas engañaría: Godot cuenta
+					// los archivos sin comprimir, el doble de lo que se descarga de verdad)
+					barra.classList.remove('esperando');
+					barraLleno.style.width = Math.min(100, current / total * 100) + '%';
+					megas.textContent = Math.floor(current / total * 100) + ' %';
+				} else {
+					barra.classList.add('esperando');
+					barraLleno.style.width = '';
+					megas.textContent = '';
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+		}, displayFailureNotice);
+	}
+}());
+		</script>
+	</body>
+</html>

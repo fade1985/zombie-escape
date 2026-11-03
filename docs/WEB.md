@@ -41,6 +41,35 @@
 - Para probar un cambio sin pisar `web/` (por ejemplo, las letras de otro idioma), exportar a una carpeta temporal y servirla sin caché: ver
   «Probar en la web» en `docs/IDIOMAS.md`. Lo que se ve bien en el ordenador puede fallar en la web, que no trae letras del sistema.
 
+## Lo que pesa la web y la pantalla de carga
+
+- Al abrir la página se descarga el motor (`index.wasm`, unos 9,5 MB comprimido) y el juego entero (`index.pck`) antes de poder
+  jugar. Medido el 3 nov (M47): el juego bajaba **39 MB**; tras quitar el relleno de los dibujos, unos **28 MB**.
+- **Los dibujos** son lo que más pesa (los jefes sobre todo: la criatura, el gerente mutado...). Godot rellenaba lo transparente
+  de cada dibujo con el color del borde (`fix_alpha_border`, que solo sirve para dibujos suavizados, y el juego va píxel a píxel):
+  no se ve, pero estropea la compresión. Desde el 3 nov se importan sin ese relleno (también los nuevos: `[importer_defaults]` de
+  `project.godot`) y con la compresión sin pérdida al máximo (`rendering/textures/webp_compression`). Se comprobó que los 661
+  dibujos se ven idénticos, píxel a píxel; pasaron de 31 a 20 MB. Lo malo: importarlos todos de cero tarda unos 2 minutos y medio.
+- **No se toca** `icudt_godot.dat` (4,8 MB): son los datos para partir bien las líneas en chino (ver `docs/IDIOMAS.md`).
+- **Para medir:** lo que baja de verdad, con
+  `curl -s -H "Accept-Encoding: br, gzip" -o /dev/null -w "%{size_download}" https://zombie-escape-two.vercel.app/index.pck`;
+  y lo que va dentro del `.pck`, leyendo su lista de archivos con `py` (empieza por `GDPC`).
+- **Idea pendiente:** cargar los jefes en un segundo paquete mientras se juega (ahorraría unos 10 MB al empezar): partir el juego
+  en dos `.pck` sin que salga ningún jefe antes de que llegue el suyo. Es más delicado y se dejó para ver antes cómo va esto.
+
+### La pantalla de carga
+
+- Es `assets/web/carga.html` (`html/custom_html_shell` en `export_presets.cfg`): la plantilla de Godot 4.7.2 con el logo, una
+  barra, el tanto por ciento y frases del conserje que cambian cada 3 s, en el idioma del navegador (de los siete del juego; si
+  no es ninguno, en inglés). Va en tanto por ciento y no en megas porque Godot cuenta los archivos sin comprimir (unos 75 MB), el
+  doble de lo que se descarga.
+- Las frases están en `TEXTOS`, dentro de la página: no pasan por `Idioma.t` (el juego aún no ha arrancado), así que si se cambia
+  una, se cambia ahí en los siete idiomas.
+- El logo va **metido dentro** de la página (una copia de `assets/ui/logo.png` en base64): si se rehace el logo, cambiar lo que va
+  tras `data:image/png;base64,` por el nuevo (con `py` y su módulo `base64`).
+- Para verla sin que cargue de golpe: exportar a una carpeta temporal y servirla despacio (un servidor de `py` que mande los
+  archivos a trozos, con una pausa entre uno y otro).
+
 ## Pantalla completa y Esc
 
 - **Esc es del navegador:** con la pantalla completa puesta, la quita en vez de llegar al juego (en el `.exe` no pasa, ver

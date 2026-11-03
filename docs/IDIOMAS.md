@@ -6,6 +6,9 @@ Language»), se guarda en `ajustes.idioma` y, si nunca se ha elegido, manda el i
 no, inglés). Para añadir otro: ver «Añadir un idioma». Glosarios de cada uno: `GLOSARIO_EN.md`, `GLOSARIO_PT_BR.md`,
 `GLOSARIO_DE.md`, `GLOSARIO_FR.md`, `GLOSARIO_RU.md` y `GLOSARIO_ZH_CN.md`.
 
+La pantalla de carga de la web (`assets/web/carga.html`) tiene sus propias frases en los siete idiomas, fuera de `Idioma.t`: ver
+«La pantalla de carga» en `docs/WEB.md`.
+
 Cómo va la migración (qué archivos ya están pasados y cuáles faltan): ver el apartado «Estado» al final.
 
 ## La idea
