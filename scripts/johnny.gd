@@ -1054,8 +1054,18 @@ func coger(id: String) -> void:
 	sostener(w.tipo)
 
 
+# Deja el hueco de fuego vacío (la pistola, al baúl, sin otra arma a distancia que la sustituya): en la mano, la de cuerpo a cuerpo
+func vaciar_fuego() -> void:
+	huecos.fuego = ""
+	balas = 0
+	deposito = 0.0
+	sostener("cuerpo")
+
+
 # Cambia a la otra arma (Q, rueda del ratón o botón Y)
 func cambiar_mano() -> void:
+	if huecos.fuego == "":   # (sin arma a distancia no hay a qué cambiar)
+		return
 	# a la de fuego sin balas (o sin con qué llenar el depósito) no se cambia
 	if mano == "cuerpo" and cargado() <= 0.0 and reserva() <= 0:
 		sin_municion_aviso()
@@ -1077,7 +1087,7 @@ func preparar_fogonazo() -> void:
 
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta
 func sostener(hueco: String) -> void:
-	mano = hueco
+	mano = "cuerpo" if huecos[hueco] == "" else hueco   # (el hueco de fuego vacío no se puede poner en la mano)
 	preparar_fogonazo()
 	sin_balas_sola = false
 	recargando = 0.0
@@ -1112,7 +1122,8 @@ func avisar_arma() -> void:
 		if recargando > 0.0:
 			texto += "   " + Idioma.t("recargando…")
 	var otra: String = huecos["fuego" if mano == "cuerpo" else "cuerpo"]
-	texto += "\n[Q] " + Objetos.nombre(otra)
+	if otra != "":
+		texto += "\n[Q] " + Objetos.nombre(otra)
 	arma_cambiada.emit(texto)
 
 

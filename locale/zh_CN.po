@@ -153,6 +153,10 @@ msgid "Épica"
 msgstr "史诗"
 
 #: scripts/armas.gd
+msgid "Sin arma a distancia"
+msgstr "没有远程武器"
+
+#: scripts/armas.gd
 msgid "Fregona"
 msgstr "拖把"
 
@@ -4049,6 +4053,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "鼠标或手指：点击或拖动"
 
 #: scripts/ui/inventario.gd
+msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
+msgstr "手枪留在储物箱里了，你没有别的远程武器。从里面取出来才能再开枪。"
+
+#: scripts/ui/inventario.gd
 msgid "Depósito: %d de %d s"
 msgstr "储罐：%d / %d 秒"
 
@@ -4361,6 +4369,10 @@ msgid "No te caben: tus montones de estos están llenos y no te queda hueco para
 msgstr "放不下了：你这种投掷物的几组都满了，也没有空位再放一组。"
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
+msgstr "放在储物箱里，就算倒下也很安全。取出来之前，你没有远程武器。"
+
+#: scripts/ui/inventario.gd
 msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
 msgstr "放在储物箱里，就算倒下也很安全；你手上会换回那把老%s。"
 
@@ -4451,6 +4463,10 @@ msgstr "升级到%s"
 #: scripts/ui/inventario.gd
 msgid "mejorar"
 msgstr "升级"
+
+#: scripts/ui/inventario.gd
+msgid "No llevas arma a distancia que mejorar."
+msgstr "你没有可以升级的远程武器。"
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
@@ -5614,6 +5630,10 @@ msgstr "钱不够：还差 $%d。"
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
 msgstr "购买成功！%s拿到手上；%s换到备用；%s放进储物箱。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano."
+msgstr "购买成功！%s拿到手上。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

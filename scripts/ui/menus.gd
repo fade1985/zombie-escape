@@ -145,6 +145,8 @@ func pausa(partida: Node, foco := "") -> void:
 	derecha.add_child(armas)
 	for hueco in ["cuerpo", "fuego"]:
 		var id: String = johnny.huecos[hueco]
+		if id == "":
+			continue   # (sin arma a distancia)
 		var a: Dictionary = Armas.datos(id)
 		var resumen := Idioma.t("%s · daño %d · %s/s") % [Objetos.nombre(id), a.dano * (a.get("perdigones", 1)), Idioma.puntuar("%.1f" % a.ritmo)]
 		derecha.add_child(Tema.icono_y_texto(Objetos.icono(id), resumen, 20))

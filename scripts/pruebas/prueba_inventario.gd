@@ -11,6 +11,65 @@ func dar_lanzable(k: String) -> void:
 	lanzables.meter(k, 3)
 
 
+# Dejar la pistola Normal en el baúl (M39): sin otra arma a distancia, Johnny se queda con el hueco vacío (la fregona en la
+# mano, Q no cambia, el HUD sin balas, nada que mejorar en el banco) y se puede sacar otra vez; con una de repuesto, esa
+# pasa a la mano. Deja el baúl como estaba y se cierra. Saca captura-baul-pistola.png
+func probar_baul_pistola() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {}
+		g2.baul_equipo = [])
+	mochila.clear()
+	var boton := func(nombre: String) -> String:
+		var b: Button = inventario.fondo.find_child(nombre, true, false)
+		return "no está" if b == null else ("apagado" if b.disabled else "activo")
+	var dice := func() -> String:
+		var t: Label = inventario.fondo.find_child("nota", true, false)
+		return t.text if t else "-"
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	if inventario.abierto != "baul":
+		print("ERROR: el baúl no se ha abierto")
+		get_tree().quit()
+		return
+	inventario.tocar("p1")
+	await get_tree().process_frame
+	print("La pistola Normal elegida: «Guardar en el baúl» %s (esperado: activo) · dice «%s»" % [boton.call("guardar"), dice.call()])
+	inventario.guardar()
+	await get_tree().create_timer(0.3).timeout
+	var s := Guardado.cargar()
+	print("Guardada: huecos %s · mano %s · baúl %s (esperado: fregona y vacío · cuerpo · pistola 0)" % [
+		johnny.huecos, johnny.mano, s.baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad])])
+	johnny.cambiar_mano()
+	johnny.sostener("fuego")
+	print("Q y forzar el hueco vacío: la mano sigue en «%s» (esperado: cuerpo) · balas %d, reserva %d, arma «%s»" % [
+		johnny.mano, johnny.balas, johnny.reserva(), johnny.arma().nombre])
+	await get_tree().process_frame
+	inventario.pintar()
+	inventario.tocar("p1")
+	await get_tree().create_timer(0.3).timeout
+	print("El hueco vacío elegido: «Guardar en el baúl» %s · dice «%s»" % [boton.call("guardar"), dice.call()])
+	Captura.foto("captura-baul-pistola.png")
+	# sacarla: vuelve a la mano de fuego y se puede cambiar con Q
+	inventario.tocar("b0")
+	await get_tree().process_frame
+	inventario.sacar()
+	await get_tree().create_timer(0.3).timeout
+	print("Sacada: huecos %s · mano %s · baúl %d de equipo · balas %d (esperado: fregona y pistola · pistola · 0 · 12)" % [
+		johnny.huecos, johnny.mano, Guardado.cargar().baul_equipo.size(), johnny.balas])
+	# con una de repuesto: pasa a la mano
+	llevar_arma("escopeta", 0)
+	inventario.pintar()
+	inventario.tocar("p1")
+	await get_tree().process_frame
+	inventario.tocar("g1") if inventario.existe("g1") else null
+	print("Con escopeta en la mano y la pistola de repuesto: huecos %s, repuesto %s" % [johnny.huecos, armas_guardadas])
+	Guardado.escribir(antes)
+	get_tree().quit()
+
+
 # Con "--captura --baul": la pantalla del baúl (ui/inventario.gd). En la sala de
 # mantenimiento, con dos piezas especiales en el baúl y en la mochila gasolina, una pieza especial, vendas, una pieza
 # cuerpo a cuerpo y tres a distancia, Johnny

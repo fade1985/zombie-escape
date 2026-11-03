@@ -136,7 +136,7 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   cuerpo, A distancia y especiales, en calidad Normal, y los arrojables de uno en uno (molotov y granada $5,
   atraedora y congeladora $8) mientras quepan; las armas, para esa partida, y los arrojables que sobren, al baúl. Si
   compras un arma y ya llevas dos de ese tipo, la de la mano baja al repuesto y la de repuesto va al baúl en ese momento;
-  si el baúl está lleno o es la fregona o la pistola Normales, la de la mano se queda en el suelo.
+  si el baúl está lleno o es la fregona Normal, la de la mano se queda en el suelo.
 - **Vestuario** (izquierda): ducha, lavabo, váter y banco, de adorno, y la **taquilla** de Johnny para elegir skin
   (las que no tienes salen con «???» y cómo se consiguen): el portero (la portera; fregona +100 %), el glotón (el
   Glotón; quien te hace daño lo paga: un jefe pierde el 3 % de su vida), el gymbro (el Gymbro; cuerpo a cuerpo +50 %) y
@@ -149,7 +149,7 @@ La partida empieza aquí. Tres estancias de 10 × 10 una al lado de otra (arriba
   las balas atraviesan a un zombi (estela morada); especiales, el zombi que matan revienta y prende, echa ácido o da
   calambre a los de al lado; arrojables, al romperse o explotar sueltan 2 más pequeños. Y el **baúl**
   (32 casillas; lo guardado no se pierde si Johnny cae; se maneja como el inventario y se arrastra de una mitad a la
-  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (menos la fregona y la pistola Normales) y arrojables (los del mismo
+  otra). Guarda objetos, munición (las balas y los cartuchos, una casilla cada uno), armas (menos la fregona Normal; la pistola Normal sí: Johnny se queda sin arma a distancia hasta que la saca, `Armas.SIN_FUEGO`, con el hueco de fuego en `""`; al completar el edificio la fregona y la pistola Normales no pasan al baúl) y arrojables (los del mismo
   tipo y calidad juntos, hasta 99, y salen de 5 en 5), cada arma en su casilla y todo con el borde del color de su
   **calidad** (gris Normal, verde Poco común, azul Rara, morado Épica). Lo que lleva encima se pierde si cae; al
   completar el edificio, sus armas y todos sus arrojables pasan solos al baúl. La joyería del centro comercial da un arma Épica. Por la puerta de la derecha, las **viviendas** de los rescatados: arrimarse a uno para que te acompañe (uno a

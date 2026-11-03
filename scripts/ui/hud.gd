@@ -646,6 +646,8 @@ func pintar_escudo() -> void:
 
 # Las balas del cargador, en fila encima de la barra (el lanzallamas y el lanza ácido, su depósito)
 func pintar_balas() -> void:
+	if johnny.huecos.fuego == "":
+		return   # (sin arma a distancia: ni balas ni reserva)
 	var w: Dictionary = johnny.base(johnny.huecos.fuego)
 	var lejos: bool = johnny.mano != "fuego"
 	if w.has("deposito"):

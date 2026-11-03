@@ -33,7 +33,7 @@ const PRECIOS := {"cuchillo": 10, "bate": 15, "pistola": 0, "escopeta": 30, "mp5
 # "distancia" (pistola, escopeta y MP5) o "especial" (lanzallamas, lanza ácido y lanza rayos: las de "efecto").
 # Por dentro, las de A distancia y las especiales son de tipo "fuego" y van en el mismo hueco
 static func familia(id: String) -> String:
-	var w: Dictionary = DATOS[id]
+	var w: Dictionary = datos(id)
 	return "cuerpo" if w.tipo == "cuerpo" else ("especial" if w.has("efecto") else "distancia")
 
 
@@ -83,7 +83,12 @@ const EPICA := 3   # la calidad más alta, la que trae el truco
 #   arrojables        racimo: al romperse o explotar sueltan "racimo" más pequeños alrededor, de "racimo_tamano" su
 #                     tamaño y su daño (proyectil.gd y granada.gd)
 const TRUCO := {"gracia": 4, "atraviesa": 1, "estallido": 80.0, "racimo": 2, "racimo_tamano": 0.5}
-const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar: en Normal no van al baúl
+const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar (la fregona Normal no va al baúl; la pistola sí)
+# Lo que hay en el hueco de fuego cuando Johnny ha dejado la pistola en el baúl y no lleva otra arma a distancia: el id es
+# "" y esto, lo que dicen sus datos (nada dispara; solo para que las cuentas del cargador, el daño... no fallen)
+const SIN_FUEGO := {"nombre": "Sin arma a distancia", "tipo": "fuego", "dano": 0, "ritmo": 1.0, "alcance": 0.0,   # [traducir]
+	"velocidad": 0.0, "perdigones": 1, "abertura": 0.0, "temblor": 0.0, "empuje": 1.0, "cargador": 0, "recarga": 1.0,
+	"cartucho": false, "municion": "", "pies": Vector2(48, 72)}
 # Lo que se ve de la calidad del arma que Johnny lleva en la mano (aura_arma.gd, tajo.gd y la trazadora de bala.gd; la
 # Normal, nada). Por calidad:
 #   "luz"      lo grande que es la luz de su color pegada al arma (unidades) y "fuerza", lo fuerte que luce (alumbra el
@@ -102,17 +107,18 @@ const AURA := [
 ]
 
 
-# ¿Va al baúl? Las armas, todas menos la fregona y la pistola Normales (SIEMPRE: las tiene siempre); los paquetes de
+# ¿Va al baúl? Las armas, todas menos la fregona Normal (con ella siempre se puede pegar; la pistola Normal sí, y Johnny
+# se queda sin arma a distancia: SIN_FUEGO); los paquetes de
 # arrojables (su id de Lanzables.DATOS), los mejorados (los Normales se compran en la tienda y los sueltan los zombis)
 static func al_baul(id: String, calidad: int) -> bool:
 	if not DATOS.has(id):
 		return calidad > 0
-	return calidad > 0 or not id in SIEMPRE.values()
+	return calidad > 0 or id != SIEMPRE.cuerpo
 
 
 # Los datos de un arma con su calidad ya aplicada (sin los atributos de Johnny: eso lo hace johnny.gd, arma_de)
 static func con_calidad(id: String, calidad: int) -> Dictionary:
-	var w: Dictionary = DATOS[id].duplicate()
+	var w: Dictionary = datos(id).duplicate()
 	var c: Dictionary = CALIDADES[clampi(calidad, 0, CALIDADES.size() - 1)]
 	w.calidad = calidad
 	w.dano = w.dano * c.dano
@@ -326,7 +332,7 @@ static func calidad_nombre(calidad: int) -> String:
 # Cómo se dice un arma (o un arrojable: su id de Lanzables.DATOS) con su calidad: «Bate» o «Bate (Rara)», en el idioma del
 # jugador. Para el nombre solo, sin calidad, también vale Objetos.nombre(id)
 static func nombre(id: String, calidad := 0) -> String:
-	var base: String = Objetos.nombre(id) if DATOS.has(id) else Lanzables.uno(id)
+	var base: String = Objetos.nombre(id) if DATOS.has(id) or id == "" else Lanzables.uno(id)
 	return base if calidad <= 0 else "%s (%s)" % [base, calidad_nombre(calidad)]
 
 # Lo que llena las armas que tienen "relleno" (un objeto de la mochila): cómo se dice uno («una gasolina», con su artículo;
@@ -388,4 +394,4 @@ static func municion(id: String) -> String:
 
 # Los datos de un arma por su id (DATOS)
 static func datos(id: String) -> Dictionary:
-	return DATOS[id]
+	return DATOS[id] if id != "" else SIN_FUEGO

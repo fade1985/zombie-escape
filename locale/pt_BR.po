@@ -154,6 +154,10 @@ msgid "Épica"
 msgstr "Épica"
 
 #: scripts/armas.gd
+msgid "Sin arma a distancia"
+msgstr "Sem arma à distância"
+
+#: scripts/armas.gd
 msgid "Fregona"
 msgstr "Esfregão"
 
@@ -4057,6 +4061,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Mouse ou dedo: tocar ou arrastar"
 
 #: scripts/ui/inventario.gd
+msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
+msgstr "A pistola ficou no baú e você não leva outra arma à distância. Tire-a de lá para voltar a atirar."
+
+#: scripts/ui/inventario.gd
 msgid "Depósito: %d de %d s"
 msgstr "Tanque: %d de %d s"
 
@@ -4369,6 +4377,10 @@ msgid "No te caben: tus montones de estos están llenos y no te queda hueco para
 msgstr "Não cabem: suas pilhas destes estão cheias e não sobra espaço para outra."
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
+msgstr "No baú fica a salvo mesmo se você cair. Você fica sem arma à distância até tirá-la."
+
+#: scripts/ui/inventario.gd
 msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
 msgstr "No baú fica a salvo mesmo se você cair; na mão, no lugar dela, volta a de sempre: %s."
 
@@ -4459,6 +4471,10 @@ msgstr "Melhorar para %s"
 #: scripts/ui/inventario.gd
 msgid "mejorar"
 msgstr "melhorar"
+
+#: scripts/ui/inventario.gd
+msgid "No llevas arma a distancia que mejorar."
+msgstr "Você não tem arma à distância para melhorar."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
@@ -5633,6 +5649,10 @@ msgstr "Não dá: faltam $%d."
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
 msgstr "Comprado! %s na mão; %s vai para a reserva e %s vai para o baú."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Comprado! %s na mão."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

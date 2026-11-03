@@ -99,6 +99,8 @@ static func nombre(id: String) -> String:
 		return Idioma.t(USABLES[id].nombre)
 	if id in Armas.MUNICION:   # las balas y los cartuchos (en el baúl)
 		return Armas.municion_nombre(id)
+	if id == "":
+		return Idioma.t(Armas.SIN_FUEGO.nombre)
 	return Idioma.t(Armas.DATOS[id].nombre) if id in Armas.DATOS else id
 
 
@@ -109,6 +111,8 @@ static func pieza_para(familia: String) -> String:
 
 # El icono para Tema.icono_y_texto: los objetos, "obj-<id>"; las armas, el suyo
 static func icono(id: String) -> String:
+	if id == "":
+		return "sin_arma"   # el hueco de fuego vacío (Armas.SIN_FUEGO)
 	if id in NOMBRES:
 		return "obj-" + id
 	if id in USABLES:

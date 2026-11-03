@@ -154,6 +154,10 @@ msgid "Épica"
 msgstr "Épique"
 
 #: scripts/armas.gd
+msgid "Sin arma a distancia"
+msgstr "Pas d'arme à distance"
+
+#: scripts/armas.gd
 msgid "Fregona"
 msgstr "Serpillière"
 
@@ -4057,6 +4061,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Souris ou doigt : toucher ou glisser"
 
 #: scripts/ui/inventario.gd
+msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
+msgstr "Le pistolet est resté au coffre et tu n'as pas d'autre arme à distance. Reprends-le de là pour tirer à nouveau."
+
+#: scripts/ui/inventario.gd
 msgid "Depósito: %d de %d s"
 msgstr "Réservoir : %d sur %d s"
 
@@ -4369,6 +4377,10 @@ msgid "No te caben: tus montones de estos están llenos y no te queda hueco para
 msgstr "Pas de place : tes piles de ceux-ci sont pleines et il ne te reste aucun emplacement pour une autre."
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
+msgstr "Au coffre, rien ne se perd, même si tu tombes. Tu n'auras pas d'arme à distance tant que tu ne l'auras pas reprise."
+
+#: scripts/ui/inventario.gd
 msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
 msgstr "Au coffre, rien ne se perd, même si tu tombes ; à sa place, en main : ton arme habituelle (%s)."
 
@@ -4459,6 +4471,10 @@ msgstr "Améliorer en %s"
 #: scripts/ui/inventario.gd
 msgid "mejorar"
 msgstr "améliorer"
+
+#: scripts/ui/inventario.gd
+msgid "No llevas arma a distancia que mejorar."
+msgstr "Tu n'as pas d'arme à distance à améliorer."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
@@ -5633,6 +5649,10 @@ msgstr "Pas assez : il te manque $%d."
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
 msgstr "Acheté ! En main : %s ; en rechange : %s ; au coffre : %s."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Acheté ! En main : %s."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

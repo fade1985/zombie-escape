@@ -476,6 +476,8 @@ func carga(id: String) -> float:
 # Lo que se ve en la esquina de la casilla de un arma de fuego: «8/12» o, las de depósito, «6 s» ("" las de cuerpo a
 # cuerpo)
 func carga_corta(id: String) -> String:
+	if id == "":
+		return ""   # (sin arma a distancia)
 	var w: Dictionary = partida.johnny.base(id)
 	if w.tipo != "fuego":
 		return ""
@@ -616,6 +618,10 @@ func cabeza(caja: VBoxContainer, icono: String, nombre: String, que_es: String) 
 # repuesto (que pasa a la mano)
 func ficha_arma(caja: VBoxContainer, id: String, puesta: bool) -> Dictionary:
 	var johnny: Node2D = partida.johnny
+	if id == "":   # el hueco de fuego vacío: nada que tirar ni que mejorar
+		cabeza(caja, Objetos.icono(id), Objetos.nombre(id), Idioma.t("A distancia"))
+		return {"que": Idioma.t("La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."),
+			"botones": []}
 	var w: Dictionary = johnny.arma_de(id)
 	cabeza(caja, Objetos.icono(id), Objetos.nombre(id), "%s · %s · %s" % [Armas.tipo_nombre(w.tipo),
 		Armas.calidad_nombre(johnny.calidad(id)), Idioma.t("En la mano") if puesta else Idioma.t("De repuesto")])
@@ -1219,12 +1225,16 @@ func ficha_baul() -> Dictionary:
 			var id: String = johnny.huecos["cuerpo" if i == 0 else "fuego"] if sel[0] == "p" else partida.armas_guardadas[i]
 			var w: Dictionary = johnny.arma_de(id)
 			var calidad: int = johnny.calidad(id)
+			if id == "":   # el hueco de fuego vacío: no hay nada que guardar
+				d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id), "que_es": Idioma.t("A distancia"),
+					"que": Idioma.t("La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar.")}, true)
+				return d
 			d.merge({"icono": Objetos.icono(id), "nombre": Objetos.nombre(id),
 				"que_es": "%s · %s · %s" % [Armas.tipo_nombre(w.tipo), Armas.calidad_nombre(calidad),
 					Idioma.t("En la mano") if sel[0] == "p" else Idioma.t("De repuesto")],
 				"que": que_hace(id) + " "}, true)
 			if Armas.al_baul(id, calidad):
-				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo)
+				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo, id == Armas.SIEMPRE.fuego and calidad == 0)
 				d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, not Objetos.hueco_baul(s)]
 			else:
 				d.que += Idioma.t("La %s Normal no va al baúl: la tienes siempre.") % Idioma.minusculas(Objetos.nombre(id))
@@ -1325,9 +1335,11 @@ func ficha_equipo(o: Dictionary) -> Dictionary:
 
 
 # Lo que pasa al guardar un arma en el baúl ("sin_otra": es la de la mano y no lleva otra de repuesto de su tipo)
-func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String) -> String:
+func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String, hueco_normal := false) -> String:
 	if not Objetos.hueco_baul(s):
 		return Idioma.t("El baúl está lleno: haz sitio sacando algo.")
+	if sin_otra and tipo == "fuego" and hueco_normal:
+		return Idioma.t("En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques.")
 	if sin_otra:
 		return Idioma.t("En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre.") % \
 			Idioma.minusculas(Objetos.nombre(Armas.SIEMPRE[tipo]))
@@ -1514,12 +1526,17 @@ func guardar_equipo() -> void:
 					var otra: String = partida.repuesto(tipo)
 					if otra != "":
 						partida.armas_guardadas.erase(otra)
+					elif id == Armas.SIEMPRE.fuego and e.calidad == 0:
+						otra = ""   # la pistola Normal sin otra a distancia: Johnny se queda sin ella (vaciar_fuego)
 					else:
 						otra = Armas.SIEMPRE[tipo]
 						var w: Dictionary = Armas.datos(otra)
 						if w.tipo == "fuego":   # (llena, pero sin regalar munición de reserva: johnny.coger)
 							johnny.cargadores[otra] = w.get("deposito", w.cargador)
-					johnny.coger(otra)
+					if otra == "":
+						johnny.vaciar_fuego()
+					else:
+						johnny.coger(otra)
 					if johnny.mano != mano:
 						johnny.sostener(mano)   # (la otra mano sigue con la suya)
 					salta_johnny = true
@@ -1892,6 +1909,8 @@ func en_banco(s: Dictionary) -> Dictionary:
 # Por qué no se puede mejorar eso ("" si se puede): ya es Épica, le faltan piezas, (un montón que lleva a mano) ya lleva
 # a mano otro de la calidad de arriba y juntos no caben o (un montón del baúl) no queda sitio para el mejorado
 func no_mejora(o: Dictionary, s: Dictionary) -> String:
+	if o.id == "":
+		return Idioma.t("No llevas arma a distancia que mejorar.")
 	if o.calidad >= Armas.CALIDADES.size() - 1:
 		return Idioma.t("Ya es Épica: no se puede mejorar más.")
 	var pieza := Armas.pieza(o.id)

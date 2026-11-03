@@ -154,6 +154,10 @@ msgid "Épica"
 msgstr "Epic"
 
 #: scripts/armas.gd
+msgid "Sin arma a distancia"
+msgstr "No ranged weapon"
+
+#: scripts/armas.gd
 msgid "Fregona"
 msgstr "Mop"
 
@@ -4057,6 +4061,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Mouse or finger: tap or drag"
 
 #: scripts/ui/inventario.gd
+msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
+msgstr "The pistol stayed in the stash and you carry no other ranged weapon. Take it out of there to shoot again."
+
+#: scripts/ui/inventario.gd
 msgid "Depósito: %d de %d s"
 msgstr "Tank: %d of %d s"
 
@@ -4369,6 +4377,10 @@ msgid "No te caben: tus montones de estos están llenos y no te queda hueco para
 msgstr "They don't fit: your stacks of these are full and you have no room for another."
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
+msgstr "Safe in the stash even if you die. You'll have no ranged weapon until you take it out."
+
+#: scripts/ui/inventario.gd
 msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
 msgstr "Safe in the stash even if you die; in its place, in hand, the usual %s."
 
@@ -4459,6 +4471,10 @@ msgstr "Upgrade to %s"
 #: scripts/ui/inventario.gd
 msgid "mejorar"
 msgstr "upgrade"
+
+#: scripts/ui/inventario.gd
+msgid "No llevas arma a distancia que mejorar."
+msgstr "You have no ranged weapon to upgrade."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
@@ -5633,6 +5649,10 @@ msgstr "Not enough: you're $%d short."
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
 msgstr "Bought! %s in hand; %s goes to spare and %s goes into the stash."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Bought! %s in hand."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."

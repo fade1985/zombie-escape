@@ -1209,7 +1209,9 @@ func llevar_arma(id: String, calidad := 0, a_la_mano := true, al_suelo := true) 
 		johnny.calidades[id] = calidad
 	else:
 		var vieja: String = johnny.huecos[tipo]
-		if repuesto(tipo) == "":
+		if vieja == "":   # (sin arma a distancia: la nueva ocupa el hueco vacío y no hay nada que mandar al repuesto)
+			pass
+		elif repuesto(tipo) == "":
 			armas_guardadas.append(vieja)
 		else:
 			fuera = {"id": vieja, "calidad": johnny.calidad(vieja)}
@@ -1243,12 +1245,12 @@ func repuesto_al_baul(tipo: String) -> Dictionary:
 
 
 # Lo que lleva encima que va al baúl al completar el edificio (Armas.al_baul), como en el guardado ("baul_equipo"):
-# sus armas, menos la fregona y la pistola Normales, y todos sus montones de arrojables (también los Normales: M18),
+# sus armas, menos la fregona y la pistola Normales (las de siempre se quedan en sus manos), y todos sus montones de arrojables (también los Normales: M18),
 # cada uno con cuántos hay en "n" (en el baúl se juntan los del mismo tipo y calidad: Objetos.arrojables_al_baul)
 func equipo_encima() -> Array:
 	var lista := []
 	for id in johnny.huecos.values() + armas_guardadas:
-		if Armas.al_baul(id, johnny.calidad(id)):
+		if Armas.al_baul(id, johnny.calidad(id)) and not (id in Armas.SIEMPRE.values() and johnny.calidad(id) == 0):
 			lista.append({"id": id, "calidad": johnny.calidad(id)})
 	for m in lanzables.montones():
 		if m[1] > 0:

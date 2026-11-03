@@ -846,6 +846,7 @@ func comprar_arma(id: String) -> void:
 		s.armas.append(id)
 	Guardado.escribir(s)
 	partida.ahorrados = s.dolares
+	var sin_vieja: bool = johnny.huecos[w.tipo] == ""   # (sin arma a distancia: no hay una vieja que pase al repuesto)
 	var vieja: String = Armas.nombre(johnny.huecos[w.tipo], johnny.calidad(johnny.huecos[w.tipo]))
 	var al_baul: Dictionary = partida.repuesto_al_baul(w.tipo)   # (con los dos huecos llenos, la de repuesto va al baúl: M26)
 	var suelo: Dictionary = partida.llevar_arma(id)   # (en Normal: las mejoradas salen del banco y de la joyería)
@@ -854,6 +855,8 @@ func comprar_arma(id: String) -> void:
 	if not al_baul.is_empty():
 		texto = Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl.") % [
 			Armas.nombre(id), vieja, Armas.nombre(al_baul.id, al_baul.calidad)]
+	elif sin_vieja:
+		texto = Idioma.t("¡Compra hecha! %s a la mano.") % Armas.nombre(id)
 	elif suelo.is_empty():
 		texto = Idioma.t("¡Compra hecha! %s a la mano; %s pasa al repuesto.") % [Armas.nombre(id), vieja]
 	else:

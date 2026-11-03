@@ -155,6 +155,10 @@ msgid "Épica"
 msgstr "Эпическое"
 
 #: scripts/armas.gd
+msgid "Sin arma a distancia"
+msgstr "Нет оружия дальнего боя"
+
+#: scripts/armas.gd
 msgid "Fregona"
 msgstr "Швабра"
 
@@ -4065,6 +4069,10 @@ msgid "Ratón o dedo: tocar o arrastrar"
 msgstr "Мышь или палец: нажми или перетащи"
 
 #: scripts/ui/inventario.gd
+msgid "La pistola se ha quedado en el baúl y no llevas otra arma a distancia. Sácala de allí para volver a disparar."
+msgstr "Пистолет остался в сундуке, а другого оружия дальнего боя у тебя нет. Достань его оттуда, чтобы снова стрелять."
+
+#: scripts/ui/inventario.gd
 msgid "Depósito: %d de %d s"
 msgstr "Бак: %d из %d с"
 
@@ -4377,6 +4385,10 @@ msgid "No te caben: tus montones de estos están llenos y no te queda hueco para
 msgstr "Не влезают: твои стопки таких полны, и места для новой нет."
 
 #: scripts/ui/inventario.gd
+msgid "En el baúl queda a salvo aunque caigas. Te quedas sin arma a distancia hasta que la saques."
+msgstr "В сундуке будет в сохранности, даже если падешь. Без оружия дальнего боя ты останешься, пока не достанешь его."
+
+#: scripts/ui/inventario.gd
 msgid "En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre."
 msgstr "В сундуке будет в сохранности, даже если падешь; взамен в руке — то, что всегда при тебе: %s."
 
@@ -4467,6 +4479,10 @@ msgstr "Улучшить: %s"
 #: scripts/ui/inventario.gd
 msgid "mejorar"
 msgstr "улучшить"
+
+#: scripts/ui/inventario.gd
+msgid "No llevas arma a distancia que mejorar."
+msgstr "Нет оружия дальнего боя, которое можно улучшить."
 
 #: scripts/ui/inventario.gd
 msgid "Ya es Épica: no se puede mejorar más."
@@ -5652,6 +5668,10 @@ msgstr "Не хватает: нужно еще $%d."
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto y %s va al baúl."
 msgstr "Куплено! %s — в руку, %s уходит в запас, а %s — в сундук."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Compra hecha! %s a la mano."
+msgstr "Куплено! %s — в руку."
 
 #: scripts/ui/ordenador.gd
 msgid "¡Compra hecha! %s a la mano; %s pasa al repuesto."
