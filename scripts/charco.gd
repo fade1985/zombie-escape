@@ -227,7 +227,7 @@ func prender_zombis(delta: float) -> void:
 			if zombi.has_method("prender"):
 				zombi.prender(dano_lanzar)
 			else:
-				zombi.herir(Lanzables.MOLOTOV.quema * Lanzables.MOLOTOV.tick * dano_lanzar, Llamas.FUEGO[2])
+				zombi.herir(Lanzables.MOLOTOV.quema * Lanzables.MOLOTOV.tick * dano_lanzar * Lanzables.a_jefe(zombi), Llamas.FUEGO[2])
 
 
 # El aceite, al acabar, arde: en su sitio, un fuego como el del molotov (con su llamarada)

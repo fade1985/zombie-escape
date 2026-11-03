@@ -147,7 +147,7 @@ func llamarada(r: float) -> void:
 			zombi.prender(dano_lanzar)
 		if zombi.get("inmune_fuego"):
 			continue   # al que el fuego no le hace nada (el jefe de bomberos), el golpe tampoco
-		zombi.recibir_golpe(roundi(Lanzables.MOLOTOV.golpe * dano_lanzar), Vector2.ZERO)
+		zombi.recibir_golpe(roundi(Lanzables.MOLOTOV.golpe * dano_lanzar * Lanzables.a_jefe(zombi)), Vector2.ZERO)
 
 
 func _draw() -> void:

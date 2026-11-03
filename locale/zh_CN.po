@@ -620,7 +620,7 @@ msgstr "博士给自己打了一针之后剩下的东西：大胃王的嘴、健
 msgid "¡A ARDER!"
 msgstr "消防演习！"
 
-#: scripts/bombero.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
 msgid "¡INMUNE!"
 msgstr "免疫！"
 

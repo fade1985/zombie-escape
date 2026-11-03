@@ -621,7 +621,7 @@ msgstr "Ce qui reste du docteur après sa propre dose : la bouche du Glouton, le
 msgid "¡A ARDER!"
 msgstr "AU FEU !"
 
-#: scripts/bombero.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
 msgid "¡INMUNE!"
 msgstr "IMMUNISÉ !"
 

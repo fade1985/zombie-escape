@@ -622,7 +622,7 @@ msgstr "Что осталось от доктора после собствен�
 msgid "¡A ARDER!"
 msgstr "ГОРИ ЯСНО!"
 
-#: scripts/bombero.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
 msgid "¡INMUNE!"
 msgstr "НЕ БЕРЕТ!"
 

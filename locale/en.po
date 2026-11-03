@@ -621,7 +621,7 @@ msgstr "What's left of the doctor after his own dose: the Glutton's mouth, the G
 msgid "¡A ARDER!"
 msgstr "FIRE DRILL!"
 
-#: scripts/bombero.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
 msgid "¡INMUNE!"
 msgstr "IMMUNE!"
 

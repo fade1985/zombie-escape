@@ -50,7 +50,7 @@ func _ready() -> void:
 		var hacia: Vector2 = zombi.global_position - global_position
 		if hacia.length() <= radio + zombi.radio and not tapado(zombi.global_position):
 			pilla = true
-			var cuanto := dano if dano_zombis < 0 else dano_zombis
+			var cuanto := roundi((dano if dano_zombis < 0 else dano_zombis) * Lanzables.a_jefe(zombi))   # (a los jefes, la mitad)
 			if zombi is Minijefe:   # la explosión les da de lleno (el escudo del antidisturbios no la para)
 				zombi.recibir_golpe(cuanto, hacia.normalized() * EMPUJE, true)
 			else:

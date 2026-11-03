@@ -781,6 +781,32 @@ func probar_cientifico_jefe(camara: Camera2D) -> void:
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-criatura-fuego.png")
 	print("  fuego: %s | bolas en el aire %d" % [jefa.estado, get_tree().get_nodes_in_group("balas_zombi").size()])
+	# M41 y M42: a la criatura el fuego del suelo no le hace nada, una granada le hace la mitad y, si quedan pocos
+	# zombis, ruge y llegan tres vecinos
+	await get_tree().create_timer(0.6).timeout
+	var antes_vida: int = jefa.vida
+	jefa.herir(20.0, Llamas.FUEGO[2])
+	print("  fuego del suelo (20): le quita %d (esperado: 0, «¡INMUNE!»)" % (antes_vida - jefa.vida))
+	johnny.position = jefa.position + Vector2(400, 0)
+	antes_vida = jefa.vida
+	var ex: Node2D = load("res://escenas/armas/explosion.tscn").instantiate()
+	ex.dano = Lanzables.GRANADA.dano
+	ex.radio = Lanzables.GRANADA.radio
+	ex.position = jefa.position
+	jefa.get_parent().add_child(ex)
+	await get_tree().physics_frame
+	print("  una granada (%d): le quita %d (esperado: %d, la mitad)" % [Lanzables.GRANADA.dano, antes_vida - jefa.vida,
+		roundi(Lanzables.GRANADA.dano * Lanzables.A_JEFES)])
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != jefa:
+			z.queue_free()
+	await get_tree().physics_frame
+	jefa.espera_criatura.sujetos = 0.0
+	jefa.elegir_criatura(johnny, 400.0)
+	await get_tree().physics_frame
+	print("  sin zombis, ruge: llegan %d (esperado: 3)" % jefa.secuaces())
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-criatura-ruge.png")
 	for z in vecinos:
 		if is_instance_valid(z):
 			z.queue_free()

@@ -56,7 +56,7 @@ en una línea.
   arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
   `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
-  de una clave de hasta `MONTON` (5; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
+  de una clave de hasta `MONTON` (3 desde la M42; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
   de cada clave, F cambia; sus cuentas en `cantidades`) y 8 de repuesto (`repuesto` y sus cuentas en `en_repuesto`,
   con varios de la misma clave). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
   sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su
@@ -66,7 +66,8 @@ en una línea.
   detrás (`"molotov:2"`; `clave`, `tipo_de`, `calidad_de`; el banco lo sube con `mejorar`). Al completar el edificio
   van todos al baúl (`partida.equipo_encima`, `montones`), también los Normales; allí se juntan los del mismo tipo y
   calidad hasta 99 por casilla (`Objetos.arrojables_al_baul`, `caben_arrojables`) y salen de montón en montón
-  («Sacar 5»). Se prueba con `--montones`.
+  («Sacar 3»). Se prueba con `--montones`. A los jefes, el fuego y las explosiones les hacen la mitad (`A_JEFES`,
+  `a_jefe`: lo miran `explosion.gd`, `charco.gd` y `proyectil.gd`).
   `granada.gd`: también la atraedora y la congeladora (cada una con su propio dibujo, su icono: `DIBUJOS_PROPIOS`).
   Rebota en las paredes también en el aire (`choque_hasta`, con `mapa.muro_entre`) y en los muebles solo a ras de suelo;
   por eso lanzar de un toque (`mas_cercano`) no le apunta a un zombi tras una pared. El molotov vuela por encima de todo.

@@ -27,6 +27,8 @@
 #   - Puñetazo al suelo: si Johnny está cerca, marca un círculo rojo y da con los dos puños: una onda expansiva que
 #     crece desde él; si te pilla (esquivando, no) te quita 24 y te tira al suelo.
 #   - Escupitajos de fuego: si Johnny está lejos y a la vista, tres bolas de fuego en abanico (bola_fuego.gd).
+# Y (M41, el dueño lo veía demasiado fácil) el fuego no le hace nada, como al bombero (inmune_fuego: ni el molotov ni el
+# lanzallamas), y si quedan pocos zombis ruge y llegan tres vecinos, como los sujetos del científico.
 # Al caer la criatura, la partida enseña la última página del dosier y trae el helicóptero de Velaria (partida.gd).
 # Sus animaciones (PixelLab): andar y probetas en las 8 direcciones (las del oeste, el este en espejo), suero (vale
 # para llamar) y jeringa solo de frente. Las de la criatura, en otra hoja: andar, lenguas, punetazo, escupir y muerte.
@@ -50,13 +52,15 @@ const SUERO_A := 3                       # a cuántos zombis inyecta de una vez
 const SUERO_VIDA := 1.6                  # la vida máxima se multiplica por esto (y se le suma la diferencia)
 const SUERO_VELOCIDAD := 1.3
 const SUERO_DANO := 6
-const CUPULA_VIDA := 140
+const CUPULA_VIDA := 220                 # (M41: antes 140)
 const CUPULA_RADIO := 62.0               # lo ancha que es (a la medida del doctor sin mutar)
 const CUPULA_DURA := 7.0                 # lo que aguanta dentro si no se la rompen
 const CUPULA_SUBE := 0.4                 # lo que tarda en subir (y en bajar)
 const CUPULA_PROBETAS := 1.6             # dentro, cada cuánto tira probetas
 const TAMBALEO := 0.9                    # lo que se tambalea al rompérsela
-const ESPERAS := {"probetas": 3.0, "suero": 9.0, "sujetos": 14.0, "cupula": 14.0}
+# Lo que espera entre un ataque y el siguiente del mismo tipo (M41, era demasiado fácil: un 25 % menos que antes, y la
+# cúpula, cada 10 s en vez de 14)
+const ESPERAS := {"probetas": 2.25, "suero": 6.75, "sujetos": 10.5, "cupula": 10.0}
 const PIE := 34.0                        # a qué altura dibuja los pies respecto a su centro
 # El fotograma de "probetas" con el brazo adelante (cuando sale la probeta de código), según hacia dónde mire
 const SUELTA := {"s": 4, "se": 5, "e": 4, "ne": 4, "n": 4, "no": 4, "o": 4, "so": 5}
@@ -100,7 +104,8 @@ const ABRE_BOLAS := 0.24
 const VELOCIDAD_BOLA := 360.0
 const DANO_BOLA := 12
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}
-const ESPERAS_CRIATURA := {"lenguas": 2.2, "punetazo": 3.2, "fuego": 3.6}
+# (M41: un 25 % menos que antes; "sujetos", el rugido con el que llama a más vecinos si quedan pocos)
+const ESPERAS_CRIATURA := {"lenguas": 1.65, "punetazo": 2.4, "fuego": 2.7, "sujetos": 12.0}
 # El fotograma de cada ataque de la criatura en el que llega el golpe (cuando salen las lenguas, la onda y las bolas)
 const GOLPE := {"lenguas": 3, "punetazo": 4, "escupir": 4}
 # Las lenguas, pintadas con código (lengua.gd), iguales que las de su dibujo (colores sacados píxel a píxel de su
@@ -135,7 +140,10 @@ var destello := 0.0                      # lo que brilla porque le acaban de dar
 var escudo: Array[Sprite2D] = []         # las tres capas de la cúpula (detrás, delante y brillo)
 var ondas: Array[Dictionary] = []        # donde rebotan las balas en la cúpula: su onda ("donde", desde su centro; "t")
 var mutado := false
-var espera_criatura := {"lenguas": 0.8, "punetazo": 1.5, "fuego": 2.0}
+var espera_criatura := {"lenguas": 0.8, "punetazo": 1.5, "fuego": 2.0, "sujetos": 3.0}
+var inmune_fuego := false                # la criatura (M41): lleva el fuego del bombero, así que no se quema (lo miran
+                                         # proyectil.gd, armas_creadas.gd y llamarada.gd, como en el bombero; y herir)
+var aviso_inmune := 0.0                  # para no decir «¡INMUNE!» a cada llama
 var lenguas: Array[Lengua] = []          # las de la criatura
 
 
@@ -478,6 +486,7 @@ func mutar() -> void:
 	radio = RADIO_CRIATURA
 	arriba = ARRIBA_CRIATURA
 	dano_contacto = 14
+	inmune_fuego = true
 	$Choque.shape = $Choque.shape.duplicate()
 	$Choque.shape.radius = radio
 	$Sombra.ancho = 130.0
@@ -500,9 +509,22 @@ func mutar() -> void:
 
 # ── La criatura ──
 
+# El fuego de los charcos (llega con el color del fuego) no le quema a la criatura: «¡INMUNE!» de vez en cuando. Lo
+# demás (el calambre del agua, el ácido...), como a cualquier jefe
+func herir(cantidad: float, color := Color.WHITE) -> void:
+	if inmune_fuego and color == Llamas.FUEGO[2]:
+		if aviso_inmune <= 0.0 and estado != "muerto":
+			aviso_inmune = 1.5
+			gritar(Idioma.t("¡INMUNE!"), Llamas.FUEGO[1], 18)
+		return
+	super(cantidad, color)
+
+
+
 func pensar_criatura(delta: float, johnny: Node2D) -> void:
 	for k in espera_criatura:
 		espera_criatura[k] -= delta
+	aviso_inmune -= delta
 	var hacia: Vector2 = johnny.global_position - global_position
 	var d := hacia.length()
 	match estado:
@@ -552,6 +574,12 @@ func pensar_criatura(delta: float, johnny: Node2D) -> void:
 
 func elegir_criatura(johnny: Node2D, d: float) -> void:
 	var angulo := (johnny.global_position - global_position).angle()
+	# si quedan pocos zombis, ruge y llegan tres vecinos (M41), sin pararse: luego elige su ataque
+	if espera_criatura.sujetos <= 0.0 and secuaces() <= POCOS:
+		espera_criatura.sujetos = ESPERAS_CRIATURA.sujetos
+		gritar(Idioma.t("¡GRAAAAH!"), VERDE, 24)
+		Sonido.tocar("rugido")
+		llamar_sujetos()
 	if d < DISTANCIA_PUNETAZO and espera_criatura.punetazo <= 0.0:
 		espera_criatura.punetazo = ESPERAS_CRIATURA.punetazo
 		empezar("aviso_punetazo", angulo)

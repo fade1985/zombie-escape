@@ -621,7 +621,7 @@ msgstr "O que sobrou do doutor depois da própria dose: a boca do Glutão, os br
 msgid "¡A ARDER!"
 msgstr "VAI ARDER!"
 
-#: scripts/bombero.gd scripts/minijefe.gd
+#: scripts/bombero.gd scripts/cientifico_jefe.gd scripts/minijefe.gd
 msgid "¡INMUNE!"
 msgstr "IMUNE!"
 

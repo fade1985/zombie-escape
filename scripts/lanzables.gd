@@ -8,7 +8,7 @@
 #   - Con la ayuda "Lanzar apuntando solo" (Opciones > Ayudas), va siempre al zombi más cercano a la vista
 #     (el mismo que buscaría el modo de atacar asistido); si no se ve ninguno, se apunta como siempre.
 #   - Van en montones (el M18 del dueño, 28 oct): cada hueco lleva un montón de un tipo y una calidad, de hasta MONTON
-#     (5; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, uno de cada clave (F o RB cambian lo
+#     (3; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, uno de cada clave (F o RB cambian lo
 #     que se lanza entre ellos), y REPUESTO de repuesto, donde puede haber varios de la misma. No hay tope por tipo: se
 #     coge mientras quede sitio. Al empezar, el molotov y la granada, a mano. Lo que consigue va al montón de su clave
 #     que no esté lleno (primero el de la mano); si están llenos, a un montón nuevo: a la mano si hay hueco y no lleva
@@ -35,7 +35,7 @@ extends Node2D
 # Números del molotov (provisionales, como en el JS)
 const MOLOTOV := {
 	"inicio": 2,       # botellas al empezar la partida
-	"suelta": 0.06,    # probabilidad de que un zombi suelte una al morir
+	"suelta": 0.03,    # probabilidad de que un zombi suelte una al morir (M42: antes 0,06; con diez a mano se mataba a los jefes muy fácil)
 	"alcance": 300.0,  # lo más lejos que se puede lanzar
 	"vuelo": 0.55,     # segundos en el aire
 	"altura": 110.0,   # altura de la parábola
@@ -55,7 +55,7 @@ const MOLOTOV := {
 # Números de la granada
 const GRANADA := {
 	"inicio": 2,
-	"suelta": 0.05,
+	"suelta": 0.025,   # (M42: antes 0,05)
 	"vuelo": 0.45,     # segundos hasta tocar el suelo
 	"mecha": 2.0,      # segundos desde el lanzamiento hasta que explota
 	"radio": 110.0,    # radio de la explosión
@@ -65,6 +65,9 @@ const GRANADA := {
 	"rebote": 0.35,    # cuánta velocidad en el suelo conserva al botar
 	"roce": 7.0,       # lo que frena al rodar
 }
+# Lo que les hacen a los jefes (la portera y los Minijefe) el fuego y las explosiones: la mitad (M42), para que no se
+# caigan solo a base de lanzables. Lo miran explosion.gd, charco.gd (el fuego del suelo) y proyectil.gd (la llamarada)
+const A_JEFES := 0.5
 const FABRICANTE := {"radio": 1.3, "duracion": 1.5}   # el talento: fuego y explosiones más grandes y largos
 # La atraedora y la congeladora (ARROJADIZAS de src/armas-creadas.js): granadas con otro efecto
 #   inicio   como en el molotov y la granada (no se tiene ninguna al empezar) · dano  de la explosión
@@ -92,7 +95,7 @@ const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
 const MANO := 3            # los montones que lleva a mano (F cambia entre ellos)
 const REPUESTO := 8        # y los de repuesto
-const MONTON := 5          # los que caben en un montón (antes, un tope por tipo: 5 molotovs, 4 granadas y 3 de las otras)
+const MONTON := 3          # los que caben en un montón (M42: antes 5; y antes aún, un tope por tipo: 5 molotovs, 4 granadas y 3 de las otras)
 
 var johnny: Node2D
 var partida: Node
@@ -109,6 +112,11 @@ var t := 0.0
 func _ready() -> void:
 	top_level = true   # se dibuja en las coordenadas del mundo
 	z_index = 15
+
+
+# Por cuánto se multiplica el daño del fuego o de una explosión a ese zombi (A_JEFES a los jefes; 1 a los demás)
+static func a_jefe(zombi: Node) -> float:
+	return A_JEFES if zombi is Minijefe or zombi.get_meta("tipo", "") == "portera" else 1.0
 
 
 # La clave de un paquete: el tipo y, si no es Normal, su calidad («molotov:2»)
