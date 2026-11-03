@@ -13,8 +13,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M67** Los ocho huecos de los lanzables: partirlos en dos grupos de cuatro, a la izquierda cuatro para los lanzables y a
-  la derecha cuatro para las curas.
 - **M68** Evento de la alarma de incendios: el doble de cables sueltos, y que estén electrocutando todo el rato.
 - **M69** La fase dos del doctor Salas (la criatura, después de pincharse) es demasiado fácil: hacerla más difícil.
 - **M70** La misión diaria (el reto del día): que ponga en algún sitio cuál es su recompensa.
