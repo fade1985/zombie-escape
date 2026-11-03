@@ -127,8 +127,8 @@
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
-#   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia entera en la
-#                       tele, para ver si caben                                        [prueba_larga.gd]
+#   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia en la
+#                       tele, trozo a trozo, para ver si caben                         [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
 #                       completar el edificio                                          [prueba_inventario.gd]
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)

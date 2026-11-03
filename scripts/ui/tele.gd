@@ -3,7 +3,8 @@
 # noche delante del edificio de la noticia (el número 14 o el centro comercial) con la policía, y la reportera de
 # Canal 8 (Marta Ruiz) con su micro, que mueve la boca al hablar y parpadea. Por código: "EN DIRECTO" parpadeando, el
 # logo, el rótulo con su nombre (solo al empezar, como en la tele de verdad), el del titular y la cinta de abajo que
-# corre. Debajo, lo que dice la reportera, saliendo letra a letra (con un "bip" de voz).
+# corre. Debajo, lo que dice la reportera, saliendo letra a letra (con un "bip" de voz), con letras grandes (M75) y
+# por trozos, los que caben en el cuadro: al acabar uno sale una flechita y, al pulsar, sigue con el siguiente.
 # Se usa así:  var tele := Tele.new()  ·  tele.poner(noticia)   (una de Historia.NOTICIAS)
 class_name Tele
 extends Control
@@ -19,7 +20,8 @@ const ROJO := Color("#c0392b")
 const AZUL := Color("#1d2a6b")
 const MUEBLE_EN := Vector2(24, 0)   # centrado encima del cuadro del texto
 const PANTALLA := Rect2(46, 54, 288, 164)   # el hueco del mueble (lo dice tools/tele.py), más MUEBLE_EN
-const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # cabe la noticia más larga (unas 300 letras)
+const CAJA_TEXTO := Rect2(0, 262, 448, 142)   # lo que dice la reportera, por trozos (partir)
+const LETRA := 32   # el tamaño de esas letras (M75: antes 16, y cabía la noticia entera)
 const NOMBRE_SEGUNDOS := 4.0   # lo que se ve el rótulo con el nombre de la reportera al empezar
 
 var noticia: Dictionary
@@ -33,6 +35,8 @@ var texto: Label
 var tiempo := 0.0
 var en_antena := 0.0    # lo que lleva la noticia puesta (para el rótulo del nombre)
 var letras := 0.0
+var trozos: Array[String] = []   # lo que dice la reportera, en los trozos que caben en el cuadro
+var trozo := 0                  # el que está diciendo
 var boca := 0           # el dibujo de la reportera mientras habla (0, 1 o 2)
 var nieve := 0.0        # el ruido de cambiar de canal, al poner una noticia
 
@@ -67,8 +71,8 @@ func _init() -> void:
 	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	texto.add_theme_color_override("font_color", Color("#e8e8d0"))
 	texto.add_theme_constant_override("outline_size", 0)
-	texto.add_theme_font_size_override("font_size", 16)
-	texto.add_theme_constant_override("line_spacing", -4)
+	texto.add_theme_font_size_override("font_size", LETRA)
+	texto.add_theme_constant_override("line_spacing", -8)
 	add_child(texto)
 
 
@@ -89,21 +93,62 @@ func poner(n: Dictionary) -> void:
 	titular.text = Historia.titular_de(n)
 	cinta.text = Idioma.t("ÚLTIMA HORA  ·  %s: «LA SITUACIÓN ESTÁ CONTROLADA»  ·  NO SE ACERQUEN AL EDIFICIO  ·  ") % Historia.EMPRESA.to_upper()
 	cinta.position.x = PANTALLA.size.x
-	texto.text = Historia.texto_de(n)
-	texto.visible_characters = 0
-	letras = 0.0
+	trozos = partir(Historia.texto_de(n))
+	empezar_trozo(0)
 	en_antena = 0.0
 	boca = 0
 	nieve = 0.3
 
 
-# Si está hablando, termina de golpe; si ya había terminado, vuelve a empezar
+# Si está hablando, termina el trozo de golpe; si ya lo había terminado, sigue con el siguiente y, después del
+# último, vuelve a empezar
 func saltar() -> void:
 	if hablando():
 		letras = texto.get_total_character_count()
 		texto.visible_characters = -1
+	elif trozo + 1 < trozos.size():
+		empezar_trozo(trozo + 1)
 	elif not noticia.is_empty():
 		poner(noticia)
+
+
+func empezar_trozo(i: int) -> void:
+	trozo = i
+	texto.text = trozos[i] if i < trozos.size() else ""
+	texto.visible_characters = 0
+	letras = 0.0
+
+
+# Las líneas que caben en el cuadro del texto
+func lineas_que_caben() -> int:
+	var alto := texto.get_line_height() + texto.get_theme_constant("line_spacing")
+	return maxi(1, int((texto.size.y - texto.get_line_height()) / alto) + 1)
+
+
+# Parte lo que dice la reportera en trozos que quepan en el cuadro, palabra a palabra (se mide con el mismo texto).
+# En chino no hay espacios: allí cada letra cuenta como una palabra (PALABRA)
+const PALABRA := "[\\x{2E80}-\\x{9FFF}\\x{FF00}-\\x{FFEF}]\\s*|[^\\s\\x{2E80}-\\x{9FFF}\\x{FF00}-\\x{FFEF}]+\\s*|\\s+"
+func partir(todo: String) -> Array[String]:
+	var cuantas := lineas_que_caben()
+	var lista: Array[String] = []
+	var actual := ""
+	texto.visible_characters = -1   # (se mide con todas las letras a la vista)
+	for m in RegEx.create_from_string(PALABRA).search_all(todo):
+		var prueba: String = actual + m.get_string()
+		texto.text = prueba.strip_edges()
+		if actual.strip_edges() != "" and texto.get_line_count() > cuantas:
+			lista.append(actual.strip_edges())
+			actual = m.get_string()
+		else:
+			actual = prueba
+	if actual.strip_edges() != "":
+		lista.append(actual.strip_edges())
+	return lista
+
+
+# ¿Queda otro trozo por decir? (la flechita del cuadro)
+func hay_mas() -> bool:
+	return not hablando() and trozo + 1 < trozos.size()
 
 
 func hablando() -> bool:
@@ -134,6 +179,7 @@ func _process(delta: float) -> void:
 	if cinta.position.x < -cinta.size.x:
 		cinta.position.x = PANTALLA.size.x
 	pantalla.queue_redraw()
+	queue_redraw()
 
 
 # La boca para cada letra: abierta en la a, la o y la u; entreabierta en la e, la i y las demás letras que suenan;
@@ -151,6 +197,10 @@ func boca_de(letra: String) -> int:
 func _draw() -> void:
 	draw_rect(CAJA_TEXTO, Color("#10141c"))
 	draw_rect(CAJA_TEXTO, CONTORNO, false, 3.0)
+	# la flechita de que hay más, abajo a la derecha, dando saltitos
+	if hay_mas():
+		var o := CAJA_TEXTO.end - Vector2(22, 14) + Vector2(0, 2 if fmod(tiempo, 0.8) < 0.4 else 0)
+		draw_colored_polygon(PackedVector2Array([o + Vector2(-6, -6), o + Vector2(6, -6), o]), Color("#e8e8d0"))
 
 
 # Lo de dentro de la pantalla: la calle, la reportera y los rótulos

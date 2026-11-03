@@ -758,10 +758,16 @@ func probar_noticias() -> void:
 	# luego, sin el rótulo del nombre (sale solo al empezar) y con todo lo que dice la reportera (¿cabe en su cuadro?)
 	await get_tree().create_timer(2.0).timeout
 	for t in ordenador.find_children("*", "", true, false):
-		if t is Tele:
-			t.saltar()
+		if t is Tele and t.hablando():
+			t.saltar()   # (que termine el primer trozo)
 	await get_tree().create_timer(0.2).timeout
 	Captura.foto("captura-noticias-entera.png")
+	for t in ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele):
+		print("La tele: letras de %d, %d trozos, este con %d líneas (caben %d) · ¿flechita? %s (esperado: 32 · más de 1 · true)" % [
+			Tele.LETRA, t.trozos.size(), t.texto.get_line_count(), t.lineas_que_caben(), t.hay_mas()])
+		t.saltar()   # el trozo siguiente
+	await get_tree().create_timer(1.5).timeout
+	Captura.foto("captura-noticias-trozo2.png")
 	print("Noticias vistas tras abrir: ", Guardado.cargar().noticias_vistas)
 	ordenador.abrir("")
 	ordenador.apagar()
@@ -769,7 +775,7 @@ func probar_noticias() -> void:
 
 # Con "--captura --historia": todos los textos de historia.gd, para ver si caben. Cada página del dosier de cada
 # edificio en su hoja, como al cogerla (captura-hoja-<id>.png), y cada noticia en la tele con todo lo que dice la
-# reportera (captura-tele-<id>.png). Al acabar, el guardado de prueba vuelve a tener sus páginas y sus noticias
+# reportera, trozo a trozo (captura-tele-<id>-<trozo>.png). Al acabar, el guardado de prueba vuelve a tener sus páginas y sus noticias
 func probar_historia_entera() -> void:
 	var antes := Guardado.cargar().duplicate(true)
 	for e in Historia.DOSIERES:
@@ -793,11 +799,33 @@ func probar_historia_entera() -> void:
 	for n in Historia.NOTICIAS:
 		ordenador.abrir("noticias", "b_" + n.id)
 		await get_tree().create_timer(0.3).timeout
-		for t in ordenador.find_children("*", "", true, false):
-			if t is Tele:
-				t.saltar()
+		var tele: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+		tele.saltar()
 		await get_tree().create_timer(2.5).timeout   # que se vaya el rótulo del nombre de la reportera
-		Captura.foto("captura-tele-%s.png" % n.id)
+		# cada trozo de lo que dice (M75), entero: ¿cabe en el cuadro?
+		for i in tele.trozos.size():
+			print("Tele %s, trozo %d de %d: %d líneas (caben %d)" % [n.id, i + 1, tele.trozos.size(),
+				tele.texto.get_line_count(), tele.lineas_que_caben()])
+			Captura.foto("captura-tele-%s-%d.png" % [n.id, i + 1])
+			tele.saltar()
+			tele.saltar()
+			await get_tree().create_timer(0.1).timeout
+	# en otros idiomas (el ruso y el chino tienen las líneas más altas; el chino, sin espacios): ¿algún trozo se sale?
+	var tele_idiomas: Tele = ordenador.find_children("*", "", true, false).filter(func(x): return x is Tele)[0]
+	for codigo in ["de", "ru", "zh_CN"]:
+		Idioma.poner(codigo, false)
+		var peor := 0
+		var trozos := 0
+		for n in Historia.NOTICIAS:
+			tele_idiomas.poner(n)
+			trozos = maxi(trozos, tele_idiomas.trozos.size())
+			tele_idiomas.texto.visible_characters = -1
+			for t in tele_idiomas.trozos:
+				tele_idiomas.texto.text = t
+				peor = maxi(peor, tele_idiomas.texto.get_line_count())
+		print("Tele en %s: hasta %d trozos, el más largo con %d líneas (caben %d)" % [codigo, trozos, peor,
+			tele_idiomas.lineas_que_caben()])
+	Idioma.poner(Idioma.ORIGEN, false)
 	ordenador.abrir("")
 	ordenador.apagar()
 	Guardado.cambiar(func(g):
