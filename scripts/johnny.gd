@@ -221,14 +221,17 @@ func _input(evento: InputEvent) -> void:
 
 
 # Le pone unos atributos nuevos (al empezar la partida con los talentos, o al comprar uno en el ordenador).
-# La vida de más viene llena (sin curar los tercios perdidos) y, si acaba de tener Acero (o Blindaje), su escudo de más
+# La vida de más viene llena (sin curar los tercios perdidos) y, si acaba de tener Acero (o Blindaje), su escudo de más.
+# Con menos (al resetear los talentos, M32), no se queda por encima de lo que ahora le toca
 func poner_stats(nuevos: Dictionary) -> void:
 	var antes: Dictionary = stats
 	stats = nuevos
 	if stats.vida_max > antes.vida_max:
 		vida = mini(vida + stats.vida_max - antes.vida_max, vida_tope())
+	vida = mini(vida, vida_tope())
 	if stats.escudo > antes.escudo:
 		escudo += stats.escudo - antes.escudo
+	escudo = mini(escudo, stats.escudo)
 	vida_cambiada.emit(vida, stats.vida_max)
 
 

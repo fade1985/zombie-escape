@@ -86,6 +86,7 @@ var tarea: Label
 var reloj: Label
 var abierta := ""           # el programa abierto ("" = solo el escritorio)
 var rama_abierta := "militar"   # en Puntos, la pestaña de la rama del árbol que se ve
+var seguro_resetear := false     # en Puntos, ya se ha pulsado una vez «Resetear talentos»: la segunda lo hace (M32)
 
 
 func _ready() -> void:
@@ -303,6 +304,8 @@ func _process(_delta: float) -> void:
 func abrir(programa: String, foco := "") -> void:
 	var antes := abierta
 	abierta = programa
+	if foco != "b_resetear":
+		seguro_resetear = false   # («¿Seguro?» solo vale justo después de pulsarlo)
 	if programa != antes:
 		Sonido.tocar("click")
 	# Al volver a abrir el mismo programa (tras comprar o subir algo), cada desplazamiento se queda donde estaba
@@ -529,6 +532,14 @@ func programa_puntos(c: VBoxContainer) -> void:
 		Idioma.t("Cambiar"), "" if alcanzables >= 1 else "bloqueada")
 	enlazar(todo, Idioma.t("Cambia todos los dólares que puedas por puntos ($%d = 1 punto)") % Talentos.PRECIO_PUNTO,
 		func(): comprar(maxi(1, Guardado.cargar().dolares / Talentos.PRECIO_PUNTO)))
+	# Resetear (M32): devuelve todos los puntos puestos, por PRECIO_RESETEAR. Se pulsa dos veces, por si acaso
+	var en_el_arbol := Talentos.puestos(s)
+	var resetear := tarjeta(botones, "b_resetear", "herramientas", Idioma.t("Resetear talentos"),
+		Idioma.t("Cuesta $%d") % Talentos.PRECIO_RESETEAR if en_el_arbol > 0 else Idioma.t("No hay puntos puestos"),
+		Idioma.t("¿Seguro?") if seguro_resetear else Idioma.t("Resetear"),
+		"" if en_el_arbol > 0 and s.dolares >= Talentos.PRECIO_RESETEAR else "bloqueada")
+	enlazar(resetear, Idioma.t("Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d.") %
+		Talentos.PRECIO_RESETEAR, resetear_talentos)
 	var arbol := grupo(c, Idioma.t("Árbol de talentos · cada punto sube un nivel"))
 	# Una pestaña por rama (con tres, una al lado de otra no cabían): la abierta, hundida y en verde, y debajo su árbol
 	var pestanas := HBoxContainer.new()
@@ -694,6 +705,29 @@ func comprar(n: int) -> void:
 	abrir("puntos", "b_comprar_1" if s.dolares >= Talentos.PRECIO_PUNTO else "")
 	# (el español pone «puntos» también con 1, como siempre; el inglés sí distingue)
 	info.set_deferred("text", Idioma.n("¡Hecho! Ahora tienes %d punto para gastar.", "¡Hecho! Ahora tienes %d puntos para gastar.", s.puntos) % s.puntos)   # después de marcar el botón (que pone su explicación)
+
+
+# «Resetear talentos»: la primera vez solo pregunta; la segunda quita los puntos del árbol y los devuelve
+func resetear_talentos() -> void:
+	var s := Guardado.cargar()
+	if Talentos.puestos(s) == 0 or s.dolares < Talentos.PRECIO_RESETEAR:
+		Sonido.tocar("no")
+		info.text = Idioma.t("No tienes ningún punto puesto.") if Talentos.puestos(s) == 0 else 			Idioma.t("No te llega: resetear cuesta $%d de lo ahorrado.") % Talentos.PRECIO_RESETEAR
+		return
+	if not seguro_resetear:
+		seguro_resetear = true
+		abrir("puntos", "b_resetear")
+		info.set_deferred("text", Idioma.t("¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."))
+		return
+	seguro_resetear = false
+	var devueltos := Talentos.puestos(s)
+	s = Talentos.resetear()
+	Sonido.tocar("compra")
+	partida.ahorrados = s.dolares   # el HUD enseña lo ahorrado más lo de esta partida
+	partida.aplicar_talentos(s.talentos)
+	abrir("puntos", "b_resetear")
+	info.set_deferred("text", Idioma.n("¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar.",
+		"¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar.", devueltos) % [devueltos, s.puntos])
 
 
 func subir(id: String) -> void:

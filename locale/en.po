@@ -5427,6 +5427,26 @@ msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
 msgstr "Trade as many dollars as you can for points ($%d = 1 point)"
 
 #: scripts/ui/ordenador.gd
+msgid "Resetear talentos"
+msgstr "Reset talents"
+
+#: scripts/ui/ordenador.gd
+msgid "No hay puntos puestos"
+msgstr "No points spent"
+
+#: scripts/ui/ordenador.gd
+msgid "¿Seguro?"
+msgstr "Sure?"
+
+#: scripts/ui/ordenador.gd
+msgid "Resetear"
+msgstr "Reset"
+
+#: scripts/ui/ordenador.gd
+msgid "Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d."
+msgstr "Removes every point spent in the tree and gives them back to spend again. Costs $%d."
+
+#: scripts/ui/ordenador.gd
 msgid "Árbol de talentos · cada punto sube un nivel"
 msgstr "Talent tree · each point adds a level"
 
@@ -5495,6 +5515,24 @@ msgid "¡Hecho! Ahora tienes %d punto para gastar."
 msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
 msgstr[0] "Done! You now have %d point to spend."
 msgstr[1] "Done! You now have %d points to spend."
+
+#: scripts/ui/ordenador.gd
+msgid "No tienes ningún punto puesto."
+msgstr "You haven't spent any points."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: resetear cuesta $%d de lo ahorrado."
+msgstr "Not enough: resetting costs $%d of your savings."
+
+#: scripts/ui/ordenador.gd
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
+msgstr "Sure? Press again to remove every point from the tree."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar."
+msgid_plural "¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar."
+msgstr[0] "Done! You get %d point back: you now have %d to spend."
+msgstr[1] "Done! You get %d points back: you now have %d to spend."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

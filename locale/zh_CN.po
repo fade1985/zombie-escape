@@ -5410,6 +5410,26 @@ msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
 msgstr "把能换的美元都换成天赋点（$%d = 1点）"
 
 #: scripts/ui/ordenador.gd
+msgid "Resetear talentos"
+msgstr "重置天赋"
+
+#: scripts/ui/ordenador.gd
+msgid "No hay puntos puestos"
+msgstr "没有已分配的点数"
+
+#: scripts/ui/ordenador.gd
+msgid "¿Seguro?"
+msgstr "确定？"
+
+#: scripts/ui/ordenador.gd
+msgid "Resetear"
+msgstr "重置"
+
+#: scripts/ui/ordenador.gd
+msgid "Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d."
+msgstr "收回天赋树上已分配的所有点数，让你重新分配。花费 $%d。"
+
+#: scripts/ui/ordenador.gd
 msgid "Árbol de talentos · cada punto sube un nivel"
 msgstr "天赋树 · 每点提升一级"
 
@@ -5477,6 +5497,23 @@ msgstr "钱不够：每点天赋点要花掉存款 $%d。"
 msgid "¡Hecho! Ahora tienes %d punto para gastar."
 msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
 msgstr[0] "完成！现在你有 %d 点可以分配。"
+
+#: scripts/ui/ordenador.gd
+msgid "No tienes ningún punto puesto."
+msgstr "你还没有分配任何点数。"
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: resetear cuesta $%d de lo ahorrado."
+msgstr "钱不够：重置要花掉存款 $%d。"
+
+#: scripts/ui/ordenador.gd
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
+msgstr "确定？再按一次即可收回天赋树上的所有点数。"
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar."
+msgid_plural "¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar."
+msgstr[0] "完成！返还了 %d 点：现在你有 %d 点可以分配。"
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

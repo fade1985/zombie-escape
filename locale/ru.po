@@ -5444,6 +5444,26 @@ msgid "Cambia todos los dólares que puedas por puntos ($%d = 1 punto)"
 msgstr "Обменяй все доллары, какие можешь, на очки ($%d = 1 очко)"
 
 #: scripts/ui/ordenador.gd
+msgid "Resetear talentos"
+msgstr "Сбросить таланты"
+
+#: scripts/ui/ordenador.gd
+msgid "No hay puntos puestos"
+msgstr "Очки не вложены"
+
+#: scripts/ui/ordenador.gd
+msgid "¿Seguro?"
+msgstr "Уверен?"
+
+#: scripts/ui/ordenador.gd
+msgid "Resetear"
+msgstr "Сбросить"
+
+#: scripts/ui/ordenador.gd
+msgid "Quita todos los puntos puestos en el árbol y te los devuelve para repartirlos otra vez. Cuesta $%d."
+msgstr "Снимает все очки, вложенные в дерево, и возвращает их, чтобы распределить заново. Стоит $%d."
+
+#: scripts/ui/ordenador.gd
 msgid "Árbol de talentos · cada punto sube un nivel"
 msgstr "Дерево талантов · каждое очко — новый уровень"
 
@@ -5513,6 +5533,25 @@ msgid_plural "¡Hecho! Ahora tienes %d puntos para gastar."
 msgstr[0] "Готово! Можно потратить %d очко."
 msgstr[1] "Готово! Можно потратить %d очка."
 msgstr[2] "Готово! Можно потратить %d очков."
+
+#: scripts/ui/ordenador.gd
+msgid "No tienes ningún punto puesto."
+msgstr "Ты ещё не вложил ни одного очка."
+
+#: scripts/ui/ordenador.gd
+msgid "No te llega: resetear cuesta $%d de lo ahorrado."
+msgstr "Не хватает: сброс стоит $%d из накоплений."
+
+#: scripts/ui/ordenador.gd
+msgid "¿Seguro? Pulsa otra vez para quitar todos los puntos del árbol."
+msgstr "Уверен? Нажми ещё раз, чтобы снять все очки с дерева."
+
+#: scripts/ui/ordenador.gd
+msgid "¡Hecho! Te devuelve %d punto: ahora tienes %d para gastar."
+msgid_plural "¡Hecho! Te devuelve %d puntos: ahora tienes %d para gastar."
+msgstr[0] "Готово! Возвращено %d очко: теперь можно потратить %d."
+msgstr[1] "Готово! Возвращено %d очка: теперь можно потратить %d."
+msgstr[2] "Готово! Возвращено %d очков: теперь можно потратить %d."
 
 #: scripts/ui/ordenador.gd
 msgid "¡%s sube a %d/%d!"

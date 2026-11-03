@@ -1510,6 +1510,45 @@ func probar_equilibrio_talentos() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --resetear-talentos": el botón «Resetear talentos» del ordenador (M32), con 50 $ ahorrados y 7 puntos
+# puestos (Ataque 3, Corpulento 4). El primer toque solo pregunta; el segundo devuelve los 7, cobra 20 $ y Johnny vuelve
+# a su vida de siempre. Cada línea dice lo esperado. Fotos: captura-resetear-seguro.png (la tarjeta preguntando) y
+# captura-resetear-hecho.png. Deja el guardado como estaba
+func probar_resetear_talentos() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g):
+		g.dolares = 50
+		g.puntos = 0
+		g.talentos = {"ataque": 3, "corpulento": 4})
+	ahorrados = 50
+	aplicar_talentos(Guardado.cargar().talentos)
+	var vida_con: int = johnny.stats.vida_max
+	await get_tree().create_timer(0.3).timeout
+	abrir_ordenador()
+	ordenador.abrir("puntos")
+	await get_tree().create_timer(0.4).timeout
+	var tarjeta := func() -> String:   # lo que pone en el botón de la tarjeta
+		var b: Button = ordenador.ventana.find_child("b_resetear", true, false)
+		return " | ".join(b.get_parent().find_children("*", "Label", true, false).map(func(l): return l.text)) if b else "no está"
+	print("Con 7 puntos puestos: tarjeta «%s» (esperado: Resetear talentos | Cuesta $20 | Resetear)" % tarjeta.call())
+	ordenador.resetear_talentos()
+	await get_tree().create_timer(0.4).timeout
+	var s := Guardado.cargar()
+	print("Primer toque: tarjeta «%s» · info «%s» · puntos %d · dólares %d (esperado: ¿Seguro? · pregunta · 0 · 50)" % [
+		tarjeta.call(), ordenador.info.text, s.puntos, s.dolares])
+	Captura.foto("captura-resetear-seguro.png")
+	ordenador.resetear_talentos()
+	await get_tree().create_timer(0.4).timeout
+	s = Guardado.cargar()
+	print("Segundo toque: puntos %d · talentos %s · dólares %d · info «%s» (esperado: 7 · {} · 30 · ¡Hecho! Te devuelve 7...)" % [
+		s.puntos, s.talentos, s.dolares, ordenador.info.text])
+	print("Johnny: vida máxima %d (con Corpulento 4, %d; esperado: la de siempre, %d) · vida %d (esperado: no más que la máxima)" % [
+		johnny.stats.vida_max, vida_con, Mejoras.base().vida_max, johnny.vida])
+	print("Ya sin puntos puestos: tarjeta «%s» (esperado: ... No hay puntos puestos ...)" % tarjeta.call())
+	Captura.foto("captura-resetear-hecho.png")
+	Guardado.escribir(antes)
+
+
 # Con "--captura --talentos-altos": los niveles 4 y 5 de las tres ramas (M16), con sus números en la terminal y lo
 # esperado al lado. Militar: Frenesí y Gatillo fácil (rapidez y recarga), Racimo (lo que sueltan el molotov y la
 # granada, con la foto de las granaditas: captura-altos-racimo.png) y Veterano. Superviviente: Blindaje, Sombra, Segundo

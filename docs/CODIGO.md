@@ -259,7 +259,9 @@ en una línea.
   (`ArmasCreadas.con_acido`); Criogenia da congeladoras (`Lanzables.extra_talentos`) y las hace durar (`granada.gd`);
   Reacción en cadena y Residuo tóxico, al morir el zombi (`zombi.quimica_al_morir`: el estallido de las Épicas y un
   charco `residuo`, `charco.gd`), y Pararrayos, al recibir un golpe (`johnny.pararrayos`, con `Talentos.PARARRAYOS`).
-  En el ordenador, una pestaña por rama (`ordenador.gd`, `rama_abierta`). Se prueba con `--quimico`. Revisión de
+  En el ordenador, una pestaña por rama (`ordenador.gd`, `rama_abierta`). Se prueba con `--quimico`. «Resetear talentos»
+  (M32): devuelve todos los puntos puestos por `PRECIO_RESETEAR` (20 $), pulsando dos veces (`Talentos.resetear`,
+  `ordenador.resetear_talentos`, `seguro_resetear`); se prueba con `--resetear-talentos`. Revisión de
   Militar y Superviviente (M15): Durito llega a 3 (`guardado.gd` devuelve sin gastar los puntos que sobren si un talento
   admite menos), Ajolote cura solo hasta la mitad (`johnny.REGENERA_TOPE`), Ninja cada 5 s (`NINJA_ESPERA`), Puntería
   también lanza más lejos (`alcance_lanzar`, `lanzables.alcance()`) y Mirilla da un crítico de cada 3 disparos. Cada

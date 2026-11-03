@@ -14,6 +14,7 @@
 class_name Talentos
 
 const PRECIO_PUNTO := 10   # dólares que cuesta cada punto de talento (provisional, como en el JS)
+const PRECIO_RESETEAR := 20   # dólares que cuesta quitar todos los puntos puestos y que vuelvan para repartirlos otra vez (M32)
 
 # Los textos de RAMAS y de LISTA (nombre y desc) se traducen al enseñarlos, con nombre_rama(), nombre_de() y desc_de().
 # Ojo: las desc no acaban en punto, porque ordenador.gd les pega detrás «. Te hace falta 1 punto.» y similares
@@ -281,6 +282,27 @@ static func comprar_puntos(n: int) -> Dictionary:
 		return {}
 	s.dolares -= n * PRECIO_PUNTO
 	s.puntos += n
+	Guardado.escribir(s)
+	return s
+
+
+# Los puntos puestos en todo el árbol
+static func puestos(s: Dictionary) -> int:
+	var n := 0
+	for t in LISTA:
+		n += nivel_de(s, t.id)
+	return n
+
+
+# Quita todos los puntos puestos y los devuelve para repartirlos otra vez (M32), por PRECIO_RESETEAR de lo ahorrado.
+# Devuelve el guardado nuevo, o {} si no hay nada puesto o no llega el dinero
+static func resetear() -> Dictionary:
+	var s := Guardado.cargar()
+	if puestos(s) == 0 or s.dolares < PRECIO_RESETEAR:
+		return {}
+	s.dolares -= PRECIO_RESETEAR
+	s.puntos += puestos(s)
+	s.talentos = {}
 	Guardado.escribir(s)
 	return s
 
