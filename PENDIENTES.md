@@ -26,6 +26,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   la derecha cuatro para las curas.
 - **M68** Evento de la alarma de incendios: el doble de cables sueltos, y que estén electrocutando todo el rato.
 - **M69** La fase dos del doctor Salas (la criatura, después de pincharse) es demasiado fácil: hacerla más difícil.
+- **M70** La misión diaria (el reto del día): que ponga en algún sitio cuál es su recompensa.
 
 
 ## Por limar
