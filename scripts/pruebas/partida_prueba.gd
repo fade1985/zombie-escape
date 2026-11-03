@@ -132,9 +132,10 @@
 #                       completar el edificio                                          [prueba_inventario.gd]
 #   --banco-mejorar     el banco de trabajo: subir de calidad armas y arrojables (los que lleva y los del baúl)
 #                       gastando piezas                                                [prueba_inventario.gd]
-#   --municion          la munición por tipos y los arrojables (3 a mano y 8 de repuesto)    [prueba_inventario.gd]
+#   --municion          la munición por tipos y los arrojables (3 a mano y 4 de repuesto)    [prueba_inventario.gd]
 #   --montones          los arrojables en montones de 3: varios del mismo tipo, el inventario lleno, otros 3 a la
-#                       mano al acabarse, el baúl (juntos, de 3 en 3) y completar el edificio  [prueba_inventario.gd]
+#                       mano al acabarse, el baúl (juntos, de 3 en 3), completar el edificio y una partida
+#                       guardada con más de 4 de repuesto (M67: los que sobran, al baúl)  [prueba_inventario.gd]
 #   --municion-suelo    la munición, un molotov y una granada en el suelo (con luz y a oscuras), la caja según el arma y un
 #                       molotov en vuelo                                                   [prueba_inventario.gd]
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,

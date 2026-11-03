@@ -4114,8 +4114,12 @@ msgid "Munición  %d / %d"
 msgstr "Munition  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables  %d / %d"
-msgstr "Wurfwaffen  %d / %d"
+msgid "Arrojables %d/%d"
+msgstr "Wurfwaffen %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "Heilung %d/%d"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -4319,10 +4323,6 @@ msgid "Lo que llevas"
 msgstr "Dein Gepäck"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "Ersatz-Wurfwaffen  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
 msgstr "Truhe  %d / %d"
 
@@ -4517,6 +4517,10 @@ msgstr "Werkbank"
 #: scripts/ui/inventario.gd
 msgid "Tus piezas"
 msgstr "Deine Teile"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "Ersatz-Wurfwaffen  %d / %d"
 
 #: scripts/ui/inventario.gd
 msgid "En el baúl"

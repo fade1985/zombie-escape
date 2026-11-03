@@ -160,7 +160,8 @@ func probar_baul() -> void:
 	if not abierto:
 		get_tree().quit()
 		return
-	# las casillas de la mochila: m0 pieza especial, m1 vendas, m2 pieza cuerpo a cuerpo, m3 pieza a distancia × 3 (la gasolina va con la munición)
+	# las casillas de la mochila: m0 pieza especial, m1 pieza cuerpo a cuerpo, m2 pieza a distancia × 3 y, en su grupo,
+	# m3 las vendas (las curas, al final: M67; la gasolina va con la munición)
 	print("Al abrir: la marca en «%s» (esperado: m0, la pieza especial: lo primero que se puede guardar) · «Guardar todo» %s (esperado: activo) · dice «%s»" % [
 		marca.call(), boton.call("guardar_todo"), dice.call()])
 	inventario.tocar("m0")
@@ -170,10 +171,10 @@ func probar_baul() -> void:
 	inventario.guardar()
 	await get_tree().process_frame
 	var g := Guardado.cargar()
-	print("Guardada la pieza especial: en el baúl %d, en la mochila %d (esperado: 3, 0) · la marca en «%s», en la casilla de %s (esperado: m0, Vendas: la siguiente)" % [
+	print("Guardada la pieza especial: en el baúl %d, en la mochila %d (esperado: 3, 0) · la marca en «%s», en la casilla de %s (esperado: m0, Pieza cuerpo a cuerpo: la siguiente)" % [
 		g.baul.get("pieza_especial", 0), mochila.count("pieza_especial"), marca.call(), Objetos.nombre(Objetos.casillas(mochila)[0][0])])
-	# ahora: m0 vendas, m1 pieza cuerpo a cuerpo, m2 pieza a distancia × 3
-	inventario.tocar("m0")
+	# ahora: m0 pieza cuerpo a cuerpo, m1 pieza a distancia × 3 y m2 las vendas
+	inventario.tocar(inventario.donde_esta("vendas"))
 	await get_tree().process_frame
 	print("Elegidas las vendas: «Guardar en el baúl» %s (esperado: activo) · dice «%s»" % [boton.call("guardar"), dice.call()])
 	inventario.guardar()
@@ -1102,7 +1103,7 @@ func probar_municion() -> void:
 
 # Con "--captura --montones": los arrojables en montones (el M18 del dueño; lanzables.gd), en la sala de mantenimiento y
 # con el baúl vacío. Cada línea dice lo esperado: los molotovs que coge llenan su montón de la mano y luego van al
-# repuesto en montones de 3 (M42), varios del mismo tipo; con el inventario lleno (la mano y las 8 casillas de repuesto) ya no
+# repuesto en montones de 3 (M42), varios del mismo tipo; con el inventario lleno (la mano y las 4 casillas de repuesto, M67) ya no
 # coge más; al acabarse el montón de la mano entran otros 3 del repuesto; en el baúl, los montones de la misma clase se
 # juntan en una casilla y salen de 3 en 3 («Sacar 3»); y al completar el edificio, lo que sobra (también lo Normal) va
 # al baúl, junto. Fotos: captura-montones.png (el inventario con el repuesto lleno de montones) y
@@ -1122,12 +1123,12 @@ func probar_montones() -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("Al empezar: %s · caben en un montón %d (esperado: a mano [molotov 2, granada 2] · repuesto [] · 3)" % [como.call(),
 		lz.maximo("molotov")])
-	for i in 13:
+	for i in 7:
 		lz.sumar("molotov")
-	print("Coge 13 molotovs: %s · molotovs %d (esperado: a mano [molotov 3, granada 2] · repuesto [molotov 3, molotov 3, molotov 3, molotov 3] · 15)" % [
+	print("Coge 7 molotovs: %s · molotovs %d (esperado: a mano [molotov 3, granada 2] · repuesto [molotov 3, molotov 3] · 9)" % [
 		como.call(), lz.total("molotov")])
 	var entran := lz.meter("granada", 100)
-	print("Mete 100 granadas: entran %d · %s (esperado: 13: llenan su montón de la mano y 4 montones de 3 en el repuesto, que queda lleno)" % [
+	print("Mete 100 granadas: entran %d · %s (esperado: 7: llenan su montón de la mano y 2 montones de 3 en el repuesto, que queda lleno)" % [
 		entran, como.call()])
 	print("¿Coge otra granada? %s · ¿una atraedora? %s (esperado: false, sus montones y el repuesto, llenos · true, a la mano, que tiene un hueco)" % [
 		lz.cabe("granada"), lz.cabe("atraedora")])
@@ -1170,7 +1171,7 @@ func probar_montones() -> void:
 	print("Las granadas del baúl: botón «%s» (esperado: Sacar 3)" % (b.text if b else "no está"))
 	inventario.sacar()
 	await get_tree().process_frame
-	print("Saca un montón: baúl %s · granadas %d (esperado: [granada 0 ×3] · 12)" % [baul.call(), lz.total("granada")])
+	print("Saca un montón: baúl %s · granadas %d (esperado: [granada 0 ×3] · 6)" % [baul.call(), lz.total("granada")])
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-montones-baul.png")
 	inventario.cerrar()
@@ -1178,8 +1179,16 @@ func probar_montones() -> void:
 	# al completar el edificio, todo lo que sobra va al baúl, también lo Normal, junto
 	terminar(true)
 	await get_tree().create_timer(0.3).timeout
-	print("Completa el edificio: baúl %s (esperado: [granada 0 ×15, molotov 0 ×12, atraedora 0 ×3]: los de la misma clase, juntos)" % [
+	print("Completa el edificio: baúl %s (esperado: [granada 0 ×9, molotov 0 ×6, atraedora 0 ×3]: los de la misma clase, juntos)" % [
 		baul.call()])
+	# una partida guardada de antes del M67, con 6 montones de repuesto: caben 4 y los otros 2 van al baúl
+	Guardado.cambiar(func(g2): g2.baul_equipo = [])
+	lz.repuesto = ["molotov", "granada", "molotov", "atraedora", "granada", "congeladora:2"]
+	lz.en_repuesto = [3, 3, 3, 3, 2, 1]
+	var foto := {"lanzables": {"repuesto": lz.repuesto.duplicate(), "en_repuesto": lz.en_repuesto.duplicate()}}
+	PartidaGuardada.sobrantes_al_baul(lz, foto)
+	print("Partida guardada con 6 de repuesto: repuesto %s · en la foto %d · baúl %s (esperado: [molotov, granada, molotov, atraedora] · 4 · [granada 0 ×2, congeladora 2 ×1])" % [
+		lz.repuesto, str_to_var(Guardado.cargar().en_curso).lanzables.repuesto.size(), baul.call()])
 	Guardado.escribir(antes)
 	get_tree().quit()
 
@@ -1585,7 +1594,7 @@ func probar_curas() -> void:
 	mochila = ["vendas", "pieza_cuerpo"]
 	johnny.vida = roundi(johnny.vida_tope() * 0.4)
 	abrir_cosas("inventario")
-	inventario.tocar("m0")
+	inventario.tocar(inventario.donde_esta("vendas"))   # (las curas van en su grupo, detrás de los objetos: M67)
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	Captura.foto("captura-vendas.png")
 	for id in ["vendas"]:
@@ -1593,7 +1602,7 @@ func probar_curas() -> void:
 		if inventario.abierto == "":
 			abrir_cosas("inventario")
 		if inventario.elegido() != id:
-			inventario.tocar("m0")   # el primero de la mochila: las vendas
+			inventario.tocar(inventario.donde_esta(id))
 		inventario.usar()
 		print("%s: vida %d -> %d (cura %d) | mochila %s | cerrado %s" % [Objetos.nombre(id), v, johnny.vida, cura_de(id),
 			mochila, inventario.abierto == ""])

@@ -21,7 +21,8 @@
 # Uno solo lo suelta un zombi, en los dos edificios (DE_UN_ZOMBI): el bidón de ácido.
 class_name Objetos
 
-const MOCHILA := 8           # casillas de la mochila
+const MOCHILA := 8           # casillas de la mochila (los objetos)
+const CURAS := 4             # y las de las curas, aparte (M67: junto a los arrojables de repuesto, en el inventario)
 const BAUL := 32             # casillas del baúl: una por cada objeto distinto, una por cada arma y una por cada clase de arrojables
 const MONTON := 99           # lo máximo de un mismo objeto (o de una clase de arrojables) en una casilla del baúl (sobre todo las balas, que se amontonan): lo que pasa va a otra casilla
 const SUELTA := 0.04         # probabilidad de que un zombi suelte un objeto (0,10 con 7 objetos; ahora son la gasolina y la batería)
@@ -122,9 +123,10 @@ static func icono(id: String) -> String:
 	return id
 
 
-# Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron.
-# La gasolina, el bidón de ácido y la batería no ocupan casilla de la mochila, sino de la munición (Armas.MUNICION;
-# Johnny los cuenta ahí), salvo con "con_municion" (para guardarlos en el baúl)
+# Las casillas de la mochila (una lista de ids, uno por objeto): [[id, cuántos], ...] en el orden en que se cogieron y,
+# al final, las curas (USABLES, en su orden): en el inventario van aparte, en su grupo «Curas» (M67), y no ocupan
+# casilla de «Objetos» (ocupadas). La gasolina, el bidón de ácido y la batería no ocupan casilla de la mochila, sino
+# de la munición (Armas.MUNICION; Johnny los cuenta ahí), salvo con "con_municion" (para guardarlos en el baúl)
 static func casillas(mochila: Array, con_municion := false) -> Array:
 	var cuantos := {}
 	for id in mochila:
@@ -132,16 +134,26 @@ static func casillas(mochila: Array, con_municion := false) -> Array:
 			cuantos[id] = cuantos.get(id, 0) + 1
 	var lista := []
 	for id in cuantos:
-		lista.append([id, cuantos[id]])
+		if not id in USABLES:
+			lista.append([id, cuantos[id]])
+	for id in USABLES:
+		if id in cuantos:
+			lista.append([id, cuantos[id]])
 	return lista
 
 
+# Cuántas casillas de «Objetos» ocupa la mochila (las curas no cuentan: van en su grupo)
+static func ocupadas(mochila: Array) -> int:
+	return casillas(mochila).filter(func(c): return not c[0] in USABLES).size()
+
+
 # ¿Cabe uno más? Si ya lleva alguno va a su casilla; si no, hace falta una libre (la gasolina, el bidón de ácido y
-# la batería van con la munición: johnny.sitio). Las curas, como mucho su TOPE
+# la batería van con la munición: johnny.sitio). Las curas, como mucho su TOPE, en su grupo (CURAS casillas, que
+# siempre llegan: solo hay dos)
 static func cabe(mochila: Array, id: String) -> bool:
 	if mochila.count(id) >= TOPE.get(id, 1000):
 		return false
-	return id in mochila or casillas(mochila).size() < MOCHILA
+	return id in mochila or id in USABLES or ocupadas(mochila) < MOCHILA
 
 
 # Casillas ocupadas del baúl: una por cada MONTON de cada objeto (99 como mucho en cada una: el baúl guarda cuántos hay y

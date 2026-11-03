@@ -4105,8 +4105,12 @@ msgid "Munición  %d / %d"
 msgstr "弹药  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables  %d / %d"
-msgstr "投掷物  %d / %d"
+msgid "Arrojables %d/%d"
+msgstr "投掷物 %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "治疗 %d/%d"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -4310,10 +4314,6 @@ msgid "Lo que llevas"
 msgstr "随身物品"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "备用投掷物  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
 msgstr "储物箱  %d / %d"
 
@@ -4508,6 +4508,10 @@ msgstr "工作台"
 #: scripts/ui/inventario.gd
 msgid "Tus piezas"
 msgstr "你的零件"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "备用投掷物  %d / %d"
 
 #: scripts/ui/inventario.gd
 msgid "En el baúl"

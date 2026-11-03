@@ -120,6 +120,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	lz.repuesto = foto.lanzables.repuesto.duplicate()
 	lz.en_repuesto = foto.lanzables.en_repuesto.duplicate()
 	lz.tipo = foto.lanzables.tipo
+	sobrantes_al_baul(lz, foto)
 	# el superviviente de la partida y el equipo (el acompañante y el rescatado, si ya lo estaba)
 	var sup: Supervivientes = p.supervivientes
 	Planta.tienda_fija = {}
@@ -139,3 +140,21 @@ static func poner(p: Node, foto: Dictionary) -> void:
 		if e.rescatado and not sup.rescate.is_empty():
 			sup.rescate.amigo = a
 		sup.equipo.append(a)
+
+
+# Las fotos de antes del M67 llevan hasta 8 montones de repuesto y ahora caben Lanzables.REPUESTO (4): los que sobran
+# van al baúl, para que no se pierdan, y la foto se queda sin ellos (si el juego se cierra otra vez, no se meten dos veces)
+static func sobrantes_al_baul(lz: Lanzables, foto: Dictionary) -> void:
+	if lz.repuesto.size() <= Lanzables.REPUESTO:
+		return
+	var claves: Array = lz.repuesto.slice(Lanzables.REPUESTO)
+	var cuantos: Array = lz.en_repuesto.slice(Lanzables.REPUESTO)
+	lz.repuesto = lz.repuesto.slice(0, Lanzables.REPUESTO)
+	lz.en_repuesto = lz.en_repuesto.slice(0, Lanzables.REPUESTO)
+	foto.lanzables.repuesto = lz.repuesto.duplicate()
+	foto.lanzables.en_repuesto = lz.en_repuesto.duplicate()
+	var texto := var_to_str(foto)
+	Guardado.cambiar(func(g):
+		for i in claves.size():
+			Objetos.arrojables_al_baul(g, Lanzables.tipo_de(claves[i]), Lanzables.calidad_de(claves[i]), cuantos[i])
+		g.en_curso = texto)

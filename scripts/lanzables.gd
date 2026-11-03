@@ -94,7 +94,7 @@ const ARTIFICIERO := ["molotov", "granada"]   # a los que el talento Artificiero
 const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
 const MANO := 3            # los montones que lleva a mano (F cambia entre ellos)
-const REPUESTO := 8        # y los de repuesto
+const REPUESTO := 4        # y los de repuesto (M67: antes 8; los otros 4 huecos del inventario son de las curas)
 const MONTON := 3          # los que caben en un montón (M42: antes 5; y antes aún, un tope por tipo: 5 molotovs, 4 granadas y 3 de las otras)
 
 var johnny: Node2D

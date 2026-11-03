@@ -1045,7 +1045,7 @@ func probar_botiquin() -> void:
 	johnny.vida = roundi(johnny.vida_tope() * 0.5)
 	partida.abrir_cosas("inventario")
 	print("Botiquín al empezar: sin ella %s | con ella %s | mochila %s" % [sin_ella, con_ella, partida.mochila])
-	inv.tocar("m0")
+	inv.tocar(inv.donde_esta("botiquin"))
 	await get_tree().create_timer(0.4).timeout   # (sigue contando con el juego en pausa)
 	var marcado := get_viewport().gui_get_focus_owner()
 	print("Botiquín elegido: marcado '%s' | dice '%s'" % [marcado.name if marcado else "-",

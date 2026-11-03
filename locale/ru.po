@@ -4123,8 +4123,12 @@ msgid "Munición  %d / %d"
 msgstr "Патроны  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables  %d / %d"
-msgstr "Метательное  %d / %d"
+msgid "Arrojables %d/%d"
+msgstr "Метательное %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "Лечение %d/%d"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -4328,10 +4332,6 @@ msgid "Lo que llevas"
 msgstr "При тебе"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "Запасное метательное  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
 msgstr "Сундук  %d / %d"
 
@@ -4526,6 +4526,10 @@ msgstr "Верстак"
 #: scripts/ui/inventario.gd
 msgid "Tus piezas"
 msgstr "Твои детали"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "Запасное метательное  %d / %d"
 
 #: scripts/ui/inventario.gd
 msgid "En el baúl"

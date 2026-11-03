@@ -4114,8 +4114,12 @@ msgid "Munición  %d / %d"
 msgstr "Munitions  %d / %d"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables  %d / %d"
-msgstr "Lançables  %d / %d"
+msgid "Arrojables %d/%d"
+msgstr "Lançables %d/%d"
+
+#: scripts/ui/inventario.gd
+msgid "Curas %d/%d"
+msgstr "Soins %d/%d"
 
 #: scripts/ui/inventario.gd
 msgctxt "inventario"
@@ -4319,10 +4323,6 @@ msgid "Lo que llevas"
 msgstr "Ce que tu portes"
 
 #: scripts/ui/inventario.gd
-msgid "Arrojables de repuesto  %d / %d"
-msgstr "Lançables de rechange  %d / %d"
-
-#: scripts/ui/inventario.gd
 msgid "Baúl  %d / %d"
 msgstr "Coffre  %d / %d"
 
@@ -4517,6 +4517,10 @@ msgstr "Établi"
 #: scripts/ui/inventario.gd
 msgid "Tus piezas"
 msgstr "Tes pièces"
+
+#: scripts/ui/inventario.gd
+msgid "Arrojables de repuesto  %d / %d"
+msgstr "Lançables de rechange  %d / %d"
 
 #: scripts/ui/inventario.gd
 msgid "En el baúl"

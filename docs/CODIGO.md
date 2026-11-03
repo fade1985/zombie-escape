@@ -59,7 +59,7 @@ en una línea.
   `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
   de una clave de hasta `MONTON` (3 desde la M42; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
-  de cada clave, F cambia; sus cuentas en `cantidades`) y 8 de repuesto (`repuesto` y sus cuentas en `en_repuesto`,
+  de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,
   con varios de la misma clave). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
   sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su
   clave, uno de su tipo o el primero). Un montón se señala por su sitio, el nombre de su casilla en el inventario
@@ -249,7 +249,8 @@ en una línea.
   suelta uno, en `partida.gd`; se consigue matando al doctor Salas).
 - `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
   botiquín, 50, que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
-  la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3; se usan con la tecla 1 y la 2,
+  la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3, pero en su grupo «Curas» (`CURAS`, 4 casillas, M67: `casillas` las
+  pone al final y `ocupadas` cuenta solo las de «Objetos»); se usan con la tecla 1 y la 2,
   `partida.usar_cura`, con casillas junto a la barra de vida en `ui/hud.gd` y botones en `ui/tactil.gd`; el botiquín y las
   vendas los sueltan los armaritos de los baños, uno y uno por piso, `partida.abrir_armarito`, y el botiquín lo prepara la Farmacéutica), qué sale en
   cada tienda (`TIENDAS`), los que suelta un solo zombi (`DE_UN_ZOMBI`), la mochila y el baúl de 32 casillas (un mismo objeto, 99 como mucho en cada una: `MONTON`; el baúl guarda cuántos hay
@@ -298,7 +299,8 @@ en una línea.
   los enseña usa esas funciones, no la tabla directa (`docs/IDIOMAS.md`).
 - `partida_guardada.gd` (la partida a medias: al empezar cada planta, una foto de lo que lleva la partida en `en_curso`
   del guardado; «Continuar partida» del menú vuelve al principio de esa planta, que sale igual porque la semilla de
-  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida)
+  la partida, `Planta.semilla`, va en la foto; se borra al acabar la partida. Una foto de antes de la M67 con más de 4
+  arrojables de repuesto: los que sobran pasan al baúl al continuar, `sobrantes_al_baul`)
 - `guardado.gd` (el guardado; al cargar quita lo que ya no está en el juego; el baúl son `baul`, los objetos, y
   `baul_equipo`, las armas y los arrojables con su calidad; los arrojables, juntos hasta 99 por casilla. Tres huecos
   (M45): el progreso de cada uno en `guardado.json` (el 1, el de siempre), `guardado-2.json` y `guardado-3.json`; los
@@ -388,7 +390,8 @@ en una línea.
   línea de abajo (`partida.decir`), dan un grito grande encima de Johnny como el de la llave (`partida.gran_aviso`: noticias
   nuevas, logro y skin nueva); la skin sin ver se apunta en `skins_nuevo` del guardado hasta que se abre la taquilla.
   Se prueba con `--novedades` y `--avisos-ordenador` (que se quitan al mirar o cobrar).
-- `inventario.gd`: el inventario «todo a la vista», el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
+- `inventario.gd`: el inventario «todo a la vista» (en medio, la mochila y la munición, 8 y 8, y abajo dos grupos de 4: los
+  arrojables de repuesto y las curas, `cuadro`; las curas siguen siendo casillas "m" de la mochila, las últimas), el baúl (`pintar_baul`, `cosas_baul`: objetos, armas y
   arrojables; `guardar_equipo`, `sacar_equipo`), el banco de trabajo (`pintar_banco`, `en_banco`, `no_mejora`,
   `mejorar`: sube un nivel un arma o un paquete, de lo que lleva o del baúl, con las piezas de la mochila y del baúl)
   y arrastrar con ratón o dedo (`levantar`, `destinos`, `soltar_en`). `taquilla.gd`: la ventanita de las skins.

@@ -3,8 +3,9 @@
 #   - Inventario (Tab, I o Select): Johnny grande en medio, de
 #     frente, con su skin y el arma que tiene en la mano; a los lados, sus armas (a la izquierda las de cuerpo a cuerpo
 #     y a la derecha las de distancia; arriba la de la mano y abajo la de repuesto: partida.llevar_arma), y debajo, los
-#     3 arrojables a mano (lanzables.gd) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, tres grupos de 8: la mochila, la munición (por tipos:
-#     Armas.MUNICION) y los arrojables de repuesto. A la derecha, la ficha de lo elegido (qué es, el cargador, las
+#     3 arrojables a mano (lanzables.gd) y, abajo del todo, el dinero y el hueco de la llave (no están en el HUD). En medio, la mochila (8), la munición (8, por tipos:
+#     Armas.MUNICION) y, abajo, dos grupos de 4 (M67): los arrojables de repuesto y las curas (Objetos.USABLES; son de
+#     la mochila, pero van aparte y no ocupan casilla de «Objetos»). A la derecha, la ficha de lo elegido (qué es, el cargador, las
 #     barras y qué hace) y sus botones: "Ponérmela" (las de repuesto), "Usar" (lo de curar:
 #     Objetos.USABLES), "A la mano" y "Al repuesto" (los arrojables) y "Tirar al suelo" (los objetos, la gasolina,
 #     los bidones de ácido y las baterías, de uno en uno; las balas, el hueco entero en una caja; y las armas: la de la mano, solo si
@@ -232,12 +233,14 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 	rotulo(lienzo, Idioma.t("Dinero"), 112, 552, Tema.AMARILLO)
 	rotulo(lienzo, "$%d" % partida.cartera(), 252, 552, Tema.TINTA, HORIZONTAL_ALIGNMENT_RIGHT)
 	hueco_llave()
-	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y los arrojables de repuesto
+	# en medio, los tres grupos de 8: los objetos de la mochila, la munición y, abajo, dos de 4: a la izquierda los
+	# arrojables de repuesto y a la derecha las curas (M67)
 	raya(Rect2(393, 92, 2, 492))
 	var llenas := Objetos.casillas(partida.mochila)
-	rotulo(lienzo, Idioma.t("Objetos  %d / %d") % [llenas.size(), Objetos.MOCHILA], 406, 89, Tema.AMARILLO)
+	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
+	rotulo(lienzo, Idioma.t("Objetos  %d / %d") % [objetos, Objetos.MOCHILA], 406, 89, Tema.AMARILLO)
 	for i in Objetos.MOCHILA:
-		if i < llenas.size():
+		if i < objetos:
 			var n: int = llenas[i][1]
 			casilla_inv(rejilla(i, 116), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "")
 		else:
@@ -249,9 +252,19 @@ func pintar_inventario(columna: VBoxContainer) -> Control:
 			casilla_inv(rejilla(i, 266), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]))
 		else:
 			casilla_inv(rejilla(i, 266))
-	rotulo(lienzo, Idioma.t("Arrojables  %d / %d") % [lz.repuesto.size(), Lanzables.REPUESTO], 406, 389, Tema.AMARILLO)
+	# (los títulos, más cortos que los de arriba para que quepan los dos: el de las curas, pegado al borde derecho)
+	rotulo(lienzo, Idioma.t("Arrojables %d/%d") % [lz.repuesto.size(), Lanzables.REPUESTO], 406, 389, Tema.AMARILLO)
 	for i in Lanzables.REPUESTO:
-		sitio("e%d" % i, rejilla(i, 416), arrojable(rejilla(i, 416), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else ""))
+		sitio("e%d" % i, cuadro(i, 0), arrojable(cuadro(i, 0), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else ""))
+	rotulo(lienzo, Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], cuadro(3, 1).end.x, 389, Tema.AMARILLO,
+		HORIZONTAL_ALIGNMENT_RIGHT)
+	for i in Objetos.CURAS:
+		var j := objetos + i
+		if j < llenas.size():
+			var n: int = llenas[j][1]
+			casilla_inv(cuadro(i, 1), "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "")
+		else:
+			casilla_inv(cuadro(i, 1))
 	var seguir := boton(lienzo, "cerrar", Idioma.t("Seguir", "inventario"), cerrar)   # vuelve a la partida: «Resume»
 	seguir.position = Vector2(406, 544) - ORIGEN
 	seguir.size = Vector2(226, 38)
@@ -310,6 +323,14 @@ func raya(r: Rect2) -> void:
 # El sitio de la casilla i de un grupo de 8 (4 por fila) que empieza en "y"
 func rejilla(i: int, y: float) -> Rect2:
 	return Rect2(406 + (i % 4) * (LADO + 6), y + floori(i / 4.0) * (LADO + 6), LADO, LADO)
+
+
+# Abajo, en el sitio del tercer grupo de 8, los dos de 4 (2 × 2): "bloque" 0 los arrojables de repuesto y 1 las curas,
+# con un poco más de hueco entre los dos
+func cuadro(i: int, bloque: int) -> Rect2:
+	var r := rejilla(bloque * 2 + i % 2 + floori(i / 2.0) * 4, 416)
+	r.position.x += bloque * 6
+	return r
 
 
 # Si lo elegido ya no está (o no hay nada elegido), se elige otra cosa: la ficha nunca está vacía. En el inventario, el
@@ -1029,7 +1050,7 @@ func tirar(todo := false) -> void:
 # ── Baúl ──
 # La pantalla del baúl (parte 4 del inventario nuevo; la maqueta es maqueta-baul-parte4.png), hecha como la del
 # inventario: cada cosa en su sitio, en coordenadas de la pantalla. A la izquierda, lo que lleva Johnny: sus armas y los
-# arrojables a mano y, en filas de 8, los objetos, la munición y los arrojables de repuesto. A la derecha, las casillas
+# arrojables a mano y, en filas de 8, los objetos, la munición y los arrojables de repuesto con las curas. A la derecha, las casillas
 # del baúl: los objetos guardados y, cada una en su casilla y con el borde del color de su calidad, las armas y los
 # arrojables (cosas_baul; parte 4 de la tienda y las piezas: van al baúl todas las armas menos la fregona y la pistola
 # Normales, Armas.al_baul, y todos los arrojables, juntos los de la misma clase: Objetos.arrojables_al_baul). Abajo, la ficha de lo
@@ -1065,9 +1086,10 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 	for i in Lanzables.MANO:
 		arrojable(en_fila(5 + i, 132), "l%d" % i, lz.mano[i] if i < lz.mano.size() else "", 8.0)
 	var llenas := Objetos.casillas(partida.mochila)
-	rotulo(lienzo, Idioma.t("Objetos  %d / %d") % [llenas.size(), Objetos.MOCHILA], 64, 182, Tema.AMARILLO)
+	var objetos := Objetos.ocupadas(partida.mochila)   # las curas van al final de "llenas"
+	rotulo(lienzo, Idioma.t("Objetos  %d / %d") % [objetos, Objetos.MOCHILA], 64, 182, Tema.AMARILLO)
 	for i in Objetos.MOCHILA:
-		if i < llenas.size():
+		if i < objetos:
 			var n: int = llenas[i][1]
 			casilla_inv(en_fila(i, 204), "m%d" % i, Objetos.icono(llenas[i][0]), "×%d" % n if n > 1 else "", GRIS, 8.0)
 		else:
@@ -1079,9 +1101,21 @@ func pintar_baul(columna: VBoxContainer) -> Control:
 			casilla_inv(en_fila(i, 276), "u%d" % i, Armas.MUNICION[balas[i][0]].icono, str(balas[i][1]), GRIS, 8.0)
 		else:
 			casilla_inv(en_fila(i, 276))
-	rotulo(lienzo, Idioma.t("Arrojables de repuesto  %d / %d") % [lz.repuesto.size(), Lanzables.REPUESTO], 64, 326, Tema.AMARILLO)
+	# y en la última fila, los arrojables de repuesto y, a su derecha, las curas (M67)
+	rotulo(lienzo, Idioma.t("Arrojables %d/%d") % [lz.repuesto.size(), Lanzables.REPUESTO], 64, 326, Tema.AMARILLO)
 	for i in Lanzables.REPUESTO:
 		arrojable(en_fila(i, 348), "e%d" % i, lz.repuesto[i] if i < lz.repuesto.size() else "", 8.0)
+	var curas := en_fila(Lanzables.REPUESTO, 348).position.x + 12
+	rotulo(lienzo, Idioma.t("Curas %d/%d") % [llenas.size() - objetos, Objetos.CURAS], curas, 326, Tema.AMARILLO)
+	for i in Objetos.CURAS:
+		var r := en_fila(i, 348)
+		r.position.x = curas + i * 46
+		var j := objetos + i
+		if j < llenas.size():
+			var n: int = llenas[j][1]
+			casilla_inv(r, "m%d" % j, Objetos.icono(llenas[j][0]), "×%d" % n if n > 1 else "", GRIS, 8.0)
+		else:
+			casilla_inv(r)
 	raya(Rect2(452, 92, 2, 298))
 	# las dos mitades, para arrastrar de una a otra (guardar y sacar)
 	sitio("llevas", Rect2(52, 80, 394, 316))
