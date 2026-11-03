@@ -13,7 +13,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M61** Que la fregona se pueda dejar en el baúl como el resto de armas.
 - **M62** Al coger las curas del botiquín, que un tutorial explique cómo funcionan.
 - **M63** Rescate del superviviente en los Apartamentos: mientras fuerza la cerradura, que haga un gesto o movimiento
   (ahora solo se queda parado delante de la puerta).
