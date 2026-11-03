@@ -920,6 +920,16 @@ func probar_tutorial() -> void:
 	tutorial("jugar")
 	await get_tree().create_timer(0.5).timeout
 	print("Tutorial · «Cómo se juega» otra vez: %s (esperado: no sale)" % ("sale" if ventana.call() else "no sale"))
+	# el primer botiquín en la mochila trae su ventana, la suya y no la de las vendas (M62)
+	mochila.append("botiquin")
+	await get_tree().create_timer(0.8).timeout
+	t = ventana.call()
+	print("Tutorial · al coger un botiquín: %s (esperado: botiquin)" % (t.id if t else "ninguna"))
+	Captura.foto("captura-tutorial-botiquin.png")
+	if t:
+		t.cerrar()
+	mochila.erase("botiquin")
+	await get_tree().create_timer(0.5).timeout
 	# el texto, con las teclas del jugador y con los botones del móvil
 	var limpio := func(texto: String) -> String:
 		var r := RegEx.create_from_string(r"\[/?color[^\]]*\]")
@@ -942,7 +952,7 @@ func probar_tutorial() -> void:
 			lista = h
 	print("Tutorial · lista abierta desde la pausa: %s · pausa escondida: %s · ??? : %d de %d (esperado: true, true, %d)" % [
 		lista != null, not menus.fondo.visible, lista.botones.values().filter(func(b): return b.disabled).size(),
-		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 2])
+		Tutoriales.LISTA.size(), Tutoriales.LISTA.size() - 3])   # (vistos: jugar, lanzables y botiquin)
 	lista.ver("lanzables")
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-tutorial-lista.png")

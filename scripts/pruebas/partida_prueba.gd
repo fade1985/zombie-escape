@@ -167,8 +167,8 @@
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
 #   --guiado --tercios  en la primera partida, al perder el primer tercio sale la ventana de los tercios (M35)
 #                                                                                          [prueba_varias.gd]
-#   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
-#                       la casilla de Ayudas                                                [prueba_varias.gd]
+#   --tutorial          los tutoriales: la ventana, la cola, el del primer botiquín, la lista desde la pausa, el del
+#                       baúl antes del baúl y la casilla de Ayudas                         [prueba_varias.gd]
 #   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
 #                       saltan, el cartel del final y que quedan apuntados (mirarlos también con --lang ru y
 #                       --lang zh_CN, por si se sale alguna línea)                           [prueba_varias.gd]

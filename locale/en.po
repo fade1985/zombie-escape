@@ -2365,7 +2365,7 @@ msgstr "special weapons (the flamethrower, the acid launcher and the lightning g
 msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "throwables (the Molotov, the grenade, the decoy and the freeze bomb)"
 
-#: scripts/objetos.gd
+#: scripts/objetos.gd scripts/tutoriales.gd
 msgid "Vendas"
 msgstr "Bandages"
 
@@ -3595,25 +3595,37 @@ msgstr "Lost thirds stay lost when you go up a floor. Only a medkit brings one b
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
 msgstr "If it gets too hard, Options → Assists has \"Whole health\"."
 
-#: scripts/tutoriales.gd scripts/ui/opciones.gd
-msgid "Vendas y botiquín"
-msgstr "Bandages and medkit"
-
 #: scripts/tutoriales.gd
-msgid "Al coger la primera cura"
-msgstr "On picking up your first heal"
+msgid "Al coger las primeras vendas"
+msgstr "On picking up your first bandages"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "Use bandages with {usar_vendas}: they heal 25, without going past the third you're in."
 
 #: scripts/tutoriales.gd
-msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
-msgstr "Use the medkit with {usar_botiquin}: it restores a lost third and heals 50."
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "You can carry 3 in your backpack. Bathroom cabinets pop open as you get close and spill what's inside."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "You can carry 3 bandages and 2 medkits. Bathroom cabinets pop open as you get close and spill what's inside."
+msgid "El botiquín"
+msgstr "The medkit"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer botiquín"
+msgstr "On picking up your first medkit"
+
+#: scripts/tutoriales.gd
+msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
+msgstr "Use it with {usar_botiquin}: it heals 50 and restores a lost third of your health."
+
+#: scripts/tutoriales.gd
+msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
+msgstr "It's the only thing that brings back lost thirds, apart from the Second Wind talent. Save it for when you lose one."
+
+#: scripts/tutoriales.gd
+msgid "Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."
+msgstr "You can carry 2 in your backpack; any extra stay on the floor or go to the stash."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -5291,6 +5303,10 @@ msgstr "Drag from the button to aim and release to throw"
 #: scripts/ui/opciones.gd
 msgid "El botoncito de al lado de lanzar"
 msgstr "The small button next to throw"
+
+#: scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Bandages and medkit"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa (solo salen si llevas)"

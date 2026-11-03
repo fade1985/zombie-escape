@@ -319,7 +319,8 @@ en una línea.
   llaves, que salen las del jugador, las del mando o los botones del móvil: `texto()`, `tecla()`), los vistos
   (`Guardado` → `tutoriales`; `toca`, `apuntar`, `olvidar`) y el ajuste de Ayudas. Cada uno sale una sola vez: los
   pide `partida.tutorial(id)` (la mayoría, en `mirar_tutoriales`; el ordenador, la taquilla, el banco, el baúl y la
-  mutación sacan el suyo antes de abrirse), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba
+  mutación sacan el suyo antes de abrirse; las vendas sacan «curas» y el botiquín, «botiquin», el suyo aparte
+  y fuera de la guía, que solo enseña las vendas: M62), `eventos.gd`, `supervivientes.gd` y el menú (el de la alerta). Se prueba
   con `--tutorial`.
 - `guia.gd`: el tutorial disimulado de la primera partida (la planta baja de los Apartamentos, con los tutoriales
   encendidos): en vez de las ventanas de `CUBRE`, pistas encima de Johnny con la tecla en amarillo (`PISTAS`: moverse,

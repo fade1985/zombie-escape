@@ -21,7 +21,8 @@ FOTOS = {
 	"jugar": ("captura-curas-hud.png", 340, 230),                 # --curas
 	"apartamentos": ("captura-alerta-llave-suelo.png", 300, 400),  # --alerta 1
 	"tercios": ("captura-curas-tercio.png", 0, 460),               # --curas
-	"curas": ("captura-curas-armarito.png", 0, 220),               # --curas
+	"curas": ("captura-curas-hud.png", 200, 460),                 # --curas (las casillas de las curas)
+	"botiquin": ("captura-curas-armarito.png", 0, 40),             # --curas
 	"inventario": ("captura-inventario.png", 180, 22),             # --inventario
 	"dolares": ("captura-curas-caer.png", 370, 240),               # --curas
 	"armas": ("captura-repuesto.png", 190, 60),                    # --repuesto
@@ -52,7 +53,7 @@ FOTOS_EN = {
 	"supervivientes": ("captura-escolta.png", 180, 290),           # --rescate --edificio centro
 }
 # Las fotos sin ningún texto dibujado (la oscuridad, la horda, un molotov...) valen en todos los idiomas: no se rehacen.
-SIN_TEXTO = ["apagon", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros"]
+SIN_TEXTO = ["apagon", "botiquin", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros"]
 
 if __name__ == "__main__":
 	args = sys.argv[1:]

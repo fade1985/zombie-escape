@@ -2363,7 +2363,7 @@ msgstr "特殊武器（火焰喷射器、酸液枪和闪电枪）"
 msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "投掷物（燃烧瓶、手雷、诱饵弹和冰冻弹）"
 
-#: scripts/objetos.gd
+#: scripts/objetos.gd scripts/tutoriales.gd
 msgid "Vendas"
 msgstr "绷带"
 
@@ -3587,25 +3587,37 @@ msgstr "失去的段数上楼后也不会恢复。只有急救包能恢复一段
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
 msgstr "如果觉得太难，可以在“选项 → 辅助”里开启“完整生命”。"
 
-#: scripts/tutoriales.gd scripts/ui/opciones.gd
-msgid "Vendas y botiquín"
-msgstr "绷带和急救包"
-
 #: scripts/tutoriales.gd
-msgid "Al coger la primera cura"
-msgstr "第一次捡到治疗品时"
+msgid "Al coger las primeras vendas"
+msgstr "第一次捡到绷带时"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "用{usar_vendas}使用绷带：恢复25点，但不会超过当前这一段。"
 
 #: scripts/tutoriales.gd
-msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
-msgstr "用{usar_botiquin}使用急救包：恢复失去的一段，并恢复50点。"
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "背包里最多放3卷。浴室的小柜子在你靠近时会自动打开，掉出里面的东西。"
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "最多带3卷绷带和2个急救包。浴室的小柜子在你靠近时会自动打开，掉出里面的东西。"
+msgid "El botiquín"
+msgstr "急救包"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer botiquín"
+msgstr "第一次捡到急救包时"
+
+#: scripts/tutoriales.gd
+msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
+msgstr "用{usar_botiquin}使用：恢复50点，并恢复失去的一段生命。"
+
+#: scripts/tutoriales.gd
+msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
+msgstr "除了“绝处逢生”天赋，只有它能恢复失去的段数。留到失去一段时再用。"
+
+#: scripts/tutoriales.gd
+msgid "Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."
+msgstr "背包里最多放2个；多出来的留在地上或放进储物箱。"
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -5273,6 +5285,10 @@ msgstr "从按钮上拖动来瞄准，松开投掷"
 #: scripts/ui/opciones.gd
 msgid "El botoncito de al lado de lanzar"
 msgstr "投掷旁边的小按钮"
+
+#: scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "绷带和急救包"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa (solo salen si llevas)"

@@ -2365,7 +2365,7 @@ msgstr "die Spezialwaffen (Flammenwerfer, Säurewerfer und Blitzwerfer)"
 msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "die Wurfwaffen (Molotow, Granate, Köder und Eisbombe)"
 
-#: scripts/objetos.gd
+#: scripts/objetos.gd scripts/tutoriales.gd
 msgid "Vendas"
 msgstr "Verbände"
 
@@ -3595,25 +3595,37 @@ msgstr "Verlorene Drittel bleiben verloren, auch auf der nächsten Ebene. Nur ei
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
 msgstr "Wird es dir zu schwer: Unter Optionen → Hilfen gibt es \"Ganzes Leben\"."
 
-#: scripts/tutoriales.gd scripts/ui/opciones.gd
-msgid "Vendas y botiquín"
-msgstr "Verbände und Medikit"
-
 #: scripts/tutoriales.gd
-msgid "Al coger la primera cura"
-msgstr "Beim ersten Heilmittel"
+msgid "Al coger las primeras vendas"
+msgstr "Bei den ersten Verbänden"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "Verbände mit {usar_vendas}: Sie heilen 25, aber nicht über dein aktuelles Drittel hinaus."
 
 #: scripts/tutoriales.gd
-msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
-msgstr "Das Medikit mit {usar_botiquin}: bringt ein Drittel zurück und heilt 50."
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "Platz für 3 im Rucksack. Badschränkchen öffnen sich vor dir und geben ihren Inhalt frei."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "Platz für 3 Verbände und 2 Medikits. Badschränkchen öffnen sich vor dir und geben ihren Inhalt frei."
+msgid "El botiquín"
+msgstr "Das Medikit"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer botiquín"
+msgstr "Beim ersten Medikit"
+
+#: scripts/tutoriales.gd
+msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
+msgstr "Benutze es mit {usar_botiquin}: Es heilt 50 und bringt ein verlorenes Drittel deiner Lebensenergie zurück."
+
+#: scripts/tutoriales.gd
+msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
+msgstr "Nur damit bekommst du verlorene Drittel zurück, abgesehen vom Talent Zweite Luft. Heb es auf, bis du eins verlierst."
+
+#: scripts/tutoriales.gd
+msgid "Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."
+msgstr "Platz für 2 im Rucksack; überzählige bleiben am Boden liegen oder kommen in die Truhe."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -5291,6 +5303,10 @@ msgstr "Vom Knopf aus ziehen zum Zielen, loslassen zum Werfen"
 #: scripts/ui/opciones.gd
 msgid "El botoncito de al lado de lanzar"
 msgstr "Der kleine Knopf neben dem Wurf-Knopf"
+
+#: scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Verbände und Medikit"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa (solo salen si llevas)"

@@ -1397,7 +1397,7 @@ func mirar_tutoriales() -> void:
 	if johnny.huecos.cuerpo != "fregona" or johnny.huecos.fuego != "pistola" or not armas_guardadas.is_empty():
 		tutorial("armas")
 	for id in mochila:
-		tutorial("curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
+		tutorial("botiquin" if id == "botiquin" else "curas" if id in Objetos.USABLES else "piezas" if id in Objetos.PIEZAS else "inventario")
 
 
 # En la sala de pruebas no salen, ni en la partida de prueba (salvo en la suya, --tutorial)

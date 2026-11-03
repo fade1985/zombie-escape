@@ -2367,7 +2367,7 @@ msgstr "особое оружие (огнемет, кислотомет и мо�
 msgid "los arrojables (el molotov, la granada, la atraedora y la congeladora)"
 msgstr "метательное оружие (молотов, граната, приманка и криобомба)"
 
-#: scripts/objetos.gd
+#: scripts/objetos.gd scripts/tutoriales.gd
 msgid "Vendas"
 msgstr "Бинты"
 
@@ -3603,25 +3603,37 @@ msgstr "Потерянные трети не возвращаются и на с
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
 msgstr "Если тяжело, в «Настройки → Упрощения» есть «Здоровье целиком»."
 
-#: scripts/tutoriales.gd scripts/ui/opciones.gd
-msgid "Vendas y botiquín"
-msgstr "Бинты и аптечка"
-
 #: scripts/tutoriales.gd
-msgid "Al coger la primera cura"
-msgstr "Когда подбираешь первое лечение"
+msgid "Al coger las primeras vendas"
+msgstr "Когда подбираешь первые бинты"
 
 #: scripts/tutoriales.gd
 msgid "Las vendas se usan con {usar_vendas}: curan 25, sin pasar del tercio en el que estás."
 msgstr "Бинты: {usar_vendas}. Лечат на 25, но не выше текущей трети."
 
 #: scripts/tutoriales.gd
-msgid "El botiquín, con {usar_botiquin}: devuelve un tercio perdido y cura 50."
-msgstr "Аптечка: {usar_botiquin}. Возвращает потерянную треть и лечит на 50."
+msgid "Caben 3 en la mochila. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
+msgstr "В рюкзак влезает 3. Шкафчики в ванных открываются, когда подходишь, и вываливают содержимое."
 
 #: scripts/tutoriales.gd
-msgid "Caben 3 vendas y 2 botiquines. Los armaritos de los baños se abren al acercarte y sueltan lo suyo."
-msgstr "Влезает 3 бинта и 2 аптечки. Шкафчики в ванных открываются, когда подходишь, и вываливают содержимое."
+msgid "El botiquín"
+msgstr "Аптечка"
+
+#: scripts/tutoriales.gd
+msgid "Al coger el primer botiquín"
+msgstr "Когда подбираешь первую аптечку"
+
+#: scripts/tutoriales.gd
+msgid "Úsalo con {usar_botiquin}: cura 50 y te devuelve un tercio de vida perdido."
+msgstr "Используй её: {usar_botiquin}. Лечит на 50 и возвращает потерянную треть здоровья."
+
+#: scripts/tutoriales.gd
+msgid "Es lo único que recupera los tercios perdidos, aparte del talento Segundo aliento. Guárdalo para cuando pierdas uno."
+msgstr "Только она возвращает потерянные трети, не считая таланта «Второе дыхание». Береги её до тех пор, пока не потеряешь треть."
+
+#: scripts/tutoriales.gd
+msgid "Caben 2 en la mochila; los que sobran se quedan en el suelo o van al baúl."
+msgstr "В рюкзак влезает 2; лишние остаются на полу или отправляются в сундук."
 
 #: scripts/tutoriales.gd
 msgid "Inventario y mochila"
@@ -5309,6 +5321,10 @@ msgstr "Потяни от кнопки, чтобы прицелиться, и о
 #: scripts/ui/opciones.gd
 msgid "El botoncito de al lado de lanzar"
 msgstr "Маленькая кнопка рядом с броском"
+
+#: scripts/ui/opciones.gd
+msgid "Vendas y botiquín"
+msgstr "Бинты и аптечка"
 
 #: scripts/ui/opciones.gd
 msgid "Los botones de debajo del minimapa (solo salen si llevas)"
