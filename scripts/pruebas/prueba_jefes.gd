@@ -477,6 +477,44 @@ func probar_cupula() -> void:
 	get_tree().quit()
 
 
+# --criatura: lo seguido que ataca la criatura del científico (M69). Lo hace mutar y deja a Johnny quieto a unos 200
+# de ella, sin que pueda caer, durante 10 s: escribe cuántos ataques empieza de cada tipo y saca una foto a mitad
+# (captura-criatura-seguido.png)
+func probar_criatura() -> void:
+	await get_tree().create_timer(0.3).timeout
+	nueva_planta(Planta.PLANTAS)
+	await montar(0, puerta_de_llegada(), false)
+	johnny.position = mapa.puertas[0].llegada() - Vector2(60, 200)
+	await get_tree().create_timer(1.4).timeout
+	var s: Dictionary = planta.sitios[0]
+	johnny.position = Vector2(Planta.plataforma(s).end.x - 60.0, s.helipuerto.y)   # sube al ring: deja de esperar
+	await get_tree().create_timer(0.5).timeout
+	jefa.recibir_golpe(int(jefa.vida - jefa.vida_max * 0.5), Vector2.ZERO)
+	for i in 600:
+		if jefa.mutado and jefa.estado != "mutar" and jefa.estado != "jeringa":
+			break
+		await get_tree().physics_frame
+	johnny.set_physics_process(false)   # quieto
+	var ataques := {}
+	var antes: String = jefa.estado
+	var pasos := 0
+	while pasos < 600:   # 10 s
+		johnny.vida = johnny.stats.vida_max
+		if jefa.global_position.distance_to(johnny.global_position) > 230.0 or pasos == 0:
+			johnny.position = jefa.position + Vector2(200, 0)
+			johnny.get_node("Camara").reset_smoothing()
+		if jefa.estado != antes and jefa.estado.begins_with("aviso_"):
+			ataques[jefa.estado] = ataques.get(jefa.estado, 0) + 1
+		antes = jefa.estado
+		if pasos == 300:
+			Captura.foto("captura-criatura-seguido.png")
+		pasos += 1
+		await get_tree().physics_frame
+	var total: int = ataques.values().reduce(func(x, y): return x + y, 0)
+	print("Criatura · ataques en 10 s: %d %s · esperas %s" % [total, ataques, jefa.ESPERAS_CRIATURA])
+	get_tree().quit()
+
+
 # Una bala de verdad hacia el jefe, desde "lejos" por el lado "angulo"; espera a que choque
 func bala_al_jefe(angulo: float, lejos: float, dano: int) -> void:
 	var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()

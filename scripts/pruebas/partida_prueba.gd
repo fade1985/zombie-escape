@@ -44,6 +44,7 @@
 #                       (el científico; con --edificio centro, el gerente)                    [prueba_jefes.gd]
 #   --cupula            la cúpula de cristal del científico jefe con balas de verdad: rebotan en su borde con su onda,
 #                       el daño se lo lleva ella y, rota, ya le dan a él                      [prueba_jefes.gd]
+#   --criatura          la criatura del científico, con Johnny quieto cerca 10 s: cuántos ataques hace (M69) [prueba_jefes.gd]
 #   --latigazos        el gerente mutado en la sala de pruebas: sus tres latigazos con Johnny abajo, arriba, de
 #                       lado, en diagonal, por detrás y junto a una pared                  [prueba_varias.gd]
 #   --lenguas           las lenguas del Glotón (también enfadado) y de la criatura del científico, en la sala de
@@ -331,6 +332,9 @@ func empezar_prueba() -> void:
 	elif "--cupula" in args:
 		set_process(false)   # sin la prueba larga
 		probar_cupula()
+	elif "--criatura" in args:
+		set_process(false)   # sin la prueba larga
+		probar_criatura()
 	elif "--skins" in args:
 		set_process(false)   # sin la prueba larga
 		probar_skins()

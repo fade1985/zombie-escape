@@ -29,6 +29,7 @@
 #   - Escupitajos de fuego: si Johnny está lejos y a la vista, tres bolas de fuego en abanico (bola_fuego.gd).
 # Y (M41, el dueño lo veía demasiado fácil) el fuego no le hace nada, como al bombero (inmune_fuego: ni el molotov ni el
 # lanzallamas), y si quedan pocos zombis ruge y llegan tres vecinos, como los sujetos del científico.
+# Y (M69, aún fácil) ataca más seguido: menos espera entre ataques, avisos más cortos y casi sin descanso tras cada uno.
 # Al caer la criatura, la partida enseña la última página del dosier y trae el helicóptero de Velaria (partida.gd).
 # Sus animaciones (PixelLab): andar y probetas en las 8 direcciones (las del oeste, el este en espejo), suero (vale
 # para llamar) y jeringa solo de frente. Las de la criatura, en otra hoja: andar, lenguas, punetazo, escupir y muerte.
@@ -89,10 +90,10 @@ const LENGUAS := 3
 const ABRE_LENGUAS := 0.4
 const LARGO_LENGUA := 330.0
 const ANCHO_LENGUA := 14.0               # medio ancho de cada franja
-const AVISO_LENGUAS := 0.65
+const AVISO_LENGUAS := 0.5               # (M69: antes 0,65)
 const DANO_LENGUA := 18
 const BOCA := 0.5                        # a qué altura tiene la boca (parte de "arriba"): de ahí sale el fuego
-const AVISO_PUNETAZO := 0.75
+const AVISO_PUNETAZO := 0.6              # (M69: antes 0,75)
 const DISTANCIA_PUNETAZO := 240.0        # si Johnny está más cerca que esto, prefiere el puñetazo
 const RADIO_ONDA := 210.0
 const DURA_ONDA := 0.4
@@ -104,8 +105,10 @@ const ABRE_BOLAS := 0.24
 const VELOCIDAD_BOLA := 360.0
 const DANO_BOLA := 12
 const QUEMA_BOLA := {"fuego": {"dps": 8.0, "despues": 1.5}}
-# (M41: un 25 % menos que antes; "sujetos", el rugido con el que llama a más vecinos si quedan pocos)
-const ESPERAS_CRIATURA := {"lenguas": 1.65, "punetazo": 2.4, "fuego": 2.7, "sujetos": 12.0}
+# (M41: un 25 % menos que antes; M69, el dueño la seguía viendo fácil: los tres ataques, otro 30 % menos, que eran
+# 1,65, 2,4 y 2,7. "sujetos", el rugido con el que llama a más vecinos si quedan pocos)
+const ESPERAS_CRIATURA := {"lenguas": 1.15, "punetazo": 1.7, "fuego": 1.9, "sujetos": 12.0}
+const DESCANSO := 0.15                   # lo que se queda quieta tras cada ataque antes de elegir otro (M69: antes 0,4)
 # El fotograma de cada ataque de la criatura en el que llega el golpe (cuando salen las lenguas, la onda y las bolas)
 const GOLPE := {"lenguas": 3, "punetazo": 4, "escupir": 4}
 # Las lenguas, pintadas con código (lengua.gd), iguales que las de su dibujo (colores sacados píxel a píxel de su
@@ -550,7 +553,7 @@ func pensar_criatura(delta: float, johnny: Node2D) -> void:
 		"lenguas":
 			frenar(delta)
 			if t >= DESPUES:
-				andar(0.4)
+				andar(DESCANSO)
 		"aviso_punetazo":
 			frenar(delta, 12.0)
 			if t >= AVISO_PUNETAZO:
@@ -560,7 +563,7 @@ func pensar_criatura(delta: float, johnny: Node2D) -> void:
 			frenar(delta)
 			onda(johnny)
 			if t >= DURA_ONDA + 0.25:
-				andar(0.4)
+				andar(DESCANSO)
 		"aviso_fuego":
 			frenar(delta)
 			if t >= AVISO_FUEGO:
@@ -569,7 +572,7 @@ func pensar_criatura(delta: float, johnny: Node2D) -> void:
 		"escupir":
 			frenar(delta)
 			if t >= DESPUES:
-				andar(0.4)
+				andar(DESCANSO)
 
 
 func elegir_criatura(johnny: Node2D, d: float) -> void:

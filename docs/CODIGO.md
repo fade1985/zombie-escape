@@ -122,7 +122,7 @@ en una línea.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`
-    (el doctor Salas; las lenguas de la criatura, `lengua.gd`). `helicoptero.gd`: el que llega al final (su cuerpo,
+    (el doctor Salas; las lenguas de la criatura, `lengua.gd`; lo seguido que ataca la criatura se mide con `--criatura`). `helicoptero.gd`: el que llega al final (su cuerpo,
     `helicoptero.png` de PixelLab; los rotores y la luz de la aleta, por código) y suelta su escalera de cuerda sobre
     el helipuerto; al llegar Johnny a ella (`agarrada`) se acaba el edificio (`partida.subir_al_helicoptero`).
 - `bala_zombi.gd` (el agua sucia de la portera, gotas de pixel art, rojiza si está enfadada; el polvo de su giro; y los
