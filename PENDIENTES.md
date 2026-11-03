@@ -22,10 +22,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   - Pesadilla: fundido a negro y se despierta de golpe; cada intento es otro sueño, lo que explicaría que el edificio vuelva a estar lleno.
 - **M36** Skin de Johnny del doctor Salas (cuando se cree): su efecto es que los zombis tengan un 50 % de probabilidad
   de dar dos objetos aleatorios en lugar de uno.
-- **M47** Web: el juego tarda mucho en cargar. Se descarga el motor de Godot (unos 10 MB comprimido) y todo el juego
-  de golpe (unos 30 MB: 28 de dibujos y 2,4 de música) antes de empezar. Ideas: hacer más pequeñas las hojas de
-  dibujos más grandes (jefe criatura, gerente mutado…), cargar cada jefe solo cuando sale y una pantalla de carga
-  más bonita para que la espera se note menos.
 
 
 ## Por limar
