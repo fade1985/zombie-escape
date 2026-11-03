@@ -18,6 +18,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M70** La misión diaria (el reto del día): que ponga en algún sitio cuál es su recompensa.
 - **M71** El reto del día solo se puede hacer una vez (al día).
 - **M72** Revisar el equilibrio del juego: es demasiado fácil.
+- **M73** (Para después) Con un mando USB en el móvil, el botón L2 abre el menú del juego y además lanza el arrojable.
 
 
 ## Por limar
