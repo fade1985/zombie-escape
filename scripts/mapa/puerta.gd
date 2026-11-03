@@ -196,7 +196,7 @@ func placa_de_piso(acero: Vector2, rota: Dictionary, laton: Vector2) -> void:
 		letra(filas, acero + Vector2(6, 6), 2, CHAPA.letra)
 		return
 	var tam: Vector2 = rota.dibujo
-	draw_texture_rect_region(rota.hoja, Rect2(laton, tam * 2), Rect2("ABCD".find(salida.placa) * tam.x, 0, tam.x, tam.y))
+	draw_texture_rect_region(rota.hoja, Rect2(laton, tam * 2), Rect2("ABCD".find(salida.placa) * tam.x, 0, tam.x, tam.y))   # no-tr (las letras de las placas, para buscar su dibujo)
 
 
 # El cartel de la planta, junto al ascensor, a su izquierda (a 10 unidades del marco): el número pintado con plantilla
