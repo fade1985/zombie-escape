@@ -70,7 +70,7 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   huecos de dos cargadores. Una caja da un cargador del arma a distancia de la mano. Toda la munición se puede guardar
   en el baúl (un hueco entero de una vez, o arrastrándolo) y sale de él hasta un hueco por pulsación (24 balas, 12
   cartuchos; la gasolina, el ácido y las baterías, de una en una) o lo que quepa.
-- **Lanzables:** en montones de 3 (más con la calidad y los talentos): 3 a mano y 4 de repuesto, con varios del mismo
+- **Lanzables:** en montones de 2 (más con la calidad y los talentos): 3 a mano y 4 de repuesto, con varios del mismo
   tipo, hasta llenarlos (sin tope por tipo). Al acabarse el de la mano entran otros 3 de repuesto (de los suyos o, si
   no quedan, el primero).
 - **Vida en tercios:** el tercio que pierdes ya no se cura y, por cada uno, Johnny anda un 15 % más lento (210, 179 y

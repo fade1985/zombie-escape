@@ -8,7 +8,7 @@
 #   - Con la ayuda "Lanzar apuntando solo" (Opciones > Ayudas), va siempre al zombi más cercano a la vista
 #     (el mismo que buscaría el modo de atacar asistido); si no se ve ninguno, se apunta como siempre.
 #   - Van en montones (el M18 del dueño, 28 oct): cada hueco lleva un montón de un tipo y una calidad, de hasta MONTON
-#     (3; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, uno de cada clave (F o RB cambian lo
+#     (2; más con la calidad y los talentos: maximo). Lleva MANO montones a mano, uno de cada clave (F o RB cambian lo
 #     que se lanza entre ellos), y REPUESTO de repuesto, donde puede haber varios de la misma. No hay tope por tipo: se
 #     coge mientras quede sitio. Al empezar, el molotov y la granada, a mano. Lo que consigue va al montón de su clave
 #     que no esté lleno (primero el de la mano); si están llenos, a un montón nuevo: a la mano si hay hueco y no lleva
@@ -95,7 +95,7 @@ const PROYECTIL := preload("res://escenas/armas/proyectil.tscn")
 const BOMBA := preload("res://scripts/granada.gd")
 const MANO := 3            # los montones que lleva a mano (F cambia entre ellos)
 const REPUESTO := 4        # y los de repuesto (M67: antes 8; los otros 4 huecos del inventario son de las curas)
-const MONTON := 3          # los que caben en un montón (M42: antes 5; y antes aún, un tope por tipo: 5 molotovs, 4 granadas y 3 de las otras)
+const MONTON := 2          # los que caben en un montón (M74: antes 3; M42: antes 5; y antes aún, un tope por tipo: 5 molotovs, 4 granadas y 3 de las otras)
 
 var johnny: Node2D
 var partida: Node

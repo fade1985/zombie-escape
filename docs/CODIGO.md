@@ -58,7 +58,7 @@ en una línea.
   arcos—, tiene un cono más estrecho (`ABRE_RAYO`), aturde y la descarga salta de un zombi a otro: `buscar_blancos`,
   `electrocutar`). `goteo.gd`: la gota que cuelga de la boquilla del lanza ácido.
 - `lanzables.gd`: molotov, granada, atraedora y congeladora, en **montones** (M18, 28 oct): cada hueco lleva un montón
-  de una clave de hasta `MONTON` (3 desde la M42; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
+  de una clave de hasta `MONTON` (2 desde la M74; más con la calidad y el Artificiero o Criogenia: `maximo`). 3 a mano (`mano`, una
   de cada clave, F cambia; sus cuentas en `cantidades`) y 4 de repuesto (`REPUESTO`, 8 hasta la M67; `repuesto` y sus cuentas en `en_repuesto`,
   con varios de la misma clave). Sin tope por tipo: se coge mientras quepa (`cabe`, `meter`: primero en sus montones
   sin llenar, luego en uno nuevo). Al acabarse el de la mano entra otro de repuesto (`repasar`, `relevo`: el de su

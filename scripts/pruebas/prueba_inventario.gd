@@ -1103,9 +1103,9 @@ func probar_municion() -> void:
 
 # Con "--captura --montones": los arrojables en montones (el M18 del dueño; lanzables.gd), en la sala de mantenimiento y
 # con el baúl vacío. Cada línea dice lo esperado: los molotovs que coge llenan su montón de la mano y luego van al
-# repuesto en montones de 3 (M42), varios del mismo tipo; con el inventario lleno (la mano y las 4 casillas de repuesto, M67) ya no
-# coge más; al acabarse el montón de la mano entran otros 3 del repuesto; en el baúl, los montones de la misma clase se
-# juntan en una casilla y salen de 3 en 3 («Sacar 3»); y al completar el edificio, lo que sobra (también lo Normal) va
+# repuesto en montones de 2 (M74), varios del mismo tipo; con el inventario lleno (la mano y las 4 casillas de repuesto, M67) ya no
+# coge más; al acabarse el montón de la mano entran otros 2 del repuesto; en el baúl, los montones de la misma clase se
+# juntan en una casilla y salen de 2 en 2 («Sacar 2»); y al completar el edificio, lo que sobra (también lo Normal) va
 # al baúl, junto. Fotos: captura-montones.png (el inventario con el repuesto lleno de montones) y
 # captura-montones-baul.png (el baúl con las granadas juntas). Deja el guardado como estaba y se cierra
 func probar_montones() -> void:
@@ -1121,26 +1121,26 @@ func probar_montones() -> void:
 		return Guardado.cargar().baul_equipo.filter(func(e): return e.has("n")).map(
 			func(e): return "%s %d ×%d" % [e.id, e.calidad, e.n])
 	await get_tree().create_timer(0.5).timeout
-	print("Al empezar: %s · caben en un montón %d (esperado: a mano [molotov 2, granada 2] · repuesto [] · 3)" % [como.call(),
+	print("Al empezar: %s · caben en un montón %d (esperado: a mano [molotov 2, granada 2] · repuesto [] · 2)" % [como.call(),
 		lz.maximo("molotov")])
-	for i in 7:
+	for i in 4:
 		lz.sumar("molotov")
-	print("Coge 7 molotovs: %s · molotovs %d (esperado: a mano [molotov 3, granada 2] · repuesto [molotov 3, molotov 3] · 9)" % [
+	print("Coge 4 molotovs: %s · molotovs %d (esperado: a mano [molotov 2, granada 2] · repuesto [molotov 2, molotov 2] · 6)" % [
 		como.call(), lz.total("molotov")])
 	var entran := lz.meter("granada", 100)
-	print("Mete 100 granadas: entran %d · %s (esperado: 7: llenan su montón de la mano y 2 montones de 3 en el repuesto, que queda lleno)" % [
+	print("Mete 100 granadas: entran %d · %s (esperado: 4: 2 montones de 2 en el repuesto (el de la mano ya estaba lleno), que queda lleno)" % [
 		entran, como.call()])
 	print("¿Coge otra granada? %s · ¿una atraedora? %s (esperado: false, sus montones y el repuesto, llenos · true, a la mano, que tiene un hueco)" % [
 		lz.cabe("granada"), lz.cabe("atraedora")])
 	entran = lz.meter("atraedora", 8)
-	print("Mete 8 atraedoras: entran %d · ¿coge un molotov? %s (esperado: 3 · false: lleno, no se pueden llevar más)" % [entran,
+	print("Mete 8 atraedoras: entran %d · ¿coge un molotov? %s (esperado: 2 · false: lleno, no se pueden llevar más)" % [entran,
 		lz.cabe("molotov")])
-	# se acaba el montón de la mano: entran otros tres del repuesto
+	# se acaba el montón de la mano: entran otros dos del repuesto
 	lz.tipo = "molotov"
 	johnny.invulnerable = 2.6   # (por si alguno le cae cerca)
 	for i in Lanzables.MONTON:
 		lz.lanzar(johnny.global_position + Vector2(-280, 60))
-	print("Lanza 3 molotovs: %s · lanza %s (esperado: a mano molotov 3 otra vez, el primer montón de repuesto ha pasado a la mano · molotov)" % [
+	print("Lanza 2 molotovs: %s · lanza %s (esperado: a mano molotov 2 otra vez, el primer montón de repuesto ha pasado a la mano · molotov)" % [
 		como.call(), lz.tipo])
 	await get_tree().create_timer(4.5).timeout   # (que se apague el fuego antes de las fotos)
 	abrir_cosas("inventario")
@@ -1150,7 +1150,7 @@ func probar_montones() -> void:
 	print("El montón de molotovs de repuesto: dice «%s»" % inventario.fondo.find_child("nota", true, false).text)
 	inventario.cerrar()
 	await get_tree().process_frame
-	# el baúl: se guardan dos montones de granadas y se juntan; salen de 3 en 3
+	# el baúl: se guardan dos montones de granadas y se juntan; salen de 2 en 2
 	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
 	johnny.direccion = "n"
 	johnny.get_node("Camara").reset_smoothing()
@@ -1164,14 +1164,14 @@ func probar_montones() -> void:
 		inventario.tocar("e%d" % lz.repuesto.find("granada"))
 		inventario.guardar()
 	await get_tree().process_frame
-	print("Guarda dos montones de granadas: baúl %s · %s (esperado: [granada 0 ×6], juntas en una casilla)" % [baul.call(), como.call()])
+	print("Guarda dos montones de granadas: baúl %s · %s (esperado: [granada 0 ×4], juntas en una casilla)" % [baul.call(), como.call()])
 	inventario.tocar("b0")
 	await get_tree().process_frame
 	var b: Button = inventario.fondo.find_child("sacar", true, false)
-	print("Las granadas del baúl: botón «%s» (esperado: Sacar 3)" % (b.text if b else "no está"))
+	print("Las granadas del baúl: botón «%s» (esperado: Sacar 2)" % (b.text if b else "no está"))
 	inventario.sacar()
 	await get_tree().process_frame
-	print("Saca un montón: baúl %s · granadas %d (esperado: [granada 0 ×3] · 6)" % [baul.call(), lz.total("granada")])
+	print("Saca un montón: baúl %s · granadas %d (esperado: [granada 0 ×2] · 4)" % [baul.call(), lz.total("granada")])
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-montones-baul.png")
 	inventario.cerrar()
@@ -1179,12 +1179,12 @@ func probar_montones() -> void:
 	# al completar el edificio, todo lo que sobra va al baúl, también lo Normal, junto
 	terminar(true)
 	await get_tree().create_timer(0.3).timeout
-	print("Completa el edificio: baúl %s (esperado: [granada 0 ×9, molotov 0 ×6, atraedora 0 ×3]: los de la misma clase, juntos)" % [
+	print("Completa el edificio: baúl %s (esperado: [granada 0 ×6, molotov 0 ×4, atraedora 0 ×2]: los de la misma clase, juntos)" % [
 		baul.call()])
 	# una partida guardada de antes del M67, con 6 montones de repuesto: caben 4 y los otros 2 van al baúl
 	Guardado.cambiar(func(g2): g2.baul_equipo = [])
 	lz.repuesto = ["molotov", "granada", "molotov", "atraedora", "granada", "congeladora:2"]
-	lz.en_repuesto = [3, 3, 3, 3, 2, 1]
+	lz.en_repuesto = [2, 2, 2, 2, 2, 1]
 	var foto := {"lanzables": {"repuesto": lz.repuesto.duplicate(), "en_repuesto": lz.en_repuesto.duplicate()}}
 	PartidaGuardada.sobrantes_al_baul(lz, foto)
 	print("Partida guardada con 6 de repuesto: repuesto %s · en la foto %d · baúl %s (esperado: [molotov, granada, molotov, atraedora] · 4 · [granada 0 ×2, congeladora 2 ×1])" % [
