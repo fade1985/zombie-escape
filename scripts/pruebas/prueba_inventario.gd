@@ -1101,6 +1101,21 @@ func probar_municion() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --infinito": el HUD con la ayuda de balas infinitas (Opciones > Ayudas). El «∞» se dibuja a mano (ninguna
+# letra del juego lo trae: en el móvil y la web salía un cuadro). Foto: captura-infinito-hud.png (a mirar: «+» y el infinito)
+func probar_infinito() -> void:
+	mochila.clear()
+	armas_guardadas.clear()
+	johnny.coger("fregona")
+	johnny.coger("pistola")
+	Guardado.cambiar(func(g): g.ajustes.pistola_sin_fin = true)
+	await get_tree().create_timer(0.5).timeout
+	print("Balas infinitas: pistola_sin_fin %s (esperado: true)" % johnny.pistola_sin_fin())
+	Captura.foto("captura-infinito-hud.png")
+	Guardado.cambiar(func(g): g.ajustes.pistola_sin_fin = false)
+	get_tree().quit()
+
+
 # Con "--captura --montones": los arrojables en montones (el M18 del dueño; lanzables.gd), en la sala de mantenimiento y
 # con el baúl vacío. Cada línea dice lo esperado: los molotovs que coge llenan su montón de la mano y luego van al
 # repuesto en montones de 2 (M74), varios del mismo tipo; con el inventario lleno (la mano y las 4 casillas de repuesto, M67) ya no

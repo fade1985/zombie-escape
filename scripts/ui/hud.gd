@@ -763,11 +763,27 @@ func pintar_balas() -> void:
 	# La reserva: la munición de su tipo que lleva, la que comparte con las otras armas que la gastan (en naranja si ya
 	# no le queda ninguna)
 	var donde := Vector2(x + 4, abajo - 2)
-	var texto := "+∞" if johnny.pistola_sin_fin() else "+%d" % johnny.reserva()
-	var color_texto := Color("#f0e8d4") if johnny.reserva() > 0 or texto == "+∞" else Color("#ff9f1c")
+	var sin_fin: bool = johnny.pistola_sin_fin()
+	var texto := "+" if sin_fin else "+%d" % johnny.reserva()
+	var color_texto := Color("#f0e8d4") if johnny.reserva() > 0 or sin_fin else Color("#ff9f1c")
 	color_texto.a = 0.5 if lejos else 1.0
 	barra.draw_string_outline(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, 4, Color(Tema.LINEA, color_texto.a))
 	barra.draw_string(Tema.FUENTE, donde, texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color_texto)
+	if sin_fin:
+		# El «∞» no está en ninguna letra del juego (en el móvil y la web salía un cuadro): se dibuja a mano, píxel a píxel
+		var ancho := Tema.FUENTE.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+		var origen := Vector2(roundf(donde.x + ancho + 2.0), donde.y - 10.0)
+		var filas := [".##.##.", "#..#..#", "#..#..#", ".##.##."]
+		for pasada in 2:
+			for fila in filas.size():
+				for col in 7:
+					if filas[fila][col] != "#":
+						continue
+					var p := origen + Vector2(col, fila) * 2.0
+					if pasada == 0:
+						barra.draw_rect(Rect2(p, Vector2(2, 2)).grow(2.0), Color(Tema.LINEA, color_texto.a))
+					else:
+						barra.draw_rect(Rect2(p, Vector2(2, 2)), color_texto)
 
 
 # El depósito del lanzallamas, del lanza ácido o del lanza rayos, encima de la barra de vida: una barra (naranja de
