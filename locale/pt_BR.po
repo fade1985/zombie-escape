@@ -918,10 +918,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "Esse zumbi está com a chave do apto. %s!"
 
 #: scripts/guia.gd
-msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
-msgstr "Você perdeu um terço da vida: esse não se cura com bandagens, só com um kit médico"
-
-#: scripts/guia.gd
 msgid "Muévete con {moverse}"
 msgstr "Mova-se com {moverse}"
 
@@ -3560,12 +3556,16 @@ msgid "Al perder un tercio de vida"
 msgstr "Ao perder um terço da vida"
 
 #: scripts/tutoriales.gd
-msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
-msgstr "Sua vida é dividida em três terços. O que você perde já não se cura com bandagens, e a cada um você anda mais devagar."
+msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
+msgstr "Sua barra de vida é dividida em três terços por duas linhas. Quando a vida desce de uma linha, esse terço se perde: escurece e as bandagens já não o enchem."
 
 #: scripts/tutoriales.gd
-msgid "Solo el botiquín devuelve un tercio perdido."
-msgstr "Só o kit médico devolve um terço perdido."
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
+msgstr "A cada terço perdido você anda mais devagar: com dois perdidos, já não escapa dos zumbis rápidos."
+
+#: scripts/tutoriales.gd
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
+msgstr "Os terços perdidos continuam perdidos ao subir de andar. Só o kit médico devolve um (e o talento Segundo fôlego, uma vez por andar)."
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."

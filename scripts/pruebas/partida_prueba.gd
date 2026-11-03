@@ -164,6 +164,8 @@
 #   --llave             la llave de la jefa en el suelo, con su luz blanca, con y sin ella      [prueba_varias.gd]
 #   --curas             las vendas y el botiquín: casillas del HUD, teclas 1 y 2, el tercio que devuelve el botiquín, la
 #                       velocidad por tercios, baúl, el armarito del baño y la mitad de los dólares al caer [prueba_inventario.gd]
+#   --guiado --tercios  en la primera partida, al perder el primer tercio sale la ventana de los tercios (M35)
+#                                                                                          [prueba_varias.gd]
 #   --tutorial          los tutoriales: la ventana, la cola, la lista desde la pausa, el del baúl antes del baúl y
 #                       la casilla de Ayudas                                                [prueba_varias.gd]
 #   --relato            los textos de la historia sobre negro: la introducción, los dos finales, cómo se pasan y se
@@ -617,6 +619,9 @@ func empezar_prueba() -> void:
 	elif "--sin-hacer" in args:
 		set_process(false)   # sin la prueba larga
 		probar_guia_sin_hacer()
+	elif "--guiado" in args and "--tercios" in args:
+		set_process(false)   # sin la prueba larga
+		probar_guiado_tercios()
 	elif "--guiado" in args:
 		set_process(false)   # sin la prueba larga
 		probar_guiado()

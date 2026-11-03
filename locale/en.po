@@ -918,10 +918,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "That zombie has the key to apt. %s!"
 
 #: scripts/guia.gd
-msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
-msgstr "You lost a third of your health: bandages won't heal it, only a medkit"
-
-#: scripts/guia.gd
 msgid "Muévete con {moverse}"
 msgstr "Move with {moverse}"
 
@@ -3560,12 +3556,16 @@ msgid "Al perder un tercio de vida"
 msgstr "On losing a third of your health"
 
 #: scripts/tutoriales.gd
-msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
-msgstr "Your health is split into thirds. Bandages can't heal a third you've lost, and each lost third slows you down."
+msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
+msgstr "Your health bar is split into thirds by two lines. When your health drops below a line, that third is lost: it goes dark and bandages can't fill it anymore."
 
 #: scripts/tutoriales.gd
-msgid "Solo el botiquín devuelve un tercio perdido."
-msgstr "Only a medkit brings back a lost third."
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
+msgstr "Each lost third slows you down: with two lost, you can't outrun the fast zombies anymore."
+
+#: scripts/tutoriales.gd
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
+msgstr "Lost thirds stay lost when you go up a floor. Only a medkit brings one back (and the Second Wind talent, once per floor)."
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."

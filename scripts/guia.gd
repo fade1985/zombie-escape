@@ -11,8 +11,8 @@
 # armarito del baño (preparar_planta).
 #
 # Las pistas, en orden (PISTAS): moverse y esquivar al empezar; al ver un zombi despierto, atacar; luego sacar la
-# pistola, recargar con medio cargador, curarse con vendas al estar herido y lanzar con tres zombis cerca. Los tercios
-# y el jefe se cuentan con la línea de avisos (partida.decir) o con una pista con tiempo.
+# pistola, recargar con medio cargador, curarse con vendas al estar herido y lanzar con tres zombis cerca. El jefe se
+# cuenta con la línea de avisos (partida.decir) o con una pista con tiempo.
 # Lo que se enseña así se apunta como visto (Tutoriales.apuntar) nada más salir, se haga o no: si no, al morir en la
 # primera partida, la siguiente (ya sin guía) lo volvería a explicar con su ventana. Queda en el apartado Tutorial del
 # menú. Las ventanas de CUBRE no salen mientras la guía está activa (partida.tutorial); después, solo las de lo que
@@ -32,7 +32,8 @@ const CERCA := 300.0        # a qué distancia cuentan los zombis para la pista 
 const LEJOS_FLECHA := 150.0 # más cerca de la puerta que esto, la flecha se va
 
 # Las ventanas que la guía enseña a su manera (no salen mientras está activa)
-const CUBRE := ["jugar", "apartamentos", "lanzables", "municion", "curas", "tercios", "jefes"]
+# (la de los tercios sí sale, con su ventana: es cuando más falta hace entenderlos, M35)
+const CUBRE := ["jugar", "apartamentos", "lanzables", "municion", "curas", "jefes"]
 
 # Cada pista: su frase (con las teclas entre llaves, como en tutoriales.gd), la ventana que cuenta como vista al salir
 # y la casilla del HUD que late mientras sale. "atacar" usa la frase del modo de atacar (Tutoriales.atacar_modo)
@@ -60,7 +61,7 @@ var inicio := Vector2.ZERO    # dónde estaba Johnny al salir "moverse"
 var lanzables_antes := 0      # los lanzables a mano al salir "lanzar" (al bajar, ha lanzado)
 var vendas_antes := 0
 var facil := -1               # el apartamento fácil (su número de sitio)
-var dicho: Array = []         # los avisos de la línea de abajo ya dichos ("pasillo", "llave", "tercio")
+var dicho: Array = []         # los avisos de la línea de abajo ya dichos ("pasillo", "llave")
 var letrero := RichTextLabel.new()
 var flecha := Flecha.new()
 
@@ -270,17 +271,14 @@ func colocar_letrero() -> void:
 	letrero.modulate.a = clampf(desde / 0.25, 0.0, 1.0)
 
 
-# Los avisos de la línea de abajo, una vez cada uno: el zombi de la llave al despertar y el primer tercio perdido
+# Los avisos de la línea de abajo, una vez cada uno: el zombi de la llave al despertar (el primer tercio perdido ya no:
+# sale su ventana, M35)
 func mirar_avisos() -> void:
 	if not "llave" in dicho:
 		for z in zombis_despiertos():
 			if z.has_meta("llave"):
 				dicho.append("llave")
 				partida.decir(Idioma.t("¡Ese zombi lleva la llave del %s!") % partida.nombre_jefa(), 3.5)
-	if not "tercio" in dicho and johnny.tercios_vivos() < 3:
-		dicho.append("tercio")
-		Tutoriales.apuntar("tercios")
-		partida.decir(Idioma.t("Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"), 5.0)
 
 
 func zombis_despiertos() -> Array:

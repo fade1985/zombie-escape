@@ -2648,6 +2648,28 @@ func probar_relieve() -> void:
 
 # --guiado: el tutorial disimulado de la primera partida (guia.gd): las pistas encima de Johnny en orden, el latido del
 # HUD, la flecha del suelo, el apartamento fácil, la llavecita del zombi de la llave y que no sale ninguna ventana
+# Con "--captura --guiado --tercios": en la primera partida (con la guía), el primer tercio perdido saca la ventana de
+# «La vida en tercios» (M35; antes, solo una frase en la línea de abajo). Foto: captura-tutorial-tercios.png. Se cierra
+func probar_guiado_tercios() -> void:
+	await get_tree().create_timer(1.0).timeout
+	johnny.invulnerable = 0.0
+	johnny.quitar_vida(roundi(johnny.stats.vida_max * 0.4))
+	var ventana: Tutorial = null
+	var tiempo := 0.0
+	while ventana == null and tiempo < 4.0:
+		await get_tree().create_timer(0.2, true, false, true).timeout
+		tiempo += 0.2
+		for h in get_children():
+			if h is Tutorial and not h.is_queued_for_deletion():
+				ventana = h
+	await get_tree().create_timer(0.6, true, false, true).timeout
+	Captura.foto("captura-tutorial-tercios.png")
+	print("Tercios · guía activa %s · tercios %d · ventana: %s (esperado: true, 2, tercios)" % [guia.activa, johnny.tercios,
+		ventana.id if ventana else "ninguna"])
+	print("Tercios · %s" % ("BIEN" if guia.activa and ventana and ventana.id == "tercios" else "MAL"))
+	get_tree().quit()
+
+
 func probar_guiado() -> void:
 	johnny.invencible = true
 	var ventanas := func() -> int:

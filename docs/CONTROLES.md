@@ -53,7 +53,8 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   hay uno enchufado o los botones del móvil). **Entendido**, Esc o B la cierran. El botón **Tutorial** del menú
   principal y de la pausa las vuelve a enseñar; las que aún no han salido, con «???» (menos *Cómo se juega*).
   En la **primera partida**, la planta baja no saca las ventanas de lo básico: lo enseña jugando (`guia.gd`), con
-  pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo. El botón
+  pistas encima de Johnny que se van al hacerlo, la casilla del HUD que toca latiendo y una flecha en el suelo (la de
+  la vida en tercios sí sale, al perder el primero: es cuando más falta hace). El botón
   *Que vuelvan a salir todos* de Opciones → Ayudas también la reactiva: sale en la próxima partida de los Apartamentos
   aunque no sea la primera (`guia_otra_vez` en el guardado; se apaga sola al empezarla).
 - **Textos de la historia:** la introducción (la primera partida) y el final de cada edificio (la primera vez que se

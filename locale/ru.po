@@ -919,10 +919,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "У этого зомби ключ от кв. %s!"
 
 #: scripts/guia.gd
-msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
-msgstr "Ты потерял треть здоровья: бинты её уже не вылечат, только аптечка"
-
-#: scripts/guia.gd
 msgid "Muévete con {moverse}"
 msgstr "Движение: {moverse}"
 
@@ -3568,12 +3564,16 @@ msgid "Al perder un tercio de vida"
 msgstr "Когда теряешь треть здоровья"
 
 #: scripts/tutoriales.gd
-msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
-msgstr "Твое здоровье разделено на три трети. Потерянную треть бинтами не вылечить, и с каждой потерянной ты ходишь медленнее."
+msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
+msgstr "Полоска здоровья разделена двумя чертами на три трети. Когда здоровье опускается ниже черты, эта треть теряется: она темнеет, и бинты её уже не заполнят."
 
 #: scripts/tutoriales.gd
-msgid "Solo el botiquín devuelve un tercio perdido."
-msgstr "Потерянную треть возвращает только аптечка."
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
+msgstr "С каждой потерянной третью ты ходишь медленнее: потеряв две, от быстрых зомби уже не убежать."
+
+#: scripts/tutoriales.gd
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
+msgstr "Потерянные трети не возвращаются и на следующем этаже. Вернуть одну может только аптечка (и талант «Второе дыхание», раз за этаж)."
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."

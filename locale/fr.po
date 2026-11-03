@@ -918,10 +918,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "Ce zombie a la clé de l'appart %s !"
 
 #: scripts/guia.gd
-msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
-msgstr "Tu as perdu un tiers de ta vie : les bandages ne le soignent plus, seul un médikit le rend"
-
-#: scripts/guia.gd
 msgid "Muévete con {moverse}"
 msgstr "Déplace-toi avec {moverse}"
 
@@ -3560,12 +3556,16 @@ msgid "Al perder un tercio de vida"
 msgstr "En perdant un tiers de vie"
 
 #: scripts/tutoriales.gd
-msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
-msgstr "Ta vie est divisée en trois tiers. Celui que tu perds ne se soigne plus avec des bandages, et chacun te ralentit."
+msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
+msgstr "Ta barre de vie est divisée en trois tiers par deux traits. Quand ta vie passe sous un trait, ce tiers est perdu : il s'assombrit et les bandages ne le remplissent plus."
 
 #: scripts/tutoriales.gd
-msgid "Solo el botiquín devuelve un tercio perdido."
-msgstr "Seul le médikit rend un tiers perdu."
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
+msgstr "Chaque tiers perdu te ralentit : avec deux tiers perdus, tu n'échappes plus aux zombies rapides."
+
+#: scripts/tutoriales.gd
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
+msgstr "Les tiers perdus le restent quand tu montes d'étage. Seul le médikit en rend un (et le talent Second souffle, une fois par étage)."
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."

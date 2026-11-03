@@ -918,10 +918,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "Dieser Zombie hat den Schlüssel für Wohnung %s!"
 
 #: scripts/guia.gd
-msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
-msgstr "Du hast ein Drittel Leben verloren: Verbände heilen es nicht mehr, nur ein Medikit"
-
-#: scripts/guia.gd
 msgid "Muévete con {moverse}"
 msgstr "Beweg dich mit {moverse}"
 
@@ -3560,12 +3556,16 @@ msgid "Al perder un tercio de vida"
 msgstr "Ein Drittel verloren"
 
 #: scripts/tutoriales.gd
-msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
-msgstr "Dein Leben ist in drei Drittel geteilt. Ein verlorenes heilen Verbände nicht mehr, und mit jedem bist du langsamer."
+msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
+msgstr "Deine Lebensleiste ist durch zwei Striche in drei Drittel geteilt. Fällt dein Leben unter einen Strich, ist dieses Drittel verloren: Es wird dunkel, und Verbände füllen es nicht mehr."
 
 #: scripts/tutoriales.gd
-msgid "Solo el botiquín devuelve un tercio perdido."
-msgstr "Nur Medikits bringen ein Drittel zurück."
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
+msgstr "Mit jedem verlorenen Drittel bist du langsamer: Mit zwei verlorenen entkommst du den schnellen Zombies nicht mehr."
+
+#: scripts/tutoriales.gd
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
+msgstr "Verlorene Drittel bleiben verloren, auch auf der nächsten Ebene. Nur ein Medikit bringt eins zurück (und das Talent Zweite Luft, einmal pro Ebene)."
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."

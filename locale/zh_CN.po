@@ -917,10 +917,6 @@ msgid "¡Ese zombi lleva la llave del %s!"
 msgstr "那个僵尸拿着%s的钥匙！"
 
 #: scripts/guia.gd
-msgid "Has perdido un tercio de vida: ese ya no se cura con vendas, solo con un botiquín"
-msgstr "你失去了一段生命：这一段绷带治不好，只有急救包能恢复"
-
-#: scripts/guia.gd
 msgid "Muévete con {moverse}"
 msgstr "用{moverse}移动"
 
@@ -3552,12 +3548,16 @@ msgid "Al perder un tercio de vida"
 msgstr "失去三分之一生命时"
 
 #: scripts/tutoriales.gd
-msgid "Tu vida está partida en tres tercios. El que pierdes ya no se cura con vendas, y por cada uno andas más lento."
-msgstr "你的生命分成三段。失去的那一段无法用绷带恢复，而且每失去一段，你都会走得更慢。"
+msgid "Tu barra de vida está partida en tres tercios por dos rayas. Cuando la vida baja de una raya, ese tercio se pierde: se oscurece y las vendas ya no lo llenan."
+msgstr "你的生命条被两条线分成三段。生命降到一条线以下时，那一段就失去了：它会变暗，绷带也无法再补满。"
 
 #: scripts/tutoriales.gd
-msgid "Solo el botiquín devuelve un tercio perdido."
-msgstr "只有急救包能恢复失去的一段。"
+msgid "Por cada tercio perdido andas más lento: con dos perdidos ya no escapas de los zombis rápidos."
+msgstr "每失去一段，你都会走得更慢：失去两段后，就跑不过快速僵尸了。"
+
+#: scripts/tutoriales.gd
+msgid "Los tercios perdidos siguen perdidos al subir de planta. Solo el botiquín devuelve uno (y el talento Segundo aliento, una vez por planta)."
+msgstr "失去的段数上楼后也不会恢复。只有急救包能恢复一段（还有“绝处逢生”天赋，每层一次）。"
 
 #: scripts/tutoriales.gd
 msgid "Si se te hace cuesta arriba, en Opciones → Ayudas está «Vida entera»."
