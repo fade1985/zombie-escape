@@ -42,8 +42,11 @@ const DATOS := {
 const APAGON := 0.4          # oscuridad de más (con la del pasillo, casi negro: el tope de luz.gd es 0,97)
 const INCENDIO := {
 	"charcos": [4, 9],       # charcos en cada sitio, según lo grande que sea
-	"cables": 2,             # cuántos de ellos tienen un cable pelado (en los sitios pequeños, uno)
-	"pulso": 1.6,            # un calambrazo cada tanto; el daño, el del agua de la tienda de electrónica (Peligros.AGUA)
+	"cables": 4,             # cuántos de ellos tienen un cable pelado (en los sitios pequeños, dos; hasta el 3 nov, 2 y 1)
+	"pulso": 0.5,            # la corriente no para (hasta el 3 nov, un calambrazo cada 1,6 s): cada tanto mira quién
+                             # pisa el charco y le da; el daño, el del agua de la tienda de electrónica (Peligros.AGUA),
+                             # y a Johnny, tras cada uno, le salva su rato sin daño (johnny.gd: INVULNERABLE)
+	"rayos": 0.08,           # cada cuánto cambian de forma los rayos, que se ven todo el rato
 	"sirena": 12.0,          # cada cuánto vuelve a sonar la sirena
 }
 const HORDA := {
@@ -281,7 +284,7 @@ func repartir_charcos(sitio: Dictionary) -> Array:
 		if lista.any(func(c): return c.pos.distance_to(p) < 150.0):
 			continue
 		lista.append({"pos": p, "cable": false, "avisado": false})
-	for i in mini(INCENDIO.cables if n >= 6 else 1, lista.size()):
+	for i in mini(INCENDIO.cables if n >= 6 else INCENDIO.cables / 2, lista.size()):
 		lista[i].cable = true
 	return lista
 
@@ -510,7 +513,7 @@ func probar_incendio(foto: Callable, esperar: Callable) -> void:
 	zombi.set_physics_process(false)
 	var antes: int = johnny.vida
 	var antes_z: int = zombi.vida
-	await esperar.call(INCENDIO.pulso + 0.3)
+	await esperar.call(INCENDIO.pulso + 0.1)
 	print("Incendio · tras un calambrazo: Johnny %d -> %d · zombi %d -> %d" % [antes, johnny.vida,
 		antes_z, zombi.vida if is_instance_valid(zombi) else 0])
 	foto.call("incendio-cable")
@@ -587,14 +590,16 @@ func probar_horda(foto: Callable, esperar: Callable) -> void:
 
 # ═════════════ Lo que se dibuja ═════════════
 
-# El cable pelado que ha caído en un charco de los aspersores: echa chispas y, cada tanto, un calambrazo a todo el
-# charco (como el agua de la tienda de electrónica, agua.gd, con sus mismos daños)
+# El cable pelado que ha caído en un charco de los aspersores: electrocuta todo el charco sin parar, con los rayos
+# siempre a la vista, y da calambrazos a todo el que lo pise (como el agua de la tienda de electrónica, agua.gd, con
+# sus mismos daños)
 class Cable extends Node2D:
 	var charco: Node2D
 	var datos: Dictionary
 	var punta := Vector2(-10, 2)
 	var desde := Vector2(78, -36)   # por donde entra el cable (fuera del charco)
 	var pulso := 0.0
+	var cambio := 0.0   # lo que falta para que los rayos cambien de forma
 	var destello := 0.0
 	var rayos: Array = []
 	var t := 0.0
@@ -605,6 +610,7 @@ class Cable extends Node2D:
 		name = "Cable"   # no-tr (nombre de nodo)
 		z_index = -1
 		pulso = randf() * INCENDIO.pulso   # que no den todos a la vez
+		nuevos_rayos()
 		chispas = Node2D.new()
 		var propio := CanvasItemMaterial.new()
 		propio.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED   # lo eléctrico luce por sí mismo
@@ -629,17 +635,20 @@ class Cable extends Node2D:
 		if pulso >= INCENDIO.pulso:
 			pulso -= INCENDIO.pulso
 			calambrazo(johnny)
+		cambio -= delta
+		if cambio <= 0.0:
+			cambio = INCENDIO.rayos
+			nuevos_rayos()
 		if randf() < 8.0 * delta:
 			var a := randf() * TAU
 			Particulas.soltar(self, global_position + punta, Vector2(cos(a), sin(a) - 0.6) * randf_range(40, 110),
 				Color.WHITE if randf() < 0.4 else RAYO, 2, randf_range(0.15, 0.3))
-		luz.energy = (0.5 + 0.35 * randf() + destello * 4.0) * Luz.fuerza()
-		charco.modulate = Color.WHITE.lerp(Color(1.7, 2.0, 2.3), destello / 0.2)
+		luz.energy = (0.9 + 0.5 * randf() + destello * 4.0) * Luz.fuerza()
+		charco.modulate = Color.WHITE.lerp(Color(1.7, 2.0, 2.3), 0.25 + 0.15 * randf() + destello / 0.2 * 0.6)
 		chispas.queue_redraw()
 
-	func calambrazo(johnny: Node2D) -> void:
-		var a: Dictionary = Peligros.AGUA
-		destello = 0.2
+	# Los rayos, de la punta del cable a sitios del charco al azar (cambian a menudo, para que parezcan vivos)
+	func nuevos_rayos() -> void:
 		rayos.clear()
 		for i in 4:
 			var meta := Vector2.from_angle(randf() * TAU) * Vector2(50, 28) * randf_range(0.4, 1.0)
@@ -647,7 +656,10 @@ class Cable extends Node2D:
 			for k in range(1, 5):
 				puntos.append(punta.lerp(meta, k / 4.0) + Vector2(randf_range(-7, 7), randf_range(-5, 5)))
 			rayos.append(puntos)
-		Luz.destello(self, global_position + punta, 240.0, 0.25, 0.8, RAYO)
+
+	# Le da a todo el que esté dentro del charco; el fogonazo y el ruido, solo si ha dado a alguien
+	func calambrazo(johnny: Node2D) -> void:
+		var a: Dictionary = Peligros.AGUA
 		var dio := false
 		if johnny and johnny.vivo and johnny.esquiva_t <= 0.0 and charco.dentro(johnny.global_position, 0.0):
 			johnny.pisar({"calambre": {"despues": a.tieso}})
@@ -660,7 +672,9 @@ class Cable extends Node2D:
 			if "aturdido" in zombi:
 				zombi.aturdido = maxf(zombi.aturdido, a.aturde)
 			dio = true
-		if dio or (johnny and johnny.global_position.distance_to(global_position) < 300.0):
+		if dio:
+			destello = 0.2
+			Luz.destello(self, global_position + punta, 240.0, 0.25, 0.8, RAYO)
 			Sonido.tocar("calambre")
 
 	# El cable por el suelo, desde fuera del charco hasta dentro, con una curva y la punta de cobre abierta
@@ -679,8 +693,6 @@ class Cable extends Node2D:
 		for i in 3:
 			if randf() < 0.5:
 				chispas.draw_rect(Rect2(punta + Vector2(randi_range(-6, 4), randi_range(-6, 4)) * 2.0, Vector2(2, 2)), RAYO)
-		if destello <= 0.0:
-			return
 		for puntos in rayos:
 			for i in puntos.size() - 1:
 				chispas.draw_line(puntos[i], puntos[i + 1], Color(RAYO, 0.6), 6.0)
