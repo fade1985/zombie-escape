@@ -2620,6 +2620,22 @@ msgstr "НОВЫЙ СКИН!"
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "Новый скин: %s. Надень его в шкафчике в дворницкой"
 
+#: scripts/partida.gd
+msgid "Johnny: «¡Uf! Vaya pesadilla…»"
+msgstr "Джонни: «Уф! Ну и кошмар…»"
+
+#: scripts/partida.gd
+msgid "Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»"
+msgstr "Джонни: «Я что, опять уснул на работе?»"
+
+#: scripts/partida.gd
+msgid "Johnny: «Juraría que me estaban mordiendo…»"
+msgstr "Джонни: «Готов поклясться, меня кусали…»"
+
+#: scripts/partida.gd
+msgid "Johnny: «Otra vez ese sueño de los zombis…»"
+msgstr "Джонни: «Опять этот сон про зомби…»"
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "Ток снова есть!"

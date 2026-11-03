@@ -2446,6 +2446,23 @@ func probar_golpes_pared() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --despertar": el despertar tras una derrota (partida.despertar, M31): saliendo de negro y tumbado
+# (captura-despertar-1.png), levantándose con su frase (captura-despertar-2.png) y ya de pie (captura-despertar-3.png)
+func probar_despertar() -> void:
+	await get_tree().create_timer(0.3).timeout
+	despertar()
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-despertar-1.png")
+	await get_tree().create_timer(1.4).timeout
+	Captura.foto("captura-despertar-2.png")
+	await get_tree().create_timer(1.6).timeout
+	Captura.foto("captura-despertar-3.png")
+	if johnny.dormido or johnny.caido_t > 0.0:
+		Captura.fallar("Johnny no se ha levantado")
+	await get_tree().create_timer(0.5).timeout
+	get_tree().quit()
+
+
 # Con "--captura --derrota": el cartel de derrota (menus.gd, fin). Primero, quién le pega a Johnny (johnny.gd,
 # golpe_de): un zombi, la explosión del dinamitero, su propia granada y el fuego del suelo. Luego cae de verdad por
 # un crío, con un logro, una skin, una página, un enemigo y un objeto nuevos y su mejor marca (captura-derrota.png);

@@ -2615,6 +2615,22 @@ msgstr "SKIN NOVA!"
 msgid "Skin nueva: %s. Póntela en la taquilla de la sala de mantenimiento"
 msgstr "Skin nova: %s. Vista no armário da sala de manutenção"
 
+#: scripts/partida.gd
+msgid "Johnny: «¡Uf! Vaya pesadilla…»"
+msgstr "Johnny: \"Ufa! Que pesadelo…\""
+
+#: scripts/partida.gd
+msgid "Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»"
+msgstr "Johnny: \"Peguei no sono no trabalho de novo?\""
+
+#: scripts/partida.gd
+msgid "Johnny: «Juraría que me estaban mordiendo…»"
+msgstr "Johnny: \"Eu juro que estavam me mordendo…\""
+
+#: scripts/partida.gd
+msgid "Johnny: «Otra vez ese sueño de los zombis…»"
+msgstr "Johnny: \"De novo aquele sonho dos zumbis…\""
+
 #: scripts/peligros/agua.gd
 msgid "¡Ha vuelto la corriente!"
 msgstr "A energia voltou!"

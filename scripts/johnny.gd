@@ -124,6 +124,7 @@ var resucitado := false    # Desfibrilador: solo una vez por partida
 var aliento_usado := false   # Segundo aliento: ya ha curado en esta planta (partida.nueva_planta lo quita)
 var con_adrenalina := false  # Adrenalina: si en el paso de antes estaba por debajo de la mitad (para avisar al entrar)
 var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
+var dormido := false       # tirado en el suelo al despertarse tras una derrota (despertar): sin estrellitas
 var caido_max := 0.0       # lo que dura ese tropezón
 var levantado_t := 0.0     # lo que le queda sin poder volver a tropezar
 var sombra_ancho := 0.0    # lo ancha que es su sombra de pie (tumbado, se alarga)
@@ -1218,6 +1219,23 @@ func caer(segundos: float) -> bool:
 	return true
 
 
+# Al empezar tras una derrota (partida.despertar): ya tumbado en el suelo, como dormido, y se levanta al cabo de
+# "segundos" (los dibujos del tropezón, sin golpe ni estrellitas)
+func despertar(segundos: float) -> void:
+	quedarse_quieto()
+	efectos.hide()
+	partir_cintura(false)
+	sprite.sprite_frames = Skins.hoja(HOJA_CAIDA, skin)
+	sprite.offset = -PIES_CAIDA
+	sprite.speed_scale = 1.0
+	sprite.animation = "caer_" + direccion
+	sprite.frame = sprite.sprite_frames.get_frame_count(sprite.animation) - 1
+	sprite.pause()
+	caido_t = segundos
+	caido_max = segundos + CAIDA   # (la sombra ya empieza larga)
+	dormido = true
+
+
 # En el suelo: se cae (y se queda en el último dibujo, tumbado), le dan vueltas unas estrellitas y, al final, se
 # levanta (sus dibujos de levantarse) y vuelve a su hoja de siempre
 func seguir_caido(delta: float) -> void:
@@ -1230,6 +1248,7 @@ func seguir_caido(delta: float) -> void:
 	estrellas.queue_redraw()
 	if caido_t <= 0.0:
 		caido_t = 0.0
+		dormido = false
 		levantado_t = LEVANTADO
 		tumbar(0.0)
 		volver_a_su_hoja()
@@ -1253,7 +1272,7 @@ func tumbar(k: float) -> void:
 # Tres estrellitas que dan vueltas sobre la cabeza mientras está en el suelo: cruces de 5 píxeles del dibujo (de 2
 # unidades), amarillas o blancas, con su borde oscuro
 func pintar_estrellas() -> void:
-	if caido_t <= LEVANTARSE or caido_max - caido_t < CAIDA * 2.0:
+	if dormido or caido_t <= LEVANTARSE or caido_max - caido_t < CAIDA * 2.0:
 		return
 	var cabeza: Vector2 = CABEZA_TUMBADO[direccion] + Vector2(0, -12)
 	var t := Time.get_ticks_msec() / 1000.0

@@ -91,6 +91,15 @@ const ICONOS_LANZABLES := {"molotov": preload("res://assets/ui/iconos/molotov.pn
 	"granada": preload("res://assets/ui/iconos/granada.png")}
 const CIERRE := 110.0     # lo que hay que alejarse de la puerta de entrada para que se cierre
 const FUNDIDO := 0.25      # segundos del fundido a negro al cruzar una puerta
+const DESPERTAR := 2.4     # tras una derrota, lo que tarda Johnny en levantarse al empezar (despertar)
+# [traducir]
+const FRASES_DESPERTAR := [   # lo que dice al levantarse (una al azar)
+	"Johnny: «¡Uf! Vaya pesadilla…»",
+	"Johnny: «¿Me he vuelto a quedar dormido en el trabajo?»",
+	"Johnny: «Juraría que me estaban mordiendo…»",
+	"Johnny: «Otra vez ese sueño de los zombis…»",
+]
+# [/traducir]
 const ARRIBA_EXTRA := 44   # lo que la cámara deja ver por encima del mapa (la cara del muro de arriba y su moldura)
 
 var planta: Dictionary
@@ -247,8 +256,11 @@ func _ready() -> void:
 		# el reto del día (reto.gd): también el dado de siempre con la semilla de hoy, para que el orden de los
 		# minijefes, la planta del superviviente y los eventos sorpresa salgan iguales para todo el mundo
 		seed(Planta.semilla)
-	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados
+	# Empieza una partida: se apunta, y se cuenta con los dólares ahorrados. Si la de antes acabó en derrota, Johnny se
+	# despierta en la sala de mantenimiento (despertar)
+	var despierta: bool = Guardado.cargar().pesadilla
 	var s := Guardado.cambiar(func(g):
+		g.pesadilla = false
 		g.partidas += 1
 		Guardado.edificio(g, edificio).partidas += 1
 		if Reto.activo:
@@ -290,6 +302,8 @@ func _ready() -> void:
 	# nada; la guía, el aviso de abajo y las ventanas empiezan al cerrarla
 	if edificio == "apartamentos":
 		await ver_relato("intro")
+	if despierta and not captura:
+		await despertar()
 	if captura:
 		empezar_prueba()
 	else:
@@ -1048,6 +1062,18 @@ func _al_morir_johnny() -> void:
 	terminar(false)
 
 
+# Tras una derrota (M31), la partida nueva empieza como si todo hubiera sido una pesadilla: la pantalla sale de negro,
+# Johnny está tumbado en el suelo de la sala de mantenimiento, se levanta (sus dibujos del tropezón) y dice una de
+# FRASES_DESPERTAR. Así se entiende por qué vuelve a estar allí y el edificio otra vez lleno de zombis
+func despertar() -> void:
+	negro.modulate.a = 1.0
+	johnny.despertar(DESPERTAR)
+	create_tween().tween_property(negro, "modulate:a", 0.0, 0.8)
+	await get_tree().create_timer(0.6, false).timeout
+	decir(Idioma.t(FRASES_DESPERTAR.pick_random()), DESPERTAR)
+	await get_tree().create_timer(DESPERTAR, false).timeout
+
+
 # Los dólares que salen en el HUD: los ahorrados más los de esta partida
 func cartera() -> int:
 	return ahorrados + dolares
@@ -1486,6 +1512,8 @@ func terminar(gano: bool, abandona := false) -> void:
 			g.victorias += 1
 		g.dolares += salvados
 		g.dolares_total += salvados
+		if not gano and not abandona:
+			g.pesadilla = true   # la próxima partida empieza con Johnny despertándose (despertar)
 		if gano and not Reto.activo:   # (el reto no cuenta como edificio completado ni abre alertas)
 			e.victorias += 1
 			e.completado = true

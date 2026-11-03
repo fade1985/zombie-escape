@@ -32,7 +32,7 @@ en una línea.
   quien, peligro)`; quién le ha quitado vida la última vez queda en `golpe_de`: un enemigo, por su meta `"tipo"`, que
   lee `Bestiario.de` y le ponen al nacer `partida.meter_zombi`, la modista a sus maniquíes y los jefes al mutar; o un
   peligro de `Menus.PELIGROS`: el charco que más quema, `charco_que_quema`, el agua con corriente, el cable pelado o su
-  granada, `explosion.de`), tropezar (`caer`), las skins (`vestir`, y sus ventajas en `arma()`, `ignifugo()`, `devolver()`), la
+  granada, `explosion.de`), tropezar (`caer`) y despertarse tumbado tras una derrota (`despertar`), las skins (`vestir`, y sus ventajas en `arma()`, `ignifugo()`, `devolver()`), la
   munición (`municion`, `reserva()`, `meter_municion()`, `arma_de_caja()`) y el depósito del lanzallamas y el lanza
   ácido (`echar_fuego`, `rellenos()`, `coger_relleno`). `mejoras.gd`: sus atributos.
 - `armas.gd`: los números de cada arma (`DATOS`, `PRECIOS`), su hoja y su `boca`, la munición (`MUNICION`) y lo que
@@ -223,7 +223,9 @@ en una línea.
 
 **Partida y progreso**
 - `partida.gd`: la planta en juego (cambiar de sitio, puertas, llave o tarjeta y su guardia, jefes, escaleras,
-  ascensor, dinero, soltar objetos y munición, pausa, fin). Salir de un sitio no lo reinicia: `montar` hace su mapa solo
+  ascensor, dinero, soltar objetos y munición, pausa, fin). Tras una derrota (M31: `pesadilla` en el guardado), la
+  partida siguiente empieza con `despertar`: sale de negro, Johnny tumbado en la sala de mantenimiento se levanta
+  (`johnny.despertar`, con los dibujos del tropezón) y dice una de `FRASES_DESPERTAR`; prueba `--despertar`. Salir de un sitio no lo reinicia: `montar` hace su mapa solo
   la primera vez (`hacer_mapa`) y al salir lo guarda entero en `mapas`, fuera de la escena, donde nada se mueve; al
   volver lo saca tal cual (`sacar_mapa`; lo que no hay que repetir va con `nuevo`, y `supervivientes.recoger` y
   `joyeria.recoger` quitan lo que ellos vuelven a poner). Lo que esté fuera del mapa y apunte a algo de dentro tiene que
