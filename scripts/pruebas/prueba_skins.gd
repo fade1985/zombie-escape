@@ -7,6 +7,7 @@ extends "res://scripts/pruebas/prueba_armas.gd"
 #   - la portera cae y desbloquea el portero (se guarda; no se pone sola), con su aviso (captura-skins-desbloqueo.png);
 #     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png), el Gymbro, el
 #     gymbro (captura-skins-desbloqueo-gymbro.png), y el jefe de bomberos, el bombero (captura-skins-desbloqueo-bombero.png)
+#   - el doctor Salas: suelta un objeto de más la mitad de las veces (Skins.doble) y lo consigue el científico jefe
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
 #     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón, el gymbro y el bombero
 #     (captura-skins-taquilla-<id>.png); «Siguiente skin» del panel de pruebas da la vuelta sin guardar
@@ -168,7 +169,10 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > Conserje)" % " > ".join(vuelta))
+	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > Conserje)" % " > ".join(vuelta))
+	# el doctor Salas (M36): la mitad de las veces, un objeto más; las demás skins, nunca
+	print("Objeto de más: salas %s · bombero %s · conserje %s · lo consigue «%s» (esperado: 0.5, 0, 0, «salas»)" % [
+		Skins.doble("salas"), Skins.doble("bombero"), Skins.doble(""), Skins.de_jefe("cientifico_jefe")])
 
 	# ── La cara: las 8 direcciones con la fregona, y las otras armas mirando al sur (una foto por skin) ──
 	johnny.position = Vector2(690, 330)
@@ -176,7 +180,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton", "gymbro", "bombero"]:
+	for skin in ["portero", "gloton", "gymbro", "bombero", "salas"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:

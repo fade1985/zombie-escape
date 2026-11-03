@@ -8,7 +8,7 @@
 #   3. Se pega la cabeza de la skin (la de cara.py: cabeza_nueva) girada igual, con el mismo giro de píxeles.
 # Saca assets/sprites/conserje-48-caida-<skin>.png y .tres. Y, con "muestra", capturas/captura-caida-<skin>.png: la
 # fila de cada dirección antes y después, para revisarla.
-#   py tools/caida_skins.py                 → las cuatro skins
+#   py tools/caida_skins.py                 → todas las skins
 #   py tools/caida_skins.py gloton muestra  → solo esa, con la muestra
 import json
 import math
@@ -24,7 +24,7 @@ import cara  # noqa: E402
 RAIZ = cara.RAIZ
 SPRITES = cara.SPRITES
 NOMBRE = "conserje-48-caida"
-SKINS = ["portero", "gloton", "gymbro", "bombero"]
+SKINS = ["portero", "gloton", "gymbro", "bombero", "salas"]
 GIRO = 15          # de cuántos en cuántos grados se prueba
 CERCA = 9          # hasta cuántos píxeles del pañuelo se busca el centro de la cabeza
 PARECIDO = 70      # dos colores se parecen si la suma de sus diferencias es menor que esto

@@ -47,6 +47,8 @@ const LISTA := {
 		"como": "Mata al Gymbro por primera vez.", "jefe": "gymbro", "cuerpo": 1.5},
 	"bombero": {"nombre": "El bombero", "efecto": "Las armas que queman hacen un 50 % más de daño y el fuego no te quema.",
 		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 1.5, "ignifugo": true},
+	"salas": {"nombre": "El doctor Salas", "efecto": "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más.",
+		"como": "Mata al doctor Salas por primera vez.", "jefe": "cientifico_jefe", "doble": 0.5},
 }
 # [/traducir]
 
@@ -137,3 +139,8 @@ static func ignifugo(id: String) -> bool:
 # Qué parte de su vida máxima pierde un jefe que le hace daño con esa skin (0 = nada: el poder del glotón no está)
 static func mordisco(id: String) -> float:
 	return LISTA[id].get("mordisco", 0.0) if id in LISTA else 0.0
+
+
+# La probabilidad de que un zombi que suelta un objeto suelte otro más con esa skin (0 = nunca: el doctor Salas, 0,5)
+static func doble(id: String) -> float:
+	return LISTA[id].get("doble", 0.0) if id in LISTA else 0.0

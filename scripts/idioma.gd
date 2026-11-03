@@ -92,11 +92,12 @@ func t(texto: String, contexto := "") -> String:
 
 # Un nombre (de un objeto, de una planta...) para meterlo en medio de una frase, en minúsculas. En alemán los nombres llevan
 # siempre mayúscula: se dejan como están (con solo_inicial, solo se baja la primera letra: el texto de un botón en una línea
-# de ayuda, «In die Truhe» → «in die Truhe»)
+# de ayuda, «In die Truhe» → «in die Truhe»; en los demás idiomas, igual: una frase que lleva un nombre, como «Mata al
+# doctor Salas», no lo pierde)
 func minusculas(texto: String, solo_inicial := false) -> String:
-	if actual != "de":
-		return texto.to_lower()
-	return texto.left(1).to_lower() + texto.substr(1) if solo_inicial else texto
+	if solo_inicial:
+		return texto.left(1).to_lower() + texto.substr(1)
+	return texto.to_lower() if actual != "de" else texto
 
 
 # Pone el punto decimal de un número ya escrito como se hace en el idioma: coma en español, portugués, alemán, francés y ruso, y punto en

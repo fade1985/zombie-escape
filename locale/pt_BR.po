@@ -605,7 +605,7 @@ msgstr "O chefe dos bombeiros"
 msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
 msgstr "O fogo não faz nada com ele: troque de arma. Quando ele girar, corra na frente do cone de fogo, para onde as setas apontam. De perto, cuidado com o machado."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El doctor Salas"
 msgstr "O doutor Salas"
 
@@ -2836,6 +2836,14 @@ msgstr "As armas que queimam causam 50 % mais dano e o fogo não te queima."
 #: scripts/skins.gd
 msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Mate o chefe dos bombeiros pela primeira vez."
+
+#: scripts/skins.gd
+msgid "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "Quando um zumbi solta um item, em 50 % das vezes ele solta mais um."
+
+#: scripts/skins.gd
+msgid "Mata al doctor Salas por primera vez."
+msgstr "Mate o doutor Salas pela primeira vez."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

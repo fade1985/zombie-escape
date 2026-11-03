@@ -605,7 +605,7 @@ msgstr "The Fire Chief"
 msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
 msgstr "Fire does nothing to him: switch weapons. When he spins, run ahead of the cone of fire, the way the arrows point. Up close, watch out for the axe."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El doctor Salas"
 msgstr "Dr. Salas"
 
@@ -2836,6 +2836,14 @@ msgstr "Weapons that burn do 50 % more damage and fire can't burn you."
 #: scripts/skins.gd
 msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Kill the fire chief for the first time."
+
+#: scripts/skins.gd
+msgid "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "When a zombie drops an item, 50 % of the time it drops another one."
+
+#: scripts/skins.gd
+msgid "Mata al doctor Salas por primera vez."
+msgstr "Kill Dr. Salas for the first time."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

@@ -1686,6 +1686,9 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 			var obj := Objetos.que_suelta(tipo, edificio, tienda)
 			if obj != "":
 				soltar_objeto(obj, zombi.position)
+				# con la skin del doctor Salas, a veces otro más al azar
+				if randf() < Skins.doble(johnny.skin):
+					soltar_objeto(Objetos.al_azar(edificio, tienda), zombi.position)
 		# y piezas de mejora de las armas: los jefes, cuatro seguras; cualquier otro zombi, a veces una
 		if tipo in JEFES:
 			for pieza in Objetos.piezas_de_jefe():

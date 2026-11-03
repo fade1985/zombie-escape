@@ -606,7 +606,7 @@ msgstr "Брандмейстер"
 msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
 msgstr "Огонь ему нипочем: смени оружие. Когда начнет крутиться, беги впереди огненного конуса, куда указывают стрелки. Вблизи берегись топора."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El doctor Salas"
 msgstr "Доктор Салас"
 
@@ -2842,6 +2842,14 @@ msgstr "Жгучее оружие наносит на 50 % больше урон
 #: scripts/skins.gd
 msgid "Mata al jefe de bomberos por primera vez."
 msgstr "Убей брандмейстера в первый раз."
+
+#: scripts/skins.gd
+msgid "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "Когда зомби роняет предмет, в 50 % случаев он роняет ещё один."
+
+#: scripts/skins.gd
+msgid "Mata al doctor Salas por primera vez."
+msgstr "Убей доктора Саласа в первый раз."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

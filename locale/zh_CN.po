@@ -604,7 +604,7 @@ msgstr "消防队长"
 msgid "El fuego no le hace nada: cambia de arma. Cuando gire, corre delante del cono de fuego, hacia donde marcan las flechas. De cerca, cuidado con el hacha."
 msgstr "火对他毫无作用：换把武器。他转身喷火时，顺着箭头方向跑在火焰前面。近身时，小心他的斧头。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El doctor Salas"
 msgstr "萨拉斯博士"
 
@@ -2830,6 +2830,14 @@ msgstr "灼烧类武器伤害提高50%，而且火烧不着你。"
 #: scripts/skins.gd
 msgid "Mata al jefe de bomberos por primera vez."
 msgstr "首次杀死消防队长。"
+
+#: scripts/skins.gd
+msgid "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más."
+msgstr "僵尸掉落物品时，有50%的几率再多掉一件。"
+
+#: scripts/skins.gd
+msgid "Mata al doctor Salas por primera vez."
+msgstr "首次杀死萨拉斯博士。"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"
