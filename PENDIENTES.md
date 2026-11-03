@@ -20,7 +20,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   - Rescatado: un superviviente lo saca a rastras y lo deja en mantenimiento.
   - Cámara de seguridad: el regreso se ve en blanco y negro por las cámaras del edificio y acaba en el monitor del ordenador.
   - Pesadilla: fundido a negro y se despierta de golpe; cada intento es otro sueño, lo que explicaría que el edificio vuelva a estar lleno.
-- **M32** Talentos: una opción para resetearlos.
 - **M35** Tutorial: explicar el sistema de vida de Johnny por tercios y lo que le pasa cuando baja.
 - **M36** Skin de Johnny del doctor Salas (cuando se cree): su efecto es que los zombis tengan un 50 % de probabilidad
   de dar dos objetos aleatorios en lugar de uno.
