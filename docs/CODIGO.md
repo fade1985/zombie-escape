@@ -347,7 +347,8 @@ en una línea.
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide
-  al navegador que deje Esc para el juego mientras dura la pantalla completa (`QUEDARSE_ESC`, ver `docs/WEB.md`).
+  al navegador que deje Esc para el juego mientras dura la pantalla completa (`QUEDARSE_ESC`, ver `docs/WEB.md`), y a cada
+  mando que se enchufa le pasa `Controles.ordenar_mando` (M73).
 - `formas.gd` (`Formas`): `disco`, `arco`, `poligono` y `polilinea`, lo mismo que `draw_circle`, `draw_arc`, `draw_colored_polygon` y
   `draw_polyline` pero pintado con primitivas: en la web, 200 polígonos por fotograma tardan un segundo (`docs/WEB.md`).
   Todo el juego pinta con ellas. Se prueba con `--formas` (píxel a píxel contra las de CanvasItem) y `--dibujos`.
@@ -358,7 +359,8 @@ en una línea.
   los zombis despiertos, que cuenta cada medio segundo: explorando, la batería entra con uno; en la horda, la melodía,
   con `MUCHOS` (6); con el jefe, la melodía, cuando sale. Suben en 1 s y bajan tras 5 s sin hacer falta; se prueba con
   `--musica`), `controles.gd` (las teclas cambiadas en Opciones; y `con_mando`, si se juega con el mando: lo último que se ha tocado,
-  que mira `pantalla.gd` con `fijarse`, M44).
+  que mira `pantalla.gd` con `fijarse`, M44; y `ordenar_mando`, que en la web da el orden estándar a los mandos que el
+  navegador no reconoce, para que su L2 no sea Start, M73, ver `docs/CONTROLES.md`).
 
 **ui/**
 - `hud.gd` (con la barra del escudo, M22: pegada encima de la de vida, a media altura, con su marco `barra-escudo.png`,
@@ -520,7 +522,9 @@ en una línea.
 - `prueba_mando.gd` (`PruebaMando`, fuera de la cadena: la lanza el menú con `--mando`): A y B del mando en el menú
   principal (JUGAR, «Elige edificio», Opciones, Tutorial) y los botones de mando de mentira que usa también
   `probar_mando()` de `prueba_varias.gd` (la pausa, Opciones, un tutorial, el inventario, la taquilla, el ordenador, una
-  página, el panel de pruebas y el cartel del final).
+  página, el panel de pruebas y el cartel del final). También `mando_web` (`--mandoweb`, la lanza `partida_prueba.gd`, solo
+  en la web): enchufa desde el navegador un mando de mentira sin orden estándar y otro con él, y mira que el L2 lance sin
+  abrir la pausa (M73).
 
 ## assets/
 

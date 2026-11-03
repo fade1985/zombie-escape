@@ -35,6 +35,11 @@ func _ready() -> void:
 		get_window().size_changed.connect(ajustar_escala)
 		ajustar_escala()
 	if OS.has_feature("web"):
+		for mando in Input.get_connected_joypads():   # (los mandos que el navegador no reconoce, M73)
+			Controles.ordenar_mando(mando)
+		Input.joy_connection_changed.connect(func(mando: int, enchufado: bool) -> void:
+			if enchufado:   # (un momento después, con el mando ya apuntado del todo en Godot)
+				(func(): Controles.ordenar_mando(mando)).call_deferred())
 		set_process_input(false)
 		JavaScriptBridge.eval(QUEDARSE_ESC, true)
 		return

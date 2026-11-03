@@ -22,6 +22,27 @@ const ACCIONES := ["arriba", "izquierda", "abajo", "derecha", "atacar", "esquiva
 static var con_mando := not Input.get_connected_joypads().is_empty()
 
 
+# En la web, el navegador ordena los botones de casi todos los mandos de una forma estándar y Godot ya sabe leerla.
+# Pero a algunos (sobre todo con un mando USB en el móvil) el navegador no los reconoce y los pasa tal cual: Godot no
+# sabe qué es cada botón y toma su número a pelo. El 6 de esos mandos es el L2, y para Godot el 6 es Start: el L2 abría
+# la pausa además de lanzar (M73). A esos mandos se les da el orden estándar del navegador, que es el que traen
+# (A B X Y, LB RB, LT RT, Select Start, los sticks, la cruceta y el botón central); los ejes 4 y 5, si los tienen,
+# siguen siendo los gatillos, como hasta ahora
+const ORDEN_WEB := "a:b0,b:b1,x:b2,y:b3,leftshoulder:b4,rightshoulder:b5,lefttrigger:b6,righttrigger:b7," \
+	+ "back:b8,start:b9,leftstick:b10,rightstick:b11,dpup:b12,dpdown:b13,dpleft:b14,dpright:b15,guide:b16," \
+	+ "leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:a4,righttrigger:a5"   # no-tr (mapa de Godot)
+
+
+# En la web, al arrancar y cada vez que se enchufa un mando (pantalla.gd). Los que el navegador reconoce («standard»)
+# Godot ya los conoce y no se tocan. (Uno ordenado aquí Godot lo sigue dando por desconocido: si se desenchufa y se
+# vuelve a enchufar, se le pone el mismo orden otra vez, y no pasa nada)
+static func ordenar_mando(mando: int) -> void:
+	if Input.is_joy_known(mando):
+		return
+	var nombre := Input.get_joy_name(mando).replace(",", " ")
+	Input.add_joy_mapping("%s,%s,%s" % [Input.get_joy_guid(mando), nombre, ORDEN_WEB], true)
+
+
 # Mira cada cosa que pulsa el jugador para saber si juega con el mando o con el teclado y el ratón (con_mando)
 static func fijarse(ev: InputEvent) -> void:
 	if (ev is InputEventJoypadButton and ev.pressed) or (ev is InputEventJoypadMotion and absf(ev.axis_value) > 0.5):

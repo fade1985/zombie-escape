@@ -180,6 +180,8 @@
 #                       Opciones, un tutorial, el inventario, la taquilla, el ordenador, una página, el panel de pruebas
 #                       y el cartel del final; que A siga esquivando (project.godot pone A en ui_accept y B en ui_cancel)
 #                                                                  [prueba_varias.gd, pruebas/prueba_mando.gd]
+#   --mandoweb          solo en la web (py tools/medir_web.py 40 --captura --mandoweb): un mando que el navegador no
+#                       reconoce; su L2 lanza y ya no abre la pausa (M73)               [pruebas/prueba_mando.gd]
 #   --formas            que las formas de formas.gd (disco, arco, polígono, polilínea) salgan como las de CanvasItem: dos
 #                       fotos y su diferencia píxel a píxel                                  [prueba_varias.gd]
 #   --dibujos           lo que cuesta cada tipo de dibujo (rectángulos, círculos, abanicos y anillos de primitivas) según cuántos por
@@ -621,6 +623,9 @@ func empezar_prueba() -> void:
 	elif "--mando" in args:
 		set_process(false)   # sin la prueba larga (el menú principal ya ha hecho su parte: menu_principal.gd)
 		probar_mando()
+	elif "--mandoweb" in args:
+		set_process(false)   # sin la prueba larga
+		PruebaMando.mando_web(self)
 	elif "--formas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_formas()

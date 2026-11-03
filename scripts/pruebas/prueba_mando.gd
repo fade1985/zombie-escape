@@ -61,3 +61,62 @@ static func menu_principal(menu: Control) -> void:
 		await pulsar(arbol, JOY_BUTTON_B)
 		print("Mando · menú, A en «%s»: se abre %s · B: se cierra %s · menú a la vista %s (esperado: true, true, true)" % [
 			par[0], salio, not abierta.call(par[1]), menu.centro.visible])
+
+
+# Un mando que el navegador no reconoce, en la web (-- --captura --mandoweb, M73): se enchufa uno falso desde el
+# navegador (sin «mapping» estándar, como algunos mandos USB en el móvil) y se pulsa su L2, que en bruto es el botón 6
+# y el eje 4. Primero como llega (con el orden de Controles.ordenar_mando puesto al enchufarlo: solo lanza); luego sin
+# ese orden, para ver el fallo (abría la pausa), y otra vez con él; su Start (el 9) sí abre la pausa. Al final, uno que el
+# navegador sí reconoce («standard»), para ver que a ese no se le toca. Fuera de la web no se puede: lo dice y ya
+static func mando_web(partida: Node) -> void:
+	var arbol := partida.get_tree()
+	if not OS.has_feature("web"):
+		print("Mando web: esta prueba solo vale en la web (py tools/medir_web.py 40 --captura --mandoweb)")
+		arbol.quit()
+		return
+	JavaScriptBridge.eval("""
+		window.mandos_falsos = [];
+		Object.defineProperty(navigator, 'getGamepads', {value: () => window.mandos_falsos, configurable: true});
+		window.enchufar_falso = (id, mapping) => {
+			const m = {id: id, index: window.mandos_falsos.length, connected: true, mapping: mapping, timestamp: 0,
+				buttons: Array.from({length: 17}, () => ({pressed: false, touched: false, value: 0})), axes: [0, 0, 0, 0, 0, 0]};
+			window.mandos_falsos.push(m);
+			const e = new Event('gamepadconnected'); e.gamepad = m; window.dispatchEvent(e);
+		};
+		window.boton_falso = (i, b, eje, v) => {
+			const m = window.mandos_falsos[i];
+			m.buttons[b] = {pressed: v > 0, touched: v > 0, value: v};
+			if (eje >= 0) m.axes[eje] = v;
+			m.timestamp += 1;
+		};
+		window.enchufar_falso('Mando falso (Vendor: 1234 Product: 5678)', '');""", true)   # no-tr (JavaScript)
+	await arbol.create_timer(0.5).timeout
+	var menus = partida.menus
+	# Pulsa y suelta el L2 del mando i (en bruto: el botón 6 y, en el desconocido, también el eje 4) y dice qué ha pasado
+	var l2 := func(i: int, eje: int, que: String) -> void:
+		JavaScriptBridge.eval("window.boton_falso(%d, 6, %d, 1)" % [i, eje], true)   # no-tr (JavaScript)
+		await arbol.create_timer(0.3).timeout
+		print("Mando web · L2 %s: pausa «%s» · lanzar %s" % [que, menus.abierto, Input.is_action_pressed("lanzar")])
+		JavaScriptBridge.eval("window.boton_falso(%d, 6, %d, 0)" % [i, eje], true)   # no-tr (JavaScript)
+		await arbol.create_timer(0.3).timeout
+		if menus.abierto != "":
+			Input.parse_input_event(boton(JOY_BUTTON_B))
+			await arbol.create_timer(0.4).timeout
+	print("Mando web: enchufado %s · «%s» (esperado: true, Android12345678 o Windows12345678)" % [
+		Input.get_connected_joypads().size() == 1, Input.get_joy_guid(0)])
+	await l2.call(0, 4, "al enchufarlo (esperado: «», true)")
+	Input.remove_joy_mapping(Input.get_joy_guid(0))   # como antes del arreglo
+	await l2.call(0, 4, "sin el arreglo (el fallo: «pausa», true)")
+	Controles.ordenar_mando(0)
+	await l2.call(0, 4, "con el arreglo otra vez (esperado: «», true)")
+	JavaScriptBridge.eval("window.boton_falso(0, 9, -1, 1)", true)   # no-tr (JavaScript)
+	await arbol.create_timer(0.3).timeout
+	print("Mando web · Start: pausa «%s» (esperado: «pausa»)" % menus.abierto)
+	JavaScriptBridge.eval("window.boton_falso(0, 9, -1, 0)", true)   # no-tr (JavaScript)
+	Input.parse_input_event(boton(JOY_BUTTON_B))
+	await arbol.create_timer(0.4).timeout
+	JavaScriptBridge.eval("window.enchufar_falso('Mando estándar (Vendor: 045e Product: 028e)', 'standard')", true)   # no-tr (JavaScript)
+	await arbol.create_timer(0.5).timeout
+	print("Mando web · el estándar: «%s» · reconocido %s (esperado: «standard», true)" % [Input.get_joy_guid(1), Input.is_joy_known(1)])
+	await l2.call(1, -1, "del estándar (esperado: «», true)")
+	print("Mando web: hecho")

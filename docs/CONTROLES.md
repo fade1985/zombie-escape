@@ -38,6 +38,12 @@ el libre es una mirilla de pixel art; con un menú abierto, la flecha de siempre
   para ella (se puede dejar A o B en cualquier acción sin que abra ni cierre nada). El cartel del final y la ficha de un
   tutorial no hacen caso a A las primeras décimas, para que un esquivar de última hora no los cierre. Se prueba con
   `-- --captura --mando`.
+- **Mandos que el navegador no reconoce (web, M73):** casi todos los mandos llegan a la web ya ordenados por el navegador
+  («standard») y Godot sabe qué es cada botón. Algunos (sobre todo un mando USB en el móvil) llegan en bruto: Godot tomaba
+  sus números tal cual y el L2, que en bruto es el botón 6, era para él Start (abría la pausa además de lanzar), y Start
+  esquivaba. Al enchufar uno así, `Controles.ordenar_mando` le da el orden estándar del navegador (`ORDEN_WEB`); a los
+  reconocidos no los toca. Se prueba solo en la web, con un mando de mentira que la prueba enchufa desde el navegador:
+  exportar a `web/` (de desarrollo), arrancar su servidor y `py tools/medir_web.py 45 --captura --mandoweb`.
 - **Opciones** (menú y pausa): **idioma** (español o inglés; si nunca se ha elegido, el del sistema), modo de atacar, música, sonido, **temblor de pantalla** (*Normal*, *Suave* a la mitad o *Sin temblor*: lo que
   tiembla la cámara y lo que se frena el juego al golpear; no cuenta como ayuda, no apaga logros), la pestaña **Ayudas** (*Vida entera*, *Pistola sin
   fin*, *Lanzar apuntando solo*; no cambian récords, pero con cualquiera encendida esa partida no da logros, aunque se
