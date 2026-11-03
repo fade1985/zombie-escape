@@ -2724,6 +2724,14 @@ msgid_plural "%d intentos"
 msgstr[0] "已尝试 %d 次"
 
 #: scripts/reto.gd
+msgid "Premio de hoy: cobrado ($%d)"
+msgstr "今日奖励：已领取（$%d）"
+
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "今日奖励：$%d"
+
+#: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
 msgstr "只许近战"
 

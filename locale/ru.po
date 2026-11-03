@@ -2736,6 +2736,14 @@ msgstr[1] "%d попытки"
 msgstr[2] "%d попыток"
 
 #: scripts/reto.gd
+msgid "Premio de hoy: cobrado ($%d)"
+msgstr "Награда дня: забрана ($%d)"
+
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "Награда дня: $%d"
+
+#: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
 msgstr "Только ближний бой"
 

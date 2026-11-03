@@ -2730,6 +2730,14 @@ msgstr[0] "%d essai"
 msgstr[1] "%d essais"
 
 #: scripts/reto.gd
+msgid "Premio de hoy: cobrado ($%d)"
+msgstr "Récompense du jour : encaissée ($%d)"
+
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "Récompense du jour : $%d"
+
+#: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
 msgstr "Corps à corps uniquement"
 

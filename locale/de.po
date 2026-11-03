@@ -2730,6 +2730,14 @@ msgstr[0] "%d Versuch"
 msgstr[1] "%d Versuche"
 
 #: scripts/reto.gd
+msgid "Premio de hoy: cobrado ($%d)"
+msgstr "Heutige Belohnung: erhalten ($%d)"
+
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "Heutige Belohnung: $%d"
+
+#: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
 msgstr "Nur Nahkampf"
 

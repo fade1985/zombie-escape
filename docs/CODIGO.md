@@ -243,7 +243,7 @@ en una línea.
 - `edificios.gd`: la ficha de cada edificio, `MINIJEFES` y el sorteo de qué jefe va en cada planta
   (`orden_jefes`, `jefe_de()`).
 - `alerta.gd` (niveles de alerta), `eventos.gd` (eventos sorpresa: apagón, incendio y horda; en el incendio, los aspersores dejan charcos y en 4 de ellos (2 en los sitios pequeños) cae un cable pelado que electrocuta sin parar, con los rayos siempre a la vista y un calambrazo cada 0,5 s a quien lo pise, `Cable`, se prueba con `--evento incendio`; la horda no empieza hasta que Johnny llega al medio del pasillo y, a los 2 s del cartel, sale toda de golpe por los dos extremos, `soltar`; se prueba con `--evento horda`), `reto.gd` (el reto del
-  día) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
+  día; su tarjeta en «Elige edificio» dice la regla, tu marca y el premio de hoy, `texto_tarjeta`) y `joyeria.gd` (la cámara acorazada y su premio). Los engancha `partida.gd` (`preparar`, `al_montar`, `recoger`).
 - `skins.gd`: las skins de Johnny (`LISTA`, sus ventajas, `de_jefe()`, `siguiente()` para la Z, `hoja()`): el portero, el
   glotón, el gymbro, el bombero y el doctor Salas (M36: `doble()`, un objeto de más la mitad de las veces que un zombi
   suelta uno, en `partida.gd`; se consigue matando al doctor Salas).

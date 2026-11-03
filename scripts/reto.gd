@@ -174,9 +174,19 @@ static func marca(f: Dictionary, corta := false) -> String:
 	return (Idioma.t("planta %d") if corta else Idioma.t("Has llegado a la planta %d")) % f.planta
 
 
-# Lo de debajo del botón de la tarjeta: la regla de hoy y tu marca, con los intentos
+# Lo de debajo del botón de la tarjeta: la regla de hoy, tu marca, con los intentos, y el premio (M70)
 static func texto_tarjeta(f: Dictionary) -> String:
 	var linea: String = Idioma.t("Hoy: %s") % nombre(f.regla)
 	if f.intentos == 0:
-		return linea + "\n" + Idioma.t("Aún no lo has intentado")
-	return "%s\n%s (%s)" % [linea, marca(f), Idioma.n("%d intento", "%d intentos", int(f.intentos)) % int(f.intentos)]
+		linea += "\n" + Idioma.t("Aún no lo has intentado")
+	else:
+		linea = "%s\n%s (%s)" % [linea, marca(f), Idioma.n("%d intento", "%d intentos", int(f.intentos)) % int(f.intentos)]
+	return linea + "\n" + texto_premio(f)
+
+
+# El premio de hoy (PREMIO, solo la primera vez que se completa ese día): lo que se gana o, si ya se ha completado
+# hoy, que ya se ha cobrado
+static func texto_premio(f: Dictionary) -> String:
+	if f.completado:
+		return Idioma.t("Premio de hoy: cobrado ($%d)") % PREMIO
+	return Idioma.t("Premio de hoy: $%d") % PREMIO
