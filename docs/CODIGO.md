@@ -355,7 +355,7 @@ en una línea.
   jefe), `menus.gd` (pausa y fin; el cartel del final dice al caer
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
   peligro; lo conseguido en la partida, que saca `partida.conseguido` comparando el guardado con `al_empezar`; y «Otra vez»,
-  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
+  también con la R, que no hace caso hasta pasado `ESPERA_FIN`; se prueba con `--derrota`), `menu_principal.gd` (menú y «Elige edificio»; en la web, «Salir» no puede cerrar la pestaña y abre una despedida, M46, `--despedida`; al lado de Tutorial y Opciones, el hueco en uso, «Partida 1», que abre `huecos.gd`; si se cambia el idioma en Opciones, se
   monta otra vez), `opciones.gd` (con el botón de idioma; al cambiarlo se rehace entera, `reconstruir`; en General, el botón «Avisar de un texto mal traducido» a continuación de los idiomas (`enlace_avisos`, el formulario de Google del dueño; vacío no sale,
   y en español tampoco; se prueba con `--idioma`), el temblor de
   pantalla (`TEMBLORES`) y, en el móvil, todo dentro de una caja con barra porque no cabe; la pestaña Créditos, con `AUTORES` y

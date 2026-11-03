@@ -4723,6 +4723,18 @@ msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
 msgstr "最高到达：第%d层   ·   存下的美元：$%d"
 
 #: scripts/ui/menu_principal.gd
+msgid "¡Gracias por jugar!"
+msgstr "感谢游玩！"
+
+#: scripts/ui/menu_principal.gd
+msgid "Tu partida está guardada. Ya puedes cerrar la pestaña"
+msgstr "进度已保存。现在可以关闭标签页了"
+
+#: scripts/ui/menu_principal.gd
+msgid "Volver al menú"
+msgstr "返回菜单"
+
+#: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
 msgstr "选择大楼"
 

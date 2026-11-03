@@ -1,5 +1,5 @@
 # El menú principal (showMenu de src/ui.js): el logo, JUGAR, Tutorial (tutorial.gd), Opciones (opciones.gd), pantalla
-# completa y salir, y el récord. Al lado de Tutorial y Opciones, el hueco de guardado en uso («Partida 1»), que abre
+# completa y salir (en la web, una despedida: M46), y el récord. Al lado de Tutorial y Opciones, el hueco de guardado en uso («Partida 1»), que abre
 # «Elige partida» (huecos.gd): cambiar de hueco, o borrar uno para empezar de cero. Con una partida a medias (partida_guardada.gd), encima de JUGAR sale «Continuar
 # partida» con su edificio y su planta, y JUGAR pide pulsarlo otra vez (la partida nueva pisa la guardada). Es la escena con la que arranca el juego. JUGAR abre "Elige edificio" (showBuildings
 # de src/ui.js): una tarjeta por edificio (edificios.gd) con su progreso; el elegido lleva a la partida
@@ -98,8 +98,7 @@ func _ready() -> void:
 	partidas.custom_minimum_size.x = 127
 	if Tactil.puede_pantalla_completa():   # en iPhone no hay
 		boton(columna, Idioma.t("Pantalla completa"), Tactil.pantalla_completa)
-	if not OS.has_feature("web"):
-		boton(columna, Idioma.t("Salir"), get_tree().quit)
+	boton(columna, Idioma.t("Salir"), salir)
 
 	var ayuda := PanelContainer.new()
 	ayuda.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -141,6 +140,12 @@ func _ready() -> void:
 			await PruebaHuecos.probar(self)
 			get_tree().quit()
 			return
+		if "--despedida" in OS.get_cmdline_user_args():   # la despedida de «Salir» en la web (aquí, aunque no sea la web)
+			despedida()
+			await get_tree().create_timer(0.4).timeout
+			Captura.foto("captura-despedida.png")
+			get_tree().quit()
+			return
 		if "--idioma" in OS.get_cmdline_user_args():   # solo las pantallas del menú en el idioma de la prueba (pruebas/prueba_idioma.gd)
 			await PruebaIdioma.probar(self)
 			get_tree().quit()
@@ -164,6 +169,52 @@ func _ready() -> void:
 				get_tree().quit()
 				return
 			jugar_partida(edificio)
+
+
+# Salir: en el ordenador cierra el juego. En la web no se puede (el navegador no deja que una página cierre su propia
+# pestaña): sale una despedida (M46)
+func salir() -> void:
+	if OS.has_feature("web"):
+		despedida()
+	else:
+		get_tree().quit()
+
+
+# La despedida de la web: «¡Gracias por jugar!», que la partida está guardada y que ya se puede cerrar la pestaña. La música
+# se apaga y se quita la pantalla completa, para que se vea la pestaña. «Volver al menú» (o Esc) lo deja todo como estaba
+var adios: CenterContainer
+
+func despedida() -> void:
+	centro.hide()
+	Sonido.musica("")
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	adios = CenterContainer.new()
+	adios.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(adios)
+	var columna := VBoxContainer.new()
+	columna.alignment = BoxContainer.ALIGNMENT_CENTER
+	columna.add_theme_constant_override("separation", 18)
+	adios.add_child(columna)
+	var titulo := Label.new()
+	titulo.theme_type_variation = "Titulo"
+	titulo.text = Idioma.t("¡Gracias por jugar!")
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(titulo)
+	var texto := Label.new()
+	texto.text = Idioma.t("Tu partida está guardada. Ya puedes cerrar la pestaña")
+	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	columna.add_child(texto)
+	var volver := boton(columna, Idioma.t("Volver al menú"), quitar_despedida)
+	volver.grab_focus.call_deferred()
+
+
+func quitar_despedida() -> void:
+	adios.queue_free()
+	adios = null
+	Sonido.musica("menu")
+	centro.show()
+	centro.find_children("*", "Button", true, false)[0].grab_focus()
 
 
 # «Elige partida» (huecos.gd), tapando el menú
@@ -356,9 +407,13 @@ func volver_al_menu() -> void:
 	centro.find_children("*", "Button", true, false)[0].grab_focus()
 
 
-# Esc (o B en el mando) en "Elige edificio": vuelve al menú. N (tecla de prueba): abre todos los edificios
+# Esc (o B en el mando) en "Elige edificio" o en la despedida: vuelve al menú. N (tecla de prueba): abre todos los edificios
 # hasta cerrar el juego, sin completar los anteriores (no se guarda nada)
 func _unhandled_input(evento: InputEvent) -> void:
+	if adios and evento.is_action_pressed("ui_cancel"):
+		quitar_despedida()
+		get_viewport().set_input_as_handled()
+		return
 	if not (edificios and edificios.visible):
 		return
 	if evento.is_action_pressed("ui_cancel"):

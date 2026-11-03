@@ -98,6 +98,9 @@
 
 ## Lo que suena distinto en la web
 
+- **Salir** (menú principal): el navegador no deja que una página cierre su propia pestaña, así que sale una despedida
+  («¡Gracias por jugar!», que la partida está guardada y que ya se puede cerrar la pestaña), con la música apagada y sin la
+  pantalla completa; «Volver al menú» o Esc la quitan (M46; se ve con `-- --captura --despedida`).
 - Se quita todo el sonido cuando la página se oculta (otra pestaña, móvil bloqueado) **y también cuando pierde el
   foco** (otra ventana delante, otro programa, el panel del navegador de la app de Claude): con la ventana detrás de
   otra o en otra pantalla, la página no cuenta como oculta y la música seguía sonando (29 oct). Lo hace `_visibilidad`

@@ -4741,6 +4741,18 @@ msgid "Mejor planta alcanzada: %d   ·   Dólares ahorrados: $%d"
 msgstr "Melhor andar alcançado: %d   ·   Dólares guardados: $%d"
 
 #: scripts/ui/menu_principal.gd
+msgid "¡Gracias por jugar!"
+msgstr "Obrigado por jogar!"
+
+#: scripts/ui/menu_principal.gd
+msgid "Tu partida está guardada. Ya puedes cerrar la pestaña"
+msgstr "Seu progresso está salvo. Já pode fechar a aba"
+
+#: scripts/ui/menu_principal.gd
+msgid "Volver al menú"
+msgstr "Voltar ao menu"
+
+#: scripts/ui/menu_principal.gd
 msgid "Elige edificio"
 msgstr "Escolha o prédio"
 
