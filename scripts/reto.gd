@@ -174,19 +174,20 @@ static func marca(f: Dictionary, corta := false) -> String:
 	return (Idioma.t("planta %d") if corta else Idioma.t("Has llegado a la planta %d")) % f.planta
 
 
-# Lo de debajo del botón de la tarjeta: la regla de hoy, tu marca, con los intentos, y el premio (M70)
+# El reto se juega una vez al día (M71): el intento se gasta al empezar la partida (partida.gd lo apunta en el
+# guardado nada más entrar), aunque se muera en la primera planta o se salga al menú. Hasta el día siguiente, el botón
+# de la tarjeta sale apagado (menu_principal.gd, boton_reto)
+static func jugado(f: Dictionary) -> bool:
+	return f.intentos > 0
+
+
+# Lo de debajo del botón de la tarjeta: la regla de hoy, tu marca y el premio (M70). Si ya se ha jugado hoy, que se
+# vuelva mañana (y el premio, solo si se ha cobrado: si no, ya no se puede ganar)
 static func texto_tarjeta(f: Dictionary) -> String:
 	var linea: String = Idioma.t("Hoy: %s") % nombre(f.regla)
-	if f.intentos == 0:
-		linea += "\n" + Idioma.t("Aún no lo has intentado")
-	else:
-		linea = "%s\n%s (%s)" % [linea, marca(f), Idioma.n("%d intento", "%d intentos", int(f.intentos)) % int(f.intentos)]
-	return linea + "\n" + texto_premio(f)
-
-
-# El premio de hoy (PREMIO, solo la primera vez que se completa ese día): lo que se gana o, si ya se ha completado
-# hoy, que ya se ha cobrado
-static func texto_premio(f: Dictionary) -> String:
+	if not jugado(f):
+		return linea + "\n" + Idioma.t("Aún no lo has intentado") + "\n" + Idioma.t("Premio de hoy: $%d") % PREMIO
+	linea += "\n" + marca(f)
 	if f.completado:
-		return Idioma.t("Premio de hoy: cobrado ($%d)") % PREMIO
-	return Idioma.t("Premio de hoy: $%d") % PREMIO
+		linea += "\n" + Idioma.t("Premio de hoy: cobrado ($%d)") % PREMIO
+	return linea + "\n" + Idioma.t("Ya lo has jugado hoy: vuelve mañana")

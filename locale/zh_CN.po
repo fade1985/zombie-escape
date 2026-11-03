@@ -2718,18 +2718,17 @@ msgstr "今日：%s"
 msgid "Aún no lo has intentado"
 msgstr "还没尝试过"
 
-#: scripts/reto.gd scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "已尝试 %d 次"
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "今日奖励：$%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
 msgstr "今日奖励：已领取（$%d）"
 
 #: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "今日奖励：$%d"
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "今天已经玩过了：明天再来"
 
 #: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
@@ -4797,6 +4796,11 @@ msgstr "%s（共 %d）"
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"
 msgstr "%d 层楼外加天台"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "已尝试 %d 次"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

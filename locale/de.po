@@ -2723,19 +2723,17 @@ msgstr "Heute: %s"
 msgid "Aún no lo has intentado"
 msgstr "Noch nicht versucht"
 
-#: scripts/reto.gd scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "%d Versuch"
-msgstr[1] "%d Versuche"
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "Heutige Belohnung: $%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
 msgstr "Heutige Belohnung: erhalten ($%d)"
 
 #: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "Heutige Belohnung: $%d"
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "Heute schon gespielt: komm morgen wieder"
 
 #: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
@@ -4815,6 +4813,12 @@ msgstr "%s (von %d)"
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"
 msgstr "%d Ebenen und ein Dach"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "%d Versuch"
+msgstr[1] "%d Versuche"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"

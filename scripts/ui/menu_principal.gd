@@ -359,7 +359,8 @@ func selector_alerta(caja: VBoxContainer, id: String, p: Dictionary) -> void:
 	mas.pressed.connect(cambiar.bind(1))
 
 
-# Debajo del selector de alerta: el botón del reto del día (reto.gd) y, debajo, la regla de hoy y tu marca
+# Debajo del selector de alerta: el botón del reto del día (reto.gd; apagado si ya se ha jugado hoy, M71) y, debajo,
+# la regla de hoy, tu marca y el premio
 func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	var b := Button.new()
 	b.text = Idioma.t("Reto del día")
@@ -370,13 +371,17 @@ func boton_reto(caja: VBoxContainer, id: String, s: Dictionary) -> void:
 	b.custom_minimum_size.x = 220
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	b.pressed.connect(jugar_reto.bind(id))
+	var f := Reto.ficha(s, id, Reto.hoy())
+	if Reto.jugado(f):   # una vez al día (M71): apagado hasta mañana
+		b.disabled = true
+		b.focus_mode = Control.FOCUS_NONE
 	caja.add_child(b)
 	var explica := Label.new()
 	explica.theme_type_variation = "Sub"
 	explica.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	explica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explica.custom_minimum_size = Vector2(300, 0)
-	explica.text = Reto.texto_tarjeta(Reto.ficha(s, id, Reto.hoy()))
+	explica.text = Reto.texto_tarjeta(f)
 	caja.add_child(explica)
 
 

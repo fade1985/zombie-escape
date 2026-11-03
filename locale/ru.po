@@ -2728,20 +2728,17 @@ msgstr "Сегодня: %s"
 msgid "Aún no lo has intentado"
 msgstr "Ты еще не пробовал"
 
-#: scripts/reto.gd scripts/ui/menu_principal.gd
-msgid "%d intento"
-msgid_plural "%d intentos"
-msgstr[0] "%d попытка"
-msgstr[1] "%d попытки"
-msgstr[2] "%d попыток"
+#: scripts/reto.gd
+msgid "Premio de hoy: $%d"
+msgstr "Награда дня: $%d"
 
 #: scripts/reto.gd
 msgid "Premio de hoy: cobrado ($%d)"
 msgstr "Награда дня: забрана ($%d)"
 
 #: scripts/reto.gd
-msgid "Premio de hoy: $%d"
-msgstr "Награда дня: $%d"
+msgid "Ya lo has jugado hoy: vuelve mañana"
+msgstr "Сегодня уже сыграно: приходи завтра"
 
 #: scripts/reto.gd
 msgid "Solo cuerpo a cuerpo"
@@ -4833,6 +4830,13 @@ msgstr "%s (из %d)"
 #: scripts/ui/menu_principal.gd
 msgid "%d plantas y azotea"
 msgstr "Этажей: %d + крыша"
+
+#: scripts/ui/menu_principal.gd
+msgid "%d intento"
+msgid_plural "%d intentos"
+msgstr[0] "%d попытка"
+msgstr[1] "%d попытки"
+msgstr[2] "%d попыток"
 
 #: scripts/ui/menu_principal.gd
 msgid "¡Sin explorar!"
