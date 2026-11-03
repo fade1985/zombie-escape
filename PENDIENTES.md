@@ -19,6 +19,7 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M71** El reto del día solo se puede hacer una vez (al día).
 - **M72** Revisar el equilibrio del juego: es demasiado fácil.
 - **M73** (Para después) Con un mando USB en el móvil, el botón L2 abre el menú del juego y además lanza el arrojable.
+- **M74** (Para después) Los montones de los arrojables pasan a ser de 2 (ahora son de 3).
 
 
 ## Por limar
