@@ -23,7 +23,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M35** Tutorial: explicar el sistema de vida de Johnny por tercios y lo que le pasa cuando baja.
 - **M36** Skin de Johnny del doctor Salas (cuando se cree): su efecto es que los zombis tengan un 50 % de probabilidad
   de dar dos objetos aleatorios en lugar de uno.
-- **M39** Baúl: que también se pueda dejar la pistola (hoy la pistola Normal no se puede guardar a mano).
 - **M40** Rescate del superviviente: que dure un minuto, pero con muchos más zombis y en menos tiempo.
 - **M43** Supervivientes: que los zombis también oigan sus disparos, como pasa con los de Johnny.
 - **M44** Controles en pantalla: cuando se juega con mando, que los dibujos de los controles sean los del mando (botones
