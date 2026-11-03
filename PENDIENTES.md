@@ -13,9 +13,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 ## Mejoras
 
-- **M36** Skin de Johnny del doctor Salas (cuando se cree): su efecto es que los zombis tengan un 50 % de probabilidad
-  de dar dos objetos aleatorios en lugar de uno.
-
 
 ## Por limar
 
