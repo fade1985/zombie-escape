@@ -37,7 +37,8 @@
 #    corta el chorro (M60), más anchos y, el ácido, chorreando hasta el suelo (chorro-pared.js y -acido.js).
 #  - "recoger": el destello al coger algo del suelo (M53; billete.gd: billetes, lanzables, objetos, armas y munición): una
 #    estrellita dorada, un anillito y chispitas (tools/pixelfx/recoger.js).
-#  - "curacion": la médica cura a Johnny (M56; aliado.curar): brillo verde, crucecitas que suben y un anillo a sus pies
+#  - "curacion": la médica cura a Johnny (M56, rehecha en la M66; aliado.curar): un círculo de luz verde a sus pies con
+#    un anillo que se abre, una columna de luz que le sube alrededor, cruces con borde y chispitas
 #    (tools/pixelfx/curacion.js). Va de hijo de Johnny, para que le siga.
 #  - "desfibrilador": Johnny vuelve con toda la vida por el talento Desfibrilador (M55; johnny.gd, recibir_dano): dos
 #    descargas en el pecho con rayitos, chispas y anillo eléctrico, y luego un latido verde sobre la cabeza
@@ -109,7 +110,7 @@ const TIPOS := {
 		"origen": Vector2(24, 32), "fotogramas": 8},
 	"curacion": {"hojas": [preload("res://assets/sprites/curacion-detras.png"),
 		preload("res://assets/sprites/curacion-delante.png"), preload("res://assets/sprites/curacion-brillo.png")],
-		"origen": Vector2(40, 76), "fotogramas": 18},
+		"origen": Vector2(40, 76), "fotogramas": 20},
 	"desfibrilador": {"hojas": [preload("res://assets/sprites/desfibrilador-detras.png"),
 		preload("res://assets/sprites/desfibrilador-delante.png"), preload("res://assets/sprites/desfibrilador-brillo.png")],
 		"origen": Vector2(48, 84), "fotogramas": 24},

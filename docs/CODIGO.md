@@ -173,7 +173,8 @@ en una línea.
   Pruebas: `--captura --lanzallamas` y `--desintegrador`.
 - Recoger y curar (M53 y M56; `efecto_suelo.gd`): `recoger`, el destello dorado al coger algo del suelo (`billete.gd`:
   billetes, lanzables, objetos, armas y munición; `tools/pixelfx/recoger.js`), y `curacion`, la médica cura a Johnny
-  (`aliado.curar`; `curacion.js`: brillo verde, crucecitas y un anillo, de hijo de Johnny). Prueba: `--captura --recoger-curar`.
+  (`aliado.curar`; `curacion.js`, rehecha en la M66: un círculo de luz verde con un anillo a sus pies, una columna de luz que
+  le sube alrededor, cruces con borde y chispitas, de hijo de Johnny; ya no hay raya de la médica a Johnny). Prueba: `--captura --recoger-curar`.
 - El desfibrilador (M55; `efecto_suelo.gd`, `desfibrilador`): cuando Johnny cae con el talento y vuelve con toda la vida
   (`johnny.recibir_dano`), dos descargas en el pecho (rayitos, chispas y un anillo eléctrico) y luego un latido verde de
   electrocardiograma sobre la cabeza (`tools/pixelfx/desfibrilador.js`, de hijo de Johnny). Se precalienta en

@@ -1599,7 +1599,9 @@ func probar_recoger_curar() -> void:
 	await get_tree().create_timer(0.25).timeout
 	Captura.foto("captura-curar.png")
 	johnny.vida = johnny.vida_tope()   # (que la médica no vuelva a curarle)
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-curar-2.png")   # (M66: las cruces subiendo y la columna apagándose)
+	await get_tree().create_timer(0.7).timeout
 	print("  al acabar, curaciones %d (esperado: 0)" % johnny.get_children().filter(func(n): return n is EfectoSuelo).size())
 	Luz.evento = 0.0
 	get_tree().quit()

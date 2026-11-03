@@ -81,7 +81,6 @@ var calma := 0.0           # recién acabada la presentación de un jefe, lo que
                            # ui/presentacion.gd: Mutaciones.TRAS_PRESENTACION, el mismo respiro que las mutaciones)
 var rafaga := 0            # balas que quedan de la ráfaga
 var rafaga_t := 0.0
-var cura_t := 0.0          # el destello de la curación
 var rayo_t := 0.0          # la descarga del técnico (lo que le queda por verse) y adónde va
 var rayo_a := Vector2.ZERO
 var forzando := false
@@ -171,7 +170,6 @@ func _physics_process(delta: float) -> void:
 	tiempo += delta
 	inv_t = maxf(0.0, inv_t - delta)
 	golpe_t = maxf(0.0, golpe_t - delta)
-	cura_t = maxf(0.0, cura_t - delta)
 	for c in chispitas:
 		c.t -= delta
 		c.p += c.v * delta
@@ -562,15 +560,14 @@ static func charcos_a_medias(arbol: SceneTree) -> float:
 	return 1.0
 
 
-# La médica: cura a Johnny (si le hace falta) con un anillo verde
+# La médica: cura a Johnny (si le hace falta): encima de él, la columna de luz verde, las cruces y el anillo (M66)
 func curar(cuanto: int) -> void:
 	if not johnny.vivo or johnny.vida >= johnny.vida_tope():
 		return
 	johnny.curar(cuanto)
 	Sonido.tocar("curar")
-	cura_t = 0.45
 	partida.numero(johnny.position, "+%d" % cuanto, Tema.VERDE)
-	EfectoSuelo.soltar(johnny, "curacion", Vector2.ZERO)   # (M56: el brillo verde, las crucecitas y el anillo; le sigue)
+	EfectoSuelo.soltar(johnny, "curacion", Vector2.ZERO)   # (M56 y M66: la columna de luz, las cruces y el anillo; le sigue)
 
 
 # El piso se ha quedado limpio (la médica cura un poco más)
@@ -710,14 +707,10 @@ func poner_animacion(nombre: String, otra_vez := false) -> void:
 		sprite.set_frame_and_progress(fotograma % sprite.sprite_frames.get_frame_count(nombre), avance)
 
 
-# Por encima de todo: el rayo de la curación, su vida en la horda, el círculo para levantarlo, el bocadillo y
+# Por encima de todo: su vida en la horda, el círculo para levantarlo, el bocadillo y
 # su nombre
 func dibujar_encima() -> void:
 	var letra := Tema.FUENTE
-	if cura_t > 0.0:
-		var a := minf(1.0, cura_t / 0.2)
-		encima.draw_line(Vector2(0, -10), johnny.global_position - global_position + Vector2(0, -10),
-			Color(Tema.VERDE, 0.5 * a), 8.0)
 	if rayo_t > 0.0:
 		# la descarga: un zigzag de su aparato al zombi, que cambia cada poco (con hoja, desde la punta del aparato,
 		# que apunta adonde mira a la altura del pecho)
