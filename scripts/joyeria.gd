@@ -309,22 +309,7 @@ func dibujar() -> void:
 	if not alarma() or not en_joyeria():
 		return
 	var d := datos()
-	var letra := Tema.FUENTE
-	var tam := capa.size
-	var ancho := minf(360.0, tam.x - 260.0)
-	var x := (tam.x - ancho) / 2.0
-	var y := 18.0
 	var falta := ceili(d.alarma)
-	capa.draw_rect(Rect2(x - 8, y - 8, ancho + 16, 44), Tema.LINEA)
-	capa.draw_rect(Rect2(x - 6, y - 6, ancho + 12, 40), Color(0.11, 0.1, 0.17, 0.9))
-	capa.draw_rect(Rect2(x, y + 16, ancho, 10), Color("#3a2f22"))
 	var relleno := Color("#ff2d4b") if int(tiempo * 4.0) % 2 else Color("#c0203a")
-	capa.draw_rect(Rect2(x, y + 16, ancho * (1.0 - d.alarma / CUENTA), 10), relleno)
-	capa.draw_rect(Rect2(x, y + 16, ancho, 10), Tema.LINEA, false, 2.0)
 	var texto := Idioma.t("Apertura de emergencia · %d:%02d") % [falta / 60, falta % 60]
-	capa.draw_string_outline(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, 4, Tema.LINEA)
-	capa.draw_string(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, Color("#ffb3b3"))
-	if falta <= 10:
-		var grande := 64 if fmod(d.alarma, 1.0) < 0.5 else 72
-		capa.draw_string_outline(letra, Vector2(0, 150), str(falta), HORIZONTAL_ALIGNMENT_CENTER, tam.x, grande, 10, Tema.LINEA)
-		capa.draw_string(letra, Vector2(0, 150), str(falta), HORIZONTAL_ALIGNMENT_CENTER, tam.x, grande, Tema.AMARILLO)
+	CuentaAtras.dibujar(capa, texto, Color("#ffb3b3"), 1.0 - d.alarma / CUENTA, relleno, falta, fmod(d.alarma, 1.0), true)

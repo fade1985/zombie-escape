@@ -234,9 +234,8 @@ func dibujar(capa: Control) -> void:
 	var a := el
 	var letra := Tema.FUENTE
 	var tam := capa.size
-	var y := 18.0
 	var texto := ""
-	var color := Color("#f2e6c0")
+	var color := Tema.TINTA
 	if fase == "palanca":
 		texto = Idioma.t("Baja la palanca del cuadro eléctrico")
 		var ancho := letra.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 40.0
@@ -247,11 +246,6 @@ func dibujar(capa: Control) -> void:
 		capa.draw_string(letra, Vector2(0, 33), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, color)
 	else:
 		var falta := ceili(DURA - hecho)
-		var ancho := minf(360.0, tam.x - 260.0)
-		var x := (tam.x - ancho) / 2.0
-		capa.draw_rect(Rect2(x - 8, y - 8, ancho + 16, 44), Tema.LINEA)
-		capa.draw_rect(Rect2(x - 6, y - 6, ancho + 12, 40), Color(0.11, 0.1, 0.17, 0.9))
-		capa.draw_rect(Rect2(x, y + 16, ancho, 10), Color("#22303a"))
 		var parpadeo := int(tiempo * 6.0) % 2 == 0
 		var relleno := Color("#4fe3ff")
 		if a.caido:
@@ -264,15 +258,8 @@ func dibujar(capa: Control) -> void:
 			color = Color("#ffd23f")
 		else:
 			texto = Idioma.t("El %s arregla el cable · %d:%02d") % [Idioma.t(a.def.nombre), falta / 60, falta % 60]
-		capa.draw_rect(Rect2(x, y + 16, ancho * hecho / DURA, 10), relleno)
-		capa.draw_rect(Rect2(x, y + 16, ancho, 10), Tema.LINEA, false, 2.0)
-		capa.draw_string_outline(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, 4, Tema.LINEA)
-		capa.draw_string(letra, Vector2(0, y + 9), texto, HORIZONTAL_ALIGNMENT_CENTER, tam.x, 16, color)
-		# los últimos diez segundos, en grande y latiendo
-		if falta <= 10 and not a.caido and not datos.corriente:
-			var grande := 64 if fmod(hecho, 1.0) < 0.5 else 72
-			capa.draw_string_outline(letra, Vector2(0, 150), str(falta), HORIZONTAL_ALIGNMENT_CENTER, tam.x, grande, 10, Tema.LINEA)
-			capa.draw_string(letra, Vector2(0, 150), str(falta), HORIZONTAL_ALIGNMENT_CENTER, tam.x, grande, Tema.AMARILLO)
+		CuentaAtras.dibujar(capa, texto, color, hecho / DURA, relleno, falta, fmod(hecho, 1.0),
+			not a.caido and not datos.corriente)
 	var c := cuadro()
 	if c and datos.corriente:
 		sup.flecha(c.global_position + Vector2(0, -50), a.def.color, false)

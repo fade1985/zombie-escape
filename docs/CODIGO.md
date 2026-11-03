@@ -357,6 +357,10 @@ en una línea.
   `--escudo`). El escudo (Acero, Blindaje, Endurecimiento: `johnny.escudo`, M23) se gasta antes que la vida: en
   `johnny.quitar_vida`, todo lo que le quitan (golpes, charcos, el ácido del Glotón) sale del escudo, ya rebajado por
   Durito, y lo que sobra del golpe que lo rompe, de la vida.
+- `cuenta_atras.gd` (`CuentaAtras.dibujar`, M64): la cuenta atrás de arriba, la misma para la horda del rescate, la
+  barricada, la avería y la joyería: la barra en el marco de la barra de vida (`barra-vida.png`, ×1,5), llena como la
+  sangre (brillo arriba, sombra abajo) y el texto encima con contorno, sin caja; los últimos diez segundos, el número
+  en grande. Cada uno le pasa su texto, sus colores y lo hecho.
 - `barra_jefe.gd` (la barra de los jefes, con la de armadura), `presentacion.gd` (la entrada de cada
   jefe), `menus.gd` (pausa y fin; el cartel del final dice al caer
   quién te ha pillado, `quien_te_pilla`: el dibujo, el nombre y la frase del bestiario o el icono y el consejo de su
