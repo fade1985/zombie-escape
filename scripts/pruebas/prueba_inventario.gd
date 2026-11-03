@@ -70,6 +70,52 @@ func probar_baul_pistola() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --baulfregona": la fregona Normal en el baúl (M61). Sola, no se guarda (el botón, apagado, y dice por
+# qué); con un bate de repuesto, sí, y el bate pasa a la mano. Cuenta en la terminal lo que sale y saca dos fotos
+func probar_baul_fregona() -> void:
+	var antes := Guardado.cargar()
+	Guardado.cambiar(func(g2):
+		g2.baul = {}
+		g2.baul_equipo = [])
+	mochila.clear()
+	var boton := func(nombre: String) -> String:
+		var b: Button = inventario.fondo.find_child(nombre, true, false)
+		return "no está" if b == null else ("apagado" if b.disabled else "activo")
+	var dice := func() -> String:
+		var t: Label = inventario.fondo.find_child("nota", true, false)
+		return t.text if t else "-"
+	johnny.position = Vector2(mapa.BAUL_X, mapa.MURO + 36.0 + 22.0)
+	johnny.direccion = "n"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.5).timeout
+	if inventario.abierto != "baul":
+		print("ERROR: el baúl no se ha abierto")
+		get_tree().quit()
+		return
+	inventario.tocar("p0")
+	await get_tree().process_frame
+	print("Sola: «Guardar en el baúl» %s (esperado: no está) · al arrastrar %s (esperado: {}) · dice «%s»" % [
+		boton.call("guardar"), inventario.destinos("p0"), dice.call()])
+	inventario.guardar()
+	await get_tree().create_timer(0.3).timeout
+	print("Tras intentar guardarla: huecos %s · baúl %d de equipo (esperado: fregona · 0)" % [
+		johnny.huecos, Guardado.cargar().baul_equipo.size()])
+	Captura.foto("captura-baul-fregona-sola.png")
+	llevar_arma("bate", 0, false)
+	inventario.pintar()
+	inventario.tocar("p0")
+	await get_tree().process_frame
+	print("Con bate de repuesto: repuesto %s · «Guardar en el baúl» %s (esperado: activo) · dice «%s»" % [
+		armas_guardadas, boton.call("guardar"), dice.call()])
+	inventario.guardar()
+	await get_tree().create_timer(0.3).timeout
+	print("Guardada: huecos %s · mano %s · repuesto %s · baúl %s (esperado: bate · cuerpo · [] · fregona 0)" % [
+		johnny.huecos, johnny.mano, armas_guardadas,
+		Guardado.cargar().baul_equipo.map(func(e): return "%s %d" % [e.id, e.calidad])])
+	Captura.foto("captura-baul-fregona.png")
+	Guardado.escribir(antes)
+	get_tree().quit()
+
 # Con "--captura --baul": la pantalla del baúl (ui/inventario.gd). En la sala de
 # mantenimiento, con dos piezas especiales en el baúl y en la mochila gasolina, una pieza especial, vendas, una pieza
 # cuerpo a cuerpo y tres a distancia, Johnny

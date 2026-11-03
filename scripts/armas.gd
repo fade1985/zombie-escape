@@ -83,7 +83,7 @@ const EPICA := 3   # la calidad más alta, la que trae el truco
 #   arrojables        racimo: al romperse o explotar sueltan "racimo" más pequeños alrededor, de "racimo_tamano" su
 #                     tamaño y su daño (proyectil.gd y granada.gd)
 const TRUCO := {"gracia": 4, "atraviesa": 1, "estallido": 80.0, "racimo": 2, "racimo_tamano": 0.5}
-const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar (la fregona Normal no va al baúl; la pistola sí)
+const SIEMPRE := {"cuerpo": "fregona", "fuego": "pistola"}   # las que lleva al empezar (las dos van al baúl; la fregona Normal, solo con otra de repuesto: M61)
 # Lo que hay en el hueco de fuego cuando Johnny ha dejado la pistola en el baúl y no lleva otra arma a distancia: el id es
 # "" y esto, lo que dicen sus datos (nada dispara; solo para que las cuentas del cargador, el daño... no fallen)
 const SIN_FUEGO := {"nombre": "Sin arma a distancia", "tipo": "fuego", "dano": 0, "ritmo": 1.0, "alcance": 0.0,   # [traducir]
@@ -107,13 +107,12 @@ const AURA := [
 ]
 
 
-# ¿Va al baúl? Las armas, todas menos la fregona Normal (con ella siempre se puede pegar; la pistola Normal sí, y Johnny
-# se queda sin arma a distancia: SIN_FUEGO); los paquetes de
-# arrojables (su id de Lanzables.DATOS), los mejorados (los Normales se compran en la tienda y los sueltan los zombis)
+# ¿Va al baúl? Las armas, todas (la pistola Normal deja a Johnny sin arma a distancia: SIN_FUEGO; la fregona Normal de la
+# mano, solo si lleva otra cuerpo a cuerpo de repuesto, para que siempre tenga con qué pegar: inventario.gd,
+# fregona_sola); los paquetes de arrojables (su id de Lanzables.DATOS), los mejorados (los Normales se compran en la
+# tienda y los sueltan los zombis)
 static func al_baul(id: String, calidad: int) -> bool:
-	if not DATOS.has(id):
-		return calidad > 0
-	return calidad > 0 or id != SIEMPRE.cuerpo
+	return DATOS.has(id) or calidad > 0
 
 
 # Los datos de un arma con su calidad ya aplicada (sin los atributos de Johnny: eso lo hace johnny.gd, arma_de)

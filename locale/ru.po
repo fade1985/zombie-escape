@@ -4344,8 +4344,8 @@ msgid "Guardar en el baúl"
 msgstr "В сундук"
 
 #: scripts/ui/inventario.gd
-msgid "La %s Normal no va al baúl: la tienes siempre."
-msgstr "Обычное оружие (%s) не кладется в сундук: оно всегда при тебе."
+msgid "La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar."
+msgstr "Обычное оружие (%s) кладется в сундук, только если у тебя есть запасное оружие ближнего боя: иначе тебе будет нечем бить."
 
 #: scripts/ui/inventario.gd
 msgid "Depósito %d de %d s"

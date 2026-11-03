@@ -4335,8 +4335,8 @@ msgid "Guardar en el baúl"
 msgstr "Ranger au coffre"
 
 #: scripts/ui/inventario.gd
-msgid "La %s Normal no va al baúl: la tienes siempre."
-msgstr "Version Normale (%s) : pas besoin du coffre, tu l'as toujours."
+msgid "La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar."
+msgstr "Version Normale (%s) : elle ne va au coffre que si tu as une autre arme de corps à corps de rechange. Sans elle, tu n'aurais rien pour frapper."
 
 #: scripts/ui/inventario.gd
 msgid "Depósito %d de %d s"

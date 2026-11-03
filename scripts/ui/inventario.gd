@@ -1233,11 +1233,11 @@ func ficha_baul() -> Dictionary:
 				"que_es": "%s · %s · %s" % [Armas.tipo_nombre(w.tipo), Armas.calidad_nombre(calidad),
 					Idioma.t("En la mano") if sel[0] == "p" else Idioma.t("De repuesto")],
 				"que": que_hace(id) + " "}, true)
-			if Armas.al_baul(id, calidad):
+			if Armas.al_baul(id, calidad) and not fregona_sola(sel, id):
 				d.que += que_guardar_equipo(s, sel[0] == "p" and partida.repuesto(w.tipo) == "", w.tipo, id == Armas.SIEMPRE.fuego and calidad == 0)
 				d.boton = ["guardar", Idioma.t("Guardar en el baúl"), guardar, not Objetos.hueco_baul(s)]
 			else:
-				d.que += Idioma.t("La %s Normal no va al baúl: la tienes siempre.") % Idioma.minusculas(Objetos.nombre(id))
+				d.que += Idioma.t("La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar.") % 					Idioma.minusculas(Objetos.nombre(id))
 			if w.tipo == "fuego":
 				var carga_txt: String = Idioma.t("Depósito %d de %d s") % [ceili(carga(id)), roundi(w.deposito)] \
 					if w.has("deposito") else Idioma.t("Cargador %d de %d") % [roundi(carga(id)), w.cargador]
@@ -1344,6 +1344,12 @@ func que_guardar_equipo(s: Dictionary, sin_otra: bool, tipo: String, hueco_norma
 		return Idioma.t("En el baúl queda a salvo aunque caigas; en su lugar, a la mano, la %s de siempre.") % \
 			Idioma.minusculas(Objetos.nombre(Armas.SIEMPRE[tipo]))
 	return Idioma.t("En el baúl queda a salvo aunque caigas.")
+
+
+# ¿Es la fregona Normal de la mano sin otra arma cuerpo a cuerpo de repuesto? Esa no va al baúl: Johnny se quedaría sin
+# con qué pegar (M61; con repuesto, sí, y el repuesto pasa a la mano)
+func fregona_sola(clave: String, id: String) -> bool:
+	return clave[0] == "p" and id == Armas.SIEMPRE.cuerpo and partida.johnny.calidad(id) == 0 and partida.repuesto("cuerpo") == ""
 
 
 # Lo que hace un arma (por su id) o un arrojable (por la clave de su paquete): lo de QUE_HACE y, si no es Normal, lo que
@@ -1515,7 +1521,7 @@ func guardar_equipo() -> void:
 		"p", "g":
 			var tipo: String = ("cuerpo" if i == 0 else "fuego") if sel[0] == "p" else Armas.datos(partida.armas_guardadas[i]).tipo
 			var id: String = johnny.huecos[tipo] if sel[0] == "p" else partida.armas_guardadas[i]
-			if Armas.al_baul(id, johnny.calidad(id)) and Objetos.hueco_baul(s):
+			if Armas.al_baul(id, johnny.calidad(id)) and not fregona_sola(sel, id) and Objetos.hueco_baul(s):
 				e = {"id": id, "calidad": johnny.calidad(id)}
 				johnny.calidades.erase(id)
 				johnny.cargadores.erase(id)
@@ -2072,7 +2078,7 @@ func destinos(clave: String) -> Dictionary:
 					d["baul"] = "guardar"
 			"p", "g":
 				var id: String = johnny.huecos["cuerpo" if i == 0 else "fuego"] if clave[0] == "p" else partida.armas_guardadas[i]
-				if Armas.al_baul(id, johnny.calidad(id)) and Objetos.hueco_baul(s):
+				if Armas.al_baul(id, johnny.calidad(id)) and not fregona_sola(clave, id) and Objetos.hueco_baul(s):
 					d["baul"] = "guardar"
 			"l", "e":
 				if caben_lanzables(s, partida.lanzables.clave_en(clave)) > 0:

@@ -4326,8 +4326,8 @@ msgid "Guardar en el baúl"
 msgstr "存进储物箱"
 
 #: scripts/ui/inventario.gd
-msgid "La %s Normal no va al baúl: la tienes siempre."
-msgstr "普通品质的%s不用存进储物箱：你一直都有。"
+msgid "La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar."
+msgstr "普通品质的%s只有在你带着另一把备用近战武器时才能存进储物箱：否则你就没有东西可以打了。"
 
 #: scripts/ui/inventario.gd
 msgid "Depósito %d de %d s"

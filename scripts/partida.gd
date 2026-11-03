@@ -1253,8 +1253,7 @@ func llevar_arma(id: String, calidad := 0, a_la_mano := true, al_suelo := true) 
 # Con los dos huecos de ese tipo llenos, saca el arma de repuesto y la guarda en el baúl, para que al llevarse otra (la
 # tienda del ordenador, M26) la de la mano baje al repuesto en vez de quedarse en el suelo. Se guarda en el momento, como
 # «Guardar en el baúl» del inventario: ya no se pierde si Johnny cae. Devuelve la guardada ({"id", "calidad"}) o vacío
-# si no hace falta o no se puede (no lleva repuesto, el baúl está lleno o es la fregona o la pistola Normales, que no se
-# guardan: Armas.al_baul): entonces no cambia nada y llevar_arma deja la de la mano en el suelo, como siempre
+# si no hace falta o no se puede (no lleva repuesto o el baúl está lleno: Armas.al_baul): entonces no cambia nada y llevar_arma deja la de la mano en el suelo, como siempre
 func repuesto_al_baul(tipo: String) -> Dictionary:
 	var id := repuesto(tipo)
 	if id == "":

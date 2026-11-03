@@ -4335,8 +4335,8 @@ msgid "Guardar en el baúl"
 msgstr "Put in stash"
 
 #: scripts/ui/inventario.gd
-msgid "La %s Normal no va al baúl: la tienes siempre."
-msgstr "The Normal %s doesn't go in the stash: you always have it."
+msgid "La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar."
+msgstr "The Normal %s only goes in the stash if you carry a spare melee weapon: without one, you'd have nothing to hit with."
 
 #: scripts/ui/inventario.gd
 msgid "Depósito %d de %d s"

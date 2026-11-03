@@ -4335,8 +4335,8 @@ msgid "Guardar en el baúl"
 msgstr "In die Truhe"
 
 #: scripts/ui/inventario.gd
-msgid "La %s Normal no va al baúl: la tienes siempre."
-msgstr "Normal-Qualität: %s bleibt immer bei dir und kommt nicht in die Truhe."
+msgid "La %s Normal solo va al baúl si llevas otra arma cuerpo a cuerpo de repuesto: sin ella no tendrías con qué pegar."
+msgstr "Normal-Qualität: %s kommt nur in die Truhe, wenn du eine Ersatz-Nahkampfwaffe dabeihast. Sonst hättest du nichts zum Zuschlagen."
 
 #: scripts/ui/inventario.gd
 msgid "Depósito %d de %d s"
