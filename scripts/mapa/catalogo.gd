@@ -534,12 +534,54 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
+	# M77: la tienda de ropa fija (Tienda.PLANOS). Con la puerta abajo: un escaparate de tres maniquíes al fondo del trozo
+	# que llega hasta atrás, un banco y percheros delante del almacén y de los probadores, dos cajas a la derecha, un banco
+	# a la izquierda y dos filas de tres percheros y un maniquí a cada lado del pasillo de la entrada. Volteada, las cajas
+	# a los lados de la entrada y los maniquíes del escaparate, en la pared del fondo del trozo
 	"tienda-ropa": {
 		"muebles": ["clothesrack", "clothesrack", "mannequin", "mannequin", "checkout", "bench"],
 		"cuantos": [8, 11],
 		"iguales": {"clothesrack": 4, "mannequin": 3},
 		"islas": {"muebles": ["clothesrack", "clothesrack", "mannequin"], "fila": 3, "entre": 36, "cada": 150},
+		"colocados": {
+			"abajo": [
+				["mannequin", 19.5], ["mannequin", 21.5], ["mannequin", 23.5],
+				["bench", 4.0, "libre", 10.5625], ["clothesrack", 8.0, "libre", 10.5625],
+				["clothesrack", 27.75, "libre", 10.5625], ["mannequin", 34.0, "libre", 10.4375],
+				["checkout", 16.0, "derecha"], ["checkout", 20.0, "derecha"], ["bench", 18.0, "izquierda"],
+				["clothesrack", 3.5, "libre", 15.0], ["clothesrack", 7.0, "libre", 15.0], ["clothesrack", 10.5, "libre", 15.0], ["mannequin", 13.5, "libre", 15.0],
+				["mannequin", 21.5, "libre", 15.0], ["clothesrack", 25.0, "libre", 15.0], ["clothesrack", 28.5, "libre", 15.0], ["clothesrack", 32.0, "libre", 15.0],
+				["clothesrack", 3.5, "libre", 20.5], ["clothesrack", 7.0, "libre", 20.5], ["clothesrack", 10.5, "libre", 20.5], ["mannequin", 13.5, "libre", 20.5],
+				["mannequin", 21.5, "libre", 20.5], ["clothesrack", 25.0, "libre", 20.5], ["clothesrack", 28.5, "libre", 20.5], ["clothesrack", 32.0, "libre", 20.5],
+			],
+			"arriba": [
+				["clothesrack", 3.0], ["clothesrack", 7.0], ["mannequin", 10.5], ["checkout", 14.5], ["checkout", 22.0],
+				["mannequin", 25.5], ["clothesrack", 29.0], ["clothesrack", 33.0],
+				["bench", 6.5, "izquierda"], ["bench", 6.5, "derecha"],
+				["mannequin", 19.5, "abajo"], ["mannequin", 21.5, "abajo"], ["mannequin", 23.5, "abajo"],
+				["clothesrack", 3.5, "libre", 5.0], ["clothesrack", 7.0, "libre", 5.0], ["clothesrack", 10.5, "libre", 5.0], ["mannequin", 13.5, "libre", 5.0],
+				["mannequin", 21.5, "libre", 5.0], ["clothesrack", 25.0, "libre", 5.0], ["clothesrack", 28.5, "libre", 5.0], ["clothesrack", 32.0, "libre", 5.0],
+				["clothesrack", 3.5, "libre", 10.5], ["clothesrack", 7.0, "libre", 10.5], ["clothesrack", 10.5, "libre", 10.5], ["mannequin", 13.5, "libre", 10.5],
+				["mannequin", 21.5, "libre", 10.5], ["clothesrack", 25.0, "libre", 10.5], ["clothesrack", 28.5, "libre", 10.5], ["clothesrack", 32.0, "libre", 10.5],
+			],
+		},
 	},
+	# los probadores (bancos para sentarse, percheros y un maniquí), el almacén y el aseo de empleados (M81) de la tienda
+	# de ropa fija (M77)
+	"probadores-ropa": {"colocados": {
+		"abajo": [["bench", 1.75], ["mannequin", 4.5], ["bench", 8.25], ["clothesrack", 4.5, "izquierda"],
+			["clothesrack", 4.5, "derecha"]],
+		"arriba": [["bench", 1.75], ["bench", 8.25], ["mannequin", 4.5, "abajo"], ["clothesrack", 4.5, "izquierda"],
+			["clothesrack", 4.5, "derecha"]],
+	}},
+	"almacen-ropa": {"colocados": {
+		"abajo": [["metalshelf", 1.5], ["clothesrack", 4.75], ["pallet", 7.5], ["pallet", 4.5, "derecha"]],
+		"arriba": [["metalshelf", 1.5], ["pallet", 7.5], ["pallet", 4.5, "derecha"], ["pallet", 4.5, "abajo"]],
+	}},
+	"bano-ropa": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
 	"tienda-farmacia": {
 		"muebles": ["pharmacycounter", "metalshelf", "metalshelf", "drinkfridge", "bench"],
 		"cuantos": [8, 11],

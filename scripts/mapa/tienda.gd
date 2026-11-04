@@ -209,6 +209,40 @@ const PLANOS := {
 		"#####################EE#####################",
 		"#####################EE#####################",
 	],
+	# la tienda de ropa: a la izquierda, el aseo de empleados y el almacén (el aseo se abre a él); a la derecha, los
+	# probadores; entre los dos, un trozo de tienda hasta el fondo, con el escaparate de maniquíes
+	"ropa": [
+		"########################################",
+		"########################################",
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"##BBBBBBB AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",   # no-tr
+		"##BBBBBBB AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",   # no-tr
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"##BBBBBBB#AAAAAAAAA#VVVVVVV#PPPPPPPPPP##",
+		"#############  #####VVVVVVV#####  ######",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"###################EE###################",
+		"###################EE###################",
+	],
 }
 
 static var rng := RandomNumberGenerator.new()
