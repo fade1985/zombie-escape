@@ -488,12 +488,52 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
 	}},
+	# M77: el restaurante fijo (Tienda.PLANOS). Con la puerta abajo: neveras y una caja al fondo del trozo que llega hasta
+	# atrás, bancos y neveras delante de la cocina y de la cámara, bancos en los lados y dos filas de tres mesas a cada
+	# lado del pasillo de la entrada. Volteado, las neveras y las cajas, en la pared de la entrada
 	"tienda-restaurante": {
 		"muebles": ["diningtable", "diningtable", "checkout", "drinkfridge", "bench"],
 		"cuantos": [8, 11],
 		"iguales": {"diningtable": 4, "bench": 2},
 		"islas": {"muebles": ["diningtable"], "fila": 4, "entre": 40, "cada": 150},
+		"colocados": {
+			"abajo": [
+				["drinkfridge", 22.5], ["drinkfridge", 24.5], ["checkout", 27.25],
+				["bench", 4.0, "libre", 10.5625], ["bench", 9.0, "libre", 10.5625], ["drinkfridge", 18.0, "libre", 10.75],
+				["drinkfridge", 31.5, "libre", 10.75], ["bench", 38.0, "libre", 10.5625],
+				["bench", 15.0, "izquierda"], ["bench", 20.0, "izquierda"], ["bench", 15.0, "derecha"], ["bench", 20.0, "derecha"],
+				["diningtable", 4.5, "libre", 14.5], ["diningtable", 8.75, "libre", 14.5], ["diningtable", 13.0, "libre", 14.5], ["diningtable", 25.5, "libre", 14.5], ["diningtable", 29.75, "libre", 14.5], ["diningtable", 34.0, "libre", 14.5],
+				["diningtable", 4.5, "libre", 20.0], ["diningtable", 8.75, "libre", 20.0], ["diningtable", 13.0, "libre", 20.0], ["diningtable", 25.5, "libre", 20.0], ["diningtable", 29.75, "libre", 20.0], ["diningtable", 34.0, "libre", 20.0],
+			],
+			"arriba": [
+				["drinkfridge", 1.5], ["drinkfridge", 3.5], ["checkout", 14.0], ["checkout", 25.0], ["drinkfridge", 36.5],
+				["drinkfridge", 38.5],
+				["bench", 6.5, "izquierda"], ["bench", 6.5, "derecha"], ["diningtable", 25.0, "libre", 21.0],
+				["diningtable", 4.5, "libre", 5.0], ["diningtable", 8.75, "libre", 5.0], ["diningtable", 13.0, "libre", 5.0], ["diningtable", 25.5, "libre", 5.0], ["diningtable", 29.75, "libre", 5.0], ["diningtable", 34.0, "libre", 5.0],
+				["diningtable", 4.5, "libre", 10.5], ["diningtable", 8.75, "libre", 10.5], ["diningtable", 13.0, "libre", 10.5], ["diningtable", 25.5, "libre", 10.5], ["diningtable", 29.75, "libre", 10.5], ["diningtable", 34.0, "libre", 10.5],
+			],
+		},
 	},
+	# la cocina (sus fogones y freidoras son los focos del fuego: Peligros.fuego), la cámara y el aseo de empleados (M81)
+	# del restaurante fijo (M77)
+	"cocina-restaurante": {
+		"muebles": ["industrialstove", "steeltable", "fryer", "metalshelf", "drinkfridge"],
+		"cuantos": [2, 4],
+		"colocados": {
+			"abajo": [["industrialstove", 1.75], ["fryer", 4.5], ["steeltable", 7.0], ["industrialstove", 10.25],
+				["industrialstove", 4.5, "derecha"]],
+			"arriba": [["industrialstove", 1.75], ["fryer", 3.6], ["steeltable", 8.5], ["fryer", 10.75],
+				["industrialstove", 5.0, "derecha"]],
+		},
+	},
+	"camara-restaurante": {"colocados": {
+		"abajo": [["freezershelf", 1.5], ["freezershelf", 4.75], ["freezershelf", 8.0], ["pallet", 4.5, "derecha"]],
+		"arriba": [["freezershelf", 1.75], ["freezershelf", 8.0], ["pallet", 4.75, "abajo"], ["pallet", 5.0, "derecha"]],
+	}},
+	"bano-restaurante": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
 	"tienda-ropa": {
 		"muebles": ["clothesrack", "clothesrack", "mannequin", "mannequin", "checkout", "bench"],
 		"cuantos": [8, 11],
@@ -558,10 +598,6 @@ const SALAS := {
 		"muebles": ["freezershelf", "freezershelf", "pallet"],
 		"cuantos": [2, 4],
 		"iguales": {"freezershelf": 3},
-	},
-	"cocina-restaurante": {
-		"muebles": ["industrialstove", "steeltable", "fryer", "metalshelf", "drinkfridge"],
-		"cuantos": [2, 4],
 	},
 	"taller": {
 		"muebles": ["workbench", "metalshelf", "pallet"],
