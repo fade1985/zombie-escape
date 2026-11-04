@@ -741,6 +741,16 @@ const SALAS := {
 		"cuantos": [5, 8],
 		"iguales": {"bench": 3, "plant": 2},
 		"fondo_max": 46,   # estrecho, como el de los pisos
+		# M77: puestos a mano, iguales en todas las plantas (Planta.generar); casillas desde la esquina del suelo (la 2,2 de
+		# la galería). Las puertas de las tiendas están siempre en las casillas 14 y 42 (12 y 40 desde aquí), arriba y
+		# abajo, y el ascensor en la 28 (26), con su cartel a la izquierda; los escaparates, a cada lado de las puertas de
+		# arriba, solo salen en algunas plantas (no junto a la sala de mantenimiento ni en la tienda de un minijefe), pero
+		# su sitio se deja libre siempre. En el centro, nada: por ahí se va de una punta a la otra
+		"colocados": {"abajo": [
+			["plant", 1.0], ["bench", 4.5], ["bench", 19.5], ["bench", 30.0], ["mannequin", 33.5], ["bench", 47.5], ["plant", 51.0],
+			["plant", 1.0, "abajo"], ["plant", 19.0, "abajo"], ["mannequin", 26.0, "abajo"], ["plant", 33.0, "abajo"],
+			["plant", 51.0, "abajo"],
+		]},
 	},
 	# Las viviendas de los supervivientes rescatados (viviendas.gd): el pasillo y la habitación de cada uno
 	# ("habitacion-<id>"; "habitacion", la de quien no tenga la suya). Sin muebles sueltos: solo los "colocados" (la

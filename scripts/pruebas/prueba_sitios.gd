@@ -553,6 +553,41 @@ func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	encuadrar(sitio)
 
 
+# Con "--captura --edificio centro --galeria" (M77): la galería de las cuatro primeras plantas, entera y sin penumbra,
+# con sus muebles puestos a mano (Catalogo.SALAS["galeria"].colocados). De cada una dice cuántos muebles tiene (esperado:
+# los puestos a mano), qué hay en la pared de arriba (puertas, escaparates) y saca captura-galeria-<planta>.png
+func probar_galeria() -> void:
+	for num in [1, 2, 3, 4]:
+		nueva_planta(num)
+		await montar(0, 0, false)
+		var pasillo: Dictionary = planta.sitios[0]
+		johnny.position = Vector2(pasillo.ancho / 2.0, pasillo.alto / 2.0 + 64)
+		await get_tree().create_timer(0.4).timeout
+		print("Galería de la planta %d: muebles %d (esperado: %d) · puertas %s · escaparates %s" % [num - 1,
+			get_tree().get_nodes_in_group("muebles").size(), Catalogo.SALAS.galeria.get("colocados", {}).get("abajo", []).size(),
+			pasillo.salidas.map(func(s): return "%s %s %d" % [s.tipo, s.dir, s.en / Planta.CASILLA]),
+			pasillo.escaparates.map(func(e): return e.x / Planta.CASILLA)])
+		# entera (como foto_entera, que es para los sitios con salas)
+		var camara: Camera2D = johnny.get_node("Camara")
+		var zoom := minf(get_viewport_rect().size.x / pasillo.ancho, get_viewport_rect().size.y / (pasillo.alto + pasillo.arriba_extra))
+		camara.zoom = Vector2(zoom, zoom)
+		camara.limit_left = -100000
+		camara.limit_right = 100000
+		camara.limit_top = -100000
+		camara.limit_bottom = 100000
+		Temblor.desplazamiento = Vector2(pasillo.ancho / 2.0, (pasillo.alto - pasillo.arriba_extra) / 2.0) - johnny.position
+		camara.reset_smoothing()
+		$Pantalla.hide()
+		Luz.apagada = not Luz.apagada   # sin penumbra
+		await get_tree().create_timer(0.6).timeout
+		Captura.foto("captura-galeria-%d.png" % (num - 1))
+		Luz.apagada = not Luz.apagada
+		$Pantalla.show()
+		camara.zoom = Vector2.ONE
+		Temblor.desplazamiento = Vector2.ZERO
+	get_tree().quit()
+
+
 # Con "--captura --edificio centro --tiendas": cada tienda de las cuatro primeras plantas, entera, sin zombis, sin
 # penumbra y con todo descubierto (captura-tiendas-<tipo>-<lado de su puerta>.png; la del minijefe de la planta,
 # captura-tiendas-jefe-<minijefe>-<lado>.png), para ver sus habitaciones de dentro y lo que tapan sus paredes. La
