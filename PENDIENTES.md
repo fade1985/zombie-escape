@@ -18,6 +18,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M78** Botiquines de los apartamentos: uno solo por apartamento en vez de dos, y en un baño elegido al azar (no
   siempre el mismo). Hoy los armaritos de la planta van por turnos (un botiquín y luego dos de vendas:
   `armaritos` en `planta.gd`). Para más adelante.
+- **M79** Zombi dependienta: cuando grita, que encima de ella salga «!!!AAAHHH¡¡¡» (hoy sale «¡OFERTAS!»:
+  `gritar` en `zombi_dependienta.gd`). Para más adelante.
 
 
 ## Por limar
