@@ -135,6 +135,32 @@ func probar_modista(jefa: Node2D) -> void:
 		).call_deferred())
 
 
+# Con "--captura --edificio centro --jefe modista --cambios": cuántas veces se cambia de maniquí la modista (M88) en
+# 20 s normal y 20 s enfadada, con Johnny quieto (sin que pueda caer) y lejos de ella: si se le acerca, salta junto al
+# maniquí más lejano, para que no lo tenga pegado (pegada a él no se cambia)
+func probar_cambios() -> void:
+	if not await ir_a_la_sala_del_jefe("modista"):
+		return
+	johnny.set_physics_process(false)   # quieto
+	for f in [1, 2]:
+		jefa.fase = f   # enfadada sin los maniquíes vivos: solo cuenta los cambios de sitio
+		var cambios := 0
+		var antes: String = jefa.estado
+		for pasos in 1200:   # 20 s
+			johnny.vida = johnny.stats.vida_max
+			if jefa.global_position.distance_to(johnny.global_position) < 300.0:
+				# se le ha acercado: Johnny salta junto al maniquí más lejos de ella (como si huyera)
+				var lejos: Node2D = jefa.maniquies().reduce(func(x, m): return m if m.global_position.distance_to(
+					jefa.global_position) > x.global_position.distance_to(jefa.global_position) else x)
+				johnny.global_position = lejos.global_position + Vector2(0, 40)
+			if jefa.estado == "ojos" and antes != "ojos":
+				cambios += 1
+			antes = jefa.estado
+			await get_tree().physics_frame
+		print("Modista · cambios de maniquí en 20 s (%s): %d · cada %.1f s, otra vez %d%%" % [
+			"enfadada" if f == 2 else "normal", cambios, jefa.CAMBIOS[f - 1], int(jefa.OTRA_VEZ[f - 1] * 100)])
+
+
 # Con "--captura --jefe gloton --aspirar": solo lo del Glotón de probar_gloton (la sangre ácida y el aspirado, con lo que
 # tira a 3, 5, 8 y 12 casillas, normal y enfadado), sin la prueba larga. Deja la foto captura-gloton-aspira.png
 func probar_aspirar() -> void:
