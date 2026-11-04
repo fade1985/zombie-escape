@@ -15,9 +15,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 - **M77** Centro comercial fijo, como los apartamentos: la galería y cada tienda, siempre iguales y con lo de dentro
   puesto a mano, en vez de generarse al azar (hoy `tienda.gd` genera cada tienda). Para más adelante.
-- **M80** Zombi dependienta: su grito, en vez de meter prisa (hoy despierta la tienda y los zombis van un 30 % más
-  rápido durante 5 s, `meter_prisa`), pone a los zombis una barrera de invulnerabilidad que no se quita hasta que
-  ella muere. Para más adelante.
 - **M81** Centro comercial: en cada tienda, dentro del almacén, un baño para los empleados con un botiquín (en su
   armarito, como los de los apartamentos). Para más adelante (va bien con la M77).
 - **M82** Jefe cocinero, más difícil: su sala (la Cocina central) lleva muebles de cocina en las paredes que
