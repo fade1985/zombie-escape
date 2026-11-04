@@ -275,8 +275,13 @@ func probar_grito() -> void:
 # La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡¡¡AAAHHH!!!», despierta a los
 # vigilantes dormidos de al lado y les pone la barrera (M80, captura-grito.png); luego, los nuevos de cerca
 # (captura-nuevos.png): los golpes y el fuego no les quitan vida. Muerta ella, la barrera se va (captura-sin-barrera.png)
-# y ya se les puede herir
+# y ya se les puede herir. Con el primer grito sale su tutorial (captura-tutorial-dependienta.png; se cierra y sigue)
 func foto_grito() -> void:
+	# (su tutorial, como si no se hubiera visto nunca)
+	tutoriales_prueba = true
+	Tutoriales.visto("dependienta")
+	Tutoriales.vistos.erase("dependienta")
+	Guardado.cambiar(func(s): s.tutoriales.erase("dependienta"))
 	var dep := meter_zombi("dependienta", johnny.position + Vector2(120, 0))
 	dep.dormido = true
 	var otros := []
@@ -295,6 +300,18 @@ func foto_grito() -> void:
 		await get_tree().create_timer(0.1).timeout
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-grito.png")
+	await get_tree().create_timer(1.0).timeout
+	var ventana: Tutorial = null
+	for h in get_children():
+		if h is Tutorial and not h.is_queued_for_deletion():
+			ventana = h
+	print("Tutorial de la dependienta abierto: %s · juego parado: %s (esperado: true, true)" % [
+		ventana != null and ventana.id == "dependienta", get_tree().paused])
+	Captura.foto("captura-tutorial-dependienta.png")
+	if ventana:
+		ventana.cerrar()
+	tutoriales_prueba = false
+	await get_tree().create_timer(0.5).timeout
 	print("Grito: estado %s | despiertos %d/3 | con barrera %s (esperado: 3 true) | ella con barrera %s (esperado false)" % [
 		dep.estado, otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return o.con_barrera()),
 		dep.con_barrera()])

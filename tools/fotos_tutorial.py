@@ -42,6 +42,7 @@ FOTOS = {
 	"baul": ("captura-baul.png", 300, 20),                         # --baul
 	"centro": ("captura-guardia.png", 360, 230),                   # --edificio centro
 	"peligros": ("captura-peligro-agua.png", 380, 130),            # --fotos-tiendas --edificio centro
+	"dependienta": ("captura-nuevos.png", 420, 215),               # --grito --edificio centro (la tienda sale al azar: mover el recorte)
 	"alerta": ("captura-reto-tarjeta.png", 330, 330),              # --reto si
 }
 
@@ -53,7 +54,7 @@ FOTOS_EN = {
 	"supervivientes": ("captura-escolta.png", 180, 290),           # --rescate --edificio centro
 }
 # Las fotos sin ningún texto dibujado (la oscuridad, la horda, un molotov...) valen en todos los idiomas: no se rehacen.
-SIN_TEXTO = ["apagon", "botiquin", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros"]
+SIN_TEXTO = ["apagon", "botiquin", "curas", "horda", "incendio", "jugar", "lanzables", "municion", "peligros", "dependienta"]
 
 if __name__ == "__main__":
 	args = sys.argv[1:]

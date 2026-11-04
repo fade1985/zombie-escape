@@ -501,7 +501,7 @@ msgstr "Die Portierin"
 msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
 msgstr "Sie hatte alles im Griff: die Schlüssel, die Mieten und jetzt auch die Mieter. Der Mopp ist nicht zum Putzen da."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/tutoriales.gd
 msgid "La dependienta"
 msgstr "Die Verkäuferin"
 
@@ -3972,6 +3972,22 @@ msgstr "Wache Zombies trifft es auch: Lock sie hinein!"
 #: scripts/tutoriales.gd
 msgid "Esquivando los cruzas sin daño."
 msgstr "Ausweichend kommst du heil durch."
+
+#: scripts/tutoriales.gd
+msgid "Al oír su primer grito"
+msgstr "Wenn du sie zum ersten Mal schreien hörst"
+
+#: scripts/tutoriales.gd
+msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
+msgstr "Die Verkäuferin kommt nicht auf dich zu: Sie weicht zurück und schreit \"AAAHHH!!!\". Ihr Schrei weckt den ganzen Laden auf."
+
+#: scripts/tutoriales.gd
+msgid "Los zombis que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
+msgstr "Zombies, die sie hören, hüllen sich in eine goldene Blase: Kugeln prallen ab, und weder Schläge noch Feuer noch Pfützen schaden ihnen."
+
+#: scripts/tutoriales.gd
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
+msgstr "Die Blase verschwindet erst, wenn sie fällt: Nimm dir zuerst die Verkäuferin vor (wenn es mehrere gibt, alle). Sie hält wenig aus, flieht aber: Treib sie in die Enge oder wirf etwas nach ihr."
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"

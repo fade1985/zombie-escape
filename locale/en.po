@@ -501,7 +501,7 @@ msgstr "The Super"
 msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
 msgstr "She had it all under control: the keys, the rent, and now the tenants. That mop isn't for cleaning."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/tutoriales.gd
 msgid "La dependienta"
 msgstr "The Sales Clerk"
 
@@ -3972,6 +3972,22 @@ msgstr "They hurt awake zombies too: lead them in!"
 #: scripts/tutoriales.gd
 msgid "Esquivando los cruzas sin daño."
 msgstr "Dodge through them and you take no damage."
+
+#: scripts/tutoriales.gd
+msgid "Al oír su primer grito"
+msgstr "When you first hear her scream"
+
+#: scripts/tutoriales.gd
+msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
+msgstr "The Sales Clerk doesn't come for you: she backs away and screams \"AAAHHH!!!\". Her scream wakes up the whole store."
+
+#: scripts/tutoriales.gd
+msgid "Los zombis que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
+msgstr "Zombies who hear her get covered by a golden bubble: bullets bounce off, and hits, fire and puddles do them no harm."
+
+#: scripts/tutoriales.gd
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
+msgstr "The bubble won't go away until she falls: go for the Sales Clerk first (if there are several, all of them). She's weak, but she runs: corner her or throw something at her."
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"

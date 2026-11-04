@@ -502,7 +502,7 @@ msgstr "Вахтерша"
 msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
 msgstr "У нее все было под контролем: ключи, квитанции, а теперь и жильцы. Швабра — не для уборки."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/tutoriales.gd
 msgid "La dependienta"
 msgstr "Продавщица"
 
@@ -3979,6 +3979,22 @@ msgstr "Они ранят и проснувшихся зомби: заманив
 #: scripts/tutoriales.gd
 msgid "Esquivando los cruzas sin daño."
 msgstr "В уклонении проскочишь без урона."
+
+#: scripts/tutoriales.gd
+msgid "Al oír su primer grito"
+msgstr "Когда впервые услышишь её крик"
+
+#: scripts/tutoriales.gd
+msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
+msgstr "Продавщица не идёт к тебе: она отходит и кричит «АААААА!!!». Её крик будит весь магазин."
+
+#: scripts/tutoriales.gd
+msgid "Los zombis que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
+msgstr "Зомби, которые её слышат, покрываются золотым пузырём: пули отскакивают, а удары, огонь и лужи им не вредят."
+
+#: scripts/tutoriales.gd
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
+msgstr "Пузырь не исчезнет, пока она не упадёт: сначала займись продавщицей (если их несколько — всеми). Она слабая, но убегает: загони её в угол или брось в неё что-нибудь."
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"

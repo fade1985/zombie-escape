@@ -56,6 +56,10 @@ func gritar(johnny: Node2D) -> void:
 	Sonido.tocar("chillido")
 	# grande, amarillo y encima de ella, como el «¡¡¡LA LLAVE!!!» de los apartamentos (partida.gd, gran_aviso)
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Tema.AMARILLO, 32, true, 1.4)
+	# la primera vez que se la oye, su tutorial (tutoriales.gd), cuando la burbuja de los demás ya se ve
+	var partida := get_tree().current_scene
+	if partida.has_method("tutorial"):
+		get_tree().create_timer(0.6, false).timeout.connect(partida.tutorial.bind("dependienta"))
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		# (primero la barrera y luego despertarle: así, con la burbuja, no suelta el "!")
 		if otro.has_method("meter_barrera") and otro.get_script() != get_script():

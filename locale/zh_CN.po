@@ -500,7 +500,7 @@ msgstr "楼管大妈"
 msgid "Lo tenía todo controlado: las llaves, los recibos y ahora a los vecinos. La fregona no es para limpiar."
 msgstr "整栋楼都在她掌控之中：钥匙、物业费，现在还有住户。她的拖把可不是用来拖地的。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/tutoriales.gd
 msgid "La dependienta"
 msgstr "店员"
 
@@ -3965,6 +3965,22 @@ msgstr "它们对醒着的僵尸也有伤害：把僵尸引过去！"
 #: scripts/tutoriales.gd
 msgid "Esquivando los cruzas sin daño."
 msgstr "闪避着就能毫发无伤地穿过。"
+
+#: scripts/tutoriales.gd
+msgid "Al oír su primer grito"
+msgstr "第一次听到她尖叫时"
+
+#: scripts/tutoriales.gd
+msgid "La dependienta no viene a por ti: se aparta y grita «¡¡¡AAAHHH!!!». Su grito despierta a toda la tienda."
+msgstr "店员不会冲向你：她会躲开，然后尖叫“啊啊啊！！！”。她的尖叫会吵醒整个商店。"
+
+#: scripts/tutoriales.gd
+msgid "Los zombis que la oyen se cubren con una burbuja dorada: las balas rebotan y ni los golpes, ni el fuego, ni los charcos les hacen daño."
+msgstr "听到尖叫的僵尸会被金色泡泡罩住：子弹会被弹开，攻击、火焰和水坑都伤不到它们。"
+
+#: scripts/tutoriales.gd
+msgid "La burbuja no se va hasta que cae ella: ve primero a por la dependienta (si hay varias, a por todas). Es flojita, pero se escapa: acorrálala o lánzale algo."
+msgstr "泡泡要等她倒下才会消失：先去对付店员（如果有好几个，就全部解决）。她很脆弱，但会逃跑：把她逼到角落，或者朝她扔点东西。"
 
 #: scripts/tutoriales.gd
 msgid "Alerta y Reto del día"
