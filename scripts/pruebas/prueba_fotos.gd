@@ -282,8 +282,12 @@ func foto_grito() -> void:
 		var v := meter_zombi("vigilante", johnny.position + Vector2(-140 + i * 90, 110))
 		v.dormido = true
 		otros.append(v)
-	# se despierta sola al ver a Johnny (en la misma sala) y grita enseguida
-	await get_tree().create_timer(0.25).timeout
+	# se despierta sola al ver a Johnny (en la misma sala) y grita enseguida: se espera a que grite (hasta 3 s)
+	for _i in 30:
+		if dep.estado == "grito":
+			break
+		await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-grito.png")
 	print("Grito: estado %s | despiertos %d/3 | prisa %s | velocidad máxima %s" % [dep.estado,
 		otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return snappedf(o.prisa, 0.1)),

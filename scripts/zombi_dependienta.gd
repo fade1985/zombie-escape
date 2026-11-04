@@ -53,7 +53,8 @@ func gritar(johnny: Node2D) -> void:
 	mirar_hacia(johnny.global_position - global_position)
 	poner_animacion("ataque", true)
 	Sonido.tocar("chillido")
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -altura), Idioma.t("¡¡¡AAAHHH!!!"), Color("#ff5a4f"), 22, true)
+	# grande y encima de ella, como el «¡¡¡LA LLAVE!!!» de los apartamentos (partida.gd, gran_aviso), pero en rojo
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Color("#ff5a4f"), 32, true, 1.4)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro.get("dormido"):
 			otro.despertar()
