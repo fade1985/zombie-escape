@@ -596,7 +596,8 @@ func probar_tiendas_fijas() -> void:
 			for s in t.salas:
 				esperado += Catalogo.SALAS.get("%s-%s" % [s.uso, tipo], {}).get("colocados", {}).get(lado, []).size()
 			print("Fija %s (puerta %s): %d × %d casillas, fallos %s (esperado: []) · %s" % [tipo, lado, t.cols, t.filas,
-				Apartamento.fallos(Tienda.generar(0, tipo)),   # (fallos busca la entrada abajo: se mira sin voltear) " · ".join(t.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
+				Apartamento.fallos(Tienda.generar(0, tipo)),   # (fallos busca la entrada abajo: se mira sin voltear)
+				" · ".join(t.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
 			for f in t.filas:
 				var linea := ""
 				for c in t.cols:
@@ -629,6 +630,10 @@ func probar_tiendas_fijas() -> void:
 			await get_tree().create_timer(0.4).timeout
 			print("Fija %s (puerta %s): muebles %d (esperado: %d, los puestos a mano), armaritos %s" % [tipo, lado,
 				get_tree().get_nodes_in_group("muebles").size(), esperado, sitio.get("armaritos", []).map(func(a): return a.dentro)])
+			# los peligros: el frío de la cámara; en la electrónica, el charco dibujado en el plano y el cuadro, en el almacén
+			for pel in sitio.peligros:
+				print("Fija %s (puerta %s): peligro %s%s" % [tipo, lado, pel.tipo, " de %d casillas (en el plano: %d), cuadro en %s" % [
+					pel.casillas.size(), sitio.apt.get("agua", []).size(), sitio.apt.salas[pel.cuadro.sala].nombre] if pel.tipo == "agua" else ""])
 			for s in sitio.apt.salas:
 				if s.uso == "bano":
 					johnny.position = s.centro

@@ -456,21 +456,27 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 	var se_puede := {}
 	for k in sitios:
 		se_puede[k] = true
-	for intento in 40:
-		var cuantas := rng.randi_range(AGUA.casillas[0], AGUA.casillas[1])
-		var charco := {sitios[rng.randi() % sitios.size()]: true}
-		while charco.size() < cuantas:
-			# las vecinas que pueden mojarse, repetidas por cada vecina mojada que tengan: sale redondeado
-			var opciones := []
-			for k in charco:
-				for d in LADOS:
-					if se_puede.has(k + d) and not charco.has(k + d):
-						opciones.append(k + d)
-			if opciones.is_empty():
-				break
-			charco[opciones[rng.randi() % opciones.size()]] = true
-		if charco.size() < AGUA.casillas[0]:
-			continue
+	# M77: en la tienda fija, el charco es el dibujado en su plano (Tienda.PLANOS, ~): se prueba una sola vez
+	var fijo: Array = apt.get("agua", [])
+	for intento in (1 if not fijo.is_empty() else 40):
+		var charco := {}
+		for k in fijo:
+			charco[k] = true
+		if fijo.is_empty():
+			var cuantas := rng.randi_range(AGUA.casillas[0], AGUA.casillas[1])
+			charco = {sitios[rng.randi() % sitios.size()]: true}
+			while charco.size() < cuantas:
+				# las vecinas que pueden mojarse, repetidas por cada vecina mojada que tengan: sale redondeado
+				var opciones := []
+				for k in charco:
+					for d in LADOS:
+						if se_puede.has(k + d) and not charco.has(k + d):
+							opciones.append(k + d)
+				if opciones.is_empty():
+					break
+				charco[opciones[rng.randi() % opciones.size()]] = true
+			if charco.size() < AGUA.casillas[0]:
+				continue
 		var pasa := suelo.duplicate()
 		for k in charco:
 			pasa.erase(k)
@@ -503,8 +509,8 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 	var apt: Dictionary = sitio.apt
 	var salas: Array = apt.salas.filter(func(s): return s.uso == "almacen" or s.uso == "taquillas")
-	if rng.randf() < 0.5:
-		salas.reverse()   # unas veces en una y otras en la otra
+	if rng.randf() < 0.5 and not apt.get("fijo", false):
+		salas.reverse()   # unas veces en una y otras en la otra (en la tienda fija, M77, siempre en el almacén)
 	salas.append(apt.salas[0])   # si no cabe en ninguna, en la sala de venta
 	for s in salas:
 		var mejor := {}

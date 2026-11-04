@@ -64,6 +64,7 @@ const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "tall
 #   V  sala de venta    K  cámara frigorífica    A  almacén     B  aseo de empleados (M81: es de la habitación a la
 #   T  taller           Q  taquillas             O  cocina         que da su puerta, con su botiquín en el armarito)
 #   P  probadores       R  rebotica              Z  trastienda  X  cámara acorazada
+#   ~  sala de venta con el charco con corriente de la electrónica (Peligros.agua: "agua", sus casillas)
 # Cada trozo seguido de una misma letra es una habitación. Los tabiques de lado a lado tapan las tres últimas filas de
 # lo que queda encima (como en el piso). Todas las filas, igual de largas; la prueba --tiendas-fijas dice si algo ha
 # quedado mal
@@ -139,6 +140,41 @@ const PLANOS := {
 		"###################EE###################",
 		"###################EE###################",
 	],
+	# la electrónica: a la izquierda, las taquillas; a la derecha, el almacén y el aseo de empleados; entre los dos, un
+	# trozo de sala de venta hasta el fondo. El charco con corriente (~), siempre en el mismo sitio: a la izquierda,
+	# delante de las taquillas
+	"electronica": [
+		"########################################",
+		"########################################",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA BBBBBBB##",   # no-tr
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA BBBBBBB##",   # no-tr
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"##QQQQQQQQQQ#VVVVVVV#AAAAAAAAA#BBBBBBB##",
+		"######  #####VVVVVVV####  ##############",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVV~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVV~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVV~~~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVV~~~~~~~~VVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVV~~~~~VVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"###################EE###################",
+		"###################EE###################",
+	],
 }
 
 static var rng := RandomNumberGenerator.new()
@@ -181,9 +217,20 @@ static func generar(semilla: int, tipo: String, jefe := false, lado := "abajo") 
 # M77: la tienda de ese tipo, siempre la misma, sacada de su plano (PLANOS). "fijo": sus muebles son los puestos a mano
 # (Muebles.de_tienda), no los del sorteo
 static func del_plano(tipo: String, lado: String) -> Dictionary:
-	var t := Apartamento.del_plano(PLANOS[tipo], LETRAS)
+	# el charco (~) es sala de venta: se apuntan sus casillas y se lee como una V
+	var plano: Array = PLANOS[tipo].duplicate()
+	var agua := []
+	for f in plano.size():
+		for c in plano[f].length():
+			if plano[f][c] == "~":
+				agua.append(Vector2i(c, f))
+		plano[f] = plano[f].replace("~", "V")
+	var t := Apartamento.del_plano(plano, LETRAS)
 	t.tipo = tipo
 	t.fijo = true
+	if not agua.is_empty():
+		var filas: int = plano.size()
+		t.agua = agua if lado == "abajo" else agua.map(func(k): return Vector2i(k.x, filas - 1 - k.y))
 	describir(t)
 	var malos := Apartamento.fallos(t)
 	if not malos.is_empty():

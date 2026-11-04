@@ -445,12 +445,49 @@ const SALAS := {
 		"abajo": [["workbench", 2.0], ["metalshelf", 6.0], ["workbench", 10.0], ["pallet", 4.5, "derecha"]],
 		"arriba": [["workbench", 2.0], ["metalshelf", 8.0], ["pallet", 5.0, "derecha"], ["pallet", 9.5, "abajo"]],
 	}},
+	# M77: la electrónica fija (Tienda.PLANOS, con el charco con corriente dibujado a la izquierda). Con la puerta abajo:
+	# una estantería de teles al fondo del trozo que llega hasta atrás, teles, estanterías y palés delante de las
+	# taquillas y del almacén, dos cajas a la derecha y dos filas de tres estanterías de teles a la derecha (a la izquierda,
+	# el charco). Volteada, las cajas y las teles de pared, en la de la entrada
 	"tienda-electronica": {
 		"muebles": ["tvshelf", "tvshelf", "metalshelf", "checkout", "pallet"],
 		"cuantos": [8, 11],
 		"iguales": {"tvshelf": 3, "metalshelf": 2},
 		"islas": {"muebles": ["tvshelf"], "fila": 2, "entre": 0, "cada": 176},
+		"colocados": {
+			"abajo": [
+				["tvshelf", 14.5],
+				["metalshelf", 2.0, "libre", 10.625], ["pallet", 8.75, "libre", 10.875],
+				["tvshelf", 20.0, "libre", 10.625], ["tvshelf", 27.0, "libre", 10.625], ["tvshelf", 31.0, "libre", 10.625],
+				["pallet", 34.5, "libre", 10.875],
+				["pallet", 21.5, "izquierda"], ["checkout", 16.0, "derecha"], ["checkout", 20.0, "derecha"],
+				["pallet", 2.0, "abajo"], ["pallet", 33.5, "abajo"],
+				["tvshelf", 23.3125, "libre", 15.0], ["tvshelf", 26.9375, "libre", 15.0], ["tvshelf", 30.5625, "libre", 15.0],
+				["tvshelf", 23.3125, "libre", 20.5], ["tvshelf", 26.9375, "libre", 20.5], ["tvshelf", 30.5625, "libre", 20.5],
+			],
+			"arriba": [
+				["metalshelf", 2.0], ["tvshelf", 7.0], ["tvshelf", 11.0], ["checkout", 14.5], ["checkout", 22.0],
+				["tvshelf", 27.0], ["tvshelf", 31.0], ["pallet", 34.5],
+				["pallet", 3.0, "izquierda"], ["pallet", 7.75, "derecha"], ["pallet", 12.5, "abajo"], ["pallet", 16.5, "abajo"],
+				["tvshelf", 23.3125, "libre", 5.0], ["tvshelf", 26.9375, "libre", 5.0], ["tvshelf", 30.5625, "libre", 5.0],
+				["tvshelf", 23.3125, "libre", 10.5], ["tvshelf", 26.9375, "libre", 10.5], ["tvshelf", 30.5625, "libre", 10.5],
+			],
+		},
 	},
+	# las taquillas, el almacén (con sitio libre en su pared de arriba para el cuadro eléctrico: Peligros.cuadro_electrico)
+	# y el aseo de empleados (M81) de la electrónica fija (M77)
+	"taquillas-electronica": {"colocados": {
+		"abajo": [["lockers", 1.75], ["lockers", 5.0], ["lockers", 8.25], ["bench", 4.5, "derecha"]],
+		"arriba": [["lockers", 1.75], ["lockers", 8.25], ["bench", 4.5, "derecha"], ["bench", 4.5, "izquierda"]],
+	}},
+	"almacen-electronica": {"colocados": {
+		"abajo": [["metalshelf", 1.5], ["pallet", 7.5], ["pallet", 5.0, "izquierda"]],
+		"arriba": [["metalshelf", 1.5], ["pallet", 4.5, "abajo"], ["pallet", 7.0, "abajo"], ["pallet", 4.0, "izquierda"]],
+	}},
+	"bano-electronica": {"colocados": {
+		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+	}},
 	"tienda-restaurante": {
 		"muebles": ["diningtable", "diningtable", "checkout", "drinkfridge", "bench"],
 		"cuantos": [8, 11],
