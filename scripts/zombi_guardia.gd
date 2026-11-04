@@ -12,17 +12,28 @@ extends Zombi
 signal silbato   # ha tocado el silbato: la partida trae refuerzos
 
 const RONDA := 55.0          # su velocidad haciendo la ronda
-const HUIDA := 165.0         # y huyendo (Johnny anda a 210: se le alcanza, pero cuesta)
-const ALIENTO := 3.2         # segundos que aguanta corriendo...
+const HUIDA := 200.0         # y huyendo (Johnny anda a 210: casi no se le alcanza). M83: antes 165
+const ALIENTO := 4.0         # segundos que aguanta corriendo... (M83: antes 3.2)
+const SILBIDO_CADA := 6.0    # M83: mientras te ve, vuelve a silbar cada tanto (antes, solo al verte y a media vida)
 const RESPIRO := 1.8         # ...y lo que tarda en recuperarse
 const DEFENDERSE := 70.0     # más cerca que esto (además de los radios), se gira y pega
 
 var alerta := false          # si ya ha visto a Johnny (entonces ya no hace la ronda)
-var silbidos := 0            # cuántas veces ha tocado el silbato (dos como mucho: al verte y a media vida)
+var silbidos := 0            # cuántas veces ha tocado el silbato
+var espera_silbato := SILBIDO_CADA   # lo que falta para el próximo silbido
+var media_vida_tocada := false       # si ya ha silbado por estar a media vida
 var aliento := ALIENTO
 var cansado := 0.0           # tiempo que le queda parado recuperándose
 var meta := Vector2.INF      # adónde va (en la ronda, una punta; huyendo, la punta lejos de Johnny)
 var puntas: Array = []       # los dos extremos del pasillo, los pone la partida
+
+
+# M83: el agente de navegación limita la velocidad a la del zombi (85 en la escena): sin esto el guardia nunca pasaba de
+# ~80 aunque HUIDA dijera 165. Ahora el límite es la HUIDA
+func _ready() -> void:
+	super()
+	velocidad = HUIDA
+	agente.max_speed = HUIDA
 
 
 func andar(delta: float, johnny: Node2D) -> void:
@@ -33,8 +44,13 @@ func andar(delta: float, johnny: Node2D) -> void:
 		else:
 			rondar(delta)
 			return
-	if silbidos < 2 and vida <= vida_max / 2:
+	if not media_vida_tocada and vida <= vida_max / 2:
+		media_vida_tocada = true
 		tocar_silbato()
+	elif se_ve(johnny):
+		espera_silbato -= delta
+		if espera_silbato <= 0.0:
+			tocar_silbato()
 	var cerca: bool = distancia_a(johnny) < radio + johnny.RADIO + DEFENDERSE
 	# Cansado: se queda quieto resoplando, salvo que le tengas encima
 	if cansado > 0.0:
@@ -82,6 +98,7 @@ func huida(johnny: Node2D) -> Vector2:
 
 func tocar_silbato() -> void:
 	silbidos += 1
+	espera_silbato = SILBIDO_CADA
 	Sonido.tocar("silbato")
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(-34, -altura), Idioma.t("¡PRIIII!"), Color("#ffd23f"), 22)
 	silbato.emit()

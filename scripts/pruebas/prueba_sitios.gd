@@ -1192,3 +1192,37 @@ func probar_dificultad() -> void:
 	print("Dificultad · armaritos en 12 plantas: %d botiquines y %d vendas (%.1f botiquines por planta; antes %d botiquines, %.1f por planta)" % [
 		botiquines, vendas, botiquines / 12.0, botiquines_antes, botiquines_antes / 12.0])
 	get_tree().quit()
+
+
+# Con "--captura --edificio centro --guardia" (M83): el guardia de la tarjeta, con Johnny quieto a la vista: cuenta los
+# silbatos y los refuerzos que llegan en ~14 s, y a qué velocidad huye y corren los refuerzos
+func probar_guardia() -> void:
+	await montar(0, 0, false)
+	if guardia == null:
+		print("Guardia: no hay en este pasillo")
+		get_tree().quit()
+		return
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != guardia:
+			z.queue_free()
+	var silbatos := [0]
+	guardia.silbato.connect(func(): silbatos[0] += 1)
+	guardia.vida = guardia.vida_max * 10   # que no caiga a media vida por el camino
+	guardia.vida_max = guardia.vida
+	johnny.vida = 100000   # que no le maten los refuerzos
+	var sitio: Dictionary = planta.sitios[aqui]
+	guardia.global_position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+	johnny.position = guardia.global_position + Vector2(-250, 0)
+	await get_tree().create_timer(0.3, false).timeout
+	for seg in 14:
+		var p0: Vector2 = guardia.global_position
+		await get_tree().create_timer(1.0, false).timeout
+		print("Guardia seg %d: avanza %.0f · silbatos %d · cansado %.1f · alerta %s" % [seg, p0.distance_to(guardia.global_position), silbatos[0], guardia.cansado, guardia.alerta])
+		if seg == 0:
+			var llegados: int = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia).size()
+			print("Guardia: tras el primer silbato llegan %d refuerzos (esperado 4, +%d por la planta)" % [llegados, planta.num / 2])
+	var refuerzos: Array = get_tree().get_nodes_in_group("zombis").filter(func(z): return z != guardia and z.get_meta("tipo", "") == "vigilante")
+	var vel: float = refuerzos[0].velocidad if not refuerzos.is_empty() else 0.0
+	print("Guardia en ~14 s: silbatos %d (esperado 3: al verte y cada 6 s) · refuerzos vivos %d (Johnny va matando) · velocidad de un refuerzo %.0f (esperado 165)" % [
+		silbatos[0], refuerzos.size(), vel])
+	get_tree().quit()

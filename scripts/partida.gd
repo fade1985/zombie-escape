@@ -71,7 +71,8 @@ const PRESENTACION := preload("res://scripts/ui/presentacion.gd")
 const CIENTIFICO := preload("res://scripts/mapa/cientifico.gd")
 const INVENTARIO := preload("res://scripts/ui/inventario.gd")
 const PANEL_PRUEBAS := preload("res://scripts/ui/panel_pruebas.gd")
-const REFUERZOS := 2               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas)
+const REFUERZOS := 4               # los vigilantes que llegan al silbato del guardia (y uno más cada dos plantas). M83: antes 2
+const REFUERZOS_VELOCIDAD := 165.0 # y lo deprisa que corren (M83: antes 85, la de un vigilante normal)
 const BILLETES_GUARDIA := 2
 const JEFE_POR_PLANTA := 1.35     # los jefes de planta, su vida por cada planta que se sube (M72: antes 1,25)
 const ZOMBI_POR_PLANTA := 0.1     # los demás zombis, vida y zarpazo de más por cada planta (M72: antes, nada)
@@ -998,7 +999,10 @@ func _al_silbar() -> void:
 		var donde := Vector2(x, sitio.alto / 2.0 + randf_range(-60, 60))
 		if donde.distance_to(johnny.position) < 250.0:
 			donde.x = sitio.ancho - donde.x   # no encima de Johnny: por la otra punta
-		meter_zombi("vigilante", donde)
+		var refuerzo: Node2D = meter_zombi("vigilante", donde)
+		refuerzo.velocidad = REFUERZOS_VELOCIDAD
+		if refuerzo.get("agente") != null:
+			refuerzo.agente.max_speed = REFUERZOS_VELOCIDAD
 
 
 # Ha caído: suelta la tarjeta donde estaba (se queda en el suelo del pasillo hasta que Johnny la coja)
