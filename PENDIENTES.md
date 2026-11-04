@@ -35,8 +35,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M86** Centro comercial: las páginas del dosier las sueltan también científicos muertos de Velaria (con su bata,
   como en los apartamentos), y se borran los que hay ahora (el jefe de seguridad y la secretaria, dibujados con formas:
   `cientifico.gd`). Para más adelante.
-- **M89** Maniquíes vivos de la modista: que se muevan mejor, con animaciones de PixelLab. Ahora son muy estáticos
-  (usan el dibujo quieto del mueble y solo se bambolean sobre la peana: `maniqui_vivo.gd`). Para más adelante.
 
 
 ## Por limar
