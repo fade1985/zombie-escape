@@ -153,6 +153,7 @@
 #   --salida            la salida de incendios del fondo del pasillo (escaleras): cerrada y, al caer la jefa, abierta [prueba_sitios.gd]
 #   --piso              el piso de los apartamentos (siempre el mismo): puerta abajo y arriba [prueba_sitios.gd]
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
+#   --zombis-tienda     (con --edificio centro) cuántos zombis hay en cada tienda y en cada sala   [prueba_sitios.gd]
 #   --dificultad        lo que cambia de una planta a otra (M72): vida y zarpazo de los zombis, vida de la portera y los
 #                       botiquines de los armaritos, con lo de antes; solo números    [prueba_sitios.gd]
 #   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
@@ -562,6 +563,9 @@ func empezar_prueba() -> void:
 	elif "--piso" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piso()
+	elif "--zombis-tienda" in args:
+		set_process(false)   # sin la prueba larga
+		probar_zombis_tienda()
 	elif "--zombis-sala" in args:
 		set_process(false)   # sin la prueba larga
 		probar_zombis_sala()

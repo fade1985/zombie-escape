@@ -427,9 +427,10 @@ en una línea.
 - `planta.gd`: la planta, sus zombis y sus salas especiales (mantenimiento, exposición, pruebas de armas, azotea).
   Los zombis de un piso (`horda`): un presupuesto (`BASE`, `POR_NIVEL`, el coste de cada tipo en `COSTE`) repartido por
   el tamaño de las habitaciones y, aparte, `EXTRA_POR_SALA` (2) zombis baratos (lentos, normales o rápidos) en cada
-  habitación de los pisos de los Apartamentos, no en las tiendas del centro comercial: los que quepan, lejos de la
+  habitación de los pisos de los Apartamentos: los que quepan, lejos de la
   puerta (`LEJOS_PUERTA`), de los muebles y de los otros. Sin esos 2 había unos 13 por piso; con ellos, unos 27. La prueba
-  `--zombis-sala` los cuenta por habitación.
+  `--zombis-sala` los cuenta por habitación. En las tiendas del centro comercial, `EXTRA_TIENDA` (M84): 14 de más en la
+  sala de venta, 1 en los baños y 3 en las demás salas; de unos 9 por tienda a unos 27. Los cuenta `--zombis-tienda`.
   La sala de mantenimiento se ve como las viviendas ("cajas": vestuario, despacho y taller, cada uno en su caja de
   tabiques con oscuro alrededor), y también los dos edificios enteros: el pasillo de los Apartamentos, sus pisos, las
   habitaciones de sus jefes y su azotea, y la galería del centro comercial, sus tiendas, las de sus minijefes y su azotea. La azotea, al aire libre, sin tabique que suba (`mapa.al_aire`): su murete, del mismo gris muy oscuro que
