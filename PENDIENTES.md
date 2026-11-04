@@ -25,6 +25,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   ella muere. Para más adelante.
 - **M81** Centro comercial: en cada tienda, dentro del almacén, un baño para los empleados con un botiquín (en su
   armarito, como los de los apartamentos). Para más adelante (va bien con la M77).
+- **M82** Jefe cocinero, más difícil: su sala (la Cocina central) lleva muebles de cocina en las paredes que
+  sueltan aceite ardiendo, y ese aceite se va extendiendo por la habitación durante el combate (aparte de la
+  sartén que ya tira él, `cocinero.gd` y `charco.gd`). Para más adelante.
 
 
 ## Por limar
