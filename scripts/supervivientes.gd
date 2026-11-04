@@ -557,8 +557,8 @@ func soltar_provisiones(a: Aliado) -> void:
 
 
 # Un grupo de zombis entra por una habitación (casi siempre una donde no está Johnny) y él avisa de por dónde
-func grupo(n: int, tipos: Array) -> void:
-	n = mini(n, HORDA.tope - get_tree().get_nodes_in_group("zombis").size())
+func grupo(n: int, tipos: Array, tope: int = HORDA.tope) -> void:
+	n = mini(n, tope - get_tree().get_nodes_in_group("zombis").size())
 	if n <= 0:
 		return
 	var sitio: Dictionary = partida.planta.sitios[partida.aqui]

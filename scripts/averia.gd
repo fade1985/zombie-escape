@@ -14,12 +14,13 @@
 class_name Averia
 extends Node
 
-const DURA := 90.0          # segundos de trabajo (no cuentan con corriente, ni caído, ni yendo a su sitio)
-const TOPE := 24            # zombis a la vez, como mucho (la tienda es pequeña y está a oscuras)
-const CADA := [6.0, 3.5]    # segundos entre grupo y grupo, al principio y al final
-const GRUPO := [2, 5]       # zombis por grupo, igual
+# (M87: antes 90 s, grupos de 2 a 5 cada 6 s y luego cada 3,5, y 24 a la vez: unos 65 en total. Ahora unos 170 en el minuto)
+const DURA := 60.0          # segundos de trabajo (no cuentan con corriente, ni caído, ni yendo a su sitio)
+const TOPE := 60            # zombis a la vez, como mucho (contando los que queden de la tienda)
+const CADA := [3.0, 1.5]    # segundos entre grupo y grupo, al principio y al final
+const GRUPO := [4, 9]       # zombis por grupo, igual
 const TIPOS := [["lento", "normal", "normal", "dependienta"],
-	["normal", "rapido", "rapido", "vigilante", "dependienta", "explosivo"]]   # el primer minuto y luego
+	["normal", "rapido", "rapido", "vigilante", "dependienta", "explosivo"]]   # la primera mitad y la segunda
 # Lo que dice el técnico (en español; sale con Idioma.t)
 # [traducir]
 const FRASES := [
@@ -136,7 +137,7 @@ func _physics_process(delta: float) -> void:
 		grupo_t = lerpf(CADA[0], CADA[1], k)
 		var n := mini(roundi(lerpf(GRUPO[0], GRUPO[1], k)), TOPE - get_tree().get_nodes_in_group("zombis").size())
 		if n > 0:
-			sup.grupo(n, TIPOS[0 if hecho < 60.0 else 1])
+			sup.grupo(n, TIPOS[0 if hecho < DURA / 2.0 else 1], TOPE)
 	if hecho >= DURA:
 		acabar()
 
@@ -321,6 +322,7 @@ func probar() -> void:
 	await get_tree().create_timer(2.0, false).timeout
 	print("Técnico: arreglando %.1f s | en su sitio %s | zombis %d | dice '%s'" % [hecho, a.en_su_sitio(),
 		get_tree().get_nodes_in_group("zombis").size(), a.dicho])
+	print("Técnico: en %d s entran %s (grupos, zombis; sin contar el tope de %d a la vez)" % [DURA, cuantos(), TOPE])
 	Captura.foto("captura-tecnico-horda.png")
 	# subir la palanca: vuelve la luz y se para
 	johnny.position = Vector2(c.datos.x, c.datos.y + 200)
@@ -371,6 +373,19 @@ func probar() -> void:
 
 # Su mejora: con el técnico rescatado, el minimapa enseña los zombis (en el pasillo, unos cuantos de prueba, y en
 # las tiendas sin visitar); y una foto de su habitación de las viviendas. Se deja el guardado como estaba
+# Cuántos grupos y zombis entran en todo el arreglo, sin tope y trabajando sin parar (para la prueba): [grupos, zombis]
+static func cuantos() -> Array:
+	var t := 3.0   # el primer grupo, a los 3 s (empezar_arreglo)
+	var grupos := 0
+	var total := 0
+	while DURA - t > 3.0:
+		var k := t / DURA
+		grupos += 1
+		total += roundi(lerpf(GRUPO[0], GRUPO[1], k))
+		t += lerpf(CADA[0], CADA[1], k)
+	return [grupos, total]
+
+
 func probar_mejora() -> void:
 	var partida: Node = sup.partida
 	var johnny: Node2D = sup.johnny
