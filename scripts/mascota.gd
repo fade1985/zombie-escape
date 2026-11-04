@@ -9,6 +9,7 @@
 #     creciendo, donde va a caer; al caer quita 18 a lo que esté en ese círculo. En el aire no se le puede dar.
 # Enfadada (a media vida): 3 embestidas seguidas con menos aviso; si choca con una pared rebota y, tras un aviso corto
 # con su franja (AVISO_REBOTE), sigue; solo se marea si se estrella en la última.
+# M85: durante todo el combate van saliendo críos (el zombi rápido) por la tienda, lejos de Johnny (salir_crios()).
 extends Minijefe
 
 const VELOCIDAD := 140.0
@@ -30,13 +31,21 @@ const PIE := 30.0                      # a qué altura dibuja los pies respecto 
 const DESPEGUE := 4
 const ATERRIZA := 9
 
+# M85: los críos que salen sin parar (normal y enfadada): cada cuánto sale uno, cuántos puede haber vivos a la vez
+# (con el máximo, no saca más hasta que Johnny mate alguno) y a qué distancia de Johnny aparecen (para verlos venir)
+const CRIOS_CADA := [4.0, 2.5]
+const CRIOS_MAX := [4, 6]
+const CRIOS_LEJOS := 300.0
+
 var espera_embestida := 1.5
 var espera_salto := 3.0
+var espera_crio := 3.0
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
 	espera_embestida -= delta
 	espera_salto -= delta
+	salir_crios(delta, johnny)
 	match estado:
 		"andar":
 			perseguir(delta, johnny, VELOCIDAD)
@@ -158,6 +167,33 @@ func aterrizar(johnny: Node2D) -> void:
 			and not Aviso.tapado(self, johnny.global_position + Vector2(0, 16), Vector2(0, PIE - 6)):
 		johnny.recibir_dano(DANO_SALTO, self)
 		johnny.empujar((hacia.normalized() if hacia != Vector2.ZERO else Vector2.DOWN) * 600.0)
+
+
+# M85: cada CRIOS_CADA segundos sale un crío, si no hay ya CRIOS_MAX vivos. Aparece en un sitio libre de la tienda a
+# unas CRIOS_LEJOS unidades de Johnny (como si saliera de entre los juguetes). En la sala de pruebas (quieta), no.
+func salir_crios(delta: float, johnny: Node2D) -> void:
+	espera_crio -= delta
+	if espera_crio > 0.0 or quieto:
+		return
+	espera_crio = CRIOS_CADA[fase - 1]
+	if crios() >= CRIOS_MAX[fase - 1]:
+		return
+	# prueba unos cuantos sitios alrededor de Johnny y se queda con el que, ya dentro de la tienda, quede más lejos
+	var mapa_nav := agente.get_navigation_map()
+	var mejor := global_position
+	for i in 8:
+		var a := randf() * TAU
+		var p := NavigationServer2D.map_get_closest_point(mapa_nav, johnny.global_position + Vector2(cos(a), sin(a)) * CRIOS_LEJOS)
+		if p.distance_to(johnny.global_position) > mejor.distance_to(johnny.global_position):
+			mejor = p
+		if mejor.distance_to(johnny.global_position) > CRIOS_LEJOS * 0.75:
+			break
+	pide_zombi.emit("rapido", mejor)
+
+
+# Cuántos críos quedan vivos
+func crios() -> int:
+	return get_tree().get_nodes_in_group("zombis").filter(func(z): return z.get_meta("tipo", "") == "rapido").size()
 
 
 # Si cae en mitad de un salto o mareada, que caiga en el suelo y derecha

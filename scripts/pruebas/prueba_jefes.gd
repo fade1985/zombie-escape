@@ -196,6 +196,38 @@ func probar_aspirar() -> void:
 		await probar_gloton()
 
 
+# Con "--captura --edificio centro --jefe mascota --crios": los críos que salen sin parar en el combate de la mascota
+# (M85). 20 s normal y 20 s enfadada, con Johnny quieto y sin que pueda caer (los críos se le echan encima y se quedan:
+# así se ve que no pasan del máximo). Cuenta los que salen, los que hay a la vez como mucho y a qué distancia de Johnny
+# aparecen. Foto con los críos encima: captura-mascota-crios.png
+func probar_crios() -> void:
+	if not await ir_a_la_sala_del_jefe("mascota"):
+		return
+	johnny.set_physics_process(false)   # quieto
+	var distancias: Array[float] = []
+	jefa.pide_zombi.connect(func(tipo, donde):
+		if tipo == "rapido":
+			distancias.append(johnny.global_position.distance_to(donde)))
+	for f in [1, 2]:
+		jefa.fase = f
+		jefa.espera_crio = 0.0
+		distancias.clear()
+		var a_la_vez := 0
+		for pasos in 1200:   # 20 s
+			johnny.vida = johnny.stats.vida_max
+			a_la_vez = maxi(a_la_vez, jefa.crios())
+			await get_tree().physics_frame
+		print("Mascota · críos en 20 s (%s): salen %d (cada %.1f s) · a la vez como mucho %d (máximo %d) · a %s de Johnny" % [
+			"enfadada" if f == 2 else "normal", distancias.size(), jefa.CRIOS_CADA[f - 1], a_la_vez,
+			jefa.CRIOS_MAX[f - 1], distancias.map(func(d): return int(d))])
+		if f == 1:
+			Captura.foto("captura-mascota-crios.png")
+			for z in get_tree().get_nodes_in_group("zombis"):
+				if z.get_meta("tipo", "") == "rapido":
+					z.recibir_golpe(999, Vector2.RIGHT)
+			await get_tree().create_timer(0.5, false).timeout
+
+
 # Va a la habitación del jefe de la 1ª planta (el de --jefe X) y espera a que salga, sin la prueba larga. Dice si está
 func ir_a_la_sala_del_jefe(tipo: String) -> bool:
 	set_process(false)
