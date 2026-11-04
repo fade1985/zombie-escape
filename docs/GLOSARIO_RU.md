@@ -115,7 +115,7 @@ Los avisos, sin punto final, como en español. Números con coma decimal (0,8 с
 | Dr. Salas: ¡MÁS SUJETOS! · ¡DOSIS DOBLE! · ¡SUERO! · ¡NO ME TOCARÁS! · ¡MI CÚPULA! · ¡AÚN NO HE TERMINADO! | ЕЩЕ КРОЛИКИ! · ДВОЙНАЯ ДОЗА! · УКОЛЬЧИК! · РУКИ ПРОЧЬ! · МОЙ КУПОЛ! · Я ЕЩЕ НЕ ЗАКОНЧИЛ! |
 | Cocinero · modista · mascota | ГОРЯЧЕНЬКОЕ! / В СУП! · ШШШШ! / СНИМУ МЕРКУ! · ОБНИМАШКИ! / ДАВАЙ ИГРАТЬ! / ПРЫГ! |
 | Antidisturbios: ¡PRIIIII! · ¡ATRÁS! · ¡QUEDAS DETENIDO! · ¡CLONC! | ФЬЮЮЮЮТЬ! · НАЗАД! · ЛИЦОМ В ПОЛ! · ДЗЫНЬ! |
-| Dependienta: ¡OFERTAS! | СКИДКИ! |
+| Dependienta: ¡¡¡AAAHHH!!! (bestiario: ¡OFERTAS!) | АААААА!!! (bestiario: СКИДКИ!) |
 
 ## Logros, mutaciones, trajes
 

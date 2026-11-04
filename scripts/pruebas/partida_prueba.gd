@@ -143,6 +143,7 @@
 #   --atraedora         la atraedora (dinamita con despertador) y la congeladora (extintor con temporizador) en vuelo,
 #                       en el HUD y en el inventario                                       [prueba_inventario.gd]
 #   --fotos-tiendas, --fotos-luz, --fotos-ayudas, --fotos-supervivientes   fotos para mirar  [prueba_fotos.gd]
+#   --grito             (con --edificio centro) el grito de la dependienta, «¡¡¡AAAHHH!!!»     [prueba_fotos.gd]
 #   --sala              la sala de mantenimiento: sus tres estancias y sus muebles           [prueba_sitios.gd]
 #   --ascensor          el ascensor arreglado: bajar a la sala y volver                      [prueba_sitios.gd]
 #   --viviendas         las viviendas de los rescatados                                      [prueba_sitios.gd]
@@ -265,6 +266,8 @@ func empezar_prueba() -> void:
 		probar_volver()
 	elif "--fotos-tiendas" in args:
 		fotos_tiendas()
+	elif "--grito" in args:
+		probar_grito()
 	elif "--fotos-luz" in args:
 		fotos_luz()
 	elif "--fotos-ayudas" in args:

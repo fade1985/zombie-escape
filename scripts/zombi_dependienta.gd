@@ -1,6 +1,6 @@
 # La dependienta del centro comercial (parte 4 del plan, docs/historial/CENTRO_COMERCIAL.md): flojita (vida 20) pero
 # rápida, y lo peor es su grito:
-#   - Al despertar grita «¡OFERTAS!»: despierta a toda la tienda y durante 5 s todos los zombis van un 30 % más
+#   - Al despertar grita «¡¡¡AAAHHH!!!»: despierta a toda la tienda y durante 5 s todos los zombis van un 30 % más
 #     rápido (zombi.gd, meter_prisa).
 #   - Luego no se acerca: se aparta de Johnny, guardando las distancias, y vuelve a gritar cada 8 s.
 #   - Si la acorralas, te chilla en la cara (un golpe flojo, 6).
@@ -46,14 +46,14 @@ func andar(delta: float, johnny: Node2D) -> void:
 	mirar_hacia(hacia)
 
 
-# «¡OFERTAS!»: despierta a todos los de la tienda y les mete prisa (a ella también)
+# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos los de la tienda y les mete prisa (a ella también)
 func gritar(johnny: Node2D) -> void:
 	estado = "grito"
 	grito_t = GRITO_CADA
 	mirar_hacia(johnny.global_position - global_position)
 	poner_animacion("ataque", true)
 	Sonido.tocar("chillido")
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(-44, -altura), Idioma.t("¡OFERTAS!"), Color("#ff5a4f"), 22)
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -altura), Idioma.t("¡¡¡AAAHHH!!!"), Color("#ff5a4f"), 22, true)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro.get("dormido"):
 			otro.despertar()

@@ -6137,8 +6137,8 @@ msgid "Entendido"
 msgstr "知道了"
 
 #: scripts/zombi_dependienta.gd
-msgid "¡OFERTAS!"
-msgstr "大促销！"
+msgid "¡¡¡AAAHHH!!!"
+msgstr "啊啊啊！！！"
 
 #: scripts/zombi_guardia.gd
 msgid "uf"

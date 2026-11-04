@@ -172,4 +172,4 @@ y en `locale/zh_CN.po` (buscar y reemplazar).
 | Dr. Salas: ¡MÁS SUJETOS! · ¡DOSIS DOBLE! · ¡SUERO! · ¡NO ME TOCARÁS! · ¡MI CÚPULA! · ¡AÚN NO HE TERMINADO! | 再来点实验品！ · 双倍剂量！ · 血清！ · 扫地的，别碰我！ · 我的玻璃罩！ · 我还没完呢！ |
 | Cocinero · Modista · Mascota | 趁热吃！ / 下锅！ · 嘶——！ / 给你量尺寸！ · 免费抱抱！ / 蹦！ / 游戏时间！ |
 | Antidisturbios: ¡PRIIIII! · ¡ATRÁS! · ¡QUEDAS DETENIDO! · ¡CLONC! | 嘘——！ · 退后！ · 你被捕了！ · 当！ |
-| Dependienta: ¡OFERTAS! · Guardia: ¡PRIIII! / uf | 大促销！ · 嘘——！ / 呼 |
+| Dependienta: ¡¡¡AAAHHH!!! (bestiario: ¡OFERTAS! = 大促销！) · Guardia: ¡PRIIII! / uf | 啊啊啊！！！ · 嘘——！ / 呼 |

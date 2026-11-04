@@ -96,7 +96,7 @@ const EFECTOS := {
 	"silbato": {"fijo": true, "notas": [[2700, 0.1, "seno", 0.045, 150], [2900, 0.4, "seno", 0.05, -200, 0.13]]},   # el guardia
 	"tijeras": {"hueco": 60, "notas": [[2400, 0.03, "cuadrada", 0.03, -800], [1900, 0.05, "cuadrada", 0.03, -600, 0.07]]},   # la modista
 	"alfiler": {"hueco": 40, "notas": [[2600, 0.03, "triangulo", 0.012, 900]]},
-	"chillido": {"notas": [[1150, 0.3, "sierra", 0.035, -450], [980, 0.45, "cuadrada", 0.022, -380, 0.1]]},   # ¡OFERTAS!
+	"chillido": {"notas": [[1150, 0.3, "sierra", 0.035, -450], [980, 0.45, "cuadrada", 0.022, -380, 0.1]]},   # el grito de la dependienta
 	"jefe": {"fijo": true, "notas": [[110, 0.6, "sierra", 0.06, -40], [82, 0.8, "sierra", 0.05, -20, 0.2]]},
 	"rugido": {"notas": [[160, 0.5, "sierra", 0.07, -90], [120, 0.6, "cuadrada", 0.04, -60, 0.05]]},
 	"rotor": {"fijo": true, "hueco": 200, "notas": [[64, 0.07, "cuadrada", 0.03, -15], [60, 0.07, "cuadrada", 0.025, -15, 0.2]]},   # el helicóptero de Velaria

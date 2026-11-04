@@ -85,7 +85,7 @@ en una línea.
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
-  `zombi_dependienta.gd` («¡OFERTAS!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
+  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
   no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.

@@ -249,7 +249,30 @@ func fotos_tiendas() -> void:
 	get_tree().quit()
 
 
-# La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡OFERTAS!», despierta a los
+# Con "-- --captura --edificio centro --grito": solo la foto del grito de la dependienta (foto_grito), en la sala de
+# venta de la primera tienda, sin penumbra; luego se cierra
+func probar_grito() -> void:
+	set_process(false)
+	luz.alternar()
+	for i in range(1, planta.sitios.size()):
+		var s: Dictionary = planta.sitios[i]
+		if s.get("tienda", "") == "" or s.tipo == "jefe":
+			continue
+		montar(i, 0, false)
+		for sala in s.apt.salas:
+			mapa.vistas[sala.id] = true
+		for z in get_tree().get_nodes_in_group("zombis"):
+			z.queue_free()
+		var venta: Dictionary = s.apt.salas[0]
+		johnny.position = Vector2(venta.c0 + venta.ancho / 2.0, venta.f0 + venta.fondo / 2.0) * 32.0
+		johnny.get_node("Camara").reset_smoothing()
+		await get_tree().create_timer(0.8).timeout
+		await foto_grito()
+		break
+	get_tree().quit()
+
+
+# La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡¡¡AAAHHH!!!», despierta a los
 # vigilantes dormidos de al lado y les mete prisa (captura-grito.png); luego, los nuevos de cerca (captura-nuevos.png)
 func foto_grito() -> void:
 	var dep := meter_zombi("dependienta", johnny.position + Vector2(120, 0))

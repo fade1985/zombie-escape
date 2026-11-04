@@ -6157,8 +6157,8 @@ msgid "Entendido"
 msgstr "Entendi"
 
 #: scripts/zombi_dependienta.gd
-msgid "¡OFERTAS!"
-msgstr "PROMOÇÃO!"
+msgid "¡¡¡AAAHHH!!!"
+msgstr "AAAHHH!!!"
 
 #: scripts/zombi_guardia.gd
 msgid "uf"
