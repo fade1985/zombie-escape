@@ -46,6 +46,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M88** Jefa modista: que se cambie de maniquí más a menudo para escaparse de Johnny. Hoy cada 7 s (4,5 s
   enfadada) y, al dejar de esconderse, un 25 % de las veces vuelve a cambiarse (50 % enfadada): `CAMBIOS` y
   `OTRA_VEZ` en `modista.gd`. Para más adelante.
+- **M89** Maniquíes vivos de la modista: que se muevan mejor, con animaciones de PixelLab. Ahora son muy estáticos
+  (usan el dibujo quieto del mueble y solo se bambolean sobre la peana: `maniqui_vivo.gd`). Para más adelante.
 
 
 ## Por limar
