@@ -273,7 +273,9 @@ func probar_grito() -> void:
 
 
 # La dependienta (zombi_dependienta.gd): dormida delante de Johnny, se despierta, grita «¡¡¡AAAHHH!!!», despierta a los
-# vigilantes dormidos de al lado y les mete prisa (captura-grito.png); luego, los nuevos de cerca (captura-nuevos.png)
+# vigilantes dormidos de al lado y les pone la barrera (M80, captura-grito.png); luego, los nuevos de cerca
+# (captura-nuevos.png): los golpes y el fuego no les quitan vida. Muerta ella, la barrera se va (captura-sin-barrera.png)
+# y ya se les puede herir
 func foto_grito() -> void:
 	var dep := meter_zombi("dependienta", johnny.position + Vector2(120, 0))
 	dep.dormido = true
@@ -293,12 +295,26 @@ func foto_grito() -> void:
 		await get_tree().create_timer(0.1).timeout
 	await get_tree().create_timer(0.15).timeout
 	Captura.foto("captura-grito.png")
-	print("Grito: estado %s | despiertos %d/3 | prisa %s | velocidad máxima %s" % [dep.estado,
-		otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return snappedf(o.prisa, 0.1)),
-		otros.map(func(o): return o.agente.max_speed)])
+	print("Grito: estado %s | despiertos %d/3 | con barrera %s (esperado: 3 true) | ella con barrera %s (esperado false)" % [
+		dep.estado, otros.filter(func(o): return not o.dormido).size(), otros.map(func(o): return o.con_barrera()),
+		dep.con_barrera()])
 	await get_tree().create_timer(2.0).timeout
 	print("Dependienta a %d de Johnny (se aparta) | estado %s" % [dep.global_position.distance_to(johnny.global_position), dep.estado])
+	# M80: con la barrera, ni un golpe ni el fuego les quitan vida, y una bala rebota en su burbuja
+	var v0: Zombi = otros[0]
+	var antes: int = v0.vida
+	v0.recibir_golpe(15, Vector2(200, 0))
+	v0.herir(10.0)
+	print("Barrera: vida %d → %d tras un golpe de 15 y 10 de fuego (esperado: igual) | la burbuja para una bala: %s (esperado true)" % [
+		antes, v0.vida, v0.escudo_toca(v0.centro_burbuja() + Vector2(v0.radio_burbuja() - 4.0, 0))])
 	Captura.foto("captura-nuevos.png")
+	dep.recibir_golpe(999, Vector2(100, 0))
+	await get_tree().create_timer(0.5).timeout
+	antes = v0.vida
+	v0.recibir_golpe(5, Vector2.ZERO)
+	print("Muerta la dependienta: con barrera %s (esperado: 3 false) | vida %d → %d tras un golpe de 5 (esperado: 5 menos)" % [
+		otros.map(func(o): return o.con_barrera()), antes, v0.vida])
+	Captura.foto("captura-sin-barrera.png")
 	for z in get_tree().get_nodes_in_group("zombis"):
 		z.queue_free()
 	await get_tree().process_frame

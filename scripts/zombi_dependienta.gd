@@ -1,14 +1,13 @@
 # La dependienta del centro comercial (parte 4 del plan, docs/historial/CENTRO_COMERCIAL.md): flojita (vida 20) pero
 # rápida, y lo peor es su grito:
-#   - Al despertar grita «¡¡¡AAAHHH!!!»: despierta a toda la tienda y durante 5 s todos los zombis van un 30 % más
-#     rápido (zombi.gd, meter_prisa).
+#   - Al despertar grita «¡¡¡AAAHHH!!!»: despierta a toda la tienda y les pone a todos los zombis (a ella no) una
+#     barrera que no se les quita hasta que ella muere (M80, zombi.gd, meter_barrera; antes les metía prisa 5 s).
 #   - Luego no se acerca: se aparta de Johnny, guardando las distancias, y vuelve a gritar cada 8 s.
 #   - Si la acorralas, te chilla en la cara (un golpe flojo, 6).
 # El grito usa la animación de ataque (el chillido con las manos en la boca); no tiene zarpazo.
 extends Zombi
 
 const GRITO_CADA := 8.0     # cada cuánto vuelve a gritar
-const PRISA_GRITO := 5.0    # lo que dura la prisa de los demás
 const CERCA := 200.0        # más cerca que esto, se aparta de Johnny
 const LEJOS := 300.0        # más lejos que esto, se acerca (para que no se pierda de vista)
 
@@ -47,7 +46,8 @@ func andar(delta: float, johnny: Node2D) -> void:
 	mirar_hacia(hacia)
 
 
-# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos los de la tienda y les mete prisa (a ella también)
+# «¡¡¡AAAHHH!!!» (M79; antes, «¡OFERTAS!»): despierta a todos los de la tienda y les pone la barrera (M80: a ella no,
+# ni a las otras dependientas, que si no no habría manera de quitarla)
 func gritar(johnny: Node2D) -> void:
 	estado = "grito"
 	grito_t = GRITO_CADA
@@ -59,8 +59,8 @@ func gritar(johnny: Node2D) -> void:
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro.get("dormido"):
 			otro.despertar()
-		if otro.has_method("meter_prisa"):
-			otro.meter_prisa(PRISA_GRITO)
+		if otro.has_method("meter_barrera") and otro.get_script() != get_script():
+			otro.meter_barrera(self)
 
 
 # Mientras grita se queda plantada (si se moviera sin mover las piernas, parecería que flota)

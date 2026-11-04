@@ -23,7 +23,6 @@ const OIDO := 430.0        # dormido, a qué distancia oye un disparo (aunque ha
 const CORRILLO := 140.0    # al despertar, despierta también a los que tiene a esta distancia
 const ESPABILAR := 0.5     # lo que tarda en echar a andar después de despertar
 const DIRS := ["e", "se", "s", "so", "o", "no", "n", "ne"]
-const PRISA := 1.3         # con el grito de la dependienta, todos van un 30 % más rápido
 const CAPA_ZOMBIS := 3     # su capa de choque, la 3 de project.godot
 
 @export var vida_max := 30
@@ -76,7 +75,13 @@ var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (p
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
 var electrico := 0.0       # le ha dado un rayo hace poco (ArmasCreadas.aturdir): para Mezcla explosiva
 var lio_angulo := 0.0
-var prisa := 0.0           # segundos que le quedan con prisa (el grito de la dependienta, zombi_dependienta.gd)
+# M80: la barrera del grito de la dependienta (zombi_dependienta.gd): mientras siga viva alguna de las que le han
+# gritado ("barrera"), no hay quien le haga daño: las balas rebotan en su burbuja y los golpes, el fuego y los charcos
+# no le quitan vida (antes, el grito les metía prisa)
+var barrera: Array = []
+var capas_barrera: Array[Sprite2D] = []   # las tres capas de la burbuja (detrás, delante y brillo), al ponérsela
+var barrera_k := 0.0       # lo subida que está la burbuja (0 = no hay, 1 = entera)
+var destello_barrera := 0.0   # lo que brilla porque le acaban de dar (de 1 a 0)
 # La diana de la sala de pruebas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
 # acto), no da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números
 # de daño los pone la sala, más grandes
@@ -92,6 +97,13 @@ const DESTELLO := preload("res://escenas/personajes/destello.gdshader")
 const BARRA := preload("res://scripts/barra_zombi.gd")
 const CHARCO := preload("res://escenas/armas/charco.tscn")
 const BOOM := preload("res://escenas/armas/explosion.tscn")   # la de Mezcla explosiva
+# M80: la burbuja de la barrera: la cúpula de cristal del científico jefe pintada en dorado
+# (tools/pixelfx/escudo-barrera.py), tres hojas de 8 × 6 fotogramas de 80 px a 20 por segundo
+const BARRERA := [preload("res://assets/sprites/escudo-barrera-detras.png"),
+	preload("res://assets/sprites/escudo-barrera-delante.png"), preload("res://assets/sprites/escudo-barrera-brillo.png")]
+const BARRERA_CENTRO := Vector2(40, 38)   # el centro de la esfera en cada fotograma (en píxeles del dibujo)
+const BARRERA_RADIO := 31.0               # lo que mide la esfera en el dibujo (de radio)
+const BARRERA_SUBE := 0.3                 # lo que tarda en subir (y en bajar)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -156,10 +168,8 @@ func _physics_process(delta: float) -> void:
 	if estado == "muerto":
 		return
 	tiempo += delta
-	if prisa > 0.0:
-		prisa -= delta
-		if prisa <= 0.0:
-			agente.max_speed = velocidad
+	if not capas_barrera.is_empty():
+		animar_barrera(delta)
 	sufrir(delta)
 	if estado == "muerto":
 		return
@@ -281,8 +291,6 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	rapidez *= Estados.frenado(estados)   # el frío de la cámara
 	if con_acido():
 		rapidez *= 1.0 - Mejoras.de_johnny(get_tree(), "pegajoso")   # (Pegajoso: el ácido los frena)
-	if prisa > 0.0:
-		rapidez *= PRISA
 	pedir_velocidad(paso.normalized() * rapidez)
 	mirar_hacia(paso)
 	poner_animacion("andar")
@@ -310,10 +318,72 @@ func despertar() -> void:
 			otro.despertar()
 
 
-# El grito de la dependienta: unos segundos con prisa (el agente también tiene que dejarle ir más rápido)
-func meter_prisa(segundos: float) -> void:
-	prisa = maxf(prisa, segundos)
-	agente.max_speed = velocidad * PRISA
+# M80: el grito de la dependienta "de" le pone la barrera (la burbuja se prepara la primera vez: lo de detrás, por
+# debajo de su dibujo; lo de delante y el brillo, encima)
+func meter_barrera(de: Node) -> void:
+	if de not in barrera:
+		barrera.append(de)
+	if not capas_barrera.is_empty():
+		return
+	for i in 3:
+		var capa := Sprite2D.new()
+		capa.texture = BARRERA[i]
+		capa.hframes = 8
+		capa.vframes = 6
+		capa.offset = Vector2(40, 40) - BARRERA_CENTRO
+		capa.position = Vector2(0, -altura * 0.45)
+		capa.visible = false
+		if i > 0:
+			capa.z_index = 1
+		if i == 2:
+			var suma := CanvasItemMaterial.new()
+			suma.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			capa.material = suma
+		add_child(capa)
+		move_child(capa, sprite.get_index() + (0 if i == 0 else i))
+		capas_barrera.append(capa)
+
+
+# M80: ¿tiene la barrera? Mientras quede viva alguna de las dependientas que le han gritado
+func con_barrera() -> bool:
+	barrera = barrera.filter(func(d): return is_instance_valid(d) and d.estado != "muerto")
+	return not barrera.is_empty() and estado != "muerto"
+
+
+# M80: la burbuja sube al ponérsela y baja al quitársela (al morir la última dependienta), y brilla al darle
+func animar_barrera(delta: float) -> void:
+	barrera_k = clampf(barrera_k + delta / BARRERA_SUBE * (1.0 if con_barrera() else -1.0), 0.0, 1.0)
+	destello_barrera = maxf(0.0, destello_barrera - delta * 4.0)
+	var cuadro := int(tiempo * 20.0) % 48
+	for capa in capas_barrera:
+		capa.visible = barrera_k > 0.0
+		capa.scale = Vector2.ONE * radio_burbuja() / BARRERA_RADIO
+		capa.frame = cuadro
+	capas_barrera[1].modulate = Color.WHITE.lerp(Color(1.5, 1.4, 1.1), destello_barrera)
+	capas_barrera[2].modulate = Color.WHITE * (1.0 + 2.0 * destello_barrera)
+
+
+# M80: la burbuja, tal como se ve (bala.gd la mira para que la bala rebote en su borde, como en la del bombero)
+func centro_burbuja() -> Vector2:
+	return global_position + Vector2(0, -altura * 0.45)
+
+
+func radio_burbuja() -> float:
+	return altura * 0.62 * barrera_k
+
+
+func escudo_toca(p: Vector2) -> bool:
+	return barrera_k > 0.5 and con_barrera() and p.distance_to(centro_burbuja()) < radio_burbuja()
+
+
+# Los colores del rebote de las balas en la burbuja (en dorado), de blanco a oscuro como pide impacto.gd
+func colores_escudo() -> Array:
+	return [Color.WHITE, Color("#fff8dc"), Color("#ffd23f"), Color("#e0aa2a"), Color("#a87818")]
+
+
+# Una bala ha rebotado en su burbuja (bala.gd, rebotar): la burbuja brilla
+func onda_en(_p: Vector2) -> void:
+	destello_barrera = 1.0
 
 
 # Los disparos se oyen (las armas de cuerpo a cuerpo son silenciosas): lo llama Johnny al disparar, y también el policía
@@ -391,6 +461,10 @@ func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if dormido:
 		despertar()
 		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
+	if con_barrera():   # M80: con la barrera, el golpe le empuja un poco pero no le quita vida
+		velocity = fuerza * empuje * 0.5
+		destello_barrera = 1.0
+		return
 	cantidad = ArmasCreadas.con_acido(self, cantidad)
 	vida -= cantidad
 	herido.emit(cantidad, true)
@@ -524,6 +598,8 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 		return
 	if dormido:
 		despertar()
+	if con_barrera():   # M80: con la barrera, ni el fuego ni los charcos le quitan vida
+		return
 	var n := ArmasCreadas.con_acido(self, maxi(1, roundi(cantidad)))
 	vida -= n
 	herido.emit(n, false)

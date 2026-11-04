@@ -81,11 +81,11 @@ en una línea.
 
 **Zombis, jefes y lo que hacen daño**
 - `zombi.gd`: la base de todos (perseguir con navegación, zarpazos, arder y el ácido con su shader, `contagiar`,
-  `meter_prisa`, la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
+  `meter_barrera`, la burbuja dorada del grito de la dependienta (M80), la `diana` de la sala de armas, la señal `herido`). Normal, lento, rápido y vigilante solo cambian
   números en su `.tscn`. Heredan: `zombi_explosivo.gd`, `zombi_tentaculos.gd` (el latigazo: su hoja de PixelLab
   va al ritmo del aviso, `IMPACTO`; el tentáculo que pega le sale del hombro, `HOMBRO`, medido en su hoja en cada
   dirección; de espaldas va por delante del dibujo, en el nodo `delante`), `zombi_venenoso.gd`,
-  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!») y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
+  `zombi_dependienta.gd` (su grito, «¡¡¡AAAHHH!!!», pone la barrera a los demás hasta que ella muere) y `zombi_guardia.gd` (el guardia de la tarjeta: ronda, silbato, huye).
   El cuerpo de choque de un zombi no puede ser mucho mayor que el radio de la navegación (18, `mapa.hornear`): si no,
   no cabe por los caminos que le salen. Por eso el del venenoso mide 18 aunque su `radio`, el de los golpes, sea 30.
   `barra_zombi.gd`: su barrita de vida. `sombra.gd`: la sombra de los pies de todos.
