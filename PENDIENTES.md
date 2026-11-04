@@ -23,6 +23,8 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M80** Zombi dependienta: su grito, en vez de meter prisa (hoy despierta la tienda y los zombis van un 30 % más
   rápido durante 5 s, `meter_prisa`), pone a los zombis una barrera de invulnerabilidad que no se quita hasta que
   ella muere. Para más adelante.
+- **M81** Centro comercial: en cada tienda, dentro del almacén, un baño para los empleados con un botiquín (en su
+  armarito, como los de los apartamentos). Para más adelante (va bien con la M77).
 
 
 ## Por limar
