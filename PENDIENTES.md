@@ -35,9 +35,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M86** Centro comercial: las páginas del dosier las sueltan también científicos muertos de Velaria (con su bata,
   como en los apartamentos), y se borran los que hay ahora (el jefe de seguridad y la secretaria, dibujados con formas:
   `cientifico.gd`). Para más adelante.
-- **M87** Rescate del técnico (centro comercial, arreglar el cable a oscuras): que dure un minuto y sea muchísimo más
-  intenso, con muchos más zombis. Hoy dura 90 s, con 24 zombis a la vez como mucho y grupos de 2 a 5 cada 6 s (al
-  final, cada 3,5 s): `DURA`, `TOPE`, `CADA` y `GRUPO` en `averia.gd`. Para más adelante.
 - **M88** Jefa modista: que se cambie de maniquí más a menudo para escaparse de Johnny. Hoy cada 7 s (4,5 s
   enfadada) y, al dejar de esconderse, un 25 % de las veces vuelve a cambiarse (50 % enfadada): `CAMBIOS` y
   `OTRA_VEZ` en `modista.gd`. Para más adelante.
