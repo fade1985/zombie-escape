@@ -631,7 +631,45 @@ const SALAS := {
 		"cuantos": [7, 10],
 		"iguales": {"jewelcase": 4, "jewelcabinet": 3},
 		"islas": {"muebles": ["jewelcase"], "fila": 2, "entre": 40, "cada": 150},
+		# M77: la joyería fija (Tienda.PLANOS). Con la puerta abajo: vitrinas altas delante de la trastienda y de la cámara
+		# acorazada (sin tapar su puerta), la caja a la derecha, un banco a la izquierda y dos filas de tres vitrinas a cada
+		# lado del pasillo de la entrada. Volteada, las vitrinas altas en la pared de la entrada y las filas, más arriba, para
+		# dejar sitio delante de la puerta de la cámara
+		"colocados": {
+			"abajo": [
+				["jewelcabinet", 2.0, "libre", 0.5625], ["jewelcabinet", 5.5, "libre", 0.5625],
+				["jewelcabinet", 21.0, "libre", 0.5625], ["jewelcabinet", 28.0, "libre", 0.5625],
+				["checkout", 7.5, "derecha"], ["bench", 7.5, "izquierda"],
+				["jewelcase", 2.75, "libre", 5.0], ["jewelcase", 6.5, "libre", 5.0], ["jewelcase", 10.25, "libre", 5.0],
+				["jewelcase", 18.0, "libre", 5.0], ["jewelcase", 21.75, "libre", 5.0], ["jewelcase", 25.5, "libre", 5.0],
+				["jewelcase", 2.75, "libre", 10.5], ["jewelcase", 6.5, "libre", 10.5], ["jewelcase", 10.25, "libre", 10.5],
+				["jewelcase", 18.0, "libre", 10.5], ["jewelcase", 21.75, "libre", 10.5], ["jewelcase", 25.5, "libre", 10.5],
+			],
+			"arriba": [
+				["jewelcabinet", 2.0], ["jewelcabinet", 5.0], ["jewelcabinet", 8.0], ["jewelcabinet", 11.0],
+				["jewelcabinet", 19.0], ["jewelcabinet", 22.0], ["jewelcabinet", 25.0], ["jewelcabinet", 28.0],
+				["checkout", 6.5, "derecha"], ["bench", 6.5, "izquierda"],
+				["jewelcase", 2.75, "libre", 4.5], ["jewelcase", 6.5, "libre", 4.5], ["jewelcase", 10.25, "libre", 4.5],
+				["jewelcase", 18.0, "libre", 4.5], ["jewelcase", 21.75, "libre", 4.5], ["jewelcase", 25.5, "libre", 4.5],
+				["jewelcase", 2.75, "libre", 9.0], ["jewelcase", 6.5, "libre", 9.0], ["jewelcase", 10.25, "libre", 9.0],
+				["jewelcase", 18.0, "libre", 9.0], ["jewelcase", 21.75, "libre", 9.0], ["jewelcase", 25.5, "libre", 9.0],
+			],
+		},
 	},
+	# la trastienda, la cámara acorazada (las cajas fuertes en el fondo y el centro libre, para la vitrina del premio:
+	# joyeria.gd) y el aseo de empleados (M81) de la joyería fija (M77)
+	"trastienda-joyeria": {"colocados": {
+		"abajo": [["lockers", 1.75], ["metalshelf", 5.0], ["metalshelf", 8.25], ["workbench", 4.5, "derecha"]],
+		"arriba": [["lockers", 1.75], ["metalshelf", 8.25], ["workbench", 4.5, "derecha"], ["pallet", 4.5, "abajo"]],
+	}},
+	"acorazada-joyeria": {"colocados": {
+		"abajo": [["safe", 1.5], ["safe", 3.5], ["safe", 7.5], ["safe", 9.5]],
+		"arriba": [["safe", 1.25], ["safe", 3.0], ["safe", 8.0], ["safe", 9.75]],
+	}},
+	"bano-joyeria": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
 	"trastienda": {
 		"muebles": ["metalshelf", "workbench", "lockers", "pallet"],
 		"cuantos": [2, 4],

@@ -277,6 +277,41 @@ const PLANOS := {
 		"################EE################",
 		"################EE################",
 	],
+	# la joyería: al fondo, el aseo de empleados, la trastienda (el aseo se abre a ella) y la cámara acorazada, con su
+	# única puerta a la sala de venta (Planta la vuelve de acero y cerrada: joyeria.gd). No le cabe un trozo de venta hasta
+	# el fondo
+	"joyeria": [
+		"##################################",
+		"##################################",
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##BBBBBBB ZZZZZZZZZZ#XXXXXXXXXXX##",   # no-tr
+		"##BBBBBBB ZZZZZZZZZZ#XXXXXXXXXXX##",   # no-tr
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##BBBBBBB#ZZZZZZZZZZ#XXXXXXXXXXX##",
+		"##############  ##########  ######",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"################EE################",
+		"################EE################",
+	],
 }
 
 static var rng := RandomNumberGenerator.new()
