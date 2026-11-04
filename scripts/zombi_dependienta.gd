@@ -15,8 +15,9 @@ const LEJOS := 300.0        # más lejos que esto, se acerca (para que no se pie
 var grito_t := 0.0          # lo que le falta para el siguiente grito (empieza gritando)
 
 
-# Al despertar no se queda pasmada como los demás: grita enseguida (en andar, que ya le toca)
+# Al despertar no se queda pasmada como los demás ni suelta el "!": grita enseguida (en andar, que ya le toca)
 func despertar() -> void:
+	exclamacion = false
 	var estaba := dormido
 	super()
 	if estaba:
@@ -53,8 +54,8 @@ func gritar(johnny: Node2D) -> void:
 	mirar_hacia(johnny.global_position - global_position)
 	poner_animacion("ataque", true)
 	Sonido.tocar("chillido")
-	# grande y encima de ella, como el «¡¡¡LA LLAVE!!!» de los apartamentos (partida.gd, gran_aviso), pero en rojo
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Color("#ff5a4f"), 32, true, 1.4)
+	# grande, amarillo y encima de ella, como el «¡¡¡LA LLAVE!!!» de los apartamentos (partida.gd, gran_aviso)
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Tema.AMARILLO, 32, true, 1.4)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro.get("dormido"):
 			otro.despertar()

@@ -52,6 +52,7 @@ var momento_zarpazo := 0.429   # en qué punto de la animación de ataque llega 
 var dormido := false
 var zona := -1
 var espabilando := 0.0     # tiempo que le queda quieto después de despertar
+var exclamacion := true     # suelta el "!" al despertar (la dependienta no: lo suyo es su grito)
 var apretado := false      # pasando por una puerta abierta: ni se aparta de los demás ni choca con ellos (pedir_velocidad)
 
 var estados := {}          # lo que le han puesto los charcos (estados.gd)
@@ -302,7 +303,8 @@ func despertar() -> void:
 		return
 	dormido = false
 	espabilando = ESPABILAR
-	Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
+	if exclamacion:
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro != self and otro.get("dormido") and distancia_a(otro) < CORRILLO:
 			otro.despertar()
