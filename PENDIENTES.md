@@ -15,6 +15,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 
 - **M77** Centro comercial fijo, como los apartamentos: la galería y cada tienda, siempre iguales y con lo de dentro
   puesto a mano, en vez de generarse al azar (hoy `tienda.gd` genera cada tienda). Para más adelante.
+- **M78** Botiquines de los apartamentos: uno solo por apartamento en vez de dos, y en un baño elegido al azar (no
+  siempre el mismo). Hoy los armaritos de la planta van por turnos (un botiquín y luego dos de vendas:
+  `armaritos` en `planta.gd`). Para más adelante.
 
 
 ## Por limar
