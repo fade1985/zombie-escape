@@ -25,14 +25,15 @@ env:
 
 jobs:
   publicar:
-    runs-on: ubuntu-latest
+    # Ubuntu fijo, para que no cambie solo (GitHub pasa ubuntu-latest a la 26 desde el 19 oct 2026)
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Godot y sus plantillas de web se guardan entre una vez y otra (las plantillas vienen en un archivo de 1,2 GB)
       - name: Godot guardado de otras veces
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/godot
           key: godot-${{ env.GODOT }}-web
