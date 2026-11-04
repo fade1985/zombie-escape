@@ -11,8 +11,8 @@ class_name Tienda
 const CASILLA := 32
 const BORDE := 2           # grosor del muro de fuera, en casillas
 
-# Cada tipo de tienda: su nombre (el del letrero y el de la sala de venta) y sus habitaciones de dentro (las de verdad
-# salen de su plano; con "bano" en la lista, Planta la prefiere para esconder a un superviviente en el aseo).
+# Cada tipo de tienda: su nombre (el del letrero y el de la sala de venta) y sus habitaciones de dentro (solo para
+# saberlas: las de verdad, con el aseo de empleados de todas, salen de su plano).
 # "neon" es lo que pone el letrero de neón de encima de su puerta (neon.gd), con su color; su escaparate, el sprite
 # escaparate-<tipo>.
 # Los textos (el nombre y el neón, y los de NOMBRES) están en español, en líneas con la marca de traducir al final

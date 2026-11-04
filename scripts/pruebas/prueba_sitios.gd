@@ -553,6 +553,26 @@ func foto_entera(sitio: Dictionary, nombre: String) -> void:
 	encuadrar(sitio)
 
 
+# Con "--captura --edificio centro --escondites" (M81): en 200 plantas sorteadas, sin que le toque su tienda, en qué tienda
+# y en qué sala se esconde el superviviente (esperado: en el aseo de cualquier tienda, no solo de las que lo tenían antes).
+# Luego se cierra
+func probar_escondites() -> void:
+	var cuenta := {}
+	var fija: Dictionary = Planta.tienda_fija
+	Planta.tienda_fija = {}
+	for i in 200:
+		Planta.semilla = 5000 + i
+		var num := 1 + i % 4
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		var s: Dictionary = p.get("superviviente", {})
+		var k: String = "(ninguno)" if s.is_empty() else "%s/%s" % [p.sitios[s.sitio].tienda, p.sitios[s.sitio].apt.salas[s.sala].uso]
+		cuenta[k] = cuenta.get(k, 0) + 1
+	Planta.semilla = 0
+	Planta.tienda_fija = fija
+	print("Escondites del superviviente: %s" % cuenta)
+	get_tree().quit()
+
+
 # Con "--captura --edificio centro --galeria" (M77): la galería de las cuatro primeras plantas, entera y sin penumbra,
 # con sus muebles puestos a mano (Catalogo.SALAS["galeria"].colocados). De cada una dice cuántos muebles tiene (esperado:
 # los puestos a mano), qué hay en la pared de arriba (puertas, escaparates) y saca captura-galeria-<planta>.png

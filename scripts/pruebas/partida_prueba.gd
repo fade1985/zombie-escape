@@ -165,6 +165,8 @@
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
 #   --tiendas-fijas     (con --edificio centro; --tipo X, solo esa) las tiendas fijas (M77), con la puerta abajo y
 #                       arriba: su plano con letras, sus muebles, el aseo de empleados y la tienda entera [prueba_sitios.gd]
+#   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
+#                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
 #                       puestos a mano (M77)                                                  [prueba_sitios.gd]
 #   --zombis-tienda     (con --edificio centro) cuántos zombis hay en cada tienda y en cada sala   [prueba_sitios.gd]
@@ -599,6 +601,9 @@ func empezar_prueba() -> void:
 	elif "--piso" in args:
 		set_process(false)   # sin la prueba larga
 		probar_piso()
+	elif "--escondites" in args:
+		set_process(false)   # sin la prueba larga
+		probar_escondites()
 	elif "--galeria" in args:
 		set_process(false)   # sin la prueba larga
 		probar_galeria()

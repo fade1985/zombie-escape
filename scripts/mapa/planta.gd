@@ -239,13 +239,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		if nombre_puerta(num, h.letra) == "4ºB" and not tiendas:
 			de_jefa = h
 	# en el centro comercial, cada puerta una tienda distinta; la primera tienda normal, la del superviviente si le
-	# toca esta planta (tienda_fija) o, si no, una de las que tienen aseo
+	# toca esta planta (tienda_fija) o, si no, cualquiera (desde la M81 todas tienen su aseo de empleados)
 	var tipos: Array = Tienda.TIPOS.keys().filter(func(t): return t != "joyeria")   # (la joyería no se sortea)
 	tipos.shuffle()
 	var tipo_de := {}
-	var con_aseo: Array = tipos.filter(func(t): return "bano" in Tienda.TIPOS[t].salas)
 	var fija: Dictionary = tienda_fija if tiendas and tienda_fija.get("planta", -1) == num else {}
-	var primera: String = fija.tienda if not fija.is_empty() else con_aseo[0]
+	var primera: String = fija.tienda if not fija.is_empty() else tipos[0]
 	for h in libres.filter(func(h): return h != de_jefa) + [de_jefa]:
 		if tipo_de.is_empty():
 			tipo_de[h.letra] = primera
