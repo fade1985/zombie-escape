@@ -60,35 +60,99 @@
       "dirs": {
         "south": {
           "row": 1,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "south-east": {
           "row": 2,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "east": {
           "row": 3,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "north-east": {
           "row": 4,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "north": {
           "row": 5,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "north-west": {
           "row": 6,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "west": {
           "row": 7,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         },
         "south-west": {
           "row": 8,
-          "frames": 20
+          "frames": 6,
+          "durations": [
+            8,
+            6,
+            5,
+            1,
+            4,
+            6
+          ]
         }
       }
     },

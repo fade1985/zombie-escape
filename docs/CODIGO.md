@@ -606,7 +606,10 @@ en una línea.
   `andar_arma.py`, `ritmo_andar.py`, `juntar_piernas.py`, `zapato_negro.py`, `hoja_lanza_acido.py` (la del lanza
   ácido sale de la del lanzallamas), `hoja_lanza_rayos.py` (la del lanza rayos, blanco y gris: monta con `arma.py` y
   quita el parpadeo de espaldas, que confundía el arma con unos ojos; `PYTHONPATH=tools py tools/hoja_lanza_rayos.py`) y
-  `cara.py` (las skins: `py tools/cara.py <skin> [arma]`).
+  `cara.py` (las skins: `py tools/cara.py <skin> [arma]`). Al final de todos, `respiracion.py`: rehace el reposo de
+  todas las hojas de Johnny y sus skins (solo sube el pecho, la cabeza quieta; dos respiraciones en 6 s, con el
+  parpadeo) y conserva las puntas del lanza ácido. Va después porque los otros esperan el reposo viejo de 20 dibujos:
+  si se rehace una hoja con ellos, se vuelve a pasar `py tools/respiracion.py` (las que ya están hechas no las toca).
 - **La salida de incendios:** `puerta_salida.py` dibuja a mano, sin PixelLab, la puerta roja de las escaleras y el
   cartel EXIT (apagado y encendido): `py tools/puerta_salida.py`.
 - **Bocetos para pedir muebles a PixelLab:** `guias_*.py`, `guia_cientifico.py`, `banco_mantenimiento.py`,
