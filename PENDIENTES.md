@@ -37,6 +37,9 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   con el presupuesto de antes. Para más adelante.
 - **M85** Jefe mascota (la Juguetería): durante el combate salen sin parar zombis jóvenes de los que corren
   (el rápido, «El crío» del bestiario). En `mascota.gd`. Para más adelante.
+- **M86** Centro comercial: las páginas del dosier las sueltan también científicos muertos de Velaria (con su bata,
+  como en los apartamentos), y se borran los que hay ahora (el jefe de seguridad y la secretaria, dibujados con formas:
+  `cientifico.gd`). Para más adelante.
 
 
 ## Por limar
