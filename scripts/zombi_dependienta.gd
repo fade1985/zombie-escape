@@ -57,10 +57,11 @@ func gritar(johnny: Node2D) -> void:
 	# grande, amarillo y encima de ella, como el «¡¡¡LA LLAVE!!!» de los apartamentos (partida.gd, gran_aviso)
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(0, -110), Idioma.t("¡¡¡AAAHHH!!!"), Tema.AMARILLO, 32, true, 1.4)
 	for otro in get_tree().get_nodes_in_group("zombis"):
-		if otro.get("dormido"):
-			otro.despertar()
+		# (primero la barrera y luego despertarle: así, con la burbuja, no suelta el "!")
 		if otro.has_method("meter_barrera") and otro.get_script() != get_script():
 			otro.meter_barrera(self)
+		if otro.get("dormido"):
+			otro.despertar()
 
 
 # Mientras grita se queda plantada (si se moviera sin mover las piernas, parecería que flota)

@@ -82,6 +82,7 @@ var barrera: Array = []
 var capas_barrera: Array[Sprite2D] = []   # las tres capas de la burbuja (detrás, delante y brillo), al ponérsela
 var barrera_k := 0.0       # lo subida que está la burbuja (0 = no hay, 1 = entera)
 var destello_barrera := 0.0   # lo que brilla porque le acaban de dar (de 1 a 0)
+var exclamacion_suelta: Label   # el "!" que soltó al despertar (M80: si luego le ponen la barrera, se quita)
 # La diana de la sala de pruebas (sala_armas.gd): no pierde vida (el daño se cuenta, pero se le devuelve en el
 # acto), no da zarpazos y no se va de su sitio, "casa" (si un golpe la echa para atrás, vuelve andando). Sus números
 # de daño los pone la sala, más grandes
@@ -313,8 +314,8 @@ func despertar() -> void:
 		return
 	dormido = false
 	espabilando = ESPABILAR
-	if exclamacion:
-		Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
+	if exclamacion and not con_barrera():   # (M80: con la barrera puesta, sin el "!": ya se ve la burbuja)
+		exclamacion_suelta = Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("ffd23f"), 26)
 	for otro in get_tree().get_nodes_in_group("zombis"):
 		if otro != self and otro.get("dormido") and distancia_a(otro) < CORRILLO:
 			otro.despertar()
@@ -325,6 +326,9 @@ func despertar() -> void:
 func meter_barrera(de: Node) -> void:
 	if de not in barrera:
 		barrera.append(de)
+	# (si se acababa de despertar, fuera su "!": con la burbuja ya se ve que viene)
+	if is_instance_valid(exclamacion_suelta):
+		exclamacion_suelta.queue_free()
 	if not capas_barrera.is_empty():
 		return
 	for i in 3:
@@ -799,7 +803,7 @@ static func numero_golpe(sala: Node, donde: Vector2, cantidad: int) -> void:
 # cualquier sitio sin tener un zombi, escribiendo Zombi.texto_flotante(...). "donde" es la esquina de arriba a la
 # izquierda del texto, o su medio si es "centrado"; "dura" son los segundos que sube (0,6 en los números de daño)
 static func texto_flotante(sala: Node, donde: Vector2, texto: String, color := Color.WHITE, tamano := 18,
-		centrado := false, dura := 0.6) -> void:
+		centrado := false, dura := 0.6) -> Label:
 	var etiqueta := Label.new()
 	etiqueta.text = texto
 	etiqueta.theme = Tema.crear()
@@ -815,6 +819,7 @@ static func texto_flotante(sala: Node, donde: Vector2, texto: String, color := C
 	tween.tween_property(etiqueta, "position:y", etiqueta.position.y - 30.0, dura).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(etiqueta, "modulate:a", 0.0, dura).set_delay(dura * 0.25 / 0.6)
 	tween.tween_callback(etiqueta.queue_free)
+	return etiqueta
 
 
 func _al_acabar_animacion() -> void:
