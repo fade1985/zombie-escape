@@ -87,7 +87,6 @@ const EXTRA_POR_SALA := 2
 # Y en las tiendas del centro comercial (M84: con el presupuesto solo salían unos 9 por tienda; así, unos 27, como un
 # piso): en la sala de venta, en los baños y en las demás salas (almacén, cocina, rebotica...)
 const EXTRA_TIENDA := {"tienda": 14, "bano": 1, "otra": 3}
-const ARMARITO_CADA := 3          # en cada planta, uno de cada tantos armaritos lleva un botiquín; los demás, vendas (M72: antes 2, y por piso)
 const LEJOS_PUERTA := 340.0       # ningún zombi espera a menos de esto de la puerta de entrada
 
 static var rng := RandomNumberGenerator.new()
@@ -393,12 +392,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		var puertas: Array = bano.puertas.filter(func(p): return p.a == 0 or p.b == 0) if not de_su_tienda.is_empty() else bano.puertas
 		planta.superviviente = {"sitio": de_superv, "sala": bano.id, "puerta": puertas[0],
 			"pos": bano.centro if en == Vector2.INF else en}
-	var armaritos_planta := 0   # los armaritos ya puestos en la planta (para repartir lo que llevan: armaritos())
 	for orden in normales.size():
 		var sitio: Dictionary = planta.sitios[normales[orden]]
 		sitio.zombis = horda(sitio, orden + 1, num, planta.superviviente.sala if normales[orden] == de_superv and not planta.superviviente.is_empty() else -1)
-		sitio.armaritos = armaritos(sitio, armaritos_planta)
-		armaritos_planta += sitio.armaritos.size()
+		sitio.armaritos = armaritos(sitio)
 
 	# Con tarjeta, no hay llave en el suelo: la lleva el guardia de seguridad, que ronda el pasillo
 	if ed.cerrojo == "tarjeta":
@@ -663,11 +660,11 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 
 
 # Un armarito con un botiquín colgado en la pared de arriba de cada baño (Armarito en src/props.js del JS): al
-# abrirlo suelta lo que tiene dentro ("dentro"): contando por toda la planta ("antes", los ya puestos en ella), un
-# botiquín y luego dos de vendas, y así (el dueño, 27 oct: con un botiquín en cada baño salían unos 22 por partida; M72:
-# antes, en cada piso, el primero un botiquín y el siguiente unas vendas: era demasiado fácil). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
+# abrirlo suelta lo que tiene dentro ("dentro"). M78: un solo botiquín por apartamento, en uno de sus baños elegido al
+# azar, y vendas en los demás (antes, contando por toda la planta, un botiquín y luego dos de vendas, así que el
+# botiquín caía siempre en los mismos baños). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
 # lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido, dentro}
-static func armaritos(sitio: Dictionary, antes := 0) -> Array:
+static func armaritos(sitio: Dictionary) -> Array:
 	var apt: Dictionary = sitio.apt
 	var lista := []
 	for s in apt.salas.filter(func(s): return s.uso == "bano"):
@@ -690,8 +687,11 @@ static func armaritos(sitio: Dictionary, antes := 0) -> Array:
 			if mejor.is_empty() or nota < mejor.nota:
 				mejor = {"x": x, "y": float(s.f0 * CASILLA), "alcance": alcance, "cogido": false, "nota": nota}
 		if not mejor.is_empty():
-			mejor.dentro = "botiquin" if (antes + lista.size()) % ARMARITO_CADA == 0 else "vendas"
+			mejor.dentro = "vendas"
 			lista.append(mejor)
+	# M78: el botiquín, en un armarito al azar (con la semilla de la planta, así que la misma planta lo pone igual)
+	if not lista.is_empty():
+		lista[rng.randi() % lista.size()].dentro = "botiquin"
 	return lista
 
 

@@ -163,7 +163,7 @@
 #   --zombis-sala       cuántos zombis hay en cada habitación de los apartamentos, y que no se amontonen [prueba_sitios.gd]
 #   --zombis-tienda     (con --edificio centro) cuántos zombis hay en cada tienda y en cada sala   [prueba_sitios.gd]
 #   --dificultad        lo que cambia de una planta a otra (M72): vida y zarpazo de los zombis, vida de la portera y los
-#                       botiquines de los armaritos, con lo de antes; solo números    [prueba_sitios.gd]
+#                       botiquines de los armaritos (M78: uno por apartamento, en qué baño), con lo de antes; solo números [prueba_sitios.gd]
 #   --volver            salir de un sitio y volver lo deja como estaba: un piso a medias, ya limpio, el pasillo, el jefe,
 #                       el superviviente, los eventos, la sala de pruebas y lo que ocupa una planta entera; con
 #                       --edificio centro --joyeria, también el guardia y la joyería         [prueba_sitios.gd]

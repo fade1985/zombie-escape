@@ -689,7 +689,7 @@ func probar_equilibrio() -> void:
 	for sitio in planta.sitios:
 		if not sitio.get("armaritos", []).is_empty():
 			dentro.append(sitio.armaritos.map(func(a): return a.dentro))
-	print("Los armaritos de la planta, piso a piso: %s (esperado: en cada piso, botiquin y luego vendas)" % [dentro])
+	print("Los armaritos de la planta, piso a piso: %s (esperado, M78: en cada piso, un botiquin en un baño al azar y vendas en los demás)" % [dentro])
 	if not mapa.armaritos.is_empty():
 		var armarito: Node2D = mapa.armaritos[0]
 		mochila.assign(["botiquin", "botiquin"])

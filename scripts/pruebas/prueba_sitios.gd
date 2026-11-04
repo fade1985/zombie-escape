@@ -1152,7 +1152,8 @@ func probar_acustica() -> void:
 # Con "--captura --dificultad" (M72, el equilibrio): lo que cambia de una planta a otra. Para cada planta (de la baja a
 # la 4ª), la vida y el zarpazo de un zombi normal, de un rápido y del guardia (partida.gd, ZOMBI_POR_PLANTA) y la vida
 # de la portera (JEFE_POR_PLANTA), con lo que eran antes; y, en doce plantas generadas, cuántos armaritos llevan
-# botiquín y cuántos vendas (planta.gd, ARMARITO_CADA). Solo números, sin fotos. Luego se cierra
+# botiquín y cuántos vendas, y en qué baño cae el botiquín (M78: uno por apartamento, en un baño al azar; planta.gd,
+# armaritos). Solo números, sin fotos. Luego se cierra
 func probar_dificultad() -> void:
 	await get_tree().create_timer(0.3).timeout
 	nueva_planta(1)
@@ -1176,11 +1177,21 @@ func probar_dificultad() -> void:
 	var botiquines := 0
 	var vendas := 0
 	var botiquines_antes := 0
+	var con_bano := 0
+	var mal := 0              # M78: apartamentos con baño que no tienen justo un botiquín
+	var en_bano := [0, 0, 0]  # M78: en qué baño (el 1º, el 2º, el 3º) cae el botiquín
 	for i in 12:
 		Planta.semilla = 2000 + i
 		var p: Dictionary = Planta.generar(1 + i % 5, edificio, jefe_de(1 + i % 5))
 		for s in p.sitios:
 			var lista: Array = s.get("armaritos", [])
+			if not lista.is_empty():
+				con_bano += 1
+				var cuantos: int = lista.filter(func(a): return a.dentro == "botiquin").size()
+				if cuantos != 1:
+					mal += 1
+				else:
+					en_bano[mini(lista.map(func(a): return a.dentro).find("botiquin"), 2)] += 1
 			for k in lista.size():
 				if lista[k].dentro == "botiquin":
 					botiquines += 1
@@ -1189,8 +1200,10 @@ func probar_dificultad() -> void:
 				if k % 2 == 0:   # antes: en cada piso, el primero un botiquín y el siguiente unas vendas
 					botiquines_antes += 1
 	Planta.semilla = 0
-	print("Dificultad · armaritos en 12 plantas: %d botiquines y %d vendas (%.1f botiquines por planta; antes %d botiquines, %.1f por planta)" % [
-		botiquines, vendas, botiquines / 12.0, botiquines_antes, botiquines_antes / 12.0])
+	print("Dificultad · armaritos en 12 plantas: %d botiquines y %d vendas (%.1f botiquines por planta; antes %d botiquines, %.1f por planta) · sitios con baño: %d" % [
+		botiquines, vendas, botiquines / 12.0, botiquines_antes, botiquines_antes / 12.0, con_bano])
+	print("M78 · botiquines por apartamento: %d apartamentos sin justo uno (esperado 0) · en el 1er baño %d, en el 2º %d, en el 3º o más %d (esperado: repartidos)" % [
+		mal, en_bano[0], en_bano[1], en_bano[2]])
 	get_tree().quit()
 
 
