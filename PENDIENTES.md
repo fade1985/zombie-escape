@@ -30,9 +30,6 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
   más pillarlo (hoy huye a 165 y Johnny anda a 210), que toque el silbato más a menudo (hoy al verte y a media vida)
   y que lleguen más guardias a protegerle, que también corran como él. En `zombi_guardia.gd` (los refuerzos, la
   señal «silbato» de la partida). Para más adelante.
-- **M84** Centro comercial: muchos más zombis en cada tienda, que ahora casi no hay ninguno. Los zombis de más de
-  la M19 (`EXTRA_POR_SALA` en `planta.gd`, `horda`) se pusieron solo en los apartamentos y las tiendas se quedaron
-  con el presupuesto de antes. Para más adelante.
 - **M85** Jefe mascota (la Juguetería): durante el combate salen sin parar zombis jóvenes de los que corren
   (el rápido, «El crío» del bestiario). En `mascota.gd`. Para más adelante.
 - **M86** Centro comercial: las páginas del dosier las sueltan también científicos muertos de Velaria (con su bata,
