@@ -105,6 +105,40 @@ const PLANOS := {
 		"#####################EE#####################",
 		"#####################EE#####################",
 	],
+	# la ferretería: a la izquierda, el aseo de empleados y el almacén (el aseo se abre a él); a la derecha, el taller;
+	# entre los dos, un trozo de sala de venta que llega hasta el fondo
+	"ferreteria": [
+		"########################################",
+		"########################################",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
+		"##BBBBBBB AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",   # no-tr
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##BBBBBBB#AAAAAAAAA#VVVVV#TTTTTTTTTTTT##",
+		"##############  ####VVVVV#####  ########",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"###################EE###################",
+		"###################EE###################",
+	],
 }
 
 static var rng := RandomNumberGenerator.new()

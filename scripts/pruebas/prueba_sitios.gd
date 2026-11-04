@@ -596,7 +596,7 @@ func probar_tiendas_fijas() -> void:
 			for s in t.salas:
 				esperado += Catalogo.SALAS.get("%s-%s" % [s.uso, tipo], {}).get("colocados", {}).get(lado, []).size()
 			print("Fija %s (puerta %s): %d × %d casillas, fallos %s (esperado: []) · %s" % [tipo, lado, t.cols, t.filas,
-				Apartamento.fallos(t), " · ".join(t.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
+				Apartamento.fallos(Tienda.generar(0, tipo)),   # (fallos busca la entrada abajo: se mira sin voltear) " · ".join(t.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
 			for f in t.filas:
 				var linea := ""
 				for c in t.cols:
