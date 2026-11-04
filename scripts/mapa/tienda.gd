@@ -243,6 +243,40 @@ const PLANOS := {
 		"###################EE###################",
 		"###################EE###################",
 	],
+	# la farmacia: a la izquierda, el aseo de empleados y la rebotica (el aseo se abre a ella; la farmacéutica se esconde
+	# en la rebotica, detrás de su puerta a la sala de venta); a la derecha, un trozo de venta hasta el fondo, con el mostrador
+	"farmacia": [
+		"##################################",
+		"##################################",
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"##BBBBBBB RRRRRRRRRRRR#VVVVVVVVV##",   # no-tr
+		"##BBBBBBB RRRRRRRRRRRR#VVVVVVVVV##",   # no-tr
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"##BBBBBBB#RRRRRRRRRRRR#VVVVVVVVV##",
+		"###############  ######VVVVVVVVV##",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"################EE################",
+		"################EE################",
+	],
 }
 
 static var rng := RandomNumberGenerator.new()

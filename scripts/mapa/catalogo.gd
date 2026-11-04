@@ -587,7 +587,43 @@ const SALAS := {
 		"cuantos": [8, 11],
 		"iguales": {"metalshelf": 3},
 		"islas": {"muebles": ["metalshelf"], "fila": 2, "entre": 0, "cada": 176},
+		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
+		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas
+		# de tres estanterías a cada lado del pasillo de la entrada. Volteada, las neveras y las estanterías, en la pared de
+		# la entrada, y el mostrador, en el trozo de abajo
+		"colocados": {
+			"abajo": [
+				["metalshelf", 22.5], ["metalshelf", 25.25], ["metalshelf", 28.0], ["pharmacycounter", 25.25, "libre", 5.5],
+				["metalshelf", 2.0, "libre", 10.625], ["drinkfridge", 6.0, "libre", 10.75], ["metalshelf", 18.0, "libre", 10.625],
+				["bench", 18.0, "izquierda"], ["bench", 18.0, "derecha"],
+				["metalshelf", 3.0, "libre", 15.0], ["metalshelf", 5.75, "libre", 15.0], ["metalshelf", 8.5, "libre", 15.0],
+				["metalshelf", 20.5, "libre", 15.0], ["metalshelf", 23.25, "libre", 15.0], ["metalshelf", 26.0, "libre", 15.0],
+				["metalshelf", 3.0, "libre", 20.5], ["metalshelf", 5.75, "libre", 20.5], ["metalshelf", 8.5, "libre", 20.5],
+				["metalshelf", 20.5, "libre", 20.5], ["metalshelf", 23.25, "libre", 20.5], ["metalshelf", 26.0, "libre", 20.5],
+			],
+			"arriba": [
+				["drinkfridge", 2.0], ["drinkfridge", 4.0], ["metalshelf", 8.0], ["metalshelf", 11.0],
+				["metalshelf", 19.0], ["metalshelf", 22.0], ["metalshelf", 25.0], ["metalshelf", 28.0],
+				["bench", 6.5, "izquierda"], ["bench", 6.5, "derecha"],
+				["pharmacycounter", 25.25, "libre", 20.0], ["metalshelf", 22.75, "libre", 24.0], ["metalshelf", 27.75, "libre", 24.0],
+				["metalshelf", 3.0, "libre", 5.0], ["metalshelf", 5.75, "libre", 5.0], ["metalshelf", 8.5, "libre", 5.0],
+				["metalshelf", 20.5, "libre", 5.0], ["metalshelf", 23.25, "libre", 5.0], ["metalshelf", 26.0, "libre", 5.0],
+				["metalshelf", 3.0, "libre", 10.5], ["metalshelf", 5.75, "libre", 10.5], ["metalshelf", 8.5, "libre", 10.5],
+				["metalshelf", 20.5, "libre", 10.5], ["metalshelf", 23.25, "libre", 10.5], ["metalshelf", 26.0, "libre", 10.5],
+			],
+		},
 	},
+	# la rebotica (con sitio en medio para la farmacéutica) y el aseo de empleados (M81) de la farmacia fija (M77)
+	"rebotica-farmacia": {"colocados": {
+		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.25], ["metalshelf", 7.0], ["pallet", 10.25], ["pallet", 4.5, "derecha"],
+			["pharmacycounter", 8.5, "libre", 5.0]],
+		"arriba": [["metalshelf", 1.25], ["metalshelf", 3.5], ["pallet", 10.5], ["pallet", 4.5, "derecha"], ["pallet", 6.0, "abajo"],
+			["pharmacycounter", 8.5, "libre", 5.0]],
+	}},
+	"bano-farmacia": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
 	# la joyería (parte 9): vitrinas bajas en filas, vitrinas altas contra la pared; detrás, la trastienda (como un
 	# almacén pequeño) y la cámara acorazada con sus cajas fuertes
 	"tienda-joyeria": {
