@@ -36,7 +36,7 @@ const DISTANCIA_TIJERETAZO := 140.0   # si Johnny está más cerca que esto, pre
 # Esconderse entre los maniquíes
 const OJOS := 0.6                  # lo que le brillan los ojos antes de cambiarse de sitio
 const OJOS_LLEGAR := 0.35          # y al llegar al sitio nuevo
-const ESCONDIDA := [2.6, 1.8]      # lo que se queda quieta como un maniquí más (normal y enfadada)
+const ESCONDIDA := [1.8, 1.2]      # lo que se queda quieta como un maniquí más (normal y enfadada; M88: antes [2.6, 1.8])
 const CAMBIOS := [4.0, 2.5]        # cada cuánto se cambia de sitio (M88: antes [7.0, 4.5])
 const LEJOS_DE_JOHNNY := 260.0     # el maniquí con el que se cambia está por lo menos así de lejos de Johnny
 const DESPIERTA := 130.0           # escondida, si Johnny se le acerca más que esto, salta
