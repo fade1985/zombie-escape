@@ -345,21 +345,9 @@ const SALAS := {
 		"cuantos": [2, 4],
 		"fondo_max": 46,
 	},
-	# Las salas de las tiendas del centro comercial (tienda.gd). La sala de venta va por tipo de tienda
-	# ("tienda-<tipo>", y "tienda" si un tipo no tiene la suya); la cocina del restaurante es "cocina-restaurante"
-	# (Muebles.de_apartamento busca primero "<uso>-<tipo de tienda>"). Sin plantillas: son salas grandes y se
-	# amueblan todas sus paredes, y además "islas": filas de muebles en medio, con pasillos (Muebles.islas)
-	"tienda": {
-		"muebles": ["gondola", "metalshelf", "checkout", "pallet"],
-		"cuantos": [8, 11],
-		"iguales": {"gondola": 3, "metalshelf": 2},
-		"islas": {"muebles": ["gondola"], "fila": 3, "entre": 0, "cada": 176},
-	},
+	# Las salas de las tiendas del centro comercial (tienda.gd), fijas desde la M77: "<uso>-<tipo de tienda>" ("tienda-
+	# supermercado", "cocina-restaurante", "bano-farmacia"...), cada una solo con sus "colocados" (Muebles.de_tienda)
 	"tienda-supermercado": {
-		"muebles": ["gondola", "gondola", "drinkfridge", "checkout", "pallet"],
-		"cuantos": [8, 11],
-		"iguales": {"gondola": 4, "drinkfridge": 2, "checkout": 2, "pallet": 2},
-		"islas": {"muebles": ["gondola"], "fila": 3, "entre": 0, "cada": 176},
 		# M77: el supermercado fijo (Tienda.PLANOS; casillas desde la esquina de la sala de venta, la 2,2 del plano). Con la
 		# puerta abajo: tres neveras de bebidas al fondo del trozo que llega hasta atrás, palés y estanterías delante de la
 		# cámara y del almacén (sueltos: esas paredes están más abajo que la de arriba de la sala), dos cajas a la izquierda,
@@ -408,10 +396,6 @@ const SALAS := {
 	# del almacén y del taller (sueltos), palés a la izquierda, dos cajas a la derecha y dos filas de cuatro estanterías
 	# a cada lado del pasillo de la entrada. Volteada, las cajas y las estanterías de pared, en la de la entrada
 	"tienda-ferreteria": {
-		"muebles": ["metalshelf", "metalshelf", "workbench", "checkout", "pallet"],
-		"cuantos": [8, 11],
-		"iguales": {"metalshelf": 4, "pallet": 2},
-		"islas": {"muebles": ["metalshelf"], "fila": 4, "entre": 0, "cada": 176},
 		"colocados": {
 			"abajo": [
 				["metalshelf", 20.5],
@@ -450,10 +434,6 @@ const SALAS := {
 	# taquillas y del almacén, dos cajas a la derecha y dos filas de tres estanterías de teles a la derecha (a la izquierda,
 	# el charco). Volteada, las cajas y las teles de pared, en la de la entrada
 	"tienda-electronica": {
-		"muebles": ["tvshelf", "tvshelf", "metalshelf", "checkout", "pallet"],
-		"cuantos": [8, 11],
-		"iguales": {"tvshelf": 3, "metalshelf": 2},
-		"islas": {"muebles": ["tvshelf"], "fila": 2, "entre": 0, "cada": 176},
 		"colocados": {
 			"abajo": [
 				["tvshelf", 14.5],
@@ -492,10 +472,6 @@ const SALAS := {
 	# atrás, bancos y neveras delante de la cocina y de la cámara, bancos en los lados y dos filas de tres mesas a cada
 	# lado del pasillo de la entrada. Volteado, las neveras y las cajas, en la pared de la entrada
 	"tienda-restaurante": {
-		"muebles": ["diningtable", "diningtable", "checkout", "drinkfridge", "bench"],
-		"cuantos": [8, 11],
-		"iguales": {"diningtable": 4, "bench": 2},
-		"islas": {"muebles": ["diningtable"], "fila": 4, "entre": 40, "cada": 150},
 		"colocados": {
 			"abajo": [
 				["drinkfridge", 22.5], ["drinkfridge", 24.5], ["checkout", 27.25],
@@ -517,8 +493,6 @@ const SALAS := {
 	# la cocina (sus fogones y freidoras son los focos del fuego: Peligros.fuego), la cámara y el aseo de empleados (M81)
 	# del restaurante fijo (M77)
 	"cocina-restaurante": {
-		"muebles": ["industrialstove", "steeltable", "fryer", "metalshelf", "drinkfridge"],
-		"cuantos": [2, 4],
 		"colocados": {
 			"abajo": [["industrialstove", 1.75], ["fryer", 4.5], ["steeltable", 7.0], ["industrialstove", 10.25],
 				["industrialstove", 4.5, "derecha"]],
@@ -539,10 +513,6 @@ const SALAS := {
 	# a la izquierda y dos filas de tres percheros y un maniquí a cada lado del pasillo de la entrada. Volteada, las cajas
 	# a los lados de la entrada y los maniquíes del escaparate, en la pared del fondo del trozo
 	"tienda-ropa": {
-		"muebles": ["clothesrack", "clothesrack", "mannequin", "mannequin", "checkout", "bench"],
-		"cuantos": [8, 11],
-		"iguales": {"clothesrack": 4, "mannequin": 3},
-		"islas": {"muebles": ["clothesrack", "clothesrack", "mannequin"], "fila": 3, "entre": 36, "cada": 150},
 		"colocados": {
 			"abajo": [
 				["mannequin", 19.5], ["mannequin", 21.5], ["mannequin", 23.5],
@@ -583,10 +553,6 @@ const SALAS := {
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
 	"tienda-farmacia": {
-		"muebles": ["pharmacycounter", "metalshelf", "metalshelf", "drinkfridge", "bench"],
-		"cuantos": [8, 11],
-		"iguales": {"metalshelf": 3},
-		"islas": {"muebles": ["metalshelf"], "fila": 2, "entre": 0, "cada": 176},
 		# M77: la farmacia fija (Tienda.PLANOS). Con la puerta abajo: estanterías al fondo del trozo que llega hasta atrás y,
 		# delante, el mostrador; estanterías y una nevera delante del aseo y de la rebotica, un banco a cada lado y dos filas
 		# de tres estanterías a cada lado del pasillo de la entrada. Volteada, las neveras y las estanterías, en la pared de
@@ -627,10 +593,6 @@ const SALAS := {
 	# la joyería (parte 9): vitrinas bajas en filas, vitrinas altas contra la pared; detrás, la trastienda (como un
 	# almacén pequeño) y la cámara acorazada con sus cajas fuertes
 	"tienda-joyeria": {
-		"muebles": ["jewelcase", "jewelcase", "jewelcabinet", "checkout", "bench"],
-		"cuantos": [7, 10],
-		"iguales": {"jewelcase": 4, "jewelcabinet": 3},
-		"islas": {"muebles": ["jewelcase"], "fila": 2, "entre": 40, "cada": 150},
 		# M77: la joyería fija (Tienda.PLANOS). Con la puerta abajo: vitrinas altas delante de la trastienda y de la cámara
 		# acorazada (sin tapar su puerta), la caja a la derecha, un banco a la izquierda y dos filas de tres vitrinas a cada
 		# lado del pasillo de la entrada. Volteada, las vitrinas altas en la pared de la entrada y las filas, más arriba, para
@@ -670,16 +632,6 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
-	"trastienda": {
-		"muebles": ["metalshelf", "workbench", "lockers", "pallet"],
-		"cuantos": [2, 4],
-		"iguales": {"metalshelf": 2},
-	},
-	"acorazada": {
-		"muebles": ["safe", "safe", "metalshelf"],
-		"cuantos": [2, 4],
-		"iguales": {"safe": 3, "metalshelf": 1},
-	},
 	# la tienda destrozada del jefe de la planta
 	"jefe-tienda": {
 		"muebles": ["gondola", "metalshelf", "pallet", "checkout", "mannequin"],
@@ -705,42 +657,8 @@ const SALAS := {
 		"iguales": {"tallmannequin": 6, "clothesrack": 2},
 		"islas": {"muebles": ["tallmannequin"], "fila": 2, "entre": 80, "cada": 230},
 	},
-	"almacen": {
-		"muebles": ["metalshelf", "metalshelf", "pallet", "pallet", "lockers"],
-		"cuantos": [2, 4],
-		"iguales": {"metalshelf": 3, "pallet": 2},
-	},
-	"camara": {
-		"muebles": ["freezershelf", "freezershelf", "pallet"],
-		"cuantos": [2, 4],
-		"iguales": {"freezershelf": 3},
-	},
-	"taller": {
-		"muebles": ["workbench", "metalshelf", "pallet"],
-		"cuantos": [2, 4],
-		"iguales": {"metalshelf": 2},
-	},
-	"taquillas": {
-		"muebles": ["lockers", "lockers", "bench"],
-		"cuantos": [2, 4],
-		"iguales": {"lockers": 2},
-	},
-	"probadores": {
-		"muebles": ["mannequin", "clothesrack", "bench"],
-		"cuantos": [2, 4],
-		"iguales": {"mannequin": 2},
-	},
-	"rebotica": {
-		"muebles": ["metalshelf", "metalshelf", "pharmacycounter", "pallet"],
-		"cuantos": [2, 4],
-		"iguales": {"metalshelf": 2},
-	},
 	# el pasillo del centro comercial
 	"galeria": {
-		"muebles": ["bench", "plant", "mannequin", "bench", "plant"],
-		"cuantos": [5, 8],
-		"iguales": {"bench": 3, "plant": 2},
-		"fondo_max": 46,   # estrecho, como el de los pisos
 		# M77: puestos a mano, iguales en todas las plantas (Planta.generar); casillas desde la esquina del suelo (la 2,2 de
 		# la galería). Las puertas de las tiendas están siempre en las casillas 14 y 42 (12 y 40 desde aquí), arriba y
 		# abajo, y el ascensor en la 28 (26), con su cartel a la izquierda; los escaparates, a cada lado de las puertas de

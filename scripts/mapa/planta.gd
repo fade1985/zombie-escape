@@ -362,11 +362,10 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	delante_escaparates.append(Rect2(ancho / 2.0 - 130, MURO, 130, 130))   # (y el cartel de la planta, a la izquierda del ascensor)
 	pasillo.muebles = Muebles.de_sala(ed.pasillo, {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
 		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng,
-		delante_escaparates)
+		delante_escaparates) if not Catalogo.SALAS[ed.pasillo].has("colocados") else []
 	if Catalogo.SALAS[ed.pasillo].has("colocados"):
 		# M77: la galería del centro comercial, con sus muebles puestos a mano, iguales en todas las plantas (sin tapar
-		# puertas ni el sitio de los escaparates, salgan o no). El sorteo de arriba se deja: así el dado gasta lo mismo y lo
-		# demás de la planta (zombis, botín...) sale como antes con la misma semilla
+		# puertas ni el sitio de los escaparates, salgan o no)
 		var borde := MURO / CASILLA
 		pasillo.muebles = Muebles.colocados(Catalogo.SALAS[ed.pasillo].colocados.abajo, {"id": 0, "c0": borde, "f0": borde,
 			"ancho": PASILLO_COLS - 2 * borde, "fondo": PASILLO_FILAS - 2 * borde})
