@@ -31,6 +31,8 @@
 #                                                                                          [prueba_jefes.gd]
 #   --cambios           (con --edificio centro --jefe modista) cuántas veces se cambia de maniquí en 20 s, normal y
 #                       enfadada (M88)                                                     [prueba_jefes.gd]
+#   --maniquies         (con --edificio centro --jefe modista) los maniquíes vivos de la modista: despiertan, andan
+#                       y se rompen, con fotos (M89)                                       [prueba_jefes.gd]
 #   --metal             (con --jefe gymbro) el cuerpo de metal de sus suplementos: sube, se desconcha y revienta; y
 #                       sus sonidos nuevos, en .wav                                         [prueba_jefes.gd]
 #   --gotas             (con --jefe portera) el abanico de agua sucia y sus salpicaduras    [prueba_jefes_salas.gd]
@@ -296,6 +298,10 @@ func empezar_prueba() -> void:
 	elif "--cambios" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_cambios()
+		get_tree().quit()
+	elif "--maniquies" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_maniquies()
 		get_tree().quit()
 	elif "--metal" in args:
 		set_process(false)   # sin la prueba larga

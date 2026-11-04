@@ -161,6 +161,34 @@ func probar_cambios() -> void:
 			"enfadada" if f == 2 else "normal", cambios, jefa.CAMBIOS[f - 1], int(jefa.OTRA_VEZ[f - 1] * 100)])
 
 
+# Con "--captura --edificio centro --jefe modista --maniquies": los maniquíes vivos de la modista (M89) con sus
+# animaciones de PixelLab. Con Johnny quieto (sin que pueda caer) y mirando al otro lado, para que anden. Fotos:
+# despertando (captura-maniquies-despertar.png), andando a saltitos (-andar.png) y rompiéndose (-romper.png) y rotos (-rotos.png)
+func probar_maniquies() -> void:
+	if not await ir_a_la_sala_del_jefe("modista"):
+		return
+	johnny.set_physics_process(false)   # quieto
+	jefa.set_physics_process(false)     # la modista, quieta: solo se miran los maniquíes
+	jefa.despertar_maniquies(johnny)
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-maniquies-despertar.png")
+	# Johnny, de espaldas al maniquí más cercano: los maniquíes andan
+	var cerca: Node2D = jefa.vivos.reduce(func(x, m): return m if m.global_position.distance_to(johnny.global_position) 		< x.global_position.distance_to(johnny.global_position) else x)
+	var hacia: Vector2 = johnny.global_position - cerca.global_position
+	johnny.direccion = johnny.DIRS[posmod(roundi(hacia.angle() / (PI / 4.0)), 8)]
+	for i in 90:
+		johnny.vida = johnny.stats.vida_max
+		await get_tree().physics_frame
+	print("Maniquíes: %s" % [jefa.vivos.map(func(m): return "%s, fotograma %d" % [m.estado, m.sprite.frame])])
+	Captura.foto("captura-maniquies-andar.png")
+	for m in jefa.vivos:
+		m.recibir_golpe(999, Vector2.RIGHT)
+	await get_tree().create_timer(0.4, false).timeout
+	Captura.foto("captura-maniquies-romper.png")
+	await get_tree().create_timer(1.0, false).timeout
+	Captura.foto("captura-maniquies-rotos.png")
+
+
 # Con "--captura --jefe gloton --aspirar": solo lo del Glotón de probar_gloton (la sangre ácida y el aspirado, con lo que
 # tira a 3, 5, 8 y 12 casillas, normal y enfadado), sin la prueba larga. Deja la foto captura-gloton-aspira.png
 func probar_aspirar() -> void:

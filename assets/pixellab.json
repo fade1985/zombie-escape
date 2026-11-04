@@ -4292,5 +4292,34 @@
    "D (41004, ELEGIDO)": "86564a0f-995a-4425-8851-9586ef76de2d"
   },
   "coste": "20 generaciones (4 dibujos x 5)"
+ },
+ "maniqui-vivo": {
+  "kind": "animacion de imagen suelta",
+  "dibujo": "assets/sprites/mueble-tallmannequin.png",
+  "nota": "M89, 2026-11-04. El dibujo del mueble, pegado en un lienzo de 80x80 en (25, 8) (romper: 96x96 en (33, 24)): los pies quedan en (40, 77) y (48, 93). 4 generaciones.",
+  "subject_description": "a creepy pale plastic female mannequin in a long dark red dress with a yellow tape measure around her neck",
+  "direction": "south",
+  "view": "low top-down",
+  "herramienta": "animate_image_pixminimax",
+  "anims": {
+   "andar": {
+    "job": "f08602a9-5791-4a9a-a0e8-88176058ff24",
+    "frames": 8,
+    "ultimo_fotograma": "el dibujo quieto",
+    "texto": "The possessed mannequin creeps forward toward the camera in stiff, jerky hops on her feet, like a puppet pulled by invisible strings. Her body stays rigid; her head twitches sharply to one side, her thin plastic arms jerk and swing unnaturally, and the dark red dress and the yellow tape measure sway and flap with each hop. She lands and returns to the same upright pose to loop. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, same character, same colors and size.",
+    "descartada": "93213d29-1a95-44e7-b09d-ff35fb077b3a (un arrastre suave: casi no se movia)"
+   },
+   "despertar": {
+    "job": "7dfe5466-4549-437d-a01e-8ac12ad7404d",
+    "frames": 8,
+    "ultimo_fotograma": "el dibujo quieto",
+    "texto": "The lifeless mannequin comes to life: first a small tremor runs through her stiff plastic body, then her head snaps sharply to one side with a jerk, her fingers twitch and her arms lift slightly away from her body with a creepy unnatural jolt, the dress and tape measure quiver. Then she settles back into her upright standing pose, now awake. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, same character, same colors and size."
+   },
+   "romper": {
+    "job": "bd26f78d-3a2c-4870-a625-5bc7e803a9ec",
+    "frames": 12,
+    "texto": "The plastic mannequin is destroyed: cracks spread across her pale body, her head snaps off and drops, her arms break off at the shoulders and fall, then the whole figure crumbles and collapses straight down into a pile of broken plastic pieces and the crumpled dark red dress on the floor. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, same character, same colors and size."
+   }
+  }
  }
 }

@@ -1,13 +1,20 @@
 # Un maniquí del Taller de costura que ha cobrado vida (cuando la modista se enfada: modista.gd). Tiene el dibujo
 # del mueble y solo se mueve cuando Johnny no lo mira: si Johnny lo tiene delante (hacia donde mira y sin nada en
-# medio), se queda quieto como un mueble más; en cuanto le da la espalda, se le acerca deprisa, bamboleándose
-# sobre su peana, y si le toca le hace daño. Se rompe a golpes, y cuando cae la modista se caen todos.
+# medio), se queda quieto como un mueble más, congelado en la postura en que lo pilla; en cuanto le da la espalda,
+# se le acerca deprisa a saltitos tiesos, y si le toca le hace daño. Se rompe a golpes (se desmorona en trozos), y
+# cuando cae la modista se caen todos. Sus animaciones (M89) son de PixelLab, hechas sobre el dibujo del mueble
+# (pixellab.json → maniqui-vivo): despertar, andar y romper, en hojas de fotogramas en fila.
 # Está en el grupo "zombis" (con radio, vida y recibir_golpe): las balas, los golpes y las explosiones le dan.
 extends CharacterBody2D
 
 signal murio
 
-const DIBUJO := preload("res://assets/sprites/mueble-tallmannequin.png")
+# Cada hoja: su dibujo, cuántos fotogramas tiene, dónde quedan los pies en cada fotograma y cuántos pasan por segundo
+const HOJA_DESPERTAR := {"tex": preload("res://assets/sprites/maniqui-vivo-despertar.png"), "n": 8, "pies": Vector2(40, 77)}
+const HOJA_ANDAR := {"tex": preload("res://assets/sprites/maniqui-vivo-andar.png"), "n": 8, "pies": Vector2(40, 77)}
+const HOJA_ROMPER := {"tex": preload("res://assets/sprites/maniqui-vivo-romper.png"), "n": 12, "pies": Vector2(48, 93)}
+const PASOS_SEGUNDO := 10.0   # fotogramas por segundo al andar
+const ROMPER := 0.9           # lo que tarda en desmoronarse
 const VELOCIDAD := 165.0
 const DANO := 10
 const VISTA := 0.95        # medio ángulo de lo que ve Johnny por delante: si está dentro, lo está mirando
@@ -20,6 +27,7 @@ var vida := 45
 var vida_max := 45
 var estado := "despertar"  # despertar, quieto, andar o muerto
 var t := 0.0
+var paso := randf()        # el tiempo que lleva andando (para su animación; cada uno empieza en un punto del paso)
 var sprite: Sprite2D
 var agente: NavigationAgent2D
 
@@ -36,12 +44,11 @@ func _ready() -> void:
 	choque.shape = circulo
 	add_child(choque)
 	sprite = Sprite2D.new()
-	sprite.texture = DIBUJO
 	sprite.scale = Vector2(2, 2)
 	sprite.centered = false
-	sprite.offset = Vector2(-floorf(DIBUJO.get_width() / 2.0), -DIBUJO.get_height())
-	sprite.position = Vector2(0, PIE)   # gira sobre sus pies (la peana)
+	sprite.position = Vector2(0, PIE)   # sus pies
 	add_child(sprite)
+	poner_hoja(HOJA_DESPERTAR)
 	agente = NavigationAgent2D.new()
 	agente.radius = 18.0
 	agente.path_desired_distance = 16.0
@@ -54,21 +61,26 @@ func _physics_process(delta: float) -> void:
 		return
 	t += delta
 	if estado == "despertar":
-		sprite.position.x = sin(t * 60.0) * 2.0
+		# tiembla, da un tirón de cabeza y levanta los brazos (su animación, una vez)
+		sprite.frame = mini(int(t / DESPERTAR * HOJA_DESPERTAR.n), HOJA_DESPERTAR.n - 1)
 		if t >= DESPERTAR:
 			estado = "quieto"
-			sprite.position.x = 0.0
+			poner_hoja(HOJA_ANDAR)
 		return
 	var johnny := get_tree().get_first_node_in_group("jugador")
 	if johnny == null or not johnny.vivo or lo_mira(johnny):
-		# quieto como un mueble (y tal como se haya quedado, un poco torcido)
+		# quieto como un mueble, congelado en el fotograma en que se ha quedado (a medio salto, torcido...)
 		estado = "quieto"
 		return
 	estado = "andar"
 	agente.target_position = johnny.global_position
 	velocity = global_position.direction_to(agente.get_next_path_position()) * VELOCIDAD
 	move_and_slide()
-	sprite.rotation = sin(t * 16.0) * 0.12
+	# a saltitos: los fotogramas solo avanzan mientras anda
+	paso += delta
+	sprite.frame = int(paso * PASOS_SEGUNDO) % HOJA_ANDAR.n
+	if absf(velocity.x) > 20.0:
+		sprite.flip_h = velocity.x < 0.0
 	if global_position.distance_to(johnny.global_position) < radio + johnny.RADIO + 4.0:
 		johnny.recibir_dano(DANO, self)
 
@@ -105,7 +117,7 @@ func herir(cantidad: float, _color := Color.WHITE) -> void:
 	recibir_golpe(maxi(1, roundi(cantidad)), Vector2.ZERO)
 
 
-# Se cae al suelo, roto, y se queda ahí
+# Se rompe: se agrieta, pierde la cabeza y los brazos y se desmorona en un montón de trozos y tela, que se queda ahí
 func morir() -> void:
 	if estado == "muerto":
 		return
@@ -114,12 +126,16 @@ func morir() -> void:
 	$Choque.set_deferred("disabled", true)
 	z_index = -1
 	Sonido.tocar("portazo")
-	sprite.position.x = 0.0
-	var lado := 1.0 if randf() < 0.5 else -1.0
-	create_tween().tween_property(sprite, "rotation", PI / 2.0 * lado, 0.35) \
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	# tendido, su dibujo queda a ese lado de los pies
-	var largo := DIBUJO.get_height() * 2.0
-	var ancho := DIBUJO.get_width() * 2.0
-	Cuerpo.resbalar(self, Rect2(global_position + sprite.position + Vector2(minf(lado, 0.0) * largo, -ancho / 2.0), Vector2(largo, ancho)), 0.35)
+	poner_hoja(HOJA_ROMPER)
+	create_tween().tween_property(sprite, "frame", HOJA_ROMPER.n - 1, ROMPER).from(0)
+	# el montón, en el suelo a los lados de sus pies (último fotograma de la hoja: 74 × 16 píxeles del dibujo)
+	Cuerpo.resbalar(self, Rect2(global_position + sprite.position + Vector2(-74, -30), Vector2(148, 32)), 0.35)
 	murio.emit()
+
+
+# Cambia a otra hoja de fotogramas (con los pies siempre en el mismo sitio)
+func poner_hoja(hoja: Dictionary) -> void:
+	sprite.texture = hoja.tex
+	sprite.hframes = hoja.n
+	sprite.frame = 0
+	sprite.offset = -hoja.pies
