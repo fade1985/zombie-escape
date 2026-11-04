@@ -1254,8 +1254,8 @@ msgid "Marta, si te llega esto: no vengas al centro. Por favor."
 msgstr "Marta, falls dich das erreicht: Komm nicht ins Einkaufszentrum. Bitte."
 
 #: scripts/historia.gd
-msgid "Manuel Ortega, jefe de seguridad del centro"
-msgstr "Manuel Ortega, Sicherheitschef des Zentrums"
+msgid "Dr. Tomás Vidal, químico de Velaria"
+msgstr "Dr. Tomás Vidal, Chemiker bei Velaria"
 
 #: scripts/historia.gd
 msgid "PARTE DE INCIDENCIAS"
@@ -1288,12 +1288,12 @@ msgstr ""
 "05:30. Ich rufe um Hilfe. Velaria Corp. schickt einen Einsatzpolizisten. Er geht ins Sicherheitsbüro. Er kommt nicht wieder raus."
 
 #: scripts/historia.gd
-msgid "Esta noche no me tomo el café."
-msgstr "Heute Nacht lasse ich den Kaffee weg."
+msgid "Se lo quité al de seguridad. Él no llegó a la mañana."
+msgstr "Hab ich dem Sicherheitschef abgenommen. Er hat den Morgen nicht erlebt."
 
 #: scripts/historia.gd
-msgid "Lucía Benet, secretaria del gerente"
-msgstr "Lucía Benet, Sekretärin des Managers"
+msgid "Dra. Irene Soler, enlace de Velaria con la gerencia"
+msgstr "Dr. Irene Soler, Verbindungsfrau von Velaria zum Management"
 
 #: scripts/historia.gd
 msgid "CORREO IMPRESO · GERENCIA"
@@ -1324,8 +1324,8 @@ msgstr ""
 "Im Gegenzug will ich die gute Dosis. Die echte."
 
 #: scripts/historia.gd
-msgid "Lleva cuatro días sin dormir. Dice que ya no le hace falta."
-msgstr "Er hat seit vier Tagen nicht geschlafen. Sagt, er braucht es nicht mehr."
+msgid "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."
+msgstr "Für den Turm ausgedruckt. Der Manager schläft seit vier Tagen nicht: Er sagt, er braucht es nicht mehr."
 
 #: scripts/historia.gd
 msgid ""

@@ -341,26 +341,6 @@ func probar_historia() -> void:
 	Captura.foto("captura-pagina.png")
 	print("Página cogida: %s | en el guardado: %s" % [c.get("pagina", {}).get("id", "-"), Guardado.cargar().paginas])
 	menus.leida()
-	# los muertos que no llevan bata (en el centro comercial: el jefe de seguridad y la secretaria), en fila sobre
-	# un fondo liso, por encima de todo (sin penumbra ni paredes): captura-cuerpos.png
-	var con_ropa: Array = Historia.dosier(edificio).paginas.filter(func(p): return p.look.has("ropa"))
-	if not con_ropa.is_empty():
-		var capa := CanvasLayer.new()
-		capa.layer = 50
-		add_child(capa)
-		var fondo := ColorRect.new()
-		fondo.color = Color("#5a5d66")
-		fondo.position = Vector2(240, 230)
-		fondo.size = Vector2(480, 180)
-		capa.add_child(fondo)
-		for i in con_ropa.size():
-			var cuerpo := CIENTIFICO.new()
-			cuerpo.montar(con_ropa[i], Vector2(370 + i * 220, 320))
-			cuerpo.z_index = 0
-			capa.add_child(cuerpo)
-		await get_tree().create_timer(0.3).timeout
-		Captura.foto("captura-cuerpos.png")
-		capa.queue_free()
 	# en el ordenador, la primera y la tercera página del dosier de este edificio (en los Apartamentos, el correo)
 	# y la primera de cada uno de los otros edificios: el Dosier las enseña todas, sea cual sea el edificio
 	var ids: Array = Historia.dosier(edificio).paginas.map(func(p): return p.id)

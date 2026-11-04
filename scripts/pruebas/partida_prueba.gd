@@ -133,6 +133,8 @@
 #   --ordenador-arriba  cada programa del ordenador recién abierto empieza arriba y, al subir un talento, se queda
 #                       donde estaba, también con clics de verdad                             [prueba_larga.gd]
 #   --ordenador-teclado con el teclado o el mando se llega a todas las tarjetas de cada programa [prueba_larga.gd]
+#   --muertos-dosier    (con --edificio X) los muertos que llevan las páginas del dosier de ese edificio, en fila sobre
+#                       un fondo liso: todos con bata (M86)                                [prueba_varias.gd]
 #   --historia          todos los textos de la historia: cada página del dosier en su hoja y cada noticia en la
 #                       tele, trozo a trozo, para ver si caben                         [prueba_larga.gd]
 #   --calidades         las calidades de las armas y los arrojables: lo que dan, una de cada arma, el baúl, caer y
@@ -415,6 +417,10 @@ func empezar_prueba() -> void:
 	elif "--ordenador-teclado" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_ordenador_teclado()
+		get_tree().quit()
+	elif "--muertos-dosier" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_muertos_dosier()
 		get_tree().quit()
 	elif "--historia" in args:
 		set_process(false)   # sin la prueba larga

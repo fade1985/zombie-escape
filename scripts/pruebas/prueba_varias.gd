@@ -3265,3 +3265,27 @@ func probar_raton() -> void:
 	foto.save_png(Captura.CARPETA + "captura-raton-mirilla.png")
 	Raton.dibujar(12).get_image().save_png(Captura.CARPETA + "captura-raton-mirilla-grande.png")
 	get_tree().quit()
+
+
+# Con "--captura --edificio X --muertos-dosier": los muertos que llevan las páginas del dosier de ese edificio (los de
+# las plantas, no la del jefe), en fila sobre un fondo liso, por encima de todo (sin penumbra ni paredes). Desde la M86,
+# también en el centro comercial son todos científicos de Velaria con su bata. Foto: captura-muertos-dosier.png
+func probar_muertos_dosier() -> void:
+	await get_tree().create_timer(0.5).timeout
+	var muertos: Array = Historia.dosier(edificio).paginas.filter(func(p): return not p.get("jefe", false))
+	var capa := CanvasLayer.new()
+	capa.layer = 50
+	add_child(capa)
+	var fondo := ColorRect.new()
+	fondo.color = Color("#5a5d66")
+	fondo.position = Vector2(40, 230)
+	fondo.size = Vector2(880, 180)
+	capa.add_child(fondo)
+	for i in muertos.size():
+		var cuerpo := CIENTIFICO.new()
+		cuerpo.montar(muertos[i], Vector2(150 + i * 220, 320))
+		cuerpo.z_index = 0
+		capa.add_child(cuerpo)
+		print("Muerto del dosier %d: %s · con bata: %s" % [i + 1, muertos[i].cuerpo, not muertos[i].look.has("ropa")])
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-muertos-dosier.png")

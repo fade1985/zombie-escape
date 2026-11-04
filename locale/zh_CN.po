@@ -1253,8 +1253,8 @@ msgid "Marta, si te llega esto: no vengas al centro. Por favor."
 msgstr "Marta，如果你收到这个：别来商场。求你了。"
 
 #: scripts/historia.gd
-msgid "Manuel Ortega, jefe de seguridad del centro"
-msgstr "曼努埃尔·奥尔特加，商场保安主管"
+msgid "Dr. Tomás Vidal, químico de Velaria"
+msgstr "Tomás Vidal博士，Velaria化学家"
 
 #: scripts/historia.gd
 msgid "PARTE DE INCIDENCIAS"
@@ -1287,12 +1287,12 @@ msgstr ""
 "05:30。我请求支援。Velaria公司派来一名防暴警察。他进了保安室。再没出来。"
 
 #: scripts/historia.gd
-msgid "Esta noche no me tomo el café."
-msgstr "今晚这咖啡我不喝了。"
+msgid "Se lo quité al de seguridad. Él no llegó a la mañana."
+msgstr "我从保安头儿身上拿的。他没撑到早上。"
 
 #: scripts/historia.gd
-msgid "Lucía Benet, secretaria del gerente"
-msgstr "露西亚·贝内特，经理秘书"
+msgid "Dra. Irene Soler, enlace de Velaria con la gerencia"
+msgstr "Irene Soler博士，Velaria与商场管理层的联络人"
 
 #: scripts/historia.gd
 msgid "CORREO IMPRESO · GERENCIA"
@@ -1323,8 +1323,8 @@ msgstr ""
 "作为交换，我要好的那种剂量。真货。"
 
 #: scripts/historia.gd
-msgid "Lleva cuatro días sin dormir. Dice que ya no le hace falta."
-msgstr "他已经四天没睡了。说是不需要了。"
+msgid "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."
+msgstr "为Velaria大厦打印的。经理已经四天没睡了：他说他已经不需要睡觉了。"
 
 #: scripts/historia.gd
 msgid ""

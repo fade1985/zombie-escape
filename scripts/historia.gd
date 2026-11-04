@@ -41,8 +41,7 @@ const EMPRESA := "Velaria Corp."   # no-tr
 #   id       no cambiar una vez publicada
 #   planta   en qué planta está el muerto que la lleva
 #   cuerpo   quién es el muerto (sale al encontrarlo)
-#   look     los colores de su dibujo (cientifico.gd): piel y pelo, y bata blanca si no se dice otra cosa
-#            ("ropa": la chaqueta o la blusa, "pantalon", "tarjeta": la tarjeta del pecho)
+#   look     los colores de su dibujo (cientifico.gd): piel y pelo (todos llevan la bata de Velaria)
 #   tipo     qué clase de papel es (sale arriba de la hoja)
 #   titulo, texto, nota (lo escrito a mano al pie, o "")
 # Las páginas con "jefe" no las lleva un muerto de la planta: las suelta el jefe del edificio al caer
@@ -101,18 +100,16 @@ const DOSIERES := {
 				"tipo": "CONTRATO · CONFIDENCIAL", "titulo": "Programa «Turno infinito»",   # [traducir]
 				"texto": "Entre Velaria Corp. y la gerencia del centro comercial.\n\nVelaria entrega el VD-7 gratis. El centro lo echa en la cafetera de la sala de descanso de los empleados, a dosis completa. Ellos no lo saben.\n\nObjetivo: turnos de 20 horas, sin cansancio y sin quejas. Velaria se queda con los datos de 312 empleados.\n\nSi sale bien, Velaria Corp. lo venderá a fábricas, almacenes y hospitales: un turno infinito para todo el país.",   # [traducir]
 				"nota": "Marta, si te llega esto: no vengas al centro. Por favor."},   # [traducir]
-			{"id": "cc_incidencias", "planta": 3, "cuerpo": "Manuel Ortega, jefe de seguridad del centro",   # [traducir]
-				"look": {"skin": Color("#c68642"), "hair": Color("#2b2b2b"), "ropa": Color("#2f3b5c"),
-					"pantalon": Color("#23283a"), "tarjeta": Color("#d9b44a")},
+			{"id": "cc_incidencias", "planta": 3, "cuerpo": "Dr. Tomás Vidal, químico de Velaria",   # [traducir]
+				"look": {"skin": Color("#c68642"), "hair": Color("#2b2b2b")},   # M86: un científico, con su bata
 				"tipo": "PARTE DE INCIDENCIAS", "titulo": "Turno de noche",   # [traducir]
 				"texto": "02:10. Cerrado desde las 22:00. Los cajeros siguen cobrando a nadie.\n\n03:40. El cocinero fríe sin aceite. La del taller de costura viste maniquíes. El del oso de la juguetería saluda al pasillo vacío.\n\n04:15. Tienen los ojos cerrados. Siguen trabajando. Si te acercas, muerden.\n\n05:00. El gerente dice que no es una incidencia: «Rinden más que nunca».\n\n05:30. Pido ayuda. Velaria Corp. manda un antidisturbios. Entra en la oficina de seguridad. No sale.",   # [traducir]
-				"nota": "Esta noche no me tomo el café."},   # [traducir]
-			{"id": "cc_correo", "planta": 4, "cuerpo": "Lucía Benet, secretaria del gerente",   # [traducir]
-				"look": {"skin": Color("#f1c27d"), "hair": Color("#1d1b2c"), "ropa": Color("#a34a6a"),
-					"pantalon": Color("#3a3a46"), "tarjeta": Color("#e8e8e0")},
+				"nota": "Se lo quité al de seguridad. Él no llegó a la mañana."},   # [traducir]
+			{"id": "cc_correo", "planta": 4, "cuerpo": "Dra. Irene Soler, enlace de Velaria con la gerencia",   # [traducir]
+				"look": {"skin": Color("#f1c27d"), "hair": Color("#1d1b2c")},   # M86: una científica, con su bata
 				"tipo": "CORREO IMPRESO · GERENCIA", "titulo": "Asunto: El conserje",   # [traducir]
 				"texto": "De: Gerencia del centro comercial\nPara: Velaria Corp., Dirección\n\nEl conserje del 14 está en el centro. Lo veo en las cámaras: sube planta por planta, como si buscara algo.\n\nNo voy a llamar a la policía. Lo retengo hasta que llegue vuestro helicóptero. He cerrado las salidas, y mis empleados no se cansan.\n\nA cambio, quiero la dosis buena. La de verdad.",   # [traducir]
-				"nota": "Lleva cuatro días sin dormir. Dice que ya no le hace falta."},   # [traducir]
+				"nota": "Lo imprimí para la Torre. El gerente lleva cuatro días sin dormir: dice que ya no le hace falta."},   # [traducir]
 			# La última no la lleva un muerto: la suelta el gerente al caer en la azotea (del_jefe). La azotea y el
 			# gerente llegan en el trozo 6 de la parte 4
 			{"id": "cc_recogida", "planta": 5, "jefe": true, "donde": "azotea",
