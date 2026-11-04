@@ -28,6 +28,10 @@ Lista del dueño. Él dicta los puntos y Claude solo los apunta aquí.
 - **M82** Jefe cocinero, más difícil: su sala (la Cocina central) lleva muebles de cocina en las paredes que
   sueltan aceite ardiendo, y ese aceite se va extendiendo por la habitación durante el combate (aparte de la
   sartén que ya tira él, `cocinero.gd` y `charco.gd`). Para más adelante.
+- **M83** Guardia de la tarjeta (pasillo del centro comercial): que siga huyendo, pero más deprisa para que cueste
+  más pillarlo (hoy huye a 165 y Johnny anda a 210), que toque el silbato más a menudo (hoy al verte y a media vida)
+  y que lleguen más guardias a protegerle, que también corran como él. En `zombi_guardia.gd` (los refuerzos, la
+  señal «silbato» de la partida). Para más adelante.
 
 
 ## Por limar
