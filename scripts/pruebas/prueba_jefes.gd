@@ -189,17 +189,17 @@ func probar_maniquies() -> void:
 	Captura.foto("captura-maniquies-rotos.png")
 
 
-# Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 3 fogones y
-# 3 freidoras, que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
+# Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 9 fogones y
+# freidoras (tres en cada pared), que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
 # Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los
-# muebles con su charco ya extendido (-llena). Cuenta cuántos rebosan en 60 s, normal y enfadado, y cuántas veces dos a la vez
+# muebles con su charco ya extendido (-llena-izquierda y -llena-derecha). Cuenta cuántos rebosan en 60 s, normal y enfadado, y cuántas veces dos a la vez
 func probar_cocina() -> void:
 	if not await ir_a_la_sala_del_jefe("cocinero"):
 		return
 	jefa.set_physics_process(false)
 	johnny.set_physics_process(false)
 	var fogones: Array = jefa.fogones()
-	print("Cocina: %d muebles que rebosan (esperado: 6): %s" % [fogones.size(), fogones.map(func(m): return "%s en %s" % [
+	print("Cocina: %d muebles que rebosan (esperado: 9, tres arriba, tres a la izquierda y tres a la derecha): %s" % [fogones.size(), fogones.map(func(m): return "%s en %s" % [
 		m.datos.tipo, m.datos.lado])])
 	if fogones.is_empty():
 		return
@@ -232,7 +232,13 @@ func probar_cocina() -> void:
 		if jefa.mojado.get(m, 0.0) <= jefa.tiempo:
 			jefa.derramar(m)
 	await correr.call(6.5)
-	Captura.foto("captura-cocina-llena.png")
+	# la cocina no cabe entera en la pantalla: una foto con Johnny hacia cada lado (la pared de arriba sale en las dos)
+	var bordes: Array = fogones.map(func(m): return m.global_position.x)
+	for lado in ["izquierda", "derecha"]:
+		johnny.global_position = Vector2(lerpf(bordes.min(), bordes.max(), 0.15 if lado == "izquierda" else 0.85), medio.y + 60.0)
+		await get_tree().create_timer(1.0, false).timeout   # (la cámara va suave: que llegue)
+		Captura.foto("captura-cocina-llena-%s.png" % lado)
+	johnny.global_position = medio
 	# cuántos rebosan en 60 s (sin esperar de verdad: los charcos, fuera al momento), normal y enfadado
 	for c in get_tree().get_nodes_in_group("charcos"):
 		c.remove_from_group("charcos")
@@ -256,8 +262,8 @@ func probar_cocina() -> void:
 					c.remove_from_group("charcos")
 					c.queue_free()
 		print("Cocina, %s: rebosan %d en 60 s (esperado: %s), %d veces dos a la vez (esperado: %s)" % [
-			"enfadado" if fase == 2 else "normal", soltados, "8 o 9" if fase == 1 else "unos 20", dobles,
-			"0" if fase == 1 else "unas 6"])
+			"enfadado" if fase == 2 else "normal", soltados, "13 o 14" if fase == 1 else "unos 30", dobles,
+			"0" if fase == 1 else "unas 10"])
 
 
 # Con "--captura --jefe gloton --aspirar": solo lo del Glotón de probar_gloton (la sangre ácida y el aspirado, con lo que

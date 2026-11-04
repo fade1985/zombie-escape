@@ -414,13 +414,18 @@ const SALAS := {
 		"muebles": ["gondola", "metalshelf", "pallet", "checkout", "mannequin"],
 		"cuantos": [2, 3],
 	},
-	# la Cocina central del cocinero (minijefe; planta.gd pone apt.tipo = "cocinero"): 3 fogones industriales y 3
-	# freidoras contra las paredes, que en el combate rebosan aceite hirviendo (M82, cocinero.gd), y alguna mesa de acero
+	# la Cocina central del cocinero (minijefe; planta.gd pone apt.tipo = "cocinero"): tres muebles que rebosan aceite
+	# hirviendo en cada pared (M82, cocinero.gd), siempre en el mismo sitio (muebles.gd, fijos): en el fondo, dos
+	# freidoras y un fogón industrial, con dos mesas de acero entre medias (no sueltan nada); a cada lado, tres fogones
+	# (las freidoras no tienen dibujo de lado). La pared de abajo, vacía (ahí está la puerta)
 	"jefe-cocinero": {
-		"primero": ["industrialstove", "fryer", "industrialstove", "fryer", "industrialstove", "fryer"],
-		"muebles": ["steeltable"],
-		"cuantos": [7, 7],
-		"iguales": {"industrialstove": 3, "fryer": 3, "steeltable": 2},
+		"muebles": [],
+		"cuantos": [0, 0],
+		"fijos": {
+			"arriba": ["fryer", "steeltable", "industrialstove", "steeltable", "fryer"],
+			"izquierda": ["industrialstove", "industrialstove", "industrialstove"],
+			"derecha": ["industrialstove", "industrialstove", "industrialstove"],
+		},
 	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {

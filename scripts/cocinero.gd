@@ -9,13 +9,13 @@
 #   - Aceite hirviendo: tira la sartén (sale una marca donde caerá) y deja un charco que quema como el fuego del
 #     molotov durante 6 s (charco.gd). A él su aceite no le quema: es el cocinero.
 #   - Cuchillazo: si Johnny se le pega, marca un trozo de suelo (medio segundo) y le da: 20.
-#   - Su cocina (M82): los 3 fogones industriales y las 3 freidoras de las paredes de la Cocina central
-#     (catalogo.gd, "jefe-cocinero") rebosan: cada 7 s uno echa vapor y burbujea (1 s, el aviso) y suelta por delante
+#   - Su cocina (M82): los 9 muebles de las paredes de la Cocina central, tres en cada una (catalogo.gd,
+#     "jefe-cocinero": 7 fogones industriales y 2 freidoras), rebosan: cada 4,5 s uno se pone al rojo, echa vapor y burbujea (1 s, el aviso) y suelta por delante
 #     un charco de aceite hirviendo que se va extendiendo despacio por el suelo (6 s, hasta casi el doble que el de
 #     la sartén) y se seca a los 14 s. Quema como el de la sartén. Nunca el que soltaría el aceite encima de Johnny,
 #     ni uno que aún tiene su charco. Fuera de su cocina (la sala de pruebas), sin muebles, no pasa nada.
 # Enfadado (a media vida): 5 cuchillos en el abanico y más rápidos, 7 en la lluvia y todo más seguido; y su cocina
-# rebosa cada 4,5 s, la mitad de las veces dos muebles a la vez, con los charcos un poco más grandes.
+# rebosa cada 3 s, la mitad de las veces dos muebles a la vez, con los charcos un poco más grandes.
 # Sus animaciones (PixelLab): andar, lanzar (vale para el abanico, la lluvia y la sartén), cuchillazo, golpe (al
 # enfadarse) y muerte. Lo que lanza sale justo en el fotograma en el que el brazo llega adelante (SUELTA) y el
 # cuchillazo hace daño en el del tajo (TAJO).
@@ -47,7 +47,7 @@ const ESPERAS := {"abanico": [2.4, 1.5], "lluvia": [6.5, 4.5], "sarten": [8.0, 6
 # M82: los muebles de su cocina que rebosan aceite hirviendo (charco.gd, "hirviendo" con "crece")
 const CHARCO := "res://escenas/armas/charco.tscn"   # (se carga al rebosar, como en proyectil.gd)
 const REBOSAN := ["industrialstove", "fryer"]
-const CADA_REBOSE := [7.0, 4.5]    # cada cuánto rebosa uno (normal y enfadado)
+const CADA_REBOSE := [4.5, 3.0]    # cada cuánto rebosa uno (normal y enfadado)
 const DOS_A_LA_VEZ := 0.5          # enfadado: la suerte de que rebosen dos a la vez
 const AVISO_REBOSE := 1.0          # lo que echa vapor y burbujea antes de soltar el aceite
 const GRANDE_REBOSE := [1.8, 2.0]  # lo grande que llega a ser el charco, respecto al de la sartén (normal y enfadado)
