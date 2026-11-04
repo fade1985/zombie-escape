@@ -104,6 +104,8 @@ const BARRERA := [preload("res://assets/sprites/escudo-barrera-detras.png"),
 const BARRERA_CENTRO := Vector2(40, 38)   # el centro de la esfera en cada fotograma (en píxeles del dibujo)
 const BARRERA_RADIO := 31.0               # lo que mide la esfera en el dibujo (de radio)
 const BARRERA_SUBE := 0.3                 # lo que tarda en subir (y en bajar)
+const BARRERA_CABEZA := 12.0              # lo alto de la cabeza, esto por debajo de sus números de daño ("altura")
+const BARRERA_MARGEN := 6.0               # lo que sobra de burbuja por encima de la cabeza y por debajo de los pies
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var agente: NavigationAgent2D = $Agente
@@ -331,7 +333,7 @@ func meter_barrera(de: Node) -> void:
 		capa.hframes = 8
 		capa.vframes = 6
 		capa.offset = Vector2(40, 40) - BARRERA_CENTRO
-		capa.position = Vector2(0, -altura * 0.45)
+		capa.position = centro_burbuja() - global_position
 		capa.visible = false
 		if i > 0:
 			capa.z_index = 1
@@ -364,12 +366,14 @@ func animar_barrera(delta: float) -> void:
 
 
 # M80: la burbuja, tal como se ve (bala.gd la mira para que la bala rebote en su borde, como en la del bombero)
+# (centrada entre los pies, en el 0 de su dibujo, y lo alto de la cabeza, un poco por debajo de sus números de daño;
+# con un pelín de margen por arriba y por abajo)
 func centro_burbuja() -> Vector2:
-	return global_position + Vector2(0, -altura * 0.45)
+	return global_position + Vector2(0, (sprite.position.y - altura + BARRERA_CABEZA) / 2.0)
 
 
 func radio_burbuja() -> float:
-	return altura * 0.62 * barrera_k
+	return ((sprite.position.y + altura - BARRERA_CABEZA) / 2.0 + BARRERA_MARGEN) * barrera_k
 
 
 func escudo_toca(p: Vector2) -> bool:
