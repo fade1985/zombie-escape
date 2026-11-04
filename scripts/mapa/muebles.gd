@@ -82,6 +82,17 @@ static func de_piso(apt: Dictionary) -> Array:
 	return lista
 
 
+# M77: los muebles de una tienda fija (Tienda.PLANOS): como los de un piso, los que el dueño ha puesto a mano. Cada sala
+# lleva los "colocados" de "<uso>-<tipo de tienda>" en Catalogo.SALAS ("tienda-supermercado", "camara-supermercado",
+# "bano-supermercado"...), según el lado por el que se entra ("abajo" las normales, "arriba" las volteadas)
+static func de_tienda(apt: Dictionary) -> Array:
+	var lista := []
+	for s in apt.salas:
+		var datos: Dictionary = Catalogo.SALAS.get("%s-%s" % [s.uso, apt.tipo], {})
+		lista += colocados(datos.get("colocados", {}).get(apt.entrada.lado, []), s)
+	return lista
+
+
 # Los muebles de una habitación puestos a mano, cada uno en una pared. Cada uno, [tipo, dónde está su centro, pared, extra]: el
 # centro, en casillas contadas desde la esquina de arriba a la izquierda de la habitación (2.0 es justo en medio de las
 # casillas 2 y 3; 5.5, el centro de la casilla 6), a lo largo de su pared (de izquierda a derecha en la de arriba y la de

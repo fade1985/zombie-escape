@@ -52,9 +52,60 @@ const TIPOS := {
 const ASEO_EN := ["almacen", "cocina", "rebotica", "taller", "taquillas", "probadores"]   # nunca en la cámara
 # [traducir]
 const NOMBRES := {"almacen": "Almacén", "camara": "Cámara frigorífica", "taller": "Taller", "taquillas": "Taquillas",
-	"cocina": "Cocina", "probadores": "Probadores", "rebotica": "Rebotica", "bano": "Aseo",
+	"cocina": "Cocina", "probadores": "Probadores", "rebotica": "Rebotica", "bano": "Aseo de empleados",
 	"trastienda": "Trastienda", "acorazada": "Cámara acorazada"}
 # [/traducir]
+
+# M77: las tiendas fijas, como el piso de los apartamentos (Apartamento.PLANO_PASILLO). Cada tipo de tienda que tiene
+# aquí su plano sale siempre igual, dibujado con letras y con la puerta de entrada abajo (las de debajo de la galería, con
+# la puerta arriba, salen volteadas); sus muebles, puestos a mano en los "colocados" de "<sala>-<tipo>" de
+# Catalogo.SALAS (Muebles.de_tienda). Las que aún no tienen plano se siguen sorteando (probar).
+#   #  muro             (espacio)  hueco de una puerta          E  la puerta de entrada, en el muro de fuera
+#   V  sala de venta    K  cámara frigorífica    A  almacén     B  aseo de empleados (M81: es de la habitación a la
+#   T  taller           Q  taquillas             O  cocina         que da su puerta, con su botiquín en el armarito)
+#   P  probadores       R  rebotica              Z  trastienda  X  cámara acorazada
+# Cada trozo seguido de una misma letra es una habitación. Los tabiques de lado a lado tapan las tres últimas filas de
+# lo que queda encima (como en el piso). Todas las filas, igual de largas; la prueba --tiendas-fijas dice si algo ha
+# quedado mal
+const LETRAS := {"V": {"uso": "tienda"}, "K": {"uso": "camara"}, "A": {"uso": "almacen"}, "B": {"uso": "bano"},
+	"T": {"uso": "taller"}, "Q": {"uso": "taquillas"}, "O": {"uso": "cocina"}, "P": {"uso": "probadores"},
+	"R": {"uso": "rebotica"}, "Z": {"uso": "trastienda"}, "X": {"uso": "acorazada"}}
+const PLANOS := {
+	# el supermercado: la cámara a la izquierda y el almacén a la derecha, con el aseo en su rincón; entre los dos, un
+	# trozo de sala de venta que llega hasta el fondo
+	"supermercado": [
+		"############################################",
+		"############################################",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA BBBBBBB##",   # no-tr (el plano, no es un texto)
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA BBBBBBB##",   # no-tr
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"##KKKKKKKKKKKK#VVVVVVVV#AAAAAAAAAA#BBBBBBB##",
+		"#######  ######VVVVVVVV#AAAAAAAAAA##########",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVV#AAAAAAAAAAAAAAAAAA##",
+		"##VVVVVVVVVVVVVVVVVVVVV#AAAAAAAAAAAAAAAAAA##",
+		"##VVVVVVVVVVVVVVVVVVVVV#####  ##############",   # no-tr
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"##VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV##",
+		"#####################EE#####################",
+		"#####################EE#####################",
+	],
+}
 
 static var rng := RandomNumberGenerator.new()
 
@@ -78,6 +129,8 @@ static func generar(semilla: int, tipo: String, jefe := false, lado := "abajo") 
 		local.salas[0].nombre = "Tienda destrozada"   # [traducir]
 		local.tipo = "tienda"   # sus muebles, los de "jefe-tienda" del catálogo (no los del salón de un piso)
 		return local
+	if PLANOS.has(tipo):
+		return del_plano(tipo, lado)
 	for intento in 500:
 		rng.seed = semilla + intento * 7919
 		var t := probar(tipo)
@@ -89,6 +142,22 @@ static func generar(semilla: int, tipo: String, jefe := false, lado := "abajo") 
 		return t
 	push_error("No se pudo generar la tienda %s (semilla %d)" % [tipo, semilla])
 	return {}
+
+
+# M77: la tienda de ese tipo, siempre la misma, sacada de su plano (PLANOS). "fijo": sus muebles son los puestos a mano
+# (Muebles.de_tienda), no los del sorteo
+static func del_plano(tipo: String, lado: String) -> Dictionary:
+	var t := Apartamento.del_plano(PLANOS[tipo], LETRAS)
+	t.tipo = tipo
+	t.fijo = true
+	describir(t)
+	var malos := Apartamento.fallos(t)
+	if not malos.is_empty():
+		push_error("El plano de la tienda %s (Tienda.PLANOS) está mal: %s" % [tipo, ", ".join(malos)])
+	if lado == "arriba":
+		Apartamento.voltear(t)
+	t.lado = lado
+	return t
 
 
 static func probar(tipo: String) -> Dictionary:

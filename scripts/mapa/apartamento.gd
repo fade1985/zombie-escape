@@ -125,24 +125,34 @@ static func habitacion_jefe() -> Dictionary:
 # El piso, montado tal cual a partir de su dibujo (PLANO_PASILLO), con la puerta de entrada abajo. Devuelve lo que
 # cuenta generar()
 static func pasillo_del_plano() -> Dictionary:
-	var filas: int = PLANO_PASILLO.size()
-	var cols: int = PLANO_PASILLO[0].length()
+	var apt := del_plano(PLANO_PASILLO, LETRAS)
+	apt.forma = "pasillo"
+	describir(apt)
+	return apt
+
+
+# Un sitio montado tal cual a partir de su dibujo con letras ("plano": filas de texto igual de largas; "letras": qué es
+# cada letra, {uso, tipo}, y en ese orden se numeran las habitaciones). Lo usan el piso (PLANO_PASILLO) y, desde la M77,
+# las tiendas del centro comercial (Tienda.PLANOS). Sin nombres: eso lo pone describir() (o Tienda.describir)
+static func del_plano(plano: Array, letras: Dictionary) -> Dictionary:
+	var filas: int = plano.size()
+	var cols: int = plano[0].length()
 	var dueno := PackedInt32Array()
 	dueno.resize(cols * filas)
 	dueno.fill(-1)
 	var letra := func(c: int, f: int) -> String:
-		return PLANO_PASILLO[f][c]
+		return plano[f][c]
 
 	# 1. Las habitaciones: cada trozo seguido de una misma letra, rellenado de vecina en vecina
 	var salas := []
-	for l: String in LETRAS:
+	for l: String in letras:
 		for f in filas:
 			for c in cols:
 				if letra.call(c, f) != l or dueno[f * cols + c] != -1:
 					continue
-				var sala := {"id": salas.size(), "uso": LETRAS[l].uso, "puertas": []}
-				if LETRAS[l].has("tipo"):
-					sala.tipo = LETRAS[l].tipo
+				var sala := {"id": salas.size(), "uso": letras[l].uso, "puertas": []}
+				if letras[l].has("tipo"):
+					sala.tipo = letras[l].tipo
 				var desde := Vector2i(c, f)   # (la esquina de arriba a la izquierda de lo que ocupa, y la de abajo a la derecha)
 				var hasta := Vector2i(c, f)
 				var pila := [Vector2i(c, f)]
@@ -190,10 +200,8 @@ static func pasillo_del_plano() -> Dictionary:
 		salas[bano.dueno_bano].bano = bano.id
 
 	# 3. La puerta de entrada: la E del muro de abajo
-	var apt := {"cols": cols, "filas": filas, "dueno": dueno, "salas": salas, "puertas": puertas,
-		"entrada": {"c": PLANO_PASILLO[filas - 1].find("E"), "lado": "abajo"}, "jefe": false, "forma": "pasillo"}
-	describir(apt)
-	return apt
+	return {"cols": cols, "filas": filas, "dueno": dueno, "salas": salas, "puertas": puertas,
+		"entrada": {"c": plano[filas - 1].find("E"), "lado": "abajo"}, "jefe": false}
 
 
 # Cuántas casillas se alcanzan andando desde "desde" pisando solo las que cumplen "pisable"

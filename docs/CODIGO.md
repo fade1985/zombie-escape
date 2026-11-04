@@ -447,7 +447,9 @@ en una línea.
   mismo sitio (`APARATOS`, uno por edificio; ninguno cerca de la puerta, de la rampa ni del helipuerto: lo mira `--azotea`). No tiene más puerta que la de llegada: se sale por la escalera del helicóptero. Se prueba con `--azotea`.
   `apartamento.gd` da cada piso, que es siempre el mismo (dibujado con letras en `PLANO_PASILLO`, volteado cuando la
   puerta da arriba; sus muebles, solo los puestos a mano: `colocados` en `catalogo.gd`, por ahora el dormitorio de matrimonio con la
-  puerta abajo), y la habitación de cada jefe; `tienda.gd` genera cada tienda;
+  puerta abajo), y la habitación de cada jefe; `tienda.gd` da cada tienda: las que tienen plano (`Tienda.PLANOS`, M77, de
+  momento el supermercado) salen siempre iguales, leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
+  (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`), y las demás se sortean;
   `viviendas.gd`, el pasillo de los rescatados. Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
   habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y de un gris muy oscuro (`tabique.gd` y
   `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los

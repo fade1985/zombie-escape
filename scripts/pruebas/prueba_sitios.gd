@@ -576,6 +576,70 @@ func probar_tiendas() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --edificio centro --tiendas-fijas" (M77): las tiendas que ya tienen plano (Tienda.PLANOS), siempre
+# iguales. De cada una, con la puerta abajo y arriba: si el plano está bien (Apartamento.fallos), sus salas, cuántos
+# muebles lleva (los puestos a mano) y cuántos armaritos con botiquín tiene su aseo (M81), y su plano con letras. Luego la
+# busca en una planta, la monta sin zombis y saca captura-fija-<tipo>-<lado>.png (entera, sin penumbra) y
+# captura-fija-<tipo>-<lado>-aseo.png (Johnny en el aseo de empleados). Con "--tipo X", solo esa. Luego se cierra
+func probar_tiendas_fijas() -> void:
+	var args := OS.get_cmdline_user_args()
+	var solo: String = args[args.find("--tipo") + 1] if "--tipo" in args else ""
+	var letra := {}
+	for l in Tienda.LETRAS:
+		letra[Tienda.LETRAS[l].uso] = l
+	for tipo in Tienda.PLANOS:
+		if solo != "" and tipo != solo:
+			continue
+		for lado in ["abajo", "arriba"]:
+			var t := Tienda.generar(0, tipo, false, lado)
+			var esperado: int = 0
+			for s in t.salas:
+				esperado += Catalogo.SALAS.get("%s-%s" % [s.uso, tipo], {}).get("colocados", {}).get(lado, []).size()
+			print("Fija %s (puerta %s): %d × %d casillas, fallos %s (esperado: []) · %s" % [tipo, lado, t.cols, t.filas,
+				Apartamento.fallos(t), " · ".join(t.salas.map(func(s): return "%s %d×%d" % [s.nombre, s.ancho, s.fondo]))])
+			for f in t.filas:
+				var linea := ""
+				for c in t.cols:
+					var v: int = t.dueno[f * t.cols + c]
+					var entrada: bool = (c - t.entrada.c) in [0, 1] and (f < Tienda.BORDE if lado == "arriba" else f >= t.filas - Tienda.BORDE)
+					linea += "E" if entrada else "#" if v == -1 else " " if v == -2 else letra[t.salas[v].uso]
+				print("    " + linea)
+			# la busca en una planta (las tiendas de cada puerta se sortean)
+			var hallada := {}
+			for i in 200:
+				Planta.semilla = 3000 + i
+				var num := 1 + i % 4
+				var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+				for idx in p.sitios.size():
+					if p.sitios[idx].get("tienda", "") == tipo and p.sitios[idx].tipo != "jefe" and p.sitios[idx].apt.entrada.lado == lado:
+						hallada = {"semilla": 3000 + i, "num": num, "idx": idx}
+						break
+				if not hallada.is_empty():
+					break
+			if hallada.is_empty():
+				Planta.semilla = 0
+				print("Fija %s (puerta %s): no sale en ninguna planta" % [tipo, lado])
+				continue
+			Planta.semilla = hallada.semilla
+			nueva_planta(hallada.num)
+			Planta.semilla = 0
+			var sitio: Dictionary = planta.sitios[hallada.idx]
+			sitio.limpio = true   # sin zombis: aquí se mira la tienda
+			await montar(hallada.idx, 0, false)
+			await get_tree().create_timer(0.4).timeout
+			print("Fija %s (puerta %s): muebles %d (esperado: %d, los puestos a mano), armaritos %s" % [tipo, lado,
+				get_tree().get_nodes_in_group("muebles").size(), esperado, sitio.get("armaritos", []).map(func(a): return a.dentro)])
+			for s in sitio.apt.salas:
+				if s.uso == "bano":
+					johnny.position = s.centro
+					johnny.get_node("Camara").reset_smoothing()
+					await get_tree().create_timer(0.8).timeout
+					Captura.foto("captura-fija-%s-%s-aseo.png" % [tipo, lado])
+			johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+			await foto_entera(sitio, "captura-fija-%s-%s.png" % [tipo, lado])
+	get_tree().quit()
+
+
 # El sitio de esta planta con más puertas de dentro, si tiene al menos dos (las tiendas se sortean: unas tienen dos y otras más), o -1
 func piso_con_mas_puertas() -> int:
 	var idx := -1

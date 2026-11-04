@@ -2218,8 +2218,8 @@ msgid "Rebotica"
 msgstr "Hinterzimmer"
 
 #: scripts/mapa/tienda.gd
-msgid "Aseo"
-msgstr "WC"
+msgid "Aseo de empleados"
+msgstr "Personal-WC"
 
 #: scripts/mapa/tienda.gd
 msgid "Trastienda"
@@ -6183,3 +6183,7 @@ msgstr "puh"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PFIIII!"
+
+#, sin-usar
+msgid "Aseo"
+msgstr "WC"

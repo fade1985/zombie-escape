@@ -2216,8 +2216,8 @@ msgid "Rebotica"
 msgstr "配药间"
 
 #: scripts/mapa/tienda.gd
-msgid "Aseo"
-msgstr "厕所"
+msgid "Aseo de empleados"
+msgstr "员工厕所"
 
 #: scripts/mapa/tienda.gd
 msgid "Trastienda"
@@ -6163,3 +6163,7 @@ msgstr "呼"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "嘘——！"
+
+#, sin-usar
+msgid "Aseo"
+msgstr "厕所"

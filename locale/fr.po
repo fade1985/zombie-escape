@@ -2218,8 +2218,8 @@ msgid "Rebotica"
 msgstr "Arrière-officine"
 
 #: scripts/mapa/tienda.gd
-msgid "Aseo"
-msgstr "Toilettes"
+msgid "Aseo de empleados"
+msgstr "Toilettes du personnel"
 
 #: scripts/mapa/tienda.gd
 msgid "Trastienda"
@@ -6183,3 +6183,7 @@ msgstr "pff"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "PRIIIT !"
+
+#, sin-usar
+msgid "Aseo"
+msgstr "Toilettes"

@@ -2220,8 +2220,8 @@ msgid "Rebotica"
 msgstr "Провизорская"
 
 #: scripts/mapa/tienda.gd
-msgid "Aseo"
-msgstr "Туалет"
+msgid "Aseo de empleados"
+msgstr "Туалет для персонала"
 
 #: scripts/mapa/tienda.gd
 msgid "Trastienda"
@@ -6203,3 +6203,7 @@ msgstr "уф"
 #: scripts/zombi_guardia.gd
 msgid "¡PRIIII!"
 msgstr "ФЬЮЮЮТЬ!"
+
+#, sin-usar
+msgid "Aseo"
+msgstr "Туалет"

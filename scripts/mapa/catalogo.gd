@@ -360,7 +360,49 @@ const SALAS := {
 		"cuantos": [8, 11],
 		"iguales": {"gondola": 4, "drinkfridge": 2, "checkout": 2, "pallet": 2},
 		"islas": {"muebles": ["gondola"], "fila": 3, "entre": 0, "cada": 176},
+		# M77: el supermercado fijo (Tienda.PLANOS; casillas desde la esquina de la sala de venta, la 2,2 del plano). Con la
+		# puerta abajo: tres neveras de bebidas al fondo del trozo que llega hasta atrás, palés y estanterías delante de la
+		# cámara y del almacén (sueltos: esas paredes están más abajo que la de arriba de la sala), dos cajas a la izquierda,
+		# dos filas de tres góndolas a cada lado del pasillo de la entrada y palés por la derecha y abajo. Volteada (la
+		# puerta arriba), las neveras y las cajas en la pared de la entrada y las góndolas, más arriba
+		"colocados": {
+			"abajo": [
+				["drinkfridge", 14.5], ["drinkfridge", 17.0], ["drinkfridge", 19.5],
+				["pallet", 1.75, "libre", 10.875], ["metalshelf", 9.75, "libre", 10.625],
+				["metalshelf", 23.5, "libre", 13.625], ["metalshelf", 30.5, "libre", 13.625],
+				["metalshelf", 33.0, "libre", 13.625], ["pallet", 37.5, "libre", 13.875],
+				["checkout", 17.0, "izquierda"], ["checkout", 21.0, "izquierda"],
+				["pallet", 18.0, "derecha"], ["pallet", 22.0, "derecha"],
+				["gondola", 5.4375, "libre", 16.75], ["gondola", 9.3125, "libre", 16.75], ["gondola", 13.1875, "libre", 16.75],
+				["gondola", 26.4375, "libre", 16.75], ["gondola", 30.3125, "libre", 16.75], ["gondola", 34.1875, "libre", 16.75],
+				["gondola", 5.4375, "libre", 22.25], ["gondola", 9.3125, "libre", 22.25], ["gondola", 13.1875, "libre", 22.25],
+				["gondola", 26.4375, "libre", 22.25], ["gondola", 30.3125, "libre", 22.25], ["gondola", 34.1875, "libre", 22.25],
+			],
+			"arriba": [
+				["drinkfridge", 2.0], ["drinkfridge", 4.0], ["drinkfridge", 6.0], ["metalshelf", 9.5],
+				["checkout", 15.0], ["checkout", 25.0], ["metalshelf", 30.5], ["drinkfridge", 34.0], ["drinkfridge", 36.0],
+				["pallet", 6.0, "izquierda"], ["pallet", 6.0, "derecha"], ["pallet", 15.0, "abajo"], ["pallet", 19.0, "abajo"],
+				["gondola", 5.4375, "libre", 4.5], ["gondola", 9.3125, "libre", 4.5], ["gondola", 13.1875, "libre", 4.5],
+				["gondola", 26.4375, "libre", 4.5], ["gondola", 30.3125, "libre", 4.5], ["gondola", 34.1875, "libre", 4.5],
+				["gondola", 5.4375, "libre", 9.5], ["gondola", 9.3125, "libre", 9.5], ["gondola", 13.1875, "libre", 9.5],
+				["gondola", 26.4375, "libre", 9.5], ["gondola", 30.3125, "libre", 9.5], ["gondola", 34.1875, "libre", 9.5],
+			],
+		},
 	},
+	# la cámara, el almacén y el aseo de empleados (M81: con su botiquín en el armarito, planta.gd, armaritos) del
+	# supermercado fijo (M77)
+	"camara-supermercado": {"colocados": {
+		"abajo": [["freezershelf", 1.75], ["freezershelf", 6.0], ["freezershelf", 10.25], ["pallet", 4.5, "derecha"]],
+		"arriba": [["freezershelf", 1.75], ["freezershelf", 9.25], ["pallet", 5.0, "derecha"], ["pallet", 6.0, "abajo"]],
+	}},
+	"almacen-supermercado": {"colocados": {
+		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.0], ["lockers", 8.0], ["pallet", 6.0, "izquierda"]],
+		"arriba": [["metalshelf", 1.5], ["lockers", 8.5], ["pallet", 7.0, "izquierda"], ["pallet", 3.0, "abajo"]],
+	}},
+	"bano-supermercado": {"colocados": {
+		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+	}},
 	"tienda-ferreteria": {
 		"muebles": ["metalshelf", "metalshelf", "workbench", "checkout", "pallet"],
 		"cuantos": [8, 11],
