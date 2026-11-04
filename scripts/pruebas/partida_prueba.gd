@@ -33,6 +33,8 @@
 #                       enfadada (M88)                                                     [prueba_jefes.gd]
 #   --maniquies         (con --edificio centro --jefe modista) los maniquíes vivos de la modista: despiertan, andan
 #                       y se rompen, con fotos (M89)                                       [prueba_jefes.gd]
+#   --cocina            (con --edificio centro --jefe cocinero) la Cocina central (M82): los fogones y las
+#                       freidoras que rebosan aceite hirviendo, con fotos; y cuántos, normal y enfadado [prueba_jefes.gd]
 #   --crios             (con --edificio centro --jefe mascota) cuántos críos salen en 20 s, normal y enfadada, cuántos
 #                       a la vez como mucho y a qué distancia de Johnny (M85)              [prueba_jefes.gd]
 #   --metal             (con --jefe gymbro) el cuerpo de metal de sus suplementos: sube, se desconcha y revienta; y
@@ -308,6 +310,10 @@ func empezar_prueba() -> void:
 	elif "--maniquies" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_maniquies()
+		get_tree().quit()
+	elif "--cocina" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_cocina()
 		get_tree().quit()
 	elif "--crios" in args:
 		set_process(false)   # sin la prueba larga

@@ -10,7 +10,9 @@
 # de ceniza. Prende a los zombis que lo pisan (siguen ardiendo al salir: zombi.gd) y lleva su luz de fuego.
 #
 # El aceite hirviendo del cocinero ("hirviendo") quema como el fuego (a Johnny y a los zombis, pero no a él: es su
-# "dueno"); se dibuja también con código, una mancha dorada con burbujas que revientan y algo de vapor.
+# "dueno"); se dibuja también con código, una mancha dorada con burbujas que revientan y algo de vapor. El que rebosa
+# de los fogones y las freidoras de su cocina (M82, cocinero.gd) es el mismo, más grande y con "crece": en vez de
+# extenderse de golpe, se va extendiendo despacio por el suelo (y solo quema hasta donde ha llegado).
 #
 # El veneno, el ácido, el vómito y la lejía ("burbujas" en TIPOS) se dibujan como el fuego, a cuadraditos y con el borde
 # ondulado: se extienden desde el centro, sus colores tiemblan, en vez de llamas tienen burbujitas que crecen y
@@ -75,6 +77,7 @@ var escala := 1.0          # el Fabricante hace el fuego más grande...
 var duracion := 1.0        # ...y más largo
 var extra := 0.0           # segundos de más que dura (Napalm: el fuego del molotov de Johnny)
 var dano_lanzar := 1.0     # Puntería: el fuego quema más a los zombis
+var crece := 0.0           # M82: el aceite hirviendo que rebosa de la cocina, lo que tarda en llegar a su tamaño (0: de golpe)
 var vida := 0.0
 var vida_max := 0.0
 var t := 0.0
@@ -82,7 +85,7 @@ var tick := 0.0
 var celdas: Array = []     # el fuego: [posición, distancia al centro (0-1), cuándo prende, cuándo se apaga, ruido]
 var llamas: Array = []     # [x, y, ancho, alto, semilla, prende, apaga]
 var ascuas: Array = []
-var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada cuánto revienta]; el veneno, ver hacer_burbujeo
+var burbujas: Array = []   # el aceite hirviendo: [sitio, cuándo empieza, cada cuánto revienta, lo lejos del centro]; el veneno, ver hacer_burbujeo
 var gordas: Array = []     # las burbujas gordas del reventón: [su celda, desfase, cada cuánto revienta, lo grande que se hace]
 
 
@@ -105,6 +108,15 @@ func _ready() -> void:
 
 func radio() -> float:
 	return TIPOS[tipo].radio * escala
+
+
+# El aceite hirviendo, lo que se ha extendido ya (0-1): el de la sartén, en un momento; el que rebosa de la cocina
+# (M82), despacio, más deprisa al principio (como un líquido que se derrama)
+func extendido() -> float:
+	if crece <= 0.0:
+		return minf(1.0, t / 0.25)
+	var k := minf(1.0, t / crece)
+	return 0.25 + 0.75 * (1.0 - (1.0 - k) * (1.0 - k))
 
 
 func burbujea() -> bool:
@@ -151,7 +163,7 @@ func _physics_process(delta: float) -> void:
 # El charco es una elipse (más ancha que alta, porque el suelo se ve un poco desde arriba)
 func dentro(punto: Vector2, margen: float) -> bool:
 	var d := punto - global_position
-	var r := radio() + margen
+	var r := radio() * (extendido() if tipo == "hirviendo" else 1.0) + margen
 	return (d.x / r) ** 2 + (d.y / (r * 0.6)) ** 2 <= 1.0
 
 
@@ -452,25 +464,26 @@ func hacer_hirviendo() -> void:
 			var d := Vector2(p.x, p.y / 0.6).length() / r / borde
 			if d <= 1.0:
 				celdas.append([p, d, 0.0, 0.0, randf()])
-	for i in 9:
+	# (el grande de la cocina, M82, con más burbujas: las mismas por trozo de suelo)
+	for i in roundi(9 * escala * escala):
 		var c: Array = celdas.pick_random()
 		if c[1] < 0.8:
-			burbujas.append([c[0], randf() * 2.0, randf_range(0.7, 1.4)])
+			burbujas.append([c[0], randf() * 2.0, randf_range(0.7, 1.4), c[1]])
 
 
 # Hierve: algo de vapor que sube
 func hervir(delta: float) -> void:
 	if randf() < 5.0 * delta:
 		var a := randf() * TAU
-		var r := sqrt(randf()) * radio() * 0.7
+		var r := sqrt(randf()) * radio() * extendido() * 0.7
 		Particulas.soltar(self, global_position + Vector2(cos(a) * r, sin(a) * r * 0.6), Vector2(randf_range(-8, 8), randf_range(-50, -30)),
 			Color(1, 0.95, 0.85, 0.4), randf_range(3, 5), 0.7)
 
 
 func pintar_hirviendo() -> void:
-	var crece := minf(1.0, t / 0.25)   # al caer, se extiende en un momento
+	var hasta := extendido()   # al caer, se extiende en un momento (el de la cocina, M82, despacio)
 	for c in celdas:
-		if c[1] > crece:
+		if c[1] > hasta:
 			continue
 		var color := Color("#5e3510") if c[1] > 0.88 else Color("#9a5a16") if c[1] > 0.6 or c[4] < 0.25 else Color("#c07a22")
 		if c[4] > 0.93:
@@ -478,6 +491,8 @@ func pintar_hirviendo() -> void:
 		draw_rect(Rect2(c[0], Vector2(CELDA, CELDA)), color)
 	# las burbujas: crecen y revientan (un anillo claro), cada una a su ritmo
 	for b in burbujas:
+		if b[3] > hasta:
+			continue   # (aún no ha llegado ahí el aceite)
 		var k: float = fmod(t + b[1], b[2]) / b[2]
 		var p: Vector2 = b[0] + Vector2(2, 2)
 		if k < 0.8:

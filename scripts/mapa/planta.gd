@@ -276,7 +276,7 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		# (planta.jefe, no su_jefe: cuando la portera sale por defecto, su_jefe llega vacío)
 		if jefe and Catalogo.SALAS.has("jefe-" + planta.jefe):
 			apt.tipo = planta.jefe   # sus muebles, los suyos (el Taller de costura lleno de maniquíes; el Glotón,
-			# ninguno; el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza; el jefe
+			# ninguno; el cocinero, sus fogones y freidoras, que rebosan aceite (M82); el Gymbro, sus máquinas de gimnasio; la portera, sus cubos de basura y su carro de limpieza; el jefe
 			# de bomberos, ninguno)
 		# (las tiendas son "apartamento" para la partida: un sitio normal que hay que limpiar; "tienda" dice de qué)
 		# Los pisos solo llevan los muebles que el dueño ha puesto a mano, cada uno en su sitio (Muebles.de_piso)

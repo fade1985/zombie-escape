@@ -189,6 +189,77 @@ func probar_maniquies() -> void:
 	Captura.foto("captura-maniquies-rotos.png")
 
 
+# Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 3 fogones y
+# 3 freidoras, que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
+# Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los
+# muebles con su charco ya extendido (-llena). Cuenta cuántos rebosan en 60 s, normal y enfadado, y cuántas veces dos a la vez
+func probar_cocina() -> void:
+	if not await ir_a_la_sala_del_jefe("cocinero"):
+		return
+	jefa.set_physics_process(false)
+	johnny.set_physics_process(false)
+	var fogones: Array = jefa.fogones()
+	print("Cocina: %d muebles que rebosan (esperado: 6): %s" % [fogones.size(), fogones.map(func(m): return "%s en %s" % [
+		m.datos.tipo, m.datos.lado])])
+	if fogones.is_empty():
+		return
+	# Johnny, en medio de la cocina (entre los muebles)
+	var medio := Vector2.ZERO
+	for m in fogones:
+		medio += m.global_position / fogones.size()
+	johnny.global_position = medio
+	var paso := 1.0 / 60.0
+	var correr := func(segundos: float) -> void:
+		for i in roundi(segundos * 60.0):
+			jefa.tiempo += paso
+			jefa.rebosar(paso, johnny)
+			await get_tree().physics_frame
+	# el primero, a mano: el de la pared de arriba más cerca de Johnny (que salga en la foto)
+	var cerca: Node2D = fogones.filter(func(m): return m.datos.lado == "arriba").reduce(func(x, m): return m if 		m.global_position.distance_to(medio) < x.global_position.distance_to(medio) else x)
+	jefa.rebosando.append([cerca, jefa.AVISO_REBOSE])
+	jefa.mojado[cerca] = jefa.tiempo + jefa.AVISO_REBOSE + jefa.DURA_REBOSE
+	jefa.rebose = 99.0
+	await correr.call(0.6)
+	print("Cocina: avisando %d (esperado: 1)" % jefa.rebosando.size())
+	Captura.foto("captura-cocina-aviso.png")
+	await correr.call(3.4)
+	var charcos := get_tree().get_nodes_in_group("charcos").filter(func(c): return c.tipo == "hirviendo")
+	print("Cocina: charcos %d, extendido a los 3 s %s (esperado: 1, entre 0,7 y 0,85)" % [charcos.size(),
+		charcos.map(func(c): return "%.2f" % c.extendido())])
+	Captura.foto("captura-cocina-crece.png")
+	# todos los demás, a la vez (para ver dónde queda el charco de cada uno)
+	for m in fogones:
+		if jefa.mojado.get(m, 0.0) <= jefa.tiempo:
+			jefa.derramar(m)
+	await correr.call(6.5)
+	Captura.foto("captura-cocina-llena.png")
+	# cuántos rebosan en 60 s (sin esperar de verdad: los charcos, fuera al momento), normal y enfadado
+	for c in get_tree().get_nodes_in_group("charcos"):
+		c.remove_from_group("charcos")
+		c.queue_free()
+	for fase in [1, 2]:
+		jefa.fase = fase
+		jefa.mojado.clear()
+		jefa.rebosando.clear()
+		jefa.rebose = 0.0
+		var soltados := 0
+		var dobles := 0
+		for i in 3600:
+			jefa.tiempo += paso
+			var antes: int = jefa.rebosando.size()
+			jefa.rebosar(paso, johnny)
+			if jefa.rebosando.size() - antes >= 2:
+				dobles += 1
+			for c in get_tree().get_nodes_in_group("charcos"):
+				if not c.is_queued_for_deletion():
+					soltados += 1
+					c.remove_from_group("charcos")
+					c.queue_free()
+		print("Cocina, %s: rebosan %d en 60 s (esperado: %s), %d veces dos a la vez (esperado: %s)" % [
+			"enfadado" if fase == 2 else "normal", soltados, "8 o 9" if fase == 1 else "unos 20", dobles,
+			"0" if fase == 1 else "unas 6"])
+
+
 # Con "--captura --jefe gloton --aspirar": solo lo del Glotón de probar_gloton (la sangre ácida y el aspirado, con lo que
 # tira a 3, 5, 8 y 12 casillas, normal y enfadado), sin la prueba larga. Deja la foto captura-gloton-aspira.png
 func probar_aspirar() -> void:

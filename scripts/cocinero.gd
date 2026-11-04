@@ -9,7 +9,13 @@
 #   - Aceite hirviendo: tira la sartén (sale una marca donde caerá) y deja un charco que quema como el fuego del
 #     molotov durante 6 s (charco.gd). A él su aceite no le quema: es el cocinero.
 #   - Cuchillazo: si Johnny se le pega, marca un trozo de suelo (medio segundo) y le da: 20.
-# Enfadado (a media vida): 5 cuchillos en el abanico y más rápidos, 7 en la lluvia y todo más seguido.
+#   - Su cocina (M82): los 3 fogones industriales y las 3 freidoras de las paredes de la Cocina central
+#     (catalogo.gd, "jefe-cocinero") rebosan: cada 7 s uno echa vapor y burbujea (1 s, el aviso) y suelta por delante
+#     un charco de aceite hirviendo que se va extendiendo despacio por el suelo (6 s, hasta casi el doble que el de
+#     la sartén) y se seca a los 14 s. Quema como el de la sartén. Nunca el que soltaría el aceite encima de Johnny,
+#     ni uno que aún tiene su charco. Fuera de su cocina (la sala de pruebas), sin muebles, no pasa nada.
+# Enfadado (a media vida): 5 cuchillos en el abanico y más rápidos, 7 en la lluvia y todo más seguido; y su cocina
+# rebosa cada 4,5 s, la mitad de las veces dos muebles a la vez, con los charcos un poco más grandes.
 # Sus animaciones (PixelLab): andar, lanzar (vale para el abanico, la lluvia y la sartén), cuchillazo, golpe (al
 # enfadarse) y muerte. Lo que lanza sale justo en el fotograma en el que el brazo llega adelante (SUELTA) y el
 # cuchillazo hace daño en el del tajo (TAJO).
@@ -38,6 +44,17 @@ const DANO_CUCHILLAZO := 20
 const DISTANCIA_CUCHILLAZO := 140.0   # si Johnny está más cerca que esto, prefiere el cuchillazo
 # lo que espera a repetir cada ataque (normal y enfadado)
 const ESPERAS := {"abanico": [2.4, 1.5], "lluvia": [6.5, 4.5], "sarten": [8.0, 6.0], "cuchillazo": [1.4, 1.0]}
+# M82: los muebles de su cocina que rebosan aceite hirviendo (charco.gd, "hirviendo" con "crece")
+const CHARCO := "res://escenas/armas/charco.tscn"   # (se carga al rebosar, como en proyectil.gd)
+const REBOSAN := ["industrialstove", "fryer"]
+const CADA_REBOSE := [7.0, 4.5]    # cada cuánto rebosa uno (normal y enfadado)
+const DOS_A_LA_VEZ := 0.5          # enfadado: la suerte de que rebosen dos a la vez
+const AVISO_REBOSE := 1.0          # lo que echa vapor y burbujea antes de soltar el aceite
+const GRANDE_REBOSE := [1.8, 2.0]  # lo grande que llega a ser el charco, respecto al de la sartén (normal y enfadado)
+const RADIO_ACEITE := 60.0         # el del charco de la sartén ("hirviendo" en charco.gd)
+const CRECE_REBOSE := 6.0          # lo que tarda en extenderse del todo
+const DURA_REBOSE := 14.0          # lo que dura (y luego se seca)
+const LEJOS_REBOSE := 90.0         # no rebosa un mueble si su aceite saldría así de cerca de Johnny
 const PIE := 30.0                  # a qué altura dibuja los pies respecto a su centro
 # El fotograma de "lanzar" con el brazo del todo adelante (cuando sale el cuchillo o la sartén) y el del tajo del
 # cuchillazo, según hacia dónde mire
@@ -48,11 +65,15 @@ const SUBEN := 0.4                 # la lluvia: lo que se ven subir los cuchillo
 
 var espera := {"abanico": 1.0, "lluvia": 3.0, "sarten": 4.5, "cuchillazo": 0.8}
 var lado := 1.0                    # hacia qué lado da los pasitos
+var rebose := 4.0                  # M82: lo que falta para que rebose el siguiente mueble de la cocina
+var rebosando: Array = []          # los que están avisando: [mueble, lo que les falta para soltar el aceite]
+var mojado := {}                   # mueble -> hasta cuándo dura su charco (no vuelve a rebosar hasta que se seque)
 
 
 func pensar(delta: float, johnny: Node2D) -> void:
 	for k in espera:
 		espera[k] -= delta
+	rebosar(delta, johnny)
 	var hacia: Vector2 = johnny.global_position - global_position
 	var d := hacia.length()
 	match estado:
@@ -197,6 +218,92 @@ func sarten(johnny: Node2D) -> void:
 	p.dueno = self
 	get_parent().add_child(p)
 	Sonido.tocar("lanzar")
+
+
+# ── Su cocina rebosa (M82) ──
+
+# Cada tanto, uno (o dos, enfadado) de los fogones y las freidoras avisa y luego suelta su aceite
+func rebosar(delta: float, johnny: Node2D) -> void:
+	for r in rebosando:
+		r[1] -= delta
+		echar_vapor(r[0], 1.0 - r[1] / AVISO_REBOSE)
+	for r in rebosando.filter(func(x): return x[1] <= 0.0):
+		rebosando.erase(r)
+		if is_instance_valid(r[0]):
+			derramar(r[0])
+	rebose -= delta
+	if rebose > 0.0:
+		return
+	var libres := fogones().filter(func(m): return tiempo >= mojado.get(m, 0.0) 		and salida(m).distance_to(johnny.global_position) > LEJOS_REBOSE)
+	if libres.is_empty():
+		rebose = 0.5   # (todos con su charco o junto a Johnny: vuelve a mirar en un momento)
+		return
+	rebose = CADA_REBOSE[fase - 1]
+	libres.shuffle()
+	for m in libres.slice(0, 2 if enfadado() and randf() < DOS_A_LA_VEZ else 1):
+		rebosando.append([m, AVISO_REBOSE])
+		mojado[m] = tiempo + AVISO_REBOSE + DURA_REBOSE
+	Sonido.tocar("chisporroteo")
+
+
+# Los fogones industriales y las freidoras de la cocina (de su sitio: los muebles que hay montados)
+func fogones() -> Array:
+	return get_tree().get_nodes_in_group("muebles").filter(func(m): return m.get("datos") is Dictionary 		and m.datos.get("tipo", "") in REBOSAN)
+
+
+# Dónde queda el centro del charco de un mueble: delante de él (hacia el centro de la sala), con algo de aceite por
+# debajo del mueble, que es de donde sale. (El mueble tiene su sitio en los pies: el centro de lo que ocupa, más arriba)
+func salida(m: Node2D) -> Vector2:
+	var r := RADIO_ACEITE * GRANDE_REBOSE[1]
+	var centro: Vector2 = m.global_position - Vector2(0, m.datos.h / 2.0)
+	match m.datos.get("lado", "arriba"):
+		"abajo": return centro - Vector2(0, m.datos.h / 2.0 + r * 0.6 * 0.5)
+		"izquierda": return centro + Vector2(m.datos.w / 2.0 + r * 0.5, 0)
+		"derecha": return centro - Vector2(m.datos.w / 2.0 + r * 0.5, 0)
+	return centro + Vector2(0, m.datos.h / 2.0 + r * 0.6 * 0.5)
+
+
+# El aviso ("k": lo que lleva, de 0 a 1): el mueble se pone al rojo y palpita cada vez más deprisa, le sale mucho
+# vapor por arriba y le saltan gotas de aceite hirviendo
+func echar_vapor(m: Node2D, k: float) -> void:
+	if not is_instance_valid(m):
+		return
+	var pulso := 0.5 + 0.5 * sin(tiempo * (14.0 + k * 16.0))
+	colorear(m, Color(1.0, 0.92, 0.82).lerp(Color(1.0, 0.45, 0.25), (0.35 + 0.45 * k) * pulso))
+	var w: float = m.datos.w * 0.35
+	var arriba_mueble: Vector2 = m.global_position - Vector2(0, m.datos.h + 14.0)
+	for i in 2:
+		Particulas.soltar(self, arriba_mueble + Vector2(randf_range(-w, w), randf_range(-6, 6)),
+			Vector2(randf_range(-14, 14), randf_range(-90, -50)), Color(1, 0.97, 0.92, 0.8), randf_range(4, 8), 0.8)
+	if randf() < 0.5:
+		var hacia := (salida(m) - m.global_position).normalized()
+		Particulas.volar(self, m.global_position + Vector2(randf_range(-w, w), 0), m.datos.h * 0.8,
+			hacia * randf_range(20, 60), randf_range(80, 160), Color("#f0b040"), randf_range(2, 4))
+
+
+# El color del dibujo de un mueble (el del propio mueble, "modulate", ya lo usa la niebla: mapa.gd)
+func colorear(m: Node2D, color: Color) -> void:
+	for h in m.get_children():
+		if h is Sprite2D:
+			h.modulate = color
+
+
+# Suelta el aceite: un charco hirviendo que se va extendiendo desde el mueble
+func derramar(m: Node2D) -> void:
+	colorear(m, Color.WHITE)
+	var charco: Node2D = load(CHARCO).instantiate()
+	charco.tipo = "hirviendo"
+	charco.escala = GRANDE_REBOSE[fase - 1]
+	charco.crece = CRECE_REBOSE
+	charco.extra = DURA_REBOSE - 6.0   # (el de la sartén dura 6 s)
+	charco.dueno = self                # (a él no le quema)
+	var donde := salida(m)
+	charco.position = (donde / 2.0).round() * 2.0   # en píxel entero del dibujo, como el de la sartén
+	get_parent().add_child(charco)
+	Sonido.tocar("chof")
+	for i in 8:
+		var a := randf() * TAU
+		Particulas.soltar(self, donde, Vector2(cos(a), sin(a) * 0.6) * randf_range(50, 120), Color("#e8c547"), randf_range(3, 5), 0.4)
 
 
 # Si Johnny está a la vista (sin paredes ni muebles en medio): los cuchillos del abanico van en línea recta

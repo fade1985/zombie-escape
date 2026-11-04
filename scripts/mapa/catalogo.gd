@@ -414,6 +414,14 @@ const SALAS := {
 		"muebles": ["gondola", "metalshelf", "pallet", "checkout", "mannequin"],
 		"cuantos": [2, 3],
 	},
+	# la Cocina central del cocinero (minijefe; planta.gd pone apt.tipo = "cocinero"): 3 fogones industriales y 3
+	# freidoras contra las paredes, que en el combate rebosan aceite hirviendo (M82, cocinero.gd), y alguna mesa de acero
+	"jefe-cocinero": {
+		"primero": ["industrialstove", "fryer", "industrialstove", "fryer", "industrialstove", "fryer"],
+		"muebles": ["steeltable"],
+		"cuantos": [7, 7],
+		"iguales": {"industrialstove": 3, "fryer": 3, "steeltable": 2},
+	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {
 		"muebles": ["tallmannequin", "clothesrack", "tallmannequin", "checkout"],
