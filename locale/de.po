@@ -541,6 +541,14 @@ msgstr "Der Velaria-Leibwächter"
 msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
 msgstr "Kommt, wenn dich eine Kamera sieht. Seine Weste hält von vorn die halbe Kugel ab, und sein Taser lässt dich erstarren: geh um ihn herum."
 
+#: scripts/bestiario.gd
+msgid "La directora de Recursos Humanos"
+msgstr "Die Personalchefin"
+
+#: scripts/bestiario.gd
+msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
+msgstr "Ihr Stempel fällt von der Decke: Trifft er dich, bist du gefeuert und eine Weile ohne Schusswaffe. Mit ihren Leuten vor sich hält sie doppelt so viel aus."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Der Einsatzpolizist"
@@ -649,6 +657,10 @@ msgstr "IMMUN!"
 msgid "¡TODO ARDE!"
 msgstr "ALLES BRENNT!"
 
+#: scripts/cae_encima.gd
+msgid "DESPEDIDO"
+msgstr "GEFEUERT"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MEHR PROBANDEN!"
@@ -684,6 +696,26 @@ msgstr "SCHÖN HEISS!"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "IN DEN TOPF!"
+
+#: scripts/directora.gd
+msgid "¡INACEPTABLE!"
+msgstr "INAKZEPTABEL!"
+
+#: scripts/directora.gd
+msgid "¡EVALUACIÓN DE DESEMPEÑO!"
+msgstr "LEISTUNGSBEURTEILUNG!"
+
+#: scripts/directora.gd
+msgid "¡FUERA!"
+msgstr "RAUS!"
+
+#: scripts/directora.gd
+msgid "¡RECOGE TUS COSAS!"
+msgstr "PACK DEINE SACHEN!"
+
+#: scripts/directora.gd
+msgid "¡ESTÁS DESPEDIDO!"
+msgstr "DU BIST GEFEUERT!"
 
 #: scripts/edificios.gd
 msgid "Apartamentos"
@@ -1614,6 +1646,10 @@ msgstr "Diese Seite fehlt (%s)."
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"
 msgstr "Adrenalin!"
+
+#: scripts/johnny.gd
+msgid "¡DESPEDIDO!"
+msgstr "GEFEUERT!"
 
 #: scripts/johnny.gd
 msgid "recargando…"

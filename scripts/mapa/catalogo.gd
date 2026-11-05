@@ -894,6 +894,20 @@ const SALAS := {
 			"derecha": ["industrialstove", "industrialstove", "industrialstove"],
 		},
 	},
+	# el Despacho de Recursos Humanos de la directora (minijefa de Torre Velaria; planta.gd pone apt.tipo = "directora"):
+	# siempre los mismos muebles en el mismo sitio (muebles.gd, fijos), todos de la torre: en el fondo, los archivadores,
+	# las librerías y en medio su mesa de dirección (con una lámpara a cada lado, para que siempre haya luz); a cada lado,
+	# la sala de espera (dos sofás, la fuente de agua y plantas). El medio, libre para la pelea; la pared de abajo, vacía
+	# (ahí está la puerta)
+	"jefe-directora": {
+		"muebles": [],
+		"cuantos": [0, 0],
+		"fijos": {
+			"arriba": ["filecabinet", "bookcase", "lamp", "execdesk", "lamp", "bookcase", "filecabinet"],
+			"izquierda": ["plant", "lobbysofa", "watercooler", "lobbysofa", "plant"],
+			"derecha": ["plant", "lobbysofa", "watercooler", "lobbysofa", "plant"],
+		},
+	},
 	# el Taller de costura de la modista (minijefa): lleno de maniquíes de cuerpo entero, entre los que se esconde
 	"jefe-modista": {
 		"muebles": ["tallmannequin", "clothesrack", "tallmannequin", "checkout"],

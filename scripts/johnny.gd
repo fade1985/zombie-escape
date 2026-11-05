@@ -112,6 +112,7 @@ var acido_t := 0.0         # lo que lleva algo que corroe encima (CORROEN): las 
 var llamas: Llamas         # las llamas que le salen si arde
 var a_la_vista := 0        # Ansiedad: los zombis despiertos que se ven en pantalla
 var escudo := 0.0          # Acero y Endurecimiento: lo que le queda de escudo en esta planta (se gasta antes que la vida)
+var despedido_t := 0.0     # sin poder usar el arma de fuego (el sello de la directora: despedir())
 var esquiva_t := 0.0       # lo que le queda al acelerón de la esquiva (0 = no está esquivando)
 var esquiva_espera := 0.0  # lo que falta para poder esquivar otra vez
 var esquiva_dir := Vector2.DOWN
@@ -356,6 +357,7 @@ func _physics_process(delta: float) -> void:
 	pararrayos_t -= delta
 	sola_t -= delta
 	levantado_t -= delta
+	despedido_t -= delta
 	# Parpadea mientras es invulnerable (medio transparente a ratos)
 	sprite.modulate.a = 0.45 if invulnerable > 0.0 and int(invulnerable * 18.0) % 2 == 0 else 1.0
 	# El retroceso de disparar andando: el dibujo entero va un poquito hacia atrás y vuelve enseguida
@@ -956,6 +958,16 @@ func sin_municion_aviso() -> void:
 	Sonido.tocar("click")
 
 
+# El sello de la directora de Recursos Humanos (cae_encima.gd): «¡DESPEDIDO!», y "segundos" sin poder usar el arma de
+# fuego (sostener() y cambiar_mano() no le dejan sacarla): solo la de cuerpo a cuerpo
+func despedir(segundos: float) -> void:
+	despedido_t = maxf(despedido_t, segundos)
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(-60, -100), Idioma.t("¡DESPEDIDO!"), Color("#ff5d73"), 26,
+		false, 1.2)
+	if mano == "fuego":
+		sostener("cuerpo")
+
+
 # Ha cogido munición (una caja; o del suelo, una gasolina, un bidón de ácido o una batería). Si es de la que gasta su arma de fuego
 # y se había pasado sola a la de cuerpo a cuerpo por quedarse sin, vuelve a sacarla; y si la tiene vacía, la recarga
 func coger_municion(tipo: String) -> void:
@@ -1080,6 +1092,10 @@ func vaciar_fuego() -> void:
 func cambiar_mano() -> void:
 	if huecos.fuego == "":   # (sin arma a distancia no hay a qué cambiar)
 		return
+	if despedido_t > 0.0 and mano == "cuerpo":   # despedido (despedir()): el arma de fuego, todavía no
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-50, -70), Idioma.t("¡DESPEDIDO!"), Color("#ff5d73"), 18)
+		Sonido.tocar("click")
+		return
 	# a la de fuego sin balas (o sin con qué llenar el depósito) no se cambia
 	if mano == "cuerpo" and cargado() <= 0.0 and reserva() <= 0:
 		sin_municion_aviso()
@@ -1101,6 +1117,8 @@ func preparar_fogonazo() -> void:
 
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta
 func sostener(hueco: String) -> void:
+	if despedido_t > 0.0:
+		hueco = "cuerpo"   # despedido (despedir()): solo la de cuerpo a cuerpo
 	mano = "cuerpo" if huecos[hueco] == "" else hueco   # (el hueco de fuego vacío no se puede poner en la mano)
 	preparar_fogonazo()
 	sin_balas_sola = false

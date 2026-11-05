@@ -182,6 +182,24 @@ JEFES = {
         "de_frente": ["giro"],
         "motas": {"lanzar": 120, "hachazo": 150},   # las rayas del brazo al lanzar y el polvo del hachazo
     },
+    # la directora de Recursos Humanos (minijefa de Torre Velaria): el sello que cae y las cajas salen con código
+    # (cae_encima.gd). "llamar" (la evaluación y la lluvia de cajas), solo de frente. Hacia el oeste, el este dado la
+    # vuelta (tools/espejo_oeste.py), también la vista quieta. En "golpe" salpica sangre y, de lado, una estela blanca
+    "directora-72": {
+        "anims": {
+            "quieto": ("rotations", 1, True, False),
+            "reposo": ("rotations", 1, True, False),
+            "andar": ("walk", 9, True, True),
+            "sello": ("sello", 12, False, False),
+            "llamar": ("llamar", 9, False, False),
+            "golpe": ("golpe", 14, False, False),
+            "muerte": ("muerte", 10, False, False),
+        },
+        "de_frente": ["llamar"],
+        "motas": {"golpe": 120, "sello": 100},   # los salpicones del golpe y el sello que sale volando (lo dibuja el juego)
+        "sin": {"golpe_s": [1], "golpe_se": [2], "golpe_e": [1, 2], "golpe_o": [1, 2]},   # la estela blanca y el chorro de sangre
+        "sangre": 150,
+    },
     # el científico jefe (el jefe final de los Apartamentos, lienzo de 128 como el gerente): las probetas que
     # lanza, el chorro de suero y la cúpula salen con código (cientifico_jefe.gd). Sin muerte (el que muere es la
     # criatura, en otra hoja); "suero" y "jeringa", solo de frente. Hacia el oeste, el este dado la vuelta

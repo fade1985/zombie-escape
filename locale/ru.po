@@ -542,6 +542,14 @@ msgstr "Телохранитель Velaria"
 msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
 msgstr "Приходит, когда тебя замечает камера. Бронежилет спереди держит полпули, а электрошокер парализует: обходи его."
 
+#: scripts/bestiario.gd
+msgid "La directora de Recursos Humanos"
+msgstr "Директор по персоналу"
+
+#: scripts/bestiario.gd
+msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
+msgstr "Её печать падает с потолка: попадёт — тебя уволят, и ты на время останешься без огнестрела. Пока её подчинённые рядом, она вдвое крепче."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Омоновец"
@@ -650,6 +658,10 @@ msgstr "НЕ БЕРЕТ!"
 msgid "¡TODO ARDE!"
 msgstr "ГОРИ ОНО ВСЕ!"
 
+#: scripts/cae_encima.gd
+msgid "DESPEDIDO"
+msgstr "УВОЛЕН"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "ЕЩЕ КРОЛИКИ!"
@@ -685,6 +697,26 @@ msgstr "ГОРЯЧЕНЬКОЕ!"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "В СУП!"
+
+#: scripts/directora.gd
+msgid "¡INACEPTABLE!"
+msgstr "НЕДОПУСТИМО!"
+
+#: scripts/directora.gd
+msgid "¡EVALUACIÓN DE DESEMPEÑO!"
+msgstr "АТТЕСТАЦИЯ!"
+
+#: scripts/directora.gd
+msgid "¡FUERA!"
+msgstr "ВОН!"
+
+#: scripts/directora.gd
+msgid "¡RECOGE TUS COSAS!"
+msgstr "СОБИРАЙ ВЕЩИ!"
+
+#: scripts/directora.gd
+msgid "¡ESTÁS DESPEDIDO!"
+msgstr "ТЫ УВОЛЕН!"
 
 #: scripts/edificios.gd
 msgid "Apartamentos"
@@ -1615,6 +1647,10 @@ msgstr "Этой страницы нет (%s)."
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"
 msgstr "Адреналин!"
+
+#: scripts/johnny.gd
+msgid "¡DESPEDIDO!"
+msgstr "УВОЛЕН!"
 
 #: scripts/johnny.gd
 msgid "recargando…"

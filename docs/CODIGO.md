@@ -124,6 +124,10 @@ en una línea.
   en esquirlas al acabarse, con los sonidos "acero", "metalizar" y "chatarra"; prueba: `--captura --jefe gymbro --metal`), `bombero.gd` (+ `bola_fuego.gd` y `chorro_fuego.gd`, el fuego de los conos del giro: bocanadas de pixelfx que vuelan hasta la pared, se aplastan contra ella y acaban en humo; las balas rebotan en el borde de su burbuja, `bala.rebotar`, con un fogonazo y una onda, `bombero.onda_en`).
   - Centro comercial: `antidisturbios.gd`, `cocinero.gd` (+ `cuchillo.gd`; su Cocina central, `jefe-cocinero` en el catálogo, tiene tres fogones o freidoras en cada pared (arriba, izquierda y derecha) que en el combate rebosan aceite hirviendo, un charco "hirviendo" con `crece` que se va extendiendo: M82, prueba `--captura --edificio centro --jefe cocinero --cocina`), `modista.gd` (+ `maniqui_vivo.gd`),
     `mascota.gd`.
+  - Torre Velaria: `directora.gd` (la directora de Recursos Humanos, + `cae_encima.gd`: su sello gigante y las cajas de cartón,
+    que caen del techo con su marca en el suelo; el sello «despide» a Johnny, `johnny.despedir()`: unos segundos sin el arma de
+    fuego. Su Despacho de Recursos Humanos, `jefe-directora` en el catálogo, con muebles fijos de la torre; prueba
+    `--captura --edificio torre --jefe directora --despacho`). Los otros tres (informático, presentador y becario), sin hacer.
   - Jefes finales de la azotea, que mutan a media vida (`mutar()`) y al caer llaman a `fin_del_edificio()`:
     `gerente.gd` (+ `contrato.gd`; los tentáculos del mutado, `tentaculo.gd`: salen de tres puntos de su
     espalda, `RAICES`, y se mueven con el cuerpo en cada fotograma del latigazo, `MUEVE`) y `cientifico_jefe.gd`

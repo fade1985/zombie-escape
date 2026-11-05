@@ -189,6 +189,86 @@ func probar_maniquies() -> void:
 	Captura.foto("captura-maniquies-rotos.png")
 
 
+# Con "--captura --edificio torre --jefe directora --despacho": la directora de Recursos Humanos (parte 5 de la torre,
+# directora.gd) en su Despacho de Recursos Humanos, con Johnny quieto delante y ella sin moverse de su sitio (cada ataque
+# se le manda a mano). Fotos: el despacho (captura-despacho.png), el sello cayendo (captura-directora-sello.png), Johnny
+# despedido (-despedido), la lluvia de cajas (-cajas), la evaluación con sus oficinistas (-evaluacion), enfadada con los
+# tres sellos (-enfadada) y caída (-muerta). Lo que comprueba, en la terminal
+func probar_despacho() -> void:
+	if not await ir_a_la_sala_del_jefe("directora"):
+		return
+	var espera := func(s: float) -> void:
+		await get_tree().create_timer(s, false).timeout
+	jefa.quieto = true
+	jefa.espera_sello = 999.0
+	jefa.espera_cajas = 999.0
+	jefa.espera_evaluacion = 999.0
+	johnny.vida = 999
+	johnny.global_position = jefa.global_position + Vector2(0, 190)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.sostener("fuego")
+	var muebles := get_tree().get_nodes_in_group("muebles").filter(func(m): return m.get("datos") is Dictionary)
+	print("Despacho: sala «%s», %d muebles (esperado: Despacho de Recursos Humanos, 17): %s" % [planta.sitios[aqui].nombre,
+		muebles.size(), ", ".join(muebles.map(func(m): return str(m.datos.get("tipo", "?"))))])
+	# el despacho: Johnny arriba, junto a la mesa de dirección, para que salgan los muebles del fondo y de los lados
+	var mesa: Array = muebles.filter(func(m): return m.datos.get("tipo", "") == "execdesk")
+	johnny.global_position = (mesa[0].global_position if mesa else jefa.global_position) + Vector2(0, 160)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.8)
+	Captura.foto("captura-despacho.png")
+	johnny.global_position = jefa.global_position + Vector2(0, 190)
+	johnny.get_node("Camara").reset_smoothing()
+	await espera.call(0.3)
+	# el sello: cae donde está Johnny
+	jefa.cambiar("sello", {"cuantos": 1, "lanzados": 0})
+	await espera.call(1.0)
+	Captura.foto("captura-directora-sello.png")
+	await espera.call(0.45)
+	print("Sello: despedido %.1f s, en la mano «%s» (esperado: unos 2,5 y cuerpo)" % [johnny.despedido_t, johnny.mano])
+	johnny.cambiar_mano()
+	print("Sello: al intentar sacar el arma de fuego, en la mano «%s» (esperado: cuerpo)" % johnny.mano)
+	await espera.call(0.3)
+	Captura.foto("captura-directora-despedido.png")
+	await espera.call(3.0)
+	johnny.cambiar_mano()
+	print("Sello: pasados los 3 s, en la mano «%s» (esperado: fuego)" % johnny.mano)
+	# la lluvia de cajas
+	jefa.cambiar("cajas")
+	await espera.call(0.85)
+	print("Cajas: cayendo %d (esperado: 6)" % get_tree().get_nodes_in_group("balas_zombi").filter(func(c): return c is CaeEncima).size())
+	Captura.foto("captura-directora-cajas.png")
+	await espera.call(2.0)
+	# la evaluación de desempeño: 3 oficinistas y la mitad del daño
+	jefa.cambiar("llamar")
+	await espera.call(1.1)
+	var antes: int = jefa.vida
+	jefa.recibir_golpe(20, Vector2.UP)
+	print("Evaluación: %d oficinistas, un golpe de 20 le quita %d (esperado: 3 y 10)" % [jefa.evaluados().size(), antes - jefa.vida])
+	await espera.call(0.3)
+	Captura.foto("captura-directora-evaluacion.png")
+	for z in jefa.evaluados():
+		z.recibir_golpe(999, Vector2.RIGHT)
+	await espera.call(0.4)
+	antes = jefa.vida
+	jefa.recibir_golpe(20, Vector2.UP)
+	print("Evaluación: sin oficinistas, %d; un golpe de 20 le quita %d (esperado: 0 y 20); estado «%s» (esperado: disgusto)" % [
+		jefa.evaluados().size(), antes - jefa.vida, jefa.estado])
+	# enfadada: tres sellos seguidos (donde vaya estando Johnny: aquí se le mueve entre uno y otro)
+	jefa.vida = int(jefa.vida_max * 0.45)
+	await espera.call(1.8)
+	print("Enfadada: fase %d (esperado: 2)" % jefa.fase)
+	jefa.cambiar("sello", {"cuantos": jefa.SELLOS[1], "lanzados": 0})
+	for i in 3:
+		await espera.call(jefa.ENTRE_SELLOS)
+		johnny.global_position += Vector2(70, 0)
+	print("Enfadada: sellos lanzados %d (esperado: 3)" % jefa.datos.get("lanzados", 0))
+	Captura.foto("captura-directora-enfadada.png")
+	await espera.call(2.0)
+	jefa.recibir_golpe(99999, Vector2.UP)
+	await espera.call(1.4)   # (a los 2 s sale la mutación, que para el juego)
+	Captura.foto("captura-directora-muerta.png")
+
+
 # Con "--captura --edificio centro --jefe cocinero --cocina": la Cocina central del cocinero (M82), con sus 9 fogones y
 # freidoras (tres en cada pared), que rebosan aceite hirviendo. Johnny quieto en medio y el cocinero quieto (aquí se le hace rebosar a mano).
 # Fotos: el aviso del primero que rebosa (captura-cocina-aviso.png), su charco a medio extender (-crece) y todos los

@@ -332,6 +332,22 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      escolta suelta una chispita amarilla en algunas direcciones.
    - Pruebas: `--captura --edificio torre --oficinista`, `--escolta` y `--camaras`.
 5. **Minijefes**, uno por sesión (Opus): directora, informático, presentador y becario.
+   - **La directora de Recursos Humanos** ✅ **Hecha el 5 nov, a falta del visto bueno del dueño.** 35 generaciones (6 el modelo, 29
+     las animaciones). Lo que ha quedado (`directora.gd`; números provisionales, en sus `const`):
+     - Vida 450 (+35 % por planta), velocidad 75, 8 si te pegas a ella. Su sala, el **Despacho de Recursos Humanos** (`jefe-directora`
+       en `Catalogo.SALAS`): archivadores, librerías, su mesa de dirección y dos lámparas al fondo; a cada lado, la sala de espera
+       (sofás, fuente de agua y plantas). El medio, libre.
+     - **Sello de despido** («¡FUERA!»): lanza el sello hacia arriba y cae donde está Johnny, con su marca roja y su sombra durante 1 s
+       (`cae_encima.gd`). Si le pilla, 15 y «¡DESPEDIDO!»: 3 s sin el arma de fuego, solo la de cuerpo a cuerpo (la fregona o la que
+       lleve; `johnny.despedir()`). Deja en el suelo la tinta roja «DESPEDIDO» unos segundos.
+     - **Evaluación de desempeño**: llama a 3 oficinistas (cada 14 s como pronto y solo si no le queda ninguno). Mientras quede alguno,
+       le entra la mitad del daño (sale «½» y una línea amarilla discontinua de ella a cada uno); al caer el último, «¡INACEPTABLE!».
+     - **Lluvia de cajas** («¡RECOGE TUS COSAS!»): 6 cajas de cartón, una encima de Johnny y las demás alrededor, cada una con su marca
+       (10 de daño y un empujón).
+     - **Enfadada** («¡ESTÁS DESPEDIDO!»): tres sellos seguidos donde vaya estando Johnny y llama a 5.
+     - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9, sin atajo de teclado: ya hay 10 jefes) y en la sala de
+       exposición. Su skin, con las demás de la torre (parte 9).
+     - Prueba: `--captura --edificio torre --jefe directora --despacho`.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
    viviendas y un superviviente por trozo.

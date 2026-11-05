@@ -540,6 +540,14 @@ msgstr "Velaria保镖"
 msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
 msgstr "被摄像头发现时他就会赶来。防弹背心能从正面挡掉一半子弹，电击枪会让你动弹不得：绕到他身后。"
 
+#: scripts/bestiario.gd
+msgid "La directora de Recursos Humanos"
+msgstr "人事总监"
+
+#: scripts/bestiario.gd
+msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
+msgstr "她的印章会从天而降：被砸中就会被开除，一时用不了枪械。手下挡在前面时，她能多扛一倍。"
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "防暴警察"
@@ -648,6 +656,10 @@ msgstr "免疫！"
 msgid "¡TODO ARDE!"
 msgstr "一片火海！"
 
+#: scripts/cae_encima.gd
+msgid "DESPEDIDO"
+msgstr "已开除"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "再来点实验品！"
@@ -683,6 +695,26 @@ msgstr "趁热吃！"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "下锅！"
+
+#: scripts/directora.gd
+msgid "¡INACEPTABLE!"
+msgstr "不可接受！"
+
+#: scripts/directora.gd
+msgid "¡EVALUACIÓN DE DESEMPEÑO!"
+msgstr "绩效考核！"
+
+#: scripts/directora.gd
+msgid "¡FUERA!"
+msgstr "出去！"
+
+#: scripts/directora.gd
+msgid "¡RECOGE TUS COSAS!"
+msgstr "收拾东西走人！"
+
+#: scripts/directora.gd
+msgid "¡ESTÁS DESPEDIDO!"
+msgstr "你被开除了！"
 
 #: scripts/edificios.gd
 msgid "Apartamentos"
@@ -1613,6 +1645,10 @@ msgstr "这一页缺失（%s）。"
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"
 msgstr "肾上腺素！"
+
+#: scripts/johnny.gd
+msgid "¡DESPEDIDO!"
+msgstr "开除！"
 
 #: scripts/johnny.gd
 msgid "recargando…"

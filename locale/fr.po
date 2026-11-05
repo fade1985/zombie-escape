@@ -541,6 +541,14 @@ msgstr "Le garde du corps de Velaria"
 msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
 msgstr "Il arrive quand une caméra te repère. Son gilet arrête la moitié d'une balle de face et son taser te paralyse : contourne-le."
 
+#: scripts/bestiario.gd
+msgid "La directora de Recursos Humanos"
+msgstr "La DRH"
+
+#: scripts/bestiario.gd
+msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
+msgstr "Son tampon tombe du plafond : s'il t'écrase, tu es viré et privé de ton arme à feu un moment. Avec ses employés devant elle, elle encaisse deux fois plus."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "Le CRS"
@@ -649,6 +657,10 @@ msgstr "IMMUNISÉ !"
 msgid "¡TODO ARDE!"
 msgstr "TOUT BRÛLE !"
 
+#: scripts/cae_encima.gd
+msgid "DESPEDIDO"
+msgstr "VIRÉ"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MES COBAYES !"
@@ -684,6 +696,26 @@ msgstr "TOUT CHAUD !"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "À LA POÊLE !"
+
+#: scripts/directora.gd
+msgid "¡INACEPTABLE!"
+msgstr "INACCEPTABLE !"
+
+#: scripts/directora.gd
+msgid "¡EVALUACIÓN DE DESEMPEÑO!"
+msgstr "ENTRETIEN ANNUEL !"
+
+#: scripts/directora.gd
+msgid "¡FUERA!"
+msgstr "DEHORS !"
+
+#: scripts/directora.gd
+msgid "¡RECOGE TUS COSAS!"
+msgstr "RANGE TES AFFAIRES !"
+
+#: scripts/directora.gd
+msgid "¡ESTÁS DESPEDIDO!"
+msgstr "TU ES VIRÉ !"
 
 #: scripts/edificios.gd
 msgid "Apartamentos"
@@ -1614,6 +1646,10 @@ msgstr "Cette page manque (%s)."
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"
 msgstr "Adrénaline !"
+
+#: scripts/johnny.gd
+msgid "¡DESPEDIDO!"
+msgstr "VIRÉ !"
 
 #: scripts/johnny.gd
 msgid "recargando…"

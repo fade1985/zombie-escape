@@ -4483,5 +4483,49 @@
    "pegas": "El 'taser' sale como un arma corta de brazo estirado (parece una pistola) con un cable, y en 3-4 direcciones lleva chispas amarillas al principio aunque se dijo 'no sparks' (no se limpiaron: en el ataque solo se quitan destellos blancos). Hay pequeñas salpicaduras de sangre oscura en golpe y muerte."
   },
   "lo_repetido": "Nada repetido. Solo se canceló un envío del ataque del oficinista (south) por usar keep_first_frame=false."
- }
+ },
+  "torre-directora": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 5 de la Torre Velaria, el primer minijefe: la directora de Recursos Humanos (directora.gd), con la receta del jefe de bomberos (apartamentos-jefes): modelo con create_character_pro_flash a 72x72 (view low top-down; estilo, el sur del zombi venenoso de 72 subido con get_upload_url, el mismo usage_description y style_options sin color_palette) y animaciones con PixMiniMax, una dirección por llamada (cada animación un grupo; las demás direcciones, con animation_group_id y el mismo animation_name). Sello, golpe y muerte con partida = dibujo quieto pegado en (28, 44) de 128x128 (assets/sources/directora-72/partida/; los upload:<id> de partida/subidas.txt caducan a los 3 días); sello y golpe también con final = partida. Hacia el oeste no se generó nada: el este en espejo (py tools/espejo_oeste.py directora-72 walk sello golpe muerte), también la vista quieta (rotations/west.png es la del este en espejo, para que case con el andar). Bajado con py tools/bajar_zip.py y montado con py tools/jefe_hoja.py directora-72 jefe-directora (casilla 98x142; offset del Sprite (-49, -126)).",
+    "coste": "35 generaciones (6 el modelo, 29 las animaciones, ninguna repetida; saldo 1102,55 → 1067,55)",
+    "directora-72": {
+      "character_id": "268f605a-e5f0-45c5-8428-cbee1c748ee1",
+      "size": "72x72",
+      "alto_px": 71,
+      "description": "a tall, stiff zombie woman boss, a Human Resources director, standing upright and rigid with perfect posture, about 66 pixels tall. She wears a sharp, severe charcoal grey skirt suit: a fitted blazer with padded shoulders over a white blouse, a knee-length pencil skirt and black low heels, the suit torn and stained with dark dried blood in places. Her grey hair is pulled back into a very tight bun on top of her head. Thick black rectangular glasses. In her right hand she holds a gigantic red wooden rubber stamp with a thick handle, as big as her head, its flat rubber face stained with red ink. Grey-green rotting zombie skin, dead white eyes behind the glasses, a thin cold disapproving mouth. No logos, no letters, no badges, no brand marks, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: traje gris, moño, gafas y el sello rojo enorme en la mano. El moño toca el borde de arriba del lienzo (alto 71-72).",
+      "animaciones": {
+        "subject_description": "a tall stiff zombie woman in a dark grey skirt suit with a tight grey hair bun and thick black glasses, holding a giant red rubber stamp in one hand (de lado: ', seen from the side'; de espaldas: ', seen from behind')",
+        "initial_pose": "standing upright and rigid + la vista (facing the camera / in three-quarter front view, facing toward the camera and to the right / facing right, seen from the side / ...) + ', holding the giant red rubber stamp down at her side'",
+        "frases_de_direccion": "las del Gymbro y el bombero ('Strict front view the whole time, facing the camera, she never turns to the side.', etc.)",
+        "andar": {
+          "group": "310f1f46-8f7c-46d3-840c-ae0b296dd38a",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 100-104). 7 direcciones.",
+          "action_description": "She walks forward in place in a stiff, brisk, seamless looping walk cycle: her legs step alternately with short precise steps in her pencil skirt, her upper body stays upright and rigid, and the giant red stamp held down at her side only sways very slightly with each step. The last frame returns to the starting pose so the cycle loops. No effects, no dust, no motion lines."
+        },
+        "sello": {
+          "group": "733f0768-2330-4553-b682-0244c360a3de",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Suelta el sello hacia el fotograma 3 (hacia el sureste, el 6).",
+          "action_description": "She lifts the giant red rubber stamp with both hands high above her head, then hurls it straight up into the air and out of the picture, her empty arms stretched up for a moment, then lowers her arms and settles cleanly back into the starting stance holding the stamp at her side. No effects, no motion lines, no ink, no blood.",
+          "pegas": "El sello que sale volando se queda suelto en algún fotograma: se quita al montar (motas 100)."
+        },
+        "llamar": {
+          "group": "5067d5b8-a3c5-49fe-800b-1bec21c1db28",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. Solo de frente (la evaluación y la lluvia de cajas).",
+          "action_description": "She summons her staff: she raises the giant red stamp high above her head and shakes it in the air while her other hand points sharply forward and her mouth opens wide to shout an order, then she lowers the stamp and settles cleanly back into the starting stance. No effects, no motion lines, no text, no blood."
+        },
+        "golpe": {
+          "group": "633adc16-4788-48fa-83ea-498f31689e4a",
+          "fotogramas": "8 + partida, partida y final = dibujo quieto. 7 direcciones. Se usa para el disgusto al caer el último oficinista.",
+          "action_description": "She flinches from a hard blow: her head and shoulders jolt backward and she staggers one short step backward, off balance, still holding the stamp. She stays on her feet. Then she settles cleanly into the starting stance. Nothing comes off: no effects, no particles, no blood.",
+          "pegas": "Pese a 'no blood', salpica sangre y, de lado, pinta una estela blanca del golpe: se quitan al montar (motas 120 y los fotogramas 'sin' de jefe_hoja.py)."
+        },
+        "muerte": {
+          "group": "dce95a89-7f3b-4d33-a635-5da3c149b4c8",
+          "fotogramas": "12 + partida, solo partida. 7 direcciones. Suelta el sello, cae de rodillas y de bruces; de espaldas se queda arrodillada.",
+          "action_description": "She dies: she drops the giant red stamp, staggers, clutches her chest, falls to her knees and then collapses forward, face down on the floor (toward the camera... / toward the right... / away from the camera...), and lies still, flat on the floor, in the last frames. The stamp lies on the floor beside her. No effects, no blood."
+        }
+      }
+    }
+  }
 }

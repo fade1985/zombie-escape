@@ -541,6 +541,14 @@ msgstr "O guarda-costas da Velaria"
 msgid "Llega cuando una cámara te ve. El chaleco le para media bala de frente y su táser te deja tieso: rodéalo."
 msgstr "Chega quando uma câmera te vê. O colete segura meia bala de frente e o taser te deixa duro: dê a volta nele."
 
+#: scripts/bestiario.gd
+msgid "La directora de Recursos Humanos"
+msgstr "A diretora de RH"
+
+#: scripts/bestiario.gd
+msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
+msgstr "O carimbo dela cai do teto: se te pegar, você é demitido e fica sem a arma de fogo. Com a equipe dela na frente, ela aguenta o dobro."
+
 #: scripts/bestiario.gd scripts/skins.gd
 msgid "El antidisturbios"
 msgstr "O policial de choque"
@@ -649,6 +657,10 @@ msgstr "IMUNE!"
 msgid "¡TODO ARDE!"
 msgstr "TUDO QUEIMA!"
 
+#: scripts/cae_encima.gd
+msgid "DESPEDIDO"
+msgstr "DEMITIDO"
+
 #: scripts/cientifico_jefe.gd
 msgid "¡MÁS SUJETOS!"
 msgstr "MAIS COBAIAS!"
@@ -684,6 +696,26 @@ msgstr "QUENTINHO!"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "PRA PANELA!"
+
+#: scripts/directora.gd
+msgid "¡INACEPTABLE!"
+msgstr "INACEITÁVEL!"
+
+#: scripts/directora.gd
+msgid "¡EVALUACIÓN DE DESEMPEÑO!"
+msgstr "AVALIAÇÃO DE DESEMPENHO!"
+
+#: scripts/directora.gd
+msgid "¡FUERA!"
+msgstr "FORA!"
+
+#: scripts/directora.gd
+msgid "¡RECOGE TUS COSAS!"
+msgstr "PEGA SUAS COISAS!"
+
+#: scripts/directora.gd
+msgid "¡ESTÁS DESPEDIDO!"
+msgstr "VOCÊ TÁ DEMITIDO!"
 
 #: scripts/edificios.gd
 msgid "Apartamentos"
@@ -1614,6 +1646,10 @@ msgstr "Falta esta página (%s)."
 #: scripts/johnny.gd
 msgid "¡Adrenalina!"
 msgstr "Adrenalina!"
+
+#: scripts/johnny.gd
+msgid "¡DESPEDIDO!"
+msgstr "DEMITIDO!"
 
 #: scripts/johnny.gd
 msgid "recargando…"

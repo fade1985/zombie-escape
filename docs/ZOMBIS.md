@@ -209,3 +209,10 @@ animaciones con PixMiniMax, una dirección por llamada). Todo en `assets/pixella
   `zombi_escolta.gd`). En algunas direcciones suelta una chispita amarilla.
 - Las hojas se montan con `py tools/zombi.py oficinista-48 zombi-oficinista` (y `escolta-48 zombi-escolta`) y sus `.tres` con
   `py tools/hacer_frames.py assets/sprites/zombi-<nombre>`.
+- **La directora de Recursos Humanos** (minijefa, 72 px; fuente `directora-72`, hoja `jefe-directora`): traje chaqueta gris, moño
+  tirante, gafas de pasta y un sello rojo enorme en la mano. Con la receta del jefe de bomberos: modelo con `create_character_pro_flash`
+  a 72 (estilo: el sur del zombi venenoso de 72) y animaciones con PixMiniMax, una dirección por llamada: andar, sello (lo lanza hacia
+  arriba), llamar (solo de frente), golpe y muerte; hacia el oeste, el este en espejo, también la vista quieta. 35 generaciones (6 el
+  modelo, 29 las animaciones, ninguna repetida). Todo en `assets/pixellab.json` → `torre-directora`. Hoja con
+  `py tools/jefe_hoja.py directora-72 jefe-directora` (quita la sangre y la estela blanca que PixelLab pinta en el golpe). El sello que
+  cae y las cajas los dibuja el juego (`cae_encima.gd`).
