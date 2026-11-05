@@ -18,7 +18,8 @@ CAMA = 'assets/sources/salas/dormitorio/cama.png'   # la cama de siempre, de la 
 SALIDA = 'assets/sources/salas/viviendas'
 # el color de cada superviviente (Supervivientes.DATOS)
 COLORES = {'policia': '#6fa8ff', 'medico': '#80ed99', 'militar': '#c9e265',
-           'ferretero': '#ff9a3c', 'farmaceutica': '#3ddc84', 'tecnico': '#4fe3ff'}
+           'ferretero': '#ff9a3c', 'farmaceutica': '#3ddc84', 'tecnico': '#4fe3ff',
+           'programador': '#b48cff', 'recepcionista': '#ff6fae', 'limpiadora': '#ffd23c'}
 SAT_MIN, SAT_MAX = 0.45, 0.85   # la colcha no ha de quedar ni grisácea ni chillona
 # los colores de la sangre de la cama de siempre (la mancha de la almohada y el reguero de la sábana, y un píxel suelto de su
 # borde): tools/guias_trasteros.py la quita antes de hacer la guía del colchón

@@ -298,7 +298,7 @@ msgstr "Готово! Можешь включать свет"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "%s починил провод! Вода больше не бьет током"
 
-#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Помоги, не могу встать!"
 
@@ -314,7 +314,7 @@ msgstr "Держись: %s чинит провод"
 msgid "Baja la palanca del cuadro eléctrico"
 msgstr "Опусти рубильник на электрощитке"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/copia.gd
 msgid "¡El %s ha caído!"
 msgstr "%s ранен!"
 
@@ -350,7 +350,7 @@ msgstr "Зачищаю, скручиваю… готово"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Осталось только заизолировать…"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Un poco más!"
 msgstr "Еще чуть-чуть!"
 
@@ -366,15 +366,15 @@ msgstr "Так я не могу! Вырубай ток!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Меня же шибанет! Рубильник!"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Джонни, вернись!"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡No me dejes aquí!"
 msgstr "Не бросай меня тут!"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Que me comen!"
 msgstr "Меня же съедят!"
 
@@ -745,6 +745,54 @@ msgstr "ГОРЯЧЕНЬКОЕ!"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "В СУП!"
+
+#: scripts/copia.gd
+msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
+msgstr "Дверь захлопнулась! Защищай: %s копирует файлы"
+
+#: scripts/copia.gd
+msgid "¡Gracias! Sigo copiando"
+msgstr "Спасибо! Копирую дальше"
+
+#: scripts/copia.gd
+msgid "¡Copiado! Vámonos de aquí"
+msgstr "Скопировал! Валим отсюда"
+
+#: scripts/copia.gd
+msgid "¡El %s ha copiado los archivos de Velaria!"
+msgstr "%s скопировал файлы «Велария»!"
+
+#: scripts/copia.gd
+msgid "Aguanta: el %s está copiando los archivos"
+msgstr "Держись: %s копирует файлы"
+
+#: scripts/copia.gd
+msgid "El %s copia los archivos · %d:%02d"
+msgstr "%s копирует файлы · %d:%02d"
+
+#: scripts/copia.gd
+msgid "Me llevo los archivos de Velaria. ¡Cúbreme mientras se copian!"
+msgstr "Забираю файлы «Велария». Прикрой меня, пока копируются!"
+
+#: scripts/copia.gd
+msgid "Cuatro mil carpetas… ¿quién guarda tanto?"
+msgstr "Четыре тысячи папок… кто столько хранит?"
+
+#: scripts/copia.gd
+msgid "¡Ay! El programa de copia ha hecho saltar las cámaras"
+msgstr "Ой! Программа копирования включила камеры"
+
+#: scripts/copia.gd
+msgid "¡Toma, esto estaba en el armario de los cables!"
+msgstr "На, это лежало в шкафу с кабелями!"
+
+#: scripts/copia.gd
+msgid "«Proyecto Sujeto 1»… esto no pinta bien"
+msgstr "«Проект Субъект 1»… выглядит паршиво"
+
+#: scripts/copia.gd
+msgid "Copiando lo último…"
+msgstr "Докачиваю последнее…"
 
 #: scripts/directora.gd
 msgid "¡INACEPTABLE!"
@@ -2523,6 +2571,10 @@ msgstr "Разгромленный магазин"
 msgid "Viviendas"
 msgstr "Общежитие"
 
+#: scripts/mapa/viviendas.gd
+msgid "Trastero"
+msgstr "Кладовка"
+
 #: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "ОБНИМАШКИ!"
@@ -2706,6 +2758,10 @@ msgstr "Держись: замок еще не взломан"
 #: scripts/partida.gd
 msgid "La puerta no se abre mientras quede algún zombi"
 msgstr "Дверь не откроется, пока здесь есть зомби"
+
+#: scripts/partida.gd
+msgid "El informático joven se salta el teclado: la puerta se abre"
+msgstr "Юный айтишник обходит клавиатуру: дверь открывается"
 
 #: scripts/partida.gd
 msgid "Abres con la tarjeta de acceso"
@@ -3405,6 +3461,30 @@ msgstr "Каждые 3 с разряд обездвиживает ближайш
 #: scripts/supervivientes.gd
 msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
 msgstr "Чинит камеры наблюдения: на миникарте видны зомби"
+
+#: scripts/supervivientes.gd
+msgid "Informático joven"
+msgstr "Юный айтишник"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la sala de servidores!"
+msgstr "Я в серверной!"
+
+#: scripts/supervivientes.gd
+msgid "¡No me dejéis aquí!"
+msgstr "Не бросайте меня тут!"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Pero no me voy sin los archivos de Velaria"
+msgstr "Спасибо! Но без файлов «Велария» я не уйду"
+
+#: scripts/supervivientes.gd
+msgid "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven"
+msgstr "Каждые 4 с взламывает мозг ближайшего зомби и замораживает его на 1 с; камеры его не видят"
+
+#: scripts/supervivientes.gd
+msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
+msgstr "Скидка для сотрудников: магазин в компьютере на 15 % дешевле"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"

@@ -14,6 +14,7 @@ const CONO := Color(1.0, 0.97, 0.8, 0.13)
 const CONO_VE := Color(1.0, 0.55, 0.3, 0.2)
 const CONO_ALARMA := Color(1.0, 0.15, 0.1, 0.22)
 const PILOTO := Color("#ff3b3b")
+const CIEGA := 200.0         # a esta distancia de Johnny, el informático joven ciega las cámaras
 
 var datos: Dictionary
 var mapa: Node
@@ -75,6 +76,9 @@ func angulo(i: int) -> float:
 # ¿La cámara "i" ve el punto "p"? Dentro del cono y sin nada en medio (paredes, muebles, puertas cerradas)
 func ve(i: int, p: Vector2, quien: Node) -> bool:
 	if datos.camaras[i].rota:
+		return false
+	# con el informático joven cerca, la cámara no ve a nadie (se la ha colado: supervivientes.gd)
+	if Supervivientes.informatico_cerca(get_tree(), p, CIEGA):
 		return false
 	var o := ojo(i)
 	var v: Dictionary = Peligros.CAMARAS

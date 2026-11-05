@@ -758,7 +758,7 @@ func programa_armas(c: VBoxContainer) -> void:
 			if Armas.familia(id) != seccion[0]:
 				continue
 			var w: Dictionary = Armas.DATOS[id]
-			var precio: int = Armas.PRECIOS[id]
+			var precio: int = Supervivientes.precio(Armas.PRECIOS[id])
 			var lleva: bool = partida.johnny.huecos[w.tipo] == id
 			var etiqueta := Idioma.t("LA LLEVAS") if lleva else (Idioma.t("GRATIS") if precio == 0 else "$%d" % precio)
 			var estado := "puesta" if lleva else ("" if s.dolares >= precio else "bloqueada")
@@ -769,7 +769,7 @@ func programa_armas(c: VBoxContainer) -> void:
 	var lz: Lanzables = partida.lanzables
 	var lista := rejilla(grupo(c, Idioma.t("Arrojables · de uno en uno, hasta los que caben")))
 	for k in Lanzables.PRECIOS:
-		var precio: int = Lanzables.PRECIOS[k]
+		var precio: int = Supervivientes.precio(Lanzables.PRECIOS[k])
 		var lleno := not lz.cabe(k)
 		var estado := "lleno" if lleno else ("" if s.dolares >= precio and not Reto.sin_municion() else "bloqueada")
 		var b := tarjeta(lista, "b_" + k, k, Lanzables.uno(k), Idioma.t("Llevas %d") % lz.total(k),
@@ -835,7 +835,7 @@ func comprar_arma(id: String) -> void:
 		Sonido.tocar("no")
 		return
 	var s := Guardado.cargar()
-	var precio: int = Armas.PRECIOS[id]
+	var precio: int = Supervivientes.precio(Armas.PRECIOS[id])
 	if s.dolares < precio:
 		info.text = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
 		Sonido.tocar("no")
@@ -873,7 +873,7 @@ func comprar_lanzable(k: String) -> void:
 	elif not lz.cabe(k):
 		no = Idioma.t("No te caben más %s: tus montones están llenos y no te queda hueco para otro.") % Lanzables.varios(k)
 	var s := Guardado.cargar()
-	var precio: int = Lanzables.PRECIOS[k]
+	var precio: int = Supervivientes.precio(Lanzables.PRECIOS[k])
 	if no == "" and s.dolares < precio:
 		no = Idioma.t("No te llega: te faltan $%d.") % (precio - s.dolares)
 	if no != "":

@@ -4710,5 +4710,72 @@
       "pared-laboratorio": "fc3dc81c",
       "suelo-laboratorio": "4b99d72a (descartado)"
     }
-  }
+  },
+ "supervivientes-torre-48": {
+  "kind": "characters",
+  "fecha": "2026-11-05",
+  "nota": "Los supervivientes de Torre Velaria (parte 7 de docs/PLAN_TERCER_EDIFICIO.md), con la receta de supervivientes-centro-48. Primero, el informático joven (id programador en scripts/supervivientes.gd). FASE 1 (modelos): dos intentos con create_character_pro_flash a 48x48, view low top-down, el sur de Johnny como imagen de estilo; hoja assets/pruebas/supervivientes-torre-48-modelos.png. ELEGIDO por el dueño (5 nov): el B (sudadera morada); sus 8 vistas en assets/sources/superviviente-programador-48/rotations/. FASE 2: andar con la plantilla walking-8-frames en las 8 direcciones. FASE 3: el gesto «hackear» (saca el móvil del bolsillo de la sudadera, lo toca dos veces y la pantalla destella morada; lo guarda) en las 8 direcciones y caído (solo south), con PixMiniMax desde animate_character (sin lienzo propio: PixelLab lo pone de 68x68 y el fotograma 0 es el quieto).",
+  "coste": "25 generaciones: 12 de los dos modelos (6 cada uno), 8 del andar (1 por dirección), 8 de hackear y 1 de caído",
+  "request": {
+   "herramienta": "create_character_pro_flash",
+   "width": 48,
+   "height": 48,
+   "view": "low top-down",
+   "style_image": {
+    "url": "rotations/south.png de conserje-48 (4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c), por su URL de PixelLab",
+    "usage_description": "Match the pixel art style of this character: same outline thickness, same level of detail and shading, same body size and proportions. Do not copy his clothes, face or colors."
+   },
+   "style_options": {
+    "color_palette": false,
+    "detail": true,
+    "outline": true,
+    "shading": true
+   }
+  },
+  "piezas": {
+   "programador-A": {
+    "character_id": "42271691-d837-4b2f-92b3-c79fd36aeedb",
+    "job_id": "01ba27f2-647b-4584-9663-714f1cf680a8",
+    "seed": 4817,
+    "name": "Superviviente informático A",
+    "carpeta": "assets/sources/superviviente-programador-48/intentos/A/",
+    "description": "young adult male IT intern at a corporate office tower, a nervous survivor of a zombie outbreak, realistic adult body proportions, thin, small head, light olive skin, messy dark brown hair, thick black-rimmed glasses, grey zip-up hoodie open over a purple t-shirt, white staff ID badge on a blue lanyard around his neck, a black USB cable and a small silver USB stick hanging from the hoodie pocket, dark jeans, white sneakers, clothes wrinkled and dusty with a dirt smudge, a white bandage on one forearm, worried face, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+   },
+   "programador-B": {
+    "character_id": "40e77c4c-95c2-419f-9310-c66066f689d4",
+    "job_id": "d275aeea-2cfa-4965-8c6b-cd7572d28f58",
+    "seed": 4818,
+    "name": "Superviviente informático B",
+    "carpeta": "assets/sources/superviviente-programador-48/intentos/B/",
+    "description": "young adult male junior IT technician in an office skyscraper, a scared survivor of a zombie outbreak, realistic adult body proportions, slim, small head, light skin, short curly black hair, round black glasses, dark purple hoodie with the sleeves pushed up, white ID card on a lanyard on his chest, a pair of white earbuds hanging from the collar, light grey cargo trousers, dark blue sneakers, clothes crumpled and dirty, a white bandage around one wrist, anxious expression, no zombie wounds, no blood, empty hands, arms relaxed at his sides, detailed shading"
+   }
+  },
+  "elegidos": {
+   "programador": "programador-B"
+  },
+  "andar": {
+   "template": "walking-8-frames",
+   "frames": 8,
+   "grupos": {
+    "programador": "baafb85f-f42d-4ade-8151-aa25a1a88f15"
+   }
+  },
+  "accion": {
+   "modo": "pixminimax con animate_character, 8 fotogramas más el de partida, las 8 direcciones en un mismo grupo",
+   "programador": {
+    "grupo": "04c886ef-afd7-4bd5-a988-24ea246ec85f",
+    "animation_name": "hackear",
+    "subject_description": "a nervous young male IT technician with short curly black hair, round black glasses, a dark purple hoodie with an ID card on a lanyard, light grey cargo trousers and dark blue sneakers",
+    "initial_pose": "standing upright, empty hands, arms relaxed at his sides",
+    "action_description": "He hacks with his phone. His right hand pulls a small black smartphone out of his hoodie pocket and holds it up in front of his chest, his thumb taps the screen quickly twice and the screen flashes bright purple and white for an instant. Then he slips the phone back into the hoodie pocket, his arms relax and he settles cleanly back into the starting standing pose with empty hands. His feet stay planted and he keeps facing exactly the same direction, he never turns. Static camera, completely locked-off shot. Maintain the crisp 2D pixel art aesthetic, thick dark outlines, flat colors, the same character size and the strict original low top-down perspective throughout the entire fluid animation."
+   }
+  },
+  "caido": {
+   "grupos": {
+    "programador": "a8ce7753-6f54-47f3-a764-025281bc556e"
+   },
+   "action_description": "El de supervivientes-48 → caido, con «his glasses still on»."
+  },
+  "descartados": "el intento A (42271691-d837-4b2f-92b3-c79fd36aeedb) sigue en PixelLab: borrarlo solo con permiso del dueño; sus vistas, en intentos/A/"
+ }
 }

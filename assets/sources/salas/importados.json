@@ -503,6 +503,14 @@
     "huella": "b4c40116e1090a42",
     "sprite": "mueble-mattress_ferretero"
   },
+  "viviendas/colchon-informatico.png": {
+    "huella": "5f2205afd419c47e",
+    "sprite": "mueble-mattress_informatico"
+  },
+  "viviendas/colchon-limpiadora.png": {
+    "huella": "7ffea2767b9386bb",
+    "sprite": "mueble-mattress_limpiadora"
+  },
   "viviendas/colchon-medico.png": {
     "huella": "61685af18d1c2153",
     "sprite": "mueble-mattress_medico"
@@ -514,6 +522,14 @@
   "viviendas/colchon-policia.png": {
     "huella": "c626bff029adf284",
     "sprite": "mueble-mattress_policia"
+  },
+  "viviendas/colchon-programador.png": {
+    "huella": "5f2205afd419c47e",
+    "sprite": "mueble-mattress_programador"
+  },
+  "viviendas/colchon-recepcionista.png": {
+    "huella": "9662b37b06e2bae6",
+    "sprite": "mueble-mattress_recepcionista"
   },
   "viviendas/colchon-tecnico.png": {
     "huella": "0e032da24748cabf",

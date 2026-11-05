@@ -297,7 +297,7 @@ msgstr "Pronto! Já pode religar a luz"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "O %s consertou o fio! A água não dá mais choque"
 
-#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "Me ajuda, não consigo levantar!"
 
@@ -313,7 +313,7 @@ msgstr "Aguente: o %s está consertando o fio"
 msgid "Baja la palanca del cuadro eléctrico"
 msgstr "Abaixe a alavanca do quadro elétrico"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/copia.gd
 msgid "¡El %s ha caído!"
 msgstr "O %s caiu!"
 
@@ -349,7 +349,7 @@ msgstr "Descasca o fio, junta… beleza"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "Só falta a fita isolante…"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Un poco más!"
 msgstr "Só mais um pouco!"
 
@@ -365,15 +365,15 @@ msgstr "Assim não dá! Corta a energia!"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "Vou tomar choque! A alavanca!"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny, volta aqui!"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡No me dejes aquí!"
 msgstr "Não me deixa aqui!"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Que me comen!"
 msgstr "Tão me comendo!"
 
@@ -744,6 +744,54 @@ msgstr "QUENTINHO!"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "PRA PANELA!"
+
+#: scripts/copia.gd
+msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
+msgstr "A porta se fechou! Proteja o %s enquanto ele copia os arquivos"
+
+#: scripts/copia.gd
+msgid "¡Gracias! Sigo copiando"
+msgstr "Valeu! Voltando à cópia"
+
+#: scripts/copia.gd
+msgid "¡Copiado! Vámonos de aquí"
+msgstr "Copiado! Vamos sair daqui"
+
+#: scripts/copia.gd
+msgid "¡El %s ha copiado los archivos de Velaria!"
+msgstr "O %s copiou os arquivos da Velaria!"
+
+#: scripts/copia.gd
+msgid "Aguanta: el %s está copiando los archivos"
+msgstr "Aguente: o %s está copiando os arquivos"
+
+#: scripts/copia.gd
+msgid "El %s copia los archivos · %d:%02d"
+msgstr "O %s copia os arquivos · %d:%02d"
+
+#: scripts/copia.gd
+msgid "Me llevo los archivos de Velaria. ¡Cúbreme mientras se copian!"
+msgstr "Vou levar os arquivos da Velaria. Me cubra enquanto copiam!"
+
+#: scripts/copia.gd
+msgid "Cuatro mil carpetas… ¿quién guarda tanto?"
+msgstr "Quatro mil pastas… quem guarda tanta coisa?"
+
+#: scripts/copia.gd
+msgid "¡Ay! El programa de copia ha hecho saltar las cámaras"
+msgstr "Ai! O programa de cópia disparou as câmeras"
+
+#: scripts/copia.gd
+msgid "¡Toma, esto estaba en el armario de los cables!"
+msgstr "Toma, isto estava no armário dos cabos!"
+
+#: scripts/copia.gd
+msgid "«Proyecto Sujeto 1»… esto no pinta bien"
+msgstr "«Projeto Sujeito 1»… isso não parece nada bom"
+
+#: scripts/copia.gd
+msgid "Copiando lo último…"
+msgstr "Copiando o finalzinho…"
 
 #: scripts/directora.gd
 msgid "¡INACEPTABLE!"
@@ -2521,6 +2569,10 @@ msgstr "Loja destruída"
 msgid "Viviendas"
 msgstr "Moradias"
 
+#: scripts/mapa/viviendas.gd
+msgid "Trastero"
+msgstr "Depósito"
+
 #: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "ABRAÇO GRÁTIS!"
@@ -2704,6 +2756,10 @@ msgstr "Aguente: ainda estão forçando a fechadura"
 #: scripts/partida.gd
 msgid "La puerta no se abre mientras quede algún zombi"
 msgstr "A porta não abre enquanto houver algum zumbi"
+
+#: scripts/partida.gd
+msgid "El informático joven se salta el teclado: la puerta se abre"
+msgstr "O Garoto da TI pula o teclado: a porta se abre"
 
 #: scripts/partida.gd
 msgid "Abres con la tarjeta de acceso"
@@ -3400,6 +3456,30 @@ msgstr "A cada 3 s, uma descarga deixa o zumbi mais próximo parado por 1,5 s"
 #: scripts/supervivientes.gd
 msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
 msgstr "Conserta as câmeras de segurança: o minimapa mostra os zumbis"
+
+#: scripts/supervivientes.gd
+msgid "Informático joven"
+msgstr "Garoto da TI"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la sala de servidores!"
+msgstr "Estou na sala dos servidores!"
+
+#: scripts/supervivientes.gd
+msgid "¡No me dejéis aquí!"
+msgstr "Não me deixem aqui!"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Pero no me voy sin los archivos de Velaria"
+msgstr "Valeu! Mas não saio sem os arquivos da Velaria"
+
+#: scripts/supervivientes.gd
+msgid "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven"
+msgstr "A cada 4 s, invade o cérebro do zumbi mais próximo e o deixa parado 1 s; as câmeras não o veem"
+
+#: scripts/supervivientes.gd
+msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
+msgstr "Preço de funcionário: a loja do computador fica 15% mais barata"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"

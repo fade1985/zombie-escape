@@ -49,6 +49,9 @@ const MUEBLES := {
 	"mattress_ferretero":    {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-ferretero"},
 	"mattress_farmaceutica": {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-farmaceutica"},
 	"mattress_tecnico":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-tecnico"},
+	"mattress_programador":      {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-programador"},
+	"mattress_recepcionista":    {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-recepcionista"},
+	"mattress_limpiadora":       {"len": 84, "dep": 124, "paredes": "", "archivo": "viviendas/colchon-limpiadora"},
 	"storageshelf":          {"len": 88, "dep": 36,  "paredes": "", "archivo": "viviendas/estanteria-trastero"},
 	# lo del pasillo de los trasteros (el de las viviendas): cajas de cartón apiladas, unas altas y otras bajas, y una carretilla
 	# de mano cargada con dos cajas (PixelLab, con las guías de tools/guias_trasteros.py)
@@ -1014,4 +1017,7 @@ const SALAS := {
 	"habitacion-ferretero": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_ferretero", 10.6]]}},
 	"habitacion-farmaceutica": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_farmaceutica", 10.6]]}},
 	"habitacion-tecnico": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_tecnico", 10.6]]}},
+	"habitacion-programador": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_programador", 10.6]]}},
+	"habitacion-recepcionista": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_recepcionista", 10.6]]}},
+	"habitacion-limpiadora": {"muebles": [], "cuantos": [0, 0], "colocados": {"izquierda": [["storageshelf", 2.5], ["mattress_limpiadora", 10.6]]}},
 }

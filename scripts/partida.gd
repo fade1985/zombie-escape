@@ -702,6 +702,8 @@ func cruzar(i: int) -> void:
 	var sitio: Dictionary = planta.sitios[aqui]
 	var salida: Dictionary = sitio.salidas[i]
 	var arreglo := supervivientes.averia.no_cruzar()   # el técnico, que no se va sin arreglar el cable
+	if arreglo == "":
+		arreglo = supervivientes.copia.no_cruzar()   # el informático joven, copiando los archivos
 	if arreglo != "":
 		decir(arreglo)
 		Sonido.tocar("no")
@@ -721,6 +723,10 @@ func cruzar(i: int) -> void:
 			Sonido.tocar("no")
 			return
 		"llave":
+			# (en la torre, el informático joven del equipo teclea el código sin tenerlo)
+			var sin_codigo: bool = ed.cerrojo == "codigo" and not planta.tiene_llave and supervivientes.abre_codigo()
+			if sin_codigo:
+				planta.tiene_llave = true
 			if not planta.tiene_llave:
 				decir(Planta.aviso_de(salida))
 				Sonido.tocar("no")
@@ -729,7 +735,8 @@ func cruzar(i: int) -> void:
 			planta.tiene_llave = false
 			planta.llave_usada = true
 			salida.cerrojo = ""
-			decir({"tarjeta": Idioma.t("Abres con la tarjeta de acceso"), "codigo": Idioma.t("Tecleas el código: la puerta se abre")}.get(
+			decir(Idioma.t("El informático joven se salta el teclado: la puerta se abre") if sin_codigo else
+				{"tarjeta": Idioma.t("Abres con la tarjeta de acceso"), "codigo": Idioma.t("Tecleas el código: la puerta se abre")}.get(
 				ed.cerrojo, Idioma.t("Abres con la llave")))
 			Sonido.tocar("compra")
 		"jefa":

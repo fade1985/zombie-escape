@@ -255,5 +255,9 @@
   "mueble-stagescreen",
   "mueble-capsuleopen",
   "mueble-capsule",
-  "mueble-labbench"
+  "mueble-labbench",
+  "mueble-mattress_informatico",
+  "mueble-mattress_limpiadora",
+  "mueble-mattress_recepcionista",
+  "mueble-mattress_programador"
 ]

@@ -973,6 +973,13 @@ func sala_mas_lejana(sala: int, hueco: Dictionary, desde: Vector2) -> Vector2:
 # acompañar y volver, y desde la 1ª planta por el ascensor (supervivientes.gd: probar_viviendas); luego los seis a la
 # vez. Cada línea de la terminal dice lo esperado. Deja el guardado
 # como estaba y se cierra
+# Con "--captura --edificio torre --programador": el informático joven (copia.gd)
+func probar_programador() -> void:
+	await get_tree().create_timer(0.3).timeout
+	await supervivientes.copia.probar()
+	get_tree().quit()
+
+
 func probar_viviendas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await supervivientes.probar_viviendas()

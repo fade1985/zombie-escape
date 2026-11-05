@@ -90,7 +90,23 @@ const DATOS := {
 		"desc": "Cada 3 s, una descarga deja quieto 1,5 s al zombi más cercano",   # [traducir]
 		"habilidad": {"tipo": "aturdir", "cada": 3.0, "segundos": 1.5, "alcance": 260.0},   # (hasta el 27 oct, 1 s cada 4)
 		"mejora": "Arregla las cámaras de seguridad: el minimapa enseña los zombis"},   # [traducir]
+	# los de Torre Velaria (parte 7 del plan; viven al final del pasillo de las viviendas: Viviendas.TORRE). El
+	# informático joven (id "programador": "informatico" es el minijefe del centro de datos), el que hacía las prácticas
+	# con el becario: en la sala de servidores de Informática, protegerle mientras copia los archivos (copia.gd). Con él
+	# cerca, las cámaras no ven a Johnny (camaras.gd) y el teclado de la sala del jefe se abre sin código (partida.gd);
+	# ya rescatado, la tienda del ordenador es un 15 % más barata (precio)
+	"programador": {"id": "programador", "edificio": "torre", "color": Color("#b48cff"), "arma": "",
+		"tienda": "informatica", "sala": "servidores",
+		"look": {"skin": Color("#e0b48a"), "hair": Color("#3a2618"), "shirt": Color("#8a8f99"), "pants": Color("#33405c"),
+			"shoes": Color("#e8e8e8"), "tarjeta": true},
+		"nombre": "Informático joven",   # [traducir]
+		"gritos": ["¡Socorro!", "¡Estoy en la sala de servidores!", "¡Aquí dentro!", "¡No me dejéis aquí!", "¡Que alguien me oiga!"],   # [traducir]
+		"rescate": "copia", "al_abrir": "¡Gracias! Pero no me voy sin los archivos de Velaria",   # [traducir]
+		"desc": "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven",   # [traducir]
+		"habilidad": {"tipo": "aturdir", "cada": 4.0, "segundos": 1.0, "alcance": 220.0},
+		"mejora": "Precio de empleado: la tienda del ordenador, un 15 % más barata"},   # [traducir]
 }
+const DESCUENTO := 0.85   # el precio de empleado del informático joven
 const MAX_EQUIPO := 4
 
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
@@ -165,6 +181,7 @@ var tiempo := 0.0
 var capa: Control          # la flecha del borde y la barra de la horda (en la pantalla)
 var escolta := Escolta.new()   # el rescate de la farmacéutica
 var averia := Averia.new()     # el del técnico
+var copia := Copia.new()       # el del informático joven
 
 
 func preparar(p: Node) -> void:
@@ -184,6 +201,8 @@ func preparar(p: Node) -> void:
 	add_child(escolta)
 	averia.sup = self
 	add_child(averia)
+	copia.sup = self
+	add_child(copia)
 
 
 # Al empezar la partida: quién sale y en qué planta (elegirSuperviviente), de los de este edificio. Los que ya
@@ -437,6 +456,8 @@ func unir(a: Aliado) -> void:
 		escolta.empezar(a)
 	elif a.def.get("rescate", "") == "averia":
 		averia.empezar(a)   # si su tienda no tuviera el agua con corriente, la horda de siempre
+	elif a.def.get("rescate", "") == "copia":
+		copia.empezar(a)
 
 
 # ═════════════ La horda ═════════════
@@ -445,8 +466,8 @@ func actualizar_horda(delta: float) -> void:
 	var r := rescate
 	if r.is_empty() or not r.rescatado or not r.amigo in equipo or partida.aqui != r.sitio:
 		return
-	if r.def.get("rescate", "") == "escolta" or averia.activa():
-		return   # la farmacéutica no tiene horda (su escolta va en escolta.gd), ni el técnico (averia.gd)
+	if r.def.get("rescate", "") in ["escolta", "copia"] or averia.activa():
+		return   # la farmacéutica no tiene horda (su escolta va en escolta.gd), ni el técnico (averia.gd), ni el informático (copia.gd)
 	var a: Aliado = r.amigo
 	if horda.is_empty():
 		if r.horda_hecha or not johnny.vivo:
@@ -537,6 +558,9 @@ func al_herir(cae: bool, a: Aliado) -> void:
 		return
 	if averia.el == a:
 		averia.al_herir(cae)
+		return
+	if copia.el == a:
+		copia.al_herir(cae)
 		return
 	if horda.is_empty():
 		return
@@ -644,6 +668,26 @@ func llevar_vecino(v: Aliado) -> void:
 	Particulas.anillo(v, v.global_position, 50.0, v.def.color, 0.5)
 
 
+# ═════════════ Lo del informático joven ═════════════
+
+# El precio de "base" en la tienda del ordenador: con el informático joven rescatado, el precio de empleado
+static func precio(base: int) -> int:
+	return roundi(base * DESCUENTO) if "programador" in Guardado.cargar().rescatados else base
+
+
+# ¿Va el informático joven en el equipo? (y no tumbado): abre el teclado de la sala del jefe sin el código
+func abre_codigo() -> bool:
+	return equipo.any(func(a): return is_instance_valid(a) and a.def.id == "programador" and not a.caido)
+
+
+# ¿Hay un informático joven a menos de "radio" de "p"? (las cámaras no ven a Johnny con él cerca: camaras.gd)
+static func informatico_cerca(arbol: SceneTree, p: Vector2, radio: float) -> bool:
+	for a in arbol.get_nodes_in_group("aliados"):
+		if a.def.id == "programador" and a.modo == "equipo" and a.global_position.distance_to(p) < radio:
+			return true
+	return false
+
+
 # ═════════════ El botiquín de la farmacéutica ═════════════
 
 # Al empezar la partida, con la farmacéutica rescatada (en los dos edificios): un botiquín en la mochila. Se usa
@@ -678,6 +722,7 @@ func dibujar_capa() -> void:
 			flecha(hacia, rescate.def.color, tiempo - grito_t < 0.7, sube)
 	escolta.dibujar(capa)
 	averia.dibujar(capa)
+	copia.dibujar(capa)
 	if horda.is_empty():
 		return
 	var a: Aliado = rescate.amigo
@@ -756,7 +801,7 @@ func probar() -> void:
 	partida.menus.visible = false   # por si ha salido el recuadro de una mutación (tapa las fotos)
 	await probar_aqui(false)
 	for i in 2:
-		if rescate.def.get("rescate", "") in ["escolta", "averia", "barricada"]:
+		if rescate.def.get("rescate", "") in ["escolta", "averia", "barricada", "copia"]:
 			await probar_aqui(false)   # la horda, con otro (la escolta y la avería se prueban en escolta.gd y averia.gd)
 	# la horda de siempre (en el centro comercial ya no la tiene ninguno: cada uno tiene su rescate)
 	if rescate.def.get("rescate", "") == "":
@@ -882,12 +927,12 @@ func probar_viviendas() -> void:
 	var cerradas := []
 	var abiertas := []
 	for d in casas.apt.puertas:
-		(cerradas if d.cerrada else abiertas).append(DATOS[d.vecino].nombre)
+		(cerradas if d.cerrada else abiertas).append(DATOS.get(d.vecino, {"nombre": d.vecino}).nombre)
 	var hojas: Array = mapa.cosas.get_children().filter(func(n): return n.get_script() == PUERTA_BANO)
-	print("Viviendas: cerradas %s · abiertas %s · hojas %d, de ellas abiertas %d (esperado: [Médica, Farmacéutica], los otros cuatro, 6, 4)" % [
+	print("Viviendas: cerradas %s · abiertas %s · hojas %d, de ellas abiertas %d (esperado: [Médica, Farmacéutica] y los tres de la torre, los otros cuatro, 9, 4)" % [
 		cerradas, abiertas, hojas.size(), hojas.filter(func(h): return h.abierta == 1.0).size()])
 	var oscuras: Array = casas.apt.salas.filter(func(s): return mapa.oculto(s.centro)).map(func(s): return s.nombre)
-	print("Viviendas: a oscuras %s (esperado: [Médica, Farmacéutica])" % [oscuras])
+	print("Viviendas: a oscuras %s (esperado: [Médica, Farmacéutica] y los tres trasteros de la torre)" % [oscuras])
 	print("Viviendas: vecinos %s (esperado: cada uno en la suya)" % [vecinos.map(func(v):
 		return "%s en «%s»" % [v.def.nombre, mapa.nombre_zona(mapa.zona_en(v.position))])])
 	print("Viviendas: cuánto se aparta cada uno del medio de su habitación %s (esperado: 0 todos menos el técnico, -96)" % [
@@ -908,6 +953,11 @@ func probar_viviendas() -> void:
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
 	Captura.foto("captura-viviendas-derecha.png")
+	# el final del pasillo, con las tres de la torre (la cuarta de arriba, la cuarta de abajo y la del fondo)
+	johnny.position = Vector2(Viviendas.casa("programador").x + 120, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3, false).timeout
+	Captura.foto("captura-viviendas-torre.png")
 	# una puerta cerrada no deja pasar: Johnny anda hacia la de la médica un segundo y se queda en el pasillo
 	var de_ella: Dictionary = casas.apt.puertas.filter(func(d): return d.vecino == "medico")[0]
 	johnny.position = Vector2((de_ella.c + 1) * Planta.CASILLA, (Viviendas.PASILLO_F + 1) * Planta.CASILLA)
@@ -991,7 +1041,7 @@ func probar_los_seis() -> void:
 	johnny.position = Vector2(Viviendas.COLS * Planta.CASILLA / 2.0, (Viviendas.PASILLO_F + 3) * Planta.CASILLA)
 	johnny.get_node("Camara").reset_smoothing()
 	await get_tree().create_timer(0.3, false).timeout
-	print("Los seis en las viviendas: %s | puertas cerradas %d (esperado: 0)" % [vecinos.map(func(v): return "%s en «%s»" % [
+	print("Los seis en las viviendas: %s | puertas cerradas %d (esperado: 2, las de la torre que aún no están)" % [vecinos.map(func(v): return "%s en «%s»" % [
 		v.def.nombre, partida.mapa.nombre_zona(partida.mapa.zona_en(v.position))]),
 		partida.mapa.sitio.apt.puertas.filter(func(d): return d.cerrada).size()])
 	Captura.foto("captura-viviendas-seis.png")

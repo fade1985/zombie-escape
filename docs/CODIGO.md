@@ -394,8 +394,10 @@ en una línea.
   apunta `guia_otra_vez`). Se prueba con `--guiado` y, con un jugador que no hace caso, `--guiado --sin-hacer`. La
   ventana de los tercios sí sale con la guía, al perder el primero (M35; `--guiado --tercios`).
 - `supervivientes.gd` (el encerrado en su baño, la horda, los vecinos; la horda dura 1 minuto de cerradura con unos 150 zombis en grupos cada vez más seguidos y por tramos de 20 s, `HORDA` y `TIPOS`, M40) y `aliado.gd` (cada superviviente que te
-  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`; en la horda, delante de la puerta, trastea en la cerradura: echado hacia ella, a empujones, con chispitas que lucen a oscuras y un clic, `trastear`, M63). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico) y
-  `barricada.gd` (ferretero).
+  acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`; en la horda, delante de la puerta, trastea en la cerradura: echado hacia ella, a empujones, con chispitas que lucen a oscuras y un clic, `trastear`, M63). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico),
+  `barricada.gd` (ferretero) y `copia.gd` (el informático joven de la torre, id `programador`: protegerle 60 s mientras
+  copia los archivos, con las cámaras saltando; su precio de empleado, `Supervivientes.precio`, y lo de acompañar:
+  `abre_codigo` y `informatico_cerca`, que ciega las cámaras; `--edificio torre --programador`).
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide
@@ -510,7 +512,8 @@ en una línea.
   `"vestibulo"` (`Planta.generar`, `estilo_pasillo`), con el ventanal de la ciudad de noche (`ventanal.gd`) en vez de
   escaparates y el cartel de la planta (0, 10...40) dibujado en `puerta.gd` (`cartel_torre`); se miran con
   `--edificio torre --torre` y `--edificio torre --departamentos` (`--tipo X`);
-  `viviendas.gd`, el pasillo de los rescatados. Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
+  `viviendas.gd`, el pasillo de los rescatados (nueve habitaciones: las de la torre, `TORRE`, la cuarta de arriba, la
+  cuarta de abajo y la del fondo, con su puerta de lado; las de quien aún no está en `Supervivientes.DATOS`, cerradas). Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
   habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y de un gris muy oscuro (`tabique.gd` y
   `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los
   lados subiendo hasta él), los demás tabiques se ven planos y el muro que sobra alrededor se ve oscuro,

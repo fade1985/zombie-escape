@@ -196,6 +196,9 @@
 #   --sujeto            (con --edificio torre --jefe sujeto_1) el Sujeto 1, el jefe final de la torre (parte 6): el
 #                       fregonazo, los cubos de agua, rodar, partirse en dos, una mitad enfadada y la puerta del
 #                       helipuerto al caer las dos, con fotos                              [prueba_jefes.gd]
+#   --programador       (con --edificio torre) el informático joven, superviviente de la torre (parte 7): su sala de
+#                       servidores, la copia de 60 s (la barra, una cámara que salta, tumbarlo y levantarlo), el
+#                       precio de empleado, las cámaras ciegas, el código del jefe y su habitación, con fotos [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -635,6 +638,9 @@ func empezar_prueba() -> void:
 		set_process(false)   # sin la prueba larga
 		await supervivientes.probar()
 		get_tree().quit()
+	elif "--programador" in args:
+		set_process(false)   # sin la prueba larga
+		probar_programador()
 	elif "--viviendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_viviendas()

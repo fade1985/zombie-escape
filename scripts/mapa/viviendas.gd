@@ -1,12 +1,14 @@
 # Las viviendas de los supervivientes rescatados: detrás de la puerta de la derecha de la sala de mantenimiento, un
-# pasillo largo con seis habitaciones, una por superviviente (Supervivientes.DATOS). Son los trasteros del edificio (no
+# pasillo largo con nueve habitaciones, una por superviviente (Supervivientes.DATOS). Son los trasteros del edificio (no
 # pueden vivir en ningún piso: la horda los ha destrozado todos), así que todas son iguales, de chapa metálica (mapa.gd
 # les pone el estilo "trastero" y la puerta azul lisa de puerta_bano.gd), y el pasillo es el de una zona de trasteros: el
 # mismo hormigón, con una línea amarilla pintada a lo largo, la misma chapa con una franja de chapa lagrimada abajo,
 # cajas de cartón y carretillas contra la pared y, a la izquierda de la primera puerta de arriba, el cartel de
 # «TRASTEROS» (cartel_trasteros.gd). Las de los tres de los
 # Apartamentos (policía, médica y militar) dan a la pared de arriba del pasillo, y las de los tres del centro
-# comercial (ferretero, farmacéutica y técnico), a la de abajo; cada una con su puerta en medio (sin cartel con su
+# comercial (ferretero, farmacéutica y técnico), a la de abajo; las de los tres de Torre Velaria (parte 7 del plan:
+# informático, recepcionista y limpiadora), al final: una arriba, otra abajo y la tercera al fondo del pasillo, con su
+# puerta en la pared de la derecha. Cada una con su puerta en medio (sin cartel con su
 # nombre: no se ve quién hay detrás hasta abrirla). Las de quien aún no está rescatado (Guardado.rescatados) están
 # cerradas y a oscuras, para ver lo que falta por salvar; las de los rescatados, abiertas, con él dentro (supervivientes.gd: colocar_vecinos).
 #
@@ -34,7 +36,8 @@ const PASILLO := 8           # el fondo del pasillo (sus tres últimas filas, de
 const ENTRADA := 0           # el trozo de pasillo antes de las habitaciones: nada, la pared de la entrada es la de las primeras
 const FINAL := 0             # y el que queda después de la última: nada, el pasillo acaba con las habitaciones
 const PUERTA := 2            # el ancho de las puertas, en casillas
-const COLS := BORDE * 2 + ENTRADA + ANCHO * 3 + 2 + FINAL
+const LARGO := ENTRADA + ANCHO * 4 + 3 + FINAL   # el pasillo, de largo: cuatro habitaciones por fila (con sus tabiques)
+const COLS := BORDE * 2 + LARGO + 1 + ANCHO      # y, tras su tabique de la derecha, la habitación del fondo
 const FILAS := BORDE * 2 + FONDO_ARRIBA + 1 + PASILLO + 1 + FONDO_ABAJO
 const PASILLO_F := BORDE + FONDO_ARRIBA + 1     # la primera fila del pasillo
 const ABAJO_F := PASILLO_F + PASILLO + 1        # y la de las habitaciones de abajo
@@ -44,6 +47,18 @@ const CARTEL := 2.5                             # el cartel de «TRASTEROS» (ma
 # Dónde espera cada uno, contando desde el medio de lo que se ve de su habitación (si no está aquí, en medio): el
 # técnico, a la izquierda
 const SITIO := {"tecnico": Vector2(-96, 32)}
+# Los de la torre, en este orden: arriba, abajo y al fondo. Los que aún no están en Supervivientes.DATOS (se hacen uno por
+# trozo) ya tienen su habitación, cerrada
+const TORRE := ["programador", "recepcionista", "limpiadora"]   # no-tr (ids)
+
+
+# Todos los que tienen habitación: los de Supervivientes.DATOS y los de la torre que aún falten
+static func ids() -> Array:
+	var todos: Array = Supervivientes.DATOS.keys()
+	for id in TORRE:
+		if id not in todos:
+			todos.append(id)
+	return todos
 
 
 # El sitio entero. "mant" es la sala de mantenimiento y "vuelta", su puerta de la derecha (por donde se vuelve)
@@ -55,17 +70,22 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 	# ("linea", la "y" de la línea amarilla pintada a lo largo del suelo, mapa.gd: en medio de lo que se ve de él)
 	# (los nombres, en español, como los de la planta: se traducen al enseñarlos, Planta.nombre_de_sitio)
 	var pasillo := {"id": 0, "uso": "pasillo", "tipo": "viviendas", "nombre": "Viviendas", "c0": BORDE, "f0": PASILLO_F,   # [traducir]
-		"ancho": COLS - BORDE * 2, "fondo": PASILLO, "puertas": [], "linea": (PASILLO_F + (PASILLO - TAPADAS) / 2.0) * CASILLA}
+		"ancho": LARGO, "fondo": PASILLO, "puertas": [], "linea": (PASILLO_F + (PASILLO - TAPADAS) / 2.0) * CASILLA}
 	var salas := [pasillo]
 	var puertas := []
-	for id: String in Supervivientes.DATOS:
+	for id: String in ids():
 		var r := habitacion(id)
 		# (cada habitación se llama como el suyo, en español; se enseña con Supervivientes.nombre_de: Planta.nombre_de_sitio)
-		var sala := {"id": salas.size(), "uso": "habitacion", "tipo": id, "vecino": id, "nombre": Supervivientes.DATOS[id].nombre,
+		var nombre: String = Supervivientes.DATOS[id].nombre if Supervivientes.DATOS.has(id) else "Trastero"   # [traducir]
+		var sala := {"id": salas.size(), "uso": "habitacion", "tipo": id, "vecino": id, "nombre": nombre,
 			"c0": r.position.x, "f0": r.position.y, "ancho": r.size.x, "fondo": r.size.y, "puertas": []}
-		# la puerta, en medio de la pared que da al pasillo (el tabique de debajo o el de encima)
+		# la puerta, en medio de la pared que da al pasillo (el tabique de debajo o el de encima; la del fondo, en el de
+		# su izquierda, a la altura de lo que se ve del pasillo)
 		var p := {"a": sala.id, "b": 0, "c": r.position.x + (ANCHO - PUERTA) / 2,
 			"f": r.end.y if r.position.y < PASILLO_F else r.position.y - 1, "ancho": PUERTA, "fondo": 1, "vecino": id}
+		if r.position.y == PASILLO_F:
+			p = {"a": 0, "b": sala.id, "c": r.position.x - 1, "f": PASILLO_F + (PASILLO - TAPADAS - PUERTA) / 2,
+				"ancho": 1, "fondo": PUERTA, "vecino": id}
 		sala.puertas.append(p)
 		pasillo.puertas.append(p)
 		puertas.append(p)
@@ -77,8 +97,9 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 		s.casillas = s.ancho * s.fondo
 		s.centro = Vector2(s.c0 + s.ancho / 2.0, s.f0 + s.fondo / 2.0) * CASILLA
 	for p in puertas:
-		for c in range(p.c, p.c + PUERTA):
-			dueno[p.f * COLS + c] = -2
+		for f in range(p.f, p.f + p.fondo):
+			for c in range(p.c, p.c + p.ancho):
+				dueno[f * COLS + c] = -2
 	# ("entrada", para Muebles.de_apartamento: la de la izquierda; en las paredes de los lados, "c" cuenta filas)
 	var apt := {"cols": COLS, "filas": FILAS, "dueno": dueno, "salas": salas, "puertas": puertas, "jefe": false,
 		"entrada": {"c": LLEGADA, "lado": "izquierda"}, "tipo": "viviendas"}
@@ -98,8 +119,15 @@ static func generar(semilla: int, mant: int, vuelta: int) -> Dictionary:
 
 
 # La habitación de cada uno, en casillas: las de los Apartamentos arriba y las del centro comercial abajo, cada fila en
-# el orden de Supervivientes.DATOS, de izquierda a derecha (caben tres por fila)
+# el orden de Supervivientes.DATOS, de izquierda a derecha; y las de la torre (TORRE), la cuarta de arriba, la cuarta
+# de abajo y la del fondo (a la derecha del pasillo, tan honda como él)
 static func habitacion(id: String) -> Rect2i:
+	var k_torre := TORRE.find(id)
+	if k_torre == 0 or k_torre == 1:
+		return Rect2i(BORDE + ENTRADA + 3 * (ANCHO + 1), BORDE if k_torre == 0 else ABAJO_F, ANCHO,
+			FONDO_ARRIBA if k_torre == 0 else FONDO_ABAJO)
+	if k_torre == 2:
+		return Rect2i(BORDE + LARGO + 1, PASILLO_F, ANCHO, PASILLO)
 	var arriba: bool = Supervivientes.DATOS[id].edificio == "apartamentos"
 	var k := 0
 	for otro: String in Supervivientes.DATOS:
@@ -115,5 +143,5 @@ static func habitacion(id: String) -> Rect2i:
 # sin sus tres últimas filas, que tapa la pared del pasillo), o donde diga SITIO
 static func casa(id: String) -> Vector2:
 	var r := habitacion(id)
-	var fondo := r.size.y - (TAPADAS if r.position.y < PASILLO_F else 0)
+	var fondo := r.size.y - (TAPADAS if r.position.y <= PASILLO_F else 0)   # (la del fondo, como el pasillo)
 	return Vector2(r.position.x + r.size.x / 2.0, r.position.y + fondo / 2.0) * CASILLA + SITIO.get(id, Vector2.ZERO)

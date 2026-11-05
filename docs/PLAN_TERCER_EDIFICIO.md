@@ -432,7 +432,26 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      los dos, la página del dosier y la puerta del helipuerto. Ficha del bestiario, exposición y panel de pruebas.
      Prueba: `--captura --edificio torre --jefe sujeto_1 --sujeto`.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
-   viviendas y un superviviente por trozo.
+   viviendas y un superviviente por trozo. Cada uno cuesta unas **25 generaciones** (no 15): 12 los dos intentos, 8 el
+   andar, 5 a 8 el gesto y 1 la caída.
+   - **Primer trozo (5 nov, falta el visto bueno del dueño):** las habitaciones y el informático joven.
+     - **Las viviendas tienen 9 trasteros** (`viviendas.gd`, `TORRE`): el pasillo es una habitación más largo; los de la
+       torre, la cuarta de arriba, la cuarta de abajo y la del **fondo**, a la derecha del pasillo, con su puerta de lado
+       en la pared. Los que aún no están en `Supervivientes.DATOS` ya tienen la suya, cerrada («Trastero»). Colchas: la
+       morada (informático), la rosa (recepcionista) y la amarilla (limpiadora), de `tools/camas_viviendas.py`.
+     - **El informático joven** (id `programador`: `informatico` es el minijefe; `copia.gd`; números en sus `const`).
+       Sale en la **sala de servidores** de Informática de una planta al azar. Al unirse, se cierra la puerta y hay que
+       protegerle **60 s** mientras copia los archivos de Velaria (grupos de 3 a 8 zombis, 50 a la vez como mucho; a
+       mitad suelta molotov, granada y munición). Cada **15 s** hace saltar una de las cámaras que sigan enteras (se
+       despiertan todos y, la primera vez de cada una, llegan escoltas): romperlas antes ahorra sustos. Si lo tumban,
+       como en la horda. Ya rescatado: **precio de empleado**, la tienda del ordenador un 15 % más barata
+       (`Supervivientes.precio`). Si te acompaña: las cámaras no ven a Johnny con él a menos de 200
+       (`camaras.gd`, `CIEGA`), abre el teclado del jefe **sin código** (`partida.gd`, `abre_codigo`) y cada 4 s deja
+       quieto 1 s al zombi más cercano (como el técnico, con el móvil).
+     - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento B (sudadera morada), andar, «hackear»
+       con el móvil y caído.
+     - Prueba: `--captura --edificio torre --programador`; las viviendas, `--captura --viviendas`.
+   - **Faltan:** la recepcionista y la limpiadora de noche, un trozo cada una.
 8. **La historia** (Sonnet): dosier, noticias y relato final.
 9. **Las skins** (Sonnet): las cinco cabezas y sus ventajas.
 10. **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las

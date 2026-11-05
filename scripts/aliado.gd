@@ -60,6 +60,7 @@ const HOJAS := {
 	"ferretero": {"hoja": preload("res://assets/sprites/superviviente-ferretero.tres"), "fogonazo": 0.2},
 	"farmaceutica": {"hoja": preload("res://assets/sprites/superviviente-farmaceutica.tres")},
 	"tecnico": {"hoja": preload("res://assets/sprites/superviviente-tecnico.tres"), "fogonazo": 0.2},
+	"programador": {"hoja": preload("res://assets/sprites/superviviente-programador.tres"), "fogonazo": 0.2},
 }
 # El fogonazo de pixelfx (fogonazo.gd) de cada arma de los que disparan: el policía, el de la pistola, y el militar,
 # que dispara en ráfagas, el de la MP5 (sus llamas se van turnando)

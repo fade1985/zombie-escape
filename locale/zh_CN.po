@@ -296,7 +296,7 @@ msgstr "修好了！可以合闸送电了"
 msgid "¡El %s ha arreglado el cable! El agua ya no da calambres"
 msgstr "%s修好了电线！水里不会再电人了"
 
-#: scripts/averia.gd scripts/escolta.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/escolta.gd scripts/supervivientes.gd
 msgid "¡Ayúdame, no puedo levantarme!"
 msgstr "帮帮我，我起不来了！"
 
@@ -312,7 +312,7 @@ msgstr "撑住：%s正在修电线"
 msgid "Baja la palanca del cuadro eléctrico"
 msgstr "拉下配电箱的电闸"
 
-#: scripts/averia.gd
+#: scripts/averia.gd scripts/copia.gd
 msgid "¡El %s ha caído!"
 msgstr "%s倒下了！"
 
@@ -348,7 +348,7 @@ msgstr "剥线，接上……行了"
 msgid "Ya solo falta la cinta aislante…"
 msgstr "就差缠绝缘胶带了……"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Un poco más!"
 msgstr "再坚持一下！"
 
@@ -364,15 +364,15 @@ msgstr "这样我没法干！快断电！"
 msgid "¡Que me electrocuto! ¡La palanca!"
 msgstr "我要触电了！电闸！"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Johnny, vuelve!"
 msgstr "Johnny，回来！"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡No me dejes aquí!"
 msgstr "别把我丢在这儿！"
 
-#: scripts/averia.gd scripts/supervivientes.gd
+#: scripts/averia.gd scripts/copia.gd scripts/supervivientes.gd
 msgid "¡Que me comen!"
 msgstr "我要被吃掉了！"
 
@@ -743,6 +743,54 @@ msgstr "趁热吃！"
 #: scripts/cocinero.gd
 msgid "¡A LA OLLA!"
 msgstr "下锅！"
+
+#: scripts/copia.gd
+msgid "¡Se ha cerrado la puerta! Protege al %s mientras copia los archivos"
+msgstr "门关上了！%s复制文件的时候，保护好他"
+
+#: scripts/copia.gd
+msgid "¡Gracias! Sigo copiando"
+msgstr "谢谢！我接着复制"
+
+#: scripts/copia.gd
+msgid "¡Copiado! Vámonos de aquí"
+msgstr "复制完了！快离开这儿"
+
+#: scripts/copia.gd
+msgid "¡El %s ha copiado los archivos de Velaria!"
+msgstr "%s把维拉里亚的文件复制完了！"
+
+#: scripts/copia.gd
+msgid "Aguanta: el %s está copiando los archivos"
+msgstr "撑住：%s正在复制文件"
+
+#: scripts/copia.gd
+msgid "El %s copia los archivos · %d:%02d"
+msgstr "%s正在复制文件 · %d:%02d"
+
+#: scripts/copia.gd
+msgid "Me llevo los archivos de Velaria. ¡Cúbreme mientras se copian!"
+msgstr "我要带走维拉里亚的文件。复制的时候掩护我！"
+
+#: scripts/copia.gd
+msgid "Cuatro mil carpetas… ¿quién guarda tanto?"
+msgstr "四千个文件夹……谁会存这么多？"
+
+#: scripts/copia.gd
+msgid "¡Ay! El programa de copia ha hecho saltar las cámaras"
+msgstr "哎呀！复制程序触发了摄像头"
+
+#: scripts/copia.gd
+msgid "¡Toma, esto estaba en el armario de los cables!"
+msgstr "给，这是在电缆柜里找到的！"
+
+#: scripts/copia.gd
+msgid "«Proyecto Sujeto 1»… esto no pinta bien"
+msgstr "“一号实验体项目”……情况不妙"
+
+#: scripts/copia.gd
+msgid "Copiando lo último…"
+msgstr "复制最后一点……"
 
 #: scripts/directora.gd
 msgid "¡INACEPTABLE!"
@@ -2519,6 +2567,10 @@ msgstr "被砸烂的商店"
 msgid "Viviendas"
 msgstr "生活区"
 
+#: scripts/mapa/viviendas.gd
+msgid "Trastero"
+msgstr "储藏室"
+
 #: scripts/mascota.gd
 msgid "¡ABRAZOS GRATIS!"
 msgstr "免费抱抱！"
@@ -2702,6 +2754,10 @@ msgstr "撑住：还在撬锁"
 #: scripts/partida.gd
 msgid "La puerta no se abre mientras quede algún zombi"
 msgstr "只要还有僵尸，门就打不开"
+
+#: scripts/partida.gd
+msgid "El informático joven se salta el teclado: la puerta se abre"
+msgstr "年轻网管绕过了键盘：门开了"
 
 #: scripts/partida.gd
 msgid "Abres con la tarjeta de acceso"
@@ -3395,6 +3451,30 @@ msgstr "每3秒放一次电，让最近的僵尸定住1.5秒"
 #: scripts/supervivientes.gd
 msgid "Arregla las cámaras de seguridad: el minimapa enseña los zombis"
 msgstr "修好监控摄像头：小地图上会显示僵尸"
+
+#: scripts/supervivientes.gd
+msgid "Informático joven"
+msgstr "年轻网管"
+
+#: scripts/supervivientes.gd
+msgid "¡Estoy en la sala de servidores!"
+msgstr "我在机房！"
+
+#: scripts/supervivientes.gd
+msgid "¡No me dejéis aquí!"
+msgstr "别把我丢在这儿！"
+
+#: scripts/supervivientes.gd
+msgid "¡Gracias! Pero no me voy sin los archivos de Velaria"
+msgstr "谢谢！不过不带走维拉里亚的文件我不走"
+
+#: scripts/supervivientes.gd
+msgid "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven"
+msgstr "每 4 秒入侵最近僵尸的大脑，让它定住 1 秒；摄像头看不见他"
+
+#: scripts/supervivientes.gd
+msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
+msgstr "员工价：电脑商店便宜 15%"
 
 #: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
