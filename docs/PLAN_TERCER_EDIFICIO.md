@@ -478,7 +478,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento A (americana azul marino, pañuelo rosa,
        auriculares), andar, «pasar la tarjeta» y caída.
      - Prueba: `--captura --edificio torre --recepcionista`.
-8. **La historia** (Sonnet): dosier, noticias y relato final. ✅ **Hecha el 5 nov** (falta el visto bueno del dueño). Lo que ha
+8. **La historia** (Sonnet): dosier, noticias y relato final. ✅ **Hecha el 5 nov, con el visto bueno del dueño.** Lo que ha
    quedado (`historia.gd`, `"torre"`; ids `tv_*` y `n_*`):
    - El final, **con gancho** (lo eligió el dueño): la presidenta (ya tiene nombre: **Clara Velar**) escapa en el
      helicóptero rumbo al norte; Johnny recuerda quién es y le manda su ficha a Marta.
