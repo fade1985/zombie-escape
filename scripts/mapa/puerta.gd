@@ -203,10 +203,36 @@ func placa_de_piso(acero: Vector2, rota: Dictionary, laton: Vector2) -> void:
 # en la pared, con «PLANTA» pequeño encima (en otro idioma, su palabra: CARTELES_POR_IDIOMA), de suelo a moldura (la planta baja, el 0,
 # como en los botones de los ascensores). Las pinturas son de PixelLab (tools/guias_cartel.py)
 func cartel_planta() -> void:
+	if salida.has("planta_torre"):
+		cartel_torre(salida.planta_torre)
+		return
 	var planta: int = salida.planta
 	var carteles: Array = CARTELES_POR_IDIOMA.get(Idioma.actual, CARTELES)
 	if planta >= 0 and planta < carteles.size():
 		draw_texture_rect(carteles[planta], Rect2(-114, -84, 56, 84), false)
+
+
+# El cartel de Torre Velaria (0, 10, 20, 30 o 40: el ascensor solo para cada diez plantas), en el mismo sitio que los demás: el
+# número pintado con plantilla en una placa clara, hecho con código (cada píxel del dibujo, 8 unidades)
+const CIFRAS := {"0": ["XXX", "X.X", "X.X", "X.X", "XXX"], "1": [".X.", "XX.", ".X.", ".X.", "XXX"],
+	"2": ["XXX", "..X", "XXX", "X..", "XXX"], "3": ["XXX", "..X", "XXX", "..X", "XXX"], "4": ["X.X", "X.X", "XXX", "..X", "..X"]}
+const PINTURA := Color("1f2430")        # los números, pintados en oscuro
+const PLACA_TORRE := Color("c9cdd3")    # la placa clara de detrás (el cristal esmerilado y la piedra son casi de su color)
+func cartel_torre(numero: int) -> void:
+	var texto := str(numero)
+	var px := 8.0
+	var ancho := texto.length() * 3 * px + (texto.length() - 1) * px
+	var x := -86.0 - ancho / 2.0   # centrado en el sitio del cartel (de -114 a -58)
+	var y := -56.0
+	draw_rect(Rect2(-114, -80, 56, 68), PINTURA)
+	draw_rect(Rect2(-112, -78, 52, 64), PLACA_TORRE)
+	for ch in texto:
+		var filas: Array = CIFRAS[ch]
+		for f in 5:
+			for c in 3:
+				if filas[f][c] == "X":
+					draw_rect(Rect2(x + c * px, y + f * px, px, px), PINTURA)
+		x += 4 * px
 
 
 # Una placa: el borde oscuro y el metal, con su brillo arriba y a la izquierda y su sombra abajo y a la derecha

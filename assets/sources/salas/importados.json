@@ -343,6 +343,102 @@
     "huella": "3b3db1bf763bb54f",
     "sprite": "mueble-tv"
   },
+  "torre/archivador.png": {
+    "huella": "cd71de23898c827c",
+    "sprite": "mueble-filecabinet"
+  },
+  "torre/armero.png": {
+    "huella": "d218596cc0768bba",
+    "sprite": "mueble-armory"
+  },
+  "torre/cubiculo-lado.png": {
+    "huella": "029f22aa4e2c392d",
+    "sprite": "mueble-cubicle-lado"
+  },
+  "torre/cubiculo.png": {
+    "huella": "2b358e439cbb3800",
+    "sprite": "mueble-cubicle"
+  },
+  "torre/escritorio-lado.png": {
+    "huella": "40a846c01654c857",
+    "sprite": "mueble-officedesk-lado"
+  },
+  "torre/escritorio.png": {
+    "huella": "02dab5d7b3386af4",
+    "sprite": "mueble-officedesk"
+  },
+  "torre/fotocopiadora.png": {
+    "huella": "347d0258bd91d565",
+    "sprite": "mueble-copier"
+  },
+  "torre/fuente-agua.png": {
+    "huella": "5b3dfd175e409b91",
+    "sprite": "mueble-watercooler"
+  },
+  "torre/impresora.png": {
+    "huella": "31dd36cc01d9822c",
+    "sprite": "mueble-printer"
+  },
+  "torre/libreria.png": {
+    "huella": "11c8f977178d3d4a",
+    "sprite": "mueble-bookcase"
+  },
+  "torre/maqueta-torre.png": {
+    "huella": "960c0e3d2fee3a6c",
+    "sprite": "mueble-towermodel"
+  },
+  "torre/mesa-direccion-lado.png": {
+    "huella": "c6463c9888036c2d",
+    "sprite": "mueble-execdesk-lado"
+  },
+  "torre/mesa-direccion.png": {
+    "huella": "9597dee67baac5f5",
+    "sprite": "mueble-execdesk"
+  },
+  "torre/mesa-entrevistas-lado.png": {
+    "huella": "84097af5219e7bfe",
+    "sprite": "mueble-interviewtable-lado"
+  },
+  "torre/mesa-entrevistas.png": {
+    "huella": "e4d7d556bf0f692a",
+    "sprite": "mueble-interviewtable"
+  },
+  "torre/mesa-juntas.png": {
+    "huella": "1b2f886bd480f669",
+    "sprite": "mueble-boardtable"
+  },
+  "torre/mesa-mezclas.png": {
+    "huella": "7a5ed4910112ee7c",
+    "sprite": "mueble-mixerdesk"
+  },
+  "torre/office-cocina.png": {
+    "huella": "29f74f5076714ead",
+    "sprite": "mueble-officekitchen"
+  },
+  "torre/pared-monitores.png": {
+    "huella": "7b96d83faab3f26f",
+    "sprite": "mueble-monitorwall"
+  },
+  "torre/rack-servidores.png": {
+    "huella": "063af26f20e2cbe5",
+    "sprite": "mueble-serverrack"
+  },
+  "torre/recepcion.png": {
+    "huella": "af707b1f42a85853",
+    "sprite": "mueble-reception"
+  },
+  "torre/sofa-vestibulo-lado.png": {
+    "huella": "0e0d363c58c6de05",
+    "sprite": "mueble-lobbysofa-lado"
+  },
+  "torre/sofa-vestibulo.png": {
+    "huella": "3f04bc37a8dcc14f",
+    "sprite": "mueble-lobbysofa"
+  },
+  "torre/torno.png": {
+    "huella": "a859cdadaefcd7eb",
+    "sprite": "mueble-turnstile"
+  },
   "vestuario/banco-vestuario.png": {
     "huella": "d48a8dde87bafebc",
     "sprite": "mueble-lockerbench"

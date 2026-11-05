@@ -175,3 +175,24 @@ Nada de esto está probado ni decidido.
   Al romperse: se quita el choque, humo y cascotes, y puede soltar botín.
 - **Preguntas sin contestar:** qué se rompe (todo o solo algunos muebles marcados) y quién lo rompe (Johnny,
   los zombis, las explosiones).
+
+## Torre Velaria (5 nov, parte 2 de `docs/PLAN_TERCER_EDIFICIO.md`)
+
+Todo de PixelLab (recetas e ids en `assets/pixellab.json` → `torre-parte2`); originales en `assets/sources/torre/` (suelos y
+paredes) y `assets/sources/salas/torre/` (muebles). Mismas herramientas que el centro.
+
+- **Suelos** (`py tools/textura_suelo.py assets/sources/torre/<x>.png <nombre> <baldosas>`): `torre` (moqueta gris de oficina, 4),
+  `datos` (suelo técnico, 10), `direccion` (parquet, 8) y `vestibulo` (mármol en damero, 4: un recorte de 2×2 baldosas repetido).
+- **Paredes** (`py tools/textura_pared.py ...`, las juntas con `py tools/junta_pared.py`): `torre` (cristal esmerilado, la del
+  pasillo), `oficina` (tabique claro de los departamentos), `datos`, `direccion` (madera) y `vestibulo` (piedra con latón).
+  **Tapa:** `tapa-torre` (`py tools/textura_tapa.py assets/sources/torre/crudos/tapa-torre.png torre`).
+- **Qué va en cada sala:** `ESTILO_TIENDA` de `mapa.gd` (sala grande de cada departamento y habitaciones de dentro); el pasillo,
+  por la ficha del edificio (`"pasillo": "torre"`) y `PASILLOS` de `mapa.gd`; el vestíbulo (planta 1 de la torre) usa el estilo
+  `vestibulo`.
+- **Muebles** (`py tools/guias_torre.py` → PixelLab → `guias_torre.py quita` → `py tools/importar.py`): cubículo, escritorio,
+  impresora, fotocopiadora, rack de servidores, fuente de agua, sofá del vestíbulo, recepción, torno, archivador, mesa de juntas,
+  mesa de dirección, librería, mesa de mezclas, pared de monitores, armero, mesa de entrevistas, cocina del office y maqueta de la
+  torre; de lado, solo cubículo, escritorio, sofá, mesa de dirección y de entrevistas. Puestos en las mismas casillas que los de
+  la tienda del centro cuyo plano usan (`py tools/muebles_torre.py`, que ya no hace falta: se retoca a mano en `catalogo.gd`).
+- **Con código:** el rótulo del departamento (`neon.gd`, placa blanca y fría iluminada; con `iluminado`), el ventanal con la ciudad
+  de noche (`ventanal.gd`) y el cartel del número de planta junto al ascensor (`puerta.gd`, `cartel_torre`).

@@ -1417,3 +1417,61 @@ func probar_torre() -> void:
 		Planta.nombre_de_sitio(planta.sitios[jefe_idx])])
 	print("Torre: la última planta se llama «%s» (esperado: Planta 40)" % Planta.nombre_de(Planta.generar(Planta.PLANTAS, edificio, "")))
 	get_tree().quit()
+
+
+# Con "--captura --edificio torre --departamentos" (tercer edificio, parte 2: cómo se ve; --tipo X, solo ese): el pasillo del
+# vestíbulo y el de la planta 10, enteros y sin penumbra, y cada departamento, con la puerta abajo y arriba, sin zombis: cuántos
+# muebles lleva (esperado: los puestos a mano en Catalogo.SALAS "<sala>-<tipo>"; los "libre" cuentan igual) y su foto
+# (captura-torre-<tipo>-<lado>.png). Luego se cierra
+func probar_departamentos() -> void:
+	var args := OS.get_cmdline_user_args()
+	var solo: String = args[args.find("--tipo") + 1] if "--tipo" in args else ""
+	if solo == "":
+		for num in [1, 2]:
+			Planta.semilla = 3300 + num
+			nueva_planta(num)
+			Planta.semilla = 0
+			planta.sitios[0].limpio = true
+			await montar(0, 0, false)
+			await get_tree().create_timer(0.4).timeout
+			print("Pasillo de la torre, %s: estilo %s, muebles %d (esperado: %d)" % [Planta.nombre_de(planta), planta.sitios[0].estilo,
+				get_tree().get_nodes_in_group("muebles").size(), Catalogo.SALAS[planta.sitios[0].estilo].colocados.abajo.size()])
+			for lado in ["izq", "cen", "der"]:   # (el pasillo es más largo que la pantalla: sus dos puntas y el ascensor, en medio)
+				johnny.position = Vector2(planta.sitios[0].ancho * {"izq": 0.2, "cen": 0.5, "der": 0.8}[lado], planta.sitios[0].alto / 2.0)
+				johnny.get_node("Camara").reset_smoothing()
+				await get_tree().create_timer(0.5).timeout
+				Captura.foto("captura-torre-pasillo-%d-%s.png" % [num, lado])
+	for tipo in Tienda.de_edificio("torre"):
+		if solo != "" and tipo != solo:
+			continue
+		for lado in ["abajo", "arriba"]:
+			var t := Tienda.generar(0, tipo, false, lado)
+			var esperado: int = 0
+			for s in t.salas:
+				esperado += Catalogo.SALAS.get("%s-%s" % [s.uso, tipo], {}).get("colocados", {}).get(lado, []).size()
+			var hallada := {}
+			for i in 300:
+				Planta.semilla = 3500 + i
+				var num := 1 + i % 4
+				var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+				for idx in p.sitios.size():
+					if p.sitios[idx].get("tienda", "") == tipo and p.sitios[idx].tipo != "jefe" and p.sitios[idx].apt.entrada.lado == lado:
+						hallada = {"semilla": 3500 + i, "num": num, "idx": idx}
+						break
+				if not hallada.is_empty():
+					break
+			if hallada.is_empty():
+				Planta.semilla = 0
+				print("Departamento %s (puerta %s): no sale en ninguna planta" % [tipo, lado])
+				continue
+			Planta.semilla = hallada.semilla
+			nueva_planta(hallada.num)
+			Planta.semilla = 0
+			var sitio: Dictionary = planta.sitios[hallada.idx]
+			sitio.limpio = true
+			await montar(hallada.idx, 0, false)
+			await get_tree().create_timer(0.4).timeout
+			print("Departamento %s (puerta %s): muebles %d (esperado: %d)" % [tipo, lado, get_tree().get_nodes_in_group("muebles").size(), esperado])
+			johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
+			await foto_entera(sitio, "captura-torre-%s-%s.png" % [tipo, lado])
+	get_tree().quit()

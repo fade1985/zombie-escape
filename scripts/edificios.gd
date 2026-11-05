@@ -78,7 +78,7 @@ const LISTA := {
 		"el_final": "el Sujeto 1",
 		"objetivo": "limpia los departamentos y busca las tres cifras del código en sus ordenadores",
 		"abre": "centro",
-		"pasillo": "galeria",
+		"pasillo": "torre",
 	},
 }
 

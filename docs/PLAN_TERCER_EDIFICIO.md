@@ -284,6 +284,23 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
    - El pasillo, de momento, la galería del centro.
    - Prueba: `--captura --edificio torre --torre`.
 2. **Cómo se ve** (Sonnet): suelos, paredes y muebles con PixelLab; rótulos de departamento y ventanales con la ciudad.
+   ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** 45 generaciones (no las 115 del cálculo: los departamentos
+   siguen en los planos de las tiendas y usan unos 20 muebles). Lo que ha quedado:
+   - Suelos, paredes y tapa propios (`docs/FONDOS.md`, apartado de la torre): el pasillo, de moqueta gris y cristal esmerilado;
+     el vestíbulo, de mármol en damero con paredes de piedra; los departamentos, con tabique claro, y el centro de datos
+     (Informática, sala de servidores, sala de cámaras) y Dirección (parquet y madera) con los suyos.
+   - 19 muebles de oficina (cubículos, escritorios, impresoras, fotocopiadoras, racks, fuentes de agua, archivadores, sofás,
+     recepción, torno, mesas de juntas, de dirección, de mezclas y de entrevistas, librería, pared de monitores, armero, cocina
+     del office, maqueta de la torre), 5 de ellos también de lado. Puestos en las casillas de la tienda cuyo plano usa cada
+     departamento (`Catalogo.SALAS` `<sala>-<tipo>`, ya sin `presta` para los muebles; `presta` queda solo para el plano). Los
+     planos propios de cada departamento, y los muebles que faltan (cápsulas y mesas del laboratorio, de la parte 6), quedan
+     para más adelante.
+   - El pasillo de la torre y el vestíbulo tienen sus muebles puestos a mano (`"torre"` y `"vestibulo"` de `Catalogo.SALAS`):
+     fuentes de agua, sofás, plantas, y en el vestíbulo, la recepción, la maqueta de la torre y dos tornos.
+   - Rótulos iluminados (`neon.gd`, `iluminado`), ventanal con la ciudad de noche a la punta izquierda del pasillo
+     (`ventanal.gd`) y el cartel del número de planta junto al ascensor (0, 10, 20, 30 y 40, `puerta.gd`).
+   - Sin hacer (opcional): cambiar el ordenador del código (`terminal.gd`) por uno de PixelLab.
+   - Prueba: `--captura --edificio torre --departamentos` (`--tipo X`) y `--torre`.
 3. **Los peligros** (Opus): viento, cámaras y gas.
 4. **Los zombis nuevos** (Sonnet): oficinista y escolta.
 5. **Minijefes**, uno por sesión (Opus): directora, informático, presentador y becario.

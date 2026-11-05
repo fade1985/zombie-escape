@@ -237,10 +237,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 		"jefe": su_jefe if su_jefe != "" else ed.jefe, "el_jefe": mini.get("el", ed.el_jefe)}
 	var ancho := PASILLO_COLS * CASILLA
 	var alto := PASILLO_FILAS * CASILLA
+	# en la torre, el vestíbulo (la planta baja) tiene el suyo, de mármol; las demás plantas, el distribuidor de oficina
+	var estilo_pasillo: String = "vestibulo" if edificio == "torre" and num == 1 else ed.pasillo
 	var pasillo := {"tipo": "pasillo", "nombre": planta.nombre, "ancho": ancho, "alto": alto, "salidas": [],
 		"zombis": [], "limpio": true, "visitado": true, "dueno": Muebles.plano_rectangular(PASILLO_COLS, PASILLO_FILAS),
-		"surtido": rng.randi(), "estilo": ed.pasillo, "escaparates": []}
-	if ed.pasillo in ["pasillo", "galeria"]:
+		"surtido": rng.randi(), "estilo": estilo_pasillo, "escaparates": []}
+	if estilo_pasillo in ["pasillo", "galeria", "torre", "vestibulo"]:
 		# el de los apartamentos y la galería del centro, como las viviendas ("cajas": cerrado por sus tabiques, con
 		# oscuro alrededor)
 		pasillo.cajas = true
@@ -364,7 +366,8 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 
 	pasillo.salidas.append({"dir": "arriba", "en": ancho / 2, "tipo": "ascensor", "a": -1, "vuelta": -1,
 		"cerrojo": "nunca", "aviso": "El ascensor está averiado", "planta": -1 if edificio == "torre" else num - 1})   # [traducir]
-	# (en la torre, sin el cartel pintado de la planta: los que hay van del 0 al 3, y allí son la 10, la 20... Parte 2)
+	if edificio == "torre":
+		pasillo.salidas.back().planta_torre = (num - 1) * 10   # su cartel (0, 10, 20...), pintado con código (puerta.gd)
 	# por donde se ha llegado: solo en la planta baja, el portal del edificio, a la izquierda. En las demás plantas no hay otra
 	# puerta: se llega por las escaleras de la derecha, las mismas por las que se salió de la planta de abajo (como en un
 	# edificio de verdad, que no hay que rodear); y por ellas se sigue subiendo
@@ -387,14 +390,14 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	var delante_escaparates: Array = pasillo.escaparates.map(func(e): return Rect2(e.x - ESCAPARATE_MEDIO, MURO,
 		ESCAPARATE_MEDIO * 2, 60))
 	delante_escaparates.append(Rect2(ancho / 2.0 - 130, MURO, 130, 130))   # (y el cartel de la planta, a la izquierda del ascensor)
-	pasillo.muebles = Muebles.de_sala(ed.pasillo, {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
+	pasillo.muebles = Muebles.de_sala(estilo_pasillo, {"cols": PASILLO_COLS, "filas": PASILLO_FILAS, "dueno": pasillo.dueno},
 		pasillo.salidas, [Vector2(MURO + 40, alto / 2.0), Vector2(ancho - MURO - 40, alto / 2.0)], rng,
-		delante_escaparates) if not Catalogo.SALAS[ed.pasillo].has("colocados") else []
-	if Catalogo.SALAS[ed.pasillo].has("colocados"):
+		delante_escaparates) if not Catalogo.SALAS[estilo_pasillo].has("colocados") else []
+	if Catalogo.SALAS[estilo_pasillo].has("colocados"):
 		# M77: la galería del centro comercial, con sus muebles puestos a mano, iguales en todas las plantas (sin tapar
 		# puertas ni el sitio de los escaparates, salgan o no)
 		var borde := MURO / CASILLA
-		pasillo.muebles = Muebles.colocados(Catalogo.SALAS[ed.pasillo].colocados.abajo, {"id": 0, "c0": borde, "f0": borde,
+		pasillo.muebles = Muebles.colocados(Catalogo.SALAS[estilo_pasillo].colocados.abajo, {"id": 0, "c0": borde, "f0": borde,
 			"ancho": PASILLO_COLS - 2 * borde, "fondo": PASILLO_FILAS - 2 * borde})
 	if baja:
 		planta.armas = planta.sitios.size()

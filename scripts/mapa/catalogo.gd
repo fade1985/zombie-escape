@@ -124,6 +124,28 @@ const MUEBLES := {
 	"staffsink":       {"len": 52,  "dep": 40, "paredes": "lados", "archivo": "vestuario/lavabo-espejo"},
 	"canshelf":        {"len": 80,  "dep": 36, "paredes": "",      "archivo": "mantenimiento/estanteria-botes"},
 	"wastebasket":     {"len": 24,  "dep": 22, "paredes": "todas", "archivo": "despacho/papelera"},
+	# Los de Torre Velaria (parte 2 del tercer edificio; PixelLab, con las guías de tools/guias_torre.py): oficina,
+	# vestíbulo, centro de datos, despachos y la sala de seguridad. Los altos (rack, archivador, librería, armero, pared de
+	# monitores), solo en la pared del fondo
+	"cubicle":         {"len": 96,  "dep": 48, "paredes": "lados", "archivo": "torre/cubiculo"},
+	"officedesk":      {"len": 100, "dep": 48, "paredes": "lados", "archivo": "torre/escritorio"},
+	"printer":         {"len": 64,  "dep": 48, "paredes": "",      "archivo": "torre/impresora"},
+	"copier":          {"len": 80,  "dep": 52, "paredes": "",      "archivo": "torre/fotocopiadora"},
+	"serverrack":      {"len": 56,  "dep": 44, "paredes": "",      "archivo": "torre/rack-servidores"},
+	"watercooler":     {"len": 32,  "dep": 28, "paredes": "todas", "archivo": "torre/fuente-agua"},
+	"lobbysofa":       {"len": 96,  "dep": 40, "paredes": "lados", "archivo": "torre/sofa-vestibulo"},
+	"reception":       {"len": 124, "dep": 52, "paredes": ""     , "archivo": "torre/recepcion"},
+	"turnstile":       {"len": 48,  "dep": 40, "paredes": "",      "archivo": "torre/torno"},
+	"filecabinet":     {"len": 64,  "dep": 36, "paredes": "",      "archivo": "torre/archivador"},
+	"boardtable":      {"len": 128, "dep": 64, "paredes": "",      "archivo": "torre/mesa-juntas"},
+	"execdesk":        {"len": 100, "dep": 56, "paredes": "lados", "archivo": "torre/mesa-direccion"},
+	"bookcase":        {"len": 80,  "dep": 36, "paredes": "",      "archivo": "torre/libreria"},
+	"mixerdesk":       {"len": 100, "dep": 48, "paredes": "",      "archivo": "torre/mesa-mezclas"},
+	"monitorwall":     {"len": 100, "dep": 36, "paredes": "",      "archivo": "torre/pared-monitores"},
+	"armory":          {"len": 84,  "dep": 40, "paredes": "",      "archivo": "torre/armero"},
+	"interviewtable":  {"len": 88,  "dep": 48, "paredes": "lados", "archivo": "torre/mesa-entrevistas"},
+	"officekitchen":   {"len": 88,  "dep": 44, "paredes": "",      "archivo": "torre/office-cocina"},
+	"towermodel":      {"len": 64,  "dep": 64, "paredes": "",      "archivo": "torre/maqueta-torre"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo; la sala de mantenimiento no tiene muebles sueltos):
@@ -632,6 +654,228 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
+	# Los departamentos de Torre Velaria (parte 2 del tercer edificio): los muebles de oficina, en las casillas del
+	# plano que les presta una tienda del centro (Tienda.TIPOS, "presta"). "<uso>-<tipo>", como las tiendas
+	# Atención al cliente (plano del supermercado): impresoras, fotocopiadoras y fuentes de agua al fondo, filas de cubículos; el resto, como esa tienda (mismas casillas)
+	"tienda-atencion": {
+		"colocados": {
+			"abajo": [
+				["printer", 14.5], ["watercooler", 17.0], ["copier", 19.5],
+				["filecabinet", 1.75, "libre", 10.875], ["filecabinet", 9.75, "libre", 10.625],
+				["filecabinet", 23.5, "libre", 13.625], ["filecabinet", 30.5, "libre", 13.625],
+				["filecabinet", 33.0, "libre", 13.625], ["filecabinet", 37.5, "libre", 13.875],
+				["officedesk", 17.0, "izquierda"], ["officedesk", 21.0, "izquierda"],
+				["watercooler", 18.0, "derecha"], ["watercooler", 22.0, "derecha"],
+				["cubicle", 5.4375, "libre", 16.75], ["cubicle", 9.3125, "libre", 16.75], ["cubicle", 13.1875, "libre", 16.75],
+				["cubicle", 26.4375, "libre", 16.75], ["cubicle", 30.3125, "libre", 16.75], ["cubicle", 34.1875, "libre", 16.75],
+				["cubicle", 5.4375, "libre", 22.25], ["cubicle", 9.3125, "libre", 22.25], ["cubicle", 13.1875, "libre", 22.25],
+				["cubicle", 26.4375, "libre", 22.25], ["cubicle", 30.3125, "libre", 22.25], ["cubicle", 34.1875, "libre", 22.25],
+			],
+			"arriba": [
+				["printer", 2.0], ["watercooler", 4.0], ["copier", 6.0], ["filecabinet", 9.5],
+				["officedesk", 15.0], ["officedesk", 25.0], ["filecabinet", 30.5], ["printer", 34.0], ["watercooler", 36.0],
+				["watercooler", 6.0, "izquierda"], ["watercooler", 6.0, "derecha"], ["plant", 15.0, "abajo"], ["plant", 19.0, "abajo"],
+				["cubicle", 5.4375, "libre", 4.5], ["cubicle", 9.3125, "libre", 4.5], ["cubicle", 13.1875, "libre", 4.5],
+				["cubicle", 26.4375, "libre", 4.5], ["cubicle", 30.3125, "libre", 4.5], ["cubicle", 34.1875, "libre", 4.5],
+				["cubicle", 5.4375, "libre", 9.5], ["cubicle", 9.3125, "libre", 9.5], ["cubicle", 13.1875, "libre", 9.5],
+				["cubicle", 26.4375, "libre", 9.5], ["cubicle", 30.3125, "libre", 9.5], ["cubicle", 34.1875, "libre", 9.5],
+			],
+		},
+	},
+	"impresoras-atencion": {"colocados": {
+		"abajo": [["copier", 1.75], ["printer", 6.0], ["copier", 10.25], ["plant", 4.5, "derecha"]],
+		"arriba": [["copier", 1.75], ["printer", 9.25], ["plant", 5.0, "derecha"], ["plant", 6.0, "abajo"]],
+	}},
+	"office-atencion": {"colocados": {
+		"abajo": [["officekitchen", 1.5], ["filecabinet", 4.0], ["drinkfridge", 8.0], ["watercooler", 6.0, "izquierda"]],
+		"arriba": [["officekitchen", 1.5], ["drinkfridge", 8.5], ["watercooler", 7.0, "izquierda"], ["watercooler", 3.0, "abajo"]],
+	}},
+	"bano-atencion": {"colocados": {
+		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+	}},
+	# Informática (plano de la electrónica): racks de servidores en la pared y filas de escritorios; el resto, como esa tienda (mismas casillas)
+	"tienda-informatica": {
+		"colocados": {
+			"abajo": [
+				["serverrack", 14.5],
+				["filecabinet", 2.0, "libre", 10.625], ["watercooler", 8.75, "libre", 10.875],
+				["serverrack", 20.0, "libre", 10.625], ["serverrack", 27.0, "libre", 10.625], ["serverrack", 31.0, "libre", 10.625],
+				["watercooler", 34.5, "libre", 10.875],
+				["watercooler", 21.5, "izquierda"], ["officedesk", 16.0, "derecha"], ["officedesk", 20.0, "derecha"],
+				["watercooler", 2.0, "abajo"], ["watercooler", 33.5, "abajo"],
+				["serverrack", 23.3125, "libre", 15.0], ["serverrack", 26.9375, "libre", 15.0], ["serverrack", 30.5625, "libre", 15.0],
+				["serverrack", 23.3125, "libre", 20.5], ["serverrack", 26.9375, "libre", 20.5], ["serverrack", 30.5625, "libre", 20.5],
+			],
+			"arriba": [
+				["filecabinet", 2.0], ["serverrack", 7.0], ["serverrack", 11.0], ["officedesk", 14.5], ["officedesk", 22.0],
+				["serverrack", 27.0], ["serverrack", 31.0], ["watercooler", 34.5],
+				["watercooler", 3.0, "izquierda"], ["watercooler", 7.75, "derecha"], ["watercooler", 12.5, "abajo"], ["watercooler", 16.5, "abajo"],
+				["serverrack", 23.3125, "libre", 5.0], ["serverrack", 26.9375, "libre", 5.0], ["serverrack", 30.5625, "libre", 5.0],
+				["serverrack", 23.3125, "libre", 10.5], ["serverrack", 26.9375, "libre", 10.5], ["serverrack", 30.5625, "libre", 10.5],
+			],
+		},
+	},
+	"servidores-informatica": {"colocados": {
+		"abajo": [["serverrack", 1.75], ["serverrack", 5.0], ["serverrack", 8.25], ["watercooler", 4.5, "derecha"]],
+		"arriba": [["serverrack", 1.75], ["serverrack", 8.25], ["watercooler", 4.5, "derecha"], ["watercooler", 4.5, "izquierda"]],
+	}},
+	"almacen-informatica": {"colocados": {
+		"abajo": [["metalshelf", 1.5], ["pallet", 7.5], ["pallet", 5.0, "izquierda"]],
+		"arriba": [["metalshelf", 1.5], ["pallet", 4.5, "abajo"], ["pallet", 7.0, "abajo"], ["pallet", 4.0, "izquierda"]],
+	}},
+	"bano-informatica": {"colocados": {
+		"abajo": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+		"arriba": [["staffsink", 2.5, "derecha"], ["stafftoilet", 6.0, "derecha"]],
+	}},
+	# Recursos Humanos (plano de la tienda de ropa): cubículos, sofás de espera y plantas; el resto, como esa tienda (mismas casillas)
+	"tienda-rrhh": {
+		"colocados": {
+			"abajo": [
+				["plant", 19.5], ["watercooler", 21.5], ["plant", 23.5],
+				["lobbysofa", 4.0, "libre", 10.5625], ["cubicle", 8.0, "libre", 10.5625],
+				["cubicle", 27.75, "libre", 10.5625], ["plant", 34.0, "libre", 10.4375],
+				["officedesk", 16.0, "derecha"], ["officedesk", 20.0, "derecha"], ["lobbysofa", 18.0, "izquierda"],
+				["cubicle", 3.5, "libre", 15.0], ["cubicle", 7.0, "libre", 15.0], ["cubicle", 10.5, "libre", 15.0], ["watercooler", 13.5, "libre", 15.0],
+				["plant", 21.5, "libre", 15.0], ["cubicle", 25.0, "libre", 15.0], ["cubicle", 28.5, "libre", 15.0], ["cubicle", 32.0, "libre", 15.0],
+				["cubicle", 3.5, "libre", 20.5], ["cubicle", 7.0, "libre", 20.5], ["cubicle", 10.5, "libre", 20.5], ["plant", 13.5, "libre", 20.5],
+				["watercooler", 21.5, "libre", 20.5], ["cubicle", 25.0, "libre", 20.5], ["cubicle", 28.5, "libre", 20.5], ["cubicle", 32.0, "libre", 20.5],
+			],
+			"arriba": [
+				["cubicle", 3.0], ["cubicle", 7.0], ["plant", 10.5], ["officedesk", 14.5], ["officedesk", 22.0],
+				["plant", 25.5], ["cubicle", 29.0], ["cubicle", 33.0],
+				["lobbysofa", 6.5, "izquierda"], ["lobbysofa", 6.5, "derecha"],
+				["watercooler", 19.5, "abajo"], ["plant", 21.5, "abajo"], ["plant", 23.5, "abajo"],
+				["cubicle", 3.5, "libre", 5.0], ["cubicle", 7.0, "libre", 5.0], ["cubicle", 10.5, "libre", 5.0], ["watercooler", 13.5, "libre", 5.0],
+				["plant", 21.5, "libre", 5.0], ["cubicle", 25.0, "libre", 5.0], ["cubicle", 28.5, "libre", 5.0], ["cubicle", 32.0, "libre", 5.0],
+				["cubicle", 3.5, "libre", 10.5], ["cubicle", 7.0, "libre", 10.5], ["cubicle", 10.5, "libre", 10.5], ["plant", 13.5, "libre", 10.5],
+				["watercooler", 21.5, "libre", 10.5], ["cubicle", 25.0, "libre", 10.5], ["cubicle", 28.5, "libre", 10.5], ["cubicle", 32.0, "libre", 10.5],
+			],
+		},
+	},
+	"archivo-rrhh": {"colocados": {
+		"abajo": [["filecabinet", 1.5], ["bookcase", 4.75], ["filecabinet", 7.5], ["watercooler", 4.5, "derecha"]],
+		"arriba": [["filecabinet", 1.5], ["filecabinet", 7.5], ["watercooler", 4.5, "derecha"], ["plant", 4.5, "abajo"]],
+	}},
+	"entrevistas-rrhh": {"colocados": {
+		"abajo": [["interviewtable", 1.75], ["watercooler", 4.5], ["interviewtable", 8.25], ["lobbysofa", 4.5, "izquierda"],
+			["lobbysofa", 4.5, "derecha"]],
+		"arriba": [["interviewtable", 1.75], ["interviewtable", 8.25], ["watercooler", 4.5, "abajo"], ["lobbysofa", 4.5, "izquierda"],
+			["lobbysofa", 4.5, "derecha"]],
+	}},
+	"bano-rrhh": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
+	# Marketing (plano de la ferretería): cubículos creativos en filas y escritorios; el resto, como esa tienda (mismas casillas)
+	"tienda-marketing": {
+		"colocados": {
+			"abajo": [
+				["cubicle", 20.5],
+				["officedesk", 3.0, "libre", 10.75], ["plant", 16.0, "libre", 10.875],
+				["cubicle", 25.0, "libre", 10.625], ["plant", 33.5, "libre", 10.875],
+				["plant", 16.0, "izquierda"], ["plant", 20.0, "izquierda"],
+				["officedesk", 16.0, "derecha"], ["officedesk", 20.0, "derecha"],
+				["plant", 3.0, "abajo"], ["plant", 33.0, "abajo"],
+				["cubicle", 7.25, "libre", 14.0], ["cubicle", 12.25, "libre", 14.0], ["cubicle", 26.25, "libre", 14.0], ["cubicle", 31.25, "libre", 14.0],
+				["cubicle", 7.25, "libre", 19.5], ["cubicle", 12.25, "libre", 19.5], ["cubicle", 26.25, "libre", 19.5], ["cubicle", 31.25, "libre", 19.5],
+			],
+			"arriba": [
+				["cubicle", 4.5], ["officedesk", 12.0], ["officedesk", 23.5], 
+				["cubicle", 30.5], ["plant", 34.0],
+				["plant", 6.0, "izquierda"], ["plant", 7.0, "derecha"], ["plant", 19.25, "abajo"], ["plant", 21.75, "abajo"],
+				["cubicle", 7.25, "libre", 4.5], ["cubicle", 12.25, "libre", 4.5], ["cubicle", 26.25, "libre", 4.5], ["cubicle", 31.25, "libre", 4.5],
+				["cubicle", 7.25, "libre", 9.5], ["cubicle", 12.25, "libre", 9.5], ["cubicle", 26.25, "libre", 9.5], ["cubicle", 31.25, "libre", 9.5],
+			],
+		},
+	},
+	"estudio-marketing": {"colocados": {
+		"abajo": [["mixerdesk", 2.0], ["lobbysofa", 6.0], ["officedesk", 10.0], ["plant", 4.5, "derecha"]],
+		"arriba": [["mixerdesk", 2.0], ["lobbysofa", 8.0], ["plant", 5.0, "derecha"], ["plant", 9.5, "abajo"]],
+	}},
+	"almacen-marketing": {"colocados": {
+		"abajo": [["metalshelf", 1.5], ["metalshelf", 4.0], ["pallet", 7.5]],
+		"arriba": [["metalshelf", 1.5], ["pallet", 7.75], ["pallet", 4.5, "abajo"]],
+	}},
+	"bano-marketing": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
+	# Seguridad corporativa (plano del restaurante): filas de escritorios, archivadores y sofás; el resto, como esa tienda (mismas casillas)
+	"tienda-seguridad": {
+		"colocados": {
+			"abajo": [
+				["filecabinet", 22.5], ["filecabinet", 24.5], ["officedesk", 27.25],
+				["lobbysofa", 4.0, "libre", 10.5625], ["lobbysofa", 9.0, "libre", 10.5625], ["filecabinet", 18.0, "libre", 10.75],
+				["filecabinet", 31.5, "libre", 10.75], ["lobbysofa", 38.0, "libre", 10.5625],
+				["lobbysofa", 15.0, "izquierda"], ["lobbysofa", 20.0, "izquierda"], ["lobbysofa", 15.0, "derecha"], ["lobbysofa", 20.0, "derecha"],
+				["officedesk", 4.5, "libre", 14.5], ["officedesk", 8.75, "libre", 14.5], ["officedesk", 13.0, "libre", 14.5], ["officedesk", 25.5, "libre", 14.5], ["officedesk", 29.75, "libre", 14.5], ["officedesk", 34.0, "libre", 14.5],
+				["officedesk", 4.5, "libre", 20.0], ["officedesk", 8.75, "libre", 20.0], ["officedesk", 13.0, "libre", 20.0], ["officedesk", 25.5, "libre", 20.0], ["officedesk", 29.75, "libre", 20.0], ["officedesk", 34.0, "libre", 20.0],
+			],
+			"arriba": [
+				["filecabinet", 1.5], ["filecabinet", 3.5], ["officedesk", 14.0], ["officedesk", 25.0], ["filecabinet", 36.5],
+				["filecabinet", 38.5],
+				["lobbysofa", 6.5, "izquierda"], ["lobbysofa", 6.5, "derecha"], ["officedesk", 25.0, "libre", 21.0],
+				["officedesk", 4.5, "libre", 5.0], ["officedesk", 8.75, "libre", 5.0], ["officedesk", 13.0, "libre", 5.0], ["officedesk", 25.5, "libre", 5.0], ["officedesk", 29.75, "libre", 5.0], ["officedesk", 34.0, "libre", 5.0],
+				["officedesk", 4.5, "libre", 10.5], ["officedesk", 8.75, "libre", 10.5], ["officedesk", 13.0, "libre", 10.5], ["officedesk", 25.5, "libre", 10.5], ["officedesk", 29.75, "libre", 10.5], ["officedesk", 34.0, "libre", 10.5],
+			],
+		},
+	},
+	"camaras-seguridad": {
+		"colocados": {
+			"abajo": [["monitorwall", 1.75], ["serverrack", 4.5], ["officedesk", 7.0], ["officedesk", 10.25],
+				["watercooler", 4.5, "derecha"]],
+			"arriba": [["officedesk", 1.75], ["serverrack", 3.6], ["officedesk", 8.5], ["serverrack", 10.75],
+				["watercooler", 5.0, "derecha"]],
+		},
+	},
+	"armero-seguridad": {"colocados": {
+		"abajo": [["armory", 1.5], ["armory", 4.75], ["armory", 8.0], ["pallet", 4.5, "derecha"]],
+		"arriba": [["armory", 1.75], ["armory", 8.0], ["pallet", 4.75, "abajo"], ["pallet", 5.0, "derecha"]],
+	}},
+	"bano-seguridad": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
+	# Dirección (plano de la tienda de ropa): mesas de dirección, sofás y plantas; el resto, como esa tienda (mismas casillas)
+	"tienda-direccion": {
+		"colocados": {
+			"abajo": [
+				["plant", 19.5], ["plant", 21.5], ["plant", 23.5],
+				["lobbysofa", 4.0, "libre", 10.5625], ["execdesk", 8.0, "libre", 10.5625],
+				["execdesk", 27.75, "libre", 10.5625], ["plant", 34.0, "libre", 10.4375],
+				["execdesk", 16.0, "derecha"], ["execdesk", 20.0, "derecha"], ["lobbysofa", 18.0, "izquierda"],
+				["execdesk", 3.5, "libre", 15.0], ["execdesk", 7.0, "libre", 15.0], ["execdesk", 10.5, "libre", 15.0], ["plant", 13.5, "libre", 15.0],
+				["plant", 21.5, "libre", 15.0], ["execdesk", 25.0, "libre", 15.0], ["execdesk", 28.5, "libre", 15.0], ["execdesk", 32.0, "libre", 15.0],
+				["execdesk", 3.5, "libre", 20.5], ["execdesk", 7.0, "libre", 20.5], ["execdesk", 10.5, "libre", 20.5], ["plant", 13.5, "libre", 20.5],
+				["plant", 21.5, "libre", 20.5], ["execdesk", 25.0, "libre", 20.5], ["execdesk", 28.5, "libre", 20.5], ["execdesk", 32.0, "libre", 20.5],
+			],
+			"arriba": [
+				["execdesk", 3.0], ["execdesk", 7.0], ["plant", 10.5], ["execdesk", 14.5], ["execdesk", 22.0],
+				["plant", 25.5], ["execdesk", 29.0], ["execdesk", 33.0],
+				["lobbysofa", 6.5, "izquierda"], ["lobbysofa", 6.5, "derecha"],
+				["plant", 19.5, "abajo"], ["plant", 21.5, "abajo"], ["plant", 23.5, "abajo"],
+				["execdesk", 3.5, "libre", 5.0], ["execdesk", 7.0, "libre", 5.0], ["execdesk", 10.5, "libre", 5.0], ["plant", 13.5, "libre", 5.0],
+				["plant", 21.5, "libre", 5.0], ["execdesk", 25.0, "libre", 5.0], ["execdesk", 28.5, "libre", 5.0], ["execdesk", 32.0, "libre", 5.0],
+				["execdesk", 3.5, "libre", 10.5], ["execdesk", 7.0, "libre", 10.5], ["execdesk", 10.5, "libre", 10.5], ["plant", 13.5, "libre", 10.5],
+				["plant", 21.5, "libre", 10.5], ["execdesk", 25.0, "libre", 10.5], ["execdesk", 28.5, "libre", 10.5], ["execdesk", 32.0, "libre", 10.5],
+			],
+		},
+	},
+	"despacho-direccion": {"colocados": {
+		"abajo": [["bookcase", 1.5], ["execdesk", 4.75], ["filecabinet", 7.5], ["watercooler", 4.5, "derecha"]],
+		"arriba": [["bookcase", 1.5], ["filecabinet", 7.5], ["watercooler", 4.5, "derecha"], ["plant", 4.5, "abajo"]],
+	}},
+	"juntas-direccion": {"colocados": {
+		"abajo": [["bookcase", 1.75], ["boardtable", 4.5], ["bookcase", 8.25], ["watercooler", 4.5, "izquierda"],
+			["watercooler", 4.5, "derecha"]],
+		"arriba": [["bookcase", 1.75], ["bookcase", 8.25], ["plant", 4.5, "abajo"], ["watercooler", 4.5, "izquierda"],
+			["watercooler", 4.5, "derecha"]],
+	}},
+	"bano-direccion": {"colocados": {
+		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
+	}},
 	# la tienda destrozada del jefe de la planta
 	"jefe-tienda": {
 		"muebles": ["gondola", "metalshelf", "pallet", "checkout", "mannequin"],
@@ -667,6 +911,26 @@ const SALAS := {
 		"colocados": {"abajo": [
 			["plant", 1.0], ["bench", 4.5], ["bench", 19.5], ["bench", 30.0], ["mannequin", 33.5], ["bench", 47.5], ["plant", 51.0],
 			["plant", 1.0, "abajo"], ["plant", 19.0, "abajo"], ["mannequin", 26.0, "abajo"], ["plant", 33.0, "abajo"],
+			["plant", 51.0, "abajo"],
+		]},
+	},
+	# Los pasillos de Torre Velaria (tercer edificio), puestos a mano como la galería (mismas casillas: las puertas de los
+	# departamentos, en la 12 y la 40; el ascensor, en la 26, con su cartel a la izquierda, en la 22-24): el distribuidor de
+	# oficina de las plantas 10 a 40, con fuentes de agua, sofás y plantas; y el vestíbulo de la planta baja (que no tiene la
+	# puerta de la 12), con la recepción, la maqueta de la torre y los tornos de acceso
+	"torre": {
+		"colocados": {"abajo": [
+			["plant", 1.0], ["watercooler", 5.0], ["lobbysofa", 18.5], ["plant", 21.5], ["watercooler", 30.0], ["lobbysofa", 34.0],
+			["plant", 37.5], ["lobbysofa", 47.5], ["plant", 51.0],
+			["plant", 1.0, "abajo"], ["watercooler", 19.0, "abajo"], ["plant", 26.0, "abajo"], ["watercooler", 33.0, "abajo"],
+			["plant", 51.0, "abajo"],
+		]},
+	},
+	"vestibulo": {
+		"colocados": {"abajo": [
+			["plant", 1.0], ["lobbysofa", 5.0], ["reception", 18.5], ["towermodel", 31.5], ["turnstile", 35.0], ["turnstile", 36.9],
+			["lobbysofa", 47.5], ["plant", 51.0],
+			["plant", 1.0, "abajo"], ["watercooler", 19.0, "abajo"], ["plant", 26.0, "abajo"], ["watercooler", 33.0, "abajo"],
 			["plant", 51.0, "abajo"],
 		]},
 	},

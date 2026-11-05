@@ -458,9 +458,13 @@ en una línea.
   charco: `~`; todas con su aseo de empleados y su botiquín, M81), leídas con `Apartamento.del_plano` y con sus muebles puestos a mano
   (`colocados` de `<sala>-<tipo>` en `catalogo.gd`, `Muebles.de_tienda`; se miran con `--tiendas-fijas`); la galería, igual
   (`colocados` de `"galeria"`, se mira con `--galeria`). Los departamentos de Torre Velaria (el tercer edificio,
-  `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: de momento toman el plano y
-  los muebles de una tienda del centro (`"presta"`, `Tienda.plano_de`, `Muebles.de_tienda`); se miran con
-  `--edificio torre --torre`;
+  `docs/PLAN_TERCER_EDIFICIO.md`) también son tipos de `Tienda.TIPOS`, con `"edificio": "torre"`: toman el plano de una
+  tienda del centro (`"presta"`, `Tienda.plano_de`), pero con muebles propios (`colocados` de `<sala>-<tipo>`, puestos con
+  `py tools/muebles_torre.py` a partir de los de esa tienda), suelos y paredes propios (`Mapa.ESTILO_TIENDA`) y su rótulo
+  iluminado en vez del neón (`neon.gd`, `iluminado`); su pasillo es el de `Catalogo.SALAS["torre"]` y el vestíbulo, el de
+  `"vestibulo"` (`Planta.generar`, `estilo_pasillo`), con el ventanal de la ciudad de noche (`ventanal.gd`) en vez de
+  escaparates y el cartel de la planta (0, 10...40) dibujado en `puerta.gd` (`cartel_torre`); se miran con
+  `--edificio torre --torre` y `--edificio torre --departamentos` (`--tipo X`);
   `viviendas.gd`, el pasillo de los rescatados. Se ve como una casa por dentro desde arriba ("cajas" en el sitio): cada
   habitación y el pasillo, cerrados por sus tabiques de una casilla de grueso, lisos y de un gris muy oscuro (`tabique.gd` y
   `mapa.poner_tabiques`); solo la pared de arriba de cada uno tiene altura (su cara y, encima, su tabique, con los de los
@@ -510,7 +514,7 @@ en una línea.
   queda verde vivo, sin que le afecte la penumbra, con halo y una luz verde de verdad (la de `lampara.gd`); si Johnny
   vuelve a una planta ya pasada, nace encendido. Dibujados a mano con `py tools/puerta_salida.py` (a esa anchura PixelLab
   no dibuja). Se prueba con `--salida`.
-- `cara_pared.gd`, `neon.gd`; `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`,
+- `cara_pared.gd`, `neon.gd` (el letrero de neón de las tiendas y el rótulo iluminado de los departamentos de la torre), `ventanal.gd` (el ventanal con la ciudad de noche del pasillo de la torre); `ordenador.gd` (la mesa; `novedades(s)` dice qué programas tienen algo nuevo), `arrimable.gd`,
   `exclamacion.gd` (el «!» que bota encima de la mesa del ordenador y de la taquilla mientras haya algo nuevo; se
   pone con una `condicion` y se mira cada segundo)
   (baúl, banco, taquilla), `armarito.gd`, `cientifico.gd` (el muerto con su página), `terminal.gd` (los ordenadores con

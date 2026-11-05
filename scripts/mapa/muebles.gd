@@ -87,13 +87,8 @@ static func de_piso(apt: Dictionary) -> Array:
 # "bano-supermercado"...), según el lado por el que se entra ("abajo" las normales, "arriba" las volteadas)
 static func de_tienda(apt: Dictionary) -> Array:
 	var lista := []
-	# los departamentos de Torre Velaria que aún no tienen muebles propios, los de la tienda que les presta su plano
-	# (Tienda.TIPOS, "presta"; parte 1 del tercer edificio)
-	var presta: Dictionary = Tienda.TIPOS.get(apt.tipo, {}).get("presta", {})
 	for s in apt.salas:
 		var clave := "%s-%s" % [s.uso, apt.tipo]
-		if not Catalogo.SALAS.has(clave) and not presta.is_empty():
-			clave = "%s-%s" % [presta.usos.get(s.uso, s.uso), presta.tipo]
 		var datos: Dictionary = Catalogo.SALAS.get(clave, {})
 		lista += colocados(datos.get("colocados", {}).get(apt.entrada.lado, []), s)
 	return lista

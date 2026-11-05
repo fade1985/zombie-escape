@@ -12,6 +12,7 @@ const TUBO := Color(0.3, 0.28, 0.33)   # una letra fundida: el tubo de cristal a
 var texto := "TIENDA"   # no-tr (lo cambia siempre mapa.gd, ya traducido: Tienda.neon)
 var color := Color("#ff4fa0")
 var semilla := 0.5
+var iluminado := false       # en Torre Velaria: un rótulo de departamento iluminado por detrás (placa blanca y fría), no un neón
 var fundidas := {}           # las letras que no se encienden (su posición en el texto)
 var luz: Node2D
 var tiempo := 0.0
@@ -58,6 +59,9 @@ func _draw() -> void:
 	var ancho := fuente.get_string_size(texto, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO).x
 	var x := -roundf(ancho / 2.0 / 2.0) * 2.0
 	var y := -ALTO
+	if iluminado:
+		dibujar_rotulo(x, y, ancho, b)
+		return
 	# el soporte: una chapa oscura detrás de las letras, atornillada a la pared
 	draw_rect(Rect2(x - 8, y - TAMANO + 2, ancho + 16, TAMANO + 6), Color(0.08, 0.07, 0.1, 0.85))
 	for i in texto.length():
@@ -75,3 +79,18 @@ func _draw() -> void:
 				draw_string_outline(fuente, Vector2(x, y), letra, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO, 6, halo)
 				draw_string(fuente, Vector2(x, y), letra, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO, c)
 		x += w
+
+
+# El rótulo de un departamento de la torre: una placa blanca y fría iluminada por detrás, con el nombre en gris azulado oscuro
+# en un marco de aluminio. Casi no parpadea (la luz de la torre falla poco), pero a veces se apaga un instante
+func dibujar_rotulo(x: float, y: float, ancho: float, b: float) -> void:
+	var luz_placa := clampf(0.55 + 0.45 * b, 0.0, 1.0)
+	var placa := Color(0.84, 0.92, 1.0).lerp(color, 0.25) * Color(luz_placa, luz_placa, luz_placa, 1.0)
+	var marco := Color(0.22, 0.25, 0.3)
+	var rect := Rect2(x - 12, y - TAMANO + 0, ancho + 24, TAMANO + 10)
+	# el halo frío alrededor
+	draw_rect(rect.grow(6), Color(0.7, 0.85, 1.0, 0.12 * luz_placa))
+	draw_rect(rect.grow(2), marco)
+	draw_rect(rect, placa)
+	draw_rect(Rect2(rect.position, Vector2(rect.size.x, 2)), Color(1, 1, 1, 0.5 * luz_placa))   # el brillo de arriba
+	draw_string(fuente, Vector2(x, y + 2), texto, HORIZONTAL_ALIGNMENT_LEFT, -1, TAMANO, Color(0.13, 0.17, 0.25))

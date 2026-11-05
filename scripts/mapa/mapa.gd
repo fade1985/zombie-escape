@@ -75,17 +75,21 @@ const ESTILO_TIENDA := {
 	# la joyería (parte 9): su sala de venta con mármol ("<uso>-<tipo de tienda>" manda sobre "<uso>"), la trastienda
 	# como un almacén y la cámara acorazada con suelo de chapa de acero
 	"tienda-joyeria": [["marmol"], "venta"], "trastienda": [["linoleo"], "almacen"], "acorazada": [["acorazada"], "almacen"],
-	# los departamentos de Torre Velaria (parte 1 del tercer edificio: de momento, con los suelos y paredes del centro; los
-	# suyos, en la parte 2): la sala grande con moqueta, y cada habitación del fondo con uno de los que ya hay
-	"tienda-atencion": [["moqueta"], "venta"], "tienda-informatica": [["linoleo"], "venta"], "tienda-rrhh": [["moqueta"], "venta"],
-	"tienda-marketing": [["moqueta"], "venta"], "tienda-seguridad": [["linoleo"], "venta"], "tienda-direccion": [["marmol"], "venta"],
-	"impresoras": [["linoleo"], "almacen"], "office": [["cocinaind"], "cocinaind"], "servidores": [["linoleo"], "almacen"],
-	"archivo": [["almacen"], "almacen"], "entrevistas": [["moqueta"], "venta"], "estudio": [["moqueta"], "venta"],
-	"camaras": [["linoleo"], "almacen"], "armero": [["almacen"], "almacen"], "despacho": [["moqueta"], "venta"],
-	"juntas": [["moqueta"], "venta"]}
+	# los departamentos de Torre Velaria (tercer edificio): la sala grande con moqueta gris de oficina (suelo-torre), su pared
+	# de tabique claro (pared-oficina) y, en cada departamento, lo suyo: el centro de datos de Informática, el parquet y la
+	# madera de Dirección (parte 2 del plan). Las habitaciones de dentro, con los suyos
+	"tienda-atencion": [["torre"], "oficina"], "tienda-informatica": [["torre"], "oficina"], "tienda-rrhh": [["torre"], "oficina"],
+	"tienda-marketing": [["torre"], "oficina"], "tienda-seguridad": [["torre"], "oficina"], "tienda-direccion": [["direccion"], "direccion"],
+	"impresoras": [["torre"], "oficina"], "office": [["cocinaind"], "cocinaind"], "servidores": [["datos"], "datos"],
+	"archivo": [["torre"], "oficina"], "entrevistas": [["torre"], "oficina"], "estudio": [["datos"], "oficina"],
+	"camaras": [["datos"], "datos"], "armero": [["almacen"], "almacen"], "despacho": [["direccion"], "direccion"],
+	"juntas": [["direccion"], "direccion"]}
 # El pasillo de cada edificio (planta.gd lo apunta en "estilo"): su suelo y pared, su tapa y si lleva alfombra
-const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false}}
+const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": {"tapa": "centro", "alfombra": false},
+	# los de Torre Velaria: el distribuidor de oficina (moqueta gris y cristal esmerilado) y el vestíbulo (mármol y piedra)
+	"torre": {"tapa": "torre", "alfombra": false}, "vestibulo": {"tapa": "torre", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")
+const VENTANAL := preload("res://scripts/mapa/ventanal.gd")   # el ventanal con la ciudad de noche del pasillo de la torre
 # Los peligros de las tiendas del centro comercial, y la porquería del Glotón (peligros.gd): cada uno con su nodo
 const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": preload("res://scripts/peligros/fuego.gd"),
 	"agua": preload("res://scripts/peligros/agua.gd"),
@@ -189,7 +193,8 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 		var tienda: bool = sitio.get("tienda", "") != ""
 		# la de todo el piso, como en el JS; en el centro comercial, la suya; en las viviendas, la del pasillo; en la
 		# sala de mantenimiento, la de siempre
-		tapa = load("res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-pasillo.png"
+		var de_torre: bool = tienda and Tienda.TIPOS.get(sitio.tienda, {}).get("edificio", "centro") == "torre"
+		tapa = load("res://assets/sprites/tapa-torre.png" if de_torre else "res://assets/sprites/tapa-centro.png" if tienda else "res://assets/sprites/tapa-pasillo.png"
 			if sitio.tipo == "viviendas" else "res://assets/sprites/tapa-generica.png" if sitio.tipo == "mantenimiento"
 			else "res://assets/sprites/tapa-salon.png")
 		var comun: Dictionary = {}   # el estilo de siempre del salón: el pasillo del piso toma este, aunque el salón lleve otro suelo
@@ -241,7 +246,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 				estilos[s.id] = textura(estilo, fijo[0] if not fijo.is_empty() and fijo[0] != "" else suelo_h,
 					fijo[1] if not fijo.is_empty() and fijo[1] != "" else pared_h)
 
-	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea"]
+	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea", "torre", "vestibulo"]
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
 		preparar_restos()
@@ -811,6 +816,7 @@ func poner_puertas() -> void:
 				var neon := NEON.new()
 				neon.texto = Tienda.neon(salida.neon)   # (ya traducido)
 				neon.color = Tienda.TIPOS[salida.neon].color
+				neon.iluminado = Tienda.TIPOS[salida.neon].get("edificio", "centro") == "torre"   # (en la torre, un rótulo iluminado)
 				neon.semilla = fposmod(sin(salida.en * 12.9898) * 43758.5453, 1.0)
 				neon.position = puerta.position
 				cosas.add_child(neon)
@@ -980,6 +986,11 @@ func poner_peligros() -> void:
 # rodapié y, a veces, un salpicón o unas huellas de sangre en el cristal. Van en el pie de la cara del muro, como
 # los apliques, para ordenarse con ella.
 func poner_escaparates() -> void:
+	if sitio.get("estilo", "") in ["torre", "vestibulo"]:
+		# en Torre Velaria, en vez de escaparates, el ventanal de la punta del pasillo, con la ciudad de noche detrás
+		var ventanal := VENTANAL.new()
+		ventanal.position = Vector2(MURO + 120, MURO + 1)
+		cosas.add_child(ventanal)
 	for e in sitio.get("escaparates", []):
 		var nodo := Node2D.new()
 		nodo.position = Vector2(e.x, MURO + 1)

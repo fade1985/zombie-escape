@@ -37,9 +37,9 @@ const TIPOS := {
 		"color": Color("#ffd23f")},
 	# Los departamentos de Torre Velaria (el tercer edificio: docs/PLAN_TERCER_EDIFICIO.md). Son tiendas para el código
 	# (un local con su sala grande delante y sus habitaciones al fondo), pero de la torre ("edificio"); el "neon" es su
-	# rótulo iluminado. "desde": la planta desde la que sale (Dirección, solo de la planta 20 arriba). De momento (parte 1,
-	# el esqueleto) cada uno toma el plano y los muebles de una tienda del centro ("presta": esa tienda, y qué habitación
-	# de ella hace de cada una suya); en la parte 2 llevan los suyos
+	# rótulo iluminado. "desde": la planta desde la que sale (Dirección, solo de la planta 20 arriba). "presta": el plano de la
+	# tienda del centro que usan (y qué habitación de ella hace de cada una suya); los muebles, suelos y paredes son propios
+	# (Catalogo.SALAS "<sala>-<tipo>", Mapa.ESTILO_TIENDA)
 	"atencion": {"nombre": "Atención al cliente", "neon": "CLIENTES", "salas": ["impresoras", "office", "bano"],   # [traducir]
 		"color": Color("#dff1ff"), "edificio": "torre",
 		"presta": {"tipo": "supermercado", "usos": {"impresoras": "camara", "office": "almacen"}}},
