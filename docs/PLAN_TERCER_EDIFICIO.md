@@ -403,7 +403,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe becario --fotocopias`.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres. 🔶 **A medias (5 nov), en dos sesiones.**
-   - **Primera sesión, hecha (falta el visto bueno del dueño):** el laboratorio y la presidenta. Lo que ha quedado:
+   - **Primera sesión, hecha (5 nov, con el visto bueno del dueño):** el laboratorio y la presidenta. Lo que ha quedado:
      - La planta 40 ya no es la azotea: es el **Laboratorio** (`planta.gd`, `laboratorio`; 44 × 30 casillas), con suelo de
        baldosa blanca y paredes de laboratorio. Se llega por la derecha y la escalera se cierra detrás. En la pared de arriba,
        en medio, la **cabina blindada** de la presidenta (dibujada con código, con su dibujo de PixelLab dentro); a cada lado,
