@@ -3477,6 +3477,38 @@ msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "员工价：电脑商店便宜 15%"
 
 #: scripts/supervivientes.gd
+msgid "Limpiadora de noche"
+msgstr "夜班保洁员"
+
+#: scripts/supervivientes.gd
+msgid "¡Cerrad el gas!"
+msgstr "快关掉煤气！"
+
+#: scripts/supervivientes.gd
+msgid "¡Las válvulas!"
+msgstr "阀门！"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro! *cof, cof*"
+msgstr "我在这儿！*咳咳*"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo respirar!"
+msgstr "我喘不过气了！"
+
+#: scripts/supervivientes.gd
+msgid "¡Aire! Gracias, chico. Yo también limpio este edificio de noche"
+msgstr "终于有空气了！谢了，小伙子。我也是这栋楼上夜班的保洁"
+
+#: scripts/supervivientes.gd
+msgid "Friega por donde pasa: quita los charcos de veneno, de ácido y los que resbalan"
+msgstr "走到哪儿拖到哪儿：清除毒液、酸液和湿滑的水洼"
+
+#: scripts/supervivientes.gd
+msgid "Te arregla la fregona: el fregonazo barre más ancho"
+msgstr "帮你修好拖把：拖把横扫范围更大"
+
+#: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "我在浴室！"
 
@@ -6655,6 +6687,38 @@ msgstr "可以在主菜单和暂停菜单的“教程”里重新查看"
 #: scripts/ui/tutorial.gd
 msgid "Entendido"
 msgstr "知道了"
+
+#: scripts/valvulas.gd
+msgid "Válvula cerrada: %d de %d"
+msgstr "阀门已关：%d / %d"
+
+#: scripts/valvulas.gd
+msgid "¡Gas cortado! Se abre el cuarto de la limpieza"
+msgstr "煤气已切断！保洁间的门开了"
+
+#: scripts/valvulas.gd
+msgid "Cierra las válvulas del gas · %d/%d"
+msgstr "关掉煤气阀门 · %d/%d"
+
+#: scripts/valvulas.gd
+msgid "¡Una menos! Quedan dos"
+msgstr "关掉一个！还剩两个"
+
+#: scripts/valvulas.gd
+msgid "¡Ya casi! Solo queda una"
+msgstr "快好了！只剩一个"
+
+#: scripts/valvulas.gd
+msgid "*cof, cof*"
+msgstr "*咳咳*"
+
+#: scripts/valvulas.gd
+msgid "¡No respiro!"
+msgstr "我快窒息了！"
+
+#: scripts/valvulas.gd
+msgid "¡Date prisa, chico!"
+msgstr "快点，小伙子！"
 
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"

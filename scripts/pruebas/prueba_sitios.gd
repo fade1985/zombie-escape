@@ -980,6 +980,13 @@ func probar_programador() -> void:
 	get_tree().quit()
 
 
+# Con "--captura --edificio torre --limpiadora": la limpiadora de noche (valvulas.gd)
+func probar_limpiadora() -> void:
+	await get_tree().create_timer(0.3).timeout
+	await supervivientes.valvulas.probar()
+	get_tree().quit()
+
+
 func probar_viviendas() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await supervivientes.probar_viviendas()

@@ -161,6 +161,7 @@ var golpe_angulo := 0.0        # y hacia dónde va
 var patada_t := -1.0           # tiempo desde el último disparo andando (-1 = nada): el retroceso de todo el cuerpo
 var patada := Vector2.ZERO     # hacia dónde y cuánto empuja ese disparo
 
+var fregona_ancha := false   # la limpiadora de noche está rescatada: le ha arreglado la fregona (barre más ancho)
 var skin := ""             # la skin puesta (skins.gd; "" = el conserje de siempre): sus hojas y su ventaja
 var modo := "asistido"     # cómo se ataca (ver arriba)
 var con_raton := false     # modo libre: si se está apuntando con el ratón (se ha movido hace poco)
@@ -214,6 +215,7 @@ func _ready() -> void:
 	var guardado := Guardado.cargar()
 	if guardado.ajustes.modo in MODOS:
 		modo = guardado.ajustes.modo
+	fregona_ancha = "limpiadora" in guardado.rescatados
 
 
 # Si se mueve el ratón (o se hace clic), se apunta con él; si se empuja el stick derecho, con el mando. Con los botones
@@ -303,6 +305,8 @@ func arma_de(id: String) -> Dictionary:
 	var extra: float = stats.dano - 1.0 + (stats.dano_cuerpo if w.tipo == "cuerpo" else stats.dano_fuego) - 1.0
 	if id == "fregona":
 		extra += Skins.fregona(skin) - 1.0   # el portero: +100 % (solo la fregona de siempre)
+		if fregona_ancha:
+			w.arco = w.arco * Supervivientes.FREGONA_ANCHA   # la arreglada por la limpiadora de noche
 	if w.tipo == "cuerpo":
 		extra += Skins.cuerpo(skin) - 1.0    # el gymbro: +50 % (la fregona, el bate y el cuchillo)
 	if w.has("efecto"):

@@ -105,8 +105,22 @@ const DATOS := {
 		"desc": "Cada 4 s, se cuela en el cerebro del zombi más cercano y lo deja quieto 1 s; las cámaras no le ven",   # [traducir]
 		"habilidad": {"tipo": "aturdir", "cada": 4.0, "segundos": 1.0, "alcance": 220.0},
 		"mejora": "Precio de empleado: la tienda del ordenador, un 15 % más barata"},   # [traducir]
+	# la limpiadora de noche (otra como Johnny): encerrada en el cuarto de la limpieza de Recursos Humanos, lleno de gas;
+	# hay que cerrar las tres válvulas del departamento para que pueda salir (valvulas.gd). Ya rescatada, le arregla la
+	# fregona a Johnny (barre más ancho: FREGONA_ANCHA); si te acompaña, friega los charcos que tiene cerca
+	"limpiadora": {"id": "limpiadora", "edificio": "torre", "color": Color("#7fb8ff"), "arma": "",
+		"tienda": "rrhh", "sala": "bano", "cuarto": "limpieza",
+		"look": {"skin": Color("#c99a72"), "hair": Color("#2b211c"), "shirt": Color("#8fb8e0"), "pants": Color("#5a5f6a"),
+			"shoes": Color("#22222a"), "peinado": "moño"},   # no-tr (un id: el peinado, persona.gd)
+		"nombre": "Limpiadora de noche",   # [traducir]
+		"gritos": ["¡Socorro!", "¡Cerrad el gas!", "¡Las válvulas!", "¡Aquí dentro! *cof, cof*", "¡No puedo respirar!"],   # [traducir]
+		"rescate": "valvulas", "al_abrir": "¡Aire! Gracias, chico. Yo también limpio este edificio de noche",   # [traducir]
+		"desc": "Friega por donde pasa: quita los charcos de veneno, de ácido y los que resbalan",   # [traducir]
+		"habilidad": {"tipo": "fregar", "cada": 1.2, "alcance": 110.0},
+		"mejora": "Te arregla la fregona: el fregonazo barre más ancho"},   # [traducir]
 }
 const DESCUENTO := 0.85   # el precio de empleado del informático joven
+const FREGONA_ANCHA := 200.0 / 140.0   # la fregona arreglada por la limpiadora de noche: barre 200° en vez de 140° (johnny.gd)
 const MAX_EQUIPO := 4
 
 # Lo que grita desde dentro del baño, y cada cuánto (segundos, al azar entre los dos)
@@ -182,6 +196,7 @@ var capa: Control          # la flecha del borde y la barra de la horda (en la p
 var escolta := Escolta.new()   # el rescate de la farmacéutica
 var averia := Averia.new()     # el del técnico
 var copia := Copia.new()       # el del informático joven
+var valvulas := Valvulas.new()   # el de la limpiadora de noche
 
 
 func preparar(p: Node) -> void:
@@ -203,6 +218,8 @@ func preparar(p: Node) -> void:
 	add_child(averia)
 	copia.sup = self
 	add_child(copia)
+	valvulas.sup = self
+	add_child(valvulas)
 
 
 # Al empezar la partida: quién sale y en qué planta (elegirSuperviviente), de los de este edificio. Los que ya
@@ -230,7 +247,8 @@ func de_edificio(ed: String) -> Array:
 # A quién hay que salvar en esta partida y en qué planta (y, si tiene tienda, que salga en esa planta)
 func poner_rescate(def: Dictionary, num: int) -> void:
 	rescate = {"def": def, "planta": num, "rescatado": false, "amigo": null, "sitio": -1, "horda_hecha": false}
-	Planta.tienda_fija = {"planta": num, "tienda": def.tienda, "sala": def.sala} if def.has("tienda") else {}
+	Planta.tienda_fija = {"planta": num, "tienda": def.tienda, "sala": def.sala, "cuarto": def.get("cuarto", "")} \
+		if def.has("tienda") else {}
 
 
 # Al generar cada planta: si le toca a esta, se cierra la puerta de su baño (el baño ya lo ha guardado planta.gd)
@@ -282,6 +300,7 @@ func recoger() -> void:
 		a.accion_zombi = null
 		if a.get_parent():
 			a.get_parent().remove_child(a)
+	valvulas.soltar()
 	if is_instance_valid(npc):
 		npc.queue_free()
 	if is_instance_valid(puerta) and puerta.abierta == 0.0 and not puerta.abriendo:
@@ -317,6 +336,8 @@ func al_montar(idx: int, sitio: Dictionary) -> void:
 		npc.position = sup.pos
 		mapa.cosas.add_child(npc)
 		sala_socorro = -1
+		if Valvulas.es_suyo(rescate.def) and sup.puerta.cerrada:
+			valvulas.montar()   # la limpiadora: su cuarto lleno de gas y las tres válvulas (valvulas.gd)
 	if sitio.tipo == "viviendas":
 		colocar_vecinos()
 
@@ -414,8 +435,8 @@ func piso_limpio(idx: int) -> void:
 		a.al_limpiar()
 	if not encerrado() or idx != partida.planta.superviviente.sitio:
 		return
-	if rescate.def.get("rescate", "") != "barricada":
-		abrir_escondite(idx)
+	if not rescate.def.get("rescate", "") in ["barricada", "valvulas"]:
+		abrir_escondite(idx)   # (la limpiadora, con las válvulas: valvulas.gd)
 
 
 # Se abre la puerta de su escondite y, al poco, dice lo suyo
@@ -466,7 +487,7 @@ func actualizar_horda(delta: float) -> void:
 	var r := rescate
 	if r.is_empty() or not r.rescatado or not r.amigo in equipo or partida.aqui != r.sitio:
 		return
-	if r.def.get("rescate", "") in ["escolta", "copia"] or averia.activa():
+	if r.def.get("rescate", "") in ["escolta", "copia", "valvulas"] or averia.activa():
 		return   # la farmacéutica no tiene horda (su escolta va en escolta.gd), ni el técnico (averia.gd), ni el informático (copia.gd)
 	var a: Aliado = r.amigo
 	if horda.is_empty():
@@ -723,6 +744,7 @@ func dibujar_capa() -> void:
 	escolta.dibujar(capa)
 	averia.dibujar(capa)
 	copia.dibujar(capa)
+	valvulas.dibujar(capa)
 	if horda.is_empty():
 		return
 	var a: Aliado = rescate.amigo
@@ -801,7 +823,7 @@ func probar() -> void:
 	partida.menus.visible = false   # por si ha salido el recuadro de una mutación (tapa las fotos)
 	await probar_aqui(false)
 	for i in 2:
-		if rescate.def.get("rescate", "") in ["escolta", "averia", "barricada", "copia"]:
+		if rescate.def.get("rescate", "") in ["escolta", "averia", "barricada", "copia", "valvulas"]:
 			await probar_aqui(false)   # la horda, con otro (la escolta y la avería se prueban en escolta.gd y averia.gd)
 	# la horda de siempre (en el centro comercial ya no la tiene ninguno: cada uno tiene su rescate)
 	if rescate.def.get("rescate", "") == "":

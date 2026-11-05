@@ -571,7 +571,8 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 # planta.armaritos): lo más centrado posible, sin tapar una puerta y sin un mueble debajo (las taquillas y las
 # estanterías lo taparían). Si no cabe en ninguna, en la pared de arriba de la sala de venta. {x, y (el pie de la
 # pared), alcance (hasta dónde se puede usar desde delante), sala}
-static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator, usos := ["almacen", "taquillas"], en_venta := true, holgura := 18.0) -> Dictionary:
+static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator, usos := ["almacen", "taquillas"], en_venta := true, holgura := 18.0,
+		evitar: Array = []) -> Dictionary:
 	var apt: Dictionary = sitio.apt
 	var salas: Array = apt.salas.filter(func(s): return s.uso in usos)
 	if rng.randf() < 0.5 and not apt.get("fijo", false):
@@ -588,6 +589,8 @@ static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator, usos
 			if not muro:
 				continue
 			var x := (c + 0.5) * CASILLA
+			if evitar.any(func(e): return absf(x - e) < 5 * CASILLA):
+				continue   # (lejos de esas: la puerta de entrada, que si no se giraría solo con entrar, u otra válvula)
 			var tapado := false
 			for m in sitio.muebles:
 				var h := Muebles.hueco(m)
@@ -675,7 +678,10 @@ static func camaras(sitio: Dictionary) -> Dictionary:
 
 # Las rejillas del gas: en el suelo de la sala grande, sin un mueble encima, lejos de la puerta y separadas entre sí; y
 # la válvula, en la pared de arriba del archivo (como el cuadro eléctrico de la electrónica)
-static func gas(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
+# Con "tres" (la planta de la limpiadora de noche, planta.gd: cuarto_limpieza), tres válvulas: en el archivo, en las
+# entrevistas y en la pared de arriba de la sala grande, lejos de la puerta; cada una corta una rejilla y no se vuelve a
+# abrir (valvula.gd). Van en "valvulas", cada una con su "rejilla"
+static func gas(sitio: Dictionary, rng: RandomNumberGenerator, tres := false) -> Dictionary:
 	var apt: Dictionary = sitio.apt
 	var sala: Dictionary = apt.salas[0]
 	var entrada := Vector2i(apt.entrada.c, apt.filas - Tienda.BORDE - 1 if apt.entrada.lado == "abajo" else Tienda.BORDE)
@@ -705,4 +711,21 @@ static func gas(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 			valvula = cuadro_electrico(sitio, rng, [uso], false, 6.0)   # (es más estrecha que el cuadro)
 	if rejillas.is_empty() or valvula.is_empty():
 		return {}
+	if tres:
+		# (si alguna habitación no tiene sitio, otra más en la sala grande; y si aun así faltan, menos rejillas)
+		var valvulas := []
+		var lejos := [(apt.entrada.c + 1) * CASILLA] if apt.entrada.lado == "arriba" else []
+		for usos in [["archivo"], ["entrevistas"], [], [], []]:
+			if valvulas.size() >= rejillas.size():
+				break
+			var v := cuadro_electrico(sitio, rng, usos, usos.is_empty(), 6.0, lejos if usos.is_empty() else [])
+			if not v.is_empty():
+				v.rejilla = valvulas.size()
+				valvulas.append(v)
+				if v.sala == sala.id:
+					lejos.append(v.x)
+		rejillas = rejillas.slice(0, valvulas.size())
+		if valvulas.size() >= 2:
+			return {"tipo": "gas", "sala": sala.id, "rejillas": rejillas, "valvulas": valvulas, "abierto": true,
+				"avisado": false}
 	return {"tipo": "gas", "sala": sala.id, "rejillas": rejillas, "valvula": valvula, "abierto": true, "avisado": false}

@@ -17,6 +17,7 @@
 # El veneno, el ácido, el vómito y la lejía ("burbujas" en TIPOS) se dibujan como el fuego, a cuadraditos y con el borde
 # ondulado: se extienden desde el centro, sus colores tiemblan, en vez de llamas tienen burbujitas que crecen y
 # revientan, echan algo de vapor y al secarse desaparecen a trozos, antes por los bordes, dejando una mancha.
+class_name Charco
 extends Node2D
 
 const LEJIA := preload("res://assets/sprites/objeto-charco-lejia.png")
@@ -76,6 +77,7 @@ const BRASA := 0.3
 const CELDA := 4.0   # 2 píxeles del dibujo
 
 var tipo := "veneno"
+var fregado := false       # la limpiadora de noche lo ha fregado: se seca enseguida (fregar)
 var dueno: Node2D = null   # quien lo ha tirado: a él no le hace nada (el cocinero y su aceite hirviendo)
 var escala := 1.0          # el Fabricante hace el fuego más grande...
 var duracion := 1.0        # ...y más largo
@@ -108,6 +110,19 @@ func _ready() -> void:
 		luz.radio = radio() * 3.0
 		luz.vida = vida_max
 		add_child(luz)
+
+
+# La limpiadora de noche (aliado.gd, fregar) se lleva estos: el veneno, el ácido, la lejía y el aceite (los que resbalan)
+const FREGABLES := ["veneno", "reventon", "acido", "lejia", "aceite"]
+
+
+# Fregado: se seca de golpe, a trozos como siempre (el aceite, sin arder: se quita sin más)
+func fregar() -> void:
+	fregado = true
+	if tipo == "aceite":
+		queue_free()
+		return
+	vida = minf(vida, 0.45)
 
 
 func radio() -> float:

@@ -3482,6 +3482,38 @@ msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "Preço de funcionário: a loja do computador fica 15% mais barata"
 
 #: scripts/supervivientes.gd
+msgid "Limpiadora de noche"
+msgstr "Faxineira da noite"
+
+#: scripts/supervivientes.gd
+msgid "¡Cerrad el gas!"
+msgstr "Fechem o gás!"
+
+#: scripts/supervivientes.gd
+msgid "¡Las válvulas!"
+msgstr "As válvulas!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro! *cof, cof*"
+msgstr "Aqui dentro! *cof, cof*"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo respirar!"
+msgstr "Não consigo respirar!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aire! Gracias, chico. Yo también limpio este edificio de noche"
+msgstr "Ar! Valeu, garoto. Eu também limpo este prédio à noite"
+
+#: scripts/supervivientes.gd
+msgid "Friega por donde pasa: quita los charcos de veneno, de ácido y los que resbalan"
+msgstr "Passa pano por onde anda: tira as poças de veneno, de ácido e as que escorregam"
+
+#: scripts/supervivientes.gd
+msgid "Te arregla la fregona: el fregonazo barre más ancho"
+msgstr "Conserta o seu esfregão: a esfregada varre mais largo"
+
+#: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "Estou no banheiro!"
 
@@ -6675,6 +6707,38 @@ msgstr "Você pode ver de novo em Tutorial, no menu principal e na pausa"
 #: scripts/ui/tutorial.gd
 msgid "Entendido"
 msgstr "Entendi"
+
+#: scripts/valvulas.gd
+msgid "Válvula cerrada: %d de %d"
+msgstr "Válvula fechada: %d de %d"
+
+#: scripts/valvulas.gd
+msgid "¡Gas cortado! Se abre el cuarto de la limpieza"
+msgstr "Gás fechado! O quartinho da limpeza se abre"
+
+#: scripts/valvulas.gd
+msgid "Cierra las válvulas del gas · %d/%d"
+msgstr "Feche as válvulas do gás · %d/%d"
+
+#: scripts/valvulas.gd
+msgid "¡Una menos! Quedan dos"
+msgstr "Menos uma! Faltam duas"
+
+#: scripts/valvulas.gd
+msgid "¡Ya casi! Solo queda una"
+msgstr "Quase lá! Só falta uma"
+
+#: scripts/valvulas.gd
+msgid "*cof, cof*"
+msgstr "*cof, cof*"
+
+#: scripts/valvulas.gd
+msgid "¡No respiro!"
+msgstr "Não tô respirando!"
+
+#: scripts/valvulas.gd
+msgid "¡Date prisa, chico!"
+msgstr "Anda logo, garoto!"
 
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"

@@ -485,6 +485,8 @@ func dar_zarpazo(johnny: Node2D) -> void:
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto":
 		return
+	if gaseado > Peligros.GAS.duerme:
+		espabilar_gas()   # (el sueño largo de la planta de la limpiadora: con un golpe, se despierta frenético)
 	if dormido:
 		despertar()
 		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
@@ -731,6 +733,14 @@ func gasear(dormir: float) -> void:
 	gaseado = dormir
 	aturdido = maxf(aturdido, dormir)
 	Zombi.texto_flotante(get_parent(), global_position + Vector2(-8, -altura), "z", Color("#c77dff"), 18)   # no-tr
+
+
+# Que se despierte ya del gas (frenético): lo usan las válvulas de la planta de la limpiadora de noche (valvulas.gd),
+# que duermen a todo el departamento hasta que se cierra una válvula cerca, y un golpe
+func espabilar_gas() -> void:
+	if gaseado > 0.0:
+		gaseado = 0.05
+		aturdido = minf(aturdido, 0.05)
 
 
 func gas_y_frenesi(delta: float) -> void:

@@ -3482,6 +3482,38 @@ msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "Staff discount: the computer shop is 15% cheaper"
 
 #: scripts/supervivientes.gd
+msgid "Limpiadora de noche"
+msgstr "Night Cleaner"
+
+#: scripts/supervivientes.gd
+msgid "¡Cerrad el gas!"
+msgstr "Shut off the gas!"
+
+#: scripts/supervivientes.gd
+msgid "¡Las válvulas!"
+msgstr "The valves!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro! *cof, cof*"
+msgstr "In here! *cough, cough*"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo respirar!"
+msgstr "I can't breathe!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aire! Gracias, chico. Yo también limpio este edificio de noche"
+msgstr "Air! Thanks, kid. I clean this building at night too"
+
+#: scripts/supervivientes.gd
+msgid "Friega por donde pasa: quita los charcos de veneno, de ácido y los que resbalan"
+msgstr "Mops wherever she goes: clears poison, acid and slippery puddles"
+
+#: scripts/supervivientes.gd
+msgid "Te arregla la fregona: el fregonazo barre más ancho"
+msgstr "Fixes your mop: mop swings sweep wider"
+
+#: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "I'm in the bathroom!"
 
@@ -6675,6 +6707,38 @@ msgstr "See it again in Tutorial, from the main menu or the pause menu"
 #: scripts/ui/tutorial.gd
 msgid "Entendido"
 msgstr "Got it"
+
+#: scripts/valvulas.gd
+msgid "Válvula cerrada: %d de %d"
+msgstr "Valve closed: %d of %d"
+
+#: scripts/valvulas.gd
+msgid "¡Gas cortado! Se abre el cuarto de la limpieza"
+msgstr "Gas shut off! The janitor's closet opens"
+
+#: scripts/valvulas.gd
+msgid "Cierra las válvulas del gas · %d/%d"
+msgstr "Close the gas valves · %d/%d"
+
+#: scripts/valvulas.gd
+msgid "¡Una menos! Quedan dos"
+msgstr "One down! Two to go"
+
+#: scripts/valvulas.gd
+msgid "¡Ya casi! Solo queda una"
+msgstr "Almost there! Just one left"
+
+#: scripts/valvulas.gd
+msgid "*cof, cof*"
+msgstr "*cough, cough*"
+
+#: scripts/valvulas.gd
+msgid "¡No respiro!"
+msgstr "I can't breathe!"
+
+#: scripts/valvulas.gd
+msgid "¡Date prisa, chico!"
+msgstr "Hurry up, kid!"
 
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"

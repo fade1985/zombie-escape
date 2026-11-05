@@ -397,7 +397,12 @@ en una línea.
   acompaña; sus hojas, en `HOJAS`; sus disparos despiertan a los zombis dormidos, como los de Johnny, M43, `--oido-aliados`; en la horda, delante de la puerta, trastea en la cerradura: echado hacia ella, a empujones, con chispitas que lucen a oscuras y un clic, `trastear`, M63). Los rescates propios: `escolta.gd` (farmacéutica), `averia.gd` (técnico),
   `barricada.gd` (ferretero) y `copia.gd` (el informático joven de la torre, id `programador`: protegerle 60 s mientras
   copia los archivos, con las cámaras saltando; su precio de empleado, `Supervivientes.precio`, y lo de acompañar:
-  `abre_codigo` y `informatico_cerca`, que ciega las cámaras; `--edificio torre --programador`).
+  `abre_codigo` y `informatico_cerca`, que ciega las cámaras; `--edificio torre --programador`) y `valvulas.gd` (la
+  limpiadora de noche, id `limpiadora`: encerrada en el aseo de Recursos Humanos, que en su planta es el cuarto de la
+  limpieza, `Planta.cuarto_limpieza`, con el gas dentro; hay que cerrar las tres válvulas del departamento, una por rejilla
+  y para siempre (`Peligros.gas` con `tres`), con los zombis dormidos por el gas que despiertan frenéticos al cerrar una cerca
+  o con un golpe, `Zombi.espabilar_gas`; ya rescatada, la fregona barre 200° en vez de 140°, `Supervivientes.FREGONA_ANCHA`;
+  acompañando, friega los charcos de `Charco.FREGABLES` con su gesto, `Aliado.fregar`; `--edificio torre --limpiadora`).
 - `pantalla.gd` (autoload): cómo llena la imagen la ventana (`escala_para`, sin bordes y con los píxeles exactos si se puede;
   la prueba es `--escala`) y la pantalla completa del ordenador; arranca como se dejó y la cambian F11 y Alt+Intro
   (`Tactil.pantalla_completa()` la cambia y la guarda). Se prueba con `--pantalla`. Ver `docs/ESCRITORIO.md`. En la web, pide

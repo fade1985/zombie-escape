@@ -427,8 +427,12 @@ static func generar(num: int, edificio := "apartamentos", su_jefe := "") -> Dict
 	planta.superviviente = {}
 	if not banos.is_empty():
 		var bano: Dictionary = banos[rng.randi() % banos.size()]
+		if fija.get("cuarto", "") == "limpieza" and not de_su_tienda.is_empty():
+			cuarto_limpieza(planta.sitios[de_superv], bano, rng)
 		var en := sitio_libre(planta.sitios[de_superv], bano, Vector2.INF, [], 18.0)
 		var puertas: Array = bano.puertas.filter(func(p): return p.a == 0 or p.b == 0) if not de_su_tienda.is_empty() else bano.puertas
+		if puertas.is_empty():
+			puertas = bano.puertas   # (el aseo de Recursos Humanos, el cuarto de la limpiadora, da a otra habitación)
 		planta.superviviente = {"sitio": de_superv, "sala": bano.id, "puerta": puertas[0],
 			"pos": bano.centro if en == Vector2.INF else en}
 	for orden in normales.size():
@@ -813,6 +817,21 @@ static func horda(sitio: Dictionary, orden: int, num: int, sin := -1) -> Array:
 # azar, y vendas en los demás (antes, contando por toda la planta, un botiquín y luego dos de vendas, así que el
 # botiquín caía siempre en los mismos baños). Va lo más centrado posible, sin tapar una puerta y mejor donde no haya un mueble debajo; si
 # lo hay, se coge desde delante del mueble ("alcance"). Cada uno: {x, y (el pie de la pared), alcance, cogido, dentro}
+# Torre Velaria: la limpiadora de noche se ha encerrado en el aseo de Recursos Humanos, que en su planta es el cuarto de
+# la limpieza (supervivientes.gd: "cuarto"): sin váter ni lavabo, con el carro de limpieza y un cubo de basura
+# (Catalogo.SALAS, "limpieza-rrhh") y fregonas y cubos colgados de la pared (mapa.gd, colgados). Y el gas del
+# departamento, con tres válvulas en vez de una (Peligros.gas): hay que cerrarlas todas para sacarla (valvulas.gd)
+static func cuarto_limpieza(sitio: Dictionary, sala: Dictionary, rng: RandomNumberGenerator) -> void:
+	sala.nombre = "Cuarto de la limpieza"   # [traducir]
+	sitio.cuarto_limpieza = sala.id
+	var lado: String = sitio.apt.entrada.lado
+	sitio.muebles = sitio.muebles.filter(func(m): return m.zona != sala.id) + Muebles.colocados(
+		Catalogo.SALAS["limpieza-rrhh"].colocados[lado], sala)
+	var otros: Array = sitio.peligros.filter(func(p): return p.tipo != "gas")
+	var gas := Peligros.gas(sitio, rng, true)
+	sitio.peligros = otros + ([gas] if not gas.is_empty() else [])
+
+
 static func armaritos(sitio: Dictionary) -> Array:
 	var apt: Dictionary = sitio.apt
 	var lista := []

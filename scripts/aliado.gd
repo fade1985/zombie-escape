@@ -61,6 +61,7 @@ const HOJAS := {
 	"farmaceutica": {"hoja": preload("res://assets/sprites/superviviente-farmaceutica.tres")},
 	"tecnico": {"hoja": preload("res://assets/sprites/superviviente-tecnico.tres"), "fogonazo": 0.2},
 	"programador": {"hoja": preload("res://assets/sprites/superviviente-programador.tres"), "fogonazo": 0.2},
+	"limpiadora": {"hoja": preload("res://assets/sprites/superviviente-limpiadora.tres"), "fogonazo": 0.3},
 }
 # El fogonazo de pixelfx (fogonazo.gd) de cada arma de los que disparan: el policía, el de la pistola, y el militar,
 # que dispara en ráfagas, el de la MP5 (sus llamas se van turnando)
@@ -365,6 +366,9 @@ func habilidad(delta: float) -> void:
 		return
 	if h.tipo == "charcos":
 		return   # lo suyo no se usa: se nota en los charcos (johnny.gd)
+	if h.tipo == "fregar":
+		fregar(h)
+		return
 	var blanco := zombi_cercano()
 	if h.tipo == "golpear" or h.tipo == "aturdir":
 		if blanco:
@@ -551,6 +555,26 @@ func descarga(z: Node2D) -> void:
 	Sonido.tocar("calambre")
 	for i in 5:
 		Particulas.soltar(z, rayo_a, Vector2.from_angle(randf() * TAU) * randf_range(60.0, 140.0), Color("#bff4ff"), 3.0, 0.25)
+
+
+# La limpiadora de noche: cada poco, friega los charcos que tiene cerca (veneno, ácido y los que resbalan: Charco.FREGABLES),
+# con su gesto de fregar mirando al primero
+func fregar(h: Dictionary) -> void:
+	if hab_t > 0.0:
+		return
+	hab_t = h.cada
+	var cerca := []
+	for c in get_tree().get_nodes_in_group("charcos"):
+		if c.tipo in Charco.FREGABLES and not c.fregado and c.global_position.distance_to(global_position) < h.alcance + c.radio():
+			cerca.append(c)
+	if cerca.is_empty():
+		return
+	if sprite:
+		animar("reposo", cerca[0].global_position - global_position)
+		empezar_accion()
+	for c in cerca:
+		c.fregar()
+	Sonido.tocar("barrido")
 
 
 # ¿Va con Johnny alguien que deja a medias los charcos (la farmacéutica)? Lo pregunta johnny.gd al pisar uno

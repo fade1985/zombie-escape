@@ -3487,6 +3487,38 @@ msgid "Precio de empleado: la tienda del ordenador, un 15 % más barata"
 msgstr "Скидка для сотрудников: магазин в компьютере на 15 % дешевле"
 
 #: scripts/supervivientes.gd
+msgid "Limpiadora de noche"
+msgstr "Ночная уборщица"
+
+#: scripts/supervivientes.gd
+msgid "¡Cerrad el gas!"
+msgstr "Перекройте газ!"
+
+#: scripts/supervivientes.gd
+msgid "¡Las válvulas!"
+msgstr "Вентили!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aquí dentro! *cof, cof*"
+msgstr "Я здесь! *кхе-кхе*"
+
+#: scripts/supervivientes.gd
+msgid "¡No puedo respirar!"
+msgstr "Мне нечем дышать!"
+
+#: scripts/supervivientes.gd
+msgid "¡Aire! Gracias, chico. Yo también limpio este edificio de noche"
+msgstr "Воздух! Спасибо, парень. Я тоже убираю это здание по ночам"
+
+#: scripts/supervivientes.gd
+msgid "Friega por donde pasa: quita los charcos de veneno, de ácido y los que resbalan"
+msgstr "Моет пол там, где проходит: убирает лужи яда, кислоты и скользкие лужи"
+
+#: scripts/supervivientes.gd
+msgid "Te arregla la fregona: el fregonazo barre más ancho"
+msgstr "Чинит тебе швабру: удар шваброй бьёт шире"
+
+#: scripts/supervivientes.gd
 msgid "¡Estoy en el baño!"
 msgstr "Я в ванной!"
 
@@ -6695,6 +6727,38 @@ msgstr "Это можно снова посмотреть в «Обучении�
 #: scripts/ui/tutorial.gd
 msgid "Entendido"
 msgstr "Понятно"
+
+#: scripts/valvulas.gd
+msgid "Válvula cerrada: %d de %d"
+msgstr "Вентиль закрыт: %d из %d"
+
+#: scripts/valvulas.gd
+msgid "¡Gas cortado! Se abre el cuarto de la limpieza"
+msgstr "Газ перекрыт! Подсобка открывается"
+
+#: scripts/valvulas.gd
+msgid "Cierra las válvulas del gas · %d/%d"
+msgstr "Закрой газовые вентили · %d/%d"
+
+#: scripts/valvulas.gd
+msgid "¡Una menos! Quedan dos"
+msgstr "Один есть! Осталось два"
+
+#: scripts/valvulas.gd
+msgid "¡Ya casi! Solo queda una"
+msgstr "Почти! Остался один"
+
+#: scripts/valvulas.gd
+msgid "*cof, cof*"
+msgstr "*кхе-кхе*"
+
+#: scripts/valvulas.gd
+msgid "¡No respiro!"
+msgstr "Задыхаюсь!"
+
+#: scripts/valvulas.gd
+msgid "¡Date prisa, chico!"
+msgstr "Поторопись, парень!"
 
 #: scripts/zombi_dependienta.gd
 msgid "¡¡¡AAAHHH!!!"

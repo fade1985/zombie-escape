@@ -781,6 +781,12 @@ const SALAS := {
 		"abajo": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 		"arriba": [["staffsink", 2.5, "izquierda"], ["stafftoilet", 6.0, "izquierda"]],
 	}},
+	# el aseo de Recursos Humanos cuando la limpiadora de noche se encierra en él (planta.gd, cuarto_limpieza): el cuarto
+	# de la limpieza, con el carro y un cubo de basura donde estaban el lavabo y el váter
+	"limpieza-rrhh": {"colocados": {
+		"abajo": [["janitorcart", 2.5, "izquierda"], ["trashcan", 6.0, "izquierda"]],
+		"arriba": [["janitorcart", 2.5, "izquierda"], ["trashcan", 6.0, "izquierda"]],
+	}},
 	# Marketing (plano de la ferretería): cubículos creativos en filas y escritorios; el resto, como esa tienda (mismas casillas)
 	"tienda-marketing": {
 		"colocados": {

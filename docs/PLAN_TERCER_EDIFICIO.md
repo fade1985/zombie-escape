@@ -451,7 +451,19 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento B (sudadera morada), andar, «hackear»
        con el móvil y caído.
      - Prueba: `--captura --edificio torre --programador`; las viviendas, `--captura --viviendas`.
-   - **Faltan:** la recepcionista y la limpiadora de noche, un trozo cada una.
+   - **Segundo trozo (5 nov, falta el visto bueno del dueño):** la limpiadora de noche (id `limpiadora`; `valvulas.gd`).
+     - Sale en **Recursos Humanos** de una planta al azar: su aseo pasa a ser el **cuarto de la limpieza** (carro y cubo
+       de basura, fregonas colgadas; `Planta.cuarto_limpieza`), con gas dentro. Limpiar el departamento no la saca: hay
+       que cerrar **tres válvulas** (archivo, entrevistas y la pared de arriba de la sala grande, o dos en la sala grande si
+       el archivo no tiene sitio), cada una corta su rejilla para siempre. Los zombis del departamento **duermen por el
+       gas**; cada válvula despierta **frenéticos** a los de cerca (340) y la última a todos; un golpe también. Con las tres,
+       se abre la puerta y se une (sin horda).
+     - Ya rescatada: **la fregona barre 200° en vez de 140°** (`Supervivientes.FREGONA_ANCHA`). Si te acompaña: cada 1,2 s
+       **friega los charcos** de veneno, ácido, lejía y aceite a menos de 110 (`Charco.FREGABLES`; el fuego no).
+     - Dibujos (`assets/pixellab.json` → `supervivientes-torre-48`): el intento A (bata azul y moño, con la fregona en la
+       mano), andar, «fregar» y caída.
+     - Prueba: `--captura --edificio torre --limpiadora`.
+   - **Falta:** la recepcionista, en su trozo.
 8. **La historia** (Sonnet): dosier, noticias y relato final.
 9. **Las skins** (Sonnet): las cinco cabezas y sus ventajas.
 10. **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las

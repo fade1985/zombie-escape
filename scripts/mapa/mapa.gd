@@ -676,7 +676,8 @@ func poner_caras() -> void:
 			cara.puede_tapar = f > 1   # el muro de fuera de arriba no tiene a nadie detrás
 			if centro and sitio.get("estilo", "") != "azotea":   # (el murete es bajo: lo de encima es el cielo)
 				cara.adornos = restos_de_pared(cara.ancho)
-			if sitio.get("apt", {}).get("tipo", "") == "portera":
+			# (y en el cuarto de la limpieza de Recursos Humanos, donde se encierra la limpiadora de noche: planta.gd)
+			if sitio.get("apt", {}).get("tipo", "") == "portera" or sala == sitio.get("cuarto_limpieza", -1):
 				cara.adornos += colgados(cara)
 			cosas.add_child(cara)
 			if not caras.has(sala):

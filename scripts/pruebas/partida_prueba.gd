@@ -199,6 +199,10 @@
 #   --programador       (con --edificio torre) el informático joven, superviviente de la torre (parte 7): su sala de
 #                       servidores, la copia de 60 s (la barra, una cámara que salta, tumbarlo y levantarlo), el
 #                       precio de empleado, las cámaras ciegas, el código del jefe y su habitación, con fotos [prueba_sitios.gd]
+#   --limpiadora        (con --edificio torre) la limpiadora de noche, superviviente de la torre (parte 7): su cuarto
+#                       de la limpieza lleno de gas, los zombis dormidos, las tres válvulas (despiertan frenéticos),
+#                       la puerta que se abre, unirse, fregar charcos, la fregona ancha y su habitación, con fotos
+#                                                                                         [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -641,6 +645,9 @@ func empezar_prueba() -> void:
 	elif "--programador" in args:
 		set_process(false)   # sin la prueba larga
 		probar_programador()
+	elif "--limpiadora" in args:
+		set_process(false)   # sin la prueba larga
+		probar_limpiadora()
 	elif "--viviendas" in args:
 		set_process(false)   # sin la prueba larga
 		probar_viviendas()

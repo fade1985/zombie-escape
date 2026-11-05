@@ -2,7 +2,8 @@
 # la electrónica (cuadro.gd). Plantándose delante (o delante del mueble que tenga debajo, hasta "alcance") se gira la
 # rueda: se corta el gas de las rejillas. Apartándose y volviendo, se abre otra vez. Se dibuja con código, a píxeles de
 # 2 unidades: la tubería que baja al suelo, la rueda roja (con una raya que gira) y un reloj con la aguja. El nodo va en el
-# pie de la pared, para ordenarse con la cara del muro.
+# pie de la pared, para ordenarse con la cara del muro. Las de la planta de la limpiadora de noche ("rejilla" en sus
+# datos) cortan solo su rejilla y no se vuelven a abrir.
 extends Node2D
 
 const ARRIBA := -80.0        # dónde empieza el dibujo, por encima del pie de la pared
@@ -23,9 +24,16 @@ func montar(d: Dictionary, g: Node, m: Node) -> void:
 	position = Vector2(d.x, d.y + 1)
 
 
+# ¿Sale gas por lo suyo? (la de siempre, todo el gas; las de la limpiadora, su rejilla)
+func abierta() -> bool:
+	if datos.has("rejilla"):
+		return gas.datos.abierto and not gas.datos.rejillas[datos.rejilla].get("cerrada", false)
+	return gas.datos.abierto
+
+
 func _physics_process(delta: float) -> void:
 	t += delta
-	var meta := 0.0 if gas.datos.abierto else PI * 1.5
+	var meta := 0.0 if abierta() else PI * 1.5
 	giro = move_toward(giro, meta, delta * 6.0)
 	# como el cuadro: en una habitación aún sin descubrir se oscurece
 	var oscuro: float = mapa.niebla.get(datos.sala, 0.0)
@@ -38,14 +46,17 @@ func _physics_process(delta: float) -> void:
 	var delante: bool = absf(p.x - global_position.x) < 46.0 and p.y > datos.y - 10.0 and p.y - datos.y < datos.alcance
 	if not delante:
 		listo = true
-	elif listo:
+	elif listo and not (datos.has("rejilla") and not abierta()):
 		listo = false
 		Sonido.tocar("palanca")
 		Sonido.tocar("siseo")
 		for i in 8:
 			Particulas.soltar(self, global_position + Vector2(0, ARRIBA + 24), Vector2(randf_range(-70, 70), randf_range(-80, 20)),
 				Color("#c77dff") if i % 2 else Color.WHITE, 2, 0.3)
-		gas.cambiar()
+		if datos.has("rejilla"):
+			gas.cerrar_rejilla(datos.rejilla)
+		else:
+			gas.cambiar()
 
 
 func px(x: int, y: int, w: int, h: int, color: Color) -> void:
@@ -59,7 +70,7 @@ func _draw() -> void:
 	# el reloj de presión: blanco con su aguja (en rojo si sale gas)
 	px(1, 0, 6, 6, Color("#24262b"))
 	px(2, 1, 4, 4, Color("#e8e6df"))
-	px(3, 3 if gas.datos.abierto else 2, 2, 1, Color("#c7342b") if gas.datos.abierto else Color("#3a3d44"))
+	px(3, 3 if abierta() else 2, 2, 1, Color("#c7342b") if abierta() else Color("#3a3d44"))
 	# la rueda roja: un aro con sus radios, que gira
 	var centro := Vector2(4, ARRIBA + 30)
 	draw_circle(centro, 11.0, Color("#24262b"))

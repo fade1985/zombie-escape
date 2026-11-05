@@ -2,7 +2,9 @@
 # rejillas en el suelo de la sala grande que, a ratos (cada una en su momento), echan una nube morada. A Johnny no le
 # hace nada (es el Sujeto 0: lo dice el dosier); a los zombis despiertos que la pisan los duerme un rato y luego
 # despiertan frenéticos, más rápidos (zombi.gd, gasear). Sirve para escapar, pero vuelven peor. Con la válvula del
-# archivo (valvula.gd) se corta el gas y, volviendo a ella, se abre otra vez.
+# archivo (valvula.gd) se corta el gas y, volviendo a ella, se abre otra vez. En la planta de la limpiadora de noche hay
+# tres válvulas ("valvulas"), una por rejilla: cada una corta la suya para siempre, y con las tres cerradas se acaba el
+# gas (y se abre el cuarto de la limpieza: valvulas.gd).
 #
 # Se dibuja todo con código: la rejilla (en el suelo) y las bocanadas de la nube, que salen, se hinchan, se mecen y se
 # deshacen.
@@ -14,7 +16,9 @@ const MORADO_CLARO := Color(0.72, 0.5, 0.9, 0.26)
 var datos: Dictionary
 var mapa: Node
 var suelo: Node2D            # las rejillas, en el suelo
-var valvula: Node2D
+var valvula: Node2D          # la de siempre (o la primera de las tres)
+var valvulas: Array = []     # todas
+signal cerrada(cuantas: int, de: int)   # con tres válvulas: se ha cerrado una (las que van y las que hay)
 var bocanadas: Array = []    # [x, y, vx, vy, edad, dura, tamaño, semilla]
 var nubes: Array = []        # lo grande que es ahora la nube de cada rejilla (0 a 1)
 var t := 0.0
@@ -37,19 +41,23 @@ func montar(d: Dictionary, m: Node) -> void:
 	add_child(suelo)
 	for r in d.rejillas:
 		nubes.append(0.0)
-	valvula = preload("res://scripts/peligros/valvula.gd").new()
-	valvula.montar(d.valvula, self, m)
-	m.cosas.add_child(valvula)
+	for v in d.get("valvulas", [d.get("valvula", {})]):
+		var nodo: Node2D = preload("res://scripts/peligros/valvula.gd").new()
+		nodo.montar(v, self, m)
+		m.cosas.add_child(nodo)
+		valvulas.append(nodo)
+	valvula = valvulas[0]
 
 
 func _exit_tree() -> void:
-	if is_instance_valid(valvula):
-		valvula.queue_free()
+	for v in valvulas:
+		if is_instance_valid(v):
+			v.queue_free()
 
 
 # ¿Está echando gas la rejilla "i"? (cada una tiene su momento del ciclo)
 func echando(i: int) -> bool:
-	if not datos.abierto:
+	if not datos.abierto or datos.rejillas[i].get("cerrada", false):
 		return false
 	var g: Dictionary = Peligros.GAS
 	return fposmod(t + datos.rejillas[i].fase, g.parada + g.echa) >= g.parada
@@ -61,6 +69,20 @@ func dentro(p: Vector2) -> bool:
 		if nubes[i] > 0.3 and p.distance_to(Vector2(r.x, r.y)) < Peligros.GAS.radio * nubes[i]:
 			return true
 	return false
+
+
+# Las válvulas de una sola rejilla (la planta de la limpiadora): cierra la suya para siempre; con todas cerradas, se
+# acaba el gas
+func cerrar_rejilla(i: int) -> void:
+	datos.rejillas[i].cerrada = true
+	var cuantas: int = datos.rejillas.filter(func(r): return r.get("cerrada", false)).size()
+	if cuantas >= datos.rejillas.size():
+		datos.abierto = false
+	cerrada.emit(cuantas, datos.rejillas.size())
+
+
+func todo_cerrado() -> bool:
+	return not datos.abierto
 
 
 # La válvula: cierra el gas (o lo abre otra vez)
