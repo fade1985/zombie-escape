@@ -532,7 +532,7 @@ msgstr "防暴警察"
 msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
 msgstr "盾牌挡在前面，什么都打不进去。绕到他身后：背后挨打疼两倍。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El cocinero"
 msgstr "厨师"
 
@@ -2845,6 +2845,14 @@ msgstr "僵尸掉落物品时，有50%的几率再多掉一件。"
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
 msgstr "首次杀死萨拉斯博士。"
+
+#: scripts/skins.gd
+msgid "Las vendas y los botiquines curan un 50 % más."
+msgstr "绷带和急救包的治疗量提高50%。"
+
+#: scripts/skins.gd
+msgid "Mata al cocinero por primera vez."
+msgstr "首次杀死厨师。"
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

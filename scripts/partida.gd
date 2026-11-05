@@ -1350,7 +1350,8 @@ func usar_cura(id: String) -> void:
 # Lo que cura un objeto de curar: lo suyo (Objetos.USABLES: vendas 25, botiquín 40), más el talento Sanitario y, con la
 # Alerta 4, la mitad
 func cura_de(id: String) -> int:
-	return roundi((Objetos.USABLES[id].cura + johnny.stats.botiquin_extra) * Alerta.botiquin())
+	# (con la skin del cocinero, un 50 % más: Skins.cura)
+	return roundi((Objetos.USABLES[id].cura + johnny.stats.botiquin_extra) * Alerta.botiquin() * Skins.cura(johnny.skin))
 
 
 # El inventario (Tab, I o Select), el baúl o el banco de trabajo: se para el juego y sale su pantalla

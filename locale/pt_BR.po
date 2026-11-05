@@ -533,7 +533,7 @@ msgstr "O policial de choque"
 msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
 msgstr "Com o escudo na frente, nada passa. Dê a volta: pelas costas dói o dobro."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El cocinero"
 msgstr "O cozinheiro"
 
@@ -2850,6 +2850,14 @@ msgstr "Quando um zumbi solta um item, em 50 % das vezes ele solta mais um."
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
 msgstr "Mate o doutor Salas pela primeira vez."
+
+#: scripts/skins.gd
+msgid "Las vendas y los botiquines curan un 50 % más."
+msgstr "As bandagens e os kits médicos curam 50 % mais."
+
+#: scripts/skins.gd
+msgid "Mata al cocinero por primera vez."
+msgstr "Mate o cozinheiro pela primeira vez."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

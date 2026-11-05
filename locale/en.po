@@ -533,7 +533,7 @@ msgstr "The Riot Cop"
 msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
 msgstr "With that shield up front, nothing gets through. Circle around him: from behind, it hurts twice as much."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El cocinero"
 msgstr "The Cook"
 
@@ -2850,6 +2850,14 @@ msgstr "When a zombie drops an item, 50 % of the time it drops another one."
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
 msgstr "Kill Dr. Salas for the first time."
+
+#: scripts/skins.gd
+msgid "Las vendas y los botiquines curan un 50 % más."
+msgstr "Bandages and medkits heal 50 % more."
+
+#: scripts/skins.gd
+msgid "Mata al cocinero por primera vez."
+msgstr "Kill the cook for the first time."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

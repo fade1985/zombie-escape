@@ -8,6 +8,8 @@ extends "res://scripts/pruebas/prueba_armas.gd"
 #     una segunda vez ya no es nueva. Y el Glotón, el glotón (captura-skins-desbloqueo-gloton.png), el Gymbro, el
 #     gymbro (captura-skins-desbloqueo-gymbro.png), y el jefe de bomberos, el bombero (captura-skins-desbloqueo-bombero.png)
 #   - el doctor Salas: suelta un objeto de más la mitad de las veces (Skins.doble) y lo consigue el científico jefe
+#   - el cocinero (M90): las vendas y el botiquín curan un 50 % más (Skins.cura, partida.cura_de), contado y usando unas
+#     vendas de verdad; lo consigue el cocinero del centro comercial
 #   - la taquilla: se abre al arrimarse, enseña el portero y se elige (captura-skins-taquilla.png); Johnny cambia de
 #     hoja en el acto y se guarda; uno que no existe no se puede; lo mismo con el glotón, el gymbro y el bombero
 #     (captura-skins-taquilla-<id>.png); «Siguiente skin» del panel de pruebas da la vuelta sin guardar
@@ -81,8 +83,8 @@ func probar_skins() -> void:
 	Captura.foto("captura-skins-desbloqueo-gloton.png")
 	print("Cae el Glotón (muerto: %s): skins %s · puesta «%s» (esperado: [\"portero\", \"gloton\"], «»)" % [
 		gloton.estado == "muerto", Skins.tenidas(), Skins.puesta()])
-	print("Otra vez: ¿nueva? %s (esperado: false) · un jefe sin skin (el cocinero): «%s» (esperado: «»)" % [
-		Skins.desbloquear("gloton"), Skins.de_jefe("cocinero")])
+	print("Otra vez: ¿nueva? %s (esperado: false) · un jefe sin skin (la modista): «%s» (esperado: «»)" % [
+		Skins.desbloquear("gloton"), Skins.de_jefe("modista")])
 	await get_tree().create_timer(2.0).timeout
 	if menus.abierto == "mutacion":
 		menus.elegir("canibal")
@@ -162,6 +164,18 @@ func probar_skins() -> void:
 		Captura.foto("captura-skins-taquilla-bombero.png")
 		print("Elegido el bombero: Johnny lleva «%s» · guardado «%s» · su hoja %s · dice «%s»" % [johnny.skin,
 			Guardado.cargar().skin, johnny.sprite.sprite_frames.resource_path.get_file(), taquilla.info.text])
+		# el cocinero (M90), ya conseguido: la lista no cabe entera y baja sola hasta su carta al elegirla con el
+		# teclado o el mando (captura-skins-taquilla-cocinero.png)
+		Skins.desbloquear("cocinero")
+		taquilla.abrir(self)
+		await get_tree().process_frame
+		(taquilla.cartas["cocinero"] as Button).grab_focus()
+		taquilla.elegir("cocinero")
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-skins-taquilla-cocinero.png")
+		print("Elegido el cocinero: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true)" % [johnny.skin,
+			johnny.sprite.sprite_frames.resource_path.get_file(),
+			(taquilla.cartas["cocinero"] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y])
 		taquilla.cerrar()
 	print("Taquilla cerrada: juego en pausa %s (esperado: false)" % get_tree().paused)
 	var vuelta := []
@@ -169,10 +183,24 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > Conserje)" % " > ".join(vuelta))
+	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > Conserje)" % " > ".join(vuelta))
 	# el doctor Salas (M36): la mitad de las veces, un objeto más; las demás skins, nunca
 	print("Objeto de más: salas %s · bombero %s · conserje %s · lo consigue «%s» (esperado: 0.5, 0, 0, «salas»)" % [
 		Skins.doble("salas"), Skins.doble("bombero"), Skins.doble(""), Skins.de_jefe("cientifico_jefe")])
+	# el cocinero (M90): las vendas y el botiquín curan un 50 % más; y de verdad, usando unas vendas
+	var curas := []
+	for skin in ["", "cocinero", "salas"]:
+		johnny.skin = skin
+		curas.append("%s: vendas %d, botiquín %d" % [Skins.nombre(skin), cura_de("vendas"), cura_de("botiquin")])
+	johnny.skin = "cocinero"
+	johnny.vida = 10
+	mochila.append("vendas")
+	var antes: int = johnny.vida
+	usar_objeto("vendas")
+	print("Curas: %s · usadas unas vendas con el cocinero: +%d · lo consigue «%s» (esperado: 25 y 40, 38 y 60, 25 y 40; +38; «cocinero»)" % [
+		" · ".join(curas), johnny.vida - antes, Skins.de_jefe("cocinero")])
+	johnny.skin = ""
+	johnny.vida = johnny.vida_tope()
 
 	# ── La cara: las 8 direcciones con la fregona, y las otras armas mirando al sur (una foto por skin) ──
 	johnny.position = Vector2(690, 330)
@@ -180,7 +208,7 @@ func probar_skins() -> void:
 	johnny.hide()
 	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
 	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
-	for skin in ["portero", "gloton", "gymbro", "bombero", "salas"]:
+	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero"]:
 		var copias := []
 		var hojas_bien := 0
 		for i in dirs.size() + armas.size() + 1:

@@ -533,7 +533,7 @@ msgstr "Der Einsatzpolizist"
 msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
 msgstr "Mit dem Schild vorne kommt nichts durch. Geh um ihn herum: Von hinten tut's doppelt weh."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El cocinero"
 msgstr "Der Koch"
 
@@ -2850,6 +2850,14 @@ msgstr "Wenn ein Zombie einen Gegenstand fallen lässt, lässt er in 50 % der F�
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
 msgstr "Erledige Dr. Salas zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "Las vendas y los botiquines curan un 50 % más."
+msgstr "Verbände und Medikits heilen 50 % mehr."
+
+#: scripts/skins.gd
+msgid "Mata al cocinero por primera vez."
+msgstr "Erledige den Koch zum ersten Mal."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

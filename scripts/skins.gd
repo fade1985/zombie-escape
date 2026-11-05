@@ -33,6 +33,10 @@
 #   - Johnny es inmune al fuego ("ignifugo"; johnny.gd, ignifugo()): el cono, las bolas, el aro y los molotovs del jefe
 #     de bomberos, el fuego del suelo y de los charcos, el aceite hirviendo del cocinero y el seguir ardiendo al salir.
 #     El hachazo del jefe y las explosiones, sí le quitan
+#
+# La sexta, el cocinero (la suelta el cocinero del centro comercial al caer por primera vez, partida.gd; M90): un gorro
+# de cocinero blanco en lugar del pañuelo, con su barba de siempre. Con ella puesta, las vendas y los botiquines curan un
+# 50 % más ("cura"; partida.gd, cura_de(): las vendas, de 25 a 38; el botiquín, de 40 a 60)
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
@@ -49,6 +53,8 @@ const LISTA := {
 		"como": "Mata al jefe de bomberos por primera vez.", "jefe": "bombero", "quema": 1.5, "ignifugo": true},
 	"salas": {"nombre": "El doctor Salas", "efecto": "Cuando un zombi suelta un objeto, un 50 % de las veces suelta otro más.",
 		"como": "Mata al doctor Salas por primera vez.", "jefe": "cientifico_jefe", "doble": 0.5},
+	"cocinero": {"nombre": "El cocinero", "efecto": "Las vendas y los botiquines curan un 50 % más.",
+		"como": "Mata al cocinero por primera vez.", "jefe": "cocinero", "cura": 1.5},
 }
 # [/traducir]
 
@@ -144,3 +150,8 @@ static func mordisco(id: String) -> float:
 # La probabilidad de que un zombi que suelta un objeto suelte otro más con esa skin (0 = nunca: el doctor Salas, 0,5)
 static func doble(id: String) -> float:
 	return LISTA[id].get("doble", 0.0) if id in LISTA else 0.0
+
+
+# Por cuánto se multiplica lo que curan las vendas y los botiquines con esa skin (el cocinero, 1,5)
+static func cura(id: String) -> float:
+	return LISTA[id].get("cura", 1.0) if id in LISTA else 1.0

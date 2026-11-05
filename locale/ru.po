@@ -534,7 +534,7 @@ msgstr "Омоновец"
 msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
 msgstr "Пока щит впереди, его ничем не пробить. Обойди его: в спину больнее вдвое."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El cocinero"
 msgstr "Повар"
 
@@ -2855,6 +2855,14 @@ msgstr "Когда зомби роняет предмет, в 50 % случае�
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
 msgstr "Убей доктора Саласа в первый раз."
+
+#: scripts/skins.gd
+msgid "Las vendas y los botiquines curan un 50 % más."
+msgstr "Бинты и аптечки лечат на 50 % больше."
+
+#: scripts/skins.gd
+msgid "Mata al cocinero por primera vez."
+msgstr "Убей повара в первый раз."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

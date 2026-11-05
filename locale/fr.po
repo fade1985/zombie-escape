@@ -533,7 +533,7 @@ msgstr "Le CRS"
 msgid "Con el escudo delante no le entra nada. Rodéalo: por la espalda duele el doble."
 msgstr "Avec le bouclier devant, rien ne passe. Contourne-le : dans le dos, ça fait deux fois plus mal."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El cocinero"
 msgstr "Le cuisinier"
 
@@ -2850,6 +2850,14 @@ msgstr "Quand un zombie lâche un objet, dans 50 % des cas il en lâche un autre
 #: scripts/skins.gd
 msgid "Mata al doctor Salas por primera vez."
 msgstr "Tue le docteur Salas pour la première fois."
+
+#: scripts/skins.gd
+msgid "Las vendas y los botiquines curan un 50 % más."
+msgstr "Les bandages et les médikits soignent 50 % de plus."
+
+#: scripts/skins.gd
+msgid "Mata al cocinero por primera vez."
+msgstr "Tue le cuisinier pour la première fois."
 
 #: scripts/supervivientes.gd
 msgctxt "superviviente"

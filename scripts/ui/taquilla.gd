@@ -7,6 +7,7 @@
 extends CanvasLayer
 
 const COLOR := Color("#9fd3ff")   # el color de la taquilla (el del título)
+const ALTO_LISTA := 420.0   # lo alto de la lista de skins: lo que cabe en la pantalla de 640 con el título y el pie (M90)
 
 var partida: Node
 var fondo: ColorRect
@@ -97,7 +98,14 @@ func abrir(p: Node) -> void:
 	var lista := VBoxContainer.new()
 	lista.add_theme_constant_override("separation", 6)
 	lista.sort_children.connect(igualar.bind(lista))
-	fila.add_child(lista)
+	# (M90: con las skins del centro comercial ya no caben todas a la vez en la pantalla: la lista va en una caja de
+	# ALTO_LISTA que se desliza con la rueda, y con el teclado o el mando sigue a la carta que se elige)
+	var desliza := ScrollContainer.new()
+	desliza.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	desliza.follow_focus = true
+	desliza.custom_minimum_size.y = ALTO_LISTA
+	fila.add_child(desliza)
+	desliza.add_child(lista)
 	var todos := ids()
 	for i in todos.size():
 		var id: String = todos[i]
