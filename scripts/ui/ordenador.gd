@@ -407,10 +407,13 @@ func al_principio(b: Button) -> void:
 
 
 # El botón de "botones" más cercano a "b" hacia arriba (-1) o hacia abajo (1), de los que caen en su columna (el que más
-# coincida con ella, si hay varios a la misma altura); si no hay ninguno, él mismo
+# coincida con ella, si hay varios a la misma altura); si en su columna no hay ninguno, el más cercano de la otra (en
+# una rejilla de dos con la última fila a medias, para llegar a la tarjeta que queda sola); si no hay ninguno, él mismo
 func vecino(b: Button, botones: Array, hacia: float) -> Button:
 	var mejor := b
 	var menor := INF
+	var otro := b            # el más cercano en esa dirección, de cualquier columna
+	var menor_otro := INF
 	var caja := b.get_global_rect()
 	for o: Button in botones:
 		var otra := o.get_global_rect()
@@ -419,7 +422,11 @@ func vecino(b: Button, botones: Array, hacia: float) -> Button:
 		if lejos > 1.0 and coinciden > 0.0 and lejos - coinciden * 0.001 < menor:
 			menor = lejos - coinciden * 0.001
 			mejor = o
-	return mejor
+		var de_lado := absf(otra.get_center().x - caja.get_center().x) * 0.001
+		if lejos > 1.0 and lejos + de_lado < menor_otro:
+			menor_otro = lejos + de_lado
+			otro = o
+	return mejor if mejor != b else otro
 
 
 func primer_boton(nodo: Node) -> Button:
@@ -1321,7 +1328,13 @@ func tarjeta(padre: Container, nombre: String, icono: String, titulo: String, de
 	var arriba := HBoxContainer.new()
 	arriba.add_theme_constant_override("separation", 6)
 	textos.add_child(arriba)
-	arriba.add_child(texto_tarjeta(titulo, TINTA))
+	var titular := texto_tarjeta(titulo, TINTA)
+	# los nombres largos («La directora de Recursos Humanos») parten la línea en vez de ensanchar la lista y, con ella,
+	# la ventana, que se saldría de la pantalla del monitor
+	titular.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	titular.custom_minimum_size.x = 60
+	titular.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	arriba.add_child(titular)
 	if not pips.is_empty():
 		var cuadros := HBoxContainer.new()
 		cuadros.add_theme_constant_override("separation", 2)

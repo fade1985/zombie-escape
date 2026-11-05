@@ -405,6 +405,16 @@ func probar_colecciones() -> void:
 		ordenador.abrir("colecciones", "z_oficinista")
 		await get_tree().create_timer(0.3).timeout
 		Captura.foto("captura-bestiario-torre.png")
+	# la ventana del programa no crece con los nombres largos ni con las frases (se saldría de la pantalla del monitor)
+	var tarjetas := []
+	var buscar := func(n: Node, f: Callable) -> void:
+		for h in n.get_children():
+			if h is ScrollContainer:
+				tarjetas.append(h)
+			f.call(h, f)
+	buscar.call(ordenador.ventana, buscar)
+	print("Colecciones · ventana %s (esperado: 718 de ancho) · listas %s" % [ordenador.ventana.size,
+		tarjetas.map(func(d): return d.size.x)])
 	# los recuentos que enseña el programa, edificio por edificio
 	var g := Guardado.cargar()
 	for e in Edificios.LISTA:
