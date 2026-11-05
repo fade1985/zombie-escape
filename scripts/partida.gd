@@ -1704,11 +1704,15 @@ func meter_zombi(tipo: String, donde: Vector2) -> Node2D:
 		zombi.prendido.connect(logros.zombi_prendido)
 	zombi.murio.connect(func():
 		if de_mentira:
-			sangre(tipo, zombi)
+			if not zombi.has_meta("ventana"):
+				sangre(tipo, zombi)
 			return
 		muertos += 1
 		var ardia: bool = zombi.get("arder_t") != null and zombi.arder_t > 0.0
 		logros.zombi_muerto(johnny.huecos[johnny.mano], ardia)
+		# tirado por el ventanal roto de la torre (peligros/viento.gd): cuenta, pero ni sangre ni suelta nada
+		if zombi.has_meta("ventana"):
+			return
 		if tipo in JEFES:
 			logros.jefe_muerto(tipo, zombi)
 		sangre(tipo, zombi)

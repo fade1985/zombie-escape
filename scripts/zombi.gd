@@ -73,6 +73,8 @@ var aturdido := 0.0        # Tentacular, Flatulento: quieto
 var liado := 0.0           # Locura: da vueltas sin rumbo
 var frio_t := 0.0          # segundos seguidos dentro del frío de la cámara (peligros.gd): a los 4, se congela
 var congelado := 0.0       # congelado: quieto y azul (también lleva "aturdido")
+var gaseado := 0.0         # dormido por el gas de las rejillas de Recursos Humanos (peligros/gas.gd): quieto...
+var frenesi := 0.0         # ...y, al despertar, frenético (más rápido) este rato
 var electrico := 0.0       # le ha dado un rayo hace poco (ArmasCreadas.aturdir): para Mezcla explosiva
 var lio_angulo := 0.0
 # M80: la barrera del grito de la dependienta (zombi_dependienta.gd): mientras siga viva alguna de las que le han
@@ -291,6 +293,8 @@ func ir_hacia(delta: float, hacia: Vector2, rapidez: float) -> void:
 	var paso := rumbo + rumbo.orthogonal() * sin(tiempo * bamboleo_ritmo) * bamboleo
 	if a_tirones:
 		rapidez *= 0.55 + 0.45 * absf(sin(tiempo * 2.0))
+	if frenesi > 0.0:
+		rapidez *= Peligros.GAS.rapido   # (despierta frenético del gas)
 	rapidez *= Estados.frenado(estados)   # el frío de la cámara
 	if con_acido():
 		rapidez *= 1.0 - Mejoras.de_johnny(get_tree(), "pegajoso")   # (Pegajoso: el ácido los frena)
@@ -623,6 +627,7 @@ func herir(cantidad: float, color := Color.WHITE) -> void:
 
 # Cada paso: los estados de los charcos (a pellizcos cada medio segundo), la quemadura y lo que se ve encima
 func sufrir(delta: float) -> void:
+	gas_y_frenesi(delta)
 	# el frío de la cámara: tras unos segundos seguidos dentro, se congela (y al deshelarse vuelve a contar)
 	if not pisando.has("frio"):
 		frio_t = 0.0
@@ -705,6 +710,34 @@ func deshelar() -> void:
 	EfectoSuelo.soltar(get_parent(), "deshielo", global_position)
 
 
+# El gas de las rejillas (peligros/gas.gd) le duerme: se queda quieto "dormir" segundos y despierta frenético
+# (gas_y_frenesi). Mientras le dura una cosa u otra, el gas ya no le hace nada
+func gasear(dormir: float) -> void:
+	if gaseado > 0.0 or frenesi > 0.0 or estado == "muerto":
+		return
+	gaseado = dormir
+	aturdido = maxf(aturdido, dormir)
+	Zombi.texto_flotante(get_parent(), global_position + Vector2(-8, -altura), "z", Color("#c77dff"), 18)   # no-tr
+
+
+func gas_y_frenesi(delta: float) -> void:
+	if gaseado > 0.0:
+		gaseado -= delta
+		aturdido = maxf(aturdido, gaseado)
+		if gaseado <= 0.0:
+			# despierta frenético: un "!" morado y más rápido un rato
+			frenesi = Peligros.GAS.frenetico
+			agente.max_speed *= Peligros.GAS.rapido
+			Zombi.texto_flotante(get_parent(), global_position + Vector2(-4, -altura), "!", Color("#d38cff"), 26)
+	elif frenesi > 0.0:
+		frenesi -= delta
+		if randf() < 6.0 * delta:
+			Particulas.soltar(self, global_position + Vector2(randf_range(-10, 10), -altura * randf_range(0.3, 0.9)),
+				Vector2(randf_range(-20, 20), -40), Color("#c77dff"), 2, 0.35)
+		if frenesi <= 0.0:
+			agente.max_speed /= Peligros.GAS.rapido
+
+
 # Se queda helado: quieto, azul y con el dibujo parado, soltando escarcha
 func congelar(segundos: float) -> void:
 	frio_t = 0.0
@@ -764,7 +797,7 @@ func mareo(delta: float) -> void:
 		estado = "andar"   # se le corta el zarpazo o su ataque especial
 	if randf() < 5.0 * delta:
 		Particulas.soltar(self, global_position + Vector2(randf_range(-10, 10), -altura * 0.75), Vector2(randf_range(-15, 15), -35),
-			Color("#e8f6ff") if congelado > 0.0 else Color("#ffd23f") if aturdido > 0.0 else Color("#c77dff"), 2, 0.45)
+			Color("#e8f6ff") if congelado > 0.0 else Color("#ffd23f") if aturdido > 0.0 and gaseado <= 0.0 else Color("#c77dff"), 2, 0.45)
 	if aturdido > 0.0:
 		aturdido -= delta
 		velocity = velocity.move_toward(Vector2.ZERO, FRENADA * delta)

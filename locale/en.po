@@ -1641,7 +1641,7 @@ msgstr[1] "Hold out: the vault opens in %d seconds"
 msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
 msgstr "Card reader. Without the guard's gold card, the only option left is the emergency override: step up again to set off the alarm"
 
-#: scripts/joyeria.gd
+#: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
 msgstr "ALARM!"
 
@@ -2823,6 +2823,14 @@ msgstr "Clunk! The store's lights just went out"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Watch out! The water is live"
 
+#: scripts/peligros/camaras.gd
+msgid "¡Una cámara! Si me ve, saltará la alarma"
+msgstr "A camera! If it sees me, the alarm goes off"
+
+#: scripts/peligros/camaras.gd
+msgid "¡Me han visto! Ya vienen..."
+msgstr "They spotted me! Here they come..."
+
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "The room is on fire! Stay away from the walls"
@@ -2835,6 +2843,18 @@ msgstr "Brrr! It's freezing in here"
 msgid "¡La cocina está ardiendo!"
 msgstr "The kitchen's on fire!"
 
+#: scripts/peligros/gas.gd
+msgid "Gas cortado"
+msgstr "Gas shut off"
+
+#: scripts/peligros/gas.gd
+msgid "Gas abierto otra vez"
+msgstr "Gas back on"
+
+#: scripts/peligros/gas.gd
+msgid "Huele raro... pero a mí no me hace nada"
+msgstr "Smells funny... but it does nothing to me"
+
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
 msgstr "What a stench! The floor's covered in acid crap: don't step in it"
@@ -2846,6 +2866,14 @@ msgstr "Careful with the dumbbells on the floor: if I step on one, I'm going dow
 #: scripts/peligros/tropiezos.gd
 msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
 msgstr "Careful with the buckets on the floor: if I trip on one, I'm going down"
+
+#: scripts/peligros/viento.gd
+msgid "¡Qué corriente! Si me acerco al ventanal, me lleva"
+msgstr "What a draft! If I get close to the window, it'll pull me out"
+
+#: scripts/peligros/viento.gd
+msgid "¡Uf! Casi me caigo por la ventana"
+msgstr "Whoa! I almost fell out the window"
 
 #: scripts/portera.gd
 msgid "¡VECINOS!"
@@ -5271,6 +5299,14 @@ msgstr "Electrified water"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Pull the lever on the electrical panel and the water will stop shocking you."
+
+#: scripts/ui/menus.gd
+msgid "El viento"
+msgstr "The wind"
+
+#: scripts/ui/menus.gd
+msgid "Cruza la sala pegado a las mesas: detrás de ellas, el viento no te arrastra al ventanal."
+msgstr "Cross the room hugging the desks: behind them, the wind can't drag you to the window."
 
 #: scripts/ui/menus.gd
 msgid "El cable pelado"

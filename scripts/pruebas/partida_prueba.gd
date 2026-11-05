@@ -169,6 +169,12 @@
 #                       departamentos, el código y sus ordenadores, con fotos                [prueba_sitios.gd]
 #   --departamentos     (con --edificio torre; --tipo X, solo ese) los pasillos de la torre y sus departamentos, con la puerta abajo
 #                       y arriba, sin zombis: sus muebles y una foto de cada                 [prueba_sitios.gd]
+#   --viento            (con --edificio torre) el ventanal roto de Marketing: cuánto arrastra a Johnny, el borde y los
+#                       zombis que salen volando por la ventana, con fotos (tercer edificio, parte 3) [prueba_sitios.gd]
+#   --camaras           (con --edificio torre) las cámaras de Seguridad corporativa: la alarma, los refuerzos y una rota
+#                       de un tiro, con fotos                                                  [prueba_sitios.gd]
+#   --gas               (con --edificio torre) el gas de Recursos Humanos: duerme al zombi, no a Johnny, lo despierta
+#                       frenético y la válvula del archivo lo corta, con fotos                 [prueba_sitios.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -620,6 +626,15 @@ func empezar_prueba() -> void:
 	elif "--torre" in args:
 		set_process(false)   # sin la prueba larga
 		probar_torre()
+	elif "--viento" in args:
+		set_process(false)   # sin la prueba larga
+		probar_viento()
+	elif "--camaras" in args:
+		set_process(false)   # sin la prueba larga
+		probar_camaras()
+	elif "--gas" in args:
+		set_process(false)   # sin la prueba larga
+		probar_gas()
 	elif "--zombis-tienda" in args:
 		set_process(false)   # sin la prueba larga
 		probar_zombis_tienda()

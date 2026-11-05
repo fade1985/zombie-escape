@@ -29,6 +29,7 @@ const PELIGROS := {
 	"acido": {"nombre": "El ácido", "consejo": "Esquiva para cruzar los charcos: así no te hacen nada.", "icono": "obj-bidon_acido"},
 	"frio": {"nombre": "El frío", "consejo": "No te quedes mucho rato en la cámara frigorífica: el frío te quita vida y te frena.", "icono": "congeladora"},
 	"agua": {"nombre": "El agua con corriente", "consejo": "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres.", "icono": "obj-bateria"},
+	"viento": {"nombre": "El viento", "consejo": "Cruza la sala pegado a las mesas: detrás de ellas, el viento no te arrastra al ventanal.", "icono": "torre"},
 	"cable": {"nombre": "El cable pelado", "consejo": "No pises el charco donde ha caído el cable: da calambres a todo el charco.", "icono": "obj-bateria"},
 	"granada": {"nombre": "Tu propia granada", "consejo": "Lánzala lejos: su explosión también te hace daño a ti.", "icono": "granada"},
 }

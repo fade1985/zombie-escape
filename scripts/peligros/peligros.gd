@@ -23,6 +23,13 @@
 #                 sus entradas; el gimnasio del Gymbro no tiene otra)   {tipo, sala, luces ([Vector2])}
 #   cerco.gd      la habitación del jefe de bomberos, en llamas por el borde   {tipo, sala, casillas (casilla -> 1),
 #                                                                               ovalo, avisado}
+# Y los de los departamentos de Torre Velaria (docs/PLAN_TERCER_EDIFICIO.md, parte 3), también desde de_tienda:
+#   viento.gd   el ventanal roto de la sala grande (Marketing y Dirección)   {tipo, sala, lado ("izquierda"/"derecha"),
+#                                                                             x (la cara de dentro del muro), y0, y1, avisado}
+#   camaras.gd  las cámaras de seguridad de la sala grande (Informática y Seguridad corporativa)
+#               {tipo, sala, camaras ([{x, y (el pie de la pared), mira (ángulo del centro de su barrido), rota, llamo}]), avisado}
+#   gas.gd      las rejillas del gas de la sala grande (Recursos Humanos)   {tipo, sala, rejillas ([{x, y, fase}]),
+#               valvula ({x, y, alcance, sala}: valvula.gd, en la pared del archivo o de otra habitación de dentro), abierto, avisado}
 class_name Peligros
 
 const CASILLA := 32
@@ -103,6 +110,53 @@ const CERCO := {
 }
 
 
+# El ventanal roto de Marketing y Dirección (viento.gd): a treinta plantas de altura, la corriente empuja hacia él. A
+# Johnny lo arrastra poco a poco y, si llega al borde, se agarra (le quita vida y sale despedido hacia dentro); a los
+# zombis despiertos los tira por la ventana. Detrás de un mueble no sopla: se cruza pegado a las mesas
+const VIENTO := {
+	"cerca": 90.0,       # lo que empuja pegado al ventanal (unidades por segundo; Johnny anda a 210)...
+	"lejos": 30.0,       # ...y en la otra punta de la sala
+	"zombis": 1.6,       # a los zombis, más (son torpes): cerca del ventanal, aunque anden hacia otro lado, se los lleva
+	"flojo": 0.5,        # entre racha y racha sopla a la mitad...
+	"calma": 4.0,        # ...este rato...
+	"racha": 2.0,        # ...y luego, este, con toda su fuerza
+	"abrigo": 96.0,      # un mueble a menos de esto, entre él y el ventanal, lo resguarda (3 casillas)
+	"borde": 30.0,       # a esta distancia de la cara del muro, en el hueco, se está en el borde
+	"dano": 20,          # lo que le quita a Johnny agarrarse al borde...
+	"rebote": 1100.0,    # ...y el empujón hacia dentro (más que el fregonazo de la portera: que no vuelva a caer enseguida)
+	"casillas": 4,       # lo alto que es el hueco del ventanal
+}
+# Las cámaras de seguridad de Informática y Seguridad corporativa (camaras.gd): en las esquinas de arriba de la sala
+# grande, barren el suelo con su cono de luz. Si ven a Johnny un rato, salta la alarma: se despiertan los zombis del
+# departamento y llegan refuerzos por la puerta. Se rompen de un disparo
+const CAMARAS := {
+	"cuantas": {"informatica": 2, "seguridad": 3},
+	"alcance": 288.0,    # lo largo que es el cono (9 casillas)
+	"abre": 0.32,        # la mitad de lo ancho que es (en radianes: unos 18 grados a cada lado)
+	"barre": 0.6,        # lo que gira a cada lado del centro de su barrido (unos 35 grados)...
+	"vuelta": 8.0,       # ...y lo que tarda en ir y volver
+	"ve": 0.5,           # segundos viendo a Johnny hasta que salta la alarma (sin verle, se vacía a la mitad de ese paso)
+	"alarma": 6.0,       # lo que suena la alarma
+	"descanso": 4.0,     # después, lo que tarda en volver a vigilar
+	"refuerzos": 2,      # los zombis que llegan por la puerta (una vez por cámara; luego serán los escoltas de Velaria)
+	"lejos_puerta": 3,   # la cámara del medio (Seguridad), a estas casillas como poco de una puerta
+}
+# El gas de las rejillas de Recursos Humanos (gas.gd): el VD-7 del aire acondicionado. A ratos, cada rejilla echa una
+# nube morada. A Johnny no le hace nada (es el Sujeto 0); a los zombis despiertos los duerme un rato y luego despiertan
+# frenéticos. Se corta (y se vuelve a abrir) con la válvula del archivo (valvula.gd)
+const GAS := {
+	"rejillas": 3,       # cuántas en la sala grande
+	"separadas": 5,      # casillas como poco entre una y otra
+	"lejos_entrada": 4,  # y de la puerta del departamento
+	"parada": 9.0,       # lo que está cada una sin echar gas...
+	"echa": 5.0,         # ...y lo que está echándolo
+	"radio": 52.0,       # lo grande que es la nube (unas 3 casillas de ancho)
+	"duerme": 3.0,       # lo que duerme un zombi que la pisa...
+	"frenetico": 6.0,    # ...y lo que va frenético al despertar...
+	"rapido": 1.5,       # ...así de rápido
+}
+
+
 # Los peligros de una tienda (el sitio, ya con sus muebles). Vacío si su tipo no tiene. Con su propio dado (de la
 # semilla del sitio): así no cambia nada de lo demás que sale en la planta
 static func de_tienda(sitio: Dictionary) -> Array:
@@ -120,6 +174,17 @@ static func de_tienda(sitio: Dictionary) -> Array:
 		var a := agua(sitio, rng)
 		if not a.is_empty():
 			lista.append(a)
+	# los de los departamentos de Torre Velaria, en la sala grande
+	var torre := {}
+	match sitio.tienda:
+		"marketing", "direccion":
+			torre = viento(sitio)
+		"informatica", "seguridad":
+			torre = camaras(sitio)
+		"rrhh":
+			torre = gas(sitio, rng)
+	if not torre.is_empty():
+		lista.append(torre)
 	return lista
 
 
@@ -502,21 +567,22 @@ static func agua(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 	return {}
 
 
-# El cuadro eléctrico, colgado en la pared de arriba de una habitación del fondo (como el armarito del baño:
+# El cuadro eléctrico (y la válvula del gas de Recursos Humanos, en el archivo: "usos"; más estrecha: "holgura"), colgado en la pared de arriba de una habitación del fondo (como el armarito del baño:
 # planta.armaritos): lo más centrado posible, sin tapar una puerta y sin un mueble debajo (las taquillas y las
 # estanterías lo taparían). Si no cabe en ninguna, en la pared de arriba de la sala de venta. {x, y (el pie de la
 # pared), alcance (hasta dónde se puede usar desde delante), sala}
-static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
+static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator, usos := ["almacen", "taquillas"], en_venta := true, holgura := 18.0) -> Dictionary:
 	var apt: Dictionary = sitio.apt
-	var salas: Array = apt.salas.filter(func(s): return s.uso == "almacen" or s.uso == "taquillas")
+	var salas: Array = apt.salas.filter(func(s): return s.uso in usos)
 	if rng.randf() < 0.5 and not apt.get("fijo", false):
 		salas.reverse()   # unas veces en una y otras en la otra (en la tienda fija, M77, siempre en el almacén)
-	salas.append(apt.salas[0])   # si no cabe en ninguna, en la sala de venta
+	if en_venta:
+		salas.append(apt.salas[0])   # si no cabe en ninguna, en la sala de venta
 	for s in salas:
 		var mejor := {}
 		for c in range(s.c0 + 1, s.c0 + s.ancho - 1):
 			var muro := true
-			for dc in [-1, 0, 1]:
+			for dc in ([-1, 0, 1] if holgura > 10.0 else [0]):
 				if dueno(apt, c + dc, s.f0 - 1) != -1 or dueno(apt, c + dc, s.f0) != s.id:
 					muro = false
 			if not muro:
@@ -525,7 +591,7 @@ static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator) -> D
 			var tapado := false
 			for m in sitio.muebles:
 				var h := Muebles.hueco(m)
-				if m.zona == s.id and h.position.y < s.f0 * CASILLA + 8 and absf(m.x - x) < h.size.x / 2.0 + 18.0:
+				if m.zona == s.id and h.position.y < s.f0 * CASILLA + 8 and absf(m.x - x) < h.size.x / 2.0 + holgura:
 					tapado = true
 			if tapado:
 				continue
@@ -535,3 +601,108 @@ static func cuadro_electrico(sitio: Dictionary, rng: RandomNumberGenerator) -> D
 		if not mejor.is_empty():
 			return mejor
 	return {}
+
+
+# ── Torre Velaria ──
+
+# El ventanal roto: en la pared de un lado de la sala grande (la que da al pasillo, que va de lado a lado), en medio
+# de su alto. El lado, según el dado del sitio (si los dos dan a la calle)
+static func viento(sitio: Dictionary) -> Dictionary:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var alto: int = mini(VIENTO.casillas, sala.fondo - 2)
+	# (en medio de lo que se ve del suelo: la cara del muro de abajo tapa sus tres últimas filas)
+	var f0: int = sala.f0 + maxi(1, (sala.fondo - 3 - alto) / 2)
+	var lados := []
+	for lado in ["izquierda", "derecha"]:
+		var hacia := -1 if lado == "izquierda" else 1
+		var c: int = sala.c0 - 1 if lado == "izquierda" else sala.c0 + sala.ancho
+		var vale := true
+		for f in range(f0, f0 + alto):
+			# el hueco: muro de fuera (sin nada detrás) y, delante, suelo de la sala
+			if dueno(apt, c, f) != -1 or dueno(apt, c + hacia, f) != -1 or dueno(apt, c - hacia, f) != sala.id:
+				vale = false
+		if vale:
+			lados.append(lado)
+	if lados.is_empty():
+		return {}
+	var lado: String = lados[int(sitio.surtido) % lados.size()]
+	var x: float = sala.c0 * CASILLA if lado == "izquierda" else (sala.c0 + sala.ancho) * CASILLA
+	return {"tipo": "viento", "sala": sala.id, "lado": lado, "x": x, "y0": float(f0 * CASILLA),
+		"y1": float((f0 + alto) * CASILLA), "avisado": false}
+
+
+# Las cámaras: cerca de las dos esquinas de arriba de la sala grande, colgadas en la pared y mirando hacia el centro; en
+# Seguridad, una más en medio de la pared de arriba, mirando hacia abajo. Nunca encima de una puerta (ni de la de entrada)
+# ni tapadas por un mueble alto pegado a la pared (los racks, los armarios): se corren hacia dentro hasta un hueco libre
+static func camaras(sitio: Dictionary) -> Dictionary:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var y := float(sala.f0 * CASILLA)
+	var medio := Vector2((sala.c0 + sala.ancho / 2.0) * CASILLA, (sala.f0 + sala.fondo / 2.0) * CASILLA)
+	var cerca := junto_a_puertas(apt, sala.id, 1)
+	var libre := func(c: int) -> bool:
+		if cerca.has(Vector2i(c, sala.f0)) or dueno(apt, c, sala.f0 - 1) != -1:
+			return false
+		if apt.entrada.lado == "arriba" and c >= apt.entrada.c - CAMARAS.lejos_puerta and c <= apt.entrada.c + 1 + CAMARAS.lejos_puerta:
+			return false
+		var x := (c + 0.5) * CASILLA
+		for m in sitio.muebles:
+			var h := Muebles.hueco(m)
+			if m.zona == sala.id and h.position.y < y + 8 and absf(m.x - x) < h.size.x / 2.0 + 14.0:
+				return false
+		return true
+	var lista := []
+	for desde in [[sala.c0, 1], [sala.c0 + sala.ancho - 1, -1]]:
+		for k in 8:
+			var c: int = desde[0] + desde[1] * k
+			if libre.call(c):
+				var p := Vector2((c + 0.5) * CASILLA, y)
+				lista.append({"x": p.x, "y": y, "mira": (medio - p).angle(), "rota": false, "llamo": false})
+				break
+	if CAMARAS.cuantas.get(sitio.tienda, 2) > 2:
+		var mitad: float = sala.c0 + sala.ancho / 2.0
+		var mejor := -1
+		for c in range(sala.c0 + 3, sala.c0 + sala.ancho - 3):
+			if libre.call(c) and (mejor == -1 or absf(c - mitad) < absf(mejor - mitad)):
+				mejor = c
+		if mejor != -1:
+			lista.append({"x": (mejor + 0.5) * CASILLA, "y": y, "mira": PI / 2, "rota": false, "llamo": false})
+	if lista.is_empty():
+		return {}
+	return {"tipo": "camaras", "sala": sala.id, "camaras": lista, "avisado": false}
+
+
+# Las rejillas del gas: en el suelo de la sala grande, sin un mueble encima, lejos de la puerta y separadas entre sí; y
+# la válvula, en la pared de arriba del archivo (como el cuadro eléctrico de la electrónica)
+static func gas(sitio: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
+	var apt: Dictionary = sitio.apt
+	var sala: Dictionary = apt.salas[0]
+	var entrada := Vector2i(apt.entrada.c, apt.filas - Tienda.BORDE - 1 if apt.entrada.lado == "abajo" else Tienda.BORDE)
+	var cerca := junto_a_puertas(apt, sala.id, 1)
+	var sitios := []
+	for f in range(sala.f0 + 1, sala.f0 + sala.fondo - 1):
+		for c in range(sala.c0 + 1, sala.c0 + sala.ancho - 1):
+			var k := Vector2i(c, f)
+			if dueno(apt, c, f) == sala.id and not cerca.has(k) and not bajo_mueble(sitio, k) \
+					and Vector2(k - entrada).length() > GAS.lejos_entrada:
+				sitios.append(k)
+	var rejillas := []
+	for intento in 200:
+		if rejillas.size() >= GAS.rejillas or sitios.is_empty():
+			break
+		var k: Vector2i = sitios[rng.randi() % sitios.size()]
+		if rejillas.any(func(r): return Vector2(casilla(Vector2(r.x, r.y)) - k).length() < GAS.separadas):
+			continue
+		var p := centro(k)
+		# cada una, en su momento del ciclo: no echan gas todas a la vez
+		rejillas.append({"x": p.x, "y": p.y, "fase": rejillas.size() * (GAS.parada + GAS.echa) / GAS.rejillas})
+	# (en el archivo o, si sus estanterías la taparían, en otra habitación de dentro; nunca en la sala grande, que la
+	# pared de arriba es la de la puerta de entrada y se giraría solo con entrar)
+	var valvula := {}
+	for uso in ["archivo", "entrevistas", "bano"]:
+		if valvula.is_empty():
+			valvula = cuadro_electrico(sitio, rng, [uso], false, 6.0)   # (es más estrecha que el cuadro)
+	if rejillas.is_empty() or valvula.is_empty():
+		return {}
+	return {"tipo": "gas", "sala": sala.id, "rejillas": rejillas, "valvula": valvula, "abierto": true, "avisado": false}

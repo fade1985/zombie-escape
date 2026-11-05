@@ -1639,7 +1639,7 @@ msgstr[0] "撑住：金库将在 %d 秒后打开"
 msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
 msgstr "读卡器。没有保安的金卡，就只能紧急开启：再靠近一次就会触发警报"
 
-#: scripts/joyeria.gd
+#: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
 msgstr "警报！"
 
@@ -2818,6 +2818,14 @@ msgstr "啪！店里的灯灭了"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "小心！水里带电"
 
+#: scripts/peligros/camaras.gd
+msgid "¡Una cámara! Si me ve, saltará la alarma"
+msgstr "有摄像头！要是被它看到，警报就会响"
+
+#: scripts/peligros/camaras.gd
+msgid "¡Me han visto! Ya vienen..."
+msgstr "被发现了！它们来了……"
+
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "房间着火了！离墙远点"
@@ -2830,6 +2838,18 @@ msgstr "嘶——！这冷库冻死人了"
 msgid "¡La cocina está ardiendo!"
 msgstr "厨房着火了！"
 
+#: scripts/peligros/gas.gd
+msgid "Gas cortado"
+msgstr "煤气已关闭"
+
+#: scripts/peligros/gas.gd
+msgid "Gas abierto otra vez"
+msgstr "煤气又打开了"
+
+#: scripts/peligros/gas.gd
+msgid "Huele raro... pero a mí no me hace nada"
+msgstr "味道怪怪的……不过对我没用"
+
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
 msgstr "臭死了！地上全是带酸的屎：别踩"
@@ -2841,6 +2861,14 @@ msgstr "小心地上的哑铃：踩到一个我就得摔个狗啃泥"
 #: scripts/peligros/tropiezos.gd
 msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
 msgstr "小心地上的水桶：绊到一个我就得摔个狗啃泥"
+
+#: scripts/peligros/viento.gd
+msgid "¡Qué corriente! Si me acerco al ventanal, me lleva"
+msgstr "好大的风！靠近窗户就会被卷出去"
+
+#: scripts/peligros/viento.gd
+msgid "¡Uf! Casi me caigo por la ventana"
+msgstr "呼！差点从窗户掉下去"
 
 #: scripts/portera.gd
 msgid "¡VECINOS!"
@@ -5253,6 +5281,14 @@ msgstr "带电的水"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "拉下配电箱的电闸，水就不会再电人了。"
+
+#: scripts/ui/menus.gd
+msgid "El viento"
+msgstr "大风"
+
+#: scripts/ui/menus.gd
+msgid "Cruza la sala pegado a las mesas: detrás de ellas, el viento no te arrastra al ventanal."
+msgstr "贴着办公桌穿过房间：躲在桌子后面，风就不会把你拖向窗户。"
 
 #: scripts/ui/menus.gd
 msgid "El cable pelado"

@@ -301,7 +301,21 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      (`ventanal.gd`) y el cartel del número de planta junto al ascensor (0, 10, 20, 30 y 40, `puerta.gd`).
    - Sin hacer (opcional): cambiar el ordenador del código (`terminal.gd`) por uno de PixelLab.
    - Prueba: `--captura --edificio torre --departamentos` (`--tipo X`) y `--torre`.
-3. **Los peligros** (Opus): viento, cámaras y gas.
+3. **Los peligros** (Opus): viento, cámaras y gas. ✅ **Hecho el 5 nov, a falta del visto bueno del dueño.** Lo que ha quedado
+   (los números, en `Peligros.VIENTO`, `CAMARAS` y `GAS`; todo dibujado con código y solo con los zombis despiertos):
+   - **Viento** (`viento.gd`; Marketing y Dirección): el ventanal roto, en la pared de un lado de la sala grande, con la ciudad
+     detrás, cortinas, rayas de aire y papeles volando. Empuja de 90 (pegado) a 30 (en la otra punta), a rachas (4 s a la mitad y
+     2 s fuerte), y a los zombis un 60 % más. Detrás de un mueble no sopla. En el borde, Johnny se agarra (20 de vida y sale
+     despedido hacia dentro) y los zombis salen volando: cuentan como muertos, sin cuerpo ni botín.
+   - **Cámaras** (`camaras.gd`; Informática 2 y Seguridad 3): cerca de las esquinas de arriba (y en Seguridad, una en medio),
+     nunca encima de una puerta ni tapadas por un mueble alto. Barren un cono de 9 casillas (ida y vuelta en 8 s); si te ven
+     medio segundo, alarma: sirena y luz roja 6 s, se despiertan los zombis del departamento y, la primera vez de cada cámara,
+     llegan 2 zombis normales por la puerta (los escoltas de Velaria, en la parte 4). Se rompen de un tiro.
+   - **Gas** (`gas.gd` y `valvula.gd`; Recursos Humanos): 3 rejillas en el suelo de la sala grande, cada una 5 s echando y 9 s
+     parada (no a la vez). A Johnny no le hace nada; a los zombis los duerme 3 s y los despierta frenéticos (un 50 % más
+     rápidos, 6 s). La válvula, en la pared del archivo (o de otra habitación de dentro), lo corta y lo vuelve a abrir.
+   - El viento tiene su cartel de derrota («El viento», `Menus.PELIGROS`) y sus tres sonidos nuevos (`viento`, `camara`, `siseo`).
+   - Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
 4. **Los zombis nuevos** (Sonnet): oficinista y escolta.
 5. **Minijefes**, uno por sesión (Opus): directora, informático, presentador y becario.
 6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.

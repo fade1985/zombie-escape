@@ -1643,7 +1643,7 @@ msgstr[2] "Держись: хранилище откроется через %d �
 msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
 msgstr "Считыватель карт. Без золотой карты охранника остается только аварийное открытие: подойди еще раз, чтобы включить тревогу"
 
-#: scripts/joyeria.gd
+#: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
 msgstr "ТРЕВОГА!"
 
@@ -2828,6 +2828,14 @@ msgstr "Щелк! В магазине вырубился свет"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Осторожно! Вода под током"
 
+#: scripts/peligros/camaras.gd
+msgid "¡Una cámara! Si me ve, saltará la alarma"
+msgstr "Камера! Если она меня увидит, сработает тревога"
+
+#: scripts/peligros/camaras.gd
+msgid "¡Me han visto! Ya vienen..."
+msgstr "Меня заметили! Идут..."
+
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "Комната в огне! Держись подальше от стен"
@@ -2840,6 +2848,18 @@ msgstr "Бррр! Ну и холодина в этой камере"
 msgid "¡La cocina está ardiendo!"
 msgstr "Кухня горит!"
 
+#: scripts/peligros/gas.gd
+msgid "Gas cortado"
+msgstr "Газ перекрыт"
+
+#: scripts/peligros/gas.gd
+msgid "Gas abierto otra vez"
+msgstr "Газ снова открыт"
+
+#: scripts/peligros/gas.gd
+msgid "Huele raro... pero a mí no me hace nada"
+msgstr "Странный запах... но мне он ничего не делает"
+
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
 msgstr "Ну и вонь! Пол в кислотном дерьме: не наступай"
@@ -2851,6 +2871,14 @@ msgstr "Осторожно, гантели на полу: наступлю — �
 #: scripts/peligros/tropiezos.gd
 msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
 msgstr "Осторожно, ведра на полу: споткнусь — и растянусь"
+
+#: scripts/peligros/viento.gd
+msgid "¡Qué corriente! Si me acerco al ventanal, me lleva"
+msgstr "Ну и сквозняк! Подойду к окну — меня вынесет"
+
+#: scripts/peligros/viento.gd
+msgid "¡Uf! Casi me caigo por la ventana"
+msgstr "Уф! Чуть не выпал в окно"
 
 #: scripts/portera.gd
 msgid "¡VECINOS!"
@@ -5289,6 +5317,14 @@ msgstr "Вода под током"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Опусти рубильник на электрощитке, и вода перестанет бить током."
+
+#: scripts/ui/menus.gd
+msgid "El viento"
+msgstr "Ветер"
+
+#: scripts/ui/menus.gd
+msgid "Cruza la sala pegado a las mesas: detrás de ellas, el viento no te arrastra al ventanal."
+msgstr "Пересекай зал вдоль столов: за ними ветер не тянет тебя к окну."
 
 #: scripts/ui/menus.gd
 msgid "El cable pelado"

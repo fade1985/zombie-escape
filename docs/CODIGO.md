@@ -209,6 +209,11 @@ en una línea.
   `fuego.gd`, `agua.gd` (con `arreglar()`) y `cuadro.gd`. De las habitaciones de los jefes de los Apartamentos:
   `porqueria.gd` (Glotón), `tropiezos.gd` (mancuernas del Gymbro, cubos de la portera: sus dos dibujos, `cubo-de-pie.png` y `cubo-volcado.png`, salen de `tools/cubos.py`; la mancuerna, `mancuerna.png`, de `tools/mancuernas.py`, y la dibuja `Pesa.dibujar`, de `pesa.gd`, que usan también las pesas que lanza el Gymbro; se prueba con `--gimnasio` y `--pesas`; al tropezar, Johnny se cae de espaldas, se queda tumbado y se levanta con sus dibujos de PixelLab, sin el arma: `johnny.caer`, hoja `conserje-48-caida`, que monta `tools/caida.py`, y la de cada skin, `tools/caida_skins.py`; se prueba con una skin con `--skin X`), `cerco.gd` (bombero) y
   `luz_jefe.gd` (la luz fija de esas habitaciones).
+  De los departamentos de Torre Velaria: `viento.gd` (el ventanal roto de Marketing y Dirección: arrastra a Johnny y tira a
+  los zombis por la ventana, que cuentan sin cuerpo ni botín: `partida.gd`, meta `"ventana"`), `camaras.gd` (Informática y
+  Seguridad: la alarma y los refuerzos; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`
+  (Recursos Humanos: duerme a los zombis y los despierta frenéticos, `zombi.gd` `gasear`; a Johnny no le hace nada).
+  Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
 - `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
   primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
 - `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la

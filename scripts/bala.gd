@@ -49,9 +49,17 @@ func _physics_process(delta: float) -> void:
 	if pared:
 		global_position = pared.position
 		normal_pared = pared.normal
+		# junto a una cámara de seguridad de Torre Velaria (peligros/camaras.gd), la rompe
+		for camaras in get_tree().get_nodes_in_group("camaras"):
+			camaras.romper_en(pared.position)
 		chocar(true)
 		return
 	global_position = despues
+	# ¿Ha dado a una cámara de seguridad de la torre? (pasando junto a ella, pegada a la pared)
+	for camaras in get_tree().get_nodes_in_group("camaras"):
+		if camaras.romper_en(global_position):
+			chocar(true)
+			return
 
 	# ¿Ha dado a algún zombi?
 	for zombi in get_tree().get_nodes_in_group("zombis"):

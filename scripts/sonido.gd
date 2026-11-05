@@ -140,6 +140,10 @@ const EFECTOS := {
 	"palanca": {"notas": [[220, 0.04, "cuadrada", 0.06, -120], [95, 0.1, "triangulo", 0.07, -30, 0.04]]},
 	"apagon": {"notas": [[180, 0.7, "sierra", 0.03, -150, 0.05]]},                      # se va la corriente
 	"encendido": {"notas": [[60, 0.45, "sierra", 0.03, 180, 0.05], [1400, 0.05, "cuadrada", 0.012, 0, 0.4]]},
+	# los peligros de Torre Velaria: el viento del ventanal roto, el pitido de la cámara que te ve y el siseo de la válvula
+	"viento": {"hueco": 700, "notas": [[500, 1.2, "ruido", 0.012, 300, 0.0], [300, 0.9, "ruido", 0.008, -150, 0.25]]},
+	"camara": {"hueco": 250, "notas": [[1900, 0.05, "cuadrada", 0.008, 0]]},
+	"siseo": {"hueco": 300, "notas": [[5000, 0.5, "ruido", 0.012, -2000]]},
 	# los eventos sorpresa (eventos.gd): la sirena de la alarma de incendios
 	"alarma": {"fijo": true, "hueco": 400, "notas": [[720, 0.4, "triangulo", 0.03, 380, 0.0], [1100, 0.4, "triangulo", 0.03, -380, 0.4],
 		[720, 0.4, "triangulo", 0.03, 380, 0.8], [1100, 0.4, "triangulo", 0.03, -380, 1.2]]},

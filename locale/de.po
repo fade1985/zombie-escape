@@ -1641,7 +1641,7 @@ msgstr[1] "Halte durch: Der Tresor geht in %d Sekunden auf"
 msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
 msgstr "Kartenleser. Ohne die goldene Karte des Wächters bleibt nur die Notöffnung: Geh noch mal ran, um den Alarm auszulösen"
 
-#: scripts/joyeria.gd
+#: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
 msgstr "ALARM!"
 
@@ -2823,6 +2823,14 @@ msgstr "Klack! Im Laden ist der Strom weg"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Achtung! Das Wasser steht unter Strom"
 
+#: scripts/peligros/camaras.gd
+msgid "¡Una cámara! Si me ve, saltará la alarma"
+msgstr "Eine Kamera! Wenn sie mich sieht, geht der Alarm los"
+
+#: scripts/peligros/camaras.gd
+msgid "¡Me han visto! Ya vienen..."
+msgstr "Sie haben mich gesehen! Jetzt kommen sie..."
+
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "Das Zimmer brennt! Weg von den Wänden"
@@ -2835,6 +2843,18 @@ msgstr "Brrr! Ist das kalt hier drin"
 msgid "¡La cocina está ardiendo!"
 msgstr "Die Küche brennt!"
 
+#: scripts/peligros/gas.gd
+msgid "Gas cortado"
+msgstr "Gas abgedreht"
+
+#: scripts/peligros/gas.gd
+msgid "Gas abierto otra vez"
+msgstr "Gas wieder an"
+
+#: scripts/peligros/gas.gd
+msgid "Huele raro... pero a mí no me hace nada"
+msgstr "Riecht komisch... aber mir macht das nichts"
+
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
 msgstr "Was für ein Gestank! Der Boden ist voller Säurescheiße: Tritt nicht rein"
@@ -2846,6 +2866,14 @@ msgstr "Vorsicht mit den Hanteln am Boden: Wenn ich auf eine trete, leg ich mich
 #: scripts/peligros/tropiezos.gd
 msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
 msgstr "Vorsicht mit den Eimern am Boden: Wenn ich über einen stolpere, leg ich mich lang"
+
+#: scripts/peligros/viento.gd
+msgid "¡Qué corriente! Si me acerco al ventanal, me lleva"
+msgstr "Was für ein Luftzug! Wenn ich ans Fenster komme, zieht er mich raus"
+
+#: scripts/peligros/viento.gd
+msgid "¡Uf! Casi me caigo por la ventana"
+msgstr "Puh! Fast wäre ich aus dem Fenster gefallen"
 
 #: scripts/portera.gd
 msgid "¡VECINOS!"
@@ -5271,6 +5299,14 @@ msgstr "Das Wasser unter Strom"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Leg den Hebel am Sicherungskasten um, dann steht das Wasser nicht mehr unter Strom."
+
+#: scripts/ui/menus.gd
+msgid "El viento"
+msgstr "Der Wind"
+
+#: scripts/ui/menus.gd
+msgid "Cruza la sala pegado a las mesas: detrás de ellas, el viento no te arrastra al ventanal."
+msgstr "Durchquere den Raum dicht an den Tischen: hinter ihnen zieht dich der Wind nicht zum Fenster."
 
 #: scripts/ui/menus.gd
 msgid "El cable pelado"

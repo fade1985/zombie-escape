@@ -1475,3 +1475,181 @@ func probar_departamentos() -> void:
 			johnny.position = Vector2(sitio.ancho / 2.0, sitio.alto / 2.0)
 			await foto_entera(sitio, "captura-torre-%s-%s.png" % [tipo, lado])
 	get_tree().quit()
+
+
+# ── Los peligros de Torre Velaria (parte 3) ──
+
+# Monta un departamento de ese tipo, con la puerta "lado" y sin zombis (busca una planta en la que salga). Devuelve el sitio
+# (vacío si no sale en ninguna) y deja todas sus salas vistas
+func ir_a_departamento(tipo: String, lado := "arriba") -> Dictionary:
+	for i in 300:
+		Planta.semilla = 3500 + i
+		var num := 1 + i % 4
+		var p: Dictionary = Planta.generar(num, edificio, jefe_de(num))
+		for idx in p.sitios.size():
+			var s: Dictionary = p.sitios[idx]
+			if s.get("tienda", "") == tipo and s.tipo != "jefe" and s.apt.entrada.lado == lado:
+				nueva_planta(num)
+				Planta.semilla = 0
+				var sitio: Dictionary = planta.sitios[idx]
+				sitio.limpio = true
+				await montar(idx, 0, false)
+				for sala in sitio.apt.salas:
+					mapa.vistas[sala.id] = true
+					mapa.niebla[sala.id] = 0.0
+				mapa.actualizar_niebla(0.0)
+				await get_tree().create_timer(0.3).timeout
+				return sitio
+	Planta.semilla = 0
+	print("Departamento %s (puerta %s): no sale en ninguna planta" % [tipo, lado])
+	return {}
+
+
+func peligro_de(tipo: String) -> Node:
+	for p in mapa.peligros:
+		if p.datos.tipo == tipo:
+			return p
+	return null
+
+
+# Con "--captura --edificio torre --viento": el ventanal roto de Marketing. Johnny en medio de la sala, quieto, y dos
+# zombis despiertos cerca del ventanal: dice cuánto arrastra el viento a Johnny (al aire y al abrigo de un mueble), si se
+# agarra al borde (y lo que le quita) y si los zombis salen volando (cuentan como muertos). Fotos: captura-torre-viento-1.png
+# (los zombis cerca del ventanal) y -2.png (ya fuera). Luego se cierra
+func probar_viento() -> void:
+	var sitio: Dictionary = await ir_a_departamento("marketing")
+	var v: Node = peligro_de("viento")
+	print("Viento: %s (esperado: el ventanal en un lado de la sala grande)" % (v.datos if v else "NO HAY"))
+	if v == null:
+		get_tree().quit(1)
+		return
+	var sala: Dictionary = sitio.apt.salas[0]
+	var medio_y: float = (v.datos.y0 + v.datos.y1) / 2.0
+	var hacia: float = v.hacia
+	# Johnny, a media sala: sin moverse, ¿cuánto le arrastra en 2 s?
+	johnny.position = Vector2((sala.c0 + sala.ancho / 2.0) * 32.0, medio_y)
+	johnny.invulnerable = 0.0
+	v.t = Peligros.VIENTO.calma - 0.5   # (a punto de empezar una racha)
+	var antes: float = johnny.position.x
+	var muertos_antes: int = muertos
+	var z1 := meter_zombi("normal", Vector2(v.datos.x - hacia * 90.0, medio_y - 20.0))
+	var z2 := meter_zombi("lento", Vector2(v.datos.x - hacia * 130.0, medio_y + 30.0))
+	await get_tree().create_timer(0.7).timeout
+	Captura.foto("captura-torre-viento-1.png")
+	await get_tree().create_timer(1.5).timeout
+	print("Viento: Johnny arrastrado %.0f unidades hacia el ventanal en 2 s (esperado: unas 60-120)" % ((johnny.position.x - antes) * hacia))
+	print("Viento: zombis tirados por la ventana %d de 2, muertos contados %d (esperado: 2 y 2)" % [
+		[z1, z2].filter(func(z): return z.has_meta("ventana")).size(), muertos - muertos_antes])
+	johnny.position = Vector2(v.datos.x - hacia * 300.0, medio_y)   # (la foto, con el ventanal en medio)
+	await get_tree().create_timer(0.1).timeout
+	Captura.foto("captura-torre-viento-2.png")
+	# al borde: se agarra
+	var vida: int = johnny.vida
+	johnny.invulnerable = 0.0
+	johnny.position = Vector2(v.datos.x - hacia * 20.0, medio_y)
+	await get_tree().create_timer(0.3).timeout
+	print("Viento: en el borde, vida %d -> %d (esperado: %d menos) y lo echa hacia dentro: a %.0f del muro (esperado: más de 30)" % [
+		vida, johnny.vida, Peligros.VIENTO.dano, absf(johnny.position.x - v.datos.x)])
+	# al abrigo: un mueble entre Johnny y el ventanal, pegado a él
+	var abrigo := Vector2.ZERO
+	for m in get_tree().get_nodes_in_group("muebles"):
+		var p: Vector2 = m.global_position - mapa.global_position + Vector2(-hacia * 40.0, 0)
+		if sala.c0 * 32.0 < p.x and p.x < (sala.c0 + sala.ancho) * 32.0 and sala.f0 * 32.0 < p.y and p.y < (sala.f0 + sala.fondo) * 32.0 \
+				and v.empuje(p, johnny) == Vector2.ZERO:
+			abrigo = p
+			break
+	print("Viento: al abrigo de un mueble en %s, empuje %s (esperado: (0, 0))" % [abrigo, v.empuje(abrigo, johnny) if abrigo != Vector2.ZERO else "SIN SITIO"])
+	get_tree().quit()
+
+
+# Con "--captura --edificio torre --camaras": las cámaras de Seguridad corporativa (3). Un zombi dormido en la sala y
+# Johnny delante de una cámara, en su cono: dice cuándo salta la alarma (esperado: en 0,6 s), si despierta al zombi y
+# cuántos refuerzos llegan por la puerta (2; la segunda alarma de la misma cámara, ninguno). Luego le pega un tiro a la
+# pared junto a una cámara y dice si se rompe. Fotos: captura-torre-camaras-1.png (vigilando, con la barrita llenándose),
+# -2.png (la alarma) y -3.png (una rota). Luego se cierra
+func probar_camaras() -> void:
+	var sitio: Dictionary = await ir_a_departamento("seguridad")
+	var c: Node = peligro_de("camaras")
+	print("Cámaras: %d (esperado: 3)" % (c.datos.camaras.size() if c else 0))
+	if c == null:
+		get_tree().quit(1)
+		return
+	var sala: Dictionary = sitio.apt.salas[0]
+	var dormido := meter_zombi("normal", Vector2((sala.c0 + sala.ancho / 2.0) * 32.0, (sala.f0 + sala.fondo - 2) * 32.0))
+	dormido.dormido = true
+	var zombis_antes: int = get_tree().get_nodes_in_group("zombis").size()
+	# Johnny, en el cono de la primera, donde mira ahora mismo
+	c.t = 0.0
+	johnny.position = c.ojo(0) + Vector2.from_angle(c.angulo(0)) * 150.0
+	var ve: bool = c.ve(0, johnny.global_position, johnny)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-torre-camaras-1.png")
+	await get_tree().create_timer(0.4).timeout
+	print("Cámaras: le ve %s; alarma %s, zombi despierto %s, refuerzos %d (esperado: true, true, true, 2)" % [ve,
+		c.alarma > 0.0, not dormido.dormido, get_tree().get_nodes_in_group("zombis").size() - zombis_antes])
+	Captura.foto("captura-torre-camaras-2.png")
+	# otra alarma de la misma cámara: ya no llama a nadie más
+	var ahora: int = get_tree().get_nodes_in_group("zombis").size()
+	c.alarma = 0.0
+	c.saltar(0)
+	await get_tree().create_timer(0.2).timeout
+	print("Cámaras: la segunda alarma de la misma, refuerzos %d (esperado: 0)" % (get_tree().get_nodes_in_group("zombis").size() - ahora))
+	# un tiro a la pared junto a la segunda
+	for z in get_tree().get_nodes_in_group("zombis"):
+		z.queue_free()
+	c.alarma = 0.0
+	var cam: Dictionary = c.datos.camaras[c.datos.camaras.size() - 1]
+	johnny.position = Vector2(cam.x, cam.y + 140.0)
+	var bala: Node2D = load("res://escenas/armas/bala.tscn").instantiate()
+	bala.position = Vector2(cam.x, cam.y + 60.0)
+	bala.velocidad = Vector2(0, -900)
+	mapa.add_child(bala)
+	await get_tree().create_timer(0.3).timeout
+	print("Cámaras: tiro a la pared junto a la última, rota %s (esperado: true); ve a Johnny %s (esperado: false)" % [cam.rota,
+		c.ve(c.datos.camaras.size() - 1, johnny.global_position, johnny)])
+	johnny.position = Vector2(cam.x + 120.0, cam.y + 120.0)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-torre-camaras-3.png")
+	get_tree().quit()
+
+
+# Con "--captura --edificio torre --gas": el gas de Recursos Humanos. Un zombi despierto encima de una rejilla que echa
+# gas: dice si se duerme (y a Johnny, encima de otra, no le pasa nada) y si al rato despierta frenético (más rápido).
+# Luego Johnny va a la válvula del archivo y dice si corta el gas. Fotos: captura-torre-gas-1.png (la nube con el zombi
+# dormido), -2.png (frenético) y -3.png (la válvula cerrada). Luego se cierra
+func probar_gas() -> void:
+	await ir_a_departamento("rrhh")
+	var g: Node = peligro_de("gas")
+	print("Gas: %d rejillas, válvula %s (esperado: 3 y en el archivo)" % [g.datos.rejillas.size() if g else 0,
+		g.datos.valvula if g else "NO HAY"])
+	if g == null:
+		get_tree().quit(1)
+		return
+	# las dos primeras, echando gas ya
+	var r0: Dictionary = g.datos.rejillas[0]
+	g.t = Peligros.GAS.parada - r0.fase + 0.2
+	for i in g.nubes.size():
+		g.nubes[i] = 1.0 if g.echando(i) else 0.0
+	var zombi := meter_zombi("normal", Vector2(r0.x, r0.y))
+	johnny.position = Vector2(r0.x + 160.0, r0.y)
+	var vida: int = johnny.vida
+	var velocidad: float = zombi.agente.max_speed
+	await get_tree().create_timer(0.6).timeout
+	print("Gas: echando %s, zombi dormido %s (esperado: true y true)" % [g.echando(0), zombi.gaseado > 0.0])
+	johnny.position = Vector2(r0.x + 40.0, r0.y + 10.0)
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-torre-gas-1.png")
+	print("Gas: Johnny dentro de la nube %s, vida %d -> %d (esperado: true y la misma)" % [g.dentro(johnny.global_position), vida, johnny.vida])
+	johnny.position = Vector2(r0.x + 260.0, r0.y)
+	await get_tree().create_timer(Peligros.GAS.duerme - 0.8).timeout
+	print("Gas: frenético %s, rapidez %.0f -> %.0f (esperado: true y x%.1f)" % [zombi.frenesi > 0.0, velocidad, zombi.agente.max_speed,
+		Peligros.GAS.rapido])
+	Captura.foto("captura-torre-gas-2.png")
+	zombi.queue_free()
+	# la válvula: Johnny se planta delante
+	var val: Dictionary = g.datos.valvula
+	johnny.position = Vector2(val.x, val.y + 30.0)
+	await get_tree().create_timer(0.4).timeout
+	print("Gas: con Johnny en la válvula, abierto %s; echa la primera %s (esperado: false y false)" % [g.datos.abierto, g.echando(0)])
+	Captura.foto("captura-torre-gas-3.png")
+	get_tree().quit()

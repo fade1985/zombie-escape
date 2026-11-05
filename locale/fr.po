@@ -1641,7 +1641,7 @@ msgstr[1] "Tiens bon : la salle forte s'ouvre dans %d secondes"
 msgid "Lector de tarjetas. Sin la tarjeta dorada del guardia solo queda la apertura de emergencia: vuelve a arrimarte para disparar la alarma"
 msgstr "Lecteur de carte. Sans la carte dorée du garde, il ne reste que l'ouverture d'urgence : approche-toi encore pour déclencher l'alarme"
 
-#: scripts/joyeria.gd
+#: scripts/joyeria.gd scripts/peligros/camaras.gd
 msgid "¡ALARMA!"
 msgstr "ALARME !"
 
@@ -2823,6 +2823,14 @@ msgstr "Clac ! La boutique est plongée dans le noir"
 msgid "¡Ojo! El agua tiene corriente"
 msgstr "Attention ! L'eau est électrifiée"
 
+#: scripts/peligros/camaras.gd
+msgid "¡Una cámara! Si me ve, saltará la alarma"
+msgstr "Une caméra ! Si elle me voit, l'alarme se déclenche"
+
+#: scripts/peligros/camaras.gd
+msgid "¡Me han visto! Ya vienen..."
+msgstr "Ils m'ont vu ! Ils arrivent..."
+
 #: scripts/peligros/cerco.gd
 msgid "¡La habitación está en llamas! Lejos de las paredes"
 msgstr "La pièce est en feu ! Éloigne-toi des murs"
@@ -2835,6 +2843,18 @@ msgstr "Brrr ! On gèle dans cette chambre froide"
 msgid "¡La cocina está ardiendo!"
 msgstr "La cuisine est en feu !"
 
+#: scripts/peligros/gas.gd
+msgid "Gas cortado"
+msgstr "Gaz coupé"
+
+#: scripts/peligros/gas.gd
+msgid "Gas abierto otra vez"
+msgstr "Gaz rouvert"
+
+#: scripts/peligros/gas.gd
+msgid "Huele raro... pero a mí no me hace nada"
+msgstr "Ça sent bizarre... mais sur moi, ça ne fait rien"
+
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
 msgstr "Quelle puanteur ! Le sol est couvert de merde acide : n'y marche pas"
@@ -2846,6 +2866,14 @@ msgstr "Attention aux haltères par terre : si je marche sur un, je me ramasse"
 #: scripts/peligros/tropiezos.gd
 msgid "Cuidado con los cubos del suelo: si tropiezo con uno, me la pego"
 msgstr "Attention aux seaux par terre : si je trébuche sur un, je me ramasse"
+
+#: scripts/peligros/viento.gd
+msgid "¡Qué corriente! Si me acerco al ventanal, me lleva"
+msgstr "Quel courant d'air ! Si je m'approche de la baie vitrée, il m'emporte"
+
+#: scripts/peligros/viento.gd
+msgid "¡Uf! Casi me caigo por la ventana"
+msgstr "Ouf ! J'ai failli tomber par la fenêtre"
 
 #: scripts/portera.gd
 msgid "¡VECINOS!"
@@ -5271,6 +5299,14 @@ msgstr "L'eau électrifiée"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Abaisse le levier du tableau électrique et l'eau ne donnera plus de décharges."
+
+#: scripts/ui/menus.gd
+msgid "El viento"
+msgstr "Le vent"
+
+#: scripts/ui/menus.gd
+msgid "Cruza la sala pegado a las mesas: detrás de ellas, el viento no te arrastra al ventanal."
+msgstr "Traverse la salle en longeant les bureaux : derrière eux, le vent ne t'entraîne pas vers la fenêtre."
 
 #: scripts/ui/menus.gd
 msgid "El cable pelado"
