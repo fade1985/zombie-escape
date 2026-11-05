@@ -365,7 +365,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe informatico --datos`.
-   - **El presentador** ⏳ **Hecho el 5 nov, a falta del visto bueno del dueño.** 32 generaciones (6 el modelo, 22 las animaciones, 4 los
+   - **El presentador** ✅ **Hecho el 5 nov, con el visto bueno del dueño.** 32 generaciones (6 el modelo, 22 las animaciones, 4 los
      muebles del plató). Lo que ha quedado (`presentador.gd`; números provisionales, en sus `const`):
      - Vida 430 (+35 % por planta), velocidad 85, 8 si te pegas a él. Su sala, el **Plató de presentaciones** (`jefe-presentador` en
        `Catalogo.SALAS`): en la pared de arriba, el escenario con la pantalla gigante, el atril, dos lámparas y dos focos de pie; en el
