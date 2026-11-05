@@ -240,6 +240,12 @@ en una línea.
   Seguridad: la alarma y los refuerzos, dos escoltas de Velaria; se rompen de un tiro desde `bala.gd`, `romper_en`), `gas.gd` y `valvula.gd`
   (Recursos Humanos: duerme a los zombis y los despierta frenéticos, `zombi.gd` `gasear`; a Johnny no le hace nada).
   Pruebas: `--captura --edificio torre --viento`, `--camaras` y `--gas`.
+  Y `laboratorio.gd`, la planta 40 de la torre (`planta.gd`, `laboratorio`, en lugar de la azotea; suelo y pared
+  `laboratorio`): la cabina blindada de la presidenta (dibujada con código, con `presidenta.png` dentro, de
+  `py tools/presidenta_hoja.py`), las 6 cápsulas (muebles `capsule`/`capsuleopen`), las mesas (`labbench`), los láseres, el gas
+  (a los zombis los pone frenéticos al momento) y la puerta del helipuerto, que se abre al caer el jefe (`partida.gd`,
+  `fin_del_edificio`: no baja el helicóptero). La partida le pasa el jefe (`mapa.laboratorio.jefe`); a media vida, o con
+  `romper_cabina()`, la cabina se rompe y queda en automático. Prueba: `--captura --edificio torre --laboratorio`.
 - `calentador.gd` (monta los shaders grandes al abrir el menú, en una pantallita escondida, para que no paren el juego la
   primera vez que se usan: `docs/WEB.md`; si se añade un shader grande, va en su lista).
 - `mutaciones.gd`, `llamas.gd` (colores y luz del fuego), `quemado.gd` (el cuerpo que muere ardiendo; cada hoja se lee de la
@@ -559,7 +565,9 @@ en una línea.
   Y el seguro de las pruebas: el menú pasa a la partida con `Captura.ir_a_la_partida()`, que antes de abrir la de prueba
   mira que compile (si no, `diagnosticar()` carga uno a uno los archivos de `scripts/pruebas/` para que cada uno cuente su
   error y su línea) y, si no, cierra con el código 2; y `vigilar()` (puesto por el menú con `--captura`, salvo en el trailer)
-  cierra con el código 1 al primer error de script a mitad de una prueba. En los dos casos dice
+  cierra con el código 1 al primer error de script a mitad de una prueba, y con su reloj, si la prueba se cuelga sin error
+  (150 s; la larga, 900; `--limite N` lo cambia), diciendo si el juego estaba en pausa (una página del dosier o el relato
+  paran los `create_timer(s, false)`: en la prueba, esperar ahí con `create_timer(s, true)`). En los dos casos dice
   `ERROR DE LA PRUEBA: …` en la terminal: nunca más una prueba en negro que no acaba.
 - La partida de prueba va en una cadena de archivos por tema, cada uno hereda del anterior: `prueba_comun.gd` (hereda
   de `partida.gd`) → `prueba_jefes_salas.gd` → `prueba_jefes.gd` → `prueba_armas.gd` → `prueba_skins.gd` →

@@ -1438,3 +1438,118 @@ func probar_mutado(camara: Camera2D) -> void:
 		if estados.is_empty() or estados[-1] != jefa.estado:
 			estados.append(jefa.estado)
 	print("  embestida: %s" % " → ".join(estados))
+
+
+# --laboratorio (con --edificio torre): la planta 40 de Torre Velaria, el laboratorio (parte 6), con el jefe que haya (el
+# Sujeto 1 cuando esté; si no, el de relleno). La sala entera con la cabina de la presidenta (captura-lab.png), un láser
+# con su aviso y su rayo (captura-lab-laser-aviso.png y captura-lab-laser.png: quema a Johnny una vez), dos cápsulas
+# abiertas con sus sujetos (captura-lab-capsulas.png), el gas (captura-lab-gas.png: a Johnny nada, al sujeto lo pone
+# frenético), la cabina rota con la presidenta huyendo (captura-lab-rota.png) y, al caer el jefe, la puerta del
+# helipuerto abierta (captura-lab-puerta.png). Lo que comprueba lo escribe en la terminal
+func probar_laboratorio() -> void:
+	await get_tree().create_timer(0.3).timeout
+	var espera := func(s: float) -> void:
+		await get_tree().create_timer(s, false).timeout
+	nueva_planta(Planta.PLANTAS)
+	await montar(0, puerta_de_llegada(), false)
+	for al in get_tree().get_nodes_in_group("aliados"):
+		al.process_mode = Node.PROCESS_MODE_DISABLED
+		al.visible = false
+	var s: Dictionary = planta.sitios[0]
+	var lab: Node2D = mapa.laboratorio
+	print("Laboratorio: sitio «%s», estilo %s, %d cápsulas, %d mesas, laboratorio.gd montado: %s (esperado: Laboratorio, laboratorio, 6, 6, true)" % [
+		s.nombre, s.estilo, s.laboratorio.capsulas.size(), s.muebles.filter(func(m): return m.tipo == "labbench").size(), lab != null])
+	johnny.vida = 999
+	johnny.position = Vector2(s.ancho / 2.0 + 160, 420)
+	johnny.set_physics_process(false)
+	await espera.call(1.2)
+	print("  jefe: %s, la presidenta lo sigue: %s" % [planta.jefe, lab.jefe == jefa])
+	jefa.process_mode = Node.PROCESS_MODE_DISABLED   # (quieto: que no se meta en las fotos)
+	lab.espera = 999.0
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != jefa:
+			z.queue_free()
+	var camara: Camera2D = johnny.get_node("Camara")
+	camara.zoom = Vector2(0.75, 0.75)
+	Temblor.desplazamiento = Vector2(s.ancho / 2.0, 330) - johnny.position
+	camara.reset_smoothing()
+	await espera.call(0.4)
+	Captura.foto("captura-lab.png")
+	# un láser horizontal justo por los pies de Johnny
+	lab.lasers.append({"horizontal": true, "pos": johnny.position.y + 12, "t": 0.0, "pillados": {}})
+	var vida: int = johnny.vida
+	await espera.call(0.5)
+	Captura.foto("captura-lab-laser-aviso.png")
+	var en_aviso: int = vida - johnny.vida
+	await espera.call(0.8)
+	Captura.foto("captura-lab-laser.png")
+	await espera.call(1.2)
+	print("Láser: en el aviso le quita %d (esperado: 0); con el rayo, %d (esperado: %d, una sola vez)" % [en_aviso,
+		vida - johnny.vida - en_aviso, lab.LASER.dano])
+	# las cápsulas
+	lab.abrir_capsulas()
+	await espera.call(0.6)
+	var sujetos := get_tree().get_nodes_in_group("zombis").filter(func(z): return z != jefa)
+	print("Cápsulas: abiertas %d, cerradas %d, sujetos fuera %d (esperado: 2, 4, 2)" % [6 - lab.cerradas.size(),
+		lab.cerradas.size(), sujetos.size()])
+	for z in sujetos:
+		z.process_mode = Node.PROCESS_MODE_DISABLED
+	Temblor.desplazamiento = Vector2(260, 260) - johnny.position
+	await espera.call(0.3)
+	Captura.foto("captura-lab-capsulas.png")
+	# el gas: un sujeto encima de una rejilla
+	var z0: Node2D = sujetos[0]
+	z0.process_mode = Node.PROCESS_MODE_INHERIT
+	z0.position = s.laboratorio.rejillas[0]
+	var vida_j: int = johnny.vida
+	johnny.position = s.laboratorio.rejillas[0] + Vector2(40, 10)
+	lab.echar_gas()
+	Temblor.desplazamiento = Vector2(s.laboratorio.rejillas[0]) - johnny.position
+	await espera.call(1.5)
+	Captura.foto("captura-lab-gas.png")
+	print("Gas: a Johnny le quita %d (esperado: 0); el sujeto frenético: %s (esperado: true)" % [vida_j - johnny.vida,
+		z0.frenesi > 0.0])
+	for z in get_tree().get_nodes_in_group("zombis"):
+		if z != jefa:
+			z.queue_free()
+	await espera.call(lab.GAS.dura)
+	# a media vida: la cabina se rompe y la presidenta huye
+	jefa.vida = jefa.vida_max / 2
+	jefa.process_mode = Node.PROCESS_MODE_INHERIT
+	johnny.position = Vector2(s.ancho / 2.0 + 160, 420)
+	Temblor.desplazamiento = Vector2(s.ancho / 2.0, 200) - johnny.position
+	camara.zoom = Vector2(1.25, 1.25)
+	await espera.call(0.15)
+	jefa.process_mode = Node.PROCESS_MODE_DISABLED
+	await espera.call(0.6)
+	Captura.foto("captura-lab-rota.png")
+	print("Cabina: rota %s (esperado: true), en automático: %s" % [lab.rota, lab.rota])
+	await espera.call(1.6)
+	# cae el jefe: la puerta del helipuerto se abre
+	jefa.process_mode = Node.PROCESS_MODE_INHERIT
+	for z in get_tree().get_nodes_in_group("zombis"):   # (los que haya llamado el jefe)
+		if z != jefa:
+			z.queue_free()
+	await espera.call(0.1)
+	jefa.vida = 0
+	jefa.vida_cambiada.emit(0, jefa.vida_max)
+	jefa.morir()
+	var t0 := 0.0
+	while not lab.salida_abierta and t0 < 8.0:
+		if get_tree().paused:   # (la página del dosier: se cierra)
+			get_tree().paused = false
+			menus.cerrar()
+		# (con un reloj que corre también en pausa: el de "espera" se pararía con la página abierta y la prueba se colgaría)
+		await get_tree().create_timer(0.2, true).timeout
+		t0 += 0.2
+	await espera.call(1.0)
+	camara.zoom = Vector2(1.25, 1.25)
+	johnny.position = Vector2(lab.datos.puerta + 90, 200)
+	Temblor.desplazamiento = Vector2(lab.datos.puerta, 120) - johnny.position
+	await espera.call(0.3)
+	Captura.foto("captura-lab-puerta.png")
+	print("Puerta del helipuerto: abierta %s (esperado: true) | jefe muerto %s, vida %s, zombis %d" % [lab.salida_abierta,
+		planta.jefa_muerta, jefa.vida if is_instance_valid(jefa) else -1, get_tree().get_nodes_in_group("zombis").size()])
+	johnny.position = Vector2(lab.datos.puerta, Planta.MURO + 24)
+	await get_tree().create_timer(0.4, true).timeout   # (el relato del final pone el juego en pausa)
+	print("  al llegar a ella: se acaba el edificio %s (esperado: true)" % lab.salido)

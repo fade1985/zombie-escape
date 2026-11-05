@@ -191,6 +191,8 @@
 #   --fotocopias        (con --edificio torre --jefe becario) el becario en su Sala de fotocopias: las copias (sin
 #                       sombra; el de verdad se refleja en la máquina), el carrito del correo, el café que resbala,
 #                       enfadado (más copias, que pegan) y su muerte (las copias se deshacen), con fotos [prueba_jefes.gd]
+#   --laboratorio       (con --edificio torre) la planta 40, el laboratorio (parte 6): la cabina de la presidenta, un
+#                       láser, las cápsulas, el gas, la cabina rota y la puerta del helipuerto, con fotos [prueba_jefes.gd]
 #   --escondites        (con --edificio centro) en qué tienda y sala se esconde el superviviente sin su tienda (M81)
 #                                                                                         [prueba_sitios.gd]
 #   --galeria           (con --edificio centro) la galería de las cuatro primeras plantas, entera, con sus muebles
@@ -358,6 +360,10 @@ func empezar_prueba() -> void:
 	elif "--fotocopias" in args:
 		set_process(false)   # sin la prueba larga
 		await probar_fotocopias()
+		get_tree().quit()
+	elif "--laboratorio" in args:
+		set_process(false)   # sin la prueba larga
+		await probar_laboratorio()
 		get_tree().quit()
 	elif "--cocina" in args:
 		set_process(false)   # sin la prueba larga

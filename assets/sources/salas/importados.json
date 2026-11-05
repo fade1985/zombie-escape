@@ -359,6 +359,14 @@
     "huella": "db4a0c3269b6f93c",
     "sprite": "mueble-theaterseats"
   },
+  "torre/capsula-abierta.png": {
+    "huella": "24d254bf44bc1da6",
+    "sprite": "mueble-capsuleopen"
+  },
+  "torre/capsula.png": {
+    "huella": "1f46ee8d66902f08",
+    "sprite": "mueble-capsule"
+  },
   "torre/cubiculo-lado.png": {
     "huella": "029f22aa4e2c392d",
     "sprite": "mueble-cubicle-lado"
@@ -418,6 +426,10 @@
   "torre/mesa-juntas.png": {
     "huella": "1b2f886bd480f669",
     "sprite": "mueble-boardtable"
+  },
+  "torre/mesa-laboratorio.png": {
+    "huella": "62c6e83536c37ab8",
+    "sprite": "mueble-labbench"
   },
   "torre/mesa-mezclas.png": {
     "huella": "7a5ed4910112ee7c",

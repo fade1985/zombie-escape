@@ -526,6 +526,8 @@ static func codigo(planta: Dictionary, normales: Array) -> Dictionary:
 # helipuerto (helicoptero.gd); al llegar Johnny a ella se acaba el edificio (partida.gd, subir_al_helicoptero). Es un
 # sitio "jefe": el jefe aparece al llegar, encima del helipuerto, y espera ahí a Johnny.
 static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
+	if edificio == "torre":
+		return laboratorio(num, edificio, su_jefe)
 	var ed: Dictionary = Edificios.datos(edificio)
 	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
 	var planta := {"num": num, "nombre": "Azotea", "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},   # [traducir]
@@ -548,6 +550,52 @@ static func azotea(num: int, edificio: String, su_jefe: String) -> Dictionary:
 	for i in rng.randi_range(5, 8):
 		var pos := Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60), rng.randf_range(MURO + 60, alto - MURO - 60))
 		if not huella.any(func(h): return h.grow(40.0).has_point(pos)) and lejos_de_muebles(sitio, pos, 20.0):
+			sitio.manchas.append({"pos": pos, "dibujo": rng.randi() % 10, "giro": rng.randi() % 4, "espejo": rng.randf() < 0.5})
+	planta.sitios.append(sitio)
+	return planta
+
+
+# El laboratorio de la planta 40 de Torre Velaria (parte 6 del plan: el Sujeto 1), en lugar de la azotea. Como ella, un
+# solo sitio grande, con el jefe final, al que se llega por la derecha por la escalera, que se cierra detrás; pero
+# cerrado, con sus paredes blancas (mapa.gd, "laboratorio"), y sin helipuerto: el helipuerto está arriba y se sube por
+# la puerta de la pared de arriba, que se abre al caer el jefe (laboratorio.gd). En la pared de arriba, en medio, la
+# cabina blindada de la presidenta (la dibuja laboratorio.gd) y, a cada lado, tres cápsulas de cristal con un sujeto
+# dentro; por la sala, mesas de laboratorio sueltas para cubrirse; en el suelo, las rejillas del gas. Sigue siendo
+# "azotea" para la partida (el último combate del edificio y su final)
+const LAB_CAPSULAS := [150, 230, 310, 1098, 1178, 1258]   # x del centro de cada cápsula, contra la pared de arriba
+const LAB_PUERTA := 430.0       # x del centro de la puerta del helipuerto, en la pared de arriba
+const LAB_CABINA := Rect2(524, -150, 360, 144)  # la cabina: x de su izquierda, y de arriba desde el pie de la pared, ancho y alto
+const LAB_MESAS := [[300, 380], [1108, 380], [470, 620], [938, 620], [250, 770], [1158, 770]]   # [x, y de arriba]
+const LAB_REJILLAS := [Vector2(420, 500), Vector2(988, 500), Vector2(704, 330), Vector2(704, 820)]
+
+
+static func laboratorio(num: int, edificio: String, su_jefe: String) -> Dictionary:
+	var ed: Dictionary = Edificios.datos(edificio)
+	var jefe: String = su_jefe if su_jefe != "" else ed.jefe
+	var planta := {"num": num, "nombre": nombre_torre_es(num), "azotea": true, "sitios": [], "llave": {"sitio": -1, "pos": Vector2.ZERO},
+		"tiene_llave": false, "jefa_muerta": false, "mantenimiento": -1, "viviendas": -1, "expo": -1, "armas": -1, "edificio": edificio, "jefe": jefe,
+		"el_jefe": ed.el_final if jefe == ed.get("final", "") else ed.el_jefe, "superviviente": {}, "cientifico": {}}
+	var ancho := AZOTEA_COLS * CASILLA
+	var alto := AZOTEA_FILAS * CASILLA
+	var sitio := {"tipo": "jefe", "azotea": true, "nombre": "Laboratorio", "ancho": ancho, "alto": alto, "estilo": "laboratorio",   # [traducir]
+		"dueno": Muebles.plano_rectangular(AZOTEA_COLS, AZOTEA_FILAS), "zombis": [], "limpio": false, "visitado": true,
+		"surtido": rng.randi(), "manchas": []}
+	sitio.salidas = [
+		{"dir": "derecha", "en": alto / 2, "tipo": "llegada", "a": -1, "vuelta": -1, "cerrojo": "nunca",
+			"aviso": "Ya no hay vuelta atrás"},   # [traducir]
+	]
+	var muebles := []
+	var capsulas := []
+	for x in LAB_CAPSULAS:
+		capsulas.append(muebles.size())
+		muebles.append(Muebles.nuevo("capsule", {"lado": "arriba", "base": float(MURO)}, float(x), 0))
+	for m in LAB_MESAS:
+		muebles.append(Muebles.nuevo("labbench", {"lado": "arriba", "base": float(m[1])}, float(m[0]), 0))
+	sitio.muebles = muebles
+	sitio.laboratorio = {"capsulas": capsulas, "puerta": LAB_PUERTA, "cabina": LAB_CABINA, "rejillas": LAB_REJILLAS}
+	for i in rng.randi_range(4, 6):
+		var pos := Vector2(rng.randf_range(MURO + 60, ancho - MURO - 60), rng.randf_range(MURO + 160, alto - MURO - 60))
+		if lejos_de_muebles(sitio, pos, 20.0):
 			sitio.manchas.append({"pos": pos, "dibujo": rng.randi() % 10, "giro": rng.randi() % 4, "espejo": rng.randf() < 0.5})
 	planta.sitios.append(sitio)
 	return planta

@@ -2324,6 +2324,10 @@ msgid "Ya no hay vuelta atrás"
 msgstr "已经没有回头路了"
 
 #: scripts/mapa/planta.gd
+msgid "Laboratorio"
+msgstr "实验室"
+
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "维修间"
 
@@ -2708,6 +2712,10 @@ msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta ba
 msgstr "Johnny：“电梯被我修好了！现在可以下到底层的维修间了”"
 
 #: scripts/partida.gd
+msgid "%s · ¡El último combate del edificio!"
+msgstr "%s · 这栋楼的最终决战！"
+
+#: scripts/partida.gd
 msgid "Azotea · ¡El último combate del edificio!"
 msgstr "天台 · 这栋楼的最终决战！"
 
@@ -2742,6 +2750,10 @@ msgstr "%s的房间"
 #: scripts/partida.gd
 msgid "Ya tienes el código: abre %s"
 msgstr "密码到手：能打开%s"
+
+#: scripts/partida.gd
+msgid "¡La puerta del helipuerto se ha abierto! Sube por ella"
+msgstr "通往停机坪的门开了！从那里上去"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -2954,9 +2966,13 @@ msgstr "煤气已关闭"
 msgid "Gas abierto otra vez"
 msgstr "煤气又打开了"
 
-#: scripts/peligros/gas.gd
+#: scripts/peligros/gas.gd scripts/peligros/laboratorio.gd
 msgid "Huele raro... pero a mí no me hace nada"
 msgstr "味道怪怪的……不过对我没用"
+
+#: scripts/peligros/laboratorio.gd
+msgid "¡La presidenta huye hacia el helipuerto! El laboratorio se queda en automático"
+msgstr "总裁逃向停机坪了！实验室进入自动模式"
 
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
@@ -5409,6 +5425,14 @@ msgstr "带电的水"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "拉下配电箱的电闸，水就不会再电人了。"
+
+#: scripts/ui/menus.gd
+msgid "El láser"
+msgstr "激光"
+
+#: scripts/ui/menus.gd
+msgid "Cuando parpadee la línea roja, apártate o esquiva a través: el rayo sale enseguida."
+msgstr "红线闪烁时，赶紧躲开或闪避穿过：光束马上就会射出。"
 
 #: scripts/ui/menus.gd
 msgid "El viento"

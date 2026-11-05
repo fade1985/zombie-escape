@@ -43,11 +43,27 @@ class Vigilante extends Logger:
 			Captura.fallar.call_deferred("un error de script en %s:%d (%s)" % [archivo, linea, razon if razon != "" else codigo], 1)
 
 
-# Se pone al abrir el menú con --captura: vigila los errores de script hasta que acaba la prueba
+# Se pone al abrir el menú con --captura: vigila los errores de script hasta que acaba la prueba. Y el reloj (5 nov):
+# una prueba que se queda colgada sin error (esperando algo que nunca llega, o con el juego en pausa por una página del
+# dosier o un menú, que también para los create_timer(s, false)) se cierra sola a los LIMITE segundos diciendo si el juego
+# estaba en pausa, en vez de esperar al timeout de fuera. La prueba larga (sin opciones), LIMITE_LARGA; se cambia con
+# --limite <segundos>
+const LIMITE := 150.0
+const LIMITE_LARGA := 900.0
+const SIN_OPCION := ["--captura", "--edificio", "--jefe", "--limite"]   # las que no dicen qué parte se prueba
+
+
 static func vigilar() -> void:
-	if vigilante == null and not "--trailer" in OS.get_cmdline_user_args():
+	var args := OS.get_cmdline_user_args()
+	if vigilante == null and not "--trailer" in args:
 		vigilante = Vigilante.new()
 		OS.add_logger(vigilante)
+		var corta: bool = Array(args).any(func(a): return a.begins_with("--") and not a in SIN_OPCION)
+		var limite := float(dato("--limite", str(LIMITE if corta else LIMITE_LARGA)))
+		var arbol := Engine.get_main_loop() as SceneTree
+		arbol.create_timer(limite, true, false, true).timeout.connect(func() -> void:
+			fallar("la prueba lleva %d s sin acabar: se ha quedado colgada%s (súbele el límite con --limite si de verdad tarda tanto)" % [
+				limite, " con el juego en PAUSA (¿una página del dosier o un menú abierto?)" if arbol.paused else ""], 1))
 
 
 # Dice por qué falla la prueba y cierra el juego (solo la primera vez)

@@ -252,5 +252,8 @@
   "mueble-lectern",
   "mueble-theaterseats",
   "mueble-spotlight",
-  "mueble-stagescreen"
+  "mueble-stagescreen",
+  "mueble-capsuleopen",
+  "mueble-capsule",
+  "mueble-labbench"
 ]

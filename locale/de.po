@@ -2326,6 +2326,10 @@ msgid "Ya no hay vuelta atrás"
 msgstr "Jetzt gibt es kein Zurück mehr"
 
 #: scripts/mapa/planta.gd
+msgid "Laboratorio"
+msgstr "Labor"
+
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Wartung"
 
@@ -2710,6 +2714,10 @@ msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta ba
 msgstr "Johnny: \"Ich hab den Aufzug repariert! Jetzt kann ich runter ins Erdgeschoss, in den Wartungsraum\""
 
 #: scripts/partida.gd
+msgid "%s · ¡El último combate del edificio!"
+msgstr "%s · Der letzte Kampf im Haus!"
+
+#: scripts/partida.gd
 msgid "Azotea · ¡El último combate del edificio!"
 msgstr "Dach · Der letzte Kampf im Haus!"
 
@@ -2744,6 +2752,10 @@ msgstr "der Raum von %s"
 #: scripts/partida.gd
 msgid "Ya tienes el código: abre %s"
 msgstr "Du hast den Code: er öffnet %s"
+
+#: scripts/partida.gd
+msgid "¡La puerta del helipuerto se ha abierto! Sube por ella"
+msgstr "Die Tür zum Hubschrauberlandeplatz ist offen! Geh hinauf"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -2959,9 +2971,13 @@ msgstr "Gas abgedreht"
 msgid "Gas abierto otra vez"
 msgstr "Gas wieder an"
 
-#: scripts/peligros/gas.gd
+#: scripts/peligros/gas.gd scripts/peligros/laboratorio.gd
 msgid "Huele raro... pero a mí no me hace nada"
 msgstr "Riecht komisch... aber mir macht das nichts"
+
+#: scripts/peligros/laboratorio.gd
+msgid "¡La presidenta huye hacia el helipuerto! El laboratorio se queda en automático"
+msgstr "Die Präsidentin flieht zum Landeplatz! Das Labor läuft jetzt automatisch"
 
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
@@ -5427,6 +5443,14 @@ msgstr "Das Wasser unter Strom"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Leg den Hebel am Sicherungskasten um, dann steht das Wasser nicht mehr unter Strom."
+
+#: scripts/ui/menus.gd
+msgid "El láser"
+msgstr "Der Laser"
+
+#: scripts/ui/menus.gd
+msgid "Cuando parpadee la línea roja, apártate o esquiva a través: el rayo sale enseguida."
+msgstr "Wenn die rote Linie flackert, geh zur Seite oder weich hindurch aus: der Strahl kommt sofort."
 
 #: scripts/ui/menus.gd
 msgid "El viento"

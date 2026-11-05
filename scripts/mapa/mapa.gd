@@ -89,7 +89,8 @@ const PASILLOS := {"pasillo": {"tapa": "pasillo", "alfombra": true}, "galeria": 
 	# los de Torre Velaria: el distribuidor de oficina (moqueta gris y cristal esmerilado) y el vestíbulo (mármol y piedra)
 	"torre": {"tapa": "torre", "alfombra": false}, "vestibulo": {"tapa": "torre", "alfombra": false}}
 const NEON := preload("res://scripts/mapa/neon.gd")
-const VENTANAL := preload("res://scripts/mapa/ventanal.gd")   # el ventanal con la ciudad de noche del pasillo de la torre
+const VENTANAL := preload("res://scripts/mapa/ventanal.gd")
+const LABORATORIO := preload("res://scripts/peligros/laboratorio.gd")   # la planta 40 de la torre (el Sujeto 1)   # el ventanal con la ciudad de noche del pasillo de la torre
 # Los peligros de las tiendas del centro comercial, y la porquería del Glotón (peligros.gd): cada uno con su nodo
 const PELIGROS := {"frio": preload("res://scripts/peligros/frio.gd"), "fuego": preload("res://scripts/peligros/fuego.gd"),
 	"agua": preload("res://scripts/peligros/agua.gd"),
@@ -160,6 +161,7 @@ var alzados := {}                 # con cajas, las casillas de la pantalla con t
 var restos: Array = []            # los del suelo: {dibujo (textura), pos, giro, espejo}
 var dado_restos := RandomNumberGenerator.new()   # con la semilla del sitio: al volver, todo sigue en su sitio
 var peligros: Array = []          # los nodos de los peligros del sitio (frío, fuego, agua con corriente)
+var laboratorio: Node2D = null   # el de la planta 40 de la torre (laboratorio.gd)
 var valla: Node2D = null          # la valla de la rampa del helipuerto (solo en la azotea; valla.gd)
 # Lo que la partida apunta al salir de un mapa guardado (partida.gd, dejar_mapa)
 var quedan := 0                   # los zombis vivos que se quedan dentro (para el minimapa)
@@ -188,6 +190,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 			estilos[0] = {"suelo": load("res://assets/sprites/suelo-hormigon.png"),
 				"pared": load("res://assets/sprites/pared-azotea.png"), "techo": load("res://assets/sprites/techo-azotea.png")}
 			tapa = load("res://assets/sprites/tapa-azotea.png")
+		elif sitio.get("estilo", "") == "laboratorio":
+			# el laboratorio de la planta 40 de Torre Velaria: baldosas blancas y paneles de laboratorio
+			estilos[0] = {"suelo": load("res://assets/sprites/suelo-laboratorio.png"),
+				"pared": load("res://assets/sprites/pared-laboratorio.png"), "techo": load("res://assets/sprites/techo-laboratorio.png")}
+			tapa = load("res://assets/sprites/tapa-torre.png")
 		else:   # la exposición del modo pruebas: como el taller de la sala de mantenimiento
 			estilos[0] = textura("mantenimiento", "")
 			tapa = load("res://assets/sprites/tapa-generica.png")
@@ -249,7 +256,7 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 				estilos[s.id] = textura(estilo, fijo[0] if not fijo.is_empty() and fijo[0] != "" else suelo_h,
 					fijo[1] if not fijo.is_empty() and fijo[1] != "" else pared_h)
 
-	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea", "torre", "vestibulo"]
+	centro = sitio.get("tienda", "") != "" or sitio.get("estilo", "") in ["galeria", "azotea", "torre", "vestibulo", "laboratorio"]
 	if centro:
 		dado_restos.seed = int(sitio.get("surtido", 0)) + 7
 		preparar_restos()
@@ -284,6 +291,11 @@ func montar(datos: Dictionary, llave := Vector2.INF, tarjeta := false) -> void:
 	poner_apliques()
 	poner_escaparates()
 	poner_peligros()
+	if sitio.has("laboratorio"):
+		# el laboratorio de la planta 40 (la cabina de la presidenta, las cápsulas, los láseres y el gas)
+		laboratorio = LABORATORIO.new()
+		laboratorio.montar(sitio.laboratorio, self)
+		add_child(laboratorio)
 	for a in sitio.get("armaritos", []):
 		var armarito := ARMARITO.new()
 		armarito.montar(a)
@@ -385,7 +397,7 @@ func zona_en(pos: Vector2) -> int:
 # donde hay sofás, camas o ropa que se comen el eco; "eco" en pasillos y salas grandes; "duro" en los cuartos
 # pequeños de azulejo o metal (baño, cocina, cámara, almacén, la sala de mantenimiento...)
 func acustica_en(pos: Vector2) -> String:
-	if sitio.get("azotea", false):
+	if sitio.get("estilo", "") == "azotea":
 		return "seca"
 	var zona := zona_en(pos)
 	if not sitio.has("apt") or zona < 0:

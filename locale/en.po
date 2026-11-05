@@ -2326,6 +2326,10 @@ msgid "Ya no hay vuelta atrás"
 msgstr "There's no going back"
 
 #: scripts/mapa/planta.gd
+msgid "Laboratorio"
+msgstr "Laboratory"
+
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Maintenance"
 
@@ -2710,6 +2714,10 @@ msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta ba
 msgstr "Johnny: \"I got the elevator working! Now I can go down to the ground floor, to the maintenance room\""
 
 #: scripts/partida.gd
+msgid "%s · ¡El último combate del edificio!"
+msgstr "%s · The building's final fight!"
+
+#: scripts/partida.gd
 msgid "Azotea · ¡El último combate del edificio!"
 msgstr "Rooftop · The building's final fight!"
 
@@ -2744,6 +2752,10 @@ msgstr "the room of %s"
 #: scripts/partida.gd
 msgid "Ya tienes el código: abre %s"
 msgstr "You have the code: it opens %s"
+
+#: scripts/partida.gd
+msgid "¡La puerta del helipuerto se ha abierto! Sube por ella"
+msgstr "The helipad door is open! Go up through it"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -2959,9 +2971,13 @@ msgstr "Gas shut off"
 msgid "Gas abierto otra vez"
 msgstr "Gas back on"
 
-#: scripts/peligros/gas.gd
+#: scripts/peligros/gas.gd scripts/peligros/laboratorio.gd
 msgid "Huele raro... pero a mí no me hace nada"
 msgstr "Smells funny... but it does nothing to me"
+
+#: scripts/peligros/laboratorio.gd
+msgid "¡La presidenta huye hacia el helipuerto! El laboratorio se queda en automático"
+msgstr "The president is fleeing to the helipad! The lab is on autopilot now"
 
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
@@ -5427,6 +5443,14 @@ msgstr "Electrified water"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Pull the lever on the electrical panel and the water will stop shocking you."
+
+#: scripts/ui/menus.gd
+msgid "El láser"
+msgstr "The laser"
+
+#: scripts/ui/menus.gd
+msgid "Cuando parpadee la línea roja, apártate o esquiva a través: el rayo sale enseguida."
+msgstr "When the red line flickers, step aside or dodge through it: the beam fires right after."
 
 #: scripts/ui/menus.gd
 msgid "El viento"

@@ -152,6 +152,11 @@ const MUEBLES := {
 	"lectern":         {"len": 40,  "dep": 28, "paredes": "",      "archivo": "torre/atril"},
 	"spotlight":       {"len": 40,  "dep": 36, "paredes": "",      "archivo": "torre/foco"},
 	"stagescreen":     {"len": 160, "dep": 24, "paredes": "",      "archivo": "torre/pantalla-plato"},
+	# el laboratorio de la planta 40 (el Sujeto 1, parte 6): las cápsulas de cristal con un sujeto dentro (la presidenta
+	# las abre: laboratorio.gd cambia el dibujo por el de la abierta) y las mesas de laboratorio sueltas
+	"capsule":         {"len": 48,  "dep": 40, "paredes": "",      "archivo": "torre/capsula"},
+	"capsuleopen":     {"len": 48,  "dep": 40, "paredes": "",      "archivo": "torre/capsula-abierta"},
+	"labbench":        {"len": 96,  "dep": 48, "paredes": "",      "archivo": "torre/mesa-laboratorio"},
 }
 
 # Cada sala, por su uso (el de apartamento.gd, más el pasillo; la sala de mantenimiento no tiene muebles sueltos):

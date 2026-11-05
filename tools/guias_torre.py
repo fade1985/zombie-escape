@@ -38,6 +38,11 @@ T = {
     'atril':           (40,  28, 40, 0,  (60, 45, 35),    'liso',     False),
     'foco':            (40,  36, 56, 0,  (45, 45, 50),    'foco',     False),
     'pantalla-plato':  (160, 24, 64, 0,  (35, 38, 45),    'pantalla', False),
+    # el laboratorio de la planta 40 (parte 6, el Sujeto 1): la cápsula de cristal con un sujeto dentro, la misma
+    # abierta y vacía (cuando la presidenta la abre) y la mesa de laboratorio
+    'capsula':         (48,  40, 72, 0,  (185, 195, 200), 'capsula',  False),
+    'capsula-abierta': (48,  40, 72, 0,  (185, 195, 200), 'capsula-abierta', False),
+    'mesa-laboratorio': (96, 48, 22, 0,  (215, 220, 222), 'mesa',     True),
 }
 
 _encima = g.encima
@@ -122,6 +127,14 @@ def encima(t, nombre, color, rnd):
     elif nombre == 'foco':
         t.caja(0.15, 0.1, 0.85, 0.9, (30, 30, 35))         # el foco, de lado, sobre su trípode
         t.caja(0.25, 0.65, 0.75, 0.95, (240, 235, 190), False)   # su cristal, mirando al público
+    elif nombre in ('capsula', 'capsula-abierta'):
+        t.caja(0.05, 0.05, 0.95, 0.95, (150, 160, 165))    # la tapa de acero de arriba
+        t.caja(0.3, 0.3, 0.7, 0.7, (60, 200, 140), False)  # su luz verde
+    elif nombre == 'mesa-laboratorio':
+        t.caja(0.06, 0.2, 0.2, 0.7, (120, 210, 150))       # probetas y matraces
+        t.caja(0.25, 0.25, 0.35, 0.6, (170, 120, 210))
+        t.caja(0.45, 0.2, 0.75, 0.75, (60, 65, 70))        # un microscopio
+        t.caja(0.8, 0.3, 0.95, 0.8, (225, 225, 215))       # papeles
     elif nombre == 'pantalla-plato':
         t.caja(0, 0, 1, 0.5, g.tono(color, 0.6))
     else:
@@ -155,6 +168,18 @@ def frente(dr, x, y, w, h, color, estilo, rnd):
         # la pantalla gigante, apagada, con su marco
         dr.rectangle((x, y, x + w - 1, y + h - 1), fill=g.tono(color, 0.7), outline=g.RAYA)
         dr.rectangle((x + 3 * g.S, y + 3 * g.S, x + w - 3 * g.S, y + h - 3 * g.S), fill=(70, 95, 130, 255), outline=g.RAYA)
+        return
+    if estilo in ('capsula', 'capsula-abierta'):
+        # el tubo de cristal con su base de acero; dentro, la silueta de un sujeto flotando en líquido verde
+        dr.rectangle((x, y + h - 6 * g.S, x + w - 1, y + h - 1), fill=(120, 125, 130, 255), outline=g.RAYA)
+        if estilo == 'capsula':
+            dr.rectangle((x + 2 * g.S, y, x + w - 3 * g.S, y + h - 6 * g.S), fill=(120, 190, 160, 255), outline=g.RAYA)
+            cx = x + w // 2
+            dr.ellipse((cx - 4 * g.S, y + 6 * g.S, cx + 4 * g.S, y + 14 * g.S), fill=(70, 90, 80, 255))
+            dr.rectangle((cx - 5 * g.S, y + 14 * g.S, cx + 5 * g.S, y + h - 12 * g.S), fill=(70, 90, 80, 255))
+        else:
+            dr.rectangle((x + 2 * g.S, y, x + w - 3 * g.S, y + h - 6 * g.S), fill=(60, 70, 72, 255), outline=g.RAYA)
+            dr.rectangle((x + w - 5 * g.S, y, x + w + 0 * g.S, y + h - 6 * g.S), fill=(170, 200, 205, 255), outline=g.RAYA)
         return
     _frente(dr, x, y, w, h, color, estilo, rnd)
 

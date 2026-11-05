@@ -4647,5 +4647,67 @@
         }
       }
     }
+  },
+  "torre-sujeto-1": {
+    "fecha": "2026-11-05",
+    "nota": "Parte 6 de la Torre Velaria (primera sesión): el Sujeto 1 y la presidenta, y los muebles y paredes del laboratorio de la planta 40. Sujeto 1: create_character_pro_flash a 128x128 (view low top-down), con el sur del gerente-128 de estilo (subido con get_upload_url; usage 'Match the pixel art style of this boss: same outline thickness, same pixel size, same level of detail and shading, same size on the canvas. Do not copy his body, clothes, briefcase or colors.', style_options sin color_palette). Presidenta: a 72x72 con el sur del zombi venenoso de 72 (como los minijefes de la torre). Animaciones con animate_character en modo pixminimax, una dirección por llamada, 1 generación cada una; cada animación un grupo. Del Sujeto 1 solo se generan south, south-east, east, north-east y north (el oeste, en espejo con py tools/espejo_oeste.py, como el científico jefe); rodar, fregonazo y cubo con partida y final = vista quieta pegada en (16, 28) de 160x160; muerte y partirse, solo partida (assets/sources/sujeto-1-128/partida/; los upload:<id> de subidas.txt caducan a los 3 días). Partirse, solo de frente. Bajado con py tools/bajar_zip.py; las vistas quietas, sacadas del zip. La presidenta: tableta (de frente, partida y final) y huir (al este; el juego la voltea), montadas con py tools/presidenta_hoja.py en assets/sprites/presidenta.png. Muebles con create_image_pixflux y la receta de torre-parte2 (guía de py tools/guias_torre.py a fuerza 45, sin fondo con 'guias_torre.py quita'): capsula, capsula-abierta y mesa-laboratorio (la de lado salió con dos mesas diminutas: descartada). Pared del laboratorio: create_image_pixflux 256x128 view side, recortada con textura_pared.py (x 185-237, y 12-126, techo 0-12). El suelo de PixelLab salió liso y con juntas irregulares (descartado): suelo-laboratorio.png se hizo a mano en Python (baldosas blancas de 16 px).",
+    "coste": "primera sesión: 14 los modelos (8 el Sujeto 1, 6 la presidenta), 6 muebles, suelo y pared, y 18 animaciones (6 de frente del Sujeto 1, 2 de la presidenta y 10 de otras direcciones); faltan las otras 10 direcciones del Sujeto 1 (fregonazo ne y n, cubo y muerte en se, e, ne y n)",
+    "sujeto-1-128": {
+      "character_id": "5dcd8151-63d8-4d16-b60a-ad84d09f542c",
+      "size": "128x128",
+      "description": "a huge hulking failed lab clone boss, a giant badly made copy of a young janitor, about 100 pixels tall, broad and muscular with oversized arms and big hands, slightly hunched. He wears the same clothes as the janitor: faded blue denim work overalls (bib overalls with shoulder straps) torn and stretched over his huge body, a cream-white t-shirt under them ripped at the shoulders, a red bandana headband tied around his forehead, scruffy brown hair and heavy brown work boots. Pale grey-white sickly skin with surgical stitch scars across his face and arms, a few clear plastic medical tubes and IV ports stuck into his shoulders and neck, glowing pale green dead eyes and a blank expressionless face. A plastic hospital ID bracelet on one wrist. He holds an enormous wet grey mop as long as his body in his right hand, like a weapon. No logos, no letters, no text. Crisp pixel art, dark outline, detailed shading",
+      "resultado": "A la primera: Johnny enorme y pálido, con el peto vaquero roto, la cinta roja, cicatrices y la fregona gigante.",
+      "animaciones": {
+        "subject_description": "a huge hulking pale clone of a janitor in torn blue denim overalls and a red bandana, holding an enormous grey mop (de lado ', seen from the side'; de espaldas ', seen from behind')",
+        "frases_de_direccion": "las del científico jefe (Strict front view... / Strict three-quarter front view... / Strict side view the whole time, facing right... / Strict three-quarter back view...: we only see his back, his face stays hidden... / Strict back view...); la dirección del movimiento: toward the camera / toward the lower right of the image / to the right / toward the upper right of the image / away from the camera",
+        "andar": {
+          "group": "7d59296a-9069-4649-9c37-e9185b646cd3",
+          "fotogramas": "8 + la vista quieta, sin partida (lienzo 180). De frente, sobre todo balanceo."
+        },
+        "rodar": {
+          "group": "4edc7745-61bc-4186-878f-18dd5b57f4fd",
+          "fotogramas": "8 + partida; partida y final = quieta. Se agacha (1), rueda (2-5) y se levanta (6-8)."
+        },
+        "fregonazo": {
+          "group": "aa269016-b24c-4c36-9358-4eec720535c1",
+          "fotogramas": "8 + partida; partida y final = quieta. La sube por encima del hombro (2-3) y barre el suelo (4-5)."
+        },
+        "cubo": {
+          "group": "64a1b6cb-56da-4b27-a704-3dc4cce580fe",
+          "fotogramas": "8 + partida; partida y final = quieta. Lanza por encima (2-4). Pega: de frente dibujó una bola oscura en la mano y luego en el suelo (2-4): quitar al montar; el cubo lo pinta el juego."
+        },
+        "muerte": {
+          "group": "f5e1f350-42e7-4258-9c23-98316e04f949",
+          "fotogramas": "12 + partida, solo partida. Suelta la fregona, cae de rodillas y de bruces."
+        },
+        "partirse": {
+          "group": "c89ac675-eb58-4c30-b879-b4313f304e26",
+          "fotogramas": "12 + partida, solo partida, solo south. Se encoge, tiembla y acaba con los brazos abiertos (11-12), a punto de partirse en dos."
+        }
+      }
+    },
+    "presidenta-72": {
+      "character_id": "1fdb7565-61b5-49bf-858d-586d5e1283c8",
+      "size": "72x72",
+      "description": "a cold, elegant corporate CEO woman, the president of a sinister pharmaceutical company, about 64 pixels tall, standing upright and arrogant. She wears an immaculate tailored white business suit with a white jacket and white trousers, a pale grey silk blouse, white high-heeled shoes, a thin gold necklace. Sleek platinum blonde hair pulled back in a tight bun, a sharp pale face with red lipstick and a cruel calm smile. She holds a black tablet computer in her left hand against her chest. Healthy human skin, not a zombie. No logos, no letters, no text. Crisp pixel art, dark outline, detailed shading",
+      "animaciones": {
+        "tableta": {
+          "group": "785e0bfc-a8e3-4699-85c8-55a8b0fa601e",
+          "fotogramas": "8 + partida, solo south; partida y final = quieta. Toca la tableta y sonríe."
+        },
+        "huir": {
+          "group": "9b57c764-39ec-4f27-80ab-4bdab35b002b",
+          "fotogramas": "8 + partida, solo east. Corre en bucle (1-8)."
+        }
+      }
+    },
+    "muebles": {
+      "capsula": "d002fbfe",
+      "capsula-abierta": "24c8a3d6",
+      "mesa-laboratorio": "b6aa3f95",
+      "mesa-laboratorio-lado": "6ca22589 (descartada)",
+      "pared-laboratorio": "fc3dc81c",
+      "suelo-laboratorio": "4b99d72a (descartado)"
+    }
   }
 }

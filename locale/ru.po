@@ -2328,6 +2328,10 @@ msgid "Ya no hay vuelta atrás"
 msgstr "Пути назад нет"
 
 #: scripts/mapa/planta.gd
+msgid "Laboratorio"
+msgstr "Лаборатория"
+
+#: scripts/mapa/planta.gd
 msgid "Mantenimiento"
 msgstr "Дворницкая"
 
@@ -2712,6 +2716,10 @@ msgid "Johnny: «¡He podido arreglar el ascensor! Ya puedo bajar a la planta ba
 msgstr "Джонни: «Я починил лифт! Теперь можно спуститься на первый этаж, в дворницкую»"
 
 #: scripts/partida.gd
+msgid "%s · ¡El último combate del edificio!"
+msgstr "%s · Последний бой в этом здании!"
+
+#: scripts/partida.gd
 msgid "Azotea · ¡El último combate del edificio!"
 msgstr "Крыша · Последний бой в этом здании!"
 
@@ -2746,6 +2754,10 @@ msgstr "комната (%s)"
 #: scripts/partida.gd
 msgid "Ya tienes el código: abre %s"
 msgstr "Код у тебя: он открывает %s"
+
+#: scripts/partida.gd
+msgid "¡La puerta del helipuerto se ha abierto! Sube por ella"
+msgstr "Дверь на вертолётную площадку открылась! Поднимайся"
 
 #: scripts/partida.gd
 msgid "¡Acércate a la escalera para subir al helicóptero!"
@@ -2964,9 +2976,13 @@ msgstr "Газ перекрыт"
 msgid "Gas abierto otra vez"
 msgstr "Газ снова открыт"
 
-#: scripts/peligros/gas.gd
+#: scripts/peligros/gas.gd scripts/peligros/laboratorio.gd
 msgid "Huele raro... pero a mí no me hace nada"
 msgstr "Странный запах... но мне он ничего не делает"
+
+#: scripts/peligros/laboratorio.gd
+msgid "¡La presidenta huye hacia el helipuerto! El laboratorio se queda en automático"
+msgstr "Президент бежит к вертолётной площадке! Лаборатория работает сама"
 
 #: scripts/peligros/porqueria.gd
 msgid "¡Qué peste! El suelo está lleno de mierda con ácido: no la pises"
@@ -5445,6 +5461,14 @@ msgstr "Вода под током"
 #: scripts/ui/menus.gd
 msgid "Baja la palanca del cuadro eléctrico y el agua dejará de dar calambres."
 msgstr "Опусти рубильник на электрощитке, и вода перестанет бить током."
+
+#: scripts/ui/menus.gd
+msgid "El láser"
+msgstr "Лазер"
+
+#: scripts/ui/menus.gd
+msgid "Cuando parpadee la línea roja, apártate o esquiva a través: el rayo sale enseguida."
+msgstr "Когда мигает красная линия, отойди или проскочи сквозь неё уклонением: луч бьёт сразу."
 
 #: scripts/ui/menus.gd
 msgid "El viento"

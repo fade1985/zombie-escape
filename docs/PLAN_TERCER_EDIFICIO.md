@@ -402,7 +402,31 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      - Su ficha en el bestiario (solo de la torre), en el panel de pruebas (F9) y en la sala de exposición. Su skin, con las demás de
        la torre (parte 9).
      - Prueba: `--captura --edificio torre --jefe becario --fotocopias`.
-6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres.
+6. **La planta 40 y el Sujeto 1** (Opus), con la presidenta y los láseres. 🔶 **A medias (5 nov), en dos sesiones.**
+   - **Primera sesión, hecha (falta el visto bueno del dueño):** el laboratorio y la presidenta. Lo que ha quedado:
+     - La planta 40 ya no es la azotea: es el **Laboratorio** (`planta.gd`, `laboratorio`; 44 × 30 casillas), con suelo de
+       baldosa blanca y paredes de laboratorio. Se llega por la derecha y la escalera se cierra detrás. En la pared de arriba,
+       en medio, la **cabina blindada** de la presidenta (dibujada con código, con su dibujo de PixelLab dentro); a cada lado,
+       tres **cápsulas** de cristal con un sujeto dentro; por la sala, seis **mesas de laboratorio**; en el suelo, cuatro
+       rejillas.
+     - **La presidenta** (`laboratorio.gd`; números en sus `const`): cada 7,5 s hace un truco (y toca la tableta, con las
+       pantallas de la cabina en rojo): **láser** (una línea roja parpadea 1 s y sale el rayo 1,8 s, de pared a pared, en
+       horizontal o vertical, muchas veces por donde está Johnny: 15 a Johnny si no esquiva, 40 a los zombis y 20 al jefe),
+       **cápsulas** (abre 2 y salen un normal o un rápido, despiertos; solo con 2 zombis o menos) o **gas** (5 s; a Johnny
+       nada, a los zombis los pone frenéticos al momento).
+     - **A media vida del jefe** la cabina se rompe (cristales) y la presidenta huye corriendo; el laboratorio queda **en
+       automático**: solo láseres, cada 5,5 s, a veces dos a la vez.
+     - **Al caer el jefe**, en vez del helicóptero se abre la **puerta del helipuerto** de la pared de arriba (luz verde); al
+       llegar Johnny a ella se acaba el edificio.
+     - El láser tiene su cartel de derrota («El láser», `Menus.PELIGROS`).
+     - Dibujos (`assets/pixellab.json` → `torre-sujeto-1`): el Sujeto 1 (128 px) con andar, rodar, fregonazo, cubo, muerte y
+       partirse (de frente y parte de las demás direcciones, sin montar aún) y la presidenta (tableta y huir, ya montada en
+       `presidenta.png`); las cápsulas (cerrada y abierta), la mesa y la pared del laboratorio.
+     - De momento, en la planta 40 sale el jefe de relleno (la portera) hasta que esté el Sujeto 1.
+     - Prueba: `--captura --edificio torre --laboratorio`.
+   - **Segunda sesión, por hacer:** las 10 animaciones que faltan del Sujeto 1 (fregonazo hacia arriba, cubo y muerte), su
+     hoja, `sujeto_1.gd` (fase 1 y la fase partida en dos, que llama a `romper_cabina()`), su prueba, su ficha del bestiario,
+     la exposición y el panel de pruebas.
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
    viviendas y un superviviente por trozo.
 8. **La historia** (Sonnet): dosier, noticias y relato final.

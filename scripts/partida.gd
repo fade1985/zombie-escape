@@ -547,6 +547,9 @@ func montar(idx: int, por: int, fundir := true) -> void:
 			# (en la azotea, espera arriba a que suba Johnny: mirar_ring)
 			if sitio.has("helipuerto") and jefa is Minijefe:
 				jefa.esperando = true
+			# (en el laboratorio de la torre, la presidenta maneja la sala mientras dura la pelea: laboratorio.gd)
+			if mapa.laboratorio:
+				mapa.laboratorio.jefe = jefa
 			# y su presentación: la cámara lo enfoca mientras grita y sale su nombre (en la prueba, solo en la suya)
 			if presentara:
 				await presentacion.presentar(self, jefa, $Pantalla/Jefa/Nombre.text)
@@ -791,7 +794,9 @@ func subir() -> void:
 		PartidaGuardada.apuntar(self, planta.num + 1)   # lo que se lleva al llegar a ella, por si se cierra el juego
 	nueva_planta(planta.num + 1)
 	await montar(0, puerta_de_llegada())
-	var texto: String = Idioma.t("Azotea · ¡El último combate del edificio!") if planta.get("azotea", false) else Planta.nombre_de(planta)
+	var texto: String = Planta.nombre_de(planta)
+	if planta.get("azotea", false):   # (en la torre, la planta 40, el laboratorio)
+		texto = Idioma.t("%s · ¡El último combate del edificio!") % Planta.nombre_de(planta) if planta.edificio == "torre" 			else Idioma.t("Azotea · ¡El último combate del edificio!")
 	decir(texto if premio == "" else "%s · %s" % [texto, premio], 2.5 if premio == "" else 3.5)
 	if planta.num >= 3:
 		logros.cumplir("sube_conserje")
@@ -953,6 +958,11 @@ func fin_del_edificio() -> void:
 	pagina_del_jefe()
 	await get_tree().create_timer(0.8, false).timeout   # (mientras la página está abierta, no corre)
 	if donde != aqui:
+		return
+	if mapa.laboratorio:
+		# en el laboratorio de la torre no baja el helicóptero: se abre la puerta del helipuerto y se sube por ella
+		mapa.laboratorio.abrir_salida(subir_al_helicoptero)
+		decir(Idioma.t("¡La puerta del helipuerto se ha abierto! Sube por ella"), 4.0)
 		return
 	var heli := Helicoptero.new()
 	heli.destino = planta.sitios[aqui].get("helipuerto", johnny.position)
