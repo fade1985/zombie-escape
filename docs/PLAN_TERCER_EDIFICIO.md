@@ -492,7 +492,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      (página 4) y la torre a oscuras (al completar la torre).
    - Prueba: `--captura --historia-torre`.
 9. **Las skins** (Sonnet; se hizo con Opus porque lo pidió el dueño): las cinco cabezas y sus ventajas. ✅ **Hecho el 5
-   nov (falta el visto bueno del dueño).** 50 generaciones (10 cada cabeza: el cálculo de 15 era de antes de saber lo
+   nov, con el visto bueno del dueño.** 50 generaciones (10 cada cabeza: el cálculo de 15 era de antes de saber lo
    que cuesta). Lo que ha quedado:
    - Las cabezas, con la receta de las del centro (`edit_image` sobre las 8 rotaciones de Johnny quieto), todas a la
      primera: la directora, moño gris y gafas de pasta negras; el informático, cascos con micrófono y gafas; el
