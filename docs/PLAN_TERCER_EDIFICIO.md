@@ -434,7 +434,7 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
 7. **Los supervivientes** (Sonnet lo común; Opus cada rescate nuevo): las tres habitaciones nuevas de las
    viviendas y un superviviente por trozo. Cada uno cuesta unas **25 generaciones** (no 15): 12 los dos intentos, 8 el
    andar, 5 a 8 el gesto y 1 la caída.
-   - **Primer trozo (5 nov, falta el visto bueno del dueño):** las habitaciones y el informático joven.
+   - **Primer trozo ✅ (5 nov, con el visto bueno del dueño):** las habitaciones y el informático joven.
      - **Las viviendas tienen 9 trasteros** (`viviendas.gd`, `TORRE`): el pasillo es una habitación más largo; los de la
        torre, la cuarta de arriba, la cuarta de abajo y la del **fondo**, a la derecha del pasillo, con su puerta de lado
        en la pared. Los que aún no están en `Supervivientes.DATOS` ya tienen la suya, cerrada («Trastero»). Colchas: la
