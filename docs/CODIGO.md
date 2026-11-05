@@ -302,8 +302,14 @@ en una línea.
   la modista (M90: `camuflaje()`, los zombis dormidos no se despiertan porque Johnny entre en su habitación y le ven a
   la mitad de distancia; en `zombi.vigilar` y en `zombi_guardia.gd`), la mascota (M90: `rapidez()`, anda un 15 % más
   rápido; en `johnny.gd`, al andar) y el gerente (M90: `comision()`, la mitad de los billetes valen $2; en
-  `partida.valor_billete`). En la taquilla (`ui/taquilla.gd`) ya no caben todas: la lista
-  se desliza (`ALTO_LISTA`).
+  `partida.valor_billete`). Y las cinco de Torre Velaria (parte 9): la directora (`despido()`, «Despido»: el primer golpe
+  a un zombi dormido, o dormido por el gas, lo mata; en `zombi.recibir_golpe`, que mira la skin con `puesta_en()`), el
+  informático (`invisible()`, las cámaras no le ven, en `peligros/camaras.ve`; y `linterna()`, la linterna llega un 50 %
+  más lejos, en `luz/luz.gd`, `_process`), el presentador (`municion()`, las cajas de munición dan un 30 % más, en
+  `johnny.sumar_municion`), el becario (`copia()`, «Copia de seguridad»: una vez por partida, al caer, se levanta con
+  25 de vida; en `johnny.recibir_dano`, después del desfibrilador, con `copia_usada`, que va en la partida guardada) y el
+  Sujeto 1 (`mutacion()`, empieza cada partida eligiendo una mutación: `partida.mutacion_al_empezar`). En la taquilla
+  (`ui/taquilla.gd`) ya no caben todas: la lista se desliza (`ALTO_LISTA`).
 - `objetos.gd`: los objetos (gasolina, bidón de ácido, batería y vendas), los de curar (`USABLES`: las vendas, 25, y el
   botiquín, 40 (M72: antes 50), que además devuelve un tercio de vida perdido, `johnny.devolver_tercio`; van como las demás cosas de
   la mochila y del baúl, con su `TOPE` en la mochila: 2 y 3, pero en su grupo «Curas» (`CURAS`, 4 casillas, M67: `casillas` las

@@ -237,7 +237,7 @@ func probar_skins() -> void:
 	for i in Skins.LISTA.size() + 1:
 		s = Skins.siguiente(s)
 		vuelta.append(Skins.nombre(s))
-	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > La modista > La mascota > El gerente > Conserje)" % " > ".join(vuelta))
+	print("Siguiente skin (panel de pruebas): %s (esperado: El portero > El glotón > El gymbro > El bombero > El doctor Salas > El cocinero > El antidisturbios > La modista > La mascota > El gerente > La directora > El informático > El presentador > El becario > El Sujeto 1 > Conserje)" % " > ".join(vuelta))
 	# el doctor Salas (M36): la mitad de las veces, un objeto más; las demás skins, nunca
 	print("Objeto de más: salas %s · bombero %s · conserje %s · lo consigue «%s» (esperado: 0.5, 0, 0, «salas»)" % [
 		Skins.doble("salas"), Skins.doble("bombero"), Skins.doble(""), Skins.de_jefe("cientifico_jefe")])
@@ -349,38 +349,8 @@ func probar_skins() -> void:
 	johnny.position = Vector2(690, 330)
 	johnny.get_node("Camara").reset_smoothing()
 	johnny.hide()
-	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
-	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
 	for skin in ["portero", "gloton", "gymbro", "bombero", "salas", "cocinero", "antidisturbios", "modista", "mascota", "gerente"]:
-		var copias := []
-		var hojas_bien := 0
-		for i in dirs.size() + armas.size() + 1:
-			var arma: String = "fregona" if i < dirs.size() else ("fregona" if i == dirs.size() else armas[i - dirs.size() - 1])
-			var w: Dictionary = Armas.datos(arma)
-			var copia := Node2D.new()   # los pies, como el dibujo de Johnny (sprite.position)
-			if i < dirs.size():
-				copia.position = johnny.position + Vector2(-350 + 100 * i, -40)
-			else:
-				copia.position = johnny.position + Vector2(-350 + 100 * (i - dirs.size()), 110)
-			var dibujo := AnimatedSprite2D.new()
-			# el último de la segunda fila, el conserje de siempre, para comparar
-			dibujo.sprite_frames = Skins.hoja(w.hoja, "" if i == dirs.size() else skin)
-			if dibujo.sprite_frames.resource_path.ends_with("-%s.tres" % skin):
-				hojas_bien += 1
-			dibujo.centered = false
-			dibujo.offset = -w.pies
-			dibujo.scale = Vector2(2, 2)
-			dibujo.material = johnny.sprite.material.duplicate()
-			copia.add_child(dibujo)
-			dibujo.play("reposo_" + (dirs[i] if i < dirs.size() else "s"))
-			mapa.cosas.add_child(copia)
-			copias.append(copia)
-		await get_tree().create_timer(0.6).timeout
-		Captura.foto("captura-skins-caras.png" if skin == "portero" else "captura-skins-caras-%s.png" % skin)
-		print("Foto caras: arriba %s en %s; abajo el conserje y %s con %s · sus hojas %d de %d (esperado: 14 de 14)" % [
-			Skins.nombre(skin), ", ".join(dirs), Skins.nombre(skin), ", ".join(armas), hojas_bien, dirs.size() + armas.size()])
-		for c in copias:
-			c.queue_free()
+		await foto_caras(skin)
 	johnny.show()
 	# andando: ponerse la skin no le corta el paso (sigue con la misma animación, en el mismo dibujo)
 	johnny.vestir("")
@@ -704,3 +674,198 @@ func probar_skin_bombero() -> void:
 	johnny.coger("pistola")
 	johnny.vestir("")
 	await get_tree().process_frame
+
+
+# La foto de la cara de una skin (probar_skins y probar_skins_torre): arriba, las 8 direcciones con la fregona;
+# abajo, el conserje de siempre y la skin con las otras armas, mirando al sur. Johnny, escondido
+func foto_caras(skin: String) -> void:
+	var dirs := ["s", "se", "e", "ne", "n", "no", "o", "so"]
+	var armas := ["fregona", "bate", "cuchillo", "pistola", "escopeta", "mp5"]
+	var copias := []
+	var hojas_bien := 0
+	for i in dirs.size() + armas.size() + 1:
+		var arma: String = "fregona" if i < dirs.size() else ("fregona" if i == dirs.size() else armas[i - dirs.size() - 1])
+		var w: Dictionary = Armas.datos(arma)
+		var copia := Node2D.new()   # los pies, como el dibujo de Johnny (sprite.position)
+		if i < dirs.size():
+			copia.position = johnny.position + Vector2(-350 + 100 * i, -40)
+		else:
+			copia.position = johnny.position + Vector2(-350 + 100 * (i - dirs.size()), 110)
+		var dibujo := AnimatedSprite2D.new()
+		# el último de la segunda fila, el conserje de siempre, para comparar
+		dibujo.sprite_frames = Skins.hoja(w.hoja, "" if i == dirs.size() else skin)
+		if dibujo.sprite_frames.resource_path.ends_with("-%s.tres" % skin):
+			hojas_bien += 1
+		dibujo.centered = false
+		dibujo.offset = -w.pies
+		dibujo.scale = Vector2(2, 2)
+		dibujo.material = johnny.sprite.material.duplicate()
+		copia.add_child(dibujo)
+		dibujo.play("reposo_" + (dirs[i] if i < dirs.size() else "s"))
+		mapa.cosas.add_child(copia)
+		copias.append(copia)
+	await get_tree().create_timer(0.6).timeout
+	Captura.foto("captura-skins-caras.png" if skin == "portero" else "captura-skins-caras-%s.png" % skin)
+	print("Foto caras: arriba %s en %s; abajo el conserje y %s con %s · sus hojas %d de %d (esperado: 14 de 14)" % [
+		Skins.nombre(skin), ", ".join(dirs), Skins.nombre(skin), ", ".join(armas), hojas_bien, dirs.size() + armas.size()])
+	for c in copias:
+		c.queue_free()
+
+
+# Con "--captura --skins-torre": las cinco skins de Torre Velaria (parte 9 del tercer edificio; skins.gd). En la sala
+# de mantenimiento, sin ninguna skin:
+#   - cae la directora y desbloquea la suya, con su aviso (captura-skins-torre-desbloqueo.png); cada jefe de la torre
+#     suelta la suya (de_jefe)
+#   - la taquilla: se elige cada una, Johnny cambia de hoja y su carta se ve entera (captura-skins-taquilla-<id>.png)
+#   - la cara de cada una en las 8 direcciones y con las otras armas (captura-skins-caras-<id>.png)
+#   - la directora («Despido»): un zombi dormido muere del primer golpe, también uno dormido por el gas
+#     (captura-skins-torre-despido.png); sin la skin, o despierto, no
+#   - el informático: la linterna llega un 50 % más lejos (las cámaras que no le ven, en --camaras)
+#   - el presentador: una caja de munición da un 30 % más, de verdad
+#   - el becario («Copia de seguridad»): al caer se levanta con 25 de vida, una sola vez
+#     (captura-skins-torre-copia.png); sin la skin, no
+#   - el Sujeto 1: al empezar, el recuadro de las mutaciones (captura-skins-torre-mutacion.png) y se elige una; sin la
+#     skin, nada
+# Cada línea dice lo esperado. Deja el guardado de la prueba sin skins y se cierra
+func probar_skins_torre() -> void:
+	set_process(false)
+	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
+	johnny.vestir("")
+	johnny.coger("fregona")
+	var modo: String = johnny.modo
+	johnny.modo = "quieto"   # que Johnny no pegue ni dispare solo
+	johnny.position = Vector2(690, 300)   # (en el despacho)
+	johnny.direccion = "e"
+	johnny.get_node("Camara").reset_smoothing()
+	await get_tree().create_timer(0.3).timeout
+
+	# ── El desbloqueo: cae la directora ──
+	var directora: Node2D = meter_zombi("directora", johnny.position + Vector2(220, 0))
+	await get_tree().create_timer(0.2).timeout
+	for i in 20:
+		if directora.estado == "muerto":
+			break
+		directora.recibir_golpe(99999, Vector2.ZERO, false, true)
+		await get_tree().process_frame
+	await get_tree().create_timer(0.5).timeout
+	Captura.foto("captura-skins-torre-desbloqueo.png")
+	print("Cae la directora (muerta: %s): skins %s · puesta «%s» (esperado: [\"directora\"], «»: no se pone sola)" % [
+		directora.estado == "muerto", Skins.tenidas(), Skins.puesta()])
+	print("Cada jefe de la torre, su skin: %s (esperado: directora, informatico, presentador, becario, sujeto)" % ", ".join(
+		["directora", "informatico", "presentador", "becario", "sujeto_1"].map(func(t): return Skins.de_jefe(t))))
+	await get_tree().create_timer(2.0).timeout
+	if menus.abierto == "mutacion":
+		menus.elegir(menus.cartas[0].id)
+	get_tree().paused = false
+	$Pantalla/Jefa.hide()
+
+	# ── La taquilla: cada una, puesta ──
+	var torre := ["directora", "informatico", "presentador", "becario", "sujeto"]
+	for id in torre:
+		Skins.desbloquear(id)
+	for id in torre:
+		taquilla.abrir(self)
+		await get_tree().process_frame
+		(taquilla.cartas[id] as Button).grab_focus()
+		taquilla.elegir(id)
+		await get_tree().create_timer(0.5).timeout
+		Captura.foto("captura-skins-taquilla-%s.png" % id)
+		print("Elegido %s: Johnny lleva «%s» · su hoja %s · su carta a la vista %s (esperado: true) · dice «%s»" % [
+			Skins.nombre(id), johnny.skin, johnny.sprite.sprite_frames.resource_path.get_file(),
+			(taquilla.cartas[id] as Button).get_global_rect().end.y <= get_viewport().get_visible_rect().size.y,
+			taquilla.info.text.replace("\n", " / ")])
+	taquilla.cerrar()
+	get_tree().paused = false
+
+	# ── Las caras ──
+	johnny.position = Vector2(690, 330)
+	johnny.get_node("Camara").reset_smoothing()
+	johnny.hide()
+	for id in torre:
+		await foto_caras(id)
+	johnny.show()
+	johnny.vestir("")
+
+	# ── La directora: «Despido» ──
+	var despidos := []
+	for caso in [["", "dormido"], ["directora", "despierto"], ["directora", "gas"], ["directora", "dormido"]]:
+		johnny.skin = caso[0]
+		var z: Node2D = meter_zombi("normal", johnny.position + Vector2(90, 0))
+		await get_tree().process_frame
+		z.vida = 500
+		z.dormido = caso[1] == "dormido"
+		if caso[1] == "gas":
+			z.gaseado = Peligros.GAS.duerme + 5.0
+		z.recibir_golpe(10, Vector2.ZERO)
+		await get_tree().create_timer(0.25).timeout
+		despidos.append("%s, %s: %s" % [Skins.nombre(caso[0]), caso[1],
+			"muerto" if z.estado == "muerto" else "vida %d" % z.vida])
+		if caso == ["directora", "dormido"]:
+			Captura.foto("captura-skins-torre-despido.png")
+		if z.estado != "muerto":
+			z.queue_free()
+	# (los jefes no duermen nunca: no tienen "dormido"; y si lo tuvieran, recibir_golpe() se los salta)
+	print("Despido: %s (esperado: Conserje dormido, vida 490; despierto, vida 490; gas y dormido, muerto)" % " · ".join(despidos))
+
+	# ── El informático: la linterna ──
+	var alcances := []
+	for id in ["", "informatico", "presentador"]:
+		johnny.skin = id
+		await get_tree().process_frame
+		await get_tree().process_frame
+		alcances.append("%s %.0f" % [Skins.nombre(id), luz.linterna_suelo.texture_scale * 128.0])
+	print("Linterna: %s (esperado: 330, 495, 330)" % " · ".join(alcances))
+
+	# ── El presentador: las cajas de munición ──
+	johnny.coger("pistola")
+	var cajas := []
+	for id in ["", "presentador"]:
+		johnny.skin = id
+		johnny.municion.clear()
+		johnny.sumar_municion()
+		cajas.append("%s %d" % [Skins.nombre(id), johnny.cuanta(Armas.municion("pistola"))])
+	print("Una caja de munición de la pistola (cargador %d): %s (esperado: el cargador; × 1,3 hacia arriba)" % [
+		Armas.datos("pistola").cargador, " · ".join(cajas)])
+	johnny.coger("fregona")
+
+	# ── El becario: «Copia de seguridad» ──
+	johnny.vestir("becario")
+	johnny.invulnerable = 0.0
+	johnny.escudo = 0.0   # (sin el escudo de Acero: que el golpe llegue a la vida)
+	johnny.vida = 10
+	johnny.recibir_dano(50)
+	await get_tree().create_timer(0.3).timeout
+	Captura.foto("captura-skins-torre-copia.png")
+	var primera := "vivo %s, vida %d, usada %s" % [johnny.vivo, johnny.vida, johnny.copia_usada]
+	var segunda: bool = Skins.copia("becario") > 0 and not johnny.copia_usada
+	johnny.copia_usada = false
+	johnny.vestir("")
+	johnny.invulnerable = 0.0
+	johnny.vida = johnny.stats.vida_max
+	print("Copia de seguridad: al caer, %s · ¿otra vez? %s · desfibrilador %s (esperado: vivo true, vida 25, usada true; false; false)" % [
+		primera, segunda, johnny.stats.resucitar])
+
+	# ── El Sujeto 1: una mutación al empezar ──
+	mutaciones.tengo.clear()
+	aplicar_talentos(Guardado.cargar().talentos)
+	johnny.skin = ""
+	await mutacion_al_empezar()
+	var sin := "recuadro %s, mutaciones %d" % [menus.abierto == "mutacion", mutaciones.tengo.size()]
+	johnny.skin = "sujeto"
+	mutacion_al_empezar()   # (espera a que se elija: no se le espera aquí)
+	for i in 60:
+		if menus.abierto == "mutacion":
+			break
+		await get_tree().create_timer(0.1, true).timeout
+	await get_tree().create_timer(0.4, true).timeout
+	Captura.foto("captura-skins-torre-mutacion.png")
+	var abierto: bool = menus.abierto == "mutacion"
+	if abierto:
+		menus.elegir(menus.cartas[0].id)
+	await get_tree().create_timer(0.3, true).timeout
+	print("Mutación al empezar: sin la skin, %s · con el Sujeto 1, recuadro %s y luego %d mutación, juego en pausa %s (esperado: false, 0; true, 1, false)" % [
+		sin, abierto, mutaciones.tengo.size(), get_tree().paused])
+	johnny.vestir("")
+	johnny.modo = modo
+	Guardado.cambiar(func(g): g.skins = []; g.skin = "")
+	get_tree().quit()

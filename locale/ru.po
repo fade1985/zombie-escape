@@ -570,7 +570,7 @@ msgstr "Директор по персоналу"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Её печать падает с потолка: попадёт — тебя уволят, и ты на время останешься без огнестрела. Пока её подчинённые рядом, она вдвое крепче."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El informático"
 msgstr "Айтишник"
 
@@ -578,7 +578,7 @@ msgstr "Айтишник"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Пускает ток по полу полосами и выключает свет в своём зале. В ярости перезагружается у другой стойки."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El presentador"
 msgstr "Ведущий"
 
@@ -586,7 +586,7 @@ msgstr "Ведущий"
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Орёт в микрофон, слепит прожекторами и засыпает пол конфетти. В ярости поднимает на ноги свою публику."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El becario"
 msgstr "Стажёр"
 
@@ -690,7 +690,7 @@ msgstr "Тварь"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "Что осталось от доктора после собственной дозы: пасть Обжоры, руки Качка и огонь брандмейстера. Уходи с ее полос и от ударной волны."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El Sujeto 1"
 msgstr "Субъект 1"
 
@@ -2028,7 +2028,7 @@ msgstr "ФАТАЛЬНАЯ ОШИБКА!"
 msgid "¡Adrenalina!"
 msgstr "Адреналин!"
 
-#: scripts/johnny.gd
+#: scripts/johnny.gd scripts/zombi.gd
 msgid "¡DESPEDIDO!"
 msgstr "УВОЛЕН!"
 
@@ -2043,6 +2043,10 @@ msgstr "Увернулся!"
 #: scripts/johnny.gd
 msgid "¡Segundo aliento!"
 msgstr "Второе дыхание!"
+
+#: scripts/johnny.gd
+msgid "¡Copia de seguridad!"
+msgstr "Бэкап восстановлен!"
 
 #: scripts/johnny.gd
 msgid "Asistido"
@@ -3579,6 +3583,50 @@ msgstr "Половина купюр, которые ты подбираешь, �
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "Убей управляющего в первый раз."
+
+#: scripts/skins.gd
+msgid "La directora"
+msgstr "Директор по персоналу"
+
+#: scripts/skins.gd
+msgid "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no)."
+msgstr "«Увольнение»: первый удар по спящему зомби убивает его (кроме боссов)."
+
+#: scripts/skins.gd
+msgid "Mata a la directora de Recursos Humanos por primera vez."
+msgstr "Убей директора по персоналу в первый раз."
+
+#: scripts/skins.gd
+msgid "Las cámaras de seguridad no te ven y la linterna alumbra un 50 % más lejos."
+msgstr "Камеры наблюдения тебя не видят, а фонарик светит на 50 % дальше."
+
+#: scripts/skins.gd
+msgid "Mata al informático por primera vez."
+msgstr "Убей айтишника в первый раз."
+
+#: scripts/skins.gd
+msgid "Las cajas de munición te dan un 30 % más."
+msgstr "Ящики с патронами дают на 30 % больше."
+
+#: scripts/skins.gd
+msgid "Mata al presentador por primera vez."
+msgstr "Убей ведущего в первый раз."
+
+#: scripts/skins.gd
+msgid "«Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida."
+msgstr "«Бэкап»: раз за забег, упав, ты встаешь с 25 здоровья."
+
+#: scripts/skins.gd
+msgid "Mata al becario por primera vez."
+msgstr "Убей стажера в первый раз."
+
+#: scripts/skins.gd
+msgid "Empiezas cada partida con una mutación: eliges una de dos al llegar."
+msgstr "Каждый забег начинается с мутации: выбери одну из двух на старте."
+
+#: scripts/skins.gd
+msgid "Mata al Sujeto 1 por primera vez."
+msgstr "Убей Субъекта 1 в первый раз."
 
 #: scripts/sujeto_1.gd
 msgid "¡NO AGUANTA!"

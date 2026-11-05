@@ -3636,6 +3636,76 @@
   "cost": "10 generaciones",
   "updated": "2026-11-05"
  },
+ "skin-directora": {
+  "kind": "edit_image",
+  "job_id": "4706b971-07e4-4396-8226-1655c2636ff6",
+  "asset_id": "3279d7a4-ce76-5cb7-aff2-20bb14d78608",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin de la directora de Recursos Humanos (scripts/skins.gd, Torre Velaria, parte 9), hecha el 2026-11-05 con la misma receta que las otras: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera: el pelo gris recogido en un moño alto y tirante y unas gafas de pasta negras y cuadradas, con la barba de siempre. Los 8 dibujos, tal cual, en assets/sources/skin-directora/quietos/<dirección>.png. tools/cara.py directora pega la cabeza en las hojas de armas (SOBRA = \"casco\": el moño tapa el pelo y el pañuelo) y tools/caida_skins.py directora, en la de caerse.",
+  "request": {
+   "description": "Give him a strict corporate HR director's look, changing only his head: his hair is gray with silver streaks, pulled back very tight and smooth against his skull into a small, high, round bun on the back of his head, and he wears thick black rectangular plastic-framed glasses (bold dark frames). The bun stays small and close to his skull (it must stay inside the image). The tight gray hair and bun completely replace the red bandana: no bandana and no bandana tails are visible, no brown messy hair. Keep his black beard and moustache, the same face, eyes, eyebrows and stern expression behind the glasses, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the hair, bun and glasses the same in every view; from the side the bun is seen in profile at the back of his head and the glasses arm along his temple; from behind only the tight gray hair and the bun are seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-05"
+ },
+ "skin-informatico": {
+  "kind": "edit_image",
+  "job_id": "742e4319-6f5f-4dbd-8ed3-91d65dfd21b1",
+  "asset_id": "6104dd15-4802-5843-ba72-103ecf5790d2",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin de el informático (scripts/skins.gd, Torre Velaria, parte 9), hecha el 2026-11-05 con la misma receta que las otras: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera: unos cascos negros de diadema con micrófono y gafas finas, con su pelo castaño y su barba, sin pañuelo. Los 8 dibujos, tal cual, en assets/sources/skin-informatico/quietos/<dirección>.png. tools/cara.py informatico pega la cabeza en las hojas de armas (SOBRA = \"casco\": quita lo que quede del pañuelo) y tools/caida_skins.py informatico, en la de caerse.",
+  "request": {
+   "description": "Give him an IT technician's look, changing only his head: a black over-ear headset with a band over the top of his head, two round black ear cups over his ears and a thin black microphone arm curving from the left ear cup to the front of his mouth, plus thin silver rectangular glasses. His own short messy brown hair is visible under the headset band. The headset stays close to his head (it must stay inside the image). No red bandana and no bandana tails are visible. Keep his black beard and moustache, the same face, eyes, eyebrows and expression behind the glasses, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the headset, microphone and glasses the same in every view; from the side one ear cup and the microphone arm are seen in profile; from behind only the brown hair, the headset band and the backs of the ear cups are seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-05"
+ },
+ "skin-presentador": {
+  "kind": "edit_image",
+  "job_id": "942ec776-0277-4c7d-b230-25549ed79dfc",
+  "asset_id": "77c2034d-28ef-5c82-9431-3ccd944e9b60",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin de el presentador (scripts/skins.gd, Torre Velaria, parte 9), hecha el 2026-11-05 con la misma receta que las otras: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera: un tupé engominado y brillante, con la barba de siempre (el micrófono de diadema que se pidió apenas se ve). Los 8 dibujos, tal cual, en assets/sources/skin-presentador/quietos/<dirección>.png. tools/cara.py presentador pega la cabeza en las hojas de armas (SOBRA = \"casco\": el tupé tapa el pelo y el pañuelo) y tools/caida_skins.py presentador, en la de caerse.",
+  "request": {
+   "description": "Give him a TV show host's look, changing only his head: a tall, glossy, gel-slicked dark brown pompadour quiff swept up and back from his forehead, shiny with light highlights (the quiff stays inside the image, no taller than a third of his head), short neat sides, and a thin skin-colored headset microphone running from his ear along his cheek to the corner of his mouth, with a tiny black mic tip. The pompadour completely replaces the red bandana: no bandana and no bandana tails are visible, no messy hair. Keep his black beard and moustache neatly trimmed, the same face, eyes, eyebrows and a confident expression, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the hairstyle and microphone the same in every view; from the side the quiff is seen in profile rising over his forehead; from behind only the neat slicked hair is seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-05"
+ },
+ "skin-becario": {
+  "kind": "edit_image",
+  "job_id": "3e23e549-2062-4af8-8690-c90fe6a7048f",
+  "asset_id": "338a003d-31c1-5075-ad8f-02d2b8c18697",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin de el becario (scripts/skins.gd, Torre Velaria, parte 9), hecha el 2026-11-05 con la misma receta que las otras: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera: una gorra roja puesta del revés, con la visera atrás (la acreditación colgada no se pidió: las skins solo cambian la cabeza). Los 8 dibujos, tal cual, en assets/sources/skin-becario/quietos/<dirección>.png. tools/cara.py becario pega la cabeza en las hojas de armas (SOBRA = \"casco\": la gorra tapa el pelo y el pañuelo) y tools/caida_skins.py becario, en la de caerse.",
+  "request": {
+   "description": "Put a red baseball cap on his head worn backwards, like a young office intern, changing only his head: a plain bright red cap that fits snugly around his skull, turned around so the short curved brim points to the back of his head and the adjustable strap opening is over his forehead, with a few tufts of his brown hair poking out through the strap opening and at the sides. The cap stays close to his head (the brim must stay inside the image). The cap completely replaces the red bandana: no bandana and no bandana tails are visible. Keep his black beard and moustache, the same face, eyes, eyebrows and expression, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the backwards cap the same in every view; from the side the cap is seen in profile with the brim sticking out at the back; from behind the brim is seen pointing toward the viewer.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-05"
+ },
+ "skin-sujeto": {
+  "kind": "edit_image",
+  "job_id": "9f486245-59eb-4013-83e9-d3b0bde07185",
+  "asset_id": "2d8d0f45-98c9-50ca-8b9e-ea6993d107ae",
+  "source_character_id": "4e6c78c6-d6c6-46d3-99c1-40a2d86f0e6c",
+  "nota": "La skin de el Sujeto 1 (scripts/skins.gd, Torre Velaria, parte 9), hecha el 2026-11-05 con la misma receta que las otras: edit_image (modo texto) sobre las 8 rotaciones de Johnny quieto (conserje-48), las 8 en una sola petición, a 48x48. Salió a la primera: la cara de Johnny con venas moradas y los ojos violetas brillantes, con su pañuelo, su pelo y su barba. Los 8 dibujos, tal cual, en assets/sources/skin-sujeto/quietos/<dirección>.png. tools/cara.py sujeto pega la cabeza en las hojas de armas (SOBRA = \"tenir\": el pelo y el pañuelo son los de siempre) y tools/caida_skins.py sujeto, en la de caerse.",
+  "request": {
+   "description": "Make him look like a mutated lab experiment, changing only his face and neck: dark purple swollen veins branching across his cheeks, forehead, temples and down his neck, slightly paler grayish skin, and glowing bright violet eyes with a light lilac glow (the eyes are clearly glowing, with no pupils). Keep his red bandana with its tails, his brown hair, his black beard and moustache, the same face shape, eyebrows and an angry expression, exactly the same cream shirt, blue work overalls and dark boots, the same pose, the same head and body size and proportions, the same single-color black outline and detailed pixel art shading. Nothing new sticks out of his head. The 8 images are the same character seen from 8 directions (south, south-east, east, north-east, north, north-west, west, south-west): keep the veins and glowing eyes the same in every view; from the side one glowing eye and the veins on the cheek and neck are seen; from behind only the bandana, the hair and a few purple veins on the back of the neck are seen.",
+   "image_urls": "las 8 rotaciones del personaje 4e6c78c6 (Johnny, estado Idle), en el orden south, south-east, east, north-east, north, north-west, west, south-west",
+   "seed": 1985
+  },
+  "cost": "10 generaciones",
+  "updated": "2026-11-05"
+ },
  "municion-iconos": {
   "nota": "Los dibujos de la munición, la gasolina y el bidón de ácido (25 oct, lo pidió el dueño: hacerlos bien con el arte del juego, de frente y un poco desde arriba, en tres cuartos). create_object_pro_flash a 32x32, 1 dirección, view low top-down, con assets/sprites/baul.png (el baúl de la sala de mantenimiento, 32x29, en tres cuartos) como imagen de estilo sin copiar sus colores (style_options color_palette false). Dos intentos de cada uno (semillas X001 y X002), todos en assets/sources/municion/intentos/; hoja para elegir: assets/sources/municion/elegir.png. ELEGIDOS por el dueño: pistola A (assets/ui/iconos/municion-pistola.png), escopeta A (municion-escopeta.png, quitado un píxel blanco suelto de la esquina), gasolina B (obj-gasolina.png) y ácido A (obj-bidon_acido.png). Los cuatro cargadores de la MP5 (A y B de pie, C tumbado en diagonal y D dos cargadores pegados con cinta) no le gustaron: la de la MP5 (municion-mp5.png) es la caja de la pistola pintada de verde oscuro militar con assets/sources/municion/verde_militar.py. En el juego: la caja que suelta un zombi enseña la munición del arma que la recibiría (partida.icono_caja; la MP5, la caja verde) y se ve un poco a oscuras (billete.gd, a_oscuras); en el inventario, los iconos de Armas.MUNICION. Prueba: -- --captura --municion-suelo.",
   "herramienta": "create_object_pro_flash",

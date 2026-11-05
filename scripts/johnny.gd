@@ -123,6 +123,7 @@ var ninja_t := 0.0         # Ninja: lo que falta para que el golpe al acabar la 
 var pararrayos_t := 0.0    # Pararrayos: lo que falta para que vuelva a saltar el rayo
 var disparos := 0          # Mirilla: los disparos que lleva
 var resucitado := false    # Desfibrilador: solo una vez por partida
+var copia_usada := false   # la «Copia de seguridad» de la skin del becario (skins.gd): solo una vez por partida
 var aliento_usado := false   # Segundo aliento: ya ha curado en esta planta (partida.nueva_planta lo quita)
 var con_adrenalina := false  # Adrenalina: si en el paso de antes estaba por debajo de la mitad (para avisar al entrar)
 var caido_t := 0.0         # lo que le queda tirado en el suelo por un tropezón (caer; 0 = de pie)
@@ -1059,7 +1060,8 @@ func sumar_municion() -> void:
 	if id == "":
 		return
 	var tipo := Armas.municion(id)
-	meter_municion(tipo, Armas.datos(id).cargador * RESERVA_CAJA)
+	# con la skin del presentador (skins.gd), un 30 % más (redondeando hacia arriba)
+	meter_municion(tipo, ceili(Armas.datos(id).cargador * RESERVA_CAJA * Skins.municion(skin) - 0.0001))
 	coger_municion(tipo)
 
 
@@ -1120,6 +1122,8 @@ func preparar_fogonazo() -> void:
 		Chispa.precalentar(get_parent())
 		if stats.resucitar and not resucitado:   # el desfibrilador (M55), para que no pare el juego al caer
 			EfectoSuelo.precalentar(get_parent(), "desfibrilador")
+		if Skins.copia(skin) > 0 and not copia_usada:   # (y la «Copia de seguridad» del becario, igual)
+			EfectoSuelo.precalentar(get_parent(), "mutar")
 
 
 # Se pone en la mano el arma de ese hueco: lo que estaba haciendo con la otra se corta
@@ -1510,6 +1514,18 @@ func quitar_vida(cantidad: int, de := "") -> void:
 		vida_cambiada.emit(vida, stats.vida_max)
 		EfectoSuelo.soltar(self, "desfibrilador", Vector2.ZERO)   # (M55: las dos descargas y el latido; le sigue)
 		resucito.emit()
+		return
+	if vida == 0 and Skins.copia(skin) > 0 and not copia_usada:
+		# la skin del becario (skins.gd, «Copia de seguridad»): una vez por partida, se levanta con 25 de vida
+		copia_usada = true
+		vida = mini(Skins.copia(skin), stats.vida_max)
+		tercios = maxi(tercios, 1)
+		invulnerable = 2.0
+		vida_cambiada.emit(vida, stats.vida_max)
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-80, -80), Idioma.t("¡Copia de seguridad!"),
+			VERDE, 20, false, 1.2)
+		Sonido.tocar("curar")
+		EfectoSuelo.soltar(self, "mutar", Vector2.ZERO)
 		return
 	if vida == 0:
 		vivo = false

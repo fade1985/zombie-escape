@@ -61,6 +61,21 @@
 # M90): el pelo engominado hacia atrás, gris con canas, con la raya al lado, como un ejecutivo; con su barba de siempre.
 # Con ella puesta, la mitad de los billetes que coge valen $2 en vez de $1 ("comision"; partida.gd, valor_billete()):
 # de media, un 50 % más de dólares. Los fajos de la joyería y los premios, igual. La esquiva, igual que siempre
+#
+# Las cinco de Torre Velaria (parte 9 de docs/PLAN_TERCER_EDIFICIO.md), una por jefe de la torre, la primera vez que cae:
+#   - la directora (la directora de Recursos Humanos): el pelo gris recogido en un moño tirante y gafas de pasta negras,
+#     con su barba. «Despido» ("despido"; zombi.gd, recibir_golpe()): el primer golpe (o disparo, o lo que sea) a un
+#     zombi dormido, también al dormido por el gas, lo mata con un «¡DESPEDIDO!». A los jefes, no
+#   - el informático: cascos de diadema con micrófono y gafas, sin pañuelo. Las cámaras de seguridad no le ven
+#     ("invisible"; peligros/camaras.gd, ve()) y la linterna llega un 50 % más lejos ("linterna"; luz/luz.gd, de 330 a 495)
+#   - el presentador: un tupé engominado, con su barba. Las cajas de munición dan un 30 % más ("municion"; johnny.gd,
+#     sumar_municion(), redondeando hacia arriba). La que tira él y vuelve a coger, igual
+#   - el becario: una gorra roja del revés. «Copia de seguridad» ("copia"; johnny.gd, recibir_dano()): una vez por
+#     partida, al caer, se levanta con 25 de vida y 2 s sin recibir daño (copia_usada, que va en la partida guardada).
+#     Si lleva el desfibrilador, gasta primero ese
+#   - el Sujeto 1: la cara de Johnny con venas moradas y los ojos violetas, con su pañuelo y su barba. Empieza cada
+#     partida con una mutación ("mutacion"; partida.gd, al empezar: sale el recuadro de siempre y elige una de dos).
+#     El plan decía «las mutaciones duran el doble», pero duran toda la partida: el dueño eligió esta (5 nov)
 class_name Skins
 
 # "efecto": lo que hace llevarla puesta, tal cual sale en la taquilla (cómo es por fuera ya se ve en Johnny)
@@ -89,6 +104,20 @@ const LISTA := {
 		"como": "Mata a la mascota por primera vez.", "jefe": "mascota", "rapidez": 1.15},
 	"gerente": {"nombre": "El gerente", "efecto": "La mitad de los billetes que coges valen el doble.",
 		"como": "Mata al gerente por primera vez.", "jefe": "gerente", "comision": 0.5},
+	"directora": {"nombre": "La directora",
+		"efecto": "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no).",
+		"como": "Mata a la directora de Recursos Humanos por primera vez.", "jefe": "directora", "despido": true},
+	"informatico": {"nombre": "El informático",
+		"efecto": "Las cámaras de seguridad no te ven y la linterna alumbra un 50 % más lejos.",
+		"como": "Mata al informático por primera vez.", "jefe": "informatico", "invisible": true, "linterna": 1.5},
+	"presentador": {"nombre": "El presentador", "efecto": "Las cajas de munición te dan un 30 % más.",
+		"como": "Mata al presentador por primera vez.", "jefe": "presentador", "municion": 1.3},
+	"becario": {"nombre": "El becario",
+		"efecto": "«Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida.",
+		"como": "Mata al becario por primera vez.", "jefe": "becario", "copia": 25},
+	"sujeto": {"nombre": "El Sujeto 1",
+		"efecto": "Empiezas cada partida con una mutación: eliges una de dos al llegar.",
+		"como": "Mata al Sujeto 1 por primera vez.", "jefe": "sujeto_1", "mutacion": true},
 }
 # [/traducir]
 
@@ -112,6 +141,13 @@ static func efecto(id: String) -> String:
 static func puesta() -> String:
 	var g := Guardado.cargar()
 	return g.skin if g.skin in LISTA and g.skin in g.skins else ""
+
+
+# La que lleva Johnny ahora mismo en la partida ("" si no está o no lleva ninguna): la de johnny.skin, que la tecla Z
+# de prueba puede cambiar sin guardarla
+static func puesta_en(arbol: SceneTree) -> String:
+	var johnny := arbol.get_first_node_in_group("jugador") if arbol else null
+	return johnny.get("skin") if johnny and johnny.get("skin") != null else ""
 
 
 # Se queda con esa skin para siempre (hasta que elija otra)
@@ -216,3 +252,33 @@ static func rapidez(id: String) -> float:
 # La probabilidad de que un billete valga $2 en vez de $1 con esa skin (0 = nunca: el gerente, 0,5)
 static func comision(id: String) -> float:
 	return LISTA[id].get("comision", 0.0) if id in LISTA else 0.0
+
+
+# Si con esa skin el primer golpe a un zombi dormido lo mata (la directora: «Despido»)
+static func despido(id: String) -> bool:
+	return LISTA[id].get("despido", false) if id in LISTA else false
+
+
+# Si con esa skin las cámaras de seguridad no ven a Johnny (el informático)
+static func invisible(id: String) -> bool:
+	return LISTA[id].get("invisible", false) if id in LISTA else false
+
+
+# Por cuánto se multiplica lo lejos que alumbra la linterna con esa skin (el informático, 1,5)
+static func linterna(id: String) -> float:
+	return LISTA[id].get("linterna", 1.0) if id in LISTA else 1.0
+
+
+# Por cuánto se multiplica lo que da una caja de munición con esa skin (el presentador, 1,3)
+static func municion(id: String) -> float:
+	return LISTA[id].get("municion", 1.0) if id in LISTA else 1.0
+
+
+# Con cuánta vida se levanta Johnny al caer, una vez por partida, con esa skin (0 = no se levanta: el becario, 25)
+static func copia(id: String) -> int:
+	return LISTA[id].get("copia", 0) if id in LISTA else 0
+
+
+# Si con esa skin empieza cada partida eligiendo una mutación (el Sujeto 1)
+static func mutacion(id: String) -> bool:
+	return LISTA[id].get("mutacion", false) if id in LISTA else false

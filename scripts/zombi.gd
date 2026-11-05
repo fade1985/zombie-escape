@@ -487,11 +487,19 @@ func dar_zarpazo(johnny: Node2D) -> void:
 func recibir_golpe(cantidad: int, fuerza: Vector2) -> void:
 	if estado == "muerto":
 		return
+	# la skin de la directora (skins.gd, «Despido»): el primer golpe a un zombi dormido (o dormido por el gas) lo mata.
+	# A los jefes (los que se pueden morder), no
+	var despedido := (dormido or gaseado > Peligros.GAS.duerme) and not has_method("morder") \
+		and Skins.despido(Skins.puesta_en(get_tree()))
 	if gaseado > Peligros.GAS.duerme:
 		espabilar_gas()   # (el sueño largo de la planta de la limpiadora: con un golpe, se despierta frenético)
 	if dormido:
 		despertar()
 		espabilando = 0.0   # con un golpe no hay tiempo de pensárselo
+	if despedido:
+		cantidad = maxi(cantidad, vida)
+		Zombi.texto_flotante(get_parent(), global_position + Vector2(-60, -70), Idioma.t("¡DESPEDIDO!"),
+			Color("#ff5d73"), 20)
 	if con_barrera():   # M80: con la barrera, el golpe le empuja un poco pero no le quita vida
 		velocity = fuerza * empuje * 0.5
 		destello_barrera = 1.0

@@ -71,7 +71,7 @@ static func apuntar(p: Node, num: int) -> void:
 			"racha": p.logros.racha, "mejor_racha": p.logros.mejor_racha},
 		"mochila": p.mochila, "armas_guardadas": p.armas_guardadas,
 		"dolares": p.dolares, "muertos": p.muertos, "duracion": p.duracion, "al_empezar": p.al_empezar,
-		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "huecos": j.huecos,
+		"johnny": {"vida": j.vida, "tercios": j.tercios, "resucitado": j.resucitado, "copia_usada": j.copia_usada, "huecos": j.huecos,
 			"calidades": j.calidades, "mano": j.mano, "balas": j.balas, "municion": j.municion,
 			"cargadores": j.cargadores, "deposito": j.deposito},
 		"lanzables": {"cantidades": lz.cantidades, "mano": lz.mano, "repuesto": lz.repuesto,
@@ -104,6 +104,7 @@ static func poner(p: Node, foto: Dictionary) -> void:
 	var fj: Dictionary = foto.johnny
 	j.tercios = fj.tercios
 	j.resucitado = fj.resucitado
+	j.copia_usada = fj.get("copia_usada", false)   # (la skin del becario; las guardadas antes, sin)
 	j.huecos = fj.huecos.duplicate()
 	j.calidades = fj.calidades.duplicate()
 	j.municion = fj.municion.duplicate()

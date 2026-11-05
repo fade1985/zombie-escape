@@ -569,7 +569,7 @@ msgstr "La DRH"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Son tampon tombe du plafond : s'il t'écrase, tu es viré et privé de ton arme à feu un moment. Avec ses employés devant elle, elle encaisse deux fois plus."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El informático"
 msgstr "L'informaticien"
 
@@ -577,7 +577,7 @@ msgstr "L'informaticien"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Il électrifie le sol par bandes et coupe la lumière de sa salle. En colère, il redémarre près d'une autre baie."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El presentador"
 msgstr "Le présentateur"
 
@@ -585,7 +585,7 @@ msgstr "Le présentateur"
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Hurle dans son micro, aveugle avec les projecteurs et couvre le sol de confettis. En colère, il fait lever son public."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El becario"
 msgstr "Le stagiaire"
 
@@ -689,7 +689,7 @@ msgstr "La créature"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "Ce qui reste du docteur après sa propre dose : la bouche du Glouton, les bras du Gymbro et le feu du pompier. Sors de ses bandes et de son onde de choc."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El Sujeto 1"
 msgstr "Le Sujet 1"
 
@@ -2027,7 +2027,7 @@ msgstr "ERREUR FATALE !"
 msgid "¡Adrenalina!"
 msgstr "Adrénaline !"
 
-#: scripts/johnny.gd
+#: scripts/johnny.gd scripts/zombi.gd
 msgid "¡DESPEDIDO!"
 msgstr "VIRÉ !"
 
@@ -2042,6 +2042,10 @@ msgstr "Esquivé !"
 #: scripts/johnny.gd
 msgid "¡Segundo aliento!"
 msgstr "Second souffle !"
+
+#: scripts/johnny.gd
+msgid "¡Copia de seguridad!"
+msgstr "Sauvegarde restaurée !"
 
 #: scripts/johnny.gd
 msgid "Asistido"
@@ -3574,6 +3578,50 @@ msgstr "La moitié des billets que tu ramasses valent le double."
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "Tue le gérant pour la première fois."
+
+#: scripts/skins.gd
+msgid "La directora"
+msgstr "La DRH"
+
+#: scripts/skins.gd
+msgid "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no)."
+msgstr "« Licenciement » : ton premier coup sur un zombie endormi le tue (pas les boss)."
+
+#: scripts/skins.gd
+msgid "Mata a la directora de Recursos Humanos por primera vez."
+msgstr "Tue la DRH pour la première fois."
+
+#: scripts/skins.gd
+msgid "Las cámaras de seguridad no te ven y la linterna alumbra un 50 % más lejos."
+msgstr "Les caméras de sécurité ne te voient pas et ta lampe torche éclaire 50 % plus loin."
+
+#: scripts/skins.gd
+msgid "Mata al informático por primera vez."
+msgstr "Tue l'informaticien pour la première fois."
+
+#: scripts/skins.gd
+msgid "Las cajas de munición te dan un 30 % más."
+msgstr "Les boîtes de munitions te donnent 30 % de plus."
+
+#: scripts/skins.gd
+msgid "Mata al presentador por primera vez."
+msgstr "Tue le présentateur pour la première fois."
+
+#: scripts/skins.gd
+msgid "«Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida."
+msgstr "« Sauvegarde » : une fois par partie, quand tu tombes, tu te relèves avec 25 de vie."
+
+#: scripts/skins.gd
+msgid "Mata al becario por primera vez."
+msgstr "Tue le stagiaire pour la première fois."
+
+#: scripts/skins.gd
+msgid "Empiezas cada partida con una mutación: eliges una de dos al llegar."
+msgstr "Tu commences chaque partie avec une mutation : tu en choisis une sur deux en arrivant."
+
+#: scripts/skins.gd
+msgid "Mata al Sujeto 1 por primera vez."
+msgstr "Tue le Sujet 1 pour la première fois."
 
 #: scripts/sujeto_1.gd
 msgid "¡NO AGUANTA!"

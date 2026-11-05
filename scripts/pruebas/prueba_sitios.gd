@@ -1603,6 +1603,11 @@ func probar_camaras() -> void:
 	c.t = 0.0
 	johnny.position = c.ojo(0) + Vector2.from_angle(c.angulo(0)) * 150.0
 	var ve: bool = c.ve(0, johnny.global_position, johnny)
+	# con la skin del informático (skins.gd), en el mismo sitio no le ve
+	var skin_antes: String = johnny.skin
+	johnny.skin = "informatico"
+	print("Cámaras: con la skin del informático, le ve %s (esperado: false)" % c.ve(0, johnny.global_position, johnny))
+	johnny.skin = skin_antes
 	await get_tree().create_timer(0.3).timeout
 	Captura.foto("captura-torre-camaras-1.png")
 	await get_tree().create_timer(0.4).timeout

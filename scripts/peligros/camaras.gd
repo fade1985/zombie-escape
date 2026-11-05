@@ -80,6 +80,9 @@ func ve(i: int, p: Vector2, quien: Node) -> bool:
 	# con el informático joven cerca, la cámara no ve a nadie (se la ha colado: supervivientes.gd)
 	if Supervivientes.informatico_cerca(get_tree(), p, CIEGA):
 		return false
+	# con la skin del informático (skins.gd), las cámaras no ven a Johnny
+	if Skins.invisible(str(quien.get("skin")) if quien.get("skin") != null else ""):
+		return false
 	var o := ojo(i)
 	var v: Dictionary = Peligros.CAMARAS
 	if o.distance_to(p) > v.alcance or absf(angle_difference(angulo(i), (p - o).angle())) > v.abre:

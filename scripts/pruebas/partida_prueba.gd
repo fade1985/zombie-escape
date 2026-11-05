@@ -117,6 +117,8 @@
 #   --musica            la música por capas: qué capas se oyen explorando, con zombis, en la horda y con el jefe, y
 #                       que van a la par (va sin sonido: lo dice en la terminal)              [prueba_armas.gd]
 #   --skins             las skins: desbloqueo, taquilla, caras y lo que hace cada una        [prueba_skins.gd]
+#   --skins-torre       las cinco skins de Torre Velaria: desbloqueo, taquilla, caras, Despido, linterna,
+#                       munición, Copia de seguridad y la mutación al empezar                [prueba_skins.gd]
 #   --inventario        la pantalla del inventario; luego, las vendas y el botiquín          [prueba_inventario.gd]
 #   --arrastrar         arrastrar con el ratón o el dedo en el inventario y en el baúl       [prueba_inventario.gd]
 #   --baul              la pantalla del baúl: guardar, sacar y el baúl lleno                 [prueba_inventario.gd]
@@ -450,6 +452,9 @@ func empezar_prueba() -> void:
 	elif "--skins" in args:
 		set_process(false)   # sin la prueba larga
 		probar_skins()
+	elif "--skins-torre" in args:
+		set_process(false)   # sin la prueba larga
+		probar_skins_torre()
 	elif "--banco" in args:
 		set_process(false)   # sin la prueba larga
 		probar_banco()

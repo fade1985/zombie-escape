@@ -221,7 +221,7 @@ cuerpo, fuego, curas, aguante, camuflaje, rapidez, billetes).
 | **El informático** | cascos con micrófono y gafas | Las cámaras no te ven y la linterna alumbra un 50 % más lejos |
 | **El presentador** | tupé engominado y micrófono de diadema | Recoges un 30 % más de munición |
 | **El becario** | gorra del revés y la acreditación colgada | «Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida |
-| **El Sujeto 1** | la cara de Johnny con venas moradas y los ojos brillantes | Las mutaciones (lo que te da el VD-7 al matar a un jefe) duran el doble |
+| **El Sujeto 1** | la cara de Johnny con venas moradas y los ojos brillantes | ~~Las mutaciones duran el doble~~ (duran toda la partida): empiezas cada partida con una mutación (parte 9) |
 
 ### La historia
 
@@ -491,7 +491,20 @@ Con el modelo que toca según `CLAUDE.md` (Opus para lo nuevo o difícil; Sonnet
      centro), el simulacro (página 1), los dormidos de la puerta giratoria (página 2), el audio de la presidenta
      (página 4) y la torre a oscuras (al completar la torre).
    - Prueba: `--captura --historia-torre`.
-9. **Las skins** (Sonnet): las cinco cabezas y sus ventajas.
+9. **Las skins** (Sonnet; se hizo con Opus porque lo pidió el dueño): las cinco cabezas y sus ventajas. ✅ **Hecho el 5
+   nov (falta el visto bueno del dueño).** 50 generaciones (10 cada cabeza: el cálculo de 15 era de antes de saber lo
+   que cuesta). Lo que ha quedado:
+   - Las cabezas, con la receta de las del centro (`edit_image` sobre las 8 rotaciones de Johnny quieto), todas a la
+     primera: la directora, moño gris y gafas de pasta negras; el informático, cascos con micrófono y gafas; el
+     presentador, el tupé (el micrófono de diadema apenas se ve); el becario, la gorra roja del revés (la acreditación
+     no: colgaría del pecho y las skins solo cambian la cabeza); el Sujeto 1, venas moradas y ojos violetas.
+   - **El Sujeto 1 cambia de ventaja:** las mutaciones duran toda la partida, así que «duran el doble» no hacía nada.
+     El dueño eligió esta: **empiezas cada partida con una mutación** (al llegar sale el recuadro de siempre y eliges
+     una de dos).
+   - «Despido» también mata a los dormidos por el gas de Recursos Humanos; los jefes no duermen nunca. La «Copia de
+     seguridad» va después del desfibrilador y se guarda con la partida. Las cajas de munición, × 1,3 hacia arriba (la
+     de la pistola, de 12 a 16).
+   - Prueba: `--captura --skins-torre` (y la de las cámaras con la skin, dentro de `--camaras`).
 10. **Repaso** (Sonnet): que la torre entre en alertas, eventos sorpresa, reto del día, colecciones y bestiario; las
     traducciones de todo a los 7 idiomas; la prueba de cada cosa (`--captura --edificio torre ...`).
 

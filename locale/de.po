@@ -569,7 +569,7 @@ msgstr "Die Personalchefin"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "Ihr Stempel fällt von der Decke: Trifft er dich, bist du gefeuert und eine Weile ohne Schusswaffe. Mit ihren Leuten vor sich hält sie doppelt so viel aus."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El informático"
 msgstr "Der IT-Typ"
 
@@ -577,7 +577,7 @@ msgstr "Der IT-Typ"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "Er setzt den Boden streifenweise unter Strom und schaltet in seinem Raum das Licht aus. Wütend startet er neben einem anderen Schrank neu."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El presentador"
 msgstr "Der Moderator"
 
@@ -585,7 +585,7 @@ msgstr "Der Moderator"
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "Brüllt ins Mikro, blendet mit den Scheinwerfern und füllt den Boden mit Konfetti. Wütend holt er sein Publikum auf die Beine."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El becario"
 msgstr "Der Praktikant"
 
@@ -689,7 +689,7 @@ msgstr "Die Kreatur"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "Was vom Doktor nach seiner eigenen Dosis übrig ist: das Maul des Vielfraßes, die Arme des Gymbros und das Feuer des Feuerwehrchefs. Raus aus ihren Bahnen und ihrer Druckwelle."
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El Sujeto 1"
 msgstr "Proband 1"
 
@@ -2027,7 +2027,7 @@ msgstr "SCHWERER FEHLER!"
 msgid "¡Adrenalina!"
 msgstr "Adrenalin!"
 
-#: scripts/johnny.gd
+#: scripts/johnny.gd scripts/zombi.gd
 msgid "¡DESPEDIDO!"
 msgstr "GEFEUERT!"
 
@@ -2042,6 +2042,10 @@ msgstr "Ausgewichen!"
 #: scripts/johnny.gd
 msgid "¡Segundo aliento!"
 msgstr "Zweite Luft!"
+
+#: scripts/johnny.gd
+msgid "¡Copia de seguridad!"
+msgstr "Backup geladen!"
 
 #: scripts/johnny.gd
 msgid "Asistido"
@@ -3574,6 +3578,50 @@ msgstr "Die Hälfte der Scheine, die du aufhebst, ist doppelt so viel wert."
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "Erledige den Manager zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "La directora"
+msgstr "Die Personalchefin"
+
+#: scripts/skins.gd
+msgid "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no)."
+msgstr "\"Kündigung\": Dein erster Treffer tötet einen schlafenden Zombie (Bosse nicht)."
+
+#: scripts/skins.gd
+msgid "Mata a la directora de Recursos Humanos por primera vez."
+msgstr "Erledige die Personalchefin zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "Las cámaras de seguridad no te ven y la linterna alumbra un 50 % más lejos."
+msgstr "Überwachungskameras sehen dich nicht, und deine Taschenlampe leuchtet 50 % weiter."
+
+#: scripts/skins.gd
+msgid "Mata al informático por primera vez."
+msgstr "Erledige den IT-Typen zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "Las cajas de munición te dan un 30 % más."
+msgstr "Munitionskisten geben dir 30 % mehr."
+
+#: scripts/skins.gd
+msgid "Mata al presentador por primera vez."
+msgstr "Erledige den Moderator zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "«Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida."
+msgstr "\"Backup\": Einmal pro Runde stehst du nach einem Sturz mit 25 Leben wieder auf."
+
+#: scripts/skins.gd
+msgid "Mata al becario por primera vez."
+msgstr "Erledige den Praktikanten zum ersten Mal."
+
+#: scripts/skins.gd
+msgid "Empiezas cada partida con una mutación: eliges una de dos al llegar."
+msgstr "Du startest jede Runde mit einer Mutation: Bei der Ankunft wählst du eine von zwei."
+
+#: scripts/skins.gd
+msgid "Mata al Sujeto 1 por primera vez."
+msgstr "Erledige Proband 1 zum ersten Mal."
 
 #: scripts/sujeto_1.gd
 msgid "¡NO AGUANTA!"

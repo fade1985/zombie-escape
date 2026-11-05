@@ -568,7 +568,7 @@ msgstr "人事总监"
 msgid "Su sello cae del techo: si te pilla, te despide y te quedas sin el arma de fuego. Con su gente delante, aguanta el doble."
 msgstr "她的印章会从天而降：被砸中就会被开除，一时用不了枪械。手下挡在前面时，她能多扛一倍。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El informático"
 msgstr "网管"
 
@@ -576,7 +576,7 @@ msgstr "网管"
 msgid "Electrifica el suelo por franjas y apaga la luz de su sala. Enfadado, se reinicia junto a otro armario."
 msgstr "他让地面一条条通电，还会关掉房间的灯。发怒后会重启，出现在另一台机柜旁。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El presentador"
 msgstr "主持人"
 
@@ -584,7 +584,7 @@ msgstr "主持人"
 msgid "Grita al micrófono, ciega con los focos y llena el suelo de confeti. Enfadado, levanta a su público."
 msgstr "对着麦克风大吼，用聚光灯晃瞎你，把地上撒满彩纸。发怒后，他让观众全都站起来。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El becario"
 msgstr "实习生"
 
@@ -688,7 +688,7 @@ msgstr "怪物"
 msgid "Lo que queda del doctor con su propia dosis: la boca del Glotón, los brazos del Gymbro y el fuego del bombero. Sal de sus franjas y de su onda."
 msgstr "博士给自己打了一针之后剩下的东西：大胃王的嘴、健身哥的胳膊、消防队长的火。避开它的冲锋路线和冲击波。"
 
-#: scripts/bestiario.gd
+#: scripts/bestiario.gd scripts/skins.gd
 msgid "El Sujeto 1"
 msgstr "1号实验体"
 
@@ -2026,7 +2026,7 @@ msgstr "致命错误！"
 msgid "¡Adrenalina!"
 msgstr "肾上腺素！"
 
-#: scripts/johnny.gd
+#: scripts/johnny.gd scripts/zombi.gd
 msgid "¡DESPEDIDO!"
 msgstr "开除！"
 
@@ -2041,6 +2041,10 @@ msgstr "闪避！"
 #: scripts/johnny.gd
 msgid "¡Segundo aliento!"
 msgstr "绝处逢生！"
+
+#: scripts/johnny.gd
+msgid "¡Copia de seguridad!"
+msgstr "备份已恢复！"
 
 #: scripts/johnny.gd
 msgid "Asistido"
@@ -3569,6 +3573,50 @@ msgstr "你捡到的钞票有一半价值翻倍。"
 #: scripts/skins.gd
 msgid "Mata al gerente por primera vez."
 msgstr "首次杀死经理。"
+
+#: scripts/skins.gd
+msgid "La directora"
+msgstr "人事总监"
+
+#: scripts/skins.gd
+msgid "«Despido»: el primer golpe a un zombi dormido lo mata (a los jefes, no)."
+msgstr "“开除”：对睡着的僵尸的第一击直接将其杀死（首领除外）。"
+
+#: scripts/skins.gd
+msgid "Mata a la directora de Recursos Humanos por primera vez."
+msgstr "首次杀死人事总监。"
+
+#: scripts/skins.gd
+msgid "Las cámaras de seguridad no te ven y la linterna alumbra un 50 % más lejos."
+msgstr "监控摄像头看不见你，手电筒照得远50%。"
+
+#: scripts/skins.gd
+msgid "Mata al informático por primera vez."
+msgstr "首次杀死网管。"
+
+#: scripts/skins.gd
+msgid "Las cajas de munición te dan un 30 % más."
+msgstr "弹药箱给你的弹药多30%。"
+
+#: scripts/skins.gd
+msgid "Mata al presentador por primera vez."
+msgstr "首次杀死主持人。"
+
+#: scripts/skins.gd
+msgid "«Copia de seguridad»: una vez por partida, al caer, te levantas con 25 de vida."
+msgstr "“备份”：每局一次，倒下时带着25点生命值重新站起来。"
+
+#: scripts/skins.gd
+msgid "Mata al becario por primera vez."
+msgstr "首次杀死实习生。"
+
+#: scripts/skins.gd
+msgid "Empiezas cada partida con una mutación: eliges una de dos al llegar."
+msgstr "每局开始时获得一个变异：到达时二选一。"
+
+#: scripts/skins.gd
+msgid "Mata al Sujeto 1 por primera vez."
+msgstr "首次杀死1号实验体。"
 
 #: scripts/sujeto_1.gd
 msgid "¡NO AGUANTA!"

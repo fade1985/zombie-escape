@@ -321,6 +321,7 @@ func _ready() -> void:
 	if captura:
 		empezar_prueba()
 	else:
+		await mutacion_al_empezar()
 		decir("%s: %s%s" % [Planta.nombre_de(planta), Idioma.t(ed.objetivo), "\n%s: %s" % [Alerta.nombre(), Alerta.regla()]
 			if Alerta.nivel > 0 else ""] + ("\n" + Reto.aviso() if Reto.activo else "")
 			+ ("\n" + Idioma.t("La Farmacéutica te ha preparado un botiquín: está en la mochila") if botiquin else ""), 4.0)
@@ -427,6 +428,17 @@ func abrir_mutacion() -> void:
 	if puede_tutorial("mutaciones"):
 		await ver_tutorial("mutaciones")   # la primera vez, antes de las cartas, qué son
 	menus.mutacion(opciones, mutaciones.tengo.size(), elegir_mutacion)
+
+
+# La skin del Sujeto 1 (skins.gd): al empezar la partida, el recuadro de las mutaciones para elegir una. Espera a que
+# la elija (con el juego parado) para que el aviso de la planta salga después
+func mutacion_al_empezar() -> void:
+	if not Skins.mutacion(johnny.skin) or not mutaciones.tengo.is_empty():
+		return
+	await get_tree().create_timer(0.6, false).timeout
+	await abrir_mutacion()
+	while menus.abierto == "mutacion":
+		await get_tree().process_frame
 
 
 func elegir_mutacion(id: String) -> void:

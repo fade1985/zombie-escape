@@ -168,6 +168,11 @@ func _process(delta: float) -> void:
 		linterna.rotation = lerp_angle(linterna.rotation, hacia, minf(delta * LINTERNA_GIRO, 1.0))
 		linterna_cosas.range_item_cull_mask = capa_johnny
 		luz_johnny.range_item_cull_mask = capa_johnny
+		# con la skin del informático (skins.gd), llega un 50 % más lejos (la skin se puede cambiar en la taquilla)
+		var alcance := LINTERNA_ALCANCE * Skins.linterna(str(johnny.get("skin"))) / 128.0
+		if linterna_suelo.texture_scale != alcance:
+			linterna_suelo.texture_scale = alcance
+			linterna_cosas.texture_scale = alcance
 
 
 func pintar() -> void:
